@@ -205,45 +205,8 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
     int textHeight = dc.GetCharHeight();
 
     for ( size_t i = 0; i < m_panes.GetCount(); i ++ )
-        DrawField(dc, i, textHeight);
+        DrawField(dc, (int)i, textHeight);
 }
-
-//void wxStatusBarMac::InitCornerInset()
-//{
-//#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_26_0
-//    if ( WX_IS_MACOS_AVAILABLE(26, 0) )
-//        m_cornerInset = 8;
-//    else
-//#endif
-//#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_11_0
-//    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
-//        m_cornerInset = 4;
-//    else
-//#endif
-//        m_cornerInset = 0;
-//}
-//
-//void wxStatusBarMac::MacSetCornerInset(int inset)
-//{
-//    m_cornerInset = inset;
-//    // force recalculation of the fields:
-//    m_lastClientSize = wxDefaultSize;
-//    Refresh();
-//}
-//
-//int wxStatusBarMac::GetAvailableWidthForFields(int width) const
-//{
-//    return wxStatusBarGeneric::GetAvailableWidthForFields(width) - 2 * m_cornerInset;
-//}
-//
-//bool wxStatusBarMac::GetFieldRect(int i, wxRect& rect) const
-//{
-//    if ( !wxStatusBarGeneric::GetFieldRect(i, rect) )
-//        return false;
-//
-//    rect.x += MacGetCornerInset();
-//    return true;
-//}
 
 void wxStatusBarMac::MacHiliteChanged()
 {

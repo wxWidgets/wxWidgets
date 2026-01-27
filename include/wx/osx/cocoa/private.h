@@ -232,13 +232,11 @@ public :
     // from the same pimpl class.
     virtual void                controlTextDidChange();
 
+    virtual void                ClipsToBounds(bool clip) wxOVERRIDE;
+
     virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) wxOVERRIDE;
     virtual void                UseClippingView(bool clip) wxOVERRIDE;
     virtual WXWidget            GetContainer() const wxOVERRIDE { return m_osxClipView ? m_osxClipView : m_osxView; }
-
-    virtual void                ClipsToBounds(bool clip) wxOVERRIDE;
-
-    virtual void                ApplyScrollViewBorderType() wxOVERRIDE;
 
 protected:
     WXWidget m_osxView;
