@@ -308,10 +308,10 @@ private:
     void DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label);
 
 
-    wxPanel *m_panel;
-    MyTreeCtrl *m_treeCtrl;
+    wxPanel *m_panel = nullptr;
+    MyTreeCtrl *m_treeCtrl = nullptr;
 #if wxUSE_LOG
-    wxTextCtrl *m_textCtrl;
+    wxTextCtrl *m_textCtrl = nullptr;
 #endif // wxUSE_LOG
 
     void DoSetBold(bool bold = true);

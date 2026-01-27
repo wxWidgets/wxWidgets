@@ -214,10 +214,6 @@ bool MyApp::OnInit()
 MyFrame::MyFrame()
        : wxFrame(nullptr, wxID_ANY, "wxTreeCtrl test",
                  wxDefaultPosition, FromDIP(wxSize(450, 600), nullptr)),
-         m_treeCtrl(nullptr)
-#if wxUSE_LOG
-         , m_textCtrl(nullptr)
-#endif // wxUSE_LOG
 {
     // This reduces flicker effects - even better would be to define
     // OnEraseBackground to do nothing. When the tree control's scrollbars are
