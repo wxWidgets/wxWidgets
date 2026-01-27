@@ -782,7 +782,7 @@ void MyFrame::OnSetFocus(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnInsertItem(wxCommandEvent& WXUNUSED(event))
 {
-    int image = wxGetApp().ShowImages() ? MyTreeCtrl::TreeCtrlIcon_File : -1;
+    int image = wxGetApp().ShowImages() ? TreeCtrlIcon_File : -1;
     m_treeCtrl->InsertItem(m_treeCtrl->GetRootItem(), image, "2nd item");
 }
 
@@ -795,7 +795,7 @@ void MyFrame::OnAddItem(wxCommandEvent& WXUNUSED(event))
 
     m_treeCtrl->AppendItem(m_treeCtrl->GetRootItem(),
                            text /*,
-                           MyTreeCtrl::TreeCtrlIcon_File */ );
+                           TreeCtrlIcon_File */ );
 }
 
 void MyFrame::OnAddManyItems(wxCommandEvent& WXUNUSED(event))
@@ -1191,7 +1191,7 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
 void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
                                     size_t depth)
 {
-    int image = wxGetApp().ShowImages() ? MyTreeCtrl::TreeCtrlIcon_Folder : -1;
+    int image = wxGetApp().ShowImages() ? TreeCtrlIcon_Folder : -1;
     wxTreeItemId rootId = AddRoot("Root",
                                   image, image,
                                   new MyTreeItemData("Root item"));

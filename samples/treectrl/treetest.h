@@ -59,18 +59,18 @@ private:
     wxString m_desc;
 };
 
+enum
+{
+    TreeCtrlIcon_File,
+    TreeCtrlIcon_FileSelected,
+    TreeCtrlIcon_Folder,
+    TreeCtrlIcon_FolderSelected,
+    TreeCtrlIcon_FolderOpened
+};
+
 class MyTreeCtrl : public wxTreeCtrl
 {
 public:
-    enum
-    {
-        TreeCtrlIcon_File,
-        TreeCtrlIcon_FileSelected,
-        TreeCtrlIcon_Folder,
-        TreeCtrlIcon_FolderSelected,
-        TreeCtrlIcon_FolderOpened
-    };
-
     MyTreeCtrl() = default;
     MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                const wxPoint& pos, const wxSize& size,
