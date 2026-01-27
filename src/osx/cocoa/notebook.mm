@@ -24,6 +24,7 @@
 #include "wx/string.h"
 #include "wx/private/bmpbndl.h"
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 //
 // controller
