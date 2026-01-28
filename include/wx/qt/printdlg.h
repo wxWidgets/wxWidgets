@@ -11,16 +11,27 @@
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
 
+#include <memory>
+
+class QPrinter;
+
 class WXDLLIMPEXP_CORE wxQtPrintNativeData: public wxPrintNativeDataBase
 {
 public:
     wxQtPrintNativeData();
+    ~wxQtPrintNativeData();
 
-    virtual bool TransferTo( wxPrintData &data ) override;
-    virtual bool TransferFrom( const wxPrintData &data ) override;
+    virtual bool TransferTo(wxPrintData& data) override;
+    virtual bool TransferFrom(const wxPrintData& data) override;
 
     virtual bool IsOk() const override;
 
+    QPrinter* GetQtPrinter() const { return m_qtPrinter.get(); }
+
+private:
+    std::unique_ptr<QPrinter> m_qtPrinter;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxQtPrintNativeData);
 };
 
 class WXDLLIMPEXP_CORE wxQtPrintDialog : public wxPrintDialogBase
