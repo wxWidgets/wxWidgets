@@ -815,12 +815,12 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
 
         m_tbar->SetMargins(4, 4);
 
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP_PNG(new));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP_PNG(open));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP_PNG(save));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP_BUNDLE_2(new));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP_BUNDLE_2(open));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP_BUNDLE_2(save));
         m_tbar->AddSeparator();
-        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP_PNG(help));
-        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP_PNG(cut), wxBITMAP_PNG(paste));
+        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP_BUNDLE_2(help));
+        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP_BUNDLE_2(cut), wxBITMAP_BUNDLE_2(paste));
         m_tbar->EnableTool(IDM_TOOLBAR_OTHER_4, false);
 
         m_tbar->Realize();
@@ -1068,7 +1068,7 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
 
     wxToolBarBase *tb = GetToolBar();
     tb->InsertTool(0, wxID_PRINT, "New print",
-                   wxBITMAP_PNG(print), wxNullBitmap,
+                   wxBITMAP_BUNDLE_2(print), wxNullBitmap,
                    wxITEM_NORMAL,
                    "Delete this tool",
                    "This button was inserted into the toolbar");
