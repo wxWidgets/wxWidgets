@@ -16,6 +16,7 @@ set(TEST_GUI_SRC
     geometry/point.cpp
     geometry/region.cpp
     graphics/bitmap.cpp
+    graphics/bmpbundle.cpp
     graphics/colour.cpp
     graphics/ellipsization.cpp
     graphics/measuring.cpp
@@ -84,6 +85,7 @@ set(TEST_GUI_SRC
     controls/windowtest.cpp
     controls/dialogtest.cpp
     events/clone.cpp
+    events/enterleave.cpp
     # Duplicate this file here to test GUI event loops too.
     events/evtlooptest.cpp
     events/propagation.cpp
@@ -105,6 +107,7 @@ set(TEST_GUI_SRC
     misc/garbage.cpp
     misc/safearrayconverttest.cpp
     misc/settings.cpp
+    misc/textwrap.cpp
     # This one is intentionally duplicated here (it is also part of
     # non-GUI test) as sockets behave differently in console and GUI
     # applications.
