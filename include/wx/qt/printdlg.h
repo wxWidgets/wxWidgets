@@ -34,34 +34,44 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxQtPrintNativeData);
 };
 
-class WXDLLIMPEXP_CORE wxQtPrintDialog : public wxPrintDialogBase
+class WXDLLIMPEXP_CORE wxQtPrintDialog: public wxPrintDialogBase
 {
 public:
-    wxQtPrintDialog(wxWindow *parent, wxPrintDialogData *data);
-    wxQtPrintDialog(wxWindow *parent, wxPrintData *data);
+    wxQtPrintDialog() = default;
+    explicit wxQtPrintDialog(wxWindow* parent, wxPrintDialogData* data = nullptr);
+    wxQtPrintDialog(wxWindow* parent, wxPrintData* data);
 
-    virtual wxPrintDialogData& GetPrintDialogData() override;
-    virtual wxPrintData& GetPrintData() override;
-    virtual wxDC *GetPrintDC() override;
+    virtual int ShowModal() override;
 
-protected:
+    virtual wxPrintDialogData& GetPrintDialogData() override { return m_printDialogData; }
+    virtual wxPrintData& GetPrintData() override { return m_printDialogData.GetPrintData(); }
+
+    virtual wxDC* GetPrintDC() override;
 
 private:
-};
+    wxWindow*         m_dialogParent = nullptr;
+    wxPrinterDC*      m_printerDC = nullptr;
+    wxPrintDialogData m_printDialogData;
 
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxQtPrintDialog);
+};
 
 
 class WXDLLIMPEXP_CORE wxQtPageSetupDialog: public wxPageSetupDialogBase
 {
 public:
-    wxQtPageSetupDialog();
-    wxQtPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
+    wxQtPageSetupDialog() = default;
+    explicit wxQtPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = nullptr);
 
-    bool Create(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
+    virtual int ShowModal() override;
 
-    virtual wxPageSetupDialogData& GetPageSetupDialogData() override;
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() override { return m_pageSetupData; }
 
 private:
+    wxWindow*               m_dialogParent = nullptr;
+    wxPageSetupDialogData   m_pageSetupData;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxQtPageSetupDialog);
 };
 
 #endif // _WX_QT_PRINTDLG_H_

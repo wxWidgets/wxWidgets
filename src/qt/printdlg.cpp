@@ -19,6 +19,8 @@
 
 #include <QPrinter>
 #include <QPrinterInfo>
+#include <QPrintDialog>
+#include <QPageSetupDialog>
 #include <QPageSize>
 
 
@@ -212,54 +214,196 @@ bool wxQtPrintNativeData::IsOk() const
 
 //##############################################################################
 
-wxQtPrintDialog::wxQtPrintDialog(wxWindow *WXUNUSED(parent), wxPrintDialogData *WXUNUSED(data))
+namespace // anonymous
 {
+// ConvertToNative/ConvertFromNative for wxQtPrintDialog.
+void ConvertToNative(wxPrintDialogData& printData, QPrintDialog* printDialog = nullptr)
+{
+    if ( !printDialog )
+    {
+        printData.GetPrintData().ConvertToNative();
+    }
+    else
+    {
+        QAbstractPrintDialog::PrintDialogOptions options;
+
+        if ( printData.GetCollate() )
+            options |= QAbstractPrintDialog::PrintCollateCopies;
+        if ( printData.GetEnablePrintToFile() )
+            options |= QAbstractPrintDialog::PrintToFile;
+        if ( printData.GetEnableSelection() )
+            options |= QAbstractPrintDialog::PrintSelection;
+        if ( printData.GetEnableCurrentPage() )
+            options |= QAbstractPrintDialog::PrintCurrentPage;
+        if ( printData.GetEnablePageNumbers() )
+            options |= QAbstractPrintDialog::PrintPageRange;
+        // TODO: Add GetEnableShowPageSize() to wxPrintDialogData
+        // if ( printData.GetEnableShowPageSize() )
+        //    options |= QAbstractPrintDialog::PrintShowPageSize;
+
+        printDialog->setOptions(options);
+
+        printDialog->setMinMax(printData.GetMinPage(),
+                               printData.GetMaxPage());
+        printDialog->setFromTo(printData.GetFromPage(),
+                               printData.GetToPage());
+
+        QAbstractPrintDialog::PrintRange printRange = QAbstractPrintDialog::AllPages;
+
+        if ( printData.GetSelection() )
+            printRange = QAbstractPrintDialog::Selection;
+        else if ( printData.GetCurrentPage() )
+            printRange = QAbstractPrintDialog::CurrentPage;
+        else if ( printData.GetSpecifiedPages() )
+            printRange = QAbstractPrintDialog::PageRange;
+
+        printDialog->setPrintRange(printRange);
+    }
+
+    return true;
 }
 
-wxQtPrintDialog::wxQtPrintDialog(wxWindow *WXUNUSED(parent), wxPrintData *WXUNUSED(data))
+bool ConvertFromNative(wxPrintDialogData& printData, QPrintDialog* printDialog = nullptr)
 {
+    printData.GetPrintData().ConvertFromNative();
+
+    if ( printDialog )
+    {
+        printData.SetMinPage(printDialog->minPage());
+        printData.SetMaxPage(printDialog->maxPage());
+        printData.SetFromPage(printDialog->fromPage());
+        printData.SetToPage(printDialog->toPage());
+
+        auto printRange = printDialog->printRange();
+
+        printData.SetAllPages(printRange == QAbstractPrintDialog::AllPages);
+        printData.SetSelection(printRange == QAbstractPrintDialog::Selection);
+        printData.SetCurrentPage(printRange == QAbstractPrintDialog::CurrentPage);
+        // TODO: Add SetSpecifiedPages() to wxPrintDialogData
+        // printData.SetSpecifiedPages(printRange == QAbstractPrintDialog::PageRange);
+    }
+
+    return true;
 }
 
-
-wxPrintDialogData& wxQtPrintDialog::GetPrintDialogData()
+// ConvertToNative/ConvertFromNative for wxQtPageSetupDialog.
+bool ConvertToNative(wxPageSetupDialogData& setupData)
 {
-    static wxPrintDialogData s_data;
+    auto& data = setupData.GetPrintData();
+    data.ConvertToNative();
 
-    return s_data;
+    auto* nativeData = static_cast<wxQtPrintNativeData*>(data.GetNativeData());
+    auto* qtPrinter = nativeData->GetQtPrinter();
+
+    const wxRealPoint minTopLeft     = setupData.GetMinMarginTopLeft();
+    const wxRealPoint minBottomRight = setupData.GetMinMarginBottomRight();
+    const wxRealPoint topLeft        = setupData.GetMarginTopLeft();
+    const wxRealPoint bottomRight    = setupData.GetMarginBottomRight();
+
+    QPageLayout pageLayout = qtPrinter->pageLayout();
+    pageLayout.setUnits(QPageLayout::Millimeter);
+    pageLayout.setMargins(QMarginsF{topLeft.x, topLeft.y, bottomRight.x, bottomRight.y});
+    pageLayout.setMinimumMargins(QMarginsF{minTopLeft.x, minTopLeft.y, minBottomRight.x, minBottomRight.y});
+
+    return qtPrinter->setPageLayout(pageLayout);
 }
 
-wxPrintData& wxQtPrintDialog::GetPrintData()
+bool ConvertFromNative(wxPageSetupDialogData& setupData)
 {
-    static wxPrintData s_data;
+    auto& data = setupData.GetPrintData();
+    data.ConvertFromNative();
 
-    return s_data;
-}
+    auto* nativeData = static_cast<wxQtPrintNativeData*>(data.GetNativeData());
+    auto* qtPrinter = nativeData->GetQtPrinter();
 
-wxDC *wxQtPrintDialog::GetPrintDC()
-{
-    return nullptr;
+    QPageLayout pageLayout = qtPrinter->pageLayout();
+    pageLayout.setUnits(QPageLayout::Millimeter);
+
+    const auto margins = pageLayout.margins();
+    const auto minMargins = pageLayout.minimumMargins();
+
+    setupData.SetMarginTopLeft(wxPoint(margins.left(), margins.top()));
+    setupData.SetMarginBottomRight(wxPoint(margins.right(), margins.bottom()));
+    setupData.SetMinMarginTopLeft(wxPoint(minMargins.left(), minMargins.top()));
+    setupData.SetMinMarginBottomRight(wxPoint(minMargins.right(), minMargins.bottom()));
+
+    return true;
 }
+} // anonymous namespace
 
 //##############################################################################
+wxIMPLEMENT_CLASS(wxQtPrintDialog, wxPrintDialogBase);
 
-wxQtPageSetupDialog::wxQtPageSetupDialog()
+wxQtPrintDialog::wxQtPrintDialog(wxWindow* parent, wxPrintDialogData* data)
+    : m_dialogParent(parent), m_printDialogData(*data)
 {
 }
 
-wxQtPageSetupDialog::wxQtPageSetupDialog(wxWindow *WXUNUSED(parent), wxPageSetupDialogData *WXUNUSED(data))
+wxQtPrintDialog::wxQtPrintDialog(wxWindow* parent, wxPrintData* data)
+    : m_dialogParent(parent), m_printDialogData(*data)
 {
 }
 
-bool wxQtPageSetupDialog::Create(wxWindow *WXUNUSED(parent), wxPageSetupDialogData *WXUNUSED(data))
+int wxQtPrintDialog::ShowModal()
 {
-    return false;
+    WX_HOOK_MODAL_DIALOG();
+
+    ConvertToNative( m_printDialogData );
+
+    auto& data = GetPrintData();
+    auto* nativeData = static_cast<wxQtPrintNativeData*>(data.GetNativeData());
+    auto* qtPrinter = nativeData->GetQtPrinter();
+
+    QPrintDialog printDialog(qtPrinter, m_dialogParent->GetHandle());
+
+    ConvertToNative( m_printDialogData, &printDialog );
+
+    if ( printDialog.exec() == QDialog::Accepted )
+    {
+        ConvertFromNative( m_printDialogData, &printDialog );
+
+        m_printerDC = new wxPrinterDC(data);
+
+        return wxID_OK;
+    }
+    else
+    {
+        return wxID_CANCEL;
+    }
 }
 
-wxPageSetupDialogData& wxQtPageSetupDialog::GetPageSetupDialogData()
-{
-    static wxPageSetupDialogData s_data;
+wxDC* wxQtPrintDialog::GetPrintDC() { return m_printerDC; }
 
-    return s_data;
+//##############################################################################
+wxIMPLEMENT_CLASS(wxQtPageSetupDialog, wxPageSetupDialogBase);
+
+wxQtPageSetupDialog::wxQtPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data)
+    : m_dialogParent(parent), m_pageSetupData(*data)
+{
+}
+
+int wxQtPageSetupDialog::ShowModal()
+{
+    WX_HOOK_MODAL_DIALOG();
+
+    ConvertToNative( m_pageSetupData );
+
+    auto& data = m_pageSetupData.GetPrintData();
+    auto* nativeData = static_cast<wxQtPrintNativeData*>(data.GetNativeData());
+    auto* qtPrinter = nativeData->GetQtPrinter();
+
+    QPageSetupDialog pageSetupDialog(qtPrinter, m_dialogParent->GetHandle());
+
+    if ( pageSetupDialog.exec() == QDialog::Accepted )
+    {
+        ConvertFromNative( m_pageSetupData );
+
+        return wxID_OK;
+    }
+    else
+    {
+        return wxID_CANCEL;
+    }
 }
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
