@@ -50,7 +50,10 @@ public:
     virtual void SetToolNormalBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
     virtual void SetToolDisabledBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
 
+    // Bricsys change: added wxToolBar::GetToolRect() implementation
+    wxRect GetToolRect(int id);
     virtual bool Realize() wxOVERRIDE;
+
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

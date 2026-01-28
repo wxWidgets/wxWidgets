@@ -114,7 +114,8 @@ public:
     void ClearClientDatas();
 
     // helpers
-    int GetItemAtPosition( const wxPoint& pos ) { return HitTest(pos); }
+    // Bricsys change: fix LayerCombo icon click by calling VirtualHitTest() instead of HitTest()
+    int GetItemAtPosition( const wxPoint& pos ) { return wxVarVScrollHelper::VirtualHitTest(pos.y); }
     wxCoord GetTotalHeight() const { return EstimateTotalHeight(); }
     wxCoord GetLineHeight(int line) const { return OnGetRowHeight(line); }
 

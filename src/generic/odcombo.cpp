@@ -135,7 +135,8 @@ void wxVListBoxComboPopup::PaintComboControl( wxDC& dc, const wxRect& rect )
 
         OnDrawBg(dc, rect, m_value, flags);
 
-        if ( m_value >= 0 )
+        // Bricsys change: allow m_value == -1 pass (previously: m_value >= 0)
+        if ( m_value >= -1 )
         {
             OnDrawItem(dc,rect,m_value,flags);
             return;

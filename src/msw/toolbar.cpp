@@ -1872,6 +1872,18 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
         Realize();
     }
 }
+ 
+// Bricsys change: added wxToolBar::GetToolRect() implementation
+wxRect wxToolBar::GetToolRect(int id)
+{
+	int toolPos = GetToolPos(id);
+	RECT rc;
+	if ( ::SendMessage(GetHwnd(),TB_GETITEMRECT,toolPos,(LPARAM)&rc) )
+	{
+		return wxRectFromRECT(rc);
+	}
+	return wxRect();
+}
 
 void wxToolBar::SetToolPacking(int packing)
 {
@@ -2098,7 +2110,6 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
 
     if ( !hadHook )
         GetParent()->MSWSetEraseBgHook(NULL);
-
 
     if ( rgnDummySeps.IsOk() )
     {
