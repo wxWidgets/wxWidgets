@@ -63,18 +63,6 @@ public:
 
 namespace
 {
-
-wxBitmap MakeResizedBitmap(const wxBitmap& original, wxSize size)
-{
-    double scale = original.GetScaleFactor();
-    if (scale > 1.0)
-        scale = 2.0;
-
-    wxImage img(original.ConvertToImage());
-    img.Rescale(scale * size, wxIMAGE_QUALITY_HIGH);
-    return wxBitmap(img, -1, scale);
-}
-
 wxBitmap MakeDisabledBitmap(const wxBitmap& original)
 {
     wxImage img(original.ConvertToImage());
@@ -339,7 +327,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
                 const wxString& help_string)
 {
     wxASSERT(bitmap.IsOk() || bitmap_small.IsOk());
-    
+
     // Determine base bitmap sizes on first button (at 100% scale)
     // These are scaled by DPI when used for layout and drawing
     if(m_buttons.IsEmpty())
@@ -374,7 +362,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     {
         idxLarge = m_bundlesLarge.size();
         m_bundlesLarge.push_back(bitmap);
-        
+
         idxLargeDisabled = m_bundlesLargeDisabled.size();
         if(bitmap_disabled.IsOk())
         {
@@ -392,7 +380,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     {
         idxSmall = m_bundlesSmall.size();
         m_bundlesSmall.push_back(bitmap_small);
-        
+
         idxSmallDisabled = m_bundlesSmallDisabled.size();
         if(bitmap_small_disabled.IsOk())
         {
@@ -410,7 +398,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         // Use large bitmap scaled down for small
         idxSmall = m_bundlesSmall.size();
         m_bundlesSmall.push_back(bitmap);
-        
+
         idxSmallDisabled = m_bundlesSmallDisabled.size();
         if(bitmap_disabled.IsOk())
         {
@@ -537,7 +525,7 @@ void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         const double scale = GetDPIScaleFactor();
         wxSize scaledLarge = m_bitmap_size_large * scale;
         wxSize scaledSmall = m_bitmap_size_small * scale;
-        
+
         info.is_supported = m_art->GetButtonBarButtonSize(dc, this,
             button->kind, size, button->label, button->text_min_width[size],
             scaledLarge, scaledSmall, &info.size,
@@ -670,12 +658,12 @@ void wxRibbonButtonBar::SetButtonIcon(
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
     if(base == nullptr)
         return;
-    
+
     // Update the bundles in our vectors
     if(bitmap.IsOk() && base->imageIndexLarge >= 0)
     {
         m_bundlesLarge[base->imageIndexLarge] = bitmap;
-        
+
         if(bitmap_disabled.IsOk())
         {
             m_bundlesLargeDisabled[base->imageIndexLargeDisabled] = bitmap_disabled;
@@ -683,15 +671,15 @@ void wxRibbonButtonBar::SetButtonIcon(
         else
         {
             wxBitmap bmp = bitmap.GetBitmap(m_bitmap_size_large);
-            m_bundlesLargeDisabled[base->imageIndexLargeDisabled] = 
+            m_bundlesLargeDisabled[base->imageIndexLargeDisabled] =
                 wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
         }
     }
-    
+
     if(bitmap_small.IsOk() && base->imageIndexSmall >= 0)
     {
         m_bundlesSmall[base->imageIndexSmall] = bitmap_small;
-        
+
         if(bitmap_small_disabled.IsOk())
         {
             m_bundlesSmallDisabled[base->imageIndexSmallDisabled] = bitmap_small_disabled;
@@ -699,11 +687,11 @@ void wxRibbonButtonBar::SetButtonIcon(
         else
         {
             wxBitmap bmp = bitmap_small.GetBitmap(m_bitmap_size_small);
-            m_bundlesSmallDisabled[base->imageIndexSmallDisabled] = 
+            m_bundlesSmallDisabled[base->imageIndexSmallDisabled] =
                 wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
         }
     }
-    
+
     Refresh();
 }
 
@@ -955,7 +943,7 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     m_art->DrawButtonBarBackground(dc, this, GetSize());
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
-    
+
     // Calculate DPI-scaled bitmap sizes (must match layout calculation)
     const double scale = GetDPIScaleFactor();
     const wxSize scaledLarge = m_bitmap_size_large * scale;
@@ -970,31 +958,31 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         // Using explicit sizes ensures bundles are scaled correctly even if
         // the small bundle contains a large source image
         wxBitmap bitmap, bitmap_small;
-        
+
         bool disabled = (base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) != 0;
-        
+
         if(base->imageIndexLarge >= 0)
         {
             int idx = disabled ? base->imageIndexLargeDisabled : base->imageIndexLarge;
             if(idx >= 0 && idx < (int)m_bundlesLarge.size())
             {
-                const wxBitmapBundle& bundle = disabled ? 
+                const wxBitmapBundle& bundle = disabled ?
                     m_bundlesLargeDisabled[idx] : m_bundlesLarge[idx];
                 bitmap = bundle.GetBitmap(scaledLarge);
             }
         }
-        
+
         if(base->imageIndexSmall >= 0)
         {
             int idx = disabled ? base->imageIndexSmallDisabled : base->imageIndexSmall;
             if(idx >= 0 && idx < (int)m_bundlesSmall.size())
             {
-                const wxBitmapBundle& bundle = disabled ? 
+                const wxBitmapBundle& bundle = disabled ?
                     m_bundlesSmallDisabled[idx] : m_bundlesSmall[idx];
                 bitmap_small = bundle.GetBitmap(scaledSmall);
             }
         }
-        
+
         m_art->DrawButtonBarButton(dc, this, rect, base->kind,
             base->state | button.size, base->label, bitmap, bitmap_small);
      }
@@ -1004,11 +992,11 @@ wxBitmap wxRibbonButtonBar::GetButtonBitmap(int imageIndex, bool large) const
 {
     if(imageIndex < 0)
         return wxNullBitmap;
-        
+
     const wxVector<wxBitmapBundle>& bundles = large ? m_bundlesLarge : m_bundlesSmall;
     if(imageIndex >= (int)bundles.size())
         return wxNullBitmap;
-        
+
     return bundles[imageIndex].GetBitmapFor(this);
 }
 
@@ -1612,7 +1600,7 @@ void wxRibbonButtonBar::OnDPIChanged(wxDPIChangedEvent& event)
         FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
         FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
     }
-    
+
     m_layouts_valid = false;
     Realize();
     Refresh();
