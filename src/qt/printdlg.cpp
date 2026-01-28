@@ -217,7 +217,7 @@ bool wxQtPrintNativeData::IsOk() const
 namespace // anonymous
 {
 // ConvertToNative/ConvertFromNative for wxQtPrintDialog.
-void ConvertToNative(wxPrintDialogData& printData, QPrintDialog* printDialog = nullptr)
+bool ConvertToNative(wxPrintDialogData& printData, QPrintDialog* printDialog = nullptr)
 {
     if ( !printDialog )
     {
