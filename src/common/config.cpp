@@ -570,6 +570,12 @@ wxString wxExpandEnvVars(const wxString& str)
         }
         break;
 
+/** Bricsys change
+/* GV: case below is commented out for _WIN32 platform since backslashes in paths
+/* are treated as escape symbol for following '%' or'$'  that prevents expansion
+/* of environment variables located after such backslashes.
+*/
+#ifndef __WINDOWS__
       case wxT('\\'):
         // backslash can be used to suppress special meaning of % and $
         if ( n != str.length() - 1 &&
@@ -579,6 +585,7 @@ wxString wxExpandEnvVars(const wxString& str)
           break;
         }
         wxFALLTHROUGH;
+#endif // __WINDOWS__
 
       default:
         strResult += str[n];
