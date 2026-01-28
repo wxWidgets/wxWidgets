@@ -2606,7 +2606,9 @@ wxWidgetImpl( peer, flags )
     if ( m_osxView )
         CFRetain(m_osxView);
     [m_osxView release];
-    m_osxView.clipsToBounds = YES;
+
+    if ( IsUserPane() )
+        ClipsToBounds(true);
 }
 
 
@@ -4164,6 +4166,11 @@ void wxWidgetCocoaImpl::UseClippingView(bool clip)
         }
     }
 #endif
+}
+
+void wxWidgetCocoaImpl::ClipsToBounds(bool clip)
+{
+    m_osxView.clipsToBounds = clip;
 }
 
 
