@@ -1053,6 +1053,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1509,6 +1510,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1761,6 +1763,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1898,7 +1909,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -2051,6 +2062,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -29634,7 +29646,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
         if test -n "$QT5_CUSTOM_DIR" ; then
                         TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I${QT5_CUSTOM_DIR}/include"
             GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -L${QT5_CUSTOM_DIR}/lib \
-                            -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test \
+                            -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test -lQt5PrintSupport \
                             -Wl,-rpath,${QT5_CUSTOM_DIR}/lib"
 
         elif test -z "$PKG_CONFIG" ; then
@@ -29643,19 +29655,19 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
         else
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" >&5
-$as_echo_n "checking for Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport" >&5
+$as_echo_n "checking for Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport... " >&6; }
 
 if test -n "$QT5_CFLAGS"; then
     pkg_cv_QT5_CFLAGS="$QT5_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_QT5_CFLAGS=`$PKG_CONFIG --cflags "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" 2>/dev/null`
+  pkg_cv_QT5_CFLAGS=`$PKG_CONFIG --cflags "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport" 2>/dev/null`
               test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -29667,12 +29679,12 @@ if test -n "$QT5_LIBS"; then
     pkg_cv_QT5_LIBS="$QT5_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_QT5_LIBS=`$PKG_CONFIG --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" 2>/dev/null`
+  pkg_cv_QT5_LIBS=`$PKG_CONFIG --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport" 2>/dev/null`
               test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -29693,9 +29705,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-            QT5_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" 2>&1`
+            QT5_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport" 2>&1`
         else
-            QT5_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" 2>&1`
+            QT5_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport" 2>&1`
         fi
     # Put the nasty error message in config.log where it belongs
     echo "$QT5_PKG_ERRORS" >&5
