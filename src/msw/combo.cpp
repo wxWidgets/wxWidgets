@@ -88,8 +88,13 @@ bool wxComboCtrl::Create(wxWindow *parent,
             border = wxBORDER_NONE;
             m_widthCustomBorder = 1;
         }
-        else
-            border = wxBORDER_SUNKEN;
+	else
+            // Bricsys change: for Classic Theme, use wxBORDER_SIMPLE instead of sunken (it looks better for our toolbar controls)
+#if 1
+            border = wxBORDER_SIMPLE;
+#else
+             border = wxBORDER_SUNKEN;
+#endif
 
         style = (style & ~(wxBORDER_MASK)) | border;
     }
@@ -200,8 +205,9 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
         if ( hTheme )
         {
             // WinXP  Theme
-            focusSpacingX = isEnabled ? 2 : 1;
-            focusSpacingY = sz.y > (GetCharHeight()+2) && isEnabled ? 2 : 1;
+            // Bricsys change: reduce white space around the focus rectangle
+            focusSpacingX = /*isEnabled ? 2 :*/ 1;
+            focusSpacingY = /*sz.y > (GetCharHeight()+2) && isEnabled ? 2 :*/ 1;
         }
         else
 #endif
@@ -402,8 +408,11 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
             // Draw the entire control as a single button?
             if ( !isNonStdButton )
             {
-                if ( HasFlag(wxCB_READONLY) )
-                    drawFullButton = true;
+                // Bricsys change: our owner drawn combo boxes did not have a full button drawn control
+                // this is a wx 2.9 change is conformant with Vista/Win 7 behaviour for read-only combo boxes,
+                // but breaks visual compatibility with 2.8
+                //if ( HasFlag(wxCB_READONLY) )
+                //    drawFullButton = true;
             }
 
             if ( drawFullButton )

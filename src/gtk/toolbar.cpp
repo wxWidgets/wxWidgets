@@ -58,6 +58,9 @@ public:
     void ShowDropdown(GtkToggleButton* button);
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
 
+    // Bricsys change: added wxToolBar::GetToolRect() implementation
+    wxRect GetClientRect();
+
     GtkToolItem* m_item;
 };
 
@@ -333,6 +336,17 @@ void wxToolBarTool::ShowDropdown(GtkToggleButton* button)
             toolbar->PopupMenu(menu, x, y);
         }
     }
+}
+
+// Bricsys change: added wxToolBar::GetToolRect() implementation
+wxRect wxToolBarTool::GetClientRect()
+{
+    if ( !m_item )
+        return wxRect();
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(GTK_WIDGET(m_item), &allocation);
+    wxRect rect(allocation.x,allocation.y,allocation.width,allocation.height);
+    return rect;
 }
 
 void wxToolBarTool::SetLabel(const wxString& label)
@@ -766,6 +780,15 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
     wxFAIL_MSG( wxT("wxToolBar::FindToolForPosition() not implemented") );
 
     return NULL;
+}
+
+// Bricsys change: added wxToolBar::GetToolRect() implementation
+wxRect wxToolBar::GetToolRect(int id)
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+        return  tool->GetClientRect();
+    return wxRect();
 }
 
 void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
