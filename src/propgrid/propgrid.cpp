@@ -1862,27 +1862,12 @@ bool wxPropertyGrid::IsSmallScreen()
 wxBitmap wxPropertyGrid::RescaleBitmap(const wxBitmap& srcBmp,
                                        double scaleX, double scaleY)
 {
-    int w = wxRound(srcBmp.GetWidth()*scaleX);
-    int h = wxRound(srcBmp.GetHeight()*scaleY);
+    wxSize size = srcBmp.GetSize();
+    size.x = wxRound(size.x * scaleX);
+    size.y = wxRound(size.y * scaleY);
 
-#if wxUSE_IMAGE
-    // Here we use high-quality wxImage scaling functions available
-    wxImage img = srcBmp.ConvertToImage();
-    img.Rescale(w, h, wxIMAGE_QUALITY_HIGH);
-    wxBitmap dstBmp(img);
-#else // !wxUSE_IMAGE
-    wxBitmap dstBmp(w, h, srcBmp.GetDepth());
-#if defined(__WXMSW__) || defined(__WXOSX__)
-    // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
-    dstBmp.UseAlpha(srcBmp.HasAlpha());
-#endif // __WXMSW__ || __WXOSX__
-    {
-        wxMemoryDC dc(dstBmp);
-        dc.SetUserScale(scaleX, scaleY);
-        dc.DrawBitmap(srcBmp, 0, 0);
-    }
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
-
+    wxBitmap dstBmp(srcBmp);
+    wxBitmap::Rescale(dstBmp, size);
     return dstBmp;
 }
 
