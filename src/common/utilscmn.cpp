@@ -1518,6 +1518,7 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip, bool disableParentOnly)
 #endif
 }
 
+#if !defined(__WXQT__)
 void wxWindowDisabler::DoDisable()
 {
     if ( m_disableParentOnly )
@@ -1577,6 +1578,7 @@ wxWindowDisabler::~wxWindowDisabler()
         }
     }
 }
+#endif // !__WXQT__
 
 // Yield to other apps/messages and disable user input to all windows except
 // the given one

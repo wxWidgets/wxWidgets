@@ -2150,3 +2150,72 @@ bool wxWindowQt::EnableTouchEvents(int eventsMask)
 
     return true;
 }
+
+//
+//
+//
+
+void wxWindowDisabler::DoDisable()
+{
+    if ( m_windowsToSkip.empty() )
+    {
+        // remember the top level windows which were already disabled, so that we
+        // don't reenable them later
+        wxWindowList::compatibility_iterator node;
+        for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+        {
+            wxWindow *winTop = node->GetData();
+            if ( wxVectorContains(m_windowsToSkip, winTop) )
+                continue;
+
+            // we don't need to disable the hidden or already disabled windows
+            if ( winTop->IsEnabled() && winTop->IsShown() )
+            {
+                winTop->Disable();
+            }
+            else
+            {
+                m_windowsToSkip.push_back(winTop);
+            }
+        }
+    }
+    else
+    {
+        auto* const win = m_windowsToSkip[0];
+        wxCHECK_RET(win->IsTopLevel() && !win->IsShown(),
+            "Changing the window modality while it is visible has no effect");
+
+        win->GetHandle()->setWindowModality(m_disableParentOnly ? Qt::WindowModal
+                                                                : Qt::ApplicationModal);
+    }
+}
+
+wxWindowDisabler::~wxWindowDisabler()
+{
+    if ( !m_disabled )
+        return;
+
+    if ( !m_windowsToSkip.empty() &&
+          m_windowsToSkip[0]->IsShown() &&
+          m_windowsToSkip[0]->IsEnabled() )
+    {
+        // Hide the window to break modality.
+        m_windowsToSkip[0]->GetHandle()->hide();
+
+        if ( m_windowsToSkip.size() > 1 )
+            m_windowsToSkip[0] = nullptr;
+        else
+            return;
+    }
+
+    wxWindowList::compatibility_iterator node;
+    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+    {
+        wxWindow *winTop = node->GetData();
+        if ( !wxVectorContains(m_windowsToSkip, winTop) )
+        {
+            winTop->Enable();
+        }
+        //else: we didn't disable this window, so don't reenable it either
+    }
+}
