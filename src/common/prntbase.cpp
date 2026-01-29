@@ -1760,21 +1760,8 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     // Reenable any windows we disabled by undoing whatever we did in our
     // Initialize().
-    switch ( m_modalityKind )
-    {
-        case wxPreviewFrame_AppModal:
-            delete m_windowDisabler;
-            m_windowDisabler = nullptr;
-            break;
-
-        case wxPreviewFrame_WindowModal:
-            if ( GetParent() )
-                GetParent()->Enable();
-            break;
-
-        case wxPreviewFrame_NonModal:
-            break;
-    }
+    delete m_windowDisabler;
+    m_windowDisabler = nullptr;
 
     Destroy();
 }
@@ -1814,26 +1801,13 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     SetSizeHints(ClientToWindowSize(m_controlBar->GetBestSize()));
 
     m_modalityKind = kind;
-    switch ( m_modalityKind )
-    {
-        case wxPreviewFrame_AppModal:
-            // Disable everything.
-            m_windowDisabler = new wxWindowDisabler( this );
-            break;
-
-        case wxPreviewFrame_WindowModal:
-            // Disable our parent if we have one.
-            if ( GetParent() )
-                GetParent()->Disable();
-            break;
-
-        case wxPreviewFrame_NonModal:
-            // Nothing to do, we don't need to disable any windows.
-            break;
-    }
 
     if ( m_modalityKind != wxPreviewFrame_NonModal )
     {
+        const bool disableParentOnly = m_modalityKind == wxPreviewFrame_WindowModal;
+
+        m_windowDisabler = new wxWindowDisabler( this, disableParentOnly );
+
         // Behave like modal dialogs, don't show in taskbar. This implies
         // removing the minimize box, because minimizing windows without
         // taskbar entry is confusing.
