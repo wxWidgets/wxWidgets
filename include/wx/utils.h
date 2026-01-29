@@ -681,6 +681,10 @@ public:
     // ctor disables all windows except the given one(s)
     explicit wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2 = nullptr);
 
+    // ctor disables all windows except the given one. Or disables the parent
+    // window only if disableParentOnly is true.
+    explicit wxWindowDisabler(wxWindow *winToSkip, bool disableParentOnly);
+
     // dtor enables back all windows disabled by the ctor
     ~wxWindowDisabler();
 
@@ -696,6 +700,7 @@ private:
 #endif
     wxVector<wxWindow*> m_windowsToSkip;
     bool m_disabled;
+    bool m_disableParentOnly = false;
 
     wxDECLARE_NO_COPY_CLASS(wxWindowDisabler);
 };

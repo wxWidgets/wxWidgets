@@ -1501,25 +1501,50 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2)
 #endif
 }
 
+wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip, bool disableParentOnly)
+{
+    m_disabled = true;
+
+    if ( winToSkip )
+    {
+        m_windowsToSkip.push_back(winToSkip);
+        m_disableParentOnly = disableParentOnly;
+    }
+
+    DoDisable();
+
+#if defined(__WXOSX__) && defined(wxOSX_USE_COCOA) && wxOSX_USE_COCOA
+    AfterDisable(winToSkip);
+#endif
+}
+
 void wxWindowDisabler::DoDisable()
 {
-    // remember the top level windows which were already disabled, so that we
-    // don't reenable them later
-    wxWindowList::compatibility_iterator node;
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+    if ( m_disableParentOnly )
     {
-        wxWindow *winTop = node->GetData();
-        if ( wxVectorContains(m_windowsToSkip, winTop) )
-            continue;
+        if ( auto* const parent = m_windowsToSkip[0]->GetParent() )
+            parent->Disable();
+    }
+    else
+    {
+        // remember the top level windows which were already disabled, so that we
+        // don't reenable them later
+        wxWindowList::compatibility_iterator node;
+        for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+        {
+            wxWindow *winTop = node->GetData();
+            if ( wxVectorContains(m_windowsToSkip, winTop) )
+                continue;
 
-        // we don't need to disable the hidden or already disabled windows
-        if ( winTop->IsEnabled() && winTop->IsShown() )
-        {
-            winTop->Disable();
-        }
-        else
-        {
-            m_windowsToSkip.push_back(winTop);
+            // we don't need to disable the hidden or already disabled windows
+            if ( winTop->IsEnabled() && winTop->IsShown() )
+            {
+                winTop->Disable();
+            }
+            else
+            {
+                m_windowsToSkip.push_back(winTop);
+            }
         }
     }
 }
@@ -1533,15 +1558,23 @@ wxWindowDisabler::~wxWindowDisabler()
     BeforeEnable();
 #endif
 
-    wxWindowList::compatibility_iterator node;
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+    if ( m_disableParentOnly )
     {
-        wxWindow *winTop = node->GetData();
-        if ( !wxVectorContains(m_windowsToSkip, winTop) )
+        if ( auto* const parent = m_windowsToSkip[0]->GetParent() )
+            parent->Enable();
+    }
+    else
+    {
+        wxWindowList::compatibility_iterator node;
+        for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
         {
-            winTop->Enable();
+            wxWindow *winTop = node->GetData();
+            if ( !wxVectorContains(m_windowsToSkip, winTop) )
+            {
+                winTop->Enable();
+            }
+            //else: we didn't disable this window, so don't reenable it either
         }
-        //else: we didn't disable this window, so don't reenable it either
     }
 }
 
