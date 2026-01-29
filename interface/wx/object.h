@@ -798,6 +798,36 @@ public:
 #define wxIMPLEMENT_DYNAMIC_CLASS2( className, baseClassName1, baseClassName2 )
 
 /**
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information, and whose instances can be created
+    dynamically. Use this for template specializations.
+
+    Please note that @a arg must be the template parameter the primary template
+    @a templateName is being specialized for, e.g.
+
+    @code
+    template <typename T>
+    class MyWindow : public wxWindow
+    {
+    public:
+        MyWindow() = default; // Must have a default ctor for dynamic creation.
+
+    private:
+        T m_value;
+
+        wxDECLARE_DYNAMIC_CLASS(MyWindow);
+    };
+
+    wxIMPLEMENT_DYNAMIC_TEMPLATE_SPECIALIZATION(MyWindow, int, wxWindow);
+    @endcode
+
+    @header{wx/object.h}
+
+    @since 3.3.2
+*/
+#define wxIMPLEMENT_DYNAMIC_TEMPLATE_SPECIALIZATION( templateName, arg, baseClassName )
+
+/**
     Synonym for wxIMPLEMENT_ABSTRACT_CLASS().
 
     Please prefer to use the more clear, if longer,
