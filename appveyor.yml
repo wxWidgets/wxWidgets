@@ -51,7 +51,7 @@ environment:
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
 cache:
-  - '%GOPATH%\go%GOVERSION%.windows-amd64.msi'
+  - '%USERPROFILE%\go%GOVERSION%.windows-amd64.msi'
 
 clone_depth: 1
 
@@ -84,7 +84,7 @@ before_test:
     echo Getting and launching httpbin.
     rmdir %GOROOT% /s /q
     mkdir %GOROOT%
-    cd %GOPATH%
+    cd %USERPROFILE%
     set go_exe=go%GOVERSION%.windows-amd64.msi
     if not exist "%go_exe%" (
         appveyor DownloadFile https://go.dev/dl/%go_exe%
