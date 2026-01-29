@@ -161,10 +161,10 @@ public:
 
     void HideIfExpanded();
 
-    // Deprecated: wxRibbonButtonBar now uses wxWithImages internally for
+    // Deprecated: wxRibbonButtonBar now uses wxBitmapBundle directly for
     // DPI-aware bitmap management. This method is maintained for backward
     // compatibility but is no longer used by wxRibbonButtonBar.
-    wxDEPRECATED_MSG("wxRibbonButtonBar now uses wxWithImages for DPI support")
+    wxDEPRECATED_MSG("wxRibbonButtonBar now uses wxBitmapBundle for DPI support")
     wxImageList* GetButtonImageList(wxSize size, int initialCount = 1);
 
 protected:

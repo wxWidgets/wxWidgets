@@ -17,7 +17,6 @@
 #include "wx/ribbon/control.h"
 #include "wx/dynarray.h"
 #include "wx/bmpbndl.h"
-#include "wx/vector.h"
 
 class wxRibbonButtonBar;
 class wxRibbonButtonBarButtonBase;
@@ -214,10 +213,10 @@ protected:
     bool m_lock_active_state;
     bool m_show_tooltips_for_disabled;
 
-    wxVector<wxBitmapBundle> m_bundlesLarge;         // Large button icons
-    wxVector<wxBitmapBundle> m_bundlesSmall;         // Small button icons
-    wxVector<wxBitmapBundle> m_bundlesLargeDisabled; // Disabled large icons
-    wxVector<wxBitmapBundle> m_bundlesSmallDisabled; // Disabled small icons
+    std::vector<wxBitmapBundle> m_bundlesLarge;         // Large button icons
+    std::vector<wxBitmapBundle> m_bundlesSmall;         // Small button icons
+    std::vector<wxBitmapBundle> m_bundlesLargeDisabled; // Disabled large icons
+    std::vector<wxBitmapBundle> m_bundlesSmallDisabled; // Disabled small icons
 
 private:
     wxRibbonBar* m_ribbonBar = nullptr;
