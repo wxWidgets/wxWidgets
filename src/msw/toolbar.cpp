@@ -425,8 +425,8 @@ void wxToolBar::MSWSetPadding(WXWORD padding)
 {
     DWORD curPadding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
     // Preserve orthogonal padding
-    DWORD newPadding = IsVertical() ? MAKELPARAM(LOWORD(curPadding), FromDIP(padding))
-                                    : MAKELPARAM(FromDIP(padding), HIWORD(curPadding));
+    DWORD newPadding = IsVertical() ? MAKELPARAM(LOWORD(curPadding), padding)
+                                    : MAKELPARAM(padding, HIWORD(curPadding));
     ::SendMessage(GetHwnd(), TB_SETPADDING, 0, newPadding);
 }
 
@@ -447,13 +447,13 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
     if ( m_toolPacking <= 0 )
     {
         // Retrieve packing value if it hasn't been yet set with SetToolPacking.
-        m_toolPacking = IsVertical() ? HIWORD(padding) : LOWORD(padding);
+        m_toolPacking = FromDIP(IsVertical() ? HIWORD(padding) : LOWORD(padding));
     }
 
     // Scale the tool packing to the active DPI
-    DWORD orthoPadding = IsVertical() ? LOWORD(padding) : HIWORD(padding);
-    DWORD scaledPadding = IsVertical() ? MAKELPARAM(FromDIP(orthoPadding), FromDIP(m_toolPacking))
-                                       : MAKELPARAM(FromDIP(m_toolPacking), FromDIP(orthoPadding));
+    DWORD orthoPadding = FromDIP(IsVertical() ? LOWORD(padding) : HIWORD(padding));
+    DWORD scaledPadding = IsVertical() ? MAKELPARAM(orthoPadding, m_toolPacking)
+                                       : MAKELPARAM(m_toolPacking, orthoPadding);
     ::SendMessage(GetHwnd(), TB_SETPADDING, 0, scaledPadding);
 
 #if wxUSE_TOOLTIPS
@@ -612,7 +612,7 @@ wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
     // half of it to each tool, as the total amount of packing is the sum of
     // the right margin of the previous tool and the left margin of the next
     // one.
-    size.x += FromDIP(m_toolPacking) / 2;
+    size.x += m_toolPacking / 2;
 
     return size;
 }
@@ -1374,7 +1374,7 @@ bool wxToolBar::Realize()
         // Take also into account tool padding value: the amount of padding
         // used for each tool is half of m_toolPacking, so the margin on each
         // side is a half of that.
-        const int x = r.left + FromDIP(m_toolPacking) / 4;
+        const int x = r.left + m_toolPacking / 4;
 
         // Greater of control and its label widths.
         int totalWidth = controlSize.x;
@@ -2127,6 +2127,7 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
     DWORD curPadding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
     DWORD newPadding = MAKELPARAM(event.ScaleX(LOWORD(curPadding)),
                                   event.ScaleY(HIWORD(curPadding)));
+    m_toolPacking = IsVertical() ? HIWORD(newPadding) : LOWORD(newPadding);
     ::SendMessage(GetHwnd(), TB_SETPADDING, 0, newPadding);
 
     // Manually scale the size of the controls. Even though the font has been
