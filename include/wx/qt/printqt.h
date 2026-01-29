@@ -10,33 +10,44 @@
 
 #include "wx/prntbase.h"
 
+// ---------------------------------------------------------------------------
+// Represents the printer: manages printing a wxPrintout object
+// ---------------------------------------------------------------------------
+
 class WXDLLIMPEXP_CORE wxQtPrinter : public wxPrinterBase
 {
 public:
-    explicit wxQtPrinter( wxPrintDialogData *data = nullptr );
+    explicit wxQtPrinter(wxPrintDialogData* data = nullptr);
 
-    virtual bool Setup(wxWindow *parent) override;
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) override;
-    virtual wxDC* PrintDialog(wxWindow *parent) override;
+    virtual bool Setup(wxWindow* parent) override;
+    virtual bool Print(wxWindow* parent, wxPrintout* printout, bool prompt = true) override;
+    virtual wxDC* PrintDialog(wxWindow* parent) override;
+
 private:
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxQtPrinter);
 };
 
 
+// ---------------------------------------------------------------------------
+// wxPrintPreview: programmer creates an object of this class to preview a
+// wxPrintout.
+// ---------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxQtPrintPreview : public wxPrintPreviewBase
 {
 public:
-    wxQtPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting = nullptr,
-                          wxPrintDialogData *data = nullptr);
-    wxQtPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting,
-                          wxPrintData *data);
+    wxQtPrintPreview(wxPrintout* printout,
+                     wxPrintout* printoutForPrinting = nullptr,
+                     wxPrintDialogData* data = nullptr);
+    wxQtPrintPreview(wxPrintout* printout,
+                     wxPrintout* printoutForPrinting,
+                     wxPrintData* data);
 
     virtual bool Print(bool interactive) override;
     virtual void DetermineScaling() override;
 
 protected:
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxQtPrintPreview);
 };
 
 #endif // _WX_QT_PRINTQT_H_

@@ -3296,7 +3296,7 @@ installed, where VER is 2, 3 or 4.
             dnl the name of the directory where the files for this toolkit live
             TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I${QT5_CUSTOM_DIR}/include"
             GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -L${QT5_CUSTOM_DIR}/lib \
-                            -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test \
+                            -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test -lQt5PrintSupport \
                             -Wl,-rpath,${QT5_CUSTOM_DIR}/lib"
 
         elif test -z "$PKG_CONFIG" ; then
@@ -3304,7 +3304,7 @@ installed, where VER is 2, 3 or 4.
 
         else
             PKG_CHECK_MODULES(QT5,
-                          [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test],
+                          [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport],
                 [
                 TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
                 GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
