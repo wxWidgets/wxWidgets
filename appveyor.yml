@@ -51,8 +51,7 @@ environment:
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
 cache:
-  - %GOPATH%\go%GOVERSION%.windows-amd64.msi
-
+  - '%GOPATH%\go%GOVERSION%.windows-amd64.msi'
 
 clone_depth: 1
 
