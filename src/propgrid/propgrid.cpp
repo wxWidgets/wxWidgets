@@ -1858,6 +1858,7 @@ bool wxPropertyGrid::IsSmallScreen()
 
 // -----------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_3_2
 // static
 wxBitmap wxPropertyGrid::RescaleBitmap(const wxBitmap& srcBmp,
                                        double scaleX, double scaleY)
@@ -1870,6 +1871,7 @@ wxBitmap wxPropertyGrid::RescaleBitmap(const wxBitmap& srcBmp,
     wxBitmap::Rescale(dstBmp, size);
     return dstBmp;
 }
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
 
