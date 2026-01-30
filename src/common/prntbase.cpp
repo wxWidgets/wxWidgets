@@ -1758,6 +1758,7 @@ wxPreviewFrame::~wxPreviewFrame()
 
 void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
+#ifndef __WXQT__
     // Reenable any windows we disabled by undoing whatever we did in our
     // Initialize().
     switch ( m_modalityKind )
@@ -1775,6 +1776,7 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
         case wxPreviewFrame_NonModal:
             break;
     }
+#endif // __WXQT__
 
     Destroy();
 }
@@ -1814,6 +1816,8 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     SetSizeHints(ClientToWindowSize(m_controlBar->GetBestSize()));
 
     m_modalityKind = kind;
+
+#ifndef __WXQT__
     switch ( m_modalityKind )
     {
         case wxPreviewFrame_AppModal:
@@ -1831,6 +1835,18 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
             // Nothing to do, we don't need to disable any windows.
             break;
     }
+#else // __WXQT__
+    wxQtWindowModality qtWindowModality;
+
+    if ( m_modalityKind == wxPreviewFrame_AppModal )
+        qtWindowModality = wxQtWindowModality::AppModal;
+    else if ( m_modalityKind == wxPreviewFrame_WindowModal )
+        qtWindowModality = wxQtWindowModality::WindowModal;
+    else
+        qtWindowModality = wxQtWindowModality::NonModal;
+
+    QtSetWindowModality(qtWindowModality);
+#endif // !__WXQT__
 
     if ( m_modalityKind != wxPreviewFrame_NonModal )
     {
