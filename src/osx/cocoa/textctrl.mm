@@ -1510,6 +1510,29 @@ void wxNSTextViewControl::SetJustification()
     [m_textView setAlignment:align];
 }
 
+int wxNSTextViewControl::GetPhysicalLineCount() const
+{
+    const NSString *string = [m_textView string];
+    unsigned numberOfLines, index, stringLength = [string length];
+    for(index = 0, numberOfLines = 0; index < stringLength; numberOfLines++)
+    {
+        index = NSMaxRange([string lineRangeForRange:NSMakeRange(index, 0)]);
+    }
+    return numberOfLines;
+}
+
+int wxNSTextViewControl::GetLogicalLineCount() const
+{
+    NSLayoutManager *layoutManager = [m_textView layoutManager];
+    unsigned numberOfLines, index, numberOfGlyphs = [layoutManager numberOfGlyphs];
+    NSRange lineRange;
+    for (numberOfLines = 0, index = 0; index < numberOfGlyphs; numberOfLines++)
+    {
+        (void) [layoutManager lineFragmentRectForGlyphAtIndex:index effectiveRange:&lineRange];
+        index = NSMaxRange(lineRange);
+    }
+    return numberOfLines;
+}
 // wxNSTextFieldControl
 
 wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *text, WXWidget w )

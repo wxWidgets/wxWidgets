@@ -279,6 +279,31 @@ public:
                     );
     }
 
+    void OnGetPhysicalCount(wxCommandEvent &WXUNUSED(event))
+    {
+        wxMessageBox(wxString::Format("Number of newline characters is %d",
+                                        m_panel->m_textrich->GetPhysicalLineCount()));
+    }
+
+    void OnGetLogicalCount(wxCommandEvent &WXUNUSED(event))
+    {
+        wxMessageBox(wxString::Format("Number of visible lines is: %d",
+                                        m_panel->m_textrich->GetLogicalLineCount()));
+    }
+
+    void OnGetLineCount(wxCommandEvent &WXUNUSED(event))
+    {
+        wxString message;
+#ifdef __WXMSW__
+        message = wxString::Format("Number of logical lines in the control is %d",
+                                   m_panel->m_textrich->GetNumberOfLines());
+#else
+        message = wxString::Format("Number of physical lines in the control is %d",
+                                   m_panel->m_textrich->GetNumberOfLines());
+#endif
+        wxMessageBox(message);
+    }
+
 #if wxUSE_LOG
     void OnLogClear(wxCommandEvent& event);
 #endif // wxUSE_LOG
@@ -447,6 +472,9 @@ enum
 
     TEXT_GET_LINE,
     TEXT_GET_LINELENGTH,
+    TEXT_GET_LINE_COUNT,
+    TEXT_GET_PHYSICAL_COUNT,
+    TEXT_GET_LOGICAL_COUNT,
 
     TEXT_REMOVE,
     TEXT_REPLACE,
@@ -554,6 +582,9 @@ bool MyApp::OnInit()
     menuText->AppendSeparator();
     menuText->Append(TEXT_GET_LINE, "Get the text of a line of the tabbed multiline");
     menuText->Append(TEXT_GET_LINELENGTH, "Get the length of a line of the tabbed multiline");
+    menuText->Append(TEXT_GET_LINE_COUNT, "Get number of lines");
+    menuText->Append(TEXT_GET_PHYSICAL_COUNT, "Get physical lines count");
+    menuText->Append(TEXT_GET_LOGICAL_COUNT, "Get logical lines count");
     menu_bar->Append(menuText, "Te&xt");
 
 #if wxUSE_LOG
@@ -1565,6 +1596,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(TEXT_GET_LINE,           MyFrame::OnGetLine)
     EVT_MENU(TEXT_GET_LINELENGTH,     MyFrame::OnGetLineLength)
+    EVT_MENU(TEXT_GET_LINE_COUNT,     MyFrame::OnGetLineCount)
+    EVT_MENU(TEXT_GET_PHYSICAL_COUNT, MyFrame::OnGetPhysicalCount)
+    EVT_MENU(TEXT_GET_LOGICAL_COUNT,  MyFrame::OnGetLogicalCount)
 
     EVT_MENU(TEXT_SET,                MyFrame::OnSetText)
     EVT_MENU(TEXT_SET_RTF,            MyFrame::OnSetRTF)
