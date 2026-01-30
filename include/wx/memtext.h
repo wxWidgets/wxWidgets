@@ -40,8 +40,10 @@ protected:
     virtual bool OnRead(const wxMBConv& WXUNUSED(conv)) wxOVERRIDE
         { return true; }
 
+    // Bricsys: added last 2 parameters to write BOM to Unicode files
     virtual bool OnWrite(wxTextFileType WXUNUSED(typeNew),
-                         const wxMBConv& WXUNUSED(conv) = wxMBConvUTF8()) wxOVERRIDE
+                         const wxMBConv& WXUNUSED(conv) = wxMBConvUTF8(),
+                         const char* WXUNUSED(charBOM) = NULL, size_t WXUNUSED(lengthBOM) = 0) wxOVERRIDE
         { return true; }
 
 private:

@@ -39,7 +39,8 @@ protected:
                         wxTextBufferOpenMode openMode) wxOVERRIDE;
     virtual bool OnClose() wxOVERRIDE;
     virtual bool OnRead(const wxMBConv& conv) wxOVERRIDE;
-    virtual bool OnWrite(wxTextFileType typeNew, const wxMBConv& conv) wxOVERRIDE;
+    // Bricsys: added last 2 parameters to write BOM to Unicode files
+    virtual bool OnWrite(wxTextFileType typeNew, const wxMBConv& conv, const char* charBOM, size_t lengthBOM) wxOVERRIDE;
 
 private:
 

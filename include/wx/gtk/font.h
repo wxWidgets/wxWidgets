@@ -9,6 +9,10 @@
 #ifndef _WX_GTK_FONT_H_
 #define _WX_GTK_FONT_H_
 
+// Bricsys change
+inline int wxFONT_SZ(int pointSize){ return pointSize; }
+// end Bricsys change
+
 // ----------------------------------------------------------------------------
 // wxFont
 // ----------------------------------------------------------------------------

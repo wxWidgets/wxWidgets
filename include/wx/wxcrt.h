@@ -664,7 +664,7 @@ inline const wchar_t *wxStrstr(const wchar_t *haystack, const wxString& needle)
 // used by c_str()'s implicit conversion to char*, for ANSI build compatibility
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const char *wxStrstr(const wxString& haystack, const wxString& needle)
-    { return wxCRT_StrstrA(haystack.c_str(), needle.mb_str()); }
+    { return wxCRT_StrstrA(haystack.data(), needle.mb_str()); }
 inline const char *wxStrstr(const wxCStrData& haystack, const wxString& needle)
     { return wxCRT_StrstrA(haystack, needle.mb_str()); }
 inline const char *wxStrstr(const wxCStrData& haystack, const wxCStrData& needle)
@@ -673,7 +673,7 @@ inline const char *wxStrstr(const wxCStrData& haystack, const wxCStrData& needle
 // if 'needle' is char/wchar_t, then the same is probably wanted as return value
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const char *wxStrstr(const wxString& haystack, const char *needle)
-    { return wxCRT_StrstrA(haystack.c_str(), needle); }
+    { return wxCRT_StrstrA(haystack.data(), needle); }
 inline const char *wxStrstr(const wxCStrData& haystack, const char *needle)
     { return wxCRT_StrstrA(haystack, needle); }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
@@ -736,13 +736,13 @@ inline const char* wxStrchr(const wxString& s, int c)
 inline const char* wxStrrchr(const wxString& s, int c)
     { return wxCRT_StrrchrA((const char*)s.c_str(), c); }
 inline const char* wxStrchr(const wxString& s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.c_str(), c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.data(), c) : NULL; }
 inline const char* wxStrrchr(const wxString& s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.c_str(), c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.data(), c) : NULL; }
 inline const char* wxStrchr(const wxString& s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.c_str(), c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.data(), c) : NULL; }
 inline const char* wxStrrchr(const wxString& s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.c_str(), c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.data(), c) : NULL; }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const wchar_t* wxStrchr(const wxString& s, wchar_t c)
     { return wxCRT_StrchrW((const wchar_t*)s.c_str(), c); }
@@ -787,15 +787,15 @@ inline const wchar_t *wxStrpbrk(const wchar_t *s, const wxCStrData& accept)
     { return wxCRT_StrpbrkW(s, accept.AsWCharBuf()); }
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const char *wxStrpbrk(const wxString& s, const wxString& accept)
-    { return wxCRT_StrpbrkA(s.c_str(), accept.mb_str()); }
+    { return wxCRT_StrpbrkA(s.data(), accept.mb_str()); }
 inline const char *wxStrpbrk(const wxString& s, const char *accept)
-    { return wxCRT_StrpbrkA(s.c_str(), accept); }
+    { return wxCRT_StrpbrkA(s.data(), accept); }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const wchar_t *wxStrpbrk(const wxString& s, const wchar_t *accept)
     { return wxCRT_StrpbrkW(s.wc_str(), accept); }
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const char *wxStrpbrk(const wxString& s, const wxCStrData& accept)
-    { return wxCRT_StrpbrkA(s.c_str(), accept.AsCharBuf()); }
+    { return wxCRT_StrpbrkA(s.data(), accept.AsCharBuf()); }
 inline const char *wxStrpbrk(const wxCStrData& s, const wxString& accept)
     { return wxCRT_StrpbrkA(s.AsChar(), accept.mb_str()); }
 inline const char *wxStrpbrk(const wxCStrData& s, const char *accept)

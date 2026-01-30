@@ -46,6 +46,9 @@ enum wxAuiNotebookOption
     wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 11,
     wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 12,
     wxAUI_NB_MIDDLE_CLICK_CLOSE  = 1 << 13,
+// Bricsys added: disable hint window
+    wxAUI_NB_NO_HINT_WINDOW      = 1 << 14,
+// end Bricsys added
 
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
@@ -168,6 +171,9 @@ public:
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
 
+    // Bricsys added
+    bool IsVertical() const;
+
 protected:
 
     virtual void Render(wxDC* dc, wxWindow* wnd);
@@ -241,8 +247,76 @@ protected:
 #endif
 };
 
+// wxTabFrame is an interesting case.  It's important that all child pages
+// of the multi-notebook control are all actually children of that control
+// (and not grandchildren).  wxTabFrame facilitates this.  There is one
+// instance of wxTabFrame for each tab control inside the multi-notebook.
+// It's important to know that wxTabFrame is not a real window, but it merely
+// used to capture the dimensions/positioning of the internal tab control and
+// it's managed page windows
 
-
+class WXDLLIMPEXP_AUI wxTabFrame : public wxWindow
+{
+public:
+    
+    wxTabFrame()
+    {
+        m_tabs = NULL;
+        
+        // Both m_rect and m_tabCtrlHeight will be really initialized later.
+        m_tabCtrlHeight = 0;
+    }
+    
+    ~wxTabFrame()
+    {
+        wxDELETE(m_tabs);
+    }
+    
+    void SetTabCtrlHeight(int h)
+    {
+        m_tabCtrlHeight = h;
+    }
+    
+protected:
+    void DoSetSize(int x, int y,
+                   int width, int height,
+                   int WXUNUSED(sizeFlags = wxSIZE_AUTO)) wxOVERRIDE
+    {
+        m_rect = wxRect(x, y, width, height);
+        DoSizing();
+    }
+    
+    void DoGetClientSize(int* x, int* y) const wxOVERRIDE
+    {
+        *x = m_rect.width;
+        *y = m_rect.height;
+    }
+    
+public:
+    bool Show( bool WXUNUSED(show = true) ) wxOVERRIDE { return false; }
+    
+    void DoSizing();
+    
+protected:
+    void DoGetSize(int* x, int* y) const wxOVERRIDE
+    {
+        if (x)
+            *x = m_rect.GetWidth();
+        if (y)
+            *y = m_rect.GetHeight();
+    }
+    
+public:
+    void Update() wxOVERRIDE
+    {
+        // does nothing
+    }
+    
+    wxRect m_rect;
+    wxRect m_tab_rect;
+    wxAuiTabCtrl* m_tabs;
+    int m_tabCtrlHeight;
+};
 
 class WXDLLIMPEXP_AUI wxAuiNotebook : public wxNavigationEnabled<wxBookCtrlBase>
 {
@@ -312,7 +386,7 @@ public:
 
     virtual void Split(size_t page, int direction);
 
-    const wxAuiManager& GetAuiManager() const { return m_mgr; }
+    const wxAuiManager& GetAuiManager() const { return *m_mgr; }
 
     // Sets the normal font
     void SetNormalFont(const wxFont& font);
@@ -387,11 +461,16 @@ protected:
 
     //A general selection function
     virtual int DoModifySelection(size_t n, bool events);
+    virtual wxAuiManager& GetAuiManager() { if(m_mgr == NULL) m_mgr = new wxAuiManager; return *m_mgr; }
+
+// Bricsys change: enable replacement of stock wxAuiTabCtrl with derived class
+    virtual wxAuiTabCtrl* createTabControl(wxWindow* parent, wxWindowID id,
+        const wxPoint& pos, const wxSize& size, long style);
 
 protected:
 
     void DoSizing();
-    void InitNotebook(long style);
+    virtual void InitNotebook(long style);
     wxWindow* GetTabFrameFromTabCtrl(wxWindow* tabCtrl);
     void RemoveEmptyTabFrames();
     void UpdateHintWindowSize();
@@ -425,7 +504,7 @@ protected:
 
 protected:
 
-    wxAuiManager m_mgr;
+    wxAuiManager* m_mgr;
     wxAuiTabContainer m_tabs;
     int m_curPage;
     int m_tabIdCounter;

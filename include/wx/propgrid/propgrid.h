@@ -205,11 +205,22 @@ wxPG_DESCRIPTION                    = 0x00002000,
 // property grid. Recommended if you use a header.
 wxPG_NO_INTERNAL_BORDER             = 0x00004000,
 
+//Bricsys change merged on wxwidgets upgrade
+/** Added by Bricsys : Standard behaviour of wxPropertyGrid, doesn't set focus on control
+	on selection, unless the user clicked on the value field. When this flag is on,
+	focus is set on the control when the user (left or right)clicked anywhere on the property, 
+	and when she navigates to it with an arrow key.
++*/
+wxPG_ALWAYS_FOCUS_SELECTED          = 0x00008000,
+
 // A mask which can be used to filter (out) all styles.
 wxPG_WINDOW_STYLE_MASK = wxPG_AUTO_SORT|wxPG_HIDE_CATEGORIES|wxPG_BOLD_MODIFIED|
                          wxPG_SPLITTER_AUTO_CENTER|wxPG_TOOLTIPS|wxPG_HIDE_MARGIN|
                          wxPG_STATIC_SPLITTER|wxPG_LIMITED_EDITING|wxPG_TOOLBAR|
                          wxPG_DESCRIPTION|wxPG_NO_INTERNAL_BORDER
+#if 1 // Bricsys change
+                        |wxPG_ALWAYS_FOCUS_SELECTED,
+#endif
 };
 
 #if wxPG_COMPATIBILITY_1_4
@@ -1058,6 +1069,9 @@ public:
     // background.
     void SetSelectionBackgroundColour(const wxColour& col);
 
+    // Bricscad change: set a different colour for selected but unfocused properties
+    void SetSelectionUnfocusedBackgroundColour(const wxColour& col);
+
     // Sets selection foreground colour - applies to selected property name
     // text.
     void SetSelectionTextColour(const wxColour& col);
@@ -1695,6 +1709,8 @@ protected:
     // background for selected property (actually use background color when
     // control out-of-focus)
     wxColour            m_colSelBack;
+    // Bricscad change: set a different colour for selected but unfocused properties
+    wxColour            m_colSelUnfocusBack;  
     // background colour for margin
     wxColour            m_colMargin;
     // background colour for empty space below the grid

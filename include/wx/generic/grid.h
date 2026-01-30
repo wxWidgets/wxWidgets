@@ -1804,8 +1804,14 @@ public:
 
     // ------ grid cursor movement functions
     //
-    void SetGridCursor(int row, int col) { SetCurrentCell(row, col); }
-    void SetGridCursor(const wxGridCellCoords& c) { SetCurrentCell(c); }
+
+    // Bricsys change: added 'sendSelectEvent';
+    // the purpose - to make possible calling this method from select event handler;
+    // this allows us to set 'm_currentCellCoords'
+    void SetGridCursor( int row, int col, bool sendSelectEvent = true )
+        { SetCurrentCell( wxGridCellCoords(row, col), sendSelectEvent ); }
+    void SetGridCursor( const wxGridCellCoords& c, bool sendSelectEvent = true )
+        { SetCurrentCell(c, sendSelectEvent); }
 
     void GoToCell(int row, int col)
     {
@@ -2899,7 +2905,8 @@ protected:
     void OnChar( wxKeyEvent& );
 
 
-    bool SetCurrentCell( const wxGridCellCoords& coords );
+    // Bricsys change: added 'sendSelectEvent', see comments near SetGridCursor()
+    bool SetCurrentCell( const wxGridCellCoords& coords, bool sendSelectEvent = true ); 
     bool SetCurrentCell( int row, int col )
         { return SetCurrentCell( wxGridCellCoords(row, col) ); }
 

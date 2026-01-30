@@ -48,6 +48,9 @@ enum wxAuiManagerOption
     wxAUI_MGR_HINT_FADE                = 1 << 6,
     wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
     wxAUI_MGR_LIVE_RESIZE              = 1 << 8,
+// Bricsys added: disable hint window
+    wxAUI_MGR_NO_HINT_WINDOW           = 1 << 9,
+// end Bricsys added
 
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
@@ -416,7 +419,7 @@ public:
     static bool AlwaysUsesLiveResize();
     bool HasLiveResize() const;
 
-    void SetManagedWindow(wxWindow* managedWnd);
+    virtual void SetManagedWindow(wxWindow* managedWnd);
     wxWindow* GetManagedWindow() const;
 
     static wxAuiManager* GetManager(wxWindow* window);
@@ -494,7 +497,7 @@ public:
 
 protected:
 
-    void UpdateHintWindowConfig();
+    virtual void UpdateHintWindowConfig();
 
     void DoFrameLayout();
 

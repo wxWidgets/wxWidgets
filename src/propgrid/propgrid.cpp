@@ -1476,9 +1476,20 @@ void wxPropertyGrid::RegainColours()
     if ( !(m_coloursCustomized & 0x0100) )
         m_colDisPropFore = m_colCapFore;
 
+    // Bricscad change: set a different colour for selected but unfocused properties
+    if ( !(m_coloursCustomized & 0x0200) )
+        m_colSelUnfocusBack = m_colMargin;
+
     m_colEmptySpace = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
 }
 
+// Bricscad change: set a different colour for selected but unfocused properties
+void wxPropertyGrid::SetSelectionUnfocusedBackgroundColour( const wxColour& col )
+{
+    m_colSelUnfocusBack = col;
+    m_coloursCustomized |= 0x200;
+    Refresh();
+}
 // -----------------------------------------------------------------------
 
 void wxPropertyGrid::ResetColours()
@@ -2294,7 +2305,15 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 else if ( isPgEnabled )
                 {
                     rowFgCol = m_colPropFore;
-                    rowBgCol = m_colMargin;
+                    if ( p == firstSelected )
+                    {   // Bricscad change: set a different colour for selected but unfocused properties
+                        if ( !(m_coloursCustomized & 0x0200) )
+                            rowBgCol = m_colMargin;
+                        else
+                            rowBgCol = m_colSelUnfocusBack;
+                    }
+                    else
+                        rowBgCol = m_colSelBack;
                 }
                 else
                 {
@@ -4795,8 +4814,18 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                      )
                     )
                 {
+                    int setFocus = columnHit;
+#if 1   // Bricsys change
+                    if (m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED)
+                    {
+                        // only allow 'columnHit' column to get focus, when visible, enabled, write-enabled
+                            if (!p->IsEnabled() || !p->IsVisible() || p->HasFlag(wxPG_PROP_READONLY))
+                                setFocus = 0;  // 'Label' column only
+                    }
+#endif
+                        
                     if ( !AddToSelectionFromInputEvent( p,
-                                                        columnHit,
+                                                        setFocus,
                                                         &event ) )
                         return res;
 
@@ -4811,12 +4840,20 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
             else if ( splitterHit == -1 )
             {
             // Click on value.
-                unsigned int selFlag = 0;
+                unsigned int selFlag = m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED ? wxPG_SEL_FOCUS : 0;  // Bricsys change
                 if ( columnHit == 1 )
                 {
                     m_iFlags |= wxPG_FL_ACTIVATION_BY_CLICK;
                     selFlag = wxPG_SEL_FOCUS;
                 }
+#if 1   // Bricsys change
+                if (selFlag == wxPG_SEL_FOCUS)
+                {
+                    // only allow 'columnHit' column to get focus, when visible, enabled, write-enabled
+                        if (!p->IsEnabled() || !p->IsVisible() || p->HasFlag(wxPG_PROP_READONLY))
+                            selFlag = 0;
+                }
+#endif
                 if ( !AddToSelectionFromInputEvent( p,
                                                     columnHit,
                                                     &event,
@@ -4942,7 +4979,18 @@ bool wxPropertyGrid::HandleMouseRightClick( int WXUNUSED(x),
     {
         // Select property here as well
         wxPGProperty* p = m_propHover;
+
+#if 1   // Bricsys change
+        unsigned int hitColumn = m_colHover;
+        if (m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED)
+            {
+                if (!p->IsEnabled() || !p->IsVisible() || p->HasFlag(wxPG_PROP_READONLY))
+                        hitColumn = 0;
+            }
+        AddToSelectionFromInputEvent(p, hitColumn, &event);
+#else
         AddToSelectionFromInputEvent(p, m_colHover, &event);
+#endif
 
         // Send right click event.
         SendEvent( wxEVT_PG_RIGHT_CLICK, p );
@@ -5766,7 +5814,13 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
                     if ( m_labelEditor )
                         reopenLabelEditorCol = m_selColumn;
                 }
-
+#if 1 // Bricsys change
+                if ( m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED )
+                {
+                    if (!p->IsEnabled() || !p->IsVisible() || p->HasFlag(wxPG_PROP_READONLY))
+                            selFlags = 0;  // 'Label' column only
+                }
+#endif  
                 DoSelectProperty(p, selFlags);
 
                 if ( reopenLabelEditorCol >= 0 )
@@ -5787,7 +5841,20 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         if ( action != wxPG_ACTION_CANCEL_EDIT && secondAction != wxPG_ACTION_CANCEL_EDIT )
         {
             wxPGProperty* p = wxPropertyGridInterface::GetFirst();
+#if 1   // Bricsys change
+            if ( p )
+            {
+                unsigned int flags = 0;
+                if ( m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED )  // Bricsys change
+                    {
+                        if (p->IsEnabled() && p->IsVisible() && !p->HasFlag(wxPG_PROP_READONLY))
+                                flags = wxPG_SEL_FOCUS;
+                    }
+                DoSelectProperty(p, flags);
+            }
+#else
             if ( p ) DoSelectProperty(p);
+#endif
             wasHandled = true;
         }
     }

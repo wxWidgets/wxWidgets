@@ -262,9 +262,10 @@ bool wxTextBuffer::Close()
     return true;
 }
 
-bool wxTextBuffer::Write(wxTextFileType typeNew, const wxMBConv& conv)
+// Bricsys: added last 2 parameters to write BOM to Unicode files
+bool wxTextBuffer::Write(wxTextFileType typeNew, const wxMBConv& conv, const char* charBOM, size_t lengthBOM)
 {
-    return OnWrite(typeNew, conv);
+    return OnWrite(typeNew, conv, charBOM, lengthBOM);
 }
 
 #endif // wxUSE_TEXTBUFFER

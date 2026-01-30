@@ -1211,7 +1211,7 @@ bool wxThread::SetNameForCurrent(const wxString &name)
     // Even if the method above succeeded, we can set
     // the name through this other, independent way also.
 #ifdef _MSC_VER
-    retval |= wxSetThreadNameOnAnyMSVC(name.c_str());
+    retval |= wxSetThreadNameOnAnyMSVC(name.data());
 #endif
 
     // return true if at least one call succeeded

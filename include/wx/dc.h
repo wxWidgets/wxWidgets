@@ -636,7 +636,8 @@ public:
                                wxRasterOperationMode rop = wxCOPY,
                                bool useMask = false,
                                wxCoord xsrcMask = wxDefaultCoord,
-                               wxCoord ysrcMask = wxDefaultCoord);
+                               wxCoord ysrcMask = wxDefaultCoord,
+                               bool resizeQualityHigh = false); // Bricsys change: added resizeQualityHigh param
 
     virtual wxBitmap DoGetAsBitmap(const wxRect *WXUNUSED(subrect)) const
         { return wxNullBitmap; }
@@ -1327,18 +1328,20 @@ public:
                      wxCoord srcX, wxCoord srcY,
                      wxCoord srcWidth, wxCoord srcHeight,
                      wxRasterOperationMode rop = wxCOPY, bool useMask = false,
-                     wxCoord srcMaskX = wxDefaultCoord, wxCoord srcMaskY = wxDefaultCoord)
+                     wxCoord srcMaskX = wxDefaultCoord, wxCoord srcMaskY = wxDefaultCoord,
+                     bool resizeQualityHigh = false) // Bricsys change: added resizeQualityHigh param
     {
         return m_pimpl->DoStretchBlit(dstX, dstY, dstWidth, dstHeight,
-                      source, srcX, srcY, srcWidth, srcHeight, rop, useMask, srcMaskX, srcMaskY);
+                      source, srcX, srcY, srcWidth, srcHeight, rop, useMask, srcMaskX, srcMaskY, resizeQualityHigh);
     }
     bool StretchBlit(const wxPoint& dstPt, const wxSize& dstSize,
                      wxDC *source, const wxPoint& srcPt, const wxSize& srcSize,
                      wxRasterOperationMode rop = wxCOPY, bool useMask = false,
-                     const wxPoint& srcMaskPt = wxDefaultPosition)
+                     const wxPoint& srcMaskPt = wxDefaultPosition,
+                     bool resizeQualityHigh = false) // Bricsys change: added resizeQualityHigh param
     {
         return m_pimpl->DoStretchBlit(dstPt.x, dstPt.y, dstSize.x, dstSize.y,
-                      source, srcPt.x, srcPt.y, srcSize.x, srcSize.y, rop, useMask, srcMaskPt.x, srcMaskPt.y);
+                      source, srcPt.x, srcPt.y, srcSize.x, srcSize.y, rop, useMask, srcMaskPt.x, srcMaskPt.y, resizeQualityHigh);
     }
 
     wxBitmap GetAsBitmap(const wxRect *subrect = (const wxRect *) NULL) const

@@ -202,6 +202,39 @@ bool wxGUIEventLoop::Dispatch()
 
 #endif
 
+// Bricsys added: regenAbort - we need a function which peeks for queued mouse events in the loop
+// type == 1 - I found no other existing specifier nor a good candidate
+bool wxGUIEventLoop::Pending(int type) const
+{
+    if( type == 1 )
+    {
+        static NSPoint lastEventLocationInWindow;
+        NSEvent* newEvent = nullptr;
+        if( (newEvent =
+             [[NSApplication sharedApplication]
+             nextEventMatchingMask: NSMouseMovedMask | NSOtherMouseDraggedMask | NSLeftMouseDraggedMask // | NSRightMouseDraggedMask
+             untilDate: nil
+             inMode: NSDefaultRunLoopMode
+             dequeue: NO]
+             ) != nil )
+            
+            if( newEvent.locationInWindow.x != lastEventLocationInWindow.x &&
+                newEvent.locationInWindow.y != lastEventLocationInWindow.y
+               )
+            {
+                lastEventLocationInWindow = newEvent.locationInWindow;
+                return true;
+            }
+            else
+            {
+                [[NSApplication sharedApplication]
+                 discardEventsMatchingMask: NSMouseMovedMask
+                 beforeEvent: newEvent];
+            }
+    }
+    return false;
+}
+
 int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
 {
     wxMacAutoreleasePool autoreleasepool;

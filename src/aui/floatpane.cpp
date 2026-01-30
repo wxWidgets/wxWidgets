@@ -52,6 +52,8 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
     , m_ownerMgr(owner_mgr)
 {
     m_moving = false;
+    // Bricsys change: copy flags from owner manager; need wxAUI_MGR_NO_HINT_WINDOW
+    m_mgr.SetFlags(m_ownerMgr->GetFlags());
     m_mgr.SetManagedWindow(this);
     m_mgr.SetArtProvider(owner_mgr->GetArtProvider()->Clone());
     m_solidDrag = true;

@@ -56,6 +56,9 @@ public:
     virtual void SetColour(const wxColour& colour) = 0;
     virtual void SetActiveColour(const wxColour& colour) = 0;
 
+    // Bricsys added
+    virtual bool Vertical() const { return false; }
+
     virtual void DrawBorder(
                  wxDC& dc,
                  wxWindow* wnd,
@@ -135,6 +138,9 @@ public:
     void SetMeasuringFont(const wxFont& font) wxOVERRIDE;
     void SetColour(const wxColour& colour) wxOVERRIDE;
     void SetActiveColour(const wxColour& colour) wxOVERRIDE;
+
+    // Bricsys added
+    bool Vertical() const wxOVERRIDE;
 
     void DrawBorder(
                  wxDC& dc,
@@ -238,6 +244,9 @@ public:
     void SetMeasuringFont(const wxFont& font) wxOVERRIDE;
     void SetColour(const wxColour& colour) wxOVERRIDE;
     void SetActiveColour(const wxColour& colour) wxOVERRIDE;
+
+    // Bricsys added
+    bool Vertical() const wxOVERRIDE;
 
     void DrawBorder(
                  wxDC& dc,
