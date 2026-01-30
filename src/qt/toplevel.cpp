@@ -230,6 +230,14 @@ long wxTopLevelWindowQt::GetWindowStyleFlag() const
     return winStyle;
 }
 
+void wxTopLevelWindowQt::QtSetWindowModality(wxQtWindowModality modality)
+{
+    wxCHECK_RET( !IsShown(),
+        "QtSetWindowModality() has no effect on an already shown window" );
+
+    GetHandle()->setWindowModality(static_cast<Qt::WindowModality>(modality));
+}
+
 void wxTopLevelWindowQt::DoSetSizeHints( int minW, int minH,
                                          int maxW, int maxH,
                                          int incW, int incH )

@@ -47,6 +47,18 @@ public:
     virtual void SetWindowStyleFlag( long style ) override;
     virtual long GetWindowStyleFlag() const override;
 
+    // Values of this enum are synchronized with Qt::WindowModality ones
+    enum wxQtWindowModality
+    {
+        NonModal,
+        WindowModal,
+        AppModal
+    };
+
+
+    // Window modality
+    void QtSetWindowModality(wxQtWindowModality modality);
+
 protected:
     void QtSetSizeIncrement(int width, int height);
 
