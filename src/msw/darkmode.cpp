@@ -566,7 +566,7 @@ HBRUSH GetMenuBrush(wxMenuColour which = wxMenuColour::StandardBg)
 
 // ---------------------------------------------------------------------------
 // Check High contrast mode
-// Menu Theme is disabled in high contrast mode 
+// Menu Theme is disabled in high contrast mode
 // ---------------------------------------------------------------------------
 static bool IsHighContrast()
 {
@@ -595,7 +595,7 @@ HandleMenuMessage(WXLRESULT* result,
     switch ( nMsg )
     {
         case WM_MENUBAR_INITMENU:
-            // Enable rounded corners for UAH menus 
+            // Enable rounded corners for UAH menus
             if (auto* const pUahMenu = (MenuBarDrawMenu*)lParam)
             {
                 // if (!pUahMenu || pUahMenu->dwReserved & 0x0A10) return FALSE;

@@ -295,7 +295,7 @@ static bool wxIsTouchEventMSW()
 }
 // ---------------------------------------------------------------------------
 // Check High contrast mode
-// Menu Theme is disabled in high contrast mode 
+// Menu Theme is disabled in high contrast mode.
 // ---------------------------------------------------------------------------
 static bool IsHighContrast()
 {
@@ -3614,7 +3614,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             processed = HandleEndSession(wParam != 0, lParam);
             break;
         case WM_ENTERIDLE:
-            processed = HandleEnterIdle(wParam, lParam);    
+            processed = HandleEnterIdle(wParam, lParam);
             break;
         case WM_GETMINMAXINFO:
             processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);
@@ -4291,7 +4291,7 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 
     return true;
 }
-void wxWindowMSW::EnableRoundCorners(HWND hWndMenu)
+void wxWindowMSW::EnableRoundCorners(WXHWND hWndMenu)
 {
     // Dynamically load DwmSetWindowAttribute to avoid link dependency
     typedef HRESULT(WINAPI* PFN_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
@@ -4340,14 +4340,15 @@ void wxWindowMSW::EnableRoundCorners(HWND hWndMenu)
         }
     }
 }
-bool wxWindowMSW::HandleEnterIdle(WPARAM wParam, LPARAM lParam)
+
+bool wxWindowMSW::HandleEnterIdle(WXWPARAM wParam, WXLPARAM lParam)
 {
     // We only care about idle states triggered by menus
-    if (static_cast<WPARAM>(wParam) != MSGF_MENU)
+    if (static_cast<WXWPARAM>(wParam) != MSGF_MENU)
         return false;
 
     // Fix menu rounded corners in Windows 11 and higher at light mode if menu has Owner Drawn items.
-    // high contrast off according to uxtheme.   
+    // high contrast off according to uxtheme.
     // See: https://github.com/wxWidgets/wxWidgets/issues/22518
     if (!wxMSWDarkMode::IsActive() && !IsHighContrast())
     {

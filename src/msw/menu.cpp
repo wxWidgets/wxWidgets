@@ -962,7 +962,7 @@ WXHMENU wxMenuBar::Create()
                     wxLogLastError(wxT("SetMenuInfo(MIM_BACKGROUND)"));
                 }
             }
-           
+
         }
 #endif // wxUSE_OWNER_DRAWN
     }

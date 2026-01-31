@@ -896,7 +896,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HDC hdc = GetHdcOf(*impl);
-       
+
     RECT rect;
     wxCopyRectToRECT(rc, rect);
 
@@ -1010,7 +1010,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             }
 
             DrawThemePart(rcGutter, MENU_POPUPGUTTER);
-           
+
             if ( IsSeparator() )
             {
                     rcSeparator.left = rcGutter.right;
@@ -1236,7 +1236,7 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
     if ( MenuDrawData::IsUxThemeActive() )
     {
         wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU" , L"DARKMODE::MENU");
-      
+
         const MenuDrawData* data = MenuDrawData::Get(GetMenu());
 
         // rect for background must be without check margins
