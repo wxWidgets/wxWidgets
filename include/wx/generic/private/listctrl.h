@@ -356,6 +356,7 @@ public:
 
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
+    void OnSysColourChanged( wxSysColourChangedEvent &event );
 
     // needs refresh
     bool m_dirty;
