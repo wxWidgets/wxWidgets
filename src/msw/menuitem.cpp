@@ -134,7 +134,7 @@ private:
 #include "wx/msw/private/metrics.h"
 
 #endif // wxUSE_OWNER_DRAWN
-#include <wx/msw/private/darkmode.h>
+#include "wx/msw/private/darkmode.h"
 
 // ----------------------------------------------------------------------------
 // dynamic classes implementation

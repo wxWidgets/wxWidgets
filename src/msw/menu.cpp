@@ -45,8 +45,8 @@
 #include <string.h>
 
 #include "wx/dynlib.h"
-#include <wx/msw/private/darkmode.h>
-#include <wx/msw/uxtheme.h>
+#include "wx/msw/private/darkmode.h"
+#include "wx/msw/uxtheme.h"
 
 // ----------------------------------------------------------------------------
 // global variables
