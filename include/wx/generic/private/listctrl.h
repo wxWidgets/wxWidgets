@@ -618,6 +618,8 @@ public:
 
     void OnPaint( wxPaintEvent &event );
 
+    void OnSysColourChanged( wxSysColourChangedEvent &event );
+
     void OnChildFocus(wxChildFocusEvent& event);
 
     void DrawImage( int index, wxDC *dc, int x, int y );

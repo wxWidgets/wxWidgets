@@ -1529,6 +1529,7 @@ wxBEGIN_EVENT_TABLE(wxListMainWindow, wxWindow)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
   EVT_SCROLLWIN      (wxListMainWindow::OnScroll)
   EVT_CHILD_FOCUS    (wxListMainWindow::OnChildFocus)
+  EVT_SYS_COLOUR_CHANGED(wxListMainWindow::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 void wxListMainWindow::Init()
@@ -2205,6 +2206,26 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             DrawFocusRect(this, dc, GetLineHighlightRect(m_current), flags);
     }
 #endif // !__WXMAC__
+}
+
+void wxListMainWindow::OnSysColourChanged( wxSysColourChangedEvent &event )
+{
+    SetOwnForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
+    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
+
+    if ( m_highlightBrush )
+    {
+        m_highlightBrush->SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    }
+
+    if ( m_highlightUnfocusedBrush )
+    {
+        m_highlightUnfocusedBrush->SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+    }
+
+    Refresh();
+
+    event.Skip();
 }
 
 void wxListMainWindow::HighlightAll( bool on )
