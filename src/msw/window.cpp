@@ -295,7 +295,7 @@ static bool wxIsTouchEventMSW()
 }
 // ---------------------------------------------------------------------------
 // Check High contrast mode
-// Menu Theme is disabled in high contrast mode 
+// Menu Theme is disabled in high contrast mode.
 // ---------------------------------------------------------------------------
 static bool IsHighContrast()
 {
