@@ -564,6 +564,22 @@ HBRUSH GetMenuBrush(wxMenuColour which = wxMenuColour::StandardBg)
 
 } // namespace wxMSWMenuImpl
 
+// ---------------------------------------------------------------------------
+// Check High contrast mode
+// Menu Theme is disabled in high contrast mode 
+// ---------------------------------------------------------------------------
+static bool IsHighContrast()
+{
+    HIGHCONTRASTW hc = { sizeof(hc) };
+
+    if (SystemParametersInfoW(SPI_GETHIGHCONTRAST, sizeof(hc), &hc, 0))
+    {
+        return (hc.dwFlags & HCF_HIGHCONTRASTON) != 0;
+    }
+
+    return false;
+}
+
 bool
 HandleMenuMessage(WXLRESULT* result,
                   wxWindow* w,
@@ -578,6 +594,25 @@ HandleMenuMessage(WXLRESULT* result,
 
     switch ( nMsg )
     {
+        case WM_MENUBAR_INITMENU:
+            // Enable rounded corners for UAH menus 
+            if (auto* const pUahMenu = (MenuBarDrawMenu*)lParam)
+            {
+                // if (!pUahMenu || pUahMenu->dwReserved & 0x0A10) return FALSE;
+                bool bIsBarSupMenu = (pUahMenu->dwReserved & 0x4000001);
+                if (bIsBarSupMenu && !IsHighContrast())
+                {
+                    HWND hWndMenu = WindowFromDC(pUahMenu->hdc);
+                    if (hWndMenu)
+                    {
+                        wxWindow* winMenu = wxFindWinFromHandle(hWndMenu);
+                        winMenu->EnableRoundCorners(hWndMenu);
+                    }
+
+                }
+            }
+            return false;
+
         case WM_MENUBAR_DRAWMENU:
             // Erase the menu bar background using custom brush.
             if ( auto* const drawMenu = (MenuBarDrawMenu*)lParam )

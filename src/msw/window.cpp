@@ -4315,6 +4315,7 @@ void wxWindowMSW::EnableRoundCorners(HWND hWndMenu)
             if (SUCCEEDED(hr))
             {
                 // Clean up conflicting styles like drop shadows
+                // Not needed for Dark mode at WM_MENUBAR_INITMENU Windows handles it correctly there because of Menu is Not visible yet.
                 DWORD style = ::GetClassLongPtr(hWndMenu, GCL_STYLE);
                 if (style & CS_DROPSHADOW)
                 {
