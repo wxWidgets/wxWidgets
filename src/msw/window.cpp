@@ -4291,7 +4291,7 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 
     return true;
 }
-void wxWindowMSW::EnableRoundCorners(HWND hWndMenu)
+void wxWindowMSW::EnableRoundCorners(WXHWND hWndMenu)
 {
     // Dynamically load DwmSetWindowAttribute to avoid link dependency
     typedef HRESULT(WINAPI* PFN_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);

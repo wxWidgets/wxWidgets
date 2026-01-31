@@ -370,7 +370,7 @@ public:
     virtual bool HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleQueryEndSession(long logOff, bool *mayEnd);
-    void EnableRoundCorners(HWND hWndMenu);
+    void EnableRoundCorners(WXHWND hWndMenu);
     bool HandleEndSession(bool endSession, long logOff);
 
     bool HandleSetFocus(WXHWND wnd);
