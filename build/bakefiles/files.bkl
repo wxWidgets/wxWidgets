@@ -202,9 +202,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/mimetype.cpp
 </set>
 <set var="BASE_OSX_HDR" hints="files">
+    wx/osx/chkconf.h
+    wx/osx/cocoa/chkconf.h
+    wx/osx/iphone/chkconf.h
     $(BASE_COREFOUNDATION_HDR)
     $(BASE_UNIX_AND_DARWIN_HDR)
     wx/osx/fswatcher_fsevents.h
+    wx/osx/evtloopsrc.h
 </set>
 <!-- Base and GUI files used by OS X -->
 
@@ -2178,7 +2182,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/button.h
     wx/osx/checkbox.h
     wx/osx/checklst.h
-    wx/osx/chkconf.h
     wx/osx/choice.h
     wx/osx/clipbrd.h
     wx/osx/colordlg.h
@@ -2198,7 +2201,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/dirdlg.h
     wx/osx/dnd.h
     wx/osx/evtloop.h
-    wx/osx/evtloopsrc.h
     wx/osx/filedlg.h
     wx/osx/font.h
     wx/osx/fontdlg.h
@@ -2324,7 +2326,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/power.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
-    wx/osx/cocoa/chkconf.h
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
     wx/generic/region.h
@@ -2377,7 +2378,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="OSX_IPHONE_HDR" hints="files">
-    wx/osx/iphone/chkconf.h
     wx/osx/iphone/private.h
     wx/generic/region.h
     wx/osx/sound.h

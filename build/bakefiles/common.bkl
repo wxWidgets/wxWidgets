@@ -556,6 +556,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     <include file="expat.bkl"/>
     <include file="scintilla.bkl"/>
     <include file="lexilla.bkl"/>
+    <include file="lunasvg.bkl"/>
 
 
     <!-- =============================================================== -->
@@ -668,6 +669,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <sys-lib>$(LIB_JPEG)</sys-lib>
         <sys-lib>$(LIB_PNG)</sys-lib>
         <sys-lib>$(LIB_WEBP)</sys-lib>
+        <sys-lib>$(LIB_LUNASVG)</sys-lib>
         <ldlibs>$(LIB_GTK)</ldlibs>
         <ldlibs>$(EXTRALIBS_FOR_GUI)</ldlibs>
     </template>
@@ -787,6 +789,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <depends>wxjpeg</depends>
         <depends>wxpng</depends>
         <depends>wxwebp</depends>
+        <depends>wxlunasvg</depends>
         <depends>wxscintilla</depends>
         <depends>wxlexilla</depends>
     </template>
@@ -804,6 +807,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <include>$(INC_JPEG)</include>
         <include>$(INC_PNG)</include>
         <include>$(INC_WEBP)</include>
+        <include>$(INC_LUNASVG)</include>
     </template>
 
     <template id="wx_lib"

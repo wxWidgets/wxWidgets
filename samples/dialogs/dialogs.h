@@ -563,7 +563,7 @@ private:
     void OnShowTip(wxCommandEvent& event);
     void OnUpdateShowTipUI(wxUpdateUIEvent& event);
 
-    wxTipWindow *m_tipWindow;
+    wxTipWindow::Ref m_tipWindow;
 #endif // wxUSE_TIPWINDOW
 
     bool m_confirmExit;

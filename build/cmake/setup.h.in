@@ -3,6 +3,16 @@
 #ifndef __WX_SETUP_H__
 #define __WX_SETUP_H__
 
+/* Deal with wxUSE_GUI first, before any toolkit definitions below. */
+#ifndef wxUSE_GUI
+    #ifdef __WX@wxBUILD_TOOLKIT_UPPER@__
+        #cmakedefine01 wxUSE_GUI
+    #else
+        #define wxUSE_GUI 0
+    #endif
+#endif
+
+
 /* never undefine inline or const keywords for C++ compilation */
 #ifndef __cplusplus
 
@@ -559,6 +569,8 @@
 #cmakedefine01 wxUSE_NANOSVG
 
 #cmakedefine01 wxUSE_NANOSVG_EXTERNAL
+
+#cmakedefine01 wxUSE_LUNASVG
 
 #cmakedefine01 wxUSE_TGA
 

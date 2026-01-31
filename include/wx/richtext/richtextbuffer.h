@@ -4765,7 +4765,7 @@ public:
     wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextPlainText(*this); }
 
 private:
-    bool DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, wxString& str, wxCoord& x, wxCoord& y, bool selected);
+    void DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, wxString& str, wxCoord& x, wxCoord& y, ssize_t selStart, ssize_t selEnd);
 
 protected:
     wxString    m_text;

@@ -18,9 +18,9 @@
 #include "wx/dcmemory.h"
 #include "wx/imaglist.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     #include "wx/msw/private/resource_usage.h"
-#endif // __WINDOWS__
+#endif // __WXMSW__
 
 #include "asserthelper.h"
 
@@ -77,7 +77,7 @@ TEST_CASE("BitmapBundle::GetBitmap", "[bmpbundle]")
     CHECK( b.GetBitmap(wxSize(48, 48)).GetSize() == wxSize(48, 48) );
 }
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 
 namespace
 {
@@ -134,7 +134,7 @@ TEST_CASE("BitmapBundle::ResourceLeak", "[bmpbundle]")
     CHECK( usageAfter.numGDI - usageBefore.numGDI < 10 );
 }
 
-#endif // __WINDOWS__
+#endif // __WXMSW__
 
 // Helper functions for the test below.
 namespace

@@ -763,10 +763,6 @@ MyFrame::MyFrame(const wxString& title)
     SetOwnBackgroundColour(m_canvas->GetBackgroundColour());
 #endif // wxUSE_INFOBAR
 
-#if wxUSE_TIPWINDOW
-    m_tipWindow = nullptr;
-#endif // wxUSE_TIPWINDOW
-
 #ifdef __WXMSW__
     // Test MSW-specific function allowing to access the "system" menu.
     wxMenu * const menu = MSWGetSystemMenu();
@@ -2858,14 +2854,13 @@ void MyFrame::OnShowTip(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        m_tipWindow = new wxTipWindow
+        m_tipWindow = wxTipWindow::New
                           (
                             this,
                             "This is just some text to be shown in the tip "
                             "window, broken into multiple lines, each less "
                             "than 60 logical pixels wide.",
-                            FromDIP(60),
-                            &m_tipWindow
+                            FromDIP(60)
                           );
     }
 }
@@ -3449,7 +3444,7 @@ static void InitAboutInfoMinimal(wxAboutDialogInfo& info)
                         wxVERSION_NUM_DOT_STRING
                     ));
     info.SetDescription("This sample shows different wxWidgets dialogs.");
-    info.SetCopyright("Copyright (C) 1992-2025 wxWidgets dev team.");
+    info.SetCopyright("Copyright (C) 1992-2026 wxWidgets dev team.");
 }
 
 static void InitAboutInfoWebsite(wxAboutDialogInfo& info)

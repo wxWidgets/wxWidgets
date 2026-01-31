@@ -299,8 +299,19 @@ void MyFrame::PopuplateWithDisplayInfo()
 
         sizer->Add(new wxStaticText(page, wxID_ANY, "Resolution: "));
         const wxSize ppi = display.GetPPI();
-        sizer->Add(new wxStaticText(page, wxID_ANY,
-                                    wxString::Format("%d*%d", ppi.x, ppi.y)));
+        const wxSize ppiRaw = display.GetRawPPI();
+        wxString resolutionText;
+        if ( ppiRaw == ppi )
+        {
+            resolutionText = wxString::Format("%d*%d", ppi.x, ppi.y);
+        }
+        else
+        {
+            resolutionText = wxString::Format("%d*%d (logical), %d*%d (raw)",
+                                              ppi.x, ppi.y, ppiRaw.x, ppiRaw.y);
+        }
+
+        sizer->Add(new wxStaticText(page, wxID_ANY, resolutionText));
 
         sizer->Add(new wxStaticText(page, wxID_ANY, "Depth: "));
         sizer->Add(new wxStaticText(page, wxID_ANY,

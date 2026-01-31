@@ -954,6 +954,7 @@
     <ClCompile Include="controls\slidertest.cpp" />
     <ClCompile Include="controls\spinctrldbltest.cpp" />
     <ClCompile Include="controls\spinctrltest.cpp" />
+    <ClCompile Include="controls\statbmptest.cpp" />
     <ClCompile Include="controls\styledtextctrltest.cpp" />
     <ClCompile Include="controls\textctrltest.cpp" />
     <ClCompile Include="controls\textentrytest.cpp" />

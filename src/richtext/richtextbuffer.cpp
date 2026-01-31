@@ -6934,234 +6934,257 @@ bool wxRichTextPlainText::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
         y = rect.y + (rect.height - charHeight - (descent - m_descent));
     }
 
-    // TODO: new selection code
-
     // (a) All selected.
     if (allSelected)
     {
-        DrawTabbedString(dc, textAttr, rect, stringChunk, x, y, true);
+        DrawTabbedString(dc, textAttr, rect, stringChunk, x, y, 0, stringChunk.length() - 1);
     }
     // (b) None selected.
     else if (noneSelected)
     {
         // Draw all unselected
-        DrawTabbedString(dc, textAttr, rect, stringChunk, x, y, false);
+        DrawTabbedString(dc, textAttr, rect, stringChunk, x, y, -1, -1);
     }
     else
     {
-        // (c) Part selected, part not
-        // Let's draw unselected chunk, selected chunk, then unselected chunk.
-
-        const wxString& str = stringWhole;
-
-        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-
-        // 1. Initial unselected chunk, if any, up until start of selection.
-        if (selectionRange.GetStart() > range.GetStart() && selectionRange.GetStart() <= range.GetEnd())
-        {
-            int r1 = range.GetStart();
-            int s1 = selectionRange.GetStart()-1;
-            int fragmentLen = s1 - r1 + 1;
-            if (fragmentLen < 0)
-            {
-                wxLogDebug(wxT("Mid(%d, %d"), (int)(r1 - offset), (int)fragmentLen);
-            }
-            wxString stringFragment = str.Mid(r1 - offset, fragmentLen);
-
-            DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, false);
-
-#if USE_KERNING_FIX
-            if (stringChunk.Find(wxT("\t")) == wxNOT_FOUND)
-            {
-                // Compensate for kerning difference
-                wxString stringFragment2(str.Mid(r1 - offset, fragmentLen+1));
-                wxString stringFragment3(str.Mid(r1 - offset + fragmentLen, 1));
-
-                wxCoord w1, h1, w2, h2, w3, h3;
-                dc.GetTextExtent(stringFragment,  & w1, & h1);
-                dc.GetTextExtent(stringFragment2, & w2, & h2);
-                dc.GetTextExtent(stringFragment3, & w3, & h3);
-
-                int kerningDiff = (w1 + w3) - w2;
-                x = x - kerningDiff;
-            }
-#endif
-        }
-
-        // 2. Selected chunk, if any.
-        if (selectionRange.GetEnd() >= range.GetStart())
-        {
-            int s1 = wxMax(selectionRange.GetStart(), range.GetStart());
-            int s2 = wxMin(selectionRange.GetEnd(), range.GetEnd());
-
-            int fragmentLen = s2 - s1 + 1;
-            if (fragmentLen < 0)
-            {
-                wxLogDebug(wxT("Mid(%d, %d"), (int)(s1 - offset), (int)fragmentLen);
-            }
-            wxString stringFragment = str.Mid(s1 - offset, fragmentLen);
-
-            DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, true);
-
-#if USE_KERNING_FIX
-            if (stringChunk.Find(wxT("\t")) == wxNOT_FOUND)
-            {
-                // Compensate for kerning difference
-                wxString stringFragment2(str.Mid(s1 - offset, fragmentLen+1));
-                wxString stringFragment3(str.Mid(s1 - offset + fragmentLen, 1));
-
-                wxCoord w1, h1, w2, h2, w3, h3;
-                dc.GetTextExtent(stringFragment,  & w1, & h1);
-                dc.GetTextExtent(stringFragment2, & w2, & h2);
-                dc.GetTextExtent(stringFragment3, & w3, & h3);
-
-                int kerningDiff = (w1 + w3) - w2;
-                x = x - kerningDiff;
-            }
-#endif
-        }
-
-        // 3. Remaining unselected chunk, if any
-        if (selectionRange.GetEnd() < range.GetEnd())
-        {
-            int s2 = wxMin(selectionRange.GetEnd()+1, range.GetEnd());
-            int r2 = range.GetEnd();
-
-            int fragmentLen = r2 - s2 + 1;
-            if (fragmentLen < 0)
-            {
-                wxLogDebug(wxT("Mid(%d, %d"), (int)(s2 - offset), (int)fragmentLen);
-            }
-            wxString stringFragment = str.Mid(s2 - offset, fragmentLen);
-
-            DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, false);
-        }
+        const int selStart = wxMax(selectionRange.GetStart(), range.GetStart()) - range.GetStart();
+        const int selEnd = wxMin(selectionRange.GetEnd(),   range.GetEnd()) - range.GetStart();
+        DrawTabbedString(dc, textAttr, rect, stringChunk, x, y, selStart, selEnd);
     }
 
     return true;
 }
 
-bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect,wxString& str, wxCoord& x, wxCoord& y, bool selected)
+void wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, wxString& str, wxCoord& x, wxCoord& y, ssize_t selStart, ssize_t selEnd)
 {
-    bool hasTabs = (str.Find(wxT('\t')) != wxNOT_FOUND);
+    //////////////////////////////////////////////////////////////////////////
+    // This function assumes str has uniform formatting (attr applies to    //
+    // the entire string). The calling code should split text into style    //
+    // runs before calling this function.                                   //
+    //////////////////////////////////////////////////////////////////////////
 
-    wxArrayInt tabArray;
-    int tabCount;
-    if (hasTabs)
+    wxColour selClr     = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    wxColour txtForeClr = attr.HasTextColour() && attr.GetTextColour().IsOk()
+                            ? attr.GetTextColour()
+                            : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    wxColour txtBackClr = attr.HasBackgroundColour() && attr.GetBackgroundColour().IsOk()
+                            ? attr.GetBackgroundColour()
+                            : wxTransparentColour;
+    int      txtBackMod = attr.HasBackgroundColour() && attr.GetBackgroundColour().IsOk()
+                            ? wxBRUSHSTYLE_SOLID
+                            : wxBRUSHSTYLE_TRANSPARENT;
+    wxCoord  originx    = GetParent()->GetPosition().x;
+    wxArrayInt startpos;  // Character starting positions
+    wxArrayInt endpos;    // Character ending positions (cumulative widths)
+    wxArrayInt tabstops;  // Array of tab stop positions
+
+    const bool strikethrough = (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH) != 0;
+    const int strikeheight = wxRound(0.5 * rect.GetHeight() + rect.y);
+    size_t effectivetabstop;
+    int posadjustment;
+    size_t printstart;
+    size_t  i  = 0;  // initialization iterator
+    size_t  si = 0;  // string iterator
+    size_t  ti = 0;  // tabstop iterator
+    size_t  pi = 0;  // position iterator
+
+
+    //////////////////////////////////////////////////////////////////////////
+    //                    Initial setup & early returns                     //
+    //////////////////////////////////////////////////////////////////////////
+
+    if (str.empty())
+        return;
+
+    // Get character ending positions
+    dc.GetPartialTextExtents(str, endpos);
+    startpos.SetCount(endpos.GetCount());
+
+    startpos[0] = x;
+    for (i = 0; i < endpos.GetCount() - 1; i++)
     {
-        if (attr.GetTabs().IsEmpty())
-            tabArray = wxRichTextParagraph::GetDefaultTabs();
-        else
-            tabArray = attr.GetTabs();
-        tabCount = tabArray.GetCount();
-
-        for (int i = 0; i < tabCount; ++i)
-        {
-            int pos = tabArray[i];
-            pos = ConvertTenthsMMToPixels(dc, pos);
-            tabArray[i] = pos;
-        }
+        endpos[i] = x + endpos[i];
+        startpos[i+1] = endpos[i];
     }
-    else
-        tabCount = 0;
+    endpos[i] = x + endpos[i];
 
-    wxCoord w, h;
+    // Get all of the tabstops
+    tabstops = attr.GetTabs().IsEmpty()
+                    ? wxRichTextParagraph::GetDefaultTabs()
+                    : attr.GetTabs();
+    const size_t tabcount = tabstops.GetCount();
+    for (i = 0; i < tabcount; i++)
+        tabstops[i] = originx + ConvertTenthsMMToPixels(dc, tabstops[i]);
 
-    if (selected)
+
+    //////////////////////////////////////////////////////////////////////////
+    //                    Tab stop position adjustments                     //
+    //////////////////////////////////////////////////////////////////////////
+
+    // Adjust horizontal positions to account for tab stops.
+    // Do this by looping through to find every tab character, calculate the
+    // appropriate tab stop for it, measure the horizontal space difference,
+    // and adjust the tab's ending position and the start/end positions of
+    // every character after it.
+    //
+    // BL: Tab Char --> Tab Stop --> Pixel Adjustment --> New startpos/endpos
+    //
+    // NOTE: TODO: This almost certainly does not work for RTL languages
+    // unless wxDC has some real x-flipping magic.
+    for (si = 0; si < str.length(); si++)
     {
-        wxColour highlightColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-        wxColour highlightTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
 
-        wxCheckSetBrush(dc, wxBrush(highlightColour));
-        wxCheckSetPen(dc, wxPen(highlightColour));
-        dc.SetTextForeground(highlightTextColour);
-        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    }
-    else
-    {
-        dc.SetTextForeground(attr.GetTextColour());
-
-        if (attr.HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) && attr.GetBackgroundColour().IsOk())
+        if (str[si] == '\t')
         {
-            dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
-            dc.SetTextBackground(attr.GetBackgroundColour());
-        }
-        else
-            dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    }
+            // We have a tab. Find the next tab stop AFTER this tab's start position.
+            // NOTE: ti is monotonic.
+            while (ti < tabcount && tabstops[ti] <= startpos[si])
+                ti++;
 
-    wxCoord x_orig = GetParent()->GetPosition().x;
-    while (hasTabs)
-    {
-        // the string has a tab
-        // break up the string at the Tab
-        wxString stringChunk = str.BeforeFirst(wxT('\t'));
-        str = str.AfterFirst(wxT('\t'));
-        dc.GetTextExtent(stringChunk, & w, & h);
-        int tabPos;
-        tabPos = x + w;
-        bool not_found = true;
-        for (int i = 0; i < tabCount && not_found; ++i)
-        {
-            int nextTabPos;
-            nextTabPos = tabArray.Item(i) + x_orig;
+            // If we found a valid tab stop before reaching the end of the list, use that.
+            if (ti < tabcount)
+                effectivetabstop = tabstops[ti];
 
-            // Find the next tab position.
-            // Even if we're at the end of the tab array, we must still draw the chunk.
+            // Otherwise use the default tab width.
+            else
+                effectivetabstop = startpos[si] + ConvertTenthsMMToPixels(dc, WIDTH_FOR_DEFAULT_TABS);
 
-            if (nextTabPos > tabPos || (i == (tabCount - 1)))
+            // Adjust position calculations accordingly
+            posadjustment = effectivetabstop - endpos[si];
+            endpos[si] += posadjustment;
+            for (pi = si + 1; pi < endpos.GetCount(); pi++)
             {
-                if (nextTabPos <= tabPos)
-                {
-                    int defaultTabWidth = ConvertTenthsMMToPixels(dc, WIDTH_FOR_DEFAULT_TABS);
-                    nextTabPos = tabPos + defaultTabWidth;
-                }
-
-                not_found = false;
-                if (selected)
-                {
-                    w = nextTabPos - x;
-                    wxRect selRect(x, rect.y, w, rect.GetHeight());
-                    dc.DrawRectangle(selRect);
-                }
-                dc.DrawText(stringChunk, x, y);
-
-                if (attr.HasTextEffects() && (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH))
-                {
-                    wxPen oldPen = dc.GetPen();
-                    wxCheckSetPen(dc, wxPen(attr.GetTextColour(), 1));
-                    dc.DrawLine(x, (int) (y+(h/2)+0.5), x+w, (int) (y+(h/2)+0.5));
-                    wxCheckSetPen(dc, oldPen);
-                }
-
-                x = nextTabPos;
+                startpos[pi] += posadjustment;
+                endpos[pi] += posadjustment;
             }
         }
-        hasTabs = (str.Find(wxT('\t')) != wxNOT_FOUND);
     }
 
-    if (!str.IsEmpty())
+//////////////////////////////////////////////////////////////////////////////
+//                   PLATFORM-SPECIFIC SELECTION HANDLING                   //
+//////////////////////////////////////////////////////////////////////////////
+// We face different challenges on different platforms:
+//     1.  On most platforms, the text foreground color changes when selected;
+//         as a result, we MUST make a separate DrawText() call for it or it
+//         won't render as expected.
+//     2.  On Mac, aggressive font-shaping means that breaking up DrawText()
+//         calls causes kerning-induced left-right jitter as text is selected
+//         (e.g., DrawText("AB") DrawText("CD") isn't the same canvas width as
+//         (DrawText("ABC") DrawText("D")). However, luckily, Mac does NOT use
+//         or need a different foreground color for text, so we don't NEED to
+//         break up the DrawText() calls.
+//     3.  However, caveat: selection highlights DO override the background
+//         color on Mac, so if we use DrawText() for the background color, we
+//         still need separate DrawText() calls on Mac. We address this by
+//         MANUALLY drawing text backgrounds on Mac (BEFORE drawing the
+//         selection highlight, so the selection highlight overwrites it),
+//         rather than using DrawText()'s background drawing capability.
+#ifdef __WXMAC__
+    //////////////////////////////////////////////////////////////////////////
+    //                      Mac: Draw text background                       //
+    //////////////////////////////////////////////////////////////////////////
+
     {
-        dc.GetTextExtent(str, & w, & h);
-        if (selected)
-        {
-            wxRect selRect(x, rect.y, w, rect.GetHeight());
-            dc.DrawRectangle(selRect);
-        }
-        dc.DrawText(str, x, y);
-
-        if (attr.HasTextEffects() && (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH))
-        {
-            wxPen oldPen = dc.GetPen();
-            wxCheckSetPen(dc, wxPen(attr.GetTextColour(), 1));
-            dc.DrawLine(x, (int) (y+(h/2)+0.5), x+w, (int) (y+(h/2)+0.5));
-            wxCheckSetPen(dc, oldPen);
-        }
-
-        x += w;
+        int backgroundWidth = endpos[endpos.GetCount() - 1] - startpos[0] + 1; // Avoid kerning gaps
+        wxDCBrushChanger autobrush(dc, wxBrush(txtBackClr));
+        wxDCPenChanger autopen(dc, wxPen(txtBackClr));
+        dc.DrawRectangle(startpos[0], y, backgroundWidth, dc.GetTextExtent(str).y);
+        txtBackMod = wxBRUSHSTYLE_TRANSPARENT;
     }
 
-    return true;
+    ///////////////////////////////////////////////////////////////////////////
+    //                     Mac: Draw selection rectangle                     //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (0 <= selStart && selStart <= selEnd && selEnd < endpos.GetCount())
+    {
+        int selectionWidth = endpos[selEnd] - startpos[selStart] + 1; // Avoid kerning gaps
+        wxDCBrushChanger autobrush(dc, wxBrush(selClr));
+        wxDCPenChanger autopen(dc, wxPen(selClr));
+        dc.DrawRectangle(startpos[selStart], rect.y, selectionWidth, rect.GetHeight());
+    }
+#else
+    // If str is entirely selected or not selected at all, we can print it
+    // out in just one DrawText() call. However, if it's PARTIALLY selected,
+    // we will need separate DrawText() calls. The easiest way to do this is
+    // to call ourselves re-entrantly on (1) text before the selection,
+    // (2) selected text, and (3) text after the selection.
+    //
+    // TODO: When dealing with combined LTR and RTL text there will be a
+    // portion of selected text that is not contiguous with the rest, so we
+    // will need to fix that eventually. E.g., if the first six characters of
+    // "Yes, حبيبي, of course" are selected, then the selection rectangle(s)
+    // will cover the underlined characters:  Yes, حبيبي, of course
+    //                                        -----    -
+    if (selStart == -1 && selEnd == -1)
+    {
+        // Nothing is selected; leave existing setup in place.
+    }
+
+    else if (selStart == 0 && selEnd == (static_cast<ssize_t>(str.length()) - 1))
+    {
+        // Everything is selected; change the colors we'll use to draw text.
+        txtForeClr = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        txtBackClr = selClr;
+        txtBackMod = wxBRUSHSTYLE_SOLID;
+    }
+
+    else
+    {
+        // Partial selection; break it up into component parts.
+        wxString selPrefix = str.Mid(0, selStart);
+        wxString selString = str.Mid(selStart, selEnd - selStart + 1);
+        wxString selSuffix = str.Mid(selEnd + 1);
+
+        if (!selPrefix.empty())
+            DrawTabbedString(dc, attr, rect, selPrefix, x, y, -1, -1);
+
+        x = startpos[selStart];
+
+        if (!selString.empty())
+            DrawTabbedString(dc, attr, rect, selString, x, y, 0, selString.length() - 1);
+
+        x = endpos[selEnd];
+
+        if (!selSuffix.empty())
+            DrawTabbedString(dc, attr, rect, selSuffix, x, y, -1, -1);
+
+        return;
+    }
+#endif
+
+    //////////////////////////////////////////////////////////////////////////
+    //                    Draw text (and strikethrough)                     //
+    //////////////////////////////////////////////////////////////////////////
+
+    printstart = 0;
+    dc.SetBackgroundMode(txtBackMod);
+    dc.SetTextBackground(txtBackClr);
+    dc.SetTextForeground(txtForeClr);
+    wxDCPenChanger penWithCleanup(dc, wxPen(txtForeClr)); // For strikethrough
+    for (si = 0; si < str.length(); si++)
+    {
+        if (str[si] == '\t')
+        {
+            if (si - printstart > 0)
+            {
+                dc.DrawText(str.Mid(printstart, si-printstart), startpos[printstart], y);
+                if (strikethrough)
+                    dc.DrawLine(startpos[printstart], strikeheight, startpos[si], strikeheight);
+            }
+            // Match original behavior of only striking through SELECTED tabs.
+            // TODO: Research and decide whether to keep doing this.
+            if (selStart <= static_cast<ssize_t>(si) && static_cast<ssize_t>(si) <= selEnd && strikethrough)
+                dc.DrawLine(startpos[si], strikeheight, endpos[si], strikeheight);
+            printstart = si + 1;
+        }
+    }
+    if (printstart < str.length())
+    {
+        dc.DrawText(str.Mid(printstart), startpos[printstart], y);
+        if (strikethrough)
+            dc.DrawLine(startpos[printstart], strikeheight, endpos[endpos.GetCount()-1], strikeheight);
+    }
 }
 
 /// Lay the item out

@@ -354,6 +354,7 @@ extern void WXDLLIMPEXP_BASE wxAbort();
 // the generic macro: takes the condition to check, the statement to be executed
 // in case the condition is false and the message to pass to the assert handler
 #define wxCHECK2_MSG(cond, op, msg)                                       \
+    wxSTATEMENT_MACRO_BEGIN                                               \
     if ( cond )                                                           \
     {}                                                                    \
     else                                                                  \
@@ -361,7 +362,7 @@ extern void WXDLLIMPEXP_BASE wxAbort();
         wxFAIL_COND_MSG(#cond, msg);                                      \
         op;                                                               \
     }                                                                     \
-    struct wxMAKE_UNIQUE_NAME(wxDummyCheckStruct) /* to force a semicolon */
+    wxSTATEMENT_MACRO_END
 
 // check which returns with the specified return code if the condition fails
 #define wxCHECK_MSG(cond, rc, msg)   wxCHECK2_MSG(cond, return rc, msg)

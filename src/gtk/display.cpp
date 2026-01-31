@@ -246,6 +246,7 @@ public:
 #if GTK_CHECK_VERSION(3,10,0)
     virtual double GetScaleFactor() const override;
 #endif // GTK+ 3.10
+    virtual wxSize GetRawPPI() const override;
 
 #if wxUSE_DISPLAY
     virtual bool IsPrimary() const override;
@@ -339,6 +340,22 @@ double wxDisplayImplGTK::GetScaleFactor() const
     return 1.0;
 }
 #endif // GTK+ 3.10
+
+wxSize wxDisplayImplGTK::GetRawPPI() const
+{
+    auto const widthInMM = gdk_screen_get_monitor_width_mm(m_screen, m_index);
+    auto const heightInMM = gdk_screen_get_monitor_height_mm(m_screen, m_index);
+
+    // Don't use manifestly invalid values.
+    if ( widthInMM <= 0 && heightInMM <= 0 )
+        return wxDisplay::GetStdPPI();
+
+    const wxRect geometry = GetGeometry();
+    const double ppiX = geometry.width * 25.4 / widthInMM;
+    const double ppiY = geometry.height * 25.4 / heightInMM;
+
+    return wxSize(wxRound(ppiX), wxRound(ppiY));
+}
 
 #if wxUSE_DISPLAY
 bool wxDisplayImplGTK::IsPrimary() const

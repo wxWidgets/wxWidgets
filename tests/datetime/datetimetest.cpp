@@ -1839,7 +1839,7 @@ TEST_CASE("wxDateTime::DateOnly", "[datetime]")
 
 TEST_CASE("wxDateTime::TranslateFromUnicodeFormat", "[datetime]")
 {
-#if defined(__WINDOWS__) || defined(__WXOSX__)
+#if defined(__WINDOWS__) || defined(__DARWIN__)
     // This function is defined in src/common/intl.cpp and as it is not public we
     // need to declare it here explicitly.
     WXDLLIMPEXP_BASE

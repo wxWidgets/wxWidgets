@@ -399,6 +399,8 @@ bool wxWindowMac::Create(wxWindowMac *parent,
 
     m_hScrollBarAlwaysShown =
     m_vScrollBarAlwaysShown = HasFlag(wxALWAYS_SHOW_SB);
+    if ( HasTransparentBackground())
+        m_backgroundStyle = wxBG_STYLE_TRANSPARENT;
 
     if ( m_peer != kOSXNoWidgetImpl )
     {

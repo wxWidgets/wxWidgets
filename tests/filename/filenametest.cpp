@@ -37,7 +37,6 @@
 #endif // __UNIX__
 
 #include "testfile.h"
-#include "testdate.h"
 
 // Use a hack to keep using wxPATH_NORM_ALL in this test code without getting
 // deprecation warnings for it.

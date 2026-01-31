@@ -346,6 +346,89 @@ static int wxCURLSeek(void* userdata, curl_off_t offset, int origin)
     return static_cast<wxWebRequestCURL*>(userdata)->CURLOnSeek(offset, origin);
 }
 
+static int
+wxCURLDebugFunction(CURL* WXUNUSED(handle),
+                    curl_infotype type,
+                    char* data,
+                    size_t size,
+                    void* userdata)
+{
+    wxCHECK_MSG( userdata, 0, "invalid curl debug function data" );
+
+    auto* const logger = static_cast<wxWebRequestDebugLogger*>(userdata);
+    wxString text;
+    switch ( type )
+    {
+        case CURLINFO_TEXT:
+        case CURLINFO_HEADER_IN:
+        case CURLINFO_HEADER_OUT:
+            text = wxString::FromUTF8(data, size);
+            break;
+
+        case CURLINFO_DATA_IN:
+        case CURLINFO_SSL_DATA_IN:
+            logger->OnDataReceived(data, size);
+            break;
+
+        case CURLINFO_DATA_OUT:
+        case CURLINFO_SSL_DATA_OUT:
+            logger->OnDataSent(data, size);
+            break;
+
+        case CURLINFO_END:
+            wxFAIL_MSG("Unexpected CURLINFO_END info type in debug function");
+            break;
+    }
+
+    if ( !text.empty() )
+    {
+        // Remove trailing newline added by libcurl.
+        text.Trim();
+
+        if ( type == CURLINFO_TEXT )
+        {
+            // Informational messages are always on single line, so we don't
+            // need to do anything else with them.
+            logger->OnInfo(text);
+        }
+        else // Header or similar.
+        {
+            // We may have multiple lines and each of them may be either a
+            // header or a request/status line as libcurl reports both of them
+            // in the same way.
+            for ( auto const& line: wxSplit(text, '\n') )
+            {
+                wxString value;
+                auto const name = line.BeforeFirst(':', &value);
+
+                // A correct "start line" (from RFC 7230) can't include a colon
+                // before a space, so this is a simple way to distinguish it
+                // from a header field.
+                if ( value.empty() || name.find(' ') != wxString::npos )
+                {
+                    if ( type == CURLINFO_HEADER_IN )
+                        logger->OnResponseReceived(line);
+                    else // CURLINFO_HEADER_OUT
+                        logger->OnRequestSent(line);
+                }
+                else
+                {
+                    // Remove leading space, if any.
+                    value.Trim(false);
+
+                    if ( type == CURLINFO_HEADER_IN )
+                        logger->OnHeaderReceived(name, value);
+                    else // CURLINFO_HEADER_OUT
+                        logger->OnHeaderSent(name, value);
+                }
+            }
+        }
+    }
+
+    // We must always return 0 according to libcurl documentation.
+    return 0;
+}
+
 wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
                                    wxWebSessionCURL& sessionImpl,
                                    wxEvtHandler* handler,
@@ -528,6 +611,15 @@ wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
         wxCURLSetOpt(m_handle, CURLOPT_SSL_VERIFYPEER, 0);
     if ( securityFlags & wxWebRequest::Ignore_Host )
         wxCURLSetOpt(m_handle, CURLOPT_SSL_VERIFYHOST, 0);
+
+
+    // Enable debug logging if requested.
+    if ( auto const* logger = GetSessionImpl().GetDebugLogger() )
+    {
+        wxCURLSetOpt(m_handle, CURLOPT_DEBUGDATA, logger);
+        wxCURLSetOpt(m_handle, CURLOPT_DEBUGFUNCTION, wxCURLDebugFunction);
+        wxCURLSetOpt(m_handle, CURLOPT_VERBOSE, 1L);
+    }
 
     return Result::Ok();
 }

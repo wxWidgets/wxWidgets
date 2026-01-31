@@ -873,6 +873,8 @@ public:
 
         @note This method shouldn't be used with wxPaintDC as accessing the DC
         while drawing can result in unexpected results, notably in wxGTK.
+
+        @note This method can only be used with wxMemoryDC under wxQt.
     */
     bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
 
