@@ -3614,7 +3614,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             processed = HandleEndSession(wParam != 0, lParam);
             break;
         case WM_ENTERIDLE:
-            processed = HandleEnterIdle(wParam, lParam);    
+            processed = HandleEnterIdle(wParam, lParam);
             break;
         case WM_GETMINMAXINFO:
             processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);
@@ -4348,7 +4348,7 @@ bool wxWindowMSW::HandleEnterIdle(WXWPARAM wParam, WXLPARAM lParam)
         return false;
 
     // Fix menu rounded corners in Windows 11 and higher at light mode if menu has Owner Drawn items.
-    // high contrast off according to uxtheme.   
+    // high contrast off according to uxtheme.
     // See: https://github.com/wxWidgets/wxWidgets/issues/22518
     if (!wxMSWDarkMode::IsActive() && !IsHighContrast())
     {
