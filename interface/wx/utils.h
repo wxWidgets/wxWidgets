@@ -101,6 +101,11 @@ public:
         The argument @a winToSkip2 may be used to specify another window to
         leave enabled, if it is non-null. This parameter is only available
         since wxWidgets 3.1.7.
+
+        @note In wxQt, using this constructor is effectively the same as using
+        the other constructor passing true as parameter. i.e.: everything will
+        be disabled. If you are trying to make @a winToSkip behave like a modal
+        window, then consider using wxWindow::QtSetWindowModality() instead.
     */
     explicit wxWindowDisabler(wxWindow* winToSkip, wxWindow* winToSkip2 = nullptr);
 
