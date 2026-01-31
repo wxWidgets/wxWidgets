@@ -4346,14 +4346,14 @@ bool wxWindowMSW::HandleEnterIdle(WXWPARAM wParam, WXLPARAM lParam)
     // We only care about idle states triggered by menus
     if (static_cast<WXWPARAM>(wParam) != MSGF_MENU)
         return false;
-
+    HWND hWndMenu = reinterpret_cast<HWND>(lParam);
     // Fix menu rounded corners in Windows 11 and higher at light mode if menu has Owner Drawn items.
     // high contrast off according to uxtheme.
     // See: https://github.com/wxWidgets/wxWidgets/issues/22518
     if (!wxMSWDarkMode::IsActive() && !IsHighContrast())
     {
 #if wxUSE_OWNER_DRAWN
-        HWND hWndMenu = reinterpret_cast<HWND>(lParam);
+
         if (hWndMenu)
         {
             EnableRoundCorners(hWndMenu);
