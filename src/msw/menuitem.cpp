@@ -896,7 +896,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HDC hdc = GetHdcOf(*impl);
-
+       
     RECT rect;
     wxCopyRectToRECT(rc, rect);
 
@@ -944,7 +944,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             if ( stat & wxODDisabled )
             {
                 state = (stat & wxODSelected) ? MPI_DISABLEDHOT
-                                              : MPI_DISABLED;
+                    : MPI_DISABLED;
             }
             else if ( stat & wxODSelected )
             {
@@ -955,26 +955,72 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 state = MPI_NORMAL;
             }
 
-            wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU",L"DARKMODE::MENU");
+             //--------------------------------------------------------------
+             // To get a proper dark mode appearance, we need to combine
+             // The DarkMode::Menu theme only defines MENU_POPUPBACKGROUND,
+             // MENU_POPUPSUBMENU, and MENU_POPUPGUTTER parts.
+             //
+             // The DarkMode_ImmersiveStart::Menu theme, on the other hand,
+             // only defines MENU_POPUPITEM (used for the rounded selection background).
+             //
+             // Because no single theme provides all required menu parts,
+             // multiple theme classes must be chained using ';' so missing parts
+             // can fall back to another theme.
+             //
+             // On older Windows versions, this fallback must be specified explicitly.
+             // On newer Windows 11 builds (25H2+), the system automatically falls back
+             // to the base Menu class if a subclass is not found.
+             //
+             // Result:
+             // MENU_POPUPITEM is taken from DarkMode_ImmersiveStart,
+             // while remaining menu parts (background, submenu, gutter, separator)
+             // are drawn from DarkMode::Menu or the base MENU class to ensure a
+             // consistent dark-mode appearance. wxUxThemeHandle  DarkModeTheme = wxUxThemeHandle::NewAtStdDPI(L"DarkMode::Menu");
+             //--------------------------------------------------------------
+
+            wxUxThemeHandle  DarkModeTheme = wxUxThemeHandle::NewAtStdDPI(L"DarkMode::Menu");
+            wxUxThemeHandle  hTheme(GetMenu()->GetWindow(), L"LightMode_ImmersiveStart::Menu;Menu", L"DarkMode_ImmersiveStart::Menu;DarkMode::Menu;MENU");
+            const bool isDark = wxMSWDarkMode::IsActive();
+
+            auto DrawThemePart = [&](const RECT& r, int part, int state = 0)
+                {
+                    if (isDark)
+                    {
+                        switch (part)
+                        {
+                            // Parts provided by DarkMode::Menu
+                        case MENU_POPUPBACKGROUND:
+                        case MENU_POPUPSUBMENU:
+                        case MENU_POPUPGUTTER:
+                            DarkModeTheme.DrawBackground(hdc, r, part, state);
+                            return;
+                        default:
+                            break;
+                        }
+                    }
+
+                    // Fallback / ImmersiveStart / base Menu
+                    hTheme.DrawBackground(hdc, r, part, state);
+                };
 
             if ( ::IsThemeBackgroundPartiallyTransparent(hTheme,
                     MENU_POPUPITEM, state) )
             {
-                hTheme.DrawBackground(hdc, rect, MENU_POPUPBACKGROUND);
+                DrawThemePart(rect, MENU_POPUPBACKGROUND);
             }
 
-             hTheme.DrawBackground(hdc, rcGutter, MENU_POPUPGUTTER);
-
+            DrawThemePart(rcGutter, MENU_POPUPGUTTER);
+           
             if ( IsSeparator() )
             {
-                rcSeparator.left = rcGutter.right;
-                hTheme.DrawBackground(hdc, rcSeparator, MENU_POPUPSEPARATOR);
+                    rcSeparator.left = rcGutter.right;
+                    DrawThemePart(rcSeparator, MENU_POPUPSEPARATOR);
                 return true;
             }
 
-            hTheme.DrawBackground(hdc, rcSelection, MENU_POPUPITEM, state);
+            DrawThemePart(rcSelection, MENU_POPUPITEM, state);
             // we need also to draw menu arrow if the menu item at popup menu and has subMenu for dark mode.
-            if (wxMSWDarkMode::IsActive() && GetSubMenu())
+            if (isDark && GetSubMenu())
             {
                 int glyphState = (stat & wxODDisabled) ? MSM_DISABLED : MSM_NORMAL;
                 RECT arrowRect;
@@ -982,7 +1028,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 arrowRect.left = arrowRect.right - data->ArrowSize.cx;
                 arrowRect.top = rcSelection.top + ((rcSelection.bottom - rcSelection.top) - data->ArrowSize.cy) / 2;  // Vertical center
                 arrowRect.bottom = arrowRect.top + data->ArrowSize.cy;
-                hTheme.DrawBackground(hdc, arrowRect,MENU_POPUPSUBMENU, glyphState);
+                DrawThemePart(arrowRect, MENU_POPUPSUBMENU, glyphState);
                 // Prevent Windows from drawing its default arrow over ours.
                 ExcludeClipRect(hdc, arrowRect.left, arrowRect.top, arrowRect.right, arrowRect.bottom);
             }
@@ -1033,7 +1079,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         int x = rcText.left;
         int y = rcText.top + (rcText.bottom - rcText.top - textSize.cy) / 2;
 
-        ::DrawStateW(hdc, nullptr, nullptr, wxMSW_CONV_LPARAM(text),
+        ::DrawState(hdc, nullptr, nullptr, wxMSW_CONV_LPARAM(text),
                     text.length(), x, y, 0, 0, flags);
 
         // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO
@@ -1190,7 +1236,7 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
     if ( MenuDrawData::IsUxThemeActive() )
     {
         wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU" , L"DARKMODE::MENU");
-
+      
         const MenuDrawData* data = MenuDrawData::Get(GetMenu());
 
         // rect for background must be without check margins
