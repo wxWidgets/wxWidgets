@@ -410,7 +410,8 @@ public:
 
     bool HandlePower(WXWPARAM wParam, WXLPARAM lParam, bool *vetoed);
 
-    bool HandleEnterIdle(WPARAM wParam, LPARAM lParam);
+    bool HandleEnterIdle(WXWPARAM wParam, WXLPARAM lParam);
+
     // The main body of common window proc for all wxWindow objects. It tries
     // to handle the given message and returns true if it was handled (the
     // appropriate return value is then put in result, which must be non-null)

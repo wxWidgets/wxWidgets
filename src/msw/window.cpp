@@ -4340,10 +4340,11 @@ void wxWindowMSW::EnableRoundCorners(HWND hWndMenu)
         }
     }
 }
-bool wxWindowMSW::HandleEnterIdle(WPARAM wParam, LPARAM lParam)
+
+bool wxWindowMSW::HandleEnterIdle(WXWPARAM wParam, WXLPARAM lParam)
 {
     // We only care about idle states triggered by menus
-    if (static_cast<WPARAM>(wParam) != MSGF_MENU)
+    if (static_cast<WXWPARAM>(wParam) != MSGF_MENU)
         return false;
 
     // Fix menu rounded corners in Windows 11 and higher at light mode if menu has Owner Drawn items.
