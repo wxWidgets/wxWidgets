@@ -236,7 +236,7 @@ bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDat
  // not to be identical because the being edited item might be below the passed item in the hierarchy);
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
-  wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr, parent);
+  wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr, item);
 
   bool ok = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
 
