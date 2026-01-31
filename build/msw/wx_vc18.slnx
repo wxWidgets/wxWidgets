@@ -1,0 +1,81 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DLL Debug" />
+    <BuildType Name="DLL Release" />
+    <BuildType Name="Release" />
+    <Platform Name="Win32" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="wx_adv.vcxproj" Id="24c45343-fd20-5c92-81c1-35a2ae841e79">
+    <BuildDependency Project="wx_core.vcxproj" />
+  </Project>
+  <Project Path="wx_aui.vcxproj" Id="a16d3832-0f42-57ce-8f48-50e06649ade8">
+    <BuildDependency Project="wx_core.vcxproj" />
+    <BuildDependency Project="wx_html.vcxproj" />
+  </Project>
+  <Project Path="wx_base.vcxproj" Id="3fcc50c2-81e9-5db2-b8d8-2129427568b1">
+    <BuildDependency Project="wx_custom_build.vcxproj" />
+    <BuildDependency Project="wx_wxexpat.vcxproj" />
+    <BuildDependency Project="wx_wxregex.vcxproj" />
+    <BuildDependency Project="wx_wxzlib.vcxproj" />
+  </Project>
+  <Project Path="wx_core.vcxproj" Id="6744dad8-9c70-574a-bff2-9f8dddb24a75">
+    <BuildDependency Project="wx_base.vcxproj" />
+    <BuildDependency Project="wx_wxjpeg.vcxproj" />
+    <BuildDependency Project="wx_wxpng.vcxproj" />
+    <BuildDependency Project="wx_wxtiff.vcxproj" />
+  </Project>
+  <Project Path="wx_custom_build.vcxproj" Id="01f4ce10-2cfb-41a8-b41f-e54337868a1d" />
+  <Project Path="wx_gl.vcxproj" Id="da8b15ef-6750-5928-bc0e-c748213cf9b2">
+    <BuildDependency Project="wx_core.vcxproj" />
+  </Project>
+  <Project Path="wx_html.vcxproj" Id="33cc42f9-7756-5587-863c-8d4461b7c5dd">
+    <BuildDependency Project="wx_core.vcxproj" />
+  </Project>
+  <Project Path="wx_media.vcxproj" Id="8bd8f8d9-4275-5b42-a8f4-f1db2970a550">
+    <BuildDependency Project="wx_core.vcxproj" />
+  </Project>
+  <Project Path="wx_net.vcxproj" Id="69f2ede4-7d21-5738-9bc0-f66f61c9ae00">
+    <BuildDependency Project="wx_base.vcxproj" />
+  </Project>
+  <Project Path="wx_propgrid.vcxproj" Id="97fdab45-9c58-5bc5-a2f4-ee42739ebc63">
+    <BuildDependency Project="wx_core.vcxproj" />
+  </Project>
+  <Project Path="wx_qa.vcxproj" Id="e21129e0-7c08-5936-9d8c-0d60b5319ba7">
+    <BuildDependency Project="wx_core.vcxproj" />
+    <BuildDependency Project="wx_xml.vcxproj" />
+  </Project>
+  <Project Path="wx_ribbon.vcxproj" Id="87b42a9c-3f5c-53d7-9017-2b1cae39457d">
+    <BuildDependency Project="wx_core.vcxproj" />
+  </Project>
+  <Project Path="wx_richtext.vcxproj" Id="7fb0902d-8579-5dce-b883-daf66a885005">
+    <BuildDependency Project="wx_core.vcxproj" />
+    <BuildDependency Project="wx_html.vcxproj" />
+    <BuildDependency Project="wx_xml.vcxproj" />
+  </Project>
+  <Project Path="wx_stc.vcxproj" Id="23e1c437-a951-5943-8639-a17f3cf2e606">
+    <BuildDependency Project="wx_core.vcxproj" />
+    <BuildDependency Project="wx_wxscintilla.vcxproj" />
+  </Project>
+  <Project Path="wx_webview.vcxproj" Id="a8e8442a-078a-5fc5-b495-8d71ba77ee6e">
+    <BuildDependency Project="wx_core.vcxproj" />
+  </Project>
+  <Project Path="wx_wxexpat.vcxproj" Id="a1a8355b-0988-528e-9cc2-b971d6266669" />
+  <Project Path="wx_wxjpeg.vcxproj" Id="6053cc38-cdee-584c-8bc8-4b000d800fc7" />
+  <Project Path="wx_wxpng.vcxproj" Id="8acc122a-ca6a-5aa6-9c97-9cdd2e533db0" />
+  <Project Path="wx_wxregex.vcxproj" Id="56a4b526-bb81-5d01-aaa9-16d23bbb169d">
+    <BuildDependency Project="wx_custom_build.vcxproj" />
+  </Project>
+  <Project Path="wx_wxscintilla.vcxproj" Id="74827ebd-93dc-5110-ba95-3f2ab029b6b0" />
+  <Project Path="wx_wxtiff.vcxproj" Id="75596ce6-5ae7-55c9-b890-c07b0a657a83" />
+  <Project Path="wx_wxzlib.vcxproj" Id="8b867186-a0b5-5479-b824-e176edd27c40" />
+  <Project Path="wx_xml.vcxproj" Id="3e6dca27-5fa3-53ec-bbd6-2d42294b7ae6">
+    <BuildDependency Project="wx_base.vcxproj" />
+  </Project>
+  <Project Path="wx_xrc.vcxproj" Id="09f2f96a-1cc6-5e43-af1d-956ec2a4888d">
+    <BuildDependency Project="wx_core.vcxproj" />
+    <BuildDependency Project="wx_html.vcxproj" />
+    <BuildDependency Project="wx_xml.vcxproj" />
+  </Project>
+</Solution>

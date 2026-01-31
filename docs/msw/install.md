@@ -50,10 +50,11 @@ Microsoft Visual C++ Compilation       {#msw_build_msvs}
 ### From the IDE
 
 Ready to use project files are provided for VC++ versions 8, 9,
-10, 11, 12, 14, 15, 16 and 17 (also known as MSVS 2005, 2008, 2010, 2012,
-2013, 2015, 2017, 2019 and 2022 respectively).
+10, 11, 12, 14, 15, 16, 17 and 18 (also known as MSVS 2005, 2008, 2010, 2012,
+2013, 2015, 2017, 2019, 2022 and 2026 respectively).
 
-Simply open `wx_vcN.sln` (for N=8, 9, 10, 11, 12, 14, 15, 16 or 17) file,
+Simply open `wx_vcN.sln` (for N=8, 9, 10, 11, 12, 14, 15, 16 or 17, matching
+MSVS versions between 2005 and 2022) or `wx_vc18.slnx` (for MSVS 2026) file,
 select the appropriate configuration (Debug or Release, static or DLL)
 and build the solution. Notice that when building a DLL configuration,
 you may need to perform the build several times because the projects

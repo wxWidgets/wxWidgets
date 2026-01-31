@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DLL Debug" />
+    <BuildType Name="DLL Release" />
+    <BuildType Name="Release" />
+    <Platform Name="Win32" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="../../build/msw/wx_base.vcxproj" Id="3fcc50c2-81e9-5db2-b8d8-2129427568b1" />
+  <Project Path="../../build/msw/wx_core.vcxproj" Id="6744dad8-9c70-574a-bff2-9f8dddb24a75" />
+  <Project Path="minimal.vcxproj" Id="853d1fd7-20ab-586c-9699-9680f84ac985">
+    <BuildDependency Project="../../build/msw/wx_base.vcxproj" />
+    <BuildDependency Project="../../build/msw/wx_core.vcxproj" />
+  </Project>
+</Solution>
