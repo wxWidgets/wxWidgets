@@ -370,6 +370,7 @@ public:
     virtual bool HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleQueryEndSession(long logOff, bool *mayEnd);
+    void EnableRoundCorners(HWND hWndMenu);
     bool HandleEndSession(bool endSession, long logOff);
 
     bool HandleSetFocus(WXHWND wnd);
@@ -409,7 +410,7 @@ public:
 
     bool HandlePower(WXWPARAM wParam, WXLPARAM lParam, bool *vetoed);
 
-
+    bool HandleEnterIdle(WPARAM wParam, LPARAM lParam);
     // The main body of common window proc for all wxWindow objects. It tries
     // to handle the given message and returns true if it was handled (the
     // appropriate return value is then put in result, which must be non-null)
