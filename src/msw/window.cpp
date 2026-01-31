@@ -293,7 +293,21 @@ static bool wxIsTouchEventMSW()
     const LONG_PTR SIGNATURE_MASK = 0xFFFFFF00;
     return (::GetMessageExtraInfo() & SIGNATURE_MASK) == MI_WP_SIGNATURE;
 }
+// ---------------------------------------------------------------------------
+// Check High contrast mode
+// Menu Theme is disabled in high contrast mode 
+// ---------------------------------------------------------------------------
+static bool IsHighContrast()
+{
+    HIGHCONTRASTW hc = { sizeof(hc) };
 
+    if (SystemParametersInfoW(SPI_GETHIGHCONTRAST, sizeof(hc), &hc, 0))
+    {
+        return (hc.dwFlags & HCF_HIGHCONTRASTON) != 0;
+    }
+
+    return false;
+}
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -3600,61 +3614,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             processed = HandleEndSession(wParam != 0, lParam);
             break;
         case WM_ENTERIDLE:
-            // fix menu rounded corners in Windows 11 and higher see https://github.com/wxWidgets/wxWidgets/issues/22518
-            // if any menu is being shown, apply rounded corners and border color to it in Windows 11+
-            if (static_cast<WPARAM>(wParam) == MSGF_MENU)
-            {
-                // lParam is A handle to window containing the displayed menu(if wParam is MSGF_MENU).
-                // also if windows is not 11+ or Window Corner Preference is not rounded, we can subclass this window and prosses WM_NCPAINT.
-                // see https://learn.microsoft.com/windows/win32/dlgbox/wm-enteridle for more details.
-                HWND hWndMenu = reinterpret_cast<HWND>(lParam);
-                if (hWndMenu)
-                {
-
-                    // Dynamically load DwmSetWindowAttribute to avoid link dependency.
-                    typedef HRESULT(WINAPI* PFN_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
-                    HMODULE hDwm = ::LoadLibraryW(L"dwmapi.dll");
-                    if (hDwm)
-                    {
-                        PFN_DwmSetWindowAttribute pDwmSetWindowAttribute =
-                            reinterpret_cast<PFN_DwmSetWindowAttribute>(
-                                ::GetProcAddress(hDwm, "DwmSetWindowAttribute"));
-                        if (pDwmSetWindowAttribute)
-                        {
-                            const DWORD DWMWA_WINDOW_CORNER_PREFERENCE = 33;
-                            const DWORD DWMWA_BORDER_COLOR = 34;
-                            int WindowCornerPreference = 3; //  DWMWCP_ROUNDSMALL
-                            // Apply rounded corners with round small  to any menu window
-                            HRESULT hr = pDwmSetWindowAttribute(hWndMenu, DWMWA_WINDOW_CORNER_PREFERENCE, &WindowCornerPreference, sizeof(WindowCornerPreference));
-                            if (SUCCEEDED(hr))
-                            {
-                                DWORD style = GetClassLongPtr(hWndMenu, GCL_STYLE);
-
-                                // Remove the drop shadow flag because it conflicts with rounded corners at bottom right if menu has Owner Draw style and its suppMenu of menu bar.
-                                if (style & CS_DROPSHADOW)
-                                {
-                                    style &= ~CS_DROPSHADOW;
-                                    SetClassLongPtr(hWndMenu, GCL_STYLE, style);
-                                    // not working properly for first show.
-                                    // RedrawWindow(hWndMenu, nullptr, nullptr, RDW_INVALIDATE | RDW_FRAME | RDW_UPDATENOW | RDW_ERASE);
-                                    //SetWindowPos(hWndMenu, nullptr, 0, 0, 0, 0,
-                                    //    SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER  | SWP_FRAMECHANGED);
-                                }
-
-                                // Apply border color to menu window
-                                // the border color applied only if Window Corner Preference is round or round small.
-                                DWORD color = static_cast<DWORD>(wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER)));
-                                hr =
-                                    pDwmSetWindowAttribute(hWndMenu, DWMWA_BORDER_COLOR, &color, sizeof(color));
-                            }
-                        }
-
-                        ::FreeLibrary(hDwm);
-                    }
-                }
-            }
-            rc.result = MSWDefWindowProc(message, wParam, lParam);
-            processed = true;
+            processed = HandleEnterIdle(wParam, lParam);    
             break;
         case WM_GETMINMAXINFO:
             processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);
@@ -4330,6 +4290,77 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
     *mayEnd = gs_queryEndSession == QueryEndSession::Allow;
 
     return true;
+}
+void wxWindowMSW::EnableRoundCorners(HWND hWndMenu)
+{
+    // Dynamically load DwmSetWindowAttribute to avoid link dependency
+    typedef HRESULT(WINAPI* PFN_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
+
+    wxDynamicLibrary dllDwm(wxT("dwmapi.dll"), wxDL_VERBATIM);
+    if (dllDwm.IsLoaded())
+    {
+        auto pDwmSetWindowAttribute = (PFN_DwmSetWindowAttribute)
+            dllDwm.GetSymbol(wxT("DwmSetWindowAttribute"));
+
+        if (pDwmSetWindowAttribute)
+        {
+            const DWORD DWMWA_WINDOW_CORNER_PREFERENCE = 33;
+            const DWORD DWMWA_BORDER_COLOR = 34;
+            int WindowCornerPreference = 3; // DWMWCP_ROUNDSMALL
+
+            // Apply rounded corners
+            HRESULT hr = pDwmSetWindowAttribute(hWndMenu, DWMWA_WINDOW_CORNER_PREFERENCE,
+                &WindowCornerPreference, sizeof(WindowCornerPreference));
+
+            if (SUCCEEDED(hr))
+            {
+                // Clean up conflicting styles like drop shadows
+                DWORD style = ::GetClassLongPtr(hWndMenu, GCL_STYLE);
+                if (style & CS_DROPSHADOW)
+                {
+                    style &= ~CS_DROPSHADOW;
+                    ::SetClassLongPtr(hWndMenu, GCL_STYLE, style);
+                }
+                wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
+                // Determine the appropriate border color based on themes
+                wxUxThemeHandle hTheme(window, L"LightMode_ImmersiveStart::Menu;MENU",
+                    L"DarkMode_ImmersiveStart::Menu;DarkMode::Menu;MENU");
+
+                wxColor cBorderColor = hTheme.GetColour(MENU_POPUPBORDERS, TMT_FILLCOLORHINT);
+                DWORD color;
+
+                if (cBorderColor.IsOk())
+                    color = static_cast<DWORD>(wxColourToRGB(cBorderColor));
+                else
+                    color = static_cast<DWORD>(wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER)));
+
+                pDwmSetWindowAttribute(hWndMenu, DWMWA_BORDER_COLOR, &color, sizeof(color));
+            }
+        }
+    }
+}
+bool wxWindowMSW::HandleEnterIdle(WPARAM wParam, LPARAM lParam)
+{
+    // We only care about idle states triggered by menus
+    if (static_cast<WPARAM>(wParam) != MSGF_MENU)
+        return false;
+
+    // Fix menu rounded corners in Windows 11 and higher at light mode if menu has Owner Drawn items.
+    // high contrast off according to uxtheme.   
+    // See: https://github.com/wxWidgets/wxWidgets/issues/22518
+    if (!wxMSWDarkMode::IsActive() && !IsHighContrast())
+    {
+#if wxUSE_OWNER_DRAWN
+        HWND hWndMenu = reinterpret_cast<HWND>(lParam);
+        if (hWndMenu)
+        {
+            EnableRoundCorners(hWndMenu);
+        }
+#endif // wxUSE_OWNER_DRAWN
+    }
+
+    // Return false to allow default processing, or true if you handled it fully
+    return false;
 }
 
 bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
