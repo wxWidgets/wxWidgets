@@ -456,10 +456,6 @@ protected:
     wxPreviewCanvas*      m_previewCanvas = nullptr;
     wxPreviewControlBar*  m_controlBar = nullptr;
     wxPrintPreviewBase*   m_printPreview;
-    wxWindowDisabler*     m_windowDisabler = nullptr;
-
-    wxPreviewFrameModalityKind m_modalityKind = wxPreviewFrame_NonModal;
-
 
 private:
     void OnChar(wxKeyEvent& event);
