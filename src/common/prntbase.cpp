@@ -1728,10 +1728,6 @@ wxFrame(parent, wxID_ANY, title, pos, size, style, name),
     m_initialSize(size)
 {
     m_printPreview = preview;
-    m_controlBar = nullptr;
-    m_previewCanvas = nullptr;
-    m_windowDisabler = nullptr;
-    m_modalityKind = wxPreviewFrame_NonModal;
 
     // Give the application icon
 #ifdef __WXMSW__
