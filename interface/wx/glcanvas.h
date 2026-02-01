@@ -259,7 +259,7 @@ public:
 
     /**
         wxWidgets defaults:
-        RGBA, Z-depth 16 bits, double buffering, 1 sample buffer, 4 samplers.
+        RGBA, Z-depth 16 bits, double buffering.
 
         @see PlatformDefaults()
     */
