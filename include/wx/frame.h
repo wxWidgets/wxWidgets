@@ -74,6 +74,18 @@ public:
     // if the frame has a toolbar) in client coordinates
     virtual wxPoint GetClientAreaOrigin() const override;
 
+    // frame modality
+    // ------------------
+
+    enum class Modality
+    {
+        App,
+        Window,
+        None
+    };
+
+    // Changing the frame modality after it has been shown has no effect
+    virtual void SetWindowModality(Modality modality);
 
     // menu bar functions
     // ------------------
@@ -248,6 +260,9 @@ protected:
 
     wxToolBar *m_frameToolBar = nullptr;
 #endif // wxUSE_TOOLBAR
+
+    // The frame is not modal by default.
+    Modality m_modality = Modality::None;
 
 #if wxUSE_MENUS
     wxDECLARE_EVENT_TABLE();
