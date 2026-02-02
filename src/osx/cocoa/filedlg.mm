@@ -287,6 +287,10 @@ void wxFileDialog::ShowWindowModal()
     {
       m_firstFileTypeFilter = GetMatchingFilterExtension(m_fileName);
     }
+    else
+    {
+        m_firstFileTypeFilter = 0;
+    }
 
     if ( HasFlag(wxFD_SAVE) )
     {
@@ -606,6 +610,10 @@ int wxFileDialog::ShowModal()
     else if ( m_useFileTypeFilter )
     {
         m_firstFileTypeFilter = GetMatchingFilterExtension(m_fileName);
+    }
+    else
+    {
+        m_firstFileTypeFilter = 0;
     }
 
     OSXBeginModalDialog();
