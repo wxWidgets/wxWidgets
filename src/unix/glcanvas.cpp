@@ -23,7 +23,9 @@
 #include "wx/glcanvas.h"
 
 #include "wx/unix/private/glcanvas.h"
+#ifdef wxHAS_GLX
 #include "wx/unix/private/glx11.h"
+#endif // wxHAS_GLX
 #ifdef wxHAS_EGL
     #include "wx/unix/private/glegl.h"
 
@@ -229,11 +231,15 @@ wxGLBackend* wxGLBackend::Init()
         return &wxGLBackendEGL::Get();
 #endif // GTK 3 with Wayland
 
+#ifdef wxHAS_GLX
     if ( !(wxGLBackendPreferGLX || wxSystemOptions::IsFalse("opengl.egl")) )
+#endif // wxHAS_GLX
         return &wxGLBackendEGL::Get();
 #endif // wxHAS_EGL
 
+#ifdef wxHAS_GLX
     return &wxGLBackendX11::Get();
+#endif // wxHAS_GLX
 }
 
 wxGLContext::wxGLContext(wxGLCanvas *win,

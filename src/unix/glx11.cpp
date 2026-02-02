@@ -18,7 +18,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_GLCANVAS
+#if wxUSE_GLCANVAS && defined(wxHAS_GLX)
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
