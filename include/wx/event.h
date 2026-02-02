@@ -700,6 +700,7 @@ class WXDLLIMPEXP_FWD_CORE wxRotateGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxTwoFingerTapEvent;
 class WXDLLIMPEXP_FWD_CORE wxLongPressEvent;
 class WXDLLIMPEXP_FWD_CORE wxPressAndTapEvent;
+class WXDLLIMPEXP_FWD_CORE wxTabletEvent;
 
 
     // Command events
@@ -810,6 +811,11 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_BEGIN, wxMultiTouchEvent)
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_MOVE, wxMultiTouchEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_END, wxMultiTouchEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_CANCEL, wxMultiTouchEvent);
+
+    // Tablet event types
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_POINTER_DOWN, wxTabletEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_POINTER_UP, wxTabletEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_POINTER_UPDATE, wxTabletEvent);
 
     // Gesture events
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_PAN, wxPanGestureEvent);
@@ -2202,6 +2208,45 @@ public:
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPressAndTapEvent);
 };
+
+class WXDLLIMPEXP_CORE wxTabletEvent : public wxEvent
+{
+public:
+    wxTabletEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
+        : wxEvent(winid, type), m_pressure(0.0), m_tiltX(0.0), m_tiltY(0.0), m_rotation(0.0), m_pos(0,0)
+    {
+    }
+
+    wxTabletEvent(const wxTabletEvent& event) = default;
+
+    wxDouble GetPressure() const { return m_pressure; }
+    void SetPressure(wxDouble p) { m_pressure = p; }
+
+    wxDouble GetTiltX() const { return m_tiltX; }
+    void SetTiltX(wxDouble t) { m_tiltX = t; }
+
+    wxDouble GetTiltY() const { return m_tiltY; }
+    void SetTiltY(wxDouble t) { m_tiltY = t; }
+
+    wxDouble GetRotation() const { return m_rotation; }
+    void SetRotation(wxDouble r) { m_rotation = r; }
+
+    const wxPoint& GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint& pos) { m_pos = pos; }
+
+    wxNODISCARD virtual wxEvent* Clone() const override { return new wxTabletEvent(*this); }
+
+protected:
+    wxDouble m_pressure; // range [ 0.0, 1.0 ]
+    wxDouble m_tiltX;    // range [ -90.0, -90.0 ]
+    wxDouble m_tiltY;    // range [ -90.0, -90.0 ]
+    wxDouble m_rotation; // range [ 0, 360.0 ]
+    wxPoint m_pos;        // position in pixels relative to the Window receiving the event
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTabletEvent);
+};
+
+
 
 // Keyboard input event class
 
@@ -4327,6 +4372,7 @@ typedef void (wxEvtHandler::*wxTwoFingerTapEventFunction)(wxTwoFingerTapEvent&);
 typedef void (wxEvtHandler::*wxLongPressEventFunction)(wxLongPressEvent&);
 typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
 typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
+typedef void (wxEvtHandler::*wxTabletEventFunction)(wxTabletEvent&);
 
 #define wxCommandEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxCommandEventFunction, func)
@@ -4421,6 +4467,8 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     wxEVENT_HANDLER_CAST(wxPressAndTapEventFunction, func)
 #define wxFullScreenEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxFullScreenEventFunction, func)
+#define wxTabletEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxTabletEventFunction, func)
 
 #endif // wxUSE_GUI
 
@@ -4766,6 +4814,15 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     EVT_TOUCH_MOVE(func) \
     EVT_TOUCH_END(func) \
     EVT_TOUCH_CANCEL(func)
+
+#define EVT_POINTER_DOWN(func) wx__DECLARE_EVT0(wxEVT_POINTER_DOWN, wxTabletEventHandler(func))
+#define EVT_POINTER_UP(func) wx__DECLARE_EVT0(wxEVT_POINTER_UP, wxTabletEventHandler(func))
+#define EVT_POINTER_UPDATE(func) wx__DECLARE_EVT0(wxEVT_POINTER_UPDATE, wxTabletEventHandler(func))
+
+#define EVT_POINTER_EVENTS(func) \
+    EVT_POINTER_DOWN(func) \
+    EVT_POINTER_UP(func) \
+    EVT_POINTER_UPDATE(func)
 
 // Gesture events
 #define EVT_GESTURE_PAN(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_PAN, winid, wxPanGestureEventHandler(func))
