@@ -3478,6 +3478,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
                     found_gl=1
                     OPENGL_LIBS="-lGL"
+                    AC_DEFINE(wxHAS_GLX)
 
                     if test "$WXGTK3" = 1; then
                         if test "$wxUSE_GLCANVAS_EGL" != "no"; then

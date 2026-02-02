@@ -31347,6 +31347,8 @@ fi
 
                     found_gl=1
                     OPENGL_LIBS="-lGL"
+                    $as_echo "#define wxHAS_GLX 1" >>confdefs.h
+
 
                     if test "$WXGTK3" = 1; then
                         if test "$wxUSE_GLCANVAS_EGL" != "no"; then
