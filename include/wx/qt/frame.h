@@ -52,6 +52,8 @@ public:
 
     virtual void SetWindowStyleFlag( long style ) override;
 
+    virtual void SetWindowModality(Modality modality) override;
+
     virtual void AddChild( wxWindowBase *child ) override;
     virtual void RemoveChild( wxWindowBase *child ) override;
 
