@@ -321,6 +321,11 @@ TEST_CASE("wxArrayString", "[dynarray]")
     CHECK( a5.size() == 3 );
     CHECK( a5[2] == "Foo" );
 
+    // This is undefined behaviour but because the array has just been resized
+    // down, its memory hopefully hasn't been reallocated yet, so we shouldn't
+    // crash accessing it. But we must assert due to the index being invalid.
+    WX_ASSERT_FAILS_WITH_ASSERT( a5[3].clear() );
+
     wxArrayString a6;
     a6.Add("Foo");
     a6.Insert(a6[0], 1, 100);
