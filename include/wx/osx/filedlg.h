@@ -100,6 +100,7 @@ protected:
 private:
     // Common part of all ctors.
     void Init();
+    void CommonShow();
 };
 
 #endif // _WX_FILEDLG_H_
