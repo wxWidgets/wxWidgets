@@ -55,11 +55,11 @@ wxString ConcatenateDataViewItemValues(wxDataViewCtrl const* dataViewCtrlPtr, wx
 
 struct wxOSXDVCDeleting
 {
-    explicit wxOSXDVCDeleting(const wxDataViewItem& parent) : m_parent(parent)
+    explicit wxOSXDVCDeleting(const wxDataViewItem& item) : m_item(item)
     {
     }
 
-    const wxDataViewItem m_parent;
+    const wxDataViewItem m_item;
 
     wxDECLARE_NO_COPY_CLASS(wxOSXDVCDeleting);
 };
@@ -68,11 +68,11 @@ struct wxOSXDVCDeleting
 class wxOSXDVCScopedDeleter
 {
 public:
-    wxOSXDVCScopedDeleter(wxDataViewCtrl* dvc, const wxDataViewItem& parent) :
+    wxOSXDVCScopedDeleter(wxDataViewCtrl* dvc, const wxDataViewItem& item) :
         m_dvc(dvc),
         m_valueOrig(m_dvc->m_Deleting)
     {
-        m_dvc->m_Deleting = new wxOSXDVCDeleting(parent);
+        m_dvc->m_Deleting = new wxOSXDVCDeleting(item);
     }
 
     ~wxOSXDVCScopedDeleter()
@@ -429,7 +429,7 @@ bool wxDataViewCtrl::IsClearing() const
 {
     // We only set the item being deleted to an invalid item when we're
     // clearing the entire model.
-    return m_Deleting != NULL && !m_Deleting->m_parent.IsOk();
+    return m_Deleting != NULL && !m_Deleting->m_item.IsOk();
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent,
