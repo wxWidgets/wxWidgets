@@ -139,6 +139,7 @@ wx_add_sample(statbar DEPENDS wxUSE_STATUSBAR)
 wx_add_sample(stc stctest.cpp edit.cpp prefs.cpp edit.h defsext.h prefs.h
     DATA stctest.cpp NAME stctest LIBRARIES wxstc DEPENDS wxUSE_STC)
 wx_add_sample(svg svgtest.cpp RES svgtest.rc DEPENDS wxUSE_SVG)
+wx_add_sample(stylus stylus.cpp)
 wx_add_sample(taborder)
 wx_add_sample(taskbar tbtest.cpp tbtest.h DATA info.svg DEPENDS wxUSE_TASKBARICON)
 wx_add_sample(text DEPENDS wxUSE_TEXTCTRL)

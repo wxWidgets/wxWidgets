@@ -3521,6 +3521,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             processed = HandleTouch(wParam, lParam);
             break;
 
+        case WM_POINTERDOWN:
+        case WM_POINTERUP:
+        case WM_POINTERUPDATE:
+            processed = HandlePointer(message, wParam, lParam);
+            break;
+
         // CTLCOLOR messages are sent by children to query the parent for their
         // colors
         case WM_CTLCOLORMSGBOX:
@@ -6366,6 +6372,80 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
     }
 
     return allHandled;
+}
+
+bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    wxUnusedVar(lParam);
+    wxEventType type;
+    switch( message )
+    {
+        case WM_POINTERDOWN:
+            type = wxEVT_STYLUS_DOWN;
+            break;
+        case WM_POINTERUP:
+            type = wxEVT_STYLUS_UP;
+            break;
+        case WM_POINTERUPDATE:
+            type = wxEVT_STYLUS_UPDATE;
+            break;
+        default:
+            wxFAIL_MSG( wxT("Unexpected pointer message") );
+            return false;
+    }
+
+    const UINT32 pointerId = GET_POINTERID_WPARAM(wParam);
+    POINTER_INPUT_TYPE pType = 0;
+    if ( ::GetPointerType(pointerId, &pType) )
+    {
+        if (pType != PT_PEN)
+        {
+            // we only expect a pen as source of event here
+            return false;
+        }
+    }
+
+    wxStylusEvent event(GetId(), type);
+    event.SetEventObject(this);
+
+    // here we already know we have a pen generated event
+    POINTER_PEN_INFO penInfo;
+    if ( ::GetPointerPenInfo(pointerId, &penInfo) )
+    {
+        if (penInfo.penMask & PEN_MASK_PRESSURE)
+        {
+            wxDouble pressure = penInfo.pressure; // [0, 1024] in Windows
+            pressure /= 1024.0; // normalize
+            event.SetPressure(pressure);
+        }
+
+        if (penInfo.penMask & PEN_MASK_ROTATION)
+        {
+            wxDouble rotation = penInfo.rotation;
+            event.SetRotation(rotation);
+        }
+
+        if (penInfo.penMask & PEN_MASK_TILT_X)
+        {
+            wxDouble t = penInfo.tiltX;
+            event.SetTiltX(t);
+        }
+
+        if (penInfo.penMask & PEN_MASK_TILT_Y)
+        {
+            wxDouble t = penInfo.tiltY;
+            event.SetTiltY(t);
+        }
+
+        // set the eraser flag
+        event.SetUsingEraser( (penInfo.penFlags & PEN_FLAG_ERASER) != 0 );
+
+        const POINT& pt = penInfo.pointerInfo.ptPixelLocation;
+        wxPoint pos(pt.x, pt.y);
+        event.SetPosition( ScreenToClient(pos) );
+    }
+
+    return HandleWindowEvent(event);;
 }
 
 // ---------------------------------------------------------------------------

@@ -5166,6 +5166,94 @@ public:
     */
     void SetCursor(const wxCursor& cursor);
 };
+/**
+    @class wxStylusEvent
+
+    A wxStylusEvent is generated from wxWindow when the graphical pen (stylus) is used.
+
+    Application can handle this event to process stylus actions based on
+    the current of the pen, pressure and other parameters.
+    processing based on the current position of the pen, pressure and other
+    parameters.
+
+    @beginEventTable{wxStylusEvent}
+    @event{EVT_STYLUS_DOWN(func)}
+        Process a @c wxEVT_STYLUS_DOWN event, which is generated when a pen makes
+        contact with the tablet.
+    @event{EVT_STYLUS_UP(func)}
+        Process a @c wxEVT_STYLUS_UP event, which is generated when a pen breaks contact
+        with the tablet.
+    @event{EVT_STYLUS_UPDATE(func)}
+        Process a @c wxEVT_STYLUS_UPDATE event, which is generated each time an update
+        (like movement) comes from a pen that is near or touches surface of the tablet.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.3.3
+ */
+class wxStylusEvent : public wxEvent
+{
+public:
+    /**
+        Constructor.
+     */
+    wxStylusEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL);
+    /**
+        Get the pressure value. Range is from 0 to 1.
+     */
+    wxDouble GetPressure() const;
+    /**
+        Set the pressure value.
+     */
+    void SetPressure(wxDouble p);
+
+    /**
+        Get the x tilt value. Range is between -90 and +90.
+     */
+    wxDouble GetTiltX() const;
+    /**
+        Set the x tilt value.
+     */
+    void SetTiltX(wxDouble t);
+
+    /**
+        Get the y tilt value. Range is between -90 and +90.
+     */
+    wxDouble GetTiltY() const;
+    /**
+        Set the y tilt value.
+     */
+    void SetTiltY(wxDouble t);
+
+    /**
+        Get the rotation value. Range is between 0 and 360.
+     */
+    wxDouble GetRotation() const;
+    /**
+        Set the rotation.
+     */
+    void SetRotation(wxDouble r);
+    /**
+        Returns the position where the event happened relative to the window generating the event.
+     */
+    const wxPoint& GetPosition() const;
+    /**
+        Set the position.
+     */
+    void SetPosition(const wxPoint& pos);
+
+    /**
+        Tells if the pen used is an eraser.
+     */
+    bool IsUsingEraser() const;
+    /**
+        Update the eraser flag, true if eraser used, false otherwise.
+     */
+    void SetUsingEraser(bool eraser);
+};
+
 
 #endif // wxUSE_GUI
 
