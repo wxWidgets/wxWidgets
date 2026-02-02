@@ -230,9 +230,10 @@ public:
             return nullptr;
     }
 
+    virtual wxWebViewConfiguration CreateConfiguration() override;
+
 #if wxUSE_WEBVIEW_WEBKIT2
     virtual wxVersionInfo GetVersionInfo(wxVersionContext context) override;
-    virtual wxWebViewConfiguration CreateConfiguration() override;
     virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config) override;
 #endif
 };

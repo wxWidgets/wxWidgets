@@ -535,9 +535,4 @@ void wxWebView::InitFactoryMap()
 #endif
 }
 
-wxWebViewConfiguration wxWebViewFactory::CreateConfiguration()
-{
-    return wxWebViewConfiguration(wxWebViewBackendDefault, new wxWebViewConfigurationImpl);
-}
-
 #endif // wxUSE_WEBVIEW
