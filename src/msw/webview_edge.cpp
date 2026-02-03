@@ -856,6 +856,14 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     m_webViewController->put_IsVisible(true);
     m_ctrl->NotifyWebViewCreated();
 
+    // If focus moved to the WebView window before the Edge instance was fully
+    // created, we couldn't call m_webViewController->MoveFocus at that time. If focus is
+    // there now, call MoveFocus to ensure that focus is inside of the web
+    // content window. This helps screen readers, since they  use the focus
+    // window to influence their behavior.
+    if (m_ctrl && m_ctrl->HasFocus())
+        m_webViewController->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
+
     // Connect and handle the various WebView events
     m_webView->add_NavigationStarting(
         Callback<ICoreWebView2NavigationStartingEventHandler>(
