@@ -376,6 +376,7 @@ public:
     virtual ~wxPreviewCanvas();
 
     void SetPreview(wxPrintPreviewBase *preview) { m_printPreview = preview; }
+    wxPrintPreviewBase* GetPreview() const { return m_printPreview; }
 
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent &event);
