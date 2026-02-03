@@ -341,6 +341,13 @@ void wxGUIEventLoop::OSXDoRun()
         }
     }
 
+#if wxUSE_EXCEPTIONS
+    // Rethrow any exceptions which could have been produced by the handlers
+    // ran by the event loop.
+    if ( wxTheApp )
+        wxTheApp->RethrowStoredException();
+#endif // wxUSE_EXCEPTIONS
+
     // Wake up the enclosing loop so that it can check if it also needs
     // to exit.
     WakeUp();
