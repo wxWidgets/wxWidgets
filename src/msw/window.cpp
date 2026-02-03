@@ -6346,8 +6346,10 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
     {
         case WM_POINTERDOWN:
             type = wxEVT_POINTER_DOWN;
+            break;
         case WM_POINTERUP:
             type = wxEVT_POINTER_UP;
+            break;
         case WM_POINTERUPDATE:
             type = wxEVT_POINTER_UPDATE;
             break;
