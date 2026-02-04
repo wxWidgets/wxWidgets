@@ -81,3 +81,30 @@ wxString wxGetStockLabel(wxWindowID id, long flags = wxSTOCK_WITH_MNEMONIC);
 
 ///@}
 
+/** @addtogroup group_funcmacro_misc */
+///@{
+
+/**
+    Return help string associated with given stock @a id and @a client.
+
+    This function uses the default help string shown in the status bar when the
+    item with the given @a id is selected in a menu, e.g. for ::wxID_EXIT the
+    returned string is "Quit this program".
+
+    @param id
+        The stock item identifier to get the help string for.
+    @param client
+        The client context for which the help string is requested, currently
+        can only be `wxSTOCK_MENU`, which is the default value for this
+        parameter.
+    @return
+        The translated help string for the given stock item identifier and
+        client context, or an empty string if no default help string is
+        available for this @a id.
+
+    @header{wx/stockitem.h}
+ */
+wxString wxGetStockHelpString(wxWindowID id,
+                              wxStockHelpStringClient client = wxSTOCK_MENU);
+
+///@}
