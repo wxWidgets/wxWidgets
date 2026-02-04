@@ -20,6 +20,7 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 
     //Arrays to keep track of touches and identify if they are the same touches during touch events.
     NSTouch *_initialTouches[2];
+    NSTouch *_oldTouches[2];
     NSTouch *_currentTouches[2];
     NSTouch *_oldTouchesUsedInRotateEvent[2];
 
@@ -51,7 +52,8 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 // The two tracked touches are considered the bounds of a rectangle. THe following methods allow you to get the change in origin or size from the inital tracking values to the current values of said rectangle. The values are in points (72ppi)
 @property(readonly) NSPoint deltaOrigin;
 @property(readonly) NSSize deltaSize;
-@property(readonly) double deltaSizeTouches;
+@property(readonly) double deltaSizeOfCurrentTouches;
+@property(readonly) double deltaSizeOfInitialTouches;
 @property(readonly) CGPoint midPointCoordOfCurrentTouches;
 @property(readonly) CGPoint midPointCoordOfInitialTouches;
 

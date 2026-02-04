@@ -2122,13 +2122,6 @@ void wxWidgetCocoaImpl::trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEven
     wxEvent.m_altDown = modifiers & NSAlternateKeyMask;
     wxEvent.m_controlDown = modifiers & NSCommandKeyMask;
 
-    UInt32 modifiers = [nsEvent modifierFlags];
-
-    wxEvent.m_shiftDown = modifiers & NSShiftKeyMask;
-    wxEvent.m_rawControlDown = modifiers & NSControlKeyMask;
-    wxEvent.m_altDown = modifiers & NSAlternateKeyMask;
-    wxEvent.m_controlDown = modifiers & NSCommandKeyMask;
-
     wxWindowMac* peer = GetWXPeer();
     if ( peer )
     {
