@@ -193,6 +193,7 @@ public:
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) override
     { return new wxWebViewIE(parent, id, url, pos, size, style, name); }
     virtual wxVersionInfo GetVersionInfo(wxVersionContext context) override;
+    virtual wxWebViewConfiguration CreateConfiguration() override;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)

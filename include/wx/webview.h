@@ -200,7 +200,7 @@ public:
     {
         return wxVersionInfo();
     }
-    virtual wxWebViewConfiguration CreateConfiguration();
+    virtual wxWebViewConfiguration CreateConfiguration() = 0;
 };
 
 using wxStringWebViewFactoryMap = std::unordered_map<wxString, wxSharedPtr<wxWebViewFactory>>;
