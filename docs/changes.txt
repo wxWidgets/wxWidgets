@@ -270,6 +270,7 @@ wxOSX:
 
 - Fix bug when deleting wxDataViewCtrl items (Hartwig Wiesmann, #26138).
 - Fix crash on some key presses in wxDataViewCtrl (#26160).
+- Fix regression in wxFileDialog filters in 3.2.9 (#26148).
 - Improve wxRichTextCtrl handling of cursor keys (Lee Ockert, #26064).
 - Many appearance fixes for macOS 26 Tahoe (#26058, #25767, #26121).
 - Show applications launched from keyboard under macOS 26 (#26095).
