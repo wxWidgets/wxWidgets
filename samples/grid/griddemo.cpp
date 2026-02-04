@@ -812,6 +812,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEEDIT, true );
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, true );
+    GetMenuBar()->Check( ID_TOGGLEROWMOVING, false ); // BRICSYS DragRowMove
     GetMenuBar()->Check( ID_TOGGLECOLMOVING, false );
     GetMenuBar()->Check( ID_TOGGLECOLHIDING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
@@ -868,6 +869,12 @@ void GridFrame::ToggleColSizing( wxCommandEvent& WXUNUSED(ev) )
 }
 
 void GridFrame::ToggleRowMoving( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableDragRowMove(
+        GetMenuBar()->IsChecked( ID_TOGGLEROWMOVING ) );
+}
+
+void GridFrame::ToggleRowMoving( wxCommandEvent& WXUNUSED(ev) ) // BRICSYS DragRowMove
 {
     grid->EnableDragRowMove(
         GetMenuBar()->IsChecked( ID_TOGGLEROWMOVING ) );

@@ -618,6 +618,19 @@ public:
     // Override to call DoIdleUpdate().
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE) wxOVERRIDE;
 
+    wxOrientation GetOrientation() const
+        {
+            return m_orientation;
+        }
+    bool IsVertical() const
+        {
+            return GetOrientation() == wxVERTICAL;
+        }
+    bool IsHorizontal() const
+        {
+            return !IsVertical();
+        }
+
 protected:
     void Init();
 

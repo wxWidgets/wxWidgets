@@ -162,6 +162,13 @@ public:
     void GTKSendPaintEvents(const GdkRegion* region);
 #endif
 
+    // Bricsys change (Linux): recursively notify our children when a
+    // reparenting action takes place. We use it to reparent
+    // Qt subwindows to the new X window parent (doesn't happen directly)
+    virtual void NotifyWindowOnReparent();
+    // end Bricsys change
+
+
     // The methods below are required because many native widgets
     // are composed of several subwidgets and setting a style for
     // the widget means setting it for all subwidgets as well.
@@ -264,6 +271,9 @@ public:
 
     // Common scroll event handling code for wxWindow and wxScrollBar
     wxEventType GTKGetScrollEventType(GtkRange* range);
+
+    // Bricsys added
+    bool HasTopLevelFocus();
 
     // position and size of the window
     int                  m_x, m_y;

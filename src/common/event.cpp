@@ -112,6 +112,9 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxTwoFingerTapEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxLongPressEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxPressAndTapEvent, wxGestureEvent);
+#if defined(__WXMAC__)
+    IMPLEMENT_DYNAMIC_CLASS(wxTrackPadEvent, wxEvent)
+#endif
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -216,6 +219,15 @@ wxDEFINE_EVENT( wxEVT_AUX2_DOWN, wxMouseEvent );
 wxDEFINE_EVENT( wxEVT_AUX2_UP, wxMouseEvent );
 wxDEFINE_EVENT( wxEVT_AUX2_DCLICK, wxMouseEvent );
 wxDEFINE_EVENT( wxEVT_MAGNIFY, wxMouseEvent );
+
+#if defined(__WXMAC__)
+// Trackpad event types
+wxDEFINE_EVENT( wxEVT_ROTATE, wxTrackPadEvent );
+wxDEFINE_EVENT( wxEVT_PINCH, wxTrackPadEvent );
+wxDEFINE_EVENT( wxEVT_PAN, wxTrackPadEvent );
+wxDEFINE_EVENT( wxEVT_TAP, wxTrackPadEvent );
+wxDEFINE_EVENT( wxEVT_RUBBER_SHEET, wxTrackPadEvent );
+#endif
 
 // Character input event type
 wxDEFINE_EVENT( wxEVT_CHAR, wxKeyEvent );
@@ -762,6 +774,17 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
     wxPoint pt(dc.DeviceToLogicalX(m_x), dc.DeviceToLogicalY(m_y));
     return pt;
 }
+
+#if defined(__WXMAC__)
+// ----------------------------------------------------------------------------
+// wxTrackPadEvent
+// ----------------------------------------------------------------------------
+
+wxTrackPadEvent::wxTrackPadEvent(wxEventType commandType)
+{
+    m_eventType = commandType;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxKeyEvent

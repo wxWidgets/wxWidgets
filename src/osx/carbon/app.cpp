@@ -342,6 +342,18 @@ void wxCGDisplayReconfigurationCallBack(CGDirectDisplayID WXUNUSED(display),
 }
 #endif
 
+// start Bricsys change
+void wxApp::SetAppearance(const Theme theme) {
+    if (theme == Theme::DARK) {
+        followDark();
+    } else if (theme == Theme::LIGHT) {
+        followLight();
+    } else {
+        /* Do nothing */
+    }
+}
+// end Bricsys change
+
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )

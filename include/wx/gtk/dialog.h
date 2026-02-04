@@ -39,10 +39,18 @@ public:
     virtual void EndModal( int retCode ) wxOVERRIDE;
     virtual bool IsModal() const wxOVERRIDE;
 
+    // Begin Bricsys change
+    void SetModalEventLoop(bool flag) { m_useModalEventLoop = flag; }
+    // End Bricsys change    
+
 private:
     // common part of all ctors
     void Init();
 
+    // Begin Bricsys change
+    bool m_useModalEventLoop;
+    // End Bricsys change 
+   
     bool m_modalShowing;
     wxGUIEventLoop *m_modalLoop;
 

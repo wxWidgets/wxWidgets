@@ -124,7 +124,7 @@ protected:
 
     // generic double valued functions
     double DoGetValue() const { return m_value; }
-    bool DoSetValue(double val, SendEvent sendEvent);
+    bool DoSetValue(double val, int sendEvent) wxOVERRIDE;
     void DoSetRange(double min_val, double max_val);
     void DoSetIncrement(double inc);
 

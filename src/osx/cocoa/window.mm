@@ -44,6 +44,9 @@
 #endif
 
 #include <objc/objc-runtime.h>
+#include "wx/trackpadstate.h"
+#include "wx/osx/cocoa/trackerInput.h"
+#include "wx/osx/cocoa/trackerTouchDouble.h"
 
 #define TRACE_FOCUS "focus"
 #define TRACE_KEYS  "keyevent"
@@ -153,9 +156,59 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 @interface wxNSView : NSView
 {
+
+    //Touch pad
+    NSMutableArray *inputTrackers;
+    DualTouchTracker *m_pTracker;
+
+@private
+    //used to differentiate Magic Mouse from touchpad.
+    //Te gesture source of scroll from Magic Mouse can't be determined in another way.
+    //See: http://stackoverflow.com/questions/13807616/mac-cocoa-how-to-differentiate-if-a-nsscrollwheel-event-is-from-a-mouse-or-trac
+    //panning states
+    wxState _panningStatus;
+    wxState _rotateStatus;
+    wxState _magnifyStatus;
+    wxState _rubberSheetStatus;
+    double  _currentFingersSize;
+    double  _previousFingersSize;
+    bool    _isRubberSheet;
+    int     _rubberSheetSensibility;        // rubbersheet actions threshold modifier.
+    double  _rubberSheetLastSentTime;       // last time a rubbersheet event has been dispatched for processing.
+    double  _rubberSheetAngleThreshold;     // real time rubbersheet rotate threshold.
+    double  _rubberSheetPanThreshold;       // real time rubbersheet pan threshold.
+    double  _rubberSheetPinchThreshold;     // real time rubbersheet pinch threshold.
 }
 
+@property BOOL isTouch;
+
 @end // wxNSView
+
+static const double     _pinchDeltaLimit                = 0.010000; // delta dist. between fingers for which to send pinch event.
+static const double     _panEventExpireThreshold        = 0.000800; // if pan event is handle to late then skip it.
+static const double     _rotationScaleFactor            = -0.025;   //
+static const double     _rubberSheetPinchScaleFactor    = 2;        // rubbersheet pinch action scale factor.
+static const double     _rubberSheetSendThreshold       = 0.01;     // rubbersheet send event timeframe - seconds.
+static const double     _basicRSPanThreshold            = 0.004;    // rubbersheet base threshold for pan action.
+static const double     _basicRSPinchThreshold          = 0.008;    // rubbersheet base threshold for pinch action.
+static const double     _basicRSRotateThreshold         = 0.005;    // rubbersheet base threshold for rotate action.
+static const int        _defaultSensibility             = 5;        // rubbersheet actions threshold modifier.
+static const int        _maxSensibility                 = 10;       // maximum allowed rubbersheet activation sensibility.
+
+@interface wxNSView(TouchPadGestures)
+@end
+
+//constants
+static const double     _pinchDeltaLimit                = 0.010000; // delta dist. between fingers for which to send pinch event.
+static const double     _panEventExpireThreshold        = 0.000800; // if pan event is handle to late then skip it.
+static const double     _rotationScaleFactor            = -0.025;   //
+static const double     _rubberSheetPinchScaleFactor    = 2;        // rubbersheet pinch action scale factor.
+static const double     _rubberSheetSendThreshold       = 0.01;     // rubbersheet send event timeframe - seconds.
+static const double     _basicRSPanThreshold            = 0.004;    // rubbersheet base threshold for pan action.
+static const double     _basicRSPinchThreshold          = 0.008;    // rubbersheet base threshold for pinch action.
+static const double     _basicRSRotateThreshold         = 0.005;    // rubbersheet base threshold for rotate action.
+static const int        _defaultSensibility             = 5;        // rubbersheet actions threshold modifier.
+static const int        _maxSensibility                 = 10;       // maximum allowed rubbersheet activation sensibility.
 
 @interface wxNSView(TextInput) <NSTextInputClient>
 
@@ -172,6 +225,507 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (NSUInteger)characterIndexForPoint:(NSPoint)aPoint;
 
 @end
+
+@implementation wxNSView(TouchPadGestures)
+
+- (void)_initTrackers
+{
+    inputTrackers = [NSMutableArray new];
+    DualTouchTracker *touchTracker = [DualTouchTracker new];
+    touchTracker.beginTrackingAction = @selector(dualTouchesBegan:);
+
+    touchTracker.rotateAction = @selector(dualGestureRotate:);
+    touchTracker.magnifyAction = @selector(dualGestureMagnify:);
+    touchTracker.doubleTapAction = @selector(dualGestureSmartMagnify:);
+
+    touchTracker.view = self;
+    [inputTrackers addObject:touchTracker];
+    [touchTracker release];
+}
+
++ (double) pinchDeltaLimit{
+    return _pinchDeltaLimit;
+}
+
++ (double) panEventExpireThreshold{
+    return _panEventExpireThreshold;
+}
+
++ (double) rotationScaleFactor{
+    return _rotationScaleFactor;
+}
+
++ (double) rubberSheetSendThreshold{
+    return _rubberSheetSendThreshold;
+}
+
+- (void)acceptTouchEvents:(BOOL)status
+{
+    [self setAcceptsTouchEvents:status];
+}
+
+- (void)enableRubberSheet:(bool)enable
+{
+    _isRubberSheet = enable;
+}
+
+-(void)setRubberSheetSensibility:(int)sensibility
+{
+    sensibility = _maxSensibility - sensibility;
+
+    if(sensibility < 0 || sensibility > _maxSensibility)
+        sensibility = _defaultSensibility;
+
+    _rubberSheetSensibility = sensibility;
+}
+
+- (void)endGestures
+{
+    wxWidgetCocoaImpl* impl = nullptr;
+
+    if(_rotateStatus != wxNoState)
+    {
+        impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+        wxTrackPadEvent tpevent(wxEVT_ROTATE);
+        _rotateStatus = wxRotationEnd;
+        tpevent.SetState(_rotateStatus);
+        impl->trackpadEvent(tpevent, nullptr, self, _cmd);
+        _rotateStatus = wxNoState;
+    }
+
+    if(_magnifyStatus != wxNoState )
+        _magnifyStatus = wxNoState;
+}
+
+-(NSMutableArray *)getInputTrackers
+{
+    return inputTrackers;
+}
+
+- (void)dualTouchesBegan:(DualTouchTracker*)tracker
+{
+
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL){
+        return;
+    }
+
+    CGPoint trackerLocation = NSPointToCGPoint(tracker.initialPoint);
+    //we can manage which type of tracking we are performing by simply changing the tracking action methods.
+    if(_isRubberSheet)
+    {
+        tracker.updateTrackingAction = @selector(dualTouchesMovedRubberSheet:);
+        _rubberSheetLastSentTime = [[NSProcessInfo processInfo] systemUptime];
+
+        _rubberSheetPanThreshold = _basicRSPanThreshold * _rubberSheetSensibility / _defaultSensibility;
+        _rubberSheetPinchThreshold = _basicRSPinchThreshold * _rubberSheetSensibility / _defaultSensibility;
+        _rubberSheetAngleThreshold = _basicRSRotateThreshold * _rubberSheetSensibility / _defaultSensibility;
+    }
+    else
+    {
+        tracker.updateTrackingAction = @selector(dualTouchesMoved:);
+    }
+
+    tracker.endTrackingAction = @selector(dualTouchesEnded:);
+}
+
+// rubber sheet
+//
+- (void)dualTouchesMovedRubberSheet:(DualTouchTracker*)tracker
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (!impl)
+        return;
+
+    NSTimeInterval currentTime = [[NSProcessInfo processInfo] systemUptime];
+
+    if((currentTime - _rubberSheetLastSentTime) > [wxNSView rubberSheetSendThreshold])
+    {
+        wxTrackPadEvent tpevent(wxEVT_RUBBER_SHEET);
+
+        bool oppositeDirection = [tracker GetRotationTouchesMovedInOpposition];
+        bool shiftDown = tracker.modifiers & NSShiftKeyMask;
+
+        // pinch data
+        //
+        double deltaTouches = tracker.deltaSizeOfCurrentTouches;
+        double deltaMove    = deltaTouches - tracker.oldDeltaSizeTouches;
+
+        if(_magnifyStatus == wxNoState)
+        {
+            if(std::abs(deltaMove) > _rubberSheetPinchThreshold && !oppositeDirection)
+            {
+                _magnifyStatus = wxRubberSheetMove;
+
+                if (_panningStatus == wxNoState &&
+                    _rotateStatus == wxNoState)
+                {
+                    _rubberSheetPanThreshold += _rubberSheetPanThreshold / 2;
+                }
+            }
+        }
+        else
+        {
+            double deltaMv = deltaMove * _rubberSheetPinchScaleFactor + 1;
+            tpevent.SetPinchMagnitude(deltaMv);
+        }
+
+        // pan data
+        //
+        CGPoint midPointCoord = tracker.midPointCoordOfCurrentTouches;
+
+        if(_panningStatus == wxNoState && _rubberSheetStatus != wxNoState && !shiftDown)
+        {
+            double xDist = midPointCoord.x - tracker.oldMidPointCoord.x;
+            double yDist = midPointCoord.y - tracker.oldMidPointCoord.y;
+            double panDist = std::sqrt(xDist * xDist + yDist * yDist);
+
+            if(panDist > _rubberSheetPanThreshold && !oppositeDirection)
+            {
+                _panningStatus = wxRubberSheetMove;
+
+                if(_rotateStatus == wxNoState &&
+                   _magnifyStatus == wxNoState)
+                {
+                    _rubberSheetPinchThreshold += _rubberSheetPinchThreshold / 2;
+                }
+            }
+        }
+        else
+        {
+            CGPoint meanPoint = midPointCoord;
+            meanPoint.x *= self.frame.size.width;
+
+            // because the origin of trackpad starts from bottom-left point
+            // and the frame origin is top-left we have to adapt to frame origin adapt y
+            //
+            meanPoint.y *= self.frame.size.height;
+            meanPoint.y = self.frame.size.height - meanPoint.y;
+            tpevent.SetPosition(wxRealPoint(meanPoint.x, meanPoint.y));
+        }
+
+        // rotate data
+        //
+        double angle = [tracker GetRotationAngle];
+
+        if(_rotateStatus == wxNoState)
+        {
+            if((std::abs(angle) > _rubberSheetAngleThreshold / deltaTouches) && oppositeDirection)
+            {
+                _rotateStatus = wxRubberSheetMove;
+
+                if(_panningStatus == wxNoState &&
+                   _magnifyStatus == wxNoState)
+                {
+                    _rubberSheetPanThreshold += _rubberSheetPanThreshold / 2;
+                    _rubberSheetPinchThreshold += _rubberSheetPinchThreshold / 2;
+                }
+            }
+        }
+        else
+            tpevent.SetAngle(angle);
+
+        if(_rubberSheetStatus == wxNoState)
+        {
+            _rubberSheetStatus = wxRubberSheetStart;
+            tpevent.SetState(_rubberSheetStatus);
+        }
+        else
+        {
+            _rubberSheetStatus = wxRubberSheetMove;
+            tpevent.SetState(_rubberSheetStatus);
+        }
+
+        if(_rotateStatus != wxNoState ||
+           _panningStatus != wxNoState ||
+           _magnifyStatus != wxNoState ||
+           _rubberSheetStatus == wxRubberSheetStart ||
+           shiftDown)
+        {
+            NSEvent *event = tracker.getCurrentTouchEvent;
+
+            impl->trackpadEvent(tpevent, event, self, _cmd);
+        }
+
+        tracker.oldMidPointCoord = midPointCoord;
+        tracker.oldDeltaSizeTouches = deltaTouches;
+        _rubberSheetLastSentTime = [[NSProcessInfo processInfo] systemUptime];
+    }
+}
+
+- (void)dualTouchesMoved:(DualTouchTracker*)tracker
+{
+    m_pTracker = tracker;
+}
+
+- (void)dualTouchPan:(NSEvent*)event
+{
+    if(_rotateStatus == wxNoState && _magnifyStatus == wxNoState && !_isRubberSheet)
+    {
+        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+
+        if (impl == NULL)
+            return;
+
+        wxTrackPadEvent tpevent(wxEVT_PAN);
+        CGPoint meanPoint = m_pTracker.midPointCoordOfCurrentTouches;
+        meanPoint.x *= self.frame.size.width;
+        //because the origin of trackpad starts from bottom-left point
+        //and the frame origin is top-left we have to adapt to frame origin
+        //adapt y
+        meanPoint.y *= self.frame.size.height;
+        meanPoint.y = self.frame.size.height - meanPoint.y;
+
+
+        switch([event phase])
+        {
+            case NSEventPhaseBegan:
+                //[event touches:NSEventPhaseBegan in:m_osxView];
+                _panningStatus = wxPanningStartMove;
+                tpevent.SetState(_panningStatus);
+                tpevent.SetPosition(wxRealPoint(meanPoint.x, meanPoint.y));
+                impl->trackpadEvent(tpevent, event, self, _cmd);
+
+            break;
+            case NSEventPhaseChanged:
+                _panningStatus = wxPanningMove;
+                tpevent.SetState(_panningStatus);
+                tpevent.SetPosition(wxRealPoint(meanPoint.x, meanPoint.y));
+                impl->trackpadEvent(tpevent, event, self, _cmd);
+                break;
+            case NSEventPhaseEnded:
+            case NSEventPhaseCancelled:
+                if(_panningStatus != wxNoState)
+                {
+                    wxTrackPadEvent tpevent(wxEVT_PAN);
+                    _panningStatus = wxPanningEnd;
+                    tpevent.SetState(_panningStatus);
+                    impl->trackpadEvent(tpevent, event, self, _cmd);
+                    _panningStatus = wxNoState;
+                }
+                break;
+        }
+
+    }
+    else
+    {
+        return;
+    }
+}
+
+//handling gesture events for rotation and pinch
+- (void)dualGestureRotate:(DualTouchTracker*)tracker
+{
+    if(_isRubberSheet)
+    {
+        if(_rubberSheetStatus == wxRubberSheetMove &&
+           _rotateStatus == wxNoState &&
+           _magnifyStatus == wxNoState)
+        {
+            _rotateStatus = wxRubberSheetMove;
+
+            _rubberSheetPanThreshold += _rubberSheetPanThreshold / 2;
+            _rubberSheetPinchThreshold += _rubberSheetPinchThreshold / 2;
+        }
+        return;
+    }
+
+    NSEvent * event = tracker.getCurrentGestureEvent;
+    wxWidgetCocoaImpl* impl = nullptr;
+
+    switch ([event phase])
+    {
+        case NSEventPhaseBegan:
+            if(event.type == NSEventTypeRotate && _magnifyStatus == wxNoState)
+            {
+                impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+
+                if (impl == nullptr)
+                {
+                    return;
+                }
+
+                [self acceptTouchEvents:NO];
+
+                wxTrackPadEvent tpevent(wxEVT_ROTATE);
+
+                double angle = (double)[event rotation] * [wxNSView rotationScaleFactor];
+                tpevent.SetAngle(angle);
+
+                _rotateStatus = wxRotationStart;
+                tpevent.SetState(_rotateStatus);
+
+                NSPoint mousePosition = [NSEvent mouseLocation];
+                mousePosition = [self convertPoint:mousePosition fromView:nil];
+                tpevent.SetPosition(wxRealPoint(mousePosition.x, mousePosition.y));
+
+                impl->trackpadEvent(tpevent, event, self, _cmd);
+            }
+
+            [event release];
+            break;
+
+        case NSEventPhaseChanged:
+            if(event.type == NSEventTypeRotate && _magnifyStatus == wxNoState)
+            {
+                impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+
+                if (impl == nullptr)
+                {
+                    return;
+                }
+
+                wxTrackPadEvent tpevent(wxEVT_ROTATE);
+
+                double angle = (double)[event rotation] * [wxNSView rotationScaleFactor];
+                tpevent.SetAngle(angle);
+
+                _rotateStatus = wxRotationMove;
+                tpevent.SetState(_rotateStatus);
+
+                impl->trackpadEvent(tpevent, event, self, _cmd);
+            }
+
+            [event release];
+            break;
+
+        case NSEventPhaseEnded:
+        case NSEventPhaseCancelled:
+            if(event.type == NSEventTypeRotate)
+            {
+                [self acceptTouchEvents:YES];
+
+                impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+
+                if (impl == nullptr)
+                {
+                    return;
+                }
+
+                wxTrackPadEvent tpevent(wxEVT_ROTATE);
+
+                _rotateStatus = wxRotationEnd;
+                tpevent.SetState(_rotateStatus);
+
+                impl->trackpadEvent(tpevent, event, self, _cmd);
+
+                _rotateStatus = wxNoState;
+            }
+
+            [event release];
+            break;
+    }
+}
+
+- (void)dualGestureSmartMagnify:(DualTouchTracker*)tracker
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL){
+        return;
+    }
+
+    wxTrackPadEvent tpevent(wxEVT_TAP);
+    NSEvent * event = tracker.getCurrentGestureEvent;
+    impl->trackpadEvent(tpevent, event, self, _cmd);
+    [event release];
+}
+
+- (void)dualGestureMagnify:(DualTouchTracker*)tracker
+{
+    if(_isRubberSheet)
+        return;
+
+    wxWidgetCocoaImpl* impl = nullptr;
+    NSEvent * event = tracker.getCurrentGestureEvent;
+    switch ([event phase])
+    {
+        case NSEventPhaseBegan:
+        case NSEventPhaseChanged:
+           if(event.type == NSEventTypeRotate && _magnifyStatus == wxNoState && _panningStatus == wxNoState)
+           {
+                impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+
+                if (impl == nullptr)
+                {
+                    return;
+                }
+
+                _magnifyStatus = wxMagnifying;
+
+                wxTrackPadEvent tpevent(wxEVT_PINCH);
+
+                double magValue = 1.0 + (double)[event magnification];
+
+                tpevent.SetPinchMagnitude(magValue);
+
+                NSPoint mousePosition = [NSEvent mouseLocation];
+                mousePosition = [self convertPoint:mousePosition fromView:nil];
+                tpevent.SetPosition(wxRealPoint(mousePosition.x, mousePosition.y));
+
+                impl->trackpadEvent(tpevent, event, self, _cmd);
+            }
+
+            [event release];
+            break;
+
+        case NSEventPhaseEnded:
+        case NSEventPhaseCancelled:
+            if(event.type == NSEventTypeRotate)
+            {
+                impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+
+                if (impl == nullptr)
+                {
+                    return;
+                }
+
+                wxTrackPadEvent tpevent(wxEVT_ROTATE);
+
+                _rotateStatus = wxRotationEnd;
+                tpevent.SetState(_rotateStatus);
+
+                impl->trackpadEvent(tpevent, event, self, _cmd);
+
+                _rotateStatus = wxNoState;
+            }
+
+            [event release];
+            break;
+    }
+}
+//end gestures
+
+- (void)dualTouchesEnded:(DualTouchTracker*)tracker {
+
+    tracker.updateTrackingAction = nil;
+    tracker.endTrackingAction    = nil;
+    tracker.oldDeltaSizeTouches  = 0;
+    [self enableTrackers];
+
+    if(_rubberSheetStatus != wxNoState)
+    {
+        _rubberSheetStatus = wxNoState;
+        _panningStatus = wxNoState;
+        _rotateStatus = wxNoState;
+        _magnifyStatus = wxNoState;
+
+        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+        NSEvent * event = tracker.getCurrentTouchEvent;
+        wxTrackPadEvent tpevent(wxEVT_RUBBER_SHEET);
+        tpevent.SetState(wxRubberSheetEnd);
+        impl->trackpadEvent(tpevent, event, self, _cmd);
+    }
+}
+
+- (void)enableTrackers {
+    for (InputTracker *tracker in inputTrackers) {
+        tracker.isEnabled = YES;
+    }
+}
+
+@end
+
+
 
 @interface NSView(PossibleMethods)
 - (void)setTitle:(NSString *)aString;
@@ -896,7 +1450,34 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     }
 }
 
-/* idea taken from webkit sources: overwrite the methods that (private) NSToolTipManager will use to attach its tracking rectangle 
+- (id)initWithFrame:(NSRect)rectBox
+{
+    [super initWithFrame:rectBox];
+    [self _initTrackers];
+    [self acceptTouchEvents:NO];
+    _isTouch                    = FALSE;
+    _isRubberSheet              = false;
+    _rubberSheetSensibility     = 5;
+    _rubberSheetLastSentTime    = 0;
+    _rubberSheetAngleThreshold  = 0;
+    _rubberSheetPanThreshold    = 0;
+    _rubberSheetPinchThreshold  = 0;
+    _currentFingersSize         = 0;
+    _previousFingersSize        = 0;
+    _panningStatus              = wxNoState;
+    _rotateStatus               = wxNoState;
+    _magnifyStatus              = wxNoState;
+    _rubberSheetStatus          = wxNoState;
+    return self;
+}
+
+- (void)dealloc
+{
+    [inputTrackers release];
+    [super dealloc];
+}
+
+/* idea taken from webkit sources: overwrite the methods that (private) NSToolTipManager will use to attach its tracking rectangle
  * then when changing the tooltip send fake view-exit and view-enter methods which will lead to a tooltip refresh
  */
 
@@ -1088,6 +1669,54 @@ void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event)
     if (impl->GetWXPeer()->IsEnabled())
         impl->mouseEvent(event, self, _cmd);
 }
+
+// custom touches events treat
+void wxOSX_touchesBeganEvent(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return;
+
+    impl->touchesEvent(event, self, _cmd, 0);
+}
+
+void wxOSX_touchesMovedEvent(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return;
+
+    impl->touchesEvent(event, self, _cmd, 1);
+}
+
+void wxOSX_touchesEndedEvent(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return;
+
+    impl->touchesEvent(event, self, _cmd, 2);
+}
+
+void wxOSX_touchesCancelledEvent(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return;
+
+    impl->touchesEvent(event, self, _cmd, 3);
+}
+
+void wxOSX_gestureEvents(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return;
+
+    impl->gestureEvents(event, self, _cmd);
+}
+
+//END custom touches events treat
 
 void wxOSX_cursorUpdate(NSView* self, SEL _cmd, NSEvent *event)
 {
@@ -1474,6 +2103,95 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget slf, void *_cmd)
 }
 #endif // wxUSE_DRAG_AND_DROP
 
+void wxWidgetCocoaImpl::SetTouchEventsStatus(bool status)
+{
+    wxNSView * casted_osxView;
+    if ([m_osxView isKindOfClass:[wxNSView class]])
+        casted_osxView = (wxNSView *)m_osxView;
+    else
+        return;
+    [casted_osxView acceptTouchEvents:status];
+}
+
+void wxWidgetCocoaImpl::EnableRubberSheet(bool enable, int sensibility)
+{
+    wxNSView * casted_osxView;
+    if ([m_osxView isKindOfClass:[wxNSView class]])
+        casted_osxView = (wxNSView *)m_osxView;
+    else
+        return;
+    [casted_osxView setRubberSheetSensibility:sensibility];
+}
+
+void wxWidgetCocoaImpl::trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEvent, WXWidget slf, void *_cmd)
+{
+    wxEvent.SetTimestamp( (int)([nsEvent timestamp] * 1000) );
+    UInt32 modifiers = [nsEvent modifierFlags];
+
+    wxEvent.m_shiftDown = modifiers & NSShiftKeyMask;
+    wxEvent.m_rawControlDown = modifiers & NSControlKeyMask;
+    wxEvent.m_altDown = modifiers & NSAlternateKeyMask;
+    wxEvent.m_controlDown = modifiers & NSCommandKeyMask;
+
+    UInt32 modifiers = [nsEvent modifierFlags];
+
+    wxEvent.m_shiftDown = modifiers & NSShiftKeyMask;
+    wxEvent.m_rawControlDown = modifiers & NSControlKeyMask;
+    wxEvent.m_altDown = modifiers & NSAlternateKeyMask;
+    wxEvent.m_controlDown = modifiers & NSCommandKeyMask;
+
+    wxWindowMac* peer = GetWXPeer();
+    if ( peer )
+    {
+        wxEvent.SetEventObject(peer);
+        wxEvent.SetId(peer->GetId());
+    }
+    GetWXPeer()->HandleWindowEvent(wxEvent);
+}
+
+void wxWidgetCocoaImpl::touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd, int touchEventType)
+{
+    wxNSView * casted_osxView;
+    if ( [m_osxView isKindOfClass:[wxNSView class]] )
+        casted_osxView = (wxNSView *)m_osxView;
+    else
+        return;
+
+    switch (touchEventType) {
+        case 0:
+                [casted_osxView setIsTouch:TRUE];
+                [[casted_osxView getInputTrackers] makeObjectsPerformSelector:(SEL)_cmd withObject:event];
+            break;
+
+        case 1:
+                [[casted_osxView getInputTrackers] makeObjectsPerformSelector:(SEL)_cmd withObject:event];
+            break;
+
+        case 2:
+                [casted_osxView setIsTouch:FALSE];
+                [[casted_osxView getInputTrackers] makeObjectsPerformSelector:(SEL)_cmd withObject:event];
+            break;
+        case 3:
+                [casted_osxView setIsTouch:FALSE];
+                [[casted_osxView getInputTrackers] makeObjectsPerformSelector:(SEL)_cmd withObject:event];
+            break;
+
+        default:
+            break;
+    }
+}
+
+void wxWidgetCocoaImpl::gestureEvents(WX_NSEvent event, WXWidget slf, void *_cmd)
+{
+    wxNSView * casted_osxView;
+    if ( [m_osxView isKindOfClass:[wxNSView class]] )
+        casted_osxView = (wxNSView *)m_osxView;
+    else
+        return;
+
+    [[casted_osxView getInputTrackers] makeObjectsPerformSelector:(SEL)_cmd withObject:event];
+}
+
 void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     // we are getting moved events for all windows in the hierarchy, not something wx expects
@@ -1483,6 +2201,29 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         NSView* hitview = [[[slf window] contentView] hitTest:[event locationInWindow]];
         if ( hitview == NULL || hitview != slf)
             return;
+    }
+
+    if([event type] == NSScrollWheel)
+    {
+        wxNSView * casted_osxView = nullptr;
+        if ( [m_osxView isKindOfClass:[wxNSView class]])
+            casted_osxView = (wxNSView *)m_osxView;
+        else
+            return;
+
+        bool isTouch = casted_osxView == nullptr ? false : [casted_osxView isTouch];
+
+        //In non momentum scroll wheel events,that is user-performed scroll events, momentumPhase has the value NSEventPhaseNone.
+        if([event phase] != NSEventPhaseNone && isTouch)
+        {
+            [casted_osxView dualTouchPan:event];
+            return;
+        }
+        else if([event momentumPhase] != NSEventPhaseNone)
+        {
+            //In momentum scrolling the hardware continues to issue scroll wheel events even though the user is no longer physically scrolling
+            return;
+        }
     }
 
     // The Infinity IN-USB-2 V15 foot pedal on OS 11 produces spurious mouse
@@ -2569,6 +3310,14 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
         wxOSX_CLASS_ADD_METHOD(c, @selector(performDragOperation:), (IMP) wxOSX_performDragOperation, "c@:@" )
     }
 #endif
+
+    wxOSX_CLASS_ADD_METHOD(c, @selector(touchesBeganWithEvent:), (IMP) wxOSX_touchesBeganEvent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(touchesMovedWithEvent:), (IMP) wxOSX_touchesMovedEvent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(touchesEndedWithEvent:), (IMP) wxOSX_touchesEndedEvent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(touchesCancelledWithEvent:), (IMP) wxOSX_touchesCancelledEvent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(rotateWithEvent:), (IMP) wxOSX_gestureEvents, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(magnifyWithEvent:), (IMP) wxOSX_gestureEvents, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(smartMagnifyWithEvent:), (IMP) wxOSX_gestureEvents, "v@:@" )
 
 #if OBJC_API_VERSION < 2
     } ;

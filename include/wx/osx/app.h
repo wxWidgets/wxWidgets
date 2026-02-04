@@ -38,6 +38,11 @@ class WXDLLIMPEXP_CORE wxApp: public wxAppBase
     wxApp();
     virtual ~wxApp();
 
+// start Bricsys change
+    enum class Theme { DARK, LIGHT };
+
+    void SetAppearance(const Theme theme);
+// end Bricsys change
     virtual void WakeUpIdle() wxOVERRIDE;
 
     virtual void SetPrintMode(int mode) wxOVERRIDE { m_printMode = mode; }

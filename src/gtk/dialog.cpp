@@ -33,6 +33,9 @@ void wxDialog::Init()
 {
     m_modalLoop = NULL;
     m_modalShowing = false;
+    // Begin Bricsys change
+    m_useModalEventLoop = false;
+    // End Bricsys change 
 }
 
 wxDialog::wxDialog( wxWindow *parent,
@@ -172,8 +175,15 @@ int wxDialog::ShowModal()
 
     // Run modal dialog event loop.
     {
-        wxGUIEventLoopTiedPtr modal(&m_modalLoop, new wxGUIEventLoop());
-        m_modalLoop->Run();
+        // Begin Bricsys change
+        if (m_useModalEventLoop) {
+            wxGUIEventLoopTiedPtr modal(&m_modalLoop, new wxModalEventLoop(this));
+            m_modalLoop->Run();
+        } else {
+            wxGUIEventLoopTiedPtr modal(&m_modalLoop, new wxGUIEventLoop());
+            m_modalLoop->Run();
+        }
+        // End Bricsys change
     }
 
     g_signal_handler_disconnect(m_widget, handler_id);

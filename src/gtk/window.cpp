@@ -4910,6 +4910,10 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 {
     wxCHECK_MSG( (m_widget != NULL), false, wxT("invalid window") );
 
+    // Bricsys change: see function
+    NotifyWindowOnReparent();
+    // end Bricsys change
+
     wxWindowGTK * const newParent = (wxWindowGTK *)newParentBase;
 
     wxASSERT( GTK_IS_WIDGET(m_widget) );
@@ -5599,6 +5603,24 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
     m_updateRegion.Clear();
     m_nativeUpdateRegion.Clear();
 }
+
+// Bricsys change (Linux): recursively notify our children when a
+// reparenting action takes place. We use it to reparent
+// Qt subwindows to the new X window parent (since this doesn't happen
+// automatically)
+void wxWindowGTK::NotifyWindowOnReparent()
+{
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindowGTK * const child = static_cast<wxWindowGTK*>(node->GetData());
+        if ( !child->IsTopLevel() )
+            child->NotifyWindowOnReparent();
+    }
+}
+// end Bricsys change
+
 
 void wxWindowGTK::SetDoubleBuffered( bool on )
 {
@@ -6568,6 +6590,12 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
         }
     }
     return eventType;
+}
+
+// Bricsys added
+bool wxWindowGTK::HasTopLevelFocus()
+{
+    return gtk_window_has_toplevel_focus(GTK_WINDOW(m_widget));
 }
 
 void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )

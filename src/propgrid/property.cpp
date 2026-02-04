@@ -1037,6 +1037,13 @@ wxString wxPGProperty::GetValueAsString( int argFlags ) const
         return g_invalidStringContent;
     }
 #endif
+    //Bricsys change: avoid test for detached property when it doesn't matter
+    if (!IsValueUnspecified() && m_commonValue == -1)
+    {
+        wxVariant value(GetValue());
+        return ValueToString(value, argFlags|wxPG_VALUE_IS_CURRENT);
+    }
+
     wxPropertyGrid* pg = GetGrid();
     wxCHECK_MSG( pg, wxEmptyString,
                  wxS("Cannot get valid value for detached property") );

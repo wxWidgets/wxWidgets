@@ -277,6 +277,17 @@ WXWidget wxWindowMac::GetHandle() const
     return NULL;
 }
 
+void wxWindowMac::EnableTouches(bool enable)
+{
+    //Enable receiving of touch events
+    GetPeer()->SetTouchEventsStatus(enable);
+}
+
+void wxWindowMac::EnableRubberSheet(bool enable, int sensibility)
+{
+    GetPeer()->EnableRubberSheet(enable, sensibility);
+}
+
 wxOSXWidgetImpl* wxWindowMac::GetPeer() const 
 { 
     return m_peer == kOSXNoWidgetImpl ? NULL : m_peer ; 

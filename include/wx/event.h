@@ -21,6 +21,9 @@
     #include "wx/gdicmn.h"
     #include "wx/cursor.h"
     #include "wx/mousestate.h"
+#if defined(__WXMAC__)
+    #include "wx/trackpadstate.h"
+#endif
 #endif
 
 #include "wx/dynarray.h"
@@ -698,6 +701,9 @@ class WXDLLIMPEXP_FWD_CORE wxInitDialogEvent;
 class WXDLLIMPEXP_FWD_CORE wxUpdateUIEvent;
 class WXDLLIMPEXP_FWD_CORE wxClipboardTextEvent;
 class WXDLLIMPEXP_FWD_CORE wxHelpEvent;
+#if defined(__WXMAC__)
+class WXDLLIMPEXP_FWD_CORE wxTrackPadEvent;
+#endif
 class WXDLLIMPEXP_FWD_CORE wxGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxPanGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxZoomGestureEvent;
@@ -757,6 +763,15 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_AUX2_DOWN, wxMouseEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_AUX2_UP, wxMouseEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_AUX2_DCLICK, wxMouseEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_MAGNIFY, wxMouseEvent);
+
+#if defined(__WXMAC__)
+// Trackpad event types
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_ROTATE, wxTrackPadEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PINCH, wxTrackPadEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PAN, wxTrackPadEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TAP, wxTrackPadEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_RUBBER_SHEET, wxTrackPadEvent);
+#endif
 
     // Character input event type
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_CHAR, wxKeyEvent);
@@ -1786,6 +1801,22 @@ enum wxMouseWheelAxis
     wxMOUSE_WHEEL_VERTICAL,
     wxMOUSE_WHEEL_HORIZONTAL
 };
+
+#if defined(__WXMAC__)
+class WXDLLIMPEXP_CORE wxTrackPadEvent : public wxEvent,
+                public wxTrackPadState
+{
+public:
+    wxTrackPadEvent(wxEventType trackpadEventType = wxEVT_NULL);
+
+    virtual wxEvent *Clone() const { return new wxTrackPadEvent(*this); }
+    virtual wxEventCategory GetEventCategory() const { return wxEVT_CATEGORY_USER_INPUT; }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxTrackPadEvent)
+
+};
+#endif
 
 class WXDLLIMPEXP_CORE wxMouseEvent : public wxEvent,
                                       public wxMouseState
@@ -4259,6 +4290,9 @@ typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureChangedEvent&);
 typedef void (wxEvtHandler::*wxMouseCaptureLostEventFunction)(wxMouseCaptureLostEvent&);
 typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&);
+#if defined(__WXMAC__)
+typedef void (wxEvtHandler::*wxTrackPadEventFunction)(wxTrackPadEvent&);
+#endif
 typedef void (wxEvtHandler::*wxPanGestureEventFunction)(wxPanGestureEvent&);
 typedef void (wxEvtHandler::*wxZoomGestureEventFunction)(wxZoomGestureEvent&);
 typedef void (wxEvtHandler::*wxRotateGestureEventFunction)(wxRotateGestureEvent&);
@@ -4342,6 +4376,10 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     wxEVENT_HANDLER_CAST(wxMouseCaptureLostEventFunction, func)
 #define wxClipboardTextEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxClipboardTextEventFunction, func)
+#if defined(__WXMAC__)
+#define wxTrackPadEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxTrackPadEventFunction, func)
+#endif
 #define wxPanGestureEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxPanGestureEventFunction, func)
 #define wxZoomGestureEventHandler(func) \
@@ -4578,6 +4616,22 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
 #define EVT_MOUSE_CAPTURE_CHANGED(func) wx__DECLARE_EVT0(wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEventHandler(func))
 #define EVT_MOUSE_CAPTURE_LOST(func) wx__DECLARE_EVT0(wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEventHandler(func))
 #define EVT_FULLSCREEN(func) wx__DECLARE_EVT0(wxEVT_FULLSCREEN, wxFullScreenEventHandler(func))
+
+//Trackpad events
+#if defined(__WXMAC__)
+#define EVT_ROTATE(func) wx__DECLARE_EVT0(wxEVT_ROTATE, wxTrackPadEventHandler(func))
+#define EVT_PINCH(func) wx__DECLARE_EVT0(wxEVT_PINCH, wxTrackPadEventHandler(func))
+#define EVT_PAN(func) wx__DECLARE_EVT0(wxEVT_PAN, wxTrackPadEventHandler(func))
+#define EVT_TAP(func) wx__DECLARE_EVT0(wxEVT_TAP, wxTrackPadEventHandler(func))
+#define EVT_RUBBER_SHEET(func) wx__DECLARE_EVT0(wxEVT_RUBBER_SHEET, wxTrackPadEventHandler(func))
+#endif
+
+// All trackpad events
+#define EVT_TRACKPAD_EVENTS(func) \
+        EVT_PINCH(func) \
+        EVT_PAN(func) \
+        EVT_ROTATE \
+        EVT_RUBBER_SHEET \
 
 // Mouse events
 #define EVT_LEFT_DOWN(func) wx__DECLARE_EVT0(wxEVT_LEFT_DOWN, wxMouseEventHandler(func))

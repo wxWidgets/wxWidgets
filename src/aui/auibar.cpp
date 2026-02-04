@@ -807,7 +807,7 @@ int wxAuiGenericToolBarArt::ShowDropDown(wxWindow* wnd,
 
 
 
-static wxOrientation GetOrientation(long style)
+static wxOrientation GetAllowedOrientation(long style)
 {
     switch (style & wxAUI_ORIENTATION_MASK)
     {
@@ -884,7 +884,7 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     m_gripperVisible  = (style & wxAUI_TB_GRIPPER) ? true : false;
     m_overflowVisible = (style & wxAUI_TB_OVERFLOW) ? true : false;
 
-    m_orientation = GetOrientation(style);
+    m_orientation = GetAllowedOrientation(style);
     if (m_orientation == wxBOTH)
     {
         m_orientation = wxHORIZONTAL;
@@ -911,7 +911,7 @@ wxAuiToolBar::~wxAuiToolBar()
 
 void wxAuiToolBar::SetWindowStyleFlag(long style)
 {
-    GetOrientation(style);      // assert if style is invalid
+    GetAllowedOrientation(style);      // assert if style is invalid
     wxCHECK_RET(IsPaneValid(style),
                 "window settings and pane settings are incompatible");
 
@@ -2354,7 +2354,7 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
                 }
             }
             else if (pane.IsResizable() &&
-                    GetOrientation(m_windowStyle) == wxBOTH)
+                    GetAllowedOrientation(m_windowStyle) == wxBOTH)
             {
                 // changing orientation in OnSize causes havoc
                 int x, y;
