@@ -660,7 +660,7 @@ enum wxStandardID
     wxID_FILE8,
     wxID_FILE9,
 
-    /** Standard button and menu IDs */
+    // Standard button and menu IDs
     wxID_OK = 5100,
     wxID_CANCEL,
     wxID_APPLY,
@@ -723,16 +723,15 @@ enum wxStandardID
     wxID_SPELL_CHECK,
     wxID_STRIKETHROUGH,
 
-    /** System menu IDs (used by wxUniv): */
-    wxID_SYSTEM_MENU = 5200,
-    wxID_CLOSE_FRAME,
-    wxID_MOVE_FRAME,
-    wxID_RESIZE_FRAME,
-    wxID_MAXIMIZE_FRAME,
-    wxID_ICONIZE_FRAME,
-    wxID_RESTORE_FRAME,
+    wxID_SYSTEM_MENU = 5200,///< System menu ID (used only by wxUniv).
+    wxID_CLOSE_FRAME,       ///< System menu close item ID (used only by wxUniv).
+    wxID_MOVE_FRAME,        ///< System menu move item ID (used only by wxUniv).
+    wxID_RESIZE_FRAME,      ///< System menu size item ID (used only by wxUniv).
+    wxID_MAXIMIZE_FRAME,    ///< System menu maximize item ID (used only by wxUniv).
+    wxID_ICONIZE_FRAME,     ///< System menu minimize item ID (used only by wxUniv).
+    wxID_RESTORE_FRAME,     ///< System menu restore item ID (used only by wxUniv).
 
-    /** MDI window menu ids */
+    /// Start of the range of IDs reserved for MDI menu commands.
     wxID_MDI_WINDOW_FIRST = 5230,
     wxID_MDI_WINDOW_CASCADE = wxID_MDI_WINDOW_FIRST,
     wxID_MDI_WINDOW_TILE_HORZ,
@@ -740,12 +739,13 @@ enum wxStandardID
     wxID_MDI_WINDOW_ARRANGE_ICONS,
     wxID_MDI_WINDOW_PREV,
     wxID_MDI_WINDOW_NEXT,
+    /// End of the range of IDs reserved for MDI menu commands.
     wxID_MDI_WINDOW_LAST = wxID_MDI_WINDOW_NEXT,
 
-    /** IDs used by generic file dialog (13 consecutive starting from this value) */
+    /** Start of IDs used by generic file dialog (13 consecutive starting from this value) */
     wxID_FILEDLGG = 5900,
 
-    /** IDs used by generic file ctrl (4 consecutive starting from this value) */
+    /** Start of IDs used by generic file control (4 consecutive starting from this value) */
     wxID_FILECTRL = 5950,
 
     /**
