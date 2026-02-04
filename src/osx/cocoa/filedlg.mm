@@ -535,7 +535,11 @@ void wxFileDialog::CommonShow()
         }
         else
         {
-            NSArray* types = GetTypesFromExtension(m_filterExtensions[m_firstFileTypeFilter], m_currentExtensions);
+            // m_firstFileTypeFilter may be -1 here if we're not using the
+            // combobox for selecting the filter, use the first filter in this
+            // case
+            const int filterIndex = m_useFileTypeFilter ? m_firstFileTypeFilter : 0;
+            NSArray* types = GetTypesFromExtension(m_filterExtensions[filterIndex], m_currentExtensions);
             if ( m_delegate )
                 [(wxOpenSavePanelDelegate*) m_delegate setAllowedExtensions: m_currentExtensions];
             else
