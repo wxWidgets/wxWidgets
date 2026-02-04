@@ -51,6 +51,8 @@ def main():
             args.cmake_generator = f'"Visual Studio 17"'
         elif args.platform == 'linux':
             args.cmake_generator = f'"Ninja"'
+        else:
+            args.cmake_generator = f'"Unix Makefiles"'
 
     if args.wx_build_dir is None:
         args.wx_build_dir = args.wx_src_dir + f'/build_bsys/'
@@ -151,6 +153,8 @@ def main():
     )
     if PLATFORM == 'windows':
         configure_command += f'-DwxUSE_LIBTIFF=builtin '
+    elif PLATFORM == 'mac':
+        configure_command += f'-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"'
 
     if Action.CHECKOUT in ACTION:
         initialize_and_update_submodules(SUBMODULES, SRC_DIR, ENV)
