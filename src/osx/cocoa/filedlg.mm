@@ -488,16 +488,16 @@ void wxFileDialog::CommonShow()
             m_useFileTypeFilter = false;
     }
 
-    m_firstFileTypeFilter = -1;
-
-    if ( m_useFileTypeFilter
-        && m_filterIndex >= 0 && (size_t)m_filterIndex < m_filterExtensions.GetCount() )
+    if ( m_useFileTypeFilter )
     {
-        m_firstFileTypeFilter = m_filterIndex;
+        if ( m_filterIndex >= 0 && (size_t)m_filterIndex < m_filterExtensions.GetCount() )
+            m_firstFileTypeFilter = m_filterIndex;
+        else
+            m_firstFileTypeFilter = GetMatchingFilterExtension(m_fileName);
     }
-    else if ( m_useFileTypeFilter )
+    else
     {
-        m_firstFileTypeFilter = GetMatchingFilterExtension(m_fileName);
+        m_firstFileTypeFilter = -1;
     }
 
     if ( HasFlag(wxFD_SAVE) )
