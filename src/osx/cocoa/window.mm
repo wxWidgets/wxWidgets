@@ -184,17 +184,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 @end // wxNSView
 
-static const double     _pinchDeltaLimit                = 0.010000; // delta dist. between fingers for which to send pinch event.
-static const double     _panEventExpireThreshold        = 0.000800; // if pan event is handle to late then skip it.
-static const double     _rotationScaleFactor            = -0.025;   //
-static const double     _rubberSheetPinchScaleFactor    = 2;        // rubbersheet pinch action scale factor.
-static const double     _rubberSheetSendThreshold       = 0.01;     // rubbersheet send event timeframe - seconds.
-static const double     _basicRSPanThreshold            = 0.004;    // rubbersheet base threshold for pan action.
-static const double     _basicRSPinchThreshold          = 0.008;    // rubbersheet base threshold for pinch action.
-static const double     _basicRSRotateThreshold         = 0.005;    // rubbersheet base threshold for rotate action.
-static const int        _defaultSensibility             = 5;        // rubbersheet actions threshold modifier.
-static const int        _maxSensibility                 = 10;       // maximum allowed rubbersheet activation sensibility.
-
 @interface wxNSView(TouchPadGestures)
 @end
 
