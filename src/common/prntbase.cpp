@@ -371,7 +371,7 @@ bool wxPrinter::Setup(wxWindow *parent)
     return m_pimpl->Setup( parent );
 }
 
-bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
+bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt, bool batchMode)
 {
     if ( !prompt && m_printDialogData.GetToPage() == 0 )
     {
@@ -386,7 +386,7 @@ bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         pdd.SetToPage(maxPage);
     }
 
-    return m_pimpl->Print( parent, printout, prompt );
+    return m_pimpl->Print( parent, printout, prompt, batchMode );
 }
 
 wxDC* wxPrinter::PrintDialog(wxWindow *parent)

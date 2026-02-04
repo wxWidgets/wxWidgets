@@ -669,6 +669,21 @@ void wxRibbonButtonBar::ToggleButton(int button_id, bool checked)
     }
 }
 
+// Bricsys function
+bool wxRibbonButtonBar::ToggleState(int button_id)
+{
+    size_t count = m_buttons.GetCount();
+    for (size_t i = 0; i < count; ++i)
+    {
+        wxRibbonButtonBarButtonBase* button = m_buttons.Item(i);
+        if (button->id == button_id)
+        {
+            return button->state & wxRIBBON_BUTTONBAR_BUTTON_TOGGLED ? true : false;
+        }
+    }
+    return false;
+}
+//End Bricsys function
 void wxRibbonButtonBar::SetButtonIcon(
                 int button_id,
                 const wxBitmap& bitmap,

@@ -75,7 +75,7 @@ wxWindowsPrinter::wxWindowsPrinter(wxPrintDialogData *data)
 {
 }
 
-bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
+bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt, bool batchMode)
 {
     sm_abortIt = false;
     sm_abortWindow = NULL;
@@ -140,22 +140,32 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
 
-    wxPrintAbortDialog *win = CreateAbortWindow(parent, printout);
-    wxYield();
+    wxPrintAbortDialog *win(0);
 
     ::SetAbortProc(GetHdcOf(*dc), wxAbortProc);
 
-    if (!win)
+    //bricsys change merged on wxwidgets upgrade: added batchMode
+    //Added new param 'bool batchMode' to 'wxPrinterBase::Print()' and derived for suppressing abort/status window and abort procedure in test mode.
+    if(!batchMode)
     {
-        wxLogDebug(wxT("Could not create an abort dialog."));
-        sm_lastError = wxPRINTER_ERROR;
+        wxPrinterDCImpl *impl = (wxPrinterDCImpl*)dc->GetImpl();
+        win = CreateAbortWindow(parent, printout);
+        wxYield();
 
-        delete dc;
-        return false;
+        ::SetAbortProc(GetHdcOf(*impl), wxAbortProc);
+
+        if (!win)
+        {
+            wxLogDebug(wxT("Could not create an abort dialog."));
+            sm_lastError = wxPRINTER_ERROR;
+
+            delete dc;
+            return false;
+        }
+        sm_abortWindow = win;
+        sm_abortWindow->Show();
+        wxSafeYield();
     }
-    sm_abortWindow = win;
-    sm_abortWindow->Show();
-    wxSafeYield();
 
     printout->OnBeginPrinting();
 
@@ -197,9 +207,12 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
               pn <= maxPageNum && printout->HasPage(pn);
               pn++ )
         {
-            win->SetProgress(pn - minPageNum + 1,
-                             maxPageNum - minPageNum + 1,
-                             copyCount, maxCopyCount);
+            if(win)
+            {
+                win->SetProgress(pn - minPageNum + 1,
+                                 maxPageNum - minPageNum + 1,
+                                 copyCount, maxCopyCount);
+            }
 
             if ( sm_abortIt )
             {

@@ -392,6 +392,11 @@ wxGtkPrintNativeData::~wxGtkPrintNativeData()
     g_object_unref(m_config);
 }
 
+// Bricsys added: r478
+bool wxGtkPrintNativeData::Initialize( wxPrintData &/*data*/, const wxString &/*printerName*/ )
+{
+    return false;
+}
 void wxGtkPrintNativeData::SetPrintJob(GtkPrintOperation* job)
 {
     m_job = job;
@@ -942,7 +947,7 @@ wxGtkPrinter::~wxGtkPrinter()
 {
 }
 
-bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
+bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt, bool batchMode )
 {
     if (!printout)
     {

@@ -198,11 +198,21 @@ bool wxPrinterDCImpl::StartDoc(const wxString& message)
     if (!m_hDC)
         return false;
 
+    // Bricsys change: improve error and print job status reporting
+#if 0
     if ( ::StartDoc(GetHdc(), &docinfo) <= 0 )
     {
         wxLogLastError(wxT("StartDoc"));
         return false;
     }
+#else
+    m_printJobId = ::StartDoc(GetHdc(), &docinfo);
+    if(m_printJobId <= 0)
+    {
+        wxLogSysError(_("::StartDoc failed!"));
+        return false;
+    }
+#endif
 
     return true;
 }

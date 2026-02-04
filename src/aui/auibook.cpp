@@ -2058,8 +2058,9 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     // if that was the first page added, even if
     // select is false, it must become the "current page"
     // (though no select events will be fired)
-    if (!select && m_tabs.GetPageCount() == 1)
-        select = true;
+// Bricsys change: overrule mandatory activation of first added page
+//    if (!select && m_tabs.GetPageCount() == 1)
+//        select = true;
         //m_curPage = GetPageIndex(page);
 
     wxAuiTabCtrl* active_tabctrl = GetActiveTabCtrl();
@@ -2082,6 +2083,11 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     if (select)
     {
         SetSelectionToWindow(page);
+    }
+// Bricsys change:ensure selected tab remains visible
+    else
+    {
+        active_tabctrl->MakeTabVisible(m_curPage, active_tabctrl);
     }
 
     return true;
@@ -2294,6 +2300,29 @@ wxString wxAuiNotebook::GetPageToolTip(size_t page_idx) const
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
     return page_info.tooltip;
 }
+
+// Bricsys added
+void wxAuiNotebook::SetPageClientObject(size_t page_idx, std::shared_ptr<wxClientData> data)
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return;
+
+    // update our own tab catalog
+    wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    page_info.m_clientData = data;
+}
+
+wxClientData* wxAuiNotebook::GetPageClientObject(size_t page_idx) const
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return nullptr;
+
+    // update our own tab catalog
+    const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    return page_info.m_clientData.get();
+}
+
+// end Bricsys added
 
 bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmapBundle& bitmap)
 {

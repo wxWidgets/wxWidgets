@@ -26,7 +26,7 @@ public:
     wxPostScriptPrinter(wxPrintDialogData *data = NULL);
     virtual ~wxPostScriptPrinter();
 
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) wxOVERRIDE;
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true, bool batchMode = false) wxOVERRIDE;
     virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
     virtual bool Setup(wxWindow *parent) wxOVERRIDE;
 

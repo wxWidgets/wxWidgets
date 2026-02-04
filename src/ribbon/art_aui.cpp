@@ -741,6 +741,26 @@ wxRect wxRibbonAUIArtProvider::GetPanelExtButtonArea(wxDC& dc,
     return rect;
 }
 
+// Bricsys change
+wxRect wxRibbonAUIArtProvider::GetLabelArea(wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxRect rect)
+{
+    wxRect true_rect(rect);
+
+    true_rect.x++;
+    true_rect.width -= 2;
+    true_rect.y++;
+
+    wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
+    int label_height = label_size.GetHeight() + 5;
+    wxRect label_rect(true_rect);
+    label_rect.height = label_height - 1;
+
+    return label_rect;
+}
+// End Bricsys change
+
 void wxRibbonAUIArtProvider::DrawPanelBackground(
                         wxDC& dc,
                         wxRibbonPanel* wnd,
@@ -788,7 +808,51 @@ void wxRibbonAUIArtProvider::DrawPanelBackground(
         label_bg_colour, label_bg_grad_colour, wxSOUTH);
 #endif
     dc.SetFont(m_panel_label_font);
-    dc.DrawText(wnd->GetLabel(), label_rect.x + 3, label_rect.y + 2);
+// Bricsys change
+// bogdanl: label is not truncated and sometimes doesn't fit the rect
+    if(wnd->HasExtButton())
+        label_rect.SetWidth(label_rect.GetWidth() - 13);
+    bool hasSlideOutPanel = wnd->HasSlideOutPanel();
+    if (hasSlideOutPanel)
+        label_rect.SetWidth(label_rect.GetWidth() - 13);
+
+    wxString label = wnd->GetLabel();
+    bool clip_label = false;
+    if(label_size.GetWidth() > label_rect.GetWidth())
+    {
+        // Test if there is enough length for 3 letters and ...
+        wxString new_label = label.Mid(0, 3) + wxT("...");
+        label_size = dc.GetTextExtent(new_label);
+        if(label_size.GetWidth() > label_rect.GetWidth())
+        {
+            // Not enough room for three characters and ...
+            // Display the entire label and just crop it
+            clip_label = true;
+        }
+        else
+        {
+            // Room for some characters and ...
+            // Display as many characters as possible and append ...
+            for(size_t len = label.Len() - 1; len >= 3; --len)
+            {
+                new_label = label.Mid(0, len) + wxT("...");
+                label_size = dc.GetTextExtent(new_label);
+                if(label_size.GetWidth() <= label_rect.GetWidth())
+                {
+                    label = new_label;
+                    break;
+                }
+            }
+        }
+    }
+    if(clip_label)
+        wxDCClipper clip(dc, label_rect);
+    dc.DrawText(label, label_rect.x + 2, label_rect.y + 2);
+    wxString defaultLabel = wnd->GetLabel();
+    if (!defaultLabel.IsSameAs(label))
+        wnd->SetToolTip(defaultLabel);
+// End Bricsys Change
+    //dc.DrawText(wnd->GetLabel(), label_rect.x + 3, label_rect.y + 2);
 
     if(wnd->IsHovered())
     {
@@ -807,15 +871,24 @@ void wxRibbonAUIArtProvider::DrawPanelBackground(
 
     if(wnd->HasExtButton())
     {
+        int avail_width = label_rect.GetRight() + 13;
         if(wnd->IsExtButtonHovered())
         {
             dc.SetPen(m_panel_hover_button_border_pen);
             dc.SetBrush(m_panel_hover_button_background_brush);
-            dc.DrawRoundedRectangle(label_rect.GetRight() - 13, label_rect.GetBottom() - 13, 13, 13, 1.0);
-            dc.DrawBitmap(m_panel_extension_bitmap[1], label_rect.GetRight() - 10, label_rect.GetBottom() - 10, true);
+            dc.DrawRoundedRectangle(avail_width - 13, label_rect.GetBottom() - 13, 13, 13, 1.0);
+            dc.DrawBitmap(m_panel_extension_bitmap[1], avail_width - 10, label_rect.GetBottom() - 10, true);
         }
         else
-            dc.DrawBitmap(m_panel_extension_bitmap[0], label_rect.GetRight() - 10, label_rect.GetBottom() - 10, true);
+            dc.DrawBitmap(m_panel_extension_bitmap[0], avail_width - 10, label_rect.GetBottom() - 10, true);
+    }
+    if (hasSlideOutPanel)
+    {
+        int avail_width = label_size.GetWidth() < label_rect.GetWidth() ?
+            label_rect.GetLeft() + label_size.GetWidth() + 8 : label_rect.GetWidth();
+        DrawDropdownArrow(dc, label_rect.x + avail_width,
+            label_rect.y + (label_rect.height / 2) + 2,
+            m_panel_button_face_colour);
     }
 }
 

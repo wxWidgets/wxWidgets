@@ -132,6 +132,9 @@
 // global variables
 // ---------------------------------------------------------------------------
 
+// it prevents to deactivate the application main window when open qt transient popups
+const WXLRESULT qtTransientPopupResult = -1898989605;
+
 #if wxUSE_MENUS_NATIVE
 extern wxMenu *wxCurrentPopupMenu;
 #endif
@@ -1120,7 +1123,8 @@ void wxWindowMSW::SetScrollbar(int orient,
                                int pos,
                                int pageSize,
                                int range,
-                               bool refresh)
+                               bool refresh,
+                               int WXUNUSED(lineSize))
 {
 #if wxUSE_DEFERRED_SIZING
     // Work around not documented, but reliably happening, at least under
@@ -2312,6 +2316,18 @@ int wxWindowMSW::GetCharWidth() const
     return wxGetTextMetrics(this).tmAveCharWidth + 1;
 #endif
 }
+
+// ----- BEGIN Bricsys change
+// for font "MS Shell Dlg 2" - tmAveCharWidth=5, but tmMaxCharWidth=23 !
+// better to use true text extents for a wide character, as it is done on other platforms;
+// Linux/Mac also use "g" to determine an average width
+int wxWindowMSW::GetCharWidthByExtents() const
+{
+    int width = wxGetTextMetrics(this).tmAveCharWidth + 1;
+    this->DoGetTextExtent("g", &width, NULL, NULL, NULL, NULL);
+    return width;
+}
+// ----- END Bricsys change
 
 void wxWindowMSW::DoGetTextExtent(const wxString& string,
                                   int *x, int *y,
@@ -3754,14 +3770,23 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // draw the window as active seems to be the only way of achieving
             // this (thanks to Barmak Shemirani for suggesting it at
             // https://stackoverflow.com/a/52808753/15275).
-            if ( !wParam &&
-                    wxCurrentPopupWindow &&
-                        wxCurrentPopupWindow->MSWGetOwner() == this )
-            {
-                rc.result = MSWDefWindowProc(message, TRUE, lParam);
-                processed = true;
-            }
-            break;
+        {
+#if 1 // BS_CHANGES_ENABLED
+            if (!wParam &&
+                (wxCurrentPopupWindow &&
+                 wxCurrentPopupWindow->MSWGetOwner() == this || *result == qtTransientPopupResult))
+#else
+            if (!wParam &&
+                wxCurrentPopupWindow &&
+                wxCurrentPopupWindow->MSWGetOwner() == this)
+#endif
+
+             {
+                 rc.result = MSWDefWindowProc(message, TRUE, lParam);
+                 processed = true;
+             }
+             break;
+        }
 #endif
 
 #if wxUSE_UXTHEME

@@ -22,6 +22,9 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 // by setting this to 0 (in the future this should be removed completely)
 #define wxUSE_DEFERRED_SIZING 1
 
+// the value that extends the window hack for qt transient popup
+extern WXDLLIMPEXP_CORE const WXLRESULT qtTransientPopupResult;
+
 // ---------------------------------------------------------------------------
 // wxWindow declaration for MSW
 // ---------------------------------------------------------------------------
@@ -119,8 +122,12 @@ public:
     virtual int GetCharHeight() const wxOVERRIDE;
     virtual int GetCharWidth() const wxOVERRIDE;
 
+// ----- BEGIN Bricsys change
+    virtual int GetCharWidthByExtents() const;
+// ----- END Bricsys change
+
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
-                               int range, bool refresh = true ) wxOVERRIDE;
+                               int range, bool refresh = true, [[maybe_unused]] int lineSize=1 ) wxOVERRIDE;
     virtual void SetScrollPos( int orient, int pos, bool refresh = true ) wxOVERRIDE;
     virtual int GetScrollPos( int orient ) const wxOVERRIDE;
     virtual int GetScrollThumb( int orient ) const wxOVERRIDE;

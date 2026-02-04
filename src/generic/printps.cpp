@@ -66,7 +66,7 @@ wxPostScriptPrinter::~wxPostScriptPrinter()
 {
 }
 
-bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
+bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt, bool batchMode)
 {
     sm_abortIt = false;
     sm_abortWindow = NULL;

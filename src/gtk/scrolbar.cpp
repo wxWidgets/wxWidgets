@@ -178,6 +178,13 @@ int wxScrollBar::GetPageSize() const
     return int(gtk_adjustment_get_page_increment(adj));
 }
 
+// bricsys added
+int wxScrollBar::GetLineSize() const
+{
+    GtkAdjustment* adj = gtk_range_get_adjustment(GTK_RANGE(m_widget));
+    return int(gtk_adjustment_get_step_increment(adj));
+}
+
 int wxScrollBar::GetRange() const
 {
     GtkAdjustment* adj = gtk_range_get_adjustment(GTK_RANGE(m_widget));
@@ -199,7 +206,7 @@ void wxScrollBar::SetThumbPosition( int viewStart )
     }
 }
 
-void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize, bool)
+void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize, bool, int lineSize)
 {
     if (range <= 0)
     {
@@ -215,7 +222,7 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
     GtkAdjustment* adj = gtk_range_get_adjustment(widget);
 
     g_object_freeze_notify(G_OBJECT(adj));
-    gtk_range_set_increments(widget, 1, pageSize);
+    gtk_range_set_increments(widget, lineSize, pageSize);
     gtk_adjustment_set_page_size(adj, thumbSize);
     gtk_range_set_range(widget, 0, range);
     g_object_thaw_notify(G_OBJECT(adj));
@@ -232,12 +239,17 @@ void wxScrollBar::SetThumbSize(int thumbSize)
 
 void wxScrollBar::SetPageSize( int pageLength )
 {
-    SetScrollbar(GetThumbPosition(), GetThumbSize(), GetRange(), pageLength);
+    SetScrollbar(GetThumbPosition(), GetThumbSize(), GetRange(), pageLength, true, GetLineSize());
+}
+
+void wxScrollBar::SetLineSize( int lineSize )
+{
+    SetScrollbar(GetThumbPosition(), GetThumbSize(), GetRange(), GetPageSize(), true, lineSize);
 }
 
 void wxScrollBar::SetRange(int range)
 {
-    SetScrollbar(GetThumbPosition(), GetThumbSize(), range, GetPageSize());
+    SetScrollbar(GetThumbPosition(), GetThumbSize(), range, GetPageSize(), true, GetLineSize());
 }
 
 // static

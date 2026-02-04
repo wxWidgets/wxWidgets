@@ -162,6 +162,9 @@ public:
     wxPrintNativeDataBase();
     virtual ~wxPrintNativeDataBase() {}
 
+    // Bricsys added: r478
+    virtual bool Initialize( wxPrintData &data, const wxString &printerName = wxEmptyString ) = 0;
+
     virtual bool TransferTo( wxPrintData &data ) = 0;
     virtual bool TransferFrom( const wxPrintData &data ) = 0;
 #ifdef __WXOSX__
@@ -205,7 +208,12 @@ public:
     // OVERRIDES
 
     virtual bool Setup(wxWindow *parent) = 0;
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) = 0;
+    //bricsys change merged on wxwidgets upgrade
+    // added a new param - 'batchMode';
+    // in case if batchMode == true the status/abort window is not created and abort procedure is not set;
+    // we need this in test mode, because abort procedure and window can interfere in the process
+    // by sending messages e.g. during PeekMessage calls
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true, bool batchMode = false) = 0;
     virtual wxDC* PrintDialog(wxWindow *parent) = 0;
 
 protected:
@@ -237,7 +245,7 @@ public:
     virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message) wxOVERRIDE;
 
     virtual bool Setup(wxWindow *parent) wxOVERRIDE;
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) wxOVERRIDE;
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true, bool batchMode = false) wxOVERRIDE;
     virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
 
     virtual wxPrintDialogData& GetPrintDialogData() const wxOVERRIDE;

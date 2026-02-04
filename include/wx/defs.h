@@ -2759,6 +2759,8 @@ enum wxDuplexMode
 /* Print quality.
  */
 
+// Bricsys change: used for testing purposes
+#define wxPRINT_QUALITY_DEFAULT  0
 #define wxPRINT_QUALITY_HIGH    -1
 #define wxPRINT_QUALITY_MEDIUM  -2
 #define wxPRINT_QUALITY_LOW     -3

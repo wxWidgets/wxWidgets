@@ -31,6 +31,9 @@ public:
     wxWindowsPrintNativeData();
     virtual ~wxWindowsPrintNativeData();
 
+    // Bricsys added: r478
+    virtual bool Initialize( wxPrintData &data, const wxString &printerName = wxEmptyString );
+
     virtual bool TransferTo( wxPrintData &data ) wxOVERRIDE;
     virtual bool TransferFrom( const wxPrintData &data ) wxOVERRIDE;
 
@@ -43,9 +46,21 @@ public:
     void* GetDevNames() const { return m_devNames; }
     void SetDevNames(void* data) { m_devNames = data; }
 
+    // Bricsys change: store full 'printer name' separately because DEVMODE structure
+	// truncates it to 32 characters
+    void SetPrinterName( const wxString& name ) { m_printerName = name; }
+	const wxString& GetPrinterName() { return m_printerName; }
+
+    // Bricsys change: need access to m_customWindowsPaperId
+    short GetCustomPaperId() const { return m_customWindowsPaperId; }
+    void SetCustomPaperId(short customPaperId) { m_customWindowsPaperId = customPaperId; }
+
 private:
     void* m_devMode;
     void* m_devNames;
+    // Bricsys change: store full 'printer name' separately because DEVMODE structure
+	// truncates it to 32 characters
+	wxString m_printerName;
 
     short m_customWindowsPaperId;
 

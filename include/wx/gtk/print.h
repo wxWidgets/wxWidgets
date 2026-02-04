@@ -155,7 +155,8 @@ public:
 
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
-                       bool prompt = true) wxOVERRIDE;
+                       bool prompt = true,
+                       bool batchMode = false) wxOVERRIDE;
     virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
     virtual bool Setup(wxWindow *parent) wxOVERRIDE;
 
@@ -181,6 +182,9 @@ class WXDLLIMPEXP_CORE wxGtkPrintNativeData : public wxPrintNativeDataBase
 public:
     wxGtkPrintNativeData();
     virtual ~wxGtkPrintNativeData();
+
+   // Bricsys added: r478
+   virtual bool Initialize( wxPrintData &data, const wxString &printerName = wxEmptyString );
 
     virtual bool TransferTo( wxPrintData &data ) wxOVERRIDE;
     virtual bool TransferFrom( const wxPrintData &data ) wxOVERRIDE;
