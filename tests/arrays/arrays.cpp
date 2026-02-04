@@ -113,38 +113,35 @@ int wxCMPFUNC_CONV StringLenCompare(const wxString& first,
     return first.length() - second.length();
 }
 
-#define DEFINE_COMPARE(name, T)                                               \
-                                                                              \
-int wxCMPFUNC_CONV name ## CompareValues(T first, T second)                   \
-{                                                                             \
-    return first - second;                                                    \
-}                                                                             \
-                                                                              \
-int wxCMPFUNC_CONV name ## Compare(T* first, T* second)                       \
-{                                                                             \
-    return *first - *second;                                                  \
-}                                                                             \
-                                                                              \
-int wxCMPFUNC_CONV name ## RevCompare(T* first, T* second)                    \
-{                                                                             \
-    return *second - *first;                                                  \
-}                                                                             \
+template <typename T>
+int wxCMPFUNC_CONV CompareValues(T first, T second)
+{
+    return first - second;
+}
+
+template <typename T>
+int wxCMPFUNC_CONV Compare(T* first, T* second)
+{
+    return *first - *second;
+}
+
+template <typename T>
+int wxCMPFUNC_CONV RevCompare(T* first, T* second)
+{
+    return *second - *first;
+}
 
 typedef unsigned short ushort;
 
-DEFINE_COMPARE(Char, char)
-DEFINE_COMPARE(UShort, ushort)
-DEFINE_COMPARE(Int, int)
-
 WX_DEFINE_ARRAY_CHAR(char, wxArrayChar);
 WX_DEFINE_SORTED_ARRAY_CHAR(char, wxSortedArrayCharNoCmp);
-WX_DEFINE_SORTED_ARRAY_CMP_CHAR(char, CharCompareValues, wxSortedArrayChar);
+WX_DEFINE_SORTED_ARRAY_CMP_CHAR(char, CompareValues<char>, wxSortedArrayChar);
 
 WX_DEFINE_ARRAY_SHORT(ushort, wxArrayUShort);
 WX_DEFINE_SORTED_ARRAY_SHORT(ushort, wxSortedArrayUShortNoCmp);
-WX_DEFINE_SORTED_ARRAY_CMP_SHORT(ushort, UShortCompareValues, wxSortedArrayUShort);
+WX_DEFINE_SORTED_ARRAY_CMP_SHORT(ushort, CompareValues<ushort>, wxSortedArrayUShort);
 
-WX_DEFINE_SORTED_ARRAY_CMP_INT(int, IntCompareValues, wxSortedArrayInt);
+WX_DEFINE_SORTED_ARRAY_CMP_INT(int, CompareValues<int>, wxSortedArrayInt);
 
 struct Item
 {
@@ -323,6 +320,11 @@ TEST_CASE("wxArrayString", "[dynarray]")
     a5.resize(3);
     CHECK( a5.size() == 3 );
     CHECK( a5[2] == "Foo" );
+
+    // This is undefined behaviour but because the array has just been resized
+    // down, its memory hopefully hasn't been reallocated yet, so we shouldn't
+    // crash accessing it. But we must assert due to the index being invalid.
+    WX_ASSERT_FAILS_WITH_ASSERT( a5[3].clear() );
 
     wxArrayString a6;
     a6.Add("Foo");
@@ -649,44 +651,50 @@ TEST_CASE("wxObjArrayPtr", "[dynarray]")
                                                                               \
 TEST_CASE("wxDynArray::" #name, "[dynarray]")                                 \
 {                                                                             \
-    wxArray##name a;                                                          \
-    a.Add(1);                                                                 \
-    a.Add(17,2);                                                              \
-    a.Add(5,3);                                                               \
-    a.Add(3,4);                                                               \
-                                                                              \
-    CHECK((COMPARE_10_VALUES(a,1,17,17,5,5,5,3,3,3,3)));             \
-    CHECK( COMPARE_COUNT( a , 10 ) );                                \
-                                                                              \
-    a.Sort(name ## Compare);                                                  \
-                                                                              \
-    CHECK((COMPARE_10_VALUES(a,1,3,3,3,3,5,5,5,17,17)));             \
-    CHECK( COMPARE_COUNT( a , 10 ) );                                \
-                                                                              \
-    a.Sort(name ## RevCompare);                                               \
-                                                                              \
-    CHECK((COMPARE_10_VALUES(a,17,17,5,5,5,3,3,3,3,1)));             \
-    CHECK( COMPARE_COUNT( a , 10 ) );                                \
-                                                                              \
-    wxSortedArray##name b;                                                    \
-                                                                              \
-    b.Add(1);                                                                 \
-    b.Add(17);                                                                \
-    b.Add(5);                                                                 \
-    b.Add(3);                                                                 \
-                                                                              \
-    CHECK((COMPARE_4_VALUES(b,1,3,5,17)));                           \
-    CHECK( COMPARE_COUNT( b , 4 ) );                                 \
-    CHECK( b.Index( 0 ) == wxNOT_FOUND );                            \
-    CHECK( b.Index( 1 ) == 0 );                                      \
-    CHECK( b.Index( 3 ) == 1 );                                      \
-    CHECK( b.Index( 4 ) == wxNOT_FOUND );                            \
-    CHECK( b.Index( 5 ) == 2 );                                      \
-    CHECK( b.Index( 6 ) == wxNOT_FOUND );                            \
-    CHECK( b.Index( 17 ) == 3 );                                     \
-                                                                     \
-    wxArray##name c({1,2,3});                                        \
-    CHECK(c.size() == 3);                                            \
+    DoTest<wxArray##name, wxSortedArray##name>();                             \
+}
+
+template <typename wxArrayT, typename wxSortedArrayT>
+void DoTest()
+{
+    wxArrayT a;
+    a.Add(1);
+    a.Add(17,2);
+    a.Add(5,3);
+    a.Add(3,4);
+
+    CHECK((COMPARE_10_VALUES(a,1,17,17,5,5,5,3,3,3,3)));
+    CHECK( COMPARE_COUNT( a , 10 ) );
+
+    a.Sort(Compare<typename wxArrayT::value_type>);
+
+    CHECK((COMPARE_10_VALUES(a,1,3,3,3,3,5,5,5,17,17)));
+    CHECK( COMPARE_COUNT( a , 10 ) );
+
+    a.Sort(RevCompare<typename wxArrayT::value_type>);
+
+    CHECK((COMPARE_10_VALUES(a,17,17,5,5,5,3,3,3,3,1)));
+    CHECK( COMPARE_COUNT( a , 10 ) );
+
+    wxSortedArrayT b;
+
+    b.Add(1);
+    b.Add(17);
+    b.Add(5);
+    b.Add(3);
+
+    CHECK((COMPARE_4_VALUES(b,1,3,5,17)));
+    CHECK( COMPARE_COUNT( b , 4 ) );
+    CHECK( b.Index( 0 ) == wxNOT_FOUND );
+    CHECK( b.Index( 1 ) == 0 );
+    CHECK( b.Index( 3 ) == 1 );
+    CHECK( b.Index( 4 ) == wxNOT_FOUND );
+    CHECK( b.Index( 5 ) == 2 );
+    CHECK( b.Index( 6 ) == wxNOT_FOUND );
+    CHECK( b.Index( 17 ) == 3 );
+
+    wxArrayT c({1,2,3});
+    CHECK(c.size() == 3);
 }
 
 TestArrayOf(UShort)
