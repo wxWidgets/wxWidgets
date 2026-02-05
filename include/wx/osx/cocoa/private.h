@@ -215,7 +215,6 @@ public :
 #endif
     virtual void                touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd, int touchEventType);
     virtual void                gestureEvents(WX_NSEvent event, WXWidget slf, void *_cmd);
-    virtual void                gesturesEvent(WX_NSEvent event, WXWidget slf, void *_cmd);
     virtual void                trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEvent, WXWidget slf, void* _cmd);
     virtual void                mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                cursorUpdate(WX_NSEvent event, WXWidget slf, void* _cmd);
