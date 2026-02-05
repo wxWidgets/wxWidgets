@@ -200,7 +200,7 @@ wxIMPLEMENT_CLASS(wxGLContext, wxObject);
 
 wxGLBackend* wxGLBackend::ms_instance = nullptr;
 
-#ifdef wxHAS_EGL
+#if defined(wxHAS_EGL) && defined(wxHAS_GLX)
 
 static bool wxGLBackendPreferGLX = false;
 
@@ -212,7 +212,7 @@ void wxGLBackend::PreferGLX()
 
     wxGLBackendPreferGLX = true;
 }
-#endif // wxHAS_EGL
+#endif // wxHAS_EGL && wxHAS_GLX
 
 /* static */
 wxGLBackend* wxGLBackend::Init()
@@ -302,9 +302,9 @@ void wxGLCanvasUnix::CallOnRealized()
 /* static */
 void wxGLCanvasUnix::PreferGLX()
 {
-#ifdef wxHAS_EGL
+#if defined(wxHAS_EGL) && defined(wxHAS_GLX)
     wxGLBackend::PreferGLX();
-#endif // wxHAS_EGL
+#endif // wxHAS_EGL && wxHAS_GLX
 }
 
 /* static */

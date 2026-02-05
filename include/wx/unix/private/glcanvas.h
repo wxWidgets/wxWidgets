@@ -71,10 +71,10 @@ protected:
 class wxGLBackend
 {
 public:
-#ifdef wxHAS_EGL
+#if defined(wxHAS_EGL) && defined(wxHAS_GLX)
     // This can be called only before calling Get() for the first time.
     static void PreferGLX();
-#endif // wxHAS_EGL
+#endif // wxHAS_EGL && wxHAS_GLX
 
     // Get the (sole) instance of this class.
     static wxGLBackend& Get()
