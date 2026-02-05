@@ -233,8 +233,11 @@ wxGLBackend* wxGLBackend::Init()
 
 #ifdef wxHAS_GLX
     if ( !(wxGLBackendPreferGLX || wxSystemOptions::IsFalse("opengl.egl")) )
-#endif // wxHAS_GLX
         return &wxGLBackendEGL::Get();
+#else
+    return &wxGLBackendEGL::Get();
+#endif // wxHAS_GLX
+
 #endif // wxHAS_EGL
 
 #ifdef wxHAS_GLX
