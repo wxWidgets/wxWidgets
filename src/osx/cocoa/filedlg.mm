@@ -256,30 +256,26 @@ void wxFileDialog::ShowWindowModal()
 
     wxCHECK_RET(parentWindow, "Window modal display requires parent.");
 
-    CommonShow();
+    NSSavePanel* panel = (NSSavePanel*) CommonShow();
 
     if ( HasFlag(wxFD_SAVE) )
     {
-        NSSavePanel* sPanel = [NSSavePanel savePanel];
-
         NSWindow* nativeParent = parentWindow->GetWXWindow();
 
-        [sPanel beginSheetModalForWindow:nativeParent completionHandler:
+        [panel beginSheetModalForWindow:nativeParent completionHandler:
          ^(NSModalResponse returnCode)
         {
-            this->ModalFinishedCallback(sPanel, returnCode);
+            this->ModalFinishedCallback(panel, returnCode);
         }];
     }
     else
     {
-        NSOpenPanel* oPanel = [NSOpenPanel openPanel];
-
         NSWindow* nativeParent = parentWindow->GetWXWindow();
 
-        [oPanel beginSheetModalForWindow:nativeParent completionHandler:
+        [panel beginSheetModalForWindow:nativeParent completionHandler:
          ^(NSModalResponse returnCode)
         {
-            this->ModalFinishedCallback(oPanel, returnCode);
+            this->ModalFinishedCallback(panel, returnCode);
         }];
     }
 
@@ -462,7 +458,7 @@ int wxFileDialog::GetMatchingFilterExtension(const wxString& filename)
     return index;
 }
 
-void wxFileDialog::CommonShow()
+WX_NSObject wxFileDialog::CommonShow()
 {
     wxCFStringRef cf( m_message );
     wxCFStringRef dir( m_dir );
@@ -552,6 +548,8 @@ void wxFileDialog::CommonShow()
 
         if ( !m_fileName.IsEmpty() )
             [sPanel setNameFieldStringValue: file.AsNSString()];
+
+        return sPanel;
     }
     else
     {
@@ -591,6 +589,8 @@ void wxFileDialog::CommonShow()
         if ( !m_dir.IsEmpty() )
             [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString()
                                                isDirectory:YES]];
+
+        return oPanel;
     }
 }
 
@@ -604,25 +604,22 @@ int wxFileDialog::ShowModal()
 
     int returnCode = -1;
 
-    CommonShow();
+    // NSOpenPanel is a subclass of NSSavePanel so this is safe
+    NSSavePanel* panel = (NSSavePanel*) CommonShow();
 
     OSXBeginModalDialog();
 
     if ( HasFlag(wxFD_SAVE) )
     {
-        NSSavePanel* sPanel = [NSSavePanel savePanel];
+        returnCode = [panel runModal];
 
-        returnCode = [sPanel runModal];
-
-        ModalFinishedCallback(sPanel, returnCode);
+        ModalFinishedCallback(panel, returnCode);
     }
     else
     {
-        NSOpenPanel* oPanel = [NSOpenPanel openPanel];
+        returnCode = [panel runModal];
 
-        returnCode = [oPanel runModal];
-
-        ModalFinishedCallback(oPanel, returnCode);
+        ModalFinishedCallback(panel, returnCode);
     }
 
     OSXEndModalDialog();
