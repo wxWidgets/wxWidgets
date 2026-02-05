@@ -301,6 +301,8 @@ TEST_ALLHEADERS_OBJECTS =  \
 TEST_ALLHEADERS_ODEP = \
 	$(_____pch_testprec_test_allheaders_testprec_h_gch___depname)
 
+TEST_SCKIPC_SERVER = test_sckipc_server.o
+
 ### Conditionally set variables: ###
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
@@ -477,7 +479,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
+all: test$(EXEEXT) test_sckipc_server$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
 
 install: 
 
@@ -581,7 +583,14 @@ test$(EXEEXT): $(TEST_OBJECTS) $(__test___win32rc)
 @COND_USE_PCH_1@./.pch/testprec_test_allheaders/testprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test_allheaders/testprec.h.gch testprec.h $(CXX) $(TEST_ALLHEADERS_CXXFLAGS)
 
-data: 
+test_sckipc_server$(EXEEXT): $(TEST_SCKIPC_SERVER) $(__test___win32rc)
+	$(CXX) -o $@ $(TEST_SCKIPC_SERVER)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)     $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_NET_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+
+@COND_USE_PCH_1@./.pch/testprec_test_sckipc_server/testprec.h.gch:
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test_sckipc_server/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
+
+
+data:
 	@mkdir -p .
 	@for f in testdata.conf horse.svg; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
@@ -799,6 +808,9 @@ test_typeinfotest.o: $(srcdir)/misc/typeinfotest.cpp $(TEST_ODEP)
 
 test_ipc.o: $(srcdir)/net/ipc.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/net/ipc.cpp
+
+test_sckipc_server.o: $(srcdir)/net/sckipc_server.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/net/sckipc_server.cpp
 
 test_socket.o: $(srcdir)/net/socket.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/net/socket.cpp
