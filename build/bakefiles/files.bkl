@@ -3329,6 +3329,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/aui/tabart.cpp
     src/xrc/xh_aui.cpp
     src/xrc/xh_auitoolb.cpp
+    src/aui/tabdocmdi.cpp
 </set>
 <set var="AUI_SRC" hints="files">
     $(AUI_CMN_SRC)
@@ -3346,6 +3347,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
+    wx/aui/tabdocmdi.h
 </set>
 <set var="AUI_HDR" hints="files">
     $(AUI_CMN_HDR)
