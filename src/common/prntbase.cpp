@@ -2145,7 +2145,6 @@ void wxPrintPreviewBase::SetZoom(int percent)
     {
         AdjustScrollbars(m_previewCanvas);
         m_previewCanvas->Scroll(0, 0);
-        m_previewCanvas->ClearBackground();
         m_previewCanvas->Refresh();
         m_previewCanvas->SetFocus();
     }
