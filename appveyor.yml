@@ -50,9 +50,6 @@ environment:
     CONFIGURATION: Release
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
-cache:
-  - '%USERPROFILE%\go%GOVERSION%.windows-amd64.msi'
-
 clone_depth: 1
 
 install: git submodule update --init
@@ -84,10 +81,8 @@ before_test:
     echo Getting and launching httpbin.
     rmdir %GOROOT% /s /q
     mkdir %GOROOT%
-    cd %USERPROFILE%
-    set go_exe=go%GOVERSION%.windows-amd64.msi
-    if not exist "%go_exe%" appveyor DownloadFile https://go.dev/dl/%go_exe%
-    msiexec /i %go_exe% INSTALLDIR="%GOROOT%" /q
+    appveyor DownloadFile https://go.dev/dl/go%GOVERSION%.windows-amd64.msi
+    msiexec /i go%GOVERSION%.windows-amd64.msi INSTALLDIR="%GOROOT%" /q
     go version
     go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
     set PATH=%PATH%;%GOPATH%\bin
