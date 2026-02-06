@@ -845,6 +845,7 @@
     <ClInclude Include="..\..\include\wx\lzmastream.h" />
     <ClInclude Include="..\..\include\wx\localedefs.h" />
     <ClInclude Include="..\..\include\wx\uilocale.h" />
+    <ClInclude Include="..\..\include\wx\trackpadstate.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

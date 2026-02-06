@@ -634,6 +634,7 @@ BASE_CMN_HDR =
     wx/tls.h
     wx/tokenzr.h
     wx/tracker.h
+    wx/trackpadstate.h
     wx/translation.h
     wx/txtstrm.h
     wx/typeinfo.h

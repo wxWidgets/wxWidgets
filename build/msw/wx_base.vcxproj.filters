@@ -856,6 +856,9 @@
     <ClInclude Include="..\..\include\wx\tracker.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\trackpadstate.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\translation.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
