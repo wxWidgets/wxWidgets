@@ -44,6 +44,12 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\wx\bricsys\LexLisp.hxx">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\bricsys\LexLispShared.hxx">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\stc\stc.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

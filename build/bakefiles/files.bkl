@@ -3469,6 +3469,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="STC_CMN_HDR" hints="files">
     wx/stc/stc.h
     wx/xrc/xh_styledtextctrl.h
+    wx/bricsys/LexLispShared.hxx
+    wx/bricsys/LexLisp.hxx
 </set>
 
 <set var="STC_OSX_COCOA_SRC" hints="files">

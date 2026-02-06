@@ -492,6 +492,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\stc\stc.h" />
+    <ClInclude Include="..\..\include\wx\bricsys\LexLisp.hxx" />
+    <ClInclude Include="..\..\include\wx\bricsys\LexLispShared.hxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

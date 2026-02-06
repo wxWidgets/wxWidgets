@@ -1057,6 +1057,14 @@
 				RelativePath="..\..\include\wx\xrc\xh_styledtextctrl.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\bricsys\LexLispShared.hxx"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\bricsys\LexLisp.hxx"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"

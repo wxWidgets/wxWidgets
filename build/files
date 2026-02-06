@@ -3167,6 +3167,8 @@ STC_CMN_SRC =
 STC_CMN_HDR =
     wx/stc/stc.h
     wx/xrc/xh_styledtextctrl.h
+    wx/bricsys/LexLispShared.hxx
+    wx/bricsys/LexLisp.hxx
 
 STC_OSX_COCOA_SRC =
     src/stc/PlatWXcocoa.mm
