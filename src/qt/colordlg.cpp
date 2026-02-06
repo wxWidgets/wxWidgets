@@ -20,7 +20,20 @@ class wxQtColorDialog : public wxQtEventSignalHandler< QColorDialog, wxDialog >
 public:
     wxQtColorDialog( wxWindow *parent, wxDialog *handler)
         : wxQtEventSignalHandler<QColorDialog,wxDialog>(parent, handler)
-        { }
+    {
+        connect(this, &QColorDialog::currentColorChanged,
+                this, &wxQtColorDialog::currentColorChanged);
+    }
+
+private:
+    void currentColorChanged(const QColor& color)
+    {
+        wxColourDialogEvent event(wxEVT_COLOUR_CHANGED,
+                                  static_cast<wxColourDialog*>(GetHandler()),
+                                  wxQtConvertColour(color));
+
+        EmitEvent( event );
+    }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog,wxDialog)
