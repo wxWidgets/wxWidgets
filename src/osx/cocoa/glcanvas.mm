@@ -45,11 +45,6 @@ void WXGLDestroyContext( WXGLContext context )
     }
 }
 
-void WXGLSwapBuffers( WXGLContext context )
-{
-    [context flushBuffer];
-}
-
 WXGLContext WXGLGetCurrentContext()
 {
     return [NSOpenGLContext currentContext];
