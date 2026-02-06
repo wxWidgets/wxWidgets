@@ -56,24 +56,42 @@ permissions:
 
 jobs:
   msw-msvs:
-    runs-on: windows-2022
-    name: wxMSW vs2022 ${{ matrix.configuration }} ${{ matrix.platform }}
+    runs-on: ${{ matrix.runner }}
+    name: wxMSW ${{ matrix.compiler }} ${{ matrix.configuration }} ${{ matrix.platform }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - configuration: 'DLL Debug'
             platform: 'x64'
+            runner: windows-2022
+            compiler: vs2022
+            compiler_suffix: vc17.sln
             use_utf8: true
           - configuration: 'Release'
             platform: 'arm64'
+            runner: windows-2022
+            compiler: vs2022
+            compiler_suffix: vc17.sln
             skip_running_tests: true
           - configuration: 'Debug'
             platform: 'Win32'
+            runner: windows-2022
+            compiler: vs2022
+            compiler_suffix: vc17.sln
             use_cxx20: true
           - configuration: 'DLL Release'
             use_std_string: true
             platform: 'x64'
+            runner: windows-2022
+            compiler: vs2022
+            compiler_suffix: vc17.sln
+          - configuration: 'DLL Release'
+            platform: 'x64'
+            runner: windows-2025-vs2026
+            compiler: vs2026
+            compiler_suffix: vc18.slnx
+            use_cxx20: true
 
     steps:
       - name: Checkout
@@ -112,7 +130,7 @@ jobs:
 
       - name: Build
         run: |
-            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc17.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_${{ matrix.compiler_suffix }}
             if ( '${{ matrix.configuration }}'.IndexOf('DLL') -ne -1 ) {
                 $dlldir = Join-Path (Get-Location) 'lib\vc_${{ matrix.platform }}_dll'
                 Write-Output "Adding $dlldir to the PATH"
@@ -122,11 +140,11 @@ jobs:
       - name: Build samples
         if: matrix.platform != 'arm64'
         run: |
-            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\samples_vc17.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\samples_${{ matrix.compiler_suffix }}
 
       - name: Build tests
         run: |
-            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc17.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_${{ matrix.compiler_suffix }}
 
       - name: Run tests
         if: matrix.skip_running_tests != true
@@ -151,7 +169,7 @@ jobs:
 
       - name: Build GUI tests
         run: |
-            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc17.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_${{ matrix.compiler_suffix }}
 
       - name: Run GUI tests
         if: matrix.skip_running_tests != true
