@@ -90,6 +90,8 @@ public:
 
     // implement wxGLCanvasBase methods
     virtual bool SwapBuffers() override;
+    virtual bool SetSwapInterval(int interval) override;
+    virtual int GetSwapInterval() const override;
 
 
     // MSW-specific helpers
