@@ -1,5 +1,10 @@
+#ifndef _TRACKER_INPUT_H_
+#define _TRACKER_INPUT_H_
+
+#include "wx/defs.h"
 #import <Cocoa/Cocoa.h>
 
+WXDLLIMPEXP_CORE
 @interface InputTracker : NSResponder {
 @private
     NSView *_view;
@@ -15,3 +20,4 @@
 // Stop any tracking the tracker may be performing and reset itself.
 - (void)cancelTracking;
 @end
+#endif // _TRACKER_INPUT_H_

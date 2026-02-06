@@ -524,7 +524,14 @@ public:
         wxOSXSKIP_DND = 0x2
     };
 
-    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags = wxOSXSKIP_NONE);
+    //Bricsys change, refs #22025 add extra flags
+    enum bsOSXAddOverrides {
+        wxOSXADD_NONE = 0x0,
+        wxOSXADD_COMMANDBYSELECTOR = 0x1
+    };
+
+    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags = wxOSXSKIP_NONE, bsOSXAddOverrides = wxOSXADD_NONE);
+    //Bricsys change end
 
     /*
     We need this for ShowModal, as the sheet just disables the parent window and

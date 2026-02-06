@@ -53,12 +53,22 @@ CGContextRef wxOSXGetContextFromCurrentContext()
 
 bool wxOSXLockFocus( WXWidget view)
 {
-    return [view lockFocusIfCanDraw];
+// Bricsys change: lockFocusIfCanDraw is deprecated in 10_14
+#if defined (MAC_OS_X_VERSION_10_14) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    return view == [NSView focusView];
+#else
+     return [view lockFocusIfCanDraw];
+#endif
+// Bricsys change end
 }
 
 void wxOSXUnlockFocus( WXWidget view)
 {
-    [view unlockFocus];
+// Bricsys change: unlockFocus is deprecated in 10_14
+#if !defined (MAC_OS_X_VERSION_10_14) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_14
+     [view unlockFocus];
+#endif
+// Bricsys change end
 }
 
 #endif
