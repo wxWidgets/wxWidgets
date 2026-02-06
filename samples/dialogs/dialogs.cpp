@@ -1178,6 +1178,7 @@ void MyFrame::LineEntry(wxCommandEvent& WXUNUSED(event))
                              "Please enter a string",
                              "Default value",
                              wxOK | wxCANCEL);
+    dialog.SetHint("Enter your text here");
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -1191,6 +1192,7 @@ void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
                              "Please enter some text",
                              "First line\nSecond one\nAnd another one too",
                              wxOK | wxCANCEL | wxTE_MULTILINE);
+    dialog.SetHint("Enter your text here");
 
     if (dialog.ShowModal() == wxID_OK)
     {

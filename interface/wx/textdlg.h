@@ -179,6 +179,15 @@ public:
     void SetValue(const wxString& value);
 
     /**
+        Sets the hint shown in the empty text control.
+
+        @see wxTextEntry::SetHint()
+
+        @since 3.3.2
+    */
+    void SetHint(const wxString &hint);
+
+    /**
         Convert all text entered into the text control used by the dialog to upper case.
 
         Call this method to ensure that all text entered into the text control
