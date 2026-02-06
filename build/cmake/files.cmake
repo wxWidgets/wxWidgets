@@ -2543,6 +2543,9 @@ set(OSX_COCOA_SRC
     src/osx/core/sound.cpp
     src/osx/cocoa/statbmp.mm
     src/osx/core/display.cpp
+    src/osx/cocoa/trackerInput.mm
+    src/osx/cocoa/trackerTouchDouble.mm
+    src/osx/cocoa/touchPadGesturesDelegate.mm
 )
 
 set(OSX_COCOA_HDR
@@ -2562,6 +2565,9 @@ set(OSX_COCOA_HDR
     wx/osx/datetimectrl.h
     wx/osx/taskbarosx.h
     wx/osx/dvrenderers.h
+    wx/osx/cocoa/trackerInput.h
+    wx/osx/cocoa/trackerTouchDouble.h
+    wx/osx/cocoa/touchPadGesturesDelegate.h
 )
 
 set(OSX_IPHONE_SRC

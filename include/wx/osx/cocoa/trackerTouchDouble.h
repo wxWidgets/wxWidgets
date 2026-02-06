@@ -1,3 +1,6 @@
+#ifndef __TRACKER_TOUCH_DOUBLE_H_
+#define __TRACKER_TOUCH_DOUBLE_H_
+
 #import "trackerInput.h"
 
 typedef struct TLine {
@@ -86,3 +89,5 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 @property SEL doubleTapAction;
 
 @end
+
+#endif // __TRACKER_TOUCH_DOUBLE_H_

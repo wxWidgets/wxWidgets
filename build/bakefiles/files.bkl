@@ -2672,6 +2672,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/activityindicator.mm
     src/osx/cocoa/statbmp.mm
     src/osx/core/display.cpp
+    src/osx/cocoa/touchPadGesturesDelegate.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
@@ -2692,6 +2693,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/datetimectrl.h
     wx/osx/cocoa/trackerInput.h
     wx/osx/cocoa/trackerTouchDouble.h
+    wx/osx/cocoa/touchPadGesturesDelegate.h
 </set>
 
 <!-- ====================================================================== -->
