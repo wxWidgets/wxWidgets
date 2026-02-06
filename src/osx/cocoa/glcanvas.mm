@@ -695,7 +695,7 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
     [v setWantsBestResolutionOpenGLSurface:YES];
 
     //Bricsys change, refs #22025 add false, true - otherwise key events are not processed
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, false /*isRootControl*/, true /*isUserPane*/);
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, wxWidgetImpl::Widget_IsUserPane);
     //Bricsys change end
     SetPeer(c);
     MacPostControlCreate(pos, size) ;
