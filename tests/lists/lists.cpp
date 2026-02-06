@@ -194,6 +194,29 @@ TEST_CASE("wxList::ctor", "[list]")
     CHECK( Baz::GetNumber() == 0 );
 }
 
+TEST_CASE("wxList::iterator::cmp", "[list]")
+{
+    int dummy[2];
+
+    wxListInt list;
+    list.push_back(dummy);
+    list.push_back(dummy + 1);
+
+    wxListInt::compatibility_iterator it = list.GetFirst();
+    CHECK( it == it );
+    CHECK( it != nullptr );
+
+    const wxListInt::compatibility_iterator last = list.GetLast();
+    CHECK( last != nullptr );
+    CHECK( it != last );
+
+    it = list.Item(1);
+    CHECK( it == last );
+
+    it = list.Find(dummy + 2);
+    CHECK( it == nullptr );
+}
+
 // Check for WX_DECLARE_LIST_3 which is used to define wxWindowList: we can't
 // use this class itself here, as it's in the GUI library, so declare something
 // similar.
