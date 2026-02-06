@@ -3476,34 +3476,35 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                       fi
                     fi
 
-                        found_gl=1
-                        OPENGL_LIBS="-lGL"
+                    found_gl=1
+                    OPENGL_LIBS="-lGL"
+                    AC_DEFINE(wxHAS_GLX)
 
-                        if test "$WXGTK3" = 1; then
-                            if test "$wxUSE_GLCANVAS_EGL" != "no"; then
-                                PKG_CHECK_MODULES(EGL, [egl >= 1.4],
-                                    [
-                                        OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
-                                        AC_DEFINE(wxHAS_EGL)
-                                        PKG_CHECK_MODULES(WAYLAND_EGL, [wayland-egl],
-                                            [
-                                                if test $wx_cv_gdk_wayland = "yes"; then
-                                                    OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
-                                                    have_wayland=1
-                                                fi
-                                            ],
-                                            [:]
-                                        )
-                                    ],
-                                    [
-                                        AC_MSG_NOTICE([EGL 1.4+ not available. Will use GLX.])
-                                    ]
-                                )
-                                if test "$have_wayland" != 1; then
-                                    AC_MSG_NOTICE([wxGLCanvas will not have Wayland support])
-                                fi
+                    if test "$WXGTK3" = 1; then
+                        if test "$wxUSE_GLCANVAS_EGL" != "no"; then
+                            PKG_CHECK_MODULES(EGL, [egl >= 1.4],
+                                [
+                                    OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
+                                    AC_DEFINE(wxHAS_EGL)
+                                    PKG_CHECK_MODULES(WAYLAND_EGL, [wayland-egl],
+                                        [
+                                            if test $wx_cv_gdk_wayland = "yes"; then
+                                                OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
+                                                have_wayland=1
+                                            fi
+                                        ],
+                                        [:]
+                                    )
+                                ],
+                                [
+                                    AC_MSG_NOTICE([EGL 1.4+ not available. Will use GLX.])
+                                ]
+                            )
+                            if test "$have_wayland" != 1; then
+                                AC_MSG_NOTICE([wxGLCanvas will not have Wayland support])
                             fi
                         fi
+                    fi
                 fi
 
                 if test "$found_gl" != 1; then

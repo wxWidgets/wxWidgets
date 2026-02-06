@@ -18,14 +18,6 @@
 #include "wx/palette.h"
 #include "wx/window.h"
 
-// Most ports have a single implementation of wxGLCanvas, but wxGTK has two:
-// legacy GLX-based one (also used by wxX11) and EGL-based one which is used
-// if support for EGL is available. wxHAS_EGL is defined by the build system
-// but define wxHAS_GLX too for consistency, even if it's always available.
-#if defined(__WXX11__) || defined(__WXGTK__)
-    #define wxHAS_GLX 1
-#endif
-
 class WXDLLIMPEXP_FWD_GL wxGLCanvas;
 class WXDLLIMPEXP_FWD_GL wxGLContext;
 

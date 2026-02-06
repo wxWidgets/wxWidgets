@@ -31345,11 +31345,13 @@ fi
                       fi
                     fi
 
-                        found_gl=1
-                        OPENGL_LIBS="-lGL"
+                    found_gl=1
+                    OPENGL_LIBS="-lGL"
+                    $as_echo "#define wxHAS_GLX 1" >>confdefs.h
 
-                        if test "$WXGTK3" = 1; then
-                            if test "$wxUSE_GLCANVAS_EGL" != "no"; then
+
+                    if test "$WXGTK3" = 1; then
+                        if test "$wxUSE_GLCANVAS_EGL" != "no"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for egl >= 1.4" >&5
@@ -31410,7 +31412,7 @@ fi
     echo "$EGL_PKG_ERRORS" >&5
 
 
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
 $as_echo "$as_me: EGL 1.4+ not available. Will use GLX." >&6;}
 
 
@@ -31418,7 +31420,7 @@ elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
 $as_echo "$as_me: EGL 1.4+ not available. Will use GLX." >&6;}
 
 
@@ -31428,8 +31430,8 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                        OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
-                                        $as_echo "#define wxHAS_EGL 1" >>confdefs.h
+                                    OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
+                                    $as_echo "#define wxHAS_EGL 1" >>confdefs.h
 
 
 pkg_failed=no
@@ -31503,20 +31505,20 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                                if test $wx_cv_gdk_wayland = "yes"; then
-                                                    OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
-                                                    have_wayland=1
-                                                fi
+                                            if test $wx_cv_gdk_wayland = "yes"; then
+                                                OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
+                                                have_wayland=1
+                                            fi
 
 fi
 
 fi
-                                if test "$have_wayland" != 1; then
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: wxGLCanvas will not have Wayland support" >&5
+                            if test "$have_wayland" != 1; then
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: wxGLCanvas will not have Wayland support" >&5
 $as_echo "$as_me: wxGLCanvas will not have Wayland support" >&6;}
-                                fi
                             fi
                         fi
+                    fi
                 fi
 
                 if test "$found_gl" != 1; then

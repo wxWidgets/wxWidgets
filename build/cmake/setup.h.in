@@ -1143,6 +1143,9 @@
 /* Define if you have EGL support */
 #cmakedefine wxHAS_EGL 1
 
+/* Define if you have GLX support */
+#cmakedefine wxHAS_GLX 1
+
 /* Define if you have inotify_xxx() functions. */
 #cmakedefine wxHAS_INOTIFY 1
 

@@ -38,6 +38,7 @@ static gboolean draw(GtkWidget* widget, cairo_t* cr, wxGLCanvas* win)
 }
 #endif // __WXGTK3__
 
+#ifdef wxHAS_GLX
 //-----------------------------------------------------------------------------
 // emission hook for "parent-set"
 //-----------------------------------------------------------------------------
@@ -69,6 +70,7 @@ parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void*
     return true;
 }
 }
+#endif // wxHAS_GLX
 
 //---------------------------------------------------------------------------
 // wxGlCanvas
@@ -178,6 +180,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if ( !InitVisual(dispAttrs) )
         return false;
 
+#ifdef wxHAS_GLX
     // watch for the "parent-set" signal on m_wxwindow so we can set colormap
     // before m_wxwindow is realized (which will occur before
     // wxWindow::Create() returns if parent is already visible)
@@ -186,6 +189,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
         unsigned sig_id = g_signal_lookup("parent-set", GTK_TYPE_WIDGET);
         g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, nullptr);
     }
+#endif // wxHAS_GLX
 
     wxWindow::Create( parent, id, pos, size, style, name );
 #ifdef __WXGTK3__
