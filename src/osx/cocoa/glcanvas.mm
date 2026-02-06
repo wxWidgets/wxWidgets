@@ -184,9 +184,47 @@ bool wxGLCanvas::SwapBuffers()
     WXGLContext context = WXGLGetCurrentContext();
     wxCHECK_MSG(context, false, wxT("should have current context"));
 
+    if ( m_swapIntervalToSet != DefaultSwapInterval )
+    {
+        [context setValues: &m_swapIntervalToSet forParameter: NSOpenGLCPSwapInterval];
+
+        // It's enough to do it only once.
+        m_swapIntervalToSet = DefaultSwapInterval;
+    }
+
     [context flushBuffer];
 
     return true;
+}
+
+bool wxGLCanvas::SetSwapInterval(int interval)
+{
+    WXGLContext context = WXGLGetCurrentContext();
+    if ( !context )
+    {
+        // Set it later in SwapBuffers().
+        m_swapIntervalToSet = interval;
+        return true;
+    }
+
+    // Try setting it below and don't do it again in SwapBuffers().
+    m_swapIntervalToSet = DefaultSwapInterval;
+
+    if ( interval != DefaultSwapInterval )
+        [context setValues: &interval forParameter: NSOpenGLCPSwapInterval];
+
+    return true;
+}
+
+int wxGLCanvas::GetSwapInterval() const
+{
+    int interval = DefaultSwapInterval;
+
+    WXGLContext context = WXGLGetCurrentContext();
+    if ( context )
+        [context getValues: &interval forParameter: NSOpenGLCPSwapInterval];
+
+    return interval;
 }
 
 bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
