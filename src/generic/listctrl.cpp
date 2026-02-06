@@ -905,6 +905,7 @@ void wxListLineData::ReverseHighlight( void )
 wxBEGIN_EVENT_TABLE(wxListHeaderWindow,wxWindow)
     EVT_PAINT         (wxListHeaderWindow::OnPaint)
     EVT_MOUSE_EVENTS  (wxListHeaderWindow::OnMouse)
+    EVT_SYS_COLOUR_CHANGED(wxListHeaderWindow::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 void wxListHeaderWindow::Init()
@@ -1051,13 +1052,17 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if (i == 0)
            flags |= wxCONTROL_SPECIAL; // mark as first column
 
+        wxHeaderButtonParams headerBtnParams;
+        headerBtnParams.m_arrowColour = GetForegroundColour();
+
         wxRendererNative::Get().DrawHeaderButton
                                 (
                                     this,
                                     dc,
                                     wxRect(x, HEADER_OFFSET_Y, cw, ch),
                                     flags,
-                                    sortArrow
+                                    sortArrow,
+                                    &headerBtnParams
                                 );
 
         // see if we have enough space for the column label
@@ -1306,6 +1311,16 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     }
 }
 
+void wxListHeaderWindow::OnSysColourChanged(wxSysColourChangedEvent &event)
+{
+    SetOwnForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+
+    Refresh();
+
+    event.Skip();
+}
+
 bool wxListHeaderWindow::SendListEvent(wxEventType type, const wxPoint& pos)
 {
     wxWindow *parent = GetParent();
@@ -1515,6 +1530,7 @@ wxBEGIN_EVENT_TABLE(wxListMainWindow, wxWindow)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
   EVT_SCROLLWIN      (wxListMainWindow::OnScroll)
   EVT_CHILD_FOCUS    (wxListMainWindow::OnChildFocus)
+  EVT_SYS_COLOUR_CHANGED(wxListMainWindow::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 void wxListMainWindow::Init()
@@ -2191,6 +2207,26 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             DrawFocusRect(this, dc, GetLineHighlightRect(m_current), flags);
     }
 #endif // !__WXMAC__
+}
+
+void wxListMainWindow::OnSysColourChanged( wxSysColourChangedEvent &event )
+{
+    SetOwnForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
+    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
+
+    if ( m_highlightBrush )
+    {
+        m_highlightBrush->SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    }
+
+    if ( m_highlightUnfocusedBrush )
+    {
+        m_highlightUnfocusedBrush->SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+    }
+
+    Refresh();
+
+    event.Skip();
 }
 
 void wxListMainWindow::HighlightAll( bool on )
