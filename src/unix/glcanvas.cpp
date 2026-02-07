@@ -287,7 +287,7 @@ bool wxGLCanvasUnix::SwapBuffers()
     return m_impl->SwapBuffers();
 }
 
-bool wxGLCanvasUnix::SetSwapInterval(int interval)
+wxGLCanvas::SwapInterval wxGLCanvasUnix::SetSwapInterval(int interval)
 {
     return m_impl->SetSwapInterval(interval);
 }

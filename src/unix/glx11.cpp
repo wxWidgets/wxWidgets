@@ -780,6 +780,11 @@ bool IsSwapControlExtensionSupported()
     return wxGLBackendX11_instance.IsExtensionSupported("GLX_EXT_swap_control");
 }
 
+bool IsSwapControlTearExtensionSupported()
+{
+    return wxGLBackendX11_instance.IsExtensionSupported("GLX_EXT_swap_control_tear");
+}
+
 bool IsMesaSwapControlExtensionSupported()
 {
     return wxGLBackendX11_instance.IsExtensionSupported("GLX_MESA_swap_control");
@@ -790,7 +795,8 @@ bool IsMesaSwapControlExtensionSupported()
 // For now just try using EXT_swap_control extension, in principle there is
 // also a MESA one, but it's not clear if it's worth falling back on it (or
 // preferring to use it?).
-bool wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
+wxGLCanvas::SwapInterval
+wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
 {
     typedef void (*PFNGLXSWAPINTERVALEXTPROC)(Display *dpy,
                                               GLXDrawable drawable,
@@ -835,23 +841,53 @@ bool wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
         }
     }
 
+    wxGLCanvas::SwapInterval result = wxGLCanvas::SwapInterval::Set;
+
     if ( s_glXSwapIntervalEXT )
     {
+        // Don't try requesting adaptive VSync if it's not supported.
+        if ( interval < 0 && !IsSwapControlTearExtensionSupported() )
+        {
+            interval = -interval;
+            result = wxGLCanvas::SwapInterval::NonAdaptive;
+        }
+
         wxLogTrace(TRACE_GLX, "Setting GLX swap interval to %d", interval);
 
         s_glXSwapIntervalEXT(dpy, drawable, interval);
 
-        return true;
+        // Check if adaptive VSync was actually enabled.
+        if ( interval < 0 )
+        {
+            unsigned int value = 0;
+            glXQueryDrawable(dpy, drawable, GLX_LATE_SWAPS_TEAR_EXT, &value);
+            if ( !value )
+            {
+                wxLogTrace(TRACE_GLX, "Failed to enable adaptive VSync");
+                result = wxGLCanvas::SwapInterval::NonAdaptive;
+            }
+        }
     }
     else if ( s_glXSwapIntervalMESA )
     {
+        // Adaptive VSync not supported by MESA extension.
+        if ( interval < 0 )
+        {
+            interval = -interval;
+            result = wxGLCanvas::SwapInterval::NonAdaptive;
+        }
+
         wxLogTrace(TRACE_GLX, "Setting GLX swap interval to %d (using MESA)",
                    interval);
 
         s_glXSwapIntervalMESA(interval);
     }
+    else
+    {
+        result = wxGLCanvas::SwapInterval::NotSet;
+    }
 
-    return false;
+    return result;
 }
 
 int wxMESAGetSwapInterval()
@@ -909,7 +945,7 @@ bool wxGLCanvasX11::SwapBuffers()
     return true;
 }
 
-bool wxGLCanvasX11::DoSetSwapInterval(int interval)
+wxGLCanvas::SwapInterval wxGLCanvasX11::DoSetSwapInterval(int interval)
 {
     const Window xid = m_canvas->GetXWindow();
     const auto dpy = wxGetX11Display();

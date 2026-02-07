@@ -807,7 +807,26 @@ public:
 
         @since 3.3.2
      */
-    static constexpr int DefaultSwapInterval = -1;
+    static constexpr int DefaultSwapInterval = INT_MAX;
+
+    /**
+        Return values of SetSwapInterval().
+
+        @since 3.3.2
+     */
+    enum class SwapInterval
+    {
+        /// SetSwapInterval() failed to set the requested swap interval.
+        NotSet = 0,
+
+        /// SetSwapInterval() successfully set the requested swap interval.
+        Set = 1,
+
+        /// SetSwapInterval() failed to enable adaptive VSync but successfully
+        /// enabled standard VSync instead.
+        NonAdaptive = 2
+    };
+
 
     /**
         Default constructor not creating the window.
@@ -1046,19 +1065,28 @@ public:
         buffer swap, i.e. for each call to SwapBuffers(). Using the value of 0
         means to disable synchronizing buffer swaps to video frames.
 
+        The value may be negative to enable adaptive VSync if supported by the
+        implementation, i.e. to allow swapping buffers without waiting for
+        VSync when the refresh late is too low.
+
         @param interval
             The swap interval to set or the special value DefaultSwapInterval
             which means to turn off automatically setting it to 0 by default,
-            as needs to be done under some platforms currently.
+            as needs to be done under some platforms currently. Typical values
+            are 1 to enable VSync, 0 to disable it and -1 to enable adaptive
+            VSync if supported.
 
-        @return @true if the swap interval was set successfully, @false if not,
-            e.g. if the function is not implemented for the current platform.
+        @return SwapInterval::Set if the swap interval was set successfully,
+            SwapInterval::NotSet if setting it failed completely, e.g. if the
+            function is not implemented for the current platform and
+            SwapInterval::NonAdaptive if the adaptive VSync was requested but
+            is not supported and standard VSync was enabled instead.
 
         @see GetSwapInterval()
 
         @since 3.3.2
      */
-    bool SetSwapInterval(int interval);
+    SwapInterval SetSwapInterval(int interval);
 
     /**
         Swaps the double-buffer of this window, making the back-buffer the

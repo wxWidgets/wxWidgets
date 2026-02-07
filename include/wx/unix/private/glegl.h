@@ -59,7 +59,7 @@ public:
 
     virtual bool SwapBuffers() override;
 
-    virtual bool DoSetSwapInterval(int interval) override;
+    virtual wxGLCanvas::SwapInterval DoSetSwapInterval(int interval) override;
     virtual int GetSwapInterval() const override;
 
     virtual void OnRealized() override;

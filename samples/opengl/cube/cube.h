@@ -59,8 +59,9 @@ private:
     void OnNewWindow(wxCommandEvent& event);
     void OnNewStereoWindow(wxCommandEvent& event);
 
-    void OnSetSwapInterval0(wxCommandEvent& event);
-    void OnSetSwapInterval1(wxCommandEvent& event);
+    void OnDisableVSync(wxCommandEvent& event);
+    void OnEnableVSync(wxCommandEvent& event);
+    void OnEnableAdaptiveVSync(wxCommandEvent& event);
     void OnGetSwapInterval(wxCommandEvent& event);
 
     wxGLCanvas* m_canvas = nullptr;
@@ -93,8 +94,9 @@ private:
 enum
 {
     NEW_STEREO_WINDOW = wxID_HIGHEST,
-    SET_SWAP_INTERVAL_0,
-    SET_SWAP_INTERVAL_1,
+    DISABLE_VSYNC,
+    ENABLE_VSYNC,
+    ENABLE_ADAPTIVE_VSYNC,
     GET_SWAP_INTERVAL
 };
 

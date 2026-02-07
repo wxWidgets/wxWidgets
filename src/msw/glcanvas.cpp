@@ -788,24 +788,32 @@ bool wxGLCanvas::SwapBuffers()
     return true;
 }
 
-bool wxGLCanvas::SetSwapInterval(int interval)
+wxGLCanvas::SwapInterval wxGLCanvas::SetSwapInterval(int interval)
 {
     if ( !IsExtensionSupported("WGL_EXT_swap_control") )
-        return false;
+        return SwapInterval::NotSet;
 
     typedef BOOL (WINAPI * wglSwapIntervalEXT_t)(int interval);
 
     wxDEFINE_WGL_FUNC(wglSwapIntervalEXT);
     if ( !wglSwapIntervalEXT )
-        return false;
+        return SwapInterval::NotSet;
+
+    wxGLCanvas::SwapInterval result = wxGLCanvas::SwapInterval::Set;
+    if ( interval < 0 && !IsExtensionSupported("WGL_EXT_swap_control_tear") )
+    {
+        // Adaptive VSync not supported, fall back to standard VSync.
+        interval = -interval;
+        result = wxGLCanvas::SwapInterval::NonAdaptive;
+    }
 
     if ( !wglSwapIntervalEXT(interval) )
     {
         wxLogLastError(wxT("wglSwapIntervalEXT"));
-        return false;
+        return SwapInterval::NotSet;
     }
 
-    return true;
+    return result;
 }
 
 int wxGLCanvas::GetSwapInterval() const

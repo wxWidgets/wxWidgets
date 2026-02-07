@@ -103,7 +103,7 @@ public:
     virtual bool SwapBuffers() override;
 
 #ifdef __WXOSX_MAC__
-    virtual bool SetSwapInterval(int interval) override;
+    virtual SwapInterval SetSwapInterval(int interval) override;
     virtual int GetSwapInterval() const override;
 #endif
 

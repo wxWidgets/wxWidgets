@@ -197,23 +197,34 @@ bool wxGLCanvas::SwapBuffers()
     return true;
 }
 
-bool wxGLCanvas::SetSwapInterval(int interval)
+wxGLCanvas::SwapInterval wxGLCanvas::SetSwapInterval(int interval)
 {
     WXGLContext context = WXGLGetCurrentContext();
     if ( !context )
     {
         // Set it later in SwapBuffers().
         m_swapIntervalToSet = interval;
-        return true;
+        return SwapInterval::Set;
     }
 
     // Try setting it below and don't do it again in SwapBuffers().
     m_swapIntervalToSet = DefaultSwapInterval;
 
+    wxGLCanvas::SwapInterval result = wxGLCanvas::SwapInterval::Set;
     if ( interval != DefaultSwapInterval )
-        [context setValues: &interval forParameter: NSOpenGLCPSwapInterval];
+    {
+        if ( interval < 0 )
+        {
+            // This parameter doesn't support adaptive VSync, so enable
+            // standard VSync instead.
+            interval = -interval;
+            result = wxGLCanvas::SwapInterval::NonAdaptive;
+        }
 
-    return true;
+        [context setValues: &interval forParameter: NSOpenGLCPSwapInterval];
+    }
+
+    return result;
 }
 
 int wxGLCanvas::GetSwapInterval() const

@@ -920,18 +920,29 @@ bool wxGLCanvasEGL::SwapBuffers()
     return eglSwapBuffers(m_display, m_surface);
 }
 
-bool wxGLCanvasEGL::DoSetSwapInterval(int interval)
+wxGLCanvas::SwapInterval wxGLCanvasEGL::DoSetSwapInterval(int interval)
 {
+    wxGLCanvas::SwapInterval result = wxGLCanvas::SwapInterval::Set;
+
+    if ( interval < 0 )
+    {
+        // Adaptive VSync is not supported by EGL yet, see
+        // https://github.com/KhronosGroup/EGL-Registry/pull/113
+        interval = -interval;
+
+        result = wxGLCanvas::SwapInterval::NonAdaptive;
+    }
+
     if ( !eglSwapInterval(m_display, interval) )
     {
         wxLogTrace(TRACE_EGL, "eglSwapInterval(%d) failed for %p: %#x",
                    interval, this, eglGetError());
-        return false;
+        return wxGLCanvas::SwapInterval::NotSet;
     }
 
-    wxLogTrace(TRACE_EGL, "Set EGL swap interval to 0 for %p", this);
+    wxLogTrace(TRACE_EGL, "Set EGL swap interval to %d for %p", interval, this);
 
-    return true;
+    return result;
 }
 
 int wxGLCanvasEGL::GetSwapInterval() const

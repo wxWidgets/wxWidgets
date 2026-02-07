@@ -451,8 +451,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
     EVT_MENU(NEW_STEREO_WINDOW, MyFrame::OnNewStereoWindow)
 
-    EVT_MENU(SET_SWAP_INTERVAL_0, MyFrame::OnSetSwapInterval0)
-    EVT_MENU(SET_SWAP_INTERVAL_1, MyFrame::OnSetSwapInterval1)
+    EVT_MENU(DISABLE_VSYNC, MyFrame::OnDisableVSync)
+    EVT_MENU(ENABLE_VSYNC, MyFrame::OnEnableVSync)
+    EVT_MENU(ENABLE_ADAPTIVE_VSYNC, MyFrame::OnEnableAdaptiveVSync)
     EVT_MENU(GET_SWAP_INTERVAL, MyFrame::OnGetSwapInterval)
 
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
@@ -471,8 +472,9 @@ MyFrame::MyFrame( bool stereoWindow )
     menu->Append(wxID_NEW);
     menu->Append(NEW_STEREO_WINDOW, "New Stereo Window");
     menu->AppendSeparator();
-    menu->Append(SET_SWAP_INTERVAL_0, "&Disable VSync");
-    menu->Append(SET_SWAP_INTERVAL_1, "Set Swap Interval to &1");
+    menu->Append(DISABLE_VSYNC, "&Disable VSync");
+    menu->Append(ENABLE_VSYNC, "&Enable VSync");
+    menu->Append(ENABLE_ADAPTIVE_VSYNC, "Enable &adaptive VSync");
     menu->Append(GET_SWAP_INTERVAL, "Display Swap &Interval\tCtrl+I");
     menu->AppendSeparator();
     menu->Append(wxID_ABOUT, "&About...\tF1");
@@ -571,20 +573,38 @@ void MyFrame::OnNewStereoWindow( wxCommandEvent& WXUNUSED(event) )
     }
 }
 
-void MyFrame::OnSetSwapInterval0( wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnDisableVSync( wxCommandEvent& WXUNUSED(event) )
 {
-    if ( m_canvas->SetSwapInterval(0) )
+    if ( m_canvas->SetSwapInterval(0) == wxGLCanvas::SwapInterval::Set )
         wxLogStatus("VSync disabled.");
     else
         wxLogStatus("Couldn't disable VSync.");
 }
 
-void MyFrame::OnSetSwapInterval1( wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnEnableVSync( wxCommandEvent& WXUNUSED(event) )
 {
-    if ( m_canvas->SetSwapInterval(1) )
-        wxLogStatus("Swap interval set to 1.");
+    if ( m_canvas->SetSwapInterval(1) == wxGLCanvas::SwapInterval::Set )
+        wxLogStatus("VSync enabled.");
     else
-        wxLogStatus("Couldn't set swap interval to 1.");
+        wxLogStatus("Couldn't enable VSync.");
+}
+
+void MyFrame::OnEnableAdaptiveVSync( wxCommandEvent& WXUNUSED(event) )
+{
+    switch ( m_canvas->SetSwapInterval(-1) )
+    {
+        case wxGLCanvas::SwapInterval::Set:
+            wxLogStatus("Adaptive VSync enabled.");
+            break;
+
+        case wxGLCanvas::SwapInterval::NonAdaptive:
+            wxLogStatus("Adaptive VSync not supported, but VSync enabled.");
+            break;
+
+        case wxGLCanvas::SwapInterval::NotSet:
+            wxLogStatus("Couldn't enable VSync.");
+            break;
+    }
 }
 
 void MyFrame::OnGetSwapInterval( wxCommandEvent& WXUNUSED(event) )
