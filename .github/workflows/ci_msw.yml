@@ -67,6 +67,7 @@ jobs:
             use_utf8: true
           - configuration: 'Release'
             platform: 'arm64'
+            skip_running_tests: true
           - configuration: 'Debug'
             platform: 'Win32'
             use_cxx20: true
@@ -128,7 +129,7 @@ jobs:
             msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc17.sln
 
       - name: Run tests
-        if: ${{ !contains(matrix.platform, 'arm64') }}
+        if: matrix.skip_running_tests != true
         working-directory: tests
         run: |
             go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
@@ -153,7 +154,7 @@ jobs:
             msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc17.sln
 
       - name: Run GUI tests
-        if: ${{ !contains(matrix.platform, 'arm64') }}
+        if: matrix.skip_running_tests != true
         working-directory: tests
         run: |
             .\vc*msw*\test_gui.exe
