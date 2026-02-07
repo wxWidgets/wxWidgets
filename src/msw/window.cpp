@@ -146,6 +146,11 @@ extern wxPopupWindow* wxCurrentPopupWindow;
 wxWindowMSW *wxWindowBeingErased = nullptr;
 #endif // wxUSE_UXTHEME
 
+// Set to the key code of the pressed key if we need to ignore it but couldn't
+// return 1 from the keyboard hook because we had to leave the IME edit this
+// event, see wxKeyboardHook() code.
+WPARAM wxVKBlockedByKeyboardHook = 0;
+
 namespace
 {
 
@@ -7342,6 +7347,13 @@ wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
                             // Stop processing of this event.
                             return 1;
                         }
+
+                        // Because we don't stop processing of the event at
+                        // Windows level, we are going to get WM_KEYDOWN for
+                        // this key, but we need to ignore it as it's not
+                        // supposed to be generated if wxEVT_CHAR_HOOK handled
+                        // the event.
+                        wxVKBlockedByKeyboardHook = wParam;
                     }
                 }
             }
