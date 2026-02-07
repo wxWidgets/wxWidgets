@@ -4024,7 +4024,8 @@ private:
     wxSharedPtr<wxD2DRenderTargetResourceHolder> m_renderTargetHolder;
     wxStack<StateData> m_stateStack;
     wxStack<LayerData> m_layers;
-    ID2D1RenderTarget* m_cachedRenderTarget;
+    // This is set only once and is never null for a valid context.
+    ID2D1RenderTarget* m_target = nullptr;
     wxCOMPtr<ID2D1GdiInteropRenderTarget> m_gdiRenderTarget;
     D2D1::Matrix3x2F m_inheritedTransform;
     D2D1::Matrix3x2F m_initTransform;
@@ -4163,7 +4164,6 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
 
 void wxD2DContext::Init()
 {
-    m_cachedRenderTarget = nullptr;
     m_composition = wxCOMPOSITION_OVER;
     m_renderTargetHolder->Bind(this);
     m_enableOffset = true;
@@ -4193,7 +4193,7 @@ wxD2DContext::~wxD2DContext()
 
 ID2D1RenderTarget* wxD2DContext::GetRenderTarget() const
 {
-    return m_cachedRenderTarget;
+    return m_target;
 }
 
 void wxD2DContext::Clip(const wxRegion& region)
@@ -4792,8 +4792,8 @@ void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 
 void wxD2DContext::EnsureInitialized()
 {
-    m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
-    GetRenderTarget()->GetTransform(&m_initTransform);
+    m_target = m_renderTargetHolder->GetD2DResource().get();
+    m_target->GetTransform(&m_initTransform);
     m_initTransform = m_initTransform * m_inheritedTransform;
     wxASSERT(m_initTransform.IsInvertible());
     m_initTransformInv = m_initTransform;
@@ -4801,10 +4801,10 @@ void wxD2DContext::EnsureInitialized()
     {
         m_initTransformInv = D2D1::Matrix3x2F::Identity();
     }
-    GetRenderTarget()->SetTransform(&m_initTransform);
-    GetRenderTarget()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
-    GetRenderTarget()->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_DEFAULT);
-    GetRenderTarget()->BeginDraw();
+    m_target->SetTransform(&m_initTransform);
+    m_target->SetAntialiasMode(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+    m_target->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_DEFAULT);
+    m_target->BeginDraw();
 }
 
 void wxD2DContext::SetPen(const wxGraphicsPen& pen)
