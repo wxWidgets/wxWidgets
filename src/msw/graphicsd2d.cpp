@@ -4215,8 +4215,6 @@ void wxD2DContext::Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 
 void wxD2DContext::SetClipLayer(ID2D1Geometry* clipGeometry)
 {
-    EnsureInitialized();
-
     wxCOMPtr<ID2D1Layer> clipLayer;
     HRESULT hr = GetRenderTarget()->CreateLayer(&clipLayer);
     wxCHECK_HRESULT_RET(hr);
@@ -4400,7 +4398,6 @@ void wxD2DContext::StrokePath(const wxGraphicsPath& p)
 
     OffsetHelper helper(this, m_pen);
 
-    EnsureInitialized();
     AdjustRenderTargetSize();
 
     wxD2DPathData* pathData = wxGetD2DPathData(p);
@@ -4421,7 +4418,6 @@ void wxD2DContext::FillPath(const wxGraphicsPath& p , wxPolygonFillMode fillStyl
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    EnsureInitialized();
     AdjustRenderTargetSize();
 
     wxD2DPathData* pathData = wxGetD2DPathData(p);
@@ -4496,8 +4492,6 @@ bool wxD2DContext::SetCompositionMode(wxCompositionMode compositionMode)
 
 void wxD2DContext::BeginLayer(wxDouble opacity)
 {
-    EnsureInitialized();
-
     wxCOMPtr<ID2D1Layer> layer;
     HRESULT hr = GetRenderTarget()->CreateLayer(&layer);
     wxCHECK_HRESULT_RET(hr);
@@ -4612,8 +4606,6 @@ void wxD2DContext::ConcatTransform(const wxGraphicsMatrix& matrix)
 
 void wxD2DContext::SetTransform(const wxGraphicsMatrix& matrix)
 {
-    EnsureInitialized();
-
     D2D1::Matrix3x2F m;
     m.SetProduct(wxGetD2DMatrixData(matrix)->GetMatrix3x2F(), m_initTransform);
     GetRenderTarget()->SetTransform(&m);
@@ -4680,8 +4672,6 @@ void wxD2DContext::DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y, wxDouble
 
 void wxD2DContext::PushState()
 {
-    EnsureInitialized();
-
     StateData state;
     m_direct2dFactory->CreateDrawingStateBlock(&state.drawingState);
     GetRenderTarget()->SaveDrawingState(state.drawingState);
@@ -4802,26 +4792,19 @@ void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 
 void wxD2DContext::EnsureInitialized()
 {
-    if (!m_renderTargetHolder->IsResourceAcquired())
+    m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
+    GetRenderTarget()->GetTransform(&m_initTransform);
+    m_initTransform = m_initTransform * m_inheritedTransform;
+    wxASSERT(m_initTransform.IsInvertible());
+    m_initTransformInv = m_initTransform;
+    if ( !m_initTransformInv.Invert() )
     {
-        m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
-        GetRenderTarget()->GetTransform(&m_initTransform);
-        m_initTransform = m_initTransform * m_inheritedTransform;
-        wxASSERT(m_initTransform.IsInvertible());
-        m_initTransformInv = m_initTransform;
-        if ( !m_initTransformInv.Invert() )
-        {
-            m_initTransformInv = D2D1::Matrix3x2F::Identity();
-        }
-        GetRenderTarget()->SetTransform(&m_initTransform);
-        GetRenderTarget()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
-        GetRenderTarget()->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_DEFAULT);
-        GetRenderTarget()->BeginDraw();
+        m_initTransformInv = D2D1::Matrix3x2F::Identity();
     }
-    else
-    {
-        m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
-    }
+    GetRenderTarget()->SetTransform(&m_initTransform);
+    GetRenderTarget()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+    GetRenderTarget()->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_DEFAULT);
+    GetRenderTarget()->BeginDraw();
 }
 
 void wxD2DContext::SetPen(const wxGraphicsPen& pen)
@@ -4830,8 +4813,6 @@ void wxD2DContext::SetPen(const wxGraphicsPen& pen)
 
     if (!m_pen.IsNull())
     {
-        EnsureInitialized();
-
         wxD2DPenData* penData = wxGetD2DPenData(pen);
         penData->Bind(this);
     }
@@ -4864,7 +4845,6 @@ void wxD2DContext::DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 
     OffsetHelper helper(this, m_pen);
 
-    EnsureInitialized();
     AdjustRenderTargetSize();
 
     D2D1_RECT_F rect = { (FLOAT)x, (FLOAT)y, (FLOAT)(x + w), (FLOAT)(y + h) };
@@ -4893,7 +4873,6 @@ void wxD2DContext::DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDo
 
     OffsetHelper helper(this, m_pen);
 
-    EnsureInitialized();
     AdjustRenderTargetSize();
 
     D2D1_RECT_F rect = { (FLOAT)x, (FLOAT)y, (FLOAT)(x + w), (FLOAT)(y + h) };
@@ -4923,7 +4902,6 @@ void wxD2DContext::DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 
     OffsetHelper helper(this, m_pen);
 
-    EnsureInitialized();
     AdjustRenderTargetSize();
 
     D2D1_ELLIPSE ellipse = {
