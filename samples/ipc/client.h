@@ -29,7 +29,6 @@ class MyApp: public wxApp
 {
 public:
     virtual bool OnInit() override;
-    virtual int OnExit() override;
     MyFrame *GetFrame() { return m_frame; }
 
 protected:

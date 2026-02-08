@@ -98,7 +98,7 @@ public:
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit() override;
 
-    virtual int OnExit() override { DeleteBitmaps(); return 0; }
+    virtual int OnExit() override { DeleteBitmaps(); return wxApp::OnExit(); }
 
     // Get the menu ID corresponding to the initially selected appearance.
     int GetInitialAppearanceMenuId() const { return m_initialAppearanceMenuId; }

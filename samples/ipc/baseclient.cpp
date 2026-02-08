@@ -131,7 +131,7 @@ int MyApp::OnExit()
 {
     delete m_client;
 
-    return 0;
+    return wxApp::OnExit();
 }
 
 void MyApp::OnIdle(wxIdleEvent& event)
