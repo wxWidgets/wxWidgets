@@ -364,6 +364,9 @@ public:
 
         The return value of this function is currently ignored, return the same
         value as returned by the base class method if you override it.
+
+        NOTE: The base class method performs some cleanup - call it at the end
+        of your method if you override it.
     */
     virtual int OnExit();
 

@@ -363,7 +363,8 @@ int Server::OnExit()
     m_threadWorkers.Clear();
     m_eventWorkers.Clear();
     m_listeningSocket->Destroy();
-    return 0;
+
+    return wxApp::OnExit();
 }
 
 void Server::OnSocketEvent(wxSocketEvent& pEvent)

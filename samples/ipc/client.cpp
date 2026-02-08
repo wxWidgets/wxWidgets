@@ -82,12 +82,6 @@ bool MyApp::OnInit()
     return true;
 }
 
-int MyApp::OnExit()
-{
-
-    return 0;
-}
-
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title)
         : wxFrame(frame, wxID_ANY, title, wxDefaultPosition, wxSize(400, 300))
