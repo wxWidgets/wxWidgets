@@ -1,0 +1,20 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DLL Debug" />
+    <BuildType Name="DLL Release" />
+    <BuildType Name="Release" />
+    <Platform Name="ARM64" />
+    <Platform Name="ARM64EC" />
+    <Platform Name="Win32" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="../build/msw/wx_base.vcxproj" />
+  <Project Path="../build/msw/wx_net.vcxproj" />
+  <Project Path="../build/msw/wx_xml.vcxproj" />
+  <Project Path="test.vcxproj">
+    <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_xml.vcxproj" />
+  </Project>
+</Solution>
