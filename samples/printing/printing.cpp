@@ -487,7 +487,7 @@ void MyFrame::OnAngleDown(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPreviewFrameModalityKind(wxCommandEvent& event)
 {
     m_previewModality = static_cast<wxPreviewFrameModalityKind>(
-                            wxPreviewFrame_AppModal +
+                            static_cast<int>(wxPreviewFrame_AppModal) +
                                 (event.GetId() - WXPRINT_FRAME_MODAL_APP));
 }
 

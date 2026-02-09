@@ -54,18 +54,23 @@ enum wxPrinterError
     wxPRINTER_ERROR
 };
 
+// The following symbols are preserved only for compatibility.
+// Please use the new wxFrame::Modality instead in any new code.
+
 // Preview frame modality kind used with wxPreviewFrame::Initialize()
-enum wxPreviewFrameModalityKind
-{
-    // Disable all the other top level windows while the preview is shown.
-    wxPreviewFrame_AppModal,
+using wxPreviewFrameModalityKind = wxFrameBase::Modality;
 
-    // Disable only the parent window while the preview is shown.
-    wxPreviewFrame_WindowModal,
+// Disable all the other top level windows while the preview is shown.
+constexpr wxPreviewFrameModalityKind
+wxPreviewFrame_AppModal = wxFrameBase::Modality::App;
 
-    // Don't disable any windows.
-    wxPreviewFrame_NonModal
-};
+// Disable only the parent window while the preview is shown.
+constexpr wxPreviewFrameModalityKind
+wxPreviewFrame_WindowModal = wxFrameBase::Modality::Window;
+
+// Don't disable any windows.
+constexpr wxPreviewFrameModalityKind
+wxPreviewFrame_NonModal = wxFrameBase::Modality::None;
 
 //----------------------------------------------------------------------------
 // wxPrintFactory
@@ -448,13 +453,9 @@ public:
     inline wxPreviewControlBar* GetControlBar() const { return m_controlBar; }
 
 protected:
-    wxPreviewCanvas*      m_previewCanvas;
-    wxPreviewControlBar*  m_controlBar;
+    wxPreviewCanvas*      m_previewCanvas = nullptr;
+    wxPreviewControlBar*  m_controlBar = nullptr;
     wxPrintPreviewBase*   m_printPreview;
-    wxWindowDisabler*     m_windowDisabler;
-
-    wxPreviewFrameModalityKind m_modalityKind;
-
 
 private:
     void OnChar(wxKeyEvent& event);

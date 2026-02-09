@@ -207,6 +207,31 @@ void wxFrame::SetWindowStyleFlag( long style )
     GetQMainWindow()->setWindowFlags(qtFlags);
 }
 
+void wxFrame::SetWindowModality(Modality modality)
+{
+    wxCHECK_RET( !IsShown(),
+                 "SetWindowModality() must be called before showing the window" );
+
+    Qt::WindowModality qtModality;
+
+    switch ( modality )
+    {
+        case Modality::App:
+            qtModality = Qt::ApplicationModal;
+            break;
+
+        case Modality::Window:
+            qtModality = Qt::WindowModal;
+            break;
+
+        case Modality::None:
+            qtModality = Qt::NonModal;
+            break;
+    }
+
+    GetHandle()->setWindowModality(qtModality);
+}
+
 QWidget* wxFrame::QtGetParentWidget() const
 {
     // GetQMainWindow() always returns nullptr for MDI children

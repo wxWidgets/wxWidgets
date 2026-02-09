@@ -28,7 +28,10 @@
     #include "wx/dcclient.h"
     #include "wx/toolbar.h"
     #include "wx/statusbr.h"
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
+
+#include <stack>
 
 extern WXDLLEXPORT_DATA(const char) wxFrameNameStr[] = "frame";
 extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[] = "status_line";
@@ -47,6 +50,17 @@ wxBEGIN_EVENT_TABLE(wxFrameBase, wxTopLevelWindow)
     EVT_MENU_HIGHLIGHT_ALL(wxFrameBase::OnMenuHighlight)
 #endif // wxUSE_STATUSBAR
 wxEND_EVENT_TABLE()
+
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+namespace
+{
+// Global stack used to track all active wxWindowDisablers for the wxFrames
+// currently shown modally (those with Modality::App flag).
+// E.g.: a frame shown modally from another modal frame.
+std::stack<wxWindowDisabler> gs_windowDisablers;
+} // anonymous namespace
 
 /* static */
 bool wxFrameBase::ShouldUpdateMenuFromIdle()
@@ -144,19 +158,41 @@ wxCONSTRUCTOR_6( wxFrame, wxWindow*, Parent, wxWindowID, Id, wxString, Title, \
 
 wxFrameBase::wxFrameBase()
 {
-#if wxUSE_MENUBAR
-    m_frameMenuBar = nullptr;
-#endif // wxUSE_MENUS
+#ifndef __WXQT__
+    // To avoid keeping other windows disabled longer than necessary, connect
+    // to the wxEVT_SHOW event. This allows us to end the frame's modality as
+    // soon as it becomes hidden, rather than when it is actually destroyed
+    // (which typically occurs during the next event loop iteration for TLWs)
+    Bind(wxEVT_SHOW, [this](wxShowEvent& event)
+        {
+            event.Skip();
 
-#if wxUSE_TOOLBAR
-    m_frameToolBar = nullptr;
-#endif // wxUSE_TOOLBAR
+            if ( !event.IsShown() )
+            {
+                switch ( m_modality )
+                {
+                    case Modality::App:
+                        if ( !gs_windowDisablers.empty() )
+                        {
+                            gs_windowDisablers.pop();
+                        }
+                        else
+                        {
+                            wxFAIL_MSG( "A window with Modality::App MUST have a wxWindowDisabler" );
+                        }
+                        break;
 
-#if wxUSE_STATUSBAR
-    m_frameStatusBar = nullptr;
-#endif // wxUSE_STATUSBAR
+                    case Modality::Window:
+                        if ( GetParent() )
+                            GetParent()->Enable();
+                        break;
 
-    m_statusBarPane = 0;
+                    case Modality::None:
+                        break;
+                }
+            }
+        });
+#endif // __WXQT__
 }
 
 wxFrameBase::~wxFrameBase()
@@ -263,6 +299,40 @@ void wxFrameBase::RemoveChild(wxWindowBase *child)
 #endif // wxUSE_STATUSBAR
 
     wxTopLevelWindow::RemoveChild(child);
+}
+
+void wxFrameBase::SetWindowModality(Modality modality)
+{
+    wxCHECK_RET( !IsShown(),
+                 "SetWindowModality() must be called before showing the window" );
+
+    m_modality = modality;
+
+    switch ( m_modality )
+    {
+        case Modality::App:
+            // Disable everything for this frame.
+            gs_windowDisablers.emplace(wxWindowDisabler( this ));
+            break;
+
+        case Modality::Window:
+            // Disable our parent if we have one.
+            if ( GetParent() )
+                GetParent()->Disable();
+            break;
+
+        case Modality::None:
+            // Nothing to do, we don't need to disable any window.
+            break;
+    }
+
+    if ( m_modality != Modality::None )
+    {
+        // Behave like modal dialogs, don't show in taskbar. This implies
+        // removing the minimize box, because minimizing windows without
+        // taskbar entry is confusing.
+        SetWindowStyle((GetWindowStyle() & ~wxMINIMIZE_BOX) | wxFRAME_NO_TASKBAR);
+    }
 }
 
 // ----------------------------------------------------------------------------
