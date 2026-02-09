@@ -59,9 +59,8 @@ public:
 class MyTextCtrl : public wxTextCtrl
 {
 public:
-    MyTextCtrl(wxWindow *parent, wxWindowID id, const wxString &value,
-               const wxPoint &pos, const wxSize &size, int style = 0)
-        : wxTextCtrl(parent, id, value, pos, size, style)
+    MyTextCtrl(wxWindow *parent, wxWindowID id, const wxString &value, int style = 0)
+        : wxTextCtrl(parent, id, value, wxDefaultPosition, wxDefaultSize, style)
     {
         m_hasCapture = false;
     }
@@ -1142,7 +1141,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 {
 #if wxUSE_LOG
     m_log = new wxTextCtrl( this, wxID_ANY, "This is the log window.\n",
-                            wxPoint(5,260), wxSize(630,100),
+                            wxDefaultPosition, wxDefaultSize,
                             wxTE_MULTILINE | wxTE_READONLY);
 
     m_logOld = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
@@ -1151,7 +1150,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // single line text controls
 
     m_text = new MyTextCtrl( this, wxID_ANY, "Single line.",
-                             wxDefaultPosition, wxDefaultSize,
                              wxTE_PROCESS_ENTER | wxTE_RICH2);
     m_text->SetForegroundColour(*wxBLUE);
     m_text->SetBackgroundColour(*wxLIGHT_GREY);
@@ -1169,36 +1167,33 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     }
 #endif
 
-    m_password = new MyTextCtrl( this, wxID_ANY, "",
-      wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
+    m_password = new MyTextCtrl( this, wxID_ANY, "", wxTE_PASSWORD );
     m_password->SetHint("Don't use 12345 here");
 
-    m_limited = new MyTextCtrl(this, wxID_ANY, "",
-                              wxPoint(10, 90), wxDefaultSize);
+    m_limited = new MyTextCtrl(this, wxID_ANY, "");
     m_limited->SetHint("Max 8 ch");
     m_limited->SetMaxLength(8);
     wxSize size2 = m_limited->GetSizeFromTextSize(m_limited->GetTextExtent("WWWWWWWW"));
     m_limited->SetSizeHints(size2, size2);
-    m_limitedMultiline = new MyTextCtrl( this, wxID_ANY, "", wxPoint( 10, 110 ), wxDefaultSize, wxTE_MULTILINE );
+    m_limitedMultiline = new MyTextCtrl( this, wxID_ANY, "", wxTE_MULTILINE );
     m_limitedMultiline->SetHint( "Max 20 characters" );
     m_limitedMultiline->SetMinSize( wxSize(size2.x, wxDefaultCoord) );
     m_limitedMultiline->SetMaxLength( 20 );
 
-    wxTextCtrl* upperOnly = new MyTextCtrl(this, wxID_ANY, "Only upper case",
-                                           wxDefaultPosition, wxDefaultSize);
+    wxTextCtrl* upperOnly = new MyTextCtrl(this, wxID_ANY, "Only upper case");
     upperOnly->ForceUpper();
 
     // multi line text controls
 
     wxString string3L("Read only\nMultiline\nFitted size");
     m_readonly = new MyTextCtrl( this, wxID_ANY, string3L,
-               wxPoint(10, 120), wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY );
+               wxTE_MULTILINE | wxTE_READONLY );
     wxWindowDC dc(m_readonly);
     size2 = m_readonly->GetSizeFromTextSize(dc.GetMultiLineTextExtent(string3L));
     m_readonly->SetMinSize(size2);
 
     m_horizontal = new MyTextCtrl( this, wxID_ANY, "Multiline text control with a horizontal scrollbar.\n",
-      wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL);
+      wxTE_MULTILINE | wxHSCROLL);
     m_horizontal->SetHint("Enter multiline text here");
 
     // a little hack to use the command line argument for encoding testing
@@ -1234,7 +1229,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_multitext = new MyTextCtrl( this, wxID_ANY,
                                   "Multi line without vertical scrollbar.",
-      wxPoint(180,10), wxSize(200,70), wxTE_MULTILINE | wxTE_NO_VSCROLL );
+                                  wxTE_MULTILINE | wxTE_NO_VSCROLL );
     m_multitext->SetFont(*wxITALIC_FONT);
     (*m_multitext) << " Appended.";
     m_multitext->SetInsertionPoint(0);
@@ -1247,11 +1242,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif
 
     m_tab = new MyTextCtrl( this, 100, "Multiline, allow <TAB> processing.",
-      wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
+      wxTE_MULTILINE |  wxTE_PROCESS_TAB );
     m_tab->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("tab"))));
 
     m_enter = new MyTextCtrl( this, 100, "Multiline, allow <ENTER> processing.",
-      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2 );
+      wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2 );
     m_enter->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("enter"))));
 
 #if wxUSE_SPELLCHECK
@@ -1280,7 +1275,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 "wxHSCROLL style\n"
                                 "\nAnd here is a link in quotation marks to "
                                 "test wxTE_AUTO_URL: \"http://www.wxwidgets.org\"",
-                                wxPoint(450, 10), wxSize(200, 230),
                                 wxTE_RICH | wxTE_MULTILINE | wxTE_AUTO_URL);
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
@@ -1329,10 +1323,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     column2->Add( m_tab, 0, wxALL | wxEXPAND, 10 );
     column2->Add( m_enter, 1, wxALL | wxEXPAND, 10 );
 
-    wxBoxSizer *row1 = new wxBoxSizer(wxHORIZONTAL);
+    auto* const row1 = new wxGridSizer(3, FromDIP(wxSize(10, 10)));
     row1->Add( column1, 0, wxALL | wxEXPAND, 10 );
     row1->Add( column2, 1, wxALL | wxEXPAND, 10 );
     row1->Add( m_textrich, 1, wxALL | wxEXPAND, 10 );
+    row1->SetItemMinSize( m_textrich, FromDIP(wxSize(300, 200)) );
 
     wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
     topSizer->Add( row1, 2, wxALL | wxEXPAND, 10 );
