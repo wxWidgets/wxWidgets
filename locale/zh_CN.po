@@ -34,7 +34,7 @@ msgstr "已用时间："
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Estimated time:"
-msgstr "预期时间："
+msgstr "预计时间："
 
 #: ../include/wx/generic/progdlgg.h:87
 msgid "Remaining time:"
@@ -44,7 +44,7 @@ msgstr "剩余时间："
 #: ../include/wx/html/htmprint.h:121 ../include/wx/prntbase.h:273
 #: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2161
 msgid "Printout"
-msgstr "打印"
+msgstr "打印输出"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
@@ -64,7 +64,7 @@ msgstr "否"
 #: ../src/msw/msgdlg.cpp:430 ../src/msw/msgdlg.cpp:734
 #: ../src/richtext/richtextstyledlg.cpp:292
 msgid "OK"
-msgstr "确认"
+msgstr "确定"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:150
 #: ../src/msw/msgdlg.cpp:430 ../src/msw/progdlg.cpp:884
@@ -90,7 +90,7 @@ msgstr "无法关闭 '%s' 的句柄"
 #: ../include/wx/msw/private/fswatcher.h:92
 #, c-format
 msgid "Failed to open directory \"%s\" for monitoring."
-msgstr "无法打开监视目录 \"%s\"。"
+msgstr "无法打开目录 \"%s\" 以进行监视。"
 
 #: ../include/wx/msw/private/fswatcher.h:125
 msgid "Unable to close I/O completion port handle"
@@ -98,7 +98,7 @@ msgstr "无法关闭 I/O 完成端口的句柄"
 
 #: ../include/wx/msw/private/fswatcher.h:142
 msgid "Unable to associate handle with I/O completion port"
-msgstr "无法将句柄与 I/O 完成端口相关联"
+msgstr "无法将句柄关联到 I/O 完成端口"
 
 #: ../include/wx/msw/private/fswatcher.h:148
 msgid "Unexpectedly new I/O completion port was created"
@@ -106,11 +106,11 @@ msgstr "意外创建了新的 I/O 完成端口"
 
 #: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
-msgstr "无法提交完成状态"
+msgstr "无法发送完成状态"
 
 #: ../include/wx/msw/private/fswatcher.h:262
 msgid "Unable to dequeue completion packet"
-msgstr "无法移出完成封包"
+msgstr "无法从队列中取出完成包"
 
 #: ../include/wx/msw/private/fswatcher.h:273
 msgid "Unable to create I/O completion port"
@@ -118,15 +118,15 @@ msgstr "无法创建 I/O 完成端口"
 
 #: ../include/wx/richmsgdlg.h:29
 msgid "&See details"
-msgstr "查看细节(&S)"
+msgstr "查看详情(&S)"
 
 #: ../include/wx/richmsgdlg.h:30
 msgid "&Hide details"
-msgstr "隐藏细节(&H)"
+msgstr "隐藏详情(&H)"
 
 #: ../include/wx/richtext/richtextbuffer.h:3864
 msgid "&Box"
-msgstr "框(&B)"
+msgstr "文本框(&B)"
 
 #: ../include/wx/richtext/richtextbuffer.h:5008
 msgid "&Picture"
@@ -150,7 +150,7 @@ msgstr "符号"
 
 #: ../include/wx/unix/pipe.h:46
 msgid "Pipe creation failed"
-msgstr "创建管道失败"
+msgstr "管道创建失败"
 
 #: ../include/wx/unix/private/displayx11.h:65
 msgid "Failed to enumerate video modes"
@@ -163,40 +163,40 @@ msgstr "无法改变视频模式"
 #: ../include/wx/unix/private/fswatcher_kqueue.h:57
 #, c-format
 msgid "Unable to open path '%s'"
-msgstr "无法打开 '%s' 路径"
+msgstr "无法打开路径 '%s'"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:74
 #, c-format
 msgid "Unable to close path '%s'"
-msgstr "无法关闭 '%s' 路径"
+msgstr "无法关闭路径 '%s'"
 
 #: ../include/wx/xtiprop.h:175
 msgid "SetProperty called w/o valid setter"
-msgstr "调用 SetProperty 时未提供有效的 setter"
+msgstr "调用 SetProperty 时未找到有效的 setter"
 
 #: ../include/wx/xtiprop.h:184
 msgid "GetProperty called w/o valid getter"
-msgstr "调用 GetProperty 时未提供有效的 getter"
+msgstr "调用 GetProperty 时未找到有效的 getter"
 
 #: ../include/wx/xtiprop.h:193
 msgid "AddToPropertyCollection called w/o valid adder"
-msgstr "调用 AddToPropertyCollection 时未提供有效的 adder"
+msgstr "调用 AddToPropertyCollection 时未找到有效的 adder"
 
 #: ../include/wx/xtiprop.h:202
 msgid "GetPropertyCollection called w/o valid collection getter"
-msgstr "调用 GetPropertyCollection 时未提供有效的 collection getter"
+msgstr "调用 GetPropertyCollection 时未找到有效的 collection getter"
 
 #: ../include/wx/xtiprop.h:255
 msgid "AddToPropertyCollection called on a generic accessor"
-msgstr "在通用存取器函数上调用 AddToPropertyCollection"
+msgstr "在通用访问器上调用 AddToPropertyCollection"
 
 #: ../include/wx/xtiprop.h:262
 msgid "GetPropertyCollection called on a generic accessor"
-msgstr "在通用存取器函数上调用 GetPropertyCollection"
+msgstr "在通用访问器上调用 GetPropertyCollection"
 
 #: ../src/aui/tabmdi.cpp:106 ../src/generic/mdig.cpp:94
 msgid "Cl&ose"
-msgstr "关闭(&o)"
+msgstr "关闭(&O)"
 
 #: ../src/aui/tabmdi.cpp:107 ../src/generic/mdig.cpp:95
 msgid "Close All"
@@ -222,482 +222,482 @@ msgstr "窗口(&W)"
 #: ../src/common/accelcmn.cpp:47
 msgctxt "keyboard key"
 msgid "Delete"
-msgstr "删除"
+msgstr "Delete"
 
 #: ../src/common/accelcmn.cpp:48
 msgctxt "keyboard key"
 msgid "Del"
-msgstr "删除"
+msgstr "Del"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
 msgid "Back"
-msgstr "退格"
+msgstr "Back"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
 msgid "Backspace"
-msgstr "退格"
+msgstr "Backspace"
 
 #: ../src/common/accelcmn.cpp:50
 msgctxt "keyboard key"
 msgid "Insert"
-msgstr "插入"
+msgstr "Insert"
 
 #: ../src/common/accelcmn.cpp:51
 msgctxt "keyboard key"
 msgid "Ins"
-msgstr "插入"
+msgstr "Ins"
 
 #: ../src/common/accelcmn.cpp:52
 msgctxt "keyboard key"
 msgid "Enter"
-msgstr "输入"
+msgstr "Enter"
 
 #: ../src/common/accelcmn.cpp:53
 msgctxt "keyboard key"
 msgid "Return"
-msgstr "换行"
+msgstr "Return"
 
 #: ../src/common/accelcmn.cpp:54
 msgctxt "keyboard key"
 msgid "PageUp"
-msgstr "上页"
+msgstr "PageUp"
 
 #: ../src/common/accelcmn.cpp:54
 msgctxt "keyboard key"
 msgid "Page Up"
-msgstr "上页"
+msgstr "Page Up"
 
 #: ../src/common/accelcmn.cpp:55
 msgctxt "keyboard key"
 msgid "PageDown"
-msgstr "下页"
+msgstr "PageDown"
 
 #: ../src/common/accelcmn.cpp:55
 msgctxt "keyboard key"
 msgid "Page Down"
-msgstr "下页"
+msgstr "Page Down"
 
 #: ../src/common/accelcmn.cpp:56
 msgctxt "keyboard key"
 msgid "PgUp"
-msgstr "上页"
+msgstr "PgUp"
 
 #: ../src/common/accelcmn.cpp:57
 msgctxt "keyboard key"
 msgid "PgDn"
-msgstr "下页"
+msgstr "PgDn"
 
 #: ../src/common/accelcmn.cpp:58
 msgctxt "keyboard key"
 msgid "Left"
-msgstr "左"
+msgstr "Left"
 
 #: ../src/common/accelcmn.cpp:59
 msgctxt "keyboard key"
 msgid "Right"
-msgstr "右"
+msgstr "Right"
 
 #: ../src/common/accelcmn.cpp:60
 msgctxt "keyboard key"
 msgid "Up"
-msgstr "向上"
+msgstr "Up"
 
 #: ../src/common/accelcmn.cpp:61
 msgctxt "keyboard key"
 msgid "Down"
-msgstr "向下"
+msgstr "Down"
 
 #: ../src/common/accelcmn.cpp:62
 msgctxt "keyboard key"
 msgid "Home"
-msgstr "主页"
+msgstr "Home"
 
 #: ../src/common/accelcmn.cpp:63
 msgctxt "keyboard key"
 msgid "End"
-msgstr "末页"
+msgstr "End"
 
 #: ../src/common/accelcmn.cpp:64
 msgctxt "keyboard key"
 msgid "Space"
-msgstr "空格"
+msgstr "Space"
 
 #: ../src/common/accelcmn.cpp:65
 msgctxt "keyboard key"
 msgid "Tab"
-msgstr "跳格"
+msgstr "Tab"
 
 #: ../src/common/accelcmn.cpp:66
 msgctxt "keyboard key"
 msgid "Esc"
-msgstr "退出"
+msgstr "Esc"
 
 #: ../src/common/accelcmn.cpp:67
 msgctxt "keyboard key"
 msgid "Escape"
-msgstr "退出"
+msgstr "Escape"
 
 #: ../src/common/accelcmn.cpp:68
 msgctxt "keyboard key"
 msgid "Cancel"
-msgstr "取消"
+msgstr "Cancel"
 
 #: ../src/common/accelcmn.cpp:69
 msgctxt "keyboard key"
 msgid "Clear"
-msgstr "清除"
+msgstr "Clear"
 
 #: ../src/common/accelcmn.cpp:70
 msgctxt "keyboard key"
 msgid "Menu"
-msgstr "菜单"
+msgstr "Menu"
 
 #: ../src/common/accelcmn.cpp:71
 msgctxt "keyboard key"
 msgid "Pause"
-msgstr "暂停"
+msgstr "Pause"
 
 #: ../src/common/accelcmn.cpp:72
 msgctxt "keyboard key"
 msgid "Capital"
-msgstr "大写"
+msgstr "Capital"
 
 #: ../src/common/accelcmn.cpp:73
 msgctxt "keyboard key"
 msgid "Select"
-msgstr "选择"
+msgstr "Select"
 
 #: ../src/common/accelcmn.cpp:74
 msgctxt "keyboard key"
 msgid "Print"
-msgstr "打印"
+msgstr "Print"
 
 #: ../src/common/accelcmn.cpp:75
 msgctxt "keyboard key"
 msgid "Execute"
-msgstr "执行"
+msgstr "Execute"
 
 #: ../src/common/accelcmn.cpp:76
 msgctxt "keyboard key"
 msgid "Snapshot"
-msgstr "快照"
+msgstr "Snapshot"
 
 #: ../src/common/accelcmn.cpp:77
 msgctxt "keyboard key"
 msgid "Help"
-msgstr "帮助"
+msgstr "Help"
 
 #: ../src/common/accelcmn.cpp:78
 msgctxt "keyboard key"
 msgid "Add"
-msgstr "添加"
+msgstr "Add"
 
 #: ../src/common/accelcmn.cpp:79
 msgctxt "keyboard key"
 msgid "Separator"
-msgstr "分隔符"
+msgstr "Separator"
 
 #: ../src/common/accelcmn.cpp:80
 msgctxt "keyboard key"
 msgid "Subtract"
-msgstr "减号"
+msgstr "Subtract"
 
 #: ../src/common/accelcmn.cpp:81
 msgctxt "keyboard key"
 msgid "Decimal"
-msgstr "小数点"
+msgstr "Decimal"
 
 #: ../src/common/accelcmn.cpp:82
 msgctxt "keyboard key"
 msgid "Multiply"
-msgstr "乘号"
+msgstr "Multiply"
 
 #: ../src/common/accelcmn.cpp:83
 msgctxt "keyboard key"
 msgid "Divide"
-msgstr "除号"
+msgstr "Divide"
 
 #: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
 msgid "Num_lock"
-msgstr "数字键_锁定"
+msgstr "Num_lock"
 
 #: ../src/common/accelcmn.cpp:84
 msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr "数字键 锁定"
+msgstr "Num Lock"
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Scroll_lock"
-msgstr "滚动_锁屏"
+msgstr "Scroll_lock"
 
 #: ../src/common/accelcmn.cpp:85
 msgctxt "keyboard key"
 msgid "Scroll Lock"
-msgstr "滚动 锁屏"
+msgstr "Scroll Lock"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr "字符键_空格"
+msgstr "KP_Space"
 
 #: ../src/common/accelcmn.cpp:86
 msgctxt "keyboard key"
 msgid "Num Space"
-msgstr "数字键 空格"
+msgstr "小键盘 Space"
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "KP_Tab"
-msgstr "字符键_跳格"
+msgstr "KP_Tab"
 
 #: ../src/common/accelcmn.cpp:87
 msgctxt "keyboard key"
 msgid "Num Tab"
-msgstr "数字键 跳格"
+msgstr "小键盘 Tab"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "KP_Enter"
-msgstr "字符键_输入"
+msgstr "KP_Enter"
 
 #: ../src/common/accelcmn.cpp:88
 msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr "数字键 输入"
+msgstr "小键盘 Enter"
 
 #: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
 msgid "KP_Home"
-msgstr "编辑键_行头"
+msgstr "KP_Home"
 
 #: ../src/common/accelcmn.cpp:89
 msgctxt "keyboard key"
 msgid "Num Home"
-msgstr "数字键 行头"
+msgstr "小键盘 Home"
 
 #: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
 msgid "KP_Left"
-msgstr "编辑键_左"
+msgstr "KP_Left"
 
 #: ../src/common/accelcmn.cpp:90
 msgctxt "keyboard key"
 msgid "Num left"
-msgstr "数字键 左"
+msgstr "小键盘 Left"
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "KP_Up"
-msgstr "编辑键_上"
+msgstr "KP_Up"
 
 #: ../src/common/accelcmn.cpp:91
 msgctxt "keyboard key"
 msgid "Num Up"
-msgstr "数字键 上"
+msgstr "小键盘 Up"
 
 #: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "KP_Right"
-msgstr "编辑键_右"
+msgstr "KP_Right"
 
 #: ../src/common/accelcmn.cpp:92
 msgctxt "keyboard key"
 msgid "Num Right"
-msgstr "数字键 右"
+msgstr "小键盘 Right"
 
 #: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"
 msgid "KP_Down"
-msgstr "编辑键_下"
+msgstr "KP_Down"
 
 #: ../src/common/accelcmn.cpp:93
 msgctxt "keyboard key"
 msgid "Num Down"
-msgstr "数字键 下"
+msgstr "小键盘 Down"
 
 #: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr "编辑键_上页"
+msgstr "KP_PageUp"
 
 #: ../src/common/accelcmn.cpp:94
 msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr "编辑键 上页"
+msgstr "小键盘 Page Up"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr "编辑键_下页"
+msgstr "KP_PageDown"
 
 #: ../src/common/accelcmn.cpp:95
 msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr "数字键 下页"
+msgstr "小键盘 Page Down"
 
 #: ../src/common/accelcmn.cpp:96
 msgctxt "keyboard key"
 msgid "KP_Prior"
-msgstr "编辑键_前一个"
+msgstr "KP_Prior"
 
 #: ../src/common/accelcmn.cpp:97
 msgctxt "keyboard key"
 msgid "KP_Next"
-msgstr "编辑键_下一个"
+msgstr "KP_Next"
 
 #: ../src/common/accelcmn.cpp:98
 msgctxt "keyboard key"
 msgid "KP_End"
-msgstr "编辑键_行末"
+msgstr "KP_End"
 
 #: ../src/common/accelcmn.cpp:98
 msgctxt "keyboard key"
 msgid "Num End"
-msgstr "数字键 行末"
+msgstr "小键盘 End"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "KP_Begin"
-msgstr "编辑键_行首"
+msgstr "KP_Begin"
 
 #: ../src/common/accelcmn.cpp:99
 msgctxt "keyboard key"
 msgid "Num Begin"
-msgstr "数字键 行首"
+msgstr "小键盘 Begin"
 
 #: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "KP_Insert"
-msgstr "编辑键_插入"
+msgstr "KP_Insert"
 
 #: ../src/common/accelcmn.cpp:100
 msgctxt "keyboard key"
 msgid "Num Insert"
-msgstr "数字键 插入"
+msgstr "小键盘 Insert"
 
 #: ../src/common/accelcmn.cpp:101
 msgctxt "keyboard key"
 msgid "KP_Delete"
-msgstr "编辑键_删除"
+msgstr "小键盘 Delete"
 
 #: ../src/common/accelcmn.cpp:101
 msgctxt "keyboard key"
 msgid "Num Delete"
-msgstr "数字键 删除"
+msgstr "小键盘 Delete"
 
 #: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "KP_Equal"
-msgstr "字符键_等号"
+msgstr "KP_Equal"
 
 #: ../src/common/accelcmn.cpp:102
 msgctxt "keyboard key"
 msgid "Num ="
-msgstr "数字键 ="
+msgstr "小键盘 ="
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "KP_Multiply"
-msgstr "字符键_乘号"
+msgstr "KP_Multiply"
 
 #: ../src/common/accelcmn.cpp:103
 msgctxt "keyboard key"
 msgid "Num *"
-msgstr "数字键 *"
+msgstr "小键盘 *"
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "KP_Add"
-msgstr "字符键_加号"
+msgstr "KP_Add"
 
 #: ../src/common/accelcmn.cpp:104
 msgctxt "keyboard key"
 msgid "Num +"
-msgstr "数字键 +"
+msgstr "小键盘 +"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "KP_Separator"
-msgstr "字符键_分隔号"
+msgstr "KP_Separator"
 
 #: ../src/common/accelcmn.cpp:105
 msgctxt "keyboard key"
 msgid "Num ,"
-msgstr "数字键 ,"
+msgstr "小键盘 ,"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "KP_Subtract"
-msgstr "字符键_减号"
+msgstr "KP_Subtract"
 
 #: ../src/common/accelcmn.cpp:106
 msgctxt "keyboard key"
 msgid "Num -"
-msgstr "数字键 -"
+msgstr "小键盘 -"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr "字符键_小数点"
+msgstr "KP_Decimal"
 
 #: ../src/common/accelcmn.cpp:107
 msgctxt "keyboard key"
 msgid "Num ."
-msgstr "数字键 ."
+msgstr "小键盘 ."
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "KP_Divide"
-msgstr "字符键_除号"
+msgstr "KP_Divide"
 
 #: ../src/common/accelcmn.cpp:108
 msgctxt "keyboard key"
 msgid "Num /"
-msgstr "数字键 /"
+msgstr "小键盘 /"
 
 #: ../src/common/accelcmn.cpp:109
 msgctxt "keyboard key"
 msgid "Windows_Left"
-msgstr "Windows_左键"
+msgstr "Windows_Left"
 
 #: ../src/common/accelcmn.cpp:110
 msgctxt "keyboard key"
 msgid "Windows_Right"
-msgstr "Windows_右键"
+msgstr "Windows_Right"
 
 #: ../src/common/accelcmn.cpp:111
 msgctxt "keyboard key"
 msgid "Windows_Menu"
-msgstr "Windows_菜单"
+msgstr "Windows_Menu"
 
 #: ../src/common/accelcmn.cpp:112
 msgctxt "keyboard key"
 msgid "Command"
-msgstr "命令"
+msgstr "Command"
 
 #: ../src/common/accelcmn.cpp:186 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "Ctrl"
-msgstr "控制键"
+msgstr "Ctrl"
 
 #: ../src/common/accelcmn.cpp:188 ../src/common/accelcmn.cpp:363
 msgctxt "keyboard key"
 msgid "Alt"
-msgstr "转换键"
+msgstr "Alt"
 
 #: ../src/common/accelcmn.cpp:190 ../src/common/accelcmn.cpp:361
 msgctxt "keyboard key"
 msgid "Shift"
-msgstr "移位键"
+msgstr "Shift"
 
 #: ../src/common/accelcmn.cpp:196
 msgctxt "keyboard key"
 msgid "num "
-msgstr "数字键 "
+msgstr "num "
 
 #: ../src/common/accelcmn.cpp:260 ../src/common/accelcmn.cpp:382
 msgctxt "keyboard key"
@@ -707,52 +707,52 @@ msgstr "F"
 #: ../src/common/accelcmn.cpp:277 ../src/common/accelcmn.cpp:385
 msgctxt "keyboard key"
 msgid "KP_F"
-msgstr "功能键_F"
+msgstr "KP_F"
 
 #: ../src/common/accelcmn.cpp:280 ../src/common/accelcmn.cpp:388
 msgctxt "keyboard key"
 msgid "KP_"
-msgstr "字符键_"
+msgstr "KP_"
 
 #: ../src/common/accelcmn.cpp:283 ../src/common/accelcmn.cpp:391
 msgctxt "keyboard key"
 msgid "SPECIAL"
-msgstr "特殊键"
+msgstr "SPECIAL"
 
 #: ../src/common/accelcmn.cpp:373
 msgid "Ctrl"
-msgstr "控制键"
+msgstr "Ctrl"
 
 #: ../src/common/appbase.cpp:786
 msgid "show this help message"
-msgstr "显示帮助信息"
+msgstr "显示此帮助信息"
 
 #: ../src/common/appbase.cpp:796
 msgid "generate verbose log messages"
-msgstr "生成详细日志信息"
+msgstr "输出详细日志信息"
 
 #: ../src/common/appcmn.cpp:256
 msgid "specify the theme to use"
-msgstr "指定视觉效果主题"
+msgstr "指定要使用的主题"
 
 #: ../src/common/appcmn.cpp:270
 msgid "specify display mode to use (e.g. 640x480-16)"
-msgstr "指定显示模式 (例如：640x480-16)"
+msgstr "指定要使用的显示模式（例如：640x480-16）"
 
 #: ../src/common/appcmn.cpp:292
 #, c-format
 msgid "Unsupported theme '%s'."
-msgstr "不支持的视觉效果主题 '%s'。"
+msgstr "不支持主题 '%s'。"
 
 #: ../src/common/appcmn.cpp:309
 #, c-format
 msgid "Invalid display mode specification '%s'."
-msgstr "无效的显示模式 '%s'。"
+msgstr "无效的显示模式描述 '%s'。"
 
 #: ../src/common/cmdline.cpp:875
 #, c-format
 msgid "Option '%s' can't be negated"
-msgstr "选项 '%s' 无法取消"
+msgstr "选项 '%s' 不支持否定形式"
 
 #: ../src/common/cmdline.cpp:889
 #, c-format
@@ -767,32 +767,32 @@ msgstr "未知选项 '%s'"
 #: ../src/common/cmdline.cpp:1004
 #, c-format
 msgid "Unexpected characters following option '%s'."
-msgstr "选项 '%s' 后有异常的字符。"
+msgstr "选项 '%s' 后包含意外字符。"
 
 #: ../src/common/cmdline.cpp:1039
 #, c-format
 msgid "Option '%s' requires a value."
-msgstr "选项 '%s' 须有一个值。"
+msgstr "选项 '%s' 需要一个值。"
 
 #: ../src/common/cmdline.cpp:1058
 #, c-format
 msgid "Separator expected after the option '%s'."
-msgstr "期望在选项 '%s' 后存在分隔号。"
+msgstr "选项 '%s' 后缺少分隔符。"
 
 #: ../src/common/cmdline.cpp:1088 ../src/common/cmdline.cpp:1106
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
-msgstr "'%s' 不是匹配选项 '%s'的正确数字值。"
+msgstr "'%s' 不是选项 '%s' 的有效数值。"
 
 #: ../src/common/cmdline.cpp:1122
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
-msgstr "选项 '%s'：'%s' 无法转成日期。"
+msgstr "选项 '%s'：无法将 '%s' 转换为日期。"
 
 #: ../src/common/cmdline.cpp:1170
 #, c-format
 msgid "Unexpected parameter '%s'"
-msgstr "异常参数 '%s'"
+msgstr "意外的参数 '%s'"
 
 #. TRANSLATORS: Short name and long name for a command line option
 #: ../src/common/cmdline.cpp:1197
@@ -817,19 +817,19 @@ msgstr "用法：%s"
 
 #: ../src/common/cmdline.cpp:1498
 msgid "str"
-msgstr "字符串"
+msgstr "str"
 
 #: ../src/common/cmdline.cpp:1502
 msgid "num"
-msgstr "数字"
+msgstr "num"
 
 #: ../src/common/cmdline.cpp:1506
 msgid "double"
-msgstr "实数"
+msgstr "double"
 
 #: ../src/common/cmdline.cpp:1510
 msgid "date"
-msgstr "日期"
+msgstr "date"
 
 #: ../src/common/cmdproc.cpp:250 ../src/common/cmdproc.cpp:276
 #: ../src/common/cmdproc.cpp:296
@@ -852,18 +852,18 @@ msgstr "撤销(&U)"
 
 #: ../src/common/cmdproc.cpp:277 ../src/common/cmdproc.cpp:297
 msgid "&Redo "
-msgstr "恢复(&R) "
+msgstr "重做(&R) "
 
 #: ../src/common/cmdproc.cpp:281 ../src/common/cmdproc.cpp:288
 #: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2881
 #: ../src/osx/textctrl_osx.cpp:650 ../src/richtext/richtextctrl.cpp:328
 msgid "&Redo"
-msgstr "恢复(&R)"
+msgstr "重做(&R)"
 
 #: ../src/common/colourcmn.cpp:41
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
-msgstr "颜色名称：错误的颜色规范：%s"
+msgstr "字符串转颜色：颜色格式无效：%s"
 
 #: ../src/common/config.cpp:259
 #, c-format
@@ -879,22 +879,22 @@ msgstr "环境变量展开失败：'%3$s' 中在位置 %2$u 处缺少 '%1$c'。"
 #: ../src/common/config.cpp:576 ../src/msw/regconf.cpp:272
 #, c-format
 msgid "'%s' has extra '..', ignored."
-msgstr "'%s' 有额外的 '..'，已忽略。"
+msgstr "'%s' 存在额外的 '..'，已忽略。"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2166 ../src/generic/datavgen.cpp:1430
 msgid "checked"
-msgstr "已勾选"
+msgstr "已选中"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2170 ../src/generic/datavgen.cpp:1432
 msgid "unchecked"
-msgstr "未勾选"
+msgstr "未选中"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/common/datavcmn.cpp:2174
 msgid "undetermined"
-msgstr "不确定"
+msgstr "部分选中"
 
 #: ../src/common/datetimefmt.cpp:1875
 msgid "today"
@@ -999,7 +999,7 @@ msgstr "午夜"
 #: ../src/common/debugrpt.cpp:209
 #, c-format
 msgid "Failed to create directory \"%s\""
-msgstr "无法创建 \"%s\" 目录"
+msgstr "无法创建目录 \"%s\""
 
 #: ../src/common/debugrpt.cpp:210
 msgid "Debug report couldn't be created."
@@ -1008,20 +1008,20 @@ msgstr "无法创建调试报告。"
 #: ../src/common/debugrpt.cpp:227
 #, c-format
 msgid "Failed to remove debug report file \"%s\""
-msgstr "无法删除调试报告文件 \"%s\""
+msgstr "无法移除调试报告文件 \"%s\""
 
 #: ../src/common/debugrpt.cpp:239
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "无法清除调试报告目录 \"%s\""
+msgstr "无法清理调试报告目录 \"%s\""
 
 #: ../src/common/debugrpt.cpp:514
 msgid "process context description"
-msgstr "进程上下文描述"
+msgstr "进程上下文信息"
 
 #: ../src/common/debugrpt.cpp:538
 msgid "dump of the process state (binary)"
-msgstr "转储进程状态 (二进制码)"
+msgstr "进程状态转储（二进制）"
 
 #: ../src/common/debugrpt.cpp:553
 msgid "Debug report generation has failed."
@@ -1031,15 +1031,15 @@ msgstr "无法生成调试报告。"
 #, c-format
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
-msgstr "处理调试报告失败，文件被保存在 \"%s\" 目录。"
+msgstr "处理调试报告失败，文件已保留在目录 \"%s\" 中。"
 
 #: ../src/common/debugrpt.cpp:573
 msgid "A debug report has been generated. It can be found in"
-msgstr "产生了一份调试报告，位于"
+msgstr "已生成调试报告，保存位置："
 
 #: ../src/common/debugrpt.cpp:576
 msgid "And includes the following files:\n"
-msgstr "并且包含以下文件：\n"
+msgstr "并包含以下文件：\n"
 
 #: ../src/common/debugrpt.cpp:586
 msgid ""
@@ -1047,16 +1047,16 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 "\n"
-"请将报告发送给程序维护人员，谢谢！\n"
+"请将此报告发送给程序维护者，谢谢！\n"
 
 #: ../src/common/debugrpt.cpp:729
 msgid "Failed to execute curl, please install it in PATH."
-msgstr "无法执行 curl，请将其安装到 PATH 路径中。"
+msgstr "无法执行 curl，请确保已安装并在 PATH 中可用。"
 
 #: ../src/common/debugrpt.cpp:742
 #, c-format
 msgid "Failed to upload the debug report (error code %d)."
-msgstr "无法上传调试报告 (错误码 %d)。"
+msgstr "无法上传调试报告（错误代码 %d）。"
 
 #: ../src/common/docview.cpp:366
 msgid "Save As"
@@ -1086,7 +1086,7 @@ msgstr "放弃更改(&D)"
 
 #: ../src/common/docview.cpp:523
 msgid "Do&n't close"
-msgstr "不关闭(&n)"
+msgstr "取消(&N)"
 
 #: ../src/common/docview.cpp:553
 #, c-format
@@ -1100,7 +1100,7 @@ msgstr "必须关闭此文档。"
 #: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr "保存 %s 失败，是否要重试？"
+msgstr "保存 %s 失败，是否重试？"
 
 #: ../src/common/docview.cpp:577
 msgid "Retry"
@@ -1113,22 +1113,22 @@ msgstr "放弃更改"
 #: ../src/common/docview.cpp:679
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
-msgstr "文件 \"%s\" 无法开启为写入模式。"
+msgstr "无法以写入方式打开文件 \"%s\"。"
 
 #: ../src/common/docview.cpp:685
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
-msgstr "无法将文档保存至 \"%s\" 文件。"
+msgstr "无法将文档保存到文件 \"%s\"。"
 
 #: ../src/common/docview.cpp:702
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
-msgstr "文件 \"%s\" 无法开启为读取模式。"
+msgstr "无法以读取方式打开文件 \"%s\"。"
 
 #: ../src/common/docview.cpp:714
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
-msgstr "无法从 \"%s\" 文件读取文档。"
+msgstr "无法从文件 \"%s\" 读取文档。"
 
 #: ../src/common/docview.cpp:1236
 #, c-format
@@ -1136,8 +1136,8 @@ msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
 "It has been removed from the most recently used files list."
 msgstr ""
-"'%s'文件不存在，无法打开。\n"
-"已从最近使用的文件列表中移去。"
+"文件 \"%s\" 不存在，无法打开。\n"
+"已将其从最近使用的文件列表中移除。"
 
 #: ../src/common/docview.cpp:1296
 msgid "Print preview creation failed."
@@ -1145,12 +1145,12 @@ msgstr "创建打印预览失败。"
 
 #: ../src/common/docview.cpp:1302
 msgid "Print Preview"
-msgstr "预览打印"
+msgstr "打印预览"
 
 #: ../src/common/docview.cpp:1517
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
-msgstr "无法确定 '%s' 文件格式。"
+msgstr "无法确定文件 '%s' 的格式。"
 
 #: ../src/common/docview.cpp:1643
 #, c-format
@@ -1171,11 +1171,11 @@ msgstr "文件错误"
 
 #: ../src/common/docview.cpp:1809
 msgid "Sorry, could not open this file."
-msgstr "抱歉，无法打开文件。"
+msgstr "抱歉，无法打开此文件。"
 
 #: ../src/common/docview.cpp:1843
 msgid "Sorry, the format for this file is unknown."
-msgstr "抱歉，此文件格式未知。"
+msgstr "抱歉，无法识别此文件的格式。"
 
 #: ../src/common/docview.cpp:1924
 msgid "Select a document template"
@@ -1196,12 +1196,12 @@ msgstr "视图"
 #: ../src/common/dynlib.cpp:81
 #, c-format
 msgid "Failed to load shared library '%s'"
-msgstr "无法加载 '%s' 共享库"
+msgstr "无法加载共享库 '%s'"
 
 #: ../src/common/dynlib.cpp:105
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
-msgstr "在动态连接库中找不到符号 '%s'"
+msgstr "在动态库中找不到符号 '%s'"
 
 #: ../src/common/ffile.cpp:56 ../src/common/file.cpp:215
 #, c-format
@@ -1226,41 +1226,41 @@ msgstr "写入文件 '%s' 出错"
 #: ../src/common/ffile.cpp:182
 #, c-format
 msgid "failed to flush the file '%s'"
-msgstr "清空文件 '%s' 失败"
+msgstr "无法刷新文件 '%s'"
 
 #: ../src/common/ffile.cpp:222
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
-msgstr "'%s' 文件定位错误 (stdio 不支持大文件)"
+msgstr "定位文件 '%s' 失败（stdio 不支持大文件）"
 
 #: ../src/common/ffile.cpp:232
 #, c-format
 msgid "Seek error on file '%s'"
-msgstr "'%s' 文件定位错误"
+msgstr "定位文件 '%s' 失败"
 
 #: ../src/common/ffile.cpp:248
 #, c-format
 msgid "Can't find current position in file '%s'"
-msgstr "无法在 '%s' 文件中找到当前位置"
+msgstr "在文件 '%s' 中无法找到当前位置"
 
 #: ../src/common/ffile.cpp:349 ../src/common/file.cpp:569
 msgid "Failed to set temporary file permissions"
-msgstr "无法设置临时文件的许可权限"
+msgstr "无法设置临时文件权限"
 
 #: ../src/common/ffile.cpp:371
 #, c-format
 msgid "can't remove file '%s'"
-msgstr "无法删除文件 '%s'"
+msgstr "无法移除文件 '%s'"
 
 #: ../src/common/ffile.cpp:376 ../src/common/file.cpp:591
 #, c-format
 msgid "can't commit changes to file '%s'"
-msgstr "无法提交修改至文件 '%s'"
+msgstr "无法将更改写入文件 '%s'"
 
 #: ../src/common/ffile.cpp:388 ../src/common/file.cpp:603
 #, c-format
 msgid "can't remove temporary file '%s'"
-msgstr "无法删除临时文件 '%s'"
+msgstr "无法移除临时文件 '%s'"
 
 #: ../src/common/file.cpp:162
 #, c-format
@@ -1285,7 +1285,7 @@ msgstr "无法写入文件描述符 %d"
 #: ../src/common/file.cpp:390
 #, c-format
 msgid "can't flush file descriptor %d"
-msgstr "无法清空文件描述符 %d"
+msgstr "无法刷新文件描述符 %d"
 
 #: ../src/common/file.cpp:432
 #, c-format
@@ -1295,17 +1295,17 @@ msgstr "无法定位文件描述符 %d"
 #: ../src/common/file.cpp:446
 #, c-format
 msgid "can't get seek position on file descriptor %d"
-msgstr "无法获得文件描述符 %d 的指针位置"
+msgstr "无法从文件描述符 %d 中定位当前位置"
 
 #: ../src/common/file.cpp:475
 #, c-format
 msgid "can't find length of file on file descriptor %d"
-msgstr "无法获得文件描述符 %d 的文件长度"
+msgstr "无法从文件描述符 %d 中获得文件长度"
 
 #: ../src/common/file.cpp:505
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
-msgstr "无法确定文件是否已达描述符 %d 的尾部"
+msgstr "无法从文件描述符 %d 确定是否已到达文件末尾"
 
 #: ../src/common/fileconf.cpp:352
 #, c-format
@@ -1313,8 +1313,8 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
-"此外，现有配置文件已重命名为 \"%s\"，且无法恢复原名，请手动将其重命名回原始路"
-"径 \"%s\""
+"此外，现有的配置文件已被重命名为 \"%s\"，且无法恢复原名"
+"请手动将其重命名回其原始路径 \"%s\""
 
 #: ../src/common/fileconf.cpp:389
 msgid " due to the following error:\n"
@@ -1345,11 +1345,11 @@ msgstr "无法打开用户配置文件 '%s'。"
 #: ../src/common/fileconf.cpp:483
 #, c-format
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
-msgstr "为了防止重写已有的 \"%s\" 文件，不会保存更改"
+msgstr "为避免覆盖现有文件 \"%s\"，更改将不会被保存"
 
 #: ../src/common/fileconf.cpp:583
 msgid "Error reading config options."
-msgstr "读取配置选项错误。"
+msgstr "读取配置选项时出错。"
 
 #: ../src/common/fileconf.cpp:593
 msgid "Failed to read config options."
@@ -1363,12 +1363,12 @@ msgstr "文件 '%1$s'：第 %3$zu 行存在异常字符 %2$c。"
 #: ../src/common/fileconf.cpp:736
 #, c-format
 msgid "file '%s', line %zu: '%s' ignored after group header."
-msgstr "文件 '%s'，第 %zu 行：忽略群组标头之后的 '%s'。"
+msgstr "文件 '%s'，第 %zu 行：组标题之后的 '%s' 已被忽略。"
 
 #: ../src/common/fileconf.cpp:765
 #, c-format
 msgid "file '%s', line %zu: '=' expected."
-msgstr "文件 '%s'，第 %zu 行：应有 '='。"
+msgstr "文件 '%s'，第 %zu 行：缺少 '='。"
 
 #: ../src/common/fileconf.cpp:778
 #, c-format
@@ -1403,7 +1403,7 @@ msgstr "无法更新用户配置文件。"
 
 #: ../src/common/fileconf.cpp:1201
 msgid "Error saving user configuration data."
-msgstr "保存用户配置数据错误。"
+msgstr "保存用户配置数据时出错。"
 
 #: ../src/common/fileconf.cpp:1313
 #, c-format
@@ -1413,12 +1413,12 @@ msgstr "无法删除用户配置文件 '%s'"
 #: ../src/common/fileconf.cpp:2007
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
-msgstr "条目 '%s' 在 '%s' 组中已出现一次以上"
+msgstr "条目 '%s' 在组 '%s' 中出现多次"
 
 #: ../src/common/fileconf.cpp:2021
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
-msgstr "忽略对不可变表项 '%s' 的修改。"
+msgstr "已忽略对不可变键 '%s' 的修改。"
 
 #: ../src/common/fileconf.cpp:2118
 #, c-format
@@ -1428,22 +1428,22 @@ msgstr "'%s' 尾部的反斜杠将被忽略"
 #: ../src/common/fileconf.cpp:2153
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
-msgstr "在字符串 '%2$s' 的位置 %1$d 处发现意外的 \"。"
+msgstr "在 '%2$s' 的位置 %1$d 处出现意外的 \"。"
 
 #: ../src/common/filefn.cpp:474
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
-msgstr "无法复制 '%s' 文件至 '%s'"
+msgstr "无法将文件 '%s' 复制到 '%s'"
 
 #: ../src/common/filefn.cpp:487
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
-msgstr "不可能获得文件 '%s' 的权限"
+msgstr "无法获取文件 '%s' 的权限"
 
 #: ../src/common/filefn.cpp:501
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
-msgstr "不可能重写文件 '%s'"
+msgstr "无法覆盖文件 '%s'"
 
 #: ../src/common/filefn.cpp:508
 #, c-format
@@ -1453,7 +1453,7 @@ msgstr "无法将文件 '%s' 复制到 '%s'。"
 #: ../src/common/filefn.cpp:556
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
-msgstr "不可能设置文件 '%s' 的权限"
+msgstr "无法为文件 '%s' 设置权限"
 
 #: ../src/common/filefn.cpp:606
 #, c-format
@@ -1465,12 +1465,12 @@ msgstr "无法将文件 '%s' 重命名为 '%s'，因为目标文件已存在。"
 #: ../src/common/filefn.cpp:623
 #, c-format
 msgid "File '%s' couldn't be renamed '%s'"
-msgstr "文件 '%s' 无法重命名为 '%s'"
+msgstr "无法将文件 '%s' 重命名为 '%s'"
 
 #: ../src/common/filefn.cpp:639
 #, c-format
 msgid "File '%s' couldn't be removed"
-msgstr "文件 '%s' 无法被移除"
+msgstr "无法移除文件 '%s'"
 
 #: ../src/common/filefn.cpp:666
 #, c-format
@@ -1503,12 +1503,12 @@ msgstr "文件 (%s)"
 #: ../src/common/filename.cpp:182
 #, c-format
 msgid "Failed to open '%s' for reading"
-msgstr "无法打开欲读取的文件 '%s'"
+msgstr "无法以读取方式打开 '%s'"
 
 #: ../src/common/filename.cpp:187
 #, c-format
 msgid "Failed to open '%s' for writing"
-msgstr "无法打开欲写入的文件 '%s'"
+msgstr "无法以写入方式打开 '%s'"
 
 #: ../src/common/filename.cpp:199
 msgid "Failed to close file handle"
@@ -1530,12 +1530,12 @@ msgstr "无法修改文件 '%s' 的时间"
 #: ../src/common/filename.cpp:2877
 #, c-format
 msgid "Failed to touch the file '%s'"
-msgstr "无法更新文件 '%s' 的修改、访问时间"
+msgstr "无法更新文件 '%s' 的时间"
 
 #: ../src/common/filename.cpp:2958
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
-msgstr "无法提取文件 '%s' 的时间"
+msgstr "无法获取文件 '%s' 的时间"
 
 #: ../src/common/filepickercmn.cpp:39 ../src/common/filepickercmn.cpp:40
 msgid "Browse"
@@ -1555,12 +1555,12 @@ msgstr "%s 文件 (%s)|%s"
 #: ../src/common/fldlgcmn.cpp:1072
 #, c-format
 msgid "Load %s file"
-msgstr "装入文件 %s"
+msgstr "打开 %s 文件"
 
 #: ../src/common/fldlgcmn.cpp:1074
 #, c-format
 msgid "Save %s file"
-msgstr "保存文件 %s"
+msgstr "保存 %s 文件"
 
 #: ../src/common/fmapbase.cpp:144
 msgid "Western European (ISO-8859-1)"
@@ -1572,11 +1572,11 @@ msgstr "中欧语言 (ISO-8859-2)"
 
 #: ../src/common/fmapbase.cpp:146
 msgid "Esperanto (ISO-8859-3)"
-msgstr "南欧语言 (ISO-8859-3)"
+msgstr "世界语 (ISO-8859-3)"
 
 #: ../src/common/fmapbase.cpp:147
 msgid "Baltic (old) (ISO-8859-4)"
-msgstr "北欧语言 (旧式) (ISO-8859-4)"
+msgstr "波罗的语（旧） (ISO-8859-4)"
 
 #: ../src/common/fmapbase.cpp:148
 msgid "Cyrillic (ISO-8859-5)"
@@ -1600,7 +1600,7 @@ msgstr "土耳其语 (ISO-8859-9)"
 
 #: ../src/common/fmapbase.cpp:153
 msgid "Nordic (ISO-8859-10)"
-msgstr "北日耳曼语支 (ISO-8859-10)"
+msgstr "北欧语言 (ISO-8859-10)"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Thai (ISO-8859-11)"
@@ -1608,19 +1608,19 @@ msgstr "泰文 (ISO-8859-11)"
 
 #: ../src/common/fmapbase.cpp:155
 msgid "Indian (ISO-8859-12)"
-msgstr "ISO-8859-12"
+msgstr "印度文 (ISO-8859-12)"
 
 #: ../src/common/fmapbase.cpp:156
 msgid "Baltic (ISO-8859-13)"
-msgstr "波罗的语族 (ISO-8859-13)"
+msgstr "波罗的语 (ISO-8859-13)"
 
 #: ../src/common/fmapbase.cpp:157
 msgid "Celtic (ISO-8859-14)"
-msgstr "凯尔特语族 (ISO-8859-14)"
+msgstr "凯尔特语 (ISO-8859-14)"
 
 #: ../src/common/fmapbase.cpp:158
 msgid "Western European with Euro (ISO-8859-15)"
-msgstr "西欧带欧元符号 (ISO-8859-15)"
+msgstr "西欧语言（含欧元符号）(ISO-8859-15)"
 
 #: ../src/common/fmapbase.cpp:159
 msgid "KOI8-R"
@@ -1652,7 +1652,7 @@ msgstr "Windows 韩文 (CP 949)"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
-msgstr "Windows 正體中文 (CP 950) 或 Big-5"
+msgstr "Windows 繁体中文 (CP 950) 或 Big-5"
 
 #: ../src/common/fmapbase.cpp:167
 msgid "Windows Central European (CP 1250)"
@@ -1684,7 +1684,7 @@ msgstr "Windows 阿拉伯文 (CP 1256)"
 
 #: ../src/common/fmapbase.cpp:174
 msgid "Windows Baltic (CP 1257)"
-msgstr "Windows 波罗的语族 (CP 1257)"
+msgstr "Windows 波罗的语 (CP 1257)"
 
 #: ../src/common/fmapbase.cpp:175
 msgid "Windows Vietnamese (CP 1258)"
@@ -1692,7 +1692,7 @@ msgstr "Windows 越南文 (CP 1258)"
 
 #: ../src/common/fmapbase.cpp:176
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows 组合韩文 (CP 1361)"
+msgstr "Windows Johab (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:177
 msgid "Windows/DOS OEM (CP 437)"
@@ -1700,39 +1700,39 @@ msgstr "Windows/DOS OEM (CP 437)"
 
 #: ../src/common/fmapbase.cpp:178
 msgid "Unicode 7 bit (UTF-7)"
-msgstr "7 位的统一码 (UTF-7)"
+msgstr "Unicode 7 位 (UTF-7)"
 
 #: ../src/common/fmapbase.cpp:179
 msgid "Unicode 8 bit (UTF-8)"
-msgstr "8 位的统一码 (UTF-8)"
+msgstr "Unicode 8 位 (UTF-8)"
 
 #: ../src/common/fmapbase.cpp:181 ../src/common/fmapbase.cpp:187
 msgid "Unicode 16 bit (UTF-16)"
-msgstr "16 位的统一码 (UTF-16)"
+msgstr "Unicode 16 位 (UTF-16)"
 
 #: ../src/common/fmapbase.cpp:182
 msgid "Unicode 16 bit Little Endian (UTF-16LE)"
-msgstr "16 位小端序统一码 (UTF-16LE)"
+msgstr "Unicode 16 位（小端序）(UTF-16LE)"
 
 #: ../src/common/fmapbase.cpp:183 ../src/common/fmapbase.cpp:189
 msgid "Unicode 32 bit (UTF-32)"
-msgstr "32 位的统一码 (UTF-32)"
+msgstr "Unicode 32 位 (UTF-32)"
 
 #: ../src/common/fmapbase.cpp:184
 msgid "Unicode 32 bit Little Endian (UTF-32LE)"
-msgstr "32 位小端序统一码 (UTF-32LE)"
+msgstr "Unicode 32 位（小端序）(UTF-32LE)"
 
 #: ../src/common/fmapbase.cpp:186
 msgid "Unicode 16 bit Big Endian (UTF-16BE)"
-msgstr "16 位大端序统一码 (UTF-16BE)"
+msgstr "Unicode 16 位（大端序）(UTF-16BE)"
 
 #: ../src/common/fmapbase.cpp:188
 msgid "Unicode 32 bit Big Endian (UTF-32BE)"
-msgstr "32 位大端序统一码 (UTF-32BE)"
+msgstr "Unicode 32 位（大端序）(UTF-32BE)"
 
 #: ../src/common/fmapbase.cpp:191
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
-msgstr "扩展的日语 Unix 代码页 (EUC-JP)"
+msgstr "日文扩展 Unix 代码页 (EUC-JP)"
 
 #: ../src/common/fmapbase.cpp:192
 msgid "US-ASCII"
@@ -1913,7 +1913,7 @@ msgstr "未知编码 (%d)"
 
 #: ../src/common/fmapbase.cpp:815 ../src/richtext/richtextstyles.cpp:776
 msgid "default"
-msgstr "默认值"
+msgstr "默认"
 
 #: ../src/common/fmapbase.cpp:829
 #, c-format
@@ -1930,15 +1930,15 @@ msgstr " 删除线"
 
 #: ../src/common/fontcmn.cpp:942
 msgid " thin"
-msgstr " 超细"
+msgstr " 极细"
 
 #: ../src/common/fontcmn.cpp:946
 msgid " extra light"
-msgstr " 纤细"
+msgstr " 特细"
 
 #: ../src/common/fontcmn.cpp:950
 msgid " light"
-msgstr " 细体"
+msgstr " 细"
 
 #: ../src/common/fontcmn.cpp:954
 msgid " medium"
@@ -1954,11 +1954,11 @@ msgstr " 粗体"
 
 #: ../src/common/fontcmn.cpp:966
 msgid " extra bold"
-msgstr " 大粗"
+msgstr " 特粗"
 
 #: ../src/common/fontcmn.cpp:970
 msgid " heavy"
-msgstr " 特粗"
+msgstr " 粗黑"
 
 #: ../src/common/fontcmn.cpp:974
 msgid " extra heavy"
@@ -1974,15 +1974,15 @@ msgstr "删除线"
 
 #: ../src/common/fontcmn.cpp:1143
 msgid "thin"
-msgstr "超细"
+msgstr "极细"
 
 #: ../src/common/fontcmn.cpp:1156
 msgid "extralight"
-msgstr "纤细"
+msgstr "特细"
 
 #: ../src/common/fontcmn.cpp:1161
 msgid "light"
-msgstr "细体"
+msgstr "细"
 
 #: ../src/common/fontcmn.cpp:1169 ../src/richtext/richtextstyles.cpp:775
 msgid "normal"
@@ -2002,11 +2002,11 @@ msgstr "粗体"
 
 #: ../src/common/fontcmn.cpp:1194
 msgid "extrabold"
-msgstr "大粗"
+msgstr "特粗"
 
 #: ../src/common/fontcmn.cpp:1204
 msgid "heavy"
-msgstr "特粗"
+msgstr "粗黑"
 
 #: ../src/common/fontcmn.cpp:1212
 msgid "extraheavy"
@@ -2027,14 +2027,14 @@ msgid ""
 "another charset to replace it with or choose\n"
 "[Cancel] if it cannot be replaced"
 msgstr ""
-"不明的字符集 '%s'。\n"
-"选择其它字符集更换，\n"
-"如果无法替代请选择【取消】"
+"未知字符集 '%s'。\n"
+"你可以选择另一个字符集来替代，\n"
+"如果无法替代请选择「取消」"
 
 #: ../src/common/fontmap.cpp:241
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
-msgstr "无法记忆字符集 '%s' 的编码。"
+msgstr "未能记住字符集 '%s' 的编码。"
 
 #: ../src/common/fontmap.cpp:321
 msgid "can't load any font, aborting"
@@ -2052,9 +2052,9 @@ msgid ""
 "Do you want to use this encoding (otherwise you will have to choose another "
 "one)?"
 msgstr ""
-"编码 '%s' 的字体未找到，无法显示文本。\n"
-"但发现另一替代编码 '%s'。\n"
-"是否使用该编码？(否则您必须选择另外的编码)"
+"未找到用于显示编码为 '%s' 的文本的字体。\n"
+"但有可用的替代编码 '%s'。\n"
+"是否使用该编码？(否则必须选择其他编码)"
 
 #: ../src/common/fontmap.cpp:422
 #, c-format
@@ -2063,8 +2063,8 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
-"编码 '%s' 的字体未找到，无法显示文本。\n"
-"是否选择用于该编码的字体？\n"
+"未找到用于显示编码为 '%s' 的文本的字体。\n"
+"是否要为该编码选择一种字体？\n"
 "(否则该编码的文本将无法正确显示)"
 
 #: ../src/common/fs_mem.cpp:169
@@ -2075,7 +2075,7 @@ msgstr "内存 VFS 已包含文件 '%s'！"
 #: ../src/common/fs_mem.cpp:232
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr "试图从内存 VFS 中移去文件 '%s'，但它并没有被装入内存！"
+msgstr "试图从内存 VFS 中移除文件 '%s'，但它并没有被装入内存！"
 
 #: ../src/common/fs_mem.cpp:262
 #, c-format
@@ -2199,11 +2199,11 @@ msgstr "DIB 头：编码与色彩的位深度不匹配。"
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr "BMP 头：无效的颜色数 (%d)。"
+msgstr "BMP 头：颜色数无效 (%d)。"
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
-msgstr "读取图像 DIB 错误。"
+msgstr "读取图像 DIB 时出错。"
 
 #: ../src/common/imagbmp.cpp:1294
 msgid "ICO: Error in reading mask DIB."
@@ -2227,7 +2227,7 @@ msgstr "ICO：写入图像文件错误！"
 
 #: ../src/common/imagbmp.cpp:1701
 msgid "ICO: Invalid icon index."
-msgstr "ICO：无效的图标索引。"
+msgstr "ICO：图标索引无效。"
 
 #: ../src/common/image.cpp:2410
 msgid "Image and mask have different sizes."
@@ -2255,22 +2255,22 @@ msgstr "无法从文件 \"%s\" 中加载图像。"
 #: ../src/common/image.cpp:2761
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
-msgstr "无法从将图像保存至文件 '%s' 中：无法识别的扩展名。"
+msgstr "无法将图像保存到文件 '%s'：未知的扩展名。"
 
 #: ../src/common/image.cpp:2869
 msgid "No handler found for image type."
-msgstr "没有找到图像类型的句柄。"
+msgstr "未找到该图像类型的处理程序。"
 
 #: ../src/common/image.cpp:2877 ../src/common/image.cpp:3000
 #: ../src/common/image.cpp:3066
 #, c-format
 msgid "No image handler for type %d defined."
-msgstr "没有定义 %d 类型的图像句柄。"
+msgstr "未定义 %d 类型的图像处理程序。"
 
 #: ../src/common/image.cpp:2887
 #, c-format
 msgid "Image file is not of type %d."
-msgstr "图像文件的不是 %d 类型。"
+msgstr "图像文件不是 %d 类型。"
 
 #: ../src/common/image.cpp:2970
 msgid "Can't automatically determine the image format for non-seekable input."
@@ -2288,7 +2288,7 @@ msgstr "这不是 %s。"
 #: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
-msgstr "没有类型 %s 的图像句柄定义。"
+msgstr "未定义用于处理类型为 %s 的图像处理程序。"
 
 #: ../src/common/image.cpp:3041
 #, c-format
@@ -2302,7 +2302,7 @@ msgstr "无法确认图像文件 \"%s\" 的格式。"
 
 #: ../src/common/imaggif.cpp:124
 msgid "GIF: error in GIF image format."
-msgstr "GIF：GIF文件格式错误。"
+msgstr "GIF：GIF 文件格式错误。"
 
 #: ../src/common/imaggif.cpp:129
 msgid "GIF: not enough memory."
@@ -2380,7 +2380,7 @@ msgstr "无法保存 PNG 图像。"
 
 #: ../src/common/imagpnm.cpp:71
 msgid "PNM: File format is not recognized."
-msgstr "PNM：无法识别的文件格式。"
+msgstr "PNM：无法识别文件格式。"
 
 #: ../src/common/imagpnm.cpp:89
 msgid "PNM: Couldn't allocate memory."
@@ -2394,11 +2394,11 @@ msgstr "PNM：文件似乎已被截断。"
 #: ../src/common/imagtiff.cpp:69
 #, c-format
 msgid " (in module \"%s\")"
-msgstr " (于模块：\"%s\")"
+msgstr "（在模块 \"%s\" 中）"
 
 #: ../src/common/imagtiff.cpp:304
 msgid "TIFF: Error loading image."
-msgstr "TIFF：加载图像错误。"
+msgstr "TIFF：加载图像时出错。"
 
 #: ../src/common/imagtiff.cpp:314
 msgid "Invalid TIFF image index."
@@ -2415,24 +2415,24 @@ msgstr "TIFF：无法分配内存。"
 
 #: ../src/common/imagtiff.cpp:471
 msgid "TIFF: Error reading image."
-msgstr "TIFF：读取图像错误。"
+msgstr "TIFF：读取图像时出错。"
 
 #: ../src/common/imagtiff.cpp:532
 #, c-format
 msgid "Unknown TIFF resolution unit %d ignored"
-msgstr "未知的 TIFF 分辨率单位 %d，已忽略"
+msgstr "未知 TIFF 分辨率单位 %d，已忽略"
 
 #: ../src/common/imagtiff.cpp:611
 msgid "TIFF: Error saving image."
-msgstr "TIFF：保存图像错误。"
+msgstr "TIFF：保存图像时出错。"
 
 #: ../src/common/imagtiff.cpp:868
 msgid "TIFF: Error writing image."
-msgstr "TIFF：写入图像错误。"
+msgstr "TIFF：写入图像时出错。"
 
 #: ../src/common/imagtiff.cpp:881
 msgid "TIFF: Error flushing data."
-msgstr "TIFF：刷新数据失败。"
+msgstr "TIFF：刷新数据时出错。"
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
@@ -2444,7 +2444,7 @@ msgstr "WebP：分配图像内存失败。"
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr "WebP：解码 RGBA 图像数据失败。"
+msgstr "WebP：无法解码 RGBA 图像数据。"
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
@@ -2464,18 +2464,18 @@ msgstr "WebP：动画解码出错。"
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr "WebP：获取下一动画帧出错。"
+msgstr "WebP：获取下一动画帧时出错。"
 
 #: ../src/common/init.cpp:172
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
 "ignored."
-msgstr "命令行参数 %d 无法转化成统一码，将被忽略。"
+msgstr "命令行参数 %d 无法转化成 Unicode，将被忽略。"
 
 #: ../src/common/init.cpp:344
 msgid "Initialization failed in post init, aborting."
-msgstr "在后初始化阶段出错，退出。"
+msgstr "后期初始化失败，正在中止。"
 
 #: ../src/common/intl.cpp:378
 #, c-format
@@ -2492,33 +2492,33 @@ msgstr "警告： "
 
 #: ../src/common/log.cpp:284
 msgid "The previous message repeated once."
-msgstr "前则消息已重复一次。"
+msgstr "上一条消息已重复一次。"
 
 #: ../src/common/log.cpp:291
 #, c-format
 msgid "The previous message repeated %u time."
 msgid_plural "The previous message repeated %u times."
-msgstr[0] "前则消息已重复 %u 次。"
+msgstr[0] "上一条消息已重复 %u 次。"
 
 #: ../src/common/log.cpp:319
 #, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] "最后重复的消息（\"%s\"，%u 次）没有输出"
+msgstr[0] "最后重复的消息（\"%s\"，%u 次）未输出"
 
 #: ../src/common/log.cpp:435
 #, c-format
 msgid " (error %ld: %s)"
-msgstr " (错误 %ld： %s)"
+msgstr "（错误 %ld：%s）"
 
 #: ../src/common/lzmastream.cpp:121
 msgid "Failed to allocate memory for LZMA decompression."
-msgstr "无法分配内存用于 LZMA 解压。"
+msgstr "无法分配用于 LZMA 解压的内存。"
 
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr "初始化 LZMA 解压失败：异常的错误 %u。"
+msgstr "LZMA 解压初始化失败：意外错误 %u。"
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
@@ -2534,21 +2534,21 @@ msgstr "输入已损坏"
 
 #: ../src/common/lzmastream.cpp:192
 msgid "unknown decompression error"
-msgstr "不明解压缩错误"
+msgstr "未知的解压缩错误"
 
 #: ../src/common/lzmastream.cpp:196
 #, c-format
 msgid "LZMA decompression error: %s"
-msgstr "LZMA 解压错误：%s"
+msgstr "LZMA 解压出错：%s"
 
 #: ../src/common/lzmastream.cpp:231
 msgid "Failed to allocate memory for LZMA compression."
-msgstr "无法配置内存供 LZMA 压缩用。"
+msgstr "无法为 LZMA 压缩分配内存。"
 
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
-msgstr "初始化 LZMA 压缩失败：异常的错误 %u。"
+msgstr "初始化 LZMA 压缩失败：意外错误 %u。"
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -2557,7 +2557,7 @@ msgstr "内存耗尽"
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
 msgid "unknown compression error"
-msgstr "不明压缩错误"
+msgstr "未知的压缩错误"
 
 #: ../src/common/lzmastream.cpp:280
 #, c-format
@@ -2567,12 +2567,12 @@ msgstr "LZMA 压缩错误：%s"
 #: ../src/common/lzmastream.cpp:350
 #, c-format
 msgid "LZMA compression error when flushing output: %s"
-msgstr "刷新输出时出现 LZMA 压缩错误：%s"
+msgstr "刷新输出时 LZMA 压缩出错：%s"
 
 #: ../src/common/mimecmn.cpp:167
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
-msgstr "媒体类型 %s 的条目中，'{' 未闭合。"
+msgstr "MIME 类型 %s 的条目中 '{' 未闭合。"
 
 #: ../src/common/module.cpp:76
 #, c-format
@@ -2595,475 +2595,475 @@ msgstr "消息"
 
 #: ../src/common/paper.cpp:70
 msgid "Letter, 8 1/2 x 11 in"
-msgstr "信纸，8 1/2 x 11 英寸"
+msgstr "Letter, 8 1/2 x 11 in"
 
 #: ../src/common/paper.cpp:71
 msgid "Legal, 8 1/2 x 14 in"
-msgstr "标准法律纸张，8 1/2 x 14 英寸"
+msgstr "Legal, 8 1/2 x 14 in"
 
 #: ../src/common/paper.cpp:72
 msgid "A4 sheet, 210 x 297 mm"
-msgstr "A4 纸张，210 x 297 毫米"
+msgstr "A4 sheet, 210 x 297 mm"
 
 #: ../src/common/paper.cpp:73
 msgid "C sheet, 17 x 22 in"
-msgstr "C 纸张，17 x 22 英寸"
+msgstr "C sheet, 17 x 22 in"
 
 #: ../src/common/paper.cpp:74
 msgid "D sheet, 22 x 34 in"
-msgstr "D 纸张，22 x 34 英寸"
+msgstr "D sheet, 22 x 34 in"
 
 #: ../src/common/paper.cpp:75
 msgid "E sheet, 34 x 44 in"
-msgstr "E 纸张，34 x 44 英寸"
+msgstr "E sheet, 34 x 44 in"
 
 #: ../src/common/paper.cpp:76
 msgid "Letter Small, 8 1/2 x 11 in"
-msgstr "信纸 (小)，8 1/2 x 11 英寸"
+msgstr "Letter Small, 8 1/2 x 11 in"
 
 #: ../src/common/paper.cpp:77
 msgid "Tabloid, 11 x 17 in"
-msgstr "小报，11 x 17 英寸"
+msgstr "Tabloid, 11 x 17 in"
 
 #: ../src/common/paper.cpp:78
 msgid "Ledger, 17 x 11 in"
-msgstr "帐簿，17 x 11 英寸"
+msgstr "Ledger, 17 x 11 in"
 
 #: ../src/common/paper.cpp:79
 msgid "Statement, 5 1/2 x 8 1/2 in"
-msgstr "报表用纸，5 1/2 x 8 1/2 英寸"
+msgstr "Statement, 5 1/2 x 8 1/2 in"
 
 #: ../src/common/paper.cpp:80
 msgid "Executive, 7 1/4 x 10 1/2 in"
-msgstr "实用纸张，7 1/4 x 10 1/2 英寸"
+msgstr "Executive, 7 1/4 x 10 1/2 in"
 
 #: ../src/common/paper.cpp:81
 msgid "A3 sheet, 297 x 420 mm"
-msgstr "A3 纸张，297 x 420 毫米"
+msgstr "A3 sheet, 297 x 420 mm"
 
 #: ../src/common/paper.cpp:82
 msgid "A4 small sheet, 210 x 297 mm"
-msgstr "小 A4 纸张，210 x 297 毫米"
+msgstr "A4 small sheet, 210 x 297 mm"
 
 #: ../src/common/paper.cpp:83
 msgid "A5 sheet, 148 x 210 mm"
-msgstr "A5 纸张，148 x 210 毫米"
+msgstr "A5 sheet, 148 x 210 mm"
 
 #: ../src/common/paper.cpp:84
 msgid "B4 sheet, 250 x 354 mm"
-msgstr "B4 纸张，250 x 354 毫米"
+msgstr "B4 sheet, 250 x 354 mm"
 
 #: ../src/common/paper.cpp:85
 msgid "B5 sheet, 182 x 257 millimeter"
-msgstr "B5 纸张，182 x 257 毫米"
+msgstr "B5 sheet, 182 x 257 mm"
 
 #: ../src/common/paper.cpp:86
 msgid "Folio, 8 1/2 x 13 in"
-msgstr "对开纸，8 1/2 x 13 英寸"
+msgstr "Folio, 8 1/2 x 13 in"
 
 #: ../src/common/paper.cpp:87
 msgid "Quarto, 215 x 275 mm"
-msgstr "四开，215 x 275 毫米"
+msgstr "Quarto, 215 x 275 mm"
 
 #: ../src/common/paper.cpp:88
 msgid "10 x 14 in"
-msgstr "10 x 14 英寸"
+msgstr "10 x 14 in"
 
 #: ../src/common/paper.cpp:89
 msgid "11 x 17 in"
-msgstr "11 x 17 英寸"
+msgstr "11 x 17 in"
 
 #: ../src/common/paper.cpp:90
 msgid "Note, 8 1/2 x 11 in"
-msgstr "笔记簿，8 1/2 x 11 英寸"
+msgstr "Note, 8 1/2 x 11 in"
 
 #: ../src/common/paper.cpp:91
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
-msgstr "#9 信封，3 7/8 x 8 7/8 英寸"
+msgstr "#9 Envelope, 3 7/8 x 8 7/8 in"
 
 #: ../src/common/paper.cpp:92
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
-msgstr "#10 信封，4 1/8 x 9 1/2 英寸"
+msgstr "#10 Envelope, 4 1/8 x 9 1/2 in"
 
 #: ../src/common/paper.cpp:93
 msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
-msgstr "#11 信封，4 1/2 x 10 3/8 英寸"
+msgstr "#11 Envelope, 4 1/2 x 10 3/8 in"
 
 #: ../src/common/paper.cpp:94
 msgid "#12 Envelope, 4 3/4 x 11 in"
-msgstr "#12 信封，4 3/4 x 11 英寸"
+msgstr "#12 Envelope, 4 3/4 x 11 in"
 
 #: ../src/common/paper.cpp:95
 msgid "#14 Envelope, 5 x 11 1/2 in"
-msgstr "#14 信封，5 x 11 1/2 英寸"
+msgstr "#14 Envelope, 5 x 11 1/2 in"
 
 #: ../src/common/paper.cpp:96
 msgid "DL Envelope, 110 x 220 mm"
-msgstr "DL 信封，110 x 220 毫米"
+msgstr "DL Envelope, 110 x 220 mm"
 
 #: ../src/common/paper.cpp:97
 msgid "C5 Envelope, 162 x 229 mm"
-msgstr "C5 信封，162 x 229 毫米"
+msgstr "C5 Envelope, 162 x 229 mm"
 
 #: ../src/common/paper.cpp:98
 msgid "C3 Envelope, 324 x 458 mm"
-msgstr "C3 信封，324 x 458 毫米"
+msgstr "C3 Envelope, 324 x 458 mm"
 
 #: ../src/common/paper.cpp:99
 msgid "C4 Envelope, 229 x 324 mm"
-msgstr "C4 信封，229 x 324 毫米"
+msgstr "C4 Envelope, 229 x 324 mm"
 
 #: ../src/common/paper.cpp:100
 msgid "C6 Envelope, 114 x 162 mm"
-msgstr "C6 信封，114 x 162 毫米"
+msgstr "C6 Envelope, 114 x 162 mm"
 
 #: ../src/common/paper.cpp:101
 msgid "C65 Envelope, 114 x 229 mm"
-msgstr "C65 信封，114 x 229 毫米"
+msgstr "C65 Envelope, 114 x 229 mm"
 
 #: ../src/common/paper.cpp:102
 msgid "B4 Envelope, 250 x 353 mm"
-msgstr "B4 信封，250 x 353 毫米"
+msgstr "B4 Envelope, 250 x 353 mm"
 
 #: ../src/common/paper.cpp:103
 msgid "B5 Envelope, 176 x 250 mm"
-msgstr "B5 信封，176 x 250 毫米"
+msgstr "B5 Envelope, 176 x 250 mm"
 
 #: ../src/common/paper.cpp:104
 msgid "B6 Envelope, 176 x 125 mm"
-msgstr "B6 信封，176 x 125 毫米"
+msgstr "B6 Envelope, 176 x 125 mm"
 
 #: ../src/common/paper.cpp:105
 msgid "Italy Envelope, 110 x 230 mm"
-msgstr "意大利信封，110 x 230 毫米"
+msgstr "Italy Envelope, 110 x 230 mm"
 
 #: ../src/common/paper.cpp:106
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
-msgstr "7.75信封，3 7/8 x 7 1/2 英寸"
+msgstr "Monarch Envelope, 3 7/8 x 7 1/2 in"
 
 #: ../src/common/paper.cpp:107
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
-msgstr "6 3/4 信封，3 5/8 x 6 1/2 英寸"
+msgstr "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 
 #: ../src/common/paper.cpp:108
 msgid "US Std Fanfold, 14 7/8 x 11 in"
-msgstr "美国标准复写簿，14 7/8 x 11 英寸"
+msgstr "US Std Fanfold, 14 7/8 x 11 in"
 
 #: ../src/common/paper.cpp:109
 msgid "German Std Fanfold, 8 1/2 x 12 in"
-msgstr "德国标准复写簿，8 1/2 x 12 英寸"
+msgstr "German Std Fanfold, 8 1/2 x 12 in"
 
 #: ../src/common/paper.cpp:110
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
-msgstr "德国法定复写簿，8 1/2 x 13 英寸"
+msgstr "German Legal Fanfold, 8 1/2 x 13 in"
 
 #: ../src/common/paper.cpp:112
 msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 纸张 (ISO)，250 x 353 毫米"
+msgstr "B4 sheet (ISO), 250 x 353 mm"
 
 #: ../src/common/paper.cpp:113
 msgid "Japanese Postcard 100 x 148 mm"
-msgstr "日式明信片，100 x 148 毫米"
+msgstr "Japanese Postcard 100 x 148 mm"
 
 #: ../src/common/paper.cpp:114
 msgid "9 x 11 in"
-msgstr "9 x 11 英寸"
+msgstr "9 x 11 in"
 
 #: ../src/common/paper.cpp:115
 msgid "10 x 11 in"
-msgstr "10 x 11 英寸"
+msgstr "10 x 11 in"
 
 #: ../src/common/paper.cpp:116
 msgid "15 x 11 in"
-msgstr "15 x 11 英寸"
+msgstr "15 x 11 in"
 
 #: ../src/common/paper.cpp:117
 msgid "Envelope Invite 220 x 220 mm"
-msgstr "邀请信，220 x 220 毫米"
+msgstr "Envelope Invite 220 x 220 mm"
 
 #: ../src/common/paper.cpp:118
 msgid "Letter Extra 9 1/2 x 12 in"
-msgstr "特大信纸，9 1/2 x 12 英寸"
+msgstr "Letter Extra 9 1/2 x 12 in"
 
 #: ../src/common/paper.cpp:119
 msgid "Legal Extra 9 1/2 x 15 in"
-msgstr "特大法律纸张，9 1/2 x 15 英寸"
+msgstr "Legal Extra 9 1/2 x 15 in"
 
 #: ../src/common/paper.cpp:120
 msgid "Tabloid Extra 11.69 x 18 in"
-msgstr "小报 (特大)，11.69 x 18 英寸"
+msgstr "Tabloid Extra 11.69 x 18 in"
 
 #: ../src/common/paper.cpp:121
 msgid "A4 Extra 9.27 x 12.69 in"
-msgstr "特大 A4 纸张，9.27 x 12.69 英寸"
+msgstr "A4 Extra 9.27 x 12.69 in"
 
 #: ../src/common/paper.cpp:122
 msgid "Letter Transverse 8 1/2 x 11 in"
-msgstr "信纸 (横排)，8 1/2 x 11 英寸"
+msgstr "Letter Transverse 8 1/2 x 11 in"
 
 #: ../src/common/paper.cpp:123
 msgid "A4 Transverse 210 x 297 mm"
-msgstr "A4 纸张 (横排)，210 x 297 毫米"
+msgstr "A4 Transverse 210 x 297 mm"
 
 #: ../src/common/paper.cpp:124
 msgid "Letter Extra Transverse 9.275 x 12 in"
-msgstr "特大信纸 (横排)，9.275 x 12 英寸"
+msgstr "Letter Extra Transverse 9.275 x 12 in"
 
 #: ../src/common/paper.cpp:125
 msgid "SuperA/SuperA/A4 227 x 356 mm"
-msgstr "SuperA/SuperA/A4 纸张，227 x 356 毫米"
+msgstr "SuperA/SuperA/A4 227 x 356 mm"
 
 #: ../src/common/paper.cpp:126
 msgid "SuperB/SuperB/A3 305 x 487 mm"
-msgstr "SuperB/SuperB/A3 纸张，305 x 487 毫米"
+msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
-msgstr "加大信纸，8 1/2 x 12.69 英寸"
+msgstr "Letter Plus 8 1/2 x 12.69 in"
 
 #: ../src/common/paper.cpp:128
 msgid "A4 Plus 210 x 330 mm"
-msgstr "加大 A4 纸张，210 x 330 毫米"
+msgstr "A4 Plus 210 x 330 mm"
 
 #: ../src/common/paper.cpp:129
 msgid "A5 Transverse 148 x 210 mm"
-msgstr "A5 纸张 (横排)，148 x 210 毫米"
+msgstr "A5 Transverse 148 x 210 mm"
 
 #: ../src/common/paper.cpp:130
 msgid "B5 (JIS) Transverse 182 x 257 mm"
-msgstr "B5 纸张 (JIS，横排)，182 x 257 毫米"
+msgstr "B5 (JIS) Transverse 182 x 257 mm"
 
 #: ../src/common/paper.cpp:131
 msgid "A3 Extra 322 x 445 mm"
-msgstr "特大 A3 纸张，322 x 445 毫米"
+msgstr "A3 Extra 322 x 445 mm"
 
 #: ../src/common/paper.cpp:132
 msgid "A5 Extra 174 x 235 mm"
-msgstr "特大 A5 纸张，174 x 235 毫米"
+msgstr "A5 Extra 174 x 235 mm"
 
 #: ../src/common/paper.cpp:133
 msgid "B5 (ISO) Extra 201 x 276 mm"
-msgstr "特大 B5 纸张 (JIS)，201 x 276 毫米"
+msgstr "B5 (ISO) Extra 201 x 276 mm"
 
 #: ../src/common/paper.cpp:134
 msgid "A2 420 x 594 mm"
-msgstr "A2 纸张，420 x 594 毫米"
+msgstr "A2 420 x 594 mm"
 
 #: ../src/common/paper.cpp:135
 msgid "A3 Transverse 297 x 420 mm"
-msgstr "A3 纸张 (横排)，297 x 420 毫米"
+msgstr "A3 Transverse 297 x 420 mm"
 
 #: ../src/common/paper.cpp:136
 msgid "A3 Extra Transverse 322 x 445 mm"
-msgstr "特大 A3 纸张 (横排)，322 x 445 毫米"
+msgstr "A3 Extra Transverse 322 x 445 mm"
 
 #: ../src/common/paper.cpp:138
 msgid "Japanese Double Postcard 200 x 148 mm"
-msgstr "日式双明信片，200 x 148 毫米"
+msgstr "Japanese Double Postcard 200 x 148 mm"
 
 #: ../src/common/paper.cpp:139
 msgid "A6 105 x 148 mm"
-msgstr "A6 纸张，105 x 148 毫米"
+msgstr "A6 105 x 148 mm"
 
 #: ../src/common/paper.cpp:140
 msgid "Japanese Envelope Kaku #2"
-msgstr "日本角形 2 号信封"
+msgstr "Japanese Envelope Kaku #2"
 
 #: ../src/common/paper.cpp:141
 msgid "Japanese Envelope Kaku #3"
-msgstr "日本角形 3 号信封"
+msgstr "Japanese Envelope Kaku #3"
 
 #: ../src/common/paper.cpp:142
 msgid "Japanese Envelope Chou #3"
-msgstr "日本直式 3 号信封"
+msgstr "Japanese Envelope Chou #3"
 
 #: ../src/common/paper.cpp:143
 msgid "Japanese Envelope Chou #4"
-msgstr "日本直式 4 号信封"
+msgstr "Japanese Envelope Chou #4"
 
 #: ../src/common/paper.cpp:144
 msgid "Letter Rotated 11 x 8 1/2 in"
-msgstr "横向信纸，11 x 8 1/2 英寸"
+msgstr "Letter Rotated 11 x 8 1/2 in"
 
 #: ../src/common/paper.cpp:145
 msgid "A3 Rotated 420 x 297 mm"
-msgstr "横向 A3 纸张，420 x 297 毫米"
+msgstr "A3 Rotated 420 x 297 mm"
 
 #: ../src/common/paper.cpp:146
 msgid "A4 Rotated 297 x 210 mm"
-msgstr "横向 A4 纸张，297 x 210 毫米"
+msgstr "A4 Rotated 297 x 210 mm"
 
 #: ../src/common/paper.cpp:147
 msgid "A5 Rotated 210 x 148 mm"
-msgstr "横向 A5 纸张，210 x 148 毫米"
+msgstr "A5 Rotated 210 x 148 mm"
 
 #: ../src/common/paper.cpp:148
 msgid "B4 (JIS) Rotated 364 x 257 mm"
-msgstr "横向 B4 纸张 (JIS)，364 x 257 毫米"
+msgstr "B4 (JIS) Rotated 364 x 257 mm"
 
 #: ../src/common/paper.cpp:149
 msgid "B5 (JIS) Rotated 257 x 182 mm"
-msgstr "横向 B5 纸张 (JIS)，257 x 182 毫米"
+msgstr "B5 (JIS) Rotated 257 x 182 mm"
 
 #: ../src/common/paper.cpp:150
 msgid "Japanese Postcard Rotated 148 x 100 mm"
-msgstr "横向日式明信片，148 x 100 毫米"
+msgstr "Japanese Postcard Rotated 148 x 100 mm"
 
 #: ../src/common/paper.cpp:151
 msgid "Double Japanese Postcard Rotated 148 x 200 mm"
-msgstr "横向日式双明信片，148 x 200 毫米"
+msgstr "Double Japanese Postcard Rotated 148 x 200 mm"
 
 #: ../src/common/paper.cpp:152
 msgid "A6 Rotated 148 x 105 mm"
-msgstr "横向 A6 纸张，148 x 105 毫米"
+msgstr "A6 Rotated 148 x 105 mm"
 
 #: ../src/common/paper.cpp:153
 msgid "Japanese Envelope Kaku #2 Rotated"
-msgstr "日本角形 2 号信封 (横向)"
+msgstr "Japanese Envelope Kaku #2 Rotated"
 
 #: ../src/common/paper.cpp:154
 msgid "Japanese Envelope Kaku #3 Rotated"
-msgstr "日本角形 3 号信封 (横向)"
+msgstr "Japanese Envelope Kaku #3 Rotated"
 
 #: ../src/common/paper.cpp:155
 msgid "Japanese Envelope Chou #3 Rotated"
-msgstr "日本直式 3 号信封 (横向)"
+msgstr "Japanese Envelope Chou #3 Rotated"
 
 #: ../src/common/paper.cpp:156
 msgid "Japanese Envelope Chou #4 Rotated"
-msgstr "日本直式 4 号信封 (横向)"
+msgstr "Japanese Envelope Chou #4 Rotated"
 
 #: ../src/common/paper.cpp:157
 msgid "B6 (JIS) 128 x 182 mm"
-msgstr "B6 纸张 (JIS)，128 x 182 毫米"
+msgstr "B6 (JIS) 128 x 182 mm"
 
 #: ../src/common/paper.cpp:158
 msgid "B6 (JIS) Rotated 182 x 128 mm"
-msgstr "横向 B6 纸张 (JIS)，182 x 128 毫米"
+msgstr "B6 (JIS) Rotated 182 x 128 mm"
 
 #: ../src/common/paper.cpp:159
 msgid "12 x 11 in"
-msgstr "12 x 11 英寸"
+msgstr "12 x 11 in"
 
 #: ../src/common/paper.cpp:160
 msgid "Japanese Envelope You #4"
-msgstr "日本洋形 4 号信封"
+msgstr "Japanese Envelope You #4"
 
 #: ../src/common/paper.cpp:161
 msgid "Japanese Envelope You #4 Rotated"
-msgstr "日本洋形 4 号信封 (横向)"
+msgstr "Japanese Envelope You #4 Rotated"
 
 #: ../src/common/paper.cpp:162
 msgid "PRC 16K 146 x 215 mm"
-msgstr "中国 16 开纸，146 x 215 毫米"
+msgstr "PRC 16K 146 x 215 mm"
 
 #: ../src/common/paper.cpp:163
 msgid "PRC 32K 97 x 151 mm"
-msgstr "中国 32 开纸，97 x 151 毫米"
+msgstr "PRC 32K 97 x 151 mm"
 
 #: ../src/common/paper.cpp:164
 msgid "PRC 32K(Big) 97 x 151 mm"
-msgstr "中国 32 开纸 (大)，97 x 151 毫米"
+msgstr "PRC 32K(Big) 97 x 151 mm"
 
 #: ../src/common/paper.cpp:165
 msgid "PRC Envelope #1 102 x 165 mm"
-msgstr "中国 1 号信封，102 x 165 毫米"
+msgstr "PRC Envelope #1 102 x 165 mm"
 
 #: ../src/common/paper.cpp:166
 msgid "PRC Envelope #2 102 x 176 mm"
-msgstr "中国 2 号信封，102 x 176 毫米"
+msgstr "PRC Envelope #2 102 x 176 mm"
 
 #: ../src/common/paper.cpp:167
 msgid "PRC Envelope #3 125 x 176 mm"
-msgstr "中国 3 号信封，125 x 176 毫米"
+msgstr "PRC Envelope #3 125 x 176 mm"
 
 #: ../src/common/paper.cpp:168
 msgid "PRC Envelope #4 110 x 208 mm"
-msgstr "中国 4 号信封，110 x 208 毫米"
+msgstr "PRC Envelope #4 110 x 208 mm"
 
 #: ../src/common/paper.cpp:169
 msgid "PRC Envelope #5 110 x 220 mm"
-msgstr "中国 5 号信封，110 x 220 毫米"
+msgstr "PRC Envelope #5 110 x 220 mm"
 
 #: ../src/common/paper.cpp:170
 msgid "PRC Envelope #6 120 x 230 mm"
-msgstr "中国 6 号信封，120 x 230 毫米"
+msgstr "PRC Envelope #6 120 x 230 mm"
 
 #: ../src/common/paper.cpp:171
 msgid "PRC Envelope #7 160 x 230 mm"
-msgstr "中国 7 号信封，160 x 230 毫米"
+msgstr "PRC Envelope #7 160 x 230 mm"
 
 #: ../src/common/paper.cpp:172
 msgid "PRC Envelope #8 120 x 309 mm"
-msgstr "中国 8 号信封，120 x 309 毫米"
+msgstr "PRC Envelope #8 120 x 309 mm"
 
 #: ../src/common/paper.cpp:173
 msgid "PRC Envelope #9 229 x 324 mm"
-msgstr "中国 9 号信封，229 x 324 毫米"
+msgstr "PRC Envelope #9 229 x 324 mm"
 
 #: ../src/common/paper.cpp:174
 msgid "PRC Envelope #10 324 x 458 mm"
-msgstr "中国 10 号信封，324 x 458 毫米"
+msgstr "PRC Envelope #10 324 x 458 mm"
 
 #: ../src/common/paper.cpp:175
 msgid "PRC 16K Rotated"
-msgstr "中国 16 开纸 (横向)"
+msgstr "PRC 16K Rotated"
 
 #: ../src/common/paper.cpp:176
 msgid "PRC 32K Rotated"
-msgstr "中国 32 开纸 (横向)"
+msgstr "PRC 32K Rotated"
 
 #: ../src/common/paper.cpp:177
 msgid "PRC 32K(Big) Rotated"
-msgstr "中国 32 开纸 (大，横向)"
+msgstr "PRC 32K(Big) Rotated"
 
 #: ../src/common/paper.cpp:178
 msgid "PRC Envelope #1 Rotated 165 x 102 mm"
-msgstr "中国 1 号信封 (横向)，165 x 102 毫米"
+msgstr "PRC Envelope #1 Rotated 165 x 102 mm"
 
 #: ../src/common/paper.cpp:179
 msgid "PRC Envelope #2 Rotated 176 x 102 mm"
-msgstr "中国 2 号信封 (横向)，176 x 102 毫米"
+msgstr "PRC Envelope #2 Rotated 176 x 102 mm"
 
 #: ../src/common/paper.cpp:180
 msgid "PRC Envelope #3 Rotated 176 x 125 mm"
-msgstr "中国 3 号信封 (横向)，176 x 125 毫米"
+msgstr "PRC Envelope #3 Rotated 176 x 125 mm"
 
 #: ../src/common/paper.cpp:181
 msgid "PRC Envelope #4 Rotated 208 x 110 mm"
-msgstr "中国 4 号信封 (横向)，208 x 110 毫米"
+msgstr "PRC Envelope #4 Rotated 208 x 110 mm"
 
 #: ../src/common/paper.cpp:182
 msgid "PRC Envelope #5 Rotated 220 x 110 mm"
-msgstr "中国 5 号信封 (横向)，220 x 110 毫米"
+msgstr "PRC Envelope #5 Rotated 220 x 110 mm"
 
 #: ../src/common/paper.cpp:183
 msgid "PRC Envelope #6 Rotated 230 x 120 mm"
-msgstr "中国 6 号信封 (横向)，230 x 120 毫米"
+msgstr "PRC Envelope #6 Rotated 230 x 120 mm"
 
 #: ../src/common/paper.cpp:184
 msgid "PRC Envelope #7 Rotated 230 x 160 mm"
-msgstr "中国 7 号信封 (横向)，230 x 160 毫米"
+msgstr "PRC Envelope #7 Rotated 230 x 160 mm"
 
 #: ../src/common/paper.cpp:185
 msgid "PRC Envelope #8 Rotated 309 x 120 mm"
-msgstr "中国 8 号信封 (横向)，309 x 120 毫米"
+msgstr "PRC Envelope #8 Rotated 309 x 120 mm"
 
 #: ../src/common/paper.cpp:186
 msgid "PRC Envelope #9 Rotated 324 x 229 mm"
-msgstr "中国 9 号信封 (横向)，324 x 229 毫米"
+msgstr "PRC Envelope #9 Rotated 324 x 229 mm"
 
 #: ../src/common/paper.cpp:187
 msgid "PRC Envelope #10 Rotated 458 x 324 mm"
-msgstr "中国 10 号信封 (横向)，458 x 324 毫米"
+msgstr "PRC Envelope #10 Rotated 458 x 324 mm"
 
 #: ../src/common/paper.cpp:192
 msgid "A0 sheet, 841 x 1189 mm"
-msgstr "A0 纸张，841 x 1189 毫米"
+msgstr "A0 sheet, 841 x 1189 mm"
 
 #: ../src/common/paper.cpp:193
 msgid "A1 sheet, 594 x 841 mm"
-msgstr "A1 纸张，594 x 841 毫米"
+msgstr "A1 sheet, 594 x 841 mm"
 
 #: ../src/common/preferencescmn.cpp:37
 msgid "General"
@@ -3083,7 +3083,7 @@ msgstr "就绪"
 
 #: ../src/common/prntbase.cpp:331
 msgid "Printing Error"
-msgstr "打印出错"
+msgstr "打印错误"
 
 #: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1597
 #: ../src/generic/prntdlgg.cpp:135 ../src/generic/prntdlgg.cpp:149
@@ -3097,7 +3097,7 @@ msgstr "页面设置"
 
 #: ../src/common/prntbase.cpp:525
 msgid "Please wait while printing..."
-msgstr "打印，请等待..."
+msgstr "正在打印，请稍候..."
 
 #: ../src/common/prntbase.cpp:529
 msgid "Document:"
@@ -3114,17 +3114,17 @@ msgstr "准备中"
 #: ../src/common/prntbase.cpp:552
 #, c-format
 msgid "Printing page %d"
-msgstr "正在打印页 %d"
+msgstr "正在打印第 %d 页"
 
 #: ../src/common/prntbase.cpp:557
 #, c-format
 msgid "Printing page %d of %d"
-msgstr "正在打印 %d 页其中 %d"
+msgstr "正在打印第 %d 页，共 %d 页"
 
 #: ../src/common/prntbase.cpp:560
 #, c-format
 msgid " (copy %d of %d)"
-msgstr " (复制 %d / %d)"
+msgstr "（第 %d 份，共 %d 份）"
 
 #: ../src/common/prntbase.cpp:1604
 msgid "First page"
@@ -3132,7 +3132,7 @@ msgstr "第一页"
 
 #: ../src/common/prntbase.cpp:1609 ../src/html/helpwnd.cpp:659
 msgid "Previous page"
-msgstr "前页"
+msgstr "上一页"
 
 #: ../src/common/prntbase.cpp:1623 ../src/html/helpwnd.cpp:660
 msgid "Next page"
@@ -3166,17 +3166,17 @@ msgstr "打印预览失败"
 
 #: ../src/common/prntbase.cpp:2129 ../src/common/prntbase.cpp:2137
 msgid "Sorry, not enough memory to create a preview."
-msgstr "抱歉，没有足够内存创建预览。"
+msgstr "内存不足，无法创建预览。"
 
 #: ../src/common/prntbase.cpp:2144
 #, c-format
 msgid "Page %d of %d"
-msgstr "页 %d / %d"
+msgstr "第 %d 页，共 %d 页"
 
 #: ../src/common/prntbase.cpp:2146
 #, c-format
 msgid "Page %d"
-msgstr "页 %d"
+msgstr "第 %d 页"
 
 #: ../src/common/regex.cpp:382 ../src/html/chm.cpp:348
 msgid "unknown error"
@@ -3185,12 +3185,12 @@ msgstr "未知错误"
 #: ../src/common/regex.cpp:995
 #, c-format
 msgid "Invalid regular expression '%s': %s"
-msgstr "无效的正则表达式 '%s'：%s"
+msgstr "无效正则表达式 '%s'：%s"
 
 #: ../src/common/regex.cpp:1059
 #, c-format
 msgid "Failed to find match for regular expression: %s"
-msgstr "无法找到匹配的正则表达式：%s"
+msgstr "未找到与该正则表达式匹配的内容：%s"
 
 #: ../src/common/rendcmn.cpp:188
 #, c-format
@@ -3199,7 +3199,7 @@ msgstr "渲染器 \"%s\" 的版本 %d.%d 不兼容，无法加载。"
 
 #: ../src/common/secretstore.cpp:162
 msgid "Not available for this platform"
-msgstr "不适用于此平台"
+msgstr "此平台不支持"
 
 #: ../src/common/secretstore.cpp:183
 #, c-format
@@ -3214,7 +3214,7 @@ msgstr "读取 \"%s\" 的密码失败：%s。"
 #: ../src/common/secretstore.cpp:228
 #, c-format
 msgid "Deleting password for \"%s\" failed: %s."
-msgstr "删除 \"%s\" 的密码失败：%s。"
+msgstr "无法删除 \"%s\" 的密码：%s。"
 
 #: ../src/common/selectdispatcher.cpp:254
 msgid "Failed to monitor I/O channels"
@@ -3276,11 +3276,11 @@ msgstr "粗体"
 
 #: ../src/common/stockitem.cpp:149
 msgid "&Bottom"
-msgstr "底端(&B)"
+msgstr "底部(&B)"
 
 #: ../src/common/stockitem.cpp:149 ../src/richtext/richtextsizepage.cpp:287
 msgid "Bottom"
-msgstr "底端"
+msgstr "底部"
 
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
@@ -3331,7 +3331,7 @@ msgstr "复制"
 #: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2883
 #: ../src/osx/textctrl_osx.cpp:652 ../src/richtext/richtextctrl.cpp:330
 msgid "Cu&t"
-msgstr "剪切(&t)"
+msgstr "剪切(&T)"
 
 #: ../src/common/stockitem.cpp:156 ../src/stc/stc_i18n.cpp:17
 msgid "Cut"
@@ -3390,7 +3390,7 @@ msgstr "文件"
 
 #: ../src/common/stockitem.cpp:163
 msgid "&Find..."
-msgstr "查找(&F)"
+msgstr "查找(&F)..."
 
 #: ../src/common/stockitem.cpp:163
 msgid "Find..."
@@ -3473,11 +3473,11 @@ msgstr "斜体"
 
 #: ../src/common/stockitem.cpp:174
 msgid "&Jump to"
-msgstr "跳转到(&J)"
+msgstr "转到(&J)"
 
 #: ../src/common/stockitem.cpp:174
 msgid "Jump to"
-msgstr "跳转至"
+msgstr "转到"
 
 #: ../src/common/stockitem.cpp:175
 msgid "Centered"
@@ -3485,7 +3485,7 @@ msgstr "居中"
 
 #: ../src/common/stockitem.cpp:176
 msgid "Justified"
-msgstr "分散对齐"
+msgstr "两端对齐"
 
 #: ../src/common/stockitem.cpp:177
 msgid "Align Left"
@@ -3526,7 +3526,7 @@ msgstr "否(&N)"
 #: ../src/common/stockitem.cpp:183 ../src/generic/fontdlgg.cpp:467
 #: ../src/generic/fontdlgg.cpp:474
 msgid "&OK"
-msgstr "确认(&O)"
+msgstr "确定(&O)"
 
 #: ../src/common/stockitem.cpp:184 ../src/generic/dbgrptg.cpp:341
 msgid "&Open..."
@@ -3548,11 +3548,11 @@ msgstr "粘贴"
 
 #: ../src/common/stockitem.cpp:186
 msgid "&Preferences"
-msgstr "偏好设置(&P)"
+msgstr "首选项(&P)"
 
 #: ../src/common/stockitem.cpp:186 ../src/osx/cocoa/preferences.mm:304
 msgid "Preferences"
-msgstr "偏好设置"
+msgstr "首选项"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Print previe&w..."
@@ -3581,7 +3581,7 @@ msgstr "属性"
 
 #: ../src/common/stockitem.cpp:190 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
-msgstr "恢复"
+msgstr "重做"
 
 #: ../src/common/stockitem.cpp:191
 msgid "Refresh"
@@ -3593,7 +3593,7 @@ msgstr "移除"
 
 #: ../src/common/stockitem.cpp:193
 msgid "Rep&lace..."
-msgstr "替换(&l)..."
+msgstr "替换(&L)..."
 
 #: ../src/common/stockitem.cpp:193
 msgid "Replace..."
@@ -3601,7 +3601,7 @@ msgstr "替换..."
 
 #: ../src/common/stockitem.cpp:194
 msgid "Revert to Saved"
-msgstr "还原为上次保存的文件"
+msgstr "还原到已保存状态"
 
 #: ../src/common/stockitem.cpp:196 ../src/generic/logg.cpp:549
 msgid "Save &As..."
@@ -3614,11 +3614,11 @@ msgstr "另存为..."
 #: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2888
 #: ../src/osx/textctrl_osx.cpp:657 ../src/richtext/richtextctrl.cpp:335
 msgid "Select &All"
-msgstr "全部选择(&A)"
+msgstr "全选(&A)"
 
 #: ../src/common/stockitem.cpp:197 ../src/stc/stc_i18n.cpp:21
 msgid "Select All"
-msgstr "全部选择"
+msgstr "全选"
 
 #: ../src/common/stockitem.cpp:198
 msgid "&Color"
@@ -3638,19 +3638,19 @@ msgstr "字体"
 
 #: ../src/common/stockitem.cpp:200
 msgid "&Ascending"
-msgstr "递增(&A)"
+msgstr "升序(&A)"
 
 #: ../src/common/stockitem.cpp:200
 msgid "Ascending"
-msgstr "递增"
+msgstr "升序"
 
 #: ../src/common/stockitem.cpp:201
 msgid "&Descending"
-msgstr "递减(&D)"
+msgstr "降序(&D)"
 
 #: ../src/common/stockitem.cpp:201
 msgid "Descending"
-msgstr "递减"
+msgstr "降序"
 
 #: ../src/common/stockitem.cpp:202
 msgid "&Spell Check"
@@ -3678,12 +3678,12 @@ msgstr "删除线"
 
 #: ../src/common/stockitem.cpp:205
 msgid "&Top"
-msgstr "顶端(&T)"
+msgstr "顶部(&T)"
 
 #: ../src/common/stockitem.cpp:205 ../src/richtext/richtextsizepage.cpp:285
 #: ../src/richtext/richtextsizepage.cpp:289
 msgid "Top"
-msgstr "顶端"
+msgstr "顶部"
 
 #: ../src/common/stockitem.cpp:206
 msgid "Undelete"
@@ -3751,15 +3751,15 @@ msgstr "显示关于对话框"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Copy selection"
-msgstr "复制选区"
+msgstr "复制所选内容"
 
 #: ../src/common/stockitem.cpp:264
 msgid "Cut selection"
-msgstr "剪切选区"
+msgstr "剪切所选内容"
 
 #: ../src/common/stockitem.cpp:265
 msgid "Delete selection"
-msgstr "删除选区"
+msgstr "删除所选内容"
 
 #: ../src/common/stockitem.cpp:266
 msgid "Find in document"
@@ -3771,7 +3771,7 @@ msgstr "在文档中查找和替换"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Paste selection"
-msgstr "粘贴选区"
+msgstr "粘贴所选内容"
 
 #: ../src/common/stockitem.cpp:269
 msgid "Quit this program"
@@ -3779,7 +3779,7 @@ msgstr "退出此程序"
 
 #: ../src/common/stockitem.cpp:270
 msgid "Redo last action"
-msgstr "恢复上一次操作"
+msgstr "重做上一次操作"
 
 #: ../src/common/stockitem.cpp:271
 msgid "Undo last action"
@@ -3787,7 +3787,7 @@ msgstr "撤销上一次操作"
 
 #: ../src/common/stockitem.cpp:272
 msgid "Create new document"
-msgstr "创建新文件"
+msgstr "创建新文档"
 
 #: ../src/common/stockitem.cpp:273
 msgid "Open an existing document"
@@ -3803,12 +3803,12 @@ msgstr "保存当前文档"
 
 #: ../src/common/stockitem.cpp:276
 msgid "Save current document with a different filename"
-msgstr "保存当前文档至重命名"
+msgstr "以其他文件名保存当前文档"
 
 #: ../src/common/strconv.cpp:2324
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
-msgstr "无法转换到字符集 '%s'。"
+msgstr "无法转换为字符集 '%s'。"
 
 #: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
 #: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
@@ -3817,20 +3817,20 @@ msgstr "未知"
 
 #: ../src/common/tarstrm.cpp:774
 msgid "incomplete header block in tar"
-msgstr "tar 表头块不完整"
+msgstr "tar 头块不完整"
 
 #: ../src/common/tarstrm.cpp:798
 msgid "checksum failure reading tar header block"
-msgstr "读取 tar 表头块发生校验和错误"
+msgstr "读取 tar 头块时校验和错误"
 
 #: ../src/common/tarstrm.cpp:971
 msgid "invalid data in extended tar header"
-msgstr "tar 扩展头数据无效"
+msgstr "tar 扩展头中的数据无效"
 
 #: ../src/common/tarstrm.cpp:981 ../src/common/tarstrm.cpp:1003
 #: ../src/common/tarstrm.cpp:1477 ../src/common/tarstrm.cpp:1499
 msgid "tar entry not open"
-msgstr "tar 标头未打开"
+msgstr "tar 条目尚未打开"
 
 #: ../src/common/tarstrm.cpp:1023
 msgid "unexpected end of file"
@@ -3839,20 +3839,20 @@ msgstr "文件意外结束"
 #: ../src/common/tarstrm.cpp:1297
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
-msgstr "%s 不符合 tar 项目 '%s' 的表头"
+msgstr "%1$s 无法写入 tar 条目 '%2$s' 的头部"
 
 #: ../src/common/tarstrm.cpp:1359
 msgid "incorrect size given for tar entry"
-msgstr "tar 项目不正确的大小"
+msgstr "tar 条目给定的大小不正确"
 
 #: ../src/common/textbuf.cpp:232
 #, c-format
 msgid "'%s' is probably a binary buffer."
-msgstr "'%s' 或许是二进制缓冲区。"
+msgstr "'%s' 可能是二进制缓冲区。"
 
 #: ../src/common/textcmn.cpp:1006 ../src/richtext/richtextctrl.cpp:3053
 msgid "File couldn't be loaded."
-msgstr "文件无法加载。"
+msgstr "无法加载文件。"
 
 #: ../src/common/textfile.cpp:95
 #, c-format
@@ -3862,7 +3862,7 @@ msgstr "无法读取文本文件 \"%s\"。"
 #: ../src/common/textfile.cpp:160
 #, c-format
 msgid "can't write buffer '%s' to disk."
-msgstr "无法把缓存区 '%s' 写到磁盘。"
+msgstr "无法将缓冲区 '%s' 写入磁盘。"
 
 #: ../src/common/time.cpp:212
 msgid "Failed to get the local system time"
@@ -3889,7 +3889,7 @@ msgstr "无法解析复数形式：'%s'"
 #: ../src/common/translation.cpp:1723
 #, c-format
 msgid "using catalog '%s' from '%s'."
-msgstr "使用目录 '%s' 从 '%s'。"
+msgstr "正在使用消息目录 '%s'（来自 '%s'）。"
 
 #: ../src/common/translation.cpp:1816
 #, c-format
@@ -3898,11 +3898,11 @@ msgstr "资源 '%s' 不是有效的消息目录。"
 
 #: ../src/common/translation.cpp:1865
 msgid "Couldn't enumerate translations"
-msgstr "无法枚举翻译"
+msgstr "无法列出可用翻译"
 
 #: ../src/common/utilscmn.cpp:1145
 msgid "No default application configured for HTML files."
-msgstr "没有配置 HTML 文件的默认应用。"
+msgstr "未为 HTML 文件配置默认应用程序。"
 
 #: ../src/common/utilscmn.cpp:1190
 #, c-format
@@ -3911,11 +3911,11 @@ msgstr "无法在默认浏览器中打开 URL \"%s\"。"
 
 #: ../src/common/valtext.cpp:144
 msgid "Validation conflict"
-msgstr "验证冲突"
+msgstr "验证失败"
 
 #: ../src/common/valtext.cpp:186
 msgid "Required information entry is empty."
-msgstr "必要的信息项目为空。"
+msgstr "必填项不能为空。"
 
 #: ../src/common/valtext.cpp:188
 #, c-format
@@ -3925,7 +3925,7 @@ msgstr "'%s' 是无效的字符串"
 #: ../src/common/valtext.cpp:190
 #, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' 不属于有效的字符串"
+msgstr "'%s' 不是有效的字符串"
 
 #: ../src/common/valtext.cpp:199
 #, c-format
@@ -3935,13 +3935,13 @@ msgstr "'%s' 包含无效字符"
 #: ../src/common/webrequest.cpp:139
 #, c-format
 msgid "Error: %s (%d)"
-msgstr "错误：%s (%d)"
+msgstr "错误：%s（%d）"
 
 #: ../src/common/webrequest.cpp:655
 #, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "磁盘空间不足，无法下载：需要 %llu，但仅有 %llu 可用。"
+msgstr "磁盘剩余空间不足，无法下载：需要 %llu 字节，但仅有 %llu 字节可用。"
 
 #: ../src/common/webrequest.cpp:669
 #, c-format
@@ -3988,7 +3988,7 @@ msgstr "关闭开发者工具"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr "检查"
+msgstr "检查元素"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -3996,29 +3996,29 @@ msgstr "该平台不支持背景透明度。"
 
 #: ../src/common/wincmn.cpp:2097
 msgid "Could not transfer data to window"
-msgstr "无法把数据转到窗口"
+msgstr "无法将数据传输到窗口"
 
 #: ../src/common/windowid.cpp:240
 msgid "Out of window IDs.  Recommend shutting down application."
-msgstr "窗口 ID 已耗尽。 建议关闭应用。"
+msgstr "窗口 ID 已耗尽。建议退出应用程序。"
 
 #: ../src/common/xpmdecod.cpp:678
 msgid "XPM: incorrect header format!"
-msgstr "XPM：不正确的头格式！"
+msgstr "XPM：头部格式不正确！"
 
 #: ../src/common/xpmdecod.cpp:703
 #, c-format
 msgid "XPM: incorrect colour description in line %d"
-msgstr "XPM：错误的颜色描述，位于第 %d 行"
+msgstr "XPM：第 %d 行的颜色描述不正确"
 
 #: ../src/common/xpmdecod.cpp:715 ../src/common/xpmdecod.cpp:724
 #, c-format
 msgid "XPM: malformed colour definition '%s' at line %d!"
-msgstr "XPM：错误的颜色定义 '%s'，位于第 %d 行！"
+msgstr "XPM：第 %2$d 行的颜色定义 '%1$s' 格式错误！"
 
 #: ../src/common/xpmdecod.cpp:754
 msgid "XPM: no colors left to use for mask!"
-msgstr "XPM：没有空余的颜色能用于蒙版！"
+msgstr "XPM：没有剩余颜色可用于蒙版！"
 
 #: ../src/common/xpmdecod.cpp:781
 #, c-format
@@ -4027,11 +4027,11 @@ msgstr "XPM：第 %d 行的图像数据被截断！"
 
 #: ../src/common/xpmdecod.cpp:795
 msgid "XPM: Malformed pixel data!"
-msgstr "XPM：错误的像素数据！"
+msgstr "XPM：像素数据格式错误！"
 
 #: ../src/common/xti.cpp:492
 msgid "Illegal Parameter Count for Create Method"
-msgstr "Create 方法的参数个数不正确"
+msgstr "Create 方法的参数数量无效"
 
 #: ../src/common/xti.cpp:504
 msgid "Illegal Parameter Count for ConstructObject Method"
@@ -4044,40 +4044,40 @@ msgstr "在声明的 RTTI 参数里找不到创建参数 %s"
 
 #: ../src/common/xtistrm.cpp:290
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
-msgstr "非法的对象类 (非-wxEvtHandler) 作为事件源"
+msgstr "事件源对象类型无效（非 wxEvtHandler）"
 
 #: ../src/common/xtistrm.cpp:313 ../src/common/xtixml.cpp:345
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
-msgstr "必须进行 enum - long 的类型转换"
+msgstr "类型必须支持 enum 与 long 的转换"
 
 #: ../src/common/xtistrm.cpp:400 ../src/common/xtistrm.cpp:415
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
-msgstr "无效的或空的对象 ID 传给 GetObjectClassInfo"
+msgstr "向 GetObjectClassInfo 传入无效或空的对象 ID"
 
 #: ../src/common/xtistrm.cpp:405
 msgid "Unknown Object passed to GetObjectClassInfo"
-msgstr "未知的对象传递给 GetObjectClassInfo"
+msgstr "向 GetObjectClassInfo 传入未知对象"
 
 #: ../src/common/xtistrm.cpp:420
 msgid "Already Registered Object passed to SetObjectClassInfo"
-msgstr "传递已注册对象给 SetObjectClassInfo"
+msgstr "向 SetObjectClassInfo 传入已注册对象"
 
 #: ../src/common/xtistrm.cpp:430
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
-msgstr "无效的或空的对象 ID 传给 HasObjectClassInfo"
+msgstr "向 HasObjectClassInfo 传入无效或空的对象 ID"
 
 #: ../src/common/xtistrm.cpp:460
 msgid "Passing a already registered object to SetObject"
-msgstr "传递一个已注册的对象给 SetObject"
+msgstr "向 SetObject 传入已注册对象"
 
 #: ../src/common/xtistrm.cpp:471
 msgid "Passing an unknown object to GetObject"
-msgstr "传递一个未知对象给 GetObject"
+msgstr "向 GetObject 传入未知对象"
 
 #: ../src/common/xtixml.cpp:229
 msgid "Forward hrefs are not supported"
-msgstr "不支持传递 hrefs"
+msgstr "不支持前向 href（引用尚未读取的对象）"
 
 #: ../src/common/xtixml.cpp:247
 #, c-format
@@ -4086,21 +4086,21 @@ msgstr "未知类 %s"
 
 #: ../src/common/xtixml.cpp:253
 msgid "objects cannot have XML Text Nodes"
-msgstr "对象不能有 XML 文本节点"
+msgstr "对象不能包含 XML 文本节点"
 
 #: ../src/common/xtixml.cpp:258
 msgid "Objects must have an id attribute"
-msgstr "对象必须有一个 id 属性"
+msgstr "对象必须具有 id 属性"
 
 #: ../src/common/xtixml.cpp:267
 #, c-format
 msgid "Doubly used id : %d"
-msgstr "重复使用的 id：%d"
+msgstr "重复的 id：%d"
 
 #: ../src/common/xtixml.cpp:316
 #, c-format
 msgid "Unknown Property %s"
-msgstr "未知属性 %s"
+msgstr "未知属性：%s"
 
 #: ../src/common/xtixml.cpp:407
 msgid "A non empty collection must consist of 'element' nodes"
@@ -4108,7 +4108,7 @@ msgstr "非空集合必须包含 'element' 节点"
 
 #: ../src/common/xtixml.cpp:478
 msgid "incorrect event handler string, missing dot"
-msgstr "错误的时间句柄字符串，缺少点号('.')"
+msgstr "事件处理函数字符串无效：缺少点号('.')"
 
 #: ../src/common/zipstrm.cpp:559
 msgid "can't re-initialize zlib deflate stream"
@@ -4124,7 +4124,7 @@ msgstr "忽略格式错误的额外数据记录，ZIP 文件可能已损坏"
 
 #: ../src/common/zipstrm.cpp:1502
 msgid "assuming this is a multi-part zip concatenated"
-msgstr "假定这是一个分段 zip 文件的合并"
+msgstr "推测这是拼接的分卷 ZIP 文件"
 
 #: ../src/common/zipstrm.cpp:1664
 msgid "invalid zip file"
@@ -4132,47 +4132,47 @@ msgstr "无效的 zip 文件"
 
 #: ../src/common/zipstrm.cpp:1723
 msgid "can't find central directory in zip"
-msgstr "zip 文件中找不到核心目录"
+msgstr "ZIP 文件中找不到中央目录"
 
 #: ../src/common/zipstrm.cpp:1812
 msgid "error reading zip central directory"
-msgstr "读取 zip 核心目录时出错"
+msgstr "读取 ZIP 中央目录时出错"
 
 #: ../src/common/zipstrm.cpp:1916
 msgid "error reading zip local header"
-msgstr "读取 zip 本地头时出错"
+msgstr "读取 ZIP 本地文件头时出错"
 
 #: ../src/common/zipstrm.cpp:1964
 msgid "bad zipfile offset to entry"
-msgstr "zip 文件中到条目的偏移值错误"
+msgstr "ZIP 文件到条目的偏移值错误"
 
 #: ../src/common/zipstrm.cpp:2031
 msgid "stored file length not in Zip header"
-msgstr "此 Zip 头没有已存文件的长度信息"
+msgstr "ZIP 文件头中缺少已存文件长度信息"
 
 #: ../src/common/zipstrm.cpp:2045 ../src/common/zipstrm.cpp:2362
 msgid "unsupported Zip compression method"
-msgstr "不支持的 Zip 压缩方法"
+msgstr "不支持的 ZIP 压缩方法"
 
 #: ../src/common/zipstrm.cpp:2126
 #, c-format
 msgid "reading zip stream (entry %s): bad length"
-msgstr "读入 zip 流 (条目 %s)：长度错误"
+msgstr "读取 ZIP 流（条目 %s）：长度错误"
 
 #: ../src/common/zipstrm.cpp:2131
 #, c-format
 msgid "reading zip stream (entry %s): bad crc"
-msgstr "读入 zip 流 (条目 %s)：crc 校验错误"
+msgstr "读取 ZIP 流（条目 %s）：CRC 校验错误"
 
 #: ../src/common/zipstrm.cpp:2578
 #, c-format
 msgid "error writing zip entry '%s': file too large without ZIP64"
-msgstr "写入 zip 条目 '%s' 时出错：文件太大，没有 ZIP64"
+msgstr "写入 ZIP 条目 '%s' 时出错：文件过大且未使用 ZIP64"
 
 #: ../src/common/zipstrm.cpp:2585
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
-msgstr "写入 zip 条目 '%s' 时出错：crc 校验或长度错误"
+msgstr "写入 ZIP 条目 '%s' 时出错：CRC 校验或长度错误"
 
 #: ../src/common/zstream.cpp:155 ../src/common/zstream.cpp:315
 msgid "Gzip not supported by this version of zlib"
@@ -4184,7 +4184,7 @@ msgstr "无法初始化 zlib 解压流。"
 
 #: ../src/common/zstream.cpp:241
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
-msgstr "无法读取解压流：流内有异常的 EOF。"
+msgstr "无法读取解压流：底层流意外到达 EOF。"
 
 #: ../src/common/zstream.cpp:248 ../src/common/zstream.cpp:423
 #, c-format
@@ -4194,7 +4194,7 @@ msgstr "zlib 错误 %d"
 #: ../src/common/zstream.cpp:249
 #, c-format
 msgid "Can't read from inflate stream: %s"
-msgstr "无法从解压流 %s 中读取"
+msgstr "无法从解压流读取：%s"
 
 #: ../src/common/zstream.cpp:343
 msgid "Can't initialize zlib deflate stream."
@@ -4203,12 +4203,12 @@ msgstr "无法初始化 zlib 压缩流。"
 #: ../src/common/zstream.cpp:424
 #, c-format
 msgid "Can't write to deflate stream: %s"
-msgstr "无法写到压缩流：%s"
+msgstr "无法写入压缩流：%s"
 
 #: ../src/dfb/bitmap.cpp:633 ../src/dfb/bitmap.cpp:667
 #, c-format
 msgid "No bitmap handler for type %d defined."
-msgstr "没有定义类型 %d 的位图处理程序。"
+msgstr "未定义类型 %d 的位图处理程序。"
 
 #: ../src/dfb/evtloop.cpp:99
 msgid "Failed to read event from DirectFB pipe"
@@ -4216,12 +4216,12 @@ msgstr "无法从 DirectFB 管道中读取事件"
 
 #: ../src/dfb/evtloop.cpp:171
 msgid "Failed to switch DirectFB pipe to non-blocking mode"
-msgstr "无法将 DirectFB 通道切换至非阻塞模式"
+msgstr "无法将 DirectFB 管道切换为非阻塞模式"
 
 #: ../src/dfb/fontmgr.cpp:171
 #, c-format
 msgid "no fonts found in %s, using builtin font"
-msgstr "%s 中字体未找到，将使用内置字体"
+msgstr "在 %s 中未找到字体，将使用内置字体"
 
 #: ../src/dfb/fontmgr.cpp:177
 msgid "Default font"
@@ -4230,28 +4230,28 @@ msgstr "默认字体"
 #: ../src/dfb/fontmgr.cpp:195
 #, c-format
 msgid "Fonts index file %s disappeared while loading fonts."
-msgstr "字体索引文件 %s 加载字体时丢失。"
+msgstr "加载字体时，字体索引文件 %s 已不存在。"
 
 #: ../src/dfb/wrapdfb.cpp:60
 #, c-format
 msgid "DirectFB error %d occurred."
-msgstr "Direct FB 报错 %d。"
+msgstr "发生 DirectFB 错误 %d。"
 
 #: ../src/generic/aboutdlgg.cpp:69
 msgid "Developed by "
-msgstr "开发者 "
+msgstr "开发： "
 
 #: ../src/generic/aboutdlgg.cpp:72
 msgid "Documentation by "
-msgstr "文档作者 "
+msgstr "文档： "
 
 #: ../src/generic/aboutdlgg.cpp:75
 msgid "Graphics art by "
-msgstr "美工 "
+msgstr "美术： "
 
 #: ../src/generic/aboutdlgg.cpp:78
 msgid "Translations by "
-msgstr "译者 "
+msgstr "翻译："
 
 #: ../src/generic/aboutdlgg.cpp:133 ../src/osx/cocoa/aboutdlg.mm:83
 msgid "Version "
@@ -4265,7 +4265,7 @@ msgstr "关于 %s"
 
 #: ../src/generic/aboutdlgg.cpp:181
 msgid "License"
-msgstr "软件许可证"
+msgstr "许可证"
 
 #: ../src/generic/aboutdlgg.cpp:184
 msgid "Developers"
@@ -4277,7 +4277,7 @@ msgstr "文档作者"
 
 #: ../src/generic/aboutdlgg.cpp:192
 msgid "Artists"
-msgstr "美工"
+msgstr "美术"
 
 #: ../src/generic/aboutdlgg.cpp:196
 msgid "Translators"
@@ -4285,17 +4285,17 @@ msgstr "译者"
 
 #: ../src/generic/animateg.cpp:125
 msgid "No handler found for animation type."
-msgstr "找不到动画类型的句柄。"
+msgstr "未找到用于该动画类型的处理程序。"
 
 #: ../src/generic/animateg.cpp:133
 #, c-format
 msgid "No animation handler for type %ld defined."
-msgstr "未定义 %ld 类型的动画句柄。"
+msgstr "未定义用于类型 %ld 的动画处理程序。"
 
 #: ../src/generic/animateg.cpp:145
 #, c-format
 msgid "Animation file is not of type %ld."
-msgstr "动画文件不符合 %ld 类型。"
+msgstr "动画文件不是 %ld 类型。"
 
 #: ../src/generic/colrdlgg.cpp:154 ../src/gtk/colordlg.cpp:47
 msgid "Choose colour"
@@ -4319,7 +4319,7 @@ msgstr "不透明度："
 
 #: ../src/generic/colrdlgg.cpp:384
 msgid "Add to custom colours"
-msgstr "加到自定义颜色中"
+msgstr "添加到自定义颜色"
 
 #: ../src/generic/creddlgg.cpp:56
 msgid "Username:"
@@ -4352,18 +4352,18 @@ msgstr "折叠"
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6990
 msgid "Expand"
-msgstr "扩展"
+msgstr "展开"
 
 #. TRANSLATORS: Name of data view control and number of rows
 #: ../src/generic/datavgen.cpp:7011
 #, c-format
 msgid "%s (%d items)"
-msgstr "%s (%d 项)"
+msgstr "%s（%d 项）"
 
 #: ../src/generic/datavgen.cpp:7062
 #, c-format
 msgid "Column %u"
-msgstr "列 %u"
+msgstr "第 %u 列"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
 #: ../src/generic/datavgen.cpp:7131 ../src/richtext/richtextbulletspage.cpp:189
@@ -4426,8 +4426,8 @@ msgid ""
 "private information,\n"
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
-"调试报告包含了以下文件。如果这些文件含有私人信息，\n"
-"请取消选中它们，调试报告中将移除这些文件。\n"
+"报告包含下列文件。如果其中包含隐私信息，\n"
+"请取消勾选，它们将从报告中移除。\n"
 
 #: ../src/generic/dbgrptg.cpp:323
 msgid ""
@@ -4436,12 +4436,12 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"如果您想完全禁用调试报告，请按 “取消” 按钮。\n"
+"如果想完全禁用调试报告，请点击「取消」按钮。\n"
 "但请注意，这可能会阻碍我们改进程序。如果条件允许，请务必继续生成报告。\n"
 
 #: ../src/generic/dbgrptg.cpp:325
 msgid "              Thank you and we're sorry for the inconvenience!\n"
-msgstr "              谢谢，我们对您遇到的不便表示抱歉！\n"
+msgstr "              谢谢，对于给您带来的不便，我们深表歉意！\n"
 
 #: ../src/generic/dbgrptg.cpp:333
 msgid "&Debug report preview:"
@@ -4453,15 +4453,15 @@ msgstr "查看(&V)..."
 
 #: ../src/generic/dbgrptg.cpp:359
 msgid "&Notes:"
-msgstr "注意(&N)："
+msgstr "备注(&N)："
 
 #: ../src/generic/dbgrptg.cpp:361
 msgid ""
 "If you have any additional information pertaining to this bug\n"
 "report, please enter it here and it will be joined to it:"
 msgstr ""
-"如果您有任何与此错误报告有关的信息，\n"
-"请在此输入，它将会被加到错误报告中："
+"如果您有关于此错误的任何附加信息，\n"
+"请在此输入，将附加到报告中："
 
 #: ../src/generic/dcpsg.cpp:1627
 msgid "Cannot open file for PostScript printing!"
@@ -4473,7 +4473,7 @@ msgstr "计算机"
 
 #: ../src/generic/dirctrlg.cpp:404
 msgid "Sections"
-msgstr "段"
+msgstr "位置"
 
 #: ../src/generic/dirctrlg.cpp:482
 msgid "Home directory"
@@ -4486,7 +4486,7 @@ msgstr "桌面"
 
 #: ../src/generic/dirctrlg.cpp:528 ../src/generic/filectrlg.cpp:752
 msgid "Illegal directory name."
-msgstr "不合规范的目录名。"
+msgstr "非法目录名。"
 
 #: ../src/generic/dirctrlg.cpp:528 ../src/generic/dirctrlg.cpp:546
 #: ../src/generic/dirctrlg.cpp:557 ../src/generic/dirdlgg.cpp:317
@@ -4504,7 +4504,7 @@ msgstr "文件名已存在。"
 #: ../src/generic/dirctrlg.cpp:557 ../src/generic/dirdlgg.cpp:317
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:782
 msgid "Operation not permitted."
-msgstr "不允许的操作。"
+msgstr "不允许此操作。"
 
 #: ../src/generic/dirdlgg.cpp:107 ../src/generic/filedlgg.cpp:207
 msgid "Create new directory"
@@ -4512,7 +4512,7 @@ msgstr "创建新目录"
 
 #: ../src/generic/dirdlgg.cpp:112 ../src/generic/filedlgg.cpp:203
 msgid "Go to home directory"
-msgstr "进入主目录"
+msgstr "转到用户主目录"
 
 #: ../src/generic/dirdlgg.cpp:143
 msgid "Show &hidden directories"
@@ -4538,15 +4538,15 @@ msgid ""
 "(Do you have the required permissions?)"
 msgstr ""
 "无法创建目录 '%s'\n"
-"(您是否有所需的权限？)"
+"(是否具备所需权限？)"
 
 #: ../src/generic/dirdlgg.cpp:216
 msgid "Error creating directory"
-msgstr "创建目录错误"
+msgstr "创建目录时出错"
 
 #: ../src/generic/dirdlgg.cpp:281
 msgid "You cannot add a new directory to this section."
-msgstr "你无法向该项中加入新的目录。"
+msgstr "无法在此位置创建新目录。"
 
 #: ../src/generic/dirdlgg.cpp:282
 msgid "Create directory"
@@ -4563,7 +4563,7 @@ msgstr "编辑项"
 
 #: ../src/generic/editlbox.cpp:143
 msgid "New item"
-msgstr "新项目"
+msgstr "新建项"
 
 #: ../src/generic/editlbox.cpp:151
 msgid "Delete item"
@@ -4579,7 +4579,7 @@ msgstr "下移"
 
 #: ../src/generic/fdrepdlg.cpp:108
 msgid "Search for:"
-msgstr "搜索："
+msgstr "查找内容："
 
 #: ../src/generic/fdrepdlg.cpp:120
 msgid "Replace with:"
@@ -4587,7 +4587,7 @@ msgstr "替换为："
 
 #: ../src/generic/fdrepdlg.cpp:140
 msgid "Whole word"
-msgstr "整字"
+msgstr "全词匹配"
 
 #: ../src/generic/fdrepdlg.cpp:143
 msgid "Match case"
@@ -4603,19 +4603,19 @@ msgstr "替换(&R)"
 
 #: ../src/generic/fdrepdlg.cpp:178
 msgid "Replace &all"
-msgstr "全部替换(&a)"
+msgstr "全部替换(&A)"
 
 #: ../src/generic/filectrlg.cpp:246 ../src/generic/filectrlg.cpp:269
 msgid "<DIR>"
-msgstr "<目录>"
+msgstr "<DIR>"
 
 #: ../src/generic/filectrlg.cpp:248 ../src/generic/filectrlg.cpp:271
 msgid "<LINK>"
-msgstr "<连接>"
+msgstr "<LINK>"
 
 #: ../src/generic/filectrlg.cpp:250 ../src/generic/filectrlg.cpp:273
 msgid "<DRIVE>"
-msgstr "<盘符>"
+msgstr "<DRIVE>"
 
 #: ../src/generic/filectrlg.cpp:275
 #, c-format
@@ -4658,7 +4658,7 @@ msgstr "显示隐藏文件(&H)"
 
 #: ../src/generic/filectrlg.cpp:1355
 msgid "Illegal file specification."
-msgstr "不合规范的文件描述。"
+msgstr "文件通配符不合法。"
 
 #: ../src/generic/filectrlg.cpp:1387
 msgid "Directory doesn't exist."
@@ -4674,12 +4674,12 @@ msgstr "以详细视图查看文件"
 
 #: ../src/generic/filedlgg.cpp:200
 msgid "Go to parent directory"
-msgstr "进入父目录"
+msgstr "转到上级目录"
 
 #: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:59
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
-msgstr "文件 '%s' 已存在，确实需要重写它？"
+msgstr "文件 '%s' 已存在，是否要覆盖？"
 
 #: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:62
 msgid "Confirm"
@@ -4699,27 +4699,27 @@ msgstr "ABCDEFGabcdefg12345"
 
 #: ../src/generic/fontdlgg.cpp:315
 msgid "Roman"
-msgstr "罗马"
+msgstr "衬线体"
 
 #: ../src/generic/fontdlgg.cpp:316
 msgid "Decorative"
-msgstr "修饰"
+msgstr "装饰体"
 
 #: ../src/generic/fontdlgg.cpp:317
 msgid "Modern"
-msgstr "现代"
+msgstr "等宽体"
 
 #: ../src/generic/fontdlgg.cpp:318
 msgid "Script"
-msgstr "手写"
+msgstr "手写体"
 
 #: ../src/generic/fontdlgg.cpp:319
 msgid "Swiss"
-msgstr "瑞士"
+msgstr "无衬线体"
 
 #: ../src/generic/fontdlgg.cpp:320
 msgid "Teletype"
-msgstr "打字"
+msgstr "打字机体"
 
 #: ../src/generic/fontdlgg.cpp:321 ../src/generic/fontdlgg.cpp:324
 msgid "Normal"
@@ -4727,19 +4727,19 @@ msgstr "正常"
 
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Slant"
-msgstr "倾斜"
+msgstr "倾斜体"
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Light"
-msgstr "细"
+msgstr "细体"
 
 #: ../src/generic/fontdlgg.cpp:363
 msgid "&Font family:"
-msgstr "字体(&F)："
+msgstr "字体系列(&F)："
 
 #: ../src/generic/fontdlgg.cpp:367 ../src/generic/fontdlgg.cpp:369
 msgid "The font family."
-msgstr "字体。"
+msgstr "字体系列。"
 
 #: ../src/generic/fontdlgg.cpp:374 ../src/richtext/richtextstylepage.cpp:105
 msgid "&Style:"
@@ -4759,7 +4759,7 @@ msgstr "字体粗细。"
 
 #: ../src/generic/fontdlgg.cpp:399
 msgid "C&olour:"
-msgstr "颜色(&o)："
+msgstr "颜色(&O)："
 
 #: ../src/generic/fontdlgg.cpp:407 ../src/generic/fontdlgg.cpp:409
 msgid "The font colour."
@@ -4767,16 +4767,16 @@ msgstr "字体颜色。"
 
 #: ../src/generic/fontdlgg.cpp:415
 msgid "&Point size:"
-msgstr "字体大小(&P)："
+msgstr "字号(&P)："
 
 #: ../src/generic/fontdlgg.cpp:420 ../src/generic/fontdlgg.cpp:422
 #: ../src/generic/fontdlgg.cpp:426 ../src/generic/fontdlgg.cpp:428
 msgid "The font point size."
-msgstr "字体大小。"
+msgstr "字号。"
 
 #: ../src/generic/fontdlgg.cpp:439 ../src/generic/fontdlgg.cpp:441
 msgid "Whether the font is underlined."
-msgstr "字体是否为下划线。"
+msgstr "字体是否加下划线。"
 
 #: ../src/generic/fontdlgg.cpp:448 ../src/html/helpwnd.cpp:1215
 msgid "Preview:"
@@ -4804,7 +4804,7 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
-"复制网格到剪贴板时出错。可能是因为所选单元格不连续，或者没有选中任何单元格。"
+"无法将网格复制到剪贴板。所选单元格不连续，或未选择任何单元格。"
 
 #: ../src/generic/grid.cpp:12739
 msgid "Grid Corner"
@@ -4848,16 +4848,16 @@ msgstr "找不到帮助文件 \"%s\"。"
 #: ../src/generic/helpext.cpp:284
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
-msgstr "映射文件 \"%2$s\" 的第 %1$lu 行存在无效语法，跳过。"
+msgstr "映射文件 \"%2$s\" 的第 %1$lu 行存在无效语法，已跳过。"
 
 #: ../src/generic/helpext.cpp:292
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
-msgstr "文件 \"%s\" 中无有效映射。"
+msgstr "文件 \"%s\" 中未找到有效映射。"
 
 #: ../src/generic/helpext.cpp:435
 msgid "No entries found."
-msgstr "没找到条目。"
+msgstr "未找到条目。"
 
 #: ../src/generic/helpext.cpp:444 ../src/generic/helpext.cpp:445
 msgid "Help Index"
@@ -4877,7 +4877,7 @@ msgstr "复制 URL(&C)"
 
 #: ../src/generic/infobar.cpp:119
 msgid "Hide this notification message."
-msgstr "隐藏此通知消息。"
+msgstr "隐藏此通知。"
 
 #. TRANSLATORS: %s will be either the application name or "Application"
 #: ../src/generic/logg.cpp:257
@@ -4903,7 +4903,7 @@ msgstr "应用程序"
 
 #: ../src/generic/logg.cpp:549
 msgid "Save log contents to file"
-msgstr "把日志内容保存到文件"
+msgstr "将日志内容保存到文件"
 
 #: ../src/generic/logg.cpp:551
 msgid "C&lear"
@@ -4923,16 +4923,16 @@ msgstr "日志(&L)"
 
 #: ../src/generic/logg.cpp:610 ../src/generic/logg.cpp:992
 msgid "Can't save log contents to file."
-msgstr "无法把日志内容保存到文件。"
+msgstr "无法将日志内容保存到文件。"
 
 #: ../src/generic/logg.cpp:613
 #, c-format
 msgid "Log saved to the file '%s'."
-msgstr "日志保存到文件 '%s'。"
+msgstr "日志已保存到文件 '%s'。"
 
 #: ../src/generic/logg.cpp:719
 msgid "&Details"
-msgstr "细节(&D)"
+msgstr "详细信息(&D)"
 
 #: ../src/generic/logg.cpp:972
 msgid "Failed to copy dialog contents to the clipboard."
@@ -4941,28 +4941,28 @@ msgstr "无法将对话框内容复制到剪贴板。"
 #: ../src/generic/logg.cpp:1022
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
-msgstr "是否把日志添加到文件 '%s'？（选择【否】将覆盖该文件）"
+msgstr "将日志追加到文件 '%s' 中？（选择「否」将覆盖该文件）"
 
 #: ../src/generic/logg.cpp:1024
 msgid "Question"
-msgstr "问题"
+msgstr "询问"
 
 #: ../src/generic/logg.cpp:1038
 msgid "invalid message box return value"
-msgstr "消息框的返回值无效"
+msgstr "无效消息框返回值"
 
 #: ../src/generic/notifmsgg.cpp:129
 msgid "Notice"
-msgstr "注意"
+msgstr "通知"
 
 #: ../src/generic/preferencesg.cpp:118
 #, c-format
 msgid "%s Preferences"
-msgstr "%s 偏好设置"
+msgstr "%s 首选项"
 
 #: ../src/generic/printps.cpp:143
 msgid "Printing..."
-msgstr "打印..."
+msgstr "正在打印..."
 
 #: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1076
 #: ../src/msw/printwin.cpp:235
@@ -4996,11 +4996,11 @@ msgstr "状态："
 
 #: ../src/generic/prntdlgg.cpp:206
 msgid "All"
-msgstr "所有"
+msgstr "全部"
 
 #: ../src/generic/prntdlgg.cpp:207
 msgid "Pages"
-msgstr "页"
+msgstr "页码范围"
 
 #: ../src/generic/prntdlgg.cpp:215
 msgid "Print Range"
@@ -5020,7 +5020,7 @@ msgstr "份数："
 
 #: ../src/generic/prntdlgg.cpp:288
 msgid "PostScript file"
-msgstr "PostScript文件"
+msgstr "PostScript 文件"
 
 #: ../src/generic/prntdlgg.cpp:439
 msgid "Print Setup"
@@ -5032,7 +5032,7 @@ msgstr "打印机"
 
 #: ../src/generic/prntdlgg.cpp:501
 msgid "Default printer"
-msgstr "默认的打印机"
+msgstr "默认打印机"
 
 #: ../src/generic/prntdlgg.cpp:595 ../src/generic/prntdlgg.cpp:782
 #: ../src/generic/prntdlgg.cpp:822 ../src/generic/prntdlgg.cpp:835
@@ -5062,7 +5062,7 @@ msgstr "彩色打印"
 
 #: ../src/generic/prntdlgg.cpp:621
 msgid "Print spooling"
-msgstr "打印假脱机"
+msgstr "打印后台处理"
 
 #: ../src/generic/prntdlgg.cpp:623
 msgid "Printer command:"
@@ -5074,24 +5074,23 @@ msgstr "打印机选项："
 
 #: ../src/generic/prntdlgg.cpp:860
 msgid "Left margin (mm):"
-msgstr "左边距 (毫米)："
+msgstr "左边距（毫米）："
 
 #: ../src/generic/prntdlgg.cpp:861
 msgid "Top margin (mm):"
-msgstr "上边距 (毫米)："
+msgstr "上边距（毫米）："
 
 #: ../src/generic/prntdlgg.cpp:872
 msgid "Right margin (mm):"
-msgstr "右边距 (毫米)："
+msgstr "右边距（毫米）："
 
 #: ../src/generic/prntdlgg.cpp:873
 msgid "Bottom margin (mm):"
-msgstr "底边距 (毫米)："
+msgstr "底边距（毫米）："
 
 #: ../src/generic/prntdlgg.cpp:896
 msgid "Printer..."
 msgstr "打印机..."
-
 #: ../src/generic/progdlgg.cpp:246
 msgid "&Skip"
 msgstr "跳过(&S)"
@@ -5111,31 +5110,31 @@ msgstr "搜索"
 
 #: ../src/generic/tabg.cpp:1026
 msgid "Could not find tab for id"
-msgstr "找不到 id 对应的标签"
+msgstr "未找到 id 对应的标签"
 
 #: ../src/generic/tipdlg.cpp:136
 msgid "Tips not available, sorry!"
-msgstr "对不起，没有所需的提示！"
+msgstr "抱歉，暂无提示！"
 
 #: ../src/generic/tipdlg.cpp:197
 msgid "Tip of the Day"
-msgstr "每日技巧"
+msgstr "每日提示"
 
 #: ../src/generic/tipdlg.cpp:207
 msgid "Did you know..."
-msgstr "你知道吗..."
+msgstr "使用技巧..."
 
 #: ../src/generic/tipdlg.cpp:232
 msgid "&Show tips at startup"
-msgstr "启动时显示技巧(&S)"
+msgstr "启动时显示提示(&S)"
 
 #: ../src/generic/tipdlg.cpp:236
 msgid "&Next Tip"
-msgstr "下一技巧(&N)"
+msgstr "下一条(&N)"
 
 #: ../src/generic/wizard.cpp:411
 msgid "&Next >"
-msgstr "下一个(&N) >"
+msgstr "下一步(&N) >"
 
 #: ../src/generic/wizard.cpp:412
 msgid "&Finish"
@@ -5143,7 +5142,7 @@ msgstr "完成(&F)"
 
 #: ../src/generic/wizard.cpp:420
 msgid "< &Back"
-msgstr "< 返回(&B)"
+msgstr "< 上一步(&B)"
 
 #: ../src/gtk/aboutdlg.cpp:204
 msgid "translator-credits"
@@ -5165,7 +5164,7 @@ msgstr "无法初始化 GTK+，DISPLAY 是否已正确设置？"
 #: ../src/gtk/filedlg.cpp:89 ../src/gtk/filepicker.cpp:255
 #, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "将当前目录更改为 \"%s\" 失败"
+msgstr "切换当前目录到 \"%s\" 失败"
 
 #: ../src/gtk/font.cpp:548
 msgid ""
@@ -5175,20 +5174,20 @@ msgstr "此系统不支持使用私有字体：Pango 库太旧，需要 1.38 或
 
 #: ../src/gtk/font.cpp:558
 msgid "Failed to create font configuration object."
-msgstr "未能创建字体配置对象。"
+msgstr "无法创建字体配置对象。"
 
 #: ../src/gtk/font.cpp:568
 #, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "添加自定义字体 \"%s\" 失败。"
+msgstr "无法添加自定义字体 \"%s\"。"
 
 #: ../src/gtk/font.cpp:576
 msgid "Failed to register font configuration using private fonts."
-msgstr "使用私有字体注册字体配置失败。"
+msgstr "无法使用私有字体注册字体配置。"
 
 #: ../src/gtk/glcanvas.cpp:117 ../src/gtk/glcanvas.cpp:132
 msgid "Fatal Error"
-msgstr "严重错误"
+msgstr "致命错误"
 
 #: ../src/gtk/glcanvas.cpp:117
 msgid ""
@@ -5207,12 +5206,12 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
-"wxGLCanvas 目前仅支持 Wayland 和 X11。您可能可以通过\n"
+"wxGLCanvas 目前仅支持 Wayland 和 X11。您可以尝试\n"
 "在启动程序前设置环境变量 GDK_BACKEND=x11 来解决此问题。"
 
 #: ../src/gtk/mdi.cpp:433
 msgid "MDI child"
-msgstr "多文档界面子窗口"
+msgstr "MDI 子窗口"
 
 #: ../src/gtk/power.cpp:188
 #, c-format
@@ -5234,11 +5233,11 @@ msgstr "挂起前清理"
 #: ../src/gtk/power.cpp:259
 #, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "阻止睡眠失败：%s"
+msgstr "无法阻止睡眠：%s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr "对 D-Bus “阻止” 请求的意外响应。"
+msgstr "D-Bus \"Inhibit\" 请求收到意外响应。"
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
@@ -5271,33 +5270,33 @@ msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
 msgstr ""
-"本机安装的 GTK+ 版本过低，不支持屏幕组合，请安装 GTK+2.12 或者更新版本。"
+"本机安装的 GTK+ 版本过低，无法支持屏幕合成。请安装 GTK+ 2.12 或更高版本。"
 
 #: ../src/gtk/window.cpp:6307
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
-msgstr "当前系统不支持组合模式，请在窗口管理器中启用。"
+msgstr "当前系统不支持屏幕合成，请在窗口管理器中启用。"
 
 #: ../src/gtk/window.cpp:6318
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
-msgstr "该应用由过早版本的 GTK+ 编译，请用 GTK+ 2.12 或以上版本重新构建。"
+msgstr "本程序使用过旧版本的 GTK+ 编译，请使用 GTK+ 2.12 或更高版本重新构建。"
 
 #: ../src/html/chm.cpp:138
 #, c-format
 msgid "Failed to open CHM archive '%s'."
-msgstr "无法打开 CHM 存档 '%s'。"
+msgstr "无法打开 CHM 文件 '%s'。"
 
 #: ../src/html/chm.cpp:270
 #, c-format
 msgid "Could not extract %s into %s: %s"
-msgstr "无法将 %s 解开至 %s：%s"
+msgstr "无法将 %s 提取到 %s：%s"
 
 #: ../src/html/chm.cpp:324
 msgid "no error"
-msgstr "没有错误"
+msgstr "无错误"
 
 #: ../src/html/chm.cpp:326
 msgid "bad arguments to library function"
@@ -5305,23 +5304,23 @@ msgstr "库函数参数错误"
 
 #: ../src/html/chm.cpp:328
 msgid "error opening file"
-msgstr "打开文件出错"
+msgstr "打开文件时出错"
 
 #: ../src/html/chm.cpp:330
 msgid "read error"
-msgstr "读取错误"
+msgstr "读取时出错"
 
 #: ../src/html/chm.cpp:332
 msgid "write error"
-msgstr "写错误"
+msgstr "写入时出错"
 
 #: ../src/html/chm.cpp:334
 msgid "seek error"
-msgstr "搜索错误"
+msgstr "定位时出错"
 
 #: ../src/html/chm.cpp:338
 msgid "bad signature"
-msgstr "错误的签名"
+msgstr "签名无效"
 
 #: ../src/html/chm.cpp:340
 msgid "error in data format"
@@ -5329,20 +5328,20 @@ msgstr "文件格式错误"
 
 #: ../src/html/chm.cpp:342
 msgid "checksum error"
-msgstr "校验和错误"
+msgstr "校验和出错"
 
 #: ../src/html/chm.cpp:344
 msgid "compression error"
-msgstr "压缩错误"
+msgstr "压缩出错"
 
 #: ../src/html/chm.cpp:346
 msgid "decompression error"
-msgstr "解压缩错误"
+msgstr "解压缩出错"
 
 #: ../src/html/chm.cpp:437
 #, c-format
 msgid "Could not locate file '%s'."
-msgstr "找不到文件 '%s'。"
+msgstr "未找到文件 '%s'。"
 
 #: ../src/html/chm.cpp:711
 #, c-format
@@ -5352,7 +5351,7 @@ msgstr "无法创建临时文件 '%s'"
 #: ../src/html/chm.cpp:718
 #, c-format
 msgid "Extraction of '%s' into '%s' failed."
-msgstr "将 '%s' 解压至 '%s' 失败。"
+msgstr "无法将 '%s' 提取到 '%s'。"
 
 #: ../src/html/chm.cpp:806 ../src/html/chm.cpp:863
 msgid "CHM handler currently supports only local files!"
@@ -5370,7 +5369,7 @@ msgstr "帮助：%s"
 #: ../src/html/helpctrl.cpp:155
 #, c-format
 msgid "Adding book %s"
-msgstr "正在添加卷 %s"
+msgstr "正在添加帮助手册 %s"
 
 #: ../src/html/helpdata.cpp:295
 #, c-format
@@ -5384,16 +5383,16 @@ msgstr "无法打开索引文件：%s"
 
 #: ../src/html/helpdata.cpp:643
 msgid "noname"
-msgstr "未名"
+msgstr "无名称"
 
 #: ../src/html/helpdata.cpp:652
 #, c-format
 msgid "Cannot open HTML help book: %s"
-msgstr "无法打开 HTML 帮助：%s"
+msgstr "无法打开 HTML 帮助手册：%s"
 
 #: ../src/html/helpwnd.cpp:315
 msgid "Displays help as you browse the books on the left."
-msgstr "在您浏览左侧的书籍时显示帮助。"
+msgstr "浏览左侧的帮助手册时在此显示帮助内容。"
 
 #: ../src/html/helpwnd.cpp:411 ../src/html/helpwnd.cpp:1100
 #: ../src/html/helpwnd.cpp:1735
@@ -5402,15 +5401,15 @@ msgstr "(书签)"
 
 #: ../src/html/helpwnd.cpp:424
 msgid "Add current page to bookmarks"
-msgstr "把当前页加到书签中"
+msgstr "将当前页添加到书签"
 
 #: ../src/html/helpwnd.cpp:425
 msgid "Remove current page from bookmarks"
-msgstr "从书签中移去当前页"
+msgstr "从书签中移除当前页"
 
 #: ../src/html/helpwnd.cpp:470
 msgid "Contents"
-msgstr "内容"
+msgstr "目录"
 
 #: ../src/html/helpwnd.cpp:485
 msgid "Find"
@@ -5424,29 +5423,29 @@ msgstr "显示全部"
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
-msgstr "显示包含给定子串的所有索引项。搜索是大小写无关的。"
+msgstr "显示包含指定子串的所有索引项。搜索不区分大小写。"
 
 #: ../src/html/helpwnd.cpp:498
 msgid "Show all items in index"
-msgstr "以索引方式显示所有项目"
+msgstr "显示索引中的所有项"
 
 #: ../src/html/helpwnd.cpp:528
 msgid "Case sensitive"
-msgstr "大小写敏感"
+msgstr "区分大小写"
 
 #: ../src/html/helpwnd.cpp:529
 msgid "Whole words only"
-msgstr "仅为整字"
+msgstr "全词匹配"
 
 #: ../src/html/helpwnd.cpp:532
 msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
 "above"
-msgstr "从帮助内容中搜索符合你在上面输入的正文的所有条目"
+msgstr "在帮助手册内容中查找上方输入文本的所有匹配项"
 
 #: ../src/html/helpwnd.cpp:653
 msgid "Show/hide navigation panel"
-msgstr "显示/隐藏 导航面板"
+msgstr "显示/隐藏导航面板"
 
 #: ../src/html/helpwnd.cpp:655
 msgid "Go back"
@@ -5458,7 +5457,7 @@ msgstr "前进"
 
 #: ../src/html/helpwnd.cpp:658
 msgid "Go one level up in document hierarchy"
-msgstr "到上一级文档目录"
+msgstr "转到文档层级的上一级"
 
 #: ../src/html/helpwnd.cpp:666 ../src/html/helpwnd.cpp:1547
 msgid "Open HTML document"
@@ -5474,7 +5473,7 @@ msgstr "显示选项对话框"
 
 #: ../src/html/helpwnd.cpp:795
 msgid "Please choose the page to display:"
-msgstr "请选择欲显示的页面："
+msgstr "请选择要显示的页面："
 
 #: ../src/html/helpwnd.cpp:796
 msgid "Help Topics"
@@ -5482,11 +5481,11 @@ msgstr "帮助主题"
 
 #: ../src/html/helpwnd.cpp:852
 msgid "Searching..."
-msgstr "搜索中..."
+msgstr "正在搜索..."
 
 #: ../src/html/helpwnd.cpp:853
 msgid "No matching page found yet"
-msgstr "还没有找到匹配页"
+msgstr "尚未找到匹配的页面"
 
 #: ../src/html/helpwnd.cpp:870
 #, c-format
@@ -5509,7 +5508,7 @@ msgstr "%lu / %lu"
 
 #: ../src/html/helpwnd.cpp:1047
 msgid "Search in all books"
-msgstr "搜索所有的书籍"
+msgstr "在所有帮助手册中搜索"
 
 #: ../src/html/helpwnd.cpp:1193
 msgid "Help Browser Options"
@@ -5521,7 +5520,7 @@ msgstr "正常字体："
 
 #: ../src/html/helpwnd.cpp:1199
 msgid "Fixed font:"
-msgstr "固定字体："
+msgstr "等宽字体："
 
 #: ../src/html/helpwnd.cpp:1200
 msgid "Font size:"
@@ -5549,7 +5548,7 @@ msgstr "<b><i>粗斜体</i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1262
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
-msgstr "固定字体。<br> <b>粗体</b><i>斜体</i> "
+msgstr "等宽字体。<br> <b>粗体</b> <i>斜体</i> "
 
 #: ../src/html/helpwnd.cpp:1263
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
@@ -5557,7 +5556,7 @@ msgstr "<b><i>粗斜体<u>加下划线</u></i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1524
 msgid "Help Printing"
-msgstr "帮助打印"
+msgstr "打印帮助"
 
 #: ../src/html/helpwnd.cpp:1527
 msgid "Cannot print empty page."
@@ -5565,19 +5564,19 @@ msgstr "无法打印空白页面。"
 
 #: ../src/html/helpwnd.cpp:1540
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
-msgstr "HTML文件 (*.html;*.htm)|*.html;*.htm|"
+msgstr "HTML 文件 (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/html/helpwnd.cpp:1541
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
-msgstr "帮助书 (*.htb)|*.htb|帮助书 (*.zip)|*.zip|"
+msgstr "帮助手册 (*.htb)|*.htb|帮助手册 (*.zip)|*.zip|"
 
 #: ../src/html/helpwnd.cpp:1542
 msgid "HTML Help Project (*.hhp)|*.hhp|"
-msgstr "HTML 帮助的工程文件 (*.hhp)|*.hhp|"
+msgstr "HTML 帮助工程 (*.hhp)|*.hhp|"
 
 #: ../src/html/helpwnd.cpp:1544
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
-msgstr "压缩的HTML帮助文件 (*.chm)|*.chm|"
+msgstr "压缩的 HTML 帮助文件 (*.chm)|*.chm|"
 
 #: ../src/html/helpwnd.cpp:1671
 #, c-format
@@ -5601,11 +5600,11 @@ msgstr "正在连接..."
 #: ../src/html/htmlwin.cpp:616
 #, c-format
 msgid "Unable to open requested HTML document: %s"
-msgstr "无法打开 HTML 文档：%s"
+msgstr "无法打开请求的 HTML 文档：%s"
 
 #: ../src/html/htmlwin.cpp:630
 msgid "Loading : "
-msgstr "加载： "
+msgstr "正在加载： "
 
 #: ../src/html/htmlwin.cpp:673
 msgid "Done"
@@ -5614,7 +5613,7 @@ msgstr "完成"
 #: ../src/html/htmlwin.cpp:723
 #, c-format
 msgid "HTML anchor %s does not exist."
-msgstr "HTML 锚 %s 不存在。"
+msgstr "HTML 锚点 %s 不存在。"
 
 #: ../src/html/htmlwin.cpp:1057
 #, c-format
@@ -5625,7 +5624,7 @@ msgstr "已复制到剪贴板：\"%s\""
 msgid ""
 "This document doesn't fit on the page horizontally and will be truncated "
 "when it is printed."
-msgstr "该文档的水平尺寸不符合页面，若打印将会被截断。"
+msgstr "此文档宽度超出页面，打印时将被截断。"
 
 #: ../src/html/htmprint.cpp:285
 #, c-format
@@ -5635,19 +5634,19 @@ msgid ""
 "\n"
 "Would you like to proceed with printing it nevertheless?"
 msgstr ""
-"文件 \"%s\" 的水平尺寸不符合页面，若打印将会被截断。\n"
+"文档 \"%s\" 的宽度超出页面，打印时将被截断。\n"
 "\n"
-"强制打印该文档？"
+"仍要继续打印吗？"
 
 #: ../src/html/htmprint.cpp:296
 msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
-msgstr "如有可能，请尝试更改布局参数以使输出结果更紧凑。"
+msgstr "如有可能，请尝试调整布局参数，使打印输出更窄。"
 
 #: ../src/html/htmprint.cpp:445
 msgid ": file does not exist!"
-msgstr "：文件不存在！"
+msgstr ": 文件不存在！"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
@@ -5658,7 +5657,7 @@ msgstr "%s 预览"
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
-msgstr "在页面建立时发生问题：您可能需要设置一台默认的打印机。"
+msgstr "页面设置时出现问题：可能需要设置默认打印机。"
 
 #: ../src/msw/clipbrd.cpp:80
 msgid "Failed to open the clipboard."
@@ -5674,7 +5673,7 @@ msgstr "无法清空剪贴板。"
 
 #: ../src/msw/clipbrd.cpp:284
 msgid "Failed to put data on the clipboard"
-msgstr "无法把数据放到剪贴板"
+msgstr "无法将数据放入剪贴板"
 
 #: ../src/msw/clipbrd.cpp:326
 msgid "Failed to get data from the clipboard"
@@ -5682,16 +5681,16 @@ msgstr "无法从剪贴板获取数据"
 
 #: ../src/msw/clipbrd.cpp:363
 msgid "Failed to retrieve the supported clipboard formats"
-msgstr "无法提取支持的剪贴板格式"
+msgstr "无法获取支持的剪贴板格式"
 
 #: ../src/msw/colordlg.cpp:228
 #, c-format
 msgid "Colour selection dialog failed with error %0lx."
-msgstr "颜色选择对话框错误，错误码 %0lx。"
+msgstr "颜色选择对话框出错，代码 %0lx。"
 
 #: ../src/msw/cursor.cpp:141
 msgid "Failed to create cursor."
-msgstr "无法创建游标。"
+msgstr "无法创建光标。"
 
 #: ../src/msw/dde.cpp:279
 #, c-format
@@ -5701,28 +5700,28 @@ msgstr "无法注册 DDE 服务器 '%s'"
 #: ../src/msw/dde.cpp:300
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "无法撤消 DDE 服务器 '%s' 的注册"
+msgstr "无法取消注册 DDE 服务器 '%s'"
 
 #: ../src/msw/dde.cpp:428
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
-msgstr "无法创建到服务器 '%s' 关于主题 '%s' 的连接"
+msgstr "无法创建到服务器 '%s' 的连接（主题 '%s'）"
 
 #: ../src/msw/dde.cpp:655
 msgid "DDE poke request failed"
-msgstr "DDE poke 请求失败"
+msgstr "DDE Poke 请求失败"
 
 #: ../src/msw/dde.cpp:674
 msgid "Failed to establish an advise loop with DDE server"
-msgstr "无法在 DDE 服务器建立 advise 循环"
+msgstr "无法与 DDE 服务器建立 Advise 循环"
 
 #: ../src/msw/dde.cpp:693
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr "无法终止与 DDE 服务器的 advise 循环"
+msgstr "无法终止与 DDE 服务器的 Advise 循环"
 
 #: ../src/msw/dde.cpp:768
 msgid "Failed to send DDE advise notification"
-msgstr "无法发送 DDE advise 通知"
+msgstr "无法发送 DDE Advise 通知"
 
 #: ../src/msw/dde.cpp:1085
 msgid "Failed to create DDE string"
@@ -5730,19 +5729,19 @@ msgstr "无法创建 DDE 字符串"
 
 #: ../src/msw/dde.cpp:1131
 msgid "no DDE error."
-msgstr "没有 DDE 错误。"
+msgstr "无 DDE 错误。"
 
 #: ../src/msw/dde.cpp:1135
 msgid "a request for a synchronous advise transaction has timed out."
-msgstr "同步 advise 事务请求超时。"
+msgstr "同步 Advise 事务请求已超时。"
 
 #: ../src/msw/dde.cpp:1138
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
-msgstr "对事件的响应导致 DDE_FBUSY 位被设置。"
+msgstr "事务响应导致 DDE_FBUSY 位被置位。"
 
 #: ../src/msw/dde.cpp:1141
 msgid "a request for a synchronous data transaction has timed out."
-msgstr "同步 data 事务请求超时。"
+msgstr "同步数据事务请求已超时。"
 
 #: ../src/msw/dde.cpp:1144
 msgid ""
@@ -5751,8 +5750,8 @@ msgid ""
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
-"没有调用 DdeInitialize 初始化函数就调用其它的\n"
-"DDEML 函数，或传给 DDEML 函数的是无效的实例标识。"
+"调用了 DDEML 函数，但未先调用 DdeInitialize 函数，\n"
+"或向 DDEML 函数传递了无效的实例标识符。"
 
 #: ../src/msw/dde.cpp:1147
 msgid ""
@@ -5761,20 +5760,22 @@ msgid ""
 "or an application initialized as APPCMD_CLIENTONLY has \n"
 "attempted to perform server transactions."
 msgstr ""
-"初始化为 APPCLASS_MONITOR 的应用程序试图执行 DDE 事务，\n"
-"或初始化为 APPCMD_CLIENTONLY 的应用程序试图执行服务器事务。"
+"初始化为 APPCLASS_MONITOR 的应用程序\n"
+"尝试执行 DDE 事务，\n"
+"或初始化为 APPCMD_CLIENTONLY 的应用程序\n"
+"尝试执行服务器事务。"
 
 #: ../src/msw/dde.cpp:1150
 msgid "a request for a synchronous execute transaction has timed out."
-msgstr "同步 execute 事务请求超时。"
+msgstr "同步执行事务请求已超时。"
 
 #: ../src/msw/dde.cpp:1153
 msgid "a parameter failed to be validated by the DDEML."
-msgstr "参数无法通过 DDEML 验证。"
+msgstr "参数未能通过 DDEML 验证。"
 
 #: ../src/msw/dde.cpp:1156
 msgid "a DDEML application has created a prolonged race condition."
-msgstr "一 DDEML 应用程序已生成延时竞态条件。"
+msgstr "DDEML 应用程序造成了长时间的竞争条件。"
 
 #: ../src/msw/dde.cpp:1159
 msgid "a memory allocation failed."
@@ -5782,7 +5783,7 @@ msgstr "内存分配失败。"
 
 #: ../src/msw/dde.cpp:1162
 msgid "a client's attempt to establish a conversation has failed."
-msgstr "客户试图建立的会话已失败。"
+msgstr "客户端建立会话的尝试失败。"
 
 #: ../src/msw/dde.cpp:1165
 msgid "a transaction failed."
@@ -5790,11 +5791,11 @@ msgstr "事务失败。"
 
 #: ../src/msw/dde.cpp:1168
 msgid "a request for a synchronous poke transaction has timed out."
-msgstr "同步 poke 事务请求超时。"
+msgstr "同步 Poke 事务请求已超时。"
 
 #: ../src/msw/dde.cpp:1171
 msgid "an internal call to the PostMessage function has failed. "
-msgstr "内部调用 PostMessage 失败。 "
+msgstr "内部调用 PostMessage 函数失败。"
 
 #: ../src/msw/dde.cpp:1174
 msgid "reentrancy problem."
@@ -5806,16 +5807,16 @@ msgid ""
 "that was terminated by the client, or the server\n"
 "terminated before completing a transaction."
 msgstr ""
-"服务器端事务尝试在已被客户端终止的会话上\n"
-"执行，或服务器在完成事务前终止。"
+"尝试在客户端已终止的会话上执行服务器端事务，\n"
+"或服务器在完成事务前已终止。"
 
 #: ../src/msw/dde.cpp:1180
 msgid "an internal error has occurred in the DDEML."
-msgstr "DDEML 内部发生错误。"
+msgstr "DDEML 发生内部错误。"
 
 #: ../src/msw/dde.cpp:1183
 msgid "a request to end an advise transaction has timed out."
-msgstr "终止 advise 事务的请求超时。"
+msgstr "结束 Advise 事务的请求已超时。"
 
 #: ../src/msw/dde.cpp:1186
 msgid ""
@@ -5823,8 +5824,9 @@ msgid ""
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
-"传给 DDEML 函数的是无效的事务标识符。一旦应用程序从\n"
-"XTYP_XACT_COMPLETE 回调函数返回，回调函数事务标识符就不再有效。"
+"向 DDEML 函数传递了无效的事务标识符。\n"
+"一旦应用程序从 XTYP_XACT_COMPLETE 回调返回，\n"
+"该回调的事务标识符即不再有效。"
 
 #: ../src/msw/dde.cpp:1189
 #, c-format
@@ -5843,16 +5845,16 @@ msgid ""
 "The version of remote access service (RAS) installed on this machine is too "
 "old, please upgrade (the following required function is missing: %s)."
 msgstr ""
-"本机安装的远程访问服务 (RAS) 太旧，请更新该服务 (缺少下列必要的函数：%s)."
+"本机安装的远程访问服务 (RAS) 版本过旧，请升级（缺少下列必要的函数：%s）。"
 
 #: ../src/msw/dialup.cpp:437
 msgid "Failed to retrieve text of RAS error message"
-msgstr "无法提取 RAS 错误消息正文"
+msgstr "无法获取 RAS 错误消息文本"
 
 #: ../src/msw/dialup.cpp:440
 #, c-format
 msgid "unknown error (error code %08x)."
-msgstr "未知错误 (错误码 %08x)。"
+msgstr "未知错误（错误代码 %08x）。"
 
 #: ../src/msw/dialup.cpp:492
 #, c-format
@@ -5875,7 +5877,7 @@ msgstr "无法获取 ISP 名称：%s"
 
 #: ../src/msw/dialup.cpp:712
 msgid "Failed to connect: no ISP to dial."
-msgstr "连接失败：没有可用的 ISP。"
+msgstr "连接失败：没有 ISP 可拨号。"
 
 #: ../src/msw/dialup.cpp:732
 msgid "Choose ISP to dial"
@@ -5883,7 +5885,7 @@ msgstr "选择 ISP 进行拨号"
 
 #: ../src/msw/dialup.cpp:733
 msgid "Please choose which ISP do you want to connect to"
-msgstr "请选择你想连接的 ISP"
+msgstr "请选择要连接的 ISP"
 
 #: ../src/msw/dialup.cpp:766
 msgid "Failed to connect: missing username/password."
@@ -5900,7 +5902,7 @@ msgstr "无法初始化拨号连接：%s"
 
 #: ../src/msw/dialup.cpp:897
 msgid "Cannot hang up - no active dialup connection."
-msgstr "无法挂断 - 没有活动的拨号连接。"
+msgstr "无法挂断：没有活动的拨号连接。"
 
 #: ../src/msw/dialup.cpp:907
 #, c-format
@@ -5910,12 +5912,12 @@ msgstr "无法终止拨号连接：%s"
 #: ../src/msw/dib.cpp:313
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
-msgstr "无法将位图图像保存至文件 \"%s\"。"
+msgstr "无法将位图图像保存到文件 \"%s\"。"
 
 #: ../src/msw/dib.cpp:543
 #, c-format
 msgid "Failed to allocate %luKb of memory for bitmap data."
-msgstr "无法为位图数据分配 %luKb 内存。"
+msgstr "无法为位图数据分配 %lu KB 内存。"
 
 #: ../src/msw/dir.cpp:241
 #, c-format
@@ -5944,7 +5946,7 @@ msgstr "无法从文件 \"%s\" 加载图元文件。"
 #: ../src/msw/fdrepdlg.cpp:412
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
-msgstr "无法创建标准 “查找/替换” 对话框 (错误码 %d)"
+msgstr "无法创建标准「查找/替换」对话框（错误代码 %d）"
 
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
@@ -5957,7 +5959,7 @@ msgstr "安全警告"
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
 msgid "File dialog failed with error code %0lx."
-msgstr "文件对话框错误，错误码：%0lx。"
+msgstr "文件对话框出错，代码 %0lx。"
 
 #: ../src/msw/font.cpp:1120
 #, c-format
@@ -5967,7 +5969,7 @@ msgstr "无法加载字体文件 \"%s\""
 #: ../src/msw/fontdlg.cpp:220
 #, c-format
 msgid "Common dialog failed with error code %0lx."
-msgstr "公共对话框错误，错误码 %0lx。"
+msgstr "通用对话框出错，代码 %0lx。"
 
 #: ../src/msw/fswatcher.cpp:67
 msgid "Ungraceful worker thread termination"
@@ -5979,7 +5981,7 @@ msgstr "无法创建 IOCP 工作线程"
 
 #: ../src/msw/fswatcher.cpp:88
 msgid "Unable to start IOCP worker thread"
-msgstr "无法开始 IOCP 工作线程"
+msgstr "无法启动 IOCP 工作线程"
 
 #: ../src/msw/fswatcher.cpp:140
 msgid "Monitoring individual files for changes is not supported currently."
@@ -5988,12 +5990,12 @@ msgstr "当前不支持监视单独文件的更改。"
 #: ../src/msw/fswatcher.cpp:165
 #, c-format
 msgid "Unable to set up watch for '%s'"
-msgstr "无法为 '%s' 设置 watch"
+msgstr "无法为 '%s' 设置监视"
 
 #: ../src/msw/fswatcher.cpp:466
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
-msgstr "无法监视不存在目录 \"%s\" 的更新。"
+msgstr "无法监视不存在的目录 \"%s\" 的更改。"
 
 #: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:507
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
@@ -6020,7 +6022,7 @@ msgstr "缺少微软 HTML 帮助库，无法使用微软 HTML 帮助功能。请
 
 #: ../src/msw/helpchm.cpp:55
 msgid "Failed to initialize MS HTML Help."
-msgstr "微软 HTML 帮助初始化失败。"
+msgstr "无法初始化微软 HTML 帮助。"
 
 #: ../src/msw/iniconf.cpp:458
 #, c-format
@@ -6038,15 +6040,15 @@ msgstr "层叠(&C)"
 
 #: ../src/msw/mdi.cpp:171
 msgid "Tile &Horizontally"
-msgstr "水平排布(&H)"
+msgstr "水平平铺(&H)"
 
 #: ../src/msw/mdi.cpp:172
 msgid "Tile &Vertically"
-msgstr "垂直排布(&V)"
+msgstr "垂直平铺(&V)"
 
 #: ../src/msw/mdi.cpp:174
 msgid "&Arrange Icons"
-msgstr "重排图标(&A)"
+msgstr "排列图标(&A)"
 
 #: ../src/msw/mdi.cpp:621
 msgid "Failed to create MDI parent frame."
@@ -6065,37 +6067,36 @@ msgstr "无法找到 \"%s\" 的 CLSID"
 #: ../src/msw/ole/automtn.cpp:512
 #, c-format
 msgid "Failed to create an instance of \"%s\""
-msgstr "无法创建实例 \"%s\""
+msgstr "无法创建 \"%s\" 的实例"
 
 #: ../src/msw/ole/automtn.cpp:552
 #, c-format
 msgid "Cannot get an active instance of \"%s\""
-msgstr "无法获得 \"%s\" 的活动实例"
+msgstr "无法获取 \"%s\" 的活动实例"
 
 #: ../src/msw/ole/automtn.cpp:564
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
-msgstr "无法获取 OLE 自动化接口 \"%s\""
+msgstr "无法获取 \"%s\" 的 OLE 自动化接口"
 
 #: ../src/msw/ole/automtn.cpp:621
 msgid "Unknown name or named argument."
-msgstr "未知名称或者命名参数。"
+msgstr "未知名称或命名参数。"
 
 #: ../src/msw/ole/automtn.cpp:625
 msgid "Incorrect number of arguments."
-msgstr "错误的变量数目。"
+msgstr "参数数量不正确。"
 
 #: ../src/msw/ole/automtn.cpp:637
 msgid "Unknown exception"
 msgstr "未知异常"
-
 #: ../src/msw/ole/automtn.cpp:642
 msgid "Method or property not found."
-msgstr "找不到方法或属性。"
+msgstr "未找到方法或属性。"
 
 #: ../src/msw/ole/automtn.cpp:646
 msgid "Overflow while coercing argument values."
-msgstr "强制修改参数值溢出。"
+msgstr "强制转换参数值时发生溢出。"
 
 #: ../src/msw/ole/automtn.cpp:650
 msgid "Object implementation does not support named arguments."
@@ -6103,7 +6104,7 @@ msgstr "对象实现不支持命名参数。"
 
 #: ../src/msw/ole/automtn.cpp:654
 msgid "The locale ID is unknown."
-msgstr "区域 ID 不明。"
+msgstr "区域设置 ID 未知。"
 
 #: ../src/msw/ole/automtn.cpp:658
 msgid "Missing a required parameter."
@@ -6112,7 +6113,7 @@ msgstr "缺少必要参数。"
 #: ../src/msw/ole/automtn.cpp:662
 #, c-format
 msgid "Argument %u not found."
-msgstr "找不到参数 %u。"
+msgstr "未找到参数 %u。"
 
 #: ../src/msw/ole/automtn.cpp:666
 #, c-format
@@ -6121,7 +6122,7 @@ msgstr "参数 %u 的类型不匹配。"
 
 #: ../src/msw/ole/automtn.cpp:670
 msgid "The system cannot find the file specified."
-msgstr "系统无法找到指定的文件。"
+msgstr "系统未找到指定文件。"
 
 #: ../src/msw/ole/automtn.cpp:674
 msgid "Class not registered."
@@ -6135,7 +6136,7 @@ msgstr "未知错误 %08x"
 #: ../src/msw/ole/automtn.cpp:682
 #, c-format
 msgid "OLE Automation error in %s: %s"
-msgstr "OLE 自动化错误 %s：%s"
+msgstr "在 %s 中发生 OLE 自动化错误：%s"
 
 #: ../src/msw/ole/dataobj.cpp:385
 #, c-format
@@ -6154,12 +6155,12 @@ msgstr "跳过"
 #: ../src/msw/registry.cpp:141
 #, c-format
 msgid "unknown (%lu)"
-msgstr "未知 (%lu)"
+msgstr "未知（%lu）"
 
 #: ../src/msw/registry.cpp:409
 #, c-format
 msgid "Can't get info about registry key '%s'"
-msgstr "无法获得注册表项 '%s' 的信息"
+msgstr "无法获取注册表项 '%s' 的信息"
 
 #: ../src/msw/registry.cpp:445
 #, c-format
@@ -6179,12 +6180,12 @@ msgstr "无法关闭注册表项 '%s'"
 #: ../src/msw/registry.cpp:512
 #, c-format
 msgid "Registry value '%s' already exists."
-msgstr "注册值 '%s' 已存在。"
+msgstr "注册表值 '%s' 已存在。"
 
 #: ../src/msw/registry.cpp:520
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
-msgstr "无法将注册值 '%s' 重命名为 '%s'。"
+msgstr "无法将注册表值 '%s' 重命名为 '%s'。"
 
 #: ../src/msw/registry.cpp:575
 #, c-format
@@ -6194,7 +6195,7 @@ msgstr "无法复制不支持的类型 %d 的值。"
 #: ../src/msw/registry.cpp:586
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
-msgstr "注册表项 '%s' 不存在，无法改名。"
+msgstr "注册表项 '%s' 不存在，无法重命名。"
 
 #: ../src/msw/registry.cpp:617
 #, c-format
@@ -6209,7 +6210,7 @@ msgstr "无法将注册表项 '%s' 重命名为 '%s'。"
 #: ../src/msw/registry.cpp:670
 #, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
-msgstr "无法复制注册表子项 '%s' 至 '%s'。"
+msgstr "无法将注册表子项 '%s' 复制到 '%s'。"
 
 #: ../src/msw/registry.cpp:683
 #, c-format
@@ -6219,7 +6220,7 @@ msgstr "无法复制注册表值 '%s'"
 #: ../src/msw/registry.cpp:692
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
-msgstr "无法把注册表项内容从 '%s' 复制到 '%s'。"
+msgstr "无法将注册表项 '%s' 的内容复制到 '%s'。"
 
 #: ../src/msw/registry.cpp:718
 #, c-format
@@ -6228,9 +6229,9 @@ msgid ""
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
-"正常的系统操作需要注册表项 '%s',\n"
-"删除它将使系统进入不可用状态：\n"
-"操作终止。"
+"系统正常运行需要注册表项 '%s'。\n"
+"删除它会导致系统无法使用：\n"
+"操作已中止。"
 
 #: ../src/msw/registry.cpp:754
 #, c-format
@@ -6288,7 +6289,7 @@ msgstr "无法枚举注册表项 '%s' 的子项"
 #, c-format
 msgid ""
 "Exporting registry key: file \"%s\" already exists and won't be overwritten."
-msgstr "导出注册表项：文件 \"%s\" 已经存在，无法覆盖。"
+msgstr "导出注册表项：文件 \"%s\" 已存在，不会被覆盖。"
 
 #: ../src/msw/registry.cpp:1411
 #, c-format
@@ -6305,7 +6306,7 @@ msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
 msgstr ""
-"无法创建富文本编辑器控件，使用简单文本编辑器控件代替。请重新安装 riched32.dll"
+"无法创建富文本编辑控件，将改用普通文本控件。请重新安装 riched32.dll"
 
 #: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:850
 msgid "Cannot start thread: error writing TLS."
@@ -6325,7 +6326,7 @@ msgstr "无法终止线程"
 
 #: ../src/msw/thread.cpp:799
 msgid "Cannot wait for thread termination"
-msgstr "无法等候线程终止"
+msgstr "无法等待线程终止"
 
 #: ../src/msw/thread.cpp:873
 #, c-format
@@ -6339,7 +6340,7 @@ msgstr "无法恢复线程 %lx"
 
 #: ../src/msw/thread.cpp:932
 msgid "Couldn't get the current thread pointer"
-msgstr "无法获得当前线程指针"
+msgstr "无法获取当前线程指针"
 
 #: ../src/msw/thread.cpp:1333
 msgid ""
@@ -6355,11 +6356,11 @@ msgstr "线程模块初始化失败：无法在线程本地存储区中存放值
 
 #: ../src/msw/timer.cpp:133
 msgid "Couldn't create a timer"
-msgstr "无法创建计时器"
+msgstr "无法创建定时器"
 
 #: ../src/msw/utils.cpp:372
 msgid "can't find user's HOME, using current directory."
-msgstr "找不到用户的主页目录，使用当前目录。"
+msgstr "找不到用户的 HOME，改用当前目录。"
 
 #: ../src/msw/utils.cpp:662
 #, c-format
@@ -6380,7 +6381,7 @@ msgstr "无法锁定资源 \"%s\"。"
 #: ../src/msw/utils.cpp:1209
 #, c-format
 msgid "build %lu"
-msgstr "构建号 %lu"
+msgstr "内部版本 %lu"
 
 #: ../src/msw/utils.cpp:1218
 msgid ", 64-bit edition"
@@ -6392,7 +6393,7 @@ msgstr "无法创建匿名管道"
 
 #: ../src/msw/utilsexc.cpp:697
 msgid "Failed to redirect the child process IO"
-msgstr "无法重定向子过程 IO"
+msgstr "无法重定向子进程 I/O"
 
 #: ../src/msw/utilsexc.cpp:870
 #, c-format
@@ -6411,27 +6412,27 @@ msgstr "无法从 '%s' 中读取类型名称！"
 #: ../src/msw/volume.cpp:615
 #, c-format
 msgid "Cannot load icon from '%s'."
-msgstr "无法从 '%s' 中读取图标。"
+msgstr "无法从 '%s' 加载图标。"
 
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
-msgstr "编译本程序时选择了不支持设置 Edge 代理。"
+msgstr "本程序编译时未启用设置 Edge 代理的支持。"
 
 #: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
-msgstr "无法在注册表中找到 Web 视图仿真级别"
+msgstr "无法在注册表中找到 WebView 仿真级别"
 
 #: ../src/msw/webview_ie.cpp:1019
 msgid "Failed to set web view to modern emulation level"
-msgstr "无法将 Web 视图设置为现代仿真级别"
+msgstr "无法将 WebView 设置为现代仿真级别"
 
 #: ../src/msw/webview_ie.cpp:1027
 msgid "Failed to reset web view to standard emulation level"
-msgstr "无法将 Web 视图重置为标准仿真级别"
+msgstr "无法将 WebView 重置为标准仿真级别"
 
 #: ../src/msw/webview_ie.cpp:1049
 msgid "Can't run JavaScript script without a valid HTML document"
-msgstr "没有有效的 HTML 文档就无法运行 JavaScript 脚本"
+msgstr "没有有效的 HTML 文档，无法运行 JavaScript 脚本"
 
 #: ../src/msw/webview_ie.cpp:1056
 msgid "Can't get the JavaScript object"
@@ -6439,7 +6440,7 @@ msgstr "无法获取 JavaScript 对象"
 
 #: ../src/msw/webview_ie.cpp:1070
 msgid "failed to evaluate"
-msgstr "未能评估"
+msgstr "求值失败"
 
 #: ../src/osx/cocoa/filedlg.mm:412
 msgid "File type:"
@@ -6473,7 +6474,7 @@ msgstr "前置全部窗口"
 #: ../src/osx/core/sound.cpp:143
 #, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "无法从 \"%s\" 加载声音 (错误 %d)。"
+msgstr "无法从 \"%s\" 加载声音（错误 %d）。"
 
 #: ../src/osx/fontutil.cpp:80
 #, c-format
@@ -6542,7 +6543,7 @@ msgstr "退出应用程序"
 
 #: ../src/osx/webview_webkit.mm:444
 msgid "Printing is not supported by the system web control"
-msgstr "系统网页控制不支持打印"
+msgstr "系统 Web 控件不支持打印"
 
 #: ../src/osx/webview_webkit.mm:453
 msgid "Print operation could not be initialized"
@@ -6551,7 +6552,7 @@ msgstr "无法初始化打印操作"
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:605
 msgid "Point Size"
-msgstr "字体大小(磅值)"
+msgstr "字号"
 
 #. TRANSLATORS: Label of font face name
 #: ../src/propgrid/advprops.cpp:615
@@ -6576,22 +6577,22 @@ msgstr "下划线"
 #. TRANSLATORS: Label of font family
 #: ../src/propgrid/advprops.cpp:637
 msgid "Family"
-msgstr "系列"
+msgstr "字体族"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:801
 msgid "AppWorkspace"
-msgstr "应用工作区"
+msgstr "应用程序工作区"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:802
 msgid "ActiveBorder"
-msgstr "活动边框"
+msgstr "活动窗口边框"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:803
 msgid "ActiveCaption"
-msgstr "主动字幕"
+msgstr "活动窗口标题栏"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:804
@@ -6601,7 +6602,7 @@ msgstr "按钮面"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:805
 msgid "ButtonHighlight"
-msgstr "按钮反白"
+msgstr "按钮高亮"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:806
@@ -6611,52 +6612,52 @@ msgstr "按钮阴影"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:807
 msgid "ButtonText"
-msgstr "按钮文字"
+msgstr "按钮文本"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:808
 msgid "CaptionText"
-msgstr "标题文字"
+msgstr "标题栏文本"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:809
 msgid "ControlDark"
-msgstr "控制暗度"
+msgstr "控件暗色"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:810
 msgid "ControlLight"
-msgstr "控制亮度"
+msgstr "控件亮色"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:812
 msgid "GrayText"
-msgstr "灰阶文字"
+msgstr "灰色文本"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:813
 msgid "Highlight"
-msgstr "反白"
+msgstr "高亮"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:814
 msgid "HighlightText"
-msgstr "反白文字"
+msgstr "高亮文本"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:815
 msgid "InactiveBorder"
-msgstr "待用边框"
+msgstr "非活动窗口边框"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:816
 msgid "InactiveCaption"
-msgstr "待用标题"
+msgstr "非活动窗口标题栏"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:817
 msgid "InactiveCaptionText"
-msgstr "待用标题文字"
+msgstr "非活动窗口标题栏文本"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:818
@@ -6676,28 +6677,28 @@ msgstr "工具提示"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:821
 msgid "TooltipText"
-msgstr "工具提示文字"
+msgstr "工具提示文本"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:822
 msgid "Window"
-msgstr "视窗"
+msgstr "窗口"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:823
 msgid "WindowFrame"
-msgstr "窗框"
+msgstr "窗口框架"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:824
 msgid "WindowText"
-msgstr "视窗文字"
+msgstr "窗口文本"
 
 #. TRANSLATORS: Custom colour choice entry
 #: ../src/propgrid/advprops.cpp:825 ../src/propgrid/advprops.cpp:1532
 #: ../src/propgrid/advprops.cpp:1576
 msgid "Custom"
-msgstr "自选"
+msgstr "自定义"
 
 #: ../src/propgrid/advprops.cpp:1558
 msgid "Black"
@@ -6717,7 +6718,7 @@ msgstr "紫色"
 
 #: ../src/propgrid/advprops.cpp:1562
 msgid "Teal"
-msgstr "蓝绿色"
+msgstr "青绿色"
 
 #: ../src/propgrid/advprops.cpp:1563
 msgid "Gray"
@@ -6733,7 +6734,7 @@ msgstr "橄榄色"
 
 #: ../src/propgrid/advprops.cpp:1566
 msgid "Brown"
-msgstr "咖啡色"
+msgstr "棕色"
 
 #: ../src/propgrid/advprops.cpp:1567
 msgid "Blue"
@@ -6741,7 +6742,7 @@ msgstr "蓝色"
 
 #: ../src/propgrid/advprops.cpp:1568
 msgid "Fuchsia"
-msgstr "紫红色"
+msgstr "品红"
 
 #: ../src/propgrid/advprops.cpp:1569
 msgid "Red"
@@ -6749,7 +6750,7 @@ msgstr "红色"
 
 #: ../src/propgrid/advprops.cpp:1570
 msgid "Orange"
-msgstr "橘色"
+msgstr "橙色"
 
 #: ../src/propgrid/advprops.cpp:1571
 msgid "Silver"
@@ -6757,11 +6758,11 @@ msgstr "银色"
 
 #: ../src/propgrid/advprops.cpp:1572
 msgid "Lime"
-msgstr "草绿色"
+msgstr "酸橙色"
 
 #: ../src/propgrid/advprops.cpp:1573
 msgid "Aqua"
-msgstr "海蓝色"
+msgstr "青色"
 
 #: ../src/propgrid/advprops.cpp:1574
 msgid "Yellow"
@@ -6789,7 +6790,7 @@ msgstr "右箭头"
 #: ../src/propgrid/advprops.cpp:1721
 msgctxt "system cursor name"
 msgid "Blank"
-msgstr "空"
+msgstr "空白"
 
 #: ../src/propgrid/advprops.cpp:1722
 msgctxt "system cursor name"
@@ -6799,22 +6800,22 @@ msgstr "靶心"
 #: ../src/propgrid/advprops.cpp:1723
 msgctxt "system cursor name"
 msgid "Character"
-msgstr "字符编码"
+msgstr "文字"
 
 #: ../src/propgrid/advprops.cpp:1724
 msgctxt "system cursor name"
 msgid "Cross"
-msgstr "交叉"
+msgstr "十字"
 
 #: ../src/propgrid/advprops.cpp:1725
 msgctxt "system cursor name"
 msgid "Hand"
-msgstr "手"
+msgstr "手形"
 
 #: ../src/propgrid/advprops.cpp:1726
 msgctxt "system cursor name"
 msgid "I-Beam"
-msgstr "工字梁"
+msgstr "I 形光标"
 
 #: ../src/propgrid/advprops.cpp:1727
 msgctxt "system cursor name"
@@ -6829,17 +6830,17 @@ msgstr "放大镜"
 #: ../src/propgrid/advprops.cpp:1729
 msgctxt "system cursor name"
 msgid "Middle Button"
-msgstr "中间按钮"
+msgstr "中键"
 
 #: ../src/propgrid/advprops.cpp:1730
 msgctxt "system cursor name"
 msgid "No Entry"
-msgstr "不可进入"
+msgstr "禁止"
 
 #: ../src/propgrid/advprops.cpp:1731
 msgctxt "system cursor name"
 msgid "Paint Brush"
-msgstr "油漆刷"
+msgstr "画笔"
 
 #: ../src/propgrid/advprops.cpp:1732
 msgctxt "system cursor name"
@@ -6859,7 +6860,7 @@ msgstr "向右指"
 #: ../src/propgrid/advprops.cpp:1735
 msgctxt "system cursor name"
 msgid "Question Arrow"
-msgstr "问题箭头"
+msgstr "问号箭头"
 
 #: ../src/propgrid/advprops.cpp:1736
 msgctxt "system cursor name"
@@ -6869,32 +6870,32 @@ msgstr "右键"
 #: ../src/propgrid/advprops.cpp:1737
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
-msgstr "缩放 (东北至西南)"
+msgstr "调整大小（右上-左下）"
 
 #: ../src/propgrid/advprops.cpp:1738
 msgctxt "system cursor name"
 msgid "Sizing N-S"
-msgstr "缩放 (北至南)"
+msgstr "调整大小（上-下）"
 
 #: ../src/propgrid/advprops.cpp:1739
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
-msgstr "缩放 (西北至东南)"
+msgstr "调整大小（左上-右下）"
 
 #: ../src/propgrid/advprops.cpp:1740
 msgctxt "system cursor name"
 msgid "Sizing W-E"
-msgstr "缩放 (西至东)"
+msgstr "调整大小（左-右）"
 
 #: ../src/propgrid/advprops.cpp:1741
 msgctxt "system cursor name"
 msgid "Sizing"
-msgstr "缩放"
+msgstr "调整大小"
 
 #: ../src/propgrid/advprops.cpp:1742
 msgctxt "system cursor name"
 msgid "Spraycan"
-msgstr "喷雾罐"
+msgstr "喷漆罐"
 
 #: ../src/propgrid/advprops.cpp:1743
 msgctxt "system cursor name"
@@ -6904,7 +6905,7 @@ msgstr "等待"
 #: ../src/propgrid/advprops.cpp:1744
 msgctxt "system cursor name"
 msgid "Watch"
-msgstr "监控"
+msgstr "沙漏"
 
 #: ../src/propgrid/advprops.cpp:1745
 msgctxt "system cursor name"
@@ -6953,7 +6954,7 @@ msgstr "属性错误"
 
 #: ../src/propgrid/propgrid.cpp:3259
 msgid "You have entered invalid value. Press ESC to cancel editing."
-msgstr "你输入了无效值。按 ESC 取消编辑。"
+msgstr "输入的值无效。按 Esc 取消编辑。"
 
 #: ../src/propgrid/propgrid.cpp:6608
 #, c-format
@@ -6966,13 +6967,12 @@ msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
-"类型操作 \"%s\" 失败：标记为 \"%s\" 的属性属于 \"%s\" 类型，而不是 \"%s\" 类"
-"型。"
+"类型操作 \"%s\" 失败：标记为 \"%s\" 的属性类型为 \"%s\"，而不是 \"%s\""
 
 #: ../src/propgrid/props.cpp:159
 #, c-format
 msgid "Unknown base %d. Base 10 will be used."
-msgstr "未知基数 %d。 将使用基数 10。"
+msgstr "未知基数 %d，将使用 10 进制。"
 
 #: ../src/propgrid/props.cpp:324
 #, c-format
@@ -7142,7 +7142,7 @@ msgstr "水平偏移。"
 #: ../src/richtext/richtextsizepage.cpp:661
 #: ../src/richtext/richtextsizepage.cpp:662
 msgid "px"
-msgstr "像素"
+msgstr "px"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:225
 #: ../src/richtext/richtextbackgroundpage.cpp:248
@@ -7176,7 +7176,7 @@ msgstr "像素"
 #: ../src/richtext/richtextsizepage.cpp:624
 #: ../src/richtext/richtextsizepage.cpp:659
 msgid "cm"
-msgstr "厘米"
+msgstr "cm"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:226
 #: ../src/richtext/richtextbackgroundpage.cpp:249
@@ -7194,7 +7194,7 @@ msgstr "厘米"
 #: ../src/richtext/richtextfontpage.cpp:176
 #: ../src/richtext/richtextfontpage.cpp:179
 msgid "pt"
-msgstr "点"
+msgstr "pt"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:229
 #: ../src/richtext/richtextbackgroundpage.cpp:231
@@ -7232,31 +7232,31 @@ msgstr "阴影颜色。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:270
 msgid "Sh&adow spread:"
-msgstr "阴影扩散(&a)："
+msgstr "阴影扩展半径(&a)："
 
 #: ../src/richtext/richtextbackgroundpage.cpp:272
 #: ../src/richtext/richtextbackgroundpage.cpp:274
 msgid "Enables the shadow spread."
-msgstr "启用阴影扩散。"
+msgstr "启用阴影扩展半径。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:281
 #: ../src/richtext/richtextbackgroundpage.cpp:283
 msgid "The shadow spread."
-msgstr "阴影扩散。"
+msgstr "阴影扩展半径。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:297
 msgid "&Blur distance:"
-msgstr "模糊距离(&B)："
+msgstr "模糊半径(&B)："
 
 #: ../src/richtext/richtextbackgroundpage.cpp:299
 #: ../src/richtext/richtextbackgroundpage.cpp:301
 msgid "Enables the blur distance."
-msgstr "启用模糊距离。"
+msgstr "启用模糊半径。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:308
 #: ../src/richtext/richtextbackgroundpage.cpp:310
 msgid "The shadow blur distance."
-msgstr "阴影模糊距离。"
+msgstr "阴影模糊半径。"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:324
 msgid "Opaci&ty:"
@@ -7306,7 +7306,7 @@ msgstr "左(&L)："
 #: ../src/richtext/richtextborderspage.cpp:257
 #: ../src/richtext/richtextborderspage.cpp:259
 msgid "Units for the left border width."
-msgstr "左边框单位。"
+msgstr "左边框宽度的单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:266
 #: ../src/richtext/richtextborderspage.cpp:268
@@ -7341,7 +7341,7 @@ msgstr "右(&R)："
 #: ../src/richtext/richtextborderspage.cpp:291
 #: ../src/richtext/richtextborderspage.cpp:293
 msgid "Units for the right border width."
-msgstr "右边框单位。"
+msgstr "右边框宽度的单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:310
 #: ../src/richtext/richtextborderspage.cpp:478
@@ -7350,12 +7350,12 @@ msgstr "右边框单位。"
 #: ../src/richtext/richtextsizepage.cpp:566
 #: ../src/richtext/richtextsizepage.cpp:573
 msgid "&Top:"
-msgstr "顶端(&T)："
+msgstr "上(&T)："
 
 #: ../src/richtext/richtextborderspage.cpp:325
 #: ../src/richtext/richtextborderspage.cpp:327
 msgid "Units for the top border width."
-msgstr "上边框单位。"
+msgstr "上边框宽度的单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:344
 #: ../src/richtext/richtextborderspage.cpp:512
@@ -7364,24 +7364,24 @@ msgstr "上边框单位。"
 #: ../src/richtext/richtextsizepage.cpp:636
 #: ../src/richtext/richtextsizepage.cpp:643
 msgid "&Bottom:"
-msgstr "底端(&B)："
+msgstr "下(&B)："
 
 #: ../src/richtext/richtextborderspage.cpp:359
 #: ../src/richtext/richtextborderspage.cpp:361
 msgid "Units for the bottom border width."
-msgstr "下边框单位。"
+msgstr "下边框宽度的单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:380
 #: ../src/richtext/richtextborderspage.cpp:548
 msgid "&Synchronize values"
-msgstr "同步值(&S)"
+msgstr "同步数值(&S)"
 
 #: ../src/richtext/richtextborderspage.cpp:382
 #: ../src/richtext/richtextborderspage.cpp:384
 #: ../src/richtext/richtextborderspage.cpp:550
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "Check to edit all borders simultaneously."
-msgstr "勾选以同时编辑边框。"
+msgstr "勾选后同时编辑所有边框。"
 
 #: ../src/richtext/richtextborderspage.cpp:397
 #: ../src/richtext/richtextborderspage.cpp:555
@@ -7391,46 +7391,46 @@ msgstr "轮廓"
 #: ../src/richtext/richtextborderspage.cpp:425
 #: ../src/richtext/richtextborderspage.cpp:427
 msgid "Units for the left outline width."
-msgstr "左轮廓单位。"
+msgstr "左轮廓宽度的单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:459
 #: ../src/richtext/richtextborderspage.cpp:461
 msgid "Units for the right outline width."
-msgstr "右轮廓单位。"
+msgstr "右轮廓宽度的单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:493
 #: ../src/richtext/richtextborderspage.cpp:495
 msgid "Units for the top outline width."
-msgstr "上轮廓单位。"
+msgstr "上轮廓宽度的单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:527
 #: ../src/richtext/richtextborderspage.cpp:529
 msgid "Units for the bottom outline width."
-msgstr "下轮廓单位。"
+msgstr "下轮廓宽度的单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:565
 #: ../src/richtext/richtextborderspage.cpp:600
 msgid "Corner"
-msgstr "角"
+msgstr "圆角"
 
 #: ../src/richtext/richtextborderspage.cpp:574
 msgid "Corner &radius:"
-msgstr "角半径(&r)："
+msgstr "圆角半径(&r)："
 
 #: ../src/richtext/richtextborderspage.cpp:576
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "An optional corner radius for adding rounded corners."
-msgstr "用于添加圆角的可选圆角半径。"
+msgstr "可选的圆角半径。"
 
 #: ../src/richtext/richtextborderspage.cpp:584
 #: ../src/richtext/richtextborderspage.cpp:586
 msgid "The value of the corner radius."
-msgstr "拐角半径的值。"
+msgstr "圆角半径数值。"
 
 #: ../src/richtext/richtextborderspage.cpp:595
 #: ../src/richtext/richtextborderspage.cpp:597
 msgid "Units for the corner radius."
-msgstr "上内衬单位。"
+msgstr "圆角半径单位。"
 
 #: ../src/richtext/richtextborderspage.cpp:609
 #: ../src/richtext/richtextsizepage.cpp:247
@@ -7444,7 +7444,7 @@ msgstr "实线"
 
 #: ../src/richtext/richtextborderspage.cpp:611
 msgid "Dotted"
-msgstr "修饰"
+msgstr "点线"
 
 #: ../src/richtext/richtextborderspage.cpp:612
 msgid "Dashed"
@@ -7452,23 +7452,23 @@ msgstr "虚线"
 
 #: ../src/richtext/richtextborderspage.cpp:613
 msgid "Double"
-msgstr "加倍"
+msgstr "双线"
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Groove"
-msgstr "惯例"
+msgstr "凹槽"
 
 #: ../src/richtext/richtextborderspage.cpp:615
 msgid "Ridge"
-msgstr "坎入"
+msgstr "凸脊"
 
 #: ../src/richtext/richtextborderspage.cpp:616
 msgid "Inset"
-msgstr "插入"
+msgstr "内凹"
 
 #: ../src/richtext/richtextborderspage.cpp:617
 msgid "Outset"
-msgstr "抽离"
+msgstr "外凸"
 
 #: ../src/richtext/richtextbuffer.cpp:3518
 msgid "Change Style"
@@ -7489,7 +7489,7 @@ msgstr "更改列表样式"
 
 #: ../src/richtext/richtextbuffer.cpp:4519
 msgid "Renumber List"
-msgstr "重编号列表"
+msgstr "重新编号列表"
 
 #: ../src/richtext/richtextbuffer.cpp:7867
 #: ../src/richtext/richtextbuffer.cpp:7897
@@ -7509,11 +7509,11 @@ msgstr "插入对象"
 
 #: ../src/richtext/richtextbuffer.cpp:8112
 msgid "Insert Field"
-msgstr "插入范围"
+msgstr "插入字段"
 
 #: ../src/richtext/richtextbuffer.cpp:8410
 msgid "Too many EndStyle calls!"
-msgstr "调用 EndStyle 太多次！"
+msgstr "EndStyle 调用次数过多！"
 
 #: ../src/richtext/richtextbuffer.cpp:8785
 msgid "files"
@@ -7521,27 +7521,27 @@ msgstr "文件"
 
 #: ../src/richtext/richtextbuffer.cpp:9380
 msgid "standard/circle"
-msgstr "标准/圆形"
+msgstr "standard/circle"
 
 #: ../src/richtext/richtextbuffer.cpp:9381
 msgid "standard/circle-outline"
-msgstr "标准/圆框"
+msgstr "standard/circle-outline"
 
 #: ../src/richtext/richtextbuffer.cpp:9382
 msgid "standard/square"
-msgstr "标准/方形"
+msgstr "standard/square"
 
 #: ../src/richtext/richtextbuffer.cpp:9383
 msgid "standard/diamond"
-msgstr "标准/菱形"
+msgstr "standard/diamond"
 
 #: ../src/richtext/richtextbuffer.cpp:9384
 msgid "standard/triangle"
-msgstr "标准/三角形"
+msgstr "standard/triangle"
 
 #: ../src/richtext/richtextbuffer.cpp:9423
 msgid "Box Properties"
-msgstr "方块属性"
+msgstr "文本框属性"
 
 #: ../src/richtext/richtextbuffer.cpp:10006
 msgid "Multiple Cell Properties"
@@ -7599,14 +7599,14 @@ msgstr "可用的项目符号样式。"
 #: ../src/richtext/richtextbulletspage.cpp:158
 #: ../src/richtext/richtextliststylepage.cpp:221
 msgid "Peri&od"
-msgstr "英文句号(&o)"
+msgstr "句号(&o)"
 
 #: ../src/richtext/richtextbulletspage.cpp:160
 #: ../src/richtext/richtextbulletspage.cpp:162
 #: ../src/richtext/richtextliststylepage.cpp:223
 #: ../src/richtext/richtextliststylepage.cpp:225
 msgid "Check to add a period after the bullet."
-msgstr "勾选以在项目符号后加上英文句号。"
+msgstr "勾选以在项目符号后添加句号。"
 
 #. TRANSLATORS: Bullet point in parentheses option
 #: ../src/richtext/richtextbulletspage.cpp:167
@@ -7632,7 +7632,7 @@ msgstr "*)"
 #: ../src/richtext/richtextliststylepage.cpp:241
 #: ../src/richtext/richtextliststylepage.cpp:243
 msgid "Check to add a right parenthesis."
-msgstr "勾选以加上右括号。"
+msgstr "勾选以添加右括号。"
 
 #: ../src/richtext/richtextbulletspage.cpp:185
 #: ../src/richtext/richtextliststylepage.cpp:248
@@ -7670,12 +7670,12 @@ msgstr "选择(&o)..."
 #: ../src/richtext/richtextliststylepage.cpp:284
 #: ../src/richtext/richtextliststylepage.cpp:286
 msgid "Click to browse for a symbol."
-msgstr "点击浏览该符号。"
+msgstr "点击浏览并选择符号。"
 
 #: ../src/richtext/richtextbulletspage.cpp:230
 #: ../src/richtext/richtextliststylepage.cpp:291
 msgid "Symbol &font:"
-msgstr "符号样式(&f)："
+msgstr "符号字体(&f)："
 
 #: ../src/richtext/richtextbulletspage.cpp:235
 #: ../src/richtext/richtextbulletspage.cpp:237
@@ -7702,14 +7702,14 @@ msgstr "编号(&N)："
 #: ../src/richtext/richtextbulletspage.cpp:258
 #: ../src/richtext/richtextbulletspage.cpp:260
 msgid "The list item number."
-msgstr "列表编号。"
+msgstr "列表项编号。"
 
 #: ../src/richtext/richtextbulletspage.cpp:266
 #: ../src/richtext/richtextbulletspage.cpp:268
 #: ../src/richtext/richtextliststylepage.cpp:475
 #: ../src/richtext/richtextliststylepage.cpp:477
 msgid "Shows a preview of the bullet settings."
-msgstr "预览项目符号设置。"
+msgstr "显示项目符号设置预览。"
 
 #: ../src/richtext/richtextbulletspage.cpp:276
 #: ../src/richtext/richtextliststylepage.cpp:484
@@ -7744,7 +7744,7 @@ msgstr "小写罗马数字"
 #: ../src/richtext/richtextbulletspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Numbered outline"
-msgstr "大纲标号"
+msgstr "大纲编号"
 
 #: ../src/richtext/richtextbulletspage.cpp:283
 #: ../src/richtext/richtextliststylepage.cpp:491
@@ -7788,11 +7788,11 @@ msgstr "~"
 
 #: ../src/richtext/richtextctrl.cpp:859
 msgid "Drag"
-msgstr "移动"
+msgstr "拖动"
 
 #: ../src/richtext/richtextctrl.cpp:1338 ../src/richtext/richtextctrl.cpp:1559
 msgid "Delete Text"
-msgstr "删除文字"
+msgstr "删除文本"
 
 #: ../src/richtext/richtextctrl.cpp:1537
 msgid "Remove Bullet"
@@ -7800,7 +7800,7 @@ msgstr "移除项目符号"
 
 #: ../src/richtext/richtextctrl.cpp:3070
 msgid "The text couldn't be saved."
-msgstr "文本无法保存。"
+msgstr "无法保存文本。"
 
 #: ../src/richtext/richtextctrl.cpp:3644
 msgid "Replace"
@@ -7823,12 +7823,12 @@ msgstr "大小(&S)："
 #: ../src/richtext/richtextfontpage.cpp:165
 #: ../src/richtext/richtextfontpage.cpp:167
 msgid "Type a size in points."
-msgstr "输入大小，以磅为单位。"
+msgstr "输入字号（单位：磅）。"
 
 #: ../src/richtext/richtextfontpage.cpp:180
 #: ../src/richtext/richtextfontpage.cpp:182
 msgid "The font size units, points or pixels."
-msgstr "字体大小单位，磅值或像素值。"
+msgstr "字号单位：磅或像素。"
 
 #: ../src/richtext/richtextfontpage.cpp:189
 #: ../src/richtext/richtextfontpage.cpp:191
@@ -7838,16 +7838,16 @@ msgstr "列出可用字体。"
 #: ../src/richtext/richtextfontpage.cpp:196
 #: ../src/richtext/richtextfontpage.cpp:198
 msgid "Lists font sizes in points."
-msgstr "列表字体大小。"
+msgstr "列出字号（磅）。"
 
 #: ../src/richtext/richtextfontpage.cpp:207
 msgid "Font st&yle:"
-msgstr "字体样式 (&y)："
+msgstr "字体样式(&y)："
 
 #: ../src/richtext/richtextfontpage.cpp:212
 #: ../src/richtext/richtextfontpage.cpp:214
 msgid "Select regular or italic style."
-msgstr "选择是否斜体。"
+msgstr "选择常规或斜体样式。"
 
 #: ../src/richtext/richtextfontpage.cpp:220
 msgid "Font &weight:"
@@ -7856,7 +7856,7 @@ msgstr "字体粗细(&w)："
 #: ../src/richtext/richtextfontpage.cpp:225
 #: ../src/richtext/richtextfontpage.cpp:227
 msgid "Select regular or bold."
-msgstr "选择是否粗体。"
+msgstr "选择常规或粗体。"
 
 #: ../src/richtext/richtextfontpage.cpp:233
 msgid "&Underlining:"
@@ -7865,7 +7865,7 @@ msgstr "下划线(&U)："
 #: ../src/richtext/richtextfontpage.cpp:238
 #: ../src/richtext/richtextfontpage.cpp:240
 msgid "Select underlining or no underlining."
-msgstr "选择是否下划线。"
+msgstr "选择下划线或无下划线。"
 
 #: ../src/richtext/richtextfontpage.cpp:248
 msgid "&Colour:"
@@ -7874,7 +7874,7 @@ msgstr "颜色(&C)："
 #: ../src/richtext/richtextfontpage.cpp:253
 #: ../src/richtext/richtextfontpage.cpp:255
 msgid "Click to change the text colour."
-msgstr "点击修改字体颜色。"
+msgstr "点击更改文本颜色。"
 
 #: ../src/richtext/richtextfontpage.cpp:261
 msgid "&Bg colour:"
@@ -7883,30 +7883,30 @@ msgstr "背景颜色(&B)："
 #: ../src/richtext/richtextfontpage.cpp:266
 #: ../src/richtext/richtextfontpage.cpp:268
 msgid "Click to change the text background colour."
-msgstr "点击修改字体背景颜色。"
+msgstr "点击更改文本背景颜色。"
 
 #: ../src/richtext/richtextfontpage.cpp:276
 #: ../src/richtext/richtextfontpage.cpp:278
 msgid "Check to show a line through the text."
-msgstr "勾选加删除线。"
+msgstr "勾选以添加删除线。"
 
 #: ../src/richtext/richtextfontpage.cpp:281
 msgid "Ca&pitals"
-msgstr "大写(&p)"
+msgstr "全大写(&p)"
 
 #: ../src/richtext/richtextfontpage.cpp:283
 #: ../src/richtext/richtextfontpage.cpp:285
 msgid "Check to show the text in capitals."
-msgstr "勾选显示为大写。"
+msgstr "勾选以将文本显示为全大写。"
 
 #: ../src/richtext/richtextfontpage.cpp:288
 msgid "Small C&apitals"
-msgstr "小型大写(&a)"
+msgstr "小型大写字母(&a)"
 
 #: ../src/richtext/richtextfontpage.cpp:290
 #: ../src/richtext/richtextfontpage.cpp:292
 msgid "Check to show the text in small capitals."
-msgstr "勾选显示为小型大写。"
+msgstr "勾选以将文本显示为小型大写字母。"
 
 #: ../src/richtext/richtextfontpage.cpp:295
 msgid "Supe&rscript"
@@ -7915,7 +7915,7 @@ msgstr "上标(&r)"
 #: ../src/richtext/richtextfontpage.cpp:297
 #: ../src/richtext/richtextfontpage.cpp:299
 msgid "Check to show the text in superscript."
-msgstr "勾选显示为上标。"
+msgstr "勾选以将文本显示为上标。"
 
 #: ../src/richtext/richtextfontpage.cpp:302
 msgid "Subscrip&t"
@@ -7924,7 +7924,7 @@ msgstr "下标(&t)"
 #: ../src/richtext/richtextfontpage.cpp:304
 #: ../src/richtext/richtextfontpage.cpp:306
 msgid "Check to show the text in subscript."
-msgstr "勾选显示为下标。"
+msgstr "勾选以将文本显示为下标。"
 
 #: ../src/richtext/richtextfontpage.cpp:312
 msgid "Rig&ht-to-left"
@@ -7933,21 +7933,21 @@ msgstr "从右到左(&h)"
 #: ../src/richtext/richtextfontpage.cpp:314
 #: ../src/richtext/richtextfontpage.cpp:316
 msgid "Check to indicate right-to-left text layout."
-msgstr "勾选使用从右到左文字布局。"
+msgstr "勾选以使用从右到左的文本布局。"
 
 #: ../src/richtext/richtextfontpage.cpp:319
 msgid "Suppress hyphe&nation"
-msgstr "抑制断字(&n)"
+msgstr "禁用断字(&n)"
 
 #: ../src/richtext/richtextfontpage.cpp:321
 #: ../src/richtext/richtextfontpage.cpp:323
 msgid "Check to suppress hyphenation."
-msgstr "检查以抑制断字。"
+msgstr "勾选以禁用断字。"
 
 #: ../src/richtext/richtextfontpage.cpp:329
 #: ../src/richtext/richtextfontpage.cpp:331
 msgid "Shows a preview of the font settings."
-msgstr "预览字体设置。"
+msgstr "显示字体设置预览。"
 
 #: ../src/richtext/richtextfontpage.cpp:348
 #: ../src/richtext/richtextfontpage.cpp:352
@@ -8017,7 +8017,7 @@ msgstr "左(&L)"
 #: ../src/richtext/richtextliststylepage.cpp:333
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
-msgstr "文字左对齐。"
+msgstr "文本左对齐。"
 
 #: ../src/richtext/richtextindentspage.cpp:145
 #: ../src/richtext/richtextliststylepage.cpp:338
@@ -8034,14 +8034,14 @@ msgstr "文本右对齐。"
 #: ../src/richtext/richtextindentspage.cpp:152
 #: ../src/richtext/richtextliststylepage.cpp:345
 msgid "&Justified"
-msgstr "分散对齐(&J)"
+msgstr "两端对齐(&J)"
 
 #: ../src/richtext/richtextindentspage.cpp:154
 #: ../src/richtext/richtextindentspage.cpp:156
 #: ../src/richtext/richtextliststylepage.cpp:347
 #: ../src/richtext/richtextliststylepage.cpp:349
 msgid "Justify text left and right."
-msgstr "文本左右对齐。"
+msgstr "文本两端对齐。"
 
 #: ../src/richtext/richtextindentspage.cpp:159
 #: ../src/richtext/richtextliststylepage.cpp:352
@@ -8053,24 +8053,24 @@ msgstr "居中(&t)"
 #: ../src/richtext/richtextliststylepage.cpp:354
 #: ../src/richtext/richtextliststylepage.cpp:356
 msgid "Centre text."
-msgstr "文字居中。"
+msgstr "文本居中。"
 
 #: ../src/richtext/richtextindentspage.cpp:166
 #: ../src/richtext/richtextliststylepage.cpp:359
 msgid "&Indeterminate"
-msgstr "未定义(&I)"
+msgstr "保持当前(&I)"
 
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
 #: ../src/richtext/richtextliststylepage.cpp:361
 #: ../src/richtext/richtextliststylepage.cpp:363
 msgid "Use the current alignment setting."
-msgstr "使用当前的对齐设置。"
+msgstr "使用当前对齐设置。"
 
 #: ../src/richtext/richtextindentspage.cpp:183
 #: ../src/richtext/richtextliststylepage.cpp:375
 msgid "&Indentation (tenths of a mm)"
-msgstr "缩进(&I) (十分之一毫米)"
+msgstr "缩进(&I)（单位：0.1 毫米）"
 
 #: ../src/richtext/richtextindentspage.cpp:198
 #: ../src/richtext/richtextindentspage.cpp:200
@@ -8082,7 +8082,7 @@ msgstr "左缩进。"
 #: ../src/richtext/richtextindentspage.cpp:203
 #: ../src/richtext/richtextliststylepage.cpp:393
 msgid "Left (&first line):"
-msgstr "左(第一行)(&F)："
+msgstr "左（首行）(&F)："
 
 #: ../src/richtext/richtextindentspage.cpp:207
 #: ../src/richtext/richtextindentspage.cpp:209
@@ -8096,7 +8096,7 @@ msgstr "首行缩进。"
 #: ../src/richtext/richtextliststylepage.cpp:406
 #: ../src/richtext/richtextliststylepage.cpp:408
 msgid "The right indent."
-msgstr "右侧缩进。"
+msgstr "右缩进。"
 
 #: ../src/richtext/richtextindentspage.cpp:221
 msgid "&Outline level:"
@@ -8110,7 +8110,7 @@ msgstr "大纲层级。"
 #: ../src/richtext/richtextindentspage.cpp:241
 #: ../src/richtext/richtextliststylepage.cpp:420
 msgid "&Spacing (tenths of a mm)"
-msgstr "间距(&S) (十分之一毫米)"
+msgstr "间距(&S)（单位：0.1 毫米）"
 
 #: ../src/richtext/richtextindentspage.cpp:252
 msgid "&Before a paragraph:"
@@ -8211,7 +8211,7 @@ msgstr "在段落前插入分页符。"
 #: ../src/richtext/richtextindentspage.cpp:302
 #: ../src/richtext/richtextindentspage.cpp:304
 msgid "Shows a preview of the paragraph settings."
-msgstr "预览段落设置。"
+msgstr "显示段落设置预览。"
 
 #: ../src/richtext/richtextliststylepage.cpp:182
 msgid "&List level:"
@@ -8220,7 +8220,7 @@ msgstr "列表层级(&L)："
 #: ../src/richtext/richtextliststylepage.cpp:186
 #: ../src/richtext/richtextliststylepage.cpp:188
 msgid "Selects the list level to edit."
-msgstr "选择并编辑列表层级。"
+msgstr "选择要编辑的列表层级。"
 
 #: ../src/richtext/richtextliststylepage.cpp:193
 msgid "&Font for Level..."
@@ -8284,7 +8284,7 @@ msgstr "上边距单位。"
 #: ../src/richtext/richtextmarginspage.cpp:266
 #: ../src/richtext/richtextmarginspage.cpp:268
 msgid "The bottom margin size."
-msgstr "底边距。"
+msgstr "下边距大小。"
 
 #: ../src/richtext/richtextmarginspage.cpp:276
 #: ../src/richtext/richtextmarginspage.cpp:278
@@ -8293,47 +8293,47 @@ msgstr "下边距单位。"
 
 #: ../src/richtext/richtextmarginspage.cpp:284
 msgid "Padding"
-msgstr "内衬"
+msgstr "内边距"
 
 #: ../src/richtext/richtextmarginspage.cpp:307
 #: ../src/richtext/richtextmarginspage.cpp:309
 msgid "The left padding size."
-msgstr "左内衬大小。"
+msgstr "左内边距大小。"
 
 #: ../src/richtext/richtextmarginspage.cpp:317
 #: ../src/richtext/richtextmarginspage.cpp:319
 msgid "Units for the left padding."
-msgstr "左内衬单位。"
+msgstr "左内边距单位。"
 
 #: ../src/richtext/richtextmarginspage.cpp:332
 #: ../src/richtext/richtextmarginspage.cpp:334
 msgid "The right padding size."
-msgstr "右内衬。"
+msgstr "右内边距大小。"
 
 #: ../src/richtext/richtextmarginspage.cpp:342
 #: ../src/richtext/richtextmarginspage.cpp:344
 msgid "Units for the right padding."
-msgstr "右内衬单位。"
+msgstr "右内边距单位。"
 
 #: ../src/richtext/richtextmarginspage.cpp:355
 #: ../src/richtext/richtextmarginspage.cpp:357
 msgid "The top padding size."
-msgstr "上内衬大小。"
+msgstr "上内边距大小。"
 
 #: ../src/richtext/richtextmarginspage.cpp:365
 #: ../src/richtext/richtextmarginspage.cpp:367
 msgid "Units for the top padding."
-msgstr "上内衬单位。"
+msgstr "上内边距单位。"
 
 #: ../src/richtext/richtextmarginspage.cpp:380
 #: ../src/richtext/richtextmarginspage.cpp:382
 msgid "The bottom padding size."
-msgstr "底内衬大小。"
+msgstr "下内边距大小。"
 
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:392
 msgid "Units for the bottom padding."
-msgstr "下内衬单位。"
+msgstr "下内边距单位。"
 
 #: ../src/richtext/richtextprint.cpp:592
 msgid " Preview"
@@ -8350,7 +8350,7 @@ msgstr "浮动模式(&F)："
 #: ../src/richtext/richtextsizepage.cpp:252
 #: ../src/richtext/richtextsizepage.cpp:254
 msgid "How the object will float relative to the text."
-msgstr "对象相对于文本如何浮动。"
+msgstr "对象相对于文本的浮动方式。"
 
 #: ../src/richtext/richtextsizepage.cpp:265
 msgid "Alignment"
@@ -8433,7 +8433,7 @@ msgstr "对象最小宽度。"
 #: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:405
 msgid "Units for the minimum object width."
-msgstr "最小对象宽度单位。"
+msgstr "对象最小宽度单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:408
 msgid "Min height:"
@@ -8452,7 +8452,7 @@ msgstr "对象最小高度。"
 #: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:432
 msgid "Units for the minimum object height."
-msgstr "最小对象高度单位。"
+msgstr "对象最小高度单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:435
 msgid "Max width:"
@@ -8471,7 +8471,7 @@ msgstr "对象最大宽度。"
 #: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:459
 msgid "Units for the maximum object width."
-msgstr "最大对象宽度单位。"
+msgstr "对象最大宽度单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:462
 msgid "Max height:"
@@ -8485,7 +8485,7 @@ msgstr "对象最大高度。"
 #: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:486
 msgid "Units for the maximum object height."
-msgstr "最大对象高度单位。"
+msgstr "对象最大高度单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:495
 msgid "Position"
@@ -8493,7 +8493,7 @@ msgstr "位置"
 
 #: ../src/richtext/richtextsizepage.cpp:513
 msgid "&Position mode:"
-msgstr "位置(&P)："
+msgstr "位置模式(&P)："
 
 #: ../src/richtext/richtextsizepage.cpp:517
 #: ../src/richtext/richtextsizepage.cpp:522
@@ -8502,7 +8502,7 @@ msgstr "静态"
 
 #: ../src/richtext/richtextsizepage.cpp:518
 msgid "Relative"
-msgstr "相关"
+msgstr "相对"
 
 #: ../src/richtext/richtextsizepage.cpp:519
 msgid "Absolute"
@@ -8517,48 +8517,48 @@ msgstr "固定"
 #: ../src/richtext/richtextsizepage.cpp:547
 #: ../src/richtext/richtextsizepage.cpp:549
 msgid "The left position."
-msgstr "左位置。"
+msgstr "左侧偏移量。"
 
 #: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:560
 msgid "Units for the left position."
-msgstr "左位置单位。"
+msgstr "左侧偏移量单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:568
 #: ../src/richtext/richtextsizepage.cpp:570
 #: ../src/richtext/richtextsizepage.cpp:582
 #: ../src/richtext/richtextsizepage.cpp:584
 msgid "The top position."
-msgstr "顶部位置。"
+msgstr "上方偏移量。"
 
 #: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:595
 msgid "Units for the top position."
-msgstr "上位置单位。"
+msgstr "上方偏移量单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:603
 #: ../src/richtext/richtextsizepage.cpp:605
 #: ../src/richtext/richtextsizepage.cpp:617
 #: ../src/richtext/richtextsizepage.cpp:619
 msgid "The right position."
-msgstr "右位置。"
+msgstr "右侧偏移量。"
 
 #: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:630
 msgid "Units for the right position."
-msgstr "右位置单位。"
+msgstr "右侧偏移量单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:638
 #: ../src/richtext/richtextsizepage.cpp:640
 #: ../src/richtext/richtextsizepage.cpp:652
 #: ../src/richtext/richtextsizepage.cpp:654
 msgid "The bottom position."
-msgstr "底部位置。"
+msgstr "下方偏移量。"
 
 #: ../src/richtext/richtextsizepage.cpp:663
 #: ../src/richtext/richtextsizepage.cpp:665
 msgid "Units for the bottom position."
-msgstr "下位置单位。"
+msgstr "下方偏移量单位。"
 
 #: ../src/richtext/richtextsizepage.cpp:671
 msgid "&Move the object to:"
@@ -8603,16 +8603,16 @@ msgstr "样式预览。"
 
 #: ../src/richtext/richtextstyledlg.cpp:220
 msgid "New &Character Style..."
-msgstr "新增字体样式(&C)..."
+msgstr "新建字符样式(&C)..."
 
 #: ../src/richtext/richtextstyledlg.cpp:221
 #: ../src/richtext/richtextstyledlg.cpp:223
 msgid "Click to create a new character style."
-msgstr "点击新建文字样式。"
+msgstr "点击新建字符样式。"
 
 #: ../src/richtext/richtextstyledlg.cpp:226
 msgid "New &Paragraph Style..."
-msgstr "新增段落样式(&P)..."
+msgstr "新建段落样式(&P)..."
 
 #: ../src/richtext/richtextstyledlg.cpp:227
 #: ../src/richtext/richtextstyledlg.cpp:229
@@ -8621,21 +8621,21 @@ msgstr "点击新建段落样式。"
 
 #: ../src/richtext/richtextstyledlg.cpp:232
 msgid "New &List Style..."
-msgstr "新增列表样式(&L)..."
+msgstr "新建列表样式(&L)..."
 
 #: ../src/richtext/richtextstyledlg.cpp:233
 #: ../src/richtext/richtextstyledlg.cpp:235
 msgid "Click to create a new list style."
-msgstr "点击新增列表样式。"
+msgstr "点击新建列表样式。"
 
 #: ../src/richtext/richtextstyledlg.cpp:238
 msgid "New &Box Style..."
-msgstr "新方块样式(&B)"
+msgstr "新建文本框样式(&B)..."
 
 #: ../src/richtext/richtextstyledlg.cpp:239
 #: ../src/richtext/richtextstyledlg.cpp:241
 msgid "Click to create a new box style."
-msgstr "点击新增方块样式。"
+msgstr "点击新建文本框样式。"
 
 #: ../src/richtext/richtextstyledlg.cpp:246
 msgid "&Apply Style"
@@ -8689,7 +8689,7 @@ msgstr "勾选以重新编号。"
 
 #: ../src/richtext/richtextstyledlg.cpp:601
 msgid "Enter a character style name"
-msgstr "输入文字样式名称"
+msgstr "输入字符样式名称"
 
 #: ../src/richtext/richtextstyledlg.cpp:601
 #: ../src/richtext/richtextstyledlg.cpp:606
@@ -8702,7 +8702,7 @@ msgstr "输入文字样式名称"
 #: ../src/richtext/richtextstyledlg.cpp:929
 #: ../src/richtext/richtextstyledlg.cpp:934
 msgid "New Style"
-msgstr "新增样式"
+msgstr "新建样式"
 
 #: ../src/richtext/richtextstyledlg.cpp:606
 #: ../src/richtext/richtextstyledlg.cpp:654
@@ -8710,7 +8710,7 @@ msgstr "新增样式"
 #: ../src/richtext/richtextstyledlg.cpp:896
 #: ../src/richtext/richtextstyledlg.cpp:934
 msgid "Sorry, that name is taken. Please choose another."
-msgstr "抱歉，名字已被使用。请选择其他名字。"
+msgstr "抱歉，该名称已被占用。请选择其他名称。"
 
 #: ../src/richtext/richtextstyledlg.cpp:649
 msgid "Enter a paragraph style name"
@@ -8719,7 +8719,7 @@ msgstr "输入段落样式名称"
 #: ../src/richtext/richtextstyledlg.cpp:777
 #, c-format
 msgid "Delete style %s?"
-msgstr "删除样式 %s?"
+msgstr "删除样式 %s？"
 
 #: ../src/richtext/richtextstyledlg.cpp:777
 msgid "Delete Style"
@@ -8735,7 +8735,7 @@ msgstr "输入新样式名称"
 
 #: ../src/richtext/richtextstyledlg.cpp:929
 msgid "Enter a box style name"
-msgstr "输入文字方块样式名称"
+msgstr "输入文本框样式名称"
 
 #: ../src/richtext/richtextstylepage.cpp:109
 #: ../src/richtext/richtextstylepage.cpp:111
@@ -8770,7 +8770,7 @@ msgstr "段落样式"
 
 #: ../src/richtext/richtextstyles.cpp:1059
 msgid "Character styles"
-msgstr "文字样式"
+msgstr "字符样式"
 
 #: ../src/richtext/richtextstyles.cpp:1060
 msgid "List styles"
@@ -8778,12 +8778,12 @@ msgstr "列表样式"
 
 #: ../src/richtext/richtextstyles.cpp:1061
 msgid "Box styles"
-msgstr "方块样式"
+msgstr "文本框样式"
 
 #: ../src/richtext/richtextsymboldlg.cpp:389
 #: ../src/richtext/richtextsymboldlg.cpp:391
 msgid "The font from which to take the symbol."
-msgstr "符号使用该字体。"
+msgstr "从中选取符号的字体。"
 
 #: ../src/richtext/richtextsymboldlg.cpp:396
 msgid "&Subset:"
@@ -8792,7 +8792,7 @@ msgstr "子集(&S)："
 #: ../src/richtext/richtextsymboldlg.cpp:401
 #: ../src/richtext/richtextsymboldlg.cpp:403
 msgid "Shows a Unicode subset."
-msgstr "显示统一码子集。"
+msgstr "显示 Unicode 子集。"
 
 #: ../src/richtext/richtextsymboldlg.cpp:412
 msgid "xxxx"
@@ -8815,7 +8815,7 @@ msgstr "从(&F)："
 #: ../src/richtext/richtextsymboldlg.cpp:434
 #: ../src/richtext/richtextsymboldlg.cpp:435
 msgid "Unicode"
-msgstr "统一码"
+msgstr "Unicode"
 
 #: ../src/richtext/richtextsymboldlg.cpp:436
 #: ../src/richtext/richtextsymboldlg.cpp:438
@@ -8828,63 +8828,63 @@ msgstr "插入"
 
 #: ../src/richtext/richtextsymboldlg.cpp:478
 msgid "(Normal text)"
-msgstr "(正常字体)"
+msgstr "(普通文本)"
 
 #: ../src/richtext/richtexttabspage.cpp:109
 msgid "&Position (tenths of a mm):"
-msgstr "位置(&P) (十分之一毫米)："
+msgstr "位置(&P)（单位：0.1 毫米）："
 
 #: ../src/richtext/richtexttabspage.cpp:113
 #: ../src/richtext/richtexttabspage.cpp:115
 msgid "The tab position."
-msgstr "标签位置。"
+msgstr "制表位。"
 
 #: ../src/richtext/richtexttabspage.cpp:119
 msgid "The tab positions."
-msgstr "标签位置。"
+msgstr "制表位。"
 
 #: ../src/richtext/richtexttabspage.cpp:132
 #: ../src/richtext/richtexttabspage.cpp:134
 msgid "Click to create a new tab position."
-msgstr "点击建立新的标签位置。"
+msgstr "点击新建制表位。"
 
 #: ../src/richtext/richtexttabspage.cpp:138
 #: ../src/richtext/richtexttabspage.cpp:140
 msgid "Click to delete the selected tab position."
-msgstr "点击删除所选标签位置。"
+msgstr "点击删除所选制表位。"
 
 #: ../src/richtext/richtexttabspage.cpp:143
 msgid "Delete A&ll"
-msgstr "删除全部(&l)"
+msgstr "全部删除(&L)"
 
 #: ../src/richtext/richtexttabspage.cpp:144
 #: ../src/richtext/richtexttabspage.cpp:146
 msgid "Click to delete all tab positions."
-msgstr "点击删除所有标签位置。"
+msgstr "点击删除所有制表位。"
 
 #: ../src/univ/theme.cpp:110
 msgid "Failed to initialize GUI: no built-in themes found."
-msgstr "无法初始化 GUI：找不到内嵌的主题。"
+msgstr "无法初始化 GUI：未找到内置主题。"
 
 #: ../src/univ/themes/gtk.cpp:521
 msgid "GTK+ theme"
-msgstr "GTK+ 视觉主题"
+msgstr "GTK+ 主题"
 
 #: ../src/univ/themes/metal.cpp:164
 msgid "Metal theme"
-msgstr "金属视觉主题"
+msgstr "Metal 主题"
 
 #: ../src/univ/themes/mono.cpp:512
 msgid "Simple monochrome theme"
-msgstr "简单黑白视觉主题"
+msgstr "简易黑白主题"
 
 #: ../src/univ/themes/win32.cpp:1098
 msgid "Win32 theme"
-msgstr "Win32 视觉主题"
+msgstr "Win32 主题"
 
 #: ../src/univ/themes/win32.cpp:3743
 msgid "&Restore"
-msgstr "复原(&R)"
+msgstr "还原(&R)"
 
 #: ../src/univ/themes/win32.cpp:3744
 msgid "&Move"
@@ -8896,11 +8896,11 @@ msgstr "大小(&S)"
 
 #: ../src/univ/themes/win32.cpp:3748
 msgid "Mi&nimize"
-msgstr "最小化(&n)"
+msgstr "最小化(&N)"
 
 #: ../src/univ/themes/win32.cpp:3750
 msgid "Ma&ximize"
-msgstr "最大化(&x)"
+msgstr "最大化(&X)"
 
 #: ../src/univ/themes/win32.cpp:3752
 msgid "Alt+"
@@ -8908,11 +8908,11 @@ msgstr "Alt+"
 
 #: ../src/unix/appunix.cpp:178
 msgid "Failed to install signal handler"
-msgstr "无法安装信号句柄"
+msgstr "无法安装信号处理程序"
 
 #: ../src/unix/dialup.cpp:351
 msgid "Already dialling ISP."
-msgstr "已经拨接 ISP。"
+msgstr "已在拨号连接 ISP。"
 
 #: ../src/unix/dlunix.cpp:93
 msgid "Failed to unload shared library"
@@ -8933,7 +8933,7 @@ msgstr "关闭 epoll 描述符时发生错误"
 #: ../src/unix/epolldispatcher.cpp:116
 #, c-format
 msgid "Failed to add descriptor %d to epoll descriptor %d"
-msgstr "无法将描述符 %d 加到 epoll 描述符 %d"
+msgstr "无法将描述符 %d 添加到 epoll 描述符 %d"
 
 #: ../src/unix/epolldispatcher.cpp:136
 #, c-format
@@ -8948,7 +8948,7 @@ msgstr "无法从 epoll 描述符 %2$d 中注销描述符 %1$d"
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
 msgid "Waiting for IO on epoll descriptor %d failed"
-msgstr "等待 epoll 描述符 %d 的 IO 时失败"
+msgstr "在 epoll 描述符 %d 上等待 IO 失败"
 
 #: ../src/unix/fswatcher_inotify.cpp:71
 msgid "Unable to create inotify instance"
@@ -8960,22 +8960,22 @@ msgstr "无法关闭 inotify 实例"
 
 #: ../src/unix/fswatcher_inotify.cpp:106
 msgid "Unable to add inotify watch"
-msgstr "无法添加 inotify watch"
+msgstr "无法添加 inotify 监视项"
 
 #: ../src/unix/fswatcher_inotify.cpp:138
 #, c-format
 msgid "Unable to remove inotify watch %i"
-msgstr "无法删除 inotify watch %i"
+msgstr "无法移除 inotify 监视项 %i"
 
 #: ../src/unix/fswatcher_inotify.cpp:271
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
-msgstr "意外事件 \"%s\"：没有匹配的监控描述符。"
+msgstr "\"%s\" 出现意外事件：无匹配的监视描述符。"
 
 #: ../src/unix/fswatcher_inotify.cpp:320
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr "无效的 \"%s\" inotify 事件"
+msgstr "\"%s\" 的无效 inotify 事件"
 
 #: ../src/unix/fswatcher_inotify.cpp:553
 msgid "Unable to read from inotify descriptor"
@@ -8995,11 +8995,11 @@ msgstr "关闭 kqueue 实例时发生错误"
 
 #: ../src/unix/fswatcher_kqueue.cpp:153
 msgid "Unable to add kqueue watch"
-msgstr "无法添加 kqueue watch"
+msgstr "无法添加 kqueue 监视项"
 
 #: ../src/unix/fswatcher_kqueue.cpp:170
 msgid "Unable to remove kqueue watch"
-msgstr "无法删除 kqueue watch"
+msgstr "无法移除 kqueue 监视项"
 
 #: ../src/unix/fswatcher_kqueue.cpp:202
 msgid "Unable to get events from kqueue"
@@ -9008,12 +9008,12 @@ msgstr "无法从 kqueue 中获取事件"
 #: ../src/unix/mediactrl.cpp:966
 #, c-format
 msgid "Media playback error: %s"
-msgstr "媒体回放错误：%s"
+msgstr "媒体播放错误：%s"
 
 #: ../src/unix/mediactrl.cpp:1228
 #, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "无法准备播放 \"%s\"。"
+msgstr "无法准备播放“%s”。"
 
 #: ../src/unix/snglinst.cpp:164
 #, c-format
@@ -9028,7 +9028,7 @@ msgstr "无法设置锁定文件 '%s' 的权限"
 #: ../src/unix/snglinst.cpp:194
 #, c-format
 msgid "Failed to lock the lock file '%s'"
-msgstr "无法给锁定文件 '%s' 上锁"
+msgstr "无法锁定文件 '%s'"
 
 #: ../src/unix/snglinst.cpp:237
 #, c-format
@@ -9038,12 +9038,12 @@ msgstr "无法检查锁定文件 '%s'"
 #: ../src/unix/snglinst.cpp:242
 #, c-format
 msgid "Lock file '%s' has incorrect owner."
-msgstr "锁定文件 '%s' 没有正确的所有者。"
+msgstr "锁定文件 '%s' 的所有者不正确。"
 
 #: ../src/unix/snglinst.cpp:247
 #, c-format
 msgid "Lock file '%s' has incorrect permissions."
-msgstr "锁定文件 '%s' 没有正确的权限。"
+msgstr "锁定文件 '%s' 的权限不正确。"
 
 #: ../src/unix/snglinst.cpp:265
 msgid "Failed to access lock file."
@@ -9056,7 +9056,7 @@ msgstr "无法从锁定文件读取 PID。"
 #: ../src/unix/snglinst.cpp:284
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr "无法删除过期的锁定文件 '%s'。"
+msgstr "无法移除过期的锁定文件 '%s'。"
 
 #: ../src/unix/snglinst.cpp:297
 #, c-format
@@ -9071,7 +9071,7 @@ msgstr "无效的锁定文件 '%s'。"
 #: ../src/unix/snglinst.cpp:324
 #, c-format
 msgid "Failed to remove lock file '%s'"
-msgstr "无法删除锁定文件 '%s'"
+msgstr "无法移除锁定文件 '%s'"
 
 #: ../src/unix/snglinst.cpp:330
 #, c-format
@@ -9089,7 +9089,7 @@ msgstr "没有声音"
 
 #: ../src/unix/sound.cpp:364
 msgid "Unable to play sound asynchronously."
-msgstr "无法异步地播放声音。"
+msgstr "无法异步播放声音。"
 
 #: ../src/unix/sound.cpp:458
 #, c-format
@@ -9099,11 +9099,11 @@ msgstr "无法从 '%s' 中加载声音数据。"
 #: ../src/unix/sound.cpp:465
 #, c-format
 msgid "Sound file '%s' is in unsupported format."
-msgstr "不支持声音文件 '%s' 的格式。"
+msgstr "声音文件 '%s' 格式不受支持。"
 
 #: ../src/unix/sound.cpp:480
 msgid "Sound data are in unsupported format."
-msgstr "不支持声音数据的格式。"
+msgstr "声音数据格式不受支持。"
 
 #: ../src/unix/sound_sdl.cpp:226
 #, c-format
@@ -9127,12 +9127,12 @@ msgstr "线程优先级设置被忽略。"
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
-msgstr "线程回收失败，检测到潜在的内存泄漏 - 请重启程序"
+msgstr "等待线程结束失败，检测到潜在的内存泄漏——请重启程序"
 
 #: ../src/unix/threadpsx.cpp:1352
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "无法设置线程并发级别至 %lu"
+msgstr "无法将线程并发级别设置为 %lu"
 
 #: ../src/unix/threadpsx.cpp:1481
 #, c-format
@@ -9145,7 +9145,7 @@ msgstr "无法终止线程。"
 
 #: ../src/unix/threadpsx.cpp:1893
 msgid "Thread module initialization failed: failed to create thread key"
-msgstr "线程模块初始化失败：创建线程键失败"
+msgstr "线程模块初始化失败：创建线程局部存储键失败"
 
 #: ../src/unix/utilsunx.cpp:340
 msgid "Impossible to get child process input"
@@ -9182,7 +9182,7 @@ msgstr "无法获取主机名"
 
 #: ../src/unix/utilsunx.cpp:1059
 msgid "Cannot get the official hostname"
-msgstr "无法获取正式主机名"
+msgstr "无法获取规范主机名"
 
 #: ../src/unix/wakeuppipe.cpp:49
 msgid "Failed to create wake up pipe used by event loop."
@@ -9199,11 +9199,11 @@ msgstr "无法读取唤醒管道"
 #: ../src/x11/app.cpp:124
 #, c-format
 msgid "Invalid geometry specification '%s'"
-msgstr "无效的几何规格 '%s'"
+msgstr "几何规格 '%s' 无效"
 
 #: ../src/x11/app.cpp:167
 msgid "wxWidgets could not open display. Exiting."
-msgstr "wxWidgets 无法打开显示设备。退出。"
+msgstr "wxWidgets 无法打开显示。正在退出。"
 
 #: ../src/x11/utils.cpp:169
 #, c-format
@@ -9213,7 +9213,7 @@ msgstr "无法关闭显示 \"%s\""
 #: ../src/x11/utils.cpp:188
 #, c-format
 msgid "Failed to open display \"%s\"."
-msgstr "无法打开显示设备 \"%s\"。"
+msgstr "无法打开显示 \"%s\"。"
 
 #: ../src/xml/xml.cpp:868
 #, c-format
@@ -9223,7 +9223,7 @@ msgstr "XML 解析错误：'%s'，位于第 %d 行"
 #: ../src/xrc/xh_propgrid.cpp:239
 #, c-format
 msgid "Page %i"
-msgstr "页 %i"
+msgstr "第 %i 页"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
