@@ -1044,12 +1044,12 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 long line, column, pos = GetInsertionPoint();
                 PositionToXY(pos, &column, &line);
 
-                wxLogMessage("Current position: %ld\nCurrent line, column: (%ld, %ld)\nNumber of lines: %ld\nCurrent line length: %ld\nTotal text length: %u (%ld)",
+                wxLogMessage("Current position: %ld\nCurrent line, column: (%ld, %ld)\nNumber of lines: %d\nCurrent line length: %d\nTotal text length: %zu (%ld)",
                         pos,
                         line, column,
-                        (long) GetNumberOfLines(),
-                        (long) GetLineLength(line),
-                        (unsigned int) GetValue().length(),
+                        GetNumberOfLines(),
+                        GetLineLength(line),
+                        GetValue().length(),
                         GetLastPosition());
 
                 long from, to;
@@ -1058,12 +1058,11 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 wxString sel = GetStringSelection();
 
                 wxLogMessage("Selection: from %ld to %ld.", from, to);
-                wxLogMessage("Selection = '%s' (len = %u)",
-                             sel,
-                             (unsigned int) sel.length());
+                wxLogMessage("Selection = '%s' (len = %zu)",
+                             sel, sel.length());
 
                 const wxString text = GetLineText(line);
-                wxLogMessage("Current line: \"%s\"; length = %lu",
+                wxLogMessage("Current line: \"%s\"; length = %zu",
                              text, text.length());
             }
             break;
