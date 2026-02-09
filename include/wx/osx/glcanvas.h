@@ -102,6 +102,11 @@ public:
     // implement wxGLCanvasBase methods
     virtual bool SwapBuffers() override;
 
+#ifdef __WXOSX_MAC__
+    virtual SwapInterval SetSwapInterval(int interval) override;
+    virtual int GetSwapInterval() const override;
+#endif
+
     // Mac-specific functions
     // ----------------------
 
@@ -129,6 +134,10 @@ protected:
 
     WXGLPixelFormat m_glFormat = nullptr;
     wxGLAttributes m_GLAttrs;
+
+private:
+    // The value of swap interval to set or DefaultSwapInterval.
+    int m_swapIntervalToSet = DefaultSwapInterval;
 
     wxDECLARE_CLASS(wxGLCanvas);
 };

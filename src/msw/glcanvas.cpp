@@ -788,6 +788,47 @@ bool wxGLCanvas::SwapBuffers()
     return true;
 }
 
+wxGLCanvas::SwapInterval wxGLCanvas::SetSwapInterval(int interval)
+{
+    if ( !IsExtensionSupported("WGL_EXT_swap_control") )
+        return SwapInterval::NotSet;
+
+    typedef BOOL (WINAPI * wglSwapIntervalEXT_t)(int interval);
+
+    wxDEFINE_WGL_FUNC(wglSwapIntervalEXT);
+    if ( !wglSwapIntervalEXT )
+        return SwapInterval::NotSet;
+
+    wxGLCanvas::SwapInterval result = wxGLCanvas::SwapInterval::Set;
+    if ( interval < 0 && !IsExtensionSupported("WGL_EXT_swap_control_tear") )
+    {
+        // Adaptive VSync not supported, fall back to standard VSync.
+        interval = -interval;
+        result = wxGLCanvas::SwapInterval::NonAdaptive;
+    }
+
+    if ( !wglSwapIntervalEXT(interval) )
+    {
+        wxLogLastError(wxT("wglSwapIntervalEXT"));
+        return SwapInterval::NotSet;
+    }
+
+    return result;
+}
+
+int wxGLCanvas::GetSwapInterval() const
+{
+    if ( !IsExtensionSupported("WGL_EXT_swap_control") )
+        return DefaultSwapInterval;
+
+    typedef int (WINAPI * wglGetSwapIntervalEXT_t) (void);
+    wxDEFINE_WGL_FUNC(wglGetSwapIntervalEXT);
+
+    if ( !wglGetSwapIntervalEXT )
+        return DefaultSwapInterval;
+
+    return wglGetSwapIntervalEXT();
+}
 
 /* static */
 bool wxGLCanvasBase::IsExtensionSupported(const char *extension)

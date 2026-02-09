@@ -211,6 +211,18 @@ protected:
 class WXDLLIMPEXP_GL wxGLCanvasBase : public wxWindow
 {
 public:
+    // Disable changing swap interval or indicate that it is unknown.
+    static constexpr int DefaultSwapInterval = INT_MAX;
+
+    // Return values of SetSwapInterval().
+    enum class SwapInterval
+    {
+        NotSet = 0,
+        Set = 1,
+        NonAdaptive = 2
+    };
+
+
     // default ctor doesn't initialize the window, use Create() later
     wxGLCanvasBase();
 
@@ -239,6 +251,21 @@ public:
     // flush the back buffer (if we have it)
     virtual bool SwapBuffers() = 0;
 
+    // Set swap interval to the specified value.
+    //
+    // Special value of 0 means to disable VSync and DefaultSwapInterval means
+    // to disable automatically disabling VSync by default, as needs to be done
+    // under some platforms currently.
+    //
+    // Negative values may be used to enable adaptive VSync if supported by the
+    // implementation.
+    //
+    // Return true if the swap interval was set successfully, false if not.
+    virtual SwapInterval SetSwapInterval(int WXUNUSED(interval))
+    {
+        return SwapInterval::NotSet;
+    }
+
 
     // accessors
     // ---------
@@ -250,6 +277,10 @@ public:
 #if wxUSE_PALETTE
     const wxPalette *GetPalette() const { return &m_palette; }
 #endif // wxUSE_PALETTE
+
+    // Return the current swap interval.
+    virtual int GetSwapInterval() const { return DefaultSwapInterval; }
+
 
     // miscellaneous helper functions
     // ------------------------------
