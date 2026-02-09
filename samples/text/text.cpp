@@ -1044,26 +1044,29 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 long line, column, pos = GetInsertionPoint();
                 PositionToXY(pos, &column, &line);
 
-                wxLogMessage("Current position: %ld\nCurrent line, column: (%ld, %ld)\nNumber of lines: %d\nCurrent line length: %d\nTotal text length: %zu (%ld)",
-                        pos,
-                        line, column,
-                        GetNumberOfLines(),
-                        GetLineLength(line),
-                        GetValue().length(),
-                        GetLastPosition());
-
                 long from, to;
                 GetSelection(&from, &to);
 
-                wxString sel = GetStringSelection();
-
-                wxLogMessage("Selection: from %ld to %ld.", from, to);
-                wxLogMessage("Selection = '%s' (len = %zu)",
-                             sel, sel.length());
-
+                const wxString sel = GetStringSelection();
                 const wxString text = GetLineText(line);
-                wxLogMessage("Current line: \"%s\"; length = %zu",
-                             text, text.length());
+
+                wxLogMessage(R"(Control state:
+Current position: %ld
+Current line, column: (%ld, %ld)
+Number of lines: %d
+Current line: "%s" (length from control %d, actual %zu)
+Total text length: %zu (last position %ld)
+Selection: "%s" (length %zu, from %ld to %ld))",
+                        pos,
+                        line, column,
+                        GetNumberOfLines(),
+                        text,
+                        GetLineLength(line),
+                        text.length(),
+                        GetValue().length(),
+                        GetLastPosition(),
+                        sel, sel.length(),
+                        from, to);
             }
             break;
 
