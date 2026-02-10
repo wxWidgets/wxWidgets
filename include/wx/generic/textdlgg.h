@@ -64,7 +64,6 @@ public:
     wxString GetValue() const { return m_value; }
 
     void SetHint(const wxString &hint);
-    wxString GetHint() const;
 
     void SetMaxLength(unsigned long len);
 

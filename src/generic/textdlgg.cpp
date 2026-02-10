@@ -178,18 +178,6 @@ void wxTextEntryDialog::SetHint(const wxString& hint)
     }
 }
 
-wxString wxTextEntryDialog::GetHint() const
-{
-    if ( m_textctrl )
-    {
-        return m_textctrl->GetHint();
-    }
-    else
-    {
-        return wxString();
-    }
-}
-
 void wxTextEntryDialog::ForceUpper()
 {
     if ( m_textctrl )
