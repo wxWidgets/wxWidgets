@@ -796,6 +796,10 @@ TEST_CASE("wxDateTime::Format", "[datetime]")
     }
 
     CHECK(wxDateTime::Now().Format("%%") == "%");
+
+
+    wxDateTime dt(29, wxDateTime::May, 1976, 18, 30, 15, 678);
+    CHECK( dt.Format("%F %T.%l") == "1976-05-29 18:30:15.678" );
 }
 
 TEST_CASE("wxDateTime::ParseFormat", "[datetime]")
