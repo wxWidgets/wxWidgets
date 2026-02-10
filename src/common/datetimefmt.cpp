@@ -356,7 +356,9 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
         {
             case 'l':
 #ifdef __WINDOWS__
+#ifdef __MINGW32__
             case 'F':
+#endif
             case 'g':
             case 'G':
             case 'V':
