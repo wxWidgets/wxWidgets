@@ -634,6 +634,10 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
                     res += wxString::Format(fmt, tm.sec);
                     break;
 
+                case wxT('T'):       // time as %H:%M:%S
+                    res += wxString::Format(wxT("%02d:%02d:%02d"), tm.hour, tm.min, tm.sec);
+                    break;
+
                 case wxT('U'):       // week number in the year (Sunday 1st week day)
                     res += wxString::Format(fmt, GetWeekOfYear(Sunday_First, tz));
                     break;
