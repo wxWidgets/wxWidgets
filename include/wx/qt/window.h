@@ -89,6 +89,7 @@ public:
     virtual void Update() override;
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = nullptr ) override;
+    virtual void ClearBackground() override;
 
     virtual bool SetCursor( const wxCursor &cursor ) override;
     virtual bool SetFont(const wxFont& font) override;

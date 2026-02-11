@@ -33,6 +33,14 @@ wxStaticText::wxStaticText(wxWindow *parent,
              const wxString &name)
 {
     Create( parent, id, label, pos, size, style, name );
+
+    // to allow dynamic ellipsizing of the label.
+    Bind(wxEVT_SIZE, [this](wxSizeEvent& event)
+        {
+            event.Skip();
+
+            UpdateLabel();
+        });
 }
 
 wxStaticText::~wxStaticText()

@@ -794,7 +794,6 @@ void MyFrame::DoApplyColour(const wxColour& colour)
         return;
 
     m_canvas->SetBackgroundColour(colour);
-    m_canvas->ClearBackground();
     m_canvas->Refresh();
 }
 
@@ -858,7 +857,6 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& event)
     {
         m_clrData = dialog->GetColourData();
         m_canvas->SetBackgroundColour(m_clrData.GetColour());
-        m_canvas->ClearBackground();
         m_canvas->Refresh();
     }
     dialog->Destroy();
