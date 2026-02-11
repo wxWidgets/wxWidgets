@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxTextEntryDialog::SetHint() (Lauri Nurmi, #26176).
