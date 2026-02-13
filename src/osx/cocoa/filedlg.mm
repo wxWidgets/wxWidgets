@@ -249,7 +249,7 @@ void wxFileDialog::ShowWindowModal()
 {
     wxNonOwnedWindow* parentWindow = nullptr;
 
-    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
+    m_modality = wxWindowMode::WindowModal;
 
     if (GetParent())
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
@@ -689,7 +689,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     if ( m_isNativeWindowWrapper )
         UnsubclassWin();
 
-    if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
+    if (GetModality() == wxWindowMode::WindowModal)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 
     [sPanel setAccessoryView:nil];

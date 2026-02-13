@@ -170,7 +170,7 @@ void wxMessageDialog::ShowWindowModal()
 {
     wxNonOwnedWindow* parentWindow = nullptr;
 
-    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
+    m_modality = wxWindowMode::WindowModal;
 
     if (GetParent())
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
@@ -204,7 +204,7 @@ void wxMessageDialog::ModalFinishedCallback(void* WXUNUSED(panel), int resultCod
     }
     SetReturnCode(resultbutton);
 
-    if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
+    if (GetModality() == wxWindowMode::WindowModal)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
 

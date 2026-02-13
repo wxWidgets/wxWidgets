@@ -207,7 +207,7 @@ void wxFrame::SetWindowStyleFlag( long style )
     GetQMainWindow()->setWindowFlags(qtFlags);
 }
 
-void wxFrame::SetWindowModality(Modality modality)
+void wxFrame::SetWindowModality(wxWindowMode modality)
 {
     wxCHECK_RET( !IsShown(),
                  "SetWindowModality() must be called before showing the window" );
@@ -216,15 +216,15 @@ void wxFrame::SetWindowModality(Modality modality)
 
     switch ( modality )
     {
-        case Modality::App:
+        case wxWindowMode::AppModal:
             qtModality = Qt::ApplicationModal;
             break;
 
-        case Modality::Window:
+        case wxWindowMode::WindowModal:
             qtModality = Qt::WindowModal;
             break;
 
-        case Modality::None:
+        case wxWindowMode::Normal:
             qtModality = Qt::NonModal;
             break;
     }

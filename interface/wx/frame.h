@@ -316,28 +316,17 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
 
     /**
-        Possible parameters for SetWindowModality().
-
-        @since 3.3.2
-    */
-    enum class Modality
-    {
-        App,    ///< Disable all the other TLWs while the frame is shown.
-        Window, ///< Disable only the parent window while the frame is shown.
-        None    ///< Show the frame non-modally, and this is the default.
-    };
-
-    /**
         Set the frame modality.
 
         Call this function before showing the frame to make it modal to the
-        application (Modality::App) or just to the parent window (Modality::Window).
+        application (wxWindowMode::AppModal) or just to the parent window
+        (wxWindowMode::WindowModal).
 
         @note Changing the frame modality after it has been shown has no effect
 
         @since 3.3.2
     */
-    virtual void SetWindowModality(Modality modality);
+    virtual void SetWindowModality(wxWindowMode modality);
 
 
     /**
