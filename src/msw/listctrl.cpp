@@ -1794,8 +1794,15 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     // the user handler for it can call GetEditControl() resulting in an on
     // demand creation of a stock wxTextCtrl instead of the control of a
     // (possibly) custom wxClassInfo
-    DeleteEditControl();
-    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
+    // begin bricscad change
+	// since rev. 339 - update to wxwidgets 2.8.10 - calling this function causes
+	// a crash in Drawing Explorer when creating new items in icon view while the
+	// editor of the previous item is still shown.
+	// so for now, moved deleting/recreating of the text control back to after
+	// the call to ListView_EditLabel:
+	// DeleteEditControl();
+    // m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
+    // end bricscad change: 
 
     WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
     if ( !hWnd )
@@ -1805,6 +1812,11 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 
         return NULL;
     }
+
+	// begin bricscad change (see explanation above)
+	DeleteEditControl();
+    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
+	// end bricscad change
 
     // if GetEditControl() hasn't been called, we need to initialize the edit
     // control ourselves
