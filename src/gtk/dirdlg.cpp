@@ -88,6 +88,13 @@ bool wxDirDialog::Create(wxWindow* parent,
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
+	//bricscad change
+    //use stock labels rather than stock ids
+    //this avoid a translation problem with gtk stock items
+    wxCharBuffer cancelLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL)));
+    wxCharBuffer acceptLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_OPEN)));
+    const gchar* gtk_cancel_label = cancelLabel;
+    const gchar* gtk_accept_label = acceptLabel;
     m_widget = gtk_file_chooser_dialog_new(
                    wxGTK_CONV(m_message),
                    gtk_parent,
@@ -95,13 +102,13 @@ bool wxDirDialog::Create(wxWindow* parent,
 #ifdef __WXGTK4__
                    static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
 #else
-                   "gtk-cancel",
+                   gtk_cancel_label,
 #endif
                    GTK_RESPONSE_CANCEL,
 #ifdef __WXGTK4__
                    static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN)))),
 #else
-                   "gtk-open",
+                   gtk_accept_label,
 #endif
                    GTK_RESPONSE_ACCEPT,
                    NULL);

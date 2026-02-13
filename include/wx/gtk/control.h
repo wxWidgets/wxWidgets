@@ -61,8 +61,13 @@ protected:
     // remove mnemonics ("&"s) from the label
     static wxString GTKRemoveMnemonics(const wxString& label);
 
+//bricscad change
+//make GTKConvertMnemonics public
+//needed to avoid a translation problem with gtk stock items
+public:
     // converts wx label to GTK+ label, i.e. basically replace "&"s with "_"s
     static wxString GTKConvertMnemonics(const wxString &label);
+protected:
 
     // converts wx label to GTK+ labels preserving Pango markup
     static wxString GTKConvertMnemonicsWithMarkup(const wxString& label);
