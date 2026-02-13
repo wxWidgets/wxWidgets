@@ -145,6 +145,13 @@ public:
     wxTranslations();
     ~wxTranslations();
 
+    // Bricsys added - needed by Brx because it uses wchar_t as builtin
+#ifdef __WXMSW__
+    static const unsigned short* GetTranslationBrx( const unsigned short* string );
+#else
+    static const wchar_t* GetTranslationBrx( const wchar_t* string );
+#endif
+
     // returns current translations object, may return NULL
     static wxTranslations *Get();
     // sets current translations object (takes ownership; may be NULL)

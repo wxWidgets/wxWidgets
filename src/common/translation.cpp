@@ -1320,6 +1320,19 @@ bool gs_translationsOwned = false;
 
 } // anonymous namespace
 
+// Bricsys added - needed by Brx because it uses wchar_t as builtin
+/* static */
+#ifdef __WXMSW__
+const unsigned short* wxTranslations::GetTranslationBrx( const unsigned short* string )
+{
+    return (const unsigned short*)wxGetTranslation( (const wchar_t*)string ).c_str();
+}
+#else
+const wchar_t* wxTranslations::GetTranslationBrx( const wchar_t* string )
+{
+    return wxGetTranslation( string ).c_str();
+}
+#endif //__WXMSW__
 
 /*static*/
 wxTranslations *wxTranslations::Get()

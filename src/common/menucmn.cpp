@@ -794,11 +794,15 @@ void wxMenuBase::Detach()
 
 void wxMenuBase::SetInvokingWindow(wxWindow *win)
 {
+// Bricsys change: on Windows the main MenuBar is not attached to any wxFrame
+// we use SetInvokingWindow() on the menu before adding menu items containing bitmaps
+#ifndef __WINDOWS__
     wxASSERT_MSG( !GetParent(),
                     "should only be called for top level popup menus" );
 #if wxUSE_MENUBAR
     wxASSERT_MSG( !IsAttached(),
                     "menus attached to menu bar can't have invoking window" );
+#endif
 #endif
     m_invokingWindow = win;
 }
@@ -814,8 +818,13 @@ wxWindow *wxMenuBase::GetWindow() const
     }
 
 #if wxUSE_MENUBAR
-    return menu->GetMenuBar() ? menu->GetMenuBar()->GetFrame()
-                              : menu->GetInvokingWindow();
+// Bricsys change: on Windows the main MenuBar is not attached to any wxFrame
+// we use SetInvokingWindow() on the menu before adding menu items containing bitmaps
+// However, also on Windows, the MenuBar can be attached to a wxFrame (like in drawings explorer)
+// so both ways need to be checked.
+    wxMenuBar *pMenuBar = menu->GetMenuBar();
+    wxFrame *pFrame = pMenuBar ? pMenuBar->GetFrame() : NULL;
+    return pFrame ? pFrame : menu->GetInvokingWindow();
 #else
     return menu->GetInvokingWindow();
 #endif
