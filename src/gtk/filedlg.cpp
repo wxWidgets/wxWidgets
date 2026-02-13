@@ -19,6 +19,8 @@
     #include "wx/msgdlg.h"
 #endif
 
+#include "wx/stockitem.h"
+
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/error.h"
 #include "wx/gtk/private/mnemonics.h"
@@ -216,6 +218,10 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
+    //bricscad change
+    //use stock labels rather than stock ids
+    //this avoid a translation problem with gtk stock items
+    wxCharBuffer acceptLabel;
     wxString ok_btn_stock;
     if ( style & wxFD_SAVE )
     {
@@ -223,7 +229,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE));
 #else
-        ok_btn_stock = "gtk-save";
+        acceptLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_SAVE)));
 #endif
     }
     else
@@ -232,9 +238,13 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN));
 #else
-        ok_btn_stock = "gtk-open";
+        acceptLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_OPEN)));
 #endif
     }
+
+	wxCharBuffer cancelLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL)));
+    const gchar* gtk_cancel_label = cancelLabel;
+    const gchar* gtk_accept_label = acceptLabel;
 
     m_widget = gtk_file_chooser_dialog_new(
                    wxGTK_CONV(m_message),
@@ -243,10 +253,14 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
                    static_cast<const gchar*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
 #else
-                   "gtk-cancel",
+                   gtk_cancel_label,
 #endif
                    GTK_RESPONSE_CANCEL,
+#ifdef __WXGTK4__
                    static_cast<const gchar*>(wxGTK_CONV(ok_btn_stock)), GTK_RESPONSE_ACCEPT,
+#else
+                   gtk_accept_label, GTK_RESPONSE_ACCEPT,
+#endif
                    NULL);
 
     g_object_ref(m_widget);
