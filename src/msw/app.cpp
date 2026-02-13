@@ -739,17 +739,10 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
     // WM_ENDSESSION handler or when we delete our last window, so make sure we
     // at least execute our cleanup code before
 
-    // Destroy all the remaining TLWs before calling OnExit() to have the same
-    // sequence of events in this case as in case of the normal shutdown,
-    // otherwise we could have many problems due to wxApp being already
-    // destroyed when window cleanup code (in close event handlers or dtor) is
-    // executed.
-    //
     // Note that we survive after this call only because we don't delete any
-    // windows at MSW level, see gs_gotEndSession check in wxWindow dtor.
-    DeleteAllTLWs();
-
-    const int rc = OnExit();
+    // windows at MSW level, see gs_gotEndSession check in wxWindow dtor, even
+    // though CallOnExit() deletes all C++ top level window objects.
+    const int rc = CallOnExit();
 
     // Skip unregistering windows classes: this is not really necessary and
     // would result in an error because we may still have an open window.
