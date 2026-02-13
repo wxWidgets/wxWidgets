@@ -35,7 +35,7 @@
 #include "wx/msw/missing.h"
 
 #if wxUSE_ACCESSIBILITY
-    #include "wx/access.h"
+    #include "wx/private/accessible.h"
 #endif
 
 // ============================================================================
@@ -285,41 +285,29 @@ void wxCheckBox::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
 namespace
 {
 // When the checkbox is owner-drawn (e.g. in dark mode), the native BS_CHECKBOX style is replaced with BS_OWNERDRAW, causing the standard Windows accessible object to report the control as a generic button. This custom accessible ensures the correct role and checked state are always reported.
-class wxCheckBoxAccessible : public wxWindowAccessible
+class wxCheckBoxAccessible : public wxOwnerDrawnAccessible<wxCheckBox>
 {
 public:
-    explicit wxCheckBoxAccessible(wxCheckBox* win) : wxWindowAccessible(win) { }
+    explicit wxCheckBoxAccessible(wxCheckBox* win) : wxOwnerDrawnAccessible(win) { }
 
-    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override
+protected:
+    wxAccRole MSWGetRole() const override
     {
-        if ( childId != wxACC_SELF ) return wxACC_NOT_IMPLEMENTED;
-        *role = wxROLE_SYSTEM_CHECKBUTTON;
-        return wxACC_OK;
+        return wxROLE_SYSTEM_CHECKBUTTON;
     }
 
-    virtual wxAccStatus GetState(int childId, long* state) override
+    long MSWGetCheckedState(wxCheckBox* cb) const override
     {
-        if ( childId != wxACC_SELF ) return wxACC_NOT_IMPLEMENTED;
-        wxCheckBox* cb = wxDynamicCast(GetWindow(), wxCheckBox);
-        wxCHECK(cb, wxACC_FAIL);
-        long st = 0;
-        if ( !cb->IsEnabled() ) st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
-        if ( !cb->IsShown() ) st |= wxACC_STATE_SYSTEM_INVISIBLE;
-        if ( cb->IsFocusable() ) st |= wxACC_STATE_SYSTEM_FOCUSABLE;
-        if ( cb->HasFocus() ) st |= wxACC_STATE_SYSTEM_FOCUSED;
         switch ( cb->Get3StateValue() )
         {
             case wxCHK_CHECKED:
-                st |= wxACC_STATE_SYSTEM_CHECKED;
-                break;
+                return wxACC_STATE_SYSTEM_CHECKED;
             case wxCHK_UNDETERMINED:
-                st |= wxACC_STATE_SYSTEM_MIXED;
-                break;
+                return wxACC_STATE_SYSTEM_MIXED;
             case wxCHK_UNCHECKED:
                 break;
         }
-        *state = st;
-        return wxACC_OK;
+        return 0;
     }
 };
 }

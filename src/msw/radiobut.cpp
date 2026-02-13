@@ -34,7 +34,7 @@
 #include "wx/msw/uxtheme.h"
 
 #if wxUSE_ACCESSIBILITY
-    #include "wx/access.h"
+    #include "wx/private/accessible.h"
 #endif
 
 // ============================================================================
@@ -355,31 +355,20 @@ void wxRadioButton::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
 namespace
 {
 // When the radio button is owner-drawn (e.g. in dark mode), the native BS_RADIOBUTTON style is replaced with BS_OWNERDRAW, causing the standard Windows accessible object to report the control as a generic button. This custom accessible ensures the correct role and checked state are always reported.
-class wxRadioButtonAccessible : public wxWindowAccessible
+class wxRadioButtonAccessible : public wxOwnerDrawnAccessible<wxRadioButton>
 {
 public:
-    explicit wxRadioButtonAccessible(wxRadioButton* win) : wxWindowAccessible(win) { }
+    explicit wxRadioButtonAccessible(wxRadioButton* win) : wxOwnerDrawnAccessible(win) { }
 
-    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override
+protected:
+    wxAccRole MSWGetRole() const override
     {
-        if ( childId != wxACC_SELF ) return wxACC_NOT_IMPLEMENTED;
-        *role = wxROLE_SYSTEM_RADIOBUTTON;
-        return wxACC_OK;
+        return wxROLE_SYSTEM_RADIOBUTTON;
     }
 
-    virtual wxAccStatus GetState(int childId, long* state) override
+    long MSWGetCheckedState(wxRadioButton* rb) const override
     {
-        if ( childId != wxACC_SELF ) return wxACC_NOT_IMPLEMENTED;
-        wxRadioButton* rb = wxDynamicCast(GetWindow(), wxRadioButton);
-        wxCHECK(rb, wxACC_FAIL);
-        long st = 0;
-        if ( !rb->IsEnabled() ) st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
-        if ( !rb->IsShown() ) st |= wxACC_STATE_SYSTEM_INVISIBLE;
-        if ( rb->IsFocusable() ) st |= wxACC_STATE_SYSTEM_FOCUSABLE;
-        if ( rb->HasFocus() ) st |= wxACC_STATE_SYSTEM_FOCUSED;
-        if ( rb->GetValue() ) st |= wxACC_STATE_SYSTEM_CHECKED;
-        *state = st;
-        return wxACC_OK;
+        return rb->GetValue() ? wxACC_STATE_SYSTEM_CHECKED : 0;
     }
 };
 }
