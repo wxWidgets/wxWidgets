@@ -57,7 +57,7 @@ wxEND_EVENT_TABLE()
 namespace
 {
 // Global stack used to track all active wxWindowDisablers for the wxFrames
-// currently shown modally (those with Modality::App flag).
+// currently shown modally (those with wxWindowMode::AppModal flag).
 // E.g.: a frame shown modally from another modal frame.
 std::stack<wxWindowDisabler> gs_windowDisablers;
 } // anonymous namespace
@@ -171,23 +171,23 @@ wxFrameBase::wxFrameBase()
             {
                 switch ( m_modality )
                 {
-                    case Modality::App:
+                    case wxWindowMode::AppModal:
                         if ( !gs_windowDisablers.empty() )
                         {
                             gs_windowDisablers.pop();
+                            break;
+
                         }
-                        else
-                        {
-                            wxFAIL_MSG( "A window with Modality::App MUST have a wxWindowDisabler" );
-                        }
+
+                        wxFAIL_MSG("Must have wxWindowDisabler if app modal");
                         break;
 
-                    case Modality::Window:
+                    case wxWindowMode::WindowModal:
                         if ( GetParent() )
                             GetParent()->Enable();
                         break;
 
-                    case Modality::None:
+                    case wxWindowMode::Normal:
                         break;
                 }
             }
@@ -301,32 +301,35 @@ void wxFrameBase::RemoveChild(wxWindowBase *child)
     wxTopLevelWindow::RemoveChild(child);
 }
 
-void wxFrameBase::SetWindowModality(Modality modality)
+void wxFrameBase::SetWindowModality(wxWindowMode modality)
 {
     wxCHECK_RET( !IsShown(),
                  "SetWindowModality() must be called before showing the window" );
 
     m_modality = modality;
 
+    bool isModal = false;
     switch ( m_modality )
     {
-        case Modality::App:
+        case wxWindowMode::AppModal:
             // Disable everything for this frame.
             gs_windowDisablers.emplace(wxWindowDisabler( this ));
+            isModal = true;
             break;
 
-        case Modality::Window:
+        case wxWindowMode::WindowModal:
             // Disable our parent if we have one.
             if ( GetParent() )
                 GetParent()->Disable();
+            isModal = true;
             break;
 
-        case Modality::None:
+        case wxWindowMode::Normal:
             // Nothing to do, we don't need to disable any window.
             break;
     }
 
-    if ( m_modality != Modality::None )
+    if ( isModal )
     {
         // Behave like modal dialogs, don't show in taskbar. This implies
         // removing the minimize box, because minimizing windows without

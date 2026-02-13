@@ -153,7 +153,7 @@ public:
     The elements of this enum can be used with wxPreviewFrame::Initialize() to
     indicate how should the preview frame be shown.
 
-    @note Since version 3.3.2, this is just an alias for wxFrame::Modality.
+    @note Since version 3.3.2, this is just an alias for wxWindowMode.
 
     @since 2.9.2
 */
@@ -162,7 +162,7 @@ enum wxPreviewFrameModalityKind
     /**
         Disable all the other top level windows while the preview frame is shown.
 
-        Same as wxFrame::Modality::App
+        Same as wxWindowMode::AppModal.
 
         This is the default behaviour.
      */
@@ -171,14 +171,14 @@ enum wxPreviewFrameModalityKind
     /**
         Disable only the parent window while the preview frame is shown.
 
-        Same as wxFrame::Modality::Window
+        Same as wxWindowMode::WindowModal.
      */
     wxPreviewFrame_WindowModal,
 
     /**
         Show the preview frame non-modally and don't disable any other windows.
 
-        Same as wxFrame::Modality::None
+        Same as wxWindowMode::Normal.
      */
     wxPreviewFrame_NonModal
 };

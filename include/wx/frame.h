@@ -77,15 +77,8 @@ public:
     // frame modality
     // ------------------
 
-    enum class Modality
-    {
-        App,
-        Window,
-        None
-    };
-
     // Changing the frame modality after it has been shown has no effect
-    virtual void SetWindowModality(Modality modality);
+    virtual void SetWindowModality(wxWindowMode modality);
 
     // menu bar functions
     // ------------------
@@ -262,7 +255,7 @@ protected:
 #endif // wxUSE_TOOLBAR
 
     // The frame is not modal by default.
-    Modality m_modality = Modality::None;
+    wxWindowMode m_modality = wxWindowMode::Normal;
 
 #if wxUSE_MENUS
     wxDECLARE_EVENT_TABLE();

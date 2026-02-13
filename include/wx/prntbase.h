@@ -55,22 +55,22 @@ enum wxPrinterError
 };
 
 // The following symbols are preserved only for compatibility.
-// Please use the new wxFrame::Modality instead in any new code.
+// Please use wxWindowMode directly instead in any new code.
 
 // Preview frame modality kind used with wxPreviewFrame::Initialize()
-using wxPreviewFrameModalityKind = wxFrameBase::Modality;
+using wxPreviewFrameModalityKind = wxWindowMode;
 
 // Disable all the other top level windows while the preview is shown.
 constexpr wxPreviewFrameModalityKind
-wxPreviewFrame_AppModal = wxFrameBase::Modality::App;
+wxPreviewFrame_AppModal = wxWindowMode::AppModal;
 
 // Disable only the parent window while the preview is shown.
 constexpr wxPreviewFrameModalityKind
-wxPreviewFrame_WindowModal = wxFrameBase::Modality::Window;
+wxPreviewFrame_WindowModal = wxWindowMode::WindowModal;
 
 // Don't disable any windows.
 constexpr wxPreviewFrameModalityKind
-wxPreviewFrame_NonModal = wxFrameBase::Modality::None;
+wxPreviewFrame_NonModal = wxWindowMode::Normal;
 
 //----------------------------------------------------------------------------
 // wxPrintFactory

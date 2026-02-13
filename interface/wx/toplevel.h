@@ -40,6 +40,18 @@ enum
                           wxFULLSCREEN_NOCAPTION
 };
 
+/**
+    Possible parameters for wxFrame::SetWindowModality().
+
+    @since 3.3.2
+*/
+enum class wxWindowMode
+{
+    Normal,      ///< Show the frame non-modally, and this is the default.
+    WindowModal, ///< Disable only the parent window while the frame is shown.
+    AppModal     ///< Disable all the other TLWs while the frame is shown.
+};
+
 #define wxDEFAULT_FRAME_STYLE (wxSYSTEM_MENU |          \
                                wxRESIZE_BORDER |        \
                                wxMINIMIZE_BOX |         \
