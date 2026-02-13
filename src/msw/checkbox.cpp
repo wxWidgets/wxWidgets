@@ -34,6 +34,10 @@
 #include "wx/private/window.h"
 #include "wx/msw/missing.h"
 
+#if wxUSE_ACCESSIBILITY
+    #include "wx/msw/private/accessible.h"
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -276,5 +280,53 @@ void wxCheckBox::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
 {
     wxRendererNative::Get().DrawCheckBox(this, dc, rect, flags);
 }
+
+#if wxUSE_ACCESSIBILITY
+
+namespace
+{
+
+// When the checkbox is owner-drawn (e.g. in dark mode), the native BS_CHECKBOX
+// style is replaced with BS_OWNERDRAW, causing the standard Windows accessible
+// object to report the control as a generic button. This custom accessible
+// ensures the correct role and checked state are always reported.
+class wxCheckBoxAccessible
+    : public wxOwnerDrawnAccessible<wxCheckBox, wxROLE_SYSTEM_CHECKBUTTON>
+{
+public:
+    explicit wxCheckBoxAccessible(wxCheckBox* win)
+        : wxOwnerDrawnAccessible(win)
+    {
+    }
+
+protected:
+    long MSWGetCheckedState(wxCheckBox* cb) const override
+    {
+        switch ( cb->Get3StateValue() )
+        {
+            case wxCHK_CHECKED:
+                return wxACC_STATE_SYSTEM_CHECKED;
+
+            case wxCHK_UNDETERMINED:
+                return wxACC_STATE_SYSTEM_MIXED;
+
+            case wxCHK_UNCHECKED:
+                return 0;
+        }
+
+        wxFAIL_MSG( wxT("unexpected Get3StateValue() return value") );
+
+        return 0;
+    }
+};
+
+} // anonymous namespace
+
+wxAccessible* wxCheckBox::CreateAccessible()
+{
+    return new wxCheckBoxAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_CHECKBOX
