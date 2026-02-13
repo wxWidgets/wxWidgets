@@ -297,16 +297,29 @@ void wxAppConsoleBase::OnLaunched()
 
 int wxAppConsoleBase::OnExit()
 {
-    // Delete all pending objects first, they might use wxConfig to save their
-    // state during their destruction.
-    DeletePendingObjects();
+    return 0;
+}
+
+int wxAppConsoleBase::CallOnExit()
+{
+    // As we're not dispatching any events any more, it should be safe to
+    // delete all pending objects and all still existing TLWs now, as they
+    // won't get any events any more.
+    DoDelayedCleanup();
+
+    const int rc = OnExit();
+
+    // Delete all pending objects again, in case more of them were created
+    // inside OnExit(): they might use wxConfig to save their state during
+    // their destruction.
+    DoDelayedCleanup();
 
 #if wxUSE_CONFIG
     // Ensure we won't create it on demand any more if we hadn't done it yet.
     wxConfigBase::DontCreateOnDemand();
 #endif // wxUSE_CONFIG
 
-    return 0;
+    return rc;
 }
 
 void wxAppConsoleBase::Exit()
@@ -646,6 +659,11 @@ void wxAppConsoleBase::DeletePendingObjects()
         // objects, so start from beginning of list again.
         node = wxPendingDelete.GetFirst();
     }
+}
+
+void wxAppConsoleBase::DoDelayedCleanup()
+{
+    DeletePendingObjects();
 }
 
 // ----------------------------------------------------------------------------

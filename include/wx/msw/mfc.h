@@ -84,7 +84,7 @@ public:
         BaseApp::m_pMainWnd = nullptr;
 
         if ( wxTheApp )
-            wxTheApp->OnExit();
+            wxTheApp->CallOnExit();
 
         wxEntryCleanup();
 
