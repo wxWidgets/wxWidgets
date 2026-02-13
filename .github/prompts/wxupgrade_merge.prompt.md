@@ -26,8 +26,10 @@ You can also look in '../bricscad/bricscad/src' where these changes are used.
 Process each revision completely before moving to the next.
 When applying each revision use direct edits to the source files and avoid using external tools for this.
 
-If, and only if, the changes are fine and the build is successful, create a commit with the original log and your notes including "Copilot".
+If, and only if, the changes are fine and the build is successful, create a commit with the original log.
 Make sure the revision is fully merged.
+
+Do NOT create empty commits.
 
 If any revision cannot be processed, even after trying hard, append its number to file ../revisions_rejected.txt
 
