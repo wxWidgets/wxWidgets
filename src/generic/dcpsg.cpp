@@ -1022,7 +1022,11 @@ void wxPostScriptDCImpl::SetPSColour(const wxColor& col)
         // setgray here ?
     }
 
+// Bricsys change: let's write the color, even if it's the same, because
+// there could be 'grestore' after the previous 'setrgbcolor' (e.g. due to clipping caused by viewports)
+#if 0
     if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
+#endif
     {
         double redPS = (double)red / 255.0;
         double bluePS = (double)blue / 255.0;
