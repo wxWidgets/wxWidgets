@@ -6538,21 +6538,22 @@ void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)
 
 bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords, bool sendSelectEvent /*= true*/ )
 {
-    switch ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) )
+    if ( sendSelectEvent )
     {
-        case Event_Vetoed:
-            if ( sendSelectEvent )
+        switch ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) )
+        {
+            case Event_Vetoed:
                 return false;
-            break;
-        case Event_CellDeleted:
-            // We shouldn't do anything if the event was vetoed and can't do
-            // anything if the cell doesn't exist any longer.
-            return false;
+            case Event_CellDeleted:
+                // We shouldn't do anything if the event was vetoed and can't do
+                // anything if the cell doesn't exist any longer.
+                return false;
 
-        case Event_Unhandled:
-        case Event_Handled:
-            // But it doesn't matter here if the event was skipped or not.
-            break;
+            case Event_Unhandled:
+            case Event_Handled:
+                // But it doesn't matter here if the event was skipped or not.
+                break;
+        }
     }
 
     if ( m_currentCellCoords != wxGridNoCellCoords )
