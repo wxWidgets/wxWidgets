@@ -1,0 +1,1 @@
+wxMSW: Fix accessibility for check boxes etc in dark mode (Quin Gillespie, #26184).
