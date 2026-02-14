@@ -8,20 +8,20 @@
 	branch = wx
 [submodule "src/png"]
 	path = src/png
-	url = https://github.com/wxWidgets/libpng.git
-	branch = wx
+	url = https://github.com/MaartenBent/libpng.git
+	branch = wx-png-v1.6.55
 [submodule "src/expat"]
 	path = src/expat
-	url = https://github.com/wxWidgets/libexpat.git
-	branch = wx
+	url = https://github.com/MaartenBent/libexpat.git
+	branch = wx-expat-v2.7.4
 [submodule "src/tiff"]
 	path = src/tiff
 	url = https://github.com/wxWidgets/libtiff.git
 	branch = wx
 [submodule "src/jpeg"]
 	path = src/jpeg
-	url = https://github.com/wxWidgets/libjpeg-turbo.git
-	branch = wx
+	url = https://github.com/MaartenBent/libjpeg-turbo.git
+	branch = wx-jpeg-v10
 [submodule "3rdparty/pcre"]
 	path = 3rdparty/pcre
 	url = https://github.com/wxWidgets/pcre.git
@@ -44,5 +44,5 @@
 	branch = wx
 [submodule "3rdparty/lunasvg"]
 	path = 3rdparty/lunasvg
-	url = https://github.com/wxWidgets/lunasvg.git
-	branch = wx
+	url = https://github.com/MaartenBent/lunasvg.git
+	branch = wx-lunasvg-v3.5.0

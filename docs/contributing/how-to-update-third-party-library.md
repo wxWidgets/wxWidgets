@@ -96,6 +96,10 @@ The forked upstream shown in github is incorrect. It is based on the official
 PCRE2 repository https://github.com/PCRE2Project/pcre2.
 You might need to use `git merge --allow-unrelated-histories`.
 
+## lunasvg
+
+After merging the upstream tag, change the namespace in all the sources from
+`lunasvg` to `wxlunasvg`.
 
 Updating the main repository
 ----------------------------
