@@ -1446,8 +1446,6 @@ public:
         - Toolbar items for which wxToolBar::SetDropdownMenu() was called
           don't draw the menu drop-down correctly, making it almost
           invisible.
-        - Calling wxMenu::Break() or wxMenuItem::SetDisabledBitmap() will result
-          in the menu being light.
 
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the

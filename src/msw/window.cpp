@@ -77,6 +77,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/keyboard.h"
+#include "wx/msw/private/metrics.h"
 #include "wx/msw/private/paint.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/dcclient.h"
@@ -3604,6 +3605,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             processed = HandleEndSession(wParam != 0, lParam);
             break;
 
+        case WM_ENTERIDLE:
+            processed = HandleEnterIdle(wParam, lParam);
+            break;
+
         case WM_GETMINMAXINFO:
             processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);
             break;
@@ -4278,6 +4283,31 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
     *mayEnd = gs_queryEndSession == QueryEndSession::Allow;
 
     return true;
+}
+
+bool wxWindowMSW::HandleEnterIdle(WXWPARAM wParam, WXLPARAM lParam)
+{
+#if wxUSE_OWNER_DRAWN
+    // We only care about idle states triggered by menus
+    if ( static_cast<WXWPARAM>(wParam) != MSGF_MENU || !lParam )
+        return false;
+
+    // Fix menu rounded corners in Windows 11 which are turned off if menu is
+    // owner-drawn and we're not in dark mode (but also not using high contrast
+    // mode as round corners are not used in it).
+    if ( wxGetWinVersion() < wxWinVersion_11 )
+        return false;
+
+    if ( !wxMSWDarkMode::IsActive() && !wxMSWImpl::IsHighContrast() )
+    {
+        wxMSWImpl::EnableRoundCorners(reinterpret_cast<HWND>(lParam));
+    }
+#else
+    wxUnusedVar(wParam);
+    wxUnusedVar(lParam);
+#endif // wxUSE_OWNER_DRAWN
+
+    return false;
 }
 
 bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)

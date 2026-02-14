@@ -37,6 +37,20 @@ inline const NONCLIENTMETRICS GetNonClientMetrics(const wxWindow* win)
     return nm;
 }
 
+// Check whether high contrast mode is on.
+inline bool IsHighContrast()
+{
+    HIGHCONTRAST hc = { sizeof(hc) };
+
+    if ( !::SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(hc), &hc, 0) )
+    {
+        wxLogLastError("SystemParametersInfo(SPI_GETHIGHCONTRAST)");
+        return false;
+    }
+
+    return (hc.dwFlags & HCF_HIGHCONTRASTON) != 0;
+}
+
 } // namespace wxMSWImpl
 
 #endif // _WX_MSW_PRIVATE_METRICS_H_
