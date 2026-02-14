@@ -93,7 +93,7 @@ public:
         wxTipWindow* operator->() const;
     };
 
-    /*
+    /**
         Replace the deprecated single-step constructor.  See
         Create() for parameters
 
@@ -119,10 +119,10 @@ public:
     wxTipWindow();
 
     /**
-        Use New() instead instead of the new code.
+        Use New() instead of this in new code.
 
         This constructor is preserved only for backward compatibility, don't
-        use it in the new code.
+        use it in new code.
 
         @deprecated
     */
