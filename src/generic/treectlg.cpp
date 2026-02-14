@@ -4195,23 +4195,49 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
 
     wxSize size = wxTreeCtrlBase::DoGetBestSize();
 
-    // there seems to be an implicit extra border around the items, although
-    // I'm not really sure where does it come from -- but without this, the
-    // scrollbars appear in a tree with default/best size
-    size.IncBy(4, 4);
+    // DoGetBestSize assumes we can stretch out completely and therefore
+    // will not have scrollbars
 
-    // and the border has to be rounded up to a multiple of PIXELS_PER_UNIT or
-    // scrollbars still appear
+    // Use the calculation from AdjustMyScrollbars()
+    size.y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+    size.x += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+    size.x = (size.x / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
+    size.y = (size.y / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
+
+    // add the border
     const wxSize& borderSize = GetWindowBorderSize();
-
-    int dx = (size.x - borderSize.x) % PIXELS_PER_UNIT;
-    if ( dx )
-        size.x += PIXELS_PER_UNIT - dx;
-    int dy = (size.y - borderSize.y) % PIXELS_PER_UNIT;
-    if ( dy )
-        size.y += PIXELS_PER_UNIT - dy;
+    size.x += borderSize.x;
+    size.y += borderSize.y;
 
     return size;
+}
+
+int wxGenericTreeCtrl::DoGetBestClientWidth(int height) const
+{
+    // make sure all positions are calculated as normally this only done during
+    // idle time but we need them for base class DoGetBestSize() to return the
+    // correct result
+    wxConstCast(this, wxGenericTreeCtrl)->CalculatePositions();
+
+    wxSize size = wxTreeCtrlBase::DoGetBestSize();
+
+    // DoGetBestClientWidth calculates if a vertical scrollbar is
+    // needed based on the given height
+
+    // Use the calculation from AdjustMyScrollbars()
+    size.y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+    size.x += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+    size.x = (size.x / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
+    size.y = (size.y / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
+
+    if (height < size.y)
+    {
+        // Add space for vertical scrollbar
+        return size.x + wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+    }
+
+    // No scrollbar needed
+    return size.x;
 }
 
 #endif // wxUSE_TREECTRL
