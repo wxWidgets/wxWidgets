@@ -95,6 +95,28 @@ enum wxScrollbarVisibility
     window out of the visible area), the child window will report a position
     of (10,-90).
 
+    @section scrolled_autoscroll Automatic scrolling
+
+    Scrolled windows implement automatic scrolling behaviour: when the mouse is
+    captured by the application and the user holds the mouse button down, the
+    window may start and keep scrolling even if the mouse doesn't move,
+    provided that it is in the "autoscroll zone". This is convenient to allow
+    extending selection to the parts of the window currently outside of the
+    visible area, for example.
+
+    By default, autoscrolling is triggered when the mouse is anywhere outside
+    of the window, i.e. the window starts scrolling when the (captured) mouse
+    pointer leaves the window and stops when it re-enters the window. However,
+    this behaviour can be customized using SetInnerScrollZone() and
+    SetOuterScrollZone() functions. The first of them allows to enable
+    autoscrolling even when mouse is inside the window, but close to its
+    border, while the second one allows to disable autoscrolling when mouse is
+    outside the window.
+
+    To disable autoscrolling completely, call SetOuterScrollZone() with 0
+    argument.
+
+
     @beginStyleTable
     @style{wxHSCROLL}
            If this style is specified and ::wxVSCROLL isn't, the window will be
@@ -602,6 +624,47 @@ public:
     int GetScrollPageSize(int orient) const;
     void SetScrollPageSize(int orient, int pageSize);
     int GetScrollLines( int orient ) const;
+
+    /**
+        Set the width of the autoscroll zone inside the client rectangle.
+
+        Setting inner scroll zone to a non-zero value enables autoscrolling if
+        the distance between the mouse and the closest edge of the client
+        rectangle is less than the given value.
+
+        By default, autoscrolling is not triggered when the mouse is inside the
+        window.
+
+        @see @ref scrolled_autoscroll, SetOuterScrollZone()
+
+        @param innerZone
+            The width of the inner scroll zone in pixels. If this parameter is
+            set to either 0 or ::wxDefaultCoord, there is no inner scroll zone
+            and autoscrolling may be triggered only when the mouse is outside
+            of the window (unless it is disabled too).
+
+        @since 3.3.2
+    */
+    void SetInnerScrollZone(wxCoord innerZone);
+
+    /**
+        Set the width of the auto-scroll zone outside the window.
+
+        By default, autoscrolling is triggered when the mouse is anywhere
+        outside of the window.
+
+        @see @ref scrolled_autoscroll, SetInnerScrollZone()
+
+        @param outerZone
+            The width of the outer scroll zone in pixels. If this parameter is
+            set to ::wxDefaultCoord, autoscrolling is triggered when the mouse
+            is anywhere outside of the window. May be set to 0 to disable
+            autoscrolling when the mouse is outside of the window entirely.
+            It is typically not useful to set it at any other value.
+
+        @since 3.3.2
+    */
+    void SetOuterScrollZone(wxCoord outerZone);
 
     /**
         Set the scaling factor for the window.
