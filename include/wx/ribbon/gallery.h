@@ -15,6 +15,7 @@
 
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/control.h"
+#include "wx/bmpbndl.h"
 
 class wxRibbonGalleryItem;
 
@@ -44,9 +45,9 @@ public:
     bool IsEmpty() const;
     unsigned int GetCount() const;
     wxRibbonGalleryItem* GetItem(unsigned int n);
-    wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id);
-    wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, void* clientData);
-    wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, wxClientData* clientData);
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id);
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, void* clientData);
+    wxRibbonGalleryItem* Append(const wxBitmapBundle& bitmap, int id, wxClientData* clientData);
 
     void SetItemClientObject(wxRibbonGalleryItem* item, wxClientData* data);
     wxClientData* GetItemClientObject(const wxRibbonGalleryItem* item) const;
@@ -86,6 +87,7 @@ protected:
     void OnMouseDClick(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnSize(wxSizeEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
     int GetScrollLineSize() const;
 
     virtual wxSize DoGetBestSize() const override;

@@ -515,19 +515,19 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     int i;
     for(i = 0; i < 4; ++i)
     {
-        copy->m_gallery_up_bitmap[i] = m_gallery_up_bitmap[i];
-        copy->m_gallery_down_bitmap[i] = m_gallery_down_bitmap[i];
-        copy->m_gallery_extension_bitmap[i] = m_gallery_extension_bitmap[i];
+        copy->m_gallery_up_bundle[i] = m_gallery_up_bundle[i];
+        copy->m_gallery_down_bundle[i] = m_gallery_down_bundle[i];
+        copy->m_gallery_extension_bundle[i] = m_gallery_extension_bundle[i];
     }
     for(i = 0; i < 2; ++i)
     {
-        copy->m_panel_extension_bitmap[i] = m_panel_extension_bitmap[i];
-        copy->m_ribbon_toggle_up_bitmap[i] = m_ribbon_toggle_up_bitmap[i];
-        copy->m_ribbon_toggle_down_bitmap[i] = m_ribbon_toggle_down_bitmap[i];
-        copy->m_ribbon_toggle_pin_bitmap[i] = m_ribbon_toggle_pin_bitmap[i];
-        copy->m_ribbon_bar_help_button_bitmap[i] = m_ribbon_bar_help_button_bitmap[i];
+        copy->m_panel_extension_bundle[i] = m_panel_extension_bundle[i];
+        copy->m_ribbon_toggle_up_bundle[i] = m_ribbon_toggle_up_bundle[i];
+        copy->m_ribbon_toggle_down_bundle[i] = m_ribbon_toggle_down_bundle[i];
+        copy->m_ribbon_toggle_pin_bundle[i] = m_ribbon_toggle_pin_bundle[i];
+        copy->m_ribbon_bar_help_button_bundle[i] = m_ribbon_bar_help_button_bundle[i];
     }
-    copy->m_toolbar_drop_bitmap = m_toolbar_drop_bitmap;
+    copy->m_toolbar_drop_bundle = m_toolbar_drop_bundle;
 
     copy->m_primary_scheme_colour = m_primary_scheme_colour;
     copy->m_secondary_scheme_colour = m_secondary_scheme_colour;
@@ -1051,15 +1051,15 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             m_gallery_button_face_colour = colour;
             if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
             {
-                m_gallery_up_bitmap[0] = wxRibbonLoadPixmap(gallery_left_xpm, colour);
-                m_gallery_down_bitmap[0] = wxRibbonLoadPixmap(gallery_right_xpm, colour);
+                m_gallery_up_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_left_xpm, colour));
+                m_gallery_down_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_right_xpm, colour));
             }
             else
             {
-                m_gallery_up_bitmap[0] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
-                m_gallery_down_bitmap[0] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+                m_gallery_up_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_up_xpm, colour));
+                m_gallery_down_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_down_xpm, colour));
             }
-            m_gallery_extension_bitmap[0] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
+            m_gallery_extension_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_extension_xpm, colour));
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_COLOUR:
             m_gallery_button_hover_background_colour = colour;
@@ -1074,15 +1074,15 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             m_gallery_button_hover_face_colour = colour;
             if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
             {
-                m_gallery_up_bitmap[1] = wxRibbonLoadPixmap(gallery_left_xpm, colour);
-                m_gallery_down_bitmap[1] = wxRibbonLoadPixmap(gallery_right_xpm, colour);
+                m_gallery_up_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_left_xpm, colour));
+                m_gallery_down_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_right_xpm, colour));
             }
             else
             {
-                m_gallery_up_bitmap[1] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
-                m_gallery_down_bitmap[1] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+                m_gallery_up_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_up_xpm, colour));
+                m_gallery_down_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_down_xpm, colour));
             }
-            m_gallery_extension_bitmap[1] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
+            m_gallery_extension_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_extension_xpm, colour));
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_COLOUR:
             m_gallery_button_active_background_colour = colour;
@@ -1097,15 +1097,15 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             m_gallery_button_active_face_colour = colour;
             if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
             {
-                m_gallery_up_bitmap[2] = wxRibbonLoadPixmap(gallery_left_xpm, colour);
-                m_gallery_down_bitmap[2] = wxRibbonLoadPixmap(gallery_right_xpm, colour);
+                m_gallery_up_bundle[2] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_left_xpm, colour));
+                m_gallery_down_bundle[2] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_right_xpm, colour));
             }
             else
             {
-                m_gallery_up_bitmap[2] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
-                m_gallery_down_bitmap[2] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+                m_gallery_up_bundle[2] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_up_xpm, colour));
+                m_gallery_down_bundle[2] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_down_xpm, colour));
             }
-            m_gallery_extension_bitmap[2] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
+            m_gallery_extension_bundle[2] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_extension_xpm, colour));
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_COLOUR:
             m_gallery_button_disabled_background_colour = colour;
@@ -1120,15 +1120,15 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             m_gallery_button_disabled_face_colour = colour;
             if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
             {
-                m_gallery_up_bitmap[3] = wxRibbonLoadPixmap(gallery_left_xpm, colour);
-                m_gallery_down_bitmap[3] = wxRibbonLoadPixmap(gallery_right_xpm, colour);
+                m_gallery_up_bundle[3] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_left_xpm, colour));
+                m_gallery_down_bundle[3] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_right_xpm, colour));
             }
             else
             {
-                m_gallery_up_bitmap[3] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
-                m_gallery_down_bitmap[3] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+                m_gallery_up_bundle[3] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_up_xpm, colour));
+                m_gallery_down_bundle[3] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_down_xpm, colour));
             }
-            m_gallery_extension_bitmap[3] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
+            m_gallery_extension_bundle[3] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_extension_xpm, colour));
             break;
         case wxRIBBON_ART_GALLERY_ITEM_BORDER_COLOUR:
             m_gallery_item_border_pen.SetColour(colour);
@@ -1228,11 +1228,11 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_PANEL_BUTTON_FACE_COLOUR:
             m_panel_button_face_colour = colour;
-            m_panel_extension_bitmap[0] = wxRibbonLoadPixmap(panel_extension_xpm, colour);
+            m_panel_extension_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(panel_extension_xpm, colour));
             break;
         case wxRIBBON_ART_PANEL_BUTTON_HOVER_FACE_COLOUR:
             m_panel_button_hover_face_colour = colour;
-            m_panel_extension_bitmap[1] = wxRibbonLoadPixmap(panel_extension_xpm, colour);
+            m_panel_extension_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(panel_extension_xpm, colour));
             break;
         case wxRIBBON_ART_PAGE_BORDER_COLOUR:
             m_page_border_pen.SetColour(colour);
@@ -1267,21 +1267,21 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_TOOLBAR_FACE_COLOUR:
             m_tool_face_colour = colour;
-            m_toolbar_drop_bitmap = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            m_toolbar_drop_bundle = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(gallery_down_xpm, colour));
             break;
         case wxRIBBON_ART_PAGE_TOGGLE_FACE_COLOUR:
             m_page_toggle_face_colour = colour;
-            m_ribbon_toggle_down_bitmap[0] = wxRibbonLoadPixmap(panel_toggle_down_xpm, colour);
-            m_ribbon_toggle_up_bitmap[0] = wxRibbonLoadPixmap(panel_toggle_up_xpm, colour);
-            m_ribbon_toggle_pin_bitmap[0] = wxRibbonLoadPixmap(ribbon_toggle_pin_xpm, colour);
-            m_ribbon_bar_help_button_bitmap[0] = wxRibbonLoadPixmap(ribbon_help_button_xpm, colour);
+            m_ribbon_toggle_down_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(panel_toggle_down_xpm, colour));
+            m_ribbon_toggle_up_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(panel_toggle_up_xpm, colour));
+            m_ribbon_toggle_pin_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(ribbon_toggle_pin_xpm, colour));
+            m_ribbon_bar_help_button_bundle[0] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(ribbon_help_button_xpm, colour));
             break;
         case wxRIBBON_ART_PAGE_TOGGLE_HOVER_FACE_COLOUR:
             m_page_toggle_hover_face_colour = colour;
-            m_ribbon_toggle_down_bitmap[1] = wxRibbonLoadPixmap(panel_toggle_down_xpm, colour);
-            m_ribbon_toggle_up_bitmap[1] = wxRibbonLoadPixmap(panel_toggle_up_xpm, colour);
-            m_ribbon_toggle_pin_bitmap[1] = wxRibbonLoadPixmap(ribbon_toggle_pin_xpm, colour);
-            m_ribbon_bar_help_button_bitmap[1] = wxRibbonLoadPixmap(ribbon_help_button_xpm, colour);
+            m_ribbon_toggle_down_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(panel_toggle_down_xpm, colour));
+            m_ribbon_toggle_up_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(panel_toggle_up_xpm, colour));
+            m_ribbon_toggle_pin_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(ribbon_toggle_pin_xpm, colour));
+            m_ribbon_bar_help_button_bundle[1] = wxBitmapBundle::FromBitmap(wxRibbonLoadPixmap(ribbon_help_button_xpm, colour));
             break;
         case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_TOP_COLOUR:
            m_tab_highlight_top_colour = colour;
@@ -1983,10 +1983,10 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
                 dc.SetPen(m_panel_hover_button_border_pen);
                 dc.SetBrush(m_panel_hover_button_background_brush);
                 dc.DrawRoundedRectangle(label_rect.GetRight(), label_rect.GetBottom() - 13, 13, 13, 1.0);
-                dc.DrawBitmap(m_panel_extension_bitmap[1], label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
+                dc.DrawBitmap(m_panel_extension_bundle[1].GetBitmapFor(wnd), label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
             }
             else
-                dc.DrawBitmap(m_panel_extension_bitmap[0], label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
+                dc.DrawBitmap(m_panel_extension_bundle[0].GetBitmapFor(wnd), label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
         }
     }
 
@@ -2094,17 +2094,18 @@ void wxRibbonMSWArtProvider::DrawGalleryBackgroundCommon(wxDC& dc,
     }
 
     DrawGalleryButton(dc, up_btn, wnd->GetUpButtonState(),
-        m_gallery_up_bitmap);
+        m_gallery_up_bundle, wnd);
     DrawGalleryButton(dc, down_btn, wnd->GetDownButtonState(),
-        m_gallery_down_bitmap);
+        m_gallery_down_bundle, wnd);
     DrawGalleryButton(dc, ext_btn, wnd->GetExtensionButtonState(),
-        m_gallery_extension_bitmap);
+        m_gallery_extension_bundle, wnd);
 }
 
 void wxRibbonMSWArtProvider::DrawGalleryButton(wxDC& dc,
                                             wxRect rect,
                                             wxRibbonGalleryButtonState state,
-                                            wxBitmap* bitmaps)
+                                            wxBitmapBundle* bundles,
+                                            wxWindow* wnd)
 {
     wxBitmap btn_bitmap;
     wxBrush btn_top_brush;
@@ -2116,25 +2117,25 @@ void wxRibbonMSWArtProvider::DrawGalleryButton(wxDC& dc,
         btn_top_brush = m_gallery_button_background_top_brush;
         btn_colour = m_gallery_button_background_colour;
         btn_grad_colour = m_gallery_button_background_gradient_colour;
-        btn_bitmap = bitmaps[0];
+        btn_bitmap = bundles[0].GetBitmapFor(wnd);
         break;
     case wxRIBBON_GALLERY_BUTTON_HOVERED:
         btn_top_brush = m_gallery_button_hover_background_top_brush;
         btn_colour = m_gallery_button_hover_background_colour;
         btn_grad_colour = m_gallery_button_hover_background_gradient_colour;
-        btn_bitmap = bitmaps[1];
+        btn_bitmap = bundles[1].GetBitmapFor(wnd);
         break;
     case wxRIBBON_GALLERY_BUTTON_ACTIVE:
         btn_top_brush = m_gallery_button_active_background_top_brush;
         btn_colour = m_gallery_button_active_background_colour;
         btn_grad_colour = m_gallery_button_active_background_gradient_colour;
-        btn_bitmap = bitmaps[2];
+        btn_bitmap = bundles[2].GetBitmapFor(wnd);
         break;
     case wxRIBBON_GALLERY_BUTTON_DISABLED:
         btn_top_brush = m_gallery_button_disabled_background_top_brush;
         btn_colour = m_gallery_button_disabled_background_colour;
         btn_grad_colour = m_gallery_button_disabled_background_gradient_colour;
-        btn_bitmap = bitmaps[3];
+        btn_bitmap = bundles[3].GetBitmapFor(wnd);
         break;
     }
 
@@ -2732,7 +2733,7 @@ void wxRibbonMSWArtProvider::DrawToolGroupBackground(
 
 void wxRibbonMSWArtProvider::DrawTool(
                 wxDC& dc,
-                wxWindow* WXUNUSED(wnd),
+                wxWindow* wnd,
                 const wxRect& rect,
                 const wxBitmap& bitmap,
                 wxRibbonButtonKind kind,
@@ -2822,7 +2823,7 @@ void wxRibbonMSWArtProvider::DrawTool(
             dc.DrawLine(rect.x + avail_width + 1, rect.y,
                 rect.x + avail_width + 1, rect.y + rect.height);
         }
-        dc.DrawBitmap(m_toolbar_drop_bitmap, bg_rect.x + avail_width + 2,
+        dc.DrawBitmap(m_toolbar_drop_bundle.GetBitmapFor(wnd), bg_rect.x + avail_width + 2,
             bg_rect.y + (bg_rect.height / 2) - 2, true);
     }
     dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetLogicalWidth()) / 2,
@@ -2851,13 +2852,13 @@ wxRibbonMSWArtProvider::DrawToggleButton(wxDC& dc,
     switch(mode)
     {
         case wxRIBBON_BAR_PINNED:
-            dc.DrawBitmap(m_ribbon_toggle_up_bitmap[bindex], rect.GetX()+7, rect.GetY()+6, true);
+            dc.DrawBitmap(m_ribbon_toggle_up_bundle[bindex].GetBitmapFor(wnd), rect.GetX()+7, rect.GetY()+6, true);
             break;
         case wxRIBBON_BAR_MINIMIZED:
-            dc.DrawBitmap(m_ribbon_toggle_down_bitmap[bindex], rect.GetX()+7, rect.GetY()+6, true);
+            dc.DrawBitmap(m_ribbon_toggle_down_bundle[bindex].GetBitmapFor(wnd), rect.GetX()+7, rect.GetY()+6, true);
             break;
         case wxRIBBON_BAR_EXPANDED:
-            dc.DrawBitmap(m_ribbon_toggle_pin_bitmap[bindex], rect.GetX ()+4, rect.GetY ()+5, true);
+            dc.DrawBitmap(m_ribbon_toggle_pin_bundle[bindex].GetBitmapFor(wnd), rect.GetX ()+4, rect.GetY ()+5, true);
             break;
     }
 }
@@ -2876,11 +2877,11 @@ void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
         dc.SetPen(m_ribbon_toggle_pen);
         dc.SetBrush(m_ribbon_toggle_brush);
         dc.DrawRoundedRectangle(rect.GetX(), rect.GetY(), 20, 20, 1.0);
-        dc.DrawBitmap(m_ribbon_bar_help_button_bitmap[1], rect.GetX ()+4, rect.GetY()+5, true);
+        dc.DrawBitmap(m_ribbon_bar_help_button_bundle[1].GetBitmapFor(wnd), rect.GetX ()+4, rect.GetY()+5, true);
     }
     else
     {
-        dc.DrawBitmap(m_ribbon_bar_help_button_bitmap[0], rect.GetX ()+4, rect.GetY()+5, true);
+        dc.DrawBitmap(m_ribbon_bar_help_button_bundle[0].GetBitmapFor(wnd), rect.GetX ()+4, rect.GetY()+5, true);
     }
 
 }

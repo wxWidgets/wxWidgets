@@ -13,7 +13,7 @@
 
 #if wxUSE_RIBBON
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/ribbon/control.h"
 
 enum wxRibbonPanelOption
@@ -35,7 +35,7 @@ public:
     wxRibbonPanel(wxWindow* parent,
                   wxWindowID id = wxID_ANY,
                   const wxString& label = wxEmptyString,
-                  const wxBitmap& minimised_icon = wxNullBitmap,
+                  const wxBitmapBundle& minimised_icon = wxBitmapBundle(),
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = wxRIBBON_PANEL_DEFAULT_STYLE);
@@ -45,13 +45,13 @@ public:
     bool Create(wxWindow* parent,
                 wxWindowID id = wxID_ANY,
                 const wxString& label = wxEmptyString,
-                const wxBitmap& icon = wxNullBitmap,
+                const wxBitmapBundle& icon = wxBitmapBundle(),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxRIBBON_PANEL_DEFAULT_STYLE);
 
-    wxBitmap& GetMinimisedIcon() {return m_minimised_icon;}
-    const wxBitmap& GetMinimisedIcon() const {return m_minimised_icon;}
+    wxBitmap GetMinimisedIcon() {return m_minimised_icon.GetBitmapFor(this);}
+    const wxBitmapBundle& GetMinimisedIconBundle() const {return m_minimised_icon;}
     bool IsMinimised() const;
     bool IsMinimised(wxSize at_size) const;
     bool IsHovered() const;
@@ -108,17 +108,18 @@ protected:
     void OnMotion(wxMouseEvent& evt);
     void OnKillFocus(wxFocusEvent& evt);
     void OnChildKillFocus(wxFocusEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
 
     void TestPositionForHover(const wxPoint& pos);
     bool ShouldSendEventToDummy(wxEvent& evt);
     virtual bool TryAfter(wxEvent& evt) override;
 
-    void CommonInit(const wxString& label, const wxBitmap& icon, long style);
+    void CommonInit(const wxString& label, const wxBitmapBundle& icon, long style);
     static wxRect GetExpandedPosition(wxRect panel,
                                       wxSize expanded_size,
                                       wxDirection direction);
 
-    wxBitmap m_minimised_icon;
+    wxBitmapBundle m_minimised_icon;
     wxBitmap m_minimised_icon_resized;
     wxSize m_smallest_unminimised_size;
     wxSize m_minimised_size;

@@ -30,8 +30,8 @@ class wxRibbonToolBarToolBase
 {
 public:
     wxString help_string;
-    wxBitmap bitmap;
-    wxBitmap bitmap_disabled;
+    wxBitmapBundle bitmap;
+    wxBitmapBundle bitmap_disabled;
     wxRect dropdown;
     wxPoint position;
     wxSize size;
@@ -70,6 +70,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonToolBar, wxRibbonControl)
     EVT_MOTION(wxRibbonToolBar::OnMouseMove)
     EVT_PAINT(wxRibbonToolBar::OnPaint)
     EVT_SIZE(wxRibbonToolBar::OnSize)
+    EVT_DPI_CHANGED(wxRibbonToolBar::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 wxRibbonToolBar::wxRibbonToolBar()
@@ -133,44 +134,44 @@ wxRibbonToolBar::~wxRibbonToolBar()
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddTool(
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind)
 {
-    return AddTool(tool_id, bitmap, wxNullBitmap, help_string, kind, nullptr);
+    return AddTool(tool_id, bitmap, wxBitmapBundle(), help_string, kind, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddDropdownTool(
             int tool_id,
-            const wxBitmap& bitmap,
+            const wxBitmapBundle& bitmap,
             const wxString& help_string)
 {
-    return AddTool(tool_id, bitmap, wxNullBitmap, help_string,
+    return AddTool(tool_id, bitmap, wxBitmapBundle(), help_string,
         wxRIBBON_BUTTON_DROPDOWN, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddHybridTool(
             int tool_id,
-            const wxBitmap& bitmap,
+            const wxBitmapBundle& bitmap,
             const wxString& help_string)
 {
-    return AddTool(tool_id, bitmap, wxNullBitmap, help_string,
+    return AddTool(tool_id, bitmap, wxBitmapBundle(), help_string,
         wxRIBBON_BUTTON_HYBRID, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddToggleTool(
         int tool_id,
-        const wxBitmap& bitmap,
+        const wxBitmapBundle& bitmap,
         const wxString& help_string)
 {
-    return AddTool(tool_id, bitmap, wxNullBitmap, help_string,
+    return AddTool(tool_id, bitmap, wxBitmapBundle(), help_string,
         wxRIBBON_BUTTON_TOGGLE, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddTool(
             int tool_id,
-            const wxBitmap& bitmap,
-            const wxBitmap& bitmap_disabled,
+            const wxBitmapBundle& bitmap,
+            const wxBitmapBundle& bitmap_disabled,
             const wxString& help_string,
             wxRibbonButtonKind kind,
             wxObject* client_data)
@@ -192,49 +193,49 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::AddSeparator()
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
                 size_t pos,
                 int tool_id,
-                const wxBitmap& bitmap,
+                const wxBitmapBundle& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonKind kind)
 {
-    return InsertTool(pos, tool_id, bitmap, wxNullBitmap, help_string, kind,
+    return InsertTool(pos, tool_id, bitmap, wxBitmapBundle(), help_string, kind,
         nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertDropdownTool(
             size_t pos,
             int tool_id,
-            const wxBitmap& bitmap,
+            const wxBitmapBundle& bitmap,
             const wxString& help_string)
 {
-    return InsertTool(pos, tool_id, bitmap, wxNullBitmap, help_string,
+    return InsertTool(pos, tool_id, bitmap, wxBitmapBundle(), help_string,
         wxRIBBON_BUTTON_DROPDOWN, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertHybridTool(
             size_t pos,
             int tool_id,
-            const wxBitmap& bitmap,
+            const wxBitmapBundle& bitmap,
             const wxString& help_string)
 {
-    return InsertTool(pos, tool_id, bitmap, wxNullBitmap, help_string,
+    return InsertTool(pos, tool_id, bitmap, wxBitmapBundle(), help_string,
         wxRIBBON_BUTTON_HYBRID, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertToggleTool(
         size_t pos,
         int tool_id,
-        const wxBitmap& bitmap,
+        const wxBitmapBundle& bitmap,
         const wxString& help_string)
 {
-    return InsertTool(pos, tool_id, bitmap, wxNullBitmap, help_string,
+    return InsertTool(pos, tool_id, bitmap, wxBitmapBundle(), help_string,
         wxRIBBON_BUTTON_TOGGLE, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
             size_t pos,
             int tool_id,
-            const wxBitmap& bitmap,
-            const wxBitmap& bitmap_disabled,
+            const wxBitmapBundle& bitmap,
+            const wxBitmapBundle& bitmap_disabled,
             const wxString& help_string,
             wxRibbonButtonKind kind,
             wxObject* client_data)
@@ -247,11 +248,15 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
     tool->bitmap = bitmap;
     if(bitmap_disabled.IsOk())
     {
-        wxASSERT(bitmap.GetLogicalSize() == bitmap_disabled.GetLogicalSize());
+        wxASSERT(bitmap.GetDefaultSize() == bitmap_disabled.GetDefaultSize());
         tool->bitmap_disabled = bitmap_disabled;
     }
     else
-        tool->bitmap_disabled = MakeDisabledBitmap(bitmap);
+    {
+        // Generate disabled bitmap from normal bitmap
+        wxBitmap bmp = bitmap.GetBitmap(bitmap.GetDefaultSize());
+        tool->bitmap_disabled = wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
+    }
     tool->help_string = help_string;
     tool->kind = kind;
     tool->client_data = client_data;
@@ -580,7 +585,7 @@ void wxRibbonToolBar::SetToolClientData(int tool_id, wxObject* clientData)
     tool->client_data = clientData;
 }
 
-void wxRibbonToolBar::SetToolDisabledBitmap(int tool_id, const wxBitmap &bitmap)
+void wxRibbonToolBar::SetToolDisabledBitmap(int tool_id, const wxBitmapBundle &bitmap)
 {
     wxRibbonToolBarToolBase* tool = FindById(tool_id);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
@@ -594,7 +599,7 @@ void wxRibbonToolBar::SetToolHelpString(int tool_id, const wxString& helpString)
     tool->help_string = helpString;
 }
 
-void wxRibbonToolBar::SetToolNormalBitmap(int tool_id, const wxBitmap &bitmap)
+void wxRibbonToolBar::SetToolNormalBitmap(int tool_id, const wxBitmapBundle &bitmap)
 {
     wxRibbonToolBarToolBase* tool = FindById(tool_id);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
@@ -784,7 +789,7 @@ bool wxRibbonToolBar::Realize()
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             tool->size = m_art->GetToolSize(temp_dc, this,
-                tool->bitmap.GetLogicalSize(), tool->kind, t == 0,
+                tool->bitmap.GetPreferredLogicalSizeFor(this), tool->kind, t == 0,
                 t == (tool_count - 1), &tool->dropdown);
             if(t == 0)
                 tool->state |= wxRIBBON_TOOLBAR_TOOL_FIRST;
@@ -975,6 +980,12 @@ void wxRibbonToolBar::OnSize(wxSizeEvent& evt)
     delete[] row_sizes;
 }
 
+void wxRibbonToolBar::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    Realize();
+    event.Skip();
+}
+
 // Finds the best width and height given the parents' width and height
 wxSize wxRibbonToolBar::GetBestSizeForParentSize(const wxSize& parentSize) const
 {
@@ -1038,12 +1049,13 @@ void wxRibbonToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             {
                 wxRibbonToolBarToolBase* tool = group->tools.Item(t);
                 wxRect rect(group->position + tool->position, tool->size);
+                // Resolve bitmap bundle to actual bitmap for current DPI
+                wxBitmap bmp;
                 if(tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
-                    m_art->DrawTool(dc, this, rect, tool->bitmap_disabled,
-                        tool->kind, tool->state);
+                    bmp = tool->bitmap_disabled.GetBitmapFor(this);
                 else
-                    m_art->DrawTool(dc, this, rect, tool->bitmap, tool->kind,
-                        tool->state);
+                    bmp = tool->bitmap.GetBitmapFor(this);
+                m_art->DrawTool(dc, this, rect, bmp, tool->kind, tool->state);
             }
         }
     }
