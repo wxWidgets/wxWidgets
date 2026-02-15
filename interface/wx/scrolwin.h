@@ -107,14 +107,14 @@ enum wxScrollbarVisibility
     By default, autoscrolling is triggered when the mouse is anywhere outside
     of the window, i.e. the window starts scrolling when the (captured) mouse
     pointer leaves the window and stops when it re-enters the window. However,
-    this behaviour can be customized using SetInnerScrollZone() and
-    SetOuterScrollZone() functions. The first of them allows to enable
+    this behaviour can be customized using EnableAutoScrollInside() and
+    DisableAutoScrollOutside() functions. The first of them allows to enable
     autoscrolling even when mouse is inside the window, but close to its
     border, while the second one allows to disable autoscrolling when mouse is
     outside the window.
 
-    To disable autoscrolling completely, call SetOuterScrollZone() with 0
-    argument.
+    To disable autoscrolling completely, call DisableAutoScrollOutside()
+    without calling EnableAutoScrollInside().
 
 
     @beginStyleTable
@@ -626,10 +626,10 @@ public:
     int GetScrollLines( int orient ) const;
 
     /**
-        Set the width of the autoscroll zone inside the client rectangle.
+        Set the width of the autoscroll zone inside the window rectangle.
 
         Setting inner scroll zone to a non-zero value enables autoscrolling if
-        the distance between the mouse and the closest edge of the client
+        the distance between the mouse and the closest edge of the window
         rectangle is less than the given value.
 
         By default, autoscrolling is not triggered when the mouse is inside the
@@ -637,7 +637,7 @@ public:
 
         @see @ref scrolled_autoscroll, SetOuterScrollZone()
 
-        @param innerZone
+        @param insideWidth
             The width of the inner scroll zone in pixels. If this parameter is
             set to either 0 or ::wxDefaultCoord, there is no inner scroll zone
             and autoscrolling may be triggered only when the mouse is outside
@@ -645,26 +645,19 @@ public:
 
         @since 3.3.2
     */
-    void SetInnerScrollZone(wxCoord innerZone);
+    void EnableAutoScrollInside(wxCoord insideWidth);
 
     /**
-        Set the width of the auto-scroll zone outside the window.
-
         By default, autoscrolling is triggered when the mouse is anywhere
-        outside of the window.
+        outside of the window.  This function disables autoscrolling
+        when the mouse is outside the window.  (Autoscrolling could
+        still be enabled when the mouse is inside the window.)
 
-        @see @ref scrolled_autoscroll, SetInnerScrollZone()
-
-        @param outerZone
-            The width of the outer scroll zone in pixels. If this parameter is
-            set to ::wxDefaultCoord, autoscrolling is triggered when the mouse
-            is anywhere outside of the window. May be set to 0 to disable
-            autoscrolling when the mouse is outside of the window entirely.
-            It is typically not useful to set it at any other value.
+        @see @ref scrolled_autoscroll, EnableAutoScrollInside()
 
         @since 3.3.2
     */
-    void SetOuterScrollZone(wxCoord outerZone);
+    void DisableAutoScrollOutside();
 
     /**
         Set the scaling factor for the window.

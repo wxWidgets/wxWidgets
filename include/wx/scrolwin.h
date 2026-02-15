@@ -167,7 +167,7 @@ public:
     void SetOuterScrollZone(wxCoord outerZone);
 
     // Check whether clientPt triggers autoscrolling in each direction: return
-    // true if it does and fill the corresponing output parameter with the
+    // true if it does and fill the corresponding output parameter with the
     // event type to generate.
     bool AutoscrollTest(wxPoint clientPt,
                         wxEventType& evtHorzScroll,
