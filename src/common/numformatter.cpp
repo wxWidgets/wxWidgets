@@ -173,6 +173,8 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s, int style)
         grouping = numForm.grouping;
         decimalSeparator = numForm.decimalSeparator;
     }
+#else
+    wxUnusedVar(style);
 #endif // wxUSE_INTL
 
     if (groupingSeparator.empty() )
@@ -320,8 +322,8 @@ void wxNumberFormatter::AddCurrency(wxString& s, int style)
         }
     }
 #else
-    wxUnused(s);
-    wxUnused(style);
+    wxUnusedVar(s);
+    wxUnusedVar(style);
 #endif // wxUSE_INTL
 }
 
@@ -372,7 +374,7 @@ wxString wxNumberFormatter::RemoveCurrencySymbolOrCode(wxString s, int style)
     }
     return s;
 #else
-    wxUnused(style);
+    wxUnusedVar(style);
     return s;
 #endif // wxUSE_INTL
 }
