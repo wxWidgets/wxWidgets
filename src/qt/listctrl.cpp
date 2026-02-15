@@ -453,7 +453,9 @@ public:
 
         const QModelIndex modelIndex = index(row, col);
 
-        if ( info.m_mask & wxLIST_MASK_STATE )
+        // For consistency with the other ports, don't generate wxEVT_LIST_ITEM_SELECTED
+        // event when the list control is shown for the first time.
+        if ( m_view->isVisible() && info.m_mask & wxLIST_MASK_STATE )
         {
             if ( (info.m_stateMask & wxLIST_STATE_FOCUSED) &&
                 (info.m_state & wxLIST_STATE_FOCUSED) )
