@@ -264,7 +264,9 @@ public:
         m_dataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 #ifdef __VISUALC__
         m_webViewEnvironmentOptions = Make<CoreWebView2EnvironmentOptions>().Get();
+#if wxUSE_INTL
         m_webViewEnvironmentOptions->put_Language(wxUILocale::GetCurrent().GetLocaleId().GetName().wc_str());
+#endif
 
         wxCOMPtr<ICoreWebView2EnvironmentOptions3> options3;
         if (SUCCEEDED(m_webViewEnvironmentOptions->QueryInterface(IID_PPV_ARGS(&options3))))
