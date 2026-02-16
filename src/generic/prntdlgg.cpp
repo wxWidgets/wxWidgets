@@ -102,6 +102,9 @@ wxPostScriptPrintNativeData::wxPostScriptPrintNativeData()
     m_printerScaleY = 1.0;
     m_printerTranslateX = 0;
     m_printerTranslateY = 0;
+
+    // Bricsys change: Rotate by 90 Degrees feature
+    m_rotate90 = false;
 }
 
 wxPostScriptPrintNativeData::~wxPostScriptPrintNativeData()

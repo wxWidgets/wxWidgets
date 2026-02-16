@@ -1866,6 +1866,16 @@ void wxPostScriptDCImpl::StartPage()
     // transformation and so we need to rotate the page for
     // landscape printing)
 
+    // Bricsys change: Rotate by 90 Degrees feature
+    wxPostScriptPrintNativeData* nativeData = (wxPostScriptPrintNativeData*)m_printData.GetNativeData();
+    if(nativeData->IsRotate90())
+    {
+        wxCoord x = YLOG2DEVREL(m_pageHeight), y = 0;
+        buffer.Printf("%d %d translate\n", x, y);
+        PsPrint(buffer);
+        PsPrint("90 rotate\n");
+    }
+
     // I copied this one from a PostScript tutorial, but to no avail. RR.
     // PsPrint( "90 rotate llx neg ury nef translate\n" );
 
