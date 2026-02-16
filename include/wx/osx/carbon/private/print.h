@@ -16,6 +16,11 @@
 
 // for PrintingManager
 #include "ApplicationServices/ApplicationServices.h"
+//Bricsys change:
+//undefine check, else it breaks compilation of validator templates in cadapp
+#ifdef check
+#undef check
+#endif
 
 class WXDLLIMPEXP_CORE wxOSXPrintData : public wxPrintNativeDataBase
 {
