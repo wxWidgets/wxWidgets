@@ -4294,7 +4294,19 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     // Focus and select all (wxTextCtrl, wxComboBox etc.)
                     if ( flags & wxPG_SEL_FOCUS )
                     {
+                        // Bricsys change: when a property cotrol is focused, GTK sets the scroll as well
+                        // but as we want, so record it here and reset it after
+                        #if defined(__WXGTK__)
+                            int xPos = GetScrollPos( wxHORIZONTAL );
+                            int yPos = GetScrollPos( wxVERTICAL );
+                        #endif
+
                         primaryCtrl->SetFocus();
+
+                        // Bricsys change: reset scroll position here
+                        #if defined(__WXGTK__)
+                            Scroll(xPos, yPos);
+                        #endif
 
                         p->GetEditorClass()->OnFocus(p, primaryCtrl);
                     }
