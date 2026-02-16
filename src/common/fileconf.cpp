@@ -1405,19 +1405,19 @@ wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
             wxString    strFullName;
 
             if ( Config()->GetStyle() & wxCONFIG_USE_NO_ESCAPE_CHARACTERS )
-			{
-	            // add 1 to the name because we don't want to start with '/'
-		        strFullName << wxT("[")
-			                << GetFullName().c_str() + 1
-				            << wxT("]");
-			}
-			else
-			{
-	            // add 1 to the name because we don't want to start with '/'
-		        strFullName << wxT("[")
-			                << FilterOutEntryName(GetFullName().c_str() + 1)
-				            << wxT("]");
-			}
+            {
+                // add 1 to the name because we don't want to start with '/'
+                strFullName << wxT("[")
+                            << GetFullName().c_str() + 1
+                            << wxT("]");
+            }
+            else
+            {
+                // add 1 to the name because we don't want to start with '/'
+                strFullName << wxT("[")
+                            << FilterOutEntryName(GetFullName().c_str() + 1)
+                            << wxT("]");
+            }
             m_pLine = m_pConfig->LineListInsert(strFullName,
                                                 pParent->GetLastGroupLine());
             pParent->SetLastGroup(this);  // we're surely after all the others
@@ -1887,9 +1887,9 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
             strLine << m_strName<< wxT('=') << strValFiltered;
         }
         else
-		{
-			strLine << FilterOutEntryName(m_strName) << wxT('=') << strValFiltered;
-		}
+        {
+            strLine << FilterOutEntryName(m_strName) << wxT('=') << strValFiltered;
+        }
 
         if ( m_pLine )
         {

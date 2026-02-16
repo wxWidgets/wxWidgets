@@ -632,7 +632,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
             paperType = wxThePrintPaperDatabase->FindPaperType(paperId);
         }
 
-		// Bricsys change: let's keep DM_PAPERSIZE, DM_PAPERWIDTH and DM_PAPERLENGTH flags in states
+        // Bricsys change: let's keep DM_PAPERSIZE, DM_PAPERWIDTH and DM_PAPERLENGTH flags in states
         // as they come from the driver and set dmPaperSize, dmPaperWidth and dmPaperLength fields;
         // this will satisfy both (good) drivers following normal flags/fields behavior and (bad) ones
         // that interpret these data in unusual ways

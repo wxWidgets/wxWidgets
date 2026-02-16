@@ -488,7 +488,7 @@ wxWindowMSW::~wxWindowMSW()
     if ( m_hWnd )
     {
         // Bricsys changes: uncommented check below to avoid compiler error output
-		// upon closing an application
+        // upon closing an application
         if (::IsWindow(GetHwnd()))
         {
             if ( !::DestroyWindow(GetHwnd()) )

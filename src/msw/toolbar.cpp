@@ -1876,13 +1876,13 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
 // Bricsys change: added wxToolBar::GetToolRect() implementation
 wxRect wxToolBar::GetToolRect(int id)
 {
-	int toolPos = GetToolPos(id);
-	RECT rc;
-	if ( ::SendMessage(GetHwnd(),TB_GETITEMRECT,toolPos,(LPARAM)&rc) )
-	{
-		return wxRectFromRECT(rc);
-	}
-	return wxRect();
+    int toolPos = GetToolPos(id);
+    RECT rc;
+    if ( ::SendMessage(GetHwnd(),TB_GETITEMRECT,toolPos,(LPARAM)&rc) )
+    {
+        return wxRectFromRECT(rc);
+    }
+    return wxRect();
 }
 
 void wxToolBar::SetToolPacking(int packing)

@@ -837,8 +837,8 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 
             GetBitmapData()->m_depth = wxDisplayDepth();
         }
-		
-		// Bricsys change:
+        
+        // Bricsys change:
         // if failed to create DDB, then try to create DIB, even if the requested size is not big
 #ifndef NEVER_USE_DIB
         if(!hbmp && !hdc && (d >= 24 || d == -1))

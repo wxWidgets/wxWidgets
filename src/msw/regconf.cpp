@@ -543,7 +543,7 @@ bool wxRegConfig::HasGroup(const wxString& key) const
 
     wxString strName(path.Name());
 
-	// Bricsys change - added UseGlobal(this)
+    // Bricsys change - added UseGlobal(this)
     return (m_keyLocal.Exists() && LocalKey().HasSubKey(strName)) ||
            (UseGlobal(this) && m_keyGlobal.HasSubKey(strName));
 }
@@ -554,7 +554,7 @@ bool wxRegConfig::HasEntry(const wxString& key) const
 
     wxString strName(path.Name());
 
-	// Bricsys change - added UseGlobal(this)
+    // Bricsys change - added UseGlobal(this)
     return (m_keyLocal.Exists() && LocalKey().HasValue(strName)) ||
            (UseGlobal(this) && m_keyGlobal.HasValue(strName));
 }

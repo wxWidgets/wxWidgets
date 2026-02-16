@@ -175,7 +175,7 @@ void PixelToHIMETRIC(LONG *x, LONG *y, HDC hdcRef)
         iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
         iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
 
-	// Bricsys change:
+    // Bricsys change:
     // sometimes GetDeviceCaps returns 0 for HORZRES/VERTRES,
     // in this case we try to retrieve the values using GetSystemMetrics;
     // if it fails, then use standard resolution values: there would be scaling problems,
