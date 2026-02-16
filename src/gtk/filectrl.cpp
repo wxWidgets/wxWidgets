@@ -37,7 +37,11 @@ wxString wxGtkFileChooser::GetPath() const
 
     wxString string;
     if (str)
-        string = wxString::FromUTF8(str);
+        // ****begin**** Bricsys change:
+        //original code:
+        //string = wxString::FromUTF8(str);
+        string = wxConvFileName->cMB2WX(str);
+        // ****end**** Bricsys change
     return string;
 }
 
@@ -60,7 +64,11 @@ void wxGtkFileChooser::GetPaths( wxArrayString& paths ) const
         GSList *gpaths = gpathsi;
         while ( gpathsi )
         {
-            wxString file(wxString::FromUTF8(static_cast<gchar *>(gpathsi->data)));
+            // ****begin**** Bricsys change
+            //original code:
+            //wxString file(wxString::FromUTF8(static_cast<gchar *>(gpathsi->data)));
+            wxString file(wxConvFileName->cMB2WX(static_cast<gchar *>(gpathsi->data)));
+            // ****end**** Bricsys change
             paths.Add( file );
             g_free( gpathsi->data );
             gpathsi = gpathsi->next;
@@ -84,16 +92,29 @@ bool wxGtkFileChooser::SetPath( const wxString& path )
                 wxFileName fn(path);
 
                 const wxString fname = fn.GetFullName();
-                gtk_file_chooser_set_current_name( m_widget, fname.utf8_str() );
+                // ****begin**** Bricsys change
+                //original code:
+                //gtk_file_chooser_set_current_name( m_widget, fname.utf8_str() );
+                gtk_file_chooser_set_current_name( m_widget, wxConvFileName->cWX2MB(fname) );
+                // ****end**** Bricsys change
 
                 // set the initial file name and/or directory
                 const wxString dir = fn.GetPath();
+                // ****begin**** Bricsys change
+                //original code:
+                //return gtk_file_chooser_set_current_folder( m_widget
+                //                                            dir.utf8_str() ) != 0;
                 return gtk_file_chooser_set_current_folder( m_widget,
-                                                            dir.utf8_str() ) != 0;
+                                                            wxConvFileName->cWX2MB(dir) ) != 0;
+                // ****end**** Bricsys change
             }
 
         case GTK_FILE_CHOOSER_ACTION_OPEN:
-            return gtk_file_chooser_set_filename( m_widget, path.utf8_str() ) != 0;
+            // ****begin**** Bricsys change
+            //original code:
+            //return gtk_file_chooser_set_filename( m_widget, path.utf8_str() ) != 0;
+            return gtk_file_chooser_set_filename( m_widget, wxConvFileName->cWX2MB(path) ) != 0;
+            // ****end**** Bricsys change
 
         case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
         case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
@@ -107,7 +128,11 @@ bool wxGtkFileChooser::SetPath( const wxString& path )
 
 bool wxGtkFileChooser::SetDirectory( const wxString& dir )
 {
-    return gtk_file_chooser_set_current_folder( m_widget, dir.utf8_str() ) != 0;
+    // ****begin**** Bricsys change
+    //original code:
+    //return gtk_file_chooser_set_current_folder( m_widget, dir.utf8_str() ) != 0;
+    return gtk_file_chooser_set_current_folder( m_widget, wxConvFileName->cWX2MB(dir) ) != 0;
+    // ****end**** Bricsys change
 }
 
 wxString wxGtkFileChooser::GetDirectory() const

@@ -333,7 +333,9 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     {
         if ( !fname.empty() )
         {
-            gtk_file_chooser_set_current_name(file_chooser, wxGTK_CONV_FN(fname));
+            // ****begin**** Bricsys change
+            gtk_file_chooser_set_current_name(file_chooser, fname.mb_str(wxConvUTF8));
+            // ****end**** Bricsys change
         }
 
 #if GTK_CHECK_VERSION(2,7,3)
@@ -347,8 +349,10 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     {
         if ( !fname.empty() )
         {
+            // ****begin**** Bricsys change
             gtk_file_chooser_set_filename(file_chooser,
-                                          wxGTK_CONV_FN(fn.GetFullPath()));
+                                          fn.GetFullPath().mb_str(wxConvUTF8));
+            // ****end**** Bricsys change
         }
     }
 
@@ -464,7 +468,9 @@ void wxFileDialog::SetFilename(const wxString& name)
 
     if (HasFdFlag(wxFD_SAVE))
     {
-        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
+        // ****begin**** Bricsys change
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), name.mb_str(wxConvUTF8));
+        // ****end**** Bricsys change
     }
 
     else
