@@ -200,7 +200,12 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 #ifdef __WXMAC__
     m_captionFont = *wxSMALL_FONT;
 #else
-    m_captionFont = wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    // Bricsys change: use the font before the upgrade for the panes' caption
+#if 1
+    m_captionFont = wxSystemSettingsNative::GetFont(wxSYS_DEFAULT_GUI_FONT);
+#else
+    m_captionFont = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
+#endif
 #endif
 
     // default metric values
