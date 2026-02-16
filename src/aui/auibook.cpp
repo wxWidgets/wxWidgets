@@ -1759,6 +1759,7 @@ void wxAuiNotebook::Init()
 {
     m_curPage = -1;
     m_tabIdCounter = wxAuiBaseTabCtrlId;
+    m_mgr = NULL;
     m_dummyWnd = NULL;
     m_requestedBmpSize = wxDefaultSize;
     m_requestedTabCtrlHeight = -1;
