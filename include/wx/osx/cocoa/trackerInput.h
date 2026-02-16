@@ -1,3 +1,5 @@
+#ifndef _TRACKER_INPUT_H_
+#define _TRACKER_INPUT_H_
 #import <Cocoa/Cocoa.h>
 
 @interface InputTracker : NSResponder {
@@ -15,3 +17,4 @@
 // Stop any tracking the tracker may be performing and reset itself.
 - (void)cancelTracking;
 @end
+#endif // _TRACKER_INPUT_H_

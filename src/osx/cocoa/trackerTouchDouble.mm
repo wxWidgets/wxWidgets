@@ -48,6 +48,9 @@
         _currentTouches[0] = [_initialTouches[0] retain];
         _currentTouches[1] = [_initialTouches[1] retain];
 
+        _oldTouches[0] = [ _currentTouches[0] retain];
+        _oldTouches[1] = [ _currentTouches[1] retain];
+
         _oldTouchesUsedInRotateEvent[0] = [ _currentTouches[0] retain];
         _oldTouchesUsedInRotateEvent[1] = [ _currentTouches[1] retain];
 
@@ -73,6 +76,12 @@
     
     if (touches.count == 2 && _initialTouches[0]) {
         NSArray *array = [touches allObjects];
+        [_oldTouches[0] release];
+        [_oldTouches[1] release];
+
+        _oldTouches[0] = [_currentTouches[0] retain];
+        _oldTouches[1] = [_currentTouches[1] retain];
+
         [_currentTouches[0] release];
         [_currentTouches[1] release];
         [_currentTouchEvent release];

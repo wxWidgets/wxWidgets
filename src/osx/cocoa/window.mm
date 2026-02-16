@@ -47,6 +47,7 @@
 #include "wx/trackpadstate.h"
 #include "wx/osx/cocoa/trackerInput.h"
 #include "wx/osx/cocoa/trackerTouchDouble.h"
+#include "wx/osx/cocoa/touchPadGesturesDelegate.h"
 
 #define TRACE_FOCUS "focus"
 #define TRACE_KEYS  "keyevent"
@@ -154,9 +155,33 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     return wxToNSRect( sv, bounds );
 }
 
-@interface wxNSView : NSView
+static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool enable)
 {
+    if (!impl->GetWXPeer())
+        return;
 
+    if (impl->GetWXPeer()->IsFrozen())
+        impl->SetDrawingEnabled(enable);
+
+    for ( wxWindowList::iterator i = impl->GetWXPeer()->GetChildren().begin();
+          i != impl->GetWXPeer()->GetChildren().end();
+          ++i )
+    {
+        wxWindow *child = *i;
+        if ( child->IsTopLevel() || !child->IsFrozen() )
+            continue;
+
+        // Skip any user panes as they'll handle this themselves
+        if ( !child->GetPeer() || child->GetPeer()->IsUserPane() )
+            continue;
+
+        SetDrawingEnabledIfFrozenRecursive((wxWidgetCocoaImpl *)child->GetPeer(), enable);
+    }
+}
+
+@interface wxNSView : NSView <TouchPadGesturesDelegate>
+{
+// Bricsys change end: #4142 add gestures recognition
     //Touch pad
     NSMutableArray *inputTrackers;
     DualTouchTracker *m_pTracker;
@@ -170,8 +195,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     wxState _rotateStatus;
     wxState _magnifyStatus;
     wxState _rubberSheetStatus;
-    double  _currentFingersSize;
-    double  _previousFingersSize;
     bool    _isRubberSheet;
     int     _rubberSheetSensibility;        // rubbersheet actions threshold modifier.
     double  _rubberSheetLastSentTime;       // last time a rubbersheet event has been dispatched for processing.
@@ -181,34 +204,9 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 }
 
 @property BOOL isTouch;
+// Bricsys change end: #4142 add gestures recognition
 
 @end // wxNSView
-
-static const double     _pinchDeltaLimit                = 0.010000; // delta dist. between fingers for which to send pinch event.
-static const double     _panEventExpireThreshold        = 0.000800; // if pan event is handle to late then skip it.
-static const double     _rotationScaleFactor            = -0.025;   //
-static const double     _rubberSheetPinchScaleFactor    = 2;        // rubbersheet pinch action scale factor.
-static const double     _rubberSheetSendThreshold       = 0.01;     // rubbersheet send event timeframe - seconds.
-static const double     _basicRSPanThreshold            = 0.004;    // rubbersheet base threshold for pan action.
-static const double     _basicRSPinchThreshold          = 0.008;    // rubbersheet base threshold for pinch action.
-static const double     _basicRSRotateThreshold         = 0.005;    // rubbersheet base threshold for rotate action.
-static const int        _defaultSensibility             = 5;        // rubbersheet actions threshold modifier.
-static const int        _maxSensibility                 = 10;       // maximum allowed rubbersheet activation sensibility.
-
-@interface wxNSView(TouchPadGestures)
-@end
-
-//constants
-static const double     _pinchDeltaLimit                = 0.010000; // delta dist. between fingers for which to send pinch event.
-static const double     _panEventExpireThreshold        = 0.000800; // if pan event is handle to late then skip it.
-static const double     _rotationScaleFactor            = -0.025;   //
-static const double     _rubberSheetPinchScaleFactor    = 2;        // rubbersheet pinch action scale factor.
-static const double     _rubberSheetSendThreshold       = 0.01;     // rubbersheet send event timeframe - seconds.
-static const double     _basicRSPanThreshold            = 0.004;    // rubbersheet base threshold for pan action.
-static const double     _basicRSPinchThreshold          = 0.008;    // rubbersheet base threshold for pinch action.
-static const double     _basicRSRotateThreshold         = 0.005;    // rubbersheet base threshold for rotate action.
-static const int        _defaultSensibility             = 5;        // rubbersheet actions threshold modifier.
-static const int        _maxSensibility                 = 10;       // maximum allowed rubbersheet activation sensibility.
 
 @interface wxNSView(TextInput) <NSTextInputClient>
 
@@ -226,8 +224,9 @@ static const int        _maxSensibility                 = 10;       // maximum a
 
 @end
 
-@implementation wxNSView(TouchPadGestures)
-
+@implementation wxNSView
+// Bricsys change: #4142 add gestures recognition
+// MARK:- TouchPadGesturesDelegate
 - (void)_initTrackers
 {
     inputTrackers = [NSMutableArray new];
@@ -243,22 +242,6 @@ static const int        _maxSensibility                 = 10;       // maximum a
     [touchTracker release];
 }
 
-+ (double) pinchDeltaLimit{
-    return _pinchDeltaLimit;
-}
-
-+ (double) panEventExpireThreshold{
-    return _panEventExpireThreshold;
-}
-
-+ (double) rotationScaleFactor{
-    return _rotationScaleFactor;
-}
-
-+ (double) rubberSheetSendThreshold{
-    return _rubberSheetSendThreshold;
-}
-
 - (void)acceptTouchEvents:(BOOL)status
 {
     [self setAcceptsTouchEvents:status];
@@ -271,10 +254,10 @@ static const int        _maxSensibility                 = 10;       // maximum a
 
 -(void)setRubberSheetSensibility:(int)sensibility
 {
-    sensibility = _maxSensibility - sensibility;
+    sensibility = [TrackPadConstants maxSensibility] - sensibility;
 
-    if(sensibility < 0 || sensibility > _maxSensibility)
-        sensibility = _defaultSensibility;
+    if(sensibility < 0 || sensibility > [TrackPadConstants maxSensibility])
+        sensibility = [TrackPadConstants defaultSensibility];
 
     _rubberSheetSensibility = sensibility;
 }
@@ -317,9 +300,9 @@ static const int        _maxSensibility                 = 10;       // maximum a
         tracker.updateTrackingAction = @selector(dualTouchesMovedRubberSheet:);
         _rubberSheetLastSentTime = [[NSProcessInfo processInfo] systemUptime];
 
-        _rubberSheetPanThreshold = _basicRSPanThreshold * _rubberSheetSensibility / _defaultSensibility;
-        _rubberSheetPinchThreshold = _basicRSPinchThreshold * _rubberSheetSensibility / _defaultSensibility;
-        _rubberSheetAngleThreshold = _basicRSRotateThreshold * _rubberSheetSensibility / _defaultSensibility;
+        _rubberSheetPanThreshold = [TrackPadConstants basicRSPanThreshold] * _rubberSheetSensibility / [TrackPadConstants defaultSensibility];
+        _rubberSheetPinchThreshold = [TrackPadConstants basicRSPinchThreshold] * _rubberSheetSensibility / [TrackPadConstants defaultSensibility];
+        _rubberSheetAngleThreshold = [TrackPadConstants basicRSRotateThreshold] * _rubberSheetSensibility / [TrackPadConstants defaultSensibility];
     }
     else
     {
@@ -339,7 +322,7 @@ static const int        _maxSensibility                 = 10;       // maximum a
 
     NSTimeInterval currentTime = [[NSProcessInfo processInfo] systemUptime];
 
-    if((currentTime - _rubberSheetLastSentTime) > [wxNSView rubberSheetSendThreshold])
+    if((currentTime - _rubberSheetLastSentTime) > [TrackPadConstants rubberSheetSendThreshold])
     {
         wxTrackPadEvent tpevent(wxEVT_RUBBER_SHEET);
 
@@ -366,7 +349,7 @@ static const int        _maxSensibility                 = 10;       // maximum a
         }
         else
         {
-            double deltaMv = deltaMove * _rubberSheetPinchScaleFactor + 1;
+            double deltaMv = deltaMove * [TrackPadConstants rubberSheetPinchScaleFactor] + 1;
             tpevent.SetPinchMagnitude(deltaMv);
         }
 
@@ -549,7 +532,7 @@ static const int        _maxSensibility                 = 10;       // maximum a
 
                 wxTrackPadEvent tpevent(wxEVT_ROTATE);
 
-                double angle = (double)[event rotation] * [wxNSView rotationScaleFactor];
+                double angle = (double)[event rotation] * [TrackPadConstants rotationScaleFactor];
                 tpevent.SetAngle(angle);
 
                 _rotateStatus = wxRotationStart;
@@ -577,7 +560,7 @@ static const int        _maxSensibility                 = 10;       // maximum a
 
                 wxTrackPadEvent tpevent(wxEVT_ROTATE);
 
-                double angle = (double)[event rotation] * [wxNSView rotationScaleFactor];
+                double angle = (double)[event rotation] * [TrackPadConstants rotationScaleFactor];
                 tpevent.SetAngle(angle);
 
                 _rotateStatus = wxRotationMove;
@@ -722,10 +705,104 @@ static const int        _maxSensibility                 = 10;       // maximum a
         tracker.isEnabled = YES;
     }
 }
+// Bricsys change end: #4142 add gestures recognition
+// MARK:- wxNSView
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
 
-@end
+- (id)initWithFrame:(NSRect)rectBox
+{
+    [super initWithFrame:rectBox];
+    [self _initTrackers];
+    [self acceptTouchEvents:NO];
+    _isTouch                    = FALSE;
+    _isRubberSheet              = false;
+    _rubberSheetSensibility     = 5;
+    _rubberSheetLastSentTime    = 0;
+    _rubberSheetAngleThreshold  = 0;
+    _rubberSheetPanThreshold    = 0;
+    _rubberSheetPinchThreshold  = 0;
+    _panningStatus              = wxNoState;
+    _rotateStatus               = wxNoState;
+    _magnifyStatus              = wxNoState;
+    _rubberSheetStatus          = wxNoState;
+    return self;
+}
+
+- (void)dealloc
+{
+    [inputTrackers release];
+    [super dealloc];
+}
+
+/* idea taken from webkit sources: overwrite the methods that (private) NSToolTipManager will use to attach its tracking rectangle
+ * then when changing the tooltip send fake view-exit and view-enter methods which will lead to a tooltip refresh
+ */
 
 
+#if wxOSX_USE_NATIVE_FLIPPED
+- (BOOL)isFlipped
+{
+    return YES;
+}
+#endif
+
+- (BOOL) canBecomeKeyView
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( viewimpl && viewimpl->HasUserKeyHandling() && viewimpl->GetWXPeer() )
+        return viewimpl->GetWXPeer()->AcceptsFocus();
+    return NO;
+}
+
+- (NSView *)hitTest:(NSPoint)aPoint
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( viewimpl && viewimpl->GetWXPeer() && !viewimpl->GetWXPeer()->IsEnabled() )
+        return nil;
+
+    return [super hitTest:aPoint];
+}
+
+- (void) viewWillMoveToWindow:(NSWindow *)newWindow
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget( self );
+    if (viewimpl)
+        SetDrawingEnabledIfFrozenRecursive(viewimpl, true);
+
+    [super viewWillMoveToWindow:newWindow];
+}
+
+- (void) viewDidMoveToWindow
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget( self );
+    if (viewimpl)
+        SetDrawingEnabledIfFrozenRecursive(viewimpl, false);
+
+    [super viewDidMoveToWindow];
+}
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101200
+- (void) viewWillDraw
+{
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        CALayer* layer = self.layer;
+        layer.contentsFormat = kCAContentsFormatRGBA8Uint;
+    }
+    
+    [super viewWillDraw];
+}
+#endif
+
+@end // wxNSView
 
 @interface NSView(PossibleMethods)
 - (void)setTitle:(NSString *)aString;
@@ -1414,131 +1491,6 @@ wxWidgetCocoaImpl::TranslateMouseEvent( NSEvent * nsEvent )
     return wxevents;
 }
 
-static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool enable)
-{
-    if (!impl->GetWXPeer())
-        return;
-
-    if (impl->GetWXPeer()->IsFrozen())
-        impl->SetDrawingEnabled(enable);
-
-    for ( wxWindowList::iterator i = impl->GetWXPeer()->GetChildren().begin();
-          i != impl->GetWXPeer()->GetChildren().end();
-          ++i )
-    {
-        wxWindow *child = *i;
-        if ( child->IsTopLevel() || !child->IsFrozen() )
-            continue;
-
-        // Skip any user panes as they'll handle this themselves
-        if ( !child->GetPeer() || child->GetPeer()->IsUserPane() )
-            continue;
-
-        SetDrawingEnabledIfFrozenRecursive((wxWidgetCocoaImpl *)child->GetPeer(), enable);
-    }
-}
-
-@implementation wxNSView
-
-+ (void)initialize
-{
-    static BOOL initialized = NO;
-    if (!initialized)
-    {
-        initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
-    }
-}
-
-- (id)initWithFrame:(NSRect)rectBox
-{
-    [super initWithFrame:rectBox];
-    [self _initTrackers];
-    [self acceptTouchEvents:NO];
-    _isTouch                    = FALSE;
-    _isRubberSheet              = false;
-    _rubberSheetSensibility     = 5;
-    _rubberSheetLastSentTime    = 0;
-    _rubberSheetAngleThreshold  = 0;
-    _rubberSheetPanThreshold    = 0;
-    _rubberSheetPinchThreshold  = 0;
-    _currentFingersSize         = 0;
-    _previousFingersSize        = 0;
-    _panningStatus              = wxNoState;
-    _rotateStatus               = wxNoState;
-    _magnifyStatus              = wxNoState;
-    _rubberSheetStatus          = wxNoState;
-    return self;
-}
-
-- (void)dealloc
-{
-    [inputTrackers release];
-    [super dealloc];
-}
-
-/* idea taken from webkit sources: overwrite the methods that (private) NSToolTipManager will use to attach its tracking rectangle
- * then when changing the tooltip send fake view-exit and view-enter methods which will lead to a tooltip refresh
- */
-
-
-#if wxOSX_USE_NATIVE_FLIPPED
-- (BOOL)isFlipped
-{
-    return YES;
-}
-#endif
-
-- (BOOL) canBecomeKeyView
-{
-    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( viewimpl && viewimpl->HasUserKeyHandling() && viewimpl->GetWXPeer() )
-        return viewimpl->GetWXPeer()->AcceptsFocus();
-    return NO;
-}
-
-- (NSView *)hitTest:(NSPoint)aPoint
-{
-    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( viewimpl && viewimpl->GetWXPeer() && !viewimpl->GetWXPeer()->IsEnabled() )
-        return nil;
-
-    return [super hitTest:aPoint];
-}
-
-- (void) viewWillMoveToWindow:(NSWindow *)newWindow
-{
-    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget( self );
-    if (viewimpl)
-        SetDrawingEnabledIfFrozenRecursive(viewimpl, true);
-
-    [super viewWillMoveToWindow:newWindow];
-}
-
-- (void) viewDidMoveToWindow
-{
-    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget( self );
-    if (viewimpl)
-        SetDrawingEnabledIfFrozenRecursive(viewimpl, false);
-
-    [super viewDidMoveToWindow];
-}
-
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101200
-- (void) viewWillDraw
-{
-    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
-    {
-        CALayer* layer = self.layer;
-        layer.contentsFormat = kCAContentsFormatRGBA8Uint;
-    }
-    
-    [super viewWillDraw];
-}
-#endif
-
-@end // wxNSView
-
 // We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
 // Currently, only insertText:(replacementRange:) is
 // implemented here, and the rest of the methods are stubs.
@@ -1555,12 +1507,14 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
     wxOSX_insertText(self, @selector(insertText:), aString);
 }
 
+//Bricsys change, refs #22025 make the call consistent
+void wxOSX_doCommandBySelector(NSView* self, SEL _cmd, SEL aSelector);
+
 - (void)doCommandBySelector:(SEL)aSelector
 {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if (impl)
-        impl->doCommandBySelector(aSelector, self, _cmd);
+    wxOSX_doCommandBySelector(self, _cmd, aSelector);
 }
+// Bricsys change end
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
 {
@@ -1755,6 +1709,17 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
 
     impl->insertText(text, self, _cmd);
 }
+
+//Bricsys change, refs #22025 make the call consistent
+void wxOSX_doCommandBySelector(NSView* self, SEL _cmd, SEL aSelector)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return;
+
+    impl->doCommandBySelector(aSelector, self, _cmd);
+}
+//Bricsys change end
 
 void wxOSX_panGestureEvent(NSView* self, SEL WXUNUSED(_cmd), NSPanGestureRecognizer* panGestureRecognizer)
 {
@@ -2105,9 +2070,9 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::SetTouchEventsStatus(bool status)
 {
-    wxNSView * casted_osxView;
-    if ([m_osxView isKindOfClass:[wxNSView class]])
-        casted_osxView = (wxNSView *)m_osxView;
+    NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
+    if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
+        casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
     else
         return;
     [casted_osxView acceptTouchEvents:status];
@@ -2115,9 +2080,9 @@ void wxWidgetCocoaImpl::SetTouchEventsStatus(bool status)
 
 void wxWidgetCocoaImpl::EnableRubberSheet(bool enable, int sensibility)
 {
-    wxNSView * casted_osxView;
-    if ([m_osxView isKindOfClass:[wxNSView class]])
-        casted_osxView = (wxNSView *)m_osxView;
+    NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
+    if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
+        casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
     else
         return;
     [casted_osxView setRubberSheetSensibility:sensibility];
@@ -2126,13 +2091,6 @@ void wxWidgetCocoaImpl::EnableRubberSheet(bool enable, int sensibility)
 void wxWidgetCocoaImpl::trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEvent, WXWidget slf, void *_cmd)
 {
     wxEvent.SetTimestamp( (int)([nsEvent timestamp] * 1000) );
-    UInt32 modifiers = [nsEvent modifierFlags];
-
-    wxEvent.m_shiftDown = modifiers & NSShiftKeyMask;
-    wxEvent.m_rawControlDown = modifiers & NSControlKeyMask;
-    wxEvent.m_altDown = modifiers & NSAlternateKeyMask;
-    wxEvent.m_controlDown = modifiers & NSCommandKeyMask;
-
     UInt32 modifiers = [nsEvent modifierFlags];
 
     wxEvent.m_shiftDown = modifiers & NSShiftKeyMask;
@@ -2151,9 +2109,9 @@ void wxWidgetCocoaImpl::trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEven
 
 void wxWidgetCocoaImpl::touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd, int touchEventType)
 {
-    wxNSView * casted_osxView;
-    if ( [m_osxView isKindOfClass:[wxNSView class]] )
-        casted_osxView = (wxNSView *)m_osxView;
+    NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
+    if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
+        casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
     else
         return;
 
@@ -2183,9 +2141,9 @@ void wxWidgetCocoaImpl::touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd,
 
 void wxWidgetCocoaImpl::gestureEvents(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    wxNSView * casted_osxView;
-    if ( [m_osxView isKindOfClass:[wxNSView class]] )
-        casted_osxView = (wxNSView *)m_osxView;
+    NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
+    if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
+        casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
     else
         return;
 
@@ -2205,9 +2163,9 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
     if([event type] == NSScrollWheel)
     {
-        wxNSView * casted_osxView = nullptr;
-        if ( [m_osxView isKindOfClass:[wxNSView class]])
-            casted_osxView = (wxNSView *)m_osxView;
+        NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
+        if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
+            casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
         else
             return;
 
@@ -3249,7 +3207,9 @@ void wxWidgetCocoaImpl::controlTextDidChange()
 
 #endif
 
-void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
+//Bricsys change, refs #22025 add extra flags
+void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags, bsOSXAddOverrides addFlags)
+//Bricsys change end
 {
 
 #if OBJC_API_VERSION < 2
@@ -3286,6 +3246,10 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
     wxOSX_CLASS_ADD_METHOD(c, @selector(flagsChanged:), (IMP) wxOSX_keyEvent, "v@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(insertText:), (IMP) wxOSX_insertText, "v@:@" )
+    //Bricsys change, refs #22025
+    if ( (addFlags & wxOSXADD_COMMANDBYSELECTOR) )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(doCommandBySelector:), (IMP) wxOSX_doCommandBySelector, "v@:@" )
+    //Bricsys change end
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(acceptsFirstResponder), (IMP) wxOSX_acceptsFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" )

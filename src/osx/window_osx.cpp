@@ -1685,7 +1685,7 @@ void wxWindowMac::DoUpdateScrollbarVisibility()
 
 // New function that will replace some of the above.
 void wxWindowMac::SetScrollbar(int orient, int pos, int thumb,
-                               int range, bool refresh)
+                               int range, bool refresh, int WXUNUSED(lineSize))
 {
 #if wxUSE_SCROLLBAR
     // Updating scrollbars when window is being deleted is useless and

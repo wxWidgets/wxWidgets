@@ -803,7 +803,7 @@ void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
     }
 }
 
-void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,
+void wxNonOwnedWindowCocoaImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
 long style, long extraStyle, const wxString& WXUNUSED(name) )
 {
     static wxNonOwnedWindowController* controller = NULL;
