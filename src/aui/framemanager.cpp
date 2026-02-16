@@ -2547,6 +2547,8 @@ void wxAuiManager::Update()
 
             // reduce flicker
             p.window->SetSize(1,1);
+            // Bricsys change: show gripper when toolbar is not floating.
+            p.Gripper(true);
 
 
             // the following block is a workaround for bug #1531361
@@ -2604,6 +2606,16 @@ void wxAuiManager::Update()
 
         if (p.IsFloating())
         {
+            // Bricsys change: hide/show gripper when toolbar is floating.
+            if(p.show_gripper_onfloat)
+            {
+                p.Gripper(true);
+            }
+            else
+            {
+                p.Gripper(false);
+            }
+
             if (p.frame == NULL)
             {
                 // we need to create a frame for this

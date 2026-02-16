@@ -163,6 +163,8 @@ public:
         dock_row = 0;
         dock_pos = 0;
         dock_proportion = 0;
+        // Bricsys change: hide/show gripper when toolbar si floating. TO BE done in BricsCAD.
+        show_gripper_onfloat = 0;
 
         DefaultPane();
     }
@@ -392,6 +394,7 @@ public:
     wxPoint floating_pos; // position while floating
     wxSize floating_size; // size while floating
     int dock_proportion;  // proportion while docked
+    bool show_gripper_onfloat; // true if gripper will be shown when floating (0 = default, not shown)
 
     wxRect rect;              // current rectangle (populated by wxAUI)
 
