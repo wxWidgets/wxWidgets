@@ -291,6 +291,9 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     SetWildcard(wildCard);
 
     wxString defaultFileNameWithExt = defaultFileName;
+
+    // Bricsys change: don't append any extension initially, as the user will be forced to delete it
+#if 0
     if ( !wildCard.empty() && !defaultFileName.empty() &&
             !wxFileName(defaultFileName).HasExt() )
     {
@@ -307,6 +310,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
                 defaultFileNameWithExt << "." << ext;
         }
     }
+#endif
 
 
     // if defaultDir is specified it should contain the directory and
