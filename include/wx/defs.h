@@ -1997,8 +1997,10 @@ enum wxStandardID
        range.  On other platforms the range is only restricted if id
        management is used so the reference count buffer won't be so big.
      */
-    wxID_AUTO_LOWEST = -32000,
-    wxID_AUTO_HIGHEST = -2000,
+    // Bricsys change: negative values of automatically allocated IDs for XRC context menus get translated to 34000+ by WIN32 who accepts only unsigned values
+    // solve by changing the range to positive values
+    wxID_AUTO_LOWEST = 10000, /*wxID_HIGHESTT+4001*/
+    wxID_AUTO_HIGHEST = 19999, /* our first ID starts from 20000 */
 #else
     wxID_AUTO_LOWEST = -1000000,
     wxID_AUTO_HIGHEST = -2000,
