@@ -1003,8 +1003,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     if ( IsBmp )
     {
         // read the header off the .BMP format file
-        if ( !stream.ReadAll(&aWord, 2) ||
-             !stream.ReadAll(dbuf, 16) )
+        if ( !stream.ReadAll(&aWord, 2) )
             return false;
 
         #if 0 // unused
@@ -1012,6 +1011,39 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         #endif
         offset = wxINT32_SWAP_ON_BE(dbuf[2]);
         hdrSize = wxINT32_SWAP_ON_BE(dbuf[3]);
+
+#if 1 // BRICSYS ADDED: #2736 // check BMP file signature (in case of reading from unseekable stream DoCanRead was not called)
+        unsigned char bbuf[4];
+        bbuf[0] = aWord & 0xFF;
+        bbuf[1] = (aWord >> 8) & 0xFF;
+        if (bbuf[0] != 'B' || bbuf[1] != 'M')  // not a BMP file
+        {
+            if (verbose)
+            {
+                stream.Read(&bbuf[2], 2);
+                if (bbuf[0] == 0x89 && bbuf[1] == 'P' && bbuf[2] == 'N' && bbuf[3] == 'G')
+                {
+                    wxLogError( _("PNG file with incorrect BMP extension.") );
+                }
+                else if (bbuf[0] == 'G' && bbuf[1] == 'I' && bbuf[2] == 'F' && bbuf[3] == '8')
+                {
+                    wxLogError( _("GIF file with incorrect BMP extension.") );
+                }
+                else if (bbuf[0] == 0xFF && bbuf[1] == 0xD8 && bbuf[2] == 0xFF)
+                {
+                    wxLogError( _("JPG file with incorrect BMP extension.") );
+                }
+                else
+                {
+                    wxLogError( _("Not a BMP file. Probably another image file format with incorrect BMP extension.") );
+                }
+            }
+            return false;
+        }
+#endif
+
+        if ( !stream.ReadAll(dbuf, 16) )
+            return false;
     }
     else
     {
