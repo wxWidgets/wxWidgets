@@ -751,6 +751,13 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
     paneSz->Add(m_listctrl, wxSizerFlags(1).Expand().Border(wxTOP));
 
+    //BricCAD change: #2635. After wx-r945 in bc|r1410, paneSz has width and height 0.
+    if(paneSz->GetMinSize().y < m_listctrl->GetViewRect().GetHeight()) //
+    {
+        wxSize newSize = m_listctrl->GetViewRect().GetSize()+ wxSize(0, 50);
+        paneSz->SetMinSize(newSize);
+    }
+
 #if wxUSE_CLIPBOARD || CAN_SAVE_FILES
     wxBoxSizer * const btnSizer = new wxBoxSizer(wxHORIZONTAL);
 
