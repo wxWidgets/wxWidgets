@@ -88,7 +88,7 @@ bool wxDirDialog::Create(wxWindow* parent,
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
-	//bricscad change
+    //bricscad change
     //use stock labels rather than stock ids
     //this avoid a translation problem with gtk stock items
     wxCharBuffer cancelLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL)));

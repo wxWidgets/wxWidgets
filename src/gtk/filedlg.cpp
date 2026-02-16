@@ -242,7 +242,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #endif
     }
 
-	wxCharBuffer cancelLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL)));
+    wxCharBuffer cancelLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL)));
     const gchar* gtk_cancel_label = cancelLabel;
     const gchar* gtk_accept_label = acceptLabel;
 

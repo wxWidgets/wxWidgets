@@ -233,7 +233,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
             //
             // [Help]                  [Alternative] [Cancel] [Affirmative]
 
-			//bricscad change
+            //bricscad change
             //use stock labels rather than stock ids
             //this avoid a translation problem with gtk stock items
             wxCharBuffer noLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_NO)));
@@ -244,18 +244,18 @@ void wxMessageDialog::GTKCreateMsgDialog()
             const gchar* gtk_yes_label = yesLabel;
 
             gtk_dialog_add_button(dlg,
-				  gtk_no_label,
+                                  gtk_no_label,
                                   GTK_RESPONSE_NO);
 
             if ( m_dialogStyle & wxCANCEL )
             {
                 gtk_dialog_add_button(dlg,
-				      gtk_cancel_label,
+                                      gtk_cancel_label,
                                       GTK_RESPONSE_CANCEL);
             }
 
             gtk_dialog_add_button(dlg,
-				  gtk_yes_label,
+                                  gtk_yes_label,
                                   GTK_RESPONSE_YES);
         }
         else // Ok or Ok/Cancel dialog

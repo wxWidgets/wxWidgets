@@ -254,7 +254,7 @@ void wxPropertyGridPageState::InitNonCatMode()
         {
             wxPGProperty* p = it.GetProperty();
             wxPGProperty* parent = p->GetParent();
-			it.Next();
+            it.Next();
             if ( parent->IsCategory() || parent->IsRoot() )
             {
                 m_abcArray->DoAddChild(p);
@@ -1672,10 +1672,10 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
 
 //bricscad change:
 #if 0 // It's ok to have properties with identical names, no need to show warning here.
-	  // For example property names may be names of entity attributes and is's ok to select
-	  // several entities with different attributes which has identical names.
-	  // Other place is explorer where one property grid contains properties for several
-	  // records, so each record have it's own category with identical set of properties
+      // For example property names may be names of entity attributes and is's ok to select
+      // several entities with different attributes which has identical names.
+      // Other place is explorer where one property grid contains properties for several
+      // records, so each record have it's own category with identical set of properties
 //#ifdef __WXDEBUG__
     // Warn for identical names in debug mode.
     if ( BaseGetPropertyByName(property->GetName()) &&

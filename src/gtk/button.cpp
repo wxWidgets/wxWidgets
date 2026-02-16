@@ -248,7 +248,7 @@ void wxButton::SetLabel( const wxString &lbl )
     if ( HasFlag(wxBU_NOTEXT) )
         return;
 
-	//bricscad change
+    //bricscad change
     //do not use stock ids
     //this avoid a translation problem with gtk stock items
     /*
@@ -262,7 +262,7 @@ void wxButton::SetLabel( const wxString &lbl )
             return;
         }
     }
-	*/
+    */
 
     // this call is necessary if the button had been initially created without
     // a (text) label -- then we didn't use gtk_button_new_with_mnemonic() and

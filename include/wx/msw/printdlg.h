@@ -47,9 +47,9 @@ public:
     void SetDevNames(void* data) { m_devNames = data; }
 
     // Bricsys change: store full 'printer name' separately because DEVMODE structure
-	// truncates it to 32 characters
+    // truncates it to 32 characters
     void SetPrinterName( const wxString& name ) { m_printerName = name; }
-	const wxString& GetPrinterName() { return m_printerName; }
+    const wxString& GetPrinterName() { return m_printerName; }
 
     // Bricsys change: need access to m_customWindowsPaperId
     short GetCustomPaperId() const { return m_customWindowsPaperId; }
@@ -59,8 +59,8 @@ private:
     void* m_devMode;
     void* m_devNames;
     // Bricsys change: store full 'printer name' separately because DEVMODE structure
-	// truncates it to 32 characters
-	wxString m_printerName;
+    // truncates it to 32 characters
+    wxString m_printerName;
 
     short m_customWindowsPaperId;
 
