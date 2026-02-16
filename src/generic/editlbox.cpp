@@ -215,6 +215,8 @@ void wxEditableListBox::OnItemSelected(wxListEvent& event)
         m_bEdit->Enable(m_selection < m_listCtrl->GetItemCount()-1);
     if (m_style & wxEL_ALLOW_DELETE)
         m_bDel->Enable(m_selection < m_listCtrl->GetItemCount()-1);
+
+    event.Skip(); // BRICSYS ADDED: propagate event further (#2018) http://trac.wxwidgets.org/ticket/15645
 }
 
 void wxEditableListBox::OnNewItem(wxCommandEvent& WXUNUSED(event))
@@ -240,6 +242,8 @@ void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
         selectionEvent.m_itemIndex = event.GetIndex();
         m_listCtrl->GetEventHandler()->ProcessEvent(selectionEvent);
     }
+
+    event.Skip(); // BRICSYS ADDED: propagate event further (#2018) http://trac.wxwidgets.org/ticket/15645
 }
 
 void wxEditableListBox::OnDelItem(wxCommandEvent& WXUNUSED(event))
