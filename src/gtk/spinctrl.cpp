@@ -12,6 +12,8 @@
 
 #if wxUSE_SPINCTRL
 
+#ifdef wxHAS_NATIVE_SPINCTRLDOUBLE
+
 #include "wx/spinctrl.h"
 
 #ifndef WX_PRECOMP
@@ -697,5 +699,7 @@ void wxSpinCtrlDouble::GTKValueChanged()
     event.SetString(GetTextValue());
     HandleWindowEvent( event );
 }
+
+#endif // wxHAS_NATIVE_SPINCTRLDOUBLE
 
 #endif // wxUSE_SPINCTRL
