@@ -469,10 +469,13 @@ function(wx_set_target_properties target_name)
 
     set_target_properties(${target_name} PROPERTIES FOLDER Libraries)
 
-    set_target_properties(${target_name} PROPERTIES
-        SOVERSION ${wxSOVERSION_MAJOR}
-        VERSION ${wxSOVERSION}
-    )
+    # bricscad change: Disable library versioning to only generate simple .so names
+    # without version suffixes (e.g., libwx_gtk3u_gl-3.1.so instead of libwx_gtk3u_gl-3.1.so.6.0.0)
+    # set_target_properties(${target_name} PROPERTIES
+    #     SOVERSION ${wxSOVERSION_MAJOR}
+    #     VERSION ${wxSOVERSION}
+    # )
+    # end bricscad change
 
     wx_set_common_target_properties(${target_name})
 endfunction()
