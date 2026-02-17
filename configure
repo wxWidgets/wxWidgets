@@ -34272,24 +34272,28 @@ rm -f core conftest.err conftest.$ac_objext \
             cat <<EOF >change-install-names
 #!/bin/sh
 set -e
-libdir=\$(cd lib ; pwd -P)
-libnames=\$(cd lib ; ls -1 libwx*${WX_RELEASE}.dylib)
+[ -z "\${WXDEBUG_X}" ] || set -x
+destdir=\$1
+libdir=\$2
+bindir=\$3
+build_libdir=\$4
+libnames=\$(cd \${build_libdir}; printf '%s\n' libwx*${WX_RELEASE}.dylib)
 changes=''
-for dep in \${libnames} ; do
-    target=\$(readlink \${4}/\${dep})
-    changes="\${changes} -change \${libdir}\${target} \${3}/\${dep}"
+for libname in \${libnames} ; do
+    target=\$(realpath \${build_libdir}/\${libname})
+    changes="\${changes} -change \${target} \${libdir}/\$(basename \${target})"
 done
-for i in \${libnames} ; do
-    lib=\$(readlink \${1}/\${i})
-    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${libdir}/\${lib}
+for libname in \${libnames} ; do
+    target=\$(realpath \${build_libdir}/\${libname})
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${libdir}/\${libname} \${destdir}\${libdir}/\$(basename \${target})
 done
 
-if test -f "\${2}/wxrc-${WX_RELEASE}" ; then
-    ${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}
+if test -f \${destdir}\${bindir}/wxrc-${WX_RELEASE} ; then
+    ${HOST_PREFIX}install_name_tool \${changes} \${destdir}\${bindir}/wxrc-${WX_RELEASE}
 fi
 EOF
             chmod +x change-install-names
-            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \${DESTDIR}\${bindir} \${libdir} \$(wx_top_builddir)/lib"
+            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \"\${DESTDIR}\" \${libdir} \${bindir} \$(wx_top_builddir)/lib"
         fi
 
                                         HEADER_PAD_OPTION="-headerpad_max_install_names"
