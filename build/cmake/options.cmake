@@ -66,7 +66,9 @@ if(UNIX)
 endif()
 
 if(WIN32)
-    set(wxBUILD_VENDOR "custom" CACHE STRING "Short string identifying your company (used in DLL name)")
+    # bricsys change: Use 'bricsys' instead of 'custom' as the vendor name in DLL names
+    set(wxBUILD_VENDOR "bricsys" CACHE STRING "Short string identifying your company (used in DLL name)")
+    # end bricsys change
 endif()
 set(wxBUILD_FLAVOUR "" CACHE STRING "Specify a name to identify the build")
 mark_as_advanced(wxBUILD_FLAVOUR)
