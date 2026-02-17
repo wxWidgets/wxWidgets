@@ -769,6 +769,9 @@ void wxMenuItem::SetupBitmaps(wxWindow *win)
         WX_GTK_IMAGE(image)->Set(m_bitmap);
         gtk_widget_show(image);
         gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(m_menuItem), image);
+        // Bricsys change: on linuxes using Gnome, showing menu item icons is disabled by default
+        // we can force gtk to show the bitmap regardless for the system settings
+        gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(m_menuItem), TRUE);
     }
 #endif
 }
