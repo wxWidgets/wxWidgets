@@ -1522,12 +1522,12 @@ void wxPostScriptDCImpl::SetPrintData(const wxPrintData& data)
         h = paper->GetSizeDeviceUnits().y;
     }
     // Bricsys change: use paper height and width from print data, if possible
-        else if(m_printData.GetPaperSize().x)
-        {
-            w = floor(m_printData.GetPaperSize().x / (25.4 / 72.0) + 0.5);
-            h = floor(m_printData.GetPaperSize().y / (25.4 / 72.0) + 0.5);
-        }
-    
+    else if(m_printData.GetPaperSize().x)
+    {
+        w = floor(m_printData.GetPaperSize().x / (25.4 / 72.0) + 0.5);
+        h = floor(m_printData.GetPaperSize().y / (25.4 / 72.0) + 0.5);
+    }
+
     if (m_printData.GetOrientation() == wxLANDSCAPE)
         m_pageHeight = w * PS2DEV;
     else
