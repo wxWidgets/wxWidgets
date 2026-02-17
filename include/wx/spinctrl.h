@@ -125,9 +125,11 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/msw/spinctrl.h"
 #elif defined(__WXGTK20__)
-    #define wxHAS_NATIVE_SPINCTRL
-    #define wxHAS_NATIVE_SPINCTRLDOUBLE
-    #include "wx/gtk/spinctrl.h"
+    // Use generic spinctrl instead of native GTK - refs #9499 (wx|r2021), RM-70705
+    // Original change from wxwidgets_gitsvn commit bda8a33b019f75e9fa5b35ccc94bf456d1ed8915
+    // #define wxHAS_NATIVE_SPINCTRL
+    // #define wxHAS_NATIVE_SPINCTRLDOUBLE
+    // #include "wx/gtk/spinctrl.h"
 #elif defined(__WXGTK__)
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/gtk1/spinctrl.h"
