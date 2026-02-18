@@ -217,8 +217,8 @@ public:
     virtual ~wxGraphicsMatrix() {}
 
     // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrix *t );
-    void Concat( const wxGraphicsMatrix &t ) { Concat( &t ); }
+    virtual void Concat( const wxGraphicsMatrix *transform );
+    void Concat( const wxGraphicsMatrix &transform ) { Concat( &transform ); }
 
     // sets the matrix to the respective values
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
@@ -232,8 +232,8 @@ public:
     virtual void Invert();
 
     // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrix* t) const;
-    bool IsEqual( const wxGraphicsMatrix& t) const { return IsEqual( &t ); }
+    virtual bool IsEqual( const wxGraphicsMatrix* transform) const;
+    bool IsEqual( const wxGraphicsMatrix& transform) const { return IsEqual( &transform ); }
 
     // return true if this is the identity matrix
     virtual bool IsIdentity() const;
