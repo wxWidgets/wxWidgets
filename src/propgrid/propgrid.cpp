@@ -395,6 +395,11 @@ void wxPropertyGrid::Init1()
     wxASSERT( gs_deletedEditorObjects.find(this) == gs_deletedEditorObjects.end() );
     gs_deletedEditorObjects[this] = new wxArrayPGObject;
 #endif
+
+// Bricsys change: make propgrid Retina capable by disabling custom double buffering on render (which seems probably not needed on most platforms anyway)
+#ifdef __WXMAC__
+    SetExtraStyle( GetExtraStyle() | wxPG_EX_NATIVE_DOUBLE_BUFFERING );
+#endif //__WXMAC__
 }
 
 // -----------------------------------------------------------------------
