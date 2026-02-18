@@ -109,11 +109,13 @@ void wxPropertyGridIteratorBase::Prev()
 
         property = parent->Item(index);
 
+        // Bricsys change: replaced if by while
         // Go to last children?
-        if ( property->GetChildCount() &&
+        //if ( property->GetChildCount() &&
+        while ( property->GetChildCount() &&
              wxPG_ITERATOR_PARENTEXMASK_TEST(property, m_parentExMask) )
         {
-            // First child
+            // Last child
             property = property->Last();
         }
     }
