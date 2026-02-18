@@ -44,6 +44,11 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 {
     wxCArrayString chs( choices );
 
+#ifdef __WXMAC__ //wxCB_SORT style not supported on OSX/Cocoa presently
+    if( style & wxCB_SORT )
+        style ^= wxCB_SORT;
+#endif
+
     return Create( parent, id, value, pos, size, chs.GetCount(),
                    chs.GetStrings(), style, validator, name );
 }
