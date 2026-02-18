@@ -405,57 +405,27 @@ bool wxWindowsPrintPreview::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)
     // metrics correctness while still being fast.
 
 #if BS_CACHE_PREVIEW_METAFILE
+
     if (pageNum != m_metafilePageNum)
         m_metafile.reset(NULL);
 
     if (!m_metafile.get())
     {
-#endif // BS_CACHE_PREVIEW_METAFILE
+        // print the preview into a metafile:
+        wxPrinterDC printerDC(m_printDialogData.GetPrintData());
+        wxEnhMetaFileDC metaDC(printerDC,
+                               wxEmptyString,
+                               printerDC.GetSize().x, printerDC.GetSize().y);
 
-    // print the preview into a metafile:
-    wxPrinterDC printerDC(m_printDialogData.GetPrintData());
+        if ( !RenderPageIntoDC(metaDC, pageNum) )
+            return false;
 
-#if 1
-    // Bricsys change: some printers don't accept the DPI we give to them. Force our DPI.
-    wxSize sz = printerDC.GetSize();
-
-    // expected resolution
-    int dpi = m_printDialogData.GetPrintData().GetQuality();
-    if (dpi > 0)
-    {
-        wxSize szNew = m_printDialogData.GetPrintData().GetPaperSize();
-        if ((sz.x > sz.y) != (szNew.x > szNew.y)) // landscape
-            std::swap(szNew.x, szNew.y);
-        szNew.x = 10 * szNew.x * dpi / 254;
-        szNew.y = 10 * szNew.y * dpi / 254;
-
-        sz = szNew;
-    }
-
-    wxEnhMetaFileDC metaDC(printerDC,
-                           wxEmptyString,
-                           sz.x, sz.y);
-#else
-    wxEnhMetaFileDC metaDC(printerDC,
-                           wxEmptyString,
-                           printerDC.GetSize().x, printerDC.GetSize().y);
-#endif
-
-    if ( !RenderPageIntoDC(metaDC, pageNum) )
-        return false;
-
-#if BS_CACHE_PREVIEW_METAFILE
-    m_metafile.reset(metaDC.Close());
-    m_metafilePageNum = pageNum;
+        m_metafile.reset(metaDC.Close());
+        m_metafilePageNum = pageNum;
     }
 
     if ( !m_metafile.get() )
         return false;
-#else // BS_CACHE_PREVIEW_METAFILE
-    wxEnhMetaFile *metafile = metaDC.Close();
-    if ( !metafile )
-        return false;
-#endif // BS_CACHE_PREVIEW_METAFILE
 
     // now render the metafile:
     wxMemoryDC bmpDC;
@@ -464,11 +434,31 @@ bool wxWindowsPrintPreview::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)
 
     wxRect outRect(0, 0, bmp.GetWidth(), bmp.GetHeight());
 
-#if BS_CACHE_PREVIEW_METAFILE
     m_metafile->Play(&bmpDC, &outRect);
-#else // BS_CACHE_PREVIEW_METAFILE
-    metafile->Play(&bmpDC, &outRect);
 
+#else // BS_CACHE_PREVIEW_METAFILE
+
+    // print the preview into a metafile:
+    wxPrinterDC printerDC(m_printDialogData.GetPrintData());
+    wxEnhMetaFileDC metaDC(printerDC,
+                            wxEmptyString,
+                            printerDC.GetSize().x, printerDC.GetSize().y);
+
+    if ( !RenderPageIntoDC(metaDC, pageNum) )
+        return false;
+
+    wxEnhMetaFile *metafile = metaDC.Close();
+    if ( !metafile )
+        return false;
+
+    // now render the metafile:
+    wxMemoryDC bmpDC;
+    bmpDC.SelectObject(bmp);
+    bmpDC.Clear();
+
+    wxRect outRect(0, 0, bmp.GetWidth(), bmp.GetHeight());
+
+    metafile->Play(&bmpDC, &outRect);
 
     delete metafile;
 
