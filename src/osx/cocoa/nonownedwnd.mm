@@ -151,6 +151,7 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
 
 static NSResponder* s_nextFirstResponder = NULL;
 static NSResponder* s_formerFirstResponder = NULL;
+static NSMutableDictionary* s_shownTopLevelWindows = NULL;
 
 @interface wxNSWindow : NSWindow
 {
@@ -759,6 +760,71 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
         }
     }
 }
+
+// Bricsys change (Issue #3990): hide all child top level windows at main window minimize
+// and bring them back at un-minimize (make sure to bring back only the not hidden ones)
+- (void)windowWillMiniaturize:(NSNotification *)notification
+{
+    if( s_shownTopLevelWindows == NULL )
+        s_shownTopLevelWindows = [[NSMutableDictionary alloc] init];
+    
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer && wxTheApp->GetTopWindow() == wxpeer )
+        {
+            for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+                 end = wxTopLevelWindows.end();
+                 i != end;
+                 ++i )
+            {
+                wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+                WXWindow nswindow = win ? win->GetWXWindow() : nil;
+                
+                if( [nswindow isVisible] )
+                {
+                    [s_shownTopLevelWindows setObject:[NSNumber numberWithBool:YES] forKey:[NSValue valueWithPointer:win]];
+                    [nswindow orderOut:self];
+                }
+            }
+        }
+    }
+}
+
+- (void)windowDidDeminiaturize:(NSNotification *)notification
+{
+    if( !s_shownTopLevelWindows )
+        return;
+    
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer && wxTheApp->GetTopWindow() == wxpeer )
+        {
+            for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+                 end = wxTopLevelWindows.end();
+                 i != end;
+                 ++i )
+            {
+                wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+                WXWindow nswindow = win ? win->GetWXWindow() : nil;
+                
+                NSNumber* n = [s_shownTopLevelWindows objectForKey:[NSValue valueWithPointer:win]];
+                if( [n boolValue] == YES )
+                    [nswindow orderFront:self];
+            }
+        }
+    }
+    
+    [s_shownTopLevelWindows removeAllObjects];
+    [s_shownTopLevelWindows release];
+    s_shownTopLevelWindows = NULL;
+}
+// end Bricsys change
 
 @end
 
