@@ -752,11 +752,16 @@ void wxSplitterWindow::SizeWindows()
             DoSetSashPosition(newSashPosition);
         }
 
+        // Bricsys change: guard this part out; this solves the problem of initially setting the sash postion
+        // and setting a gravity value; see: http://trac.wxwidgets.org/ticket/15996
+        // I didn't spot any drawback
         if ( newSashPosition <= m_sashPosition
             && newSashPosition >= m_sashPosition - GetBorderSize() )
         {
             // don't update it any more
+#ifndef __WXMAC__
             m_requestedSashPosition = INT_MAX;
+#endif //!__WXMAC__
         }
     }
 
