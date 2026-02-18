@@ -29,6 +29,226 @@
 
 const char wxEditableListBoxNameStr[] = "editableListBox";
 
+// begin Bricsys change: replaced icon images
+static const char* const eledit_xpm[] = {
+"16 16 19 1",
+" 	c None",
+".	c #99380D",
+"+	c #FF8888",
+"@	c #9F9F98",
+"#	c #FDDDB9",
+"$	c #FCEBAC",
+"%	c #F7D142",
+"&	c #F49632",
+"*	c #555A5C",
+"=	c #7F8079",
+"-	c #CC873D",
+";	c #5F615A",
+">	c #939697",
+",	c #7C7C7C",
+"'	c #FFFFFF",
+")	c #5D5D5D",
+"!	c #969696",
+"~	c #000000",
+"{	c #DEDEDE",
+"                ",
+"                ",
+"            .   ",
+"           .+.  ",
+"          @#++. ",
+"         @$%&.  ",
+"        @$%&*   ",
+"       =$%-*    ",
+"      ;$%&*>    ",
+"     ,'%&*      ",
+"     )''*       ",
+" !!!'~,,        ",
+" !'''{          ",
+" !'''*          ",
+" !'''*          ",
+" !****          "};
+
+static const char* const elnew_xpm[] = {
+"16 16 50 1",
+" 	c None",
+".	c #555A5C",
+"+	c #FFFFFF",
+"@	c #73787A",
+"#	c #E3E3E3",
+"$	c #E1E1E1",
+"%	c #E0E0E0",
+"&	c #DEDEDE",
+"*	c #DCDCDC",
+"=	c #DDDDDD",
+"-	c #BFC1C2",
+";	c #E5E5E5",
+">	c #E4E4E4",
+",	c #E2E2E2",
+"'	c #F8F8F8",
+")	c #606466",
+"!	c #E8E8E8",
+"~	c #E6E6E6",
+"{	c #DFDFDF",
+"]	c #EAEAEA",
+"^	c #E7E7E7",
+"/	c #EDEDED",
+"(	c #EBEBEB",
+"_	c #E9E9E9",
+":	c #EFEFEF",
+"<	c #ECECEC",
+"[	c #F0F0F0",
+"}	c #F1F1F1",
+"|	c #EEEEEE",
+"1	c #F3F3F3",
+"2	c #AAADAE",
+"3	c #F4F4F4",
+"4	c #F2F2F2",
+"5	c #F7F7F7",
+"6	c #E95A1D",
+"7	c #F6F6F6",
+"8	c #F4AD8E",
+"9	c #F7C1AA",
+"0	c #FBE0D5",
+"a	c #F9F9F9",
+"b	c #F5F5F5",
+"c	c #E9631D",
+"d	c #EA7C1C",
+"e	c #EB6D2B",
+"f	c #FBFBFB",
+"g	c #EB8D1C",
+"h	c #EDE319",
+"i	c #FDFDFD",
+"j	c #FCFCFC",
+"k	c #FAFAFA",
+"  .........     ",
+"  .+++++++@.    ",
+"  .+#$%&*=@-.   ",
+"  .+;>,%&=@'-)  ",
+"  .+!~>#${@@@@. ",
+"  .+]!^;#,%&{+. ",
+"  .+/(_^~>,%{+. ",
+"  .+:/<]!~;:[+. ",
+"  .+}[|<]_1+++2 ",
+"  .+34[:/5++6+++",
+"  .+731}7+89608+",
+"  .+a5ba++9cde9+",
+"  .+fa'f+66ghg66",
+"  .+ijkf++0egc9+",
+"  .+++++++89698+",
+"  .......-++6+++"};
+
+static const char* const eldel_xpm[] = {
+"16 16 2 1",
+" 	c None",
+".	c #C71F1F",
+"                ",
+"                ",
+"   .        .   ",
+"  ...      ...  ",
+"   ...    ...   ",
+"    ...  ...    ",
+"     ......     ",
+"      ....      ",
+"      ....      ",
+"     ......     ",
+"    ...  ...    ",
+"   ...    ...   ",
+"  ...      ...  ",
+"   .        .   ",
+"                ",
+"                "};
+
+static const char* const eldown_xpm[] = {
+"16 16 26 1",
+" 	c None",
+".	c #555A5C",
+"+	c #B0B9BF",
+"@	c #AEB7BD",
+"#	c #ACB5BB",
+"$	c #FFFFFF",
+"%	c #AAB2B8",
+"&	c #A7B0B5",
+"*	c #A4ACB2",
+"=	c #A0A9AE",
+"-	c #EDEFF0",
+";	c #9DA5AA",
+">	c #A3ABAF",
+",	c #EDEEEF",
+"'	c #99A1A6",
+")	c #9FA7AC",
+"!	c #F9F9FA",
+"~	c #F3F4F4",
+"{	c #949CA1",
+"]	c #A8AFB3",
+"^	c #F9F9F9",
+"/	c #90989C",
+"(	c #A5ABAF",
+"_	c #F2F2F3",
+":	c #8C9398",
+"<	c #878E92",
+"............... ",
+".+++++++++++++. ",
+".@@@@@@@@@@@@@. ",
+".#####$$$#####. ",
+".%%%%%$$$%%%%%. ",
+".&&&&&$$$&&&&&. ",
+".*****$$$*****. ",
+".==-$$$$$$$-==. ",
+".;;>,$$$$$,>;;. ",
+".''')!$$$~)'''. ",
+".{{{{]^$^]{{{{. ",
+"./////(_(/////. ",
+".:::::::::::::. ",
+".<<<<<<<<<<<<<. ",
+"............... ",
+"                "};
+
+static const char* const elup_xpm[] = {
+"16 16 26 1",
+" 	c None",
+".	c #555A5C",
+"+	c #B0B9BF",
+"@	c #AEB7BD",
+"#	c #ACB5BB",
+"$	c #BCC3C8",
+"%	c #F5F6F7",
+"&	c #AAB2B8",
+"*	c #BAC0C5",
+"=	c #FAFAFB",
+"-	c #FFFFFF",
+";	c #A7B0B5",
+">	c #ADB5BA",
+",	c #F4F5F6",
+"'	c #A4ACB2",
+")	c #AAB1B7",
+"!	c #EEF0F1",
+"~	c #A0A9AE",
+"{	c #EDEFF0",
+"]	c #A6AEB3",
+"^	c #9DA5AA",
+"/	c #99A1A6",
+"(	c #949CA1",
+"_	c #90989C",
+":	c #8C9398",
+"<	c #878E92",
+"............... ",
+".+++++++++++++. ",
+".@@@@@@@@@@@@@. ",
+".#####$%$#####. ",
+".&&&&*=-=*&&&&. ",
+".;;;>,---=>;;;. ",
+".'')!-----!)''. ",
+".~~{-------{]~. ",
+".^^^^^---^^^^^. ",
+"./////---/////. ",
+".(((((---(((((. ",
+"._____---_____. ",
+".:::::::::::::. ",
+".<<<<<<<<<<<<<. ",
+"............... ",
+"                "};
+// end Bricsys change
+
 // list control with auto-resizable column:
 class CleverListCtrl : public wxListCtrl
 {
@@ -124,42 +344,39 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     const wxSizerFlags flagsCentered = wxSizerFlags().Center();
 
+    // begin Bricsys change: removed border from bitmap buttons (added ", wxDefaultPosition, wxSize(20,18), wxBORDER_NONE")
     if ( m_style & wxEL_ALLOW_EDIT )
     {
-        m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
-                                     wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
+        m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT, wxBitmap(eledit_xpm), wxDefaultPosition, wxSize(20,18), wxBORDER_NONE);
         m_bEdit->SetToolTip(_("Edit item"));
         subsizer->Add(m_bEdit, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_NEW )
     {
-        m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
-                                    wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
+        m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW, wxBitmap(elnew_xpm), wxDefaultPosition, wxSize(20,18), wxBORDER_NONE);
         m_bNew->SetToolTip(_("New item"));
         subsizer->Add(m_bNew, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_DELETE )
     {
-        m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
-                                    wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
+        m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE, wxBitmap(eldel_xpm), wxDefaultPosition, wxSize(20,18), wxBORDER_NONE);
         m_bDel->SetToolTip(_("Delete item"));
         subsizer->Add(m_bDel, flagsCentered);
     }
 
     if (!(m_style & wxEL_NO_REORDER))
     {
-        m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
-                                   wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
+        m_bUp = new wxBitmapButton(subp, wxID_ELB_UP, wxBitmap(elup_xpm), wxDefaultPosition, wxSize(20,18), wxBORDER_NONE);
         m_bUp->SetToolTip(_("Move up"));
         subsizer->Add(m_bUp, flagsCentered);
 
-        m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
-                                     wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
+        m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN, wxBitmap(eldown_xpm), wxDefaultPosition, wxSize(20,18), wxBORDER_NONE);
         m_bDown->SetToolTip(_("Move down"));
         subsizer->Add(m_bDown, flagsCentered);
     }
+    // end Bricsys change
 
     subp->SetSizer(subsizer);
     subsizer->Fit(subp);
