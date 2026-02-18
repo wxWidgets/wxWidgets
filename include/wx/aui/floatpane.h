@@ -35,7 +35,7 @@ public:
                    wxAuiManager* ownerMgr,
                    const wxAuiPaneInfo& pane,
                    wxWindowID id = wxID_ANY,
-                   long style = wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
+                   long style = /*wxRESIZE_BORDER |*/ wxSYSTEM_MENU | wxCAPTION |
                                 wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT |
                                 wxCLIP_CHILDREN
                    );
