@@ -455,16 +455,17 @@ extern int wxOSXGetIdFromSelector(SEL action );
     }
 }
 
-- (void)windowDidDeminiaturize:(NSNotification *)notification
-{
-    NSWindow* window = (NSWindow*) [notification object];
-    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
-    if ( windowimpl )
-    {
-        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
-            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
-    }
-}
+//kept Bricsys version of implementation
+//- (void)windowDidDeminiaturize:(NSNotification *)notification
+//{
+//    NSWindow* window = (NSWindow*) [notification object];
+//    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+//    if ( windowimpl )
+//    {
+//        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
+//            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
+//    }
+//}
 
 - (BOOL)windowShouldClose:(id)nwindow
 {
