@@ -71,6 +71,15 @@ enum wxDLFlags
                                     // should not be called so don't forget to
                                     // Detach() if you use this function
 
+    // Bricsys change: support dlopen() flags RTLD_DEEPBIND and RTLD_LOCAL (see #4241)
+    wxDL_DEEPBIND   = 0x00000080,   // prefer local scope symbols in this library ahead of the global scope
+                                    // only works on some Unix systems
+                                    // translates to RTLD_DEEPBIND flag for dlopen()
+
+    wxDL_LOCAL      = 0x00000100,   // symbols exported from this image (dynamic library or
+                                    // bundle) are generally hidden and only availble to dlsym()
+    // end Bricsys change
+
     wxDL_DEFAULT    = wxDL_NOW      // default flags correspond to Win32
 };
 
