@@ -643,6 +643,17 @@ public:
         return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_RADIO,
                        shortHelp, longHelp, data);
     }
+    wxAuiToolBarItem* AddCheckTool(int toolid,
+                                    const wxString& label,
+                                    const wxBitmapBundle& bitmap,
+                                    const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
+                                    const wxString& shortHelp = wxEmptyString,
+                                    const wxString& longHelp = wxEmptyString,
+                                    wxObject *data = NULL)
+    {
+        return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_CHECK,
+                       shortHelp, longHelp, data);
+    }
     wxAuiToolBarItem* InsertTool(size_t pos,
                                  int toolid,
                                  const wxString& label,
