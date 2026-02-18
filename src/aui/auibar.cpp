@@ -1153,6 +1153,27 @@ bool wxAuiToolBar::DeleteByIndex(int idx)
 {
     if (idx >= 0 && idx < (int)m_items.GetCount())
     {
+        // Bricsys added: cleanup for tools containing controls
+        wxAuiToolBarItem& item = m_items.Item(idx);
+        wxSizerItem* szItem = item.GetSizerItem();
+        if( szItem )
+        {
+            wxSizer* sizer = szItem->GetSizer();
+            if(sizer)
+                sizer->Clear( true );
+            item.SetSizerItem(NULL);
+        }
+        else
+        {
+            wxWindow* wnd = item.GetWindow();
+            if(wnd)
+            {
+                wnd->GetParent()->RemoveChild( wnd );
+                wnd->Destroy();
+                item.SetWindow(NULL);
+            }
+        }
+        // finish Bricsys added
         m_items.RemoveAt(idx);
         Realize();
         return true;
@@ -1171,8 +1192,27 @@ bool wxAuiToolBar::DestroyToolByIndex(int idx)
     if ( idx < 0 || static_cast<unsigned>(idx) >= m_items.GetCount() )
         return false;
 
-    if ( wxWindow* window = m_items[idx].GetWindow() )
-        window->Destroy();
+    // Bricsys added: thorough cleanup for tools containing controls
+    wxAuiToolBarItem& item = m_items.Item(idx);
+    wxSizerItem* szItem = item.GetSizerItem();
+    if( szItem )
+    {
+        wxSizer* sizer = szItem->GetSizer();
+        if(sizer)
+            sizer->Clear( true );
+        item.SetSizerItem(NULL);
+    }
+    else
+    {
+        wxWindow* wnd = item.GetWindow();
+        if(wnd)
+        {
+            wnd->GetParent()->RemoveChild( wnd );
+            wnd->Destroy();
+            item.SetWindow(NULL);
+        }
+    }
+    // finish Bricsys added
 
     return DeleteByIndex(idx);
 }
