@@ -531,15 +531,29 @@ wxRendererMac::DrawComboBoxDropButton(wxWindow *win,
                               const wxRect& rect,
                               int flags)
 {
+
     int kind;
+    // Bricsys change: use different SMALL button size for NORMAL window variant and MINI button size for SMALL window variant
+    // to fix button overflowing in our owner drawn combo boxes (OS X by default does not have resizable graphics - see CoreUI though)
+    // also adjust positioning to better fit the new sizes
+    wxRect newRect( rect );
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
-        kind = kThemeArrowButtonSmall;
+    {
+        newRect.x = rect.x - 2;
+        newRect.y = rect.y + 2;
+        kind = kThemeArrowButtonMini;
+    }
     else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
         kind = kThemeArrowButtonMini;
     else
-        kind = kThemeArrowButton;
+    {
+        newRect.x = rect.x - 2;
+        newRect.y = rect.y + 1;
+        kind = kThemeArrowButtonSmall;
+    }
+    // end Bricsys change
 
-    DrawMacThemeButton(win, dc, rect, flags,
+    DrawMacThemeButton(win, dc, newRect, flags,
                        kind, kThemeAdornmentArrowDownArrow);
 }
 
