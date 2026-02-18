@@ -524,6 +524,16 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
             msgDlg << wxT("\n\nCall stack:\n") << stackTrace;
 #endif // wxUSE_STACKWALKER
 
+#ifdef __APPLE__
+        //bricsys change: clip long message to prevent out of reach buttons
+        if ( msgDlg.size()>725)
+        {
+            msgDlg = msgDlg.Truncate(675);
+            msgDlg += _T("... (clipped long message)...");
+        }
+#endif
+        // this message is intentionally not translated -- it is for
+        // developers only
         msgDlg += wxT("\nDo you want to stop the program?\n")
                   wxT("You can also choose [Cancel] to suppress ")
                   wxT("further warnings.");
