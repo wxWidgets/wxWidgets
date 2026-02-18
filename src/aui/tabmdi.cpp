@@ -536,6 +536,9 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
     pClientWindow->InsertPage(page_index, this, title, m_activateOnCreate);
     // Bricsys change end : add tabPosition
 
+    // Bricsys change: remove this assert; it is not relevant in our case, because
+    // we create the view without activating it on the spot
+#if 0
     // Check that the parent notion of the active child coincides with our one.
     // This is less obvious that it seems because we must honour
     // m_activateOnCreate flag but only if it's not the first child because
@@ -546,6 +549,8 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
             == (parent->GetActiveChild() == this),
         wxS("Logic error: child [not] activated when it should [not] have been.")
     );
+#endif
+    // end Bricsys change
 
     pClientWindow->Refresh();
 
