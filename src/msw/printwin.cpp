@@ -401,9 +401,32 @@ bool wxWindowsPrintPreview::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)
 
     // print the preview into a metafile:
     wxPrinterDC printerDC(m_printDialogData.GetPrintData());
+
+#if 1
+    // Bricsys change: some printers don't accept the DPI we give to them. Force our DPI.
+    wxSize sz = printerDC.GetSize();
+
+    // expected resolution
+    int dpi = m_printDialogData.GetPrintData().GetQuality();
+    if (dpi > 0)
+    {
+        wxSize szNew = m_printDialogData.GetPrintData().GetPaperSize();
+        if ((sz.x > sz.y) != (szNew.x > szNew.y)) // landscape
+            std::swap(szNew.x, szNew.y);
+        szNew.x = 10 * szNew.x * dpi / 254;
+        szNew.y = 10 * szNew.y * dpi / 254;
+
+        sz = szNew;
+    }
+
+    wxEnhMetaFileDC metaDC(printerDC,
+                           wxEmptyString,
+                           sz.x, sz.y);
+#else
     wxEnhMetaFileDC metaDC(printerDC,
                            wxEmptyString,
                            printerDC.GetSize().x, printerDC.GetSize().y);
+#endif
 
     if ( !RenderPageIntoDC(metaDC, pageNum) )
         return false;
