@@ -251,9 +251,13 @@ void wxNSComboBoxControl::SetSelectedItem(int item)
 
     if ( item != wxNOT_FOUND )
     {
-        wxASSERT_MSG( item >= 0 && item < [m_comboBox numberOfItems],
-                      "Inavlid item index." );
-        [m_comboBox selectItemAtIndex: item];
+        int countItems = [m_comboBox numberOfItems];
+        
+        wxASSERT_MSG( item >= 0 && item < countItems,
+                     "Inavlid item index." );
+        
+        if( item >= 0 && item < countItems )
+            [m_comboBox selectItemAtIndex: item];
     }
     else // remove current selection (if we have any)
     {
