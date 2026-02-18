@@ -2104,6 +2104,14 @@ bool wxPGProperty::SetChoices( const wxPGChoices& choices )
     }
 
     m_choices.Assign(choices);
+
+    // Bricsys Change - otherwise crash in SetValue(), if 'defVal' is defined
+    if (m_choices.GetCount() == 0)
+    {
+        return true;
+    }
+    // Bricsys Change
+
     if ( isSelected )
     {
         wxWindow* ctrl = pg->GetEditorControl();
