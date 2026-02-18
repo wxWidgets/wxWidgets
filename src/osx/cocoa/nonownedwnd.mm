@@ -929,6 +929,16 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
             }
         }
     }
+    
+    // Bricsys change: allow popup windows to work in a modal event loop
+    // I suppose we don't need to check if their parent is the modal window,
+    // since they are short lived anyway and are probably always created by the modal window
+    if( level == kCGPopUpMenuWindowLevel )
+        if ([m_macWindow isKindOfClass:[NSPanel class]])
+        {
+            [(NSPanel*)m_macWindow setWorksWhenModal:YES];
+        }
+    // end Bricsys change
 
     m_macWindowLevel = level;
     SetUpForModalParent();
