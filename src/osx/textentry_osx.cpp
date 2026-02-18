@@ -226,6 +226,9 @@ void wxTextEntry::Clear()
     {
         EventsSuppressor noevents(this);
         GetTextPeer()->Clear();
+//BRICSYS fix. After clear, text cursor position is not reset.
+        long lastPos = GetLastPosition();
+        Remove(0,lastPos);
     }
 
     SendTextUpdatedEventIfAllowed();
