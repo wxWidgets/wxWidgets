@@ -630,6 +630,57 @@ public:
         {
             return !IsVertical();
         }
+    
+    // Bricsys added: add some functions to be more compatible with wxToolBar
+    wxAuiToolBarItem* AddRadioTool(int toolid,
+                                    const wxString& label,
+                                    const wxBitmapBundle& bitmap,
+                                    const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
+                                    const wxString& shortHelp = wxEmptyString,
+                                    const wxString& longHelp = wxEmptyString,
+                                    wxObject *data = NULL)
+    {
+        return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_RADIO,
+                       shortHelp, longHelp, data);
+    }
+    wxAuiToolBarItem* AddCheckTool(int toolid,
+                                    const wxString& label,
+                                    const wxBitmapBundle& bitmap,
+                                    const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
+                                    const wxString& shortHelp = wxEmptyString,
+                                    const wxString& longHelp = wxEmptyString,
+                                    wxObject *data = NULL)
+    {
+        return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_CHECK,
+                       shortHelp, longHelp, data);
+    }
+    wxAuiToolBarItem* InsertTool(size_t pos,
+                                 int toolid,
+                                 const wxString& label,
+                                 const wxBitmapBundle& bitmap,
+                                 const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
+                                 wxItemKind kind = wxITEM_NORMAL,
+                                 const wxString& shortHelp = wxEmptyString,
+                                 const wxString& longHelp = wxEmptyString,
+                                 wxObject* clientData = NULL);
+    wxAuiToolBarItem* InsertControl( size_t pos,
+                                    wxControl* control,
+                                    const wxString& label = wxEmptyString);
+    wxAuiToolBarItem* InsertSeparator(size_t pos);
+    wxAuiToolBarItem* FindById (int id) const
+    {
+        return FindTool(id);
+    }
+    bool              DeleteToolByPos(size_t pos)
+    {
+        return DeleteByIndex( (int) pos);
+    }
+    wxSize            GetToolSize() const
+    {
+        wxRect rect = GetToolRect( 0 );
+        return wxSize( rect.GetWidth(), rect.GetHeight());
+    }
+    // finish Bricsys added
 
 protected:
     void Init();
