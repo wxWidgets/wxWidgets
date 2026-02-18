@@ -2616,6 +2616,15 @@ void wxAuiManager::Update()
                 p.Gripper(false);
             }
 
+            // Bricsys change: don't show Close/Minimize/Maximize buttons when floating
+            // they impede dragging of vertical toolbars
+#ifdef __WXMAC__
+            p.CloseButton(false);
+            p.MaximizeButton(false);
+            p.MinimizeButton(false);
+#endif //__WXMAC__
+            // end Bricsys change
+            
             if (p.frame == NULL)
             {
                 // we need to create a frame for this
