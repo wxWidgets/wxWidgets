@@ -1521,7 +1521,39 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
         return false;
     }
 
-    const HANDLE h = ::CreateFile
+#if 1  // Bricsys change : "IsWritable" for directory need special handling
+    if ( ((dwAttr & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) &&
+         ((access & GENERIC_WRITE) == GENERIC_WRITE)
+       )
+    {
+        DWORD dwShareMode = (access & GENERIC_WRITE) ? 0 : FILE_SHARE_READ;
+
+        wchar_t tmpFilename[4096];
+        if (::GetTempFileName(path.t_str(), wxEmptyString, 0, tmpFilename) == 0)
+            return false;
+
+        ::DeleteFile(tmpFilename);
+        HANDLE h = ::CreateFile
+                     (
+                        tmpFilename,
+                        access,
+                        dwShareMode,
+                        NULL,
+                        OPEN_ALWAYS,
+                        FILE_ATTRIBUTE_NORMAL,
+                        NULL
+                 );
+        if ( h != INVALID_HANDLE_VALUE )
+        {
+            CloseHandle(h);
+        }
+
+        ::DeleteFile(tmpFilename);
+        return h != INVALID_HANDLE_VALUE;
+    }
+#endif
+
+    HANDLE h = ::CreateFile
                  (
                     path.t_str(),
                     access,
