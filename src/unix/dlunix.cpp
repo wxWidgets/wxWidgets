@@ -46,6 +46,16 @@
     #define RTLD_GLOBAL 0
 #endif
 
+// Bricsys change: support dlopen() flags RTLD_DEEPBIND and RTLD_LOCAL (see #4241)
+#ifndef RTLD_DEEPBIND
+    #define RTLD_DEEPBIND 0
+#endif
+
+#ifndef RTLD_LOCAL
+    #define RTLD_LOCAL 0
+#endif
+// end Bricsys change
+
 
 #ifndef HAVE_DLOPEN
     #error "Don't know how to load dynamic libraries on this platform!"
@@ -77,6 +87,14 @@ wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 
     if ( flags & wxDL_GLOBAL )
         rtldFlags |= RTLD_GLOBAL;
+
+// Bricsys change: support dlopen() flags RTLD_DEEPBIND and RTLD_LOCAL (see #4241)
+    if ( flags & wxDL_DEEPBIND )
+        rtldFlags |= RTLD_DEEPBIND;
+
+    if ( flags & wxDL_LOCAL )
+        rtldFlags |= RTLD_LOCAL;
+// end Bricsys change
 
     return dlopen(libname.fn_str(), rtldFlags);
 }
