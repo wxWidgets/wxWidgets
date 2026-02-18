@@ -2303,6 +2303,10 @@ protected:
 #endif
 #endif // !__WXUNIVERSAL__
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible *CreateAccessible() override;
+#endif
+
 // Overrides
 protected:
 
