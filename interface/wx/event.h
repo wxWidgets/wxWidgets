@@ -48,7 +48,14 @@ enum wxEventCategory
     /// This category is for wxSocketEvent
     wxEVT_CATEGORY_SOCKET = 4,
 
-    /// This category is for wxTimerEvent
+    /**
+        This category is for wxTimerEvent.
+
+        @note Under wxMSW, if this category is not specified when calling
+        wxEventLoopBase::YieldFor, events from one-off timers may be lost,
+        so it's recommended to either pass this category to it or use
+        repeatedly firing timers instead.
+     */
     wxEVT_CATEGORY_TIMER = 8,
 
     /**

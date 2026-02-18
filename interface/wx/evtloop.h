@@ -262,6 +262,11 @@ public:
         wxWidgets events posted using wxEvtHandler::AddPendingEvent or
         wxEvtHandler::QueueEvent are instead selectively processed by all ports.
 
+        @note Under wxMSW, if @a eventsToProcess doesn't include
+        ::wxEVT_CATEGORY_TIMER, events from one-off timers may be lost,
+        so it's recommended to either include this category in the argument or
+        use repeatedly firing timers instead.
+
         @see wxEvent::GetEventCategory
     */
     bool YieldFor(long eventsToProcess);

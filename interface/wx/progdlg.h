@@ -27,11 +27,16 @@
     essentially be the same as this class.
 
     Note that you must be aware that wxProgressDialog internally calls
-    wxEventLoopBase::YieldFor with @c wxEVT_CATEGORY_UI and @c wxEVT_CATEGORY_USER_INPUT
+    wxEventLoopBase::YieldFor with ::wxEVT_CATEGORY_UI and ::wxEVT_CATEGORY_USER_INPUT
     and this may cause unwanted re-entrancies or the out-of-order processing
     of pending events (to help preventing the last problem if you're using
     wxProgressDialog in a multi-threaded application you should be sure to use
-    wxThreadEvent for your inter-threads communications).
+    wxThreadEvent for your inter-threads communications). Additionally because
+    events from one-off timers, i.e. those started with wxTimer::StartOnce(),
+    are discarded by wxEventLoopBase::YieldFor() when it's called with these
+    flags in wxMSW, any such timers firing while the progress dialog is shown
+    will not be processed at all, so it is recommended not to start such timers
+    before showing the progress dialog.
 
     Although wxProgressDialog is not really modal, it should be created on the
     stack, and not the heap, as other modal dialogs, e.g. use it like this:

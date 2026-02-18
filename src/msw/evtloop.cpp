@@ -273,6 +273,7 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 
         // choose a wxEventCategory for this Windows message
         bool processNow;
+        bool processLater = true;
         switch (msg.message)
         {
             case WM_NCMOUSEMOVE:
@@ -338,6 +339,18 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 
             case WM_TIMER:
                 processNow = (eventsToProcess & wxEVT_CATEGORY_TIMER) != 0;
+
+                // Timer messages are synthesized by Windows whenever there are
+                // no other messages and so will keep accumulating in the queue
+                // if we don't process them, so to prevent this from happening,
+                // don't put them back into the queue, as this would result in
+                // it growing with each call to this function, which is
+                // especially bad if it's called in a loop, as it happens in
+                // wxGenericProgressDialog.
+                //
+                // This is not ideal, as events from one off timers will be
+                // lost, but it's better than the alternative.
+                processLater = false;
                 break;
 
             default:
@@ -369,9 +382,13 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
         }
         else
         {
-            // remove the message and store it
+            // remove the message from the queue to ensure that we don't loop
+            // forever here in any case
             ::GetMessage(&msg, nullptr, 0, 0);
-            msgsToProcess.push_back(msg);
+
+            // and perhaps save it for processing later
+            if ( processLater )
+                msgsToProcess.push_back(msg);
         }
     }
 
