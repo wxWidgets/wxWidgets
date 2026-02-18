@@ -891,9 +891,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     if ( (windowstyle & NSTitledWindowMask) && 
         !(style & wxCLOSE_BOX) && !(style & wxMAXIMIZE_BOX) && !(style & wxMINIMIZE_BOX) )
     {
-        [[m_macWindow standardWindowButton:NSWindowZoomButton] setHidden:YES];
-        [[m_macWindow standardWindowButton:NSWindowCloseButton] setHidden:YES];
-        [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
+        [[m_macWindow standardWindowButton:NSWindowZoomButton] setFrame:NSZeroRect];
+        [[m_macWindow standardWindowButton:NSWindowCloseButton] setFrame:NSZeroRect];
+        [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setFrame:NSZeroRect];
     }
     
     // Bricsys change: popup windows in Drawing Explorer (or modal windows, other than dialogs - see below)
