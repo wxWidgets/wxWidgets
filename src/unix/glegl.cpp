@@ -342,6 +342,11 @@ void wxGLBackendEGL::ClearCurrentContext()
                    EGL_NO_SURFACE, EGL_NO_CONTEXT);
 }
 
+wxGLExtFunction wxGLBackendEGL::GetProcAddress(const wxString& name)
+{
+    return eglGetProcAddress(name.utf8_str());
+}
+
 // ============================================================================
 // wxGLCanvasEGL implementation
 // ============================================================================
@@ -378,13 +383,17 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
                 eglQueryString(nullptr, EGL_EXTENSIONS),
                 "EGL_EXT_platform_base") )
         {
-            s_eglGetPlatformDisplay = reinterpret_cast<GetPlatformDisplayFunc>(
-                    eglGetProcAddress("eglGetPlatformDisplay"));
+            s_eglGetPlatformDisplay =
+                wxGLContext::GetProcAddress<GetPlatformDisplayFunc>(
+                    "eglGetPlatformDisplay"
+                );
             if ( !s_eglGetPlatformDisplay )
             {
                 // Try the fallback if not available.
-                s_eglGetPlatformDisplay = reinterpret_cast<GetPlatformDisplayFunc>(
-                    eglGetProcAddress("eglGetPlatformDisplayEXT"));
+                s_eglGetPlatformDisplay =
+                    wxGLContext::GetProcAddress<GetPlatformDisplayFunc>(
+                        "eglGetPlatformDisplayEXT"
+                    );
             }
         }
     }
@@ -541,8 +550,10 @@ EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
         static CreatePlatformWindowSurface s_eglCreatePlatformWindowSurface = nullptr;
         if ( !s_eglCreatePlatformWindowSurface )
         {
-            s_eglCreatePlatformWindowSurface = reinterpret_cast<CreatePlatformWindowSurface>(
-                eglGetProcAddress("eglCreatePlatformWindowSurface"));
+            s_eglCreatePlatformWindowSurface =
+                wxGLContext::GetProcAddress<CreatePlatformWindowSurface>(
+                    "eglCreatePlatformWindowSurface"
+                );
         }
 
         // This check is normally superfluous but avoid crashing just in case
@@ -564,8 +575,10 @@ EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
 
         if ( wxGLBackendEGL_instance.IsExtensionSupported("EGL_EXT_platform_base") )
         {
-            s_eglCreatePlatformWindowSurfaceEXT = reinterpret_cast<CreatePlatformWindowSurface>(
-                eglGetProcAddress("eglCreatePlatformWindowSurfaceEXT"));
+            s_eglCreatePlatformWindowSurfaceEXT =
+                wxGLContext::GetProcAddress<CreatePlatformWindowSurface>(
+                    "eglCreatePlatformWindowSurfaceEXT"
+                );
         }
     }
 

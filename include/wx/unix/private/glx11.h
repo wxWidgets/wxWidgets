@@ -87,6 +87,7 @@ public:
     CreateCanvasImpl(wxGLCanvasUnix* canvas) override;
 
     void ClearCurrentContext() override;
+    wxGLExtFunction GetProcAddress(const wxString& name) override;
 
     bool IsExtensionSupported(const char* extension) override;
     bool IsDisplaySupported(const wxGLAttributes& dispAttrs) override;

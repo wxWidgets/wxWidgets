@@ -266,6 +266,12 @@ void wxGLContextBase::ClearCurrent()
     wxGLBackend::Get().ClearCurrentContext();
 }
 
+/* static */
+wxGLExtFunction wxGLContextBase::GetProcAddress(const wxString& name)
+{
+    return wxGLBackend::Get().GetProcAddress(name);
+}
+
 // ----------------------------------------------------------------------------
 // wxGLCanvasUnix
 // ----------------------------------------------------------------------------

@@ -437,6 +437,15 @@ public:
 };
 
 /**
+    Return type of wxGLContext::GetProcAddress().
+
+    Generic OpenGL function pointer type.
+
+    @since 3.3.2
+ */
+using wxGLExtFunction = void (*)();
+
+/**
     @class wxGLContext
 
     An instance of a wxGLContext represents the state of an OpenGL state
@@ -548,6 +557,62 @@ public:
         @since 3.3.2
     */
     static void ClearCurrent();
+
+    /**
+        Tries to load an OpenGL extension function with the given name.
+
+        This function uses the platform-specific mechanism for retrieving the
+        address of OpenGL extension functions, e.g. `wglGetProcAddress()` on
+        MSW and either `glXGetProcAddress()` or `eglGetProcAddress()` under
+        Unix systems.
+
+        When calling the template function, the type of the function must be
+        specified as the template parameter, e.g.
+
+        @code
+        typedef void (*glGenBuffers_t) (GLsizei n, GLuint *buffers);
+        auto glGenBuffers = wxGLContext::GetProcAddress<glGenBuffers_t>("glGenBuffers");
+        if ( glGenBuffers )
+        {
+            // glGenBuffers is supported, use it
+            ...
+        }
+        @endcode
+
+        If the type is omitted, the function returns a generic
+        ::wxGLExtFunction pointer that should be cast to the appropriate type
+        by the caller.
+
+        @note Under MSW the returned value may be specific to the currently
+            active context and thus may not be valid for other contexts. So, it
+            is recommended to call this function for each context separately
+            and not to share the returned function pointers between contexts.
+
+        @par
+
+        @note This function is currently not implemented under macOS and always
+            returns @NULL there.
+
+        @since 3.3.2
+     */
+    template <typename T = wxGLExtFunction>
+    static T GetProcAddress(const wxString& name);
+
+    /*
+        Documenting the function returning wxGLExtFunction directly results in
+        bogus Doxygen warnings:
+
+interface/wx/glcanvas.h:596: warning: no uniquely matching class member found for
+  returning a generic function wxGLContext::pointer
+Possible candidates:
+  'wxChar * wxString::pointer' at line 383 of file interface/wx/string.h
+  'value_type * wxVector< T >::pointer' at line 31 of file interface/wx/vector.h
+
+        So don't do it.
+
+        /// @overload
+        static wxGLExtFunction GetProcAddress(const wxString& name);
+    */
 };
 
 /**

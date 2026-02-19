@@ -261,4 +261,12 @@ void wxGLContextBase::ClearCurrent()
     [NSOpenGLContext clearCurrentContext];
 }
 
+/* static */
+wxGLExtFunction wxGLContextBase::GetProcAddress(const wxString& WXUNUSED(name))
+{
+    // TODO: we should probably use wxDynamicLibrary to load the function but
+    // it's not clear what is the shared library to load them from.
+    return nullptr;
+}
+
 #endif // wxUSE_GLCANVAS

@@ -182,6 +182,8 @@ public:
 // wxGLContextBase: OpenGL rendering context
 // ----------------------------------------------------------------------------
 
+using wxGLExtFunction = void (*)();
+
 class WXDLLIMPEXP_GL wxGLContextBase : public wxObject
 {
 public:
@@ -199,6 +201,20 @@ public:
     static void ClearCurrent();
 
     bool IsOK() const { return m_isOk; }
+
+    // Get pointer to OpenGL extension function, return nullptr if not found.
+    static wxGLExtFunction GetProcAddress(const wxString& name);
+
+    // Same as above, but returns the function of the specified type.
+    template <typename T>
+    static T GetProcAddress(const wxString& name)
+    {
+        wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+
+        return reinterpret_cast<T>(GetProcAddress(name));
+
+        wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+    }
 
 protected:
     bool m_isOk;

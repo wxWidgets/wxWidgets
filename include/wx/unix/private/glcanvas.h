@@ -137,6 +137,7 @@ public:
 
     // Static functions of wxGLContext and wxGLCanvas.
     virtual void ClearCurrentContext() = 0;
+    virtual wxGLExtFunction GetProcAddress(const wxString& name) = 0;
 
     virtual bool IsExtensionSupported(const char* extension) = 0;
 

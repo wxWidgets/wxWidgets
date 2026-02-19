@@ -143,24 +143,12 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 #define WGL_CONTEXT_ES_PROFILE_BIT_EXT            0x00000004
 #endif
 
-// This helper function only exists to suppress unavoidable gcc 8 warnings
-// about incompatible function casts.
-template <typename T>
-inline T wxWGLProcCast(PROC proc)
-{
-    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
-
-    return reinterpret_cast<T>(proc);
-
-    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
-}
-
 // this macro defines a variable of type "name_t" called "name" and initializes
 // it with the pointer to WGL function "name" (which may be null)
 //
 // NB: type name_t must be defined by the code using the macro
 #define wxDEFINE_WGL_FUNC(name) \
-    name##_t name = wxWGLProcCast<name##_t>(wglGetProcAddress(#name))
+    name##_t name = wxGLContext::GetProcAddress<name##_t>(#name)
 
 // ----------------------------------------------------------------------------
 // libraries
@@ -626,6 +614,24 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 void wxGLContextBase::ClearCurrent()
 {
     wglMakeCurrent(nullptr, nullptr);
+}
+
+/* static */
+wxGLExtFunction wxGLContextBase::GetProcAddress(const wxString& name)
+{
+    // PROC returned by wglGetProcAddress() is a pointer to function returning
+    // INT_PTR and not void, so we need to use another cast here.
+    const auto ptr =
+        reinterpret_cast<wxGLExtFunction>(wglGetProcAddress(name.utf8_str()));
+
+    // Some old drivers return invalid pointer values different from 0 for
+    // unsupported functions, deal with this here to free the caller from the
+    // need to check for this.
+    const auto ptrVal = reinterpret_cast<wxIntPtr>(ptr);
+    if ( ptrVal == -1 || ptrVal == 1 || ptrVal == 2 || ptrVal == 3 )
+        return nullptr;
+
+    return ptr;
 }
 
 // ============================================================================

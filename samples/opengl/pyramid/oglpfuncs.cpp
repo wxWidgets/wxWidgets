@@ -7,55 +7,18 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "oglpfuncs.h"
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+// This header needs to be included before GL/gl.h included by wx/glcanvas.h.
+#include "oglstuff.h"
+#include "wx/glcanvas.h"
 
 // Apple defines everything on his own
 #ifndef __APPLE__
-
-#if defined(_WIN32) || defined(__WIN32__)
-    #ifndef WIN32_LEAN_AND_MEAN
-        // Reduce a bit header VC++ compilation time
-        #define WIN32_LEAN_AND_MEAN 1
-        #define LE_ME_ISDEF
-    #endif
-
-    /*
-    APIENTRY is defined in oglpfuncs.h as well as by windows.h. Undefine
-    it to prevent a macro redefinition warning.
-    */
-    #undef APIENTRY
-    #include <windows.h> //For wglGetProcAddress
-    #ifdef LE_ME_ISDEF
-        #undef WIN32_LEAN_AND_MEAN
-        #undef LE_ME_ISDEF
-    #endif
-    // Our macro
-    #define MyGetProcAddress(name) wglGetProcAddress((LPCSTR)name)
-#else // Linux
-    // GLX_ARB_get_proc_address
-    // glXGetProcAddressARB is statically exported by all libGL implementations,
-    // while glXGetProcAddress may be not available.
-    #ifdef __cplusplus
-        extern "C" {
-    #endif
-    extern void (*glXGetProcAddressARB(const GLubyte *procName))();
-    #ifdef __cplusplus
-        }
-    #endif
-    #define MyGetProcAddress(name) (*glXGetProcAddressARB)((const GLubyte*)name)
-#endif
-
-// The function to get the pointers
-void* MyGetGLFuncAddress(const char* fname)
-{
-    void* pret = (void*) MyGetProcAddress(fname);
-
-    // Some drivers return -apart from 0-, -1, 1, 2 or 3
-    if ( pret == (void*)-1 || pret == (void*)1 || pret == (void*)2 || pret == (void*)3 )
-        pret = nullptr;
-
-    return pret;
-}
 
 // Declare and initialize pointers
 PFNGLACTIVETEXTUREPROC my_glActiveTexture = nullptr;
@@ -96,7 +59,7 @@ PFNGLVERTEXATTRIBPOINTERPROC my_glVertexAttribPointer = nullptr;
 
 // Retrieve the pointers
 #define GETANDTEST(type, name)                       \
-    my_ ## name = (type) MyGetGLFuncAddress(#name);  \
+    my_ ## name = wxGLContext::GetProcAddress<type>(#name);  \
     if (name == nullptr)                                   \
         return false;
 

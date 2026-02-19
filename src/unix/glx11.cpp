@@ -503,8 +503,10 @@ wxGLContextX11::wxGLContextX11(wxGLCanvas *win,
     PFNGLXCREATECONTEXTATTRIBSARBPROC wx_glXCreateContextAttribsARB = 0;
     if (fbc)
     {
-        wx_glXCreateContextAttribsARB = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
-            glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXCreateContextAttribsARB"));
+        wx_glXCreateContextAttribsARB =
+            wxGLContext::GetProcAddress<PFNGLXCREATECONTEXTATTRIBSARBPROC>(
+                "glXCreateContextAttribsARB"
+            );
     }
 
     glXDestroyContext( dpy, tempContext );
@@ -811,8 +813,10 @@ wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
         static bool s_glXSwapIntervalEXTInit = false;
         if ( !s_glXSwapIntervalEXTInit )
         {
-            s_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)
-                glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
+            s_glXSwapIntervalEXT =
+                wxGLContext::GetProcAddress<PFNGLXSWAPINTERVALEXTPROC>(
+                    "glXSwapIntervalEXT"
+                );
 
             s_glXSwapIntervalEXTInit = true;
 
@@ -828,8 +832,10 @@ wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
         static bool s_glXSwapIntervalMESAInit = false;
         if ( !s_glXSwapIntervalMESAInit )
         {
-            s_glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESAPROC)
-                glXGetProcAddress((const GLubyte*)"glXSwapIntervalMESA");
+            s_glXSwapIntervalMESA =
+                wxGLContext::GetProcAddress<PFNGLXSWAPINTERVALMESAPROC>(
+                    "glXSwapIntervalMESA"
+                );
 
             s_glXSwapIntervalMESAInit = true;
 
@@ -900,8 +906,10 @@ int wxMESAGetSwapInterval()
         static bool s_glXGetSwapIntervalMESAInit = false;
         if ( !s_glXGetSwapIntervalMESAInit )
         {
-            s_glXGetSwapIntervalMESA = (PFNGLXGETSWAPINTERVALMESAPROC)
-                glXGetProcAddress((const GLubyte*)"glXGetSwapIntervalMESA");
+            s_glXGetSwapIntervalMESA =
+                wxGLContext::GetProcAddress<PFNGLXGETSWAPINTERVALMESAPROC>(
+                    "glXGetSwapIntervalMESA"
+                );
 
             s_glXGetSwapIntervalMESAInit = true;
 
@@ -1009,6 +1017,13 @@ wxGLBackendX11::CreateCanvasImpl(wxGLCanvasUnix* canvas)
 void wxGLBackendX11::ClearCurrentContext()
 {
     MakeCurrent(None, nullptr);
+}
+
+wxGLExtFunction wxGLBackendX11::GetProcAddress(const wxString& name)
+{
+    return glXGetProcAddressARB(reinterpret_cast<const GLubyte*>(
+            static_cast<const char*>(name.utf8_str())
+        ));
 }
 
 #endif // wxUSE_GLCANVAS
