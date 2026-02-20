@@ -69,8 +69,14 @@ HTMLHELP GetHtmlHelpFunction()
 // fall back to the top level app window and then the desktop if it's NULL
 static HWND GetSuitableHWND(wxWindow *win)
 {
+    // Bricsys change: do not override NULL window, so desktop is parent for the HTML help window;
+    // otherwise it always stays on-top of BricsCAD application window.
+    // WX should not override given parent window - it could be "by intention"!
+#if 0
     if ( !win )
         win = wxApp::GetMainTopWindow();
+#endif
+    // end Bricsys change
 
     return win ? GetHwndOf(win) : ::GetDesktopWindow();
 }
