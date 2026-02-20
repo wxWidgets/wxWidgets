@@ -2051,6 +2051,20 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
         m_data.RemoveAt( pos, numRows );
     }
 
+    // Bricsys change: also remove labels if a label exists for each row
+    if (m_rowLabels.GetCount() == curNumRows)
+    {
+        if (numRows >= curNumRows)
+        {
+            m_rowLabels.Clear();
+        }
+        else
+        {
+            m_rowLabels.RemoveAt(pos, numRows);
+        }
+    }
+    // end Bricsys change
+
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
