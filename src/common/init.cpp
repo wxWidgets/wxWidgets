@@ -440,6 +440,14 @@ void wxEntryCleanupReal()
     {
         wxTheApp->CleanUp();
 
+        // Bricsys change 2016-01-09 owen.wengerd (refs #1080)
+        // If wxTheApp->CleanUp() results in logged messages, they must be flushed now
+        // while wxTheApp is still alive. See comments in DoCommonPreCleanup().
+#if wxUSE_LOG
+        wxLog::FlushActive();
+        delete wxLog::SetActiveTarget(NULL);
+#endif
+
         // reset the global pointer to it to NULL before destroying it as in
         // some circumstances this can result in executing the code using
         // wxTheApp and using half-destroyed object is no good
