@@ -2730,9 +2730,6 @@ wxWidgetImpl( peer, flags )
     if ( !peer->IsShown() )
         SetVisibility(false);
 
-    // gc aware handling
-    if ( m_osxView )
-        CFRetain(m_osxView);
     [m_osxView release];
 
     if ( IsUserPane() )
@@ -2771,9 +2768,6 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         if ( sv != nil )
             [m_osxView removeFromSuperview];
     }
-    // gc aware handling
-    if ( m_osxView )
-        CFRelease(m_osxView);
 
     wxCocoaGestures::EraseForObject(this);
 }
