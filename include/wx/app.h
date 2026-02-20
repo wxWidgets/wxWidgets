@@ -541,6 +541,12 @@ protected:
     // flag modified by Suspend/ResumeProcessingOfPendingEvents()
     bool m_bDoPendingEventProcessing;
 
+#if 1 // Bricsys change : protect 'pending events' processing against deleting of 'objects pending for deletion'
+    // flag indicates processing of 'pending events'
+    int  m_isPendingEventProcessing;
+    bool IsPendingEventsProcessing() const;
+#endif
+
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
     // Stub virtual functions for forward binary compatibility. DO NOT USE.

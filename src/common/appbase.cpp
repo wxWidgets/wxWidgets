@@ -170,6 +170,10 @@ wxAppConsoleBase::wxAppConsoleBase()
     m_mainLoop = NULL;
     m_bDoPendingEventProcessing = true;
 
+#if 1 // Bricsys change : protect 'pending events' processing against deleting of 'objects pending for deletion'
+    m_isPendingEventProcessing = 0;
+#endif
+
     ms_appInstance = reinterpret_cast<wxAppConsole *>(this);
 
 #ifdef __WXDEBUG__
@@ -543,12 +547,25 @@ bool wxAppConsoleBase::HasPendingEvents() const
 {
     wxENTER_CRIT_SECT(const_cast<wxAppConsoleBase*>(this)->m_handlersWithPendingEventsLocker);
 
+#if 1 // Bricsys change : respect both 'pending events lists'
+    bool has = !m_handlersWithPendingEvents.IsEmpty() ||
+               !m_handlersWithPendingDelayedEvents.IsEmpty();
+#else
     bool has = !m_handlersWithPendingEvents.IsEmpty();
+#endif
 
     wxLEAVE_CRIT_SECT(const_cast<wxAppConsoleBase*>(this)->m_handlersWithPendingEventsLocker);
 
     return has;
 }
+
+#if 1 // Bricsys change : protect 'pending events' processing against deleting of 'objects pending for deletion'
+    // flag indicates processing of 'pending events'
+bool wxAppConsoleBase::IsPendingEventsProcessing() const
+{
+    return (m_isPendingEventProcessing > 0);
+}
+#endif
 
 void wxAppConsoleBase::SuspendProcessingOfPendingEvents()
 {
@@ -565,6 +582,10 @@ void wxAppConsoleBase::ProcessPendingEvents()
     if ( m_bDoPendingEventProcessing )
     {
         wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+#if 1 // Bricsys change : protect 'pending events' processing against deleting of 'objects pending for deletion'
+        ++m_isPendingEventProcessing;
+#endif
 
         wxCHECK_RET( m_handlersWithPendingDelayedEvents.IsEmpty(),
                      "this helper list should be empty" );
@@ -600,6 +621,10 @@ void wxAppConsoleBase::ProcessPendingEvents()
             m_handlersWithPendingDelayedEvents.Clear();
         }
 
+#if 1 // Bricsys change : protect 'pending events' processing against deleting of 'objects pending for deletion'
+        --m_isPendingEventProcessing;
+#endif
+
         wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
     }
 }
@@ -615,6 +640,13 @@ void wxAppConsoleBase::DeletePendingEvents()
         m_handlersWithPendingEvents[i]->DeletePendingEvents();
 
     m_handlersWithPendingEvents.Clear();
+
+#if 1 // Bricsys change : same logic for 'pending delayed events'
+    for (unsigned int i=0; i<m_handlersWithPendingDelayedEvents.GetCount(); i++)
+        m_handlersWithPendingDelayedEvents[i]->DeletePendingEvents();
+
+    m_handlersWithPendingDelayedEvents.Clear();
+#endif
 
     wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
 }
@@ -644,6 +676,15 @@ void wxAppConsoleBase::ScheduleForDestruction(wxObject *object)
 
 void wxAppConsoleBase::DeletePendingObjects()
 {
+#if 1 // Bricsys change : do not delete 'pending objects' while processing pending + delayed
+      // events ! 'idle state' can just be reached, when processing an event/eventHandler,
+      // which has added itself to the 'pending objects for deletion' list;
+      // this would result in deleting an event/eventHandler just being processed,
+      // leaving the code flow on undefined memory -> crash
+    if (HasPendingEvents() || IsPendingEventsProcessing()) // Garbage collect all objects previously scheduled for destruction.
+        return;
+#endif
+
     wxList::compatibility_iterator node = wxPendingDelete.GetFirst();
     while (node)
     {
