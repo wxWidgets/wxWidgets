@@ -2104,8 +2104,9 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
     // Bricsys change: use the base function on Win 32 bit because of insufficient memory problems caused by
     // the new implementation using high resolution wxEnhMetaFileDC
+    // Also use the base function when there is no printer, which means we deal with preview for Print As PDF.
 #ifdef _WIN32   // modification restricted to Windows systems
-    if(wxIsPlatform64Bit())
+    if (wxIsPlatform64Bit() && !m_printDialogData.GetPrintData().GetPrinterName().IsEmpty())
 #endif
     {
         if ( !RenderPageIntoBitmap(*m_previewBitmap, pageNum) )
