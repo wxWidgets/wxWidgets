@@ -2189,6 +2189,22 @@ bool wxPGProperty::HasVisibleChildren() const
     return false;
 }
 
+// Bricsys change: we want to check if at least one child can be modified (not readonly or disabled)
+bool wxPGProperty::HasModifiableChildren() const
+{
+    unsigned int i;
+
+    for (i = 0; i<GetChildCount(); i++)
+    {
+        wxPGProperty* child = Item(i);
+
+        if (!(child->HasFlag(wxPG_PROP_READONLY) || child->HasFlag(wxPG_PROP_DISABLED)))
+            return true;
+    }
+
+    return false;
+}
+
 bool wxPGProperty::RecreateEditor()
 {
     wxPropertyGrid* pg = GetGrid();

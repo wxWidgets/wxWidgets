@@ -1482,6 +1482,9 @@ public:
     // Returns true if property has even one visible child.
     bool HasVisibleChildren() const;
 
+    // Bricsys change: we want to check if at least one child can be modified (not readonly or disabled)
+    bool HasModifiableChildren() const;
+
     // Use this member function to add independent (i.e. regular) children to
     // a property.
     // Returns inserted childProperty.
