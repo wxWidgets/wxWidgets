@@ -15,7 +15,7 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
     NSPoint _initialPoint;
     NSUInteger _modifiers;
     CGFloat _threshold;
-    double _pannThreshold;
+    double _pinchThreshold;
     double _oldDeltaSizeTouches;
     CGPoint _oldMidPointCoord;
     NSEvent * _currentTouchEvent;
@@ -39,7 +39,7 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 @property CGFloat threshold;
 
 // Ammount of dual touch diff between fingers in order to detect panning movement or pinching.
-@property double pannThreshold;
+@property double pinchThreshold;
 
 // Delta used to compare with pannThreshold
 @property double oldDeltaSizeTouches;
@@ -68,6 +68,7 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 - (BOOL) GetRotationTouchesMovedInOpposition;
 - (BOOL)   DoLinesIntersect;
 + (double) calcPointsDelta:(CGPoint)point1 :(CGPoint)point2;
++ (NSPoint) calcPointsDelta:(NSPoint)point1 :(NSPoint)point2;
 + (CGFloat) CGPointCrossProductZComponent:(CGPoint)p1 :(CGPoint)p2;
 
 + (CGPoint) CGPointSubtract:(CGPoint)p1 :(CGPoint)p2;

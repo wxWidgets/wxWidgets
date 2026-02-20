@@ -297,6 +297,9 @@ wxWindowsPrintPreview::wxWindowsPrintPreview(wxPrintout *printout,
                                              wxPrintout *printoutForPrinting,
                                              wxPrintDialogData *data)
                      : wxPrintPreviewBase(printout, printoutForPrinting, data)
+#if BS_CACHE_PREVIEW_METAFILE
+                     , m_metafilePageNum(-1)
+#endif // BS_CACHE_PREVIEW_METAFILE
 {
     DetermineScaling();
 }
@@ -305,6 +308,9 @@ wxWindowsPrintPreview::wxWindowsPrintPreview(wxPrintout *printout,
                                              wxPrintout *printoutForPrinting,
                                              wxPrintData *data)
                      : wxPrintPreviewBase(printout, printoutForPrinting, data)
+#if BS_CACHE_PREVIEW_METAFILE
+                     , m_metafilePageNum(-1)
+#endif // BS_CACHE_PREVIEW_METAFILE
 {
     DetermineScaling();
 }
@@ -398,12 +404,45 @@ bool wxWindowsPrintPreview::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)
     // metafile with properties identical to the printer DC. This guarantees
     // metrics correctness while still being fast.
 
+#if BS_CACHE_PREVIEW_METAFILE
+
+    if (pageNum != m_metafilePageNum)
+        m_metafile.reset(NULL);
+
+    if (!m_metafile.get())
+    {
+        // print the preview into a metafile:
+        wxPrinterDC printerDC(m_printDialogData.GetPrintData());
+        wxEnhMetaFileDC metaDC(printerDC,
+                               wxEmptyString,
+                               printerDC.GetSize().x, printerDC.GetSize().y);
+
+        if ( !RenderPageIntoDC(metaDC, pageNum) )
+            return false;
+
+        m_metafile.reset(metaDC.Close());
+        m_metafilePageNum = pageNum;
+    }
+
+    if ( !m_metafile.get() )
+        return false;
+
+    // now render the metafile:
+    wxMemoryDC bmpDC;
+    bmpDC.SelectObject(bmp);
+    bmpDC.Clear();
+
+    wxRect outRect(0, 0, bmp.GetWidth(), bmp.GetHeight());
+
+    m_metafile->Play(&bmpDC, &outRect);
+
+#else // BS_CACHE_PREVIEW_METAFILE
 
     // print the preview into a metafile:
     wxPrinterDC printerDC(m_printDialogData.GetPrintData());
     wxEnhMetaFileDC metaDC(printerDC,
-                           wxEmptyString,
-                           printerDC.GetSize().x, printerDC.GetSize().y);
+                            wxEmptyString,
+                            printerDC.GetSize().x, printerDC.GetSize().y);
 
     if ( !RenderPageIntoDC(metaDC, pageNum) )
         return false;
@@ -418,12 +457,13 @@ bool wxWindowsPrintPreview::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)
     bmpDC.Clear();
 
     wxRect outRect(0, 0, bmp.GetWidth(), bmp.GetHeight());
-    metafile->Play(&bmpDC, &outRect);
 
+    metafile->Play(&bmpDC, &outRect);
 
     delete metafile;
 
     // TODO: we should keep the metafile and reuse it when changing zoom level
+#endif // BS_CACHE_PREVIEW_METAFILE
 
     return true;
 }

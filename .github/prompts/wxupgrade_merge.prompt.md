@@ -27,6 +27,7 @@ Process each revision completely before moving to the next.
 When applying each revision use direct edits to the source files and avoid using external tools for this.
 
 If, and only if, the changes are fine and the build is successful, create a commit with the original log.
+When creating the log, on the first line write a short description, then an empty line, then write: "MERGED REVISIONS: <rev-no>", then the original revision log, then on the last line: "refs RM-<first-word-of-branch>".
 Make sure the revision is fully merged.
 
 Do NOT create empty commits.

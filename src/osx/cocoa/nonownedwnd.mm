@@ -151,6 +151,7 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
 
 static NSResponder* s_nextFirstResponder = NULL;
 static NSResponder* s_formerFirstResponder = NULL;
+static NSMutableDictionary* s_shownTopLevelWindows = NULL;
 
 @interface wxNSWindow : NSWindow
 {
@@ -454,16 +455,17 @@ extern int wxOSXGetIdFromSelector(SEL action );
     }
 }
 
-- (void)windowDidDeminiaturize:(NSNotification *)notification
-{
-    NSWindow* window = (NSWindow*) [notification object];
-    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
-    if ( windowimpl )
-    {
-        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
-            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
-    }
-}
+//kept Bricsys version of implementation
+//- (void)windowDidDeminiaturize:(NSNotification *)notification
+//{
+//    NSWindow* window = (NSWindow*) [notification object];
+//    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+//    if ( windowimpl )
+//    {
+//        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
+//            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
+//    }
+//}
 
 - (BOOL)windowShouldClose:(id)nwindow
 {
@@ -760,6 +762,71 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
     }
 }
 
+// Bricsys change (Issue #3990): hide all child top level windows at main window minimize
+// and bring them back at un-minimize (make sure to bring back only the not hidden ones)
+- (void)windowWillMiniaturize:(NSNotification *)notification
+{
+    if( s_shownTopLevelWindows == NULL )
+        s_shownTopLevelWindows = [[NSMutableDictionary alloc] init];
+    
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer && wxTheApp->GetTopWindow() == wxpeer )
+        {
+            for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+                 end = wxTopLevelWindows.end();
+                 i != end;
+                 ++i )
+            {
+                wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+                WXWindow nswindow = win ? win->GetWXWindow() : nil;
+                
+                if( [nswindow isVisible] )
+                {
+                    [s_shownTopLevelWindows setObject:[NSNumber numberWithBool:YES] forKey:[NSValue valueWithPointer:win]];
+                    [nswindow orderOut:self];
+                }
+            }
+        }
+    }
+}
+
+- (void)windowDidDeminiaturize:(NSNotification *)notification
+{
+    if( !s_shownTopLevelWindows )
+        return;
+    
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer && wxTheApp->GetTopWindow() == wxpeer )
+        {
+            for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+                 end = wxTopLevelWindows.end();
+                 i != end;
+                 ++i )
+            {
+                wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+                WXWindow nswindow = win ? win->GetWXWindow() : nil;
+                
+                NSNumber* n = [s_shownTopLevelWindows objectForKey:[NSValue valueWithPointer:win]];
+                if( [n boolValue] == YES )
+                    [nswindow orderFront:self];
+            }
+        }
+    }
+    
+    [s_shownTopLevelWindows removeAllObjects];
+    [s_shownTopLevelWindows release];
+    s_shownTopLevelWindows = NULL;
+}
+// end Bricsys change
+
 @end
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxNonOwnedWindowCocoaImpl , wxNonOwnedWindowImpl);
@@ -891,9 +958,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     if ( (windowstyle & NSTitledWindowMask) && 
         !(style & wxCLOSE_BOX) && !(style & wxMAXIMIZE_BOX) && !(style & wxMINIMIZE_BOX) )
     {
-        [[m_macWindow standardWindowButton:NSWindowZoomButton] setHidden:YES];
-        [[m_macWindow standardWindowButton:NSWindowCloseButton] setHidden:YES];
-        [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
+        [[m_macWindow standardWindowButton:NSWindowZoomButton] setFrame:NSZeroRect];
+        [[m_macWindow standardWindowButton:NSWindowCloseButton] setFrame:NSZeroRect];
+        [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setFrame:NSZeroRect];
     }
     
     // Bricsys change: popup windows in Drawing Explorer (or modal windows, other than dialogs - see below)
@@ -929,6 +996,16 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
             }
         }
     }
+    
+    // Bricsys change: allow popup windows to work in a modal event loop
+    // I suppose we don't need to check if their parent is the modal window,
+    // since they are short lived anyway and are probably always created by the modal window
+    if( level == kCGPopUpMenuWindowLevel )
+        if ([m_macWindow isKindOfClass:[NSPanel class]])
+        {
+            [(NSPanel*)m_macWindow setWorksWhenModal:YES];
+        }
+    // end Bricsys change
 
     m_macWindowLevel = level;
     SetUpForModalParent();

@@ -24,6 +24,7 @@ public:
 #ifdef wxOSX_USE_COCOA
     wxCursor( const wxBitmap &bmp, int hotSpotX, int hotSpotY );
 #endif //wxOSX_USE_COCOA
+
 #if wxUSE_IMAGE
     wxCursor(const wxImage & image) ;
     wxCursor(const char* const* xpmData);

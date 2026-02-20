@@ -18,7 +18,7 @@
 - (id)init {
     if (self = [super init]) {
         self.threshold = 1;
-        self.pannThreshold = 0.0014;
+        self.pinchThreshold = 0.00110;
         self.oldDeltaSizeTouches = 0;
         self.oldMidPointCoord = CGPointZero;
     }
@@ -176,7 +176,7 @@
 @synthesize threshold = _threshold;
 @synthesize isTracking = _tracking;
 @synthesize initialPoint = _initialPoint;
-@synthesize pannThreshold = _pannThreshold;
+@synthesize pinchThreshold = _pinchThreshold;
 @synthesize oldDeltaSizeTouches = _oldDeltaSizeTouches;
 @synthesize oldMidPointCoord = _oldMidPointCoord;
 
@@ -466,6 +466,15 @@
 - (void)releaseEvent {
     [_currentTouchEvent release];
     _currentTouchEvent = nil;
+}
+
++ (NSPoint)calcPointsDelta:(NSPoint)point1 :(NSPoint)point2
+{
+    NSPoint deltaPoint;
+    deltaPoint.x = fabs(point1.x - point2.x);
+    deltaPoint.y = fabs(point1.y - point2.y);
+    
+    return deltaPoint;
 }
 
 @end // end DualTouchTracker implementation

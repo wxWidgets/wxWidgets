@@ -314,7 +314,8 @@ void wxFileDialog::ShowWindowModal()
          types are foo and bar, a filename "myletter" with SetDialogIndex(1)
          would result in saving as myletter.foo, while we want myletter.bar.
          */
-        if(m_firstFileTypeFilter > 0)
+        // Bricsys change: include case == 0 too
+        if(m_firstFileTypeFilter >= 0)
         {
             DoOnFilterSelected(m_firstFileTypeFilter);
         }
@@ -640,18 +641,21 @@ int wxFileDialog::ShowModal()
         types are foo and bar, a filename "myletter" with SetDialogIndex(1)
         would result in saving as myletter.foo, while we want myletter.bar.
         */
-        if(m_firstFileTypeFilter > 0)
+        // Bricsys change: set the FileTypeFilter for the case != wxFD_SAVE too
+        // also make it work for case == 0
+        /*
+         Let the file dialog know what file type should be used initially.
+         If this is not done then when setting the filter index
+         programmatically to 1 the file will still have the extension
+         of the first file type instead of the second one. E.g. when file
+         types are foo and bar, a filename "myletter" with SetDialogIndex(1)
+         would result in saving as myletter.foo, while we want myletter.bar.
+         */
+        if(m_firstFileTypeFilter >= 0)
         {
             DoOnFilterSelected(m_firstFileTypeFilter);
         }
-        else
-        {
-            NSArray* types = GetTypesFromExtension(m_filterExtensions[m_firstFileTypeFilter], m_currentExtensions);
-            if ( m_delegate )
-                [(wxOpenSavePanelDelegate*) m_delegate setAllowedExtensions: m_currentExtensions];
-            else
-                [sPanel setAllowedFileTypes: types];
-        }
+        // end Bricsys change
 
         if ( !m_dir.IsEmpty() )
             [sPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString()
@@ -754,6 +758,13 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             [m_delegate release];
             m_delegate = nil;
         }
+        
+        // Bricsys change: include setting filter index for case != wxFD_SAVE too
+        if (m_filterChoice)
+        {
+            m_filterIndex = m_filterChoice->GetSelection();
+        }
+        // end Bricsys change
     }
 
     if (wasAccepted)

@@ -13,6 +13,16 @@
 
 #include "wx/prntbase.h"
 
+// Bricsys change: cache wxEnhMetaFile that the preview generates, such that it does not have to be
+// recreated on zoom. Please follow BS_CACHE_PREVIEW_METAFILE defines to find all related code.
+//#define BS_CACHE_PREVIEW_METAFILE 0
+#define BS_CACHE_PREVIEW_METAFILE wxUSE_ENH_METAFILE
+
+#if BS_CACHE_PREVIEW_METAFILE
+#include <memory>
+class wxEnhMetaFile;
+#endif // BS_CACHE_PREVIEW_METAFILE
+
 // ---------------------------------------------------------------------------
 // Represents the printer: manages printing a wxPrintout object
 // ---------------------------------------------------------------------------
@@ -58,7 +68,13 @@ public:
 protected:
 #if wxUSE_ENH_METAFILE
     virtual bool RenderPageIntoBitmap(wxBitmap& bmp, int pageNum) wxOVERRIDE;
-#endif
+
+#if BS_CACHE_PREVIEW_METAFILE
+    std::unique_ptr<wxEnhMetaFile> m_metafile;
+    int m_metafilePageNum;
+#endif // BS_CACHE_PREVIEW_METAFILE
+
+#endif // wxUSE_ENH_METAFILE
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowsPrintPreview);
 };

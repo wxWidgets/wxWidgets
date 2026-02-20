@@ -1171,8 +1171,27 @@ bool wxAuiToolBar::DestroyToolByIndex(int idx)
     if ( idx < 0 || static_cast<unsigned>(idx) >= m_items.GetCount() )
         return false;
 
-    if ( wxWindow* window = m_items[idx].GetWindow() )
-        window->Destroy();
+    // Bricsys added: thorough cleanup for tools containing controls
+    wxAuiToolBarItem& item = m_items.Item(idx);
+    wxSizerItem* szItem = item.GetSizerItem();
+    if( szItem )
+    {
+        wxSizer* sizer = szItem->GetSizer();
+        if(sizer)
+            sizer->Clear( true );
+        item.SetSizerItem(NULL);
+    }
+    else
+    {
+        wxWindow* wnd = item.GetWindow();
+        if(wnd)
+        {
+            wnd->GetParent()->RemoveChild( wnd );
+            wnd->Destroy();
+            item.SetWindow(NULL);
+        }
+    }
+    // finish Bricsys added
 
     return DeleteByIndex(idx);
 }
@@ -1766,6 +1785,91 @@ bool wxAuiToolBar::IsPaneValid(long style) const
     }
     return true;
 }
+
+// Bricsys added: add some functions to be more compatible with wxToolBar
+wxAuiToolBarItem* wxAuiToolBar::InsertTool(size_t pos,
+                                           int tool_id,
+                                           const wxString& label,
+                                           const wxBitmapBundle& bitmap,
+                                           const wxBitmapBundle& disabledBitmap,
+                                           wxItemKind kind,
+                                           const wxString& shortHelpString,
+                                           const wxString& longHelpString,
+                                           wxObject* WXUNUSED(client_data))
+{
+    wxAuiToolBarItem item;
+    item.m_window = NULL;
+    item.m_label = label;
+    item.m_bitmap = bitmap;
+    item.m_disabledBitmap = disabledBitmap;
+    item.m_shortHelp = shortHelpString;
+    item.m_longHelp = longHelpString;
+    item.m_active = true;
+    item.m_dropDown = false;
+    item.m_spacerPixels = 0;
+    item.m_toolId = tool_id;
+    item.m_state = 0;
+    item.m_proportion = 0;
+    item.m_kind = kind;
+    item.m_sizerItem = NULL;
+    item.m_minSize = wxDefaultSize;
+    item.m_userData = 0;
+    item.m_sticky = false;
+    
+    if (item.m_toolId == wxID_ANY)
+        item.m_toolId = wxNewId();
+    
+    m_items.Insert(item, pos);
+    return &m_items.Item( pos );
+}
+
+wxAuiToolBarItem* wxAuiToolBar::InsertControl( size_t pos,
+                                              wxControl* control,
+                                              const wxString& label)
+{
+    wxAuiToolBarItem item;
+    item.m_window = (wxWindow*)control;
+    item.m_label = label;
+    item.m_bitmap = wxBitmapBundle();
+    item.m_disabledBitmap = wxBitmapBundle();
+    item.m_active = true;
+    item.m_dropDown = false;
+    item.m_spacerPixels = 0;
+    item.m_toolId = control->GetId();
+    item.m_state = 0;
+    item.m_proportion = 0;
+    item.m_kind = wxITEM_CONTROL;
+    item.m_sizerItem = NULL;
+    item.m_minSize = control->GetEffectiveMinSize();
+    item.m_userData = 0;
+    item.m_sticky = false;
+    
+    m_items.Insert(item, pos);
+    return &m_items.Item(pos);
+}
+
+wxAuiToolBarItem* wxAuiToolBar::InsertSeparator(size_t pos)
+{
+    wxAuiToolBarItem item;
+    item.m_window = NULL;
+    item.m_label = wxEmptyString;
+    item.m_bitmap = wxBitmapBundle();
+    item.m_disabledBitmap = wxBitmapBundle();
+    item.m_active = true;
+    item.m_dropDown = false;
+    item.m_toolId = -1;
+    item.m_state = 0;
+    item.m_proportion = 0;
+    item.m_kind = wxITEM_SEPARATOR;
+    item.m_sizerItem = NULL;
+    item.m_minSize = wxDefaultSize;
+    item.m_userData = 0;
+    item.m_sticky = false;
+    
+    m_items.Insert(item, pos);
+    return &m_items.Item(pos);
+}
+// finish Bricsys added
 
 void wxAuiToolBar::SetArtFlags() const
 {
