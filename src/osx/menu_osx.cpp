@@ -524,9 +524,6 @@ void wxMenuBar::Init()
 
     m_appleMenu = CreateAppleMenu();
     
-    if( wxTheApp )
-        wxTheApp->m_pAppMenuOSX = m_appleMenu;
-    
     m_rootMenu->AppendSubMenu(m_appleMenu, "\x14") ;
 }
 
@@ -584,16 +581,33 @@ void wxMenuBar::MacUninstallMenuBar()
 
 void wxMenuBar::MacInstallMenuBar()
 {
+    wxMenuItem* appleItem = NULL;
+    int menuid = 0;
+    
     if ( s_macInstalledMenuBar == this )
+    {
+        if ( m_appleMenu )
+        {
+            menuid = wxApp::s_macHideMenuItemId;
+            appleItem = m_appleMenu->FindItem(menuid);
+            if (appleItem && !(appleItem->IsEnabled()))
+                appleItem->Enable(true);
+            
+            menuid = wxApp::s_macHideOthersMenuItemId;
+            appleItem = m_appleMenu->FindItem(menuid);
+            if (appleItem && !(appleItem->IsEnabled()))
+                appleItem->Enable(true);
+        }
+        
         return ;
+    }
 
     m_rootMenu->GetPeer()->MakeRoot();
     
     // hide items in the apple menu that don't exist in the wx menubar
-    
-    wxMenuItem* appleItem = NULL;
     wxMenuItem* wxItem = NULL;
-    int menuid = wxApp::s_macPreferencesMenuItemId;
+    
+    menuid = wxApp::s_macPreferencesMenuItemId;
     appleItem = m_appleMenu->FindItem(menuid);
     wxItem = FindItem(menuid);
     if ( appleItem != NULL )

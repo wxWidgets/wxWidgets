@@ -100,7 +100,6 @@ public:
     static long           s_lastModifiers ;
 
     int                   m_nCmdShow;
-    wxMenu*               m_pAppMenuOSX;
 
     // mac specifics
 protected:

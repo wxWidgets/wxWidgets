@@ -253,7 +253,9 @@ void wxBell()
             winimpl->RestoreWindowLevel();
     }
     if ( wxTheApp )
+    {
         wxTheApp->SetActive( true , NULL ) ;
+    }
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -291,7 +293,9 @@ void wxBell()
 
     wxUnusedVar(notification);
     if ( wxTheApp )
+    {
         wxTheApp->SetActive( false , NULL ) ;
+    }
 }
 
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
