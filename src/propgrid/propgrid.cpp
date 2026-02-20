@@ -5906,6 +5906,9 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         if ( selectDir >= -1 )
         {
             p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
+            while (p && (p->HasFlag(wxPG_PROP_READONLY) || p->HasFlag(wxPG_PROP_DISABLED)) &&
+                   !(p->HasFlag(wxPG_PROP_AGGREGATE) && p->HasModifiableChildren()) )
+                p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
             if ( p )
             {
                 int selFlags = 0;

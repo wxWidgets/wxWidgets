@@ -523,7 +523,10 @@ void wxMenuBar::Init()
     m_rootMenu->Attach(this);
 
     m_appleMenu = CreateAppleMenu();
-    wxTheApp->m_pAppMenuOSX = m_appleMenu;
+    
+    if( wxTheApp )
+        wxTheApp->m_pAppMenuOSX = m_appleMenu;
+    
     m_rootMenu->AppendSubMenu(m_appleMenu, "\x14") ;
 }
 

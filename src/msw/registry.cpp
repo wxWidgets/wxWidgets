@@ -878,6 +878,21 @@ wxRegKey::ValueType wxRegKey::GetValueType(const wxString& szValue) const
 #include <Shlwapi.h>
 #pragma comment(lib, "Shlwapi.lib")
 
+static bool isExpandable(const wxString& path)
+{
+    const int newLength = ::ExpandEnvironmentStrings(path.c_str(), NULL, 0);
+    if (newLength == 0)
+        return false;
+    else if (newLength == path.length() + 1)
+    {
+        wxString str;
+        int length = ::ExpandEnvironmentStrings(path.c_str(), wxStringBuffer(str, newLength), newLength);
+        return length != 0 && path != str;
+    }
+    else
+        return true;
+}
+
 bool wxRegKey::SetUnexpandedValue(const wxString& szValue, const wxString& strValue)
 {
     //BRICSYS change: use expandable type "REG_EXPAND_SZ" + ::PathUnExpandEnvStrings routine
@@ -886,7 +901,8 @@ bool wxRegKey::SetUnexpandedValue(const wxString& szValue, const wxString& strVa
     wxChar buf[maxStrLen]; // MAX_PATH (512) is too small, long strings encountered (i.e. SRCHPATH)
     BOOL bUnExpanded = PathUnExpandEnvStrings(strValue.c_str(), buf, (maxStrLen-1) * sizeof(wxChar));
     wxString refinedValue(bUnExpanded ? buf : strValue);
-    int storeType = bUnExpanded ? REG_EXPAND_SZ : REG_SZ;
+    bool bExpandable = bUnExpanded || isExpandable(refinedValue);
+    int storeType = bExpandable ? REG_EXPAND_SZ : REG_SZ;
     
     return SetValue(szValue, refinedValue, storeType);
 }

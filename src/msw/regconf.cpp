@@ -41,7 +41,7 @@
 // get the value if the key is opened and it exists
 bool TryGetValue(const wxRegKey& key, const wxString& str, wxString* strVal)
 {
-  return key.IsOpened() && key.HasValue(str) && key.QueryValue(str, *strVal);
+  return key.IsOpened() && key.HasValue(str) && key.QueryValue(str, *strVal, true);
 }
 
 bool TryGetValue(const wxRegKey& key, const wxString& str, long *plVal)
