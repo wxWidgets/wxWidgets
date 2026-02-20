@@ -302,15 +302,30 @@ void wxTreeCtrlBase::ExpandAllChildren(const wxTreeItemId& item)
     Thaw();
 }
 
+void wxTreeCtrlBase::Collapse(const wxTreeItemId& item, bool)
+{
+    Collapse(item);
+}
+
 void wxTreeCtrlBase::CollapseAll()
+{
+    CollapseAll(false);
+}
+
+void wxTreeCtrlBase::CollapseAll(bool keepSelection)
 {
     if ( IsEmpty() )
         return;
 
-    CollapseAllChildren(GetRootItem());
+    CollapseAllChildren(GetRootItem(), keepSelection);
 }
 
 void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item)
+{
+    CollapseAllChildren(item, false);
+}
+
+void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item, bool keepSelection)
 {
     Freeze();
     // first (recursively) collapse all the children
@@ -319,13 +334,13 @@ void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item)
           idCurr.IsOk();
           idCurr = GetNextChild(item, cookie) )
     {
-        CollapseAllChildren(idCurr);
+        CollapseAllChildren(idCurr, keepSelection);
     }
 
     // then collapse this element too unless it's the hidden root which can't
     // be collapsed
     if ( item != GetRootItem() || !HasFlag(wxTR_HIDE_ROOT) )
-        Collapse(item);
+        Collapse(item, keepSelection);
     Thaw();
 }
 

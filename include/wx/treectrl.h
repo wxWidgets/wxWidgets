@@ -296,10 +296,16 @@ public:
     void ExpandAll();
         // collapse the item without removing its children
     virtual void Collapse(const wxTreeItemId& item) = 0;
+        // collapse the item without removing its children, optionally keeping selection
+    virtual void Collapse(const wxTreeItemId& item, bool keepSelection);
         // collapse the item and all its children
     void CollapseAllChildren(const wxTreeItemId& item);
+        // collapse the item and all its children with option to keep selection
+    void CollapseAllChildren(const wxTreeItemId& item, bool keepSelection);
         // collapse all items
     void CollapseAll();
+        // collapse all items with option to keep selection
+    void CollapseAll(bool keepSelection);
         // collapse the item and remove all children
     virtual void CollapseAndReset(const wxTreeItemId& item) = 0;
         // toggles the current state
