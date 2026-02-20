@@ -893,16 +893,45 @@ static bool isExpandable(const wxString& path)
         return true;
 }
 
+struct PathUnExpander
+{
+    // combined path could contain single path or several valid paths
+    // we have to split paths so PathUnExpandEnvStrings could process all of sub-paths, 
+    // otherwise only first sub-path would be handled
+    PathUnExpander(const wxString& combinedPath)
+    : m_subPaths(wxSplit(combinedPath, _T(';'))), m_bUnExpanded(false) {}
+
+    bool unexpand(wxString &result)
+    {
+        m_bUnExpanded = false;
+        wxArrayString::iterator it = m_subPaths.begin();
+        wxArrayString::iterator itEnd = m_subPaths.end();
+        for (; it != itEnd; ++it)
+        {
+            if (PathUnExpandEnvStrings(it->c_str(), buf, eMAX_PATH * sizeof(wxChar)))
+            {
+                *it = buf;
+                m_bUnExpanded = true;
+            }
+        }
+        result = wxJoin(m_subPaths, _T(';'), _T('\0'));
+        return m_bUnExpanded;
+    }
+
+    enum {eMAX_PATH = 1024};
+    wxArrayString m_subPaths;
+    wxChar buf[eMAX_PATH];
+    bool m_bUnExpanded;
+};
+
 bool wxRegKey::SetUnexpandedValue(const wxString& szValue, const wxString& strValue)
 {
     //BRICSYS change: use expandable type "REG_EXPAND_SZ" + ::PathUnExpandEnvStrings routine
     // for storing strings in registry in a portable format
-    const unsigned int maxStrLen = 16384;
-    wxChar buf[maxStrLen]; // MAX_PATH (512) is too small, long strings encountered (i.e. SRCHPATH)
-    BOOL bUnExpanded = PathUnExpandEnvStrings(strValue.c_str(), buf, (maxStrLen-1) * sizeof(wxChar));
-    wxString refinedValue(bUnExpanded ? buf : strValue);
-    bool bExpandable = bUnExpanded || isExpandable(refinedValue);
-    int storeType = bExpandable ? REG_EXPAND_SZ : REG_SZ;
+    PathUnExpander unExpander(strValue);
+    wxString refinedValue;
+    BOOL bUnExpanded = unExpander.unexpand(refinedValue);
+    int storeType = bUnExpanded ? REG_EXPAND_SZ : REG_SZ;
     
     return SetValue(szValue, refinedValue, storeType);
 }
