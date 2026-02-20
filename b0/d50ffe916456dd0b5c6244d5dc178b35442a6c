@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxGLContext::GetProcAddress() (#9215).
