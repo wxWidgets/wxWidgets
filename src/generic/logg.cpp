@@ -360,7 +360,8 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
                 }
 
                 // find the top window and set it's status text if it has any
-                if ( pFrame == NULL ) {
+                // Bricsys change: add wxTheApp check
+                if ( pFrame == NULL && wxTheApp != nullptr ) {
                     wxWindow *pWin = wxTheApp->GetTopWindow();
                     if ( wxDynamicCast(pWin, wxFrame) ) {
                         pFrame = (wxFrame *)pWin;
