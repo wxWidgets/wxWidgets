@@ -151,6 +151,7 @@ public:
 
     virtual void Expand(const wxTreeItemId& item) wxOVERRIDE;
     virtual void Collapse(const wxTreeItemId& item) wxOVERRIDE;
+    virtual void Collapse(const wxTreeItemId& item, bool keepSelection);
     virtual void CollapseAndReset(const wxTreeItemId& item) wxOVERRIDE;
     virtual void Toggle(const wxTreeItemId& item) wxOVERRIDE;
 
@@ -352,6 +353,7 @@ protected:
     bool TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
     void UnselectAllChildren( wxGenericTreeItem *item );
     void ChildrenClosing(wxGenericTreeItem* item);
+    void ChildrenClosing(wxGenericTreeItem* item, bool keepSelection);
 
     void DoDirtyProcessing();
 
