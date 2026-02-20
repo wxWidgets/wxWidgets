@@ -99,7 +99,7 @@ public:
     {
         wxURI rawURI(GetRawURI());
         wxString path = rawURI.GetPath();
-        if (!path.empty()) // Remove / in front
+        if (!path.empty() && path[0] == '/') // Remove '/' in front if present
             path.erase(0, 1);
         wxString uri = wxString::Format("%s:%s", m_handler->GetName(), path);
         return uri;
@@ -577,6 +577,21 @@ HRESULT wxWebViewEdgeImpl::HandleNavigationStarting(ICoreWebView2NavigationStart
     if (SUCCEEDED(args->get_Uri(&uri)))
         evtURL = wxString(uri);
 
+    // Check if this is a custom scheme URL that needs translation
+    // (e.g., memory:page2.htm -> https://memory.wxsite/page2.htm)
+    for (const auto& kv : m_handlers)
+    {
+        const wxString scheme = kv.second->GetName() + ":";
+        if (evtURL.StartsWith(scheme))
+        {
+            // Cancel this navigation and redirect through LoadURL
+            // which will translate the custom scheme URL
+            args->put_Cancel(true);
+            m_ctrl->LoadURL(evtURL);
+            return S_OK;
+        }
+    }
+
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING, m_ctrl->GetId(), evtURL, wxString());
     event.SetEventObject(m_ctrl);
     if (mainFrame)
@@ -806,13 +821,30 @@ HRESULT wxWebViewEdgeImpl::OnWebResourceRequested(ICoreWebView2* WXUNUSED(sender
         return hr;
     wxWebViewEdgeHandlerRequest request(apiRequest);
 
-    // Find handler
+    // Find handler by server (e.g., https://memory.wxsite/page1.htm)
+    // or by scheme (e.g., memory:logo.png)
     wxURI uri(request.GetRawURI());
-    if (!uri.HasServer())
-        return E_INVALIDARG;
-    wxSharedPtr<wxWebViewHandler> handler = m_handlers[uri.GetServer()];
+    wxSharedPtr<wxWebViewHandler> handler;
+
+    if (uri.HasServer())
+        handler = m_handlers[uri.GetServer()];
+
+    if (!handler)
+    {
+        wxString scheme = uri.GetScheme();
+        for (const auto& kv : m_handlers)
+        {
+            if (kv.second->GetName() == scheme)
+            {
+                handler = kv.second;
+                break;
+            }
+        }
+    }
+
     if (!handler)
         return E_INVALIDARG;
+
     request.SetHandler(handler.get());
 
     // Create response
@@ -915,8 +947,14 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     // Register handlers
     for (const auto& kv : m_handlers)
     {
+        // Register filter for virtual host URLs (e.g., *://memory.wxsite/*)
         wxString filterURI = wxString::Format("*://%s/*", kv.first);
-        m_webView->AddWebResourceRequestedFilter(filterURI.wc_str(), COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL);
+        AddWebResourceRequestedFilter(filterURI);
+
+        // Also register filter for scheme URLs (e.g., memory:*)
+        // This is needed for resources referenced in HTML like <img src='memory:logo.png'>
+        wxString schemeFilter = kv.second->GetName() + ":*";
+        AddWebResourceRequestedFilter(schemeFilter);
     }
 
     if (m_pendingContextMenuEnabled != -1)
@@ -1004,6 +1042,30 @@ void wxWebViewEdgeImpl::UpdateWebMessageHandler()
             m_scriptMsgHandlerName);
         m_ctrl->AddUserScript(js);
         m_webView->ExecuteScript(js.wc_str(), nullptr);
+    }
+}
+
+void wxWebViewEdgeImpl::AddWebResourceRequestedFilter(const wxString& filterURI)
+{
+    // Try to use the newer API that properly handles iframes if available,
+    // fall back to the deprecated method otherwise.
+    wxCOMPtr<ICoreWebView2_22> webView22;
+    if (SUCCEEDED(m_webView->QueryInterface(IID_PPV_ARGS(&webView22))))
+    {
+        HRESULT hr = webView22->AddWebResourceRequestedFilterWithRequestSourceKinds(
+            filterURI.wc_str(),
+            COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL,
+            COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL);
+        if (FAILED(hr))
+            wxLogApiError("AddWebResourceRequestedFilterWithRequestSourceKinds", hr);
+    }
+    else
+    {
+        HRESULT hr = m_webView->AddWebResourceRequestedFilter(
+            filterURI.wc_str(),
+            COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL);
+        if (FAILED(hr))
+            wxLogApiError("AddWebResourceRequestedFilter", hr);
     }
 }
 
@@ -1636,8 +1698,14 @@ void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 
     if (m_impl->m_webView)
     {
+        // Register filter for virtual host URLs (e.g., *://memory.wxsite/*)
         wxString filterURI = wxString::Format("*://%s/*", handlerHost);
-        m_impl->m_webView->AddWebResourceRequestedFilter(filterURI.wc_str(), COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL);
+        m_impl->AddWebResourceRequestedFilter(filterURI);
+
+        // Also register filter for scheme URLs (e.g., memory:*)
+        // This is needed for resources referenced in HTML like <img src='memory:logo.png'>
+        wxString schemeFilter = handler->GetName() + ":*";
+        m_impl->AddWebResourceRequestedFilter(schemeFilter);
     }
 }
 
