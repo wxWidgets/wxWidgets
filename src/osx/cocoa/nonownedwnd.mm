@@ -954,6 +954,14 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         [m_macWindow setFrame:frameRect display:NO];
     }
 
+    // Bricsys change: extra style for main window to be shown as transparent when drawing the crosshair
+    if( extraStyle & wxWS_EX_TRANSP_FRAME_MAC_BCAD )
+    {
+        [m_macWindow setOpaque:NO];
+        [m_macWindow setAlphaValue:0.999];
+    }
+    // end Bricsys change
+
     // if we just have a title bar with no buttons needed, hide them
     if ( (windowstyle & NSTitledWindowMask) && 
         !(style & wxCLOSE_BOX) && !(style & wxMAXIMIZE_BOX) && !(style & wxMINIMIZE_BOX) )
