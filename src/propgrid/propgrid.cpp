@@ -1682,15 +1682,15 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
 
     if ( y < vy )
     {
-        // *** Bricsys : scroll the property to the middle of the view, not the top
-        Scroll (vx, (y - (m_height/2))/wxPG_PIXELS_PER_UNIT );
+        // *** Bricsys : scroll the property to 1/4th from top of the view, not the top
+        Scroll (vx, (y - (m_height/4))/wxPG_PIXELS_PER_UNIT );
         m_iFlags |= wxPG_FL_SCROLLED;
         changed = true;
     }
     else if ( (y+m_lineHeight) > (vy+m_height) )
     {
-        // *** Bricsys : scroll the property to the middle of the view, not the bottom
-        Scroll (vx, (y-(m_height/2)+(m_lineHeight*2))/wxPG_PIXELS_PER_UNIT );
+        // *** Bricsys : scroll the property to the to 1/4th from top of the view, not the bottom
+        Scroll (vx, (y-(m_height/4)+(m_lineHeight*2))/wxPG_PIXELS_PER_UNIT );
         m_iFlags |= wxPG_FL_SCROLLED;
         changed = true;
     }
