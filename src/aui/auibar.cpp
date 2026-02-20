@@ -2405,9 +2405,15 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     m_sizer->SetDimension(0, 0, x, y);
 
     // We need to update the bitmap if the size has changed.
-    UpdateBackgroundBitmap(wxSize(x, y));
+    wxSize size(x, y);
+    if ( !m_backgroundBitmap.IsOk() || m_backgroundBitmap.GetSize() != size )
+    {
+        UpdateBackgroundBitmap(size);
 
-    Refresh(false);
+        // We need to refresh the entire window if the background bitmap has
+        // changed, not just the area affected by the resize.
+        Refresh(false);
+    }
 
     // idle events aren't sent while user is resizing frame (why?),
     // but resizing toolbar here causes havoc,
