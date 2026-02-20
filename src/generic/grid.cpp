@@ -5283,6 +5283,20 @@ void wxGrid::DoHeaderEndDragResizeCol(int width)
 void wxGrid::DoStartMoveRowOrCol(int col)
 {
     m_dragMoveRowOrCol = col;
+
+    // BRICSYS fix for SR66593 (#3342):
+    //    check if the 'col' argument is correct, because, when dragging started very close to
+    //    the column's left edge, 'col' points to the column before the one being dragged
+    if (m_cursorMode == WXGRID_CURSOR_MOVE_COL)
+    {
+        wxPoint point = ScreenToClient(wxGetMousePosition());
+        int x;
+        CalcUnscrolledPosition(point.x, 0, &x, NULL);
+        int draggedCol = XToCol(x - GetRowLabelSize());
+        if (draggedCol != col && draggedCol >= 0 && draggedCol < GetNumberCols())
+            m_dragMoveRowOrCol = draggedCol;
+    }
+    //end BRICSYS fix
 }
 
 void wxGrid::DoEndMoveRow(int pos)
