@@ -2102,12 +2102,30 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
         }
     }
 
-    if ( !RenderPageIntoBitmap(*m_previewBitmap, pageNum) )
+    // Bricsys change: use the base function on Win 32 bit because of insufficient memory problems caused by
+    // the new implementation using high resolution wxEnhMetaFileDC
+#ifdef _WIN32   // modification restricted to Windows systems
+    if(wxIsPlatform64Bit())
+#endif
     {
-        InvalidatePreviewBitmap();
-        wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
-        return false;
+        if ( !RenderPageIntoBitmap(*m_previewBitmap, pageNum) )
+        {
+            InvalidatePreviewBitmap();
+            wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
+            return false;
+        }
     }
+#ifdef _WIN32
+    else
+    {
+        if ( !wxPrintPreviewBase::RenderPageIntoBitmap(*m_previewBitmap, pageNum) )
+        {
+            InvalidatePreviewBitmap();
+            wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
+            return false;
+        }
+    }
+#endif
 
 #if wxUSE_STATUSBAR
     wxString status;

@@ -175,6 +175,24 @@ void PixelToHIMETRIC(LONG *x, LONG *y, HDC hdcRef)
         iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
         iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
 
+    // Bricsys change:
+    // sometimes GetDeviceCaps returns 0 for HORZRES/VERTRES,
+    // in this case we try to retrieve the values using GetSystemMetrics;
+    // if it fails, then use standard resolution values: there would be scaling problems,
+    // but at least we avoid divide-by-zero crash and don't get empty output.
+    if(!iWidthPels)
+    {
+        iWidthPels = GetSystemMetrics(SM_CXSCREEN);
+        if(!iWidthPels)
+            iWidthPels = 1024;
+    }
+    if(!iHeightPels)
+    {
+        iHeightPels = GetSystemMetrics(SM_CYSCREEN);
+        if(!iHeightPels)
+            iHeightPels = 768;
+    }
+
     // Take care to use MulDiv() here to avoid overflow.
     *x = ::MulDiv(*x, iWidthMM * 100, iWidthPels);
     *y = ::MulDiv(*y, iHeightMM * 100, iHeightPels);

@@ -487,8 +487,9 @@ wxWindowMSW::~wxWindowMSW()
 
     if ( m_hWnd )
     {
-        // VZ: test temp removed to understand what really happens here
-        //if (::IsWindow(GetHwnd()))
+        // Bricsys changes: uncommented check below to avoid compiler error output
+        // upon closing an application
+        if (::IsWindow(GetHwnd()))
         {
             if ( !::DestroyWindow(GetHwnd()) )
             {
@@ -3621,6 +3622,20 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 break;
             }
 #endif
+
+        //bricsys change merged on wxwidgets upgrade
+        //added: open context help immediately (TaskDD952)
+        case WM_SYSCOMMAND:
+            {
+                if (wParam == SC_CONTEXTHELP)
+                {
+                    wxHelpEvent event(wxEVT_HELP);
+                    event.SetEventObject(this);
+                    if (GetEventHandler()->ProcessEvent(event))
+                        return true;
+                }
+            }
+            break;
 
         case WM_HELP:
             {
@@ -7155,6 +7170,9 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         win = wxFindWinFromHandle(hwnd);
         if ( !win )
         {
+//bricsys change merged on wxwidgets upgrade
+//commented out wxRadioBox code that conflicts with MFC radiobuttons as used in the drawing settings dialog
+/*
 #if wxUSE_RADIOBOX && !defined(__WXUNIVERSAL__)
             // native radiobuttons return DLGC_RADIOBUTTON here and for any
             // wxWindow class which overrides WM_GETDLGCODE processing to
@@ -7165,6 +7183,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
             }
             //else: it's a wxRadioButton, not a radiobutton from wxRadioBox
 #endif // wxUSE_RADIOBOX
+*/
 
             // spin control text buddy window should be mapped to spin ctrl
             // itself so try it too

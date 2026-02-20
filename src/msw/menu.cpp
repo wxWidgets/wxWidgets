@@ -778,7 +778,9 @@ void wxMenu::SetTitle(const wxString& label)
 
 bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
 {
-    const int id = (signed short)id_;
+    // Bricsys change: since 2.9 wxwidgets menu id range has been restricted to 'signed short' and can use negative values
+    // solution: avoid this casting which gives incorrect values for > 32767
+    const int id = /*(signed short)*/id_;
 
     // ignore commands from the menu title
     if ( id != idMenuTitle )

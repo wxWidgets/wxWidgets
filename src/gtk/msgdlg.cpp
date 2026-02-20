@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/modalhook.h"
+#include "wx/stockitem.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/list.h"
@@ -232,16 +233,29 @@ void wxMessageDialog::GTKCreateMsgDialog()
             //
             // [Help]                  [Alternative] [Cancel] [Affirmative]
 
-            gtk_dialog_add_button(dlg, wxGTK_CONV(GetNoLabel()),
+            //bricscad change
+            //use stock labels rather than stock ids
+            //this avoid a translation problem with gtk stock items
+            wxCharBuffer noLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_NO)));
+            wxCharBuffer cancelLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL)));
+            wxCharBuffer yesLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_YES)));
+            const gchar* gtk_no_label = noLabel;
+            const gchar* gtk_cancel_label = cancelLabel;
+            const gchar* gtk_yes_label = yesLabel;
+
+            gtk_dialog_add_button(dlg,
+                                  gtk_no_label,
                                   GTK_RESPONSE_NO);
 
             if ( m_dialogStyle & wxCANCEL )
             {
-                gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
+                gtk_dialog_add_button(dlg,
+                                      gtk_cancel_label,
                                       GTK_RESPONSE_CANCEL);
             }
 
-            gtk_dialog_add_button(dlg, wxGTK_CONV(GetYesLabel()),
+            gtk_dialog_add_button(dlg,
+                                  gtk_yes_label,
                                   GTK_RESPONSE_YES);
         }
         else // Ok or Ok/Cancel dialog

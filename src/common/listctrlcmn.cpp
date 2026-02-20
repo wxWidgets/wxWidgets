@@ -199,8 +199,12 @@ wxSize wxListCtrlBase::DoGetBestClientSize() const
     const int columns = GetColumnCount();
     if ( HasFlag(wxLC_NO_HEADER) || !columns )
     {
+#if 1 // Bricsys change (#1410: User Profile Manager dialog was too wide)
+        return wxControl::DoGetBestClientSize();
+#else
         // Use some arbitrary width.
         totalWidth = 50*dc.GetCharWidth();
+#endif
     }
     else // We do have columns, use them to determine the best width.
     {

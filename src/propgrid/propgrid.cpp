@@ -1657,13 +1657,14 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
     if ( !p->IsVisible() )
     {
         // expand parents
+        // *** Bricsys change : expand ALL parents, not just parent and grandparent.
         wxPGProperty* parent = p->GetParent();
-        wxPGProperty* grandparent = parent->GetParent();
-
-        if ( grandparent && grandparent != m_pState->DoGetRoot() )
-            Expand( grandparent );
-
-        Expand( parent );
+        while (parent)
+		{
+			if ( parent != m_pState->DoGetRoot() )
+				Expand(parent);
+			parent = parent->GetParent();
+		}
         changed = true;
     }
 
@@ -1676,13 +1677,15 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
 
     if ( y < vy )
     {
-        Scroll(vx, y/wxPG_PIXELS_PER_UNIT );
+        // *** Bricsys : scroll the property to the middle of the view, not the top
+        Scroll (vx, (y - (m_height/2))/wxPG_PIXELS_PER_UNIT );
         m_iFlags |= wxPG_FL_SCROLLED;
         changed = true;
     }
     else if ( (y+m_lineHeight) > (vy+m_height) )
     {
-        Scroll(vx, (y-m_height+(m_lineHeight*2))/wxPG_PIXELS_PER_UNIT );
+        // *** Bricsys : scroll the property to the middle of the view, not the bottom
+        Scroll (vx, (y-(m_height/2)+(m_lineHeight*2))/wxPG_PIXELS_PER_UNIT );
         m_iFlags |= wxPG_FL_SCROLLED;
         changed = true;
     }
@@ -4291,7 +4294,19 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     // Focus and select all (wxTextCtrl, wxComboBox etc.)
                     if ( flags & wxPG_SEL_FOCUS )
                     {
+                        // Bricsys change: when a property cotrol is focused, GTK sets the scroll as well
+                        // but as we want, so record it here and reset it after
+                        #if defined(__WXGTK__)
+                            int xPos = GetScrollPos( wxHORIZONTAL );
+                            int yPos = GetScrollPos( wxVERTICAL );
+                        #endif
+
                         primaryCtrl->SetFocus();
+
+                        // Bricsys change: reset scroll position here
+                        #if defined(__WXGTK__)
+                            Scroll(xPos, yPos);
+                        #endif
 
                         p->GetEditorClass()->OnFocus(p, primaryCtrl);
                     }
@@ -5687,39 +5702,98 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
     if ( keycode == WXK_TAB )
     {
+//#if defined(__WXGTK__)
+//        wxWindow* mainControl;
+//
+//        if ( HasInternalFlag(wxPG_FL_IN_MANAGER) )
+//            mainControl = GetParent();
+//        else
+//            mainControl = this;
+//#endif
+//
+        //if ( !event.ShiftDown() )
+        //{
+        //    if ( !editorFocused && m_wndEditor )
+        //    {
+        //        DoSelectProperty( selected, wxPG_SEL_FOCUS );
+        //    }
+        //    else
+        //    {
+        //        // Tab traversal workaround for platforms on which
+        //        // wxWindow::Navigate() may navigate into first child
+        //        // instead of next sibling. Does not work perfectly
+        //        // in every scenario (for instance, when property grid
+        //        // is either first or last control).
+        //    #if defined(__WXGTK__)
+        //        wxWindow* sibling = mainControl->GetNextSibling();
+        //        if ( sibling )
+        //            sibling->SetFocusFromKbd();
+        //    #else
+        //        Navigate(wxNavigationKeyEvent::IsForward);
+        //    #endif
+        //    }
+        //}
+        //else
+        //{
+        //    if ( editorFocused )
+        //    {
+        //        UnfocusEditor();
+        //    }
+        //    else
+        //    {
+        //    #if defined(__WXGTK__)
+        //        wxWindow* sibling = mainControl->GetPrevSibling();
+        //        if ( sibling )
+        //            sibling->SetFocusFromKbd();
+        //    #else
+        //        Navigate(wxNavigationKeyEvent::IsBackward);
+        //    #endif
+        //    }
+        //}
+        
+        // Bricsys change (v2.9.4): implement TAB traversal inside propgrid
+        //     => AB: we do this because the editor is always focused, so arrow keys will be handled by it
+        int selectDir=0;
+        wxPGProperty* p = selected;
+
         if ( !event.ShiftDown() )
-        {
             if ( !editorFocused && m_wndEditor )
-            {
                 DoSelectProperty( selected, wxPG_SEL_FOCUS );
-            }
             else
-            {
-                // Tab traversal workaround for platforms on which
-                // wxWindow::Navigate() may navigate into first child
-                // instead of next sibling.
-            #if defined(__WXGTK__)
-                SetFocus();
-            #endif
-
-                Navigate(wxNavigationKeyEvent::IsForward);
-            }
-        }
+                selectDir = 1;
         else
-        {
-            if ( editorFocused )
-            {
-                UnfocusEditor();
-            }
-            else
-            {
-            #if defined(__WXGTK__)
-                SetFocus();
-            #endif
+            selectDir = -1;
 
-                Navigate(wxNavigationKeyEvent::IsBackward);
+        if ( selectDir >= -1 )
+        {
+            p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
+            if ( p )
+            {
+                int selFlags = 0;
+                if(m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED)
+                    selFlags=wxPG_SEL_FOCUS;
+                int reopenLabelEditorCol = -1;
+
+                if ( editorFocused )
+                {
+                    // If editor was focused, then make the next editor
+                    // focused as well
+                    selFlags |= wxPG_SEL_FOCUS;
+                }
+                else
+                {
+                    // Also maintain the same label editor focus state
+                    if ( m_labelEditor )
+                        reopenLabelEditorCol = m_selColumn;
+                }
+
+                DoSelectProperty(p, selFlags);
+
+                if ( reopenLabelEditorCol >= 0 )
+                    DoBeginLabelEdit(reopenLabelEditorCol);
             }
         }
+        // end of Bricsys change
 
         return;
     }

@@ -636,7 +636,10 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
                                    // or is XTYP_EXECUTE, wFmt should be zero.
                                    0,
                                    XTYP_EXECUTE,
-                                   DDE_TIMEOUT,
+// Bricsys change: single instance policy requires this call to be made asynchronously (TaskDD1305)
+                                   TIMEOUT_ASYNC
+                                   /*DDE_TIMEOUT*/
+                                   ,
                                    &result) != 0;
 
     if ( !ok )

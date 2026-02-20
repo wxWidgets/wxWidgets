@@ -112,6 +112,10 @@ public:
     void SetPrinterTranslateY(long y) { m_printerTranslateY = y; }
     void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; }
 
+    // Bricsys change: Rotate by 90 Degrees feature
+     bool IsRotate90() const { return m_rotate90; }
+     void SetRotate90(bool rotate90 = true) { m_rotate90 = rotate90; }
+
 #if wxUSE_STREAMS
     wxOutputStream *GetOutputStream() { return m_outputStream; }
     void SetOutputStream( wxOutputStream *output ) { m_outputStream = output; }
@@ -129,6 +133,8 @@ private:
 #if wxUSE_STREAMS
     wxOutputStream *m_outputStream;
 #endif
+    // Bricsys change: Rotate by 90 Degrees feature
+    bool m_rotate90;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPostScriptPrintNativeData);

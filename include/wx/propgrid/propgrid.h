@@ -1276,7 +1276,7 @@ public:
     void RefreshEditor();
 
     // Events from editor controls are forward to this function
-    bool HandleCustomEditorEvent( wxEvent &event );
+    virtual bool HandleCustomEditorEvent( wxEvent &event );
 
     // Mostly useful for page switching.
     void SwitchState( wxPropertyGridPageState* pNewState );

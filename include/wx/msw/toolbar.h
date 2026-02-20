@@ -57,6 +57,9 @@ public:
 
     virtual void SetToolPacking(int packing) wxOVERRIDE;
 
+    // Bricsys change: added wxToolBar::GetToolRect() implementation
+    wxRect GetToolRect(int id);
+
     // implementation only from now on
     // -------------------------------
 

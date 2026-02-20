@@ -1022,7 +1022,11 @@ void wxPostScriptDCImpl::SetPSColour(const wxColor& col)
         // setgray here ?
     }
 
+// Bricsys change: let's write the color, even if it's the same, because
+// there could be 'grestore' after the previous 'setrgbcolor' (e.g. due to clipping caused by viewports)
+#if 0
     if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
+#endif
     {
         double redPS = (double)red / 255.0;
         double bluePS = (double)blue / 255.0;
@@ -1861,6 +1865,16 @@ void wxPostScriptDCImpl::StartPage()
     // Each page starts with an "initgraphics" which resets the
     // transformation and so we need to rotate the page for
     // landscape printing)
+
+    // Bricsys change: Rotate by 90 Degrees feature
+    wxPostScriptPrintNativeData* nativeData = (wxPostScriptPrintNativeData*)m_printData.GetNativeData();
+    if(nativeData->IsRotate90())
+    {
+        wxCoord x = YLOG2DEVREL(m_pageHeight), y = 0;
+        buffer.Printf("%d %d translate\n", x, y);
+        PsPrint(buffer);
+        PsPrint("90 rotate\n");
+    }
 
     // I copied this one from a PostScript tutorial, but to no avail. RR.
     // PsPrint( "90 rotate llx neg ury nef translate\n" );

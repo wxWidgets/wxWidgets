@@ -311,6 +311,10 @@ void wxEnhMetaFileDCImpl::Create(HDC hdcRef,
     if ( !m_hDC )
     {
         wxLogLastError(wxT("CreateEnhMetaFile"));
+
+        //Bricsys change:
+        // inform callers that the DC is not Ok
+        m_ok = false;
     }
 }
 
