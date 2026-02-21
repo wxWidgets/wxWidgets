@@ -264,7 +264,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 wxString
 wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
 {
-    NSDateFormatter* df = [NSDateFormatter new];
+    NSDateFormatter* df = [[NSDateFormatter new] autorelease];
     df.locale = m_nsloc;
 
     NSArray* monthNames = nullptr;
@@ -309,7 +309,7 @@ wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm for
 wxString
 wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const
 {
-    NSDateFormatter* df = [NSDateFormatter new];
+    NSDateFormatter* df = [[NSDateFormatter new] autorelease;
     df.locale = m_nsloc;
 
     NSArray* weekdayNames = nullptr;
