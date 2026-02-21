@@ -151,7 +151,7 @@
         [self addSubview:okButton];
         [cancelButton release];
         [okButton release];
- 
+
         [self resetFlags];
     }
     return self;
