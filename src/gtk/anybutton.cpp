@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/stockitem.h"
+#include "wx/dcmemory.h"
 
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/image.h"
@@ -69,6 +70,10 @@ wxgtk_button_released_callback(GtkWidget *WXUNUSED(widget), wxAnyButton *button)
 //-----------------------------------------------------------------------------
 // wxAnyButton
 //-----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxAnyButton, wxControl)
+    EVT_SIZE(wxAnyButton::OnButtonResize)
+END_EVENT_TABLE()
 
 void wxAnyButton::DoEnable(bool enable)
 {
@@ -430,5 +435,62 @@ void wxAnyButton::DoSetBitmapPosition(wxDirection dir)
     }
 #endif // GTK+ 2.10+
 }
+
+void wxAnyButton::OnButtonResize( wxSizeEvent& WXUNUSED(event))
+{
+    applyColourToButton();
+}
+
+void wxAnyButton::SetBitmap(const wxBitmapBundle& bitmap, wxDirection dir)
+{
+    m_nonBackgroundColourBitmap = bitmap;
+    wxAnyButtonBase::SetBitmap(bitmap, dir);
+}
+
+bool wxAnyButton::SetBackgroundColour(const wxColour &colour)
+{
+    m_backgroundColour = colour;
+    applyColourToButton();
+    return true;
+}
+
+wxColour wxAnyButton::GetBackgroundColour() const
+{
+    return m_backgroundColour;
+}
+
+bool wxAnyButton::applyColourToButton()
+{
+    wxSize buttonSize = this->GetSize();
+    if (buttonSize.GetWidth() != 0 && buttonSize.GetHeight() != 0)
+    {
+        if (m_nonBackgroundColourBitmap.IsOk())
+        {
+            this->wxAnyButtonBase::SetBitmapLabel(m_nonBackgroundColourBitmap);
+            wxWindowGTK::SetBackgroundColour(m_backgroundColour);
+        }
+        else
+        {
+            if (m_backgroundColour != wxNullColour)
+            {
+                wxBitmap buttonBackground(buttonSize.GetWidth(), buttonSize.GetHeight());
+
+                wxMemoryDC tempDC;
+                tempDC.SelectObject(buttonBackground);
+
+                tempDC.SetBackground(m_backgroundColour);
+                tempDC.Clear();
+                tempDC.SelectObject(wxNullBitmap);
+
+                this->wxAnyButtonBase::SetBitmapLabel(buttonBackground);
+            }
+            else
+                wxWindowGTK::SetBackgroundColour(m_backgroundColour);
+        }
+        return true;
+    }
+    return false;
+}
+
 
 #endif // wxHAS_ANY_BUTTON
