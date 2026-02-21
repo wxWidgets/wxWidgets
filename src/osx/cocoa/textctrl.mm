@@ -491,7 +491,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (void)dealloc
 {
-    [self.undoManager release];
+    self.undoManager = nil;
     [super dealloc];
 }
 
@@ -606,7 +606,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (void)dealloc
 {
-    [self.WXFieldEditor release];
+    self.WXFieldEditor = nil;
     [super dealloc];
 }
 

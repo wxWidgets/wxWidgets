@@ -49,7 +49,7 @@
 
 - (void)dealloc
 {
-    [self.WXFieldEditor release];
+    self.WXFieldEditor = nil;
     [super dealloc];
 }
 
