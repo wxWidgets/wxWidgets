@@ -129,7 +129,7 @@ if(UNIX AND NOT WIN32 AND (WXX11 OR WXMOTIF OR WXGTK2 OR (WXGTK AND wxHAVE_GDK_X
 endif()
 
 if(WXQT)
-    find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+    find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
 
     if(QT_VERSION_MAJOR EQUAL 5)
         set(QT_COMPONENTS Core Widgets Gui OpenGL OpenGL Test)
