@@ -15,6 +15,7 @@
     #include "wx/panel.h"
     #include "wx/toplevel.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/stattext.h"
 #endif
 
@@ -25,6 +26,7 @@
 wxBEGIN_EVENT_TABLE(wxAnyButton, wxControl)
     EVT_ENTER_WINDOW(wxAnyButton::OnEnterWindow)
     EVT_LEAVE_WINDOW(wxAnyButton::OnLeaveWindow)
+    EVT_SIZE(wxAnyButton::OnButtonResize)
 wxEND_EVENT_TABLE()
 
 void wxAnyButton::SetLabel(const wxString& label)
@@ -39,6 +41,58 @@ void wxAnyButton::SetLabel(const wxString& label)
     }
 
     wxAnyButtonBase::SetLabel(label);
+}
+
+void wxAnyButton::SetBitmap(const wxBitmap& bitmap, wxDirection dir)
+{
+    m_nonBackgroundColourBitmap = bitmap;
+    wxAnyButtonBase::SetBitmap(bitmap, dir);
+}
+
+bool wxAnyButton::SetBackgroundColour(const wxColour &colour)
+{
+    m_backgroundColour = colour;
+    applyColourToButton();
+}
+
+wxColour wxAnyButton::GetBackgroundColour()
+{
+    return m_backgroundColour;
+}
+
+bool wxAnyButton::applyColourToButton()
+{
+    wxSize buttonSize = this->GetSize();
+    if (buttonSize.GetWidth() != 0 && buttonSize.GetHeight() != 0)
+    {
+        if (m_nonBackgroundColourBitmap.IsOk())
+        {
+            this->wxAnyButtonBase::SetBitmapLabel(m_nonBackgroundColourBitmap);
+            wxWindowMac::SetBackgroundColour(m_backgroundColour);
+        }
+        else
+        {
+            if (m_backgroundColour != wxNullColour)
+            {
+                wxBitmap buttonBackground(buttonSize.GetWidth(), buttonSize.GetHeight());
+
+                //use wxmemorydc in order to draw the bitmap
+                wxMemoryDC tempDC;
+                tempDC.SelectObject(buttonBackground);
+
+                //set bitmap bg color
+                tempDC.SetBackground(m_backgroundColour);
+                tempDC.Clear();
+                tempDC.SelectObject(wxNullBitmap);
+
+                this->wxAnyButtonBase::SetBitmapLabel(buttonBackground);
+            }
+            else
+                wxWindowMac::SetBackgroundColour(m_backgroundColour);
+        }
+        return true;
+    }
+    return false;
 }
 
 wxBitmap wxAnyButton::DoGetBitmap(State which) const
@@ -91,4 +145,9 @@ void wxAnyButton::OnLeaveWindow( wxMouseEvent& WXUNUSED(event))
 {
     if ( DoGetBitmap( State_Current ).IsOk() )
         GetPeer()->SetBitmap( m_bitmaps[State_Normal] );
+}
+
+void wxAnyButton::OnButtonResize( wxSizeEvent& WXUNUSED(event))
+{
+    applyColourToButton();
 }
