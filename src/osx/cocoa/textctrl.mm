@@ -604,6 +604,12 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     }
 }
 
+- (void)dealloc
+{
+    [self.WXFieldEditor release];
+    [super dealloc];
+}
+
 - (void) setEnabled:(BOOL) flag
 {
     [super setEnabled: flag];
