@@ -204,7 +204,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 #if 1
     m_captionFont = wxSystemSettingsNative::GetFont(wxSYS_DEFAULT_GUI_FONT);
 #else
-    m_captionFont = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
+    m_captionFont = wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 #endif
 #endif
 
