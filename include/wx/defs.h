@@ -2314,6 +2314,8 @@ enum wxDeprecatedGUIConstants
     wxNORMAL     = 90,
     wxLIGHT,
     wxBOLD,
+// Bricsys change: add Font weight SEMIBOLD
+    wxSEMIBOLD,
     /*  Also wxNORMAL for normal (non-italic text) */
     wxITALIC,
     wxSLANT,
