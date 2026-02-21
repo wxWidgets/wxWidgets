@@ -409,8 +409,7 @@ wxMenuCocoaImpl::~wxMenuCocoaImpl()
 {
     [m_osxMenu setDelegate:nil];
     [m_osxMenu setImplementation:nil];
-    // autorelease in case pending events still reference the menu
-    [m_osxMenu autorelease];
+    [m_osxMenu release];
 }
 
 wxMenuImpl* wxMenuImpl::Create( wxMenu* peer, const wxString& title )
