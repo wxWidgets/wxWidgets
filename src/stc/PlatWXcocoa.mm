@@ -106,7 +106,7 @@ WX_NSWindow CreateFloatingWindow(wxWindow* wxWin)
                                                   defer: NO];
     [w setLevel:NSPopUpMenuWindowLevel];
     [w setHasShadow:YES];
-    [w setContentView:[[wxSTCPopupBaseView alloc] initWithwxWin:wxWin]];
+    [w setContentView:[[[wxSTCPopupBaseView alloc] initWithwxWin:wxWin] autorelease]] ;
 
     return w;
 }

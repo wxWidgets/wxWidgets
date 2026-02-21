@@ -2019,7 +2019,7 @@ void wxCocoaDataViewControl::InitOutlineView(long style)
     NSTableHeaderView* header = nil;
     if ( !(style & wxDV_NO_HEADER) )
     {
-        header = [[wxDVCNSHeaderView alloc] initWithDVC:GetDataViewCtrl()];
+        header = [[[wxDVCNSHeaderView alloc] initWithDVC:GetDataViewCtrl()] autorelease];
     }
 
     [m_OutlineView setHeaderView:header];
