@@ -652,7 +652,11 @@ static wxString CharToString(wxMBConv *conv,
 // returns true if the given string contains only whitespaces
 bool wxIsWhiteOnly(const wxString& buf)
 {
+#if 1 // Bricsys change: optimize resource parsing - create end iterator only once
+    for ( wxString::const_iterator i = buf.begin(), end(buf.end()); i != end; ++i )
+#else
     for ( wxString::const_iterator i = buf.begin(); i != buf.end(); ++i )
+#endif
     {
         wxChar c = *i;
         if ( c != wxS(' ') && c != wxS('\t') && c != wxS('\n') && c != wxS('\r'))
@@ -731,6 +735,35 @@ static void EndElementHnd(void *userData, const char* WXUNUSED(name))
 
 static void TextHnd(void *userData, const char *s, int len)
 {
+#if 1 // Bricsys change: optimize resource parsing - optimize for empty strings
+    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
+
+    if (ctx->lastAsText)
+    {
+        if (len)
+            ctx->lastAsText->SetContent(
+                ctx->lastAsText->GetContent() + CharToString(ctx->conv, s, len));
+    }
+    else if (len || !ctx->removeWhiteOnlyNodes)
+    {
+        const wxString str = CharToString(ctx->conv, s, len);
+
+        bool whiteOnly = false;
+        if (ctx->removeWhiteOnlyNodes)
+            whiteOnly = !len || wxIsWhiteOnly(str);
+
+        if (!whiteOnly)
+        {
+            wxXmlNode *textnode =
+                new wxXmlNode(wxXML_TEXT_NODE, wxS("text"), str,
+                              XML_GetCurrentLineNumber(ctx->parser));
+
+            ASSERT_LAST_CHILD_OK(ctx);
+            ctx->node->InsertChildAfter(textnode, ctx->lastChild);
+            ctx->lastChild= ctx->lastAsText = textnode;
+        }
+    }
+#else
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
     wxString str = CharToString(ctx->conv, s, len);
 
@@ -755,6 +788,7 @@ static void TextHnd(void *userData, const char *s, int len)
             ctx->lastChild= ctx->lastAsText = textnode;
         }
     }
+#endif
 }
 
 static void StartCdataHnd(void *userData)
