@@ -119,7 +119,7 @@ endif()
 
 # webkit extension plugin
 # we can't use (all of the) macros and functions because this library should
-# always be build as a shared libary, and not included in the monolithic build.
+# always be built as a shared library, and not included in the monolithic build.
 if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
     wx_append_sources(WEBKIT2_EXT_FILES WEBVIEW_WEBKIT2_EXTENSION)
     add_library(wxwebkit2_ext SHARED ${WEBKIT2_EXT_FILES})
