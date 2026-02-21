@@ -149,8 +149,9 @@
 
         [self addSubview:cancelButton];
         [self addSubview:okButton];
-        // TODO determine wether the two buttons should be released here
-
+        [cancelButton release];
+        [okButton release];
+ 
         [self resetFlags];
     }
     return self;
