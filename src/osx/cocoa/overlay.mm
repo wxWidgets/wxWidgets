@@ -75,7 +75,8 @@
 
 - (void)dealloc
 {
-   [super dealloc];
+    [self.overlayView release];
+    [super dealloc];
 }
 @end
 

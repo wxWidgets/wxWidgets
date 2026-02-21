@@ -489,6 +489,12 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     return self;
 }
 
+- (void)dealloc
+{
+    [self.undoManager release];
+    [super dealloc];
+}
+
 - (void)textDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
