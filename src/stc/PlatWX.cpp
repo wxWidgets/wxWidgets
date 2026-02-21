@@ -169,6 +169,9 @@ void Font::Create(const FontParameters &fp) {
     wxFontWeight weight;
     if (fp.weight <= 300)
         weight = wxFONTWEIGHT_LIGHT;
+// Bricsys change: add Font weight SEMIBOLD
+    else if (fp.weight == 600)
+        weight = wxFONTWEIGHT_SEMIBOLD;
     else if (fp.weight >= 700)
         weight = wxFONTWEIGHT_BOLD;
     else
