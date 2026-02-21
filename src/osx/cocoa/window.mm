@@ -2730,8 +2730,6 @@ wxWidgetImpl( peer, flags )
     if ( !peer->IsShown() )
         SetVisibility(false);
 
-    [m_osxView release];
-
     if ( IsUserPane() )
         ClipsToBounds(true);
 }
@@ -2770,6 +2768,8 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
     }
 
     wxCocoaGestures::EraseForObject(this);
+
+    [m_osxView autorelease];
 }
 
 void wxWidgetCocoaImpl::BeginNativeKeyDownEvent( NSEvent* event )
