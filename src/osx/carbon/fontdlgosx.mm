@@ -147,9 +147,9 @@
         // [okButton setKeyEquivalent:@"\r"];
         m_okButton = okButton ;
 
-
         [self addSubview:cancelButton];
         [self addSubview:okButton];
+        // TODO determine wether the two buttons should be released here
 
         [self resetFlags];
     }

@@ -42,6 +42,7 @@
 
 - (void)updateTrackingAreas
 {
+    // TODO: determine wether we are leaking the last tracking area, better to release it after adding ?
     if( m_trackingArea != nil )
     {
         [self removeTrackingArea:m_trackingArea];
