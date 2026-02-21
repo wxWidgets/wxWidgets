@@ -351,22 +351,23 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     {
         if (!source->GiveFeedback(result))
         {
+#if 0  //to be removed; TODO under 10.6 the os itself deals with the cursor, remove if things work properly everywhere
             wxStockCursor cursorID = wxCURSOR_NONE;
-
+            
             switch (result)
             {
                 case wxDragCopy:
                     cursorID = wxCURSOR_COPY_ARROW;
                     break;
-
+                    
                 case wxDragMove:
                     cursorID = wxCURSOR_ARROW;
                     break;
-
+                    
                 case wxDragNone:
                     cursorID = wxCURSOR_NO_ENTRY;
                     break;
-
+                    
                 case wxDragError:
                 case wxDragLink:
                 case wxDragCancel:
@@ -374,17 +375,24 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
                     // put these here to make gcc happy
                     ;
             }
-
+            
             if (cursorID != wxCURSOR_NONE)
             {
-                // TODO under 10.6 the os itself deals with the cursor, remove if things
-                // work properly everywhere
-#if 0
                 wxCursor cursor( cursorID );
                 cursor.MacInstall();
-#endif
+
             }
         }
+#else
+        if (wxDropSource* source = impl)
+        {
+            if (!source->GetCursorOntoDropTargetWnd())
+            {
+                wxCursor cursor( wxCURSOR_NOT_ALLOWED );
+                cursor.MacInstall();
+            }
+        }
+#endif
     }
 }
 
