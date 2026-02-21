@@ -2009,6 +2009,7 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
                                           WXWidget slf, void *_cmd,
                                           void *s, bool entered)
 {
+    wxDropSource::GetCurrentDropSource()->SetCursorOntoDropTargetWnd(true);
     wxWindow* wxpeer = viewImpl->GetWXPeer();
     wxDropTarget* target = wxpeer ? wxpeer->GetDropTarget() : NULL;
     if ( target == NULL )
@@ -2080,6 +2081,12 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
         // Drag updated
         result = target->OnDragOver(pt.x, pt.y, result);
     }
+    
+    if(result == wxDragNone)
+    {
+        wxCursor cursor( wxCURSOR_NOT_ALLOWED );
+        cursor.MacInstall();
+    }
 
     NSDragOperation nsresult = NSDragOperationNone;
     switch (result )
@@ -2128,6 +2135,8 @@ void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget slf, void *_cmd)
 
     target->SetCurrentDragSource(&pb);
     target->OnLeave();
+    
+    wxDropSource::GetCurrentDropSource()->SetCursorOntoDropTargetWnd(false);
  }
 
 unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget slf, void *_cmd)

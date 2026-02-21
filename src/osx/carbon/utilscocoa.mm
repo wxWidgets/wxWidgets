@@ -636,6 +636,10 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
     case wxCURSOR_CLOSED_HAND:
         cursor = [[NSCursor closedHandCursor] retain];
         break;
+            
+    case wxCURSOR_NOT_ALLOWED:
+        cursor = [[NSCursor operationNotAllowedCursor] retain];
+        break;
 
     case wxCURSOR_ARROW:
         cursor = [[NSCursor arrowCursor] retain];

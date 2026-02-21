@@ -97,12 +97,14 @@ public:
 
     wxWindow*     GetWindow() { return m_window ; }
     void SetCurrentDragPasteboard( void* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }
+    bool GetCursorOntoDropTargetWnd() const { return m_isCursorOntoDropTargetWnd; }
+    void SetCursorOntoDropTargetWnd(bool val) { m_isCursorOntoDropTargetWnd = val; }
     bool MacInstallDefaultCursor(wxDragResult effect) ;
     static wxDropSource* GetCurrentDropSource();
   protected :
-
     wxWindow        *m_window;
-    void* m_currentDragPasteboard ;
+    void* m_currentDragPasteboard;
+    bool m_isCursorOntoDropTargetWnd = false;
 };
 
 #endif // wxUSE_DRAG_AND_DROP

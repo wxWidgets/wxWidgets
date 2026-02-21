@@ -127,7 +127,8 @@ enum wxStockCursor
     wxCURSOR_DEFAULT, // standard X11 cursor
 #endif
 #ifdef __WXMAC__
-    wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
+    wxCURSOR_COPY_ARROW, // MacOS Theme Plus arrow
+    wxCURSOR_NOT_ALLOWED,
 #endif
 #ifdef __X__
     // Not yet implemented for Windows
