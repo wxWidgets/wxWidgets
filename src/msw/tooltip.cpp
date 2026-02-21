@@ -295,6 +295,9 @@ WXHWND wxToolTip::GetToolTipCtrl()
     if ( !ms_hwndTT )
     {
         WXDWORD exflags = 0;
+// Bricsys added
+        exflags |= WS_EX_TRANSPARENT;
+// End Bricsys added
         if ( wxApp::MSWGetDefaultLayout() == wxLayout_RightToLeft )
         {
             exflags |= WS_EX_LAYOUTRTL;
