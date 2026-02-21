@@ -1485,7 +1485,9 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         e.SetEventObject(this);
         GetEventHandler()->ProcessEvent(e);
 
-        m_isDragging = true;
+        // Bricsys change: enabling event handler to prevent drag
+        m_isDragging = e.IsAllowed();
+        //m_isDragging = true;
     }
 }
 
