@@ -2213,7 +2213,7 @@ class WXDLLIMPEXP_CORE wxTabletEvent : public wxEvent
 {
 public:
     wxTabletEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
-        : wxEvent(winid, type), m_pressure(-1.0), m_tiltX(-360.0), m_tiltY(-360.0), m_rotation(-1.0), m_pos(-1,-1), m_usingEraser(false)
+        : wxEvent(winid, type)
     {
         // they are initialized with invalid values, outside of normal range
     }
@@ -2240,13 +2240,13 @@ public:
 
     wxNODISCARD virtual wxEvent* Clone() const override { return new wxTabletEvent(*this); }
 
-protected:
-    wxDouble m_pressure; // range [ 0.0, 1.0 ]
-    wxDouble m_tiltX;    // range [ -90.0, 90.0 ]
-    wxDouble m_tiltY;    // range [ -90.0, 90.0 ]
-    wxDouble m_rotation; // range [ 0, 360.0 ]
-    wxPoint m_pos;        // position in pixels relative to the Window receiving the event
-    bool m_usingEraser;
+private:
+    wxDouble m_pressure = -1.0; // range [ 0.0, 1.0 ]
+    wxDouble m_tiltX = -360.0;    // range [ -90.0, 90.0 ]
+    wxDouble m_tiltY = -360.0;    // range [ -90.0, 90.0 ]
+    wxDouble m_rotation = -1.0; // range [ 0, 360.0 ]
+    wxPoint m_pos = wxPoint(-1,-1);        // position in pixels in client coordinates (the window generating the event)
+    bool m_usingEraser = false;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTabletEvent);
 };

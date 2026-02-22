@@ -5170,15 +5170,20 @@ public:
 
     @beginEventTable{wxTabletEvent}
     @event{EVT_POINTER_DOWN(func)}
-        Process a @c wxEVT_POINTER_DOWN event.
+        Process a @c wxEVT_POINTER_DOWN event, which is generated when a pen makes
+        contact with the tablet.
     @event{EVT_POINTER_UP(func)}
-        Process a @c wxEVT_POINTER_UP event.
+        Process a @c wxEVT_POINTER_UP event, which is generated when a pen breaks contact
+        with the tablet.
     @event{EVT_POINTER_UPDATE(func)}
-        Process a @c wxEVT_POINTER_UPDATE event.
+        Process a @c wxEVT_POINTER_UPDATE event, which is generated each time an update
+        (like movement) comes from a pen that is near or touches surface of the tablet.
     @endEventTable
 
     @library{wxcore}
     @category{events}
+
+    @since 3.3.2
  */
 class wxTabletEvent : public wxEvent
 {

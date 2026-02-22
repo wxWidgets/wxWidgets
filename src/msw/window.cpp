@@ -6348,7 +6348,7 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 {
     wxUnusedVar(lParam);
     wxEventType type;
-    switch(message)
+    switch( message )
     {
         case WM_POINTERDOWN:
             type = wxEVT_POINTER_DOWN;
@@ -6360,13 +6360,13 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             type = wxEVT_POINTER_UPDATE;
             break;
         default:
-            wxLogLastError(wxT("Unexpected pointer message"));
+            wxFAIL_MSG( wxT("Unexpected pointer message") );
             return false;
     }
 
     const UINT32 pointerId = GET_POINTERID_WPARAM(wParam);
     POINTER_INPUT_TYPE pType = 0;
-    if (GetPointerType(pointerId, &pType))
+    if ( ::GetPointerType(pointerId, &pType) )
     {
         if (pType != PT_PEN)
         {
@@ -6380,7 +6380,7 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
     // here we already know we have a pen generated event
     POINTER_PEN_INFO penInfo;
-    if (GetPointerPenInfo(pointerId, &penInfo))
+    if ( ::GetPointerPenInfo(pointerId, &penInfo) )
     {
         if (penInfo.penMask & PEN_MASK_PRESSURE)
         {
@@ -6415,8 +6415,7 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         event.SetPosition( ScreenToClient(pos) );
     }
 
-    bool handled = HandleWindowEvent(event);
-    return handled;
+    return HandleWindowEvent(event);;
 }
 
 // ---------------------------------------------------------------------------
