@@ -15,6 +15,7 @@
 #if wxUSE_DATAVIEWCTRL
 
 #include "wx/dataview.h"
+#include "wx/vector.h"
 
 // ----------------------------------------------------------------------------
 // String constants used by wxPersistentDataViewCtrl.
@@ -95,6 +96,7 @@ public:
     virtual bool Restore() override
     {
         wxDataViewCtrl* const control = Get();
+        wxVector<wxDataViewColumn*> order(control->GetColumnCount());
 
         for ( unsigned int col = 0; col < control->GetColumnCount(); col++ )
         {
@@ -115,7 +117,25 @@ public:
             if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), &width) )
                 column->SetWidth(width);
 
-            // TODO: Set the column's view position.
+            // Restore the column's view position.
+            int pos;
+            if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_POS), &pos) )
+            {
+                if ( pos >= 0 && static_cast<unsigned int>(pos) < order.size() )
+                    order[pos] = column;
+            }
+        }
+
+        // Set columns view position.
+        for ( unsigned int i = 0; i < order.size(); ++i )
+        {
+            auto column = order[i];
+            if ( column &&
+                 i != static_cast<unsigned int>(control->GetColumnPosition(column)) &&
+                 control->DeleteColumn(column) )
+            {
+                control->InsertColumn(i, column);
+            }
         }
 
         // Restore the sort key and order if there is a valid model and sort
