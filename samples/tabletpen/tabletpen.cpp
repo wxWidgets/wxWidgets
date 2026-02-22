@@ -159,6 +159,7 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void MyFrame::OnPenDown(wxTabletEvent& event)
 {
+    wxUnusedVar(event);
     SetCursor(*wxCROSS_CURSOR);
     m_positions.clear();
     m_penDown = true;
@@ -166,6 +167,7 @@ void MyFrame::OnPenDown(wxTabletEvent& event)
 
 void MyFrame::OnPenUp(wxTabletEvent& event)
 {
+    wxUnusedVar(event);
     SetCursor(*wxSTANDARD_CURSOR);
     m_positions.clear();
     m_penDown = false;
