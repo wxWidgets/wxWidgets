@@ -356,6 +356,7 @@ public:
 
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
+    void OnSysColourChanged( wxSysColourChangedEvent &event );
 
     // needs refresh
     bool m_dirty;
@@ -616,6 +617,8 @@ public:
     void OnScroll( wxScrollWinEvent& event );
 
     void OnPaint( wxPaintEvent &event );
+
+    void OnSysColourChanged( wxSysColourChangedEvent &event );
 
     void OnChildFocus(wxChildFocusEvent& event);
 

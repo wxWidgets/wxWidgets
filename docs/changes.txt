@@ -136,6 +136,12 @@ Changes in behaviour not resulting in compilation errors
   changed when called with "false" argument, please review the documentation
   and update your code if you called them with "false" (which is rarely done).
 
+- wxGetTranslation() and related functions now return wxString by value, not
+  as const reference. This may affect code returning wxGetTranslation() result
+  as const reference from its own functions, please change the return type of
+  the function to wxString to fix this.
+
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 

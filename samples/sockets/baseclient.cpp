@@ -301,7 +301,8 @@ Client::OnExit()
     for(EList::compatibility_iterator it = m_eventWorkers.GetFirst(); it ; it->GetNext()) {
         delete it->GetData();
     }
-    return 0;
+
+    return wxApp::OnExit();
 }
 
 // Create buffer to be sent by client. Buffer contains test indicator

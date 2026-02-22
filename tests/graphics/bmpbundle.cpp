@@ -22,6 +22,10 @@
     #include "wx/msw/private/resource_usage.h"
 #endif // __WXMSW__
 
+#ifdef __WXQT__
+    #include <QtGlobal> // QT_VERSION and QT_VERSION_CHECK
+#endif
+
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
@@ -529,12 +533,22 @@ TEST_CASE("BitmapBundle::ArtProvider", "[bmpbundle][art]")
     // client for which GetNativeSizeHint() of the native art provider returns
     // wxDefaultSize.
     const wxArtClient artClient =
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXQT__)
         wxART_TOOLBAR
 #else
         wxART_LIST
 #endif
         ;
+
+#ifdef __WXQT__
+    #if ( QT_VERSION < QT_VERSION_CHECK(5, 12, 0) )
+        if ( IsRunningUnderXVFB() )
+        {
+            WARN("Ignoring test failing under xvfb with Qt < 5.12");
+            return;
+        }
+    #endif // QT < 5.12
+#endif // __WXQT__
 
     // We also need to use an image provided by Tango but not by the native art
     // provider, but here we can at least avoid the platform checks by using an

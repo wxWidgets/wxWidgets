@@ -794,7 +794,6 @@ void MyFrame::DoApplyColour(const wxColour& colour)
         return;
 
     m_canvas->SetBackgroundColour(colour);
-    m_canvas->ClearBackground();
     m_canvas->Refresh();
 }
 
@@ -858,7 +857,6 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& event)
     {
         m_clrData = dialog->GetColourData();
         m_canvas->SetBackgroundColour(m_clrData.GetColour());
-        m_canvas->ClearBackground();
         m_canvas->Refresh();
     }
     dialog->Destroy();
@@ -1180,6 +1178,7 @@ void MyFrame::LineEntry(wxCommandEvent& WXUNUSED(event))
                              "Please enter a string",
                              "Default value",
                              wxOK | wxCANCEL);
+    dialog.SetHint("Enter your text here");
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -1193,6 +1192,7 @@ void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
                              "Please enter some text",
                              "First line\nSecond one\nAnd another one too",
                              wxOK | wxCANCEL | wxTE_MULTILINE);
+    dialog.SetHint("Enter your text here");
 
     if (dialog.ShowModal() == wxID_OK)
     {

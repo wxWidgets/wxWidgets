@@ -264,7 +264,9 @@ public:
         m_dataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 #ifdef __VISUALC__
         m_webViewEnvironmentOptions = Make<CoreWebView2EnvironmentOptions>().Get();
+#if wxUSE_INTL
         m_webViewEnvironmentOptions->put_Language(wxUILocale::GetCurrent().GetLocaleId().GetName().wc_str());
+#endif
 
         wxCOMPtr<ICoreWebView2EnvironmentOptions3> options3;
         if (SUCCEEDED(m_webViewEnvironmentOptions->QueryInterface(IID_PPV_ARGS(&options3))))
@@ -855,6 +857,14 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     UpdateBounds();
     m_webViewController->put_IsVisible(true);
     m_ctrl->NotifyWebViewCreated();
+
+    // If focus moved to the WebView window before the Edge instance was fully
+    // created, we couldn't call m_webViewController->MoveFocus at that time. If focus is
+    // there now, call MoveFocus to ensure that focus is inside of the web
+    // content window. This helps screen readers, since they  use the focus
+    // window to influence their behavior.
+    if (m_ctrl && m_ctrl->HasFocus())
+        m_webViewController->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
 
     // Connect and handle the various WebView events
     m_webView->add_NavigationStarting(

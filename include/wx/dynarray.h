@@ -122,6 +122,18 @@ public:
     bool IsEmpty() const { return this->empty(); }
     size_t Count() const { return this->size(); }
 
+    T& operator[](size_t uiIndex)
+    {
+        wxASSERT( uiIndex < this->size() );
+        return base_vec::operator[](uiIndex);
+    }
+
+    const T& operator[](size_t uiIndex) const
+    {
+        wxASSERT( uiIndex < this->size() );
+        return base_vec::operator[](uiIndex);
+    }
+
     T& Item(size_t uiIndex) const
     {
         wxASSERT( uiIndex < this->size() );

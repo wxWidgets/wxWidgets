@@ -132,9 +132,9 @@ if(WXQT)
     find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 
     if(QT_VERSION_MAJOR EQUAL 5)
-        set(QT_COMPONENTS Core Widgets Gui OpenGL OpenGL Test)
+        set(QT_COMPONENTS Core Widgets Gui OpenGL OpenGL Test PrintSupport)
     elseif(QT_VERSION_MAJOR EQUAL 6)
-        set(QT_COMPONENTS Core Widgets Gui OpenGL OpenGLWidgets Test)
+        set(QT_COMPONENTS Core Widgets Gui OpenGL OpenGLWidgets Test PrintSupport)
     endif()
 
     foreach(QT_COMPONENT ${QT_COMPONENTS})

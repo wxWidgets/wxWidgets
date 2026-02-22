@@ -70,7 +70,7 @@ public:
     // implementation
     // --------------
 
-    wxDialogModality GetModality() const override;
+    wxWindowMode GetModality() const override;
 
 #if wxOSX_USE_COCOA
     virtual void ModalFinishedCallback(void* WXUNUSED(panel), int WXUNUSED(returnCode)) {}
@@ -87,7 +87,7 @@ protected:
     virtual bool IsEscapeKey(const wxKeyEvent& event) override;
 
 
-    wxDialogModality m_modality;
+    wxWindowMode m_modality;
 
     wxModalEventLoop* m_eventLoop;
 

@@ -929,7 +929,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
                                     const wxRect& rect,
                                     int flags)
 {
-    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW", L"DarkMode::LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 

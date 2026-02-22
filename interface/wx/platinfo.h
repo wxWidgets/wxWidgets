@@ -120,8 +120,7 @@ enum wxEndianness
 };
 
 /**
-    A structure containing information about a Linux distribution as returned
-    by the @c lsb_release utility.
+    A structure containing information about a Linux distribution.
 
     See wxGetLinuxDistributionInfo() or wxPlatformInfo::GetLinuxDistributionInfo()
     for more info.

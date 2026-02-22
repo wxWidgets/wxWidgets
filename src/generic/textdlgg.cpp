@@ -115,7 +115,17 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
 
     SetSizer( topsizer );
 
-    topsizer->Fit( this );
+    // Size returned by Fit() is the minimum size needed to fit the contents.
+    const wxSize minSize = topsizer->Fit( this );
+
+    // Prevent the dialog from being resized smaller than the minimum size.
+    SetMinSize(minSize);
+
+    // For single-line entry, also constrain max height to prevent vertical expansion
+    if ( !(style & wxTE_MULTILINE) )
+    {
+        SetMaxSize(wxSize(-1, minSize.GetHeight()));
+    }
 
     if ( style & wxCENTRE )
         Centre( wxBOTH );
@@ -167,6 +177,14 @@ void wxTextEntryDialog::SetValue(const wxString& val)
     if ( m_textctrl )
     {
         m_textctrl->SetValue(val);
+    }
+}
+
+void wxTextEntryDialog::SetHint(const wxString& hint)
+{
+    if ( m_textctrl )
+    {
+        m_textctrl->SetHint(hint);
     }
 }
 

@@ -25,6 +25,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/webview_ie.h"
 #include "wx/private/jsscriptwrapper.h"
+#include "wx/private/webview.h"
 
 #include <initguid.h>
 #include <exdispid.h>
@@ -81,6 +82,11 @@ wxVersionInfo wxWebViewFactoryIE::GetVersionInfo(wxVersionContext context)
     }
 
     return {};
+}
+
+wxWebViewConfiguration wxWebViewFactoryIE::CreateConfiguration()
+{
+    return wxWebViewConfiguration(wxWebViewBackendIE, new wxWebViewConfigurationImpl);
 }
 
 //Convenience function for error conversion

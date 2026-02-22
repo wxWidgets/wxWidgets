@@ -1026,7 +1026,7 @@ public:
         @remarks Bitmap will be scaled to a size returned by
                 wxPropertyGrid::GetImageSize();
     */
-    void SetPropertyImage( wxPGPropArg id, wxBitmapBundle& bmp );
+    void SetPropertyImage( wxPGPropArg id, const wxBitmapBundle& bmp );
 
     /**
         Sets maximum length of text in property text editor.

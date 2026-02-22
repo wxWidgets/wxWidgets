@@ -23,7 +23,9 @@
 #include "wx/glcanvas.h"
 
 #include "wx/unix/private/glcanvas.h"
+#ifdef wxHAS_GLX
 #include "wx/unix/private/glx11.h"
+#endif // wxHAS_GLX
 #ifdef wxHAS_EGL
     #include "wx/unix/private/glegl.h"
 
@@ -198,7 +200,7 @@ wxIMPLEMENT_CLASS(wxGLContext, wxObject);
 
 wxGLBackend* wxGLBackend::ms_instance = nullptr;
 
-#ifdef wxHAS_EGL
+#if defined(wxHAS_EGL) && defined(wxHAS_GLX)
 
 static bool wxGLBackendPreferGLX = false;
 
@@ -210,7 +212,7 @@ void wxGLBackend::PreferGLX()
 
     wxGLBackendPreferGLX = true;
 }
-#endif // wxHAS_EGL
+#endif // wxHAS_EGL && wxHAS_GLX
 
 /* static */
 wxGLBackend* wxGLBackend::Init()
@@ -229,11 +231,18 @@ wxGLBackend* wxGLBackend::Init()
         return &wxGLBackendEGL::Get();
 #endif // GTK 3 with Wayland
 
+#ifdef wxHAS_GLX
     if ( !(wxGLBackendPreferGLX || wxSystemOptions::IsFalse("opengl.egl")) )
         return &wxGLBackendEGL::Get();
+#else
+    return &wxGLBackendEGL::Get();
+#endif // wxHAS_GLX
+
 #endif // wxHAS_EGL
 
+#ifdef wxHAS_GLX
     return &wxGLBackendX11::Get();
+#endif // wxHAS_GLX
 }
 
 wxGLContext::wxGLContext(wxGLCanvas *win,
@@ -257,6 +266,12 @@ void wxGLContextBase::ClearCurrent()
     wxGLBackend::Get().ClearCurrentContext();
 }
 
+/* static */
+wxGLExtFunction wxGLContextBase::GetProcAddress(const wxString& name)
+{
+    return wxGLBackend::Get().GetProcAddress(name);
+}
+
 // ----------------------------------------------------------------------------
 // wxGLCanvasUnix
 // ----------------------------------------------------------------------------
@@ -278,6 +293,16 @@ bool wxGLCanvasUnix::SwapBuffers()
     return m_impl->SwapBuffers();
 }
 
+wxGLCanvas::SwapInterval wxGLCanvasUnix::SetSwapInterval(int interval)
+{
+    return m_impl->SetSwapInterval(interval);
+}
+
+int wxGLCanvasUnix::GetSwapInterval() const
+{
+    return m_impl->GetSwapInterval();
+}
+
 bool wxGLCanvasUnix::IsShownOnScreen() const
 {
     return m_impl->HasWindow() && wxGLCanvasBase::IsShownOnScreen();
@@ -296,9 +321,9 @@ void wxGLCanvasUnix::CallOnRealized()
 /* static */
 void wxGLCanvasUnix::PreferGLX()
 {
-#ifdef wxHAS_EGL
+#if defined(wxHAS_EGL) && defined(wxHAS_GLX)
     wxGLBackend::PreferGLX();
-#endif // wxHAS_EGL
+#endif // wxHAS_EGL && wxHAS_GLX
 }
 
 /* static */

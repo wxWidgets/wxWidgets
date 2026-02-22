@@ -319,6 +319,7 @@ QT_SRC=
     src/qt/anybutton.cpp
     src/qt/app.cpp
     src/qt/apptraits.cpp
+    src/qt/artqt.cpp
     src/qt/bitmap.cpp
     src/qt/bmpbuttn.cpp
     src/qt/brush.cpp

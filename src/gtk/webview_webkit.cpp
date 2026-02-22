@@ -18,6 +18,9 @@
 #include "wx/filesys.h"
 #include "wx/base64.h"
 #include "wx/log.h"
+
+#include "wx/private/webview.h"
+
 #include <webkit/webkit.h>
 
 // ----------------------------------------------------------------------------
@@ -1033,5 +1036,14 @@ wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
      return GetDefaultAttributesFromGTKWidget(webkit_web_view_new());
 }
 
+// ----------------------------------------------------------------------------
+// wxWebViewFactoryWebKit
+// ----------------------------------------------------------------------------
+
+wxWebViewConfiguration wxWebViewFactoryWebKit::CreateConfiguration()
+{
+    return wxWebViewConfiguration(wxWebViewBackendWebKit,
+                                  new wxWebViewConfigurationImpl);
+}
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT

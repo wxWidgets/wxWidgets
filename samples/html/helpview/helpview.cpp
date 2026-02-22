@@ -85,6 +85,6 @@ int MyApp::OnExit()
     delete help;
     delete wxConfig::Set(nullptr);
 
-    return 0;
+    return wxApp::OnExit();
 }
 

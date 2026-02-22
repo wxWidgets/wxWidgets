@@ -26,7 +26,9 @@
 #endif
 
 #include "wx/init.h"
+
 #include "wx/atomic.h"
+#include "wx/scopeguard.h"
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
@@ -106,15 +108,6 @@ public:
 private:
     wxAppConsole *m_app;
 };
-
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-// suppress warnings about unused variables
-static inline void Use(void *) { }
-
-#define WX_SUPPRESS_UNUSED_WARN(x) Use(&x)
 
 // ----------------------------------------------------------------------------
 // initialization data
@@ -564,13 +557,7 @@ int wxEntryReal(int& argc, wxChar **argv)
         }
 
         // ensure that OnExit() is called if OnInit() had succeeded
-        class CallOnExit
-        {
-        public:
-            ~CallOnExit() { wxTheApp->OnExit(); }
-        } callOnExit;
-
-        WX_SUPPRESS_UNUSED_WARN(callOnExit);
+        wxON_BLOCK_EXIT_OBJ0(*wxTheApp, wxAppConsoleBase::CallOnExit);
 
         // app execution
         return wxTheApp->OnRun();

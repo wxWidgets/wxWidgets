@@ -246,7 +246,7 @@ int App::OnExit () {
     if (g_pageSetupData) delete g_pageSetupData;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
-    return 0;
+    return wxApp::OnExit();
 }
 
 //----------------------------------------------------------------------------

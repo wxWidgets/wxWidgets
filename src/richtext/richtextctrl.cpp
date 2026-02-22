@@ -5583,5 +5583,68 @@ int wxRichTextContextMenuPropertiesInfo::AddItems(wxRichTextCtrl* ctrl, wxRichTe
     return GetCount();
 }
 
+#if wxUSE_ACCESSIBILITY
+
+#include "wx/access.h"
+
+class wxRichTextCtrlAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxRichTextCtrlAccessible(wxRichTextCtrl *win) : wxWindowAccessible(win)
+    {
+    }
+
+    wxAccStatus GetName(int childId, wxString *name) override
+    {
+        if (childId != wxACC_SELF)
+            return wxWindowAccessible::GetName(childId, name);
+
+        *name = _("Rich Text Control");  // wxString::operator= copies, so this is safe
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetRole(int childId, wxAccRole *role) override
+    {
+        if (childId != wxACC_SELF)
+            return wxWindowAccessible::GetRole(childId, role);
+
+        *role = wxROLE_SYSTEM_TEXT;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetState(int childId, long *state) override
+    {
+        if (childId != wxACC_SELF)
+            return wxWindowAccessible::GetState(childId, state);
+
+        wxRichTextCtrl *ctrl = wxStaticCast(GetWindow(), wxRichTextCtrl);
+
+        *state = wxACC_STATE_SYSTEM_FOCUSABLE;
+        if (ctrl->HasFocus())
+            *state |= wxACC_STATE_SYSTEM_FOCUSED;
+        if (!ctrl->IsEditable())
+            *state |= wxACC_STATE_SYSTEM_READONLY;
+
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetValue(int childId, wxString *strValue) override
+    {
+        if (childId != wxACC_SELF)
+            return wxWindowAccessible::GetValue(childId, strValue);
+
+        wxRichTextCtrl *ctrl = wxStaticCast(GetWindow(), wxRichTextCtrl);
+        *strValue = ctrl->GetValue();
+        return wxACC_OK;
+    }
+};
+
+wxAccessible *wxRichTextCtrl::CreateAccessible()
+{
+    return new wxRichTextCtrlAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
+
 #endif
     // wxUSE_RICHTEXT

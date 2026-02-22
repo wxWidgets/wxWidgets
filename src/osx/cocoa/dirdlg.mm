@@ -104,7 +104,7 @@ void wxDirDialog::ShowWindowModal()
 
     wxCHECK_RET(parentWindow, "Window modal display requires parent.");
 
-    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
+    m_modality = wxWindowMode::WindowModal;
 
     NSOpenPanel *oPanel = OSXCreatePanel();
 
@@ -162,7 +162,7 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
     }
     SetReturnCode(result);
 
-    if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
+    if (GetModality() == wxWindowMode::WindowModal)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
 

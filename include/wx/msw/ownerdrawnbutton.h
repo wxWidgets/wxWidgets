@@ -125,6 +125,8 @@ public:
         return MSWDrawButton(item) || Base::MSWOnDraw(item);
     }
 
+    using wxMSWOwnerDrawnButtonBase::MSWIsOwnerDrawn;
+
 protected:
     bool IsOwnerDrawn() const { return MSWIsOwnerDrawn(); }
 };

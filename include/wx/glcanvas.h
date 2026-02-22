@@ -18,14 +18,6 @@
 #include "wx/palette.h"
 #include "wx/window.h"
 
-// Most ports have a single implementation of wxGLCanvas, but wxGTK has two:
-// legacy GLX-based one (also used by wxX11) and EGL-based one which is used
-// if support for EGL is available. wxHAS_EGL is defined by the build system
-// but define wxHAS_GLX too for consistency, even if it's always available.
-#if defined(__WXX11__) || defined(__WXGTK__)
-    #define wxHAS_GLX 1
-#endif
-
 class WXDLLIMPEXP_FWD_GL wxGLCanvas;
 class WXDLLIMPEXP_FWD_GL wxGLContext;
 
@@ -190,6 +182,8 @@ public:
 // wxGLContextBase: OpenGL rendering context
 // ----------------------------------------------------------------------------
 
+using wxGLExtFunction = void (*)();
+
 class WXDLLIMPEXP_GL wxGLContextBase : public wxObject
 {
 public:
@@ -208,6 +202,20 @@ public:
 
     bool IsOK() const { return m_isOk; }
 
+    // Get pointer to OpenGL extension function, return nullptr if not found.
+    static wxGLExtFunction GetProcAddress(const wxString& name);
+
+    // Same as above, but returns the function of the specified type.
+    template <typename T>
+    static T GetProcAddress(const wxString& name)
+    {
+        wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+
+        return reinterpret_cast<T>(GetProcAddress(name));
+
+        wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+    }
+
 protected:
     bool m_isOk;
 };
@@ -219,6 +227,18 @@ protected:
 class WXDLLIMPEXP_GL wxGLCanvasBase : public wxWindow
 {
 public:
+    // Disable changing swap interval or indicate that it is unknown.
+    static constexpr int DefaultSwapInterval = INT_MAX;
+
+    // Return values of SetSwapInterval().
+    enum class SwapInterval
+    {
+        NotSet = 0,
+        Set = 1,
+        NonAdaptive = 2
+    };
+
+
     // default ctor doesn't initialize the window, use Create() later
     wxGLCanvasBase();
 
@@ -247,6 +267,21 @@ public:
     // flush the back buffer (if we have it)
     virtual bool SwapBuffers() = 0;
 
+    // Set swap interval to the specified value.
+    //
+    // Special value of 0 means to disable VSync and DefaultSwapInterval means
+    // to disable automatically disabling VSync by default, as needs to be done
+    // under some platforms currently.
+    //
+    // Negative values may be used to enable adaptive VSync if supported by the
+    // implementation.
+    //
+    // Return true if the swap interval was set successfully, false if not.
+    virtual SwapInterval SetSwapInterval(int WXUNUSED(interval))
+    {
+        return SwapInterval::NotSet;
+    }
+
 
     // accessors
     // ---------
@@ -258,6 +293,10 @@ public:
 #if wxUSE_PALETTE
     const wxPalette *GetPalette() const { return &m_palette; }
 #endif // wxUSE_PALETTE
+
+    // Return the current swap interval.
+    virtual int GetSwapInterval() const { return DefaultSwapInterval; }
+
 
     // miscellaneous helper functions
     // ------------------------------

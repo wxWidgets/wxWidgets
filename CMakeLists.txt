@@ -7,7 +7,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-cmake_minimum_required(VERSION 3.5...4.1)
+cmake_minimum_required(VERSION 3.10...4.1)
 
 if(NOT CMAKE_CONFIGURATION_TYPES)
     get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)

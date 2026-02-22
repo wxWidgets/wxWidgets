@@ -181,7 +181,14 @@ public:
             else
 #endif // HAVE_MSW_THEME
             {
+                // In wxGTK wxSYS_COLOUR_INFOBK typically uses alpha channel
+                // and this doesn't work as wxPopupWindow background currently,
+                // so prefer not to set any colour at all to at least get
+                // something visible on the screen instead of using black
+                // bacgkround.
+#ifndef __WXGTK__
                 colStart = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK);
+#endif
             }
         }
 
@@ -198,7 +205,7 @@ public:
 
             SetBackgroundBitmap(bmp);
         }
-        else // Use solid colour.
+        else if ( colStart.IsOk() ) // Use solid colour.
         {
             SetBackgroundColour(colStart);
         }

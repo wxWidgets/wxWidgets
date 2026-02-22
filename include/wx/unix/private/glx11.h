@@ -47,6 +47,9 @@ public:
 
     virtual bool SwapBuffers() override;
 
+    virtual wxGLCanvas::SwapInterval DoSetSwapInterval(int interval) override;
+    virtual int GetSwapInterval() const override;
+
     virtual void OnRealized() override { /* nothing to do here for GLX */ }
 
     virtual bool HasWindow() const override;
@@ -62,8 +65,6 @@ public:
 private:
     GLXFBConfig *m_fbc;
     XVisualInfo* m_vi;
-
-    bool m_swapIntervalSet = false;
 };
 
 // ----------------------------------------------------------------------------
@@ -86,6 +87,7 @@ public:
     CreateCanvasImpl(wxGLCanvasUnix* canvas) override;
 
     void ClearCurrentContext() override;
+    wxGLExtFunction GetProcAddress(const wxString& name) override;
 
     bool IsExtensionSupported(const char* extension) override;
     bool IsDisplaySupported(const wxGLAttributes& dispAttrs) override;

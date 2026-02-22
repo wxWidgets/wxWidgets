@@ -382,6 +382,7 @@ set(QT_SRC
     src/qt/overlay.cpp
     src/qt/renderer.cpp
     src/qt/graphics.cpp
+    src/qt/artqt.cpp
 )
 
 set(MEDIA_QT_SRC

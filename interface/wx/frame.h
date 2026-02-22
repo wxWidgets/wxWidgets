@@ -316,6 +316,20 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
 
     /**
+        Set the frame modality.
+
+        Call this function before showing the frame to make it modal to the
+        application (wxWindowMode::AppModal) or just to the parent window
+        (wxWindowMode::WindowModal).
+
+        @note Changing the frame modality after it has been shown has no effect
+
+        @since 3.3.2
+    */
+    virtual void SetWindowModality(wxWindowMode modality);
+
+
+    /**
         Returns a pointer to the menubar currently associated with the frame (if any).
 
         @see SetMenuBar(), wxMenuBar, wxMenu

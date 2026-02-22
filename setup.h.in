@@ -1141,6 +1141,9 @@
 /* Define if you have EGL support */
 #undef wxHAS_EGL
 
+/* Define if you have GLX support */
+#undef wxHAS_GLX
+
 /* Define if you have inotify_xxx() functions. */
 #undef wxHAS_INOTIFY
 

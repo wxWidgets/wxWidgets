@@ -29,6 +29,7 @@
 #include "wx/generic/private/richtooltip.h"
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
+#include "wx/msw/private/darkmode.h"
 
 // Provide definitions missing from some compilers SDK headers.
 
@@ -66,8 +67,9 @@ public:
     wxRichToolTipMSWImpl(const wxString& title, const wxString& message) :
         wxRichToolTipGenericImpl(title, message)
     {
-        // So far so good...
-        m_canUseNative = true;
+        // We can't use native tooltips in dark mode as they use light mode
+        // colours.
+        m_canUseNative = !wxMSWDarkMode::IsActive();
 
         m_ttiIcon = TTI_NONE;
     }

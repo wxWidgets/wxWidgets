@@ -482,6 +482,10 @@ public:
     // returns true for GUI wxApp subclasses
     virtual bool IsGUI() const { return false; }
 
+    // Perform the always needed cleanup before and after calling possibly
+    // overridden OnExit().
+    int CallOnExit();
+
 
     // command line arguments (public for backwards compatibility)
     int argc;
@@ -501,6 +505,13 @@ protected:
     //
     // called from ProcessPendingEvents()
     void DeletePendingObjects();
+
+    // Perform all delayed cleanup, including deleting the pending objects and
+    // anything else, e.g. the GUI version uses it to delete any remaining
+    // windows too.
+    //
+    // This function is safe to call multiple times.
+    virtual void DoDelayedCleanup();
 
     // the function which creates the traits object when GetTraits() needs it
     // for the first time
@@ -751,6 +762,9 @@ public:
     }
 
 protected:
+    // Override base class method to do the GUI-specific cleanup too.
+    virtual void DoDelayedCleanup() override;
+
     // override base class method to use GUI traits
     virtual wxAppTraits *CreateTraits() override;
 

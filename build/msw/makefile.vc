@@ -2046,7 +2046,7 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_ScintillaWX.obj \
 	$(OBJS)\stclib_xh_styledtextctrl.obj \
 	$(OBJS)\stclib_minimap.obj
-GLDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_642)$(__DEBUGRUNTIME) /DWIN32 \
+GLDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_657)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\tiff\libtiff /I..\..\src\jpeg /I..\..\src\png \
 	/I..\..\3rdparty\libwebp\src $(____INC_LUNASVG_FILENAMES) /I..\..\src\zlib \
 	/I..\..\3rdparty\pcre\src\wx /I..\..\src\expat\expat\lib $(__DEBUGINFO) \

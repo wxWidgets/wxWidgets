@@ -128,7 +128,7 @@ wxDialogBase::wxDialogBase()
 }
 
 wxWindow *
-wxDialogBase::CheckIfCanBeUsedAsParent(wxDialogModality modality,
+wxDialogBase::CheckIfCanBeUsedAsParent(wxWindowMode modality,
                                        wxWindow *parent) const
 {
     if ( !parent )
@@ -153,11 +153,11 @@ wxDialogBase::CheckIfCanBeUsedAsParent(wxDialogModality modality,
     // be created before their parent is shown and only shown later.
     switch ( modality )
     {
-        case wxDIALOG_MODALITY_NONE:
+        case wxWindowMode::Normal:
             break;
 
-        case wxDIALOG_MODALITY_APP_MODAL:
-        case wxDIALOG_MODALITY_WINDOW_MODAL:
+        case wxWindowMode::AppModal:
+        case wxWindowMode::WindowModal:
             if ( !parent->IsShownOnScreen() )
             {
                 // using hidden parent won't work correctly either
@@ -177,7 +177,7 @@ wxDialogBase::CheckIfCanBeUsedAsParent(wxDialogModality modality,
 }
 
 wxWindow *
-wxDialogBase::DoGetParentForDialog(wxDialogModality modality,
+wxDialogBase::DoGetParentForDialog(wxWindowMode modality,
                                    wxWindow *parent,
                                    long style) const
 {
@@ -513,9 +513,9 @@ void wxDialogBase::SendWindowModalDialogEvent ( wxEventType type )
 }
 
 
-wxDialogModality wxDialogBase::GetModality() const
+wxWindowMode wxDialogBase::GetModality() const
 {
-    return IsModal() ? wxDIALOG_MODALITY_APP_MODAL : wxDIALOG_MODALITY_NONE;
+    return IsModal() ? wxWindowMode::AppModal : wxWindowMode::Normal;
 }
 
 // ----------------------------------------------------------------------------

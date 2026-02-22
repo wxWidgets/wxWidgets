@@ -461,6 +461,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/overlay.cpp
     src/qt/renderer.cpp
     src/qt/graphics.cpp
+    src/qt/artqt.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">

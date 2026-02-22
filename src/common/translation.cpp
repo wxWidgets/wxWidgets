@@ -53,12 +53,7 @@
     #include "wx/msw/missing.h"
 #endif
 
-#ifdef __MINGW32__
-    #include <map>
-#endif
-
 #include <memory>
-#include <unordered_set>
 
 // ----------------------------------------------------------------------------
 // simple types
@@ -1454,97 +1449,6 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
     wxLogTrace(TRACE_I18N, " => using language '%s'", lang);
     return lang;
 }
-
-namespace
-{
-
-// We use this container to store all strings known not to have translations.
-// It is thread-specific to avoid using mutexes for every untranslated string
-// access.
-using UntranslatedStrings = std::unordered_set<wxString>;
-
-/*
-    As of October 2025, MinGW still has a long-standing bug in its thread_local
-    variables implementation: their memory is de-allocated *before* their
-    destructor is called, see https://github.com/msys2/MINGW-packages/issues/2519
-
-    The UntranslatedStringHolder class works around this issue, by storing data
-    in global variables outside of this class and only relying on the dtor to
-    be executed when any thread (not necessarily created by wxWidgets) exits to
-    ensure that we always perform the required cleanup.
- */
-#ifdef __MINGW32__
-
-class UntranslatedStringHolder
-{
-private:
-    static wxCriticalSection ms_criticalSection;
-    static std::map<wxThreadIdType, UntranslatedStrings> ms_setsMap;
-
-    // This will be set to point to an element of ms_setsMap.
-    UntranslatedStrings* m_holder = nullptr;
-
-public:
-    UntranslatedStringHolder() = default;
-
-    const wxString& get(const wxString& str)
-    {
-        if ( m_holder == nullptr )
-        {
-            wxCriticalSectionLocker locker(ms_criticalSection);
-            m_holder = &ms_setsMap[wxThread::GetCurrentId()];
-        }
-
-        return *m_holder->insert(str).first;
-    }
-
-    ~UntranslatedStringHolder()
-    {
-        // This code is run after this object memory has been deallocated so we
-        // cannot access any member variables, but we can access global ones.
-        wxCriticalSectionLocker locker(ms_criticalSection);
-        ms_setsMap.erase(wxThread::GetCurrentId());
-    }
-
-    wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
-};
-
-wxCriticalSection UntranslatedStringHolder::ms_criticalSection;
-
-std::map<wxThreadIdType, UntranslatedStrings> UntranslatedStringHolder::ms_setsMap;
-
-#else // !__MINGW32__
-
-// When not using MinGW, thread_local variables to work correctly but we still
-// define this class, even if it's trivial, to use the same code below.
-class UntranslatedStringHolder
-{
-private:
-    UntranslatedStrings m_holder;
-
-public:
-    UntranslatedStringHolder() = default;
-
-    const wxString& get(const wxString& str)
-    {
-        return *m_holder.insert(str).first;
-    }
-
-    wxDECLARE_NO_COPY_CLASS(UntranslatedStringHolder);
-};
-
-#endif // __MINGW32__/!__MINGW32__
-
-} // Anonymous namespace
-
-
-/* static */
-const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
-{
-    thread_local UntranslatedStringHolder wxPerThreadStrings;
-    return wxPerThreadStrings.get(str);
-}
-
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
                                                     const wxString& domain,

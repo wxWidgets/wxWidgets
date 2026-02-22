@@ -59,6 +59,13 @@ private:
     void OnNewWindow(wxCommandEvent& event);
     void OnNewStereoWindow(wxCommandEvent& event);
 
+    void OnDisableVSync(wxCommandEvent& event);
+    void OnEnableVSync(wxCommandEvent& event);
+    void OnEnableAdaptiveVSync(wxCommandEvent& event);
+    void OnGetSwapInterval(wxCommandEvent& event);
+
+    wxGLCanvas* m_canvas = nullptr;
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -86,7 +93,11 @@ private:
 
 enum
 {
-    NEW_STEREO_WINDOW = wxID_HIGHEST
+    NEW_STEREO_WINDOW = wxID_HIGHEST,
+    DISABLE_VSYNC,
+    ENABLE_VSYNC,
+    ENABLE_ADAPTIVE_VSYNC,
+    GET_SWAP_INTERVAL
 };
 
 #endif // _WX_CUBE_H_

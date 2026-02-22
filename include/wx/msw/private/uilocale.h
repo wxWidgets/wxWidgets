@@ -10,6 +10,8 @@
 #ifndef _WX_MSW_PRIVATE_UILOCALE_H_
 #define _WX_MSW_PRIVATE_UILOCALE_H_
 
+#if wxUSE_INTL
+
 #include "wx/msw/private.h"     // Include <windows.h> to get LCID.
 
 #ifndef LOCALE_SNAME
@@ -22,5 +24,7 @@
 WXDLLIMPEXP_BASE wxString wxTranslateFromUnicodeFormat(const wxString& fmt);
 
 WXDLLIMPEXP_BASE wxString wxGetMSWDateTimeFormat(wxLocaleInfo index);
+
+#endif // wxUSE_INTL
 
 #endif // _WX_MSW_PRIVATE_UILOCALE_H_

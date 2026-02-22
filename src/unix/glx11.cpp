@@ -18,7 +18,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_GLCANVAS
+#if wxUSE_GLCANVAS && defined(wxHAS_GLX)
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -109,6 +109,10 @@ typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
 #endif
 #ifndef GLX_ARB_robustness_share_group_isolation
 #define GLX_ARB_robustness_share_group_isolation
+#endif
+
+#ifndef GLX_EXT_swap_control
+#define GLX_SWAP_INTERVAL_EXT 0x20F1
 #endif
 
 #ifndef GLX_ARB_context_flush_control
@@ -499,8 +503,10 @@ wxGLContextX11::wxGLContextX11(wxGLCanvas *win,
     PFNGLXCREATECONTEXTATTRIBSARBPROC wx_glXCreateContextAttribsARB = 0;
     if (fbc)
     {
-        wx_glXCreateContextAttribsARB = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
-            glXGetProcAddress(reinterpret_cast<const GLubyte*>("glXCreateContextAttribsARB"));
+        wx_glXCreateContextAttribsARB =
+            wxGLContext::GetProcAddress<PFNGLXCREATECONTEXTATTRIBSARBPROC>(
+                "glXCreateContextAttribsARB"
+            );
     }
 
     glXDestroyContext( dpy, tempContext );
@@ -771,33 +777,156 @@ int wxGLBackendX11::GetGLXVersion()
 namespace
 {
 
+bool IsSwapControlExtensionSupported()
+{
+    return wxGLBackendX11_instance.IsExtensionSupported("GLX_EXT_swap_control");
+}
+
+bool IsSwapControlTearExtensionSupported()
+{
+    return wxGLBackendX11_instance.IsExtensionSupported("GLX_EXT_swap_control_tear");
+}
+
+bool IsMesaSwapControlExtensionSupported()
+{
+    return wxGLBackendX11_instance.IsExtensionSupported("GLX_MESA_swap_control");
+}
+
 // Call glXSwapIntervalEXT() if present.
 //
 // For now just try using EXT_swap_control extension, in principle there is
 // also a MESA one, but it's not clear if it's worth falling back on it (or
 // preferring to use it?).
-void wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
+wxGLCanvas::SwapInterval
+wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
 {
     typedef void (*PFNGLXSWAPINTERVALEXTPROC)(Display *dpy,
                                               GLXDrawable drawable,
                                               int interval);
-
     static PFNGLXSWAPINTERVALEXTPROC s_glXSwapIntervalEXT = nullptr;
-    static bool s_glXSwapIntervalEXTInit = false;
-    if ( !s_glXSwapIntervalEXTInit )
-    {
-        s_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)
-            glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
 
-        s_glXSwapIntervalEXTInit = true;
+    typedef void (*PFNGLXSWAPINTERVALMESAPROC)(int interval);
+    static PFNGLXSWAPINTERVALMESAPROC s_glXSwapIntervalMESA = nullptr;
+
+    if ( IsSwapControlExtensionSupported() )
+    {
+        static bool s_glXSwapIntervalEXTInit = false;
+        if ( !s_glXSwapIntervalEXTInit )
+        {
+            s_glXSwapIntervalEXT =
+                wxGLContext::GetProcAddress<PFNGLXSWAPINTERVALEXTPROC>(
+                    "glXSwapIntervalEXT"
+                );
+
+            s_glXSwapIntervalEXTInit = true;
+
+            if ( !s_glXSwapIntervalEXT )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_EXT_swap_control supported but "
+                           "glXSwapIntervalEXT() unexpectedly not found");
+            }
+        }
     }
+    else if ( IsMesaSwapControlExtensionSupported() )
+    {
+        static bool s_glXSwapIntervalMESAInit = false;
+        if ( !s_glXSwapIntervalMESAInit )
+        {
+            s_glXSwapIntervalMESA =
+                wxGLContext::GetProcAddress<PFNGLXSWAPINTERVALMESAPROC>(
+                    "glXSwapIntervalMESA"
+                );
+
+            s_glXSwapIntervalMESAInit = true;
+
+            if ( !s_glXSwapIntervalMESA )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_MESA_swap_control supported but "
+                           "glXSwapIntervalMESA() unexpectedly not found");
+            }
+        }
+    }
+
+    wxGLCanvas::SwapInterval result = wxGLCanvas::SwapInterval::Set;
 
     if ( s_glXSwapIntervalEXT )
     {
+        // Don't try requesting adaptive VSync if it's not supported.
+        if ( interval < 0 && !IsSwapControlTearExtensionSupported() )
+        {
+            interval = -interval;
+            result = wxGLCanvas::SwapInterval::NonAdaptive;
+        }
+
         wxLogTrace(TRACE_GLX, "Setting GLX swap interval to %d", interval);
 
         s_glXSwapIntervalEXT(dpy, drawable, interval);
+
+        // Check if adaptive VSync was actually enabled.
+        if ( interval < 0 )
+        {
+            unsigned int value = 0;
+            glXQueryDrawable(dpy, drawable, GLX_LATE_SWAPS_TEAR_EXT, &value);
+            if ( !value )
+            {
+                wxLogTrace(TRACE_GLX, "Failed to enable adaptive VSync");
+                result = wxGLCanvas::SwapInterval::NonAdaptive;
+            }
+        }
     }
+    else if ( s_glXSwapIntervalMESA )
+    {
+        // Adaptive VSync not supported by MESA extension.
+        if ( interval < 0 )
+        {
+            interval = -interval;
+            result = wxGLCanvas::SwapInterval::NonAdaptive;
+        }
+
+        wxLogTrace(TRACE_GLX, "Setting GLX swap interval to %d (using MESA)",
+                   interval);
+
+        s_glXSwapIntervalMESA(interval);
+    }
+    else
+    {
+        result = wxGLCanvas::SwapInterval::NotSet;
+    }
+
+    return result;
+}
+
+int wxMESAGetSwapInterval()
+{
+    typedef int (*PFNGLXGETSWAPINTERVALMESAPROC)();
+    static PFNGLXGETSWAPINTERVALMESAPROC s_glXGetSwapIntervalMESA = nullptr;
+
+    if ( IsMesaSwapControlExtensionSupported() )
+    {
+        static bool s_glXGetSwapIntervalMESAInit = false;
+        if ( !s_glXGetSwapIntervalMESAInit )
+        {
+            s_glXGetSwapIntervalMESA =
+                wxGLContext::GetProcAddress<PFNGLXGETSWAPINTERVALMESAPROC>(
+                    "glXGetSwapIntervalMESA"
+                );
+
+            s_glXGetSwapIntervalMESAInit = true;
+
+            if ( !s_glXGetSwapIntervalMESA )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_MESA_swap_control supported but "
+                           "glXGetSwapIntervalMESA() unexpectedly not found");
+            }
+        }
+    }
+
+    if ( s_glXGetSwapIntervalMESA )
+    {
+        return s_glXGetSwapIntervalMESA();
+    }
+
+    return wxGLCanvas::DefaultSwapInterval;
 }
 
 } // anonymous namespace
@@ -811,17 +940,49 @@ bool wxGLCanvasX11::SwapBuffers()
 
     // Disable blocking in glXSwapBuffers, as this is needed under XWayland for
     // the reasons explained in wxGLCanvasEGL::SwapBuffers().
-    if ( !m_swapIntervalSet )
+    if ( m_swapIntervalToSet != wxGLCanvas::DefaultSwapInterval )
     {
-        wxGLSetSwapInterval(dpy, xid, 0);
+        wxGLSetSwapInterval(dpy, xid, m_swapIntervalToSet);
 
         // Don't try again in any case, if we failed this time, we'll fail the
         // next one anyhow.
-        m_swapIntervalSet = true;
+        m_swapIntervalToSet = wxGLCanvas::DefaultSwapInterval;
     }
 
     glXSwapBuffers(dpy, xid);
     return true;
+}
+
+wxGLCanvas::SwapInterval wxGLCanvasX11::DoSetSwapInterval(int interval)
+{
+    const Window xid = m_canvas->GetXWindow();
+    const auto dpy = wxGetX11Display();
+
+    return wxGLSetSwapInterval(dpy, xid, interval);
+}
+
+int wxGLCanvasX11::GetSwapInterval() const
+{
+    int swapInterval = wxGLCanvas::DefaultSwapInterval;
+
+    const Window xid = m_canvas->GetXWindow();
+    if ( xid )
+    {
+        if ( IsSwapControlExtensionSupported() )
+        {
+            const auto dpy = wxGetX11Display();
+            unsigned int value = 0;
+            glXQueryDrawable(dpy, xid, GLX_SWAP_INTERVAL_EXT, &value);
+
+            swapInterval = value;
+        }
+        else if ( IsMesaSwapControlExtensionSupported() )
+        {
+            swapInterval = wxMESAGetSwapInterval();
+        }
+    }
+
+    return swapInterval;
 }
 
 bool wxGLCanvasX11::HasWindow() const
@@ -856,6 +1017,13 @@ wxGLBackendX11::CreateCanvasImpl(wxGLCanvasUnix* canvas)
 void wxGLBackendX11::ClearCurrentContext()
 {
     MakeCurrent(None, nullptr);
+}
+
+wxGLExtFunction wxGLBackendX11::GetProcAddress(const wxString& name)
+{
+    return glXGetProcAddressARB(reinterpret_cast<const GLubyte*>(
+            static_cast<const char*>(name.utf8_str())
+        ));
 }
 
 #endif // wxUSE_GLCANVAS

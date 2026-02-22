@@ -494,15 +494,15 @@ public:
     /**
         Calls wxGetTranslation(const wxString&, const wxString&).
     */
-    const wxString& GetString(const wxString& origString,
-                              const wxString& domain = wxEmptyString) const;
+    wxString GetString(const wxString& origString,
+                       const wxString& domain = wxEmptyString) const;
 
     /**
         Calls wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&).
     */
-    const wxString& GetString(const wxString& origString,
-                              const wxString& origString2, unsigned n,
-                              const wxString& domain = wxEmptyString) const;
+    wxString GetString(const wxString& origString,
+                       const wxString& origString2, unsigned n,
+                       const wxString& domain = wxEmptyString) const;
 
     /**
         Returns current platform-specific locale name as passed to setlocale().

@@ -35,7 +35,7 @@ This version of wxWidgets supports the following primary platforms:
 
 All C++11 compilers are supported including but not limited to:
 
-- Microsoft Visual C++ 2015 or later (up to 2022).
+- Microsoft Visual C++ 2015 or later (up to 2026).
 - g++ 4.8 or later (up to 15), including MinGW/MinGW-64/TDM under Windows.
 - Clang (up to 19/Xcode 16).
 

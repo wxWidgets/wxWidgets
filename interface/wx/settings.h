@@ -109,7 +109,10 @@ enum wxSystemColour
     wxSYS_COLOUR_LISTBOXTEXT,
 
     /**
-        Text colour for the unfocused selection of list-like controls.
+        Text colour for the selected items in list-like controls.
+
+        This colour is supposed to have good contrast with the background drawn
+        by wxRendererNative::DrawItemSelectionRect().
 
         @since 2.9.1
      */

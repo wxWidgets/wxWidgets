@@ -37,6 +37,9 @@
     using wxMsgList = std::list<MSG>;
 #endif // wxUSE_THREADS
 
+// This is defined in src/msw/window.cpp.
+extern WPARAM wxVKBlockedByKeyboardHook;
+
 // ============================================================================
 // GUI wxEventLoop implementation
 // ============================================================================
@@ -117,6 +120,26 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 
 void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
 {
+    // Workaround for the workaround for the problem of IME hanging if it
+    // doesn't get all keyboard messages in wxKeyboardHook(): as we can't
+    // afford to ignore the keyboard event at Windows level, we ignore it here
+    // instead.
+    if ( msg->message == WM_KEYDOWN && wxVKBlockedByKeyboardHook )
+    {
+        if ( msg->wParam == wxVKBlockedByKeyboardHook )
+        {
+            wxVKBlockedByKeyboardHook = 0;
+            return;
+        }
+        else
+        {
+            // This shouldn't normally happen.
+            wxLogDebug("Unexpected WM_KEYDOWN for %x after hook blocked %x",
+                       static_cast<unsigned>(msg->wParam),
+                       static_cast<unsigned>(wxVKBlockedByKeyboardHook));
+        }
+    }
+
     // give us the chance to preprocess the message first
     if ( !PreProcessMessage(msg) )
     {

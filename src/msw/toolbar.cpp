@@ -443,17 +443,18 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
 #endif
 
     // Retrieve or apply/restore tool packing value.
+    DWORD padding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
     if ( m_toolPacking <= 0 )
     {
         // Retrieve packing value if it hasn't been yet set with SetToolPacking.
-        DWORD padding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
-        m_toolPacking = IsVertical() ? HIWORD(padding) : LOWORD(padding);
+        m_toolPacking = FromDIP(IsVertical() ? HIWORD(padding) : LOWORD(padding));
     }
-    else
-    {
-        // Apply packing value if it has been already set with SetToolPacking.
-        MSWSetPadding(m_toolPacking);
-    }
+
+    // Scale the tool packing to the active DPI
+    DWORD orthoPadding = FromDIP(IsVertical() ? LOWORD(padding) : HIWORD(padding));
+    DWORD scaledPadding = IsVertical() ? MAKELPARAM(orthoPadding, m_toolPacking)
+                                       : MAKELPARAM(m_toolPacking, orthoPadding);
+    ::SendMessage(GetHwnd(), TB_SETPADDING, 0, scaledPadding);
 
 #if wxUSE_TOOLTIPS
     // MSW "helpfully" handles ampersands as mnemonics in the tooltips
@@ -590,7 +591,7 @@ wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
 
     // This is arbitrary, but we want to leave at least 1px around the control
     // vertically, otherwise it really looks too cramped.
-    size.y += 2*1;
+    size.y += FromDIP(2*1);
 
     // Account for the label, if any.
     if ( wxStaticText * const staticText = tool->GetStaticText() )
@@ -603,7 +604,7 @@ wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
                 size.x = sizeLabel.x;
 
             size.y += sizeLabel.y;
-            size.y += MARGIN_CONTROL_LABEL;
+            size.y += FromDIP(MARGIN_CONTROL_LABEL);
         }
     }
 
@@ -1396,12 +1397,13 @@ bool wxToolBar::Realize()
 
                 // Center the static text horizontally for consistency with the
                 // button labels and position it below the control vertically.
+                const int labelMargin = FromDIP(MARGIN_CONTROL_LABEL);
                 staticText->Move(x + (totalWidth - staticTextSize.x)/2,
                                  r.top + (height + controlSize.y
                                                  - staticTextSize.y
-                                                 + MARGIN_CONTROL_LABEL)/2);
+                                                 + labelMargin)/2);
 
-                totalHeight += staticTextSize.y + MARGIN_CONTROL_LABEL;
+                totalHeight += staticTextSize.y + labelMargin;
             }
         }
 
@@ -2121,6 +2123,13 @@ void wxToolBar::RealizeHelper()
 
 void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
+    // Scale the tool packing to the new DPI
+    DWORD curPadding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
+    DWORD newPadding = MAKELPARAM(event.ScaleX(LOWORD(curPadding)),
+                                  event.ScaleY(HIWORD(curPadding)));
+    m_toolPacking = IsVertical() ? HIWORD(newPadding) : LOWORD(newPadding);
+    ::SendMessage(GetHwnd(), TB_SETPADDING, 0, newPadding);
+
     // Manually scale the size of the controls. Even though the font has been
     // updated, the internal size of the controls does not.
     wxToolBarToolsList::compatibility_iterator node;
