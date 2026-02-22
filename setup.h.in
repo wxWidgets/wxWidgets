@@ -318,6 +318,7 @@
 
 #define wxUSE_CAIRO 0
 
+#define wxUSE_CAIRO_1_18 0
 
 
 #define wxUSE_CONTROLS     0

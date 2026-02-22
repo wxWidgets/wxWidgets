@@ -7462,6 +7462,12 @@ if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
             if test "$wxUSE_GTK" != 1; then
                 CXXFLAGS="$CXXFLAGS $CAIRO_CFLAGS"
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
+
+                dnl Also check for Cairo 1.18, see test for it in cairo.cpp.
+                PKG_CHECK_MODULES(CAIRO, [cairo >= 1.18],
+                    [AC_DEFINE(wxUSE_CAIRO_1_18)],
+                    [AC_MSG_RESULT(no)]
+                )
             fi
         ],
         [AC_MSG_RESULT(no)]

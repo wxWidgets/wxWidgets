@@ -319,6 +319,7 @@
 
 #cmakedefine01 wxUSE_CAIRO
 
+#cmakedefine01 wxUSE_CAIRO_1_18
 
 
 #cmakedefine01 wxUSE_CONTROLS

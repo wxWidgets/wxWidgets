@@ -765,6 +765,8 @@
 // Recommended setting: 0
 #define wxUSE_CAIRO 0
 
+// Defined if Cairo version is >= 1.18
+#define wxUSE_CAIRO_1_18 0
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls

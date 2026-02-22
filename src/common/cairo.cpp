@@ -14,9 +14,17 @@
 
 #if wxUSE_CAIRO && !defined(__WXGTK__)
 
-// keep cairo.h from defining dllimport as we're defining the symbols inside
-// the wx dll in order to load them dynamically.
+// We want to prevent cairo.h from using dllimport attribute for the functions
+// it declares as we're loading them dynamically, but this is trickier than it
+// should be because older versions of cairo.h respected cairo_public being
+// defined before including it, but this was broken in 1.18, so we need to
+// define an alternative symbol and avoid defining cairo_public as this would
+// result in a warning about its redefinition.
+#if wxUSE_CAIRO_1_18
+#define CAIRO_WIN32_STATIC_BUILD
+#else
 #define cairo_public
+#endif
 
 #include <cairo.h>
 #include "wx/dynlib.h"
