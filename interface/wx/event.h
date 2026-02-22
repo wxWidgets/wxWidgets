@@ -5159,6 +5159,88 @@ public:
     */
     void SetCursor(const wxCursor& cursor);
 };
+/**
+    @class wxTabletEvent
+
+    A wxTabletEvent is generated from wxWindow when the graphical pen is used.
+
+    This event gives the application the chance to perform specific tablet events
+    processing based on the current position of the pen, pressure and other
+    parameters.
+
+    @beginEventTable{wxTabletEvent}
+    @event{EVT_POINTER_DOWN(func)}
+        Process a @c wxEVT_POINTER_DOWN event.
+    @event{EVT_POINTER_UP(func)}
+        Process a @c wxEVT_POINTER_UP event.
+    @event{EVT_POINTER_UPDATE(func)}
+        Process a @c wxEVT_POINTER_UPDATE event.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+ */
+class wxTabletEvent : public wxEvent
+{
+public:
+    /**
+        Constructor.
+     */
+    wxTabletEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL);
+    /**
+        Get the pressure value. Range is from 0 to 1.
+     */
+    wxDouble GetPressure() const;
+    /**
+        Set the pressure value. 
+     */
+    void SetPressure(wxDouble p);
+
+    /**
+        Get the x tilt value. Range is between -90 and +90.
+     */
+    wxDouble GetTiltX() const;
+    /**
+        Set the x tilt value.
+     */
+    void SetTiltX(wxDouble t);
+
+    /**
+        Get the y tilt value. Range is between -90 and +90.
+     */
+    wxDouble GetTiltY() const;
+    /**
+        Set the y tilt value.
+     */
+    void SetTiltY(wxDouble t);
+
+    /**
+        Get the rotation value. Range is between 0 and 360.
+     */
+    wxDouble GetRotation() const;
+    /**
+        Set the rotation.
+     */
+    void SetRotation(wxDouble r);
+    /**
+        Returns the position where the event happened relative to the window generating the event.
+     */
+    const wxPoint& GetPosition() const;
+    /**
+        Set the position..
+     */
+    void SetPosition(const wxPoint& pos);
+
+    /**
+        Tells if the pen used is an eraser.
+     */
+    bool IsUsingEraser() const;
+    /**
+        Update the eraser flag, true if eraser used, false otherwise.
+     */
+    void SetUsingEraser(bool eraser);
+};
+
 
 #endif // wxUSE_GUI
 
