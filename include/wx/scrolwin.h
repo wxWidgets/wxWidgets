@@ -168,6 +168,18 @@ public:
                         wxEventType& evtHorzScroll,
                         wxEventType& evtVertScroll) const;
 
+    // wxWidgets <= 3.3.1 mostly restricted autoscroll to the
+    // window holding the mouse capture.  However, when dragging
+    // objects between windows, the destination window should be
+    // the window that is scrolling (to allow positioning the
+    // dragged object).  The intent is that a window will call
+    // EnableAutoscrollWithoutCapture() when processing a
+    // drag-enter, and DisableAutoscrollWithoutCapture() when
+    // processing a drag-exit or drag-drop.
+    bool GetAutoscrollWithoutCapture() const;
+    void EnableAutoscrollWithoutCapture();
+    void DisableAutoscrollWithoutCapture();
+
     // Set the x, y scrolling increments.
     void SetScrollRate( int xstep, int ystep );
 
@@ -366,6 +378,7 @@ protected:
     wxCoord               m_innerScrollWidth = 0;
     bool                  m_outerScrollEnabled = true;
     bool                  m_inAutoScrollRegion = false;
+    bool                  m_autoscrollWithoutCapture = false;
 
     double                m_scaleX;
     double                m_scaleY;
