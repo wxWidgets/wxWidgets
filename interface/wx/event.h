@@ -5192,7 +5192,7 @@ public:
      */
     wxDouble GetPressure() const;
     /**
-        Set the pressure value. 
+        Set the pressure value.
      */
     void SetPressure(wxDouble p);
 
@@ -5227,7 +5227,7 @@ public:
      */
     const wxPoint& GetPosition() const;
     /**
-        Set the position..
+        Set the position.
      */
     void SetPosition(const wxPoint& pos);
 
