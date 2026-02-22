@@ -729,14 +729,15 @@ wxScrollHelperBase::AutoscrollTest(wxPoint clientPt,
                                    wxEventType& evtHorzScroll,
                                    wxEventType& evtVertScroll) const
 {
+    wxPoint screenPt = m_win->ClientToScreen(clientPt);
     // is mouse in autoscroll region?
     if ( !m_outerScrollEnabled &&
-         !m_win->GetRect().Contains(clientPt) )
+         !m_win->GetScreenRect().Contains(screenPt) )
     {
         return false;
     }
-    wxRect inner = m_win->GetRect().Deflate(m_innerScrollWidth);
-    if ( inner.Contains(clientPt) )
+    wxRect inner = m_win->GetScreenRect().Deflate(m_innerScrollWidth);
+    if ( inner.Contains(screenPt) )
     {
         return false;
     }
@@ -744,11 +745,11 @@ wxScrollHelperBase::AutoscrollTest(wxPoint clientPt,
     // can window can be scrolled in this direction?
     if ( m_win->HasScrollbar(wxHORIZONTAL) )
     {
-        if ( clientPt.x < inner.GetLeft() )
+        if ( screenPt.x < inner.GetLeft() )
         {
             evtHorzScroll = wxEVT_SCROLLWIN_LINEUP;
         }
-        else if (clientPt.x >= inner.GetRight() )
+        else if (screenPt.x >= inner.GetRight() )
         {
             evtHorzScroll = wxEVT_SCROLLWIN_LINEDOWN;
         }
@@ -757,11 +758,11 @@ wxScrollHelperBase::AutoscrollTest(wxPoint clientPt,
     // can window can be scrolled in this direction?
     if ( m_win->HasScrollbar(wxVERTICAL) )
     {
-        if ( clientPt.y < inner.GetTop() )
+        if ( screenPt.y < inner.GetTop() )
         {
             evtVertScroll = wxEVT_SCROLLWIN_LINEUP;
         }
-        else if ( clientPt.y >= inner.GetBottom() )
+        else if ( screenPt.y >= inner.GetBottom() )
         {
             evtVertScroll = wxEVT_SCROLLWIN_LINEDOWN;
         }
