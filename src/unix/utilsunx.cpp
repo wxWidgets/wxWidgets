@@ -1136,7 +1136,7 @@ wxString wxGetNativeCpuArchitectureName()
         return wxGetCpuArchitectureName();
 }
 
-#ifdef __LINUX__
+#ifdef __UNIX__
 
 static bool
 wxGetValuesFromOSRelease(const wxString& filename, wxLinuxDistributionInfo& ret)
@@ -1200,7 +1200,7 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 
     return ret;
 }
-#endif // __LINUX__
+#endif // __UNIX__
 
 // these functions are in src/osx/utils_base.mm for wxOSX.
 #ifndef __DARWIN__

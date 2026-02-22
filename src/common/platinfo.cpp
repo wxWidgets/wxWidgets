@@ -216,7 +216,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
     m_cpuArch = wxGetCpuArchitectureName();
     m_nativeCpuArch = wxGetNativeCpuArchitectureName();
 
-#ifdef __LINUX__
+#ifdef __UNIX__
     m_ldi = wxGetLinuxDistributionInfo();
 #endif
     // else: leave m_ldi empty

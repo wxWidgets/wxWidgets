@@ -120,7 +120,8 @@ enum wxEndianness
 };
 
 /**
-    A structure containing information about a Linux distribution.
+    A structure containing information about a Linux distribution,
+    or another Unix-style operating system (FreeBSD).
 
     See wxGetLinuxDistributionInfo() or wxPlatformInfo::GetLinuxDistributionInfo()
     for more info.

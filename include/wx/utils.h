@@ -144,7 +144,7 @@ WXDLLIMPEXP_BASE wxString wxGetCpuArchitectureName();
 // Get native machine CPU architecture
 WXDLLIMPEXP_BASE wxString wxGetNativeCpuArchitectureName();
 
-#ifdef __LINUX__
+#ifdef __UNIX__
 // Get linux-distro information
 WXDLLIMPEXP_BASE wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
 #endif

@@ -1065,13 +1065,14 @@ wxString wxGetNativeCpuArchitectureName();
 
 /**
     Returns a structure containing information about the currently running
-    Linux distribution.
+    Linux distribution, or another Unix-style operating system (FreeBSD).
 
     In case such information cannot be obtained, this function will return
     a ::wxLinuxDistributionInfo structure containing empty strings.
 
-    This function is Linux-specific and is only available when the @c \__LINUX__
-    symbol is defined.
+    This function is Unix-specific and is only available when the
+    @c \__UNIX__ symbol is defined (since wxWidgets 3.3.2; in earlier
+    versions only when @c \__LINUX__ is defined).
 */
 wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
 
