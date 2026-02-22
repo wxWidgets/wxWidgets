@@ -6346,6 +6346,7 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
 
 bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
+    wxUnusedVar(lParam);
     wxEventType type;
     switch(message)
     {
