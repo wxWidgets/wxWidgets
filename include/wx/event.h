@@ -2213,8 +2213,9 @@ class WXDLLIMPEXP_CORE wxTabletEvent : public wxEvent
 {
 public:
     wxTabletEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
-        : wxEvent(winid, type), m_pressure(0.0), m_tiltX(0.0), m_tiltY(0.0), m_rotation(0.0), m_pos(0,0)
+        : wxEvent(winid, type), m_pressure(-1.0), m_tiltX(-360.0), m_tiltY(-360.0), m_rotation(-1.0), m_pos(-1,-1), m_usingEraser(false)
     {
+        // they are initialized with invalid values, outside of normal range
     }
 
     wxTabletEvent(const wxTabletEvent& event) = default;
@@ -2234,14 +2235,18 @@ public:
     const wxPoint& GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
 
+    bool IsUsingEraser() const { return m_usingEraser; }
+    void SetUsingEraser(bool eraser) { m_usingEraser = eraser; }
+
     wxNODISCARD virtual wxEvent* Clone() const override { return new wxTabletEvent(*this); }
 
 protected:
     wxDouble m_pressure; // range [ 0.0, 1.0 ]
-    wxDouble m_tiltX;    // range [ -90.0, -90.0 ]
-    wxDouble m_tiltY;    // range [ -90.0, -90.0 ]
+    wxDouble m_tiltX;    // range [ -90.0, 90.0 ]
+    wxDouble m_tiltY;    // range [ -90.0, 90.0 ]
     wxDouble m_rotation; // range [ 0, 360.0 ]
     wxPoint m_pos;        // position in pixels relative to the Window receiving the event
+    bool m_usingEraser;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTabletEvent);
 };

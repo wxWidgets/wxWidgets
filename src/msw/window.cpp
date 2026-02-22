@@ -6401,6 +6401,9 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             event.SetTiltY(t);
         }
 
+        // set the eraser flag
+        event.SetUsingEraser( (penInfo.penFlags & PEN_FLAG_ERASER) != 0 );
+
         const POINT& pt = penInfo.pointerInfo.ptPixelLocation;
         wxPoint pos(pt.x, pt.y);
         event.SetPosition( ScreenToClient(pos) );
