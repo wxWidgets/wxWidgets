@@ -702,7 +702,7 @@ private:
 // A frame for the shapes which can be drag-and-dropped between frames
 // ----------------------------------------------------------------------------
 
-class DnDShapeFrame : public wxFrame
+class DnDShapeFrame : public wxScrolled<wxFrame>
 {
 public:
     DnDShapeFrame(wxFrame *parent);
@@ -756,6 +756,7 @@ public:
 #if wxUSE_STATUSBAR
         m_frame->SetStatusText("Mouse entered the frame");
 #endif // wxUSE_STATUSBAR
+        m_frame->EnableAutoscrollWithoutCapture();
         return OnDragOver(x, y, def);
     }
     virtual void OnLeave() override
@@ -763,6 +764,12 @@ public:
 #if wxUSE_STATUSBAR
         m_frame->SetStatusText("Mouse left the frame");
 #endif // wxUSE_STATUSBAR
+        m_frame->DisableAutoscrollWithoutCapture();
+    }
+    virtual bool OnDrop(wxCoord x, wxCoord y) override
+    {
+        m_frame->DisableAutoscrollWithoutCapture();
+        return wxDropTarget::OnDrop(x, y);
     }
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) override
     {
@@ -1734,14 +1741,28 @@ void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
 // DnDShapeFrame
 // ----------------------------------------------------------------------------
 
+bool wxCreateScrolled(wxFrame* self,
+                     wxWindow *parent, wxWindowID winid,
+                     const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size),
+                     long WXUNUSED(style), const wxString& name)
+{
+     return self->Create(parent, winid, name);
+}
+
 DnDShapeFrame *DnDShapeFrame::ms_lastDropTarget = nullptr;
 
 DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
-             : wxFrame(parent, wxID_ANY, "Shape Frame")
+             : wxScrolled<wxFrame>(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle, "Shape Frame")
 {
 #if wxUSE_STATUSBAR
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
+
+    // this is completely arbitrary and is done just for illustration purposes
+    SetVirtualSize(1000, 1000);
+    SetScrollRate(20, 20);
+    EnableAutoScrollInside(20);
+    DisableAutoScrollOutside();
 
     wxMenu *menuShape = new wxMenu;
     menuShape->Append(Menu_Shape_New, "&New default shape\tCtrl-S");
@@ -1846,6 +1867,7 @@ void DnDShapeFrame::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
     ms_lastDropTarget = this;
 
     wxPoint pt(x, y);
+    pt = CalcUnscrolledPosition(pt);
 
 #if wxUSE_STATUSBAR
     wxString s;
@@ -1934,17 +1956,15 @@ void DnDShapeFrame::OnUpdateUIPaste(wxUpdateUIEvent& event)
     event.Enable( wxTheClipboard->IsSupported(wxDataFormat(ShapeFormatId())) );
 }
 
-void DnDShapeFrame::OnPaint(wxPaintEvent& event)
+void DnDShapeFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+    wxPaintDC dc(this);
+    DoPrepareDC(dc);
+    dc.Clear();
+
     if ( m_shape )
     {
-        wxPaintDC dc(this);
-
         m_shape->Draw(dc);
-    }
-    else
-    {
-        event.Skip();
     }
 }
 
