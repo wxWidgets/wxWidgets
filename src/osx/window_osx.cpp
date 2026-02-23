@@ -672,6 +672,20 @@ bool wxWindowMac::MacGetBoundsForControl(
     return true ;
 }
 
+// Bricsys change: associate QNSView to the wx widget
+void wxWindowMac::MacAssociateQtSubViews()
+{
+    if(GetPeer())
+        GetPeer()->AssociateQtSubViews();
+}
+
+void wxWindowMac::MacRemoveQtAssociations()
+{
+    if(GetPeer())
+        wxWidgetImpl::RemoveAssociations(GetPeer());
+}
+// end Bricsys change
+
 // Get window size (not client size)
 void wxWindowMac::DoGetSize(int *x, int *y) const
 {
