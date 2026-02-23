@@ -732,6 +732,9 @@ protected:
     // is the text-area background colour overridden?
     bool                    m_hasTcBgCol;
 
+    // Bricsys added: on Mac we need to be able to set custom FOCUS_RING size
+    int                     m_focusRingSize;
+
     // flags used while popup is shown
     bool                    m_beenInsidePopup;
     bool                    m_blockEventsToPopup;

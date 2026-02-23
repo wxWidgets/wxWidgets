@@ -794,6 +794,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxComboCtrlBase, wxControl);
 
 void wxComboCtrlBase::Init()
 {
+    m_focusRingSize = FOCUS_RING;
     m_winPopup = NULL;
     m_popup = NULL;
     m_popupWinState = Hidden;
@@ -1108,14 +1109,14 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     m_btnSize.y = butHeight;
 
     m_btnArea.x = ( m_btnSide==wxRIGHT ? sz.x - butAreaWid - btnBorder : btnBorder );
-    m_btnArea.y = btnBorder + FOCUS_RING;
+    m_btnArea.y = btnBorder + m_focusRingSize;
     m_btnArea.width = butAreaWid;
-    m_btnArea.height = sz.y - ((btnBorder+FOCUS_RING)*2);
+    m_btnArea.height = sz.y - ((btnBorder+m_focusRingSize)*2);
 
     m_tcArea.x = ( m_btnSide==wxRIGHT ? 0 : butAreaWid ) + m_widthCustomBorder;
-    m_tcArea.y = m_widthCustomBorder + FOCUS_RING;
-    m_tcArea.width = sz.x - butAreaWid - (m_widthCustomBorder*2) - FOCUS_RING;
-    m_tcArea.height = sz.y - ((m_widthCustomBorder+FOCUS_RING)*2);
+    m_tcArea.y = m_widthCustomBorder + m_focusRingSize;
+    m_tcArea.width = sz.x - butAreaWid - (m_widthCustomBorder*2) - m_focusRingSize;
+    m_tcArea.height = sz.y - ((m_widthCustomBorder+m_focusRingSize)*2);
 
 /*
     if ( m_mainWindow )
@@ -1277,10 +1278,10 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
     }
 #endif
 
-    fhei += 2 * FOCUS_RING;
+    fhei += 2 * m_focusRingSize;
 
     // Calculate width
-    int fwid = GetNativeTextIndent() + xlen + FOCUS_RING + COMBO_MARGIN + m_btnArea.width;
+    int fwid = GetNativeTextIndent() + xlen + m_focusRingSize + COMBO_MARGIN + m_btnArea.width;
 
     // Add the margins we have previously set
     wxPoint marg( GetMargins() );
