@@ -507,9 +507,11 @@ public:
     @interface wxNSMenuItem : NSMenuItem
     {
        wxMenuItemImpl* impl;
+       BOOL worksInModal;
     }
 
     - (void) setImplementation:(wxMenuItemImpl*) item;
+    - (void) setModalStatus:(BOOL) status;
     - (wxMenuItemImpl*) implementation;
 
     - (void)clickedAction:(id)sender;
