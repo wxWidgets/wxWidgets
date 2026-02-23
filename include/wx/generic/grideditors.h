@@ -16,8 +16,8 @@
 #if wxUSE_GRID
 
 #include "wx/scopedptr.h"
-
-class wxGridCellEditorEvtHandler : public wxEvtHandler
+// Bricsys change: export wxGridCellEditorEvtHandler symbol
+class WXDLLIMPEXP_ADV wxGridCellEditorEvtHandler : public wxEvtHandler
 {
 public:
     wxGridCellEditorEvtHandler(wxGrid* grid, wxGridCellEditor* editor)
