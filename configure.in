@@ -4140,6 +4140,10 @@ if test "$wxUSE_SHARED" = "yes"; then
         install_name_tool=`which ${HOST_PREFIX}install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
+            dnl Note that the script below doesn't use realpath because it's
+            dnl only available since macOS 13 and doesn't even use readlink -f
+            dnl because this is only available since macOS 12, while we still
+            dnl need to support 10.10.
             cat <<EOF >change-install-names
 #!/bin/sh
 set -e
@@ -4151,12 +4155,12 @@ build_libdir=\$4
 libnames=\$(cd \${build_libdir}; printf '%s\n' libwx*${WX_RELEASE}.dylib)
 changes=''
 for libname in \${libnames} ; do
-    target=\$(realpath \${build_libdir}/\${libname})
-    changes="\${changes} -change \${target} \${libdir}/\$(basename \${target})"
+    target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
+    changes="\${changes} -change \${build_libdir}/\${target} \${libdir}/\${target}"
 done
 for libname in \${libnames} ; do
-    target=\$(realpath \${build_libdir}/\${libname})
-    ${HOST_PREFIX}install_name_tool \${changes} -id \${libdir}/\${libname} \${destdir}\${libdir}/\$(basename \${target})
+    target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${libdir}/\${libname} \${destdir}\${libdir}/\${target}
 done
 
 if test -f \${destdir}\${bindir}/wxrc-${WX_RELEASE} ; then

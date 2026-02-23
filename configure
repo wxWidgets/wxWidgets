@@ -34269,7 +34269,7 @@ rm -f core conftest.err conftest.$ac_objext \
         install_name_tool=`which ${HOST_PREFIX}install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
-            cat <<EOF >change-install-names
+                                                            cat <<EOF >change-install-names
 #!/bin/sh
 set -e
 [ -z "\${WXDEBUG_X}" ] || set -x
@@ -34280,12 +34280,12 @@ build_libdir=\$4
 libnames=\$(cd \${build_libdir}; printf '%s\n' libwx*${WX_RELEASE}.dylib)
 changes=''
 for libname in \${libnames} ; do
-    target=\$(realpath \${build_libdir}/\${libname})
-    changes="\${changes} -change \${target} \${libdir}/\$(basename \${target})"
+    target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
+    changes="\${changes} -change \${build_libdir}/\${target} \${libdir}/\${target}"
 done
 for libname in \${libnames} ; do
-    target=\$(realpath \${build_libdir}/\${libname})
-    ${HOST_PREFIX}install_name_tool \${changes} -id \${libdir}/\${libname} \${destdir}\${libdir}/\$(basename \${target})
+    target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${libdir}/\${libname} \${destdir}\${libdir}/\${target}
 done
 
 if test -f \${destdir}\${bindir}/wxrc-${WX_RELEASE} ; then
