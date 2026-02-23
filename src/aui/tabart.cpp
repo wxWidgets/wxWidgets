@@ -1200,6 +1200,11 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
 #ifndef __WXOSX__
     if (page.active && (wnd->FindFocus() == wnd))
     {
+        // Bricsys added (ensure focus rect is inside collapsed tab)
+        int max_width = tab_width - (text_offset-tab_x) - 4;
+        if (selected_textx > max_width)
+            selected_textx = max_width;
+        // Bricsys added
         wxRect focusRect(text_offset, ((tab_y + tab_height)/2 - (texty/2) + 1),
             selected_textx, selected_texty);
 
