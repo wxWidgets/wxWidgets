@@ -84,7 +84,7 @@ void wxTabFrame::DoSizing()
     }
     else if (flags & wxAUI_NB_RIGHT)
     {
-        m_tab_rect = wxRect(m_rect.x + m_rect.height, m_rect.y, m_rect.width - m_tabCtrlHeight, m_rect.height);
+        m_tab_rect = wxRect(m_rect.x + m_rect.width - m_tabCtrlHeight, m_rect.y, m_tabCtrlHeight, m_rect.height);
         m_tabs->SetSize(m_tab_rect);
         m_tabs->SetRect(wxRect(0, 0, m_tabCtrlHeight, m_rect.height));
     }
@@ -1485,7 +1485,9 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         e.SetEventObject(this);
         GetEventHandler()->ProcessEvent(e);
 
-        m_isDragging = true;
+        // Bricsys change: enabling event handler to prevent drag
+        m_isDragging = e.IsAllowed();
+        //m_isDragging = true;
     }
 }
 
