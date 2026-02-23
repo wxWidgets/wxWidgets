@@ -185,6 +185,10 @@ protected:
     WXGLPixelFormat m_glFormat;
     wxGLAttributes m_GLAttrs;
 
+// Bricsys change: add variable to keep last cursor lines used to draw
+    wxCursorLineArray m_lastLinesDrawn;
+// end Bricsys change
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxGLCanvas);
 };
