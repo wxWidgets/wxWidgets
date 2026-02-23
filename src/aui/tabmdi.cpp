@@ -780,6 +780,9 @@ wxAuiMDIChildFrame* wxAuiMDIClientWindow::GetActiveChild()
     if ( sel == wxNOT_FOUND || sel >= (int)GetPageCount() )
         return NULL;
 
+    if ( ! GetPage(sel) )
+        return NULL;
+
     return wxStaticCast(GetPage(sel), wxAuiMDIChildFrame);
 }
 

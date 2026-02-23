@@ -18,6 +18,9 @@
     #include "wx/combobox.h"
     #include "wx/radiobut.h"
     #include "wx/scrolbar.h"
+    
+    // Bricsys added: when pressing Enter in a toplevel window, we need to press the default item (OK button usually)
+    #include "wx/button.h"
 #endif
 
 #ifdef __WXMAC__
@@ -2402,6 +2405,28 @@ bool wxWidgetCocoaImpl::SetupCursor(WX_NSEvent event)
     }
 }
 
+// Bricsys added: when pressing Enter in a toplevel window, we need to press the default item (OK button usually)
+// if the event hasn't already been handled (e.g. by a multi line text field)
+static bool checkDefaultItem(wxWindow* peer, WX_NSEvent event)
+{
+    long keycode = wxOSXTranslateCocoaKey(event, wxEVT_KEY_DOWN);
+    if (keycode == WXK_RETURN || keycode == WXK_NUMPAD_ENTER)
+    {
+        wxTopLevelWindow* toplevelWnd = wxDynamicCast(wxGetTopLevelParent(peer), wxTopLevelWindow);
+        if(toplevelWnd)
+        {
+            wxButton* defaultButton = wxDynamicCast(toplevelWnd->GetDefaultItem(), wxButton);
+            if(defaultButton)
+            {
+                wxCommandEvent cmdEvent(wxEVT_BUTTON, defaultButton->GetId() );
+                cmdEvent.SetEventObject(defaultButton);
+                return defaultButton->GetEventHandler()->ProcessEvent(cmdEvent);
+            }
+        }
+    }
+    return false;
+}
+
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     wxLogTrace(TRACE_KEYS, "Got %s for %s",
@@ -2428,6 +2453,11 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     {
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, event);
+    }
+    else
+    {
+        // Bricsys added: when pressing Enter in a toplevel window, we need to press the default item (OK button usually)
+        checkDefaultItem(GetWXPeer(), event);
     }
     
     if ( [event type] == NSKeyDown )

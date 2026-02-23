@@ -19,12 +19,17 @@ public:
     static wxSize GetDefaultSize();
 
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual bool SetBackgroundColour(const wxColour &colour);
+    virtual wxColour GetBackgroundColour();
+    bool applyColourToButton();
+    void SetBitmap(const wxBitmap& bitmap, wxDirection dir = wxLEFT);
 
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
     void OnEnterWindow( wxMouseEvent& event);
     void OnLeaveWindow( wxMouseEvent& event);
+    void OnButtonResize( wxSizeEvent& event);
 
     virtual wxBitmap DoGetBitmap(State which) const wxOVERRIDE;
     virtual void DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which) wxOVERRIDE;
@@ -50,6 +55,8 @@ protected:
     // invalid and the button only shows a bitmap at all if State_Normal bitmap
     // is valid
     wxBitmapBundle m_bitmaps[State_Max];
+    wxBitmap m_nonBackgroundColourBitmap;
+    wxColour m_backgroundColour;
 
     wxDECLARE_NO_COPY_CLASS(wxAnyButton);
     wxDECLARE_EVENT_TABLE();

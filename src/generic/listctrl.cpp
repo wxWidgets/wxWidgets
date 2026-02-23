@@ -2574,7 +2574,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     wxMouseEvent me(event);
     me.SetEventObject( GetParent() );
     me.SetId(GetParent()->GetId());
-    if ( GetParent()->GetEventHandler()->ProcessEvent( me ))
+    if ( !event.RightDown() && GetParent()->GetEventHandler()->ProcessEvent( me ))
         return;
 
     if (event.GetEventType() == wxEVT_MOUSEWHEEL)
@@ -2859,6 +2859,27 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         // give focus to the control.
         m_lastOnSame = (m_current == oldCurrent) && oldWasSelected &&
                             !forceClick && HasFocus();
+    }
+    else if ( event.LeftUp() )
+    {
+        m_lineBeforeLastClicked = m_lineLastClicked;
+        m_lineLastClicked = current;
+        
+        bool cmdModifierDown = event.CmdDown();
+        if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
+        {
+            if ( m_renameTimer->IsRunning() )
+                m_renameTimer->Stop();
+            
+            m_lastOnSame = false;
+            
+            if ( current == m_lineLastClicked )
+            {
+                SendNotify( current, wxEVT_COMMAND_LEFT_CLICK );
+                
+                return;
+            }
+        }
     }
 }
 
