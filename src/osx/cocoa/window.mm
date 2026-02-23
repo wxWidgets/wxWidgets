@@ -3318,6 +3318,27 @@ void wxWidgetCocoaImpl::controlTextDidChange()
     }
 }
 
+// Bricsys change:
+namespace {
+void associateQtSubViews(NSView* parent, wxWidgetImpl* widget)
+{ 
+    if(!parent)
+        return;
+
+    NSArray *subviews = [parent subviews];
+    for (NSView *view in subviews)
+        associateQtSubViews(view, widget);
+    
+    wxWidgetImpl::Associate( (WXWidget)parent, widget );
+}
+} // namespace anon
+
+void wxWidgetCocoaImpl::AssociateQtSubViews()
+{
+    associateQtSubViews(m_osxView, this);
+}
+// end Bricsys change
+
 //
 
 #if OBJC_API_VERSION >= 2

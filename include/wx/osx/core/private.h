@@ -383,6 +383,11 @@ public :
     virtual void        SendEvents(bool shouldSendEvents) { m_shouldSendEvents = shouldSendEvents; }
     virtual bool        ShouldSendEvents() { return m_shouldSendEvents; }
 
+    // Bricsys change: implemented only in wxWidgetCocoaImpl
+    virtual void        AssociateQtSubViews(){}
+    virtual void        RemoveQtAssociations(){}
+    // end Bricsys change
+
     // static methods for associating native controls and their implementations
 
     // finds the impl associated with this native control
