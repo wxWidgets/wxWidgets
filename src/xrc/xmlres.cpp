@@ -70,6 +70,20 @@ wxDateTime GetXRCFileModTime(const wxString& filename)
 
 } // anonymous namespace
 
+// Bricsys change: many temporary wxString objects are created/destroyed here. When starting Bricscad from debugger,
+// there is a big slowdown. It seems that most of the time is spent here, in allocating/deallocating string buffers.
+// We try to avoid this by pre-allocating constant string objects.
+namespace
+{
+static const wxString s_strEmpty(wxEmptyString);
+static const wxString s_strName(wxS("name"));
+static const wxString s_strClass(wxS("class"));
+static const wxString s_strSubclass(wxS("subclass"));
+static const wxString s_strObj(wxS("object"));
+static const wxString s_strObjRef(wxS("object_ref"));
+static const wxString s_strRef(wxS("ref"));
+} // anonymous namespace
+
 // Assign the given value to the specified entry or add a new value with this
 // name.
 static void XRCID_Assign(const wxString& str_id, int value);
@@ -199,9 +213,11 @@ namespace
 // node must be non-NULL
 inline bool IsObjectNode(wxXmlNode *node)
 {
+    // Bricsys change: use pre-allocated string objects.
+
     return node->GetType() == wxXML_ELEMENT_NODE &&
-             (node->GetName() == wxS("object") ||
-                node->GetName() == wxS("object_ref"));
+             (node->GetName() == s_strObj ||
+                node->GetName() == s_strObjRef);
 }
 
 // special XML attribute with name of input file, see GetFileNameFromNode()
@@ -547,8 +563,10 @@ bool wxXmlResource::LoadFrame(wxFrame* frame, wxWindow *parent, const wxString& 
 
 wxBitmap wxXmlResource::LoadBitmap(const wxString& name)
 {
+    // Bricsys change: use pre-allocated string objects.
+    static const wxString bitmap(wxT("wxBitmap"));
     wxBitmap *bmp = (wxBitmap*)CreateResFromNode(
-                               FindResource(name, wxT("wxBitmap")), NULL, NULL);
+                               FindResource(name, bitmap), NULL, NULL);
     wxBitmap rt;
 
     if (bmp) { rt = *bmp; delete bmp; }
@@ -678,8 +696,9 @@ bool wxXmlResource::UpdateResources()
     if ( m_flags & wxXRC_NO_RELOADING )
         return rt;
 
-    for ( wxXmlResourceDataRecords::iterator i = Data().begin();
-          i != Data().end(); ++i )
+    // Bricsys change: optimize code .
+    for (wxXmlResourceDataRecords::iterator i = Data().begin(), itEnd = Data().end();
+          i != itEnd; ++i )
     {
         wxXmlResourceDataRecord* const rec = *i;
 
@@ -849,31 +868,38 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
 {
     wxXmlNode *node;
 
-    // first search for match at the top-level nodes (as this is
-    // where the resource is most commonly looked for):
+    // Bricsys change: many temporary wxString objects are created/destroyed here. When starting Bricscad from debugger,
+    // there is a big slowdown. It seems that most of the time is spent here, in allocating/deallocating string buffers.
+    // We try to avoid this by pre-allocating constant string objects.
+
+    static wxString clsAndAttr(wxT("1234567890123456789012345"));
+    static wxString refName(clsAndAttr);
+
+     //first search for match at the top-level nodes (as this is
+     //where the resource is most commonly looked for):
     for (node = parent->GetChildren(); node; node = node->GetNext())
     {
-        if ( IsObjectNode(node) && node->GetAttribute(wxS("name")) == name )
+        if (IsObjectNode(node) && node->GetAttribute(s_strName, &clsAndAttr) && clsAndAttr.IsSameAs(name))
         {
             // empty class name matches everything
             if ( classname.empty() )
                 return node;
 
-            wxString cls(node->GetAttribute(wxS("class")));
+            if (!node->GetAttribute(s_strClass, &clsAndAttr))
+                clsAndAttr.Clear();
 
             // object_ref may not have 'class' attribute:
-            if (cls.empty() && node->GetName() == wxS("object_ref"))
+            if (clsAndAttr.empty() && node->GetName().IsSameAs(s_strObjRef))
             {
-                wxString refName = node->GetAttribute(wxS("ref"));
-                if (refName.empty())
+                if (!node->GetAttribute(s_strRef, &refName) || refName.empty())
                     continue;
 
                 const wxXmlNode * const refNode = GetResourceNode(refName);
                 if ( refNode )
-                    cls = refNode->GetAttribute(wxS("class"));
+                    refNode->GetAttribute(s_strClass, &clsAndAttr);
             }
 
-            if ( cls == classname )
+            if (clsAndAttr.IsSameAs(classname))
                 return node;
         }
     }
@@ -937,9 +963,9 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
     // ensure everything is up-to-date: this is needed to support on-demand
     // reloading of XRC files
     const_cast<wxXmlResource *>(this)->UpdateResources();
-
-    for ( wxXmlResourceDataRecords::const_iterator f = Data().begin();
-          f != Data().end(); ++f )
+    // Bricsys change: optimize code 
+    for (wxXmlResourceDataRecords::const_iterator f = Data().begin(), itEnd = Data().end();
+        f != itEnd; ++f)
     {
         wxXmlResourceDataRecord *const rec = *f;
         wxXmlDocument * const doc = rec->Doc;
@@ -1021,7 +1047,7 @@ static void MergeNodesOver(wxXmlNode& dest, wxXmlNode& overwriteWith,
     if ( dest.GetType() == wxXML_TEXT_NODE && overwriteWith.GetContent().length() )
          dest.SetContent(overwriteWith.GetContent());
 }
-
+ // Bricsys change: many temporary wxString objects are created/destroyed
 wxObject *
 wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
                                    wxObject *parent,
@@ -1029,9 +1055,9 @@ wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
                                    wxXmlResourceHandler *handlerToUse)
 {
     // handling of referenced resource
-    if ( node.GetName() == wxT("object_ref") )
+    if ( node.GetName() == s_strObjRef )
     {
-        wxString refName = node.GetAttribute(wxT("ref"), wxEmptyString);
+        wxString refName = node.GetAttribute(s_strRef, wxEmptyString);
         wxXmlNode* refNode = FindResource(refName, wxEmptyString, true);
 
         if ( !refNode )
@@ -1085,10 +1111,10 @@ wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
             return handlerToUse->CreateResource(&node, parent, instance);
         }
     }
-    else if (node.GetName() == wxT("object"))
+    else if (node.GetName() == s_strObj)
     {
-        for ( wxVector<wxXmlResourceHandler*>::iterator h = m_handlers.begin();
-              h != m_handlers.end(); ++h )
+        for (wxVector<wxXmlResourceHandler*>::iterator h = m_handlers.begin(), hEnd = m_handlers.end();
+              h != hEnd; ++h )
         {
             wxXmlResourceHandler *handler = *h;
             if (handler->CanHandle(&node))
@@ -1482,6 +1508,8 @@ wxFileSystem& wxXmlResourceHandlerImpl::GetCurFileSystem()
 #endif
 
 
+ // Bricsys change: many temporary wxString objects are created/destroyed
+ // End iterator is not stored
 wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *parent, wxObject *instance)
 {
     wxXmlNode *myNode = m_handler->m_node;
@@ -1490,14 +1518,14 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
     wxWindow *myParentAW = m_handler->m_parentAsWindow;
 
     m_handler->m_instance = instance;
-    if (!m_handler->m_instance && node->HasAttribute(wxT("subclass")) &&
+    if (!m_handler->m_instance && node->HasAttribute(s_strSubclass) &&
         !(m_handler->m_resource->GetFlags() & wxXRC_NO_SUBCLASSING))
     {
-        wxString subclass = node->GetAttribute(wxT("subclass"), wxEmptyString);
+        wxString subclass = node->GetAttribute(s_strSubclass, wxEmptyString);
         if (!subclass.empty())
         {
-            for (wxXmlSubclassFactories::iterator i = wxXmlResource::ms_subclassFactories->begin();
-                 i != wxXmlResource::ms_subclassFactories->end(); ++i)
+            for (wxXmlSubclassFactories::iterator i = wxXmlResource::ms_subclassFactories->begin(), iEnd = wxXmlResource::ms_subclassFactories->end();
+                 i != iEnd; ++i)
             {
                 m_handler->m_instance = (*i)->Create(subclass);
                 if (m_handler->m_instance)
@@ -1506,7 +1534,7 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
 
             if (!m_handler->m_instance)
             {
-                wxString name = node->GetAttribute(wxT("name"), wxEmptyString);
+                wxString name = node->GetAttribute(s_strName, wxEmptyString);
                 ReportError
                 (
                     node,
@@ -1521,7 +1549,7 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
     }
 
     m_handler->m_node = node;
-    m_handler->m_class = node->GetAttribute(wxT("class"), wxEmptyString);
+    m_handler->m_class = node->GetAttribute(s_strClass, wxEmptyString);
     m_handler->m_parent = parent;
     m_handler->m_parentAsWindow = wxDynamicCast(m_handler->m_parent, wxWindow);
 
@@ -2233,7 +2261,8 @@ wxXmlNode *wxXmlResourceHandlerImpl::GetParamNode(const wxString& param)
 
 bool wxXmlResourceHandlerImpl::IsOfClass(wxXmlNode *node, const wxString& classname) const
 {
-    return node->GetAttribute(wxT("class")) == classname;
+    // Bricsys change: use pre-allocated string objects.
+    return node->GetAttribute(s_strClass) == classname;
 }
 
 

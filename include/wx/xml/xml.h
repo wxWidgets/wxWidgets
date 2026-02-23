@@ -154,7 +154,8 @@ public:
 
     wxXmlAttribute *GetAttributes() const { return m_attrs; }
     bool GetAttribute(const wxString& attrName, wxString *value) const;
-    wxString GetAttribute(const wxString& attrName,
+    // Bricsys change: avoid creation of temporary strings.
+    const wxString& GetAttribute(const wxString& attrName,
                           const wxString& defaultVal = wxEmptyString) const;
     bool HasAttribute(const wxString& attrName) const;
 

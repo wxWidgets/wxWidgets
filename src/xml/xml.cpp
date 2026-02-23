@@ -176,12 +176,17 @@ bool wxXmlNode::GetAttribute(const wxString& attrName, wxString *value) const
     return false;
 }
 
-wxString wxXmlNode::GetAttribute(const wxString& attrName, const wxString& defaultVal) const
+// Bricsys change: avoid creation of temporary strings.
+const wxString& wxXmlNode::GetAttribute(const wxString& attrName, const wxString& defaultVal) const
 {
-    wxString tmp;
-    if (GetAttribute(attrName, &tmp))
-        return tmp;
+    wxXmlAttribute *attr = GetAttributes();
 
+    while (attr)
+    {
+        if (attr->GetName() == attrName)
+            return attr->GetValue();
+        attr = attr->GetNext();
+    }
     return defaultVal;
 }
 
