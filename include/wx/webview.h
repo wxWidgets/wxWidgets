@@ -34,6 +34,7 @@
 
 class wxFSFile;
 class wxFileSystem;
+class wxPrintData;
 class wxWebView;
 
 enum wxWebViewZoom
@@ -101,6 +102,12 @@ enum wxWebViewBrowsingDataTypes
     wxWEBVIEW_BROWSING_DATA_DOM_STORAGE = 0x04,
     wxWEBVIEW_BROWSING_DATA_OTHER       = 0x08,
     wxWEBVIEW_BROWSING_DATA_ALL         = 0x0f
+};
+
+enum wxWebViewPrintFlags
+{
+    wxWEBVIEW_PRINT_DEFAULT            = 0,
+    wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER = 0x0001
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerRequest
@@ -266,6 +273,9 @@ public:
     virtual bool IsEditable() const = 0;
     virtual void LoadURL(const wxString& url) = 0;
     virtual void Print() = 0;
+#if wxUSE_PRINTING_ARCHITECTURE
+    virtual void Print(const wxPrintData& printData, int flags = wxWEBVIEW_PRINT_DEFAULT);
+#endif
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
     virtual bool SetUserAgent(const wxString& userAgent) { wxUnusedVar(userAgent); return false; }

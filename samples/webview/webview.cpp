@@ -47,6 +47,10 @@
 #include "wx/fs_mem.h"
 #include "wx/stdpaths.h"
 #include "wx/utils.h"
+#if wxUSE_PRINTING_ARCHITECTURE
+#include "wx/cmndata.h"
+#include "wx/choicdlg.h"
+#endif
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -158,6 +162,7 @@ public:
     void OnSetZoom(wxCommandEvent& evt);
     void OnError(wxWebViewEvent& evt);
     void OnPrint(wxCommandEvent& evt);
+    void OnPrintWithSettings(wxCommandEvent& evt);
     void OnOpenPrivateWindow(wxCommandEvent& evt);
     void OnCut(wxCommandEvent& evt);
     void OnCopy(wxCommandEvent& evt);
@@ -639,6 +644,9 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     // Create the Tools menu
     m_tools_menu = new wxMenu();
     wxMenuItem* print = m_tools_menu->Append(wxID_ANY , _("Print"));
+#if wxUSE_PRINTING_ARCHITECTURE
+    wxMenuItem* printWithSettings = m_tools_menu->Append(wxID_ANY , _("Print with Settings..."));
+#endif
     wxMenuItem* setPage = m_tools_menu->Append(wxID_ANY , _("Set page text"));
     wxMenuItem* viewSource = m_tools_menu->Append(wxID_ANY , _("View Source"));
     wxMenuItem* viewText = m_tools_menu->Append(wxID_ANY, _("View Text"));
@@ -804,6 +812,9 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     Bind(wxEVT_MENU, &WebFrame::OnViewSourceRequest, this, viewSource->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnViewTextRequest, this, viewText->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnPrint, this, print->GetId());
+#if wxUSE_PRINTING_ARCHITECTURE
+    Bind(wxEVT_MENU, &WebFrame::OnPrintWithSettings, this, printWithSettings->GetId());
+#endif
     Bind(wxEVT_MENU, &WebFrame::OnOpenPrivateWindow, this, openPrivate->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnZoomLayout, this, m_tools_layout->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_tiny->GetId());
@@ -1688,6 +1699,59 @@ void WebFrame::OnPrint(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Print();
 }
+
+#if wxUSE_PRINTING_ARCHITECTURE
+void WebFrame::OnPrintWithSettings(wxCommandEvent& WXUNUSED(evt))
+{
+    // Let the user choose paper size and orientation
+    wxArrayString paperChoices;
+    paperChoices.Add("Letter (Portrait)");
+    paperChoices.Add("Letter (Landscape)");
+    paperChoices.Add("A4 (Portrait)");
+    paperChoices.Add("A4 (Landscape)");
+    paperChoices.Add("Legal (Portrait)");
+    paperChoices.Add("Legal (Landscape)");
+
+    int sel = wxGetSingleChoiceIndex(
+        "Select paper size and orientation for printing:",
+        "Print with Settings",
+        paperChoices,
+        this);
+
+    if (sel == -1)
+        return;
+
+    wxPrintData printData;
+
+    switch (sel)
+    {
+        case 0: printData.SetPaperId(wxPAPER_LETTER); printData.SetOrientation(wxPORTRAIT); break;
+        case 1: printData.SetPaperId(wxPAPER_LETTER); printData.SetOrientation(wxLANDSCAPE); break;
+        case 2: printData.SetPaperId(wxPAPER_A4);     printData.SetOrientation(wxPORTRAIT); break;
+        case 3: printData.SetPaperId(wxPAPER_A4);     printData.SetOrientation(wxLANDSCAPE); break;
+        case 4: printData.SetPaperId(wxPAPER_LEGAL);  printData.SetOrientation(wxPORTRAIT); break;
+        case 5: printData.SetPaperId(wxPAPER_LEGAL);  printData.SetOrientation(wxLANDSCAPE); break;
+    }
+
+    wxLogMessage("Printing with paper=%s, orientation=%s",
+        paperChoices[sel],
+        printData.GetOrientation() == wxLANDSCAPE ? "Landscape" : "Portrait");
+
+#ifdef __WXMSW__
+    int printFlags = wxWEBVIEW_PRINT_DEFAULT;
+    if (wxMessageBox("Hide header and footer?",
+                     "Print with Settings",
+                     wxYES_NO | wxICON_QUESTION, this) == wxYES)
+    {
+        printFlags |= wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER;
+    }
+
+    m_browser->Print(printData, printFlags);
+#else
+    m_browser->Print(printData);
+#endif
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 void WebFrame::OnOpenPrivateWindow(wxCommandEvent& WXUNUSED(evt))
 {

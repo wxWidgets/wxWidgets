@@ -271,6 +271,15 @@ wxString wxWebView::GetPageText() const
     return text;
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
+void wxWebView::Print(const wxPrintData& WXUNUSED(printData),
+                      int WXUNUSED(flags))
+{
+    // Default implementation: fall back to the parameterless Print()
+    Print();
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
+
 bool wxWebView::CanCut() const
 {
     return QueryCommandEnabled("cut");

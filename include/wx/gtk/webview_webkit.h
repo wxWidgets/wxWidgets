@@ -75,6 +75,13 @@ public:
     virtual wxString GetPageSource() const override;
     virtual wxString GetPageText() const override;
     virtual void Print() override;
+#if wxUSE_PRINTING_ARCHITECTURE
+#if wxUSE_WEBVIEW_WEBKIT2
+    virtual void Print(const wxPrintData& printData, int flags = wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER) override;
+#else
+    using wxWebView::Print;
+#endif
+#endif
     virtual bool IsBusy() const override;
 #if wxUSE_WEBVIEW_WEBKIT2
     virtual void EnableAccessToDevTools(bool enable = true) override;

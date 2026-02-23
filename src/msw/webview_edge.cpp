@@ -1343,6 +1343,110 @@ void wxWebViewEdge::Print()
     RunScript("window.print();");
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
+#include "wx/cmndata.h"
+#include "wx/paper.h"
+
+void wxWebViewEdge::Print(const wxPrintData& printData, int flags)
+{
+    if (!m_impl->m_webView)
+    {
+        wxWebView::Print(printData, flags);
+        return;
+    }
+
+    // Try to use ICoreWebView2_16::Print with ICoreWebView2PrintSettings
+    wxCOMPtr<ICoreWebView2_16> webView16;
+    if (FAILED(m_impl->m_webView->QueryInterface(IID_PPV_ARGS(&webView16))))
+    {
+        // Fallback to default print
+        Print();
+        return;
+    }
+
+    wxCOMPtr<ICoreWebView2Environment6> environment6;
+    if (FAILED(m_impl->m_webViewEnvironment->QueryInterface(IID_PPV_ARGS(&environment6))))
+    {
+        Print();
+        return;
+    }
+
+    wxCOMPtr<ICoreWebView2PrintSettings> printSettings;
+    HRESULT hr = environment6->CreatePrintSettings(&printSettings);
+    if (FAILED(hr))
+    {
+        wxLogApiError("CreatePrintSettings", hr);
+        Print();
+        return;
+    }
+
+    // Set orientation
+    printSettings->put_Orientation(
+        printData.GetOrientation() == wxLANDSCAPE
+            ? COREWEBVIEW2_PRINT_ORIENTATION_LANDSCAPE
+            : COREWEBVIEW2_PRINT_ORIENTATION_PORTRAIT);
+
+    // Set paper size (convert from tenths of mm to inches)
+    wxSize paperSizeTenthsMM = wxThePrintPaperDatabase->GetSize(printData.GetPaperId());
+    if (paperSizeTenthsMM.x > 0 && paperSizeTenthsMM.y > 0)
+    {
+        double widthInches = paperSizeTenthsMM.x / 254.0;
+        double heightInches = paperSizeTenthsMM.y / 254.0;
+        printSettings->put_PageWidth(widthInches);
+        printSettings->put_PageHeight(heightInches);
+    }
+
+    // Set header/footer
+    printSettings->put_ShouldPrintHeaderAndFooter(
+        (flags & wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER) ? FALSE : TRUE);
+
+    // Try ICoreWebView2PrintSettings2 for extended settings
+    wxCOMPtr<ICoreWebView2PrintSettings2> printSettings2;
+    if (SUCCEEDED(printSettings->QueryInterface(IID_PPV_ARGS(&printSettings2))))
+    {
+        // Copies
+        int copies = printData.GetNoCopies();
+        if (copies > 0)
+            printSettings2->put_Copies(copies);
+
+        // Collation
+        if (printData.GetCollate())
+            printSettings2->put_Collation(COREWEBVIEW2_PRINT_COLLATION_COLLATED);
+
+        // Duplex
+        switch (printData.GetDuplex())
+        {
+            case wxDUPLEX_SIMPLEX:
+                printSettings2->put_Duplex(COREWEBVIEW2_PRINT_DUPLEX_ONE_SIDED);
+                break;
+            case wxDUPLEX_HORIZONTAL:
+                printSettings2->put_Duplex(COREWEBVIEW2_PRINT_DUPLEX_TWO_SIDED_SHORT_EDGE);
+                break;
+            case wxDUPLEX_VERTICAL:
+                printSettings2->put_Duplex(COREWEBVIEW2_PRINT_DUPLEX_TWO_SIDED_LONG_EDGE);
+                break;
+        }
+
+        // Color mode
+        if (!printData.GetColour())
+            printSettings2->put_ColorMode(COREWEBVIEW2_PRINT_COLOR_MODE_GRAYSCALE);
+    }
+
+    // Print with settings (no callback needed for now)
+    hr = webView16->Print(printSettings,
+        Callback<ICoreWebView2PrintCompletedHandler>(
+            [](HRESULT errorCode, COREWEBVIEW2_PRINT_STATUS) -> HRESULT
+            {
+                if (FAILED(errorCode))
+                    wxLogApiError("WebView2::Print", errorCode);
+                return S_OK;
+            }).Get());
+
+    if (FAILED(hr))
+        wxLogApiError("ICoreWebView2_16::Print", hr);
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
+
 float wxWebViewEdge::GetZoomFactor() const
 {
     double old_zoom_factor = 0.0;

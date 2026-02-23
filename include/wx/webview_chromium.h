@@ -90,6 +90,7 @@ public:
     virtual bool CanSetZoomType(wxWebViewZoomType type) const override;
 
     virtual void Print() override;
+    using wxWebView::Print;
 
     virtual wxWebViewZoom GetZoom() const override;
     virtual void SetZoom(wxWebViewZoom zoom) override;

@@ -172,16 +172,31 @@ enum wxWebViewIE_EmulationLevel
 */
 enum wxWebViewBrowsingDataTypes
 {
-    /** All stored and session cookies */
+    /** All stored and session cookies. */
     wxWEBVIEW_BROWSING_DATA_COOKIES = 0x01,
-    /** Cached data from disk and memory */
+    /** Cached data from disk and memory. */
     wxWEBVIEW_BROWSING_DATA_CACHE = 0x02,
-    /** All DOM Storage: File Systems, Indexed DB, Local Storage, Web SQL, Cache Storage */
+    /** All DOM Storage: File Systems, Indexed DB, Local Storage, Web SQL, Cache Storage. */
     wxWEBVIEW_BROWSING_DATA_DOM_STORAGE = 0x04,
     /** Other browsing data like history, settings, auto fill, passwords, etc. */
     wxWEBVIEW_BROWSING_DATA_OTHER = 0x08,
     /** All browsing data, including data corresponding to all the other constants. */
     wxWEBVIEW_BROWSING_DATA_ALL = 0x0f
+};
+
+/**
+    Types of settings that can be applied to print operations.
+
+    @since 3.3.3
+*/
+enum wxWebViewPrintFlags
+{
+    /** Do not apply any custom settings. */
+    wxWEBVIEW_PRINT_DEFAULT = 0,
+    /** Explicitly prevents headers and footers from appearing in print operations.
+        This currently only applies to the Edge backend;
+        other backends do not provide headers and footers. */
+    wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER = 0x0001
 };
 
 /**
@@ -1252,10 +1267,39 @@ public:
     virtual void LoadURL(const wxString& url) = 0;
 
     /**
-        Opens a print dialog so that the user may print the currently
-        displayed page.
+        Opens a print dialog (with the backend's default settings) so that the
+        user may print the currently displayed page.
     */
     virtual void Print() = 0;
+
+    /**
+        Prints the currently displayed page using the given print settings.
+
+        The @a printData parameter allows specifying paper size, orientation,
+        number of copies, duplex mode and colour/greyscale output.
+
+        The @a flags parameter is a combination of wxWebViewPrintFlags values.
+        By default, headers and footers are shown (where supported by the
+        backend). Pass @c wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER to suppress them.
+
+        This overload is only available when @c wxUSE_PRINTING_ARCHITECTURE is
+        set to 1. Backends that do not support programmatic print settings
+        will fall back to the parameterless Print().
+
+        Currently the Edge backend (MSW) has full support for all wxPrintData
+        settings including header/footer control. The GTK and macOS backends
+        support paper size, orientation, and copies but ignore @a flags.
+        The IE and Chromium backends fall back to Print().
+
+        @param printData
+            The print settings to use.
+        @param flags
+            A combination of wxWebViewPrintFlags values.
+
+        @since 3.3.3
+    */
+    virtual void Print(const wxPrintData& printData,
+                       int flags = wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER);
 
     /**
         Registers a custom scheme handler.

@@ -461,12 +461,90 @@ void wxWebViewWebKit::Print()
         // in my tests, the progress bar always freezes and it stops the whole
         // print operation. do not turn this to true unless there is a
         // workaround for the bug.
-        [op setShowsProgressPanel: false];
+        [op setShowsProgressPanel: NO];
     }
     // Print it.
-    [op runOperationModalForWindow:m_webView.window
-                          delegate:nil didRunSelector:nil contextInfo:nil];
+    if (m_webView.window)
+    {
+        [op runOperationModalForWindow:m_webView.window
+                              delegate:nil didRunSelector:nil contextInfo:nil];
+    }
+    else
+    {
+        [op runOperation];
+    }
 }
+
+#if wxUSE_PRINTING_ARCHITECTURE
+#include "wx/cmndata.h"
+#include "wx/paper.h"
+
+void wxWebViewWebKit::Print(const wxPrintData& printData, int WXUNUSED(flags))
+{
+    if ( !m_webView )
+        return;
+
+    SEL printSelector = @selector(printOperationWithPrintInfo:);
+    if (![m_webView respondsToSelector:printSelector])
+    {
+        // Fallback to parameterless Print() which handles the error message
+        Print();
+        return;
+    }
+
+    NSPrintInfo* printInfo = [[NSPrintInfo sharedPrintInfo] copy];
+
+    // Set orientation
+    if (printData.GetOrientation() == wxLANDSCAPE)
+        [printInfo setOrientation:NSPaperOrientationLandscape];
+    else
+        [printInfo setOrientation:NSPaperOrientationPortrait];
+
+    // Set paper size (convert from tenths of mm to points: 1 point = 1/72 inch)
+    wxSize paperSizeTenthsMM = wxThePrintPaperDatabase->GetSize(printData.GetPaperId());
+    if (paperSizeTenthsMM.x > 0 && paperSizeTenthsMM.y > 0)
+    {
+        double widthPoints = paperSizeTenthsMM.x * 72.0 / 254.0;
+        double heightPoints = paperSizeTenthsMM.y * 72.0 / 254.0;
+        [printInfo setPaperSize:NSMakeSize(widthPoints, heightPoints)];
+    }
+
+    // Set copies
+    int copies = printData.GetNoCopies();
+    if (copies > 0)
+    {
+        [[printInfo dictionary] setObject:[NSNumber numberWithInt:copies]
+                                   forKey:NSPrintCopies];
+        [[printInfo dictionary] setObject:[NSNumber numberWithBool:printData.GetCollate()]
+                                   forKey:NSPrintMustCollate];
+    }
+
+    NSPrintOperation* op = (NSPrintOperation*)[m_webView
+                                               performSelector:printSelector
+                                               withObject:printInfo];
+    [printInfo release];
+
+    if (!op)
+    {
+        wxLogError(_("Print operation could not be initialized"));
+        return;
+    }
+
+    op.view.frame = m_webView.frame;
+    [op setShowsPrintPanel: YES];
+    [op setShowsProgressPanel: NO];
+
+    if (m_webView.window)
+    {
+        [op runOperationModalForWindow:m_webView.window
+                              delegate:nil didRunSelector:nil contextInfo:nil];
+    }
+    else
+    {
+        [op runOperation];
+    }
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 void wxWebViewWebKit::SetEditable(bool WXUNUSED(enable))
 {

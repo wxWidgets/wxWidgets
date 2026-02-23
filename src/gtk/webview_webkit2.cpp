@@ -1418,6 +1418,108 @@ void wxWebViewWebKit::Print()
     g_object_unref(printop);
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
+#include "wx/cmndata.h"
+#include "wx/paper.h"
+
+namespace
+{
+
+// Map wxPaperSize to GTK/PWG paper size names.
+// Ordering must match the wxPaperSize enum.
+const char* const gs_webviewPaperList[] = {
+    nullptr,         // wxPAPER_NONE
+    "na_letter",     // wxPAPER_LETTER
+    "na_legal",      // wxPAPER_LEGAL
+    "iso_a4",        // wxPAPER_A4
+    "na_c",          // wxPAPER_CSHEET
+    "na_d",          // wxPAPER_DSHEET
+    "na_e",          // wxPAPER_ESHEET
+    "na_letter",     // wxPAPER_LETTERSMALL
+    "na_ledger",     // wxPAPER_TABLOID
+    "na_ledger",     // wxPAPER_LEDGER
+    "na_invoice",    // wxPAPER_STATEMENT
+    "na_executive",  // wxPAPER_EXECUTIVE
+    "iso_a3",        // wxPAPER_A3
+    "iso_a4",        // wxPAPER_A4SMALL
+    "iso_a5",        // wxPAPER_A5
+    "jis_b4",        // wxPAPER_B4
+    "jis_b5",        // wxPAPER_B5
+    "om_folio",      // wxPAPER_FOLIO
+    "na_quarto",     // wxPAPER_QUARTO
+    "na_10x14",      // wxPAPER_10X14
+    "na_ledger",     // wxPAPER_11X17
+};
+
+GtkPaperSize* wxWebViewGetGtkPaperSize(wxPaperSize paperId)
+{
+    // Use the named GTK paper size if we have a mapping
+    if (paperId > 0 && static_cast<size_t>(paperId) < WXSIZEOF(gs_webviewPaperList))
+        return gtk_paper_size_new(gs_webviewPaperList[paperId]);
+
+    // Fall back to custom size from wxThePrintPaperDatabase
+    wxSize paperSizeTenthsMM = wxThePrintPaperDatabase->GetSize(paperId);
+    if (paperSizeTenthsMM.x > 0 && paperSizeTenthsMM.y > 0)
+    {
+        return gtk_paper_size_new_custom(
+            "custom", "Custom",
+            paperSizeTenthsMM.x / 10.0, paperSizeTenthsMM.y / 10.0,
+            GTK_UNIT_MM);
+    }
+
+    // Last resort: system default
+    return gtk_paper_size_new(gtk_paper_size_get_default());
+}
+
+} // anonymous namespace
+
+void wxWebViewWebKit::Print(const wxPrintData& printData, int WXUNUSED(flags))
+{
+    wxGtkObject<WebKitPrintOperation> printop(webkit_print_operation_new(m_web_view));
+
+    // Use GtkPageSetup for paper size and orientation
+    wxGtkObject<GtkPageSetup> pageSetup(gtk_page_setup_new());
+
+    gtk_page_setup_set_orientation(pageSetup,
+        printData.GetOrientation() == wxLANDSCAPE
+            ? GTK_PAGE_ORIENTATION_LANDSCAPE
+            : GTK_PAGE_ORIENTATION_PORTRAIT);
+
+    GtkPaperSize* paperSize = wxWebViewGetGtkPaperSize(printData.GetPaperId());
+    gtk_page_setup_set_paper_size_and_default_margins(pageSetup, paperSize);
+    gtk_paper_size_free(paperSize);
+
+    webkit_print_operation_set_page_setup(printop, pageSetup);
+
+    // Use GtkPrintSettings for copies, collation, duplex, color
+    wxGtkObject<GtkPrintSettings> settings(gtk_print_settings_new());
+
+    int copies = printData.GetNoCopies();
+    if (copies > 0)
+        gtk_print_settings_set_n_copies(settings, copies);
+
+    gtk_print_settings_set_collate(settings, printData.GetCollate());
+
+    switch (printData.GetDuplex())
+    {
+        case wxDUPLEX_SIMPLEX:
+            gtk_print_settings_set_duplex(settings, GTK_PRINT_DUPLEX_SIMPLEX);
+            break;
+        case wxDUPLEX_HORIZONTAL:
+            gtk_print_settings_set_duplex(settings, GTK_PRINT_DUPLEX_HORIZONTAL);
+            break;
+        case wxDUPLEX_VERTICAL:
+            gtk_print_settings_set_duplex(settings, GTK_PRINT_DUPLEX_VERTICAL);
+            break;
+    }
+
+    gtk_print_settings_set_use_color(settings, printData.GetColour());
+
+    webkit_print_operation_set_print_settings(printop, settings);
+
+    webkit_print_operation_run_dialog(printop, nullptr);
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 bool wxWebViewWebKit::IsBusy() const
 {
