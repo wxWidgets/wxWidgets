@@ -370,16 +370,6 @@ wxAuiDocMDIParentFrame* wxAuiDocMDIChildFrame::GetMDIParentFrame() const
     return wxDynamicCast(wxAuiMDIChildFrame::GetMDIParentFrame(), wxAuiDocMDIParentFrame);
 }
 
-void wxAuiDocMDIChildFrame::ApplyMDIChildFrameRect()
-{
-    //wxAuiMDIChildFrame::ApplyMDIChildFrameRect();
-}
-
-void wxAuiDocMDIChildFrame::DoShow(bool show)
-{
-    //wxAuiMDIChildFrame:: DoShow(show);
-}
-
 #endif
     //wxUSE_AUI
 #endif

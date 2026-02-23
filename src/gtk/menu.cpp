@@ -824,6 +824,18 @@ bool wxMenuItem::IsChecked() const
 //-----------------------------------------------------------------------------
 
 extern "C" {
+// Bricsys change: on Ubuntu Unity, we need to connect to the menu "show" signal
+// to send EVT_MENU_OPEN, because "map" doesn't arrive
+static void menu_show(GtkWidget*, wxMenu* menu)
+{
+    if ( !menu->GetWindow() )
+        return;
+
+    wxMenuEvent event(wxEVT_MENU_OPEN, menu->m_popupShown ? -1 : 0, menu);
+    DoCommonMenuCallbackCode(menu, event);
+}
+// end Bricsys change
+
 // "map" from m_menu
 static void menu_map(GtkWidget*, wxMenu* menu)
 {
@@ -889,6 +901,12 @@ void wxMenu::Init()
     }
 
     // "show" occurs for sub-menus which are not showing, so use "map" instead
+    // Bricsys change: on Ubuntu Unity, we need to connect to the menu "show" signal
+    // to send EVT_MENU_OPEN, because "map" doesn't arrive
+    if(wxString(wxT("Unity")).IsSameAs(wxGetenv(wxString(wxT("XDG_CURRENT_DESKTOP")))))
+        g_signal_connect(m_menu, "show", G_CALLBACK(menu_show), this);
+    else
+    // end Bricsys change
     g_signal_connect(m_menu, "map", G_CALLBACK(menu_map), this);
     g_signal_connect(m_menu, "hide", G_CALLBACK(menu_hide), this);
 }

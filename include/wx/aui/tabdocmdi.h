@@ -150,13 +150,6 @@ public:
 
     void SetMDIParentFrame(wxAuiDocMDIParentFrame* parent);
     wxAuiDocMDIParentFrame* GetMDIParentFrame() const;
-    
-public:
-    // This function needs to be called when a size change is confirmed,
-    // we needed this function to prevent anybody from the outside
-    // changing the panel... it messes the UI layout when we would allow it.
-    void ApplyMDIChildFrameRect();
-    void DoShow(bool show);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxAuiDocMDIChildFrame)

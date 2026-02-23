@@ -1778,6 +1778,12 @@ void wxGenericTreeCtrl::SendDeleteEvent(wxGenericTreeItem *item)
 // Don't leave edit or selection on a child which is about to disappear
 void wxGenericTreeCtrl::ChildrenClosing(wxGenericTreeItem* item)
 {
+    ChildrenClosing(item, false);
+}
+
+// Don't leave edit or selection on a child which is about to disappear
+void wxGenericTreeCtrl::ChildrenClosing(wxGenericTreeItem* item, bool keepSelection)
+{
     if ( m_textCtrl && item != m_textCtrl->item() &&
             IsDescendantOf(item, m_textCtrl->item()) )
     {
@@ -1794,7 +1800,8 @@ void wxGenericTreeCtrl::ChildrenClosing(wxGenericTreeItem* item)
         m_select_me = item;
     }
 
-    if ( item != m_current && IsDescendantOf(item, m_current) )
+    // Bricsys change: Added parameter to determine if selection should be kept or not
+    if ( item != m_current && IsDescendantOf(item, m_current) && !keepSelection)
     {
         // Don't leave the only selected item invisible, but do leave selected
         // items selected if we can have many of them.
@@ -1947,6 +1954,11 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
 
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
 {
+    Collapse(itemId, false);
+}
+
+void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId, bool keepSelection)
+{
     wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(),
                  wxT("can't collapse hidden root") );
 
@@ -1962,7 +1974,8 @@ void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
         return;
     }
 
-    ChildrenClosing(item);
+    // Bricsys change: Added parameter to determine if selection should be kept or not. Default remains remove selection
+    ChildrenClosing(item, keepSelection);
     item->Collapse();
 
 #if 0  // TODO why should items be collapsed recursively?
