@@ -843,7 +843,9 @@ bool wxGetUserName(char* buf, int sz);
 /**
     Returns the string containing the description of the current platform in a
     user-readable form. For example, this function may return strings like
-    "Windows 10 (build 10240), 64-bit edition" or "Linux 4.1.4 i386".
+    "Windows 10 (build 10240), 64-bit edition",
+    "AlmaLinux 10.1 (Heliotrope Lion), 6.12.0-55.9.1.el10_0.x86_64",
+    or "Linux 4.1.4 i386".
 
     @see wxGetOsVersion()
 
@@ -867,6 +869,9 @@ wxString wxGetOsDescription();
     integers will contain the kernel's major, minor, and micro version
     numbers (as returned by the 'uname -r' command); e.g. "4", "1", and "4" if
     the machine is using kernel 4.1.4.
+
+    On Linux (@c __LINUX__ defined), if you are interested in the distribution
+    version rather than the kernel version, see wxGetLinuxDistributionInfo().
 
     For macOS systems (@c wxOS_MAC) the major and minor version integers are the
     natural version numbers associated with the OS; e.g. "10", "11" and "2" if
@@ -987,7 +992,7 @@ wxString wxGetOsDescription();
     See the <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version">Microsoft documentation</a>
     for more info about the values above.
 
-    @see wxGetOsDescription(), wxPlatformInfo
+    @see wxGetOsDescription(), wxGetLinuxDistributionInfo(), wxPlatformInfo
 
     @header{wx/utils.h}
 */
@@ -996,6 +1001,9 @@ wxOperatingSystemId wxGetOsVersion(int* major = nullptr, int* minor = nullptr, i
 /**
     Returns @true if the version of the operating system on which the program
     is running under is the same or later than the given version.
+
+    For Unix-like systems (except macOS), this is the kernel version, not
+    the marketing/distribution version.
 
     @since 3.1.0
 
