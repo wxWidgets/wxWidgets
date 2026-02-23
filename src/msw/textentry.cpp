@@ -1107,6 +1107,10 @@ extern bool wxMSWTextEntryShouldPreProcessMessage(WXMSG* msg)
                         case VK_DELETE:
                         case VK_HOME:
                         case VK_END:
+// Bricsys added (#10533)
+                        case VK_LEFT:
+                        case VK_RIGHT:
+// end Bricsys added
                             return false;
                     }
                     break;
