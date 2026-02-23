@@ -2221,9 +2221,10 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     }
 
 
-    RemoveEmptyTabFrames();
-
+    // BRICSYS_CHANGE: swapped m_curPage assignment and RemoveEmptyTabFrames() call
     m_curPage = wxNOT_FOUND;
+
+    RemoveEmptyTabFrames();
 
     // set new active pane unless we're being destroyed anyhow
     if (new_active && !m_isBeingDeleted)
