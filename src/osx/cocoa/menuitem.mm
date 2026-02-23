@@ -116,6 +116,20 @@ SEL wxOSXGetSelectorFromID(int menuId )
     return YES ;
 }
 
+//BRICSYS change. -- CosminP.
+- (void) setModalStatus:(BOOL) status
+{
+    worksInModal = status;
+}
+
+- (BOOL)worksWhenModal
+{
+    if(worksInModal) //by system defaults this is FALSE
+        return YES;
+    else
+        return NO;
+}
+
 - (void)setImplementation: (wxMenuItemImpl *) theImplementation
 {
     impl = theImplementation;
@@ -291,6 +305,11 @@ public :
         wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
     }
     
+    void SetModalStatus( bool status )
+    {
+        [m_osxMenuItem setModalStatus:status];
+    }
+
     bool DoDefault() wxOVERRIDE;
 
     void * GetHMenuItem() wxOVERRIDE { return m_osxMenuItem; }

@@ -159,6 +159,11 @@ void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
     UpdateItemBitmap();
 }
 
+void wxMenuItem::UpdateModalStatus(bool status)
+{
+    GetPeer()->SetModalStatus(status);
+}
+
 void wxMenuItem::UpdateItemBitmap()
 {
     if ( !m_parentMenu )
