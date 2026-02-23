@@ -951,8 +951,9 @@ bool wxAuiToolBar::Create(wxWindow* parent,
 
     m_windowStyle = style;
 
-    m_toolPacking = FromDIP(2);
-    m_toolBorderPadding = FromDIP(3);
+    // Tool packing and padding are in DIPs, i.e. do not use FromDIP() here.
+    m_toolPacking = 2;
+    m_toolBorderPadding = 3;
 
     m_gripperVisible  = (style & wxAUI_TB_GRIPPER) ? true : false;
     m_overflowVisible = (style & wxAUI_TB_OVERFLOW) ? true : false;
@@ -963,9 +964,12 @@ bool wxAuiToolBar::Create(wxWindow* parent,
         m_orientation = wxHORIZONTAL;
     }
 
-    wxSize margin_lt = FromDIP(wxSize(5, 5));
-    wxSize margin_rb = FromDIP(wxSize(2, 2));
-    SetMargins(margin_lt.x, margin_lt.y, margin_rb.x, margin_rb.y);
+    // Margins are in DIPs, i.e. do not use FromDIP() here.
+    m_leftPadding =
+    m_rightPadding = 5;
+    m_topPadding =
+    m_bottomPadding = 2;
+
     SetFont(*wxNORMAL_FONT);
     SetArtFlags();
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
@@ -1298,7 +1302,7 @@ wxAuiToolBarItem* wxAuiToolBar::FindToolByPositionWithPacking(wxCoord x, wxCoord
 
         // apply tool packing
         if (i+1 < count)
-            rect.width += m_toolPacking;
+            rect.width += FromDIP(m_toolPacking);
 
         if (rect.Contains(x,y))
         {
@@ -1437,7 +1441,7 @@ bool wxAuiToolBar::GetToolSticky(int tool_id) const
 
 void wxAuiToolBar::SetToolBorderPadding(int padding)
 {
-    m_toolBorderPadding = padding;
+    m_toolBorderPadding = ToDIP(padding);
 }
 
 int wxAuiToolBar::GetToolBorderPadding() const
@@ -1490,7 +1494,7 @@ bool wxAuiToolBar::IsToolTextVertical() const
 
 void wxAuiToolBar::SetToolPacking(int packing)
 {
-    m_toolPacking = packing;
+    m_toolPacking = ToDIP(packing);
 }
 
 int wxAuiToolBar::GetToolPacking() const
@@ -1516,13 +1520,13 @@ void wxAuiToolBar::SetOrientation(int orientation)
 void wxAuiToolBar::SetMargins(int left, int right, int top, int bottom)
 {
     if (left != -1)
-        m_leftPadding = left;
+        m_leftPadding = ToDIP(left);
     if (right != -1)
-        m_rightPadding = right;
+        m_rightPadding = ToDIP(right);
     if (top != -1)
-        m_topPadding = top;
+        m_topPadding = ToDIP(top);
     if (bottom != -1)
-        m_bottomPadding = bottom;
+        m_bottomPadding = ToDIP(bottom);
 }
 
 bool wxAuiToolBar::GetGripperVisible() const
@@ -2049,7 +2053,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
     // add "left" padding
     if (m_leftPadding > 0)
     {
-        sizer->AddSpacer(m_leftPadding);
+        sizer->AddSpacer(FromDIP(m_leftPadding));
     }
 
     size_t i, count;
@@ -2063,13 +2067,13 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
             case wxITEM_LABEL:
             {
                 wxSize size = m_art->GetLabelSize(dc, this, item);
-                sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
-                                        size.y + (m_toolBorderPadding*2),
+                sizerItem = sizer->Add(size.x + (FromDIP(m_toolBorderPadding*2)),
+                                        size.y + (FromDIP(m_toolBorderPadding*2)),
                                         item.m_proportion,
                                         item.m_alignment);
                 if (i+1 < count)
                 {
-                    sizer->AddSpacer(m_toolPacking);
+                    sizer->AddSpacer(FromDIP(m_toolPacking));
                 }
 
                 break;
@@ -2080,14 +2084,14 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
             case wxITEM_RADIO:
             {
                 wxSize size = m_art->GetToolSize(dc, this, item);
-                sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
-                                        size.y + (m_toolBorderPadding*2),
+                sizerItem = sizer->Add(size.x + (FromDIP(m_toolBorderPadding*2)),
+                                        size.y + (FromDIP(m_toolBorderPadding*2)),
                                         0,
                                         item.m_alignment);
                 // add tool packing
                 if (i+1 < count)
                 {
-                    sizer->AddSpacer(m_toolPacking);
+                    sizer->AddSpacer(FromDIP(m_toolPacking));
                 }
 
                 break;
@@ -2101,7 +2105,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
                 // add tool packing
                 if (i+1 < count)
                 {
-                    sizer->AddSpacer(m_toolPacking);
+                    sizer->AddSpacer(FromDIP(m_toolPacking));
                 }
 
                 break;
@@ -2152,7 +2156,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
                 // add tool packing
                 if (i+1 < count)
                 {
-                    sizer->AddSpacer(m_toolPacking);
+                    sizer->AddSpacer(FromDIP(m_toolPacking));
                 }
             }
         }
@@ -2163,7 +2167,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
     // add "right" padding
     if (m_rightPadding > 0)
     {
-        sizer->AddSpacer(m_rightPadding);
+        sizer->AddSpacer(FromDIP(m_rightPadding));
     }
 
     // add drop down area
@@ -2191,7 +2195,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
     // add "top" padding
     if (m_topPadding > 0)
     {
-        outside_sizer->AddSpacer(m_topPadding);
+        outside_sizer->AddSpacer(FromDIP(m_topPadding));
     }
 
     // add the sizer that contains all of the toolbar elements
@@ -2200,7 +2204,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
     // add "bottom" padding
     if (m_bottomPadding > 0)
     {
-        outside_sizer->AddSpacer(m_bottomPadding);
+        outside_sizer->AddSpacer(FromDIP(m_bottomPadding));
     }
 
     m_sizer = outside_sizer;
