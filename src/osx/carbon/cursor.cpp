@@ -237,6 +237,21 @@ wxCursor::wxCursor(const char* const* xpmData)
 }
 #endif // wxUSE_IMAGE
 
+// Bricsys change: allow cursor being created directly from wxBitmap on wxOSX_COCOA
+// it is better than going through wxImage then coming back to wxBitmap again
+#ifdef wxOSX_USE_COCOA
+wxCursor::wxCursor( const wxBitmap &bmp, int hotSpotX, int hotSpotY )
+{
+    m_refData = new wxCursorRefData;
+    CGImageRef cgimage = bmp.CreateCGImage();
+    if ( cgimage )
+    {
+        M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromCGImage( cgimage, hotSpotX, hotSpotY );
+        CFRelease( cgimage );
+    }
+}
+#endif //wxOSX_USE_COCOA
+
 wxGDIRefData *wxCursor::CreateGDIRefData() const
 {
     return new wxCursorRefData;
