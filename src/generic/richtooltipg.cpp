@@ -269,7 +269,9 @@ public:
 protected:
     virtual void OnDismiss() wxOVERRIDE
     {
-        Destroy();
+        // Bricsys change: merged the fix from http://trac.wxwidgets.org/ticket/13953#comment:4
+        if( !wxPendingDelete.Member(this) )
+            Destroy();
     }
 
 private:
