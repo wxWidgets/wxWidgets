@@ -80,6 +80,11 @@ enum wxDLFlags
                                     // bundle) are generally hidden and only availble to dlsym()
     // end Bricsys change
 
+    //bricsys change merged on wxwidgets upgrade
+    // added flag wxDL_AS_DATAFILE
+    wxDL_AS_DATAFILE = 0x80000000,  // Win32 only: load as datafile (only for
+                                    // extracting messages or resources)
+
     wxDL_DEFAULT    = wxDL_NOW      // default flags correspond to Win32
 };
 

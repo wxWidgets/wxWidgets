@@ -185,6 +185,11 @@ void wxDynamicLibrary::ReportError(const wxString& message, const wxString& name
 wxDllType
 wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 {
+    //bricsys change merged on wxwidgets upgrade
+    // added flag wxDL_AS_DATAFILE
+    if (flags & wxDL_AS_DATAFILE)
+        return ::LoadLibraryEx(libname, NULL, LOAD_LIBRARY_AS_DATAFILE);
+
     if (flags & wxDL_GET_LOADED)
         return ::GetModuleHandle(libname.t_str());
 
