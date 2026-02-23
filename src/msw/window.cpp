@@ -6351,13 +6351,13 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
     switch( message )
     {
         case WM_POINTERDOWN:
-            type = wxEVT_POINTER_DOWN;
+            type = wxEVT_STYLUS_DOWN;
             break;
         case WM_POINTERUP:
-            type = wxEVT_POINTER_UP;
+            type = wxEVT_STYLUS_UP;
             break;
         case WM_POINTERUPDATE:
-            type = wxEVT_POINTER_UPDATE;
+            type = wxEVT_STYLUS_UPDATE;
             break;
         default:
             wxFAIL_MSG( wxT("Unexpected pointer message") );
@@ -6375,7 +6375,7 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
         }
     }
 
-    wxTabletEvent event(GetId(), type);
+    wxStylusEvent event(GetId(), type);
     event.SetEventObject(this);
 
     // here we already know we have a pen generated event

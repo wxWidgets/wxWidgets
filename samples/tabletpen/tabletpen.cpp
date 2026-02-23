@@ -59,9 +59,9 @@ private:
 public:
     MyFrame(wxFrame *parent, const wxString& title);
 
-    void OnPenDown(wxTabletEvent& event);
-    void OnPenUp(wxTabletEvent& event);
-    void OnPenUpdate(wxTabletEvent& event);
+    void OnPenDown(wxStylusEvent& event);
+    void OnPenUp(wxStylusEvent& event);
+    void OnPenUpdate(wxStylusEvent& event);
 
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
@@ -121,9 +121,9 @@ MyFrame::MyFrame(wxFrame *parent, const wxString& title)
     m_penDown = false;
     m_backgroundColor = *wxWHITE;
 
-    Bind(wxEVT_POINTER_DOWN, &MyFrame::OnPenDown, this);
-    Bind(wxEVT_POINTER_UP, &MyFrame::OnPenUp, this);
-    Bind(wxEVT_POINTER_UPDATE, &MyFrame::OnPenUpdate, this);
+    Bind(wxEVT_STYLUS_DOWN, &MyFrame::OnPenDown, this);
+    Bind(wxEVT_STYLUS_UP, &MyFrame::OnPenUp, this);
+    Bind(wxEVT_STYLUS_UPDATE, &MyFrame::OnPenUpdate, this);
 
     Bind(wxEVT_MENU, &MyFrame::OnQuit, this, wxID_EXIT);
     Bind(wxEVT_MENU, &MyFrame::OnColorChange, this, ID_COLOR_FIRST, ID_COLOR_LAST-1);
@@ -157,7 +157,7 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 }
 
 
-void MyFrame::OnPenDown(wxTabletEvent& event)
+void MyFrame::OnPenDown(wxStylusEvent& event)
 {
     wxUnusedVar(event);
     SetCursor(*wxCROSS_CURSOR);
@@ -165,7 +165,7 @@ void MyFrame::OnPenDown(wxTabletEvent& event)
     m_penDown = true;
 }
 
-void MyFrame::OnPenUp(wxTabletEvent& event)
+void MyFrame::OnPenUp(wxStylusEvent& event)
 {
     wxUnusedVar(event);
     SetCursor(*wxSTANDARD_CURSOR);
@@ -173,7 +173,7 @@ void MyFrame::OnPenUp(wxTabletEvent& event)
     m_penDown = false;
 }
 
-void MyFrame::OnPenUpdate(wxTabletEvent& event)
+void MyFrame::OnPenUpdate(wxStylusEvent& event)
 {
     bool skip = false;
     if (!m_penDown)

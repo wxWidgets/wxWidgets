@@ -5160,23 +5160,23 @@ public:
     void SetCursor(const wxCursor& cursor);
 };
 /**
-    @class wxTabletEvent
+    @class wxStylusEvent
 
-    A wxTabletEvent is generated from wxWindow when the graphical pen is used.
+    A wxStylusEvent is generated from wxWindow when the graphical pen (stylus) is used.
 
     This event gives the application the chance to perform specific tablet events
     processing based on the current position of the pen, pressure and other
     parameters.
 
-    @beginEventTable{wxTabletEvent}
-    @event{EVT_POINTER_DOWN(func)}
-        Process a @c wxEVT_POINTER_DOWN event, which is generated when a pen makes
+    @beginEventTable{wxStylusEvent}
+    @event{EVT_STYLUS_DOWN(func)}
+        Process a @c wxEVT_STYLUS_DOWN event, which is generated when a pen makes
         contact with the tablet.
-    @event{EVT_POINTER_UP(func)}
-        Process a @c wxEVT_POINTER_UP event, which is generated when a pen breaks contact
+    @event{EVT_STYLUS_UP(func)}
+        Process a @c wxEVT_STYLUS_UP event, which is generated when a pen breaks contact
         with the tablet.
-    @event{EVT_POINTER_UPDATE(func)}
-        Process a @c wxEVT_POINTER_UPDATE event, which is generated each time an update
+    @event{EVT_STYLUS_UPDATE(func)}
+        Process a @c wxEVT_STYLUS_UPDATE event, which is generated each time an update
         (like movement) comes from a pen that is near or touches surface of the tablet.
     @endEventTable
 
@@ -5185,13 +5185,13 @@ public:
 
     @since 3.3.2
  */
-class wxTabletEvent : public wxEvent
+class wxStylusEvent : public wxEvent
 {
 public:
     /**
         Constructor.
      */
-    wxTabletEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL);
+    wxStylusEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL);
     /**
         Get the pressure value. Range is from 0 to 1.
      */

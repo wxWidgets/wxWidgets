@@ -700,7 +700,7 @@ class WXDLLIMPEXP_FWD_CORE wxRotateGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxTwoFingerTapEvent;
 class WXDLLIMPEXP_FWD_CORE wxLongPressEvent;
 class WXDLLIMPEXP_FWD_CORE wxPressAndTapEvent;
-class WXDLLIMPEXP_FWD_CORE wxTabletEvent;
+class WXDLLIMPEXP_FWD_CORE wxStylusEvent;
 
 
     // Command events
@@ -813,9 +813,9 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_END, wxMultiTouchEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_CANCEL, wxMultiTouchEvent);
 
     // Tablet event types
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_POINTER_DOWN, wxTabletEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_POINTER_UP, wxTabletEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_POINTER_UPDATE, wxTabletEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_STYLUS_DOWN, wxStylusEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_STYLUS_UP, wxStylusEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_STYLUS_UPDATE, wxStylusEvent);
 
     // Gesture events
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_PAN, wxPanGestureEvent);
@@ -2209,16 +2209,16 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPressAndTapEvent);
 };
 
-class WXDLLIMPEXP_CORE wxTabletEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxStylusEvent : public wxEvent
 {
 public:
-    wxTabletEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
+    wxStylusEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
         : wxEvent(winid, type)
     {
         // they are initialized with invalid values, outside of normal range
     }
 
-    wxTabletEvent(const wxTabletEvent& event) = default;
+    wxStylusEvent(const wxStylusEvent& event) = default;
 
     wxDouble GetPressure() const { return m_pressure; }
     void SetPressure(wxDouble p) { m_pressure = p; }
@@ -2238,7 +2238,7 @@ public:
     bool IsUsingEraser() const { return m_usingEraser; }
     void SetUsingEraser(bool eraser) { m_usingEraser = eraser; }
 
-    wxNODISCARD virtual wxEvent* Clone() const override { return new wxTabletEvent(*this); }
+    wxNODISCARD virtual wxEvent* Clone() const override { return new wxStylusEvent(*this); }
 
 private:
     wxDouble m_pressure = -1.0; // range [ 0.0, 1.0 ]
@@ -2248,7 +2248,7 @@ private:
     wxPoint m_pos = wxPoint(-1,-1);        // position in pixels in client coordinates (the window generating the event)
     bool m_usingEraser = false;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTabletEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxStylusEvent);
 };
 
 
@@ -4377,7 +4377,7 @@ typedef void (wxEvtHandler::*wxTwoFingerTapEventFunction)(wxTwoFingerTapEvent&);
 typedef void (wxEvtHandler::*wxLongPressEventFunction)(wxLongPressEvent&);
 typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
 typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
-typedef void (wxEvtHandler::*wxTabletEventFunction)(wxTabletEvent&);
+typedef void (wxEvtHandler::* wxStylusEventFunction)(wxStylusEvent&);
 
 #define wxCommandEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxCommandEventFunction, func)
@@ -4472,8 +4472,8 @@ typedef void (wxEvtHandler::*wxTabletEventFunction)(wxTabletEvent&);
     wxEVENT_HANDLER_CAST(wxPressAndTapEventFunction, func)
 #define wxFullScreenEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxFullScreenEventFunction, func)
-#define wxTabletEventHandler(func) \
-    wxEVENT_HANDLER_CAST(wxTabletEventFunction, func)
+#define wxStylusEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxStylusEventFunction, func)
 
 #endif // wxUSE_GUI
 
@@ -4820,14 +4820,14 @@ typedef void (wxEvtHandler::*wxTabletEventFunction)(wxTabletEvent&);
     EVT_TOUCH_END(func) \
     EVT_TOUCH_CANCEL(func)
 
-#define EVT_POINTER_DOWN(func) wx__DECLARE_EVT0(wxEVT_POINTER_DOWN, wxTabletEventHandler(func))
-#define EVT_POINTER_UP(func) wx__DECLARE_EVT0(wxEVT_POINTER_UP, wxTabletEventHandler(func))
-#define EVT_POINTER_UPDATE(func) wx__DECLARE_EVT0(wxEVT_POINTER_UPDATE, wxTabletEventHandler(func))
+#define EVT_STYLUS_DOWN(func) wx__DECLARE_EVT0(wxEVT_STYLUS_DOWN, wxStylusEventHandler(func))
+#define EVT_STYLUS_UP(func) wx__DECLARE_EVT0(wxEVT_STYLUS_UP, wxStylusEventHandler(func))
+#define EVT_STYLUS_UPDATE(func) wx__DECLARE_EVT0(wxEVT_STYLUS_UPDATE, wxStylusEventHandler(func))
 
-#define EVT_POINTER_EVENTS(func) \
-    EVT_POINTER_DOWN(func) \
-    EVT_POINTER_UP(func) \
-    EVT_POINTER_UPDATE(func)
+#define EVT_STYLUS_EVENTS(func) \
+    EVT_STYLUS_DOWN(func) \
+    EVT_STYLUS_UP(func) \
+    EVT_STYLUS_UPDATE(func)
 
 // Gesture events
 #define EVT_GESTURE_PAN(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_PAN, winid, wxPanGestureEventHandler(func))
