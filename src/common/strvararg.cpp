@@ -478,7 +478,14 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
                               CharType& outConv, SizeModifier& outSize) override
     {
         outConv = 's';
+#if wxUSE_WXVSNPRINTFA
+        // When using wx's own vsnprintf implementation, plain %s is
+        // interpreted as wchar_t*. We need %hs to indicate char* args,
+        // which is what we actually pass in UTF-8 builds.
+        outSize = Size_Short;
+#else
         outSize = Size_Default;
+#endif
     }
 
     virtual void HandleChar(CharType WXUNUSED(conv),
