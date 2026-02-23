@@ -2650,6 +2650,12 @@ void wxAuiManager::Update()
                 // and size reflect the information in wxAuiPaneInfo
                 if ((p.frame->GetPosition() != p.floating_pos) || (p.frame->GetSize() != p.floating_size))
                 {
+#ifdef __APPLE__
+                    // Bricsys change: is SetSize() needed?
+                    // on new OS X versions, SetSize() sends window move events
+                    // this is intrusive in the middle of Update()
+                    wxEventBlocker evBlocker(p.frame, wxEVT_MOVE);
+#endif // __APPLE__
                     p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
                                      p.floating_size.x, p.floating_size.y,
                                      wxSIZE_USE_EXISTING);
