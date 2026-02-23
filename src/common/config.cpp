@@ -558,8 +558,8 @@ wxString wxExpandEnvVars(const wxString& str)
 
           break;
         }
+        wxFALLTHROUGH;
 #endif // __WINDOWS__
-        //else: fall through
 
       default:
         strResult += str[n];
