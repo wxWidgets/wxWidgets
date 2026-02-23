@@ -1061,6 +1061,15 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         traits->AfterChildWaitLoop(cookie);
     }
 
+    //Bricsys change: remove thread handle from gs_asyncThreads
+    for (wxVector<HANDLE>::iterator it = gs_asyncThreads.begin(); it != gs_asyncThreads.end(); ++it)
+    {
+        if (*it != hThread)
+            continue;
+        gs_asyncThreads.erase(it);
+        break;
+    }
+
     DWORD dwExitCode = data->dwExitCode;
     delete data;
 
