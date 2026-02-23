@@ -34272,6 +34272,16 @@ rm -f core conftest.err conftest.$ac_objext \
             cat <<EOF >change-install-names
 #!/bin/sh
 set -e
+resolve_path() {
+    # macos >= 13.0
+    if which realpath > /dev/null; then
+        cmd="realpath"
+    # macos < 13.0
+    else
+        cmd="readlink"
+    fi
+    \$cmd \$1
+}
 [ -z "\${WXDEBUG_X}" ] || set -x
 destdir=\$1
 libdir=\$2
@@ -34280,11 +34290,11 @@ build_libdir=\$4
 libnames=\$(cd \${build_libdir}; printf '%s\n' libwx*${WX_RELEASE}.dylib)
 changes=''
 for libname in \${libnames} ; do
-    target=\$(realpath \${build_libdir}/\${libname})
+    target=\$(resolve_path \${build_libdir}/\${libname})
     changes="\${changes} -change \${target} \${libdir}/\$(basename \${target})"
 done
 for libname in \${libnames} ; do
-    target=\$(realpath \${build_libdir}/\${libname})
+    target=\$(resolve_path \${build_libdir}/\${libname})
     ${HOST_PREFIX}install_name_tool \${changes} -id \${libdir}/\${libname} \${destdir}\${libdir}/\$(basename \${target})
 done
 
@@ -47865,4 +47875,3 @@ echo "                                       libmspack          ${wxUSE_LIBMSPAC
 echo "                                       sdl                ${wxUSE_LIBSDL}"
 
 echo ""
-
