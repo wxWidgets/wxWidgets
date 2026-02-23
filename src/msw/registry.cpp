@@ -880,59 +880,60 @@ wxRegKey::ValueType wxRegKey::GetValueType(const wxString& szValue) const
 
 static bool isExpandable(const wxString& path)
 {
-    const int newLength = ::ExpandEnvironmentStrings(path.c_str(), NULL, 0);
-    if (newLength == 0)
-        return false;
-    else if (newLength == path.length() + 1)
-    {
-        wxString str;
-        int length = ::ExpandEnvironmentStrings(path.c_str(), wxStringBuffer(str, newLength), newLength);
-        return length != 0 && path != str;
-    }
-    else
-        return true;
+    static const wxChar s_ident(_T('%')); // Linux/Mac use '$', but this code here is Windows-only
+    return (path.Find(s_ident) != wxNOT_FOUND);
 }
 
-struct PathUnExpander
+//BRICSYS change: unexpandPath
+// combined path could contain single path or several valid paths
+// we have to split paths so PathUnExpandEnvStrings could process all of sub-paths, 
+// otherwise only first sub-path would be handled
+bool unexpandPath(const wxString& combinedPath, wxString& result)
 {
-    // combined path could contain single path or several valid paths
-    // we have to split paths so PathUnExpandEnvStrings could process all of sub-paths, 
-    // otherwise only first sub-path would be handled
-    PathUnExpander(const wxString& combinedPath)
-    : m_subPaths(wxSplit(combinedPath, _T(';'))), m_bUnExpanded(false) {}
-
-    bool unexpand(wxString &result)
-    {
-        m_bUnExpanded = false;
-        wxArrayString::iterator it = m_subPaths.begin();
-        wxArrayString::iterator itEnd = m_subPaths.end();
-        for (; it != itEnd; ++it)
-        {
-            if (PathUnExpandEnvStrings(it->c_str(), buf, eMAX_PATH * sizeof(wxChar)))
-            {
-                *it = buf;
-                m_bUnExpanded = true;
-            }
-        }
-        result = wxJoin(m_subPaths, _T(';'), _T('\0'));
-        return m_bUnExpanded;
-    }
+    static const wxChar s_delimiter(_T(';'));
 
     enum {eMAX_PATH = 1024};
-    wxArrayString m_subPaths;
     wxChar buf[eMAX_PATH];
-    bool m_bUnExpanded;
-};
 
+    if (combinedPath.Find(s_delimiter) == wxNOT_FOUND) // single string/path
+    {
+        if (PathUnExpandEnvStrings(combinedPath, buf, eMAX_PATH))
+        {
+            result = buf;
+            return true;
+        }
+        result = combinedPath;
+        return false;
+    }
+
+    // multiple paths
+    bool bUnExpanded(false);
+    wxArrayString subPaths = wxSplit(combinedPath, s_delimiter);
+
+    wxArrayString::iterator it = subPaths.begin();
+    wxArrayString::iterator itEnd = subPaths.end();
+    for (; it != itEnd; ++it)
+    {
+        if (PathUnExpandEnvStrings(it->c_str(), buf, eMAX_PATH))
+        {
+            *it = buf;
+            bUnExpanded = true;
+        }
+    }
+    result = bUnExpanded ? wxJoin(subPaths, s_delimiter, _T('\0')) : combinedPath;
+    return bUnExpanded;
+}
+
+//BRICSYS change: unexpandPath
+// use expandable type "REG_EXPAND_SZ" + ::PathUnExpandEnvStrings routine
+// for storing strings in registry in a portable format
 bool wxRegKey::SetUnexpandedValue(const wxString& szValue, const wxString& strValue)
 {
-    //BRICSYS change: use expandable type "REG_EXPAND_SZ" + ::PathUnExpandEnvStrings routine
-    // for storing strings in registry in a portable format
-    PathUnExpander unExpander(strValue);
     wxString refinedValue;
-    BOOL bUnExpanded = unExpander.unexpand(refinedValue);
-    int storeType = bUnExpanded ? REG_EXPAND_SZ : REG_SZ;
-    
+    const bool bUnExpanded = unexpandPath(strValue, refinedValue);
+    const bool bExpandable = bUnExpanded || isExpandable(refinedValue);
+    const int storeType = bExpandable ? REG_EXPAND_SZ : REG_SZ;
+
     return SetValue(szValue, refinedValue, storeType);
 }
 

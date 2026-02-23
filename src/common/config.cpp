@@ -303,12 +303,16 @@ bool wxConfigBase::DoReadDouble(const wxString& key, double* val) const
 // string reading helper
 wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 {
+#if 1 // Bricsys change, for performance
+    return IsExpandingEnvVars() ? wxExpandEnvVars(str) : str;
+#else
     wxString tmp; // Required for BC++
     if (IsExpandingEnvVars())
         tmp = wxExpandEnvVars(str);
     else
         tmp = str;
     return tmp;
+#endif
 }
 
 // ----------------------------------------------------------------------------
