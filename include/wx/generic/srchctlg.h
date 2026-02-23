@@ -224,7 +224,7 @@ private:
     virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
 
     // Position the child controls using the current window size.
-    void LayoutControls();
+    void DoLayoutControls();
 
 #if wxUSE_MENUS
     void PopupSearchMenu();

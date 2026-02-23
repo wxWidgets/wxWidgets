@@ -2246,6 +2246,9 @@ void wxWidgetCocoaImpl::imeEvent(wxImeEvent wxEvent, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd, int touchEventType)
 {
+    if ( !HasFocus() )
+        return;
+    
     NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
     if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
         casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
@@ -2300,6 +2303,8 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
     if([event type] == NSScrollWheel)
     {
+        NSView* hitview = [[[slf window] contentView] hitTest:[event locationInWindow]];
+
         NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
         if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
             casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
@@ -2314,9 +2319,18 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             [casted_osxView dualTouchPan:event];
             return;
         }
-        else if([event momentumPhase] != NSEventPhaseNone)
+        else if([event momentumPhase] != NSEventPhaseNone && HasFocus())
         {
             //In momentum scrolling the hardware continues to issue scroll wheel events even though the user is no longer physically scrolling
+            return;
+        }
+        else if([event subtype] != NSMouseEventSubtype &&
+                !HasFocus() &&
+                m_osxView == slf &&
+                hitview == slf)
+        {
+            // touch with main window not focused, but pointer over drawing area
+            // (action is perceived as zoom if allowed to continue)
             return;
         }
     }

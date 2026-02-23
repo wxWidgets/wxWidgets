@@ -112,7 +112,7 @@ protected:
     //
     // This is a bit ugly and it would arguably be better to use whatever size
     // the base class version returns and just centre the text vertically in
-    // the search control but I failed to modify the code in LayoutControls()
+    // the search control but I failed to modify the code in DoLayoutControls()
     // to do this easily and as there is much in that code I don't understand
     // (notably what is the logic for buttons sizing?) I prefer to not touch it
     // at all.
@@ -365,7 +365,7 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
             m_searchButton->Refresh();
         }
     }
-    LayoutControls();
+    DoLayoutControls();
 }
 
 wxMenu* wxSearchCtrl::GetMenu()
@@ -396,7 +396,7 @@ void wxSearchCtrl::ShowSearchButton( bool show )
             m_searchButton->Hide();
     }
 
-    LayoutControls();
+    DoLayoutControls();
 }
 
 bool wxSearchCtrl::IsSearchButtonVisible() const
@@ -425,7 +425,7 @@ void wxSearchCtrl::ShowCancelButton( bool show )
 
     m_cancelButton->Show(show);
 
-    LayoutControls();
+    DoLayoutControls();
 }
 
 bool wxSearchCtrl::IsCancelButtonVisible() const
@@ -463,10 +463,15 @@ wxSize wxSearchCtrl::DoGetBestClientSize() const
     int horizontalBorder = FromDIP(1) + (size.y - size.y * 14 / 21 ) / 2;
     size.x += 2 * horizontalBorder;
 
+#ifdef __WXMSW__
+    // Border is already added in wxSearchTextCtrl::DoGetBestSize()
     return size;
+#else
+    return size + DoGetBorderSize();
+#endif
 }
 
-void wxSearchCtrl::LayoutControls()
+void wxSearchCtrl::DoLayoutControls()
 {
     if ( !m_text )
         return;
@@ -1197,7 +1202,7 @@ void wxSearchCtrl::OnCancelButton( wxCommandEvent& event )
 
 void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )
 {
-    LayoutControls();
+    DoLayoutControls();
 }
 
 void wxSearchCtrl::OnDPIChanged(wxDPIChangedEvent &event)
