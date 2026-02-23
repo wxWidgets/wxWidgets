@@ -392,6 +392,9 @@ struct WXDLLIMPEXP_CORE wxScrolledT_Helper
                                  const wxSize& origBest);
 #ifdef __WXMSW__
     static WXLRESULT FilterMSWWindowProc(WXUINT nMsg, WXLRESULT origResult);
+    // Bricsys added: redirect accelerators to wxAnyScrollHelperBase::HandleOnChar()
+    static bool FilterMSWShouldPreProcessMessage(WXMSG* msg);
+    // end Bricsys added
 #endif
 };
 
@@ -473,6 +476,14 @@ public:
     {
         CalcUnscrolledPosition(*xOrg, *yOrg, xOrg, yOrg);
     }
+    // Bricsys added: (#10533) redirect accelerators to wxAnyScrollHelperBase::HandleOnChar()
+    virtual bool MSWShouldPreProcessMessage(WXMSG* msg) wxOVERRIDE
+    {
+        if (!FilterMSWShouldPreProcessMessage(msg))
+            return false;
+        return T::MSWShouldPreProcessMessage(msg);
+    }
+    // end Bricsys added
 #endif // __WXMSW__
 
     WX_FORWARD_TO_SCROLL_HELPER()

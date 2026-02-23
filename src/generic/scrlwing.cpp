@@ -1575,6 +1575,25 @@ WXLRESULT wxScrolledT_Helper::FilterMSWWindowProc(WXUINT nMsg, WXLRESULT rc)
     }
     return rc;
 }
+// Bricsys added: (#10533) redirect accelerators to wxAnyScrollHelperBase::HandleOnChar()
+bool wxScrolledT_Helper::FilterMSWShouldPreProcessMessage(WXMSG* msg)
+{
+    if (msg->message == WM_KEYDOWN)
+    {
+        if ((HIWORD(msg->lParam) & KF_ALTDOWN) == 0)
+        {
+            const WPARAM vkey = msg->wParam;
+            switch (vkey)
+            {
+            case VK_PRIOR:
+            case VK_NEXT:
+                return false;
+            }
+        }
+    }
+    return true;
+}
+// end Bricsys added
 #endif // __WXMSW__
 
 // NB: skipping wxScrolled<T> in wxRTTI information because being a template,
