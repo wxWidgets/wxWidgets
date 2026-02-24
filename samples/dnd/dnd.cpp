@@ -1750,8 +1750,8 @@ void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
 
 bool wxCreateScrolled(wxFrame* self,
                      wxWindow *parent, wxWindowID winid,
-                     const wxPoint& pos, const wxSize& size,
-                     long style, const wxString& name)
+                     const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size),
+                     long WXUNUSED(style), const wxString& name)
 {
      return self->Create(parent, winid, name);
 }
