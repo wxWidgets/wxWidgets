@@ -1822,6 +1822,17 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
 /// This takes a _caret_ position.
 bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
 {
+#if 1
+    // Bricsys change:
+    // Change in scrollbar visibilities can lead to an OnSize event, which in turn leads to delayed layouting.
+    // If we adjust insertion point and call ScrollIntoView before the execution of that delayed layouting,
+    // then out scroll will be undo when delayed layouting actually happens to  m_fullLayoutSavedPosition is wrong.
+    // We correct m_fullLayoutSavedPosition such that it does not change scroll.
+    // Instead we could have canceled the delayed layouting altogether, but I'm not sure about the consequences.
+    if (m_fullLayoutRequired)
+        m_fullLayoutSavedPosition = position + 1;
+#endif
+
     if (!m_verticalScrollbarEnabled)
         return false;
 
@@ -2883,6 +2894,13 @@ void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
         m_fullLayoutRequired = false;
         m_fullLayoutTime = 0;
         GetBuffer().Invalidate(wxRICHTEXT_ALL);
+#if 1
+        // Bricsys change:
+        // when vertical scrollbar had appeared, the client area changes and the
+        // whole text has to be layouted. Otherwise, ShowPosition will scroll to
+        // a wrong position.
+        LayoutContent(false);
+#endif
         ShowPosition(m_fullLayoutSavedPosition);
         Refresh(false);
     }
