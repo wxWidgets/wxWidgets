@@ -2308,8 +2308,6 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
         if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
             casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
-        else
-            return;
 
         bool isTouch = casted_osxView == nullptr ? false : [casted_osxView isTouch];
 

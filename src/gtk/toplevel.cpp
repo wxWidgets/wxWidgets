@@ -480,6 +480,8 @@ void wxTopLevelWindowGTK::GTKHandleMapped()
     }
 
     // restore focus-on-map setting in case ShowWithoutActivating() was called
+
+    wxLogTrace(wxT("activate"), wxT("restore focus-on-map setting on %p (from gtk_frame_map_callback)"), m_widget);
     gtk_window_set_focus_on_map(GTK_WINDOW(m_widget), true);
 
     // Deferred show is no longer possible
@@ -1234,6 +1236,8 @@ void wxTopLevelWindowGTK::ShowWithoutActivating()
 {
     if (!m_isShown)
     {
+
+        wxLogTrace(wxT("activate"), wxT("disable focus-on-map setting on %p (from ShowWithoutActivating)"), m_widget);
         gtk_window_set_focus_on_map(GTK_WINDOW(m_widget), false);
         Show(true);
     }
