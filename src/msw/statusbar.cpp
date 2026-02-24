@@ -446,6 +446,7 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
     if ( !::SendMessage(GetHwnd(), SB_GETRECT, i, (LPARAM)&r) )
     {
         wxLogLastError("SendMessage(SB_GETRECT)");
+        return false; //Bricsys change: avoid continuing with uninitialized 'r'
     }
 
 #if wxUSE_UXTHEME

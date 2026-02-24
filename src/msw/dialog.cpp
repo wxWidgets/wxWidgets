@@ -119,6 +119,13 @@ wxDialog::~wxDialog()
     Show(false);
 
     DestroyGripper();
+
+    //Bricsys change (#15898): if a child control still has focus, DestroyWindow()
+    //will move focus to the next control. If that control is a button, it will
+    //crash in wxButton::SetTmpDefault() because of NULL parent. This situation
+    //doesn't arise in ordinary dialog use, but it does in our automated GUI test
+    //code. Calling Disable() here is a heavy handed way to block focus messages.
+    Disable();
 }
 
 // ----------------------------------------------------------------------------
