@@ -210,6 +210,12 @@ protected:
     virtual void DoFreeze() wxOVERRIDE;
     virtual void DoThaw() wxOVERRIDE;
 
+    // Bricsys change: added back after 3.1.2 upgrade (from previous version)
+    virtual void DoSetSize(int x, int y,
+        int width, int height,
+        int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    // end Bricsys change: added back after 3.1.2 upgrade (from previous version)
+
     virtual bool MSWShouldSetDefaultFont() const wxOVERRIDE { return false; }
 
     virtual void OnImagesChanged() wxOVERRIDE;
@@ -342,6 +348,10 @@ private:
 
     // whether we need to deselect other items on mouse up
     bool m_mouseUpDeselect;
+
+    // Bricsys change: added back after 3.1.2 upgrade (from previous version)
+    // The size to restore the control to when it is thawed, see DoThaw().
+    wxSize m_thawnSize;
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;

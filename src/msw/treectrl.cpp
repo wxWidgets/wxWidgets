@@ -4021,26 +4021,40 @@ void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 
 void wxTreeCtrl::DoFreeze()
 {
-    wxTreeCtrlBase::DoFreeze();
+    // Bricsys change: reverted back after 3.1.2 upgrade (from previous version)
+    if (IsShown())
+    {
+        RECT rc;
+        ::GetWindowRect(GetHwnd(), &rc);
+        m_thawnSize = wxRectFromRECT(rc).GetSize();
 
-    // In addition to disabling redrawing, we also need to disable scrollbar
-    // updates that would still happen otherwise.
-    wxMSWWinStyleUpdater(GetHwnd()).TurnOn(TVS_NOSCROLL);
+        ::SetWindowPos(GetHwnd(), 0, 0, 0, 1, 1,
+            SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW | SWP_NOACTIVATE);
+    }
 }
 
 void wxTreeCtrl::DoThaw()
 {
-    // Undo temporary TVS_NOSCROLL addition.
-    wxMSWWinStyleUpdater(GetHwnd()).TurnOff(TVS_NOSCROLL);
-
-    wxTreeCtrlBase::DoThaw();
-
-    if ( !IsFrozen() && m_htEnsureVisibleOnThaw.IsOk() )
+    // Bricsys change: reverted back after 3.1.2 upgrade (from previous version)
+    if (IsShown())
     {
-        // Really do the job of EnsureVisible() now that we can.
-        EnsureVisible(m_htEnsureVisibleOnThaw);
-        m_htEnsureVisibleOnThaw.Unset();
+        if (m_thawnSize != wxDefaultSize)
+        {
+            ::SetWindowPos(GetHwnd(), 0, 0, 0, m_thawnSize.x, m_thawnSize.y,
+                SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+        }
     }
+}
+
+// Bricsys change: added back after 3.1.2 upgrade (from previous version)
+// We also need to override DoSetSize() to ensure that m_thawnSize is reset if
+// the window is resized while being frozen -- in this case, we need to avoid
+// resizing it back to its original, pre-freeze, size when it's thawed.
+void wxTreeCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    m_thawnSize = wxDefaultSize;
+
+    wxTreeCtrlBase::DoSetSize(x, y, width, height, sizeFlags);
 }
 
 #endif // wxUSE_TREECTRL
