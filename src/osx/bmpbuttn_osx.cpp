@@ -33,7 +33,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
                              const wxString& name )
 {
     DontCreatePeer();
-    
+
     if ( !wxBitmapButtonBase::Create(parent, id, pos, size, style,
                                      validator, name) )
         return false;
@@ -42,7 +42,6 @@ bool wxBitmapButton::Create( wxWindow *parent,
     m_marginY = wxDEFAULT_BUTTON_MARGIN;
 
     m_bitmaps[State_Normal] = bitmap;
-    m_nonBackgroundColourBitmap = bitmap.GetBitmap(wxDefaultSize);
 
     SetPeer(wxWidgetImpl::CreateBitmapButton( this, parent, id, bitmap, pos, size, style, GetExtraStyle() ));
 
