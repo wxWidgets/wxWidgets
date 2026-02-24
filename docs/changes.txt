@@ -258,6 +258,7 @@ Changes in behaviour which may result in build errors
 All (GUI):
 
 - Fix stc.h with wxNO_IMPLICIT_WXSTRING_ENCODING (reid-p, arch1t3cht, #25047).
+- Fix right/middle click events in vertical wxAuiToolBar (#26242).
 
 wxMSW:
 
