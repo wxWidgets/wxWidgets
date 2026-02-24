@@ -300,6 +300,17 @@ void wxPropertyGridPageState::DoClear()
             wxPGProperty* p = m_regularArray.Item(i);
             wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, p);
             wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, p);
+#if 1 // BS_CHANGES_ENABLED, #17980, TODO: to be recursive
+            if (!p->HasFlag(wxPG_PROP_CHILDREN_ARE_COPIES))
+            {
+                for (unsigned int j = 0; j < p->GetChildCount(); j++)
+                {
+                    wxPGProperty* c = p->Item(j);
+                    wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, c);
+                    wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, c);
+                }
+            }
+#endif
         }
 
         m_regularArray.Empty();
