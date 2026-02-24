@@ -76,9 +76,9 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
     if ( style & wxCHK_3STATE )
-        msStyle |= BS_3STATE;
+        (msStyle &= ~BS_TYPEMASK) |= BS_3STATE; //Bricsys change: must use BS_TYPEMASK
     else
-        msStyle |= BS_CHECKBOX;
+        (msStyle &= ~BS_TYPEMASK) |= BS_CHECKBOX; //Bricsys change: must use BS_TYPEMASK
 
     if ( style & wxALIGN_RIGHT )
     {

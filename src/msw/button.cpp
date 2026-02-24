@@ -337,16 +337,16 @@ wxButton::SetDefaultStyle(wxButton *btn, bool on)
 
     // then also change the style as needed
     long style = ::GetWindowLong(GetHwndOf(btn), GWL_STYLE);
-    if ( !(style & BS_DEFPUSHBUTTON) == on )
+    if ( !((style & BS_TYPEMASK) == BS_DEFPUSHBUTTON) == on ) //Bricsys change: must use BS_TYPEMASK
     {
         // don't do it with the owner drawn buttons because it will
         // reset BS_OWNERDRAW style bit too (as BS_OWNERDRAW &
         // BS_DEFPUSHBUTTON != 0)!
-        if ( (style & BS_OWNERDRAW) != BS_OWNERDRAW )
+        if ( (style & BS_TYPEMASK) != BS_OWNERDRAW ) //Bricsys change: must use BS_TYPEMASK
         {
             ::SendMessage(GetHwndOf(btn), BM_SETSTYLE,
-                          on ? style | BS_DEFPUSHBUTTON
-                             : style & ~BS_DEFPUSHBUTTON,
+                          on ? (style & ~BS_TYPEMASK) | BS_DEFPUSHBUTTON //Bricsys change: must use BS_TYPEMASK
+                             : style & ~BS_TYPEMASK, //Bricsys change: must use BS_TYPEMASK
                           1L /* redraw */);
         }
         else // owner drawn

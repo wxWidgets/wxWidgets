@@ -421,7 +421,7 @@ wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawnIfNecessary(const wxColour& colFg)
 bool wxMSWOwnerDrawnButtonBase::MSWIsOwnerDrawn() const
 {
     return
-        (::GetWindowLong(GetHwndOf(m_win), GWL_STYLE) & BS_OWNERDRAW) == BS_OWNERDRAW;
+        (::GetWindowLong(GetHwndOf(m_win), GWL_STYLE) & BS_TYPEMASK) == BS_OWNERDRAW; //Bricsys change: must use BS_TYPEMASK
 }
 
 void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)

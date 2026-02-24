@@ -1351,7 +1351,7 @@ void wxAnyButton::MakeOwnerDrawn()
 bool wxAnyButton::IsOwnerDrawn() const
 {
     long style = GetWindowLong(GetHwnd(), GWL_STYLE);
-    return ( (style & BS_OWNERDRAW) == BS_OWNERDRAW );
+    return ( (style & BS_TYPEMASK) == BS_OWNERDRAW ); //Bricsys change: must use BS_TYPEMASK
 }
 
 bool wxAnyButton::SetBackgroundColour(const wxColour &colour)
