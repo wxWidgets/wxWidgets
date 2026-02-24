@@ -794,13 +794,13 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
         return NULL;
     }
 
-    if (!DoLoadDocument(*doc))
+    if (!DoLoadDocument(*doc, filename))
         return NULL;
 
     return doc.release();
 }
 
-bool wxXmlResource::DoLoadDocument(const wxXmlDocument& doc)
+bool wxXmlResource::DoLoadDocument(const wxXmlDocument& doc, const wxString& filename)
 {
     wxXmlNode * const root = doc.GetRoot();
     if (root->GetName() != wxT("resource"))
@@ -824,7 +824,10 @@ bool wxXmlResource::DoLoadDocument(const wxXmlDocument& doc)
         m_version = version;
     if (m_version != version)
     {
-        wxLogWarning("Resource files must have same version number.");
+        if (!filename.empty())
+            wxLogWarning("Resource file '%s' does not match version of previously loaded resources.", filename); //Bricsys change
+        else
+            wxLogWarning("Resource files must have same version number.");
     }
 
     ProcessPlatformProperty(root);
@@ -838,7 +841,7 @@ bool wxXmlResource::LoadDocument(wxXmlDocument* doc, const wxString& name)
 {
     wxCHECK_MSG( doc, false, wxS("must have a valid document") );
 
-    if ( !DoLoadDocument(*doc) )
+    if ( !DoLoadDocument(*doc, name) )
     {
         // Still avoid memory leaks.
         delete doc;
