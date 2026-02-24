@@ -35,7 +35,7 @@
 
 
 //bricsys change merged on wxwidgets upgrade
-#if defined(_DEBUG)
+#if defined(_DEBUG) && defined(_WIN32)
 std::vector<HMODULE>* wxDynamicLibrary::s_notFreedDlls = 0;
 #endif
 
@@ -200,7 +200,7 @@ wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 void wxDynamicLibrary::Unload(wxDllType handle)
 {
     //bricsys change merged on wxwidgets upgrade
-    #if defined(_DEBUG)
+    #if defined(_DEBUG) && defined(_WIN32)
         if(s_notFreedDlls)
             s_notFreedDlls->push_back(handle);
         else
