@@ -193,4 +193,20 @@ protected:
     wxDECLARE_CLASS(wxGLCanvas);
 };
 
+// Bricsys change:
+class WXDLLIMPEXP_GL wxRetinaHelper
+{
+public:
+    wxRetinaHelper(wxWindow* canvas);
+    ~wxRetinaHelper();
+    
+    void setViewWantsBestResolutionOpenGLSurface(bool value);
+    bool getViewWantsBestResolutionOpenGLSurface();
+    float getBackingScaleFactor();
+    
+private:
+    wxWindow* m_pCanvas;
+    void* m_pCocoaRetinaHelperImpl;
+};
+// end Bricsys change
 #endif // _WX_GLCANVAS_H_

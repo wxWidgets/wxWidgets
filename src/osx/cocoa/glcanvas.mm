@@ -894,4 +894,124 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     return true;
 }
 
+//Bricsys change:
+@interface wxCocoaRetinaHelperImpl : NSObject
+{
+    NSView *view;
+    wxEvtHandler* handler;
+}
+-(id)initWithView:(NSView *)view handler:(wxEvtHandler *)handler;
+-(void)setViewWantsBestResolutionOpenGLSurface:(BOOL)value;
+-(BOOL)getViewWantsBestResolutionOpenGLSurface;
+-(float)getBackingScaleFactor;
+@end
+
+@implementation wxCocoaRetinaHelperImpl
+
+wxRetinaHelper::wxRetinaHelper(wxWindow* canvas) : m_pCanvas(canvas)
+{
+    if(m_pCanvas)
+        m_pCocoaRetinaHelperImpl = [[wxCocoaRetinaHelperImpl alloc] initWithView:m_pCanvas->GetHandle() handler:m_pCanvas->GetEventHandler()];
+    else
+        m_pCocoaRetinaHelperImpl = nullptr;
+}
+
+wxRetinaHelper::~wxRetinaHelper()
+{
+    [(id)m_pCocoaRetinaHelperImpl release];
+}
+
+void wxRetinaHelper::setViewWantsBestResolutionOpenGLSurface (bool aValue)
+{
+    if(m_pCocoaRetinaHelperImpl)
+        [(id)m_pCocoaRetinaHelperImpl setViewWantsBestResolutionOpenGLSurface:aValue];
+}
+
+bool wxRetinaHelper::getViewWantsBestResolutionOpenGLSurface()
+{
+    if(m_pCocoaRetinaHelperImpl)
+        return [(id)m_pCocoaRetinaHelperImpl getViewWantsBestResolutionOpenGLSurface];
+    else
+        return false;
+}
+
+float wxRetinaHelper::getBackingScaleFactor()
+{
+    if(m_pCocoaRetinaHelperImpl)
+        return [(id)m_pCocoaRetinaHelperImpl getBackingScaleFactor];
+    else
+        return 1;
+}
+
+
+-(id)initWithView:(NSView *)aView handler:(wxEvtHandler *)aHandler
+{
+    self = [super init];
+    if(self)
+    {
+        handler = aHandler;
+        view = aView;
+        // register for backing change notifications
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        if(nc){
+            [nc addObserver:self
+                   selector:@selector(windowDidChangeBackingProperties:)
+                       name:NSWindowDidChangeBackingPropertiesNotification
+                     object:nil];
+        }
+    }
+    return self;
+}
+
+-(void) dealloc
+{
+    // unregister from all notifications
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    if(nc){
+        [nc removeObserver:self];
+    }
+    [super dealloc];
+}
+
+-(void)setViewWantsBestResolutionOpenGLSurface:(BOOL)value
+{
+    [view setWantsBestResolutionOpenGLSurface:value];
+}
+
+-(BOOL)getViewWantsBestResolutionOpenGLSurface
+{
+    return [view wantsBestResolutionOpenGLSurface];
+}
+
+-(float)getBackingScaleFactor
+{
+    return [[view window] backingScaleFactor];
+}
+
+//scaling is adjusted depending on monitor(retina or non-retina displays) where window is currently placed on
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification {
+    NSWindow *theWindow = (NSWindow *)[notification object];
+    if(theWindow == [view window])
+    {
+        CGFloat newBackingScaleFactor = [theWindow backingScaleFactor];
+        CGFloat oldBackingScaleFactor = [[[notification userInfo]
+                                          objectForKey:@"NSBackingPropertyOldScaleFactorKey"]
+                                         doubleValue];
+        if (newBackingScaleFactor != oldBackingScaleFactor) {
+            // generate a wx resize event and pass it to the handler's queue
+            wxSizeEvent *event = new wxSizeEvent();
+            // use the following line if this resize event should have the physical pixel resolution
+            // but that is not recommended, because ordinary resize events won't do so either
+            // which would necessitate a case-by-case switch in the resize handler method.
+            // NSRect nsrect = [view convertRectToBacking:[view bounds]];
+            NSRect nsrect = [view bounds];
+            wxRect rect = wxRect(nsrect.origin.x, nsrect.origin.y, nsrect.size.width, nsrect.size.height);
+            event->SetRect(rect);
+            event->SetSize(rect.GetSize());
+            handler->QueueEvent(event);
+        }
+    }
+}
+@end
+// end Bricsys change
 #endif // wxUSE_GLCANVAS
