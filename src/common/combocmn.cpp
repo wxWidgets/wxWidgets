@@ -2028,6 +2028,41 @@ void wxComboCtrlBase::DestroyPopup()
     m_popup = NULL;
 }
 
+//Bricsys change: added RecreatePopup(), to be called from wxComboCtrl::Reparent()
+//  - roughly based on relevant parts of DestroyPopup() and CreatePopup()
+void wxComboCtrlBase::RecreatePopup()
+{
+    if ( !m_winPopup )
+        return;
+    
+    // Unbind events before destroying
+    m_winPopup->Unbind(wxEVT_KEY_DOWN, &wxComboCtrlBase::OnPopupKey, this);
+    m_winPopup->Unbind(wxEVT_CHAR, &wxComboCtrlBase::OnPopupKey, this);
+    m_winPopup->Unbind(wxEVT_KEY_UP, &wxComboCtrlBase::OnPopupKey, this);
+#if !wxUSE_POPUPWIN
+    m_winPopup->Unbind(wxEVT_ACTIVATE, &wxComboCtrlBase::OnPopupActivate, this);
+#endif
+    m_winPopup->Unbind(wxEVT_SIZE, &wxComboCtrlBase::OnPopupSize, this);
+    
+    if ( m_popup )
+        m_popup->Reparent(NULL);
+    m_winPopup->Destroy();
+    
+    // Recreate popup window with new parent hierarchy
+    m_winPopup = new wxComboPopupWindow( this, wxNO_BORDER );
+    
+    m_winPopup->Bind(wxEVT_KEY_DOWN, &wxComboCtrlBase::OnPopupKey, this);
+    m_winPopup->Bind(wxEVT_CHAR, &wxComboCtrlBase::OnPopupKey, this);
+    m_winPopup->Bind(wxEVT_KEY_UP, &wxComboCtrlBase::OnPopupKey, this);
+#if !wxUSE_POPUPWIN
+    m_winPopup->Bind(wxEVT_ACTIVATE, &wxComboCtrlBase::OnPopupActivate, this);
+#endif
+    m_winPopup->Bind(wxEVT_SIZE, &wxComboCtrlBase::OnPopupSize, this);
+    
+    if ( m_popup )
+        m_popup->Reparent(m_winPopup);
+}
+
 void wxComboCtrlBase::DoSetPopupControl(wxComboPopup* iface)
 {
     wxCHECK_RET( iface, wxT("no popup interface set for wxComboCtrl") );

@@ -66,6 +66,7 @@ public:
 
     virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const wxOVERRIDE;
     virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const wxOVERRIDE;
+    virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE; //Bricsys change
 
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
