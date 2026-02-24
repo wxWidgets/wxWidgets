@@ -127,8 +127,11 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPropert
     if ( !(flags & DontUseCellBgCol) )
     {
         const wxColour& bgCol = cell.GetBgCol();
-        dc.SetPen(bgCol);
-        dc.SetBrush(bgCol);
+        if (bgCol.IsOk()) //Bricsys change: allow wxNullColour for "not set" background color
+        {
+            dc.SetPen(bgCol);
+            dc.SetBrush(bgCol);
+        }
     }
 
     if ( !(flags & DontUseCellFgCol) )
