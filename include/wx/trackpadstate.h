@@ -53,7 +53,6 @@ private:
     wxState     m_state;
     wxRealPoint m_ip;    //initial point
     double      m_pinchMagnitude;
-    double      m_touchesSpace; //distance between 2 touches( fingers )
     double      m_angle;        //rotation angle, usualy is used when sending a wxEVT_ROTATE event
 };
 
