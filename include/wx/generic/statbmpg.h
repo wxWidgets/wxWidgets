@@ -39,9 +39,7 @@ public:
     {
         m_bitmapBundle = bitmap;
         InvalidateBestSize();
-#ifndef __APPLE__
         SetSize(GetBestSize());
-#endif
         Refresh();
     }
 

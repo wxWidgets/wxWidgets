@@ -2006,6 +2006,9 @@ protected:
     void SetParentState( wxPropertyGridPageState* pstate )
         { m_parentState = pstate; }
 
+//bricsys change merged on wxwidgets upgrade
+//added public modifier for SetFlag (and protected right after)
+public:
     void SetFlag( wxPGPropertyFlags flag )
     {
         //
@@ -2014,6 +2017,7 @@ protected:
         //     using incorrect flags (say, wxWindow styles).
         m_flags |= flag;
     }
+protected:
 
     void ClearFlag( FlagType flag ) { m_flags &= ~(flag); }
 

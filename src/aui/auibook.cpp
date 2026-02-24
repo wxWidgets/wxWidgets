@@ -591,6 +591,15 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
         }
     }
 
+    // begin Bricsys changes: calculate width of buttons (to replace hard-coded button_count*16)
+    int total_button_width = 0; //Bricsys change
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(i);
+        total_button_width += (IsVertical() ? button.rect.GetHeight() : button.rect.GetWidth()); //Bricsys change
+    }
+    // end Bricsys changes
+
     // determine whether left button should be enabled
     for (i = 0; i < button_count; ++i)
     {
@@ -604,11 +613,7 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
         }
         if (button.id == wxAUI_BUTTON_RIGHT)
         {
-            int button_width = 0;
-            for (i = 0; i < button_count; ++i)
-                button_width += m_buttons.Item(button_count - i - 1).rect.GetWidth();
-
-            if (visible_width < (IsVertical() ? m_rect.GetHeight() : m_rect.GetWidth() - button_width))
+            if (visible_width < (IsVertical() ? m_rect.GetHeight() : m_rect.GetWidth()) - total_button_width) //Bricsys change
                 button.curState |= wxAUI_BUTTON_STATE_DISABLED;
             else
                 button.curState &= ~wxAUI_BUTTON_STATE_DISABLED;

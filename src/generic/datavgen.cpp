@@ -5985,9 +5985,10 @@ void wxDataViewCtrl::OnColumnWidthChange(unsigned int idx)
 
 void wxDataViewCtrl::OnColumnChange(unsigned int idx)
 {
+#if 0 // Bricsys Change : torstenm - resizing columns gets messed-up, header control is already resized
     if ( m_headerArea )
         m_headerArea->UpdateColumn(idx);
-
+#endif
     m_clientArea->UpdateDisplay();
 }
 
