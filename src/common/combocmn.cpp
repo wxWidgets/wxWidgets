@@ -2379,7 +2379,8 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
     m_popupWinState = Hidden;
 
     //SetFocus();
-    m_winPopup->Disable();
+    if (!m_winPopup->IsTopLevel()) //Bricsys change (#14869-22): don't disable an active TLW popup!
+        m_winPopup->Disable();
 
     // Inform popup control itself
     m_popupInterface->OnDismiss();
