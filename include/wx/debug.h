@@ -258,7 +258,9 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
         #define wxTrap() __debugbreak()
     #elif defined(__GNUC__)
         #if defined(__i386) || defined(__x86_64)
-            #define wxTrap() asm volatile ("int $3")
+            //bricsys change: suppressed the define
+            //we want a plain function so we can use a plain breakpoint
+            //#define wxTrap() asm volatile ("int $3")
         #endif
     #endif
 
