@@ -614,11 +614,16 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
     // draw tab text
+    // Bricsys change: disallow setting foreground colour
+    // so we can theme it ourselves
+#if 0
     wxColor sys_color = wxSystemSettings::GetColour(
         page.active ? wxSYS_COLOUR_CAPTIONTEXT : wxSYS_COLOUR_INACTIVECAPTIONTEXT);
     wxColor font_color = wxAuiHasSufficientContrast(back_color, sys_color) ? sys_color
         : wxAuiGetBetterContrastColour(back_color, *wxWHITE, *wxBLACK);
     dc.SetTextForeground(font_color);
+#endif // 0
+    // end Bricsys change
     dc.DrawText(draw_text,
                 text_offset,
                 drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);
@@ -1190,12 +1195,17 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
     // draw tab text
+    // Bricsys change: disallow setting foreground colour
+    // so we can theme it ourselves
+#if 0
     wxColor back_color = dc.GetBrush().GetColour();
     wxColor sys_color = wxSystemSettings::GetColour(
         page.active ? wxSYS_COLOUR_CAPTIONTEXT : wxSYS_COLOUR_INACTIVECAPTIONTEXT);
     wxColor font_color = wxAuiHasSufficientContrast(back_color, sys_color) ? sys_color
         : wxAuiGetBetterContrastColour(back_color, *wxWHITE, *wxBLACK);
     dc.SetTextForeground(font_color);
+#endif // 0
+    // end Bricsys change
     dc.DrawText(draw_text,
                  text_offset,
                  (tab_y + tab_height)/2 - (texty/2) + 1);
