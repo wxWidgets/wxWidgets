@@ -5167,7 +5167,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                     {
                         // Show help string as a tooltip
                         wxString tipString = m_propHover->GetHelpString();
-
+                        SetToolTip(nullptr); // Bricsys added (restart tooltip delay)
                         SetToolTip(tipString);
                     }
                     else if ( m_colHover >= 0 && m_colHover < (int)m_pState->GetColumnCount())
