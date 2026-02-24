@@ -1006,12 +1006,6 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         if ( !stream.ReadAll(&aWord, 2) )
             return false;
 
-        #if 0 // unused
-            wxInt32 size = wxINT32_SWAP_ON_BE(dbuf[0]);
-        #endif
-        offset = wxINT32_SWAP_ON_BE(dbuf[2]);
-        hdrSize = wxINT32_SWAP_ON_BE(dbuf[3]);
-
 #if 1 // BRICSYS ADDED: #2736 // check BMP file signature (in case of reading from unseekable stream DoCanRead was not called)
         unsigned char bbuf[4];
         bbuf[0] = aWord & 0xFF;
@@ -1044,6 +1038,12 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
         if ( !stream.ReadAll(dbuf, 16) )
             return false;
+        
+        #if 0 // unused
+            wxInt32 size = wxINT32_SWAP_ON_BE(dbuf[0]);
+        #endif
+        offset = wxINT32_SWAP_ON_BE(dbuf[2]);
+        hdrSize = wxINT32_SWAP_ON_BE(dbuf[3]);
     }
     else
     {
