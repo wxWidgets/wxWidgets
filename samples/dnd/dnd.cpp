@@ -773,7 +773,7 @@ public:
         m_frame->ProcessWindowEvent(event);
         return wxDropTarget::OnDragOver(x, y, def);
     }
-    virtual bool OnDrop(wxCoord x, wxCoord y)
+    virtual bool OnDrop(wxCoord x, wxCoord y) override
     {
         m_frame->DisableAutoscrollWithoutCapture();
         return wxDropTarget::OnDrop(x, y);
