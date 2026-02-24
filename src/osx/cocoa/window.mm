@@ -52,6 +52,7 @@
 #include "wx/osx/cocoa/trackerTouchDouble.h"
 #include "wx/string.h"
 #include "wx/osx/cocoa/touchPadGesturesDelegate.h"
+#include "wx/minifram.h"
 
 #define TRACE_FOCUS "focus"
 #define TRACE_KEYS  "keyevent"
@@ -2247,7 +2248,15 @@ void wxWidgetCocoaImpl::imeEvent(wxImeEvent wxEvent, WXWidget slf, void *_cmd)
 void wxWidgetCocoaImpl::touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd, int touchEventType)
 {
     if ( !HasFocus() )
-        return;
+    {
+        wxWindow* pWnd = wxWindow::FindFocus();
+        
+        if(pWnd)
+            pWnd = pWnd->GetParent();
+        
+        if(pWnd && !pWnd->IsKindOf(wxCLASSINFO(wxMiniFrame)))
+            return;
+    }
     
     NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
     if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
