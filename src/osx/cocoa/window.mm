@@ -52,6 +52,7 @@
 #include "wx/osx/cocoa/trackerTouchDouble.h"
 #include "wx/string.h"
 #include "wx/osx/cocoa/touchPadGesturesDelegate.h"
+#include "wx/minifram.h"
 
 #define TRACE_FOCUS "focus"
 #define TRACE_KEYS  "keyevent"
@@ -2246,12 +2247,23 @@ void wxWidgetCocoaImpl::imeEvent(wxImeEvent wxEvent, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd, int touchEventType)
 {
+    if ( !HasFocus() )
+    {
+        wxWindow* pWnd = wxWindow::FindFocus();
+        
+        if(pWnd)
+            pWnd = pWnd->GetParent();
+        
+        if(pWnd && !pWnd->IsKindOf(wxCLASSINFO(wxMiniFrame)))
+            return;
+    }
+    
     NSView <TouchPadGesturesDelegate> * casted_osxView = nullptr;
     if ([[m_osxView class] conformsToProtocol: @protocol(TouchPadGesturesDelegate)])
         casted_osxView = (NSView <TouchPadGesturesDelegate> *)m_osxView;
     else
         return;
-
+ 
     switch (touchEventType) {
         case 0:
                 [casted_osxView setIsTouch:TRUE];
@@ -2319,7 +2331,10 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             //In momentum scrolling the hardware continues to issue scroll wheel events even though the user is no longer physically scrolling
             return;
         }
+        //Bricsys change: #18960 - some mice like Logitech MX Master provide much more precise delta.
+        //NSMouseEventSubtype indicates a purely mouse event which is not the case for Logitech MX Master
         else if([event subtype] != NSMouseEventSubtype &&
+                ![event hasPreciseScrollingDeltas] &&
                 !HasFocus() &&
                 m_osxView == slf &&
                 hitview == slf)
