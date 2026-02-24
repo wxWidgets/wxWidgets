@@ -137,6 +137,60 @@ int wxDirDialog::ShowModal()
     return GetReturnCode();
 }
 
+// Bricsys added
+int wxDirDialog::ShowModalChooseApp()
+{
+    WX_HOOK_MODAL_DIALOG();
+    
+    wxCFEventLoopPauseIdleEvents pause;
+    
+    NSOpenPanel* p_Panel = OSXCreatePanel();
+    [p_Panel setPrompt:@"Select App"];
+    [p_Panel setResolvesAliases:NO];
+    [p_Panel setCanChooseFiles:NO];
+    [p_Panel setAllowedFileTypes:[[NSArray alloc] initWithObjects:@"app",@"APP"]];
+    [p_Panel setTreatsFilePackagesAsDirectories:YES];
+    
+    wxCFStringRef dir(@"/Applications");
+    
+    CFURLRef cfURLCurrentFile = (CFURLRef)[NSURL fileURLWithPath:wxNSStringWithWxString(m_path)];
+    
+    m_path.clear();
+    
+    int returnCode = -1;
+    
+    OSXBeginModalDialog();
+    
+    returnCode = (NSInteger)[p_Panel runModalForDirectory:dir.AsNSString() file:nil types:nil];
+    ModalFinishedCallback(p_Panel, returnCode);
+    
+    OSXEndModalDialog();
+    
+    if(returnCode)
+    {
+        NSArray<NSURL *>* p_URLs = [p_Panel URLs];
+
+        NSString* p_SelectedAppURL = [p_URLs[0] path];
+
+        CFURLRef appURL = (CFURLRef)[NSURL fileURLWithPath:p_SelectedAppURL];
+
+        CFMutableArrayRef cfFiles = CFArrayCreateMutable(kCFAllocatorDefault, 1, &kCFTypeArrayCallBacks);
+        CFArrayAppendValue(cfFiles,cfURLCurrentFile);
+
+        LSLaunchURLSpec launchSpec;
+        launchSpec.appURL = appURL;
+        launchSpec.itemURLs = cfFiles;
+        launchSpec.passThruParams = nullptr;
+        launchSpec.launchFlags = kLSLaunchDefaults;
+        launchSpec.asyncRefCon = nullptr;
+
+        LSOpenFromURLSpec(&launchSpec, nullptr);
+    }
+    
+    return GetReturnCode();
+}
+// end Bricsys added
+
 void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
 {
     int result = wxID_CANCEL;
