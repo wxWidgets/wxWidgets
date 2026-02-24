@@ -49,6 +49,7 @@ public:
     virtual bool OSXHandleClicked(double timestampsec) wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
+    bool SetBackgroundColour(const wxColor& color);
     void OSXUpdateAfterLabelChange(const wxString& label);
 #endif
 

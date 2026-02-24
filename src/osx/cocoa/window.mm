@@ -4293,8 +4293,12 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
         SetDrawingEnabled(false);
 }
 
-void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
+bool wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 {
+    // Bricsys change: only apply colours that are Ok
+    if(!col.IsOk())
+        return;
+
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
@@ -4307,10 +4311,14 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
             wxNonOwnedWindow* toplevel = dynamic_cast<wxNonOwnedWindow*>(peer);
 
             if ( toplevel == NULL || toplevel->GetShape().IsEmpty() )
+            {
                 [targetView setBackgroundColor:
                         col.IsOk() ? col.OSXGetNSColor() : nil];
+                return true;
+            }
         }
     }
+    return false;
 }
 
 bool wxWidgetCocoaImpl::SetBackgroundStyle( wxBackgroundStyle style )

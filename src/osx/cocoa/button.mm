@@ -105,6 +105,13 @@ void wxButtonCocoaImpl::SetBitmap(const wxBitmapBundle& bitmap)
     wxWidgetCocoaImpl::SetBitmap(bitmap);
 }
 
+bool wxButtonCocoaImpl::SetBackgroundColour(const wxColour& col )
+{
+    GetNSButton().layer.backgroundColor = col.OSXGetNSColor().CGColor;
+    [[GetNSButton() cell] setBackgroundColor: col.OSXGetNSColor()];
+    return true;
+}
+
 #if wxUSE_MARKUP
 void wxButtonCocoaImpl::SetLabelMarkup(const wxString& markup)
 {
@@ -234,6 +241,20 @@ SetBezelStyleFromBorderFlags(NSButton *v,
 
         [v setBezelStyle:bezel];
     }
+}
+
+bool wxButton::SetBackgroundColour(const wxColor& col)
+{
+    wxButtonCocoaImpl *impl = static_cast<wxButtonCocoaImpl*>(GetPeer());
+
+    // AppleDoc: "The background color is used only when drawing borderless buttons."
+    // => Force the button style to be borderless.
+    SetBezelStyleFromBorderFlags(impl->GetNSButton(),
+                                 wxBORDER_NONE,
+                                 GetId(),
+                                 GetLabel());
+
+    return impl->SetBackgroundColour(col);
 }
 
 // Set the keyboard accelerator key from the label (e.g. "Click &Me")
