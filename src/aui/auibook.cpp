@@ -102,7 +102,7 @@ void wxTabFrame::DoSizing()
     }
     // end Bricsys changed 
     m_tabs->Refresh();
-    m_tabs->Update();
+    //m_tabs->Update(); //Bricsys change: #16145 performance suffers due to gratuitous Update()
 
     wxAuiNotebookPageArray& pages = m_tabs->GetPages();
     size_t i, page_count = pages.GetCount();
