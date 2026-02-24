@@ -1167,7 +1167,12 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                     tab_y + (tab_height/2) - (bmp.GetLogicalHeight()/2) + 1,
                     bmp.GetLogicalWidth(),
                     tab_height - 1);
-        DrawButtons(dc, wnd->FromDIP(wxSize(1, 1)), rect, bmp, *wxWHITE, close_button_state);
+
+        //Bricsys change: use virtual DrawButton()
+        //DrawButtons(dc, wnd->FromDIP(wxSize(1, 1)), rect, bmp, *wxWHITE, close_button_state);
+        wxSize offset = wnd->FromDIP(wxSize(1, 1));
+        rect.Offset(offset.x, offset.y);
+        DrawButton(dc, wnd, rect, wxAUI_BUTTON_CLOSE, close_button_state, 0, &rect);
 
         *out_button_rect = rect;
         close_button_width = bmp.GetLogicalWidth();
