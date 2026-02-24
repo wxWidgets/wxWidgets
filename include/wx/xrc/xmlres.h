@@ -328,7 +328,7 @@ protected:
     wxXmlDocument *DoLoadFile(const wxString& file);
 
     // Load XRC from the given document and returns true on success.
-    bool DoLoadDocument(const wxXmlDocument& doc);
+    bool DoLoadDocument(const wxXmlDocument& doc, const wxString& filename = wxEmptyString);
 
     // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.
