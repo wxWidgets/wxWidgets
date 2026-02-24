@@ -884,6 +884,17 @@ static bool isExpandable(const wxString& path)
     return (path.Find(s_ident) != wxNOT_FOUND);
 }
 
+// BRICSYS change: makeLong
+// short names in 8.3 format should be preliminary converted
+// to long format so PathUnExpandEnvStrings could correctly handle them
+wxString makeLong(const wxString& path)
+{
+    const int eMAX_PATH = 1024;
+    wxChar buf[eMAX_PATH];
+    unsigned length = GetLongPathName(path.c_str(), buf, eMAX_PATH);
+    return ((length > 0 && length < eMAX_PATH) ? buf : path);
+}
+
 //BRICSYS change: unexpandPath
 // combined path could contain single path or several valid paths
 // we have to split paths so PathUnExpandEnvStrings could process all of sub-paths, 
@@ -892,12 +903,12 @@ bool unexpandPath(const wxString& combinedPath, wxString& result)
 {
     static const wxChar s_delimiter(_T(';'));
 
-    enum {eMAX_PATH = 1024};
+    const int eMAX_PATH = 1024;
     wxChar buf[eMAX_PATH];
 
     if (combinedPath.Find(s_delimiter) == wxNOT_FOUND) // single string/path
     {
-        if (PathUnExpandEnvStrings(combinedPath, buf, eMAX_PATH))
+        if (PathUnExpandEnvStrings(makeLong(combinedPath).c_str(), buf, eMAX_PATH))
         {
             result = buf;
             return true;
@@ -914,7 +925,7 @@ bool unexpandPath(const wxString& combinedPath, wxString& result)
     wxArrayString::iterator itEnd = subPaths.end();
     for (; it != itEnd; ++it)
     {
-        if (PathUnExpandEnvStrings(it->c_str(), buf, eMAX_PATH))
+        if (PathUnExpandEnvStrings(makeLong(*it).c_str(), buf, eMAX_PATH))
         {
             *it = buf;
             bUnExpanded = true;
