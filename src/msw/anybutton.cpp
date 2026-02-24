@@ -1263,6 +1263,11 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
 
     int iState = uxStates[GetButtonState(button, state)];
 
+    //Bricsys change: draw custom hovered background if UseBgCol
+    const bool hoveredUseBgCol = (iState == PBS_HOT && button->UseBgCol());
+    if (hoveredUseBgCol)
+        iState = PBS_NORMAL;
+
     // draw parent background if needed
     if ( ::IsThemeBackgroundPartiallyTransparent
                  (
@@ -1301,6 +1306,14 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
     if ( button->UseBgCol() && iState != PBS_HOT )
     {
         COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
+        //Bricsys change: blend foreground color for custom hot state color
+        if (hoveredUseBgCol)
+        {
+            COLORREF colFg = wxColourToRGB(button->GetForegroundColour());
+            colBg = RGB((GetRValue(colBg) * 2 + GetRValue(colFg)) / 3,
+                        (GetGValue(colBg) * 2 + GetGValue(colFg)) / 3,
+                        (GetBValue(colBg) * 2 + GetBValue(colFg)) / 3); //poor man's color blending
+        }
         AutoHBRUSH hbrushBackground(colBg);
 
         FillRect(hdc, &rectBtn, hbrushBackground);
