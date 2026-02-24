@@ -7752,9 +7752,20 @@ long wxRichTextPlainText::GetFirstLineBreakPosition(long pos)
     int i;
     int len = m_text.length();
     int startPos = pos - m_range.GetStart();
+
+    // Bricsys change: access m_text[i] from a const reference in order to trigger
+    // the const version.
+    const wxString& text = m_text;
+
     for (i = startPos; i < len; i++)
     {
-        wxChar ch = m_text[i];
+
+        // Bricsys change: access m_text[i] from a const reference in order to trigger
+        // the const version.
+        wxChar ch = text[i];
+        //wxChar ch = m_text[i];
+
+
         if (ch == wxRichTextLineBreakChar)
         {
             return i + m_range.GetStart();
