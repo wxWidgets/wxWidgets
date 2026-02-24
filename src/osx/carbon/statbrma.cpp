@@ -76,6 +76,9 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
 
 void wxStatusBarMac::InitColours()
 {
+    // Bricsys change: store background colour for later
+    auto storeBackgroundCol = GetBackgroundColour();
+    
     if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
         if ( wxSystemSettings::GetAppearance().IsDark() )
@@ -95,6 +98,15 @@ void wxStatusBarMac::InitColours()
         m_textActive = wxColour(0x40, 0x40, 0x40);
         m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
     }
+    
+    // Bricsys change: support custom theming
+    if(GetForegroundColour().IsOk())
+        m_textActive = GetForegroundColour();
+    if(storeBackgroundCol.IsOk())
+    {
+        SetBackgroundColour(storeBackgroundCol);
+    }
+    // end Bricsys change: support custom theming
 }
 
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
