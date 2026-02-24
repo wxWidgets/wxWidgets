@@ -55,6 +55,9 @@ public:
     virtual void ShowWindowModal() wxOVERRIDE;
     virtual void ModalFinishedCallback(void* panel, int returnCode) wxOVERRIDE;
 #endif
+    
+    // Bricsys added
+    int ShowModalChooseApp();
 
 private:
 #if wxOSX_USE_COCOA
