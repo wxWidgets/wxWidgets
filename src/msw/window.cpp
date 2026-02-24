@@ -2619,7 +2619,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             // buttons except the owner-drawn ones which it
                             // just seems to ignore
                             long style = ::GetWindowLong(msg->hwnd, GWL_STYLE);
-                            if ( (style & BS_OWNERDRAW) == BS_OWNERDRAW )
+                            if ( (style & BS_TYPEMASK) == BS_OWNERDRAW ) //Bricsys change: must use BS_TYPEMASK
                             {
                                 btn = wxDynamicCast
                                       (
