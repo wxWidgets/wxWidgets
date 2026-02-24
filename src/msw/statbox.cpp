@@ -417,7 +417,7 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
         wxMSWWinStyleUpdater updateStyle(child);
         wxString str(wxGetWindowClass(child));
         str.UpperCase();
-        if ( str == wxT("BUTTON") && updateStyle.IsOn(BS_GROUPBOX) )
+        if ( str == wxT("BUTTON") && ((updateStyle.Get() & BS_TYPEMASK) == BS_GROUPBOX) ) //Bricsys change: must use BS_TYPEMASK
         {
             if ( child == GetHwnd() )
                 foundThis = true;

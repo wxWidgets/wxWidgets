@@ -548,6 +548,13 @@ protected:
     // Destroy popup window and all related constructs
     void DestroyPopup();
 
+    // Recreate the popup window to deal with the scenario where a wxPU_CONTAINS_CONTROLS popup
+    // is reparented to a different TLW hierarchy. Reason: on MSW there is no way to change the
+    // TLW owner of a WS_POPUP window after creation, leaving such a reparented popup in the
+    // untenable position where its original owner controls its lifetime (i.e. the popup will be
+    // destroyed when the original owner window is destroyed).
+    void RecreatePopup(); //Bricsys change: support reparenting popup
+
     // override the base class virtuals involved in geometry calculations
     // The common version only sets a default width, so the derived classes
     // should override it and set the height and change the width as needed.

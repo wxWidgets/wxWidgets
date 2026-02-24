@@ -1205,7 +1205,10 @@ void wxTrap()
 #elif defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     Debugger();
 #elif defined(__UNIX__)
-    raise(SIGTRAP);
+    //bricsys change: do not send SIGTRAP
+    //we want to be able to continue beyond a trap signal
+    //breaking is still possible by adding a breakpoint in this function
+    //raise(SIGTRAP);
 #else
     // TODO
 #endif // Win/Unix

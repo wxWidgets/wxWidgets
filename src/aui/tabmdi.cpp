@@ -531,7 +531,7 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
     m_title = title;
 
     // Bricsys change start : add tabPosition
-    const size_t page_index = (tabPosition >= 0 && tabPosition <= pClientWindow->GetPageCount())
+    const size_t page_index = (tabPosition >= 0 && static_cast<size_t>(tabPosition) <= pClientWindow->GetPageCount())
                               ? tabPosition : pClientWindow->GetPageCount();
     pClientWindow->InsertPage(page_index, this, title, m_activateOnCreate);
     // Bricsys change end : add tabPosition

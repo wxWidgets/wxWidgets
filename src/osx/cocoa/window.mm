@@ -4297,6 +4297,10 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
 
 void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 {
+    // Bricsys change: only apply colours that are Ok
+    if(!col.IsOk())
+        return;
+
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];

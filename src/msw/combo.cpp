@@ -135,6 +135,15 @@ wxComboCtrl::~wxComboCtrl()
 {
 }
 
+//Bricsys change: in case a combo is reparented, popup should be recreated
+bool wxComboCtrl::Reparent(wxWindowBase *newParent)
+{
+    if (!wxComboCtrlBase::Reparent(newParent))
+        return false;
+    RecreatePopup();
+    return true;
+}
+
 void wxComboCtrl::OnResize()
 {
     //
