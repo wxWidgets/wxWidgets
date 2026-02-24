@@ -2331,7 +2331,10 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             //In momentum scrolling the hardware continues to issue scroll wheel events even though the user is no longer physically scrolling
             return;
         }
+        //Bricsys change: #18960 - some mice like Logitech MX Master provide much more precise delta.
+        //NSMouseEventSubtype indicates a purely mouse event which is not the case for Logitech MX Master
         else if([event subtype] != NSMouseEventSubtype &&
+                ![event hasPreciseScrollingDeltas] &&
                 !HasFocus() &&
                 m_osxView == slf &&
                 hitview == slf)
