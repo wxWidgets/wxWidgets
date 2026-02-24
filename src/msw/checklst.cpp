@@ -126,6 +126,7 @@ wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *parent)
 
     SetMarginWidth(size.GetWidth());
     SetBackgroundColour(parent->GetBackgroundColour());
+    SetTextColour(parent->GetForegroundColour()); // Bricsys change, #15291 (for theming)
 }
 
 bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
