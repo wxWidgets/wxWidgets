@@ -1170,7 +1170,7 @@ wxGetSpecificValueFromOSRelease(const wxString& key)
         "/usr/lib/os-release"
     };
 
-    for ( int i = 0; i < WXSIZEOF(Filename); ++i )
+    for ( size_t i = 0; i < WXSIZEOF(Filename); ++i )
     {
         if ( wxFileName::Exists(Filename[i]) )
         {
