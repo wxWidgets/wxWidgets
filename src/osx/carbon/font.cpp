@@ -260,7 +260,7 @@ namespace
                 break;
 
             case wxFONTFAMILY_SWISS:
-                faceName = wxT("Helvetica");
+                faceName = wxT("Helvetica Neue"); // Bricsys change: Helvetica is rendered badly on MacOS 12 Monterey (and 13 Ventura, no way to check future ones) (RM-38156)
                 break;
 
             case wxFONTFAMILY_MODERN:
@@ -370,10 +370,16 @@ void wxFontRefData::Alloc()
 {
     wxCHECK_RET(m_info.GetPointSize() > 0, wxT("Point size should not be zero."));
     
+    // Start Bricsys change: fix caching of a font without face name specified (RM-38156)
+    auto fn = m_info.GetPostScriptName();
+    if (fn.IsEmpty()) {
+        fn = FamilyToFaceName(m_info.GetFamily());
+    }
     // use font caching, we cache a font with a certain size and a font with just any size for faster creation
-    wxString lookupnameNoSize = wxString::Format("%s_%d_%d", m_info.GetPostScriptName(), (int)m_info.GetStyle(), m_info.GetNumericWeight());
+    wxString lookupnameNoSize = wxString::Format("%s_%d_%d", fn, (int)m_info.GetStyle(), m_info.GetNumericWeight());
 
-    wxString lookupnameWithSize = wxString::Format("%s_%d_%d_%.2f", m_info.GetPostScriptName(), (int)m_info.GetStyle(), m_info.GetNumericWeight(), m_info.GetFractionalPointSize());
+    wxString lookupnameWithSize = wxString::Format("%s_%d_%d_%.2f", fn, (int)m_info.GetStyle(), m_info.GetNumericWeight(), m_info.GetFractionalPointSize());
+    // End Bricsys change: fix caching of a font without face name specified (RM-38156)
 
     static std::map<wxString, CachedFontEntry> fontcache;
 
