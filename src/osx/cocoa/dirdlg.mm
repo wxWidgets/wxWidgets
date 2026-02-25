@@ -148,7 +148,7 @@ int wxDirDialog::ShowModalChooseApp()
     [p_Panel setPrompt:@"Select App"];
     [p_Panel setResolvesAliases:NO];
     [p_Panel setCanChooseFiles:NO];
-    [p_Panel setAllowedFileTypes:[[NSArray alloc] initWithObjects:@"app",@"APP"]];
+    [p_Panel setAllowedFileTypes:[[NSArray alloc] initWithObjects:@"app",@"APP", nil]];
     [p_Panel setTreatsFilePackagesAsDirectories:YES];
     
     wxCFStringRef dir(@"/Applications");

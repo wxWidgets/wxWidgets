@@ -589,6 +589,14 @@ private:
         DoShow();
     }
 
+    // Bricsys change : Forwarding char events to wxTextControl parent
+    void onChar(wxKeyEvent& event)
+    {
+        auto pParent = GetParent();
+        if (pParent)
+            pParent->GetEventHandler()->QueueEvent(new wxKeyEvent(event));
+        Dismiss();
+    }
 
     // The anchor point offset if we show a tip or the middle of the top side
     // otherwise.
@@ -604,7 +612,12 @@ private:
     bool m_delayShow;
 
     wxDECLARE_NO_COPY_CLASS(wxRichToolTipPopup);
+    DECLARE_EVENT_TABLE()
 };
+
+BEGIN_EVENT_TABLE(wxRichToolTipPopup, wxCustomBackgroundWindow<wxPopupTransientWindow>)
+EVT_CHAR(wxRichToolTipPopup::onChar)
+END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxRichToolTipGenericImpl: generic implementation of wxRichToolTip.
