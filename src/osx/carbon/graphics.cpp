@@ -1857,10 +1857,10 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
 
 bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
 {
-    if (!EnsureIsValid())
+    if (m_antialias == antialias)
         return true;
 
-    if (m_antialias == antialias)
+    if (!EnsureIsValid())
         return true;
 
     m_antialias = antialias;
@@ -1893,10 +1893,10 @@ bool wxMacCoreGraphicsContext::DoSetAntialiasMode(wxAntialiasMode antialias)
 
 bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality interpolation)
 {
-    if (!EnsureIsValid())
+    if (m_interpolation == interpolation)
         return true;
 
-    if (m_interpolation == interpolation)
+    if (!EnsureIsValid())
         return true;
 
     m_interpolation = interpolation;
@@ -1939,10 +1939,10 @@ bool wxMacCoreGraphicsContext::DoSetInterpolationQuality(wxInterpolationQuality 
 
 bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
 {
-    if (!EnsureIsValid())
+    if ( m_composition == op )
         return true;
 
-    if ( m_composition == op )
+    if (!EnsureIsValid())
         return true;
 
     m_composition = op;
