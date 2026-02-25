@@ -654,7 +654,12 @@ void wxDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
             y2 = y1 + height;
 
     // the pen width is calibrated to give 3 for width == height == 10
-    wxDCPenChanger pen( *m_owner, wxPen(GetTextForeground(), (width + height + 1)/7));
+#ifdef __WXGTK3__
+    unsigned int num = 14;
+#else
+    unsigned int num = 7;
+#endif
+    wxDCPenChanger pen( *m_owner, wxPen(GetTextForeground(), (width + height + 1)/num));
 
     // we're drawing a scaled version of wx/generic/tick.xpm here
     wxCoord x3 = x1 + (4*width) / 10,   // x of the tick bottom
