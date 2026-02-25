@@ -34,9 +34,22 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
-WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
+WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext, wxGLCanvas* canvas )
 {
     WXGLContext context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext: shareContext];
+
+    // Bricsys change: we want to hide the OpenGL view behind the NSWindow so we can
+    // draw the crosshair on the contentView of the NSWindow (main frame)
+    if( canvas != nullptr && canvas->GetParent() && canvas->GetParent()->GetParent() && canvas->GetParent()->GetParent()->GetParent() )
+    {
+        wxNonOwnedWindow* topLevelWnd = wxDynamicCast( canvas->GetParent()->GetParent()->GetParent(), wxNonOwnedWindow );
+        if( topLevelWnd->GetExtraStyle() & wxWS_EX_TRANSP_FRAME_MAC_BCAD )
+        {
+            GLint order = -1;
+            [context setValues:&order forParameter:NSOpenGLCPSurfaceOrder];
+        }
+    }
+    // end Bricsys change
     return context ;
 }
 
@@ -722,6 +735,144 @@ bool wxGLCanvas::SwapBuffers()
 
     return true;
 }
+
+class RAII_lockFocus
+{
+public:
+    RAII_lockFocus(NSView* view)
+    {
+        m_pView = view;
+        [m_pView lockFocus];
+    }
+    ~RAII_lockFocus()
+    {
+        [m_pView unlockFocus];
+    }
+private:
+    NSView* m_pView;
+};
+
+// Bricsys change: add crosshair draw function
+// we hide the openGL view behind the NSWindow's contentView and then we draw
+// on the contentView (the default view of an NSWindow)
+void wxGLCanvas::updateCrosshairCanvasMac( const wxCursorLineArray& lines, bool undraw )
+{
+    WXGLContext context = WXGLGetCurrentContext();
+    NSView* openglView = [context view];
+    NSWindow* window = openglView.window;
+    NSView* contentView = [window contentView];
+    if( lines.size() < 1 )
+        return;
+    
+    static wxCursorLineArray lastLinesDrawn;
+    
+    RAII_lockFocus raii( contentView );
+    
+    NSRect rect = [window frame];
+    
+    NSGraphicsContext *nsContext = [NSGraphicsContext currentContext];
+    
+    bool lastUndraw = false;  // should we undraw the last recorded draw?
+    
+    // AB: sometimes there are multiple DRAW commands that arrive in succession (this still works in XOR mode on Linux/Win)
+    // but here, we need to undraw the last draw, so we need to record it (like in a static variable)
+    if( !undraw )
+    {
+        for( size_t i = 0; i < lastLinesDrawn.size(); i++ )
+        {
+            NSPoint viewPt1 = NSMakePoint( lastLinesDrawn[i].m_pt1.x, lastLinesDrawn[i].m_pt1.y );
+            NSPoint viewPt2 = NSMakePoint( lastLinesDrawn[i].m_pt2.x, lastLinesDrawn[i].m_pt2.y );
+            
+            NSPoint contentViewPt1 = [openglView convertPoint: viewPt1 toView: contentView];
+            NSPoint contentViewPt2 = [openglView convertPoint: viewPt2 toView: contentView];
+            
+            // calculate mid point of the current line
+            CGFloat minX = fmin( contentViewPt1.x, contentViewPt2.x );
+            CGFloat minY = fmin( contentViewPt1.y, contentViewPt2.y );
+            CGFloat maxX = fmax( contentViewPt1.x, contentViewPt2.x );
+            CGFloat maxY = fmax( contentViewPt1.y, contentViewPt2.y );
+            NSPoint contentViewMid = NSMakePoint( minX + (maxX - minX)/2, minY + (minY - minY)/2 );
+            
+            // check mid point's color
+            NSColor* color = NSReadPixel(contentViewMid);
+            CGFloat red, green, blue, alpha;
+            [color getRed:&red  green:&green blue:&blue alpha:&alpha];
+            if( red != 0.0 || green != 0.0 || blue != 0.0 || alpha != 0.0 )
+            {
+                lastUndraw = true;
+                break;
+            }
+        }
+        
+        if( lastUndraw )
+        {
+            [nsContext setCompositingOperation:NSCompositeClear];
+            [[NSColor clearColor] set];
+            NSBezierPath *line = [NSBezierPath bezierPath];
+            [line setLineWidth:1.5];
+            for( size_t i = 0; i < lastLinesDrawn.size(); i++ )
+            {
+                NSPoint viewPt1 = NSMakePoint( lastLinesDrawn[i].m_pt1.x, lastLinesDrawn[i].m_pt1.y );
+                NSPoint viewPt2 = NSMakePoint( lastLinesDrawn[i].m_pt2.x, lastLinesDrawn[i].m_pt2.y );
+                
+                NSPoint contentViewPt1 = [openglView convertPoint: viewPt1 toView: contentView];
+                NSPoint contentViewPt2 = [openglView convertPoint: viewPt2 toView: contentView];
+                
+                [line moveToPoint: contentViewPt1];
+                [line lineToPoint: contentViewPt2];
+            }
+            [line stroke];
+        }
+    }
+    
+    if( undraw )
+    {
+        [nsContext setCompositingOperation:NSCompositeClear];
+        [[NSColor clearColor] set];
+        NSBezierPath *line = [NSBezierPath bezierPath];
+        [line setLineWidth:1.5];
+        for( size_t i = 0; i < lines.size(); i++ )
+        {
+            NSPoint viewPt1 = NSMakePoint( lines[i].m_pt1.x, lines[i].m_pt1.y );
+            NSPoint viewPt2 = NSMakePoint( lines[i].m_pt2.x, lines[i].m_pt2.y );
+            
+            NSPoint contentViewPt1 = [openglView convertPoint: viewPt1 toView: contentView];
+            NSPoint contentViewPt2 = [openglView convertPoint: viewPt2 toView: contentView];
+            
+            [line moveToPoint: contentViewPt1];
+            [line lineToPoint: contentViewPt2];
+        }
+        [line stroke];
+    }
+    else
+    {
+        [nsContext setCompositingOperation:NSCompositeCopy];
+        for( size_t i = 0; i < lines.size(); i++ )
+        {
+            NSBezierPath *line = [NSBezierPath bezierPath];
+            
+            CGFloat redC = 1.0-lines[i].m_color.Red()/255.0;
+            CGFloat greenC = 1.0-lines[i].m_color.Green()/255.0;
+            CGFloat blueC = 1.0-lines[i].m_color.Blue()/255.0;
+            
+            [[NSColor colorWithCalibratedRed:redC green:greenC blue:blueC alpha:1.0] set];
+            
+            NSPoint viewPt1 = NSMakePoint( lines[i].m_pt1.x, lines[i].m_pt1.y );
+            NSPoint viewPt2 = NSMakePoint( lines[i].m_pt2.x, lines[i].m_pt2.y );
+            
+            NSPoint contentViewPt1 = [openglView convertPoint: viewPt1 toView: contentView];
+            NSPoint contentViewPt2 = [openglView convertPoint: viewPt2 toView: contentView];
+            
+            [line moveToPoint: contentViewPt1];
+            [line lineToPoint: contentViewPt2];
+            [line stroke];
+        }
+        
+        // record the last drawn lines
+        lastLinesDrawn = lines;
+    }
+}
+// end Bricsys change
 
 bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {

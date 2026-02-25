@@ -874,6 +874,14 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         defer:NO
         ];
 
+    // Bricsys change: extra style for main window to be shown as transparent when drawing the crosshair
+    if( extraStyle & wxWS_EX_TRANSP_FRAME_MAC_BCAD )
+    {
+        [m_macWindow setOpaque:NO];
+        [m_macWindow setAlphaValue:0.999];
+    }
+    // end Bricsys change
+
     if (!NSEqualRects([m_macWindow frame], frameRect))
     {
         [m_macWindow setFrame:frameRect display:NO];
