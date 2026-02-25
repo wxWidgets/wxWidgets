@@ -399,7 +399,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
     if ( pf )
     {
-        m_glContext = WXGLCreateContext(pf, other ? other->m_glContext : NULL);
+        m_glContext = WXGLCreateContext(pf, other ? other->m_glContext : NULL, win);
         if ( m_glContext )
         {
             m_isOk = true;

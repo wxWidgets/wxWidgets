@@ -1755,6 +1755,10 @@ wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 #define wxWS_EX_MODAL_FRAME_BCAD        0x00000100
 // end Bricsys change
 
+// Bricsys change: extra style for main window to be shown as transparent when drawing the crosshair
+#define wxWS_EX_TRANSP_FRAME_MAC_BCAD   0x00000200
+// end Bricsys change
+
 /*  Create a window which is attachable to another top level window */
 #define wxFRAME_DRAWER          0x0020
 

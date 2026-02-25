@@ -26,7 +26,8 @@
 
 // low level calls
 
-WXDLLIMPEXP_GL WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext );
+// Bricsys change: add the canvas we build this context from as parameter
+WXDLLIMPEXP_GL WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext, wxGLCanvas* canvas = nullptr );
 WXDLLIMPEXP_GL void WXGLDestroyContext( WXGLContext context );
 
 WXDLLIMPEXP_GL WXGLContext WXGLGetCurrentContext();
@@ -37,6 +38,17 @@ WXDLLIMPEXP_GL WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs = NULL,
                                                      const int *ctxAttrs = NULL,
                                                      int n2 = 0);
 WXDLLIMPEXP_GL void WXGLDestroyPixelFormat( WXGLPixelFormat pixelFormat );
+
+// Bricsys change:
+struct wxCursorLine
+{
+    wxPoint m_pt1;
+    wxPoint m_pt2;
+    wxColor m_color;
+};
+
+typedef wxVector<wxCursorLine> wxCursorLineArray;
+// end Bricsys change
 
 class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
@@ -157,6 +169,9 @@ public:
     );
 #endif // WXWIN_COMPATIBILITY_2_8
 
+   // Bricsys change:
+   void updateCrosshairCanvasMac( const wxCursorLineArray& lines, bool undraw );
+
     // implementation-only from now on
 
 protected:
@@ -169,6 +184,10 @@ protected:
 
     WXGLPixelFormat m_glFormat;
     wxGLAttributes m_GLAttrs;
+
+// Bricsys change: add variable to keep last cursor lines used to draw
+    wxCursorLineArray m_lastLinesDrawn;
+// end Bricsys change
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxGLCanvas);
