@@ -295,23 +295,29 @@ void wxPropertyGridPageState::DoClear()
     {
         // Properties which will be deleted immediately
         // should be removed from the lists of pending deletions.
+#if 1 // BS_CHANGES_ENABLED, #37636, #17980: properties are checked recursively
+        auto removeProperties = [&](wxPGProperty* p, unsigned int n, auto& removePropsRef) -> void
+        {
+            for (unsigned int i = 0; i < n; i++)
+            {
+                wxPGProperty* c = p->Item(i);
+                wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, c);
+                wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, c);
+
+                unsigned int nc = c->GetChildCount();
+                if (nc && !c->HasFlag(wxPG_PROP_CHILDREN_ARE_COPIES))
+                    removePropsRef(c, nc, removePropsRef);
+            }
+        };
+        removeProperties(&m_regularArray, m_regularArray.GetChildCount(), removeProperties);
+#else
         for (unsigned int i = 0; i < m_regularArray.GetChildCount(); i++)
         {
             wxPGProperty* p = m_regularArray.Item(i);
             wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, p);
             wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, p);
-#if 1 // BS_CHANGES_ENABLED, #17980, TODO: to be recursive
-            if (!p->HasFlag(wxPG_PROP_CHILDREN_ARE_COPIES))
-            {
-                for (unsigned int j = 0; j < p->GetChildCount(); j++)
-                {
-                    wxPGProperty* c = p->Item(j);
-                    wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, c);
-                    wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, c);
-                }
-            }
-#endif
         }
+#endif
 
         m_regularArray.Empty();
         if ( m_abcArray )
