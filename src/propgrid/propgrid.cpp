@@ -5087,8 +5087,8 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
     }
 
     wxPropertyGridPageState* state = m_pState;
-    int splitterHit;
-    int splitterHitOffset;
+    int splitterHit(0); // Bricsys change (initialize int)
+    int splitterHitOffset(0); // Bricsys change (initialize int)
     int columnHit = state->HitTestH( x, &splitterHit, &splitterHitOffset );
 
     #if wxUSE_TOOLTIPS
@@ -5167,9 +5167,10 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                     {
                         // Show help string as a tooltip
                         wxString tipString = m_propHover->GetHelpString();
-                        SetToolTip(nullptr); // Bricsys added (restart tooltip delay)
+                        UnsetToolTip(); // Bricsys added (restart tooltip delay)
                         SetToolTip(tipString);
                     }
+#if 0 // Bricsys change (if wxPG_EX_HELP_AS_TOOLTIPS is off, don't display tooltip)
                     else if ( m_colHover >= 0 && m_colHover < (int)m_pState->GetColumnCount())
                     {
                         // Show cropped value string as a tooltip
@@ -5220,6 +5221,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         if ( tw > space )
                             SetToolTip( tipString );
                     }
+#endif // end Bricsys change
                     else
                     {
                         SetToolTip(wxEmptyString);
