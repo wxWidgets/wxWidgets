@@ -2666,6 +2666,13 @@ bool wxImage::LoadFile( const wxString& filename,
                         wxBitmapType type,
                         int WXUNUSED_UNLESS_STREAMS(index) )
 {
+#if 1 // BS_CHANGES_ENABLED
+    // Bricsys change: Load_SuppressLoadFailureFromFile check
+    // Note: this variable should be initialized at the start, because LoadFile
+    // can destroy M_IMGDATA, where the flag was stored.
+    const bool verbose = GetLoadFlags() & Load_Verbose;
+#endif
+
 #ifdef HAS_LOAD_FROM_RESOURCE
     if (   type == wxBITMAP_TYPE_BMP_RESOURCE
         || type == wxBITMAP_TYPE_ICO_RESOURCE
@@ -2689,7 +2696,12 @@ bool wxImage::LoadFile( const wxString& filename,
             return true;
     }
 
+#if 1 // BS_CHANGES_ENABLED
+    if (verbose)
+        wxLogError(_("Failed to load image from file \"%s\"."), filename);
+#else
     wxLogError(_("Failed to load image from file \"%s\"."), filename);
+#endif
 #endif // HAS_FILE_STREAMS
 
     return false;
@@ -2699,6 +2711,13 @@ bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
                         const wxString& WXUNUSED_UNLESS_STREAMS(mimetype),
                         int WXUNUSED_UNLESS_STREAMS(index) )
 {
+#if 1 // BS_CHANGES_ENABLED
+    // Bricsys change: Load_SuppressLoadFailureFromFile check
+    // Note: this variable should be initialized at the start, because LoadFile
+    // can destroy M_IMGDATA, where the flag was stored.
+    const bool verbose = GetLoadFlags() & Load_Verbose;
+#endif
+
 #if HAS_FILE_STREAMS
     wxImageFileInputStream stream(filename);
     if ( stream.IsOk() )
@@ -2708,7 +2727,12 @@ bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
             return true;
     }
 
+#if 1 // BS_CHANGES_ENABLED
+    if (verbose)
+        wxLogError(_("Failed to load image from file \"%s\"."), filename);
+#else
     wxLogError(_("Failed to load image from file \"%s\"."), filename);
+#endif
 #endif // HAS_FILE_STREAMS
 
     return false;

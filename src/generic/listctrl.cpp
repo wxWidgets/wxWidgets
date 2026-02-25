@@ -1711,8 +1711,12 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
                               );
 
     wxVisualAttributes attr = wxGenericListCtrl::GetClassDefaultAttributes();
-    SetOwnForegroundColour( attr.colFg );
-    SetOwnBackgroundColour( attr.colBg );
+    // Bricsys change: customization - we use in-house theming
+    if(!GetForegroundColour().IsOk())
+        SetOwnForegroundColour( attr.colFg );
+    if(!GetBackgroundColour().IsOk())
+        SetOwnBackgroundColour( attr.colBg );
+    // end Bricsys change
     if (!m_hasFont)
         SetOwnFont( attr.font );
 }

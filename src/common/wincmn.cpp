@@ -1188,6 +1188,7 @@ bool wxWindowBase::IsEnabled() const
 #if defined(__WXMSW__)
     // must do everything ourselves
     #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
+    #define wxHAS_NATIVE_ENABLED_MANAGEMENT //Bricsys change (refs #14059)
 #elif defined(__WXOSX__)
     // must do everything ourselves
     #undef wxHAS_NATIVE_ENABLED_MANAGEMENT

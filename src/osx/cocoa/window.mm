@@ -3271,15 +3271,9 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
             CGContextScaleCTM( context, 1, -1 );
         }
     }
-
-    bool handled = wxpeer->MacDoRedraw( 0 );
-    if ( context != NULL )
-    {
-        CGContextRestoreGState( context );
-        CGContextSaveGState( context );
-    }
     
-    if ( !handled )
+    // Bricsys change begin
+    auto nativeRenderLambda = [&]()
     {
         // call super
         SEL _cmd = @selector(drawRect:);
@@ -3290,7 +3284,29 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
             CGContextRestoreGState( context );
             CGContextSaveGState( context );
         }
+    };
+    
+    // Bricsys change: we theme wxComboBox in onPaint(), but not its dropdown
+    // however, in this case, the native drawn dropdown gets wrong rectangle
+    // solution: draw native first (to get the correct rect), then trigger onPaint()
+    auto pCb = wxDynamicCast( wxpeer , wxComboBox );
+    if(pCb)
+    {
+        nativeRenderLambda();
     }
+
+    bool handled = wxpeer->MacDoRedraw( 0 );
+    if ( context != NULL )
+    {
+        CGContextRestoreGState( context );
+        CGContextSaveGState( context );
+    }
+    
+    if ( !handled )
+    {
+        nativeRenderLambda();
+    }
+    // Bricsys change end
     
     if ( context != NULL )
     {
