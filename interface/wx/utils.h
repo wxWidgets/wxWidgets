@@ -870,6 +870,9 @@ wxString wxGetOsDescription();
     numbers (as returned by the 'uname -r' command); e.g. "4", "1", and "4" if
     the machine is using kernel 4.1.4.
 
+    On Linux (@c __LINUX__ defined), if you are interested in the distribution
+    version rather than the kernel version, see wxGetLinuxDistributionInfo().
+
     For macOS systems (@c wxOS_MAC) the major and minor version integers are the
     natural version numbers associated with the OS; e.g. "10", "11" and "2" if
     the machine is using macOS El Capitan 10.11.2.
@@ -989,7 +992,7 @@ wxString wxGetOsDescription();
     See the <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version">Microsoft documentation</a>
     for more info about the values above.
 
-    @see wxGetOsDescription(), wxPlatformInfo
+    @see wxGetOsDescription(), wxGetLinuxDistributionInfo(), wxPlatformInfo
 
     @header{wx/utils.h}
 */
@@ -998,6 +1001,9 @@ wxOperatingSystemId wxGetOsVersion(int* major = nullptr, int* minor = nullptr, i
 /**
     Returns @true if the version of the operating system on which the program
     is running under is the same or later than the given version.
+
+    For Unix-like systems (except macOS), this is the kernel version, not
+    the marketing/distribution version.
 
     @since 3.1.0
 
