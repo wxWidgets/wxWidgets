@@ -45,6 +45,8 @@
 
 #include "wx/evtloop.h"
 
+#include "wx/dirdlg.h"
+
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
@@ -72,6 +74,17 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
     {
         return true;
     }
+    // Bricsys added
+    else if (err == kLSApplicationNotFoundErr)
+    {
+        wxDirDialog dlg(NULL, "Choose an application to open the document " + document.AfterLast('/'), document, wxDD_DIR_MUST_EXIST);
+        
+        if(dlg.ShowModalChooseApp() == wxID_OK)
+            return true;
+        else
+            return false;
+    }
+    // end Bricsys added
     else
     {
         wxLogDebug(wxT("Default Application Launch error %d"), (int) err);

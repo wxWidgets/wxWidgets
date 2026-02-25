@@ -375,7 +375,9 @@ void wxPropertyGrid::Init1()
     m_iconWidth = 11;
     m_iconHeight = 11;
 #else
-    m_iconWidth = wxPG_ICON_WIDTH;
+    // Bricsys added: make expand/collapse icon's size DPI dependent
+    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
+    m_iconHeight = FromDIP(wxPG_ICON_WIDTH);
 #endif
 
     m_gutterWidth = wxPG_GUTTER_MIN;
@@ -1296,7 +1298,9 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_fontHeight = y;
 
 #if wxPG_USE_RENDERER_NATIVE
+    // Bricsys added: make expand/collapse icon's size DPI dependent
     m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
+    m_iconHeight = FromDIP(wxPG_ICON_WIDTH);
 #elif wxPG_ICON_WIDTH
     // scale icon
     m_iconWidth = (m_fontHeight * wxPG_ICON_WIDTH) / 13;
@@ -5163,7 +5167,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                     {
                         // Show help string as a tooltip
                         wxString tipString = m_propHover->GetHelpString();
-
+                        SetToolTip(nullptr); // Bricsys added (restart tooltip delay)
                         SetToolTip(tipString);
                     }
                     else if ( m_colHover >= 0 && m_colHover < (int)m_pState->GetColumnCount())

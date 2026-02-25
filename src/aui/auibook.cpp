@@ -1452,7 +1452,10 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         // If the text changes, set it else, keep old, to avoid
         // 'moving tooltip' effect
         if (GetToolTipText() != tooltip)
+        {
+            SetToolTip(nullptr); // Bricsys added (restart tooltip delay)
             SetToolTip(tooltip);
+        }
 #endif // wxUSE_TOOLTIPS
     }
     else
