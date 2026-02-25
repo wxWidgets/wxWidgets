@@ -157,10 +157,14 @@ public:
     // before application terminates
     virtual void         OSXOnWillTerminate();
 
+// Bricsys change: needed in WxcApp::parseCommandLine()
+protected:
+    wxArrayString       m_openFiles;
+// end Bricsys change
+
 private:
     bool                m_onInitResult;
     bool                m_inited;
-    wxArrayString       m_openFiles;
     wxArrayString       m_printFiles;
     wxString            m_getURL;
 
