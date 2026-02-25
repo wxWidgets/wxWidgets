@@ -166,7 +166,8 @@ void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
     int pen_width = wxWindow::FromDIP(1, NULL);
     m_gripperPen1 = wxPen(darker5Colour, pen_width);
     m_gripperPen2 = wxPen(darker3Colour, pen_width);
-    m_gripperPen3 = wxPen(*wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE), pen_width);
+    //Bricsys change: our gray transparent pen, see RM-32154
+    m_gripperPen3 = wxPen(wxColour(128,128,128,128), pen_width);
 
     // Note: update the bitmaps here as they depend on the system colours too.
 
@@ -681,15 +682,12 @@ void wxAuiGenericToolBarArt::DrawGripper(wxDC& dc,
                 break;
         }
 
-        dc.SetPen(m_gripperPen1);
+        //Bricsys change: draw our square, see RM-32154
+        dc.SetPen(m_gripperPen3);
         dc.DrawPoint(x, y);
-        dc.SetPen(m_gripperPen2);
         dc.DrawPoint(x                , y+wnd->FromDIP(1));
         dc.DrawPoint(x+wnd->FromDIP(1), y                );
-        dc.SetPen(m_gripperPen3);
-        dc.DrawPoint(x+wnd->FromDIP(2), y+wnd->FromDIP(1));
-        dc.DrawPoint(x+wnd->FromDIP(2), y+wnd->FromDIP(2));
-        dc.DrawPoint(x+wnd->FromDIP(1), y+wnd->FromDIP(2));
+        dc.DrawPoint(x+wnd->FromDIP(1), y+wnd->FromDIP(1));
 
         i++;
     }

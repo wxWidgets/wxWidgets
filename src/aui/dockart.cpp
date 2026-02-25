@@ -332,7 +332,9 @@ void wxAuiDefaultDockArt::UpdateColoursFromSystem()
     int pen_width = wxWindow::FromDIP(1, NULL);
     m_gripperPen1 = wxPen(darker5Colour, pen_width);
     m_gripperPen2 = wxPen(darker3Colour, pen_width);
-    m_gripperPen3 = wxPen(*wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE), pen_width);
+    //Bricsys change: our gray transparent pen, see RM-32154
+    m_gripperPen3 = wxPen(wxColour(128,128,128,128), pen_width);
+    
     InitBitmaps();
 }
 
@@ -710,15 +712,12 @@ void wxAuiDefaultDockArt::DrawGripper(wxDC& dc,
         int y = window->FromDIP(5);
         while (1)
         {
-            dc.SetPen(m_gripperPen1);
-            dc.DrawPoint(rect.x+window->FromDIP(3), rect.y+y);
-            dc.SetPen(m_gripperPen2);
-            dc.DrawPoint(rect.x+window->FromDIP(3), rect.y+y+window->FromDIP(1));
-            dc.DrawPoint(rect.x+window->FromDIP(4), rect.y+y                   );
+            //Bricsys change: draw our square, see RM-32154
             dc.SetPen(m_gripperPen3);
-            dc.DrawPoint(rect.x+window->FromDIP(5), rect.y+y+window->FromDIP(1));
-            dc.DrawPoint(rect.x+window->FromDIP(5), rect.y+y+window->FromDIP(2));
-            dc.DrawPoint(rect.x+window->FromDIP(4), rect.y+y+window->FromDIP(2));
+            dc.DrawPoint(rect.x+window->FromDIP(4), rect.y+y);
+            dc.DrawPoint(rect.x+window->FromDIP(3), rect.y+y);
+            dc.DrawPoint(rect.x+window->FromDIP(4), rect.y+y+window->FromDIP(1));
+            dc.DrawPoint(rect.x+window->FromDIP(3), rect.y+y+window->FromDIP(1));
 
             y += window->FromDIP(4);
             if (y > rect.GetHeight()-window->FromDIP(5))
@@ -730,15 +729,12 @@ void wxAuiDefaultDockArt::DrawGripper(wxDC& dc,
         int x = window->FromDIP(5);
         while (1)
         {
-            dc.SetPen(m_gripperPen1);
-            dc.DrawPoint(rect.x+x, rect.y+window->FromDIP(3));
-            dc.SetPen(m_gripperPen2);
-            dc.DrawPoint(rect.x+x+window->FromDIP(1), rect.y+window->FromDIP(3));
-            dc.DrawPoint(rect.x+x                   , rect.y+window->FromDIP(4));
+            //Bricsys change: draw our square, see RM-32154
             dc.SetPen(m_gripperPen3);
-            dc.DrawPoint(rect.x+x+window->FromDIP(1), rect.y+window->FromDIP(5));
-            dc.DrawPoint(rect.x+x+window->FromDIP(2), rect.y+window->FromDIP(5));
-            dc.DrawPoint(rect.x+x+window->FromDIP(2), rect.y+window->FromDIP(4));
+            dc.DrawPoint(rect.x+x, rect.y+window->FromDIP(3));
+            dc.DrawPoint(rect.x+x, rect.y+window->FromDIP(4));
+            dc.DrawPoint(rect.x+x+window->FromDIP(1), rect.y+window->FromDIP(3));
+            dc.DrawPoint(rect.x+x+window->FromDIP(1), rect.y+window->FromDIP(4));
 
             x += window->FromDIP(4);
             if (x > rect.GetWidth()-window->FromDIP(5))
