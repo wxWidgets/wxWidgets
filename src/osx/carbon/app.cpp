@@ -68,6 +68,9 @@ long      wxApp::s_lastModifiers = 0 ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 long      wxApp::s_macPreferencesMenuItemId = wxID_PREFERENCES ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
+long      wxApp::s_macHideMenuItemId = wxID_OSX_HIDE;
+long      wxApp::s_macHideOthersMenuItemId = wxID_OSX_HIDEOTHERS;
+long      wxApp::s_macShowAllMenuItemId = wxID_OSX_SHOWALL;
 wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
 wxString  wxApp::s_macWindowMenuTitleName = wxT("&Window") ;
 
