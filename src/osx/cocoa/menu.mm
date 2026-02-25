@@ -24,6 +24,11 @@
 #include "wx/frame.h"
 #include "wx/menuitem.h"
 #include "wx/dialog.h"
+
+// Bricsys change: wxEventLoopBase::GetActive();
+#include "wx/evtloop.h"
+// end Bricsys change
+
 #endif
 
 #include "wx/menu.h"
@@ -341,10 +346,15 @@ public :
 
         wxPoint screenPoint(x,y);
         NSPoint pointInView = wxToNSPoint(view, win->ScreenToClient( screenPoint ));
+        
+        // Bricsys change: Drawing Explorer is a wxFrame but uses a modal loop
+        auto pLoop = wxEventLoopBase::GetActive();
+        bool isModal = (pLoop != nullptr &&
+                        dynamic_cast<wxModalEventLoop*>(pLoop) != nullptr);
 
         // action and validation methods are not called from macos for modal dialogs
         // when using popUpMenuPositioningItem therefore we fall back to the older method
-        if ( wxDialog::OSXHasModalDialogsOpen() )
+        if ( wxDialog::OSXHasModalDialogsOpen() || isModal) // end Bricsys change
         {
             // we don't want plug-ins interfering
             m_osxMenu.allowsContextMenuPlugIns = NO;

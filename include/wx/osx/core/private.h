@@ -278,7 +278,7 @@ public :
 
     virtual WXWidget    GetWXWidget() const = 0;
 
-    virtual void        SetBackgroundColour( const wxColour& col ) = 0;
+    virtual bool        SetBackgroundColour( const wxColour& col ) = 0;
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) = 0;
     virtual void        SetForegroundColour( const wxColour& col ) = 0;
 

@@ -111,7 +111,7 @@ public :
 
     virtual WXWidget    GetWXWidget() const wxOVERRIDE { return m_osxView; }
 
-    virtual void        SetBackgroundColour(const wxColour&) wxOVERRIDE;
+    virtual bool        SetBackgroundColour(const wxColour&) wxOVERRIDE;
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
     virtual void        SetForegroundColour(const wxColour& col) wxOVERRIDE;
 
@@ -390,6 +390,7 @@ class wxButtonCocoaImpl : public wxWidgetCocoaImpl, public wxButtonImpl
 public:
     wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v);
     virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
+    bool SetBackgroundColour(const wxColour& col ) wxOVERRIDE;
 #if wxUSE_MARKUP
     virtual void SetLabelMarkup(const wxString& markup) wxOVERRIDE;
 #endif // wxUSE_MARKUP
