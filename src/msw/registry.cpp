@@ -889,6 +889,15 @@ static bool isExpandable(const wxString& path)
 // to long format so PathUnExpandEnvStrings could correctly handle them
 wxString makeLong(const wxString& path)
 {
+#if 1 //Bricsys change (refs RM-56435)
+    static const wxChar s_tilde(_T('~'));
+
+    // This is a compromise that assumes 8.3 filenames will contain a tilde
+    // but avoids the test for existence by GetLongPathName() for every path processed
+    if (path.Find(s_tilde) == wxNOT_FOUND)
+        return path;
+#endif
+
     const int eMAX_PATH = 1024;
     wxChar buf[eMAX_PATH];
     unsigned length = GetLongPathName(path.c_str(), buf, eMAX_PATH);
