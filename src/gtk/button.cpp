@@ -206,14 +206,12 @@ wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
 
         GtkWidget *wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         GtkWidget *box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
-#ifdef __WXGTK4__
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
         wxString labelGTK = GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL));
         GtkWidget *btn = gtk_button_new_with_mnemonic(labelGTK.utf8_str());
 #else
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        GtkWidget* btn = gtk_button_new_from_stock("gtk-cancel");
-        wxGCC_WARNING_RESTORE()
-#endif
+        GtkWidget *btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+#endif // GTK >= 3.10 / < 3.10
         gtk_container_add(GTK_CONTAINER(box), btn);
         gtk_container_add(GTK_CONTAINER(wnd), box);
         GtkRequisition req;
@@ -248,10 +246,7 @@ void wxButton::SetLabel( const wxString &lbl )
     if ( HasFlag(wxBU_NOTEXT) )
         return;
 
-    //bricscad change
-    //do not use stock ids
-    //this avoid a translation problem with gtk stock items
-    /*
+#if !defined(__WXGTK3__) || !GTK_CHECK_VERSION(3,10,0)
     if (wxIsStockID(m_windowId) && wxIsStockLabel(m_windowId, label))
     {
         const char *stock = wxGetStockGtkID(m_windowId);
@@ -262,19 +257,17 @@ void wxButton::SetLabel( const wxString &lbl )
             return;
         }
     }
-    */
-
+#endif // GTK < 3.10
+            
     // this call is necessary if the button had been initially created without
     // a (text) label -- then we didn't use gtk_button_new_with_mnemonic() and
     // so "use-underline" GtkButton property remained unset
     gtk_button_set_use_underline(GTK_BUTTON(m_widget), TRUE);
     const wxString labelGTK = GTKConvertMnemonics(label);
     gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
-#ifndef __WXGTK4__
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+#if !defined(__WXGTK3__) || !GTK_CHECK_VERSION(3,10,0)
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
-    wxGCC_WARNING_RESTORE()
-#endif
+#endif // GTK < 3.10
 
     GTKApplyWidgetStyle( false );
 }
