@@ -2140,11 +2140,6 @@ void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
     Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y - wxPG_BUTTON_BORDER_WIDTH, wxSIZE_ALLOW_MINUS_ONE);
 }
 
-int wxPGMultiButton::GenId( int itemid ) const
-{
-    return itemid < -1 ? wxID_ANY : itemid;
-}
-
 #if wxUSE_BMPBUTTON
 
 #if defined(__WXGTK__)
@@ -2204,7 +2199,6 @@ typedef wxBitmapButton wxPGEditorBitmapButton;
 
 void wxPGMultiButton::Add( const wxBitmapBundle& bitmap, int itemid )
 {
-    itemid = GenId(itemid);
     wxSize sz = GetSize();
 
     // Internal margins around the bitmap inside the button
@@ -2212,11 +2206,11 @@ void wxPGMultiButton::Add( const wxBitmapBundle& bitmap, int itemid )
 #if defined(__WXMSW__)
             2*4;
 #elif defined(__WXGTK3__)
-            2*2;
+            2*4;
 #elif defined(__WXGTK__)
-            2*6;
+            2*8;
 #elif defined(__WXOSX__)
-            2*3;
+            2*4;
 #else
             0;
 #endif
@@ -2249,7 +2243,6 @@ void wxPGMultiButton::Add( const wxBitmapBundle& bitmap, int itemid )
 
 void wxPGMultiButton::Add( const wxString& label, int itemid )
 {
-    itemid = GenId(itemid);
     wxSize sz = GetSize();
     wxButton* button = new wxButton(this, itemid, label,
                     wxPoint(sz.x, 0), wxSize(wxDefaultCoord, sz.y), wxBU_EXACTFIT);
