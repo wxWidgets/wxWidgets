@@ -260,7 +260,7 @@ wxIsAbsolutePath (const wxString& filename)
 #if defined(__WINDOWS__)
         // MSDOS like
         if (filename[0] == wxT('\\') ||
-            (filename.size() > 1 && (wxIsalpha (filename[0]) && filename[1] == wxT(':'))))
+            (filename.size() > 1 && (wxIsalpha(filename[0]) && filename[1] == wxT(':'))))
             return true;
 #endif
     }
