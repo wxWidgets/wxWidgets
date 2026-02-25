@@ -843,7 +843,9 @@ bool wxGetUserName(char* buf, int sz);
 /**
     Returns the string containing the description of the current platform in a
     user-readable form. For example, this function may return strings like
-    "Windows 10 (build 10240), 64-bit edition" or "Linux 4.1.4 i386".
+    "Windows 10 (build 10240), 64-bit edition",
+    "AlmaLinux 10.1 (Heliotrope Lion), 6.12.0-55.9.1.el10_0.x86_64",
+    or "Linux 4.1.4 i386".
 
     @see wxGetOsVersion()
 
