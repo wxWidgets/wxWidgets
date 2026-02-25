@@ -192,6 +192,16 @@ wxDialogBase::DoGetParentForDialog(wxDialogModality modality,
     if ( parent )
         parent = CheckIfCanBeUsedAsParent(modality, wxGetTopLevelParent(parent));
 
+#if 1 //Bricsys change (refs RM-48441)
+    // prefer the main frame window if it is enabled (i.e. no modal dialog is open)
+    if ( !parent )
+    {
+        wxWindow* top = CheckIfCanBeUsedAsParent(modality, wxApp::GetMainTopWindow());
+        if ( top && top->IsEnabled() )
+            parent = top;
+    }
+#endif
+
     // then the currently active window
     if ( !parent )
         parent = CheckIfCanBeUsedAsParent(modality,
