@@ -1165,17 +1165,17 @@ wxGetSpecificValueFromOSRelease(const wxString& key)
 #if wxUSE_CONFIG
     // Read /etc/os-release and fall back to /usr/lib/os-release per below
     // https://www.freedesktop.org/software/systemd/man/os-release.html
-    const wxString Filename[] = {
+    const wxString fileName[] = {
         "/etc/os-release",
         "/usr/lib/os-release"
     };
 
-    for ( size_t i = 0; i < WXSIZEOF(Filename); ++i )
+    for ( size_t i = 0; i < WXSIZEOF(fileName); ++i )
     {
-        if ( wxFileName::Exists(Filename[i]) )
+        if ( wxFileName::Exists(fileName[i]) )
         {
             wxFileConfig fc(wxEmptyString, wxEmptyString,
-                            wxEmptyString, Filename[i]);
+                            wxEmptyString, fileName[i]);
             // Default value suggested by the spec
             return fc.Read(key, "Linux");
         }
@@ -1285,22 +1285,22 @@ wxString wxGetOsDescription()
 #elif defined(__LINUX__)
     wxString osDesc;
 
-    const wxString DistName = wxGetSpecificValueFromOSRelease("NAME");
-    const wxString Version = wxGetSpecificValueFromOSRelease("VERSION");
+    const wxString distName = wxGetSpecificValueFromOSRelease("NAME");
+    const wxString version = wxGetSpecificValueFromOSRelease("VERSION");
 
-    if ( !DistName.empty() )
+    if ( !distName.empty() )
     {
-        osDesc += DistName;
-        if ( !Version.empty() )
+        osDesc += distName;
+        if ( !version.empty() )
         {
-            osDesc += " " + Version;
+            osDesc += " " + version;
         }
         osDesc += ",";
     }
 
-    const wxString System = wxGetCommandOutput(wxT("uname -s"));
-    const wxString Release = wxGetCommandOutput(wxT("uname -r"));
-    const wxString Machine = wxGetCommandOutput(wxT("uname -m"));
+    const wxString unSystem = wxGetCommandOutput(wxT("uname -s"));
+    const wxString unRelease = wxGetCommandOutput(wxT("uname -r"));
+    const wxString unMachine = wxGetCommandOutput(wxT("uname -m"));
 
     // If any of the strings above is already present in the info
     // read from os-release, avoid repeating the values to keep
@@ -1308,17 +1308,17 @@ wxString wxGetOsDescription()
     // e.g. the machine type if it is already part of the kernel
     // version number.
 
-    if ( osDesc.Find(System) == wxNOT_FOUND )
+    if ( osDesc.Find(unSystem) == wxNOT_FOUND )
     {
-        osDesc += " " + System;
+        osDesc += " " + unSystem;
     }
-    if ( osDesc.Find(Release) == wxNOT_FOUND )
+    if ( osDesc.Find(unRelease) == wxNOT_FOUND )
     {
-        osDesc += " " + Release;
+        osDesc += " " + unRelease;
     }
-    if ( osDesc.Find(Machine) == wxNOT_FOUND )
+    if ( osDesc.Find(unMachine) == wxNOT_FOUND )
     {
-        osDesc += " " + Machine;
+        osDesc += " " + unMachine;
     }
 
     osDesc.Trim(false);
