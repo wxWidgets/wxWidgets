@@ -70,6 +70,9 @@ void wxBell()
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSFullScreenMenuItemEverywhere"];
     }
 
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NSDisabledDictationMenuItem"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NSDisabledCharacterPaletteMenuItem"];
+    
     wxTheApp->OSXEnableAutomaticTabbing(false);
 
     wxTheApp->OSXOnWillFinishLaunching();
