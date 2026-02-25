@@ -39,6 +39,10 @@ public:
 
     const wxAcceleratorEntry *GetEntry(const wxKeyEvent& event) const;
 
+    // Bricsys change: add support for entry enable/disable
+    wxAcceleratorEntry *GetEntry(int keyCode, int keyFlags);
+    void EnableEntries( const int* entries, int length, bool enable );
+
 protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const wxOVERRIDE;

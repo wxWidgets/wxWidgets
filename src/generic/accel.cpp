@@ -189,6 +189,79 @@ wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
     return NULL;
 }
 
+// Bricsys added: access an accelerator entry by key code and modifier flags so we can disable it
+// Bricsys change: add support for entry enable/disable
+wxAcceleratorEntry *
+wxAcceleratorTable::GetEntry(int keyCode, int keyFlags)
+{
+    if ( !IsOk() )
+    {
+        // not an error, the accel table is just empty
+        return NULL;
+    }
+
+    wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
+    while ( node )
+    {
+        wxAcceleratorEntry *entry = node->GetData();
+
+        // is the key the same?
+        if ( keyCode == entry->GetKeyCode() )
+        {
+            int flags = entry->GetFlags();
+
+            // now check flags
+            if ( (((flags & wxACCEL_CTRL) != 0) == ((keyFlags & wxACCEL_CTRL) != 0)) &&
+                 (((flags & wxACCEL_SHIFT) != 0) == ((keyFlags & wxACCEL_SHIFT) != 0)) &&
+                 (((flags & wxACCEL_ALT) != 0) == ((keyFlags & wxACCEL_ALT) != 0)) )
+            {
+                return entry;
+            }
+        }
+
+        node = node->GetNext();
+    }
+
+    return NULL;
+}
+
+void wxAcceleratorTable::EnableEntries( const int* entries, int length, bool enable )
+{
+    if ( !IsOk() )
+    {
+        // not an error, the accel table is just empty
+        return;
+    }
+
+    wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
+    while ( node )
+    {
+        wxAcceleratorEntry *entry = node->GetData();
+
+        for( int i = 0; i < length; i++ )
+        {
+            int keyCode = entries[i*2];
+            int keyFlags = entries[i*2+1];
+
+            // is the key the same?
+            if ( keyCode == entry->GetKeyCode() )
+            {
+                int flags = entry->GetFlags();
+
+                // now check flags
+                if ( (((flags & wxACCEL_CTRL) != 0) == ((keyFlags & wxACCEL_CTRL) != 0)) &&
+                     (((flags & wxACCEL_SHIFT) != 0) == ((keyFlags & wxACCEL_SHIFT) != 0)) &&
+                     (((flags & wxACCEL_ALT) != 0) == ((keyFlags & wxACCEL_ALT) != 0)) )
+                {
+                    entry->Enable( enable );
+                }
+            }
+        }
+
+        node = node->GetNext();
+    }
+}
+
 wxMenuItem *wxAcceleratorTable::GetMenuItem(const wxKeyEvent& event) const
 {
     const wxAcceleratorEntry *entry = GetEntry(event);
@@ -200,7 +273,8 @@ int wxAcceleratorTable::GetCommand(const wxKeyEvent& event) const
 {
     const wxAcceleratorEntry *entry = GetEntry(event);
 
-    return entry ? entry->GetCommand() : -1;
+    // Bricsys change: add support for entry enable/disable
+    return (entry && entry->IsEnabled()) ? entry->GetCommand() : -1;
 }
 
 wxObjectRefData *wxAcceleratorTable::CreateRefData() const
