@@ -470,9 +470,9 @@ public:
     // Returns number of buttons.
     unsigned int GetCount() const { return (unsigned int) m_buttons.size(); }
 
-    void Add( const wxString& label, int id = -2 );
+    void Add( const wxString& label, int id = wxID_ANY );
 #if wxUSE_BMPBUTTON
-    void Add( const wxBitmapBundle& bitmap, int id = -2 );
+    void Add( const wxBitmapBundle& bitmap, int id = wxID_ANY );
 #endif
 
     wxSize GetPrimarySize() const
@@ -485,8 +485,6 @@ public:
 protected:
 
     void DoAddButton( wxWindow* button, const wxSize& sz );
-
-    int GenId( int id ) const;
 
     wxVector<wxWindow*> m_buttons;
     wxSize          m_fullEditorSize;
