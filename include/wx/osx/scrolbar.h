@@ -44,7 +44,7 @@ public:
 
     virtual void SetThumbPosition(int viewStart) wxOVERRIDE;
     virtual void SetScrollbar(int position, int thumbSize, int range,
-            int pageSize, bool refresh = true, int lineSize=1);
+            int pageSize, bool refresh = true, int lineSize=1) wxOVERRIDE;
 
     // needed for RTTI
     void SetThumbSize( int s ) { SetScrollbar( GetThumbPosition() , s , GetRange() , GetPageSize() , true, GetLineSize() ) ; }

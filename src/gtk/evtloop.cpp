@@ -240,6 +240,7 @@ bool wxGUIEventLoop::Pending(int type) const
              }
          }
     }
+    return false;
 }
 
 bool wxGUIEventLoop::Dispatch()

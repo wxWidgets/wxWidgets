@@ -947,7 +947,7 @@ wxGtkPrinter::~wxGtkPrinter()
 {
 }
 
-bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt, bool batchMode )
+bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt, bool WXUNUSED(batchMode))
 {
     if (!printout)
     {
