@@ -4139,28 +4139,8 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-darwin* )
         install_name_tool=`which ${HOST_PREFIX}install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
-            DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
-            cat <<EOF >change-install-names
-#!/bin/sh
-set -e
-libdir=\$(cd lib ; pwd -P)
-libnames=\$(cd lib ; ls -1 libwx*${WX_RELEASE}.dylib)
-changes=''
-for dep in \${libnames} ; do
-    target=\$(readlink \${4}/\${dep})
-    changes="\${changes} -change \${libdir}\${target} \${3}/\${dep}"
-done
-for i in \${libnames} ; do
-    lib=\$(readlink \${1}/\${i})
-    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${libdir}/\${lib}
-done
-
-if test -f "\${2}/wxrc-${WX_RELEASE}" ; then
-    ${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}
-fi
-EOF
-            chmod +x change-install-names
-            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \${DESTDIR}\${bindir} \${libdir} \$(wx_top_builddir)/lib"
+            DYLIB_RPATH_POSTLINK=
+            DYLIB_RPATH_INSTALL=
         fi
 
         dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:
