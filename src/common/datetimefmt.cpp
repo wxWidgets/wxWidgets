@@ -356,7 +356,8 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
         {
             case 'l':
 #ifdef __WINDOWS__
-#ifdef __MINGW32__
+            // Versions of MSVC until 2015 and MinGW don't support "%F".
+#if defined(__MINGW32__) || (defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(14))
             case 'F':
 #endif
             case 'g':
