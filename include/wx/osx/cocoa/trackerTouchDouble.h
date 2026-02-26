@@ -1,6 +1,7 @@
 #ifndef __TRACKER_TOUCH_DOUBLE_H_
 #define __TRACKER_TOUCH_DOUBLE_H_
 
+#include "wx/defs.h"
 #import "trackerInput.h"
 
 typedef struct TLine {
@@ -9,6 +10,7 @@ typedef struct TLine {
 
 const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 
+WXDLLIMPEXP_CORE
 @interface DualTouchTracker : InputTracker {
 @private
     BOOL _tracking;

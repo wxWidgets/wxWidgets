@@ -1,8 +1,10 @@
 #ifndef __TOUCHPADGESTURESDELEGATE_H_
 #define __TOUCHPADGESTURESDELEGATE_H_
 
+#include "wx/defs.h"
 #import "trackerTouchDouble.h"
 
+WXDLLIMPEXP_CORE
 @protocol TouchPadGesturesDelegate
 
 - (void) _initTrackers;
@@ -33,6 +35,7 @@
 
 @end
 
+WXDLLIMPEXP_CORE
 @interface TrackPadConstants : NSObject
 
 // delta dist. between fingers for which to send pinch event.
