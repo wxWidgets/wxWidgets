@@ -25,4 +25,16 @@ private :
     int m_maxVal;
 };
 
+class wxTextInputRange
+{
+public:
+    wxTextInputRange() {}
+    wxTextInputRange(unsigned long loc, unsigned long len) : m_location(loc), m_length(len) {}
+    unsigned long GetLocation() const { return m_location; }
+    unsigned long GetLength() const { return m_length; }
+private:
+    unsigned long m_location = LONG_MAX;
+    unsigned long m_length = 0;
+};
+
 #endif // _WX_RANGE_H_

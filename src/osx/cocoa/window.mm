@@ -47,6 +47,7 @@
 #include "wx/trackpadstate.h"
 #include "wx/osx/cocoa/trackerInput.h"
 #include "wx/osx/cocoa/trackerTouchDouble.h"
+#include "wx/string.h"
 #include "wx/osx/cocoa/touchPadGesturesDelegate.h"
 
 #define TRACE_FOCUS "focus"
@@ -1503,8 +1504,23 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 - (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
 {
-    wxUnusedVar(replacementRange);
+    if (replacementRange.location == NSNotFound)
+    {
+        if ([self markedRange].location != NSNotFound)
+            replacementRange = [self markedRange];
+        else
+            replacementRange = [self selectedRange];
+    }
+
+    // as our insertText doesn't perform replacement, pre-mark the text
+    if (replacementRange.location != NSNotFound && replacementRange.length > 0)
+        [self setMarkedText:aString
+              selectedRange:NSMakeRange(0, [aString length])
+           replacementRange:replacementRange];
+
     wxOSX_insertText(self, @selector(insertText:), aString);
+
+    [self unmarkText];
 }
 
 //Bricsys change, refs #22025 make the call consistent
@@ -1518,52 +1534,140 @@ void wxOSX_doCommandBySelector(NSView* self, SEL _cmd, SEL aSelector);
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
 {
-    wxUnusedVar(aString);
-    wxUnusedVar(selectedRange);
-    wxUnusedVar(replacementRange);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+    {
+        wxImeEvent imeEvent(wxEVT_IME);
+        wxImeEvent::SetMarkedTextData clientData;
+        if ([aString isKindOfClass:[NSAttributedString class]])
+            clientData.string = wxStringWithNSString([aString string]);
+        else
+            clientData.string = wxStringWithNSString(aString);
+        clientData.selectedRange = wxTextInputRange(selectedRange.location, selectedRange.length);
+        clientData.replacementRange = wxTextInputRange(replacementRange.location, replacementRange.length);
+        imeEvent.SetClientData(&clientData);
+        imeEvent.type = wxImeEvent::eEvActSetMarkedText;
+        impl->imeEvent(imeEvent, self, _cmd);
+    }
 }
 
 - (void)unmarkText
 {
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+    {
+        wxImeEvent imeEvent(wxEVT_IME);
+        imeEvent.type = wxImeEvent::eEvActUnmarkText;
+        impl->imeEvent(imeEvent, self, _cmd);
+    }
 }
 
 - (NSRange)selectedRange
 {    
-    return NSMakeRange(NSNotFound, 0);
+    NSRange nsRange = NSMakeRange(0, 0); // for selected range default location is 0
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+    {
+        wxImeEvent imeEvent(wxEVT_IME);
+        wxTextInputRange range(0, 0);
+        imeEvent.SetClientData(&range);
+        imeEvent.type = wxImeEvent::eEvReqSelectedRange;
+        impl->imeEvent(imeEvent, self, _cmd);
+        nsRange = NSMakeRange(range.GetLocation(), range.GetLength());
+    }
+    return nsRange;
 }
 
 - (NSRange)markedRange
 {
-    return NSMakeRange(NSNotFound, 0);
+    NSRange nsRange = NSMakeRange(NSNotFound, 0);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+    {
+        wxImeEvent imeEvent(wxEVT_IME);
+        wxTextInputRange range(NSNotFound, 0);
+        imeEvent.SetClientData(&range);
+        imeEvent.type = wxImeEvent::eEvReqMarkedRange;
+        impl->imeEvent(imeEvent, self, _cmd);
+        nsRange = NSMakeRange(range.GetLocation(), range.GetLength());
+    }
+    return nsRange;
 }
 
 - (BOOL)hasMarkedText
 {
-    return NO;
+    BOOL hasMarkedText = NO;
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+    {
+        wxImeEvent imeEvent(wxEVT_IME);
+        bool hasText = false;
+        imeEvent.SetClientData(&hasText);
+        imeEvent.type = wxImeEvent::eEvReqHasMarkedText;
+        impl->imeEvent(imeEvent, self, _cmd);
+        hasMarkedText = hasText ? YES : NO;
+    }
+    return hasMarkedText;
 }
 
 - (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    wxUnusedVar(aRange);
-    wxUnusedVar(actualRange);
-    return nil;
+    // choose not to adjust the range, though we have the option
+    if (actualRange)
+        *actualRange = aRange;
+
+    NSAttributedString* nsAttributedString = nil;
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+    {
+        wxImeEvent imeEvent(wxEVT_IME);
+        wxImeEvent::AttributedSubstringData clientData;
+        clientData.proposedRange = wxTextInputRange(aRange.location, aRange.length);
+        imeEvent.SetClientData(&clientData);
+        imeEvent.type = wxImeEvent::eEvReqAttributedSubstring;
+        impl->imeEvent(imeEvent, self, _cmd);
+        nsAttributedString = [[[NSAttributedString alloc] initWithString:wxNSStringWithWxString(clientData.attributedSubstring)]autorelease];
+    }
+    return nsAttributedString;
 }
 
 - (NSArray*)validAttributesForMarkedText
 {
+    // don't allow attributes as we don't handle them in setMarkedText()
     return nil;
 }
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    wxUnusedVar(aRange);
-    wxUnusedVar(actualRange);
-    return NSMakeRect(0, 0, 0, 0);
+    NSRect nsRect = NSMakeRect(0, 0, 0, 0);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+    {
+        wxImeEvent imeEvent(wxEVT_IME);
+        wxImeEvent::FirstRectData clientData;
+        clientData.characterRange = wxTextInputRange(aRange.location, aRange.length);
+        imeEvent.SetClientData(&clientData);
+        imeEvent.type = wxImeEvent::eEvReqFirstRect;
+        impl->imeEvent(imeEvent, self, _cmd);
+        nsRect = wxToNSRect(nullptr, clientData.firstRect);
+    }
+    return nsRect;
 }
 - (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
 {
-    wxUnusedVar(aPoint);
-    return NSNotFound;
+    NSUInteger nsIndex = NSNotFound;
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+    {
+        wxImeEvent imeEvent(wxEVT_IME);
+        wxImeEvent::CharacterIndexData clientData;
+        clientData.point = wxFromNSPoint(nullptr, aPoint);
+        imeEvent.SetClientData(&clientData);
+        imeEvent.type = wxImeEvent::eEvReqCharacterIndex;
+        impl->imeEvent(imeEvent, self, _cmd);
+        nsIndex = clientData.index;
+    }
+    return nsIndex;
 }
 
 @end // wxNSView(TextInput)
@@ -2097,6 +2201,27 @@ void wxWidgetCocoaImpl::trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEven
     wxEvent.m_rawControlDown = modifiers & NSControlKeyMask;
     wxEvent.m_altDown = modifiers & NSAlternateKeyMask;
     wxEvent.m_controlDown = modifiers & NSCommandKeyMask;
+
+    wxWindowMac* peer = GetWXPeer();
+    if ( peer )
+    {
+        wxEvent.SetEventObject(peer);
+        wxEvent.SetId(peer->GetId());
+    }
+    GetWXPeer()->HandleWindowEvent(wxEvent);
+}
+
+void wxWidgetCocoaImpl::imeEvent(wxImeEvent wxEvent, WXWidget slf, void *_cmd)
+{
+    NSString* is = [[NSTextInputContext currentInputContext] selectedKeyboardInputSource];
+    if ([is hasPrefix:@"com.apple.inputmethod.Japanese"] || [is hasPrefix:@"com.apple.inputmethod.Kotoeri"])
+        wxEvent.inputSource = wxImeEvent::eIsJapanese;
+    if ([is hasPrefix:@"com.apple.inputmethod.Korean"])
+        wxEvent.inputSource = wxImeEvent::eIsKorean;
+    else if ([is hasPrefix:@"com.apple.inputmethod.TCIM"] || [is hasPrefix:@"com.apple.inputmethod.SCIM"])
+        wxEvent.inputSource = wxImeEvent::eIsChinese;
+
+    wxEvent.SetTimestamp( (int)([m_lastKeyDownEvent timestamp] * 1000) );
 
     wxWindowMac* peer = GetWXPeer();
     if ( peer )
