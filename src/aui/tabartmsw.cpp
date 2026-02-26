@@ -202,7 +202,11 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
         textRect.width -= m_closeBtnSize.x + wnd->FromDIP(3);
 
-    dc.SetFont(wnd->GetFont());
+    if (page.active)  // Bricsys change : "active" tab needs to use "SelectedFont"
+        dc.SetFont(m_selectedFont);
+    else
+        dc.SetFont(wnd->GetFont());
+
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     dc.DrawLabel(page.caption, page.bitmap.GetBitmapFor(wnd), textRect, wxALIGN_CENTRE);
 
@@ -289,7 +293,11 @@ wxSize wxAuiMSWTabArt::GetTabSize(wxDC& dc,
 
     wxCoord textWidth, textHeight, tmp;
 
-    dc.SetFont(wnd->GetFont());
+    if (active)  // Bricsys change : "active" tab needs to use "SelectedFont"
+        dc.SetFont(m_selectedFont);
+    else
+        dc.SetFont(wnd->GetFont());
+
     dc.GetTextExtent(caption, &textWidth, &tmp);
     dc.GetTextExtent("ABCDEFXj", &tmp, &textHeight);
 
