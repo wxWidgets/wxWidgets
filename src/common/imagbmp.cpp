@@ -528,7 +528,7 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0, amask = 0;
     int             rshift = 0, gshift = 0, bshift = 0, ashift = 0;
     int             rbits = 0, gbits = 0, bbits = 0;
-    wxInt8          bbuf[4];
+    wxUint8         bbuf[4];
     wxUint8         aByte;
     wxUint16        aWord;
 
