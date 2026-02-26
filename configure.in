@@ -4140,27 +4140,35 @@ if test "$wxUSE_SHARED" = "yes"; then
         install_name_tool=`which ${HOST_PREFIX}install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
+            dnl Note that the script below doesn't use realpath because it's
+            dnl only available since macOS 13 and doesn't even use readlink -f
+            dnl because this is only available since macOS 12, while we still
+            dnl need to support 10.10.
             cat <<EOF >change-install-names
 #!/bin/sh
 set -e
-libdir=\$(cd lib ; pwd -P)
-libnames=\$(cd lib ; ls -1 libwx*${WX_RELEASE}.dylib)
+[[ -z "\${WXDEBUG_X}" ]] || set -x
+destdir=\$1
+libdir=\$2
+bindir=\$3
+build_libdir=\$4
+libnames=\$(cd \${build_libdir}; printf '%s\n' libwx*${WX_RELEASE}.dylib)
 changes=''
-for dep in \${libnames} ; do
-    target=\$(readlink \${4}/\${dep})
-    changes="\${changes} -change \${libdir}\${target} \${3}/\${dep}"
+for libname in \${libnames} ; do
+    target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
+    changes="\${changes} -change \${build_libdir}/\${target} \${libdir}/\${target}"
 done
-for i in \${libnames} ; do
-    lib=\$(readlink \${1}/\${i})
-    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${libdir}/\${lib}
+for libname in \${libnames} ; do
+    target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${libdir}/\${libname} \${destdir}\${libdir}/\${target}
 done
 
-if test -f "\${2}/wxrc-${WX_RELEASE}" ; then
-    ${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}
+if test -f \${destdir}\${bindir}/wxrc-${WX_RELEASE} ; then
+    ${HOST_PREFIX}install_name_tool \${changes} \${destdir}\${bindir}/wxrc-${WX_RELEASE}
 fi
 EOF
             chmod +x change-install-names
-            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \${DESTDIR}\${bindir} \${libdir} \$(wx_top_builddir)/lib"
+            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \"\${DESTDIR}\" \${libdir} \${bindir} \$(wx_top_builddir)/lib"
         fi
 
         dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:

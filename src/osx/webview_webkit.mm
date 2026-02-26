@@ -133,7 +133,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
         {
             for (wxStringToWebHandlerMap::iterator it = m_handlers.begin(); it != m_handlers.end(); it++)
             {
-                [webViewConfig setURLSchemeHandler:[[WebViewCustomProtocol alloc] initWithHandler:it->second.get()]
+                [webViewConfig setURLSchemeHandler:[[[WebViewCustomProtocol alloc] initWithHandler:it->second.get()] autorelease]
                                             forURLScheme:wxCFStringRef(it->first).AsNSString()];
             }
         }
@@ -202,7 +202,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
         document.webkitFullscreenEnabled = true; \
     ");
     [m_webView.configuration.userContentController addScriptMessageHandler:
-        [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:@"__wxfullscreen"];
+        [[[WebViewScriptMessageHandler alloc] initWithWxWindow:this] autorelease] name:@"__wxfullscreen"];
 
     m_UIDelegate = uiDelegate;
 
@@ -426,7 +426,7 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, void* clientDat
 bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
 {
     [m_webView.configuration.userContentController addScriptMessageHandler:
-        [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:wxCFStringRef(name).AsNSString()];
+        [[[WebViewScriptMessageHandler alloc] initWithWxWindow:this] autorelease] name:wxCFStringRef(name).AsNSString()];
     // Make webkit message handler available under common name
     wxString js = wxString::Format("window.%s = window.webkit.messageHandlers.%s;",
             name, name);
@@ -450,6 +450,7 @@ bool wxWebViewWebKit::AddUserScript(const wxString& javascript,
                 WKUserScriptInjectionTimeAtDocumentStart : WKUserScriptInjectionTimeAtDocumentEnd
             forMainFrameOnly:NO];
     [m_webView.configuration.userContentController addUserScript:userScript];
+    [userScript release];
     return true;
 }
 

@@ -17,13 +17,8 @@
 
 #if wxUSE_CAIRO
 
-#ifndef __WXGTK20__
-// keep cairo.h from defining dllimport as we're defining the symbols inside
-// the wx dll in order to load them dynamically.
-#define cairo_public
-#endif
+#include "wx/private/cairo.h"
 
-#include <cairo.h>
 #include <float.h>
 
 bool wxCairoInit();

@@ -857,7 +857,9 @@ void DateTimeTestCase::TestTimeFormat()
 
     CPPUNIT_ASSERT(wxDateTime::Now().Format("%%") == "%");
 
-    wxDateTime dt;
+
+    wxDateTime dt(29, wxDateTime::May, 1976, 18, 30, 15, 678);
+    CPPUNIT_ASSERT_EQUAL( dt.Format("%F %T.%l"), "1976-05-29 18:30:15.678" );
 
 #if 0
     // special case which was known to fail
