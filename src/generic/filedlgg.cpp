@@ -77,6 +77,8 @@
 #define IsTopMostDir(dir)   (dir == wxT("/"))
 #endif
 
+#ifdef wxHAS_GENERIC_FILEDIALOG
+
 //-----------------------------------------------------------------------------
 // wxGenericFileDialog
 //-----------------------------------------------------------------------------
@@ -417,11 +419,13 @@ void wxGenericFileDialog::OnUpdateButtonsUI(wxUpdateUIEvent& event)
 
     UpdateExtraControlUI();
 }
+#endif //  wxHAS_GENERIC_FILEDIALOG
 
-#ifdef wxHAS_GENERIC_FILEDIALOG
+//Bricsys change: consistent use of wxHAS_GENERIC_FILEDIALOG and wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
+#ifdef wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog);
 
-#endif // wxHAS_GENERIC_FILEDIALOG
+#endif // wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
 
 #endif // wxUSE_FILEDLG

@@ -284,7 +284,9 @@ wxSaveFileSelector(const wxString& what,
 
 
 #if defined (__WXUNIVERSAL__)
-    #define wxHAS_GENERIC_FILEDIALOG
+    //Bricsys change: consistent use of wxHAS_GENERIC_FILEDIALOG and wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
+    #define wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
+    #define wxHAS_GENERIC_FILEDIALOG  // only for wxGenericFileDialog
     #include "wx/generic/filedlgg.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/filedlg.h"
@@ -295,6 +297,8 @@ wxSaveFileSelector(const wxString& what,
 #elif defined(__WXGTK__)
     #include "wx/gtk1/filedlg.h"
 #elif defined(__WXMAC__)
+    //Bricsys change: consistent use of wxHAS_GENERIC_FILEDIALOG and wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
+    #define wxHAS_GENERIC_FILEDIALOG  // only for wxGenericFileDialog
     #include "wx/osx/filedlg.h"
 #elif defined(__WXQT__)
     #include "wx/qt/filedlg.h"

@@ -27,6 +27,8 @@ class WXDLLIMPEXP_FWD_CORE wxGenericFileCtrl;
 class WXDLLIMPEXP_FWD_CORE wxGenericFileDialog;
 class WXDLLIMPEXP_FWD_CORE wxFileCtrlEvent;
 
+#ifdef wxHAS_GENERIC_FILEDIALOG
+
 //-------------------------------------------------------------------------
 // wxGenericFileDialog
 //-------------------------------------------------------------------------
@@ -135,7 +137,10 @@ private:
     static bool ms_lastShowHidden;    // did we show hidden files?
 };
 
-#ifdef wxHAS_GENERIC_FILEDIALOG
+#endif // wxHAS_GENERIC_FILEDIALOG
+
+//Bricsys change: consistent use of wxHAS_GENERIC_FILEDIALOG and wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
+#ifdef wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
 
 class WXDLLIMPEXP_CORE wxFileDialog: public wxGenericFileDialog
 {
@@ -161,6 +166,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
 };
 
-#endif // wxHAS_GENERIC_FILEDIALOG
+#endif // wxUSE_GENERIC_FILEDIALOG_AS_NATIVE
 
 #endif // _WX_FILEDLGG_H_
