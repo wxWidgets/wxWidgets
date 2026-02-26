@@ -104,7 +104,7 @@ public:
     // ask the event loop to exit with the given exit code, can be used even if
     // this loop is not running right now but the loop must have been started,
     // i.e. Run() should have been already called
-    virtual void ScheduleExit(int rc = 0) = 0;
+    void ScheduleExit(int rc = 0);
 
     // return true if any events are available
     virtual bool Pending() const = 0;
@@ -185,6 +185,9 @@ protected:
     // real implementation of Run()
     virtual int DoRun() = 0;
 
+    // Stop the (known to be currently running) loop.
+    virtual void DoStop(int rc) = 0;
+
     // And the real, port-specific, implementation of YieldFor().
     //
     // The base class version is pure virtual to ensure that it is overridden
@@ -236,14 +239,13 @@ class WXDLLIMPEXP_BASE wxEventLoopManual : public wxEventLoopBase
 public:
     wxEventLoopManual();
 
-    // sets the "should exit" flag and wakes up the loop so that it terminates
-    // soon
-    virtual void ScheduleExit(int rc = 0) wxOVERRIDE;
-
 protected:
     // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
     // terminating when Exit() is called
     virtual int DoRun() wxOVERRIDE;
+
+    // asks for the loop to stop, called from ScheduleExit()
+    virtual void DoStop(int rc) override;
 
     // may be overridden to perform some action at the start of each new event
     // loop iteration
@@ -310,7 +312,6 @@ public:
     wxGUIEventLoop() { m_impl = NULL; }
     virtual ~wxGUIEventLoop();
 
-    virtual void ScheduleExit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout)
@@ -331,6 +332,7 @@ public:
 
 protected:
     virtual int DoRun();
+    virtual void DoStop(int rc);
     virtual void DoYieldFor(long eventsToProcess);
 
     // the pointer to the port specific implementation class

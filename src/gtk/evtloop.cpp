@@ -72,8 +72,6 @@ int wxGUIEventLoop::DoRun()
         gtk_main_quit();
     }
 
-    OnExit();
-
 #if wxUSE_EXCEPTIONS
     // Rethrow any exceptions which could have been produced by the handlers
     // ran by the event loop.
@@ -84,13 +82,9 @@ int wxGUIEventLoop::DoRun()
     return m_exitcode;
 }
 
-void wxGUIEventLoop::ScheduleExit(int rc)
+void wxGUIEventLoop::DoStop(int rc)
 {
-    wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not started") );
-
     m_exitcode = rc;
-
-    m_shouldExit = true;
 
     gtk_main_quit();
 }
