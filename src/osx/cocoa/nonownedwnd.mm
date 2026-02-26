@@ -130,10 +130,15 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
         wxWindow* cw = wxWindow::GetCapture();
         if ( cw != NULL )
         {
-            if (wxTheApp)
-                wxTheApp->MacSetCurrentEvent(event, NULL);
-            ((wxWidgetCocoaImpl*)cw->GetPeer())->DoHandleMouseEvent( event);
-            handled = true;
+            //Bricsys change: sanity check of peer
+            wxWidgetCocoaImpl* peer = (wxWidgetCocoaImpl*)cw->GetPeer();
+            if( (peer != NULL) && peer->IsOk())
+            {
+                if (wxTheApp)
+                    wxTheApp->MacSetCurrentEvent(event, NULL);
+                peer->DoHandleMouseEvent( event);
+                handled = true;
+            }
         }
         if ( handled )
         {

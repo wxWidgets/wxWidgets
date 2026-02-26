@@ -48,47 +48,47 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 
 wxString wxMessageDialog::GetDefaultYesLabel() const
 {
-#ifdef __WXGTK4__
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_YES));
 #else
     return "gtk-yes";
-#endif
+#endif // GTK >= 3.10 / < 3.10
 }
 
 wxString wxMessageDialog::GetDefaultNoLabel() const
 {
-#ifdef __WXGTK4__
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_NO));
 #else
     return "gtk-no";
-#endif
+#endif // GTK >= 3.10 / < 3.10
 }
 
 wxString wxMessageDialog::GetDefaultOKLabel() const
 {
-#ifdef __WXGTK4__
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OK));
 #else
     return "gtk-ok";
-#endif
+#endif // GTK >= 3.10 / < 3.10
 }
 
 wxString wxMessageDialog::GetDefaultCancelLabel() const
 {
-#ifdef __WXGTK4__
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL));
 #else
     return "gtk-cancel";
-#endif
+#endif // GTK >= 3.10 / < 3.10
 }
 
 wxString wxMessageDialog::GetDefaultHelpLabel() const
 {
-#ifdef __WXGTK4__
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_HELP));
 #else
     return "gtk-help";
-#endif
+#endif // GTK >= 3.10 / < 3.10
 }
 
 void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
@@ -101,11 +101,11 @@ void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
     }
     else // stock label
     {
-#ifdef __WXGTK4__
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
         var = wxConvertMnemonicsToGTK(wxGetStockLabel(stockId));
 #else
         var = wxGetStockGtkID(stockId);
-#endif
+#endif // GTK >= 3.10 / < 3.10
     }
 }
 
@@ -233,29 +233,16 @@ void wxMessageDialog::GTKCreateMsgDialog()
             //
             // [Help]                  [Alternative] [Cancel] [Affirmative]
 
-            //bricscad change
-            //use stock labels rather than stock ids
-            //this avoid a translation problem with gtk stock items
-            wxCharBuffer noLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_NO)));
-            wxCharBuffer cancelLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL)));
-            wxCharBuffer yesLabel = wxConvUTF8.cWX2MB(wxControl::GTKConvertMnemonics(wxGetStockLabel(wxID_YES)));
-            const gchar* gtk_no_label = noLabel;
-            const gchar* gtk_cancel_label = cancelLabel;
-            const gchar* gtk_yes_label = yesLabel;
-
-            gtk_dialog_add_button(dlg,
-                                  gtk_no_label,
+            gtk_dialog_add_button(dlg, wxGTK_CONV(GetNoLabel()),
                                   GTK_RESPONSE_NO);
 
             if ( m_dialogStyle & wxCANCEL )
             {
-                gtk_dialog_add_button(dlg,
-                                      gtk_cancel_label,
+                gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
                                       GTK_RESPONSE_CANCEL);
             }
 
-            gtk_dialog_add_button(dlg,
-                                  gtk_yes_label,
+            gtk_dialog_add_button(dlg, wxGTK_CONV(GetYesLabel()),
                                   GTK_RESPONSE_YES);
         }
         else // Ok or Ok/Cancel dialog
