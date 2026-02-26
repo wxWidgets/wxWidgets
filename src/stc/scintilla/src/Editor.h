@@ -379,9 +379,6 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	void PaintSelMargin(Surface *surface, PRectangle &rc);
 	void RefreshPixMaps(Surface *surfaceWindow);
-#if 1 // Bricsys change for proper matching/mismatching brace repaint
-    bool VerifyChangedBraces(const Position prevBraces[2]);
-#endif
     void Paint(Surface *surfaceWindow, PRectangle rcArea);
 	long FormatRange(bool draw, Sci_RangeToFormat *pfr);
 	int TextWidth(int style, const char *text);
