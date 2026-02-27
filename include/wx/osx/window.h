@@ -257,6 +257,11 @@ public:
                                            int& x, int& y,
                                            int& w, int& h , bool adjustForOrigin ) const ;
 
+    // Bricsys change: associate QNSView to the wx widget
+    void MacAssociateQtSubViews();
+    void MacRemoveQtAssociations();
+    // end Bricsys change
+
     // the 'true' OS level control for this wxWindow
     wxOSXWidgetImpl*    GetPeer() const;
 

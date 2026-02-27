@@ -23,6 +23,7 @@
     #include "wx/mousestate.h"
 #if defined(__WXMAC__)
     #include "wx/trackpadstate.h"
+    #include "wx/range.h"
 #endif
 #endif
 
@@ -703,6 +704,7 @@ class WXDLLIMPEXP_FWD_CORE wxClipboardTextEvent;
 class WXDLLIMPEXP_FWD_CORE wxHelpEvent;
 #if defined(__WXMAC__)
 class WXDLLIMPEXP_FWD_CORE wxTrackPadEvent;
+class WXDLLIMPEXP_FWD_CORE wxImeEvent;
 #endif
 class WXDLLIMPEXP_FWD_CORE wxGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxPanGestureEvent;
@@ -771,6 +773,8 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PINCH, wxTrackPadEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PAN, wxTrackPadEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TAP, wxTrackPadEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_RUBBER_SHEET, wxTrackPadEvent);
+// IME event
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_IME, wxImeEvent);
 #endif
 
     // Character input event type
@@ -1815,6 +1819,73 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxTrackPadEvent)
 
+};
+
+class WXDLLIMPEXP_CORE wxImeEvent : public wxEvent
+{
+public:
+    wxImeEvent(wxEventType imeEventType = wxEVT_NULL);
+
+    virtual wxEvent *Clone() const { return new wxImeEvent(*this); }
+    virtual wxEventCategory GetEventCategory() const { return wxEVT_CATEGORY_NATIVE_EVENTS; }
+
+    void SetClientData(void* clientData) { m_clientData = clientData; }
+    void *GetClientData() const { return m_clientData; }
+
+public:
+    struct SetMarkedTextData
+    {
+        wxString string;
+        wxTextInputRange selectedRange = {0, 0};
+        wxTextInputRange replacementRange;
+    };
+
+    struct FirstRectData
+    {
+        wxTextInputRange characterRange;
+        wxRect firstRect;
+    };
+
+    struct AttributedSubstringData
+    {
+        wxTextInputRange proposedRange;
+        wxString attributedSubstring;
+    };
+
+    struct CharacterIndexData
+    {
+        wxPoint point;
+        unsigned long index = -1;
+    };
+
+    enum EEventType
+    {
+        eEvNone = 0,
+        eEvActSetMarkedText, // actions
+        eEvActUnmarkText,
+        eEvReqSelectedRange, // requests
+        eEvReqMarkedRange,
+        eEvReqHasMarkedText,
+        eEvReqAttributedSubstring,
+        eEvReqFirstRect,
+        eEvReqCharacterIndex
+    };
+    EEventType type = eEvNone;
+ 
+    enum EInputSource
+    {
+        eIsDefault = 0,
+        eIsJapanese,
+        eIsKorean,
+        eIsChinese
+    };
+    EInputSource inputSource = eIsDefault;
+
+protected:
+    void* m_clientData = nullptr;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxImeEvent)
 };
 #endif
 
@@ -4292,6 +4363,7 @@ typedef void (wxEvtHandler::*wxMouseCaptureLostEventFunction)(wxMouseCaptureLost
 typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&);
 #if defined(__WXMAC__)
 typedef void (wxEvtHandler::*wxTrackPadEventFunction)(wxTrackPadEvent&);
+typedef void (wxEvtHandler::*wxImeEventFunction)(wxImeEvent&);
 #endif
 typedef void (wxEvtHandler::*wxPanGestureEventFunction)(wxPanGestureEvent&);
 typedef void (wxEvtHandler::*wxZoomGestureEventFunction)(wxZoomGestureEvent&);
@@ -4379,6 +4451,8 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
 #if defined(__WXMAC__)
 #define wxTrackPadEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxTrackPadEventFunction, func)
+#define wxImeEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxImeEventFunction, func)
 #endif
 #define wxPanGestureEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxPanGestureEventFunction, func)
@@ -4617,13 +4691,15 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
 #define EVT_MOUSE_CAPTURE_LOST(func) wx__DECLARE_EVT0(wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEventHandler(func))
 #define EVT_FULLSCREEN(func) wx__DECLARE_EVT0(wxEVT_FULLSCREEN, wxFullScreenEventHandler(func))
 
-//Trackpad events
 #if defined(__WXMAC__)
+//Trackpad events
 #define EVT_ROTATE(func) wx__DECLARE_EVT0(wxEVT_ROTATE, wxTrackPadEventHandler(func))
 #define EVT_PINCH(func) wx__DECLARE_EVT0(wxEVT_PINCH, wxTrackPadEventHandler(func))
 #define EVT_PAN(func) wx__DECLARE_EVT0(wxEVT_PAN, wxTrackPadEventHandler(func))
 #define EVT_TAP(func) wx__DECLARE_EVT0(wxEVT_TAP, wxTrackPadEventHandler(func))
 #define EVT_RUBBER_SHEET(func) wx__DECLARE_EVT0(wxEVT_RUBBER_SHEET, wxTrackPadEventHandler(func))
+//IME event
+#define EVT_IME(func) wx__DECLARE_EVT0(wxEVT_IME, wxImeEventHandler(func))
 #endif
 
 // All trackpad events

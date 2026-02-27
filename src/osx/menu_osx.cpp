@@ -491,12 +491,10 @@ static wxMenu *CreateAppleMenu()
                                      wxTheApp->GetAppDisplayName());
     else
         hideLabel = wxGETTEXT_IN_CONTEXT("macOS menu item", "Hide Application");
-    appleMenu->Append( wxID_OSX_HIDE, hideLabel + "\tCtrl+H" );
-    appleMenu->Append( wxID_OSX_HIDEOTHERS,
-                       wxString::Format("%s\tAlt+Ctrl+H",
-                                        wxGETTEXT_IN_CONTEXT("macOS menu item", "Hide Others")) );
-    appleMenu->Append( wxID_OSX_SHOWALL,
-                       wxGETTEXT_IN_CONTEXT("macOS menu item", "Show All") );
+    appleMenu->Append( wxApp::s_macHideMenuItemId, hideLabel + "\tCtrl+H" );
+    appleMenu->Append( wxApp::s_macHideOthersMenuItemId, wxGetTranslation("Hide Others")+"\tAlt+Ctrl+H" );
+    appleMenu->Append( wxApp::s_macShowAllMenuItemId, wxGetTranslation("Show All") );
+    appleMenu->FindItem(wxApp::s_macShowAllMenuItemId)->Enable(false);
     appleMenu->AppendSeparator();
     
     // Do always add "Quit" item unconditionally however, it can't be disabled.
@@ -525,6 +523,7 @@ void wxMenuBar::Init()
     m_rootMenu->Attach(this);
 
     m_appleMenu = CreateAppleMenu();
+    wxTheApp->m_pAppMenuOSX = m_appleMenu;
     m_rootMenu->AppendSubMenu(m_appleMenu, "\x14") ;
 }
 
@@ -591,19 +590,7 @@ void wxMenuBar::MacInstallMenuBar()
     
     wxMenuItem* appleItem = NULL;
     wxMenuItem* wxItem = NULL;
-
-    int menuid = wxApp::s_macAboutMenuItemId;
-    appleItem = m_appleMenu->FindItem(menuid);
-    wxItem = FindItem(menuid);
-    if ( appleItem != NULL )
-    {
-        if ( wxItem == NULL )
-            appleItem->GetPeer()->Hide();
-        else 
-            appleItem->SetItemLabel(wxItem->GetItemLabel());
-    }
-    
-    menuid = wxApp::s_macPreferencesMenuItemId;
+    int menuid = wxApp::s_macPreferencesMenuItemId;
     appleItem = m_appleMenu->FindItem(menuid);
     wxItem = FindItem(menuid);
     if ( appleItem != NULL )

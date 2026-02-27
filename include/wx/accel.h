@@ -52,6 +52,7 @@ public:
         : m_flags(flags)
         , m_keyCode(keyCode)
         , m_command(cmd)
+        , m_isEnabled(true)
         , m_item(item)
         { }
 
@@ -96,6 +97,9 @@ public:
         return  m_keyCode != 0;
     }
 
+    // Bricsys change: add support for entry enable/disable
+    bool IsEnabled() const { return m_isEnabled; }
+    bool Enable( bool enable ){ bool ret = m_isEnabled; m_isEnabled = enable; return ret; }
 
     // string <-> wxAcceleratorEntry conversion
     // ----------------------------------------
@@ -125,6 +129,9 @@ private:
     int m_flags;    // combination of wxACCEL_XXX constants
     int m_keyCode;  // ASCII or virtual keycode
     int m_command;  // Command id to generate
+
+    // Bricsys change: add support for entry enable/disable
+    bool m_isEnabled;
 
     // the menu item this entry corresponds to, may be NULL
     wxMenuItem *m_item;

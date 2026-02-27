@@ -114,6 +114,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxPressAndTapEvent, wxGestureEvent);
 #if defined(__WXMAC__)
     IMPLEMENT_DYNAMIC_CLASS(wxTrackPadEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxImeEvent, wxEvent)
 #endif
 #endif // wxUSE_GUI
 
@@ -227,6 +228,8 @@ wxDEFINE_EVENT( wxEVT_PINCH, wxTrackPadEvent );
 wxDEFINE_EVENT( wxEVT_PAN, wxTrackPadEvent );
 wxDEFINE_EVENT( wxEVT_TAP, wxTrackPadEvent );
 wxDEFINE_EVENT( wxEVT_RUBBER_SHEET, wxTrackPadEvent );
+// IME event
+wxDEFINE_EVENT( wxEVT_IME, wxImeEvent );
 #endif
 
 // Character input event type
@@ -781,6 +784,15 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
 // ----------------------------------------------------------------------------
 
 wxTrackPadEvent::wxTrackPadEvent(wxEventType commandType)
+{
+    m_eventType = commandType;
+}
+
+// ----------------------------------------------------------------------------
+// wxImeEvent
+// ----------------------------------------------------------------------------
+
+wxImeEvent::wxImeEvent(wxEventType commandType)
 {
     m_eventType = commandType;
 }

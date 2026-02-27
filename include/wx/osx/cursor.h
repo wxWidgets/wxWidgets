@@ -19,6 +19,11 @@ class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 public:
     wxCursor();
 
+// Bricsys change: allow cursor being created directly from wxBitmap on wxOSX_COCOA
+// it is better than going through wxImage then coming back to wxBitmap again
+#ifdef wxOSX_USE_COCOA
+    wxCursor( const wxBitmap &bmp, int hotSpotX, int hotSpotY );
+#endif //wxOSX_USE_COCOA
 #if wxUSE_IMAGE
     wxCursor(const wxImage & image) ;
     wxCursor(const char* const* xpmData);

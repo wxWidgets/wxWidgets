@@ -16,6 +16,8 @@
 #include "wx/gdicmn.h"
 #include "wx/event.h"
 
+#include "wx/menu.h"
+
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindowMac;
 class WXDLLIMPEXP_FWD_CORE wxApp ;
@@ -88,11 +90,17 @@ public:
     void                  MacAddToAutorelease( void* cfrefobj );
     void                  MacReleaseAutoreleasePool();
 
+    //methods for Menu items functionality : Hide, Hide others, Show all, Quit
+    void hideAppOSX();
+    void hideOtherApplicationsOSX();
+    void showOtherApplicationsOSX();
+
 public:
     static wxWindow*      s_captureWindow ;
     static long           s_lastModifiers ;
 
     int                   m_nCmdShow;
+    wxMenu*               m_pAppMenuOSX;
 
     // mac specifics
 protected:
@@ -113,6 +121,9 @@ public:
     static long           s_macAboutMenuItemId ;
     static long           s_macPreferencesMenuItemId ;
     static long           s_macExitMenuItemId ;
+    static long           s_macHideMenuItemId ;
+    static long           s_macHideOthersMenuItemId;
+    static long           s_macShowAllMenuItemId;
     static wxString       s_macHelpMenuTitleName ;
     static wxString       s_macWindowMenuTitleName ;
 
@@ -157,10 +168,14 @@ public:
     // before application terminates
     virtual void         OSXOnWillTerminate();
 
+// Bricsys change: needed in WxcApp::parseCommandLine()
+protected:
+    wxArrayString       m_openFiles;
+// end Bricsys change
+
 private:
     bool                m_onInitResult;
     bool                m_inited;
-    wxArrayString       m_openFiles;
     wxArrayString       m_printFiles;
     wxString            m_getURL;
 

@@ -162,6 +162,7 @@ public :
     virtual ~wxMenuItemImpl() ;
     virtual void SetBitmap( const wxBitmapBundle& bitmap ) = 0;
     virtual void Enable( bool enable ) = 0;
+    virtual void SetModalStatus(bool status) = 0;
     virtual void Check( bool check ) = 0;
     virtual void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) = 0;
     virtual void Hide( bool hide = true ) = 0;
@@ -381,6 +382,11 @@ public :
     // and SendEvents(true) at the end of the block.
     virtual void        SendEvents(bool shouldSendEvents) { m_shouldSendEvents = shouldSendEvents; }
     virtual bool        ShouldSendEvents() { return m_shouldSendEvents; }
+
+    // Bricsys change: implemented only in wxWidgetCocoaImpl
+    virtual void        AssociateQtSubViews(){}
+    virtual void        RemoveQtAssociations(){}
+    // end Bricsys change
 
     // static methods for associating native controls and their implementations
 

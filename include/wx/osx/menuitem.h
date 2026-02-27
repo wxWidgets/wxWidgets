@@ -56,6 +56,7 @@ public:
     void UpdateItemBitmap() ;
     void UpdateItemText() ;
     void UpdateItemStatus() ;
+    void UpdateModalStatus(bool status);
 
     wxMenuItemImpl* GetPeer() { return m_peer; }
 private:

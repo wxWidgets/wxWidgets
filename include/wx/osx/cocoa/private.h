@@ -216,6 +216,7 @@ public :
     virtual void                touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd, int touchEventType);
     virtual void                gestureEvents(WX_NSEvent event, WXWidget slf, void *_cmd);
     virtual void                trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEvent, WXWidget slf, void* _cmd);
+    virtual void                imeEvent(wxImeEvent wxEvent, WXWidget slf, void* _cmd);
     virtual void                mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                cursorUpdate(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
@@ -236,6 +237,10 @@ public :
     // for wxTextCtrl-derived classes, put here since they don't all derive
     // from the same pimpl class.
     virtual void                controlTextDidChange();
+
+    // Bricsys change:
+    void                        AssociateQtSubViews();
+    // end Bricsys change
 
     virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) wxOVERRIDE;
     virtual void                UseClippingView(bool clip) wxOVERRIDE;
@@ -507,9 +512,11 @@ public:
     @interface wxNSMenuItem : NSMenuItem
     {
        wxMenuItemImpl* impl;
+       BOOL worksInModal;
     }
 
     - (void) setImplementation:(wxMenuItemImpl*) item;
+    - (void) setModalStatus:(BOOL) status;
     - (wxMenuItemImpl*) implementation;
 
     - (void)clickedAction:(id)sender;
