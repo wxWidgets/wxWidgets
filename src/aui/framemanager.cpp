@@ -2447,7 +2447,13 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
         if (min_size == wxDefaultSize)
         {
             min_size = pane.best_size;
-            pane_proportion = 0;
+
+            // Toolbars may be fixed, i.e. non-resizable, but still need to
+            // stretch if they contain stretchable spacers, so we should avoid
+            // setting their proportion to 0 in this case.
+            auto* const toolbar = wxDynamicCast(pane.window, wxAuiToolBar);
+            if (!toolbar || !toolbar->CanStretch())
+                pane_proportion = 0;
         }
     }
 

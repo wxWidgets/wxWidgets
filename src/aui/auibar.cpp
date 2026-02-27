@@ -2207,6 +2207,17 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     return true;
 }
 
+bool wxAuiToolBar::CanStretch() const
+{
+    for (auto const& item : m_items)
+    {
+        if (item.m_proportion)
+            return true;
+    }
+
+    return false;
+}
+
 int wxAuiToolBar::GetOverflowState() const
 {
     return m_overflowState;
