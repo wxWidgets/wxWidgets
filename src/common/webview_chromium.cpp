@@ -19,6 +19,7 @@
 #include "wx/app.h"
 #include "wx/base64.h"
 #include "wx/module.h"
+#include "wx/link.h"
 
 #include "wx/private/init.h"
 #ifdef __WXMSW__
@@ -2302,6 +2303,10 @@ private:
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromiumModule, wxModule);
+
+// Allow the user code to use wxFORCE_LINK_MODULE() to ensure that this object
+// file is not discarded by the linker.
+wxFORCE_LINK_THIS_MODULE(WebViewChromium)
 
 // ----------------------------------------------------------------------------
 // wxWebViewChromiumEvent

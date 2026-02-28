@@ -15,6 +15,7 @@
 #include "wx/webview.h"
 #include "wx/filesys.h"
 #include "wx/mstream.h"
+#include "wx/link.h"
 #include "wx/private/webview.h"
 
 #if defined(__WXOSX__)
@@ -534,5 +535,10 @@ void wxWebView::InitFactoryMap()
                                                        (new wxWebViewFactoryWebKit));
 #endif
 }
+
+// Ensure the wxWebViewChromiumModule is linked in in static builds
+#if wxUSE_WEBVIEW_CHROMIUM
+    wxFORCE_LINK_MODULE(WebViewChromium)
+#endif
 
 #endif // wxUSE_WEBVIEW
