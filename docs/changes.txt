@@ -252,7 +252,7 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.10: (released 2026-??-??)
+3.2.10: (released 2026-03-03)
 -----------------------------
 
 All (GUI):
