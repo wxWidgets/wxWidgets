@@ -349,6 +349,32 @@ bool wxConcatFiles(const wxString& src1,
 bool wxRemoveFile(const wxString& file);
 
 /**
+    Moves @a path to the system trash or recycle bin.
+
+    This works for both files and directories. The item is not permanently
+    deleted and can be restored by the user from the platform's trash
+    facility.
+
+    Preprocessor symbol @c wxHAS_MOVE_TO_TRASH is defined if this function is
+    supported on the current platform. If it is not defined, the function still
+    exists but always returns @false without doing anything else.
+
+    Implementation details:
+    - Under Windows, this uses @c SHFileOperation with @c FOF_ALLOWUNDO.
+    - Under macOS, this uses @c NSFileManager's @c trashItemAtURL method.
+    - Under Unix systems (including Linux and BSD), this uses @c g_file_trash.
+
+    @returns @true on success or @false if the operation failed in which case
+        an error message will have been logged using wxLogError() and the file
+        or directory at @a path is left in place.
+
+    @since 3.3.3
+
+    @header{wx/filefn.h}
+*/
+bool wxMoveToTrash(const wxString& path);
+
+/**
     File permission bit names.
 
     We define these constants in wxWidgets because S_IREAD &c are not standard.
