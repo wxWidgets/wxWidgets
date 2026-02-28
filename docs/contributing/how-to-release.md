@@ -125,7 +125,9 @@ Update https://www.wxwidgets.org:
   anything else, the page will dynamically show the release files with the
   specified prefixes).
 * Add a news item. Usually a news item is enough but something
-  more can be called for major releases
+  more can be called for major releases.
+* Also add `promoted: false` to the front matter of the previous release
+  post, as it's not useful to show it on the front page any more.
 * Push the changes (or create the PR with them) to GitHub. Note that this will
   trigger the site rebuild which will fail if the release statistics are not
   available yet, so make sure to publish the release on GitHub first (or wait
