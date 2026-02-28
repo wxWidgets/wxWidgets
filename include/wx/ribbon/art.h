@@ -790,6 +790,108 @@ protected:
     int m_help_button_offset;
 };
 
+class WXDLLIMPEXP_RIBBON wxRibbonMSWFlatArtProvider : public wxRibbonMSWArtProvider
+{
+public:
+    wxRibbonMSWFlatArtProvider();
+    virtual ~wxRibbonMSWFlatArtProvider();
+
+    wxNODISCARD wxRibbonArtProvider* Clone() const override;
+
+    void DrawTab(wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRibbonPageTabInfo& tab) override;
+
+    void DrawTabSeparator(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        double visibility) override;
+
+    void DrawPageBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) override;
+
+    void DrawScrollButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        long style) override;
+
+    void DrawPanelBackground(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect) override;
+
+    void DrawGalleryBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect) override;
+
+    void DrawGalleryItemBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect,
+                        wxRibbonGalleryItem* item) override;
+
+    void DrawMinimisedPanel(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect,
+                        wxBitmap& bitmap) override;
+
+    void DrawButtonBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) override;
+
+    void DrawButtonBarButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        wxRibbonButtonKind kind,
+                        long state,
+                        const wxString& label,
+                        const wxBitmap& bitmap_large,
+                        const wxBitmap& bitmap_small) override;
+
+    void DrawToolBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) override;
+
+    void DrawTool(
+                wxDC& dc,
+                wxWindow* wnd,
+                const wxRect& rect,
+                const wxBitmap& bitmap,
+                wxRibbonButtonKind kind,
+                long state) override;
+
+    void DrawToggleButton(
+                        wxDC& dc,
+                        wxRibbonBar* wnd,
+                        const wxRect& rect,
+                        wxRibbonDisplayMode mode) override;
+
+    void DrawHelpButton(wxDC& dc,
+                        wxRibbonBar* wnd,
+                        const wxRect& rect) override;
+
+protected:
+    void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& r,
+        wxRibbonPage* page, wxPoint offset, bool hovered = false);
+    void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd,
+        const wxRect& rect, bool allow_hovered = true);
+    void DrawGalleryButton(wxDC& dc, wxRect rect,
+        wxRibbonGalleryButtonState state, wxBitmap* bitmaps) override;
+    void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primary_colour,
+        wxPen& secondary_colour);
+    void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect,
+        double visibility);
+};
+
 class WXDLLIMPEXP_RIBBON wxRibbonAUIArtProvider : public wxRibbonMSWArtProvider
 {
 public:

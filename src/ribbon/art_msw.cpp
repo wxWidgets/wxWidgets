@@ -1449,6 +1449,9 @@ void wxRibbonMSWArtProvider::DrawTab(
         }
     }
 
+    if ( tab.page == nullptr )
+        return;
+
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
     {
         wxBitmap icon = tab.page->GetIcon();
@@ -1502,7 +1505,7 @@ void wxRibbonMSWArtProvider::DrawTab(
 
             if(width <= text_width)
             {
-                dc.SetClippingRegion(x, tab.rect.y, width, tab.rect.height);
+                wxDCClipper clip(dc, x, tab.rect.y, width, tab.rect.height);
                 dc.DrawText(label, x, y);
             }
             else
@@ -1948,7 +1951,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
             {
                 // Room for some characters and ...
                 // Display as many characters as possible and append ...
-                for(size_t len = label.Len() - 1; len >= 3; --len)
+                for( int len = wxSsize(label) - 1; len >= 3; --len )
                 {
                     new_label = label.Mid(0, len) + "...";
                     label_size = dc.GetTextExtent(new_label);

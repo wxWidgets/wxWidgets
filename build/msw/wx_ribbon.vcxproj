@@ -859,6 +859,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64EC'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\ribbon\art_aui.cpp" />
+    <ClCompile Include="..\..\src\ribbon\art_msw_flat.cpp" />
     <ClCompile Include="..\..\src\ribbon\art_internal.cpp" />
     <ClCompile Include="..\..\src\ribbon\art_msw.cpp" />
     <ClCompile Include="..\..\src\ribbon\bar.cpp" />

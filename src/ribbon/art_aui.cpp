@@ -501,8 +501,10 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
                 dc.DrawBitmap(icon, x - offset, tab.rect.y + (tab.rect.height -
                     icon.GetLogicalHeight()) / 2, true);
             }
-            dc.SetClippingRegion(x, tab.rect.y, width, tab.rect.height);
-            dc.DrawText(label, x, y);
+            {
+                wxDCClipper clip(dc, x, tab.rect.y, width, tab.rect.height);
+                dc.DrawText(label, x, y);
+            }
         }
     }
 

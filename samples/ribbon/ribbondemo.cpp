@@ -63,6 +63,7 @@ public:
         ID_DEFAULT_PROVIDER,
         ID_AUI_PROVIDER,
         ID_MSW_PROVIDER,
+        ID_MSW_FLAT_PROVIDER,
         ID_MAIN_TOOLBAR,
         ID_POSITION_TOP,
         ID_POSITION_TOP_ICONS,
@@ -119,6 +120,7 @@ public:
     void OnDefaultProvider(wxRibbonButtonBarEvent& evt);
     void OnAUIProvider(wxRibbonButtonBarEvent& evt);
     void OnMSWProvider(wxRibbonButtonBarEvent& evt);
+    void OnMSWFlatProvider(wxRibbonButtonBarEvent& evt);
     void OnJustify(wxRibbonToolBarEvent& evt);
     void OnJustifyUpdateUI(wxUpdateUIEvent& evt);
     void OnNew(wxRibbonToolBarEvent& evt);
@@ -210,6 +212,7 @@ EVT_UPDATE_UI(ID_UI_CHANGE_TEXT_UPDATED, MyFrame::OnChangeTextUpdateUI)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_DEFAULT_PROVIDER, MyFrame::OnDefaultProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_AUI_PROVIDER, MyFrame::OnAUIProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_MSW_PROVIDER, MyFrame::OnMSWProvider)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_MSW_FLAT_PROVIDER, MyFrame::OnMSWFlatProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_EXPAND_H, MyFrame::OnSelectionExpandHButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_EXPAND_V, MyFrame::OnSelectionExpandVButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_CONTRACT, MyFrame::OnSelectionContractButton)
@@ -406,6 +409,7 @@ MyFrame::MyFrame()
             wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(32, 32)));
         provider_bar->AddButton(ID_AUI_PROVIDER, "AUI Provider", aui_style_xpm);
         provider_bar->AddButton(ID_MSW_PROVIDER, "MSW Provider", msw_style_xpm);
+        provider_bar->AddButton(ID_MSW_FLAT_PROVIDER, "MSW Flat Provider", msw_style_xpm);
         wxRibbonPanel *primary_panel = new wxRibbonPanel(scheme, wxID_ANY,
             "Primary Colour", colours_xpm);
         m_primary_gallery = PopulateColoursPanel(primary_panel,
@@ -1073,6 +1077,12 @@ void MyFrame::OnMSWProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_ribbon->DismissExpandedPanel();
     SetArtProvider(new wxRibbonMSWArtProvider);
+}
+
+void MyFrame::OnMSWFlatProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_ribbon->DismissExpandedPanel();
+    SetArtProvider(new wxRibbonMSWFlatArtProvider);
 }
 
 void MyFrame::SetArtProvider(wxRibbonArtProvider *prov)

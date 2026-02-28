@@ -729,6 +729,7 @@
 		7F77E347E1243D77A666FB43 /* clipbrd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12453E271F2A3AC9969E62A4 /* clipbrd.cpp */; };
 		159E4248CB1333AD841D9F03 /* LexYAML.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 9CC7C6FFD67233788EEDFC5E /* LexYAML.cxx */; };
 		A0BA01A85C303C78A3130711 /* art_aui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */; };
+		F1A2B3C4D5E63C78A3130714 /* art_msw_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E63727BBC7B97A /* art_msw_flat.cpp */; };
 		0BB3BF0909A134BA93CF5620 /* xh_richtext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88C2B895570936A3B4FAF3CF /* xh_richtext.cpp */; };
 		FBA19C939E1E33EDB05043FE /* cairo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DBE56B153AA3AC8A4BBE77C /* cairo.cpp */; };
 		8E674574343A3C009B1BCD00 /* tif_codec.c in Sources */ = {isa = PBXBuildFile; fileRef = 88FF67EB6E7D302A9CDEF660 /* tif_codec.c */; };
@@ -1448,6 +1449,7 @@
 		3720038D64CF3C0B8F642A90 /* tokenzr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tokenzr.cpp; path = ../../src/common/tokenzr.cpp; sourceTree = SOURCE_ROOT; };
 		5EB5FAE81851390D80798E73 /* rescaler_mips32.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = rescaler_mips32.c; path = ../../3rdparty/libwebp/src/dsp/rescaler_mips32.c; sourceTree = SOURCE_ROOT; };
 		DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_aui.cpp; path = ../../src/ribbon/art_aui.cpp; sourceTree = SOURCE_ROOT; };
+		F1A2B3C4D5E63727BBC7B97A /* art_msw_flat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_msw_flat.cpp; path = ../../src/ribbon/art_msw_flat.cpp; sourceTree = SOURCE_ROOT; };
 		4BA14FFC0F4B3AE0B4D6B185 /* jquant1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jquant1.c; path = ../../src/jpeg/jquant1.c; sourceTree = SOURCE_ROOT; };
 		8EB76F786D7F3FF286948D22 /* jcomapi.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jcomapi.c; path = ../../src/jpeg/jcomapi.c; sourceTree = SOURCE_ROOT; };
 		082CA018FB883999839C1DCE /* m_tables.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_tables.cpp; path = ../../src/html/m_tables.cpp; sourceTree = SOURCE_ROOT; };
@@ -2636,6 +2638,7 @@
 				4C4649974D8B3A109D1BF145 /* art_internal.cpp */,
 				B540E18F9C91381CA175BABB /* art_msw.cpp */,
 				DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */,
+				F1A2B3C4D5E63727BBC7B97A /* art_msw_flat.cpp */,
 				9FDDE855D9F83E4891362EB4 /* bar.cpp */,
 				5612DBC4125B379DA2B28824 /* buttonbar.cpp */,
 				12363D1F50FE301DAEE7F04B /* control.cpp */,
@@ -4072,6 +4075,7 @@
 				DE43350F6C9D3148A64F0AF9 /* art_internal.cpp in Sources */,
 				7DC4A542372437ECA0790F87 /* art_msw.cpp in Sources */,
 				A0BA01A85C303C78A3130711 /* art_aui.cpp in Sources */,
+				F1A2B3C4D5E63C78A3130714 /* art_msw_flat.cpp in Sources */,
 				056CA84179433AA48D55DA65 /* bar.cpp in Sources */,
 				CB078622E90F33BE9D131131 /* buttonbar.cpp in Sources */,
 				EB52C6A915943813932944FF /* control.cpp in Sources */,

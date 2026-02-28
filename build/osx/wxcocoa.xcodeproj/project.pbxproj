@@ -282,6 +282,7 @@
 		AAABEE399008310A8BC9BE43 /* imagtga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA7029BB5751398AA02D8C24 /* imagtga.cpp */; };
 		3C0EB1DDA5243E31B2D92CE2 /* jquant2.c in Sources */ = {isa = PBXBuildFile; fileRef = 02D9332D5C5632E981936E29 /* jquant2.c */; };
 		A0BA01A85C303C78A3130711 /* art_aui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */; };
+		F1A2B3C4D5E63C78A3130711 /* art_msw_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E63727BBC7B97A /* art_msw_flat.cpp */; };
 		EBDEBA86AA7930EB86A02E67 /* ssim.c in Sources */ = {isa = PBXBuildFile; fileRef = 5CECF4A5F2D839E397B3143F /* ssim.c */; };
 		246B4FF96BA135258FE45F50 /* encconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */; };
 		699D88EE2DAA3594B6606890 /* ViewStyle.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C133B838193A35ABBB803151 /* ViewStyle.cxx */; };
@@ -1402,6 +1403,7 @@
 		95826E8528CC32D8934C36ED /* xh_frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5A9B63746753EDFB2EC48D3 /* xh_frame.cpp */; };
 		EDD92822EBD93E86AE5A2ED2 /* slidercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8072CA67D19346ABF4D465F /* slidercmn.cpp */; };
 		A0BA01A85C303C78A3130712 /* art_aui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */; };
+		F1A2B3C4D5E63C78A3130712 /* art_msw_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E63727BBC7B97A /* art_msw_flat.cpp */; };
 		CF3082BA1ED232F4B904BD15 /* stdpbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75BF90BEF2F83BF28EC0458D /* stdpbase.cpp */; };
 		D9EE059D3C3C3C13AE4419F2 /* stattextcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 54BD19211DBD388AA0DEC7A1 /* stattextcmn.cpp */; };
 		FE5B7C7A84B83C17A38E8405 /* LexSML.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 912B2982C9413F2FB40CA2D9 /* LexSML.cxx */; };
@@ -3100,6 +3102,7 @@
 		DC928C38CA8331F18FF00BCD /* tif_lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 3088384F07C63A5DB3581656 /* tif_lzma.c */; };
 		8AA341CCFB8E3F6AB3523597 /* splash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F8836E29C5A370E80CE070E /* splash.cpp */; };
 		A0BA01A85C303C78A3130713 /* art_aui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */; };
+		F1A2B3C4D5E63C78A3130713 /* art_msw_flat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E63727BBC7B97A /* art_msw_flat.cpp */; };
 		CB078622E90F33BE9D131135 /* buttonbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5612DBC4125B379DA2B28824 /* buttonbar.cpp */; };
 		1BCC944F5E0936F5830F03EA /* windowid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9B9B85572D0312BBF2878DB /* windowid.cpp */; };
 		0FDDE8E193743F3A8CBDC67D /* richtextprint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C4C45D3C63AA37CEBCE83321 /* richtextprint.cpp */; };
@@ -5604,6 +5607,7 @@
 		A298576700C33F018616E7BD /* auibook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = auibook.cpp; path = ../../src/aui/auibook.cpp; sourceTree = SOURCE_ROOT; };
 		5F555177554E398286DBC6FB /* xh_stlin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_stlin.cpp; path = ../../src/xrc/xh_stlin.cpp; sourceTree = SOURCE_ROOT; };
 		DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_aui.cpp; path = ../../src/ribbon/art_aui.cpp; sourceTree = SOURCE_ROOT; };
+		F1A2B3C4D5E63727BBC7B97A /* art_msw_flat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_msw_flat.cpp; path = ../../src/ribbon/art_msw_flat.cpp; sourceTree = SOURCE_ROOT; };
 		42040492AAA43A60BA8DE111 /* filter_enc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = filter_enc.c; path = ../../3rdparty/libwebp/src/enc/filter_enc.c; sourceTree = SOURCE_ROOT; };
 		23FC98E2305230E2990471E3 /* wxcrt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wxcrt.cpp; path = ../../src/common/wxcrt.cpp; sourceTree = SOURCE_ROOT; };
 		BACAA6CE4A0934459F26B27C /* graphicc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graphicc.cpp; path = ../../src/generic/graphicc.cpp; sourceTree = SOURCE_ROOT; };
@@ -6140,6 +6144,7 @@
 				4C4649974D8B3A109D1BF145 /* art_internal.cpp */,
 				B540E18F9C91381CA175BABB /* art_msw.cpp */,
 				DD5E8709C3BC3727BBC7B97A /* art_aui.cpp */,
+				F1A2B3C4D5E63727BBC7B97A /* art_msw_flat.cpp */,
 				9FDDE855D9F83E4891362EB4 /* bar.cpp */,
 				5612DBC4125B379DA2B28824 /* buttonbar.cpp */,
 				12363D1F50FE301DAEE7F04B /* control.cpp */,
@@ -9451,6 +9456,7 @@
 				DE43350F6C9D3148A64F0AFB /* art_internal.cpp in Sources */,
 				7DC4A542372437ECA0790F89 /* art_msw.cpp in Sources */,
 				A0BA01A85C303C78A3130713 /* art_aui.cpp in Sources */,
+				F1A2B3C4D5E63C78A3130713 /* art_msw_flat.cpp in Sources */,
 				056CA84179433AA48D55DA67 /* bar.cpp in Sources */,
 				CB078622E90F33BE9D131134 /* buttonbar.cpp in Sources */,
 				EB52C6A91594381393294502 /* control.cpp in Sources */,
@@ -10108,6 +10114,7 @@
 				DE43350F6C9D3148A64F0AF9 /* art_internal.cpp in Sources */,
 				7DC4A542372437ECA0790F87 /* art_msw.cpp in Sources */,
 				A0BA01A85C303C78A3130711 /* art_aui.cpp in Sources */,
+				F1A2B3C4D5E63C78A3130711 /* art_msw_flat.cpp in Sources */,
 				056CA84179433AA48D55DA65 /* bar.cpp in Sources */,
 				CB078622E90F33BE9D131135 /* buttonbar.cpp in Sources */,
 				EB52C6A91594381393294500 /* control.cpp in Sources */,
@@ -11584,6 +11591,7 @@
 				DE43350F6C9D3148A64F0AFA /* art_internal.cpp in Sources */,
 				7DC4A542372437ECA0790F88 /* art_msw.cpp in Sources */,
 				A0BA01A85C303C78A3130712 /* art_aui.cpp in Sources */,
+				F1A2B3C4D5E63C78A3130712 /* art_msw_flat.cpp in Sources */,
 				056CA84179433AA48D55DA66 /* bar.cpp in Sources */,
 				CB078622E90F33BE9D131133 /* buttonbar.cpp in Sources */,
 				EB52C6A915943813932944FE /* control.cpp in Sources */,
