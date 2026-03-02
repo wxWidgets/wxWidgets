@@ -89,7 +89,7 @@ before_test:
     if not exist "%go_exe%" appveyor DownloadFile https://go.dev/dl/%go_exe%
     msiexec /i %go_exe% INSTALLDIR="%GOROOT%" /q
     go version
-    go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
+    go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2.20.0
     set PATH=%PATH%;%GOPATH%\bin
 - ps: |
     Start-Job -Name wx_httpbin { go-httpbin -host 127.0.0.1 -port 8081 2>&1 > c:\projects\wxwidgets\httpbin.log }
