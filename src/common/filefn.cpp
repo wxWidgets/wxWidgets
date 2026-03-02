@@ -770,7 +770,10 @@ bool wxMoveToTrash(const wxString& path)
 
         wxString encodedPath = wxTrashUrlEncodePath(fullPath);
         wxString info = wxString::Format(
-            "[Trash Info]\nPath=%s\nDeletionDate=%s\n",
+R"[Trash Info]
+Path=%s
+DeletionDate=%s
+",
             encodedPath,
             wxDateTime::Now().FormatISOCombined()
         );
