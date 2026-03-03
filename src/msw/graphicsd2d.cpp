@@ -3322,16 +3322,24 @@ wxCOMPtr<IDWriteTextLayout> wxD2DFontData::CreateTextLayout(const wxString& text
 
     wxCOMPtr<IDWriteTextLayout> textLayout;
 
+#if wxUSE_UNICODE_WCHAR
+    const wchar_t* const wstr = text.c_str();
+    const size_t wlen = text.length();
+#else // wxUSE_UNICODE_UTF8
+    const wxWCharBuffer wstr = text.wc_str();
+    const size_t wlen = wstr.length();
+#endif
+
     hr = wxDWriteFactory()->CreateTextLayout(
-        text.c_str(),
-        text.length(),
+        wstr,
+        wlen,
         m_textFormat,
         MAX_WIDTH,
         MAX_HEIGHT,
         &textLayout);
     wxCHECK2_HRESULT_RET(hr, wxCOMPtr<IDWriteTextLayout>(nullptr));
 
-    DWRITE_TEXT_RANGE textRange = { 0, (UINT32) text.length() };
+    DWRITE_TEXT_RANGE textRange = { 0, (UINT32) wlen };
 
     if (m_underlined)
     {
