@@ -2,7 +2,7 @@
 
 ## Internals
 
-wxQT uses the same techniques like other ports to wrap the Qt toolkit classes inside the wxWidget hierarchy (especially similar to wxGTK).
+wxQT uses the same techniques like other ports to wrap the Qt toolkit classes inside the wxWidgets hierarchy (especially similar to wxGTK).
 
 ### Current (original) Approach
 
@@ -61,10 +61,10 @@ The approach chosen was to use templates to help inherit QObject's (QWidget), pr
 
 Both templates also have some safety checks to avoid invalid spurious access to deleted wx objects (using a special pointer to the wx instance stored in the Qt object, that is reset to @NULL when the wx counterpart is marked to deletion).
 
-This is due that in some situations, Qt object could still be referenced in the Qt event queue, so it cannot be removed immediately.
+This is due that in some situations, the Qt object could still be referenced in the Qt event queue, so it cannot be removed immediately.
 
-**Important**: Currently wxQT is using Qt's `deleteLater` method to avoid this kind of issues.
-Please, don't use delete directly except you're confident it will not cause faults or other issues.
+**Important**: Currently wxQT is using Qt's `deleteLater` method to avoid these kind of issues.
+Please, don't use delete directly unless you're confident it will not cause faults or other issues.
 
 Note that no public wxWidget class should be derived directly from QWidget as they could have different lifespans and other implications to run time type systems (RTTI).
 Some QObjects are even owned by Qt (for example: menubar, statusbar) and some parents (ie. `QTabWidget`) cannot be deleted immediately in some circumstances (they would cause segmentation faults due spurious events / signals caused by the children destruction if not correctly handled as explained previously)
@@ -80,7 +80,7 @@ wxQT follows the same conventions used in other wxWidgets ports:
 
 There are also some `__WXQT__` guards to enable special features in common / generic code (i.e. event loop, graphic renders, grid)
 
-Although some Qt headers are included in public wx headers, this dependencies should be avoided as this could change in the future (decoupling completely the public wxQT headers from Qt).
+Although some Qt headers are included in public wx headers, this dependency should be avoided as this could change in the future (decoupling completely the public wxQT headers from Qt).
 
 Private headers should be include/qt/private, currently they hold:
 
@@ -109,7 +109,7 @@ Generate the 'configure' script in your wxQt root directory with:
 
     autoconf
 
-**IMPORTANT NOTE**: The precompilation step (Qt's moc) is no more needed so the build rule was removed. There is no need to use `Q_OBJECT` nor `Q_SLOTS` macros.
+**IMPORTANT NOTE**: The precompilation step (Qt's moc) is no longer needed so the build rule was removed. There is no need to use `Q_OBJECT` nor `Q_SLOTS` macros.
 
     // include/wx/qt/menuitem.h
 
@@ -147,7 +147,7 @@ Generate the 'configure' script in your wxQt root directory with:
             wxMISSING_IMPLEMENTATION( "methodFlags" );
         }
 
-* To avoid name clashes with a 3rd party library like boost, and due precompilation step was removed, don't use the internal moc keywords `signals` and `slots` nor `SIGNAL` / `SLOT` macros for `connect`. Instead, use the "New Signal Slot Qt syntax":
+* To avoid name clashes with a 3rd party library like boost, and as the precompilation step was removed, don't use the internal moc keywords `signals` and `slots` nor `SIGNAL` / `SLOT` macros for `connect`. Instead, use the "New Signal Slot Qt syntax":
 
         class wxQtClass : public QObject
         {
