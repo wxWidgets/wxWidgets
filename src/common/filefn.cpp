@@ -645,37 +645,9 @@ bool wxRemoveFile(const wxString& file)
 extern bool wxMoveToTrashOSX(const wxString& path);
 #endif
 
-#if defined(__UNIX__) && !defined(__WXMAC__)
-#include <fcntl.h>
-
-// Percent-encode a file path per RFC 2396 for the FreeDesktop Trash spec.
-static wxString wxTrashUrlEncodePath(const wxString& path)
-{
-    const wxScopedCharBuffer utf8 = path.utf8_str();
-    const char* cur = utf8;
-    wxString result;
-
-    while ( *cur )
-    {
-        const unsigned char ch = static_cast<unsigned char>(*cur);
-        // Unreserved characters per RFC 2396: A-Z a-z 0-9 - _ . ~ /
-        if ( (ch >= 'A' && ch <= 'Z') ||
-             (ch >= 'a' && ch <= 'z') ||
-             (ch >= '0' && ch <= '9') ||
-             ch == '-' || ch == '_' || ch == '.' || ch == '~' || ch == '/' )
-        {
-            result += static_cast<char>(ch);
-        }
-        else
-        {
-            result += wxString::Format("%%%02X", ch);
-        }
-        ++cur;
-    }
-
-    return result;
-}
-#endif // __UNIX__ && !__WXMAC__
+#if defined(__WXGTK__)
+#include <gio/gio.h>
+#endif
 
 bool wxMoveToTrash(const wxString& path)
 {
@@ -712,85 +684,21 @@ bool wxMoveToTrash(const wxString& path)
 #elif defined(__WXMAC__)
     return wxMoveToTrashOSX(path);
 
-#elif defined(__UNIX__)
-    wxString xdgData;
-    if ( !wxGetEnv("XDG_DATA_HOME", &xdgData) || xdgData.empty() )
-        xdgData = wxFileName::GetHomeDir() + "/.local/share";
+#elif defined(__WXGTK__)
+    GError* err = nullptr;
+    GFile* file = g_file_new_for_path(path.fn_str());
 
-    wxString trashFiles = xdgData + "/Trash/files";
-    wxString trashInfo  = xdgData + "/Trash/info";
-
-    if ( !wxFileName::Mkdir(trashFiles, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
-        return false;
-    if ( !wxFileName::Mkdir(trashInfo, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
-        return false;
-
-    // Resolve the full absolute path
-    wxFileName fileName(path);
-    fileName.MakeAbsolute();
-    wxString fullPath = fileName.GetFullPath();
-
-    // Pick a unique trash name atomically using O_EXCL per the spec
-    wxString baseName = fileName.GetFullName();
-    wxString trashName = baseName;
-    wxString infoPath;
-
-    for ( int attempt = 2; ; ++attempt )
+    bool ok = g_file_trash(file, nullptr, &err);
+    if ( !ok )
     {
-        infoPath = trashInfo + "/" + trashName + ".trashinfo";
-
-        int infoFd = open(infoPath.utf8_str(), O_WRONLY | O_CREAT | O_EXCL, 0600);
-        if ( infoFd >= 0 )
-        {
-            close(infoFd);
-            break;
-        }
-        if ( errno != EEXIST )
-        {
-            wxLogSysError(_("'%s' couldn't be moved to trash"), path);
-            return false;
-        }
-
-        // Name collision, try next: "file.2.txt", "file.3.txt", ...
-        wxString name = fileName.GetName();
-        wxString ext  = fileName.GetExt();
-        trashName = wxString::Format("%s.%d", name, attempt);
-        if ( !ext.empty() )
-            trashName += "." + ext;
+        wxLogError(_("'%s' couldn't be moved to trash: %s"),
+                   path, err ? err->message : "unknown error");
     }
 
-    // Write the .trashinfo file
-    {
-        wxFile infoFile;
-        if ( !infoFile.Open(infoPath, wxFile::write) )
-        {
-            wxRemoveFile(infoPath);
-            return false;
-        }
+    g_clear_error(&err);
+    g_object_unref(file);
 
-        wxString encodedPath = wxTrashUrlEncodePath(fullPath);
-        wxString info = wxString::Format(
-R"[Trash Info]
-Path=%s
-DeletionDate=%s
-",
-            encodedPath,
-            wxDateTime::Now().FormatISOCombined()
-        );
-        infoFile.Write(info);
-    }
-
-    // Move the file or directory into Trash/files/
-    wxString destPath = trashFiles + "/" + trashName;
-    if ( wxRename(fullPath, destPath) != 0 )
-    {
-        // Move failed (e.g. cross-device) — clean up the .trashinfo
-        wxRemoveFile(infoPath);
-        wxLogSysError(_("'%s' couldn't be moved to trash"), path);
-        return false;
-    }
-
-    return true;
+    return ok;
 
 #else
     wxLogError(_("Moving to trash is not supported on this platform"));

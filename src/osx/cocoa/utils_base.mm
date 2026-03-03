@@ -405,15 +405,10 @@ bool wxMoveToTrashOSX(const wxString& path)
                                                        error:&error];
     if ( !ok )
     {
-        if ( error )
-        {
-            wxLogDebug("NSFileManager trashItemAtURL failed: %s",
-                       wxCFStringRef::AsString([error localizedDescription]));
-        }
-        else
-        {
-            wxLogDebug("NSFileManager trashItemAtURL failed (unknown error)");
-        }
+        wxLogError(_("'%s' couldn't be moved to trash: %s"),
+                   path,
+                   error ? wxCFStringRef::AsString([error localizedDescription])
+                         : wxString("unknown error"));
     }
 
     return ok;
