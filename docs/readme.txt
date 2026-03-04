@@ -1,4 +1,4 @@
-wxWidgets 3.3.2 Release Notes
+wxWidgets 3.3.3 Release Notes
 =============================
 
 Welcome to the latest release of wxWidgets, a free and open source
@@ -16,7 +16,7 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.3.2/
+* https://docs.wxwidgets.org/3.3.3/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
@@ -25,9 +25,9 @@ download from:
 
 or, for a more more permanent but less convenient to use link, from
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.3.2/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.3.3/
 
-Please see https://docs.wxwidgets.org/3.3.2/overview_install.html for full
+Please see https://docs.wxwidgets.org/3.3.3/overview_install.html for full
 installation instructions.
 
 
@@ -72,7 +72,7 @@ There were, of course, also a number of bug fixes:
 
 Please see the change log for the more complete list:
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.2/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.3/docs/changes.txt
 
 and also see
 
@@ -80,7 +80,7 @@ https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.10/docs/changes.txt
 
 as the changes in 3.2.9 and 3.2.10 releases are also included in this one.
 
-Note that in spite of all these changes, wxWidgets 3.3.2 is almost fully
+Note that in spite of all these changes, wxWidgets 3.3.3 is almost fully
 compatible with wxWidgets 3.2 and updating the existing applications to
 use it shouldn't require much effort. However please make sure to read the
 "INCOMPATIBLE CHANGES" section of the change log above when upgrading to be
