@@ -32634,7 +32634,7 @@ destdir=\$1
 libdir=\$2
 bindir=\$3
 build_libdir=\$4
-libnames=\$(cd \${build_libdir}; printf '%s\n' libwx*${WX_RELEASE}.dylib)
+libnames=\$(cd \${build_libdir}; printf '%s\n' libwx*-${WX_RELEASE}.dylib)
 changes=''
 for libname in \${libnames} ; do
     target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
