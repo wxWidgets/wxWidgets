@@ -650,7 +650,6 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     tdc.hInstance = wxGetInstance();
     tdc.pszWindowTitle = caption.t_str();
 
-    // use the top level window as parent if none specified
     tdc.hwndParent = parent ? GetHwndOf(parent) : nullptr;
 
     // Don't use this flag if our parent window is minimized because this
