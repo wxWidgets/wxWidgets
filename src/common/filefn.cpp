@@ -692,7 +692,7 @@ bool wxMoveToTrash(const wxString& path)
     if ( !ok )
     {
         wxLogError(_("'%s' couldn't be moved to trash: %s"),
-                   path, err ? err->message : "unknown error");
+                   path, err ? err->message : _("unknown error"));
     }
 
     g_clear_error(&err);

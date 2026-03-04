@@ -356,11 +356,9 @@ bool wxRemoveFile(const wxString& file);
     deleted and can be restored by the user from the platform's trash
     facility.
 
-    Under Windows, this uses the shell file operation with @c FOF_ALLOWUNDO.
+    Under Windows, this uses @c SHFileOperation with @c FOF_ALLOWUNDO.
     Under macOS, this uses @c NSFileManager's @c trashItemAtURL method.
-    Under Unix systems (including Linux and BSD), this implements the
-    <a href="https://specifications.freedesktop.org/trash/latest/">FreeDesktop
-    Trash specification</a> directly.
+    Under Unix systems (including Linux and BSD), this uses @c g_file_trash.
 
     @note On Unix, moving files across filesystem boundaries (e.g., from an
     external drive) is not supported and will return @false.
