@@ -33,11 +33,11 @@ inherits from `std::list<wxWindow*>` and so can be used as such, e.g.
 
 You may still need to create wxWidgets containers to pass them to some
 wxWidgets function, e.g. wxDir::GetAllFiles() requires a wxArrayString to be
-passed in. However in this case you may still the object as if it were just a
-`std::vector<wxString>` and, other than that, there is no reason to use the
-container classes provided by wxWidgets anywhere in the new code, they only
-exist for backwards compatibility and standard library classes should be used
-by the application.
+passed in. However, other than using the type for creating the container, you
+can treat it as if it were just a `std::vector<wxString>` and, other than that,
+there is no reason to use the container classes provided by wxWidgets anywhere
+in the new code, they only exist for backwards compatibility and standard
+library classes should be used by the application.
 
 @see @ref group_class_containers
 
