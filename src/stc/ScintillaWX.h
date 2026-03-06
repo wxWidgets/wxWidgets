@@ -17,6 +17,8 @@
 #define __ScintillaWX_h__
 #include "wx/defs.h"
 
+#error "this shouldn't be used"
+
 //----------------------------------------------------------------------
 
 #include <stdexcept>
