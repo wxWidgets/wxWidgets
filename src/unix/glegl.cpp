@@ -685,6 +685,7 @@ void wxGLCanvasEGL::OnRealized()
 
 wxGLCanvasEGL::~wxGLCanvasEGL()
 {
+#ifdef GDK_WINDOWING_WAYLAND
     // Our "unmap" signal handler would be called from wxWindow dtor, so
     // disconnect it to avoid accessing this object when it's already destroyed
     // by wxGLCanvas dtor (and it is useless anyhow now as all it does is to
@@ -697,6 +698,7 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
             this
         );
     }
+#endif // GDK_WINDOWING_WAYLAND
 
     if ( m_surface )
         eglDestroySurface(m_display, m_surface);
