@@ -744,6 +744,9 @@ protected:
     }
 
 private:
+    friend wxWindow* wxFindWindowAtPoint(const wxPoint& pt, wxWindow* skip);
+    bool m_hideFromFind;
+
     // common part of all ctors
     void Init();
 

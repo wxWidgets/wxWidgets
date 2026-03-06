@@ -637,7 +637,9 @@ WXDLLIMPEXP_CORE int wxFindMenuItemId(wxFrame *frame, const wxString& menuString
 
 // Find the wxWindow at the given point. wxGenericFindWindowAtPoint
 // is always present but may be less reliable than a native version.
+WXDLLIMPEXP_CORE wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt, wxWindow* skip);
 WXDLLIMPEXP_CORE wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt);
+WXDLLIMPEXP_CORE wxWindow* wxFindWindowAtPoint(const wxPoint& pt, wxWindow* skip);
 WXDLLIMPEXP_CORE wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 
 // NB: this function is obsolete, use wxWindow::FindWindowByLabel() instead

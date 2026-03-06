@@ -95,6 +95,11 @@ wxDisplayInfo wxGetDisplayInfo()
 
 #endif // __UNIX__
 
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt, wxWindow* skip)
+{
+    return wxGenericFindWindowAtPoint(pt, skip);
+}
+
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);

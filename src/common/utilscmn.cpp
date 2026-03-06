@@ -1291,7 +1291,7 @@ wxFindMenuItemId(wxFrame *frame,
 // within other controls, but are still siblings (e.g. buttons within
 // static boxes). Static boxes are likely to be created _before_ controls
 // that sit inside them.
-wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
+wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt, wxWindow* skip)
 {
     if (!win->IsShown())
         return nullptr;
@@ -1306,8 +1306,8 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
       if (sel >= 0)
       {
         wxWindow* child = nb->GetPage(sel);
-        wxWindow* foundWin = wxFindWindowAtPoint(child, pt);
-        if (foundWin)
+        wxWindow* foundWin = wxFindWindowAtPoint(child, pt, skip);
+        if (foundWin && foundWin != skip)
            return foundWin;
       }
     }
@@ -1317,8 +1317,8 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
     while (node)
     {
         wxWindow* child = node->GetData();
-        wxWindow* foundWin = wxFindWindowAtPoint(child, pt);
-        if (foundWin)
+        wxWindow* foundWin = wxFindWindowAtPoint(child, pt, skip);
+        if (foundWin && foundWin != skip)
           return foundWin;
         node = node->GetPrevious();
     }
@@ -1331,13 +1331,13 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
     }
 
     wxRect rect(pos, sz);
-    if (rect.Contains(pt))
+    if (win != skip && rect.Contains(pt))
         return win;
 
     return nullptr;
 }
 
-wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt)
+wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt, wxWindow* skip)
 {
     // Go backwards through the list since windows
     // on top are likely to have been appended most
@@ -1346,12 +1346,22 @@ wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt)
     while (node)
     {
         wxWindow* win = node->GetData();
-        wxWindow* found = wxFindWindowAtPoint(win, pt);
+        wxWindow* found = wxFindWindowAtPoint(win, pt, skip);
         if (found)
             return found;
         node = node->GetPrevious();
     }
     return nullptr;
+}
+
+wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
+{
+    return wxFindWindowAtPoint(win, pt, nullptr);
+}
+
+wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt)
+{
+    return wxGenericFindWindowAtPoint(pt, nullptr);
 }
 
 // ----------------------------------------------------------------------------

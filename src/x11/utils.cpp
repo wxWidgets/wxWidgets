@@ -144,6 +144,11 @@ void wxGetMousePosition( int* x, int* y )
 #endif
 };
 
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt, wxWindow* skip)
+{
+    return wxGenericFindWindowAtPoint(pt, skip);
+}
+
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);

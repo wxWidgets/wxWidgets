@@ -122,6 +122,11 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt);
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
+    return wxGenericFindWindowAtPoint( pt, skip );
+}
+
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
     return wxGenericFindWindowAtPoint( pt );
 }
 

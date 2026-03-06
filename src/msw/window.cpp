@@ -394,6 +394,7 @@ void wxWindowMSW::Init()
 {
     // MSW specific
     m_oldWndProc = nullptr;
+    m_hideFromFind = false;
     m_mouseInWindow = false;
     m_lastKeydownProcessed = false;
 
@@ -3937,6 +3938,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT result;
+    if (m_hideFromFind && message == WM_NCHITTEST)
+    {
+        return HTTRANSPARENT;
+    }
     if ( !MSWHandleMessage(&result, message, wParam, lParam) )
     {
 #if wxDEBUG_LEVEL >= 2
@@ -7957,6 +7962,14 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     }
 
     return wxGetWindowFromHWND((WXHWND)hWnd);
+}
+
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt, wxWindow* skip)
+{
+    if (skip) skip->m_hideFromFind = true;
+    wxWindow* found = wxFindWindowAtPoint(pt);
+    if (skip) skip->m_hideFromFind = false;
+    return found;
 }
 
 #if wxUSE_HOTKEY
