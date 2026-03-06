@@ -3887,15 +3887,7 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
     if (childId > 0)
         return wxACC_NOT_IMPLEMENTED;
 
-    // This will eventually be replaced by specialised
-    // accessible classes, one for each kind of wxWidgets
-    // control or window.
-#if wxUSE_BUTTON
-    if (wxDynamicCast(GetWindow(), wxButton))
-        title = ((wxButton*) GetWindow())->GetLabel();
-    else
-#endif
-        title = GetWindow()->GetName();
+    title = GetWindow()->GetLabel();
 
     if (!title.empty())
     {
