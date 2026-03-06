@@ -3225,7 +3225,7 @@ public:
         // characters from the end of the label until it's short enough.
         wxString ellipsizedLabel = label;
 
-        wxCharBuffer buffer = ellipsizedLabel.utf8_str();
+        wxScopedCharBuffer buffer = ellipsizedLabel.utf8_str();
         int curWidth = surface.WidthText(tempFont, buffer.data(), buffer.length());
 
         for ( int i = label.length(); curWidth > rect.GetWidth() && i; --i )
