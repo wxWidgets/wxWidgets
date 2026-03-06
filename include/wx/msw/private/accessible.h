@@ -53,21 +53,6 @@ public:
         return wxACC_OK;
     }
 
-    virtual wxAccStatus GetName(int childId, wxString* name) override
-    {
-        if ( childId != wxACC_SELF )
-            return wxACC_NOT_IMPLEMENTED;
-
-        TControl* const ctrl = wxStaticCast(GetWindow(), TControl);
-        wxCHECK(ctrl, wxACC_FAIL);
-
-        if ( !ctrl->MSWIsOwnerDrawn() )
-            return wxACC_NOT_IMPLEMENTED;
-
-        *name = ctrl->GetLabel();
-        return wxACC_OK;
-    }
-
     virtual wxAccStatus GetState(int childId, long* state) override
     {
         if ( childId != wxACC_SELF )
