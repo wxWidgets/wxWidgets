@@ -36,7 +36,6 @@
 
 #include "ScintillaWX.h"
 #include "wx/stc/stc.h"
-#include "wx/stc/private.h"
 #include "PlatWX.h"
 
 #include "Lexilla.h"
@@ -297,7 +296,7 @@ void ScintillaWX::Finalise() {
 
 void ScintillaWX::StartDrag() {
 #if wxUSE_DRAG_AND_DROP
-    wxString dragText = stc2wx(drag.Data(), drag.Length());
+    wxString dragText = wxString::FromUTF8(drag.Data(), drag.Length());
 
     // Send an event to allow the drag text to be changed
     wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
@@ -518,7 +517,7 @@ void ScintillaWX::Paste() {
         evt.SetString(text);
         stc->GetEventHandler()->ProcessEvent(evt);
 
-        const wxCharBuffer buf(wx2stc(evt.GetString()));
+        const wxCharBuffer buf = evt.GetString().utf8_str();
 
         // free up the old character buffer in case the text is real big
         text.clear();
@@ -557,7 +556,7 @@ void ScintillaWX::CopyToClipboard(const SelectionText& st) {
     // Send an event to allow the copied text to be changed
     wxStyledTextEvent evt(wxEVT_STC_CLIPBOARD_COPY, stc->GetId());
     evt.SetEventObject(stc);
-    evt.SetString(wxTextBuffer::Translate(stc2wx(st.Data(), st.Length())));
+    evt.SetString(wxTextBuffer::Translate(wxString::FromUTF8(st.Data(), st.Length())));
     stc->GetEventHandler()->ProcessEvent(evt);
 
     wxTheClipboard->UsePrimarySelection(false);
@@ -621,7 +620,7 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
     if (!label[0])
         ((wxMenu*)popup.GetID())->AppendSeparator();
     else
-        ((wxMenu*)popup.GetID())->Append(cmd, wxGetTranslation(stc2wx(label)));
+        ((wxMenu*)popup.GetID())->Append(cmd, wxGetTranslation(wxString::FromUTF8(label)));
 
     if (!enabled)
         ((wxMenu*)popup.GetID())->Enable(cmd, enabled);
@@ -640,7 +639,7 @@ void ScintillaWX::ClaimSelection() {
         CopySelectionRange(&st);
         wxTheClipboard->UsePrimarySelection(true);
         if (wxTheClipboard->Open()) {
-            wxString text = stc2wx(st.Data(), st.Length());
+            wxString text = wxString::FromUTF8(st.Data(), st.Length());
             wxTheClipboard->SetData(new wxTextDataObject(text));
             wxTheClipboard->Close();
         }
@@ -1056,7 +1055,7 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     if (gotData) {
         wxString   text = wxTextBuffer::Translate(data.GetText(),
                                                   wxConvertEOLMode(pdoc->eolMode));
-        const wxCharBuffer buf(wx2stc(text));
+        const wxScopedCharBuffer buf = text.utf8_str();
         const size_t len = buf.length();
         int caretMain = sel.MainCaret();
         pdoc->InsertString(caretMain, buf, len);
@@ -1077,7 +1076,7 @@ void ScintillaWX::DoMiddleButtonUp(Point WXUNUSED(pt)) {
 
 
 void ScintillaWX::DoAddChar(wxChar key) {
-    const wxCharBuffer buf(wx2stc(key));
+    const wxCharBuffer buf = wxString(key).utf8_str();
     InsertCharacter(buf, buf.length(), CharacterSource::directInput);
 }
 
@@ -1259,7 +1258,7 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     dragResult = evt.GetDragResult();
     if (dragResult == wxDragMove || dragResult == wxDragCopy) {
         DropAt(SelectionPosition(evt.GetPosition()),
-               wx2stc(evt.GetString()),
+               evt.GetString().utf8_str(),
                dragResult == wxDragMove,
                false); // TODO: rectangular?
         return true;

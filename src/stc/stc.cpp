@@ -32,7 +32,6 @@
 #if wxUSE_STC
 
 #include "wx/stc/stc.h"
-#include "wx/stc/private.h"
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -295,8 +294,8 @@ void wxStyledTextCtrl::SetHScrollBar(wxScrollBar* bar)  {
 
 // Add text to the document at current position.
 void wxStyledTextCtrl::AddText(const wxString& text) {
-                    const wxWX2MBbuf buf = wx2stc(text);
-                    SendMsg(SCI_ADDTEXT, wx2stclen(text, buf), (sptr_t)(const char*)buf);
+                    const wxScopedCharBuffer buf = text.utf8_str();
+                    SendMsg(SCI_ADDTEXT, buf.length(), (sptr_t)(const char*)buf);
 }
 
 // Add array of cells to document.
@@ -307,13 +306,13 @@ void wxStyledTextCtrl::AddStyledText(const wxMemoryBuffer& data) {
 // Insert string at a position.
 void wxStyledTextCtrl::InsertText(int pos, const wxString& text)
 {
-    SendMsg(SCI_INSERTTEXT, pos, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_INSERTTEXT, pos, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Change the text that is being inserted in response to wxSTC_MOD_INSERTCHECK
 void wxStyledTextCtrl::ChangeInsertion(int length, const wxString& text)
 {
-    SendMsg(SCI_CHANGEINSERTION, length, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_CHANGEINSERTION, length, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Delete all text in the document.
@@ -509,7 +508,7 @@ wxString wxStyledTextCtrl::GetCurLine(int* linePos) {
         wxCharBuffer buf(len);
         int pos = SendMsg(SCI_GETCURLINE, len+1, (sptr_t)buf.data());
         if (linePos)  *linePos = pos;
-        return stc2wx(buf);
+        return wxString::FromUTF8(buf);
 }
 
 // Retrieve the position of the last correctly styled character.
@@ -870,7 +869,7 @@ void wxStyledTextCtrl::StyleSetSize(int style, int sizePoints)
 // Set the font of a style.
 void wxStyledTextCtrl::StyleSetFaceName(int style, const wxString& fontName)
 {
-    SendMsg(SCI_STYLESETFONT, style, (sptr_t)(const char*)wx2stc(fontName));
+    SendMsg(SCI_STYLESETFONT, style, (sptr_t)(const char*)fontName.utf8_str());
 }
 
 // Set a style to have its end of line filled or not.
@@ -931,7 +930,7 @@ wxString wxStyledTextCtrl::StyleGetFaceName(int style) {
 
          wxCharBuffer buf(len);
          SendMsg(msg, style, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Get is a style to have its end of line filled or not.
@@ -1195,7 +1194,7 @@ void wxStyledTextCtrl::SetCaretPeriod(int periodMilliseconds)
 // First sets defaults like SetCharsDefault.
 void wxStyledTextCtrl::SetWordChars(const wxString& characters)
 {
-    SendMsg(SCI_SETWORDCHARS, 0, (sptr_t)(const char*)wx2stc(characters));
+    SendMsg(SCI_SETWORDCHARS, 0, (sptr_t)(const char*)characters.utf8_str());
 }
 
 // Get the set of characters making up words for when moving or selecting by word.
@@ -1209,7 +1208,7 @@ wxString wxStyledTextCtrl::GetWordChars() const {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Set the number of characters to have directly indexed categories
@@ -1404,7 +1403,7 @@ void wxStyledTextCtrl::StyleSetChangeable(int style, bool changeable)
 // the caret should be used to provide context.
 void wxStyledTextCtrl::AutoCompShow(int lengthEntered, const wxString& itemList)
 {
-    SendMsg(SCI_AUTOCSHOW, lengthEntered, (sptr_t)(const char*)wx2stc(itemList));
+    SendMsg(SCI_AUTOCSHOW, lengthEntered, (sptr_t)(const char*)itemList.utf8_str());
 }
 
 // Remove the auto-completion list from the screen.
@@ -1434,7 +1433,7 @@ void wxStyledTextCtrl::AutoCompComplete()
 // Define a set of character that when typed cancel the auto-completion list.
 void wxStyledTextCtrl::AutoCompStops(const wxString& characterSet)
 {
-    SendMsg(SCI_AUTOCSTOPS, 0, (sptr_t)(const char*)wx2stc(characterSet));
+    SendMsg(SCI_AUTOCSTOPS, 0, (sptr_t)(const char*)characterSet.utf8_str());
 }
 
 // Change the separator character in the string setting up an auto-completion list.
@@ -1453,7 +1452,7 @@ int wxStyledTextCtrl::AutoCompGetSeparator() const
 // Select the item in the auto-completion list that starts with a string.
 void wxStyledTextCtrl::AutoCompSelect(const wxString& select)
 {
-    SendMsg(SCI_AUTOCSELECT, 0, (sptr_t)(const char*)wx2stc(select));
+    SendMsg(SCI_AUTOCSELECT, 0, (sptr_t)(const char*)select.utf8_str());
 }
 
 // Should the auto-completion list be cancelled if the user backspaces to a
@@ -1473,7 +1472,7 @@ bool wxStyledTextCtrl::AutoCompGetCancelAtStart() const
 // choose the selected item.
 void wxStyledTextCtrl::AutoCompSetFillUps(const wxString& characterSet)
 {
-    SendMsg(SCI_AUTOCSETFILLUPS, 0, (sptr_t)(const char*)wx2stc(characterSet));
+    SendMsg(SCI_AUTOCSETFILLUPS, 0, (sptr_t)(const char*)characterSet.utf8_str());
 }
 
 // Should a single item auto-completion list automatically choose the item.
@@ -1503,7 +1502,7 @@ bool wxStyledTextCtrl::AutoCompGetIgnoreCase() const
 // Display a list of strings and send notification when user chooses one.
 void wxStyledTextCtrl::UserListShow(int listType, const wxString& itemList)
 {
-    SendMsg(SCI_USERLISTSHOW, listType, (sptr_t)(const char*)wx2stc(itemList));
+    SendMsg(SCI_USERLISTSHOW, listType, (sptr_t)(const char*)itemList.utf8_str());
 }
 
 // Set whether or not autocompletion is hidden automatically when nothing matches.
@@ -1771,7 +1770,7 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos, const wxString& text,
             Sci_TextToFind  ft;
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
-            const wxWX2MBbuf buf = wx2stc(text);
+            const wxScopedCharBuffer buf = text.utf8_str();
             ft.lpstrText = buf;
 
             int pos = SendMsg(SCI_FINDTEXT, flags, (sptr_t)&ft);
@@ -1821,7 +1820,7 @@ wxString wxStyledTextCtrl::GetLine(int line) const {
 
          wxCharBuffer buf(len);
          SendMsg(SCI_GETLINE, line, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Returns the number of lines in the document. There is always at least one.
@@ -1868,7 +1867,7 @@ wxString wxStyledTextCtrl::GetSelectedText() {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve a range of text.
@@ -1886,7 +1885,7 @@ wxString wxStyledTextCtrl::GetTextRange(int startPos, int endPos) {
          tr.chrg.cpMax = endPos;
          tr.lpstrText[0] = '\0'; // initialize with 0 in case the range is invalid
          SendMsg(SCI_GETTEXTRANGE, 0, (sptr_t)&tr);
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Draw the selection either highlighted or in normal (non-highlighted) style.
@@ -1937,7 +1936,7 @@ void wxStyledTextCtrl::ScrollRange(int secondary, int primary)
 // Replace the selected text with the argument text.
 void wxStyledTextCtrl::ReplaceSelection(const wxString& text)
 {
-    SendMsg(SCI_REPLACESEL, 0, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_REPLACESEL, 0, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Set to read only or read write.
@@ -1997,7 +1996,7 @@ void wxStyledTextCtrl::Clear()
 // Replace the contents of the document with the argument text.
 void wxStyledTextCtrl::SetText(const wxString& text)
 {
-    SendMsg(SCI_SETTEXT, 0, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_SETTEXT, 0, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Retrieve all the text in the document.
@@ -2007,7 +2006,7 @@ wxString wxStyledTextCtrl::GetText() const {
 
          wxCharBuffer buf(len);
          SendMsg(SCI_GETTEXT, len+1, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve the number of characters in the document.
@@ -2112,7 +2111,7 @@ wxString wxStyledTextCtrl::GetTargetText() const {
          int len = GetTargetEnd() - GetTargetStart();
          wxCharBuffer buf(len);
          SendMsg(SCI_GETTARGETTEXT, 0, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Make the target range start and end be the same as the selection range start and end.
@@ -2132,8 +2131,8 @@ void wxStyledTextCtrl::TargetWholeDocument()
 // Returns the length of the replacement text.
 
      int wxStyledTextCtrl::ReplaceTarget(const wxString& text) {
-         const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(SCI_REPLACETARGET, wx2stclen(text, buf), (sptr_t)(const char*)buf);
+         const wxScopedCharBuffer buf = text.utf8_str();
+         return SendMsg(SCI_REPLACETARGET, buf.length(), (sptr_t)(const char*)buf);
 }
 
 // Replace the target text with the argument text after \\d processing.
@@ -2144,8 +2143,8 @@ void wxStyledTextCtrl::TargetWholeDocument()
 // caused by processing the \\d patterns.
 
      int wxStyledTextCtrl::ReplaceTargetRE(const wxString& text) {
-         const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(SCI_REPLACETARGETRE, wx2stclen(text, buf), (sptr_t)(const char*)buf);
+         const wxScopedCharBuffer buf = text.utf8_str();
+         return SendMsg(SCI_REPLACETARGETRE, buf.length(), (sptr_t)(const char*)buf);
 }
 
 // Search for a counted string in the target and set the target to the found
@@ -2153,8 +2152,8 @@ void wxStyledTextCtrl::TargetWholeDocument()
 // Returns start of found range or -1 for failure in which case target is not moved.
 
      int wxStyledTextCtrl::SearchInTarget(const wxString& text) {
-         const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(SCI_SEARCHINTARGET, wx2stclen(text, buf), (sptr_t)(const char*)buf);
+         const wxScopedCharBuffer buf = text.utf8_str();
+         return SendMsg(SCI_SEARCHINTARGET, buf.length(), (sptr_t)(const char*)buf);
 }
 
 // Set the search flags used by SearchInTarget.
@@ -2172,7 +2171,7 @@ int wxStyledTextCtrl::GetSearchFlags() const
 // Show a call tip containing a definition near position pos.
 void wxStyledTextCtrl::CallTipShow(int pos, const wxString& definition)
 {
-    SendMsg(SCI_CALLTIPSHOW, pos, (sptr_t)(const char*)wx2stc(definition));
+    SendMsg(SCI_CALLTIPSHOW, pos, (sptr_t)(const char*)definition.utf8_str());
 }
 
 // Remove the call tip from the screen.
@@ -2333,7 +2332,7 @@ void wxStyledTextCtrl::ToggleFold(int line)
 // Switch a header line between expanded and contracted and show some text after the line.
 void wxStyledTextCtrl::ToggleFoldShowText(int line, const wxString& text)
 {
-    SendMsg(SCI_TOGGLEFOLDSHOWTEXT, line, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_TOGGLEFOLDSHOWTEXT, line, (sptr_t)(const char*)text.utf8_str());
 
     if ( m_mirrorCtrl )
         m_mirrorCtrl->ToggleFoldShowText(line, text);
@@ -2354,7 +2353,7 @@ int wxStyledTextCtrl::FoldDisplayTextGetStyle() const
 // Set the default fold display text.
 void wxStyledTextCtrl::SetDefaultFoldDisplayText(const wxString& text)
 {
-    SendMsg(SCI_SETDEFAULTFOLDDISPLAYTEXT, 0, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_SETDEFAULTFOLDDISPLAYTEXT, 0, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Get the default fold display text.
@@ -2365,7 +2364,7 @@ wxString wxStyledTextCtrl::GetDefaultFoldDisplayText() const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Expand or contract a fold header.
@@ -2601,7 +2600,7 @@ bool wxStyledTextCtrl::GetScrollWidthTracking() const
 // Does not handle tab or control characters.
 int wxStyledTextCtrl::TextWidth(int style, const wxString& text)
 {
-    return SendMsg(SCI_TEXTWIDTH, style, (sptr_t)(const char*)wx2stc(text));
+    return SendMsg(SCI_TEXTWIDTH, style, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Sets the scroll range so that maximum scroll position has
@@ -2639,8 +2638,8 @@ bool wxStyledTextCtrl::GetUseVerticalScrollBar() const
 
 // Append a string to the end of the document without changing the selection.
 void wxStyledTextCtrl::AppendText(const wxString& text) {
-                    const wxWX2MBbuf buf = wx2stc(text);
-                    SendMsg(SCI_APPENDTEXT, wx2stclen(text, buf), (sptr_t)(const char*)buf);
+                    const wxScopedCharBuffer buf = text.utf8_str();
+                    SendMsg(SCI_APPENDTEXT, buf.length(), (sptr_t)(const char*)buf);
 }
 
 // How many phases is drawing done in?
@@ -2696,7 +2695,7 @@ wxString wxStyledTextCtrl::GetTag(int tagNumber) const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, tagNumber, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Join the lines in the target.
@@ -3247,14 +3246,14 @@ void wxStyledTextCtrl::SearchAnchor()
 // Does not ensure the selection is visible.
 int wxStyledTextCtrl::SearchNext(int searchFlags, const wxString& text)
 {
-    return SendMsg(SCI_SEARCHNEXT, searchFlags, (sptr_t)(const char*)wx2stc(text));
+    return SendMsg(SCI_SEARCHNEXT, searchFlags, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Find some text starting at the search anchor and moving backwards.
 // Does not ensure the selection is visible.
 int wxStyledTextCtrl::SearchPrev(int searchFlags, const wxString& text)
 {
-    return SendMsg(SCI_SEARCHPREV, searchFlags, (sptr_t)(const char*)wx2stc(text));
+    return SendMsg(SCI_SEARCHPREV, searchFlags, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Retrieves the number of lines completely visible.
@@ -3603,7 +3602,7 @@ void wxStyledTextCtrl::CopyRange(int start, int end)
 // Copy argument text to the clipboard.
 void wxStyledTextCtrl::CopyText(int length, const wxString& text)
 {
-    SendMsg(SCI_COPYTEXT, length, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_COPYTEXT, length, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Set the selection mode to stream (wxSTC_SEL_STREAM) or rectangular (wxSTC_SEL_RECTANGLE/wxSTC_SEL_THIN) or
@@ -3745,7 +3744,7 @@ void wxStyledTextCtrl::WordRightEndExtend()
 // Should be called after SetWordChars.
 void wxStyledTextCtrl::SetWhitespaceChars(const wxString& characters)
 {
-    SendMsg(SCI_SETWHITESPACECHARS, 0, (sptr_t)(const char*)wx2stc(characters));
+    SendMsg(SCI_SETWHITESPACECHARS, 0, (sptr_t)(const char*)characters.utf8_str());
 }
 
 // Get the set of characters making up whitespace for when moving or selecting by word.
@@ -3759,14 +3758,14 @@ wxString wxStyledTextCtrl::GetWhitespaceChars() const {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Set the set of characters making up punctuation characters
 // Should be called after SetWordChars.
 void wxStyledTextCtrl::SetPunctuationChars(const wxString& characters)
 {
-    SendMsg(SCI_SETPUNCTUATIONCHARS, 0, (sptr_t)(const char*)wx2stc(characters));
+    SendMsg(SCI_SETPUNCTUATIONCHARS, 0, (sptr_t)(const char*)characters.utf8_str());
 }
 
 // Get the set of characters making up punctuation characters
@@ -3780,7 +3779,7 @@ wxString wxStyledTextCtrl::GetPunctuationChars() const {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Reset the set of characters for whitespace and word characters to the defaults.
@@ -3803,7 +3802,7 @@ wxString wxStyledTextCtrl::AutoCompGetCurrentText() const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Set auto-completion case insensitive behaviour to either prefer case-sensitive matches or have no preference.
@@ -4070,7 +4069,7 @@ int wxStyledTextCtrl::GetMarkerSymbolDefined(int markerNumber)
 // Set the text in the text margin for a line
 void wxStyledTextCtrl::MarginSetText(int line, const wxString& text)
 {
-    SendMsg(SCI_MARGINSETTEXT, line, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_MARGINSETTEXT, line, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Get the text in the text margin for a line
@@ -4080,7 +4079,7 @@ wxString wxStyledTextCtrl::MarginGetText(int line) const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, line, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Set the style number for the text margin for a line
@@ -4098,7 +4097,7 @@ int wxStyledTextCtrl::MarginGetStyle(int line) const
 // Set the style in the text margin for a line
 void wxStyledTextCtrl::MarginSetStyles(int line, const wxString& styles)
 {
-    SendMsg(SCI_MARGINSETSTYLES, line, (sptr_t)(const char*)wx2stc(styles));
+    SendMsg(SCI_MARGINSETSTYLES, line, (sptr_t)(const char*)styles.utf8_str());
 }
 
 // Get the styles in the text margin for a line
@@ -4111,7 +4110,7 @@ wxString wxStyledTextCtrl::MarginGetStyles(int line) const {
          SendMsg(msg, line, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Clear the margin text on all lines
@@ -4147,7 +4146,7 @@ int wxStyledTextCtrl::GetMarginOptions() const
 // Set the annotation text for a line
 void wxStyledTextCtrl::AnnotationSetText(int line, const wxString& text)
 {
-    SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Get the annotation text for a line
@@ -4158,7 +4157,7 @@ wxString wxStyledTextCtrl::AnnotationGetText(int line) const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, line, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Set the style number for the annotations for a line
@@ -4176,7 +4175,7 @@ int wxStyledTextCtrl::AnnotationGetStyle(int line) const
 // Set the annotation styles for a line
 void wxStyledTextCtrl::AnnotationSetStyles(int line, const wxString& styles)
 {
-    SendMsg(SCI_ANNOTATIONSETSTYLES, line, (sptr_t)(const char*)wx2stc(styles));
+    SendMsg(SCI_ANNOTATIONSETSTYLES, line, (sptr_t)(const char*)styles.utf8_str());
 }
 
 // Get the annotation styles for a line
@@ -4189,7 +4188,7 @@ wxString wxStyledTextCtrl::AnnotationGetStyles(int line) const {
          SendMsg(msg, line, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Get the number of annotation lines for a line
@@ -4734,31 +4733,31 @@ int wxStyledTextCtrl::GetLineEndTypesActive() const
 // Set the way a character is drawn.
 void wxStyledTextCtrl::SetRepresentation(const wxString& encodedCharacter, const wxString& representation)
 {
-    SendMsg(SCI_SETREPRESENTATION, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)(const char*)wx2stc(representation));
+    SendMsg(SCI_SETREPRESENTATION, (sptr_t)(const char*)encodedCharacter.utf8_str(), (sptr_t)(const char*)representation.utf8_str());
 }
 
 // Set the way a character is drawn.
 wxString wxStyledTextCtrl::GetRepresentation(const wxString& encodedCharacter) const {
          const int msg = SCI_GETREPRESENTATION;
-         const wxWX2MBbuf encCharBuf = wx2stc(encodedCharacter);
+         const wxScopedCharBuffer encCharBuf = encodedCharacter.utf8_str();
          long len = SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
          SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Remove a character representation.
 void wxStyledTextCtrl::ClearRepresentation(const wxString& encodedCharacter)
 {
-    SendMsg(SCI_CLEARREPRESENTATION, (sptr_t)(const char*)wx2stc(encodedCharacter), 0);
+    SendMsg(SCI_CLEARREPRESENTATION, (sptr_t)(const char*)encodedCharacter.utf8_str(), 0);
 }
 
 // Set the end of line annotation text for a line
 void wxStyledTextCtrl::EOLAnnotationSetText(int line, const wxString& text)
 {
-    SendMsg(SCI_EOLANNOTATIONSETTEXT, line, (sptr_t)(const char*)wx2stc(text));
+    SendMsg(SCI_EOLANNOTATIONSETTEXT, line, (sptr_t)(const char*)text.utf8_str());
 }
 
 // Get the end of line annotation text for a line
@@ -4769,7 +4768,7 @@ wxString wxStyledTextCtrl::EOLAnnotationGetText(int line) const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, line, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Set the style number for the end of line annotations for a line
@@ -4847,56 +4846,56 @@ void wxStyledTextCtrl::Colourise(int start, int end)
 // Set up a value that may be used by a lexer for some optional feature.
 void wxStyledTextCtrl::SetProperty(const wxString& key, const wxString& value)
 {
-    SendMsg(SCI_SETPROPERTY, (sptr_t)(const char*)wx2stc(key), (sptr_t)(const char*)wx2stc(value));
+    SendMsg(SCI_SETPROPERTY, (sptr_t)(const char*)key.utf8_str(), (sptr_t)(const char*)value.utf8_str());
 }
 
 // Set up the key words used by the lexer.
 void wxStyledTextCtrl::SetKeyWords(int keyWordSet, const wxString& keyWords)
 {
-    SendMsg(SCI_SETKEYWORDS, keyWordSet, (sptr_t)(const char*)wx2stc(keyWords));
+    SendMsg(SCI_SETKEYWORDS, keyWordSet, (sptr_t)(const char*)keyWords.utf8_str());
 }
 
 // Set the lexing language of the document based on string name.
 void wxStyledTextCtrl::SetLexerLanguage(const wxString& language)
 {
-    SendMsg(SCI_SETLEXERLANGUAGE, 0, (sptr_t)(const char*)wx2stc(language));
+    SendMsg(SCI_SETLEXERLANGUAGE, 0, (sptr_t)(const char*)language.utf8_str());
 }
 
 // Load a lexer library (dll / so).
 void wxStyledTextCtrl::LoadLexerLibrary(const wxString& path)
 {
-    SendMsg(SCI_LOADLEXERLIBRARY, 0, (sptr_t)(const char*)wx2stc(path));
+    SendMsg(SCI_LOADLEXERLIBRARY, 0, (sptr_t)(const char*)path.utf8_str());
 }
 
 // Retrieve a "property" value previously set with SetProperty.
 wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
          const int msg = SCI_GETPROPERTY;
-         const wxWX2MBbuf keyBuf = wx2stc(key);
+         const wxScopedCharBuffer keyBuf = key.utf8_str();
          long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
          SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve a "property" value previously set with SetProperty,
 // with "$()" variable replacement on returned buffer.
 wxString wxStyledTextCtrl::GetPropertyExpanded(const wxString& key) {
          const int msg = SCI_GETPROPERTYEXPANDED;
-         const wxWX2MBbuf keyBuf = wx2stc(key);
+         const wxScopedCharBuffer keyBuf = key.utf8_str();
          long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
          SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve a "property" value previously set with SetProperty,
 // interpreted as an int AFTER any "$()" variable replacement.
 int wxStyledTextCtrl::GetPropertyInt(const wxString &key, int defaultValue) const {
-        return SendMsg(SCI_GETPROPERTYINT, (uptr_t)(const char*)wx2stc(key), defaultValue);
+        return SendMsg(SCI_GETPROPERTYINT, (uptr_t)(const char*)key.utf8_str(), defaultValue);
 }
 
 // Retrieve the lexing language of the document.
@@ -4907,7 +4906,7 @@ wxString wxStyledTextCtrl::GetLexerLanguage() const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // For private communication between an application and a known lexer.
@@ -4923,25 +4922,25 @@ wxString wxStyledTextCtrl::PropertyNames() const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve the type of a property.
 int wxStyledTextCtrl::PropertyType(const wxString& name)
 {
-    return SendMsg(SCI_PROPERTYTYPE, (sptr_t)(const char*)wx2stc(name), 0);
+    return SendMsg(SCI_PROPERTYTYPE, (sptr_t)(const char*)name.utf8_str(), 0);
 }
 
 // Describe a property.
 wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
          const int msg = SCI_DESCRIBEPROPERTY;
-         const wxWX2MBbuf nameBuf = wx2stc(name);
+         const wxScopedCharBuffer nameBuf = name.utf8_str();
          long len = SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
          SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve a '\\n' separated list of descriptions of the keyword sets understood by the current lexer.
@@ -4952,7 +4951,7 @@ wxString wxStyledTextCtrl::DescribeKeyWordSets() const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Bit set of LineEndType enumertion for which line ends beyond the standard
@@ -5001,7 +5000,7 @@ void wxStyledTextCtrl::FreeSubStyles()
 // Set the identifiers that are shown in a particular style
 void wxStyledTextCtrl::SetIdentifiers(int style, const wxString& identifiers)
 {
-    SendMsg(SCI_SETIDENTIFIERS, style, (sptr_t)(const char*)wx2stc(identifiers));
+    SendMsg(SCI_SETIDENTIFIERS, style, (sptr_t)(const char*)identifiers.utf8_str());
 }
 
 // Where styles are duplicated by a feature such as active/inactive code
@@ -5019,7 +5018,7 @@ wxString wxStyledTextCtrl::GetSubStyleBases() const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve the number of named styles for the lexer.
@@ -5037,7 +5036,7 @@ wxString wxStyledTextCtrl::NameOfStyle(int style) const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, style, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve a ' ' separated list of style tags like "literal quoted string".
@@ -5049,7 +5048,7 @@ wxString wxStyledTextCtrl::TagsOfStyle(int style) const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, style, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Retrieve a description of a style.
@@ -5061,7 +5060,7 @@ wxString wxStyledTextCtrl::DescriptionOfStyle(int style) const {
 
          wxCharBuffer buf(len);
          SendMsg(msg, style, (sptr_t)buf.data());
-         return stc2wx(buf);
+         return wxString::FromUTF8(buf);
 }
 
 // Set the lexer from an ILexer*.
@@ -5865,7 +5864,7 @@ static void SetEventText(wxStyledTextEvent& evt, const char* text,
                          size_t length) {
     if(!text) return;
 
-    evt.SetString(stc2wx(text, length));
+    evt.SetString(wxString::FromUTF8(text, length));
 }
 
 
