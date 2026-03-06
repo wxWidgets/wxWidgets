@@ -1,0 +1,1 @@
+wxGTK: Fix regression when building with X11-only GTK (#26269).
