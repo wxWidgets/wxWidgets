@@ -17,7 +17,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_STC
+#if 0
 
 #ifndef WX_PRECOMP
     #include "wx/scrolbar.h"

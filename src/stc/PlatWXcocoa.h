@@ -12,7 +12,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STC
+#if 0
 
 // Functions used to create and manage popup windows.
 WX_NSWindow CreateFloatingWindow(wxWindow*);

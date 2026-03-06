@@ -3,7 +3,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STC
+#if 0
 
 #include "Platform.h"
 
