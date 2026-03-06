@@ -164,8 +164,8 @@ methodOverrideMap = {
                  'void %s(const wxString& text);',
 
                  '''void %s(const wxString& text) {
-                    const wxWX2MBbuf buf = wx2stc(text);
-                    SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+                    const wxScopedCharBuffer buf = text.utf8_str();
+                    SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);'''
                  ),
 
     'AddStyledText' : (0,
@@ -179,8 +179,8 @@ methodOverrideMap = {
                  'void %s(const wxString& text) override;',
 
                  '''void %s(const wxString& text) {
-                    const wxWX2MBbuf buf = wx2stc(text);
-                    SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+                    const wxScopedCharBuffer buf = text.utf8_str();
+                    SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);'''
                  ),
 
     'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0),
@@ -241,7 +241,7 @@ methodOverrideMap = {
         wxCharBuffer buf(len);
         int pos = SendMsg(%s, len+1, (sptr_t)buf.data());
         if (linePos)  *linePos = pos;
-        return stc2wx(buf);'''
+        return wxString::FromUTF8(buf);'''
     ),
 
     'MarkerSetFore' : ('MarkerSetForeground', 0, 0),
@@ -318,7 +318,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, line, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'MarginGetStyles' :
@@ -334,7 +334,7 @@ methodOverrideMap = {
          SendMsg(msg, line, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'SetAdditionalSelFore' : ('SetAdditionalSelForeground', 0, 0),
@@ -353,7 +353,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, line, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'AnnotationGetStyles' :
@@ -369,7 +369,7 @@ methodOverrideMap = {
          SendMsg(msg, line, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'StyleGetFore' : ('StyleGetForeground', 0, 0),
@@ -390,7 +390,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, style, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'StyleSetFont' : ('StyleSetFaceName', 0, 0),
@@ -583,7 +583,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'AutoCSetMaxWidth'      : ('AutoCompSetMaxWidth', 0, 0),
@@ -623,7 +623,7 @@ methodOverrideMap = {
             Sci_TextToFind  ft;
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
-            const wxWX2MBbuf buf = wx2stc(text);
+            const wxScopedCharBuffer buf = text.utf8_str();
             ft.lpstrText = buf;
 
             int pos = SendMsg(%s, flags, (sptr_t)&ft);
@@ -679,7 +679,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(%s, line, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'SetSel' : (None, 0,0), #'SetSelection', 0, 0, 0),
@@ -695,7 +695,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'GetTextRange' :
@@ -716,7 +716,7 @@ methodOverrideMap = {
          tr.chrg.cpMax = endPos;
          tr.lpstrText[0] = '\\0'; // initialize with 0 in case the range is invalid
          SendMsg(%s, 0, (sptr_t)&tr);
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'PointXFromPosition' :
@@ -744,7 +744,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(%s, len+1, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'GetDirectFunction' :
@@ -769,7 +769,7 @@ methodOverrideMap = {
          int len = GetTargetEnd() - GetTargetStart();
          wxCharBuffer buf(len);
          SendMsg(%s, 0, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'CallTipPosStart'   : ('CallTipPosAtStart', 0, 0),
@@ -793,8 +793,8 @@ methodOverrideMap = {
 
      '''
      int %s(const wxString& text) {
-         const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+         const wxScopedCharBuffer buf = text.utf8_str();
+         return SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);'''
     ),
 
     'ReplaceTargetRE' :
@@ -803,8 +803,8 @@ methodOverrideMap = {
 
      '''
      int %s(const wxString& text) {
-         const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+         const wxScopedCharBuffer buf = text.utf8_str();
+         return SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);'''
     ),
 
     'SearchInTarget' :
@@ -813,8 +813,8 @@ methodOverrideMap = {
 
      '''
      int %s(const wxString& text) {
-         const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+         const wxScopedCharBuffer buf = text.utf8_str();
+         return SendMsg(%s, buf.length(), (sptr_t)(const char*)buf);'''
     ),
 
     # not sure what to do about these yet
@@ -829,13 +829,13 @@ methodOverrideMap = {
 
      '''wxString %s(const wxString& key) {
          const int msg = %s;
-         const wxWX2MBbuf keyBuf = wx2stc(key);
+         const wxScopedCharBuffer keyBuf = key.utf8_str();
          long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
          SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'GetPropertyExpanded' :
@@ -844,20 +844,20 @@ methodOverrideMap = {
 
      '''wxString %s(const wxString& key) {
          const int msg = %s;
-         const wxWX2MBbuf keyBuf = wx2stc(key);
+         const wxScopedCharBuffer keyBuf = key.utf8_str();
          long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
          SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'GetPropertyInt' :
     (0,
     'int %s(const wxString &key, int defaultValue=0) const;',
     '''int %s(const wxString &key, int defaultValue) const {
-        return SendMsg(%s, (uptr_t)(const char*)wx2stc(key), defaultValue);'''
+        return SendMsg(%s, (uptr_t)(const char*)key.utf8_str(), defaultValue);'''
     ),
 
     'BraceMatch' :
@@ -936,7 +936,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'SetSelection' : (None, 0, 0),
@@ -967,7 +967,7 @@ methodOverrideMap = {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'GetTag' :
@@ -981,7 +981,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, tagNumber, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'GetWhitespaceChars' :
@@ -998,7 +998,7 @@ methodOverrideMap = {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
 
@@ -1016,7 +1016,7 @@ methodOverrideMap = {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
 
@@ -1031,7 +1031,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
 
@@ -1042,13 +1042,13 @@ methodOverrideMap = {
 
      '''wxString %s(const wxString& name) const {
          const int msg = %s;
-         const wxWX2MBbuf nameBuf = wx2stc(name);
+         const wxScopedCharBuffer nameBuf = name.utf8_str();
          long len = SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
          SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
 
@@ -1064,7 +1064,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'MarkerDefineRGBAImage' :
@@ -1101,13 +1101,13 @@ methodOverrideMap = {
      'wxString %s(const wxString& encodedCharacter) const;',
      '''wxString %s(const wxString& encodedCharacter) const {
          const int msg = %s;
-         const wxWX2MBbuf encCharBuf = wx2stc(encodedCharacter);
+         const wxScopedCharBuffer encCharBuf = encodedCharacter.utf8_str();
          long len = SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
          SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
      'PrivateLexerCall' :
@@ -1127,7 +1127,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'SetKeysUnicode' : (None,0,0),
@@ -1143,7 +1143,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, style, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'TagsOfStyle' :
@@ -1156,7 +1156,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, style, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'DescriptionOfStyle' :
@@ -1169,7 +1169,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, style, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'GetDefaultFoldDisplayText' :
@@ -1182,7 +1182,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, 0, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'EOLAnnotationGetText' :
@@ -1195,7 +1195,7 @@ methodOverrideMap = {
 
          wxCharBuffer buf(len);
          SendMsg(msg, line, (sptr_t)buf.data());
-         return stc2wx(buf);'''
+         return wxString::FromUTF8(buf);'''
     ),
 
     'SetILexer' :
@@ -1569,7 +1569,7 @@ def makeArgString(param):
     typ, name = param
 
     if typ == 'string':
-        return '(sptr_t)(const char*)wx2stc(%s)' % name
+        return '(sptr_t)(const char*)%s.utf8_str()' % name
     if typ == 'colour':
         return 'wxColourAsLong(%s)' % name
 

@@ -47,7 +47,6 @@
 
 #include "PlatWX.h"
 #include "wx/stc/stc.h"
-#include "wx/stc/private.h"
 
 #if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
 #define HAVE_DIRECTWRITE_TECHNOLOGY
@@ -172,7 +171,7 @@ void Font::Create(const FontParameters &fp) {
         fp.italic ? wxFONTSTYLE_ITALIC :  wxFONTSTYLE_NORMAL,
         weight,
         false,
-        stc2wx(fp.faceName),
+        wxString::FromUTF8(fp.faceName),
         encoding);
     wxFontWithAscent* newFont = new wxFontWithAscent(font);
     fid = newFont;
@@ -1659,7 +1658,7 @@ void SurfaceD2D::DrawTextTransparent(PRectangle rc, Font &font_,
 XYPOSITION SurfaceD2D::WidthText(Font &font_, const char *s, int len)
 {
     XYPOSITION width = 1.0;
-    wxString tbuf = stc2wx(s,len);
+    wxString tbuf = wxString::FromUTF8(s, len);
     SetFont(font_);
 
     if ( m_pDWriteFactory.get() && m_pTextFormat.get() )
@@ -1687,7 +1686,7 @@ void SurfaceD2D::MeasureWidths(Font &font_, const char *s, int len,
                                XYPOSITION *positions)
 {
     int fit = 0;
-    wxString tbuf = stc2wx(s,len);
+    wxString tbuf = wxString::FromUTF8(s, len);
     wxVector<FLOAT> poses;
     poses.reserve(tbuf.length());
     poses.resize(tbuf.length());
@@ -1918,7 +1917,7 @@ void SurfaceD2D::DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
     {
         // Explicitly creating a text layout appears a little faster
         wxCOMPtr<IDWriteTextLayout> pTextLayout;
-        wxString tbuf = stc2wx(s, len);
+        wxString tbuf = wxString::FromUTF8(s, len);
         HRESULT hr;
 
         if ( fuOptions & ETO_CLIPPED )
@@ -2902,7 +2901,7 @@ void wxSTCListBox::Clear()
 
 void wxSTCListBox::Append(char *s, int type)
 {
-    AppendHelper(stc2wx(s), type);
+    AppendHelper(wxString::FromUTF8(s), type);
     RecalculateItemHeight();
 }
 
@@ -2921,7 +2920,7 @@ void wxSTCListBox::Select(int n)
 
 void wxSTCListBox::GetValue(int n, char *value, int len) const
 {
-    strncpy(value, wx2stc(m_labels[n]), len);
+    strncpy(value, m_labels[n].utf8_str(), len);
     value[len-1] = '\0';
 }
 
@@ -2934,7 +2933,7 @@ void wxSTCListBox::SetList(const char* list, char separator, char typesep)
 {
     wxWindowUpdateLocker noUpdates(this);
     Clear();
-    wxStringTokenizer tkzr(stc2wx(list), (wxChar)separator);
+    wxStringTokenizer tkzr(wxString::FromUTF8(list), (wxChar)separator);
     while ( tkzr.HasMoreTokens() ) {
         wxString token = tkzr.GetNextToken();
         long type = -1;
@@ -3227,9 +3226,8 @@ public:
         // characters from the end of the label until it's short enough.
         wxString ellipsizedLabel = label;
 
-        wxCharBuffer buffer = wx2stc(ellipsizedLabel);
-        int ellipsizedLen = wx2stclen(ellipsizedLabel, buffer);
-        int curWidth = surface.WidthText(tempFont, buffer.data(),ellipsizedLen);
+        wxCharBuffer buffer = ellipsizedLabel.utf8_str();
+        int curWidth = surface.WidthText(tempFont, buffer.data(), buffer.length());
 
         for ( int i = label.length(); curWidth > rect.GetWidth() && i; --i )
         {
@@ -3237,9 +3235,8 @@ public:
             // Add the "Horizontal Ellipsis" character (U+2026).
             ellipsizedLabel << wxUniChar(0x2026);
 
-            buffer = wx2stc(ellipsizedLabel);
-            ellipsizedLen = wx2stclen(ellipsizedLabel, buffer);
-            curWidth = surface.WidthText(tempFont, buffer.data(),ellipsizedLen);
+            buffer = ellipsizedLabel.utf8_str();
+            curWidth = surface.WidthText(tempFont, buffer.data(), buffer.length());
         }
 
         // Construct the necessary Scintilla objects and then draw the label.
@@ -3249,7 +3246,7 @@ public:
         XYPOSITION ybase = rect.GetTop() + m_surfaceFontData->GetAscent();
 
         surface.DrawTextTransparent(prect, tempFont, ybase, buffer.data(),
-                                    ellipsizedLen, fore);
+                                    buffer.length(), fore);
 
         // Clean up.
         tempFont.Release();
@@ -3503,7 +3500,7 @@ unsigned int Platform::DoubleClickTime() {
 
 void Platform::DebugDisplay(const char *s) {
 #ifdef TRACE
-    wxLogDebug(stc2wx(s));
+    wxLogDebug(wxString::FromUTF8(s));
 #else
     wxUnusedVar(s);
 #endif
@@ -3537,7 +3534,7 @@ void Platform::Assert(const char *c, const char *file, int line) {
     sprintf(buffer, "Assertion [%s] failed at %s %d", c, file, line);
     if (assertionPopUps) {
         /*int idButton = */
-        wxMessageBox(stc2wx(buffer),
+        wxMessageBox(wxString::FromUTF8(buffer),
                      wxT("Assertion failure"),
                      wxICON_HAND | wxOK);
     } else {
@@ -3552,28 +3549,5 @@ void Platform::Assert(const char *c, const char *file, int line) {
 #endif
 }
 
-
-//----------------------------------------------------------------------
-
-// For historical reasons, we use Scintilla-specific conversion functions, we
-// should probably just call FromUTF8()/utf8_str() directly instead now.
-
-wxString stc2wx(const char* str, size_t len)
-{
-    return wxString::FromUTF8(str, len);
-}
-
-
-
-wxString stc2wx(const char* str)
-{
-    return wxString::FromUTF8(str);
-}
-
-
-wxWX2MBbuf wx2stc(const wxString& str)
-{
-    return str.utf8_str();
-}
 
 #endif // wxUSE_STC
