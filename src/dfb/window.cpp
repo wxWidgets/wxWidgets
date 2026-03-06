@@ -1039,6 +1039,12 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
     }
 }
 
+wxWindow* wxFindWindowAtPoint(const wxPoint& WXUNUSED(pt), wxWindow* WXUNUSED(skip))
+{
+    wxFAIL_MSG( "wxFindWindowAtPoint not implemented" );
+    return nullptr;
+}
+
 wxWindow* wxFindWindowAtPoint(const wxPoint& WXUNUSED(pt))
 {
     wxFAIL_MSG( "wxFindWindowAtPoint not implemented" );

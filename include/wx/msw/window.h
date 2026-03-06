@@ -744,7 +744,7 @@ protected:
     }
 
 private:
-    friend wxWindow* wxFindWindowAtPoint(const wxPoint& pt, wxWindow* skip);
+    friend WXDLLIMPEXP_CORE wxWindow* wxFindWindowAtPoint(const wxPoint& pt, wxWindow* skip);
     bool m_hideFromFind;
 
     // common part of all ctors

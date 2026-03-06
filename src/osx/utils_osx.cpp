@@ -120,7 +120,7 @@ wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 
 wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt);
 
-wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt, wxWindow* skip)
 {
     return wxGenericFindWindowAtPoint( pt, skip );
 }
