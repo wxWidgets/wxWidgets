@@ -1,0 +1,1 @@
+wxMSW: Fix regression with wxCheckBox label in screen readers (#26270).
