@@ -2920,8 +2920,7 @@ void wxSTCListBox::Select(int n)
 
 void wxSTCListBox::GetValue(int n, char *value, int len) const
 {
-    strncpy(value, m_labels[n].utf8_str(), len);
-    value[len-1] = '\0';
+    wxStrlcpy(value, m_labels[n].utf8_str(), len);
 }
 
 void wxSTCListBox::SetDelegate(IListBoxDelegate* lbDelegate)
