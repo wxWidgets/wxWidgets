@@ -5598,19 +5598,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     GetEventHandler()->ProcessEvent(evt);
 }
 
-#ifdef __WXMSW__
-WXLRESULT wxStyledTextCtrl::MSWWindowProc(WXUINT nMsg,
-    WXWPARAM wParam,
-    WXLPARAM lParam)
-{
-    if ( m_swx )
-        return SendMsg(nMsg, wParam, lParam);
-    else
-        return wxControl::MSWWindowProc(nMsg, wParam, lParam);
-}
-#endif
-
-
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
