@@ -27,6 +27,18 @@
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
+static void
+scintilla_notify_callback(GtkWidget* WXUNUSED(widget), gint WXUNUSED(id), SCNotification *scn, wxStyledTextCtrl *stc) {
+    stc->NotifyParent(scn);
+}
+
+static void
+scintilla_command_callback(GtkWidget* WXUNUSED(widget), gint param, GtkWidget* WXUNUSED(widget2), wxStyledTextCtrl *stc) {
+    int command = param >> 16;
+    if (command == SCEN_CHANGE)
+        stc->NotifyChange();
+}
+
 //----------------------------------------------------------------------
 // Constructor and Destructor
 
@@ -92,6 +104,9 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
 
     SetSelForeground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
     SetSelBackground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+
+    g_signal_connect(m_widget, "sci-notify", G_CALLBACK(scintilla_notify_callback), this);
+    g_signal_connect(m_widget, "command", G_CALLBACK(scintilla_command_callback), this);
 
     return true;
 }
