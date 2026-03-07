@@ -3891,7 +3891,11 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
 
     if (!title.empty())
     {
+#if wxUSE_CONTROLS
+        *name = wxControl::GetLabelText(title);
+#else
         *name = title;
+#endif
         return wxACC_OK;
     }
     else
