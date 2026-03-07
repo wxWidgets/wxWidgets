@@ -458,7 +458,10 @@ void wxWebViewWebKit::Print()
     if (showPrompt)
     {
         [op setShowsPrintPanel: showPrompt];
-        [op setShowsProgressPanel: YES];
+        // in my tests, the progress bar always freezes and it stops the whole
+        // print operation. do not turn this to true unless there is a
+        // workaround for the bug.
+        [op setShowsProgressPanel: NO];
     }
     // Print it.
     if (m_webView.window)
@@ -529,7 +532,7 @@ void wxWebViewWebKit::Print(const wxPrintData& printData, int WXUNUSED(flags))
 
     op.view.frame = m_webView.frame;
     [op setShowsPrintPanel: YES];
-    [op setShowsProgressPanel: YES];
+    [op setShowsProgressPanel: NO];
 
     if (m_webView.window)
     {
