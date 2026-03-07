@@ -6079,6 +6079,7 @@ protected:
 
     virtual wxSize DoGetBestSize() const override;
 
+public:
     // Turn notifications from Scintilla into events
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
