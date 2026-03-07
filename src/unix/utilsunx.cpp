@@ -1159,31 +1159,6 @@ wxGetValuesFromOSRelease(const wxString& filename, wxLinuxDistributionInfo& ret)
 #endif
 }
 
-static wxString
-wxGetSpecificValueFromOSRelease(const wxString& key)
-{
-#if wxUSE_CONFIG
-    // Read /etc/os-release and fall back to /usr/lib/os-release per below
-    // https://www.freedesktop.org/software/systemd/man/os-release.html
-    const wxString fileName[] = {
-        "/etc/os-release",
-        "/usr/lib/os-release"
-    };
-
-    for ( size_t i = 0; i < WXSIZEOF(fileName); ++i )
-    {
-        if ( wxFileName::Exists(fileName[i]) )
-        {
-            wxFileConfig fc(wxEmptyString, wxEmptyString,
-                            wxEmptyString, fileName[i]);
-            // Default value suggested by the spec
-            return fc.Read(key, "Linux");
-        }
-    }
-#endif
-    return wxEmptyString;
-}
-
 static bool
 wxGetValueFromLSBRelease(const wxString& arg, const wxString& lhs, wxString* rhs)
 {
@@ -1278,52 +1253,81 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
     return wxPlatformInfo::GetOperatingSystemId(kernel);
 }
 
+static bool
+wxGetDescFromOSRelease(wxString* distName, wxString* version)
+{
+#if wxUSE_CONFIG
+    // Read /etc/os-release and fall back to /usr/lib/os-release per below
+    // https://www.freedesktop.org/software/systemd/man/os-release.html
+    static const char* const osReleasePaths[] =
+    {
+        "/etc/os-release",
+        "/usr/lib/os-release"
+    };
+
+    for ( const auto& fileName : osReleasePaths )
+    {
+        if ( wxFileName::Exists(fileName) )
+        {
+            // No app, no vendor, no global file path, just the local config
+            // file to read the values from.
+            wxFileConfig fc({}, {}, {}, fileName);
+
+            // Default value suggested by the spec
+            *distName = fc.Read("NAME", "Linux");
+
+            *version = fc.Read("VERSION");
+
+            return true;
+        }
+    }
+#endif // wxUSE_CONFIG
+
+    return false;
+}
+
 wxString wxGetOsDescription()
 {
 #ifdef __VMS
     return wxGetCommandOutput(wxT("uname -s -v -m"));
-#elif defined(__LINUX__)
-    wxString osDesc;
-
-    const wxString distName = wxGetSpecificValueFromOSRelease("NAME");
-    const wxString version = wxGetSpecificValueFromOSRelease("VERSION");
-
-    if ( !distName.empty() )
+#else
+    wxString distName, version;
+    if ( wxGetDescFromOSRelease(&distName, &version) )
     {
-        osDesc += distName;
+        wxString osDesc = distName;
         if ( !version.empty() )
         {
             osDesc += " " + version;
         }
         osDesc += ",";
+
+        const wxString unameSystem = wxGetCommandOutput(wxT("uname -s"));
+        const wxString unameRelease = wxGetCommandOutput(wxT("uname -r"));
+        const wxString unameMachine = wxGetCommandOutput(wxT("uname -m"));
+
+        // If any of the strings above is already present in the info
+        // read from os-release, avoid repeating the values to keep
+        // the description relatively short. Also do not repeat
+        // e.g. the machine type if it is already part of the kernel
+        // version number.
+
+        if ( osDesc.Find(unameSystem) == wxNOT_FOUND )
+        {
+            osDesc += " " + unameSystem;
+        }
+        if ( osDesc.Find(unameRelease) == wxNOT_FOUND )
+        {
+            osDesc += " " + unameRelease;
+        }
+        if ( osDesc.Find(unameMachine) == wxNOT_FOUND )
+        {
+            osDesc += " " + unameMachine;
+        }
+
+        osDesc.Trim(false);
+        return osDesc;
     }
 
-    const wxString unSystem = wxGetCommandOutput(wxT("uname -s"));
-    const wxString unRelease = wxGetCommandOutput(wxT("uname -r"));
-    const wxString unMachine = wxGetCommandOutput(wxT("uname -m"));
-
-    // If any of the strings above is already present in the info
-    // read from os-release, avoid repeating the values to keep
-    // the description relatively short. Also do not repeat
-    // e.g. the machine type if it is already part of the kernel
-    // version number.
-
-    if ( osDesc.Find(unSystem) == wxNOT_FOUND )
-    {
-        osDesc += " " + unSystem;
-    }
-    if ( osDesc.Find(unRelease) == wxNOT_FOUND )
-    {
-        osDesc += " " + unRelease;
-    }
-    if ( osDesc.Find(unMachine) == wxNOT_FOUND )
-    {
-        osDesc += " " + unMachine;
-    }
-
-    osDesc.Trim(false);
-    return osDesc;
-#else
     return wxGetCommandOutput(wxT("uname -s -r -m"));
 #endif
 }
