@@ -363,7 +363,7 @@ bool wxRemoveFile(const wxString& file);
     @note On Unix, moving files across filesystem boundaries (e.g., from an
     external drive) is not supported and will return @false.
 
-    @availability{wxHAS_MOVE_TO_TRASH}
+    Requires @c wxHAS_MOVE_TO_TRASH.
 
     @since 3.3.3
 
