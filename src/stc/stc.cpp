@@ -5370,14 +5370,12 @@ void wxStyledTextCtrl::AnnotationClearLine(int line) {
     SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)nullptr);
 }
 
-void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber,
-                                          const wxBitmap& bmp) {
-    m_swx->DoMarkerDefineBitmap(markerNumber, bmp);
+void wxStyledTextCtrl::MarkerDefineBitmap(int, const wxBitmap&) {
+    // FIXME stub
 }
 
-void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp)
-{
-    m_swx->DoRegisterImage(type, bmp);
+void wxStyledTextCtrl::RegisterImage(int, const wxBitmap&) {
+    // FIXME stub
 }
 
 
