@@ -360,9 +360,6 @@ bool wxRemoveFile(const wxString& file);
     Under macOS, this uses @c NSFileManager's @c trashItemAtURL method.
     Under Unix systems (including Linux and BSD), this uses @c g_file_trash.
 
-    @note On Unix, moving files across filesystem boundaries (e.g., from an
-    external drive) is not supported and will return @false.
-
     @since 3.3.3
 
     @header{wx/filefn.h}
