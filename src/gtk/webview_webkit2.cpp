@@ -1454,7 +1454,7 @@ const char* const gs_webviewPaperList[] = {
 GtkPaperSize* wxWebViewGetGtkPaperSize(wxPaperSize paperId)
 {
     // Use the named GTK paper size if we have a mapping
-    if (paperId > 0 && static_cast<size_t>(paperId) < sizeof(gs_webviewPaperList)/sizeof(gs_webviewPaperList[0]))
+    if (paperId > 0 && static_cast<size_t>(paperId) < WXSIZEOF(gs_webviewPaperList))
         return gtk_paper_size_new(gs_webviewPaperList[paperId]);
 
     // Fall back to custom size from wxThePrintPaperDatabase
