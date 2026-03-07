@@ -592,10 +592,6 @@ protected:
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
-#ifdef __WXMSW__
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
-#endif // __WXMSW__
-
 private:
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxStyledTextCtrl);
