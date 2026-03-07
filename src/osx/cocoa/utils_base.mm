@@ -391,8 +391,7 @@ bool wxMacInitCocoa()
 #endif // __WXDARWIN_OSX__
 
 // Move file or directory to macOS Trash using NSFileManager.
-// Called from wxMoveToTrash() in src/common/filefn.cpp.
-bool wxMoveToTrashOSX(const wxString& path)
+bool wxMoveToTrash(const wxString& path)
 {
     wxCFStringRef cfPath(path);
     NSURL *fileURL = [NSURL fileURLWithPath:cfPath.AsNSString()];

@@ -641,70 +641,14 @@ bool wxRemoveFile(const wxString& file)
     return res == 0;
 }
 
-#if defined(__WXMAC__)
-extern bool wxMoveToTrashOSX(const wxString& path);
-#endif
+#ifndef wxHAS_MOVE_TO_TRASH
 
-#if defined(__WXGTK__)
-#include <gio/gio.h>
-#endif
-
-bool wxMoveToTrash(const wxString& path)
+bool wxMoveToTrash(const wxString& WXUNUSED(path))
 {
-    if ( !wxFileExists(path) && !wxDirExists(path) )
-    {
-        wxLogError(_("'%s' doesn't exist and can't be moved to trash."), path);
-        return false;
-    }
-
-#if defined(__WINDOWS__)
-    // SHFileOperation needs double null termination string
-    // but without separator at the end of the path
-    wxString pathStr(path);
-    if ( pathStr.Last() == wxFILE_SEP_PATH )
-        pathStr.RemoveLast();
-    pathStr += wxT('\0');
-
-    SHFILEOPSTRUCT fileop;
-    wxZeroMemory(fileop);
-    fileop.wFunc = FO_DELETE;
-    fileop.pFrom = pathStr.t_str();
-    fileop.fFlags = FOF_ALLOWUNDO | FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI;
-
-    int ret = SHFileOperation(&fileop);
-    if ( ret != 0 || fileop.fAnyOperationsAborted )
-    {
-        wxLogDebug(wxS("SHFileOperation(FO_DELETE with FOF_ALLOWUNDO) failed: error 0x%08x"),
-                   ret);
-        return false;
-    }
-
-    return true;
-
-#elif defined(__WXMAC__)
-    return wxMoveToTrashOSX(path);
-
-#elif defined(__WXGTK__)
-    GError* err = nullptr;
-    GFile* file = g_file_new_for_path(path.fn_str());
-
-    bool ok = g_file_trash(file, nullptr, &err);
-    if ( !ok )
-    {
-        wxLogError(_("'%s' couldn't be moved to trash: %s"),
-                   path, err ? err->message : _("unknown error"));
-    }
-
-    g_clear_error(&err);
-    g_object_unref(file);
-
-    return ok;
-
-#else
-    wxLogError(_("Moving to trash is not supported on this platform"));
     return false;
-#endif
 }
+
+#endif // !wxHAS_MOVE_TO_TRASH
 
 bool wxMkdir(const wxString& dir, int perm)
 {

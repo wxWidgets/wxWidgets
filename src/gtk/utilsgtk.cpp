@@ -26,6 +26,10 @@
 
 #include "wx/gtk/private/wrapgdk.h"
 #include "wx/gtk/private/backend.h"
+#include "wx/gtk/private/error.h"
+#include "wx/gtk/private/object.h"
+
+#include <gio/gio.h>
 
 #if wxDEBUG_LEVEL
     #include "wx/gtk/assertdlg_gtk.h"
@@ -335,3 +339,18 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 }
 
 #endif // __UNIX__
+
+bool wxMoveToTrash(const wxString& path)
+{
+    wxGtkError err;
+    wxGtkObject<GFile> file(g_file_new_for_path(path.utf8_str()));
+
+    bool ok = g_file_trash(file, nullptr, err.Out());
+    if ( !ok )
+    {
+        wxLogError(_("'%s' couldn't be moved to trash: %s"),
+                   path, err ? err.GetMessage() : _("unknown error"));
+    }
+
+    return ok;
+}

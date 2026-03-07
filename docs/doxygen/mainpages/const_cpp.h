@@ -204,6 +204,9 @@ Currently the following symbols exist:
 @itemdef{wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG, Defined if the <code>long
     long</code> and <code>long</code> types are different. This can be useful
     to decide whether some function should be overloaded for both types or not.}
+@itemdef{wxHAS_MOVE_TO_TRASH, Defined if wxMoveToTrash() is supported on the
+    current platform. This is currently the case for MSW, macOS, and GTK.
+    This constant is available since wxWidgets 3.3.3}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
 @itemdef{wxHAS_NATIVE_ANIMATIONCTRL, Defined if native wxAnimationCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
 @itemdef{wxHAS_NATIVE_DATAVIEWCTRL, Defined if native wxDataViewCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
