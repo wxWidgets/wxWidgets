@@ -53,6 +53,7 @@ public:
     virtual void Print() override;
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual void Print(const wxPrintData& printData, int flags = wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER) override;
+    using wxWebView::Print;
 #endif
 
     virtual void LoadURL(const wxString& url) override;
