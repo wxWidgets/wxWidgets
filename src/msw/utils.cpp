@@ -1733,7 +1733,7 @@ bool wxMoveToTrash(const wxString& path)
     int ret = SHFileOperation(&fileop);
     if ( ret != 0 || fileop.fAnyOperationsAborted )
     {
-        wxLogDebug(wxS("SHFileOperation(FO_DELETE with FOF_ALLOWUNDO) failed: error 0x%08x"),
+        wxLogError(wxS("SHFileOperation(FO_DELETE with FOF_ALLOWUNDO) failed: error 0x%08x"),
                    ret);
         return false;
     }
