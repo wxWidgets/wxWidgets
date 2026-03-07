@@ -187,7 +187,7 @@ enum wxWebViewBrowsingDataTypes
 /**
     Types of settings that can be applied to print operations.
 
-    @since 3.3.2
+    @since 3.3.3
 */
 enum wxWebViewPrintFlags
 {
