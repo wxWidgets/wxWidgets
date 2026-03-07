@@ -1296,7 +1296,7 @@ public:
         @param flags
             A combination of wxWebViewPrintFlags values.
 
-        @since 3.3.2
+        @since 3.3.3
     */
     virtual void Print(const wxPrintData& printData,
                        int flags = wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER);
