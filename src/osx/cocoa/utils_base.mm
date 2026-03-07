@@ -405,7 +405,7 @@ bool wxMoveToTrash(const wxString& path)
         wxLogError(_("'%s' couldn't be moved to trash: %s"),
                    path,
                    error ? wxCFStringRef::AsString([error localizedDescription])
-                         : wxString("unknown error"));
+                         : _("unknown error"));
     }
 
     return ok;
