@@ -14,6 +14,9 @@ wx_append_sources(STC_FILES STC_CMN)
 if(WXOSX_COCOA)
     wx_append_sources(STC_FILES STC_OSX_COCOA)
 endif()
+if(WXGTK)
+    wx_append_sources(STC_FILES STC_GTK)
+endif()
 
 wx_add_library(wxstc ${STC_FILES})
 
