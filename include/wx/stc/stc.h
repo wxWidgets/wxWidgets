@@ -3329,7 +3329,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 //}}}
 //----------------------------------------------------------------------
 
-class  ScintillaWX;                      // forward declare
 class  WordList;
 struct SCNotification;
 
@@ -3365,7 +3364,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxASCII_STR(wxSTCNameStr));
-    wxStyledTextCtrl() { m_swx = nullptr; }
+    wxStyledTextCtrl() { }
     ~wxStyledTextCtrl();
 
 #endif
@@ -6077,28 +6076,6 @@ protected:
     virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
     // Event handlers
-    void OnPaint(wxPaintEvent& evt);
-    void OnScrollWin(wxScrollWinEvent& evt);
-    void OnScroll(wxScrollEvent& evt);
-    void OnSize(wxSizeEvent& evt);
-    void OnMouseLeftDown(wxMouseEvent& evt);
-    void OnMouseRightDown(wxMouseEvent& evt);
-    void OnMouseMove(wxMouseEvent& evt);
-    void OnMouseLeftUp(wxMouseEvent& evt);
-    void OnMouseMiddleUp(wxMouseEvent& evt);
-    void OnContextMenu(wxContextMenuEvent& evt);
-    void OnMouseWheel(wxMouseEvent& evt);
-    void OnChar(wxKeyEvent& evt);
-    void OnKeyDown(wxKeyEvent& evt);
-    void OnLoseFocus(wxFocusEvent& evt);
-    void OnGainFocus(wxFocusEvent& evt);
-    void OnDPIChanged(wxDPIChangedEvent& evt);
-    void OnSysColourChanged(wxSysColourChangedEvent& evt);
-    void OnEraseBackground(wxEraseEvent& evt);
-    void OnMenu(wxCommandEvent& evt);
-    void OnListBox(wxCommandEvent& evt);
-    void OnIdle(wxIdleEvent& evt);
-    void OnMouseCaptureLost(wxMouseCaptureLostEvent& evt);
 
     virtual wxSize DoGetBestSize() const override;
 
@@ -6116,7 +6093,6 @@ private:
 
 protected:
 
-    ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
     wxScrollBar*        m_vScrollBar;
     wxScrollBar*        m_hScrollBar;
@@ -6130,8 +6106,6 @@ private:
     int                 m_foldFlags = 0;
 
     bool                m_isCustomDrawn = false;
-
-    friend class ScintillaWX;
 #endif // !SWIG
 };
 
