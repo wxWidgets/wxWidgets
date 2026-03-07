@@ -3891,7 +3891,7 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
 
     if (!title.empty())
     {
-        *name = title;
+        *name = wxStripMenuCodes(title, wxStrip_Mnemonics);
         return wxACC_OK;
     }
     else
