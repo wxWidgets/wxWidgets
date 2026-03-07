@@ -1475,10 +1475,10 @@ GtkPaperSize* wxWebViewGetGtkPaperSize(wxPaperSize paperId)
 
 void wxWebViewWebKit::Print(const wxPrintData& printData, int WXUNUSED(flags))
 {
-    WebKitPrintOperation* printop = webkit_print_operation_new(m_web_view);
+    wxGtkObject<WebKitPrintOperation> printop(webkit_print_operation_new(m_web_view));
 
     // Use GtkPageSetup for paper size and orientation
-    GtkPageSetup* pageSetup = gtk_page_setup_new();
+    wxGtkObject<GtkPageSetup> pageSetup(gtk_page_setup_new());
 
     gtk_page_setup_set_orientation(pageSetup,
         printData.GetOrientation() == wxLANDSCAPE
@@ -1490,10 +1490,9 @@ void wxWebViewWebKit::Print(const wxPrintData& printData, int WXUNUSED(flags))
     gtk_paper_size_free(paperSize);
 
     webkit_print_operation_set_page_setup(printop, pageSetup);
-    g_object_unref(pageSetup);
 
     // Use GtkPrintSettings for copies, collation, duplex, color
-    GtkPrintSettings* settings = gtk_print_settings_new();
+    wxGtkObject<GtkPrintSettings> settings(gtk_print_settings_new());
 
     int copies = printData.GetNoCopies();
     if (copies > 0)
@@ -1519,9 +1518,6 @@ void wxWebViewWebKit::Print(const wxPrintData& printData, int WXUNUSED(flags))
     webkit_print_operation_set_print_settings(printop, settings);
 
     webkit_print_operation_run_dialog(printop, nullptr);
-
-    g_object_unref(settings);
-    g_object_unref(printop);
 }
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
