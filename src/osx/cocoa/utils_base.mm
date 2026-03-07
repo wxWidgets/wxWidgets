@@ -388,8 +388,6 @@ bool wxMacInitCocoa()
     return cocoaLoaded;
 }
 
-#endif // __WXDARWIN_OSX__
-
 // Move file or directory to macOS Trash using NSFileManager.
 bool wxMoveToTrash(const wxString& path)
 {
@@ -412,3 +410,5 @@ bool wxMoveToTrash(const wxString& path)
 
     return ok;
 }
+
+#endif // __WXDARWIN_OSX__
