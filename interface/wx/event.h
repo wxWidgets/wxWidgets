@@ -5183,7 +5183,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @since 3.3.2
+    @since 3.3.3
  */
 class wxStylusEvent : public wxEvent
 {

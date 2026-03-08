@@ -77,13 +77,13 @@
     <subproject id="statbar" template="sub"/>
     <subproject id="stc" template="sub" cond="USE_STC=='1'"/>
     <subproject id="svg" template="sub"/>
+    <subproject id="tabletpen" template="sub"/>
     <subproject id="taborder" template="sub"/>
     <subproject id="taskbar" template="sub"/>
     <subproject id="text" template="sub"/>
     <subproject id="thread" template="sub"/>
     <subproject id="toolbar" template="sub"/>
     <subproject id="touchtest" template="sub"/>
-    <subproject id="tabletpen" template="sub"/>
     <subproject id="treelist" template="sub"/>
     <subproject id="treectrl" template="sub"/>
     <subproject id="typetest" template="sub"/>
