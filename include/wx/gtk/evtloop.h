@@ -21,7 +21,6 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 public:
     wxGUIEventLoop();
 
-    virtual void ScheduleExit(int rc = 0) wxOVERRIDE;
     virtual bool Pending() const wxOVERRIDE;
     virtual bool Dispatch() wxOVERRIDE;
     virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
@@ -34,6 +33,7 @@ public:
 
 protected:
     virtual int DoRun() wxOVERRIDE;
+    virtual void DoStop(int rc) override;
     virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
 
 private:
