@@ -1,7 +1,10 @@
 #ifndef _TRACKER_INPUT_H_
 #define _TRACKER_INPUT_H_
+
+#include "wx/defs.h"
 #import <Cocoa/Cocoa.h>
 
+WXDLLIMPEXP_CORE
 @interface InputTracker : NSResponder {
 @private
     NSView *_view;
