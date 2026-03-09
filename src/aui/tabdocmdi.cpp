@@ -89,9 +89,6 @@ void wxAuiDocMDIParentFrame::OnMRUFile(wxCommandEvent& event)
 // Extend event processing to search the view's event table
 bool wxAuiDocMDIParentFrame::ProcessEvent(wxEvent& event)
 {
-	int m=0;
-	if( event.GetEventType() == 10095 )
-		m=1;
     // Try the document manager, then do default processing
     if (!m_docManager || !m_docManager->ProcessEvent(event))
     {

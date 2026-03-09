@@ -900,7 +900,6 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
         // highlight positions.  So trigger a new paint event that will
         // repaint the whole window.
         stc->Refresh(false);
-        stc->Update(); // Bricsys Change : needed for proper repaint of braces
 
 #if wxALWAYS_NATIVE_DOUBLE_BUFFER
         // On systems using double buffering, we also need to finish the

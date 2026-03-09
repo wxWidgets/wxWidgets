@@ -1977,6 +1977,20 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     // Set hint text
     tc->SetHint(prop->GetHintText());
 
+// Bricsys change
+#ifdef __APPLE__
+    wxAcceleratorEntry entries[4];
+
+    entries[0].Set(wxACCEL_CMD, (int)'C', wxID_COPY);
+    entries[1].Set(wxACCEL_CMD, (int)'V', wxID_PASTE);
+    entries[2].Set(wxACCEL_CMD, (int)'X', wxID_CUT);
+    entries[3].Set(wxACCEL_CMD, (int)'A', wxID_SELECTALL);
+
+    wxAcceleratorTable accel(4, entries);
+    tc->SetAcceleratorTable(accel);
+#endif
+// End Bricsys change
+
     return tc;
 }
 

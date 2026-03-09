@@ -169,10 +169,19 @@ void wxVListBoxComboPopup::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) co
 
 wxCoord wxVListBoxComboPopup::OnMeasureItem(size_t n) const
 {
+#if 1 // Bricsys change : this 'm_combo' can be just in destruction, which calls 'HidePopup()'
+      // which calls 'SetValueByUser()' ... and finally ends-up in measuring the item height;
+      // but due to destruction, the 'm_combo' is actually only a 'wxControl' now;
+      // indicates a weak logic in wxComboCtrlBase::DestroyPopup()
+    const wxOwnerDrawnComboBox* combo = wxDynamicCast(m_combo, wxOwnerDrawnComboBox);
+    if (!combo)
+        return m_itemHeight;
+#else
     wxOwnerDrawnComboBox* combo = (wxOwnerDrawnComboBox*) m_combo;
 
     wxASSERT_MSG( wxDynamicCast(combo, wxOwnerDrawnComboBox),
                   wxT("you must subclass wxVListBoxComboPopup for drawing and measuring methods") );
+#endif
 
     wxCoord h = combo->OnMeasureItem(n);
     if ( h < 0 )
