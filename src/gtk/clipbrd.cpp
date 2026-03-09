@@ -646,8 +646,6 @@ bool wxClipboard::SetData( wxDataObject *data )
 
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
-    Clear();
-
     return AddData( data );
 }
 
@@ -658,9 +656,16 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
     // we can only store one wxDataObject so clear the old one
-    Clear();
-
-    Data() = data;
+    if ( m_usePrimary )
+    {
+        delete m_dataPrimary;
+        m_dataPrimary = data;
+    }
+    else
+    {
+        delete m_dataClipboard;
+        m_dataClipboard = data;
+    }
 
     // get formats from wxDataObjects
     const size_t count = data->GetFormatCount();
