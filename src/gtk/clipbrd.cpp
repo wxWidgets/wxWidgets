@@ -646,8 +646,6 @@ bool wxClipboard::SetData( wxDataObject *data )
 
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
-    Clear();
-
     return AddData( data );
 }
 
@@ -658,7 +656,16 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
     // we can only store one wxDataObject so clear the old one
-    Clear();
+    if ( m_usePrimary )
+    {
+        delete m_dataPrimary;
+        m_dataPrimary = nullptr;
+    }
+    else
+    {
+        delete m_dataClipboard;
+        m_dataClipboard = nullptr;
+    }
 
     Data() = data;
 
