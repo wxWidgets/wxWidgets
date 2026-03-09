@@ -10,11 +10,13 @@
 #ifndef _WX_GTK_CLIPBOARD_H_
 #define _WX_GTK_CLIPBOARD_H_
 
+#include <memory>
+
+#include "wx/weakref.h"
+
 // ----------------------------------------------------------------------------
 // wxClipboard
 // ----------------------------------------------------------------------------
-
-#include "wx/weakref.h"
 
 class WXDLLIMPEXP_CORE wxClipboard : public wxClipboardBase
 {
@@ -83,13 +85,13 @@ public:
 
 private:
     // the data object for the specific selection
-    wxDataObject *& Data(Kind kind)
+    std::unique_ptr<wxDataObject>& Data(Kind kind)
     {
         return kind == Primary ? m_dataPrimary : m_dataClipboard;
     }
 
     // the data object we're currently using
-    wxDataObject *& Data()
+    std::unique_ptr<wxDataObject>& Data()
     {
         return Data(m_usePrimary ? Primary : Clipboard);
     }
@@ -108,8 +110,8 @@ private:
     // both of these pointers can be non-null simultaneously but we only use
     // one of them at any moment depending on m_usePrimary value, use Data()
     // (from inside) or GTKGetDataObject() (from outside) accessors
-    wxDataObject *m_dataPrimary,
-                 *m_dataClipboard;
+    std::unique_ptr<wxDataObject> m_dataPrimary,
+                                  m_dataClipboard;
 
     // this is used to temporarily hold the object passed to our GetData() so
     // that GTK callbacks could access it

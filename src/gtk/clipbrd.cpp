@@ -448,8 +448,6 @@ wxClipboard::wxClipboard()
 
     m_open = false;
 
-    m_dataPrimary =
-    m_dataClipboard =
     m_receivedData = nullptr;
 
     m_formatSupported = false;
@@ -506,8 +504,7 @@ GdkAtom wxClipboard::GTKGetClipboardAtom() const
 
 void wxClipboard::GTKClearData(Kind kind)
 {
-    wxDataObject *&data = Data(kind);
-    wxDELETE(data);
+    Data(kind).reset();
 }
 
 bool wxClipboard::SetSelectionOwner(bool set)
@@ -598,16 +595,7 @@ void wxClipboard::Clear()
     else
     {
         // We need to free our data directly to avoid leaking memory.
-        if ( m_usePrimary )
-        {
-            delete m_dataPrimary;
-            m_dataPrimary = nullptr;
-        }
-        else
-        {
-            delete m_dataClipboard;
-            m_dataClipboard = nullptr;
-        }
+        Data().reset();
     }
 
     m_targetRequested = nullptr;
@@ -656,16 +644,7 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
     // we can only store one wxDataObject so clear the old one
-    if ( m_usePrimary )
-    {
-        delete m_dataPrimary;
-        m_dataPrimary = data;
-    }
-    else
-    {
-        delete m_dataClipboard;
-        m_dataClipboard = data;
-    }
+    Data().reset(data);
 
     // get formats from wxDataObjects
     const size_t count = data->GetFormatCount();
@@ -837,23 +816,23 @@ bool wxClipboard::GetData( wxDataObject& data )
 wxDataObject* wxClipboard::GTKGetDataObject( GdkAtom atom )
 {
     if ( atom == GDK_NONE )
-        return Data();
+        return Data().get();
 
     if ( atom == GDK_SELECTION_PRIMARY )
     {
         wxLogTrace(TRACE_CLIPBOARD, wxT("Primary selection requested" ));
 
-        return Data( wxClipboard::Primary );
+        return Data(wxClipboard::Primary).get();
     }
     else if ( atom == GDK_SELECTION_CLIPBOARD )
     {
         wxLogTrace(TRACE_CLIPBOARD, wxT("Clipboard data requested" ));
 
-        return Data( wxClipboard::Clipboard );
+        return Data(wxClipboard::Clipboard).get();
     }
     else // some other selection, we're not concerned
     {
-        return (wxDataObject*)nullptr;
+        return nullptr;
     }
 }
 
