@@ -26,9 +26,23 @@ class Action(IntFlag):
     ALL = CHECKOUT | GENERATE | BUILD
 
 def initialize_and_update_submodules(sub_modules, cwd, env):
-    command_text = f'git submodule update --init '
-    for module in sub_modules:
-        run_command( command_text + module, cwd=cwd, env=env)
+    """ Check if submodules are already initialized by checking if the submodule
+        directories exist and have git content """
+    needs_init = False
+
+    for submodule in sub_modules:
+        submodule_path = cwd / submodule
+        if not submodule_path.exists() or not (submodule_path / '.git').exists():
+            needs_init = True
+            break
+
+    if needs_init:
+        print("Submodules not initialized. Running git submodule update --init...")
+        command_text = 'git submodule update --init '
+        for module in sub_modules:
+            run_command(command_text + module, cwd=cwd, env=env)
+    else:
+        print("Submodules already initialized. Skipping git submodule update --init.")
 
 def main():
     parser = argparse.ArgumentParser(description='Build Qt from source.')
@@ -156,7 +170,7 @@ def main():
     elif PLATFORM == 'mac':
         configure_command += f'-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"'
 
-    if Action.CHECKOUT in ACTION:
+    if Action.CHECKOUT in ACTION or Action.GENERATE in ACTION:
         initialize_and_update_submodules(SUBMODULES, SRC_DIR, ENV)
 
     if Action.GENERATE in ACTION:
