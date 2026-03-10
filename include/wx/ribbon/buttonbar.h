@@ -140,9 +140,6 @@ public:
     virtual bool DeleteButton(int button_id);
     virtual void EnableButton(int button_id, bool enable = true);
     virtual void ToggleButton(int button_id, bool checked);
-    //Bricsys new function
-    virtual bool ToggleState(int button_id);
-    //End Bricsys changes
 
     virtual void SetButtonIcon(
                 int button_id,

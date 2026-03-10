@@ -53,16 +53,10 @@ public:
 
     wxBitmap& GetMinimisedIcon() {return m_minimised_icon;}
     const wxBitmap& GetMinimisedIcon() const {return m_minimised_icon;}
-    // Bricsys change
-    void setMinimisedIcon(const wxBitmap& icon) { m_minimised_icon = icon; }
-    // End Bricsys change
     bool IsMinimised() const;
     bool IsMinimised(wxSize at_size) const;
     bool IsHovered() const;
     bool IsExtButtonHovered() const;
-    // Bricsys change
-    bool IsLabelHovered() const;
-    // End Bricsys change
     bool CanAutoMinimise() const;
 
     bool ShowExpanded();
@@ -73,10 +67,6 @@ public:
     virtual bool Realize() wxOVERRIDE;
     virtual bool Layout() wxOVERRIDE;
     virtual wxSize GetMinSize() const wxOVERRIDE;
-    // Bricsys change
-    // Reset panel size in case children size has changed
-    virtual void resetPanelSize() { m_smallest_unminimised_size = wxDefaultSize; }
-    // End Bricsys change
 
     virtual bool IsSizingContinuous() const wxOVERRIDE;
 
@@ -84,10 +74,6 @@ public:
     virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE;
 
     virtual bool HasExtButton() const;
-    // Bricsys change
-    virtual bool HasSlideOutPanel() const { return m_hasSlideOutPanel; }
-    virtual void SetSlideOutPanel(bool hasSlideOut) { m_hasSlideOutPanel = hasSlideOut; }
-    // End Bricsys change
 
     wxRibbonPanel* GetExpandedDummy();
     wxRibbonPanel* GetExpandedPanel();
@@ -123,9 +109,6 @@ protected:
     void OnMotion(wxMouseEvent& evt);
     void OnKillFocus(wxFocusEvent& evt);
     void OnChildKillFocus(wxFocusEvent& evt);
-    // Bricsys change
-    void OnMouseUp(wxMouseEvent& evt);
-    // End Bricsys change
 
     void TestPositionForHover(const wxPoint& pos);
     bool ShouldSendEventToDummy(wxEvent& evt);
@@ -149,11 +132,6 @@ protected:
     bool m_hovered;
     bool m_ext_button_hovered;
     wxRect m_ext_button_rect;
-    // Bricsys change
-    bool m_hasSlideOutPanel;
-    wxRect m_panel_label_rect;
-    bool m_panel_label_hovered;
-    // End Bricsys change
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonPanel);
@@ -189,10 +167,6 @@ private:
 #ifndef SWIG
 
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
-// Bricsys change
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONPANEL_LABEL_ACTIVATED, wxRibbonPanelEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_RIBBONPANEL_EXPANDED_SHOWN, wxRibbonPanelEvent);
-// End Bricsys change
 
 typedef void (wxEvtHandler::*wxRibbonPanelEventFunction)(wxRibbonPanelEvent&);
 
@@ -201,12 +175,6 @@ typedef void (wxEvtHandler::*wxRibbonPanelEventFunction)(wxRibbonPanelEvent&);
 
 #define EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, winid, wxRibbonPanelEventHandler(fn))
-// Bricsys change
-#define EVT_RIBBONPANEL_LABEL_ACTIVATED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_RIBBONPANEL_LABEL_ACTIVATED, winid, wxRibbonPanelEventHandler(fn))
-#define EVT_RIBBONPANEL_EXPANDED_SHOWN(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_RIBBONPANEL_EXPANDED_SHOWN, winid, wxRibbonPanelEventHandler(fn))
-// End Bricsys change
 #else
 
 // wxpython/swig event work
@@ -215,30 +183,10 @@ typedef void (wxEvtHandler::*wxRibbonPanelEventFunction)(wxRibbonPanelEvent&);
 %pythoncode {
     EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED = wx.PyEventBinder( wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, 1 )
 }
-
-// Bricsys change
-// wxpython/swig event work
-%constant wxEventType wxEVT_RIBBONPANEL_LABEL_ACTIVATED;
-
-%pythoncode{
-    EVT_RIBBONPANEL_LABEL_ACTIVATED = wx.PyEventBinder(wxEVT_RIBBONPANEL_LABEL_ACTIVATED, 1)
-}
-
-%constant wxEventType wxEVT_RIBBONPANEL_EXPANDED_SHOWN;
-
-%pythoncode{
-    EVT_RIBBONPANEL_EXPANDED_SHOWN = wx.PyEventBinder(wxEVT_RIBBONPANEL_EXPANDED_SHOWN, 1)
-}
-// End Bricsys change
 #endif
 
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_RIBBONPANEL_EXTBUTTON_ACTIVATED   wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED
-
-// Bricsys change
-#define wxEVT_COMMAND_RIBBONPANEL_LABEL_ACTIVATED   wxEVT_RIBBONPANEL_LABEL_ACTIVATED
-#define wxEVT_COMMAND_RIBBONPANEL_EXPANDED_SHOWN   wxEVT_RIBBONPANEL_EXPANDED_SHOWN
-// End Bricsys change
 
 #endif // wxUSE_RIBBON
 
