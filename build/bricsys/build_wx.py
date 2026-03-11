@@ -160,6 +160,7 @@ def main():
         f'-DwxUSE_LIBJPEG=builtin '
         f'-DwxUSE_GLCANVAS_EGL=OFF '
         f'-DwxUSE_WEBVIEW=OFF '
+        f'-DwxUSE_RIBBON=OFF '
         f'-DwxBUILD_USE_PRIVATE_HEADERS=ON '
         f'-DwxBUILD_SAMPLES=OFF ' 
         f'-DwxBUILD_TESTS=OFF '
