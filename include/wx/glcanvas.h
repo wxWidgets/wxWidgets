@@ -22,6 +22,10 @@
 class WXDLLIMPEXP_FWD_GL wxGLCanvas;
 class WXDLLIMPEXP_FWD_GL wxGLContext;
 
+#ifndef BRICSYS_WX_2_8_COMPAT
+#define BRICSYS_WX_2_8_COMPAT 1
+#endif
+
 // ----------------------------------------------------------------------------
 // Constants for attributes list
 // ----------------------------------------------------------------------------
@@ -262,13 +266,13 @@ public:
     wxGLContextAttrs& GetGLCTXAttrs() { return m_GLCTXAttrs; }
 
     // deprecated methods using the implicit wxGLContext
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     wxDEPRECATED( wxGLContext* GetContext() const );
 
     wxDEPRECATED( void SetCurrent() );
 
     wxDEPRECATED( void OnSize(wxSizeEvent& event) );
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif // BRICSYS_WX_2_8_COMPAT
 
 #ifdef __WXUNIVERSAL__
     // resolve the conflict with wxWindowUniv::SetCurrent()
@@ -302,9 +306,9 @@ protected:
     wxPalette m_palette;
 #endif // wxUSE_PALETTE
 
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     wxGLContext *m_glContext;
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif // BRICSYS_WX_2_8_COMPAT
 };
 
 // ----------------------------------------------------------------------------

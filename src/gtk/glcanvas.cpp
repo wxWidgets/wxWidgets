@@ -87,7 +87,7 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        long style,
                        const wxString& name,
                        const wxPalette& palette)
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     : m_createImplicitContext(false)
 #endif
 {
@@ -102,14 +102,14 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        long style,
                        const wxString& name,
                        const wxPalette& palette)
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     : m_createImplicitContext(false)
 #endif
 {
     Create(parent, id, pos, size, style, name, attribList, palette);
 }
 
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        wxWindowID id,
@@ -158,7 +158,7 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
     Create(parent, id, pos, size, style, name, attribList, palette);
 }
 
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif // BRICSYS_WX_2_8_COMPAT
 
 static bool IsAvailable()
 {
@@ -275,7 +275,7 @@ void wxGLCanvas::GTKHandleRealized()
 {
     BaseType::GTKHandleRealized();
 
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     GTKInitImplicitContext();
 #endif
 #if wxUSE_GLCANVAS_EGL
@@ -284,7 +284,7 @@ void wxGLCanvas::GTKHandleRealized()
     SendSizeEvent();
 }
 
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
 
 void wxGLCanvas::GTKInitImplicitContext()
 {
@@ -298,6 +298,6 @@ void wxGLCanvas::GTKInitImplicitContext()
     }
 }
 
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif // BRICSYS_WX_2_8_COMPAT
 
 #endif // wxUSE_GLCANVAS
