@@ -29,6 +29,7 @@ bool wxBitmapButton::Create(wxWindow *parent,
     if ( bitmap.IsOk() )
     {
         SetBitmapLabel(bitmap);
+        m_nonBackgroundColourBitmap = bitmap;
 
         // we need to adjust the size after setting the bitmap as it may be too
         // big for the default button size

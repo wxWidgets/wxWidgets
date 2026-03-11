@@ -36,6 +36,11 @@ public:
     void GTKPressed();
     void GTKReleased();
 
+    virtual bool SetBackgroundColour(const wxColour &colour) wxOVERRIDE;
+    virtual wxColour GetBackgroundColour() const;
+    bool applyColourToButton();
+    void SetBitmap(const wxBitmapBundle& bitmap, wxDirection dir = wxLEFT);
+
 protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
@@ -48,11 +53,16 @@ protected:
     // update the bitmap to correspond to the current button state
     void GTKUpdateBitmap();
 
+    wxBitmapBundle m_nonBackgroundColourBitmap;
+    wxColour m_backgroundColour;
+
 private:
     typedef wxAnyButtonBase base_type;
 
     // focus event handler: calls GTKUpdateBitmap()
     void GTKOnFocus(wxFocusEvent& event);
+
+    void OnButtonResize(wxSizeEvent& event);
 
     // return the state whose bitmap is being currently shown (so this is
     // different from the real current state, e.g. it could be State_Normal
@@ -75,6 +85,7 @@ private:
     bool m_isPressed;
 
     wxDECLARE_NO_COPY_CLASS(wxAnyButton);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_GTK_ANYBUTTON_H_
