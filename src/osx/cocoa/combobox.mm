@@ -14,6 +14,7 @@
 
 #include "wx/combobox.h"
 #include "wx/evtloop.h"
+#include "wx/uiaction.h"
 
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
@@ -204,6 +205,21 @@
     return handled;
 }
 
+// Bricsys change (see wx ticket: http://trac.wxwidgets.org/ticket/16543)
+// make read-only wxComboBox expand when clicked on the text field
+- (BOOL) isExpanded
+{
+    id ax = NSAccessibilityUnignoredDescendant(self);
+    return [[ax accessibilityAttributeValue:
+             NSAccessibilityExpandedAttribute] boolValue];
+}
+
+- (void) setExpanded: (BOOL)expanded
+{
+    id ax = NSAccessibilityUnignoredDescendant(self);
+    [ax accessibilitySetValue: [NSNumber numberWithBool: expanded]
+                 forAttribute: NSAccessibilityExpandedAttribute];
+}
 @end
 
 wxNSComboBoxControl::wxNSComboBoxControl( wxComboBox *wxPeer, WXWidget w )
@@ -224,6 +240,21 @@ void wxNSComboBoxControl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     
     bool reset = false;
     wxEventLoop* const loop = (wxEventLoop*) wxEventLoopBase::GetActive();
+
+    // Bricsys change (see wx ticket: http://trac.wxwidgets.org/ticket/16543)
+    // make read-only wxComboBox expand when clicked on the text field
+    if ( ![m_comboBox isEditable] && [event type] == NSLeftMouseDown )
+    {
+        if( [m_comboBox isExpanded] )
+        {
+            [m_comboBox setExpanded:NO];
+        }
+        else
+        {
+            [m_comboBox setExpanded:YES];
+        }
+        return;
+    }
 
     if ( loop != NULL && [event type] == NSLeftMouseDown )
     {
