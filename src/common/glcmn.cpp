@@ -67,7 +67,7 @@ void wxGLAttribsBase::AddAttribBits(int searchVal, int combineVal)
 
 wxGLCanvasBase::wxGLCanvasBase()
 {
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     m_glContext = NULL;
 #endif
 
@@ -121,12 +121,12 @@ bool wxGLCanvasBase::SetColour(const wxString& colour)
 
 wxGLCanvasBase::~wxGLCanvasBase()
 {
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     delete m_glContext;
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif // BRICSYS_WX_2_8_COMPAT
 }
 
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
 
 wxGLContext *wxGLCanvasBase::GetContext() const
 {
@@ -143,7 +143,7 @@ void wxGLCanvasBase::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 }
 
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif // BRICSYS_WX_2_8_COMPAT
 
 /* static */
 bool wxGLCanvasBase::IsExtensionInList(const char *list, const char *extension)

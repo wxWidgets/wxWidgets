@@ -1228,7 +1228,9 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
         PsPrint( " setdash\n" );
     }
 
-    if ( cap != wxCAP_INVALID && cap != oldCap )
+// Bricsys change: let's write the cap, even if it's the same, because
+// there could be 'grestore' after the previous 'setlinecap' (e.g. due to clipping caused by viewports)
+    if ( cap != wxCAP_INVALID /*&& cap != oldCap*/ )
     {
         switch ( cap )
         {
@@ -1244,7 +1246,9 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
         PsPrint( buffer );
     }
 
-    if ( join != wxJOIN_INVALID && join != oldJoin )
+// Bricsys change: let's write the join, even if it's the same, because
+// there could be 'grestore' after the previous 'setlinejoin' (e.g. due to clipping caused by viewports)
+    if ( join != wxJOIN_INVALID /*&& join != oldJoin*/ )
     {
         switch ( join )
         {

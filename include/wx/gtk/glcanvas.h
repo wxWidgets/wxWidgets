@@ -21,6 +21,10 @@
     typedef wxGLCanvasX11 wxGLCanvasImpl;
 #endif
 
+#ifndef BRICSYS_WX_2_8_COMPAT
+#define BRICSYS_WX_2_8_COMPAT 1
+#endif
+
 //---------------------------------------------------------------------------
 // wxGLCanvas
 //---------------------------------------------------------------------------
@@ -77,7 +81,7 @@ public:
     // deprecated methods
     // ------------------
 
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     wxDEPRECATED(
     wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
@@ -115,7 +119,7 @@ public:
 
     // called from "realized" callback to create the implicit context if needed
     void GTKInitImplicitContext();
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif // BRICSYS_WX_2_8_COMPAT
 
     // implementation from now on
     virtual void GTKHandleRealized() wxOVERRIDE;
@@ -123,11 +127,11 @@ public:
 #ifdef __WXGTK3__
     wxSize m_size;
 #endif
-#if WXWIN_COMPATIBILITY_2_8
+#if BRICSYS_WX_2_8_COMPAT
     wxGLContext      *m_sharedContext;
     wxGLCanvas       *m_sharedContextOf;
     const bool        m_createImplicitContext;
-#endif // WXWIN_COMPATIBILITY_2_8
+#endif // BRICSYS_WX_2_8_COMPAT
 
 private:
     wxDECLARE_CLASS(wxGLCanvas);

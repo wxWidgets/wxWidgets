@@ -415,7 +415,12 @@ int wxMessageDialog::ShowMessageBox()
 
     // use the top level window as parent if none specified
     m_parent = GetParentForModalDialog();
-    HWND hWnd = m_parent ? GetHwndOf(m_parent) : NULL;
+    // ----- Bricsys change start
+    // if no parent is given for message box, then use thread's active window - 
+    // not necessarily a WxWidget window (i.e. could be a Windows' FileDialog or any
+    // other non-WX window)
+    HWND hWnd = m_parent ? GetHwndOf(m_parent) : GetActiveWindow();
+    // ----- Bricsys change end
 
 #if wxUSE_INTL
     // native message box always uses the current user locale but the program
@@ -661,8 +666,13 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     tdc.hInstance = wxGetInstance();
     tdc.pszWindowTitle = caption.t_str();
 
+    // ----- Bricsys change start
+    // if no parent is given for message box, then use thread's active window - 
+    // not necessarily a WxWidget window (i.e. could be a Windows' FileDialog or any
+    // other non-WX window)
     // use the top level window as parent if none specified
-    tdc.hwndParent = parent ? GetHwndOf(parent) : NULL;
+    tdc.hwndParent = parent ? GetHwndOf(parent) : GetActiveWindow();
+    // ----- Bricsys change end
 
     if ( wxApp::MSWGetDefaultLayout(parent) == wxLayout_RightToLeft )
         tdc.dwFlags |= TDF_RTL_LAYOUT;
