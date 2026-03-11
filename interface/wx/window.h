@@ -2006,6 +2006,9 @@ public:
         @param y
             Receives the y position of the window on the screen if non-null.
 
+        @note Starting from wxWidgets 3.3.3, this function correctly returns the
+              upper-left corner of the window in RTL layout for child windows too.
+
         @see GetPosition()
     */
     void GetScreenPosition(int* x, int* y) const;
