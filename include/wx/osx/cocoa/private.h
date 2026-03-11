@@ -493,6 +493,9 @@ public:
         wxNSTextFieldEditor* fieldEditor;
     }
 
+    // Bricsys change (see wx ticket: http://trac.wxwidgets.org/ticket/16543)
+    // make read-only wxComboBox expand when clicked on the text field
+    @property (getter=isExpanded) BOOL expanded;
     - (wxNSTextFieldEditor*) fieldEditor;
     - (void) setFieldEditor:(wxNSTextFieldEditor*) fieldEditor;
 
