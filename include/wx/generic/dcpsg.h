@@ -132,10 +132,8 @@ protected:
     void DoDrawText(const wxString& text, wxCoord x, wxCoord y) wxOVERRIDE;
     void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle) wxOVERRIDE;
     void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
-    void DoSetDeviceClippingRegion( const wxRegion &WXUNUSED(clip)) wxOVERRIDE
-    {
-        wxFAIL_MSG( "not implemented" );
-    }
+    //bricsys change: implemented DoSetDeviceClippingRegion
+    void DoSetDeviceClippingRegion( const wxRegion& clip) wxOVERRIDE;
     void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                          wxCoord *descent = NULL,
                          wxCoord *externalLeading = NULL,
@@ -155,7 +153,7 @@ protected:
     unsigned char     m_currentGreen;
     unsigned char     m_currentBlue;
     int               m_pageNumber;
-    bool              m_clipping;
+    int               m_numClips;
     mutable double    m_underlinePosition;
     mutable double    m_underlineThickness;
     wxPrintData       m_printData;
