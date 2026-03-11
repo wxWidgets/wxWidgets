@@ -753,13 +753,15 @@ wxScrollHelperBase::AutoscrollTest(wxPoint clientPt,
     // can window can be scrolled in this direction?
     if ( m_win->HasScrollbar(wxHORIZONTAL) )
     {
+        const bool isRTL = m_win->GetLayoutDirection() == wxLayout_RightToLeft;
+
         if ( screenPt.x < inner.GetLeft() )
         {
-            evtHorzScroll = wxEVT_SCROLLWIN_LINEUP;
+            evtHorzScroll = isRTL ? wxEVT_SCROLLWIN_LINEDOWN : wxEVT_SCROLLWIN_LINEUP;
         }
         else if (screenPt.x >= inner.GetRight() )
         {
-            evtHorzScroll = wxEVT_SCROLLWIN_LINEDOWN;
+            evtHorzScroll = isRTL ? wxEVT_SCROLLWIN_LINEUP : wxEVT_SCROLLWIN_LINEDOWN;
         }
     }
 
