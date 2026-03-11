@@ -300,6 +300,8 @@ void wxPostScriptDCImpl::Init()
 
     m_clipping = false;
 
+    m_numClips = 0;
+
     m_underlinePosition = 0.0;
     m_underlineThickness = 0.0;
 
@@ -337,15 +339,23 @@ void wxPostScriptDCImpl::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, w
 {
     wxCHECK_RET( m_ok , wxT("invalid postscript dc") );
 
-    if (m_clipping)
-        DestroyClippingRegion();
+    if ( m_clipping )
+    {
+        m_clipX1 = wxMax( m_clipX1, x );
+        m_clipY1 = wxMax( m_clipY1, y );
+        m_clipX2 = wxMin( m_clipX2, (x + w) );
+        m_clipY2 = wxMin( m_clipY2, (y + h) );
+    }
+    else
+    {
+        m_clipping = true;
+        m_clipX1 = x;
+        m_clipY1 = y;
+        m_clipX2 = x + w;
+        m_clipY2 = y + h;
+    }
 
-    m_clipX1 = x;
-    m_clipY1 = y;
-    m_clipX2 = x + w;
-    m_clipY2 = y + h;
-
-    m_clipping = true;
+    m_numClips++;
 
     wxString buffer;
     buffer.Printf( "gsave\n"
@@ -363,16 +373,65 @@ void wxPostScriptDCImpl::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, w
     PsPrint( buffer );
 }
 
+//bricsys change: implemented DoSetDeviceClippingRegion
+void wxPostScriptDCImpl::DoSetDeviceClippingRegion( const wxRegion& clip )
+{
+    wxCHECK_RET( m_ok , wxT("invalid postscript dc") );
+
+    wxCoord x, y, w, h;
+    clip.GetBox( x, y, w, h );
+
+    if ( m_clipping )
+    {
+        m_clipX1 = wxMax( m_clipX1, XLOG2DEV(x) );
+        m_clipY1 = wxMax( m_clipY1, YLOG2DEV(y) );
+        m_clipX2 = wxMin( m_clipX2, XLOG2DEV(x + w) );
+        m_clipY2 = wxMin( m_clipY2, YLOG2DEV(y + h) );
+    }
+    else
+    {
+        m_clipping = true;
+
+        m_clipX1 = XLOG2DEV(x);
+        m_clipY1 = YLOG2DEV(y);
+        m_clipX2 = XLOG2DEV(x + w);
+        m_clipY2 = YLOG2DEV(y + h);
+    }
+
+    m_numClips++;
+
+    PsPrint( wxT("gsave\n[") );
+
+    for (wxRegionIterator it(clip); it.HaveRects(); ++it)
+    {
+        int left = it.GetX();
+        int right = left + it.GetW();
+        int bottom = it.GetY();
+        int top = bottom + it.GetH();
+
+        if (left > right) wxSwap(left, right);
+        if (bottom > top) wxSwap(bottom, top);
+
+        wxString buffer;
+        buffer.Printf(wxT("%f %f %f %f "),
+            left * DEV2PS, (m_pageHeight - top) * DEV2PS,
+            (right - left) * DEV2PS, (top - bottom) * DEV2PS);
+        PsPrint( buffer );
+    }
+    PsPrint( wxT("] rectclip\n") );
+}
+
 
 void wxPostScriptDCImpl::DestroyClippingRegion()
 {
     wxCHECK_RET( m_ok , wxT("invalid postscript dc") );
 
-    if (m_clipping)
+    while (m_numClips > 0)
     {
-        m_clipping = false;
+        m_numClips--;
         PsPrint( "grestore\n" );
     }
+    m_clipping = false;
 
     wxDCImpl::DestroyClippingRegion();
 }
@@ -1737,11 +1796,12 @@ void wxPostScriptDCImpl::EndDoc ()
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
-    if (m_clipping)
+    while (m_numClips > 0)
     {
-        m_clipping = false;
+        m_numClips--;
         PsPrint( "grestore\n" );
     }
+    m_clipping = false;
 
     if ( m_pstream ) {
         fclose( m_pstream );
