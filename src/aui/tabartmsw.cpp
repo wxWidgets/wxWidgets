@@ -467,6 +467,7 @@ bool wxAuiMSWTabArt::IsThemed() const
     return
         m_themed &&
         !(m_flags & wxAUI_NB_BOTTOM) // Native theme does not support bottom tabs
+        && !(m_flags & wxAUI_NB_TOP) // Bricsys change, torstenm RM-70555 - Windows seem to not apply any theming to tabs anymore ?
         && !(m_flags & wxAUI_NB_LEFT) && !(m_flags & wxAUI_NB_RIGHT); // Bricsys change
 }
 
