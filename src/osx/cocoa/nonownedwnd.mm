@@ -1120,6 +1120,11 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
                 {
                     NSWindow* parentNSWindow = [parentView window];
                     if ( parentNSWindow ) {
+                        // Bricsys change begin #67313
+                        if ( !dialog->IsModal() )
+                            [parentNSWindow addChildWindow:m_macWindow ordered:NSWindowAbove];
+                        // Bricsys change end
+
                         // we used to call [parentNSWindow addChildWindow:m_macWindow here
                         // but this lead to problems with Spaces (modal windows disappeared
                         // when dragged to a different space)
@@ -1573,4 +1578,3 @@ wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWind
     now->Create( parent, pos, size, style , extraStyle, name );
     return now;
 }
-
