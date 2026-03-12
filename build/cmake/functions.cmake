@@ -1119,7 +1119,13 @@ endfunction()
 # just a warning otherwise, while ON means that an error is given if it can't
 # be enabled.
 function(wx_option_auto name desc)
-    wx_option(${name} ${desc} AUTO STRINGS ON OFF AUTO)
+    cmake_parse_arguments(OPTION "" "" "STRINGS" ${ARGN})
+    if(ARGC EQUAL 2)
+        set(default AUTO)
+    else()
+        set(default ${OPTION_UNPARSED_ARGUMENTS})
+    endif()
+    wx_option(${name} ${desc} ${default} STRINGS ON OFF AUTO)
 endfunction()
 
 # Force a new value for an option created with wx_option
