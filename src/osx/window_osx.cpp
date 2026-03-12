@@ -2442,9 +2442,14 @@ bool wxWindowMac::Reparent(wxWindowBase *newParentBase)
     if ( !wxWindowBase::Reparent(newParent) )
         return false;
 
-    GetPeer()->Embed( GetParent()->GetPeer() );
+    // Bricsys added: Reparent(nullptr) crashes because GetParent() returns null here
+    // RemoveFromParent() is already triggered by wxWindowBase::Reparent() so no need to call it here
+    if(GetParent())
+    {
+        GetPeer()->Embed( GetParent()->GetPeer() );
 
-    GetParent()->MacChildAdded();
+        GetParent()->MacChildAdded();
+    }
     return true;
 }
 
