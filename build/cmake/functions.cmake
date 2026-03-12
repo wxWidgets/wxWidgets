@@ -400,11 +400,6 @@ function(wx_set_target_properties target_name)
             $<INSTALL_INTERFACE:${wxINSTALL_INCLUDE_DIR}>
         )
 
-    if(wxTOOLKIT_INCLUDE_DIRS AND NOT wxTARGET_IS_BASE)
-        target_include_directories(${target_name}
-            PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
-    endif()
-
     if (WIN32)
         set(WIN32_LIBRARIES
             kernel32
@@ -433,25 +428,27 @@ function(wx_set_target_properties target_name)
             PUBLIC ${WIN32_LIBRARIES})
     endif()
 
-    if(wxTOOLKIT_LIBRARY_DIRS AND NOT wxTARGET_IS_BASE)
-        target_link_directories(${target_name}
-            PUBLIC ${wxTOOLKIT_LIBRARY_DIRS})
-    endif()
-    if(wxTOOLKIT_LIBRARIES AND NOT wxTARGET_IS_BASE)
-        target_link_libraries(${target_name}
-            PUBLIC ${wxTOOLKIT_LIBRARIES})
-    endif()
-
     if(wxTARGET_IS_BASE)
         # Currently base libraries still use toolkit definitions internally.
         # This is wrong and should, ideally, be fixed, but for now keep
         # defining them. However we don't need to define this for the targets
         # using the base library.
-        target_compile_definitions(${target_name}
-            PRIVATE ${wxTOOLKIT_DEFINITIONS})
+        if(wxTOOLKIT_DEFINITIONS)
+            target_compile_definitions(${target_name} PRIVATE ${wxTOOLKIT_DEFINITIONS})
+        endif()
     else()
-        target_compile_definitions(${target_name}
-            PUBLIC ${wxTOOLKIT_DEFINITIONS})
+        if(wxTOOLKIT_INCLUDE_DIRS)
+            target_include_directories(${target_name} PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
+        endif()
+        if(wxTOOLKIT_LIBRARY_DIRS)
+            target_link_directories(${target_name} PUBLIC ${wxTOOLKIT_LIBRARY_DIRS})
+        endif()
+        if(wxTOOLKIT_LIBRARIES)
+            target_link_libraries(${target_name} PUBLIC ${wxTOOLKIT_LIBRARIES})
+        endif()
+        if(wxTOOLKIT_DEFINITIONS)
+            target_compile_definitions(${target_name} PUBLIC ${wxTOOLKIT_DEFINITIONS})
+        endif()
     endif()
 
     if(wxBUILD_SHARED)
