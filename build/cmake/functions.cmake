@@ -14,6 +14,8 @@ include(GNUInstallDirs)
 
 # List of libraries added via wx_add_library() to use for wx-config
 set(wxLIB_TARGETS)
+# List of the (static) builtin libraries to use in wxWidgetsConfig.cmake
+set(wxLIB_BUILTIN_TARGETS)
 # List of headers added via wx_append_sources() to use for install
 set(wxINSTALL_HEADERS)
 # List of files not included in the install manifest
@@ -719,6 +721,9 @@ endfunction()
 
 # Add a third party builtin library
 function(wx_add_builtin_library name)
+    list(APPEND wxLIB_BUILTIN_TARGETS ${name})
+    set(wxLIB_BUILTIN_TARGETS ${wxLIB_BUILTIN_TARGETS} PARENT_SCOPE)
+
     wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
 
     list(GET src_list 0 src_file)

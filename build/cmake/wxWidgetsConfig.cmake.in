@@ -94,6 +94,24 @@ macro(wx_copy_target ns name libname)
     wx_inherit_property(wx::${libname} ${ns}::${name} IMPORTED_LINK_DEPENDENT_LIBRARIES)
 endmacro()
 
+macro(wx_map_release libname)
+    # use the Release configuration for MinSizeRel and RelWithDebInfo configurations
+    # only when Release target exists, and MinSizeRel/RelWithDebInfo doesn't exist
+    get_target_property(configs wx::${libname} IMPORTED_CONFIGURATIONS)
+    if("RELEASE" IN_LIST configs)
+        if(NOT "MINSIZEREL" IN_LIST configs)
+            if("MinSizeRel" IN_LIST CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+                set_target_properties(wx::${libname} PROPERTIES MAP_IMPORTED_CONFIG_MINSIZEREL "Release")
+            endif()
+        endif()
+        if(NOT "RELWITHDEBINFO" IN_LIST configs)
+            if("RelWithDebInfo" IN_LIST CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+                set_target_properties(wx::${libname} PROPERTIES MAP_IMPORTED_CONFIG_RELWITHDEBINFO "Release")
+            endif()
+        endif()
+    endif()
+endmacro()
+
 # for compatibility with FindwxWidgets
 set(wxWidgets_LIBRARIES)
 
@@ -108,6 +126,8 @@ endif()
 set(@PROJECT_NAME@_COMPONENTS)
 foreach(libname @wxLIB_TARGETS@)
     if(TARGET wx::${libname})
+        wx_map_release(${libname})
+
         # remove wx prefix from component name
         string(SUBSTRING ${libname} 2 -1 name)
 
@@ -115,22 +135,6 @@ foreach(libname @wxLIB_TARGETS@)
         list(APPEND @PROJECT_NAME@_COMPONENTS ${name})
         set(@PROJECT_NAME@_${name}_FOUND 1)
         set(@PROJECT_NAME@_FIND_REQUIRED_${name} 1)
-
-        # use the Release configuration for MinSizeRel and RelWithDebInfo configurations
-        # only when Release target exists, and MinSizeRel/RelWithDebInfo doesn't exist
-        get_target_property(configs wx::${libname} IMPORTED_CONFIGURATIONS)
-        if("RELEASE" IN_LIST configs)
-            if(NOT "MINSIZEREL" IN_LIST configs)
-                if("MinSizeRel" IN_LIST CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-                    set_target_properties(wx::${libname} PROPERTIES MAP_IMPORTED_CONFIG_MINSIZEREL "Release")
-                endif()
-            endif()
-            if(NOT "RELWITHDEBINFO" IN_LIST configs)
-                if("RelWithDebInfo" IN_LIST CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-                    set_target_properties(wx::${libname} PROPERTIES MAP_IMPORTED_CONFIG_RELWITHDEBINFO "Release")
-                endif()
-            endif()
-        endif()
 
         # add an alias from wx::<lib> to wx::wx<lib>
         if(NOT TARGET wx::${name})
@@ -151,6 +155,11 @@ foreach(libname @wxLIB_TARGETS@)
                 target_link_libraries(wxWidgets::wxWidgets INTERFACE wx::${name})
             endif()
         endif()
+    endif()
+endforeach()
+foreach(libname @wxLIB_BUILTIN_TARGETS@)
+    if(TARGET wx::${libname})
+        wx_map_release(${libname})
     endif()
 endforeach()
 
