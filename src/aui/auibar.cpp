@@ -2125,6 +2125,12 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 
             case wxITEM_CONTROL:
             {
+                // Bricsys change: skip vertical controls (see RM-70966)
+                if (item.m_window)
+                    item.m_window->Show(horizontal);
+                if (!horizontal)
+                    break;
+                // Bricsys change ends
                 wxSizerItem* ctrl_m_sizerItem;
 
                 wxBoxSizer* vert_sizer = new wxBoxSizer(wxVERTICAL);
