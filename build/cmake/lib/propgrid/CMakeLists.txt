@@ -10,3 +10,9 @@
 wx_append_sources(PROPGRID_FILES PROPGRID)
 
 wx_add_library(wxpropgrid ${PROPGRID_FILES})
+
+if(MSVC)
+    target_compile_options(wxpropgrid PRIVATE
+        "$<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>:/wd4723>"
+    )
+endif()
