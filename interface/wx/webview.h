@@ -918,7 +918,7 @@ public:
     The predefined @c wxWebViewBackendWebKit constant contains the name of this
     backend.
 
-    @note WebKitGTK 2.42+ may fail to render content due to 
+    @note WebKitGTK 2.42+ may fail to render content due to
     DMA-BUF hardware acceleration issues. This can be resolved by calling
     @code
     wxSetEnv("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
