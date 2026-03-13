@@ -918,6 +918,13 @@ public:
     The predefined @c wxWebViewBackendWebKit constant contains the name of this
     backend.
 
+    @note WebKitGTK 2.42+ may fail to render content due to 
+    DMA-BUF hardware acceleration issues. This can be resolved by calling
+    @code
+    wxSetEnv("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+    @endcode
+    before creating a @c wxWebView instance.
+
     @subsection wxWEBVIEW_WEBKIT_MACOS wxWEBVIEW_WEBKIT (macOS)
 
     The macOS WebKit backend uses Apple's
