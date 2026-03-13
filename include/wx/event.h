@@ -4377,7 +4377,7 @@ typedef void (wxEvtHandler::*wxTwoFingerTapEventFunction)(wxTwoFingerTapEvent&);
 typedef void (wxEvtHandler::*wxLongPressEventFunction)(wxLongPressEvent&);
 typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
 typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
-typedef void (wxEvtHandler::* wxStylusEventFunction)(wxStylusEvent&);
+typedef void (wxEvtHandler::*wxStylusEventFunction)(wxStylusEvent&);
 
 #define wxCommandEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxCommandEventFunction, func)
