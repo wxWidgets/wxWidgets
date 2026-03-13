@@ -5164,7 +5164,8 @@ public:
 
     A wxStylusEvent is generated from wxWindow when the graphical pen (stylus) is used.
 
-    This event gives the application the chance to perform specific tablet events
+    Application can handle this event to process stylus actions based on
+    the current of the pen, pressure and other parameters.
     processing based on the current position of the pen, pressure and other
     parameters.
 
