@@ -1623,7 +1623,16 @@ void wxWebSessionCURL::CheckForCompletedTransfers()
             {
                 wxWebRequestCURL* request = it->second;
                 curl_multi_remove_handle(m_handle, curl);
-                request->HandleCompletion();
+                if ( msg->data.result != CURLE_OK )
+                {
+                    wxString errorMsg = wxString::Format("libcurl error: %s",
+                        curl_easy_strerror(msg->data.result));
+                    request->SetState(wxWebRequest::State_Failed, errorMsg);
+                }
+                else
+                {
+                    request->HandleCompletion();
+                }
                 m_activeTransfers.erase(it);
                 RemoveActiveSocket(curl);
             }
