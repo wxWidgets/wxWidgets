@@ -1,0 +1,1 @@
+wxAll (GUI): Add support for print settings to wxWebView::Print() (Blake-Madden, #26239).
