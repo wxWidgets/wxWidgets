@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tabletpen.cpp
-// Purpose:     Tablet drawing sample
+// Name:        styles.cpp
+// Purpose:     Stylus sample
 // Author:      Iulian Serbanoiu
 // Modified by:
 // Created:     2026-02-02
