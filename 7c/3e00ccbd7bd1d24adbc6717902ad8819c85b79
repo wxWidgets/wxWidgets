@@ -1,0 +1,1 @@
+wxAll: Make wxGetOsDescription() more useful under Linux (Lauri Nurmi, #26231).
