@@ -11,7 +11,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tabletpen.cpp">
+    <ClCompile Include="stylus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

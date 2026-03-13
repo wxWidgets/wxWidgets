@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        styles.cpp
+// Name:        stylus.cpp
 // Purpose:     Stylus sample
 // Author:      Iulian Serbanoiu
 // Modified by:

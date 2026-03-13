@@ -3,8 +3,8 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="tabletpen" template="wx_sample" template_append="wx_append">
-        <sources>tabletpen.cpp</sources>
+    <exe id="stylus" template="wx_sample" template_append="wx_append">
+        <sources>stylus.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>

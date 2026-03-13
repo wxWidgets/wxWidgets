@@ -50,10 +50,10 @@ WX_VERSION_MAJOR = $(shell echo $(WX_VERSION) | cut -c1,1)
 WX_VERSION_MINOR = $(shell echo $(WX_VERSION) | cut -c2,2)
 WX_CONFIG_FLAGS = $(WX_CONFIG_UNICODE_FLAG) $(WX_CONFIG_SHARED_FLAG) \
 	--toolkit=$(WX_PORT) --version=$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
-TABLETPEN_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
+STYLUS_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
 	$(CPPFLAGS) $(CXXFLAGS)
-TABLETPEN_OBJECTS =  \
-	tabletpen_tabletpen.o
+STYLUS_OBJECTS =  \
+	stylus_stylus.o
 
 ### Conditionally set variables: ###
 
@@ -73,7 +73,7 @@ endif
 
 ### Targets: ###
 
-all: test_for_selected_wxbuild tabletpen
+all: test_for_selected_wxbuild stylus
 
 install: 
 
@@ -82,16 +82,16 @@ uninstall:
 clean: 
 	rm -f ./*.o
 	rm -f ./*.d
-	rm -f tabletpen
+	rm -f stylus
 
 test_for_selected_wxbuild: 
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
-tabletpen: $(TABLETPEN_OBJECTS)
-	$(CXX) -o $@ $(TABLETPEN_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+stylus: $(STYLUS_OBJECTS)
+	$(CXX) -o $@ $(STYLUS_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
-tabletpen_tabletpen.o: ./tabletpen.cpp
-	$(CXX) -c -o $@ $(TABLETPEN_CXXFLAGS) $(CPPDEPS) $<
+stylus_stylus.o: ./stylus.cpp
+	$(CXX) -c -o $@ $(STYLUS_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 

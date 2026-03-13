@@ -19,8 +19,8 @@ OBJS = \
 LIBDIRNAME = \
 	.\..\..\lib\$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)
-TABLETPEN_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
-	$(__DEBUGINFO_0) /Fd$(OBJS)\tabletpen.pdb $(____DEBUGRUNTIME_3_p) \
+STYLUS_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
+	$(__DEBUGINFO_0) /Fd$(OBJS)\stylus.pdb $(____DEBUGRUNTIME_3_p) \
 	$(__OPTIMIZEFLAG_6) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
@@ -29,10 +29,10 @@ TABLETPEN_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 	/I$(SETUPHDIR) /I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. \
 	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG_11) \
 	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
-TABLETPEN_OBJECTS =  \
-	$(OBJS)\tabletpen_tabletpen.obj
-TABLETPEN_RESOURCES =  \
-	$(OBJS)\tabletpen_sample.res
+STYLUS_OBJECTS =  \
+	$(OBJS)\stylus_stylus.obj
+STYLUS_RESOURCES =  \
+	$(OBJS)\stylus_sample.res
 
 ### Conditionally set variables: ###
 
@@ -421,24 +421,24 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\tabletpen.exe
+all: $(OBJS)\stylus.exe
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\tabletpen.exe del $(OBJS)\tabletpen.exe
-	-if exist $(OBJS)\tabletpen.ilk del $(OBJS)\tabletpen.ilk
-	-if exist $(OBJS)\tabletpen.pdb del $(OBJS)\tabletpen.pdb
+	-if exist $(OBJS)\stylus.exe del $(OBJS)\stylus.exe
+	-if exist $(OBJS)\stylus.ilk del $(OBJS)\stylus.ilk
+	-if exist $(OBJS)\stylus.pdb del $(OBJS)\stylus.pdb
 
-$(OBJS)\tabletpen.exe: $(TABLETPEN_OBJECTS) $(OBJS)\tabletpen_sample.res
-	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\tabletpen.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS   $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
-	$(TABLETPEN_OBJECTS) $(TABLETPEN_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib gdiplus.lib msimg32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+$(OBJS)\stylus.exe: $(STYLUS_OBJECTS) $(OBJS)\stylus_sample.res
+	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\stylus.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS   $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
+	$(STYLUS_OBJECTS) $(STYLUS_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib gdiplus.lib msimg32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 
-$(OBJS)\tabletpen_sample.res: .\..\..\samples\sample.rc
+$(OBJS)\stylus_sample.res: .\..\..\samples\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  $(__TARGET_CPU_COMPFLAG_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1)  /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\..\samples\sample.rc
 
-$(OBJS)\tabletpen_tabletpen.obj: .\tabletpen.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(TABLETPEN_CXXFLAGS) .\tabletpen.cpp
+$(OBJS)\stylus_stylus.obj: .\stylus.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(STYLUS_CXXFLAGS) .\stylus.cpp
 
