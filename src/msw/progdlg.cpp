@@ -900,12 +900,6 @@ bool wxProgressDialog::Show(bool show)
         }
 
         // Do launch the thread.
-        if ( m_taskDialogRunner->Create() != wxTHREAD_NO_ERROR )
-        {
-            wxLogError( "Unable to create thread!" );
-            return false;
-        }
-
         if ( m_taskDialogRunner->Run() != wxTHREAD_NO_ERROR )
         {
             wxLogError( "Unable to start thread!" );
