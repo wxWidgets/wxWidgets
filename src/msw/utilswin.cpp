@@ -14,6 +14,7 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
+#include "wx/filefn.h"
 #include "wx/private/launchbrowser.h"
 #include "wx/msw/private.h"     // includes <windows.h>
 #include "wx/msw/private/dpiaware.h"
@@ -177,4 +178,33 @@ bool wxMSWIsOnSecureScreen()
     // that is used for UAC prompts and sign-in screens and running at system
     // level.
     return wcscmp(name, L"Winlogon") == 0;
+}
+
+bool wxMoveToTrash(const wxString& path)
+{
+    // SHFileOperation needs double null termination string
+    // but without separator at the end of the path
+    wxString pathStr(path);
+    if ( pathStr.Last() == wxFILE_SEP_PATH )
+        pathStr.RemoveLast();
+    pathStr += wxT('\0');
+
+    SHFILEOPSTRUCT fileop;
+    wxZeroMemory(fileop);
+    fileop.wFunc = FO_DELETE;
+    fileop.pFrom = pathStr.t_str();
+    fileop.fFlags = FOF_ALLOWUNDO | FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI;
+
+    const int ret = SHFileOperation(&fileop);
+    if ( ret != 0 || fileop.fAnyOperationsAborted )
+    {
+        // Note that the return value from SHFileOperation() is not a standard
+        // Win32 error code, so we can't use wxLogSysError() here.
+        wxLogError(_("'%s' couldn't be moved to trash: error 0x%08x"),
+                   path,
+                   ret);
+        return false;
+    }
+
+    return true;
 }

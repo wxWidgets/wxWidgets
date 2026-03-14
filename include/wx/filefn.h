@@ -440,7 +440,9 @@ WXDLLIMPEXP_BASE bool wxRemoveFile(const wxString& file);
     #define wxHAS_MOVE_TO_TRASH
 #endif
 
-WXDLLIMPEXP_BASE bool wxMoveToTrash(const wxString& path);
+#ifdef wxHAS_MOVE_TO_TRASH
+    WXDLLIMPEXP_CORE bool wxMoveToTrash(const wxString& path);
+#endif // wxHAS_MOVE_TO_TRASH
 
 // Rename file
 WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& oldpath, const wxString& newpath, bool overwrite = true);

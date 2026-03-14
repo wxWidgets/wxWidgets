@@ -1715,35 +1715,6 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc)
     return hwnd;
 }
 
-bool wxMoveToTrash(const wxString& path)
-{
-    // SHFileOperation needs double null termination string
-    // but without separator at the end of the path
-    wxString pathStr(path);
-    if ( pathStr.Last() == wxFILE_SEP_PATH )
-        pathStr.RemoveLast();
-    pathStr += wxT('\0');
-
-    SHFILEOPSTRUCT fileop;
-    wxZeroMemory(fileop);
-    fileop.wFunc = FO_DELETE;
-    fileop.pFrom = pathStr.t_str();
-    fileop.fFlags = FOF_ALLOWUNDO | FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI;
-
-    const int ret = SHFileOperation(&fileop);
-    if ( ret != 0 || fileop.fAnyOperationsAborted )
-    {
-        // Note that the return value from SHFileOperation() is not a standard
-        // Win32 error code, so we can't use wxLogSysError() here.
-        wxLogError(_("'%s' couldn't be moved to trash: error 0x%08x"),
-                   path,
-                   ret);
-        return false;
-    }
-
-    return true;
-}
-
 int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
     return StrCmpLogicalW(s1.wc_str(), s2.wc_str());

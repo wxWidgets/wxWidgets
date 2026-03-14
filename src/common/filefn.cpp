@@ -641,15 +641,6 @@ bool wxRemoveFile(const wxString& file)
     return res == 0;
 }
 
-#ifndef wxHAS_MOVE_TO_TRASH
-
-bool wxMoveToTrash(const wxString& WXUNUSED(path))
-{
-    return false;
-}
-
-#endif // !wxHAS_MOVE_TO_TRASH
-
 bool wxMkdir(const wxString& dir, int perm)
 {
 #if defined(__WXMAC__) && !defined(__UNIX__)

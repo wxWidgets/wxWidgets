@@ -356,8 +356,7 @@ bool wxRemoveFile(const wxString& file);
     facility.
 
     Preprocessor symbol @c wxHAS_MOVE_TO_TRASH is defined if this function is
-    supported on the current platform. If it is not defined, the function still
-    exists but always returns @false without doing anything else.
+    available on the current platform.
 
     Implementation details:
     - Under Windows, this uses @c SHFileOperation with @c FOF_ALLOWUNDO.

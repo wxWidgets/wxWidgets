@@ -12,6 +12,8 @@
 #ifndef WX_PRECOMP
 #include "wx/object.h"
 #include "wx/math.h"
+#include "wx/intl.h"
+#include "wx/log.h"
 #endif
 
 #if wxOSX_USE_COCOA_OR_CARBON
@@ -693,5 +695,32 @@ wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
         NSAppearance.currentAppearance = (NSAppearance*) formerAppearance;
 #endif
 }
+
+#ifdef __WXDARWIN_OSX__
+
+// Move file or directory to macOS Trash using NSFileManager.
+bool wxMoveToTrash(const wxString& path)
+{
+    wxCFStringRef cfPath(path);
+    NSURL *fileURL = [NSURL fileURLWithPath:cfPath.AsNSString()];
+    if ( fileURL == nil )
+        return false;
+
+    NSError *error = nil;
+    BOOL ok = [[NSFileManager defaultManager] trashItemAtURL:fileURL
+                                            resultingItemURL:nil
+                                                       error:&error];
+    if ( !ok )
+    {
+        wxLogError(_("'%s' couldn't be moved to trash: %s"),
+                   path,
+                   error ? wxCFStringRef::AsString([error localizedDescription])
+                         : _("unknown error"));
+    }
+
+    return ok;
+}
+
+#endif // __WXDARWIN_OSX__
 
 #endif
