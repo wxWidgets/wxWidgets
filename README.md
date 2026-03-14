@@ -51,6 +51,12 @@ is a modified version of LGPL explicitly allowing not distributing the sources
 of an application using the library even in the case of static linking.
 
 
+Translating
+-----------
+
+Translations are usually updated via pull requests: https://github.com/wxWidgets/wxWidgets/commits/master/locale
+
+
 Building
 --------
 
