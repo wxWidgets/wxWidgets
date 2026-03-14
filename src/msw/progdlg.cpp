@@ -922,8 +922,8 @@ bool wxProgressDialog::Show(bool show)
                 break;
         }
 
-        // Do not show the underlying dialog.
-        return false;
+        // Return without showing the generic dialog.
+        return true;
     }
 
     return wxGenericProgressDialog::Show( show );
