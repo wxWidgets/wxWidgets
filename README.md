@@ -54,7 +54,9 @@ of an application using the library even in the case of static linking.
 Translating
 -----------
 
-Translations are usually updated via pull requests: https://github.com/wxWidgets/wxWidgets/commits/master/locale
+Translations are usually updated via pull requests:
+
+- https://github.com/wxWidgets/wxWidgets/commits/master/locale
 
 
 Building
