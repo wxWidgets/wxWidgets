@@ -768,9 +768,6 @@ public:
     }
     virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) override
     {
-        wxMouseEvent event(wxEVT_MOTION);
-        event.SetPosition(wxPoint(x, y));
-        m_frame->ProcessWindowEvent(event);
         return wxDropTarget::OnDragOver(x, y, def);
     }
     virtual bool OnDrop(wxCoord x, wxCoord y) override
