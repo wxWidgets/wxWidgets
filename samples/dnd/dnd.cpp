@@ -766,10 +766,6 @@ public:
 #endif // wxUSE_STATUSBAR
         m_frame->DisableAutoscrollWithoutCapture();
     }
-    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) override
-    {
-        return wxDropTarget::OnDragOver(x, y, def);
-    }
     virtual bool OnDrop(wxCoord x, wxCoord y) override
     {
         m_frame->DisableAutoscrollWithoutCapture();
