@@ -902,7 +902,9 @@ bool wxProgressDialog::Show(bool show)
         // Do launch the thread.
         if ( m_taskDialogRunner->Run() != wxTHREAD_NO_ERROR )
         {
-            wxLogError( "Unable to start thread!" );
+            // This should never happen and it's useless to have a user-visible
+            // message (that would need to be translated) for it.
+            wxLogDebug("Unexpectedly failed to launch the task dialog thread");
             return false;
         }
 
