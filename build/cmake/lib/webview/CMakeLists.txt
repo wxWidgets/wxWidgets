@@ -63,8 +63,22 @@ elseif(WXMSW)
                 ${WEBVIEW2_DEFAULT_PACKAGE_DIR}
         )
 
+        if (WEBVIEW2_PACKAGE_DIR)
+            get_filename_component(currentDir ${WEBVIEW2_PACKAGE_DIR} DIRECTORY)
+            get_filename_component(targetDir ${WEBVIEW2_DEFAULT_PACKAGE_DIR} DIRECTORY)
+            if (currentDir STREQUAL targetDir)
+                get_filename_component(currentVersion ${WEBVIEW2_PACKAGE_DIR} NAME)
+                string(SUBSTRING ${currentVersion} 23 -1 currentVersion)
+                if(${currentVersion} VERSION_LESS ${WEBVIEW2_VERSION})
+                    message(STATUS "Found outdated WebView2 SDK, downloading...")
+                    unset(WEBVIEW2_PACKAGE_DIR CACHE)
+                endif()
+            endif()
+        else()
+            message(STATUS "WebView2 SDK not found, downloading...")
+        endif()
+
         if (NOT WEBVIEW2_PACKAGE_DIR)
-            message(STATUS "WebView2 SDK not found locally, downloading...")
             set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_DEFAULT_PACKAGE_DIR} CACHE PATH "WebView2 SDK PATH" FORCE)
             file(DOWNLOAD
                 ${WEBVIEW2_URL}
