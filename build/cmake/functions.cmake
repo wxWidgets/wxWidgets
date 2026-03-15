@@ -1063,13 +1063,6 @@ function(wx_add name group)
     endif()
 endfunction()
 
-# Link libraries to a sample
-function(wx_link_sample_libraries name)
-    if(TARGET ${name})
-        target_link_libraries(${name} PUBLIC ${ARGN})
-    endif()
-endfunction()
-
 # Add a option and mark is as advanced if it starts with wxUSE_
 # wx_option(<name> <desc> [default] [STRINGS strings])
 # The default is ON if not third parameter is specified
