@@ -735,7 +735,7 @@ public:
 
         Notice that currently you need to explicitly call
         wxNotebook::RemovePage() before reparenting a notebook page
-        (and most likely you want to call Show for the window afterwards).
+        (and most likely you want to call Show() for the window afterwards).
 
         @param newParent
             New parent.
