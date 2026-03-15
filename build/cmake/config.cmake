@@ -200,7 +200,7 @@ function(wx_write_config)
     set(WXCONFIG_RESFLAGS)
     set(WXCONFIG_RPATH "-Wl,-rpath,\$libdir")
     set(LDFLAGS_GL)
-    set(RESCOMP)
+    get_filename_component(RESCOMP "${CMAKE_RC_COMPILER}" NAME_WE)
 
     wx_configure_script(
         "wx-config.in"
