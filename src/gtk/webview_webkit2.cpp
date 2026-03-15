@@ -423,11 +423,16 @@ class wxReadyToShowParams
 public:
     wxWebViewWebKit* childWebView;
     wxWebViewWebKit* parentWebView;
+    gulong handlerId = 0;
 };
 
 static void wxgtk_webview_webkit_ready_to_show (WebKitWebView *web_view,
                                                 wxReadyToShowParams *params)
 {
+    // This handler must not be called more than once as it deletes params, so
+    // disconnect it immediately.
+    g_signal_handler_disconnect(web_view, params->handlerId);
+
     wxWebViewWindowFeaturesWebKit features(params->childWebView, web_view);
     wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW_FEATURES,
                          params->parentWebView->GetId(),
@@ -867,9 +872,8 @@ wxWebViewWebKit::wxWebViewWebKit(WebKitWebView* parentWebView, wxWebViewWebKit* 
     wxReadyToShowParams* params = new wxReadyToShowParams();
     params->childWebView = this;
     params->parentWebView = parentWebViewCtrl;
-
-    g_signal_connect(m_web_view, "ready-to-show",
-                     G_CALLBACK(wxgtk_webview_webkit_ready_to_show), params);
+    params->handlerId = g_signal_connect(m_web_view, "ready-to-show",
+                                         G_CALLBACK(wxgtk_webview_webkit_ready_to_show), params);
 }
 
 wxWebViewWebKit::wxWebViewWebKit(const wxWebViewConfiguration &config):
