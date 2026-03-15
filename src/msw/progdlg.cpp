@@ -102,6 +102,7 @@ public:
     wxString m_title;
     wxString m_message;
     wxString m_expandedInformation;
+    wxString m_labelSkip;
     wxString m_labelCancel; // Privately used by callback.
     unsigned long m_timeStop;
     wxIcon m_iconSmall;
@@ -1071,7 +1072,11 @@ void* wxProgressDialogTaskRunner::Entry()
         tdc.lpCallbackData = (LONG_PTR) &m_sharedData;
 
         if ( m_sharedData.m_style & wxPD_CAN_SKIP )
-            wxTdc.AddTaskDialogButton( tdc, Id_SkipBtn, 0, _("Skip") );
+        {
+            m_sharedData.m_labelSkip = _("Skip");
+            wxTdc.AddTaskDialogButton( tdc, Id_SkipBtn, 0,
+                                       m_sharedData.m_labelSkip );
+        }
 
         tdc.dwFlags |= TDF_CALLBACK_TIMER | TDF_SHOW_PROGRESS_BAR;
 
