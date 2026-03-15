@@ -719,8 +719,6 @@ public:
         Only @c ::wxFULLSCREEN_NOTOOLBAR and @c ::wxFULLSCREEN_NOMENUBAR will be
         used when using the fullscreen API (other values are ignored).
 
-        @onlyfor{wxosx}
-
         @see ShowFullScreen(), wxFullScreenEvent
 
         @since 3.1.0
