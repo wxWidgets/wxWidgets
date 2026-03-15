@@ -857,7 +857,7 @@ public:
     This backend is enabled by default only when using CMake. To build it follow these steps:
     - When not using CMake:
         - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
-        NuGet package (Version 1.0.864.35 or newer)
+        NuGet package (Version 1.0.3485.44 or newer)
         - Extract the package (it's a zip archive) to @c WX_SRCDIR/3rdparty/webview2
         (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
         file after unpacking it)
