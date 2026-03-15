@@ -44,6 +44,8 @@ if(APPLE)
 elseif(WXMSW)
     if(wxUSE_WEBVIEW_EDGE)
         # Update the following variables if updating WebView2 SDK
+        # Also update this version and the _INTERFACE_DEFINED_ check in
+        # include/wx/msw/private/webview_edge.h and interface/wx/webview.h
         set(WEBVIEW2_VERSION "1.0.3485.44")
         set(WEBVIEW2_URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}")
         # When updating the above version of WebView2, download the nupkg from the above URL.
