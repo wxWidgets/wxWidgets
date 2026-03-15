@@ -697,6 +697,9 @@ public:
     /**
         Enables the zoom button to toggle full screen mode.
 
+        This function is currently only implemented in wxOSX and simply returns
+        @false in the other ports.
+
         A wxFullScreenEvent is generated when the users enters or exits
         full screen via the enter/exit full screen button.
 
@@ -709,7 +712,7 @@ public:
             for possible values. It is available since wxWidgets 3.1.6.
 
         @return @true if the button behaviour has been changed, @false if running
-        under another OS.
+        under unsupported OS.
 
         @note Having the button is also required to let ShowFullScreen()
         make use of the full screen API: a full screen window gets its own space
@@ -718,8 +721,6 @@ public:
         is used.
         Only @c ::wxFULLSCREEN_NOTOOLBAR and @c ::wxFULLSCREEN_NOMENUBAR will be
         used when using the fullscreen API (other values are ignored).
-
-        @onlyfor{wxosx}
 
         @see ShowFullScreen(), wxFullScreenEvent
 
