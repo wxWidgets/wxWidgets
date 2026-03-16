@@ -452,6 +452,35 @@ enum Bracket
   Bracket_Max
 };
 
+/** Bricsys change
+/* GV: wxExpandEnvVars incorrectly processes %ProgramFiles(x86)% (it adds one more "x86%" token)
+because brackets are not considered as valid characters for environment variable name;
+We have to extend number of valid chars for environment variable names;
+*/
+class EnvVarNameValidator
+{
+public:
+    EnvVarNameValidator() : m_numOpeningBrackets(0) {}
+    bool isValidEnvVarChar(wxChar ch)
+    {
+        switch (ch)
+        {
+            case wxT('('):
+                m_numOpeningBrackets++;
+                return true;
+            case wxT(')'):
+                return --m_numOpeningBrackets >= 0;
+            case wxT('_'):
+                return true;
+            default:
+                return wxIsalnum(ch);
+        };
+    }
+private:
+    int m_numOpeningBrackets;
+};
+
+
 wxString wxExpandEnvVars(const wxString& str)
 {
   wxString strResult;
@@ -493,7 +522,8 @@ wxString wxExpandEnvVars(const wxString& str)
 
           m = n + 1;
 
-          while ( m < str.length() && (wxIsalnum(str[m]) || str[m] == wxT('_')) )
+          EnvVarNameValidator envValidator;
+          while (m < str.length() && envValidator.isValidEnvVarChar(str[m]))
             m++;
 
           wxString strVarName(str.c_str() + n + 1, m - n - 1);

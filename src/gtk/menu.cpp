@@ -900,14 +900,12 @@ void wxMenu::Init()
         AppendSeparator();
     }
 
-    // "show" occurs for sub-menus which are not showing, so use "map" instead
-    // Bricsys change: on Ubuntu Unity, we need to connect to the menu "show" signal
-    // to send EVT_MENU_OPEN, because "map" doesn't arrive
-    if(wxString(wxT("Unity")).IsSameAs(wxGetenv(wxString(wxT("XDG_CURRENT_DESKTOP")))))
-        g_signal_connect(m_menu, "show", G_CALLBACK(menu_show), this);
-    else
+    // Bricsys change: for GDK_BACKEND=x11, menubar menus are incorrectly sized
+    // the first time they are shown; using menu_show instead of menu_map, this gets fixed
+    g_signal_connect(m_menu, "show", G_CALLBACK(menu_show), this);
+    //// "show" occurs for sub-menus which are not showing, so use "map" instead
+    //g_signal_connect(m_menu, "map", G_CALLBACK(menu_map), this);
     // end Bricsys change
-    g_signal_connect(m_menu, "map", G_CALLBACK(menu_map), this);
     g_signal_connect(m_menu, "hide", G_CALLBACK(menu_hide), this);
 }
 

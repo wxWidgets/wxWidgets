@@ -421,7 +421,12 @@ wxFORMAT_STRING_SPECIFIER(long int, wxFormatString::Arg_LongInt)
 wxFORMAT_STRING_SPECIFIER(long unsigned int, wxFormatString::Arg_LongInt)
 #ifdef wxLongLong_t
 wxFORMAT_STRING_SPECIFIER(wxLongLong_t, wxFormatString::Arg_LongLongInt)
+// Bricsys change: size_t is defined as unsigned __int64
+#ifdef _M_X64
+wxFORMAT_STRING_SPECIFIER(wxULongLong_t, wxFormatString::Arg_LongLongInt | wxFormatString::Arg_Size_t)
+#else
 wxFORMAT_STRING_SPECIFIER(wxULongLong_t, wxFormatString::Arg_LongLongInt)
+#endif
 #endif
 wxFORMAT_STRING_SPECIFIER(float, wxFormatString::Arg_Double)
 wxFORMAT_STRING_SPECIFIER(double, wxFormatString::Arg_Double)
