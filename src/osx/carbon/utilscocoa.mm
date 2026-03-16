@@ -12,6 +12,8 @@
 #ifndef WX_PRECOMP
 #include "wx/object.h"
 #include "wx/math.h"
+#include "wx/intl.h"
+#include "wx/log.h"
 #endif
 
 #if wxOSX_USE_COCOA_OR_CARBON
