@@ -29,10 +29,16 @@ void wxAffineMatrix2D::Set(const wxMatrix2D &mat2D, const wxPoint2DDouble &tr)
 // gets the component values of the matrix
 void wxAffineMatrix2D::Get(wxMatrix2D *mat2D, wxPoint2DDouble *tr) const
 {
-    mat2D->m_11 = m_11;
-    mat2D->m_12 = m_12;
-    mat2D->m_21 = m_21;
-    mat2D->m_22 = m_22;
+    wxASSERT_MSG( mat2D || tr,
+                  wxT("at least one parameter must be non-null") );
+
+    if( mat2D )
+    {
+        mat2D->m_11 = m_11;
+        mat2D->m_12 = m_12;
+        mat2D->m_21 = m_21;
+        mat2D->m_22 = m_22;
+    }
 
     if ( tr )
     {
