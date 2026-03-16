@@ -168,7 +168,7 @@ public:
                         wxEventType& evtHorzScroll,
                         wxEventType& evtVertScroll) const;
 
-    // wxWidgets <= 3.3.1 mostly restricted autoscroll to the
+    // wxWidgets <= 3.3.2 mostly restricted autoscroll to the
     // window holding the mouse capture.  However, when dragging
     // objects between windows, the destination window should be
     // the window that is scrolling (to allow positioning the
