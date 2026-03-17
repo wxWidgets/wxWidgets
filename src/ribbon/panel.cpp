@@ -29,10 +29,6 @@
 #endif
 
 wxDEFINE_EVENT(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
-// Bricsys change
-wxDEFINE_EVENT(wxEVT_RIBBONPANEL_LABEL_ACTIVATED, wxRibbonPanelEvent);
-wxDEFINE_EVENT(wxEVT_RIBBONPANEL_EXPANDED_SHOWN, wxRibbonPanelEvent);
-// End Bricsys change
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonPanelEvent, wxCommandEvent);
 
@@ -125,11 +121,6 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
     m_minimised = false;
     m_hovered = false;
     m_ext_button_hovered = false;
-// Bricsys change
-    m_hasSlideOutPanel = false;
-    m_panel_label_hovered = false;
-    m_child_with_focus = nullptr;
-// End Bricsys change
 
     if(m_art == NULL)
     {
@@ -160,13 +151,6 @@ bool wxRibbonPanel::IsExtButtonHovered() const
     return m_ext_button_hovered;
 }
 
-// Bricsys change
-bool wxRibbonPanel::IsLabelHovered() const
-{
-    return m_panel_label_hovered;
-}
-// End Bricsys change
-
 void wxRibbonPanel::OnMouseEnter(wxMouseEvent& evt)
 {
     TestPositionForHover(evt.GetPosition());
@@ -187,12 +171,6 @@ void wxRibbonPanel::OnMouseEnterChild(wxMouseEvent& evt)
 void wxRibbonPanel::OnMouseLeave(wxMouseEvent& evt)
 {
     TestPositionForHover(evt.GetPosition());
-// Bricsys change
-    m_hovered = false;
-    m_ext_button_hovered = false;
-    m_panel_label_hovered = false;
-    Refresh(false);
-// End Bricsys change
 }
 
 void wxRibbonPanel::OnMouseLeaveChild(wxMouseEvent& evt)
@@ -214,7 +192,7 @@ void wxRibbonPanel::OnMotion(wxMouseEvent& evt)
 
 void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
 {
-    bool hovered = false, ext_button_hovered = false, panel_label_hovered = false;
+    bool hovered = false, ext_button_hovered = false;
     if(pos.x >= 0 && pos.y >= 0)
     {
         wxSize size = GetSize();
@@ -229,19 +207,11 @@ void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
             ext_button_hovered = m_ext_button_rect.Contains(pos);
         else
             ext_button_hovered = false;
-// Bricsys change
-        if (HasSlideOutPanel())
-            panel_label_hovered = m_panel_label_rect.Contains(pos) && !m_ext_button_rect.Contains(pos);
-        else
-            panel_label_hovered = false;
-// End Bricsys change
     }
-    if(hovered != m_hovered || ext_button_hovered != m_ext_button_hovered
-                    || panel_label_hovered != m_panel_label_hovered)
+    if(hovered != m_hovered || ext_button_hovered != m_ext_button_hovered)
     {
         m_hovered = hovered;
         m_ext_button_hovered = ext_button_hovered;
-        m_panel_label_hovered = panel_label_hovered;
         Refresh(false);
     }
 }
@@ -792,11 +762,6 @@ bool wxRibbonPanel::Layout()
     if(HasExtButton())
         m_ext_button_rect = m_art->GetPanelExtButtonArea(dc, this, GetSize());
 
-// Bricsys change
-    if (HasSlideOutPanel())
-        m_panel_label_rect = m_art->GetLabelArea(dc, this, GetSize());
-// End Bricsys change
-
     return true;
 }
 
@@ -821,20 +786,6 @@ void wxRibbonPanel::OnMouseClick(wxMouseEvent& WXUNUSED(evt))
         ProcessEvent(notification);
     }
 }
-
-// Bricsys change
-void wxRibbonPanel::OnMouseUp(wxMouseEvent& evt)
-{
-    evt.Skip();
-    if (HasSlideOutPanel() && !IsMinimised() && IsLabelHovered())
-    {
-        wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_LABEL_ACTIVATED, GetId());
-        notification.SetEventObject(this);
-        notification.SetPanel(this);
-        ProcessEvent(notification);
-    }
-}
-// End Bricsys change
 
 wxRibbonPanel* wxRibbonPanel::GetExpandedDummy()
 {
@@ -906,13 +857,6 @@ bool wxRibbonPanel::ShowExpanded()
     container->SetMinClientSize(size);
     container->Show();
     m_expanded_panel->SetFocus();
-
-// Bricsys change
-    wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_EXPANDED_SHOWN, GetId());
-    notification.SetEventObject(this);
-    notification.SetPanel(this);
-    ProcessEvent(notification);
-// End Bricsys change
 
     return true;
 }

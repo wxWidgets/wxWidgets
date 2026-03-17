@@ -354,12 +354,6 @@ public:
                         wxSize size,
                         wxPoint* client_offset) = 0;
 
-    // Bricsys change
-    virtual wxRect GetLabelArea(wxDC& dc,
-                        const wxRibbonPanel* wnd,
-                        wxRect rect) = 0;
-    // End Bricsys change
-
     virtual wxRect GetPanelExtButtonArea(
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
@@ -573,12 +567,6 @@ public:
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
                         wxRect rect) wxOVERRIDE;
-
-    // Bricsys change
-    wxRect GetLabelArea(wxDC& dc,
-                        const wxRibbonPanel* wnd,
-                        wxRect rect);
-    // End Bricsys change
 
     wxSize GetGallerySize(
                         wxDC& dc,
@@ -844,12 +832,6 @@ public:
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
                         wxRect rect) wxOVERRIDE;
-
-    // Bricsys change
-    wxRect GetLabelArea(wxDC& dc,
-                        const wxRibbonPanel* wnd,
-                        wxRect rect);
-    // End Bricsys change
 
     void DrawTabCtrlBackground(
                         wxDC& dc,
