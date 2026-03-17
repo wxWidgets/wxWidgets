@@ -49,6 +49,11 @@
     #endif
 #endif
 
+// Check if C++20 three-way-comparison operator is available
+#ifdef __cpp_impl_three_way_comparison
+    #include <compare>
+#endif
+
 #include "wx/afterstd.h"
 
 // by default we cache the mapping of the positions in UTF-8 string to the byte
@@ -2287,6 +2292,19 @@ public:
       { return s1.Cmp(s2) <= 0; }
   friend bool operator>=(const wxString& s1, const wxString& s2)
       { return s1.Cmp(s2) >= 0; }
+
+#ifdef __cpp_impl_three_way_comparison
+  friend auto operator<=>(const wxString& s1, const wxString& s2)
+  {
+      const int cmp = s1.Cmp(s2);
+      if (cmp < 0)
+          return std::strong_ordering::less;
+      else if (cmp > 0)
+          return std::strong_ordering::greater;
+      else
+          return std::strong_ordering::equal;
+  }
+#endif
 
   friend bool operator==(const wxString& s1, const wxCStrData& s2)
       { return s1 == s2.AsString(); }
