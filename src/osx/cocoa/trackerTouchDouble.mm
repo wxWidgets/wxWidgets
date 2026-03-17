@@ -468,7 +468,7 @@
     _currentTouchEvent = nil;
 }
 
-+ (NSPoint)calcPointsDelta:(NSPoint)point1 :(NSPoint)point2
++ (NSPoint)calcNSPointsDelta:(NSPoint)point1 :(NSPoint)point2
 {
     NSPoint deltaPoint;
     deltaPoint.x = fabs(point1.x - point2.x);

@@ -24,12 +24,11 @@
 #include "wx/frame.h"
 #include "wx/menuitem.h"
 #include "wx/dialog.h"
+#endif
 
 // Bricsys change: wxEventLoopBase::GetActive();
 #include "wx/evtloop.h"
 // end Bricsys change
-
-#endif
 
 #include "wx/menu.h"
 

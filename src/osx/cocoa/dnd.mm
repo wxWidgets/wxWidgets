@@ -393,6 +393,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
             }
         }
 #endif
+        }
     }
 }
 
