@@ -91,14 +91,20 @@ wxButtonCocoaImpl::wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v)
 // Set bezel style depending on the wxBORDER_XXX flags specified by the style
 // and also accounting for the label (bezels are different for multiline
 // buttons and normal ones) and the ID (special bezel is used for help button).
-static
+
 void
-SetBezelStyleFromBorderFlags(NSButton *v,
+wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
                              long style,
                              wxWindowID winid,
-                             const wxString& label = wxString(),
-                             const wxBitmapBundle& bitmap = wxBitmapBundle())
+                             const wxString& label,
+                             const wxBitmapBundle& bitmap,
+                             wxWindow *peer)
 {
+#if wxUSE_TOGGLEBTN
+    bool isToggleButton = peer && peer->IsKindOf(wxCLASSINFO(wxToggleButton));
+    NSButtonType toggleButtonType = NSOnOffButton;
+#endif
+
     // We can't display a custom label inside a button with help bezel style so
     // we only use it if we are using the default label. wxButton itself checks
     // if the label is just "Help" in which case it discards it and passes us
@@ -123,6 +129,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
             case wxBORDER_NONE:
                 bezel = NSShadowlessSquareBezelStyle;
                 [v setBordered:NO];
+                toggleButtonType = NSToggleButton;
                 break;
 
             case wxBORDER_SIMPLE:
@@ -148,6 +155,10 @@ SetBezelStyleFromBorderFlags(NSButton *v,
         }
 
         [v setBezelStyle:bezel];
+#if wxUSE_TOGGLEBTN
+        if (isToggleButton)
+            [v setButtonType:toggleButtonType];
+#endif
     }
 }
 
@@ -155,11 +166,12 @@ void wxButtonCocoaImpl::SetBitmap(const wxBitmapBundle& bitmap)
 {
     // Update the bezel style as may be necessary if our new label is multi
     // line while the old one wasn't (or vice versa).
-    SetBezelStyleFromBorderFlags(GetNSButton(),
+    wxOSXSetBezelStyleFromBorderFlags(GetNSButton(),
                                  GetWXPeer()->GetWindowStyle(),
                                  GetWXPeer()->GetId(),
                                  GetWXPeer()->GetLabel(),
-                                 bitmap );
+                                 bitmap,
+                                 GetWXPeer());
 
     wxWidgetCocoaImpl::SetBitmap(bitmap);
 }
@@ -238,11 +250,12 @@ void wxButton::OSXUpdateAfterLabelChange(const wxString& label)
 
     // Update the bezel style as may be necessary if our new label is multi
     // line while the old one wasn't (or vice versa).
-    SetBezelStyleFromBorderFlags(impl->GetNSButton(),
+    wxOSXSetBezelStyleFromBorderFlags(impl->GetNSButton(),
                                  GetWindowStyle(),
                                  GetId(),
                                  label,
-                                 GetBitmap() );
+                                 GetBitmap(),
+                                 this);
 
 
     // Skip setting the accelerator for the default buttons as this would
@@ -271,7 +284,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style, winid, label);
+    wxOSXSetBezelStyleFromBorderFlags(v, style, winid, label, wxBitmapBundle(), wxpeer);
 
     [v setButtonType:NSMomentaryPushInButton];
     wxButtonCocoaImpl* const impl = new wxButtonCocoaImpl( wxpeer, v );
@@ -313,12 +326,11 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style, winid, wxString(), bitmap);
+    wxOSXSetBezelStyleFromBorderFlags(v, style, winid, wxString(), bitmap, wxpeer);
 
     if (bitmap.IsOk())
         [v setImage: wxOSXGetImageFromBundle(bitmap) ];
 
-    [v setButtonType:NSMomentaryPushInButton];
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
     return c;
 }

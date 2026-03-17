@@ -24,44 +24,10 @@
 #include "wx/osx/private.h"
 #include "wx/private/bmpbndl.h"
 
-static
-void
-SetToggleButtonStyle(NSButton *v, long style)
-{
-    NSButtonType type = NSOnOffButton;
-
-    // This is the appropriate default bezel style for the toggle buttons.
-    NSBezelStyle bezel = NSShadowlessSquareBezelStyle;
-
-    switch ( style & wxBORDER_MASK )
-    {
-        case 0:
-            break;
-
-        case wxBORDER_NONE:
-            [v setBordered:NO];
-            type = NSToggleButton;
-            break;
-
-        case wxBORDER_SIMPLE:
-            bezel = NSSmallSquareBezelStyle;
-            break;
-
-        case wxBORDER_STATIC:
-        case wxBORDER_RAISED:
-        case wxBORDER_THEME:
-        case wxBORDER_SUNKEN:
-            break;
-    }
-
-    [v setBezelStyle:bezel];
-    [v setButtonType:type];
-}
-
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
-                                    wxWindowID WXUNUSED(winid),
-                                    const wxString& WXUNUSED(label),
+                                    wxWindowID winid,
+                                    const wxString& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -70,7 +36,7 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetToggleButtonStyle(v, style);
+    wxOSXSetBezelStyleFromBorderFlags(v, style, winid, label, wxBitmapBundle(), wxpeer);
 
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
     return c;
@@ -78,8 +44,8 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
 
 wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
-                                    wxWindowID WXUNUSED(winid),
-                                    const wxBitmapBundle& label,
+                                    wxWindowID winid,
+                                    const wxBitmapBundle& bundle,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -88,13 +54,13 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetToggleButtonStyle(v, style);
+    wxOSXSetBezelStyleFromBorderFlags(v, style, winid, wxEmptyString, bundle, wxpeer);
 
-    if (label.IsOk())
-        [v setImage: wxOSXGetImageFromBundle(label) ];
+    if (bundle.IsOk())
+        [v setImage: wxOSXGetImageFromBundle(bundle) ];
 
-    [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
+
     return c;
 }
 
