@@ -441,6 +441,31 @@ bool wxRegKey::Open(AccessMode mode)
                         &tmpKey
                     );
 
+    //bricsys change merged on wxwidgets upgrade
+    // if 1. attempt fails, try again with slightly reduced rights, omitting
+    // rarely used access modes which can be restricted by group policies
+    if ( m_dwLastError != ERROR_SUCCESS )
+    {
+        // KEY_READ  = STANDARD_RIGHTS_READ  | KEY_QUERY_VALUE |
+        //             KEY_ENUMERATE_SUB_KEYS | KEY_NOTIFY
+        //             STANDARD_RIGHTS_READ = READ_CONTROL (!!!)
+        // KEY_WRITE = STANDARD_RIGHTS_WRITE | KEY_SET_VALUE |
+        //             KEY_CREATE_SUB_KEY
+        //             STANDARD_RIGHTS_WRITE = READ_CONTROL (!!!)
+        REGSAM openMode = KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS;
+        if ( mode != Read )
+            openMode |= KEY_SET_VALUE | KEY_CREATE_SUB_KEY;
+
+        m_dwLastError = ::RegOpenKeyEx
+                        (
+                            (HKEY) m_hRootKey,
+                            m_strKey.t_str(),
+                            wxRESERVED_PARAM,
+                            openMode,
+                            &tmpKey
+                        );
+    }
+
     if ( m_dwLastError != ERROR_SUCCESS )
     {
         wxLogSysError(m_dwLastError, _("Can't open registry key '%s'"),
@@ -713,9 +738,9 @@ bool wxRegKey::DeleteSelf()
   // prevent a buggy program from erasing one of the root registry keys or an
   // immediate subkey (i.e. one which doesn't have '\\' inside) of any other
   // key except HKCR (HKCR has some "deleteable" subkeys)
-  if ( m_strKey.empty() ||
-       ((m_hRootKey != (WXHKEY) aStdKeys[HKCR].hkey) &&
-        (m_strKey.Find(REG_SEPARATOR) == wxNOT_FOUND)) ) {
+  //bricsys change merged on wxwidgets upgrade
+  // it is allowed to create and delete immediate sub-keys of root keys
+  if ( m_strKey.empty() ) {
       wxLogError(_("Registry key '%s' is needed for normal system operation,\ndeleting it will leave your system in unusable state:\noperation aborted."),
                  GetFullName(this));
 
@@ -1604,7 +1629,7 @@ bool wxRegKey::DoExport(wxOutputStream& ostr) const
 
 bool KeyExists(WXHKEY hRootKey,
                const wxString& szKey,
-               wxRegKey::WOW64ViewMode viewMode)
+               wxRegKey::WOW64ViewMode)
 {
     // don't close this key itself for the case of empty szKey!
     if ( szKey.empty() )
@@ -1616,8 +1641,11 @@ bool KeyExists(WXHKEY hRootKey,
             (HKEY)hRootKey,
             szKey.t_str(),
             wxRESERVED_PARAM,
-            // we might not have enough rights for rw access
-            GetMSWAccessFlags(wxRegKey::Read, viewMode),
+            //bricsys change merged on wxwidgets upgrade
+            // KEY_READ = STANDARD_RIGHTS_READ | KEY_QUERY_VALUE |
+            //            KEY_ENUMERATE_SUB_KEYS | KEY_NOTIFY
+            //            STANDARD_RIGHTS_READ = READ_CONTROL (!!!)
+            KEY_QUERY_VALUE, // enough to test for presence
             &hkeyDummy
          ) == ERROR_SUCCESS )
     {
