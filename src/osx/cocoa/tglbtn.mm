@@ -60,7 +60,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
         [v setImage: wxOSXGetImageFromBundle(bundle) ];
 
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
-    
+
     return c;
 }
 
