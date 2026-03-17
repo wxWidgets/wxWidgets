@@ -16,7 +16,6 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/toplevel.h"      // the base class
-#include "wx/containr.h"
 #include "wx/statusbr.h"
 
 // the default names for various classes
@@ -54,7 +53,7 @@ class WXDLLIMPEXP_FWD_CORE wxToolBar;
 // CreateXXXBar() is called.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxFrameBase : public wxNavigationEnabled<wxTopLevelWindow>
+class WXDLLIMPEXP_CORE wxFrameBase : public wxTopLevelWindow
 {
 public:
     // construction
