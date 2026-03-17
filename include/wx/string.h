@@ -1631,7 +1631,7 @@ public:
     // and not defining it in STL build also helps us to get more clear error
     // messages for the code which relies on implicit conversion to char* in
     // STL build
-#if !wxUSE_STD_STRING_CONV_IN_WXSTRING
+#if !wxUSE_STD_STRING_CONV_IN_WXSTRING && !defined(wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR)
     operator const wchar_t*() const { return c_str(); }
 
 #if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
@@ -1642,7 +1642,7 @@ public:
     operator const void*() const { return c_str(); }
 #endif // wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
 
-#endif // !wxUSE_STD_STRING_CONV_IN_WXSTRING
+#endif // !wxUSE_STD_STRING_CONV_IN_WXSTRING && !defined(wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR)
 
     // identical to c_str(), for MFC compatibility
     const wxCStrData GetData() const { return c_str(); }
