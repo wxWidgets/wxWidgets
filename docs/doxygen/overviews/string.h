@@ -248,7 +248,7 @@ is not appropriate for the current software and platform. The macro @c
 wxNO_IMPLICIT_WXSTRING_ENCODING disables all implicit conversions, and
 forces the code to explicitly indicate the encoding of all C strings.
 
-Finally note that encodings, either implicitly or explicitly selected,
+Note that encodings, either implicitly or explicitly selected,
 may not be able to represent all the string's characters. The result
 in this case is undefined: the string may be empty, or the
 unrepresentable characters may be missing or wrong.
@@ -270,6 +270,12 @@ c = s.ToUTF8(); // Always compiles, encoding never fails
 c = s.utf8_str(); // Alias for the above
 c = s.mb_str(wxConvLibc); // Always compiles, explicit encoding
 @endcode
+
+Finally, please note that implicit conversion to both `const char*` (which
+is unsafe for the reasons explained above) and to `const wchar_t*` (which
+is safe from this point of view, but may still be considered dangerous, as
+any implicit conversion) may be entirely disabled by defining
+`wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR` when building the application.
 
 @subsection overview_string_iterating Iterating wxString Characters
 

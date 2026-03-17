@@ -252,6 +252,13 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
+3.2.11: (released 2026-??-??)
+
+All:
+
+- Support defining wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR in wxString (#26307).
+
+
 3.2.10: (released 2026-03-03)
 -----------------------------
 
