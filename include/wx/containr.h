@@ -258,6 +258,11 @@ public:
         BaseWindowClass::SetFocus();
     }
 
+    void SetLastFocus(wxWindow* win)
+    {
+        m_container.SetLastFocus(win);
+    }
+
 #ifdef __WXMSW__
     WXDLLIMPEXP_INLINE_CORE virtual bool HasTransparentBackground() wxOVERRIDE
     {
