@@ -1,0 +1,1 @@
+wxMSW: Fix regression with wxPD_CAN_SKIP in 3.3.2 (#26287).
