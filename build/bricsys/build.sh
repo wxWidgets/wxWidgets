@@ -10,5 +10,5 @@ case $OSTYPE in
   ;;  
 esac
 
-python3 build/bricsys/build_wx.py "$@" --platform=$PLATFORM --wx_src_dir=.
+python3 build/bricsys/build_wx.py "$@" --platform=$PLATFORM --wx_src_dir=. --wx_install_dir=./install_bsys
 

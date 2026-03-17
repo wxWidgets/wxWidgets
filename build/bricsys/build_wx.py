@@ -75,9 +75,9 @@ def main():
 
     if args.wx_install_dir is None:
         if args.platform == 'linux':
-            args.wx_install_dir = f'{CWD}/{args.build_type}'
+            args.wx_install_dir = f'{CWD}/install_bsys'
         elif args.platform == 'windows':
-            args.wx_install_dir = '../../'
+            args.wx_install_dir = '../../install_bsys'
 
     # Configurable Constants
     WXGIT_REPO_URL = 'git@github.com:Bricsys/wxWidgets.git'
