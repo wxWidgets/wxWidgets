@@ -1,14 +1,14 @@
 # Croatian translations for wxWidgets
 # Copyright (C) 2019 wxWidgets
 # This file is distributed under the same license as the wxWidgets package.
-# Milo Ivir <mail@milotype.de>, 2019.
+# Milo Ivir <mail@milotype.de>, 2019., 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.3.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2023-05-14 14:24+0200\n"
+"PO-Revision-Date: 2026-03-17 15:07+0100\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.9\n"
 
 #: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
@@ -216,7 +216,7 @@ msgstr "&Prethodno"
 #: ../src/generic/mdig.cpp:307 ../src/generic/mdig.cpp:311
 #: ../src/msw/mdi.cpp:337 ../src/qt/mdi.cpp:462
 msgid "&Window"
-msgstr "&Prozor"
+msgstr "Pro&zor"
 
 #: ../src/common/accelcmn.cpp:47
 msgctxt "keyboard key"
@@ -719,7 +719,6 @@ msgid "SPECIAL"
 msgstr "SPECIJALNO"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
@@ -1318,26 +1317,25 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+"i dodatno, postojeća konfiguracijska datoteka je preimenovana u „%s” i nije "
+"je bilo moguće vratiti na izvorno ime. Preimenuj je natrag na izvornu stazu "
+"„%s”"
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "I sadržava sljedeće datoteke:\n"
+msgstr " zbog sljedeće greške:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Neuspjelo čitanje tekstualne datoteke „%s”."
+msgstr "neuspjelo preimenovanje postojeće datoteke"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Neuspjelo dohvaćanje radne mape"
+msgstr "neuspjelo stvaranje novog direktorija datoteka"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "Neuspjelo postavljanje web-prikaza na modernu razinu emulacije"
+msgstr "neuspjelo premještanje datoteke na novu lokaciju"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1397,9 +1395,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "Konfiguracijsko ulazno ime ne može početi s „%c”."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Neuspjela izrada objekta konfiguracije fontova."
+msgstr "Neuspjelo stvaranje direktorija konfiguracijskih datoteka."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -2215,7 +2212,7 @@ msgstr "DIB zaglavlje: Kodiranje se ne poklapa s bit-dubinom."
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "BMP zaglavlje: Nevaljan broj boja (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2450,43 +2447,40 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: Greška prilikom pisanja slike."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: Greška prilikom spremanja slike."
+msgstr "TIFF: Greška prilikom zapisivanja podataka."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: Nevaljani podaci (neuspjelo dobivanje funkcija)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: Dodjellivanje memorije slika nije uspjela."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: Dekodiranje RGBA slikovnih podataka nije uspjelo."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: Dekodiranje RGB slikovnih podataka nije uspjelo."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: Dodjeljivanje međuspremnika za tok podataka nije uspjelo."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "Neuspjelo postavljanje podataka međuspremnika."
+msgstr "WebP: Neuspjela obrada podataka kontejnera."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "Greška prilikom čitanja opcija konfiguracije."
+msgstr "WebP: Greška pri dekodiranju animacije."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: Greška pri dobivanju sljedeće slike animacije."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -2596,7 +2590,7 @@ msgstr "Greška LZMA komprimiranja: %s"
 #: ../src/common/lzmastream.cpp:350
 #, c-format
 msgid "LZMA compression error when flushing output: %s"
-msgstr "Greška LZMA komprimiranja prilikom nedovršavanja iznošaja: %s"
+msgstr "Greška LZMA komprimiranja prilikom zapisivanja rezultata: %s"
 
 #: ../src/common/mimecmn.cpp:167
 #, c-format
@@ -3960,7 +3954,7 @@ msgstr "„%s” nije jedan od valjanih znakovnih nizova"
 #: ../src/common/valtext.cpp:199
 #, c-format
 msgid "'%s' contains invalid character(s)"
-msgstr "„%s” sadržava nevažeće slovne znakove"
+msgstr "„%s” sadržava nevaljane znakove"
 
 #: ../src/common/webrequest.cpp:139
 #, c-format
@@ -3968,15 +3962,17 @@ msgid "Error: %s (%d)"
 msgstr "Greška: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "Nema dovoljno memorije na disku za preuzimanje."
+msgstr ""
+"Nema dovoljno slobodne memorije na disku za preuzimanje: potrebno: %llu, "
+"dostupno: %llu."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Neuspjelo stvaranje imena privremene datoteke"
+msgstr "Neuspjelo stvaranje privremene datoteke u %s"
 
 #: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
@@ -3992,33 +3988,33 @@ msgid "Error running JavaScript: %s"
 msgstr "Greška prilikom pokretanja JavaScripta: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Neuspjelo stvaranje mape „%s”"
+msgstr "Neuspjelo postavljanje proxyja „%s“: %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromium se ne može koristiti jer libcef.so nije učitan dovoljno rano; "
+"ponovo poveži aplikaciju ili koristi LD_PRELOAD kako bi se ranije učitao."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "Nije moguće inicijalizirati OLE"
+msgstr "Nije bilo moguće inicijalizirati Chromium"
 
 #: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
-msgstr ""
+msgstr "Prikaži alate za razvoj"
 
 #: ../src/common/webview_chromium.cpp:1617
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Zatvori sve"
+msgstr "Zatvori alate za razvoj"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "Pregledaj"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4422,12 +4418,11 @@ msgstr "Desno"
 #, c-format
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
-msgstr ""
+msgstr "„%s“ nije očekivani format datuma. Upiši ga npr. kao „%s“."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "PCX: nevaljana slika"
+msgstr "Nevaljan datum"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4845,36 +4840,37 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Greška pri kopiranju mreže u međuspremnik. Odabrane ćelije nisu bile u nizu "
+"ili nije odabrana nijedna ćelija."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Kut"
+msgstr "Ugao mreže"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Stupac %u"
+msgstr "Zaglavlje stupca %s"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "Zaglavlje retka %s"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Stupac %u"
+msgstr "Stupac %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "Redak %i"
+msgstr "Redak %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Redak %s, stupac %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -5264,40 +5260,39 @@ msgid "MDI child"
 msgstr "MDI child"
 
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr "Neuspjelo povezivanje na server „%s” na temu „%s”"
+msgstr "Neuspjelo otvaranje D-Bus veze s upravljačem prijava: %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "Sakrij aplikaciju"
+msgstr "Aplikacija wxWidgets"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "Aplikacija mora nastaviti raditi"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "Očisti prije prelaska u stanje mirovanja"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Neuspjelo inicijaliziranje povezivanja: %s"
+msgstr "Neuspjelo sprečavanje prelaska u stanje mirovanja: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "Neočekivan odgovor na D-Bus zahtjev za sprečavanje (Inhibit)."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Prilagođena veličina"
 
 #: ../src/gtk/print.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Greška prilikom spisa: "
+msgstr "Greška prilikom ispisa: %s"
 
 #: ../src/gtk/print.cpp:816
 msgid "Page Setup"
@@ -5305,16 +5300,17 @@ msgstr "Postavke stranice"
 
 #: ../src/gtk/webview_webkit.cpp:932
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
-msgstr "Dohvaćanje iznošaja JavaScript skripta nije podržano s WebKit v1"
+msgstr "Dohvaćanje rezultata JavaScript skripta nije podržano s WebKit v1"
 
 #: ../src/gtk/webview_webkit2.cpp:1098
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"WebKit ne podržava postavljanje proxyja, potrebna je barem verzija 2.16."
 
 #: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
-msgstr ""
+msgstr "Ovaj je program kompiliran bez podrške za postavljanje WebKit proxyja."
 
 #: ../src/gtk/window.cpp:6289
 msgid ""
@@ -5713,9 +5709,9 @@ msgstr ": datoteka ne postoji!"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " Pregled"
+msgstr "Pregled za %s"
 
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
@@ -5817,7 +5813,7 @@ msgid ""
 msgstr ""
 "jedna DDEML funkcija je pozvana bez prethodnog pozivanja funkcije "
 "DdeInitialize,\n"
-"ili je jedan nevažeći identifikator instance\n"
+"ili je jedan nevaljan identifikator instance\n"
 "proslijeđen DDEML funkciji."
 
 #: ../src/msw/dde.cpp:1147
@@ -5892,7 +5888,7 @@ msgid ""
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
-"neispravni identifikator transakcije proslijeđen je DDEML funkciji.\n"
+"nevaljan identifikator transakcije proslijeđen je DDEML funkciji.\n"
 "Nakon što se aplikacija vrati iz povratnog poziva XTYP_XACT_COMPLETE,\n"
 "identifikator transakcije za taj povratni poziv više nije valjan."
 
@@ -6022,11 +6018,11 @@ msgstr ""
 
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
-msgstr ""
+msgstr "Pristup datotečnom sustavu nije dopušten sa sigurne radne površine."
 
 #: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "Sigurnosno upozorenje"
 
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
@@ -6501,7 +6497,7 @@ msgstr "Nije moguće učitati ikone iz „%s”."
 
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
-msgstr ""
+msgstr "Ovaj je program kompiliran bez podrške za postavljanje Edge proxyja."
 
 #: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
@@ -7042,7 +7038,7 @@ msgstr "Greška svojstva"
 #: ../src/propgrid/propgrid.cpp:3259
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
-"Uneseni su nevaljane vrijednosti. Pritisni ESC za odustajanje od uređivanja."
+"Unesena ja nevaljana vrijednosti. Pritisni ESC za odustajanje od uređivanja."
 
 #: ../src/propgrid/propgrid.cpp:6608
 #, c-format
@@ -7093,7 +7089,7 @@ msgstr "Odaberi datoteku"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&Poploči"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -8651,7 +8647,7 @@ msgstr "Jedinice za donji položaj."
 
 #: ../src/richtext/richtextsizepage.cpp:671
 msgid "&Move the object to:"
-msgstr "&Premjesti objekt u:"
+msgstr "Pre&mjesti objekt u:"
 
 #: ../src/richtext/richtextsizepage.cpp:674
 msgid "&Previous Paragraph"
@@ -8664,7 +8660,7 @@ msgstr "Premješta objekt u prethodni odlomak."
 
 #: ../src/richtext/richtextsizepage.cpp:680
 msgid "&Next Paragraph"
-msgstr "&Sljedeći odlomak"
+msgstr "Sljedeći &odlomak"
 
 #: ../src/richtext/richtextsizepage.cpp:681
 #: ../src/richtext/richtextsizepage.cpp:683
@@ -9263,7 +9259,7 @@ msgstr "Neuspjelo postavljanje prioriteta procesa"
 
 #: ../src/unix/utilsunx.cpp:712
 msgid "Failed to redirect child process input/output"
-msgstr "Neuspjelo preusmjeravanje unosa/iznošaja podređenog procesa"
+msgstr "Neuspjelo preusmjeravanje unosa/rezultata podređenog procesa"
 
 #: ../src/unix/utilsunx.cpp:816
 msgid "Failed to set up non-blocking pipe, the program might hang."
@@ -9315,9 +9311,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "Greška u XML obradi: „%s” u %d. retku"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "Stranica %d"
+msgstr "Stranica %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
