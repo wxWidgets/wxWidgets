@@ -25,6 +25,11 @@ wxTextEntry::wxTextEntry()
 {
 }
 
+wxTextEntry::~wxTextEntry()
+{
+    delete m_autoCompleteData;
+}
+
 void wxTextEntry::WriteText(const wxString& WXUNUSED(text))
 {
 }
