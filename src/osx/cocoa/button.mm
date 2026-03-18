@@ -100,8 +100,9 @@ wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
                              const wxBitmapBundle& bitmap,
                              wxWindow *peer)
 {
+    bool isToggleButton = false;
 #if wxUSE_TOGGLEBTN
-    bool isToggleButton = peer && peer->IsKindOf(wxCLASSINFO(wxToggleButton));
+    isToggleButton = peer && peer->IsKindOf(wxCLASSINFO(wxToggleButton));
     NSButtonType toggleButtonType = NSOnOffButton;
 #endif
 
@@ -137,8 +138,9 @@ wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
                 break;
 
             case wxBORDER_SUNKEN:
-                bezel = isSimpleText ? NSTexturedRoundedBezelStyle
-                                     : NSSmallSquareBezelStyle;
+                bezel = isToggleButton ? NSShadowlessSquareBezelStyle :
+                (isSimpleText ? NSTexturedRoundedBezelStyle
+                                     : NSSmallSquareBezelStyle);
                 break;
 
             default:
@@ -149,8 +151,9 @@ wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
             case wxBORDER_STATIC:
             case wxBORDER_RAISED:
             case wxBORDER_THEME:
-                bezel = isSimpleText ? NSRoundedBezelStyle
-                                     : NSRegularSquareBezelStyle;
+                bezel = isToggleButton ? NSShadowlessSquareBezelStyle :
+                (isSimpleText ? NSRoundedBezelStyle
+                                     : NSRegularSquareBezelStyle);
                 break;
         }
 
