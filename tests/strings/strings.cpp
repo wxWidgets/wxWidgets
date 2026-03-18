@@ -453,6 +453,21 @@ TEST_CASE("StringCompare", "[wxString]")
     CHECK( wxString("!").Cmp("z") < 0 );
 }
 
+#ifdef __cpp_lib_three_way_comparison
+TEST_CASE("StringCompareThreeWay", "[wxString]")
+{
+    // test that operator<=> works and compares by string contents
+
+    wxString a(wxT("bar"));
+    wxString b(wxT("bar"));
+    wxString c(wxT("baz"));
+
+    CHECK((a <=> b) == std::strong_ordering::equal);
+    CHECK((a <=> c) == std::strong_ordering::less);
+    CHECK((c <=> a) == std::strong_ordering::greater);
+}
+#endif // __cpp_lib_three_way_comparison
+
 TEST_CASE("StringCompareNoCase", "[wxString]")
 {
     wxString s1 = wxT("AHH");
