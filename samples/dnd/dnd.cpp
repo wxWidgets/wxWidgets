@@ -694,6 +694,10 @@ public:
     DnDShapeFrame(wxFrame *parent);
 
 protected:
+    // The menu and updateUI events are sent to the frame, but
+    // I think implementing their handlers is more natural in
+    // the canvas.  Use TryBefore() to forward those events to
+    // the canvas.
     bool TryBefore(wxEvent& event) override;
 
 private:
