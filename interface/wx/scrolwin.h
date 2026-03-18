@@ -559,14 +559,14 @@ public:
         intended to be called on drag-enter to support drag and drop between
         windows.
 
-        @since 3.3.0
+        @since 3.3.3
     */
     void EnableAutoscrollWithoutCapture();
     /**
         Undo EnableAutoscrollWithoutCapture().  This is intended to be called on
         drag-exit and drag-drop when supporting drag and drop between windows.
 
-        @since 3.3.0
+        @since 3.3.3
     */
     void DisableAutoscrollWithoutCapture();
 
