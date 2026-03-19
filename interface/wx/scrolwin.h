@@ -116,6 +116,18 @@ enum wxScrollbarVisibility
     To disable autoscrolling completely, call DisableAutoScrollOutside()
     without calling EnableAutoScrollInside().
 
+    wxWidgets <= 3.3.2 mostly restricted autoscroll to the window holding the
+    mouse capture.  However, when dragging objects between windows, the
+    destination window, which may or may not be the capturing window, should be
+    the window that is scrolling (to allow positioning the dragged object).
+    To support this, as of wxWidgets 3.3.3, a window can call
+    EnableAutoscrollWithoutCapture() when processing a drag-enter, and
+    DisableAutoscrollWithoutCapture() when processing a drag-exit or drag-drop.
+    (If a window supports dragging content to another window, it should use
+    EnableAutoScrollInside() and DisableAutoScrollOutside() to avoid
+    autoscrolling while a destination window is also autoscrolling.)  See the
+    shape frame portion of the @sample{dnd} for an example of dragging
+    from one window to another.
 
     @beginStyleTable
     @style{wxHSCROLL}
@@ -540,6 +552,23 @@ public:
         This is an overload of Scroll(int,int); see that function for more info.
     */
     void Scroll(const wxPoint& pt);
+
+    /**
+        Set this window to autoscroll even if it has not captured the mouse
+        (assuming the mouse cursor is in its autoscroll zone).  This is
+        intended to be called on drag-enter to support drag and drop between
+        windows.
+
+        @since 3.3.3
+    */
+    void EnableAutoscrollWithoutCapture();
+    /**
+        Undo EnableAutoscrollWithoutCapture().  This is intended to be called on
+        drag-exit and drag-drop when supporting drag and drop between windows.
+
+        @since 3.3.3
+    */
+    void DisableAutoscrollWithoutCapture();
 
     /**
         Set the horizontal and vertical scrolling increment only. See the

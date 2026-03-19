@@ -32,6 +32,7 @@
 #endif
 
 #if wxUSE_DRAG_AND_DROP
+class DnDShapeCanvas;
 
 // ----------------------------------------------------------------------------
 // Derive two simple classes which just put in the listbox the strings (text or
@@ -381,17 +382,14 @@ public:
 
         // well, it's a bit difficult to describe a triangle by position and
         // size, but we're not doing geometry here, do we? ;-)
-        wxPoint p1(m_pos);
-        wxPoint p2(m_pos.x + m_size.x, m_pos.y);
-        wxPoint p3(m_pos.x, m_pos.y + m_size.y);
+        wxPoint p[3] = {
+            { m_pos },
+            { m_pos.x + m_size.x, m_pos.y },
+            { m_pos.x, m_pos.y + m_size.y },
+        };
 
-        dc.DrawLine(p1, p2);
-        dc.DrawLine(p2, p3);
-        dc.DrawLine(p3, p1);
-
-        //works in multicolor modes; on GTK (at least) will fail in 16-bit color
         dc.SetBrush(wxBrush(m_col));
-        dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+        dc.DrawPolygon(3, p);
     }
 };
 
@@ -416,18 +414,8 @@ public:
     {
         DnDShape::Draw(dc);
 
-        wxPoint p1(m_pos);
-        wxPoint p2(p1.x + m_size.x, p1.y);
-        wxPoint p3(p2.x, p2.y + m_size.y);
-        wxPoint p4(p1.x, p3.y);
-
-        dc.DrawLine(p1, p2);
-        dc.DrawLine(p2, p3);
-        dc.DrawLine(p3, p4);
-        dc.DrawLine(p4, p1);
-
         dc.SetBrush(wxBrush(m_col));
-        dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+        dc.DrawRectangle(m_pos, m_size);
     }
 };
 
@@ -452,10 +440,8 @@ public:
     {
         DnDShape::Draw(dc);
 
-        dc.DrawEllipse(m_pos, m_size);
-
         dc.SetBrush(wxBrush(m_col));
-        dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
+        dc.DrawEllipse(m_pos, m_size);
     }
 };
 
@@ -669,7 +655,7 @@ private:
 class DnDShapeDialog : public wxDialog
 {
 public:
-    DnDShapeDialog(wxFrame *parent, DnDShape *shape);
+    DnDShapeDialog(wxWindow *parent, DnDShape *shape);
 
     DnDShape *GetShape() const;
 
@@ -702,17 +688,34 @@ private:
 // A frame for the shapes which can be drag-and-dropped between frames
 // ----------------------------------------------------------------------------
 
-class DnDShapeFrame : public wxScrolled<wxFrame>
+class DnDShapeFrame : public wxFrame
 {
 public:
     DnDShapeFrame(wxFrame *parent);
-    ~DnDShapeFrame();
+
+protected:
+    // The menu and updateUI events are sent to the frame, but
+    // I think implementing their handlers is more natural in
+    // the canvas.  Use TryBefore() to forward those events to
+    // the canvas.
+    bool TryBefore(wxEvent& event) override;
+
+private:
+    DnDShapeCanvas *m_canvas = nullptr;
+};
+
+// ----------------------------------------------------------------------------
+// A canvas for the shapes which can be drag-and-dropped between frames
+// ----------------------------------------------------------------------------
+
+class DnDShapeCanvas : public wxScrolledCanvas
+{
+public:
+    DnDShapeCanvas(DnDShapeFrame *parent);
+
+    DnDShapeFrame *GetParent();
 
     void SetShape(DnDShape *shape);
-    virtual bool SetShape(const wxRegion &region)
-    {
-        return wxFrame::SetShape( region );
-    }
 
     // callbacks
     void OnNewShape(wxCommandEvent& event);
@@ -730,9 +733,9 @@ public:
     void OnDrop(wxCoord x, wxCoord y, DnDShape *shape);
 
 private:
-    DnDShape *m_shape;
+    std::unique_ptr<DnDShape> m_shape;
 
-    static DnDShapeFrame *ms_lastDropTarget;
+    static DnDShapeCanvas *ms_lastDropTarget;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -744,31 +747,31 @@ private:
 class DnDShapeDropTarget : public wxDropTarget
 {
 public:
-    DnDShapeDropTarget(DnDShapeFrame *frame)
+    DnDShapeDropTarget(DnDShapeCanvas *canvas)
         : wxDropTarget(new DnDShapeDataObject)
     {
-        m_frame = frame;
+        m_canvas = canvas;
     }
 
     // override base class (pure) virtuals
     virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def) override
     {
 #if wxUSE_STATUSBAR
-        m_frame->SetStatusText("Mouse entered the frame");
+        m_canvas->GetParent()->SetStatusText("Mouse entered the frame");
 #endif // wxUSE_STATUSBAR
-        m_frame->EnableAutoscrollWithoutCapture();
+        m_canvas->EnableAutoscrollWithoutCapture();
         return OnDragOver(x, y, def);
     }
     virtual void OnLeave() override
     {
 #if wxUSE_STATUSBAR
-        m_frame->SetStatusText("Mouse left the frame");
+        m_canvas->GetParent()->SetStatusText("Mouse left the frame");
 #endif // wxUSE_STATUSBAR
-        m_frame->DisableAutoscrollWithoutCapture();
+        m_canvas->DisableAutoscrollWithoutCapture();
     }
     virtual bool OnDrop(wxCoord x, wxCoord y) override
     {
-        m_frame->DisableAutoscrollWithoutCapture();
+        m_canvas->DisableAutoscrollWithoutCapture();
         return wxDropTarget::OnDrop(x, y);
     }
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) override
@@ -780,14 +783,14 @@ public:
             return wxDragNone;
         }
 
-        m_frame->OnDrop(x, y,
+        m_canvas->OnDrop(x, y,
                         ((DnDShapeDataObject *)GetDataObject())->GetShape());
 
         return def;
     }
 
 private:
-    DnDShapeFrame *m_frame;
+    DnDShapeCanvas *m_canvas;
 };
 
 #endif // wxUSE_DRAG_AND_DROP
@@ -867,20 +870,20 @@ wxEND_EVENT_TABLE()
 
 #if wxUSE_DRAG_AND_DROP
 
-wxBEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
-    EVT_MENU(Menu_Shape_New,    DnDShapeFrame::OnNewShape)
-    EVT_MENU(Menu_Shape_Edit,   DnDShapeFrame::OnEditShape)
-    EVT_MENU(Menu_Shape_Clear,  DnDShapeFrame::OnClearShape)
+wxBEGIN_EVENT_TABLE(DnDShapeCanvas, wxScrolledCanvas)
+    EVT_MENU(Menu_Shape_New,    DnDShapeCanvas::OnNewShape)
+    EVT_MENU(Menu_Shape_Edit,   DnDShapeCanvas::OnEditShape)
+    EVT_MENU(Menu_Shape_Clear,  DnDShapeCanvas::OnClearShape)
 
-    EVT_MENU(Menu_ShapeClipboard_Copy,  DnDShapeFrame::OnCopyShape)
-    EVT_MENU(Menu_ShapeClipboard_Paste, DnDShapeFrame::OnPasteShape)
+    EVT_MENU(Menu_ShapeClipboard_Copy,  DnDShapeCanvas::OnCopyShape)
+    EVT_MENU(Menu_ShapeClipboard_Paste, DnDShapeCanvas::OnPasteShape)
 
-    EVT_UPDATE_UI(Menu_ShapeClipboard_Copy,  DnDShapeFrame::OnUpdateUICopy)
-    EVT_UPDATE_UI(Menu_ShapeClipboard_Paste, DnDShapeFrame::OnUpdateUIPaste)
+    EVT_UPDATE_UI(Menu_ShapeClipboard_Copy,  DnDShapeCanvas::OnUpdateUICopy)
+    EVT_UPDATE_UI(Menu_ShapeClipboard_Paste, DnDShapeCanvas::OnUpdateUIPaste)
 
-    EVT_LEFT_DOWN(DnDShapeFrame::OnDrag)
+    EVT_LEFT_DOWN(DnDShapeCanvas::OnDrag)
 
-    EVT_PAINT(DnDShapeFrame::OnPaint)
+    EVT_PAINT(DnDShapeCanvas::OnPaint)
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(DnDShapeDialog, wxDialog)
@@ -1596,7 +1599,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
 // DnDShapeDialog
 // ----------------------------------------------------------------------------
 
-DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
+DnDShapeDialog::DnDShapeDialog(wxWindow *parent, DnDShape *shape)
   :wxDialog( parent, 6001, "Choose Shape", wxPoint( 10, 10 ),
              wxSize( 40, 40 ),
              wxDEFAULT_DIALOG_STYLE | wxRAISED_BORDER | wxRESIZE_BORDER )
@@ -1741,28 +1744,14 @@ void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
 // DnDShapeFrame
 // ----------------------------------------------------------------------------
 
-bool wxCreateScrolled(wxFrame* self,
-                     wxWindow *parent, wxWindowID winid,
-                     const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size),
-                     long WXUNUSED(style), const wxString& name)
-{
-     return self->Create(parent, winid, name);
-}
-
-DnDShapeFrame *DnDShapeFrame::ms_lastDropTarget = nullptr;
-
 DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
-             : wxScrolled<wxFrame>(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxScrolledWindowStyle, "Shape Frame")
+             : wxFrame(parent, wxID_ANY, "Shape Frame")
 {
 #if wxUSE_STATUSBAR
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
 
-    // this is completely arbitrary and is done just for illustration purposes
-    SetVirtualSize(1000, 1000);
-    SetScrollRate(20, 20);
-    EnableAutoScrollInside(20);
-    DisableAutoScrollOutside();
+    m_canvas = new DnDShapeCanvas(this);
 
     wxMenu *menuShape = new wxMenu;
     menuShape->Append(Menu_Shape_New, "&New default shape\tCtrl-S");
@@ -1783,30 +1772,53 @@ DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
 #if wxUSE_STATUSBAR
     SetStatusText("Press Ctrl-S to create a new shape");
 #endif // wxUSE_STATUSBAR
+}
+
+bool DnDShapeFrame::TryBefore(wxEvent& event)
+{
+    if (event.GetEventType() == wxEVT_MENU ||
+        event.GetEventType() == wxEVT_UPDATE_UI)
+    {
+        wxPropagationDisabler disablePropagation(event);
+        if (m_canvas && m_canvas->ProcessWindowEvent(event))
+        {
+            return true;
+        }
+    }
+
+    return wxFrame::TryBefore(event);
+}
+
+DnDShapeCanvas *DnDShapeCanvas::ms_lastDropTarget = nullptr;
+
+DnDShapeCanvas::DnDShapeCanvas(DnDShapeFrame *parent)
+             : wxScrolledCanvas(parent)
+{
+    // this is completely arbitrary and is done just for illustration purposes
+    SetVirtualSize(1000, 1000);
+    SetScrollRate(20, 20);
+    EnableAutoScrollInside(20);
+    DisableAutoScrollOutside();
 
     SetDropTarget(new DnDShapeDropTarget(this));
-
-    m_shape = nullptr;
 
     SetBackgroundColour(*wxWHITE);
 }
 
-DnDShapeFrame::~DnDShapeFrame()
+DnDShapeFrame *DnDShapeCanvas::GetParent()
 {
-    if (m_shape)
-        delete m_shape;
+    wxWindow *parent = wxScrolledCanvas::GetParent();
+    return wxCheckCast<DnDShapeFrame>(parent);
 }
 
-void DnDShapeFrame::SetShape(DnDShape *shape)
+void DnDShapeCanvas::SetShape(DnDShape *shape)
 {
-    if (m_shape)
-        delete m_shape;
-    m_shape = shape;
+    m_shape.reset(shape);
     Refresh();
 }
 
 // callbacks
-void DnDShapeFrame::OnDrag(wxMouseEvent& event)
+void DnDShapeCanvas::OnDrag(wxMouseEvent& event)
 {
     if ( !m_shape )
     {
@@ -1816,7 +1828,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     }
 
     // start drag operation
-    DnDShapeDataObject shapeData(m_shape);
+    DnDShapeDataObject shapeData(m_shape.get());
     wxDropSource source(shapeData, this);
 
     wxString msg;
@@ -1829,7 +1841,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
 
         case wxDragNone:
 #if wxUSE_STATUSBAR
-            SetStatusText("Nothing happened");
+            GetParent()->SetStatusText("Nothing happened");
 #endif // wxUSE_STATUSBAR
             break;
 
@@ -1848,7 +1860,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
 
         case wxDragCancel:
 #if wxUSE_STATUSBAR
-            SetStatusText("Drag and drop operation cancelled");
+            GetParent()->SetStatusText("Drag and drop operation cancelled");
 #endif // wxUSE_STATUSBAR
             break;
     }
@@ -1856,13 +1868,13 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     if (msg.length() )
     {
 #if wxUSE_STATUSBAR
-        SetStatusText(wxString("Shape successfully ") + msg);
+        GetParent()->SetStatusText(wxString("Shape successfully ") + msg);
 #endif // wxUSE_STATUSBAR
     }
     //else: status text already set
 }
 
-void DnDShapeFrame::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
+void DnDShapeCanvas::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
 {
     ms_lastDropTarget = this;
 
@@ -1872,16 +1884,16 @@ void DnDShapeFrame::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
 #if wxUSE_STATUSBAR
     wxString s;
     s.Printf("Shape dropped at (%d, %d)", pt.x, pt.y);
-    SetStatusText(s);
+    GetParent()->SetStatusText(s);
 #endif // wxUSE_STATUSBAR
 
     shape->Move(pt);
     SetShape(shape);
 }
 
-void DnDShapeFrame::OnEditShape(wxCommandEvent& WXUNUSED(event))
+void DnDShapeCanvas::OnEditShape(wxCommandEvent& WXUNUSED(event))
 {
-    DnDShapeDialog dlg(this, m_shape);
+    DnDShapeDialog dlg(this, m_shape.get());
     if ( dlg.ShowModal() == wxID_OK )
     {
         SetShape(dlg.GetShape());
@@ -1889,27 +1901,27 @@ void DnDShapeFrame::OnEditShape(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_STATUSBAR
         if ( m_shape )
         {
-            SetStatusText("You can now drag the shape to another frame");
+            GetParent()->SetStatusText("You can now drag the shape to another frame");
         }
 #endif // wxUSE_STATUSBAR
     }
 }
 
-void DnDShapeFrame::OnNewShape(wxCommandEvent& WXUNUSED(event))
+void DnDShapeCanvas::OnNewShape(wxCommandEvent& WXUNUSED(event))
 {
     SetShape(new DnDEllipticShape(wxPoint(10, 10), wxSize(80, 60), *wxRED));
 
 #if wxUSE_STATUSBAR
-    SetStatusText("You can now drag the shape to another frame");
+    GetParent()->SetStatusText("You can now drag the shape to another frame");
 #endif // wxUSE_STATUSBAR
 }
 
-void DnDShapeFrame::OnClearShape(wxCommandEvent& WXUNUSED(event))
+void DnDShapeCanvas::OnClearShape(wxCommandEvent& WXUNUSED(event))
 {
     SetShape(nullptr);
 }
 
-void DnDShapeFrame::OnCopyShape(wxCommandEvent& WXUNUSED(event))
+void DnDShapeCanvas::OnCopyShape(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_shape )
     {
@@ -1921,11 +1933,11 @@ void DnDShapeFrame::OnCopyShape(wxCommandEvent& WXUNUSED(event))
             return;
         }
 
-        wxTheClipboard->AddData(new DnDShapeDataObject(m_shape));
+        wxTheClipboard->AddData(new DnDShapeDataObject(m_shape.get()));
     }
 }
 
-void DnDShapeFrame::OnPasteShape(wxCommandEvent& WXUNUSED(event))
+void DnDShapeCanvas::OnPasteShape(wxCommandEvent& WXUNUSED(event))
 {
     wxClipboardLocker clipLocker;
     if ( !clipLocker )
@@ -1946,17 +1958,17 @@ void DnDShapeFrame::OnPasteShape(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void DnDShapeFrame::OnUpdateUICopy(wxUpdateUIEvent& event)
+void DnDShapeCanvas::OnUpdateUICopy(wxUpdateUIEvent& event)
 {
     event.Enable( m_shape != nullptr );
 }
 
-void DnDShapeFrame::OnUpdateUIPaste(wxUpdateUIEvent& event)
+void DnDShapeCanvas::OnUpdateUIPaste(wxUpdateUIEvent& event)
 {
     event.Enable( wxTheClipboard->IsSupported(wxDataFormat(ShapeFormatId())) );
 }
 
-void DnDShapeFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
+void DnDShapeCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
     DoPrepareDC(dc);

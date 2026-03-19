@@ -84,10 +84,14 @@ must have been registered) and their values.
     drop source will delete the corresponding data - which would lead to
     data loss if you didn't paste it properly.
 
+    If wxScrolled<>::EnableAutoscrollWithoutCapture() was called previously,
+    wxScrolled<>::DisableAutoscrollWithoutCapture() should be called here.
+
  c) OnEnter()
 
     called when the mouse enters the window: you might use this function to
-    give some additional visual feedback.
+    give some additional visual feedback and/or call
+    wxScrolled<>::EnableAutoscrollWithoutCapture().
 
  d) OnLeave()
 
@@ -140,7 +144,7 @@ blocking function which enters into its own message loop and may return after
 an arbitrarily long time interval. During it, the QueryContinueDrag() is called
 whenever the mouse or keyboard state changes. The default behaviour is quite
 reasonable for 99% of cases: the drag operation is cancelled if the <Esc> key
-is preessed and the drop is initiated if the mouse button is released.
+is pressed and the drop is initiated if the mouse button is released.
 
  b) After the end of d&d
 
@@ -160,6 +164,5 @@ wxDropSource::Move code.
 
 @@@@ TODO: support tymed != TYMED_HGLOBAL;
            better support of CF_BMP, CF_METAFILE
-           scrolling support!! (how?)
            sample demonstrating use of user-defined formats
            sample which really does something useful
