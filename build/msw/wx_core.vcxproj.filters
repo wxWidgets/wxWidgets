@@ -1044,6 +1044,9 @@
     <ClCompile Include="..\..\src\msw\taskbarbutton.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\taskdlg.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\textctrl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>

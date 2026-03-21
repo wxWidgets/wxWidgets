@@ -2145,6 +2145,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_appprogress.o \
 	$(OBJS)\monodll_taskbarbutton.o \
 	$(OBJS)\monodll_power.o \
+	$(OBJS)\monodll_taskdlg.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_filepickerg.o \
@@ -2498,6 +2499,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_appprogress.o \
 	$(OBJS)\monodll_taskbarbutton.o \
 	$(OBJS)\monodll_power.o \
+	$(OBJS)\monodll_taskdlg.o \
 	$(OBJS)\monodll_generic_accel.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
@@ -3015,6 +3017,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_appprogress.o \
 	$(OBJS)\monolib_taskbarbutton.o \
 	$(OBJS)\monolib_power.o \
+	$(OBJS)\monolib_taskdlg.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_filepickerg.o \
@@ -3368,6 +3371,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_appprogress.o \
 	$(OBJS)\monolib_taskbarbutton.o \
 	$(OBJS)\monolib_power.o \
+	$(OBJS)\monolib_taskdlg.o \
 	$(OBJS)\monolib_generic_accel.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
@@ -3760,6 +3764,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_appprogress.o \
 	$(OBJS)\coredll_taskbarbutton.o \
 	$(OBJS)\coredll_power.o \
+	$(OBJS)\coredll_taskdlg.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_filepickerg.o \
@@ -4113,6 +4118,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_appprogress.o \
 	$(OBJS)\coredll_taskbarbutton.o \
 	$(OBJS)\coredll_power.o \
+	$(OBJS)\coredll_taskdlg.o \
 	$(OBJS)\coredll_generic_accel.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
@@ -4461,6 +4467,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_appprogress.o \
 	$(OBJS)\corelib_taskbarbutton.o \
 	$(OBJS)\corelib_power.o \
+	$(OBJS)\corelib_taskdlg.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_filepickerg.o \
@@ -4814,6 +4821,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_appprogress.o \
 	$(OBJS)\corelib_taskbarbutton.o \
 	$(OBJS)\corelib_power.o \
+	$(OBJS)\corelib_taskdlg.o \
 	$(OBJS)\corelib_generic_accel.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
@@ -9298,6 +9306,11 @@ $(OBJS)\monodll_power.o: ../../src/msw/power.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_taskdlg.o: ../../src/msw/taskdlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11926,6 +11939,11 @@ $(OBJS)\monolib_power.o: ../../src/msw/power.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_taskdlg.o: ../../src/msw/taskdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -14494,6 +14512,11 @@ $(OBJS)\coredll_power.o: ../../src/msw/power.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_taskdlg.o: ../../src/msw/taskdlg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -16275,6 +16298,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_power.o: ../../src/msw/power.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_taskdlg.o: ../../src/msw/taskdlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
