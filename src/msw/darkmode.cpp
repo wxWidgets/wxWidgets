@@ -44,8 +44,7 @@
 
 #include "wx/msw/private/darkmode.h"
 
-#include <UIAutomationClient.h>
-#include <UIAutomationCore.h>
+#include <uiautomation.h>
 #include <vssym32.h>
 #include <commctrl.h>
 #include <atlbase.h>    // CComPtr, CComBSTR
