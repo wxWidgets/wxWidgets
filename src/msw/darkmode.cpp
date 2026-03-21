@@ -141,6 +141,9 @@ static const char* TRACE_DARKMODE = "msw-darkmode";
 #include <atlwin.h>
 
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
+#define GET_B(c) static_cast<BYTE>((c) & 0xFF)
+#define GET_G(c) static_cast<BYTE>(((c) >> 8) & 0xFF)
+#define GET_R(c) static_cast<BYTE>(((c) >> 16) & 0xFF)
 
 namespace
 {
@@ -362,14 +365,12 @@ static HICON TDLoadStockIcon(const TASKDIALOGCONFIG* cfg, bool isMain)
             SHGSI_ICON | SHGSI_LARGEICON, &sii))
             ? sii.hIcon : nullptr;
         };
-    switch (static_cast<INT_PTR>((int)res))
-    {
-    case reinterpret_cast<INT_PTR>(TD_WARNING_ICON):     return Stock(SIID_WARNING);
-    case reinterpret_cast<INT_PTR>(TD_ERROR_ICON):       return Stock(SIID_ERROR);
-    case reinterpret_cast<INT_PTR>(TD_INFORMATION_ICON): return Stock(SIID_INFO);
-    case reinterpret_cast<INT_PTR>(TD_SHIELD_ICON):      return Stock(SIID_SHIELD);
-    default:                                             return nullptr;
-    }
+    if (res == TD_WARNING_ICON)     return Stock(SIID_WARNING);
+    if (res == TD_ERROR_ICON)       return Stock(SIID_ERROR);
+    if (res == TD_INFORMATION_ICON) return Stock(SIID_INFO);
+    if (res == TD_SHIELD_ICON)      return Stock(SIID_SHIELD);
+
+    return nullptr;
 }
 
 // ============================================================================
@@ -482,16 +483,21 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
         CloseThemeData(hL);
     }
 
+ 
     struct Rule { BYTE sR, sG, sB, dR, dG, dB; };
+
     const Rule rules[] = {
-        { GetRValue(srcPri),GetGValue(srcPri),GetBValue(srcPri),
-          GetRValue(TDDarkCol::kPrimary),  GetGValue(TDDarkCol::kPrimary),  GetBValue(TDDarkCol::kPrimary)   },
-        { GetRValue(srcSec),GetGValue(srcSec),GetBValue(srcSec),
-          GetRValue(TDDarkCol::kSecondary),GetGValue(TDDarkCol::kSecondary),GetBValue(TDDarkCol::kSecondary) },
-        { GetRValue(srcSep),GetGValue(srcSep),GetBValue(srcSep),
-          GetRValue(TDDarkCol::kSeparator),GetGValue(TDDarkCol::kSeparator),GetBValue(TDDarkCol::kSeparator) },
-        { GetRValue(srcSp2),GetGValue(srcSp2),GetBValue(srcSp2),
-          GetRValue(TDDarkCol::kSeparator),GetGValue(TDDarkCol::kSeparator),GetBValue(TDDarkCol::kSeparator) },
+        { GET_R(srcPri), GET_G(srcPri), GET_B(srcPri),
+          GET_R(TDDarkCol::kPrimary), GET_G(TDDarkCol::kPrimary), GET_B(TDDarkCol::kPrimary) },
+
+        { GET_R(srcSec), GET_G(srcSec), GET_B(srcSec),
+          GET_R(TDDarkCol::kSecondary), GET_G(TDDarkCol::kSecondary), GET_B(TDDarkCol::kSecondary) },
+
+        { GET_R(srcSep), GET_G(srcSep), GET_B(srcSep),
+          GET_R(TDDarkCol::kSeparator), GET_G(TDDarkCol::kSeparator), GET_B(TDDarkCol::kSeparator) },
+
+        { GET_R(srcSp2), GET_G(srcSp2), GET_B(srcSp2),
+          GET_R(TDDarkCol::kSeparator), GET_G(TDDarkCol::kSeparator), GET_B(TDDarkCol::kSeparator) },
     };
 
     for (int y = 0; y < h; ++y)
@@ -800,7 +806,7 @@ static void TDSubclassContainer(HWND hP, COLORREF bg)
             reinterpret_cast<DWORD_PTR>(CreateSolidBrush(bg)));
 }
 
-static void TDApplyToChildren(HWND hDUI, IUIAutomationElement* pEl, IUIAutomation* pAuto)
+static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
 {
     const bool native = TDHasNativeDarkTheme();
 
@@ -894,7 +900,7 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
                 if (ob && ob != GetSysColorBrush(COLOR_WINDOW) && ob != GetSysColorBrush(COLOR_BTNFACE)) DeleteObject(ob);
             }
 
-            TDApplyToChildren(hDUI, pEl, d->pAuto);
+            TDApplyToChildren(pEl, d->pAuto);
             SetWindowTheme(hDUI, L"DarkMode_Explorer", nullptr);
 
             // Initialise per-page state
@@ -917,7 +923,7 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
 
     if (!data.found) return;
 
-    if (native)  wxMSWDarkMode::AllowForWindow(hwndTD, L"DarkMode_Explorer", nullptr);
+    if (native) wxMSWDarkMode::AllowForWindow(hwndTD, L"DarkMode_Explorer", nullptr);
     DWORD_PTR ex;
     if (!GetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, &ex))
         SetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, 0);

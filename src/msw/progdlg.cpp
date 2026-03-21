@@ -1194,10 +1194,9 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
         else
             wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
         break;
-            // Let the main thread know that the dialog can be used.
-         
 
-        case TDN_BUTTON_CLICKED:
+        // Let the main thread know that the dialog can be used.
+    case TDN_BUTTON_CLICKED:
             switch ( wParam )
             {
                 case Id_SkipBtn:
