@@ -482,20 +482,15 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
         GetThemeColor(hL, TDLG_FOOTNOTESEPARATOR, 0, TMT_FILLCOLOR, &srcSep);
         CloseThemeData(hL);
     }
-
- 
     struct Rule { BYTE sR, sG, sB, dR, dG, dB; };
-
-    const Rule rules[] = {
+    const Rule rules[] =
+    {
         { GET_R(srcPri), GET_G(srcPri), GET_B(srcPri),
           GET_R(TDDarkCol::kPrimary), GET_G(TDDarkCol::kPrimary), GET_B(TDDarkCol::kPrimary) },
-
         { GET_R(srcSec), GET_G(srcSec), GET_B(srcSec),
           GET_R(TDDarkCol::kSecondary), GET_G(TDDarkCol::kSecondary), GET_B(TDDarkCol::kSecondary) },
-
         { GET_R(srcSep), GET_G(srcSep), GET_B(srcSep),
           GET_R(TDDarkCol::kSeparator), GET_G(TDDarkCol::kSeparator), GET_B(TDDarkCol::kSeparator) },
-
         { GET_R(srcSp2), GET_G(srcSp2), GET_B(srcSp2),
           GET_R(TDDarkCol::kSeparator), GET_G(TDDarkCol::kSeparator), GET_B(TDDarkCol::kSeparator) },
     };
@@ -927,16 +922,10 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
     DWORD_PTR ex;
     if (!GetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, &ex))
         SetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, 0);
-
-    
     // Dark title bar
     wxMSWDarkMode::EnableForTLW(hwndTD);
-
-    {
-        HBRUSH nb = CreateSolidBrush(TDDarkCol::kPrimary);
-        SetClassLongPtr(hwndTD, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb));
-    }
-
+    HBRUSH nb = CreateSolidBrush(TDDarkCol::kPrimary);
+    SetClassLongPtr(hwndTD, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb));
     EnumChildWindows(hwndTD, [](HWND h, LPARAM)->BOOL { SendMessage(h, WM_SYSCOLORCHANGE, 0, 0); return TRUE; }, 0);
     SendMessage(hwndTD, WM_THEMECHANGED, 0, 0);
 }
@@ -957,7 +946,6 @@ static void TDDetach(HWND hwndTD)
             SetWindowTheme(hChild, nullptr, nullptr);
             return TRUE;
         }, 0);
-
 
 } // anonymous namespace
 
