@@ -32,6 +32,7 @@
 
 #include "wx/msw/private/msgdlg.h"
 #include "wx/evtloop.h"
+#include <wx/msw/private/darkmode.h>
 
 using namespace wxMSWMessageDialog;
 
@@ -1143,28 +1144,58 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
 
     switch ( uNotification )
     {
-        case TDN_CREATED:
+
+    case TDN_CREATED:
+        // TDN_CREATED fires after the full HWND hierarchy is built and
+        // before the window is shown — the right moment to install theming.
+        // (The old code used TDN_DIALOG_CONSTRUCTED which fires too early
+        // for UI Automation to walk the child windows reliably.)
+        wxMSWDarkMode::AllowForTaskDialog( hwnd, nullptr);
+        sharedData->m_status = wxProgressDialogStatus::Initialized;
+
+        // Store the HWND for the main thread use.
+        sharedData->m_hwnd = hwnd;
+
+        // The main thread is sitting in an event dispatching loop waiting
+        // for this dialog to be shown, so make sure it does get an event.
+        wxWakeUpIdle();
+
+        // Set the maximum value and disable Close button.
+        ::SendMessage(hwnd,
+            TDM_SET_PROGRESS_BAR_RANGE,
+            0,
+            MAKELPARAM(0, sharedData->m_range));
+
+        // If we can't be aborted, the "Close" button will only be enabled
+        // when the progress ends (and not even then with wxPD_AUTO_HIDE).
+        if (!(sharedData->m_style & wxPD_CAN_ABORT))
+            EnableCloseButtons(hwnd, false);
+        break;
+
+    case TDN_EXPANDO_BUTTON_CLICKED:
+        // Store the expanded state as a window property so the subclassed
+        // TaskPage panel can read it during WM_PAINT without a UIA call.
+        SetProp(hwnd, L"IsExpanded",
+            reinterpret_cast<HANDLE>(static_cast<ULONG_PTR>(wParam)));
+        break;
+
+    case TDN_DESTROYED:
+        // Clean up all subclasses and GDI/theme objects.
+        // Without this call, GDI handles and thread_local state leak
+        // when the dialog is destroyed.
+        wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
+        break;
+
+    case WM_SETTINGCHANGE:
+        // Re-apply (or remove) theming when the OS light/dark preference
+        // changes while the dialog is open.
+        if (wxMSWDarkMode::IsActive())
+            wxMSWDarkMode::AllowForTaskDialog( hwnd,nullptr);
+        else
+            wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
+        break;
             // Let the main thread know that the dialog can be used.
-            sharedData->m_status = wxProgressDialogStatus::Initialized;
-
-            // Store the HWND for the main thread use.
-            sharedData->m_hwnd = hwnd;
-
-            // The main thread is sitting in an event dispatching loop waiting
-            // for this dialog to be shown, so make sure it does get an event.
-            wxWakeUpIdle();
-
-            // Set the maximum value and disable Close button.
-            ::SendMessage( hwnd,
-                           TDM_SET_PROGRESS_BAR_RANGE,
-                           0,
-                           MAKELPARAM(0, sharedData->m_range) );
-
-            // If we can't be aborted, the "Close" button will only be enabled
-            // when the progress ends (and not even then with wxPD_AUTO_HIDE).
-            if ( !(sharedData->m_style & wxPD_CAN_ABORT) )
-                EnableCloseButtons(hwnd, false);
-            break;
+         
 
         case TDN_BUTTON_CLICKED:
             switch ( wParam )
