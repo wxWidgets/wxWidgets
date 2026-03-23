@@ -72,6 +72,14 @@ bool SetKeyValue(wxRegKey& key, const wxString& name, wxLongLong_t value)
     return key.SetValue64(name, value);
 }
 
+// Bricsys change - never query HKLM unless wxCONFIG_USE_GLOBAL_FILE is set
+bool UseGlobal(const wxRegConfig* const pRegConfig)
+{
+    assert(pRegConfig);
+    return ((pRegConfig->GetStyle() & wxCONFIG_USE_GLOBAL_FILE) != 0);
+}
+// (end Bricsys change)
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -428,7 +436,8 @@ bool wxRegConfig::GetFirstGroup(wxString& str, long& lIndex) const
 bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex) const
 {
   // are we already enumerating local entries?
-  if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
+  // Bricsys change - added UseGlobal(this)
+  if ( UseGlobal(this) && m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
     // try to find a global entry which doesn't appear locally
     while ( m_keyGlobal.GetNextKey(str, lIndex) ) {
       if ( !m_keyLocal.Exists() || !LocalKey().HasSubKey(str) ) {
@@ -463,7 +472,8 @@ bool wxRegConfig::GetFirstEntry(wxString& str, long& lIndex) const
 bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
 {
   // are we already enumerating local entries?
-  if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
+  // Bricsys change - added UseGlobal(this)
+  if ( UseGlobal(this) && m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
     // try to find a global entry which doesn't appear locally
     while ( m_keyGlobal.GetNextValue(str, lIndex) ) {
       if ( !m_keyLocal.Exists() || !LocalKey().HasValue(str) ) {
@@ -533,8 +543,9 @@ bool wxRegConfig::HasGroup(const wxString& key) const
 
     wxString strName(path.Name());
 
+	// Bricsys change - added UseGlobal(this)
     return (m_keyLocal.Exists() && LocalKey().HasSubKey(strName)) ||
-           m_keyGlobal.HasSubKey(strName);
+           (UseGlobal(this) && m_keyGlobal.HasSubKey(strName));
 }
 
 bool wxRegConfig::HasEntry(const wxString& key) const
@@ -543,8 +554,9 @@ bool wxRegConfig::HasEntry(const wxString& key) const
 
     wxString strName(path.Name());
 
+	// Bricsys change - added UseGlobal(this)
     return (m_keyLocal.Exists() && LocalKey().HasValue(strName)) ||
-           m_keyGlobal.HasValue(strName);
+           (UseGlobal(this) && m_keyGlobal.HasValue(strName));
 }
 
 wxConfigBase::EntryType wxRegConfig::GetEntryType(const wxString& key) const
@@ -556,7 +568,8 @@ wxConfigBase::EntryType wxRegConfig::GetEntryType(const wxString& key) const
     bool isNumeric;
     if ( m_keyLocal.Exists() && LocalKey().HasValue(strName) )
         isNumeric = m_keyLocal.IsNumericValue(strName);
-    else if ( m_keyGlobal.HasValue(strName) )
+    // Bricsys change - added UseGlobal(this)
+    else if ( UseGlobal(this) && m_keyGlobal.HasValue(strName) )
         isNumeric = m_keyGlobal.IsNumericValue(strName);
     else
         return wxConfigBase::Type_Unknown;
@@ -575,12 +588,14 @@ bool wxRegConfig::DoReadValue(const wxString& key, T* pValue) const
 
   wxConfigPathChanger path(this, key);
 
-  bool bQueryGlobal = true;
+  // Bricsys change - added UseGlobal(this)
+  bool bQueryGlobal = UseGlobal(this);
 
   // if immutable key exists in global key we must check that it's not
   // overridden by the local key with the same name
   if ( IsImmutable(path.Name()) ) {
-    if ( TryGetValue(m_keyGlobal, path.Name(), pValue) ) {
+    // Bricsys change - added UseGlobal(this)
+    if ( UseGlobal(this) && TryGetValue(m_keyGlobal, path.Name(), pValue) ) {
       if ( m_keyLocal.Exists() && LocalKey().HasValue(path.Name()) ) {
         wxLogWarning(wxT("User value for immutable key '%s' ignored."),
                    path.Name());
