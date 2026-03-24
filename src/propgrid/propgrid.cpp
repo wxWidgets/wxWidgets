@@ -410,14 +410,14 @@ void wxPropertyGrid::Init1()
     m_doubleBuffer = nullptr;
 
 #ifndef wxPG_ICON_WIDTH
-    m_iconWidth = FromDIP(11);
-    m_iconHeight = FromDIP(11);
+    m_iconWidth = 11;
+    m_iconHeight = 11;
 #else
-    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
-    m_iconHeight = FromDIP(wxPG_ICON_WIDTH);
+    m_iconWidth = wxPG_ICON_WIDTH;
+    m_iconHeight = wxPG_ICON_WIDTH;
 #endif
 
-    m_gutterWidth = wxMax(0, (FromDIP(16) - m_iconWidth) / 2);
+    m_gutterWidth = wxMax(0, (16 - m_iconWidth) / 2);
     m_subgroup_extramargin = m_iconWidth + m_gutterWidth;
 
     m_lineHeight = 0;
@@ -476,7 +476,13 @@ void wxPropertyGrid::Init2()
 
     m_iconWidth = s_expandbmp.GetWidth();
     m_iconHeight = s_expandbmp.GetHeight();
+#else
+    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
+    m_iconHeight = FromDIP(wxPG_ICON_WIDTH);
 #endif
+
+    m_gutterWidth = wxMax(0, (FromDIP(16) - m_iconWidth) / 2);
+    m_subgroup_extramargin = m_iconWidth + m_gutterWidth;
 
     m_curcursor = wxCURSOR_ARROW;
     m_cursorSizeWE = wxCursor(wxCURSOR_SIZEWE);
