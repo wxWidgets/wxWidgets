@@ -249,8 +249,8 @@ endif()
 # Constants for setup.h creation
 if(NOT wxUSE_EXPAT)
     set(wxUSE_XRC OFF)
+    set(wxUSE_XML OFF)
 endif()
-set(wxUSE_XML ${wxUSE_XRC})
 
 if(DEFINED wxUSE_OLE AND wxUSE_OLE)
     set(wxUSE_OLE_AUTOMATION ON)
