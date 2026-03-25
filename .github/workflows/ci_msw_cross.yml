@@ -82,7 +82,7 @@ jobs:
             debian_release: stable
             triplet: i686-w64-mingw32
           - name: wxMSW/Univ
-            debian_release: testing
+            debian_release: unstable
             configure_flags: --enable-universal --disable-compat32 --disable-debug --disable-optimise
             minimal: true
     env:
