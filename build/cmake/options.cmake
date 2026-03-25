@@ -263,6 +263,8 @@ wx_option(wxUSE_PROTOCOL_FILE "FILE support in wxProtocol")
 
 wx_option(wxUSE_THREADS "use threads")
 
+wx_option(wxUSE_XML "use the XML library")
+
 if(WIN32)
     wx_option(wxUSE_DBGHELP "use dbghelp.dll API")
     wx_option(wxUSE_INICONF "use wxIniConfig")
@@ -282,7 +284,6 @@ wx_option(wxUSE_MS_HTML_HELP "use MS HTML Help (win32)")
 wx_option(wxUSE_HTML "use wxHTML sub-library")
 wx_option(wxUSE_WXHTML_HELP "use wxHTML-based help")
 wx_option(wxUSE_XRC "use XRC resources sub-library")
-wx_option(wxUSE_XML "use the xml library (overruled by wxUSE_XRC)")
 wx_option(wxUSE_AUI "use AUI docking library")
 wx_option(wxUSE_PROPGRID "use wxPropertyGrid library")
 wx_option(wxUSE_RIBBON "use wxRibbon library")
