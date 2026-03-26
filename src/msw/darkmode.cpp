@@ -654,7 +654,7 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
             SIZE sz = {};
             ::GetThemePartSize(s.hTD, hdc, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, nullptr, TS_TRUE, &sz);
             MARGINS vm = {};
-            ::GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, NULL, &vm);
+            ::GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, nullptr, &vm);
             rcT.left += sz.cx + vm.cxLeftWidth - 2; rcT.top += 1;
             part = TDLG_EXPANDOTEXT; brBg = s.brSecondary;
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
@@ -664,7 +664,7 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
             SIZE cs = {};
             ::GetThemePartSize(s.hButton, hdc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, nullptr, TS_DRAW, &cs);
             MARGINS tm = {};
-            ::GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, NULL, &tm);
+            ::GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, nullptr, &tm);
             rcT.left = el.rect.left + cs.cx + tm.cxLeftWidth + 3; rcT.top += 5;
             part = TDLG_VERIFICATIONTEXT; brBg = s.brSecondary;
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
