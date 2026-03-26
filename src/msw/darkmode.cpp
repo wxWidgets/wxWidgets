@@ -42,12 +42,10 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/comptr.h"
-#include <uiautomation.h>
-#include <vssym32.h>
-#include <dwmapi.h>
-#include <windows.h>
-#include <oleauto.h>
+#include "wx/msw/wrapcctl.h"
 #include "wx/msw/ole/oleutils.h"
+#include <uiautomation.h>
+
 // ----------------------------------------------------------------------------
 // Module keeping dark mode-related data and wrapping DwmSetWindowAttribute()
 // ----------------------------------------------------------------------------
@@ -271,7 +269,6 @@ const IID IID_IUIAutomation = { 0x30cbe57d, 0xd9d0, 0x452a, { 0xab, 0x13, 0x7a, 
 // Function to get IUIAutomation instance
 static IUIAutomation* GetTDAutomation()
 {
-    static wxCOMPtr<IUIAutomation> tls_tdAutomation;
     if (!tls_tdAutomation)
     {
         HRESULT hr = CoCreateInstance(CLSID_CUIAutomation, nullptr, CLSCTX_INPROC_SERVER, IID_IUIAutomation, reinterpret_cast<void**>(&tls_tdAutomation));
@@ -309,7 +306,7 @@ static bool TDHasNativeDarkTheme()
 static void TDRefreshThemes(HWND hwnd, TDPageState& s)
 {
     s.CloseThemes();
-    const UINT dpi = GetDpiForWindow(hwnd);
+   // const UINT dpi = GetDpiForWindow(hwnd);
 
     auto Open = [&](const wchar_t* cls) -> HTHEME {
      /*   HTHEME h = OpenThemeDataForDpi(hwnd, cls, dpi);*/
@@ -654,16 +651,20 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
         }
         else if (el.automationId == L"ExpandoButton" && s.hTD)
         {
-            SIZE sz = {}; GetThemePartSize(s.hTD, hdc, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, nullptr, TS_TRUE, &sz);
-            MARGINS vm = {}; GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, NULL, &vm);
+            SIZE sz = {};
+            ::GetThemePartSize(s.hTD, hdc, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, nullptr, TS_TRUE, &sz);
+            MARGINS vm = {};
+            ::GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, NULL, &vm);
             rcT.left += sz.cx + vm.cxLeftWidth - 2; rcT.top += 1;
             part = TDLG_EXPANDOTEXT; brBg = s.brSecondary;
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
         }
         else if (el.automationId == L"VerificationCheckBox" && s.hButton && s.hTD)
         {
-            SIZE cs = {}; GetThemePartSize(s.hButton, hdc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, nullptr, TS_DRAW, &cs);
-            MARGINS tm = {}; GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, NULL, &tm);
+            SIZE cs = {};
+            ::GetThemePartSize(s.hButton, hdc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, nullptr, TS_DRAW, &cs);
+            MARGINS tm = {};
+            ::GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, NULL, &tm);
             rcT.left = el.rect.left + cs.cx + tm.cxLeftWidth + 3; rcT.top += 5;
             part = TDLG_VERIFICATIONTEXT; brBg = s.brSecondary;
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
@@ -1060,7 +1061,7 @@ static void TDDetach(HWND hwndTD)
 
 } // TDDetach
 
-} // anonymous namespace 
+} // anonymous namespace
 
 
 // ============================================================================
