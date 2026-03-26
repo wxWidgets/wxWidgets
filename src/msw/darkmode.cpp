@@ -42,7 +42,6 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/comptr.h"
-#include "wx/msw/wrapcctl.h"
 #include "wx/msw/ole/oleutils.h"
 #include <uiautomation.h>
 
