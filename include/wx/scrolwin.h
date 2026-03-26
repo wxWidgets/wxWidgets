@@ -68,9 +68,6 @@ enum wxScrollbarVisibility
 class WXDLLIMPEXP_CORE wxAnyScrollHelperBase
 {
 public:
-    explicit wxAnyScrollHelperBase(wxWindow* win);
-    virtual ~wxAnyScrollHelperBase() = default;
-
     // Disable use of keyboard keys for scrolling. By default cursor movement
     // keys (including Home, End, Page Up and Down) are used to scroll the
     // window appropriately. If the derived class uses these keys for something
@@ -107,12 +104,10 @@ public:
     // Simple accessor for the window that is really being scrolled.
     wxWindow *GetTargetWindow() const { return m_targetWindow; }
 
-
-    // The methods called from the window event handlers.
-    void HandleOnChar(wxKeyEvent& event);
-    void HandleOnPaint(wxPaintEvent& event);
-
 protected:
+    explicit wxAnyScrollHelperBase(wxWindow* win);
+    virtual ~wxAnyScrollHelperBase() = default;
+
     // the window that receives the scroll events and the window to actually
     // scroll, respectively
     wxWindow *m_win,
@@ -120,16 +115,20 @@ protected:
 
     // whether cursor keys should scroll the window
     bool m_kbdScrollingEnabled;
+
+private:
+    // The methods called from the window event handlers.
+    void HandleOnChar(wxKeyEvent& event);
+    void HandleOnPaint(wxPaintEvent& event);
+
+    friend class wxScrollHelperEvtHandler;
+    friend class wxVarScrollHelperEvtHandler;
 };
 
 // This is the class containing the guts of (uniform) scrolling logic.
 class WXDLLIMPEXP_CORE wxScrollHelperBase : public wxAnyScrollHelperBase
 {
 public:
-    // ctor must be given the associated window
-    wxScrollHelperBase(wxWindow *winToScroll);
-    virtual ~wxScrollHelperBase();
-
     // configure the scrolling
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
@@ -161,13 +160,6 @@ public:
     // Forbid autoscrolling when the mouse is outside the window
     void DisableAutoScrollOutside();
 
-    // Check whether clientPt triggers autoscrolling in each direction: return
-    // true if it does and fill the corresponding output parameter with the
-    // event type to generate.
-    bool AutoscrollTest(wxPoint clientPt,
-                        wxEventType& evtHorzScroll,
-                        wxEventType& evtVertScroll) const;
-
     // wxWidgets <= 3.3.2 mostly restricted autoscroll to the
     // window holding the mouse capture.  However, when dragging
     // objects between windows, the destination window should be
@@ -176,7 +168,6 @@ public:
     // EnableAutoscrollWithoutCapture() when processing a
     // drag-enter, and DisableAutoscrollWithoutCapture() when
     // processing a drag-exit or drag-drop.
-    bool GetAutoscrollWithoutCapture() const;
     void EnableAutoscrollWithoutCapture();
     void DisableAutoscrollWithoutCapture();
 
@@ -254,14 +245,8 @@ public:
         return p2;
     }
 
-    void DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const;
-    void DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
-
     // Adjust the scrollbars
     virtual void AdjustScrollbars() = 0;
-
-    // Calculate scroll increment
-    int CalcScrollInc(wxScrollWinEvent& event);
 
     // Normally the wxScrolledWindow will scroll itself, but in some rare
     // occasions you might want it to scroll [part of] another window (e.g. a
@@ -288,19 +273,11 @@ public:
     // the base class version just returns true
     virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const;
 
-    // the methods to be called from the window event handlers
-    void HandleOnScroll(wxScrollWinEvent& event);
-    void HandleOnSize(wxSizeEvent& event);
-    void OnMotion(wxMouseEvent& event);
-    void OnLeftDown(wxMouseEvent& event);
-    void OnLeaveAutoScrollRegion();
-    void OnEnterAutoScrollRegion();
-#if wxUSE_MOUSEWHEEL
-    void HandleOnMouseWheel(wxMouseEvent& event);
-#endif // wxUSE_MOUSEWHEEL
-    void HandleOnChildFocus(wxChildFocusEvent& event);
-
 protected:
+    // ctor must be given the associated window
+    wxScrollHelperBase(wxWindow* winToScroll);
+    virtual ~wxScrollHelperBase();
+
     // get pointer to our scroll rect if we use it or nullptr
     const wxRect *GetScrollRect() const
     {
@@ -415,6 +392,37 @@ protected:
     wxScrollHelperEvtHandler *m_handler;
 
     wxDECLARE_NO_COPY_CLASS(wxScrollHelperBase);
+
+private:
+    // Check whether clientPt triggers autoscrolling in each direction: return
+    // true if it does and fill the corresponding output parameter with the
+    // event type to generate.
+    bool AutoscrollTest(wxPoint clientPt,
+                        wxEventType& evtHorzScroll,
+                        wxEventType& evtVertScroll) const;
+
+    bool GetAutoscrollWithoutCapture() const;
+
+    void DoCalcScrolledPosition(int x, int y, int* xx, int* yy) const;
+    void DoCalcUnscrolledPosition(int x, int y, int* xx, int* yy) const;
+
+    // Calculate scroll increment
+    int CalcScrollInc(wxScrollWinEvent& event);
+
+    // the methods to be called from the window event handlers
+    void HandleOnScroll(wxScrollWinEvent& event);
+    void HandleOnSize(wxSizeEvent& event);
+    void OnMotion(wxMouseEvent& event);
+    void OnLeftDown(wxMouseEvent& event);
+    void OnLeaveAutoScrollRegion();
+    void OnEnterAutoScrollRegion();
+#if wxUSE_MOUSEWHEEL
+    void HandleOnMouseWheel(wxMouseEvent& event);
+#endif // wxUSE_MOUSEWHEEL
+    void HandleOnChildFocus(wxChildFocusEvent& event);
+
+    friend class wxAutoScrollTimer;
+    friend class wxScrollHelperEvtHandler;
 };
 
 // this macro can be used in a wxScrollHelper-derived class to forward wxWindow
@@ -447,6 +455,7 @@ public:                                                                       \
 // helper class for wxScrolled<T> below
 struct WXDLLIMPEXP_CORE wxScrolledT_Helper
 {
+protected:
     static wxSize FilterBestSize(const wxWindow *win,
                                  const wxScrollHelper *helper,
                                  const wxSize& origBest);
