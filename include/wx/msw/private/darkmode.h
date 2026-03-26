@@ -11,7 +11,6 @@
 #define _WX_MSW_PRIVATE_DARKMODE_H_
 
 #include "wx/settings.h"
-#include <commctrl.h>
 
 namespace wxMSWDarkMode
 {

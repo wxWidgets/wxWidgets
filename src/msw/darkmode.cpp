@@ -24,6 +24,7 @@
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/module.h"
 
 // Allow predefining this as 0 to disable dark mode support completely.
 #ifndef wxUSE_DARK_MODE
@@ -37,20 +38,16 @@
 #endif
 
 #include "wx/dynlib.h"
-#include "wx/module.h"
-
 #include "wx/msw/darkmode.h"
 #include "wx/msw/uxtheme.h"
-
 #include "wx/msw/private/darkmode.h"
-
+#include "wx/msw/private/comptr.h"
 #include <uiautomation.h>
 #include <vssym32.h>
-#include <commctrl.h>
-#include <atlbase.h>    // CComPtr, CComBSTR
 #include <dwmapi.h>
 #include <windows.h>
-
+#include <oleauto.h>
+#include "wx/msw/ole/oleutils.h"
 // ----------------------------------------------------------------------------
 // Module keeping dark mode-related data and wrapping DwmSetWindowAttribute()
 // ----------------------------------------------------------------------------
@@ -137,7 +134,6 @@ wxDarkModeModule::ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
 #if wxUSE_LOG_TRACE
 static const char* TRACE_DARKMODE = "msw-darkmode";
 #endif // wxUSE_LOG_TRACE
-#include <atlwin.h>
 
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 #define GET_B(c) static_cast<BYTE>((c) & 0xFF)
@@ -197,7 +193,8 @@ namespace TDDarkCol
     static constexpr COLORREF kTextFtrExp = RGB(0xb0, 0xb0, 0xb0);
     static constexpr COLORREF kTextRadio = RGB(0xe0, 0xe0, 0xe0);
 }
-
+namespace
+{
 // Cached bounding rect + metadata for a single TaskDialog UI element.
 struct TDLayoutElement
 {
@@ -254,7 +251,7 @@ struct TDPageState
 
 // Thread-local state map and UIA singleton
 static thread_local std::unordered_map<HWND, TDPageState> tls_tdStates;
-static thread_local CComPtr<IUIAutomation>                 tls_tdAutomation;
+static thread_local wxCOMPtr<IUIAutomation>                 tls_tdAutomation;
 
 static TDPageState& GetTDPageState(HWND h) { return tls_tdStates[h]; }
 
@@ -264,13 +261,27 @@ static void DestroyTDPageState(HWND h)
     if (it != tls_tdStates.end()) { it->second.Destroy(); tls_tdStates.erase(it); }
 }
 
+// GUID definitions
+// {ff48dba4-60ef-4201-aa87-54103eef594e}
+const GUID CLSID_CUIAutomation = { 0xff48dba4, 0x60ef, 0x4201, { 0xaa, 0x87, 0x54, 0x10, 0x3e, 0xef, 0x59, 0x4e } };
+
+// Also usually paired with the IID for IUIAutomation:
+// {30cbe57d-d9d0-452a-ab13-7ac5ac4825ee}
+const IID IID_IUIAutomation = { 0x30cbe57d, 0xd9d0, 0x452a, { 0xab, 0x13, 0x7a, 0xc5, 0xac, 0x48, 0x25, 0xee } };
+// Function to get IUIAutomation instance
 static IUIAutomation* GetTDAutomation()
 {
+    static wxCOMPtr<IUIAutomation> tls_tdAutomation;
     if (!tls_tdAutomation)
-        tls_tdAutomation.CoCreateInstance(__uuidof(CUIAutomation));
+    {
+        HRESULT hr = CoCreateInstance(CLSID_CUIAutomation, nullptr, CLSCTX_INPROC_SERVER, IID_IUIAutomation, reinterpret_cast<void**>(&tls_tdAutomation));
+        if (FAILED(hr))
+        {
+            tls_tdAutomation = nullptr;
+        }
+    }
     return tls_tdAutomation;
 }
-
 // Subclass IDs
 static constexpr UINT_PTR kTDMainSubclassId = 0xDEADBEEFul;
 static constexpr UINT_PTR kTDPageSubclassId = 0xBADF00Dul;
@@ -301,8 +312,8 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
     const UINT dpi = GetDpiForWindow(hwnd);
 
     auto Open = [&](const wchar_t* cls) -> HTHEME {
-        HTHEME h = OpenThemeDataForDpi(hwnd, cls, dpi);
-        return h ? h : OpenThemeData(hwnd, cls);
+     /*   HTHEME h = OpenThemeDataForDpi(hwnd, cls, dpi);*/
+        return /*h ? h :*/ OpenThemeData(hwnd, cls);
         };
 
     s.isDark = TDHasNativeDarkTheme();
@@ -333,14 +344,22 @@ static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
     }
     switch (uiPart)
     {
-    case TDLG_MAININSTRUCTIONPANE: return TDDarkCol::kTextInstruct;
-    case TDLG_CONTENTPANE:         return TDDarkCol::kTextContent;
-    case TDLG_EXPANDOTEXT:         return TDDarkCol::kTextExpando;
-    case TDLG_VERIFICATIONTEXT:    return TDDarkCol::kTextVerify;
-    case TDLG_FOOTNOTEPANE:        return TDDarkCol::kTextFootnote;
-    case TDLG_EXPANDEDFOOTERAREA:  return TDDarkCol::kTextFtrExp;
-    case TDLG_RADIOBUTTONPANE:     return TDDarkCol::kTextRadio;
-    default:                       return TDDarkCol::kTextNormal;
+    case TDLG_MAININSTRUCTIONPANE:
+        return TDDarkCol::kTextInstruct;
+    case TDLG_CONTENTPANE:
+        return TDDarkCol::kTextContent;
+    case TDLG_EXPANDOTEXT:
+        return TDDarkCol::kTextExpando;
+    case TDLG_VERIFICATIONTEXT:
+        return TDDarkCol::kTextVerify;
+    case TDLG_FOOTNOTEPANE:
+        return TDDarkCol::kTextFootnote;
+    case TDLG_EXPANDEDFOOTERAREA:
+        return TDDarkCol::kTextFtrExp;
+    case TDLG_RADIOBUTTONPANE:
+        return TDDarkCol::kTextRadio;
+    default:
+        return TDDarkCol::kTextNormal;
     }
 }
 
@@ -350,24 +369,34 @@ static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
 
 static HICON TDLoadStockIcon(const TASKDIALOGCONFIG* cfg, bool isMain)
 {
-    if (!cfg) return nullptr;
+    if (!cfg)
+        return nullptr;
 
-    if (isMain && (cfg->dwFlags & TDF_USE_HICON_MAIN))   return cfg->hMainIcon;
-    if (!isMain && (cfg->dwFlags & TDF_USE_HICON_FOOTER)) return cfg->hFooterIcon;
+    if (isMain && (cfg->dwFlags & TDF_USE_HICON_MAIN))
+        return cfg->hMainIcon;
+    if (!isMain && (cfg->dwFlags & TDF_USE_HICON_FOOTER))
+        return cfg->hFooterIcon;
 
     LPCWSTR res = isMain ? cfg->pszMainIcon : cfg->pszFooterIcon;
-    if (!res || !IS_INTRESOURCE(res)) return nullptr;
+    if (!res || !IS_INTRESOURCE(res))
+        return nullptr;
 
-    auto Stock = [](SHSTOCKICONID id) -> HICON {
-        SHSTOCKICONINFO sii = { sizeof(sii) };
+    auto Stock = [](SHSTOCKICONID id) -> HICON
+        {
+         SHSTOCKICONINFO sii = { sizeof(sii)
+        };
         return SUCCEEDED(SHGetStockIconInfo(id,
             SHGSI_ICON | SHGSI_LARGEICON, &sii))
             ? sii.hIcon : nullptr;
         };
-    if (res == TD_WARNING_ICON)     return Stock(SIID_WARNING);
-    if (res == TD_ERROR_ICON)       return Stock(SIID_ERROR);
-    if (res == TD_INFORMATION_ICON) return Stock(SIID_INFO);
-    if (res == TD_SHIELD_ICON)      return Stock(SIID_SHIELD);
+    if (res == TD_WARNING_ICON)
+        return Stock(SIID_WARNING);
+    if (res == TD_ERROR_ICON)
+        return Stock(SIID_ERROR);
+    if (res == TD_INFORMATION_ICON)
+        return Stock(SIID_INFO);
+    if (res == TD_SHIELD_ICON)
+        return Stock(SIID_SHIELD);
 
     return nullptr;
 }
@@ -380,16 +409,19 @@ static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
 {
     out.clear();
     IUIAutomation* pAuto = GetTDAutomation();
-    if (!pAuto) return;
+    if (!pAuto)
+        return;
 
-    CComPtr<IUIAutomationElement> pRoot;
-    if (FAILED(pAuto->ElementFromHandle(hwnd, &pRoot))) return;
+   wxCOMPtr <IUIAutomationElement> pRoot;
+    if (FAILED(pAuto->ElementFromHandle(hwnd, &pRoot)))
+        return;
 
-    CComPtr<IUIAutomationTreeWalker> pWalker;
+    wxCOMPtr<IUIAutomationTreeWalker> pWalker;
     pAuto->get_ContentViewWalker(&pWalker);
-    if (!pWalker) return;
+    if (!pWalker)
+        return;
 
-    CComPtr<IUIAutomationElement> pChild;
+    wxCOMPtr<IUIAutomationElement> pChild;
     pWalker->GetFirstChildElement(pRoot, &pChild);
 
     while (pChild)
@@ -400,11 +432,13 @@ static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
         ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.right));
 
         {
-            CComBSTR b; pChild->get_CurrentAutomationId(&b);
+            BSTR b;
+            pChild->get_CurrentAutomationId(&b);
             if (b) info.automationId = static_cast<LPCWSTR>(b);
         }
         {
-            CComBSTR b; pChild->get_CurrentName(&b);
+            BSTR b;
+            pChild->get_CurrentName(&b);
             if (b) info.name = static_cast<LPCWSTR>(b);
         }
 
@@ -432,7 +466,7 @@ static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
             }
         }
 
-        CComPtr<IUIAutomationElement> pNext;
+        wxCOMPtr<IUIAutomationElement> pNext;
         pWalker->GetNextSiblingElement(pChild, &pNext);
         pChild = pNext;
     }
@@ -451,7 +485,8 @@ static void TDUpdateLayoutCache(HWND hwnd, TDPageState& s)
             s.isChecked = (el.legacyState & STATE_SYSTEM_CHECKED) != 0;
             break;
         }
-    if (s.defChecked) s.isChecked = true;
+    if (s.defChecked)
+        s.isChecked = true;
 }
 
 static int TDHitTest(const std::vector<TDLayoutElement>& els, POINT pt)
@@ -520,11 +555,13 @@ static void TDPaintIcons(HDC hdc, const TDPageState& s)
         HICON hIcon = nullptr; HBRUSH brBg = nullptr;
         if (el.automationId == L"MainIcon")
         {
-            hIcon = TDLoadStockIcon(s.pCfg, true);  brBg = s.brPrimary;
+            hIcon = TDLoadStockIcon(s.pCfg, true);
+            brBg = s.brPrimary;
         }
         else if (el.automationId == L"FootnoteIcon")
         {
-            hIcon = TDLoadStockIcon(s.pCfg, false); brBg = s.brFootnote;
+            hIcon = TDLoadStockIcon(s.pCfg, false);
+            brBg = s.brFootnote;
         }
         if (!hIcon || !brBg) continue;
         FillRect(hdc, &el.rect, brBg);
@@ -536,13 +573,15 @@ static void TDPaintIcons(HDC hdc, const TDPageState& s)
 
 static void TDPaintGlyphs(HDC hdc, TDPageState& s)
 {
-    if (!s.hTD && !s.hButton) return;
+    if (!s.hTD && !s.hButton)
+        return;
     const bool native = TDHasNativeDarkTheme();
 
     for (int i = 0; i < static_cast<int>(s.elements.size()); ++i)
     {
         const TDLayoutElement& el = s.elements[i];
-        if (IsRectEmpty(&el.rect)) continue;
+        if (IsRectEmpty(&el.rect))
+            continue;
         const bool hot = (i == s.hotIdx), press = hot && s.pressing;
 
         if (el.automationId == L"ExpandoButton" && s.hTD)
@@ -579,26 +618,44 @@ static void TDPaintGlyphs(HDC hdc, TDPageState& s)
 
 static void TDPaintText(HDC hdc, const TDPageState& s)
 {
-    if (!s.hTDS && !s.hTD) return;
+    if (!s.hTDS && !s.hTD)
+        return;
     HTHEME hThm = s.hTDS ? s.hTDS : s.hTD;
     const bool native = TDHasNativeDarkTheme();
 
     for (const auto& el : s.elements)
     {
-        if (IsRectEmpty(&el.rect)) continue;
+        if (IsRectEmpty(&el.rect))
+            continue;
         RECT   rcT = el.rect;
         int    part = 0;
         HBRUSH brBg = s.brPrimary;
         DWORD  dtF = DT_LEFT | DT_VCENTER | DT_WORDBREAK | DT_NOPREFIX;
 
-        if (el.automationId == L"MainInstruction") { part = TDLG_MAININSTRUCTIONPANE; brBg = s.brPrimary; }
-        else if (el.automationId == L"ContentText") { part = TDLG_CONTENTPANE;         brBg = s.brPrimary; }
-        else if (el.automationId == L"ExpandedFooterText") { part = TDLG_EXPANDEDFOOTERAREA;  brBg = s.brFootnote; }
-        else if (el.automationId == L"FootnoteText") { part = TDLG_FOOTNOTEPANE;        brBg = s.brFootnote; }
+        if (el.automationId == L"MainInstruction")
+        {
+            part = TDLG_MAININSTRUCTIONPANE;
+            brBg = s.brPrimary;
+        }
+        else if (el.automationId == L"ContentText")
+        {
+            part = TDLG_CONTENTPANE;
+            brBg = s.brPrimary;
+        }
+        else if (el.automationId == L"ExpandedFooterText")
+        {
+            part = TDLG_EXPANDEDFOOTERAREA;
+            brBg = s.brFootnote;
+        }
+        else if (el.automationId == L"FootnoteText")
+        {
+            part = TDLG_FOOTNOTEPANE;
+            brBg = s.brFootnote;
+        }
         else if (el.automationId == L"ExpandoButton" && s.hTD)
         {
             SIZE sz = {}; GetThemePartSize(s.hTD, hdc, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, nullptr, TS_TRUE, &sz);
-            MARGINS vm = {}; GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, &el.rect, &vm);
+            MARGINS vm = {}; GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, NULL, &vm);
             rcT.left += sz.cx + vm.cxLeftWidth - 2; rcT.top += 1;
             part = TDLG_EXPANDOTEXT; brBg = s.brSecondary;
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
@@ -606,12 +663,13 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
         else if (el.automationId == L"VerificationCheckBox" && s.hButton && s.hTD)
         {
             SIZE cs = {}; GetThemePartSize(s.hButton, hdc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, nullptr, TS_DRAW, &cs);
-            MARGINS tm = {}; GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, &el.rect, &tm);
+            MARGINS tm = {}; GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, NULL, &tm);
             rcT.left = el.rect.left + cs.cx + tm.cxLeftWidth + 3; rcT.top += 5;
             part = TDLG_VERIFICATIONTEXT; brBg = s.brSecondary;
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
         }
-        if (!part) continue;
+        if (!part)
+            continue;
 
         if (!native)
         {
@@ -629,7 +687,8 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
 
 static void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
 {
-    if (!s.themesOk) TDRefreshThemes(hwnd, s);
+    if (!s.themesOk)
+        TDRefreshThemes(hwnd, s);
     TDEnsureBrushes(s);
 
     RECT rc; GetClientRect(hwnd, &rc);
@@ -666,7 +725,8 @@ static LRESULT CALLBACK TDPageSubclassProc(
 {
     switch (msg)
     {
-    case WM_ERASEBKGND: return 1;
+    case WM_ERASEBKGND:
+        return 1;
 
     case WM_PAINT:
     {
@@ -682,17 +742,30 @@ static LRESULT CALLBACK TDPageSubclassProc(
     case WM_MOUSEMOVE:
     {
         TDPageState& s = GetTDPageState(hwnd);
-        if (!s.tracking) { TRACKMOUSEEVENT tme = { sizeof(tme),TME_LEAVE,hwnd,0 }; TrackMouseEvent(&tme); s.tracking = true; }
-        POINT pt = { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam) };
+        if (!s.tracking)
+        {
+            TRACKMOUSEEVENT tme = { sizeof(tme),TME_LEAVE,hwnd,0 };
+            TrackMouseEvent(&tme); s.tracking = true;
+        }
+        POINT pt = { (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam) };
         int nh = TDHitTest(s.elements, pt);
-        if (nh != s.hotIdx) { s.hotIdx = nh; InvalidateRect(hwnd, nullptr, FALSE); }
+        if (nh != s.hotIdx)
+        {
+            s.hotIdx = nh;
+            InvalidateRect(hwnd, nullptr, FALSE);
+        }
         break;
     }
     case WM_MOUSELEAVE:
     {
         TDPageState& s = GetTDPageState(hwnd);
-        s.tracking = false; s.pressing = false;
-        if (s.hotIdx != -1) { s.hotIdx = -1; InvalidateRect(hwnd, nullptr, FALSE); }
+        s.tracking = false;
+        s.pressing = false;
+        if (s.hotIdx != -1)
+        {
+            s.hotIdx = -1;
+            InvalidateRect(hwnd, nullptr, FALSE);
+        }
         break;
     }
     case WM_LBUTTONDOWN:
@@ -733,8 +806,12 @@ static LRESULT CALLBACK TDCtrlContainerSubclassProc(
             FillRect(hdc, &rc, reinterpret_cast<HBRUSH>(dwRef)); return 1;
         }
         break;
-    case WM_CTLCOLORMSGBOX: case WM_CTLCOLOREDIT:   case WM_CTLCOLORLISTBOX:
-    case WM_CTLCOLORBTN:    case WM_CTLCOLORDLG:    case WM_CTLCOLORSCROLLBAR:
+    case WM_CTLCOLORMSGBOX:
+    case WM_CTLCOLOREDIT:
+    case WM_CTLCOLORLISTBOX:
+    case WM_CTLCOLORBTN:
+    case WM_CTLCOLORDLG:
+    case WM_CTLCOLORSCROLLBAR:
     case WM_CTLCOLORSTATIC:
     {
         HDC hdc = reinterpret_cast<HDC>(wParam);
@@ -757,33 +834,43 @@ static LRESULT CALLBACK TDRadioButtonSubclassProc(
 {
     if (msg == WM_PAINT)
     {
-        PAINTSTRUCT ps; HDC hdc = BeginPaint(hwnd, &ps);
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
         HTHEME hStyle = OpenThemeData(nullptr, L"TaskDialogStyle");
-        HTHEME hBtn = OpenThemeDataForDpi(hwnd, L"BUTTON", GetDpiForWindow(hwnd));
-        if (!hBtn) hBtn = OpenThemeData(nullptr, L"Button");
+        HTHEME hBtn =/* OpenThemeDataForDpi(hwnd, L"BUTTON", GetDpiForWindow(hwnd));
+        if (!hBtn) hBtn =*/ OpenThemeData(nullptr, L"Button");
 
         RECT rcC; GetClientRect(hwnd, &rcC);
         HDC hdcBuf = hdc;
         HPAINTBUFFER hbp = BeginBufferedPaint(hdc, &rcC, BPBF_TOPDOWNDIB, nullptr, &hdcBuf);
         DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcBuf), PRF_CLIENT);
 
-        wchar_t text[512] = {}; GetWindowTextW(hwnd, text, static_cast<int>(std::size(text)));
-        SIZE gs = {}; GetThemePartSize(hBtn, hdcBuf, BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL, &rcC, TS_TRUE, &gs);
+        wchar_t text[512] = {};
+        GetWindowTextW(hwnd, text, static_cast<int>(std::size(text)));
+        SIZE gs = {};
+        GetThemePartSize(hBtn, hdcBuf, BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL, &rcC, TS_TRUE, &gs);
         RECT rcT = { gs.cx + 2,0,rcC.right,rcC.bottom };
-        DTTOPTS opts = { sizeof(opts) }; opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR; opts.crText = TDDarkCol::kTextNormal;
+        DTTOPTS opts = { sizeof(opts) };
+        opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
+        opts.crText = TDDarkCol::kTextNormal;
 
-        LOGFONT lf = {}; if (SUCCEEDED(GetThemeFont(hStyle, hdcBuf, TDLG_RADIOBUTTONPANE, 0, TMT_FONT, &lf)))
+        LOGFONT lf = {};
+        if (SUCCEEDED(GetThemeFont(hStyle, hdcBuf, TDLG_RADIOBUTTONPANE, 0, TMT_FONT, &lf)))
         {
             HFONT hF = CreateFontIndirect(&lf), hO = static_cast<HFONT>(SelectObject(hdcBuf, hF));
             DrawThemeTextEx(hStyle, hdcBuf, TDLG_RADIOBUTTONPANE, 0, text, -1, DT_LEFT | DT_VCENTER | DT_END_ELLIPSIS, &rcT, &opts);
             SelectObject(hdcBuf, hO); DeleteObject(hF);
         }
-        if (hStyle) CloseThemeData(hStyle);
-        if (hBtn)   CloseThemeData(hBtn);
-        if (hbp)    EndBufferedPaint(hbp, TRUE);
+        if (hStyle)
+            CloseThemeData(hStyle);
+        if (hBtn)
+            CloseThemeData(hBtn);
+        if (hbp)
+            EndBufferedPaint(hbp, TRUE);
         EndPaint(hwnd, &ps); return 0;
     }
-    if (msg == WM_DESTROY) RemoveWindowSubclass(hwnd, TDRadioButtonSubclassProc, uId);
+    if (msg == WM_DESTROY)
+        RemoveWindowSubclass(hwnd, TDRadioButtonSubclassProc, uId);
     return DefSubclassProc(hwnd, msg, wParam, lParam);
 }
 
@@ -804,13 +891,16 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
 {
     const bool native = TDHasNativeDarkTheme();
 
-    CComPtr<IUIAutomationTreeWalker> pW; pAuto->get_ContentViewWalker(&pW);
+    wxCOMPtr<IUIAutomationTreeWalker> pW;
+    pAuto->get_ContentViewWalker(&pW);
     if (!pW) return;
-    CComPtr<IUIAutomationElement> pChild; pW->GetFirstChildElement(pEl, &pChild);
+    wxCOMPtr<IUIAutomationElement> pChild;
+    pW->GetFirstChildElement(pEl, &pChild);
 
     while (pChild)
     {
-        CONTROLTYPEID ct = 0; pChild->get_CurrentControlType(&ct);
+        CONTROLTYPEID ct = 0;
+        pChild->get_CurrentControlType(&ct);
         if (ct == UIA_ButtonControlTypeId || ct == UIA_RadioButtonControlTypeId ||
             ct == UIA_ProgressBarControlTypeId || ct == UIA_HyperlinkControlTypeId ||
             ct == UIA_ScrollBarControlTypeId || ct == UIA_PaneControlTypeId)
@@ -819,7 +909,7 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
             pChild->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hBtn));
             if (hBtn)
             {
-                CComBSTR bId; pChild->get_CurrentAutomationId(&bId);
+                BSTR bId; pChild->get_CurrentAutomationId(&bId);
                 const std::wstring id(bId ? static_cast<LPCWSTR>(bId) : L"");
                 HWND hP = GetParent(hBtn);
 
@@ -833,13 +923,22 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
                 }
                 else if (ct == UIA_RadioButtonControlTypeId || id.find(L"RadioButton_") == 0 || ct == UIA_HyperlinkControlTypeId)
                 {
-                    if (native) { SetWindowTheme(hBtn, L"DarkMode_DarkTheme", nullptr); }
-                    else { DWORD_PTR ex = 0; if (!GetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &ex)) SetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, 0); }
+                    if (native)
+                    {
+                        SetWindowTheme(hBtn, L"DarkMode_DarkTheme", nullptr);
+                    }
+                    else
+                    {
+                        DWORD_PTR ex = 0;
+                        if (!GetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &ex))
+                            SetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, 0);
+                    }
                     TDSubclassContainer(hP, native ? TDDarkCol::kSecondary : TDDarkCol::kPrimary);
                 }
                 else if (id.find(L"CommandLink_") == 0 || id.find(L"CommandButton_") == 0)
                 {
-                    SetWindowTheme(hBtn, L"DarkMode_Explorer", nullptr); TDSubclassContainer(hP, TDDarkCol::kSecondary);
+                    SetWindowTheme(hBtn, L"DarkMode_Explorer", nullptr);
+                    TDSubclassContainer(hP, TDDarkCol::kSecondary);
                 }
                 else
                 {
@@ -847,7 +946,7 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
                 }
             }
         }
-        CComPtr<IUIAutomationElement> pNext; pW->GetNextSiblingElement(pChild, &pNext);
+        wxCOMPtr<IUIAutomationElement> pNext; pW->GetNextSiblingElement(pChild, &pNext);
         pChild = pNext;
     }
 }
@@ -855,26 +954,35 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
 static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
 {
     IUIAutomation* pAuto = GetTDAutomation();
-    if (!pAuto) return;
+    if (!pAuto)
+        return;
     const bool native = TDHasNativeDarkTheme();
 
-    struct EnumData { HWND hwndTD; const TASKDIALOGCONFIG* pCfg; IUIAutomation* pAuto; bool found; };
+    struct EnumData
+    {
+        HWND hwndTD;
+        const TASKDIALOGCONFIG* pCfg;
+        IUIAutomation* pAuto;
+        bool found;
+    };
     EnumData data = { hwndTD,pCfg,pAuto,false };
 
     EnumChildWindows(hwndTD, [](HWND hwndChild, LPARAM lp)->BOOL
         {
             EnumData* d = reinterpret_cast<EnumData*>(lp);
-            CComPtr<IUIAutomationElement> pEl;
-            if (FAILED(d->pAuto->ElementFromHandle(hwndChild, &pEl))) return TRUE;
-
-            CComBSTR cls; pEl->get_CurrentClassName(&cls);
-
+            wxCOMPtr<IUIAutomationElement> pEl;
+            if (FAILED(d->pAuto->ElementFromHandle(hwndChild, &pEl)))
+                return TRUE;
+            BSTR cls;
+            pEl->get_CurrentClassName(&cls);
+            wxBasicString str = wxBasicString(cls);
             // SysLink controls (footnote / content hyperlinks)
-            if (cls == L"CCSysLink")
+            if (wxString(str).IsSameAs(wxS("CCSysLink")))
             {
                 HWND hL = nullptr; pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hL));
                 if (hL) {
-                    CComBSTR bId; pEl->get_CurrentAutomationId(&bId);
+                    BSTR bId;
+                    pEl->get_CurrentAutomationId(&bId);
                     const std::wstring id(bId ? static_cast<LPCWSTR>(bId) : L"");
                     bool isFn = id.find(L"Footnote") != std::wstring::npos || id.find(L"ExpandedFooter") != std::wstring::npos;
                     TDSubclassContainer(GetParent(hL), (isFn && !TDHasNativeDarkTheme()) ? TDDarkCol::kFootnote : TDDarkCol::kPrimary);
@@ -883,9 +991,11 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
             }
 
             // Main TaskPage (DirectUI "TaskDialog" class)
-            if (cls != L"TaskDialog") return TRUE;
+            if (!wxString(str).IsSameAs(wxS("TaskDialog")))
+                return TRUE;
             HWND hDUI = nullptr;
-            if (FAILED(pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hDUI))) || !hDUI) return TRUE;
+            if (FAILED(pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hDUI))) || !hDUI)
+                return TRUE;
 
             // Class background brush
             {
@@ -902,8 +1012,8 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
             s.pCfg = d->pCfg;
             s.defExpanded = d->pCfg && (d->pCfg->dwFlags & TDF_EXPANDED_BY_DEFAULT);
             s.defChecked = d->pCfg && (d->pCfg->dwFlags & TDF_VERIFICATION_FLAG_CHECKED);
-            s.isExpanded = !!GetProp(d->hwndTD, L"IsExpanded");
-            s.isChecked = s.defChecked || !!GetProp(d->hwndTD, L"IsChecked");
+            s.isExpanded = GetProp(d->hwndTD, L"IsExpanded");
+            s.isChecked = s.defChecked || GetProp(d->hwndTD, L"IsChecked");
             s.elemsOk = false;
             TDUpdateLayoutCache(hDUI, s);
 
@@ -915,9 +1025,11 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
             return TRUE;
         }, reinterpret_cast<LPARAM>(&data));
 
-    if (!data.found) return;
+    if (!data.found)
+        return;
 
-    if (native) wxMSWDarkMode::AllowForWindow(hwndTD, L"DarkMode_Explorer", nullptr);
+    if (native)
+        wxMSWDarkMode::AllowForWindow(hwndTD, L"DarkMode_Explorer", nullptr);
     DWORD_PTR ex;
     if (!GetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, &ex))
         SetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, 0);
@@ -946,7 +1058,9 @@ static void TDDetach(HWND hwndTD)
             return TRUE;
         }, 0);
 
-} // anonymous namespace
+} // TDDetach
+
+} // anonymous namespace 
 
 
 // ============================================================================
