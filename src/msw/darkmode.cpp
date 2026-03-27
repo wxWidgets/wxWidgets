@@ -25,7 +25,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 #include "wx/module.h"
-
 // Allow predefining this as 0 to disable dark mode support completely.
 #ifndef wxUSE_DARK_MODE
     // Otherwise enable it by default.
@@ -204,9 +203,9 @@ struct TDLayoutElement
 // All per-dialog rendering state, stored in a thread_local map.
 struct TDPageState
 {
-    HTHEME hTD = nullptr; // TaskDialog panel + glyph parts
-    HTHEME hTDS = nullptr; // TaskDialogStyle / text fonts
-    HTHEME hButton = nullptr; // Button (checkbox glyph)
+    wxUxThemeHandle hTD ; // TaskDialog panel + glyph parts
+    wxUxThemeHandle hTDS ; // TaskDialogStyle / text fonts
+    wxUxThemeHandle hButton ; // Button (checkbox glyph)
     bool   isDark = false;   // native dark theme available
     bool   themesOk = false;
 
@@ -216,7 +215,26 @@ struct TDPageState
 
     std::vector<TDLayoutElement> elements;
     bool elemsOk = false;
-
+    TDPageState()
+        : hTD(wxUxThemeHandle::NewAtStdDPI(L"")),   // Invalid class -> empty handle
+        hTDS(wxUxThemeHandle::NewAtStdDPI(L"")),
+        hButton(wxUxThemeHandle::NewAtStdDPI(L"")),
+        isDark(false),
+        themesOk(false),
+        brPrimary(nullptr),
+        brSecondary(nullptr),
+        brFootnote(nullptr),
+        elemsOk(false),
+        tracking(false),
+        pressing(false),
+        hotIdx(-1),
+        isExpanded(false),
+        isChecked(false),
+        defExpanded(false),
+        defChecked(false),
+        pCfg(nullptr)
+    {
+    }
     // Mouse interaction (message-driven, no polling)
     bool tracking = false;
     bool pressing = false;
@@ -232,9 +250,6 @@ struct TDPageState
 
     void CloseThemes()
     {
-        if (hTD) { CloseThemeData(hTD);     hTD = nullptr; }
-        if (hTDS) { CloseThemeData(hTDS);    hTDS = nullptr; }
-        if (hButton) { CloseThemeData(hButton); hButton = nullptr; }
         themesOk = false;
     }
     void DestroyBrushes()
@@ -293,11 +308,9 @@ static bool TDHasNativeDarkTheme()
     static int s_cached = -1;
     if (s_cached == -1)
     {
-        HTHEME hD = OpenThemeData(nullptr, L"DarkMode_DarkTheme::TaskDialog");
-        HTHEME hB = OpenThemeData(nullptr, L"TaskDialog");
+       wxUxThemeHandle hD (wxUxThemeHandle::NewAtStdDPI( L"DarkMode_DarkTheme::TaskDialog"));
+       wxUxThemeHandle hB(wxUxThemeHandle::NewAtStdDPI(L"TaskDialog"));
         s_cached = (hD && hD != hB) ? 1 : 0;
-        if (hD) CloseThemeData(hD);
-        if (hB) CloseThemeData(hB);
     }
     return s_cached == 1;
 }
@@ -305,21 +318,29 @@ static bool TDHasNativeDarkTheme()
 static void TDRefreshThemes(HWND hwnd, TDPageState& s)
 {
     s.CloseThemes();
-   // const UINT dpi = GetDpiForWindow(hwnd);
-
-    auto Open = [&](const wchar_t* cls) -> HTHEME {
-     /*   HTHEME h = OpenThemeDataForDpi(hwnd, cls, dpi);*/
-        return /*h ? h :*/ OpenThemeData(hwnd, cls);
-        };
-
     s.isDark = TDHasNativeDarkTheme();
 
-    if (s.isDark) s.hTD = Open(L"DarkMode_DarkTheme::TaskDialog");
-    if (!s.hTD)   s.hTD = Open(L"DarkMode_Explorer::TaskDialog");
-    if (!s.hTD)   s.hTD = Open(L"TaskDialog");
+    int dpi = GetDpiForWindow(hwnd);
+    auto resetTheme = [&](wxUxThemeHandle& member, const wchar_t* classes, const wchar_t* classesDark)
+        {
+            // Destroy the old handle
+            member.~wxUxThemeHandle();
+            // Create a new temporary using the factory, then move-construct in place
+            new (&member) wxUxThemeHandle(wxUxThemeHandle::NewAtDPI(hwnd, classes, classesDark, dpi));
+        };
 
-    s.hTDS = Open(s.isDark ? L"DarkMode_Explorer::TaskDialog" : L"TaskDialog");
-    s.hButton = Open(L"Button");
+    const wchar_t* mainClass = s.isDark
+        ? L"DarkMode_Explorer::TaskDialog"
+        : L"TaskDialog";
+    const wchar_t* btnClass = s.isDark
+        ? L"DarkMode::Button" : L"Button";
+    // For TaskDialog style, likely same as mainClass; could be different.
+    const wchar_t* mainClassDark = s.isDark ? L"DarkMode_Explorer::TaskDialog" : nullptr; // or nullptr if not needed
+
+    resetTheme(s.hTD, mainClass, mainClassDark);
+    resetTheme(s.hTDS, mainClass, mainClassDark);
+    resetTheme(s.hButton, btnClass, nullptr);
+
     s.themesOk = true;
 }
 
@@ -504,14 +525,14 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
     COLORREF srcPri = RGB(255, 255, 255), srcSec = RGB(240, 240, 240);
     COLORREF srcSep = RGB(128, 128, 128), srcSp2 = RGB(223, 223, 223);
 
-    HTHEME hL = OpenThemeData(nullptr, L"TaskDialog");
+    wxUxThemeHandle hL (wxUxThemeHandle ::NewAtStdDPI(L"TaskDialog"));
     if (hL)
     {
         GetThemeColor(hL, TDLG_PRIMARYPANEL, 0, TMT_FILLCOLOR, &srcPri);
         GetThemeColor(hL, TDLG_SECONDARYPANEL, 0, TMT_FILLCOLOR, &srcSec);
         GetThemeColor(hL, TDLG_FOOTNOTESEPARATOR, 0, TMT_FILLCOLOR, &srcSep);
-        CloseThemeData(hL);
     }
+
     struct Rule { BYTE sR, sG, sB, dR, dG, dB; };
     const Rule rules[] =
     {
@@ -616,8 +637,7 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
 {
     if (!s.hTDS && !s.hTD)
         return;
-    HTHEME hThm = s.hTDS ? s.hTDS : s.hTD;
-    const bool native = TDHasNativeDarkTheme();
+     const bool native = TDHasNativeDarkTheme();
 
     for (const auto& el : s.elements)
     {
@@ -676,11 +696,11 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
             DTTOPTS opts = { sizeof(opts) }; opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
             opts.crText = TDGetTextColour(s, part);
             FillRect(hdc, &rcT, brBg);
-            DrawThemeTextEx(hThm, hdc, part, 0, el.name.c_str(), -1, dtF, &rcT, &opts);
+            ::DrawThemeTextEx(s.hTDS ? s.hTDS : s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, &rcT, &opts);
         }
         else
         {
-            DrawThemeText(hThm, hdc, part, 0, el.name.c_str(), -1, dtF, 0, &rcT);
+            ::DrawThemeText(s.hTDS ? s.hTDS : s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, 0, &rcT);
         }
     }
 }
@@ -836,24 +856,20 @@ static LRESULT CALLBACK TDRadioButtonSubclassProc(
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
-        HTHEME hStyle = OpenThemeData(nullptr, L"TaskDialogStyle");
-        HTHEME hBtn =/* OpenThemeDataForDpi(hwnd, L"BUTTON", GetDpiForWindow(hwnd));
-        if (!hBtn) hBtn =*/ OpenThemeData(nullptr, L"Button");
-
+        int dpi = GetDpiForWindow(hwnd);
+        auto hStyle = wxUxThemeHandle::NewAtStdDPI(L"TaskDialogStyle");
+        auto  hBtn = wxUxThemeHandle::NewAtDPI(nullptr, L"Button",dpi);
         RECT rcC; GetClientRect(hwnd, &rcC);
         HDC hdcBuf = hdc;
         HPAINTBUFFER hbp = BeginBufferedPaint(hdc, &rcC, BPBF_TOPDOWNDIB, nullptr, &hdcBuf);
         DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcBuf), PRF_CLIENT);
-
         wchar_t text[512] = {};
         GetWindowTextW(hwnd, text, static_cast<int>(std::size(text)));
-        SIZE gs = {};
-        GetThemePartSize(hBtn, hdcBuf, BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL, &rcC, TS_TRUE, &gs);
-        RECT rcT = { gs.cx + 2,0,rcC.right,rcC.bottom };
+        auto gs = hBtn.GetTrueSize(BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL);
+        RECT rcT = { gs.x + 2,0,rcC.right,rcC.bottom };
         DTTOPTS opts = { sizeof(opts) };
         opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
         opts.crText = TDDarkCol::kTextNormal;
-
         LOGFONT lf = {};
         if (SUCCEEDED(GetThemeFont(hStyle, hdcBuf, TDLG_RADIOBUTTONPANE, 0, TMT_FONT, &lf)))
         {
@@ -861,10 +877,6 @@ static LRESULT CALLBACK TDRadioButtonSubclassProc(
             DrawThemeTextEx(hStyle, hdcBuf, TDLG_RADIOBUTTONPANE, 0, text, -1, DT_LEFT | DT_VCENTER | DT_END_ELLIPSIS, &rcT, &opts);
             SelectObject(hdcBuf, hO); DeleteObject(hF);
         }
-        if (hStyle)
-            CloseThemeData(hStyle);
-        if (hBtn)
-            CloseThemeData(hBtn);
         if (hbp)
             EndBufferedPaint(hbp, TRUE);
         EndPaint(hwnd, &ps); return 0;
@@ -915,10 +927,9 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
 
                 if (ct == UIA_ProgressBarControlTypeId)
                 {
-                    HTHEME hCE = OpenThemeData(nullptr, L"DarkMode_CopyEngine::Progress");
-                    HTHEME hBase = OpenThemeData(nullptr, L"Progress");
+                    wxUxThemeHandle hCE = wxUxThemeHandle::NewAtStdDPI(L"DarkMode_CopyEngine::Progress");
+                    wxUxThemeHandle hBase = wxUxThemeHandle::NewAtStdDPI( L"Progress");
                     bool hasCE = (hCE && hCE != hBase);
-                    if (hCE) CloseThemeData(hCE); if (hBase) CloseThemeData(hBase);
                     SetWindowTheme(hBtn, hasCE ? L"DarkMode_CopyEngine" : L"DarkMode_Explorer", nullptr);
                 }
                 else if (ct == UIA_RadioButtonControlTypeId || id.find(L"RadioButton_") == 0 || ct == UIA_HyperlinkControlTypeId)
