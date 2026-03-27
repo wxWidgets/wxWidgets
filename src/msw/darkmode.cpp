@@ -928,7 +928,7 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
                 if (ct == UIA_ProgressBarControlTypeId)
                 {
                     wxUxThemeHandle hCE = wxUxThemeHandle::NewAtStdDPI(L"DarkMode_CopyEngine::Progress");
-                    wxUxThemeHandle hBase = wxUxThemeHandle::NewAtStdDPI( L"Progress");
+                    wxUxThemeHandle hBase = wxUxThemeHandle::NewAtStdDPI(L"Progress");
                     bool hasCE = (hCE && hCE != hBase);
                     SetWindowTheme(hBtn, hasCE ? L"DarkMode_CopyEngine" : L"DarkMode_Explorer", nullptr);
                 }
@@ -962,6 +962,94 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
     }
 }
 
+// EnumData is used by TDEnumAttachProc below, so it lives at namespace scope.
+struct TDEnumData
+{
+    HWND hwndTD;
+    const TASKDIALOGCONFIG* pCfg;
+    IUIAutomation* pAuto;
+    bool found;
+};
+
+static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lp)
+{
+    TDEnumData* d = reinterpret_cast<TDEnumData*>(lp);
+    wxCOMPtr<IUIAutomationElement> pEl;
+    if (FAILED(d->pAuto->ElementFromHandle(hwndChild, &pEl)))
+        return TRUE;
+    BSTR cls;
+    pEl->get_CurrentClassName(&cls);
+    wxBasicString str = wxBasicString(cls);
+    // SysLink controls (footnote / content hyperlinks)
+    if (wxString(str).IsSameAs(wxS("CCSysLink")))
+    {
+        HWND hL = nullptr; pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hL));
+        if (hL) {
+            BSTR bId;
+            pEl->get_CurrentAutomationId(&bId);
+            const std::wstring id(bId ? static_cast<LPCWSTR>(bId) : L"");
+            bool isFn = id.find(L"Footnote") != std::wstring::npos || id.find(L"ExpandedFooter") != std::wstring::npos;
+            TDSubclassContainer(GetParent(hL), (isFn && !TDHasNativeDarkTheme()) ? TDDarkCol::kFootnote : TDDarkCol::kPrimary);
+        }
+        return TRUE;
+    }
+
+    // Main TaskPage (DirectUI "TaskDialog" class)
+    if (!wxString(str).IsSameAs(wxS("TaskDialog")))
+        return TRUE;
+    HWND hDUI = nullptr;
+    if (FAILED(pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hDUI))) || !hDUI)
+        return TRUE;
+
+    // Class background brush
+    {
+        HBRUSH nb = CreateSolidBrush(TDDarkCol::kSecondary);
+        HBRUSH ob = reinterpret_cast<HBRUSH>(SetClassLongPtr(hDUI, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb)));
+        if (ob && ob != GetSysColorBrush(COLOR_WINDOW) && ob != GetSysColorBrush(COLOR_BTNFACE)) DeleteObject(ob);
+    }
+
+    TDApplyToChildren(pEl, d->pAuto);
+    SetWindowTheme(hDUI, L"DarkMode_Explorer", nullptr);
+
+    // Initialise per-page state
+    TDPageState& s = GetTDPageState(hDUI);
+    s.pCfg = d->pCfg;
+    s.defExpanded = d->pCfg && (d->pCfg->dwFlags & TDF_EXPANDED_BY_DEFAULT);
+    s.defChecked = d->pCfg && (d->pCfg->dwFlags & TDF_VERIFICATION_FLAG_CHECKED);
+    s.isExpanded = GetProp(d->hwndTD, L"IsExpanded");
+    s.isChecked = s.defChecked || GetProp(d->hwndTD, L"IsChecked");
+    s.elemsOk = false;
+    TDUpdateLayoutCache(hDUI, s);
+
+    DWORD_PTR ex = 0;
+    if (!GetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, &ex))
+        SetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, 0);
+
+    d->found = true;
+    return TRUE;
+}
+
+static BOOL CALLBACK TDEnumSysColorProc(HWND h, LPARAM)
+{
+    SendMessage(h, WM_SYSCOLORCHANGE, 0, 0);
+    return TRUE;
+}
+
+static BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
+{
+    DWORD_PTR ex = 0;
+    if (GetWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId, &ex))
+    {
+        RemoveWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId); DestroyTDPageState(hChild);
+    }
+    if (GetWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &ex))
+        RemoveWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId);
+    if (GetWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &ex))
+        RemoveWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId);
+    SetWindowTheme(hChild, nullptr, nullptr);
+    return TRUE;
+}
+
 static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
 {
     IUIAutomation* pAuto = GetTDAutomation();
@@ -969,72 +1057,9 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
         return;
     const bool native = TDHasNativeDarkTheme();
 
-    struct EnumData
-    {
-        HWND hwndTD;
-        const TASKDIALOGCONFIG* pCfg;
-        IUIAutomation* pAuto;
-        bool found;
-    };
-    EnumData data = { hwndTD,pCfg,pAuto,false };
+    TDEnumData data = { hwndTD,pCfg,pAuto,false };
 
-    EnumChildWindows(hwndTD, [](HWND hwndChild, LPARAM lp)->BOOL
-        {
-            EnumData* d = reinterpret_cast<EnumData*>(lp);
-            wxCOMPtr<IUIAutomationElement> pEl;
-            if (FAILED(d->pAuto->ElementFromHandle(hwndChild, &pEl)))
-                return TRUE;
-            BSTR cls;
-            pEl->get_CurrentClassName(&cls);
-            wxBasicString str = wxBasicString(cls);
-            // SysLink controls (footnote / content hyperlinks)
-            if (wxString(str).IsSameAs(wxS("CCSysLink")))
-            {
-                HWND hL = nullptr; pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hL));
-                if (hL) {
-                    BSTR bId;
-                    pEl->get_CurrentAutomationId(&bId);
-                    const std::wstring id(bId ? static_cast<LPCWSTR>(bId) : L"");
-                    bool isFn = id.find(L"Footnote") != std::wstring::npos || id.find(L"ExpandedFooter") != std::wstring::npos;
-                    TDSubclassContainer(GetParent(hL), (isFn && !TDHasNativeDarkTheme()) ? TDDarkCol::kFootnote : TDDarkCol::kPrimary);
-                }
-                return TRUE;
-            }
-
-            // Main TaskPage (DirectUI "TaskDialog" class)
-            if (!wxString(str).IsSameAs(wxS("TaskDialog")))
-                return TRUE;
-            HWND hDUI = nullptr;
-            if (FAILED(pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hDUI))) || !hDUI)
-                return TRUE;
-
-            // Class background brush
-            {
-                HBRUSH nb = CreateSolidBrush(TDDarkCol::kSecondary);
-                HBRUSH ob = reinterpret_cast<HBRUSH>(SetClassLongPtr(hDUI, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb)));
-                if (ob && ob != GetSysColorBrush(COLOR_WINDOW) && ob != GetSysColorBrush(COLOR_BTNFACE)) DeleteObject(ob);
-            }
-
-            TDApplyToChildren(pEl, d->pAuto);
-            SetWindowTheme(hDUI, L"DarkMode_Explorer", nullptr);
-
-            // Initialise per-page state
-            TDPageState& s = GetTDPageState(hDUI);
-            s.pCfg = d->pCfg;
-            s.defExpanded = d->pCfg && (d->pCfg->dwFlags & TDF_EXPANDED_BY_DEFAULT);
-            s.defChecked = d->pCfg && (d->pCfg->dwFlags & TDF_VERIFICATION_FLAG_CHECKED);
-            s.isExpanded = GetProp(d->hwndTD, L"IsExpanded");
-            s.isChecked = s.defChecked || GetProp(d->hwndTD, L"IsChecked");
-            s.elemsOk = false;
-            TDUpdateLayoutCache(hDUI, s);
-
-            DWORD_PTR ex = 0;
-            if (!GetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, &ex))
-                SetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, 0);
-
-            d->found = true;
-            return TRUE;
-        }, reinterpret_cast<LPARAM>(&data));
+    EnumChildWindows(hwndTD, TDEnumAttachProc, reinterpret_cast<LPARAM>(&data));
 
     if (!data.found)
         return;
@@ -1048,29 +1073,15 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
     wxMSWDarkMode::EnableForTLW(hwndTD);
     HBRUSH nb = CreateSolidBrush(TDDarkCol::kPrimary);
     SetClassLongPtr(hwndTD, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb));
-    EnumChildWindows(hwndTD, [](HWND h, LPARAM)->BOOL { SendMessage(h, WM_SYSCOLORCHANGE, 0, 0); return TRUE; }, 0);
+    EnumChildWindows(hwndTD, TDEnumSysColorProc, 0);
     SendMessage(hwndTD, WM_THEMECHANGED, 0, 0);
 }
 
 static void TDDetach(HWND hwndTD)
 {
-    EnumChildWindows(hwndTD, [](HWND hChild, LPARAM)->BOOL
-        {
-            DWORD_PTR ex = 0;
-            if (GetWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId, &ex))
-            {
-                RemoveWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId); DestroyTDPageState(hChild);
-            }
-            if (GetWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &ex))
-                RemoveWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId);
-            if (GetWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &ex))
-                RemoveWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId);
-            SetWindowTheme(hChild, nullptr, nullptr);
-            return TRUE;
-        }, 0);
+    EnumChildWindows(hwndTD, TDEnumDetachProc, 0);
 
 } // TDDetach
-
 } // anonymous namespace
 
 
