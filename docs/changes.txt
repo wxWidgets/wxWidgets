@@ -265,6 +265,10 @@ wxGTK:
 - Fix memory leak in wxDataViewChoiceRenderer.
 - Fix resource leak when using EGL with X11 (Florian Larysch, #26341).
 
+wxMSW:
+
+- Use default style in wxTextCtrl::SetValue() (#26320).
+
 
 3.2.10: (released 2026-03-03)
 -----------------------------
