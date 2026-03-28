@@ -48,7 +48,7 @@ public:
         Ref& operator=(std::nullptr_t);
 
         bool operator!=(std::nullptr_t) const { return m_ptr != nullptr; }
-        explicit operator bool() const { return m_ptr; }
+        explicit operator bool() const { return m_ptr != nullptr; }
         wxTipWindow* operator->() const { return m_ptr; }
 
     private:
