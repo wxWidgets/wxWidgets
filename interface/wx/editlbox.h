@@ -30,7 +30,17 @@
            Default style: wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE.
     @endStyleTable
 
-    The control uses a wxListCtrl internally and emit its events.
+    The control uses a wxListCtrl internally and emits its events.
+
+    @remarks
+    This control provides access to its internal components (e.g., GetNewButton(),
+    GetListCtrl()) for advanced customization.
+
+    You may bind events directly to these internal buttons (e.g., @c wxEVT_BUTTON)
+    to intercept or augment default behavior. To add custom validation before
+    an action occurs, bind to the button and call `event.Skip()` only if
+    validation passes. To completely override the default behavior,
+    omit the call to `event.Skip()`.
 
     @library{wxcore}
     @category{ctrl}
@@ -100,5 +110,47 @@ public:
         (the array will be erased before control's contents are appended).
     */
     void GetStrings(wxArrayString& strings) const;
+
+    /**
+        Returns the internal list control used by the editable list box.
+        While contents should ideally be managed via SetStrings(), this
+        allows for cosmetic customization of the list display.
+    */
+    wxListCtrl* GetListCtrl();
+
+    /**
+        Returns the button used to delete the selected item from the list.
+        Can be used for granular customization, such as changing the icon
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetDelButton();
+
+    /**
+        Returns the button used to add a new item to the list.
+        Can be used for granular customization, such as changing the icon
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetNewButton();
+
+    /**
+        Returns the button used to move the selected item up in the list.
+        Can be used for granular customization, such as changing the icon
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetUpButton();
+
+    /**
+        Returns the button used to move the selected item down in the list.
+        Can be used for granular customization, such as changing the icon
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetDownButton();
+
+    /**
+        Returns the button used to edit the label of the selected item.
+        Can be used for granular customization, such as changing the icon
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetEditButton();
 };
 
