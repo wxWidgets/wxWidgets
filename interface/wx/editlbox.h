@@ -30,7 +30,17 @@
            Default style: wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE.
     @endStyleTable
 
-    The control uses a wxListCtrl internally and emit its events.
+    The control uses a wxListCtrl internally and emits its events.
+
+    @remarks
+    This control provides access to its internal components (e.g., GetNewButton(), 
+    GetListCtrl()) for advanced customization. 
+
+    You may bind events directly to these internal buttons (e.g., @c wxEVT_BUTTON) 
+    to intercept or augment default behavior. To add custom validation before 
+    an action occurs, bind to the button and call `event.Skip()` only if 
+    validation passes. To completely override the default behavior, 
+    omit the call to `event.Skip()`.
 
     @library{wxcore}
     @category{ctrl}
