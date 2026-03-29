@@ -100,5 +100,47 @@ public:
         (the array will be erased before control's contents are appended).
     */
     void GetStrings(wxArrayString& strings) const;
+
+    /**
+        Returns the internal list control used by the editable list box.
+        While contents should ideally be managed via SetStrings(), this 
+        allows for cosmetic customization of the list display.
+    */
+    wxListCtrl* GetListCtrl();
+
+    /**
+        Returns the button used to delete the selected item from the list.
+        Can be used for granular customization, such as changing the icon 
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetDelButton();
+
+    /**
+        Returns the button used to add a new item to the list.
+        Can be used for granular customization, such as changing the icon 
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetNewButton();
+
+    /**
+        Returns the button used to move the selected item up in the list.
+        Can be used for granular customization, such as changing the icon 
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetUpButton();
+
+    /**
+        Returns the button used to move the selected item down in the list.
+        Can be used for granular customization, such as changing the icon 
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetDownButton();
+
+    /**
+        Returns the button used to edit the label of the selected item.
+        Can be used for granular customization, such as changing the icon 
+        via SetBitmapLabel().
+    */
+    wxBitmapButton* GetEditButton();
 };
 
