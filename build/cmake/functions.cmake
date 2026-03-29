@@ -92,6 +92,42 @@ macro(wx_install)
     endif()
 endmacro()
 
+# wx_install_symlink(...)
+# Create symlink dst pointing to src
+# try different symlink and copy methods until one succeeds
+macro(wx_install_symlink src dst)
+    if(wxBUILD_INSTALL)
+        install(CODE "
+            set(SYMLINK_SRC \"${src}\")
+            set(SYMLINK_DST \"${dst}\")
+            message(STATUS \"Installing: \${SYMLINK_DST}\")
+
+            if(CMAKE_VERSION GREATER_EQUAL \"3.17\")
+                execute_process(COMMAND \"\${CMAKE_COMMAND}\" -E rm -f \"\${SYMLINK_DST}\")
+            else()
+                execute_process(COMMAND \"\${CMAKE_COMMAND}\" -E remove -f \"\${SYMLINK_DST}\")
+            endif()
+
+            set(SYMLINK_RES 1)
+            set(wxBUILD_INSTALL_USE_SYMLINK ${wxBUILD_INSTALL_USE_SYMLINK})
+            if(wxBUILD_INSTALL_USE_SYMLINK)
+                if(SYMLINK_RES)
+                    execute_process(COMMAND ln -s --relative \"\${SYMLINK_SRC}\" \"\${SYMLINK_DST}\" RESULT_VARIABLE SYMLINK_RES OUTPUT_QUIET ERROR_QUIET)
+                endif()
+                if(SYMLINK_RES)
+                    execute_process(COMMAND ln -s \"\${SYMLINK_SRC}\" \"\${SYMLINK_DST}\" RESULT_VARIABLE SYMLINK_RES OUTPUT_QUIET ERROR_QUIET)
+                endif()
+                if(SYMLINK_RES)
+                    execute_process(COMMAND \"\${CMAKE_COMMAND}\" -E create_symlink \"\${SYMLINK_SRC}\" \"\${SYMLINK_DST}\" RESULT_VARIABLE SYMLINK_RES)
+                endif()
+            endif()
+            if(SYMLINK_RES)
+                execute_process(COMMAND \"\${CMAKE_COMMAND}\" -E copy \"\${SYMLINK_SRC}\" \"\${SYMLINK_DST}\" RESULT_VARIABLE SYMLINK_RES)
+            endif()
+        ")
+    endif()
+endmacro()
+
 # Get a valid flavour name with optional prefix
 macro(wx_get_flavour flavour prefix)
     if(wxBUILD_FLAVOUR)

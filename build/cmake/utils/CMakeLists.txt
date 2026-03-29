@@ -38,14 +38,12 @@ if(wxUSE_XRC)
             set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
         endif()
 
-        # Don't use wx_install() here to preserve escaping.
-        install(CODE "execute_process( \
-            COMMAND ${CMAKE_COMMAND} -E create_symlink \
-            \"${CMAKE_INSTALL_PREFIX}/${runtime_dir}/${wxrc_output_name}${EXE_SUFFIX}\" \
-            \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wxrc${EXE_SUFFIX}\" \
-            )"
-        )
-        list(APPEND WX_EXTRA_UNINSTALL_FILES "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wxrc${EXE_SUFFIX}")
+        set(WXRC_DIR "\\\$ENV{DESTDIR}\\\${CMAKE_INSTALL_PREFIX}")
+        set(WXRC_SRC "${WXRC_DIR}/${runtime_dir}/${wxrc_output_name}${EXE_SUFFIX}")
+        set(WXRC_DST "${WXRC_DIR}/${runtime_dir}/wxrc${EXE_SUFFIX}")
+        wx_install_symlink(${WXRC_SRC} ${WXRC_DST})
+
+        list(APPEND WX_EXTRA_UNINSTALL_FILES "\"${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wxrc${EXE_SUFFIX}\"")
         set(WX_EXTRA_UNINSTALL_FILES ${WX_EXTRA_UNINSTALL_FILES} PARENT_SCOPE)
     endif()
 endif()
