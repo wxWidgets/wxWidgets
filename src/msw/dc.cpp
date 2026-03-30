@@ -2145,7 +2145,9 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     xdest += XLOG2DEV(0);
     ydest += YLOG2DEV(0);
 
-    const int xsrcOrig = xsrc;
+    // Manually adjusted for RTL layout to fix incorrect scrolling of the DIB
+    // when blitted with ::StretchDIBits() below.
+    const int xsrcOrig = GetLayoutDirection() == wxLayout_LeftToRight ? xsrc : -xsrc;
     const int ysrcOrig = ysrc;
 
     // This does the same thing as XLOG2DEV() but for the source DC.
@@ -2366,10 +2368,23 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 // automatically as it doesn't even work with the source HDC.
                 // So do this manually to ensure that the coordinates are
                 // interpreted in the same way here as in all the other cases.
-                xsrc = source->LogicalToDeviceX(xsrcOrig);
-                ysrc = source->LogicalToDeviceY(ysrcOrig);
-                srcWidth = source->LogicalToDeviceXRel(srcWidth);
-                srcHeight = source->LogicalToDeviceYRel(srcHeight);
+                // Notice that drawings performed on a DIB section are not
+                // automatically mirrored when SetLayout(LAYOUT_RTL) is called.
+                // IOW, blitting a DIB using StretchDIBits() will always look
+                // incorrect in RTL layout, because SetLayout() cannot modify
+                // drawing directly into the bits of a DIB as documented in MSDN.
+                // Fixing this RTL issue is by using LogicalToDevice{Rel}() and
+                // rely on StretchDIBits() to create a mirror image of the bitmap.
+                // LogicalToDevice[XY]{Rel}() doesn't work correctly in RTL as it
+                // doesn't account for m_signX (which is always +1 even in RTL).
+
+                const auto pt = source->LogicalToDevice(xsrcOrig, ysrcOrig);
+                const auto sz = source->LogicalToDeviceRel(srcWidth, srcHeight);
+
+                xsrc = pt.x;
+                ysrc = pt.y;
+                srcWidth = sz.x;
+                srcHeight = sz.y;
 
                 // Figure out what co-ordinate system we're supposed to specify
                 // ysrc in.
