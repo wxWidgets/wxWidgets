@@ -2145,7 +2145,8 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     xdest += XLOG2DEV(0);
     ydest += YLOG2DEV(0);
 
-    const int xsrcOrig = xsrc;
+    // Adjust for RTL layout to fix problems during scrolling, see #26266.
+    const int xsrcOrig = GetLayoutDirection() == wxLayout_LeftToRight ? xsrc : -xsrc;
     const int ysrcOrig = ysrc;
 
     // This does the same thing as XLOG2DEV() but for the source DC.
