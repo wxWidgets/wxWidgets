@@ -269,6 +269,7 @@ wxGTK:
 
 wxMSW:
 
+- Fix wxBufferedPaintDC when using RTL layout (AliKet, #26266).
 - Use default style in wxTextCtrl::SetValue() (#26320).
 
 
