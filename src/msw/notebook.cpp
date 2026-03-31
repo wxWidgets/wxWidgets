@@ -388,6 +388,11 @@ void wxNotebook::UpdateSelection(int selNew)
     }
 
     m_selection = selNew;
+
+  // We need to update the tabs after the selection change when drawing
+  // them ourselves, otherwise the previously selected tab is not redrawn.
+  if ( wxMSWDarkMode::IsActive() )
+      Refresh();
 }
 
 int wxNotebook::ChangeSelection(size_t nPage)
@@ -1935,14 +1940,7 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   // Change the selection before generating the event as its handler should
   // already see the new page selected.
   if ( hdr->code == TCN_SELCHANGE )
-  {
       UpdateSelection(event.GetSelection());
-
-      // We need to update the tabs after the selection change when drawing
-      // them ourselves, otherwise the previously selected tab is not redrawn.
-      if ( wxMSWDarkMode::IsActive() )
-          Refresh();
-  }
 
   bool processed = HandleWindowEvent(event);
   *result = !event.IsAllowed();
