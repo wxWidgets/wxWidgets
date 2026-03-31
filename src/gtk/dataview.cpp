@@ -2980,6 +2980,7 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString &choices
             "text-column", 0,
             "has-entry", FALSE,
             NULL);
+    g_object_unref(store);
 
     bool editable = (mode & wxDATAVIEW_CELL_EDITABLE) != 0;
     g_object_set (m_renderer, "editable", editable, NULL);
