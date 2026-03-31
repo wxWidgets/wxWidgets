@@ -354,6 +354,10 @@ int wxNotebook::SetSelection(size_t nPage)
 
             (void)TabCtrl_SetCurSel(GetHwnd(), nPage);
 
+            /// MSW does not redraw the tab in darkmode
+            if (wxSystemSettings::GetAppearance().IsDark())
+                Refresh();
+
             SendPageChangedEvent(selectionOld, nPage);
         }
     }
@@ -399,6 +403,10 @@ int wxNotebook::ChangeSelection(size_t nPage)
     if ( m_selection == wxNOT_FOUND || nPage != (size_t)m_selection )
     {
         (void)TabCtrl_SetCurSel(GetHwnd(), nPage);
+
+        /// MSW does not redraw the tab in darkmode
+        if (wxSystemSettings::GetAppearance().IsDark())
+            Refresh();
 
         UpdateSelection(nPage);
     }
