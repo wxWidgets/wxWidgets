@@ -268,6 +268,11 @@ protected:
     // events, don't resend them
     bool m_hasEditor;
 
+    mutable int m_insetLeft;
+    mutable int m_insetRight;
+    mutable int m_insetTop;
+    mutable int m_insetBottom;
+
     friend class wxWidgetCocoaNativeKeyDownSuspender;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
