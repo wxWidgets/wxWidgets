@@ -99,6 +99,7 @@ namespace
 // Function to retrieve the user's preferred languages
 void GetUserPreferredLanguagesFromRegistry(wxVector<wxString>& userLanguages)
 {
+#if wxUSE_REGKEY
     // Open the registry key for user preferred languages
     wxRegKey key(wxRegKey::HKCU, L"Control Panel\\International\\User Profile");
     if ( !key.Open(wxRegKey::Read) )
@@ -135,6 +136,7 @@ void GetUserPreferredLanguagesFromRegistry(wxVector<wxString>& userLanguages)
                 break;
         }
     }
+#endif // wxUSE_REGKEY
 }
 
 } // anonymous namespace
