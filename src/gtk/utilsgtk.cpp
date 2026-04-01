@@ -338,8 +338,6 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
     return wxAppTraitsBase::ShowAssertDialog(msg);
 }
 
-#endif // __UNIX__
-
 bool wxMoveToTrash(const wxString& path)
 {
     wxGtkError err;
@@ -354,3 +352,5 @@ bool wxMoveToTrash(const wxString& path)
 
     return ok;
 }
+
+#endif // __UNIX__
