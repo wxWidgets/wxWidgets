@@ -2271,65 +2271,46 @@ long wxWindowMac::MacGetWXBorderSize() const
     return border ;
 }
 
-long wxWindowMac::MacGetLeftBorderSize() const
+wxMacBorderSize wxWindowMac::MacGetBorderSize() const
 {
     // the wx borders are all symmetric in mac themes
-    long border = MacGetWXBorderSize() ;
+    long borderWX = MacGetWXBorderSize();
+
+    wxMacBorderSize border{
+        .left   = borderWX,
+        .top    = borderWX,
+        .right  = borderWX,
+        .bottom = borderWX,
+    };
 
     if ( GetPeer() )
     {
         int left, top, right, bottom;
         GetPeer()->GetLayoutInset( left, top, right, bottom );
-        border -= left;
+
+        border.left     -= left;
+        border.top      -= top;
+        border.right    -= right;
+        border.bottom   -= bottom;
     }
 
     return border;
 }
 
-
-long wxWindowMac::MacGetRightBorderSize() const
-{
-    // the wx borders are all symmetric in mac themes
-    long border = MacGetWXBorderSize() ;
-
-    if ( GetPeer() )
-    {
-        int left, top, right, bottom;
-        GetPeer()->GetLayoutInset( left, top, right, bottom );
-        border -= right;
-    }
-
-    return border;
+long wxWindowMac::MacGetLeftBorderSize() const {
+    return MacGetBorderSize().left;
 }
 
-long wxWindowMac::MacGetTopBorderSize() const
-{
-    // the wx borders are all symmetric in mac themes
-    long border = MacGetWXBorderSize() ;
-
-    if ( GetPeer() )
-    {
-        int left, top, right, bottom;
-        GetPeer()->GetLayoutInset( left, top, right, bottom );
-        border -= top;
-    }
-
-    return border;
+long wxWindowMac::MacGetRightBorderSize() const {
+    return MacGetBorderSize().right;
 }
 
-long wxWindowMac::MacGetBottomBorderSize() const
-{
-    // the wx borders are all symmetric in mac themes
-    long border = MacGetWXBorderSize() ;
+long wxWindowMac::MacGetTopBorderSize() const {
+    return MacGetBorderSize().top;
+}
 
-    if ( GetPeer() )
-    {
-        int left, top, right, bottom;
-        GetPeer()->GetLayoutInset( left, top, right, bottom );
-        border -= bottom;
-    }
-
-    return border;
+long wxWindowMac::MacGetBottomBorderSize() const {
+    return MacGetBorderSize().bottom;
 }
 
 long wxWindowMac::MacRemoveBordersFromStyle( long style )
