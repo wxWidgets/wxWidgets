@@ -2457,10 +2457,12 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 
     wxWindow* wxpeer = GetWXPeer();
 
-    if ( wxpeer->MacGetLeftBorderSize() != 0 || wxpeer->MacGetTopBorderSize() != 0 )
+    auto macBorder{wxpeer->MacGetBorderSize()};
+    if ( macBorder.left != 0 || macBorder.top != 0 )
     {
-        // as this update region is in native window locals we must adapt it to wx window local
-        updateRgn.Offset( wxpeer->MacGetLeftBorderSize() , wxpeer->MacGetTopBorderSize() );
+        // as this update region is in native window locals we must adapt it
+        // to wx window local
+        updateRgn.Offset( macBorder.left , macBorder.top );
     }
 
     // Restrict the update region to the shape of the window, if any, and also
