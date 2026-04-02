@@ -5657,7 +5657,11 @@ if test "$wxUSE_CONFIG" = "yes" ; then
     AC_MSG_WARN(wxConfig requires wxTextFile... disabled)
   else
     AC_DEFINE(wxUSE_CONFIG)
-    AC_DEFINE(wxUSE_CONFIG_NATIVE)
+    if test "$wxUSE_MSW" == 1 -a "$wxUSE_REGKEY" != 1; then
+        AC_DEFINE(wxUSE_CONFIG_NATIVE, 0)
+    else
+        AC_DEFINE(wxUSE_CONFIG_NATIVE, 1)
+    fi
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS config"
   fi
 fi
