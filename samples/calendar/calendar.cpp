@@ -384,9 +384,11 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+#if wxUSE_INTL
     // Locale affects on the language used in the calendar, and may affect
     // the first day of the week, so set it before creating the controls.
     wxUILocale::UseDefault();
+#endif
 
     // Create the main application window
     MyFrame* frame = new MyFrame("Calendar wxWidgets sample");
