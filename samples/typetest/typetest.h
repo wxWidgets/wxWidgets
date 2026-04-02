@@ -14,10 +14,22 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp() { m_textCtrl = nullptr; m_mimeDatabase = nullptr; }
+    MyApp()
+    {
+        m_textCtrl = nullptr;
+#if wxUSE_MIMETYPE
+        m_mimeDatabase = nullptr;
+#endif // wxUSE_MIMETYPE
+    }
 
     bool OnInit() override;
-    int OnExit() override { delete m_mimeDatabase; return wxApp::OnExit(); }
+    int OnExit() override
+    {
+#if wxUSE_MIMETYPE
+        delete m_mimeDatabase;
+#endif // wxUSE_MIMETYPE
+        return wxApp::OnExit();
+    }
 
     void DoVariantDemo(wxCommandEvent& event);
     void DoByteOrderDemo(wxCommandEvent& event);
@@ -35,7 +47,9 @@ public:
 
 private:
     wxTextCtrl* m_textCtrl;
+#if wxUSE_MIMETYPE
     wxMimeTypesManager *m_mimeDatabase;
+#endif // wxUSE_MIMETYPE
 
     wxDECLARE_DYNAMIC_CLASS(MyApp);
     wxDECLARE_EVENT_TABLE();

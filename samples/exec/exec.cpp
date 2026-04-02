@@ -118,10 +118,14 @@ public:
 
     void OnPOpen(wxCommandEvent& event);
 
+#if wxUSE_MIMETYPE
     void OnFileExec(wxCommandEvent& event);
+#endif // wxUSE_MIMETYPE
     void OnFileLaunch(wxCommandEvent& event);
     void OnOpenURL(wxCommandEvent& event);
+#if wxUSE_MIMETYPE
     void OnShowCommandForExt(wxCommandEvent& event);
+#endif // wxUSE_MIMETYPE
 
     void OnAbout(wxCommandEvent& event);
 
@@ -368,8 +372,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Exec_POpen, MyFrame::OnPOpen)
 
+#if wxUSE_MIMETYPE
     EVT_MENU(Exec_OpenFile, MyFrame::OnFileExec)
     EVT_MENU(Exec_ShowCommandForExt, MyFrame::OnShowCommandForExt)
+#endif // wxUSE_MIMETYPE
     EVT_MENU(Exec_LaunchFile, MyFrame::OnFileLaunch)
     EVT_MENU(Exec_OpenURL, MyFrame::OnOpenURL)
 
@@ -1071,6 +1077,7 @@ static bool AskUserForFileName()
     return true;
 }
 
+#if wxUSE_MIMETYPE
 void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
 {
     if ( !AskUserForFileName() )
@@ -1140,6 +1147,7 @@ void MyFrame::OnShowCommandForExt(wxCommandEvent& WXUNUSED(event))
     wxLogMessage("Open command for files of extension \"%s\" is\n%s",
                  ext, cmd);
 }
+#endif // wxUSE_MIMETYPE
 
 void MyFrame::OnFileLaunch(wxCommandEvent& WXUNUSED(event))
 {
