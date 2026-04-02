@@ -298,6 +298,29 @@ static constexpr UINT_PTR kTDMainSubclassId = 0xDEADBEEFul;
 static constexpr UINT_PTR kTDPageSubclassId = 0xBADF00Dul;
 static constexpr UINT_PTR kTDCtrlSubclassId = 0xC0FFEE01ul;
 
+static int GetWindowDPI(HWND hwnd)
+{
+    typedef UINT(WINAPI* GetDpiForWindow_t)(HWND hwnd);
+    static GetDpiForWindow_t s_pfnGetDpiForWindow = nullptr;
+    static bool s_initDone = false;
+
+    if (!s_initDone)
+    {
+        wxLoadedDLL dllUser32("user32.dll");
+        wxDL_INIT_FUNC(s_pfn, GetDpiForWindow, dllUser32);
+        s_initDone = true;
+    }
+
+    if (s_pfnGetDpiForWindow)
+    {
+        const int dpi = static_cast<int>(s_pfnGetDpiForWindow(hwnd));
+        return dpi;
+    }
+
+    return 0;
+}
+
+
 // ============================================================================
 // TaskDialog theme helpers
 // ============================================================================
@@ -319,8 +342,7 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
 {
     s.CloseThemes();
     s.isDark = TDHasNativeDarkTheme();
-
-    int dpi = GetDpiForWindow(hwnd);
+    int dpi = GetWindowDPI(hwnd);
     auto resetTheme = [&](wxUxThemeHandle& member, const wchar_t* classes, const wchar_t* classesDark)
         {
             // Destroy the old handle
@@ -333,7 +355,7 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
         ? L"DarkMode_Explorer::TaskDialog"
         : L"TaskDialog";
     const wchar_t* btnClass = s.isDark
-        ? L"DarkMode::Button" : L"Button";
+        ? L"DarkMode_Explorer::Button" : L"Button";
     // For TaskDialog style, likely same as mainClass; could be different.
     const wchar_t* mainClassDark = s.isDark ? L"DarkMode_Explorer::TaskDialog" : nullptr; // or nullptr if not needed
 
@@ -700,6 +722,7 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
         }
         else
         {
+
             ::DrawThemeText(s.hTDS ? s.hTDS : s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, 0, &rcT);
         }
     }
@@ -856,7 +879,7 @@ static LRESULT CALLBACK TDRadioButtonSubclassProc(
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
-        int dpi = GetDpiForWindow(hwnd);
+        int dpi = GetWindowDPI(hwnd);
         auto hStyle = wxUxThemeHandle::NewAtStdDPI(L"TaskDialogStyle");
         auto  hBtn = wxUxThemeHandle::NewAtDPI(nullptr, L"Button",dpi);
         RECT rcC; GetClientRect(hwnd, &rcC);
