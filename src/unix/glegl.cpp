@@ -709,7 +709,7 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
 {
     if ( m_config && m_config != ms_glEGLConfig )
         delete m_config;
-    if ( m_surface )
+    if ( m_surface != EGL_NO_SURFACE )
         eglDestroySurface(m_display, m_surface);
 #ifdef GDK_WINDOWING_WAYLAND
     DestroyWaylandSubsurface();
