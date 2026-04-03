@@ -5237,13 +5237,15 @@ void wxStyledTextCtrl::SetMargins(int left, int right) {
 
 // Scroll enough to make the given line visible
 void wxStyledTextCtrl::ScrollToLine(int line) {
-    m_swx->DoScrollToLine(line);
+    SetFirstVisibleLine(line);
 }
 
 
 // Scroll enough to make the given column visible
 void wxStyledTextCtrl::ScrollToColumn(int column) {
-    m_swx->DoScrollToColumn(column);
+    // TODO is there a better way?
+    SetXOffset(0);
+    LineScroll(column, 0);
 }
 
 
