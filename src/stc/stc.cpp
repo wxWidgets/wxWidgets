@@ -5375,11 +5375,11 @@ bool wxStyledTextCtrl::DoDropText(long x, long y, const wxString& data) {
 
 
 void wxStyledTextCtrl::SetUseAntiAliasing(bool useAA) {
-    m_swx->SetUseAntiAliasing(useAA);
+    SetFontQuality(useAA ? wxSTC_EFF_QUALITY_DEFAULT : wxSTC_EFF_QUALITY_NON_ANTIALIASED);
 }
 
 bool wxStyledTextCtrl::GetUseAntiAliasing() {
-    return m_swx->GetUseAntiAliasing();
+    return GetFontQuality() != wxSTC_EFF_QUALITY_NON_ANTIALIASED;
 }
 
 void wxStyledTextCtrl::AnnotationClearLine(int line) {

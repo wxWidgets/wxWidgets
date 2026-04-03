@@ -272,15 +272,22 @@ public:
     bool DoDropText(long x, long y, const wxString& data);
 
     /**
-       Specify whether anti-aliased fonts should be used.
+       Specify whether anti-aliasing should be used when rendering text.
 
-      This will have no effect on some platforms, but on some (wxMac for
-      example) can greatly improve performance.
+       If @p useAA is true, sets @ref SetFontQuality() "font quality" to @c wxSTC_EFF_QUALITY_DEFAULT.
+
+       If @p useAA is false, sets @ref SetFontQuality() "font quality" to @c wxSTC_EFF_QUALITY_NON_ANTIALIASED.
+
+       Prefer using @ref SetFontQuality() directly in new code.
     */
     void SetUseAntiAliasing(bool useAA);
 
     /**
-       Returns the current UseAntiAliasing setting.
+       Returns whether anti-aliasing is enabled by @ref SetFontQuality() "font quality" setting.
+
+       This function returns true if GetFontQuality() is something other than @c wxSTC_EFF_QUALITY_NON_ANTIALIASED.
+
+       Prefer using @ref GetFontQuality() directly in new code.
     */
     bool GetUseAntiAliasing();
 

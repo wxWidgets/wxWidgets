@@ -264,7 +264,6 @@ void ScintillaWX::Initialise() {
     dropTarget->SetScintilla(this);
     stc->SetDropTarget(dropTarget);
 #endif // wxUSE_DRAG_AND_DROP
-    vs.extraFontFlag = true;   // UseAntiAliasing
 
     // Set up default OS X key mappings. Remember that SCI_CTRL stands for
     // "Cmd" key here, as elsewhere in wx API, while SCI_ALT is the "Option"
@@ -1325,15 +1324,6 @@ void ScintillaWX::ClipChildren(wxDC& WXUNUSED(dc), PRectangle WXUNUSED(rect))
 //     dc.SetClippingRegion(rgn);
 }
 
-
-void ScintillaWX::SetUseAntiAliasing(bool useAA) {
-    vs.extraFontFlag = useAA;
-    InvalidateStyleRedraw();
-}
-
-bool ScintillaWX::GetUseAntiAliasing() {
-    return vs.extraFontFlag != 0;
-}
 
 void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
     if ( 0 <= markerNumber && markerNumber <= MARKER_MAX) {
