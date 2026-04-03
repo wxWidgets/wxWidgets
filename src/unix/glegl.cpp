@@ -633,7 +633,7 @@ bool wxGLCanvasEGL::CreateSurface()
     {
         if ( m_surface != EGL_NO_SURFACE )
         {
-            eglDestroySurface(m_surface, m_display);
+            eglDestroySurface(m_display, m_surface);
             m_surface = EGL_NO_SURFACE;
         }
 

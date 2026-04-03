@@ -262,6 +262,8 @@ All:
 wxGTK:
 
 - Fix copy/paste when a clipboard manager is running (David Edmundson, #26265).
+- Fix memory leak in wxDataViewChoiceRenderer.
+- Fix resource leak when using EGL with X11 (Florian Larysch, #26341).
 
 
 3.2.10: (released 2026-03-03)
