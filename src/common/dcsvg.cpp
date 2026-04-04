@@ -1452,7 +1452,7 @@ void wxSVGFileDCImpl::DoDrawBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y,
         m_bmp_handler.reset(new wxSVGBitmapFileHandler(m_filename));
 
     wxStringOutputStream stream(&m_svgDocument);
-    m_writeError = m_bmp_handler->ProcessBitmap(bmp, x, y, stream);
+    m_writeError = !m_bmp_handler->ProcessBitmap(bmp, x, y, stream);
 }
 
 void wxSVGFileDCImpl::write(const wxString& s)
