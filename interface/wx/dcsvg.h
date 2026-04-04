@@ -35,9 +35,9 @@ constexpr double wxSVG_DEFAULT_DPI = 72.0;
     A wxSVGFileDC is a device context onto which graphics and text can be
     drawn, and the output produced as a vector file, in SVG format.
 
-    This format can be read by a range of programs, including a Netscape plugin
-    (Adobe) and the open source Inkscape program (http://inkscape.org/).  Full
-    details are given in the W3C SVG recommendation (http://www.w3.org/TR/SVG/).
+    This format can be read by a range of programs, including most web
+    browsers and the open source Inkscape program (http://inkscape.org/).
+    Full details are given in the W3C SVG recommendation (http://www.w3.org/TR/SVG/).
 
     The intention behind wxSVGFileDC is that it can be used to produce a file
     corresponding to the screen display context, wxSVGFileDC, by passing the
