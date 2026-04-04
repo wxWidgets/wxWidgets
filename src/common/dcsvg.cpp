@@ -20,9 +20,10 @@
 
 #include "wx/base64.h"
 #include "wx/dcsvg.h"
-#include "wx/wfstream.h"
+#include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/mstream.h"
+#include "wx/sstream.h"
 #include "wx/scopedarray.h"
 #include "wx/private/rescale.h"
 
@@ -501,6 +502,11 @@ void wxSVGFileDC::SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode)
     ((wxSVGFileDCImpl*)GetImpl())->SetShapeRenderingMode(renderingMode);
 }
 
+wxString wxSVGFileDC::GetSVGDocument() const
+{
+    return ((wxSVGFileDCImpl*)GetImpl())->GetSVGDocument();
+}
+
 // ----------------------------------------------------------
 // wxSVGFileDCImpl
 // ----------------------------------------------------------
@@ -549,11 +555,6 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
 
     m_bmp_handler.reset();
 
-    if ( m_filename.empty() )
-        m_outfile.reset();
-    else
-        m_outfile.reset(new wxFileOutputStream(m_filename));
-
     wxString s;
     s += wxS("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
     s += wxS("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n\n");
@@ -566,16 +567,27 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
     write(s);
 }
 
-wxSVGFileDCImpl::~wxSVGFileDCImpl()
+wxString wxSVGFileDCImpl::GetSVGDocument() const
 {
-    wxString s;
+    wxString doc(m_svgDocument);
 
     // Close remaining clipping group elements
     for (size_t i = 0; i < m_clipUniqueId; i++)
-        s += wxS("</g>\n");
+        doc += wxS("</g>\n");
 
-    s += wxS("</g>\n</svg>\n");
-    write(s);
+    doc += wxS("</g>\n</svg>\n");
+
+    return doc;
+}
+
+wxSVGFileDCImpl::~wxSVGFileDCImpl()
+{
+    if ( !m_filename.empty() )
+    {
+        wxFile file(m_filename, wxFile::write);
+        if ( file.IsOpened() )
+            file.Write(GetSVGDocument(), wxConvUTF8);
+    }
 }
 
 void wxSVGFileDCImpl::DoGetSizeMM(int* width, int* height) const
@@ -1435,28 +1447,17 @@ void wxSVGFileDCImpl::DoDrawBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y,
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(x, y, x + bmp.GetWidth(), y + bmp.GetHeight());
 
-    if ( !m_outfile )
-        return;
-
     // If we don't have any bitmap handler yet, use the default one.
     if ( !m_bmp_handler )
         m_bmp_handler.reset(new wxSVGBitmapFileHandler(m_filename));
 
-    m_writeError = m_bmp_handler->ProcessBitmap(bmp, x, y, *m_outfile);
+    wxStringOutputStream stream(&m_svgDocument);
+    m_writeError = !m_bmp_handler->ProcessBitmap(bmp, x, y, stream);
 }
 
 void wxSVGFileDCImpl::write(const wxString& s)
 {
-    if ( !m_outfile )
-        return;
-
-    if ( m_outfile->IsOk() )
-    {
-        const wxCharBuffer buf = s.utf8_str();
-        m_outfile->Write(buf, strlen((const char*)buf));
-    }
-
-    m_writeError = !m_outfile->IsOk();
+    m_svgDocument += s;
 }
 
 #endif // wxUSE_SVG
