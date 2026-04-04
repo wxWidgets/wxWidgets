@@ -3013,6 +3013,22 @@ void wxAuiNotebook::UnsplitAll()
 
     if ( changed )
     {
+        // We need to update the selection if the current page was in another
+        // tab control before, so force a selection change to ensure that the
+        // right page is shown.
+        m_curPage = wxNOT_FOUND;
+        int sel = tabMain->GetActivePage();
+        if ( sel == wxNOT_FOUND )
+        {
+            // Not sure if this can actually happen, but fall back to the first
+            // page if it does (note that we know that the main tab control is
+            // not empty as we must have added a page to it above for "changed"
+            // to be true).
+            sel = 0;
+        }
+
+        ChangeSelection(sel);
+
         RemoveEmptyTabFrames();
 
         DoSizing();
