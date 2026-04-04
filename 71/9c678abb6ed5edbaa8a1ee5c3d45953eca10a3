@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxSVGFileDC::GetSVGDocument() (Blake-Madden, #26344).
