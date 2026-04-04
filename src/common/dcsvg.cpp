@@ -602,7 +602,7 @@ bool wxSVGFileDCImpl::Save()
 
     wxFile file(m_filename, wxFile::write);
     if ( file.IsOpened() )
-        m_saved = file.Write(GetSVGDocument(), wxConvUTF8);
+        m_saved = file.Write(GetSVGDocument(), wxConvUTF8) && file.Close();
 
     if ( !m_saved )
         m_writeError = true;
