@@ -414,14 +414,45 @@ public:
 
     // coordinates conversions and transforms
 
-    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
-    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const;
+    wxCoord DeviceToLogicalX(wxCoord x) const
+    {
+        return DeviceToLogical(x, 0).x;
+    }
+
+    wxCoord DeviceToLogicalY(wxCoord y) const
+    {
+        return DeviceToLogical(0, y).y;
+    }
+
+    wxCoord DeviceToLogicalXRel(wxCoord x) const
+    {
+        return DeviceToLogicalRel(x, 0).x;
+    }
+
+    wxCoord DeviceToLogicalYRel(wxCoord y) const
+    {
+        return DeviceToLogicalRel(0, y).y;
+    }
+
+    wxCoord LogicalToDeviceX(wxCoord x) const
+    {
+        return LogicalToDevice(x, 0).x;
+    }
+
+    wxCoord LogicalToDeviceY(wxCoord y) const
+    {
+        return LogicalToDevice(0, y).y;
+    }
+
+    wxCoord LogicalToDeviceXRel(wxCoord x) const
+    {
+        return LogicalToDeviceRel(x, 0).x;
+    }
+
+    wxCoord LogicalToDeviceYRel(wxCoord y) const
+    {
+        return LogicalToDeviceRel(0, y).y;
+    }
 
     virtual void SetMapMode(wxMappingMode mode);
     virtual wxMappingMode GetMapMode() const { return m_mappingMode; }
