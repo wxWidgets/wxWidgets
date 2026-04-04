@@ -68,7 +68,8 @@ public:
         @a height at @a dpi resolution, and an optional @a title.
 
         The title provides a readable name for the SVG document.
-        The filename is allowed to be empty, in which case no SVG file will be written.
+        The filename is allowed to be empty, in which case no SVG file will be
+        written. Call GetSVGDocument() to retrieve the generated content.
     */
     wxSVGFileDC(const wxString& filename, int width = 320, int height = 240,
                 double dpi = wxSVG_DEFAULT_DPI, const wxString& title = wxString());
@@ -78,7 +79,8 @@ public:
         an optional @a title, and an optional @a dpi resolution.
 
         The title provides a readable name for the SVG document.
-        The filename is allowed to be empty, in which case no SVG file will be written.
+        The filename is allowed to be empty, in which case no SVG file will be
+        written. Call GetSVGDocument() to retrieve the generated content.
 
         @since 3.3.2
     */
@@ -122,6 +124,17 @@ public:
         @since 3.1.3
     */
     void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
+
+    /**
+        Returns the SVG document as a string.
+
+        This can be used to retrieve the generated SVG content regardless of
+        whether it was also written to a file. This can be called after all
+        drawing commands to get the current SVG content.
+
+        @since 3.3.3
+    */
+    wxString GetSVGDocument() const;
 
     /**
         Destroys the current clipping region so that none of the DC is clipped.
