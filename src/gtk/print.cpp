@@ -1164,23 +1164,10 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGtkPrinterDCContextSaver);
 };
 
-#define wxCAIRO_SCALE 1
-
-#if wxCAIRO_SCALE
-
 #define XLOG2DEV(x)     LogicalToDeviceX(x)
 #define XLOG2DEVREL(x)  LogicalToDeviceXRel(x)
 #define YLOG2DEV(x)     LogicalToDeviceY(x)
 #define YLOG2DEVREL(x)  LogicalToDeviceYRel(x)
-
-#else
-
-#define XLOG2DEV(x)     ((double)(LogicalToDeviceX(x)) * m_DEV2PS)
-#define XLOG2DEVREL(x)  ((double)(LogicalToDeviceXRel(x)) * m_DEV2PS)
-#define YLOG2DEV(x)     ((double)(LogicalToDeviceY(x)) * m_DEV2PS)
-#define YLOG2DEVREL(x)  ((double)(LogicalToDeviceYRel(x)) * m_DEV2PS)
-
-#endif
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDCImpl, wxDCImpl);
 
@@ -1203,14 +1190,6 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
 
     m_cairo = gtk_print_context_get_cairo_context ( m_gpc );
-
-#if wxCAIRO_SCALE
-    m_PS2DEV = 1.0;
-    m_DEV2PS = 1.0;
-#else
-    m_PS2DEV = (double)m_resolution / 72.0;
-    m_DEV2PS = 72.0 / (double)m_resolution;
-#endif
 
     m_signX = 1;  // default x-axis left to right.
     m_signY = 1;  // default y-axis bottom up -> top down.
@@ -1306,7 +1285,7 @@ void wxGtkPrinterDCImpl::DoGradientFillConcentric(const wxRect& rect, const wxCo
 
     // Create a pattern with the gradient.
     cairo_pattern_t* gradient;
-    gradient = cairo_pattern_create_radial (XLOG2DEV(xC+xR), YLOG2DEV(yC+yR), 0, XLOG2DEV(xC+xR), YLOG2DEV(yC+yR), radius * m_DEV2PS );
+    gradient = cairo_pattern_create_radial (XLOG2DEV(xC+xR), YLOG2DEV(yC+yR), 0, XLOG2DEV(xC+xR), YLOG2DEV(yC+yR), radius );
     cairo_pattern_add_color_stop_rgba (gradient, 0.0, redIPS, greenIPS, blueIPS, alphaIPS);
     cairo_pattern_add_color_stop_rgba (gradient, 1.0, redDPS, greenDPS, blueDPS, alphaDPS);
 
@@ -1923,7 +1902,7 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
     else
         width = (double) m_pen.GetWidth() * m_scaleX;
 
-    cairo_set_line_width( m_cairo, width * m_DEV2PS );
+    cairo_set_line_width( m_cairo, width );
     static const double dotted[] = {2.0, 5.0};
     static const double short_dashed[] = {4.0, 4.0};
     static const double long_dashed[] = {4.0, 8.0};
@@ -2111,9 +2090,7 @@ void wxGtkPrinterDCImpl::StartPage()
     // is used in GTK+ itself and wouldn't work correctly if we applied these
     // transformations before it is called.
 
-#if wxCAIRO_SCALE
     cairo_scale( m_cairo, 72.0 / (double)m_resolution, 72.0 / (double)m_resolution );
-#endif
 }
 
 void wxGtkPrinterDCImpl::EndPage()
@@ -2128,7 +2105,7 @@ wxCoord wxGtkPrinterDCImpl::GetCharHeight() const
     int w,h;
     pango_layout_get_pixel_size( m_layout, &w, &h );
 
-    return wxRound( h * m_PS2DEV );
+    return h;
 }
 
 wxCoord wxGtkPrinterDCImpl::GetCharWidth() const
@@ -2138,7 +2115,7 @@ wxCoord wxGtkPrinterDCImpl::GetCharWidth() const
     int w,h;
     pango_layout_get_pixel_size( m_layout, &w, &h );
 
-    return wxRound( w * m_PS2DEV );
+    return w;
 }
 
 void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width, wxCoord *height,

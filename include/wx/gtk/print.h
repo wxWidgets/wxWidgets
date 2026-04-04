@@ -309,8 +309,6 @@ private:
 
     GtkPrintContext        *m_gpc;
     int                     m_resolution;
-    double                  m_PS2DEV;
-    double                  m_DEV2PS;
 
     friend class wxGtkPrinterDCContextSaver;
 
