@@ -31,11 +31,6 @@
 // local defines
 //-----------------------------------------------------------------------------
 
-#define XLOG2DEV(x)    LogicalToDeviceX(x)
-#define XLOG2DEVREL(x) LogicalToDeviceXRel(x)
-#define YLOG2DEV(y)    LogicalToDeviceY(y)
-#define YLOG2DEVREL(y) LogicalToDeviceYRel(y)
-
 #define USE_PAINT_REGION 1
 
 //-----------------------------------------------------------------------------
@@ -525,7 +520,7 @@ void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 
     if ( m_pen.IsNonTransparent() )
     {
         if (m_gdkwindow)
-            gdk_draw_line( m_gdkwindow, m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
+            gdk_draw_line( m_gdkwindow, m_penGC, LogicalToDeviceX(x1), LogicalToDeviceY(y1), LogicalToDeviceX(x2), LogicalToDeviceY(y2) );
 
         if ( AreAutomaticBoundingBoxUpdatesEnabled() )
             CalcBoundingBox(x1, y1, x2, y2);
@@ -541,12 +536,12 @@ void wxWindowDCImpl::DoCrossHair( wxCoord x, wxCoord y )
         int w = 0;
         int h = 0;
         GetOwner()->GetSize( &w, &h );
-        wxCoord xx = XLOG2DEV(x);
-        wxCoord yy = YLOG2DEV(y);
+        wxCoord xx = LogicalToDeviceX(x);
+        wxCoord yy = LogicalToDeviceY(y);
         if (m_gdkwindow)
         {
-            gdk_draw_line( m_gdkwindow, m_penGC, 0, yy, XLOG2DEVREL(w), yy );
-            gdk_draw_line( m_gdkwindow, m_penGC, xx, 0, xx, YLOG2DEVREL(h) );
+            gdk_draw_line( m_gdkwindow, m_penGC, 0, yy, LogicalToDeviceXRel(w), yy );
+            gdk_draw_line( m_gdkwindow, m_penGC, xx, 0, xx, LogicalToDeviceYRel(h) );
         }
     }
 }
@@ -596,12 +591,12 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    wxCoord xx1 = XLOG2DEV(x1);
-    wxCoord yy1 = YLOG2DEV(y1);
-    wxCoord xx2 = XLOG2DEV(x2);
-    wxCoord yy2 = YLOG2DEV(y2);
-    wxCoord xxc = XLOG2DEV(xc);
-    wxCoord yyc = YLOG2DEV(yc);
+    wxCoord xx1 = LogicalToDeviceX(x1);
+    wxCoord yy1 = LogicalToDeviceY(y1);
+    wxCoord xx2 = LogicalToDeviceX(x2);
+    wxCoord yy2 = LogicalToDeviceY(y2);
+    wxCoord xxc = LogicalToDeviceX(xc);
+    wxCoord yyc = LogicalToDeviceY(yc);
     double dx = xx1 - xxc;
     double dy = yy1 - yyc;
     double radius = sqrt((double)(dx*dx+dy*dy));
@@ -666,10 +661,10 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = YLOG2DEV(y);
-    wxCoord ww = m_signX * XLOG2DEVREL(width);
-    wxCoord hh = m_signY * YLOG2DEVREL(height);
+    wxCoord xx = LogicalToDeviceX(x);
+    wxCoord yy = LogicalToDeviceY(y);
+    wxCoord ww = m_signX * LogicalToDeviceXRel(width);
+    wxCoord hh = m_signY * LogicalToDeviceYRel(height);
 
     // CMB: handle -ve width and/or height
     if (ww < 0) { ww = -ww; xx = xx - ww; }
@@ -715,7 +710,7 @@ void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     if ( m_pen.IsNonTransparent() && m_gdkwindow )
-        gdk_draw_point( m_gdkwindow, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
+        gdk_draw_point( m_gdkwindow, m_penGC, LogicalToDeviceX(x), LogicalToDeviceY(y) );
 
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox (x, y);
@@ -732,7 +727,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
 
     //Check, if scaling is necessary
     const bool doScale =
-        xoffset != 0 || yoffset != 0 || XLOG2DEV(10) != 10 || YLOG2DEV(10) != 10;
+        xoffset != 0 || yoffset != 0 || LogicalToDeviceX(10) != 10 || LogicalToDeviceY(10) != 10;
 
     // GdkPoint and wxPoint have the same memory layout, so we can cast one to the other
     const GdkPoint* gpts = reinterpret_cast<const GdkPoint*>(points);
@@ -748,8 +743,8 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     {
         if (doScale)
         {
-            gpts_alloc[i].x = XLOG2DEV(points[i].x + xoffset);
-            gpts_alloc[i].y = YLOG2DEV(points[i].y + yoffset);
+            gpts_alloc[i].x = LogicalToDeviceX(points[i].x + xoffset);
+            gpts_alloc[i].y = LogicalToDeviceY(points[i].y + yoffset);
         }
         if ( AreAutomaticBoundingBoxUpdatesEnabled() )
             CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
@@ -769,7 +764,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 
     //Check, if scaling is necessary
     const bool doScale =
-        xoffset != 0 || yoffset != 0 || XLOG2DEV(10) != 10 || YLOG2DEV(10) != 10;
+        xoffset != 0 || yoffset != 0 || LogicalToDeviceX(10) != 10 || LogicalToDeviceY(10) != 10;
 
     // GdkPoint and wxPoint have the same memory layout, so we can cast one to the other
     const GdkPoint* gdkpoints = reinterpret_cast<const GdkPoint*>(points);
@@ -786,8 +781,8 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
     {
         if (doScale)
         {
-            gdkpoints_alloc[i].x = XLOG2DEV(points[i].x + xoffset);
-            gdkpoints_alloc[i].y = YLOG2DEV(points[i].y + yoffset);
+            gdkpoints_alloc[i].x = LogicalToDeviceX(points[i].x + xoffset);
+            gdkpoints_alloc[i].y = LogicalToDeviceY(points[i].y + yoffset);
         }
         if ( AreAutomaticBoundingBoxUpdatesEnabled() )
             CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
@@ -829,10 +824,10 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = YLOG2DEV(y);
-    wxCoord ww = m_signX * XLOG2DEVREL(width);
-    wxCoord hh = m_signY * YLOG2DEVREL(height);
+    wxCoord xx = LogicalToDeviceX(x);
+    wxCoord yy = LogicalToDeviceY(y);
+    wxCoord ww = m_signX * LogicalToDeviceXRel(width);
+    wxCoord hh = m_signY * LogicalToDeviceYRel(height);
 
     // CMB: draw nothing if transformed w or h is 0
     if (ww == 0 || hh == 0) return;
@@ -874,11 +869,11 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
     wxDouble maxR = std::min(width, height) / 2.0;
     if ( radius > maxR ) radius = maxR;
 
-    wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = YLOG2DEV(y);
-    wxCoord ww = m_signX * XLOG2DEVREL(width);
-    wxCoord hh = m_signY * YLOG2DEVREL(height);
-    wxCoord rr = XLOG2DEVREL((wxCoord)radius);
+    wxCoord xx = LogicalToDeviceX(x);
+    wxCoord yy = LogicalToDeviceY(y);
+    wxCoord ww = m_signX * LogicalToDeviceXRel(width);
+    wxCoord hh = m_signY * LogicalToDeviceYRel(height);
+    wxCoord rr = LogicalToDeviceXRel((wxCoord)radius);
 
     // CMB: handle -ve width and/or height
     if (ww < 0) { ww = -ww; xx = xx - ww; }
@@ -951,10 +946,10 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = YLOG2DEV(y);
-    wxCoord ww = m_signX * XLOG2DEVREL(width);
-    wxCoord hh = m_signY * YLOG2DEVREL(height);
+    wxCoord xx = LogicalToDeviceX(x);
+    wxCoord yy = LogicalToDeviceY(y);
+    wxCoord ww = m_signX * LogicalToDeviceXRel(width);
+    wxCoord hh = m_signY * LogicalToDeviceYRel(height);
 
     // CMB: handle -ve width and/or height
     if (ww < 0) { ww = -ww; xx = xx - ww; }
@@ -1598,8 +1593,8 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         // X doesn't allow different width in x and y and so we take
         // the average
         double w = 0.5 +
-                   ( fabs((double) XLOG2DEVREL(width)) +
-                     fabs((double) YLOG2DEVREL(width)) ) / 2.0;
+                   ( fabs((double) LogicalToDeviceXRel(width)) +
+                     fabs((double) LogicalToDeviceYRel(width)) ) / 2.0;
         width = (int)w;
         if ( !width )
         {
@@ -1979,10 +1974,10 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
     }
 
     wxRect rect;
-    rect.x = XLOG2DEV(x);
-    rect.y = YLOG2DEV(y);
-    rect.width = XLOG2DEVREL(width);
-    rect.height = YLOG2DEVREL(height);
+    rect.x = LogicalToDeviceX(x);
+    rect.y = LogicalToDeviceY(y);
+    rect.width = LogicalToDeviceXRel(width);
+    rect.height = LogicalToDeviceYRel(height);
 
     if (m_window && m_window->m_wxwindow &&
         (m_window->GetLayoutDirection() == wxLayout_RightToLeft))
