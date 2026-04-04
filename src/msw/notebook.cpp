@@ -354,8 +354,8 @@ int wxNotebook::SetSelection(size_t nPage)
 
             (void)TabCtrl_SetCurSel(GetHwnd(), nPage);
 
-            /// MSW does not redraw the tab in darkmode
-            if (wxSystemSettings::GetAppearance().IsDark())
+            /// MSW does not redraw the tab in dark mode
+            if ( wxMSWDarkMode::IsActive() )
                 Refresh();
 
             SendPageChangedEvent(selectionOld, nPage);
@@ -405,7 +405,7 @@ int wxNotebook::ChangeSelection(size_t nPage)
         (void)TabCtrl_SetCurSel(GetHwnd(), nPage);
 
         /// MSW does not redraw the tab in darkmode
-        if (wxSystemSettings::GetAppearance().IsDark())
+        if ( wxMSWDarkMode::IsActive() )
             Refresh();
 
         UpdateSelection(nPage);
