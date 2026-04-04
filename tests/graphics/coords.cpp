@@ -463,6 +463,44 @@ static void TransformedWithMatrixEx(wxDC& dc)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
+static void
+ApplyWineWorkaround(wxPoint& posLog, const wxPoint2DDouble& posLogRef)
+{
+    if ( !wxIsRunningUnderWine() )
+        return;
+
+    static class WorkaroundWasUsed
+    {
+    public:
+        WorkaroundWasUsed() = default;
+
+        ~WorkaroundWasUsed()
+        {
+            if ( !m_wasUsed )
+                WARN("Wine workaround is not needed any longer");
+        }
+
+        void Apply(wxPoint& posLog, const wxPoint2DDouble& posLogRef)
+        {
+            // Current versions of Wine seem to have a bug and return a value
+            // which is one off from DPtoLP() used by wxDC::DeviceToLogical()
+            // and there doesn't seem to be anything we can do about it, so
+            // just tweak the result to pass this test.
+            if ( posLog.x == posLogRef.m_x + 1 )
+            {
+                posLog.x--;
+
+                m_wasUsed = true;
+            }
+        }
+
+    private:
+        bool m_wasUsed = false;
+    } s_workaroundWasUsed;
+
+    s_workaroundWasUsed.Apply(posLog, posLogRef);
+}
+
 static void TransformedWithMatrixAndStd(wxDC& dc)
 {
     // Apply combination of standard and matrix transformations
@@ -491,6 +529,8 @@ static void TransformedWithMatrixAndStd(wxDC& dc)
         wxPoint posLog;
         posLog.x = dc.DeviceToLogicalX(s_posDev.x);
         posLog.y = dc.DeviceToLogicalY(s_posDev.y);
+
+        ApplyWineWorkaround(posLog, posLogRef);
         CHECK(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
 
         wxPoint2DDouble dimLogRef = m1.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
@@ -541,18 +581,7 @@ static void TransformedWithMatrixAndStdEx(wxDC& dc)
         wxPoint posLog;
         posLog = dc.DeviceToLogical(s_posDev);
 
-        if ( wxIsRunningUnderWine() )
-        {
-            // Current versions of Wine seem to have a bug and return a value
-            // which is one off from DPtoLP() used by wxDC::DeviceToLogical()
-            // and there doesn't seem to be anything we can do about it, so
-            // just tweak the result to pass this test.
-            if ( posLog.x == posLogRef.m_x + 1 )
-                posLog.x--;
-            else
-                WARN("Wine workaround might be not needed any longer");
-        }
-
+        ApplyWineWorkaround(posLog, posLogRef);
         CHECK(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
 
         wxPoint2DDouble dimLogRef = m1.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
