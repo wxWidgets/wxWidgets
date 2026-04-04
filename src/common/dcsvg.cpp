@@ -507,6 +507,11 @@ wxString wxSVGFileDC::GetSVGDocument() const
     return ((wxSVGFileDCImpl*)GetImpl())->GetSVGDocument();
 }
 
+bool wxSVGFileDC::Save()
+{
+    return ((wxSVGFileDCImpl*)GetImpl())->Save();
+}
+
 // ----------------------------------------------------------
 // wxSVGFileDCImpl
 // ----------------------------------------------------------
@@ -529,6 +534,7 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
     m_dpi = dpi;
 
     m_writeError = false;
+    m_saved = false;
 
     m_clipUniqueId = 0;
     m_clipNestingLevel = 0;
@@ -580,14 +586,24 @@ wxString wxSVGFileDCImpl::GetSVGDocument() const
     return doc;
 }
 
+bool wxSVGFileDCImpl::Save()
+{
+    if ( m_saved || m_filename.empty() )
+        return m_saved;
+
+    wxFile file(m_filename, wxFile::write);
+    if ( file.IsOpened() )
+        m_saved = file.Write(GetSVGDocument(), wxConvUTF8) && file.Close();
+
+    if ( !m_saved )
+        m_writeError = true;
+
+    return m_saved;
+}
+
 wxSVGFileDCImpl::~wxSVGFileDCImpl()
 {
-    if ( !m_filename.empty() )
-    {
-        wxFile file(m_filename, wxFile::write);
-        if ( file.IsOpened() )
-            file.Write(GetSVGDocument(), wxConvUTF8);
-    }
+    Save();
 }
 
 void wxSVGFileDCImpl::DoGetSizeMM(int* width, int* height) const

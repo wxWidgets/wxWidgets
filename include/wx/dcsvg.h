@@ -146,6 +146,8 @@ public:
 
     wxString GetSVGDocument() const;
 
+    bool Save();
+
 private:
     virtual bool DoGetPixel(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                             wxColour* WXUNUSED(col)) const override
@@ -273,6 +275,7 @@ private:
 
     wxString            m_filename;
     bool                m_writeError;
+    bool                m_saved;
     bool                m_graphics_changed;  // set by Set{Brush,Pen}()
     int                 m_width, m_height;
     double              m_dpi;
@@ -325,6 +328,8 @@ public:
 
     // Return the SVG document as a string.
     wxString GetSVGDocument() const;
+
+    bool Save();
 
 private:
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDC);

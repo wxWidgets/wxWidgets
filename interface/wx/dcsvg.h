@@ -137,6 +137,20 @@ public:
     wxString GetSVGDocument() const;
 
     /**
+        Saves the SVG document to the file specified in the constructor.
+
+        This is called automatically by the destructor if a filename was
+        provided, but calling it explicitly allows checking for errors.
+        Does nothing if no filename was provided or if the file has already
+        been saved.
+
+        @return @true if the file was written successfully, @false otherwise.
+
+        @since 3.3.3
+    */
+    bool Save();
+
+    /**
         Destroys the current clipping region so that none of the DC is clipped.
         Since intersections arising from sequential calls to SetClippingRegion are represented
         with nested SVG group elements (\<g\>), all such groups are closed when
