@@ -724,7 +724,7 @@ void wxStyledTextCtrl::SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl)
     // Set the fold flags to the same value as in this control in case they had
     // been changed before calling this function.
     if ( m_mirrorCtrl )
-        m_mirrorCtrl->SetFoldFlags(m_swx->foldFlags);
+        m_mirrorCtrl->SetFoldFlags(m_foldFlags);
 }
 
 #if WXWIN_COMPATIBILITY_3_0

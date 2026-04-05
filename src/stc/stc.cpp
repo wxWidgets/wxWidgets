@@ -2419,12 +2419,12 @@ int wxStyledTextCtrl::GetAutomaticFold() const
 }
 
 // Set some style options for folding.
-void wxStyledTextCtrl::SetFoldFlags(int flags)
-{
-    SendMsg(SCI_SETFOLDFLAGS, flags, 0);
+void wxStyledTextCtrl::SetFoldFlags(int flags) {
+        m_foldFlags = flags;
+        SendMsg(SCI_SETFOLDFLAGS, flags, 0);
 
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->SetFoldFlags(flags);
+        if ( m_mirrorCtrl )
+            m_mirrorCtrl->SetFoldFlags(flags);
 }
 
 // Ensure a particular line is visible by expanding any header line hiding it.
@@ -5532,7 +5532,7 @@ void wxStyledTextCtrl::SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl)
     // Set the fold flags to the same value as in this control in case they had
     // been changed before calling this function.
     if ( m_mirrorCtrl )
-        m_mirrorCtrl->SetFoldFlags(m_swx->foldFlags);
+        m_mirrorCtrl->SetFoldFlags(m_foldFlags);
 }
 
 #if WXWIN_COMPATIBILITY_3_0
