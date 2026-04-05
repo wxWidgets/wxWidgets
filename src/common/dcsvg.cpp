@@ -567,7 +567,13 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
     s += wxS("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
     s += wxString::Format(wxS(" width=\"%scm\" height=\"%scm\" viewBox=\"0 0 %d %d\">\n"),
                           NumStr(m_width / m_dpi * 2.54), NumStr(m_height / m_dpi * 2.54), m_width, m_height);
-    s += wxString::Format(wxS("<title>%s</title>\n"), title);
+    s += wxString::Format(wxS("<title>%s</title>\n"),
+#if wxUSE_MARKUP
+                          wxMarkupParser::Quote(title)
+#else
+                          title
+#endif
+                          );
     s += wxString::Format(wxS("<desc>Created with %s</desc>\n\n"), wxVERSION_STRING);
     s += wxS("<g fill=\"black\" stroke=\"black\" stroke-width=\"1\">\n");
     write(s);
