@@ -518,7 +518,11 @@ void RegFrame::OnInfo(wxCommandEvent& WXUNUSED(event))
 #endif
 }
 
+#if DO_REGTEST
 void RegFrame::OnViewChange(wxCommandEvent& event)
+#else
+void RegFrame::OnViewChange(wxCommandEvent& WXUNUSED(event))
+#endif
 {
 #if DO_REGTEST
     wxRegKey::WOW64ViewMode view;

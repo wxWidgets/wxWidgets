@@ -181,11 +181,13 @@ TestGLCanvas::~TestGLCanvas()
 
 void TestGLCanvas::LoadSurface(const wxString& filename)
 {
+#if wxUSE_INTL
     // FIXME
     // we need to set english locale to force wxTextInputStream's calls to
     // wxStrtod to use the point and not the comma as decimal separator...
     // (the isosurf.dat contains points and not commas)...
     wxLocale l(wxLANGUAGE_ENGLISH);
+#endif
 
     wxZlibInputStream* stream =
         new wxZlibInputStream(new wxFFileInputStream(filename));

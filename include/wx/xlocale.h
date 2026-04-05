@@ -135,6 +135,7 @@ public:
     // Construct an uninitialized locale
     wxXLocale() { m_isC = false; }
 
+#if wxUSE_INTL
     // Construct from a symbolic language constant: unless the language is
     // wxLANGUAGE_ENGLISH_US (which we assume to be the same as "C" locale)
     // the object will be invalid
@@ -142,6 +143,7 @@ public:
     {
         m_isC = lang == wxLANGUAGE_ENGLISH_US;
     }
+#endif // wxUSE_INTL
 
     // Construct from the given language string: unless the string is "C" or
     // "POSIX" the object will be invalid

@@ -430,7 +430,7 @@ int wxJoystick::GetProductId() const
 wxString wxJoystick::GetProductName() const
 {
     wxString str;
-#ifndef __WINE__
+#if !defined(__WINE__) && wxUSE_REGKEY
     JOYCAPS joyCaps;
     if (joyGetDevCaps(m_joystick, &joyCaps, sizeof(joyCaps)) != JOYERR_NOERROR)
         return wxEmptyString;

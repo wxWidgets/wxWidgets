@@ -52,7 +52,9 @@ wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_STREAM5, MyApp::DoStreamDemo5)
     EVT_MENU(TYPES_STREAM6, MyApp::DoStreamDemo6)
     EVT_MENU(TYPES_STREAM7, MyApp::DoStreamDemo7)
+#if wxUSE_MIMETYPE
     EVT_MENU(TYPES_MIME, MyApp::DoMIMEDemo)
+#endif // wxUSE_MIMETYPE
 wxEND_EVENT_TABLE()
 
 wxString file_name = "test_wx.dat";
@@ -884,6 +886,7 @@ void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
 
 }
 
+#if wxUSE_MIMETYPE
 void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
 {
     static wxString s_defaultExt = "xyz";
@@ -955,6 +958,7 @@ void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
     }
     //else: cancelled by user
 }
+#endif // wxUSE_MIMETYPE
 
 void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
 {

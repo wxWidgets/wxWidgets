@@ -133,6 +133,22 @@
 #    endif
 #endif  /* wxUSE_WINSOCK2 */
 
+#ifndef wxUSE_REGKEY
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_REGKEY must be defined."
+#    else
+#        define wxUSE_REGKEY 0
+#    endif
+#endif  /* wxUSE_REGKEY */
+
+#ifndef wxUSE_CONFIG_NATIVE
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_CONFIG_NATIVE must be defined."
+#    else
+#        define wxUSE_CONFIG_NATIVE 0
+#    endif
+#endif  /* wxUSE_CONFIG_NATIVE */
+
 /*
  * disable the settings which don't work for some compilers
  */
@@ -348,6 +364,33 @@
 #       endif
 #   endif
 #endif /* !wxUSE_ACTIVEX */
+
+#if !wxUSE_REGKEY
+#   if wxUSE_MIMETYPE
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_MIMETYPE requires wxUSE_REGKEY"
+#       else
+#           undef wxUSE_MIMETYPE
+#           define wxUSE_MIMETYPE 0
+#       endif
+#   endif
+#   if wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxWebViewIE requires wxUSE_REGKEY under MSW"
+#       else
+#           undef wxUSE_WEBVIEW_IE
+#           define wxUSE_WEBVIEW_IE 0
+#       endif
+#   endif
+#   if wxUSE_CONFIG_NATIVE
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_CONFIG_NATIVE needs to be 0 when wxUSE_REGKEY is 0"
+#       else
+#           undef wxUSE_CONFIG_NATIVE
+#           define wxUSE_CONFIG_NATIVE 0
+#       endif
+#   endif
+#endif /* !wxUSE_REGKEY */
 
 #if wxUSE_ACTIVITYINDICATOR && !wxUSE_GRAPHICS_CONTEXT
 #   ifdef wxABORT_ON_CONFIG_ERROR

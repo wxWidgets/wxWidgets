@@ -580,6 +580,7 @@ bool wxDateTime::IsLeapYear(int year, wxDateTime::Calendar cal)
 bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
 {
     wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+#if wxUSE_REGKEY
     wxRegKey key(wxRegKey::HKCU, "Control Panel\\International");
     wxString val;
 
@@ -590,6 +591,7 @@ bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
         return true;
     }
     else
+#endif // wxUSE_REGKEY
     {
         *firstDay = wxDateTime::Sun;
         return false;
