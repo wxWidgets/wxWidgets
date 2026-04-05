@@ -227,4 +227,11 @@ void wxGLCanvas::GTKHandleRealized()
     SendSizeEvent();
 }
 
+void wxGLCanvas::GTKHandleUnrealized()
+{
+    CallOnUnrealized();
+
+    wxGLCanvasUnix::GTKHandleUnrealized();
+}
+
 #endif // wxUSE_GLCANVAS

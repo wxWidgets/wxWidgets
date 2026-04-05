@@ -51,6 +51,7 @@ public:
     virtual int GetSwapInterval() const override;
 
     virtual void OnRealized() override { /* nothing to do here for GLX */ }
+    virtual void OnUnrealized() override { /* nothing to do here for GLX */ }
 
     virtual bool HasWindow() const override;
 

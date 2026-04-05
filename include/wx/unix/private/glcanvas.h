@@ -75,6 +75,8 @@ public:
 
     virtual void OnRealized() = 0;
 
+    virtual void OnUnrealized() = 0;
+
     virtual bool HasWindow() const = 0;
 
     virtual void* GetXVisualInfo() const = 0;

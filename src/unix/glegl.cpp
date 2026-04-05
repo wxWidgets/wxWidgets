@@ -683,6 +683,25 @@ void wxGLCanvasEGL::OnRealized()
     }
 }
 
+void wxGLCanvasEGL::OnUnrealized()
+{
+    // We would destroy the surface anyhow either in OnRealized() or in the
+    // dtor, but do it here as well just to free it sooner, in case the window
+    // remains unrealized for some time.
+    //
+    // Do it only for X11 as we don't recreate the surface under Wayland.
+#ifdef GDK_WINDOWING_X11
+    if ( m_canvas && wxGTKImpl::IsX11(m_canvas->GTKGetDrawingWindow()) )
+    {
+        if ( m_surface != EGL_NO_SURFACE )
+        {
+            eglDestroySurface(m_display, m_surface);
+            m_surface = EGL_NO_SURFACE;
+        }
+    }
+#endif // GDK_WINDOWING_X11
+}
+
 wxGLCanvasEGL::~wxGLCanvasEGL()
 {
 #ifdef GDK_WINDOWING_WAYLAND

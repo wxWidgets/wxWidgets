@@ -63,6 +63,7 @@ public:
     virtual int GetSwapInterval() const override;
 
     virtual void OnRealized() override;
+    virtual void OnUnrealized() override;
 
     virtual bool HasWindow() const override;
 
