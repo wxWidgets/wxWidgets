@@ -6333,6 +6333,7 @@ private:
     wxBitmap m_buffer;
 
     wxStyledTextCtrl*   m_mirrorCtrl = nullptr;
+    int                 m_foldFlags = 0;
 
     bool                m_isCustomDrawn = false;
 
