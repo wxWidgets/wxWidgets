@@ -14,13 +14,7 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp()
-    {
-        m_textCtrl = nullptr;
-#if wxUSE_MIMETYPE
-        m_mimeDatabase = nullptr;
-#endif // wxUSE_MIMETYPE
-    }
+    MyApp() = default;
 
     bool OnInit() override;
     int OnExit() override
@@ -46,9 +40,9 @@ public:
     wxTextCtrl* GetTextCtrl() const { return m_textCtrl; }
 
 private:
-    wxTextCtrl* m_textCtrl;
+    wxTextCtrl* m_textCtrl = nullptr;
 #if wxUSE_MIMETYPE
-    wxMimeTypesManager *m_mimeDatabase;
+    wxMimeTypesManager* m_mimeDatabase = nullptr;
 #endif // wxUSE_MIMETYPE
 
     wxDECLARE_DYNAMIC_CLASS(MyApp);
