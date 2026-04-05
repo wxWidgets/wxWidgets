@@ -3253,11 +3253,12 @@ void wxWindowGTK::PostCreation()
     {
         GTKHandleRealized();
     }
-    else
-    {
-        g_signal_connect (connect_widget, "realize",
-                          G_CALLBACK (gtk_window_realized_callback), this);
-    }
+
+    // Note that we connect to "realize" even if the widget is already realized
+    // because we might be unrealized later and then realized again, and we
+    // must be notified when the widget is re-realized again.
+    g_signal_connect (connect_widget, "realize",
+                      G_CALLBACK (gtk_window_realized_callback), this);
     g_signal_connect(connect_widget, "unrealize", G_CALLBACK(unrealize), this);
 
     if (!IsTopLevel())
