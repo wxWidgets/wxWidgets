@@ -68,6 +68,7 @@ public:
 
     // implementation from now on
     virtual void GTKHandleRealized() override;
+    virtual void GTKHandleUnrealized() override;
 
 #ifdef __WXGTK3__
     wxSize m_size;

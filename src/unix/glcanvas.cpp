@@ -318,6 +318,11 @@ void wxGLCanvasUnix::CallOnRealized()
     m_impl->OnRealized();
 }
 
+void wxGLCanvasUnix::CallOnUnrealized()
+{
+    m_impl->OnUnrealized();
+}
+
 /* static */
 void wxGLCanvasUnix::PreferGLX()
 {
