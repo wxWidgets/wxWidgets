@@ -137,9 +137,6 @@ wxString GetBrushFill(const wxColour& c, int style = wxBRUSHSTYLE_SOLID)
 
 wxString GetPenPattern(const wxPen& pen)
 {
-    if ( !pen.IsOk() )
-        return wxString();
-
     wxString s;
 
     // The length of the dashes and gaps have a constant factor.
@@ -242,9 +239,6 @@ wxString GetPenStyle(const wxPen& pen)
 
 wxString GetBrushStyleName(const wxBrush& brush)
 {
-    if ( !brush.IsOk() )
-        return wxString();
-
     wxString brushStyle;
 
     switch (brush.GetStyle())
@@ -287,9 +281,6 @@ wxString GetBrushStyleName(const wxBrush& brush)
 
 wxString GetBrushPattern(const wxBrush& brush)
 {
-    if ( !brush.IsOk() )
-        return wxString();
-
     wxString s;
     wxString brushStyle = GetBrushStyleName(brush);
 
@@ -1410,13 +1401,10 @@ void wxSVGFileDCImpl::DoStartNewGraphics()
 {
     wxString s;
 
-    const wxPen& pen = m_pen.IsOk() ? m_pen : *wxTRANSPARENT_PEN;
-    const wxBrush& brush = m_brush.IsOk() ? m_brush : *wxTRANSPARENT_BRUSH;
-
     s = wxString::Format(wxS("<g %s %s %s transform=\"translate(%d %d) scale(%s %s)\">\n"),
-        GetPenStyle(pen),
-        GetBrushFill(brush.GetColour(), brush.GetStyle()),
-        GetPenStroke(pen.GetColour(), pen.GetStyle()),
+        GetPenStyle(m_pen),
+        GetBrushFill(m_brush.GetColour(), m_brush.GetStyle()),
+        GetPenStroke(m_pen.GetColour(), m_pen.GetStyle()),
         (m_deviceOriginX - m_logicalOriginX) * m_signX,
         (m_deviceOriginY - m_logicalOriginY) * m_signY,
         NumStr(m_scaleX * m_signX),
