@@ -207,7 +207,7 @@ public:
     // multiple times). Derived classes must call the base class version if
     // they override these functions.
     virtual void GTKHandleRealized();
-    virtual void GTKHandleUnrealize();
+    virtual void GTKHandleUnrealized();
 
     // Apply the widget style to the given window. Should normally only be
     // called from the overridden DoApplyWidgetStyle() implementation in

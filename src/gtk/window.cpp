@@ -2652,7 +2652,7 @@ gtk_window_grab_broken( GtkWidget*,
 
 static void gtk_window_unrealized_callback(GtkWidget*, wxWindow* win)
 {
-    win->GTKHandleUnrealize();
+    win->GTKHandleUnrealized();
 }
 
 #if GTK_CHECK_VERSION(3,8,0)
@@ -2758,7 +2758,7 @@ void wxWindowGTK::GTKHandleRealized()
     WXUpdateCursor();
 }
 
-void wxWindowGTK::GTKHandleUnrealize()
+void wxWindowGTK::GTKHandleUnrealized()
 {
     m_isGtkPositionValid = false;
 
