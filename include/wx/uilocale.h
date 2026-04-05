@@ -158,6 +158,9 @@ public:
     // not supported, the other functions will behave as for the "C" locale.
     bool IsSupported() const;
 
+    // Check if the locale was instantiated via UseDefault()
+    bool IsDefault() const { return m_isDefault; }
+
     // Get the platform-dependent name of the current locale.
     wxString GetName() const;
 
@@ -268,11 +271,12 @@ public:
 private:
     // This ctor is private and exists only for implementation reasons.
     // It takes ownership of the provided pointer.
-    explicit wxUILocale(wxUILocaleImpl* impl = nullptr) : m_impl(impl) { }
+    explicit wxUILocale(wxUILocaleImpl* impl = nullptr) : m_impl(impl), m_isDefault(false) { }
 
     static wxUILocale ms_current;
 
     wxUILocaleImpl* m_impl;
+    bool m_isDefault;
 };
 
 inline wxString wxGetUIDateFormat()
