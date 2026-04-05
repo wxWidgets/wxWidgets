@@ -610,12 +610,7 @@ wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
 // initialization and destruction
 // ----------------------------------------------------------------------------
 
-wxTextEntry::wxTextEntry()
-{
-    m_autoCompleteData = nullptr;
-    m_coalesceData = nullptr;
-    m_isUpperCase = false;
-}
+wxTextEntry::wxTextEntry() = default;
 
 wxTextEntry::~wxTextEntry()
 {
