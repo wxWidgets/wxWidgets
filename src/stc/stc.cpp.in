@@ -1238,9 +1238,9 @@ WXLRESULT wxStyledTextCtrl::MSWWindowProc(WXUINT nMsg,
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
-bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCI_SHIFT) != 0; }
-bool wxStyledTextEvent::GetControl() const { return (m_modifiers & SCI_CTRL) != 0; }
-bool wxStyledTextEvent::GetAlt() const { return (m_modifiers & SCI_ALT) != 0; }
+bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCMOD_SHIFT) != 0; }
+bool wxStyledTextEvent::GetControl() const { return (m_modifiers & SCMOD_CTRL) != 0; }
+bool wxStyledTextEvent::GetAlt() const { return (m_modifiers & SCMOD_ALT) != 0; }
 
 
 wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
