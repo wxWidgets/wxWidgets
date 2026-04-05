@@ -86,10 +86,6 @@ bool wxFileDirPickerCtrlBase::CreateBase(wxWindow *parent,
 
     DoConnect( m_picker, this );
 
-    // default's wxPickerBase textctrl limit is too small for this control:
-    // make it bigger
-    if (m_text) m_text->SetMaxLength(512);
-
     return true;
 }
 
