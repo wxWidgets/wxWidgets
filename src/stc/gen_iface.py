@@ -39,7 +39,6 @@ valPrefixes = [('SCI_', ''),
                ('SC_',  ''),
                ('SCN_', None),  # just toss these out...
                ('SCEN_', None),
-               ('SC_EFF', None),
                ('SCE_', ''),
                ('SCLEX_', 'LEX_'),
                ('SCK_', 'KEY_'),
