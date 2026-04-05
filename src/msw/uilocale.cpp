@@ -173,14 +173,24 @@ WXDLLIMPEXP_BASE wxString wxGetMSWDateTimeFormat(wxLocaleInfo index)
         return wxString{};
     }
 
+    // Determine the name of the locale to be used for querying the date/time
+    // format: if a locale is explicitly specified, use it, but otherwise use
+    // LOCALE_NAME_USER_DEFAULT to get the format configured in the regional
+    // settings.
+    const wchar_t* name = LOCALE_NAME_USER_DEFAULT;
     wxString format;
-    wxString localeName = wxUILocale::GetCurrent().GetName();
-    if (localeName.IsSameAs("C"))
+    wxString localeName;
+    if ( !wxUILocale::GetCurrent().IsDefault() )
     {
-        localeName = "en-US";
+        localeName = wxUILocale::GetCurrent().GetName();
+        if ( localeName.IsSameAs("C") )
+        {
+            // Handle the case when the application uses the C locale
+            localeName = "en-US";
+        }
+        name = localeName.wc_str();
     }
 
-    const wchar_t* name = localeName.wc_str();
     LCTYPE lctype = wxGetLCTYPEFormatFromLocalInfo(index);
     if (lctype != 0)
     {
@@ -194,6 +204,7 @@ WXDLLIMPEXP_BASE wxString wxGetMSWDateTimeFormat(wxLocaleInfo index)
             wxLogLastError(wxT("GetLocaleInfoEx"));
         }
     }
+
     return format;
 }
 
@@ -482,15 +493,19 @@ public:
 
     ~wxUILocaleImplName() override
     {
-        free(const_cast<wchar_t*>(m_name));
+        if (m_nameDisplay != m_nameRegion)
+        {
+            free(const_cast<wchar_t*>(m_nameDisplay));
+        }
+        free(const_cast<wchar_t*>(m_nameRegion));
     }
 
     void Use() override
     {
         // Construct a double NUL-terminated buffer.
         wchar_t buf[256];
-        if ( m_name )
-            wxStrlcpy(buf, m_name, WXSIZEOF(buf) - 1);
+        if ( m_nameDisplay )
+            wxStrlcpy(buf, m_nameDisplay, WXSIZEOF(buf) - 1);
         else
             buf[0] = L'\0';
         buf[wxWcslen(buf) + 1] = L'\0';
@@ -503,7 +518,7 @@ public:
 
     wxString GetName() const override
     {
-        return DoGetInfo(LOCALE_SNAME);
+        return DoGetInfo(m_nameDisplay, LOCALE_SNAME);
     }
 
     wxLocaleIdent GetLocaleId() const override
@@ -517,13 +532,13 @@ public:
         switch ( index )
         {
             case wxLOCALE_THOUSANDS_SEP:
-                str = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+                str = DoGetInfo(m_nameRegion, cat == wxLOCALE_CAT_MONEY
                     ? LOCALE_SMONTHOUSANDSEP
                     : LOCALE_STHOUSAND);
                 break;
 
             case wxLOCALE_DECIMAL_POINT:
-                str = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+                str = DoGetInfo(m_nameRegion, cat == wxLOCALE_CAT_MONEY
                     ? LOCALE_SMONDECIMALSEP
                     : LOCALE_SDECIMAL);
                 break;
@@ -531,7 +546,7 @@ public:
             case wxLOCALE_SHORT_DATE_FMT:
             case wxLOCALE_LONG_DATE_FMT:
             case wxLOCALE_TIME_FMT:
-                str = DoGetInfo(wxGetLCTYPEFormatFromLocalInfo(index));
+                str = DoGetInfo(m_nameRegion, wxGetLCTYPEFormatFromLocalInfo(index));
                 if ( !str.empty() )
                     str = wxTranslateFromUnicodeFormat(str);
                 break;
@@ -564,10 +579,10 @@ public:
                 switch (form)
                 {
                     case wxLOCALE_FORM_NATIVE:
-                        str = DoGetInfo(LOCALE_SNATIVEDISPLAYNAME);
+                        str = DoGetInfo(m_nameDisplay, LOCALE_SNATIVEDISPLAYNAME);
                         break;
                     case wxLOCALE_FORM_ENGLISH:
-                        str = DoGetInfo(LOCALE_SENGLISHDISPLAYNAME);
+                        str = DoGetInfo(m_nameDisplay, LOCALE_SENGLISHDISPLAYNAME);
                         break;
                     default:
                         wxFAIL_MSG("unknown wxLocaleForm");
@@ -577,10 +592,10 @@ public:
                 switch (form)
                 {
                     case wxLOCALE_FORM_NATIVE:
-                        str = DoGetInfo(LOCALE_SNATIVELANGUAGENAME);
+                        str = DoGetInfo(m_nameDisplay, LOCALE_SNATIVELANGUAGENAME);
                         break;
                     case wxLOCALE_FORM_ENGLISH:
-                        str = DoGetInfo(LOCALE_SENGLISHLANGUAGENAME);
+                        str = DoGetInfo(m_nameDisplay, LOCALE_SENGLISHLANGUAGENAME);
                         break;
                     default:
                         wxFAIL_MSG("unknown wxLocaleForm");
@@ -590,10 +605,10 @@ public:
                 switch (form)
                 {
                     case wxLOCALE_FORM_NATIVE:
-                        str = DoGetInfo(LOCALE_SNATIVECOUNTRYNAME);
+                        str = DoGetInfo(m_nameDisplay, LOCALE_SNATIVECOUNTRYNAME);
                         break;
                     case wxLOCALE_FORM_ENGLISH:
-                        str = DoGetInfo(LOCALE_SENGLISHCOUNTRYNAME);
+                        str = DoGetInfo(m_nameDisplay, LOCALE_SENGLISHCOUNTRYNAME);
                         break;
                     default:
                         wxFAIL_MSG("unknown wxLocaleForm");
@@ -639,7 +654,7 @@ public:
                 break;
         }
 
-        return DoGetInfo(lctype);
+        return DoGetInfo(m_nameRegion, lctype);
     }
 
     wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const override
@@ -670,7 +685,7 @@ public:
                 break;
         }
 
-        return DoGetInfo(lctype);
+        return DoGetInfo(m_nameRegion, lctype);
     }
 #endif // wxUSE_DATETIME
 
@@ -678,7 +693,7 @@ public:
     {
         if ( m_layoutDir == wxLayout_Default )
         {
-            wxString str = DoGetInfo(LOCALE_IREADINGLAYOUT);
+            wxString str = DoGetInfo(m_nameDisplay, LOCALE_IREADINGLAYOUT);
             // str contains a number between 0 and 3:
             // 0 = LTR, 1 = RTL, 2 = TTB+RTL, 3 = TTB + LTR
             // If str equals 1 return RTL, otherwise LTR
@@ -696,12 +711,12 @@ public:
 
     wxString GetCurrencySymbol() const override
     {
-        return DoGetInfo(LOCALE_SCURRENCY);
+        return DoGetInfo(m_nameRegion, LOCALE_SCURRENCY);
     }
 
     wxString GetCurrencyCode() const override
     {
-        return wxString(DoGetInfo(LOCALE_SINTLSYMBOL)).Left(3);
+        return wxString(DoGetInfo(m_nameRegion, LOCALE_SINTLSYMBOL)).Left(3);
     }
 
     wxCurrencySymbolPosition GetCurrencySymbolPosition() const override
@@ -709,7 +724,7 @@ public:
         static std::array<wxCurrencySymbolPosition, 4> symPos = {
              wxCurrencySymbolPosition::PrefixNoSep, wxCurrencySymbolPosition::SuffixNoSep,
              wxCurrencySymbolPosition::PrefixWithSep, wxCurrencySymbolPosition::SuffixWithSep };
-        wxString posStr = wxString(DoGetInfo(LOCALE_ICURRENCY));
+        wxString posStr = wxString(DoGetInfo(m_nameRegion, LOCALE_ICURRENCY));
         unsigned int posIdx;
         return posStr.ToUInt(&posIdx) && posIdx < symPos.size()
             ? symPos[posIdx]
@@ -728,7 +743,7 @@ public:
 
     wxMeasurementSystem UsesMetricSystem() const override
     {
-        wxString str = DoGetInfo(LOCALE_IMEASURE);
+        wxString str = DoGetInfo(m_nameRegion, LOCALE_IMEASURE);
         if (!str.empty())
         {
             return (str.IsSameAs("0")) ? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
@@ -746,7 +761,7 @@ public:
 
         const int ret = ::CompareStringEx
             (
-                m_name,
+                m_nameDisplay,
                 dwFlags,
                 lhs.wc_str(), -1,
                 rhs.wc_str(), -1,
@@ -774,14 +789,23 @@ private:
     //
     // Note that "name" can be null here (LOCALE_NAME_USER_DEFAULT).
     explicit wxUILocaleImplName(const wchar_t* name)
-        : m_name(name ? wxStrdup(name) : nullptr)
+        : m_nameRegion(name ? wxStrdup(name) : nullptr)
     {
+        m_nameDisplay = m_nameRegion;
+        if (!m_nameRegion)
+        {
+            wxVector<wxString> preferred = GetPreferredUILanguages();
+            if (!preferred.empty())
+            {
+                m_nameDisplay = wxStrdup(preferred[0].wc_str());
+            }
+        }
     }
 
-    wxString DoGetInfo(LCTYPE lctype) const
+    wxString DoGetInfo(const wchar_t* const name, LCTYPE lctype) const
     {
         wchar_t buf[256];
-        if ( !::GetLocaleInfoEx(m_name, lctype, buf, WXSIZEOF(buf)) )
+        if ( !::GetLocaleInfoEx(name, lctype, buf, WXSIZEOF(buf)) )
         {
             wxLogLastError(wxT("GetLocaleInfoEx"));
             return wxString();
@@ -792,16 +816,16 @@ private:
 
     wxLocaleNumberFormatting DoGetNumberFormatting(wxLocaleCategory cat) const
     {
-        wxString groupSeparator = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+        wxString groupSeparator = DoGetInfo(m_nameRegion, cat == wxLOCALE_CAT_MONEY
                                 ? LOCALE_SMONTHOUSANDSEP
                                 : LOCALE_STHOUSAND);
-        wxString groupingInfo = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+        wxString groupingInfo = DoGetInfo(m_nameRegion, cat == wxLOCALE_CAT_MONEY
                               ? LOCALE_SMONGROUPING
                               : LOCALE_SGROUPING);
-        wxString decimalSeparator = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+        wxString decimalSeparator = DoGetInfo(m_nameRegion, cat == wxLOCALE_CAT_MONEY
                                   ? LOCALE_SMONDECIMALSEP
                                   : LOCALE_SDECIMAL);
-        wxString digits = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+        wxString digits = DoGetInfo(m_nameRegion, cat == wxLOCALE_CAT_MONEY
                         ? LOCALE_ICURRDIGITS
                         : LOCALE_IDIGITS);
         int fractionalDigits;
@@ -820,7 +844,20 @@ private:
         return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
     }
 
-    const wchar_t* const m_name;
+    // On Windows we need to distinguish between the name of the display
+    // language locale and the regional formatting locale when using the
+    // default locale.
+    //
+    // Although both are often the same, Windows can be set up to use different
+    // locales by the user in the Control Panel: the "display language" can be
+    // set to one locale, while the "regional format" can be set to a different
+    // one.
+    //
+    // Note that we currently don't allow the application to request using
+    // different locales for display and regional formatting, so if an
+    // non-default locale is used, both names are always identical.
+    const wchar_t* const m_nameRegion;  // Name of locale for regional formatting
+    const wchar_t*       m_nameDisplay; // Name of locale for display language
 
     mutable wxLayoutDirection m_layoutDir = wxLayout_Default;
 
