@@ -2650,7 +2650,7 @@ gtk_window_grab_broken( GtkWidget*,
 // "unrealize"
 //-----------------------------------------------------------------------------
 
-static void unrealize(GtkWidget*, wxWindow* win)
+static void gtk_window_unrealized_callback(GtkWidget*, wxWindow* win)
 {
     win->GTKHandleUnrealize();
 }
@@ -3259,7 +3259,8 @@ void wxWindowGTK::PostCreation()
     // must be notified when the widget is re-realized again.
     g_signal_connect (connect_widget, "realize",
                       G_CALLBACK (gtk_window_realized_callback), this);
-    g_signal_connect(connect_widget, "unrealize", G_CALLBACK(unrealize), this);
+    g_signal_connect(connect_widget, "unrealize",
+                      G_CALLBACK(gtk_window_unrealized_callback), this);
 
     if (!IsTopLevel())
     {
