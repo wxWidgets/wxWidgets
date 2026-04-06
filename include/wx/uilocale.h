@@ -271,12 +271,12 @@ public:
 private:
     // This ctor is private and exists only for implementation reasons.
     // It takes ownership of the provided pointer.
-    explicit wxUILocale(wxUILocaleImpl* impl = nullptr) : m_impl(impl), m_isDefault(false) { }
+    explicit wxUILocale(wxUILocaleImpl* impl = nullptr) : m_impl(impl) { }
 
     static wxUILocale ms_current;
 
     wxUILocaleImpl* m_impl;
-    bool m_isDefault;
+    bool m_isDefault = false;
 };
 
 inline wxString wxGetUIDateFormat()
