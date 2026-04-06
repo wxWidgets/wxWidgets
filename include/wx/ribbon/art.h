@@ -886,7 +886,7 @@ protected:
     void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd,
         const wxRect& rect, bool allow_hovered = true);
     void DrawGalleryButton(wxDC& dc, wxRect rect,
-        wxRibbonGalleryButtonState state, wxBitmap* bitmaps) override;
+        wxRibbonGalleryButtonState state, wxBitmapBundle* bundles, wxWindow* wnd) override;
     void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primary_colour,
         wxPen& secondary_colour);
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect,

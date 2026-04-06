@@ -481,7 +481,8 @@ void wxRibbonMSWFlatArtProvider::DrawScrollButton(
 void wxRibbonMSWFlatArtProvider::DrawGalleryButton(wxDC& dc,
                                             wxRect rect,
                                             wxRibbonGalleryButtonState state,
-                                            wxBitmap* bitmaps)
+                                            wxBitmapBundle* bundles,
+                                            wxWindow* wnd)
 {
     wxBitmap btn_bitmap;
     wxColour btn_colour;
@@ -489,19 +490,19 @@ void wxRibbonMSWFlatArtProvider::DrawGalleryButton(wxDC& dc,
     {
     case wxRIBBON_GALLERY_BUTTON_NORMAL:
         btn_colour = m_gallery_button_background_colour;
-        btn_bitmap = bitmaps[0];
+        btn_bitmap = bundles[0].GetBitmapFor(wnd);
         break;
     case wxRIBBON_GALLERY_BUTTON_HOVERED:
         btn_colour = m_gallery_button_hover_background_colour;
-        btn_bitmap = bitmaps[1];
+        btn_bitmap = bundles[1].GetBitmapFor(wnd);
         break;
     case wxRIBBON_GALLERY_BUTTON_ACTIVE:
         btn_colour = m_gallery_button_active_background_colour;
-        btn_bitmap = bitmaps[2];
+        btn_bitmap = bundles[2].GetBitmapFor(wnd);
         break;
     case wxRIBBON_GALLERY_BUTTON_DISABLED:
         btn_colour = m_gallery_button_disabled_background_colour;
-        btn_bitmap = bitmaps[3];
+        btn_bitmap = bundles[3].GetBitmapFor(wnd);
         break;
     }
 
@@ -961,10 +962,10 @@ void wxRibbonMSWFlatArtProvider::DrawPanelBackground(
                 dc.SetPen(m_panel_hover_button_border_pen);
                 dc.SetBrush(m_panel_hover_button_background_brush);
                 dc.DrawRoundedRectangle(label_rect.GetRight(), label_rect.GetBottom() - 13, 13, 13, 1.0);
-                dc.DrawBitmap(m_panel_extension_bitmap[1], label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
+                dc.DrawBitmap(m_panel_extension_bundle[1].GetBitmapFor(wnd), label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
             }
             else
-                dc.DrawBitmap(m_panel_extension_bitmap[0], label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
+                dc.DrawBitmap(m_panel_extension_bundle[0].GetBitmapFor(wnd), label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
         }
     }
 
@@ -1058,13 +1059,13 @@ wxRibbonMSWFlatArtProvider::DrawToggleButton(wxDC& dc,
     switch ( mode )
     {
         case wxRIBBON_BAR_PINNED:
-            dc.DrawBitmap(m_ribbon_toggle_up_bitmap[bindex], rect.GetX()+7, rect.GetY()+6, true);
+            dc.DrawBitmap(m_ribbon_toggle_up_bundle[bindex].GetBitmapFor(wnd), rect.GetX()+7, rect.GetY()+6, true);
             break;
         case wxRIBBON_BAR_MINIMIZED:
-            dc.DrawBitmap(m_ribbon_toggle_down_bitmap[bindex], rect.GetX()+7, rect.GetY()+6, true);
+            dc.DrawBitmap(m_ribbon_toggle_down_bundle[bindex].GetBitmapFor(wnd), rect.GetX()+7, rect.GetY()+6, true);
             break;
         case wxRIBBON_BAR_EXPANDED:
-            dc.DrawBitmap(m_ribbon_toggle_pin_bitmap[bindex], rect.GetX()+4, rect.GetY()+5, true);
+            dc.DrawBitmap(m_ribbon_toggle_pin_bundle[bindex].GetBitmapFor(wnd), rect.GetX()+4, rect.GetY()+5, true);
             break;
     }
 }
@@ -1083,17 +1084,17 @@ void wxRibbonMSWFlatArtProvider::DrawHelpButton(wxDC& dc,
         dc.SetPen(m_ribbon_toggle_pen);
         dc.SetBrush(m_ribbon_toggle_brush);
         dc.DrawRoundedRectangle(rect.GetX(), rect.GetY(), 20, 20, 1.0);
-        dc.DrawBitmap(m_ribbon_bar_help_button_bitmap[1], rect.GetX()+4, rect.GetY()+5, true);
+        dc.DrawBitmap(m_ribbon_bar_help_button_bundle[1].GetBitmapFor(wnd), rect.GetX()+4, rect.GetY()+5, true);
     }
     else
     {
-        dc.DrawBitmap(m_ribbon_bar_help_button_bitmap[0], rect.GetX()+4, rect.GetY()+5, true);
+        dc.DrawBitmap(m_ribbon_bar_help_button_bundle[0].GetBitmapFor(wnd), rect.GetX()+4, rect.GetY()+5, true);
     }
 }
 
 void wxRibbonMSWFlatArtProvider::DrawTool(
                 wxDC& dc,
-                wxWindow* WXUNUSED(wnd),
+                wxWindow* wnd,
                 const wxRect& rect,
                 const wxBitmap& bitmap,
                 wxRibbonButtonKind kind,
@@ -1168,7 +1169,7 @@ void wxRibbonMSWFlatArtProvider::DrawTool(
             dc.DrawLine(rect.x + avail_width + 1, rect.y,
                 rect.x + avail_width + 1, rect.y + rect.height);
         }
-        dc.DrawBitmap(m_toolbar_drop_bitmap, bg_rect.x + avail_width + 2,
+        dc.DrawBitmap(m_toolbar_drop_bundle.GetBitmapFor(wnd), bg_rect.x + avail_width + 2,
             bg_rect.y + (bg_rect.height / 2) - 2, true);
     }
     dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetLogicalWidth()) / 2,
