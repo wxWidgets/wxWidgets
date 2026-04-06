@@ -50,7 +50,7 @@ wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
 WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromNSCursor(const WXHCURSOR cursor);
-void WXDLLIMPEXP_CORE wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
+void wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
                              long style,
                              wxWindowID winid,
                              const wxString& label = wxString(),

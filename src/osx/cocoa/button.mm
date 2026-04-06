@@ -199,7 +199,6 @@ void wxButtonCocoaImpl::SetPressedBitmap( const wxBitmapBundle& bitmap )
 {
     NSButton* button = GetNSButton();
     [button setAlternateImage: wxOSXGetImageFromBundle(bitmap)];
-    NSLog(@"alternateImage height %d, normalImage height %d", (int)[button alternateImage].size.height, (int)[button image].size.height);
 #if wxUSE_TOGGLEBTN
     if ( GetWXPeer()->IsKindOf(wxCLASSINFO(wxToggleButton)) )
     {
