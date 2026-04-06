@@ -841,6 +841,11 @@ private:
         return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
     }
 
+    // On Windows we need to distinguish between the name of the display language locale
+    // and the regional formatting locale in case of the default locale.
+    // Although both are typically identical, Windows can be set up to use different
+    // locales. If not the default locale, but a specific locale is requested by the
+    // application, both names will always be identical.
     const wchar_t* const m_nameRegion;  // Name of locale for regional formatting
     const wchar_t*       m_nameDisplay; // Name of locale for display language
 
