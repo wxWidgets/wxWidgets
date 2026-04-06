@@ -185,15 +185,21 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
         // characters (in first approximation, anyhow...).
         if ( text_length + g_utf8_strlen(new_text, -1) > text_max_length )
         {
-            // Prevent the new text from being inserted.
-            handled = true;
-
-            // Currently we don't insert anything at all, but it would be better to
-            // insert as many characters as would fit into the text control and
-            // only discard the rest.
-
             // Notify the user code about overflow.
             text->SendMaxLenEvent();
+
+            // Don't prevent the new text from being inserted, the native
+            // control will insert as much of it as possible, which is better
+            // than not inserting anything at all.
+
+#ifndef __WXGTK3__
+            // GTK 2 will generate a "changed" signal even if the text doesn't
+            // change at all, as happens when it's already at max length, which
+            // is unexpected and shouldn't result in a spurious wxEVT_TEXT
+            // event, so pretend that we handled the signal in this case.
+            if ( text_length == text_max_length )
+                handled = true;
+#endif // GTK < 3
         }
     }
 
@@ -610,12 +616,7 @@ wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
 // initialization and destruction
 // ----------------------------------------------------------------------------
 
-wxTextEntry::wxTextEntry()
-{
-    m_autoCompleteData = nullptr;
-    m_coalesceData = nullptr;
-    m_isUpperCase = false;
-}
+wxTextEntry::wxTextEntry() = default;
 
 wxTextEntry::~wxTextEntry()
 {

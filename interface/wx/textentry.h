@@ -410,6 +410,11 @@ public:
         event is sent to notify the program about it (giving it the possibility
         to show an explanatory message, for example) and the extra input is discarded.
 
+        @note In wxMSW the program may write more than @a len characters into
+        the control programmatically, even if the user is not able to enter
+        more than @a len characters. This is, however, not the case in the
+        other ports and it is recommended not to rely on this behaviour.
+
         @note This function may be used with single line text controls in all
         ports but only works for multi-line text controls in wxMSW and wxGTK.
     */
