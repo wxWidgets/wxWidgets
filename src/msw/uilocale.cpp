@@ -173,7 +173,7 @@ WXDLLIMPEXP_BASE wxString wxGetMSWDateTimeFormat(wxLocaleInfo index)
 
     // Determine the name of the locale to be used for querying the date/time format
     // Use LOCALE_NAME_USER_DEFAULT in case of the system default locale
-    // Otherwise use the corresponding locale name 
+    // Otherwise use the corresponding locale name
     const wchar_t* name = LOCALE_NAME_USER_DEFAULT;
     wxString format;
     wxString localeName;
