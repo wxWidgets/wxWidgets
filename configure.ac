@@ -4624,7 +4624,7 @@ if test "$TOOLKIT" != "MSW"; then
     dnl do other tests only if we are using threads
     if test "$wxUSE_THREADS" = "yes" ; then
         AC_CHECK_FUNCS(pthread_setconcurrency,
-            AC_DEFINE(HAVE_PTHREAD_SET_CONCURRENCY),
+            AC_DEFINE(HAVE_PTHREAD_SETCONCURRENCY),
             [
                 AC_CHECK_FUNCS(thr_setconcurrency,
                     AC_DEFINE(HAVE_THR_SETCONCURRENCY),

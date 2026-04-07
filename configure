@@ -35087,7 +35087,7 @@ if test "x$ac_cv_func_pthread_setconcurrency" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_PTHREAD_SETCONCURRENCY 1
 _ACEOF
- $as_echo "#define HAVE_PTHREAD_SET_CONCURRENCY 1" >>confdefs.h
+ $as_echo "#define HAVE_PTHREAD_SETCONCURRENCY 1" >>confdefs.h
 
 else
 

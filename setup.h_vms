@@ -1100,7 +1100,7 @@ typedef pid_t GPid;
 #undef HAVE_THR_SETCONCURRENCY
 
 /* Define if you have pthread_setconcurrency function */
-#define HAVE_PTHREAD_SET_CONCURRENCY 1
+#define HAVE_PTHREAD_SETCONCURRENCY 1
 
 /* Define if you have the uname function.  */
 #define HAVE_UNAME 1
