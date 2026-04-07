@@ -178,8 +178,8 @@ else()
         check_symbol_exists(${ARGV})
     endfunction()
 
-    function(wx_check_c_source_compiles_if_not_linux)
-        wx_check_c_source_compiles(${ARGV})
+    function(wx_check_c_source_compiles_if_not_linux code)
+        wx_check_c_source_compiles("${code}" ${ARGN})
     endfunction()
 endif()
 
