@@ -960,6 +960,9 @@
 /* Define if you have the dladdr function.  */
 #cmakedefine HAVE_DLADDR 1
 
+/* Define if you have the dl_iterate_phdr function.  */
+#cmakedefine HAVE_DL_ITERATE_PHDR 1
+
 /* Define if you have Posix fnctl() function. */
 #cmakedefine HAVE_FCNTL 1
 
