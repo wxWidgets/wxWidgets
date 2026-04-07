@@ -516,6 +516,7 @@ wx_check_funcs(fsync
                snprintf vsnprintf strnlen strtoull
                setpriority
                gettimeofday
+               wcsrtombs
                )
 
 if(MSVC)
