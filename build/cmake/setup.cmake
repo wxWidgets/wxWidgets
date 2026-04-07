@@ -517,7 +517,6 @@ check_struct_has_member("struct passwd" pw_gecos pwd.h HAVE_PW_GECOS)
 
 # Check various string symbols
 foreach(func
-    ftime
     wcsftime wprintf
     putws fputws wprintf vswprintf vswscanf
     wcsdup wcsnlen wcscasecmp wcsncasecmp
@@ -539,6 +538,10 @@ wx_check_funcs(fsync
 
 if(MSVC)
     check_symbol_exists(vsscanf stdio.h HAVE_VSSCANF)
+endif()
+
+if(NOT HAVE_GETTIMEOFDAY)
+    wx_check_funcs(ftime)
 endif()
 
 # Check includes
