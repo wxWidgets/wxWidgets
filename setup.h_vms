@@ -1040,9 +1040,6 @@ typedef pid_t GPid;
 /* Define if you have a gethostbyname_r function taking 5 arguments. */
 #undef HAVE_FUNC_GETHOSTBYNAME_R_5
 
-/* Define if you only have a gethostbyname function */
-#define HAVE_GETHOSTBYNAME 1
-
 /* Define if you have the gethostname function.  */
 #define HAVE_GETHOSTNAME 1
 
@@ -1051,9 +1048,6 @@ typedef pid_t GPid;
 
 /* Define if you have a getservbyname_r function taking 5 arguments. */
 #undef HAVE_FUNC_GETSERVBYNAME_R_5
-
-/* Define if you only have a getservbyname function */
-#define HAVE_GETSERVBYNAME 1
 
 /* Define if you have the gmtime_r function.  */
 #if __CRTL_VER >= 70000000 && \

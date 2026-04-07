@@ -364,23 +364,36 @@ if(UNIX)
         # Do this again for getsockopt as it may be different
         wx_get_socket_param_type(SOCKOPTLEN_T "getsockopt(0, 0, 0, 0, &len);")
 
-        check_symbol_exists(gethostbyname netdb.h HAVE_GETHOSTBYNAME)
-        check_symbol_exists(gethostbyname_r netdb.h HAVE_GETHOSTBYNAME_R)
-        if(HAVE_GETHOSTBYNAME_R)
-            check_prototype_definition(gethostbyname_r
-                "struct hostent *gethostbyname_r(const char *name, struct hostent *hp, char *buf, size_t buflen, int *herr)"
-                "NULL"
-                "netdb.h"
-                HAVE_FUNC_GETHOSTBYNAME_R_5)
+        wx_check_c_source_compiles(
+            [[struct hostent ret, *retp;
+            char buf[1024];
+            int buflen = 1024;
+            int e;
+            (void)gethostbyname_r("www.wxwidgets.org", &ret, buf, buflen, &retp, &e);]]
+            HAVE_FUNC_GETHOSTBYNAME_R_6
+            netdb.h
+            )
 
-            check_prototype_definition(gethostbyname_r
-                "int gethostbyname_r(const char *name, struct hostent *hp, char *buf, size_t buflen, struct hostent **result, int *herr)"
-                "0"
-                "netdb.h"
-                HAVE_FUNC_GETHOSTBYNAME_R_6)
+        if(HAVE_FUNC_GETHOSTBYNAME_R_6)
+            # Assume that we have getservbyname_r() with consistent signature,
+            # this does seem to be the case in practice.
+            set(HAVE_FUNC_GETSERVBYNAME_R_6 1)
+        else()
+            wx_check_c_source_compiles(
+                [[struct hostent ret;
+                char buf[1024];
+                int buflen = 1024;
+                int e;
+                struct hostent *ret = gethostbyname_r("www.wxwidgets.org", &ret, buf, buflen, &e);]]
+                HAVE_FUNC_GETHOSTBYNAME_R_5
+                netdb.h
+                )
+            if(HAVE_FUNC_GETHOSTBYNAME_R_5)
+                # See above.
+                set(HAVE_FUNC_GETSERVBYNAME_R_5 1)
+            endif()
         endif()
 
-        check_symbol_exists(getservbyname netdb.h HAVE_GETSERVBYNAME)
         check_symbol_exists(inet_aton arpa/inet.h HAVE_INET_ATON)
         check_symbol_exists(inet_addr arpa/inet.h HAVE_INET_ADDR)
     endif(wxUSE_SOCKETS)

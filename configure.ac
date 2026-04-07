@@ -4794,39 +4794,11 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
     dnl related functions (taken from python's configure.in)
     dnl sigh -- gethostbyname_r is a mess; it can have 3, 5 or 6 arguments
       AX_FUNC_WHICH_GETHOSTBYNAME_R
-      if test "x$ac_cv_func_which_gethostbyname_r" = "xno" -o \
-              "x$ac_cv_func_which_gethostbyname_r" = "xunknown" ; then
-          AC_CHECK_FUNC(gethostbyname, [ AC_DEFINE(HAVE_GETHOSTBYNAME) ],
-              [
-                  dnl Under HaikuOS it is not yet detected
-                  case "${host}" in
-                  *-*-haiku* )
-                    AC_DEFINE(HAVE_GETHOSTBYNAME)
-                    AC_MSG_WARN([Defining HAVE_GETHOSTBYNAME unconditionally under ${host}.])
-                    ;;
-                  esac
-              ]
-           )
-      fi
       dnl A similar test for getservbyname_r
       dnl I'm tempted to just not do this test which is taking much time and
       dnl do something similar as for gethostbyaddr_r, but OTOH the macro
       dnl doing the test already exists, so using it is easy enough.     - SN
       AC_raf_FUNC_WHICH_GETSERVBYNAME_R
-      if test "x$ac_cv_func_which_getservbyname_r" = "xno" -o \
-              "x$ac_cv_func_which_getservbyname_r" = "xunknown" ; then
-          AC_CHECK_FUNCS(getservbyname,[ AC_DEFINE(HAVE_GETSERVBYNAME) ],
-              [
-                  dnl Under HaikuOS it is not yet detected
-                  case "${host}" in
-                  *-*-haiku* )
-                    AC_DEFINE(HAVE_GETSERVBYNAME)
-                    AC_MSG_WARN([Defining HAVE_GETSERVBYNAME unconditionally under ${host}.])
-                    ;;
-                  esac
-              ]
-           )
-      fi
       dnl For gethostbyaddr_r, we currently do no separate test, instead, we
       dnl silently assume it's available exactly if gethostbyname_r is
       dnl available and always requires two more arguments than

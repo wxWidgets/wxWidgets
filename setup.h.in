@@ -970,9 +970,6 @@
 /* Define if you have a gethostbyname_r function taking 5 arguments. */
 #undef HAVE_FUNC_GETHOSTBYNAME_R_5
 
-/* Define if you only have a gethostbyname function */
-#undef HAVE_GETHOSTBYNAME
-
 /* Define if you have the gethostname function.  */
 #undef HAVE_GETHOSTNAME
 
@@ -981,9 +978,6 @@
 
 /* Define if you have a getservbyname_r function taking 5 arguments. */
 #undef HAVE_FUNC_GETSERVBYNAME_R_5
-
-/* Define if you only have a getservbyname function */
-#undef HAVE_GETSERVBYNAME
 
 /* Define if you have the gmtime_r function.  */
 #undef HAVE_GMTIME_R
