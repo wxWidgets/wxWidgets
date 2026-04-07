@@ -475,7 +475,8 @@ if(UNIX)
 endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
-    wx_check_funcs_if_not_linux(
+    wx_check_symbols_exist_if_not_linux(
+        pthread.h
         pthread_attr_setstacksize
         pthread_cancel
         pthread_mutex_timedlock
