@@ -4040,7 +4040,7 @@ if test "$wx_cv_func_vsscanf" = "yes"; then
 fi
 AC_LANG_POP()
 
-WX_CHECK_FUNCS(putws fputws wprintf vswprintf vswscanf,,,
+WX_CHECK_FUNCS(fputws wprintf vswprintf vswscanf,,,
                [#include <stdio.h>
                 #include <wchar.h>])
 

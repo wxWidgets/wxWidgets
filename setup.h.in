@@ -1045,9 +1045,6 @@
 /* Define if you have wcsrtombs() function */
 #undef HAVE_WCSRTOMBS
 
-/* Define this if you have putws() */
-#undef HAVE_PUTWS
-
 /* Define this if you have fputws() */
 #undef HAVE_FPUTWS
 

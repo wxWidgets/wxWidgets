@@ -606,10 +606,6 @@ wx_check_funcs_if_not_linux(
     wcslen
 )
 
-# Check for this one separately because it's not available under Linux and so
-# we shouldn't assume it is.
-wx_check_funcs(putws)
-
 cmake_pop_check_state()
 
 # Check various functions

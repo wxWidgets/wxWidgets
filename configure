@@ -33214,7 +33214,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-  for wx_func in putws fputws wprintf vswprintf vswscanf
+  for wx_func in fputws wprintf vswprintf vswscanf
   do
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $wx_func" >&5
 $as_echo_n "checking for $wx_func... " >&6; }

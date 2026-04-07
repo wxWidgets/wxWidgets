@@ -1134,9 +1134,6 @@ typedef pid_t GPid;
 /* Define if you have wcsrtombs() function */
 #define HAVE_WCSRTOMBS 1
 
-/* Define this if you have putws() */
-#undef HAVE_PUTWS
-
 /* Define this if you have fputws() */
 #define HAVE_FPUTWS 1
 

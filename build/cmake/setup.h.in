@@ -1046,9 +1046,6 @@
 /* Define if you have wcsrtombs() function */
 #cmakedefine HAVE_WCSRTOMBS 1
 
-/* Define this if you have putws() */
-#cmakedefine HAVE_PUTWS 1
-
 /* Define this if you have fputws() */
 #cmakedefine HAVE_FPUTWS 1
 
