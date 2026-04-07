@@ -1048,9 +1048,6 @@
 /* Define if you have the <wchar.h> header file.  */
 #undef HAVE_WCHAR_H
 
-/* Define if you have the <wcstr.h> header file.  */
-#undef HAVE_WCSTR_H
-
 /* Define if you have <widec.h> (Solaris only) */
 #undef HAVE_WIDEC_H
 

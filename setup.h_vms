@@ -1127,9 +1127,6 @@ typedef pid_t GPid;
 /* Define if you have the <wchar.h> header file.  */
 #define HAVE_WCHAR_H 1
 
-/* Define if you have the <wcstr.h> header file.  */
-#undef HAVE_WCSTR_H
-
 /* Define if you have the <wctype.h> header file.  */
 #if __CRTL_VER >= 70312000
 #define HAVE_WCTYPE_H 1

@@ -23676,22 +23676,6 @@ fi
 done
 
 
-if test "$ac_cv_header_wchar_h" != "yes"; then
-    for ac_header in wcstr.h
-do :
-  ac_fn_c_check_header_compile "$LINENO" "wcstr.h" "ac_cv_header_wcstr_h" "$ac_includes_default
-"
-if test "x$ac_cv_header_wcstr_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_WCSTR_H 1
-_ACEOF
-
-fi
-
-done
-
-fi
-
 if test "$USE_UNIX" = 1 ; then
         for ac_header in sys/select.h
 do :

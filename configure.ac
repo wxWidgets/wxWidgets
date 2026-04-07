@@ -1573,11 +1573,6 @@ dnl Note: non-empty last parameter makes check compile-only,
 dnl   skipping worthless preprocessing check
 AC_CHECK_HEADERS(langinfo.h wchar.h,,, [AC_INCLUDES_DEFAULT])
 
-dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
-if test "$ac_cv_header_wchar_h" != "yes"; then
-    AC_CHECK_HEADERS([wcstr.h],,, [AC_INCLUDES_DEFAULT()])
-fi
-
 if test "$USE_UNIX" = 1 ; then
     dnl POSIX needs this for select(), but old systems don't have it
     AC_CHECK_HEADERS([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
