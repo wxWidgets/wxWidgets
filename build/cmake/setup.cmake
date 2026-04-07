@@ -545,7 +545,6 @@ endif()
 check_include_file(langinfo.h HAVE_LANGINFO_H)
 check_include_file(sched.h HAVE_SCHED_H)
 check_include_file(unistd.h HAVE_UNISTD_H)
-check_include_file(wchar.h HAVE_WCHAR_H)
 
 if(wxUSE_DATETIME)
     # check for timezone variable:

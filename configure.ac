@@ -1625,12 +1625,10 @@ AC_CHECK_SIZEOF(wchar_t, 0,
         #if defined(__DJGPP__) && !( (__GNUC_MINOR__ >= 8 && __GNUC__ == 2 ) || __GNUC__ >= 3 )
         #  error "fake wchar_t"
         #endif
-        #ifdef HAVE_WCHAR_H
-        #  ifdef __CYGWIN__
-        #    include <stddef.h>
-        #  endif
-        #  include <wchar.h>
+        #ifdef __CYGWIN__
+        #  include <stddef.h>
         #endif
+        #include <wchar.h>
         #ifdef HAVE_STDLIB_H
         #  include <stdlib.h>
         #endif

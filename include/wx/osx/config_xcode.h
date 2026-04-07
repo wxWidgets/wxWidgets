@@ -87,7 +87,6 @@
 #define HAVE_X11_XKBLIB_H 1
 #define HAVE_SCHED_H 1
 #define HAVE_UNISTD_H 1
-#define HAVE_WCHAR_H 1
 /* better to use the built-in CF conversions, also avoid iconv versioning problems */
 /* #undef HAVE_ICONV */
 #define ICONV_CONST
