@@ -505,18 +505,6 @@ else()
     set(wxSIZE_T_IS_UINT YES)
 endif()
 
-# check if wchar_t is separate type
-wx_check_cxx_source_compiles("return 0; }
-
-            struct Foo { void foo(wchar_t);
-                         void foo(unsigned short);
-                         void foo(unsigned int);
-                         void foo(unsigned long); };
-
-            int bar() {"
-            wxWCHAR_T_IS_REAL_TYPE
-            wchar.h)
-
 # ---------------------------------------------------------------------------
 # Checks for structures
 # ---------------------------------------------------------------------------

@@ -348,16 +348,12 @@ wxTextInputStream& wxTextInputStream::operator>>(char& c)
     return *this;
 }
 
-#if wxWCHAR_T_IS_REAL_TYPE
-
 wxTextInputStream& wxTextInputStream::operator>>(wchar_t& wc)
 {
     wc = GetChar();
 
     return *this;
 }
-
-#endif // wxWCHAR_T_IS_REAL_TYPE
 
 wxTextInputStream& wxTextInputStream::operator>>(wxInt16& i)
 {
@@ -613,16 +609,12 @@ wxTextOutputStream& wxTextOutputStream::operator<<(char c)
     return *this;
 }
 
-#if wxWCHAR_T_IS_REAL_TYPE
-
 wxTextOutputStream& wxTextOutputStream::operator<<(wchar_t wc)
 {
     PutChar(wc);
 
     return *this;
 }
-
-#endif // wxWCHAR_T_IS_REAL_TYPE
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxInt16 c)
 {

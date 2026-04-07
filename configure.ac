@@ -3861,30 +3861,6 @@ else
     fi
 fi
 
-AC_CACHE_CHECK([if wchar_t is separate type],
-    wx_cv_wchar_t_is_separate_type,
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <wchar.h>],
-        [
-            return 0; }
-
-            struct Foo { void foo(wchar_t);
-                         void foo(unsigned short);
-                         void foo(unsigned int);
-                         void foo(unsigned long); };
-
-            int bar() {
-        ])],
-        wx_cv_wchar_t_is_separate_type=yes,
-        wx_cv_wchar_t_is_separate_type=no
-    )
-)
-
-if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
-    AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 1)
-else
-    AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 0)
-fi
-
 AC_LANG_POP() dnl C++
 
 dnl ---------------------------------------------------------------------------

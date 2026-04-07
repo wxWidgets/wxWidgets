@@ -48,7 +48,6 @@
 #define wxHAVE_PTHREAD_CLEANUP 1
 #define wxNO_WOSTREAM
 #define wxSIZE_T_IS_UINT 1
-#define wxWCHAR_T_IS_REAL_TYPE 1
 
 #define wxUSE_SELECT_DISPATCHER 1
 

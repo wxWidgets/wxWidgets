@@ -32788,51 +32788,6 @@ $as_echo "$wx_cv_size_t_is_ulong" >&6; }
     fi
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if wchar_t is separate type" >&5
-$as_echo_n "checking if wchar_t is separate type... " >&6; }
-if ${wx_cv_wchar_t_is_separate_type+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <wchar.h>
-int
-main ()
-{
-
-            return 0; }
-
-            struct Foo { void foo(wchar_t);
-                         void foo(unsigned short);
-                         void foo(unsigned int);
-                         void foo(unsigned long); };
-
-            int bar() {
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_wchar_t_is_separate_type=yes
-else
-  wx_cv_wchar_t_is_separate_type=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_wchar_t_is_separate_type" >&5
-$as_echo "$wx_cv_wchar_t_is_separate_type" >&6; }
-
-if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
-    $as_echo "#define wxWCHAR_T_IS_REAL_TYPE 1" >>confdefs.h
-
-else
-    $as_echo "#define wxWCHAR_T_IS_REAL_TYPE 0" >>confdefs.h
-
-fi
-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
