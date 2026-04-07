@@ -956,6 +956,14 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
     if ( !qtSource )
         return false;
 
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // blit is not mirrored
+        m_qtPainter->save();
+        m_qtPainter->scale(-1, 1);
+        xdest = -xdest - width;
+    }
+
     // Change logical function
     wxRasterOperationMode savedMode = GetLogicalFunction();
     SetLogicalFunction( rop );
@@ -977,6 +985,11 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
     }
 
     SetLogicalFunction( savedMode );
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        m_qtPainter->restore();
+    }
 
     return true;
 }
