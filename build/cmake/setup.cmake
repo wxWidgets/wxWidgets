@@ -591,6 +591,12 @@ if(wxUSE_DATETIME)
     check_struct_has_member("struct tm" tm_gmtoff time.h WX_GMTOFF_IN_TM)
 endif()
 
+wx_check_cxx_source_compiles(
+    "nl_langinfo(_NL_TIME_FIRST_WEEKDAY);"
+    HAVE_NL_TIME_FIRST_WEEKDAY
+    langinfo.h
+    )
+
 cmake_push_check_state(RESET)
 set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_DL_LIBS})
 check_symbol_exists(dlopen dlfcn.h HAVE_DLOPEN)
