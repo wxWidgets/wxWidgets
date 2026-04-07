@@ -158,8 +158,11 @@ if(wxSKIP_CHECK_IF_LINUX)
         set(${var} 1 PARENT_SCOPE)
     endfunction()
 
-    function(wx_check_symbol_exists_if_not_linux sym header var)
-        set(${var} 1 PARENT_SCOPE)
+    function(wx_check_symbols_exist_if_not_linux header)
+        foreach(func ${ARGN})
+            string(TOUPPER "HAVE_${func}" var)
+            set(${var} 1 PARENT_SCOPE)
+        endforeach()
     endfunction()
 
     function(wx_check_c_source_compiles_if_not_linux code var)
@@ -174,8 +177,17 @@ else()
         check_include_file(${ARGV})
     endfunction()
 
-    function(wx_check_symbol_exists_if_not_linux)
-        check_symbol_exists(${ARGV})
+    # This function takes the header as the first argument and the rest are
+    # symbols to check for in that header. HAVE_XXX is defined for each symbol
+    # if it exists.
+    function(wx_check_symbols_exist_if_not_linux header)
+        foreach(func ${ARGN})
+            string(TOUPPER "HAVE_${func}" var)
+            check_symbol_exists(${func} ${header} ${var})
+            if(${var})
+                set(${var} 1 PARENT_SCOPE)
+            endif()
+        endforeach()
     endfunction()
 
     function(wx_check_c_source_compiles_if_not_linux code)
@@ -369,10 +381,10 @@ if(UNIX)
 
     if(NOT HAVE_SOME_SLEEP_FUNC)
         # try nanosleep() in libc and libposix4, if this fails - usleep()
-        wx_check_symbol_exists_if_not_linux(nanosleep time.h HAVE_NANOSLEEP)
+        wx_check_symbols_exist_if_not_linux(time.h nanosleep)
 
         if(NOT HAVE_NANOSLEEP)
-            wx_check_symbol_exists_if_not_linux(usleep unistd.h HAVE_USLEEP)
+            wx_check_symbols_exist_if_not_linux(unistd.h usleep)
             if(NOT HAVE_USLEEP)
                 message(WARNING "wxSleep() function will not work")
             endif()
@@ -380,7 +392,7 @@ if(UNIX)
     endif()
 
     # check for uname (POSIX) and gethostname (BSD)
-    wx_check_symbol_exists_if_not_linux(uname sys/utsname.h HAVE_UNAME)
+    wx_check_symbols_exist_if_not_linux(sys/utsname.h uname)
     if(NOT HAVE_UNAME)
         wx_check_funcs_if_not_linux(gethostname)
     endif()
@@ -405,8 +417,8 @@ if(UNIX)
 
         cmake_push_check_state()
         list(APPEND CMAKE_REQUIRED_DEFINITIONS -D_REENTRANT)
-        wx_check_symbol_exists_if_not_linux(getpwuid_r pwd.h HAVE_GETPWUID_R)
-        wx_check_symbol_exists_if_not_linux(getgrgid_r grp.h HAVE_GETGRGID_R)
+        wx_check_symbols_exist_if_not_linux(pwd.h getpwuid_r)
+        wx_check_symbols_exist_if_not_linux(grp.h getgrgid_r)
         cmake_pop_check_state()
     endif()
 
@@ -450,8 +462,7 @@ if(UNIX)
             endif()
         endif()
 
-        wx_check_symbol_exists_if_not_linux(inet_aton arpa/inet.h HAVE_INET_ATON)
-        wx_check_symbol_exists_if_not_linux(inet_addr arpa/inet.h HAVE_INET_ADDR)
+        wx_check_symbols_exist_if_not_linux(arpa/inet.h inet_aton inet_addr)
     endif(wxUSE_SOCKETS)
 
     if(wxUSE_JOYSTICK AND WXGTK)
@@ -540,8 +551,7 @@ if(CMAKE_USE_PTHREADS_INIT)
     cmake_pop_check_state()
 endif() # CMAKE_USE_PTHREADS_INIT
 
-wx_check_symbol_exists_if_not_linux(localtime_r time.h HAVE_LOCALTIME_R)
-wx_check_symbol_exists_if_not_linux(gmtime_r time.h HAVE_GMTIME_R)
+wx_check_symbols_exist_if_not_linux(time.h localtime_r gmtime_r)
 
 # ---------------------------------------------------------------------------
 # Checks for typedefs
@@ -668,11 +678,10 @@ wx_check_c_source_compiles_if_not_linux(
 
 cmake_push_check_state(RESET)
 set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_DL_LIBS})
-wx_check_symbol_exists_if_not_linux(dlopen dlfcn.h HAVE_DLOPEN)
+wx_check_symbols_exist_if_not_linux(dlfcn.h dlopen dladdr)
 cmake_pop_check_state()
 if(HAVE_DLOPEN)
-    wx_check_symbol_exists_if_not_linux(dladdr dlfcn.h HAVE_DLADDR)
-    wx_check_symbol_exists_if_not_linux(dl_iterate_phdr link.h HAVE_DL_ITERATE_PHDR)
+    wx_check_symbols_exist_if_not_linux(link.h dl_iterate_phdr)
 endif()
 
 if(APPLE)
