@@ -222,27 +222,14 @@ if(UNIX)
         endif()
     endif()
 
-    wx_check_funcs(mkstemp mktemp)
+    wx_check_funcs(mkstemp)
+    if(NOT HAVE_MKSTEMP)
+        wx_check_funcs(mktemp)
+    endif()
 
-    # get the library function to use for wxGetDiskSpace(): it is statfs() under
-    # Linux and *BSD and statvfs() under Solaris and NetBSD
-    wx_check_c_source_compiles("
-        return 0; }
-        #if defined(__BSD__)
-        #include <sys/param.h>
-        #include <sys/mount.h>
-        #else
-        #include <sys/vfs.h>
-        #endif
-
-        int foo() {
-        long l;
-        struct statfs fs;
-        statfs(\"/\", &fs);
-        l = fs.f_bsize;
-        l += fs.f_blocks;
-        l += fs.f_bavail;"
-        HAVE_STATFS)
+    # get the library function to use for wxGetDiskSpace(): prefer POSIX
+    # statvfs() if it exists, but fall back to Linux/BSD-specific statfs() if
+    # necessary.
     wx_check_c_source_compiles("
         return 0; }
         #include <sys/statvfs.h>
@@ -257,9 +244,8 @@ if(UNIX)
         HAVE_STATVFS)
     if(HAVE_STATVFS)
       set(WX_STATFS_T "struct statvfs")
-    elseif(HAVE_STATFS)
-      set(WX_STATFS_T "struct statfs")
-      wx_check_cxx_source_compiles("
+    else()
+        wx_check_c_source_compiles("
             return 0; }
             #if defined(__BSD__)
             #include <sys/param.h>
@@ -269,29 +255,52 @@ if(UNIX)
             #endif
 
             int foo() {
+            long l;
             struct statfs fs;
-            statfs(\"/\", &fs);"
-        HAVE_STATFS_DECL)
-    endif()
+            statfs(\"/\", &fs);
+            l = fs.f_bsize;
+            l += fs.f_blocks;
+            l += fs.f_bavail;"
+            HAVE_STATFS)
+        if(HAVE_STATFS)
+            set(WX_STATFS_T "struct statfs")
+            wx_check_cxx_source_compiles("
+                  return 0; }
+                  #if defined(__BSD__)
+                  #include <sys/param.h>
+                  #include <sys/mount.h>
+                  #else
+                  #include <sys/vfs.h>
+                  #endif
 
-    if(NOT HAVE_STATFS AND NOT HAVE_STATVFS)
-        message(WARNING "wxGetDiskSpace() function won't work without statfs()")
+                  int foo() {
+                  struct statfs fs;
+                  statfs(\"/\", &fs);"
+              HAVE_STATFS_DECL)
+        else()
+            message(WARNING "wxGetDiskSpace() function won't work without statfs()")
+        endif()
     endif()
 
     # check for fcntl() or at least flock() needed by Unix implementation of
     # wxSingleInstanceChecker
     if(wxUSE_SNGLINST_CHECKER)
-        wx_check_funcs(fcntl flock)
-        if(NOT HAVE_FCNTL AND NOT HAVE_FLOCK)
-            message(WARNING "wxSingleInstanceChecker not available")
-            wx_option_force_value(wxUSE_SNGLINST_CHECKER OFF)
+        wx_check_funcs(fcntl)
+        if(NOT HAVE_FCNTL)
+            wx_check_funcs(flock)
+            if(NOT HAVE_FLOCK)
+                message(WARNING "wxSingleInstanceChecker not available")
+                wx_option_force_value(wxUSE_SNGLINST_CHECKER OFF)
+            endif()
         endif()
     endif()
 
     # look for a function to modify the environment
-    wx_check_funcs(setenv putenv)
+    wx_check_funcs(setenv)
     if(HAVE_SETENV)
         wx_check_funcs(unsetenv)
+    else()
+        wx_check_funcs(putenv)
     endif()
 
     set(HAVE_SOME_SLEEP_FUNC FALSE)
