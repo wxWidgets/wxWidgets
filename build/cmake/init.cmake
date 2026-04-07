@@ -810,6 +810,18 @@ if(wxUSE_GUI)
         endif()
     endif()
 
+    if(wxUSE_DETECT_SM)
+        if(APPLE OR WIN32)
+            wx_option_force_value(wxUSE_DETECT_SM OFF)
+        else()
+            find_package(PkgConfig)
+            pkg_check_modules(SM sm)
+            if(NOT SM_FOUND)
+                message(WARNING "libSM not found; disabling session management detection")
+                wx_option_force_value(wxUSE_DETECT_SM OFF)
+            endif()
+        endif()
+    endif()
 endif(wxUSE_GUI)
 
 # test if precompiled headers are supported using the cotire test project
