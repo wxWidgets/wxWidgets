@@ -204,7 +204,7 @@ wxString GetPenStyle(const wxPen& pen)
 {
     wxString penStyle;
 
-    penStyle += wxString::Format(wxS("stroke-width=\"%d\""), pen.GetWidth());
+    penStyle += wxString::Format(wxS("stroke-width=\"%d\""), wxMax(0, pen.GetWidth()));
 
     switch (pen.GetCap())
     {
