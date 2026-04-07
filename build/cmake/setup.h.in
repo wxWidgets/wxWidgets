@@ -983,9 +983,6 @@
 /* Define if you have a getservbyname_r function taking 5 arguments. */
 #cmakedefine HAVE_FUNC_GETSERVBYNAME_R_5 1
 
-/* Define if you have a getservbyname_r function taking 4 arguments. */
-#cmakedefine HAVE_FUNC_GETSERVBYNAME_R_4 1
-
 /* Define if you only have a getservbyname function */
 #cmakedefine HAVE_GETSERVBYNAME 1
 

@@ -111,18 +111,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
 #endif
 
 typedef char wxGethostBuf[4096];
-
-#ifdef HAVE_FUNC_GETSERVBYNAME_R_4
-    struct wxGetservBuf : servent_data
-    {
-        wxGetservBuf()
-        {
-            memset(this, 0, sizeof(servent_data));
-        }
-    };
-#else
-    typedef char wxGetservBuf[4096];
-#endif
+typedef char wxGetservBuf[4096];
 
 #if defined(wxHAS_MT_SAFE_GETBY_FUNCS) || !wxUSE_THREADS
     #define wxLOCK_GETBY_MUTEX(name)
@@ -365,10 +354,6 @@ servent *wxGetservbyname_r(const char *port,
     getservbyname_r(port, protocol, serv, buffer, size, &se);
 #elif defined(HAVE_FUNC_GETSERVBYNAME_R_5)
     se = getservbyname_r(port, protocol, serv, buffer, size);
-#elif defined(HAVE_FUNC_GETSERVBYNAME_R_4)
-    wxUnusedVar(size);
-    if ( getservbyname_r(port, protocol, serv, &buffer) != 0 )
-        return nullptr;
 #elif defined(HAVE_GETSERVBYNAME)
     wxLOCK_GETBY_MUTEX(serv);
 
