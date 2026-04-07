@@ -1128,9 +1128,6 @@ typedef pid_t GPid;
 #undef HAVE_WCTYPE_H
 #endif
 
-/* Define if you have <widec.h> (Solaris only) */
-#undef HAVE_WIDEC_H
-
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #define HAVE_ICONV_H 1
 

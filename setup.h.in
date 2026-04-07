@@ -1042,9 +1042,6 @@
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
 
-/* Define if you have <widec.h> (Solaris only) */
-#undef HAVE_WIDEC_H
-
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #undef HAVE_ICONV
 

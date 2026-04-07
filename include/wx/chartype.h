@@ -59,10 +59,6 @@
     #endif
 #endif /* Android */
 
-#ifdef HAVE_WIDEC_H
-    #include <widec.h>
-#endif
-
 /* -------------------------------------------------------------------------- */
 /* define wxHAVE_TCHAR_SUPPORT for the compilers which support the TCHAR type */
 /* mapped to either char or wchar_t depending on the ASCII/Unicode mode and   */

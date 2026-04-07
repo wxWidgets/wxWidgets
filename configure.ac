@@ -4040,21 +4040,9 @@ if test "$wx_cv_func_vsscanf" = "yes"; then
 fi
 AC_LANG_POP()
 
-dnl also look if we have wide char IO functions, notice that [f]putws are
-dnl declared in special widec.h under Solaris
-wchar_headers="#include <stdio.h>
-#include <wchar.h>"
-case "${host}" in
-    *-*-solaris2* )
-        AC_CHECK_HEADERS(widec.h,,, [AC_INCLUDES_DEFAULT()])
-        if test "$ac_cv_header_widec_h" = "yes"; then
-            wchar_headers="$wchar_headers
-#include <widec.h>"
-        fi
-esac
-
 WX_CHECK_FUNCS(putws fputws wprintf vswprintf vswscanf,,,
-               [$wchar_headers])
+               [#include <stdio.h>
+                #include <wchar.h>])
 
 dnl MinGW has a vswprintf with a different prototype, and
 dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS

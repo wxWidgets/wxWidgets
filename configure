@@ -33213,29 +33213,6 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-wchar_headers="#include <stdio.h>
-#include <wchar.h>"
-case "${host}" in
-    *-*-solaris2* )
-        for ac_header in widec.h
-do :
-  ac_fn_c_check_header_compile "$LINENO" "widec.h" "ac_cv_header_widec_h" "$ac_includes_default
-"
-if test "x$ac_cv_header_widec_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_WIDEC_H 1
-_ACEOF
-
-fi
-
-done
-
-        if test "$ac_cv_header_widec_h" = "yes"; then
-            wchar_headers="$wchar_headers
-#include <widec.h>"
-        fi
-esac
-
 
   for wx_func in putws fputws wprintf vswprintf vswscanf
   do
@@ -33249,7 +33226,8 @@ else
 /* end confdefs.h.  */
 
 
-                $wchar_headers
+                #include <stdio.h>
+                #include <wchar.h>
                 $ac_includes_default
 
 int
