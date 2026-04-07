@@ -1124,9 +1124,6 @@ typedef pid_t GPid;
 /* Define if you have the <unistd.h> header file.  */
 #define HAVE_UNISTD_H 1
 
-/* Define if you have the <fcntl.h> header file.  */
-#define HAVE_FCNTL_H 1
-
 /* Define if you have the <wchar.h> header file.  */
 #define HAVE_WCHAR_H 1
 
