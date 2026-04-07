@@ -769,10 +769,6 @@
  */
 #cmakedefine wxHAVE_PTHREAD_CLEANUP 1
 /*
- * Define if compiler has __thread keyword.
- */
-#cmakedefine HAVE___THREAD_KEYWORD 1
-/*
  * Define if large (64 bit file offsets) files are supported.
  */
 #cmakedefine HAVE_LARGEFILE_SUPPORT 1
