@@ -52,6 +52,15 @@ if(UNIX AND NOT APPLE)
     wx_setup_definition(_GNU_SOURCE)
 endif()
 
+# Optimization: we skip a number of checks that always pass when building under
+# Linux.
+#
+# We probably could also do it when cross-compiling to Linux, but for now be
+# conservative and only skip the checks in the most common case.
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+    set(wxSKIP_CHECK_IF_LINUX TRUE)
+endif()
+
 if(APPLE)
     wx_setup_definition(__BSD__)
 endif()
@@ -134,6 +143,46 @@ function(wx_check_funcs)
     endforeach()
 endfunction()
 
+# Variants of the functions above that check for availability only if not
+# building under Linux, otherwise just defines HAVE_... as we assume that the
+# symbols being checked for are always available under Linux.
+if(wxSKIP_CHECK_IF_LINUX)
+    function(wx_check_funcs_if_not_linux)
+        foreach(func ${ARGN})
+            string(TOUPPER ${func} func_upper)
+            set(HAVE_${func_upper} 1 PARENT_SCOPE)
+        endforeach()
+    endfunction()
+
+    function(wx_check_include_file_if_not_linux include var)
+        set(${var} 1 PARENT_SCOPE)
+    endfunction()
+
+    function(wx_check_symbol_exists_if_not_linux sym header var)
+        set(${var} 1 PARENT_SCOPE)
+    endfunction()
+
+    function(wx_check_c_source_compiles_if_not_linux code var)
+        set(${var} 1 PARENT_SCOPE)
+    endfunction()
+else()
+    function(wx_check_funcs_if_not_linux)
+        wx_check_funcs(${ARGV})
+    endfunction()
+
+    function(wx_check_include_file_if_not_linux)
+        check_include_file(${ARGV})
+    endfunction()
+
+    function(wx_check_symbol_exists_if_not_linux)
+        check_symbol_exists(${ARGV})
+    endfunction()
+
+    function(wx_check_c_source_compiles_if_not_linux)
+        wx_check_c_source_compiles(${ARGV})
+    endfunction()
+endif()
+
 # Check for availability of GCC's atomic operations builtins.
 wx_check_c_source_compiles("
     unsigned int value=0;
@@ -145,10 +194,16 @@ wx_check_c_source_compiles("
     HAVE_GCC_ATOMIC_BUILTINS
     )
 
+if(wxSKIP_CHECK_IF_LINUX)
+# Linux always uses socklen_t for getsockname and getsockopt, so we can skip
+# the checks.
 macro(wx_get_socket_param_type name code)
-    # This test needs to be done in C++ mode since gsocket.cpp now
-    # is C++ code and pointer cast that are possible even without
-    # warning in C still fail in C++.
+    set(${name} socklen_t)
+endmacro()
+else()
+macro(wx_get_socket_param_type name code)
+    # This test needs to be done in C++ mode since socket.cpp is C++ code and
+    # pointer casts that are possible in C can fail in C++.
     wx_check_cxx_source_compiles(
         "socklen_t len;
         ${code}"
@@ -181,6 +236,7 @@ macro(wx_get_socket_param_type name code)
         endif()
     endif()
 endmacro()
+endif()
 
 # the following tests are for Unix(like) systems only
 if(UNIX)
@@ -194,7 +250,7 @@ if(UNIX)
 
     # check for POSIX signals if we need them
     if(wxUSE_ON_FATAL_EXCEPTION)
-        wx_check_funcs(sigaction)
+        wx_check_funcs_if_not_linux(sigaction)
         if(NOT HAVE_SIGACTION)
             message(WARNING "No POSIX signal functions on this system, wxApp::OnFatalException will not be called")
             wx_option_force_value(wxUSE_ON_FATAL_EXCEPTION OFF)
@@ -222,7 +278,7 @@ if(UNIX)
         endif()
     endif()
 
-    wx_check_funcs(mkstemp)
+    wx_check_funcs_if_not_linux(mkstemp)
     if(NOT HAVE_MKSTEMP)
         wx_check_funcs(mktemp)
     endif()
@@ -230,7 +286,7 @@ if(UNIX)
     # get the library function to use for wxGetDiskSpace(): prefer POSIX
     # statvfs() if it exists, but fall back to Linux/BSD-specific statfs() if
     # necessary.
-    wx_check_c_source_compiles("
+    wx_check_c_source_compiles_if_not_linux("
         return 0; }
         #include <sys/statvfs.h>
 
@@ -285,9 +341,9 @@ if(UNIX)
     # check for fcntl() or at least flock() needed by Unix implementation of
     # wxSingleInstanceChecker
     if(wxUSE_SNGLINST_CHECKER)
-        wx_check_funcs(fcntl)
+        wx_check_funcs_if_not_linux(fcntl)
         if(NOT HAVE_FCNTL)
-            wx_check_funcs(flock)
+            wx_check_funcs_if_not_linux(flock)
             if(NOT HAVE_FLOCK)
                 message(WARNING "wxSingleInstanceChecker not available")
                 wx_option_force_value(wxUSE_SNGLINST_CHECKER OFF)
@@ -296,11 +352,11 @@ if(UNIX)
     endif()
 
     # look for a function to modify the environment
-    wx_check_funcs(setenv)
+    wx_check_funcs_if_not_linux(setenv)
     if(HAVE_SETENV)
-        wx_check_funcs(unsetenv)
+        wx_check_funcs_if_not_linux(unsetenv)
     else()
-        wx_check_funcs(putenv)
+        wx_check_funcs_if_not_linux(putenv)
     endif()
 
     set(HAVE_SOME_SLEEP_FUNC FALSE)
@@ -313,10 +369,10 @@ if(UNIX)
 
     if(NOT HAVE_SOME_SLEEP_FUNC)
         # try nanosleep() in libc and libposix4, if this fails - usleep()
-        check_symbol_exists(nanosleep time.h HAVE_NANOSLEEP)
+        wx_check_symbol_exists_if_not_linux(nanosleep time.h HAVE_NANOSLEEP)
 
         if(NOT HAVE_NANOSLEEP)
-            check_symbol_exists(usleep unistd.h HAVE_USLEEP)
+            wx_check_symbol_exists_if_not_linux(usleep unistd.h HAVE_USLEEP)
             if(NOT HAVE_USLEEP)
                 message(WARNING "wxSleep() function will not work")
             endif()
@@ -324,33 +380,33 @@ if(UNIX)
     endif()
 
     # check for uname (POSIX) and gethostname (BSD)
-    check_symbol_exists(uname sys/utsname.h HAVE_UNAME)
+    wx_check_symbol_exists_if_not_linux(uname sys/utsname.h HAVE_UNAME)
     if(NOT HAVE_UNAME)
-        wx_check_funcs(gethostname)
+        wx_check_funcs_if_not_linux(gethostname)
     endif()
 
     cmake_push_check_state()
     list(APPEND CMAKE_REQUIRED_DEFINITIONS -D_REENTRANT)
-    wx_check_funcs(strtok_r)
+    wx_check_funcs_if_not_linux(strtok_r)
     cmake_pop_check_state()
 
     # check for inet_addr and inet_aton (these may live either in libc, or in
     # libnsl or libresolv or libsocket)
     # TODO
 
-    wx_check_funcs(fdopen)
+    wx_check_funcs_if_not_linux(fdopen)
 
     if(wxBUILD_LARGEFILE_SUPPORT)
-        wx_check_funcs(fseeko)
+        wx_check_funcs_if_not_linux(fseeko)
     endif()
 
     if(wxUSE_TARSTREAM)
-        wx_check_funcs(sysconf)
+        wx_check_funcs_if_not_linux(sysconf)
 
         cmake_push_check_state()
         list(APPEND CMAKE_REQUIRED_DEFINITIONS -D_REENTRANT)
-        check_symbol_exists(getpwuid_r pwd.h HAVE_GETPWUID_R)
-        check_symbol_exists(getgrgid_r grp.h HAVE_GETGRGID_R)
+        wx_check_symbol_exists_if_not_linux(getpwuid_r pwd.h HAVE_GETPWUID_R)
+        wx_check_symbol_exists_if_not_linux(getgrgid_r grp.h HAVE_GETGRGID_R)
         cmake_pop_check_state()
     endif()
 
@@ -394,8 +450,8 @@ if(UNIX)
             endif()
         endif()
 
-        check_symbol_exists(inet_aton arpa/inet.h HAVE_INET_ATON)
-        check_symbol_exists(inet_addr arpa/inet.h HAVE_INET_ADDR)
+        wx_check_symbol_exists_if_not_linux(inet_aton arpa/inet.h HAVE_INET_ATON)
+        wx_check_symbol_exists_if_not_linux(inet_addr arpa/inet.h HAVE_INET_ADDR)
     endif(wxUSE_SOCKETS)
 
     if(wxUSE_JOYSTICK AND WXGTK)
@@ -408,7 +464,7 @@ if(UNIX)
 endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
-    wx_check_funcs(
+    wx_check_funcs_if_not_linux(
         pthread_attr_setstacksize
         pthread_cancel
         pthread_mutex_timedlock
@@ -416,11 +472,11 @@ if(CMAKE_USE_PTHREADS_INIT)
         sched_yield
     )
 
-    wx_check_funcs(pthread_attr_getschedpolicy)
+    wx_check_funcs_if_not_linux(pthread_attr_getschedpolicy)
     if(HAVE_PTHREAD_ATTR_GETSCHEDPOLICY)
-        wx_check_funcs(pthread_attr_setschedparam)
+        wx_check_funcs_if_not_linux(pthread_attr_setschedparam)
         if(HAVE_PTHREAD_ATTR_SETSCHEDPARAM)
-            wx_check_funcs(sched_get_priority_max)
+            wx_check_funcs_if_not_linux(sched_get_priority_max)
             if(HAVE_SCHED_GET_PRIORITY_MAX)
                 set(HAVE_THREAD_PRIORITY_FUNCTIONS 1)
             else()
@@ -430,43 +486,53 @@ if(CMAKE_USE_PTHREADS_INIT)
     endif()
 
     cmake_push_check_state(RESET)
-    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
-    wx_check_cxx_source_compiles("
-        void *p;
-        pthread_cleanup_push(ThreadCleanupFunc, p);
-        pthread_cleanup_pop(0);"
-        wxHAVE_PTHREAD_CLEANUP
-        pthread.h
-        DEFINITION
-        "void ThreadCleanupFunc(void *p) { }\;"
-        )
-    wx_check_c_source_compiles(
-        "pthread_mutexattr_t attr;
-        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);"
-        HAVE_PTHREAD_MUTEXATTR_T
-        pthread.h
-        )
-    if(HAVE_PTHREAD_MUTEXATTR_T)
-        # check if we already have the declaration we need, it is not
-        # present in some systems' headers
+
+    if(wxSKIP_CHECK_IF_LINUX)
+        # Linux always has pthread_cleanup_push and pthread_cleanup_pop, so we
+        # can skip the checks.
+        set(wxHAVE_PTHREAD_CLEANUP 1)
+        set(HAVE_PTHREAD_MUTEXATTR_T 1)
+        set(HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL 1)
+    else()
+        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+        wx_check_cxx_source_compiles("
+            void *p;
+            pthread_cleanup_push(ThreadCleanupFunc, p);
+            pthread_cleanup_pop(0);"
+            wxHAVE_PTHREAD_CLEANUP
+            pthread.h
+            DEFINITION
+            "void ThreadCleanupFunc(void *p) { }\;"
+            )
         wx_check_c_source_compiles(
             "pthread_mutexattr_t attr;
             pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);"
-            HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL
+            HAVE_PTHREAD_MUTEXATTR_T
             pthread.h
             )
-    else()
-        # don't despair, there may be another way to do it
-        wx_check_c_source_compiles(
-            "pthread_mutex_t attr = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;"
-            HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER
-            pthread.h
-            )
-        if(NOT HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
-            # this may break code working elsewhere, so at least warn about it
-            message(WARNING "wxMutex won't be recursive on this platform")
+        if(HAVE_PTHREAD_MUTEXATTR_T)
+            # check if we already have the declaration we need, it is not
+            # present in some systems' headers
+            wx_check_c_source_compiles(
+                "pthread_mutexattr_t attr;
+                pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);"
+                HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL
+                pthread.h
+                )
+        else()
+            # don't despair, there may be another way to do it
+            wx_check_c_source_compiles(
+                "pthread_mutex_t attr = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;"
+                HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER
+                pthread.h
+                )
+            if(NOT HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
+                # this may break code working elsewhere, so at least warn about it
+                message(WARNING "wxMutex won't be recursive on this platform")
+            endif()
         endif()
     endif()
+
     wx_check_cxx_source_compiles(
         "void foo(abi::__forced_unwind&);"
         HAVE_ABI_FORCEDUNWIND
@@ -474,8 +540,8 @@ if(CMAKE_USE_PTHREADS_INIT)
     cmake_pop_check_state()
 endif() # CMAKE_USE_PTHREADS_INIT
 
-check_symbol_exists(localtime_r time.h HAVE_LOCALTIME_R)
-check_symbol_exists(gmtime_r time.h HAVE_GMTIME_R)
+wx_check_symbol_exists_if_not_linux(localtime_r time.h HAVE_LOCALTIME_R)
+wx_check_symbol_exists_if_not_linux(gmtime_r time.h HAVE_GMTIME_R)
 
 # ---------------------------------------------------------------------------
 # Checks for typedefs
@@ -516,54 +582,65 @@ endif()
 # Checks for structures
 # ---------------------------------------------------------------------------
 
-check_struct_has_member("struct passwd" pw_gecos pwd.h HAVE_PW_GECOS)
+if(wxSKIP_CHECK_IF_LINUX)
+    # struct passwd always has pw_gecos under Linux, so we can skip the check.
+    set(HAVE_PW_GECOS 1)
+else()
+    check_struct_has_member("struct passwd" pw_gecos pwd.h HAVE_PW_GECOS)
+endif()
 
 # ---------------------------------------------------------------------------
 # Check for functions
 # ---------------------------------------------------------------------------
 
-# Check various string symbols
-foreach(func
+# Check various symbols from wchar.h.
+cmake_push_check_state(RESET)
+set(CMAKE_REQUIRED_INCLUDES "wchar.h")
+
+wx_check_funcs_if_not_linux(
     wcsftime wprintf
-    putws fputws wprintf vswprintf vswscanf
+    fputws wprintf vswprintf vswscanf
     wcsdup wcsnlen wcscasecmp wcsncasecmp
     wcsrctombs
     wcstoull
     wcslen
-    )
-    string(TOUPPER ${func} func_upper)
-    check_symbol_exists(${func} wchar.h HAVE_${func_upper})
-endforeach()
+)
+
+# Check for this one separately because it's not available under Linux and so
+# we shouldn't assume it is.
+wx_check_funcs(putws)
+
+cmake_pop_check_state()
 
 # Check various functions
-wx_check_funcs(fsync
+wx_check_funcs_if_not_linux(fsync
                snprintf vsnprintf strnlen strtoull
                setpriority
                gettimeofday
+               vsscanf
                wcsrtombs
                )
-
-if(MSVC)
-    check_symbol_exists(vsscanf stdio.h HAVE_VSSCANF)
-endif()
 
 if(NOT HAVE_GETTIMEOFDAY)
     wx_check_funcs(ftime)
 endif()
 
 # Check includes
-check_include_file(langinfo.h HAVE_LANGINFO_H)
-check_include_file(sched.h HAVE_SCHED_H)
-check_include_file(unistd.h HAVE_UNISTD_H)
+wx_check_include_file_if_not_linux(langinfo.h HAVE_LANGINFO_H)
+wx_check_include_file_if_not_linux(sched.h HAVE_SCHED_H)
+wx_check_include_file_if_not_linux(unistd.h HAVE_UNISTD_H)
 
 if(wxUSE_DATETIME)
     # check for timezone variable:
-    #   - under POSIX systems we prefer using POSIX timezone
+    #   - under POSIX systems we prefer using POSIX timezone and under Linux
+    #     we don't even check for it as we know that it's available
     #   - but under Windows, at least with MinGW/clang, it results in
     #     deprecation warnings, so prefer using __timezone instead.
     #   - it doesn't exist at all under Darwin / Mac OS X which uses tm_gmtoff
     #     instead, so don't bother checking for it there at all
-    if(APPLE)
+    if(wxSKIP_CHECK_IF_LINUX)
+        set(WX_TIMEZONE timezone)
+    elseif(APPLE)
         set(timezone_candidates)
     elseif(WIN32)
         set(timezone_candidates __timezone;_timezone;timezone)
@@ -587,7 +664,7 @@ if(wxUSE_DATETIME)
     check_struct_has_member("struct tm" tm_gmtoff time.h WX_GMTOFF_IN_TM)
 endif()
 
-wx_check_cxx_source_compiles(
+wx_check_c_source_compiles_if_not_linux(
     "nl_langinfo(_NL_TIME_FIRST_WEEKDAY);"
     HAVE_NL_TIME_FIRST_WEEKDAY
     langinfo.h
@@ -595,11 +672,11 @@ wx_check_cxx_source_compiles(
 
 cmake_push_check_state(RESET)
 set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_DL_LIBS})
-check_symbol_exists(dlopen dlfcn.h HAVE_DLOPEN)
+wx_check_symbol_exists_if_not_linux(dlopen dlfcn.h HAVE_DLOPEN)
 cmake_pop_check_state()
 if(HAVE_DLOPEN)
-    check_symbol_exists(dladdr dlfcn.h HAVE_DLADDR)
-    check_symbol_exists(dl_iterate_phdr link.h HAVE_DL_ITERATE_PHDR)
+    wx_check_symbol_exists_if_not_linux(dladdr dlfcn.h HAVE_DLADDR)
+    wx_check_symbol_exists_if_not_linux(dl_iterate_phdr link.h HAVE_DL_ITERATE_PHDR)
 endif()
 
 if(APPLE)
@@ -609,12 +686,12 @@ else()
     if(NOT WIN32)
         set(wxUSE_SELECT_DISPATCHER ON)
     endif()
-    check_include_file(sys/epoll.h wxUSE_EPOLL_DISPATCHER)
+    wx_check_include_file_if_not_linux(sys/epoll.h wxUSE_EPOLL_DISPATCHER)
 endif()
-check_include_file(sys/select.h HAVE_SYS_SELECT_H)
+wx_check_include_file_if_not_linux(sys/select.h HAVE_SYS_SELECT_H)
 
 if(wxUSE_FSWATCHER)
-    check_include_file(sys/inotify.h wxHAS_INOTIFY)
+    wx_check_include_file_if_not_linux(sys/inotify.h wxHAS_INOTIFY)
     if(NOT wxHAS_INOTIFY)
         check_include_file(sys/event.h wxHAS_KQUEUE)
     endif()
@@ -626,7 +703,7 @@ if(wxUSE_XLOCALE)
     if(HAVE_XLOCALE_H)
         list(APPEND xlocale_headers xlocale.h)
     endif()
-    wx_check_c_source_compiles("
+    wx_check_c_source_compiles_if_not_linux("
         locale_t t;
         strtod_l(NULL, NULL, t);
         strtol_l(NULL, NULL, 0, t);
