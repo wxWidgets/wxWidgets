@@ -1275,7 +1275,7 @@ void wxSVGFileDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, w
                 "y=\"" << y << "\" "
                 "width=\"" << width << "\" "
                 "height=\"" << height << "\" "
-                "stroke=\"gray\" fill=\"none\"/>\n"
+                "stroke=\"none\" fill=\"none\"/>\n"
            "  </clipPath>\n"
            "</defs>\n"
            "<g clip-path=\"url(#clip" << m_clipNestingLevel << ")\">\n";
