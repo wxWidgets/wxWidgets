@@ -408,6 +408,7 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
 
     // write image meta information
     wxString s;
+    s.reserve(data.size());
     s += wxString::Format("  <image x=\"%d\" y=\"%d\" width=\"%dpx\" height=\"%dpx\"",
                           x, y, bmp.GetWidth(), bmp.GetHeight());
     s += wxString::Format(" id=\"image%d\" "
@@ -415,13 +416,13 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
                           sub_images++);
 
     // Wrap Base64 encoded data on 76 columns boundary (same as Inkscape).
-    const unsigned WRAP = 76;
+    constexpr unsigned WRAP = 76;
     for ( size_t i = 0; i < data.size(); i += WRAP )
     {
         if (i < data.size() - WRAP)
-            s += data.Mid(i, WRAP) + "\n";
+            s += data.substr(i, WRAP) + "\n";
         else
-            s += data.Mid(i, s.size() - i) + "\"\n  />\n"; // last line
+            s += data.substr(i) + "\"\n  />\n"; // last line
     }
 
     // write to the SVG file
