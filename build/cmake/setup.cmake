@@ -368,12 +368,6 @@ if(UNIX)
         check_symbol_exists(gethostbyname_r netdb.h HAVE_GETHOSTBYNAME_R)
         if(HAVE_GETHOSTBYNAME_R)
             check_prototype_definition(gethostbyname_r
-                "int gethostbyname_r(const char *name, struct hostent *hp, struct hostent_data *hdata)"
-                "0"
-                "netdb.h"
-                HAVE_FUNC_GETHOSTBYNAME_R_3)
-
-            check_prototype_definition(gethostbyname_r
                 "struct hostent *gethostbyname_r(const char *name, struct hostent *hp, char *buf, size_t buflen, int *herr)"
                 "NULL"
                 "netdb.h"

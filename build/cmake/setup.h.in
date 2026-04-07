@@ -971,9 +971,6 @@
 /* Define if you have a gethostbyname_r function taking 5 arguments. */
 #cmakedefine HAVE_FUNC_GETHOSTBYNAME_R_5 1
 
-/* Define if you have a gethostbyname_r function taking 3 arguments. */
-#cmakedefine HAVE_FUNC_GETHOSTBYNAME_R_3 1
-
 /* Define if you only have a gethostbyname function */
 #cmakedefine HAVE_GETHOSTBYNAME 1
 

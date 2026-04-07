@@ -103,9 +103,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
 // tests for gethostbyaddr_r() to configure later
 #define HAVE_GETHOSTBYADDR HAVE_GETHOSTBYNAME
 
-#ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
-    #define HAVE_FUNC_GETHOSTBYADDR_R_3
-#endif
 #ifdef HAVE_FUNC_GETHOSTBYNAME_R_5
     #define HAVE_FUNC_GETHOSTBYADDR_R_5
 #endif
@@ -113,21 +110,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
     #define HAVE_FUNC_GETHOSTBYADDR_R_6
 #endif
 
-// the _r functions need the extra buffer parameter but unfortunately its type
-// differs between different systems and for the systems which use opaque
-// structs for it (at least AIX and OpenBSD) it must be zero-filled before
-// being passed to the system functions
-#ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
-    struct wxGethostBuf : hostent_data
-    {
-        wxGethostBuf()
-        {
-            memset(this, 0, sizeof(hostent_data));
-        }
-    };
-#else
-    typedef char wxGethostBuf[4096];
-#endif
+typedef char wxGethostBuf[4096];
 
 #ifdef HAVE_FUNC_GETSERVBYNAME_R_4
     struct wxGetservBuf : servent_data
@@ -166,8 +149,7 @@ namespace
 
 #if defined(HAVE_GETHOSTBYNAME) && \
     !defined(HAVE_FUNC_GETHOSTBYNAME_R_6) && \
-    !defined(HAVE_FUNC_GETHOSTBYNAME_R_5) && \
-    !defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+    !defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
 
 hostent *deepCopyHostent(hostent *h,
                          const hostent *he,
@@ -264,11 +246,8 @@ hostent *wxGethostbyname_r(const char *hostname,
     gethostbyname_r(hostname, h, buffer, size, &he, err);
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
     he = gethostbyname_r(hostname, h, buffer, size, err);
-#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
-    wxUnusedVar(var);
-    *err = gethostbyname_r(hostname, h,  &buffer);
-    he = h;
-#elif defined(HAVE_GETHOSTBYNAME)
+#else
+    // Fall back on gethostbyname() which is assumed to be always available.
     wxLOCK_GETBY_MUTEX(name);
 
     he = gethostbyname(hostname);
@@ -296,10 +275,6 @@ hostent *wxGethostbyaddr_r(const char *addr_buf,
     gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer, size, &he, err);
 #elif defined(HAVE_FUNC_GETHOSTBYADDR_R_5)
     he = gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer, size, err);
-#elif defined(HAVE_FUNC_GETHOSTBYADDR_R_3)
-    wxUnusedVar(size);
-    *err = gethostbyaddr_r(addr_buf, buf_size, proto, h, &buffer);
-    he = h;
 #elif defined(HAVE_GETHOSTBYADDR)
     wxLOCK_GETBY_MUTEX(addr);
 
