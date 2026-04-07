@@ -899,14 +899,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
         if ( style & wxCAPTION )
             m_gdkDecor |= GDK_DECOR_TITLE;
-#if GTK_CHECK_VERSION(3,10,0)
-        else if (
-            wxGTKImpl::IsWayland(display) &&
-            gtk_check_version(3,10,0) == nullptr)
-        {
-            gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
-        }
-#endif
 
         if ( style & wxSYSTEM_MENU )
             m_gdkDecor |= GDK_DECOR_MENU;
@@ -923,6 +915,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
            m_gdkDecor |= GDK_DECOR_RESIZEH;
         }
     }
+#if GTK_CHECK_VERSION(3,10,0)
+    if ((m_gdkDecor & GDK_DECOR_TITLE) == 0 &&
+        wxGTKImpl::IsWayland(display) &&
+        wx_is_at_least_gtk3(10))
+    {
+        gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
+    }
+#endif
 
     m_decorSize = GetCachedDecorSize();
 
