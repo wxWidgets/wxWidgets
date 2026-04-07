@@ -1175,10 +1175,10 @@
  */
 
 /* wxLogChain class available */
-#cmakedefine wxHAS_LOG_CHAIN
+#define wxHAS_LOG_CHAIN
 
 /* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
-#cmakedefine wxHAS_WORKING_GTK_DC_BLIT
+/* #undef wxHAS_WORKING_GTK_DC_BLIT */
 
 #endif /* __WX_SETUP_H__ */
 
