@@ -1026,7 +1026,7 @@
 #cmakedefine HAVE_THR_SETCONCURRENCY 1
 
 /* Define if you have pthread_setconcurrency function */
-#cmakedefine HAVE_PTHREAD_SET_CONCURRENCY 1
+#cmakedefine HAVE_PTHREAD_SETCONCURRENCY 1
 
 /* Define if you have the uname function.  */
 #cmakedefine HAVE_UNAME 1

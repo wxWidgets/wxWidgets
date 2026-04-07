@@ -401,6 +401,27 @@ if(UNIX)
 endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
+    wx_check_funcs(
+        pthread_attr_setstacksize
+        pthread_cancel
+        pthread_mutex_timedlock
+        pthread_setconcurrency
+        sched_yield
+    )
+
+    wx_check_funcs(pthread_attr_getschedpolicy)
+    if(HAVE_PTHREAD_ATTR_GETSCHEDPOLICY)
+        wx_check_funcs(pthread_attr_setschedparam)
+        if(HAVE_PTHREAD_ATTR_SETSCHEDPARAM)
+            wx_check_funcs(sched_get_priority_max)
+            if(HAVE_SCHED_GET_PRIORITY_MAX)
+                set(HAVE_THREAD_PRIORITY_FUNCTIONS 1)
+            else()
+                message(WARNING "Setting thread priority will not work")
+            endif()
+        endif()
+    endif()
+
     cmake_push_check_state(RESET)
     set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
     wx_check_cxx_source_compiles("
