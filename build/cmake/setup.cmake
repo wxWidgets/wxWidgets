@@ -531,9 +531,21 @@ check_include_file(wchar.h HAVE_WCHAR_H)
 check_include_file(wcstr.h HAVE_WCSTR_H)
 
 if(wxUSE_DATETIME)
-    # check for timezone variable
-    #   doesn't exist under Darwin / Mac OS X which uses tm_gmtoff instead
-    foreach(timezone_def _timezone __timezone timezone)
+    # check for timezone variable:
+    #   - under POSIX systems we prefer using POSIX timezone
+    #   - but under Windows, at least with MinGW/clang, it results in
+    #     deprecation warnings, so prefer using __timezone instead.
+    #   - it doesn't exist at all under Darwin / Mac OS X which uses tm_gmtoff
+    #     instead, so don't bother checking for it there at all
+    if(APPLE)
+        set(timezone_candidates)
+    elseif(WIN32)
+        set(timezone_candidates __timezone;_timezone;timezone)
+    else()
+        set(timezone_candidates timezone;_timezone;__timezone)
+    endif()
+
+    foreach(timezone_def ${timezone_candidates})
         wx_check_cxx_source_compiles("
             int tz;
             tz = ${timezone_def};"
