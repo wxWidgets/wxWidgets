@@ -624,18 +624,18 @@ void wxQtDCImpl::DestroyClippingRegion()
 
 wxLayoutDirection wxQtDCImpl::GetLayoutDirection() const
 {
-    if ( m_layoutDir == wxLayout_Default && m_window )
+    if ( m_qtPainter->isActive() )
     {
-        return m_window->GetLayoutDirection();
+        return m_qtPainter->layoutDirection() == Qt::RightToLeft
+             ? wxLayout_RightToLeft
+             : wxLayout_LeftToRight;
     }
 
-    return m_layoutDir;
+    return m_window ? m_window->GetLayoutDirection() : wxLayout_Default;
 }
 
 void wxQtDCImpl::SetLayoutDirection(wxLayoutDirection dir)
 {
-    m_layoutDir = dir;
-
     // QPainter::setLayoutDirection() affects text drawing only.
     // i.e.: painter's origin and axes orientations are not affected.
     m_qtPainter->setLayoutDirection(dir == wxLayout_RightToLeft ? Qt::RightToLeft

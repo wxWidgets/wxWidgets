@@ -140,8 +140,6 @@ protected:
 
     bool m_isClipBoxValid = false;
 
-    wxLayoutDirection m_layoutDir = wxLayout_Default;
-
 private:
     enum wxQtRasterColourOp
     {

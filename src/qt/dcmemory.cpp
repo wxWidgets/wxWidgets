@@ -114,9 +114,11 @@ wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
 
 void wxMemoryDCImpl::SetLayoutDirection(wxLayoutDirection dir)
 {
-    if ( m_layoutDir != dir )
+    const auto layoutDir = GetLayoutDirection();
+
+    if ( layoutDir != dir )
     {
-        if ( m_layoutDir == wxLayout_RightToLeft || dir == wxLayout_RightToLeft )
+        if ( layoutDir == wxLayout_RightToLeft || dir == wxLayout_RightToLeft )
         {
             int w;
             GetSize(&w, nullptr);
@@ -125,6 +127,6 @@ void wxMemoryDCImpl::SetLayoutDirection(wxLayoutDirection dir)
             m_qtPainter->scale(-1, 1);
         }
 
-        m_layoutDir = dir;
+        wxQtDCImpl::SetLayoutDirection(dir);
     }
 }
