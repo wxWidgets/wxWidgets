@@ -325,7 +325,7 @@ if(UNIX)
 
     # check for uname (POSIX) and gethostname (BSD)
     check_symbol_exists(uname sys/utsname.h HAVE_UNAME)
-    if(HAVE_UNAME)
+    if(NOT HAVE_UNAME)
         wx_check_funcs(gethostname)
     endif()
 
