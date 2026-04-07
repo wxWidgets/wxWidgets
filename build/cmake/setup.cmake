@@ -74,8 +74,6 @@ endif()
 
 set(wxINSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
-check_include_files("stdlib.h;stdarg.h;string.h;float.h" STDC_HEADERS)
-
 if(NOT WIN32 AND wxUSE_VISIBILITY)
     check_cxx_compiler_flag(-fvisibility=hidden HAVE_VISIBILITY)
 else()

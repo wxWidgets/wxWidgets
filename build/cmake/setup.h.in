@@ -31,7 +31,7 @@
 #cmakedefine HAVE_SSIZE_T 1
 
 /* Define if you have the ANSI C header files.  */
-#cmakedefine STDC_HEADERS 1
+#define STDC_HEADERS 1
 
 /* Define this to get extra features from GNU libc. */
 #ifndef _GNU_SOURCE
