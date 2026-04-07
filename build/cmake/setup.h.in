@@ -712,12 +712,12 @@
 /*
  * Define if your compiler has C99 va_copy
  */
-#cmakedefine HAVE_VA_COPY 1
+#define HAVE_VA_COPY 1
 
 /*
  * Define if va_list type is an array
  */
-#cmakedefine VA_LIST_IS_ARRAY 1
+/* #undef VA_LIST_IS_ARRAY */
 
 /*
  * Define if the compiler supports simple visibility declarations.

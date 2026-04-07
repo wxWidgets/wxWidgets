@@ -134,14 +134,6 @@ function(wx_check_funcs)
     endforeach()
 endfunction()
 
-if(NOT MSVC)
-    check_symbol_exists(va_copy stdarg.h HAVE_VA_COPY)
-    if(NOT HAVE_VA_COPY)
-        # try to understand how can we copy va_lists
-        set(VA_LIST_IS_ARRAY YES)
-    endif()
-endif()
-
 # Check for availability of GCC's atomic operations builtins.
 wx_check_c_source_compiles("
     unsigned int value=0;
