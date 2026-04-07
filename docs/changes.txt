@@ -265,6 +265,7 @@ wxGTK:
 - Fix crash with EGL-based wxGLCanvas in wxNotebook (Florian Larysch, #26340).
 - Fix memory leak in wxDataViewChoiceRenderer.
 - Fix resource leak when using EGL with X11 (Florian Larysch, #26341).
+- Fix showing title bar under Wayland with wxBORDER_NONE (#26357).
 - Remove wrong maximum text length limitation in "picker" controls (#26314).
 
 wxMSW:
