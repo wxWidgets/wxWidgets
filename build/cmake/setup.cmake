@@ -483,10 +483,15 @@ if(CMAKE_USE_PTHREADS_INIT)
         pthread.h
         pthread_attr_setstacksize
         pthread_cancel
-        pthread_mutex_timedlock
         pthread_setconcurrency
         sched_yield
     )
+
+    # Somehow CMake finds this function under macOS and iOS but it's not
+    # actually available there.
+    if(NOT APPLE)
+        wx_check_symbols_exist_if_not_linux(pthread.h pthread_mutex_timedlock)
+    endif()
 
     wx_check_funcs_if_not_linux(pthread_attr_getschedpolicy)
     if(HAVE_PTHREAD_ATTR_GETSCHEDPOLICY)
