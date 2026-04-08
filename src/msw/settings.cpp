@@ -230,8 +230,12 @@ wxFont wxCreateFontFromStockObject(int index)
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            wxNativeFontInfo info;
-            info.lf = lf;
+            // Bricsys change: use the proper ctor to initialize pointSize from
+            // lf.lfHeight. Upstream fix: commits 4be459d98e + 13cb9d41d8.
+            // Without this, pointSize stays 0, and MSWSetCharFormat() sets
+            // cf.yHeight=0 via GetFractionalPointSize(), making RichEdit
+            // controls render text at microscopic size.
+            wxNativeFontInfo info(lf, NULL);
 #ifndef __WXWINCE__
             // We want Windows 2000 or later to have new fonts even MS Shell Dlg
             // is returned as default GUI font for compatibility
