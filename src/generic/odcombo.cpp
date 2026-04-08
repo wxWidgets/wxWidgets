@@ -242,9 +242,11 @@ void wxVListBoxComboPopup::DismissWithEvent()
     else
         m_stringValue.clear();
 
-    m_value = selection;
-
+    // Bricsys change: reverse the order of the following two lines
     Dismiss();
+
+    m_value = selection;
+    // end Bricsys change
 
     SendComboBoxEvent(selection);
 }
