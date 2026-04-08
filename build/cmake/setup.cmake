@@ -552,7 +552,9 @@ if(CMAKE_USE_PTHREADS_INIT)
     cmake_pop_check_state()
 endif() # CMAKE_USE_PTHREADS_INIT
 
-wx_check_symbols_exist_if_not_linux(time.h localtime_r gmtime_r)
+if(NOT WIN32)
+    wx_check_symbols_exist_if_not_linux(time.h localtime_r gmtime_r)
+endif()
 
 # ---------------------------------------------------------------------------
 # Checks for typedefs
@@ -593,12 +595,16 @@ endif()
 # Checks for structures
 # ---------------------------------------------------------------------------
 
+if(NOT WIN32)
+
 if(wxSKIP_CHECK_IF_LINUX)
     # struct passwd always has pw_gecos under Linux, so we can skip the check.
     set(HAVE_PW_GECOS 1)
 else()
     check_struct_has_member("struct passwd" pw_gecos pwd.h HAVE_PW_GECOS)
 endif()
+
+endif(NOT WIN32)
 
 # ---------------------------------------------------------------------------
 # Check for functions
@@ -620,7 +626,7 @@ wx_check_funcs_if_not_linux(
 cmake_pop_check_state()
 
 # Check various functions
-wx_check_funcs_if_not_linux(fsync
+wx_check_funcs_if_not_linux(
                snprintf vsnprintf strnlen strtoull
                setpriority
                gettimeofday
@@ -633,9 +639,12 @@ if(NOT HAVE_GETTIMEOFDAY)
 endif()
 
 # Check includes
-wx_check_include_file_if_not_linux(langinfo.h HAVE_LANGINFO_H)
-wx_check_include_file_if_not_linux(sched.h HAVE_SCHED_H)
-wx_check_include_file_if_not_linux(unistd.h HAVE_UNISTD_H)
+if(NOT WIN32)
+    wx_check_funcs_if_not_linux(fsync)
+    wx_check_include_file_if_not_linux(langinfo.h HAVE_LANGINFO_H)
+    wx_check_include_file_if_not_linux(sched.h HAVE_SCHED_H)
+    wx_check_include_file_if_not_linux(unistd.h HAVE_UNISTD_H)
+endif()
 
 if(wxUSE_DATETIME)
     # check for timezone variable:
@@ -671,6 +680,8 @@ if(wxUSE_DATETIME)
     check_struct_has_member("struct tm" tm_gmtoff time.h WX_GMTOFF_IN_TM)
 endif()
 
+if(NOT WIN32)
+
 wx_check_c_source_compiles_if_not_linux(
     "nl_langinfo(_NL_TIME_FIRST_WEEKDAY);"
     HAVE_NL_TIME_FIRST_WEEKDAY
@@ -685,15 +696,20 @@ if(HAVE_DLOPEN)
     wx_check_symbols_exist_if_not_linux(link.h dl_iterate_phdr)
 endif()
 
+endif(NOT WIN32)
+
 if(APPLE)
     set(wxUSE_EPOLL_DISPATCHER OFF)
     set(wxUSE_SELECT_DISPATCHER ON)
 else()
     if(NOT WIN32)
         set(wxUSE_SELECT_DISPATCHER ON)
+        wx_check_include_file_if_not_linux(sys/epoll.h wxUSE_EPOLL_DISPATCHER)
     endif()
-    wx_check_include_file_if_not_linux(sys/epoll.h wxUSE_EPOLL_DISPATCHER)
 endif()
+
+if(NOT WIN32)
+
 wx_check_include_file_if_not_linux(sys/select.h HAVE_SYS_SELECT_H)
 
 if(wxUSE_FSWATCHER)
@@ -719,6 +735,8 @@ if(wxUSE_XLOCALE)
         ${xlocale_headers}
         )
 endif()
+
+endif(NOT WIN32)
 
 # Check sizes of various types
 set(SYSTYPES size_t wchar_t int long short)

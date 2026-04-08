@@ -23,7 +23,20 @@ if(wxUSE_EXPAT STREQUAL "builtin")
     #
     # Until this is done, at least use Expat's own CMake file to check for the
     # features it needs, so that we can produce the appropriate expat_config.h.
-    include(${wxEXPAT_DIR}/ConfigureChecks.cmake)
+    #
+    # This only makes sense under Unix, however, as almost all checks there are
+    # Unix-specific and just always fail under Windows.
+    if(WIN32)
+        include(TestBigEndian)
+        test_big_endian(WORDS_BIGENDIAN)
+        if(WORDS_BIGENDIAN)
+            set(BYTEORDER 4321)
+        else(WORDS_BIGENDIAN)
+            set(BYTEORDER 1234)
+        endif(WORDS_BIGENDIAN)
+    else()
+        include(${wxEXPAT_DIR}/ConfigureChecks.cmake)
+    endif()
 
     # Also define some options normally set by Expat's CMakeLists.txt.
     set(XML_DTD 1)
