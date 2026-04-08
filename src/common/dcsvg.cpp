@@ -585,7 +585,7 @@ wxString wxSVGFileDCImpl::GetSVGDocument() const
     wxString doc(m_svgDocument);
 
     // Close remaining clipping group elements
-    for (size_t i = 0; i < m_clipUniqueId; i++)
+    for (size_t i = 0; i < m_clipNestingLevel; i++)
         doc += wxS("</g>\n");
 
     doc += wxS("</g>\n</svg>\n");
@@ -1269,8 +1269,8 @@ void wxSVGFileDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, w
     // graphics can be subsequently changed inside the clipping region)
     svg << "</g>\n"
            "<defs>\n"
-           "  <clipPath id=\"clip" << m_clipNestingLevel << "\">\n"
-           "    <rect id=\"cliprect" << m_clipNestingLevel << "\" "
+           "  <clipPath id=\"clip" << m_clipUniqueId << "\">\n"
+           "    <rect id=\"cliprect" << m_clipUniqueId << "\" "
                 "x=\"" << x << "\" "
                 "y=\"" << y << "\" "
                 "width=\"" << width << "\" "
@@ -1278,7 +1278,7 @@ void wxSVGFileDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, w
                 "stroke=\"none\" fill=\"none\"/>\n"
            "  </clipPath>\n"
            "</defs>\n"
-           "<g clip-path=\"url(#clip" << m_clipNestingLevel << ")\">\n";
+           "<g clip-path=\"url(#clip" << m_clipUniqueId << ")\">\n";
 
     write(svg);
 
@@ -1301,7 +1301,7 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     svg << "</g>\n";
 
     // Close clipping group elements
-    for (size_t i = 0; i < m_clipUniqueId; i++)
+    for (size_t i = 0; i < m_clipNestingLevel; i++)
     {
         svg << "</g>\n";
     }
@@ -1313,7 +1313,7 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     // elements for the clipped region have been closed).
     DoStartNewGraphics();
 
-    m_clipUniqueId = 0;
+    m_clipNestingLevel = 0;
 
     // Also update the base class clipping region information.
     wxDCImpl::DestroyClippingRegion();
