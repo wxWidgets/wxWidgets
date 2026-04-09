@@ -519,6 +519,9 @@ bool wxSVGFileDC::Save()
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDCImpl);
 
+size_t wxSVGFileDCImpl::m_clipUniqueId = 0;
+size_t wxSVGFileDCImpl::m_gradientUniqueId = 0;
+
 wxSVGFileDCImpl::wxSVGFileDCImpl(wxSVGFileDC* owner, const wxString& filename,
                                  int width, int height, double dpi, const wxString& title)
     : wxDCImpl(owner)
@@ -537,10 +540,7 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
     m_writeError = false;
     m_saved = false;
 
-    m_clipUniqueId = 0;
     m_clipNestingLevel = 0;
-
-    m_gradientUniqueId = 0;
 
     m_mm_to_pix_x = m_dpi / 25.4;
     m_mm_to_pix_y = m_dpi / 25.4;
