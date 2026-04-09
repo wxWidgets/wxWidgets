@@ -289,10 +289,10 @@ private:
 
     // Unique ID for every clipping graphics group: this is simply always
     // incremented in each SetClippingRegion() call.
-    size_t m_clipUniqueId;
+    static size_t m_clipUniqueId;
 
     // Unique ID for every gradient.
-    size_t m_gradientUniqueId;
+    static size_t m_gradientUniqueId;
 
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxSVGFileDCImpl);
