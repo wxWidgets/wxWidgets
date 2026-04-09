@@ -408,6 +408,7 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
 
     // write image meta information
     wxString s;
+    s.reserve(data.size());
     s += wxString::Format("  <image x=\"%d\" y=\"%d\" width=\"%dpx\" height=\"%dpx\"",
                           x, y, bmp.GetWidth(), bmp.GetHeight());
     s += wxString::Format(" id=\"image%d\" "
@@ -415,13 +416,13 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
                           sub_images++);
 
     // Wrap Base64 encoded data on 76 columns boundary (same as Inkscape).
-    const unsigned WRAP = 76;
+    constexpr unsigned WRAP = 76;
     for ( size_t i = 0; i < data.size(); i += WRAP )
     {
         if (i < data.size() - WRAP)
-            s += data.Mid(i, WRAP) + "\n";
+            s += data.substr(i, WRAP) + "\n";
         else
-            s += data.Mid(i, s.size() - i) + "\"\n  />\n"; // last line
+            s += data.substr(i) + "\"\n  />\n"; // last line
     }
 
     // write to the SVG file
@@ -584,7 +585,7 @@ wxString wxSVGFileDCImpl::GetSVGDocument() const
     wxString doc(m_svgDocument);
 
     // Close remaining clipping group elements
-    for (size_t i = 0; i < m_clipUniqueId; i++)
+    for (size_t i = 0; i < m_clipNestingLevel; i++)
         doc += wxS("</g>\n");
 
     doc += wxS("</g>\n</svg>\n");
@@ -1268,16 +1269,16 @@ void wxSVGFileDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, w
     // graphics can be subsequently changed inside the clipping region)
     svg << "</g>\n"
            "<defs>\n"
-           "  <clipPath id=\"clip" << m_clipNestingLevel << "\">\n"
-           "    <rect id=\"cliprect" << m_clipNestingLevel << "\" "
+           "  <clipPath id=\"clip" << m_clipUniqueId << "\">\n"
+           "    <rect id=\"cliprect" << m_clipUniqueId << "\" "
                 "x=\"" << x << "\" "
                 "y=\"" << y << "\" "
                 "width=\"" << width << "\" "
                 "height=\"" << height << "\" "
-                "stroke=\"gray\" fill=\"none\"/>\n"
+                "stroke=\"none\" fill=\"none\"/>\n"
            "  </clipPath>\n"
            "</defs>\n"
-           "<g clip-path=\"url(#clip" << m_clipNestingLevel << ")\">\n";
+           "<g clip-path=\"url(#clip" << m_clipUniqueId << ")\">\n";
 
     write(svg);
 
@@ -1300,7 +1301,7 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     svg << "</g>\n";
 
     // Close clipping group elements
-    for (size_t i = 0; i < m_clipUniqueId; i++)
+    for (size_t i = 0; i < m_clipNestingLevel; i++)
     {
         svg << "</g>\n";
     }
@@ -1312,7 +1313,7 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     // elements for the clipped region have been closed).
     DoStartNewGraphics();
 
-    m_clipUniqueId = 0;
+    m_clipNestingLevel = 0;
 
     // Also update the base class clipping region information.
     wxDCImpl::DestroyClippingRegion();
