@@ -45,9 +45,7 @@ WX_DECLARE_TYPE_POD(unsigned long int)
 WX_DECLARE_TYPE_POD(float)
 WX_DECLARE_TYPE_POD(double)
 WX_DECLARE_TYPE_POD(long double)
-#if wxWCHAR_T_IS_REAL_TYPE
 WX_DECLARE_TYPE_POD(wchar_t)
-#endif
 WX_DECLARE_TYPE_POD(wxLongLong_t)
 WX_DECLARE_TYPE_POD(wxULongLong_t)
 

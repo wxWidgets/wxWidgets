@@ -71,10 +71,7 @@
 #endif
 #define SIZEOF_LONG_LONG 8
 #define wxSIZE_T_IS_ULONG 1
-#define wxWCHAR_T_IS_REAL_TYPE 1
 #define HAVE_FCNTL 1
-#define HAVE_GETHOSTBYNAME 1
-#define HAVE_GETSERVBYNAME 1
 #define HAVE_GMTIME_R 1
 #define HAVE_INET_ADDR 1
 #define HAVE_INET_ATON 1
@@ -88,7 +85,6 @@
 #define HAVE_X11_XKBLIB_H 1
 #define HAVE_SCHED_H 1
 #define HAVE_UNISTD_H 1
-#define HAVE_WCHAR_H 1
 /* better to use the built-in CF conversions, also avoid iconv versioning problems */
 /* #undef HAVE_ICONV */
 #define ICONV_CONST

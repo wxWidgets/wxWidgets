@@ -76,13 +76,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
 #ifdef __WINDOWS__
     #define HAVE_INET_ADDR
 
-    #ifndef HAVE_GETHOSTBYNAME
-    #define HAVE_GETHOSTBYNAME
-    #endif
-    #ifndef HAVE_GETSERVBYNAME
-    #define HAVE_GETSERVBYNAME
-    #endif
-
     // under MSW getxxxbyname() functions are MT-safe (but not reentrant) so
     // we don't need to serialize calls to them
     #define wxHAS_MT_SAFE_GETBY_FUNCS
@@ -92,61 +85,22 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
     #endif
 #endif // __WINDOWS__
 
-// we assume that we have gethostbyaddr_r() if and only if we have
-// gethostbyname_r() and that it uses the similar conventions to it (see
-// comment in configure)
-//
-// this used not to be the case under older Android systems, where
-// gethostbyname_r() was available, but gethostbyaddr_r() wasn't, but it's not
-// clear if we still need to support the old NDKs, so for now keep things
-// simple -- and if we really need to account for this case, we'll add the
-// tests for gethostbyaddr_r() to configure later
-#define HAVE_GETHOSTBYADDR HAVE_GETHOSTBYNAME
-
-#ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
-    #define HAVE_FUNC_GETHOSTBYADDR_R_3
-#endif
 #ifdef HAVE_FUNC_GETHOSTBYNAME_R_5
     #define HAVE_FUNC_GETHOSTBYADDR_R_5
+    #define wxHAS_REENTRANT_GETHOSTBY_FUNCS
 #endif
 #ifdef HAVE_FUNC_GETHOSTBYNAME_R_6
     #define HAVE_FUNC_GETHOSTBYADDR_R_6
+    #define wxHAS_REENTRANT_GETHOSTBY_FUNCS
 #endif
 
-// the _r functions need the extra buffer parameter but unfortunately its type
-// differs between different systems and for the systems which use opaque
-// structs for it (at least AIX and OpenBSD) it must be zero-filled before
-// being passed to the system functions
-#ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
-    struct wxGethostBuf : hostent_data
-    {
-        wxGethostBuf()
-        {
-            memset(this, 0, sizeof(hostent_data));
-        }
-    };
-#else
-    typedef char wxGethostBuf[4096];
-#endif
-
-#ifdef HAVE_FUNC_GETSERVBYNAME_R_4
-    struct wxGetservBuf : servent_data
-    {
-        wxGetservBuf()
-        {
-            memset(this, 0, sizeof(servent_data));
-        }
-    };
-#else
-    typedef char wxGetservBuf[4096];
-#endif
+typedef char wxGethostBuf[4096];
+typedef char wxGetservBuf[4096];
 
 #if defined(wxHAS_MT_SAFE_GETBY_FUNCS) || !wxUSE_THREADS
     #define wxLOCK_GETBY_MUTEX(name)
 #else // may need mutexes to protect getxxxbyxxx() calls
-    #if defined(HAVE_GETHOSTBYNAME) || \
-        defined(HAVE_GETHOSTBYADDR) || \
-        defined(HAVE_GETSERVBYNAME)
+    #ifndef wxHAS_REENTRANT_GETHOSTBY_FUNCS
         #include "wx/thread.h"
 
         namespace
@@ -164,10 +118,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
 namespace
 {
 
-#if defined(HAVE_GETHOSTBYNAME) && \
-    !defined(HAVE_FUNC_GETHOSTBYNAME_R_6) && \
-    !defined(HAVE_FUNC_GETHOSTBYNAME_R_5) && \
-    !defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+#ifndef wxHAS_REENTRANT_GETHOSTBY_FUNCS
 
 hostent *deepCopyHostent(hostent *h,
                          const hostent *he,
@@ -251,7 +202,7 @@ hostent *deepCopyHostent(hostent *h,
 
     return h;
 }
-#endif // HAVE_GETHOSTBYNAME
+#endif // !wxHAS_REENTRANT_GETHOSTBY_FUNCS
 
 hostent *wxGethostbyname_r(const char *hostname,
                            hostent *h,
@@ -264,11 +215,8 @@ hostent *wxGethostbyname_r(const char *hostname,
     gethostbyname_r(hostname, h, buffer, size, &he, err);
 #elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
     he = gethostbyname_r(hostname, h, buffer, size, err);
-#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
-    wxUnusedVar(var);
-    *err = gethostbyname_r(hostname, h,  &buffer);
-    he = h;
-#elif defined(HAVE_GETHOSTBYNAME)
+#else
+    // Fall back on gethostbyname() which is assumed to be always available.
     wxLOCK_GETBY_MUTEX(name);
 
     he = gethostbyname(hostname);
@@ -276,8 +224,6 @@ hostent *wxGethostbyname_r(const char *hostname,
 
     if ( he )
         he = deepCopyHostent(h, he, buffer, size, err);
-#else
-    #error "No gethostbyname[_r]()"
 #endif
 
     return he;
@@ -296,11 +242,8 @@ hostent *wxGethostbyaddr_r(const char *addr_buf,
     gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer, size, &he, err);
 #elif defined(HAVE_FUNC_GETHOSTBYADDR_R_5)
     he = gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer, size, err);
-#elif defined(HAVE_FUNC_GETHOSTBYADDR_R_3)
-    wxUnusedVar(size);
-    *err = gethostbyaddr_r(addr_buf, buf_size, proto, h, &buffer);
-    he = h;
-#elif defined(HAVE_GETHOSTBYADDR)
+#else
+    // Fall back on gethostbyaddr() which is assumed to be always available.
     wxLOCK_GETBY_MUTEX(addr);
 
     he = gethostbyaddr(addr_buf, buf_size, proto);
@@ -308,14 +251,12 @@ hostent *wxGethostbyaddr_r(const char *addr_buf,
 
     if ( he )
         he = deepCopyHostent(h, he, buffer, size, err);
-#else
-    #error "No gethostbyaddr[_r]()"
 #endif
 
     return he;
 }
 
-#if defined(HAVE_GETSERVBYNAME)
+#ifndef wxHAS_REENTRANT_GETHOSTBY_FUNCS
 servent *deepCopyServent(servent *s,
                          servent *se,
                          char *buffer,
@@ -377,7 +318,7 @@ servent *deepCopyServent(servent *s,
     s->s_aliases = s_aliases; /* copy pointer to pointers */
     return s;
 }
-#endif // HAVE_GETSERVBYNAME
+#endif // !wxHAS_REENTRANT_GETHOSTBY_FUNCS
 
 servent *wxGetservbyname_r(const char *port,
                            const char *protocol,
@@ -390,18 +331,13 @@ servent *wxGetservbyname_r(const char *port,
     getservbyname_r(port, protocol, serv, buffer, size, &se);
 #elif defined(HAVE_FUNC_GETSERVBYNAME_R_5)
     se = getservbyname_r(port, protocol, serv, buffer, size);
-#elif defined(HAVE_FUNC_GETSERVBYNAME_R_4)
-    wxUnusedVar(size);
-    if ( getservbyname_r(port, protocol, serv, &buffer) != 0 )
-        return nullptr;
-#elif defined(HAVE_GETSERVBYNAME)
+#else
+    // Fall back on getservbyname() which is assumed to be always available.
     wxLOCK_GETBY_MUTEX(serv);
 
     se = getservbyname(port, protocol);
     if ( se )
         se = deepCopyServent(serv, se, buffer, size);
-#else
-    #error "No getservbyname[_r]()"
 #endif
     return se;
 }

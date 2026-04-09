@@ -17,10 +17,10 @@
 #ifndef __cplusplus
 
 /* Define to empty if the keyword does not work.  */
-#undef const
+/* #undef const */
 
 /* Define as __inline if that's what the C compiler calls it.  */
-#undef inline
+/* #undef inline */
 
 #endif /* __cplusplus */
 
@@ -31,7 +31,7 @@
 #cmakedefine HAVE_SSIZE_T 1
 
 /* Define if you have the ANSI C header files.  */
-#cmakedefine STDC_HEADERS 1
+#define STDC_HEADERS 1
 
 /* Define this to get extra features from GNU libc. */
 #ifndef _GNU_SOURCE
@@ -712,12 +712,12 @@
 /*
  * Define if your compiler has C99 va_copy
  */
-#cmakedefine HAVE_VA_COPY 1
+#define HAVE_VA_COPY 1
 
 /*
  * Define if va_list type is an array
  */
-#cmakedefine VA_LIST_IS_ARRAY 1
+/* #undef VA_LIST_IS_ARRAY */
 
 /*
  * Define if the compiler supports simple visibility declarations.
@@ -768,10 +768,6 @@
  * Define if you have pthread_cleanup_push/pop()
  */
 #cmakedefine wxHAVE_PTHREAD_CLEANUP 1
-/*
- * Define if compiler has __thread keyword.
- */
-#cmakedefine HAVE___THREAD_KEYWORD 1
 /*
  * Define if large (64 bit file offsets) files are supported.
  */
@@ -954,11 +950,11 @@
 /* Define if size_t on your machine is the same type as unsigned long. */
 #cmakedefine wxSIZE_T_IS_ULONG 1
 
-/* Define if wchar_t is distinct type in your compiler. */
-#cmakedefine wxWCHAR_T_IS_REAL_TYPE 1
-
 /* Define if you have the dladdr function.  */
 #cmakedefine HAVE_DLADDR 1
+
+/* Define if you have the dl_iterate_phdr function.  */
+#cmakedefine HAVE_DL_ITERATE_PHDR 1
 
 /* Define if you have Posix fnctl() function. */
 #cmakedefine HAVE_FCNTL 1
@@ -975,12 +971,6 @@
 /* Define if you have a gethostbyname_r function taking 5 arguments. */
 #cmakedefine HAVE_FUNC_GETHOSTBYNAME_R_5 1
 
-/* Define if you have a gethostbyname_r function taking 3 arguments. */
-#cmakedefine HAVE_FUNC_GETHOSTBYNAME_R_3 1
-
-/* Define if you only have a gethostbyname function */
-#cmakedefine HAVE_GETHOSTBYNAME 1
-
 /* Define if you have the gethostname function.  */
 #cmakedefine HAVE_GETHOSTNAME 1
 
@@ -989,12 +979,6 @@
 
 /* Define if you have a getservbyname_r function taking 5 arguments. */
 #cmakedefine HAVE_FUNC_GETSERVBYNAME_R_5 1
-
-/* Define if you have a getservbyname_r function taking 4 arguments. */
-#cmakedefine HAVE_FUNC_GETSERVBYNAME_R_4 1
-
-/* Define if you only have a getservbyname function */
-#cmakedefine HAVE_GETSERVBYNAME 1
 
 /* Define if you have the gmtime_r function.  */
 #cmakedefine HAVE_GMTIME_R 1
@@ -1027,7 +1011,7 @@
 #cmakedefine HAVE_THR_SETCONCURRENCY 1
 
 /* Define if you have pthread_setconcurrency function */
-#cmakedefine HAVE_PTHREAD_SET_CONCURRENCY 1
+#cmakedefine HAVE_PTHREAD_SETCONCURRENCY 1
 
 /* Define if you have the uname function.  */
 #cmakedefine HAVE_UNAME 1
@@ -1047,18 +1031,6 @@
 /* Define if you have the <unistd.h> header file.  */
 #cmakedefine HAVE_UNISTD_H 1
 
-/* Define if you have the <fcntl.h> header file.  */
-#cmakedefine HAVE_FCNTL_H 1
-
-/* Define if you have the <wchar.h> header file.  */
-#cmakedefine HAVE_WCHAR_H 1
-
-/* Define if you have the <wcstr.h> header file.  */
-#cmakedefine HAVE_WCSTR_H 1
-
-/* Define if you have <widec.h> (Solaris only) */
-#cmakedefine HAVE_WIDEC_H 1
-
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #cmakedefine HAVE_ICONV 1
 
@@ -1073,9 +1045,6 @@
 
 /* Define if you have wcsrtombs() function */
 #cmakedefine HAVE_WCSRTOMBS 1
-
-/* Define this if you have putws() */
-#cmakedefine HAVE_PUTWS 1
 
 /* Define this if you have fputws() */
 #cmakedefine HAVE_FPUTWS 1
@@ -1175,10 +1144,10 @@
  */
 
 /* wxLogChain class available */
-#cmakedefine wxHAS_LOG_CHAIN
+#define wxHAS_LOG_CHAIN
 
 /* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
-#cmakedefine wxHAS_WORKING_GTK_DC_BLIT
+/* #undef wxHAS_WORKING_GTK_DC_BLIT */
 
 #endif /* __WX_SETUP_H__ */
 

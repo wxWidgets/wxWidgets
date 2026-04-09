@@ -1022,9 +1022,6 @@ typedef pid_t GPid;
 /* Define if size_t on your machine is the same type as unsigned long. */
 #undef wxSIZE_T_IS_ULONG
 
-/* Define if wchar_t is distinct type in your compiler. */
-#define wxWCHAR_T_IS_REAL_TYPE 1
-
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
 
@@ -1043,12 +1040,6 @@ typedef pid_t GPid;
 /* Define if you have a gethostbyname_r function taking 5 arguments. */
 #undef HAVE_FUNC_GETHOSTBYNAME_R_5
 
-/* Define if you have a gethostbyname_r function taking 3 arguments. */
-#undef HAVE_FUNC_GETHOSTBYNAME_R_3
-
-/* Define if you only have a gethostbyname function */
-#define HAVE_GETHOSTBYNAME 1
-
 /* Define if you have the gethostname function.  */
 #define HAVE_GETHOSTNAME 1
 
@@ -1057,12 +1048,6 @@ typedef pid_t GPid;
 
 /* Define if you have a getservbyname_r function taking 5 arguments. */
 #undef HAVE_FUNC_GETSERVBYNAME_R_5
-
-/* Define if you have a getservbyname_r function taking 4 arguments. */
-#undef HAVE_FUNC_GETSERVBYNAME_R_4
-
-/* Define if you only have a getservbyname function */
-#define HAVE_GETSERVBYNAME 1
 
 /* Define if you have the gmtime_r function.  */
 #if __CRTL_VER >= 70000000 && \
@@ -1103,7 +1088,7 @@ typedef pid_t GPid;
 #undef HAVE_THR_SETCONCURRENCY
 
 /* Define if you have pthread_setconcurrency function */
-#define HAVE_PTHREAD_SET_CONCURRENCY 1
+#define HAVE_PTHREAD_SETCONCURRENCY 1
 
 /* Define if you have the uname function.  */
 #define HAVE_UNAME 1
@@ -1124,24 +1109,12 @@ typedef pid_t GPid;
 /* Define if you have the <unistd.h> header file.  */
 #define HAVE_UNISTD_H 1
 
-/* Define if you have the <fcntl.h> header file.  */
-#define HAVE_FCNTL_H 1
-
-/* Define if you have the <wchar.h> header file.  */
-#define HAVE_WCHAR_H 1
-
-/* Define if you have the <wcstr.h> header file.  */
-#undef HAVE_WCSTR_H
-
 /* Define if you have the <wctype.h> header file.  */
 #if __CRTL_VER >= 70312000
 #define HAVE_WCTYPE_H 1
 #else
 #undef HAVE_WCTYPE_H
 #endif
-
-/* Define if you have <widec.h> (Solaris only) */
-#undef HAVE_WIDEC_H
 
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #define HAVE_ICONV_H 1
@@ -1160,9 +1133,6 @@ typedef pid_t GPid;
 
 /* Define if you have wcsrtombs() function */
 #define HAVE_WCSRTOMBS 1
-
-/* Define this if you have putws() */
-#undef HAVE_PUTWS
 
 /* Define this if you have fputws() */
 #define HAVE_FPUTWS 1

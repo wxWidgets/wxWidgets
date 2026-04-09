@@ -434,9 +434,6 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
 #ifdef HAVE_FPUTWS
     #define wxCRT_FputsW  fputws
 #endif
-#ifdef HAVE_PUTWS
-    #define wxCRT_PutsW   putws
-#endif
 #ifdef HAVE_FPUTWC
     #define wxCRT_FputcW  fputwc
 #endif

@@ -1573,11 +1573,6 @@ dnl Note: non-empty last parameter makes check compile-only,
 dnl   skipping worthless preprocessing check
 AC_CHECK_HEADERS(langinfo.h wchar.h,,, [AC_INCLUDES_DEFAULT])
 
-dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
-if test "$ac_cv_header_wchar_h" != "yes"; then
-    AC_CHECK_HEADERS([wcstr.h],,, [AC_INCLUDES_DEFAULT()])
-fi
-
 if test "$USE_UNIX" = 1 ; then
     dnl POSIX needs this for select(), but old systems don't have it
     AC_CHECK_HEADERS([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
@@ -1630,12 +1625,10 @@ AC_CHECK_SIZEOF(wchar_t, 0,
         #if defined(__DJGPP__) && !( (__GNUC_MINOR__ >= 8 && __GNUC__ == 2 ) || __GNUC__ >= 3 )
         #  error "fake wchar_t"
         #endif
-        #ifdef HAVE_WCHAR_H
-        #  ifdef __CYGWIN__
-        #    include <stddef.h>
-        #  endif
-        #  include <wchar.h>
+        #ifdef __CYGWIN__
+        #  include <stddef.h>
         #endif
+        #include <wchar.h>
         #ifdef HAVE_STDLIB_H
         #  include <stdlib.h>
         #endif
@@ -3866,30 +3859,6 @@ else
     fi
 fi
 
-AC_CACHE_CHECK([if wchar_t is separate type],
-    wx_cv_wchar_t_is_separate_type,
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <wchar.h>],
-        [
-            return 0; }
-
-            struct Foo { void foo(wchar_t);
-                         void foo(unsigned short);
-                         void foo(unsigned int);
-                         void foo(unsigned long); };
-
-            int bar() {
-        ])],
-        wx_cv_wchar_t_is_separate_type=yes,
-        wx_cv_wchar_t_is_separate_type=no
-    )
-)
-
-if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
-    AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 1)
-else
-    AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 0)
-fi
-
 AC_LANG_POP() dnl C++
 
 dnl ---------------------------------------------------------------------------
@@ -4071,21 +4040,9 @@ if test "$wx_cv_func_vsscanf" = "yes"; then
 fi
 AC_LANG_POP()
 
-dnl also look if we have wide char IO functions, notice that [f]putws are
-dnl declared in special widec.h under Solaris
-wchar_headers="#include <stdio.h>
-#include <wchar.h>"
-case "${host}" in
-    *-*-solaris2* )
-        AC_CHECK_HEADERS(widec.h,,, [AC_INCLUDES_DEFAULT()])
-        if test "$ac_cv_header_widec_h" = "yes"; then
-            wchar_headers="$wchar_headers
-#include <widec.h>"
-        fi
-esac
-
-WX_CHECK_FUNCS(putws fputws wprintf vswprintf vswscanf,,,
-               [$wchar_headers])
+WX_CHECK_FUNCS(fputws wprintf vswprintf vswscanf,,,
+               [#include <stdio.h>
+                #include <wchar.h>])
 
 dnl MinGW has a vswprintf with a different prototype, and
 dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
@@ -4653,7 +4610,7 @@ if test "$TOOLKIT" != "MSW"; then
     dnl do other tests only if we are using threads
     if test "$wxUSE_THREADS" = "yes" ; then
         AC_CHECK_FUNCS(pthread_setconcurrency,
-            AC_DEFINE(HAVE_PTHREAD_SET_CONCURRENCY),
+            AC_DEFINE(HAVE_PTHREAD_SETCONCURRENCY),
             [
                 AC_CHECK_FUNCS(thr_setconcurrency,
                     AC_DEFINE(HAVE_THR_SETCONCURRENCY),
@@ -4837,39 +4794,11 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
     dnl related functions (taken from python's configure.in)
     dnl sigh -- gethostbyname_r is a mess; it can have 3, 5 or 6 arguments
       AX_FUNC_WHICH_GETHOSTBYNAME_R
-      if test "x$ac_cv_func_which_gethostbyname_r" = "xno" -o \
-              "x$ac_cv_func_which_gethostbyname_r" = "xunknown" ; then
-          AC_CHECK_FUNC(gethostbyname, [ AC_DEFINE(HAVE_GETHOSTBYNAME) ],
-              [
-                  dnl Under HaikuOS it is not yet detected
-                  case "${host}" in
-                  *-*-haiku* )
-                    AC_DEFINE(HAVE_GETHOSTBYNAME)
-                    AC_MSG_WARN([Defining HAVE_GETHOSTBYNAME unconditionally under ${host}.])
-                    ;;
-                  esac
-              ]
-           )
-      fi
       dnl A similar test for getservbyname_r
       dnl I'm tempted to just not do this test which is taking much time and
       dnl do something similar as for gethostbyaddr_r, but OTOH the macro
       dnl doing the test already exists, so using it is easy enough.     - SN
       AC_raf_FUNC_WHICH_GETSERVBYNAME_R
-      if test "x$ac_cv_func_which_getservbyname_r" = "xno" -o \
-              "x$ac_cv_func_which_getservbyname_r" = "xunknown" ; then
-          AC_CHECK_FUNCS(getservbyname,[ AC_DEFINE(HAVE_GETSERVBYNAME) ],
-              [
-                  dnl Under HaikuOS it is not yet detected
-                  case "${host}" in
-                  *-*-haiku* )
-                    AC_DEFINE(HAVE_GETSERVBYNAME)
-                    AC_MSG_WARN([Defining HAVE_GETSERVBYNAME unconditionally under ${host}.])
-                    ;;
-                  esac
-              ]
-           )
-      fi
       dnl For gethostbyaddr_r, we currently do no separate test, instead, we
       dnl silently assume it's available exactly if gethostbyname_r is
       dnl available and always requires two more arguments than

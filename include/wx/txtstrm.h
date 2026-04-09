@@ -62,9 +62,7 @@ public:
     // Operators
     wxTextInputStream& operator>>(wxString& word);
     wxTextInputStream& operator>>(char& c);
-#if wxWCHAR_T_IS_REAL_TYPE
     wxTextInputStream& operator>>(wchar_t& wc);
-#endif
     wxTextInputStream& operator>>(wxInt16& i);
     wxTextInputStream& operator>>(wxInt32& i);
     wxTextInputStream& operator>>(wxInt64& i);
@@ -157,9 +155,7 @@ public:
 
     wxTextOutputStream& operator<<(const wxString& string);
     wxTextOutputStream& operator<<(char c);
-#if wxWCHAR_T_IS_REAL_TYPE
     wxTextOutputStream& operator<<(wchar_t wc);
-#endif
     wxTextOutputStream& operator<<(wxInt16 c);
     wxTextOutputStream& operator<<(wxInt32 c);
     wxTextOutputStream& operator<<(wxInt64 c);
