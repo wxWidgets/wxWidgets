@@ -606,49 +606,42 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
     HICON hicon;
 
     // do we need the icon of the specific size or would any icon do?
-    bool hasSize = desiredWidth != -1 || desiredHeight != -1;
+    const bool hasSize = desiredWidth != -1 && desiredHeight != -1;
 
-    wxASSERT_MSG( !hasSize || (desiredWidth != -1 && desiredHeight != -1),
-                  wxT("width and height should be either both -1 or not") );
+    if ( !hasSize )
+    {
+        wxASSERT_MSG( desiredWidth == -1 && desiredHeight == -1,
+                      wxT("width and height should be either both -1 or not") );
+
+        // LoadImage() interprets 0 as meaning "use the actual size".
+        desiredWidth =
+        desiredHeight = 0;
+    }
 
     // try to load the icon from this program first to allow overriding the
     // standard icons (although why one would want to do it considering that
     // we already have wxApp::GetStdIcon() is unclear)
+    hicon = (HICON)::LoadImage(wxGetInstance(), name.t_str(), IMAGE_ICON,
+                                desiredWidth, desiredHeight,
+                                LR_DEFAULTCOLOR);
 
-    // note that we can't just always call LoadImage() because it seems to do
-    // some icon rescaling internally which results in very ugly 16x16 icons
-    if ( hasSize )
+    // next check if it's not a standard icon
+    if ( !hicon )
     {
-        hicon = (HICON)::LoadImage(wxGetInstance(), name.t_str(), IMAGE_ICON,
-                                    desiredWidth, desiredHeight,
-                                    LR_DEFAULTCOLOR);
-
-        // Don't give errors when looking for a standard icon because we
-        // provide fallback for them below, but do indicate that we failed to
-        // load other icons because this is probably not expected.
-        if ( !hicon && nStdIcon == WXSIZEOF(stdIcons) )
+        if ( nStdIcon == WXSIZEOF(stdIcons) )
         {
             wxLogLastError(wxString::Format("LoadImage(%s)", name));
         }
-    }
-    else
-    {
-        hicon = ::LoadIcon(wxGetInstance(), name.t_str());
-
-        // As above, only warn for non standard icons.
-        if ( !hicon && nStdIcon == WXSIZEOF(stdIcons) )
+        else // We may still succeed in loading the standard icon.
         {
-            wxLogLastError(wxString::Format("LoadIcon(%s)", name));
-        }
-    }
-
-    // next check if it's not a standard icon
-    if ( !hicon && !hasSize && nStdIcon < WXSIZEOF(stdIcons) )
-    {
-        hicon = ::LoadIcon((HINSTANCE)nullptr, stdIcons[nStdIcon].id);
-        if ( !hicon )
-        {
-            wxLogLastError(wxString::Format("LoadIcon(%s)", stdIcons[nStdIcon].name));
+            const auto& entry = stdIcons[nStdIcon];
+            hicon = (HICON)::LoadImage((HINSTANCE)nullptr, entry.id, IMAGE_ICON,
+                                       desiredWidth, desiredHeight,
+                                       LR_DEFAULTSIZE | LR_DEFAULTCOLOR);
+            if ( !hicon )
+            {
+                wxLogLastError(wxString::Format("LoadImage(%s)", entry.name));
+            }
         }
     }
 
@@ -656,22 +649,17 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         return false;
 
     wxSize size;
-    double scale = 1.0;
     if ( hasSize )
     {
         size.x = desiredWidth;
         size.y = desiredHeight;
     }
-    else // We loaded an icon of default size.
+    else
     {
-        // LoadIcon() returns icons of scaled size, so we must use the correct
-        // scaling factor of them.
         size = wxGetHiconSize(hicon);
-        if ( const wxWindow* win = wxApp::GetMainTopWindow() )
-            scale = win->GetDPIScaleFactor();
     }
 
-    return icon->InitFromHICON((WXHICON)hicon, size.x, size.y, scale);
+    return icon->InitFromHICON((WXHICON)hicon, size.x, size.y);
 }
 
 #if wxUSE_PNG_RESOURCE_HANDLER
