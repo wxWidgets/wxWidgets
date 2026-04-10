@@ -1,0 +1,1 @@
+wxGTK: Fix regression when using wxImageList in high DPI (#26349).
