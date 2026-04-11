@@ -1008,17 +1008,16 @@ function(wx_add name group)
     endif()
 
     # All applications use at least the base library other libraries
-    # will have to be added with wx_link_sample_libraries()
-    wx_exe_link_libraries(${target_name} wxbase)
-    if(NOT APP_CONSOLE)
-        # UI applications always require core
-        wx_exe_link_libraries(${target_name} wxcore)
+    if(APP_CONSOLE)
+        wx_exe_link_libraries(${target_name} wxbase_only)
     else()
-        target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
+        wx_exe_link_libraries(${target_name} wxcore)
     endif()
+
     if(APP_LIBRARIES)
         wx_exe_link_libraries(${target_name} ${APP_LIBRARIES})
     endif()
+
     if(APP_DEFINITIONS)
         target_compile_definitions(${target_name} PRIVATE ${APP_DEFINITIONS})
     endif()
