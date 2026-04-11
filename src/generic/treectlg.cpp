@@ -2491,18 +2491,26 @@ void wxGenericTreeCtrl::AssignButtonsImageList(wxImageList *imageList)
 // helpers
 // -----------------------------------------------------------------------------
 
+wxSize GetTotalAreaFromClientArea(wxSize size)
+{
+    int x = size.x + PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+    int y = size.y + PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+    return wxSize( x, y);
+}
+
 void wxGenericTreeCtrl::AdjustMyScrollbars()
 {
     if (m_anchor)
     {
         int x = 0, y = 0;
         m_anchor->GetSize( x, y, this );
-        y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
-        x += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
+        wxSize totalSize = GetTotalAreaFromClientArea( wxSize( x, y) );
         int x_pos = GetScrollPos( wxHORIZONTAL );
         int y_pos = GetScrollPos( wxVERTICAL );
-        SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT,
-                       x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT,
+        SetScrollbars( PIXELS_PER_UNIT, 
+                       PIXELS_PER_UNIT,
+                       totalSize.x/PIXELS_PER_UNIT, 
+                       totalSize.y/PIXELS_PER_UNIT,
                        x_pos, y_pos );
     }
     else
@@ -4186,7 +4194,7 @@ void wxGenericTreeCtrl::DoDirtyProcessing()
     AdjustMyScrollbars();
 }
 
-wxSize wxGenericTreeCtrl::DoGetBestSize() const
+wxSize wxGenericTreeCtrl::DoGetBestClientSize() const
 {
     // make sure all positions are calculated as normally this only done during
     // idle time but we need them for base class DoGetBestSize() to return the
@@ -4195,23 +4203,41 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
 
     wxSize size = wxTreeCtrlBase::DoGetBestSize();
 
-    // there seems to be an implicit extra border around the items, although
-    // I'm not really sure where does it come from -- but without this, the
-    // scrollbars appear in a tree with default/best size
-    size.IncBy(4, 4);
+    // DoGetBestSize assumes we can stretch out completely and therefore
+    // will not have scrollbars
 
-    // and the border has to be rounded up to a multiple of PIXELS_PER_UNIT or
-    // scrollbars still appear
-    const wxSize& borderSize = GetWindowBorderSize();
-
-    int dx = (size.x - borderSize.x) % PIXELS_PER_UNIT;
-    if ( dx )
-        size.x += PIXELS_PER_UNIT - dx;
-    int dy = (size.y - borderSize.y) % PIXELS_PER_UNIT;
-    if ( dy )
-        size.y += PIXELS_PER_UNIT - dy;
+    // Use the calculation from AdjustMyScrollbars()
+    size = GetTotalAreaFromClientArea( size );
+    size.x = (size.x / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
+    size.y = (size.y / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
 
     return size;
+}
+
+wxSize wxGenericTreeCtrl::DoGetBestSize() const
+{
+    wxSize size = DoGetBestClientSize();
+
+    // add the border
+    const wxSize& borderSize = GetWindowBorderSize();
+    size.x += borderSize.x;
+    size.y += borderSize.y;
+
+    return size;
+}
+
+int wxGenericTreeCtrl::DoGetBestClientWidth(int height) const
+{
+    wxSize size = DoGetBestClientSize();
+
+    if (height < size.y)
+    {
+        // Add space for vertical scrollbar
+        return size.x + wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
+    }
+
+    // No scrollbar needed
+    return size.x;
 }
 
 #endif // wxUSE_TREECTRL
