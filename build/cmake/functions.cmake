@@ -588,7 +588,11 @@ macro(wx_add_library name)
         )
 
         if(wxBUILD_SHARED AND MSVC AND wxBUILD_INSTALL_PDB)
-            wx_install(FILES $<TARGET_PDB_FILE:${name}> DESTINATION "${runtime_dir}")
+            if(wxBUILD_STRIPPED_RELEASE)
+                wx_install(FILES $<TARGET_PDB_FILE:${name}> DESTINATION "${runtime_dir}" CONFIGURATIONS Debug RelWithDebInfo)
+            else()
+                wx_install(FILES $<TARGET_PDB_FILE:${name}> DESTINATION "${runtime_dir}")
+            endif()
         endif()
 
         wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
