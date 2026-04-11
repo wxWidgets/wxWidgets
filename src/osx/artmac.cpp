@@ -124,11 +124,25 @@ wxIconBundle wxMacArtProvider::CreateIconBundle(const wxArtID& id, const wxArtCl
 #define ART_BITMAP(artId, symbolname) \
     if ( id == artId ) \
     { \
-        return wxOSXCreateSystemBitmapBundle(symbolname, size); \
+        return wxOSXCreateSystemBitmapBundle(symbolname, defSize); \
     }
 
-static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id, const wxSize& size)
+static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id, const wxArtClient& client, const wxSize& size)
 {
+    // SF symbols used below have a tiny intrinsic size (roughly the
+    // system font point size), which would leave them rendering as a small
+    // glyph inside whatever container the caller places them into.  Pick a
+    // reasonable default size based on the client hint so the bundle
+    // reports a size comparable to the other art provider icons.
+    wxSize defSize = size;
+    if ( defSize == wxDefaultSize )
+    {
+        defSize = wxArtProvider::GetNativeDIPSizeHint(client);
+        if ( defSize == wxDefaultSize )
+            defSize = wxSize(32, 32);
+    }
+
+
     ART_BITMAP(wxART_ERROR,         "xmark.circle" )
     ART_BITMAP(wxART_INFORMATION,   "info.circle" )
     ART_BITMAP(wxART_WARNING,       "exclamationmark.triangle" )
@@ -169,9 +183,9 @@ wxBitmapBundle wxMacArtProvider::CreateBitmapBundle(const wxArtID& id, const wxA
     // On the Mac folders in lists are always drawn closed, so if an open
     // folder icon is asked for we will ask for a closed one in its place
     if ( client == wxART_LIST && id == wxART_FOLDER_OPEN )
-        return wxMacArtProvider_CreateBitmapBundle(wxART_FOLDER, size);
+        return wxMacArtProvider_CreateBitmapBundle(wxART_FOLDER, client, size);
 
-    return wxMacArtProvider_CreateBitmapBundle(id, size);
+    return wxMacArtProvider_CreateBitmapBundle(id, client, size);
 }
 
 // ----------------------------------------------------------------------------

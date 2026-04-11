@@ -28,6 +28,7 @@
 #include "wx/private/bmpbndl.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -154,6 +155,125 @@ wxBitmap wxOSXImageBundleImpl::GetBitmap(const wxSize& WXUNUSED(size))
 wxBitmapBundle wxOSXMakeBundleFromImage( WXImage img)
 {
     return wxBitmapBundle::FromImpl( new wxOSXImageBundleImpl(img) );
+}
+
+// ============================================================================
+// wxOSXSFSymbolBundleImpl
+// ============================================================================
+//
+// Bundle implementation for macOS SF Symbols. Unlike wxOSXImageBundleImpl,
+// this keeps the symbol name around so we can regenerate the underlying
+// NSImage at any requested size.  SF symbols are effectively vector images,
+// so regenerating produces crisp output for every display scale.  The native
+// image cache is pre-populated with the symbol at the bundle's default size,
+// ensuring widgets retrieving the bundle's native NSImage still receive a
+// proper template image that adapts to light/dark appearance.
+
+#if wxOSX_USE_COCOA
+
+namespace
+{
+
+class wxOSXSFSymbolBundleImpl : public wxBitmapBundleImpl
+{
+public:
+    wxOSXSFSymbolBundleImpl(const wxString& symbolName, const wxSize& defaultSize)
+        : m_symbolName(symbolName), m_defaultSize(defaultSize)
+    {
+        // Pre-populate the native image cache so widget code paths that
+        // retrieve the NSImage directly (via wxOSXGetImageFromBundle) get
+        // the SF symbol image with its template flag intact.
+        WXImage image = CreateSymbolImage(defaultSize);
+        if ( image )
+            wxOSXSetImageForBundleImpl(this, image);
+    }
+
+    virtual wxSize GetDefaultSize() const override { return m_defaultSize; }
+
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override
+    {
+        return m_defaultSize * scale;
+    }
+
+    virtual wxBitmap GetBitmap(const wxSize& size) override
+    {
+        const wxSize sz = (size == wxDefaultSize) ? m_defaultSize : size;
+        WXImage image = CreateSymbolImage(sz);
+        if ( image )
+            return wxBitmap(image);
+        return wxNullBitmap;
+    }
+
+private:
+    WXImage CreateSymbolImage(const wxSize& size) const
+    {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+        if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+        {
+            wxCFStringRef cfname(m_symbolName);
+            NSImage* symbol =
+                [NSImage imageWithSystemSymbolName:cfname.AsNSString()
+                          accessibilityDescription:nil];
+            if ( symbol )
+            {
+                // Configure the symbol at a point size matching the
+                // requested dimension so the stroke weight is appropriate
+                // for the rendered size.
+                NSImageSymbolConfiguration* config =
+                    [NSImageSymbolConfiguration
+                        configurationWithPointSize:size.GetHeight()
+                                            weight:NSFontWeightRegular];
+                NSImage* configured =
+                    [symbol imageWithSymbolConfiguration:config];
+                if ( configured )
+                    symbol = configured;
+
+                [symbol setSize:NSMakeSize(size.x, size.y)];
+                // SF symbols are template images; ensure the flag is set
+                // so AppKit tints them for the current light/dark mode.
+                [symbol setTemplate:YES];
+                return symbol;
+            }
+        }
+#else
+        wxUnusedVar(size);
+#endif
+        return nullptr;
+    }
+
+    const wxString m_symbolName;
+    const wxSize   m_defaultSize;
+};
+
+} // anonymous namespace
+
+#endif // wxOSX_USE_COCOA
+
+wxBitmapBundle wxOSXMakeBundleForSystemSymbol(const wxString& name, const wxSize& defaultSize)
+{
+#if wxOSX_USE_COCOA
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        wxCFStringRef cfname(name);
+        NSImage* probe =
+            [NSImage imageWithSystemSymbolName:cfname.AsNSString()
+                      accessibilityDescription:nil];
+        if ( probe )
+        {
+            wxSize sz = defaultSize;
+            if ( sz == wxDefaultSize )
+                sz = wxSize(32, 32);
+            return wxBitmapBundle::FromImpl(
+                new wxOSXSFSymbolBundleImpl(name, sz));
+        }
+    }
+#endif
+#else
+    wxUnusedVar(name);
+    wxUnusedVar(defaultSize);
+#endif
+    return wxBitmapBundle();
 }
 
 // ============================================================================
