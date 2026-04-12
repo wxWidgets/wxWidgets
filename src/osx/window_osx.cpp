@@ -20,7 +20,6 @@
     #include "wx/frame.h"
     #include "wx/dc.h"
     #include "wx/dcclient.h"
-    #include "wx/button.h"
     #include "wx/menu.h"
     #include "wx/dialog.h"
     #include "wx/settings.h"
@@ -253,7 +252,7 @@ wxWindowMac::~wxWindowMac()
     wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent((wxWindow*)this), wxTopLevelWindow);
     if ( tlw )
     {
-        if ( tlw->GetDefaultItem() == (wxButton*) this)
+        if ( tlw->GetDefaultItem() == this )
             tlw->SetDefaultItem(nullptr);
     }
 
