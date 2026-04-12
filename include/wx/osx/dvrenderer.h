@@ -79,7 +79,7 @@ public:
     void OSXUpdateAlignment();
 
 #if wxOSX_USE_COCOA
-    bool m_callEditingDoneOnCellChange;
+    bool m_callEditingDoneOnCellChange = false;
     void OSXCallEditingDoneOnCellChange() { m_callEditingDoneOnCellChange = true; }
     void OSXSendEditingDoneEvent( const wxDataViewItem &item, const wxVariant &value );
 
