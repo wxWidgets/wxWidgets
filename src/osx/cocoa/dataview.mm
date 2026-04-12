@@ -1831,7 +1831,7 @@ outlineView:(NSOutlineView*)outlineView
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
--(void) sendEditingDoneEvent:(BOOL)isCancelled withNotification:(NSNotification*)notification
+-(void) sendEditingDoneEvent:(BOOL)isCancelled
 {
     // under OSX an event indicating the end of an editing session can be sent
     // even if no event indicating a start of an editing session has been sent
@@ -1860,12 +1860,12 @@ outlineView:(NSOutlineView*)outlineView
             event.SetEditCancelled();
             dvc->GetEventHandler()->ProcessEvent(event);
         }
-        else 
+        else
         {
-            wxDataViewRenderer *renderer = col->GetRenderer();            
+            wxDataViewRenderer *renderer = col->GetRenderer();
             renderer->OSXCallEditingDoneOnCellChange();
         }
-    
+
         // we're not editing any more
         currentlyEditedColumn =
             currentlyEditedRow = -1;
@@ -1885,7 +1885,7 @@ outlineView:(NSOutlineView*)outlineView
     [self abortEditing];
     [[self window] makeFirstResponder:self];
 
-    [self sendEditingDoneEvent:YES withNotification:nil];
+    [self sendEditingDoneEvent:YES];
 }
 
 -(BOOL) textShouldBeginEditing:(NSText*)textEditor
@@ -1958,7 +1958,7 @@ outlineView:(NSOutlineView*)outlineView
     // have the checks for IsDeleting() in several other methods of this class.
     [super textDidEndEditing:notification];
 
-    [self sendEditingDoneEvent:NO withNotification:notification];
+    [self sendEditingDoneEvent:NO];
 }
 
 -(BOOL) becomeFirstResponder
@@ -2796,7 +2796,7 @@ wxDataViewRenderer::OSXOnCellChanged(NSObject *object,
         return;
     }
 
-    OSXSendEditingDoneEvent( item, value );
+    OSXSendEditingDoneEventIfPending( item, value );
 
     if ( !Validate(value) )
         return;
@@ -2805,17 +2805,17 @@ wxDataViewRenderer::OSXOnCellChanged(NSObject *object,
     model->ChangeValue(value, item, col);
 }
 
-void wxDataViewRenderer::OSXSendEditingDoneEvent( const wxDataViewItem &item, const wxVariant &value )
+void wxDataViewRenderer::OSXSendEditingDoneEventIfPending( const wxDataViewItem &item, const wxVariant &value )
 {
     if (m_callEditingDoneOnCellChange)
     {
+        m_callEditingDoneOnCellChange = false;
+
         wxDataViewColumn *column = GetOwner();
         wxDataViewCtrl *dvc = column->GetOwner();
         wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dvc, column, item);
         event.SetValue( value );
         dvc->GetEventHandler()->ProcessEvent(event);
-
-        m_callEditingDoneOnCellChange = false;
     }
 }
 
@@ -3030,7 +3030,7 @@ wxDataViewTextRenderer::OSXOnCellChanged(NSObject *value,
 {
     wxVariant valueText(ObjectToString(value));
 
-    OSXSendEditingDoneEvent( item, valueText );
+    OSXSendEditingDoneEventIfPending( item, valueText );
 
     if ( !Validate(valueText) )
         return;
@@ -3140,7 +3140,7 @@ wxDataViewChoiceRenderer::OSXOnCellChanged(NSObject *value,
 
     wxVariant valueChoice(GetChoice(choiceIndex));
 
-    OSXSendEditingDoneEvent( item, valueChoice );
+    OSXSendEditingDoneEventIfPending( item, valueChoice );
 
     if ( !Validate(valueChoice) )
         return;
@@ -3176,7 +3176,7 @@ wxDataViewChoiceByIndexRenderer::OSXOnCellChanged(NSObject *value,
 {
     wxVariant valueLong(ObjectToLong(value));
 
-    OSXSendEditingDoneEvent( item, valueLong );
+    OSXSendEditingDoneEventIfPending( item, valueLong );
 
     if ( !Validate(valueLong) )
         return;
@@ -3284,7 +3284,7 @@ wxDataViewDateRenderer::OSXOnCellChanged(NSObject *value,
 {
     wxVariant valueDate(ObjectToDate(value));
 
-    OSXSendEditingDoneEvent( item, valueDate );
+    OSXSendEditingDoneEventIfPending( item, valueDate );
     
     if ( !Validate(valueDate) )
         return;
@@ -3344,7 +3344,7 @@ void wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
     wxVariant valueIconText;
     valueIconText << iconText;
 
-    OSXSendEditingDoneEvent( item, valueIconText );
+    OSXSendEditingDoneEventIfPending( item, valueIconText );
 
     if ( !Validate(valueIconText) )
         return;
@@ -3510,7 +3510,7 @@ void wxDataViewCheckIconTextRenderer::OSXOnCellChanged(NSObject *value,
     wxVariant valueIconText;
     valueIconText << checkIconText;
 
-    OSXSendEditingDoneEvent( item, valueIconText );
+    OSXSendEditingDoneEventIfPending( item, valueIconText );
 
     if ( !Validate(valueIconText) )
         return;
@@ -3566,7 +3566,7 @@ wxDataViewToggleRenderer::OSXOnCellChanged(NSObject *value,
 {
     wxVariant valueToggle(ObjectToBool(value));
 
-    OSXSendEditingDoneEvent( item, valueToggle );
+    OSXSendEditingDoneEventIfPending( item, valueToggle );
 
     if ( !Validate(valueToggle) )
         return;
@@ -3610,7 +3610,7 @@ wxDataViewProgressRenderer::OSXOnCellChanged(NSObject *value,
 {
     wxVariant valueProgress(ObjectToLong(value));
 
-    OSXSendEditingDoneEvent( item, valueProgress );
+    OSXSendEditingDoneEventIfPending( item, valueProgress );
 
     if ( !Validate(valueProgress) )
         return;
