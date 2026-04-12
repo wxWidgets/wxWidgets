@@ -71,6 +71,8 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
     endforeach()
 
     set(WebP_LIBRARIES webp webpdemux sharpyuv)
+    list(APPEND wxLIB_BUILTIN_TARGETS ${WebP_LIBRARIES})
+
     if(NOT wxBUILD_SHARED)
         wx_get_install_platform_dir(archive)
         wx_install(TARGETS ${WebP_LIBRARIES}

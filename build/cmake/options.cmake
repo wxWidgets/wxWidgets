@@ -92,6 +92,8 @@ wx_option(wxBUILD_INSTALL_PLATFORM_SUBDIR "use platform specific sub-directory (
 mark_as_advanced(wxBUILD_INSTALL_PLATFORM_SUBDIR)
 wx_option(wxBUILD_INSTALL_PDB "install pdb files in the runtime directory (MSVC-naming)" OFF)
 mark_as_advanced(wxBUILD_INSTALL_PDB)
+wx_option(wxBUILD_INSTALL_USE_SYMLINK "use symlinks when possible, disable to always use copy" ON)
+mark_as_advanced(wxBUILD_INSTALL_USE_SYMLINK)
 
 # Use the MSVC/makefile naming convention, or the configure naming convention,
 # this is the same check as used in FindwxWidgets.

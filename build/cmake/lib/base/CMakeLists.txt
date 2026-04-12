@@ -82,3 +82,13 @@ if(APPLE)
 elseif(UNIX)
     wx_lib_link_libraries(wxbase PRIVATE ${CMAKE_DL_LIBS})
 endif()
+
+
+add_library(wxbase_only INTERFACE)
+add_library(wx::base_only ALIAS wxbase_only)
+add_library(wxWidgets::base_only ALIAS wxbase_only)
+target_link_libraries(wxbase_only INTERFACE wxbase)
+target_compile_definitions(wxbase_only INTERFACE wxUSE_GUI=0)
+wx_install(TARGETS wxbase_only EXPORT wxWidgetsTargets)
+list(APPEND wxLIB_TARGETS wxbase_only)
+set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)

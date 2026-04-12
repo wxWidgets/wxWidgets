@@ -216,7 +216,9 @@ wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC}
     DATA ${WIDGETS_RC_FILES} textctrl.cpp ../image/toucan.png:toucan.png
     )
 # includes needed by the native widget (like gtk.h)
-target_include_directories(widgets PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
+if(TARGET widgets)
+    target_include_directories(widgets PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
+endif()
 wx_add_sample(wizard DATA wiztest.svg wiztest2.svg DEPENDS wxUSE_WIZARDDLG)
 wx_add_sample(wrapsizer)
 
@@ -265,11 +267,15 @@ if(WIN32)
             # this test only makes sense with statically built wx, otherwise
             # the same copy of wx would be used
             wx_add_sample(dll wx_exe.cpp my_dll.h NAME wx_exe FOLDER dll)
-            wx_link_sample_libraries(wx_exe my_dll)
+            if(TARGET wx_exe AND TARGET my_dll)
+                target_link_libraries(wx_exe PRIVATE my_dll)
+            endif()
         endif()
 
         wx_add_sample(dll sdk_exe.cpp my_dll.h NAME sdk_exe FOLDER dll)
-        wx_link_sample_libraries(sdk_exe my_dll)
+        if(TARGET sdk_exe AND TARGET my_dll)
+            target_link_libraries(sdk_exe PRIVATE my_dll)
+        endif()
     endif()
 
     wx_add_sample(regtest RES regtest.rc DEPENDS wxUSE_REGKEY)
