@@ -449,7 +449,7 @@ void wxGLCanvasEGL::UpdateSubsurfacePosition()
     }
 
     int x, y;
-    gdk_window_get_origin(m_canvas->GTKGetDrawingWindow(), &x, &y);
+    gdk_window_get_position(m_canvas->GTKGetDrawingWindow(), &x, &y);
     wl_subsurface_set_position(m_wlSubsurface, x, y);
 }
 
