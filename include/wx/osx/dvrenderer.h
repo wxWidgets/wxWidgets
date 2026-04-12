@@ -81,7 +81,7 @@ public:
 #if wxOSX_USE_COCOA
     bool m_callEditingDoneOnCellChange = false;
     void OSXCallEditingDoneOnCellChange() { m_callEditingDoneOnCellChange = true; }
-    void OSXSendEditingDoneEvent( const wxDataViewItem &item, const wxVariant &value );
+    void OSXSendEditingDoneEventIfPending( const wxDataViewItem &item, const wxVariant &value );
 
     // called when a value was edited by user
     virtual void OSXOnCellChanged(NSObject *value,
