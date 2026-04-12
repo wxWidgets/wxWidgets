@@ -2710,8 +2710,7 @@ wxDataViewRenderer::wxDataViewRenderer(const wxString& varianttype,
     : wxDataViewRendererBase(varianttype, mode, align),
       m_alignment(align),
       m_mode(mode),
-      m_NativeDataPtr(nullptr),
-      m_callEditingDoneOnCellChange(false)
+      m_NativeDataPtr(nullptr)
 {
 }
 
