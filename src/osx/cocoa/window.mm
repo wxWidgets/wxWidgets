@@ -3878,6 +3878,9 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
                 [cell setControlSize:size];
         }
     }
+
+    // In case changing the size also affects the insets.
+    InvalidateLayoutInset();
 }
 
 NSView* wxWidgetCocoaImpl::GetViewWithText() const
