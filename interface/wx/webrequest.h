@@ -493,6 +493,10 @@ public:
         Execute(): this will use the provided credentials for the initial
         request.
 
+        Note that when using a proxy with credentials information, proxy
+        credentials will be also included in the initial request if this
+        function is called when using libcurl backend.
+
         @since 3.3.2
      */
     void UseBasicAuth(const wxWebCredentials& cred);
@@ -1000,6 +1004,10 @@ public:
         can avoid this extra request by calling this function before calling
         Execute(): this will use the provided credentials for the initial
         request.
+
+        Note that when using a proxy with credentials information, proxy
+        credentials will be also included in the initial request if this
+        function is called when using libcurl backend.
 
         @since 3.3.2
      */
