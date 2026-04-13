@@ -3434,11 +3434,24 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
     const wxBitmapBundle& icon = checkIconText.GetBitmapBundle();
     if ( icon.IsOk() )
     {
-        wxNSTextAttachmentCellWithBaseline* const attachmentCell =
-            [[wxNSTextAttachmentCellWithBaseline alloc]
-             initImageCell: wxOSXGetImageFromBundle(icon)];
+        NSImage* const image = wxOSXGetImageFromBundle(icon);
         NSTextAttachment* const attachment = [NSTextAttachment new];
-        [attachment setAttachmentCell: attachmentCell];
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
+        if ( WX_IS_MACOS_AVAILABLE(10, 11) )
+        {
+            [attachment setImage: image];
+        }
+        else
+#endif
+        {
+            wxNSTextAttachmentCellWithBaseline* const attachmentCell =
+                [[wxNSTextAttachmentCellWithBaseline alloc]
+                initImageCell: image];
+            [attachmentCell setCellBaselineOffset: NSMakePoint(0.0, -5.0)];
+            [attachment setAttachmentCell: attachmentCell];
+            [attachmentCell release];
+        }
 
         // Note: this string is released by the autorelease pool and must not
         // be released manually below.
@@ -3453,7 +3466,6 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
 
         NSMutableAttributedString* const fullString =
             [NSMutableAttributedString new];
-        [attachmentCell setCellBaselineOffset: NSMakePoint(0.0, -5.0)];
 
         [fullString appendAttributedString: iconString];
         [fullString appendAttributedString: separatorString];
@@ -3465,7 +3477,6 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
         [separatorString release];
         [textAttrString release];
         [attachment release];
-        [attachmentCell release];
     }
     else
     {
