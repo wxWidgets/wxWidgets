@@ -1,0 +1,1 @@
+wxOSX: Set value in EVT_DATAVIEW_ITEM_EDITING_DONE (Robert Roebling, #26367).
