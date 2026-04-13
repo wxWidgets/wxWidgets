@@ -260,6 +260,7 @@ EVT_RIBBONBUTTONBAR_CLICKED(ID_CHANGE_LABEL, MyFrame::OnChangeLabel)
 EVT_RIBBONBAR_TOGGLED(wxID_ANY, MyFrame::OnRibbonBarToggled)
 EVT_RIBBONBAR_HELP_CLICK(wxID_ANY, MyFrame::OnRibbonBarHelpClicked)
 EVT_SIZE(MyFrame::OnSizeEvent)
+EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 #include "align_center.xpm"
@@ -1169,6 +1170,21 @@ void MyFrame::OnRibbonBarToggled(wxRibbonBarEvent& WXUNUSED(evt))
 void MyFrame::OnRibbonBarHelpClicked(wxRibbonBarEvent& WXUNUSED(evt))
 {
     AddText("Ribbon bar help clicked");
+}
+
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& evt)
+{
+    const wxSize oldDPI = evt.GetOldDPI();
+    const wxSize newDPI = evt.GetNewDPI();
+
+    AddText(wxString::Format(
+        "DPI changed from %d x %d to %d x %d (scale: %.0f%% -> %.0f%%)",
+        oldDPI.x, oldDPI.y,
+        newDPI.x, newDPI.y,
+        oldDPI.x * 100.0 / 96.0,
+        newDPI.x * 100.0 / 96.0));
+
+    evt.Skip();
 }
 
 // This shows how to hide ribbon dynamically if there is not enough space.
