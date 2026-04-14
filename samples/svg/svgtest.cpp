@@ -247,6 +247,10 @@ bool MyPage::OnSave(const wxString& filename)
 
     // Wrap the drawing in an accessible group so that assistive technology
     // can announce the page's title and description when the SVG is viewed.
+    // 
+    // wxSVGAccessibleGroup is RAII: it opens the group in its constructor
+    // and closes it automatically when the scope exits, so there's no need
+    // to pair Begin/EndAccessibleGroup() calls by hand.
     {
         wxSVGAccessibleGroup group(svgDC,
             wxSVGAttributes().Role("img").AriaLabel(pageNames[m_index]),
@@ -330,14 +334,20 @@ void DrawOnDC(wxDC& dc, const int index)
             points[5].x = dc.FromDIP(100); points[5].y = dc.FromDIP(200);
 
             // Long-form example: role + label plus a <title> child.
+            // (Uses the RAII wxSVGAccessibleGroup helper.)
             if ( svgDC )
-                svgDC->BeginAccessibleGroup(
+            {
+                wxSVGAccessibleGroup starGroup(*svgDC,
                     wxSVGAttributes().Role("graphics-symbol").AriaLabel("Five-pointed star"),
                     "Star polygon");
-            dc.DrawPolygon(5, points);
-            dc.DrawLines(6, points, dc.FromDIP(160));
-            if ( svgDC )
-                svgDC->EndAccessibleGroup();
+                dc.DrawPolygon(5, points);
+                dc.DrawLines(6, points, dc.FromDIP(160));
+            }
+            else
+            {
+                dc.DrawPolygon(5, points);
+                dc.DrawLines(6, points, dc.FromDIP(160));
+            }
             break;
         }
 
