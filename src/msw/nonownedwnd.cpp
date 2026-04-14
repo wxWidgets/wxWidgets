@@ -255,6 +255,14 @@ WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPA
                                             wxRectFromRECT(*prcNewWindow));
             }
             break;
+
+        case WM_SHOWWINDOW:
+            // Default handling of this message in Windows restores the TLW
+            // even if it had been hidden before, and we don't want this to
+            // happen, so suppress the default behaviour and simply ignore it.
+            if ( lParam == SW_PARENTOPENING && !IsShown() )
+                processed = true;
+            break;
     }
 
     if (!processed)
