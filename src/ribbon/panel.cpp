@@ -707,28 +707,13 @@ bool wxRibbonPanel::Realize()
         m_smallest_unminimised_size =
             m_art->GetPanelSize(temp_dc, this, minimum_children_size, nullptr);
 
-        wxSize bitmap_size;
         wxSize panel_min_size = GetMinNotMinimisedSize();
         m_minimised_size = m_art->GetMinimisedPanelMinimumSize(temp_dc, this,
-            &bitmap_size, &m_preferred_expand_direction);
+            nullptr, &m_preferred_expand_direction);
         if(m_minimised_icon.IsOk())
         {
-            // Resolve bundle to bitmap for current DPI and resize if needed
-            wxBitmap icon_bitmap = m_minimised_icon.GetBitmapFor(this);
-            if(icon_bitmap.GetLogicalSize() != bitmap_size)
-            {
-                double scale = icon_bitmap.GetScaleFactor();
-                if (scale > 1.0)
-                    scale = 2.0;
-
-                wxImage img(icon_bitmap.ConvertToImage());
-                img.Rescale(scale * bitmap_size, wxIMAGE_QUALITY_HIGH);
-                m_minimised_icon_resized = wxBitmap(img, -1, scale);
-            }
-            else
-            {
-                m_minimised_icon_resized = icon_bitmap;
-            }
+            m_minimised_icon_resized = m_minimised_icon.GetBitmap(
+                m_minimised_icon.GetPreferredBitmapSizeFor(this));
         }
         if(m_minimised_size.x > panel_min_size.x &&
             m_minimised_size.y > panel_min_size.y)
