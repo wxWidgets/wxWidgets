@@ -42,16 +42,16 @@ class WXDLLIMPEXP_CORE wxSVGAttributes
 public:
     wxSVGAttributes() = default;
 
-    wxSVGAttributes& Role(const wxString& role) { return Add("role", role); }
-    wxSVGAttributes& AriaLabel(const wxString& label) { return Add("aria-label", label); }
-    wxSVGAttributes& AriaLabelledBy(const wxString& id) { return Add("aria-labelledby", id); }
-    wxSVGAttributes& AriaDescribedBy(const wxString& id) { return Add("aria-describedby", id); }
-    wxSVGAttributes& AriaHidden(bool hidden = true) { return Add("aria-hidden", hidden ? "true" : "false"); }
-    wxSVGAttributes& AriaDetails(const wxString& id) { return Add("aria-details", id); }
-    wxSVGAttributes& AriaRoleDescription(const wxString& desc) { return Add("aria-roledescription", desc); }
+    wxSVGAttributes& Role(const wxString& role) { return Add(wxASCII_STR("role"), role); }
+    wxSVGAttributes& AriaLabel(const wxString& label) { return Add(wxASCII_STR("aria-label"), label); }
+    wxSVGAttributes& AriaLabelledBy(const wxString& id) { return Add(wxASCII_STR("aria-labelledby"), id); }
+    wxSVGAttributes& AriaDescribedBy(const wxString& id) { return Add(wxASCII_STR("aria-describedby"), id); }
+    wxSVGAttributes& AriaHidden(bool hidden = true) { return Add(wxASCII_STR("aria-hidden"), hidden ? wxASCII_STR("true") : wxASCII_STR("false")); }
+    wxSVGAttributes& AriaDetails(const wxString& id) { return Add(wxASCII_STR("aria-details"), id); }
+    wxSVGAttributes& AriaRoleDescription(const wxString& desc) { return Add(wxASCII_STR("aria-roledescription"), desc); }
 
-    wxSVGAttributes& Id(const wxString& id) { return Add("id", id); }
-    wxSVGAttributes& Class(const wxString& classname) { return Add("class", classname); }
+    wxSVGAttributes& Id(const wxString& id) { return Add(wxASCII_STR("id"), id); }
+    wxSVGAttributes& Class(const wxString& classname) { return Add(wxASCII_STR("class"), classname); }
 
     // Add or update an attribute.
     wxSVGAttributes& Add(const wxString& name, const wxString& value);
