@@ -247,7 +247,7 @@ bool MyPage::OnSave(const wxString& filename)
 
     // Wrap the drawing in an accessible group so that assistive technology
     // can announce the page's title and description when the SVG is viewed.
-    // 
+    //
     // wxSVGAccessibleGroup is RAII: it opens the group in its constructor
     // and closes it automatically when the scope exits, so there's no need
     // to pair Begin/EndAccessibleGroup() calls by hand.
