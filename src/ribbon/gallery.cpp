@@ -522,8 +522,9 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
         m_art->DrawGalleryItemBackground(dc, this, offset_pos, item);
         // Resolve bitmap bundle for current DPI
         wxBitmap bmp = item->GetBitmap(this);
-        dc.DrawBitmap(bmp, offset_pos.GetLeft() + padding_left,
-            offset_pos.GetTop() + padding_top);
+        if (bmp.IsOk())
+            dc.DrawBitmap(bmp, offset_pos.GetLeft() + padding_left,
+                offset_pos.GetTop() + padding_top);
     }
 }
 
