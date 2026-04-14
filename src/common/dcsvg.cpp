@@ -532,32 +532,25 @@ void wxSVGFileDC::EndAccessibleGroup()
 wxSVGAttributes& wxSVGAttributes::Add(const wxString& name, const wxString& value)
 {
     // XML attribute names are case-sensitive.
-    const int index = m_names.Index(name);
-    if ( index != wxNOT_FOUND )
-    {
-        m_values[index] = value;
-    }
-    else
-    {
-        m_names.Add(name);
-        m_values.Add(value);
-    }
+    m_attributes[name] = value;
     return *this;
 }
 
 wxString wxSVGAttributes::GetAsString() const
 {
     wxString s;
-    for ( size_t i = 0; i < m_names.GetCount(); i++ )
+    bool first = true;
+    for ( const auto& attr : m_attributes )
     {
-        if ( i > 0 )
+        if ( !first )
             s << " ";
+        first = false;
 
-        s << m_names[i] << "=\"";
+        s << attr.first << "=\"";
 #if wxUSE_MARKUP
-        s << wxMarkupParser::Quote(m_values[i]);
+        s << wxMarkupParser::Quote(attr.second);
 #else
-        s << m_values[i];
+        s << attr.second;
 #endif
         s << "\"";
     }

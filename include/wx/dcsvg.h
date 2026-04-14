@@ -17,8 +17,8 @@
 #include "wx/string.h"
 #include "wx/filename.h"
 #include "wx/dc.h"
-#include "wx/arrstr.h"
 
+#include <map>
 #include <memory>
 
 #if WXWIN_COMPATIBILITY_3_2
@@ -59,11 +59,10 @@ public:
     // Returns the attributes as a string of name="value" pairs, each prefixed with a space.
     wxString GetAsString() const;
 
-    bool IsEmpty() const { return m_names.empty(); }
+    bool IsEmpty() const { return m_attributes.empty(); }
 
 private:
-    wxArrayString m_names;
-    wxArrayString m_values;
+    std::map<wxString, wxString> m_attributes;
 };
 
 class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
