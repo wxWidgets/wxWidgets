@@ -259,6 +259,10 @@ All:
 
 - Support defining wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR in wxString (#26307).
 
+All (GUI):
+
+- Fix wxCaret position in scrolled windows (#26282).
+
 wxGTK:
 
 - Fix copy/paste when a clipboard manager is running (David Edmundson, #26265).
