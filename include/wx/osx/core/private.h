@@ -312,6 +312,8 @@ public :
         left = top = right = bottom = 0;
     }
 
+    virtual void        InvalidateLayoutInset() const {}
+
     // native view coordinates are topleft to bottom right (flipped regarding CoreGraphics origin)
     virtual bool        IsFlipped() const { return true; }
 

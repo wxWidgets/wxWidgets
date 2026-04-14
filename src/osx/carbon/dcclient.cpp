@@ -54,12 +54,14 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
 
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
 
+    auto macBorder{window->MacGetBorderSize()};
+
     m_release = false;
     if ( cg == nullptr )
     {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
         m_contentScaleFactor = window->GetContentScaleFactor();
-        SetDeviceOrigin(-window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize());
+        SetDeviceOrigin(-macBorder.left, -macBorder.top);
     }
     else
     {
@@ -71,10 +73,12 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
 
         CGContextSaveGState( cg );
         m_release = true ;
-        // make sure the context is having its origin at the wx-window coordinates of the
-        // view (read at the top of window.cpp about the differences)
-        if ( window->MacGetLeftBorderSize() != 0 || window->MacGetTopBorderSize() != 0 )
-            CGContextTranslateCTM( cg , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() );
+
+        // make sure the context is having its origin at the wx-window
+        // coordinates of the view (read at the top of window.cpp about the
+        // differences)
+        if ( macBorder.left != 0 || macBorder.top != 0 )
+            CGContextTranslateCTM( cg, -macBorder.left, -macBorder.top );
 
         wxWidgetImpl *impl = (wxWidgetImpl *) window->GetPeer();
         wxPoint origin( impl->GetDeviceLocalOrigin() );

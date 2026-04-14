@@ -118,7 +118,10 @@ public :
     virtual void        GetPosition( int &x, int &y ) const override;
     virtual void        GetSize( int &width, int &height ) const override;
     virtual void        SetControlSize( wxWindowVariant variant ) override;
+
     virtual void        GetLayoutInset(int &left , int &top , int &right, int &bottom) const override;
+    virtual void        InvalidateLayoutInset() const override;
+
     virtual void        SetNeedsDisplay( const wxRect* where = nullptr ) override;
     virtual bool        GetNeedsDisplay() const override;
 
@@ -272,6 +275,11 @@ protected:
     // if it the control has an editor, that editor will already send some
     // events, don't resend them
     bool m_hasEditor;
+
+    mutable int m_insetLeft;
+    mutable int m_insetRight;
+    mutable int m_insetTop;
+    mutable int m_insetBottom;
 
     friend class wxWidgetCocoaNativeKeyDownSuspender;
 

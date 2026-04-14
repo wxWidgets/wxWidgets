@@ -638,10 +638,11 @@ bool wxWindowMac::MacGetBoundsForControl(
     w = WidthDefault( size.x );
     h = HeightDefault( size.y );
 
-    x += MacGetLeftBorderSize() ;
-    y += MacGetTopBorderSize() ;
-    w -= MacGetLeftBorderSize() + MacGetRightBorderSize() ;
-    h -= MacGetTopBorderSize() + MacGetBottomBorderSize() ;
+    auto macBorder{MacGetBorderSize()};
+    x += macBorder.left;
+    y += macBorder.top;
+    w -= macBorder.left + macBorder.right;
+    h -= macBorder.top + macBorder.bottom;
 
     if ( adjustOrigin )
         AdjustForParentClientOrigin( x , y ) ;
@@ -649,8 +650,9 @@ bool wxWindowMac::MacGetBoundsForControl(
     // this is in window relative coordinate, as this parent may have a border, its physical position is offset by this border
     if ( GetParent() && !GetParent()->IsTopLevel() )
     {
-        x -= GetParent()->MacGetLeftBorderSize() ;
-        y -= GetParent()->MacGetTopBorderSize() ;
+        auto parentMacBorder{GetParent()->MacGetBorderSize()};
+        x -= parentMacBorder.left;
+        y -= parentMacBorder.top;
     }
 
     return true ;
@@ -662,10 +664,12 @@ void wxWindowMac::DoGetSize(int *x, int *y) const
     int width, height;
     GetPeer()->GetSize( width, height );
 
+    auto macBorder{MacGetBorderSize()};
+
     if (x)
-       *x = width + MacGetLeftBorderSize() + MacGetRightBorderSize() ;
+       *x = width + macBorder.left + macBorder.right;
     if (y)
-       *y = height + MacGetTopBorderSize() + MacGetBottomBorderSize() ;
+       *y = height + macBorder.top + macBorder.bottom;
 }
 
 // get the position of the bounds of this window in client coordinates of its parent
@@ -676,8 +680,9 @@ void wxWindowMac::DoGetPosition(int *x, int *y) const
     GetPeer()->GetPosition( x1, y1 ) ;
 
     // get the wx window position from the native one
-    x1 -= MacGetLeftBorderSize() ;
-    y1 -= MacGetTopBorderSize() ;
+    auto macBorder{MacGetBorderSize()};
+    x1 -= macBorder.left;
+    y1 -= macBorder.top;
 
     if ( !IsTopLevel() )
     {
@@ -686,8 +691,9 @@ void wxWindowMac::DoGetPosition(int *x, int *y) const
         {
             // we must first adjust it to be in window coordinates of the parent,
             // as otherwise it gets lost by the ClientAreaOrigin fix
-            x1 += parent->MacGetLeftBorderSize() ;
-            y1 += parent->MacGetTopBorderSize() ;
+            auto parentMacBorder{parent->MacGetBorderSize()};
+            x1 += parentMacBorder.left;
+            y1 += parentMacBorder.top;
 
             // and now to client coordinates
             wxPoint pt(parent->GetClientAreaOrigin());
@@ -756,8 +762,9 @@ void wxWindowMac::MacWindowToRootWindow( int *x , int *y ) const
         wxNonOwnedWindow* top = MacGetTopLevelWindow();
         if (top)
         {
-            pt.x -= MacGetLeftBorderSize() ;
-            pt.y -= MacGetTopBorderSize() ;
+            auto macBorder{MacGetBorderSize()};
+            pt.x -= macBorder.left;
+            pt.y -= macBorder.top;
             wxWidgetImpl::Convert( &pt , GetPeer() , top->GetPeer() ) ;
         }
     }
@@ -783,8 +790,10 @@ void wxWindowMac::MacRootWindowToWindow( int *x , int *y ) const
         if (top)
         {
             wxWidgetImpl::Convert( &pt , top->GetPeer() , GetPeer() ) ;
-            pt.x += MacGetLeftBorderSize() ;
-            pt.y += MacGetTopBorderSize() ;
+
+            auto macBorder{MacGetBorderSize()};
+            pt.x += macBorder.left;
+            pt.y += macBorder.top;
         }
     }
 
@@ -808,8 +817,9 @@ wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
     sizeTotal.x += outerwidth-innerwidth;
     sizeTotal.y += outerheight-innerheight;
 
-    sizeTotal.x += MacGetLeftBorderSize() + MacGetRightBorderSize() ;
-    sizeTotal.y += MacGetTopBorderSize() + MacGetBottomBorderSize() ;
+    auto macBorder{MacGetBorderSize()};
+    sizeTotal.x += macBorder.left + macBorder.right;
+    sizeTotal.y += macBorder.top + macBorder.bottom;
 
     return sizeTotal;
 }
@@ -990,13 +1000,23 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
     {
         // as the borders are drawn outside the native control, we adjust now
 
-        wxRect bounds( wxPoint( actualX + MacGetLeftBorderSize() ,actualY + MacGetTopBorderSize() ),
-            wxSize( actualWidth - (MacGetLeftBorderSize() + MacGetRightBorderSize()) ,
-                actualHeight - (MacGetTopBorderSize() + MacGetBottomBorderSize()) ) ) ;
+        auto macBorder{MacGetBorderSize()};
+
+        wxRect bounds(
+            wxPoint(
+                actualX + macBorder.left,
+                actualY + macBorder.top
+            ),
+            wxSize(
+                actualWidth - (macBorder.left + macBorder.right),
+                actualHeight - (macBorder.top + macBorder.bottom)
+            )
+        );
 
         if ( parent && !parent->IsTopLevel() )
         {
-            bounds.Offset( -parent->MacGetLeftBorderSize(), -parent->MacGetTopBorderSize() );
+            auto parentMacBorder{parent->MacGetBorderSize()};
+            bounds.Offset( -parentMacBorder.left, -parentMacBorder.top );
         }
 
         MacInvalidateBorders() ;
@@ -1057,10 +1077,11 @@ wxSize wxWindowMac::DoGetBestSize() const
             }
         }
 
-        int bestWidth = r.width + MacGetLeftBorderSize() +
-                    MacGetRightBorderSize();
-        int bestHeight = r.height + MacGetTopBorderSize() +
-                     MacGetBottomBorderSize();
+        auto macBorder{MacGetBorderSize()};
+
+        int bestWidth = r.width + macBorder.left + macBorder.right;
+        int bestHeight = r.height + macBorder.top + macBorder.bottom;
+
         if ( bestHeight < 10 )
             bestHeight = 13 ;
 
@@ -1155,7 +1176,10 @@ wxPoint wxWindowMac::GetClientAreaOrigin() const
 {
     int left,top,width,height;
     GetPeer()->GetContentArea( left , top , width , height);
-    return wxPoint( left + MacGetLeftBorderSize() , top + MacGetTopBorderSize() );
+
+    auto macBorder{MacGetBorderSize()};
+
+    return wxPoint( left + macBorder.left , top + macBorder.top );
 }
 
 void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
@@ -1705,11 +1729,18 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
     GetClientSize( &width , &height ) ;
 
     {
-        wxRect scrollrect( MacGetLeftBorderSize() , MacGetTopBorderSize() , width , height ) ;
+        auto macBorder{MacGetBorderSize()};
+
+        wxRect scrollrect(
+            macBorder.left, macBorder.top, width, height
+        );
+
         if ( rect )
-            scrollrect.Intersect( *rect ) ;
-        // as the native control might be not a 0/0 wx window coordinates, we have to offset
-        scrollrect.Offset( -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
+            scrollrect.Intersect( *rect );
+
+        // as the native control might be not a 0/0 wx window coordinates, we
+        // have to offset
+        scrollrect.Offset( -macBorder.left , -macBorder.top );
 
         GetPeer()->ScrollRect( &scrollrect, dx, dy );
     }
@@ -2158,8 +2189,9 @@ void wxWindowMac::MacRepositionScrollBars()
         int width, height ;
         GetSize( &width , &height );
 
-        width -= MacGetLeftBorderSize() + MacGetRightBorderSize();
-        height -= MacGetTopBorderSize() + MacGetBottomBorderSize();
+        auto macBorder{MacGetBorderSize()};
+        width -= macBorder.left + macBorder.right;
+        height -= macBorder.top + macBorder.bottom;
 
         wxPoint vPoint( width - scrlsize, 0 ) ;
         wxSize vSize( scrlsize, height - adjust ) ;
@@ -2270,65 +2302,46 @@ long wxWindowMac::MacGetWXBorderSize() const
     return border ;
 }
 
-long wxWindowMac::MacGetLeftBorderSize() const
+wxMacBorderSize wxWindowMac::MacGetBorderSize() const
 {
     // the wx borders are all symmetric in mac themes
-    long border = MacGetWXBorderSize() ;
+    long borderWX = MacGetWXBorderSize();
+
+    wxMacBorderSize border{
+        .left   = borderWX,
+        .top    = borderWX,
+        .right  = borderWX,
+        .bottom = borderWX,
+    };
 
     if ( GetPeer() )
     {
         int left, top, right, bottom;
         GetPeer()->GetLayoutInset( left, top, right, bottom );
-        border -= left;
+
+        border.left     -= left;
+        border.top      -= top;
+        border.right    -= right;
+        border.bottom   -= bottom;
     }
 
     return border;
 }
 
-
-long wxWindowMac::MacGetRightBorderSize() const
-{
-    // the wx borders are all symmetric in mac themes
-    long border = MacGetWXBorderSize() ;
-
-    if ( GetPeer() )
-    {
-        int left, top, right, bottom;
-        GetPeer()->GetLayoutInset( left, top, right, bottom );
-        border -= right;
-    }
-
-    return border;
+long wxWindowMac::MacGetLeftBorderSize() const {
+    return MacGetBorderSize().left;
 }
 
-long wxWindowMac::MacGetTopBorderSize() const
-{
-    // the wx borders are all symmetric in mac themes
-    long border = MacGetWXBorderSize() ;
-
-    if ( GetPeer() )
-    {
-        int left, top, right, bottom;
-        GetPeer()->GetLayoutInset( left, top, right, bottom );
-        border -= top;
-    }
-
-    return border;
+long wxWindowMac::MacGetRightBorderSize() const {
+    return MacGetBorderSize().right;
 }
 
-long wxWindowMac::MacGetBottomBorderSize() const
-{
-    // the wx borders are all symmetric in mac themes
-    long border = MacGetWXBorderSize() ;
+long wxWindowMac::MacGetTopBorderSize() const {
+    return MacGetBorderSize().top;
+}
 
-    if ( GetPeer() )
-    {
-        int left, top, right, bottom;
-        GetPeer()->GetLayoutInset( left, top, right, bottom );
-        border -= bottom;
-    }
-
-    return border;
+long wxWindowMac::MacGetBottomBorderSize() const {
+    return MacGetBorderSize().bottom;
 }
 
 long wxWindowMac::MacRemoveBordersFromStyle( long style )

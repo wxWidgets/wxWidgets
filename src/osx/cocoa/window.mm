@@ -2457,10 +2457,12 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 
     wxWindow* wxpeer = GetWXPeer();
 
-    if ( wxpeer->MacGetLeftBorderSize() != 0 || wxpeer->MacGetTopBorderSize() != 0 )
+    auto macBorder{wxpeer->MacGetBorderSize()};
+    if ( macBorder.left != 0 || macBorder.top != 0 )
     {
-        // as this update region is in native window locals we must adapt it to wx window local
-        updateRgn.Offset( wxpeer->MacGetLeftBorderSize() , wxpeer->MacGetTopBorderSize() );
+        // as this update region is in native window locals we must adapt it
+        // to wx window local
+        updateRgn.Offset( macBorder.left , macBorder.top );
     }
 
     // Restrict the update region to the shape of the window, if any, and also
@@ -2725,6 +2727,11 @@ wxWidgetImpl( peer, flags )
     Init();
     m_osxView = w;
     m_osxClipView = nil;
+
+    m_insetLeft     = -1;
+    m_insetRight    = -1;
+    m_insetTop      = -1;
+    m_insetBottom   = -1;
 
     // check if the user wants to create the control initially hidden
     if ( !peer->IsShown() )
@@ -3288,11 +3295,26 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
 
 void wxWidgetCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &bottom) const
 {
-    NSEdgeInsets insets = [m_osxView alignmentRectInsets];
-    left = insets.left;
-    top = insets.top;
-    right = insets.right;
-    bottom = insets.bottom;
+    if (m_insetLeft == -1)
+    {
+        // It's not entirely clear if/when this needs to be invalidated.
+        // For most (all?) normal controls/views, this is effectively static.
+        NSEdgeInsets insets = [m_osxView alignmentRectInsets];
+        m_insetLeft     = insets.left;
+        m_insetRight    = insets.right;
+        m_insetTop      = insets.top;
+        m_insetBottom   = insets.bottom;
+    }
+
+    left = m_insetLeft;
+    top = m_insetTop;
+    right = m_insetRight;
+    bottom = m_insetBottom;
+}
+
+void wxWidgetCocoaImpl::InvalidateLayoutInset() const {
+    // GetLayoutInset() above only checks `m_insetLeft` for caching.
+    m_insetLeft = -1;
 }
 
 namespace
@@ -3856,6 +3878,9 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
                 [cell setControlSize:size];
         }
     }
+
+    // In case changing the size also affects the insets.
+    InvalidateLayoutInset();
 }
 
 NSView* wxWidgetCocoaImpl::GetViewWithText() const
