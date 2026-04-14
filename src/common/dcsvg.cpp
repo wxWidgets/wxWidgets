@@ -513,6 +513,50 @@ bool wxSVGFileDC::Save()
     return ((wxSVGFileDCImpl*)GetImpl())->Save();
 }
 
+void wxSVGFileDC::BeginAccessibleGroup(const wxSVGAttributes& attributes,
+                                       const wxString& title,
+                                       const wxString& desc)
+{
+    ((wxSVGFileDCImpl*)GetImpl())->BeginAccessibleGroup(attributes, title, desc);
+}
+
+void wxSVGFileDC::EndAccessibleGroup()
+{
+    ((wxSVGFileDCImpl*)GetImpl())->EndAccessibleGroup();
+}
+
+// ----------------------------------------------------------
+// wxSVGAttributes
+// ----------------------------------------------------------
+
+wxSVGAttributes& wxSVGAttributes::Add(const wxString& name, const wxString& value)
+{
+    // XML attribute names are case-sensitive.
+    m_attributes[name] = value;
+    return *this;
+}
+
+wxString wxSVGAttributes::GetAsString() const
+{
+    wxString s;
+    bool first = true;
+    for ( const auto& attr : m_attributes )
+    {
+        if ( !first )
+            s << " ";
+        first = false;
+
+        s << attr.first << "=\"";
+#if wxUSE_MARKUP
+        s << wxMarkupParser::Quote(attr.second);
+#else
+        s << attr.second;
+#endif
+        s << "\"";
+    }
+    return s;
+}
+
 // ----------------------------------------------------------
 // wxSVGFileDCImpl
 // ----------------------------------------------------------
@@ -541,6 +585,7 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
     m_saved = false;
 
     m_clipNestingLevel = 0;
+    m_accessibleGroupDepth = 0;
 
     m_mm_to_pix_x = m_dpi / 25.4;
     m_mm_to_pix_y = m_dpi / 25.4;
@@ -588,7 +633,15 @@ wxString wxSVGFileDCImpl::GetSVGDocument() const
     for (size_t i = 0; i < m_clipNestingLevel; i++)
         doc += wxS("</g>\n");
 
-    doc += wxS("</g>\n</svg>\n");
+    // Close the currently-open pen/brush group.
+    doc += wxS("</g>\n");
+
+    // Close any accessible groups left open by missing EndAccessibleGroup()
+    // calls, so the output is still well-formed XML.
+    for (size_t i = 0; i < m_accessibleGroupDepth; i++)
+        doc += wxS("</g>\n");
+
+    doc += wxS("</svg>\n");
 
     return doc;
 }
@@ -1418,6 +1471,78 @@ void wxSVGFileDCImpl::DoStartNewGraphics()
         NumStr(m_scaleY * m_signY));
 
     write(s);
+}
+
+void wxSVGFileDCImpl::BeginAccessibleGroup(const wxSVGAttributes& attributes,
+                                           const wxString& title,
+                                           const wxString& desc)
+{
+    // Close the currently-open pen/brush group. There is always one open
+    // at this point: either the initial default group written by Init()
+    // or a group written by DoStartNewGraphics() during an earlier draw.
+    write(wxS("</g>\n"));
+
+    // Open the accessible group.
+    wxString s = wxS("<g");
+    if ( !attributes.IsEmpty() )
+    {
+        s += wxS(" ");
+        s += attributes.GetAsString();
+    }
+    s += wxS(">\n");
+    write(s);
+
+    // Emit optional <title> and <desc> children. These must be the first
+    // children of the accessible group for assistive technology to pick
+    // them up, so write them before reopening the pen/brush group below.
+    if ( !title.empty() )
+    {
+        write(wxString::Format(wxS("<title>%s</title>\n"),
+#if wxUSE_MARKUP
+                               wxMarkupParser::Quote(title)
+#else
+                               title
+#endif
+                               ));
+    }
+    if ( !desc.empty() )
+    {
+        write(wxString::Format(wxS("<desc>%s</desc>\n"),
+#if wxUSE_MARKUP
+                               wxMarkupParser::Quote(desc)
+#else
+                               desc
+#endif
+                               ));
+    }
+
+    ++m_accessibleGroupDepth;
+
+    // Reopen a pen/brush group inside the accessible group so the invariant
+    // "a pen/brush <g> is currently open" is preserved for later drawing.
+    DoStartNewGraphics();
+    m_graphics_changed = false;
+}
+
+void wxSVGFileDCImpl::EndAccessibleGroup()
+{
+    if ( m_accessibleGroupDepth == 0 )
+    {
+        wxFAIL_MSG(wxS("wxSVGFileDC::EndAccessibleGroup() called without a matching BeginAccessibleGroup()"));
+        return;
+    }
+
+    // Close the current pen/brush group (nested inside the accessible group),
+    // then the accessible group itself.
+    write(wxS("</g>\n"));
+    write(wxS("</g>\n"));
+
+    --m_accessibleGroupDepth;
+
+    // Reopen a pen/brush group at the now-outer nesting level so subsequent
+    // drawing has somewhere to go.
+    DoStartNewGraphics();
+    m_graphics_changed = false;
 }
 
 void wxSVGFileDCImpl::SetFont(const wxFont& font)

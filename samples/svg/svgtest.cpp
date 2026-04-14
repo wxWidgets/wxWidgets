@@ -244,7 +244,20 @@ bool MyPage::OnSave(const wxString& filename)
 
     wxSVGFileDC svgDC(svgSize, filename, pageNames[m_index]);
     svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
-    OnDraw(svgDC);
+
+    // Wrap the drawing in an accessible group so that assistive technology
+    // can announce the page's title and description when the SVG is viewed.
+    //
+    // wxSVGAccessibleGroup is RAII: it opens the group in its constructor
+    // and closes it automatically when the scope exits, so there's no need
+    // to pair Begin/EndAccessibleGroup() calls by hand.
+    {
+        wxSVGAccessibleGroup group(svgDC,
+            wxSVGAttributes().Role("img").AriaLabel(pageNames[m_index]),
+            pageNames[m_index],
+            pageDescriptions[m_index]);
+        OnDraw(svgDC);
+    }
 
     return svgDC.IsOk();
 }
@@ -282,15 +295,36 @@ void DrawOnDC(wxDC& dc, const int index)
             break;
 
         case Page_Polygons:
+        {
+            // When rendering to an SVG DC, label each shape individually
+            // so assistive technology can announce them separately. These
+            // per-shape groups nest inside the page-level accessible group
+            // opened in MyPage::OnSave().
+            wxSVGFileDC* const svgDC = wxDynamicCast(&dc, wxSVGFileDC);
+
             // draw standard shapes
             dc.SetBrush(*wxCYAN_BRUSH);
             dc.SetPen(*wxRED_PEN);
+            if ( svgDC )
+                svgDC->BeginAccessibleGroup(wxSVGAttributes().AriaLabel("Cyan rectangle with red border"));
             dc.DrawRectangle(dc.FromDIP(10), dc.FromDIP(10), dc.FromDIP(100), dc.FromDIP(70));
+            if ( svgDC )
+                svgDC->EndAccessibleGroup();
+
             wB = wxBrush ("DARK ORCHID", wxBRUSHSTYLE_TRANSPARENT);
             dc.SetBrush (wB);
+            if ( svgDC )
+                svgDC->BeginAccessibleGroup(wxSVGAttributes().AriaLabel("Transparent rounded rectangle"));
             dc.DrawRoundedRectangle(dc.FromDIP(50), dc.FromDIP(50), dc.FromDIP(100), dc.FromDIP(70), dc.FromDIP(20));
+            if ( svgDC )
+                svgDC->EndAccessibleGroup();
+
             dc.SetBrush (wxBrush("GOLDENROD") );
+            if ( svgDC )
+                svgDC->BeginAccessibleGroup(wxSVGAttributes().AriaLabel("Goldenrod ellipse"));
             dc.DrawEllipse(dc.FromDIP(100), dc.FromDIP(100), dc.FromDIP(100), dc.FromDIP(50));
+            if ( svgDC )
+                svgDC->EndAccessibleGroup();
 
             points[0].x = dc.FromDIP(100); points[0].y = dc.FromDIP(200);
             points[1].x = dc.FromDIP(70); points[1].y = dc.FromDIP(260);
@@ -299,9 +333,23 @@ void DrawOnDC(wxDC& dc, const int index)
             points[4].x = dc.FromDIP(130); points[4].y = dc.FromDIP(260);
             points[5].x = dc.FromDIP(100); points[5].y = dc.FromDIP(200);
 
-            dc.DrawPolygon(5, points);
-            dc.DrawLines(6, points, dc.FromDIP(160));
+            // Long-form example: role + label plus a <title> child.
+            // (Uses the RAII wxSVGAccessibleGroup helper.)
+            if ( svgDC )
+            {
+                wxSVGAccessibleGroup starGroup(*svgDC,
+                    wxSVGAttributes().Role("graphics-symbol").AriaLabel("Five-pointed star"),
+                    "Star polygon");
+                dc.DrawPolygon(5, points);
+                dc.DrawLines(6, points, dc.FromDIP(160));
+            }
+            else
+            {
+                dc.DrawPolygon(5, points);
+                dc.DrawLines(6, points, dc.FromDIP(160));
+            }
             break;
+        }
 
         case Page_Text:
             // draw text in Arial or similar font

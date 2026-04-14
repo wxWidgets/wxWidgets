@@ -30,6 +30,118 @@ constexpr double wxSVG_DEFAULT_DPI = 72.0;
 
 
 /**
+    @class wxSVGAttributes
+
+    Helper class for building a set of SVG and ARIA attributes to attach to
+    an accessible group in the output of wxSVGFileDC.
+
+    ARIA (Accessible Rich Internet Applications) is a W3C specification of
+    attributes that describe the content to assistive technology such as screen readers.
+
+    The class exposes a chainable builder API so multiple attributes can be
+    specified inline. The resulting object is passed to
+    wxSVGFileDC::BeginAccessibleGroup() or to the wxSVGAccessibleGroup RAII
+    helper.
+
+    Example:
+    @code
+    dc.BeginAccessibleGroup(
+        wxSVGAttributes().Role("img").AriaLabel("Quarterly sales"),
+        "Quarterly sales",
+        "Bar chart showing revenue for Q1-Q4 2026.");
+    // ... drawing commands ...
+    dc.EndAccessibleGroup();
+    @endcode
+
+    @library{wxcore}
+    @category{dc}
+    @since 3.3.3
+*/
+class wxSVGAttributes
+{
+public:
+    /// Default constructor creates an empty set of attributes.
+    wxSVGAttributes();
+
+    /**
+        Sets the @c role attribute, which classifies the element for
+        assistive technology. Common SVG values include @c "img" (the
+        subtree is a single graphical image), @c "graphics-document", and
+        @c "graphics-symbol".
+    */
+    wxSVGAttributes& Role(const wxString& role);
+
+    /**
+        Sets the @c aria-label attribute: a short accessible name read
+        aloud by screen readers. Use when no visible text label exists.
+    */
+    wxSVGAttributes& AriaLabel(const wxString& label);
+
+    /**
+        Sets the @c aria-labelledby attribute: instead of supplying a name
+        inline, points at the @c id of another element whose text content
+        provides the accessible name.
+    */
+    wxSVGAttributes& AriaLabelledBy(const wxString& id);
+
+    /**
+        Sets the @c aria-describedby attribute: points at the @c id of
+        another element whose text content provides a longer description,
+        announced after the accessible name.
+    */
+    wxSVGAttributes& AriaDescribedBy(const wxString& id);
+
+    /**
+        Sets the @c aria-hidden attribute.
+
+        The default @a hidden value of @true is the common case (hide
+        decorative content from assistive technology). Passing @false is
+        only meaningful when overriding an inherited @c aria-hidden="true"
+        on an ancestor.
+    */
+    wxSVGAttributes& AriaHidden(bool hidden = true);
+
+    /**
+        Sets the @c aria-details attribute: points at the @c id of another
+        element containing extended information about this one
+        (e.g., a data table describing a chart).
+    */
+    wxSVGAttributes& AriaDetails(const wxString& id);
+
+    /**
+        Sets the @c aria-roledescription attribute: a human-readable,
+        optionally localized phrase that replaces the default spoken role
+        (for example @c "pie chart" instead of @c "graphic").
+    */
+    wxSVGAttributes& AriaRoleDescription(const wxString& desc);
+
+    /**
+        Sets the @c id attribute, giving the element a unique identifier
+        other attributes (such as @c aria-labelledby) or stylesheets can
+        reference.
+    */
+    wxSVGAttributes& Id(const wxString& id);
+
+    /**
+        Sets the @c class attribute, used to associate the element with
+        one or more CSS classes for styling the SVG output.
+    */
+    wxSVGAttributes& Class(const wxString& classname);
+
+    /**
+        Adds or updates an arbitrary attribute.
+
+        If @a name is already set, its value is replaced; otherwise a new
+        entry is appended.
+    */
+    wxSVGAttributes& Add(const wxString& name, const wxString& value);
+
+    /// Returns @true if no attributes have been set.
+    bool IsEmpty() const;
+};
+
+
+/**
     @class wxSVGFileDC
 
     A wxSVGFileDC is a device context onto which graphics and text can be
@@ -126,6 +238,31 @@ public:
     void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
 
     /**
+        Opens an accessible group wrapping all subsequent drawing until the
+        matching EndAccessibleGroup() call.
+
+        The group is emitted as an SVG `<g>` element carrying the given
+        @a attributes, optionally followed by `<title>` and `<desc>`
+        children supplying an accessible name and long description.
+
+        Prefer wxSVGAccessibleGroup for RAII-style scoping, which
+        guarantees EndAccessibleGroup() is called on scope exit.
+
+        @since 3.3.3
+    */
+    void BeginAccessibleGroup(const wxSVGAttributes& attributes,
+                              const wxString& title = wxString(),
+                              const wxString& desc = wxString());
+
+    /**
+        Closes the accessible group opened by the most recent
+        BeginAccessibleGroup() call.
+
+        @since 3.3.3
+    */
+    void EndAccessibleGroup();
+
+    /**
         Returns the SVG document as a string.
 
         This can be used to retrieve the generated SVG content regardless of
@@ -175,6 +312,49 @@ public:
     void StartPage();
     void EndPage();
     ///@}
+};
+
+/**
+    @class wxSVGAccessibleGroup
+
+    RAII helper that opens an accessible group on a wxSVGFileDC when
+    constructed and closes it when destroyed. Use it in place of a manual
+    wxSVGFileDC::BeginAccessibleGroup() / wxSVGFileDC::EndAccessibleGroup()
+    pair so the group is reliably closed on scope exit.
+
+    Example:
+    @code
+    {
+        wxSVGAccessibleGroup group(dc,
+            wxSVGAttributes().Role("img").AriaLabel("Quarterly sales"),
+            "Quarterly sales",
+            "Bar chart showing revenue for Q1-Q4 2026.");
+
+        dc.DrawRectangle(10, 10, 100, 60);
+        // ... further drawing ...
+    } // group closes here
+    @endcode
+
+    @library{wxcore}
+    @category{dc}
+    @since 3.3.3
+*/
+class wxSVGAccessibleGroup
+{
+public:
+    /**
+        Opens an accessible group on @a dc with the given @a attributes
+        and optional @a title and @a desc children.
+    */
+    wxSVGAccessibleGroup(wxSVGFileDC& dc,
+                         const wxSVGAttributes& attributes,
+                         const wxString& title = wxString(),
+                         const wxString& desc = wxString());
+
+    /**
+        Closes the accessible group opened by the constructor.
+    */
+    ~wxSVGAccessibleGroup();
 };
 
 /**

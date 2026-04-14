@@ -18,6 +18,7 @@
 #include "wx/filename.h"
 #include "wx/dc.h"
 
+#include <map>
 #include <memory>
 
 #if WXWIN_COMPATIBILITY_3_2
@@ -33,6 +34,35 @@ enum wxSVGShapeRenderingMode
     wxSVG_SHAPE_RENDERING_GEOMETRIC_PRECISION,
 
     wxSVG_SHAPE_RENDERING_OPTIMISE_SPEED = wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED
+};
+
+// Helper class for adding SVG and ARIA attributes to the output.
+class WXDLLIMPEXP_CORE wxSVGAttributes
+{
+public:
+    wxSVGAttributes() = default;
+
+    wxSVGAttributes& Role(const wxString& role) { return Add(wxASCII_STR("role"), role); }
+    wxSVGAttributes& AriaLabel(const wxString& label) { return Add(wxASCII_STR("aria-label"), label); }
+    wxSVGAttributes& AriaLabelledBy(const wxString& id) { return Add(wxASCII_STR("aria-labelledby"), id); }
+    wxSVGAttributes& AriaDescribedBy(const wxString& id) { return Add(wxASCII_STR("aria-describedby"), id); }
+    wxSVGAttributes& AriaHidden(bool hidden = true) { return Add(wxASCII_STR("aria-hidden"), hidden ? wxASCII_STR("true") : wxASCII_STR("false")); }
+    wxSVGAttributes& AriaDetails(const wxString& id) { return Add(wxASCII_STR("aria-details"), id); }
+    wxSVGAttributes& AriaRoleDescription(const wxString& desc) { return Add(wxASCII_STR("aria-roledescription"), desc); }
+
+    wxSVGAttributes& Id(const wxString& id) { return Add(wxASCII_STR("id"), id); }
+    wxSVGAttributes& Class(const wxString& classname) { return Add(wxASCII_STR("class"), classname); }
+
+    // Add or update an attribute.
+    wxSVGAttributes& Add(const wxString& name, const wxString& value);
+
+    // Returns the attributes as a string of name="value" pairs, each prefixed with a space.
+    wxString GetAsString() const;
+
+    bool IsEmpty() const { return m_attributes.empty(); }
+
+private:
+    std::map<wxString, wxString> m_attributes;
 };
 
 class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
@@ -143,6 +173,18 @@ public:
     void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
     void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
+
+    // Open an accessible <g> group with the given attributes and optional
+    // <title>/<desc> children. All drawing until the matching
+    // EndAccessibleGroup() call is nested inside this element.
+    // Groups may nest.
+    void BeginAccessibleGroup(const wxSVGAttributes& attributes,
+                              const wxString& title = wxString(),
+                              const wxString& desc = wxString());
+
+    // Close the accessible group opened by the most recent
+    // BeginAccessibleGroup() call.
+    void EndAccessibleGroup();
 
     wxString GetSVGDocument() const;
 
@@ -283,6 +325,9 @@ private:
     std::unique_ptr<wxSVGBitmapHandler> m_bmp_handler; // class to handle bitmaps
     wxSVGShapeRenderingMode m_renderingMode;
 
+    // Nesting depth of open accessible groups (see BeginAccessibleGroup).
+    size_t m_accessibleGroupDepth;
+
     // The clipping nesting level is incremented by every call to
     // SetClippingRegion() and reset when DestroyClippingRegion() is called.
     size_t m_clipNestingLevel;
@@ -326,6 +371,15 @@ public:
 
     void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
 
+    // Open an accessible <g> group wrapping all subsequent drawing until the
+    // matching EndAccessibleGroup() call. Prefer wxSVGAccessibleGroup for
+    // RAII-style scoping.
+    void BeginAccessibleGroup(const wxSVGAttributes& attributes,
+                              const wxString& title = wxString(),
+                              const wxString& desc = wxString());
+
+    void EndAccessibleGroup();
+
     // Return the SVG document as a string.
     wxString GetSVGDocument() const;
 
@@ -333,6 +387,31 @@ public:
 
 private:
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDC);
+};
+
+// RAII helper that opens an accessible group on construction and closes it
+// on destruction.
+class WXDLLIMPEXP_CORE wxSVGAccessibleGroup
+{
+public:
+    wxSVGAccessibleGroup(wxSVGFileDC& dc,
+                         const wxSVGAttributes& attributes,
+                         const wxString& title = wxString(),
+                         const wxString& desc = wxString())
+        : m_dc(dc)
+    {
+        m_dc.BeginAccessibleGroup(attributes, title, desc);
+    }
+
+    ~wxSVGAccessibleGroup()
+    {
+        m_dc.EndAccessibleGroup();
+    }
+
+private:
+    wxSVGFileDC& m_dc;
+
+    wxDECLARE_NO_COPY_CLASS(wxSVGAccessibleGroup);
 };
 
 #endif // wxUSE_SVG
