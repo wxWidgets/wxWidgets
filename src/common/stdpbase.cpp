@@ -26,6 +26,7 @@
 
 #include "wx/filename.h"
 #include "wx/stdpaths.h"
+#include "wx/utils.h"
 
 // ----------------------------------------------------------------------------
 // module globals
@@ -96,6 +97,18 @@ wxStandardPathsBase::wxStandardPathsBase()
 wxStandardPathsBase::~wxStandardPathsBase()
 {
     // nothing to do here
+}
+
+wxString wxStandardPathsBase::GetDataDir() const
+{
+    // allow to override the location of the data directory by setting
+    // WX_APPNAME_DATA_DIR environment variable: this is very useful in
+    // practice for running well-written (and so using wxStandardPaths to find
+    // their files) wx applications without installing them
+    wxString envOverride;
+    wxGetEnv("WX_" + wxTheApp->GetAppName().Upper() + "_DATA_DIR", &envOverride);
+
+    return envOverride;
 }
 
 wxString wxStandardPathsBase::GetLocalDataDir() const
