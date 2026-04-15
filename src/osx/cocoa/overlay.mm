@@ -309,6 +309,7 @@ void wxOverlayImpl::Reset()
 
     // todo : don't dispose, only hide and reposition on next run
     [m_overlayParentWindow removeChildWindow:m_overlayWindow];
+    [m_overlayWindow orderOut:nil];
     [m_overlayWindow release];
     m_overlayWindow = nullptr ;
 }
