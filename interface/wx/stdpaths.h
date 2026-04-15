@@ -279,7 +279,7 @@ public:
         - Windows: the directory where the executable file is located
         - Mac: @c appinfo.app/Contents/SharedSupport bundle subdirectory
 
-        Under Unix (only) it is possible to override the default value returned
+        Note that it is possible to override the default value returned
         from this function by setting the value of @c WX_APPNAME_DATA_DIR
         environment variable to the directory to use (where @c APPNAME is the
         upper-cased value of wxApp::GetAppName()). This is useful in order to

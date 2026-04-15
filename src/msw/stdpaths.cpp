@@ -316,6 +316,10 @@ wxString wxStandardPaths::GetUserConfigDir() const
 
 wxString wxStandardPaths::GetDataDir() const
 {
+    const wxString& envOverride = wxStandardPathsBase::GetDataDir();
+    if ( !envOverride.empty() )
+        return envOverride;
+
     // under Windows each program is usually installed in its own directory and
     // so its datafiles are in the same directory as its main executable
     return GetAppDir();
