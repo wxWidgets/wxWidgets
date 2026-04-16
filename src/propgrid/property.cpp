@@ -57,10 +57,17 @@ static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
     wxRendererNative::Get().DrawFocusRect(win, dc, rect);
 #else
     wxUnusedVar(win);
-
-    dc.SetPen(wxPen(*wxBLACK,1,wxPENSTYLE_DOT));
+    // Bricsys change: restore wxINVERT so the dotted focus rect is visible on
+    // any background colour, including dark themes.  Upstream commit ce4eaab20a
+    // removed wxINVERT assuming a light/default background, but that makes the
+    // rect invisible when a dark caption background is in use.
+    dc.SetLogicalFunction(wxINVERT);
+    wxPen pen(*wxBLACK, 1, wxPENSTYLE_DOT);
+    pen.SetCap(wxCAP_BUTT);
+    dc.SetPen(pen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(rect);
+    dc.SetLogicalFunction(wxCOPY);
 #endif // wxPG_USE_RENDERER_NATIVE/!wxPG_USE_RENDERER_NATIVE
 }
 
