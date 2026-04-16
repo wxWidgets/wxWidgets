@@ -1885,13 +1885,6 @@ wxPGProperty* wxPropertyGrid::DoGetItemAtY( int y ) const
 
 void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
-    // Don't paint after destruction has begun
-    if ( !HasInternalFlag(wxPG_FL_INITIALIZED) )
-    {
-        wxPaintDC dc(this);
-        return;
-    }
-
     wxDC* dcPtr = nullptr;
     if ( !HasExtraStyle(wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
     {

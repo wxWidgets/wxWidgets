@@ -5381,6 +5381,15 @@ wxStack<wxMSWImpl::PaintData> wxMSWImpl::paintStack;
 
 bool wxWindowMSW::HandlePaint()
 {
+    // Don't bother painting a window that is being destroyed -- its state
+    // may be partially torn down and event handlers may crash. Just validate
+    // the region so Windows stops sending WM_PAINT.
+    if ( IsBeingDeleted() )
+    {
+        ::ValidateRect(GetHwnd(), nullptr);
+        return true;
+    }
+
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
     {
