@@ -20,19 +20,25 @@
 
     @section fileconf_paths Configuration Files Paths
 
-    The default path for local (or user) configuration file is `~/.appname`,
-    i.e. it is stored directly in the user home directory. This default
-    path is backwards-compatible but not recommended any more and it is advised
-    to call wxStandardPaths::SetFileLayout() with
-    wxStandardPaths::FileLayout_XDG parameter to change the default path to
-    `~/.config/appname.conf`. MigrateLocalFile() may be helpful for moving the
-    existing configuration file to the new location.
+    The default behaviour is to use the existing local (or user) configuration
+    file in `~/.appname` if it exists, but to create new configuration files in
+    the XDG-compliant location under `~/.config/appname.conf`, where `appname`
+    is the return value of wxAppConsole::GetAppName() (unless overridden by the
+    constructor parameter with the same name). This is compatible with the
+    existing installations, using legacy convention for the configuration
+    files, but automatically uses the new and preferred XDG convention for the
+    new installations.
 
-    Alternatively, it is possible to specify ::wxCONFIG_USE_XDG flag in the
-    style parameter of the constructor to use this XDG-compliant path without
-    changing the global file layout.
+    You may call wxStandardPaths::SetFileLayout() with
+    wxStandardPaths::FileLayout_XDG parameter or specify ::wxCONFIG_USE_XDG
+    flag in the style parameter of the constructor to always use the
+    XDG-compliant location. If you do this, MigrateLocalFile() may be helpful
+    for moving the existing configuration file to the new location.
 
-    And for the programs using multiple configuration files it is recommended
+    Alternatively, ::wxCONFIG_USE_HOME flag may be used to use the legacy
+    location, but this is not recommended.
+
+    For the programs using multiple configuration files it is recommended
     to use both ::wxCONFIG_USE_XDG and ::wxCONFIG_USE_SUBDIR which change the
     default file path to `~/.config/appname/appname.conf` -- and allow the
     program to store other files in the same `~/.config/appname` directory.
