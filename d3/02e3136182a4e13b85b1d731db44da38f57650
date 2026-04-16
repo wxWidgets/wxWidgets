@@ -1,0 +1,1 @@
+wxOSX: Fix wxOverlay leaving phantoms in Mission Control (Daniel DeMoney, #26380).
