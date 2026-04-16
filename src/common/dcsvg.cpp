@@ -20,6 +20,9 @@
 
 #include "wx/base64.h"
 #include "wx/dcsvg.h"
+#if wxUSE_GRAPHICS_CONTEXT
+    #include "wx/svggc.h"
+#endif
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/mstream.h"
@@ -39,101 +42,6 @@ namespace
 {
 
 static const wxSize SVG_DPI(96, 96);
-
-// This function returns a string representation of a floating point number in
-// C locale (i.e. always using "." for the decimal separator) and with the
-// fixed precision (which is 2 for some unknown reason but this is what it was
-// in this code originally).
-inline wxString NumStr(double f)
-{
-    // Handle this case specially to avoid generating "-0.00" in the output.
-    if ( f == 0 )
-    {
-        return wxS("0.00");
-    }
-
-    return wxString::FromCDouble(f, 2);
-}
-
-inline wxString NumStr(float f)
-{
-    return NumStr(double(f));
-}
-
-// Return the colour representation as HTML-like "#rrggbb" string and also
-// returns its alpha as opacity number in 0..1 range.
-wxString Col2SVG(wxColour c, float* opacity = nullptr)
-{
-    if ( c.Alpha() != wxALPHA_OPAQUE )
-    {
-        if ( opacity )
-            *opacity = c.Alpha() / 255.0f;
-
-        // Remove the alpha before using GetAsString(wxC2S_HTML_SYNTAX) as it
-        // doesn't support colours with alpha channel.
-        c = wxColour(c.GetRGB());
-    }
-    else // No alpha.
-    {
-        if ( opacity )
-            *opacity = 1.0f;
-    }
-
-    return c.GetAsString(wxC2S_HTML_SYNTAX);
-}
-
-wxString GetPenStroke(const wxColour& c, int style = wxPENSTYLE_SOLID)
-{
-    float opacity;
-    wxString s = wxString::Format(wxS("stroke=\"%s\""), Col2SVG(c, &opacity));
-
-    switch ( style )
-    {
-        case wxPENSTYLE_SOLID:
-        case wxPENSTYLE_DOT:
-        case wxPENSTYLE_SHORT_DASH:
-        case wxPENSTYLE_LONG_DASH:
-        case wxPENSTYLE_DOT_DASH:
-        case wxPENSTYLE_USER_DASH:
-            s += wxString::Format(wxS(" stroke-opacity=\"%s\""), NumStr(opacity));
-            break;
-        case wxPENSTYLE_TRANSPARENT:
-            s += wxS(" stroke-opacity=\"0.0\"");
-            break;
-        default:
-            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Pen Style not available"));
-            break;
-    }
-
-    return s;
-}
-
-wxString GetBrushFill(const wxColour& c, int style = wxBRUSHSTYLE_SOLID)
-{
-    float opacity;
-    wxString s = wxString::Format(wxS("fill=\"%s\""), Col2SVG(c, &opacity));
-
-    switch ( style )
-    {
-        case wxBRUSHSTYLE_SOLID:
-        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
-        case wxBRUSHSTYLE_FDIAGONAL_HATCH:
-        case wxBRUSHSTYLE_CROSSDIAG_HATCH:
-        case wxBRUSHSTYLE_CROSS_HATCH:
-        case wxBRUSHSTYLE_VERTICAL_HATCH:
-        case wxBRUSHSTYLE_HORIZONTAL_HATCH:
-            s += wxString::Format(wxS(" fill-opacity=\"%s\""), NumStr(opacity));
-            break;
-        case wxBRUSHSTYLE_TRANSPARENT:
-            s += wxS(" fill-opacity=\"0.0\"");
-            break;
-        default:
-            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Brush Style not available"));
-            break;
-    }
-
-    return s;
-}
 
 wxString GetPenPattern(const wxPen& pen)
 {
@@ -274,7 +182,7 @@ wxString GetBrushStyleName(const wxBrush& brush)
     }
 
     if (!brushStyle.empty())
-        brushStyle += wxString::Format(wxS("%s%02X"), Col2SVG(brush.GetColour()).substr(1), brush.GetColour().Alpha());
+        brushStyle += wxString::Format(wxS("%s%02X"), wxSVGFileDCImpl::Col2SVG(brush.GetColour()).substr(1), brush.GetColour().Alpha());
 
     return brushStyle;
 }
@@ -346,13 +254,13 @@ wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
         }
 
         float opacity;
-        wxString brushColourStr = Col2SVG(brush.GetColour(), &opacity);
+        wxString brushColourStr = wxSVGFileDCImpl::Col2SVG(brush.GetColour(), &opacity);
         wxString brushStrokeStr = wxS("stroke-width=\"1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"");
 
         s += wxString::Format(wxS("  <pattern id=\"%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
             patternName);
         s += wxString::Format(wxS("    <path stroke=\"%s\" stroke-opacity=\"%s\" %s %s %s/>\n"),
-            brushColourStr, NumStr(opacity), brushStrokeStr, pattern, GetRenderMode(mode));
+            brushColourStr, wxSVGFileDCImpl::NumStr(opacity), brushStrokeStr, pattern, GetRenderMode(mode));
         s += wxS("  </pattern>\n");
     }
 
@@ -566,6 +474,97 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDCImpl);
 size_t wxSVGFileDCImpl::m_clipUniqueId = 0;
 size_t wxSVGFileDCImpl::m_gradientUniqueId = 0;
 
+// ----------------------------------------------------------
+// wxSVGFileDCImpl - string helpers (static)
+// ----------------------------------------------------------
+
+wxString wxSVGFileDCImpl::NumStr(double f)
+{
+    // Handle this case specially to avoid generating "-0.00" in the output.
+    if ( f == 0 )
+        return wxS("0.00");
+
+    return wxString::FromCDouble(f, 2);
+}
+
+wxString wxSVGFileDCImpl::NumStr(float f)
+{
+    return NumStr(double(f));
+}
+
+wxString wxSVGFileDCImpl::Col2SVG(wxColour c, float* opacity)
+{
+    if ( c.Alpha() != wxALPHA_OPAQUE )
+    {
+        if ( opacity )
+            *opacity = c.Alpha() / 255.0f;
+
+        // Remove the alpha before using GetAsString(wxC2S_HTML_SYNTAX) as it
+        // doesn't support colours with alpha channel.
+        c = wxColour(c.GetRGB());
+    }
+    else
+    {
+        if ( opacity )
+            *opacity = 1.0f;
+    }
+
+    return c.GetAsString(wxC2S_HTML_SYNTAX);
+}
+
+wxString wxSVGFileDCImpl::GetPenStroke(const wxColour& c, int style)
+{
+    float opacity;
+    wxString s = wxString::Format(wxS("stroke=\"%s\""), Col2SVG(c, &opacity));
+
+    switch ( style )
+    {
+        case wxPENSTYLE_SOLID:
+        case wxPENSTYLE_DOT:
+        case wxPENSTYLE_SHORT_DASH:
+        case wxPENSTYLE_LONG_DASH:
+        case wxPENSTYLE_DOT_DASH:
+        case wxPENSTYLE_USER_DASH:
+            s += wxString::Format(wxS(" stroke-opacity=\"%s\""), NumStr(opacity));
+            break;
+        case wxPENSTYLE_TRANSPARENT:
+            s += wxS(" stroke-opacity=\"0.0\"");
+            break;
+        default:
+            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Pen Style not available"));
+            break;
+    }
+
+    return s;
+}
+
+wxString wxSVGFileDCImpl::GetBrushFill(const wxColour& c, int style)
+{
+    float opacity;
+    wxString s = wxString::Format(wxS("fill=\"%s\""), Col2SVG(c, &opacity));
+
+    switch ( style )
+    {
+        case wxBRUSHSTYLE_SOLID:
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
+        case wxBRUSHSTYLE_FDIAGONAL_HATCH:
+        case wxBRUSHSTYLE_CROSSDIAG_HATCH:
+        case wxBRUSHSTYLE_CROSS_HATCH:
+        case wxBRUSHSTYLE_VERTICAL_HATCH:
+        case wxBRUSHSTYLE_HORIZONTAL_HATCH:
+            s += wxString::Format(wxS(" fill-opacity=\"%s\""), NumStr(opacity));
+            break;
+        case wxBRUSHSTYLE_TRANSPARENT:
+            s += wxS(" fill-opacity=\"0.0\"");
+            break;
+        default:
+            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Brush Style not available"));
+            break;
+    }
+
+    return s;
+}
+
 wxSVGFileDCImpl::wxSVGFileDCImpl(wxSVGFileDC* owner, const wxString& filename,
                                  int width, int height, double dpi, const wxString& title)
     : wxDCImpl(owner)
@@ -665,6 +664,15 @@ wxSVGFileDCImpl::~wxSVGFileDCImpl()
 {
     Save();
 }
+
+#if wxUSE_GRAPHICS_CONTEXT
+wxGraphicsContext* wxSVGFileDCImpl::GetGraphicsContext() const
+{
+    if (!m_gc)
+        m_gc.reset(new wxSVGGraphicsContext(const_cast<wxSVGFileDCImpl*>(this)));
+    return m_gc.get();
+}
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 void wxSVGFileDCImpl::DoGetSizeMM(int* width, int* height) const
 {

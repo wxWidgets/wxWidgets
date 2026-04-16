@@ -66,6 +66,7 @@ private:
 };
 
 class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
+class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsContext;
 
 // Base class for bitmap handlers used by wxSVGFileDC, used by the standard
 // "embed" and "link" handlers below but can also be used to create a custom
@@ -123,6 +124,12 @@ public:
                     const wxString& title = wxString());
 
     virtual ~wxSVGFileDCImpl();
+
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual wxGraphicsContext* GetGraphicsContext() const override;
+#endif
+
+    friend class wxSVGGraphicsContext;
 
     bool IsOk() const override { return !m_writeError; }
 
@@ -306,6 +313,21 @@ private:
 
     void write(const wxString& s);
 
+public:
+    // String helpers used by both the DC and the SVG graphics context.
+    // Formats a double in C locale with 2-digit precision.
+    static wxString NumStr(double f);
+    static wxString NumStr(float f);
+
+    // Returns the colour as "#rrggbb" and optionally its alpha as 0..1 opacity.
+    static wxString Col2SVG(wxColour c, float* opacity = nullptr);
+
+    // Returns a "stroke=... stroke-opacity=..." attribute fragment.
+    static wxString GetPenStroke(const wxColour& c, int style = wxPENSTYLE_SOLID);
+
+    // Returns a "fill=... fill-opacity=..." attribute fragment.
+    static wxString GetBrushFill(const wxColour& c, int style = wxBRUSHSTYLE_SOLID);
+
 private:
     // If m_graphics_changed is true, close the current <g> element and start a
     // new one for the last pen/brush change.
@@ -338,6 +360,11 @@ private:
 
     // Unique ID for every gradient.
     static size_t m_gradientUniqueId;
+
+#if wxUSE_GRAPHICS_CONTEXT
+    // Graphics context that writes into the same SVG buffer.
+    mutable std::unique_ptr<wxSVGGraphicsContext> m_gc;
+#endif
 
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxSVGFileDCImpl);
@@ -386,6 +413,8 @@ public:
     bool Save();
 
 private:
+    friend class wxSVGGraphicsContext;
+
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDC);
 };
 

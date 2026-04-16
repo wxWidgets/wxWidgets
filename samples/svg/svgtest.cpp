@@ -24,6 +24,11 @@
 #include "wx/dcsvg.h"
 #include "wx/notebook.h"
 
+#if wxUSE_GRAPHICS_CONTEXT
+    #include "wx/graphics.h"
+    #include "wx/dcgraph.h"
+#endif
+
 #include "SVGlogo24.xpm"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -54,6 +59,9 @@ enum Page
     Page_Bitmaps,
     Page_Clipping,
     Page_TextPos,
+#if wxUSE_GRAPHICS_CONTEXT
+    Page_SVGGraphicsContext,
+#endif
     Page_Max
 };
 
@@ -68,6 +76,9 @@ static const char* pageNames[] =
     "Bitmaps",
     "Clipping",
     "Text position",
+#if wxUSE_GRAPHICS_CONTEXT
+    "SVG graphics context",
+#endif
 };
 
 wxCOMPILE_TIME_ASSERT( WXSIZEOF(pageNames) == Page_Max, PageNamesMismatch );
@@ -83,6 +94,9 @@ static const char* pageDescriptions[] =
      "Icon and Bitmap ",
      "Clipping region",
      "Text position test page",
+#if wxUSE_GRAPHICS_CONTEXT
+     "Shapes drawn via wxGraphicsContext obtained from wxSVGFileDC",
+#endif
 };
 
 wxCOMPILE_TIME_ASSERT( WXSIZEOF(pageDescriptions) == Page_Max, PageDescriptionsMismatch );
@@ -508,6 +522,7 @@ void DrawOnDC(wxDC& dc, const int index)
             break;
 
         case Page_TextPos:
+        {
             wxString txtStr;
             wxCoord txtX, txtY, txtW, txtH, txtDescent, txtEL;
             wxCoord txtPad = 0;
@@ -547,6 +562,144 @@ void DrawOnDC(wxDC& dc, const int index)
             dc.DrawLine(txtX - int(padding + lenH), txtY + int(lenH), txtX - int(padding + lenH + lenW), txtY + int(lenH - lenW)); // bottom
             dc.DrawRotatedText(txtStr, txtX, txtY, 45);
             break;
+        }
+#if wxUSE_GRAPHICS_CONTEXT
+        case Page_SVGGraphicsContext:
+        {
+            wxGraphicsContext* const gc = dc.GetGraphicsContext();
+            if ( !gc )
+                break;
+
+            // Cyan rectangle with red border.
+            gc->SetPen(*wxRED_PEN);
+            gc->SetBrush(*wxCYAN_BRUSH);
+            gc->DrawRectangle(dc.FromDIP(10), dc.FromDIP(10),
+                              dc.FromDIP(100), dc.FromDIP(70));
+
+            // Transparent rounded rectangle.
+            gc->SetBrush(wxBrush("DARK ORCHID", wxBRUSHSTYLE_TRANSPARENT));
+            gc->DrawRoundedRectangle(dc.FromDIP(50), dc.FromDIP(50),
+                                     dc.FromDIP(100), dc.FromDIP(70),
+                                     dc.FromDIP(20));
+
+            // Goldenrod ellipse.
+            gc->SetBrush(wxBrush("GOLDENROD"));
+            gc->DrawEllipse(dc.FromDIP(100), dc.FromDIP(100),
+                            dc.FromDIP(100), dc.FromDIP(50));
+
+            // Star polygon, built as a wxGraphicsPath and filled.
+            wxPoint2DDouble starPts[] = {
+                { (double)dc.FromDIP(100), (double)dc.FromDIP(200) },
+                { (double)dc.FromDIP(70),  (double)dc.FromDIP(260) },
+                { (double)dc.FromDIP(160), (double)dc.FromDIP(230) },
+                { (double)dc.FromDIP(40),  (double)dc.FromDIP(230) },
+                { (double)dc.FromDIP(130), (double)dc.FromDIP(260) },
+            };
+            wxGraphicsPath path = gc->CreatePath();
+            path.MoveToPoint(starPts[0]);
+            for ( size_t i = 1; i < WXSIZEOF(starPts); ++i )
+                path.AddLineToPoint(starPts[i]);
+            path.CloseSubpath();
+            gc->DrawPath(path);
+
+            // Stroked-only path: a thick magenta zig-zag.
+            {
+                wxPen thick("MAGENTA", dc.FromDIP(3));
+                gc->SetPen(thick);
+                wxGraphicsPath zig = gc->CreatePath();
+                zig.MoveToPoint(dc.FromDIP(220), dc.FromDIP(20));
+                zig.AddLineToPoint(dc.FromDIP(260), dc.FromDIP(60));
+                zig.AddLineToPoint(dc.FromDIP(220), dc.FromDIP(100));
+                zig.AddLineToPoint(dc.FromDIP(260), dc.FromDIP(140));
+                zig.AddLineToPoint(dc.FromDIP(220), dc.FromDIP(180));
+                gc->StrokePath(zig);
+            }
+
+            // Cubic Bezier curve.
+            {
+                gc->SetPen(wxPen("FOREST GREEN", dc.FromDIP(2)));
+                wxGraphicsPath bez = gc->CreatePath();
+                bez.MoveToPoint(dc.FromDIP(220), dc.FromDIP(220));
+                bez.AddCurveToPoint(dc.FromDIP(260), dc.FromDIP(160),
+                                    dc.FromDIP(320), dc.FromDIP(280),
+                                    dc.FromDIP(360), dc.FromDIP(220));
+                gc->StrokePath(bez);
+            }
+
+            // Arc segment built into a filled wedge.
+            {
+                gc->SetPen(*wxBLACK_PEN);
+                gc->SetBrush(wxBrush("LIGHT BLUE"));
+                wxGraphicsPath wedge = gc->CreatePath();
+                const double cx = dc.FromDIP(310);
+                const double cy = dc.FromDIP(110);
+                const double r  = dc.FromDIP(40);
+                wedge.MoveToPoint(cx, cy);
+                wedge.AddArc(cx, cy, r, 0.0, wxDegToRad(135.0), true);
+                wedge.CloseSubpath();
+                gc->DrawPath(wedge);
+            }
+
+            // Push/Pop with rotation.
+            // Draw a rotated rectangle without disturbing later drawing.
+            gc->PushState();
+            gc->Translate(dc.FromDIP(420), dc.FromDIP(80));
+            gc->Rotate(wxDegToRad(30.0));
+            gc->SetPen(*wxBLACK_PEN);
+            gc->SetBrush(wxBrush("LIGHT GOLDENROD"));
+            gc->DrawRectangle(dc.FromDIP(-30), dc.FromDIP(-15),
+                              dc.FromDIP(60), dc.FromDIP(30));
+            gc->PopState();
+
+            // Translate and scale, creating a smaller copy of the goldenrod ellipse.
+            gc->PushState();
+            gc->Translate(dc.FromDIP(420), dc.FromDIP(160));
+            gc->Scale(0.5, 0.5);
+            gc->SetBrush(wxBrush("GOLDENROD"));
+            gc->DrawEllipse(dc.FromDIP(0), dc.FromDIP(0),
+                            dc.FromDIP(100), dc.FromDIP(50));
+            gc->PopState();
+
+            // Text drawn through the GC.
+            gc->SetFont(wxFontInfo(12).FaceName("Arial"), *wxBLACK);
+            gc->DrawText("Drawn via wxGraphicsContext", dc.FromDIP(10), dc.FromDIP(290));
+
+            // Draw an arc, transform it (rotate and scale), and draw it again.
+            {
+                gc->SetPen(wxPen(*wxRED, dc.FromDIP(2)));
+                gc->SetBrush(wxBrush(*wxRED, wxBRUSHSTYLE_TRANSPARENT));
+                wxGraphicsPath arcPath = gc->CreatePath();
+                arcPath.AddArc(dc.FromDIP(450), dc.FromDIP(250), dc.FromDIP(30), 0, M_PI, true);
+                gc->StrokePath(arcPath);
+
+                wxGraphicsMatrix m = gc->CreateMatrix();
+                m.Translate(dc.FromDIP(0), dc.FromDIP(40));
+                m.Scale(1.5, 0.5);
+                arcPath.Transform(m);
+                gc->SetPen(wxPen(*wxBLUE, dc.FromDIP(2)));
+                gc->StrokePath(arcPath);
+            }
+
+            // Draw some bitmaps.
+            {
+                wxGraphicsBitmap bmp = gc->CreateBitmap(wxBitmap(svgbitmap_xpm));
+                gc->DrawBitmap(bmp, dc.FromDIP(500), dc.FromDIP(60), dc.FromDIP(32), dc.FromDIP(32));
+                // Rescaled bitmap
+                gc->DrawBitmap(bmp, dc.FromDIP(500), dc.FromDIP(100), dc.FromDIP(64), dc.FromDIP(64));
+            }
+
+            // Clip a rectangular area and then draw a square inside of it.
+            // The square will look like a small rectangle because of the clipping.
+            {
+                gc->PushState();
+                gc->Clip(dc.FromDIP(500), dc.FromDIP(200), dc.FromDIP(50), dc.FromDIP(30));
+                gc->SetBrush(*wxRED_BRUSH);
+                gc->DrawRectangle(dc.FromDIP(480), dc.FromDIP(180), dc.FromDIP(300), dc.FromDIP(300));
+                gc->PopState();
+            }
+            break;
+        }
+#endif // wxUSE_GRAPHICS_CONTEXT
     }
 }
 
@@ -555,7 +708,23 @@ void DrawOnDC(wxDC& dc, const int index)
 // Define the repainting behaviour
 void MyPage::OnDraw(wxDC& dc)
 {
-    DrawOnDC(dc, m_index);
+#if wxUSE_GRAPHICS_CONTEXT
+    // The GC page calls dc.GetGraphicsContext(). For wxSVGFileDC that
+    // returns our wxSVGGraphicsContext directly, but a plain on-screen
+    // wxPaintDC has no GC unless wrapped in a wxGCDC.
+    if ( m_index == Page_SVGGraphicsContext && !wxDynamicCast(&dc, wxSVGFileDC) )
+    {
+        if ( wxWindowDC* const wdc = wxDynamicCast(&dc, wxWindowDC) )
+        {
+            wxGCDC gcdc(*wdc);
+            DrawOnDC(gcdc, m_index);
+        }
+    }
+    else
+#endif
+    {
+        DrawOnDC(dc, m_index);
+    }
 
     wxLogStatus(pageDescriptions[m_index]);
 }

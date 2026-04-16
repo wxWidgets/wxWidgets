@@ -3702,6 +3702,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/statbox.h \
 	wx/stattext.h \
 	wx/statusbr.h \
+	wx/svggc.h \
 	wx/testing.h \
 	wx/textcompleter.h \
 	wx/textctrl.h \
@@ -4478,6 +4479,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_statlinecmn.o \
 	monodll_stattextcmn.o \
 	monodll_stockitem.o \
+	monodll_svggc.o \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
 	monodll_textentrycmn.o \
@@ -4746,6 +4748,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_statlinecmn.o \
 	monodll_stattextcmn.o \
 	monodll_stockitem.o \
+	monodll_svggc.o \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
 	monodll_textentrycmn.o \
@@ -6264,6 +6267,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_statlinecmn.o \
 	monolib_stattextcmn.o \
 	monolib_stockitem.o \
+	monolib_svggc.o \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
 	monolib_textentrycmn.o \
@@ -6532,6 +6536,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_statlinecmn.o \
 	monolib_stattextcmn.o \
 	monolib_stockitem.o \
+	monolib_svggc.o \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
 	monolib_textentrycmn.o \
@@ -8196,6 +8201,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_statlinecmn.o \
 	coredll_stattextcmn.o \
 	coredll_stockitem.o \
+	coredll_svggc.o \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
 	coredll_textentrycmn.o \
@@ -8464,6 +8470,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_statlinecmn.o \
 	coredll_stattextcmn.o \
 	coredll_stockitem.o \
+	coredll_svggc.o \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
 	coredll_textentrycmn.o \
@@ -9707,6 +9714,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_statlinecmn.o \
 	corelib_stattextcmn.o \
 	corelib_stockitem.o \
+	corelib_svggc.o \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
 	corelib_textentrycmn.o \
@@ -9975,6 +9983,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_statlinecmn.o \
 	corelib_stattextcmn.o \
 	corelib_stockitem.o \
+	corelib_svggc.o \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
 	corelib_textentrycmn.o \
@@ -19774,6 +19783,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_stockitem.o: $(srcdir)/src/common/stockitem.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stockitem.cpp
 
+@COND_USE_GUI_1@monodll_svggc.o: $(srcdir)/src/common/svggc.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/svggc.cpp
+
 @COND_USE_GUI_1@monodll_tbarbase.o: $(srcdir)/src/common/tbarbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/tbarbase.cpp
 
@@ -24564,6 +24576,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_stockitem.o: $(srcdir)/src/common/stockitem.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stockitem.cpp
+
+@COND_USE_GUI_1@monolib_svggc.o: $(srcdir)/src/common/svggc.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/svggc.cpp
 
 @COND_USE_GUI_1@monolib_tbarbase.o: $(srcdir)/src/common/tbarbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/tbarbase.cpp
@@ -29419,6 +29434,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_stockitem.o: $(srcdir)/src/common/stockitem.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/stockitem.cpp
 
+@COND_USE_GUI_1@coredll_svggc.o: $(srcdir)/src/common/svggc.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/svggc.cpp
+
 @COND_USE_GUI_1@coredll_tbarbase.o: $(srcdir)/src/common/tbarbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/tbarbase.cpp
 
@@ -33171,6 +33189,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_stockitem.o: $(srcdir)/src/common/stockitem.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/stockitem.cpp
+
+@COND_USE_GUI_1@corelib_svggc.o: $(srcdir)/src/common/svggc.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/svggc.cpp
 
 @COND_USE_GUI_1@corelib_tbarbase.o: $(srcdir)/src/common/tbarbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/tbarbase.cpp

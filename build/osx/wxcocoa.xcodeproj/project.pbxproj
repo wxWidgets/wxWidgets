@@ -130,6 +130,7 @@
 		C259D01CC62533D296EF023A /* scrolbarcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E441D48CB73EF2BFD6C384 /* scrolbarcmn.cpp */; };
 		26BB10834DA1388881BDD1EC /* propgrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B98B72B3A0A73044B85AED60 /* propgrid.cpp */; };
 		B791BD05072B3B909A7093C2 /* dcsvg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */; };
+		7A3C9B2F4D8E1F605A8B9C30 /* svggc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A3C9B2F4D8E1F605A8B9C2D /* svggc.cpp */; };
 		36DB80FD5B153E9099DB6912 /* imaggif.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDB4AB7CDABA3A54B4F8207B /* imaggif.cpp */; };
 		65514CD6A9F23ED98436AC02 /* ftp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5CB4781DF8C432C688F30CDD /* ftp.cpp */; };
 		E882402BEE0330A080A6516F /* strconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB8204E530329FA085E5B8 /* strconv.cpp */; };
@@ -1268,6 +1269,7 @@
 		D98FABF75BCE3AF18C91B42D /* LexHex.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1C86EC3AA4193E639EB08AA7 /* LexHex.cxx */; };
 		DAAFBED07FF8365B96D20B9A /* unichar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB90ADAC10693B6F91E7D4E9 /* unichar.cpp */; };
 		B791BD05072B3B909A7093C3 /* dcsvg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */; };
+		7A3C9B2F4D8E1F605A8B9C31 /* svggc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A3C9B2F4D8E1F605A8B9C2D /* svggc.cpp */; };
 		A9864F0104FA344BBE79D3BC /* rendcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96CED508FA3C3B6B9265099E /* rendcmn.cpp */; };
 		2E059BFE8E3B3D9299D5596A /* textmeasure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9B31409EC6532FC83B0B957 /* textmeasure.cpp */; };
 		D6CF7416CA6A3CFF8FDFD49C /* nativewin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9BC8BFDE41F93504B7A51D08 /* nativewin.mm */; };
@@ -2238,6 +2240,7 @@
 		39CC380F801F3EE984523275 /* auibar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A4437E9697300390FDE14E /* auibar.cpp */; };
 		FECC98B53C0F3106AB04E69F /* tif_fax3.c in Sources */ = {isa = PBXBuildFile; fileRef = 30FD1048328234E59D319863 /* tif_fax3.c */; };
 		B791BD05072B3B909A7093C4 /* dcsvg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */; };
+		7A3C9B2F4D8E1F605A8B9C32 /* svggc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A3C9B2F4D8E1F605A8B9C2D /* svggc.cpp */; };
 		2C95DFA8EE463487956B4EB6 /* infobar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DE6A96FDD5D381D8B33D58E /* infobar.cpp */; };
 		7D615329368D32709CEF4B59 /* headerctrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7273A7E255323EB3B391D997 /* headerctrlg.cpp */; };
 		2138B8131B043DED94DDE302 /* cost_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = F523D629DF793FE5ADEA9EEA /* cost_sse2.c */; };
@@ -5455,6 +5458,7 @@
 		DC9153A350893820B942D37E /* LexMatlab.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexMatlab.cxx; path = ../../src/stc/lexilla/lexers/LexMatlab.cxx; sourceTree = SOURCE_ROOT; };
 		F582C6B3A5AA3367BB4DBE97 /* statbmp_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = statbmp_osx.cpp; path = ../../src/osx/statbmp_osx.cpp; sourceTree = SOURCE_ROOT; };
 		DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dcsvg.cpp; path = ../../src/common/dcsvg.cpp; sourceTree = SOURCE_ROOT; };
+		7A3C9B2F4D8E1F605A8B9C2D /* svggc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svggc.cpp; path = ../../src/common/svggc.cpp; sourceTree = SOURCE_ROOT; };
 		A284E855892F3A9E9E19E854 /* LexTADS3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexTADS3.cxx; path = ../../src/stc/lexilla/lexers/LexTADS3.cxx; sourceTree = SOURCE_ROOT; };
 		0510EE0FB3FF36EF8670ABD1 /* cmndata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cmndata.cpp; path = ../../src/common/cmndata.cpp; sourceTree = SOURCE_ROOT; };
 		FBE1C531185131A89EFF7FAF /* cmdline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cmdline.cpp; path = ../../src/common/cmdline.cpp; sourceTree = SOURCE_ROOT; };
@@ -6818,6 +6822,7 @@
 				FBC5A5797B0D369291A76D6E /* dcbufcmn.cpp */,
 				776CD7F5B0673B4688F2EC92 /* dcgraph.cpp */,
 				DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */,
+				7A3C9B2F4D8E1F605A8B9C2D /* svggc.cpp */,
 				E110907DDC13305E88B90086 /* dirctrlcmn.cpp */,
 				9051902662BE38B3912B34EA /* dlgcmn.cpp */,
 				0116581B77DF3A5D889B8D17 /* dndcmn.cpp */,
@@ -9105,6 +9110,7 @@
 				39D6435B10073B85A499AFDA /* dcbufcmn.cpp in Sources */,
 				9564A6968D66325DAEADEBA5 /* dcgraph.cpp in Sources */,
 				B791BD05072B3B909A7093C3 /* dcsvg.cpp in Sources */,
+				7A3C9B2F4D8E1F605A8B9C31 /* svggc.cpp in Sources */,
 				B559E894684A38238CAAA115 /* dirctrlcmn.cpp in Sources */,
 				63F0C8EEDF4B3641878A8B4D /* dlgcmn.cpp in Sources */,
 				B839235BED6F3609BDB732B8 /* dndcmn.cpp in Sources */,
@@ -9798,6 +9804,7 @@
 				39D6435B10073B85A499AFD9 /* dcbufcmn.cpp in Sources */,
 				9564A6968D66325DAEADEBA3 /* dcgraph.cpp in Sources */,
 				B791BD05072B3B909A7093C2 /* dcsvg.cpp in Sources */,
+				7A3C9B2F4D8E1F605A8B9C30 /* svggc.cpp in Sources */,
 				B559E894684A38238CAAA116 /* dirctrlcmn.cpp in Sources */,
 				63F0C8EEDF4B3641878A8B4F /* dlgcmn.cpp in Sources */,
 				B839235BED6F3609BDB732B9 /* dndcmn.cpp in Sources */,
@@ -11275,6 +11282,7 @@
 				39D6435B10073B85A499AFD8 /* dcbufcmn.cpp in Sources */,
 				9564A6968D66325DAEADEBA4 /* dcgraph.cpp in Sources */,
 				B791BD05072B3B909A7093C4 /* dcsvg.cpp in Sources */,
+				7A3C9B2F4D8E1F605A8B9C32 /* svggc.cpp in Sources */,
 				B559E894684A38238CAAA117 /* dirctrlcmn.cpp in Sources */,
 				63F0C8EEDF4B3641878A8B4E /* dlgcmn.cpp in Sources */,
 				B839235BED6F3609BDB732BA /* dndcmn.cpp in Sources */,
