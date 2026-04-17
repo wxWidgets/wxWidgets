@@ -190,7 +190,7 @@ def main():
         run_command(configure_command, cwd=CWD, env=ENV)
 
     if Action.BUILD in ACTION:
-        run_command(f'cmake --build {BUILD_DIR}', cwd=CWD, env=ENV)
+        run_command(f'cmake --build {BUILD_DIR} --config {BUILD_TYPE}', cwd=CWD, env=ENV)
         run_command(f'cmake --install {BUILD_DIR} --config {BUILD_TYPE}', cwd=CWD, env=ENV)
 
 if __name__ == '__main__':
