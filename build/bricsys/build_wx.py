@@ -139,6 +139,17 @@ def main():
     # Prepare environment variables for subprocesses
     ENV = os.environ.copy()
 
+    # Prepend cmake from thirdparty to PATH (mirrors build.sh / build.bat)
+    thirdparty_path = ENV.get('THIRDPARTY_PATH', '')
+    if thirdparty_path:
+        if PLATFORM == 'windows':
+            cmake_bin = os.path.join(thirdparty_path, 'cmake', 'win64', 'bin')
+        elif PLATFORM == 'mac':
+            cmake_bin = os.path.join(thirdparty_path, 'cmake', 'mac', 'bin')
+        else:
+            cmake_bin = os.path.join(thirdparty_path, 'cmake', 'lin64', 'bin')
+        ENV['PATH'] = cmake_bin + os.pathsep + ENV.get('PATH', '')
+
     # Create directories
     BUILD_DIR.mkdir(parents=True, exist_ok=True)
 
