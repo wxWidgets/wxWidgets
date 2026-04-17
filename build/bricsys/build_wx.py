@@ -101,7 +101,8 @@ def main():
     # Paths
     SRC_DIR = Path(args.wx_src_dir).resolve()
     BUILD_DIR = Path(args.wx_build_dir).resolve()
-    INSTALL_DIR = Path(args.wx_install_dir).resolve()
+    install_dir = Path(args.wx_install_dir)
+    INSTALL_DIR = install_dir if install_dir.is_absolute() else (SRC_DIR / install_dir).resolve()
 
     # Parse actions
     action_str = args.action.lower()
