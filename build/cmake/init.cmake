@@ -107,7 +107,7 @@ if(MSVC)
     wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${MSVC_PDB_FLAG}")
     wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${MSVC_PDB_FLAG}")
 
-    if(wxBUILD_MSVC_MULTIPROC)
+    if(wxBUILD_MSVC_MULTIPROC AND ${CMAKE_GENERATOR} MATCHES "Visual Studio")
         wx_string_append(CMAKE_C_FLAGS " /MP")
         wx_string_append(CMAKE_CXX_FLAGS " /MP")
     endif()
