@@ -1622,6 +1622,7 @@ VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler)
     m_handler = handler;
 }
 
+COM_DECLSPEC_NOTHROW
 STDMETHODIMP VirtualProtocol::QueryInterface(REFIID riid, void **ppv)
 {
     wxLogQueryInterface(wxT("VirtualProtocol"), riid);
@@ -1660,12 +1661,14 @@ STDMETHODIMP VirtualProtocol::QueryInterface(REFIID riid, void **ppv)
     return (HRESULT) E_NOINTERFACE;
 }
 
+COM_DECLSPEC_NOTHROW
 STDMETHODIMP_(ULONG) VirtualProtocol::AddRef()
 {
     wxLogAddRef(wxT("VirtualProtocol"), m_cRef);
     return ++m_cRef;
 }
 
+COM_DECLSPEC_NOTHROW
 STDMETHODIMP_(ULONG) VirtualProtocol::Release()
 {
     wxLogRelease(wxT("VirtualProtocol"), m_cRef);

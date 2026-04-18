@@ -90,9 +90,9 @@ private:
 
 #define   DECLARE_IUNKNOWN_METHODS                                            \
   public:                                                                     \
-    STDMETHODIMP          QueryInterface(REFIID, void **) override;         \
-    STDMETHODIMP_(ULONG)  AddRef() override;                                \
-    STDMETHODIMP_(ULONG)  Release() override;                               \
+    STDMETHOD(QueryInterface) (REFIID, void **) override;                     \
+    STDMETHOD_(ULONG, AddRef) () override;                                    \
+    STDMETHOD_(ULONG, Release) () override;                                   \
   private:                                                                    \
     static  const IID    *ms_aIids[];                                         \
     wxAutoULong           m_cRef
@@ -107,6 +107,7 @@ private:
 // implementation is as straightforward as possible
 // Parameter:  classname - the name of the class
 #define   IMPLEMENT_IUNKNOWN_METHODS(classname)                               \
+  COM_DECLSPEC_NOTHROW                                                        \
   STDMETHODIMP classname::QueryInterface(REFIID riid, void **ppv)             \
   {                                                                           \
     wxLogQueryInterface(wxT(#classname), riid);                               \
@@ -124,6 +125,7 @@ private:
     }                                                                         \
   }                                                                           \
                                                                               \
+  COM_DECLSPEC_NOTHROW                                                        \
   STDMETHODIMP_(ULONG) classname::AddRef()                                    \
   {                                                                           \
     wxLogAddRef(wxT(#classname), m_cRef);                                     \
@@ -131,6 +133,7 @@ private:
     return ++m_cRef;                                                          \
   }                                                                           \
                                                                               \
+  COM_DECLSPEC_NOTHROW                                                        \
   STDMETHODIMP_(ULONG) classname::Release()                                   \
   {                                                                           \
     wxLogRelease(wxT(#classname), m_cRef);                                    \
