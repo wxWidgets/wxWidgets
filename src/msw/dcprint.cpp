@@ -344,7 +344,7 @@ bool DrawBitmapUsingStretchDIBits(HDC hdc,
                 (LPBITMAPINFO)&ds.dsBmih,
                 DIB_RGB_COLORS,
                 SRCCOPY
-            ) == GDI_ERROR )
+            ) == static_cast<int>(GDI_ERROR) )
     {
         wxLogLastError(wxT("StretchDIBits"));
 

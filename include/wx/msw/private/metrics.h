@@ -40,7 +40,7 @@ inline const NONCLIENTMETRICS GetNonClientMetrics(const wxWindow* win)
 // Check whether high contrast mode is on.
 inline bool IsHighContrast()
 {
-    HIGHCONTRAST hc = { sizeof(hc) };
+    WinStruct<HIGHCONTRAST> hc;
 
     if ( !::SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(hc), &hc, 0) )
     {
