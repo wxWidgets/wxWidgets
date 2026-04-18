@@ -129,8 +129,7 @@ void CLS::ms_wxClassInfo() { ms_wxDummy = 0; }
 // Use this macro to declare type info fully inline in class.
 #define WX_DECLARE_TYPEINFO_INLINE(CLS) \
 private: \
-    static char ms_wxDummy; \
-    static void ms_wxClassInfo() { ms_wxDummy = 0; } \
+    static void ms_wxClassInfo() { } \
 _WX_DECLARE_TYPEINFO_CUSTOM(CLS, ms_wxClassInfo)
 
 #define wxTypeId(OBJ) (OBJ).GetWxTypeId()
