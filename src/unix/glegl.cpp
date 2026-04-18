@@ -448,8 +448,24 @@ void wxGLCanvasEGL::UpdateSubsurfacePosition()
         return;
     }
 
+    // We need to position the subsurface at the canvas window position inside
+    // its top level ancestor, so get it by computing the offset between the
+    // canvas origin and the window origin.
+    //
+    // We could also use gtk_widget_translate_coordinates() or call
+    // gdk_window_get_position() recursively until we reach the top level
+    // ancestor, but this way is even simpler and seems to work fine.
+    GtkWidget* const toplevel = gtk_widget_get_toplevel(m_canvas->m_widget);
+
+    int tlwx, tlwy;
+    gdk_window_get_origin(gtk_widget_get_window(toplevel), &tlwx, &tlwy);
+
     int x, y;
-    gdk_window_get_position(m_canvas->GTKGetDrawingWindow(), &x, &y);
+    gdk_window_get_origin(m_canvas->GTKGetDrawingWindow(), &x, &y);
+
+    x -= tlwx;
+    y -= tlwy;
+
     wl_subsurface_set_position(m_wlSubsurface, x, y);
 }
 
