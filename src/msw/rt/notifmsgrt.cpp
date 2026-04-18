@@ -44,7 +44,7 @@ typedef ABI::Windows::Foundation::ITypedEventHandler<ToastNotification *, ToastF
 
 class wxToastNotifMsgImpl;
 
-class wxToastEventHandler :
+class wxToastEventHandler final :
     public Microsoft::WRL::Implements<DesktopToastActivatedEventHandler, DesktopToastDismissedEventHandler, DesktopToastFailedEventHandler>
 {
 public:
