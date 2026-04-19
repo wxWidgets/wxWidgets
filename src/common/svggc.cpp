@@ -723,13 +723,13 @@ void wxSVGGraphicsPathData::AddArcToCubics(wxDouble xc, wxDouble yc, wxDouble r,
     {
         if ( clockwise )
         {
-            while (sweep <= 0) sweep += twoPi;
-            while (sweep > twoPi) sweep -= twoPi;
+            while ( sweep <= 0 ) sweep += twoPi;
+            while ( sweep > twoPi ) sweep -= twoPi;
         }
         else
         {
-            while (sweep >= 0) sweep -= twoPi;
-            while (sweep < -twoPi) sweep += twoPi;
+            while ( sweep >= 0 ) sweep -= twoPi;
+            while ( sweep < -twoPi ) sweep += twoPi;
         }
     }
 
@@ -1072,14 +1072,29 @@ void wxSVGGraphicsContext::ResetClip()
 
 void wxSVGGraphicsContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
 {
-    if ( x != nullptr )
-        *x = 0;
-    if ( y != nullptr )
-        *y = 0;
-    if ( w != nullptr )
-        *w = m_width;
-    if ( h != nullptr )
-        *h = m_height;
+    wxRect r;
+    if ( m_impl->DoGetClippingRect(r) )
+    {
+        if ( x != nullptr )
+            *x = r.x;
+        if ( y != nullptr )
+            *y = r.y;
+        if ( w != nullptr )
+            *w = r.width;
+        if ( h != nullptr )
+            *h = r.height;
+    }
+    else
+    {
+        if ( x != nullptr )
+            *x = 0;
+        if ( y != nullptr )
+            *y = 0;
+        if ( w != nullptr )
+            *w = m_width;
+        if ( h != nullptr )
+            *h = m_height;
+    }
 }
 
 void* wxSVGGraphicsContext::GetNativeContext()
@@ -1380,7 +1395,7 @@ void wxSVGGraphicsContext::GetPartialTextExtents(const wxString& text,
 {
     widths.clear();
     widths.reserve(text.length());
-    for (size_t i = 1; i <= text.length(); ++i)
+    for ( size_t i = 1; i <= text.length(); ++i )
     {
         wxCoord w = 0, h = 0;
         m_impl->DoGetTextExtent(text.substr(0, i), &w, &h, nullptr, nullptr, &m_currentFont);

@@ -394,11 +394,11 @@ wxString wxSVGFileDCImpl::GetSVGDocument() const
     wxString doc(m_svgDocument);
 
     // Close remaining clipping group elements
-    for (size_t i = 0; i < m_clipNestingLevel; i++)
+    for ( size_t i = 0; i < m_clipNestingLevel; i++ )
         doc += wxS("</g>\n");
 
     // Close remaining layer group elements
-    for (size_t i = 0; i < m_layerDepth; i++)
+    for ( size_t i = 0; i < m_layerDepth; i++ )
         doc += wxS("</g>\n");
 
     // Close the currently-open pen/brush group.
@@ -406,7 +406,7 @@ wxString wxSVGFileDCImpl::GetSVGDocument() const
 
     // Close any accessible groups left open by missing EndAccessibleGroup()
     // calls, so the output is still well-formed XML.
-    for (size_t i = 0; i < m_accessibleGroupDepth; i++)
+    for ( size_t i = 0; i < m_accessibleGroupDepth; i++ )
         doc += wxS("</g>\n");
 
     doc += wxS("</svg>\n");
@@ -505,7 +505,7 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
         if ( AreAutomaticBoundingBoxUpdatesEnabled() )
             CalcBoundingBox(points[0].x + xoffset, points[0].y + yoffset);
 
-        for (int i = 1; i < n; ++i)
+        for ( int i = 1; i < n; ++i )
         {
             s += wxString::Format(wxS(" L%d %d"), (points[i].x + xoffset), (points[i].y + yoffset));
             if ( AreAutomaticBoundingBoxUpdatesEnabled() )
@@ -664,7 +664,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
 
     // Draw all text line by line
     const wxArrayString lines = wxSplit(sText, '\n', '\0');
-    for (size_t lineNum = 0; lineNum < lines.size(); lineNum++)
+    for ( size_t lineNum = 0; lineNum < lines.size(); lineNum++ )
     {
         const double xRect = x + lineNum * dx;
         const double yRect = y + lineNum * dy;
@@ -758,7 +758,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
 
     s = wxS("  <polygon points=\"");
 
-    for (int i = 0; i < n; i++)
+    for ( int i = 0; i < n; i++ )
     {
         s += wxString::Format(wxS("%d %d "), points[i].x + xoffset, points[i].y + yoffset);
         if ( AreAutomaticBoundingBoxUpdatesEnabled() )
@@ -784,13 +784,13 @@ void wxSVGFileDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoint 
 
     int i, j;
     int totalPts = 0;
-    for (j = 0; j < n; ++j)
+    for ( j = 0; j < n; ++j )
         totalPts += count[j];
 
     wxScopedArray<wxPoint> pts(totalPts + n);
 
     int polyCounter = 0, polyIndex = 0;
-    for (i = j = 0; i < totalPts; ++i)
+    for ( i = j = 0; i < totalPts; ++i )
     {
         pts[j++] = points[i];
         ++polyCounter;
@@ -807,7 +807,7 @@ void wxSVGFileDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoint 
         DoDrawPolygon(j, pts.get(), xoffset, yoffset, fillStyle);
     }
 
-    for (i = j = 0; i < n; i++)
+    for ( i = j = 0; i < n; i++ )
     {
         DoDrawLines(count[i] + 1, pts.get() + j, xoffset, yoffset);
         j += count[i] + 1;
@@ -940,7 +940,7 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     double start = (sa - 90);
     if ( start < 0 )
         start += 360;
-    while (fabs(start) > 360)
+    while ( fabs(start) > 360 )
         start -= (start / fabs(start)) * 360;
 
     double end = (ea - 90);
@@ -1145,7 +1145,7 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     svg << "</g>\n";
 
     // Close clipping group elements
-    for (size_t i = 0; i < m_clipNestingLevel; i++)
+    for ( size_t i = 0; i < m_clipNestingLevel; i++ )
     {
         svg << "</g>\n";
     }
@@ -1651,7 +1651,7 @@ wxString wxSVGFileDCImpl::GetPenPattern(const wxPen& pen)
         int count = pen.GetDashes(&dashes);
         if ((dashes != nullptr) && (count > 0))
         {
-            for (int i = 0; i < count; ++i)
+            for ( int i = 0; i < count; ++i )
             {
                 s << dashes[i];
                 if (i < count - 1)
@@ -1754,7 +1754,7 @@ wxString wxSVGFileDCImpl::GetBrushStyleName(const wxBrush& brush)
         break;
     }
 
-    if (!brushStyle.empty())
+    if ( !brushStyle.empty() )
         brushStyle += wxString::Format(wxS("%s%02X"), wxSVGFileDCImpl::Col2SVG(brush.GetColour()).substr(1), brush.GetColour().Alpha());
 
     return brushStyle;
@@ -1765,7 +1765,7 @@ wxString wxSVGFileDCImpl::GetBrushPattern(const wxBrush& brush)
     wxString s;
     wxString brushStyle = GetBrushStyleName(brush);
 
-    if (!brushStyle.empty())
+    if ( !brushStyle.empty() )
         s = wxString::Format(wxS("fill=\"url(#%s)\""), brushStyle);
 
     return s;
@@ -1799,7 +1799,7 @@ wxString wxSVGFileDCImpl::CreateBrushFill(const wxBrush& brush, wxSVGShapeRender
     wxString s;
     wxString patternName = GetBrushStyleName(brush);
 
-    if (!patternName.empty())
+    if ( !patternName.empty() )
     {
         wxString pattern;
         switch (brush.GetStyle())
