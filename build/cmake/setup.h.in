@@ -158,6 +158,11 @@
 
 #cmakedefine01 wxUSE_DEBUG_NEW_ALWAYS
 
+// BRICSYS change: disable wx asserts in release
+#ifdef NDEBUG
+#define wxDEBUG_LEVEL 0
+#endif
+
 
 
 #ifndef wxUSE_UNICODE
