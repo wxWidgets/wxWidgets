@@ -91,7 +91,7 @@ def main():
     if args.build_type == "debug":
         BUILD_TYPE = 'Debug'
     elif args.build_type == "release":
-        BUILD_TYPE = 'Release'
+        BUILD_TYPE = 'RelWithDebInfo'
     else:
         print(f"Unknown build type: {args.build_type}")
         sys.exit(1)
