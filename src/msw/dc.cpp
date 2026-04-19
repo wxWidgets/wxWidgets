@@ -38,6 +38,7 @@
 #include "wx/msw/dc.h"
 
 #include "wx/scopedarray.h"
+#include "wx/scopeguard.h"
 #include "wx/sysopt.h"
 
 #ifdef wxHAS_RAW_BITMAP
@@ -100,6 +101,19 @@ static const int VIEWPORT_EXTENT = 134217727;
 #define YLOG2DEV(y) ((y) + (m_deviceOriginY*m_signY / m_scaleY))
 #define XDEV2LOG(x) ((x) - (m_deviceOriginX*m_signX / m_scaleX))
 #define YDEV2LOG(y) ((y) - (m_deviceOriginY*m_signY / m_scaleY))
+
+// ----------------------------------------------------------------------------
+// macro to temporarily disable RTL layout if already set on the device context
+// ----------------------------------------------------------------------------
+
+// Mainly used with the LogicalToDevice{Rel}()/DeviceToLogical{Rel}() functions
+// to force them to return unmirrored coordinates if the LAYOUT_RTL flag is set
+// on the device context. This avoids double-mirroring problems when the result
+// is passed to GDI drawing functions. And also to be consistent with wxGTK3.
+
+#define wxSCOPED_DC_RTL_DISABLER(hdc)              \
+    const auto oldLayoutDir = ::SetLayout(hdc, 0); \
+    wxON_BLOCK_EXIT2(::SetLayout, hdc, oldLayoutDir)
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -1958,6 +1972,8 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
 wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
+    wxSCOPED_DC_RTL_DISABLER(GetHdc());
+
     POINT p;
     p.x = x;
     p.y = y;
@@ -2004,6 +2020,8 @@ wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
+    wxSCOPED_DC_RTL_DISABLER(GetHdc());
+
     POINT p;
     p.x = x;
     p.y = y;
@@ -2013,6 +2031,8 @@ wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 
 wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
 {
+    wxSCOPED_DC_RTL_DISABLER(GetHdc());
+
     POINT p[2];
     p[0].x = 0;
     p[0].y = 0;
@@ -2024,6 +2044,8 @@ wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
 
 wxSize wxMSWDCImpl::LogicalToDeviceRel(int x, int y) const
 {
+    wxSCOPED_DC_RTL_DISABLER(GetHdc());
+
     POINT p[2];
     p[0].x = 0;
     p[0].y = 0;
