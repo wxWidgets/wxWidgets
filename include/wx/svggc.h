@@ -191,14 +191,27 @@ public:
 
     void GetLinearParameters(wxDouble* x1, wxDouble* y1, wxDouble* x2, wxDouble* y2) const
     {
-        if ( x1 ) *x1 = m_x1; if ( y1 ) *y1 = m_y1;
-        if ( x2 ) *x2 = m_x2; if ( y2 ) *y2 = m_y2;
+        if ( x1 )
+            *x1 = m_x1;
+        if ( y1 )
+            *y1 = m_y1;
+        if ( x2 )
+            *x2 = m_x2;
+        if ( y2 )
+            *y2 = m_y2;
     }
     void GetRadialParameters(wxDouble* startX, wxDouble* startY, wxDouble* endX, wxDouble* endY, wxDouble* radius) const
     {
-        if ( startX ) *startX = m_x1; if ( startY ) *startY = m_y1;
-        if ( endX ) *endX = m_x2; if ( endY ) *endY = m_y2;
-        if ( radius ) *radius = m_radius;
+        if ( startX )
+            *startX = m_x1;
+        if ( startY )
+            *startY = m_y1;
+        if ( endX )
+            *endX = m_x2;
+        if ( endY )
+            *endY = m_y2;
+        if ( radius )
+            *radius = m_radius;
     }
     const wxGraphicsGradientStops& GetStops() const { return m_stops; }
     const wxGraphicsMatrix& GetMatrix() const { return m_matrix; }
