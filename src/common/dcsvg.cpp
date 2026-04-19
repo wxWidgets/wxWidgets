@@ -40,257 +40,7 @@
 
 namespace
 {
-
 static const wxSize SVG_DPI(96, 96);
-
-wxString GetPenPattern(const wxPen& pen)
-{
-    wxString s;
-
-    // The length of the dashes and gaps have a constant factor.
-    // Dots have a width of 2, short dashes 10, long dashes 15 and gaps 8 (5 for dots).
-    // When the pen width increases, lines become thicker and unrecognizable.
-    // Multiplying with 1/3th of the width creates line styles matching the appearance of wxDC.
-    // The pen width is not used to modify user provided dash styles.
-    double w = pen.GetWidth();
-    if ( pen.GetWidth() == 0 )
-        w = 1;
-    w = w / 3;
-
-    switch (pen.GetStyle())
-    {
-        case wxPENSTYLE_DOT:
-            s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\""), w * 2, w * 5);
-            break;
-        case wxPENSTYLE_SHORT_DASH:
-            s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\""), w * 10, w * 8);
-            break;
-        case wxPENSTYLE_LONG_DASH:
-            s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\""), w * 15, w * 8);
-            break;
-        case wxPENSTYLE_DOT_DASH:
-            s = wxString::Format(wxS("stroke-dasharray=\"%f,%f,%f,%f\""), w * 8, w * 8, w * 2, w * 8);
-            break;
-        case wxPENSTYLE_USER_DASH:
-        {
-            s = wxS("stroke-dasharray=\"");
-            wxDash* dashes;
-            int count = pen.GetDashes(&dashes);
-            if ( (dashes != nullptr) && (count > 0) )
-            {
-                for (int i = 0; i < count; ++i)
-                {
-                    s << dashes[i];
-                    if ( i < count - 1 )
-                        s << wxS(",");
-                }
-            }
-            s += wxS("\"");
-            break;
-        }
-        case wxPENSTYLE_STIPPLE_MASK_OPAQUE:
-        case wxPENSTYLE_STIPPLE_MASK:
-        case wxPENSTYLE_STIPPLE:
-        case wxPENSTYLE_BDIAGONAL_HATCH:
-        case wxPENSTYLE_CROSSDIAG_HATCH:
-        case wxPENSTYLE_FDIAGONAL_HATCH:
-        case wxPENSTYLE_CROSS_HATCH:
-        case wxPENSTYLE_HORIZONTAL_HATCH:
-        case wxPENSTYLE_VERTICAL_HATCH:
-            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Pen Pattern not available"));
-            break;
-        case wxPENSTYLE_SOLID:
-        case wxPENSTYLE_TRANSPARENT:
-        case wxPENSTYLE_INVALID:
-            // these penstyles do not need a pattern.
-            break;
-    }
-    return s;
-}
-
-wxString GetPenStyle(const wxPen& pen)
-{
-    wxString penStyle;
-
-    penStyle += wxString::Format(wxS("stroke-width=\"%d\""), pen.GetWidth());
-
-    switch (pen.GetCap())
-    {
-        case wxCAP_PROJECTING:
-            penStyle += wxS(" stroke-linecap=\"square\"");
-            break;
-        case wxCAP_BUTT:
-            penStyle += wxS(" stroke-linecap=\"butt\"");
-            break;
-        case wxCAP_ROUND:
-        default:
-            penStyle += wxS(" stroke-linecap=\"round\"");
-            break;
-    }
-
-    switch (pen.GetJoin())
-    {
-        case wxJOIN_BEVEL:
-            penStyle += wxS(" stroke-linejoin=\"bevel\"");
-            break;
-        case wxJOIN_MITER:
-            penStyle += wxS(" stroke-linejoin=\"miter\"");
-            break;
-        case wxJOIN_ROUND:
-        default:
-            penStyle += wxS(" stroke-linejoin=\"round\"");
-            break;
-    }
-
-    return penStyle;
-}
-
-wxString GetBrushStyleName(const wxBrush& brush)
-{
-    wxString brushStyle;
-
-    switch (brush.GetStyle())
-    {
-        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
-            brushStyle = wxS("BdiagonalHatch");
-            break;
-        case wxBRUSHSTYLE_FDIAGONAL_HATCH:
-            brushStyle = wxS("FdiagonalHatch");
-            break;
-        case wxBRUSHSTYLE_CROSSDIAG_HATCH:
-            brushStyle = wxS("CrossDiagHatch");
-            break;
-        case wxBRUSHSTYLE_CROSS_HATCH:
-            brushStyle = wxS("CrossHatch");
-            break;
-        case wxBRUSHSTYLE_VERTICAL_HATCH:
-            brushStyle = wxS("VerticalHatch");
-            break;
-        case wxBRUSHSTYLE_HORIZONTAL_HATCH:
-            brushStyle = wxS("HorizontalHatch");
-            break;
-        case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
-        case wxBRUSHSTYLE_STIPPLE_MASK:
-        case wxBRUSHSTYLE_STIPPLE:
-            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Brush Fill not available"));
-            break;
-        case wxBRUSHSTYLE_SOLID:
-        case wxBRUSHSTYLE_TRANSPARENT:
-        case wxBRUSHSTYLE_INVALID:
-            // these brushstyles do not need a fill.
-            break;
-    }
-
-    if ( !brushStyle.empty() )
-        brushStyle += wxString::Format(wxS("%s%02X"), wxSVGFileDCImpl::Col2SVG(brush.GetColour()).substr(1), brush.GetColour().Alpha());
-
-    return brushStyle;
-}
-
-wxString GetBrushPattern(const wxBrush& brush)
-{
-    wxString s;
-    wxString brushStyle = GetBrushStyleName(brush);
-
-    if ( !brushStyle.empty() )
-        s = wxString::Format(wxS("fill=\"url(#%s)\""), brushStyle);
-
-    return s;
-}
-
-wxString GetRenderMode(const wxSVGShapeRenderingMode style)
-{
-    wxString mode;
-    switch (style)
-    {
-        case wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED:
-            mode = wxS("optimizeSpeed");
-            break;
-        case wxSVG_SHAPE_RENDERING_CRISP_EDGES:
-            mode = wxS("crispEdges");
-            break;
-        case wxSVG_SHAPE_RENDERING_GEOMETRIC_PRECISION:
-            mode = wxS("geometricPrecision");
-            break;
-        case wxSVG_SHAPE_RENDERING_AUTO:
-            mode = wxS("auto");
-            break;
-    }
-
-    wxString s = wxString::Format(wxS("shape-rendering=\"%s\""), mode);
-    return s;
-}
-
-wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
-{
-    wxString s;
-    wxString patternName = GetBrushStyleName(brush);
-
-    if ( !patternName.empty() )
-    {
-        wxString pattern;
-        switch (brush.GetStyle())
-        {
-            case wxBRUSHSTYLE_BDIAGONAL_HATCH:
-                pattern = wxS("d=\"M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2\"");
-                break;
-            case wxBRUSHSTYLE_FDIAGONAL_HATCH:
-                pattern = wxS("d=\"M7,-1 l2,2 M0,0 l8,8 M-1,7 l2,2\"");
-                break;
-            case wxBRUSHSTYLE_CROSSDIAG_HATCH:
-                pattern = wxS("d=\"M7,-1 l2,2 M0,0 l8,8 M-1,7 l2,2 M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2\"");
-                break;
-            case wxBRUSHSTYLE_CROSS_HATCH:
-                pattern = wxS("d=\"M4,0 l0,8 M0,4 l8,0\"");
-                break;
-            case wxBRUSHSTYLE_VERTICAL_HATCH:
-                pattern = wxS("d=\"M4,0 l0,8\"");
-                break;
-            case wxBRUSHSTYLE_HORIZONTAL_HATCH:
-                pattern = wxS("d=\"M0,4 l8,0\"");
-                break;
-            default:
-                break;
-        }
-
-        float opacity;
-        wxString brushColourStr = wxSVGFileDCImpl::Col2SVG(brush.GetColour(), &opacity);
-        wxString brushStrokeStr = wxS("stroke-width=\"1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"");
-
-        s += wxString::Format(wxS("  <pattern id=\"%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
-            patternName);
-        s += wxString::Format(wxS("    <path stroke=\"%s\" stroke-opacity=\"%s\" %s %s %s/>\n"),
-            brushColourStr, wxSVGFileDCImpl::NumStr(opacity), brushStrokeStr, pattern, GetRenderMode(mode));
-        s += wxS("  </pattern>\n");
-    }
-
-    return s;
-}
-
-wxMemoryDC GetTextMetricDC(const wxFont& font)
-{
-    wxMemoryDC dc;
-    const double dcDPI = dc.GetPPI().y;
-    const double scale = dcDPI / SVG_DPI.y;
-    if ( scale != 1 )
-    {
-        // The SVG is DPI-independent so we want text metrics for the default (96) DPI.
-        //
-        // We can't just divide the returned sizes by the scale factor, because
-        // text does not scale linear (at least on Windows). Therefore, we scale
-        // the font size instead.
-        wxFont scaledFont = font;
-        scaledFont.SetFractionalPointSize(scaledFont.GetFractionalPointSize() / scale);
-        dc.SetFont(scaledFont);
-    }
-    else
-    {
-        dc.SetFont(font);
-    }
-
-    return dc;
-}
-
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -1864,6 +1614,254 @@ void wxSVGFileDCImpl::DoDrawBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y,
 void wxSVGFileDCImpl::write(const wxString& s)
 {
     m_svgDocument += s;
+}
+
+wxString wxSVGFileDCImpl::GetPenPattern(const wxPen& pen)
+{
+    wxString s;
+
+    // The length of the dashes and gaps have a constant factor.
+    // Dots have a width of 2, short dashes 10, long dashes 15 and gaps 8 (5 for dots).
+    // When the pen width increases, lines become thicker and unrecognizable.
+    // Multiplying with 1/3th of the width creates line styles matching the appearance of wxDC.
+    // The pen width is not used to modify user provided dash styles.
+    double w = pen.GetWidth();
+    if (pen.GetWidth() == 0)
+        w = 1;
+    w = w / 3;
+
+    switch (pen.GetStyle())
+    {
+    case wxPENSTYLE_DOT:
+        s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\""), w * 2, w * 5);
+        break;
+    case wxPENSTYLE_SHORT_DASH:
+        s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\""), w * 10, w * 8);
+        break;
+    case wxPENSTYLE_LONG_DASH:
+        s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\""), w * 15, w * 8);
+        break;
+    case wxPENSTYLE_DOT_DASH:
+        s = wxString::Format(wxS("stroke-dasharray=\"%f,%f,%f,%f\""), w * 8, w * 8, w * 2, w * 8);
+        break;
+    case wxPENSTYLE_USER_DASH:
+    {
+        s = wxS("stroke-dasharray=\"");
+        wxDash* dashes;
+        int count = pen.GetDashes(&dashes);
+        if ((dashes != nullptr) && (count > 0))
+        {
+            for (int i = 0; i < count; ++i)
+            {
+                s << dashes[i];
+                if (i < count - 1)
+                    s << wxS(",");
+            }
+        }
+        s += wxS("\"");
+        break;
+    }
+    case wxPENSTYLE_STIPPLE_MASK_OPAQUE:
+    case wxPENSTYLE_STIPPLE_MASK:
+    case wxPENSTYLE_STIPPLE:
+    case wxPENSTYLE_BDIAGONAL_HATCH:
+    case wxPENSTYLE_CROSSDIAG_HATCH:
+    case wxPENSTYLE_FDIAGONAL_HATCH:
+    case wxPENSTYLE_CROSS_HATCH:
+    case wxPENSTYLE_HORIZONTAL_HATCH:
+    case wxPENSTYLE_VERTICAL_HATCH:
+        wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Pen Pattern not available"));
+        break;
+    case wxPENSTYLE_SOLID:
+    case wxPENSTYLE_TRANSPARENT:
+    case wxPENSTYLE_INVALID:
+        // these penstyles do not need a pattern.
+        break;
+    }
+    return s;
+}
+
+wxString wxSVGFileDCImpl::GetPenStyle(const wxPen& pen)
+{
+    wxString penStyle;
+
+    penStyle += wxString::Format(wxS("stroke-width=\"%d\""), pen.GetWidth());
+
+    switch (pen.GetCap())
+    {
+    case wxCAP_PROJECTING:
+        penStyle += wxS(" stroke-linecap=\"square\"");
+        break;
+    case wxCAP_BUTT:
+        penStyle += wxS(" stroke-linecap=\"butt\"");
+        break;
+    case wxCAP_ROUND:
+    default:
+        penStyle += wxS(" stroke-linecap=\"round\"");
+        break;
+    }
+
+    switch (pen.GetJoin())
+    {
+    case wxJOIN_BEVEL:
+        penStyle += wxS(" stroke-linejoin=\"bevel\"");
+        break;
+    case wxJOIN_MITER:
+        penStyle += wxS(" stroke-linejoin=\"miter\"");
+        break;
+    case wxJOIN_ROUND:
+    default:
+        penStyle += wxS(" stroke-linejoin=\"round\"");
+        break;
+    }
+
+    return penStyle;
+}
+
+wxString wxSVGFileDCImpl::GetBrushStyleName(const wxBrush& brush)
+{
+    wxString brushStyle;
+
+    switch (brush.GetStyle())
+    {
+    case wxBRUSHSTYLE_BDIAGONAL_HATCH:
+        brushStyle = wxS("BdiagonalHatch");
+        break;
+    case wxBRUSHSTYLE_FDIAGONAL_HATCH:
+        brushStyle = wxS("FdiagonalHatch");
+        break;
+    case wxBRUSHSTYLE_CROSSDIAG_HATCH:
+        brushStyle = wxS("CrossDiagHatch");
+        break;
+    case wxBRUSHSTYLE_CROSS_HATCH:
+        brushStyle = wxS("CrossHatch");
+        break;
+    case wxBRUSHSTYLE_VERTICAL_HATCH:
+        brushStyle = wxS("VerticalHatch");
+        break;
+    case wxBRUSHSTYLE_HORIZONTAL_HATCH:
+        brushStyle = wxS("HorizontalHatch");
+        break;
+    case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
+    case wxBRUSHSTYLE_STIPPLE_MASK:
+    case wxBRUSHSTYLE_STIPPLE:
+        wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Brush Fill not available"));
+        break;
+    case wxBRUSHSTYLE_SOLID:
+    case wxBRUSHSTYLE_TRANSPARENT:
+    case wxBRUSHSTYLE_INVALID:
+        // these brushstyles do not need a fill.
+        break;
+    }
+
+    if (!brushStyle.empty())
+        brushStyle += wxString::Format(wxS("%s%02X"), wxSVGFileDCImpl::Col2SVG(brush.GetColour()).substr(1), brush.GetColour().Alpha());
+
+    return brushStyle;
+}
+
+wxString wxSVGFileDCImpl::GetBrushPattern(const wxBrush& brush)
+{
+    wxString s;
+    wxString brushStyle = GetBrushStyleName(brush);
+
+    if (!brushStyle.empty())
+        s = wxString::Format(wxS("fill=\"url(#%s)\""), brushStyle);
+
+    return s;
+}
+
+wxString wxSVGFileDCImpl::GetRenderMode(const wxSVGShapeRenderingMode style)
+{
+    wxString mode;
+    switch (style)
+    {
+    case wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED:
+        mode = wxS("optimizeSpeed");
+        break;
+    case wxSVG_SHAPE_RENDERING_CRISP_EDGES:
+        mode = wxS("crispEdges");
+        break;
+    case wxSVG_SHAPE_RENDERING_GEOMETRIC_PRECISION:
+        mode = wxS("geometricPrecision");
+        break;
+    case wxSVG_SHAPE_RENDERING_AUTO:
+        mode = wxS("auto");
+        break;
+    }
+
+    wxString s = wxString::Format(wxS("shape-rendering=\"%s\""), mode);
+    return s;
+}
+
+wxString wxSVGFileDCImpl::CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
+{
+    wxString s;
+    wxString patternName = GetBrushStyleName(brush);
+
+    if (!patternName.empty())
+    {
+        wxString pattern;
+        switch (brush.GetStyle())
+        {
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
+            pattern = wxS("d=\"M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2\"");
+            break;
+        case wxBRUSHSTYLE_FDIAGONAL_HATCH:
+            pattern = wxS("d=\"M7,-1 l2,2 M0,0 l8,8 M-1,7 l2,2\"");
+            break;
+        case wxBRUSHSTYLE_CROSSDIAG_HATCH:
+            pattern = wxS("d=\"M7,-1 l2,2 M0,0 l8,8 M-1,7 l2,2 M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2\"");
+            break;
+        case wxBRUSHSTYLE_CROSS_HATCH:
+            pattern = wxS("d=\"M4,0 l0,8 M0,4 l8,0\"");
+            break;
+        case wxBRUSHSTYLE_VERTICAL_HATCH:
+            pattern = wxS("d=\"M4,0 l0,8\"");
+            break;
+        case wxBRUSHSTYLE_HORIZONTAL_HATCH:
+            pattern = wxS("d=\"M0,4 l8,0\"");
+            break;
+        default:
+            break;
+        }
+
+        float opacity;
+        wxString brushColourStr = wxSVGFileDCImpl::Col2SVG(brush.GetColour(), &opacity);
+        wxString brushStrokeStr = wxS("stroke-width=\"1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"");
+
+        s += wxString::Format(wxS("  <pattern id=\"%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
+            patternName);
+        s += wxString::Format(wxS("    <path stroke=\"%s\" stroke-opacity=\"%s\" %s %s %s/>\n"),
+            brushColourStr, NumStr(opacity), brushStrokeStr, pattern, GetRenderMode(mode));
+        s += wxS("  </pattern>\n");
+    }
+
+    return s;
+}
+
+wxMemoryDC wxSVGFileDCImpl::GetTextMetricDC(const wxFont& font)
+{
+    wxMemoryDC dc;
+    const double dcDPI = dc.GetPPI().y;
+    const double scale = dcDPI / SVG_DPI.y;
+    if (scale != 1)
+    {
+        // The SVG is DPI-independent so we want text metrics for the default (96) DPI.
+        //
+        // We can't just divide the returned sizes by the scale factor, because
+        // text does not scale linear (at least on Windows). Therefore, we scale
+        // the font size instead.
+        wxFont scaledFont = font;
+        scaledFont.SetFractionalPointSize(scaledFont.GetFractionalPointSize() / scale);
+        dc.SetFont(scaledFont);
+    }
+    else
+    {
+        dc.SetFont(font);
+    }
+
+    return dc;
 }
 
 #endif // wxUSE_SVG

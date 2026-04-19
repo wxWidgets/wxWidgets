@@ -71,6 +71,7 @@ private:
 
 class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
 class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsContext;
+class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsPathData;
 
 // Base class for bitmap handlers used by wxSVGFileDC, used by the standard
 // "embed" and "link" handlers below but can also be used to create a custom
@@ -134,6 +135,7 @@ public:
 #endif
 
     friend class wxSVGGraphicsContext;
+    friend class wxSVGGraphicsPathData;
 
     bool IsOk() const override { return !m_writeError; }
 
@@ -212,6 +214,23 @@ public:
     bool Save();
 
 private:
+
+    // String helpers used by both the DC and the SVG graphics context.
+    // Formats a double in C locale with 2-digit precision.
+    static wxString NumStr(double f);
+    static wxString NumStr(float f);
+
+    // Returns the colour as "#rrggbb" and optionally its alpha as 0..1 opacity.
+    static wxString Col2SVG(wxColour c, float* opacity = nullptr);
+
+    static wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode);
+    static wxString GetRenderMode(const wxSVGShapeRenderingMode style);
+    static wxString GetBrushPattern(const wxBrush& brush);
+    static wxString GetBrushStyleName(const wxBrush& brush);
+    static wxString GetPenStyle(const wxPen& pen);
+    static wxString GetPenPattern(const wxPen& pen);
+    static wxMemoryDC GetTextMetricDC(const wxFont& font);
+
     virtual bool DoGetPixel(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                             wxColour* WXUNUSED(col)) const override
     {
@@ -327,15 +346,6 @@ private:
 
     void write(const wxString& s);
 
-public:
-    // String helpers used by both the DC and the SVG graphics context.
-    // Formats a double in C locale with 2-digit precision.
-    static wxString NumStr(double f);
-    static wxString NumStr(float f);
-
-    // Returns the colour as "#rrggbb" and optionally its alpha as 0..1 opacity.
-    static wxString Col2SVG(wxColour c, float* opacity = nullptr);
-
     // Returns a "stroke=... stroke-opacity=..." attribute fragment.
     static wxString GetPenStroke(const wxColour& c, int style = wxPENSTYLE_SOLID);
 
@@ -352,7 +362,6 @@ public:
     wxString GetGraphicsPenStroke(const wxGraphicsPen& pen);
 #endif
 
-private:
     // If m_graphics_changed is true, close the current <g> element and start a
     // new one for the last pen/brush change.
     void NewGraphicsIfNeeded();
@@ -449,6 +458,7 @@ public:
 
 private:
     friend class wxSVGGraphicsContext;
+    friend class wxSVGGraphicsPathData;
 
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDC);
 };
