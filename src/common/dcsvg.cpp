@@ -433,6 +433,16 @@ void wxSVGFileDC::EndAccessibleGroup()
     ((wxSVGFileDCImpl*)GetImpl())->EndAccessibleGroup();
 }
 
+void wxSVGFileDC::BeginLayer(double opacity)
+{
+    ((wxSVGFileDCImpl*)GetImpl())->BeginLayer(opacity);
+}
+
+void wxSVGFileDC::EndLayer()
+{
+    ((wxSVGFileDCImpl*)GetImpl())->EndLayer();
+}
+
 // ----------------------------------------------------------
 // wxSVGAttributes
 // ----------------------------------------------------------
@@ -585,6 +595,7 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
 
     m_clipNestingLevel = 0;
     m_accessibleGroupDepth = 0;
+    m_layerDepth = 0;
 
     m_mm_to_pix_x = m_dpi / 25.4;
     m_mm_to_pix_y = m_dpi / 25.4;
@@ -630,6 +641,10 @@ wxString wxSVGFileDCImpl::GetSVGDocument() const
 
     // Close remaining clipping group elements
     for (size_t i = 0; i < m_clipNestingLevel; i++)
+        doc += wxS("</g>\n");
+
+    // Close remaining layer group elements
+    for (size_t i = 0; i < m_layerDepth; i++)
         doc += wxS("</g>\n");
 
     // Close the currently-open pen/brush group.
@@ -1549,6 +1564,40 @@ void wxSVGFileDCImpl::EndAccessibleGroup()
 
     // Reopen a pen/brush group at the now-outer nesting level so subsequent
     // drawing has somewhere to go.
+    DoStartNewGraphics();
+    m_graphics_changed = false;
+}
+
+void wxSVGFileDCImpl::BeginLayer(double opacity)
+{
+    // Close the currently-open pen/brush group.
+    write(wxS("</g>\n"));
+
+    // Open the layer group.
+    write(wxString::Format(wxS("<g opacity=\"%s\">\n"), NumStr(opacity)));
+
+    ++m_layerDepth;
+
+    // Reopen a pen/brush group inside the layer group.
+    DoStartNewGraphics();
+    m_graphics_changed = false;
+}
+
+void wxSVGFileDCImpl::EndLayer()
+{
+    if ( m_layerDepth == 0 )
+    {
+        wxFAIL_MSG(wxS("wxSVGFileDC::EndLayer() called without a matching BeginLayer()"));
+        return;
+    }
+
+    // Close the current pen/brush group, then the layer group itself.
+    write(wxS("</g>\n"));
+    write(wxS("</g>\n"));
+
+    --m_layerDepth;
+
+    // Reopen a pen/brush group at the now-outer nesting level.
     DoStartNewGraphics();
     m_graphics_changed = false;
 }

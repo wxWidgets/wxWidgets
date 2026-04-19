@@ -263,6 +263,23 @@ public:
     void EndAccessibleGroup();
 
     /**
+        Opens a new layer with the given @a opacity.
+
+        All drawing commands until the matching EndLayer() call will be
+        composited with this opacity. Layers can be nested.
+
+        @since 3.3.4
+    */
+    void BeginLayer(double opacity);
+
+    /**
+        Closes the layer opened by the most recent BeginLayer() call.
+
+        @since 3.3.4
+    */
+    void EndLayer();
+
+    /**
         Returns the SVG document as a string.
 
         This can be used to retrieve the generated SVG content regardless of

@@ -193,6 +193,12 @@ public:
     // BeginAccessibleGroup() call.
     void EndAccessibleGroup();
 
+    // Open a group with the given opacity.
+    void BeginLayer(double opacity);
+
+    // Close the group opened by the most recent BeginLayer() call.
+    void EndLayer();
+
     wxString GetSVGDocument() const;
 
     bool Save();
@@ -350,6 +356,9 @@ private:
     // Nesting depth of open accessible groups (see BeginAccessibleGroup).
     size_t m_accessibleGroupDepth;
 
+    // Nesting depth of open layers (see BeginLayer).
+    size_t m_layerDepth;
+
     // The clipping nesting level is incremented by every call to
     // SetClippingRegion() and reset when DestroyClippingRegion() is called.
     size_t m_clipNestingLevel;
@@ -406,6 +415,10 @@ public:
                               const wxString& desc = wxString());
 
     void EndAccessibleGroup();
+
+    void BeginLayer(double opacity);
+
+    void EndLayer();
 
     // Return the SVG document as a string.
     wxString GetSVGDocument() const;
