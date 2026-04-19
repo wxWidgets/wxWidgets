@@ -156,6 +156,15 @@ public:
     wxSVGFileDC as a parameter instead of a wxDC. Thus the wxSVGFileDC
     is a write-only class.
 
+    Starting with wxWidgets 3.3.4, wxSVGFileDC provides integrated support
+    for @ref wxGraphicsContext. By calling GetGraphicsContext(), you can
+    access a @ref wxSVGGraphicsContext which supports advanced vector
+    features such as:
+    - Cubic and quadratic Bézier curves via @ref wxGraphicsPath.
+    - Linear and radial gradient brushes.
+    - Semi-transparent colors and alpha blending.
+    - Arbitrary affine transformations.
+
     As the wxSVGFileDC is a vector format, raster operations like GetPixel()
     are unlikely to be supported. However, the SVG specification allows for
     raster files to be embedded in the SVG, and so bitmaps, icons and blit
@@ -303,6 +312,27 @@ public:
         @since 3.3.3
     */
     bool Save();
+
+    /**
+        Returns the graphics context associated with this DC.
+
+        The returned object is a @ref wxSVGGraphicsContext instance.
+        While @ref wxSVGFileDC provides standard @ref wxDC drawing methods,
+        retrieving the @ref wxGraphicsContext allows using more advanced
+        drawing features that are not available in the base @ref wxDC API,
+        such as:
+        - Complex paths including cubic and quadratic Bézier curves.
+        - Linear and radial gradient brushes.
+        - Transparency and alpha blending for all drawing operations.
+        - Advanced coordinate transformations (scaling, rotation, skewing)
+          applied to groups of objects.
+
+        Note that any state changes (pen, brush, font) made to the returned
+        context are mirrored back to the DC, and vice versa.
+
+        @since 3.3.4
+    */
+    virtual wxGraphicsContext* GetGraphicsContext() const;
 
     /**
         Destroys the current clipping region so that none of the DC is clipped.
