@@ -1259,6 +1259,9 @@ static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoor
     {
         wxGraphicsRenderer* rend = gc->GetRenderer();
         gc = rend->CreateContext(memDC);
+    }
+    if ( gc )
+    {
         gc->SetAntialiasMode(wxANTIALIAS_NONE);
         gc->DisableOffset();
         wxGCDC gdc(gc);
