@@ -337,8 +337,8 @@ public:
     /**
         Destroys the current clipping region so that none of the DC is clipped.
         Since intersections arising from sequential calls to SetClippingRegion are represented
-        with nested SVG group elements (\<g\>), all such groups are closed when
-        DestroyClippingRegion is called.
+        with nested SVG group elements (`<g>`), all such groups are closed when
+        @c DestroyClippingRegion is called.
     */
     void DestroyClippingRegion();
 
