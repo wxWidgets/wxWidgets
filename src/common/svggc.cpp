@@ -28,626 +28,798 @@
 #include <cmath>
 #include <vector>
 
-namespace
-{
+// ----------------------------------------------------------------------------
+// wxSVGPathSegment
+// ----------------------------------------------------------------------------
 
-// Represents a single command in an SVG path (Move, Line, etc.).
-// We store these instead of a raw string so that we can apply
-// transformations to the path after it has been recorded.
-struct wxSVGPathSegment
+wxSVGPathSegment wxSVGPathSegment::MoveTo(wxDouble x, wxDouble y)
 {
-    enum Type { MoveSegment, LineSegment, CurveSegment, ArcSegment, CloseSegment } type;
-    wxDouble x, y;
-    wxDouble x1, y1, x2, y2;
-    wxDouble r;
-    wxDouble startAngle, endAngle;
-    bool clockwise = true;
+    wxSVGPathSegment s;
+    s.type = MoveSegment;
+    s.x = x; s.y = y;
+    return s;
+}
 
-    static wxSVGPathSegment MoveTo(wxDouble x, wxDouble y)
-    {
-        wxSVGPathSegment s;
-        s.type = MoveSegment;
-        s.x = x; s.y = y;
-        return s;
-    }
-    static wxSVGPathSegment LineTo(wxDouble x, wxDouble y)
-    {
-        wxSVGPathSegment s;
-        s.type = LineSegment;
-        s.x = x;
-        s.y = y;
-        return s;
-    }
-    static wxSVGPathSegment CurveTo(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, wxDouble x, wxDouble y)
-    {
-        wxSVGPathSegment s;
-        s.type = CurveSegment;
-        s.x1 = x1;
-        s.y1 = y1;
-        s.x2 = x2;
-        s.y2 = y2;
-        s.x = x;
-        s.y = y;
-        return s;
-    }
-    static wxSVGPathSegment Arc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise)
-    {
-        wxSVGPathSegment s;
-        s.type = ArcSegment;
-        s.x = x;
-        s.y = y;
-        s.r = r;
-        s.startAngle = startAngle;
-        s.endAngle = endAngle;
-        s.clockwise = clockwise;
-        return s;
-    }
-    static wxSVGPathSegment Close()
-    {
-        wxSVGPathSegment s;
-        s.type = CloseSegment;
-        return s;
-    }
-};
+wxSVGPathSegment wxSVGPathSegment::LineTo(wxDouble x, wxDouble y)
+{
+    wxSVGPathSegment s;
+    s.type = LineSegment;
+    s.x = x;
+    s.y = y;
+    return s;
+}
+
+wxSVGPathSegment wxSVGPathSegment::CurveTo(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, wxDouble x, wxDouble y)
+{
+    wxSVGPathSegment s;
+    s.type = CurveSegment;
+    s.x1 = x1;
+    s.y1 = y1;
+    s.x2 = x2;
+    s.y2 = y2;
+    s.x = x;
+    s.y = y;
+    return s;
+}
+
+wxSVGPathSegment wxSVGPathSegment::QuadCurveTo(wxDouble cx, wxDouble cy, wxDouble x, wxDouble y)
+{
+    wxSVGPathSegment s;
+    s.type = QuadCurveSegment;
+    s.x1 = cx;
+    s.y1 = cy;
+    s.x = x;
+    s.y = y;
+    return s;
+}
+
+wxSVGPathSegment wxSVGPathSegment::Arc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise)
+{
+    wxSVGPathSegment s;
+    s.type = ArcSegment;
+    s.x = x;
+    s.y = y;
+    s.r = r;
+    s.startAngle = startAngle;
+    s.endAngle = endAngle;
+    s.clockwise = clockwise;
+    return s;
+}
+
+wxSVGPathSegment wxSVGPathSegment::Close()
+{
+    wxSVGPathSegment s;
+    s.type = CloseSegment;
+    return s;
+}
 
 // ----------------------------------------------------------------------------
 // wxSVGGraphicsMatrixData - standard 2D affine transformation matrix
 // ----------------------------------------------------------------------------
-class wxSVGGraphicsMatrixData : public wxGraphicsMatrixData
+
+wxSVGGraphicsMatrixData::wxSVGGraphicsMatrixData(wxGraphicsRenderer* renderer,
+                                                 wxDouble a, wxDouble b,
+                                                 wxDouble c, wxDouble d,
+                                                 wxDouble tx, wxDouble ty)
+    : wxGraphicsMatrixData(renderer),
+      m_a(a), m_b(b), m_c(c), m_d(d), m_tx(tx), m_ty(ty)
 {
-public:
-    wxSVGGraphicsMatrixData(wxGraphicsRenderer* renderer,
-                            wxDouble a = 1.0, wxDouble b = 0.0,
-                            wxDouble c = 0.0, wxDouble d = 1.0,
-                            wxDouble tx = 0.0, wxDouble ty = 0.0)
-        : wxGraphicsMatrixData(renderer),
-          m_a(a), m_b(b), m_c(c), m_d(d), m_tx(tx), m_ty(ty)
-    {
-    }
+}
 
-    wxGraphicsObjectRefData* Clone() const override
-    {
-        return new wxSVGGraphicsMatrixData(GetRenderer(), m_a, m_b, m_c, m_d, m_tx, m_ty);
-    }
+wxGraphicsObjectRefData* wxSVGGraphicsMatrixData::Clone() const
+{
+    return new wxSVGGraphicsMatrixData(GetRenderer(), m_a, m_b, m_c, m_d, m_tx, m_ty);
+}
 
-    void Concat(const wxGraphicsMatrixData* t) override
-    {
-        const auto* o = static_cast<const wxSVGGraphicsMatrixData*>(t);
-        const wxDouble a  = o->m_a * m_a + o->m_b * m_c;
-        const wxDouble b  = o->m_a * m_b + o->m_b * m_d;
-        const wxDouble c  = o->m_c * m_a + o->m_d * m_c;
-        const wxDouble d  = o->m_c * m_b + o->m_d * m_d;
-        const wxDouble tx = o->m_tx * m_a + o->m_ty * m_c + m_tx;
-        const wxDouble ty = o->m_tx * m_b + o->m_ty * m_d + m_ty;
-        m_a = a; m_b = b; m_c = c; m_d = d; m_tx = tx; m_ty = ty;
-    }
+void wxSVGGraphicsMatrixData::Concat(const wxGraphicsMatrixData* t)
+{
+    const auto* o = static_cast<const wxSVGGraphicsMatrixData*>(t);
+    const wxDouble a  = o->m_a * m_a + o->m_b * m_c;
+    const wxDouble b  = o->m_a * m_b + o->m_b * m_d;
+    const wxDouble c  = o->m_c * m_a + o->m_d * m_c;
+    const wxDouble d  = o->m_c * m_b + o->m_d * m_d;
+    const wxDouble tx = o->m_tx * m_a + o->m_ty * m_c + m_tx;
+    const wxDouble ty = o->m_tx * m_b + o->m_ty * m_d + m_ty;
+    m_a = a; m_b = b; m_c = c; m_d = d; m_tx = tx; m_ty = ty;
+}
 
-    void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
-             wxDouble tx = 0.0, wxDouble ty = 0.0) override
-    {
-        m_a = a; m_b = b; m_c = c; m_d = d; m_tx = tx; m_ty = ty;
-    }
+void wxSVGGraphicsMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
+                                 wxDouble tx, wxDouble ty)
+{
+    m_a = a; m_b = b; m_c = c; m_d = d; m_tx = tx; m_ty = ty;
+}
 
-    void Get(wxDouble* a = nullptr, wxDouble* b = nullptr, wxDouble* c = nullptr,
-             wxDouble* d = nullptr, wxDouble* tx = nullptr, wxDouble* ty = nullptr) const override
-    {
-        if ( a != nullptr )
-            *a  = m_a;
-        if ( b != nullptr )
-            *b  = m_b;
-        if ( c != nullptr )
-            *c  = m_c;
-        if ( d != nullptr )
-            *d  = m_d;
-        if ( tx != nullptr )
-            *tx = m_tx;
-        if ( ty != nullptr )
-            *ty = m_ty;
-    }
+void wxSVGGraphicsMatrixData::Get(wxDouble* a, wxDouble* b, wxDouble* c,
+                                 wxDouble* d, wxDouble* tx, wxDouble* ty) const
+{
+    if ( a != nullptr )
+        *a  = m_a;
+    if ( b != nullptr )
+        *b  = m_b;
+    if ( c != nullptr )
+        *c  = m_c;
+    if ( d != nullptr )
+        *d  = m_d;
+    if ( tx != nullptr )
+        *tx = m_tx;
+    if ( ty != nullptr )
+        *ty = m_ty;
+}
 
-    void Invert() override
-    {
-        const wxDouble det = m_a * m_d - m_b * m_c;
-        if ( det == 0 )
-            return;
+void wxSVGGraphicsMatrixData::Invert()
+{
+    const wxDouble det = m_a * m_d - m_b * m_c;
+    if ( det == 0 )
+        return;
 
-        const wxDouble inv = 1.0 / det;
-        const wxDouble a  =  m_d * inv;
-        const wxDouble b  = -m_b * inv;
-        const wxDouble c  = -m_c * inv;
-        const wxDouble d  =  m_a * inv;
-        const wxDouble tx = (m_c * m_ty - m_d * m_tx) * inv;
-        const wxDouble ty = (m_b * m_tx - m_a * m_ty) * inv;
-        m_a = a; m_b = b; m_c = c; m_d = d; m_tx = tx; m_ty = ty;
-    }
+    const wxDouble inv = 1.0 / det;
+    const wxDouble a  =  m_d * inv;
+    const wxDouble b  = -m_b * inv;
+    const wxDouble c  = -m_c * inv;
+    const wxDouble d  =  m_a * inv;
+    const wxDouble tx = (m_c * m_ty - m_d * m_tx) * inv;
+    const wxDouble ty = (m_b * m_tx - m_a * m_ty) * inv;
+    m_a = a; m_b = b; m_c = c; m_d = d; m_tx = tx; m_ty = ty;
+}
 
-    bool IsEqual(const wxGraphicsMatrixData* t) const override
-    {
-        const auto* o = static_cast<const wxSVGGraphicsMatrixData*>(t);
-        return m_a == o->m_a && m_b == o->m_b && m_c == o->m_c
-            && m_d == o->m_d && m_tx == o->m_tx && m_ty == o->m_ty;
-    }
+bool wxSVGGraphicsMatrixData::IsEqual(const wxGraphicsMatrixData* t) const
+{
+    const auto* o = static_cast<const wxSVGGraphicsMatrixData*>(t);
+    return m_a == o->m_a && m_b == o->m_b && m_c == o->m_c
+        && m_d == o->m_d && m_tx == o->m_tx && m_ty == o->m_ty;
+}
 
-    bool IsIdentity() const override
-    {
-        return m_a == 1.0 && m_b == 0.0 && m_c == 0.0 && m_d == 1.0
-            && m_tx == 0.0 && m_ty == 0.0;
-    }
+bool wxSVGGraphicsMatrixData::IsIdentity() const
+{
+    return m_a == 1.0 && m_b == 0.0 && m_c == 0.0 && m_d == 1.0
+        && m_tx == 0.0 && m_ty == 0.0;
+}
 
-    void Translate(wxDouble dx, wxDouble dy) override
-    {
-        m_tx += dx * m_a + dy * m_c;
-        m_ty += dx * m_b + dy * m_d;
-    }
+void wxSVGGraphicsMatrixData::Translate(wxDouble dx, wxDouble dy)
+{
+    m_tx += dx * m_a + dy * m_c;
+    m_ty += dx * m_b + dy * m_d;
+}
 
-    void Scale(wxDouble xScale, wxDouble yScale) override
-    {
-        m_a *= xScale;
-        m_b *= xScale;
-        m_c *= yScale;
-        m_d *= yScale;
-    }
+void wxSVGGraphicsMatrixData::Scale(wxDouble xScale, wxDouble yScale)
+{
+    m_a *= xScale;
+    m_b *= xScale;
+    m_c *= yScale;
+    m_d *= yScale;
+}
 
-    void Rotate(wxDouble angle) override
-    {
-        const wxDouble s = std::sin(angle);
-        const wxDouble c = std::cos(angle);
-        const wxDouble a =  m_a * c + m_c * s;
-        const wxDouble b =  m_b * c + m_d * s;
-        const wxDouble cc = -m_a * s + m_c * c;
-        const wxDouble dd = -m_b * s + m_d * c;
-        m_a = a;
-        m_b = b;
-        m_c = cc;
-        m_d = dd;
-    }
+void wxSVGGraphicsMatrixData::Rotate(wxDouble angle)
+{
+    const wxDouble s = std::sin(angle);
+    const wxDouble c = std::cos(angle);
+    const wxDouble a =  m_a * c + m_c * s;
+    const wxDouble b =  m_b * c + m_d * s;
+    const wxDouble cc = -m_a * s + m_c * c;
+    const wxDouble dd = -m_b * s + m_d * c;
+    m_a = a;
+    m_b = b;
+    m_c = cc;
+    m_d = dd;
+}
 
-    void TransformPoint(wxDouble* x, wxDouble* y) const override
-    {
-        const wxDouble xx = *x * m_a + *y * m_c + m_tx;
-        const wxDouble yy = *x * m_b + *y * m_d + m_ty;
-        *x = xx;
-        *y = yy;
-    }
+void wxSVGGraphicsMatrixData::TransformPoint(wxDouble* x, wxDouble* y) const
+{
+    const wxDouble xx = *x * m_a + *y * m_c + m_tx;
+    const wxDouble yy = *x * m_b + *y * m_d + m_ty;
+    *x = xx;
+    *y = yy;
+}
 
-    void TransformDistance(wxDouble* dx, wxDouble* dy) const override
-    {
-        const wxDouble xx = *dx * m_a + *dy * m_c;
-        const wxDouble yy = *dx * m_b + *dy * m_d;
-        *dx = xx;
-        *dy = yy;
-    }
-
-    void* GetNativeMatrix() const override { return nullptr; }
-
-    wxDouble m_a, m_b, m_c, m_d, m_tx, m_ty;
-};
+void wxSVGGraphicsMatrixData::TransformDistance(wxDouble* dx, wxDouble* dy) const
+{
+    const wxDouble xx = *dx * m_a + *dy * m_c;
+    const wxDouble yy = *dx * m_b + *dy * m_d;
+    *dx = xx;
+    *dy = yy;
+}
 
 // ----------------------------------------------------------------------------
 // wxSVGGraphicsPathData - records path commands for deferred SVG generation
 // ----------------------------------------------------------------------------
-class wxSVGGraphicsPathData : public wxGraphicsPathData
+
+wxSVGGraphicsPathData::wxSVGGraphicsPathData(wxGraphicsRenderer* renderer)
+    : wxGraphicsPathData(renderer),
+      m_curX(0), m_curY(0),
+      m_hasPoints(false),
+      m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
 {
-public:
-    explicit wxSVGGraphicsPathData(wxGraphicsRenderer* renderer)
-        : wxGraphicsPathData(renderer),
-          m_curX(0), m_curY(0),
-          m_hasPoints(false),
-          m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
-    {
-    }
+}
 
-    wxGraphicsObjectRefData* Clone() const override
-    {
-        auto* p = new wxSVGGraphicsPathData(GetRenderer());
-        p->m_segments = m_segments;
-        p->m_curX = m_curX;
-        p->m_curY = m_curY;
-        p->m_hasPoints = m_hasPoints;
-        p->m_minX = m_minX;
-        p->m_minY = m_minY;
-        p->m_maxX = m_maxX;
-        p->m_maxY = m_maxY;
-        return p;
-    }
+wxGraphicsObjectRefData* wxSVGGraphicsPathData::Clone() const
+{
+    auto* p = new wxSVGGraphicsPathData(GetRenderer());
+    p->m_segments = m_segments;
+    p->m_curX = m_curX;
+    p->m_curY = m_curY;
+    p->m_hasPoints = m_hasPoints;
+    p->m_minX = m_minX;
+    p->m_minY = m_minY;
+    p->m_maxX = m_maxX;
+    p->m_maxY = m_maxY;
+    return p;
+}
 
-    void MoveToPoint(wxDouble x, wxDouble y) override
-    {
-        m_segments.push_back(wxSVGPathSegment::MoveTo(x, y));
-        m_curX = x; m_curY = y;
-        Extend(x, y);
-    }
+void wxSVGGraphicsPathData::MoveToPoint(wxDouble x, wxDouble y)
+{
+    m_segments.push_back(wxSVGPathSegment::MoveTo(x, y));
+    m_curX = x; m_curY = y;
+    Extend(x, y);
+}
 
-    void AddLineToPoint(wxDouble x, wxDouble y) override
-    {
-        m_segments.push_back(wxSVGPathSegment::LineTo(x, y));
-        m_curX = x; m_curY = y;
-        Extend(x, y);
-    }
+void wxSVGGraphicsPathData::AddLineToPoint(wxDouble x, wxDouble y)
+{
+    m_segments.push_back(wxSVGPathSegment::LineTo(x, y));
+    m_curX = x; m_curY = y;
+    Extend(x, y);
+}
 
-    void AddCurveToPoint(wxDouble cx1, wxDouble cy1,
-                         wxDouble cx2, wxDouble cy2,
-                         wxDouble x, wxDouble y) override
-    {
-        m_segments.push_back(wxSVGPathSegment::CurveTo(cx1, cy1, cx2, cy2, x, y));
-        m_curX = x; m_curY = y;
-        Extend(cx1, cy1);
-        Extend(cx2, cy2);
-        Extend(x, y);
-    }
+void wxSVGGraphicsPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1,
+                                           wxDouble cx2, wxDouble cy2,
+                                           wxDouble x, wxDouble y)
+{
+    m_segments.push_back(wxSVGPathSegment::CurveTo(cx1, cy1, cx2, cy2, x, y));
+    m_curX = x; m_curY = y;
+    Extend(cx1, cy1);
+    Extend(cx2, cy2);
+    Extend(x, y);
+}
 
-    void AddPath(const wxGraphicsPathData* path) override
+void wxSVGGraphicsPathData::AddQuadCurveToPoint(wxDouble cx, wxDouble cy,
+                                               wxDouble x, wxDouble y)
+{
+    m_segments.push_back(wxSVGPathSegment::QuadCurveTo(cx, cy, x, y));
+    m_curX = x; m_curY = y;
+    Extend(cx, cy);
+    Extend(x, y);
+}
+
+void wxSVGGraphicsPathData::AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+{
+    wxGraphicsPathData::AddRectangle(x, y, w, h);
+}
+
+void wxSVGGraphicsPathData::AddCircle(wxDouble x, wxDouble y, wxDouble r)
+{
+    // A full circle is drawn as two arcs to avoid the SVG arc command's ambiguity
+    // with 360-degree sweeps.
+    MoveToPoint(x + r, y);
+    AddArc(x, y, r, 0.0, M_PI, true);
+    AddArc(x, y, r, M_PI, 2.0 * M_PI, true);
+    CloseSubpath();
+}
+
+void wxSVGGraphicsPathData::AddArcToPoint(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, wxDouble r)
+{
+    wxGraphicsPathData::AddArcToPoint(x1, y1, x2, y2, r);
+}
+
+void wxSVGGraphicsPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+{
+    wxGraphicsPathData::AddEllipse(x, y, w, h);
+}
+
+void wxSVGGraphicsPathData::AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius)
+{
+    wxGraphicsPathData::AddRoundedRectangle(x, y, w, h, radius);
+}
+
+void wxSVGGraphicsPathData::AddPath(const wxGraphicsPathData* path)
+{
+    const auto* o = static_cast<const wxSVGGraphicsPathData*>(path);
+    m_segments.insert(m_segments.end(), o->m_segments.begin(), o->m_segments.end());
+    m_curX = o->m_curX;
+    m_curY = o->m_curY;
+    if ( o->m_hasPoints )
     {
-        const auto* o = static_cast<const wxSVGGraphicsPathData*>(path);
-        m_segments.insert(m_segments.end(), o->m_segments.begin(), o->m_segments.end());
-        m_curX = o->m_curX;
-        m_curY = o->m_curY;
-        if ( o->m_hasPoints )
+        Extend(o->m_minX, o->m_minY);
+        Extend(o->m_maxX, o->m_maxY);
+    }
+}
+
+void wxSVGGraphicsPathData::CloseSubpath()
+{
+    m_segments.push_back(wxSVGPathSegment::Close());
+}
+
+void wxSVGGraphicsPathData::GetCurrentPoint(wxDouble* x, wxDouble* y) const
+{
+    if ( x != nullptr )
+        *x = m_curX;
+    if ( y != nullptr )
+        *y = m_curY;
+}
+
+void wxSVGGraphicsPathData::AddArc(wxDouble x, wxDouble y, wxDouble r,
+                                  wxDouble startAngle, wxDouble endAngle, bool clockwise)
+{
+    // Calculate start and end points of the arc for SVG path generation.
+    const wxDouble sx = x + r * std::cos(startAngle);
+    const wxDouble sy = y + r * std::sin(startAngle);
+    const wxDouble ex = x + r * std::cos(endAngle);
+    const wxDouble ey = y + r * std::sin(endAngle);
+
+    if ( !m_hasPoints )
+        MoveToPoint(sx, sy);
+    else
+        AddLineToPoint(sx, sy);
+
+    m_segments.push_back(wxSVGPathSegment::Arc(x, y, r, startAngle, endAngle, clockwise));
+    m_curX = ex; m_curY = ey;
+
+    Extend(x - r, y - r);
+    Extend(x + r, y + r);
+}
+
+void* wxSVGGraphicsPathData::GetNativePath() const
+{
+    // Regenerate the "d" string from segments on demand.
+    const_cast<wxSVGGraphicsPathData*>(this)->m_d = GetDString();
+    return const_cast<wxString*>(&m_d);
+}
+
+void wxSVGGraphicsPathData::Transform(const wxGraphicsMatrixData* matrix)
+{
+    if ( matrix == nullptr )
+        return;
+
+    const auto* m = static_cast<const wxSVGGraphicsMatrixData*>(matrix);
+    std::vector<wxSVGPathSegment> oldSegments = m_segments;
+    m_segments.clear();
+    m_hasPoints = false;
+
+    // Arcs must be converted to cubic Béziers before transformation
+    // because a transformed elliptical arc is generally a generic conic.
+    for ( const auto& s : oldSegments )
+    {
+        if ( s.type == wxSVGPathSegment::ArcSegment )
         {
-            Extend(o->m_minX, o->m_minY);
-            Extend(o->m_maxX, o->m_maxY);
-        }
-    }
-
-    void CloseSubpath() override
-    {
-        m_segments.push_back(wxSVGPathSegment::Close());
-    }
-
-    void GetCurrentPoint(wxDouble* x, wxDouble* y) const override
-    {
-        if ( x != nullptr )
-            *x = m_curX;
-        if ( y != nullptr )
-            *y = m_curY;
-    }
-
-    void AddArc(wxDouble x, wxDouble y, wxDouble r,
-                wxDouble startAngle, wxDouble endAngle, bool clockwise) override
-    {
-        // Calculate start and end points of the arc for SVG path generation.
-        const wxDouble sx = x + r * std::cos(startAngle);
-        const wxDouble sy = y + r * std::sin(startAngle);
-        const wxDouble ex = x + r * std::cos(endAngle);
-        const wxDouble ey = y + r * std::sin(endAngle);
-
-        if ( !m_hasPoints )
-            MoveToPoint(sx, sy);
-        else
-            AddLineToPoint(sx, sy);
-
-        m_segments.push_back(wxSVGPathSegment::Arc(x, y, r, startAngle, endAngle, clockwise));
-        m_curX = ex; m_curY = ey;
-
-        Extend(x - r, y - r);
-        Extend(x + r, y + r);
-    }
-
-    void* GetNativePath() const override
-    {
-        // Regenerate the "d" string from segments on demand.
-        const_cast<wxSVGGraphicsPathData*>(this)->m_d = GetDString();
-        return const_cast<wxString*>(&m_d);
-    }
-
-    void UnGetNativePath(void*) const override {}
-
-    void Transform(const wxGraphicsMatrixData* matrix) override
-    {
-        const auto* m = static_cast<const wxSVGGraphicsMatrixData*>(matrix);
-        std::vector<wxSVGPathSegment> oldSegments = m_segments;
-        m_segments.clear();
-        m_hasPoints = false;
-
-        // Arcs must be converted to cubic Beziers before transformation
-        // because a transformed elliptical arc is generally a generic conic.
-        for ( const auto& s : oldSegments )
-        {
-            if ( s.type == wxSVGPathSegment::ArcSegment )
-            {
-                const wxDouble sx = s.x + s.r * std::cos(s.startAngle);
-                const wxDouble sy = s.y + s.r * std::sin(s.startAngle);
-                if (!m_hasPoints)
-                    MoveToPoint(sx, sy);
-                else
-                    AddLineToPoint(sx, sy);
-
-                AddArcToCubics(s.x, s.y, s.r, s.startAngle, s.endAngle, s.clockwise);
-            }
+            const wxDouble sx = s.x + s.r * std::cos(s.startAngle);
+            const wxDouble sy = s.y + s.r * std::sin(s.startAngle);
+            if ( !m_hasPoints )
+                MoveToPoint(sx, sy);
             else
-            {
-                m_segments.push_back(s);
-                if (s.type != wxSVGPathSegment::CloseSegment)
-                    m_hasPoints = true;
-            }
-        }
+                AddLineToPoint(sx, sy);
 
-        // Apply the transformation matrix to all points in the path.
-        m_hasPoints = false;
-        for ( auto& s : m_segments )
-        {
-            switch ( s.type )
-            {
-                case wxSVGPathSegment::MoveSegment:
-                case wxSVGPathSegment::LineSegment:
-                    m->TransformPoint(&s.x, &s.y);
-                    Extend(s.x, s.y);
-                    break;
-                case wxSVGPathSegment::CurveSegment:
-                    m->TransformPoint(&s.x1, &s.y1);
-                    m->TransformPoint(&s.x2, &s.y2);
-                    m->TransformPoint(&s.x, &s.y);
-                    Extend(s.x1, s.y1);
-                    Extend(s.x2, s.y2);
-                    Extend(s.x, s.y);
-                    break;
-                case wxSVGPathSegment::ArcSegment:
-                    break;
-                case wxSVGPathSegment::CloseSegment:
-                    break;
-            }
+            AddArcToCubics(s.x, s.y, s.r, s.startAngle, s.endAngle, s.clockwise);
         }
-
-        if ( !m_segments.empty() )
+        else
         {
-            const auto& last = m_segments.back();
-            if ( last.type != wxSVGPathSegment::CloseSegment )
-            {
-                m_curX = last.x;
-                m_curY = last.y;
-            }
+            m_segments.push_back(s);
+            if ( s.type != wxSVGPathSegment::CloseSegment )
+                m_hasPoints = true;
         }
     }
 
-    void GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) const override
+    // Apply the transformation matrix to all points in the path.
+    m_hasPoints = false;
+    for ( auto& s : m_segments )
     {
-        if ( !m_hasPoints )
+        switch ( s.type )
         {
-            if ( x != nullptr )
-                *x = 0;
-            if ( y != nullptr)
-                *y = 0;
-            if ( w != nullptr )
-                *w = 0;
-            if ( h != nullptr )
-                *h = 0;
-            return;
+            case wxSVGPathSegment::MoveSegment:
+            case wxSVGPathSegment::LineSegment:
+                m->TransformPoint(&s.x, &s.y);
+                Extend(s.x, s.y);
+                break;
+            case wxSVGPathSegment::CurveSegment:
+                m->TransformPoint(&s.x1, &s.y1);
+                m->TransformPoint(&s.x2, &s.y2);
+                m->TransformPoint(&s.x, &s.y);
+                Extend(s.x1, s.y1);
+                Extend(s.x2, s.y2);
+                Extend(s.x, s.y);
+                break;
+            case wxSVGPathSegment::QuadCurveSegment:
+                m->TransformPoint(&s.x1, &s.y1);
+                m->TransformPoint(&s.x, &s.y);
+                Extend(s.x1, s.y1);
+                Extend(s.x, s.y);
+                break;
+            case wxSVGPathSegment::ArcSegment:
+                break;
+            case wxSVGPathSegment::CloseSegment:
+                break;
         }
+    }
+
+    if ( !m_segments.empty() )
+    {
+        const auto& last = m_segments.back();
+        if ( last.type != wxSVGPathSegment::CloseSegment )
+        {
+            m_curX = last.x;
+            m_curY = last.y;
+        }
+    }
+}
+
+void wxSVGGraphicsPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) const
+{
+    if ( !m_hasPoints )
+    {
         if ( x != nullptr )
-            *x = m_minX;
-        if ( y != nullptr )
-            *y = m_minY;
+            *x = 0;
+        if ( y != nullptr)
+            *y = 0;
         if ( w != nullptr )
-            *w = m_maxX - m_minX;
+            *w = 0;
         if ( h != nullptr )
-            *h = m_maxY - m_minY;
+            *h = 0;
+        return;
     }
+    if ( x != nullptr )
+        *x = m_minX;
+    if ( y != nullptr )
+        *y = m_minY;
+    if ( w != nullptr )
+        *w = m_maxX - m_minX;
+    if ( h != nullptr )
+        *h = m_maxY - m_minY;
+}
 
-    bool Contains(wxDouble WXUNUSED(x), wxDouble WXUNUSED(y),
-                  wxPolygonFillMode WXUNUSED(fillStyle) = wxODDEVEN_RULE) const override
-    {
-        /* TODO */
-         return false;
-    }
+bool wxSVGGraphicsPathData::Contains(wxDouble x, wxDouble y,
+                                     wxPolygonFillMode fillStyle) const
+{
+    if ( m_segments.empty() )
+        return false;
 
-    // Generates the SVG "d" attribute string from recorded segments.
-    wxString GetDString() const
+    // Fast bounding box rejection.
+    wxDouble bx, by, bw, bh;
+    GetBox(&bx, &by, &bw, &bh);
+    if ( x < bx || x > bx + bw || y < by || y > by + bh )
+        return false;
+
+    int windingNumber = 0;
+    wxPoint2DDouble curPt, startPt;
+    bool hasStartPt = false;
+
+    // Helper to process a single line segment for the winding number algorithm.
+    const auto processEdge = [&](const wxPoint2DDouble& p1, const wxPoint2DDouble& p2)
     {
-        wxString d;
-        for ( const auto& s : m_segments )
+        if ( p1.m_y <= y )
         {
-            switch ( s.type )
+            if ( p2.m_y > y && (p2.m_x - p1.m_x) * (y - p1.m_y) - (x - p1.m_x) * (p2.m_y - p1.m_y) > 0 )
+                windingNumber++;
+        }
+        else
+        {
+            if ( p2.m_y <= y && (p2.m_x - p1.m_x) * (y - p1.m_y) - (x - p1.m_x) * (p2.m_y - p1.m_y) < 0 )
+                windingNumber--;
+        }
+    };
+
+    for ( const auto& seg : m_segments )
+    {
+        switch ( seg.type )
+        {
+            case wxSVGPathSegment::MoveSegment:
+                if ( hasStartPt )
+                    processEdge(curPt, startPt);
+                curPt = { seg.x, seg.y };
+                startPt = curPt;
+                hasStartPt = true;
+                break;
+
+            case wxSVGPathSegment::LineSegment:
+                processEdge(curPt, { seg.x, seg.y });
+                curPt = { seg.x, seg.y };
+                break;
+
+            case wxSVGPathSegment::CurveSegment:
             {
-                case wxSVGPathSegment::MoveSegment:
-                    d += wxString::Format(wxS("M %s %s "),
-                        wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
-                    break;
-                case wxSVGPathSegment::LineSegment:
-                    d += wxString::Format(wxS("L %s %s "),
-                        wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
-                    break;
-                case wxSVGPathSegment::CurveSegment:
-                    d += wxString::Format(wxS("C %s %s %s %s %s %s "),
-                        wxSVGFileDCImpl::NumStr(s.x1), wxSVGFileDCImpl::NumStr(s.y1),
-                        wxSVGFileDCImpl::NumStr(s.x2), wxSVGFileDCImpl::NumStr(s.y2),
-                        wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
-                    break;
-                case wxSVGPathSegment::ArcSegment:
+                const wxPoint2DDouble p0 = curPt;
+                const wxPoint2DDouble p1 = { seg.x1, seg.y1 };
+                const wxPoint2DDouble p2 = { seg.x2, seg.y2 };
+                const wxPoint2DDouble p3 = { seg.x, seg.y };
+                constexpr int steps = 10;
+                for ( int i = 1; i <= steps; ++i )
                 {
-                    wxDouble sweep = s.endAngle - s.startAngle;
+                    const double t = i / (double)steps;
+                    const double tInv = 1.0 - t;
+                    const wxPoint2DDouble next = {
+                        tInv * tInv * tInv * p0.m_x + 3 * tInv * tInv * t * p1.m_x + 3 * tInv * t * t * p2.m_x + t * t * t * p3.m_x,
+                        tInv * tInv * tInv * p0.m_y + 3 * tInv * tInv * t * p1.m_y + 3 * tInv * t * t * p2.m_y + t * t * t * p3.m_y
+                    };
+                    processEdge(curPt, next);
+                    curPt = next;
+                }
+                break;
+            }
+
+            case wxSVGPathSegment::QuadCurveSegment:
+            {
+                const wxPoint2DDouble p0 = curPt;
+                const wxPoint2DDouble p1 = { seg.x1, seg.y1 };
+                const wxPoint2DDouble p2 = { seg.x, seg.y };
+                constexpr int steps = 10;
+                for ( int i = 1; i <= steps; ++i )
+                {
+                    const double t = i / static_cast<double>(steps);
+                    const double tInv = 1.0 - t;
+                    const wxPoint2DDouble next = {
+                        tInv * tInv * p0.m_x + 2 * tInv * t * p1.m_x + t * t * p2.m_x,
+                        tInv * tInv * p0.m_y + 2 * tInv * t * p1.m_y + t * t * p2.m_y
+                    };
+                    processEdge(curPt, next);
+                    curPt = next;
+                }
+                break;
+            }
+
+            case wxSVGPathSegment::ArcSegment:
+            {
+                wxDouble sweep = seg.endAngle - seg.startAngle;
+                constexpr wxDouble twoPi = 2.0 * M_PI;
+                if ( std::abs(sweep) >= twoPi - 1e-9 )
+                {
+                    sweep = seg.clockwise ? twoPi : -twoPi;
+                }
+                else
+                {
+                    if ( seg.clockwise )
+                    {
+                        while ( sweep <= 0 ) sweep += twoPi;
+                        while ( sweep > twoPi ) sweep -= twoPi;
+                    }
+                    else
+                    {
+                        while ( sweep >= 0 ) sweep -= twoPi;
+                        while ( sweep < -twoPi ) sweep += twoPi;
+                    }
+                }
+
+                const int steps = std::max(1, (int)std::ceil(std::abs(sweep) / (M_PI / 10.0)));
+                const double angleStep = sweep / steps;
+                for ( int i = 1; i <= steps; ++i )
+                {
+                    const double ang = seg.startAngle + i * angleStep;
+                    const wxPoint2DDouble next = { seg.x + seg.r * std::cos(ang), seg.y + seg.r * std::sin(ang) };
+                    processEdge(curPt, next);
+                    curPt = next;
+                }
+                break;
+            }
+
+            case wxSVGPathSegment::CloseSegment:
+                if ( hasStartPt )
+                {
+                    processEdge(curPt, startPt);
+                    hasStartPt = false;
+                }
+                break;
+        }
+    }
+
+    if ( hasStartPt )
+        processEdge(curPt, startPt);
+
+    if ( fillStyle == wxODDEVEN_RULE )
+        return (windingNumber % 2) != 0;
+    return windingNumber != 0;
+}
+
+// Generates the SVG "d" attribute string from recorded segments.
+wxString wxSVGGraphicsPathData::GetDString() const
+{
+    wxString d;
+    for ( const auto& s : m_segments )
+    {
+        switch ( s.type )
+        {
+            case wxSVGPathSegment::MoveSegment:
+                d += wxString::Format(wxS("M %s %s "),
+                    wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
+                break;
+            case wxSVGPathSegment::LineSegment:
+                d += wxString::Format(wxS("L %s %s "),
+                    wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
+                break;
+            case wxSVGPathSegment::CurveSegment:
+                d += wxString::Format(wxS("C %s %s %s %s %s %s "),
+                    wxSVGFileDCImpl::NumStr(s.x1), wxSVGFileDCImpl::NumStr(s.y1),
+                    wxSVGFileDCImpl::NumStr(s.x2), wxSVGFileDCImpl::NumStr(s.y2),
+                    wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
+                break;
+            case wxSVGPathSegment::QuadCurveSegment:
+                d += wxString::Format(wxS("Q %s %s %s %s "),
+                    wxSVGFileDCImpl::NumStr(s.x1), wxSVGFileDCImpl::NumStr(s.y1),
+                    wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
+                break;
+            case wxSVGPathSegment::ArcSegment:
+            {
+                wxDouble sweep = s.endAngle - s.startAngle;
+                constexpr wxDouble twoPi = 2 * M_PI;
+                if ( std::abs(sweep) >= twoPi - 1e-9 )
+                {
+                    sweep = twoPi;
+                }
+                else
+                {
                     if ( s.clockwise )
                     {
-                        while ( sweep < 0 )
-                            sweep += 2 * M_PI;
+                        while ( sweep <= 0 )
+                            sweep += twoPi;
+                        while ( sweep > twoPi )
+                            sweep -= twoPi;
                     }
                     else
                     {
-                        while ( sweep > 0 )
-                            sweep -= 2 * M_PI;
+                        while ( sweep >= 0 )
+                            sweep -= twoPi;
+                        while ( sweep < -twoPi )
+                            sweep += twoPi;
                         sweep = -sweep;
                     }
-
-                    if ( sweep >= 2 * M_PI - 1e-9 )
-                    {
-                        const wxDouble ox = s.x - s.r, oy = s.y;
-                        d += wxString::Format(wxS("A %s %s 0 1 %d %s %s "),
-                            wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
-                            s.clockwise ? 1 : 0,
-                            wxSVGFileDCImpl::NumStr(s.x + s.r), wxSVGFileDCImpl::NumStr(s.y));
-                        d += wxString::Format(wxS("A %s %s 0 1 %d %s %s "),
-                            wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
-                            s.clockwise ? 1 : 0,
-                            wxSVGFileDCImpl::NumStr(ox), wxSVGFileDCImpl::NumStr(oy));
-                    }
-                    else
-                    {
-                        const wxDouble ex = s.x + s.r * std::cos(s.endAngle);
-                        const wxDouble ey = s.y + s.r * std::sin(s.endAngle);
-                        const int large = sweep > M_PI ? 1 : 0;
-                        d += wxString::Format(wxS("A %s %s 0 %d %d %s %s "),
-                            wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
-                            large, s.clockwise ? 1 : 0,
-                            wxSVGFileDCImpl::NumStr(ex), wxSVGFileDCImpl::NumStr(ey));
-                    }
-                    break;
                 }
-                case wxSVGPathSegment::CloseSegment:
-                    d += wxS("Z ");
-                    break;
+
+                if ( sweep >= twoPi - 1e-9 )
+                {
+                    const wxDouble ox = s.x - s.r, oy = s.y;
+                    d += wxString::Format(wxS("A %s %s 0 1 %d %s %s "),
+                        wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
+                        s.clockwise ? 1 : 0,
+                        wxSVGFileDCImpl::NumStr(s.x + s.r), wxSVGFileDCImpl::NumStr(s.y));
+                    d += wxString::Format(wxS("A %s %s 0 1 %d %s %s "),
+                        wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
+                        s.clockwise ? 1 : 0,
+                        wxSVGFileDCImpl::NumStr(ox), wxSVGFileDCImpl::NumStr(oy));
+                }
+                else
+                {
+                    const wxDouble ex = s.x + s.r * std::cos(s.endAngle);
+                    const wxDouble ey = s.y + s.r * std::sin(s.endAngle);
+                    const int large = sweep > M_PI ? 1 : 0;
+                    d += wxString::Format(wxS("A %s %s 0 %d %d %s %s "),
+                        wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
+                        large, s.clockwise ? 1 : 0,
+                        wxSVGFileDCImpl::NumStr(ex), wxSVGFileDCImpl::NumStr(ey));
+                }
+                break;
             }
+            case wxSVGPathSegment::CloseSegment:
+                d += wxS("Z ");
+                break;
         }
-        return d;
     }
+    return d;
+}
 
-private:
-    void Extend(wxDouble x, wxDouble y)
+void wxSVGGraphicsPathData::Extend(wxDouble x, wxDouble y)
+{
+    if ( !m_hasPoints )
     {
-        if ( !m_hasPoints )
-        {
-            m_minX = m_maxX = x;
-            m_minY = m_maxY = y;
-            m_hasPoints = true;
-            return;
-        }
-        if ( x < m_minX )
-            m_minX = x;
-        if ( x > m_maxX )
-            m_maxX = x;
-        if ( y < m_minY )
-            m_minY = y;
-        if ( y > m_maxY )
-            m_maxY = y;
+        m_minX = m_maxX = x;
+        m_minY = m_maxY = y;
+        m_hasPoints = true;
+        return;
     }
+    if ( x < m_minX )
+        m_minX = x;
+    if ( x > m_maxX )
+        m_maxX = x;
+    if ( y < m_minY )
+        m_minY = y;
+    if ( y > m_maxY )
+        m_maxY = y;
+}
 
-    // Approximates a circular arc with a series of cubic Beziers.
-    void AddArcToCubics(wxDouble xc, wxDouble yc, wxDouble r,
-                        wxDouble startAngle, wxDouble endAngle, bool clockwise)
+// Approximates a circular arc with a series of cubic Béziers.
+void wxSVGGraphicsPathData::AddArcToCubics(wxDouble xc, wxDouble yc, wxDouble r,
+                                          wxDouble startAngle, wxDouble endAngle, bool clockwise)
+{
+    wxDouble sweep = endAngle - startAngle;
+    constexpr wxDouble twoPi = 2.0 * M_PI;
+    if ( std::abs(sweep) >= twoPi - 1e-9 )
     {
-        wxDouble sweep = endAngle - startAngle;
+        sweep = clockwise ? twoPi : -twoPi;
+    }
+    else
+    {
         if ( clockwise )
         {
-            while (sweep < 0) sweep += 2 * M_PI;
-            while (sweep > 2 * M_PI) sweep -= 2 * M_PI;
+            while (sweep <= 0) sweep += twoPi;
+            while (sweep > twoPi) sweep -= twoPi;
         }
         else
         {
-            while (sweep > 0) sweep -= 2 * M_PI;
-            while (sweep < -2 * M_PI) sweep += 2 * M_PI;
-        }
-
-        if ( std::abs(sweep) < 1e-9 )
-            return;
-
-        int n = std::ceil(std::abs(sweep) / (M_PI / 2.0));
-        wxDouble angleStep = sweep / n;
-        wxDouble alpha = angleStep / 2.0;
-        wxDouble kappa = 4.0 / 3.0 * (1.0 - std::cos(alpha)) / std::sin(alpha);
-
-        wxDouble a1 = startAngle;
-        for ( int i = 0; i < n; ++i )
-        {
-            wxDouble a2 = a1 + angleStep;
-
-            wxDouble cos_a1 = std::cos(a1);
-            wxDouble sin_a1 = std::sin(a1);
-            wxDouble cos_a2 = std::cos(a2);
-            wxDouble sin_a2 = std::sin(a2);
-
-            wxDouble cx1 = xc + r * (cos_a1 - kappa * sin_a1);
-            wxDouble cy1 = yc + r * (sin_a1 + kappa * cos_a1);
-            wxDouble cx2 = xc + r * (cos_a2 + kappa * sin_a2);
-            wxDouble cy2 = yc + r * (sin_a2 - kappa * cos_a2);
-            wxDouble x = xc + r * cos_a2;
-            wxDouble y = yc + r * sin_a2;
-
-            m_segments.push_back(wxSVGPathSegment::CurveTo(cx1, cy1, cx2, cy2, x, y));
-
-            a1 = a2;
+            while (sweep >= 0) sweep -= twoPi;
+            while (sweep < -twoPi) sweep += twoPi;
         }
     }
 
-    std::vector<wxSVGPathSegment> m_segments;
-    wxString m_d;
-    wxDouble m_curX, m_curY;
-    bool m_hasPoints;
-    wxDouble m_minX, m_minY, m_maxX, m_maxY;
-};
+    if ( std::abs(sweep) < 1e-9 )
+        return;
+
+    int n = std::ceil(std::abs(sweep) / (M_PI / 2.0));
+    wxDouble angleStep = sweep / n;
+    wxDouble alpha = angleStep / 2.0;
+    wxDouble kappa = 4.0 / 3.0 * (1.0 - std::cos(alpha)) / std::sin(alpha);
+
+    wxDouble a1 = startAngle;
+    for ( int i = 0; i < n; ++i )
+    {
+        wxDouble a2 = a1 + angleStep;
+
+        wxDouble cos_a1 = std::cos(a1);
+        wxDouble sin_a1 = std::sin(a1);
+        wxDouble cos_a2 = std::cos(a2);
+        wxDouble sin_a2 = std::sin(a2);
+
+        wxDouble cx1 = xc + r * (cos_a1 - kappa * sin_a1);
+        wxDouble cy1 = yc + r * (sin_a1 + kappa * cos_a1);
+        wxDouble cx2 = xc + r * (cos_a2 + kappa * sin_a2);
+        wxDouble cy2 = yc + r * (sin_a2 - kappa * cos_a2);
+        wxDouble x = xc + r * cos_a2;
+        wxDouble y = yc + r * sin_a2;
+
+        m_segments.push_back(wxSVGPathSegment::CurveTo(cx1, cy1, cx2, cy2, x, y));
+
+        a1 = a2;
+    }
+}
 
 // ----------------------------------------------------------------------------
-// wxSVGGraphicsPenData / BrushData / FontData
+// wxSVGGraphicsPenData / BrushData / FontData / BitmapData
 // ----------------------------------------------------------------------------
 
-class wxSVGGraphicsPenData : public wxGraphicsObjectRefData
+wxSVGGraphicsPenData::wxSVGGraphicsPenData(wxGraphicsRenderer* renderer,
+                                           const wxGraphicsPenInfo& info)
+    : wxGraphicsObjectRefData(renderer), m_info(info)
 {
-public:
-    wxSVGGraphicsPenData(wxGraphicsRenderer* renderer,
-                         const wxGraphicsPenInfo& info)
-        : wxGraphicsObjectRefData(renderer), m_info(info)
-    {
-        m_pen.SetColour(info.GetColour());
-        m_pen.SetWidth(static_cast<int>(info.GetWidth() + 0.5));
-        m_pen.SetStyle(info.GetStyle());
-    }
+    m_pen.SetColour(info.GetColour());
+    m_pen.SetWidth(static_cast<int>(info.GetWidth() + 0.5));
+    m_pen.SetStyle(info.GetStyle());
+}
 
-    const wxPen& GetPen() const { return m_pen; }
-    const wxGraphicsPenInfo& GetInfo() const { return m_info; }
-
-private:
-    wxGraphicsPenInfo m_info;
-    wxPen m_pen;
-};
-
-class wxSVGGraphicsBrushData : public wxGraphicsObjectRefData
+wxSVGGraphicsBrushData::wxSVGGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush& brush)
+    : wxGraphicsObjectRefData(renderer), m_brush(brush)
 {
-public:
-    wxSVGGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush& brush)
-        : wxGraphicsObjectRefData(renderer), m_brush(brush)
-    {
-    }
+}
 
-    const wxBrush& GetBrush() const { return m_brush; }
-
-private:
-    wxBrush m_brush;
-};
-
-class wxSVGGraphicsFontData : public wxGraphicsObjectRefData
+wxSVGGraphicsBrushData::wxSVGGraphicsBrushData(wxGraphicsRenderer* renderer,
+                                               wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                                               const wxGraphicsGradientStops& stops,
+                                               const wxGraphicsMatrix& matrix)
+    : wxGraphicsObjectRefData(renderer),
+      m_isGradient(true),
+      m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2),
+      m_stops(stops), m_matrix(matrix)
 {
-public:
-    wxSVGGraphicsFontData(wxGraphicsRenderer* renderer,
-                          const wxFont& font, const wxColour& colour)
-        : wxGraphicsObjectRefData(renderer), m_font(font), m_colour(colour)
-    {
-    }
+}
 
-    const wxFont& GetFont() const { return m_font; }
-    const wxColour& GetColour() const { return m_colour; }
-
-private:
-    wxFont m_font;
-    wxColour m_colour;
-};
-
-class wxSVGGraphicsBitmapData : public wxGraphicsObjectRefData
+wxSVGGraphicsBrushData::wxSVGGraphicsBrushData(wxGraphicsRenderer* renderer,
+                                               wxDouble startX, wxDouble startY, wxDouble endX, wxDouble endY,
+                                               wxDouble radius,
+                                               const wxGraphicsGradientStops& stops,
+                                               const wxGraphicsMatrix& matrix)
+    : wxGraphicsObjectRefData(renderer),
+      m_isGradient(true), m_isRadial(true),
+      m_x1(startX), m_y1(startY), m_x2(endX), m_y2(endY), m_radius(radius),
+      m_stops(stops), m_matrix(matrix)
 {
-public:
-    wxSVGGraphicsBitmapData(wxGraphicsRenderer* renderer, const wxBitmap& bmp)
-        : wxGraphicsObjectRefData(renderer), m_bitmap(bmp)
-    {
-    }
+}
 
-    wxGraphicsObjectRefData* Clone() const override
-    {
-        return new wxSVGGraphicsBitmapData(GetRenderer(), m_bitmap);
-    }
+wxSVGGraphicsFontData::wxSVGGraphicsFontData(wxGraphicsRenderer* renderer,
+                                             const wxFont& font, const wxColour& colour)
+    : wxGraphicsObjectRefData(renderer), m_font(font), m_colour(colour)
+{
+}
 
-    const wxBitmap& GetBitmap() const { return m_bitmap; }
+wxSVGGraphicsBitmapData::wxSVGGraphicsBitmapData(wxGraphicsRenderer* renderer, const wxBitmap& bmp)
+    : wxGraphicsObjectRefData(renderer), m_bitmap(bmp)
+{
+}
 
-private:
-    wxBitmap m_bitmap;
-};
-
-} // anonymous namespace
+wxGraphicsObjectRefData* wxSVGGraphicsBitmapData::Clone() const
+{
+    return new wxSVGGraphicsBitmapData(GetRenderer(), m_bitmap);
+}
 
 // ----------------------------------------------------------------------------
 // wxSVGGraphicsRenderer
@@ -720,21 +892,24 @@ wxGraphicsBrush wxSVGGraphicsRenderer::CreateBrush(const wxBrush& brush)
 }
 
 wxGraphicsBrush
-wxSVGGraphicsRenderer::CreateLinearGradientBrush(wxDouble, wxDouble, wxDouble, wxDouble,
-                                                 const wxGraphicsGradientStops&,
-                                                 const wxGraphicsMatrix&)
+wxSVGGraphicsRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                                                 const wxGraphicsGradientStops& stops,
+                                                 const wxGraphicsMatrix& matrix)
 {
-    /* TODO */
-    return wxNullGraphicsBrush;
+    wxGraphicsBrush b;
+    b.SetRefData(new wxSVGGraphicsBrushData(this, x1, y1, x2, y2, stops, matrix));
+    return b;
 }
 
 wxGraphicsBrush
-wxSVGGraphicsRenderer::CreateRadialGradientBrush(wxDouble, wxDouble, wxDouble, wxDouble, wxDouble,
-                                                 const wxGraphicsGradientStops&,
-                                                 const wxGraphicsMatrix&)
+wxSVGGraphicsRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startY, wxDouble endX, wxDouble endY,
+                                                 wxDouble radius,
+                                                 const wxGraphicsGradientStops& stops,
+                                                 const wxGraphicsMatrix& matrix)
 {
-    /* TODO */
-    return wxNullGraphicsBrush;
+    wxGraphicsBrush b;
+    b.SetRefData(new wxSVGGraphicsBrushData(this, startX, startY, endX, endY, radius, stops, matrix));
+    return b;
 }
 
 wxGraphicsFont wxSVGGraphicsRenderer::CreateFont(const wxFont& font, const wxColour& col)
@@ -846,14 +1021,37 @@ wxSVGGraphicsContext::~wxSVGGraphicsContext() = default;
 
 void wxSVGGraphicsContext::PushState()
 {
-    m_stateStack.push(m_transform);
+    m_stateStack.push({ m_transform, m_impl->m_clipNestingLevel, m_composition });
 }
 
 void wxSVGGraphicsContext::PopState()
 {
     if ( m_stateStack.empty() )
         return;
-    m_transform = m_stateStack.top();
+
+    const State& s = m_stateStack.top();
+    m_transform = s.transform;
+    SyncTransformToDC();
+
+    if ( m_composition != s.compositionMode )
+    {
+        m_composition = s.compositionMode;
+        m_impl->SetCompositionMode(m_composition);
+    }
+
+    if ( m_impl->m_clipNestingLevel > s.clipNestingLevel )
+    {
+        // Close the clipping groups that were opened since PushState.
+        m_impl->write(wxS("</g>\n")); // Close the attribute group
+        while ( m_impl->m_clipNestingLevel > s.clipNestingLevel )
+        {
+            m_impl->write(wxS("</g>\n"));
+            m_impl->m_clipNestingLevel--;
+        }
+        // Restart the attribute group
+        m_impl->DoStartNewGraphics();
+    }
+
     m_stateStack.pop();
 }
 
@@ -924,34 +1122,55 @@ bool wxSVGGraphicsContext::SetInterpolationQuality(wxInterpolationQuality interp
     return true;
 }
 
-bool wxSVGGraphicsContext::SetCompositionMode(wxCompositionMode) { /* TODO */ return false; }
+bool wxSVGGraphicsContext::SetCompositionMode(wxCompositionMode op)
+{
+    if ( op == wxCOMPOSITION_ADD || op == wxCOMPOSITION_DIFF || op == wxCOMPOSITION_OVER )
+    {
+        m_impl->SetCompositionMode(op);
+        m_composition = op;
+        return true;
+    }
+    return false;
+}
 
-void wxSVGGraphicsContext::BeginLayer(wxDouble) { /* TODO */ }
-void wxSVGGraphicsContext::EndLayer() { /* TODO */ }
+void wxSVGGraphicsContext::BeginLayer(wxDouble opacity)
+{
+    m_impl->BeginLayer(opacity);
+}
+
+void wxSVGGraphicsContext::EndLayer()
+{
+    m_impl->EndLayer();
+}
 
 void wxSVGGraphicsContext::Translate(wxDouble dx, wxDouble dy)
 {
     m_transform.Translate(dx, dy);
+    SyncTransformToDC();
 }
 
 void wxSVGGraphicsContext::Scale(wxDouble xScale, wxDouble yScale)
 {
     m_transform.Scale(xScale, yScale);
+    SyncTransformToDC();
 }
 
 void wxSVGGraphicsContext::Rotate(wxDouble angle)
 {
     m_transform.Rotate(angle);
+    SyncTransformToDC();
 }
 
 void wxSVGGraphicsContext::ConcatTransform(const wxGraphicsMatrix& matrix)
 {
     m_transform.Concat(matrix);
+    SyncTransformToDC();
 }
 
 void wxSVGGraphicsContext::SetTransform(const wxGraphicsMatrix& matrix)
 {
     m_transform = matrix;
+    SyncTransformToDC();
 }
 
 wxGraphicsMatrix wxSVGGraphicsContext::GetTransform() const
@@ -962,6 +1181,9 @@ wxGraphicsMatrix wxSVGGraphicsContext::GetTransform() const
 void wxSVGGraphicsContext::SetPen(const wxGraphicsPen& pen)
 {
     wxGraphicsContext::SetPen(pen);
+    m_impl->m_graphicsPen = pen;
+    m_impl->m_graphics_changed = true;
+
     if ( pen.IsNull() )
     {
         SyncPenToDC(*wxTRANSPARENT_PEN);
@@ -976,6 +1198,9 @@ void wxSVGGraphicsContext::SetPen(const wxGraphicsPen& pen)
 void wxSVGGraphicsContext::SetBrush(const wxGraphicsBrush& brush)
 {
     wxGraphicsContext::SetBrush(brush);
+    m_impl->m_graphicsBrush = brush;
+    m_impl->m_graphics_changed = true;
+
     if ( brush.IsNull() )
     {
         SyncBrushToDC(*wxTRANSPARENT_BRUSH);
@@ -1020,9 +1245,14 @@ void wxSVGGraphicsContext::SyncBrushToDC(const wxBrush& brush)
     m_impl->m_graphics_changed = true;
 }
 
+void wxSVGGraphicsContext::SyncTransformToDC()
+{
+    m_impl->m_gcTransform = GetCurrentTransformAttr();
+}
+
 wxString wxSVGGraphicsContext::GetCurrentTransformAttr() const
 {
-    if ( m_transform.IsIdentity() )
+    if ( m_transform.IsNull() || m_transform.IsIdentity() )
         return wxString();
 
     wxDouble a, b, c, d, tx, ty;
@@ -1053,7 +1283,8 @@ void wxSVGGraphicsContext::AccumulatePathBounds(wxGraphicsPathData* data)
 
     for ( int i = 0; i < 4; ++i )
     {
-        m_transform.TransformPoint(&cx[i], &cy[i]);
+        if ( !m_transform.IsNull() )
+            m_transform.TransformPoint(&cx[i], &cy[i]);
         m_impl->CalcBoundingBox(wxRound(cx[i]), wxRound(cy[i]));
     }
 }
@@ -1069,8 +1300,16 @@ void wxSVGGraphicsContext::StrokePath(const wxGraphicsPath& path)
 
     m_impl->NewGraphicsIfNeeded();
 
-    const wxString stroke = wxSVGFileDCImpl::GetPenStroke(m_currentPen.GetColour(),
-                                                          m_currentPen.GetStyle());
+    wxString stroke;
+    if ( !m_pen.IsNull() )
+        stroke = m_impl->GetGraphicsPenStroke(m_pen);
+
+    if ( stroke.empty() )
+    {
+        stroke = wxSVGFileDCImpl::GetPenStroke(m_currentPen.GetColour(),
+                                               m_currentPen.GetStyle());
+    }
+
     const wxString transform = GetCurrentTransformAttr();
 
     const wxString s = wxString::Format(
@@ -1094,10 +1333,18 @@ void wxSVGGraphicsContext::FillPath(const wxGraphicsPath& path, wxPolygonFillMod
 
     m_impl->NewGraphicsIfNeeded();
 
-    const wxString fill = m_currentBrush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT
-        ? wxString(wxS("fill=\"none\""))
-        : wxSVGFileDCImpl::GetBrushFill(m_currentBrush.GetColour(),
-                                        m_currentBrush.GetStyle());
+    wxString fill;
+    if ( !m_brush.IsNull() )
+        fill = m_impl->GetGraphicsBrushFill(m_brush);
+
+    if ( fill.empty() )
+    {
+        fill = m_currentBrush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT
+            ? wxString(wxS("fill=\"none\""))
+            : wxSVGFileDCImpl::GetBrushFill(m_currentBrush.GetColour(),
+                                            m_currentBrush.GetStyle());
+    }
+
     const wxString transform = GetCurrentTransformAttr();
     const wxString rule = (fillStyle == wxODDEVEN_RULE)
         ? wxS("evenodd") : wxS("nonzero");

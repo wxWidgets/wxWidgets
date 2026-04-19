@@ -18,6 +18,10 @@
 #include "wx/filename.h"
 #include "wx/dc.h"
 
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/graphics.h"
+#endif
+
 #include <map>
 #include <memory>
 
@@ -199,6 +203,10 @@ public:
     // Close the group opened by the most recent BeginLayer() call.
     void EndLayer();
 
+#if wxUSE_GRAPHICS_CONTEXT
+    void SetCompositionMode(wxCompositionMode mode);
+#endif
+
     wxString GetSVGDocument() const;
 
     bool Save();
@@ -334,6 +342,16 @@ public:
     // Returns a "fill=... fill-opacity=..." attribute fragment.
     static wxString GetBrushFill(const wxColour& c, int style = wxBRUSHSTYLE_SOLID);
 
+#if wxUSE_GRAPHICS_CONTEXT
+    // Returns a "fill=url(#...)" attribute fragment for a gradient brush,
+    // and writes its definition to the SVG.
+    wxString GetGraphicsBrushFill(const wxGraphicsBrush& brush);
+
+    // Returns a "stroke=url(#...)" attribute fragment for a gradient pen,
+    // and writes its definition to the SVG.
+    wxString GetGraphicsPenStroke(const wxGraphicsPen& pen);
+#endif
+
 private:
     // If m_graphics_changed is true, close the current <g> element and start a
     // new one for the last pen/brush change.
@@ -373,6 +391,10 @@ private:
 #if wxUSE_GRAPHICS_CONTEXT
     // Graphics context that writes into the same SVG buffer.
     mutable std::unique_ptr<wxSVGGraphicsContext> m_gc;
+    wxGraphicsBrush m_graphicsBrush;
+    wxGraphicsPen m_graphicsPen;
+    wxCompositionMode m_compositionMode;
+    wxString m_gcTransform;
 #endif
 
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl);
