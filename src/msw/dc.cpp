@@ -1969,6 +1969,8 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
 wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
+    wxScopedRTLDisabler disableRTL(GetHdc());
+
     POINT p;
     p.x = x;
     p.y = y;
@@ -2015,6 +2017,8 @@ wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
+    wxScopedRTLDisabler disableRTL(GetHdc());
+
     POINT p;
     p.x = x;
     p.y = y;
@@ -2024,6 +2028,8 @@ wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 
 wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
 {
+    wxScopedRTLDisabler disableRTL(GetHdc());
+
     POINT p[2];
     p[0].x = 0;
     p[0].y = 0;
@@ -2035,6 +2041,8 @@ wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
 
 wxSize wxMSWDCImpl::LogicalToDeviceRel(int x, int y) const
 {
+    wxScopedRTLDisabler disableRTL(GetHdc());
+
     POINT p[2];
     p[0].x = 0;
     p[0].y = 0;
