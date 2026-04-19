@@ -107,6 +107,9 @@ public:
     MyPage(wxNotebook *parent, int index);
     virtual void OnDraw(wxDC& dc) override;
     bool OnSave(const wxString& filename);
+
+    void OnPaint(wxPaintEvent& event);
+
 private:
     int m_index;
 };
@@ -245,6 +248,21 @@ MyPage::MyPage(wxNotebook *parent, int index)
     SetBackgroundColour(*wxWHITE);
     SetScrollbars(20, 20, 50, 50);
     m_index = index;
+
+    Bind(wxEVT_PAINT, &MyPage::OnPaint, this);
+}
+
+void MyPage::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+    PrepareDC(dc);
+
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGCDC gcdc(dc);
+    OnDraw(gcdc);
+#else
+    OnDraw(dc);
+#endif
 }
 
 bool MyPage::OnSave(const wxString& filename)
@@ -646,7 +664,7 @@ void DrawOnDC(wxDC& dc, const int index)
             gc->Translate(dc.FromDIP(420), dc.FromDIP(80));
             gc->Rotate(wxDegToRad(30.0));
             gc->SetPen(*wxBLACK_PEN);
-            gc->SetBrush(wxBrush("LIGHT GOLDENROD"));
+            gc->SetBrush(wxBrush("GOLDENROD"));
             gc->DrawRectangle(dc.FromDIP(-30), dc.FromDIP(-15),
                               dc.FromDIP(60), dc.FromDIP(30));
             gc->PopState();
