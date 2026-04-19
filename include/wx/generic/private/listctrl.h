@@ -623,7 +623,7 @@ public:
     void OnChildFocus(wxChildFocusEvent& event);
 
     void DrawImage( int index, wxDC *dc, int x, int y );
-    void GetImageSize( int index, int &width, int &height ) const;
+    void GetImageSize( int &width, int &height ) const;
 
     void SetImages( wxWithImages *images, const int which );
     void SetItemSpacing( int spacing, bool isSmall = false );

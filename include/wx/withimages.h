@@ -183,32 +183,12 @@ public:
         return window->FromPhys(GetImageSize(window));
     }
 
-    // Return logical size of the image to use or (0, 0) if there are none.
-    wxSize GetImageLogicalSize(const wxWindow* window, int iconIndex) const
-    {
-        wxSize size;
-
-        if ( iconIndex != NO_IMAGE )
-        {
-            if ( !m_images.empty() )
-            {
-                size = m_images.at(iconIndex).GetPreferredLogicalSizeFor(window);
-            }
-            else if ( m_imageList )
-            {
-                size = m_imageList->GetBitmap(iconIndex).GetLogicalSize();
-            }
-        }
-
-        return size;
-    }
-
     // Overload provided to facilitate transition from the existing code using
     // wxImageList::GetSize() -- don't use it in the new code.
-    void GetImageLogicalSize(const wxWindow* window, int iconIndex,
+    void GetImageLogicalSize(const wxWindow* window,
                              int& width, int& height) const
     {
-        const wxSize size = GetImageLogicalSize(window, iconIndex);
+        const wxSize size = GetImageLogicalSize(window);
         width = size.x;
         height = size.y;
     }
