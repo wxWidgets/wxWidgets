@@ -824,7 +824,7 @@ void DrawOnDC(wxDC& dc, const int index)
                 gc->DrawText("Difference (on blue)", 0, -dc.FromDIP(15));
                 gc->SetBrush(*wxBLUE_BRUSH);
                 gc->DrawRectangle(0, 0, dc.FromDIP(80), dc.FromDIP(70));
-                
+
                 gc->SetCompositionMode(wxCOMPOSITION_DIFF);
                 gc->SetBrush(wxBrush(*wxWHITE));
                 // White diff Blue = Yellow.

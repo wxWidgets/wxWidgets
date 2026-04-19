@@ -344,6 +344,7 @@
 #include <wx/string.h>
 #include <wx/stringops.h>
 #include <wx/strvararg.h>
+#include <wx/svggc.h>
 #include <wx/sysopt.h>
 #include <wx/systhemectrl.h>
 #include <wx/tarstrm.h>
