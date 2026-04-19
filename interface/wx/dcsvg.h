@@ -156,7 +156,7 @@ public:
     wxSVGFileDC as a parameter instead of a wxDC. Thus the wxSVGFileDC
     is a write-only class.
 
-    Starting with wxWidgets 3.3.4, wxSVGFileDC provides integrated support
+    Starting with wxWidgets 3.3.3, wxSVGFileDC provides integrated support
     for @ref wxGraphicsContext. By calling GetGraphicsContext(), you can
     access a @ref wxSVGGraphicsContext which supports advanced vector
     features such as:
@@ -277,14 +277,14 @@ public:
         All drawing commands until the matching EndLayer() call will be
         composited with this opacity. Layers can be nested.
 
-        @since 3.3.4
+        @since 3.3.3
     */
     void BeginLayer(double opacity);
 
     /**
         Closes the layer opened by the most recent BeginLayer() call.
 
-        @since 3.3.4
+        @since 3.3.3
     */
     void EndLayer();
 
@@ -330,7 +330,7 @@ public:
         Note that any state changes (pen, brush, font) made to the returned
         context are mirrored back to the DC, and vice versa.
 
-        @since 3.3.4
+        @since 3.3.3
     */
     virtual wxGraphicsContext* GetGraphicsContext() const;
 

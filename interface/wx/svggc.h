@@ -36,7 +36,7 @@
 
     @library{wxcore}
     @category{gdi}
-    @since 3.3.4
+    @since 3.3.3
 */
 class wxSVGGraphicsContext : public wxGraphicsContext
 {
@@ -248,7 +248,7 @@ public:
 
     @library{wxcore}
     @category{gdi}
-    @since 3.3.4
+    @since 3.3.3
 */
 class wxSVGGraphicsRenderer : public wxGraphicsRenderer
 {
