@@ -251,6 +251,9 @@ Changes in behaviour which may result in build errors
   configurations using EGL is not available any longer as exposing it doesn't
   make sense when wxGLCanvas may use either EGL or GLX.
 
+- wxWithImages::GetImageLogicalSize() overload taking the icon index didn't
+  make sense and was removed, please use the other overload instead if needed.
+
 
 3.3.3: (released 2026-??-??)
 ----------------------------
