@@ -956,7 +956,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                                 int flags,
                                 wxEllipsizeMode ellipsizeMode)
 {
-    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW", L"DarkMode::LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
