@@ -67,8 +67,10 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl);
 // ---------------------------------------------------------------------------
 
 // The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
-// maximal possible view port extent.
-static const int VIEWPORT_EXTENT = 134217727;
+// maximal possible view port extent. An extra -1 is applied to avoid overflow
+// when computing clip extents for RTL layouts in GM_COMPATIBLE mode.
+// As a result, the effective viewport extent is 2^27-2 instead of 2^27-1.
+static const int VIEWPORT_EXTENT = 134217726;
 
 // ROPs which don't have standard names (see "Ternary Raster Operations" in the
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
@@ -1782,7 +1784,7 @@ namespace
 void ApplyEffectiveScale(double scale, int sign, int *device, int *logical)
 {
     // To reduce rounding errors as much as possible, we try to use the largest
-    // possible extent (2^27-1) for the device space but we must also avoid
+    // possible extent (2^27-2) for the device space but we must also avoid
     // overflowing the int range i.e. ensure that logical extents are less than
     // 2^31 in magnitude. So the minimal scale we can use is 1/16 as for
     // anything smaller VIEWPORT_EXTENT/scale would overflow the int range.
