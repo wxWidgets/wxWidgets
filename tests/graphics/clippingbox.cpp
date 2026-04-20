@@ -1059,7 +1059,7 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
     const int x2 = s_dcSize.x - (x + w);
     // In a mirrored DC, the device origin (0, 0) is always at the top left
     // of the DC under wxMSW, but under wxGTK3 is at the top right.
-#if defined(__WXGTK3__)
+#if defined(__WXGTK3__) || defined(__WXQT__)
     wxPoint pos = dc.DeviceToLogical(x, y);
     wxSize dim = dc.DeviceToLogicalRel(w, h);
 #else
