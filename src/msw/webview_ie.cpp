@@ -23,13 +23,14 @@
 
 #include "wx/msw/missing.h"
 #include "wx/msw/private.h"
-#include "wx/msw/private/webview_ie.h"
 #include "wx/private/jsscriptwrapper.h"
 #include "wx/private/webview.h"
 
 #include <initguid.h>
 #include <exdispid.h>
 #include <mshtml.h>
+
+#include "wx/msw/private/webview_ie.h"
 
 /* These GUID definitions are our own implementation to support interfaces
  * normally in urlmon.h. See include/wx/msw/webview_ie.h
