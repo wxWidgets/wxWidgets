@@ -2158,8 +2158,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     xdest += XLOG2DEV(0);
     ydest += YLOG2DEV(0);
 
-    // Adjust for RTL layout to fix problems during scrolling, see #26266.
-    const int xsrcOrig = GetLayoutDirection() == wxLayout_LeftToRight ? xsrc : -xsrc;
+    const int xsrcOrig = xsrc;
     const int ysrcOrig = ysrc;
 
     // This does the same thing as XLOG2DEV() but for the source DC.
@@ -2392,6 +2391,22 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 {
                     // reflect ysrc
                     ysrc = hDIB - (ysrc + srcHeight);
+                }
+
+                if ( GetLayoutDirection() == wxLayout_RightToLeft )
+                {
+                    // Unlike BitBlt() and StretchBlt(), StretchDIBits() doesn't
+                    // honor the LAYOUT_RTL flag set on the DC, so we have to apply
+                    // mirroring ourselves (see SetLayout() documentation in MSDN).
+                    const LONG wDIB = ds.dsBmih.biWidth;
+                    if ( wDIB > 0 )
+                    {
+                        // reflect wsrc
+                        xsrc = wDIB - (xsrc + srcWidth);
+
+                        xdest += dstWidth;
+                        dstWidth = -dstWidth;
+                    }
                 }
 
                 if ( ::StretchDIBits(GetHdc(),
