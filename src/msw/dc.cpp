@@ -69,7 +69,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl);
 
 // The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
 // maximal possible view port extent.
-static const int VIEWPORT_EXTENT = 134217727;
+static const int VIEWPORT_EXTENT = 134217726;
 
 // ROPs which don't have standard names (see "Ternary Raster Operations" in the
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
