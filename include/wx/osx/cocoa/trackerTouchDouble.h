@@ -70,7 +70,7 @@ WXDLLIMPEXP_CORE
 - (BOOL) GetRotationTouchesMovedInOpposition;
 - (BOOL)   DoLinesIntersect;
 + (double) calcPointsDelta:(CGPoint)point1 :(CGPoint)point2;
-+ (NSPoint) calcPointsDelta:(NSPoint)point1 :(NSPoint)point2;
++ (NSPoint) calcNSPointsDelta:(NSPoint)point1 :(NSPoint)point2;
 + (CGFloat) CGPointCrossProductZComponent:(CGPoint)p1 :(CGPoint)p2;
 
 + (CGPoint) CGPointSubtract:(CGPoint)p1 :(CGPoint)p2;
