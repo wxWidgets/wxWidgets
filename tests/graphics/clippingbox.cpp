@@ -1057,15 +1057,9 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
     dc.Clear();
     // right physical edge becomes left logical edge in a mirrored DC.
     const int x2 = s_dcSize.x - (x + w);
-    // In a mirrored DC, the device origin (0, 0) is always at the top left
-    // of the DC under wxMSW, but under wxGTK3 is at the top right.
-#if defined(__WXGTK3__) || defined(__WXQT__)
+
     wxPoint pos = dc.DeviceToLogical(x, y);
     wxSize dim = dc.DeviceToLogicalRel(w, h);
-#else
-    wxPoint pos = dc.DeviceToLogical(s_dcSize.x-x, y);
-    wxSize dim = dc.DeviceToLogicalRel(-w, h);
-#endif
 
     CheckClipBox(dc, bmp,
                  pos.x, pos.y, dim.x, dim.y,
