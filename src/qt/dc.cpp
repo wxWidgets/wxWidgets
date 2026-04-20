@@ -99,6 +99,9 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     m_qtPenColor = new QColor;
     m_qtBrushColor = new QColor;
     m_ok = true;
+
+    m_matrixCurrent.reset(new QTransform);
+    m_matrixCurrentInv.reset(new QTransform);
 }
 
 wxQtDCImpl::~wxQtDCImpl()
@@ -295,15 +298,14 @@ void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 wxPoint wxQtDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
     QPointF devicePoint(x, y);
-    const auto invTrans  = m_qtPainter->combinedTransform().inverted();
-    QPointF logicalPoint = invTrans.map(devicePoint);
+    QPointF logicalPoint = m_matrixCurrentInv->map(devicePoint);
     return wxPoint(wxRound(logicalPoint.x()), wxRound(logicalPoint.y()));
 }
 
 wxPoint wxQtDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
     QPointF logicalPoint(x, y);
-    QPointF devicePoint = m_qtPainter->combinedTransform().map(logicalPoint);
+    QPointF devicePoint = m_matrixCurrent->map(logicalPoint);
     return wxPoint(wxRound(devicePoint.x()), wxRound(devicePoint.y()));
 }
 
@@ -1095,6 +1097,9 @@ void wxQtDCImpl::ComputeScaleAndOrigin()
                              m_deviceOriginY + m_deviceLocalOriginY - m_logicalOriginY * m_signY * m_scaleY );
 
     matrixCurrent.scale( m_scaleX * m_signX, m_scaleY * m_signY );
+
+    *m_matrixCurrent = matrixCurrent;
+    *m_matrixCurrentInv = matrixCurrent.inverted();
 
     if ( GetLayoutDirection() == wxLayout_RightToLeft )
     {
