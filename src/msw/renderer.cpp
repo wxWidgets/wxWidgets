@@ -972,7 +972,11 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         wxColour textColour = dc.GetTextForeground();
         if (flags & wxCONTROL_SELECTED)
         {
-            textColour = hTheme.GetColour(LVP_LISTITEM, TMT_TEXTCOLOR, LISS_SELECTED);
+            if (wxSystemSettings::GetAppearance().IsDark()) {
+                textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+            } else {
+                textColour = hTheme.GetColour(LVP_LISTITEM, TMT_TEXTCOLOR, LISS_SELECTED);
+            }
         }
         else if (flags & wxCONTROL_DISABLED)
         {
