@@ -575,13 +575,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
                     ? (wxWidgetCocoaImpl*)wxWidgetImpl::FindFromWXWidget(wxOSXGetViewFromResponder(firstResponder))
                     : NULL;
             if ( focused )
-            {
-                // Bricsys change: save last focus so it can be restored when frame is reactivated
-                if(wxFrame* frameParent = wxDynamicCast(wxpeer, wxFrame))
-                    frameParent->SetLastFocus(focused->GetWXPeer());
-                
                 focused->DoNotifyFocusLost();
-            }
 
             // TODO Remove if no problems arise with Popup Windows
 #if 0
