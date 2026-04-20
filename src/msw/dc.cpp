@@ -475,27 +475,18 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
     // 4 corners of the rectangle to create a polygonal clipping region
     // in device coordinates.
     POINT rect[4];
-    {
-        // Forcing LTR layout to calculate _rect_, otherwise the region created
-        // by CreatePolygonRgn() will not be correct in RTL layout.
-        const auto oldLayoutDir = GetLayoutDirection();
-        SetLayoutDirection(wxLayout_LeftToRight);
-
-        wxPoint p = LogicalToDevice(x, y);
-        rect[0].x = p.x;
-        rect[0].y = p.y;
-        p = LogicalToDevice(x + w, y);
-        rect[1].x = p.x;
-        rect[1].y = p.y;
-        p = LogicalToDevice(x + w, y + h);
-        rect[2].x = p.x;
-        rect[2].y = p.y;
-        p = LogicalToDevice(x, y + h);
-        rect[3].x = p.x;
-        rect[3].y = p.y;
-
-        SetLayoutDirection(oldLayoutDir);
-    }
+    wxPoint p = LogicalToDevice(x, y);
+    rect[0].x = p.x;
+    rect[0].y = p.y;
+    p = LogicalToDevice(x + w, y);
+    rect[1].x = p.x;
+    rect[1].y = p.y;
+    p = LogicalToDevice(x + w, y + h);
+    rect[2].x = p.x;
+    rect[2].y = p.y;
+    p = LogicalToDevice(x, y + h);
+    rect[3].x = p.x;
+    rect[3].y = p.y;
 
     HRGN hrgn = ::CreatePolygonRgn(rect, WXSIZEOF(rect), WINDING);
     if ( !hrgn )
