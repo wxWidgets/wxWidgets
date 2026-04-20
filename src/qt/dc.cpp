@@ -1087,10 +1087,19 @@ void wxQtDCImpl::DoDrawPolyPolygon(int n,
 
 void wxQtDCImpl::ComputeScaleAndOrigin()
 {
-    QTransform t;
+    wxDCImpl::ComputeScaleAndOrigin();
+
+    QTransform matrixCurrent;
+
+    matrixCurrent.translate( m_deviceOriginX + m_deviceLocalOriginX - m_logicalOriginX * m_signX * m_scaleX,
+                             m_deviceOriginY + m_deviceLocalOriginY - m_logicalOriginY * m_signY * m_scaleY );
+
+    matrixCurrent.scale( m_scaleX * m_signX, m_scaleY * m_signY );
 
     if ( GetLayoutDirection() == wxLayout_RightToLeft )
     {
+        QTransform matrixRTL;
+
         int w;
 
         if ( m_window )
@@ -1098,24 +1107,14 @@ void wxQtDCImpl::ComputeScaleAndOrigin()
         else
             GetSize(&w, nullptr);
 
-        t.translate(w, 0);
-        t.scale(-1, 1);
+        matrixRTL.translate(w, 0);
+        matrixRTL.scale(-1, 1);
+
+        matrixCurrent *= matrixRTL;
     }
 
-    // First apply device origin
-    t.translate( m_deviceOriginX + m_deviceLocalOriginX,
-                 m_deviceOriginY + m_deviceLocalOriginY );
-
-    // Second, scale
-    m_scaleX = m_logicalScaleX * m_userScaleX;
-    m_scaleY = m_logicalScaleY * m_userScaleY;
-    t.scale( m_scaleX * m_signX, m_scaleY * m_signY );
-
-    // Finally, logical origin
-    t.translate( -m_logicalOriginX, -m_logicalOriginY );
-
     // Apply transform to QPainter, overwriting the previous one
-    m_qtPainter->setWorldTransform(t, false);
+    m_qtPainter->setWorldTransform(matrixCurrent, false);
 
     m_isClipBoxValid = false;
 }
