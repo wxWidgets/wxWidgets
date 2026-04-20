@@ -2935,6 +2935,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     // make a bitmap large enough for any top/left offset
     wxBitmap bmp( sizeRender + sizeOffset );
     wxMemoryDC memDc(bmp);
+    memDc.SetLayoutDirection(GetLayoutDirection());
 
     // default row labels have no background colour so set background
     memDc.SetBackground( wxBrush( canvas->GetBackgroundColour() ) );
@@ -2975,6 +2976,7 @@ void GridFrame::OnRenderPaint( wxPaintEvent& event )
         return;
 
     wxMemoryDC memDc( m_gridBitmap );
+    memDc.SetLayoutDirection(GetLayoutDirection());
 
     dc.Blit( 0, 0,
              m_gridBitmap.GetWidth(),
