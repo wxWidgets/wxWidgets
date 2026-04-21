@@ -207,6 +207,13 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     _rubberSheetStatus          = wxNoState;
     return self;
 }
+// Bricsys change, refs #72649
+- (void)dealloc
+{
+    [inputTrackers release];
+    [super dealloc];
+}
+// Bricsys change end, refs #72649
 
 - (void)viewDidChangeBackingProperties {
     // use the following line if this resize event should have the physical pixel resolution
