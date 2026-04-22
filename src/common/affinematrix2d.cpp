@@ -9,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-
-#if wxUSE_GEOMETRY
-
 #include "wx/affinematrix2d.h"
 #include "wx/math.h"
 
@@ -185,5 +182,3 @@ bool wxAffineMatrix2D::IsIdentity() const
            m_21 == 0 && m_22 == 1 &&
            m_tx == 0 && m_ty == 0;
 }
-
-#endif // wxUSE_GEOMETRY

@@ -12,8 +12,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_GEOMETRY
-
 #include "wx/geometry.h"
 
 struct wxMatrix2D
@@ -121,7 +119,5 @@ protected:
     virtual
         wxPoint2DDouble DoTransformDistance(const wxPoint2DDouble& p) const = 0;
 };
-
-#endif // wxUSE_GEOMETRY
 
 #endif // _WX_AFFINEMATRIX2DBASE_H_
