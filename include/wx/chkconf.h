@@ -1711,24 +1711,6 @@
 #   define wxUSE_ACTIVITYINDICATOR 0
 #endif /* wxUSE_ACTIVITYINDICATOR */
 
-#if wxUSE_GRAPHICS_CONTEXT && !wxUSE_GEOMETRY
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_GRAPHICS_CONTEXT requires wxUSE_GEOMETRY"
-#   else
-#       undef wxUSE_GRAPHICS_CONTEXT
-#       define wxUSE_GRAPHICS_CONTEXT 0
-#   endif
-#endif /* wxUSE_GRAPHICS_CONTEXT */
-
-#if wxUSE_DC_TRANSFORM_MATRIX && !wxUSE_GEOMETRY
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_DC_TRANSFORM_MATRIX requires wxUSE_GEOMETRY"
-#   else
-#       undef wxUSE_DC_TRANSFORM_MATRIX
-#       define wxUSE_DC_TRANSFORM_MATRIX 0
-#   endif
-#endif /* wxUSE_DC_TRANSFORM_MATRIX */
-
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 #   if wxUSE_FONTDLG || wxUSE_FILEDLG || wxUSE_CHOICEDLG

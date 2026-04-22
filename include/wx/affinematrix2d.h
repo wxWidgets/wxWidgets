@@ -12,8 +12,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_GEOMETRY
-
 #include "wx/affinematrix2dbase.h"
 
 // A simple implementation of wxAffineMatrix2DBase interface done entirely in
@@ -45,7 +43,5 @@ protected:
 private:
     wxDouble m_11, m_12, m_21, m_22, m_tx, m_ty;
 };
-
-#endif // wxUSE_GEOMETRY
 
 #endif // _WX_AFFINEMATRIX2D_H_

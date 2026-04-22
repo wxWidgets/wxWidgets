@@ -1205,7 +1205,6 @@ enable_fs_inet
 enable_fs_zip
 enable_fsvolume
 enable_fswatcher
-enable_geometry
 enable_log
 enable_mimetype
 enable_printfposparam
@@ -2184,7 +2183,6 @@ Optional Features:
   --enable-fs_zip         now replaced by fs_archive
   --enable-fsvolume       use wxFSVolume class
   --enable-fswatcher      use wxFileSystemWatcher class
-  --enable-geometry       use geometry class
   --enable-log            use logging system
   --enable-mimetype       use wxMimeTypesManager
   --enable-printfposparam use wxVsnprintf() which supports positional parameters
@@ -7589,35 +7587,6 @@ fi
 
 
           eval "$wx_cv_use_fswatcher"
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-geometry was given.
-if test "${enable_geometry+set}" = set; then :
-  enableval=$enable_geometry;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_geometry='wxUSE_GEOMETRY=yes'
-                          else
-                            wx_cv_use_geometry='wxUSE_GEOMETRY=no'
-                          fi
-
-else
-
-                          wx_cv_use_geometry='wxUSE_GEOMETRY=${'DEFAULT_wxUSE_GEOMETRY":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_geometry"
 
 
           enablestring=
@@ -38051,11 +38020,6 @@ if test "$wxUSE_LOG" = "yes"; then
     fi
 
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS keyboard"
-fi
-
-if test "$wxUSE_GEOMETRY" = "yes"; then
-  $as_echo "#define wxUSE_GEOMETRY 1" >>confdefs.h
-
 fi
 
 if test "$wxUSE_BASE64" = "yes"; then

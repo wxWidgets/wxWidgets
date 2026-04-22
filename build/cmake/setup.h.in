@@ -420,8 +420,6 @@
 
 #cmakedefine01 wxUSE_DISPLAY
 
-#cmakedefine01 wxUSE_GEOMETRY
-
 #cmakedefine01 wxUSE_IMAGLIST
 
 #cmakedefine01 wxUSE_INFOBAR
