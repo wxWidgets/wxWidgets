@@ -595,7 +595,7 @@ void DrawOnDC(wxDC& dc, const int index)
                               dc.FromDIP(100), dc.FromDIP(70));
 
             // Transparent rounded rectangle.
-            gc->SetBrush(wxBrush("DARK ORCHID", wxBRUSHSTYLE_TRANSPARENT));
+            gc->SetBrush(*wxTRANSPARENT_BRUSH);
             gc->DrawRoundedRectangle(dc.FromDIP(50), dc.FromDIP(50),
                                      dc.FromDIP(100), dc.FromDIP(70),
                                      dc.FromDIP(20));
