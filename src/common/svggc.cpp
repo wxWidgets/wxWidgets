@@ -24,6 +24,7 @@
 #include "wx/svggc.h"
 #include "wx/dcsvg.h"
 #include "wx/private/graphics.h"
+#include "wx/private/svg.h"
 
 #include <cmath>
 #include <vector>
@@ -614,22 +615,22 @@ wxString wxSVGGraphicsPathData::GetDString() const
         {
             case wxSVGPathSegment::MoveSegment:
                 d += wxString::Format(wxS("M %s %s "),
-                    wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
+                    wxSVG::NumStr(s.x), wxSVG::NumStr(s.y));
                 break;
             case wxSVGPathSegment::LineSegment:
                 d += wxString::Format(wxS("L %s %s "),
-                    wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
+                    wxSVG::NumStr(s.x), wxSVG::NumStr(s.y));
                 break;
             case wxSVGPathSegment::CurveSegment:
                 d += wxString::Format(wxS("C %s %s %s %s %s %s "),
-                    wxSVGFileDCImpl::NumStr(s.x1), wxSVGFileDCImpl::NumStr(s.y1),
-                    wxSVGFileDCImpl::NumStr(s.x2), wxSVGFileDCImpl::NumStr(s.y2),
-                    wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
+                    wxSVG::NumStr(s.x1), wxSVG::NumStr(s.y1),
+                    wxSVG::NumStr(s.x2), wxSVG::NumStr(s.y2),
+                    wxSVG::NumStr(s.x), wxSVG::NumStr(s.y));
                 break;
             case wxSVGPathSegment::QuadCurveSegment:
                 d += wxString::Format(wxS("Q %s %s %s %s "),
-                    wxSVGFileDCImpl::NumStr(s.x1), wxSVGFileDCImpl::NumStr(s.y1),
-                    wxSVGFileDCImpl::NumStr(s.x), wxSVGFileDCImpl::NumStr(s.y));
+                    wxSVG::NumStr(s.x1), wxSVG::NumStr(s.y1),
+                    wxSVG::NumStr(s.x), wxSVG::NumStr(s.y));
                 break;
             case wxSVGPathSegment::ArcSegment:
             {
@@ -662,13 +663,13 @@ wxString wxSVGGraphicsPathData::GetDString() const
                 {
                     const wxDouble ox = s.x - s.r, oy = s.y;
                     d += wxString::Format(wxS("A %s %s 0 1 %d %s %s "),
-                        wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
+                        wxSVG::NumStr(s.r), wxSVG::NumStr(s.r),
                         s.clockwise ? 1 : 0,
-                        wxSVGFileDCImpl::NumStr(s.x + s.r), wxSVGFileDCImpl::NumStr(s.y));
+                        wxSVG::NumStr(s.x + s.r), wxSVG::NumStr(s.y));
                     d += wxString::Format(wxS("A %s %s 0 1 %d %s %s "),
-                        wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
+                        wxSVG::NumStr(s.r), wxSVG::NumStr(s.r),
                         s.clockwise ? 1 : 0,
-                        wxSVGFileDCImpl::NumStr(ox), wxSVGFileDCImpl::NumStr(oy));
+                        wxSVG::NumStr(ox), wxSVG::NumStr(oy));
                 }
                 else
                 {
@@ -676,9 +677,9 @@ wxString wxSVGGraphicsPathData::GetDString() const
                     const wxDouble ey = s.y + s.r * std::sin(s.endAngle);
                     const int large = sweep > M_PI ? 1 : 0;
                     d += wxString::Format(wxS("A %s %s 0 %d %d %s %s "),
-                        wxSVGFileDCImpl::NumStr(s.r), wxSVGFileDCImpl::NumStr(s.r),
+                        wxSVG::NumStr(s.r), wxSVG::NumStr(s.r),
                         large, s.clockwise ? 1 : 0,
-                        wxSVGFileDCImpl::NumStr(ex), wxSVGFileDCImpl::NumStr(ey));
+                        wxSVG::NumStr(ex), wxSVG::NumStr(ey));
                 }
                 break;
             }
@@ -1274,12 +1275,12 @@ wxString wxSVGGraphicsContext::GetCurrentTransformAttr() const
     m_transform.Get(&a, &b, &c, &d, &tx, &ty);
     return wxString::Format(
         wxS(" transform=\"matrix(%s,%s,%s,%s,%s,%s)\""),
-        wxSVGFileDCImpl::NumStr(a),
-        wxSVGFileDCImpl::NumStr(b),
-        wxSVGFileDCImpl::NumStr(c),
-        wxSVGFileDCImpl::NumStr(d),
-        wxSVGFileDCImpl::NumStr(tx),
-        wxSVGFileDCImpl::NumStr(ty));
+        wxSVG::NumStr(a),
+        wxSVG::NumStr(b),
+        wxSVG::NumStr(c),
+        wxSVG::NumStr(d),
+        wxSVG::NumStr(tx),
+        wxSVG::NumStr(ty));
 }
 
 void wxSVGGraphicsContext::AccumulatePathBounds(wxGraphicsPathData* data)
@@ -1321,8 +1322,8 @@ void wxSVGGraphicsContext::StrokePath(const wxGraphicsPath& path)
 
     if ( stroke.empty() )
     {
-        stroke = wxSVGFileDCImpl::GetPenStroke(m_currentPen.GetColour(),
-                                               m_currentPen.GetStyle());
+        stroke = wxSVG::GetPenStroke(m_currentPen.GetColour(),
+                                     m_currentPen.GetStyle());
     }
 
     const wxString transform = GetCurrentTransformAttr();
@@ -1356,8 +1357,8 @@ void wxSVGGraphicsContext::FillPath(const wxGraphicsPath& path, wxPolygonFillMod
     {
         fill = m_currentBrush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT
             ? wxString(wxS("fill=\"none\""))
-            : wxSVGFileDCImpl::GetBrushFill(m_currentBrush.GetColour(),
-                                            m_currentBrush.GetStyle());
+            : wxSVG::GetBrushFill(m_currentBrush.GetColour(),
+                                  m_currentBrush.GetStyle());
     }
 
     const wxString transform = GetCurrentTransformAttr();

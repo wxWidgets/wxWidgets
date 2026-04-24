@@ -30,6 +30,7 @@
 #include "wx/sstream.h"
 #include "wx/scopedarray.h"
 #include "wx/private/rescale.h"
+#include "wx/private/svg.h"
 
 #if wxUSE_MARKUP
     #include "wx/private/markupparser.h"
@@ -239,7 +240,10 @@ size_t wxSVGFileDCImpl::m_gradientUniqueId = 0;
 // wxSVGFileDCImpl - string helpers (static)
 // ----------------------------------------------------------
 
-wxString wxSVGFileDCImpl::NumStr(double f)
+namespace wxSVG
+{
+
+wxString NumStr(double f)
 {
     // Handle this case specially to avoid generating "-0.00" in the output.
     if ( f == 0 )
@@ -248,12 +252,12 @@ wxString wxSVGFileDCImpl::NumStr(double f)
     return wxString::FromCDouble(f, 2);
 }
 
-wxString wxSVGFileDCImpl::NumStr(float f)
+wxString NumStr(float f)
 {
     return NumStr(double(f));
 }
 
-wxString wxSVGFileDCImpl::Col2SVG(wxColour c, float* opacity)
+wxString Col2SVG(wxColour c, float* opacity)
 {
     if ( c.Alpha() != wxALPHA_OPAQUE )
     {
@@ -273,7 +277,7 @@ wxString wxSVGFileDCImpl::Col2SVG(wxColour c, float* opacity)
     return c.GetAsString(wxC2S_HTML_SYNTAX);
 }
 
-wxString wxSVGFileDCImpl::GetPenStroke(const wxColour& c, int style)
+wxString GetPenStroke(const wxColour& c, int style)
 {
     float opacity;
     wxString s = wxString::Format(wxS("stroke=\"%s\""), Col2SVG(c, &opacity));
@@ -299,7 +303,7 @@ wxString wxSVGFileDCImpl::GetPenStroke(const wxColour& c, int style)
     return s;
 }
 
-wxString wxSVGFileDCImpl::GetBrushFill(const wxColour& c, int style)
+wxString GetBrushFill(const wxColour& c, int style)
 {
     float opacity;
     wxString s = wxString::Format(wxS("fill=\"%s\""), Col2SVG(c, &opacity));
@@ -325,6 +329,8 @@ wxString wxSVGFileDCImpl::GetBrushFill(const wxColour& c, int style)
 
     return s;
 }
+
+} // namespace wxSVG
 
 wxSVGFileDCImpl::wxSVGFileDCImpl(wxSVGFileDC* owner, const wxString& filename,
                                  int width, int height, double dpi, const wxString& title)
@@ -377,7 +383,7 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
     s += wxS("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n\n");
     s += wxS("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
     s += wxString::Format(wxS(" width=\"%scm\" height=\"%scm\" viewBox=\"0 0 %d %d\">\n"),
-                          NumStr(m_width / m_dpi * 2.54), NumStr(m_height / m_dpi * 2.54), m_width, m_height);
+                          wxSVG::NumStr(m_width / m_dpi * 2.54), wxSVG::NumStr(m_height / m_dpi * 2.54), m_width, m_height);
     s += wxString::Format(wxS("<title>%s</title>\n"),
 #if wxUSE_MARKUP
                           wxMarkupParser::Quote(title)
@@ -485,7 +491,7 @@ void wxSVGFileDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
     wxString s;
     s = wxString::Format(wxS("  <path d=\"M%d %d L%d %d\" %s %s/>\n"),
-        x1, y1, x2, y2, GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
+        x1, y1, x2, y2, wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen));
 
     write(s);
 
@@ -514,7 +520,7 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
         }
 
         s += wxString::Format(wxS("\" fill=\"none\" %s %s/>\n"),
-            GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
+            wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen));
 
         write(s);
     }
@@ -539,7 +545,7 @@ void wxSVGFileDCImpl::DoDrawSpline(const wxPointList* points)
     wxString s = "  <path d=\"";
 
     s += wxString::Format("M %s %s L %s %s",
-                          NumStr(p1.m_x), NumStr(p1.m_y), NumStr(p3.m_x), NumStr(p3.m_y));
+                          wxSVG::NumStr(p1.m_x), wxSVG::NumStr(p1.m_y), wxSVG::NumStr(p3.m_x), wxSVG::NumStr(p3.m_y));
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
     {
         CalcBoundingBox(wxRound(p1.m_x), wxRound(p1.m_y));
@@ -560,7 +566,7 @@ void wxSVGFileDCImpl::DoDrawSpline(const wxPointList* points)
         wxPoint2DDouble c2 = ((p1 * 2.0) + p3) / 3.0;
 
         s += wxString::Format(" C %s %s, %s %s, %s %s",
-             NumStr(c1.m_x), NumStr(c1.m_y), NumStr(c2.m_x), NumStr(c2.m_y), NumStr(p3.m_x), NumStr(p3.m_y));
+             wxSVG::NumStr(c1.m_x), wxSVG::NumStr(c1.m_y), wxSVG::NumStr(c2.m_x), wxSVG::NumStr(c2.m_y), wxSVG::NumStr(p3.m_x), wxSVG::NumStr(p3.m_y));
 
         if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         {
@@ -568,12 +574,12 @@ void wxSVGFileDCImpl::DoDrawSpline(const wxPointList* points)
             CalcBoundingBox(wxRound(p3.m_x), wxRound(p3.m_y));
         }
     }
-    s += wxString::Format(" L %s %s", NumStr(p2.m_x), NumStr(p2.m_y));
+    s += wxString::Format(" L %s %s", wxSVG::NumStr(p2.m_x), wxSVG::NumStr(p2.m_y));
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(wxRound(p2.m_x), wxRound(p2.m_y));
 
     s += wxString::Format("\" fill=\"none\" %s %s/>\n",
-                          GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
+                          wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen));
     write(s);
 }
 #endif // wxUSE_SPLINES
@@ -652,11 +658,11 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     style += wxString::Format(wxS("font-family=\"%s\" "), m_font.GetFaceName());
     style += wxString::Format(wxS("font-weight=\"%d\" "), m_font.GetWeight());
     style += wxString::Format(wxS("font-style=\"%s\" "), fontstyle);
-    style += wxString::Format(wxS("font-size=\"%spt\" "), NumStr(m_font.GetFractionalPointSize()));
+    style += wxString::Format(wxS("font-size=\"%spt\" "), wxSVG::NumStr(m_font.GetFractionalPointSize()));
     style += wxString::Format(wxS("text-decoration=\"%s\" "), textDecoration);
     style += wxString::Format(wxS("%s %s stroke-width=\"0\" "),
-                              GetBrushFill(m_textForegroundColour),
-                              GetPenStroke(m_textForegroundColour));
+                              wxSVG::GetBrushFill(m_textForegroundColour),
+                              wxSVG::GetPenStroke(m_textForegroundColour));
 
     // "xml:space" is deprecated in favour of "white-space: pre", keep it for now to
     // support SVG viewers that do not support the new tag
@@ -682,12 +688,12 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
             // draw text background
             const wxString rectStyle = wxString::Format(
                 wxS("%s %s stroke-width=\"1\""),
-                GetBrushFill(m_textBackgroundColour),
-                GetPenStroke(m_textBackgroundColour));
+                wxSVG::GetBrushFill(m_textBackgroundColour),
+                wxSVG::GetPenStroke(m_textBackgroundColour));
 
             wxString rectTransform = wxString::Format(
                 wxS("rotate(%s %s %s)"),
-                NumStr(-angle), NumStr(xRect), NumStr(yRect));
+                wxSVG::NumStr(-angle), wxSVG::NumStr(xRect), wxSVG::NumStr(yRect));
 
 #if wxUSE_GRAPHICS_CONTEXT
             if ( m_gcTransform.StartsWith(wxS(" transform=\"")) )
@@ -698,15 +704,15 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
 
             s = wxString::Format(
                 wxS("  <rect x=\"%s\" y=\"%s\" width=\"%d\" height=\"%d\" %s %s transform=\"%s\"/>\n"),
-                NumStr(xRect), NumStr(yRect), ww, hh,
-                GetRenderMode(m_renderingMode), rectStyle, rectTransform);
+                wxSVG::NumStr(xRect), wxSVG::NumStr(yRect), ww, hh,
+                wxSVG::GetRenderMode(m_renderingMode), rectStyle, rectTransform);
 
             write(s);
         }
 
         wxString transform = wxString::Format(
             wxS("rotate(%s %s %s)"),
-            NumStr(-angle), NumStr(xText), NumStr(yText));
+            wxSVG::NumStr(-angle), wxSVG::NumStr(xText), wxSVG::NumStr(yText));
 
 #if wxUSE_GRAPHICS_CONTEXT
         if ( m_gcTransform.StartsWith(wxS(" transform=\"")) )
@@ -717,7 +723,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
 
         s = wxString::Format(
             wxS("  <text x=\"%s\" y=\"%s\" textLength=\"%d\" %s transform=\"%s\">%s</text>\n"),
-            NumStr(xText), NumStr(yText), ww, style, transform,
+            wxSVG::NumStr(xText), wxSVG::NumStr(yText), ww, style, transform,
 #if wxUSE_MARKUP
             wxMarkupParser::Quote(line)
 #else
@@ -740,8 +746,8 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     wxString s;
 
     s = wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" %s %s %s/>\n"),
-        x, y, width, height, NumStr(radius),
-        GetRenderMode(m_renderingMode), GetPenPattern(m_pen), GetBrushPattern(m_brush));
+        x, y, width, height, wxSVG::NumStr(radius),
+        wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen), wxSVG::GetBrushPattern(m_brush));
 
     write(s);
 
@@ -767,7 +773,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     }
 
     s += wxString::Format(wxS("\" %s %s %s fill-rule=\"%s\"/>\n"),
-        GetRenderMode(m_renderingMode), GetPenPattern(m_pen), GetBrushPattern(m_brush),
+        wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen), wxSVG::GetBrushPattern(m_brush),
         fillStyle == wxODDEVEN_RULE ? wxS("evenodd") : wxS("nonzero"));
 
     write(s);
@@ -824,8 +830,8 @@ void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord
 
     wxString s;
     s = wxString::Format(wxS("  <ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" %s %s"),
-        NumStr(x + rw), NumStr(y + rh), NumStr(rw), NumStr(rh),
-        GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
+        wxSVG::NumStr(x + rw), wxSVG::NumStr(y + rh), wxSVG::NumStr(rw), wxSVG::NumStr(rh),
+        wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen));
     s += wxS("/>\n");
 
     write(s);
@@ -879,8 +885,8 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         // drawing full circle fails with default arc. Draw two half arcs instead.
         s = wxString::Format(wxS("  <path d=\"M%d %d a%s %s 0 %d %d %s 0 a%s %s 0 %d %d %s 0"),
             x1, y1,
-            NumStr(r1), NumStr(r2), fArc, fSweep, NumStr( r1 * 2),
-            NumStr(r1), NumStr(r2), fArc, fSweep, NumStr(-r1 * 2));
+            wxSVG::NumStr(r1), wxSVG::NumStr(r2), fArc, fSweep, wxSVG::NumStr( r1 * 2),
+            wxSVG::NumStr(r1), wxSVG::NumStr(r2), fArc, fSweep, wxSVG::NumStr(-r1 * 2));
     }
     else
     {
@@ -890,11 +896,11 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
             line = wxString::Format(wxS("L%d %d z"), xc, yc);
 
         s = wxString::Format(wxS("  <path d=\"M%d %d A%s %s 0 %d %d %d %d %s"),
-            x1, y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, line);
+            x1, y1, wxSVG::NumStr(r1), wxSVG::NumStr(r2), fArc, fSweep, x2, y2, line);
     }
 
     s += wxString::Format(wxS("\" %s %s/>\n"),
-        GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
+        wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen));
 
     write(s);
 
@@ -964,15 +970,15 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
         // Drawing full circle fails with default arc. Draw two half arcs instead.
         fArc = 1;
         arcPath = wxString::Format(wxS("  <path d=\"M%d %s a%s %s 0 %d %d %s 0 a%s %s 0 %d %d %s 0"),
-            x, NumStr(y + ry),
-            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr( rx * 2),
-            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(-rx * 2));
+            x, wxSVG::NumStr(y + ry),
+            wxSVG::NumStr(rx), wxSVG::NumStr(ry), fArc, fSweep, wxSVG::NumStr( rx * 2),
+            wxSVG::NumStr(rx), wxSVG::NumStr(ry), fArc, fSweep, wxSVG::NumStr(-rx * 2));
     }
     else
     {
         arcPath = wxString::Format(wxS("  <path d=\"M%s %s A%s %s 0 %d %d %s %s"),
-            NumStr(xs), NumStr(ys),
-            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(xe), NumStr(ye));
+            wxSVG::NumStr(xs), wxSVG::NumStr(ys),
+            wxSVG::NumStr(rx), wxSVG::NumStr(ry), fArc, fSweep, wxSVG::NumStr(xe), wxSVG::NumStr(ye));
     }
 
     // Workaround so SVG does not draw an extra line from the centre of the drawn arc
@@ -986,8 +992,8 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
 
         wxString arcFill = arcPath;
         arcFill += wxString::Format(wxS(" L%s %s z\" %s %s/>\n"),
-            NumStr(xc), NumStr(yc),
-            GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
+            wxSVG::NumStr(xc), wxSVG::NumStr(yc),
+            wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen));
         write(arcFill);
     }
 
@@ -995,7 +1001,7 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     NewGraphicsIfNeeded();
 
     wxString arcLine = wxString::Format(wxS("%s\" %s %s/>\n"),
-        arcPath, GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
+        arcPath, wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen));
     write(arcLine);
 
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
@@ -1011,8 +1017,8 @@ void wxSVGFileDCImpl::DoGradientFillLinear(const wxRect& rect,
 
     float initOpacity;
     float destOpacity;
-    wxString initCol = Col2SVG(initialColour, &initOpacity);
-    wxString destCol = Col2SVG(destColour, &destOpacity);
+    wxString initCol = wxSVG::Col2SVG(initialColour, &initOpacity);
+    wxString destCol = wxSVG::Col2SVG(destColour, &destOpacity);
 
     const int x1 = ((nDirection & wxLEFT) > 0) ? 100 : 0;
     const int y1 = ((nDirection & wxUP) > 0) ? 100 : 0;
@@ -1024,15 +1030,15 @@ void wxSVGFileDCImpl::DoGradientFillLinear(const wxRect& rect,
     s += wxString::Format(wxS("    <linearGradient id=\"gradient%zu\" x1=\"%d%%\" y1=\"%d%%\" x2=\"%d%%\" y2=\"%d%%\">\n"),
         m_gradientUniqueId, x1, y1, x2, y2);
     s += wxString::Format(wxS("      <stop offset=\"0%%\" stop-color=\"%s\" stop-opacity=\"%s\"/>\n"),
-        initCol, NumStr(initOpacity));
+        initCol, wxSVG::NumStr(initOpacity));
     s += wxString::Format(wxS("      <stop offset=\"100%%\" stop-color=\"%s\" stop-opacity=\"%s\"/>\n"),
-        destCol, NumStr(destOpacity));
+        destCol, wxSVG::NumStr(destOpacity));
     s += wxS("    </linearGradient>\n");
     s += wxS("  </defs>\n");
 
     s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"url(#gradient%zu)\" %s %s %s/>\n"),
         rect.x, rect.y, rect.width, rect.height, m_gradientUniqueId,
-        GetRenderMode(m_renderingMode), GetPenPattern(m_pen), GetBrushPattern(m_brush));
+        wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen), wxSVG::GetBrushPattern(m_brush));
 
     m_gradientUniqueId++;
 
@@ -1051,8 +1057,8 @@ void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
 
     float initOpacity;
     float destOpacity;
-    wxString initCol = Col2SVG(initialColour, &initOpacity);
-    wxString destCol = Col2SVG(destColour, &destOpacity);
+    wxString initCol = wxSVG::Col2SVG(initialColour, &initOpacity);
+    wxString destCol = wxSVG::Col2SVG(destColour, &destOpacity);
 
     const double cx = circleCenter.x * 100.0 / rect.GetWidth();
     const double cy = circleCenter.y * 100.0 / rect.GetHeight();
@@ -1062,17 +1068,17 @@ void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
     wxString s;
     s += wxS("  <defs>\n");
     s += wxString::Format(wxS("    <radialGradient id=\"gradient%zu\" cx=\"%s%%\" cy=\"%s%%\" fx=\"%s%%\" fy=\"%s%%\">\n"),
-        m_gradientUniqueId, NumStr(cx), NumStr(cy), NumStr(fx), NumStr(fd));
+        m_gradientUniqueId, wxSVG::NumStr(cx), wxSVG::NumStr(cy), wxSVG::NumStr(fx), wxSVG::NumStr(fd));
     s += wxString::Format(wxS("      <stop offset=\"0%%\" stop-color=\"%s\" stop-opacity=\"%s\" />\n"),
-        initCol, NumStr(initOpacity));
+        initCol, wxSVG::NumStr(initOpacity));
     s += wxString::Format(wxS("      <stop offset=\"100%%\" stop-color=\"%s\" stop-opacity=\"%s\" />\n"),
-        destCol, NumStr(destOpacity));
+        destCol, wxSVG::NumStr(destOpacity));
     s += wxS("    </radialGradient>\n");
     s += wxS("  </defs>\n");
 
     s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"url(#gradient%zu)\" %s %s %s/>\n"),
         rect.x, rect.y, rect.width, rect.height, m_gradientUniqueId,
-        GetRenderMode(m_renderingMode), GetPenPattern(m_pen), GetBrushPattern(m_brush));
+        wxSVG::GetRenderMode(m_renderingMode), wxSVG::GetPenPattern(m_pen), wxSVG::GetBrushPattern(m_brush));
 
     m_gradientUniqueId++;
 
@@ -1200,12 +1206,12 @@ void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string,
 
 wxCoord wxSVGFileDCImpl::GetCharHeight() const
 {
-    return GetTextMetricDC(m_font).GetCharHeight();
+    return wxSVG::GetTextMetricDC(m_font).GetCharHeight();
 }
 
 wxCoord wxSVGFileDCImpl::GetCharWidth() const
 {
-    return GetTextMetricDC(m_font).GetCharWidth();
+    return wxSVG::GetTextMetricDC(m_font).GetCharWidth();
 }
 
 void wxSVGFileDCImpl::ComputeScaleAndOrigin()
@@ -1247,7 +1253,7 @@ void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
 
     m_graphics_changed = true;
 
-    wxString pattern = CreateBrushFill(m_brush, m_renderingMode);
+    wxString pattern = wxSVG::CreateBrushFill(m_brush, m_renderingMode);
     if ( !pattern.empty() )
     {
         NewGraphicsIfNeeded();
@@ -1309,7 +1315,7 @@ wxString wxSVGFileDCImpl::GetGraphicsBrushFill(const wxGraphicsBrush& brush)
         wxDouble a, b, c, d, tx, ty;
         matrix.Get(&a, &b, &c, &d, &tx, &ty);
         transform = wxString::Format(wxS(" gradientTransform=\"matrix(%s %s %s %s %s %s)\""),
-            NumStr(a), NumStr(b), NumStr(c), NumStr(d), NumStr(tx), NumStr(ty));
+            wxSVG::NumStr(a), wxSVG::NumStr(b), wxSVG::NumStr(c), wxSVG::NumStr(d), wxSVG::NumStr(tx), wxSVG::NumStr(ty));
     }
 
     if ( data->IsRadial() )
@@ -1317,14 +1323,14 @@ wxString wxSVGFileDCImpl::GetGraphicsBrushFill(const wxGraphicsBrush& brush)
         wxDouble startX, startY, endX, endY, radius;
         data->GetRadialParameters(&startX, &startY, &endX, &endY, &radius);
         s += wxString::Format(wxS("    <radialGradient id=\"%s\" cx=\"%s\" cy=\"%s\" r=\"%s\" fx=\"%s\" fy=\"%s\"%s gradientUnits=\"userSpaceOnUse\">\n"),
-            gradId, NumStr(endX), NumStr(endY), NumStr(radius), NumStr(startX), NumStr(startY), transform);
+            gradId, wxSVG::NumStr(endX), wxSVG::NumStr(endY), wxSVG::NumStr(radius), wxSVG::NumStr(startX), wxSVG::NumStr(startY), transform);
     }
     else
     {
         wxDouble x1, y1, x2, y2;
         data->GetLinearParameters(&x1, &y1, &x2, &y2);
         s += wxString::Format(wxS("    <linearGradient id=\"%s\" x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\"%s gradientUnits=\"userSpaceOnUse\">\n"),
-            gradId, NumStr(x1), NumStr(y1), NumStr(x2), NumStr(y2), transform);
+            gradId, wxSVG::NumStr(x1), wxSVG::NumStr(y1), wxSVG::NumStr(x2), wxSVG::NumStr(y2), transform);
     }
 
     const wxGraphicsGradientStops& stops = data->GetStops();
@@ -1332,9 +1338,9 @@ wxString wxSVGFileDCImpl::GetGraphicsBrushFill(const wxGraphicsBrush& brush)
     {
         wxGraphicsGradientStop stop = stops.Item(static_cast<unsigned>(i));
         float opacity;
-        wxString col = Col2SVG(stop.GetColour(), &opacity);
+        wxString col = wxSVG::Col2SVG(stop.GetColour(), &opacity);
         s += wxString::Format(wxS("      <stop offset=\"%s%%\" stop-color=\"%s\" stop-opacity=\"%s\"/>\n"),
-            NumStr(stop.GetPosition() * 100), col, NumStr(opacity));
+            wxSVG::NumStr(stop.GetPosition() * 100), col, wxSVG::NumStr(opacity));
     }
 
     if ( data->IsRadial() )
@@ -1371,18 +1377,18 @@ wxString wxSVGFileDCImpl::GetGraphicsPenStroke(const wxGraphicsPen& pen)
         wxDouble a, b, c, d, tx, ty;
         matrix.Get(&a, &b, &c, &d, &tx, &ty);
         transform = wxString::Format(wxS(" gradientTransform=\"matrix(%s %s %s %s %s %s)\""),
-            NumStr(a), NumStr(b), NumStr(c), NumStr(d), NumStr(tx), NumStr(ty));
+            wxSVG::NumStr(a), wxSVG::NumStr(b), wxSVG::NumStr(c), wxSVG::NumStr(d), wxSVG::NumStr(tx), wxSVG::NumStr(ty));
     }
 
     if ( info.GetGradientType() == wxGRADIENT_RADIAL )
     {
         s += wxString::Format(wxS("    <radialGradient id=\"%s\" cx=\"%s\" cy=\"%s\" r=\"%s\" fx=\"%s\" fy=\"%s\"%s gradientUnits=\"userSpaceOnUse\">\n"),
-            gradId, NumStr(info.GetEndX()), NumStr(info.GetEndY()), NumStr(info.GetRadius()), NumStr(info.GetStartX()), NumStr(info.GetStartY()), transform);
+            gradId, wxSVG::NumStr(info.GetEndX()), wxSVG::NumStr(info.GetEndY()), wxSVG::NumStr(info.GetRadius()), wxSVG::NumStr(info.GetStartX()), wxSVG::NumStr(info.GetStartY()), transform);
     }
     else
     {
         s += wxString::Format(wxS("    <linearGradient id=\"%s\" x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\"%s gradientUnits=\"userSpaceOnUse\">\n"),
-            gradId, NumStr(info.GetX1()), NumStr(info.GetY1()), NumStr(info.GetX2()), NumStr(info.GetY2()), transform);
+            gradId, wxSVG::NumStr(info.GetX1()), wxSVG::NumStr(info.GetY1()), wxSVG::NumStr(info.GetX2()), wxSVG::NumStr(info.GetY2()), transform);
     }
 
     const wxGraphicsGradientStops& stops = info.GetStops();
@@ -1390,9 +1396,9 @@ wxString wxSVGFileDCImpl::GetGraphicsPenStroke(const wxGraphicsPen& pen)
     {
         wxGraphicsGradientStop stop = stops.Item(static_cast<unsigned>(i));
         float opacity;
-        wxString col = Col2SVG(stop.GetColour(), &opacity);
+        wxString col = wxSVG::Col2SVG(stop.GetColour(), &opacity);
         s += wxString::Format(wxS("      <stop offset=\"%s%%\" stop-color=\"%s\" stop-opacity=\"%s\"/>\n"),
-            NumStr(stop.GetPosition() * 100), col, NumStr(opacity));
+            wxSVG::NumStr(stop.GetPosition() * 100), col, wxSVG::NumStr(opacity));
     }
 
     if ( info.GetGradientType() == wxGRADIENT_RADIAL )
@@ -1440,20 +1446,20 @@ void wxSVGFileDCImpl::DoStartNewGraphics()
 #endif
 
     if ( brushFill.empty() )
-        brushFill = GetBrushFill(m_brush.GetColour(), m_brush.GetStyle());
+        brushFill = wxSVG::GetBrushFill(m_brush.GetColour(), m_brush.GetStyle());
 
     if ( penStroke.empty() )
-        penStroke = GetPenStroke(m_pen.GetColour(), m_pen.GetStyle());
+        penStroke = wxSVG::GetPenStroke(m_pen.GetColour(), m_pen.GetStyle());
 
     s = wxString::Format(wxS("<g %s %s %s %s transform=\"translate(%d %d) scale(%s %s)\">\n"),
-        GetPenStyle(m_pen),
+        wxSVG::GetPenStyle(m_pen),
         brushFill,
         penStroke,
         style,
         (m_deviceOriginX - m_logicalOriginX) * m_signX,
         (m_deviceOriginY - m_logicalOriginY) * m_signY,
-        NumStr(m_scaleX * m_signX),
-        NumStr(m_scaleY * m_signY));
+        wxSVG::NumStr(m_scaleX * m_signX),
+        wxSVG::NumStr(m_scaleY * m_signY));
 
     write(s);
 }
@@ -1536,7 +1542,7 @@ void wxSVGFileDCImpl::BeginLayer(double opacity)
     write(wxS("</g>\n"));
 
     // Open the layer group.
-    write(wxString::Format(wxS("<g opacity=\"%s\">\n"), NumStr(opacity)));
+    write(wxString::Format(wxS("<g opacity=\"%s\">\n"), wxSVG::NumStr(opacity)));
 
     ++m_layerDepth;
 
@@ -1640,7 +1646,10 @@ void wxSVGFileDCImpl::write(const wxString& s)
     m_svgDocument += s;
 }
 
-wxString wxSVGFileDCImpl::GetPenPattern(const wxPen& pen)
+namespace wxSVG
+{
+
+wxString GetPenPattern(const wxPen& pen)
 {
     wxString s;
 
@@ -1705,7 +1714,7 @@ wxString wxSVGFileDCImpl::GetPenPattern(const wxPen& pen)
     return s;
 }
 
-wxString wxSVGFileDCImpl::GetPenStyle(const wxPen& pen)
+wxString GetPenStyle(const wxPen& pen)
 {
     wxString penStyle;
 
@@ -1742,7 +1751,7 @@ wxString wxSVGFileDCImpl::GetPenStyle(const wxPen& pen)
     return penStyle;
 }
 
-wxString wxSVGFileDCImpl::GetBrushStyleName(const wxBrush& brush)
+wxString GetBrushStyleName(const wxBrush& brush)
 {
     wxString brushStyle;
 
@@ -1779,12 +1788,12 @@ wxString wxSVGFileDCImpl::GetBrushStyleName(const wxBrush& brush)
     }
 
     if ( !brushStyle.empty() )
-        brushStyle += wxString::Format(wxS("%s%02X"), wxSVGFileDCImpl::Col2SVG(brush.GetColour()).substr(1), brush.GetColour().Alpha());
+        brushStyle += wxString::Format(wxS("%s%02X"), Col2SVG(brush.GetColour()).substr(1), brush.GetColour().Alpha());
 
     return brushStyle;
 }
 
-wxString wxSVGFileDCImpl::GetBrushPattern(const wxBrush& brush)
+wxString GetBrushPattern(const wxBrush& brush)
 {
     wxString s;
     wxString brushStyle = GetBrushStyleName(brush);
@@ -1795,7 +1804,7 @@ wxString wxSVGFileDCImpl::GetBrushPattern(const wxBrush& brush)
     return s;
 }
 
-wxString wxSVGFileDCImpl::GetRenderMode(const wxSVGShapeRenderingMode style)
+wxString GetRenderMode(wxSVGShapeRenderingMode style)
 {
     wxString mode;
     switch (style)
@@ -1818,7 +1827,7 @@ wxString wxSVGFileDCImpl::GetRenderMode(const wxSVGShapeRenderingMode style)
     return s;
 }
 
-wxString wxSVGFileDCImpl::CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
+wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
 {
     wxString s;
     wxString patternName = GetBrushStyleName(brush);
@@ -1851,7 +1860,7 @@ wxString wxSVGFileDCImpl::CreateBrushFill(const wxBrush& brush, wxSVGShapeRender
         }
 
         float opacity;
-        wxString brushColourStr = wxSVGFileDCImpl::Col2SVG(brush.GetColour(), &opacity);
+        wxString brushColourStr = Col2SVG(brush.GetColour(), &opacity);
         wxString brushStrokeStr = wxS("stroke-width=\"1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"");
 
         s += wxString::Format(wxS("  <pattern id=\"%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
@@ -1864,7 +1873,7 @@ wxString wxSVGFileDCImpl::CreateBrushFill(const wxBrush& brush, wxSVGShapeRender
     return s;
 }
 
-wxMemoryDC wxSVGFileDCImpl::GetTextMetricDC(const wxFont& font)
+wxMemoryDC GetTextMetricDC(const wxFont& font)
 {
     wxMemoryDC dc;
     const double dcDPI = dc.GetPPI().y;
@@ -1887,5 +1896,7 @@ wxMemoryDC wxSVGFileDCImpl::GetTextMetricDC(const wxFont& font)
 
     return dc;
 }
+
+} // namespace wxSVG
 
 #endif // wxUSE_SVG

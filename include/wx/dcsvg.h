@@ -215,22 +215,6 @@ public:
 
 private:
 
-    // String helpers used by both the DC and the SVG graphics context.
-    // Formats a double in C locale with 2-digit precision.
-    static wxString NumStr(double f);
-    static wxString NumStr(float f);
-
-    // Returns the colour as "#rrggbb" and optionally its alpha as 0..1 opacity.
-    static wxString Col2SVG(wxColour c, float* opacity = nullptr);
-
-    static wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode);
-    static wxString GetRenderMode(const wxSVGShapeRenderingMode style);
-    static wxString GetBrushPattern(const wxBrush& brush);
-    static wxString GetBrushStyleName(const wxBrush& brush);
-    static wxString GetPenStyle(const wxPen& pen);
-    static wxString GetPenPattern(const wxPen& pen);
-    static wxMemoryDC GetTextMetricDC(const wxFont& font);
-
     virtual bool DoGetPixel(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                             wxColour* WXUNUSED(col)) const override
     {
@@ -345,12 +329,6 @@ private:
               double dpi, const wxString& title);
 
     void write(const wxString& s);
-
-    // Returns a "stroke=... stroke-opacity=..." attribute fragment.
-    static wxString GetPenStroke(const wxColour& c, int style = wxPENSTYLE_SOLID);
-
-    // Returns a "fill=... fill-opacity=..." attribute fragment.
-    static wxString GetBrushFill(const wxColour& c, int style = wxBRUSHSTYLE_SOLID);
 
 #if wxUSE_GRAPHICS_CONTEXT
     // Returns a "fill=url(#...)" attribute fragment for a gradient brush,
