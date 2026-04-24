@@ -22,6 +22,7 @@
 #include "wx/dcsvg.h"
 #if wxUSE_GRAPHICS_CONTEXT
     #include "wx/svggc.h"
+    #include "wx/dcgraph.h"
 #endif
 #include "wx/file.h"
 #include "wx/filename.h"
@@ -1170,8 +1171,31 @@ void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string,
                                       wxCoord* externalLeading,
                                       const wxFont* theFont) const
 {
-    GetTextMetricDC(theFont ? *theFont : m_font).
-        GetTextExtent(string, x, y, descent, externalLeading);
+    wxFont font = theFont ? *theFont : m_font;
+
+    // A bitmap must be selected before wrapping the memory DC in a wxGCDC
+    // (size is irrelevant).
+    wxBitmap metricBmp(1, 1);
+    wxMemoryDC memDc(metricBmp);
+    const double scale = memDc.GetPPI().y / SVG_DPI.y;
+    if ( scale != 1.0 )
+    {
+        // SVG is DPI-independent, so we want text metrics at the default (96) DPI.
+        // Text does not scale linearly (at least on MSW), so scale the font size,
+        // rather than dividing the returned extent.
+        font.SetFractionalPointSize(font.GetFractionalPointSize() / scale);
+    }
+
+#if wxUSE_GRAPHICS_CONTEXT
+    // Measure through a wxGCDC so widths come from the platform's modern font engine
+    // (DirectWrite / Core Graphics / Cairo).
+    wxGCDC gcdc(memDc);
+    gcdc.SetFont(font);
+    gcdc.GetTextExtent(string, x, y, descent, externalLeading);
+#else
+    memDc.SetFont(font);
+    memDc.GetTextExtent(string, x, y, descent, externalLeading);
+#endif
 }
 
 wxCoord wxSVGFileDCImpl::GetCharHeight() const
