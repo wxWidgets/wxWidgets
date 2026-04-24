@@ -1178,7 +1178,7 @@ void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string,
     wxBitmap metricBmp(1, 1);
     wxMemoryDC memDc(metricBmp);
     const double scale = memDc.GetPPI().y / SVG_DPI.y;
-    if ( scale != 1.0 )
+    if ( scale != 1.0 && scale != 0.0 )
     {
         // SVG is DPI-independent, so we want text metrics at the default (96) DPI.
         // Text does not scale linearly (at least on MSW), so scale the font size,
