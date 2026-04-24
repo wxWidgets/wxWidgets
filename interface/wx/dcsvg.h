@@ -405,6 +405,32 @@ public:
 };
 
 /**
+    @class wxSVGLayer
+
+    RAII helper that opens a layer on a wxSVGFileDC when constructed and
+    closes it when destroyed. Use it in place of a manual
+    wxSVGFileDC::BeginLayer() / wxSVGFileDC::EndLayer() pair so the layer
+    is reliably closed on scope exit.
+
+    @library{wxcore}
+    @category{dc}
+    @since 3.3.3
+*/
+class wxSVGLayer
+{
+public:
+    /**
+        Opens a new layer on @a dc with the given @a opacity.
+    */
+    wxSVGLayer(wxSVGFileDC& dc, double opacity);
+
+    /**
+        Closes the layer opened by the constructor.
+    */
+    ~wxSVGLayer();
+};
+
+/**
     Abstract base class for handling bitmaps inside a wxSVGFileDC.
 
     To use it you need to derive a new class from it and override

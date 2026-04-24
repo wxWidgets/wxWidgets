@@ -488,6 +488,27 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxSVGAccessibleGroup);
 };
 
+// RAII helper that opens a layer on construction and closes it on destruction.
+class WXDLLIMPEXP_CORE wxSVGLayer
+{
+public:
+    wxSVGLayer(wxSVGFileDC& dc, double opacity)
+        : m_dc(dc)
+    {
+        m_dc.BeginLayer(opacity);
+    }
+
+    ~wxSVGLayer()
+    {
+        m_dc.EndLayer();
+    }
+
+private:
+    wxSVGFileDC& m_dc;
+
+    wxDECLARE_NO_COPY_CLASS(wxSVGLayer);
+};
+
 #endif // wxUSE_SVG
 
 #endif // _WX_DCSVG_H_
