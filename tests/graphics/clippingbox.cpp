@@ -1823,7 +1823,7 @@ static void TwoDevRegionsNonOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, boo
 
 static void DcAttributes(wxDC& dc)
 {
-    // Check if wxDC atrributes left unchanged
+    // Check if wxDC attributes left unchanged
     wxFont font = dc.GetFont().Bold().Smaller();
     wxPen pen(*wxYELLOW, 2);
     wxBrush brush = *wxBLUE_BRUSH;
