@@ -521,14 +521,19 @@ void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
     wxRibbonButtonBarButtonSizeInfo& info = button->sizes[size];
     if(m_art)
     {
-        // Scale base bitmap sizes by current DPI for layout calculation
+#ifdef __WXOSX__
+        // macOS DC is in logical units (points); use base sizes directly
+        const wxSize& bmpSizeLarge = m_bitmap_size_large;
+        const wxSize& bmpSizeSmall = m_bitmap_size_small;
+#else
+        // Windows DC is in physical pixels; scale bitmap sizes to match
         const double scale = GetDPIScaleFactor();
-        wxSize scaledLarge = m_bitmap_size_large * scale;
-        wxSize scaledSmall = m_bitmap_size_small * scale;
-
+        const wxSize bmpSizeLarge = m_bitmap_size_large * scale;
+        const wxSize bmpSizeSmall = m_bitmap_size_small * scale;
+#endif
         info.is_supported = m_art->GetButtonBarButtonSize(dc, this,
             button->kind, size, button->label, button->text_min_width[size],
-            scaledLarge, scaledSmall, &info.size,
+            bmpSizeLarge, bmpSizeSmall, &info.size,
             &info.normal_region, &info.dropdown_region);
     }
     else
@@ -945,7 +950,11 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
 
     // Calculate DPI-scaled bitmap sizes (must match layout calculation)
+#ifdef __WXOSX__
+    const double scale = GetContentScaleFactor();
+#else
     const double scale = GetDPIScaleFactor();
+#endif
     const wxSize scaledLarge = m_bitmap_size_large * scale;
     const wxSize scaledSmall = m_bitmap_size_small * scale;
 
@@ -969,6 +978,10 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
                 const wxBitmapBundle& bundle = disabled ?
                     m_bundlesLargeDisabled[idx] : m_bundlesLarge[idx];
                 bitmap = bundle.GetBitmap(scaledLarge);
+#ifdef __WXOSX__
+                if ( bitmap.IsOk() )
+                    bitmap.SetScaleFactor(scale);
+#endif
             }
         }
 
@@ -980,6 +993,10 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
                 const wxBitmapBundle& bundle = disabled ?
                     m_bundlesSmallDisabled[idx] : m_bundlesSmall[idx];
                 bitmap_small = bundle.GetBitmap(scaledSmall);
+#ifdef __WXOSX__
+                if ( bitmap_small.IsOk() )
+                    bitmap_small.SetScaleFactor(scale);
+#endif
             }
         }
 
