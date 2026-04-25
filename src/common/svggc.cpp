@@ -854,6 +854,12 @@ wxGraphicsContext* wxSVGGraphicsRenderer::CreateContext(wxWindow*) { return null
 #if wxUSE_IMAGE
 wxGraphicsContext* wxSVGGraphicsRenderer::CreateContextFromImage(wxImage&) { return nullptr; }
 #endif
+
+wxGraphicsContext* wxSVGGraphicsRenderer::CreateContext(wxSVGFileDC& dc)
+{
+    return wxSVGGraphicsContext::Create(dc);
+}
+
 wxGraphicsContext* wxSVGGraphicsRenderer::CreateMeasuringContext() { return nullptr; }
 
 wxGraphicsPath wxSVGGraphicsRenderer::CreatePath()
@@ -1017,6 +1023,16 @@ wxSVGGraphicsContext::wxSVGGraphicsContext(wxSVGFileDCImpl* impl)
     m_currentTextColour = impl->m_textForegroundColour;
 
     m_transform = GetRenderer()->CreateMatrix();
+}
+
+wxSVGGraphicsContext::wxSVGGraphicsContext(wxSVGFileDC& dc)
+    : wxSVGGraphicsContext(static_cast<wxSVGFileDCImpl*>(dc.GetImpl()))
+{
+}
+
+wxGraphicsContext* wxSVGGraphicsContext::Create(wxSVGFileDC& dc)
+{
+    return new wxSVGGraphicsContext(dc);
 }
 
 wxSVGGraphicsContext::~wxSVGGraphicsContext() = default;

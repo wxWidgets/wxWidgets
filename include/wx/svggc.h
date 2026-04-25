@@ -284,6 +284,10 @@ public:
     virtual wxGraphicsContext* CreateContextFromImage(wxImage& image) override;
 #endif
 
+    // Create a context that draws into the given SVG DC. The DC must outlive
+    // the returned context.
+    wxGraphicsContext* CreateContext(wxSVGFileDC& dc);
+
     virtual wxGraphicsContext* CreateMeasuringContext() override;
 
     virtual wxGraphicsPath CreatePath() override;
@@ -346,7 +350,12 @@ class WXDLLIMPEXP_CORE wxSVGGraphicsContext : public wxGraphicsContext
 {
 public:
     explicit wxSVGGraphicsContext(wxSVGFileDCImpl* impl);
+    explicit wxSVGGraphicsContext(wxSVGFileDC& dc);
     virtual ~wxSVGGraphicsContext();
+
+    // Construct a graphics context that draws into the given SVG DC. The DC
+    // must outlive the returned context.
+    static wxGraphicsContext* Create(wxSVGFileDC& dc);
 
     // State stack
     virtual void PushState() override;
