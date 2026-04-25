@@ -1184,14 +1184,12 @@ void wxRibbonButtonBar::MakeLayouts()
                               wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
         }
 
-        // TODO: small buttons are not implemented yet in
-        //       art_msw.cpp:2581 and will be invisible
-        /*iLast = btn_count;
+        iLast = btn_count;
         while(iLast-- > 0)
         {
             TryCollapseLayout(m_layouts.Last(), iLast, &iLast,
                               wxRIBBON_BUTTONBAR_BUTTON_SMALL);
-        }*/
+        }
     }
 }
 
