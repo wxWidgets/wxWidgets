@@ -41,6 +41,31 @@
 class wxSVGGraphicsContext : public wxGraphicsContext
 {
 public:
+    /**
+        Constructor.
+
+        The DC must outlive the context.
+
+        @since 3.3.3
+    */
+    wxSVGGraphicsContext(wxSVGFileDC& dc);
+
+    /**
+        Creates a graphics context that draws into the given SVG DC.
+
+        Equivalent to calling @ref wxSVGFileDC::GetGraphicsContext().
+        The DC must outlive the returned context.
+
+        Example:
+        @code
+        wxSVGFileDC dc("output.svg", 800, 600);
+        wxGraphicsContext* gc = wxSVGGraphicsContext::Create(dc);
+        @endcode
+
+        @since 3.3.3
+    */
+    static wxGraphicsContext* Create(wxSVGFileDC& dc);
+
     /** @name State stack */
     ///@{
     /**
@@ -297,6 +322,14 @@ public:
         This method is not supported by the SVG renderer and always returns @NULL.
     */
     virtual wxGraphicsContext* CreateContextFromImage(wxImage& image) override;
+
+    /**
+        Creates a graphics context that draws into the given SVG DC.
+        The DC must outlive the returned context.
+
+        @since 3.3.3
+    */
+    wxGraphicsContext* CreateContext(wxSVGFileDC& dc);
 
     /**
         This method is not supported by the SVG renderer and always returns @NULL.
