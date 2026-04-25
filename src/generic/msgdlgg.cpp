@@ -39,6 +39,7 @@
     #include "wx/statline.h"
 #endif
 
+#if wxUSE_STATTEXT
 // ----------------------------------------------------------------------------
 // wxTitleTextWrapper: simple class to create wrapped text in "title font"
 // ----------------------------------------------------------------------------
@@ -61,6 +62,7 @@ protected:
         return win;
     }
 };
+#endif // wxUSE_STATTEXT
 
 // ----------------------------------------------------------------------------
 // icons
@@ -89,6 +91,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     m_created = false;
 }
 
+#if wxUSE_BUTTON
 wxSizer *wxGenericMessageDialog::CreateMsgDlgButtonSizer()
 {
     if ( HasCustomLabels() )
@@ -153,6 +156,7 @@ wxSizer *wxGenericMessageDialog::CreateMsgDlgButtonSizer()
                                  wxNO_DEFAULT | wxCANCEL_DEFAULT)
            );
 }
+#endif // wxUSE_BUTTON
 
 void wxGenericMessageDialog::DoCreateMsgdialog()
 {
@@ -217,10 +221,12 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     AddMessageDialogCheckBox( topsizer );
     AddMessageDialogDetails( topsizer );
 
+#if wxUSE_BUTTON
     // 4) buttons
     wxSizer *sizerBtn = CreateMsgDlgButtonSizer();
     if ( sizerBtn )
         topsizer->Add(sizerBtn, 0, wxEXPAND | wxALL, 10 );
+#endif // wxUSE_BUTTON
 
     SetSizer( topsizer );
 

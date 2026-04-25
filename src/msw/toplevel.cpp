@@ -306,6 +306,7 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
                 }
 
 #ifndef __WXUNIVERSAL__
+#if wxUSE_MENUS
                 // We need to generate events for the custom items added to the
                 // system menu if it had been created (and presumably modified).
                 // As SC_SIZE is the first of the system-defined commands, we
@@ -316,6 +317,7 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
                     if ( m_menuSystem->MSWCommand(0 /* unused anyhow */, id) )
                         processed = true;
                 }
+#endif // wxUSE_MENUS
 #endif // #ifndef __WXUNIVERSAL__
             }
             break;
@@ -517,7 +519,9 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 {
+#if wxUSE_MENUS
     delete m_menuSystem;
+#endif // wxUSE_MENUS
 
     SendDestroyEvent();
 }
@@ -1221,6 +1225,7 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
 {
 #ifndef __WXUNIVERSAL__
+#if wxUSE_MENUS
     if ( !m_menuSystem )
     {
         HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE);
@@ -1246,6 +1251,7 @@ wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
         // correct but doesn't seem to have any serious drawbacks.
         m_menuSystem->SetInvokingWindow(self);
     }
+#endif // wxUSE_MENUS
 #endif // #ifndef __WXUNIVERSAL__
 
     return m_menuSystem;
