@@ -23,6 +23,7 @@
 #if wxUSE_GRAPHICS_CONTEXT
     #include "wx/svggc.h"
     #include "wx/dcgraph.h"
+    #include "wx/private/svggc.h"
 #endif
 #include "wx/file.h"
 #include "wx/filename.h"

@@ -25,6 +25,7 @@
 #include "wx/dcsvg.h"
 #include "wx/private/graphics.h"
 #include "wx/private/svg.h"
+#include "wx/private/svggc.h"
 
 #include <cmath>
 #include <vector>
