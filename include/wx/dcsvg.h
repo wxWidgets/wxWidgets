@@ -136,7 +136,6 @@ public:
 #endif
 
     friend class wxSVGGraphicsContext;
-    friend class wxSVGGraphicsPathData;
 
     bool IsOk() const override;
 
