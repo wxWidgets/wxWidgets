@@ -72,6 +72,7 @@ private:
 class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
 class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsContext;
 class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsPathData;
+class WXDLLIMPEXP_FWD_CORE wxSVGWriter;
 
 // Base class for bitmap handlers used by wxSVGFileDC, used by the standard
 // "embed" and "link" handlers below but can also be used to create a custom
@@ -137,7 +138,7 @@ public:
     friend class wxSVGGraphicsContext;
     friend class wxSVGGraphicsPathData;
 
-    bool IsOk() const override { return !m_writeError; }
+    bool IsOk() const override;
 
     virtual bool CanDrawBitmap() const override { return true; }
     virtual bool CanGetTextExtent() const override { return true; }
@@ -204,10 +205,6 @@ public:
 
     // Close the group opened by the most recent BeginLayer() call.
     void EndLayer();
-
-#if wxUSE_GRAPHICS_CONTEXT
-    void SetCompositionMode(wxCompositionMode mode);
-#endif
 
     wxString GetSVGDocument() const;
 
@@ -298,13 +295,7 @@ private:
                                           const wxColour& destColour,
                                           const wxPoint& circleCenter) override;
 
-    virtual void DoGetSize(int* width, int* height) const override
-    {
-        if ( width )
-            *width = m_width;
-        if ( height )
-            *height = m_height;
-    }
+    virtual void DoGetSize(int* width, int* height) const override;
 
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord* x, wxCoord* y,
@@ -328,60 +319,20 @@ private:
     void Init(const wxString& filename, int width, int height,
               double dpi, const wxString& title);
 
-    void write(const wxString& s);
-
-#if wxUSE_GRAPHICS_CONTEXT
-    // Returns a "fill=url(#...)" attribute fragment for a gradient brush,
-    // and writes its definition to the SVG.
-    wxString GetGraphicsBrushFill(const wxGraphicsBrush& brush);
-
-    // Returns a "stroke=url(#...)" attribute fragment for a gradient pen,
-    // and writes its definition to the SVG.
-    wxString GetGraphicsPenStroke(const wxGraphicsPen& pen);
-#endif
-
-    // If m_graphics_changed is true, close the current <g> element and start a
-    // new one for the last pen/brush change.
+    // If the writer's graphics-changed flag is set, close the current <g>
+    // element and start a new one reflecting the latest pen/brush state.
     void NewGraphicsIfNeeded();
 
     // Open a new graphics group setting up all the attributes according to
     // their current values in wxDC.
     void DoStartNewGraphics();
 
-    wxString            m_filename;
-    bool                m_writeError;
-    bool                m_saved;
-    bool                m_graphics_changed;  // set by Set{Brush,Pen}()
-    int                 m_width, m_height;
-    double              m_dpi;
-    wxString            m_svgDocument;
-    std::unique_ptr<wxSVGBitmapHandler> m_bmp_handler; // class to handle bitmaps
-    wxSVGShapeRenderingMode m_renderingMode;
-
-    // Nesting depth of open accessible groups (see BeginAccessibleGroup).
-    size_t m_accessibleGroupDepth;
-
-    // Nesting depth of open layers (see BeginLayer).
-    size_t m_layerDepth;
-
-    // The clipping nesting level is incremented by every call to
-    // SetClippingRegion() and reset when DestroyClippingRegion() is called.
-    size_t m_clipNestingLevel;
-
-    // Unique ID for every clipping graphics group: this is simply always
-    // incremented in each SetClippingRegion() call.
-    static size_t m_clipUniqueId;
-
-    // Unique ID for every gradient.
-    static size_t m_gradientUniqueId;
+    // Output buffer + shared bookkeeping shared with the GC.
+    std::unique_ptr<wxSVGWriter> m_writer;
 
 #if wxUSE_GRAPHICS_CONTEXT
     // Graphics context that writes into the same SVG buffer.
     mutable std::unique_ptr<wxSVGGraphicsContext> m_gc;
-    wxGraphicsBrush m_graphicsBrush;
-    wxGraphicsPen m_graphicsPen;
-    wxCompositionMode m_compositionMode;
-    wxString m_gcTransform;
 #endif
 
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl);

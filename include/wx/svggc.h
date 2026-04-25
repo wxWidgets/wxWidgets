@@ -21,6 +21,7 @@
 #include <vector>
 
 class wxSVGFileDCImpl;
+class WXDLLIMPEXP_FWD_CORE wxSVGWriter;
 
 // Represents a single command in an SVG path (Move, Line, etc.).
 // We store these instead of a raw string so that we can apply
@@ -430,6 +431,7 @@ private:
     void AccumulatePathBounds(wxGraphicsPathData* data);
 
     wxSVGFileDCImpl* m_impl;
+    wxSVGWriter* m_writer;
     wxPen m_currentPen;
     wxBrush m_currentBrush;
     wxFont m_currentFont;

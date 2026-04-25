@@ -1003,7 +1003,8 @@ void wxSVGGraphicsRenderer::GetVersion(int* major, int* minor, int* micro) const
 
 wxSVGGraphicsContext::wxSVGGraphicsContext(wxSVGFileDCImpl* impl)
     : wxGraphicsContext(wxSVGGraphicsRenderer::Get()),
-      m_impl(impl)
+      m_impl(impl),
+      m_writer(impl->m_writer.get())
 {
     int w = 0, h = 0;
     impl->DoGetSize(&w, &h);
@@ -1022,7 +1023,7 @@ wxSVGGraphicsContext::~wxSVGGraphicsContext() = default;
 
 void wxSVGGraphicsContext::PushState()
 {
-    m_stateStack.push({ m_transform, m_impl->m_clipNestingLevel, m_composition });
+    m_stateStack.push({ m_transform, m_writer->GetClipNestingLevel(), m_composition });
 }
 
 void wxSVGGraphicsContext::PopState()
@@ -1037,18 +1038,20 @@ void wxSVGGraphicsContext::PopState()
     if ( m_composition != s.compositionMode )
     {
         m_composition = s.compositionMode;
-        m_impl->SetCompositionMode(m_composition);
+        m_writer->SetCompositionMode(m_composition);
     }
 
-    if ( m_impl->m_clipNestingLevel > s.clipNestingLevel )
+    if ( m_writer->GetClipNestingLevel() > s.clipNestingLevel )
     {
         // Close the clipping groups that were opened since PushState.
-        m_impl->write(wxS("</g>\n")); // Close the attribute group
-        while ( m_impl->m_clipNestingLevel > s.clipNestingLevel )
+        m_writer->Write(wxS("</g>\n")); // Close the attribute group
+        size_t level = m_writer->GetClipNestingLevel();
+        while ( level > s.clipNestingLevel )
         {
-            m_impl->write(wxS("</g>\n"));
-            m_impl->m_clipNestingLevel--;
+            m_writer->Write(wxS("</g>\n"));
+            --level;
         }
+        m_writer->SetClipNestingLevel(level);
         // Restart the attribute group
         m_impl->DoStartNewGraphics();
     }
@@ -1142,7 +1145,7 @@ bool wxSVGGraphicsContext::SetCompositionMode(wxCompositionMode op)
 {
     if ( op == wxCOMPOSITION_ADD || op == wxCOMPOSITION_DIFF || op == wxCOMPOSITION_OVER )
     {
-        m_impl->SetCompositionMode(op);
+        m_writer->SetCompositionMode(op);
         m_composition = op;
         return true;
     }
@@ -1197,8 +1200,8 @@ wxGraphicsMatrix wxSVGGraphicsContext::GetTransform() const
 void wxSVGGraphicsContext::SetPen(const wxGraphicsPen& pen)
 {
     wxGraphicsContext::SetPen(pen);
-    m_impl->m_graphicsPen = pen;
-    m_impl->m_graphics_changed = true;
+    m_writer->SetGraphicsPen(pen);
+    m_writer->MarkGraphicsChanged();
 
     if ( pen.IsNull() )
     {
@@ -1214,8 +1217,8 @@ void wxSVGGraphicsContext::SetPen(const wxGraphicsPen& pen)
 void wxSVGGraphicsContext::SetBrush(const wxGraphicsBrush& brush)
 {
     wxGraphicsContext::SetBrush(brush);
-    m_impl->m_graphicsBrush = brush;
-    m_impl->m_graphics_changed = true;
+    m_writer->SetGraphicsBrush(brush);
+    m_writer->MarkGraphicsChanged();
 
     if ( brush.IsNull() )
     {
@@ -1250,7 +1253,7 @@ void wxSVGGraphicsContext::SyncPenToDC(const wxPen& pen)
     // and reopens the current <g> group before the next write.
     m_currentPen = pen;
     m_impl->m_pen = pen;
-    m_impl->m_graphics_changed = true;
+    m_writer->MarkGraphicsChanged();
 }
 
 void wxSVGGraphicsContext::SyncBrushToDC(const wxBrush& brush)
@@ -1258,12 +1261,12 @@ void wxSVGGraphicsContext::SyncBrushToDC(const wxBrush& brush)
     // Mirror the brush to the parent DC.
     m_currentBrush = brush;
     m_impl->m_brush = brush;
-    m_impl->m_graphics_changed = true;
+    m_writer->MarkGraphicsChanged();
 }
 
 void wxSVGGraphicsContext::SyncTransformToDC()
 {
-    m_impl->m_gcTransform = GetCurrentTransformAttr();
+    m_writer->SetGCTransform(GetCurrentTransformAttr());
 }
 
 wxString wxSVGGraphicsContext::GetCurrentTransformAttr() const
@@ -1318,7 +1321,7 @@ void wxSVGGraphicsContext::StrokePath(const wxGraphicsPath& path)
 
     wxString stroke;
     if ( !m_pen.IsNull() )
-        stroke = m_impl->GetGraphicsPenStroke(m_pen);
+        stroke = m_writer->WriteGraphicsPenStroke(m_pen);
 
     if ( stroke.empty() )
     {
@@ -1332,7 +1335,7 @@ void wxSVGGraphicsContext::StrokePath(const wxGraphicsPath& path)
         wxS("  <path d=\"%s\" fill=\"none\" %s stroke-width=\"%d\"%s/>\n"),
         data->GetDString(), stroke, m_currentPen.GetWidth(), transform);
 
-    m_impl->write(s);
+    m_writer->Write(s);
 
     AccumulatePathBounds(data);
 }
@@ -1351,7 +1354,7 @@ void wxSVGGraphicsContext::FillPath(const wxGraphicsPath& path, wxPolygonFillMod
 
     wxString fill;
     if ( !m_brush.IsNull() )
-        fill = m_impl->GetGraphicsBrushFill(m_brush);
+        fill = m_writer->WriteGraphicsBrushFill(m_brush);
 
     if ( fill.empty() )
     {
@@ -1369,7 +1372,7 @@ void wxSVGGraphicsContext::FillPath(const wxGraphicsPath& path, wxPolygonFillMod
         wxS("  <path d=\"%s\" %s fill-rule=\"%s\" stroke=\"none\"%s/>\n"),
         data->GetDString(), fill, rule, transform);
 
-    m_impl->write(s);
+    m_writer->Write(s);
 
     AccumulatePathBounds(data);
 }
