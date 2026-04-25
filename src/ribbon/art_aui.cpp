@@ -1110,6 +1110,7 @@ void wxRibbonAUIArtProvider::DrawButtonBarButton(
                 }
                 break;
             case wxRIBBON_BUTTONBAR_BUTTON_MEDIUM:
+            case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
                 {
                     int iArrowWidth = 9;
                     if(state & wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED)
@@ -1128,8 +1129,6 @@ void wxRibbonAUIArtProvider::DrawButtonBarButton(
                             bg_rect.x - 1, rect.y + rect.height);
                     }
                 }
-                break;
-            case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
                 break;
             }
         }
