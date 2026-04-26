@@ -566,13 +566,17 @@ bool wxSVGGraphicsPathData::Contains(wxDouble x, wxDouble y,
                 {
                     if ( seg.clockwise )
                     {
-                        while ( sweep <= 0 ) sweep += twoPi;
-                        while ( sweep > twoPi ) sweep -= twoPi;
+                        while ( sweep <= 0 )
+                            sweep += twoPi;
+                        while ( sweep > twoPi )
+                            sweep -= twoPi;
                     }
                     else
                     {
-                        while ( sweep >= 0 ) sweep -= twoPi;
-                        while ( sweep < -twoPi ) sweep += twoPi;
+                        while ( sweep >= 0 )
+                            sweep -= twoPi;
+                        while ( sweep < -twoPi )
+                            sweep += twoPi;
                     }
                 }
 
@@ -725,13 +729,17 @@ void wxSVGGraphicsPathData::AddArcToCubics(wxDouble xc, wxDouble yc, wxDouble r,
     {
         if ( clockwise )
         {
-            while ( sweep <= 0 ) sweep += twoPi;
-            while ( sweep > twoPi ) sweep -= twoPi;
+            while ( sweep <= 0 )
+                sweep += twoPi;
+            while ( sweep > twoPi )
+                sweep -= twoPi;
         }
         else
         {
-            while ( sweep >= 0 ) sweep -= twoPi;
-            while ( sweep < -twoPi ) sweep += twoPi;
+            while ( sweep >= 0 )
+                sweep -= twoPi;
+            while ( sweep < -twoPi )
+                sweep += twoPi;
         }
     }
 
