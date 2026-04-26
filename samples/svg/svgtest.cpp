@@ -64,6 +64,7 @@ enum Page
 #if wxUSE_GRAPHICS_CONTEXT
     Page_SVGGraphicsContext,
     Page_SVGGraphicsContextCreate,
+    Page_SVGGraphicsContextDirect,
 #endif
     Page_Max
 };
@@ -82,6 +83,7 @@ static const char* pageNames[] =
 #if wxUSE_GRAPHICS_CONTEXT
     "SVG graphics context",
     "SVG graphics context (via Create)",
+    "SVG graphics context (direct)",
 #endif
 };
 
@@ -101,6 +103,7 @@ static const char* pageDescriptions[] =
 #if wxUSE_GRAPHICS_CONTEXT
      "Shapes drawn via wxGraphicsContext obtained from wxSVGFileDC",
      "Same as the previous page, but the context is obtained via wxSVGGraphicsContext::Create() when saving as SVG",
+     "Same as the previous page, but the context is created directly, without creating wxSVGFileDC at all",
 #endif
 };
 
@@ -270,67 +273,38 @@ void MyPage::OnPaint(wxPaintEvent& WXUNUSED(event))
 #endif
 }
 
-bool MyPage::OnSave(const wxString& filename)
-{
-    wxSize svgSize;
-    wxSVGFileDC tempSvgDC(svgSize);
-    OnDraw(tempSvgDC);
-
-    svgSize = wxSize(tempSvgDC.MaxX(), tempSvgDC.MaxY());
-    svgSize.IncBy(15); // account for wxPen width exceeding bounds
-
-    wxSVGFileDC svgDC(svgSize, filename, pageNames[m_index]);
-    svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
-
-    // Wrap the drawing in an accessible group so that assistive technology
-    // can announce the page's title and description when the SVG is viewed.
-    //
-    // wxSVGAccessibleGroup is RAII: it opens the group in its constructor
-    // and closes it automatically when the scope exits, so there's no need
-    // to pair Begin/EndAccessibleGroup() calls by hand.
-    {
-        wxSVGAccessibleGroup group(svgDC,
-            wxSVGAttributes().Role("img").AriaLabel(pageNames[m_index]),
-            pageNames[m_index],
-            pageDescriptions[m_index]);
-        OnDraw(svgDC);
-    }
-
-    return svgDC.IsOk();
-}
-
 namespace
 {
 
 #if wxUSE_GRAPHICS_CONTEXT
 // Shared content for the two SVGGraphicsContext demo pages: each page acquires
 // the GC differently, but draws the same shapes.
-void DrawSVGGraphicsContextDemo(wxGraphicsContext* gc, wxDC& dc)
+//
+// All coordinates and sizes here are in logical units (DIPs). The caller is
+// responsible for scaling the context (e.g., via gc->Scale()) to match the
+// target device's DPI.
+void DrawSVGGraphicsContextDemo(wxGraphicsContext* gc)
 {
     // Cyan rectangle with red border.
     gc->SetPen(*wxRED_PEN);
     gc->SetBrush(*wxCYAN_BRUSH);
-    gc->DrawRectangle(dc.FromDIP(10), dc.FromDIP(10),
-                      dc.FromDIP(100), dc.FromDIP(70));
+    gc->DrawRectangle(10, 10, 100, 70);
 
     // Transparent rounded rectangle.
     gc->SetBrush(*wxTRANSPARENT_BRUSH);
-    gc->DrawRoundedRectangle(dc.FromDIP(50), dc.FromDIP(50),
-                             dc.FromDIP(100), dc.FromDIP(70),
-                             dc.FromDIP(20));
+    gc->DrawRoundedRectangle(50, 50, 100, 70, 20);
 
     // Goldenrod ellipse.
     gc->SetBrush(wxBrush("GOLDENROD"));
-    gc->DrawEllipse(dc.FromDIP(100), dc.FromDIP(100),
-                    dc.FromDIP(100), dc.FromDIP(50));
+    gc->DrawEllipse(100, 100, 100, 50);
 
     // Star polygon, built as a wxGraphicsPath and filled.
     wxPoint2DDouble starPts[] = {
-        { (double)dc.FromDIP(100), (double)dc.FromDIP(200) },
-        { (double)dc.FromDIP(70),  (double)dc.FromDIP(260) },
-        { (double)dc.FromDIP(160), (double)dc.FromDIP(230) },
-        { (double)dc.FromDIP(40),  (double)dc.FromDIP(230) },
-        { (double)dc.FromDIP(130), (double)dc.FromDIP(260) },
+        { 100.0, 200.0 },
+        { 70.0,  260.0 },
+        { 160.0, 230.0 },
+        { 40.0,  230.0 },
+        { 130.0, 260.0 },
     };
     wxGraphicsPath path = gc->CreatePath();
     path.MoveToPoint(starPts[0]);
@@ -341,35 +315,31 @@ void DrawSVGGraphicsContextDemo(wxGraphicsContext* gc, wxDC& dc)
 
     // Stroked-only path: a thick magenta zig-zag.
     {
-        wxPen thick("MAGENTA", dc.FromDIP(3));
-        gc->SetPen(thick);
+        gc->SetPen(wxPenInfo("MAGENTA").Width(3));
         wxGraphicsPath zig = gc->CreatePath();
-        zig.MoveToPoint(dc.FromDIP(220), dc.FromDIP(20));
-        zig.AddLineToPoint(dc.FromDIP(260), dc.FromDIP(60));
-        zig.AddLineToPoint(dc.FromDIP(220), dc.FromDIP(100));
-        zig.AddLineToPoint(dc.FromDIP(260), dc.FromDIP(140));
-        zig.AddLineToPoint(dc.FromDIP(220), dc.FromDIP(180));
+        zig.MoveToPoint(220, 20);
+        zig.AddLineToPoint(260, 60);
+        zig.AddLineToPoint(220, 100);
+        zig.AddLineToPoint(260, 140);
+        zig.AddLineToPoint(220, 180);
         gc->StrokePath(zig);
     }
 
     // Cubic Bezier curve.
     {
-        gc->SetPen(wxPen("FOREST GREEN", dc.FromDIP(2)));
+        gc->SetPen(wxPenInfo("FOREST GREEN").Width(2));
         wxGraphicsPath bez = gc->CreatePath();
-        bez.MoveToPoint(dc.FromDIP(220), dc.FromDIP(220));
-        bez.AddCurveToPoint(dc.FromDIP(260), dc.FromDIP(160),
-                            dc.FromDIP(320), dc.FromDIP(280),
-                            dc.FromDIP(360), dc.FromDIP(220));
+        bez.MoveToPoint(220, 220);
+        bez.AddCurveToPoint(260, 160, 320, 280, 360, 220);
         gc->StrokePath(bez);
     }
 
     // Quadratic Bezier curve.
     {
-        gc->SetPen(wxPen("ORANGE", dc.FromDIP(2)));
+        gc->SetPen(wxPenInfo("ORANGE").Width(2));
         wxGraphicsPath bez = gc->CreatePath();
-        bez.MoveToPoint(dc.FromDIP(380), dc.FromDIP(220));
-        bez.AddQuadCurveToPoint(dc.FromDIP(420), dc.FromDIP(160),
-                                dc.FromDIP(460), dc.FromDIP(220));
+        bez.MoveToPoint(380, 220);
+        bez.AddQuadCurveToPoint(420, 160, 460, 220);
         gc->StrokePath(bez);
     }
 
@@ -378,9 +348,9 @@ void DrawSVGGraphicsContextDemo(wxGraphicsContext* gc, wxDC& dc)
         gc->SetPen(*wxBLACK_PEN);
         gc->SetBrush(wxBrush("LIGHT BLUE"));
         wxGraphicsPath wedge = gc->CreatePath();
-        const double cx = dc.FromDIP(310);
-        const double cy = dc.FromDIP(110);
-        const double r  = dc.FromDIP(40);
+        const double cx = 310;
+        const double cy = 110;
+        const double r  = 40;
         wedge.MoveToPoint(cx, cy);
         wedge.AddArc(cx, cy, r, 0.0, wxDegToRad(135.0), true);
         wedge.CloseSubpath();
@@ -390,164 +360,144 @@ void DrawSVGGraphicsContextDemo(wxGraphicsContext* gc, wxDC& dc)
     // Push/Pop with rotation.
     // Draw a rotated rectangle without disturbing later drawing.
     gc->PushState();
-    gc->Translate(dc.FromDIP(420), dc.FromDIP(80));
+    gc->Translate(420, 80);
     gc->Rotate(wxDegToRad(30.0));
     gc->SetPen(*wxBLACK_PEN);
     gc->SetBrush(wxBrush("GOLDENROD"));
-    gc->DrawRectangle(dc.FromDIP(-30), dc.FromDIP(-15),
-                      dc.FromDIP(60), dc.FromDIP(30));
+    gc->DrawRectangle(-30, -15, 60, 30);
     gc->PopState();
 
     // Translate and scale, creating a smaller copy of the goldenrod ellipse.
     gc->PushState();
-    gc->Translate(dc.FromDIP(420), dc.FromDIP(160));
+    gc->Translate(420, 160);
     gc->Scale(0.5, 0.5);
     gc->SetBrush(wxBrush("GOLDENROD"));
-    gc->DrawEllipse(dc.FromDIP(0), dc.FromDIP(0),
-                    dc.FromDIP(100), dc.FromDIP(50));
+    gc->DrawEllipse(0, 0, 100, 50);
     gc->PopState();
 
     // Text drawn through the GC.
     gc->SetFont(wxFontInfo(12).FaceName("Arial"), *wxBLACK);
-    gc->DrawText("Drawn via wxGraphicsContext", dc.FromDIP(10), dc.FromDIP(290));
+    gc->DrawText("Drawn via wxGraphicsContext", 10, 290);
 
     // Linear Gradient Brush
     {
         wxGraphicsGradientStops stops(wxColour(255, 0, 0), wxColour(0, 0, 255));
         stops.Add(wxColour(0, 255, 0), 0.5f);
         wxGraphicsBrush gradBrush = gc->CreateLinearGradientBrush(
-            dc.FromDIP(10), dc.FromDIP(320),
-            dc.FromDIP(110), dc.FromDIP(320),
-            stops);
+            10, 320, 110, 320, stops);
         gc->SetBrush(gradBrush);
         gc->SetPen(*wxBLACK_PEN);
-        gc->DrawRectangle(dc.FromDIP(10), dc.FromDIP(320),
-                          dc.FromDIP(100), dc.FromDIP(40));
+        gc->DrawRectangle(10, 320, 100, 40);
     }
 
     // Radial Gradient Brush
     {
         wxGraphicsGradientStops stops(*wxWHITE, *wxRED);
         wxGraphicsBrush gradBrush = gc->CreateRadialGradientBrush(
-            dc.FromDIP(180), dc.FromDIP(340),
-            dc.FromDIP(180), dc.FromDIP(340),
-            dc.FromDIP(40),
-            stops);
+            180, 340, 180, 340, 40, stops);
         gc->SetBrush(gradBrush);
         gc->SetPen(*wxBLACK_PEN);
-        gc->DrawEllipse(dc.FromDIP(140), dc.FromDIP(300),
-                        dc.FromDIP(80), dc.FromDIP(80));
+        gc->DrawEllipse(140, 300, 80, 80);
     }
 
     // Linear Gradient Pen
     {
         wxGraphicsGradientStops stops(*wxRED, *wxBLUE);
         wxGraphicsPen gradPen = gc->CreatePen(
-            wxGraphicsPenInfo(*wxBLACK).Width(dc.FromDIP(5)).LinearGradient(
-                dc.FromDIP(250), dc.FromDIP(320),
-                dc.FromDIP(350), dc.FromDIP(320),
-                stops));
+            wxGraphicsPenInfo(*wxBLACK).Width(5).LinearGradient(
+                250, 320, 350, 320, stops));
         gc->SetPen(gradPen);
-        gc->StrokeLine(dc.FromDIP(250), dc.FromDIP(320),
-                       dc.FromDIP(350), dc.FromDIP(360));
+        gc->StrokeLine(250, 320, 350, 360);
     }
 
     // Radial Gradient Pen
     {
         wxGraphicsGradientStops stops(*wxYELLOW, *wxGREEN);
         wxGraphicsPen gradPen = gc->CreatePen(
-            wxGraphicsPenInfo(*wxBLACK).Width(dc.FromDIP(5)).RadialGradient(
-                dc.FromDIP(400), dc.FromDIP(340),
-                dc.FromDIP(400), dc.FromDIP(340),
-                dc.FromDIP(40),
-                stops));
+            wxGraphicsPenInfo(*wxBLACK).Width(5).RadialGradient(
+                400, 340, 400, 340, 40, stops));
         gc->SetPen(gradPen);
-        gc->StrokeLine(dc.FromDIP(370), dc.FromDIP(310),
-                       dc.FromDIP(430), dc.FromDIP(370));
+        gc->StrokeLine(370, 310, 430, 370);
     }
 
     // Draw an arc, transform it (rotate and scale), and draw it again.
     {
-        gc->SetPen(wxPen(*wxRED, dc.FromDIP(2)));
+        gc->SetPen(wxPen(*wxRED, 2));
         gc->SetBrush(wxBrush(*wxRED, wxBRUSHSTYLE_TRANSPARENT));
         wxGraphicsPath arcPath = gc->CreatePath();
-        arcPath.AddArc(dc.FromDIP(450), dc.FromDIP(250), dc.FromDIP(30), 0, M_PI, true);
+        arcPath.AddArc(450, 250, 30, 0, M_PI, true);
         gc->StrokePath(arcPath);
 
         wxGraphicsMatrix m = gc->CreateMatrix();
-        m.Translate(dc.FromDIP(0), dc.FromDIP(40));
+        m.Translate(0, 40);
         m.Scale(1.5, 0.5);
         arcPath.Transform(m);
-        gc->SetPen(wxPen(*wxBLUE, dc.FromDIP(2)));
+        gc->SetPen(wxPen(*wxBLUE, 2));
         gc->StrokePath(arcPath);
     }
+
+
 
     // Draw some bitmaps.
     {
         wxGraphicsBitmap bmp = gc->CreateBitmap(wxBitmap(svgbitmap_xpm));
-        gc->DrawBitmap(bmp, dc.FromDIP(500), dc.FromDIP(60), dc.FromDIP(32), dc.FromDIP(32));
+        gc->DrawBitmap(bmp, 500, 60, 32, 32);
         // Rescaled bitmap
-        gc->DrawBitmap(bmp, dc.FromDIP(500), dc.FromDIP(100), dc.FromDIP(64), dc.FromDIP(64));
+        gc->DrawBitmap(bmp, 500, 100, 64, 64);
     }
 
     // Clip a rectangular area and then draw a square inside of it.
     // The square will look like a small rectangle because of the clipping.
     {
         gc->PushState();
-        gc->Clip(dc.FromDIP(500), dc.FromDIP(200), dc.FromDIP(50), dc.FromDIP(30));
+        gc->Clip(500, 200, 50, 30);
         gc->SetBrush(*wxRED_BRUSH);
-        gc->DrawRectangle(dc.FromDIP(480), dc.FromDIP(180), dc.FromDIP(300), dc.FromDIP(300));
+        gc->DrawRectangle(480, 180, 300, 300);
         gc->PopState();
     }
 
     // Layer with 50% opacity.
-    // Note: BeginLayer/EndLayer and composition modes render
-    // correctly in the exported SVG, but may have no visible
-    // effect in the UI on some backends (e.g., GDI+ does not
-    // support these features; use Direct2D instead).
     {
         gc->BeginLayer(0.5);
         gc->SetPen(*wxBLACK_PEN);
         gc->SetBrush(*wxGREEN_BRUSH);
-        gc->DrawRectangle(dc.FromDIP(10), dc.FromDIP(380),
-                          dc.FromDIP(100), dc.FromDIP(100));
-        gc->DrawEllipse(dc.FromDIP(60), dc.FromDIP(380),
-                        dc.FromDIP(100), dc.FromDIP(100));
+        gc->DrawRectangle(10, 380, 100, 100);
+        gc->DrawEllipse(60, 380, 100, 100);
         gc->EndLayer();
     }
 
     // Composition modes.
     {
         gc->PushState();
-        gc->Translate(dc.FromDIP(200), dc.FromDIP(400));
+        gc->Translate(200, 400);
 
         gc->SetFont(wxFontInfo(10).FaceName("Arial"), *wxBLACK);
-        gc->DrawText("Additive (on black)", 0, -dc.FromDIP(15));
+        gc->DrawText("Additive (on black)", 0, -15);
 
         // Backdrop for ADD: colors add up from black.
         gc->SetCompositionMode(wxCOMPOSITION_OVER);
         gc->SetBrush(*wxBLACK_BRUSH);
-        gc->DrawRectangle(0, 0, dc.FromDIP(100), dc.FromDIP(70));
+        gc->DrawRectangle(0, 0, 100, 70);
 
         // Additive blending (plus-lighter): Red + Green = Yellow.
         gc->SetCompositionMode(wxCOMPOSITION_ADD);
         gc->SetBrush(wxBrush(*wxRED));
         gc->SetPen(*wxTRANSPARENT_PEN);
-        gc->DrawEllipse(dc.FromDIP(10), dc.FromDIP(5), dc.FromDIP(50), dc.FromDIP(50));
+        gc->DrawEllipse(10, 5, 50, 50);
         gc->SetBrush(wxBrush(*wxGREEN));
-        gc->DrawEllipse(dc.FromDIP(40), dc.FromDIP(5), dc.FromDIP(50), dc.FromDIP(50));
+        gc->DrawEllipse(40, 5, 50, 50);
 
         // Difference blending: Inverts background colors.
-        gc->Translate(dc.FromDIP(150), 0);
+        gc->Translate(150, 0);
         gc->SetCompositionMode(wxCOMPOSITION_OVER);
-        gc->DrawText("Difference (on blue)", 0, -dc.FromDIP(15));
+        gc->DrawText("Difference (on blue)", 0, -15);
         gc->SetBrush(*wxBLUE_BRUSH);
-        gc->DrawRectangle(0, 0, dc.FromDIP(80), dc.FromDIP(70));
+        gc->DrawRectangle(0, 0, 80, 70);
 
         gc->SetCompositionMode(wxCOMPOSITION_DIFF);
         gc->SetBrush(wxBrush(*wxWHITE));
         // White diff Blue = Yellow.
-        gc->DrawRectangle(dc.FromDIP(10), dc.FromDIP(10), dc.FromDIP(60), dc.FromDIP(50));
+        gc->DrawRectangle(10, 10, 60, 50);
 
         gc->PopState();
     }
@@ -838,6 +788,7 @@ void DrawOnDC(wxDC& dc, const int index)
             dc.DrawRotatedText(txtStr, txtX, txtY, 45);
             break;
         }
+
 #if wxUSE_GRAPHICS_CONTEXT
         case Page_SVGGraphicsContext:
         {
@@ -846,9 +797,14 @@ void DrawOnDC(wxDC& dc, const int index)
             if ( !gc )
                 break;
 
-            DrawSVGGraphicsContextDemo(gc, dc);
+            const double scale = dc.FromDIP(100) / 100.0;
+            gc->PushState();
+            gc->Scale(scale, scale);
+            DrawSVGGraphicsContextDemo(gc);
+            gc->PopState();
             break;
         }
+
         case Page_SVGGraphicsContextCreate:
         {
             // Acquire the GC via wxSVGGraphicsContext::Create(). This only
@@ -861,24 +817,104 @@ void DrawOnDC(wxDC& dc, const int index)
                 if (!gc)
                     break;
 
-                DrawSVGGraphicsContextDemo(gc, dc);
+                const double scale = dc.FromDIP(100) / 100.0;
+                gc->PushState();
+                gc->Scale(scale, scale);
+                DrawSVGGraphicsContextDemo(gc);
+                gc->PopState();
                 break;
             }
 
             // We are responsible for deleting the wxGraphicsContext when
             // calling Create() (which std::unique_ptr will handle via RAII).
-            std::unique_ptr<wxGraphicsContext> gc(wxSVGGraphicsContext::Create(*svgDC));
+            std::unique_ptr<wxSVGGraphicsContext> gc(wxSVGGraphicsContext::Create(*svgDC));
             if ( !gc )
                 break;
 
-            DrawSVGGraphicsContextDemo(gc.get(), dc);
+            const double scale = dc.FromDIP(100) / 100.0;
+            gc->Scale(scale, scale);
+            DrawSVGGraphicsContextDemo(gc.get());
+            break;
+        }
+
+        case Page_SVGGraphicsContextDirect:
+        {
+            // This page is purely about the direct-to-file creation API,
+            // so we don't render the demo shapes to the screen here.
+            // Instead, we show a message explaining how to use it.
+            dc.SetFont(wxFontInfo(12).Bold());
+            dc.DrawText("This page demonstrates direct wxSVGGraphicsContext creation.",
+                        dc.FromDIP(10), dc.FromDIP(20));
+            dc.SetFont(wxFontInfo(10));
+            dc.DrawText("Drawing commands are sent directly to the SVG context,",
+                        dc.FromDIP(10), dc.FromDIP(50));
+            dc.DrawText("bypassing the wxDC interface.",
+                        dc.FromDIP(10), dc.FromDIP(70));
+            dc.SetTextForeground(*wxBLUE);
+            dc.DrawText("Use \"File -> Save\" to generate the SVG and see the result.",
+                        dc.FromDIP(10), dc.FromDIP(100));
             break;
         }
 #endif // wxUSE_GRAPHICS_CONTEXT
+
+        case Page_Max:
+            break;
     }
 }
 
 } // namespace
+
+bool MyPage::OnSave(const wxString& filename)
+{
+#if wxUSE_GRAPHICS_CONTEXT
+    if ( m_index == Page_SVGGraphicsContextDirect )
+    {
+        // Direct creation demo: we create the context directly with the
+        // filename, bypassing the need to create a wxSVGFileDC ourselves.
+        // We use a larger width (800) and height (700) to ensure all demo shapes fit.
+        std::unique_ptr<wxSVGGraphicsContext> gc(
+            wxSVGGraphicsContext::Create(filename, 800, 700, 72, pageNames[m_index])
+        );
+        if ( !gc )
+            return false;
+
+        gc->SetBitmapHandler(new wxSVGBitmapEmbedHandler());
+
+        // Draw onto the context. (All drawing in DrawSVGGraphicsContextDemo
+        // is done in logical units (DIPs).)
+        DrawSVGGraphicsContextDemo(gc.get());
+
+        // Save the resulting SVG file.
+        return gc->Save();
+    }
+#endif
+
+    wxSize svgSize;
+    wxSVGFileDC tempSvgDC(svgSize);
+    OnDraw(tempSvgDC);
+
+    svgSize = wxSize(tempSvgDC.MaxX(), tempSvgDC.MaxY());
+    svgSize.IncBy(15); // account for wxPen width exceeding bounds
+
+    wxSVGFileDC svgDC(svgSize, filename, pageNames[m_index]);
+    svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
+
+    // Wrap the drawing in an accessible group so that assistive technology
+    // can announce the page's title and description when the SVG is viewed.
+    //
+    // wxSVGAccessibleGroup is RAII: it opens the group in its constructor
+    // and closes it automatically when the scope exits, so there's no need
+    // to pair Begin/EndAccessibleGroup() calls by hand.
+    {
+        wxSVGAccessibleGroup group(svgDC,
+            wxSVGAttributes().Role("img").AriaLabel(pageNames[m_index]),
+            pageNames[m_index],
+            pageDescriptions[m_index]);
+        OnDraw(svgDC);
+    }
+
+    return svgDC.IsOk();
+}
 
 // Define the repainting behaviour
 void MyPage::OnDraw(wxDC& dc)
