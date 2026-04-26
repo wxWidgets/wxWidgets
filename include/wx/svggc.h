@@ -46,6 +46,7 @@ public:
 #ifdef __WXMSW__
     virtual wxGraphicsContext* CreateContextFromNativeHDC(WXHDC dc) override;
 #endif
+    virtual wxWindow* GetWindow() { return nullptr; }
     virtual wxGraphicsContext* CreateContext(wxWindow* window) override;
 
 #if wxUSE_IMAGE
@@ -79,6 +80,16 @@ public:
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
                               const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) override;
+
+    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                                      wxDouble endX, wxDouble endY,
+                                                      wxDouble radius,
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix,
+                                                      const wxColour& WXUNUSED(o))
+    {
+        return CreateRadialGradientBrush(startX, startY, endX, endY, radius, stops, matrix);
+    }
 
     virtual wxGraphicsFont CreateFont(const wxFont& font,
                                       const wxColour& col = *wxBLACK) override;
@@ -160,6 +171,8 @@ public:
     // Paths
     virtual void StrokePath(const wxGraphicsPath& path) override;
     virtual void FillPath(const wxGraphicsPath& path,
+                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) override;
+    virtual void DrawPath(const wxGraphicsPath& path,
                           wxPolygonFillMode fillStyle = wxODDEVEN_RULE) override;
 
     // Text

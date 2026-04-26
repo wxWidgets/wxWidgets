@@ -1394,6 +1394,12 @@ void wxSVGGraphicsContext::FillPath(const wxGraphicsPath& path, wxPolygonFillMod
     AccumulatePathBounds(data);
 }
 
+void wxSVGGraphicsContext::DrawPath(const wxGraphicsPath& path, wxPolygonFillMode fillStyle)
+{
+    FillPath(path, fillStyle);
+    StrokePath(path);
+}
+
 void wxSVGGraphicsContext::GetTextExtent(const wxString& text,
                                          wxDouble* width, wxDouble* height,
                                          wxDouble* descent,
