@@ -208,7 +208,7 @@ private:
     void AccumulatePathBounds(wxGraphicsPathData* data);
 
     wxSVGFileDCImpl* m_impl;
-    wxSVGWriter* m_writer;
+    wxSVGWriter* const m_writer;
     wxPen m_currentPen;
     wxBrush m_currentBrush;
     wxFont m_currentFont;

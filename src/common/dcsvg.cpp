@@ -1099,7 +1099,7 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     svg << "</g>\n";
 
     // Close clipping group elements
-    for ( size_t i = 0; i < m_writer->GetClipNestingLevel(); i++ )
+    for ( int i = 0; i < m_writer->GetClipNestingLevel(); i++ )
     {
         svg << "</g>\n";
     }
@@ -1758,11 +1758,11 @@ wxString wxSVGWriter::GetDocument() const
     wxString doc(m_svgDocument);
 
     // Close remaining clipping group elements
-    for ( size_t i = 0; i < m_clipNestingLevel; i++ )
+    for ( int i = 0; i < m_clipNestingLevel; i++ )
         doc += wxS("</g>\n");
 
     // Close remaining layer group elements
-    for ( size_t i = 0; i < m_layerDepth; i++ )
+    for ( int i = 0; i < m_layerDepth; i++ )
         doc += wxS("</g>\n");
 
     // Close the currently-open pen/brush group.
@@ -1770,7 +1770,7 @@ wxString wxSVGWriter::GetDocument() const
 
     // Close any accessible groups left open by missing EndAccessibleGroup()
     // calls, so the output is still well-formed XML.
-    for ( size_t i = 0; i < m_accessibleGroupDepth; i++ )
+    for ( int i = 0; i < m_accessibleGroupDepth; i++ )
         doc += wxS("</g>\n");
 
     doc += wxS("</svg>\n");

@@ -1062,7 +1062,7 @@ void wxSVGGraphicsContext::PopState()
     {
         // Close the clipping groups that were opened since PushState.
         m_writer->Write(wxS("</g>\n")); // Close the attribute group
-        size_t level = m_writer->GetClipNestingLevel();
+        auto level = m_writer->GetClipNestingLevel();
         while ( level > s.clipNestingLevel )
         {
             m_writer->Write(wxS("</g>\n"));

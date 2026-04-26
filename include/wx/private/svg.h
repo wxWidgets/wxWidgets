@@ -127,17 +127,17 @@ public:
     size_t GetNextGradientId() { return ms_gradientUniqueId++; }
     size_t GetNextClipId() { return ms_clipUniqueId++; }
 
-    size_t GetAccessibleGroupDepth() const { return m_accessibleGroupDepth; }
+    int GetAccessibleGroupDepth() const { return m_accessibleGroupDepth; }
     void IncrementAccessibleGroupDepth() { ++m_accessibleGroupDepth; }
     void DecrementAccessibleGroupDepth() { --m_accessibleGroupDepth; }
 
-    size_t GetLayerDepth() const { return m_layerDepth; }
+    int GetLayerDepth() const { return m_layerDepth; }
     void IncrementLayerDepth() { ++m_layerDepth; }
     void DecrementLayerDepth() { --m_layerDepth; }
 
-    size_t GetClipNestingLevel() const { return m_clipNestingLevel; }
+    int GetClipNestingLevel() const { return m_clipNestingLevel; }
     void IncrementClipNestingLevel() { ++m_clipNestingLevel; }
-    void SetClipNestingLevel(size_t n) { m_clipNestingLevel = n; }
+    void SetClipNestingLevel(int n) { m_clipNestingLevel = n; }
 
 #if wxUSE_GRAPHICS_CONTEXT
     const wxGraphicsBrush& GetGraphicsBrush() const { return m_graphicsBrush; }
@@ -178,9 +178,9 @@ private:
     std::unique_ptr<wxSVGBitmapHandler> m_bmpHandler;
     wxSVGShapeRenderingMode m_renderingMode = wxSVG_SHAPE_RENDERING_AUTO;
 
-    size_t m_accessibleGroupDepth = 0;
-    size_t m_layerDepth = 0;
-    size_t m_clipNestingLevel = 0;
+    int m_accessibleGroupDepth = 0;
+    int m_layerDepth = 0;
+    int m_clipNestingLevel = 0;
 
     static size_t ms_clipUniqueId;
     static size_t ms_gradientUniqueId;
