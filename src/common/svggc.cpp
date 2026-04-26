@@ -1076,6 +1076,21 @@ wxSVGGraphicsContext* wxSVGGraphicsContext::Create(const wxSize& size,
 
 wxSVGGraphicsContext::~wxSVGGraphicsContext() = default;
 
+wxString wxSVGGraphicsContext::GetSVGDocument() const
+{
+    return m_impl->GetSVGDocument();
+}
+
+bool wxSVGGraphicsContext::Save()
+{
+    return m_impl->Save();
+}
+
+void wxSVGGraphicsContext::SetBitmapHandler(wxSVGBitmapHandler* handler)
+{
+    m_impl->SetBitmapHandler(handler);
+}
+
 void wxSVGGraphicsContext::PushState()
 {
     m_stateStack.push({ m_transform, m_writer->GetClipNestingLevel(), m_composition });

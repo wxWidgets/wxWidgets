@@ -20,6 +20,7 @@
 
 class wxSVGFileDCImpl;
 class WXDLLIMPEXP_FWD_CORE wxSVGWriter;
+class WXDLLIMPEXP_FWD_CORE wxSVGBitmapHandler;
 
 // Singleton renderer producing wxSVGGraphicsContext and its supporting
 // handle/data objects. This renderer does not know how to create contexts
@@ -168,6 +169,16 @@ public:
                                      const wxString& filename = wxString(),
                                      const wxString& title = wxString(),
                                      double dpi = wxSVG_DEFAULT_DPI);
+
+    // Return the SVG document as a string.
+    wxString GetSVGDocument() const;
+
+    // Write the document to the configured filename.
+    bool Save();
+
+    // Set a handler for bitmap processing (e.g., embedding).
+    // Takes ownership of the handler.
+    void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
     // State stack
     virtual void PushState() override;
