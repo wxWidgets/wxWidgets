@@ -57,6 +57,18 @@ public:
     // the returned context.
     wxGraphicsContext* CreateContext(wxSVGFileDC& dc);
 
+    // Create a context that draws into the given file.
+    wxGraphicsContext* CreateContext(const wxString& filename,
+                                     int width = 320,
+                                     int height = 240,
+                                     double dpi = wxSVG_DEFAULT_DPI,
+                                     const wxString& title = wxString());
+
+    wxGraphicsContext* CreateContext(const wxSize& size,
+                                     const wxString& filename = wxString(),
+                                     const wxString& title = wxString(),
+                                     double dpi = wxSVG_DEFAULT_DPI);
+
     virtual wxGraphicsContext* CreateMeasuringContext() override;
 
     virtual wxGraphicsPath CreatePath() override;
@@ -130,11 +142,32 @@ class WXDLLIMPEXP_CORE wxSVGGraphicsContext : public wxGraphicsContext
 public:
     explicit wxSVGGraphicsContext(wxSVGFileDCImpl* impl);
     explicit wxSVGGraphicsContext(wxSVGFileDC& dc);
+    wxSVGGraphicsContext(const wxString& filename,
+                         int width = 320,
+                         int height = 240,
+                         double dpi = wxSVG_DEFAULT_DPI,
+                         const wxString& title = wxString());
+    wxSVGGraphicsContext(const wxSize& size,
+                         const wxString& filename = wxString(),
+                         const wxString& title = wxString(),
+                         double dpi = wxSVG_DEFAULT_DPI);
     virtual ~wxSVGGraphicsContext();
 
     // Construct a graphics context that draws into the given SVG DC. The DC
     // must outlive the returned context.
-    static wxGraphicsContext* Create(wxSVGFileDC& dc);
+    static wxSVGGraphicsContext* Create(wxSVGFileDC& dc);
+
+    // Construct a graphics context that draws into the given file.
+    static wxSVGGraphicsContext* Create(const wxString& filename,
+                                     int width = 320,
+                                     int height = 240,
+                                     double dpi = wxSVG_DEFAULT_DPI,
+                                     const wxString& title = wxString());
+
+    static wxSVGGraphicsContext* Create(const wxSize& size,
+                                     const wxString& filename = wxString(),
+                                     const wxString& title = wxString(),
+                                     double dpi = wxSVG_DEFAULT_DPI);
 
     // State stack
     virtual void PushState() override;
@@ -199,6 +232,9 @@ protected:
     virtual void DoDrawText(const wxString& str, wxDouble x, wxDouble y) override;
 
 private:
+    // This constructor takes ownership of the DC.
+    explicit wxSVGGraphicsContext(wxSVGFileDC* dc);
+
     // Mirror a pen/brush onto the parent DC so its NewGraphicsIfNeeded()
     // machinery closes/reopens the current <g> group before the next write.
     void SyncPenToDC(const wxPen& pen);
@@ -220,8 +256,11 @@ private:
     // so wxSVGFileDC::MaxX/MaxY include GC-rendered geometry.
     void AccumulatePathBounds(wxGraphicsPathData* data);
 
+    // underlying DC implementation
     wxSVGFileDCImpl* m_impl;
     wxSVGWriter* const m_writer;
+    // DC owned by this context, if any constructed as standalone object
+    std::unique_ptr<wxSVGFileDC> m_ownedDC;
     wxPen m_currentPen;
     wxBrush m_currentBrush;
     wxFont m_currentFont;
@@ -237,6 +276,8 @@ private:
         wxCompositionMode compositionMode;
     };
     std::stack<State> m_stateStack;
+
+    friend class wxSVGFileDCImpl;
 
     wxDECLARE_NO_COPY_CLASS(wxSVGGraphicsContext);
 };

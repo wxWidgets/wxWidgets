@@ -1031,9 +1031,47 @@ wxSVGGraphicsContext::wxSVGGraphicsContext(wxSVGFileDC& dc)
 {
 }
 
-wxGraphicsContext* wxSVGGraphicsContext::Create(wxSVGFileDC& dc)
+wxSVGGraphicsContext::wxSVGGraphicsContext(const wxString& filename,
+                                           int width, int height,
+                                           double dpi,
+                                           const wxString& title)
+    : wxSVGGraphicsContext(new wxSVGFileDC(filename, width, height, dpi, title))
+{
+}
+
+wxSVGGraphicsContext::wxSVGGraphicsContext(const wxSize& size,
+                                           const wxString& filename,
+                                           const wxString& title,
+                                           double dpi)
+    : wxSVGGraphicsContext(new wxSVGFileDC(size, filename, title, dpi))
+{
+}
+
+wxSVGGraphicsContext::wxSVGGraphicsContext(wxSVGFileDC* dc)
+    : wxSVGGraphicsContext(static_cast<wxSVGFileDCImpl*>(dc->GetImpl()))
+{
+    m_ownedDC.reset(dc);
+}
+
+wxSVGGraphicsContext* wxSVGGraphicsContext::Create(wxSVGFileDC& dc)
 {
     return new wxSVGGraphicsContext(dc);
+}
+
+wxSVGGraphicsContext* wxSVGGraphicsContext::Create(const wxString& filename,
+                                                int width, int height,
+                                                double dpi,
+                                                const wxString& title)
+{
+    return new wxSVGGraphicsContext(filename, width, height, dpi, title);
+}
+
+wxSVGGraphicsContext* wxSVGGraphicsContext::Create(const wxSize& size,
+                                                const wxString& filename,
+                                                const wxString& title,
+                                                double dpi)
+{
+    return new wxSVGGraphicsContext(size, filename, title, dpi);
 }
 
 wxSVGGraphicsContext::~wxSVGGraphicsContext() = default;
