@@ -18,10 +18,6 @@
 #include "wx/filename.h"
 #include "wx/dc.h"
 
-#if wxUSE_GRAPHICS_CONTEXT
-#include "wx/graphics.h"
-#endif
-
 #include <map>
 #include <memory>
 
@@ -73,6 +69,7 @@ class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
 class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsContext;
 class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsPathData;
 class WXDLLIMPEXP_FWD_CORE wxSVGWriter;
+class WXDLLIMPEXP_FWD_CORE wxGraphisContext;
 
 // Base class for bitmap handlers used by wxSVGFileDC, used by the standard
 // "embed" and "link" handlers below but can also be used to create a custom
