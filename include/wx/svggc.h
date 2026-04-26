@@ -220,7 +220,7 @@ private:
     struct State
     {
         wxGraphicsMatrix transform;
-        size_t clipNestingLevel;
+        int clipNestingLevel;
         wxCompositionMode compositionMode;
     };
     std::stack<State> m_stateStack;
