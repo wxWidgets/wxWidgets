@@ -872,20 +872,16 @@ bool MyPage::OnSave(const wxString& filename)
         // Direct creation demo: we create the context directly with the
         // filename, bypassing the need to create a wxSVGFileDC ourselves.
         // We use a larger width (800) and height (700) to ensure all demo shapes fit.
-        std::unique_ptr<wxSVGGraphicsContext> gc(
-            wxSVGGraphicsContext::Create(filename, 800, 700, 72, pageNames[m_index])
-        );
-        if ( !gc )
-            return false;
+        wxSVGGraphicsContext gc(filename, 800, 700, 72, pageNames[m_index]);
 
-        gc->SetBitmapHandler(new wxSVGBitmapEmbedHandler());
+        gc.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
 
         // Draw onto the context. (All drawing in DrawSVGGraphicsContextDemo
         // is done in logical units (DIPs).)
-        DrawSVGGraphicsContextDemo(gc.get());
+        DrawSVGGraphicsContextDemo(&gc);
 
         // Save the resulting SVG file.
-        return gc->Save();
+        return gc.Save();
     }
 #endif
 
