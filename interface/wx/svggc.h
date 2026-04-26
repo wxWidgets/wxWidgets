@@ -51,6 +51,27 @@ public:
     wxSVGGraphicsContext(wxSVGFileDC& dc);
 
     /**
+        Constructor for creating an SVG file directly.
+
+        @since 3.3.3
+    */
+    wxSVGGraphicsContext(const wxString& filename,
+                         int width = 320,
+                         int height = 240,
+                         double dpi = wxSVG_DEFAULT_DPI,
+                         const wxString& title = wxString());
+
+    /**
+        Constructor for creating an SVG file directly.
+
+        @since 3.3.3
+    */
+    wxSVGGraphicsContext(const wxSize& size,
+                         const wxString& filename = wxString(),
+                         const wxString& title = wxString(),
+                         double dpi = wxSVG_DEFAULT_DPI);
+
+    /**
         Creates a graphics context that draws into the given SVG DC.
 
         Equivalent to calling @ref wxSVGFileDC::GetGraphicsContext().
@@ -65,6 +86,30 @@ public:
         @since 3.3.3
     */
     static wxGraphicsContext* Create(wxSVGFileDC& dc);
+
+    /**
+        Returns the SVG document as a string.
+
+        @since 3.3.3
+    */
+    wxString GetSVGDocument() const;
+
+    /**
+        Writes the document to the configured filename.
+
+        @return @true if the file was written successfully, @false otherwise.
+
+        @since 3.3.3
+    */
+    bool Save();
+
+    /**
+        Sets a handler for bitmap processing (e.g., embedding).
+        Takes ownership of the handler.
+
+        @since 3.3.3
+    */
+    void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
     /** @name State stack */
     ///@{
@@ -278,11 +323,6 @@ public:
 class wxSVGGraphicsRenderer : public wxGraphicsRenderer
 {
 public:
-    /**
-        Returns the singleton instance of the SVG renderer.
-    */
-    static wxGraphicsRenderer* Get();
-
     /** @name Context creation */
     ///@{
     /**
@@ -330,6 +370,27 @@ public:
         @since 3.3.3
     */
     wxGraphicsContext* CreateContext(wxSVGFileDC& dc);
+
+    /**
+        Creates a graphics context that draws into the given file.
+
+        @since 3.3.3
+    */
+    wxGraphicsContext* CreateContext(const wxString& filename,
+                                     int width = 320,
+                                     int height = 240,
+                                     double dpi = wxSVG_DEFAULT_DPI,
+                                     const wxString& title = wxString());
+
+    /**
+        Creates a graphics context that draws into the given file.
+
+        @since 3.3.3
+    */
+    wxGraphicsContext* CreateContext(const wxSize& size,
+                                     const wxString& filename = wxString(),
+                                     const wxString& title = wxString(),
+                                     double dpi = wxSVG_DEFAULT_DPI);
 
     /**
         This method is not supported by the SVG renderer and always returns @NULL.
