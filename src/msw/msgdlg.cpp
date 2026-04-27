@@ -584,13 +584,44 @@ namespace
 {
 
 HRESULT CALLBACK
-wxTaskDialogCallback(HWND hwnd, UINT msg, WPARAM, LPARAM, LONG_PTR)
+wxTaskDialogCallback(HWND hwnd, UINT msg, WPARAM wParam, LPARAM, LONG_PTR refData)
 {
     switch ( msg )
     {
-        case TDN_DIALOG_CONSTRUCTED:
-            wxMSWDarkMode::EnableForTLW(hwnd);
-            break;
+    case TDN_CREATED:
+        // TDN_CREATED fires after the full HWND hierarchy is built and
+        // before the window is shown — the right moment to install theming.
+        // (The old code used TDN_DIALOG_CONSTRUCTED which fires too early
+        // for UI Automation to walk the child windows reliably.)
+        wxMSWDarkMode::AllowForTaskDialog(
+            hwnd,
+            reinterpret_cast<const TASKDIALOGCONFIG*>(refData));
+        break;
+
+    case TDN_EXPANDO_BUTTON_CLICKED:
+        // Store the expanded state as a window property so the subclassed
+        // TaskPage panel can read it during WM_PAINT without a UIA call.
+        SetProp(hwnd, L"IsExpanded",
+            reinterpret_cast<HANDLE>(static_cast<ULONG_PTR>(wParam)));
+        break;
+
+    case TDN_DESTROYED:
+        // Clean up all subclasses and GDI/theme objects.
+        // Without this call, GDI handles and thread_local state leak
+        // when the dialog is destroyed.
+        wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
+        break;
+
+    case WM_SETTINGCHANGE:
+        // Re-apply (or remove) theming when the OS light/dark preference
+        // changes while the dialog is open.
+        if (wxMSWDarkMode::IsActive())
+            wxMSWDarkMode::AllowForTaskDialog(
+                hwnd,
+                reinterpret_cast<const TASKDIALOGCONFIG*>(refData));
+        else
+            wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
+        break;
     }
 
     return S_OK;
@@ -753,6 +784,7 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     }
 
     tdc.pfCallback = wxTaskDialogCallback;
+    tdc.lpCallbackData = (LONG_PTR) &tdc;
 }
 
 void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
