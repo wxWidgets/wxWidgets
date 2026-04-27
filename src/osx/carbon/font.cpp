@@ -1176,6 +1176,13 @@ bool wxNativeFontInfo::FromString(const wxString& s)
             descriptor = CTFontDescriptorCreateWithAttributes(attributes);
         if (descriptor != nullptr)
         {
+            wxCFDictionaryRef traits((CFDictionaryRef)CTFontDescriptorCopyAttribute(descriptor, kCTFontTraitsAttribute));
+            if (!traits)
+            {
+                CFRelease(descriptor);
+                return false;
+            }
+
             InitFromFontDescriptor(descriptor);
             CFRelease(descriptor);
             m_underlined = underlined;
