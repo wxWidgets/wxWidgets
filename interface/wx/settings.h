@@ -62,8 +62,8 @@ enum wxSystemColour
     wxSYS_COLOUR_ACTIVEBORDER,        //!< Active window border colour.
     wxSYS_COLOUR_INACTIVEBORDER,      //!< Inactive window border colour.
     wxSYS_COLOUR_APPWORKSPACE,        //!< Background colour for MDI applications.
-    wxSYS_COLOUR_HIGHLIGHT,           //!< Colour of item(s) selected in a control.
-    wxSYS_COLOUR_HIGHLIGHTTEXT,       //!< Colour of the text of item(s) selected in a control.
+    wxSYS_COLOUR_HIGHLIGHT,           //!< Background colour of a selected item or selected text in a control.
+    wxSYS_COLOUR_HIGHLIGHTTEXT,       //!< Colour of selected text.
     wxSYS_COLOUR_BTNFACE,             //!< Face shading colour on push buttons.
     wxSYS_COLOUR_BTNSHADOW,           //!< Edge shading colour on push buttons.
     wxSYS_COLOUR_GRAYTEXT,            //!< Colour of greyed (disabled) text.

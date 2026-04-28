@@ -312,10 +312,13 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
 
         case wxSYS_COLOUR_ACTIVECAPTION:
         case wxSYS_COLOUR_APPWORKSPACE:
-        case wxSYS_COLOUR_INFOBK:
         case wxSYS_COLOUR_LISTBOX:
         case wxSYS_COLOUR_WINDOW:
             return wxColour(0x202020);
+
+        // Tooltip background of File Explorer toolbar button and file, averaged
+        case wxSYS_COLOUR_INFOBK:
+            return wxColour(0x2a2a2a);
 
         case wxSYS_COLOUR_BTNTEXT:
         case wxSYS_COLOUR_CAPTIONTEXT:
@@ -325,7 +328,7 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_LISTBOXTEXT:
         case wxSYS_COLOUR_MENUTEXT:
         case wxSYS_COLOUR_WINDOWTEXT:
-            return wxColour(0xe0e0e0);
+            return *wxWHITE;
 
         case wxSYS_COLOUR_HOTLIGHT:
             return wxColour(0xe48435);
@@ -346,8 +349,8 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
             return wxColour(0x626262);
 
         case wxSYS_COLOUR_HIGHLIGHT:
-        case wxSYS_COLOUR_MENUHILIGHT:
-            return wxColour(0x9e5315);
+            // Selected text background in File Open dialog
+            return wxColour(0xd47800);
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:
             return wxColour(0x777777);
