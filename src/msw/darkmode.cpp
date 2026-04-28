@@ -299,6 +299,10 @@ wxDarkModeSettings::~wxDarkModeSettings() = default;
 
 wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
 {
+    // This code is currently only used under Windows 10 and 11, so if this is
+    // false, we must be using Windows 11.
+    static const bool isWindows10 = wxGetWinVersion() == wxWinVersion_10;
+
     // This is not great at all, but better than using light mode colours that
     // are not appropriate for the dark mode.
     //
@@ -312,10 +316,12 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
 
         case wxSYS_COLOUR_ACTIVECAPTION:
         case wxSYS_COLOUR_APPWORKSPACE:
-        case wxSYS_COLOUR_INFOBK:
         case wxSYS_COLOUR_LISTBOX:
         case wxSYS_COLOUR_WINDOW:
-            return wxColour(0x202020);
+            return wxColour(isWindows10 ? 0x202020 : 0x191919);
+
+        case wxSYS_COLOUR_INFOBK:
+            return wxColour(isWindows10 ? 0x2b2b2b : 0x2a2a2a);
 
         case wxSYS_COLOUR_BTNTEXT:
         case wxSYS_COLOUR_CAPTIONTEXT:
@@ -325,7 +331,7 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_LISTBOXTEXT:
         case wxSYS_COLOUR_MENUTEXT:
         case wxSYS_COLOUR_WINDOWTEXT:
-            return wxColour(0xe0e0e0);
+            return *wxWHITE;
 
         case wxSYS_COLOUR_HOTLIGHT:
             return wxColour(0xe48435);
@@ -346,8 +352,8 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
             return wxColour(0x626262);
 
         case wxSYS_COLOUR_HIGHLIGHT:
-        case wxSYS_COLOUR_MENUHILIGHT:
-            return wxColour(0x9e5315);
+            // Selected text background in File Open dialog
+            return wxColour(isWindows10 ? 0xd77800 : 0xd47800);
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:
             return wxColour(0x777777);
@@ -363,6 +369,7 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         case wxSYS_COLOUR_GRAYTEXT:
         case wxSYS_COLOUR_INACTIVEBORDER:
+        case wxSYS_COLOUR_MENUHILIGHT:
         case wxSYS_COLOUR_WINDOWFRAME:
             return wxColour();
 
