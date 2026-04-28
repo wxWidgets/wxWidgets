@@ -182,7 +182,11 @@ def main():
         configure_command += f'-DwxUSE_LIBTIFF=builtin '
         configure_command += f'-DCMAKE_CONFIGURATION_TYPES="Debug;RelWithDebInfo" '
     elif PLATFORM == 'mac':
-        configure_command += f'-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"'
+        configure_command += f'-DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" '
+        configure_command += f'-DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 '
+        configure_command += f'-DCMAKE_MACOSX_RPATH=OFF '
+        configure_command += f'-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=TRUE '
+        configure_command += f'-DCMAKE_INSTALL_NAME_DIR="@executable_path" '
 
     if Action.CHECKOUT in ACTION or Action.GENERATE in ACTION:
         initialize_and_update_submodules(SUBMODULES, SRC_DIR, ENV)
