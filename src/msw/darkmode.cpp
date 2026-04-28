@@ -366,6 +366,7 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         case wxSYS_COLOUR_GRAYTEXT:
         case wxSYS_COLOUR_INACTIVEBORDER:
+        case wxSYS_COLOUR_MENUHILIGHT:
         case wxSYS_COLOUR_WINDOWFRAME:
             return wxColour();
 
