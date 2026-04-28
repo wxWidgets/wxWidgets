@@ -314,10 +314,11 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_APPWORKSPACE:
         case wxSYS_COLOUR_LISTBOX:
         case wxSYS_COLOUR_WINDOW:
-            return wxColour(0x202020);
+            // File Explorer background
+            return wxColour(0x191919);
 
-        // Tooltip background of File Explorer toolbar button and file, averaged
         case wxSYS_COLOUR_INFOBK:
+            // Tooltip background of File Explorer toolbar button and file, averaged
             return wxColour(0x2a2a2a);
 
         case wxSYS_COLOUR_BTNTEXT:
