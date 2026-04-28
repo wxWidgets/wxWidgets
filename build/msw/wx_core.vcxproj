@@ -981,6 +981,7 @@
     <ClCompile Include="..\..\src\common\statlinecmn.cpp" />
     <ClCompile Include="..\..\src\common\stattextcmn.cpp" />
     <ClCompile Include="..\..\src\common\stockitem.cpp" />
+    <ClCompile Include="..\..\src\common\svggc.cpp" />
     <ClCompile Include="..\..\src\common\tbarbase.cpp" />
     <ClCompile Include="..\..\src\common\textcmn.cpp" />
     <ClCompile Include="..\..\src\common\textentrycmn.cpp" />
@@ -2074,6 +2075,7 @@
     <ClInclude Include="..\..\include\wx\statline.h" />
     <ClInclude Include="..\..\include\wx\stattext.h" />
     <ClInclude Include="..\..\include\wx\statusbr.h" />
+    <ClInclude Include="..\..\include\wx\svggc.h" />
     <ClInclude Include="..\..\include\wx\systhemectrl.h" />
     <ClInclude Include="..\..\include\wx\taskbarbutton.h" />
     <ClInclude Include="..\..\include\wx\tbarbase.h" />

@@ -922,6 +922,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/statlinecmn.cpp
     src/common/stattextcmn.cpp
     src/common/stockitem.cpp
+    src/common/svggc.cpp
     src/common/tbarbase.cpp
     src/common/textcmn.cpp
     src/common/textentrycmn.cpp
@@ -1121,6 +1122,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/statbox.h
     wx/stattext.h
     wx/statusbr.h
+    wx/svggc.h
     wx/testing.h
     wx/textcompleter.h
     wx/textctrl.h

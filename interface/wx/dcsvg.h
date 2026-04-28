@@ -156,6 +156,15 @@ public:
     wxSVGFileDC as a parameter instead of a wxDC. Thus the wxSVGFileDC
     is a write-only class.
 
+    Starting with wxWidgets 3.3.3, wxSVGFileDC provides integrated support
+    for @ref wxGraphicsContext. By calling GetGraphicsContext(), you can
+    access a @ref wxSVGGraphicsContext which supports advanced vector
+    features such as:
+    - Cubic and quadratic Bézier curves via @ref wxGraphicsPath.
+    - Linear and radial gradient brushes.
+    - Semi-transparent colors and alpha blending.
+    - Arbitrary affine transformations.
+
     As the wxSVGFileDC is a vector format, raster operations like GetPixel()
     are unlikely to be supported. However, the SVG specification allows for
     raster files to be embedded in the SVG, and so bitmaps, icons and blit
@@ -263,6 +272,23 @@ public:
     void EndAccessibleGroup();
 
     /**
+        Opens a new layer with the given @a opacity.
+
+        All drawing commands until the matching EndLayer() call will be
+        composited with this opacity. Layers can be nested.
+
+        @since 3.3.3
+    */
+    void BeginLayer(double opacity);
+
+    /**
+        Closes the layer opened by the most recent BeginLayer() call.
+
+        @since 3.3.3
+    */
+    void EndLayer();
+
+    /**
         Returns the SVG document as a string.
 
         This can be used to retrieve the generated SVG content regardless of
@@ -288,10 +314,31 @@ public:
     bool Save();
 
     /**
+        Returns the graphics context associated with this DC.
+
+        The returned object is a @ref wxSVGGraphicsContext instance.
+        While @ref wxSVGFileDC provides standard @ref wxDC drawing methods,
+        retrieving the @ref wxGraphicsContext allows using more advanced
+        drawing features that are not available in the base @ref wxDC API,
+        such as:
+        - Complex paths including cubic and quadratic Bézier curves.
+        - Linear and radial gradient brushes.
+        - Transparency and alpha blending for all drawing operations.
+        - Advanced coordinate transformations (scaling, rotation, skewing)
+          applied to groups of objects.
+
+        Note that any state changes (pen, brush, font) made to the returned
+        context are mirrored back to the DC, and vice versa.
+
+        @since 3.3.3
+    */
+    virtual wxGraphicsContext* GetGraphicsContext() const;
+
+    /**
         Destroys the current clipping region so that none of the DC is clipped.
         Since intersections arising from sequential calls to SetClippingRegion are represented
-        with nested SVG group elements (\<g\>), all such groups are closed when
-        DestroyClippingRegion is called.
+        with nested SVG group elements (`<g>`), all such groups are closed when
+        @c DestroyClippingRegion is called.
     */
     void DestroyClippingRegion();
 
@@ -355,6 +402,32 @@ public:
         Closes the accessible group opened by the constructor.
     */
     ~wxSVGAccessibleGroup();
+};
+
+/**
+    @class wxSVGLayer
+
+    RAII helper that opens a layer on a wxSVGFileDC when constructed and
+    closes it when destroyed. Use it in place of a manual
+    wxSVGFileDC::BeginLayer() / wxSVGFileDC::EndLayer() pair so the layer
+    is reliably closed on scope exit.
+
+    @library{wxcore}
+    @category{dc}
+    @since 3.3.3
+*/
+class wxSVGLayer
+{
+public:
+    /**
+        Opens a new layer on @a dc with the given @a opacity.
+    */
+    wxSVGLayer(wxSVGFileDC& dc, double opacity);
+
+    /**
+        Closes the layer opened by the constructor.
+    */
+    ~wxSVGLayer();
 };
 
 /**
