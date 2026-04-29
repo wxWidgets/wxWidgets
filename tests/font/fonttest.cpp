@@ -383,6 +383,15 @@ TEST_CASE("wxFont::NativeFontInfo", "[font][fontinfo]")
     CHECK( !font.SetNativeFontInfo("bloordyblop") );
 #endif
 
+#ifdef __WXOSX__
+    CHECK( !font.SetNativeFontInfo(
+        "3;90;0;0;43;<plist version=\"1.0\"><dict>"
+        "<key>NSFontNameAttribute</key>"
+        "<string>DefinitelyNotARealWxFontTest-Regular</string>"
+        "<key>NSFontSizeAttribute</key><real>14</real>"
+        "</dict></plist>") );
+#endif
+
     // Pango font description doesn't have 'underlined' and 'strikethrough'
     // attributes, so wxNativeFontInfo implements these itself. Test if these
     // are properly preserved by wxNativeFontInfo or its string description.
