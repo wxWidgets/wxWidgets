@@ -519,16 +519,15 @@ void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         wxRibbonButtonBarButtonState size, wxReadOnlyDC& dc)
 {
     wxRibbonButtonBarButtonSizeInfo& info = button->sizes[size];
+    const double scale = GetDPIScaleFactor() / GetContentScaleFactor();
+    const wxSize bmpSizeLarge = m_bitmap_size_large * scale;
+    const wxSize bmpSizeSmall = m_bitmap_size_small * scale;
+
     if(m_art)
     {
-        // Scale base bitmap sizes by current DPI for layout calculation
-        const double scale = GetDPIScaleFactor();
-        wxSize scaledLarge = m_bitmap_size_large * scale;
-        wxSize scaledSmall = m_bitmap_size_small * scale;
-
         info.is_supported = m_art->GetButtonBarButtonSize(dc, this,
             button->kind, size, button->label, button->text_min_width[size],
-            scaledLarge, scaledSmall, &info.size,
+            bmpSizeLarge, bmpSizeSmall, &info.size,
             &info.normal_region, &info.dropdown_region);
     }
     else
@@ -946,6 +945,7 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     // Calculate DPI-scaled bitmap sizes (must match layout calculation)
     const double scale = GetDPIScaleFactor();
+    const double contentScale = GetContentScaleFactor();
     const wxSize scaledLarge = m_bitmap_size_large * scale;
     const wxSize scaledSmall = m_bitmap_size_small * scale;
 
@@ -969,6 +969,8 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
                 const wxBitmapBundle& bundle = disabled ?
                     m_bundlesLargeDisabled[idx] : m_bundlesLarge[idx];
                 bitmap = bundle.GetBitmap(scaledLarge);
+                if ( bitmap.IsOk() )
+                    bitmap.SetScaleFactor(contentScale);
             }
         }
 
@@ -980,6 +982,8 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
                 const wxBitmapBundle& bundle = disabled ?
                     m_bundlesSmallDisabled[idx] : m_bundlesSmall[idx];
                 bitmap_small = bundle.GetBitmap(scaledSmall);
+                if ( bitmap_small.IsOk() )
+                    bitmap_small.SetScaleFactor(contentScale);
             }
         }
 
@@ -1167,14 +1171,12 @@ void wxRibbonButtonBar::MakeLayouts()
                               wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
         }
 
-        // TODO: small buttons are not implemented yet in
-        //       art_msw.cpp:2581 and will be invisible
-        /*iLast = btn_count;
+        iLast = btn_count;
         while(iLast-- > 0)
         {
             TryCollapseLayout(m_layouts.Last(), iLast, &iLast,
                               wxRIBBON_BUTTONBAR_BUTTON_SMALL);
-        }*/
+        }
     }
 }
 
