@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   build-fedora:
     docker:
-      - image: fedora
+      - image: fedora:43
     steps:
       - run:
           name: Install Git

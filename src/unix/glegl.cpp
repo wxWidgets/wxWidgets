@@ -561,7 +561,9 @@ static void gtk_glcanvas_scale_factor_notify(GtkWidget* widget,
 } // extern "C"
 #endif // GDK_WINDOWING_WAYLAND
 
-EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
+EGLSurface
+wxGLCanvasEGL::DoCallCreatePlatformWindowSurface(wxUIntPtr windowID,
+                                                 void* windowPtr) const
 {
     // Type of eglCreatePlatformWindowSurface[EXT]().
     typedef EGLSurface (*CreatePlatformWindowSurface)(EGLDisplay display,
@@ -585,7 +587,7 @@ EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
         if ( s_eglCreatePlatformWindowSurface )
         {
             return s_eglCreatePlatformWindowSurface(m_display, *m_config,
-                                                    window,
+                                                    windowPtr,
                                                     NULL);
         }
     }
@@ -607,13 +609,13 @@ EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
     if ( s_eglCreatePlatformWindowSurfaceEXT )
     {
         return s_eglCreatePlatformWindowSurfaceEXT(m_display, *m_config,
-                                                   window,
+                                                   windowPtr,
                                                    NULL);
     }
     else
     {
         return eglCreateWindowSurface(m_display, *m_config,
-                                      reinterpret_cast<EGLNativeWindowType>(window),
+                                      reinterpret_cast<EGLNativeWindowType>(windowID),
                                       NULL);
     }
 }
@@ -633,12 +635,12 @@ bool wxGLCanvasEGL::CreateSurface()
     {
         if ( m_surface != EGL_NO_SURFACE )
         {
-            eglDestroySurface(m_surface, m_display);
+            eglDestroySurface(m_display, m_surface);
             m_surface = EGL_NO_SURFACE;
         }
 
         m_xwindow = GDK_WINDOW_XID(window);
-        m_surface = CallCreatePlatformWindowSurface(&m_xwindow);
+        m_surface = CallCreatePlatformWindowSurface(m_xwindow);
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
@@ -709,7 +711,7 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
 {
     if ( m_config && m_config != ms_glEGLConfig )
         delete m_config;
-    if ( m_surface )
+    if ( m_surface != EGL_NO_SURFACE )
         eglDestroySurface(m_display, m_surface);
 #ifdef GDK_WINDOWING_WAYLAND
     DestroyWaylandSubsurface();
