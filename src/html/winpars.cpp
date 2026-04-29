@@ -430,9 +430,8 @@ void wxHtmlWinParser::AddPreBlock(const wxString& text)
 
         const wxString::const_iterator end = text.end();
         wxString::const_iterator copyFrom = text.begin();
-        size_t pos = 0;
         int posColumn = m_posColumn;
-        for ( wxString::const_iterator i = copyFrom; i != end; ++i, ++pos )
+        for ( wxString::const_iterator i = copyFrom; i != end; ++i )
         {
             if ( *i == '\t' )
             {
