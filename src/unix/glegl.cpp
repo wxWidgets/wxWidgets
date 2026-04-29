@@ -608,7 +608,9 @@ wxGLCanvasEGL::DoCallCreatePlatformWindowSurface(wxUIntPtr windowID,
     }
     else
     {
-        return eglCreateWindowSurface(m_display, m_config, windowID, nullptr);
+        return eglCreateWindowSurface(m_display, m_config,
+                                      reinterpret_cast<EGLNativeWindowType>(windowID),
+                                      nullptr);
     }
 }
 
