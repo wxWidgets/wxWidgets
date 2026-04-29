@@ -677,8 +677,10 @@ public:
     }
     wxSize            GetToolSize() const
     {
-        wxRect rect = GetToolRect( 0 );
-        return wxSize( rect.GetWidth(), rect.GetHeight());
+        const wxAuiToolBarItem* item = FindToolByIndex(0);
+        if (item && item->m_sizerItem)
+            return item->m_sizerItem->GetRect().GetSize();
+        return wxSize();
     }
     // finish Bricsys added
 
