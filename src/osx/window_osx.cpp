@@ -1537,6 +1537,17 @@ wxWindowMac::AlwaysShowScrollbars(bool hflag, bool vflag)
         DoUpdateScrollbarVisibility();
 }
 
+/* static */ wxVisualAttributes
+wxWindowMac::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    // it is important to return valid values for all attributes from here,
+    // GetXXX() below rely on this
+    wxVisualAttributes attrs = wxWindowBase::GetClassDefaultAttributes(variant);
+    attrs.colBg = wxTransparentColour;
+
+    return attrs;
+}
+
 //
 // we draw borders and grow boxes, are already set up and clipped in the current port / cgContextRef
 // our own window origin is at leftOrigin/rightOrigin
