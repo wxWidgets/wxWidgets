@@ -39770,7 +39770,7 @@ $as_echo "yes" >&6; }
 
 fi
         fi
-    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_MSW" = 1; then
+    elif test "$wxUSE_QT" = 1 -o "$wxUSE_MAC" = 1 -o "$wxUSE_MSW" = 1; then
                 $as_echo "#define wxUSE_PRIVATE_FONTS 1" >>confdefs.h
 
     fi

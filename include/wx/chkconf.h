@@ -2300,7 +2300,7 @@
 #endif /* wxUSE_PREFERENCES_EDITOR */
 
 #if wxUSE_PRIVATE_FONTS
-#   if !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXOSX__)
+#   if !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXQT__) && !defined(__WXOSX__)
 #       undef wxUSE_PRIVATE_FONTS
 #       define wxUSE_PRIVATE_FONTS 0
 #   endif

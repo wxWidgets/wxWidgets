@@ -1,21 +1,31 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/font.cpp
-// Author:      Peter Most, Mariano Reingart, Javier Torres
+// Purpose:     wxFont for wxQt
+// Author:      Peter Most, Mariano Reingart, Javier Torres, Keven Ates
 // Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 
-#include <QtGui/QFont>
-#include <QtGui/QFontInfo>
-
 #include "wx/font.h"
 #include "wx/fontutil.h"
+
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
+
+#include <QtGui/QFont>
+#include <QtGui/QFontInfo>
 
 // Older versions of QT don't define all the QFont::Weight enum values, so just
 // do it ourselves here for all cases instead.
@@ -42,27 +52,13 @@ static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
 {
     switch (family)
     {
-        case wxFONTFAMILY_DEFAULT:
-            return QFont::AnyStyle;
-
-        case wxFONTFAMILY_DECORATIVE:
-            return QFont::Decorative;
-
-        case wxFONTFAMILY_ROMAN:
-            return QFont::Serif;
-
-        case wxFONTFAMILY_SCRIPT:
-            return QFont::Decorative;
-
-        case wxFONTFAMILY_SWISS:
-            return QFont::SansSerif;
-
-        case wxFONTFAMILY_MODERN:
-            return QFont::TypeWriter;
-
-        case wxFONTFAMILY_TELETYPE:
-            return QFont::TypeWriter;
-
+        case wxFONTFAMILY_DEFAULT:      return QFont::AnyStyle;
+        case wxFONTFAMILY_DECORATIVE:   return QFont::Decorative;
+        case wxFONTFAMILY_ROMAN:        return QFont::Serif;
+        case wxFONTFAMILY_SCRIPT:       return QFont::Decorative;
+        case wxFONTFAMILY_SWISS:        return QFont::SansSerif;
+        case wxFONTFAMILY_MODERN:       return QFont::TypeWriter;
+        case wxFONTFAMILY_TELETYPE:     return QFont::TypeWriter;
         case wxFONTFAMILY_MAX:
             wxFAIL_MSG( "Invalid font family value" );
             break;
@@ -70,87 +66,105 @@ static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
     return QFont::AnyStyle;
 }
 
-// Helper of ConvertFontWeight() and GetNumericWeight(): if a value lies in
-// ]fromMin, fromMax] interval, then map it to [toMin, toMax] interval linearly
-// and return true, otherwise return false and don't modify it.
+// Helper of ConvertFontWeight() and GetNumericWeight()
+//      If a value lies in (fromMin, fromMax] interval, then
+//          map it to [toMin, toMax] interval linearly and return true
+//      Otherwise don't modify it and return false.
 static bool TryToMap(int& x, int fromMin, int fromMax, int toMin, int toMax)
 {
     if ( x > fromMin && x <= fromMax )
     {
         x = (toMin*(fromMax - x) + toMax*(x - fromMin))/(fromMax - fromMin);
-
         return true;
     }
-
     return false;
 }
 
 static int ConvertFontWeight(int w)
 {
     // Note that wxQFont_Thin is 0, so we can't have anything lighter than it.
-    if ( TryToMap(w, wxFONTWEIGHT_INVALID, wxFONTWEIGHT_THIN,
-                     wxQFont_Thin, wxQFont_Thin) ||
-         TryToMap(w, wxFONTWEIGHT_THIN, wxFONTWEIGHT_EXTRALIGHT,
-                     wxQFont_Thin, wxQFont_ExtraLight) ||
+    if ( TryToMap(w, wxFONTWEIGHT_INVALID,    wxFONTWEIGHT_THIN,
+                     wxQFont_Thin,       wxQFont_Thin) ||
+         TryToMap(w, wxFONTWEIGHT_THIN,       wxFONTWEIGHT_EXTRALIGHT,
+                     wxQFont_Thin,       wxQFont_ExtraLight) ||
          TryToMap(w, wxFONTWEIGHT_EXTRALIGHT, wxFONTWEIGHT_LIGHT,
                      wxQFont_ExtraLight, wxQFont_Light) ||
-         TryToMap(w, wxFONTWEIGHT_LIGHT, wxFONTWEIGHT_NORMAL,
-                     wxQFont_Light, wxQFont_Normal) ||
-         TryToMap(w, wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_MEDIUM,
-                     wxQFont_Normal, wxQFont_Medium) ||
-         TryToMap(w, wxFONTWEIGHT_MEDIUM, wxFONTWEIGHT_SEMIBOLD,
-                     wxQFont_Medium, wxQFont_DemiBold) ||
-         TryToMap(w, wxFONTWEIGHT_SEMIBOLD, wxFONTWEIGHT_BOLD,
-                     wxQFont_DemiBold, wxQFont_Bold) ||
-         TryToMap(w, wxFONTWEIGHT_BOLD, wxFONTWEIGHT_EXTRABOLD,
-                     wxQFont_Bold, wxQFont_ExtraBold) ||
-         TryToMap(w, wxFONTWEIGHT_EXTRABOLD, wxFONTWEIGHT_HEAVY,
-                     wxQFont_ExtraBold, wxQFont_Black) ||
-         TryToMap(w, wxFONTWEIGHT_HEAVY, wxFONTWEIGHT_EXTRAHEAVY,
-                     wxQFont_Black, 99) )
+         TryToMap(w, wxFONTWEIGHT_LIGHT,      wxFONTWEIGHT_NORMAL,
+                     wxQFont_Light,      wxQFont_Normal) ||
+         TryToMap(w, wxFONTWEIGHT_NORMAL,     wxFONTWEIGHT_MEDIUM,
+                     wxQFont_Normal,     wxQFont_Medium) ||
+         TryToMap(w, wxFONTWEIGHT_MEDIUM,     wxFONTWEIGHT_SEMIBOLD,
+                     wxQFont_Medium,     wxQFont_DemiBold) ||
+         TryToMap(w, wxFONTWEIGHT_SEMIBOLD,   wxFONTWEIGHT_BOLD,
+                     wxQFont_DemiBold,   wxQFont_Bold) ||
+         TryToMap(w, wxFONTWEIGHT_BOLD,       wxFONTWEIGHT_EXTRABOLD,
+                     wxQFont_Bold,       wxQFont_ExtraBold) ||
+         TryToMap(w, wxFONTWEIGHT_EXTRABOLD,  wxFONTWEIGHT_HEAVY,
+                     wxQFont_ExtraBold,  wxQFont_Black) ||
+         TryToMap(w, wxFONTWEIGHT_HEAVY,      wxFONTWEIGHT_EXTRAHEAVY,
+                     wxQFont_Black,      99) )
     {
         return w;
     }
-
     wxFAIL_MSG("invalid wxFont weight");
-
     return wxQFont_Normal;
 }
+
+// ----------------------------------------------------------------------------
+// wxFontRefData
+// ----------------------------------------------------------------------------
 
 class wxFontRefData: public wxGDIRefData
 {
 public:
+    // default ctor
     wxFontRefData() {}
 
-    wxFontRefData(const wxFontInfo& info)
-    {
-        if ( info.HasFaceName() )
-            m_nativeFontInfo.SetFaceName(info.GetFaceName());
-        else
-            m_nativeFontInfo.SetFamily(info.GetFamily());
+    // main ctor
+    wxFontRefData(const wxFontInfo& info);
 
-        if ( info.IsUsingSizeInPixels() )
-            m_nativeFontInfo.SetPixelSize(info.GetPixelSize());
-        else
-            m_nativeFontInfo.SetSizeOrDefault(info.GetFractionalPointSize());
+    wxFontRefData(const wxString& strNativeFontInfo);
 
-        m_nativeFontInfo.SetStyle(info.GetStyle());
-        m_nativeFontInfo.SetWeight(info.GetWeight());
-        m_nativeFontInfo.SetUnderlined(info.IsUnderlined());
-        m_nativeFontInfo.SetStrikethrough(info.IsStrikethrough());
-
-    }
-
-    wxFontRefData( const wxFontRefData& data )
-    : wxGDIRefData()
-    {
-        m_nativeFontInfo.m_qtFont = data.m_nativeFontInfo.m_qtFont;
-    }
+    // copy ctor
+    wxFontRefData( const wxFontRefData& data );
 
     wxNativeFontInfo m_nativeFontInfo;
 };
 
 #define M_FONTDATA ((wxFontRefData *)m_refData)->m_nativeFontInfo
+
+wxFontRefData::wxFontRefData(const wxFontInfo& info)
+{
+    if ( info.HasFaceName() )
+        m_nativeFontInfo.SetFaceName(info.GetFaceName());
+    else
+        m_nativeFontInfo.SetFamily(info.GetFamily());
+
+    if ( info.IsUsingSizeInPixels() )
+        m_nativeFontInfo.SetPixelSize(info.GetPixelSize());
+    else
+        m_nativeFontInfo.SetSizeOrDefault(info.GetFractionalPointSize());
+
+    m_nativeFontInfo.SetStyle(info.GetStyle());
+    m_nativeFontInfo.SetWeight(info.GetWeight());
+    m_nativeFontInfo.SetUnderlined(info.IsUnderlined());
+    m_nativeFontInfo.SetStrikethrough(info.IsStrikethrough());
+}
+
+wxFontRefData::wxFontRefData( const wxFontRefData& data )
+             : wxGDIRefData(),
+               m_nativeFontInfo(data.m_nativeFontInfo)
+{
+}
+
+wxFontRefData::wxFontRefData(const wxString& strNativeFontInfo)
+{
+    m_nativeFontInfo.FromString( strNativeFontInfo );
+}
+
+// ----------------------------------------------------------------------------
+// wxFont creation
+// ----------------------------------------------------------------------------
 
 wxFont::wxFont()
 {
@@ -162,13 +176,11 @@ wxFont::wxFont(const wxFontInfo& info)
     m_refData = new wxFontRefData(info);
 }
 
-wxFont::wxFont(const wxString& nativeFontInfoString)
+wxFont::wxFont(const wxString& strNativeFontInfo)
 {
     m_refData = new wxFontRefData();
 
-    QFont font;
-    font.fromString(wxQtConvertString( nativeFontInfoString ));
-    M_FONTDATA.m_qtFont = font;
+    M_FONTDATA.FromString( strNativeFontInfo );
 }
 
 wxFont::wxFont(const wxNativeFontInfo& info)
@@ -233,6 +245,10 @@ bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// accessors
+// ----------------------------------------------------------------------------
+
 int wxFont::GetPointSize() const
 {
     return M_FONTDATA.wxNativeFontInfo::GetPointSize();
@@ -246,6 +262,16 @@ double wxFont::GetFractionalPointSize() const
 wxSize wxFont::GetPixelSize() const
 {
     return M_FONTDATA.GetPixelSize();
+}
+
+wxString wxFont::GetFaceName() const
+{
+    return M_FONTDATA.GetFaceName();
+}
+
+wxFontFamily wxFont::DoGetFamily() const
+{
+    return M_FONTDATA.GetFamily();
 }
 
 wxFontStyle wxFont::GetStyle() const
@@ -263,9 +289,9 @@ bool wxFont::GetUnderlined() const
     return M_FONTDATA.GetUnderlined();
 }
 
-wxString wxFont::GetFaceName() const
+bool wxFont::GetStrikethrough() const
 {
-    return M_FONTDATA.GetFaceName();
+    return M_FONTDATA.GetStrikethrough();
 }
 
 wxFontEncoding wxFont::GetEncoding() const
@@ -278,11 +304,16 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     return &M_FONTDATA;
 }
 
-bool wxFont::GetStrikethrough() const
+bool wxFont::IsFixedWidth() const
 {
-    return M_FONTDATA.GetStrikethrough();
+    wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
+
+    return wxFontBase::IsFixedWidth();
 }
 
+// ----------------------------------------------------------------------------
+// change font attributes
+// ----------------------------------------------------------------------------
 
 void wxFont::SetFractionalPointSize(double pointSize)
 {
@@ -296,13 +327,6 @@ void wxFont::SetPixelSize(const wxSize& pixelSize)
     AllocExclusive();
 
     M_FONTDATA.SetPixelSize(pixelSize);
-}
-
-bool wxFont::SetFaceName(const wxString& facename)
-{
-    AllocExclusive();
-
-    return M_FONTDATA.SetFaceName(facename);
 }
 
 void wxFont::SetFamily( wxFontFamily family )
@@ -324,6 +348,13 @@ void wxFont::SetNumericWeight(int weight)
     AllocExclusive();
 
     M_FONTDATA.SetNumericWeight(weight);
+}
+
+bool wxFont::SetFaceName(const wxString& strFacename)
+{
+    AllocExclusive();
+
+    return M_FONTDATA.SetFaceName(strFacename);
 }
 
 void wxFont::SetUnderlined( bool underlined )
@@ -372,11 +403,6 @@ wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 QFont wxFont::GetHandle() const
 {
     return M_FONTDATA.m_qtFont;
-}
-
-wxFontFamily wxFont::DoGetFamily() const
-{
-    return M_FONTDATA.GetFamily();
 }
 
 // ----------------------------------------------------------------------------
@@ -452,24 +478,24 @@ int wxNativeFontInfo::GetNumericWeight() const
     if ( w == wxQFont_Thin )
         return wxFONTWEIGHT_THIN;
 
-    if ( TryToMap(w, wxQFont_Thin, wxQFont_ExtraLight,
-                     wxFONTWEIGHT_THIN, wxFONTWEIGHT_EXTRALIGHT) ||
+    if ( TryToMap(w, wxQFont_Thin,       wxQFont_ExtraLight,
+                     wxFONTWEIGHT_THIN,       wxFONTWEIGHT_EXTRALIGHT) ||
          TryToMap(w, wxQFont_ExtraLight, wxQFont_Light,
                      wxFONTWEIGHT_EXTRALIGHT, wxFONTWEIGHT_LIGHT) ||
-         TryToMap(w, wxQFont_Light, wxQFont_Normal,
-                     wxFONTWEIGHT_LIGHT, wxFONTWEIGHT_NORMAL) ||
-         TryToMap(w, wxQFont_Normal, wxQFont_Medium,
-                     wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_MEDIUM) ||
-         TryToMap(w, wxQFont_Medium, wxQFont_DemiBold,
-                     wxFONTWEIGHT_MEDIUM, wxFONTWEIGHT_SEMIBOLD) ||
-         TryToMap(w, wxQFont_DemiBold, wxQFont_Bold,
-                     wxFONTWEIGHT_SEMIBOLD, wxFONTWEIGHT_BOLD) ||
-         TryToMap(w, wxQFont_Bold, wxQFont_ExtraBold,
-                     wxFONTWEIGHT_BOLD, wxFONTWEIGHT_EXTRABOLD) ||
-         TryToMap(w, wxQFont_ExtraBold, wxQFont_Black,
-                     wxFONTWEIGHT_EXTRABOLD, wxFONTWEIGHT_HEAVY) ||
-         TryToMap(w, wxQFont_Black, 99,
-                     wxFONTWEIGHT_HEAVY, wxFONTWEIGHT_EXTRAHEAVY) )
+         TryToMap(w, wxQFont_Light,      wxQFont_Normal,
+                     wxFONTWEIGHT_LIGHT,      wxFONTWEIGHT_NORMAL) ||
+         TryToMap(w, wxQFont_Normal,     wxQFont_Medium,
+                     wxFONTWEIGHT_NORMAL,     wxFONTWEIGHT_MEDIUM) ||
+         TryToMap(w, wxQFont_Medium,     wxQFont_DemiBold,
+                     wxFONTWEIGHT_MEDIUM,     wxFONTWEIGHT_SEMIBOLD) ||
+         TryToMap(w, wxQFont_DemiBold,   wxQFont_Bold,
+                     wxFONTWEIGHT_SEMIBOLD,   wxFONTWEIGHT_BOLD) ||
+         TryToMap(w, wxQFont_Bold,       wxQFont_ExtraBold,
+                     wxFONTWEIGHT_BOLD,       wxFONTWEIGHT_EXTRABOLD) ||
+         TryToMap(w, wxQFont_ExtraBold,  wxQFont_Black,
+                     wxFONTWEIGHT_EXTRABOLD,  wxFONTWEIGHT_HEAVY) ||
+         TryToMap(w, wxQFont_Black,      99,
+                     wxFONTWEIGHT_HEAVY,      wxFONTWEIGHT_EXTRAHEAVY) )
     {
         return w;
     }
@@ -585,9 +611,9 @@ void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
     m_qtFont.setStrikeOut(strikethrough);
 }
 
-bool wxNativeFontInfo::SetFaceName(const wxString& facename)
+bool wxNativeFontInfo::SetFaceName(const wxString& strFacename)
 {
-    m_qtFont.setFamily(wxQtConvertString(facename));
+    m_qtFont.setFamily(wxQtConvertString(strFacename));
     // Qt uses a "font matching algorithm" so the font will be always valid
     return true;
 }
@@ -604,9 +630,9 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
     wxMISSING_IMPLEMENTATION( __func__ );
 }
 
-bool wxNativeFontInfo::FromString(const wxString& s)
+bool wxNativeFontInfo::FromString(const wxString& strFontInfo)
 {
-    return m_qtFont.fromString( wxQtConvertString( s ) );
+    return m_qtFont.fromString( wxQtConvertString( strFontInfo ) );
 }
 
 wxString wxNativeFontInfo::ToString() const
@@ -614,12 +640,38 @@ wxString wxNativeFontInfo::ToString() const
     return wxQtConvertString( m_qtFont.toString() );
 }
 
-bool wxNativeFontInfo::FromUserString(const wxString& s)
+bool wxNativeFontInfo::FromUserString(const wxString& strUserFontInfo)
 {
-    return FromString(s);
+    return FromString(strUserFontInfo);
 }
 
 wxString wxNativeFontInfo::ToUserString() const
 {
     return ToString();
 }
+
+// ----------------------------------------------------------------------------
+// Support for adding private fonts
+// ----------------------------------------------------------------------------
+
+#if wxUSE_PRIVATE_FONTS
+
+#include "wx/fontenum.h"
+
+#include <QtGui/QFontDatabase>
+
+bool wxFontBase::AddPrivateFont(const wxString& strFilename)
+{
+    int iFontID =
+        QFontDatabase::addApplicationFont( wxQtConvertString(strFilename) );
+    if (iFontID == -1) return false;
+
+    // Ensure that the face names defined by private fonts are recognized by
+    // our SetFaceName() which uses wxFontEnumerator to check if the name is in
+    // the list of available faces.
+    wxFontEnumerator::InvalidateCache();
+
+    return true;
+}
+
+#endif // wxUSE_PRIVATE_FONTS
