@@ -2858,6 +2858,10 @@ STC_CMN_HDR =
     wx/stc/stc.h
     wx/xrc/xh_styledtextctrl.h
 
+STC_GTK_SRC =
+    src/stc/stc_gtk.cpp
+STC_GTK_HDR =
+
 STC_OSX_COCOA_SRC =
     src/stc/PlatWXcocoa.mm
 STC_OSX_COCOA_HDR =

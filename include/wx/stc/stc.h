@@ -3329,7 +3329,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 //}}}
 //----------------------------------------------------------------------
 
-class  ScintillaWX;                      // forward declare
 class  WordList;
 struct SCNotification;
 
@@ -3365,7 +3364,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxASCII_STR(wxSTCNameStr));
-    wxStyledTextCtrl() { m_swx = nullptr; }
+    wxStyledTextCtrl() { }
     ~wxStyledTextCtrl();
 
 #endif
@@ -5779,20 +5778,6 @@ public:
     bool LoadFile(const wxString& filename);
 #endif // !wxUSE_TEXTCTRL
 
-#ifdef STC_USE_DND
-    // Allow for simulating a DnD DragEnter
-    wxDragResult DoDragEnter(wxCoord x, wxCoord y, wxDragResult def);
-
-    // Allow for simulating a DnD DragOver
-    wxDragResult DoDragOver(wxCoord x, wxCoord y, wxDragResult def);
-
-    // Allow for simulating a DnD DragLeave
-    void DoDragLeave();
-
-    // Allow for simulating a DnD DropText
-    bool DoDropText(long x, long y, const wxString& data);
-#endif
-
     // Specify whether anti-aliased fonts should be used.  Will have no effect
     // on some platforms, but on some (wxMac for example) can greatly improve
     // performance.
@@ -6091,38 +6076,13 @@ protected:
     virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
     // Event handlers
-    void OnPaint(wxPaintEvent& evt);
-    void OnScrollWin(wxScrollWinEvent& evt);
-    void OnScroll(wxScrollEvent& evt);
-    void OnSize(wxSizeEvent& evt);
-    void OnMouseLeftDown(wxMouseEvent& evt);
-    void OnMouseRightDown(wxMouseEvent& evt);
-    void OnMouseMove(wxMouseEvent& evt);
-    void OnMouseLeftUp(wxMouseEvent& evt);
-    void OnMouseMiddleUp(wxMouseEvent& evt);
-    void OnContextMenu(wxContextMenuEvent& evt);
-    void OnMouseWheel(wxMouseEvent& evt);
-    void OnChar(wxKeyEvent& evt);
-    void OnKeyDown(wxKeyEvent& evt);
-    void OnLoseFocus(wxFocusEvent& evt);
-    void OnGainFocus(wxFocusEvent& evt);
-    void OnDPIChanged(wxDPIChangedEvent& evt);
-    void OnSysColourChanged(wxSysColourChangedEvent& evt);
-    void OnEraseBackground(wxEraseEvent& evt);
-    void OnMenu(wxCommandEvent& evt);
-    void OnListBox(wxCommandEvent& evt);
-    void OnIdle(wxIdleEvent& evt);
-    void OnMouseCaptureLost(wxMouseCaptureLostEvent& evt);
 
     virtual wxSize DoGetBestSize() const override;
 
+public:
     // Turn notifications from Scintilla into events
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
-
-#ifdef __WXMSW__
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
-#endif // __WXMSW__
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -6130,7 +6090,6 @@ private:
 
 protected:
 
-    ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
     wxScrollBar*        m_vScrollBar;
     wxScrollBar*        m_hScrollBar;
@@ -6141,10 +6100,9 @@ private:
     wxBitmap m_buffer;
 
     wxStyledTextCtrl*   m_mirrorCtrl = nullptr;
+    int                 m_foldFlags = 0;
 
     bool                m_isCustomDrawn = false;
-
-    friend class ScintillaWX;
 #endif // !SWIG
 };
 
@@ -6184,22 +6142,6 @@ public:
     void SetAnnotationLinesAdded(int val) { m_annotationLinesAdded = val; }
     void SetUpdated(int val)              { m_updated = val; }
     void SetListCompletionMethod(int val) { m_listCompletionMethod = val; }
-#ifdef  STC_USE_DND
-    // Kept for backwards compatibility, use SetString().
-    void SetDragText(const wxString& val) { SetString(val); }
-    void SetDragFlags(int flags)          { m_dragFlags = flags; }
-    void SetDragResult(wxDragResult val)  { m_dragResult = val; }
-
-    // This method is kept mainly for backwards compatibility, use
-    // SetDragFlags() in the new code.
-    void SetDragAllowMove(bool allow)
-    {
-        if ( allow )
-            m_dragFlags |= wxDrag_AllowMove;
-        else
-            m_dragFlags &= ~(wxDrag_AllowMove | wxDrag_DefaultMove);
-    }
-#endif
 
     int  GetPosition() const         { return m_position; }
     int  GetKey()  const             { return m_key; }
@@ -6223,15 +6165,6 @@ public:
     int  GetAnnotationsLinesAdded() const { return m_annotationLinesAdded; }
     int  GetUpdated() const               { return m_updated; }
     int  GetListCompletionMethod() const  { return m_listCompletionMethod; }
-
-#ifdef STC_USE_DND
-    // Kept for backwards compatibility, use GetString().
-    wxString GetDragText()           { return GetString(); }
-    int GetDragFlags()               { return m_dragFlags; }
-    wxDragResult GetDragResult()     { return m_dragResult; }
-
-    bool GetDragAllowMove() { return (GetDragFlags() & wxDrag_AllowMove) != 0; }
-#endif
 
     bool GetShift() const;
     bool GetControl() const;
@@ -6269,10 +6202,6 @@ private:
     int m_updated = 0;              // wxEVT_STC_UPDATEUI
     int m_listCompletionMethod = 0;
 
-#if wxUSE_DRAG_AND_DROP
-    int m_dragFlags = wxDrag_CopyOnly;       // wxEVT_STC_START_DRAG
-    wxDragResult m_dragResult = wxDragNone;  // wxEVT_STC_DRAG_OVER,wxEVT_STC_DO_DROP
-#endif
 #endif
 };
 

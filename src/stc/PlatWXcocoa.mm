@@ -9,7 +9,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_STC
+#if 0
 
 #include "wx/osx/private.h"
 #include "PlatWXcocoa.h"

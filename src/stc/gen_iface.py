@@ -39,7 +39,6 @@ valPrefixes = [('SCI_', ''),
                ('SC_',  ''),
                ('SCN_', None),  # just toss these out...
                ('SCEN_', None),
-               ('SC_EFF', None),
                ('SCE_', ''),
                ('SCLEX_', 'LEX_'),
                ('SCK_', 'KEY_'),
@@ -291,6 +290,18 @@ methodOverrideMap = {
             m_mirrorCtrl->MarkerDefinePixmap(markerNumber, xpmData);
 
         SendMsg(%s, markerNumber, (sptr_t)xpmData);'''
+    ),
+
+    # This one is defined manually because we need to save the value
+    # and apply it to the new mirror ctrl in SetMirrorCtrl.
+    'SetFoldFlags':
+    (0, 0,
+     '''void %s(int flags) {
+        m_foldFlags = flags;
+        SendMsg(%s, flags, 0);
+
+        if ( m_mirrorCtrl )
+            m_mirrorCtrl->SetFoldFlags(flags);'''
     ),
 
     'GetMargins' : ('GetMarginCount', 0, 0),
@@ -1210,6 +1221,7 @@ methodOverrideMap = {
 
 # List of methods that should be mirrored to m_mirrorCtrl if it is non-null.
 mirroringNeeded = (
+    # Commented out are the ones overridden above.
     'SetFoldLevel',
     'SetFoldExpanded',
     'ToggleFold',
@@ -1217,9 +1229,9 @@ mirroringNeeded = (
     'FoldLine',
     'FoldChildren',
     'FoldAll',
-    'SetFoldFlags',
+    # SetFoldFlags
 
-    # Marker-related methods: commented out are the ones overridden above.
+    # Marker-related methods
     # MarkerAdd
     'MarkerAddSet',
     # MarkerDefine
