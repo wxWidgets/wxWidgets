@@ -99,6 +99,9 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     m_qtPenColor = new QColor;
     m_qtBrushColor = new QColor;
     m_ok = true;
+
+    m_matrixCurrent.reset(new QTransform);
+    m_matrixCurrentInv.reset(new QTransform);
 }
 
 wxQtDCImpl::~wxQtDCImpl()
@@ -295,15 +298,14 @@ void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 wxPoint wxQtDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
     QPointF devicePoint(x, y);
-    const auto invTrans  = m_qtPainter->combinedTransform().inverted();
-    QPointF logicalPoint = invTrans.map(devicePoint);
+    QPointF logicalPoint = m_matrixCurrentInv->map(devicePoint);
     return wxPoint(wxRound(logicalPoint.x()), wxRound(logicalPoint.y()));
 }
 
 wxPoint wxQtDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
     QPointF logicalPoint(x, y);
-    QPointF devicePoint = m_qtPainter->combinedTransform().map(logicalPoint);
+    QPointF devicePoint = m_matrixCurrent->map(logicalPoint);
     return wxPoint(wxRound(devicePoint.x()), wxRound(devicePoint.y()));
 }
 
@@ -1087,10 +1089,22 @@ void wxQtDCImpl::DoDrawPolyPolygon(int n,
 
 void wxQtDCImpl::ComputeScaleAndOrigin()
 {
-    QTransform t;
+    wxDCImpl::ComputeScaleAndOrigin();
+
+    QTransform matrixCurrent;
+
+    matrixCurrent.translate( m_deviceOriginX + m_deviceLocalOriginX - m_logicalOriginX * m_signX * m_scaleX,
+                             m_deviceOriginY + m_deviceLocalOriginY - m_logicalOriginY * m_signY * m_scaleY );
+
+    matrixCurrent.scale( m_scaleX * m_signX, m_scaleY * m_signY );
+
+    *m_matrixCurrent = matrixCurrent;
+    *m_matrixCurrentInv = matrixCurrent.inverted();
 
     if ( GetLayoutDirection() == wxLayout_RightToLeft )
     {
+        QTransform matrixRTL;
+
         int w;
 
         if ( m_window )
@@ -1098,24 +1112,14 @@ void wxQtDCImpl::ComputeScaleAndOrigin()
         else
             GetSize(&w, nullptr);
 
-        t.translate(w, 0);
-        t.scale(-1, 1);
+        matrixRTL.translate(w, 0);
+        matrixRTL.scale(-1, 1);
+
+        matrixCurrent *= matrixRTL;
     }
 
-    // First apply device origin
-    t.translate( m_deviceOriginX + m_deviceLocalOriginX,
-                 m_deviceOriginY + m_deviceLocalOriginY );
-
-    // Second, scale
-    m_scaleX = m_logicalScaleX * m_userScaleX;
-    m_scaleY = m_logicalScaleY * m_userScaleY;
-    t.scale( m_scaleX * m_signX, m_scaleY * m_signY );
-
-    // Finally, logical origin
-    t.translate( -m_logicalOriginX, -m_logicalOriginY );
-
     // Apply transform to QPainter, overwriting the previous one
-    m_qtPainter->setWorldTransform(t, false);
+    m_qtPainter->setWorldTransform(matrixCurrent, false);
 
     m_isClipBoxValid = false;
 }

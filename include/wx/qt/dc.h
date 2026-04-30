@@ -10,6 +10,7 @@
 
 class QPainter;
 class QImage;
+class QTransform;
 
 class WXDLLIMPEXP_FWD_CORE wxRegion;
 
@@ -139,6 +140,10 @@ protected:
     wxRegion m_clippingRegion;
 
     bool m_isClipBoxValid = false;
+
+    // Used by LogicalToDevice()/DeviceToLogical()
+    std::unique_ptr<QTransform> m_matrixCurrent;
+    std::unique_ptr<QTransform> m_matrixCurrentInv;
 
 private:
     enum wxQtRasterColourOp
