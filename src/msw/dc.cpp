@@ -38,6 +38,7 @@
 #include "wx/msw/dc.h"
 
 #include "wx/scopedarray.h"
+#include "wx/scopeguard.h"
 #include "wx/sysopt.h"
 
 #ifdef wxHAS_RAW_BITMAP
@@ -68,7 +69,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl);
 
 // The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
 // maximal possible view port extent.
-static const int VIEWPORT_EXTENT = 134217727;
+static const int VIEWPORT_EXTENT = 134217726;
 
 // ROPs which don't have standard names (see "Ternary Raster Operations" in the
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
@@ -100,6 +101,19 @@ static const int VIEWPORT_EXTENT = 134217727;
 #define YLOG2DEV(y) ((y) + (m_deviceOriginY*m_signY / m_scaleY))
 #define XDEV2LOG(x) ((x) - (m_deviceOriginX*m_signX / m_scaleX))
 #define YDEV2LOG(y) ((y) - (m_deviceOriginY*m_signY / m_scaleY))
+
+// ----------------------------------------------------------------------------
+// macro to temporarily disable RTL layout if already set on the device context
+// ----------------------------------------------------------------------------
+
+// Mainly used with the LogicalToDevice{Rel}()/DeviceToLogical{Rel}() functions
+// to force them to return unmirrored coordinates if the LAYOUT_RTL flag is set
+// on the device context. This avoids double-mirroring problems when the result
+// is passed to GDI drawing functions. And also to be consistent with wxGTK3.
+
+#define wxSCOPED_DC_RTL_DISABLER(hdc)              \
+    const auto oldLayoutDir = ::SetLayout(hdc, 0); \
+    wxON_BLOCK_EXIT2(::SetLayout, hdc, oldLayoutDir)
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -461,27 +475,18 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
     // 4 corners of the rectangle to create a polygonal clipping region
     // in device coordinates.
     POINT rect[4];
-    {
-        // Forcing LTR layout to calculate _rect_, otherwise the region created
-        // by CreatePolygonRgn() will not be correct in RTL layout.
-        const auto oldLayoutDir = GetLayoutDirection();
-        SetLayoutDirection(wxLayout_LeftToRight);
-
-        wxPoint p = LogicalToDevice(x, y);
-        rect[0].x = p.x;
-        rect[0].y = p.y;
-        p = LogicalToDevice(x + w, y);
-        rect[1].x = p.x;
-        rect[1].y = p.y;
-        p = LogicalToDevice(x + w, y + h);
-        rect[2].x = p.x;
-        rect[2].y = p.y;
-        p = LogicalToDevice(x, y + h);
-        rect[3].x = p.x;
-        rect[3].y = p.y;
-
-        SetLayoutDirection(oldLayoutDir);
-    }
+    wxPoint p = LogicalToDevice(x, y);
+    rect[0].x = p.x;
+    rect[0].y = p.y;
+    p = LogicalToDevice(x + w, y);
+    rect[1].x = p.x;
+    rect[1].y = p.y;
+    p = LogicalToDevice(x + w, y + h);
+    rect[2].x = p.x;
+    rect[2].y = p.y;
+    p = LogicalToDevice(x, y + h);
+    rect[3].x = p.x;
+    rect[3].y = p.y;
 
     HRGN hrgn = ::CreatePolygonRgn(rect, WXSIZEOF(rect), WINDING);
     if ( !hrgn )
@@ -1958,6 +1963,8 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
 wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
+    wxSCOPED_DC_RTL_DISABLER(GetHdc());
+
     POINT p;
     p.x = x;
     p.y = y;
@@ -2004,6 +2011,8 @@ wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
+    wxSCOPED_DC_RTL_DISABLER(GetHdc());
+
     POINT p;
     p.x = x;
     p.y = y;
@@ -2013,6 +2022,8 @@ wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 
 wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
 {
+    wxSCOPED_DC_RTL_DISABLER(GetHdc());
+
     POINT p[2];
     p[0].x = 0;
     p[0].y = 0;
@@ -2024,6 +2035,8 @@ wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
 
 wxSize wxMSWDCImpl::LogicalToDeviceRel(int x, int y) const
 {
+    wxSCOPED_DC_RTL_DISABLER(GetHdc());
+
     POINT p[2];
     p[0].x = 0;
     p[0].y = 0;
@@ -2145,8 +2158,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     xdest += XLOG2DEV(0);
     ydest += YLOG2DEV(0);
 
-    // Adjust for RTL layout to fix problems during scrolling, see #26266.
-    const int xsrcOrig = GetLayoutDirection() == wxLayout_LeftToRight ? xsrc : -xsrc;
+    const int xsrcOrig = xsrc;
     const int ysrcOrig = ysrc;
 
     // This does the same thing as XLOG2DEV() but for the source DC.
@@ -2379,6 +2391,22 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 {
                     // reflect ysrc
                     ysrc = hDIB - (ysrc + srcHeight);
+                }
+
+                if ( GetLayoutDirection() == wxLayout_RightToLeft )
+                {
+                    // Unlike BitBlt() and StretchBlt(), StretchDIBits() doesn't
+                    // honor the LAYOUT_RTL flag set on the DC, so we have to apply
+                    // mirroring ourselves (see SetLayout() documentation in MSDN).
+                    const LONG wDIB = ds.dsBmih.biWidth;
+                    if ( wDIB > 0 )
+                    {
+                        // reflect wsrc
+                        xsrc = wDIB - (xsrc + srcWidth);
+
+                        xdest += dstWidth;
+                        dstWidth = -dstWidth;
+                    }
                 }
 
                 if ( ::StretchDIBits(GetHdc(),

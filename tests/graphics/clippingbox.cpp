@@ -1030,7 +1030,7 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
 
     // Setting one clipping region in device coordinates
     // inside transformed DC area.
-    const int x = 11;
+    const int x = 10;
     const int y = 21;
     const int w = 79;
     const int h = 75;
@@ -1057,9 +1057,8 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
     dc.Clear();
     // right physical edge becomes left logical edge in a mirrored DC.
     const int x2 = s_dcSize.x - (x + w);
-    // In a mirrored DC, the device origin (0, 0) is always at the top left
-    // of the DC under wxMSW, but under wxGTK3 is at the top right.
-#if defined(__WXGTK3__)
+
+#if defined(__WXGTK3__) || defined(__WXMSW__)
     wxPoint pos = dc.DeviceToLogical(x, y);
     wxSize dim = dc.DeviceToLogicalRel(w, h);
 #else
