@@ -51,7 +51,7 @@ static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
 {
     switch (family)
     {
-         case wxFONTFAMILY_DEFAULT:
+        case wxFONTFAMILY_DEFAULT:
             return QFont::AnyStyle;
 
         case wxFONTFAMILY_DECORATIVE:
@@ -138,46 +138,36 @@ public:
     wxFontRefData() {}
 
     // main ctor
-    wxFontRefData(const wxFontInfo& info);
+    wxFontRefData(const wxFontInfo& info)
+    {
+        if ( info.HasFaceName() )
+            m_nativeFontInfo.SetFaceName(info.GetFaceName());
+        else
+            m_nativeFontInfo.SetFamily(info.GetFamily());
 
-    wxFontRefData(const wxString& strNativeFontInfo);
+        if ( info.IsUsingSizeInPixels() )
+            m_nativeFontInfo.SetPixelSize(info.GetPixelSize());
+        else
+            m_nativeFontInfo.SetSizeOrDefault(info.GetFractionalPointSize());
+
+        m_nativeFontInfo.SetStyle(info.GetStyle());
+        m_nativeFontInfo.SetWeight(info.GetWeight());
+        m_nativeFontInfo.SetUnderlined(info.IsUnderlined());
+        m_nativeFontInfo.SetStrikethrough(info.IsStrikethrough());
+
+    }
 
     // copy ctor
-    wxFontRefData( const wxFontRefData& data );
+    wxFontRefData( const wxFontRefData& data )
+    : wxGDIRefData()
+    {
+        m_nativeFontInfo.m_qtFont = data.m_nativeFontInfo.m_qtFont;
+    }
 
     wxNativeFontInfo m_nativeFontInfo;
 };
 
 #define M_FONTDATA ((wxFontRefData *)m_refData)->m_nativeFontInfo
-
-wxFontRefData::wxFontRefData(const wxFontInfo& info)
-{
-    if ( info.HasFaceName() )
-        m_nativeFontInfo.SetFaceName(info.GetFaceName());
-    else
-        m_nativeFontInfo.SetFamily(info.GetFamily());
-
-    if ( info.IsUsingSizeInPixels() )
-        m_nativeFontInfo.SetPixelSize(info.GetPixelSize());
-    else
-        m_nativeFontInfo.SetSizeOrDefault(info.GetFractionalPointSize());
-
-    m_nativeFontInfo.SetStyle(info.GetStyle());
-    m_nativeFontInfo.SetWeight(info.GetWeight());
-    m_nativeFontInfo.SetUnderlined(info.IsUnderlined());
-    m_nativeFontInfo.SetStrikethrough(info.IsStrikethrough());
-}
-
-wxFontRefData::wxFontRefData( const wxFontRefData& data )
-             : wxGDIRefData(),
-               m_nativeFontInfo(data.m_nativeFontInfo)
-{
-}
-
-wxFontRefData::wxFontRefData(const wxString& strNativeFontInfo)
-{
-    m_nativeFontInfo.FromString( strNativeFontInfo );
-}
 
 // ----------------------------------------------------------------------------
 // wxFont creation
@@ -193,11 +183,11 @@ wxFont::wxFont(const wxFontInfo& info)
     m_refData = new wxFontRefData(info);
 }
 
-wxFont::wxFont(const wxString& strNativeFontInfo)
+wxFont::wxFont(const wxString& nativeFontInfoString)
 {
     m_refData = new wxFontRefData();
 
-    M_FONTDATA.FromString( strNativeFontInfo );
+    M_FONTDATA.FromString( nativeFontInfoString );
 }
 
 wxFont::wxFont(const wxNativeFontInfo& info)
@@ -339,11 +329,11 @@ void wxFont::SetPixelSize(const wxSize& pixelSize)
     M_FONTDATA.SetPixelSize(pixelSize);
 }
 
-bool wxFont::SetFaceName(const wxString& strFacename)
+bool wxFont::SetFaceName(const wxString& facename)
 {
     AllocExclusive();
 
-    return M_FONTDATA.SetFaceName(strFacename);
+    return M_FONTDATA.SetFaceName(facename);
 }
 
 void wxFont::SetFamily( wxFontFamily family )
@@ -640,7 +630,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
     wxMISSING_IMPLEMENTATION( __func__ );
 }
 
-bool wxNativeFontInfo::FromString(const wxString& scalb)
+bool wxNativeFontInfo::FromString(const wxString& s)
 {
     return m_qtFont.fromString( wxQtConvertString( s ) );
 }
