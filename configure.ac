@@ -6802,7 +6802,7 @@ if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
                               ],
                               [AC_MSG_WARN([run-time font loading won't be supported by wxFont])])
         fi
-    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_MSW" = 1; then
+    elif test "$wxUSE_QT" = 1 -o "$wxUSE_MAC" = 1 -o "$wxUSE_MSW" = 1; then
         dnl In these ports we don't need anything special.
         AC_DEFINE(wxUSE_PRIVATE_FONTS)
     fi

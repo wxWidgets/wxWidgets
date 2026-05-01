@@ -55,12 +55,11 @@ public:
     virtual wxSize GetPixelSize() const override;
     virtual wxFontStyle GetStyle() const override;
     virtual int GetNumericWeight() const override;
-    virtual wxString GetFaceName() const override;
     virtual bool GetUnderlined() const override;
-    virtual bool GetStrikethrough() const override;
+    virtual wxString GetFaceName() const override;
     virtual wxFontEncoding GetEncoding() const override;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const override;
-    virtual bool IsFixedWidth() const override;
+    virtual bool GetStrikethrough() const override;
 
     // change the font characteristics
     virtual void SetFractionalPointSize(double pointSize) override;
