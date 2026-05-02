@@ -667,7 +667,6 @@ WX_ARG_DISABLE(pic,          [  --disable-pic           don't use position indep
 WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
-WX_ARG_DISABLE(vararg_macros,[  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
 
 if test "$USE_DARWIN" = 1; then
 WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary=archs create universal binary for the specified (or all supported) architectures]], wxUSE_UNIVERSAL_BINARY)
@@ -983,7 +982,6 @@ dnl ---------------------------------------------------------------------------
 dnl common dialogs
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_FEATURE(commondlg,   [  --enable-commondlg      use all common dialogs], wxUSE_COMMONDLGS)
 WX_ARG_FEATURE(aboutdlg,    [  --enable-aboutdlg       use wxAboutBox], wxUSE_ABOUTDLG)
 WX_ARG_FEATURE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
 WX_ARG_FEATURE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
@@ -2665,7 +2663,7 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             tiff_jpeg_option=--with-jpeg-from-wx
         fi
 
-        dnl if you ever want to enable webp, check if it clashes with the wxUSE_LIBWBP setting
+        dnl if you ever want to enable webp, check if it clashes with the wxUSE_LIBWEBP setting
         AX_SUBDIRS_CONFIGURE([src/tiff],
             [[--disable-jbig],
              [--disable-lerc],
@@ -7726,7 +7724,7 @@ if test "$wxUSE_MAC" = 1 ; then
         fi
     fi
 fi
-if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1 ; then
+if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1; then
     EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework AppKit -framework IOKit -framework CoreServices -framework System -framework ApplicationServices -framework Foundation"
 fi
 
