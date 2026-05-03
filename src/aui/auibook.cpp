@@ -1300,7 +1300,7 @@ wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_CHAR(wxAuiTabCtrl::OnChar)
     EVT_MOUSE_CAPTURE_LOST(wxAuiTabCtrl::OnCaptureLost)
     EVT_SYS_COLOUR_CHANGED(wxAuiTabCtrl::OnSysColourChanged)
-    EVT_DPI_CHANGED(wxAuiTabCtrl::OnDpiChanged)
+    EVT_DPI_CHANGED(wxAuiTabCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 
@@ -1871,7 +1871,7 @@ void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
         event.Skip();
 }
 
-void wxAuiTabCtrl::OnDpiChanged(wxDPIChangedEvent& event)
+void wxAuiTabCtrl::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_art->UpdateDpi();
     event.Skip();
@@ -2033,7 +2033,7 @@ wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxBookCtrlBase)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocusNotebook)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
     EVT_SYS_COLOUR_CHANGED(wxAuiNotebook::OnSysColourChanged)
-    EVT_DPI_CHANGED(wxAuiNotebook::OnDpiChanged)
+    EVT_DPI_CHANGED(wxAuiNotebook::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 namespace
@@ -2068,7 +2068,7 @@ void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
     Refresh();
 }
 
-void wxAuiNotebook::OnDpiChanged(wxDPIChangedEvent& event)
+void wxAuiNotebook::OnDPIChanged(wxDPIChangedEvent& event)
 {
     UpdateTabCtrlHeight();
     event.Skip();
