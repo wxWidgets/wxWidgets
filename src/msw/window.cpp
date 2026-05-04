@@ -5236,6 +5236,8 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
         node = node->GetNext();
     }
 
+    Refresh();
+
     // let the system handle it
     return false;
 }
