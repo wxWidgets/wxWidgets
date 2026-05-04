@@ -608,7 +608,7 @@ static bool parseDialog(Accessor &styler, unsigned int pos, unsigned int lengthD
 
     // check next character after 'dialog'
     ch = styler.SafeGetCharAt(++pos);
-    if (!isspacechar(ch) && (ch != L'{'))
+    if (!isspacechar(ch) && (ch != '{'))
         return false;
 
     return true;

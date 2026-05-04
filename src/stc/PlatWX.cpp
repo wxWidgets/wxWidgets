@@ -2772,6 +2772,40 @@ void wxSTCListBox::SetAverageCharWidth(int width)
     m_aveCharWidth = width;
 }
 
+#if 1 // Bricsys change : corrected BLADE AutoComplete window size
+PRectangle wxSTCListBox::GetDesiredRect() const {
+    // wxListCtrl doesn't have a DoGetBestSize, so instead we kept track of
+    // the max size in Append and calculate it here...
+    int maxw = m_maxStrWidth * m_aveCharWidth;
+    int maxh = 100;
+
+    // give it a default if there are no lines, and/or add a bit more
+    if (maxw == 0) maxw = 400;
+    maxw += TextBoxFromClientEdge() + m_textBoxToTextGap + (m_aveCharWidth * 3) + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    if (maxw > 550)
+        maxw = 550;
+
+    // estimate a desired height
+    const int count = Length();
+    const int desiredVisibleRows = m_visualData->GetDesiredVisibleRows();
+    if ( count ) {
+        maxh = wxMin(count * m_itemHeight, desiredVisibleRows * m_itemHeight);
+        if (maxh > 350)
+            maxh = 350;
+
+        // Try to make the size an exact multiple of some number of lines
+        int lines = maxh / m_itemHeight;
+        maxh = lines * m_itemHeight + 5;
+    }
+
+    PRectangle rc;
+    rc.top = 0;
+    rc.left = 0;
+    rc.right = maxw;
+    rc.bottom = maxh;
+    return rc;
+}
+#else
 PRectangle wxSTCListBox::GetDesiredRect() const
 {
     int maxw = m_maxStrWidth * m_aveCharWidth;
@@ -2811,6 +2845,7 @@ PRectangle wxSTCListBox::GetDesiredRect() const
     rc.bottom = maxh;
     return rc;
 }
+#endif
 
 int wxSTCListBox::CaretFromEdge() const
 {
