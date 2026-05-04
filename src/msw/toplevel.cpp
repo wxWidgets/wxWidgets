@@ -512,7 +512,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // focus rectangles) work under Win2k+
     MSWUpdateUIState(UIS_INITIALIZE);
 
-    wxMSWDarkMode::EnableForTLW(GetHwnd());
+    wxMSWDarkMode::ConfigureTLW(GetHwnd());
 
     return true;
 }
