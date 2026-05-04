@@ -5243,6 +5243,17 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
         node = node->GetNext();
     }
 
+    // We don't always need to refresh the window as many settings don't affect
+    // its appearance (e.g. we could avoid it for wParam==SPI_SETDESKWALLPAPER
+    // as we're not affected by the desktop background change), but it is
+    // difficult to determine when we need to do it or not, so just always do
+    // as it's less bad to refresh the window unnecessarily than to fail to do
+    // it when we should.
+    //
+    // Note that only TLWs need to be refreshed, as refresh is recursive.
+    if ( IsTopLevel() )
+        Refresh();
+
     // let the system handle it
     return false;
 }
