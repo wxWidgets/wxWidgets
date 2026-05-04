@@ -5298,6 +5298,7 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 
         node = node->GetNext();
     }
+    Refresh();
 }
 
 extern wxCOLORMAP *wxGetStdColourMap()
