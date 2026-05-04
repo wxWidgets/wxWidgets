@@ -425,11 +425,7 @@ bool IsActive()
 
 void EnableForTLW(HWND hwnd)
 {
-    // Nothing to do, dark mode support not enabled or dark mode is not used.
-    if ( !wxMSWImpl::ShouldUseDarkMode() )
-        return;
-
-    BOOL useDarkMode = TRUE;
+    BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
 
     // DWMWA_USE_IMMERSIVE_DARK_MODE is 19 for v1809, but is 20 for later
     // versions, so to set title bar black for both v1809 and later versions,
@@ -455,7 +451,9 @@ void EnableForTLW(HWND hwnd)
     if ( FAILED(hr) )
         wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
 
-    wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
+    if ( wxMSWImpl::AllowDarkModeForWindow != nullptr ) {
+        wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
+    }
 }
 
 void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)

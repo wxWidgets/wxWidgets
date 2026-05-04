@@ -5202,6 +5202,9 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
     // Check for the special case of changing the system light/dark mode.
     if ( lParam && wxStrcmp((TCHAR*)lParam, wxT("ImmersiveColorSet")) == 0 )
     {
+        if (IsTopLevel()) {
+            wxMSWDarkMode::EnableForTLW(GetHwnd());
+        }
         // Forward to the existing function generating an event for this.
         HandleSysColorChange();
     }
