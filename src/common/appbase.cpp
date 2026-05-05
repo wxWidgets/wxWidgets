@@ -548,7 +548,7 @@ bool wxAppConsoleBase::HasPendingEvents() const
     wxENTER_CRIT_SECT(const_cast<wxAppConsoleBase*>(this)->m_handlersWithPendingEventsLocker);
 
 #if 1 // Bricsys change : respect both 'pending events lists'
-    bool has = !m_handlersWithPendingEvents.IsEmpty() ||
+    bool has = !m_handlersWithPendingEvents.IsEmpty() &&
                !m_handlersWithPendingDelayedEvents.IsEmpty();
 #else
     bool has = !m_handlersWithPendingEvents.IsEmpty();
