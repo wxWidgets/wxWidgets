@@ -423,7 +423,7 @@ bool IsActive()
     return wxMSWImpl::ShouldUseDarkMode();
 }
 
-void EnableForTLW(HWND hwnd)
+void ConfigureTLW(HWND hwnd)
 {
     BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
 
@@ -451,9 +451,8 @@ void EnableForTLW(HWND hwnd)
     if ( FAILED(hr) )
         wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
 
-    if ( wxMSWImpl::AllowDarkModeForWindow != nullptr ) {
+    if ( wxMSWImpl::AllowDarkModeForWindow != nullptr )
         wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
-    }
 }
 
 void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
@@ -776,7 +775,7 @@ bool IsActive()
     return false;
 }
 
-void EnableForTLW(HWND WXUNUSED(hwnd))
+void ConfigureTLW(HWND WXUNUSED(hwnd))
 {
 }
 

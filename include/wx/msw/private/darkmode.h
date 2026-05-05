@@ -20,8 +20,8 @@ namespace wxMSWDarkMode
 WXDLLIMPEXP_CORE
 bool IsActive();
 
-// Enable dark mode for the given TLW if appropriate.
-void EnableForTLW(HWND hwnd);
+// Enable or disable dark mode for the given TLW if appropriate.
+void ConfigureTLW(HWND hwnd);
 
 // Set dark theme for the given (child) window if appropriate.
 //
