@@ -123,8 +123,6 @@ bool wxFrame::Create(wxWindow *parent,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
 
-    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
-
 #if wxUSE_TASKBARBUTTON
     static bool s_taskbarButtonCreatedMsgRegistered = false;
     if ( !s_taskbarButtonCreatedMsgRegistered )
@@ -475,13 +473,6 @@ wxTaskBarButton* wxFrame::MSWGetTaskBarButton()
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    // Don't override the colour explicitly set by the user, if any.
-    if ( !UseBgCol() )
-    {
-        SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
-        Refresh();
-    }
-
 #if wxUSE_STATUSBAR
     if ( m_frameStatusBar )
     {
@@ -727,6 +718,13 @@ void wxFrame::IconizeChildFrames(bool bIconize)
                 frame->Iconize(bIconize);
         }
     }
+}
+
+wxVisualAttributes wxFrame::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs = GetClassDefaultAttributes(GetWindowVariant());
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
+    return attrs;
 }
 
 WXHICON wxFrame::GetDefaultIcon() const
