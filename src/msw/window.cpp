@@ -5236,7 +5236,8 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
         node = node->GetNext();
     }
 
-    Refresh();
+    if (IsTopLevel())
+        Refresh();
 
     // let the system handle it
     return false;
@@ -5300,7 +5301,6 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 
         node = node->GetNext();
     }
-    Refresh();
 }
 
 extern wxCOLORMAP *wxGetStdColourMap()
