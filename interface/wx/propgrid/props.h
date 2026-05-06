@@ -8,7 +8,7 @@
 
 
 /** @class wxPGInDialogValidator
-    @ingroup classes
+    @ingroup group_class_propgrid
     Creates and manages a temporary wxTextCtrl for validation purposes.
     Uses wxPropertyGrid's current editor, if available.
 */
@@ -29,7 +29,7 @@ public:
 // -----------------------------------------------------------------------
 
 /** @class wxStringProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Basic property with string value.
 
     <b>Supported special attributes:</b>
@@ -99,7 +99,7 @@ public:
 };
 
 /** @class wxNumericProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
 
     This is an abstract class which serves as a base class for numeric properties,
     like wxIntProperty, wxUIntProperty, wxFloatProperty.
@@ -162,7 +162,7 @@ protected:
 
 
 /** @class wxIntProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Basic property with integer value.
 
     Seamlessly supports 64-bit integer (wxLongLong) on overflow.
@@ -230,7 +230,7 @@ public:
 
 
 /** @class wxUIntProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Basic property with unsigned integer value.
     Seamlessly supports 64-bit integer (wxULongLong) on overflow.
 
@@ -279,7 +279,7 @@ protected:
 
 
 /** @class wxFloatProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Basic property with double-precision floating point value.
 
     <b>Supported special attributes:</b>
@@ -316,7 +316,7 @@ protected:
 
 
 /** @class wxBoolProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Basic property with boolean value.
 
     <b>Supported special attributes:</b>
@@ -344,7 +344,7 @@ public:
 
 
 /** @class wxEnumProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     You can derive custom properties with choices from this class. See
     wxBaseEnumProperty for remarks.
 
@@ -425,7 +425,7 @@ protected:
 
 
 /** @class wxEditEnumProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     wxEnumProperty with wxString value and writable combo box editor.
 
     @remarks
@@ -473,7 +473,7 @@ public:
 
 
 /** @class wxFlagsProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Represents a bit set that fits in a long integer. wxBoolProperty
     sub-properties are created for editing individual bits. Textctrl is created
     to manually edit the flags as a text; a continuous sequence of spaces,
@@ -528,7 +528,7 @@ protected:
 
 
 /** @class wxEditorDialogProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
 
     This is an abstract class which serves as a base class for the properties
     having a button triggering an editor dialog, like e.g. wxLongStringProperty,
@@ -577,7 +577,7 @@ protected:
 
 
 /** @class wxFileProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Like wxLongStringProperty, but the button triggers file selector instead.
 
     <b>Supported special attributes:</b>
@@ -627,7 +627,7 @@ protected:
 
 
 /** @class wxLongStringProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Like wxStringProperty, but has a button that triggers a small text
     editor dialog.
 
@@ -654,7 +654,7 @@ protected:
 
 
 /** @class wxDirProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Like wxLongStringProperty, but the button triggers directory selector
     instead.
 
@@ -681,7 +681,7 @@ protected:
 
 
 /** @class wxArrayStringProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Property that manages a list of strings.
 
     <b>Supported special attributes:</b>
@@ -857,4 +857,3 @@ protected:
     virtual void ArrayRemoveAt( int index );
     virtual void ArraySwap( size_t first, size_t second );
 };
-

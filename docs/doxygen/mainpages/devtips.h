@@ -321,7 +321,7 @@ conditions that should or should not hold, and print out appropriate error
 messages.
 
 These can be compiled out of a non-debugging version of wxWidgets and your
-application. Using ASSERT is an example of `defensive programming': it can
+application. Using ASSERT is an example of 'defensive programming': it can
 alert you to problems later on.
 
 See wxASSERT() for more info.
@@ -410,4 +410,3 @@ of time in the long run.
 See the @ref overview_debugging for further information.
 
 */
-

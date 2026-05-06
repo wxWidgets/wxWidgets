@@ -1,4 +1,4 @@
-# Doxyfile 1.8.8
+# Doxyfile 1.15.0
 
 #---------------------------------------------------------------------------
 # Project Options
@@ -9,8 +9,10 @@ PROJECT_NAME           = wxWidgets
 PROJECT_NUMBER         = 3.3.3
 PROJECT_BRIEF          =
 PROJECT_LOGO           = logo.png
+PROJECT_ICON           =
 OUTPUT_DIRECTORY       = out
 CREATE_SUBDIRS         = NO
+CREATE_SUBDIRS_LEVEL   = 8
 ALLOW_UNICODE_NAMES    = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
@@ -24,8 +26,10 @@ STRIP_FROM_INC_PATH    = "$(WXWIDGETS)/include/" \
                          "$(WXWIDGETS)/interface/"
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES # Default: NO
+JAVADOC_BANNER         = NO
 QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = NO
+PYTHON_DOCSTRING       = YES
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 4
@@ -33,19 +37,27 @@ OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 OPTIMIZE_FOR_FORTRAN   = NO
 OPTIMIZE_OUTPUT_VHDL   = NO
+OPTIMIZE_OUTPUT_SLICE  = NO
 EXTENSION_MAPPING      =
 MARKDOWN_SUPPORT       = YES
+MARKDOWN_STRICT        = YES
+TOC_INCLUDE_HEADINGS   = 3
+MARKDOWN_ID_STYLE      = DOXYGEN
 AUTOLINK_SUPPORT       = YES
+AUTOLINK_IGNORE_WORDS  =
 BUILTIN_STL_SUPPORT    = NO
 CPP_CLI_SUPPORT        = NO
 SIP_SUPPORT            = NO
 IDL_PROPERTY_SUPPORT   = NO # Default: YES
 DISTRIBUTE_GROUP_DOC   = YES # Default: NO
+GROUP_NESTED_COMPOUNDS = NO
 SUBGROUPING            = YES
 INLINE_GROUPED_CLASSES = NO # TODO: Examine this setting.
 INLINE_SIMPLE_STRUCTS  = NO # TODO: Examine this setting.
 TYPEDEF_HIDES_STRUCT   = NO
 LOOKUP_CACHE_SIZE      = 0
+NUM_PROC_THREADS       = 1
+TIMESTAMP              = YES # Default: NO
 
 
 #---------------------------------------------------------------------------
@@ -244,25 +256,30 @@ ALIASES += buildwith{2}="<b>Build Note:</b> You may need to build the wxWidgets 
 
 EXTRACT_ALL            = YES # Default: NO
 EXTRACT_PRIVATE        = YES # Default: NO
+EXTRACT_PRIV_VIRTUAL   = NO
 EXTRACT_PACKAGE        = NO
 EXTRACT_STATIC         = YES # Default: NO
 EXTRACT_LOCAL_CLASSES  = YES
 EXTRACT_LOCAL_METHODS  = NO
 EXTRACT_ANON_NSPACES   = YES # TODO: Default: NO
+RESOLVE_UNNAMED_PARAMS = YES
 HIDE_UNDOC_MEMBERS     = NO
 HIDE_UNDOC_CLASSES     = NO
+HIDE_UNDOC_NAMESPACES  = YES
 HIDE_FRIEND_COMPOUNDS  = NO
 HIDE_IN_BODY_DOCS      = NO
 INTERNAL_DOCS          = NO
 CASE_SENSE_NAMES       = NO # Default: YES
 HIDE_SCOPE_NAMES       = NO
+HIDE_COMPOUND_REFERENCE= NO
+SHOW_HEADERFILE        = YES
 SHOW_INCLUDE_FILES     = YES
 SHOW_GROUPED_MEMB_INC  = NO # TODO: YES
 FORCE_LOCAL_INCLUDES   = NO
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
 SORT_BRIEF_DOCS        = NO # Don't set to YES, it renders our named groups out of order.
-SORT_MEMBERS_CTORS_1ST = NO # Default: NO
+SORT_MEMBERS_CTORS_1ST = NO
 SORT_GROUP_NAMES       = YES # Default: NO
 SORT_BY_SCOPE_NAME     = NO
 STRICT_PROTO_MATCHING  = NO
@@ -279,6 +296,7 @@ SHOW_NAMESPACES        = NO # TODO: Default: YES
 FILE_VERSION_FILTER    =
 LAYOUT_FILE            = DoxygenLayout.xml
 CITE_BIB_FILES         =
+EXTERNAL_TOOL_PATH     =
 
 
 #---------------------------------------------------------------------------
@@ -289,8 +307,13 @@ QUIET                  = YES # Default: NO
 WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
+WARN_IF_INCOMPLETE_DOC = YES
 WARN_NO_PARAMDOC       = YES # Default: NO
+WARN_IF_UNDOC_ENUM_VAL = NO
+WARN_LAYOUT_FILE       = YES
+WARN_AS_ERROR          = NO
 WARN_FORMAT            = "$file:$line: $text"
+WARN_LINE_FORMAT       = "at line $line of file $file"
 WARN_LOGFILE           = doxygen.log
 
 
@@ -309,6 +332,7 @@ INPUT                  = mainpages \
                          ../x11 \
                          ../../interface
 INPUT_ENCODING         = UTF-8
+INPUT_FILE_ENCODING    =
 FILE_PATTERNS          = *.h *.md
 RECURSIVE              = YES # Default: NO
 EXCLUDE                =
@@ -324,6 +348,8 @@ FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
 FILTER_SOURCE_PATTERNS =
 USE_MDFILE_AS_MAINPAGE =
+IMPLICIT_DIR_DOCS      = YES
+FORTRAN_COMMENT_AFTER  = 72
 
 
 #---------------------------------------------------------------------------
@@ -339,6 +365,10 @@ REFERENCES_LINK_SOURCE = YES
 SOURCE_TOOLTIPS        = YES
 USE_HTAGS              = NO
 VERBATIM_HEADERS       = NO # Default: YES
+CLANG_ASSISTED_PARSING = NO
+CLANG_ADD_INC_PATHS    = YES
+CLANG_OPTIONS          =
+CLANG_DATABASE_PATH    =
 
 
 #---------------------------------------------------------------------------
@@ -361,11 +391,15 @@ HTML_FOOTER            = custom_footer.html
 HTML_STYLESHEET        =
 HTML_EXTRA_STYLESHEET  = $(CUSTOM_THEME_CSS) extra_stylesheet.css
 HTML_EXTRA_FILES       = $(CUSTOM_THEME_JS1) $(CUSTOM_THEME_JS2) wxwidgets.js
+HTML_COLORSTYLE        = LIGHT # Required LIGHT for Doxygen Awesome
 HTML_COLORSTYLE_HUE    = 220 # Default: 220
 HTML_COLORSTYLE_SAT    = 255 # Default: 100
 HTML_COLORSTYLE_GAMMA  = 100 # Default: 80
-HTML_TIMESTAMP         = YES
+HTML_DYNAMIC_MENUS     = YES # TODO: Maybe NO
 HTML_DYNAMIC_SECTIONS  = YES # Default: NO
+HTML_CODE_FOLDING      = YES
+HTML_COPY_CLIPBOARD    = YES
+HTML_PROJECT_COOKIE    =
 HTML_INDEX_NUM_ENTRIES = 100
 
 
@@ -375,7 +409,8 @@ HTML_INDEX_NUM_ENTRIES = 100
 
 GENERATE_DOCSET        = $(GENERATE_DOCSET)
 DOCSET_FEEDNAME        = "wxWidgets 3.3"
-DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx31
+DOCSET_FEEDURL         =
+DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx33
 DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
 DOCSET_PUBLISHER_NAME  = wxWidgets
 
@@ -391,7 +426,7 @@ GENERATE_CHI           = NO
 CHM_INDEX_ENCODING     =
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
-TOC_INCLUDE_HEADINGS   = 3
+SITEMAP_URL            =
 
 
 #---------------------------------------------------------------------------
@@ -422,12 +457,18 @@ ECLIPSE_DOC_ID         = org.wxwidgets.doxygen
 
 DISABLE_INDEX          = NO
 GENERATE_TREEVIEW      = NO
+PAGE_OUTLINE_PANEL     = YES
+FULL_SIDEBAR           = NO # Required NO for Doxygen Awesome
 ENUM_VALUES_PER_LINE   = 1 # Default: 4
+SHOW_ENUM_VALUES       = NO
 TREEVIEW_WIDTH         = 250
 EXT_LINKS_IN_WINDOW    = YES # Default: NO
+OBFUSCATE_EMAILS       = YES
+HTML_FORMULA_FORMAT    = png
 FORMULA_FONTSIZE       = 10
-FORMULA_TRANSPARENT    = YES
+FORMULA_MACROFILE      =
 USE_MATHJAX            = NO
+MATHJAX_VERSION        = MathJax_2
 MATHJAX_FORMAT         = HTML-CSS
 MATHJAX_RELPATH        = http://cdn.mathjax.org/mathjax/latest
 MATHJAX_EXTENSIONS     =
@@ -449,18 +490,20 @@ GENERATE_LATEX         = $(GENERATE_LATEX)
 LATEX_OUTPUT           = latex
 LATEX_CMD_NAME         = latex
 MAKEINDEX_CMD_NAME     = makeindex
+LATEX_MAKEINDEX_CMD    = makeindex
 COMPACT_LATEX          = NO
 PAPER_TYPE             = a4
 EXTRA_PACKAGES         =
 LATEX_HEADER           = latex_header.tex
 LATEX_FOOTER           =
+LATEX_EXTRA_STYLESHEET =
 LATEX_EXTRA_FILES      =
 PDF_HYPERLINKS         = YES
 USE_PDFLATEX           = YES
 LATEX_BATCHMODE        = YES # Default: NO
 LATEX_HIDE_INDICES     = NO
-LATEX_SOURCE_CODE      = NO
 LATEX_BIB_STYLE        = plain
+LATEX_EMOJI_DIRECTORY  =
 
 
 #---------------------------------------------------------------------------
@@ -473,6 +516,7 @@ COMPACT_RTF            = NO
 RTF_HYPERLINKS         = NO
 RTF_STYLESHEET_FILE    =
 RTF_EXTENSIONS_FILE    =
+RTF_EXTRA_FILES        =
 
 
 #---------------------------------------------------------------------------
@@ -493,6 +537,7 @@ MAN_LINKS              = NO
 GENERATE_XML           = $(GENERATE_XML)
 XML_OUTPUT             = xml
 XML_PROGRAMLISTING     = NO # Default: YES
+XML_NS_MEMB_FILE_SCOPE = NO
 
 
 #---------------------------------------------------------------------------
@@ -501,7 +546,6 @@ XML_PROGRAMLISTING     = NO # Default: YES
 
 GENERATE_DOCBOOK       = NO
 DOCBOOK_OUTPUT         = docbook
-DOCBOOK_PROGRAMLISTING = NO
 
 
 #---------------------------------------------------------------------------
@@ -509,6 +553,15 @@ DOCBOOK_PROGRAMLISTING = NO
 #---------------------------------------------------------------------------
 
 GENERATE_AUTOGEN_DEF   = NO
+
+
+#---------------------------------------------------------------------------
+# Sqlite3 Output Options
+#---------------------------------------------------------------------------
+
+GENERATE_SQLITE3       = NO
+SQLITE3_OUTPUT         = sqlite3
+SQLITE3_RECREATE_DB    = YES
 
 
 #---------------------------------------------------------------------------
@@ -552,19 +605,21 @@ EXTERNAL_PAGES         = YES
 # dot Tool Options
 #---------------------------------------------------------------------------
 
-CLASS_DIAGRAMS         = YES
-DIA_PATH               =
 HIDE_UNDOC_RELATIONS   = YES
 HAVE_DOT               = YES # Default: NO
 DOT_NUM_THREADS        = 0
-DOT_FONTNAME           =
-DOT_FONTSIZE           = 10
+DOT_COMMON_ATTR        = "fontname=Helvetica,fontsize=10"
+DOT_EDGE_ATTR          = "labelfontname=Helvetica,labelfontsize=10"
+DOT_NODE_ATTR          = "shape=box,height=0.2,width=0.4"
 DOT_FONTPATH           =
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = NO # Default: YES
 GROUP_GRAPHS           = NO # Default: YES
 UML_LOOK               = NO
 UML_LIMIT_NUM_FIELDS   = 10
+UML_MAX_EDGE_LABELS    = 10
+DOT_UML_DETAILS        = NO
+DOT_WRAP_THRESHOLD     = 17
 TEMPLATE_RELATIONS     = NO
 INCLUDE_GRAPH          = NO # Default: YES
 INCLUDED_BY_GRAPH      = NO # Default: YES
@@ -572,16 +627,21 @@ CALL_GRAPH             = NO
 CALLER_GRAPH           = NO
 GRAPHICAL_HIERARCHY    = NO # TODO: Default: YES
 DIRECTORY_GRAPH        = NO # Default: YES
+DIR_GRAPH_MAX_DEPTH    = 1
 DOT_IMAGE_FORMAT       = $(DOT_IMAGE_FORMAT)
 INTERACTIVE_SVG        = NO
 DOT_PATH               =
 DOTFILE_DIRS           =
-MSCFILE_DIRS           =
+DIA_PATH               =
 DIAFILE_DIRS           =
 PLANTUML_JAR_PATH      =
+PLANTUML_CFG_FILE      =
+PLANTUML_INCLUDE_PATH  =
+PLANTUMLFILE_DIRS      =
 DOT_GRAPH_MAX_NODES    = 150 # Default 50, we currently have 108 for wxObject
 MAX_DOT_GRAPH_DEPTH    = 1000 # Default: 0
-DOT_TRANSPARENT        = yes
 DOT_MULTI_TARGETS      = NO
 GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES
+MSCGEN_TOOL            =
+MSCFILE_DIRS           =

@@ -89,7 +89,7 @@ public:
     /**
         This function returns @true if either the given @a mimeType is exactly
         the same as @a wildcard or if it has the same category and the subtype of
-        @a wildcard is '*'. Note that the '*' wildcard is not allowed in
+        @a wildcard is "*". Note that the "*" wildcard is not allowed in
         @a mimeType itself.
 
         The comparison done by this function is case insensitive so it is not

@@ -58,6 +58,8 @@ wxWidgets programs.
          href="https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html">LANGUAGE</a>
          variable: a colon-separated list of language tags (which are, in their
          simplest form, just the language names).}
+@endDefList
+
 */
 
 @see wxSystemOptions

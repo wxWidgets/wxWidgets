@@ -216,7 +216,7 @@ startup, before the main window is shown.
 This sample shows the wxDialUpManager
 class. In the status bar, it displays the information gathered through its
 interface: in particular, the current connection status (online or offline) and
-whether the connection is permanent (in which case a string `LAN' appears in
+whether the connection is permanent (in which case a string 'LAN' appears in
 the third status bar field - but note that you may be on a LAN not
 connected to the Internet, in which case you will not see this) or not.
 

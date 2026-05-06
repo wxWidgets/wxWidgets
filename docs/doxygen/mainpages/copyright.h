@@ -141,7 +141,7 @@ longer:
 
 @li Julian Smart
 @li Robert Roebling
-@li Wlodzimierz `ABX' Skiba
+@li Wlodzimierz 'ABX' Skiba
 @li Chris Elliott
 @li David Elliott
 @li Kevin Hock
@@ -173,7 +173,7 @@ David Webster, Otto Wyss, Xiaokun Zhu, Edward Zimmermann.
 Many thanks also to AIAI for being willing to release the original version of
 wxWidgets into the public domain, and to our patient partners.
 
-`Graphplace', the basis for the wxGraphLayout library, is copyright Dr. Jos
+'Graphplace', the basis for the wxGraphLayout library, is copyright Dr. Jos
 T.J. van Eijndhoven of Eindhoven University of Technology. The code has
 been used in wxGraphLayout (not in wxWidgets anymore) with his permission.
 
@@ -190,7 +190,7 @@ copyright notice and this permission notice appear in supporting
 documentation, and that the name of M.I.T. not be used in advertising or
 publicity pertaining to distribution of the software without specific,
 written prior permission.  M.I.T. makes no representations about the
-suitability of this software for any purpose.  It is provided ``as is''
+suitability of this software for any purpose.  It is provided 'as is'
 without express or implied warranty.
 </em>
 

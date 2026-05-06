@@ -5293,7 +5293,7 @@ public:
     void SetMarginCount(int margins);
 
     /**
-        How many margins are there?.
+        Returns the count of margins.
 
         @since 3.1.1
     */

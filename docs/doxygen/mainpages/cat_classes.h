@@ -136,7 +136,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxStaticBox: A static, or group box for visually grouping related controls
 @li wxScrollBar: Scrollbar control
 @li wxSearchCtrl: A text input control used to initiate a search
-@li wxSpinButton: A spin or `up-down' control
+@li wxSpinButton: A spin or 'up-down' control
 @li wxSpinCtrl: A spin control - i.e. spin button and text control displaying
     an integer
 @li wxSpinCtrlDouble: A spin control - i.e. spin button and text control displaying
@@ -830,4 +830,3 @@ Related overview: @ref overview_ipc
 @li wxSingleInstanceChecker: Check that only single program instance is running
 
 */
-

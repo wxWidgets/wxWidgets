@@ -63,7 +63,7 @@ public:
 
 
 /** @class wxFontProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Property representing wxFont.
 
     <b>Supported special attributes:</b>
@@ -90,7 +90,7 @@ protected:
 
 
 /** @class wxSystemColourProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Has dropdown list of wxWidgets system colours. Value used is
     of wxColourPropertyValue type.
 
@@ -169,7 +169,7 @@ protected:
 
 
 /** @class wxColourProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Allows to select a colour from the list or with colour dialog. Value used
     is of wxColourPropertyValue type.
 
@@ -195,7 +195,7 @@ protected:
 
 
 /** @class wxCursorProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Property representing wxCursor.
 */
 class wxCursorProperty : public wxEnumProperty
@@ -217,7 +217,7 @@ public:
 const wxString& wxPGGetDefaultImageWildcard();
 
 /** @class wxImageFileProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Property representing image file(name).
 
     <b>Supported special attributes:</b>
@@ -250,7 +250,7 @@ public:
 
 
 /** @class wxMultiChoiceProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Property that manages a value resulting from wxMultiChoiceDialog. Value is
     array of strings. You can get value as array of choice values/indices by
     calling wxMultiChoiceProperty::GetValueAsArrayInt().
@@ -306,7 +306,7 @@ protected:
 
 
 /** @class wxDateProperty
-    @ingroup classes
+    @ingroup group_class_propgrid
     Property representing wxDateTime.
 
     <b>Supported special attributes:</b>

@@ -36,7 +36,7 @@ enum
         configuration file location to `~/.config/appname.conf`.
 
         In combination with wxCONFIG_USE_SUBDIR, this flag changes the default
-        configuration file location to ~/.config/appname/appname.conf`.
+        configuration file location to `~/.config/appname/appname.conf`.
 
         If neither this flag nor wxCONFIG_USE_HOME is specified, XDG-compliant
         configuration file path will be used by default, but if there is an
@@ -1071,4 +1071,3 @@ public:
     */
     void UpdateIfDeleted();
 };
-

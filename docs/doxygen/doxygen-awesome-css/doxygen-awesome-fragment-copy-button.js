@@ -1,29 +1,10 @@
+// SPDX-License-Identifier: MIT
 /**
 
 Doxygen Awesome
 https://github.com/jothepro/doxygen-awesome-css
 
-MIT License
-
-Copyright (c) 2022 jothepro
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Copyright (c) 2022 - 2025 jothepro
 
 */
 
@@ -33,8 +14,8 @@ class DoxygenAwesomeFragmentCopyButton extends HTMLElement {
         this.onclick=this.copyContent
     }
     static title = "Copy to clipboard"
-    static copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`
-    static successIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`
+    static copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M23.04,10.322c0,-2.582 -2.096,-4.678 -4.678,-4.678l-6.918,-0c-2.582,-0 -4.678,2.096 -4.678,4.678c0,-0 0,8.04 0,8.04c0,2.582 2.096,4.678 4.678,4.678c0,-0 6.918,-0 6.918,-0c2.582,-0 4.678,-2.096 4.678,-4.678c0,-0 0,-8.04 0,-8.04Zm-2.438,-0l-0,8.04c-0,1.236 -1.004,2.24 -2.24,2.24l-6.918,-0c-1.236,-0 -2.239,-1.004 -2.239,-2.24l-0,-8.04c-0,-1.236 1.003,-2.24 2.239,-2.24c0,0 6.918,0 6.918,0c1.236,0 2.24,1.004 2.24,2.24Z"/><path d="M5.327,16.748c-0,0.358 -0.291,0.648 -0.649,0.648c0,0 0,0 0,0c-2.582,0 -4.678,-2.096 -4.678,-4.678c0,0 0,-8.04 0,-8.04c0,-2.582 2.096,-4.678 4.678,-4.678l6.918,0c2.168,0 3.994,1.478 4.523,3.481c0.038,0.149 0.005,0.306 -0.09,0.428c-0.094,0.121 -0.239,0.191 -0.392,0.191c-0.451,0.005 -1.057,0.005 -1.457,0.005c-0.238,0 -0.455,-0.14 -0.553,-0.357c-0.348,-0.773 -1.128,-1.31 -2.031,-1.31c-0,0 -6.918,0 -6.918,0c-1.236,0 -2.24,1.004 -2.24,2.24l0,8.04c0,1.236 1.004,2.24 2.24,2.24l0,-0c0.358,-0 0.649,0.29 0.649,0.648c-0,0.353 -0,0.789 -0,1.142Z" style="fill-opacity:0.6;"/></svg>`
+    static successIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M8.084,16.111c-0.09,0.09 -0.212,0.141 -0.34,0.141c-0.127,-0 -0.249,-0.051 -0.339,-0.141c-0.746,-0.746 -2.538,-2.538 -3.525,-3.525c-0.375,-0.375 -0.983,-0.375 -1.357,0c-0.178,0.178 -0.369,0.369 -0.547,0.547c-0.375,0.375 -0.375,0.982 -0,1.357c1.135,1.135 3.422,3.422 4.75,4.751c0.27,0.27 0.637,0.421 1.018,0.421c0.382,0 0.749,-0.151 1.019,-0.421c2.731,-2.732 10.166,-10.167 12.454,-12.455c0.375,-0.375 0.375,-0.982 -0,-1.357c-0.178,-0.178 -0.369,-0.369 -0.547,-0.547c-0.375,-0.375 -0.982,-0.375 -1.357,0c-2.273,2.273 -9.567,9.567 -11.229,11.229Z"/></svg>`
     static successDuration = 980
     static init() {
         $(function() {

@@ -530,7 +530,7 @@ public:
     /**
         Assignment from UTF-8 string.
 
-        Calling `s.AssignFromUTF8(utf8, len) is equivalent to doing
+        Calling `s.AssignFromUTF8(utf8, len)` is equivalent to doing
         `s = wxString::FromUTF8(utf8, len)` but may be more efficient as it can
         reuse the existing string buffer instead of always having to allocate a
         new one.

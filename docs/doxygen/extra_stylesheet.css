@@ -1,5 +1,30 @@
 /* wxWidgets Custom Styles */
 
+/* Give top navigation buttons more breathing room, matching older style */
+.sm-dox li {
+    margin: 0 0.2em;
+    padding: 0 0.2em;
+}
+
+/* Hopefully temporary tweaks to get a better looking search icon until eventual fixes in Doxygen Awesome */
+.search-icon:before {
+    width: 10px;
+    height: 10px;
+}
+.search-icon:after {
+    width: 2px;
+    height: 5px;
+    top: 16px;
+    left: 11px;
+    background-color: #707070;
+}
+#MSearchSelectExt.search-icon {
+    width: 20px;
+    height: 1.4em;
+    top: 3px;
+    margin-left: 6px;
+}
+
 div.appearance {
     margin: 1em 0em;
 }
@@ -43,6 +68,24 @@ div.appearance_brief table td {
 td.green { color: green; }
 td.orange { color: #ff8000; }
 td.red { color: red; }
+
+/* Fix up class member groups - Doxygen Awesome doesn't fix these up yet */
+.memberdecls tr.groupHeader td {
+    padding-top: 1em;
+}
+.memberdecls div.groupHeader {
+    box-shadow: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    color: inherit;
+}
+.memberdecls td.ititle {
+    border: none !important;
+    color: inherit;
+}
+.memberdecls div.groupText {
+    font-style: inherit;
+}
 
 span.literal {
     text-decoration: none;
