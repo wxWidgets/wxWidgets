@@ -244,6 +244,13 @@ public:
     wxWindow* GetWindow();
 
     /**
+      Returns the wxAuiToolBar this item belongs to.
+
+      @since 3.3.0
+    */
+    wxAuiToolBar* GetToolBar() const;
+
+    /**
       Sets the toolbar item identifier.
     */
     void SetId(int new_id);

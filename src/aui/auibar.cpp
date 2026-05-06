@@ -1009,6 +1009,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
         item.m_toolId = wxNewId();
 
     m_items.Add(item);
+    m_items.Last().m_toolbar = this;
     return &m_items.Last();
 }
 
@@ -1033,6 +1034,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddControl(wxControl* control,
     item.m_sticky = false;
 
     m_items.Add(item);
+    m_items.Last().m_toolbar = this;
     return &m_items.Last();
 }
 
@@ -1065,6 +1067,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
         item.m_toolId = wxNewId();
 
     m_items.Add(item);
+    m_items.Last().m_toolbar = this;
     return &m_items.Last();
 }
 
@@ -1087,6 +1090,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
     item.m_sticky = false;
 
     m_items.Add(item);
+    m_items.Last().m_toolbar = this;
     return &m_items.Last();
 }
 
@@ -1110,6 +1114,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
     item.m_sticky = false;
 
     m_items.Add(item);
+    m_items.Last().m_toolbar = this;
     return &m_items.Last();
 }
 
@@ -1133,6 +1138,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddStretchSpacer(int proportion)
     item.m_sticky = false;
 
     m_items.Add(item);
+    m_items.Last().m_toolbar = this;
     return &m_items.Last();
 }
 

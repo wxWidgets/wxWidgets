@@ -22,6 +22,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxClientDC;
 class WXDLLIMPEXP_FWD_AUI wxAuiPaneInfo;
+class WXDLLIMPEXP_FWD_AUI wxAuiToolBar;
 
 enum wxAuiToolBarStyle
 {
@@ -122,6 +123,7 @@ public:
         m_sticky = true;
         m_userData = 0;
         m_alignment = wxALIGN_CENTER;
+        m_toolbar = nullptr;
     }
 
     void Assign(const wxAuiToolBarItem& c)
@@ -145,11 +147,14 @@ public:
         m_sticky = c.m_sticky;
         m_userData = c.m_userData;
         m_alignment = c.m_alignment;
+        m_toolbar = c.m_toolbar;
     }
 
 
     void SetWindow(wxWindow* w) { m_window = w; }
     wxWindow* GetWindow() { return m_window; }
+
+    wxAuiToolBar* GetToolBar() const { return m_toolbar; }
 
     void SetId(int newId) { m_toolId = newId; }
     int GetId() const { return m_toolId; }
@@ -246,6 +251,7 @@ private:
     bool m_sticky;               // overrides button states if true (always active)
     long m_userData;            // user-specified data
     int m_alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
+    wxAuiToolBar* m_toolbar;    // toolbar this item belongs to
 };
 
 #ifndef SWIG
