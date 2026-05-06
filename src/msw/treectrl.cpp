@@ -3741,7 +3741,12 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     event.m_item = item;
                     eventType = wxEVT_TREE_STATE_IMAGE_CLICK;
                 }
-
+                else if( item )
+                {
+                    event.m_item = item;
+                    eventType = wxEVT_TREE_ITEM_LEFT_CLICK;
+                }
+                
                 break;
             }
 

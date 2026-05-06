@@ -3594,6 +3594,24 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             RefreshLine( m_underMouse );
     }
 
+    if (event.LeftDown())
+    {
+        m_isLastMouseEventLeftDown = true;
+    }
+    else
+    {
+        if (event.LeftUp() && m_isLastMouseEventLeftDown)
+        {
+            m_isLastMouseEventLeftDown = false;
+            if (underMouse != nullptr && underMouse == m_underMouse)
+            {
+                wxTreeEvent* pEvent = new wxTreeEvent(wxEVT_TREE_ITEM_LEFT_CLICK, this, m_underMouse);
+                GetEventHandler()->QueueEvent(pEvent);
+            }
+        }
+        m_isLastMouseEventLeftDown = false;
+    }
+
 #if wxUSE_TOOLTIPS
     // Determines what item we are hovering over and need a tooltip for
     wxTreeItemId hoverItem = thisItem;
