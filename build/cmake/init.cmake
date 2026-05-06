@@ -107,7 +107,7 @@ if(MSVC)
     wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${MSVC_PDB_FLAG}")
     wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${MSVC_PDB_FLAG}")
 
-    if(wxBUILD_MSVC_MULTIPROC)
+    if(wxBUILD_MSVC_MULTIPROC AND ${CMAKE_GENERATOR} MATCHES "Visual Studio")
         wx_string_append(CMAKE_C_FLAGS " /MP")
         wx_string_append(CMAKE_CXX_FLAGS " /MP")
     endif()
@@ -249,8 +249,8 @@ endif()
 # Constants for setup.h creation
 if(NOT wxUSE_EXPAT)
     set(wxUSE_XRC OFF)
+    set(wxUSE_XML OFF)
 endif()
-set(wxUSE_XML ${wxUSE_XRC})
 
 if(DEFINED wxUSE_OLE AND wxUSE_OLE)
     set(wxUSE_OLE_AUTOMATION ON)
@@ -335,7 +335,11 @@ if(wxUSE_CONFIG)
         message(WARNING "wxConfig requires wxTextFile... disabled")
         wx_option_force_value(wxUSE_CONFIG OFF)
     else()
-        set(wxUSE_CONFIG_NATIVE ON)
+        if(WIN32 AND NOT wxUSE_REGKEY)
+            set(wxUSE_CONFIG_NATIVE OFF)
+        else()
+            set(wxUSE_CONFIG_NATIVE ON)
+        endif()
     endif()
 endif()
 
@@ -464,6 +468,7 @@ if(wxUSE_GUI)
                     pkg_get_variable(WAYLAND_SCANNER wayland-scanner wayland_scanner)
                     if(WAYLAND_SCANNER)
                         set(wx_protocols_input_dir ${wxSOURCE_DIR}/src/unix/protocols)
+                        set(wx_protocols_temp_dir ${wxOUTPUT_DIR}/wx/protocols)
                         set(wx_protocols_output_dir ${wxSETUP_HEADER_PATH}/wx/protocols)
 
                         # Note that we need multiple execute_process()
@@ -471,19 +476,30 @@ if(wxUSE_GUI)
                         # concurrently and not sequentially.
                         execute_process(
                             COMMAND
-                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_output_dir}
+                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_temp_dir}
                         )
                         execute_process(
                             COMMAND
                                 ${WAYLAND_SCANNER} client-header
                                     ${wx_protocols_input_dir}/pointer-warp-v1.xml
-                                    ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
+                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.h
                         )
                         execute_process(
                             COMMAND
                                 ${WAYLAND_SCANNER} private-code
                                     ${wx_protocols_input_dir}/pointer-warp-v1.xml
-                                    ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
+                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.c
+                        )
+
+                        execute_process(
+                            COMMAND
+                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_output_dir}
+                        )
+                        execute_process(
+                            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.h
+                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.c
+                                    ${wx_protocols_output_dir}
                         )
 
                         set(wxHAVE_WAYLAND_CLIENT ON)
@@ -525,15 +541,23 @@ if(wxUSE_GUI)
                     # library directly like this to avoid link problems.
                     set(OPENGL_LIBRARIES ${OPENGL_egl_LIBRARY} ${OPENGL_LIBRARIES})
                 endif()
+                set(wxHAS_EGL 1)
                 set(OPENGL_INCLUDE_DIR ${OPENGL_INCLUDE_DIR} ${OPENGL_EGL_INCLUDE_DIRS})
                 find_package(WAYLANDEGL)
                 if(WAYLANDEGL_FOUND AND wxHAVE_GDK_WAYLAND)
                     list(APPEND OPENGL_LIBRARIES ${WAYLANDEGL_LIBRARIES})
                 endif()
             endif()
+            if(X11_FOUND AND OpenGL_GLX_FOUND)
+                # toolkit.cmake calls find_package(X11) if X11 support is needed
+                set(wxHAS_GLX 1)
+            endif()
+            if(WXGTK3 AND APPLE AND (NOT wxHAVE_GDK_X11 OR NOT wxHAVE_GDK_WAYLAND))
+                set(OPENGL_FOUND OFF)
+            endif()
         endif()
         if(NOT OPENGL_FOUND)
-            message(WARNING "opengl not found, wxGLCanvas won't be available")
+            message(WARNING "OpenGL not found, wxGLCanvas won't be available")
             wx_option_force_value(wxUSE_OPENGL OFF)
         endif()
         if(UNIX AND (NOT WXGTK3 OR NOT OpenGL_EGL_FOUND))
@@ -645,7 +669,7 @@ if(wxUSE_GUI)
         endif()
     endif()
 
-    if(wxUSE_MEDIACTRL AND WXGTK AND NOT APPLE AND NOT WIN32)
+    if(wxUSE_MEDIACTRL AND WXGTK AND NOT WIN32)
         find_package(GSTREAMER 1.0 COMPONENTS video)
         if(NOT GSTREAMER_FOUND)
             find_package(GSTREAMER 0.10 COMPONENTS interfaces)
@@ -696,7 +720,7 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_UIACTIONSIMULATOR AND UNIX AND WXGTK)
-        if(wxUSE_XTEST)
+        if(wxHAVE_GDK_X11 AND wxUSE_XTEST)
             find_package(XTEST)
             if(XTEST_FOUND)
                 list(APPEND wxTOOLKIT_INCLUDE_DIRS ${XTEST_INCLUDE_DIRS})
@@ -786,6 +810,18 @@ if(wxUSE_GUI)
         endif()
     endif()
 
+    if(wxUSE_DETECT_SM)
+        if(APPLE OR WIN32)
+            wx_option_force_value(wxUSE_DETECT_SM OFF)
+        else()
+            find_package(PkgConfig)
+            pkg_check_modules(SM sm)
+            if(NOT SM_FOUND)
+                message(WARNING "libSM not found; disabling session management detection")
+                wx_option_force_value(wxUSE_DETECT_SM OFF)
+            endif()
+        endif()
+    endif()
 endif(wxUSE_GUI)
 
 # test if precompiled headers are supported using the cotire test project

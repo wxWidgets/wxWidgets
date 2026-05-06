@@ -491,6 +491,13 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
+    if ( wxMenuBar* const menuBar = GetMenuBar() )
+    {
+        menuBar->MSWApplyThemeBackground();
+    }
+#endif // wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
+
     // Propagate the event to the non-top-level children
     wxWindow::OnSysColourChanged(event);
 }

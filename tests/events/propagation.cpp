@@ -33,7 +33,9 @@
 
 #include <memory>
 
-#include "waitfor.h"
+#if defined(__WXGTK__) || defined(__WXQT__)
+    #include "waitfor.h"
+#endif
 
 // FIXME: Currently under OS X testing paint event doesn't work because neither
 //        calling Refresh()+Update() nor even sending wxPaintEvent directly to
@@ -668,6 +670,7 @@ void EventPropagationTestCase::DocViewCommon(wxFrame* (*newParent)(wxDocManager 
 
     wxMenu* const menuChild = CreateTestMenu(child.get());
 
+#ifdef __WXGTK__
     // There are a lot of hacks related to child frame menu bar handling in
     // wxGTK and, in particular, the code in src/gtk/mdi.cpp relies on getting
     // idle events to really put everything in place. Moreover, as wxGTK uses
@@ -679,8 +682,8 @@ void EventPropagationTestCase::DocViewCommon(wxFrame* (*newParent)(wxDocManager 
     // make things work "as usual".
     child->Show();
     parent->Show();
-    child->SetFocus(); // Without this, the test would fail on wxGTK2
-    YieldForAWhile();
+    wxYield();
+#endif // __WXGTK__
 
     TestEvtSink sinkDoc('d');
     doc->Connect(wxEVT_MENU,
@@ -696,25 +699,7 @@ void EventPropagationTestCase::DocViewCommon(wxFrame* (*newParent)(wxDocManager 
 
     // Check that wxDocument, wxView, wxDocManager, child frame and the parent
     // get the event in order.
-#if wxUSE_UIACTIONSIMULATOR
-    // We use wxUIActionSimulator instead of ASSERT_MENU_EVENT_RESULT because
-    // using the latter fails with wxQt on Linux.
-    wxUnusedVar(menuChild);
-    g_str.clear();
-
-    wxUIActionSimulator sim;
-    sim.Char('m', wxMOD_ALT);
-    // N.B.: Don't call wxYield() here, as this will cause the menu to appear
-    // immediately (and enter its internal message loop) and the next line will
-    // never be executed under wxMSW. In other words, the execution would block
-    // indefinitely.
-    sim.Char('a');
-    wxYield();
-
-    CHECK( g_str == "advmcpA" );
-#else // !wxUSE_UIACTIONSIMULATOR
     ASSERT_MENU_EVENT_RESULT( menuChild, "advmcpA" );
-#endif // wxUSE_UIACTIONSIMULATOR
 
 #if wxUSE_TOOLBAR
     // Also check that toolbar events get forwarded to the active child.

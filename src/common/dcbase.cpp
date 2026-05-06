@@ -432,64 +432,32 @@ void wxDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y,
 // coordinate conversions and transforms
 // ----------------------------------------------------------------------------
 
-wxCoord wxDCImpl::DeviceToLogicalX(wxCoord x) const
-{
-    return wxRound( (double)((x - m_deviceOriginX - m_deviceLocalOriginX) * m_signX) / m_scaleX ) + m_logicalOriginX ;
-}
-
-wxCoord wxDCImpl::DeviceToLogicalY(wxCoord y) const
-{
-    return wxRound( (double)((y - m_deviceOriginY - m_deviceLocalOriginY) * m_signY) / m_scaleY ) + m_logicalOriginY ;
-}
-
-wxCoord wxDCImpl::DeviceToLogicalXRel(wxCoord x) const
-{
-    return wxRound((double)(x) / m_scaleX);
-}
-
-wxCoord wxDCImpl::DeviceToLogicalYRel(wxCoord y) const
-{
-    return wxRound((double)(y) / m_scaleY);
-}
-
-wxCoord wxDCImpl::LogicalToDeviceX(wxCoord x) const
-{
-    return wxRound( (double)((x - m_logicalOriginX) * m_signX) * m_scaleX) + m_deviceOriginX + m_deviceLocalOriginX;
-}
-
-wxCoord wxDCImpl::LogicalToDeviceY(wxCoord y) const
-{
-    return wxRound( (double)((y - m_logicalOriginY) * m_signY) * m_scaleY) + m_deviceOriginY + m_deviceLocalOriginY;
-}
-
-wxCoord wxDCImpl::LogicalToDeviceXRel(wxCoord x) const
-{
-    return wxRound((double)(x) * m_scaleX);
-}
-
-wxCoord wxDCImpl::LogicalToDeviceYRel(wxCoord y) const
-{
-    return wxRound((double)(y) * m_scaleY);
-}
-
 wxPoint wxDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
-    return wxPoint(DeviceToLogicalX(x), DeviceToLogicalY(y));
+    return wxRealPoint
+           (
+            ((x - m_deviceOriginX - m_deviceLocalOriginX) * m_signX) / m_scaleX + m_logicalOriginX,
+            ((y - m_deviceOriginY - m_deviceLocalOriginY) * m_signY) / m_scaleY + m_logicalOriginY
+           );
 }
 
 wxPoint wxDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
-    return wxPoint(LogicalToDeviceX(x), LogicalToDeviceY(y));
+    return wxRealPoint
+           (
+            (x - m_logicalOriginX) * m_signX * m_scaleX + m_deviceOriginX + m_deviceLocalOriginX,
+            (y - m_logicalOriginY) * m_signY * m_scaleY + m_deviceOriginY + m_deviceLocalOriginY
+           );
 }
 
 wxSize wxDCImpl::DeviceToLogicalRel(int x, int y) const
 {
-    return wxSize(DeviceToLogicalXRel(x), DeviceToLogicalYRel(y));
+    return wxSize(wxRound(x / m_scaleX), wxRound(y / m_scaleY));
 }
 
 wxSize wxDCImpl::LogicalToDeviceRel(int x, int y) const
 {
-    return wxSize(LogicalToDeviceXRel(x), LogicalToDeviceYRel(y));
+    return wxSize(wxRound(x * m_scaleX), wxRound(y * m_scaleY));
 }
 
 void wxDCImpl::ComputeScaleAndOrigin()
@@ -1131,8 +1099,8 @@ void wxDC::DrawLabel(const wxString& text,
     wxCoord width, height;
     if ( bitmap.IsOk() )
     {
-        width = widthText + bitmap.GetWidth();
-        height = bitmap.GetHeight();
+        width = widthText + wxRound(bitmap.GetLogicalWidth());
+        height = wxRound(bitmap.GetLogicalHeight());
     }
     else // no bitmap
     {
@@ -1175,7 +1143,7 @@ void wxDC::DrawLabel(const wxString& text,
     {
         DrawBitmap(bitmap, x, y, true /* use mask */);
 
-        wxCoord offset = bitmap.GetWidth() + 4;
+        wxCoord offset = wxRound(bitmap.GetLogicalWidth()) + 4;
         x += offset;
         width -= offset;
 

@@ -23,6 +23,13 @@ class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
     typedef wxWidgetImpl wxOSXWidgetImpl;
 #endif
 
+struct wxMacBorderSize
+{
+    long left;
+    long top;
+    long right;
+    long bottom;
+};
 
 class WXDLLIMPEXP_CORE wxWindowMac: public wxWindowBase
 {
@@ -189,10 +196,13 @@ public:
     wxNonOwnedWindow*   MacGetTopLevelWindow() const ;
 
     virtual long        MacGetWXBorderSize() const;
-    virtual long        MacGetLeftBorderSize() const ;
-    virtual long        MacGetRightBorderSize() const ;
-    virtual long        MacGetTopBorderSize() const ;
-    virtual long        MacGetBottomBorderSize() const ;
+
+    // Border adjusted for inset/"aura", if any.
+    virtual wxMacBorderSize MacGetBorderSize() const;
+    virtual long            MacGetLeftBorderSize() const;
+    virtual long            MacGetRightBorderSize() const;
+    virtual long            MacGetTopBorderSize() const;
+    virtual long            MacGetBottomBorderSize() const;
 
     virtual void        MacSuperChangedPosition() ;
 
@@ -329,9 +339,6 @@ protected:
     mutable wxRegion    m_cachedClippedRegion ;
     mutable wxRegion    m_cachedClippedClientRegion ;
 
-    // insets of the mac control from the wx top left corner
-    wxPoint             m_macTopLeftInset ;
-    wxPoint             m_macBottomRightInset ;
     wxByte              m_macAlpha ;
 
     wxScrollBar*        m_hScrollBar ;

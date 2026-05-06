@@ -42,6 +42,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
     EVT_LEFT_DOWN(wxRibbonPanel::OnMouseClick)
     EVT_PAINT(wxRibbonPanel::OnPaint)
     EVT_SIZE(wxRibbonPanel::OnSize)
+    EVT_DPI_CHANGED(wxRibbonPanel::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 wxRibbonPanel::wxRibbonPanel() : m_expanded_dummy(nullptr), m_expanded_panel(nullptr)
@@ -51,7 +52,7 @@ wxRibbonPanel::wxRibbonPanel() : m_expanded_dummy(nullptr), m_expanded_panel(nul
 wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
                   wxWindowID id,
                   const wxString& label,
-                  const wxBitmap& minimised_icon,
+                  const wxBitmapBundle& minimised_icon,
                   const wxPoint& pos,
                   const wxSize& size,
                   long style)
@@ -72,7 +73,7 @@ wxRibbonPanel::~wxRibbonPanel()
 bool wxRibbonPanel::Create(wxWindow* parent,
                 wxWindowID id,
                 const wxString& label,
-                const wxBitmap& icon,
+                const wxBitmapBundle& icon,
                 const wxPoint& pos,
                 const wxSize& size,
                 long style)
@@ -105,7 +106,7 @@ void wxRibbonPanel::SetArtProvider(wxRibbonArtProvider* art)
         m_expanded_panel->SetArtProvider(art);
 }
 
-void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long style)
+void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmapBundle& icon, long style)
 {
     SetName(label);
     SetLabel(label);
@@ -250,6 +251,12 @@ void wxRibbonPanel::OnSize(wxSizeEvent& evt)
         Layout();
 
     evt.Skip();
+}
+
+void wxRibbonPanel::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    Realize();
+    event.Skip();
 }
 
 void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags)
@@ -700,23 +707,13 @@ bool wxRibbonPanel::Realize()
         m_smallest_unminimised_size =
             m_art->GetPanelSize(temp_dc, this, minimum_children_size, nullptr);
 
-        wxSize bitmap_size;
         wxSize panel_min_size = GetMinNotMinimisedSize();
         m_minimised_size = m_art->GetMinimisedPanelMinimumSize(temp_dc, this,
-            &bitmap_size, &m_preferred_expand_direction);
-        if(m_minimised_icon.IsOk() && m_minimised_icon.GetLogicalSize() != bitmap_size)
+            nullptr, &m_preferred_expand_direction);
+        if(m_minimised_icon.IsOk())
         {
-            double scale = m_minimised_icon.GetScaleFactor();
-            if (scale > 1.0)
-                scale = 2.0;
-
-            wxImage img(m_minimised_icon.ConvertToImage());
-            img.Rescale(scale * bitmap_size, wxIMAGE_QUALITY_HIGH);
-            m_minimised_icon_resized = wxBitmap(img, -1, scale);
-        }
-        else
-        {
-            m_minimised_icon_resized = m_minimised_icon;
+            m_minimised_icon_resized = m_minimised_icon.GetBitmap(
+                m_minimised_icon.GetPreferredBitmapSizeFor(this));
         }
         if(m_minimised_size.x > panel_min_size.x &&
             m_minimised_size.y > panel_min_size.y)

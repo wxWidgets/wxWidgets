@@ -262,5 +262,5 @@ void wxArtBrowserDialog::SetArtBitmap(const wxArtID& id, const wxArtClient& clie
     m_canvas->SetSize(bmp.GetWidth(), bmp.GetHeight());
     m_canvas->SetBitmap(bmp);
     m_text->SetLabel(wxString::Format("Size: %d x %d", bmp.GetWidth(), bmp.GetHeight()));
-    Refresh();
+    Layout();
 }

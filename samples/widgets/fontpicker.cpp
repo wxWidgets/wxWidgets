@@ -219,8 +219,10 @@ void FontPickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void FontPickerWidgetsPage::OnFontChange(wxFontPickerEvent& event)
 {
-    wxLogMessage("The font changed to '%s' with size %d !",
-                 event.GetFont().GetFaceName(), event.GetFont().GetPointSize());
+    wxLogMessage("The font changed to '%s' with size %d, style %s, weight %d !",
+                 event.GetFont().GetFaceName(), event.GetFont().GetPointSize(),
+                 event.GetFont().GetStyle() == wxFONTSTYLE_NORMAL ? "regular" : "italic",
+                 event.GetFont().GetNumericWeight());
 }
 
 void FontPickerWidgetsPage::OnCheckBox(wxCommandEvent &event)

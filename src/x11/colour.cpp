@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/x11/colour.cpp
-// Purpose:     wxColour class
+// Purpose:     wxColourImpl class
 // Author:      Julian Smart, Robert Roebling
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
@@ -20,7 +20,7 @@
 #include "wx/x11/private.h"
 
 //-----------------------------------------------------------------------------
-// wxColour
+// wxColourImpl
 //-----------------------------------------------------------------------------
 
 class wxColourRefData : public wxGDIRefData
@@ -66,7 +66,7 @@ public:
     WXColormap   m_colormap;
     bool         m_hasPixel;
 
-    friend class wxColour;
+    friend class wxColourImpl;
 
     // reference counter for systems with <= 8-Bit display
     static unsigned short colMapAllocCounter[ 256 ];
@@ -140,7 +140,7 @@ void wxColourRefData::AllocColour( WXColormap cmap )
 
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
-bool wxColour::operator == ( const wxColour& col ) const
+bool wxColourImpl::operator == ( const wxColourImpl& col ) const
 {
     if (m_refData == col.m_refData) return true;
 
@@ -155,17 +155,17 @@ bool wxColour::operator == ( const wxColour& col ) const
 
 }
 
-wxGDIRefData *wxColour::CreateGDIRefData() const
+wxGDIRefData *wxColourImpl::CreateGDIRefData() const
 {
     return new wxColourRefData;
 }
 
-wxGDIRefData *wxColour::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *wxColourImpl::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxColourRefData(*(wxColourRefData *)data);
 }
 
-void wxColour::InitRGBA(unsigned char red, unsigned char green, unsigned char blue,
+void wxColourImpl::InitRGBA(unsigned char red, unsigned char green, unsigned char blue,
                         unsigned char WXUNUSED(alpha))
 {
     UnRef();
@@ -183,7 +183,7 @@ void wxColour::InitRGBA(unsigned char red, unsigned char green, unsigned char bl
     M_COLDATA->m_color.pixel = 0;
 }
 
-unsigned char wxColour::Red() const
+unsigned char wxColourImpl::Red() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid colour") );
 
@@ -194,7 +194,7 @@ unsigned char wxColour::Red() const
 #endif
 }
 
-unsigned char wxColour::Green() const
+unsigned char wxColourImpl::Green() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid colour") );
 
@@ -205,7 +205,7 @@ unsigned char wxColour::Green() const
 #endif
 }
 
-unsigned char wxColour::Blue() const
+unsigned char wxColourImpl::Blue() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid colour") );
 
@@ -216,7 +216,7 @@ unsigned char wxColour::Blue() const
 #endif
 }
 
-void wxColour::CalcPixel( WXColormap cmap )
+void wxColourImpl::CalcPixel( WXColormap cmap )
 {
     wxCHECK_RET( IsOk(), wxT("invalid colour") );
 
@@ -225,21 +225,21 @@ void wxColour::CalcPixel( WXColormap cmap )
     M_COLDATA->AllocColour( cmap );
 }
 
-unsigned long wxColour::GetPixel() const
+unsigned long wxColourImpl::GetPixel() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid colour") );
 
     return M_COLDATA->m_color.pixel;
 }
 
-WXColor *wxColour::GetColor() const
+WXColor *wxColourImpl::GetColor() const
 {
     wxCHECK_MSG( IsOk(), nullptr, wxT("invalid colour") );
 
     return (WXColor*) &M_COLDATA->m_color;
 }
 
-bool wxColour::FromString(const wxString& name)
+bool wxColourImpl::FromString(const wxString& name)
 {
     Display *dpy = wxGlobalDisplay();
     WXColormap colormap = wxTheApp->GetMainColormap( dpy );

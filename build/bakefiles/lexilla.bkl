@@ -140,6 +140,7 @@
             src/stc/lexilla/lexers/LexRuby.cxx
             src/stc/lexilla/lexers/LexRust.cxx
             src/stc/lexilla/lexers/LexSAS.cxx
+            src/stc/lexilla/lexers/LexSINEX.cxx
             src/stc/lexilla/lexers/LexSML.cxx
             src/stc/lexilla/lexers/LexSQL.cxx
             src/stc/lexilla/lexers/LexSTTXT.cxx

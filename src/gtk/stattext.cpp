@@ -152,10 +152,8 @@ void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 
 void wxStaticText::SetLabel(const wxString& label)
 {
-    if ( label == m_labelOrig )
+    if ( !UpdateLabelOrig(label) )
         return;
-
-    m_labelOrig = label;
 
     GTKDoSetLabel(&wxStaticText::GTKSetLabelForLabel, label);
 }
@@ -168,7 +166,7 @@ bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
     if ( stripped.empty() && !markup.empty() )
         return false;
 
-    m_labelOrig = stripped;
+    UpdateLabelOrig(stripped);
 
     GTKDoSetLabel(&wxStaticText::GTKSetLabelWithMarkupForLabel, markup);
 

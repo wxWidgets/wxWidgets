@@ -85,6 +85,84 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
 */
 
 // ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Helper formatting wxSize as string.
+wxString ToString(const wxSize& size)
+{
+    return wxString::Format("%dx%d", size.x, size.y);
+}
+
+// wxDumpSizer() helper calling itself recursively to dump the whole sizer tree.
+wxString DoDumpSizer(const wxSizer* sizer, const wxSize& minSize, int level)
+{
+    wxString str = sizer->GetClassInfo()->GetClassName();
+    if ( auto* const boxSizer = wxDynamicCast(sizer, wxBoxSizer) )
+    {
+        str += boxSizer->IsVertical() ? "[V]" : "[H]";
+    }
+
+    switch ( sizer->GetItemCount() )
+    {
+        case 0:
+            str += " (empty)";
+            break;
+
+        case 1:
+            break;
+
+        default:
+            str += wxString::Format(" (%zu items)", sizer->GetItemCount());
+    }
+
+    if ( minSize != wxDefaultSize )
+    {
+        str += wxString::Format(" min size %s", ToString(minSize));
+    }
+
+    for ( const wxSizerItem* item : sizer->GetChildren() )
+    {
+        str += "\n";
+        str += wxString(' ', level + 1);
+
+        if ( wxSizer* child = item->GetSizer() )
+        {
+            str += DoDumpSizer(child, item->GetMinSize(), level + 1);
+        }
+        else if ( wxWindow* win = item->GetWindow() )
+        {
+            str += wxString::Format("%s min size %s",
+                                    wxDumpWindow(win),
+                                    ToString(item->GetMinSize()));
+        }
+        else
+        {
+            wxASSERT_MSG( item->IsSpacer(), "unknown wxSizerItem kind" );
+
+            str += wxString::Format("space %s", ToString(item->GetSpacer()));
+        }
+    }
+
+    return str;
+}
+
+} // anonymous namespace
+
+// debugger helper: this function can be called from a debugger to show what
+// the sizer contains
+extern wxString wxDumpSizer(const wxSizer* sizer)
+{
+    if ( !sizer )
+        return "<null sizer>";
+
+    return DoDumpSizer(sizer, wxDefaultSize, 0);
+}
+
+// ----------------------------------------------------------------------------
 // wxSizerFlags
 // ----------------------------------------------------------------------------
 
@@ -538,15 +616,33 @@ bool wxSizerItem::InformFirstDirection(int direction, int size, int availableOth
     // Pass the information along to the held object
     if (IsSizer())
     {
-        didUse = GetSizer()->InformFirstDirection(direction,size,availableOtherDir);
-        if (didUse)
-            m_minSize = GetSizer()->CalcMin();
+        const wxSize minSize = GetSizer()->CalcMinSizeFromKnownDirection
+                                           (
+                                             direction,
+                                             size,
+                                             availableOtherDir
+                                           );
+
+        if (minSize != wxDefaultSize)
+        {
+            m_minSize = minSize;
+            didUse = true;
+        }
     }
     else if (IsWindow())
     {
-        didUse =  GetWindow()->InformFirstDirection(direction,size,availableOtherDir);
-        if (didUse)
-            m_minSize = m_window->GetEffectiveMinSize();
+        const wxSize minSize = GetWindow()->GetMinSizeFromKnownDirection
+                                            (
+                                             direction,
+                                             size,
+                                             availableOtherDir
+                                            );
+
+        if (minSize != wxDefaultSize)
+        {
+            m_minSize = minSize;
+            didUse = true;
+        }
 
         // This information is useful for items with wxSHAPED flag, since
         // we can request an optimal min size for such an item. Even if
@@ -556,7 +652,7 @@ bool wxSizerItem::InformFirstDirection(int direction, int size, int availableOth
         {
             if ( m_ratio != 0 )
             {
-                wxCHECK_MSG( m_proportion==0, false, wxT("Shaped item, non-zero proportion in wxSizerItem::InformFirstDirection()") );
+                wxCHECK_MSG( m_proportion==0, false, wxT("Shaped item, non-zero proportion in wxSizerItem::CalcMinSizeFromKnownDirection()") );
                 if ( direction == wxHORIZONTAL )
                 {
                     // Clip size so that we don't take too much
@@ -1227,6 +1323,21 @@ wxSize wxSizer::GetMinSize()
     if (ret.x < m_minSize.x) ret.x = m_minSize.x;
     if (ret.y < m_minSize.y) ret.y = m_minSize.y;
     return ret;
+}
+
+wxSize
+wxSizer::CalcMinSizeFromKnownDirection(int direction,
+                                       int size,
+                                       int availableOtherDir)
+{
+    // For compatibility, call InformFirstDirection().
+    if ( !InformFirstDirection(direction, size, availableOtherDir) )
+        return wxDefaultSize;
+
+    // Old code overriding InformFirstDirection() must have stored the values
+    // passed to it internally, so call its CalcMin() again to recalculate the
+    // minimal size using them.
+    return CalcMin();
 }
 
 void wxSizer::DoSetMinSize( int width, int height )
@@ -2663,17 +2774,12 @@ wxSize wxBoxSizer::CalcMin()
     return minSize;
 }
 
-bool
-wxBoxSizer::InformFirstDirection(int direction, int size, int availableOtherDir)
-{
-    // In principle, we could propagate the information about the size in the
-    // sizer major direction too, but this would require refactoring CalcMin()
-    // to determine the actual sizes all our items would have with the given
-    // size and we don't do this yet, so for now handle only the simpler case
-    // of informing all our items about their size in the orthogonal direction.
-    if ( direction == GetOrientation() )
-        return false;
+wxSize
+wxBoxSizer::CalcMinSizeFromKnownDirection(int direction,
+                                          int size,
+                                          int availableOtherDir)
 
+{
     bool didUse = false;
 
     for ( wxSizerItem* item: m_children )
@@ -2681,7 +2787,11 @@ wxBoxSizer::InformFirstDirection(int direction, int size, int availableOtherDir)
         didUse |= item->InformFirstDirection(direction, size, availableOtherDir);
     }
 
-    return didUse;
+    if ( !didUse )
+        return wxDefaultSize;
+
+    // Recalculate the min size now that items had a chance to adjust.
+    return CalcMin();
 }
 
 //---------------------------------------------------------------------------

@@ -94,13 +94,13 @@ TIFFwxErrorHandler(const char* module, const char *fmt, va_list ap)
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTIFFHandler,wxImageHandler);
 
-wxTIFFHandler::wxTIFFHandler()
+wxTIFFHandler::wxTIFFHandler() : wxImageHandler(
+    wxT("TIFF file"),
+    wxT("tif"),
+    wxBITMAP_TYPE_TIFF,
+    wxT("image/tiff"))
 {
-    m_name = wxT("TIFF file");
-    m_extension = wxT("tif");
     m_altExtensions.Add(wxT("tiff"));
-    m_type = wxBITMAP_TYPE_TIFF;
-    m_mime = wxT("image/tiff");
     TIFFSetWarningHandler((TIFFErrorHandler) TIFFwxWarningHandler);
     TIFFSetErrorHandler((TIFFErrorHandler) TIFFwxErrorHandler);
 }

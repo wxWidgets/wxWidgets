@@ -450,13 +450,20 @@ wxString glGetwxString(GLenum name)
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
     EVT_MENU(NEW_STEREO_WINDOW, MyFrame::OnNewStereoWindow)
+
+    EVT_MENU(DISABLE_VSYNC, MyFrame::OnDisableVSync)
+    EVT_MENU(ENABLE_VSYNC, MyFrame::OnEnableVSync)
+    EVT_MENU(ENABLE_ADAPTIVE_VSYNC, MyFrame::OnEnableAdaptiveVSync)
+    EVT_MENU(GET_SWAP_INTERVAL, MyFrame::OnGetSwapInterval)
+
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_CLOSE, MyFrame::OnClose)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame( bool stereoWindow )
        : wxFrame(nullptr, wxID_ANY, "wxWidgets OpenGL Cube Sample")
 {
-    new TestGLCanvas(this, stereoWindow);
+    m_canvas = new TestGLCanvas(this, stereoWindow);
 
     SetIcon(wxICON(sample));
 
@@ -464,6 +471,13 @@ MyFrame::MyFrame( bool stereoWindow )
     wxMenu *menu = new wxMenu;
     menu->Append(wxID_NEW);
     menu->Append(NEW_STEREO_WINDOW, "New Stereo Window");
+    menu->AppendSeparator();
+    menu->Append(DISABLE_VSYNC, "&Disable VSync");
+    menu->Append(ENABLE_VSYNC, "&Enable VSync");
+    menu->Append(ENABLE_ADAPTIVE_VSYNC, "Enable &adaptive VSync");
+    menu->Append(GET_SWAP_INTERVAL, "Display Swap &Interval\tCtrl+I");
+    menu->AppendSeparator();
+    menu->Append(wxID_ABOUT, "&About...\tF1");
     menu->AppendSeparator();
     menu->Append(wxID_CLOSE);
     wxMenuBar *menuBar = new wxMenuBar;
@@ -492,6 +506,48 @@ MyFrame::MyFrame( bool stereoWindow )
     }
 }
 
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+{
+    wxString info = "This is the wxWidgets OpenGL Cube sample.\n\n";
+
+#ifdef wxHAS_GLX
+    const int glxVersion = wxGLCanvasUnix::GetGLXVersion();
+    if ( glxVersion == 0 )
+    {
+        int eglMajor = 0, eglMinor = 0;
+        if ( wxGLCanvasUnix::GetEGLVersion(&eglMajor, &eglMinor) )
+        {
+            info += wxString::Format("Using EGL %d.%d.\n\n",
+                                     eglMajor, eglMinor);
+        }
+        else
+        {
+            info += "Using unknown OpenGL binding API.\n\n";
+        }
+    }
+    else
+    {
+        info += wxString::Format("Using GLX %d.%d.\n\n",
+                                 glxVersion / 10, glxVersion % 10);
+    }
+#endif // wxHAS_GLX
+
+    auto const getString = [](GLenum name) -> wxString
+    {
+        const GLubyte* const str = glGetString(name);
+        return wxString::FromUTF8(reinterpret_cast<const char*>(str));
+    };
+
+    info += wxString::Format("OpenGL version: %s\n", getString(GL_VERSION));
+    info += wxString::Format("OpenGL vendor: %s\n", getString(GL_VENDOR));
+    info += wxString::Format("OpenGL renderer: %s", getString(GL_RENDERER));
+
+    wxMessageBox(info,
+                 "About wxWidgets OpenGL cube sample",
+                 wxOK | wxICON_INFORMATION,
+                 this);
+}
+
 void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
     // true is to force the frame to close
@@ -515,4 +571,47 @@ void MyFrame::OnNewStereoWindow( wxCommandEvent& WXUNUSED(event) )
     {
         wxLogError("Stereo not supported by OpenGL on this system, sorry.");
     }
+}
+
+void MyFrame::OnDisableVSync( wxCommandEvent& WXUNUSED(event) )
+{
+    if ( m_canvas->SetSwapInterval(0) == wxGLCanvas::SwapInterval::Set )
+        wxLogStatus("VSync disabled.");
+    else
+        wxLogStatus("Couldn't disable VSync.");
+}
+
+void MyFrame::OnEnableVSync( wxCommandEvent& WXUNUSED(event) )
+{
+    if ( m_canvas->SetSwapInterval(1) == wxGLCanvas::SwapInterval::Set )
+        wxLogStatus("VSync enabled.");
+    else
+        wxLogStatus("Couldn't enable VSync.");
+}
+
+void MyFrame::OnEnableAdaptiveVSync( wxCommandEvent& WXUNUSED(event) )
+{
+    switch ( m_canvas->SetSwapInterval(-1) )
+    {
+        case wxGLCanvas::SwapInterval::Set:
+            wxLogStatus("Adaptive VSync enabled.");
+            break;
+
+        case wxGLCanvas::SwapInterval::NonAdaptive:
+            wxLogStatus("Adaptive VSync not supported, but VSync enabled.");
+            break;
+
+        case wxGLCanvas::SwapInterval::NotSet:
+            wxLogStatus("Couldn't enable VSync.");
+            break;
+    }
+}
+
+void MyFrame::OnGetSwapInterval( wxCommandEvent& WXUNUSED(event) )
+{
+    const int swapInterval = m_canvas->GetSwapInterval();
+    if ( swapInterval != wxGLCanvas::DefaultSwapInterval )
+        wxLogMessage("Current swap interval is %d.", swapInterval);
+    else
+        wxLogMessage("Couldn't get current swap interval.");
 }

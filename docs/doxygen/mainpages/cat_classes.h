@@ -149,6 +149,8 @@ Controls that are not static can have wxValidator associated with them.
 @li wxStaticBitmap: A control to display a bitmap
 @li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code
     editing component for plain text editing.
+@li wxStyledTextCtrlMiniMap: A minimap which can be used together with
+    wxStyledTextCtrl.
 @li wxSlider: A slider that can be dragged by the user
 @li wxVListBox: A listbox supporting variable height rows
 

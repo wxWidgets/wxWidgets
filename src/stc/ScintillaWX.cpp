@@ -36,7 +36,6 @@
 
 #include "ScintillaWX.h"
 #include "wx/stc/stc.h"
-#include "wx/stc/private.h"
 #include "PlatWX.h"
 
 #include "Lexilla.h"
@@ -265,7 +264,6 @@ void ScintillaWX::Initialise() {
     dropTarget->SetScintilla(this);
     stc->SetDropTarget(dropTarget);
 #endif // wxUSE_DRAG_AND_DROP
-    vs.extraFontFlag = true;   // UseAntiAliasing
 
     // Set up default OS X key mappings. Remember that SCI_CTRL stands for
     // "Cmd" key here, as elsewhere in wx API, while SCI_ALT is the "Option"
@@ -297,7 +295,7 @@ void ScintillaWX::Finalise() {
 
 void ScintillaWX::StartDrag() {
 #if wxUSE_DRAG_AND_DROP
-    wxString dragText = stc2wx(drag.Data(), drag.Length());
+    wxString dragText = wxString::FromUTF8(drag.Data(), drag.Length());
 
     // Send an event to allow the drag text to be changed
     wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
@@ -357,6 +355,15 @@ bool ScintillaWX::HaveMouseCapture() {
 
 
 void ScintillaWX::ScrollText(Sci::Line linesToMove) {
+    if (stc->m_isCustomDrawn) {
+        // We can't scroll the window as this would scroll custom-drawn content
+        // too corrupting the display, so we have to always do a full redraw in
+        // this case. It doesn't make any visible difference due to the use of
+        // double buffering anyhow.
+        Redraw();
+        return;
+    }
+
     int dy = vs.lineHeight * (linesToMove);
     stc->ScrollWindow(0, dy);
 }
@@ -509,7 +516,7 @@ void ScintillaWX::Paste() {
         evt.SetString(text);
         stc->GetEventHandler()->ProcessEvent(evt);
 
-        const wxCharBuffer buf(wx2stc(evt.GetString()));
+        const wxCharBuffer buf = evt.GetString().utf8_str();
 
         // free up the old character buffer in case the text is real big
         text.clear();
@@ -548,7 +555,7 @@ void ScintillaWX::CopyToClipboard(const SelectionText& st) {
     // Send an event to allow the copied text to be changed
     wxStyledTextEvent evt(wxEVT_STC_CLIPBOARD_COPY, stc->GetId());
     evt.SetEventObject(stc);
-    evt.SetString(wxTextBuffer::Translate(stc2wx(st.Data(), st.Length())));
+    evt.SetString(wxTextBuffer::Translate(wxString::FromUTF8(st.Data(), st.Length())));
     stc->GetEventHandler()->ProcessEvent(evt);
 
     wxTheClipboard->UsePrimarySelection(false);
@@ -612,7 +619,7 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
     if (!label[0])
         ((wxMenu*)popup.GetID())->AppendSeparator();
     else
-        ((wxMenu*)popup.GetID())->Append(cmd, wxGetTranslation(stc2wx(label)));
+        ((wxMenu*)popup.GetID())->Append(cmd, wxGetTranslation(wxString::FromUTF8(label)));
 
     if (!enabled)
         ((wxMenu*)popup.GetID())->Enable(cmd, enabled);
@@ -631,7 +638,7 @@ void ScintillaWX::ClaimSelection() {
         CopySelectionRange(&st);
         wxTheClipboard->UsePrimarySelection(true);
         if (wxTheClipboard->Open()) {
-            wxString text = stc2wx(st.Data(), st.Length());
+            wxString text = wxString::FromUTF8(st.Data(), st.Length());
             wxTheClipboard->SetData(new wxTextDataObject(text));
             wxTheClipboard->Close();
         }
@@ -737,8 +744,15 @@ void ScintillaWX::FineTickerCancel(TickReason reason) {
 //----------------------------------------------------------------------
 
 
-sptr_t ScintillaWX::DefWndProc(unsigned int /*iMessage*/, uptr_t /*wParam*/, sptr_t /*lParam*/) {
+sptr_t ScintillaWX::DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
+#ifdef __WXMSW__
+    return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+#else
+    wxUnusedVar(iMessage);
+    wxUnusedVar(wParam);
+    wxUnusedVar(lParam);
     return 0;
+#endif
 }
 
 sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
@@ -770,7 +784,7 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
                     InvalidateStyleRedraw();
                 }
             }
-            break;
+            return 0;
 #endif
 
         case SCI_GETDIRECTFUNCTION:
@@ -784,18 +798,18 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
         case WM_IME_STARTCOMPOSITION:
             // Always use windowed IME in ScintillaWX for now. Inline IME not implemented yet
             ImeStartComposition();
-            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+            break;
 
         case WM_IME_ENDCOMPOSITION:
             ImeEndComposition();
-            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+            break;
 
         case WM_IME_KEYDOWN:
         case WM_IME_REQUEST:
         case WM_IME_COMPOSITION:
         case WM_IME_SETCONTEXT:
             // These events are forwarded here for future inline IME implementation
-            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+            break;
 #endif
 
         case SCI_SETLEXER:
@@ -804,7 +818,7 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             const char* name = LexerNameFromID(lexLanguage);
             ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
             stc->SetILexer(pLexer);
-            break;
+            return 0;
         }
 
         case SCI_SETLEXERLANGUAGE:
@@ -812,19 +826,20 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             const char* name = ConstCharPtrFromSPtr(lParam);
             ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
             stc->SetILexer(pLexer);
-            break;
+            return 0;
         }
 
         case SCI_LOADLEXERLIBRARY:
         {
             Lexilla::Load(ConstCharPtrFromSPtr(lParam));
-            break;
+            return 0;
         }
 
         default:
-            return ScintillaBase::WndProc(iMessage, wParam, lParam);
+            break;
     }
-    return 0;
+
+    return ScintillaBase::WndProc(iMessage, wParam, lParam);
 }
 
 
@@ -852,12 +867,10 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
         // repaint the whole window.
         stc->Refresh(false);
 
-#if wxALWAYS_NATIVE_DOUBLE_BUFFER
-        // On systems using double buffering, we also need to finish the
-        // current paint to make sure that everything is on the screen that
-        // needs to be there between now and when the next paint event arrives.
+        // We also need to finish the current paint to make sure that
+        // everything is on the screen that needs to be there between now and
+        // when the next paint event arrives.
         FullPaintDC(dc);
-#endif
     }
     paintState = notPainting;
 }
@@ -1041,7 +1054,7 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     if (gotData) {
         wxString   text = wxTextBuffer::Translate(data.GetText(),
                                                   wxConvertEOLMode(pdoc->eolMode));
-        const wxCharBuffer buf(wx2stc(text));
+        const wxScopedCharBuffer buf = text.utf8_str();
         const size_t len = buf.length();
         int caretMain = sel.MainCaret();
         pdoc->InsertString(caretMain, buf, len);
@@ -1062,7 +1075,7 @@ void ScintillaWX::DoMiddleButtonUp(Point WXUNUSED(pt)) {
 
 
 void ScintillaWX::DoAddChar(wxChar key) {
-    const wxCharBuffer buf(wx2stc(key));
+    const wxCharBuffer buf = wxString(key).utf8_str();
     InsertCharacter(buf, buf.length(), CharacterSource::directInput);
 }
 
@@ -1244,7 +1257,7 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     dragResult = evt.GetDragResult();
     if (dragResult == wxDragMove || dragResult == wxDragCopy) {
         DropAt(SelectionPosition(evt.GetPosition()),
-               wx2stc(evt.GetString()),
+               evt.GetString().utf8_str(),
                dragResult == wxDragMove,
                false); // TODO: rectangular?
         return true;
@@ -1311,15 +1324,6 @@ void ScintillaWX::ClipChildren(wxDC& WXUNUSED(dc), PRectangle WXUNUSED(rect))
 //     dc.SetClippingRegion(rgn);
 }
 
-
-void ScintillaWX::SetUseAntiAliasing(bool useAA) {
-    vs.extraFontFlag = useAA;
-    InvalidateStyleRedraw();
-}
-
-bool ScintillaWX::GetUseAntiAliasing() {
-    return vs.extraFontFlag != 0;
-}
 
 void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
     if ( 0 <= markerNumber && markerNumber <= MARKER_MAX) {

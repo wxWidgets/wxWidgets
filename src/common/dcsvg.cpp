@@ -20,9 +20,10 @@
 
 #include "wx/base64.h"
 #include "wx/dcsvg.h"
-#include "wx/wfstream.h"
+#include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/mstream.h"
+#include "wx/sstream.h"
 #include "wx/scopedarray.h"
 #include "wx/private/rescale.h"
 
@@ -407,6 +408,7 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
 
     // write image meta information
     wxString s;
+    s.reserve(data.size());
     s += wxString::Format("  <image x=\"%d\" y=\"%d\" width=\"%dpx\" height=\"%dpx\"",
                           x, y, bmp.GetWidth(), bmp.GetHeight());
     s += wxString::Format(" id=\"image%d\" "
@@ -414,13 +416,13 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
                           sub_images++);
 
     // Wrap Base64 encoded data on 76 columns boundary (same as Inkscape).
-    const unsigned WRAP = 76;
+    constexpr unsigned WRAP = 76;
     for ( size_t i = 0; i < data.size(); i += WRAP )
     {
         if (i < data.size() - WRAP)
-            s += data.Mid(i, WRAP) + "\n";
+            s += data.substr(i, WRAP) + "\n";
         else
-            s += data.Mid(i, s.size() - i) + "\"\n  />\n"; // last line
+            s += data.substr(i) + "\"\n  />\n"; // last line
     }
 
     // write to the SVG file
@@ -501,11 +503,68 @@ void wxSVGFileDC::SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode)
     ((wxSVGFileDCImpl*)GetImpl())->SetShapeRenderingMode(renderingMode);
 }
 
+wxString wxSVGFileDC::GetSVGDocument() const
+{
+    return ((wxSVGFileDCImpl*)GetImpl())->GetSVGDocument();
+}
+
+bool wxSVGFileDC::Save()
+{
+    return ((wxSVGFileDCImpl*)GetImpl())->Save();
+}
+
+void wxSVGFileDC::BeginAccessibleGroup(const wxSVGAttributes& attributes,
+                                       const wxString& title,
+                                       const wxString& desc)
+{
+    ((wxSVGFileDCImpl*)GetImpl())->BeginAccessibleGroup(attributes, title, desc);
+}
+
+void wxSVGFileDC::EndAccessibleGroup()
+{
+    ((wxSVGFileDCImpl*)GetImpl())->EndAccessibleGroup();
+}
+
+// ----------------------------------------------------------
+// wxSVGAttributes
+// ----------------------------------------------------------
+
+wxSVGAttributes& wxSVGAttributes::Add(const wxString& name, const wxString& value)
+{
+    // XML attribute names are case-sensitive.
+    m_attributes[name] = value;
+    return *this;
+}
+
+wxString wxSVGAttributes::GetAsString() const
+{
+    wxString s;
+    bool first = true;
+    for ( const auto& attr : m_attributes )
+    {
+        if ( !first )
+            s << " ";
+        first = false;
+
+        s << attr.first << "=\"";
+#if wxUSE_MARKUP
+        s << wxMarkupParser::Quote(attr.second);
+#else
+        s << attr.second;
+#endif
+        s << "\"";
+    }
+    return s;
+}
+
 // ----------------------------------------------------------
 // wxSVGFileDCImpl
 // ----------------------------------------------------------
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDCImpl);
+
+size_t wxSVGFileDCImpl::m_clipUniqueId = 0;
+size_t wxSVGFileDCImpl::m_gradientUniqueId = 0;
 
 wxSVGFileDCImpl::wxSVGFileDCImpl(wxSVGFileDC* owner, const wxString& filename,
                                  int width, int height, double dpi, const wxString& title)
@@ -523,11 +582,10 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
     m_dpi = dpi;
 
     m_writeError = false;
+    m_saved = false;
 
-    m_clipUniqueId = 0;
     m_clipNestingLevel = 0;
-
-    m_gradientUniqueId = 0;
+    m_accessibleGroupDepth = 0;
 
     m_mm_to_pix_x = m_dpi / 25.4;
     m_mm_to_pix_y = m_dpi / 25.4;
@@ -549,33 +607,63 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
 
     m_bmp_handler.reset();
 
-    if ( m_filename.empty() )
-        m_outfile.reset();
-    else
-        m_outfile.reset(new wxFileOutputStream(m_filename));
-
     wxString s;
     s += wxS("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
     s += wxS("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n\n");
     s += wxS("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
     s += wxString::Format(wxS(" width=\"%scm\" height=\"%scm\" viewBox=\"0 0 %d %d\">\n"),
                           NumStr(m_width / m_dpi * 2.54), NumStr(m_height / m_dpi * 2.54), m_width, m_height);
-    s += wxString::Format(wxS("<title>%s</title>\n"), title);
+    s += wxString::Format(wxS("<title>%s</title>\n"),
+#if wxUSE_MARKUP
+                          wxMarkupParser::Quote(title)
+#else
+                          title
+#endif
+                          );
     s += wxString::Format(wxS("<desc>Created with %s</desc>\n\n"), wxVERSION_STRING);
     s += wxS("<g fill=\"black\" stroke=\"black\" stroke-width=\"1\">\n");
     write(s);
 }
 
-wxSVGFileDCImpl::~wxSVGFileDCImpl()
+wxString wxSVGFileDCImpl::GetSVGDocument() const
 {
-    wxString s;
+    wxString doc(m_svgDocument);
 
     // Close remaining clipping group elements
-    for (size_t i = 0; i < m_clipUniqueId; i++)
-        s += wxS("</g>\n");
+    for (size_t i = 0; i < m_clipNestingLevel; i++)
+        doc += wxS("</g>\n");
 
-    s += wxS("</g>\n</svg>\n");
-    write(s);
+    // Close the currently-open pen/brush group.
+    doc += wxS("</g>\n");
+
+    // Close any accessible groups left open by missing EndAccessibleGroup()
+    // calls, so the output is still well-formed XML.
+    for (size_t i = 0; i < m_accessibleGroupDepth; i++)
+        doc += wxS("</g>\n");
+
+    doc += wxS("</svg>\n");
+
+    return doc;
+}
+
+bool wxSVGFileDCImpl::Save()
+{
+    if ( m_saved || m_filename.empty() )
+        return m_saved;
+
+    wxFile file(m_filename, wxFile::write);
+    if ( file.IsOpened() )
+        m_saved = file.Write(GetSVGDocument(), wxConvUTF8) && file.Close();
+
+    if ( !m_saved )
+        m_writeError = true;
+
+    return m_saved;
+}
+
+wxSVGFileDCImpl::~wxSVGFileDCImpl()
+{
+    Save();
 }
 
 void wxSVGFileDCImpl::DoGetSizeMM(int* width, int* height) const
@@ -1234,16 +1322,16 @@ void wxSVGFileDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, w
     // graphics can be subsequently changed inside the clipping region)
     svg << "</g>\n"
            "<defs>\n"
-           "  <clipPath id=\"clip" << m_clipNestingLevel << "\">\n"
-           "    <rect id=\"cliprect" << m_clipNestingLevel << "\" "
+           "  <clipPath id=\"clip" << m_clipUniqueId << "\">\n"
+           "    <rect id=\"cliprect" << m_clipUniqueId << "\" "
                 "x=\"" << x << "\" "
                 "y=\"" << y << "\" "
                 "width=\"" << width << "\" "
                 "height=\"" << height << "\" "
-                "stroke=\"gray\" fill=\"none\"/>\n"
+                "stroke=\"none\" fill=\"none\"/>\n"
            "  </clipPath>\n"
            "</defs>\n"
-           "<g clip-path=\"url(#clip" << m_clipNestingLevel << ")\">\n";
+           "<g clip-path=\"url(#clip" << m_clipUniqueId << ")\">\n";
 
     write(svg);
 
@@ -1266,7 +1354,7 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     svg << "</g>\n";
 
     // Close clipping group elements
-    for (size_t i = 0; i < m_clipUniqueId; i++)
+    for (size_t i = 0; i < m_clipNestingLevel; i++)
     {
         svg << "</g>\n";
     }
@@ -1278,7 +1366,7 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     // elements for the clipped region have been closed).
     DoStartNewGraphics();
 
-    m_clipUniqueId = 0;
+    m_clipNestingLevel = 0;
 
     // Also update the base class clipping region information.
     wxDCImpl::DestroyClippingRegion();
@@ -1385,6 +1473,78 @@ void wxSVGFileDCImpl::DoStartNewGraphics()
     write(s);
 }
 
+void wxSVGFileDCImpl::BeginAccessibleGroup(const wxSVGAttributes& attributes,
+                                           const wxString& title,
+                                           const wxString& desc)
+{
+    // Close the currently-open pen/brush group. There is always one open
+    // at this point: either the initial default group written by Init()
+    // or a group written by DoStartNewGraphics() during an earlier draw.
+    write(wxS("</g>\n"));
+
+    // Open the accessible group.
+    wxString s = wxS("<g");
+    if ( !attributes.IsEmpty() )
+    {
+        s += wxS(" ");
+        s += attributes.GetAsString();
+    }
+    s += wxS(">\n");
+    write(s);
+
+    // Emit optional <title> and <desc> children. These must be the first
+    // children of the accessible group for assistive technology to pick
+    // them up, so write them before reopening the pen/brush group below.
+    if ( !title.empty() )
+    {
+        write(wxString::Format(wxS("<title>%s</title>\n"),
+#if wxUSE_MARKUP
+                               wxMarkupParser::Quote(title)
+#else
+                               title
+#endif
+                               ));
+    }
+    if ( !desc.empty() )
+    {
+        write(wxString::Format(wxS("<desc>%s</desc>\n"),
+#if wxUSE_MARKUP
+                               wxMarkupParser::Quote(desc)
+#else
+                               desc
+#endif
+                               ));
+    }
+
+    ++m_accessibleGroupDepth;
+
+    // Reopen a pen/brush group inside the accessible group so the invariant
+    // "a pen/brush <g> is currently open" is preserved for later drawing.
+    DoStartNewGraphics();
+    m_graphics_changed = false;
+}
+
+void wxSVGFileDCImpl::EndAccessibleGroup()
+{
+    if ( m_accessibleGroupDepth == 0 )
+    {
+        wxFAIL_MSG(wxS("wxSVGFileDC::EndAccessibleGroup() called without a matching BeginAccessibleGroup()"));
+        return;
+    }
+
+    // Close the current pen/brush group (nested inside the accessible group),
+    // then the accessible group itself.
+    write(wxS("</g>\n"));
+    write(wxS("</g>\n"));
+
+    --m_accessibleGroupDepth;
+
+    // Reopen a pen/brush group at the now-outer nesting level so subsequent
+    // drawing has somewhere to go.
+    DoStartNewGraphics();
+    m_graphics_changed = false;
+}
+
 void wxSVGFileDCImpl::SetFont(const wxFont& font)
 {
     m_font = font;
@@ -1435,28 +1595,17 @@ void wxSVGFileDCImpl::DoDrawBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y,
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(x, y, x + bmp.GetWidth(), y + bmp.GetHeight());
 
-    if ( !m_outfile )
-        return;
-
     // If we don't have any bitmap handler yet, use the default one.
     if ( !m_bmp_handler )
         m_bmp_handler.reset(new wxSVGBitmapFileHandler(m_filename));
 
-    m_writeError = m_bmp_handler->ProcessBitmap(bmp, x, y, *m_outfile);
+    wxStringOutputStream stream(&m_svgDocument);
+    m_writeError = !m_bmp_handler->ProcessBitmap(bmp, x, y, stream);
 }
 
 void wxSVGFileDCImpl::write(const wxString& s)
 {
-    if ( !m_outfile )
-        return;
-
-    if ( m_outfile->IsOk() )
-    {
-        const wxCharBuffer buf = s.utf8_str();
-        m_outfile->Write(buf, strlen((const char*)buf));
-    }
-
-    m_writeError = !m_outfile->IsOk();
+    m_svgDocument += s;
 }
 
 #endif // wxUSE_SVG

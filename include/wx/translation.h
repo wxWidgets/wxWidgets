@@ -179,10 +179,11 @@ public:
     wxString GetHeaderValue(const wxString& header,
                             const wxString& domain = wxEmptyString) const;
 
-    // this is hack to work around a problem with wxGetTranslation() which
-    // returns const wxString& and not wxString, so when it returns untranslated
-    // string, it needs to have a copy of it somewhere
-    static const wxString& GetUntranslatedString(const wxString& str);
+
+    wxDEPRECATED_INLINE(
+        static const wxString& GetUntranslatedString(const wxString& str),
+        return str;
+    )
 
 private:
     enum class Translations
@@ -274,9 +275,9 @@ protected:
 // ----------------------------------------------------------------------------
 
 // get the translation of the string in the current locale
-inline const wxString& wxGetTranslation(const wxString& str,
-                                        const wxString& domain = wxString(),
-                                        const wxString& context = wxString())
+inline wxString wxGetTranslation(const wxString& str,
+                                 const wxString& domain = wxString(),
+                                 const wxString& context = wxString())
 {
     wxTranslations *trans = wxTranslations::Get();
     const wxString *transStr = trans ? trans->GetTranslatedString(str, domain, context)
@@ -284,16 +285,14 @@ inline const wxString& wxGetTranslation(const wxString& str,
     if ( transStr )
         return *transStr;
     else
-        // NB: this function returns reference to a string, so we have to keep
-        //     a copy of it somewhere
-        return wxTranslations::GetUntranslatedString(str);
+        return str;
 }
 
-inline const wxString& wxGetTranslation(const wxString& str1,
-                                        const wxString& str2,
-                                        unsigned n,
-                                        const wxString& domain = wxString(),
-                                        const wxString& context = wxString())
+inline wxString wxGetTranslation(const wxString& str1,
+                                 const wxString& str2,
+                                 unsigned n,
+                                 const wxString& domain = wxString(),
+                                 const wxString& context = wxString())
 {
     wxTranslations *trans = wxTranslations::Get();
     const wxString *transStr = trans ? trans->GetTranslatedString(str1, n, domain, context)
@@ -301,11 +300,7 @@ inline const wxString& wxGetTranslation(const wxString& str1,
     if ( transStr )
         return *transStr;
     else
-        // NB: this function returns reference to a string, so we have to keep
-        //     a copy of it somewhere
-        return n == 1
-               ? wxTranslations::GetUntranslatedString(str1)
-               : wxTranslations::GetUntranslatedString(str2);
+        return n == 1 ? str1 : str2;
 }
 
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
@@ -314,19 +309,20 @@ inline const wxString& wxGetTranslation(const wxString& str1,
  * It must always be possible to call wxGetTranslation() with const
  * char* arguments.
  */
-inline const wxString& wxGetTranslation(const char *str,
-                                        const char *domain = "",
-                                        const char *context = "") {
+
+inline wxString wxGetTranslation(const char *str,
+                                 const char *domain = "",
+                                 const char *context = "") {
     const wxMBConv &conv = wxConvWhateverWorks;
     return wxGetTranslation(wxString(str, conv), wxString(domain, conv),
                             wxString(context, conv));
 }
 
-inline const wxString& wxGetTranslation(const char *str1,
-                                        const char *str2,
-                                        unsigned n,
-                                        const char *domain = "",
-                                        const char *context = "") {
+inline wxString wxGetTranslation(const char *str1,
+                                 const char *str2,
+                                 unsigned n,
+                                 const char *domain = "",
+                                 const char *context = "") {
     const wxMBConv &conv = wxConvWhateverWorks;
     return wxGetTranslation(wxString(str1, conv), wxString(str2, conv), n,
                             wxString(domain, conv),
@@ -383,7 +379,7 @@ inline wxString wxTRANS_INPUT_STR(const wchar_t* s)
 */
 
 template<size_t N, typename T>
-const wxString& wxUnderscoreWrapper(const T (&msg)[N])
+wxString wxUnderscoreWrapper(const T (&msg)[N])
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg));
 }
@@ -396,9 +392,9 @@ wxString wxUnderscoreWrapper(T)
 }
 
 template<size_t M, size_t N, typename T>
-const wxString& wxPluralWrapper(const T (&msg)[M],
-                                const T (&plural)[N],
-                                int count)
+wxString wxPluralWrapper(const T (&msg)[M],
+                         const T (&plural)[N],
+                         int count)
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
                             count);
@@ -412,8 +408,8 @@ wxString wxPluralWrapper(T, U, int)
 }
 
 template<size_t M, size_t N, typename T>
-const wxString& wxGettextInContextWrapper(const T (&ctx)[M],
-                                          const T (&msg)[N])
+wxString wxGettextInContextWrapper(const T (&ctx)[M],
+                                   const T (&msg)[N])
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxString(),
                             wxTRANS_INPUT_STR(ctx));
@@ -427,10 +423,10 @@ wxString wxGettextInContextWrapper(T, U)
 }
 
 template<size_t L, size_t M, size_t N, typename T>
-const wxString& wxGettextInContextPluralWrapper(const T (&ctx)[L],
-                                                const T (&msg)[M],
-                                                const T (&plural)[N],
-                                                int count)
+wxString wxGettextInContextPluralWrapper(const T (&ctx)[L],
+                                         const T (&msg)[M],
+                                         const T (&plural)[N],
+                                         int count)
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
                             count, wxString(), wxTRANS_INPUT_STR(ctx));
@@ -447,30 +443,30 @@ wxString wxGettextInContextPluralWrapper(T, U, V, int)
 
 // Wrapper functions that accept both string literals and variables
 // as arguments.
-inline const wxString& wxUnderscoreWrapper(const char *msg)
+inline wxString wxUnderscoreWrapper(const char *msg)
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg));
 }
 
-inline const wxString& wxPluralWrapper(const char *msg,
-                                       const char *plural,
-                                       int count)
+inline wxString wxPluralWrapper(const char *msg,
+                                const char *plural,
+                                int count)
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
                             count);
 }
 
-inline const wxString& wxGettextInContextWrapper(const char *ctx,
-                                                 const char *msg)
+inline wxString wxGettextInContextWrapper(const char *ctx,
+                                          const char *msg)
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxString(),
                             wxTRANS_INPUT_STR(ctx));
 }
 
-inline const wxString& wxGettextInContextPluralWrapper(const char *ctx,
-                                                       const char *msg,
-                                                       const char *plural,
-                                                       int count)
+inline wxString wxGettextInContextPluralWrapper(const char *ctx,
+                                                const char *msg,
+                                                const char *plural,
+                                                int count)
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
                             count, wxString(), wxTRANS_INPUT_STR(ctx));

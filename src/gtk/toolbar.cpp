@@ -645,9 +645,18 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             tool->m_item = GTK_TOOL_ITEM(gtk_widget_get_parent(gtk_widget_get_parent(control->m_widget)));
 #endif
             // The widget size is not controlled by wx, so at least make sure
-            // that its minimal size is respected by GTK (note that this works
-            // fine even if minSize is not set).
-            const wxSize minSize = control->GetBestSize();
+            // that its minimal size is respected by GTK.
+            wxSize minSize = control->GetMinSize();
+            if ( !minSize.IsFullySpecified() )
+            {
+                // Note that we intentionally don't use GetBestSize() here as
+                // the control may be explicitly given smaller size than its
+                // best size when adding it to the toolbar to prevent it from
+                // taking too much space, see b0ad9ccffd (Use control current,
+                // not best, size in wxMSW wxToolBar layout code, 2019-03-31).
+                minSize.SetDefaults(control->GetSize());
+            }
+
             gtk_widget_set_size_request(control->m_widget, minSize.x, minSize.y);
 
             if (gtk_toolbar_get_item_index(m_toolbar, tool->m_item) != int(pos))

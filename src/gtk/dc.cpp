@@ -584,6 +584,13 @@ wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
     return m_bitmap;
 }
 
+void wxMemoryDCImpl::SetLayoutDirection(wxLayoutDirection dir)
+{
+    wxGTKCairoDCImpl::SetLayoutDirection(dir);
+
+    Setup();
+}
+
 void wxMemoryDCImpl::Setup()
 {
     wxGraphicsContext* gc = nullptr;

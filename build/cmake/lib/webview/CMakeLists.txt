@@ -44,6 +44,8 @@ if(APPLE)
 elseif(WXMSW)
     if(wxUSE_WEBVIEW_EDGE)
         # Update the following variables if updating WebView2 SDK
+        # Also update this version and the _INTERFACE_DEFINED_ check in
+        # include/wx/msw/private/webview_edge.h and interface/wx/webview.h
         set(WEBVIEW2_VERSION "1.0.3485.44")
         set(WEBVIEW2_URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}")
         # When updating the above version of WebView2, download the nupkg from the above URL.
@@ -63,8 +65,22 @@ elseif(WXMSW)
                 ${WEBVIEW2_DEFAULT_PACKAGE_DIR}
         )
 
+        if (WEBVIEW2_PACKAGE_DIR)
+            get_filename_component(currentDir ${WEBVIEW2_PACKAGE_DIR} DIRECTORY)
+            get_filename_component(targetDir ${WEBVIEW2_DEFAULT_PACKAGE_DIR} DIRECTORY)
+            if (currentDir STREQUAL targetDir)
+                get_filename_component(currentVersion ${WEBVIEW2_PACKAGE_DIR} NAME)
+                string(SUBSTRING ${currentVersion} 23 -1 currentVersion)
+                if(${currentVersion} VERSION_LESS ${WEBVIEW2_VERSION})
+                    message(STATUS "Found outdated WebView2 SDK, downloading...")
+                    unset(WEBVIEW2_PACKAGE_DIR CACHE)
+                endif()
+            endif()
+        else()
+            message(STATUS "WebView2 SDK not found, downloading...")
+        endif()
+
         if (NOT WEBVIEW2_PACKAGE_DIR)
-            message(STATUS "WebView2 SDK not found locally, downloading...")
             set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_DEFAULT_PACKAGE_DIR} CACHE PATH "WebView2 SDK PATH" FORCE)
             file(DOWNLOAD
                 ${WEBVIEW2_URL}
@@ -119,7 +135,7 @@ endif()
 
 # webkit extension plugin
 # we can't use (all of the) macros and functions because this library should
-# always be build as a shared libary, and not included in the monolithic build.
+# always be built as a shared library, and not included in the monolithic build.
 if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
     wx_append_sources(WEBKIT2_EXT_FILES WEBVIEW_WEBKIT2_EXTENSION)
     add_library(wxwebkit2_ext SHARED ${WEBKIT2_EXT_FILES})

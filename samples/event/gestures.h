@@ -38,4 +38,37 @@ private:
     wxPoint m_lastGesturePos;
 };
 
+class MyMouseFrame : public wxFrame
+{
+public:
+    MyMouseFrame();
+
+    void OnQuit(wxCloseEvent& event);
+
+private:
+    wxLog *m_logOld;
+    wxTextCtrl *m_logText;
+};
+
+class MyMousePanel : public wxPanel
+{
+public:
+    MyMousePanel(MyMouseFrame* parent);
+
+private:
+    void DoLogMouseEvent(const wxMouseEvent& event, const wxString& eventName);
+
+    void OnLeftDown(wxMouseEvent& event);
+    void OnLeftUp(wxMouseEvent& event);
+    void OnRightDown(wxMouseEvent& event);
+    void OnRightUp(wxMouseEvent& event);
+    void OnLeftDClick(wxMouseEvent& event);
+    void OnRightDClick(wxMouseEvent& event);
+    void OnEnter(wxMouseEvent& event);
+    void OnLeave(wxMouseEvent& event);
+
+};
+
+
+
 #endif // _WX_GESTURES_H_

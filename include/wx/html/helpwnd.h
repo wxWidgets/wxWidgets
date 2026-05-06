@@ -132,7 +132,8 @@ public:
         {
             m_Config = config;
             m_ConfigRoot = rootpath;
-            ReadCustomization(config, rootpath);
+            if ( config )
+                ReadCustomization(config, rootpath);
         }
 
     // Saves custom settings into cfg config. it will use the path 'path'

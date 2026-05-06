@@ -116,10 +116,15 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         // there is no standard colour with this index, map to another one
         index = wxSYS_COLOUR_WINDOWTEXT;
     }
+    else if ( index == wxSYS_COLOUR_LISTBOXHIGHLIGHT)
+    {
+        // there is no standard colour with this index, map to another one
+        index = wxSYS_COLOUR_HIGHLIGHT;
+    }
     else if ( index == wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT)
     {
         // there is no standard colour with this index, map to another one
-        index = wxSYS_COLOUR_HIGHLIGHTTEXT;
+        index = wxSYS_COLOUR_LISTBOXTEXT;
     }
     else if ( index == wxSYS_COLOUR_LISTBOX )
     {
@@ -304,6 +309,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* win)
         return blinkTime;
     }
 
+#if wxUSE_REGKEY
     // Avoid using SM_C[XY]CURSOR: these are legacy values preserved only for
     // compatibility and don't actually describe the current cursor size.
     if ( index == wxSYS_CURSOR_X || index == wxSYS_CURSOR_Y )
@@ -326,6 +332,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* win)
         //else: If we failed to get the value from the registry, fall back to
         //      the old method.
     }
+#endif // wxUSE_REGKEY
 
     int indexMSW = gs_metricsMap[index];
     if ( indexMSW == -1 )
@@ -410,6 +417,7 @@ namespace
 // Return false unless we are sure we're using the dark mode.
 bool IsUsingDarkTheme(const wxString& forWhat)
 {
+#if wxUSE_REGKEY
     wxRegKey rk(wxRegKey::HKCU, "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
     if ( rk.Exists() && rk.HasValue(forWhat) )
     {
@@ -417,6 +425,7 @@ bool IsUsingDarkTheme(const wxString& forWhat)
         if ( rk.QueryValue(forWhat, &value) )
             return value <= 0;
     }
+#endif // wxUSE_REGKEY
 
     return false;
 }

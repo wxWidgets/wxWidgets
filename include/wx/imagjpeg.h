@@ -23,14 +23,14 @@
 class WXDLLIMPEXP_CORE wxJPEGHandler: public wxImageHandler
 {
 public:
-    inline wxJPEGHandler()
+    wxJPEGHandler() : wxImageHandler(
+        wxT("JPEG file"),
+        wxT("jpg"),
+        wxBITMAP_TYPE_JPEG,
+        wxT("image/jpeg"))
     {
-        m_name = wxT("JPEG file");
-        m_extension = wxT("jpg");
         m_altExtensions.Add(wxT("jpeg"));
         m_altExtensions.Add(wxT("jpe"));
-        m_type = wxBITMAP_TYPE_JPEG;
-        m_mime = wxT("image/jpeg");
     }
 
     static wxVersionInfo GetLibraryVersionInfo();

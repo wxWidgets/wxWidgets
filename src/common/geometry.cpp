@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-
-#if wxUSE_GEOMETRY
-
 #include "wx/geometry.h"
 
 #ifndef WX_PRECOMP
@@ -418,5 +415,3 @@ wxRect2DInt wxTransform2D::InverseTransform( const wxRect2DInt &r ) const
     InverseTransform( &res );
     return res;
 }
-
-#endif // wxUSE_GEOMETRY

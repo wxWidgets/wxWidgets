@@ -98,7 +98,7 @@ public:
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit() override;
 
-    virtual int OnExit() override { DeleteBitmaps(); return 0; }
+    virtual int OnExit() override { DeleteBitmaps(); return wxApp::OnExit(); }
 
     // Get the menu ID corresponding to the initially selected appearance.
     int GetInitialAppearanceMenuId() const { return m_initialAppearanceMenuId; }
@@ -272,6 +272,29 @@ public:
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+    void OnAutoscrollOuter(wxCommandEvent& WXUNUSED(event))
+    {
+        m_outerScrollEnabled = false;
+        m_canvas->DisableAutoScrollOutside();
+    }
+
+    void OnAutoscrollOuterUpdateUI(wxUpdateUIEvent& event)
+    {
+        event.Check(m_outerScrollEnabled);
+        event.Enable(m_outerScrollEnabled);
+    }
+
+    void OnAutoscrollInner(wxCommandEvent& WXUNUSED(event))
+    {
+        m_innerScrollWidth = FromDIP(16) - m_innerScrollWidth;
+        m_canvas->EnableAutoScrollInside(m_innerScrollWidth);
+    }
+
+    void OnAutoscrollInnerUpdateUI(wxUpdateUIEvent& event)
+    {
+        event.Check(m_innerScrollWidth != 0);
+    }
+
     void OnBuffer(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
 #if wxUSE_FILEDLG
@@ -314,6 +337,9 @@ public:
     MyCanvas   *m_canvas;
     wxMenuItem *m_menuItemUseDC;
 private:
+    bool        m_outerScrollEnabled = true;
+    int         m_innerScrollWidth = 0;
+
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
 };
@@ -374,6 +400,8 @@ enum
 #if wxUSE_GRAPHICS_CONTEXT
     File_AntiAliasing,
 #endif
+    File_AutoscrollOuter,
+    File_AutoscrollInner,
     File_Copy,
     File_Save,
 
@@ -594,7 +622,7 @@ bool MyApp::DoSetAppearance(int menuId)
     switch ( SetAppearance(Appearance(menuId - Colour_AppearanceSystem)) )
     {
         case wxApp::AppearanceResult::Failure:
-            wxLogStatus("Appearance couldn't be changed.");
+            wxLogWarning("Appearance couldn't be changed.");
             break;
 
         case wxApp::AppearanceResult::Ok:
@@ -602,7 +630,7 @@ bool MyApp::DoSetAppearance(int menuId)
             return true;
 
         case wxApp::AppearanceResult::CannotChange:
-            wxLogStatus("Appearance cannot be changed dynamically.");
+            wxLogWarning("Appearance cannot be changed dynamically.");
             break;
     }
 
@@ -1883,7 +1911,8 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
         { wxSYS_COLOUR_WINDOWFRAME, "wxSYS_COLOUR_WINDOWFRAME" },
         { wxSYS_COLOUR_WINDOWTEXT, "wxSYS_COLOUR_WINDOWTEXT" },
         { wxSYS_COLOUR_WINDOW, "wxSYS_COLOUR_WINDOW" },
-        { wxSYS_COLOUR_GRIDLINES, "wxSYS_COLOUR_GRIDLINES" }
+        { wxSYS_COLOUR_GRIDLINES, "wxSYS_COLOUR_GRIDLINES" },
+        { wxSYS_COLOUR_LISTBOXHIGHLIGHT, "wxSYS_COLOUR_LISTBOXHIGHLIGHT" },
     };
 
     for (int i = 0; i < wxSYS_COLOUR_MAX; i++)
@@ -2310,18 +2339,21 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         m_currentpoint = wxPoint( xx , yy ) ;
         wxRect newrect ( m_anchorpoint , m_currentpoint ) ;
 
+        // This is required with wxMSW to allow per-pixel transparency.
+        m_overlay.SetOpacity(-1);
+
         wxOverlayDC dc(m_overlay, this);
         PrepareDC(dc);
 
+        // Note: this must be called on the overlay DC, not wxGCDC.
         dc.Clear();
-#ifdef __WXMAC__
-        dc.SetPen( *wxGREY_PEN );
-        dc.SetBrush( wxColour( 192,192,192,64 ) );
-#else
-        dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-#endif
-        dc.DrawRectangle( newrect );
+
+        // Use wxGCDC to ensure that brush transparency is taken into account
+        // even under wxMSW where plain wxDC doesn't support it.
+        wxGCDC gdc(dc);
+        gdc.SetPen( *wxGREY_PEN );
+        gdc.SetBrush( wxColour( 192,192,192,64 ) );
+        gdc.DrawRectangle( newrect );
     }
 #else
     wxUnusedVar(event);
@@ -2517,6 +2549,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU      (File_AntiAliasing, MyFrame::OnAntiAliasing)
     EVT_UPDATE_UI (File_AntiAliasing, MyFrame::OnAntiAliasingUpdateUI)
 #endif // wxUSE_GRAPHICS_CONTEXT
+    EVT_MENU      (File_AutoscrollOuter, MyFrame::OnAutoscrollOuter)
+    EVT_UPDATE_UI (File_AutoscrollOuter, MyFrame::OnAutoscrollOuterUpdateUI)
+    EVT_MENU      (File_AutoscrollInner, MyFrame::OnAutoscrollInner)
+    EVT_UPDATE_UI (File_AutoscrollInner, MyFrame::OnAutoscrollInnerUpdateUI)
 
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
     EVT_MENU      (File_Copy,     MyFrame::OnCopy)
@@ -2616,6 +2652,9 @@ MyFrame::MyFrame(const wxString& title)
                               "Enable Anti-Aliasing in wxGraphicContext")
             ->Check();
 #endif
+    menuFile->AppendSeparator();
+    menuFile->AppendCheckItem(File_AutoscrollOuter, "&Outer Scroll Zone", "Autoscroll zone outside window");
+    menuFile->AppendCheckItem(File_AutoscrollInner, "&Inner Scroll Zone", "Autoscroll zone inside window");
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
     menuFile->Append(File_Copy, "Copy to clipboard");

@@ -74,11 +74,11 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
         event.m_y += posY - a.y;
     }
 
-    if ((win->m_wxwindow) && (win->GetLayoutDirection() == wxLayout_RightToLeft))
+    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
     {
         // origin in the upper right corner
         GtkAllocation a;
-        gtk_widget_get_allocation(win->m_wxwindow, &a);
+        gtk_widget_get_allocation(win->m_wxwindow ? win->m_wxwindow : win->m_widget, &a);
         int window_width = a.width;
         event.m_x = window_width - event.m_x;
     }

@@ -415,6 +415,15 @@ inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
     return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : nullptr;
 }
 
+// ensure that an object that should be a particular type is what it should be,
+// then static cast it
+template <class T>
+inline T* wxCheckedStaticCast(wxObject* obj)
+{
+    wxCHECK_MSG(wxDynamicCast(obj, T), nullptr, "Pointer of wrong type?");
+    return static_cast<T*>(obj);
+}
+
 #include "wx/xti2.h"
 
 // ----------------------------------------------------------------------------

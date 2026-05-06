@@ -77,6 +77,7 @@
     <subproject id="statbar" template="sub"/>
     <subproject id="stc" template="sub" cond="USE_STC=='1'"/>
     <subproject id="svg" template="sub"/>
+    <subproject id="stylus" template="sub"/>
     <subproject id="taborder" template="sub"/>
     <subproject id="taskbar" template="sub"/>
     <subproject id="text" template="sub"/>

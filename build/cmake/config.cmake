@@ -92,7 +92,7 @@ function(wx_write_config_inplace)
         "wx-config-inplace.in"
         "inplace-${TOOLCHAIN_FULLNAME}"
         )
-    if(WIN32_MSVC_NAMING)
+    if(WIN32_MSVC_NAMING OR NOT wxBUILD_INSTALL_USE_SYMLINK)
         set(COPY_CMD copy)
     else()
         set(COPY_CMD create_symlink)
@@ -200,7 +200,7 @@ function(wx_write_config)
     set(WXCONFIG_RESFLAGS)
     set(WXCONFIG_RPATH "-Wl,-rpath,\$libdir")
     set(LDFLAGS_GL)
-    set(RESCOMP)
+    get_filename_component(RESCOMP "${CMAKE_RC_COMPILER}" NAME_WE)
 
     wx_configure_script(
         "wx-config.in"

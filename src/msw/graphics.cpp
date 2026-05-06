@@ -92,7 +92,7 @@ StringFormat* gs_drawTextStringFormat = nullptr;
 // Get the string format used for the text drawing and measuring functions:
 // notice that it must be the same one for all of them, otherwise the drawn
 // text might be of different size than what measuring it returned.
-inline StringFormat* GetDrawTextStringFormat(wxLayoutDirection dir = wxLayout_Default)
+inline StringFormat* GetDrawTextStringFormat(DWORD layoutDir = 0)
 {
     if ( !gs_drawTextStringFormat )
     {
@@ -103,7 +103,7 @@ inline StringFormat* GetDrawTextStringFormat(wxLayoutDirection dir = wxLayout_De
         auto flags = gs_drawTextStringFormat->GetFormatFlags()
                    | StringFormatFlagsMeasureTrailingSpaces;
 
-        if ( dir == wxLayout_RightToLeft )
+        if ( (layoutDir & LAYOUT_RTL) != 0 )
             flags |= StringFormatFlagsDirectionRightToLeft;
 
         gs_drawTextStringFormat->SetFormatFlags(flags);
@@ -483,7 +483,7 @@ public:
 
     Graphics* GetGraphics() const { return m_context; }
 
-    bool IsRTL() const { return m_layoutDir == wxLayout_RightToLeft; }
+    bool IsRTL() const { return (m_layoutDir & LAYOUT_RTL) != 0; }
 
     virtual WXHDC GetNativeHDC() override;
     virtual void ReleaseNativeHDC(WXHDC hdc) override;
@@ -505,7 +505,7 @@ private:
     GraphicsState m_state2;
     Matrix* m_internalTransform;
     Matrix* m_internalTransformInv;
-    wxLayoutDirection m_layoutDir = wxLayout_Default;
+    DWORD m_layoutDir = 0;
 
     wxDECLARE_NO_COPY_CLASS(wxGDIPlusContext);
 };
@@ -1903,16 +1903,39 @@ public :
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height   )
     : wxGraphicsContext(renderer)
-    , m_layoutDir((::GetLayout(hdc) & LAYOUT_RTL) ? wxLayout_RightToLeft : wxLayout_LeftToRight)
+    , m_layoutDir(::GetLayout(hdc))
 {
+    if ( IsRTL() )
+    {
+        // Mixing GDI+ with pure GDI calls on the same drawing may have
+        // unexpected results in RTL layout. i.e.: The final drawing may
+        // not be correctly mirrored on the destination DC. So we always
+        // perform drawing operations on an LTR HDC and a transformation
+        // matrix will be applied to this context to achieve the necessary
+        // mirroring effects.
+        ::SetLayout(hdc, 0);
+    }
+
     Init(new Graphics(hdc), width, height);
 }
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc )
     : wxGraphicsContext(renderer, dc.GetWindow())
-    , m_layoutDir(dc.GetLayoutDirection())
+    , m_layoutDir(::GetLayout((HDC)dc.GetHandle()))
 {
     HDC hdc = (HDC) dc.GetHDC();
+
+    if ( IsRTL() )
+    {
+        // Mixing GDI+ with pure GDI calls on the same drawing may have
+        // unexpected results in RTL layout. i.e.: The final drawing may
+        // not be correctly mirrored on the destination DC. So we always
+        // perform drawing operations on an LTR HDC and a transformation
+        // matrix will be applied to this context to achieve the necessary
+        // mirroring effects.
+        ::SetLayout(hdc, 0);
+    }
+
     wxSize sz = dc.GetSize();
 
     // We don't set HDC origin at MSW level in wxDC because this limits it to
@@ -1937,9 +1960,12 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer,
                                     HWND hwnd,
                                     wxWindow* window )
     : wxGraphicsContext(renderer, window)
-    , m_layoutDir((::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) ? wxLayout_RightToLeft
-                                                                         : wxLayout_LeftToRight)
 {
+    if ( (::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) != 0 )
+    {
+        m_layoutDir = LAYOUT_RTL;
+    }
+
     RECT rect = wxGetWindowRect(hwnd);
     Init(new Graphics(hwnd), rect.right - rect.left, rect.bottom - rect.top);
     m_enableOffset = true;
@@ -1968,7 +1994,7 @@ void wxGDIPlusContext::Init(Graphics* graphics, int width, int height, const Mat
     m_height = height;
     m_internalTransform = new Matrix();
 
-    if ( m_layoutDir == wxLayout_RightToLeft )
+    if ( IsRTL() )
     {
         m_context->ScaleTransform(-1, 1);
         m_context->TranslateTransform(-width, 0);
@@ -1995,6 +2021,13 @@ void wxGDIPlusContext::Init(Graphics* graphics, int width, int height, const Mat
 
 wxGDIPlusContext::~wxGDIPlusContext()
 {
+    if ( IsRTL() )
+    {
+        WXHDC hdc = GetNativeHDC();
+        ::SetLayout((HDC)hdc, m_layoutDir);
+        ReleaseNativeHDC(hdc);
+    }
+
     delete m_internalTransform;
     delete m_internalTransformInv;
     if ( m_context )

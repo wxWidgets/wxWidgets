@@ -59,6 +59,14 @@ const int wxSPDD_WINDOW_MOVED      = 0x2000;
 
 const int Id_SkipBtn = wxID_HIGHEST + 1;
 
+// Enum indicating whether the native dialog was initialized.
+enum class wxProgressDialogStatus
+{
+    Initializing,
+    Initialized,
+    Failed
+};
+
 } // anonymous namespace
 
 // ============================================================================
@@ -82,6 +90,10 @@ public:
 
     wxCriticalSection m_cs;
 
+    // This field is set to either Initialized or Failed by the task dialog
+    // runner thread to indicate whether the dialog was successfully created.
+    wxProgressDialogStatus m_status = wxProgressDialogStatus::Initializing;
+
     wxWindow *m_parent;     // Parent window only used to center us over it.
     HWND m_hwnd;            // Task dialog handler
     long m_style;           // wxProgressDialog style
@@ -90,6 +102,7 @@ public:
     wxString m_title;
     wxString m_message;
     wxString m_expandedInformation;
+    wxString m_labelSkip;
     wxString m_labelCancel; // Privately used by callback.
     unsigned long m_timeStop;
     wxIcon m_iconSmall;
@@ -395,6 +408,8 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
       m_message(message),
       m_title(title)
 {
+    // Note that here we're testing whether we can use the native task dialog
+    // and not if we are already using it, as UsingNativeTaskDialog() does.
     if ( HasNativeTaskDialog() )
     {
         SetTopParent(parent);
@@ -402,10 +417,29 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
         SetMaximum(maximum);
 
         EnsureActiveEventLoopExists();
-        Show();
-        DisableOtherWindows();
+        if ( InitAndShowNative() )
+        {
+            DisableOtherWindows();
+            return;
+        }
 
-        return;
+        // Showing native dialog failed, fall back to the generic one.
+        if ( m_taskDialogRunner )
+        {
+            // This points to the data owned by m_taskDialogRunner, so don't
+            // keep it dangling after deleting the thread.
+            //
+            // This is also used by UsingNativeTaskDialog().
+            m_sharedData = nullptr;
+
+            // It's critical to use wxTHREAD_WAIT_YIELD here to prevent
+            // deadlocks as the task dialog runner thread might be waiting for
+            // the main thread to process some messages.
+            m_taskDialogRunner->Wait(wxTHREAD_WAIT_YIELD);
+
+            delete m_taskDialogRunner;
+            m_taskDialogRunner = nullptr;
+        }
     }
 
     Create(title, message, maximum, parent, style);
@@ -469,7 +503,7 @@ wxProgressDialog::~wxProgressDialog()
 
 bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         if ( !DoNativeBeforeUpdate(skip) )
         {
@@ -542,7 +576,7 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 
 bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         if ( !DoNativeBeforeUpdate(skip) )
         {
@@ -577,7 +611,7 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 
 void wxProgressDialog::DispatchEvents()
 {
-    // No need for HasNativeTaskDialog() check, we're only called when this is
+    // No need for UsingNativeTaskDialog() check, we're only called when this is
     // the case.
 
     // We don't need to dispatch the user input events as the task dialog
@@ -613,7 +647,7 @@ void wxProgressDialog::Resume()
 {
     wxGenericProgressDialog::Resume();
 
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         HWND hwnd;
 
@@ -648,7 +682,7 @@ void wxProgressDialog::Resume()
 
 WXWidget wxProgressDialog::GetHandle() const
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_hwnd;
@@ -659,7 +693,7 @@ WXWidget wxProgressDialog::GetHandle() const
 
 int wxProgressDialog::GetValue() const
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_value;
@@ -670,7 +704,7 @@ int wxProgressDialog::GetValue() const
 
 wxString wxProgressDialog::GetMessage() const
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
         return m_message;
 
     return wxGenericProgressDialog::GetMessage();
@@ -678,7 +712,7 @@ wxString wxProgressDialog::GetMessage() const
 
 void wxProgressDialog::SetRange(int maximum)
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         SetMaximum(maximum);
 
@@ -695,7 +729,7 @@ void wxProgressDialog::SetRange(int maximum)
 
 bool wxProgressDialog::WasSkipped() const
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         if ( !m_sharedData )
         {
@@ -712,7 +746,7 @@ bool wxProgressDialog::WasSkipped() const
 
 bool wxProgressDialog::WasCancelled() const
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_state == Canceled;
@@ -723,7 +757,7 @@ bool wxProgressDialog::WasCancelled() const
 
 void wxProgressDialog::SetTitle(const wxString& title)
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         m_title = title;
 
@@ -740,7 +774,7 @@ void wxProgressDialog::SetTitle(const wxString& title)
 
 wxString wxProgressDialog::GetTitle() const
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
         return m_title;
 
     return wxGenericProgressDialog::GetTitle();
@@ -748,7 +782,7 @@ wxString wxProgressDialog::GetTitle() const
 
 void wxProgressDialog::SetIcons(const wxIconBundle& icons)
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         m_icons = icons; // We can't just call to parent's SetIcons()
                          // (wxGenericProgressDialog::SetIcons == wxTopLevelWindowMSW::SetIcons)
@@ -780,7 +814,7 @@ void wxProgressDialog::SetIcons(const wxIconBundle& icons)
 
 void wxProgressDialog::DoMoveWindow(int x, int y, int width, int height)
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         if ( m_sharedData )
         {
@@ -810,7 +844,7 @@ wxRect wxProgressDialog::GetTaskDialogRect() const
 
 void wxProgressDialog::DoGetPosition(int *x, int *y) const
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         const wxRect r = GetTaskDialogRect();
         if (x)
@@ -826,7 +860,7 @@ void wxProgressDialog::DoGetPosition(int *x, int *y) const
 
 void wxProgressDialog::DoGetSize(int *width, int *height) const
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         const wxRect r = GetTaskDialogRect();
         if ( width )
@@ -842,7 +876,7 @@ void wxProgressDialog::DoGetSize(int *width, int *height) const
 
 void wxProgressDialog::Fit()
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
@@ -856,74 +890,90 @@ void wxProgressDialog::Fit()
     wxGenericProgressDialog::Fit();
 }
 
+bool wxProgressDialog::InitAndShowNative()
+{
+    // We're showing the dialog for the first time, create the thread that
+    // will manage it.
+    m_taskDialogRunner = new wxProgressDialogTaskRunner;
+    m_sharedData = m_taskDialogRunner->GetSharedDataObject();
+
+    // Initialize shared data.
+    m_sharedData->m_title = m_title;
+    m_sharedData->m_message = m_message;
+    m_sharedData->m_range = m_maximum;
+    m_sharedData->m_state = Uncancelable;
+    m_sharedData->m_style = GetPDStyle();
+    m_sharedData->m_parent = GetTopParent();
+
+    if ( HasPDFlag(wxPD_CAN_ABORT) )
+    {
+        m_sharedData->m_state = Continue;
+        m_sharedData->m_labelCancel = _("Cancel");
+    }
+    else // Dialog can't be cancelled.
+    {
+        // We still must have at least a single button in the dialog so
+        // just don't call it "Cancel" in this case.
+        m_sharedData->m_labelCancel = _("Close");
+    }
+
+    if ( HasPDFlag(wxPD_ELAPSED_TIME |
+                     wxPD_ESTIMATED_TIME |
+                        wxPD_REMAINING_TIME) )
+    {
+        // Set the expanded information field from the beginning to avoid
+        // having to re-layout the dialog later when it changes.
+        UpdateExpandedInformation(0);
+    }
+
+    // Do launch the thread.
+    if ( m_taskDialogRunner->Run() != wxTHREAD_NO_ERROR )
+    {
+        // This should never happen and it's useless to have a user-visible
+        // message (that would need to be translated) for it.
+        wxLogDebug("Unexpectedly failed to launch the task dialog thread");
+        return false;
+    }
+
+    // Wait until the dialog is shown as the program may need some time
+    // before it calls Update() and we want to show something to the user
+    // in the meanwhile.
+    auto status = wxProgressDialogStatus::Failed;
+    while ( wxEventLoop::GetActive()->Dispatch() )
+    {
+        wxCriticalSectionLocker locker(m_sharedData->m_cs);
+        status = m_sharedData->m_status;
+        if ( status != wxProgressDialogStatus::Initializing )
+            break;
+    }
+
+    switch ( m_sharedData->m_status )
+    {
+        case wxProgressDialogStatus::Initialized:
+            break;
+
+        case wxProgressDialogStatus::Initializing:
+            wxFAIL_MSG("Unreachable");
+            wxFALLTHROUGH;
+
+        case wxProgressDialogStatus::Failed:
+            return false;
+    }
+
+    return true;
+}
+
 bool wxProgressDialog::Show(bool show)
 {
-    if ( HasNativeTaskDialog() )
+    if ( UsingNativeTaskDialog() )
     {
         // The dialog can't be hidden at all and showing it again after it had
         // been shown before doesn't do anything.
         if ( !show || m_taskDialogRunner )
             return false;
 
-        // We're showing the dialog for the first time, create the thread that
-        // will manage it.
-        m_taskDialogRunner = new wxProgressDialogTaskRunner;
-        m_sharedData = m_taskDialogRunner->GetSharedDataObject();
-
-        // Initialize shared data.
-        m_sharedData->m_title = m_title;
-        m_sharedData->m_message = m_message;
-        m_sharedData->m_range = m_maximum;
-        m_sharedData->m_state = Uncancelable;
-        m_sharedData->m_style = GetPDStyle();
-        m_sharedData->m_parent = GetTopParent();
-
-        if ( HasPDFlag(wxPD_CAN_ABORT) )
-        {
-            m_sharedData->m_state = Continue;
-            m_sharedData->m_labelCancel = _("Cancel");
-        }
-        else // Dialog can't be cancelled.
-        {
-            // We still must have at least a single button in the dialog so
-            // just don't call it "Cancel" in this case.
-            m_sharedData->m_labelCancel = _("Close");
-        }
-
-        if ( HasPDFlag(wxPD_ELAPSED_TIME |
-                         wxPD_ESTIMATED_TIME |
-                            wxPD_REMAINING_TIME) )
-        {
-            // Set the expanded information field from the beginning to avoid
-            // having to re-layout the dialog later when it changes.
-            UpdateExpandedInformation(0);
-        }
-
-        // Do launch the thread.
-        if ( m_taskDialogRunner->Create() != wxTHREAD_NO_ERROR )
-        {
-            wxLogError( "Unable to create thread!" );
-            return false;
-        }
-
-        if ( m_taskDialogRunner->Run() != wxTHREAD_NO_ERROR )
-        {
-            wxLogError( "Unable to start thread!" );
-            return false;
-        }
-
-        // Wait until the dialog is shown as the program may need some time
-        // before it calls Update() and we want to show something to the user
-        // in the meanwhile.
-        while ( wxEventLoop::GetActive()->Dispatch() )
-        {
-            wxCriticalSectionLocker locker(m_sharedData->m_cs);
-            if ( m_sharedData->m_hwnd )
-                break;
-        }
-
-        // Do not show the underlying dialog.
-        return false;
+        // We don't need to do anything to show it.
+        return true;
     }
 
     return wxGenericProgressDialog::Show( show );
@@ -1022,7 +1072,11 @@ void* wxProgressDialogTaskRunner::Entry()
         tdc.lpCallbackData = (LONG_PTR) &m_sharedData;
 
         if ( m_sharedData.m_style & wxPD_CAN_SKIP )
-            wxTdc.AddTaskDialogButton( tdc, Id_SkipBtn, 0, _("Skip") );
+        {
+            m_sharedData.m_labelSkip = _("Skip");
+            wxTdc.AddTaskDialogButton( tdc, Id_SkipBtn, 0,
+                                       m_sharedData.m_labelSkip );
+        }
 
         tdc.dwFlags |= TDF_CALLBACK_TIMER | TDF_SHOW_PROGRESS_BAR;
 
@@ -1040,14 +1094,25 @@ void* wxProgressDialogTaskRunner::Entry()
         }
     }
 
+    HRESULT hr;
     TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
-    if ( !taskDialogIndirect )
-        return nullptr;
+    if ( taskDialogIndirect )
+    {
+        int msAns;
+        hr = taskDialogIndirect(&tdc, &msAns, nullptr, nullptr);
+    }
+    else
+    {
+        hr = E_UNEXPECTED;
+    }
 
-    int msAns;
-    HRESULT hr = taskDialogIndirect(&tdc, &msAns, nullptr, nullptr);
     if ( FAILED(hr) )
+    {
         wxLogApiError( "TaskDialogIndirect", hr );
+
+        wxCriticalSectionLocker locker(m_sharedData.m_cs);
+        m_sharedData.m_status = wxProgressDialogStatus::Failed;
+    }
 
     // If the main thread is waiting for us to exit inside the event loop in
     // Update(), wake it up so that it checks our status again.
@@ -1079,6 +1144,9 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
     switch ( uNotification )
     {
         case TDN_CREATED:
+            // Let the main thread know that the dialog can be used.
+            sharedData->m_status = wxProgressDialogStatus::Initialized;
+
             // Store the HWND for the main thread use.
             sharedData->m_hwnd = hwnd;
 

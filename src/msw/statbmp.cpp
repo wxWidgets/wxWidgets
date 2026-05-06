@@ -231,6 +231,7 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
 
     // For the icons we just use its HICON directly, but for bitmaps we create
     // our own temporary bitmap and need to delete its handle manually later.
+    WXHANDLE currentHandle = 0;
     if ( !m_icon.IsOk() )
     {
         wxBitmap bitmap = m_bitmapBundle.GetBitmapFor(this);
@@ -244,8 +245,8 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
         {
             // For bitmap with alpha channel create temporary DIB with
             // not-premultiplied alpha values.
-            m_currentHandle = wxDIB(bitmap.ConvertToImage(),
-                                    wxDIB::PixelFormat_NotPreMultiplied)
+            currentHandle = wxDIB(bitmap.ConvertToImage(),
+                                  wxDIB::PixelFormat_NotPreMultiplied)
                 .Detach();
             m_ownsCurrentHandle = true;
         }
@@ -266,14 +267,14 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
             // Just use the HBITMAP as is, but also make a copy of the bitmap
             // to ensure that HBITMAP remains valid for as long as we need it
             m_bitmap = bitmap;
-            m_currentHandle = bitmap.GetHandle();
+            currentHandle = bitmap.GetHandle();
         }
     }
 
     const bool isIcon = m_icon.IsOk();
     if ( isIcon )
     {
-        m_currentHandle = m_icon.GetHandle();
+        currentHandle = m_icon.GetHandle();
     }
 
     if ( isIcon != wasIcon )
@@ -287,17 +288,21 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
     // Update the handle used by the native control.
     const WPARAM imageType = m_icon.IsOk() ? IMAGE_ICON : IMAGE_BITMAP;
 
-    const HGDIOBJ currentHandle = (HGDIOBJ)m_currentHandle;
     const HGDIOBJ oldHandle = (HGDIOBJ)
         ::SendMessage(GetHwnd(), STM_SETIMAGE, imageType, (LPARAM)currentHandle);
 
     // detect if this is still the handle we passed before or
     // if the static-control made a copy of the bitmap!
-    if ( oldHandle != 0 && oldHandle != currentHandle )
+    if ( oldHandle != 0 && oldHandle != m_currentHandle )
     {
         // the static control made a copy and we are responsible for deleting it
         ::DeleteObject(oldHandle);
     }
+
+    // Note that m_currentHandle must be changed after comparing its previous
+    // value with oldHandle above and before possibly freeing it in the call to
+    // Free() below.
+    m_currentHandle = currentHandle;
 
     // Also check if we need to keep our current handle, it may be unnecessary
     // if the native control doesn't actually use it.

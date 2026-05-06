@@ -144,8 +144,13 @@ public:
                            const wxString& path = wxEmptyString);
 
     /**
-        Associates a wxConfig object with the help window. It is recommended that you
-        use wxHtmlHelpController::UseConfig instead.
+        Associates a wxConfig object with the help window.
+
+        It is recommended that you use wxHtmlHelpController::UseConfig instead.
+
+        @param config The object to use or @NULL to disable the use of wxConfig.
+        @param rootpath The path in the wxConfig object to use as the root for
+            this window's settings. If empty, the current path will be used.
     */
     void UseConfig(wxConfigBase* config,
                    const wxString& rootpath = wxEmptyString);

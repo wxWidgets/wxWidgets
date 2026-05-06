@@ -42,6 +42,7 @@ static std::unordered_map<wxString, wxString> gs_scmap_alias2name;
 
 /* static */ wxString wxUILocaleImpl::GetScriptAliasFromName(const wxString& scriptName)
 {
+    wxUILocaleImpl::CreateLanguagesDB();
     const auto scIter = gs_scmap_name2alias.find(scriptName);
     if (scIter != gs_scmap_name2alias.end())
         return scIter->second;
@@ -51,6 +52,7 @@ static std::unordered_map<wxString, wxString> gs_scmap_alias2name;
 
 /* static */ wxString wxUILocaleImpl::GetScriptNameFromAlias(const wxString& scriptAlias)
 {
+    wxUILocaleImpl::CreateLanguagesDB();
     const auto scIter = gs_scmap_alias2name.find(scriptAlias);
     if (scIter != gs_scmap_alias2name.end())
         return scIter->second;
@@ -63,6 +65,7 @@ static std::unordered_map<wxString, wxString> gs_likely_subtags_map;
 
 /* static */ wxString wxUILocaleImpl::GetLikelySubtags(const wxString& fromTag)
 {
+    wxUILocaleImpl::CreateLanguagesDB();
     const auto tagIter = gs_likely_subtags_map.find(fromTag);
     if (tagIter != gs_likely_subtags_map.end())
         return tagIter->second;
@@ -75,6 +78,7 @@ static std::unordered_map<wxString, int> gs_matching_tags_map;
 
 /* static */ int wxUILocaleImpl::GetMatchDistance(const wxString& desiredTag, const wxString& supportedTag)
 {
+    wxUILocaleImpl::CreateLanguagesDB();
     const auto tagIter = gs_matching_tags_map.find(desiredTag+wxString(":")+supportedTag);
     if (tagIter != gs_matching_tags_map.end())
         return tagIter->second;
@@ -87,6 +91,7 @@ static std::unordered_map<wxString, std::unordered_set<wxString>> gs_region_grou
 
 /* static */ bool wxUILocaleImpl::SameRegionGroup(const wxString& language, const wxString& desiredRegion, const wxString& supportedRegion)
 {
+    wxUILocaleImpl::CreateLanguagesDB();
     const auto languageIter = gs_region_groups_map.find(language);
     if (languageIter != gs_region_groups_map.end())
     {

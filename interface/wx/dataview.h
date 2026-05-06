@@ -816,7 +816,7 @@ public:
     ///@}
 
     /**
-        Returns the ID.
+        Returns the ID as an opaque void pointer.
     */
     void* GetID() const;
 
@@ -824,6 +824,11 @@ public:
         Returns @true if the ID is not @NULL.
     */
     bool IsOk() const;
+
+    /**
+        Sets the ID to @NULL and thus makes this item invalid.
+    */
+    void Unset();
 };
 
 

@@ -20,7 +20,6 @@
 #include "wx/uiaction.h"
 
 #include "testableframe.h"
-#include "testdate.h"
 
 class DatePickerCtrlTestCase : public CppUnit::TestCase
 {

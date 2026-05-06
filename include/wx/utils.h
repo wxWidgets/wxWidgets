@@ -681,6 +681,19 @@ public:
     // ctor disables all windows except the given one(s)
     explicit wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2 = nullptr);
 
+    // move ctor so we can put objects of this class in a container.
+    wxWindowDisabler(wxWindowDisabler&& other) noexcept
+        : m_windowsToSkip(std::move(other.m_windowsToSkip)),
+          m_disabled(other.m_disabled)
+    {
+        other.m_disabled = false;
+
+    #if defined(__WXOSX__) && wxOSX_USE_COCOA
+        m_modalEventLoop = other.m_modalEventLoop;
+        other.m_modalEventLoop = nullptr;
+    #endif
+    }
+
     // dtor enables back all windows disabled by the ctor
     ~wxWindowDisabler();
 
@@ -696,6 +709,9 @@ private:
 #endif
     wxVector<wxWindow*> m_windowsToSkip;
     bool m_disabled;
+
+    // move assignment deleted as it doesn't make sense for this class
+    wxWindowDisabler& operator=(wxWindowDisabler&& other) = delete;
 
     wxDECLARE_NO_COPY_CLASS(wxWindowDisabler);
 };

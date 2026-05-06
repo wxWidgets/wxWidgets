@@ -71,10 +71,10 @@ void wxDFBDCImpl::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoor
     //     DirectFB will return an error if you try to set clipping rectangle
     //     that is partially outside of the surface.
     DFBRegion r;
-    r.x1 = wxMax(0, XLOG2DEV(cx));
-    r.y1 = wxMax(0, YLOG2DEV(cy));
-    r.x2 = wxMin(r.x1 + XLOG2DEVREL(cw), size.x) - 1;
-    r.y2 = wxMin(r.y1 + YLOG2DEVREL(ch), size.y) - 1;
+    r.x1 = wxMax(0, LogicalToDeviceX(cx));
+    r.y1 = wxMax(0, LogicalToDeviceY(cy));
+    r.x2 = wxMin(r.x1 + LogicalToDeviceXRel(cw), size.x) - 1;
+    r.y2 = wxMin(r.y1 + LogicalToDeviceYRel(ch), size.y) - 1;
 
     if ( !m_surface->SetClip(&r) )
         return;
@@ -93,10 +93,10 @@ void wxDFBDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 
     // our parameter is in physical coordinates while DoSetClippingRegion()
     // takes logical ones
-    rect.x = XDEV2LOG(rect.x);
-    rect.y = YDEV2LOG(rect.y);
-    rect.width = XDEV2LOG(rect.width);
-    rect.height = YDEV2LOG(rect.height);
+    rect.x = DeviceToLogicalX(rect.x);
+    rect.y = DeviceToLogicalY(rect.y);
+    rect.width = DeviceToLogicalX(rect.width);
+    rect.height = DeviceToLogicalY(rect.height);
 
     DoSetClippingRegion(rect.x, rect.y, rect.width, rect.height);
 }
@@ -136,7 +136,7 @@ void wxDFBDCImpl::Clear()
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
     {
         wxSize size(GetSize());
-        CalcBoundingBox(XDEV2LOG(0), YDEV2LOG(0), XDEV2LOG(size.x), YDEV2LOG(size.y));
+        CalcBoundingBox(DeviceToLogicalX(0), DeviceToLogicalY(0), DeviceToLogicalX(size.x), DeviceToLogicalY(size.y));
     }
 }
 
@@ -178,10 +178,10 @@ void wxDFBDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     if ( m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return;
 
-    wxCoord xx1 = XLOG2DEV(x1);
-    wxCoord yy1 = YLOG2DEV(y1);
-    wxCoord xx2 = XLOG2DEV(x2);
-    wxCoord yy2 = YLOG2DEV(y2);
+    wxCoord xx1 = LogicalToDeviceX(x1);
+    wxCoord yy1 = LogicalToDeviceY(y1);
+    wxCoord xx2 = LogicalToDeviceX(x2);
+    wxCoord yy2 = LogicalToDeviceY(y2);
 
     // FIXME: DrawLine() shouldn't draw the last pixel, but DFB's DrawLine()
     //        does draw it. We should undo any change to the last pixel by
@@ -254,10 +254,10 @@ void wxDFBDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = YLOG2DEV(y);
-    wxCoord ww = m_signX * XLOG2DEVREL(width);
-    wxCoord hh = m_signY * YLOG2DEVREL(height);
+    wxCoord xx = LogicalToDeviceX(x);
+    wxCoord yy = LogicalToDeviceY(y);
+    wxCoord ww = m_signX * LogicalToDeviceXRel(width);
+    wxCoord hh = m_signY * LogicalToDeviceYRel(height);
 
     if ( ww == 0 || hh == 0 ) return;
 
@@ -327,8 +327,8 @@ void wxDFBDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = YLOG2DEV(y);
+    wxCoord xx = LogicalToDeviceX(x);
+    wxCoord yy = LogicalToDeviceY(y);
 
     // update the bounding box
     wxCoord w, h;
@@ -343,7 +343,7 @@ void wxDFBDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
                      wxT("invalid background color") );
 
         SelectColour(m_textBackgroundColour);
-        m_surface->FillRectangle(xx, yy, XLOG2DEVREL(w), YLOG2DEVREL(h));
+        m_surface->FillRectangle(xx, yy, LogicalToDeviceXRel(w), LogicalToDeviceYRel(h));
     }
 
     // finally draw the text itself:
@@ -475,7 +475,7 @@ wxCoord wxDFBDCImpl::GetCharHeight() const
 
     int h = -1;
     GetCurrentFont()->GetHeight(&h);
-    return YDEV2LOGREL(h);
+    return DeviceToLogicalYRel(h);
 }
 
 wxCoord wxDFBDCImpl::GetCharWidth() const
@@ -487,7 +487,7 @@ wxCoord wxDFBDCImpl::GetCharWidth() const
     GetCurrentFont()->GetStringWidth("H", 1, &w);
     // VS: YDEV is correct, it should *not* be XDEV, because fonts are only
     //     scaled according to m_scaleY
-    return YDEV2LOGREL(w);
+    return DeviceToLogicalYRel(w);
 }
 
 void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
@@ -513,14 +513,14 @@ void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
     {
         // VS: YDEV is correct, it should *not* be XDEV, because fonts are
         //     only scaled according to m_scaleY
-        xx = YDEV2LOGREL(rect.w);
-        yy = YDEV2LOGREL(rect.h);
+        xx = DeviceToLogicalYRel(rect.w);
+        yy = DeviceToLogicalYRel(rect.h);
 
         if ( descent )
         {
             int d;
             if ( f->GetDescender(&d) )
-                *descent = YDEV2LOGREL(-d);
+                *descent = DeviceToLogicalYRel(-d);
             else
                 *descent = 0;
         }
@@ -699,8 +699,8 @@ bool wxDFBDCImpl::DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
         CalcBoundingBox(wxPoint(dstx, dsty), wxSize(w, h));
 
     DFBRectangle srcRect = { srcx, srcy, w, h };
-    DFBRectangle dstRect = { XLOG2DEV(dstx), YLOG2DEV(dsty),
-                             XLOG2DEVREL(w), YLOG2DEVREL(h) };
+    DFBRectangle dstRect = { LogicalToDeviceX(dstx), LogicalToDeviceY(dsty),
+                             LogicalToDeviceXRel(w), LogicalToDeviceYRel(h) };
 
     wxIDirectFBSurfacePtr dst(m_surface);
 

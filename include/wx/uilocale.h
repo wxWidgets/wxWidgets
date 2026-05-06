@@ -158,6 +158,9 @@ public:
     // not supported, the other functions will behave as for the "C" locale.
     bool IsSupported() const;
 
+    // Check if the locale was instantiated via UseDefault()
+    bool IsDefault() const { return m_isDefault; }
+
     // Get the platform-dependent name of the current locale.
     wxString GetName() const;
 
@@ -273,6 +276,7 @@ private:
     static wxUILocale ms_current;
 
     wxUILocaleImpl* m_impl;
+    bool m_isDefault = false;
 };
 
 inline wxString wxGetUIDateFormat()

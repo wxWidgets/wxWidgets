@@ -330,6 +330,7 @@ Windows 10 version 1703 or later. It is also possible to use
 support for system DPI, see [MSDN documentation][msw-highdpi] for more
 information about different levels of DPI awareness.
 
+[msw-manifest]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
 [msw-highdpi]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
 
 macOS                               {#high_dpi_platform_mac}

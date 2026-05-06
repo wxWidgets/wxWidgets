@@ -646,13 +646,18 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     // fully shown for reasonably-sized words whereas without it using almost
     // any file system path in a message box would result in truncation.
     tdc.dwFlags = TDF_EXPAND_FOOTER_AREA |
-                  TDF_POSITION_RELATIVE_TO_WINDOW |
                   TDF_SIZE_TO_CONTENT;
     tdc.hInstance = wxGetInstance();
     tdc.pszWindowTitle = caption.t_str();
 
-    // use the top level window as parent if none specified
     tdc.hwndParent = parent ? GetHwndOf(parent) : nullptr;
+
+    // Don't use this flag if our parent window is minimized because this
+    // results in the task dialog being shown in the top left corner of the
+    // screen, which is completely unexpected, so prefer the default behaviour
+    // of centering the dialog on the screen in this case.
+    if ( parent && !::IsIconic(tdc.hwndParent) )
+        tdc.dwFlags |= TDF_POSITION_RELATIVE_TO_WINDOW;
 
     if ( wxApp::MSWGetDefaultLayout(parent) == wxLayout_RightToLeft )
         tdc.dwFlags |= TDF_RTL_LAYOUT;

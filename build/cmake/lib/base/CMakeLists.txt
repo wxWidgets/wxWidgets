@@ -14,13 +14,9 @@ if(WIN32)
     wx_append_sources(BASE_FILES BASE_WIN32)
     wx_append_sources(BASE_FILES BASE_AND_GUI_WIN32)
 elseif(APPLE)
-    if(WXOSX_COCOA OR WXOSX_IPHONE)
-        wx_append_sources(BASE_FILES BASE_OSX_SHARED)
-        if(WXOSX_COCOA)
-            wx_append_sources(BASE_FILES BASE_AND_GUI_OSX_COCOA)
-        endif()
-    else()
-        wx_append_sources(BASE_FILES BASE_OSX_NOTWXMAC)
+    wx_append_sources(BASE_FILES BASE_OSX)
+    if(WXOSX_COCOA)
+        wx_append_sources(BASE_FILES BASE_AND_GUI_OSX_COCOA)
     endif()
 elseif(UNIX)
     wx_append_sources(BASE_FILES BASE_UNIX)
@@ -58,13 +54,24 @@ endif()
 
 if(APPLE)
     wx_lib_link_libraries(wxbase
+        PRIVATE
+        "-framework Security"
         PUBLIC
         "-framework CoreFoundation"
     )
+    if(WXOSX_IPHONE)
+        wx_lib_link_libraries(wxbase
+            PUBLIC
+            "-framework UIKit"
+        )
+    else()
+        wx_lib_link_libraries(wxbase
+            PUBLIC
+            "-framework AppKit"
+        )
+    endif()
     if(WXOSX_COCOA)
         wx_lib_link_libraries(wxbase
-            PRIVATE
-            "-framework Security"
             PUBLIC
             "-framework Carbon"
             "-framework Cocoa"
@@ -75,3 +82,13 @@ if(APPLE)
 elseif(UNIX)
     wx_lib_link_libraries(wxbase PRIVATE ${CMAKE_DL_LIBS})
 endif()
+
+
+add_library(wxbase_only INTERFACE)
+add_library(wx::base_only ALIAS wxbase_only)
+add_library(wxWidgets::base_only ALIAS wxbase_only)
+target_link_libraries(wxbase_only INTERFACE wxbase)
+target_compile_definitions(wxbase_only INTERFACE wxUSE_GUI=0)
+wx_install(TARGETS wxbase_only EXPORT wxWidgetsTargets)
+list(APPEND wxLIB_TARGETS wxbase_only)
+set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)

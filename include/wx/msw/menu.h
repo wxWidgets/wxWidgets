@@ -218,6 +218,9 @@ public:
     // Get a top level or sub menu with given handle (recursively).
     wxMenu* MSWGetMenu(WXHMENU hMenu) const;
 
+    // Set background appropriate for the current theme.
+    void MSWApplyThemeBackground();
+
 protected:
     // common part of all ctors
     void Init();

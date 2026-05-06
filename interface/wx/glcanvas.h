@@ -259,7 +259,7 @@ public:
 
     /**
         wxWidgets defaults:
-        RGBA, Z-depth 16 bits, double buffering, 1 sample buffer, 4 samplers.
+        RGBA, Z-depth 16 bits, double buffering.
 
         @see PlatformDefaults()
     */
@@ -437,6 +437,15 @@ public:
 };
 
 /**
+    Return type of wxGLContext::GetProcAddress().
+
+    Generic OpenGL function pointer type.
+
+    @since 3.3.2
+ */
+using wxGLExtFunction = void (*)();
+
+/**
     @class wxGLContext
 
     An instance of a wxGLContext represents the state of an OpenGL state
@@ -533,8 +542,77 @@ public:
               an object of type wxGLContext, the statements
               @e "RC.SetCurrent(win);" and @e "win.SetCurrent(RC);" are
               equivalent, see wxGLCanvas::SetCurrent().
+
+        @note This function may be called from any thread, not only the main
+              one, provided that the context is not used by any other thread.
     */
     virtual bool SetCurrent(const wxGLCanvas& win) const;
+
+    /**
+        Clears any currently set context.
+
+        After calling this function, no OpenGL operations can be performed
+        until a new context is made current.
+
+        @since 3.3.2
+    */
+    static void ClearCurrent();
+
+    /**
+        Tries to load an OpenGL extension function with the given name.
+
+        This function uses the platform-specific mechanism for retrieving the
+        address of OpenGL extension functions, e.g. `wglGetProcAddress()` on
+        MSW and either `glXGetProcAddress()` or `eglGetProcAddress()` under
+        Unix systems.
+
+        When calling the template function, the type of the function must be
+        specified as the template parameter, e.g.
+
+        @code
+        typedef void (*glGenBuffers_t) (GLsizei n, GLuint *buffers);
+        auto glGenBuffers = wxGLContext::GetProcAddress<glGenBuffers_t>("glGenBuffers");
+        if ( glGenBuffers )
+        {
+            // glGenBuffers is supported, use it
+            ...
+        }
+        @endcode
+
+        If the type is omitted, the function returns a generic
+        ::wxGLExtFunction pointer that should be cast to the appropriate type
+        by the caller.
+
+        @note Under MSW the returned value may be specific to the currently
+            active context and thus may not be valid for other contexts. So, it
+            is recommended to call this function for each context separately
+            and not to share the returned function pointers between contexts.
+
+        @par
+
+        @note This function is currently not implemented under macOS and always
+            returns @NULL there.
+
+        @since 3.3.2
+     */
+    template <typename T = wxGLExtFunction>
+    static T GetProcAddress(const wxString& name);
+
+    /*
+        Documenting the function returning wxGLExtFunction directly results in
+        bogus Doxygen warnings:
+
+interface/wx/glcanvas.h:596: warning: no uniquely matching class member found for
+  returning a generic function wxGLContext::pointer
+Possible candidates:
+  'wxChar * wxString::pointer' at line 383 of file interface/wx/string.h
+  'value_type * wxVector< T >::pointer' at line 31 of file interface/wx/vector.h
+
+        So don't do it.
+
+        /// @overload
+        static wxGLExtFunction GetProcAddress(const wxString& name);
+    */
 };
 
 /**
@@ -786,6 +864,36 @@ class wxGLCanvas : public wxWindow
 {
 public:
     /**
+        Constant used with SetSwapInterval() and GetSwapInterval().
+
+        When used with SetSwapInterval(), it disables changing the default swap
+        interval. When returned by GetSwapInterval(), it indicates that the
+        swap interval value couldn't be retrieved.
+
+        @since 3.3.2
+     */
+    static constexpr int DefaultSwapInterval = INT_MAX;
+
+    /**
+        Return values of SetSwapInterval().
+
+        @since 3.3.2
+     */
+    enum class SwapInterval
+    {
+        /// SetSwapInterval() failed to set the requested swap interval.
+        NotSet = 0,
+
+        /// SetSwapInterval() successfully set the requested swap interval.
+        Set = 1,
+
+        /// SetSwapInterval() failed to enable adaptive VSync but successfully
+        /// enabled standard VSync instead.
+        NonAdaptive = 2
+    };
+
+
+    /**
         Default constructor not creating the window.
 
         Create() must be used to actually create it later.
@@ -889,16 +997,52 @@ public:
 
 
     /**
-       Re-creates EGLSurface. To be used after a reparent or other
-       changes that may invalidate the EGL drawing surface.
+        Return the version of EGL being used or @false if not using EGL.
 
-       Only available when wxUSE_GLCANVAS_EGL is enabled.
+        This function is only available when `wxHAS_GLX` preprocessor symbol is
+        defined, i.e. in the builds where either GLX or EGL can be used. Note
+        that it is still available when `wxHAS_EGL` is _not_ defined, and
+        simply always returns @false in this case.
 
-       @return @true if surface is successfully recreated
+        @param major
+            Pointer to an integer to receive the major version number. May be
+            @NULL.
+        @param minor
+            Pointer to an integer to receive the minor version number. May be
+            @NULL.
+        @return
+            @true if EGL is being used and version numbers were returned,
+            @false otherwise, e.g. if GLX is being used instead.
 
-       @since 3.2.3
-    */
-    bool CreateSurface();
+        @since 3.3.2
+     */
+    static bool GetEGLVersion(int* major, int* minor);
+
+    /**
+        Return the version of GLX being used or 0 if not using GLX.
+
+        The returned value combines major and minor version numbers in a
+        single integer, e.g. version 1.3 will be returned as 13.
+
+        This function is only available when `wxHAS_GLX` preprocessor symbol is
+        defined (which will be the case for wxGTK and wxX11 under Unix systems).
+     */
+    static int GetGLXVersion();
+
+    /**
+        Return the current swap interval.
+
+        Note that the swap interval is not necessarily the same as the one set
+        by SetSwapInterval() as the implementation may clamp it to the maximum
+        supported value.
+
+        @return
+            The current swap interval or DefaultSwapInterval if the function is
+            not implemented for the current platform or an error occurred.
+
+        @since 3.3.2
+     */
+    int GetSwapInterval() const;
 
     /**
         Determines if a canvas having the specified attributes is available.
@@ -936,6 +1080,28 @@ public:
     static bool IsExtensionSupported(const char *extension);
 
     /**
+        Prefer using GLX over other OpenGL implementations on Unix-like systems
+        where multiple implementations are available (such as GLX and EGL).
+
+        This function is only available when `wxHAS_GLX` preprocessor symbol is
+        defined (which will be the case for wxGTK and wxX11 under Unix systems).
+
+        It must be called before using any OpenGL functionality, which includes
+        not only creating wxGLCanvas but also checking for extension support or
+        creating attributes objects, doing it afterwards will trigger an assert
+        failure and have no other effect.
+
+        Note that when using wxGTK with Wayland, calling this function will
+        have no effect anyhow as only EGL is supported in this case.
+
+        Finally please note that the same effect can be achieved by setting the
+        environment variable `wx_opengl_egl=0` before starting the application.
+
+        @since 3.3.2
+     */
+    static void PreferGLX();
+
+    /**
         Sets the current colour for this window (using @c glcolor3f()), using
         the wxWidgets colour database to find a named colour.
     */
@@ -956,6 +1122,36 @@ public:
         @return @false if an error occurred.
     */
     bool SetCurrent(const wxGLContext& context) const;
+
+    /**
+        Set swap interval to the specified value.
+
+        @a interval specifies the minimum number of video frame periods per
+        buffer swap, i.e. for each call to SwapBuffers(). Using the value of 0
+        means to disable synchronizing buffer swaps to video frames.
+
+        The value may be negative to enable adaptive VSync if supported by the
+        implementation, i.e. to allow swapping buffers without waiting for
+        VSync when the refresh late is too low.
+
+        @param interval
+            The swap interval to set or the special value DefaultSwapInterval
+            which means to turn off automatically setting it to 0 by default,
+            as needs to be done under some platforms currently. Typical values
+            are 1 to enable VSync, 0 to disable it and -1 to enable adaptive
+            VSync if supported.
+
+        @return SwapInterval::Set if the swap interval was set successfully,
+            SwapInterval::NotSet if setting it failed completely, e.g. if the
+            function is not implemented for the current platform and
+            SwapInterval::NonAdaptive if the adaptive VSync was requested but
+            is not supported and standard VSync was enabled instead.
+
+        @see GetSwapInterval()
+
+        @since 3.3.2
+     */
+    SwapInterval SetSwapInterval(int interval);
 
     /**
         Swaps the double-buffer of this window, making the back-buffer the

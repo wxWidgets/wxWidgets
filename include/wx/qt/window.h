@@ -89,6 +89,7 @@ public:
     virtual void Update() override;
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = nullptr ) override;
+    virtual void ClearBackground() override;
 
     virtual bool SetCursor( const wxCursor &cursor ) override;
     virtual bool SetFont(const wxFont& font) override;
@@ -116,6 +117,13 @@ public:
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = nullptr ) override;
+
+    // LTR/RTL layout direction setter/getter
+    virtual void SetLayoutDirection(wxLayoutDirection dir) override;
+    virtual wxLayoutDirection GetLayoutDirection() const override;
+    virtual wxCoord AdjustForLayoutDirection(wxCoord x,
+                                             wxCoord width,
+                                             wxCoord widthTotal) const override;
 
     // Styles
     virtual void SetWindowStyleFlag( long style ) override;
@@ -249,9 +257,6 @@ private:
     std::unique_ptr<QPainter> m_qtPainter;                   // always allocated
 
     bool m_mouseInside;
-
-    bool  m_pendingSize = false; // to properly set the size of the TLW if SetSize()
-                                 // is called before the window is shown.
 
     wxSize  m_pendingClientSize;
 

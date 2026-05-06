@@ -435,6 +435,10 @@ protected:
                                         int& flags) const = 0;
 
 
+    // override the base class version to take state images into account
+    virtual bool HasAnyImages() const override;
+
+
     // Usually we inherit from this class, rather than aggregating it, but we
     // need two different sets of images here, so we do both.
     wxWithImages m_imagesState;

@@ -38,8 +38,9 @@ public:
     wxRibbonGalleryItem() = default;
 
     void SetId(int id) {m_id = id;}
-    void SetBitmap(const wxBitmap& bitmap) {m_bitmap = bitmap;}
-    const wxBitmap& GetBitmap() const {return m_bitmap;}
+    void SetBitmap(const wxBitmapBundle& bitmap) {m_bitmap = bitmap;}
+    const wxBitmapBundle& GetBitmapBundle() const {return m_bitmap;}
+    wxBitmap GetBitmap(wxWindow* wnd) const {return m_bitmap.GetBitmapFor(wnd);}
     void SetIsVisible(bool visible) {m_is_visible = visible;}
     void SetPosition(int x, int y, const wxSize& size)
     {
@@ -54,7 +55,7 @@ public:
     void *GetClientData() const {return m_client_data.GetClientData();}
 
 protected:
-    wxBitmap m_bitmap;
+    wxBitmapBundle m_bitmap;
     wxClientDataContainer m_client_data;
     wxRect m_position;
     int m_id = 0;
@@ -71,6 +72,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)
     EVT_MOTION(wxRibbonGallery::OnMouseMove)
     EVT_PAINT(wxRibbonGallery::OnPaint)
     EVT_SIZE(wxRibbonGallery::OnSize)
+    EVT_DPI_CHANGED(wxRibbonGallery::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 wxRibbonGallery::wxRibbonGallery()
@@ -458,7 +460,7 @@ bool wxRibbonGallery::ScrollPixels(int pixels)
 
 void wxRibbonGallery::EnsureVisible(const wxRibbonGalleryItem* item)
 {
-    if(item == nullptr || !item->IsVisible() || IsEmpty())
+    if(item == nullptr || !item->IsVisible() || IsEmpty() || m_art == nullptr )
         return;
 
     if(m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
@@ -518,8 +520,11 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
         else
             offset_pos.SetLeft(offset_pos.GetLeft() - m_scroll_amount);
         m_art->DrawGalleryItemBackground(dc, this, offset_pos, item);
-        dc.DrawBitmap(item->GetBitmap(), offset_pos.GetLeft() + padding_left,
-            offset_pos.GetTop() + padding_top);
+        // Resolve bitmap bundle for current DPI
+        wxBitmap bmp = item->GetBitmap(this);
+        if (bmp.IsOk())
+            dc.DrawBitmap(bmp, offset_pos.GetLeft() + padding_left,
+                offset_pos.GetTop() + padding_top);
     }
 }
 
@@ -528,17 +533,23 @@ void wxRibbonGallery::OnSize(wxSizeEvent& WXUNUSED(evt))
     Layout();
 }
 
-wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id)
+void wxRibbonGallery::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    Realize();
+    event.Skip();
+}
+
+wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id)
 {
     wxASSERT(bitmap.IsOk());
     if(m_items.IsEmpty())
     {
-        m_bitmap_size = bitmap.GetLogicalSize();
+        m_bitmap_size = bitmap.GetDefaultSize();
         CalculateMinSize();
     }
     else
     {
-        wxASSERT(bitmap.GetLogicalSize() == m_bitmap_size);
+        wxASSERT(bitmap.GetDefaultSize() == m_bitmap_size);
     }
 
     wxRibbonGalleryItem *item = new wxRibbonGalleryItem;
@@ -548,7 +559,7 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id)
     return item;
 }
 
-wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id,
+wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id,
                                              void* clientData)
 {
     wxRibbonGalleryItem *item = Append(bitmap, id);
@@ -556,7 +567,7 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id,
     return item;
 }
 
-wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id,
+wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id,
                                              wxClientData* clientData)
 {
     wxRibbonGalleryItem *item = Append(bitmap, id);
@@ -574,6 +585,10 @@ void wxRibbonGallery::Clear()
         delete item;
     }
     m_items.Clear();
+
+    m_selected_item = nullptr;
+    m_hovered_item = nullptr;
+    m_active_item = nullptr;
 }
 
 bool wxRibbonGallery::IsSizingContinuous() const

@@ -14,6 +14,8 @@ include(GNUInstallDirs)
 
 # List of libraries added via wx_add_library() to use for wx-config
 set(wxLIB_TARGETS)
+# List of the (static) builtin libraries to use in wxWidgetsConfig.cmake
+set(wxLIB_BUILTIN_TARGETS)
 # List of headers added via wx_append_sources() to use for install
 set(wxINSTALL_HEADERS)
 # List of files not included in the install manifest
@@ -87,6 +89,42 @@ endmacro()
 macro(wx_install)
     if(wxBUILD_INSTALL)
         install(${ARGN})
+    endif()
+endmacro()
+
+# wx_install_symlink(...)
+# Create symlink dst pointing to src
+# try different symlink and copy methods until one succeeds
+macro(wx_install_symlink src dst)
+    if(wxBUILD_INSTALL)
+        install(CODE "
+            set(SYMLINK_SRC \"${src}\")
+            set(SYMLINK_DST \"${dst}\")
+            message(STATUS \"Installing: \${SYMLINK_DST}\")
+
+            if(CMAKE_VERSION GREATER_EQUAL \"3.17\")
+                execute_process(COMMAND \"\${CMAKE_COMMAND}\" -E rm -f \"\${SYMLINK_DST}\")
+            else()
+                execute_process(COMMAND \"\${CMAKE_COMMAND}\" -E remove -f \"\${SYMLINK_DST}\")
+            endif()
+
+            set(SYMLINK_RES 1)
+            set(wxBUILD_INSTALL_USE_SYMLINK ${wxBUILD_INSTALL_USE_SYMLINK})
+            if(wxBUILD_INSTALL_USE_SYMLINK)
+                if(SYMLINK_RES)
+                    execute_process(COMMAND ln -s --relative \"\${SYMLINK_SRC}\" \"\${SYMLINK_DST}\" RESULT_VARIABLE SYMLINK_RES OUTPUT_QUIET ERROR_QUIET)
+                endif()
+                if(SYMLINK_RES)
+                    execute_process(COMMAND ln -s \"\${SYMLINK_SRC}\" \"\${SYMLINK_DST}\" RESULT_VARIABLE SYMLINK_RES OUTPUT_QUIET ERROR_QUIET)
+                endif()
+                if(SYMLINK_RES)
+                    execute_process(COMMAND \"\${CMAKE_COMMAND}\" -E create_symlink \"\${SYMLINK_SRC}\" \"\${SYMLINK_DST}\" RESULT_VARIABLE SYMLINK_RES)
+                endif()
+            endif()
+            if(SYMLINK_RES)
+                execute_process(COMMAND \"\${CMAKE_COMMAND}\" -E copy \"\${SYMLINK_SRC}\" \"\${SYMLINK_DST}\" RESULT_VARIABLE SYMLINK_RES)
+            endif()
+        ")
     endif()
 endmacro()
 
@@ -362,13 +400,13 @@ function(wx_set_target_properties target_name)
     # Set common compile definitions
     target_compile_definitions(${target_name} PRIVATE WXBUILDING)
     if(wxTARGET_IS_MONO AND wxUSE_GUI)
-        target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=1)
+        target_compile_definitions(${target_name} PUBLIC wxUSE_GUI=1 PRIVATE wxUSE_BASE=1)
     elseif(wxTARGET_IS_PLUGIN)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=0)
     elseif(wxTARGET_IS_BASE OR NOT wxUSE_GUI)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
     else()
-        target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=0)
+        target_compile_definitions(${target_name} PUBLIC wxUSE_GUI=1 PRIVATE wxUSE_BASE=0)
     endif()
 
     if(MSVC)
@@ -382,9 +420,10 @@ function(wx_set_target_properties target_name)
     endif()
 
     if(WIN32)
-        target_compile_definitions(${target_name} PUBLIC UNICODE)
+        # not needed for wxWidgets anymore (it is always built with unicode)
+        # but keep it here so IDEs like Visual Studio know what character set is used
+        target_compile_definitions(${target_name} PRIVATE UNICODE _UNICODE)
     endif()
-    target_compile_definitions(${target_name} PUBLIC _UNICODE)
 
     wx_get_install_dir(library)
     file(RELATIVE_PATH wxSETUP_HEADER_REL ${wxOUTPUT_DIR} ${wxSETUP_HEADER_PATH})
@@ -396,11 +435,6 @@ function(wx_set_target_properties target_name)
             $<INSTALL_INTERFACE:${library_dir}/${wxSETUP_HEADER_REL}>
             $<INSTALL_INTERFACE:${wxINSTALL_INCLUDE_DIR}>
         )
-
-    if(wxTOOLKIT_INCLUDE_DIRS AND NOT wxTARGET_IS_BASE)
-        target_include_directories(${target_name}
-            PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
-    endif()
 
     if (WIN32)
         set(WIN32_LIBRARIES
@@ -430,12 +464,28 @@ function(wx_set_target_properties target_name)
             PUBLIC ${WIN32_LIBRARIES})
     endif()
 
-    if(wxTOOLKIT_LIBRARIES AND NOT wxTARGET_IS_BASE)
-        target_link_libraries(${target_name}
-            PUBLIC ${wxTOOLKIT_LIBRARIES})
+    if(wxTARGET_IS_BASE)
+        # Currently base libraries still use toolkit definitions internally.
+        # This is wrong and should, ideally, be fixed, but for now keep
+        # defining them. However we don't need to define this for the targets
+        # using the base library.
+        if(wxTOOLKIT_DEFINITIONS)
+            target_compile_definitions(${target_name} PRIVATE ${wxTOOLKIT_DEFINITIONS})
+        endif()
+    else()
+        if(wxTOOLKIT_INCLUDE_DIRS)
+            target_include_directories(${target_name} PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
+        endif()
+        if(wxTOOLKIT_LIBRARY_DIRS)
+            target_link_directories(${target_name} PUBLIC ${wxTOOLKIT_LIBRARY_DIRS})
+        endif()
+        if(wxTOOLKIT_LIBRARIES)
+            target_link_libraries(${target_name} PUBLIC ${wxTOOLKIT_LIBRARIES})
+        endif()
+        if(wxTOOLKIT_DEFINITIONS)
+            target_compile_definitions(${target_name} PUBLIC ${wxTOOLKIT_DEFINITIONS})
+        endif()
     endif()
-    target_compile_definitions(${target_name}
-        PUBLIC ${wxTOOLKIT_DEFINITIONS})
 
     if(wxBUILD_SHARED)
         string(TOUPPER ${target_name_short} target_name_upper)
@@ -538,7 +588,11 @@ macro(wx_add_library name)
         )
 
         if(wxBUILD_SHARED AND MSVC AND wxBUILD_INSTALL_PDB)
-            wx_install(FILES $<TARGET_PDB_FILE:${name}> DESTINATION "${runtime_dir}")
+            if(wxBUILD_STRIPPED_RELEASE)
+                wx_install(FILES $<TARGET_PDB_FILE:${name}> DESTINATION "${runtime_dir}" CONFIGURATIONS Debug RelWithDebInfo)
+            else()
+                wx_install(FILES $<TARGET_PDB_FILE:${name}> DESTINATION "${runtime_dir}")
+            endif()
         endif()
 
         wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
@@ -684,9 +738,7 @@ function(wx_set_builtin_target_properties target_name)
     endif()
 
     if(WIN32)
-        # not needed for wxWidgets anymore (it is always built with unicode)
-        # but keep it here so applications linking to wxWidgets will inherit it
-        target_compile_definitions(${target_name} PUBLIC UNICODE _UNICODE)
+        target_compile_definitions(${target_name} PRIVATE UNICODE _UNICODE)
     endif()
 
     target_include_directories(${target_name} BEFORE PRIVATE ${wxSETUP_HEADER_PATH})
@@ -706,6 +758,9 @@ endfunction()
 
 # Add a third party builtin library
 function(wx_add_builtin_library name)
+    list(APPEND wxLIB_BUILTIN_TARGETS ${name})
+    set(wxLIB_BUILTIN_TARGETS ${wxLIB_BUILTIN_TARGETS} PARENT_SCOPE)
+
     wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
 
     list(GET src_list 0 src_file)
@@ -741,6 +796,8 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
 
     if(NOT wxUSE_SYS_LIBS)
         set(thirdparty_lib_default builtin)
+    elseif(THIRDPARTY_DEFAULT STREQUAL "OFF")
+        set(thirdparty_lib_default OFF)
     elseif(THIRDPARTY_DEFAULT)
         set(thirdparty_lib_default ${THIRDPARTY_DEFAULT})
     elseif(THIRDPARTY_DEFAULT_APPLE AND APPLE)
@@ -955,17 +1012,16 @@ function(wx_add name group)
     endif()
 
     # All applications use at least the base library other libraries
-    # will have to be added with wx_link_sample_libraries()
-    wx_exe_link_libraries(${target_name} wxbase)
-    if(NOT APP_CONSOLE)
-        # UI applications always require core
-        wx_exe_link_libraries(${target_name} wxcore)
+    if(APP_CONSOLE)
+        wx_exe_link_libraries(${target_name} wxbase_only)
     else()
-        target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
+        wx_exe_link_libraries(${target_name} wxcore)
     endif()
+
     if(APP_LIBRARIES)
         wx_exe_link_libraries(${target_name} ${APP_LIBRARIES})
     endif()
+
     if(APP_DEFINITIONS)
         target_compile_definitions(${target_name} PRIVATE ${APP_DEFINITIONS})
     endif()
@@ -1046,13 +1102,6 @@ function(wx_add name group)
     endif()
 endfunction()
 
-# Link libraries to a sample
-function(wx_link_sample_libraries name)
-    if(TARGET ${name})
-        target_link_libraries(${name} PUBLIC ${ARGN})
-    endif()
-endfunction()
-
 # Add a option and mark is as advanced if it starts with wxUSE_
 # wx_option(<name> <desc> [default] [STRINGS strings])
 # The default is ON if not third parameter is specified
@@ -1099,7 +1148,13 @@ endfunction()
 # just a warning otherwise, while ON means that an error is given if it can't
 # be enabled.
 function(wx_option_auto name desc)
-    wx_option(${name} ${desc} AUTO STRINGS ON OFF AUTO)
+    cmake_parse_arguments(OPTION "" "" "STRINGS" ${ARGN})
+    if(ARGC EQUAL 2)
+        set(default AUTO)
+    else()
+        set(default ${OPTION_UNPARSED_ARGUMENTS})
+    endif()
+    wx_option(${name} ${desc} ${default} STRINGS ON OFF AUTO)
 endfunction()
 
 # Force a new value for an option created with wx_option

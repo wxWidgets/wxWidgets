@@ -523,8 +523,8 @@ public:
     /**
         Draw a title bar button in the given state.
 
-        This function is currently only available under MSW and macOS (and only
-        for wxTITLEBAR_BUTTON_CLOSE under the latter), its best replacement for
+        This function is currently only available in wxMSW, wxOSX (only for
+        wxTITLEBAR_BUTTON_CLOSE) and wxQt ports, its best replacement for
         the other platforms is to use wxArtProvider to retrieve the bitmaps for
         @c wxART_HELP and @c wxART_CLOSE (but not any other title bar buttons
         and not for any state but normal, i.e. not pressed and not current one).

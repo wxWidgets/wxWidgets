@@ -1036,7 +1036,7 @@ bool wxTextCtrl::IsEmpty() const
     return wxTextCtrlBase::IsEmpty();
 }
 
-wxString wxTextCtrl::GetValue() const
+wxString wxTextCtrl::DoGetValue() const
 {
     // range 0..-1 is special for GetRange() and means to retrieve all text
     return GetRange(0, -1);
@@ -1096,9 +1096,7 @@ wxString wxTextCtrl::GetRange(long from, long to) const
     else
 #endif // wxUSE_RICHEDIT
     {
-        // retrieve all text: wxTextEntry method works even for multiline
-        // controls and must be used for single line ones to account for hints
-        str = wxTextEntry::GetValue();
+        str = wxTextEntry::DoGetValue();
 
         // need only a range?
         if ( from < to )
@@ -1303,7 +1301,24 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
         if ( !m_defaultStyle.IsDefault() )
         {
             long start, end;
-            GetSelection(&start, &end);
+
+            // For the selection style to be taken into account, we must use
+            // EM_REPLACESEL below, WM_SETTEXT ignores the style, so ensure
+            // that we do, selecting all the text if necessary to do the same
+            // thing as WM_SETTEXT would do.
+            if ( !selectionOnly )
+            {
+                start = 0;
+                end = GetLastPosition();
+                SetSelection(start, end); // Select everything.
+
+                selectionOnly = true;
+            }
+            else // We're already only overwriting the selection.
+            {
+                GetSelection(&start, &end);
+            }
+
             SetStyle(start, end, m_defaultStyle);
         }
     }

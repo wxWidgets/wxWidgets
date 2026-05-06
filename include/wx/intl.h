@@ -210,16 +210,16 @@ public:
     //
     // domains are searched in the last to first order, i.e. catalogs
     // added later override those added before.
-    const wxString& GetString(const wxString& origString,
-                              const wxString& domain = wxEmptyString) const
+    wxString GetString(const wxString& origString,
+                       const wxString& domain = wxEmptyString) const
     {
         return wxGetTranslation(origString, domain);
     }
     // plural form version of the same:
-    const wxString& GetString(const wxString& origString,
-                              const wxString& origString2,
-                              unsigned n,
-                              const wxString& domain = wxEmptyString) const
+    wxString GetString(const wxString& origString,
+                       const wxString& origString2,
+                       unsigned n,
+                       const wxString& domain = wxEmptyString) const
     {
         return wxGetTranslation(origString, origString2, n, domain);
     }

@@ -168,6 +168,19 @@ public:
     wxSize GetPPI() const;
 
     /**
+        Returns raw display resolution in pixels per inch, i.e.\ without
+        applying any scaling.
+
+        Horizontal and vertical resolution are returned in @c x and @c y
+        components of the wxSize object respectively.
+
+        If the resolution information is not available, returns `wxSize(0, 0)`.
+
+        @since 3.3.2
+     */
+    wxSize GetRawPPI() const;
+
+    /**
         Returns scaling factor used by this display.
 
         The scaling factor is the ratio between GetPPI() and GetStdPPI()

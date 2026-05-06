@@ -93,6 +93,7 @@ protected:
 
 #ifndef DPI_ENUMS_DECLARED
     #define MDT_EFFECTIVE_DPI 0
+    #define MDT_RAW_DPI 2
 #endif
 
 namespace
@@ -131,6 +132,7 @@ public:
     virtual wxRect GetClientArea() const override;
     virtual int GetDepth() const override;
     virtual wxSize GetPPI() const override;
+    virtual wxSize GetRawPPI() const override;
     virtual double GetScaleFactor() const override;
 
     virtual wxString GetName() const override;
@@ -160,6 +162,12 @@ protected:
     wxDisplayInfo m_info;
 
 private:
+    // Wrapper around GetDpiForMonitor() call: check if it's available and for
+    // its success.
+    //
+    // Return wxSize(0, 0) on failure.
+    wxSize CallGetDpiForMonitor(int type) const;
+
     wxDECLARE_NO_COPY_CLASS(wxDisplayMSW);
 };
 
@@ -321,7 +329,7 @@ int wxDisplayMSW::GetDepth() const
     return m_info.depth;
 }
 
-wxSize wxDisplayMSW::GetPPI() const
+wxSize wxDisplayMSW::CallGetDpiForMonitor(int type) const
 {
     if ( const wxDisplayFactoryMSW::GetDpiForMonitor_t
             getFunc = wxDisplayFactoryMSW::GetDpiForMonitorPtr() )
@@ -329,14 +337,32 @@ wxSize wxDisplayMSW::GetPPI() const
         UINT dpiX = 0,
              dpiY = 0;
         const HRESULT
-            hr = (*getFunc)(m_info.hmon, MDT_EFFECTIVE_DPI, &dpiX, &dpiY);
+            hr = (*getFunc)(m_info.hmon, type, &dpiX, &dpiY);
         if ( SUCCEEDED(hr) )
             return wxSize(dpiX, dpiY);
 
         wxLogApiError("GetDpiForMonitor", hr);
     }
 
-    return IsPrimary() ? wxDisplayImplSingleMSW().GetPPI() : wxSize(0, 0);
+    return wxSize();
+}
+
+wxSize wxDisplayMSW::GetPPI() const
+{
+    wxSize ppi = CallGetDpiForMonitor(MDT_EFFECTIVE_DPI);
+    if ( ppi.IsEmpty() && IsPrimary() )
+        ppi = wxDisplayImplSingleMSW().GetPPI();
+
+    return ppi;
+}
+
+wxSize wxDisplayMSW::GetRawPPI() const
+{
+    wxSize ppi = CallGetDpiForMonitor(MDT_RAW_DPI);
+    if ( ppi.IsEmpty() && IsPrimary() )
+        ppi = wxDisplayImplSingleMSW().GetRawPPI();
+
+    return ppi;
 }
 
 double wxDisplayMSW::GetScaleFactor() const

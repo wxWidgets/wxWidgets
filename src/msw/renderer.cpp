@@ -78,16 +78,8 @@ protected:
     // adjusted for the given wxDC.
     static RECT ConvertToRECT(wxDC& dc, const wxRect& rect)
     {
-        // Theme API doesn't know anything about GDI+ transforms, so apply them
-        // manually.
-        wxRect rectDevice = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
-
-        // We also need to handle the origin offset manually as we don't use
-        // Windows support for this, see wxDC code.
-        rectDevice.Offset(dc.GetDeviceOrigin());
-
         RECT rc;
-        wxCopyRectToRECT(rectDevice, rc);
+        wxCopyRectToRECT(dc.GetImpl()->MSWApplyWXTransform(rect), rc);
         return rc;
     }
 };
@@ -937,7 +929,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
                                     const wxRect& rect,
                                     int flags)
 {
-    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW", L"DarkMode_ItemsView::LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
@@ -964,7 +956,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                                 int flags,
                                 wxEllipsizeMode ellipsizeMode)
 {
-    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW", L"DarkMode_ItemsView::LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
@@ -980,7 +972,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         wxColour textColour = dc.GetTextForeground();
         if (flags & wxCONTROL_SELECTED)
         {
-            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+            textColour = hTheme.GetColour(LVP_LISTITEM, TMT_TEXTCOLOR, LISS_SELECTED);
         }
         else if (flags & wxCONTROL_DISABLED)
         {

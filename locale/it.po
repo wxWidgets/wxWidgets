@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets revised 31.10.2024 by bovirus\n"
+"Project-Id-Version: wxWidgets - it - 03.03.2026 - by bovirus\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2024-10-31 10:00+0100\n"
+"PO-Revision-Date: 2026-03-03 20:33+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@googlegroups.com>\n"
 "Language: it\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../include/wx/defs.h:2582
@@ -714,7 +714,6 @@ msgid "SPECIAL"
 msgstr "SPECIALE"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
@@ -1321,27 +1320,25 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" inoltre, il file di configurazione esistente è stato rinominato in \"%s\" e "
+"non è stato possibile rinominarlo nuovamente, rinominalo nel percorso "
+"originale \"%s\""
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "E includi i seguenti file:\n"
+msgstr " a causa del seguente errore:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Impossibile leggere il file di testo \"%s\"."
+msgstr "impossibile rinominare il file esistente"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Impossibile determinare la cartella di lavoro"
+msgstr "impossibile creare la nuova cartella dei file"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr ""
-"Impossibile impostare la visualizzazione web al livello di emulazione moderno"
+msgstr "impossibile spostare il file nel nuovo percorso"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1400,9 +1397,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "Il nome di una voce di configurazione non può iniziare con '%c'."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Impossibile creare l'oggetto di configurazione della font."
+msgstr "Impossibile creare la cartella del file di configurazione."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -1921,7 +1917,7 @@ msgstr "Mac tastiera glyphs"
 
 #: ../src/common/fmapbase.cpp:791
 msgid "Default encoding"
-msgstr "Codifca predefinita"
+msgstr "CodifIca predefinita"
 
 #: ../src/common/fmapbase.cpp:805
 #, c-format
@@ -2045,8 +2041,8 @@ msgid ""
 "[Cancel] if it cannot be replaced"
 msgstr ""
 "Il set di caratteri '%s' è sconosciuto.\n"
-"È possibile sceglierne un altro in sostituzione oppure scegliere [Annulla] "
-"se non può essere sostituito."
+"È possibile sceglierne un altro in sostituzione oppure\n"
+" scegliere [Annulla] se non può essere sostituito."
 
 #: ../src/common/fontmap.cpp:241
 #, c-format
@@ -2112,7 +2108,7 @@ msgstr ""
 #: ../src/common/ftp.cpp:399
 #, c-format
 msgid "Failed to set FTP transfer mode to %s."
-msgstr "Impossibile impostare la modalità di trasferimneto FTP %s.."
+msgstr "Impossibile impostare la modalità di trasferimento FTP %s.."
 
 #: ../src/common/ftp.cpp:400 ../src/richtext/richtextsymboldlg.cpp:432
 msgid "ASCII"
@@ -2181,11 +2177,11 @@ msgstr "BMP: l'oggetto wxImage non ha una propria wxPalette."
 
 #: ../src/common/imagbmp.cpp:243
 msgid "BMP: Couldn't write the file (Bitmap) header."
-msgstr "BMP: Impossibile scrivere l'header (Bitmap) del file."
+msgstr "BMP: Impossibile scrivere l'intestazione (bitmap) del file."
 
 #: ../src/common/imagbmp.cpp:266
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
-msgstr "BMP: Impossibile scrivere l'header (BitmapInfo) del file."
+msgstr "BMP: Impossibile scrivere l'intestazione (BitmapInfo) del file."
 
 #: ../src/common/imagbmp.cpp:353
 msgid "BMP: Couldn't write RGB color map."
@@ -2224,7 +2220,7 @@ msgstr ""
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "Intestazione BMP: numero colori non valido (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2434,7 +2430,7 @@ msgstr "Indice dell'immagine TIFF non valido."
 
 #: ../src/common/imagtiff.cpp:358
 msgid "TIFF: Image size is abnormally big."
-msgstr "TIFF: dimensione immaggine esageratamenet grande."
+msgstr "TIFF: dimensione immagine esageratamente grande."
 
 #: ../src/common/imagtiff.cpp:372 ../src/common/imagtiff.cpp:385
 #: ../src/common/imagtiff.cpp:769
@@ -2459,43 +2455,40 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: errore durante la scrittura dell'immagine."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: errore nel salvataggio dell'immagine."
+msgstr "TIFF: errore durante lo scaricamento dei dati."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: dati non validi (impossibile ottenere funzionalità)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: allocazione memoria immagine non riuscita."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: decodifica dati immagine RGBA non riuscita."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: decodifica dati immagine RGB non riuscita."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: allocazione buffer flusso non riuscita."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "Impossibile scrivere i dati degli appunti."
+msgstr "WebP: impossibile analizzare i dati del contenitore."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "Errore durante la lettura del file di configurazione."
+msgstr "WebP: errore nella decodifica dell'animazione."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: errore durante il recupero del fotogramma animazione successivo."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -3979,15 +3972,17 @@ msgid "Error: %s (%d)"
 msgstr "Errore: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "Spazio su disco insufficiente per il download."
+msgstr ""
+"Spazio libero nel disco insufficiente per il download: %llu necessarii ma "
+"solo %llu disponibili."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Impossibile creare il nome per il file temporaneo"
+msgstr "Impossibile creare il file temporaneo in %s"
 
 #: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
@@ -4003,33 +3998,34 @@ msgid "Error running JavaScript: %s"
 msgstr "Errore durante l'esecuzione del file JavaScript: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Impossibile creare la cartella \"%s\""
+msgstr "Impossibile impostare il proxy \"%s\": %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromium non può essere usato perché libcef.so non è stato caricato "
+"abbastanza presto; ricollega l'applicazione o usa LD_PRELOAD per caricarlo "
+"prima."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "Impossibile inizializzare OLE"
+msgstr "Impossibile inizializzare Chromium"
 
 #: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
-msgstr ""
+msgstr "Visualizza strumenti sviluppo"
 
 #: ../src/common/webview_chromium.cpp:1617
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Chiudi &tutto"
+msgstr "Chiudi strumenti sviluppo"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "Ispeziona"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4436,11 +4432,11 @@ msgstr "Destra"
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
 msgstr ""
+"\"%s\" non è nel formato data previsto, inseriscilo ad es. come \"%s\"."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "PCX: immagine non valida"
+msgstr "Data non valida"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4502,7 +4498,7 @@ msgstr "Anteprima &della segnalazione di errore:"
 
 #: ../src/generic/dbgrptg.cpp:339
 msgid "&View..."
-msgstr "&Visalizza..."
+msgstr "&Visualizza..."
 
 #: ../src/generic/dbgrptg.cpp:359
 msgid "&Notes:"
@@ -4724,7 +4720,7 @@ msgstr "Visualizza i file - elenco"
 
 #: ../src/generic/filedlgg.cpp:197
 msgid "View files as a detailed view"
-msgstr "Visalizza file - dettagli"
+msgstr "Visualizza file - dettagli"
 
 #: ../src/generic/filedlgg.cpp:200
 msgid "Go to parent directory"
@@ -4743,7 +4739,7 @@ msgstr "Conferma"
 
 #: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
 msgid "Please choose an existing file."
-msgstr "Segli un file esistente."
+msgstr "Scegli un file esistente."
 
 #: ../src/generic/filepickerg.cpp:64
 msgid "..."
@@ -4860,36 +4856,37 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Errore durante la copia della griglia negli appunti. Le celle selezionate "
+"non erano contigue oppure non era stata selezionata alcuna cella."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Angolo"
+msgstr "Angolo griglia"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Colonna %u"
+msgstr "Intestazione colonna %s"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "Intestazione riga %s"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Colonna %u"
+msgstr "Colonna %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "Colonna %i"
+msgstr "Riga %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Riga %s, colonna %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -5220,7 +5217,7 @@ msgstr ""
 
 #: ../src/gtk/app.cpp:569
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
-msgstr "Impossibile inzializzare GTK+, DISPLAY impostato correttamente?"
+msgstr "Impossibile inizializzare GTK+, DISPLAY impostato correttamente?"
 
 #: ../src/gtk/filedlg.cpp:89 ../src/gtk/filepicker.cpp:255
 #, c-format
@@ -5282,40 +5279,39 @@ msgid "MDI child"
 msgstr "Figlio MDI"
 
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr "Impossibile creare la connessione al server '%s' sull'argomento '%s'"
+msgstr "Impossibile aprire la connessione D-Bus al gestore degli accessi: %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "Nascondi applicazione"
+msgstr "applicazione wxWidgets"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "L'applicazione deve continuare a funzionare"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "Pulisci prima di sospendere"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Impossibile inizializzare connessione dialup: %s"
+msgstr "Impossibile inibire la sospensione: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "Risposta non prevista alla richiesta \"Inibisci\" D-Bus."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Dimensione personalizzata"
 
 #: ../src/gtk/print.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Errore durante la stampa: "
+msgstr "Errore durante la stampa: %s"
 
 #: ../src/gtk/print.cpp:816
 msgid "Page Setup"
@@ -5331,10 +5327,14 @@ msgstr ""
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"L'impostazione del proxy non è supportata da WebKit, è richiesta almeno la "
+"versione 2.16."
 
 #: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
+"Questo programma è stato compilato senza supporto per l'impostazione del "
+"proxy WebKit."
 
 #: ../src/gtk/window.cpp:6289
 msgid ""
@@ -5738,9 +5738,9 @@ msgstr ": il file non esiste!"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " Anteprima"
+msgstr "Anteprima %s"
 
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
@@ -5938,7 +5938,7 @@ msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
 msgstr ""
-"Funzionalità di composizione telefonica non disponibili perchè il servizio "
+"Funzionalità di composizione telefonica non disponibili perché il servizio "
 "di Accesso Remoto (RAS) non è installato su questo computer. Installa il "
 "servizio."
 
@@ -6058,11 +6058,11 @@ msgstr ""
 
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
-msgstr ""
+msgstr "L'accesso al file system non è consentito dal desktop protetto."
 
 #: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "Avviso sicurezza"
 
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
@@ -6081,7 +6081,7 @@ msgstr "Finestra di dialogo comune fallita con codice errore %0lx."
 
 #: ../src/msw/fswatcher.cpp:67
 msgid "Ungraceful worker thread termination"
-msgstr "Chiusra del thread inaspettata"
+msgstr "Chiusura del thread inaspettata"
 
 #: ../src/msw/fswatcher.cpp:81
 msgid "Unable to create IOCP worker thread"
@@ -6130,7 +6130,7 @@ msgid ""
 "MS HTML Help functions are unavailable because the MS HTML Help library is "
 "not installed on this machine. Please install it."
 msgstr ""
-"Funzionalità Guida HTML MS non disponibili perchè la relativa libreria non è "
+"Funzionalità Guida HTML MS non disponibili perché la relativa libreria non è "
 "installata in questo computer. Installa la libreria."
 
 #: ../src/msw/helpchm.cpp:55
@@ -6190,7 +6190,7 @@ msgstr "Impossibile ottenere una istanza attiva di \"%s\""
 #: ../src/msw/ole/automtn.cpp:564
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
-msgstr "Impossibile ottenere intrefaccia automazione OLE per \"%s\""
+msgstr "Impossibile ottenere interfaccia automazione OLE per \"%s\""
 
 #: ../src/msw/ole/automtn.cpp:621
 msgid "Unknown name or named argument."
@@ -6429,8 +6429,7 @@ msgid ""
 "Please reinstall riched32.dll"
 msgstr ""
 "Impossibile creare un controllo Rich Edit, impiegato un controllo di tipo "
-"testo semplice.\n"
-"Reinstalla riched32.dll."
+"testo semplice. Reinstalla riched32.dll."
 
 #: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:850
 msgid "Cannot start thread: error writing TLS."
@@ -6546,6 +6545,8 @@ msgstr "Impossibile caricare l'icona da '%s'."
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr ""
+"Questo programma è stato compilato senza supporto per l'impostazione del "
+"proxy Edge."
 
 #: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
@@ -7144,7 +7145,7 @@ msgstr "Scegli un file"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&Piastrella"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -7382,7 +7383,7 @@ msgstr "Abilita diffusione ombra."
 #: ../src/richtext/richtextbackgroundpage.cpp:281
 #: ../src/richtext/richtextbackgroundpage.cpp:283
 msgid "The shadow spread."
-msgstr "La diffusione ombraggiatura."
+msgstr "La diffusione ombreggiatura."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:297
 msgid "&Blur distance:"
@@ -7734,7 +7735,7 @@ msgstr "Stile &punto:"
 #: ../src/richtext/richtextliststylepage.cpp:214
 #: ../src/richtext/richtextliststylepage.cpp:216
 msgid "The available bullet styles."
-msgstr "Tipi di puntatura disponibili."
+msgstr "Tipi di punti elenco disponibili."
 
 #: ../src/richtext/richtextbulletspage.cpp:158
 #: ../src/richtext/richtextliststylepage.cpp:221
@@ -7759,7 +7760,7 @@ msgstr "(*)"
 #: ../src/richtext/richtextliststylepage.cpp:232
 #: ../src/richtext/richtextliststylepage.cpp:234
 msgid "Check to enclose the bullet in parentheses."
-msgstr "Spunta pe racchiudere la puntatura in una coppia di parentesi."
+msgstr "Spunta per racchiudere i punti elenco in una coppia di parentesi."
 
 #. TRANSLATORS: Right parenthesis bullet point option
 #: ../src/richtext/richtextbulletspage.cpp:176
@@ -7849,7 +7850,7 @@ msgstr "Il numero della voce dell'elenco."
 #: ../src/richtext/richtextliststylepage.cpp:475
 #: ../src/richtext/richtextliststylepage.cpp:477
 msgid "Shows a preview of the bullet settings."
-msgstr "Visualizza l'anteprima delle impostazioni di puntatura."
+msgstr "Visualizza l'anteprima delle impostazioni punti elenco."
 
 #: ../src/richtext/richtextbulletspage.cpp:276
 #: ../src/richtext/richtextliststylepage.cpp:484
@@ -8055,7 +8056,7 @@ msgstr "&Apice"
 #: ../src/richtext/richtextfontpage.cpp:297
 #: ../src/richtext/richtextfontpage.cpp:299
 msgid "Check to show the text in superscript."
-msgstr "Spunta pe visualizzare il testo ome apice."
+msgstr "Spunta per visualizzare il testo come apice."
 
 #: ../src/richtext/richtextfontpage.cpp:302
 msgid "Subscrip&t"
@@ -8123,7 +8124,7 @@ msgstr "Tabulazioni"
 
 #: ../src/richtext/richtextformatdlg.cpp:351
 msgid "Bullets"
-msgstr "Puntatura"
+msgstr "Punti elenco"
 
 #: ../src/richtext/richtextformatdlg.cpp:356
 msgid "List Style"
@@ -8481,7 +8482,7 @@ msgstr " Anteprima"
 
 #: ../src/richtext/richtextsizepage.cpp:228
 msgid "Floating"
-msgstr "Flottuante"
+msgstr "Flottante"
 
 #: ../src/richtext/richtextsizepage.cpp:243
 msgid "&Floating mode:"
@@ -9276,7 +9277,7 @@ msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
 msgstr ""
-"Impossibile esegure la join su di un thread, possibile memoria persa (leak) "
+"Impossibile eseguire la join su di un thread, possibile memoria persa (leak) "
 "- esegui nuovamente il programma"
 
 #: ../src/unix/threadpsx.cpp:1352
@@ -9374,9 +9375,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "Errore durante l'analisi XML: %s alla riga %d"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "Pagina %d"
+msgstr "Pagina %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format

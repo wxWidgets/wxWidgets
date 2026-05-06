@@ -42,3 +42,7 @@
 	path = 3rdparty/libwebp
 	url = https://github.com/wxWidgets/libwebp.git
 	branch = wx
+[submodule "3rdparty/lunasvg"]
+	path = 3rdparty/lunasvg
+	url = https://github.com/wxWidgets/lunasvg.git
+	branch = wx

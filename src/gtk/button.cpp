@@ -135,7 +135,7 @@ bool wxButton::Create(wxWindow *parent,
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
-    if ( useLabel && (style & wxBU_EXACTFIT) )
+    if (style & wxBU_EXACTFIT)
     {
 #ifdef __WXGTK3__
         GTKApplyCssStyle("* { padding:0 }");

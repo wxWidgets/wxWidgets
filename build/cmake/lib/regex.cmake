@@ -23,8 +23,10 @@ if(wxUSE_REGEX STREQUAL "builtin")
     # add_subdirectory or ExternalProject_Add
     wx_add_builtin_library(wxregex
         3rdparty/pcre/src/pcre2_auto_possess.c
+        3rdparty/pcre/src/pcre2_chartables.c
         3rdparty/pcre/src/pcre2_chkdint.c
         3rdparty/pcre/src/pcre2_compile.c
+        3rdparty/pcre/src/pcre2_compile_cgroup.c
         3rdparty/pcre/src/pcre2_compile_class.c
         3rdparty/pcre/src/pcre2_config.c
         3rdparty/pcre/src/pcre2_context.c
@@ -37,6 +39,7 @@ if(wxUSE_REGEX STREQUAL "builtin")
         3rdparty/pcre/src/pcre2_maketables.c
         3rdparty/pcre/src/pcre2_match.c
         3rdparty/pcre/src/pcre2_match_data.c
+        3rdparty/pcre/src/pcre2_match_next.c
         3rdparty/pcre/src/pcre2_newline.c
         3rdparty/pcre/src/pcre2_ord2utf.c
         3rdparty/pcre/src/pcre2_pattern_info.c
@@ -50,7 +53,6 @@ if(wxUSE_REGEX STREQUAL "builtin")
         3rdparty/pcre/src/pcre2_ucd.c
         3rdparty/pcre/src/pcre2_valid_utf.c
         3rdparty/pcre/src/pcre2_xclass.c
-        3rdparty/pcre/src/pcre2_chartables.c
     )
     set(REGEX_LIBRARIES wxregex)
     set(REGEX_INCLUDE_DIRS ${wxSOURCE_DIR}/3rdparty/pcre/src/wx)

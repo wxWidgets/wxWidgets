@@ -90,6 +90,11 @@ public:
 
     virtual void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs) = 0;
 
+    void UseBasicAuth(const wxWebCredentials& cred)
+    {
+        m_basicAuthCred = cred;
+    }
+
     virtual wxWebResponseImplPtr GetResponse() const = 0;
 
     virtual wxWebAuthChallengeImplPtr GetAuthChallenge() const = 0;
@@ -125,6 +130,16 @@ public:
     wxEvtHandler* GetHandler() const { return m_handler; }
 
 protected:
+    // Used by the implementation which don't support preemptive basic
+    // authentication natively.
+    void AddBasicAuthHeaderIfNecessary();
+
+    // Direct access for those that do support it natively (don't use it just
+    // to redo what AddBasicAuthHeaderIfNecessary() does).
+    const wxWebCredentials& GetBasicAuthCredentials() const
+        { return m_basicAuthCred; }
+
+
     wxString m_method;
     wxWebRequest::Storage m_storage = wxWebRequest::Storage_Memory;
     wxWebRequestHeaderMap m_headers;
@@ -204,6 +219,9 @@ private:
     wxWebRequest::State m_state = wxWebRequest::State_Idle;
     wxFileOffset m_bytesReceived = 0;
     wxCharBuffer m_dataText;
+
+    // If not empty, use preemptive basic authentication.
+    wxWebCredentials m_basicAuthCred;
 
     // Initially false, set to true after the first call to Cancel().
     bool m_cancelled = false;
@@ -344,10 +362,21 @@ public:
 
     virtual bool EnablePersistentStorage(bool WXUNUSED(enable)) { return false; }
 
+    void SetDebugLogger(std::unique_ptr<wxWebRequestDebugLogger> logger)
+        { m_debugLogger = std::move(logger); }
+
+    // Return raw, non owning pointer to the debug logger (may be null).
+    wxWebRequestDebugLogger* GetDebugLogger() const
+        { return m_debugLogger.get(); }
+
 protected:
     explicit wxWebSessionImpl(Mode mode);
 
     bool IsAsync() const { return m_mode == Mode::Async; }
+
+
+    // If non-null, use it to log debug information.
+    std::unique_ptr<wxWebRequestDebugLogger> m_debugLogger;
 
 private:
     // Make it a friend to allow accessing our m_headers.

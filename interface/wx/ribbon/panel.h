@@ -190,8 +190,13 @@ public:
         Get the bitmap to be used in place of the panel children when it is
         minimised.
     */
-    wxBitmap& GetMinimisedIcon();
-    const wxBitmap& GetMinimisedIcon() const;
+    wxBitmap GetMinimisedIcon();
+
+    /**
+        Get the bitmap bundle defining the bitmap to be used in place of the
+        panel children when it is minimised.
+    */
+    const wxBitmapBundle& GetMinimisedIconBundle() const;
 
     /**
         Test if the panel has an extension button.

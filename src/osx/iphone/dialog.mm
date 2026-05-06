@@ -24,7 +24,7 @@ extern wxList wxModalDialogs;
 
 void wxDialog::DoShowWindowModal()
 {
-    m_modality = wxDIALOG_MODALITY_APP_MODAL;
+    m_modality = wxWindowMode::AppModal;
     ShowModal();
     SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }

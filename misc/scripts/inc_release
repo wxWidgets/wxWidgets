@@ -39,10 +39,10 @@ run_sed docs/readme.txt \
     "/naming: while/s/$ver_for_sed/$ver_string_new/" 
 
 run_sed docs/release.md \
-    "s/$ver_for_sed/$ver_string_new/"
+    "s/$ver_for_sed/$ver_string_new/g"
 
 run_sed docs/msw/binaries.md \
-    "s/$ver_for_sed/$ver_string_new/"
+    "s/$ver_for_sed/$ver_string_new/g"
 
 run_sed docs/doxygen/Doxyfile \
     "/^PROJECT_NUMBER/s/$ver_for_sed/$ver_string_new/"

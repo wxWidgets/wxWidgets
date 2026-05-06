@@ -126,7 +126,6 @@ library:
 @itemdef{wxUSE_GENERIC_DRAGIMAGE, Used in wxDragImage sample.}
 @itemdef{wxUSE_GENERIC_DRAWELLIPSE, See comment in wx/dc.h file.}
 @itemdef{wxUSE_GENERIC_MDI_AS_NATIVE, This is not a user-settable symbol, it is only used internally in wx/generic/mdig.h.}
-@itemdef{wxUSE_GEOMETRY, Use common geometry classes}
 @itemdef{wxUSE_GIF, Use GIF wxImageHandler}
 @itemdef{wxUSE_GLCANVAS, Enables OpenGL support.}
 @itemdef{wxUSE_GRAPHICS_CONTEXT, Use wxGraphicsContext and related classes.}
@@ -168,6 +167,7 @@ library:
 @itemdef{wxUSE_NANOSVG, Use NanoSVG for rasterizing SVG (this option is new since wxWidgets 3.1.7).}
 @itemdef{wxUSE_NANOSVG_EXTERNAL, Use an external NanoSVG library when wxUSE_NANOSVG is enabled.}
 @itemdef{wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL, When the external NanoSVG library is header only, define this to enable its implementation.}
+@itemdef{wxUSE_LUNASVG, Use LunaSVG for rasterizing SVG (this option is new since wxWidgets 3.3.2).}
 @itemdef{wxUSE_NATIVE_DATAVIEWCTRL, Use native wxDataViewCtrl class (this option is new since wxWidgets 3.1.4).}
 @itemdef{wxUSE_NATIVE_STATUSBAR, Use native wxStatusBar class.}
 @itemdef{wxUSE_NOTEBOOK, Use wxNotebook and related classes.}

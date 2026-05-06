@@ -11,9 +11,9 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include "wx/unix/glx11.h"
+#include "wx/unix/glcanvas.h"
 
-class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasX11
+class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasUnix
 {
 public:
     wxGLCanvas() = default;
@@ -55,7 +55,7 @@ public:
                 const int *attribList = nullptr,
                 const wxPalette& palette = wxNullPalette);
 
-    // implement wxGLCanvasX11 methods
+    // implement wxGLCanvasUnix methods
     // --------------------------------
 
     virtual unsigned long GetXWindow() const;

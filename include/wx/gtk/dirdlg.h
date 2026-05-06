@@ -45,6 +45,7 @@ public:
 
     void GTKOnAccept();
     void GTKOnCancel();
+    void GTKDropNative();
 
 protected:
     // override this from wxTLW since the native

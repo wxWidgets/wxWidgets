@@ -612,9 +612,9 @@ public:
 
     @header{wx/intl.h}
 */
-const wxString& wxGetTranslation(const wxString& string,
-                                 const wxString& domain = wxEmptyString,
-                                 const wxString& context = wxEmptyString);
+wxString wxGetTranslation(const wxString& string,
+                          const wxString& domain = wxEmptyString,
+                          const wxString& context = wxEmptyString);
 
 /**
     This is an overloaded version of
@@ -638,10 +638,10 @@ const wxString& wxGetTranslation(const wxString& string,
 
     @header{wx/intl.h}
 */
-const wxString& wxGetTranslation(const wxString& string,
-                                 const wxString& plural, unsigned n,
-                                 const wxString& domain = wxEmptyString,
-                                 const wxString& context = wxEmptyString);
+wxString wxGetTranslation(const wxString& string,
+                          const wxString& plural, unsigned n,
+                          const wxString& domain = wxEmptyString,
+                          const wxString& context = wxEmptyString);
 
 /**
     Macro to be used around all literal strings that should be translated.

@@ -12,6 +12,8 @@
 #ifndef WX_PRECOMP
 #include "wx/object.h"
 #include "wx/math.h"
+#include "wx/intl.h"
+#include "wx/log.h"
 #endif
 
 #if wxOSX_USE_COCOA_OR_CARBON
@@ -28,19 +30,6 @@
 #include "wx/fontutil.h"
 #include "wx/private/bmpbndl.h"
 
-#ifdef __WXMAC__
-
-wxMacAutoreleasePool::wxMacAutoreleasePool()
-{
-    m_pool = [[NSAutoreleasePool alloc] init];
-}
-
-wxMacAutoreleasePool::~wxMacAutoreleasePool()
-{
-    [(NSAutoreleasePool*)m_pool release];
-}
-
-#endif
 
 #if wxOSX_USE_COCOA
 
@@ -71,26 +60,6 @@ CGContextRef wxOSXGetContextFromCurrentContext()
 }
 
 #endif
-
-// ----------------------------------------------------------------------------
-// NSObject Utils
-// ----------------------------------------------------------------------------
-
-void wxMacCocoaRelease( void* obj )
-{
-    [(NSObject*)obj release];
-}
-
-void wxMacCocoaAutorelease( void* obj )
-{
-    [(NSObject*)obj autorelease];
-}
-
-void* wxMacCocoaRetain( void* obj )
-{
-    [(NSObject*)obj retain];
-    return obj;
-}
 
 // ----------------------------------------------------------------------------
 // NSFont Utils
@@ -699,20 +668,6 @@ wxPoint wxMacCocoaGetCursorHotSpot(WX_NSCursor cursor)
 }
 #endif
 
-//---------------------------------------------------------
-// helper functions for NSString<->wxString conversion
-//---------------------------------------------------------
-
-wxString wxStringWithNSString(NSString *nsstring)
-{
-    return wxString([nsstring UTF8String], wxConvUTF8);
-}
-
-NSString* wxNSStringWithWxString(const wxString &wxstring)
-{
-    return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];
-}
-
 // ----------------------------------------------------------------------------
 // helper class for getting the correct system colors according to the
 // appearance in effect
@@ -740,5 +695,32 @@ wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
         NSAppearance.currentAppearance = (NSAppearance*) formerAppearance;
 #endif
 }
+
+#ifdef __WXDARWIN_OSX__
+
+// Move file or directory to macOS Trash using NSFileManager.
+bool wxMoveToTrash(const wxString& path)
+{
+    wxCFStringRef cfPath(path);
+    NSURL *fileURL = [NSURL fileURLWithPath:cfPath.AsNSString()];
+    if ( fileURL == nil )
+        return false;
+
+    NSError *error = nil;
+    BOOL ok = [[NSFileManager defaultManager] trashItemAtURL:fileURL
+                                            resultingItemURL:nil
+                                                       error:&error];
+    if ( !ok )
+    {
+        wxLogError(_("'%s' couldn't be moved to trash: %s"),
+                   path,
+                   error ? wxCFStringRef::AsString([error localizedDescription])
+                         : _("unknown error"));
+    }
+
+    return ok;
+}
+
+#endif // __WXDARWIN_OSX__
 
 #endif

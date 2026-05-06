@@ -409,17 +409,6 @@ void wxPropertyGrid::Init1()
 
     m_doubleBuffer = nullptr;
 
-#ifndef wxPG_ICON_WIDTH
-    m_iconWidth = FromDIP(11);
-    m_iconHeight = FromDIP(11);
-#else
-    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
-    m_iconHeight = FromDIP(wxPG_ICON_WIDTH);
-#endif
-
-    m_gutterWidth = wxMax(0, (FromDIP(16) - m_iconWidth) / 2);
-    m_subgroup_extramargin = m_iconWidth + m_gutterWidth;
-
     m_lineHeight = 0;
 
     m_width = m_height = 0;
@@ -476,7 +465,13 @@ void wxPropertyGrid::Init2()
 
     m_iconWidth = s_expandbmp.GetWidth();
     m_iconHeight = s_expandbmp.GetHeight();
+#else
+    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
+    m_iconHeight = FromDIP(wxPG_ICON_WIDTH);
 #endif
+
+    m_gutterWidth = wxMax(0, (FromDIP(16) - m_iconWidth) / 2);
+    m_subgroup_extramargin = m_iconWidth + m_gutterWidth;
 
     m_curcursor = wxCURSOR_ARROW;
     m_cursorSizeWE = wxCursor(wxCURSOR_SIZEWE);
@@ -523,6 +518,8 @@ void wxPropertyGrid::Init2()
 
 wxPropertyGrid::~wxPropertyGrid()
 {
+    SendDestroyEvent();
+
 #if wxUSE_THREADS
     wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
@@ -1858,33 +1855,20 @@ bool wxPropertyGrid::IsSmallScreen()
 
 // -----------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_3_2
 // static
 wxBitmap wxPropertyGrid::RescaleBitmap(const wxBitmap& srcBmp,
                                        double scaleX, double scaleY)
 {
-    int w = wxRound(srcBmp.GetWidth()*scaleX);
-    int h = wxRound(srcBmp.GetHeight()*scaleY);
+    wxSize size = srcBmp.GetSize();
+    size.x = wxRound(size.x * scaleX);
+    size.y = wxRound(size.y * scaleY);
 
-#if wxUSE_IMAGE
-    // Here we use high-quality wxImage scaling functions available
-    wxImage img = srcBmp.ConvertToImage();
-    img.Rescale(w, h, wxIMAGE_QUALITY_HIGH);
-    wxBitmap dstBmp(img);
-#else // !wxUSE_IMAGE
-    wxBitmap dstBmp(w, h, srcBmp.GetDepth());
-#if defined(__WXMSW__) || defined(__WXOSX__)
-    // wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.
-    dstBmp.UseAlpha(srcBmp.HasAlpha());
-#endif // __WXMSW__ || __WXOSX__
-    {
-        wxMemoryDC dc(dstBmp);
-        dc.SetUserScale(scaleX, scaleY);
-        dc.DrawBitmap(srcBmp, 0, 0);
-    }
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
-
+    wxBitmap dstBmp(srcBmp);
+    wxBitmap::Rescale(dstBmp, size);
     return dstBmp;
 }
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
 

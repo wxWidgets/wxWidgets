@@ -226,6 +226,25 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
     wxObject* name::wxCreateObject()                                          \
         { return new name; }
 
+    // Template specialization with one base class.
+#define wxIMPLEMENT_DYNAMIC_TEMPLATE_SPECIALIZATION(name, arg, basename)      \
+    template <>                                                               \
+    wxObject* name<arg>::wxCreateObject() { return new name<arg>; }           \
+    template <>                                                               \
+    wxClassInfo                                                               \
+    name<arg>::ms_classInfo                                                   \
+        (                                                                     \
+            wxT(#name) L"<" wxT(#arg) L">",                                   \
+            &basename::ms_classInfo,                                          \
+            nullptr,                                                          \
+            static_cast<int>(sizeof(name<arg>)),                              \
+            name<arg>::wxCreateObject                                         \
+        );                                                                    \
+    template <>                                                               \
+    wxClassInfo* name<arg>::GetClassInfo() const { return &ms_classInfo; }
+
+
+
 // -----------------------------------
 // for abstract classes
 // -----------------------------------

@@ -187,6 +187,9 @@ wxWebRequestURLSession::DoPrepare(void (^completionHandler)(NSData*, NSURLRespon
                                 [NSURL URLWithString:wxCFStringRef(m_url).AsNSString()]];
     req.HTTPMethod = wxCFStringRef(method).AsNSString();
 
+    // Provide basic authorization header if credentials were set
+    AddBasicAuthHeaderIfNecessary();
+
     // Set request headers
     for (wxWebRequestHeaderMap::const_iterator it = m_headers.begin(); it != m_headers.end(); ++it)
     {
@@ -506,9 +509,9 @@ wxWebSessionURLSession::~wxWebSessionURLSession()
 {
     [m_session release];
     [m_delegate release];
-#if !wxOSX_USE_IPHONE
+#ifdef __WXDARWIN_OSX__
     [m_proxyURL release];
-#endif // !wxOSX_USE_IPHONE
+#endif // __WXDARWIN_OSX__
 }
 
 wxWebRequestImplPtr
@@ -542,10 +545,10 @@ wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo() const
 
 bool wxWebSessionURLSession::SetProxy(const wxWebProxy& proxy)
 {
-#if wxOSX_USE_IPHONE
+#ifndef __WXDARWIN_OSX__
     // Setting the proxy doesn't seem to be supported under iOS.
     return false;
-#else // !wxOSX_USE_IPHONE
+#else // !__WXDARWIN_OSX__
     wxCHECK_MSG( !m_session, false,
                  "Proxy must be set before the first request is made" );
 
@@ -621,7 +624,7 @@ bool wxWebSessionURLSession::SetProxy(const wxWebProxy& proxy)
     }
 
     return wxWebSessionImpl::SetProxy(proxy);
-#endif // wxOSX_USE_IPHONE/!wxOSX_USE_IPHONE
+#endif // __WXDARWIN_OSX__
 }
 
 bool wxWebSessionURLSession::EnablePersistentStorage(bool enable)
@@ -641,7 +644,7 @@ WX_NSURLSession wxWebSessionURLSession::GetSession()
              [NSURLSessionConfiguration defaultSessionConfiguration] :
              [NSURLSessionConfiguration ephemeralSessionConfiguration];
 
-#if !wxOSX_USE_IPHONE
+#ifdef __WXDARWIN_OSX__
         switch ( GetProxy().GetType() )
         {
             case wxWebProxy::Type::URL:
@@ -670,7 +673,7 @@ WX_NSURLSession wxWebSessionURLSession::GetSession()
                 // Nothing to do, system proxy will be used by default.
                 break;
         }
-#endif // !wxOSX_USE_IPHONE
+#endif // __WXDARWIN_OSX__
 
         m_session = [[NSURLSession sessionWithConfiguration:config delegate:m_delegate delegateQueue:nil] retain];
     }

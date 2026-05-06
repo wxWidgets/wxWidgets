@@ -30,7 +30,14 @@ public:
     */
     bool IsOk() const;
 
+    /**
+        Returns the ID as an opaque void pointer.
+    */
     void* GetID() const;
+
+    /**
+        Makes this item invalid.
+    */
     void Unset();
 };
 

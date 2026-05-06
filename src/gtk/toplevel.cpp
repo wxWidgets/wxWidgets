@@ -599,7 +599,7 @@ wxGetFrameExtents(GdkWindow* window, wxTopLevelWindow::DecorSize* decorSize)
 
     if ( !data || nitems != 4 )
     {
-        wxLogTrace(TRACE_TLWSIZE, "Invalid _NET_FRAME_EXTENTS: %d items",
+        wxLogTrace(TRACE_TLWSIZE, "Invalid _NET_FRAME_EXTENTS: %lu items",
                    nitems);
         return false;
     }
@@ -899,14 +899,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
         if ( style & wxCAPTION )
             m_gdkDecor |= GDK_DECOR_TITLE;
-#if GTK_CHECK_VERSION(3,10,0)
-        else if (
-            wxGTKImpl::IsWayland(display) &&
-            gtk_check_version(3,10,0) == nullptr)
-        {
-            gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
-        }
-#endif
 
         if ( style & wxSYSTEM_MENU )
             m_gdkDecor |= GDK_DECOR_MENU;
@@ -923,6 +915,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
            m_gdkDecor |= GDK_DECOR_RESIZEH;
         }
     }
+#if GTK_CHECK_VERSION(3,10,0)
+    if ((m_gdkDecor & GDK_DECOR_TITLE) == 0 &&
+        wxGTKImpl::IsWayland(display) &&
+        wx_is_at_least_gtk3(10))
+    {
+        gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
+    }
+#endif
 
     m_decorSize = GetCachedDecorSize();
 
@@ -1300,6 +1300,12 @@ void wxTopLevelWindowGTK::ShowWithoutActivating()
 
 void wxTopLevelWindowGTK::Raise()
 {
+    // Raising the window would show it and we don't want this to happen if
+    // it's currently hidden and it would also break our deferred show logic,
+    // so just do nothing in this case.
+    if (!m_isShown)
+        return;
+
     gtk_window_present( GTK_WINDOW( m_widget ) );
 }
 

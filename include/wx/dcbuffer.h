@@ -90,7 +90,7 @@ public:
     {
         InitCommon(dc, style);
 
-        UseBuffer(area.x, area.y);
+        UseBuffer(area);
     }
 
     // Blits the buffer to the dc, and detaches the dc from the buffer (so it
@@ -116,7 +116,7 @@ private:
     }
 
     // check that the bitmap is valid and use it
-    void UseBuffer(wxCoord w = -1, wxCoord h = -1);
+    void UseBuffer(wxSize size = wxDefaultSize);
 
     // the underlying DC to which we copy everything drawn on this one in
     // UnMask()

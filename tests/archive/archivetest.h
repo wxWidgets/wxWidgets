@@ -177,7 +177,7 @@ protected:
 
     // 'archive up' the test data
     void CreateArchive(wxOutputStream& out);
-#ifndef __WXOSX_IPHONE__
+#ifndef __WXDARWIN_IPHONE__
     void CreateArchive(wxOutputStream& out, const wxString& archiver);
 #endif
 
@@ -186,7 +186,7 @@ protected:
 
     // extract the archive and verify its contents
     void ExtractArchive(wxInputStream& in);
-#ifndef __WXOSX_IPHONE__
+#ifndef __WXDARWIN_IPHONE__
     void ExtractArchive(wxInputStream& in, const wxString& unarchiver);
 #endif
     void VerifyDir(wxString& path, size_t rootlen = 0);

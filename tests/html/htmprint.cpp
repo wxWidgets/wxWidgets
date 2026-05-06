@@ -13,7 +13,7 @@
 #include "testprec.h"
 
 #if wxUSE_HTML
-
+#if wxUSE_PRINTING_ARCHITECTURE
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
@@ -195,4 +195,5 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     CHECK( CountPages(pr) == 3 );
 }
 
+#endif //wxUSE_PRINTING_ARCHITECTURE
 #endif //wxUSE_HTML

@@ -161,8 +161,10 @@ public:
 
     void HideIfExpanded();
 
-    // Return the image list containing images of the given size, creating it
-    // if necessary.
+    // Deprecated: wxRibbonButtonBar now uses wxBitmapBundle directly for
+    // DPI-aware bitmap management. This method is maintained for backward
+    // compatibility but is no longer used by wxRibbonButtonBar.
+    wxDEPRECATED_MSG("wxRibbonButtonBar now uses wxBitmapBundle for DPI support")
     wxImageList* GetButtonImageList(wxSize size, int initialCount = 1);
 
 protected:
@@ -185,6 +187,7 @@ protected:
     void OnEraseBackground(wxEraseEvent& evt);
     void DoEraseBackground(wxDC& dc);
     void OnSize(wxSizeEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnMouseLeftDown(wxMouseEvent& evt);
     void OnMouseLeftUp(wxMouseEvent& evt);
     void OnMouseMiddleDown(wxMouseEvent& evt);

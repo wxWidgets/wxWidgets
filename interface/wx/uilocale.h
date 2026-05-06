@@ -408,6 +408,13 @@ public:
     bool IsSupported() const;
 
     /**
+        Return true if locale was instantiated via UseDefault(), false otherwise.
+
+        @since 3.3.3
+     */
+    bool IsDefault() const;
+
+    /**
         Adds custom, user-defined language to the database of known languages.
     */
     static void AddLanguage(const wxLanguageInfo& info);

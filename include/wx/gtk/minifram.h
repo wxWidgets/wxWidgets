@@ -53,12 +53,12 @@ protected:
  // implementation
 public:
 #ifndef __WXGTK4__
-    bool m_isDragMove;
+    bool m_isDragMove = false;
     wxSize m_dragOffset;
 #endif
     wxBitmap  m_closeButton;
-    int m_miniEdge;
-    int m_miniTitle;
+    int m_miniEdge = 0;
+    int m_miniTitle = 0;
 };
 
 #endif // _WX_GTK_MINIFRAME_H_

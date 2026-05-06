@@ -118,6 +118,20 @@ enum wxContentProtection
     wxCONTENT_PROTECTION_ENABLED
 };
 
+enum class wxWindowMode
+{
+    // Normal, not modal, window.
+    Normal,
+
+    // Modal in parent window scope, i.e. the user must close this window
+    // before being able to interact with the parent window again.
+    WindowModal,
+
+    // Modal in application scope, i.e. the user must close this window
+    // before being able to interact with any other window in the application.
+    AppModal
+};
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow: a top level (as opposed to child) window
 // ----------------------------------------------------------------------------

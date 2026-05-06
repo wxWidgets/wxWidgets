@@ -12,6 +12,7 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/glcanvas.h"
 
+#include <QOpenGLContext>
 #include <QOpenGLWidget>
 #include <QSurfaceFormat>
 #include <QtWidgets/QGestureRecognizer>
@@ -153,7 +154,6 @@ wxGLContextAttrs& wxGLContextAttrs::ReleaseFlush(int val)
 
 wxGLContextAttrs& wxGLContextAttrs::PlatformDefaults()
 {
-    renderTypeRGBA = true;
     return *this;
 }
 
@@ -363,6 +363,13 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 
     qglWidget->makeCurrent();
     return true;
+}
+
+/* static */
+void wxGLContextBase::ClearCurrent()
+{
+    if (auto* const current = QOpenGLContext::currentContext())
+        current->doneCurrent();
 }
 
 //---------------------------------------------------------------------------

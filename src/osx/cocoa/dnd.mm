@@ -18,6 +18,7 @@
 #include "wx/dnd.h"
 #include "wx/clipbrd.h"
 #include "wx/filename.h"
+#include "wx/recguard.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -69,7 +70,7 @@ public:
 
     ~wxOSXPasteboardSinkItem()
     {
-
+        [m_item release];
     }
 
     virtual void SetData(const wxDataFormat& format, const void *buf, size_t datasize) override
@@ -483,17 +484,39 @@ typedef NSString* NSPasteboardType;
 
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
+    static wxRecursionGuardFlag s_inDragDrop = 0;
+
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
 
     wxDragResult result = wxDragNone;
     if ((m_data == nullptr) || (m_data->GetFormatCount() == 0))
         return result;
 
+    wxRecursionGuard guard(s_inDragDrop);
+    if (guard.IsInside())
+        return wxDragNone;
+
     NSView* view = m_window->GetPeer()->GetWXWidget();
     if (view)
     {
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
-        wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
+
+        // Drag and drop operation can be started from an external mouse event
+        // handler, this happens at least when using CEF, so synthesize the
+        // mouse event if we don't have one.
+        if (theEvent == nil)
+        {
+            NSPoint mouse_location = [NSEvent mouseLocation];
+            theEvent = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDragged 
+                location:mouse_location
+                modifierFlags:0
+                timestamp: 0
+                windowNumber: [NSWindow windowNumberAtPoint:mouse_location belowWindowWithWindowNumber:0]
+                context:nil
+                eventNumber: 0
+                clickCount: 0
+                pressure: 1.0];
+        }
 
         gCurrentSource = this;
 
@@ -559,7 +582,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         gCurrentSource = nullptr;
     }
-
 
     return result;
 }

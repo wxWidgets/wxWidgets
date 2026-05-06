@@ -18,6 +18,8 @@
     #include "wx/log.h"
 #endif
 
+#include <memory>
+
 #define TRACE_MODULE wxT("module")
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxModule, wxObject);
@@ -146,6 +148,43 @@ bool wxModule::DoInitializeModule(wxModule *module,
     initializedModules.push_back(module);
 
     return true;
+}
+
+void wxModule::AddModuleIfNecessary(const wxClassInfo *classInfo)
+{
+    wxCHECK_RET( classInfo, wxS("Valid class info must be provided") );
+    wxCHECK_RET( classInfo->IsKindOf(wxCLASSINFO(wxModule)),
+                  wxS("Class info must be for wxModule-derived class") );
+
+    const wxString className(classInfo->GetClassName());
+    for ( wxModuleList::const_iterator it = ms_modules.begin();
+          it != ms_modules.end();
+          ++it )
+    {
+        if ( (*it)->GetClassInfo()->GetClassName() == className )
+        {
+            // Already initialized or at least registered and will be
+            // initialized later.
+            return;
+        }
+    }
+
+    std::unique_ptr<wxModule>
+        module{static_cast<wxModule*>(classInfo->CreateObject())};
+
+    // Do not call RegisterModule() here as it would add it to ms_modules which
+    // would result in it being added twice as DoInitializeModule() would do it
+    // too on success.
+    module->m_state = State_Registered;
+
+    if ( !DoInitializeModule(module.get(), ms_modules) )
+    {
+        // Error is already given by DoInitializeModule().
+        return;
+    }
+
+    // Module is now owned by ms_modules.
+    module.release();
 }
 
 // Initialize user-defined modules

@@ -77,6 +77,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/keyboard.h"
+#include "wx/msw/private/metrics.h"
 #include "wx/msw/private/paint.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/dcclient.h"
@@ -103,6 +104,7 @@
 
 #include <string.h>
 
+#include <imm.h>
 #include <shellapi.h>
 #include <mmsystem.h>
 
@@ -144,6 +146,11 @@ extern wxPopupWindow* wxCurrentPopupWindow;
 // control.
 wxWindowMSW *wxWindowBeingErased = nullptr;
 #endif // wxUSE_UXTHEME
+
+// Set to the key code of the pressed key if we need to ignore it but couldn't
+// return 1 from the keyboard hook because we had to leave the IME edit this
+// event, see wxKeyboardHook() code.
+WPARAM wxVKBlockedByKeyboardHook = 0;
 
 namespace
 {
@@ -3514,6 +3521,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             processed = HandleTouch(wParam, lParam);
             break;
 
+        case WM_POINTERDOWN:
+        case WM_POINTERUP:
+        case WM_POINTERUPDATE:
+            processed = HandlePointer(message, wParam, lParam);
+            break;
+
         // CTLCOLOR messages are sent by children to query the parent for their
         // colors
         case WM_CTLCOLORMSGBOX:
@@ -3596,6 +3609,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_ENDSESSION:
             processed = HandleEndSession(wParam != 0, lParam);
+            break;
+
+        case WM_ENTERIDLE:
+            processed = HandleEnterIdle(wParam, lParam);
             break;
 
         case WM_GETMINMAXINFO:
@@ -4274,6 +4291,31 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
     return true;
 }
 
+bool wxWindowMSW::HandleEnterIdle(WXWPARAM wParam, WXLPARAM lParam)
+{
+#if wxUSE_OWNER_DRAWN
+    // We only care about idle states triggered by menus
+    if ( static_cast<WXWPARAM>(wParam) != MSGF_MENU || !lParam )
+        return false;
+
+    // Fix menu rounded corners in Windows 11 which are turned off if menu is
+    // owner-drawn and we're not in dark mode (but also not using high contrast
+    // mode as round corners are not used in it).
+    if ( wxGetWinVersion() < wxWinVersion_11 )
+        return false;
+
+    if ( !wxMSWDarkMode::IsActive() && !wxMSWImpl::IsHighContrast() )
+    {
+        wxMSWImpl::EnableRoundCorners(reinterpret_cast<HWND>(lParam));
+    }
+#else
+    wxUnusedVar(wParam);
+    wxUnusedVar(lParam);
+#endif // wxUSE_OWNER_DRAWN
+
+    return false;
+}
+
 bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 {
     // If the session isn't ending we don't need to generate any events, but we
@@ -4341,7 +4383,7 @@ bool wxWindowMSW::HandleActivate(int state,
                                  bool minimized,
                                  WXHWND WXUNUSED(activate))
 {
-    if ( minimized )
+    if ( state == WA_ACTIVE && minimized )
     {
         // Getting activation event when the window is minimized, as happens
         // e.g. when the window task bar icon is clicked, is unexpected and
@@ -5339,6 +5381,17 @@ wxStack<wxMSWImpl::PaintData> wxMSWImpl::paintStack;
 
 bool wxWindowMSW::HandlePaint()
 {
+    // Don't bother painting a window that is being destroyed: this is more
+    // than optimization, as its state may be partially torn down and event
+    // handlers may crash.
+    if ( IsBeingDeleted() )
+    {
+        // Validate the window so that Windows doesn't send WM_PAINT again (and
+        // again...).
+        ::ValidateRect(GetHwnd(), nullptr);
+        return true;
+    }
+
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
     {
@@ -6332,6 +6385,80 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
     return allHandled;
 }
 
+bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    wxUnusedVar(lParam);
+    wxEventType type;
+    switch( message )
+    {
+        case WM_POINTERDOWN:
+            type = wxEVT_STYLUS_DOWN;
+            break;
+        case WM_POINTERUP:
+            type = wxEVT_STYLUS_UP;
+            break;
+        case WM_POINTERUPDATE:
+            type = wxEVT_STYLUS_UPDATE;
+            break;
+        default:
+            wxFAIL_MSG( wxT("Unexpected pointer message") );
+            return false;
+    }
+
+    const UINT32 pointerId = GET_POINTERID_WPARAM(wParam);
+    POINTER_INPUT_TYPE pType = 0;
+    if ( ::GetPointerType(pointerId, &pType) )
+    {
+        if (pType != PT_PEN)
+        {
+            // we only expect a pen as source of event here
+            return false;
+        }
+    }
+
+    wxStylusEvent event(GetId(), type);
+    event.SetEventObject(this);
+
+    // here we already know we have a pen generated event
+    POINTER_PEN_INFO penInfo;
+    if ( ::GetPointerPenInfo(pointerId, &penInfo) )
+    {
+        if (penInfo.penMask & PEN_MASK_PRESSURE)
+        {
+            wxDouble pressure = penInfo.pressure; // [0, 1024] in Windows
+            pressure /= 1024.0; // normalize
+            event.SetPressure(pressure);
+        }
+
+        if (penInfo.penMask & PEN_MASK_ROTATION)
+        {
+            wxDouble rotation = penInfo.rotation;
+            event.SetRotation(rotation);
+        }
+
+        if (penInfo.penMask & PEN_MASK_TILT_X)
+        {
+            wxDouble t = penInfo.tiltX;
+            event.SetTiltX(t);
+        }
+
+        if (penInfo.penMask & PEN_MASK_TILT_Y)
+        {
+            wxDouble t = penInfo.tiltY;
+            event.SetTiltY(t);
+        }
+
+        // set the eraser flag
+        event.SetUsingEraser( (penInfo.penFlags & PEN_FLAG_ERASER) != 0 );
+
+        const POINT& pt = penInfo.pointerInfo.ptPixelLocation;
+        wxPoint pos(pt.x, pt.y);
+        event.SetPosition( ScreenToClient(pos) );
+    }
+
+    return HandleWindowEvent(event);;
+}
+
 // ---------------------------------------------------------------------------
 // keyboard handling
 // ---------------------------------------------------------------------------
@@ -7237,6 +7364,51 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
     return win;
 }
 
+namespace
+{
+
+// We use dynamic loading to avoid having to link with imm32.lib
+// (another positive side effect is that imm32.dll is loaded only if the
+// program actually handles wxEVT_CHAR_HOOK events without skipping them, as
+// it's the only case when we need to use these IME functions).
+typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
+typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
+typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
+
+ImmGetContext_t gs_pfnImmGetContext = nullptr;
+ImmGetOpenStatus_t gs_pfnImmGetOpenStatus = nullptr;
+ImmReleaseContext_t gs_pfnImmReleaseContext = nullptr;
+
+bool wxIsIMEOpen(const wxWindow* win)
+{
+    if ( !win )
+        return false;
+
+    if ( !gs_pfnImmGetContext )
+    {
+        wxLoadedDLL dllImm32("imm32.dll");
+        if ( !dllImm32.IsLoaded() )
+            return false;
+
+        wxDL_INIT_FUNC(gs_pfn, ImmGetContext, dllImm32);
+        wxDL_INIT_FUNC(gs_pfn, ImmGetOpenStatus, dllImm32);
+        wxDL_INIT_FUNC(gs_pfn, ImmReleaseContext, dllImm32);
+    }
+
+    const HWND hwnd = GetHwndOf(win);
+
+    const HIMC hIMC = gs_pfnImmGetContext(hwnd);
+    if ( !hIMC )
+        return false;
+
+    const BOOL isOpen = gs_pfnImmGetOpenStatus(hIMC);
+    gs_pfnImmReleaseContext(hwnd, hIMC);
+
+    return isOpen;
+}
+
+} // anonymous namespace
+
 // Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
 // in active frames and dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
@@ -7289,8 +7461,20 @@ wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
                 {
                     if ( !event.IsNextEventAllowed() )
                     {
-                        // Stop processing of this event.
-                        return 1;
+                        // When IME is active, we must let it have the event as
+                        // otherwise it could just hang, see #22473.
+                        if ( !wxIsIMEOpen(win) )
+                        {
+                            // Stop processing of this event.
+                            return 1;
+                        }
+
+                        // Because we don't stop processing of the event at
+                        // Windows level, we are going to get WM_KEYDOWN for
+                        // this key, but we need to ignore it as it's not
+                        // supposed to be generated if wxEVT_CHAR_HOOK handled
+                        // the event.
+                        wxVKBlockedByKeyboardHook = wParam;
                     }
                 }
             }

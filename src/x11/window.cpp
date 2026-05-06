@@ -515,6 +515,9 @@ bool wxWindowX11::Show(bool show)
 // Raise the window to the top of the Z order
 void wxWindowX11::Raise()
 {
+    if (!IsShown())
+        return;
+
     if (m_mainWindow)
         XRaiseWindow( wxGlobalDisplay(), (Window) m_mainWindow );
 }

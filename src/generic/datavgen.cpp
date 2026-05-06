@@ -5683,6 +5683,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 
     EnableSystemThemeByDefault();
 
+    Bind(wxEVT_SYS_COLOUR_CHANGED, &wxDataViewCtrl::OnSysColourChanged, this);
+
 #if wxUSE_ACCESSIBILITY
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_CREATE, this, wxOBJID_CLIENT, wxACC_SELF);
 #endif // wxUSE_ACCESSIBILITY
@@ -6264,6 +6266,12 @@ void wxDataViewCtrl::OnInternalIdle()
 
     if ( m_colsDirty )
         UpdateColWidths();
+}
+
+void wxDataViewCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    Refresh();
+    event.Skip();
 }
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const

@@ -50,31 +50,22 @@ BASE_UNIX_AND_DARWIN_HDR =
     wx/unix/stackwalk.h
     wx/unix/fswatcher_kqueue.h
 
-# Files used on all Unix systems, including Darwin with any port but wxMac
-# (this is really an aberration, we should also use these files for wxMac,
-#  it's not done because of some OS 9 support leftovers only now)
-BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC =
-    $(BASE_UNIX_AND_DARWIN_SRC)
-    src/unix/mimetype.cpp
-    src/unix/uilocale.cpp
-
-BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR =
-    $(BASE_UNIX_AND_DARWIN_HDR)
-    wx/unix/mimetype.h
-
 # Files used on all non-Darwin Unix systems (because Darwin provides other,
 # better, native equivalents of the functionality they implement (e.g.
 # CFSocket instead of BSD sockets) or doesn't provide it at all (epoll,
 # backtrace())
 BASE_UNIX_SRC =
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
+    $(BASE_UNIX_AND_DARWIN_SRC)
     src/unix/fswatcher_inotify.cpp
+    src/unix/mimetype.cpp
     src/unix/secretstore.cpp
     src/unix/stdpaths.cpp
+    src/unix/uilocale.cpp
 
 BASE_UNIX_HDR =
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
+    $(BASE_UNIX_AND_DARWIN_HDR)
     wx/unix/fswatcher_inotify.h
+    wx/unix/mimetype.h
     wx/unix/stdpaths.h
 
 
@@ -141,6 +132,7 @@ BASE_COREFOUNDATION_SRC =
     src/osx/core/stdpaths.mm
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
+    src/osx/volume.mm
 
 BASE_COREFOUNDATION_HDR =
     wx/osx/carbon/region.h
@@ -161,32 +153,25 @@ BASE_COREFOUNDATION_HDR =
     wx/osx/core/stdpaths.h
 
 # Base files used by OS X ports (not Carbon)
-BASE_OSX_SHARED_SRC =
+BASE_OSX_SRC =
+    $(BASE_UNIX_AND_DARWIN_SRC)
+    $(BASE_COREFOUNDATION_SRC)
     src/osx/core/mimetype.cpp
     src/osx/core/uilocale.mm
     src/osx/fswatcher_fsevents.cpp
-    $(BASE_COREFOUNDATION_SRC)
-    $(BASE_UNIX_AND_DARWIN_SRC)
 
-BASE_OSX_SHARED_HDR =
-    wx/osx/fswatcher_fsevents.h
-    $(BASE_COREFOUNDATION_HDR)
+BASE_OSX_HDR =
+    wx/osx/chkconf.h
+    wx/osx/cocoa/chkconf.h
+    wx/osx/iphone/chkconf.h
     $(BASE_UNIX_AND_DARWIN_HDR)
+    $(BASE_COREFOUNDATION_HDR)
+    wx/osx/fswatcher_fsevents.h
+    wx/osx/evtloopsrc.h
 
 # Base and GUI files used by OS X
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
-    src/osx/volume.mm
-
-# files used by non-wxMac OS X builds
-BASE_OSX_NOTWXMAC_SRC =
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
-    $(BASE_COREFOUNDATION_SRC)
-
-BASE_OSX_NOTWXMAC_HDR =
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
-    $(BASE_COREFOUNDATION_HDR)
-
 
 ## Qt
 
@@ -334,6 +319,7 @@ QT_SRC=
     src/qt/anybutton.cpp
     src/qt/app.cpp
     src/qt/apptraits.cpp
+    src/qt/artqt.cpp
     src/qt/bitmap.cpp
     src/qt/bmpbuttn.cpp
     src/qt/brush.cpp
@@ -1184,7 +1170,6 @@ GUI_CMN_HDR =
     wx/richmsgdlg.h
     wx/richtooltip.h
     wx/sashwin.h
-    wx/scopeguard.h
     wx/scrolbar.h
     wx/scrolbar.h
     wx/scrolwin.h
@@ -1822,7 +1807,6 @@ MSW_HDR =
     wx/msw/hyperlink.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
-    wx/msw/init.h
     wx/msw/listbox.h
     wx/msw/listctrl.h
     wx/msw/mdi.h
@@ -2064,7 +2048,6 @@ OSX_SHARED_HDR =
     wx/osx/button.h
     wx/osx/checkbox.h
     wx/osx/checklst.h
-    wx/osx/chkconf.h
     wx/osx/choice.h
     wx/osx/clipbrd.h
     wx/osx/colordlg.h
@@ -2084,7 +2067,6 @@ OSX_SHARED_HDR =
     wx/osx/dirdlg.h
     wx/osx/dnd.h
     wx/osx/evtloop.h
-    wx/osx/evtloopsrc.h
     wx/osx/filedlg.h
     wx/osx/font.h
     wx/osx/fontdlg.h
@@ -2208,7 +2190,6 @@ OSX_COCOA_SRC =
 OSX_COCOA_HDR =
     wx/generic/region.h
     wx/osx/activityindicator.h
-    wx/osx/cocoa/chkconf.h
     wx/osx/cocoa/dataview.h
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
@@ -2232,6 +2213,7 @@ OSX_IPHONE_SRC =
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
     src/osx/iphone/checkbox.mm
+    src/osx/iphone/choice.mm
     src/osx/iphone/colour.mm
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
@@ -2255,7 +2237,6 @@ OSX_IPHONE_SRC =
 
 OSX_IPHONE_HDR =
     wx/generic/region.h
-    wx/osx/iphone/chkconf.h
     wx/osx/iphone/private.h
     wx/osx/sound.h
 
@@ -2688,13 +2669,13 @@ OPENGL_MSW_HDR =
 
 OPENGL_GTK_SRC =
     src/gtk/glcanvas.cpp
+    src/unix/glcanvas.cpp
     src/unix/glegl.cpp
     src/unix/glx11.cpp
 
 OPENGL_GTK_HDR =
     wx/gtk/glcanvas.h
-    wx/unix/glegl.h
-    wx/unix/glx11.h
+    wx/unix/glcanvas.h
 
 OPENGL_OSX_COCOA_SRC =
     src/osx/cocoa/glcanvas.mm
@@ -2711,11 +2692,12 @@ OPENGL_OSX_IPHONE_HDR =
     wx/osx/glcanvas.h
 
 OPENGL_X11_SRC =
+    src/unix/glcanvas.cpp
     src/unix/glx11.cpp
     src/x11/glcanvas.cpp
 
 OPENGL_X11_HDR =
-    wx/unix/glx11.h
+    wx/unix/glcanvas.h
     wx/x11/glcanvas.h
 
 OPENGL_QT_SRC =
@@ -2776,6 +2758,7 @@ RIBBON_SRC =
     src/ribbon/art_internal.cpp
     src/ribbon/art_msw.cpp
     src/ribbon/art_aui.cpp
+    src/ribbon/art_msw_flat.cpp
     src/ribbon/bar.cpp
     src/ribbon/buttonbar.cpp
     src/ribbon/control.cpp
@@ -2864,12 +2847,14 @@ RICHTEXT_HDR =
 # wxSTC
 
 STC_CMN_SRC =
+    src/stc/minimap.cpp
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
     src/xrc/xh_styledtextctrl.cpp
 
 STC_CMN_HDR =
+    wx/stc/minimap.h
     wx/stc/stc.h
     wx/xrc/xh_styledtextctrl.h
 

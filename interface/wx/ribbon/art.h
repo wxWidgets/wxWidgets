@@ -1071,6 +1071,19 @@ public:
 
 
 
+/**
+    @class wxRibbonMSWArtProvider
+
+    An art provider which draws a ribbon using gradients to mimic the
+    appearance of Microsoft Office 2007 and the Windows Vista / Aero
+    visual style. Tabs, panels, button bars, and toolbars all use
+    gradient fills to create a glossy, three-dimensional look.
+
+    @library{wxribbon}
+    @category{ribbon}
+
+    @see wxRibbonMSWFlatArtProvider, wxRibbonAUIArtProvider
+*/
 class wxRibbonMSWArtProvider : public wxRibbonArtProvider
 {
 public:
@@ -1078,6 +1091,40 @@ public:
 };
 
 
+/**
+    @class wxRibbonMSWFlatArtProvider
+
+    A flat variant of wxRibbonMSWArtProvider that uses solid colour fills
+    instead of gradients, providing a modern appearance consistent with
+    the Windows Metro / Fluent design language.
+
+    @since 3.3.3
+
+    @library{wxribbon}
+    @category{ribbon}
+
+    @see wxRibbonMSWArtProvider, wxRibbonAUIArtProvider
+*/
+class wxRibbonMSWFlatArtProvider : public wxRibbonMSWArtProvider
+{
+public:
+    wxRibbonMSWFlatArtProvider();
+};
+
+
+/**
+    @class wxRibbonAUIArtProvider
+
+    An art provider styled after the wxAUI docking framework. Like
+    wxRibbonMSWArtProvider it uses gradient fills, but differs in its
+    layout of panel labels (placed at the top rather than the bottom)
+    and general styling.
+
+    @library{wxribbon}
+    @category{ribbon}
+
+    @see wxRibbonMSWArtProvider, wxRibbonMSWFlatArtProvider
+*/
 class wxRibbonAUIArtProvider : public wxRibbonMSWArtProvider
 {
 public:

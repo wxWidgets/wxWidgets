@@ -134,8 +134,14 @@ wxWinHTTP::WinHttpSetTimeouts_t wxWinHTTP::WinHttpSetTimeouts;
 #ifndef WINHTTP_PROTOCOL_FLAG_HTTP2
 #define WINHTTP_PROTOCOL_FLAG_HTTP2 0x1
 #endif
+#ifndef WINHTTP_PROTOCOL_FLAG_HTTP3
+#define WINHTTP_PROTOCOL_FLAG_HTTP3 0x2
+#endif
 #ifndef WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL
 #define WINHTTP_OPTION_ENABLE_HTTP_PROTOCOL 133
+#endif
+#ifndef WINHTTP_OPTION_HTTP_PROTOCOL_USED
+#define WINHTTP_OPTION_HTTP_PROTOCOL_USED 134
 #endif
 #ifndef WINHTTP_DECOMPRESSION_FLAG_ALL
 #define WINHTTP_DECOMPRESSION_FLAG_GZIP 0x00000001
@@ -347,12 +353,18 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
         case WINHTTP_CALLBACK_STATUS_READ_COMPLETE:
             if ( dwStatusInformationLength > 0 )
             {
+                if ( auto* const logger = GetSessionImpl().GetDebugLogger() )
+                    logger->OnDataReceived(lpvStatusInformation, dwStatusInformationLength);
+
                 m_response->ReportDataReceived(dwStatusInformationLength);
                 if ( !m_response->ReadData() && !WasCancelled() )
                     SetFailedWithLastError("Reading data");
             }
             else
             {
+                if ( auto* const logger = GetSessionImpl().GetDebugLogger() )
+                    logger->OnInfo("Request completed");
+
                 SetFinalStateFromStatus();
             }
             break;
@@ -445,12 +457,16 @@ void wxWebRequestWinHTTP::WriteData()
                 break;
         }
 
+        LogResponseHeadersIfNecessary();
+
         // Start reading the response, even in unauthorized case.
         if ( !m_response->ReadData() )
             SetFailedWithLastError("Reading data");
 
         return;
     }
+
+    LogResponseHeadersIfNecessary();
 
     CheckResult(DoWriteData());
 }
@@ -479,6 +495,12 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoWriteData(DWORD* numWritten)
             ) )
     {
         return FailWithLastError("Writing data");
+    }
+
+    if ( numWritten && *numWritten )
+    {
+        if ( auto* const logger = GetSessionImpl().GetDebugLogger() )
+            logger->OnDataSent(buffer, *numWritten);
     }
 
     return Result::Ok();
@@ -642,6 +664,8 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
         continue;
     }
 
+    LogResponseHeadersIfNecessary();
+
     // Read the response data.
     for ( ;; )
     {
@@ -656,6 +680,9 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
     }
 
     // We're done.
+    if ( auto* const logger = GetSessionImpl().GetDebugLogger() )
+        logger->OnInfo("Request completed");
+
     return GetResultFromHTTPStatus(m_response);
 }
 
@@ -673,20 +700,30 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
         return FailWithLastError("Parsing URL");
     }
 
-    // If we have auth in the URL, remember them but we can't use them yet
-    // because we don't yet know which authentication scheme the server uses.
+    // If basic authentication was explicitly requested, send it in the
+    // "Authorization:" header to avoid an extra round-trip just to get 401
+    // response first.
+    AddBasicAuthHeaderIfNecessary();
+
     if ( urlComps.HasCredentials() )
     {
         m_credentialsFromURL = urlComps.GetCredentials();
         m_tryCredentialsFromURL = true;
     }
 
+    const wxString host(urlComps.lpszHostName, urlComps.dwHostNameLength);
+    const INTERNET_PORT port = urlComps.nPort;
+
+    auto* const logger = GetSessionImpl().GetDebugLogger();
+    if ( logger )
+        logger->OnInfo(wxString::Format("Connecting to %s:%u", host, port));
+
     // Open a connection
     m_connect = wxWinHTTP::WinHttpConnect
                 (
                      m_sessionImpl.GetHandle(),
-                     wxString(urlComps.lpszHostName, urlComps.dwHostNameLength).wc_str(),
-                     urlComps.nPort,
+                     host.wc_str(),
+                     port,
                      wxRESERVED_PARAM
                 );
     if ( m_connect == nullptr )
@@ -714,6 +751,50 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
     if ( m_request == nullptr )
     {
         return FailWithLastError("Opening request");
+    }
+
+    if ( logger )
+    {
+        // Synthesize the request line for logging purposes only: for this, we
+        // need to get the HTTP version used by WinHTTP.
+        DWORD httpVersion = 0;
+        DWORD size = sizeof(httpVersion);
+        if ( wxWinHTTP::WinHttpQueryOption
+                        (
+                            m_request,
+                            WINHTTP_OPTION_HTTP_PROTOCOL_USED,
+                            &httpVersion,
+                            &size
+                        ) )
+        {
+            wxString httpStr;
+            switch ( httpVersion )
+            {
+                case 0:
+                    // Default value meaning HTTP/1.1.
+                    httpStr = "1.1";
+                    break;
+
+                case WINHTTP_PROTOCOL_FLAG_HTTP2:
+                    httpStr = "2";
+                    break;
+
+                case WINHTTP_PROTOCOL_FLAG_HTTP3:
+                    httpStr = "3";
+                    break;
+
+                default:
+                    httpStr = wxString::Format("unknown (%u)", httpVersion);
+                    break;
+            }
+
+            if ( objectName.empty() )
+                objectName = "/";
+
+            logger->OnRequestSent(
+                wxString::Format("%s %s HTTP/%s", method, objectName, httpStr)
+            );
+        }
     }
 
     if ( int flags = GetSecurityFlags() )
@@ -831,6 +912,9 @@ wxWebRequest::Result wxWebRequestWinHTTP::SendRequest()
         return FailWithLastError("Sending request");
     }
 
+    if ( auto* const logger = GetSessionImpl().GetDebugLogger() )
+        logger->OnInfo("Headers sent");
+
     return Result::Ok();
 }
 
@@ -838,6 +922,47 @@ void wxWebRequestWinHTTP::DoCancel()
 {
     wxWinHTTPCloseHandle(m_request);
     m_request = nullptr;
+}
+
+void wxWebRequestWinHTTP::LogResponseHeadersIfNecessary()
+{
+    auto* const logger = GetSessionImpl().GetDebugLogger();
+    if ( !logger )
+        return;
+
+    auto const
+        headers = wxWinHTTPQueryHeaderString(m_request, WINHTTP_QUERY_RAW_HEADERS_CRLF);
+
+    bool seenStatus = false;
+    for ( size_t pos = 0;; )
+    {
+        const size_t end = headers.find("\r\n", pos);
+
+        if ( end == wxString::npos )
+            break;
+
+        const wxString line = headers.substr(pos, end - pos);
+        if ( line.empty() )
+            break;
+
+        pos = end + 2;
+
+        if ( !seenStatus )
+        {
+            logger->OnResponseReceived(line);
+
+            seenStatus = true;
+            continue;
+        }
+
+        wxString value;
+        auto const name = line.BeforeFirst(':', &value);
+
+        // Remove leading space, if any.
+        value.Trim(false);
+
+        logger->OnHeaderReceived(name, value);
+    }
 }
 
 //
@@ -913,13 +1038,23 @@ bool wxWebResponseWinHTTP::ReadData(DWORD* bytesRead)
 {
     wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: reading data", &m_request);
 
-    return wxWinHTTP::WinHttpReadData
+    void* const data = GetDataBuffer(wxWEBREQUEST_BUFFER_SIZE);
+    if ( !wxWinHTTP::WinHttpReadData
              (
                 m_requestHandle,
-                GetDataBuffer(wxWEBREQUEST_BUFFER_SIZE),
+                data,
                 wxWEBREQUEST_BUFFER_SIZE,
                 bytesRead    // [out] bytes read, must be null in async mode
-             ) == TRUE;
+             ) )
+        return false;
+
+    if ( bytesRead && *bytesRead )
+    {
+        if ( auto* const logger = m_request.GetSessionImpl().GetDebugLogger() )
+            logger->OnDataReceived(data, *bytesRead);
+    }
+
+    return true;
 }
 
 //

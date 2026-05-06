@@ -62,9 +62,6 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     GetQCheckBox()->setText( wxQtConvertString( label ) );
 
-    // Do the initialization here as WXValidateStyle may fail in unit tests
-    bool ok = wxCheckBoxBase::Create( parent, id, pos, size, style, validator, name );
-
     WXValidateStyle(&style);
 
     if ( style & wxCHK_2STATE )
@@ -74,7 +71,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     if ( style & wxALIGN_RIGHT )
         GetQCheckBox()->setLayoutDirection( Qt::RightToLeft );
 
-    return ok;
+    return wxCheckBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 QCheckBox* wxCheckBox::GetQCheckBox() const

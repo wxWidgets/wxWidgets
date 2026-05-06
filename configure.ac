@@ -13,7 +13,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.3.2], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.3.3], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -39,7 +39,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=3
-wx_release_number=2
+wx_release_number=3
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -320,6 +320,7 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
+DEFAULT_wxUSE_LUNASVG=no
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
@@ -541,6 +542,7 @@ WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifica
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 WX_ARG_WITH(nanosvg,       [  --with-nanosvg          use NanoSVG for rasterizing SVG], wxUSE_NANOSVG)
+WX_ARG_WITH(lunasvg,       [  --with-lunasvg          use LunaSVG for rasterizing SVG], wxUSE_LUNASVG)
 
 if test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
     wx_needs_cairo_for_gc=1
@@ -665,7 +667,6 @@ WX_ARG_DISABLE(pic,          [  --disable-pic           don't use position indep
 WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
-WX_ARG_DISABLE(vararg_macros,[  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
 
 if test "$USE_DARWIN" = 1; then
 WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary=archs create universal binary for the specified (or all supported) architectures]], wxUSE_UNIVERSAL_BINARY)
@@ -734,7 +735,6 @@ if test "$USE_WIN32" = 1 -o "$USE_DARWIN"; then
 WX_ARG_FEATURE(fsvolume,      [  --enable-fsvolume       use wxFSVolume class], wxUSE_FSVOLUME)
 fi
 WX_ARG_FEATURE(fswatcher,     [  --enable-fswatcher      use wxFileSystemWatcher class], wxUSE_FSWATCHER)
-WX_ARG_FEATURE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wxUSE_LOG)
 WX_ARG_FEATURE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_FEATURE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
@@ -982,7 +982,6 @@ dnl ---------------------------------------------------------------------------
 dnl common dialogs
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_FEATURE(commondlg,   [  --enable-commondlg      use all common dialogs], wxUSE_COMMONDLGS)
 WX_ARG_FEATURE(aboutdlg,    [  --enable-aboutdlg       use wxAboutBox], wxUSE_ABOUTDLG)
 WX_ARG_FEATURE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
 WX_ARG_FEATURE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
@@ -1126,10 +1125,18 @@ case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
             AC_MSG_ERROR([Using wxWebView Chromium backend requires C++14 or later.])
         fi
 
+        if test "$wxUSE_LUNASVG" = "yes"; then
+            AC_MSG_ERROR([Using LunaSVG requires C++17 or later])
+        fi
+
         AX_CXX_COMPILE_STDCXX(11)
         ;;
 
     14)
+        if test "$wxUSE_LUNASVG" = "yes"; then
+            AC_MSG_ERROR([Using LunaSVG requires C++17 or later])
+        fi
+
         AX_CXX_COMPILE_STDCXX(14)
         ;;
 
@@ -1563,11 +1570,6 @@ dnl Note: non-empty last parameter makes check compile-only,
 dnl   skipping worthless preprocessing check
 AC_CHECK_HEADERS(langinfo.h wchar.h,,, [AC_INCLUDES_DEFAULT])
 
-dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
-if test "$ac_cv_header_wchar_h" != "yes"; then
-    AC_CHECK_HEADERS([wcstr.h],,, [AC_INCLUDES_DEFAULT()])
-fi
-
 if test "$USE_UNIX" = 1 ; then
     dnl POSIX needs this for select(), but old systems don't have it
     AC_CHECK_HEADERS([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
@@ -1620,12 +1622,10 @@ AC_CHECK_SIZEOF(wchar_t, 0,
         #if defined(__DJGPP__) && !( (__GNUC_MINOR__ >= 8 && __GNUC__ == 2 ) || __GNUC__ >= 3 )
         #  error "fake wchar_t"
         #endif
-        #ifdef HAVE_WCHAR_H
-        #  ifdef __CYGWIN__
-        #    include <stddef.h>
-        #  endif
-        #  include <wchar.h>
+        #ifdef __CYGWIN__
+        #  include <stddef.h>
         #endif
+        #include <wchar.h>
         #ifdef HAVE_STDLIB_H
         #  include <stdlib.h>
         #endif
@@ -2656,11 +2656,14 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl the top-level script to all the other ones called recursively), so
             dnl we need to hack around this
             tiff_jpeg_option=--disable-jpeg
-        else
-            tiff_jpeg_option=--enable-jpeg
+        elif test "$wxUSE_LIBJPEG" = "builtin"; then
+            dnl JPEG support is enabled by default, but make sure that we use
+            dnl our own libjpeg, even if another version of the library is
+            dnl installed system-wide
+            tiff_jpeg_option=--with-jpeg-from-wx
         fi
 
-        dnl if you ever want to enable webp, check if it clashes with the wxUSE_LIBWBP setting
+        dnl if you ever want to enable webp, check if it clashes with the wxUSE_LIBWEBP setting
         AX_SUBDIRS_CONFIGURE([src/tiff],
             [[--disable-jbig],
              [--disable-lerc],
@@ -2756,6 +2759,16 @@ dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_NANOSVG" = "yes"; then
     AC_DEFINE(wxUSE_NANOSVG)
+fi
+
+dnl ------------------------------------------------------------------------
+dnl Check for LunaSVG libraries
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_LUNASVG" = "yes"; then
+    AC_DEFINE(wxUSE_LUNASVG)
+else
+    USE_LUNASVG=0
 fi
 
 dnl ------------------------------------------------------------------------
@@ -3273,25 +3286,38 @@ installed, where VER is 2, 3 or 4.
             dnl the name of the directory where the files for this toolkit live
             TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I${QT5_CUSTOM_DIR}/include"
             GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -L${QT5_CUSTOM_DIR}/lib \
-                            -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test \
+                            -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test -lQt5PrintSupport \
                             -Wl,-rpath,${QT5_CUSTOM_DIR}/lib"
 
         elif test -z "$PKG_CONFIG" ; then
             AC_MSG_ERROR([specify QT5_CUSTOM_DIR or make sure pkg-config is available to search for Qt5 libraries])
 
         else
-            PKG_CHECK_MODULES(QT5,
-                          [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test],
+            PKG_CHECK_MODULES(QT6,
+                          [Qt6Core Qt6Widgets Qt6Gui Qt6OpenGL Qt6OpenGLWidgets Qt6Test Qt6PrintSupport],
                 [
-                TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
-                GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
-                if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
+                TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT6_CFLAGS}"
+                GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT6_LIBS}"
+                if `pkg-config --variable qt_config Qt6Core | grep "reduce_relocations" >/dev/null`; then
                     dnl build with position independent code if Qt needs it
                     wxUSE_PIC=yes
                 fi
                 ],
                 [
-                    AC_MSG_ERROR([Qt5 libraries are not available])
+                    PKG_CHECK_MODULES(QT5,
+                                  [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5PrintSupport],
+                        [
+                        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
+                        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
+                        if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
+                            dnl build with position independent code if Qt needs it
+                            wxUSE_PIC=yes
+                        fi
+                        ],
+                        [
+                            AC_MSG_ERROR([Neither Qt6 nor Qt5 libraries are available])
+                        ]
+                    )
                 ]
             )
         fi
@@ -3453,34 +3479,35 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                       fi
                     fi
 
-                        found_gl=1
-                        OPENGL_LIBS="-lGL"
+                    found_gl=1
+                    OPENGL_LIBS="-lGL"
+                    AC_DEFINE(wxHAS_GLX)
 
-                        if test "$WXGTK3" = 1; then
-                            if test "$wxUSE_GLCANVAS_EGL" != "no"; then
-                                PKG_CHECK_MODULES(EGL, [egl >= 1.5],
-                                    [
-                                        OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
-                                        AC_DEFINE(wxUSE_GLCANVAS_EGL)
-                                        PKG_CHECK_MODULES(WAYLAND_EGL, [wayland-egl],
-                                            [
-                                                if test $wx_cv_gdk_wayland = "yes"; then
-                                                    OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
-                                                    have_wayland=1
-                                                fi
-                                            ],
-                                            [:]
-                                        )
-                                    ],
-                                    [
-                                        AC_MSG_NOTICE([EGL 1.5+ not available. Will use GLX.])
-                                    ]
-                                )
-                                if test "$have_wayland" != 1; then
-                                    AC_MSG_NOTICE([wxGLCanvas will not have Wayland support])
-                                fi
+                    if test "$WXGTK3" = 1; then
+                        if test "$wxUSE_GLCANVAS_EGL" != "no"; then
+                            PKG_CHECK_MODULES(EGL, [egl >= 1.4],
+                                [
+                                    OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
+                                    AC_DEFINE(wxHAS_EGL)
+                                    PKG_CHECK_MODULES(WAYLAND_EGL, [wayland-egl],
+                                        [
+                                            if test $wx_cv_gdk_wayland = "yes"; then
+                                                OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
+                                                have_wayland=1
+                                            fi
+                                        ],
+                                        [:]
+                                    )
+                                ],
+                                [
+                                    AC_MSG_NOTICE([EGL 1.4+ not available. Will use GLX.])
+                                ]
+                            )
+                            if test "$have_wayland" != 1; then
+                                AC_MSG_NOTICE([wxGLCanvas will not have Wayland support])
                             fi
                         fi
+                    fi
                 fi
 
                 if test "$found_gl" != 1; then
@@ -3681,25 +3708,35 @@ if test "$wxUSE_SHARED" = "yes"; then
         install_name_tool=`which ${HOST_PREFIX}install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
+            dnl Note that the script below doesn't use realpath because it's
+            dnl only available since macOS 13 and doesn't even use readlink -f
+            dnl because this is only available since macOS 12, while we still
+            dnl need to support 10.10.
             cat <<EOF >change-install-names
 #!/bin/sh
-libnames=\$(cd lib ; ls -1 libwx*${WX_RELEASE}.dylib)
+set -e
+[[ -z "\${WXDEBUG_X}" ]] || set -x
+destdir=\$1
+libdir=\$2
+bindir=\$3
+build_libdir=\$4
+libnames=\$(cd \${build_libdir}; printf '%s\n' libwx*-${WX_RELEASE}.dylib)
 changes=''
-for dep in \${libnames} ; do
-    target=\$(readlink -f \${4}/\${dep})
-    changes="\${changes} -change \${target} \${3}/\${dep}"
+for libname in \${libnames} ; do
+    target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
+    changes="\${changes} -change \${build_libdir}/\${target} \${libdir}/\${target}"
 done
-for i in \${libnames} ; do
-    lib=\$(readlink -f \${1}/\${i})
-    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${lib}
+for libname in \${libnames} ; do
+    target=\$(readlink \${build_libdir}/\$(readlink \${build_libdir}/\${libname}))
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${libdir}/\${libname} \${destdir}\${libdir}/\${target}
 done
 
-if test -f "\${2}/wxrc-${WX_RELEASE}" ; then
-    ${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}
+if test -f \${destdir}\${bindir}/wxrc-${WX_RELEASE} ; then
+    ${HOST_PREFIX}install_name_tool \${changes} \${destdir}\${bindir}/wxrc-${WX_RELEASE}
 fi
 EOF
             chmod +x change-install-names
-            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \${DESTDIR}\${bindir} \${libdir} \$(wx_top_builddir)/lib"
+            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \"\${DESTDIR}\" \${libdir} \${bindir} \$(wx_top_builddir)/lib"
         fi
 
         dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:
@@ -3817,30 +3854,6 @@ else
     if test "$wx_cv_size_t_is_ulong" = "yes"; then
         AC_DEFINE(wxSIZE_T_IS_ULONG)
     fi
-fi
-
-AC_CACHE_CHECK([if wchar_t is separate type],
-    wx_cv_wchar_t_is_separate_type,
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <wchar.h>],
-        [
-            return 0; }
-
-            struct Foo { void foo(wchar_t);
-                         void foo(unsigned short);
-                         void foo(unsigned int);
-                         void foo(unsigned long); };
-
-            int bar() {
-        ])],
-        wx_cv_wchar_t_is_separate_type=yes,
-        wx_cv_wchar_t_is_separate_type=no
-    )
-)
-
-if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
-    AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 1)
-else
-    AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 0)
 fi
 
 AC_LANG_POP() dnl C++
@@ -4024,21 +4037,9 @@ if test "$wx_cv_func_vsscanf" = "yes"; then
 fi
 AC_LANG_POP()
 
-dnl also look if we have wide char IO functions, notice that [f]putws are
-dnl declared in special widec.h under Solaris
-wchar_headers="#include <stdio.h>
-#include <wchar.h>"
-case "${host}" in
-    *-*-solaris2* )
-        AC_CHECK_HEADERS(widec.h,,, [AC_INCLUDES_DEFAULT()])
-        if test "$ac_cv_header_widec_h" = "yes"; then
-            wchar_headers="$wchar_headers
-#include <widec.h>"
-        fi
-esac
-
-WX_CHECK_FUNCS(putws fputws wprintf vswprintf vswscanf,,,
-               [$wchar_headers])
+WX_CHECK_FUNCS(fputws wprintf vswprintf vswscanf,,,
+               [#include <stdio.h>
+                #include <wchar.h>])
 
 dnl MinGW has a vswprintf with a different prototype, and
 dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
@@ -4606,7 +4607,7 @@ if test "$TOOLKIT" != "MSW"; then
     dnl do other tests only if we are using threads
     if test "$wxUSE_THREADS" = "yes" ; then
         AC_CHECK_FUNCS(pthread_setconcurrency,
-            AC_DEFINE(HAVE_PTHREAD_SET_CONCURRENCY),
+            AC_DEFINE(HAVE_PTHREAD_SETCONCURRENCY),
             [
                 AC_CHECK_FUNCS(thr_setconcurrency,
                     AC_DEFINE(HAVE_THR_SETCONCURRENCY),
@@ -4790,39 +4791,11 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
     dnl related functions (taken from python's configure.in)
     dnl sigh -- gethostbyname_r is a mess; it can have 3, 5 or 6 arguments
       AX_FUNC_WHICH_GETHOSTBYNAME_R
-      if test "x$ac_cv_func_which_gethostbyname_r" = "xno" -o \
-              "x$ac_cv_func_which_gethostbyname_r" = "xunknown" ; then
-          AC_CHECK_FUNC(gethostbyname, [ AC_DEFINE(HAVE_GETHOSTBYNAME) ],
-              [
-                  dnl Under HaikuOS it is not yet detected
-                  case "${host}" in
-                  *-*-haiku* )
-                    AC_DEFINE(HAVE_GETHOSTBYNAME)
-                    AC_MSG_WARN([Defining HAVE_GETHOSTBYNAME unconditionally under ${host}.])
-                    ;;
-                  esac
-              ]
-           )
-      fi
       dnl A similar test for getservbyname_r
       dnl I'm tempted to just not do this test which is taking much time and
       dnl do something similar as for gethostbyaddr_r, but OTOH the macro
       dnl doing the test already exists, so using it is easy enough.     - SN
       AC_raf_FUNC_WHICH_GETSERVBYNAME_R
-      if test "x$ac_cv_func_which_getservbyname_r" = "xno" -o \
-              "x$ac_cv_func_which_getservbyname_r" = "xunknown" ; then
-          AC_CHECK_FUNCS(getservbyname,[ AC_DEFINE(HAVE_GETSERVBYNAME) ],
-              [
-                  dnl Under HaikuOS it is not yet detected
-                  case "${host}" in
-                  *-*-haiku* )
-                    AC_DEFINE(HAVE_GETSERVBYNAME)
-                    AC_MSG_WARN([Defining HAVE_GETSERVBYNAME unconditionally under ${host}.])
-                    ;;
-                  esac
-              ]
-           )
-      fi
       dnl For gethostbyaddr_r, we currently do no separate test, instead, we
       dnl silently assume it's available exactly if gethostbyname_r is
       dnl available and always requires two more arguments than
@@ -5055,7 +5028,20 @@ else
                     ]
                 )
 
-                AC_CHECK_FUNCS(dl_iterate_phdr)
+                AC_CACHE_CHECK(
+                    [for dl_iterate_phdr],
+                    wx_cv_func_dl_iterate_phdr,
+                    AC_LINK_IFELSE(
+                        [AC_LANG_SOURCE([
+                           #include <link.h>
+                           int main() { return dl_iterate_phdr(0, 0); }])],
+                        [wx_cv_func_dl_iterate_phdr=yes],
+                        [wx_cv_func_dl_iterate_phdr=no]
+                    )
+                )
+                if test "$wx_cv_func_dl_iterate_phdr" = "yes"; then
+                    AC_DEFINE(HAVE_DL_ITERATE_PHDR)
+                fi
             fi
         fi
 
@@ -5597,7 +5583,11 @@ if test "$wxUSE_CONFIG" = "yes" ; then
     AC_MSG_WARN(wxConfig requires wxTextFile... disabled)
   else
     AC_DEFINE(wxUSE_CONFIG)
-    AC_DEFINE(wxUSE_CONFIG_NATIVE)
+    if test "$wxUSE_MSW" = 1 -a "$wxUSE_REGKEY" != 1; then
+        AC_DEFINE(wxUSE_CONFIG_NATIVE, 0)
+    else
+        AC_DEFINE(wxUSE_CONFIG_NATIVE, 1)
+    fi
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS config"
   fi
 fi
@@ -5668,10 +5658,6 @@ if test "$wxUSE_LOG" = "yes"; then
 
     dnl the keyboard sample requires wxUSE_LOG
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS keyboard"
-fi
-
-if test "$wxUSE_GEOMETRY" = "yes"; then
-  AC_DEFINE(wxUSE_GEOMETRY)
 fi
 
 if test "$wxUSE_BASE64" = "yes"; then
@@ -6956,6 +6942,21 @@ if test "$wxUSE_STC" = "yes"; then
    AC_SUBST(COND_PYTHON)
 fi
 
+USE_LUNASVG=0
+if test "$wxUSE_LUNASVG" = "yes"; then
+   if ! test -f "$srcdir/3rdparty/lunasvg/include/lunasvg.h" ; then
+       AC_MSG_ERROR([
+   The required lunasvg header was not found. You probably need to run
+
+       git submodule update --init 3rdparty/lunasvg
+
+   to fix this.])
+   fi
+
+   AC_DEFINE(wxUSE_LUNASVG)
+   USE_LUNASVG=1
+fi
+
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
     if test "$wxUSE_MENUBAR" = "yes"; then
@@ -7723,8 +7724,8 @@ if test "$wxUSE_MAC" = 1 ; then
         fi
     fi
 fi
-if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1 ; then
-    EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices -framework Foundation"
+if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1; then
+    EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework AppKit -framework IOKit -framework CoreServices -framework System -framework ApplicationServices -framework Foundation"
 fi
 
 LDFLAGS="$LDFLAGS $EXTRA_FRAMEWORKS"

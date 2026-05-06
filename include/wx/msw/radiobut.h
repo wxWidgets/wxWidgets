@@ -53,6 +53,10 @@ public:
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif
+
 protected:
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const override;

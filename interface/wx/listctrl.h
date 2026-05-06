@@ -572,12 +572,20 @@ public:
 
     /**
         Gets information about this column.
+
         See SetItem() for more information.
 
         @beginWxPerlOnly
         In wxPerl this method takes only the @a col parameter and
         returns a @c Wx::ListItem (or @c undef).
         @endWxPerlOnly
+
+        @param col The column index. It must be valid, i.e. positive or 0 and
+            strictly less than GetColumnCount(). The function asserts if this
+            is not the case.
+        @param item Output parameter filled with the information about the
+            column on successful return.
+        @return Always @true if the column index is valid.
     */
     bool GetColumn(int col, wxListItem& item) const;
 

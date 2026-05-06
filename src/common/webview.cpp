@@ -15,6 +15,7 @@
 #include "wx/webview.h"
 #include "wx/filesys.h"
 #include "wx/mstream.h"
+#include "wx/link.h"
 #include "wx/private/webview.h"
 
 #if defined(__WXOSX__)
@@ -35,6 +36,7 @@ extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[] = "about:bl
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendIE[] = "wxWebViewIE";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendEdge[] = "wxWebViewEdge";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendWebKit[] = "wxWebViewWebKit";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
 #ifdef __WXMSW__
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[] = "";
@@ -58,16 +60,6 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, wxWebViewEvent);
-
-// wxWebViewConfigurationDefault
-class wxWebViewConfigurationImplDefault : public wxWebViewConfigurationImpl
-{
-public:
-    virtual void* GetNativeConfiguration() const override
-    {
-        return nullptr;
-    }
-};
 
 // wxWebViewConfiguration
 wxWebViewConfiguration::wxWebViewConfiguration(const wxString& backend, wxWebViewConfigurationImpl* impl):
@@ -278,6 +270,15 @@ wxString wxWebView::GetPageText() const
     RunScript("document.body.innerText;", &text);
     return text;
 }
+
+#if wxUSE_PRINTING_ARCHITECTURE
+void wxWebView::Print(const wxPrintData& WXUNUSED(printData),
+                      int WXUNUSED(flags))
+{
+    // Default implementation: fall back to the parameterless Print()
+    Print();
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 bool wxWebView::CanCut() const
 {
@@ -494,7 +495,7 @@ wxWebViewConfiguration wxWebView::NewConfiguration(const wxString& backend)
     if (iter != m_factoryMap.end())
         return iter->second->CreateConfiguration();
     else
-        return wxWebViewConfiguration(backend, new wxWebViewConfigurationImplDefault);
+        return wxWebViewConfiguration(backend, new wxWebViewConfigurationImpl);
 }
 
 // static
@@ -544,9 +545,9 @@ void wxWebView::InitFactoryMap()
 #endif
 }
 
-wxWebViewConfiguration wxWebViewFactory::CreateConfiguration()
-{
-    return wxWebViewConfiguration(wxWebViewBackendDefault, new wxWebViewConfigurationImplDefault);
-}
+// Ensure the wxWebViewChromiumModule is linked in in static builds
+#if wxUSE_WEBVIEW_CHROMIUM
+    wxFORCE_LINK_MODULE(WebViewChromium)
+#endif
 
 #endif // wxUSE_WEBVIEW

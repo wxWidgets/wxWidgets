@@ -28,11 +28,11 @@ wxSize wxAnyButton::DoGetBestSize() const
     wxRect r ;
     GetPeer()->GetBestRect(&r);
 
+    auto macBorder{MacGetBorderSize()};
+
     wxSize sz = r.GetSize();
-    sz.x  = sz.x  + MacGetLeftBorderSize() +
-    MacGetRightBorderSize();
-    sz.y = sz.y + MacGetTopBorderSize() +
-    MacGetBottomBorderSize();
+    sz.x  = sz.x + macBorder.left + macBorder.right;
+    sz.y = sz.y + macBorder.top + macBorder.bottom;
 
     const int wBtnStd = GetDefaultSize().x;
 

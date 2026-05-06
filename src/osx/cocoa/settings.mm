@@ -156,6 +156,18 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
         sysColor = [NSColor alternateSelectedControlTextColor];
         break;
+    case wxSYS_COLOUR_LISTBOXHIGHLIGHT:
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+        if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+        {
+            sysColor = [NSColor selectedContentBackgroundColor];
+        }
+        else
+#endif
+        {
+            sysColor = [NSColor selectedTextBackgroundColor];
+        }
+        break;
     case wxSYS_COLOUR_INFOBK:
         // tooltip (bogus)
         sysColor = [NSColor windowBackgroundColor];

@@ -37,6 +37,8 @@ public:
     virtual void SetValue(bool val) override;
     virtual bool GetValue() const override;
 
+    virtual bool HasTransparentBackground() override { return true; }
+
     // implementation
 
     void Command(wxCommandEvent& event) override;

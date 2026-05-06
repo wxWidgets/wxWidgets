@@ -28,9 +28,11 @@ public:
     /**
         Get the component values of the matrix.
 
+        At least one of the parameters must be non-NULL.
+
         @param mat2D
-            The rotational components of the matrix (upper 2 x 2), must be
-            non-null.
+            The rotational components of the matrix (upper 2 x 2),
+            may be @NULL.
         @param tr
             The translational components of the matrix, may be @NULL.
     */

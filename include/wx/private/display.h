@@ -102,6 +102,10 @@ public:
     // but can be also overridden directly, as is done in wxMSW
     virtual wxSize GetPPI() const { return wxDisplay::GetStdPPI()*GetScaleFactor(); }
 
+    // return raw resolution of the display, by default returns standard PPI
+    // but should be overridden
+    virtual wxSize GetRawPPI() const { return wxDisplay::GetStdPPI(); }
+
     // return the name (may be empty)
     virtual wxString GetName() const { return wxString(); }
 

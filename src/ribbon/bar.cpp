@@ -54,6 +54,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
   EVT_LEFT_DCLICK(wxRibbonBar::OnMouseDoubleClick)
   EVT_SIZE(wxRibbonBar::OnSize)
   EVT_KILL_FOCUS(wxRibbonBar::OnKillFocus)
+  EVT_DPI_CHANGED(wxRibbonBar::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 void wxRibbonBar::AddPage(wxRibbonPage *page)
@@ -381,16 +382,7 @@ void wxRibbonBar::DeletePage(size_t n)
             m_current_page = wxNOT_FOUND;
 
             if(m_pages.GetCount() > 0)
-            {
-                if(n >= m_pages.GetCount())
-                {
-                    SetActivePage(m_pages.GetCount() - 1);
-                }
-                else
-                {
-                    SetActivePage(n - 1);
-                }
-            }
+                SetActivePage(wxMin(n, m_pages.GetCount() - 1));
         }
         else if(m_current_page > static_cast<int>(n))
         {
@@ -971,6 +963,28 @@ void wxRibbonBar::OnSize(wxSizeEvent& evt)
     RefreshTabBar();
 
     evt.Skip();
+}
+
+void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // Recalculate tab sizes for new DPI
+    RecalculateTabSizes();
+
+    // Realize all pages to update their layouts
+    size_t page_count = m_pages.GetCount();
+    for(size_t i = 0; i < page_count; ++i)
+    {
+        m_pages.Item(i).page->Realize();
+    }
+
+    // Reposition current page
+    if(m_current_page != wxNOT_FOUND)
+    {
+        RepositionPage(m_pages.Item(m_current_page).page);
+    }
+
+    Refresh();
+    event.Skip();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)

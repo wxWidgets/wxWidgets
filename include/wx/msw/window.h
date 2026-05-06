@@ -392,6 +392,8 @@ public:
     bool HandleTwoFingerTap(const wxPoint& pt, WXDWORD flags);
     bool HandlePressAndTap(const wxPoint& pt, WXDWORD flags);
     bool HandleTouch(WXWPARAM wParam, WXLPARAM lParam);
+    bool HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
@@ -409,6 +411,7 @@ public:
 
     bool HandlePower(WXWPARAM wParam, WXLPARAM lParam, bool *vetoed);
 
+    bool HandleEnterIdle(WXWPARAM wParam, WXLPARAM lParam);
 
     // The main body of common window proc for all wxWindow objects. It tries
     // to handle the given message and returns true if it was handled (the

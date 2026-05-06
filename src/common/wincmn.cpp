@@ -854,17 +854,24 @@ wxWindowBase::InformFirstDirection(int direction,
                                                           availableOtherDir);
 }
 
+wxSize
+wxWindowBase::GetMinSizeFromKnownDirection(int direction,
+                                           int size,
+                                           int availableOtherDir)
+{
+    if ( !InformFirstDirection(direction, size, availableOtherDir) )
+        return wxDefaultSize;
+
+    return GetEffectiveMinSize();
+}
+
 wxSize wxWindowBase::GetEffectiveMinSize() const
 {
     // merge the best size with the min size, giving priority to the min size
     wxSize min = GetMinSize();
 
-    if (min.x == wxDefaultCoord || min.y == wxDefaultCoord)
-    {
-        wxSize best = GetBestSize();
-        if (min.x == wxDefaultCoord) min.x =  best.x;
-        if (min.y == wxDefaultCoord) min.y =  best.y;
-    }
+    if ( !min.IsFullySpecified() )
+        min.SetDefaults(GetBestSize());
 
     return min;
 }
@@ -1075,6 +1082,17 @@ void wxWindowBase::DoGetScreenPosition(int *x, int *y) const
         *y = 0;
 
     ClientToScreen(x, y);
+
+    if ( x && GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // In RTL layout, ClientToScreen(0, 0) correctly returns the upper-right corner
+        // of the window (for non TLWs). But the window position relative to the desktop
+        // surface should be expressed by its upper-left corner because position (0, 0)
+        // of the desktop surface is always at the upper-left even in RTL.
+        int width;
+        DoGetSize(&width, nullptr);
+        *x -= width;
+    }
 }
 
 void wxWindowBase::SendSizeEvent(int flags)
@@ -3115,8 +3133,11 @@ bool wxWindowBase::WXSendContextMenuEvent(const wxPoint& posInScreenCoords)
 // that well and also because we don't want to leave it enabled in default
 // builds used for production
 #if wxDEBUG_LEVEL > 1
+    #define wxHAS_SIZER_DEBUG
+#endif
 
-static void DrawSizers(wxWindowBase *win);
+#ifdef wxHAS_SIZER_DEBUG
+static void DrawSizers(wxWindowBase *win, int level = 0);
 
 static void DrawBorder(wxWindowBase *win, const wxRect& rect, bool fill, const wxPen* pen)
 {
@@ -3127,19 +3148,14 @@ static void DrawBorder(wxWindowBase *win, const wxRect& rect, bool fill, const w
     dc.DrawRectangle(rect.Deflate(1, 1));
 }
 
-static void DrawSizer(wxWindowBase *win, wxSizer *sizer)
+static void DrawSizer(wxWindowBase *win, const wxSizer *sizer, int level)
 {
-    const wxSizerItemList& items = sizer->GetChildren();
-    for ( wxSizerItemList::const_iterator i = items.begin(),
-                                        end = items.end();
-          i != end;
-          ++i )
+    for ( const wxSizerItem* item : sizer->GetChildren() )
     {
-        wxSizerItem *item = *i;
         if ( item->IsSizer() )
         {
             DrawBorder(win, item->GetRect().Deflate(2), false, wxRED_PEN);
-            DrawSizer(win, item->GetSizer());
+            DrawSizer(win, item->GetSizer(), level + 1);
         }
         else if ( item->IsSpacer() )
         {
@@ -3147,70 +3163,74 @@ static void DrawSizer(wxWindowBase *win, wxSizer *sizer)
         }
         else if ( item->IsWindow() )
         {
-            DrawSizers(item->GetWindow());
+            DrawSizers(item->GetWindow(), level + 1);
         }
         else
             wxFAIL_MSG("inconsistent wxSizerItem status!");
     }
 }
 
-static void DrawSizers(wxWindowBase *win)
+static void DrawSizers(wxWindowBase *win, int level)
 {
+    // show all kind of sizes of this window; see the "window sizing" topic
+    // overview for more info about the various differences:
+    const wxSize fullSz = win->GetSize();
+    const wxSize clientSz = win->GetClientSize();
+    const wxSize bestSz = win->GetBestSize();
+    const wxSize minSz = win->GetMinSize();
+
+    // virtual size is only interesting if it's different from the client size
+    wxString virtualStr;
+    const wxSize virtualSz = win->GetVirtualSize();
+    if ( virtualSz != clientSz )
+    {
+        virtualStr.Printf("  virtual=%4dx%-4d", virtualSz.x, virtualSz.y);
+    }
+
+    wxString name = win->GetName();
+    if ( name.empty() )
+        name = "<unnamed>";
+
+    wxMessageOutputDebug dbgout;
+    dbgout.Printf(
+        "%-20s => full=%4dx%-4d  client=%4dx%-4d  best=%4dx%-4d  min=%4dx%-4d  %s\n",
+        wxString(level, ' ') + name,
+        fullSz.x, fullSz.y,
+        clientSz.x, clientSz.y,
+        bestSz.x, bestSz.y,
+        minSz.x, minSz.y,
+        virtualStr);
+
     DrawBorder(win, win->GetClientSize(), false, wxGREEN_PEN);
 
-    wxSizer *sizer = win->GetSizer();
-    if ( sizer )
+    if ( const wxSizer* const sizer = win->GetSizer() )
     {
-        DrawSizer(win, sizer);
+        DrawSizer(win, sizer, level + 1);
     }
     else // no sizer, still recurse into the children
     {
-        const wxWindowList& children = win->GetChildren();
-        for ( wxWindowList::const_iterator i = children.begin(),
-                                         end = children.end();
-              i != end;
-              ++i )
+        for ( wxWindowBase* child : win->GetChildren() )
         {
-            DrawSizers(*i);
+            DrawSizers(child, level + 1);
         }
-
-        // show all kind of sizes of this window; see the "window sizing" topic
-        // overview for more info about the various differences:
-        wxSize fullSz = win->GetSize();
-        wxSize clientSz = win->GetClientSize();
-        wxSize bestSz = win->GetBestSize();
-        wxSize minSz = win->GetMinSize();
-        wxSize maxSz = win->GetMaxSize();
-        wxSize virtualSz = win->GetVirtualSize();
-
-        wxMessageOutputDebug dbgout;
-        dbgout.Printf(
-            "%-10s => fullsz=%4d;%-4d  clientsz=%4d;%-4d  bestsz=%4d;%-4d  minsz=%4d;%-4d  maxsz=%4d;%-4d virtualsz=%4d;%-4d\n",
-            win->GetName(),
-            fullSz.x, fullSz.y,
-            clientSz.x, clientSz.y,
-            bestSz.x, bestSz.y,
-            minSz.x, minSz.y,
-            maxSz.x, maxSz.y,
-            virtualSz.x, virtualSz.y);
     }
 }
 
-#endif // wxDEBUG_LEVEL
+#endif // wxHAS_SIZER_DEBUG
 
 // process special middle clicks
 void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 {
     if ( event.ControlDown() && event.AltDown() )
     {
-#if wxDEBUG_LEVEL > 1
+#ifdef wxHAS_SIZER_DEBUG
         // Ctrl-Alt-Shift-mclick makes the sizers visible in debug builds
         if ( event.ShiftDown() )
         {
             DrawSizers(this);
         }
         else
-#endif // __WXDEBUG__
+#endif // wxHAS_SIZER_DEBUG
         {
 #if wxUSE_MSGDLG
             // just Ctrl-Alt-middle click shows information about wx version
@@ -3878,19 +3898,11 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
     if (childId > 0)
         return wxACC_NOT_IMPLEMENTED;
 
-    // This will eventually be replaced by specialised
-    // accessible classes, one for each kind of wxWidgets
-    // control or window.
-#if wxUSE_BUTTON
-    if (wxDynamicCast(GetWindow(), wxButton))
-        title = ((wxButton*) GetWindow())->GetLabel();
-    else
-#endif
-        title = GetWindow()->GetName();
+    title = GetWindow()->GetLabel();
 
     if (!title.empty())
     {
-        *name = title;
+        *name = wxStripMenuCodes(title, wxStrip_Mnemonics);
         return wxACC_OK;
     }
     else
@@ -3948,7 +3960,7 @@ wxAccStatus wxWindowAccessible::GetParent(wxAccessible** parent)
         if (*parent)
             return wxACC_OK;
         else
-            return wxACC_FAIL;
+            return wxACC_NOT_IMPLEMENTED;
     }
 }
 

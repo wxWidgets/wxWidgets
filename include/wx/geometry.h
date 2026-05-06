@@ -12,8 +12,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_GEOMETRY
-
 #include "wx/utils.h"
 #include "wx/gdicmn.h"
 #include "wx/math.h"
@@ -847,8 +845,5 @@ public :
     virtual wxPoint2DInt    InverseTransform( const wxPoint2DInt &pt ) const ;
     virtual wxRect2DInt        InverseTransform( const wxRect2DInt &r ) const ;
 };
-
-
-#endif // wxUSE_GEOMETRY
 
 #endif // _WX_GEOMETRY_H_

@@ -30,7 +30,6 @@
 #include "wx/filedlg.h"
 #include "wx/colordlg.h"
 #include "wx/srchctrl.h"
-#include "wx/checkbox.h"
 
 // If this is 1, the sample will test an extra toolbar identical to the
 // main one, but not managed by the frame. This can test subtle differences
@@ -156,8 +155,6 @@ public:
     void OnUpdateToggleRadioBtn(wxUpdateUIEvent& event)
         { event.Enable( m_tbar != nullptr ); }
 
-    void OnCheckboxUpdateUI(wxUpdateUIEvent& evt);
-
 private:
     void DoEnablePrint();
     void DoDeletePrint();
@@ -247,10 +244,7 @@ enum
     IDM_TOOLBAR_TOGGLERADIOBTN2,
     IDM_TOOLBAR_TOGGLERADIOBTN3,
 
-    ID_COMBO = 1000,
-    ID_3CHECK,
-    ID_UI_2CHECK_UPDATED,
-    ID_UI_3CHECK_UPDATED,
+    ID_COMBO = 1000
 };
 
 // ----------------------------------------------------------------------------
@@ -312,10 +306,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                         MyFrame::OnUpdateToggleRadioBtn)
     EVT_UPDATE_UI(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
                   MyFrame::OnUpdateToggleHorzText)
-    EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED,
-                  MyFrame::OnCheckboxUpdateUI)
-    EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED,
-                  MyFrame::OnCheckboxUpdateUI)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -400,12 +390,6 @@ void MyFrame::RecreateToolbar()
 
 void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 {
-    // If using wxUPDATE_UI_PROCESS_ALL (the default),
-    // some of the problems handling controls in toolbar
-    // are masked by the calls to wxCheckBox::UpdateWindowUI()
-    wxUpdateUIEvent::SetMode(wxUPDATE_UI_PROCESS_SPECIFIED);
-    toolBar->SetExtraStyle(toolBar->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
-
     // Set up toolbar
     enum
     {
@@ -486,28 +470,6 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         combo->Append("in a");
         combo->Append("toolbar");
         toolBar->AddControl(combo, "Combo Label");
-
-#if wxUSE_CHECKBOX
-        wxCheckBox* checkbox1 = new wxCheckBox(toolBar, ID_3CHECK,
-                                                    "",
-                                                    wxDefaultPosition, wxDefaultSize,
-                                                    wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
-        checkbox1->SetToolTip("Checking this checkbox changes the state of the "
-                              "two other ones using wxEVT_UPDATE_UI handler");
-        toolBar->AddControl(checkbox1, "1");
-        wxCheckBox* checkbox2 = new wxCheckBox(toolBar, ID_UI_2CHECK_UPDATED,
-                                                    "",
-                                                    wxDefaultPosition, wxDefaultSize,
-                                                    wxCHK_2STATE);
-        checkbox2->Disable();
-        toolBar->AddControl(checkbox2, "2");
-        wxCheckBox* checkbox3 = new wxCheckBox(toolBar, ID_UI_3CHECK_UPDATED,
-                                                    "",
-                                                    wxDefaultPosition, wxDefaultSize,
-                                                    wxCHK_3STATE);
-        checkbox3->Disable();
-        toolBar->AddControl(checkbox3, "3");
-#endif
     }
 #endif // USE_CONTROLS_IN_TOOLBAR
 
@@ -853,12 +815,12 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
 
         m_tbar->SetMargins(4, 4);
 
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP_PNG(new));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP_PNG(open));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP_PNG(save));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP_BUNDLE_2(new));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP_BUNDLE_2(open));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP_BUNDLE_2(save));
         m_tbar->AddSeparator();
-        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP_PNG(help));
-        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP_PNG(cut), wxBITMAP_PNG(paste));
+        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP_BUNDLE_2(help));
+        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP_BUNDLE_2(cut), wxBITMAP_BUNDLE_2(paste));
         m_tbar->EnableTool(IDM_TOOLBAR_OTHER_4, false);
 
         m_tbar->Realize();
@@ -1039,33 +1001,6 @@ void MyFrame::OnUpdateToggleHorzText(wxUpdateUIEvent& event)
                         !tbar->HasFlag(wxTB_NOICONS) );
 }
 
-// copy state from user-controllable checkbox to disabled checkbox
-void MyFrame::OnCheckboxUpdateUI(wxUpdateUIEvent& evt)
-{
-#if wxUSE_CHECKBOX
-    wxASSERT(evt.IsCheckable());
-    wxToolBar* tbar = GetToolBar();
-    wxWindow* wnd = tbar->FindWindow(ID_3CHECK);
-    wxCheckBox* src = wxCheckCast<wxCheckBox>(wnd);
-    if (!evt.Is3State())
-    {
-        if (src->Get3StateValue() != wxCHK_UNDETERMINED)
-        {
-            evt.Show(true);
-            evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
-        }
-        else
-        {
-            evt.Show(false);
-        }
-    }
-    else
-    {
-        evt.Set3StateValue(src->Get3StateValue());
-    }
-#endif
-}
-
 void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))
 {
     GetToolBar()->SetToolShortHelp(wxID_NEW, "New toolbar button");
@@ -1133,7 +1068,7 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
 
     wxToolBarBase *tb = GetToolBar();
     tb->InsertTool(0, wxID_PRINT, "New print",
-                   wxBITMAP_PNG(print), wxNullBitmap,
+                   wxBITMAP_BUNDLE_2(print), wxNullBitmap,
                    wxITEM_NORMAL,
                    "Delete this tool",
                    "This button was inserted into the toolbar");

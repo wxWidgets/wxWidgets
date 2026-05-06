@@ -341,6 +341,13 @@ void wxGUIEventLoop::OSXDoRun()
         }
     }
 
+#if wxUSE_EXCEPTIONS
+    // Rethrow any exceptions which could have been produced by the handlers
+    // ran by the event loop.
+    if ( wxTheApp )
+        wxTheApp->RethrowStoredException();
+#endif // wxUSE_EXCEPTIONS
+
     // Wake up the enclosing loop so that it can check if it also needs
     // to exit.
     WakeUp();
@@ -379,7 +386,7 @@ void wxGUIEventLoop::WakeUp()
         NSEvent *event = [NSEvent otherEventWithType:NSApplicationDefined
                                         location:NSMakePoint(0.0, 0.0)
                                    modifierFlags:0
-                                       timestamp:0
+                                       timestamp:[[NSProcessInfo processInfo] systemUptime]
                                     windowNumber:0
                                          context:nil
                                          subtype:0 data1:0 data2:0];

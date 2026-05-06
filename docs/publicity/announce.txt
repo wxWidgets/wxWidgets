@@ -1,49 +1,59 @@
-July 21, 2025 -- The wxWidgets team is pleased to announce the first new
+March 3, 2026 -- The wxWidgets team is pleased to announce the first new
 development release of our open source framework for the development of native
 cross-platform applications in C++.
 
-wxWidgets 3.3.1 is the second release in the 3.3.x development series coming
-soon after 3.3.0 and is mostly a bug fix release, correcting some regressions
-found in 3.3.0. The new version is available now from
+wxWidgets 3.3.2 is the third release in the 3.3.x development series and brings
+a number of improvements and bug fixes, with almost 1000 changes in it since
+the previous 3.3.1 release.
+
+The new version is available now from
 
     https://www.wxwidgets.org/downloads/
 
 and
 
-    https://github.com/wxWidgets/wxWidgets/releases/v3.3.1
+    https://github.com/wxWidgets/wxWidgets/releases/v3.3.2
 
-The most important fixes since 3.3.0 include:
+Changes in this release include:
 
-- Restore Windows date/time pickers behaviour under non-English OS (#25511).
-- Fix crash on startup under macOS when using Farsi as system language (#25561).
-- Fix losing wxGenericListCtrl contents after AppendColumn() (#25519).
-- Fix crash when sorting wxDataViewCtrl in wxGTK in some circumstances (#25625).
-- Fix crash when using per-window menu in Windows MDI applications (#25522).
-- Restore inadvertently broken API compatibility in wxPropertyGrid (#25627).
+- Improve accessibility support: fix it for wxCheckBox in dark mode (#26184),
+  add it for wxCheckListBox (#25948), wxStyledTextCtrl (#25956) and minimal
+  support for wxRichTextCtrl (#26202).
+- Add support for minimizing panes in wxAUI (#23986) and improve splitting
+  behaviour in wxAuiNotebook (#26081).
+- Add wxStyledTextCtrlMiniMap (#25887).
+- Allow using GLX and EGL in the same program in wxGTK (#26023).
+- Add support for using LunaSVG for SVG rendering (#25902).
+- Include projects and solution files for MSVC 2026 (#26131).
+- Many visual fixes for macOS 26 Tahoe (#25766, #25743, #25767)
+- Support scrolling, wxListCtrl, wxNotebook in wxiOS (#25827, #25857, #25858).
+- Implement printing support and wxArtProvider in wxQt (#26126, #26210).
+- Generate suspend/resume events in wxOSX (#25778).
+- Make automatic scrolling in wxScrolled<> configurable (#25978).
+- Improve number and currency formatting (#25765).
+- Significant improvements in wxSVGFileDC (#25723).
+- Allow configuring timeouts in wxWebRequest (#25673) and add new
+  wxWebRequestDebugLogger class (#26086).
+- All bundled 3rd party libraries were updated to latest versions (#26010).
 
-There were also a number of fixes to the new Windows dark mode support:
+There were too many bug fixes to list them all here, but some of the more
+important ones include:
 
-- Fix crash with wxStaticBitmap inside wxNotebook in dark mode (#25499).
-- Fix disabled wxButton bitmaps appearance in dark mode (#25575).
-- Fix disabled wxStaticText appearance in dark mode (#25574).
-- Fix notebook background in dark high contrast themes (#25542).
-- Fix regression in wxDataViewCtrl border in light mode (#25532).
-- Fix selected toolbar buttons in dark mode (Stefan Ziegler, #25616).
-- Fix wxComboCtrl appearance in dark mode (#23766).
-- Fix wxTE_RICH wxTextCtrl appearance in dark mode (#25602).
-
-And, finally, this release also contains a small number of new features:
-
-- Allow setting "app id" under supported platforms (Windows/Wayland) (#25548).
-- Add persistence support for wxRadioButtons (#25530) and wxCheckBox (#25515).
-- Add support for PNG "Description" text chunk to wxImage (#25556).
-- wxNumberFormatter improvements (#25614, #25635).
+- Fix using wxSOCKET_NOWAIT_READ and wxSOCKET_WAITALL_WRITE together (#17114).
+- Fix crash on mouse hover after closing tab in wxAuiNotebook (#25959).
+- More dark mode fixes in wxMSW: fix or improve rendering of several controls
+  (#25835), toolbar (#25892) and menus (#26182).
+- More high DPI fixes as well: for wxToolBar (#26038), wxAuiToolBar (#26076),
+  wxPGMultiButton (#26069), wxTreeCtrl state images (#26059), generic
+  wxCalendarCtrl (#25713) and bitmap position in wxDC::DrawLabel() (#25888).
+- Many RTL layout fixes in wxMSW, wxGTK and wxQt (#25426, #25822).
+- Fix multiple bugs in gesture handling in wxGTK (#26241).
 
 Please see the change log
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.1/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.2/docs/changes.txt
 
-for the list of the other important changes.
+for the list of the other changes.
 
 
 This release is part of the "development" release series, but these development

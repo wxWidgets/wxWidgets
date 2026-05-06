@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    Add the folder where wxWidgets DLL were built to MSVS PATH so that tests can be run
+    from MSVS in DLL builds.
+   -->
+  <PropertyGroup Condition="'$(Configuration)' == 'DLL Debug' or '$(Configuration)' == 'DLL Release'">
+    <LocalDebuggerEnvironment>PATH=.\..\lib\$(wxOutDirName);$(PATH)</LocalDebuggerEnvironment>
+  </PropertyGroup>
+</Project>

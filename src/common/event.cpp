@@ -105,6 +105,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureLostEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMultiTouchEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxStylusEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxGestureEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxPanGestureEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxZoomGestureEvent, wxGestureEvent);
@@ -251,6 +252,11 @@ wxDEFINE_EVENT( wxEVT_TOUCH_BEGIN, wxMultiTouchEvent );
 wxDEFINE_EVENT( wxEVT_TOUCH_MOVE, wxMultiTouchEvent );
 wxDEFINE_EVENT( wxEVT_TOUCH_END, wxMultiTouchEvent );
 wxDEFINE_EVENT( wxEVT_TOUCH_CANCEL, wxMultiTouchEvent );
+
+// wxTablet events
+wxDEFINE_EVENT(wxEVT_STYLUS_DOWN, wxStylusEvent);
+wxDEFINE_EVENT(wxEVT_STYLUS_UP, wxStylusEvent);
+wxDEFINE_EVENT(wxEVT_STYLUS_UPDATE, wxStylusEvent);
 
 // Gesture events
 wxDEFINE_EVENT( wxEVT_GESTURE_PAN, wxPanGestureEvent );

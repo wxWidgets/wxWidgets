@@ -374,7 +374,7 @@ int MyApp::OnExit()
     // clean up
     delete wxHelpProvider::Set(nullptr);
 
-    return 0;
+    return wxApp::OnExit();
 }
 
 // ----------------------------------------------------------------------------

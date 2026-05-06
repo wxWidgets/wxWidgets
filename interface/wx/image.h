@@ -213,10 +213,24 @@ public:
     /**
         Default constructor.
 
-        In your own default constructor, initialise the members
-        m_name, m_extension and m_type.
+        When using this constructor, derived class must initialize
+        m_name, m_extension and m_type in its own constructor. Use of the
+        overloaded constructor below is recommended instead.
     */
     wxImageHandler();
+
+    /**
+        Full constructor.
+
+        This constructor initializes all fields that must be initialized and is
+        the recommended constructor to use.
+
+        @since 3.3.2
+     */
+    wxImageHandler(const wxString& name,
+                   const wxString& ext,
+                   wxBitmapType type,
+                   const wxString& mime);
 
     /**
         Destroys the wxImageHandler object.

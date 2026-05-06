@@ -1054,9 +1054,6 @@
 // Recommended setting: 1 if you need it, can be safely set to 0 otherwise
 #define wxUSE_DISPLAY       1
 
-// Miscellaneous geometry code: needed for Canvas library
-#define wxUSE_GEOMETRY            1
-
 // Use wxImageList. This class is needed by wxNotebook, wxTreeCtrl and
 // wxListCtrl.
 //
@@ -1321,14 +1318,6 @@
 // otherwise.
 #define wxUSE_GLCANVAS       1
 
-// Setting wxUSE_GLCANVAS_EGL to 1 enables OpenGL EGL backend. This will be
-// automatically enabled if EGL support is detected.  EGL support is only
-// available under Unix platforms.
-//
-// Default is 0.
-//
-#define wxUSE_GLCANVAS_EGL   0
-
 // wxRichTextCtrl allows editing of styled text.
 //
 // Default is 1.
@@ -1476,6 +1465,10 @@
 
 // Set to 1 to use external nanosvg library when wxUSE_NANOSVG is enabled
 #define wxUSE_NANOSVG_EXTERNAL 0
+
+// Set to 1 for SVG rasterizing support using LunaSVG (minimum C++ 17 required)
+// Setting to 1 will override wxUSE_NANOSVG
+#define wxUSE_LUNASVG       0
 
 // Set to 1 for TGA format support (loading only)
 #define wxUSE_TGA           1

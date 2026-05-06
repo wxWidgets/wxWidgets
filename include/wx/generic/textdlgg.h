@@ -63,6 +63,8 @@ public:
     void SetValue(const wxString& val);
     wxString GetValue() const { return m_value; }
 
+    void SetHint(const wxString &hint);
+
     void SetMaxLength(unsigned long len);
 
     void ForceUpper();

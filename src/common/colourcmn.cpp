@@ -406,5 +406,3 @@ bool wxFromString(const wxString& str, wxColourBase *col)
 
     return col->Set(str);
 }
-
-

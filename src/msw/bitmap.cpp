@@ -830,16 +830,21 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 
             GetBitmapData()->m_depth = d;
         }
-        else // No valid depth, create bitmap compatible with the screen
+        else // No valid depth, create bitmap compatible with the given one
         {
-            ScreenHDC dc;
-            hbmp = ::CreateCompatibleBitmap(dc, w, h);
+            // Use screen DC if no DC given.
+            const HDC hdcToUse = hdc ? (HDC)hdc : ::GetDC(nullptr);
+
+            hbmp = ::CreateCompatibleBitmap(hdcToUse, w, h);
             if ( !hbmp )
             {
                 wxLogLastError(wxT("CreateCompatibleBitmap"));
             }
 
-            GetBitmapData()->m_depth = wxDisplayDepth();
+            GetBitmapData()->m_depth = ::GetDeviceCaps(hdcToUse, BITSPIXEL);
+
+            if ( !hdc )
+                ::ReleaseDC(nullptr, hdcToUse);
         }
 #endif // !ALWAYS_USE_DIB
     }

@@ -19,6 +19,7 @@
 #include "wx/app.h"
 #include "wx/base64.h"
 #include "wx/module.h"
+#include "wx/link.h"
 
 #include "wx/private/init.h"
 #ifdef __WXMSW__
@@ -95,8 +96,6 @@ constexpr const char* TRACE_CEF = "cef";
 #define TRACE_CEF_FUNCTION() wxLogTrace(TRACE_CEF, "%s called", __func__)
 
 } // anonymous namespace
-
-extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
 bool wxWebViewChromium::ms_cefInitialized = false;
 
@@ -580,7 +579,7 @@ private:
 class SchemeHandler : public CefResourceHandler
 {
 public:
-    SchemeHandler(const wxSharedPtr<wxWebViewHandler>& handler) : m_handler(handler), m_offset(0) {}
+    SchemeHandler(const wxSharedPtr<wxWebViewHandler>& handler) : m_handler(handler) {}
 
     // CefResourceHandler methods
     virtual bool ProcessRequest(CefRefPtr<CefRequest> request,
@@ -605,7 +604,6 @@ private:
 
     std::string m_data;
     std::string m_mime_type;
-    size_t m_offset;
 
     IMPLEMENT_REFCOUNTING(SchemeHandler);
     base::Lock m_lock;
@@ -2305,6 +2303,10 @@ private:
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromiumModule, wxModule);
+
+// Allow the user code to use wxFORCE_LINK_MODULE() to ensure that this object
+// file is not discarded by the linker.
+wxFORCE_LINK_THIS_MODULE(WebViewChromium)
 
 // ----------------------------------------------------------------------------
 // wxWebViewChromiumEvent

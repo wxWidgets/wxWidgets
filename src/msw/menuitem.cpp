@@ -135,6 +135,8 @@ private:
 
 #endif // wxUSE_OWNER_DRAWN
 
+#include "wx/msw/private/darkmode.h"
+
 // ----------------------------------------------------------------------------
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
@@ -954,24 +956,97 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 state = MPI_NORMAL;
             }
 
-            wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
+            // To get a proper dark mode appearance, we need to combine
+            // multiple themes:
+            //
+            // The DarkMode::Menu theme only defines MENU_POPUPBACKGROUND,
+            // MENU_POPUPSUBMENU, and MENU_POPUPGUTTER parts.
+            //
+            // The DarkMode_ImmersiveStart::Menu theme, on the other hand, only
+            // defines MENU_POPUPITEM (used for the rounded selection
+            // background).
+            //
+            // Because no single theme provides all required menu parts,
+            // multiple theme classes must be chained using ';' so missing
+            // parts can fall back to another theme.
+            //
+            // On older Windows versions, this fallback must be specified
+            // explicitly. On newer Windows 11 builds (25H2+), the system
+            // automatically falls back to the base Menu class if a subclass is
+            // not found.
+            //
+            // Finally: MENU_POPUPITEM is taken from DarkMode_ImmersiveStart,
+            // while remaining menu parts (background, submenu, gutter,
+            // separator) are drawn from DarkMode::Menu or the base MENU class
+            // to ensure a consistent dark-mode appearance.
+            wxUxThemeHandle hDarkTheme =
+                wxUxThemeHandle::NewAtStdDPI(L"DarkMode::Menu");
+            wxUxThemeHandle hTheme
+                (
+                    GetMenu()->GetWindow(),
+                    L"LightMode_ImmersiveStart::Menu;Menu",
+                    L"DarkMode_ImmersiveStart::Menu;DarkMode::Menu;MENU"
+                );
+
+            const bool isDark = wxMSWDarkMode::IsActive();
+
+            auto drawMenuThemePart = [&](const RECT& r, int part, int state = 0)
+                {
+                    if ( isDark )
+                    {
+                        switch ( part )
+                        {
+                            // Parts provided by DarkMode::Menu
+                            case MENU_POPUPBACKGROUND:
+                            case MENU_POPUPSUBMENU:
+                            case MENU_POPUPGUTTER:
+                                hDarkTheme.DrawBackground(hdc, r, part, state);
+                                return;
+                        }
+                    }
+
+                    // Fallback to the light theme for missing parts or when
+                    // dark mode is not active.
+                    hTheme.DrawBackground(hdc, r, part, state);
+                };
 
             if ( ::IsThemeBackgroundPartiallyTransparent(hTheme,
                     MENU_POPUPITEM, state) )
             {
-                hTheme.DrawBackground(hdc, rect, MENU_POPUPBACKGROUND);
+                drawMenuThemePart(rect, MENU_POPUPBACKGROUND);
             }
 
-            hTheme.DrawBackground(hdc, rcGutter, MENU_POPUPGUTTER);
+            drawMenuThemePart(rcGutter, MENU_POPUPGUTTER);
 
             if ( IsSeparator() )
             {
                 rcSeparator.left = rcGutter.right;
-                hTheme.DrawBackground(hdc, rcSeparator, MENU_POPUPSEPARATOR);
+                drawMenuThemePart(rcSeparator, MENU_POPUPSEPARATOR);
                 return true;
             }
 
-            hTheme.DrawBackground(hdc, rcSelection, MENU_POPUPITEM, state);
+            drawMenuThemePart(rcSelection, MENU_POPUPITEM, state);
+
+            // We also need to draw the menu arrow for sub menus in dark mode.
+            if ( isDark && GetSubMenu() )
+            {
+                const int glyphState =
+                    stat & wxODDisabled ? MSM_DISABLED : MSM_NORMAL;
+
+                const SIZE szArrow = data->ArrowSize;
+                RECT rcArrow;
+                rcArrow.right = rcSelection.right - data->ArrowMargin.cxRightWidth;
+                rcArrow.left = rcArrow.right - szArrow.cx;
+                rcArrow.top = rcSelection.top +
+                    ((rcSelection.bottom - rcSelection.top) - szArrow.cy) / 2;
+                rcArrow.bottom = rcArrow.top + szArrow.cy;
+                drawMenuThemePart(rcArrow, MENU_POPUPSUBMENU, glyphState);
+
+                // Prevent Windows from drawing its default arrow over ours.
+                ::ExcludeClipRect(hdc,
+                                  rcArrow.left, rcArrow.top,
+                                  rcArrow.right, rcArrow.bottom);
+            }
         }
         else
 #endif // wxUSE_UXTHEME
@@ -1175,7 +1250,7 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
 #if wxUSE_UXTHEME
     if ( MenuDrawData::IsUxThemeActive() )
     {
-        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
+        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU" , L"DARKMODE::MENU");
 
         const MenuDrawData* data = MenuDrawData::Get(GetMenu());
 
@@ -1251,7 +1326,7 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
 #if wxUSE_UXTHEME
     if ( MenuDrawData::IsUxThemeActive() )
     {
-        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
+        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU", L"DARKMODE::MENU");
 
         if ( stat & wxODDisabled)
         {
@@ -1261,7 +1336,18 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
         {
             colText = GetTextColour();
             if ( !colText.IsOk() )
-                wxRGBToColour(colText, ::GetThemeSysColor(hTheme, COLOR_MENUTEXT));
+            {
+                if ( wxMSWDarkMode::IsActive() )
+                {
+                    colText = hTheme.GetColour(MENU_POPUPITEM, TMT_TEXTCOLOR, MPI_NORMAL);
+                    if ( !colText.IsOk() )
+                        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
+                }
+                else
+                {
+                    wxRGBToColour(colText, ::GetThemeSysColor(hTheme, COLOR_MENUTEXT));
+                }
+            }
         }
 
         if ( stat & wxODSelected )

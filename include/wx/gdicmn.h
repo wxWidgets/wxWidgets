@@ -614,7 +614,18 @@ public:
     wxPoint(int xx, int yy) : x(xx), y(yy) { }
     wxPoint(const wxRealPoint& pt) : x(wxRound(pt.x)), y(wxRound(pt.y)) { }
 
-    // no copy ctor or assignment operator - the defaults are ok
+    static wxPoint Round(const wxRealPoint& pt)
+    {
+        return wxPoint(pt);
+    }
+
+    static wxPoint Truncate(const wxRealPoint& pt)
+    {
+        return wxPoint(static_cast<int>(pt.x), static_cast<int>(pt.y));
+    }
+
+    wxPoint(const wxPoint& pt) = default;
+    wxPoint& operator=(const wxPoint& pt) = default;
 
     //assignment operators
     wxPoint& operator+=(const wxPoint& p) { x += p.x; y += p.y; return *this; }

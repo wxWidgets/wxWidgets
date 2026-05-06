@@ -270,7 +270,6 @@ def main(scriptName, args):
                             "--enable-graphics_ctx",
                             "--enable-mediactrl",
                             "--enable-display",
-                            "--enable-geometry",
                             "--enable-debug_flag",
                             "--enable-optimise",
                             "--disable-debugreport",

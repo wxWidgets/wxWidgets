@@ -1,0 +1,38 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DLL Debug" />
+    <BuildType Name="DLL Release" />
+    <BuildType Name="Release" />
+    <Platform Name="ARM64" />
+    <Platform Name="ARM64EC" />
+    <Platform Name="Win32" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="../build/msw/wx_aui.vcxproj" Id="a16d3832-0f42-57ce-8f48-50e06649ade8" />
+  <Project Path="../build/msw/wx_base.vcxproj" Id="3fcc50c2-81e9-5db2-b8d8-2129427568b1" />
+  <Project Path="../build/msw/wx_core.vcxproj" Id="6744dad8-9c70-574a-bff2-9f8dddb24a75" />
+  <Project Path="../build/msw/wx_html.vcxproj" Id="33cc42f9-7756-5587-863c-8d4461b7c5dd" />
+  <Project Path="../build/msw/wx_media.vcxproj" Id="8bd8f8d9-4275-5b42-a8f4-f1db2970a550" />
+  <Project Path="../build/msw/wx_net.vcxproj" Id="69f2ede4-7d21-5738-9bc0-f66f61c9ae00" />
+  <Project Path="../build/msw/wx_propgrid.vcxproj" Id="97fdab45-9c58-5bc5-a2f4-ee42739ebc63" />
+  <Project Path="../build/msw/wx_richtext.vcxproj" Id="7fb0902d-8579-5dce-b883-daf66a885005" />
+  <Project Path="../build/msw/wx_stc.vcxproj" Id="23e1c437-a951-5943-8639-a17f3cf2e606" />
+  <Project Path="../build/msw/wx_webview.vcxproj" Id="a8e8442a-078a-5fc5-b495-8d71ba77ee6e" />
+  <Project Path="../build/msw/wx_xml.vcxproj" Id="3e6dca27-5fa3-53ec-bbd6-2d42294b7ae6" />
+  <Project Path="../build/msw/wx_xrc.vcxproj" Id="09f2f96a-1cc6-5e43-af1d-956ec2a4888d" />
+  <Project Path="test_gui.vcxproj" Id="9bb295d9-a6aa-510d-aa0d-9375b5d91025">
+    <BuildDependency Project="../build/msw/wx_aui.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_media.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_propgrid.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_richtext.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_stc.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_webview.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_xml.vcxproj" />
+    <BuildDependency Project="../build/msw/wx_xrc.vcxproj" />
+  </Project>
+</Solution>

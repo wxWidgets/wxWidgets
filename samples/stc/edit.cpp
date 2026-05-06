@@ -320,6 +320,10 @@ void Edit::OnIndentGuide (wxCommandEvent &WXUNUSED(event)) {
 }
 
 void Edit::OnLineNumber (wxCommandEvent &WXUNUSED(event)) {
+    ToggleLineNumbers();
+}
+
+void Edit::ToggleLineNumbers() {
     SetMarginWidth (m_LineNrID,
                     GetMarginWidth (m_LineNrID) == 0? m_LineNrMargin: 0);
 }
@@ -511,7 +515,7 @@ void Edit::OnTechnology(wxCommandEvent& event)
 
 //! misc
 void Edit::OnMarginClick (wxStyledTextEvent &event) {
-    if (event.GetMargin() == 2) {
+    if (event.GetMargin() == m_FoldingID) {
         int lineClick = LineFromPosition (event.GetPosition());
         int levelClick = GetFoldLevel (lineClick);
         if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0) {

@@ -2208,92 +2208,12 @@ void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
 
 #if wxUSE_BMPBUTTON
 
-#if defined(__WXGTK__)
-// Dedicated wxBitmapButton with reduced internal borders
-#include "wx/gtk/private.h"
-
-class wxPGEditorBitmapButton : public wxBitmapButton
-{
-public:
-    wxPGEditorBitmapButton(wxWindow *parent, wxWindowID id,
-                     const wxBitmap& bitmap, const wxPoint& pos,
-                     const wxSize& size, long style = 0)
-        : wxBitmapButton(parent, id, bitmap, pos, size, style)
-    {
-#if defined(__WXGTK3__)
-        GTKApplyCssStyle("*{ padding:0 }");
-#else
-        // Define a special button style without inner border
-        // if it's not yet done.
-        if ( !m_exactFitStyleDefined )
-        {
-            gtk_rc_parse_string(
-              "style \"wxPGEditorBitmapButton_style\"\n"
-              "{ GtkButton::inner-border = { 0, 0, 0, 0 } }\n"
-              "widget \"*wxPGEditorBitmapButton*\" style \"wxPGEditorBitmapButton_style\"\n"
-            );
-            m_exactFitStyleDefined = true;
-        }
-
-        // Assign the button to the GTK style without inner border.
-        gtk_widget_set_name(m_widget, "wxPGEditorBitmapButton");
-#endif
-    }
-
-    virtual ~wxPGEditorBitmapButton() = default;
-
-private:
-#ifndef __WXGTK3__
-    // To mark if special GTK style was already defined.
-    static bool m_exactFitStyleDefined;
-#endif // !__WXGTK3__
-};
-
-#ifndef __WXGTK3__
-bool wxPGEditorBitmapButton::m_exactFitStyleDefined = false;
-#endif // !__WXGTK3__
-
-#else // !__WXGTK__
-
-typedef wxBitmapButton wxPGEditorBitmapButton;
-
-#endif // __WXGTK__ / !__WXGTK__
-
 void wxPGMultiButton::Add( const wxBitmapBundle& bitmap, int itemid )
 {
     wxSize sz = GetSize();
-
-    // Internal margins around the bitmap inside the button
-    const int margins =
-#if defined(__WXMSW__)
-            2*4;
-#elif defined(__WXGTK3__)
-            2*2;
-#elif defined(__WXGTK__)
-            2*6;
-#elif defined(__WXOSX__)
-            2*3;
-#else
-            0;
-#endif
-    // Maximal heigth of the bitmap
-    const int hMax = wxMax(4, sz.y - margins);
-
-    wxBitmap bmp = bitmap.GetBitmapFor(this);
-    wxBitmap scaledBmp;
-    // Scale bitmap down if necessary
-    if ( bmp.GetHeight() > hMax )
-    {
-        double scale = (double)hMax / bmp.GetHeight();
-        scaledBmp = wxPropertyGrid::RescaleBitmap(bmp, scale, scale);
-    }
-    else
-    {
-        scaledBmp = bmp;
-    }
-
-    wxBitmapButton* button = new wxPGEditorBitmapButton(this, itemid, scaledBmp,
-                           wxPoint(sz.x, 0), wxSize(wxDefaultCoord, sz.y));
+    wxBitmapButton* button = new wxBitmapButton(this, itemid, bitmap,
+                           wxPoint(sz.x, 0), wxSize(wxDefaultCoord, sz.y),
+                           wxBU_EXACTFIT);
     // If button is narrow make it a square
     wxSize szBtn = button->GetSize();
     if ( szBtn.x < szBtn.y )

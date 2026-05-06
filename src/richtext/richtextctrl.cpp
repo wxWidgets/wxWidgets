@@ -1655,8 +1655,10 @@ Left:       left one character
 Right:      right one character
 Up:         up one line
 Down:       down one line
-Ctrl-Left:  left one word
-Ctrl-Right: right one word
+Ctrl-Left:  left one word (start of line on macOS)
+Ctrl-Right: right one word (end of line on macOS)
+Alt-Left:   left one word (macOS only)
+Alt-Right:  right one word (macOS only)
 Ctrl-Up:    previous paragraph start
 Ctrl-Down:  next start of paragraph
 Home:       start of line
@@ -1684,17 +1686,35 @@ bool wxRichTextCtrl::KeyboardNavigate(int keyCode, int flags)
 
     if (keyCode == WXK_RIGHT || keyCode == WXK_NUMPAD_RIGHT)
     {
+#ifdef __WXMAC__
+        if (flags & wxRICHTEXT_CTRL_DOWN)
+            success = MoveToLineEnd(flags);
+        else if (flags & wxRICHTEXT_ALT_DOWN)
+            success = WordRight(1, flags);
+        else
+            success = MoveRight(1, flags);
+#else
         if (flags & wxRICHTEXT_CTRL_DOWN)
             success = WordRight(1, flags);
         else
             success = MoveRight(1, flags);
+#endif
     }
     else if (keyCode == WXK_LEFT || keyCode == WXK_NUMPAD_LEFT)
     {
+#ifdef __WXMAC__
+        if (flags & wxRICHTEXT_CTRL_DOWN)
+            success = MoveToLineStart(flags);
+        else if (flags & wxRICHTEXT_ALT_DOWN)
+            success = WordLeft(1, flags);
+        else
+            success = MoveLeft(1, flags);
+#else
         if (flags & wxRICHTEXT_CTRL_DOWN)
             success = WordLeft(1, flags);
         else
             success = MoveLeft(1, flags);
+#endif
     }
     else if (keyCode == WXK_UP || keyCode == WXK_NUMPAD_UP)
     {
@@ -5562,6 +5582,69 @@ int wxRichTextContextMenuPropertiesInfo::AddItems(wxRichTextCtrl* ctrl, wxRichTe
 
     return GetCount();
 }
+
+#if wxUSE_ACCESSIBILITY
+
+#include "wx/access.h"
+
+class wxRichTextCtrlAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxRichTextCtrlAccessible(wxRichTextCtrl *win) : wxWindowAccessible(win)
+    {
+    }
+
+    wxAccStatus GetName(int childId, wxString *name) override
+    {
+        if (childId != wxACC_SELF)
+            return wxWindowAccessible::GetName(childId, name);
+
+        *name = _("Rich Text Control");  // wxString::operator= copies, so this is safe
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetRole(int childId, wxAccRole *role) override
+    {
+        if (childId != wxACC_SELF)
+            return wxWindowAccessible::GetRole(childId, role);
+
+        *role = wxROLE_SYSTEM_TEXT;
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetState(int childId, long *state) override
+    {
+        if (childId != wxACC_SELF)
+            return wxWindowAccessible::GetState(childId, state);
+
+        wxRichTextCtrl *ctrl = wxStaticCast(GetWindow(), wxRichTextCtrl);
+
+        *state = wxACC_STATE_SYSTEM_FOCUSABLE;
+        if (ctrl->HasFocus())
+            *state |= wxACC_STATE_SYSTEM_FOCUSED;
+        if (!ctrl->IsEditable())
+            *state |= wxACC_STATE_SYSTEM_READONLY;
+
+        return wxACC_OK;
+    }
+
+    wxAccStatus GetValue(int childId, wxString *strValue) override
+    {
+        if (childId != wxACC_SELF)
+            return wxWindowAccessible::GetValue(childId, strValue);
+
+        wxRichTextCtrl *ctrl = wxStaticCast(GetWindow(), wxRichTextCtrl);
+        *strValue = ctrl->GetValue();
+        return wxACC_OK;
+    }
+};
+
+wxAccessible *wxRichTextCtrl::CreateAccessible()
+{
+    return new wxRichTextCtrlAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 #endif
     // wxUSE_RICHTEXT

@@ -47,6 +47,12 @@
     }
 }
 
+- (void)dealloc
+{
+    self.WXFieldEditor = nil;
+    [super dealloc];
+}
+
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);

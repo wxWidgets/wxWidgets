@@ -100,6 +100,7 @@ public:
     virtual void DoSelect(const wxBitmap& bitmap) override;
     virtual const wxBitmap& GetSelectedBitmap() const override;
     virtual wxBitmap& GetSelectedBitmap() override;
+    virtual void SetLayoutDirection(wxLayoutDirection dir) override;
 
 private:
     void Setup();

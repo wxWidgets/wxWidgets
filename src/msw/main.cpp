@@ -56,7 +56,7 @@ extern int wxEntryReal(int& argc, wxChar **argv);
 
 // global pointer to exception information, only valid inside OnFatalException,
 // used by wxStackWalker and wxCrashReport
-extern EXCEPTION_POINTERS *wxGlobalSEInformation = nullptr;
+EXCEPTION_POINTERS *wxGlobalSEInformation = nullptr;
 
 // flag telling us whether the application wants to handle exceptions at all
 static bool gs_handleExceptions = false;

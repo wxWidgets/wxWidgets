@@ -478,6 +478,30 @@ public:
     void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
+        Explicitly request using HTTP "Basic" authentication with the provided
+        credentials.
+
+        If this function is not called, wxWebRequest initially makes a request
+        without using any authentication and then requests credentials from the
+        application, using the preferred authentication method among those
+        supported by both the client and the server, using wxWebAuthChallenge.
+        This is the most flexible approach, but it always requires making an
+        extra HTTP request.
+
+        If the application knows that "Basic" authentication should be used, it
+        can avoid this extra request by calling this function before calling
+        Execute(): this will use the provided credentials for the initial
+        request.
+
+        Note that when using a proxy with credentials information, proxy
+        credentials will be also included in the initial request if this
+        function is called when using libcurl backend.
+
+        @since 3.3.2
+     */
+    void UseBasicAuth(const wxWebCredentials& cred);
+
+    /**
         Flags for disabling security features.
 
         @since 3.3.0
@@ -609,16 +633,17 @@ public:
     }
     @endcode
 
-    To handle authentication with this class the username and password must be
-    specified in the URL itself and wxWebAuthChallenge is not used with it.
+    wxWebAuthChallenge is not used with this class, to access protected
+    resources the username and password may be specified in the URL itself or
+    UseBasicAuth() must be called prior to Execute().
 
     @note Any reserved characters (see RFC 3986) in the username or password
         must be percent encoded. wxURI::SetUserAndPassword() can be used to
         ensure that this is done correctly.
 
     @note macOS backend using NSURLSession doesn't handle encoded characters in
-        the password (but does handle them in the username). Async wxWebSession
-        must be used if you need to support them under this platform.
+        the password (but does handle them in the username). Use wxWebSession or
+        UseBasicAuth() if you need to support them under this platform.
 
     @see wxWebRequest
 
@@ -966,6 +991,29 @@ public:
     void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
+        Explicitly request using HTTP "Basic" authentication with the provided
+        credentials.
+
+        If this function is not called, wxWebRequestSync will use the
+        credentials from the URL itself to authenticate with the server if
+        necessary. This has the advantage of supporting multiple authentication
+        methods, but requires an extra HTTP request to be made to discover the
+        methods supported by the server.
+
+        If the application knows that "Basic" authentication should be used, it
+        can avoid this extra request by calling this function before calling
+        Execute(): this will use the provided credentials for the initial
+        request.
+
+        Note that when using a proxy with credentials information, proxy
+        credentials will be also included in the initial request if this
+        function is called when using libcurl backend.
+
+        @since 3.3.2
+     */
+    void UseBasicAuth(const wxWebCredentials& cred);
+
+    /**
         Make connection insecure by disabling security checks.
 
         Don't use this function unless absolutely necessary as disabling the
@@ -1069,6 +1117,16 @@ public:
      */
     wxWebCredentials(const wxString& user = wxString(),
                      const wxSecretValue& password = wxSecretValue());
+
+    /**
+        Return true if user name is set.
+
+        This can be used to distinguish this object from the
+        default-constructed one.
+
+        @since 3.3.2
+     */
+    bool IsOk() const;
 
     /// Return the user.
     const wxString& GetUser() const;
@@ -1260,6 +1318,103 @@ public:
     static wxWebProxy Disable();
 
     static wxWebProxy Default();
+};
+
+/**
+    Base class for logging debug information from web requests.
+
+    An object of a class derived from this one may be associated with a
+    wxWebSession or wxWebSessionSync using wxWebSession::SetDebugLogger() in
+    order to receive detailed information about the data exchanged with the
+    HTTP server.
+
+    Once this object is associated with a session, its member functions will be
+    called to report various events happening during the request processing.
+
+    libcurl-based backend provides the most full-featured logging, with WinHTTP
+    backend providing only limited information and NSURLSession-based backend
+    currently not providing any logging at all.
+
+    @since 3.3.2
+
+    @library{wxnet}
+    @category{net}
+*/
+class wxWebRequestDebugLogger
+{
+public:
+    /// Default constructor.
+    wxWebRequestDebugLogger() = default;
+
+    /**
+        Called to notify about an informational message.
+
+        For example, the libcurl-based backend provides details about the
+        protocol used (including TLS version when applicable) and the
+        connection state using this function.
+
+        @param info A single line informational message.
+     */
+    virtual void OnInfo(const wxString& info) = 0;
+
+    /**
+        Called with the request line sent to the server.
+
+        A typical example of such a line would be `GET /index.html HTTP/1.1`.
+     */
+    virtual void OnRequestSent(const wxString& line) = 0;
+
+    /**
+        Called with the status line received from the server.
+
+        A typical example of such a line would be `HTTP/1.1 200 OK`.
+     */
+    virtual void OnResponseReceived(const wxString& line) = 0;
+
+    /**
+        Called for each header sent to the server.
+
+        This is currently only called when libcurl-based backend is used.
+
+        @param name Name of the header
+        @param value String value of the header
+     */
+    virtual void OnHeaderSent(const wxString& name, const wxString& value) = 0;
+
+    /**
+        Called for each header received from the server.
+
+        @param name Name of the header
+        @param value String value of the header
+     */
+    virtual void OnHeaderReceived(const wxString& name, const wxString& value) = 0;
+
+    /**
+        Called when other data is sent to the server.
+
+        This data may be binary and encrypted when using HTTPS, so it is
+        typically not human-readable, although it may be in some cases (e.g.
+        when using a text body with HTTP POST).
+
+        This is currently only called when libcurl-based backend is used or
+        when WinHTTP backend is used with synchronous requests.
+
+        @param data Pointer to the received data buffer.
+        @param size Size of the received data buffer in bytes.
+     */
+    virtual void OnDataSent(const void* data, size_t size) = 0;
+
+    /**
+        Called when other data is received from the server.
+
+        This data may be binary and encrypted when using HTTPS, so it is
+        typically not human-readable, although it may be in some cases (e.g.
+        when receiving a text response body).
+
+        @param data Pointer to the received data buffer.
+        @param size Size of the received data buffer in bytes.
+     */
+    virtual void OnDataReceived(const void* data, size_t size) = 0;
 };
 
 /**
@@ -1480,6 +1635,21 @@ public:
         @since 3.3.0
      */
     bool EnablePersistentStorage(bool enable);
+
+    /**
+        Enable debug logging for all requests created by this session.
+
+        If @a logger is non-null, it will be used to log detailed debug
+        information about the data exchanged with the HTTP server for all
+        requests created by this session after this function is called.
+
+        @note Calling this function destroys any previously set logger, make
+            sure there are no active requests using it any more before doing
+            so to avoid crashes.
+
+        @since 3.3.2
+     */
+    void SetDebugLogger(std::unique_ptr<wxWebRequestDebugLogger> logger);
 };
 
 /**
@@ -1671,6 +1841,21 @@ public:
         @note This is only implemented in the macOS backend.
      */
     bool EnablePersistentStorage(bool enable);
+
+    /**
+        Enable debug logging for all requests created by this session.
+
+        If @a logger is non-null, it will be used to log detailed debug
+        information about the data exchanged with the HTTP server for all
+        requests created by this session after this function is called.
+
+        @note Calling this function destroys any previously set logger, make
+            sure there are no active requests using it any more before doing
+            so to avoid crashes.
+
+        @since 3.3.2
+     */
+    void SetDebugLogger(std::unique_ptr<wxWebRequestDebugLogger> logger);
 };
 
 

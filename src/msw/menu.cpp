@@ -44,7 +44,11 @@
 // other standard headers
 #include <string.h>
 
+#include "wx/brush.h"
 #include "wx/dynlib.h"
+
+#include "wx/msw/uxtheme.h"
+#include "wx/msw/private/darkmode.h"
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -338,6 +342,15 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // (and don't forget to reset the flag)
     if ( m_doBreak ) {
         flags |= MF_MENUBREAK;
+
+#if wxUSE_OWNER_DRAWN
+        if ( wxMSWDarkMode::IsActive() )
+        {
+            // Menu breaks must be owner drawn to work properly in dark mode
+            pItem->SetOwnerDrawn(true);
+        }
+#endif // wxUSE_OWNER_DRAWN
+
         m_doBreak = false;
     }
 
@@ -938,9 +951,40 @@ WXHMENU wxMenuBar::Create()
                 wxLogLastError(wxT("AppendMenu"));
             }
         }
+
+        MSWApplyThemeBackground();
     }
 
     return m_hMenu;
+}
+
+void wxMenuBar::MSWApplyThemeBackground()
+{
+    // We need to be using owner-drawn menus to be able to use the matching
+    // foreground colour, so don't do anything if support for them is disabled:
+    // it's better to leave everything white than to make it unreadable.
+#if wxUSE_OWNER_DRAWN
+    // Set menu background color
+    wxUxThemeHandle hTheme = wxUxThemeHandle::NewAtStdDPI
+        (
+         L"LightMode_ImmersiveStart::Menu;Menu",
+         L"DarkMode_ImmersiveStart::Menu;Menu"
+        );
+    wxColour colMenu = hTheme.GetColour(MENU_POPUPBACKGROUND, TMT_FILLCOLOR);
+    if ( colMenu.IsOk() )
+    {
+        wxBrush* const brush =
+            wxTheBrushList->FindOrCreateBrush(wxColourToRGB(colMenu));
+
+        WinStruct<MENUINFO> mi;
+        mi.fMask = MIM_BACKGROUND | MIM_APPLYTOSUBMENUS;
+        mi.hbrBack = GetHbrushOf(*brush);
+        if ( !::SetMenuInfo(m_hMenu, &mi) )
+        {
+            wxLogLastError(wxT("SetMenuInfo(MIM_BACKGROUND)"));
+        }
+    }
+#endif // wxUSE_OWNER_DRAWN
 }
 
 int wxMenuBar::MSWPositionForWxMenu(wxMenu *menu, int wxpos)

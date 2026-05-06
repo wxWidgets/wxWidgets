@@ -47,6 +47,7 @@ wxAuiPaneInfo wxAuiNullPaneInfo;
 wxAuiDockInfo wxAuiNullDockInfo;
 wxDEFINE_EVENT( wxEVT_AUI_PANE_BUTTON, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_PANE_CLOSE, wxAuiManagerEvent );
+wxDEFINE_EVENT( wxEVT_AUI_PANE_MINIMIZE, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_PANE_MAXIMIZE, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_PANE_RESTORE, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_PANE_ACTIVATED, wxAuiManagerEvent );
@@ -65,6 +66,7 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 
 #include <map>
 #include <memory>
+#include <unordered_map>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
 wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
@@ -351,6 +353,149 @@ void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
 } // anonymous namespace
 
 
+// ----------------------------------------------------------------------------
+// wxAuiMinDock: dock showing panes that can be minimized.
+// ----------------------------------------------------------------------------
+
+// This class is currently implemented as wxAuiToolBar, but this could change
+// in the future, we don't expose this fact in the public API.
+class wxAuiMinDock : public wxAuiToolBar
+{
+public:
+    // Style is the combination of wxAUI_MIN_DOCK_XXX values.
+    wxAuiMinDock(wxAuiManager& mgr,
+                 wxAuiManagerDock direction,
+                 unsigned int style)
+        : m_mgr(mgr),
+          m_style(style)
+    {
+        long flags = 0;
+        if ( m_style & wxAUI_MIN_DOCK_TEXT )
+            flags |= wxAUI_TB_TEXT;
+        if ( m_style & wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT )
+            flags |= wxAUI_TB_ROTATE_ICON_WITH_TEXT;
+
+        switch ( direction )
+        {
+            case wxAUI_DOCK_TOP:
+            case wxAUI_DOCK_BOTTOM:
+                flags |= wxAUI_TB_HORIZONTAL;
+                if ( flags & wxAUI_TB_TEXT )
+                    flags |= wxAUI_TB_HORZ_LAYOUT;
+                break;
+
+            case wxAUI_DOCK_LEFT:
+                flags |= wxAUI_TB_VERTICAL;
+                if ( flags & wxAUI_TB_TEXT )
+                    flags |= wxAUI_TB_VERT_LAYOUT_UP;
+                break;
+
+            case wxAUI_DOCK_RIGHT:
+                flags |= wxAUI_TB_VERTICAL;
+                if ( flags & wxAUI_TB_TEXT )
+                    flags |= wxAUI_TB_VERT_LAYOUT_DOWN;
+                break;
+
+            default:
+                wxFAIL_MSG("Invalid direction for minimized dock");
+        }
+
+        Create(mgr.GetManagedWindow(), wxID_ANY,
+                       wxDefaultPosition, wxDefaultSize,
+                       flags | wxAUI_TB_PLAIN_BACKGROUND),
+
+        SetFont(GetFont().MakeSmaller());
+
+        Bind(wxEVT_MENU, &wxAuiMinDock::OnToolClicked, this);
+    }
+
+    void AddPane(wxAuiPaneInfo& paneInfo)
+    {
+        wxBitmapBundle icon;
+        if ( m_style & wxAUI_MIN_DOCK_ICONS )
+        {
+            icon = paneInfo.iconMin;
+            if ( !icon.IsOk() )
+                icon = paneInfo.icon;
+        }
+
+        wxString text, tooltip;
+        if ( m_style & wxAUI_MIN_DOCK_TEXT )
+        {
+            // Don't set tool tip in this case, it would be redundant.
+            text = paneInfo.caption;
+        }
+        else // Showing only icons.
+        {
+            // Don't set text in this case, it would be unused anyhow.
+            tooltip = paneInfo.caption;
+        }
+
+        auto* const item = AddTool(wxID_ANY, text, icon, tooltip);
+        m_panes[item->GetId()] = &paneInfo;
+
+        m_needsRealize = true;
+    }
+
+    // Returns false if the dock has become empty after removing this pane.
+    bool RemovePane(wxAuiPaneInfo& paneInfo)
+    {
+        for (auto const& kv : m_panes)
+        {
+            if ( kv.second == &paneInfo )
+            {
+                DeleteTool(kv.first);
+                m_panes.erase(kv.first);
+
+                m_needsRealize = true;
+
+                return !m_panes.empty();
+            }
+        }
+
+        wxFAIL_MSG("Pane unexpectedly not found in minimized dock");
+
+        return true;
+    }
+
+    bool RealizeIfNeeded()
+    {
+        if ( !m_needsRealize )
+            return false;
+
+        Realize();
+
+        m_needsRealize = false;
+
+        return true;
+    }
+
+private:
+    void OnToolClicked(wxCommandEvent& event)
+    {
+        auto* const pane = m_panes[event.GetId()];
+        wxCHECK_RET(pane, "No window associated with minimized pane tool?");
+
+        if ( pane->IsShown() )
+        {
+            m_mgr.MinimizePane(*pane);
+        }
+        else
+        {
+            pane->Show();
+        }
+
+        m_mgr.Update();
+    }
+
+    wxAuiManager& m_mgr;
+    const unsigned int m_style;
+
+    std::unordered_map<int, wxAuiPaneInfo*> m_panes;
+
+    bool m_needsRealize = false;
+};
+
 // SetActivePane() sets the active pane, as well as cycles through
 // every other pane and makes sure that all others' active flags
 // are turned off
@@ -451,6 +596,17 @@ int wxAuiManager::GetActionPartIndex() const
     }
 
     return wxNOT_FOUND;
+}
+
+int wxAuiManager::GetContainingDockSize(const wxAuiPaneInfo& paneInfo) const
+{
+    for ( const auto& d : m_docks )
+    {
+        if ( FindPaneInDock(d, paneInfo.window) )
+            return d.size;
+    }
+
+    return 0;
 }
 
 void wxAuiManager::OnSysColourChanged(wxSysColourChangedEvent& event)
@@ -687,6 +843,70 @@ wxAuiDockArt* wxAuiManager::GetArtProvider() const
     return m_art;
 }
 
+wxSize wxAuiManager::GetMinPaneSize() const
+{
+    // This is pretty arbitrary, should we make it configurable?
+    return wxWindow::FromDIP(wxSize(10, 10), m_frame);
+}
+
+void wxAuiManager::AllowDocksForMinPanes(int directions)
+{
+    wxCHECK_RET( directions, "Must specify at least one direction" );
+    wxCHECK_RET
+    (
+         !(directions & ~wxALL),
+         "Parameter may only contain wxLEFT, wxRIGHT, wxTOP and wxBOTTOM"
+    );
+
+    if ( directions == m_minDockAllowed )
+        return;
+
+    for ( const auto& dock : m_minDocks )
+    {
+        if ( dock )
+        {
+            wxFAIL_MSG( "Must be called before there are any minimized panes" );
+            return;
+        }
+    }
+
+    m_minDockAllowed = directions;
+}
+
+void wxAuiManager::SetDocksForMinPanesStyle(unsigned int style)
+{
+    wxASSERT_MSG
+    (
+        !(style & ~(wxAUI_MIN_DOCK_BOTH |
+                    wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT)),
+        "Parameter may only contain wxAUI_MIN_DOCK_XXX flags"
+    );
+
+    wxASSERT_MSG
+    (
+        style & wxAUI_MIN_DOCK_BOTH,
+        "Either wxAUI_MIN_DOCK_ICONS or wxAUI_MIN_DOCK_TEXT must be specified"
+    );
+
+    wxASSERT_MSG
+    (
+        (style & wxAUI_MIN_DOCK_ICONS) ||
+            !(style & wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT),
+        "wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT requires wxAUI_MIN_DOCK_ICONS"
+    );
+
+    for ( const auto& dock : m_minDocks )
+    {
+        if ( dock )
+        {
+            wxFAIL_MSG( "Must be called before there are any minimized panes" );
+            return;
+        }
+    }
+
+    m_minDockStyle = style;
+}
+
 void wxAuiManager::ProcessMgrEvent(wxAuiManagerEvent& event)
 {
     // first, give the owner frame a chance to override
@@ -824,7 +1044,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
         pinfo.best_size.IncTo(pinfo.min_size);
     }
 
-
+    AddPaneToMinDockIfNecessary(pinfo);
 
     return true;
 }
@@ -922,6 +1142,183 @@ bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& paneInfo,
     return true;
 }
 
+wxSize wxAuiManager::CalculateNewSplitSize() const
+{
+    // Don't do anything if we're not fully initialized yet.
+    if ( !m_frame || m_docks.empty() )
+        return GetMinPaneSize();
+
+    // Calculate the number of vertical and horizontal rows that we have.
+    int numColumns = 0;
+    int numRows = 0;
+
+    // We could have called FindDocks() multiple times here, but it is more
+    // efficient to count the docks ourselves just once.
+    for ( const auto& d : m_docks )
+    {
+        switch ( d.dock_direction )
+        {
+            case wxAUI_DOCK_LEFT:
+            case wxAUI_DOCK_RIGHT:
+                numColumns++;
+                break;
+
+            case wxAUI_DOCK_TOP:
+            case wxAUI_DOCK_BOTTOM:
+                numRows++;
+                break;
+
+            case wxAUI_DOCK_CENTER:
+                // Center dock counts as both a row and a column.
+                numColumns++;
+                numRows++;
+                break;
+
+            case wxAUI_DOCK_NONE:
+                wxFAIL_MSG( "Unexpected dock direction when calculating new split size" );
+        }
+    }
+
+    // We don't know if the new split is going to be horizontal or vertical,
+    // but it doesn't matter because the other size component won't be used, so
+    // we can just set each of them as if the split was in that direction.
+    wxSize size = m_frame->GetClientSize();
+
+    // When we have only one pane, the new split should be half of the total
+    // available size, hence +1.
+    size.x /= numColumns + 1;
+    size.y /= numRows + 1;
+
+    // Always use some minimum size to avoid creating too small panes or
+    // showing tiny hint window (because this function is also used to
+    // determine its size).
+    size.IncTo(GetMinPaneSize());
+
+    return size;
+}
+
+bool
+wxAuiManager::SplitPane(wxWindow* window,
+                        wxWindow* newWindow,
+                        int direction,
+                        const wxPoint& dropPos)
+{
+    const wxAuiPaneInfo& paneOrig = GetPane(window);
+    wxCHECK_MSG( paneOrig.IsOk(), false, "Window being split must be present" );
+
+    wxAuiPaneInfo paneInfo = wxAuiPaneInfo().CaptionVisible(false);
+
+    wxPoint defaultDropPos;
+    const wxSize sizeWindow = m_frame->GetClientSize();
+
+    if (direction == wxLEFT)
+    {
+        paneInfo.Left();
+        defaultDropPos = wxPoint(0, sizeWindow.y/2);
+    }
+    else if (direction == wxRIGHT)
+    {
+        paneInfo.Right();
+        defaultDropPos = wxPoint(sizeWindow.x, sizeWindow.y/2);
+    }
+    else if (direction == wxTOP)
+    {
+        paneInfo.Top();
+        defaultDropPos = wxPoint(sizeWindow.x/2, 0);
+    }
+    else if (direction == wxBOTTOM)
+    {
+        paneInfo.Bottom();
+        defaultDropPos = wxPoint(sizeWindow.x/2, sizeWindow.y);
+    }
+
+    // Get the new split size before adding the pane, as this would change it.
+    const wxSize size = CalculateNewSplitSize();
+
+    AddPane(newWindow, paneInfo,
+            dropPos != wxDefaultPosition ? dropPos : defaultDropPos);
+
+    // The direction specified in the pane info may be overridden by the drop
+    // position, so get the real direction of the new pane now.
+    bool adjustHorz = false;
+    bool adjustVert = false;
+    switch ( GetPane(newWindow).dock_direction )
+    {
+        case wxAUI_DOCK_LEFT:
+        case wxAUI_DOCK_RIGHT:
+            adjustHorz = true;
+            break;
+
+        case wxAUI_DOCK_TOP:
+        case wxAUI_DOCK_BOTTOM:
+            adjustVert = true;
+            break;
+
+        case wxAUI_DOCK_CENTER:
+        case wxAUI_DOCK_NONE:
+            wxFAIL_MSG( "Unexpected dock direction for new pane after split" );
+    }
+
+    // Adjust all the existing docks to have the same size as the new one in
+    // the split direction.
+    for ( auto& d : m_docks )
+    {
+        switch ( d.dock_direction )
+        {
+            case wxAUI_DOCK_LEFT:
+            case wxAUI_DOCK_RIGHT:
+                if ( adjustHorz )
+                    d.size = size.x;
+                break;
+
+            case wxAUI_DOCK_TOP:
+            case wxAUI_DOCK_BOTTOM:
+                if ( adjustVert )
+                    d.size = size.y;
+                break;
+
+            case wxAUI_DOCK_CENTER:
+                d.size = adjustHorz ? size.x : size.y;
+                break;
+
+            case wxAUI_DOCK_NONE:
+                wxFAIL_MSG( "Unexpected dock direction when calculating new split size" );
+        }
+    }
+
+    // And if we need to create a new dock for the new pane, set its size to be
+    // the same too.
+    //
+    // Note: this is similar to the code in LayoutAll() and we could also call
+    // Update() to do this, but then we'd need to call it again to take the
+    // changed dock size into account, so we prefer to set the size here to
+    // avoid an extra call to Update().
+    //
+    // Also note that it is _not_ sufficient to check if the dock is going to
+    // be created for the new pane, in some layouts it can go into an existing
+    // dock and a new dock is created for an existing pane, so we really need
+    // to iterate over all of them.
+    for ( const auto& p : m_panes )
+    {
+        if ( FindDocks(m_docks,
+                       p.dock_direction,
+                       p.dock_layer,
+                       p.dock_row,
+                       FindDocksFlags::OnlyFirst).IsEmpty() )
+        {
+            wxAuiDockInfo d;
+            d.dock_direction = p.dock_direction;
+            d.dock_layer = p.dock_layer;
+            d.dock_row = p.dock_row;
+            d.size = adjustHorz ? size.x : size.y;
+            m_docks.Add(d);
+        }
+    }
+
+    Update();
+
+    return true;
+}
 
 // DetachPane() removes a pane from the frame manager.  This
 // method will not destroy the window that is removed.
@@ -1003,7 +1400,7 @@ bool wxAuiManager::DetachPane(wxWindow* window)
 }
 
 // ClosePane() destroys or hides the pane depending on its flags
-void wxAuiManager::ClosePane(wxAuiPaneInfo& paneInfo)
+void wxAuiManager::DoHidePaneWindow(wxAuiPaneInfo& paneInfo)
 {
     // if we were maximized, restore
     if (paneInfo.IsMaximized())
@@ -1029,6 +1426,31 @@ void wxAuiManager::ClosePane(wxAuiPaneInfo& paneInfo)
         paneInfo.frame->Destroy();
         paneInfo.frame = nullptr;
     }
+}
+
+void wxAuiManager::ClosePane(wxAuiPaneInfo& paneInfo)
+{
+    DoHidePaneWindow(paneInfo);
+
+    // Ensure that the pane doesn't remain referenced by any docks, otherwise
+    // closing it would have the same effect as minimizing it, which is not
+    // what the user expects.
+    //
+    // This also ensures that docks don't reference the already destroyed pane
+    // in case we're really destroying it below (i.e. if IsDestroyOnClose()).
+    if (paneInfo.HasMinimizeButton())
+    {
+        auto const minDirection = GetMinDockDirectionFor(paneInfo.dock_direction);
+        if (minDirection != wxAUI_DOCK_NONE)
+        {
+            RemovePaneFromMinDockIfNecessary(minDirection, paneInfo);
+        }
+
+        // Also prevent it from being added to the dock if it is shown later by
+        // marking it as "closed": this flag will be reset if the frame is
+        // shown again later.
+        paneInfo.SetFlag(wxAuiPaneInfo::savedClosed, true);
+    }
 
     // now we need to either destroy or hide the pane
     if (paneInfo.IsDestroyOnClose())
@@ -1044,6 +1466,186 @@ void wxAuiManager::ClosePane(wxAuiPaneInfo& paneInfo)
     {
         paneInfo.Hide();
     }
+}
+
+wxAuiManagerDock wxAuiManager::GetMinDockDirectionFor(int paneDirection) const
+{
+    // Panes prefer to minimize in the direction of their docked position, but
+    // if minimized dock in this direction is not allowed, try to find the
+    // direction "closest" to it. This is somewhat arbitrary, we decide to
+    // prefer left to right and bottom to top.
+    wxAuiManagerDock direction = wxAUI_DOCK_NONE;
+    switch ( paneDirection )
+    {
+        case wxAUI_DOCK_TOP:
+            if ( m_minDockAllowed & wxTOP )
+                direction = wxAUI_DOCK_TOP;
+            else if ( m_minDockAllowed & wxLEFT )
+                direction = wxAUI_DOCK_LEFT;
+            else if ( m_minDockAllowed & wxRIGHT )
+                direction = wxAUI_DOCK_RIGHT;
+            else if ( m_minDockAllowed & wxBOTTOM )
+                direction = wxAUI_DOCK_BOTTOM;
+            break;
+
+        case wxAUI_DOCK_BOTTOM:
+            if ( m_minDockAllowed & wxBOTTOM )
+                direction = wxAUI_DOCK_BOTTOM;
+            else if ( m_minDockAllowed & wxLEFT )
+                direction = wxAUI_DOCK_LEFT;
+            else if ( m_minDockAllowed & wxRIGHT )
+                direction = wxAUI_DOCK_RIGHT;
+            else if ( m_minDockAllowed & wxTOP )
+                direction = wxAUI_DOCK_TOP;
+            break;
+
+        case wxAUI_DOCK_LEFT:
+            if ( m_minDockAllowed & wxLEFT )
+                direction = wxAUI_DOCK_LEFT;
+            else if ( m_minDockAllowed & wxBOTTOM )
+                direction = wxAUI_DOCK_BOTTOM;
+            else if ( m_minDockAllowed & wxTOP )
+                direction = wxAUI_DOCK_TOP;
+            else if ( m_minDockAllowed & wxRIGHT )
+                direction = wxAUI_DOCK_RIGHT;
+            break;
+
+        case wxAUI_DOCK_RIGHT:
+            if ( m_minDockAllowed & wxRIGHT )
+                direction = wxAUI_DOCK_RIGHT;
+            else if ( m_minDockAllowed & wxBOTTOM )
+                direction = wxAUI_DOCK_BOTTOM;
+            else if ( m_minDockAllowed & wxTOP )
+                direction = wxAUI_DOCK_TOP;
+            else if ( m_minDockAllowed & wxLEFT )
+                direction = wxAUI_DOCK_LEFT;
+            break;
+
+        case wxAUI_DOCK_NONE:
+            // Shouldn't happen.
+            wxFAIL_MSG( "Invalid pane docking direction" );
+            return direction;
+
+        case wxAUI_DOCK_CENTER:
+            // May happen, but center panes can't be minimized, so just return
+            // an invalid value for them.
+            return direction;
+    }
+
+    // This shouldn't happen because we prevent m_minDockAllowed from being 0.
+    wxASSERT_MSG( direction, "No allowed direction for minimizing pane?" );
+
+    return direction;
+}
+
+wxAuiMinDock*&
+wxAuiManager::GetMinDockInDirection(wxAuiManagerDock direction)
+{
+    if ( direction < wxAUI_DOCK_TOP || direction > wxAUI_DOCK_LEFT )
+    {
+        wxFAIL_MSG( "Invalid direction for minimized dock" );
+
+        // Return a reference to something to avoid crashing below.
+        direction = wxAUI_DOCK_TOP;
+    }
+
+    return m_minDocks[direction - 1];
+}
+
+void wxAuiManager::AddPaneToMinDockIfNecessary(wxAuiPaneInfo& pinfo)
+{
+    // Add panes that can be minimized to the corresponding docking bar if it's
+    // already shown.
+    if (pinfo.HasMinimizeButton())
+    {
+        auto const minDirection = GetMinDockDirectionFor(pinfo.dock_direction);
+        if (minDirection != wxAUI_DOCK_NONE)
+        {
+            if (auto const minDock = GetMinDockInDirection(minDirection))
+                minDock->AddPane(pinfo);
+        }
+    }
+}
+
+void
+wxAuiManager::RemovePaneFromMinDockIfNecessary(wxAuiManagerDock direction,
+                                               wxAuiPaneInfo& paneInfo)
+{
+    if(auto& minDock = GetMinDockInDirection(direction))
+    {
+        if (!minDock->RemovePane(paneInfo))
+        {
+            // The dock has become empty, so delete it.
+            DetachPane(minDock);
+            delete minDock;
+            minDock = nullptr;
+        }
+    }
+}
+
+void wxAuiManager::MinimizePane(wxAuiPaneInfo& paneInfo)
+{
+    // Allowing to minimize arbitrary panes would break the UI invariant that
+    // all panes that can be minimized, and only they, are shown in the
+    // corresponding dock as soon as this dock is created.
+    wxCHECK_RET
+    (
+        paneInfo.HasMinimizeButton(),
+        "Only panes with minimize button can be minimized"
+    );
+
+    // Find the dock where the pane is minimized.
+    auto const minDirection = GetMinDockDirectionFor(paneInfo.dock_direction);
+    if ( minDirection == wxAUI_DOCK_NONE )
+    {
+        // This can only happen if this function is called for a center pane
+        // normally (and if it happened for any other reason, an asert message
+        // would have be already given by GetMinDockDirectionFor() itself).
+        wxASSERT_MSG
+        (
+            paneInfo.dock_direction != wxAUI_DOCK_CENTER,
+            "Center panes cannot be minimized"
+        );
+        return;
+    }
+
+    DoHidePaneWindow(paneInfo);
+
+    paneInfo.Hide();
+
+    // Remember the size of the dock to make sure it has the same size if/when
+    // it is recreated when the pane is restored later.
+    paneInfo.dock_size = GetContainingDockSize(paneInfo);
+
+    auto& dock = GetMinDockInDirection(minDirection);
+    if ( !dock )
+    {
+        dock = new wxAuiMinDock(*this, minDirection, m_minDockStyle);
+
+        auto paneTB = wxAuiPaneInfo().
+            Name(wxString::Format("minimized-dock-%d", minDirection)).
+            ToolbarPane().
+            Floatable(false).
+            Direction(minDirection).
+            Gripper(false);
+
+        AddPane(dock, paneTB);
+
+        // Note that we want to add all panes that would minimize to this dock
+        // to it as soon as it's shown, as it would be weird to have some panes
+        // that would be shown in the dock when minimized already shown on it
+        // but not others.
+        for ( auto& p : m_panes )
+        {
+            if ( p.HasMinimizeButton() &&
+                 !p.HasFlag(wxAuiPaneInfo::savedClosed) &&
+                 GetMinDockDirectionFor(p.dock_direction) == minDirection )
+            {
+                dock->AddPane(p);
+            }
+        }
+    }
+    //else: If the dock already exists, the pane must be already shown in it.
 }
 
 void wxAuiManager::MaximizePane(wxAuiPaneInfo& paneInfo)
@@ -1434,15 +2036,7 @@ wxAuiManager::CopyDockLayoutFrom(wxAuiDockLayoutInfo& dockInfo,
     // The dock size is typically not set in the pane itself, but set in its
     // containing dock, so find it and copy it from there, as we do need to
     // save it when serializing.
-    dockInfo.dock_size = 0;
-    for ( const auto& d : m_docks )
-    {
-        if ( FindPaneInDock(d, paneInfo.window) )
-        {
-            dockInfo.dock_size = d.size;
-            break;
-        }
-    }
+    dockInfo.dock_size = GetContainingDockSize(paneInfo);
 }
 
 void
@@ -1776,13 +2370,15 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
 
         // add pane buttons to the caption
         int button_count = 0;
-        const int NUM_SUPPORTED_BUTTONS = 3;
+        constexpr int NUM_SUPPORTED_BUTTONS = 4;
         wxAuiButtonId buttons[NUM_SUPPORTED_BUTTONS] = {
+            wxAUI_BUTTON_MINIMIZE,
             wxAUI_BUTTON_MAXIMIZE_RESTORE,
             wxAUI_BUTTON_PIN,
             wxAUI_BUTTON_CLOSE
         };
         int flags[NUM_SUPPORTED_BUTTONS] = {
+            wxAuiPaneInfo::buttonMinimize,
             wxAuiPaneInfo::buttonMaximize,
             wxAuiPaneInfo::buttonPin,
             wxAuiPaneInfo::buttonClose
@@ -1829,10 +2425,6 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     else
     {
         sizer_item = vert_pane_sizer->Add(pane.window, 1, wxEXPAND);
-        // Don't do this because it breaks the pane size in floating windows
-        // BIW: Right now commenting this out is causing problems with
-        // an mdi client window as the center pane.
-        vert_pane_sizer->SetItemMinSize(pane.window, 1, 1);
     }
 
     part.type = wxAuiDockUIPart::typePane;
@@ -1855,16 +2447,23 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
         if (min_size == wxDefaultSize)
         {
             min_size = pane.best_size;
-            pane_proportion = 0;
+
+            // Toolbars may be fixed, i.e. non-resizable, but still need to
+            // stretch if they contain stretchable spacers, so we should avoid
+            // setting their proportion to 0 in this case.
+            auto* const toolbar = wxDynamicCast(pane.window, wxAuiToolBar);
+            if (!toolbar || !toolbar->CanStretch())
+                pane_proportion = 0;
         }
     }
 
-    if (min_size != wxDefaultSize)
-    {
-        vert_pane_sizer->SetItemMinSize(
-                        vert_pane_sizer->GetChildren().GetCount()-1,
-                        min_size.x, min_size.y);
-    }
+    // We need to reset any previous set min size to allow decreasing the pane
+    // size by dragging the sash between it and other panes, so always set it
+    // to something, even if it's not specified.
+    if (min_size == wxDefaultSize)
+        min_size = wxSize(1, 1);
+
+    sizer_item->SetMinSize(min_size);
 
 
     // add the vertical sizer (caption, pane window) to the
@@ -2075,6 +2674,10 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
             // the contained windows may have been resized
             dock.size = 0;
         }
+        //else: non-fixed docks must keep their size to allow resizing them
+        // interactively, if we reset their size too here, they would always
+        // have the size determined by their contents and drag-resizing them
+        // wouldn't work
     }
 
 
@@ -2100,6 +2703,14 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
             if ( dock->size == 0 )
                 dock->size = p.dock_size;
         }
+
+        if ( !p.IsDocked() || !p.IsShown() )
+        {
+            // remove the pane from any existing docks
+            RemovePaneFromDocks(docks, p);
+            continue;
+        }
+
         if ( !dock )
         {
             // dock was not found, so we need to create a new one
@@ -2113,22 +2724,13 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         }
 
 
-        if (p.IsDocked() && p.IsShown())
-        {
-            // remove the pane from any existing docks except this one
-            RemovePaneFromDocks(docks, p, dock);
+        // remove the pane from any existing docks except this one
+        RemovePaneFromDocks(docks, p, dock);
 
-            // pane needs to be added to the dock,
-            // if it doesn't already exist
-            if (!FindPaneInDock(*dock, p.window))
-                dock->panes.Add(&p);
-        }
-        else
-        {
-            // remove the pane from any existing docks
-            RemovePaneFromDocks(docks, p);
-        }
-
+        // pane needs to be added to the dock,
+        // if it doesn't already exist
+        if (!FindPaneInDock(*dock, p.window))
+            dock->panes.Add(&p);
     }
 
     // remove any empty docks
@@ -2159,6 +2761,8 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                     pane_size = pane.min_size;
                 if (pane_size == wxDefaultSize)
                     pane_size = pane.window->GetSize();
+
+                pane_size.IncTo(GetMinPaneSize());
 
                 if (dock.IsHorizontal())
                     size = wxMax(pane_size.y, size);
@@ -2202,9 +2806,6 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                 size = wxMin(size, max_dock_y_size);
             else
                 size = wxMin(size, max_dock_x_size);
-
-            // absolute minimum size for a dock is 10 pixels
-            size = wxMax(size, m_frame->FromDIP(10));
 
             dock.size = size;
         }
@@ -2466,6 +3067,15 @@ void wxAuiManager::Update()
 
     m_hoverButton = nullptr;
     m_actionPart = nullptr;
+
+    for ( auto* minDock : m_minDocks )
+    {
+        if ( minDock && minDock->RealizeIfNeeded() )
+        {
+            // Force recalculation of the minimized dock size.
+            GetPane(minDock).BestSize(wxDefaultSize);
+        }
+    }
 
     wxSizer* sizer;
     int i, pane_count = m_panes.GetCount();
@@ -3478,12 +4088,6 @@ wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
 
     m_frame->ClientToScreen(&rect.x, &rect.y);
 
-    if ( m_frame->GetLayoutDirection() == wxLayout_RightToLeft )
-    {
-        // Mirror rectangle in RTL mode
-        rect.x -= rect.GetWidth();
-    }
-
     return rect;
 }
 
@@ -3709,9 +4313,12 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
         if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
             pane.frame->SetTransparent(255);
     }
-    else if (m_hasMaximized)
+    else // it is docked
     {
-        RestoreMaximizedPane();
+        if (m_hasMaximized)
+            RestoreMaximizedPane();
+
+        AddPaneToMinDockIfNecessary(pane);
     }
 
     Update();
@@ -4168,22 +4775,6 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         int available_width = client_size.GetWidth() - used_width;
         int available_height = client_size.GetHeight() - used_height;
 
-
-#if wxUSE_STATUSBAR
-        // if there's a status control, the available
-        // height decreases accordingly
-        if (wxDynamicCast(m_frame, wxFrame))
-        {
-            wxFrame* frame = static_cast<wxFrame*>(m_frame);
-            wxStatusBar* status = frame->GetStatusBar();
-            if (status)
-            {
-                wxSize status_client_size = status->GetClientSize();
-                available_height -= status_client_size.GetHeight();
-            }
-        }
-#endif
-
         const wxRect& rect = m_actionPart->dock->rect;
 
         wxPoint new_pos(event.m_x - m_actionOffset.x,
@@ -4556,6 +5147,19 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     // float the window
                     if (paneInfo->IsMaximized())
                         RestorePane(*paneInfo);
+
+                    // Remove the button corresponding to this pane from the
+                    // min dock if it's shown there, it doesn't make sense to
+                    // keep it for a floating pane.
+                    if (paneInfo->HasMinimizeButton())
+                    {
+                        auto const minDir = GetMinDockDirectionFor(paneInfo->dock_direction);
+                        if(minDir != wxAUI_DOCK_NONE)
+                        {
+                            RemovePaneFromMinDockIfNecessary(minDir, *paneInfo);
+                        }
+                    }
+
                     paneInfo->Float();
                     Update();
 
@@ -4603,6 +5207,8 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
         pane.SetFlag(wxAuiPaneInfo::actionPane, true);
 
+        auto const dockDirectionOld = pane.dock_direction;
+
         wxPoint point = event.GetPosition();
         DoDrop(m_docks, m_panes, pane, point, m_actionOffset);
 
@@ -4613,6 +5219,30 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             wxPoint pt = m_frame->ClientToScreen(event.GetPosition());
             pane.floating_pos = wxPoint(pt.x - m_actionOffset.x,
                                         pt.y - m_actionOffset.y);
+        }
+        else // the pane is still docked
+        {
+            // Check if it's minimized direction has changed.
+            if (pane.HasMinimizeButton()
+                && pane.dock_direction != dockDirectionOld)
+            {
+                // The dock into which the pane is minimized may remain the
+                // same even if the docking direction has changed, e.g. if
+                // there is just one dock showing minimized panes, it will
+                // always remain the same.
+                auto const
+                    minDockOld = GetMinDockDirectionFor(dockDirectionOld);
+                auto const
+                    minDockNew = GetMinDockDirectionFor(pane.dock_direction);
+
+                if (minDockOld != minDockNew)
+                {
+                    RemovePaneFromMinDockIfNecessary(minDockOld, pane);
+
+                    if (auto const dockNew = GetMinDockInDirection(minDockNew))
+                        dockNew->AddPane(pane);
+                }
+            }
         }
 
         // this will do the actual move operation;
@@ -4732,6 +5362,19 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
                 ClosePane(pane);
             }
 
+            Update();
+        }
+    }
+    else if (evt.button == wxAUI_BUTTON_MINIMIZE)
+    {
+        wxAuiManagerEvent e(wxEVT_AUI_PANE_MINIMIZE);
+        e.SetManager(this);
+        e.SetPane(evt.pane);
+        ProcessMgrEvent(e);
+
+        if (!e.GetVeto())
+        {
+            MinimizePane(pane);
             Update();
         }
     }

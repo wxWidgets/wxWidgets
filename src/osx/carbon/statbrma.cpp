@@ -156,7 +156,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
     while ( keyWindow && keyWindow != tlw )
     {
         wxDialog *dlg = wxDynamicCast(keyWindow, wxDialog);
-        if ( dlg && dlg->GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL )
+        if ( dlg && dlg->GetModality() == wxWindowMode::WindowModal )
             keyWindow = dlg->GetParent();
         else
             break;

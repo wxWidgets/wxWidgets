@@ -1,0 +1,1373 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DLL Debug" />
+    <BuildType Name="DLL Release" />
+    <BuildType Name="Release" />
+    <Platform Name="Win32" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/1 Fundamental Samples/">
+    <Project Path="dialogs/dialogs.vcxproj" Id="b80d5c13-0d78-4038-b1b4-5ea80436fb98">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="minimal/minimal.vcxproj" Id="853d1fd7-20ab-586c-9699-9680f84ac985">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="widgets/widgets.vcxproj" Id="ebeb60a6-51e1-453c-a147-e9e2284d073f">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <Deploy Solution="Debug|Win32" />
+    </Project>
+  </Folder>
+  <Folder Name="/2 GUI Controls Samples/" />
+  <Folder Name="/2 GUI Controls Samples/2.1 Menus, Toolbars and Co/">
+    <Project Path="menu/menu.vcxproj" Id="3c538c2f-ae17-41f5-b075-3ccf5a2da09e">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <Deploy Solution="Debug|Win32" />
+    </Project>
+    <Project Path="ribbon/ribbon.vcxproj" Id="ce81f05e-b44c-442f-bfa1-13176ba3f598">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_ribbon.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="statbar/statbar.vcxproj" Id="fd3a24e0-a85d-41eb-8e7e-45b01494fb82">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="toolbar/toolbar.vcxproj" Id="7e93311e-590f-480e-8086-5eefeb2ce579">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <Deploy Solution="Debug|Win32" />
+    </Project>
+  </Folder>
+  <Folder Name="/2 GUI Controls Samples/2.2 Grids, Lists and Trees/">
+    <Project Path="dataview/dataview.vcxproj" Id="7f86e6b2-691a-4197-a6ce-45af15b9301b">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="grid/grid.vcxproj" Id="4fe6adbb-284f-4e4c-a933-60994138d897">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="htlbox/htlbox.vcxproj" Id="f73e57df-47c3-495f-a91c-37ebab6e9c6c">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="listctrl/listctrl.vcxproj" Id="154bd428-5006-4231-8e79-4a281dd886ae">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="propgrid/propgrid.vcxproj" Id="f758a9a8-2db1-4aee-beb9-9f92b7fb5c1e">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_propgrid.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_xml.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_xrc.vcxproj" />
+    </Project>
+    <Project Path="treectrl/treectrl.vcxproj" Id="575c6e06-0ab9-48c4-aa39-7c4771f018c0">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="treelist/treelist.vcxproj" Id="94a90ce6-dfcb-49b5-a704-175978df0a31">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/2 GUI Controls Samples/2.3 Text/">
+    <Project Path="combo/combo.vcxproj" Id="eb38caf1-ae8c-4085-8541-f2ae28c74168">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="richtext/richtext.vcxproj" Id="2131c9d5-5d6f-4298-8edb-dfad75647e4b">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_richtext.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_xml.vcxproj" />
+    </Project>
+    <Project Path="stc/stc.vcxproj" Id="c6b835d0-b5ab-4c9d-9425-b3be2c4bc702">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_stc.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxlexilla.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxscintilla.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="text/text.vcxproj" Id="73843f2b-ef6f-4902-afc7-277c8cf040df">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/2 GUI Controls Samples/2.4 Containers/">
+    <Project Path="aui/auidemo.vcxproj" Id="56be5e5a-6cbd-4dd3-930e-b11b8c23a967">
+      <BuildDependency Project="../build/msw/wx_aui.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_xml.vcxproj" />
+    </Project>
+    <Project Path="collpane/collpane.vcxproj" Id="55699e53-ebe2-4dce-be3a-9b3babf8e1de">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="notebook/notebook.vcxproj" Id="fa7f88d2-16cb-4ffe-86e8-63fb4bbf30fb">
+      <BuildDependency Project="../build/msw/wx_aui.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/2 GUI Controls Samples/2.5 Document-oriented/">
+    <Project Path="docview/docview.vcxproj" Id="cfbd4beb-2f03-410a-be37-f81d375682d3">
+      <BuildDependency Project="../build/msw/wx_aui.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="mdi/mdi.vcxproj" Id="ea75bd1d-c240-4475-9509-c816c1e5a637">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="printing/printing.vcxproj" Id="568be9e5-4517-4cb6-9ef9-b4b140c50fe2">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/2 GUI Controls Samples/2.6 Layout/">
+    <Project Path="layout/layout.vcxproj" Id="4c4b2d50-95bf-4711-bdc3-e1a36f442e0d">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="splitter/splitter.vcxproj" Id="3c475b4e-2814-b659-512d-a4013d59ebe7">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="wrapsizer/wrapsizer.vcxproj" Id="1c00fc4c-29f5-440e-b6ee-0588985276f4">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/2 GUI Controls Samples/2.7 HTML/">
+    <Project Path="html/about/about.vcxproj" Id="d2a06e44-999a-4556-b6c6-752a3e9256f0">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="html/help/help.vcxproj" Id="014917fd-7e8d-4516-a27c-9dd1e47c89d4">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="html/helpview/helpview.vcxproj" Id="3e09a72d-c93f-40b7-8aba-cc048511f59c">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="html/printing/printing.vcxproj" Id="93561ca0-5304-42ff-9e91-1c8a62480cc3">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="html/test/test.vcxproj" Id="d12847c7-a187-45f4-99e5-6db393d6cae1">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="html/virtual/virtual.vcxproj" Id="f21160b5-e21c-40f8-951a-720eee4b1cad">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="html/widget/widget.vcxproj" Id="ee61b8af-1f39-4f56-b5ac-3cb3a27b8de7">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="html/zip/zip.vcxproj" Id="acd14e94-b761-487c-836c-bb93c6fd61fb">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/2 GUI Controls Samples/2.8 Miscellaneous/">
+    <Project Path="animate/anitest.vcxproj" Id="d490b62d-4335-4f7f-aaf6-50379254b0e0">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="calendar/calendar.vcxproj" Id="7ad45428-cecb-43b8-ba03-dde9be7ba159">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="mediaplayer/mediaplayer.vcxproj" Id="d92325c1-5348-448a-9dc0-b1a1c3f1d3b2">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_media.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="popup/popup.vcxproj" Id="4aa2fcb2-0b84-42c8-96d8-fcff8c16efeb">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="webview/webview.vcxproj" Id="7688215b-1082-5681-9d37-e950d6210117">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_stc.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_webview.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxlexilla.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxscintilla.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/3 Other GUI Samples/" />
+  <Folder Name="/3 Other GUI Samples/3.1 Input/">
+    <Project Path="caret/caret.vcxproj" Id="7d8b6eae-70de-46fb-9c4c-13ee0e02990e">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="joytest/joytest.vcxproj" Id="3e9c19ee-51ec-4df3-bf3c-7535080be390">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="keyboard/keyboard.vcxproj" Id="443b91d2-e8a9-4fe5-8be3-39cf43ff5195">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="touchtest/touchtest.vcxproj" Id="2c187c8d-a452-4730-9eb0-da6f2b65a1c6">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/3 Other GUI Samples/3.2 Graphics/">
+    <Project Path="drawing/drawing.vcxproj" Id="55d77c30-8a78-4d49-a75d-a7be70d92175">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <Deploy Solution="Debug|Win32" />
+    </Project>
+    <Project Path="erase/erase.vcxproj" Id="38b9760a-0448-46c2-b47f-54a18a882353">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="image/image.vcxproj" Id="187376a2-da63-40a2-81a7-21dd74583953">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="ownerdrw/ownerdrw.vcxproj" Id="126633a2-2e49-4a7b-a375-90b2623da824">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="render/render.vcxproj" Id="c6eac135-fdc8-4175-b79c-9b2a6da012ce">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="scroll/scroll.vcxproj" Id="dc6d94d4-e56d-4088-ad2a-d46d63aa884c">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="svg/svgtest.vcxproj" Id="2de887ac-afc9-4b90-bab8-2a1fe8e8ab51">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="vscroll/vscroll.vcxproj" Id="4d601df4-3cf4-42a0-9242-88a5162a114b">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/3 Other GUI Samples/3.2 Graphics/OpenGL/">
+    <Project Path="opengl/cube/cube.vcxproj" Id="f7887b23-6b61-4cf6-b6bc-ec76500ece31">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_gl.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="opengl/isosurf/isosurf.vcxproj" Id="74df02eb-3828-4b8d-aefc-8939c3aaf3f3">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_gl.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="opengl/penguin/penguin.vcxproj" Id="ecf3415f-a6b1-4f8c-99e1-ff11413f136e">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_gl.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="opengl/pyramid/pyramid.vcxproj" Id="3a1c1e80-9897-41f4-96a3-46c5938cbea5">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_gl.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/3 Other GUI Samples/3.3 Miscellaneous/">
+    <Project Path="access/access.vcxproj" Id="5ea49c7d-8e25-4285-a9db-a37cc3da0794">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="artprov/artprov.vcxproj" Id="0d08f3c2-0466-4a78-a8c6-047b13c38f38">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <Deploy Solution="Debug|Win32" />
+    </Project>
+    <Project Path="debugrpt/debugrpt.vcxproj" Id="d86ea627-b6bf-4e6d-8e19-44c2aa01dc4b">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_qa.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_xml.vcxproj" />
+    </Project>
+    <Project Path="display/display.vcxproj" Id="3e314fdd-be00-4dc2-83b2-eb3cab3960d3">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="dnd/dnd.vcxproj" Id="0938e26d-0232-401c-88c4-cac8af2dfbbd">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="event/event.vcxproj" Id="77f14ba7-0efe-4657-b144-8d8942467056">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="except/except.vcxproj" Id="bb7c563c-d058-4715-bc98-f62b0ef1541d">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="font/font.vcxproj" Id="8149dc70-0067-4f7e-87bc-ca7fa9b52d57">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="help/help.vcxproj" Id="577ff6a3-390a-43c3-9b46-9e87803b954a">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="internat/internat.vcxproj" Id="b45248b1-bff5-40b2-a6a7-1bf46a5df077">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="preferences/preferences.vcxproj" Id="3d9272ca-549d-4680-9d92-e1c919be1927">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="shaped/shaped.vcxproj" Id="712398de-a11c-47d4-b5d8-0f144aae794b">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="taborder/taborder.vcxproj" Id="1d8f6f7b-8af6-4f79-bfc6-61f63b134fe4">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="taskbar/taskbar.vcxproj" Id="4e686d24-7439-4d6d-87a3-7339a0d5d517">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="taskbarbutton/taskbarbutton.vcxproj" Id="5c13030d-d5e7-4d7e-aad1-fc09c3367305">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="uiaction/uiaction.vcxproj" Id="1a23ed47-a0e8-48eb-8f2f-67a9fbee666e">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="validate/validate.vcxproj" Id="08ad02ad-82a7-4055-8135-b56d5696b905">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="wizard/wizard.vcxproj" Id="8851a820-0f61-45d6-a3ab-e3f8aceba28e">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="xrc/xrcdemo.vcxproj" Id="b558b15a-f097-42e7-9a18-f81d090c3e62">
+      <BuildDependency Project="../build/msw/wx_aui.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_html.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_ribbon.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_xml.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_xrc.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/4 Other Samples/" />
+  <Folder Name="/4 Other Samples/4.1 Communication and Network/">
+    <Project Path="webrequest/webrequest.vcxproj" Id="57c8d311-46f1-47d5-a8cc-2c21d1b55c20">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/4 Other Samples/4.1 Communication and Network/IPC/">
+    <Project Path="ipc/baseipcclient.vcxproj" Id="27db83aa-267d-49bc-867f-720a4a303da6">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="ipc/baseipcserver.vcxproj" Id="8280d641-3b31-49fe-a369-5af2e94ff71c">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="ipc/ipcclient.vcxproj" Id="a57c693a-e223-4de0-9720-f286934c55d4">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="ipc/ipcserver.vcxproj" Id="a8019f6c-4036-45a4-9a02-724a75c0e292">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/4 Other Samples/4.1 Communication and Network/Sockets/">
+    <Project Path="sockets/baseclient.vcxproj" Id="f6ab1942-f1ed-4320-8020-ba4e9d58ebb5">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="sockets/baseserver.vcxproj" Id="a8ed9b31-a29c-4bbb-9732-51b38b7bf28c">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="sockets/client.vcxproj" Id="2c001418-6d75-4370-9102-f7b891537371">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="sockets/server.vcxproj" Id="3feaa19a-7834-459b-bc50-96f3907d1ba6">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_net.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/4 Other Samples/4.2 Miscellaneous/">
+    <Project Path="archive/archive.vcxproj" Id="26701e8f-872d-4899-849f-1f6e2f0f7560">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="config/config.vcxproj" Id="b8fc7dcc-abf8-4850-b2c4-4f74eb172d20">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="console/console.vcxproj" Id="47ce4ef9-6cad-4e1f-81c4-66f45ba05b7f">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="exec/exec.vcxproj" Id="c3c02679-f6b4-4bc3-ac0b-491a27ebbd3f">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="fswatcher/fswatcher.vcxproj" Id="2e28cade-b1c6-49c5-b99d-11f3cdb85bc8">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="power/power.vcxproj" Id="13bf61ef-9284-4b9b-bf04-07bb8ef4a7b2">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="secretstore/secretstore.vcxproj" Id="849e3954-da52-43e9-b6e5-a7c20557931a">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="sound/sound.vcxproj" Id="e38428dd-280e-4e23-b37f-c1172d4f6db0">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/5 Windows-specific Samples/">
+    <Project Path="mfc/mfc.vcxproj" Id="bbf7b6cf-635e-437f-b409-5ff6ffeb622b">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="nativdlg/nativdlg.vcxproj" Id="bba9c805-69e8-4496-b389-80cfe78b06c6">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="oleauto/oleauto.vcxproj" Id="396175fb-afb7-422f-bd24-c883bd2183e2">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="regtest/regtest.vcxproj" Id="7b2a839e-4bdd-441b-a478-7a6cc9f76cc2">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/5 Windows-specific Samples/DLL/">
+    <Project Path="dll/my_dll.vcxproj" Id="cb5cda61-4ec1-4f27-a2b2-4d864c299e4c">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="dll/sdk_exe.vcxproj" Id="f2c2c08c-4b84-4215-8730-3897549005b5">
+      <BuildDependency Project="dll/my_dll.vcxproj" />
+      <BuildType Solution="DLL Debug|Win32" Project="Debug" />
+      <BuildType Solution="DLL Release|Win32" Project="Release" />
+    </Project>
+    <Project Path="dll/wx_exe.vcxproj" Id="5a3cead4-69b4-47bb-a058-c5f539f6f3a3">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+      <BuildDependency Project="dll/my_dll.vcxproj" />
+      <Build Solution="DLL Debug|*" Project="false" />
+      <Build Solution="DLL Release|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/6 Unmaintained Old Samples/">
+    <Project Path="dialup/dialup.vcxproj" Id="44f86825-fc39-4393-ac7b-7da877163368">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="dragimag/dragimag.vcxproj" Id="cc5c76a6-07a8-4391-9543-7cf2f56f7e55">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="sashtest/sashtest.vcxproj" Id="f23d6859-e003-45b0-9cc5-5647c767841b">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="splash/splash.vcxproj" Id="c9cb7521-dfb9-41b4-9823-af11907f845b">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_media.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="thread/thread.vcxproj" Id="34e00731-1380-49d6-8993-f89d99a47400">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="typetest/typetest.vcxproj" Id="28b9d892-99b7-41d1-a99b-039752f2c630">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/7 wxWidgets Libraries/">
+    <Project Path="../build/msw/wx_aui.vcxproj" Id="a16d3832-0f42-57ce-8f48-50e06649ade8">
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_base.vcxproj" Id="3fcc50c2-81e9-5db2-b8d8-2129427568b1">
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_core.vcxproj" Id="6744dad8-9c70-574a-bff2-9f8dddb24a75">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_custom_build.vcxproj" Id="01f4ce10-2cfb-41a8-b41f-e54337868a1d" />
+    <Project Path="../build/msw/wx_gl.vcxproj" Id="da8b15ef-6750-5928-bc0e-c748213cf9b2">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_html.vcxproj" Id="33cc42f9-7756-5587-863c-8d4461b7c5dd">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_media.vcxproj" Id="8bd8f8d9-4275-5b42-a8f4-f1db2970a550">
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_net.vcxproj" Id="69f2ede4-7d21-5738-9bc0-f66f61c9ae00">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_propgrid.vcxproj" Id="97fdab45-9c58-5bc5-a2f4-ee42739ebc63">
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_qa.vcxproj" Id="e21129e0-7c08-5936-9d8c-0d60b5319ba7">
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_ribbon.vcxproj" Id="87b42a9c-3f5c-53d7-9017-2b1cae39457d">
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_richtext.vcxproj" Id="7fb0902d-8579-5dce-b883-daf66a885005">
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_stc.vcxproj" Id="23e1c437-a951-5943-8639-a17f3cf2e606">
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxlexilla.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxscintilla.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_webview.vcxproj" Id="a8e8442a-078a-5fc5-b495-8d71ba77ee6e">
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_wxexpat.vcxproj" Id="a1a8355b-0988-528e-9cc2-b971d6266669" />
+    <Project Path="../build/msw/wx_wxjpeg.vcxproj" Id="6053cc38-cdee-584c-8bc8-4b000d800fc7" />
+    <Project Path="../build/msw/wx_wxlexilla.vcxproj" Id="812eddee-840f-4807-a732-8a0b81409f39" />
+    <Project Path="../build/msw/wx_wxpng.vcxproj" Id="8acc122a-ca6a-5aa6-9c97-9cdd2e533db0" />
+    <Project Path="../build/msw/wx_wxregex.vcxproj" Id="56a4b526-bb81-5d01-aaa9-16d23bbb169d">
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_wxscintilla.vcxproj" Id="74827ebd-93dc-5110-ba95-3f2ab029b6b0" />
+    <Project Path="../build/msw/wx_wxtiff.vcxproj" Id="75596ce6-5ae7-55c9-b890-c07b0a657a83" />
+    <Project Path="../build/msw/wx_wxwebp.vcxproj" Id="2d774e84-354b-415a-baf4-b13158808e6f" />
+    <Project Path="../build/msw/wx_wxzlib.vcxproj" Id="8b867186-a0b5-5479-b824-e176edd27c40" />
+    <Project Path="../build/msw/wx_xml.vcxproj" Id="3e6dca27-5fa3-53ec-bbd6-2d42294b7ae6">
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+    </Project>
+    <Project Path="../build/msw/wx_xrc.vcxproj" Id="09f2f96a-1cc6-5e43-af1d-956ec2a4888d">
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+    </Project>
+  </Folder>
+</Solution>

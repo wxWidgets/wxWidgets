@@ -58,6 +58,10 @@ public:
     // implementation only from now on
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const override;
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif
+
 protected:
     virtual wxSize DoGetBestClientSize() const override;
 

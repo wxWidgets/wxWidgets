@@ -400,22 +400,18 @@ static void TransformedWithMatrix(wxDC& dc)
         dc.SetTransformMatrix(m);
 
         // First convert from device to logical coordinates
-        // Results should be nagative because legacy functions
-        // don't take affine transformation into account.
         m.Invert();
         wxPoint2DDouble posLogRef = m.TransformPoint(wxPoint2DDouble(s_posDev));
         wxPoint posLog;
         posLog.x = dc.DeviceToLogicalX(s_posDev.x);
         posLog.y = dc.DeviceToLogicalY(s_posDev.y);
-        CHECK_FALSE(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
-        CHECK(posLog == s_posDev);
+        CHECK(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
 
         wxPoint2DDouble dimLogRef = m.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
         wxSize dimLog;
         dimLog.x = dc.DeviceToLogicalXRel(s_dimDev.x);
         dimLog.y = dc.DeviceToLogicalYRel(s_dimDev.y);
-        CHECK_FALSE(dimLog == wxSize(wxRound(dimLogRef.m_x), wxRound(dimLogRef.m_y)));
-        CHECK(dimLog == s_dimDev);
+        CHECK(dimLog == wxSize(wxRound(dimLogRef.m_x), wxRound(dimLogRef.m_y)));
 
         // And next back from logical to device coordinates
         wxPoint posDev;
@@ -467,6 +463,44 @@ static void TransformedWithMatrixEx(wxDC& dc)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
+static void
+ApplyWineWorkaround(wxPoint& posLog, const wxPoint2DDouble& posLogRef)
+{
+    if ( !wxIsRunningUnderWine() )
+        return;
+
+    static class WorkaroundWasUsed
+    {
+    public:
+        WorkaroundWasUsed() = default;
+
+        ~WorkaroundWasUsed()
+        {
+            if ( !m_wasUsed )
+                WARN("Wine workaround is not needed any longer");
+        }
+
+        void Apply(wxPoint& posLog, const wxPoint2DDouble& posLogRef)
+        {
+            // Current versions of Wine seem to have a bug and return a value
+            // which is one off from DPtoLP() used by wxDC::DeviceToLogical()
+            // and there doesn't seem to be anything we can do about it, so
+            // just tweak the result to pass this test.
+            if ( posLog.x == posLogRef.m_x + 1 )
+            {
+                posLog.x--;
+
+                m_wasUsed = true;
+            }
+        }
+
+    private:
+        bool m_wasUsed = false;
+    } s_workaroundWasUsed;
+
+    s_workaroundWasUsed.Apply(posLog, posLogRef);
+}
+
 static void TransformedWithMatrixAndStd(wxDC& dc)
 {
     // Apply combination of standard and matrix transformations
@@ -485,8 +519,6 @@ static void TransformedWithMatrixAndStd(wxDC& dc)
         dc.SetTransformMatrix(m);
 
         // First convert from device to logical coordinates
-        // Results should be nagative because legacy functions
-        // don't take affine transformation into account.
         wxAffineMatrix2D m1;
         m1.Translate(10 - (-15) * (0.5 * 4.0), 15 - (-20) * (1.5 * 2.0));
         m1.Scale(0.5 * 4.0, 1.5 * 2.0);
@@ -497,13 +529,15 @@ static void TransformedWithMatrixAndStd(wxDC& dc)
         wxPoint posLog;
         posLog.x = dc.DeviceToLogicalX(s_posDev.x);
         posLog.y = dc.DeviceToLogicalY(s_posDev.y);
-        CHECK_FALSE(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
+
+        ApplyWineWorkaround(posLog, posLogRef);
+        CHECK(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
 
         wxPoint2DDouble dimLogRef = m1.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
         wxSize dimLog;
         dimLog.x = dc.DeviceToLogicalXRel(s_dimDev.x);
         dimLog.y = dc.DeviceToLogicalYRel(s_dimDev.y);
-        CHECK_FALSE(dimLog == wxSize(wxRound(dimLogRef.m_x), wxRound(dimLogRef.m_y)));
+        CHECK(dimLog == wxSize(wxRound(dimLogRef.m_x), wxRound(dimLogRef.m_y)));
 
         // And next back from logical to device coordinates
         wxPoint posDev;
@@ -547,18 +581,7 @@ static void TransformedWithMatrixAndStdEx(wxDC& dc)
         wxPoint posLog;
         posLog = dc.DeviceToLogical(s_posDev);
 
-        if ( wxIsRunningUnderWine() )
-        {
-            // Current versions of Wine seem to have a bug and return a value
-            // which is one off from DPtoLP() used by wxDC::DeviceToLogical()
-            // and there doesn't seem to be anything we can do about it, so
-            // just tweak the result to pass this test.
-            if ( posLog.x == posLogRef.m_x + 1 )
-                posLog.x--;
-            else
-                WARN("Wine workaround might be not needed any longer");
-        }
-
+        ApplyWineWorkaround(posLog, posLogRef);
         CHECK(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
 
         wxPoint2DDouble dimLogRef = m1.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
@@ -590,70 +613,26 @@ static void RotatedWithMatrix(wxDC& dc)
         m.Scale(2.0, 3.0);
         dc.SetTransformMatrix(m);
 
-        // First convert from device to logical coordinates
-        // Results should be nagative because legacy functions
-        // don't take affine transformation into account.
+        // First convert from device to logical coordinates.
+        //
+        // Note that we must use DeviceToLogical() and not individual
+        // DeviceToLogical{X,Y}() here because the latter can't take rotation
+        // into account and thus won't return correct results.
         m.Invert();
         wxPoint2DDouble posLogRef = m.TransformPoint(wxPoint2DDouble(s_posDev));
-        wxPoint posLog;
-        posLog.x = dc.DeviceToLogicalX(s_posDev.x);
-        posLog.y = dc.DeviceToLogicalY(s_posDev.y);
-        CHECK_FALSE(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
-        CHECK(posLog == s_posDev);
+        wxPoint posLog = dc.DeviceToLogical(s_posDev);
+        CHECK(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)));
 
         wxPoint2DDouble dimLogRef = m.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
-        wxSize dimLog;
-        dimLog.x = dc.DeviceToLogicalXRel(s_dimDev.x);
-        dimLog.y = dc.DeviceToLogicalYRel(s_dimDev.y);
-        CHECK_FALSE(dimLog == wxSize(wxRound(dimLogRef.m_x), wxRound(dimLogRef.m_y)));
-        CHECK(dimLog == s_dimDev);
-
-        // And next back from logical to device coordinates
-        wxPoint posDev;
-        posDev.x = dc.LogicalToDeviceX(posLog.x);
-        posDev.y = dc.LogicalToDeviceY(posLog.y);
-        CHECK(posDev == s_posDev);
-
-        wxSize dimDev;
-        dimDev.x = dc.LogicalToDeviceXRel(dimLog.x);
-        dimDev.y = dc.LogicalToDeviceYRel(dimLog.y);
-        CHECK(dimDev == s_dimDev);
-    }
-#endif // wxUSE_DC_TRANSFORM_MATRIX
-}
-
-static void RotatedWithMatrixEx(wxDC& dc)
-{
-    // Apply matrix transformations with rotation component
-#if wxUSE_DC_TRANSFORM_MATRIX
-    if ( dc.CanUseTransformMatrix() )
-    {
-        wxAffineMatrix2D m = dc.GetTransformMatrix();
-        m.Rotate(6 * M_PI / 180.0);
-        m.Translate(10, 15);
-        m.Scale(2.0, 3.0);
-        dc.SetTransformMatrix(m);
-
-        // First convert from device to logical coordinates
-        m.Invert();
-        wxPoint2DDouble posLogRef = m.TransformPoint(wxPoint2DDouble(s_posDev));
-        wxPoint posLog;
-        posLog = dc.DeviceToLogical(s_posDev);
-        CHECK(posLog == wxPoint(wxRound(posLogRef.m_x), wxRound(posLogRef.m_y)) );
-
-        wxPoint2DDouble dimLogRef = m.TransformDistance(wxPoint2DDouble(s_dimDev.x, s_dimDev.y));
-        wxSize dimLog;
-        dimLog = dc.DeviceToLogicalRel(s_dimDev);
+        wxSize dimLog = dc.DeviceToLogicalRel(s_dimDev);
         CHECK(dimLog == wxSize(wxRound(dimLogRef.m_x), wxRound(dimLogRef.m_y)));
 
         // And next back from logical to device coordinates
-        wxPoint posDev;
-        posDev = dc.LogicalToDevice(posLog);
+        wxPoint posDev = dc.LogicalToDevice(posLog);
         CHECK(Approx(posDev.x).margin(1) == s_posDev.x);
         CHECK(Approx(posDev.y).margin(1) == s_posDev.y);
 
-        wxSize dimDev;
-        dimDev = dc.LogicalToDeviceRel(dimLog);
+        wxSize dimDev = dc.LogicalToDeviceRel(dimLog);
         CHECK(Approx(dimDev.x).margin(1) == s_dimDev.x);
         CHECK(Approx(dimDev.y).margin(1) == s_dimDev.y);
     }
@@ -769,12 +748,6 @@ TEST_CASE("CoordinatesTestCase::wxDC", "[coordinates][dc]")
         // Apply matrix transformations with rotation component
         RotatedWithMatrix(dc);
     }
-
-    SECTION("RotatedWithMatrixEx")
-    {
-        // Apply matrix transformations with rotation component
-        RotatedWithMatrixEx(dc);
-    }
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
@@ -889,12 +862,6 @@ TEST_CASE("CoordinatesTestCase::wxGCDC", "[coordinates][dc][gcdc]")
     {
         // Apply matrix transformations with rotation component
         RotatedWithMatrix(dc);
-    }
-
-    SECTION("RotatedWithMatrixEx")
-    {
-        // Apply matrix transformations with rotation component
-        RotatedWithMatrixEx(dc);
     }
 }
 
@@ -1017,12 +984,6 @@ TEST_CASE("CoordinatesTestCase::wxGCDC(GDI+)", "[coordinates][dc][gcdc][gdiplus]
         // Apply matrix transformations with rotation component
         RotatedWithMatrix(dc);
     }
-
-    SECTION("RotatedWithMatrixEx")
-    {
-        // Apply matrix transformations with rotation component
-        RotatedWithMatrixEx(dc);
-    }
 }
 #endif // wxUSE_GRAPHICS_GDIPLUS
 
@@ -1143,12 +1104,6 @@ TEST_CASE("CoordinatesTestCase::wxGCDC(Direct2D)", "[coordinates][dc][gcdc][dire
     {
         // Apply matrix transformations with rotation component
         RotatedWithMatrix(dc);
-    }
-
-    SECTION("RotatedWithMatrixEx")
-    {
-        // Apply matrix transformations with rotation component
-        RotatedWithMatrixEx(dc);
     }
 }
 #endif // wxUSE_GRAPHICS_DIRECT2D
@@ -1275,12 +1230,6 @@ TEST_CASE("CoordinatesTestCase::wxGCDC(Cairo)", "[coordinates][dc][gcdc][cairo]"
     {
         // Apply matrix transformations with rotation component
         RotatedWithMatrix(dc);
-    }
-
-    SECTION("RotatedWithMatrixEx")
-    {
-        // Apply matrix transformations with rotation component
-        RotatedWithMatrixEx(dc);
     }
 }
 #endif // wxUSE_CAIRO

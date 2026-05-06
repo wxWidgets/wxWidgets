@@ -28,6 +28,9 @@
     <ClCompile Include="..\..\src\ribbon\art_aui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ribbon\art_msw_flat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\ribbon\art_internal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

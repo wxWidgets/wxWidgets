@@ -1165,8 +1165,11 @@ public:
     // Checks system screen design used for laying out various dialogs.
     static bool IsSmallScreen();
 
+#if WXWIN_COMPATIBILITY_3_2
     // Returns rescaled bitmap
+    wxDEPRECATED_MSG("use wxBitmap::Rescale instead")
     static wxBitmap RescaleBitmap(const wxBitmap& srcBmp, double scaleX, double scaleY);
+#endif // WXWIN_COMPATIBILITY_3_2
 
     // Returns rectangle that fully contains properties between and including
     // p1 and p2. Rectangle is in virtual scrolled window coordinates.

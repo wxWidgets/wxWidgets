@@ -20,12 +20,12 @@
 class WXDLLIMPEXP_CORE wxIFFHandler : public wxImageHandler
 {
 public:
-    wxIFFHandler()
+    wxIFFHandler() : wxImageHandler(
+        wxT("IFF file"),
+        wxT("iff"),
+        wxBITMAP_TYPE_IFF,
+        wxT("image/x-iff"))
     {
-        m_name = wxT("IFF file");
-        m_extension = wxT("iff");
-        m_type = wxBITMAP_TYPE_IFF;
-        m_mime = wxT("image/x-iff");
     }
 
 #if wxUSE_STREAMS

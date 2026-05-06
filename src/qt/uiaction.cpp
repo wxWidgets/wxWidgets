@@ -177,7 +177,7 @@ static bool SimulateKeyboardKey( KeyAction keyAction, Key key, int modifiers )
     // always produces a lowercase of that char! (which must be in uppercase)
     if ( modifiers == wxMOD_SHIFT && key < 256 )
     {
-        const QChar qChar(key);
+        const QChar qChar(static_cast<int>(key));
         if ( qChar.isLetter() )
         {
             widget->windowHandle() != nullptr ?

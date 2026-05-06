@@ -419,8 +419,6 @@
 
 #define wxUSE_DISPLAY       0
 
-#define wxUSE_GEOMETRY            0
-
 #define wxUSE_IMAGLIST      0
 
 #define wxUSE_INFOBAR       0
@@ -506,8 +504,6 @@
 
 #define wxUSE_GLCANVAS       0
 
-#define wxUSE_GLCANVAS_EGL   0
-
 #define wxUSE_RICHTEXT       0
 
 
@@ -570,6 +566,8 @@
 #define wxUSE_NANOSVG       0
 
 #define wxUSE_NANOSVG_EXTERNAL 0
+
+#define wxUSE_LUNASVG       0
 
 #define wxUSE_TGA           0
 
@@ -949,9 +947,6 @@
 /* Define if size_t on your machine is the same type as unsigned long. */
 #undef wxSIZE_T_IS_ULONG
 
-/* Define if wchar_t is distinct type in your compiler. */
-#undef wxWCHAR_T_IS_REAL_TYPE
-
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
 
@@ -973,12 +968,6 @@
 /* Define if you have a gethostbyname_r function taking 5 arguments. */
 #undef HAVE_FUNC_GETHOSTBYNAME_R_5
 
-/* Define if you have a gethostbyname_r function taking 3 arguments. */
-#undef HAVE_FUNC_GETHOSTBYNAME_R_3
-
-/* Define if you only have a gethostbyname function */
-#undef HAVE_GETHOSTBYNAME
-
 /* Define if you have the gethostname function.  */
 #undef HAVE_GETHOSTNAME
 
@@ -987,12 +976,6 @@
 
 /* Define if you have a getservbyname_r function taking 5 arguments. */
 #undef HAVE_FUNC_GETSERVBYNAME_R_5
-
-/* Define if you have a getservbyname_r function taking 4 arguments. */
-#undef HAVE_FUNC_GETSERVBYNAME_R_4
-
-/* Define if you only have a getservbyname function */
-#undef HAVE_GETSERVBYNAME
 
 /* Define if you have the gmtime_r function.  */
 #undef HAVE_GMTIME_R
@@ -1025,7 +1008,7 @@
 #undef HAVE_THR_SETCONCURRENCY
 
 /* Define if you have pthread_setconcurrency function */
-#undef HAVE_PTHREAD_SET_CONCURRENCY
+#undef HAVE_PTHREAD_SETCONCURRENCY
 
 /* Define if you have the uname function.  */
 #undef HAVE_UNAME
@@ -1045,18 +1028,6 @@
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
 
-/* Define if you have the <fcntl.h> header file.  */
-#undef HAVE_FCNTL_H
-
-/* Define if you have the <wchar.h> header file.  */
-#undef HAVE_WCHAR_H
-
-/* Define if you have the <wcstr.h> header file.  */
-#undef HAVE_WCSTR_H
-
-/* Define if you have <widec.h> (Solaris only) */
-#undef HAVE_WIDEC_H
-
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #undef HAVE_ICONV
 
@@ -1071,9 +1042,6 @@
 
 /* Define if you have wcsrtombs() function */
 #undef HAVE_WCSRTOMBS
-
-/* Define this if you have putws() */
-#undef HAVE_PUTWS
 
 /* Define this if you have fputws() */
 #undef HAVE_FPUTWS
@@ -1137,6 +1105,12 @@
 
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
+
+/* Define if you have EGL support */
+#undef wxHAS_EGL
+
+/* Define if you have GLX support */
+#undef wxHAS_GLX
 
 /* Define if you have inotify_xxx() functions. */
 #undef wxHAS_INOTIFY

@@ -35,6 +35,7 @@
 #endif
 
 #include "wx/private/localeset.h"
+#include "wx/private/make_unique.h"
 
 #include "textentrytest.h"
 #include "testableframe.h"
@@ -1774,5 +1775,35 @@ TEST_CASE("wxTextCtrl::EmptyUndoBuffer", "[wxTextCtrl][undo]")
 }
 
 #endif // __MINGW32_TOOLCHAIN__
+
+#if wxUSE_RICHEDIT
+
+TEST_CASE("wxTextCtrl::RichWithHint", "[wxTextCtrl][hint][rich]")
+{
+    long richStyle = 0;
+
+    SECTION("Rich")
+    {
+        richStyle = wxTE_RICH;
+    }
+
+    SECTION("Rich2")
+    {
+        richStyle = wxTE_RICH2;
+    }
+
+    auto text = std::make_unique<wxTextCtrl>
+                (
+                    wxTheApp->GetTopWindow(), wxID_ANY, "",
+                    wxDefaultPosition, wxSize(400, 200),
+                    wxTE_MULTILINE | richStyle
+                );
+    text->SetHint("This is a hint");
+
+    CHECK( text->GetHint() == "This is a hint" );
+    CHECK( text->GetValue() == "" );
+}
+
+#endif // wxUSE_RICHEDIT
 
 #endif //wxUSE_TEXTCTRL

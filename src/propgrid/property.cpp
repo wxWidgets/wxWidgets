@@ -159,25 +159,23 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPropert
     if ( bmp.IsOk() )
     {
         int hMax = rect.height - wxPG_CUSTOM_IMAGE_SPACINGY;
-        wxBitmap scaledBmp;
         int yOfs;
         if ( bmp.GetHeight() <= hMax )
         {
-            scaledBmp = bmp;
             yOfs = (hMax - bmp.GetHeight()) / 2;
         }
         else
         {
-            double scale = (double)hMax / bmp.GetHeight();
-            scaledBmp = wxPropertyGrid::RescaleBitmap(bmp, scale, scale);
+            int w = wxRound(bmp.GetWidth() * (double)hMax / bmp.GetHeight());
+            wxBitmap::Rescale(bmp, wxSize(w, hMax));
             yOfs = 0;
         }
 
-        dc.DrawBitmap( scaledBmp,
+        dc.DrawBitmap( bmp,
                        rect.x + wxPG_CONTROL_MARGIN + wxCC_CUSTOM_IMAGE_MARGIN1,
                        rect.y + wxPG_CUSTOM_IMAGE_SPACINGY + yOfs,
                        true );
-        imageWidth = scaledBmp.GetWidth();
+        imageWidth = bmp.GetWidth();
     }
 
     return imageWidth;
@@ -1527,21 +1525,19 @@ void wxPGProperty::OnCustomPaint( wxDC& dc,
     wxCHECK_RET( m_valueBitmapBundle.IsOk(), wxS("invalid bitmap bundle") );
 
     wxBitmap bmp = m_valueBitmapBundle.GetBitmapFor(paintData.m_parent);
-    wxBitmap scaledBmp;
     int yOfs;
     if ( bmp.GetHeight() <= rect.height )
     {
-        scaledBmp = bmp;
         yOfs = (rect.height - bmp.GetHeight()) / 2;
     }
     else
     {
-        double scale = (double)rect.height / bmp.GetHeight();
-        scaledBmp = wxPropertyGrid::RescaleBitmap(bmp, scale, scale);
+        int w = wxRound(bmp.GetWidth() * (double)rect.height / bmp.GetHeight());
+        wxBitmap::Rescale(bmp, wxSize(w, rect.height));
         yOfs = 0;
     }
 
-    dc.DrawBitmap(scaledBmp,rect.x, rect.y + yOfs);
+    dc.DrawBitmap(bmp, rect.x, rect.y + yOfs);
 }
 
 const wxPGEditor* wxPGProperty::DoGetEditorClass() const

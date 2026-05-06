@@ -212,17 +212,7 @@ wxString wxStandardPaths::GetConfigDir() const
 
 wxString wxStandardPaths::GetDataDir() const
 {
-    // allow to override the location of the data directory by setting
-    // WX_APPNAME_DATA_DIR environment variable: this is very useful in
-    // practice for running well-written (and so using wxStandardPaths to find
-    // their files) wx applications without installing them
-    static const wxString
-      envOverride(
-        getenv(
-            ("WX_" + wxTheApp->GetAppName().Upper() + "_DATA_DIR").c_str()
-        )
-      );
-
+    const wxString& envOverride = wxStandardPathsBase::GetDataDir();
     if ( !envOverride.empty() )
         return envOverride;
 

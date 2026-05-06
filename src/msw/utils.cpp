@@ -98,6 +98,9 @@
 // For wxCmpNatural()
 #include <shlwapi.h>
 
+// For std::unique_ptr
+#include <memory>
+
 // In some distributions of MinGW32, this function is exported in the library,
 // but not declared in shlwapi.h. Therefore we declare it here.
 #if defined( __MINGW32_TOOLCHAIN__ )

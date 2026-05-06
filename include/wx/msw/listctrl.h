@@ -379,6 +379,11 @@ public:
                                     WXWPARAM wParam,
                                     WXLPARAM lParam) override;
 
+    // This function is only used by the implementation and is not part of the
+    // public API.
+    wxItemAttr* MSWGetItemColumnAttr(long item, long column) const
+        { return DoGetItemColumnAttr(item, column); }
+
 protected:
     // common part of all ctors
     void Init();

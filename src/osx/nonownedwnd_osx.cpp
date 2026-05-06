@@ -288,6 +288,9 @@ void wxNonOwnedWindow::SetWindowStyleFlag(long flags)
 // Raise the window to the top of the Z order
 void wxNonOwnedWindow::Raise()
 {
+    if (!IsShown())
+        return;
+
     m_nowpeer->Raise();
 }
 

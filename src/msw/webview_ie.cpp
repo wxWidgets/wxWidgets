@@ -23,12 +23,14 @@
 
 #include "wx/msw/missing.h"
 #include "wx/msw/private.h"
-#include "wx/msw/private/webview_ie.h"
 #include "wx/private/jsscriptwrapper.h"
+#include "wx/private/webview.h"
 
 #include <initguid.h>
 #include <exdispid.h>
 #include <mshtml.h>
+
+#include "wx/msw/private/webview_ie.h"
 
 /* These GUID definitions are our own implementation to support interfaces
  * normally in urlmon.h. See include/wx/msw/webview_ie.h
@@ -81,6 +83,11 @@ wxVersionInfo wxWebViewFactoryIE::GetVersionInfo(wxVersionContext context)
     }
 
     return {};
+}
+
+wxWebViewConfiguration wxWebViewFactoryIE::CreateConfiguration()
+{
+    return wxWebViewConfiguration(wxWebViewBackendIE, new wxWebViewConfigurationImpl);
 }
 
 //Convenience function for error conversion
@@ -1616,6 +1623,7 @@ VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler)
     m_handler = handler;
 }
 
+COM_DECLSPEC_NOTHROW
 STDMETHODIMP VirtualProtocol::QueryInterface(REFIID riid, void **ppv)
 {
     wxLogQueryInterface(wxT("VirtualProtocol"), riid);
@@ -1654,12 +1662,14 @@ STDMETHODIMP VirtualProtocol::QueryInterface(REFIID riid, void **ppv)
     return (HRESULT) E_NOINTERFACE;
 }
 
+COM_DECLSPEC_NOTHROW
 STDMETHODIMP_(ULONG) VirtualProtocol::AddRef()
 {
     wxLogAddRef(wxT("VirtualProtocol"), m_cRef);
     return ++m_cRef;
 }
 
+COM_DECLSPEC_NOTHROW
 STDMETHODIMP_(ULONG) VirtualProtocol::Release()
 {
     wxLogRelease(wxT("VirtualProtocol"), m_cRef);

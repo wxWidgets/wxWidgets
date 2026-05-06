@@ -42,12 +42,12 @@ enum
 class WXDLLIMPEXP_CORE wxBMPHandler : public wxImageHandler
 {
 public:
-    wxBMPHandler()
+    wxBMPHandler() : wxImageHandler(
+        wxT("Windows bitmap file"),
+        wxT("bmp"),
+        wxBITMAP_TYPE_BMP,
+        wxT("image/x-bmp"))
     {
-        m_name = wxT("Windows bitmap file");
-        m_extension = wxT("bmp");
-        m_type = wxBITMAP_TYPE_BMP;
-        m_mime = wxT("image/x-bmp");
     }
 
 #if wxUSE_STREAMS

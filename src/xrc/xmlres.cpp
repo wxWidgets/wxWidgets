@@ -3255,9 +3255,17 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxXmlResourceModule, wxModule);
 // then the built-in module system won't pick this one up.  Add it manually.
 void wxXmlInitResourceModule()
 {
-    wxModule* module = new wxXmlResourceModule;
-    wxModule::RegisterModule(module);
-    wxModule::InitializeModules();
+    // Only add the module if the module system is already initialized,
+    // otherwise it will be added automatically when it is done as it will be
+    // known to the module system at that time (this happens as soon as the
+    // code containing this function is loaded from a shared library and if
+    // this function is running, it must have been already loaded!).
+    if ( wxModule::AreInitialized() )
+    {
+        // Still check that this module is not already registered, as could
+        // happen if this function is called multiple times, for example.
+        wxModule::AddModuleIfNecessary(wxCLASSINFO(wxXmlResourceModule));
+    }
 }
 
 #endif // wxUSE_XRC

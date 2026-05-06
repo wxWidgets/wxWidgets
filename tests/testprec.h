@@ -4,9 +4,8 @@
 #include "wx/wxprec.h"
 #include "wx/evtloop.h"
 
-// These headers must be included before catch.hpp to be taken into account.
+// This header must be included before catch.hpp to be taken into account.
 #include "asserthelper.h"
-#include "testdate.h"
 
 // This needs to be defined before including catch.hpp for PCH support.
 #define CATCH_CONFIG_ALL_PARTS

@@ -72,6 +72,12 @@ private:
     // Get the task dialog geometry when using the native dialog.
     wxRect GetTaskDialogRect() const;
 
+    // Returns true if the dialog is currently using the native task dialog.
+    bool UsingNativeTaskDialog() const { return m_sharedData != nullptr; }
+
+    // Show native dialog for the first time.
+    bool InitAndShowNative();
+
 
     wxProgressDialogTaskRunner *m_taskDialogRunner;
 

@@ -46,7 +46,7 @@ public:
     wxRibbonPage(wxRibbonBar* parent,
                 wxWindowID id = wxID_ANY,
                 const wxString& label = wxEmptyString,
-                const wxBitmap& icon = wxNullBitmap,
+                const wxBitmapBundle& icon = wxBitmapBundle(),
                 long style = 0);
 
     /**
@@ -62,7 +62,7 @@ public:
     bool Create(wxRibbonBar* parent,
                 wxWindowID id = wxID_ANY,
                 const wxString& label = wxEmptyString,
-                const wxBitmap& icon = wxNullBitmap,
+                const wxBitmapBundle& icon = wxBitmapBundle(),
                 long style = 0);
 
     /**
@@ -78,7 +78,15 @@ public:
         Get the icon used for the page in the ribbon bar tab area (only
         displayed if the ribbon bar is actually showing icons).
     */
-    wxBitmap& GetIcon();
+    wxBitmap GetIcon();
+
+    /**
+        Get the icon bundle used for the page in the ribbon bar tab area (only
+        displayed if the ribbon bar is actually showing icons).
+
+        @since 3.3.3
+    */
+    const wxBitmapBundle& GetIconBundle() const;
 
     /**
         Set the size of the page and the external scroll buttons (if any).

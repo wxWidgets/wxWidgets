@@ -75,6 +75,14 @@ wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog);
 
+// gcc 16.0 gives a bogus warning about "'<unknown>' may be used uninitialized"
+// (sic) for GetParentForModalDialog() call below, this is almost certainly a
+// compiler bug, so disable it for this version only for now.
+#if wxCHECK_GCC_VERSION(16, 0) && !wxCHECK_GCC_VERSION(16, 1)
+#define wxGCC_WARNING_SUPPRESS_MAYBE_UNINITIALIZED
+wxGCC_WARNING_SUPPRESS(maybe-uninitialized)
+#endif
+
 wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxString& message,
                                                 const wxString& caption,
@@ -88,6 +96,10 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 {
     m_created = false;
 }
+
+#ifdef wxGCC_WARNING_SUPPRESS_MAYBE_UNINITIALIZED
+wxGCC_WARNING_RESTORE(maybe-uninitialized)
+#endif
 
 wxSizer *wxGenericMessageDialog::CreateMsgDlgButtonSizer()
 {

@@ -72,9 +72,9 @@
     #define wxOSX_USE_COCOA_OR_IPHONE 0
 #endif
 
-#if wxOSX_USE_IPHONE
+#ifdef __WXDARWIN_IPHONE__
     #include "wx/osx/iphone/chkconf.h"
-#elif wxOSX_USE_COCOA
+#elif defined(__WXDARWIN_OSX__)
     #include "wx/osx/cocoa/chkconf.h"
 #endif
 

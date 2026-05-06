@@ -362,6 +362,8 @@ public:     // utility functions not part of the API
 
     virtual void OnInternalIdle() override;
 
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
 #if wxUSE_ACCESSIBILITY
     virtual wxAccessible* CreateAccessible() override;
 #endif // wxUSE_ACCESSIBILITY

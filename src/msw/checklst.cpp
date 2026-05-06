@@ -160,6 +160,75 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     return true;
 }
 
+#if wxUSE_ACCESSIBILITY
+
+namespace
+{
+
+// ----------------------------------------------------------------------------
+// declaration and implementation of wxCheckListBoxAccessible class
+// ----------------------------------------------------------------------------
+
+class wxCheckListBoxAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxCheckListBoxAccessible(wxCheckListBox* win);
+
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
+    virtual wxAccStatus GetState(int childId, long* state) override;
+};
+
+wxCheckListBoxAccessible::wxCheckListBoxAccessible(wxCheckListBox* win)
+    : wxWindowAccessible(win)
+{
+}
+
+wxAccStatus wxCheckListBoxAccessible::GetRole(int childId, wxAccRole* role)
+{
+    wxCheckListBox* checkListBox = wxDynamicCast(GetWindow(), wxCheckListBox);
+    wxCHECK(checkListBox, wxACC_FAIL);
+
+    *role = childId == wxACC_SELF ? wxROLE_SYSTEM_LIST : wxROLE_SYSTEM_CHECKBUTTON;
+    return wxACC_OK;
+}
+
+wxAccStatus wxCheckListBoxAccessible::GetState(int childId, long* state)
+{
+    wxCheckListBox* checkListBox = wxDynamicCast(GetWindow(), wxCheckListBox);
+    wxCHECK(checkListBox, wxACC_FAIL);
+
+    if ( childId <= 0 )
+    {
+        // Fall back to Windows default
+        return wxACC_NOT_IMPLEMENTED;
+    }
+
+    long st = 0;
+    if ( !checkListBox->IsEnabled() )
+        st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+    if ( !checkListBox->IsShown() )
+        st |= wxACC_STATE_SYSTEM_INVISIBLE;
+
+    if ( checkListBox->IsFocusable() )
+        st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+
+    // This needs to be returned for the child to be recognized as focused.
+    if ( checkListBox->HasFocus() )
+        st |= wxACC_STATE_SYSTEM_FOCUSED;
+
+    // Note that child IDs are 1-based.
+    if ( checkListBox->IsChecked(childId - 1) )
+        st |= wxACC_STATE_SYSTEM_CHECKED;
+
+    *state = st;
+
+    return wxACC_OK;
+}
+
+} // anonymous namespace
+
+#endif // wxUSE_ACCESSIBILITY
+
 // ----------------------------------------------------------------------------
 // implementation of wxCheckListBox class
 // ----------------------------------------------------------------------------
@@ -276,6 +345,10 @@ void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
 
     GetItem(uiIndex)->Check(bCheck);
     RefreshItem(uiIndex);
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, uiIndex + 1);
+#endif // wxUSE_ACCESSIBILITY
+
 }
 
 void wxCheckListBox::Toggle(unsigned int uiIndex)
@@ -284,6 +357,9 @@ void wxCheckListBox::Toggle(unsigned int uiIndex)
 
     GetItem(uiIndex)->Toggle();
     RefreshItem(uiIndex);
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, uiIndex + 1);
+#endif // wxUSE_ACCESSIBILITY
 }
 
 // process events
@@ -440,5 +516,14 @@ wxSize wxCheckListBox::DoGetBestClientSize() const
     // add room for the checkbox
     return MSWGetFullItemSize(best.x, best.y);
 }
+
+#if wxUSE_ACCESSIBILITY
+
+wxAccessible* wxCheckListBox::CreateAccessible()
+{
+    return new wxCheckListBoxAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_CHECKLISTBOX

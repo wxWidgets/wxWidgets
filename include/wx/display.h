@@ -94,6 +94,9 @@ public:
     // get the resolution of this monitor in pixels per inch
     wxSize GetPPI() const;
 
+    // get raw resolution in pixels per inch, i.e. without applying any scaling
+    wxSize GetRawPPI() const;
+
     // get the default resolution for displays on this platform
     static int GetStdPPIValue()
     {

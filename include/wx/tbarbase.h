@@ -131,7 +131,7 @@ public:
         return m_kind;
     }
 
-    void MakeStretchable()
+    virtual void MakeStretchable()
     {
         wxASSERT_MSG( IsSeparator(), "only separators can be stretchable" );
 

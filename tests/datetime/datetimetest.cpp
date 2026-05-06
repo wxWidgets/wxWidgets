@@ -796,6 +796,10 @@ TEST_CASE("wxDateTime::Format", "[datetime]")
     }
 
     CHECK(wxDateTime::Now().Format("%%") == "%");
+
+
+    wxDateTime dt(29, wxDateTime::May, 1976, 18, 30, 15, 678);
+    CHECK( dt.Format("%F %T.%l") == "1976-05-29 18:30:15.678" );
 }
 
 TEST_CASE("wxDateTime::ParseFormat", "[datetime]")
@@ -1839,7 +1843,7 @@ TEST_CASE("wxDateTime::DateOnly", "[datetime]")
 
 TEST_CASE("wxDateTime::TranslateFromUnicodeFormat", "[datetime]")
 {
-#if defined(__WINDOWS__) || defined(__WXOSX__)
+#if defined(__WINDOWS__) || defined(__DARWIN__)
     // This function is defined in src/common/intl.cpp and as it is not public we
     // need to declare it here explicitly.
     WXDLLIMPEXP_BASE

@@ -123,6 +123,11 @@ protected:
 #ifdef __WXOSX_IPHONE__
     WX_UIView m_macToolbar;
 #endif
+
+private:
+#if wxOSX_USE_NATIVE_TOOLBAR
+    wxString FormatToolId(const wxToolBarToolBase *tool) const;
+#endif
 };
 
 #endif // wxUSE_TOOLBAR

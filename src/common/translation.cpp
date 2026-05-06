@@ -54,7 +54,6 @@
 #endif
 
 #include <memory>
-#include <unordered_set>
 
 // ----------------------------------------------------------------------------
 // simple types
@@ -1450,15 +1449,6 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
     wxLogTrace(TRACE_I18N, " => using language '%s'", lang);
     return lang;
 }
-
-
-/* static */
-const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
-{
-    thread_local std::unordered_set<wxString> wxPerThreadStrings;
-    return *wxPerThreadStrings.insert(str).first;
-}
-
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
                                                     const wxString& domain,

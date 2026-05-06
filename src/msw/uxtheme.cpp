@@ -48,23 +48,30 @@ bool wxUxThemeIsActive()
 wxUxThemeHandle::wxUxThemeHandle(const wxWindow* win,
                                  const wchar_t* classes,
                                  const wchar_t* classesDark)
+    : m_hTheme{DoOpenThemeData(GetHwndOf(win),
+                               classes,
+                               classesDark,
+                               win->GetDPI().y)}
 {
-    const bool useDark = classesDark && wxMSWDarkMode::IsActive();
-
-    // When using dark mode and using dark mode-specific classes we have to use
-    // the handle of a control which is *not* in dark mode, and as we don't
-    // have any, just use 0.
-    m_hTheme = DoOpenThemeData(
-        useDark ? 0 : GetHwndOf(win),
-        useDark ? classesDark : classes,
-        win->GetDPI().y
-    );
 }
 
 /* static */
 HTHEME
-wxUxThemeHandle::DoOpenThemeData(HWND hwnd, const wchar_t *classes, int dpi)
+wxUxThemeHandle::DoOpenThemeData(HWND hwnd,
+                                 const wchar_t *classes,
+                                 const wchar_t *classesDark,
+                                 int dpi)
 {
+    if ( classesDark && wxMSWDarkMode::IsActive() )
+    {
+        classes = classesDark;
+
+        // When using dark mode and using dark mode-specific classes we have to
+        // use the handle of a control which is *not* in dark mode, and as we
+        // don't have any, just use 0.
+        hwnd = 0;
+    }
+
     // If DPI is the default one, we can use the old function.
     if ( dpi != STD_DPI )
     {

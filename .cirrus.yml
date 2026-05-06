@@ -12,7 +12,7 @@ task:
   matrix:
     - name: Cirrus CI / FreeBSD wxGTK 3
       freebsd_instance:
-        image_family: freebsd-14-2
+        image_family: freebsd-14-3
       env:
         osname: FreeBSD
     - name: Cirrus CI / Debian ARM wxGTK 3
@@ -82,7 +82,7 @@ task:
 
   test_script: |
     cd tests
-    WX_TEST_WEBREQUEST_URL="0" ./test
+    WX_TEST_WEBREQUEST_URL="0" ./test -d 1
 
   build_samples_script: |
     make -k -C samples $wxBUILD_ARGS

@@ -595,7 +595,7 @@ int MyApp::OnExit()
 #endif
     delete m_styleSheet;
 
-    return 0;
+    return wxApp::OnExit();
 }
 
 void MyApp::CreateStyles()

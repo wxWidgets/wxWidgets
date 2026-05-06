@@ -2457,10 +2457,12 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 
     wxWindow* wxpeer = GetWXPeer();
 
-    if ( wxpeer->MacGetLeftBorderSize() != 0 || wxpeer->MacGetTopBorderSize() != 0 )
+    auto macBorder{wxpeer->MacGetBorderSize()};
+    if ( macBorder.left != 0 || macBorder.top != 0 )
     {
-        // as this update region is in native window locals we must adapt it to wx window local
-        updateRgn.Offset( wxpeer->MacGetLeftBorderSize() , wxpeer->MacGetTopBorderSize() );
+        // as this update region is in native window locals we must adapt it
+        // to wx window local
+        updateRgn.Offset( macBorder.left , macBorder.top );
     }
 
     // Restrict the update region to the shape of the window, if any, and also
@@ -2726,14 +2728,14 @@ wxWidgetImpl( peer, flags )
     m_osxView = w;
     m_osxClipView = nil;
 
+    m_insetLeft     = -1;
+    m_insetRight    = -1;
+    m_insetTop      = -1;
+    m_insetBottom   = -1;
+
     // check if the user wants to create the control initially hidden
     if ( !peer->IsShown() )
         SetVisibility(false);
-
-    // gc aware handling
-    if ( m_osxView )
-        CFRetain(m_osxView);
-    [m_osxView release];
 
     if ( IsUserPane() )
         ClipsToBounds(true);
@@ -2754,6 +2756,8 @@ void wxWidgetCocoaImpl::Init()
     m_lastKeyDownEvent = nil;
     m_lastKeyDownWXSent = false;
     m_hasEditor = false;
+    m_lastLeftDownWasDClick = false;
+    m_lastRightDownWasDClick = false;
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -2769,11 +2773,10 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         if ( sv != nil )
             [m_osxView removeFromSuperview];
     }
-    // gc aware handling
-    if ( m_osxView )
-        CFRelease(m_osxView);
 
     wxCocoaGestures::EraseForObject(this);
+
+    [m_osxView release];
 }
 
 void wxWidgetCocoaImpl::BeginNativeKeyDownEvent( NSEvent* event )
@@ -3292,11 +3295,26 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
 
 void wxWidgetCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &bottom) const
 {
-    NSEdgeInsets insets = [m_osxView alignmentRectInsets];
-    left = insets.left;
-    top = insets.top;
-    right = insets.right;
-    bottom = insets.bottom;
+    if (m_insetLeft == -1)
+    {
+        // It's not entirely clear if/when this needs to be invalidated.
+        // For most (all?) normal controls/views, this is effectively static.
+        NSEdgeInsets insets = [m_osxView alignmentRectInsets];
+        m_insetLeft     = insets.left;
+        m_insetRight    = insets.right;
+        m_insetTop      = insets.top;
+        m_insetBottom   = insets.bottom;
+    }
+
+    left = m_insetLeft;
+    top = m_insetTop;
+    right = m_insetRight;
+    bottom = m_insetBottom;
+}
+
+void wxWidgetCocoaImpl::InvalidateLayoutInset() const {
+    // GetLayoutInset() above only checks `m_insetLeft` for caching.
+    m_insetLeft = -1;
 }
 
 namespace
@@ -3860,6 +3878,9 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
                 [cell setControlSize:size];
         }
     }
+
+    // In case changing the size also affects the insets.
+    InvalidateLayoutInset();
 }
 
 NSView* wxWidgetCocoaImpl::GetViewWithText() const
@@ -4114,6 +4135,41 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     bool processed = false;
     for ( auto& wxevent : TranslateMouseEvent(event) )
     {
+        if (wxevent.GetEventType() == wxEVT_LEFT_DOWN)
+        {
+                m_lastLeftDownWasDClick = false;
+        }
+        else if (wxevent.GetEventType() == wxEVT_LEFT_DCLICK)
+        {
+            if (m_lastLeftDownWasDClick)
+            {
+                // synthesize LEFT_DOWN event from second, fourth etc. DCLICK event
+                wxevent.SetEventType( wxEVT_LEFT_DOWN );
+                m_lastLeftDownWasDClick = false;
+            }
+            else
+            {
+                m_lastLeftDownWasDClick = true;
+            }
+        }
+        else if (wxevent.GetEventType() == wxEVT_RIGHT_DOWN)
+        {
+                m_lastRightDownWasDClick = false;
+        }
+        else if (wxevent.GetEventType() == wxEVT_RIGHT_DCLICK)
+        {
+            if (m_lastRightDownWasDClick)
+            {
+                // synthesize RIGHT_DOWN event from second, fourth etc. DCLICK event
+                wxevent.SetEventType( wxEVT_RIGHT_DOWN );
+                m_lastRightDownWasDClick = false;
+            }
+            else
+            {
+                m_lastRightDownWasDClick = true;
+            }
+        }
+
         // Even if this event was processed, still continue with the other
         // events, if any.
         if ( GetWXPeer()->HandleWindowEvent(wxevent) )
@@ -4278,6 +4334,7 @@ void wxWidgetCocoaImpl::UseClippingView()
             m_osxClipView = [[wxNSClipView alloc] initWithFrame: m_osxView.bounds];
             [(NSClipView*)m_osxClipView setDrawsBackground: NO];
             [m_osxView addSubview:m_osxClipView];
+            [m_osxClipView release];
 
             // add tracking for this clipview as well
 

@@ -578,7 +578,17 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
     }
 
     // Erase the background.
-    ::FillRect(hdc, &rect, m_win->MSWGetBgBrush(hdc));
+    HBRUSH hbr = m_win->MSWGetBgBrush(hdc);
+    if ( !hbr && wxMSWDarkMode::IsActive() )
+    {
+        // We always need to use custom background in dark mode, default
+        // behaviour is never correct.
+        auto const colBg = m_win->GetBackgroundColour();
+        wxBrush* brush = wxTheBrushList->FindOrCreateBrush(colBg);
+        hbr = (WXHBRUSH)brush->GetResourceHandle();
+    }
+
+    ::FillRect(hdc, &rect, hbr);
 
     // draw the button itself
     wxDCTemp dc(hdc);

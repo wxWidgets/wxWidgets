@@ -60,7 +60,7 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
     SECTION("Without mouse capture")
     {
         sim.MouseMove(panel->GetScreenPosition() + wxPoint(5, 5));
-        wxYield();
+        YieldForAWhile();
 
         CHECK( enter.GetCount() == 1 );
         CHECK( leave.GetCount() == 0 );
@@ -68,7 +68,7 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
         enter.Clear();
 
         sim.MouseMove(button->GetScreenPosition() + wxPoint(5, 5));
-        wxYield();
+        YieldForAWhile();
 
         // The parent window (panel) should receive wxEVT_LEAVE_WINDOW event
         // when mouse enters the child window (button)
@@ -78,7 +78,7 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
         leave.Clear();
 
         sim.MouseMove(panel->GetScreenPosition() + wxPoint(5, 5));
-        wxYield();
+        YieldForAWhile();
 
         // Now it (panel) should receive wxEVT_ENTER_WINDOW event when
         // the mouse leaves the button and enters the panel again.
@@ -92,10 +92,10 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
         EventCounter clicked(button, wxEVT_BUTTON);
 
         sim.MouseMove(button->GetScreenPosition() + wxPoint(5, 5));
-        wxYield();
+        YieldForAWhile();
 
         sim.MouseClick();
-        wxYield();
+        YieldForAWhile();
 
         CHECK( clicked.GetCount() == 1 );
 
@@ -103,7 +103,7 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
         leave.Clear();
 
         sim.MouseDown();
-        wxYield();
+        YieldForAWhile();
 
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
         if ( IsAutomaticTest() )
@@ -113,7 +113,7 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
         }
 #endif
         sim.MouseMove(button->GetScreenPosition() + wxPoint(10, 5));
-        wxYield();
+        YieldForAWhile();
 
         // Holding the mouse button down (initiated on the button) and then
         // hovering over the panel should not generate any events (enter/leave)
@@ -121,25 +121,25 @@ TEST_CASE("EnterLeaveEvents", "[wxEvent][enter-leave]")
         // mouse is still held down should also not generate any events.
 
         sim.MouseMove(panel->GetScreenPosition() + wxPoint(5, 5));
-        wxYield();
+        YieldForAWhile();
 
         CHECK( enter.GetCount() == 0 );
         CHECK( leave.GetCount() == 0 );
 
         sim.MouseMove(textctrl->GetScreenPosition() + wxPoint(5, 5));
-        wxYield();
+        YieldForAWhile();
 
         CHECK( enter.GetCount() == 0 );
         CHECK( leave.GetCount() == 0 );
 
         sim.MouseMove(panel->GetScreenPosition() + wxPoint(5, 5));
-        wxYield();
+        YieldForAWhile();
 
         CHECK( enter.GetCount() == 0 );
         CHECK( leave.GetCount() == 0 );
 
         sim.MouseUp();
-        wxYield();
+        YieldForAWhile();
 
         // wxGTK behaves differently here, as it does not generate a
         // wxEVT_ENTER_WINDOW event when we release the mouse button.

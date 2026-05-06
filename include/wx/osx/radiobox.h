@@ -73,6 +73,8 @@ public:
     virtual wxString GetString(unsigned int item) const override;
     virtual void SetString(unsigned int item, const wxString& label) override;
 
+    virtual bool HasTransparentBackground() override { return true; }
+
     // protect native font of box
     virtual bool SetFont( const wxFont &font ) override;
 // Other external functions

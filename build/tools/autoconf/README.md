@@ -18,10 +18,16 @@ directly by executing the following command from the top-level wx directory:
 $ podman run -v `pwd`:/wx --rm docker.io/vadz/autoconf-for-wx
 ```
 
-or, if you prefer to use podman:
+or, if you prefer to use docker:
 
 ```shell
 $ docker run -v `pwd`:/wx --rm vadz/autoconf-for-wx
+```
+
+If using Fedora (or other system with SELinux enabled), you might need to add an option to relabel the volume content:
+
+```shell
+$ podman run -v `pwd`:/wx:Z --rm docker.io/vadz/autoconf-for-wx
 ```
 
 

@@ -635,8 +635,13 @@ wxPanel *MyFrame::CreateNewPage() const
     panel->SetHelpText("Panel with \"First\" and \"Second\" buttons");
 #endif
 
-    (void) new wxButton(panel, wxID_ANY, "First button", wxPoint(10, 30));
-    (void) new wxButton(panel, wxID_ANY, "Second button", wxPoint(150, 30));
+    wxBoxSizer* const sizer = new wxBoxSizer(wxHORIZONTAL);
+    panel->SetSizer(sizer);
+
+    sizer->Add(new wxButton(panel, wxID_ANY, "First button"),
+               wxSizerFlags().Border());
+    sizer->Add(new wxButton(panel, wxID_ANY, "Second button"),
+               wxSizerFlags().Border());
 
     return panel;
 }

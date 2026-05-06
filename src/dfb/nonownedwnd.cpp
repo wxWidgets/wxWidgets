@@ -259,6 +259,9 @@ bool wxNonOwnedWindow::Show(bool show)
 
 void wxNonOwnedWindow::Raise()
 {
+    if ( !IsShown() )
+        return;
+
     m_dfbwin->RaiseToTop();
 }
 

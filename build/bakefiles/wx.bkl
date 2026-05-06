@@ -92,12 +92,20 @@
 
         <action id="install-wxconfig">
             <dependency-of>install</dependency-of>
+            <!--
+                In the command below, we try to create a relative symlink
+                because this works even if DESTDIR is moved (which will
+                normally be the case if it's not empty). But if this doesn't
+                work, e.g. we're under non-Linux system (note that macOS ln
+                only supports this option since version 13), fall back to
+                creating an absolute symlink and if that fails too, just copy
+                the file.
+             -->
             <command>
                 $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
                 $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
                 $(INSTALL_SCRIPT) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
-                # Warning! If the --relative symlink fails (e.g. *BSD), then we'd create an absolute symlink, which will be broken if DESTDIR is moved
-                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) --relative $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || $(LN_S) $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
+                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) --relative $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config 2&gt;/dev/null || $(LN_S) $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
             </command>
         </action>
 

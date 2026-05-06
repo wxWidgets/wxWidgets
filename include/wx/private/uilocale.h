@@ -10,6 +10,8 @@
 #ifndef _WX_PRIVATE_UILOCALE_H_
 #define _WX_PRIVATE_UILOCALE_H_
 
+#if wxUSE_INTL
+
 #include "wx/localedefs.h"
 #include "wx/object.h"
 #include "wx/string.h"
@@ -144,5 +146,7 @@ public:
     static int GetMatchDistance(const wxString& desired, const wxString& supported);
     static bool SameRegionGroup(const wxString& language, const wxString& desiredRegion, const wxString& supportedRegion);
 };
+
+#endif // wxUSE_INTL
 
 #endif // _WX_PRIVATE_UILOCALE_H_

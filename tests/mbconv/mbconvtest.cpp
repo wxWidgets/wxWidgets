@@ -24,10 +24,6 @@
 
 #include "wx/private/localeset.h"
 
-#if defined wxHAVE_TCHAR_SUPPORT && !defined HAVE_WCHAR_H
-    #define HAVE_WCHAR_H
-#endif
-
 // ----------------------------------------------------------------------------
 // Some wide character constants. "\uXXXX" escapes aren't supported by old
 // compilers such as VC++ 5 and g++ 2.95.
@@ -81,7 +77,6 @@ private:
         CPPUNIT_TEST( BufSize );
         CPPUNIT_TEST( FromWCharTests );
         CPPUNIT_TEST( NonBMPCharTests );
-#ifdef HAVE_WCHAR_H
         CPPUNIT_TEST( UTF8_41 );
         CPPUNIT_TEST( UTF8_7f );
         CPPUNIT_TEST( UTF8_80 );
@@ -100,7 +95,6 @@ private:
         CPPUNIT_TEST( UTF8_f4_8f_bf_bd );
         CPPUNIT_TEST( UTF8PUA_f4_80_82_a5 );
         CPPUNIT_TEST( UTF8Octal_backslash245 );
-#endif // HAVE_WCHAR_H
     CPPUNIT_TEST_SUITE_END();
 
     void WC2CP1250();
@@ -177,7 +171,6 @@ private:
         int            sizeofNull   // the number of bytes occupied by a terminating null in the converter's encoding
         );
 
-#ifdef HAVE_WCHAR_H
     // UTF-8 tests. Test the first, last and one in the middle for sequences
     // of each length
     void UTF8_41() { UTF8("\x41", u41); }
@@ -215,7 +208,6 @@ private:
     void UTF8PUA(const char *charSequence, const wchar_t *wideSequence);
     void UTF8Octal(const char *charSequence, const wchar_t *wideSequence);
     void UTF8(const char *charSequence, const wchar_t *wideSequence, int option);
-#endif // HAVE_WCHAR_H
 
     wxDECLARE_NO_COPY_CLASS(MBConvTestCase);
 };
@@ -1319,8 +1311,6 @@ void MBConvTestCase::TestStreamEncoder(
 // UTF-8 tests
 // ----------------------------------------------------------------------------
 
-#ifdef HAVE_WCHAR_H
-
 // Check that 'charSequence' translates to 'wideSequence' and back.
 // Invalid sequences can be tested by giving nullptr for 'wideSequence'. Even
 // invalid sequences should roundtrip when an option is given and this is
@@ -1473,8 +1463,6 @@ void MBConvTestCase::UTF8(const char *charSequence,
     UTF8ASSERT(strcmp(bytes, bytesAgain) == 0);
     UTF8ASSERT(strlen(bytesAgain) == resultAgain);
 }
-
-#endif // HAVE_WCHAR_H
 
 TEST_CASE("wxMBConv::cWC2MB", "[mbconv][wc2mb]")
 {

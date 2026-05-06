@@ -774,7 +774,9 @@ controls into it.
 
 @section page_samples_stc wxStyledTextCtrl Sample
 
-@sampleabout{wxStyledTextCtrl}
+This samples demonstrates various uses of wxStyledTextCtrl.
+
+It also shows wxStyledTextCtrlMiniMap, see its "Window" menu.
 
 @sampledir{stc}
 

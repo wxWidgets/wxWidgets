@@ -63,6 +63,7 @@ public:
 
 private:
     MyCanvas* m_canvas;
+    wxPrintDialogData m_printDialogDataForPreview;
     wxPreviewFrameModalityKind m_previewModality;
 
     wxDECLARE_EVENT_TABLE();
@@ -86,9 +87,8 @@ class MyPrintout: public wxPrintout
 {
 public:
     MyPrintout(MyFrame* frame,
-               wxPrintDialogData* printDlgData,
-               const wxString& title = "My printout")
-        : wxPrintout(title)
+               wxPrintDialogData* printDlgData)
+        : wxPrintout("My printout")
     {
         m_frame = frame;
         m_printDlgData = printDlgData;

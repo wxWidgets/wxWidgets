@@ -140,7 +140,11 @@ wxDataFormatId wxDataFormat::GetType() const
 wxString wxDataFormat::GetId() const
 {
     wxGtkString atom_name(gdk_atom_name(m_format));
-    return wxString::FromAscii(atom_name);
+
+    // In practice atom name is always in UTF-8, but don't lose the name
+    // entirely if it isn't.
+    wxMBConvUTF8 conv(wxMBConvUTF8::MAP_INVALID_UTF8_TO_PUA);
+    return wxString(conv.cMB2WX(atom_name.c_str()));
 }
 
 void wxDataFormat::SetId( NativeFormat format )

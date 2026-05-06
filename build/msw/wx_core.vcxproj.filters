@@ -2164,9 +2164,6 @@
     <ClInclude Include="..\..\include\wx\sashwin.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\scopeguard.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\scrolbar.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

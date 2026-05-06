@@ -18,10 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-// Define this as soon as possible and before string.h is included to get
-// memset_s() declaration from it if available.
-#define __STDC_WANT_LIB_EXT1__ 1
-
 #include "wx/utils.h"
 
 #if !defined(HAVE_SETENV) && defined(HAVE_PUTENV)
@@ -493,7 +489,7 @@ private:
 // wxExecute implementations
 // ----------------------------------------------------------------------------
 
-#if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
+#ifdef __WXDARWIN_OSX__
 bool wxCocoaLaunch(const char* const* argv, pid_t &pid);
 #endif
 
@@ -614,7 +610,7 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
                     wxT("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS
     pid_t pid;
-#if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
+#ifdef __WXDARWIN_OSX__
     pid = -1;
     // wxCocoaLaunch() only executes app bundles and only does it asynchronously.
     // It returns false if the target is not an app bundle, thus falling
@@ -1257,11 +1253,81 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
     return wxPlatformInfo::GetOperatingSystemId(kernel);
 }
 
+static bool
+wxGetDescFromOSRelease(wxString* distName, wxString* version)
+{
+#if wxUSE_CONFIG
+    // Read /etc/os-release and fall back to /usr/lib/os-release per below
+    // https://www.freedesktop.org/software/systemd/man/os-release.html
+    static const char* const osReleasePaths[] =
+    {
+        "/etc/os-release",
+        "/usr/lib/os-release"
+    };
+
+    for ( const auto& fileName : osReleasePaths )
+    {
+        if ( wxFileName::Exists(fileName) )
+        {
+            // No app, no vendor, no global file path, just the local config
+            // file to read the values from.
+            wxFileConfig fc({}, {}, {}, fileName);
+
+            // Default value suggested by the spec
+            *distName = fc.Read("NAME", "Linux");
+
+            *version = fc.Read("VERSION");
+
+            return true;
+        }
+    }
+#endif // wxUSE_CONFIG
+
+    return false;
+}
+
 wxString wxGetOsDescription()
 {
 #ifdef __VMS
     return wxGetCommandOutput(wxT("uname -s -v -m"));
 #else
+    wxString distName, version;
+    if ( wxGetDescFromOSRelease(&distName, &version) )
+    {
+        wxString osDesc = distName;
+        if ( !version.empty() )
+        {
+            osDesc += " " + version;
+        }
+        osDesc += ",";
+
+        const wxString unameSystem = wxGetCommandOutput(wxT("uname -s"));
+        const wxString unameRelease = wxGetCommandOutput(wxT("uname -r"));
+        const wxString unameMachine = wxGetCommandOutput(wxT("uname -m"));
+
+        // If any of the strings above is already present in the info
+        // read from os-release, avoid repeating the values to keep
+        // the description relatively short. Also do not repeat
+        // e.g. the machine type if it is already part of the kernel
+        // version number.
+
+        if ( osDesc.Find(unameSystem) == wxNOT_FOUND )
+        {
+            osDesc += " " + unameSystem;
+        }
+        if ( osDesc.Find(unameRelease) == wxNOT_FOUND )
+        {
+            osDesc += " " + unameRelease;
+        }
+        if ( osDesc.Find(unameMachine) == wxNOT_FOUND )
+        {
+            osDesc += " " + unameMachine;
+        }
+
+        osDesc.Trim(false);
+        return osDesc;
+    }
+
     return wxGetCommandOutput(wxT("uname -s -r -m"));
 #endif
 }

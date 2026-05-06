@@ -86,31 +86,6 @@ static bool IsThemeDark()
 
 
 
-class ToolbarCommandCapture : public wxEvtHandler
-{
-public:
-
-    ToolbarCommandCapture() { m_lastId = 0; }
-    int GetCommandId() const { return m_lastId; }
-
-    bool ProcessEvent(wxEvent& evt) override
-    {
-        if (evt.GetEventType() == wxEVT_MENU)
-        {
-            m_lastId = evt.GetId();
-            return true;
-        }
-
-        if (GetNextHandler())
-            return GetNextHandler()->ProcessEvent(evt);
-
-        return false;
-    }
-
-private:
-    int m_lastId;
-};
-
 wxBitmap wxAuiToolBarItem::GetCurrentBitmapFor(wxWindow* wnd) const
 {
     // We suppose that we don't have disabled bitmap if we don't have the
@@ -218,6 +193,16 @@ void wxAuiGenericToolBarArt::SetTextOrientation(int orientation)
     m_textOrientation = orientation;
 }
 
+void wxAuiGenericToolBarArt::SetTextDirection(wxAuiTextDirection direction)
+{
+    m_textDirection = direction;
+}
+
+wxAuiTextDirection wxAuiGenericToolBarArt::GetTextDirection() const
+{
+    return m_textDirection;
+}
+
 unsigned int wxAuiGenericToolBarArt::GetFlags()
 {
     return m_flags;
@@ -315,35 +300,65 @@ void wxAuiGenericToolBarArt::DrawButton(
 
     int bmpX = 0, bmpY = 0;
     int textX = 0, textY = 0;
+    double textAngle = 0.0;
 
-    const wxBitmap& bmp = item.GetCurrentBitmapFor(wnd);
+    wxBitmap bmp = item.GetCurrentBitmapFor(wnd);
     const wxSize bmpSize = bmp.IsOk() ? bmp.GetLogicalSize() : wxSize(0, 0);
 
-    if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
+    switch ( m_textDirection )
     {
-        bmpX = rect.x +
-                (rect.width/2) -
-                (bmpSize.x/2);
+        case wxAuiTextDirection::LeftToRight:
+            if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
+            {
+                bmpX = rect.x +
+                        (rect.width/2) -
+                        (bmpSize.x/2);
 
-        bmpY = rect.y +
-                ((rect.height-textHeight)/2) -
-                (bmpSize.y/2);
+                bmpY = rect.y +
+                        ((rect.height-textHeight)/2) -
+                        (bmpSize.y/2);
 
-        textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
-        textY = rect.y + rect.height - textHeight - 1;
-    }
-    else if (m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT)
-    {
-        bmpX = rect.x + wnd->FromDIP(3);
+                textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
+                textY = rect.y + rect.height - textHeight - 1;
+            }
+            else if (m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT)
+            {
+                bmpX = rect.x + wnd->FromDIP(3);
 
-        bmpY = rect.y +
-                (rect.height/2) -
-                (bmpSize.y/2);
+                bmpY = rect.y +
+                        (rect.height/2) -
+                        (bmpSize.y/2);
 
-        textX = bmpX + wnd->FromDIP(3) + bmpSize.x;
-        textY = rect.y +
-                 (rect.height/2) -
-                 (textHeight/2);
+                textX = bmpX + wnd->FromDIP(3) + bmpSize.x;
+                textY = rect.y +
+                         (rect.height/2) -
+                         (textHeight/2);
+            }
+            break;
+
+        case wxAuiTextDirection::TopToBottom:
+            if ( bmp.IsOk() && (m_flags & wxAUI_TB_ROTATE_ICON_WITH_TEXT) )
+                bmp = wxBitmap(bmp.ConvertToImage().Rotate90(true), -1, bmp.GetScaleFactor());
+
+            bmpX = rect.x + (rect.width - bmpSize.x) / 2;
+            bmpY = rect.y + wnd->FromDIP(3);
+
+            textAngle = -90.0;
+            textX = rect.x + (rect.width + textHeight) / 2;
+            textY = bmpY + bmpSize.x + wnd->FromDIP(3);
+            break;
+
+        case wxAuiTextDirection::BottomToTop:
+            if ( bmp.IsOk() && (m_flags & wxAUI_TB_ROTATE_ICON_WITH_TEXT) )
+                bmp = wxBitmap(bmp.ConvertToImage().Rotate90(false), -1, bmp.GetScaleFactor());
+
+            bmpX = rect.x + (rect.width - bmpSize.x) / 2;
+            bmpY = rect.y + rect.height - bmpSize.y - wnd->FromDIP(3);
+
+            textAngle = 90.0;
+            textX = rect.x + (rect.width - textHeight) / 2;
+            textY = bmpY - wnd->FromDIP(3);
+            break;
     }
 
 
@@ -389,7 +404,10 @@ void wxAuiGenericToolBarArt::DrawButton(
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
     {
-        dc.DrawText(item.GetLabel(), textX, textY);
+        if ( textAngle != 0.0 )
+            dc.DrawRotatedText(item.GetLabel(), textX, textY, textAngle);
+        else
+            dc.DrawText(item.GetLabel(), textX, textY);
     }
 }
 
@@ -603,31 +621,44 @@ wxSize wxAuiGenericToolBarArt::GetToolSize(
     if (m_flags & wxAUI_TB_TEXT)
     {
         dc.SetFont(m_font);
-        int tx, ty;
+        const wxSize textSize = dc.GetTextExtent(item.GetLabel());
 
-        if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
+        switch ( m_textDirection )
         {
-            dc.GetTextExtent(wxT("ABCDHgj"), &tx, &ty);
-            height += ty;
+            case wxAuiTextDirection::LeftToRight:
+                if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
+                {
+                    // Reuse the height of text if we already have it, otherwise (i.e.
+                    // if the label is empty) use the character height.
+                    height += textSize.y ? textSize.y : dc.GetCharHeight();
 
-            if ( !item.GetLabel().empty() )
-            {
-                dc.GetTextExtent(item.GetLabel(), &tx, &ty);
-                width = wxMax(width, tx+wnd->FromDIP(6));
-            }
-        }
-        else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT &&
-                  !item.GetLabel().empty() )
-        {
-            width += wnd->FromDIP(3); // space between left border and bitmap
-            width += wnd->FromDIP(3); // space between bitmap and text
+                    const int widthWithMargins = textSize.x + wnd->FromDIP(6);
+                    if ( widthWithMargins > width )
+                        width = widthWithMargins;
+                }
+                else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT &&
+                          textSize.x != 0 )
+                {
+                    width += wnd->FromDIP(3); // space between left border and bitmap
+                    width += wnd->FromDIP(3); // space between bitmap and text
 
-            if ( !item.GetLabel().empty() )
-            {
-                dc.GetTextExtent(item.GetLabel(), &tx, &ty);
-                width += tx;
-                height = wxMax(height, ty);
-            }
+                    width += textSize.x;
+                    if ( textSize.y > height )
+                        height = textSize.y;
+                }
+                break;
+
+            case wxAuiTextDirection::TopToBottom:
+            case wxAuiTextDirection::BottomToTop:
+                if ( textSize.y != 0 )
+                {
+                    height += wnd->FromDIP(6);
+
+                    height += textSize.x;
+                    if ( textSize.y > width )
+                        width = textSize.y;
+                }
+                break;
         }
     }
 
@@ -813,13 +844,9 @@ int wxAuiGenericToolBarArt::ShowDropDown(wxWindow* wnd,
     wxRect cli_rect = wnd->GetClientRect();
     pt.y = cli_rect.y + cli_rect.height;
 
-    ToolbarCommandCapture* cc = new ToolbarCommandCapture;
-    wnd->PushEventHandler(cc);
-    wnd->PopupMenu(&menuPopup, pt);
-    int command = cc->GetCommandId();
-    wnd->PopEventHandler(true);
+    const int command = wnd->GetPopupMenuSelectionFromUser(menuPopup, pt);
 
-    return command;
+    return command == wxID_NONE ? -1 : command;
 }
 
 
@@ -895,8 +922,9 @@ bool wxAuiToolBar::Create(wxWindow* parent,
 
     m_windowStyle = style;
 
-    m_toolPacking = FromDIP(2);
-    m_toolBorderPadding = FromDIP(3);
+    // Tool packing and padding are in DIPs, i.e. do not use FromDIP() here.
+    m_toolPacking = 2;
+    m_toolBorderPadding = 3;
 
     m_gripperVisible  = (style & wxAUI_TB_GRIPPER) ? true : false;
     m_overflowVisible = (style & wxAUI_TB_OVERFLOW) ? true : false;
@@ -907,12 +935,49 @@ bool wxAuiToolBar::Create(wxWindow* parent,
         m_orientation = wxHORIZONTAL;
     }
 
-    wxSize margin_lt = FromDIP(wxSize(5, 5));
-    wxSize margin_rb = FromDIP(wxSize(2, 2));
-    SetMargins(margin_lt.x, margin_lt.y, margin_rb.x, margin_rb.y);
+    // Margins are in DIPs, i.e. do not use FromDIP() here.
+    m_leftPadding =
+    m_rightPadding = 5;
+    m_topPadding =
+    m_bottomPadding = 2;
+
     SetFont(*wxNORMAL_FONT);
     SetArtFlags();
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+
+    if ( style & wxAUI_TB_HORIZONTAL )
+    {
+        wxASSERT_MSG
+        (
+         !(style & (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_VERT_LAYOUT_UP)),
+         "Vertical text styles can't be used with horizontal toolbars"
+        );
+    }
+    else if ( style & wxAUI_TB_VERTICAL )
+    {
+        wxASSERT_MSG
+        (
+         !(style & wxAUI_TB_HORZ_LAYOUT),
+         "Horizontal layout style can't be used with vertical toolbars"
+        );
+
+        if ( style & wxAUI_TB_TEXT )
+        {
+            if ( style & wxAUI_TB_VERT_LAYOUT_DOWN )
+                SetToolTextDirection(wxAuiTextDirection::TopToBottom);
+            else if ( style & wxAUI_TB_VERT_LAYOUT_UP )
+                SetToolTextDirection(wxAuiTextDirection::BottomToTop);
+        }
+        else
+        {
+            wxASSERT_MSG
+            (
+             !(style & (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_VERT_LAYOUT_UP)),
+             "Vertical text styles don't make sense without wxAUI_TB_TEXT"
+            );
+        }
+    }
+
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
     SetBackgroundStyle(wxBG_STYLE_PAINT);
@@ -967,7 +1032,8 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
 
 wxSize wxAuiToolBar::DoGetBestSize() const
 {
-    auto bestSize = GetMinSize();
+    auto bestSize = m_orientation == wxHORIZONTAL ? m_horzHintSize
+                                                  : m_vertHintSize;
 
     if ( !bestSize.IsFullySpecified() )
     {
@@ -1025,24 +1091,14 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
                            wxObject* client_data)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
     item.m_label = label;
     item.m_bitmap = bitmap;
     item.m_disabledBitmap = disabledBitmap;
     item.m_shortHelp = shortHelpString;
     item.m_longHelp = longHelpString;
-    item.m_active = true;
-    item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = tool_id;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = kind;
-    item.m_sizerItem = nullptr;
-    item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
     item.m_clientData = client_data;
-    item.m_sticky = false;
 
     if (item.m_toolId == wxID_ANY)
         item.m_toolId = wxNewId();
@@ -1055,21 +1111,13 @@ wxAuiToolBarItem* wxAuiToolBar::AddControl(wxControl* control,
                               const wxString& label)
 {
     wxAuiToolBarItem item;
-    item.m_window = (wxWindow*)control;
+    item.m_window = control;
     item.m_label = label;
     item.m_bitmap = wxBitmapBundle();
     item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = control->GetId();
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_CONTROL;
-    item.m_sizerItem = nullptr;
     item.m_minSize = control->GetEffectiveMinSize();
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1084,21 +1132,10 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
         min_size.x = width;
 
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
     item.m_label = label;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = tool_id;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_LABEL;
-    item.m_sizerItem = nullptr;
     item.m_minSize = min_size;
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     if (item.m_toolId == wxID_ANY)
         item.m_toolId = wxNewId();
@@ -1110,20 +1147,8 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
 wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
     item.m_toolId = -1;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_SEPARATOR;
-    item.m_sizerItem = nullptr;
-    item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1132,21 +1157,9 @@ wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
 wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
     item.m_spacerPixels = pixels;
     item.m_toolId = -1;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_SPACER;
-    item.m_sizerItem = nullptr;
-    item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1155,21 +1168,9 @@ wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
 wxAuiToolBarItem* wxAuiToolBar::AddStretchSpacer(int proportion)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = -1;
-    item.m_state = 0;
     item.m_proportion = proportion;
     item.m_kind = wxITEM_SPACER;
-    item.m_sizerItem = nullptr;
-    item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1272,7 +1273,7 @@ wxAuiToolBarItem* wxAuiToolBar::FindToolByPositionWithPacking(wxCoord x, wxCoord
 
         // apply tool packing
         if (i+1 < count)
-            rect.width += m_toolPacking;
+            rect.width += FromDIP(m_toolPacking);
 
         if (rect.Contains(x,y))
         {
@@ -1411,7 +1412,7 @@ bool wxAuiToolBar::GetToolSticky(int tool_id) const
 
 void wxAuiToolBar::SetToolBorderPadding(int padding)
 {
-    m_toolBorderPadding = padding;
+    m_toolBorderPadding = ToDIP(padding);
 }
 
 int wxAuiToolBar::GetToolBorderPadding() const
@@ -1434,9 +1435,37 @@ int wxAuiToolBar::GetToolTextOrientation() const
     return m_toolTextOrientation;
 }
 
+void wxAuiToolBar::SetToolTextDirection(wxAuiTextDirection direction)
+{
+    m_textDirection = direction;
+    if (m_art)
+        m_art->SetTextDirection(direction);
+}
+
+wxAuiTextDirection wxAuiToolBar::GetToolTextDirection() const
+{
+    return m_textDirection;
+}
+
+bool wxAuiToolBar::IsToolTextVertical() const
+{
+    switch ( m_textDirection )
+    {
+        case wxAuiTextDirection::LeftToRight:
+            return false;
+
+        case wxAuiTextDirection::TopToBottom:
+        case wxAuiTextDirection::BottomToTop:
+            return true;
+    }
+
+    wxFAIL_MSG( "Unknown wxAuiTextDirection value" );
+    return false;
+}
+
 void wxAuiToolBar::SetToolPacking(int packing)
 {
-    m_toolPacking = packing;
+    m_toolPacking = ToDIP(packing);
 }
 
 int wxAuiToolBar::GetToolPacking() const
@@ -1462,13 +1491,13 @@ void wxAuiToolBar::SetOrientation(int orientation)
 void wxAuiToolBar::SetMargins(int left, int right, int top, int bottom)
 {
     if (left != -1)
-        m_leftPadding = left;
+        m_leftPadding = ToDIP(left);
     if (right != -1)
-        m_rightPadding = right;
+        m_rightPadding = ToDIP(right);
     if (top != -1)
-        m_topPadding = top;
+        m_topPadding = ToDIP(top);
     if (bottom != -1)
-        m_bottomPadding = bottom;
+        m_bottomPadding = ToDIP(bottom);
 }
 
 bool wxAuiToolBar::GetGripperVisible() const
@@ -1590,17 +1619,16 @@ void wxAuiToolBar::RefreshOverflowState()
 
     int overflow_state = 0;
 
-    wxRect overflow_rect = GetOverflowRect();
-
 
     // find out the mouse's current position
-    wxPoint pt = ::wxGetMousePosition();
+    const wxMouseState mouseState = ::wxGetMouseState();
+    wxPoint pt = mouseState.GetPosition();
     pt = this->ScreenToClient(pt);
 
     // find out if the mouse cursor is inside the dropdown rectangle
-    if (overflow_rect.Contains(pt.x, pt.y))
+    if (GetOverflowRect().Contains(pt))
     {
-        if (::wxGetMouseState().LeftIsDown())
+        if (mouseState.LeftIsDown())
             overflow_state = wxAUI_BUTTON_STATE_PRESSED;
         else
             overflow_state = wxAUI_BUTTON_STATE_HOVER;
@@ -1950,9 +1978,7 @@ bool wxAuiToolBar::Realize()
         size = m_vertHintSize;
     }
 
-    // Remember our minimum size.
-    m_minWidth = size.x;
-    m_minHeight = size.y;
+    InvalidateBestSize();
 
     // And set control size if we are not forbidden from doing it by the use of
     // a special flag and if it did actually change.
@@ -1997,7 +2023,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
     // add "left" padding
     if (m_leftPadding > 0)
     {
-        sizer->AddSpacer(m_leftPadding);
+        sizer->AddSpacer(FromDIP(m_leftPadding));
     }
 
     size_t i, count;
@@ -2011,13 +2037,13 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
             case wxITEM_LABEL:
             {
                 wxSize size = m_art->GetLabelSize(dc, this, item);
-                sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
-                                        size.y + (m_toolBorderPadding*2),
+                sizerItem = sizer->Add(size.x + (FromDIP(m_toolBorderPadding*2)),
+                                        size.y + (FromDIP(m_toolBorderPadding*2)),
                                         item.m_proportion,
                                         item.m_alignment);
                 if (i+1 < count)
                 {
-                    sizer->AddSpacer(m_toolPacking);
+                    sizer->AddSpacer(FromDIP(m_toolPacking));
                 }
 
                 break;
@@ -2028,14 +2054,14 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
             case wxITEM_RADIO:
             {
                 wxSize size = m_art->GetToolSize(dc, this, item);
-                sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
-                                        size.y + (m_toolBorderPadding*2),
+                sizerItem = sizer->Add(size.x + (FromDIP(m_toolBorderPadding*2)),
+                                        size.y + (FromDIP(m_toolBorderPadding*2)),
                                         0,
                                         item.m_alignment);
                 // add tool packing
                 if (i+1 < count)
                 {
-                    sizer->AddSpacer(m_toolPacking);
+                    sizer->AddSpacer(FromDIP(m_toolPacking));
                 }
 
                 break;
@@ -2049,7 +2075,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
                 // add tool packing
                 if (i+1 < count)
                 {
-                    sizer->AddSpacer(m_toolPacking);
+                    sizer->AddSpacer(FromDIP(m_toolPacking));
                 }
 
                 break;
@@ -2100,7 +2126,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
                 // add tool packing
                 if (i+1 < count)
                 {
-                    sizer->AddSpacer(m_toolPacking);
+                    sizer->AddSpacer(FromDIP(m_toolPacking));
                 }
             }
         }
@@ -2111,7 +2137,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
     // add "right" padding
     if (m_rightPadding > 0)
     {
-        sizer->AddSpacer(m_rightPadding);
+        sizer->AddSpacer(FromDIP(m_rightPadding));
     }
 
     // add drop down area
@@ -2139,7 +2165,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
     // add "top" padding
     if (m_topPadding > 0)
     {
-        outside_sizer->AddSpacer(m_topPadding);
+        outside_sizer->AddSpacer(FromDIP(m_topPadding));
     }
 
     // add the sizer that contains all of the toolbar elements
@@ -2148,7 +2174,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
     // add "bottom" padding
     if (m_bottomPadding > 0)
     {
-        outside_sizer->AddSpacer(m_bottomPadding);
+        outside_sizer->AddSpacer(FromDIP(m_bottomPadding));
     }
 
     m_sizer = outside_sizer;
@@ -2181,6 +2207,17 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     return true;
 }
 
+bool wxAuiToolBar::CanStretch() const
+{
+    for (auto const& item : m_items)
+    {
+        if (item.m_proportion)
+            return true;
+    }
+
+    return false;
+}
+
 int wxAuiToolBar::GetOverflowState() const
 {
     return m_overflowState;
@@ -2188,23 +2225,23 @@ int wxAuiToolBar::GetOverflowState() const
 
 wxRect wxAuiToolBar::GetOverflowRect() const
 {
-    wxRect cli_rect(wxPoint(0,0), GetClientSize());
-    wxRect overflow_rect = m_overflowSizerItem->GetRect();
+    const wxSize cli_size = GetClientSize();
+    wxRect overflow_rect;
     int overflow_size = m_art->GetElementSizeForWindow(wxAUI_TBART_OVERFLOW_SIZE, this);
 
     if (m_orientation == wxVERTICAL)
     {
-        overflow_rect.y = cli_rect.height - overflow_size;
+        overflow_rect.y = cli_size.y - overflow_size;
         overflow_rect.x = 0;
-        overflow_rect.width = cli_rect.width;
+        overflow_rect.width = cli_size.x;
         overflow_rect.height = overflow_size;
     }
     else
     {
-        overflow_rect.x = cli_rect.width - overflow_size;
+        overflow_rect.x = cli_size.x - overflow_size;
         overflow_rect.y = 0;
         overflow_rect.width = overflow_size;
-        overflow_rect.height = cli_rect.height;
+        overflow_rect.height = cli_size.y;
     }
 
     return overflow_rect;
@@ -2353,9 +2390,15 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     m_sizer->SetDimension(0, 0, x, y);
 
     // We need to update the bitmap if the size has changed.
-    UpdateBackgroundBitmap(wxSize(x, y));
+    wxSize size(x, y);
+    if ( !m_backgroundBitmap.IsOk() || m_backgroundBitmap.GetSize() != size )
+    {
+        UpdateBackgroundBitmap(size);
 
-    Refresh(false);
+        // We need to refresh the entire window if the background bitmap has
+        // changed, not just the area affected by the resize.
+        Refresh(false);
+    }
 
     // idle events aren't sent while user is resizing frame (why?),
     // but resizing toolbar here causes havoc,
@@ -2490,7 +2533,7 @@ void wxAuiToolBar::UpdateBackgroundBitmap(const wxSize& size)
 void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxAutoBufferedPaintDC dc(this);
-    wxRect cli_rect(wxPoint(0,0), GetClientSize());
+    const wxSize cli_size = GetClientSize();
 
 
     bool horizontal = m_orientation == wxHORIZONTAL;
@@ -2514,9 +2557,9 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     // calculated how far we can draw items
     int last_extent;
     if (horizontal)
-        last_extent = cli_rect.width;
+        last_extent = cli_size.x;
     else
-        last_extent = cli_rect.height;
+        last_extent = cli_size.y;
     if (m_overflowVisible)
         last_extent -= overflowSize;
 
@@ -2587,7 +2630,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
     if (m_gripperSizerItem)
     {
         wxRect gripper_rect = m_gripperSizerItem->GetRect();
-        if (gripper_rect.Contains(evt.GetX(), evt.GetY()))
+        if (gripper_rect.Contains(evt.GetPosition()))
         {
             // find aui manager
             wxAuiManager* manager = wxAuiManager::GetManager(this);
@@ -2605,9 +2648,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 
     if (m_overflowSizerItem && m_overflowVisible && m_art)
     {
-        wxRect overflow_rect = GetOverflowRect();
-
-        if (overflow_rect.Contains(evt.m_x, evt.m_y))
+        if (GetOverflowRect().Contains(evt.GetPosition()))
         {
             wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_OVERFLOW_CLICK, -1);
             e.SetEventObject(this);
@@ -2779,25 +2820,16 @@ void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)
     if (HasCapture())
         return;
 
-    wxRect cli_rect(wxPoint(0,0), GetClientSize());
-
     if (m_gripperSizerItem)
     {
-        wxRect gripper_rect = m_gripperSizerItem->GetRect();
-        if (gripper_rect.Contains(evt.GetX(), evt.GetY()))
+        if (m_gripperSizerItem->GetRect().Contains(evt.GetPosition()))
             return;
     }
 
-    if (m_overflowSizerItem && m_art)
+    if (m_overflowSizerItem && m_overflowVisible && m_art)
     {
-        int overflowSize = m_art->GetElementSizeForWindow(wxAUI_TBART_OVERFLOW_SIZE, this);
-        if (overflowSize > 0 &&
-            evt.m_x > cli_rect.width - overflowSize &&
-            evt.m_y >= 0 &&
-            evt.m_y < cli_rect.height)
-        {
+        if (GetOverflowRect().Contains(evt.GetPosition()))
             return;
-        }
     }
 
     m_actionPos = wxPoint(evt.GetX(), evt.GetY());
@@ -2813,7 +2845,7 @@ void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)
     UnsetToolTip();
 }
 
-void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
+void wxAuiToolBar::DoRightOrMiddleUp(wxMouseEvent& evt, wxEventType eventType)
 {
     if (HasCapture())
         return;
@@ -2821,29 +2853,32 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
     wxAuiToolBarItem* hitItem;
     hitItem = FindToolByPosition(evt.GetX(), evt.GetY());
 
+    int toolId;
     if (m_actionItem && hitItem == m_actionItem)
     {
-        wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_RIGHT_CLICK, m_actionItem->m_toolId);
-        e.SetEventObject(this);
-        e.SetToolId(m_actionItem->m_toolId);
-        e.SetClickPoint(m_actionPos);
-        GetEventHandler()->ProcessEvent(e);
-        DoIdleUpdate();
+        toolId = m_actionItem->m_toolId;
     }
     else
     {
         // right-clicked on the invalid area of the toolbar
-        wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_RIGHT_CLICK, -1);
-        e.SetEventObject(this);
-        e.SetToolId(-1);
-        e.SetClickPoint(m_actionPos);
-        GetEventHandler()->ProcessEvent(e);
-        DoIdleUpdate();
+        toolId = wxNOT_FOUND;
     }
+
+    wxAuiToolBarEvent e(eventType, toolId);
+    e.SetEventObject(this);
+    e.SetToolId(toolId);
+    e.SetClickPoint(m_actionPos);
+    GetEventHandler()->ProcessEvent(e);
+    DoIdleUpdate();
 
     // reset member variables
     m_actionPos = wxPoint(-1,-1);
     m_actionItem = nullptr;
+}
+
+void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
+{
+    DoRightOrMiddleUp(evt, wxEVT_AUITOOLBAR_RIGHT_CLICK);
 }
 
 void wxAuiToolBar::OnMiddleDown(wxMouseEvent& evt)
@@ -2851,25 +2886,16 @@ void wxAuiToolBar::OnMiddleDown(wxMouseEvent& evt)
     if (HasCapture())
         return;
 
-    wxRect cli_rect(wxPoint(0,0), GetClientSize());
-
     if (m_gripperSizerItem)
     {
-        wxRect gripper_rect = m_gripperSizerItem->GetRect();
-        if (gripper_rect.Contains(evt.GetX(), evt.GetY()))
+        if (m_gripperSizerItem->GetRect().Contains(evt.GetPosition()))
             return;
     }
 
-    if (m_overflowSizerItem && m_art)
+    if (m_overflowSizerItem && m_overflowVisible && m_art)
     {
-        int overflowSize = m_art->GetElementSizeForWindow(wxAUI_TBART_OVERFLOW_SIZE, this);
-        if (overflowSize > 0 &&
-            evt.m_x > cli_rect.width - overflowSize &&
-            evt.m_y >= 0 &&
-            evt.m_y < cli_rect.height)
-        {
+        if (GetOverflowRect().Contains(evt.GetPosition()))
             return;
-        }
     }
 
     m_actionPos = wxPoint(evt.GetX(), evt.GetY());
@@ -2890,28 +2916,7 @@ void wxAuiToolBar::OnMiddleDown(wxMouseEvent& evt)
 
 void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
 {
-    if (HasCapture())
-        return;
-
-    wxAuiToolBarItem* hitItem;
-    hitItem = FindToolByPosition(evt.GetX(), evt.GetY());
-
-    if (m_actionItem && hitItem == m_actionItem)
-    {
-        if (hitItem->m_kind == wxITEM_NORMAL)
-        {
-            wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_MIDDLE_CLICK, m_actionItem->m_toolId);
-            e.SetEventObject(this);
-            e.SetToolId(m_actionItem->m_toolId);
-            e.SetClickPoint(m_actionPos);
-            GetEventHandler()->ProcessEvent(e);
-            DoIdleUpdate();
-        }
-    }
-
-    // reset member variables
-    m_actionPos = wxPoint(-1,-1);
-    m_actionItem = nullptr;
+    DoRightOrMiddleUp(evt, wxEVT_AUITOOLBAR_MIDDLE_CLICK);
 }
 
 void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
@@ -3021,8 +3026,7 @@ void wxAuiToolBar::OnSetCursor(wxSetCursorEvent& evt)
 
     if (m_gripperSizerItem)
     {
-        wxRect gripper_rect = m_gripperSizerItem->GetRect();
-        if (gripper_rect.Contains(evt.GetX(), evt.GetY()))
+        if (m_gripperSizerItem->GetRect().Contains(evt.GetPosition()))
         {
             cursor = wxCursor(wxCURSOR_SIZING);
         }

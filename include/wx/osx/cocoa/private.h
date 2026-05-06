@@ -50,7 +50,12 @@ wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
 WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromNSCursor(const WXHCURSOR cursor);
-
+void wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
+                             long style,
+                             wxWindowID winid,
+                             const wxString& label = wxString(),
+                             const wxBitmapBundle& bitmap = wxBitmapBundle(),
+                             wxWindow *peer = nullptr);
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 
 class WXDLLIMPEXP_FWD_CORE wxWidgetCocoaImpl;
@@ -113,7 +118,10 @@ public :
     virtual void        GetPosition( int &x, int &y ) const override;
     virtual void        GetSize( int &width, int &height ) const override;
     virtual void        SetControlSize( wxWindowVariant variant ) override;
+
     virtual void        GetLayoutInset(int &left , int &top , int &right, int &bottom) const override;
+    virtual void        InvalidateLayoutInset() const override;
+
     virtual void        SetNeedsDisplay( const wxRect* where = nullptr ) override;
     virtual bool        GetNeedsDisplay() const override;
 
@@ -259,12 +267,19 @@ protected:
 
     NSEvent* m_lastKeyDownEvent;
     bool m_lastKeyDownWXSent;
+    bool m_lastLeftDownWasDClick;
+    bool m_lastRightDownWasDClick;
 #if !wxOSX_USE_NATIVE_FLIPPED
     bool m_isFlipped;
 #endif
     // if it the control has an editor, that editor will already send some
     // events, don't resend them
     bool m_hasEditor;
+
+    mutable int m_insetLeft;
+    mutable int m_insetRight;
+    mutable int m_insetTop;
+    mutable int m_insetBottom;
 
     friend class wxWidgetCocoaNativeKeyDownSuspender;
 

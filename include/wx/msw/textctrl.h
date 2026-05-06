@@ -37,7 +37,6 @@ public:
     // overridden wxTextEntry methods
     // ------------------------------
 
-    virtual wxString GetValue() const override;
     virtual wxString GetRange(long from, long to) const override;
 
 #if wxUSE_RICHEDIT
@@ -245,6 +244,8 @@ protected:
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
 
     virtual void DoMoveWindow(int x, int y, int width, int height) override;
+
+    virtual wxString DoGetValue() const override;
 
 #if wxUSE_RICHEDIT
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;

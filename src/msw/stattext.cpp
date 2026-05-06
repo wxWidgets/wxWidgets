@@ -217,7 +217,7 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
 void wxStaticText::SetLabel(const wxString& label)
 {
     // If the label doesn't really change, avoid flicker by not doing anything.
-    if ( label == m_labelOrig )
+    if ( !UpdateLabelOrig(label) )
         return;
 
 #if wxUSE_MARKUP
@@ -247,10 +247,6 @@ void wxStaticText::SetLabel(const wxString& label)
 
     updateStyle.Apply();
 #endif // SS_ENDELLIPSIS
-
-    // save the label in m_labelOrig with both the markup (if any) and
-    // the mnemonics characters (if any)
-    m_labelOrig = label;
 
 #ifdef SS_ENDELLIPSIS
     if ( updateStyle.IsOn(SS_ENDELLIPSIS) )
@@ -298,7 +294,7 @@ bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
     if ( label.empty() && !markup.empty() )
         return false;
 
-    m_labelOrig = label;
+    UpdateLabelOrig(label);
 
     // Don't do anything if the label didn't change.
     if ( m_markupText && !m_markupText->SetMarkup(markup) )

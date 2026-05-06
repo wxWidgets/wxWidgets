@@ -440,7 +440,7 @@ void ArchiveTestCase<ClassFactoryT>::runTest()
         CreateArchive(out);
     else
     {
-#ifndef __WXOSX_IPHONE__
+#ifndef __WXDARWIN_IPHONE__
         CreateArchive(out, m_archiver);
 #else
         CPPUNIT_FAIL("using external archivers is not supported on iOS");
@@ -473,7 +473,7 @@ void ArchiveTestCase<ClassFactoryT>::runTest()
         ExtractArchive(in);
     else
     {
-#ifndef __WXOSX_IPHONE__
+#ifndef __WXDARWIN_IPHONE__
         ExtractArchive(in, m_unarchiver);
 #else
         CPPUNIT_FAIL("using external archivers is not supported on iOS");
@@ -609,7 +609,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out)
 
 // Create an archive using an external archive program
 //
-#ifndef __WXOSX_IPHONE__
+#ifndef __WXDARWIN_IPHONE__
 template <class ClassFactoryT>
 void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
                                                    const wxString& archiver)
@@ -855,7 +855,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
 
 // Extract an archive using an external unarchive program
 //
-#ifndef __WXOSX_IPHONE__
+#ifndef __WXDARWIN_IPHONE__
 template <class ClassFactoryT>
 void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
                                                     const wxString& unarchiver)

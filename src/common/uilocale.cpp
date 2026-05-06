@@ -819,6 +819,7 @@ bool wxUILocale::UseDefault()
 
     impl->Use();
     ms_current = wxUILocale(impl);
+    ms_current.m_isDefault = true;
     wxUILocaleIsSet = true;
 
     return true;
@@ -854,6 +855,7 @@ bool wxUILocale::UseLocaleName(const wxString& localeName)
 
     impl->Use();
     ms_current = wxUILocale(impl);
+    ms_current.m_isDefault = false;
     wxUILocaleIsSet = true;
 
     return true;

@@ -489,6 +489,12 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     return self;
 }
 
+- (void)dealloc
+{
+    self.undoManager = nil;
+    [super dealloc];
+}
+
 - (void)textDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
@@ -596,6 +602,12 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
     }
+}
+
+- (void)dealloc
+{
+    self.WXFieldEditor = nil;
+    [super dealloc];
 }
 
 - (void) setEnabled:(BOOL) flag

@@ -734,7 +734,8 @@ public:
         and then re-inserted into another.
 
         Notice that currently you need to explicitly call
-        wxNotebook::RemovePage() before reparenting a notebook page.
+        wxNotebook::RemovePage() before reparenting a notebook page
+        (and most likely you want to call Show() for the window afterwards).
 
         @param newParent
             New parent.
@@ -1402,6 +1403,48 @@ public:
     virtual wxSize GetEffectiveMinSize() const;
 
     /**
+        May be overridden if the control minimal size depends on the layout
+        direction.
+
+        This function is called when using sizers for the layout to request
+        minimum controls size once its size in the specified @a direction is
+        fixed by the layout algorithm and known to be equal to @a size.
+
+        It may be useful to override it if the control minimal size varies
+        depending on its size in some direction. For example, controls showing
+        multi-line text may return the size needed to show their text after
+        wrapping the contents to fit the given width when @a direction is
+        wxHORIZONTAL and @a size is the available width.
+
+        The default implementation of this method returns wxDefaultSize
+        (to be precise, it may return GetEffectiveMinSize() if the deprecated
+        InformFirstDirection() is overridden and returns @true, but this
+        shouldn't be done in the new code).
+
+        @param direction
+            The direction in which the size is fixed, either ::wxHORIZONTAL or
+            ::wxVERTICAL.
+        @param size
+            The size in the direction given by the @a direction parameter,
+            always valid, i.e. positive.
+        @param availableOtherDir
+            The size available in the other direction, may be -1 if the
+            available size is not known.
+        @return
+            The minimal size of the window when its size in the given
+            @a direction is fixed to @a size or ::wxDefaultSize if the minimum
+            size doesn't depend on the layout direction and is always the same.
+
+        @since 3.3.2
+
+        @see wxSizer::CalcMinSizeFromKnownDirection()
+    */
+    virtual wxSize
+    GetMinSizeFromKnownDirection(int direction,
+                                 int size,
+                                 int availableOtherDir);
+
+    /**
         Returns the maximum size of window's client area.
 
         This is an indication to the sizer layout mechanism that this is the maximum
@@ -1590,12 +1633,10 @@ public:
     virtual wxSize GetWindowBorderSize() const;
 
     /**
-       wxSizer and friends use this to give a chance to a component to recalc
-       its min size once one of the final size components is known. Override
-       this function when that is useful (such as for wxStaticText which can
-       stretch over several lines). Parameter availableOtherDir
-       tells the item how much more space there is available in the opposite
-       direction (-1 if unknown).
+       Compatibility function called by GetMinSizeFromKnownDirection().
+
+       This function shouldn't be used in the new code, please override
+       GetMinSizeFromKnownDirection() instead.
     */
     virtual bool
     InformFirstDirection(int direction,
@@ -1948,6 +1989,10 @@ public:
     /**
         Returns the position and size of the window as a wxRect object.
 
+        As with GetPosition(), the rectangle position is relative to the parent
+        window for child windows or relative to the display origin for top
+        level windows.
+
         @see GetScreenRect()
     */
     wxRect GetRect() const;
@@ -1960,6 +2005,9 @@ public:
             Receives the x position of the window on the screen if non-null.
         @param y
             Receives the y position of the window on the screen if non-null.
+
+        @note Starting from wxWidgets 3.3.3, this function correctly returns the
+              upper-left corner of the window in RTL layout for child windows too.
 
         @see GetPosition()
     */
@@ -2976,6 +3024,10 @@ public:
         window manager may raise the window, not do it at all or indicate that
         a window requested to be raised in some other way, e.g. by flashing its
         icon if it is minimized.
+
+        If the window is currently hidden, this function does *not* show it
+        automatically, it will only appear on top of the other windows when it
+        is shown.
 
         @remarks
         This function only works for wxTopLevelWindow-derived classes.

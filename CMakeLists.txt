@@ -7,7 +7,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-cmake_minimum_required(VERSION 3.5...4.1)
+cmake_minimum_required(VERSION 3.10...4.1)
 
 if(NOT CMAKE_CONFIGURATION_TYPES)
     get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
@@ -52,18 +52,18 @@ set(wxOUTPUT_DIR ${wxBINARY_DIR}/lib)
 
 # parse the version number from wx/version.h and include in wxMAJOR_VERSION and wxMINOR_VERSION
 file(READ "${wxSOURCE_DIR}/include/wx/version.h" WX_VERSION_H_CONTENTS)
-string(REGEX MATCH "wxMAJOR_VERSION[ \t]+([0-9]+)"
-    wxMAJOR_VERSION ${WX_VERSION_H_CONTENTS})
-string (REGEX MATCH "([0-9]+)"
-    wxMAJOR_VERSION ${wxMAJOR_VERSION})
-string(REGEX MATCH "wxMINOR_VERSION[ \t]+([0-9]+)"
-    wxMINOR_VERSION ${WX_VERSION_H_CONTENTS})
-string (REGEX MATCH "([0-9]+)"
-    wxMINOR_VERSION ${wxMINOR_VERSION})
-string(REGEX MATCH "wxRELEASE_NUMBER[ \t]+([0-9]+)"
-    wxRELEASE_NUMBER ${WX_VERSION_H_CONTENTS})
-string (REGEX MATCH "([0-9]+)"
-    wxRELEASE_NUMBER ${wxRELEASE_NUMBER})
+
+macro(wx_extract_version_component name)
+    string(REGEX MATCH "# *define +${name} +([0-9]+)" _dummy ${WX_VERSION_H_CONTENTS})
+    if("${CMAKE_MATCH_1}" STREQUAL "")
+        message(FATAL_ERROR "Failed to extract ${name} from wx/version.h")
+    endif()
+    set(${name} ${CMAKE_MATCH_1})
+endmacro()
+
+wx_extract_version_component(wxMAJOR_VERSION)
+wx_extract_version_component(wxMINOR_VERSION)
+wx_extract_version_component(wxRELEASE_NUMBER)
 
 # Determine if current version is a "Development" release
 math(EXPR rel_dev "${wxMINOR_VERSION} % 2")
@@ -91,7 +91,7 @@ math(EXPR wxSOVERSION_MAJOR "${WX_CURRENT} - ${WX_AGE}")
 set(wxSOVERSION ${wxSOVERSION_MAJOR}.${WX_AGE}.${WX_REVISION})
 
 set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER} CACHE INTERNAL "wxWidgets version")
-set(wxCOPYRIGHT "2002-2025 wxWidgets" CACHE INTERNAL "wxWidgets copyright")
+set(wxCOPYRIGHT "2002-2026 wxWidgets" CACHE INTERNAL "wxWidgets copyright")
 
 set(wxLANGUAGES C CXX)
 if(APPLE AND NOT CMAKE_VERSION VERSION_LESS "3.16")

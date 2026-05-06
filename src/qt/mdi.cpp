@@ -27,11 +27,11 @@ static QMdiSubWindow* gs_qtActiveSubWindow = nullptr;
 }
 
 /*static*/
-wxMDIParentFrame::Layout wxMDIParentFrame::ms_layout =
+wxMDIParentFrame::Kind wxMDIParentFrame::ms_layout =
 #if defined(__WINDOWS__)
-    Layout::MDI;
+    Kind::MDI;
 #else // !__WINDOWS__
-    Layout::Tabbed;
+    Kind::Tabbed;
 #endif // __WINDOWS__
 
 // Central widget helper (provides an area in which MDI windows are displayed):
@@ -89,7 +89,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     return true;
 }
 
-void wxMDIParentFrame::QtSetPreferredDILayout(Layout layout)
+void wxMDIParentFrame::QtSetPreferredDILayout(Kind layout)
 {
     ms_layout = layout;
 
@@ -97,11 +97,11 @@ void wxMDIParentFrame::QtSetPreferredDILayout(Layout layout)
 
     switch ( layout )
     {
-    case Layout::MDI:
+    case Kind::MDI:
         viewMode = QMdiArea::SubWindowView;
         break;
 
-    case Layout::Tabbed:
+    case Kind::Tabbed:
         viewMode = QMdiArea::TabbedView;
         break;
 
@@ -242,10 +242,7 @@ void wxMDIParentFrame::AddWindowMenu()
     {
         m_windowMenu = new wxMenu;
 
-        // Qt offers only "Tile" without specifying any direction, so just
-        // reuse one of the predifined ids.
-
-        if ( ms_layout == Layout::MDI )
+        if ( ms_layout == Kind::MDI )
         {
             // Qt offers only "Tile" without specifying any direction, so just
             // reuse one of the predifined ids.
@@ -428,6 +425,13 @@ void wxMDIChildFrame::SetMenuBar(wxMenuBar* menuBar)
 
     m_menuBar = menuBar;
 
+    if ( m_mdiParent->GetActiveChild() == this )
+    {
+        // Attach the menu bar to m_mdiParent immediately if this child
+        // window is active.
+        InternalSetMenuBar();
+    }
+
     // Don't call wxFrameBase::SetMenuBar() here because m_menuBar will be
     // attached to m_mdiParent later when this child frame becomes active.
 }
@@ -494,6 +498,15 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long WXUNUSED(sty
     // from QMdiArea which in turn derives from QAbstractScrollArea.
     m_qtContainer = static_cast<QAbstractScrollArea*>(m_qtWindow);
     return true;
+}
+
+wxMDIClientWindow::~wxMDIClientWindow()
+{
+    DestroyChildren();
+
+    // Prevent the base class dtor from destroying the underlying qt window, as
+    // it is owned by QMainWindow.
+    m_qtWindow = nullptr;
 }
 
 // Helper implementation:

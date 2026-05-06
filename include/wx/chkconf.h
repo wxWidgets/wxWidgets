@@ -1263,12 +1263,7 @@
 
 #if defined(__WINDOWS__)
 #  include "wx/msw/chkconf.h"
-#  if defined(__WXGTK__)
-#      include "wx/gtk/chkconf.h"
-#  endif
-#elif defined(__WXGTK__)
-#  include "wx/gtk/chkconf.h"
-#elif defined(__WXMAC__)
+#elif defined(__DARWIN__)
 #  include "wx/osx/chkconf.h"
 #elif defined(__WXDFB__)
 #  include "wx/dfb/chkconf.h"
@@ -1276,6 +1271,12 @@
 #  include "wx/x11/chkconf.h"
 #elif defined(__WXANDROID__)
 #  include "wx/android/chkconf.h"
+#endif
+
+/* Note that __WXGTK__ may be defined under Windows and Mac if we're using
+   the wxGTK port there, so do NOT use #elif for it. */
+#if defined(__WXGTK__)
+#  include "wx/gtk/chkconf.h"
 #endif
 
 /*
@@ -1709,24 +1710,6 @@
 #   undef wxUSE_ACTIVITYINDICATOR
 #   define wxUSE_ACTIVITYINDICATOR 0
 #endif /* wxUSE_ACTIVITYINDICATOR */
-
-#if wxUSE_GRAPHICS_CONTEXT && !wxUSE_GEOMETRY
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_GRAPHICS_CONTEXT requires wxUSE_GEOMETRY"
-#   else
-#       undef wxUSE_GRAPHICS_CONTEXT
-#       define wxUSE_GRAPHICS_CONTEXT 0
-#   endif
-#endif /* wxUSE_GRAPHICS_CONTEXT */
-
-#if wxUSE_DC_TRANSFORM_MATRIX && !wxUSE_GEOMETRY
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_DC_TRANSFORM_MATRIX requires wxUSE_GEOMETRY"
-#   else
-#       undef wxUSE_DC_TRANSFORM_MATRIX
-#       define wxUSE_DC_TRANSFORM_MATRIX 0
-#   endif
-#endif /* wxUSE_DC_TRANSFORM_MATRIX */
 
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)

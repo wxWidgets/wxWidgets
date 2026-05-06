@@ -460,7 +460,7 @@ void wxListLineData::CalculateSize( wxReadOnlyDC *dc, int spacing )
             if (item->HasImage())
             {
                 int w, h;
-                m_owner->GetImageSize( item->GetImage(), w, h );
+                m_owner->GetImageSize( w, h );
                 m_gi->m_rectIcon.width = w + 8;
                 m_gi->m_rectIcon.height = h + 8;
 
@@ -498,7 +498,7 @@ void wxListLineData::CalculateSize( wxReadOnlyDC *dc, int spacing )
             if (item->HasImage())
             {
                 int w, h;
-                m_owner->GetImageSize( item->GetImage(), w, h );
+                m_owner->GetImageSize( w, h );
                 m_gi->m_rectIcon.width = w;
                 m_gi->m_rectIcon.height = h;
 
@@ -658,10 +658,7 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
         else
             colText = *wxBLACK;
 #else
-        if ( hasFocus )
-            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-        else
-            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
+        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
 #endif
     }
     else if ( attr && attr->HasTextColour() )
@@ -787,7 +784,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         if ( item.HasImage() )
         {
             int ix, iy;
-            m_owner->GetImageSize( item.GetImage(), ix, iy );
+            m_owner->GetImageSize( ix, iy );
             m_owner->DrawImage( item.GetImage(), dc, xOld, yMid - iy/2 );
 
             ix += IMAGE_MARGIN_IN_REPORT_MODE;
@@ -908,6 +905,7 @@ void wxListLineData::ReverseHighlight( void )
 wxBEGIN_EVENT_TABLE(wxListHeaderWindow,wxWindow)
     EVT_PAINT         (wxListHeaderWindow::OnPaint)
     EVT_MOUSE_EVENTS  (wxListHeaderWindow::OnMouse)
+    EVT_SYS_COLOUR_CHANGED(wxListHeaderWindow::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 void wxListHeaderWindow::Init()
@@ -1054,13 +1052,17 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if (i == 0)
            flags |= wxCONTROL_SPECIAL; // mark as first column
 
+        wxHeaderButtonParams headerBtnParams;
+        headerBtnParams.m_arrowColour = GetForegroundColour();
+
         wxRendererNative::Get().DrawHeaderButton
                                 (
                                     this,
                                     dc,
                                     wxRect(x, HEADER_OFFSET_Y, cw, ch),
                                     flags,
-                                    sortArrow
+                                    sortArrow,
+                                    &headerBtnParams
                                 );
 
         // see if we have enough space for the column label
@@ -1080,7 +1082,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             smallImages = m_owner->GetSmallImages();
             if ( smallImages )
             {
-                smallImages->GetImageLogicalSize(this, image, ix, iy);
+                smallImages->GetImageLogicalSize(this, ix, iy);
                 wLabel += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
             }
         }
@@ -1309,6 +1311,16 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     }
 }
 
+void wxListHeaderWindow::OnSysColourChanged(wxSysColourChangedEvent &event)
+{
+    SetOwnForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+
+    Refresh();
+
+    event.Skip();
+}
+
 bool wxListHeaderWindow::SendListEvent(wxEventType type, const wxPoint& pos)
 {
     wxWindow *parent = GetParent();
@@ -1518,6 +1530,7 @@ wxBEGIN_EVENT_TABLE(wxListMainWindow, wxWindow)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
   EVT_SCROLLWIN      (wxListMainWindow::OnScroll)
   EVT_CHILD_FOCUS    (wxListMainWindow::OnChildFocus)
+  EVT_SYS_COLOUR_CHANGED(wxListMainWindow::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 void wxListMainWindow::Init()
@@ -1689,7 +1702,7 @@ wxCoord wxListMainWindow::GetLineHeight() const
         if ( m_small_images && m_small_images->GetImageCount() )
         {
             int iw = 0, ih = 0;
-            m_small_images->GetImageLogicalSize(this, 0, iw, ih);
+            m_small_images->GetImageLogicalSize(this, iw, ih);
             y = wxMax(y, ih);
         }
 
@@ -1734,7 +1747,7 @@ wxRect wxListMainWindow::GetLineLabelRect(size_t line) const
         if ( item->HasImage() )
         {
             int ix, iy;
-            GetImageSize( item->GetImage(), ix, iy );
+            GetImageSize( ix, iy );
             image_x = 3 + ix + IMAGE_MARGIN_IN_REPORT_MODE;
         }
     }
@@ -1753,8 +1766,7 @@ wxRect wxListMainWindow::GetLineIconRect(size_t line) const
     if ( !InReportView() )
         return GetLine(line)->m_gi->m_rectIcon;
 
-    wxListLineData *ld = GetLine(line);
-    wxASSERT_MSG( ld->HasImage(), wxT("should have an image") );
+    wxASSERT_MSG( GetLine(line)->HasImage(), wxT("should have an image") );
 
     wxRect rect = GetLineRect(line);
     rect.x += ICON_OFFSET_X;
@@ -1767,7 +1779,7 @@ wxRect wxListMainWindow::GetLineIconRect(size_t line) const
 
     // use full height of the line, same as win32 listctrl
     int ix, iy;
-    GetImageSize(ld->GetImage(), ix, iy);
+    GetImageSize(ix, iy);
     rect.width = ix;
 
     return rect;
@@ -2194,6 +2206,26 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             DrawFocusRect(this, dc, GetLineHighlightRect(m_current), flags);
     }
 #endif // !__WXMAC__
+}
+
+void wxListMainWindow::OnSysColourChanged( wxSysColourChangedEvent &event )
+{
+    SetOwnForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
+    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
+
+    if ( m_highlightBrush )
+    {
+        m_highlightBrush->SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    }
+
+    if ( m_highlightUnfocusedBrush )
+    {
+        m_highlightUnfocusedBrush->SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+    }
+
+    Refresh();
+
+    event.Skip();
 }
 
 void wxListMainWindow::HighlightAll( bool on )
@@ -3285,15 +3317,15 @@ void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
     }
 }
 
-void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
+void wxListMainWindow::GetImageSize( int &width, int &height ) const
 {
     if ( HasFlag(wxLC_ICON) && m_normal_images )
     {
-        m_normal_images->GetImageLogicalSize(this, index, width, height);
+        m_normal_images->GetImageLogicalSize(this, width, height);
     }
     else if ( HasFlag(wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT) && m_small_images )
     {
-        m_small_images->GetImageLogicalSize(this, index, width, height);
+        m_small_images->GetImageLogicalSize(this, width, height);
     }
     else
     {
@@ -3313,7 +3345,7 @@ void wxListMainWindow::SetImages( wxWithImages *images, const int which )
     if ((images) && (images->HasImages()) )
     {
         int height;
-        images->GetImageLogicalSize(this, 0, width, height);
+        images->GetImageLogicalSize(this, width, height);
     }
 
     if (which == wxIMAGE_LIST_NORMAL)
@@ -3364,7 +3396,7 @@ wxListMainWindow::ComputeMinHeaderWidth(const wxListHeaderData* column) const
         if ( m_small_images )
         {
             int ix = 0, iy = 0;
-            m_small_images->GetImageLogicalSize(this, image, ix, iy);
+            m_small_images->GetImageLogicalSize(this, ix, iy);
             width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
         }
     }
@@ -3872,7 +3904,7 @@ wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect,
                     if ( subItem == 0 && line->HasImage() )
                     {
                         int ix, iy;
-                        GetImageSize(line->GetImage(), ix, iy);
+                        GetImageSize(ix, iy);
 
                         if ( code == wxLIST_RECT_ICON )
                         {
@@ -4591,7 +4623,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         if ( m_small_images && image != -1 && InReportView() )
         {
             int imageWidth, imageHeight;
-            m_small_images->GetImageLogicalSize(this, image, imageWidth, imageHeight);
+            m_small_images->GetImageLogicalSize(this, imageWidth, imageHeight);
 
             if ( imageHeight > m_lineHeight )
                 m_lineHeight = 0;
@@ -4667,7 +4699,7 @@ int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
     if (item->GetImage() != -1)
     {
         int ix, iy;
-        GetImageSize( item->GetImage(), ix, iy );
+        GetImageSize( ix, iy );
         width += ix + IMAGE_MARGIN_IN_REPORT_MODE;
     }
 

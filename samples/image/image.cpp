@@ -1359,9 +1359,7 @@ void MyFrame::OnNewSVGFrame(wxCommandEvent&)
     if ( filename.empty() )
         return;
 
-    // The default size here is completely arbitrary, as we don't know anything
-    // about the SVG being loaded.
-    wxBitmapBundle bb = wxBitmapBundle::FromSVGFile(filename, wxSize(200, 200));
+    wxBitmapBundle bb = wxBitmapBundle::FromSVGFile(filename, wxDefaultSize);
     if ( !bb.IsOk() )
         return;
 

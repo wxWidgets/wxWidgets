@@ -45,6 +45,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    self.WXFieldEditor = nil;
+    [super dealloc];
+}
+
 - (void)textDidChange:(NSNotification *)aNotification
 {
     m_withinTextDidChange = YES;

@@ -138,16 +138,19 @@ void wxAppBase::DeleteAllTLWs()
     }
 }
 
+void wxAppBase::DoDelayedCleanup()
+{
+    wxAppConsole::DoDelayedCleanup();
+
+    DeleteAllTLWs();
+}
+
 void wxAppBase::CleanUp()
 {
     // Clean up any still pending objects. Normally there shouldn't any as we
-    // already do this in OnExit(), but this could happen if the user code has
-    // somehow managed to create more of them since then or just forgot to call
-    // the base class OnExit().
-    DeletePendingObjects();
-
-    // and any remaining TLWs
-    DeleteAllTLWs();
+    // already do this in CallOnExit(), but this could happen if the user code
+    // has somehow managed to create more of them since then.
+    DoDelayedCleanup();
 
 #if wxUSE_LOG
     // flush the logged messages if any and don't use the current probably

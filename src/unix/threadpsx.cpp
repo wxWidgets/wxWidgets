@@ -1338,7 +1338,7 @@ wxThreadIdType wxThread::GetCurrentId()
 
 bool wxThread::SetConcurrency(size_t level)
 {
-#ifdef HAVE_PTHREAD_SET_CONCURRENCY
+#ifdef HAVE_PTHREAD_SETCONCURRENCY
     int rc = pthread_setconcurrency( level );
 #elif defined(HAVE_THR_SETCONCURRENCY)
     int rc = thr_setconcurrency(level);

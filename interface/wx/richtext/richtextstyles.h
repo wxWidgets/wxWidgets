@@ -291,7 +291,7 @@ public:
     /**
         Converts units in tenths of a millimetre to device units.
     */
-    int ConvertTenthsMMToPixels(wxDC& dc, int units) const;
+    int ConvertTenthsMMToPixels(wxReadOnlyDC& dc, int units) const;
 
     /**
         Creates a suitable HTML fragment for a definition.

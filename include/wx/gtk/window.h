@@ -203,10 +203,11 @@ public:
     void GTKHandleFocusOutNoDeferring();
     void GTKHandleDeferredFocusOut();
 
-    // Called when m_widget becomes realized. Derived classes must call the
-    // base class method if they override it.
+    // Called when m_widget becomes realized or unrealized (may be called
+    // multiple times). Derived classes must call the base class version if
+    // they override these functions.
     virtual void GTKHandleRealized();
-    void GTKHandleUnrealize();
+    virtual void GTKHandleUnrealized();
 
     // Apply the widget style to the given window. Should normally only be
     // called from the overridden DoApplyWidgetStyle() implementation in

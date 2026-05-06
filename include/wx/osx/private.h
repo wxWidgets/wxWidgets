@@ -3,12 +3,18 @@
 
 #include "wx/osx/core/private.h"
 
-#if wxOSX_USE_IPHONE
+#ifdef __WXOSX_IPHONE__
     #include "wx/osx/iphone/private.h"
-#elif wxOSX_USE_COCOA
+#elif defined(__WXOSX_COCOA__)
     #include "wx/osx/cocoa/private.h"
-#elif wxUSE_GUI
+#elif wxUSE_GUI && defined(__WXOSX__)
     #error "Must include wx/defs.h first"
+#else
+    #include <ApplicationServices/ApplicationServices.h>
+
+    #ifdef __OBJC__
+        #import <Cocoa/Cocoa.h>
+    #endif
 #endif
 
 #endif

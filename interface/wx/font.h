@@ -1054,11 +1054,18 @@ public:
         Creates the font corresponding to the given native font description string
         which must have been previously returned by GetNativeFontInfoDesc().
 
-        If the string is invalid, font is unchanged.
+        If the string is syntactically invalid, the functions returns @false
+        and the font is unchanged. Otherwise the function returns @true even if
+        the created font doesn't exactly match the description (e.g. because
+        some of the attributes in it are not supported or the font name is not
+        available on the end-user's system and so a closest match is created
+        instead).
+
         This function is typically used for de-serializing a wxFont object
         previously saved in a string-form.
 
-        @return @true if the creation was successful.
+        @return @true if the font was initialized from the given string, @false
+            if the string was invalid and the font was not changed.
 
         @see SetNativeFontInfoUserDesc()
     */
@@ -1423,7 +1430,7 @@ wxFontList* wxTheFontList;
     Converts string to a wxFont best represented by the given string. Returns
     @true on success.
 
-    @see wxToString(const wxFont&)
+    @see wxToString(const wxFont&), wxFont::SetNativeFontInfo()
 
     @header{wx/font.h}
 */
@@ -1432,7 +1439,7 @@ bool wxFromString(const wxString& string, wxFont* font);
 /**
     Converts the given wxFont into a string.
 
-    @see wxFromString(const wxString&, wxFont*)
+    @see wxFromString(const wxString&, wxFont*), wxFont::GetNativeFontInfoDesc()
 
     @header{wx/font.h}
 */

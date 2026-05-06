@@ -81,7 +81,7 @@ static wxColour wxAuiDimColour(wxColour colour, int delta = 30)
 
 static void IndentPressedBitmap(wxWindow* wnd, wxRect* rect, int button_state)
 {
-    if (button_state == wxAUI_BUTTON_STATE_PRESSED)
+    if (button_state & wxAUI_BUTTON_STATE_PRESSED)
     {
         rect->Offset(wnd->FromDIP(wxPoint(1, 1)));
     }
@@ -1683,8 +1683,8 @@ wxAuiSimpleTabArt::DrawButtonBitmap(wxDC& dc,
                                     const wxBitmap& bmp,
                                     int button_state)
 {
-    if (button_state == wxAUI_BUTTON_STATE_HOVER ||
-        button_state == wxAUI_BUTTON_STATE_PRESSED)
+    if (button_state & wxAUI_BUTTON_STATE_HOVER ||
+        button_state & wxAUI_BUTTON_STATE_PRESSED)
     {
         const wxColour bkcolour = *wxWHITE;
         dc.SetBrush(wxBrush(bkcolour.ChangeLightness(120)));

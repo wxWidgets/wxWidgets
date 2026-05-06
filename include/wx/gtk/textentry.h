@@ -134,16 +134,16 @@ private:
 
     // Various auto-completion-related stuff, only used if any of AutoComplete()
     // methods are called.
-    wxTextAutoCompleteData *m_autoCompleteData;
+    wxTextAutoCompleteData *m_autoCompleteData = nullptr;
 
     // It needs to call our GetEntry() method.
     friend class wxTextAutoCompleteData;
 
     // Data used for coalescing "changed" events resulting from a single user
     // action.
-    mutable wxTextCoalesceData* m_coalesceData;
+    mutable wxTextCoalesceData* m_coalesceData = nullptr;
 
-    bool m_isUpperCase;
+    bool m_isUpperCase = false;
 };
 
 // We don't need the generic version.

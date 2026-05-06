@@ -193,8 +193,6 @@ public:
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
     void ClipChildren(wxDC& dc, PRectangle rect);
-    void SetUseAntiAliasing(bool useAA);
-    bool GetUseAntiAliasing();
     SurfaceData* GetSurfaceData() const {return m_surfaceData;}
     void SetPaintAbandoned(){paintState = paintAbandoned;}
     void DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);

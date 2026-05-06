@@ -793,6 +793,18 @@ public:
         @since 3.1.4
     */
     bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
+
+protected:
+    /**
+        Called to determine the size of a new split tab control.
+
+        This function may be overridden to customize the initial size of the
+        newly created tab control when the user drags a tab out of the main one
+        (if ::wxAUI_NB_TAB_SPLIT style is used) or when Split() is called.
+
+        The default implementation calls wxAuiManager::CalculateNewSplitSize().
+     */
+    virtual wxSize CalculateNewSplitSize();
 };
 
 /**

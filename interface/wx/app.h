@@ -364,6 +364,9 @@ public:
 
         The return value of this function is currently ignored, return the same
         value as returned by the base class method if you override it.
+
+        NOTE: The base class method performs some cleanup - call it at the end
+        of your method if you override it.
     */
     virtual int OnExit();
 
@@ -514,12 +517,12 @@ public:
 
         Any unhandled exceptions thrown from (overridden versions of) OnInit()
         and OnExit() methods as well as any exceptions thrown from inside the
-        main loop and re-thrown by OnUnhandledException() will result in a call
+        main loop and re-thrown by OnExceptionInMainLoop() will result in a call
         to this function.
 
         By the time this function is called, the program is already about to
         exit and the exception can't be handled nor ignored any more, override
-        OnUnhandledException() or use explicit @c try/catch blocks around
+        OnExceptionInMainLoop() or use explicit @c try/catch blocks around
         OnInit() body to be able to handle the exception earlier.
 
         The default implementation dumps information about the exception using
@@ -1443,8 +1446,6 @@ public:
         - Toolbar items for which wxToolBar::SetDropdownMenu() was called
           don't draw the menu drop-down correctly, making it almost
           invisible.
-        - Calling wxMenu::Break() or wxMenuItem::SetDisabledBitmap() will result
-          in the menu being light.
 
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the
