@@ -66,12 +66,6 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl);
 // constants
 // ---------------------------------------------------------------------------
 
-// The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
-// maximal possible view port extent. An extra -1 is applied to avoid overflow
-// when computing clip extents for RTL layouts in GM_COMPATIBLE mode.
-// As a result, the effective viewport extent is 2^27-2 instead of 2^27-1.
-static const int VIEWPORT_EXTENT = 134217726;
-
 // ROPs which don't have standard names (see "Ternary Raster Operations" in the
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
 #define DSTCOPY 0x00AA0029      // a.k.a. NOP operation
@@ -1783,6 +1777,12 @@ namespace
 
 void ApplyEffectiveScale(double scale, int sign, int *device, int *logical)
 {
+    // The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
+    // maximal possible view port extent. An extra -1 is applied to avoid overflow
+    // when computing clip extents for RTL layouts in GM_COMPATIBLE mode.
+    // As a result, the effective viewport extent is 2^27-2 instead of 2^27-1.
+    static const int VIEWPORT_EXTENT = 134217726;
+
     // To reduce rounding errors as much as possible, we try to use the largest
     // possible extent (2^27-2) for the device space but we must also avoid
     // overflowing the int range i.e. ensure that logical extents are less than
