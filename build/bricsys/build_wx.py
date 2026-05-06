@@ -179,6 +179,7 @@ def main():
         f'-DwxBUILD_INSTALL=ON '
     )
     if PLATFORM == 'windows':
+        configure_command += f'-DCMAKE_GENERATOR_PLATFORM=x64 '
         configure_command += f'-DwxUSE_LIBTIFF=builtin '
         configure_command += f'-DCMAKE_CONFIGURATION_TYPES="Debug;RelWithDebInfo" '
     elif PLATFORM == 'mac':
