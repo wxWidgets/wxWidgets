@@ -988,6 +988,8 @@ void wxGenericTreeCtrl::Init()
     m_dndEffectItem = nullptr;
 
     m_lastOnSame = false;
+
+    m_isLastMouseEventLeftDown = false;
 }
 
 bool wxGenericTreeCtrl::Create(wxWindow *parent,
@@ -3592,6 +3594,23 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
          m_underMouse = underMouse;
          if (m_underMouse)
             RefreshLine( m_underMouse );
+    }
+    if (event.LeftDown())
+    {
+        m_isLastMouseEventLeftDown = true;
+    }
+    else
+    {
+        if (event.LeftUp() && m_isLastMouseEventLeftDown)
+        {
+            m_isLastMouseEventLeftDown = false;
+            if (underMouse != nullptr && underMouse == m_underMouse)
+            {
+                wxTreeEvent* pEvent = new wxTreeEvent(wxEVT_TREE_ITEM_LEFT_CLICK, this, m_underMouse);
+                GetEventHandler()->QueueEvent(pEvent);
+            }
+        }
+        m_isLastMouseEventLeftDown = false;
     }
 
 #if wxUSE_TOOLTIPS
