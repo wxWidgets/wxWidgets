@@ -5236,7 +5236,7 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
         node = node->GetNext();
     }
 
-    if (IsTopLevel())
+    if ( IsTopLevel() )
         Refresh();
 
     // let the system handle it
