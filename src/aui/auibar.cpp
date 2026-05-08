@@ -264,8 +264,8 @@ void wxAuiGenericToolBarArt::DrawLabel(
 
     // we only care about the text height here since the text
     // will get cropped based on the width of the item
-    int textWidth = 0, textHeight = 0;
-    dc.GetTextExtent(wxT("ABCDHgj"), &textWidth, &textHeight);
+    int textHeight;
+    dc.GetTextExtent(wxT("ABCDHgj"), nullptr, &textHeight);
 
     // set the clipping region
     wxRect clipRect = rect;
@@ -291,11 +291,8 @@ void wxAuiGenericToolBarArt::DrawButton(
     {
         dc.SetFont(m_font);
 
-        int tx, ty;
-
-        dc.GetTextExtent(wxT("ABCDHgj"), &tx, &textHeight);
-        textWidth = 0;
-        dc.GetTextExtent(item.GetLabel(), &textWidth, &ty);
+        dc.GetTextExtent(wxT("ABCDHgj"), nullptr, &textHeight);
+        dc.GetTextExtent(item.GetLabel(), &textWidth, nullptr);
     }
 
     int bmpX = 0, bmpY = 0;
@@ -435,14 +432,12 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     {
         dc.SetFont(m_font);
 
-        int tx, ty;
         if (m_flags & wxAUI_TB_TEXT)
         {
-            dc.GetTextExtent(wxT("ABCDHgj"), &tx, &textHeight);
-            textWidth = 0;
+            dc.GetTextExtent(wxT("ABCDHgj"), nullptr, &textHeight);
         }
 
-        dc.GetTextExtent(item.GetLabel(), &textWidth, &ty);
+        dc.GetTextExtent(item.GetLabel(), &textWidth, nullptr);
     }
 
 
@@ -558,14 +553,12 @@ void wxAuiGenericToolBarArt::DrawControlLabel(
 
     dc.SetFont(m_font);
 
-    int tx, ty;
     if (m_flags & wxAUI_TB_TEXT)
     {
-        dc.GetTextExtent(wxT("ABCDHgj"), &tx, &textHeight);
-        textWidth = 0;
+        dc.GetTextExtent(wxT("ABCDHgj"), nullptr, &textHeight);
     }
 
-    dc.GetTextExtent(item.GetLabel(), &textWidth, &ty);
+    dc.GetTextExtent(item.GetLabel(), &textWidth, nullptr);
 
     // don't draw the label if it is wider than the item width
     if (textWidth > rect.width)
@@ -591,11 +584,11 @@ wxSize wxAuiGenericToolBarArt::GetLabelSize(
     dc.SetFont(m_font);
 
     // get label's height
-    int width = 0, height = 0;
-    dc.GetTextExtent(wxT("ABCDHgj"), &width, &height);
+    int height;
+    dc.GetTextExtent(wxT("ABCDHgj"), nullptr, &height);
 
     // get item's width
-    width = item.GetMinSize().GetWidth();
+    int width = item.GetMinSize().GetWidth();
 
     if (width == -1)
     {
@@ -2251,16 +2244,15 @@ wxSize wxAuiToolBar::GetLabelSize(const wxString& label)
 {
     wxInfoDC dc(this);
 
-    int tx, ty;
     int textWidth = 0, textHeight = 0;
 
     dc.SetFont(m_font);
 
     // get the text height
-    dc.GetTextExtent(wxT("ABCDHgj"), &tx, &textHeight);
+    dc.GetTextExtent(wxT("ABCDHgj"), nullptr, &textHeight);
 
     // get the text width
-    dc.GetTextExtent(label, &textWidth, &ty);
+    dc.GetTextExtent(label, &textWidth, nullptr);
 
     return wxSize(textWidth, textHeight);
 }

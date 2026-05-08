@@ -146,8 +146,8 @@ bool wxButtonToolBar::Create(wxWindow *parent,
     {
         wxInfoDC dc(this);
         dc.SetFont(font);
-        int w, h;
-        dc.GetTextExtent(wxT("X"), & w, & h);
+        int h;
+        dc.GetTextExtent(wxT("X"), nullptr, &h);
         m_labelHeight = h;
     }
     return true;
@@ -409,8 +409,8 @@ void wxButtonToolBar::DoLayout()
                     if (!tool->GetShortHelp().empty())
                     {
                         wxInfoDC dc(this);
-                        int tw, th;
-                        dc.GetTextExtent(tool->GetShortHelp(), & tw, & th);
+                        int tw;
+                        dc.GetTextExtent(tool->GetShortHelp(), &tw, nullptr);
 
                         // If the label is bigger than the icon, the label width
                         // becomes the new tool width, and we need to centre
@@ -515,9 +515,6 @@ void wxButtonToolBar::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         if (m_labelHeight > 0 && !tool->GetShortHelp().empty())
         {
-            int tw, th;
-            dc.GetTextExtent(tool->GetShortHelp(), & tw, & th);
-
             int x = tool->m_x;
             dc.DrawText(tool->GetShortHelp(), x, tool->m_y + tool->GetButton()->GetSize().y + m_labelMargin);
         }

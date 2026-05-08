@@ -227,8 +227,8 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
         {
             SubstituteKeywords(headerTextCentre, GetTitle(), page, m_numPages);
 
-            int tx, ty;
-            dc->GetTextExtent(headerTextCentre, & tx, & ty);
+            int tx;
+            dc->GetTextExtent(headerTextCentre, &tx, nullptr);
 
             int x = headerRect.GetWidth()/2 - tx/2 + headerRect.GetLeft();
             int y = headerRect.GetY();
@@ -238,8 +238,8 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
         {
             SubstituteKeywords(headerTextRight, GetTitle(), page, m_numPages);
 
-            int tx, ty;
-            dc->GetTextExtent(headerTextRight, & tx, & ty);
+            int tx;
+            dc->GetTextExtent(headerTextRight, &tx, nullptr);
 
             int x = headerRect.GetRight() - tx;
             int y = headerRect.GetY();
@@ -255,8 +255,8 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
         {
             SubstituteKeywords(footerTextLeft, GetTitle(), page, m_numPages);
 
-            int tx, ty;
-            dc->GetTextExtent(footerTextLeft, & tx, & ty);
+            int ty;
+            dc->GetTextExtent(footerTextLeft, nullptr, &ty);
 
             int x = footerRect.GetLeft();
             int y = footerRect.GetBottom() - ty;

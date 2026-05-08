@@ -328,10 +328,10 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
         textX += bitmap.GetLogicalWidth() + padding;
     }
 
-    wxCoord textW, textH, textY;
+    wxCoord textH, textY;
 
     dc.SetFont(m_normalFont);
-    dc.GetTextExtent(page.caption, &textW, &textH);
+    dc.GetTextExtent(page.caption, nullptr, &textH);
     textY = tab_rect.y + (tab_rect.height - textH) / 2;
     if(!page.active)
     {

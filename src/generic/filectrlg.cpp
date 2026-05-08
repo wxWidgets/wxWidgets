@@ -412,20 +412,20 @@ void wxFileListCtrl::ChangeToReportMode()
 
     // do this since WIN32 does mm/dd/yy UNIX does mm/dd/yyyy
     // don't hardcode since mm/dd is dd/mm elsewhere
-    int w, h;
+    int w;
     wxDateTime dt(22, wxDateTime::Dec, 2002, 22, 22, 22);
     wxString txt = dt.FormatDate() + wxT("22") + dt.Format(wxT("%I:%M:%S %p"));
-    GetTextExtent(txt, &w, &h);
+    GetTextExtent(txt, &w, nullptr);
 
     InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, w );
     InsertColumn( 1, _("Size"), wxLIST_FORMAT_RIGHT, w/2 );
     InsertColumn( 2, _("Type"), wxLIST_FORMAT_LEFT, w/2 );
     InsertColumn( 3, _("Modified"), wxLIST_FORMAT_LEFT, w );
 #if defined(__UNIX__)
-    GetTextExtent(wxT("Permissions 2"), &w, &h);
+    GetTextExtent(wxT("Permissions 2"), &w, nullptr);
     InsertColumn( 4, _("Permissions"), wxLIST_FORMAT_LEFT, w );
 #elif defined(__WIN32__)
-    GetTextExtent(wxT("Attributes 2"), &w, &h);
+    GetTextExtent(wxT("Attributes 2"), &w, nullptr);
     InsertColumn( 4, _("Attributes"), wxLIST_FORMAT_LEFT, w );
 #endif
 

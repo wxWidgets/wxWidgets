@@ -5033,8 +5033,8 @@ bool wxRichTextParagraph::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& con
             if (font.IsOk())
             {
                 wxCheckSetFont(dc, font);
-                wxCoord spaceW = 0, spaceH = 0, maxDescent = 0;
-                dc.GetTextExtent(wxT(" "), & spaceW, & spaceH, & maxDescent);
+                wxCoord spaceW;
+                dc.GetTextExtent(wxT(" "), &spaceW, nullptr);
                 leftSubIndent = bulletSize.x + spaceW;
             }
         }
@@ -5346,8 +5346,7 @@ bool wxRichTextParagraph::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& con
 
             if (maxDescent == 0)
             {
-                int w, h;
-                dc.GetTextExtent(wxT("X"), & w, &h, & maxDescent);
+                dc.GetTextExtent(wxT("X"), nullptr, nullptr, &maxDescent);
             }
 
             // Add a new line
@@ -5461,8 +5460,7 @@ bool wxRichTextParagraph::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& con
 
         if (maxDescent == 0)
         {
-            int w, h;
-            dc.GetTextExtent(wxT("X"), & w, &h, & maxDescent);
+            dc.GetTextExtent(wxT("X"), nullptr, nullptr, &maxDescent);
         }
 
         line->SetSize(wxSize(currentWidth, lineHeight));
@@ -7304,7 +7302,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
         }
     }
 
-    wxCoord w, h;
+    wxCoord w;
     int width = 0;
     if (stringChunk.Find(wxT('\t')) != wxNOT_FOUND)
     {
@@ -7355,7 +7353,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             }
             else
             {
-                dc.GetTextExtent(stringFragment, & w, & h);
+                dc.GetTextExtent(stringFragment, &w, nullptr);
                 width += w;
                 absoluteWidth = width + relativeX;
                 haveDescent = true;
@@ -7407,7 +7405,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
         }
         else
         {
-            dc.GetTextExtent(stringChunk, & w, & h, & descent);
+            dc.GetTextExtent(stringChunk, &w, nullptr, &descent);
             width += w;
             haveDescent = true;
         }
@@ -7428,7 +7426,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     }
 
     if (!haveDescent)
-        dc.GetTextExtent(wxT("X"), & w, & h, & descent);
+        dc.GetTextExtent(wxT("X"), nullptr, nullptr, &descent);
 
     if ( bScript )
         dc.SetFont(font);
@@ -9268,8 +9266,8 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
         dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
         int charHeight = dc.GetCharHeight();
-        wxCoord tw, th;
-        dc.GetTextExtent(text1, & tw, & th);
+        wxCoord tw;
+        dc.GetTextExtent(text1, &tw, nullptr);
 
         int x = rect.x;
 
@@ -9370,14 +9368,11 @@ bool wxRichTextStdRenderer::MeasureBullet(wxRichTextParagraph* paragraph, wxRead
     }
     else if (attr.HasBulletText())
     {
-        wxCoord w, h, maxDescent;
         wxString text(attr.GetBulletText());
         if (attr.HasTextEffects() && (attr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
             text.MakeUpper();
 
-        dc.GetTextExtent(text, &w, &h, & maxDescent);
-        sz.x = w;
-        sz.y = h;
+        dc.GetTextExtent(text, &sz.x, &sz.y);
     }
     else if (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_BITMAP)
     {
@@ -9388,10 +9383,7 @@ bool wxRichTextStdRenderer::MeasureBullet(wxRichTextParagraph* paragraph, wxRead
     else
     {
         // Need to guess a size for a number bullet.
-        wxCoord w, h, maxDescent;
-        dc.GetTextExtent(wxT("8888."), & w, &h, & maxDescent);
-        sz.x = w;
-        sz.y = h;
+        dc.GetTextExtent(wxT("8888."), &sz.x, &sz.y);
     }
 
     return true;
@@ -9719,9 +9711,9 @@ bool wxRichTextFieldTypeStandard::Draw(wxRichTextField* obj, wxDC& dc, wxRichTex
             wxString label(m_label);
             if (label.IsEmpty())
                 label = wxT("??");
-            int w, h, maxDescent;
+            int w, h;
             dc.SetFont(m_font);
-            dc.GetTextExtent(label, &w, &h, &maxDescent);
+            dc.GetTextExtent(label, &w, &h);
             dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
             dc.SetTextForeground(textColour);
 
@@ -9770,7 +9762,7 @@ bool wxRichTextFieldTypeStandard::GetRangeSize(wxRichTextField* obj, const wxRic
 wxSize wxRichTextFieldTypeStandard::GetSize(wxRichTextField* WXUNUSED(obj), wxReadOnlyDC& dc, wxRichTextDrawingContext& WXUNUSED(context), int WXUNUSED(style)) const
 {
     int borderSize = 1;
-    int w = 0, h = 0, maxDescent = 0;
+    int w, h;
 
     wxSize sz;
     if (m_bitmap.IsOk())
@@ -9786,7 +9778,7 @@ wxSize wxRichTextFieldTypeStandard::GetSize(wxRichTextField* WXUNUSED(obj), wxRe
         if (label.IsEmpty())
             label = wxT("??");
         dc.SetFont(m_font);
-        dc.GetTextExtent(label, & w, &h, & maxDescent);
+        dc.GetTextExtent(label, &w, &h);
 
         sz = wxSize(w + m_horizontalPadding*2 + m_horizontalMargin*2, h + m_verticalPadding *2 + m_verticalMargin*2);
     }

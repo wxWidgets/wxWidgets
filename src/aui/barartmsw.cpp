@@ -126,11 +126,8 @@ void wxAuiMSWToolBarArt::DrawButton(
         {
             dc.SetFont(m_font);
 
-            int tx, ty;
-
-            dc.GetTextExtent(wxT("ABCDHgj"), &tx, &textHeight);
-            textWidth = 0;
-            dc.GetTextExtent(item.GetLabel(), &textWidth, &ty);
+            dc.GetTextExtent(wxT("ABCDHgj"), nullptr, &textHeight);
+            dc.GetTextExtent(item.GetLabel(), &textWidth, nullptr);
         }
 
         int bmpX = 0, bmpY = 0;
@@ -241,14 +238,12 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
         {
             dc.SetFont(m_font);
 
-            int tx, ty;
             if ( m_flags & wxAUI_TB_TEXT )
             {
-                dc.GetTextExtent(wxT("ABCDHgj"), &tx, &textHeight);
-                textWidth = 0;
+                dc.GetTextExtent(wxT("ABCDHgj"), nullptr, &textHeight);
             }
 
-            dc.GetTextExtent(item.GetLabel(), &textWidth, &ty);
+            dc.GetTextExtent(item.GetLabel(), &textWidth, nullptr);
         }
 
         int btnState;

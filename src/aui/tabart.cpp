@@ -1017,7 +1017,7 @@ int wxAuiGenericTabArt::DrawPageTab(
                                  wxAuiNotebookPage& page,
                                  const wxRect& in_rect)
 {
-    wxCoord normal_textx, normal_texty;
+    wxCoord normal_texty;
     wxCoord selected_textx, selected_texty;
     wxCoord texty;
 
@@ -1030,7 +1030,7 @@ int wxAuiGenericTabArt::DrawPageTab(
     dc.GetTextExtent(caption, &selected_textx, &selected_texty);
 
     dc.SetFont(m_normalFont);
-    dc.GetTextExtent(caption, &normal_textx, &normal_texty);
+    dc.GetTextExtent(caption, nullptr, &normal_texty);
 
     // figure out the size of the tab
     int xExtent = 0;
@@ -1316,12 +1316,12 @@ wxSize wxAuiGenericTabArt::GetPageTabSize(
                                       const wxAuiNotebookPage& page,
                                       int* x_extent)
 {
-    wxCoord measured_textx, measured_texty, tmp;
+    wxCoord measured_textx, measured_texty;
 
     dc.SetFont(m_measuringFont);
-    dc.GetTextExtent(page.caption, &measured_textx, &measured_texty);
+    dc.GetTextExtent(page.caption, &measured_textx, nullptr);
 
-    dc.GetTextExtent(wxT("ABCDEFXj"), &tmp, &measured_texty);
+    dc.GetTextExtent(wxT("ABCDEFXj"), nullptr, &measured_texty);
 
     // add padding around the text
     wxCoord tab_width = measured_textx;

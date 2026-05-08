@@ -187,8 +187,8 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
   wxColour col(m_view->GetTextColour());
   dc.SetTextForeground(col);
   dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-  wxCoord textWidth, textHeight;
-  dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
+  wxCoord textWidth;
+  dc.GetTextExtent(GetLabel(), &textWidth, nullptr);
 
   int textX = (int)(tabX + (GetWidth() - textWidth)/2.0);
   if (textX < (tabX + 2))
@@ -458,8 +458,8 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
     wxColour col(m_view->GetTextColour());
     dc.SetTextForeground(col);
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    long textWidth, textHeight;
-    dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
+    long textWidth;
+    dc.GetTextExtent(GetLabel(), &textWidth, nullptr);
 
     float textX = (tabLeft + tabRight - textWidth) / 2;
     float textY = (tabInc + tabTop + m_view->GetVerticalTabTextSpacing());

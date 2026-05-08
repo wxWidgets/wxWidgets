@@ -508,9 +508,9 @@ int wxRendererGeneric::GetHeaderButtonHeight(wxWindow *win)
     const int HEADER_OFFSET_Y = 1;
     const int EXTRA_HEIGHT = 4;
 
-    int w=0, h=14, d=0;
+    int h = 14, d = 0;
     if (win)
-        win->GetTextExtent(wxT("Hg"), &w, &h, &d);
+        win->GetTextExtent(wxT("Hg"), nullptr, &h, &d);
 
     return h + d + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
 }

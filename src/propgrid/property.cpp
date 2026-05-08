@@ -3021,8 +3021,8 @@ wxString wxPropertyCategory::GetValueAsString(wxPGPropValFormatFlags flags) cons
 
 static int DoGetTextExtent(const wxWindow* wnd, const wxString& label, const wxFont& font)
 {
-    int x = 0, y = 0;
-    wnd->GetTextExtent(label, &x, &y, nullptr, nullptr, &font);
+    int x;
+    wnd->GetTextExtent(label, &x, nullptr, nullptr, nullptr, &font);
     return x;
 }
 

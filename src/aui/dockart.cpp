@@ -166,10 +166,10 @@ static void DrawGradientRectangle(wxDC& dc,
 
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 {
-    wxCoord x,y;
+    wxCoord x;
 
     // first check if the text fits with no problems
-    dc.GetTextExtent(text, &x, &y);
+    dc.GetTextExtent(text, &x, nullptr);
     if (x <= max_size)
         return text;
 
@@ -180,7 +180,7 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
         wxString s = text.Left(i);
         s += wxT("...");
 
-        dc.GetTextExtent(s, &x, &y);
+        dc.GetTextExtent(s, &x, nullptr);
         if (x > max_size)
             break;
 
@@ -756,8 +756,8 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
         dc.SetTextForeground(m_inactiveCaptionTextColour);
 
 
-    wxCoord w,h;
-    dc.GetTextExtent(wxT("ABCDEFHXfgkj"), &w, &h);
+    wxCoord h;
+    dc.GetTextExtent(wxT("ABCDEFHXfgkj"), nullptr, &h);
 
     wxRect clip_rect = rect;
     clip_rect.width -= window->FromDIP(3); // text offset

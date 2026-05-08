@@ -258,8 +258,8 @@ wxSize wxListBox::DoGetBestSize() const
         {
             wxString str( GetString( i ) );
 
-            wxCoord width, height ;
-            dc.GetTextExtent( str , &width, &height);
+            wxCoord width;
+            dc.GetTextExtent(str, &width, nullptr);
             lbWidth = wxMax( lbWidth, width );
         }
 
@@ -269,8 +269,8 @@ wxSize wxListBox::DoGetBestSize() const
         // And just a bit more
         int cy = 12;
 
-        wxCoord width, height ;
-        dc.GetTextExtent( wxT("XX") , &width, &height);
+        wxCoord width;
+        dc.GetTextExtent(wxT("XX"), &width, nullptr);
         int cx = width ;
         lbWidth += cx;
 

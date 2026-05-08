@@ -269,11 +269,11 @@ wxSize wxAuiMSWTabArt::GetPageTabSize(wxReadOnlyDC& dc,
     if ( !m_closeBtnSize.IsFullySpecified() )
         InitSizes(wnd, dc);
 
-    wxCoord textWidth, textHeight, tmp;
+    wxCoord textWidth, textHeight;
 
     dc.SetFont(wnd->GetFont());
-    dc.GetTextExtent(page.caption, &textWidth, &tmp);
-    dc.GetTextExtent("ABCDEFXj", &tmp, &textHeight);
+    dc.GetTextExtent(page.caption, &textWidth, nullptr);
+    dc.GetTextExtent("ABCDEFXj", nullptr, &textHeight);
 
     wxCoord tabWidth = wxMax(m_tabSize.x, textWidth);
     wxCoord tabHeight = wxMax(m_tabSize.y, textHeight);

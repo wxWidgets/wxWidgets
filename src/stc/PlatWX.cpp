@@ -745,9 +745,8 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, XYPOSITION *
 XYPOSITION SurfaceImpl::WidthText(Font &font, const char *s, int len) {
     SetFont(font);
     int w;
-    int h;
 
-    hdc->GetTextExtent(STCString(s, len), &w, &h);
+    hdc->GetTextExtent(STCString(s, len), &w, nullptr);
     return w;
 }
 
@@ -755,8 +754,8 @@ XYPOSITION SurfaceImpl::WidthText(Font &font, const char *s, int len) {
 
 XYPOSITION SurfaceImpl::Ascent(Font &font) {
     SetFont(font);
-    int w, h, d, e;
-    hdc->GetTextExtent(EXTENT_TEST, &w, &h, &d, &e);
+    int h, d;
+    hdc->GetTextExtent(EXTENT_TEST, nullptr, &h, &d);
     const int ascent = h - d;
     SetAscent(font, ascent);
     return ascent;
@@ -764,8 +763,8 @@ XYPOSITION SurfaceImpl::Ascent(Font &font) {
 
 XYPOSITION SurfaceImpl::Descent(Font &font) {
     SetFont(font);
-    int w, h, d, e;
-    hdc->GetTextExtent(EXTENT_TEST, &w, &h, &d, &e);
+    int d;
+    hdc->GetTextExtent(EXTENT_TEST, nullptr, nullptr, &d);
     return d;
 }
 
@@ -2838,8 +2837,7 @@ void wxSTCListBox::SetContainerBorderSize(int s)
 void wxSTCListBox::SetListBoxFont(Font &font)
 {
     SetFont(*((wxFont*)font.GetID()));
-    int w;
-    GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
+    GetTextExtent(EXTENT_TEST, nullptr, &m_textHeight);
     RecalculateItemHeight();
 }
 
@@ -3000,8 +2998,7 @@ void wxSTCListBox::OnDPIChanged(wxDPIChangedEvent& event)
     m_textBoxToTextGap = FromDIP(3);
     m_textExtraVerticalPadding = FromDIP(1);
 
-    int w;
-    GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
+    GetTextExtent(EXTENT_TEST, nullptr, &m_textHeight);
 
     RecalculateItemHeight();
 
