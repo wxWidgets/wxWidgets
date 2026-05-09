@@ -5311,23 +5311,34 @@ WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
   if test "$USE_UNIX" = 1 -a "$USE_MAC" != 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
-      PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
+      PKG_CHECK_MODULES([SDL], [sdl3 >= 3.0.0],
                   [
                     EXTRALIBS_SDL="$SDL_LIBS"
                     CFLAGS="$SDL_CFLAGS $CFLAGS"
                     CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                     AC_DEFINE(wxUSE_LIBSDL)
+                    AC_DEFINE(wxUSE_LIBSDL3)
                   ],
                   [
-                    AC_MSG_NOTICE([SDL 2.0 not available. Falling back to 1.2.])
-                    AM_PATH_SDL([1.2.0],
+                    AC_MSG_NOTICE([SDL 3.0 not available. Falling back to SDL 2.0.])
+                    PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
                                 [
                                   EXTRALIBS_SDL="$SDL_LIBS"
                                   CFLAGS="$SDL_CFLAGS $CFLAGS"
                                   CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                                   AC_DEFINE(wxUSE_LIBSDL)
                                 ],
-                                [wxUSE_LIBSDL="no"])
+                                [
+                                  AC_MSG_NOTICE([SDL 2.0 not available. Falling back to 1.2.])
+                                  AM_PATH_SDL([1.2.0],
+                                              [
+                                                EXTRALIBS_SDL="$SDL_LIBS"
+                                                CFLAGS="$SDL_CFLAGS $CFLAGS"
+                                                CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
+                                                AC_DEFINE(wxUSE_LIBSDL)
+                                              ],
+                                              [wxUSE_LIBSDL="no"])
+                                ])
                   ])
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1

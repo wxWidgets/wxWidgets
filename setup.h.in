@@ -737,6 +737,11 @@
 #define wxUSE_LIBSDL 0
 
 /*
+ * Use SDL 3.x (rather than SDL 2.x or 1.x) for the SDL audio backend
+ */
+#define wxUSE_LIBSDL3 0
+
+/*
  * Compile sound backends as plugins
  */
 #define wxUSE_PLUGINS 0
