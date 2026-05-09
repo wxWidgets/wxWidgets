@@ -840,6 +840,9 @@ public:
 
         This overload takes the additional @a id parameter.
 
+        @remarks In case there are several functions in the event handler matching the
+                 specified parameters, only one of functions is disconnected.
+
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
