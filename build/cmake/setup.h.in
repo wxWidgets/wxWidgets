@@ -736,6 +736,11 @@
 #cmakedefine01 wxUSE_LIBSDL
 
 /*
+ * Use SDL 3.x (rather than SDL 2.x or 1.x) for the SDL audio backend
+ */
+#cmakedefine01 wxUSE_LIBSDL3
+
+/*
  * Compile sound backends as plugins
  */
 #cmakedefine01 wxUSE_PLUGINS
