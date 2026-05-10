@@ -197,6 +197,13 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     else
         return wxPCX_INVFORMAT;
 
+    // Sanity-check the dimensions. The decode loops below read width
+    // bytes per plane out of a buffer sized bytesperline * nplanes, and
+    // for 24-bit images additionally read p[i + 2 * bytesperline], so
+    // bytesperline must not be smaller than width.
+    if (width <= 0 || height <= 0 || bytesperline <= 0 || width > bytesperline)
+        return wxPCX_INVFORMAT;
+
     // If the image is of type wxPCX_8BIT, then there is
     // a palette at the end of the image data. If we were
     // working with a file, we could seek at the end to the
