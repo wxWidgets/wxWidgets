@@ -169,6 +169,11 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
                 break;
         }
 
+        // unterminated /*-comment: stop processing rather than reading past
+        // the end of the buffer in strlen() below.
+        if (*q == '\0')
+            break;
+
         // memmove allows overlaps (unlike strcpy):
         size_t cpylen = strlen(q + 2) + 1;
         memmove(p, q + 2, cpylen);
