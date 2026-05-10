@@ -36,6 +36,7 @@
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '15.0'">141</wxToolsetVersion>
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '16.0'">142</wxToolsetVersion>
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '17.0'">143</wxToolsetVersion>
+    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '18.0'">145</wxToolsetVersion>
 
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '10.0'">100</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '11.0'">110</wxToolsetVerABICompat>
@@ -44,6 +45,7 @@
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '15.0'">14x</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '16.0'">14x</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '17.0'">14x</wxToolsetVerABICompat>
+    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '18.0'">14x</wxToolsetVerABICompat>
   </PropertyGroup>
 
   <!--
