@@ -268,6 +268,7 @@ All (GUI):
 - Fix buffer overwrite when loading malformed BMPs with invalid RLE data.
 - Avoid out-of-bounds palette read in 8bpp BMP decoder (MarkLee131, #26438).
 - Avoid out-of-bounds read in wxPCXHandler (MarkLee131, #26441).
+- Avoid out-of-bounds read in wxXPMDecoder (MarkLee131, #26442).
 
 wxGTK:
 
