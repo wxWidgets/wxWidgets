@@ -872,6 +872,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                                     aByte = stream.GetC();
                                     if ( !stream.IsOk() )
                                         return false;
+                                    if ( aByte >= ncolors )
+                                        return false;
                                     ptr[poffset    ] = cmap[aByte].r;
                                     ptr[poffset + 1] = cmap[aByte].g;
                                     ptr[poffset + 2] = cmap[aByte].b;
@@ -888,6 +890,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                         else
                         {
                             // encoded mode (repeat aByte first times)
+                            if ( aByte >= ncolors )
+                                return false;
                             for ( int l = 0; l < first && column < width; l++ )
                             {
                                 ptr[poffset    ] = cmap[aByte].r;
@@ -899,6 +903,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                     }
                     else
                     {
+                        if ( aByte >= ncolors )
+                            return false;
                         ptr[poffset    ] = cmap[aByte].r;
                         ptr[poffset + 1] = cmap[aByte].g;
                         ptr[poffset + 2] = cmap[aByte].b;

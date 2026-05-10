@@ -266,6 +266,7 @@ All (GUI):
 - Correct loading of `BI_BITFIELDS` bitmaps (Brian Nixon, #23601).
 - Fix loading 32bpp BMP files without valid alpha (#24219).
 - Fix buffer overwrite when loading malformed BMPs with invalid RLE data.
+- Avoid out-of-bounds palette read in 8bpp BMP decoder (MarkLee131, #26438).
 
 wxGTK:
 
