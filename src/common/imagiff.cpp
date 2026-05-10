@@ -146,7 +146,7 @@ bool wxIFFDecoder::ConvertToImage(wxImage *image) const
     long i;
 
     // set transparent colour mask
-    if (transparent != -1)
+    if (transparent >= 0 && transparent < colors)
     {
         for (i = 0; i < colors; i++)
         {
