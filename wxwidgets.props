@@ -25,7 +25,7 @@
       - Version-specific prefix of the form "vcNNN", which is used in some other
         projects.
       - Version-specific but ABI-compatible prefix which differs from the
-        previous value in that it's the same "vc14x" for MSVS 2015/2017/2019/2022
+        previous value in that it's the same "vc14x" for MSVS 2015/2017/2019/2022/2026
         which are ABI-compatible with each other. This is used by official wx
         binaries, so we want to check this one too.
       -->
