@@ -718,7 +718,18 @@ void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     }
     else
     {
-        wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
+        int dx = 0;
+
+        // In RTL layout, we need this adjustment because vertical lines drawn
+        // with pen width > 1 are incorrectly shifted to the left by one pixel.
+        if ( x1 == x2 && y1 != y2 &&
+             m_pen.GetWidth() > 1 &&
+             GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            dx = -1;
+        }
+
+        wxDrawLine(GetHdc(), XLOG2DEV(x1) + dx, YLOG2DEV(y1), XLOG2DEV(x2) + dx, YLOG2DEV(y2));
     }
 
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
