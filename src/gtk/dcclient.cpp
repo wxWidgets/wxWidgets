@@ -1581,9 +1581,9 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
     }
 
     static const wxDash dotted[] = {1, 1};
-    static const wxDash short_dashed[] = {2, 2};
-    static const wxDash wxCoord_dashed[] = {2, 4};
-    static const wxDash dotted_dashed[] = {3, 3, 1, 3};
+    static const wxDash short_dashed[] = { 3, 1 };
+    static const wxDash long_dashed[] = { 6, 1 };
+    static const wxDash dotted_dashed[] = { 3, 1, 1, 1 };
 
     // We express dash pattern in pen width unit, so we are
     // independent of zoom factor and so on...
@@ -1603,7 +1603,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
             break;
         case wxPENSTYLE_LONG_DASH:
             req_nb_dash = 2;
-            req_dash = wxCoord_dashed;
+            req_dash = long_dashed;
             break;
         case wxPENSTYLE_SHORT_DASH:
             req_nb_dash = 2;
@@ -1630,8 +1630,17 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         wxScopedArray<wxDash> real_req_dash(req_nb_dash);
         if (real_req_dash)
         {
+            const bool isCapButt = m_pen.GetCap() == wxCAP_BUTT;
             for (int i = 0; i < req_nb_dash; i++)
-                real_req_dash[i] = req_dash[i] * width;
+            {
+                wxDash dash = req_dash[i];
+                if ((i & 1) && !isCapButt)
+                {
+                    // the caps intrude into "off" length by 0.5 at each end
+                    dash++;
+                }
+                real_req_dash[i] = dash * width;
+            }
             gdk_gc_set_dashes( m_penGC, 0, real_req_dash.get(), req_nb_dash );
         }
         else
@@ -1648,7 +1657,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         case wxCAP_BUTT:       { capStyle = GDK_CAP_BUTT;       break; }
         case wxCAP_ROUND:
         default:
-            if (width <= 1)
+            if (width <= 1 && lineStyle == GDK_LINE_SOLID)
             {
                 width = 0;
                 capStyle = GDK_CAP_NOT_LAST;
