@@ -595,6 +595,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         SetDefaultMenuItem(GetHmenu(), id);
     }
 
+    // bricscad change: Apply any bitmap set on the item immediately, rather than waiting for
+    // WM_INITMENUPOPUP (which may not always be handled by the parent window).
+    pItem->SetupBitmaps();
+
     // if we're already attached to the menubar, we must update it
     if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
