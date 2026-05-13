@@ -306,8 +306,7 @@ private :
     cairo_line_join_t m_join;
 
     int m_count;
-    const double *m_lengths;
-    double *m_userLengths;
+    double* m_lengths;
 
     wxDECLARE_NO_COPY_CLASS(wxCairoPenData);
 };
@@ -846,14 +845,13 @@ wxCairoPenBrushBaseData::CreateRadialGradientPattern(wxDouble startX, wxDouble s
 
 wxCairoPenData::~wxCairoPenData()
 {
-    delete[] m_userLengths;
+    delete[] m_lengths;
 }
 
 void wxCairoPenData::Init()
 {
     m_pattern = nullptr;
     m_lengths = nullptr;
-    m_userLengths = nullptr;
     m_width = 0;
     m_count = 0;
 }
@@ -902,24 +900,6 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         break;
     }
 
-    const double dashUnit = m_width < 1.0 ? 1.0 : m_width;
-    const double dotted[] =
-    {
-        dashUnit , dashUnit + 2.0
-    };
-    static const double short_dashed[] =
-    {
-        9.0 , 6.0
-    };
-    static const double dashed[] =
-    {
-        19.0 , 9.0
-    };
-    static const double dotted_dashed[] =
-    {
-        9.0 , 6.0 , 3.0 , 3.0
-    };
-
     switch ( info.GetStyle() )
     {
     case wxPENSTYLE_SOLID :
@@ -945,25 +925,33 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         break;
 
     case wxPENSTYLE_DOT :
-        m_count = WXSIZEOF(dotted);
-        m_userLengths = new double[ m_count ] ;
-        memcpy( m_userLengths, dotted, sizeof(dotted) );
-        m_lengths = m_userLengths;
+        m_count = 2;
+        m_lengths = new double[m_count];
+        m_lengths[0] = 1;
+        m_lengths[1] = 1;
         break;
 
     case wxPENSTYLE_LONG_DASH :
-        m_lengths = dashed ;
-        m_count = WXSIZEOF(dashed);
+        m_count = 2;
+        m_lengths = new double[m_count];
+        m_lengths[0] = 6;
+        m_lengths[1] = 1;
         break;
 
     case wxPENSTYLE_SHORT_DASH :
-        m_lengths = short_dashed ;
-        m_count = WXSIZEOF(short_dashed);
+        m_count = 2;
+        m_lengths = new double[m_count];
+        m_lengths[0] = 3;
+        m_lengths[1] = 1;
         break;
 
     case wxPENSTYLE_DOT_DASH :
-        m_lengths = dotted_dashed ;
-        m_count = WXSIZEOF(dotted_dashed);
+        m_count = 4;
+        m_lengths = new double[m_count];
+        m_lengths[0] = 1;
+        m_lengths[1] = 1;
+        m_lengths[2] = 3;
+        m_lengths[3] = 1;
         break;
 
     case wxPENSTYLE_USER_DASH :
@@ -972,18 +960,12 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
             m_count = info.GetDashes( &wxdashes ) ;
             if ((wxdashes != nullptr) && (m_count > 0))
             {
-                m_userLengths = new double[m_count] ;
+                m_lengths = new double[m_count];
                 for ( int i = 0 ; i < m_count ; ++i )
                 {
-                    m_userLengths[i] = wxdashes[i] * dashUnit ;
-
-                    if ( i % 2 == 1 && m_userLengths[i] < dashUnit + 2.0 )
-                        m_userLengths[i] = dashUnit + 2.0 ;
-                    else if ( i % 2 == 0 && m_userLengths[i] < dashUnit )
-                        m_userLengths[i] = dashUnit ;
+                    m_lengths[i] = wxdashes[i];
                 }
             }
-            m_lengths = m_userLengths ;
         }
         break;
 
@@ -1005,6 +987,19 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
             InitHatch(static_cast<wxHatchStyle>(info.GetStyle()));
         }
         break;
+    }
+
+    const double dashUnit = wxMax(m_width, 1.0);
+    for (int i = 0; i < m_count; i++)
+    {
+        if (m_cap != CAIRO_LINE_CAP_BUTT)
+        {
+            // Rounded/projecting cap will extend 0.5 on either side of "on" segment,
+            // increase "off" length, decrease "on" to account for this.
+            // Note that 0-length "on" is valid.
+            m_lengths[i] += (i & 1) ? 1 : -1;
+        }
+        m_lengths[i] *= dashUnit;
     }
 
     switch ( info.GetGradientType() )
@@ -1048,7 +1043,11 @@ void wxCairoPenData::Apply( wxGraphicsContext* context )
     cairo_set_line_width(ctext, width);
     cairo_set_line_cap(ctext,m_cap);
     cairo_set_line_join(ctext,m_join);
-    cairo_set_dash(ctext, m_lengths, m_count, 0);
+
+    double dashOffset = 0;
+    if (m_count && m_cap == CAIRO_LINE_CAP_BUTT && context->ShouldOffset())
+        dashOffset = 0.5;
+    cairo_set_dash(ctext, m_lengths, m_count, dashOffset);
 }
 
 //-----------------------------------------------------------------------------
