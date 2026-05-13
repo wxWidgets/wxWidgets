@@ -280,6 +280,7 @@ wxGTK:
 - Fix resource leak when using EGL with X11 (Florian Larysch, #26341).
 - Fix showing title bar under Wayland with wxBORDER_NONE (#26357).
 - Remove wrong maximum text length limitation in "picker" controls (#26314).
+- Fix appearance of dashed lines drawn by wxDC::DrawLine() (#26449).
 
 wxMSW:
 
