@@ -3570,7 +3570,17 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_SETTINGCHANGE:
-            processed = HandleSettingChange(wParam, lParam);
+            // Check for the special case of the message which notifies about
+            // the colours change.
+            // Note that "ImmersiveColorSet" is set both when switching between
+            // light and dark themes and also when changing high contrast mode,
+            // for which an additional message with "WindowsThemeElement" is
+            // also sent, but we don't need to check for it as handling this
+            // one is enough
+            if ( lParam && wxStrcmp((TCHAR*)lParam, wxT("ImmersiveColorSet")) == 0 )
+                processed = HandleSysColorChange();
+            else
+                processed = HandleSettingChange(wParam, lParam);
             break;
 
         case WM_QUERYNEWPALETTE:
@@ -5206,16 +5216,6 @@ bool wxWindowMSW::HandleCaptureChanged(WXHWND hWndGainedCapture)
 
 bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
 {
-    // Check for the special case of changing the system light/dark mode.
-    if ( lParam && wxStrcmp((TCHAR*)lParam, wxT("ImmersiveColorSet")) == 0 )
-    {
-        if ( IsTopLevel() )
-            wxMSWDarkMode::ConfigureTLW(GetHwnd());
-
-        // Forward to the existing function generating an event for this.
-        HandleSysColorChange();
-    }
-
     // Another special case: event with this wParam value is sent when the user
     // changes the mouse pointer size in the Control Panel.
     if ( wParam == 0x2029 )
