@@ -473,15 +473,6 @@ wxTaskBarButton* wxFrame::MSWGetTaskBarButton()
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-#if wxUSE_STATUSBAR
-    if ( m_frameStatusBar )
-    {
-        wxSysColourChangedEvent event2;
-        event2.SetEventObject( m_frameStatusBar );
-        m_frameStatusBar->HandleWindowEvent(event2);
-    }
-#endif // wxUSE_STATUSBAR
-
 #if wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
     if ( wxMenuBar* const menuBar = GetMenuBar() )
     {
