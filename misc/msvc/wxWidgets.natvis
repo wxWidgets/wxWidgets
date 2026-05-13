@@ -2,7 +2,8 @@
 <!--
 
 This file contains visualizers for Visual Studio debugger.
-It should be copied into the %USERPROFILE%\My Documents\Visual Studio 2015\Visualizers\
+It should be added to your Visual Studio project that is using wxWidgets.
+It can also be copied into the %USERPROFILE%\My Documents\Visual Studio 2015\Visualizers\
 directory (or the corresponding location for newer versions, e.g. ...2017\Visualizers).
 
 More information can be found at https://learn.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects
