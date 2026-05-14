@@ -61,23 +61,14 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
     mark_as_advanced(WEBP_UNICODE)
     mark_as_advanced(WEBP_USE_THREAD)
 
+    set(WebP_LIBRARIES webp webpdemux sharpyuv)
+
     get_property(webpTargets DIRECTORY "${WEBP_ROOT}" PROPERTY BUILDSYSTEM_TARGETS)
     foreach(target_name IN LISTS webpTargets)
-        wx_set_builtin_target_ouput_name(${target_name} "wx${target_name}")
-        set_target_properties(${target_name} PROPERTIES
-            FOLDER "Third Party Libraries/WebP"
-            PUBLIC_HEADER ""
-        )
+        set(builtin_props)
+        if (NOT ${target_name} IN_LIST WebP_LIBRARIES)
+            set(builtin_props SKIP_INSTALL)
+        endif()
+        wx_add_builtin_library(${target_name} ${builtin_props} FOLDER "/WebP")
     endforeach()
-
-    set(WebP_LIBRARIES webp webpdemux sharpyuv)
-    list(APPEND wxLIB_BUILTIN_TARGETS ${WebP_LIBRARIES})
-
-    if(NOT wxBUILD_SHARED)
-        wx_get_install_platform_dir(archive)
-        wx_install(TARGETS ${WebP_LIBRARIES}
-            EXPORT wxWidgetsTargets
-            ARCHIVE DESTINATION "${archive_dir}"
-        )
-    endif()
 endif()

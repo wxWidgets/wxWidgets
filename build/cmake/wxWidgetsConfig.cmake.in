@@ -168,6 +168,8 @@ foreach(libname @wxLIB_TARGETS@)
         endif()
     endif()
 endforeach()
+
+# list all built-in libraries
 foreach(libname @wxLIB_BUILTIN_TARGETS@)
     if(TARGET wx::${libname})
         wx_map_release(${libname})
