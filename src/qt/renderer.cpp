@@ -492,6 +492,8 @@ wxRendererQt::DrawCheckBox(wxWindow* win,  wxDC& dc, const wxRect& rect, int fla
     auto qtWidget = win->GetHandle();
     auto qtStyle = qtWidget->style();
 
+    wxDCClipper clip(dc, rect);
+
     QStyleOptionButton option;
     option.initFrom(qtWidget);
     option.rect = wxQtConvertRect(rect);
@@ -533,11 +535,7 @@ wxRendererQt::DrawCheckBox(wxWindow* win,  wxDC& dc, const wxRect& rect, int fla
         option.rect.setX(-rect.x-rect.width);
     }
 
-    {
-        wxDCClipper clip(dc, wxQtConvertRect(option.rect));
-
-        qtStyle->drawControl(QStyle::CE_CheckBox, &option, painter, qtWidget);
-    }
+    qtStyle->drawControl(QStyle::CE_CheckBox, &option, painter, qtWidget);
 
     if (isRTL)
         painter->restore();
