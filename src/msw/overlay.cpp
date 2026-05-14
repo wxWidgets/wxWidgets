@@ -258,6 +258,11 @@ void wxOverlayImpl::Reset()
         m_overlayWindow->Destroy();
         m_overlayWindow = nullptr;
 
+        // Get rid of the old memory DC, because some of its properties might
+        // have been changed in a way that makes subsequent drawings incorrect:
+        // Clipping, for example, which can only be made smaller, never larger.
+        m_memDC = wxMemoryDC();
+
         m_alpha = wxALPHA_OPAQUE;
     }
 }
