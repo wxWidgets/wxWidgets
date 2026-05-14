@@ -39,7 +39,7 @@
 // ----------------------------------------------------------------------------
 
 // the temporary buffer size used when copying from stream to stream
-#define BUF_TEMP_SIZE 4096
+#define BUF_TEMP_SIZE 65536
 
 // ============================================================================
 // implementation
