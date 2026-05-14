@@ -11,12 +11,8 @@ set(TEST_SRC
     testwin32.cpp
 )
 
-wx_add_test(test_win32_wide ${TEST_SRC})
-if(TARGET test_win32_wide)
-    target_compile_definitions(test_win32_wide PRIVATE UNICODE _UNICODE)
-endif()
+wx_add_test(test_win32_unicode ${TEST_SRC} CHARSET UNICODE _UNICODE)
 
-wx_add_test(test_win32_ansi ${TEST_SRC})
-if(TARGET test_win32_ansi)
-    target_compile_definitions(test_win32_ansi PRIVATE _SBCS)
-endif()
+wx_add_test(test_win32_mbcs ${TEST_SRC} CHARSET _MBCS)
+
+wx_add_test(test_win32_sbcs ${TEST_SRC} CHARSET _SBCS)

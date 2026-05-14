@@ -170,7 +170,7 @@ endmacro()
 
 # Set properties common to builtin third party libraries and wx libs
 function(wx_set_common_target_properties target_name)
-    cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
+    cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "CHARSET" ${ARGN})
 
     if(WIN32_MSVC_NAMING)
         # Generator expression to not create different Debug and Release directories
@@ -184,6 +184,16 @@ function(wx_set_common_target_properties target_name)
         ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
         RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
         )
+
+    if(WIN32)
+        if(wxCOMMON_TARGET_PROPS_CHARSET)
+            target_compile_definitions(${target_name} PRIVATE ${wxCOMMON_TARGET_PROPS_CHARSET})
+        else()
+            # not needed for wxWidgets anymore (it is always built with unicode)
+            # but keep it here so IDEs like Visual Studio know what character set is used
+            target_compile_definitions(${target_name} PRIVATE UNICODE _UNICODE)
+        endif()
+    endif()
 
     if(wxBUILD_PIC)
         set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
@@ -417,12 +427,6 @@ function(wx_set_target_properties target_name)
             _SCL_SECURE_NO_WARNINGS=1
             _WINSOCK_DEPRECATED_NO_WARNINGS=1
             )
-    endif()
-
-    if(WIN32)
-        # not needed for wxWidgets anymore (it is always built with unicode)
-        # but keep it here so IDEs like Visual Studio know what character set is used
-        target_compile_definitions(${target_name} PRIVATE UNICODE _UNICODE)
     endif()
 
     wx_get_install_dir(library)
@@ -869,8 +873,9 @@ endfunction()
 
 # Add sample, test, demo or benchmark
 # wx_add(<name> <group> [CONSOLE|CONSOLE_GUI|DLL] [IMPORTANT] [SRC_FILES...]
-#    [LIBRARIES ...] [NAME target_name] [FOLDER folder]
-#    [DATA ...] [DEFINITIONS ...] [RES ...] [RES_BUNDLE ...] [PLIST ...)
+#    [NAME target_name] [FOLDER folder]
+#    [DATA ...] [DEFINITIONS ...] [DEPENDS ...] [LIBRARIES ...]
+#    [RES ...] [RES_BUNDLE ...] [PLIST ...] [CHARSET ...])
 # name default target name
 # group can be Samples, Tests, Demos or Benchmarks
 # first parameter may be CONSOLE to indicate a console application or DLL to indicate a shared library
@@ -879,14 +884,16 @@ endfunction()
 #
 # Optionally:
 #   IMPORTANT (samples only) does not require wxBUILD_SAMPLES=ALL
-#   LIBRARIES followed by required libraries
 #   NAME alternative target_name
 #   FOLDER subfolder in IDE
 #   DATA followed by required data files. Use a colon to separate different source and dest paths
 #   DEFINITIONS list of definitions for the target
+#   DEPENDS build options the target depends on
+#   LIBRARIES followed by required libraries
 #   RES followed by WIN32 .rc files
 #   RES_BUNDLE followed by macOS bundle resource files
 #   PLIST followed by macOS Info.plist.in file
+#   CHARSET override the win32 default charset (unicode)
 #
 # Additionally the following variables may be set before calling wx_add_sample:
 # wxSAMPLE_SUBDIR subdirectory in the samples/ folder to use as base
@@ -912,7 +919,7 @@ function(wx_add name group)
     cmake_parse_arguments(APP
         "CONSOLE;CONSOLE_GUI;DLL;IMPORTANT"
         "NAME;FOLDER"
-        "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES;RES_BUNDLE;PLIST"
+        "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES;RES_BUNDLE;PLIST;CHARSET"
         ${ARGN}
         )
 
@@ -1086,7 +1093,7 @@ function(wx_add name group)
     else()
         set(APP_FOLDER ${group})
     endif()
-    wx_set_common_target_properties(${target_name})
+    wx_set_common_target_properties(${target_name} CHARSET ${APP_CHARSET})
     wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     set_target_properties(${target_name} PROPERTIES
         FOLDER ${APP_FOLDER}
