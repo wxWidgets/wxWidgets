@@ -26,7 +26,7 @@ The wxWidgets approach to i18n closely follows the GNU gettext package.
 wxWidgets uses the message catalogs which are binary compatible with gettext
 catalogs and this allows to use all of the programs in this package to work
 with them as well as using any of the tools working with message catalogs in
-this format such as <a href="http://poedit.net/">Poedit</a>.
+this format such as <a href="http://poedit.com/">Poedit</a>.
 
 Because of this, you will need to use the gettext package to work with the
 translations during the program development. However no additional libraries

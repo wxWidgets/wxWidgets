@@ -459,7 +459,7 @@ Here are the steps you should follow:
    for your language. Initialization can be also done using e.g. Poedit (see next item).
 -# Translate the strings in this file using either your favourite text
    editor or a specialized tool such as Vaclav Slavik's excellent
-   <a href="http://www.poedit.net/">poEdit</a> utility.
+   <a href="http://www.poedit.com/">Poedit</a> utility.
 -# Verify that your translations can at least be compiled (even if they
    are yet incomplete) by running <tt>msgfmt -vc XY.po</tt> command:
    please note that you <i>must</i> use the <tt>-c</tt> option. In

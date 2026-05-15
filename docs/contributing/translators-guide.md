@@ -10,8 +10,8 @@ First of all, here is what you will need:
    - For Unix systems you can download gettext-0.xx.yy.tar.gz from any GNU
    mirror (RPMs and DEBs are also available from the usual places)
    - For Windows you can download the precompiled binaries from
-   www.wxwidgets.org or install [Poedit](https://poedit.net/) and add
-   `<installdir>/poEdit/bin` to your path (so it can find xgettext).
+   www.wxwidgets.org or install [Poedit](https://poedit.com/) and add
+   `<installdir>/Poedit/GettextTools/bin` to your path (so it can find xgettext).
 
 2. A way to run a program recursively on an entire directory from the command
    line:
