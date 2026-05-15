@@ -172,6 +172,7 @@ public:
             // probably not worth the hassle. We know the old parent is still
             // valid, because otherwise Dismiss() would have been called and
             // m_win cleared.
+            m_win->Show();
             m_win->Raise();
         }
     }
