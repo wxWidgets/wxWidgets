@@ -258,6 +258,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Support defining wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR in wxString (#26307).
+- Fix wxCondition and wxSemaphore::WaitTimeout() after 2038 under Unix (#26466).
 
 All (GUI):
 
