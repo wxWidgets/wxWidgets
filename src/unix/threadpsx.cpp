@@ -498,13 +498,10 @@ wxCondError wxConditionInternal::Wait()
 
 wxCondError wxConditionInternal::WaitTimeout(unsigned long milliseconds)
 {
-    wxLongLong curtime = wxGetUTCTimeMillis();
+    wxLongLong_t curtime = wxGetUTCTimeMillis().GetValue();
     curtime += milliseconds;
-    wxLongLong temp = curtime / 1000;
-    int sec = temp.GetLo();
-    temp *= 1000;
-    temp = curtime - temp;
-    int millis = temp.GetLo();
+    const wxLongLong_t sec = curtime / 1000;
+    const int millis = curtime - sec * 1000;
 
     timespec tspec;
 
