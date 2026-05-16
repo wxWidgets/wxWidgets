@@ -1774,31 +1774,58 @@ bool wxMSWDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widt
 
 namespace
 {
-
-void ApplyEffectiveScale(double scale, int sign, int *device, int *logical)
+// Helper function that returns the best approximation of _scale_ as a rational
+// number _deviceExt_ / _logicalScale_ using Continued Fraction algorithm which
+// is the standard and most efficient way to convert a floating-point number (d)
+// into the best rational approximation (a/b).
+bool GetEffectiveScale(double scale, int* deviceExt, int* logicalScale)
 {
-    // The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
-    // maximal possible view port extent. An extra -1 is applied to avoid overflow
-    // when computing clip extents for RTL layouts in GM_COMPATIBLE mode.
-    // As a result, the effective viewport extent is 2^27-2 instead of 2^27-1.
-    static const int VIEWPORT_EXTENT = 134217726;
-
-    // To reduce rounding errors as much as possible, we try to use the largest
-    // possible extent (2^27-2) for the device space but we must also avoid
-    // overflowing the int range i.e. ensure that logical extents are less than
-    // 2^31 in magnitude. So the minimal scale we can use is 1/16 as for
-    // anything smaller VIEWPORT_EXTENT/scale would overflow the int range.
-    static const double MIN_LOGICAL_SCALE = 1./16;
-
-    double physExtent = VIEWPORT_EXTENT;
-    if ( scale < MIN_LOGICAL_SCALE )
+    if ( wxIsSameDouble(scale, 0.0) || wxIsSameDouble(scale, 1.0)  )
     {
-        physExtent *= scale/MIN_LOGICAL_SCALE;
-        scale = MIN_LOGICAL_SCALE;
+        *deviceExt = *logicalScale = 1;
+
+        return true;
     }
 
-    *device = wxRound(physExtent);
-    *logical = sign*wxRound(VIEWPORT_EXTENT/scale);
+    // The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
+    // maximal possible view port extent.
+    const int VIEWPORT_EXTENT = 134217727;
+    const int maxLogScale = 1000;
+    const double tolerance = 1e-12;
+    const long long s0 = static_cast<long long>(scale);
+
+    double frac = scale - s0;
+    long long h_prev = 1, k_prev = 0;
+    long long h = s0, k = 1;
+
+    while ( frac > tolerance && k <= maxLogScale )
+    {
+        double next = 1.0 / frac;
+        long long a = static_cast<long long>(next);
+
+        long long h_next = a * h + h_prev;
+        long long k_next = a * k + k_prev;
+
+        if ( k_next > maxLogScale )
+            break;
+
+        h_prev = h;
+        k_prev = k;
+        h = h_next;
+        k = k_next;
+
+        frac = next - a;
+    }
+
+    if ( h < VIEWPORT_EXTENT )
+    {
+        *deviceExt = static_cast<int>(h);
+        *logicalScale = static_cast<int>(k);
+
+        return true;
+    }
+
+    return false;
 }
 
 } // anonymous namespace
@@ -1812,26 +1839,23 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
 
     // wxWidgets API assumes that the coordinate space is "infinite" (i.e. only
     // limited by 2^32 range of the integer coordinates) but in MSW API we must
-    // actually specify the extents that we use so compute them here.
+    // actually specify the extents that we use so compute them here. And as we
+    // are using MM_ANISOTROPIC mode, only the devExt and the logScale values are
+    // important here.
 
-    int devExtX, devExtY,   // Viewport, i.e. device space, extents.
-        logExtX, logExtY;   // Window, i.e. logical coordinate space, extents.
+    int devExtX, devExtY,       // Viewport, i.e. device space, extents.
+        logScaleX, logScaleY;   // Window, i.e. logical coordinate space, scales.
 
-    ApplyEffectiveScale(m_scaleX, m_signX, &devExtX, &logExtX);
-    ApplyEffectiveScale(m_scaleY, m_signY, &devExtY, &logExtY);
+    if ( !GetEffectiveScale(m_scaleX, &devExtX, &logScaleX) ||
+         !GetEffectiveScale(m_scaleY, &devExtY, &logScaleY) )
+    {
+        return;
+    }
 
-    // In GDI anisotropic mode only devExt/logExt ratio is important
-    // so we can reduce the fractions to avoid large numbers
-    // which could cause arithmetic overflows inside Win API.
-    int gcd = wxGCD(abs(devExtX), abs(logExtX));
-    devExtX /= gcd;
-    logExtX /= gcd;
-    gcd = wxGCD(abs(devExtY), abs(logExtY));
-    devExtY /= gcd;
-    logExtY /= gcd;
-
+    ::SetWindowExtEx(GetHdc(), 1, 1, nullptr);
     ::SetViewportExtEx(GetHdc(), devExtX, devExtY, nullptr);
-    ::SetWindowExtEx(GetHdc(), logExtX, logExtY, nullptr);
+
+    ::ScaleWindowExtEx(GetHdc(), logScaleX*m_signX, 1, logScaleY*m_signY, 1, nullptr);
 
     ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, nullptr);
 
