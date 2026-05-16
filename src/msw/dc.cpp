@@ -2405,6 +2405,13 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
                         xdest += dstWidth;
                         dstWidth = -dstWidth;
+
+                        if ( (xdest % 2) == 0 )
+                        {
+                            // This fixes an off-by-one error when blitting at even
+                            // coordinates due to rounding errors.
+                            xdest -= 1;
+                        }
                     }
                 }
 
