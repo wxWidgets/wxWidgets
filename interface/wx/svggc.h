@@ -111,46 +111,6 @@ public:
     */
     void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
-    /** @name State stack */
-    ///@{
-    /**
-        Push the current state (like transformations, clipping region, and quality
-        settings) of the context on a stack.
-        Multiple balanced calls to PushState() and PopState() can be nested.
-    */
-    virtual void PushState() override;
-
-    /**
-        Pop the last state from the stack and restore the previous state.
-    */
-    virtual void PopState() override;
-    ///@}
-
-    /** @name Clipping */
-    ///@{
-    /**
-        Sets the clipping region to the intersection of the given region
-        and the previously set clipping region.
-    */
-    virtual void Clip(const wxRegion& region) override;
-
-    /**
-        Sets the clipping region to the intersection of the given rectangle
-        and the previously set clipping region.
-    */
-    virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
-
-    /**
-        Resets the clipping to original shape.
-    */
-    virtual void ResetClip() override;
-
-    /**
-        Returns a bounding box of the current clipping region.
-    */
-    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) override;
-    ///@}
-
     /**
         This method is not applicable to the SVG renderer and always returns @NULL.
     */
@@ -190,50 +150,6 @@ public:
     */
     virtual bool SetCompositionMode(wxCompositionMode op) override;
 
-    /**
-        Starts a new layer with the given opacity.
-    */
-    virtual void BeginLayer(wxDouble opacity) override;
-
-    /**
-        Composites back the drawings into the context with the opacity given at
-        the BeginLayer() call.
-    */
-    virtual void EndLayer() override;
-
-    /** @name Transformations */
-    ///@{
-    /**
-        Translates (i.e., moves) the current transformation matrix.
-    */
-    virtual void Translate(wxDouble dx, wxDouble dy) override;
-
-    /**
-        Scales (i.e., shrinks or grows) the current transformation matrix.
-    */
-    virtual void Scale(wxDouble xScale, wxDouble yScale) override;
-
-    /**
-        Rotates the current transformation matrix (in radians).
-    */
-    virtual void Rotate(wxDouble angle) override;
-
-    /**
-        Concatenates the passed-in transform with the current transform of this context.
-    */
-    virtual void ConcatTransform(const wxGraphicsMatrix& matrix) override;
-
-    /**
-        Sets the current transformation matrix of this context.
-    */
-    virtual void SetTransform(const wxGraphicsMatrix& matrix) override;
-
-    /**
-        Gets the current transformation matrix of this context.
-    */
-    virtual wxGraphicsMatrix GetTransform() const override;
-    ///@}
-
     /** @name Paint state */
     ///@{
     /**
@@ -250,61 +166,6 @@ public:
     */
     virtual void SetBrush(const wxGraphicsBrush& brush) override;
 
-    /**
-        Sets the font for drawing text.
-    */
-    virtual void SetFont(const wxGraphicsFont& font) override;
-    ///@}
-
-    /** @name Paths */
-    ///@{
-    /**
-        Strokes the path with the current pen.
-    */
-    virtual void StrokePath(const wxGraphicsPath& path) override;
-
-    /**
-        Fills the path with the current brush.
-    */
-    virtual void FillPath(const wxGraphicsPath& path,
-                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) override;
-    ///@}
-
-    /** @name Text */
-    ///@{
-    /**
-        Returns the dimensions of the string using the current font.
-    */
-    virtual void GetTextExtent(const wxString& text, wxDouble* width, wxDouble* height,
-                               wxDouble* descent = nullptr,
-                               wxDouble* externalLeading = nullptr) const override;
-
-    /**
-        Returns the widths of each character in the string.
-    */
-    virtual void GetPartialTextExtents(const wxString& text,
-                                       wxArrayDouble& widths) const override;
-    ///@}
-
-    /** @name Images */
-    ///@{
-    /**
-        Draws the bitmap.
-    */
-    virtual void DrawBitmap(const wxGraphicsBitmap& bmp,
-                            wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
-
-    /**
-        @overload
-    */
-    virtual void DrawBitmap(const wxBitmap& bmp,
-                            wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
-
-    /**
-        Draws the icon.
-    */
-    virtual void DrawIcon(const wxIcon& icon,
-                          wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
     ///@}
 };
 
@@ -396,104 +257,6 @@ public:
         This method is not supported by the SVG renderer and always returns @NULL.
     */
     virtual wxGraphicsContext* CreateMeasuringContext() override;
-    ///@}
-
-    /** @name Path and matrix creation */
-    ///@{
-    /**
-        Creates a native graphics path.
-    */
-    virtual wxGraphicsPath CreatePath() override;
-
-    /**
-        Creates a native affine transformation matrix from the passed-in values.
-    */
-    virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
-                                          wxDouble c = 0.0, wxDouble d = 1.0,
-                                          wxDouble tx = 0.0, wxDouble ty = 0.0) override;
-    ///@}
-
-    /** @name Resource creation */
-    ///@{
-    /**
-        Creates a native pen from a @ref wxGraphicsPenInfo.
-    */
-    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) override;
-
-    /**
-        Creates a native brush from a @ref wxBrush.
-    */
-    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) override;
-
-    /**
-        Creates a native brush with a linear gradient.
-    */
-    virtual wxGraphicsBrush
-    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                              wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) override;
-
-    /**
-        Creates a native brush with a radial gradient.
-    */
-    virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
-                              wxDouble endX, wxDouble endY,
-                              wxDouble radius,
-                              const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) override;
-
-    /**
-        Creates a native graphics font from a @ref wxFont and a colour.
-    */
-    virtual wxGraphicsFont CreateFont(const wxFont& font,
-                                      const wxColour& col = *wxBLACK) override;
-
-    /**
-        Creates a native graphics font with the given size, face name and flags.
-    */
-    virtual wxGraphicsFont CreateFont(double sizeInPixels,
-                                      const wxString& facename,
-                                      int flags = wxFONTFLAG_DEFAULT,
-                                      const wxColour& col = *wxBLACK) override;
-
-    /**
-        Creates a native graphics font from a @ref wxFont at a specific DPI.
-    */
-    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
-                                           const wxRealPoint& dpi,
-                                           const wxColour& col = *wxBLACK) override;
-    ///@}
-
-    /** @name Bitmap creation */
-    ///@{
-    /**
-        Creates a native graphics bitmap from a @ref wxBitmap.
-    */
-    virtual wxGraphicsBitmap CreateBitmap(const wxBitmap& bitmap) override;
-
-    /**
-        Creates a native graphics bitmap from a @ref wxImage.
-    */
-    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) override;
-
-    /**
-        Creates a @ref wxImage from a @ref wxGraphicsBitmap.
-    */
-    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) override;
-
-    /**
-        Creates a native graphics bitmap from a native bitmap handle.
-    */
-    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap(void* bitmap) override;
-
-    /**
-        Creates a native graphics sub-bitmap from an existing bitmap.
-    */
-    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
-                                             wxDouble x, wxDouble y,
-                                             wxDouble w, wxDouble h) override;
     ///@}
 
     /**
