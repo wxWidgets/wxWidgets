@@ -148,7 +148,7 @@ public:
                          int height = 240,
                          double dpi = wxSVG_DEFAULT_DPI,
                          const wxString& title = wxString());
-    wxSVGGraphicsContext(const wxSize& size,
+    explicit wxSVGGraphicsContext(const wxSize& size,
                          const wxString& filename = wxString(),
                          const wxString& title = wxString(),
                          double dpi = wxSVG_DEFAULT_DPI);
