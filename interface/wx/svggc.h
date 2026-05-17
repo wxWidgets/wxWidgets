@@ -18,20 +18,16 @@
 
     Example of use:
     @code
-    wxSVGFileDC dc("output.svg", 800, 600);
-    wxGraphicsContext* gc = dc.GetGraphicsContext();
-    if ( gc != nullptr )
-    {
-        gc->SetPen(*wxRED_PEN);
-        gc->SetBrush(*wxCYAN_BRUSH);
-        gc->DrawRectangle(10, 10, 100, 100);
+    wxSVGGraphicsContext gc("output.svg", 800, 600);
+    gc.SetPen(*wxRED_PEN);
+    gc.SetBrush(*wxCYAN_BRUSH);
+    gc.DrawRectangle(10, 10, 100, 100);
 
-        // Draw a Bézier curve
-        wxGraphicsPath path = gc->CreatePath();
-        path.MoveToPoint(150, 50);
-        path.AddCurveToPoint(200, 0, 250, 100, 300, 50);
-        gc->StrokePath(path);
-    }
+    // Draw a Bézier curve
+    wxGraphicsPath path = gc.CreatePath();
+    path.MoveToPoint(150, 50);
+    path.AddCurveToPoint(200, 0, 250, 100, 300, 50);
+    gc.StrokePath(path);
     @endcode
 
     @library{wxcore}
