@@ -48,7 +48,7 @@ public:
 
         @since 3.3.3
     */
-    wxSVGGraphicsContext(wxSVGFileDC& dc);
+    explicit wxSVGGraphicsContext(wxSVGFileDC& dc);
 
     /**
         Constructor for creating an SVG file directly.
