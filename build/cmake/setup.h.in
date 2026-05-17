@@ -623,11 +623,7 @@
 
 #define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
 
-#if defined(_MSC_VER)
-    #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
-#else
-    #cmakedefine01 wxUSE_GRAPHICS_DIRECT2D
-#endif
+#cmakedefine01 wxUSE_GRAPHICS_DIRECT2D
 
 #cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
 
