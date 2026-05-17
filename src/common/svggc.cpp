@@ -424,6 +424,7 @@ void wxSVGGraphicsPathData::Transform(const wxGraphicsMatrixData* matrix)
                 Extend(s.x, s.y);
                 break;
             case wxSVGPathSegment::ArcSegment:
+                wxFAIL_MSG("arc segments should have been converted to cubics");
                 break;
             case wxSVGPathSegment::CloseSegment:
                 break;
