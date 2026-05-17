@@ -6412,19 +6412,17 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
     typedef BOOL (WINAPI *GetPointerPenInfo_t)(UINT32 pointerId, POINTER_PEN_INFO *penInfo);
     static GetPointerType_t s_pfnGetPointerType = nullptr;
     static GetPointerPenInfo_t s_pfnGetPointerPenInfo = nullptr;
-    static bool s_initDone = false;
 
-    if ( !s_initDone )
+    if ( !s_pfnGetPointerType )
     {
         wxLoadedDLL dllUser32("user32.dll");
         wxDL_INIT_FUNC(s_pfn, GetPointerType, dllUser32);
         wxDL_INIT_FUNC(s_pfn, GetPointerPenInfo, dllUser32);
-        s_initDone = true;
     }
 
     const UINT32 pointerId = GET_POINTERID_WPARAM(wParam);
     POINTER_INPUT_TYPE pType = 0;
-    if ( s_pfnGetPointerType && s_pfnGetPointerType(pointerId, &pType) )
+    if ( s_pfnGetPointerType(pointerId, &pType) )
     {
         if (pType != PT_PEN)
         {
@@ -6438,7 +6436,7 @@ bool wxWindowMSW::HandlePointer(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
     // here we already know we have a pen generated event
     POINTER_PEN_INFO penInfo;
-    if ( s_pfnGetPointerPenInfo && s_pfnGetPointerPenInfo(pointerId, &penInfo) )
+    if ( s_pfnGetPointerPenInfo(pointerId, &penInfo) )
     {
         if (penInfo.penMask & PEN_MASK_PRESSURE)
         {
