@@ -247,11 +247,7 @@
 
 #cmakedefine01 wxUSE_WEBREQUEST
 
-#ifdef __APPLE__
-#define wxUSE_WEBREQUEST_URLSESSION wxUSE_WEBREQUEST
-#else
 #cmakedefine01 wxUSE_WEBREQUEST_URLSESSION
-#endif
 
 #cmakedefine01 wxUSE_WEBREQUEST_CURL
 
