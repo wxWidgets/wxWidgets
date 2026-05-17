@@ -55,7 +55,7 @@ public:
 
         @since 3.3.3
     */
-    wxSVGGraphicsContext(const wxString& filename,
+    explicit wxSVGGraphicsContext(const wxString& filename,
                          int width = 320,
                          int height = 240,
                          double dpi = wxSVG_DEFAULT_DPI,
