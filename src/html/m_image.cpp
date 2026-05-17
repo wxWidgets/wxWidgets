@@ -32,7 +32,8 @@
 #include "wx/gifdecod.h"
 #include "wx/artprov.h"
 
-#include <float.h>
+#include "wx/bmpbndl.h"
+#include "wx/mstream.h"
 
 FORCE_LINK_ME(m_image)
 
@@ -52,7 +53,6 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
     protected:
         std::vector<int> coords;
         celltype type;
-        int radius;
     public:
         wxHtmlImageMapAreaCell(const wxHtmlTag& tag,
                                celltype t,
@@ -287,7 +287,7 @@ class wxHtmlImageCell : public wxHtmlCell
 public:
     wxHtmlImageCell(const wxHtmlTag& tag,
                     wxHtmlWindowInterface *windowIface,
-                    wxFSFile *input, double scaleHDPI = 1.0,
+                    wxFSFile *input,
                     int w = wxDefaultCoord, bool wpercent = false,
                     int h = wxDefaultCoord, bool hpresent = false,
                     double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM,
@@ -297,7 +297,7 @@ public:
               wxHtmlRenderingInfo& info) override;
     virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const override;
 
-    void SetImage(const wxImage& img, double scaleHDPI = 1.0);
+    void SetImage(const wxBitmapBundle& bundle);
 
     // If "alt" text is set, it will be used when converting this cell to text.
     void SetAlt(const wxString& alt);
@@ -312,11 +312,12 @@ public:
     virtual wxString GetDescription() const override
     {
         return wxString::Format("wxHtmlImageCell with bitmap of size %d*%d",
-                                m_bmpW, m_bmpH);
+                                m_bitmapBundle.GetDefaultSize().GetWidth(),
+                                m_bitmapBundle.GetDefaultSize().GetHeight());
     }
 
 private:
-    wxBitmap           *m_bitmap;
+    wxBitmapBundle      m_bitmapBundle;
     int                 m_align;
     int                 m_bmpW, m_bmpH;
     bool                m_bmpWpercent:1;
@@ -362,7 +363,7 @@ class wxGIFTimer : public wxTimer
 
 wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
                                  wxHtmlWindowInterface *windowIface,
-                                 wxFSFile *input, double scaleHDPI,
+                                 wxFSFile *input,
                                  int w, bool wpercent, int h, bool hpresent, double scale, int align,
                                  const wxString& mapname) : wxHtmlCell(tag)
     , m_mapName(mapname)
@@ -370,7 +371,6 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
     m_windowIface = windowIface;
     m_scale = scale;
     m_showFrame = false;
-    m_bitmap = nullptr;
     m_bmpW   = w;
     m_bmpH   = h;
     m_align  = align;
@@ -393,18 +393,45 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
 
             if ( s )
             {
-#if wxUSE_GIF && wxUSE_TIMER
                 bool readImg = true;
-                if ( m_windowIface &&
-                     (input->GetLocation().Matches(wxT("*.gif")) ||
-                      input->GetLocation().Matches(wxT("*.GIF"))) )
+                wxString loc = input->GetLocation();
+
+                // SVG image path
+                if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
+                {
+#ifdef wxHAS_SVG
+                    // Read the entire stream into a buffer for SVG
+                    wxMemoryBuffer svgBuf;
+                    for ( ;; )
+                    {
+                        char tmp[4096];
+                        s->Read(tmp, WXSIZEOF(tmp));
+                        const size_t n = s->LastRead();
+                        if ( n == 0 )
+                            break;
+                        svgBuf.AppendData(tmp, n);
+                    }
+                    wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(
+                        static_cast<const wxByte*>(svgBuf.GetData()), svgBuf.GetDataLen(), wxDefaultSize);
+                    if ( svgBundle.IsOk() )
+                    {
+                        SetImage(svgBundle);
+                        readImg = false;
+                    }
+#endif // wxHAS_SVG
+                }
+
+#if wxUSE_GIF && wxUSE_TIMER
+                if ( readImg && m_windowIface &&
+                     (loc.Matches(wxT("*.gif")) ||
+                      loc.Matches(wxT("*.GIF"))) )
                 {
                     m_gifDecoder = new wxGIFDecoder();
                     if ( m_gifDecoder->LoadGIF(*s) == wxGIF_OK )
                     {
                         wxImage img;
                         if ( m_gifDecoder->ConvertToImage(0, &img) )
-                            SetImage(img);
+                            SetImage(wxBitmapBundle(img));
 
                         readImg = false;
 
@@ -432,7 +459,7 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
                 {
                     wxImage image(*s, wxBITMAP_TYPE_ANY);
                     if ( image.IsOk() )
-                        SetImage(image, scaleHDPI);
+                        SetImage(wxBitmapBundle(image));
                 }
             }
         }
@@ -449,35 +476,24 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
                 if ( m_bmpW == wxDefaultCoord ) m_bmpW = 31;
                 if ( m_bmpH == wxDefaultCoord ) m_bmpH = 33;
             }
-            m_bitmap =
-                new wxBitmap(wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+            m_bitmapBundle = wxArtProvider::GetBitmap(wxART_MISSING_IMAGE);
         }
     }
     //else: ignore the 0-sized images used sometimes on the Web pages
 
  }
 
-void wxHtmlImageCell::SetImage(const wxImage& img, double scaleHDPI)
+void wxHtmlImageCell::SetImage(const wxBitmapBundle& bundle)
 {
-#if !defined(__WXMSW__) || wxUSE_WXDIB
-    if ( img.IsOk() )
+    if ( bundle.IsOk() )
     {
-        delete m_bitmap;
-
-        int ww, hh;
-        ww = img.GetWidth();
-        hh = img.GetHeight();
-
-        if ( m_bmpW == wxDefaultCoord)
-            m_bmpW = ww / scaleHDPI;
-        if ( m_bmpH == wxDefaultCoord)
-            m_bmpH = hh / scaleHDPI;
-
-        // On a Mac retina screen, we might have found a @2x version of the image,
-        // so specify this scale factor.
-        m_bitmap = new wxBitmap(img, -1, scaleHDPI);
+        m_bitmapBundle = bundle;
+        wxSize sz = bundle.GetDefaultSize();
+        if ( m_bmpW == wxDefaultCoord )
+            m_bmpW = sz.GetWidth();
+        if ( m_bmpH == wxDefaultCoord )
+            m_bmpH = sz.GetHeight();
     }
-#endif
 }
 
 void wxHtmlImageCell::SetAlt(const wxString& alt)
@@ -518,19 +534,20 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
     if ( win->GetClientRect().Intersects(rect) &&
          m_gifDecoder->ConvertToImage(m_nCurrFrame, &img) )
     {
-#if !defined(__WXMSW__) || wxUSE_WXDIB
         if ( m_gifDecoder->GetFrameSize(m_nCurrFrame) != wxSize(m_Width, m_Height) ||
              m_gifDecoder->GetFramePosition(m_nCurrFrame) != wxPoint(0, 0) )
         {
-            wxBitmap bmp(img);
+            wxBitmap frameBmp(img);
+            wxBitmap curBmp = m_bitmapBundle.GetBitmap(wxSize(m_Width, m_Height));
             wxMemoryDC dc;
-            dc.SelectObject(*m_bitmap);
-            dc.DrawBitmap(bmp, m_gifDecoder->GetFramePosition(m_nCurrFrame),
+            dc.SelectObject(curBmp);
+            dc.DrawBitmap(frameBmp, m_gifDecoder->GetFramePosition(m_nCurrFrame),
                           true /* use mask */);
+            dc.SelectObject(wxNullBitmap);
+            m_bitmapBundle = wxBitmapBundle(curBmp);
         }
         else
-#endif
-            SetImage(img);
+            SetImage(wxBitmapBundle(img));
         win->Refresh(img.HasMask(), &rect);
     }
 
@@ -548,8 +565,9 @@ void wxHtmlImageCell::Layout(int w)
 
         m_Width = w*m_bmpW/100;
 
-        if (!m_bmpHpresent && m_bitmap != nullptr)
-            m_Height = m_bitmap->GetLogicalHeight()*m_Width/m_bitmap->GetLogicalWidth();
+        // Make certain to avoid a division by zero if the bitmap has no width.
+        if (!m_bmpHpresent && m_bitmapBundle.IsOk() && m_bitmapBundle.GetDefaultSize().GetWidth() != 0)
+            m_Height = m_bitmapBundle.GetDefaultSize().GetHeight()*m_Width/m_bitmapBundle.GetDefaultSize().GetWidth();
         else
             m_Height = static_cast<int>(m_scale*m_bmpH);
     } else
@@ -580,7 +598,6 @@ void wxHtmlImageCell::Layout(int w)
 
 wxHtmlImageCell::~wxHtmlImageCell()
 {
-    delete m_bitmap;
 #if wxUSE_GIF && wxUSE_TIMER
     delete m_gifTimer;
     delete m_gifDecoder;
@@ -600,45 +617,10 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
         x++;
         y++;
     }
-    if ( m_bitmap && m_Width && m_Height )
+    if ( m_bitmapBundle.IsOk() && m_Width > 0 && m_Height > 0 )
     {
-        // We add in the scaling from the desired bitmap width
-        // and height, so we only do the scaling once.
-        double imageScaleX = 1.0;
-        double imageScaleY = 1.0;
-
-        // Optimisation for Windows: WIN32 scaling for window DCs is very poor,
-        // so unless we're using a printer DC, do the scaling ourselves.
-#if defined(__WXMSW__) && wxUSE_IMAGE
-        if (m_Width != m_bitmap->GetWidth()
-    #if wxUSE_PRINTING_ARCHITECTURE
-            && !dc.IsKindOf(CLASSINFO(wxPrinterDC))
-    #endif
-           )
-        {
-            wxImage image(m_bitmap->ConvertToImage());
-            if (image.HasMask())
-            {
-                // Convert the mask to an alpha channel or scaling won't work correctly
-                image.InitAlpha();
-            }
-            image.Rescale(m_Width, m_Height, wxIMAGE_QUALITY_HIGH);
-            (*m_bitmap) = wxBitmap(image);
-        }
-#endif
-
-        if (m_Width != m_bitmap->GetLogicalWidth())
-            imageScaleX = (double) m_Width / (double) m_bitmap->GetLogicalWidth();
-        if (m_Height != m_bitmap->GetLogicalHeight())
-            imageScaleY = (double) m_Height / (double) m_bitmap->GetLogicalHeight();
-
-        double us_x, us_y;
-        dc.GetUserScale(&us_x, &us_y);
-        dc.SetUserScale(us_x * imageScaleX, us_y * imageScaleY);
-
-        dc.DrawBitmap(*m_bitmap, (int) ((x + m_PosX) / (imageScaleX)),
-                                 (int) ((y + m_PosY) / (imageScaleY)), true);
-        dc.SetUserScale(us_x, us_y);
+        wxBitmap bmp = m_bitmapBundle.GetBitmap(wxSize(m_Width, m_Height));
+        dc.DrawBitmap(bmp, x + m_PosX, y + m_PosY, true);
     }
 }
 
@@ -690,30 +672,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 int al;
                 wxFSFile *str = nullptr;
                 wxString mn;
-                double scaleHDPI = 1.0;
-
-#if defined(__WXOSX_COCOA__)
-                // Try to find a 2x resolution image with @2x appended before the file extension.
-                wxWindow* win = m_WParser->GetWindowInterface() ? m_WParser->GetWindowInterface()->GetHTMLWindow() : nullptr;
-                if (!win)
-                    win = wxApp::GetMainTopWindow();
-                if (win && win->GetContentScaleFactor() > 1.0)
-                {
-                    if (tmp.Find('.') != wxNOT_FOUND)
-                    {
-                        wxString ext = tmp.AfterLast('.');
-                        wxString rest = tmp.BeforeLast('.');
-                        wxString hiDPIFilename = rest + "@2x." + ext;
-                        str = m_WParser->OpenURL(wxHTML_URL_IMAGE, hiDPIFilename);
-                        if (str)
-                        {
-                            scaleHDPI = 2.0;
-                        }
-                    }
-                }
-#endif
-                if (!str)
-                    str = m_WParser->OpenURL(wxHTML_URL_IMAGE, tmp);
+                str = m_WParser->OpenURL(wxHTML_URL_IMAGE, tmp);
 
                 if (tag.GetParamAsIntOrPercent(wxT("WIDTH"), &w, wpercent))
                 {
@@ -751,7 +710,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 wxHtmlImageCell *cel = new wxHtmlImageCell(
                                           tag,
                                           m_WParser->GetWindowInterface(),
-                                          str, scaleHDPI, w, wpercent, h, hpresent,
+                                          str, w, wpercent, h, hpresent,
                                           m_WParser->GetPixelScale(),
                                           al, mn);
                 m_WParser->ApplyStateToCell(cel);

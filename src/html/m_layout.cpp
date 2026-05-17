@@ -19,6 +19,7 @@
 #include "wx/html/m_templ.h"
 
 #include "wx/html/htmlwin.h"
+#include "wx/mstream.h"
 
 FORCE_LINK_ME(m_layout)
 
@@ -327,9 +328,37 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
                 wxInputStream *is = fileBgImage->GetStream();
                 if ( is )
                 {
-                    wxImage image(*is);
-                    if ( image.IsOk() )
-                        winIface->SetHTMLBackgroundImage(image);
+                    wxString loc = fileBgImage->GetLocation();
+
+                    // SVG background image path
+                    if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
+                    {
+#ifdef wxHAS_SVG
+                        // Read the entire stream into a buffer for SVG
+                        wxMemoryBuffer svgBuf;
+                        for ( ;; )
+                        {
+                            char tmp[4096];
+                            is->Read(tmp, WXSIZEOF(tmp));
+                            const size_t n = is->LastRead();
+                            if ( n == 0 )
+                                break;
+                            svgBuf.AppendData(tmp, n);
+                        }
+                        wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(
+                            static_cast<const wxByte*>(svgBuf.GetData()),
+                            svgBuf.GetDataLen(),
+                            wxDefaultSize);
+                        if ( svgBundle.IsOk() )
+                            winIface->SetHTMLBackgroundImage(svgBundle);
+#endif // wxHAS_SVG
+                    }
+                    else
+                    {
+                        wxImage image(*is);
+                        if ( image.IsOk() )
+                            winIface->SetHTMLBackgroundImage(image);
+                    }
                 }
 
                 delete fileBgImage;
