@@ -502,7 +502,7 @@ public:
     virtual wxString GetName() const override;
 
     /**
-        Returns the version of the renderer.
+        Returns the version of the SVG specification targeted by this renderer (currently 1.0).
     */
     virtual void GetVersion(int* major, int* minor = nullptr, int* micro = nullptr) const override;
 };
