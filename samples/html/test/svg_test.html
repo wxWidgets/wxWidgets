@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SVG vs SVGZ Test</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      gap: 48px;
+      padding: 32px;
+      background: #f5f5f5;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    }
+    .card h2 {
+      margin: 0 0 16px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .card img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      border: 1px solid #eee;
+      background: #fafafa;
+    }
+    .card p {
+      margin: 12px 0 0;
+      font-size: 0.85rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>wxlogo.svg (uncompressed)</h2>
+    <img src="wxlogo.svg" alt="wxlogo.svg">
+    <p>File size: 5,621 bytes</p>
+  </div>
+
+  <div class="card">
+    <h2>wxlogo.svgz (gzip compressed)</h2>
+    <img src="wxlogo.svgz" alt="wxlogo.svgz">
+    <p>File size: 1,655 bytes</p>
+  </div>
+
+</body>
+</html>
