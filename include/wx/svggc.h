@@ -143,7 +143,7 @@ class WXDLLIMPEXP_CORE wxSVGGraphicsContext : public wxGraphicsContext
 public:
     explicit wxSVGGraphicsContext(wxSVGFileDCImpl* impl);
     explicit wxSVGGraphicsContext(wxSVGFileDC& dc);
-    wxSVGGraphicsContext(const wxString& filename,
+    explicit wxSVGGraphicsContext(const wxString& filename,
                          int width = 320,
                          int height = 240,
                          double dpi = wxSVG_DEFAULT_DPI,
