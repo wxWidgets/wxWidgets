@@ -293,27 +293,15 @@
 
 #cmakedefine01 wxUSE_WEBVIEW_CHROMIUM
 
-#ifdef __WXMSW__
 #cmakedefine01 wxUSE_WEBVIEW_IE
-#else
-#cmakedefine01 wxUSE_WEBVIEW_IE
-#endif
 
 #cmakedefine01 wxUSE_WEBVIEW_EDGE
 
 #cmakedefine01 wxUSE_WEBVIEW_EDGE_STATIC
 
-#if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #cmakedefine01 wxUSE_WEBVIEW_WEBKIT
-#else
-#cmakedefine01 wxUSE_WEBVIEW_WEBKIT
-#endif
 
-#if defined(__WXGTK3__)
 #cmakedefine01 wxUSE_WEBVIEW_WEBKIT2
-#else
-#cmakedefine01 wxUSE_WEBVIEW_WEBKIT2
-#endif
 
 #cmakedefine01 wxUSE_GRAPHICS_CONTEXT
 
@@ -444,12 +432,7 @@
 
 #cmakedefine01 wxUSE_VALIDATORS
 
-#ifdef __WXMSW__
 #cmakedefine01 wxUSE_AUTOID_MANAGEMENT
-#else
-#cmakedefine01 wxUSE_AUTOID_MANAGEMENT
-#endif
-
 
 #cmakedefine01 wxUSE_BUSYINFO
 
@@ -514,12 +497,7 @@
 
 #cmakedefine01 wxUSE_DRAG_AND_DROP
 
-#ifdef __WXMSW__
 #cmakedefine01 wxUSE_ACCESSIBILITY
-#else
-#cmakedefine01 wxUSE_ACCESSIBILITY
-#endif
-
 
 #cmakedefine01 wxUSE_SNGLINST_CHECKER
 
@@ -660,11 +638,7 @@
 
 #cmakedefine01 wxUSE_ACTIVEX
 
-#if defined(_MSC_VER)
-    #cmakedefine01 wxUSE_WINRT
-#else
-    #cmakedefine01 wxUSE_WINRT
-#endif
+#cmakedefine01 wxUSE_WINRT
 
 #cmakedefine01 wxUSE_DC_CACHEING
 
@@ -698,11 +672,7 @@
 #cmakedefine01 wxUSE_TIMEPICKCTRL_GENERIC
 
 
-#if defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__)
-    #cmakedefine01 wxUSE_DBGHELP
-#else
-    #cmakedefine01 wxUSE_DBGHELP
-#endif
+#cmakedefine01 wxUSE_DBGHELP
 
 #cmakedefine01 wxUSE_CRASHREPORT
 /* --- end MSW options --- */
