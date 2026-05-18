@@ -88,8 +88,9 @@ private:
 static GtkAboutDialog *gs_aboutDialog = nullptr;
 
 extern "C" {
-static void wxGtkAboutDialogOnClose(GtkAboutDialog *about)
+static void wxGtkAboutDialogOnClose(GtkAboutDialog* about, int, wxIcon* icon)
 {
+    icon->UnRef();
     gtk_widget_destroy(GTK_WIDGET(about));
     if ( about == gs_aboutDialog )
         gs_aboutDialog = nullptr;
@@ -106,6 +107,34 @@ static gboolean activate_link(GtkAboutDialog*, const char* link, void* dontIgnor
         return true;
     }
     return false;
+}
+
+static void wx_find_image(GtkWidget* widget, void* data)
+{
+    GtkWidget** p = static_cast<GtkWidget**>(data);
+    if (*p)
+        return;
+
+    if (GTK_IS_IMAGE(widget))
+        *p = widget;
+    else if (GTK_IS_CONTAINER(widget))
+        gtk_container_forall((GtkContainer*)widget, wx_find_image, data);
+}
+
+static gboolean wx_image_draw(GtkWidget* widget, cairo_t* cr, wxIcon* icon)
+{
+    if (!icon->IsOk())
+        return false;
+
+    GtkAllocation alloc;
+    gtk_widget_get_allocation(widget, &alloc);
+    const wxSize size(icon->GetLogicalSize());
+    int x = (alloc.width  - size.x) / 2;
+    int y = (alloc.height - size.y) / 2;
+    gtk_render_background(gtk_widget_get_style_context(widget),
+        cr, 0, 0, alloc.width, alloc.height);
+    icon->Draw(cr, x, y);
+    return true;
 }
 }
 #else
@@ -142,9 +171,22 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
     else
         gtk_about_dialog_set_license(dlg, nullptr);
 
-    wxIcon icon = info.GetIcon();
+    static wxIcon s_icon;
+    s_icon = info.GetIcon();
+    const wxIcon& icon = s_icon;
     if ( icon.IsOk() )
-        gtk_about_dialog_set_logo(dlg, info.GetIcon().GetPixbuf());
+    {
+        gtk_about_dialog_set_logo(dlg, icon.GetPixbuf());
+#ifdef __WXGTK3__
+        GtkImage* image = nullptr;
+        if (!parent || parent->GetContentScaleFactor() > 1)
+            wx_find_image(GTK_WIDGET(dlg), &image);
+        if (image)
+            g_signal_connect(image, "draw", G_CALLBACK(wx_image_draw), &s_icon);
+#endif
+    }
+    else
+        gtk_about_dialog_set_logo(dlg, nullptr);
 
     if ( info.HasWebSite() )
     {
@@ -219,7 +261,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         gtk_about_dialog_set_translator_credits(dlg, nullptr);
 
     g_signal_connect(dlg, "response",
-                        G_CALLBACK(wxGtkAboutDialogOnClose), nullptr);
+                        G_CALLBACK(wxGtkAboutDialogOnClose), &s_icon);
 
     GtkWindow* gtkParent = nullptr;
     if (parent && parent->m_widget)
