@@ -654,6 +654,10 @@ wxWebRequest::Result wxWebRequestCURL::Execute()
         // libcurl error message.
         m_response.reset(nullptr);
     }
+    else
+    {
+        m_response->Finalize();
+    }
 
     return DoHandleCompletion();
 }

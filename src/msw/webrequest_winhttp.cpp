@@ -679,6 +679,8 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
         m_response->ReportDataReceived(bytesRead);
     }
 
+    m_response->Finalize();
+
     // We're done.
     if ( auto* const logger = GetSessionImpl().GetDebugLogger() )
         logger->OnInfo("Request completed");
