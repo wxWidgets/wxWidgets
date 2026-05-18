@@ -70,6 +70,24 @@ WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path
 
 #if !defined(__WXOSX_IPHONE__)
 #include <ApplicationServices/ApplicationServices.h>
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_12
+    #define NSCompositingOperationClear             NSCompositeClear
+    #define NSCompositingOperationCopy              NSCompositeCopy
+    #define NSCompositingOperationSourceOver        NSCompositeSourceOver
+    #define NSCompositingOperationSourceIn          NSCompositeSourceIn
+    #define NSCompositingOperationSourceOut         NSCompositeSourceOut
+    #define NSCompositingOperationSourceAtop        NSCompositeSourceAtop
+    #define NSCompositingOperationDestinationOver   NSCompositeDestinationOver
+    #define NSCompositingOperationDestinationIn     NSCompositeDestinationIn
+    #define NSCompositingOperationDestinationOut    NSCompositeDestinationOut
+    #define NSCompositingOperationDestinationAtop   NSCompositeDestinationAtop
+    #define NSCompositingOperationExclusion         NSCompositeExclusion
+    #define NSCompositingOperationPlusLighter       NSCompositePlusLighter
+    #define NSCompositingOperationDifference        NSCompositeDifference
+    #define NSCompositingOperationSourceOver        NSCompositeSourceOver
+#endif
+
 #endif
 
 #include "wx/bmpbndl.h"
