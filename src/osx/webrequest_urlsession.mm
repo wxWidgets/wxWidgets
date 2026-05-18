@@ -313,6 +313,8 @@ wxWebRequest::Result wxWebRequestURLSession::Execute()
     if ( taskResult.data )
         m_response->HandleData(taskResult.data);
 
+    m_response->Finalize();
+
     return GetResultAfterCompletion(taskResult.error);
 }
 

@@ -270,6 +270,8 @@ public:
 
     void ReportDataReceived(size_t sizeReceived);
 
+    void Finalize();
+
 protected:
     wxWebRequestImpl& m_request;
 
@@ -282,10 +284,6 @@ protected:
     void PreAllocBuffer(size_t sizeNeeded);
 
 private:
-    // Called by wxWebRequestImpl only.
-    friend class wxWebRequestImpl;
-    void Finalize();
-
     wxMemoryBuffer m_readBuffer;
     mutable wxFFile m_file;
     mutable std::unique_ptr<wxInputStream> m_stream;
