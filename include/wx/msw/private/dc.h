@@ -141,6 +141,34 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxBkModeChanger);
 };
 
+// ----------------------------------------------------------------------------
+// Class to temporarily disable RTL layout if already set on the device context
+// ----------------------------------------------------------------------------
+
+// For consistency with wxGTK and wxQt, wxDC::LogicalToDevice{Rel}() and
+// DeviceToLogical{Rel}() functions should return unmirrored coordinates
+// in RTL layout to avoid double-mirroring when their results are passed
+// to GDI drawing functions.
+class wxScopedRTLDisabler
+{
+public:
+    explicit wxScopedRTLDisabler(HDC hdc)
+        : m_hdc(hdc), m_oldLayoutDir(::SetLayout(hdc, 0))
+    {
+    }
+
+    ~wxScopedRTLDisabler()
+    {
+        ::SetLayout(m_hdc, m_oldLayoutDir);
+    }
+
+private:
+    HDC m_hdc;
+    const DWORD m_oldLayoutDir;
+
+    wxDECLARE_NO_COPY_CLASS(wxScopedRTLDisabler);
+};
+
 } // namespace wxMSWImpl
 
 #endif // _MSW_PRIVATE_DC_H_

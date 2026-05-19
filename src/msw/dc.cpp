@@ -66,10 +66,6 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl);
 // constants
 // ---------------------------------------------------------------------------
 
-// The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
-// maximal possible view port extent.
-static const int VIEWPORT_EXTENT = 134217727;
-
 // ROPs which don't have standard names (see "Ternary Raster Operations" in the
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
 #define DSTCOPY 0x00AA0029      // a.k.a. NOP operation
@@ -461,27 +457,18 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
     // 4 corners of the rectangle to create a polygonal clipping region
     // in device coordinates.
     POINT rect[4];
-    {
-        // Forcing LTR layout to calculate _rect_, otherwise the region created
-        // by CreatePolygonRgn() will not be correct in RTL layout.
-        const auto oldLayoutDir = GetLayoutDirection();
-        SetLayoutDirection(wxLayout_LeftToRight);
-
-        wxPoint p = LogicalToDevice(x, y);
-        rect[0].x = p.x;
-        rect[0].y = p.y;
-        p = LogicalToDevice(x + w, y);
-        rect[1].x = p.x;
-        rect[1].y = p.y;
-        p = LogicalToDevice(x + w, y + h);
-        rect[2].x = p.x;
-        rect[2].y = p.y;
-        p = LogicalToDevice(x, y + h);
-        rect[3].x = p.x;
-        rect[3].y = p.y;
-
-        SetLayoutDirection(oldLayoutDir);
-    }
+    wxPoint p = LogicalToDevice(x, y);
+    rect[0].x = p.x;
+    rect[0].y = p.y;
+    p = LogicalToDevice(x + w, y);
+    rect[1].x = p.x;
+    rect[1].y = p.y;
+    p = LogicalToDevice(x + w, y + h);
+    rect[2].x = p.x;
+    rect[2].y = p.y;
+    p = LogicalToDevice(x, y + h);
+    rect[3].x = p.x;
+    rect[3].y = p.y;
 
     HRGN hrgn = ::CreatePolygonRgn(rect, WXSIZEOF(rect), WINDING);
     if ( !hrgn )
@@ -1787,25 +1774,58 @@ bool wxMSWDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widt
 
 namespace
 {
-
-void ApplyEffectiveScale(double scale, int sign, int *device, int *logical)
+// Helper function that returns the best approximation of _scale_ as a rational
+// number _deviceExt_ / _logicalScale_ using Continued Fraction algorithm which
+// is the standard and most efficient way to convert a floating-point number (d)
+// into the best rational approximation (a/b).
+bool GetEffectiveScale(double scale, int* deviceExt, int* logicalScale)
 {
-    // To reduce rounding errors as much as possible, we try to use the largest
-    // possible extent (2^27-1) for the device space but we must also avoid
-    // overflowing the int range i.e. ensure that logical extents are less than
-    // 2^31 in magnitude. So the minimal scale we can use is 1/16 as for
-    // anything smaller VIEWPORT_EXTENT/scale would overflow the int range.
-    static const double MIN_LOGICAL_SCALE = 1./16;
-
-    double physExtent = VIEWPORT_EXTENT;
-    if ( scale < MIN_LOGICAL_SCALE )
+    if ( wxIsSameDouble(scale, 0.0) || wxIsSameDouble(scale, 1.0)  )
     {
-        physExtent *= scale/MIN_LOGICAL_SCALE;
-        scale = MIN_LOGICAL_SCALE;
+        *deviceExt = *logicalScale = 1;
+
+        return true;
     }
 
-    *device = wxRound(physExtent);
-    *logical = sign*wxRound(VIEWPORT_EXTENT/scale);
+    // The device space in Win32 GDI measures 2^27*2^27 , so we use 2^27-1 as the
+    // maximal possible view port extent.
+    const int VIEWPORT_EXTENT = 134217727;
+    const int maxLogScale = 1000;
+    const double tolerance = 1e-12;
+    const long long s0 = static_cast<long long>(scale);
+
+    double frac = scale - s0;
+    long long h_prev = 1, k_prev = 0;
+    long long h = s0, k = 1;
+
+    while ( frac > tolerance && k <= maxLogScale )
+    {
+        double next = 1.0 / frac;
+        long long a = static_cast<long long>(next);
+
+        long long h_next = a * h + h_prev;
+        long long k_next = a * k + k_prev;
+
+        if ( k_next > maxLogScale )
+            break;
+
+        h_prev = h;
+        k_prev = k;
+        h = h_next;
+        k = k_next;
+
+        frac = next - a;
+    }
+
+    if ( h < VIEWPORT_EXTENT )
+    {
+        *deviceExt = static_cast<int>(h);
+        *logicalScale = static_cast<int>(k);
+
+        return true;
+    }
+
+    return false;
 }
 
 } // anonymous namespace
@@ -1819,26 +1839,23 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
 
     // wxWidgets API assumes that the coordinate space is "infinite" (i.e. only
     // limited by 2^32 range of the integer coordinates) but in MSW API we must
-    // actually specify the extents that we use so compute them here.
+    // actually specify the extents that we use so compute them here. And as we
+    // are using MM_ANISOTROPIC mode, only the devExt and the logScale values are
+    // important here.
 
-    int devExtX, devExtY,   // Viewport, i.e. device space, extents.
-        logExtX, logExtY;   // Window, i.e. logical coordinate space, extents.
+    int devExtX, devExtY,       // Viewport, i.e. device space, extents.
+        logScaleX, logScaleY;   // Window, i.e. logical coordinate space, scales.
 
-    ApplyEffectiveScale(m_scaleX, m_signX, &devExtX, &logExtX);
-    ApplyEffectiveScale(m_scaleY, m_signY, &devExtY, &logExtY);
+    if ( !GetEffectiveScale(m_scaleX, &devExtX, &logScaleX) ||
+         !GetEffectiveScale(m_scaleY, &devExtY, &logScaleY) )
+    {
+        return;
+    }
 
-    // In GDI anisotropic mode only devExt/logExt ratio is important
-    // so we can reduce the fractions to avoid large numbers
-    // which could cause arithmetic overflows inside Win API.
-    int gcd = wxGCD(abs(devExtX), abs(logExtX));
-    devExtX /= gcd;
-    logExtX /= gcd;
-    gcd = wxGCD(abs(devExtY), abs(logExtY));
-    devExtY /= gcd;
-    logExtY /= gcd;
-
+    ::SetWindowExtEx(GetHdc(), 1, 1, nullptr);
     ::SetViewportExtEx(GetHdc(), devExtX, devExtY, nullptr);
-    ::SetWindowExtEx(GetHdc(), logExtX, logExtY, nullptr);
+
+    ::ScaleWindowExtEx(GetHdc(), logScaleX*m_signX, 1, logScaleY*m_signY, 1, nullptr);
 
     ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, nullptr);
 
@@ -1969,6 +1986,8 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
 wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
+    wxScopedRTLDisabler disableRTL(GetHdc());
+
     POINT p;
     p.x = x;
     p.y = y;
@@ -2015,6 +2034,8 @@ wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
+    wxScopedRTLDisabler disableRTL(GetHdc());
+
     POINT p;
     p.x = x;
     p.y = y;
@@ -2024,6 +2045,8 @@ wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 
 wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
 {
+    wxScopedRTLDisabler disableRTL(GetHdc());
+
     POINT p[2];
     p[0].x = 0;
     p[0].y = 0;
@@ -2035,6 +2058,8 @@ wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
 
 wxSize wxMSWDCImpl::LogicalToDeviceRel(int x, int y) const
 {
+    wxScopedRTLDisabler disableRTL(GetHdc());
+
     POINT p[2];
     p[0].x = 0;
     p[0].y = 0;
@@ -2156,8 +2181,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     xdest += XLOG2DEV(0);
     ydest += YLOG2DEV(0);
 
-    // Adjust for RTL layout to fix problems during scrolling, see #26266.
-    const int xsrcOrig = GetLayoutDirection() == wxLayout_LeftToRight ? xsrc : -xsrc;
+    const int xsrcOrig = xsrc;
     const int ysrcOrig = ysrc;
 
     // This does the same thing as XLOG2DEV() but for the source DC.
@@ -2390,6 +2414,29 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 {
                     // reflect ysrc
                     ysrc = hDIB - (ysrc + srcHeight);
+                }
+
+                if ( GetLayoutDirection() == wxLayout_RightToLeft )
+                {
+                    // Unlike BitBlt() and StretchBlt(), StretchDIBits() doesn't
+                    // honor the LAYOUT_RTL flag set on the DC, so we have to apply
+                    // mirroring ourselves (see SetLayout() documentation in MSDN).
+                    const LONG wDIB = ds.dsBmih.biWidth;
+                    if ( wDIB > 0 )
+                    {
+                        // reflect wsrc
+                        xsrc = wDIB - (xsrc + srcWidth);
+
+                        xdest += dstWidth;
+                        dstWidth = -dstWidth;
+
+                        if ( (xdest % 2) == 0 )
+                        {
+                            // This fixes an off-by-one error when blitting at even
+                            // coordinates due to rounding errors.
+                            xdest -= 1;
+                        }
+                    }
                 }
 
                 if ( ::StretchDIBits(GetHdc(),
