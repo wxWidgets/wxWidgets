@@ -80,6 +80,7 @@
 #endif
 
 #include <atomic>
+#include <cstdlib>
 #include <exception>
 
 #define THR_ID_CAST(id)  (reinterpret_cast<void*>(id))
@@ -498,18 +499,13 @@ wxCondError wxConditionInternal::Wait()
 
 wxCondError wxConditionInternal::WaitTimeout(unsigned long milliseconds)
 {
-    wxLongLong curtime = wxGetUTCTimeMillis();
-    curtime += milliseconds;
-    wxLongLong temp = curtime / 1000;
-    int sec = temp.GetLo();
-    temp *= 1000;
-    temp = curtime - temp;
-    int millis = temp.GetLo();
+    const wxLongLong_t endtime = wxGetUTCTimeMillis().GetValue() + milliseconds;
+    const auto div = std::div(endtime, 1000LL);
 
     timespec tspec;
 
-    tspec.tv_sec = sec;
-    tspec.tv_nsec = millis * 1000L * 1000L;
+    tspec.tv_sec = div.quot;
+    tspec.tv_nsec = div.rem * 1000L * 1000L;
 
     int err = pthread_cond_timedwait( &m_cond, GetPMutex(), &tspec );
     switch ( err )
