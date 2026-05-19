@@ -836,12 +836,14 @@ static void menu_show(GtkWidget*, wxMenu* menu)
 }
 // end Bricsys change
 
+#if 0 // bricscad change: replaced by menu_show, kept for reference
 // "map" from m_menu
 static void menu_map(GtkWidget*, wxMenu* menu)
 {
     wxMenuEvent event(wxEVT_MENU_OPEN, menu->m_popupShown ? -1 : 0, menu);
     DoCommonMenuCallbackCode(menu, event);
 }
+#endif
 
 // "hide" from m_menu
 static void menu_hide(GtkWidget*, wxMenu* menu)
