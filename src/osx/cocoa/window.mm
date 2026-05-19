@@ -2737,6 +2737,12 @@ wxWidgetImpl( peer, flags )
     if ( !peer->IsShown() )
         SetVisibility(false);
 
+    // If the widget is created with a disabled parent, the widget will be
+    // logically disabled as well. Make sure its appearance is made consistent
+    // if this is the case.
+    if ( !peer->IsEnabled() )
+        Enable(false);
+
     if ( IsUserPane() )
         ClipsToBounds(true);
 }

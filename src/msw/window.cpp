@@ -1497,7 +1497,10 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // wxTopLevelWindow) should remove WS_CHILD in their MSWGetStyle()
     WXDWORD style = WS_CHILD;
 
-    if ( !IsThisEnabled() )
+    // For creation, check not only the enable state of this window, but also
+    // its parent hierarchy when setting this style, as any disabled parent
+    // logically disables this window.
+    if ( !IsEnabled() )
         style |= WS_DISABLED;
 
     // using this flag results in very significant reduction in flicker,
