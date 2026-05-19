@@ -452,11 +452,11 @@ enum Bracket
   Bracket_Max
 };
 
-/** Bricsys change
-/* GV: wxExpandEnvVars incorrectly processes %ProgramFiles(x86)% (it adds one more "x86%" token)
-because brackets are not considered as valid characters for environment variable name;
-We have to extend number of valid chars for environment variable names;
-*/
+/* Bricsys change
+ * GV: wxExpandEnvVars incorrectly processes %ProgramFiles(x86)% (it adds one more "x86%" token)
+ * because brackets are not considered as valid characters for environment variable name;
+ * We have to extend number of valid chars for environment variable names;
+ */
 class EnvVarNameValidator
 {
 public:
