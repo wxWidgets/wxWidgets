@@ -4168,13 +4168,11 @@ void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
         // If it doesn't, show its full text in the tooltip.
         event.SetLabel(pItem->GetText());
     }
-    
-    return;
-#endif // wxUSE_TOOLTIPS
-
+#else
     //Bricsys change, refs #18390
     //veto processing the event, nixing any tooltip
     event.Veto();
+#endif // wxUSE_TOOLTIPS
 }
 
 
