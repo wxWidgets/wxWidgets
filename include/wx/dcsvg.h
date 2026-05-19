@@ -53,8 +53,22 @@ public:
     wxSVGAttributes& Id(const wxString& id) { return Add(wxASCII_STR("id"), id); }
     wxSVGAttributes& Class(const wxString& classname) { return Add(wxASCII_STR("class"), classname); }
 
+    wxString GetRole() const { return GetAttribute(wxASCII_STR("role")); }
+    wxString GetAriaLabel() const { return GetAttribute(wxASCII_STR("aria-label")); }
+    wxString GetAriaLabelledBy() const { return GetAttribute(wxASCII_STR("aria-labelledby")); }
+    wxString GetAriaDescribedBy() const { return GetAttribute(wxASCII_STR("aria-describedby")); }
+    bool IsAriaHidden() const { return GetAttribute(wxASCII_STR("aria-hidden")) == wxASCII_STR("true"); }
+    wxString GetAriaDetails() const { return GetAttribute(wxASCII_STR("aria-details")); }
+    wxString GetAriaRoleDescription() const { return GetAttribute(wxASCII_STR("aria-roledescription")); }
+
+    wxString GetId() const { return GetAttribute(wxASCII_STR("id")); }
+    wxString GetClass() const { return GetAttribute(wxASCII_STR("class")); }
+
     // Add or update an attribute.
     wxSVGAttributes& Add(const wxString& name, const wxString& value);
+
+    // Get an attribute value, returns empty string if not found.
+    wxString GetAttribute(const wxString& name) const;
 
     // Returns the attributes as a string of name="value" pairs, each prefixed with a space.
     wxString GetAsString() const;

@@ -72,10 +72,24 @@ public:
     wxSVGAttributes& Role(const wxString& role);
 
     /**
+        Returns the @c role attribute.
+
+        @since 3.3.3
+    */
+    wxString GetRole() const;
+
+    /**
         Sets the @c aria-label attribute: a short accessible name read
         aloud by screen readers. Use when no visible text label exists.
     */
     wxSVGAttributes& AriaLabel(const wxString& label);
+
+    /**
+        Returns the @c aria-label attribute.
+
+        @since 3.3.3
+    */
+    wxString GetAriaLabel() const;
 
     /**
         Sets the @c aria-labelledby attribute: instead of supplying a name
@@ -85,11 +99,25 @@ public:
     wxSVGAttributes& AriaLabelledBy(const wxString& id);
 
     /**
+        Returns the @c aria-labelledby attribute.
+
+        @since 3.3.3
+    */
+    wxString GetAriaLabelledBy() const;
+
+    /**
         Sets the @c aria-describedby attribute: points at the @c id of
         another element whose text content provides a longer description,
         announced after the accessible name.
     */
     wxSVGAttributes& AriaDescribedBy(const wxString& id);
+
+    /**
+        Returns the @c aria-describedby attribute.
+
+        @since 3.3.3
+    */
+    wxString GetAriaDescribedBy() const;
 
     /**
         Sets the @c aria-hidden attribute.
@@ -102,11 +130,25 @@ public:
     wxSVGAttributes& AriaHidden(bool hidden = true);
 
     /**
+        Returns @true if the @c aria-hidden attribute is set to @c "true".
+
+        @since 3.3.3
+    */
+    bool IsAriaHidden() const;
+
+    /**
         Sets the @c aria-details attribute: points at the @c id of another
         element containing extended information about this one
         (e.g., a data table describing a chart).
     */
     wxSVGAttributes& AriaDetails(const wxString& id);
+
+    /**
+        Returns the @c aria-details attribute.
+
+        @since 3.3.3
+    */
+    wxString GetAriaDetails() const;
 
     /**
         Sets the @c aria-roledescription attribute: a human-readable,
@@ -116,11 +158,25 @@ public:
     wxSVGAttributes& AriaRoleDescription(const wxString& desc);
 
     /**
+        Returns the @c aria-roledescription attribute.
+
+        @since 3.3.3
+    */
+    wxString GetAriaRoleDescription() const;
+
+    /**
         Sets the @c id attribute, giving the element a unique identifier
         other attributes (such as @c aria-labelledby) or stylesheets can
         reference.
     */
     wxSVGAttributes& Id(const wxString& id);
+
+    /**
+        Returns the @c id attribute.
+
+        @since 3.3.3
+    */
+    wxString GetId() const;
 
     /**
         Sets the @c class attribute, used to associate the element with
@@ -129,12 +185,28 @@ public:
     wxSVGAttributes& Class(const wxString& classname);
 
     /**
+        Returns the @c class attribute.
+
+        @since 3.3.3
+    */
+    wxString GetClass() const;
+
+    /**
         Adds or updates an arbitrary attribute.
 
         If @a name is already set, its value is replaced; otherwise a new
         entry is appended.
     */
     wxSVGAttributes& Add(const wxString& name, const wxString& value);
+
+    /**
+        Returns the value of the attribute with the given @a name.
+
+        Returns an empty string if the attribute is not set.
+
+        @since 3.3.3
+    */
+    wxString GetAttribute(const wxString& name) const;
 
     /// Returns @true if no attributes have been set.
     bool IsEmpty() const;
