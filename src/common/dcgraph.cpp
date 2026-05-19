@@ -1052,6 +1052,7 @@ bool wxGCDCImpl::DoStretchBlit(
     wxRasterOperationMode logical_func , bool useMask,
     wxCoord xsrcMask, wxCoord ysrcMask, bool resizeQualityHigh )
 {
+    wxUnusedVar(resizeQualityHigh);
     wxCHECK_MSG( IsOk(), false, wxT("wxGCDC(cg)::DoStretchBlit - invalid DC") );
     wxCHECK_MSG( source->IsOk(), false, wxT("wxGCDC(cg)::DoStretchBlit - invalid source DC") );
 
