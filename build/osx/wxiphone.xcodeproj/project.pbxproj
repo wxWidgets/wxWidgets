@@ -343,6 +343,7 @@
 		955D2199F1893D37BA2D7478 /* laywin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3784C240C2F330683494926 /* laywin.cpp */; };
 		2DBF5F96CCC63F7481C26A43 /* webview_webkit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5FEECFD764E037288CE94FEB /* webview_webkit.mm */; };
 		B791BD05072B3B909A7093C2 /* dcsvg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */; };
+		7A3C9B2F4D8E1F605A8B9C33 /* svggc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A3C9B2F4D8E1F605A8B9C2E /* svggc.cpp */; };
 		8AA341CCFB8E3F6AB3523595 /* splash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F8836E29C5A370E80CE070E /* splash.cpp */; };
 		6F0605F3A4E83BF0BF4C8B7E /* cmdproc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A5FF9CED1FE36069FDBF636 /* cmdproc.cpp */; };
 		9C6E9E4BA54733EF9F87E4B7 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = 513033E36E643593AC305B3D /* uncompr.c */; };
@@ -1323,6 +1324,7 @@
 		A046179831F63824A67B509B /* preferencescmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = preferencescmn.cpp; path = ../../src/common/preferencescmn.cpp; sourceTree = SOURCE_ROOT; };
 		FFB767BD2C7235F293F45796 /* LexGui4Cli.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexGui4Cli.cxx; path = ../../src/stc/lexilla/lexers/LexGui4Cli.cxx; sourceTree = SOURCE_ROOT; };
 		DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dcsvg.cpp; path = ../../src/common/dcsvg.cpp; sourceTree = SOURCE_ROOT; };
+		7A3C9B2F4D8E1F605A8B9C2E /* svggc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svggc.cpp; path = ../../src/common/svggc.cpp; sourceTree = SOURCE_ROOT; };
 		B558F1ED9346332D8C4BDFBC /* headercolcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = headercolcmn.cpp; path = ../../src/common/headercolcmn.cpp; sourceTree = SOURCE_ROOT; };
 		F82278F9AF0432529891E6D7 /* tif_close.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_close.c; path = ../../src/tiff/libtiff/tif_close.c; sourceTree = SOURCE_ROOT; };
 		61658C3EABB4341AA38C691E /* m_pre.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_pre.cpp; path = ../../src/html/m_pre.cpp; sourceTree = SOURCE_ROOT; };
@@ -2959,6 +2961,7 @@
 				FBC5A5797B0D369291A76D6E /* dcbufcmn.cpp */,
 				776CD7F5B0673B4688F2EC92 /* dcgraph.cpp */,
 				DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */,
+				7A3C9B2F4D8E1F605A8B9C2E /* svggc.cpp */,
 				E110907DDC13305E88B90086 /* dirctrlcmn.cpp */,
 				9051902662BE38B3912B34EA /* dlgcmn.cpp */,
 				0116581B77DF3A5D889B8D17 /* dndcmn.cpp */,
@@ -3759,6 +3762,7 @@
 				39D6435B10073B85A499AFD8 /* dcbufcmn.cpp in Sources */,
 				9564A6968D66325DAEADEBA3 /* dcgraph.cpp in Sources */,
 				B791BD05072B3B909A7093C2 /* dcsvg.cpp in Sources */,
+				7A3C9B2F4D8E1F605A8B9C33 /* svggc.cpp in Sources */,
 				B559E894684A38238CAAA115 /* dirctrlcmn.cpp in Sources */,
 				63F0C8EEDF4B3641878A8B4D /* dlgcmn.cpp in Sources */,
 				B839235BED6F3609BDB732B8 /* dndcmn.cpp in Sources */,

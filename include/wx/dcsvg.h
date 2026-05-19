@@ -66,6 +66,10 @@ private:
 };
 
 class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
+class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsContext;
+class WXDLLIMPEXP_FWD_CORE wxSVGGraphicsPathData;
+class WXDLLIMPEXP_FWD_CORE wxSVGWriter;
+class WXDLLIMPEXP_FWD_CORE wxGraphisContext;
 
 // Base class for bitmap handlers used by wxSVGFileDC, used by the standard
 // "embed" and "link" handlers below but can also be used to create a custom
@@ -124,7 +128,13 @@ public:
 
     virtual ~wxSVGFileDCImpl();
 
-    bool IsOk() const override { return !m_writeError; }
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual wxGraphicsContext* GetGraphicsContext() const override;
+#endif
+
+    friend class wxSVGGraphicsContext;
+
+    bool IsOk() const override;
 
     virtual bool CanDrawBitmap() const override { return true; }
     virtual bool CanGetTextExtent() const override { return true; }
@@ -185,6 +195,12 @@ public:
     // Close the accessible group opened by the most recent
     // BeginAccessibleGroup() call.
     void EndAccessibleGroup();
+
+    // Open a group with the given opacity.
+    void BeginLayer(double opacity);
+
+    // Close the group opened by the most recent BeginLayer() call.
+    void EndLayer();
 
     wxString GetSVGDocument() const;
 
@@ -274,13 +290,7 @@ private:
                                           const wxColour& destColour,
                                           const wxPoint& circleCenter) override;
 
-    virtual void DoGetSize(int* width, int* height) const override
-    {
-        if ( width )
-            *width = m_width;
-        if ( height )
-            *height = m_height;
-    }
+    virtual void DoGetSize(int* width, int* height) const override;
 
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord* x, wxCoord* y,
@@ -304,40 +314,24 @@ private:
     void Init(const wxString& filename, int width, int height,
               double dpi, const wxString& title);
 
-    void write(const wxString& s);
-
-private:
-    // If m_graphics_changed is true, close the current <g> element and start a
-    // new one for the last pen/brush change.
+    // If the writer's graphics-changed flag is set, close the current <g>
+    // element and start a new one reflecting the latest pen/brush state.
     void NewGraphicsIfNeeded();
 
     // Open a new graphics group setting up all the attributes according to
     // their current values in wxDC.
     void DoStartNewGraphics();
 
-    wxString            m_filename;
-    bool                m_writeError;
-    bool                m_saved;
-    bool                m_graphics_changed;  // set by Set{Brush,Pen}()
-    int                 m_width, m_height;
-    double              m_dpi;
-    wxString            m_svgDocument;
-    std::unique_ptr<wxSVGBitmapHandler> m_bmp_handler; // class to handle bitmaps
-    wxSVGShapeRenderingMode m_renderingMode;
+    // Trivial helper forwarding to m_writer.
+    void write(const wxString& s);
 
-    // Nesting depth of open accessible groups (see BeginAccessibleGroup).
-    size_t m_accessibleGroupDepth;
+    // Output buffer + shared bookkeeping shared with the GC.
+    std::unique_ptr<wxSVGWriter> m_writer;
 
-    // The clipping nesting level is incremented by every call to
-    // SetClippingRegion() and reset when DestroyClippingRegion() is called.
-    size_t m_clipNestingLevel;
-
-    // Unique ID for every clipping graphics group: this is simply always
-    // incremented in each SetClippingRegion() call.
-    static size_t m_clipUniqueId;
-
-    // Unique ID for every gradient.
-    static size_t m_gradientUniqueId;
+#if wxUSE_GRAPHICS_CONTEXT
+    // Graphics context that writes into the same SVG buffer.
+    mutable std::unique_ptr<wxSVGGraphicsContext> m_gc;
+#endif
 
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxSVGFileDCImpl);
@@ -380,12 +374,19 @@ public:
 
     void EndAccessibleGroup();
 
+    void BeginLayer(double opacity);
+
+    void EndLayer();
+
     // Return the SVG document as a string.
     wxString GetSVGDocument() const;
 
     bool Save();
 
 private:
+    friend class wxSVGGraphicsContext;
+    friend class wxSVGGraphicsPathData;
+
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDC);
 };
 
@@ -412,6 +413,27 @@ private:
     wxSVGFileDC& m_dc;
 
     wxDECLARE_NO_COPY_CLASS(wxSVGAccessibleGroup);
+};
+
+// RAII helper that opens a layer on construction and closes it on destruction.
+class WXDLLIMPEXP_CORE wxSVGLayer
+{
+public:
+    wxSVGLayer(wxSVGFileDC& dc, double opacity)
+        : m_dc(dc)
+    {
+        m_dc.BeginLayer(opacity);
+    }
+
+    ~wxSVGLayer()
+    {
+        m_dc.EndLayer();
+    }
+
+private:
+    wxSVGFileDC& m_dc;
+
+    wxDECLARE_NO_COPY_CLASS(wxSVGLayer);
 };
 
 #endif // wxUSE_SVG

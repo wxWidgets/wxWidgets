@@ -227,7 +227,7 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
         textmeasurecmn.obj,modalhook.obj,\
 		addremovectrl.obj,notifmsgcmn.obj,graphcmn.obj,dcsvg.obj,\
-		dcgraph.obj,secretstore.obj,uilocale.obj,bmpbndl.obj
+		svggc.obj,dcgraph.obj,secretstore.obj,uilocale.obj,bmpbndl.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -431,7 +431,7 @@ SOURCES = \
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
 		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
 		richtooltipcmn.cpp persist.cpp time.cpp textmeasurecmn.cpp \
-		modalhook.cpp graphcmn.cpp dcsvg.cpp dcgraph.cpp \
+		modalhook.cpp graphcmn.cpp dcsvg.cpp svggc.cpp dcgraph.cpp \
 		secretstore.cpp uilocale.cpp bmpbndl.cpp
 
 all : $(SOURCES)
@@ -728,6 +728,7 @@ addremovectrl.obj : addremovectrl.cpp
 notifmsgcmn.obj : notifmsgcmn.cpp
 graphcmn.obj : graphcmn.cpp
 dcsvg.obj : dcsvg.cpp
+svggc.obj : svggc.cpp
 dcgraph.obj : dcgraph.cpp
 secretstore.obj : secretstore.cpp
 uilocale.obj : uilocale.cpp

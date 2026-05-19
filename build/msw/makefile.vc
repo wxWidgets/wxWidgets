@@ -2712,6 +2712,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_statlinecmn.obj \
 	$(OBJS)\monodll_stattextcmn.obj \
 	$(OBJS)\monodll_stockitem.obj \
+	$(OBJS)\monodll_svggc.obj \
 	$(OBJS)\monodll_tbarbase.obj \
 	$(OBJS)\monodll_textcmn.obj \
 	$(OBJS)\monodll_textentrycmn.obj \
@@ -3049,6 +3050,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_statlinecmn.obj \
 	$(OBJS)\monodll_stattextcmn.obj \
 	$(OBJS)\monodll_stockitem.obj \
+	$(OBJS)\monodll_svggc.obj \
 	$(OBJS)\monodll_tbarbase.obj \
 	$(OBJS)\monodll_textcmn.obj \
 	$(OBJS)\monodll_textentrycmn.obj \
@@ -3580,6 +3582,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_statlinecmn.obj \
 	$(OBJS)\monolib_stattextcmn.obj \
 	$(OBJS)\monolib_stockitem.obj \
+	$(OBJS)\monolib_svggc.obj \
 	$(OBJS)\monolib_tbarbase.obj \
 	$(OBJS)\monolib_textcmn.obj \
 	$(OBJS)\monolib_textentrycmn.obj \
@@ -3917,6 +3920,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_statlinecmn.obj \
 	$(OBJS)\monolib_stattextcmn.obj \
 	$(OBJS)\monolib_stockitem.obj \
+	$(OBJS)\monolib_svggc.obj \
 	$(OBJS)\monolib_tbarbase.obj \
 	$(OBJS)\monolib_textcmn.obj \
 	$(OBJS)\monolib_textentrycmn.obj \
@@ -4373,6 +4377,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_statlinecmn.obj \
 	$(OBJS)\coredll_stattextcmn.obj \
 	$(OBJS)\coredll_stockitem.obj \
+	$(OBJS)\coredll_svggc.obj \
 	$(OBJS)\coredll_tbarbase.obj \
 	$(OBJS)\coredll_textcmn.obj \
 	$(OBJS)\coredll_textentrycmn.obj \
@@ -4710,6 +4715,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_statlinecmn.obj \
 	$(OBJS)\coredll_stattextcmn.obj \
 	$(OBJS)\coredll_stockitem.obj \
+	$(OBJS)\coredll_svggc.obj \
 	$(OBJS)\coredll_tbarbase.obj \
 	$(OBJS)\coredll_textcmn.obj \
 	$(OBJS)\coredll_textentrycmn.obj \
@@ -5070,6 +5076,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_statlinecmn.obj \
 	$(OBJS)\corelib_stattextcmn.obj \
 	$(OBJS)\corelib_stockitem.obj \
+	$(OBJS)\corelib_svggc.obj \
 	$(OBJS)\corelib_tbarbase.obj \
 	$(OBJS)\corelib_textcmn.obj \
 	$(OBJS)\corelib_textentrycmn.obj \
@@ -5407,6 +5414,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_statlinecmn.obj \
 	$(OBJS)\corelib_stattextcmn.obj \
 	$(OBJS)\corelib_stockitem.obj \
+	$(OBJS)\corelib_svggc.obj \
 	$(OBJS)\corelib_tbarbase.obj \
 	$(OBJS)\corelib_textcmn.obj \
 	$(OBJS)\corelib_textentrycmn.obj \
@@ -10382,6 +10390,11 @@ $(OBJS)\monodll_stockitem.obj: ..\..\src\common\stockitem.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_svggc.obj: ..\..\src\common\svggc.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\svggc.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_tbarbase.obj: ..\..\src\common\tbarbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\tbarbase.cpp
 !endif
@@ -13005,6 +13018,11 @@ $(OBJS)\monolib_stockitem.obj: ..\..\src\common\stockitem.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_svggc.obj: ..\..\src\common\svggc.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\svggc.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_tbarbase.obj: ..\..\src\common\tbarbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\tbarbase.cpp
 !endif
@@ -15568,6 +15586,11 @@ $(OBJS)\coredll_stockitem.obj: ..\..\src\common\stockitem.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_svggc.obj: ..\..\src\common\svggc.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\svggc.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_tbarbase.obj: ..\..\src\common\tbarbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\tbarbase.cpp
 !endif
@@ -17345,6 +17368,11 @@ $(OBJS)\corelib_stattextcmn.obj: ..\..\src\common\stattextcmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_stockitem.obj: ..\..\src\common\stockitem.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\stockitem.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_svggc.obj: ..\..\src\common\svggc.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\svggc.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
