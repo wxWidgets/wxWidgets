@@ -1218,8 +1218,10 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
     if (!pen.IsOk()) return;
 
     int oldStyle = m_pen.IsOk() ? m_pen.GetStyle() : wxPENSTYLE_INVALID;
+#if 0 // bricscad change: oldCap/oldJoin unused since comparisons below are disabled
     wxPenCap oldCap = m_pen.IsOk() ? m_pen.GetCap() : wxCAP_INVALID;
     wxPenJoin oldJoin = m_pen.IsOk() ? m_pen.GetJoin() : wxJOIN_INVALID;
+#endif
 
     m_pen = pen;
     wxPenCap cap = m_pen.IsOk() ? m_pen.GetCap() : wxCAP_INVALID;
