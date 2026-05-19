@@ -77,13 +77,13 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
 
 // Check if the color has sufficient contrast ratio (4.5 recommended)
 // (based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html)
-static bool wxAuiHasSufficientContrast(const wxColour& c1, const wxColour& c2)
+[[maybe_unused]] static bool wxAuiHasSufficientContrast(const wxColour& c1, const wxColour& c2)
 {
     return wxAuiGetColourContrast(c1, c2) >= 4.5f;
 }
 
 // Pick a color that provides better contrast against the background
-static wxColour wxAuiGetBetterContrastColour(const wxColour& back_color,
+[[maybe_unused]] static wxColour wxAuiGetBetterContrastColour(const wxColour& back_color,
     const wxColour& c1, const wxColour& c2)
 {
     return wxAuiGetColourContrast(back_color, c1)
