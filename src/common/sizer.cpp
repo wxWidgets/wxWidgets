@@ -846,8 +846,10 @@ wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
         // (otherwise this will be checked when the containing window is set
         // later, but by this time the stack trace at the moment of assertion
         // won't point out the culprit any longer).
+#if wxDEBUG_LEVEL
         if ( m_containingWindow )
             ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+#endif
     }
 
     if ( item->GetSizer() )
@@ -881,11 +883,13 @@ void wxSizer::SetContainingWindow(wxWindow *win)
 
         // If we have a valid containing window, check that all windows managed
         // by this sizer were correctly created using it as parent.
+#if wxDEBUG_LEVEL
         if ( m_containingWindow )
         {
             if ( wxWindow* const w = item->GetWindow() )
                 ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
         }
+#endif
     }
 }
 
