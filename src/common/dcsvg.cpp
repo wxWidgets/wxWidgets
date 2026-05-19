@@ -555,6 +555,12 @@ wxSVGAttributes& wxSVGAttributes::Add(const wxString& name, const wxString& valu
     return *this;
 }
 
+wxString wxSVGAttributes::GetAttribute(const wxString& name) const
+{
+    auto it = m_attributes.find(name);
+    return it != m_attributes.end() ? it->second : wxString();
+}
+
 wxString wxSVGAttributes::GetAsString() const
 {
     wxString s;

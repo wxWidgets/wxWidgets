@@ -192,6 +192,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_boundingbox.o \
 	test_gui_clipper.o \
 	test_gui_clippingbox.o \
+	test_gui_svgattributes.o \
 	test_gui_coords.o \
 	test_gui_graphbitmap.o \
 	test_gui_graphmatrix.o \
@@ -997,6 +998,9 @@ test_gui_clipper.o: $(srcdir)/graphics/clipper.cpp $(TEST_GUI_ODEP)
 
 test_gui_clippingbox.o: $(srcdir)/graphics/clippingbox.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/clippingbox.cpp
+
+test_gui_svgattributes.o: $(srcdir)/graphics/svgattributes.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/svgattributes.cpp
 
 test_gui_coords.o: $(srcdir)/graphics/coords.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/coords.cpp
