@@ -281,6 +281,7 @@ wxGTK:
 - Fix showing title bar under Wayland with wxBORDER_NONE (#26357).
 - Remove wrong maximum text length limitation in "picker" controls (#26314).
 - Fix appearance of dashed lines drawn by wxDC::DrawLine() (#26449).
+- Fix non-resizable TLW size when client size is set to initial size (#26480).
 
 wxMSW:
 
