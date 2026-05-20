@@ -179,8 +179,12 @@ public:
 
     /**
        Returns the icon set by SetIcon().
+
+       @param window
+           If non-null, this is used to help select an icon based on window DPI.
+           New since wxWidgets 3.3.3.
     */
-    wxIcon GetIcon() const;
+    wxIcon GetIcon(wxWindow* window = nullptr) const;
 
     /**
         Set the icon to be shown in the dialog. By default the icon of the main frame
@@ -189,7 +193,7 @@ public:
         used instead so you should avoid calling this function for maximally native
         look and feel.
     */
-    void SetIcon(const wxIcon& icon);
+    void SetIcon(const wxBitmapBundle& icon);
 
     /**
        Returns @true if the licence string has been set.

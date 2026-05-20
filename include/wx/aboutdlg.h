@@ -15,6 +15,7 @@
 #if wxUSE_ABOUTDLG
 
 #include "wx/app.h"
+#include "wx/bmpbndl.h"
 #include "wx/icon.h"
 
 // ----------------------------------------------------------------------------
@@ -67,9 +68,9 @@ public:
     const wxString& GetLicence() const { return m_licence; }
 
     // icon to be shown in the dialog, defaults to the main frame icon
-    void SetIcon(const wxIcon& icon) { m_icon = icon; }
+    void SetIcon(const wxBitmapBundle& icon) { m_icon = icon; }
     bool HasIcon() const { return m_icon.IsOk(); }
-    wxIcon GetIcon() const;
+    wxIcon GetIcon(wxWindow* window = nullptr) const;
 
     // web site for the program and its description (defaults to URL itself if
     // empty)
@@ -149,7 +150,7 @@ private:
              m_copyright,
              m_licence;
 
-    wxIcon m_icon;
+    wxBitmapBundle m_icon;
 
     wxString m_url,
              m_urlDesc;

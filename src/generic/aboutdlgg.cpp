@@ -80,15 +80,26 @@ wxString wxAboutDialogInfo::GetDescriptionAndCredits() const
     return s;
 }
 
-wxIcon wxAboutDialogInfo::GetIcon() const
+wxIcon wxAboutDialogInfo::GetIcon(wxWindow* window) const
 {
-    wxIcon icon = m_icon;
-    if ( !icon.IsOk() )
+    if (window == nullptr)
+        window = wxApp::GetMainTopWindow();
+    wxBitmapBundle bundle(m_icon);
+    if ( !bundle.IsOk() )
     {
         const wxTopLevelWindow * const
-            tlw = wxDynamicCast(wxApp::GetMainTopWindow(), wxTopLevelWindow);
+            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
         if ( tlw )
-            icon = tlw->GetIcon();
+            bundle = wxBitmapBundle::FromIconBundle(tlw->GetIcons());
+    }
+
+    wxIcon icon;
+    if (bundle.IsOk())
+    {
+        if (window)
+            icon = bundle.GetIconFor(window);
+        else
+            icon = bundle.GetIcon(wxDefaultSize);
     }
 
     return icon;
