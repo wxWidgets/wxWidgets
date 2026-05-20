@@ -172,7 +172,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         gtk_about_dialog_set_license(dlg, nullptr);
 
     static wxIcon s_icon;
-    s_icon = info.GetIcon();
+    s_icon = info.GetIcon(parent);
     const wxIcon& icon = s_icon;
     if ( icon.IsOk() )
     {
