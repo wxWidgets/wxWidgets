@@ -1368,9 +1368,10 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPM", "[image][xpm][error]")
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadIFF", "[image][iff][error]")
 {
     // A FORM/ILBM file whose BMHD transparent-colour field is 0x4000 while
-    // no CMAP chunk is present, so the palette colour count stays at 0. The
+    // the palette only has 2 entries (1 bitplane and no CMAP chunk). The
     // transparent index used to be applied to the palette without a bounds
-    // check, writing past the end of the palette buffer.
+    // check, writing past the end of the palette buffer; loading such a file
+    // must now be rejected.
     static const unsigned char data[] =
     {
         0x46,0x4f,0x52,0x4d,0x00,0x00,0x00,0x2e,
