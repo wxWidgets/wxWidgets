@@ -179,6 +179,10 @@ public:
 
     /**
        Returns the icon set by SetIcon().
+
+       @param window
+           If non-null, this is used to help select an icon based on window DPI.
+           New since wxWidgets 3.3.3.
     */
     wxIcon GetIcon(wxWindow* window = nullptr) const;
 
