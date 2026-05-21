@@ -331,6 +331,11 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     if (m_nFrames==0)
         return false;
 
+    // Without any loaded icon, m_images[0] below and the public accessors
+    // would index into an empty vector.
+    if (m_images.empty())
+        return false;
+
     if (m_nFrames==m_images.size())
     {
         // if no SEQ chunk is available, display the frames in the order
@@ -338,6 +343,15 @@ bool wxANIDecoder::Load( wxInputStream& stream )
         for (unsigned int i=0; i<m_nFrames; i++)
             if (m_info[i].m_imageIndex == -1)
                 m_info[i].m_imageIndex = i;
+    }
+
+    // SEQ chunk indices come straight from the input, so reject the file if
+    // any of them would index m_images out of range.
+    for (unsigned int i=0; i<m_nFrames; i++)
+    {
+        if (m_info[i].m_imageIndex < 0 ||
+            static_cast<size_t>(m_info[i].m_imageIndex) >= m_images.size())
+            return false;
     }
 
     // if some frame has an invalid delay, use the global delay given in the
