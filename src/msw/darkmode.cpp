@@ -151,8 +151,10 @@ PreferredAppMode gs_appMode = AppMode_Default;
 template <typename T>
 bool TryLoadByOrd(T& func, const wxDynamicLibrary& lib, int ordinal)
 {
-    func = (T)::GetProcAddress(lib.GetLibHandle(), MAKEINTRESOURCEA(ordinal));
-    if ( !func )
+    T tmp = (T)::GetProcAddress(lib.GetLibHandle(), MAKEINTRESOURCEA(ordinal));
+    if ( tmp != nullptr )
+        func = tmp;
+    else
     {
         wxLogTrace(TRACE_DARKMODE,
                    "Required function with ordinal %d not found", ordinal);
@@ -160,6 +162,22 @@ bool TryLoadByOrd(T& func, const wxDynamicLibrary& lib, int ordinal)
     }
 
     return true;
+}
+
+// Stub functions for the uxtheme undocumented functions.
+bool WINAPI ShouldAppsUseDarkMode_stub()
+{
+    return false;
+}
+
+bool WINAPI AllowDarkModeForWindow_stub(HWND WXUNUSED(hwnd), bool WXUNUSED(allow))
+{
+    return false;
+}
+
+PreferredAppMode WINAPI SetPreferredAppMode_stub(PreferredAppMode WXUNUSED(appMode))
+{
+    return AppMode_Default;
 }
 
 } // anonymous namespace
@@ -175,16 +193,18 @@ namespace wxMSWImpl
 // don't appear in the SDK headers at all.
 //
 // Note that, not being public, they use C++ bool type and not Win32 BOOL.
-bool (WINAPI *ShouldAppsUseDarkMode)() = nullptr;
-bool (WINAPI *AllowDarkModeForWindow)(HWND hwnd, bool allow) = nullptr;
-DWORD (WINAPI *SetPreferredAppMode)(DWORD) = nullptr;
+bool (WINAPI *ShouldAppsUseDarkMode)() = ShouldAppsUseDarkMode_stub;
+bool (WINAPI *AllowDarkModeForWindow)(HWND hwnd, bool allow) = AllowDarkModeForWindow_stub;
+PreferredAppMode (WINAPI *SetPreferredAppMode)(PreferredAppMode appMode) = SetPreferredAppMode_stub;
 
 bool InitDarkMode()
 {
-    // In theory, dark mode support was added in v1809 (build 17763), so enable
+    // Enable dark mode for Windows 10 1903 (build 18362) and later.
+    // In theory, dark mode support was added in v1809 (build 17763). However,
+    // the undocumented functions changed in v1903. So enable
     // it for all later versions, even though in practice this code has been
     // mostly tested under v2004 ("20H1", build number 19041) and later ones.
-    if ( !wxCheckOsVersion(10, 0, 17763) )
+    if ( !wxCheckOsVersion(10, 0, 18362) )
     {
         wxLogTrace(TRACE_DARKMODE, "Unsupported due to OS version");
         return false;
