@@ -126,7 +126,6 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         m_parent->DoAddChild( this );
 
         PostCreation(size);
-        SetInitialSize(size);
     }
     else // Use generic implementation.
     {
