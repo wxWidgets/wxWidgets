@@ -39,7 +39,7 @@
 // ----------------------------------------------------------------------------
 
 // the temporary buffer size used when copying from stream to stream
-#define BUF_TEMP_SIZE 4096
+#define BUF_TEMP_SIZE 65536
 
 // ============================================================================
 // implementation
@@ -913,6 +913,43 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
     m_lastcount = lastcount;
 
     return *this;
+}
+
+bool wxInputStream::Read(std::vector<wxUint8>& buffer)
+{
+    const size_t stream_size = IsOk() ? GetSize() : 0;
+    size_t lastcount = 0;
+
+    if ( stream_size > 0 )
+    {
+        buffer.resize(stream_size);
+        lastcount = Read(buffer.data(), stream_size).LastRead();
+
+        // Read one more byte to set EOF
+        wxUint8 temp;
+        Read(&temp, 1);
+    }
+    else if ( IsOk() )
+    {
+        const size_t read_size = BUF_TEMP_SIZE * 8;
+        for ( ;; )
+        {
+            if ( buffer.size() < (lastcount + read_size) )
+                buffer.resize(lastcount + read_size);
+
+            size_t bytes_read = Read(buffer.data() + lastcount, read_size).LastRead();
+            if ( !bytes_read )
+                break;
+
+            lastcount += bytes_read;
+        }
+    }
+
+    m_lastcount = lastcount;
+
+    buffer.resize(m_lastcount);
+
+    return Eof();
 }
 
 bool wxInputStream::ReadAll(void *buffer_, size_t size)

@@ -34,8 +34,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWEBPHandler, wxImageHandler);
 
 #if wxUSE_STREAMS
 
-#include "wx/mstream.h"
-
 #include <memory>
 #include <functional>
 
@@ -103,21 +101,20 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
     return true;
 }
 
-WebPDemuxerPtr CreateDemuxer(wxMemoryOutputStream& mos, bool verbose = false)
+WebPDemuxerPtr CreateDemuxer(wxInputStream& stream, std::vector<uint8_t>& buffer, bool verbose = false)
 {
-    wxStreamBuffer* mosb = mos.GetOutputStreamBuffer();
-    if (mosb == nullptr)
+    if (!stream.Read(buffer))
     {
         if (verbose)
         {
-            wxLogError(_("WebP: Allocating stream buffer failed."));
+            wxLogError(_("WebP: Error reading data."));
         }
         return nullptr;
     }
 
     WebPData webp_data{};
-    webp_data.bytes = reinterpret_cast<uint8_t*>(mosb->GetBufferStart());
-    webp_data.size = mosb->GetBufferSize();
+    webp_data.bytes = buffer.data();
+    webp_data.size = buffer.size();
 
     WebPDemuxerPtr demux(
         WebPDemux(&webp_data),
@@ -157,9 +154,8 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
         // be a sub-frame, smaller than the full image. Its size is known, but
         // the x_offset and y_offset can not be queried, so we can't
         // reconstruct the full-size image.
-        wxMemoryOutputStream mos;
-        stream.Read(mos);
-        WebPDemuxerPtr demux = CreateDemuxer(mos, verbose);
+        std::vector<uint8_t> buffer;
+        WebPDemuxerPtr demux = CreateDemuxer(stream, buffer, verbose);
         if (demux != nullptr)
         {
             WebPIterator iter;
@@ -191,21 +187,19 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
 
 bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxInputStream& stream, bool verbose)
 {
-    wxMemoryOutputStream mos;
-    stream.Read(mos);
-    wxStreamBuffer* mosb = mos.GetOutputStreamBuffer();
-    if (mosb == nullptr)
+    std::vector<uint8_t> buffer;
+    if (!stream.Read(buffer))
     {
         if (verbose)
         {
-            wxLogError(_("WebP: Allocating stream buffer failed."));
+            wxLogError(_("WebP: Error reading data."));
         }
         return false;
     }
 
     WebPData webp_data{};
-    webp_data.bytes = reinterpret_cast<uint8_t*>(mosb->GetBufferStart());
-    webp_data.size = mosb->GetBufferSize();
+    webp_data.bytes = buffer.data();
+    webp_data.size = buffer.size();
 
     WebPAnimDecoderOptions dec_options;
     WebPAnimDecoderOptionsInit(&dec_options);
@@ -305,9 +299,8 @@ bool wxWEBPHandler::SaveFile(wxImage* image, wxOutputStream& stream, bool)
 int wxWEBPHandler::DoGetImageCount(wxInputStream& stream)
 {
     int frame_count = 0;
-    wxMemoryOutputStream mos;
-    stream.Read(mos);
-    WebPDemuxerPtr demux = CreateDemuxer(mos);
+    std::vector<uint8_t> buffer;
+    WebPDemuxerPtr demux = CreateDemuxer(stream, buffer);
     if (demux != nullptr)
     {
         frame_count = WebPDemuxGetI(demux.get(), WEBP_FF_FRAME_COUNT);
