@@ -181,10 +181,12 @@ DWORD (WINAPI *SetPreferredAppMode)(DWORD) = nullptr;
 
 bool InitDarkMode()
 {
-    // In theory, dark mode support was added in v1809 (build 17763), so enable
+    // Enable dark mode for Windows 10 1903 (build 18362) and later.
+    // In theory, dark mode support was added in v1809 (build 17763). However,
+    // the undocumented functions changed in v1903. So enable
     // it for all later versions, even though in practice this code has been
     // mostly tested under v2004 ("20H1", build number 19041) and later ones.
-    if ( !wxCheckOsVersion(10, 0, 17763) )
+    if ( !wxCheckOsVersion(10, 0, 18362) )
     {
         wxLogTrace(TRACE_DARKMODE, "Unsupported due to OS version");
         return false;
