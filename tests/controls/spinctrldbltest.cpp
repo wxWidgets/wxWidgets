@@ -56,12 +56,12 @@ TEST_CASE("SpinCtrlDouble::NoEventsInCtor", "[spinctrl][spinctrldouble]")
 {
     // Verify that creating the control does not generate any events. This is
     // unexpected and shouldn't happen.
-    std::unique_ptr<wxSpinCtrlDouble> m_spin(new wxSpinCtrlDouble);
+    std::unique_ptr<wxSpinCtrlDouble> spin(new wxSpinCtrlDouble);
 
-    EventCounter updatedSpin(m_spin.get(), wxEVT_SPINCTRLDOUBLE);
-    EventCounter updatedText(m_spin.get(), wxEVT_TEXT);
+    EventCounter updatedSpin(spin.get(), wxEVT_SPINCTRLDOUBLE);
+    EventCounter updatedText(spin.get(), wxEVT_TEXT);
 
-    m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
+    spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
                    wxDefaultPosition, wxDefaultSize, 0,
                    0., 100., 17.);
 
