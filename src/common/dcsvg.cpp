@@ -365,9 +365,8 @@ wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
     return s;
 }
 
-wxMemoryDC GetTextMetricDC(const wxFont& font)
+wxFont ScaleFontForSVG(wxFont font, wxDC& dc)
 {
-    wxMemoryDC dc;
     const double dcDPI = dc.GetPPI().y;
     const double scale = dcDPI / SVG_DPI.y;
     if ( scale != 1 )
@@ -377,14 +376,16 @@ wxMemoryDC GetTextMetricDC(const wxFont& font)
         // We can't just divide the returned sizes by the scale factor, because
         // text does not scale linear (at least on Windows). Therefore, we scale
         // the font size instead.
-        wxFont scaledFont = font;
-        scaledFont.SetFractionalPointSize(scaledFont.GetFractionalPointSize() / scale);
-        dc.SetFont(scaledFont);
+        font.SetFractionalPointSize(font.GetFractionalPointSize() / scale);
     }
-    else
-    {
-        dc.SetFont(font);
-    }
+
+    return font;
+}
+
+wxMemoryDC GetTextMetricDC(const wxFont& font)
+{
+    wxMemoryDC dc;
+    dc.SetFont(ScaleFontForSVG(font, dc));
 
     return dc;
 }
@@ -1380,20 +1381,12 @@ void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string,
                                       wxCoord* externalLeading,
                                       const wxFont* theFont) const
 {
-    wxFont font = theFont ? *theFont : m_font;
-
     // A bitmap must be selected before wrapping the memory DC in a wxGCDC
     // (size is irrelevant).
     wxBitmap metricBmp(1, 1);
     wxMemoryDC memDc(metricBmp);
-    const double scale = memDc.GetPPI().y / SVG_DPI.y;
-    if ( scale != 1.0 && scale != 0.0 )
-    {
-        // SVG is DPI-independent, so we want text metrics at the default (96) DPI.
-        // Text does not scale linearly (at least on MSW), so scale the font size,
-        // rather than dividing the returned extent.
-        font.SetFractionalPointSize(font.GetFractionalPointSize() / scale);
-    }
+
+    wxFont font = ScaleFontForSVG(theFont ? *theFont : m_font, memDc);
 
 #if wxUSE_GRAPHICS_CONTEXT
     // Measure through a wxGCDC so widths come from the platform's modern font engine
