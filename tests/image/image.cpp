@@ -1363,6 +1363,32 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPM", "[image][xpm][error]")
 
 #endif // wxUSE_XPM
 
+#if wxUSE_IFF
+
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadIFF", "[image][iff][error]")
+{
+    // A FORM/ILBM file whose BMHD transparent-colour field is 0x4000 while
+    // the palette only has 2 entries (1 bitplane and no CMAP chunk). The
+    // transparent index used to be applied to the palette without a bounds
+    // check, writing past the end of the palette buffer; loading such a file
+    // must now be rejected.
+    static const unsigned char data[] =
+    {
+        0x46,0x4f,0x52,0x4d,0x00,0x00,0x00,0x2e,
+        0x49,0x4c,0x42,0x4d,0x42,0x4d,0x48,0x44,
+        0x00,0x00,0x00,0x14,0x00,0x01,0x00,0x01,
+        0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,
+        0x40,0x00,0x00,0x00,0x00,0x01,0x00,0x01,
+        0x42,0x4f,0x44,0x59,0x00,0x00,0x00,0x02,
+        0x00,0x00,
+    };
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_IFF) );
+}
+
+#endif // wxUSE_IFF
+
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::DibPadding", "[image]")
 {
     /*
