@@ -294,6 +294,18 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
     // Load a palette if we have one.
     if (colorType == wxTGA_MAPPED)
     {
+        // The palette buffer below is sized for paletteLength entries
+        // indexed 0..paletteLength-1, and the wxPalette built from it
+        // later (see SetPalette() below) is constructed starting at
+        // index 0 as well. The loop writes entries at indices
+        // [paletteStart, paletteStart+paletteLength), so any non-zero
+        // paletteStart would cause Palette_SetRGB()/Palette_SetRGBA()
+        // to write past the end of the buffer.
+        if (paletteStart != 0)
+        {
+            return wxTGA_INVFORMAT;
+        }
+
         {
             int palEntrySize = (palettebpp == 15 || palettebpp == 24) ? 3 : 4;
             wxScopedArray<unsigned char> paletteTmp(paletteLength*palEntrySize);
