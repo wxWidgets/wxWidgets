@@ -255,7 +255,6 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_widget = GTKCreateFrame(title);
     g_object_ref(m_widget);
-    wxControl::SetLabel(title);
     if ( HasFlag(wxNO_BORDER) )
     {
         // If we don't do this here, the wxNO_BORDER style is ignored in Show()
@@ -395,6 +394,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_parent->DoAddChild( this );
 
+    wxControl::SetLabel(title);
     PostCreation(size);
 
     return true;

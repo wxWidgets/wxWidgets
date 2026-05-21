@@ -125,9 +125,9 @@ bool wxStaticText::Create(wxWindow *parent,
 
     gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
 
-    SetLabel(label);
-
     m_parent->DoAddChild( this );
+
+    SetLabel(label);
 
     PostCreation(size);
 
