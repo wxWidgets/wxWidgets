@@ -354,6 +354,7 @@ wxString wxNumberFormatter::RemoveCurrencySymbolOrCode(wxString s, int style)
             case wxCurrencySymbolPosition::PrefixWithSep:
                 currencyStr += wxString(" ");
                 // Fall through to case without separator
+                wxFALLTHROUGH;
             case wxCurrencySymbolPosition::PrefixNoSep:
                 if (s.StartsWith(currencyStr, &valueStr))
                     s = valueStr;
@@ -361,6 +362,7 @@ wxString wxNumberFormatter::RemoveCurrencySymbolOrCode(wxString s, int style)
             case wxCurrencySymbolPosition::SuffixWithSep:
                 currencyStr = wxString(" ") + currencyStr;
                 // Fall through to case without separator
+                wxFALLTHROUGH;
             case wxCurrencySymbolPosition::SuffixNoSep:
                 if (s.EndsWith(currencyStr, &valueStr))
                     s = valueStr;
