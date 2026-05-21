@@ -402,6 +402,12 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
 
     wxNonOwnedWindow::GTKHandleRealized();
 
+    if (!GTK_IS_WINDOW(m_widget))
+    {
+        // This is some kind of not-a-TLW
+        return;
+    }
+
     GdkWindow* window = gtk_widget_get_window(m_widget);
 
 #if GTK_CHECK_VERSION(3,10,0)
