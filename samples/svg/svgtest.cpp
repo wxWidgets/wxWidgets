@@ -889,7 +889,9 @@ bool MyPage::OnSave(const wxString& filename)
     wxSVGFileDC tempSvgDC(svgSize);
     OnDraw(tempSvgDC);
 
-    svgSize = wxSize(tempSvgDC.MaxX(), tempSvgDC.MaxY());
+    // MaxX()/MaxY() return logical units, but the SVG viewBox is in device units.
+    svgSize = wxSize(tempSvgDC.LogicalToDeviceX(tempSvgDC.MaxX()),
+                     tempSvgDC.LogicalToDeviceY(tempSvgDC.MaxY()));
     svgSize.IncBy(15); // account for wxPen width exceeding bounds
 
     wxSVGFileDC svgDC(svgSize, filename, pageNames[m_index]);
