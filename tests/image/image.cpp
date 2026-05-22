@@ -1361,6 +1361,22 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPM", "[image][xpm][error]")
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_XPM) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPMUnterminatedQuote",
+                 "[image][xpm][error]")
+{
+    // A payload whose final " is never closed: the quote-stripping loop in
+    // wxXPMDecoder::ReadFile() advanced p past the buffer terminator after
+    // strncpy() and then dereferenced one byte further on the next outer
+    // for-loop iteration, reading past the end of the wxCharBuffer.
+    static const unsigned char data[] =
+    {
+        0x22,0x61,0x62,0x63,
+    };
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_XPM) );
+}
+
 #endif // wxUSE_XPM
 
 #if wxUSE_IFF
