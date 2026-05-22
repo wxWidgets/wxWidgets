@@ -57,6 +57,7 @@ def main():
     parser.add_argument('--wx_src_dir', default='../../', help='Qt source directory (default: qt/src)')
     parser.add_argument('--wx_build_dir', help='Qt build directory (default: build_bsys)')
     parser.add_argument('--wx_install_dir', help='Wx install directory (default: ../)')
+    parser.add_argument('-j', '--jobs', type=int, default=None, help='Number of parallel jobs for building (default: let CMake decide)')
     args = parser.parse_args()
 
     # Apply conditional default
@@ -195,7 +196,13 @@ def main():
         run_command(configure_command, cwd=CWD, env=ENV)
 
     if Action.BUILD in ACTION:
-        run_command(f'cmake --build {BUILD_DIR} --config {BUILD_TYPE}', cwd=CWD, env=ENV)
+        if args.jobs is not None:
+            jobs = args.jobs
+        elif 'CMAKE_BUILD_PARALLEL_LEVEL' in os.environ:
+            jobs = int(os.environ['CMAKE_BUILD_PARALLEL_LEVEL'])
+        else:
+            jobs = 12
+        run_command(f'cmake --build {BUILD_DIR} --config {BUILD_TYPE} --parallel {jobs}', cwd=CWD, env=ENV)
         run_command(f'cmake --install {BUILD_DIR} --config {BUILD_TYPE}', cwd=CWD, env=ENV)
 
 if __name__ == '__main__':
