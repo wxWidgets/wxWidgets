@@ -95,10 +95,6 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 {
     m_refData = new wxAcceleratorRefData;
 
-#if 1 // Bricsys change, see RM-44840
-    HKL hklUS = ::LoadKeyboardLayout(L"00000409", KLF_NOTELLSHELL);
-#endif
-
     ACCEL* arr = new ACCEL[n];
     for ( int i = 0; i < n; i++ )
     {
@@ -112,11 +108,8 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
         if ( flags & wxACCEL_CTRL )
             fVirt |= FCONTROL;
 
-#if 1 // Bricsys change, see RM-44840
-        WORD key = wxMSWKeyboard::WXToVK(entries[i].GetKeyCode(), NULL, &hklUS);
-#else
         WORD key = wxMSWKeyboard::WXToVK(entries[i].GetKeyCode());
-#endif
+
         arr[i].fVirt = fVirt;
         arr[i].key = key;
         arr[i].cmd = (WORD)entries[i].GetCommand();
@@ -126,10 +119,6 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     delete[] arr;
 
     M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
-
-#if 1 // Bricsys change, see RM-44840
-    ::UnloadKeyboardLayout(hklUS);
-#endif
 }
 
 bool wxAcceleratorTable::IsOk() const
