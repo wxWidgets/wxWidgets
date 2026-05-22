@@ -190,6 +190,12 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
         for (q = p + 1; *q != '\0'; q++)
             if (*q == '"')
                 break;
+
+        // unterminated quoted string: stop processing rather than reading
+        // past the end of the buffer when the outer loop next advances p.
+        if (*q == '\0')
+            break;
+
         strncpy(xpm_buffer + i, p + 1, q - p - 1);
         i += q - p - 1;
         xpm_buffer[i++] = '\n';
