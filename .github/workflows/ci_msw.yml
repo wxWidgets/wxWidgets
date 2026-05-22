@@ -106,7 +106,7 @@ jobs:
             $use_std_string = "${{ matrix.use_std_string }}" ? 1 : 0
             $use_utf8 = "${{ matrix.use_utf8 }}" ? 1 : 0
             $no_compat_3_2 = "${{ matrix.no_compat_3_2 }}" ? 1 : 0
-            if ( $use_std_string -or $use_utf8 ) {
+            if ( $use_std_string -or $use_utf8 -or $no_compat_3_2 ) {
               $use_compat_3_2 = 1 - $no_compat_3_2
               $txt = Get-Content setup.h
               Write-Output $txt |
