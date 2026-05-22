@@ -762,6 +762,13 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                             {
                                 // absolute mode (pixels not runs)
                                 int absolute = aByte;
+                                // RLE runs do not span scanlines; reject a
+                                // file whose absolute run would advance past
+                                // the right edge of the row and write into
+                                // adjacent rows or past the end of the image
+                                // buffer.
+                                if ( column + absolute > width )
+                                    return false;
                                 wxUint8 nibble[2] ;
                                 int readBytes = 0 ;
                                 for (int k = 0; k < absolute; k++)
@@ -867,6 +874,13 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                             {
                                 // absolute mode (pixels not runs)
                                 int absolute = aByte;
+                                // RLE runs do not span scanlines; reject a
+                                // file whose absolute run would advance past
+                                // the right edge of the row and write into
+                                // adjacent rows or past the end of the image
+                                // buffer.
+                                if ( column + absolute > width )
+                                    return false;
                                 for (int k = 0; k < absolute; k++)
                                 {
                                     aByte = stream.GetC();
