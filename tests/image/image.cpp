@@ -1310,6 +1310,33 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIF", "[image][gif][error]")
     CHECK( image.GetSize() == wxSize(1200, 800) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIFLZWMinCodeSize",
+                 "[image][gif][error]")
+{
+    // The LZW minimum code size byte that follows the local colour table is
+    // not validated. dgif() sizes ab_prefix/ab_tail for codes up to 12 bits
+    // (allocSize == 4096+1), so a code size of 12 makes ab_free start at 4098
+    // and the first alphabet update then writes one entry past the end of
+    // both arrays. The 2x1 image below is the minimum needed to exercise the
+    // second LZW iteration where the alphabet update happens.
+    static const unsigned char data[] =
+    {
+        0x47, 0x49, 0x46, 0x38, 0x39, 0x61,             // "GIF89a"
+        0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,       // LSDB: 2x1, no GCT
+        0x2c,                                           // image separator
+        0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x01, 0x00, // 2x1 frame at 0,0
+        0x80,                                           // LCT, depth=0 (2 col)
+        0x00, 0x00, 0x00, 0xff, 0xff, 0xff,             // LCT entries
+        0x0c,                                           // LZW min code size=12
+        0x04, 0x00, 0x20, 0x00, 0x00,                   // sub-block: codes 0,1
+        0x00,                                           // sub-block terminator
+        0x3b,                                           // trailer
+    };
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_GIF) );
+}
+
 #endif // wxUSE_GIF
 
 #if wxUSE_PCX
