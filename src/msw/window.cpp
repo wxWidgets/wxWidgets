@@ -5213,7 +5213,7 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
         HandleSysColorChange();
     }
 
-    // Another special case: even with this wParam value is sent when the user
+    // Another special case: event with this wParam value is sent when the user
     // changes the mouse pointer size in the Control Panel.
     if ( wParam == 0x2029 )
     {
