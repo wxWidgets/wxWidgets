@@ -913,11 +913,13 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
     WXLRESULT rc = 0;
     bool processed = false;
 
+#if wxUSE_MENUBAR
     if ( GetMenuBar() &&
           HandleMenuMessage(&rc, this, message, wParam, lParam) )
     {
         return rc;
     }
+#endif // wxUSE_MENUBAR
 
     switch ( message )
     {
@@ -949,6 +951,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
             }
             break;
 
+#if wxUSE_MENUBAR
         case WM_INITMENUPOPUP:
         case WM_UNINITMENUPOPUP:
             // We get these messages from the menu bar even if the menu is
@@ -964,6 +967,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
                 }
             }
             break;
+#endif // wxUSE_MENUBAR
 
         case WM_QUERYDRAGICON:
             {
