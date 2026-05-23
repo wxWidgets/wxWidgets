@@ -2927,7 +2927,11 @@ void wxCSConv::SetName(const char *charset)
 WX_DECLARE_HASH_MAP( wxFontEncoding, wxString, wxIntegerHash, wxIntegerEqual,
                      wxEncodingNameCache );
 
-static wxEncodingNameCache gs_nameCache;
+wxEncodingNameCache& GetEncodingNameCache()
+{
+    static wxEncodingNameCache s_nameCache;
+    return s_nameCache;
+}
 #endif
 
 wxMBConv *wxCSConv::DoCreate() const
@@ -2981,8 +2985,9 @@ wxMBConv *wxCSConv::DoCreate() const
         }
 #if wxUSE_FONTMAP
         {
-            const wxEncodingNameCache::iterator it = gs_nameCache.find(encoding);
-            if ( it != gs_nameCache.end() )
+            wxEncodingNameCache& nameCache = GetEncodingNameCache();
+            const wxEncodingNameCache::iterator it = nameCache.find(encoding);
+            if ( it != nameCache.end() )
             {
                 if ( it->second.empty() )
                     return NULL;
@@ -3010,14 +3015,14 @@ wxMBConv *wxCSConv::DoCreate() const
                     wxMBConv_iconv *conv = new wxMBConv_iconv(name.ToAscii());
                     if ( conv->IsOk() )
                     {
-                        gs_nameCache[encoding] = *names;
+                        nameCache[encoding] = *names;
                         return conv;
                     }
 
                     delete conv;
                 }
 
-                gs_nameCache[encoding] = wxT(""); // cache the failure
+                nameCache[encoding] = wxT(""); // cache the failure
             }
         }
 #endif // wxUSE_FONTMAP
