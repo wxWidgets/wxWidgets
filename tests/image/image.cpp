@@ -1187,6 +1187,48 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::ReadCorruptedTGA", "[image]")
     */
     corruptTGA[18] = 0x7f;
     REQUIRE( !tgaImage.LoadFile(memIn) );
+
+    /*
+    A colour-mapped TGA with a non-zero colour-map origin.
+    Older code allocated the palette using paletteLength only, but
+    indexed it using paletteStart + i, leading to OOB writes.
+    */
+    static const unsigned char badPaletteTGA[] =
+    {
+        0,          // ID length
+        1,          // Color map type
+        1,          // Image type = color mapped
+
+        1, 0,       // Color map origin (paletteStart = 1)
+        1, 0,       // Color map length = 1 entry
+        24,         // Color map entry size
+
+        0, 0,       // X-origin
+        0, 0,       // Y-origin
+
+        1, 0,       // Width = 1
+        1, 0,       // Height = 1
+
+        8,          // Bits per pixel
+        0,          // Image descriptor
+
+        // One palette entry (BGR)
+        0xff, 0x00, 0x00,
+
+        // One pixel index
+        0x00
+    };
+
+    wxMemoryInputStream badPaletteStream(
+        badPaletteTGA,
+        WXSIZEOF(badPaletteTGA)
+    );
+
+    REQUIRE( badPaletteStream.IsOk() );
+
+    REQUIRE(
+        !tgaImage.LoadFile(badPaletteStream, wxBITMAP_TYPE_TGA)
+    );
 }
 
 #if wxUSE_GIF
