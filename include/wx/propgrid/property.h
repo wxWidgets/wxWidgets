@@ -2336,17 +2336,14 @@ public:
     wxPGRootProperty( const wxString& name = wxS("<Root>") );
     virtual ~wxPGRootProperty() = default;
 
-#if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use StringToValue with 'flags' argument as wxPGPropValFormatFlags")
-    virtual bool StringToValue( wxVariant&, const wxString&, int ) const override
-    {
-        return false;
-    }
-#endif // WXWIN_COMPATIBILITY_3_2
     virtual bool StringToValue( wxVariant&, const wxString&, wxPGPropValFormatFlags ) const override
     {
         return false;
     }
+
+#if WXWIN_COMPATIBILITY_3_2
+    using wxPGProperty::StringToValue;
+#endif // WXWIN_COMPATIBILITY_3_2
 
 protected:
 };
@@ -2369,24 +2366,13 @@ public:
 
     int GetTextExtent( const wxWindow* wnd, const wxFont& font ) const;
 
-#if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use ValueToString with 'flags' argument as wxPGPropValFormatFlags")
-    virtual wxString ValueToString(wxVariant& value, int flags) const override
-    {
-        m_oldValueToStringCalled = true;
-        return ValueToString(value, static_cast<wxPGPropValFormatFlags>(flags));
-    }
-#endif // WXWIN_COMPATIBILITY_3_2
     virtual wxString ValueToString(wxVariant& value, wxPGPropValFormatFlags flags) const override;
-#if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use GetValueAsString with 'flags' argument as wxPGPropValFormatFlags")
-    virtual wxString GetValueAsString(int flags) const override
-    {
-        m_oldGetValueAsString = true;
-        return GetValueAsString(static_cast<wxPGPropValFormatFlags>(flags));
-    }
-#endif // WXWIN_COMPATIBILITY_3_2
     virtual wxString GetValueAsString(wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const override;
+
+#if WXWIN_COMPATIBILITY_3_2
+    using wxPGProperty::GetValueAsString;
+    using wxPGProperty::ValueToString;
+#endif // WXWIN_COMPATIBILITY_3_2
 
 protected:
     void SetTextColIndex( unsigned int colInd )
