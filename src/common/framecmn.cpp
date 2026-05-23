@@ -51,6 +51,8 @@ wxBEGIN_EVENT_TABLE(wxFrameBase, wxTopLevelWindow)
 #endif // wxUSE_STATUSBAR
 wxEND_EVENT_TABLE()
 
+#endif // wxUSE_MENUS
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -61,24 +63,6 @@ namespace
 // E.g.: a frame shown modally from another modal frame.
 std::stack<wxWindowDisabler> gs_windowDisablers;
 } // anonymous namespace
-
-/* static */
-bool wxFrameBase::ShouldUpdateMenuFromIdle()
-{
-    // Usually this is determined at compile time and is determined by whether
-    // the platform supports wxEVT_MENU_OPEN, however in wxGTK we need to also
-    // check if we're using the global menu bar as we don't get EVT_MENU_OPEN
-    // for it and need to fall back to idle time updating even if normally
-    // wxUSE_IDLEMENUUPDATES is set to 0 for wxGTK.
-#ifdef __WXGTK__
-    if ( wxApp::GTKIsUsingGlobalMenu() )
-        return true;
-#endif // !__WXGTK__
-
-    return wxUSE_IDLEMENUUPDATES != 0;
-}
-
-#endif // wxUSE_MENUS
 
 // ============================================================================
 // implementation
@@ -417,6 +401,22 @@ void wxFrameBase::UpdateWindowUI(long flags)
 // ----------------------------------------------------------------------------
 
 #if wxUSE_MENUS
+
+/* static */
+bool wxFrameBase::ShouldUpdateMenuFromIdle()
+{
+    // Usually this is determined at compile time and is determined by whether
+    // the platform supports wxEVT_MENU_OPEN, however in wxGTK we need to also
+    // check if we're using the global menu bar as we don't get EVT_MENU_OPEN
+    // for it and need to fall back to idle time updating even if normally
+    // wxUSE_IDLEMENUUPDATES is set to 0 for wxGTK.
+#ifdef __WXGTK__
+    if ( wxApp::GTKIsUsingGlobalMenu() )
+        return true;
+#endif // !__WXGTK__
+
+    return wxUSE_IDLEMENUUPDATES != 0;
+}
 
 void wxFrameBase::OnMenuOpen(wxMenuEvent& event)
 {
