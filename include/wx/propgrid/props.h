@@ -506,7 +506,7 @@ public:
 
     virtual void OnSetValue() override;
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_BUT_USED_INTERNALLY_MSG("use ValueToString with 'flags' argument as wxPGPropValFormatFlags")
+    wxDEPRECATED_MSG("use ValueToString with 'flags' argument as wxPGPropValFormatFlags")
     virtual wxString ValueToString(wxVariant& value, int flags) const override
     {
         m_oldValueToStringCalled = true;
@@ -515,7 +515,7 @@ public:
 #endif // WXWIN_COMPATIBILITY_3_2
     virtual wxString ValueToString(wxVariant& value, wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const override;
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_BUT_USED_INTERNALLY_MSG("use StringToValue with 'flags' argument as wxPGPropValFormatFlags")
+    wxDEPRECATED_MSG("use StringToValue with 'flags' argument as wxPGPropValFormatFlags")
     virtual bool StringToValue(wxVariant& variant, const wxString& text,
                                int flags) const override
     {
@@ -531,7 +531,7 @@ public:
     // If wxPGPropValFormatFlags::FullValue is not set in flags, then the value is interpreted
     // as index to choices list. Otherwise, it is actual value.
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_BUT_USED_INTERNALLY_MSG("use IntToValue with 'flags' argument as wxPGPropValFormatFlags")
+    wxDEPRECATED_MSG("use IntToValue with 'flags' argument as wxPGPropValFormatFlags")
     virtual bool IntToValue(wxVariant& variant, int number, int flags) const override
     {
         m_oldIntToValueCalled = true;

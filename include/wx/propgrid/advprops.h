@@ -210,7 +210,7 @@ public:
     virtual int GetCustomColourIndex() const;
 
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_BUT_USED_INTERNALLY_MSG("use ValueToString with 'flags' argument as wxPGPropValFormatFlags")
+    wxDEPRECATED_MSG("use ValueToString with 'flags' argument as wxPGPropValFormatFlags")
     virtual wxString ValueToString(wxVariant& value, int flags) const override
     {
         m_oldValueToStringCalled = true;
