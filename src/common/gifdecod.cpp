@@ -51,6 +51,15 @@ public:
     // def ctor
     GIFImage();
 
+    // Normally this class does _not_ free its memory as it is owned by
+    // wxGIFDecoder, but this function can be used to do it if an error happens
+    // before the image is added to the decoder.
+    void Free()
+    {
+        free(p);
+        free(pal);
+    }
+
     unsigned int w;                 // width
     unsigned int h;                 // height
     unsigned int left;              // x coord (in logical screen)
@@ -780,10 +789,10 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 // allocate memory for IMAGEN struct
                 std::unique_ptr<GIFImage> pimg(new GIFImage());
 
-                wxScopeGuard guardDestroy = wxMakeObjGuard(*this, &wxGIFDecoder::Destroy);
-
                 if ( !pimg.get() )
                     return wxGIF_MEMERR;
+
+                wxScopeGuard guardDestroy = wxMakeObjGuard(*pimg, &GIFImage::Free);
 
                 // fill in the data
                 static const unsigned int idbSize = (2 + 2 + 2 + 2 + 1);
