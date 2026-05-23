@@ -859,7 +859,11 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
 
                 // get initial code size from first byte in raster data
                 bits = stream.GetC();
-                if (stream.Eof() || bits <= 0)
+                // dgif() sizes the LZW tables for codes up to 12 bits, so a
+                // minimum code size of 12 or more would start ab_free past the
+                // end of ab_prefix/ab_tail and corrupt the heap on the first
+                // alphabet update.
+                if (stream.Eof() || bits <= 0 || bits > 11)
                     return wxGIF_INVFORMAT;
 
                 // decode image
