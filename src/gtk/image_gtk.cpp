@@ -148,8 +148,7 @@ static gboolean wxGtkImageDraw(GtkWidget* widget, GdkEventExpose* event)
 #ifdef __WXGTK3__
     gtk_render_background(gtk_widget_get_style_context(widget),
         cr, 0, 0, alloc.width, alloc.height);
-    if (bitmap.IsOk())
-        bitmap.Draw(cr, x, y);
+    bitmap.Draw(cr, x, y);
 #else
     x += alloc.x;
     y += alloc.y;

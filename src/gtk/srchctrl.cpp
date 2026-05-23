@@ -394,8 +394,8 @@ wxSize wxSearchCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxSize size(GTKGetPreferredSize(m_widget));
     size.x += xlen;
-    if (size.y < ylen)
-        size.y = ylen;
+    if (ylen > 0)
+        size.y += ylen - GetCharHeight();
 
 #ifdef wxHAS_GTK_SEARCH_ENTRY
     if (HasGtkSearchEntry() &&

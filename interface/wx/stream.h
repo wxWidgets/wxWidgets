@@ -649,6 +649,17 @@ public:
     wxInputStream& Read(wxOutputStream& stream_out);
 
     /**
+        Read all data from the stream and stores it in the specified buffer.
+        Data is read until the end of the input stream, or until an error occurs.
+        The buffer will be resized to the number of bytes read.
+
+        @return Returns true if the entire stream is read.
+
+        @since 3.3.3
+    */
+    bool Read(std::vector<wxUint8>& buffer);
+
+    /**
         Reads exactly the specified number of bytes into the buffer.
 
         Returns @true only if the entire amount of data was read, otherwise

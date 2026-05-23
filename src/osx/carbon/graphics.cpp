@@ -91,7 +91,6 @@ bool wxOSXGetCGBlendMode(wxCompositionMode op, wxInt32& mode)
             break;
         default:
             return false;
-            break;
     }
     return true;
 }

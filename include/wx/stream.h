@@ -134,6 +134,10 @@ public:
     // when EOF is reached or an error occurs
     wxInputStream& Read(wxOutputStream& streamOut);
 
+    // copy the entire contents of this stream into buffer, stopping only
+    // when EOF is reached or an error occurs
+    bool Read(std::vector<wxUint8>& buffer);
+
 
     // status functions
     // ----------------
