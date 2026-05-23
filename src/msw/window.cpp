@@ -5625,8 +5625,16 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child)
         return hbrush;
     }
 
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
-    return (WXHBRUSH)GetHbrushOf(*brush);
+    // Otherwise see if we have a custom background colour.
+    if ( m_hasBgCol )
+    {
+        wxBrush *
+            brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
+
+        return (WXHBRUSH)GetHbrushOf(*brush);
+    }
+
+    return 0;
 }
 
 WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
