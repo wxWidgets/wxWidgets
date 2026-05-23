@@ -80,6 +80,7 @@ jobs:
             compiler: vs2022
             compiler_suffix: vc17.sln
             use_cxx20: true
+            use_compat_3_0: true
           - configuration: 'DLL Release'
             use_std_string: true
             platform: 'x64'
@@ -92,7 +93,6 @@ jobs:
             compiler: vs2026
             compiler_suffix: vc18.slnx
             use_cxx20: true
-            no_compat_3_2: true
 
     steps:
       - name: Checkout
@@ -105,11 +105,13 @@ jobs:
         run: |
             $use_std_string = "${{ matrix.use_std_string }}" ? 1 : 0
             $use_utf8 = "${{ matrix.use_utf8 }}" ? 1 : 0
+            $use_compat_3_0 = "${{ matrix.use_compat_3_0 }}" ? 1 : 0
             $no_compat_3_2 = "${{ matrix.no_compat_3_2 }}" ? 1 : 0
-            if ( $use_std_string -or $use_utf8 -or $no_compat_3_2 ) {
+            if ( $use_std_string -or $use_utf8 -or $use_compat_3_0 -or $no_compat_3_2 ) {
               $use_compat_3_2 = 1 - $no_compat_3_2
               $txt = Get-Content setup.h
               Write-Output $txt |
+              %{$_ -replace "define WXWIN_COMPATIBILITY_3_0 0", "define WXWIN_COMPATIBILITY_3_0 $use_compat_3_0"} |
               %{$_ -replace "define WXWIN_COMPATIBILITY_3_2 1", "define WXWIN_COMPATIBILITY_3_2 $use_compat_3_2"} |
               %{$_ -replace "define wxUSE_STD_STRING_CONV_IN_WXSTRING 0", "define wxUSE_STD_STRING_CONV_IN_WXSTRING $use_std_string"} |
               %{$_ -replace "define wxUSE_UNICODE_UTF8 0", "define wxUSE_UNICODE_UTF8 $use_utf8"} |
