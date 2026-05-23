@@ -1780,7 +1780,7 @@ bool wxDirProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 #if WXWIN_COMPATIBILITY_3_0
 bool wxDirProperty::DoSetAttribute(const wxString& name, wxVariant& value)
 {
-    if ( name == wxPG_DIR_DIALOG_MESSAGE )
+    if ( name == "DialogMessage" ) // wxPG_DIR_DIALOG_MESSAGE is deprecated
     {
         m_dlgTitle = value.GetString();
         return true;
@@ -2026,7 +2026,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         return true;
     }
 #if WXWIN_COMPATIBILITY_3_0
-    else if ( name == wxPG_FILE_DIALOG_TITLE )
+    else if ( name == "DialogTitle" ) // wxPG_FILE_DIALOG_TITLE is deprecated
     {
         m_dlgTitle = value.GetString();
         return true;
