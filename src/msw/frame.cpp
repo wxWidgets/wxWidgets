@@ -470,7 +470,6 @@ wxTaskBarButton* wxFrame::MSWGetTaskBarButton()
 }
 #endif // wxUSE_TASKBARBUTTON
 
-// Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
 #if wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -480,8 +479,8 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 #endif // wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
 
-    // Propagate the event to the non-top-level children
-    wxWindow::OnSysColourChanged(event);
+    // Let children react to this event too.
+    event.Skip();
 }
 
 // Pass true to show full screen, false to restore.
