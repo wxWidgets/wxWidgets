@@ -1340,6 +1340,60 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadPCX", "[image][pcx][error]")
 
 #endif // wxUSE_PCX
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadANI", "[image][ani][error]")
+{
+    // ANI with invalid seq indices.
+    // Used to cause out-of-bounds access.
+
+    static const unsigned char data[] =
+    {
+        'R','I','F','F',
+        0x64,0x00,0x00,0x00,
+        'A','C','O','N',
+
+        'a','n','i','h',
+        0x24,0x00,0x00,0x00,
+
+        0x24,0x00,0x00,0x00,
+
+        // nFrames = 1
+        0x01,0x00,0x00,0x00,
+
+        // nSteps = 2
+        0x02,0x00,0x00,0x00,
+
+        0,0,0,0,
+        0,0,0,0,
+        0,0,0,0,
+        0,0,0,0,
+        0,0,0,0,
+        0,0,0,0,
+
+        // seq chunk
+        's','e','q',' ',
+        0x08,0x00,0x00,0x00,
+
+        // indices: 0, 999
+        0x00,0x00,0x00,0x00,
+        0xE7,0x03,0x00,0x00,
+
+        // LIST chunk
+        'L','I','S','T',
+        0x10,0x00,0x00,0x00,
+        'f','r','a','m',
+
+        // empty icon chunk
+        'i','c','o','n',
+        0x00,0x00,0x00,0x00
+    };
+
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+
+    wxImage img;
+
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_ANI) );
+}
+
 #if wxUSE_XPM
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPM", "[image][xpm][error]")
