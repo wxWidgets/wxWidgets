@@ -468,7 +468,11 @@ int wxIFFDecoder::ReadIFF()
         const byte *bodyptr = dataptr + 8;          // -> BODY data
 
         if (truncated) {
-        chunkLen = dataend - dataptr;
+        // Clamp the declared chunk length to the number of bytes actually
+        // present after the BODY chunk header; otherwise the subsequent
+        // decompression/decode loops would read up to 8 bytes (the size of
+        // the chunk header) past the end of databuf.
+        chunkLen = dataend - bodyptr;
         }
 
         //
