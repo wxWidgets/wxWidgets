@@ -672,6 +672,11 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
         data_offset += (list_chunk_length + 8u);
     }
 
+    // After skipping any LIST chunk we must still have room for the
+    // 8-byte "data" chunk header that follows.
+    if (length - data_offset < 8u)
+        return false;
+
     if (memcmp(&data[data_offset], "data", 4) != 0)
         return false;
 
