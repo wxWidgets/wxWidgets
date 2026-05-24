@@ -46,7 +46,7 @@
 // for |x - y| which is not really compatible with our fixed delta, so we can't
 // use it here.
 #define CPPUNIT_ASSERT_DOUBLES_EQUAL(x, y, delta) \
-    REQUIRE(std::abs(x - y) < delta)
+    REQUIRE(std::abs(static_cast<double>(x) - static_cast<double>(y)) < (delta))
 
 #define CPPUNIT_FAIL(msg) FAIL(msg)
 
