@@ -1513,6 +1513,46 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadIFFBmhdOverflow",
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_IFF) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadIFFBodyTruncated",
+                 "[image][iff][error]")
+{
+    // A BODY chunk that declares more data than the file actually contains:
+    // dataptr + 8 + chunkLen > dataend, so the truncated branch in
+    // wxIFFDecoder::ReadIFF() runs and used to set chunkLen = dataend - dataptr,
+    // which is 8 too large (the chunk header is 8 bytes). The non-RLE BODY
+    // decode loop then reads up to 8 bytes past the heap-allocated input
+    // buffer. width = 16 with 1 bitplane gives lineskip = 2, and the second
+    // half of the scanline (j = 8..15) reads bodyptr[1], one byte past dataend.
+    // transparentColor = 0x4000 ensures ConvertToImage() also rejects the
+    // resulting image so the test fails cleanly with the fix applied.
+    wxImage::AddHandler(new wxIFFHandler);
+
+    static const unsigned char data[] =
+    {
+        0x46,0x4f,0x52,0x4d,            // "FORM"
+        0x00,0x00,0x00,0x29,            // FORM length (not validated)
+        0x49,0x4c,0x42,0x4d,            // "ILBM"
+        0x42,0x4d,0x48,0x44,            // "BMHD"
+        0x00,0x00,0x00,0x14,            // BMHD chunk length = 20
+        0x00,0x10,                      // width  = 16
+        0x00,0x01,                      // height = 1
+        0x00,0x00,0x00,0x00,            // x, y
+        0x01,                           // nPlanes
+        0x00,                           // masking
+        0x00,                           // compression (uncompressed)
+        0x00,                           // pad
+        0x40,0x00,                      // transparentColor = 0x4000
+        0x00,0x00,                      // x/y aspect
+        0x00,0x00,0x00,0x00,            // page width / height
+        0x42,0x4f,0x44,0x59,            // "BODY"
+        0x00,0x00,0x00,0x64,            // BODY chunk length = 100 (lie)
+        0xff,                           // 1 byte of body data
+    };
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_IFF) );
+}
+
 #endif // wxUSE_IFF
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::DibPadding", "[image]")
