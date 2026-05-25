@@ -36,9 +36,7 @@
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/private/cotaskmemptr.h"
 
-#if wxUSE_UXTHEME
-    #include "wx/msw/uxtheme.h"
-#endif
+#include "wx/msw/uxtheme.h"
 
 #include "wx/msw/wrapwin.h"
 #include <shlwapi.h>
@@ -982,8 +980,6 @@ void wxTextEntry::ForceUpper()
 // hints
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UXTHEME
-
 #ifndef EM_SETCUEBANNER
     #define EM_SETCUEBANNER 0x1501
     #define EM_GETCUEBANNER 0x1502
@@ -1019,8 +1015,6 @@ wxString wxTextEntry::GetHint() const
     return wxTextEntryBase::GetHint();
 }
 
-
-#endif // wxUSE_UXTHEME
 
 // ----------------------------------------------------------------------------
 // margins support

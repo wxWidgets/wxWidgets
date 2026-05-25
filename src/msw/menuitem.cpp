@@ -158,9 +158,7 @@ public:
     // Wrapper around standard MARGINS structure providing some helper
     // functions and automatically initializing the margin fields to 0.
     struct Margins
-#if wxUSE_UXTHEME
         : MARGINS
-#endif // wxUSE_UXTHEME
     {
         Margins()
         {
@@ -188,12 +186,6 @@ public:
             rect.right += cyTopHeight;
             rect.bottom += cyBottomHeight;
         }
-
-#if !wxUSE_UXTHEME
-        // When MARGINS struct is not available, we need to define the fields
-        // we use ourselves.
-        int cxLeftWidth, cxRightWidth, cyTopHeight, cyBottomHeight;
-#endif // !wxUSE_UXTHEME
     };
 
     Margins ItemMargin;         // popup item margins
@@ -241,14 +233,12 @@ public:
             ms_instance = &s_menuData;
         }
 
-    #if wxUSE_UXTHEME
         bool theme = MenuLayout() == FullTheme;
         if ( ms_instance->Theme != theme )
         {
             ms_instance->Init(window);
         }
         else
-    #endif // wxUSE_UXTHEME
         {
             if ( ms_instance->dpi != window->GetDPI().y )
             {
@@ -269,10 +259,8 @@ public:
     // are not available or not supported on menu
     static bool IsUxThemeActive()
     {
-    #if wxUSE_UXTHEME
         if ( MenuLayout() == FullTheme )
             return true;
-    #endif // wxUSE_UXTHEME
         return false;
     }
 
@@ -286,10 +274,8 @@ public:
     static MenuLayoutType MenuLayout()
     {
         MenuLayoutType menu = Classic;
-    #if wxUSE_UXTHEME
         if ( wxUxThemeIsActive() )
             menu = FullTheme;
-    #endif // wxUSE_UXTHEME
         return menu;
     }
 
@@ -303,7 +289,6 @@ MenuDrawData* MenuDrawData::ms_instance = nullptr;
 
 void MenuDrawData::Init(wxWindow const* window)
 {
-#if wxUSE_UXTHEME
     if ( IsUxThemeActive() )
     {
         wxUxThemeHandle hTheme(window, L"MENU");
@@ -359,7 +344,6 @@ void MenuDrawData::Init(wxWindow const* window)
             SeparatorMargin.cyTopHeight -= 2;
     }
     else
-#endif // wxUSE_UXTHEME
     {
         const NONCLIENTMETRICS& metrics = wxMSWImpl::GetNonClientMetrics(window);
 
@@ -936,7 +920,6 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         if ( data->MenuLayout() != MenuDrawData::FullTheme )
             rcText.top--;
 
-#if wxUSE_UXTHEME
         // If a custom background colour is explicitly specified, we should use
         // it instead of the default theme background.
         if ( !GetBackgroundColour().IsOk() && MenuDrawData::IsUxThemeActive() )
@@ -1049,7 +1032,6 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             }
         }
         else
-#endif // wxUSE_UXTHEME
         {
             if ( IsSeparator() )
             {
@@ -1247,7 +1229,6 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
 {
     HDC hdc = (HDC)hdc_;
 
-#if wxUSE_UXTHEME
     if ( MenuDrawData::IsUxThemeActive() )
     {
         wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU" , L"DARKMODE::MENU");
@@ -1279,7 +1260,6 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
         hTheme.DrawBackground(hdc, *rc, MENU_POPUPCHECK, stateCheck);
     }
     else
-#endif // wxUSE_UXTHEME
     {
         int cx = rc->right - rc->left;
         int cy = rc->bottom - rc->top;
@@ -1323,7 +1303,6 @@ void wxMenuItem::GetFontToUse(wxFont& font) const
 
 void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const
 {
-#if wxUSE_UXTHEME
     if ( MenuDrawData::IsUxThemeActive() )
     {
         wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU", L"DARKMODE::MENU");
@@ -1362,7 +1341,6 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
         }
     }
     else
-#endif // wxUSE_UXTHEME
     {
         wxOwnerDrawn::GetColourToUse(stat, colText, colBack);
     }

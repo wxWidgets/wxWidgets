@@ -40,9 +40,7 @@
 #include "wx/tooltip.h"
 #include <windowsx.h>
 
-#if wxUSE_UXTHEME
-    #include "wx/msw/uxtheme.h"
-#endif
+#include "wx/msw/uxtheme.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -368,14 +366,12 @@ const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
         // into account to make sure the text drawn by user fits inside the
         // pane. Notice that it's not the value returned by SB_GETBORDERS
         // which, at least on this Windows 2003 system, returns {0, 2, 2}
-#if wxUSE_UXTHEME
         if ( wxUxThemeIsActive() )
         {
             s_metrics.gripWidth = 20;
             s_metrics.textMargin = 8;
         }
         else // classic/unthemed look
-#endif // wxUSE_UXTHEME
         {
             s_metrics.gripWidth = 18;
             s_metrics.textMargin = 4;
@@ -418,7 +414,6 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
         wxLogLastError("SendMessage(SB_GETRECT)");
     }
 
-#if wxUSE_UXTHEME
     wxUxThemeHandle theme(const_cast<wxStatusBar*>(this), L"Status");
     if ( theme )
     {
@@ -433,7 +428,6 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
                                                               1 /* SP_PANE */, 0,
                                                               &r, &r);
     }
-#endif
 
     wxCopyRECTToRect(r, rect);
 
@@ -598,7 +592,6 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         }
     }
 
-#if wxUSE_UXTHEME
     // We need to paint the size grip ourselves in dark mode as the default one
     // is simply invisible.
     if ( nMsg == WM_PAINT &&
@@ -641,7 +634,6 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             }
         );
     }
-#endif // wxUSE_UXTHEME
 
     return wxStatusBarBase::MSWWindowProc(nMsg, wParam, lParam);
 }

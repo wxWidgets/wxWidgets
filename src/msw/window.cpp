@@ -114,9 +114,7 @@
 
 #include <windowsx.h>
 
-#if wxUSE_UXTHEME
-    #include "wx/msw/uxtheme.h"
-#endif
+#include "wx/msw/uxtheme.h"
 
 #ifndef MAPVK_VK_TO_CHAR
     // Contrary to MS claims that this is present starting with Win2k, it is
@@ -144,12 +142,10 @@ extern wxMenu *wxCurrentPopupMenu;
 extern wxPopupWindow* wxCurrentPopupWindow;
 #endif // wxUSE_POPUPWIN
 
-#if wxUSE_UXTHEME
 // This is a hack used by the owner-drawn wxButton implementation to ensure
 // that the brush used for erasing its background is correctly aligned with the
 // control.
 wxWindowMSW *wxWindowBeingErased = nullptr;
-#endif // wxUSE_UXTHEME
 
 // Set to the key code of the pressed key if we need to ignore it but couldn't
 // return 1 from the keyboard hook because we had to leave the IME edit this
@@ -1478,13 +1474,11 @@ wxBorder wxWindowMSW::DoTranslateBorder(wxBorder border) const
         if ( wxMSWDarkMode::IsActive() )
             return wxBORDER_SIMPLE;
 
-#if wxUSE_UXTHEME
         if (CanApplyThemeBorder())
         {
             if ( wxUxThemeIsActive() )
                 return wxBORDER_THEME;
         }
-#endif // wxUSE_UXTHEME
 
         return wxBORDER_SUNKEN;
     }
@@ -3813,7 +3807,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 #endif
 
-#if wxUSE_UXTHEME
         // If we want the default themed border then we need to draw it ourselves
         case WM_NCCALCSIZE:
             {
@@ -3926,8 +3919,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 }
             }
             break;
-
-#endif // wxUSE_UXTHEME
 
         default:
             // try a custom message handler
@@ -5627,10 +5618,7 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
 {
     // Use the special wxWindowBeingErased variable if it is set as the child
     // being erased.
-    wxWindowMSW * const child =
-#if wxUSE_UXTHEME
-                                wxWindowBeingErased ? wxWindowBeingErased :
-#endif
+    wxWindowMSW * const child = wxWindowBeingErased ? wxWindowBeingErased :
                                 this;
 
     for ( wxWindowMSW *win = this; win; win = win->GetParent() )

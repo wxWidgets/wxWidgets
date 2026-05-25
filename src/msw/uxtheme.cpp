@@ -19,8 +19,6 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_UXTHEME
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/toplevel.h"
@@ -150,10 +148,3 @@ wxUxThemeHandle::DrawBackground(HDC hdc, const wxRect& rect, int part, int state
 
     DrawBackground(hdc, rc, part, state);
 }
-
-#else
-bool wxUxThemeIsActive()
-{
-    return false;
-}
-#endif // wxUSE_UXTHEME

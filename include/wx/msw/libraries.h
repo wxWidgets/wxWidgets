@@ -22,7 +22,7 @@
 #pragma comment(lib, "oleacc")
 #endif
 
-#if defined __VISUALC__ && wxUSE_UXTHEME
+#if defined __VISUALC__
 #pragma comment(lib, "uxtheme")
 #endif
 

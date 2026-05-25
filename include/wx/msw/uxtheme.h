@@ -12,8 +12,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_UXTHEME
-
 #include "wx/msw/private.h"     // we use GetHwndOf()
 #include <uxtheme.h>
 
@@ -280,12 +278,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxUxThemeHandle);
 };
-
-#else // !wxUSE_UXTHEME
-
-inline bool wxUxThemeIsActive() { return false; }
-
-#endif // wxUSE_UXTHEME/!wxUSE_UXTHEME
 
 #endif // _WX_UXTHEME_H_
 

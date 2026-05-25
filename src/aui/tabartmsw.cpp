@@ -9,7 +9,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_AUI && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)
+#if wxUSE_AUI && !defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
@@ -455,4 +455,4 @@ void wxAuiMSWTabArt::UpdateDpi()
     m_closeBtnSize = wxDefaultSize;
 }
 
-#endif // wxUSE_AUI && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)
+#endif // wxUSE_AUI && !defined(__WXUNIVERSAL__)
