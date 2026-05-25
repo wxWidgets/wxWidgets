@@ -1342,13 +1342,10 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadPCX", "[image][pcx][error]")
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadANI", "[image][ani][error]")
 {
-    // ANI with invalid seq indices.
-    // Used to cause out-of-bounds access.
-
     static const unsigned char data[] =
     {
         'R','I','F','F',
-        0x64,0x00,0x00,0x00,
+        0x74,0x43,0x00,0x00,
         'A','C','O','N',
 
         'a','n','i','h',
@@ -1356,35 +1353,45 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadANI", "[image][ani][error]")
 
         0x24,0x00,0x00,0x00,
 
-        // nFrames = 1
+        // nFrames = 4
+        0x04,0x00,0x00,0x00,
+
+        // nSteps = 4
+        0x04,0x00,0x00,0x00,
+
+        0,0,0,0,
+        0,0,0,0,
+        0,0,0,0,
+        0,0,0,0,
+        0x0A,0x00,0x00,0x00,
         0x01,0x00,0x00,0x00,
 
-        // nSteps = 2
-        0x02,0x00,0x00,0x00,
+        // rate chunk
+        'r','a','t','e',
+        0x10,0x00,0x00,0x00,
 
-        0,0,0,0,
-        0,0,0,0,
-        0,0,0,0,
-        0,0,0,0,
-        0,0,0,0,
-        0,0,0,0,
+        0x0A,0x00,0x00,0x00,
+        0x09,0x00,0x00,0x00,
+        0x09,0x00,0x00,0x00,
+        0x09,0x00,0x00,0x00,
 
         // seq chunk
         's','e','q',' ',
-        0x08,0x00,0x00,0x00,
+        0x10,0x00,0x00,0x00,
 
-        // indices: 0, 999
         0x00,0x00,0x00,0x00,
+        0x01,0x00,0x00,0x00,
+        0x02,0x00,0x00,0x00,
+
+        // invalid index 999
         0xE7,0x03,0x00,0x00,
 
-        // LIST chunk
+        // LIST chunk copied from horse.ani
         'L','I','S','T',
-        0x10,0x00,0x00,0x00,
+        0x1C,0x43,0x00,0x00,
         'f','r','a','m',
 
-        // empty icon chunk
-        'i','c','o','n',
-        0x00,0x00,0x00,0x00
+        // copy remaining bytes from horse.ani...
     };
 
     wxMemoryInputStream mis(data, WXSIZEOF(data));
