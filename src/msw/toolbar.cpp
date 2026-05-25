@@ -55,9 +55,7 @@
 #include "wx/msw/dc.h"
 #include "wx/msw/dib.h"
 
-#if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"
-#endif
 
 #include "wx/msw/private/darkmode.h"
 

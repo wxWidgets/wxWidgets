@@ -684,8 +684,6 @@
 
 #cmakedefine01 wxUSE_TASKBARBUTTON
 
-#cmakedefine01 wxUSE_UXTHEME
-
 #cmakedefine01 wxUSE_INKEDIT
 
 #cmakedefine01 wxUSE_INICONF

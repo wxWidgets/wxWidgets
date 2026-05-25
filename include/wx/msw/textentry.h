@@ -49,10 +49,8 @@ public:
     virtual void SetMaxLength(unsigned long len) override;
     virtual void ForceUpper() override;
 
-#if wxUSE_UXTHEME
     virtual bool SetHint(const wxString& hint) override;
     virtual wxString GetHint() const override;
-#endif // wxUSE_UXTHEME
 
 protected:
     virtual wxString DoGetValue() const override;

@@ -578,7 +578,6 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
         MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(*impl), 0);
     }
 
-#if wxUSE_UXTHEME
     // when using XP themes, neither setting the text colour nor transparent
     // background mode changes anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
@@ -672,7 +671,6 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
         ::DrawText(hdc, label.t_str(), label.length(), &rc2,
                    drawTextFlags);
     }
-#endif // wxUSE_UXTHEME
 }
 
 void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))

@@ -38,9 +38,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/winstyle.h"
 
-#if wxUSE_UXTHEME
-    #include "wx/msw/uxtheme.h"
-#endif
+#include "wx/msw/uxtheme.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"

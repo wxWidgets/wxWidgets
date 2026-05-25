@@ -1046,7 +1046,6 @@ WX_ARG_FEATURE(dccache,     [  --enable-dccache        cache temporary wxDC obje
 WX_ARG_FEATURE(ps-in-msw,   [  --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)], wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)], wxUSE_OWNER_DRAWN)
 WX_ARG_FEATURE(taskbarbutton,[  --enable-taskbarbutton  enable wxTaskBarButton (Win32 only)], wxUSE_TASKBARBUTTON)
-WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
 
 dnl Turn off MSW-only IE webview backend here to avoid reporting it as "on" in
@@ -7322,10 +7321,6 @@ if test "$wxUSE_MSW" = 1 ; then
 
     if test "$wxUSE_TASKBARBUTTON" = "yes"; then
         AC_DEFINE(wxUSE_TASKBARBUTTON)
-    fi
-
-    if test "$wxUSE_UXTHEME" = "yes"; then
-        AC_DEFINE(wxUSE_UXTHEME)
     fi
 
 fi

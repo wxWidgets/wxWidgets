@@ -180,9 +180,7 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 void
 wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 {
-#if wxUSE_UXTHEME
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
-#endif
 
     wxSize sz = GetClientSize();
     bool isEnabled;
@@ -198,7 +196,6 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
         isEnabled = IsThisEnabled();
         doDrawFocusRect = ShouldDrawFocus();
 
-#if wxUSE_UXTHEME
         // Windows-style: for smaller size control (and for disabled background) use less spacing
         if ( hTheme )
         {
@@ -207,7 +204,6 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
             focusSpacingY = sz.y > (GetCharHeight()+2) && isEnabled ? 2 : 1;
         }
         else
-#endif
         {
             // Classic Theme
             if ( isEnabled )
@@ -334,13 +330,11 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         isStdAndEditable ? GetBackgroundColour()
                          : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
-#if wxUSE_UXTHEME
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HDC hDc = GetHdcOf(*impl);
     HWND hWnd = GetHwndOf(this);
 
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
-#endif // wxUSE_UXTHEME
 
     wxRect borderRect(0,0,sz.x,sz.y);
 
@@ -352,7 +346,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
     int drawButFlags = 0;
 
-#if wxUSE_UXTHEME
     if ( hTheme )
     {
         RECT rFull;
@@ -509,7 +502,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         }
     }
     else
-#endif
     {
         // Windows 2000 and earlier
         drawButFlags = Button_PaintBackground;

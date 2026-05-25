@@ -463,7 +463,7 @@ private:
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartgtk.h"
         using wxAuiNativeTabArt = wxAuiGtkTabArt;
-    #elif defined(__WXMSW__) && wxUSE_UXTHEME
+    #elif defined(__WXMSW__)
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartmsw.h"
         using wxAuiNativeTabArt = wxAuiMSWTabArt;

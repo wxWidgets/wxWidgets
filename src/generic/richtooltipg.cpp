@@ -44,10 +44,7 @@
 #include "wx/textwrapper.h"
 
 #ifdef __WXMSW__
-    #if wxUSE_UXTHEME
-        #include "wx/msw/uxtheme.h"
-        #define HAVE_MSW_THEME
-    #endif
+    #include "wx/msw/uxtheme.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -89,7 +86,7 @@ public:
             // Determine the appropriate title font for the current platform.
             titleFont = labelTitle->GetFont();
 
-#ifdef HAVE_MSW_THEME
+#ifdef __WXMSW__
             // When using themes MSW tooltips use larger bluish version of the
             // normal font.
             if ( wxUxThemeIsActive() )
@@ -107,7 +104,7 @@ public:
                 labelTitle->SetForegroundColour(c);
             }
             else
-#endif // HAVE_MSW_THEME
+#endif // __WXMSW__
             {
                 // Everything else, including "classic" MSW look uses just the
                 // bold version of the base font.
@@ -129,7 +126,7 @@ public:
         wxTextSizerWrapper wrapper(this);
         wxSizer* sizerText = wrapper.CreateSizer(message, -1 /* No wrapping */);
 
-#ifdef HAVE_MSW_THEME
+#ifdef __WXMSW__
         if ( icon.IsOk() && wxUxThemeIsActive() )
         {
             // Themed tooltips under MSW align the text with the title, not
@@ -141,7 +138,7 @@ public:
 
             sizerText = sizerTextIndent;
         }
-#endif // HAVE_MSW_THEME
+#endif // __WXMSW__
         sizerTop->Add(sizerText,
                         wxSizerFlags().DoubleBorder(wxLEFT|wxRIGHT|wxBOTTOM)
                                       .Centre());
@@ -164,7 +161,7 @@ public:
         if ( !colStart.IsOk() )
         {
             // Determine the best colour(s) to use on our own.
-#ifdef HAVE_MSW_THEME
+#ifdef __WXMSW__
             if ( wxUxThemeIsActive() )
             {
                 wxUxThemeHandle hTheme(GetParent(), L"TOOLTIP");
@@ -179,7 +176,7 @@ public:
                                                                {0x40, 0x40, 0x20});
             }
             else
-#endif // HAVE_MSW_THEME
+#endif // __WXMSW__
             {
                 // In wxGTK wxSYS_COLOUR_INFOBK typically uses alpha channel
                 // and this doesn't work as wxPopupWindow background currently,
@@ -262,10 +259,10 @@ private:
     // smarter in the future.
     static int GetTipHeight()
     {
-#ifdef HAVE_MSW_THEME
+#ifdef __WXMSW__
         if ( wxUxThemeIsActive() )
             return 20;
-#endif // HAVE_MSW_THEME
+#endif // __WXMSW__
 
         return 15;
     }

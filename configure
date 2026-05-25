@@ -1379,7 +1379,6 @@ enable_dccache
 enable_ps_in_msw
 enable_ownerdrawn
 enable_taskbarbutton
-enable_uxtheme
 enable_wxdib
 enable_webviewie
 enable_webviewedge
@@ -2355,7 +2354,6 @@ Optional Features:
   --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)
   --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)
   --enable-taskbarbutton  enable wxTaskBarButton (Win32 only)
-  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)
   --enable-wxdib          use wxDIB class (Win32 only)
   --enable-webviewie      use wxWebView IE backend (Win32 only)
   --enable-webviewedge    use wxWebView Edge backend (Win32 only)
@@ -12730,35 +12728,6 @@ fi
 
 
           eval "$wx_cv_use_taskbarbutton"
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-uxtheme was given.
-if test "${enable_uxtheme+set}" = set; then :
-  enableval=$enable_uxtheme;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_uxtheme='wxUSE_UXTHEME=yes'
-                          else
-                            wx_cv_use_uxtheme='wxUSE_UXTHEME=no'
-                          fi
-
-else
-
-                          wx_cv_use_uxtheme='wxUSE_UXTHEME=${'DEFAULT_wxUSE_UXTHEME":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_uxtheme"
 
 
           enablestring=
@@ -40546,11 +40515,6 @@ if test "$wxUSE_MSW" = 1 ; then
 
     if test "$wxUSE_TASKBARBUTTON" = "yes"; then
         $as_echo "#define wxUSE_TASKBARBUTTON 1" >>confdefs.h
-
-    fi
-
-    if test "$wxUSE_UXTHEME" = "yes"; then
-        $as_echo "#define wxUSE_UXTHEME 1" >>confdefs.h
 
     fi
 
