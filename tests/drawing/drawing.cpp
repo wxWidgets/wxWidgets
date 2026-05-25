@@ -9,6 +9,7 @@
 #include "testprec.h"
 
 #include "drawing.h"
+#include "wx/dcmemory.h"
 #include "wx/ffile.h"
 #include "wx/filename.h"
 
