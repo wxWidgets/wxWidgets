@@ -52,30 +52,6 @@
 
 using namespace wxMSWImpl;
 
-#if wxUSE_UXTHEME
-    // provide the necessary declarations ourselves if they're missing from
-    // headers
-    #ifndef BCM_SETIMAGELIST
-        #define BCM_SETIMAGELIST    0x1602
-        #define BCM_SETTEXTMARGIN   0x1604
-
-        enum
-        {
-            BUTTON_IMAGELIST_ALIGN_LEFT,
-            BUTTON_IMAGELIST_ALIGN_RIGHT,
-            BUTTON_IMAGELIST_ALIGN_TOP,
-            BUTTON_IMAGELIST_ALIGN_BOTTOM
-        };
-
-        struct BUTTON_IMAGELIST
-        {
-            HIMAGELIST himl;
-            RECT margin;
-            UINT uAlign;
-        };
-    #endif
-#endif // wxUSE_UXTHEME
-
 #ifndef ODS_NOACCEL
     #define ODS_NOACCEL         0x0100
 #endif
