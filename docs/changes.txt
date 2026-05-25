@@ -278,6 +278,7 @@ All (GUI):
 - Reject more invalid GIFs and do it without leaking memory (dxbjavid, #26501).
 - Fix buffer overflow for truncated data in wxIFFDecoder (dxbjavid, #26505).
 - Fix out-of-bounds read in wxSound on 0-length LIST chunk (dxbjavid, #26506).
+- Fix reading too short extra field in ZIP64 files (dxbjavid, #26507).
 
 wxGTK:
 
