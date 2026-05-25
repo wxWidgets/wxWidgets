@@ -162,6 +162,10 @@ static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id, con
 
 wxBitmapBundle wxMacArtProvider::CreateBitmapBundle(const wxArtID& id, const wxArtClient& client, const wxSize& size )
 {
+    wxBitmapBundle bundle = wxOSXCreateSystemBitmapBundle(id, size);
+    if ( bundle.IsOk() )
+        return bundle;
+
     // On the Mac folders in lists are always drawn closed, so if an open
     // folder icon is asked for we will ask for a closed one in its place
     if ( client == wxART_LIST && id == wxART_FOLDER_OPEN )
