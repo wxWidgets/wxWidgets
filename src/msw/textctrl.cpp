@@ -3611,10 +3611,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
     LOGFONT lf;
     lf.lfWidth = 0;
-    lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
+    lf.lfCharSet = (cf.dwMask & CFM_CHARSET) ? cf.bCharSet : DEFAULT_CHARSET;
     lf.lfClipPrecision = 0;
     lf.lfEscapement = 0;
-    wxStrcpy(lf.lfFaceName, cf.szFaceName);
+    wxStrlcpy(lf.lfFaceName, cf.szFaceName, WXSIZEOF(lf.lfFaceName));
 
     //NOTE:  we _MUST_ set each of these values to _something_ since we
     //do not call wxZeroMemory on the LOGFONT lf

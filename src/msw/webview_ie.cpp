@@ -1783,9 +1783,9 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::ParseUrl(
             case wxPARSE_SECURITY_URL:
             case wxPARSE_SECURITY_DOMAIN:
             {
-                if ( cchResult < secLen )
+                if ( cchResult <= secLen )
                     return S_FALSE;
-                wcscpy(pwzResult, m_handler->GetSecurityURL().wc_str());
+                wxStrlcpy(pwzResult, m_handler->GetSecurityURL().wc_str(), cchResult);
                 *pcchResult = secLen;
                 return S_OK;
             }
