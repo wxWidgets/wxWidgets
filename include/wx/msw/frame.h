@@ -150,6 +150,8 @@ protected:
 
     virtual bool IsMDIChild() const { return false; }
 
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
+
     // get default (wxWidgets) icon for the frame
     virtual WXHICON GetDefaultIcon() const;
 

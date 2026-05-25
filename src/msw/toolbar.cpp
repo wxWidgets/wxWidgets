@@ -2072,8 +2072,6 @@ void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
     int nrows = m_maxRows;
     m_maxRows = 0;      // otherwise SetRows() wouldn't do anything
     SetRows(nrows);
-
-    Refresh();
 }
 
 void wxToolBar::OnMouseEvent(wxMouseEvent& event)

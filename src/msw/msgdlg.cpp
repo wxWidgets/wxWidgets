@@ -593,7 +593,7 @@ wxTaskDialogCallback(HWND hwnd, UINT msg, WPARAM, LPARAM, LONG_PTR)
     switch ( msg )
     {
         case TDN_DIALOG_CONSTRUCTED:
-            wxMSWDarkMode::EnableForTLW(hwnd);
+            wxMSWDarkMode::ConfigureTLW(hwnd);
             break;
     }
 
