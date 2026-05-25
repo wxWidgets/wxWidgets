@@ -128,17 +128,8 @@ TEST_DRAWING_OBJECTS =  \
 	$(OBJS)\test_drawing_dummy.o \
 	$(OBJS)\test_drawing_test.o \
 	$(OBJS)\test_drawing_drawing.o \
-	$(OBJS)\test_drawing_plugindriver.o \
 	$(OBJS)\test_drawing_basictest.o \
 	$(OBJS)\test_drawing_fonttest.o
-TEST_DRAWINGPLUGIN_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
-	$(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -I$(SETUPHDIR) -I.\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall $(__DLLFLAG_p) $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
-TEST_DRAWINGPLUGIN_OBJECTS =  \
-	$(OBJS)\test_drawingplugin_pluginsample.o
 TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -316,11 +307,6 @@ endif
 ifeq ($(MONOLITHIC),1)
 ifeq ($(USE_STC),1)
 __LIB_LEXILLA_IF_MONO_p = $(__LIB_LEXILLA_p)
-endif
-endif
-ifeq ($(SHARED),1)
-ifeq ($(USE_GUI),1)
-__test_drawingplugin___depname = $(OBJS)\test_drawingplugin.dll
 endif
 endif
 ifeq ($(MONOLITHIC),1)
@@ -528,14 +514,13 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\test.exe del $(OBJS)\test.exe
 	-if exist $(OBJS)\test_drawing.exe del $(OBJS)\test_drawing.exe
-	-if exist $(OBJS)\test_drawingplugin.dll del $(OBJS)\test_drawingplugin.dll
 	-if exist $(OBJS)\test_gui.exe del $(OBJS)\test_gui.exe
 	-if exist $(OBJS)\test_allheaders.exe del $(OBJS)\test_allheaders.exe
 
@@ -551,13 +536,6 @@ $(OBJS)\test_drawing.exe: $(TEST_DRAWING_OBJECTS) $(OBJS)\test_drawing_test_rc.o
 	@move /y $@.rsp.tmp $@.rsp >nul
 	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)     $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lgdiplus -lmsimg32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
 	@-del $@.rsp
-endif
-
-ifeq ($(SHARED),1)
-ifeq ($(USE_GUI),1)
-$(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
-	$(CXX) $(LINK_MODULE_FLAGS) -fPIC -o $@ $(TEST_DRAWINGPLUGIN_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)   $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p_1) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_WEBP_p) $(__LIB_LUNASVG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lgdiplus -lmsimg32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
-endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -880,17 +858,11 @@ $(OBJS)\test_drawing_test.o: ./test.cpp
 $(OBJS)\test_drawing_drawing.o: ./drawing/drawing.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\test_drawing_plugindriver.o: ./drawing/plugindriver.cpp
-	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\test_drawing_basictest.o: ./drawing/basictest.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_drawing_fonttest.o: ./drawing/fonttest.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\test_drawingplugin_pluginsample.o: ./drawing/pluginsample.cpp
-	$(CXX) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_test_rc.o: ./../tests/test.rc
 	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_10) $(__DEBUG_DEFINE_p_10) $(__NDEBUG_DEFINE_p_10) $(__EXCEPTIONS_DEFINE_p_10) $(__RTTI_DEFINE_p_10) $(__THREAD_DEFINE_p_10) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_10) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../samples --define NOPCH --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
