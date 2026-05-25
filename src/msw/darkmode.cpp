@@ -682,7 +682,7 @@ HandleMenuMessage(WXLRESULT* result,
                 WinStruct<MENUITEMINFO> mii;
                 mii.fMask = MIIM_STRING;
                 mii.dwTypeData = buf;
-                mii.cch = sizeof(buf) - 1;
+                mii.cch = WXSIZEOF(buf);
 
                 // Note that we need to use the iPosition field of the
                 // undocumented struct here because DRAWITEMSTRUCT::itemID is
