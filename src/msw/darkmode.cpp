@@ -111,6 +111,9 @@ std::unique_ptr<wxDarkModeSettings> wxDarkModeModule::ms_settings;
 DwmSetWindowAttribute_t
 wxDarkModeModule::ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
 
+// Implemented here to ensure that it's generated inside the DLL.
+wxDarkModeSettings::~wxDarkModeSettings() = default;
+
 #if wxUSE_DARK_MODE
 
 #ifndef WX_PRECOMP
@@ -293,9 +296,6 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 // ----------------------------------------------------------------------------
 // Default wxDarkModeSettings implementation
 // ----------------------------------------------------------------------------
-
-// Implemented here to ensure that it's generated inside the DLL.
-wxDarkModeSettings::~wxDarkModeSettings() = default;
 
 wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
 {
@@ -770,6 +770,21 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance WXUNUSED(appearance))
     return AppearanceResult::Failure;
 }
 
+wxColour wxDarkModeSettings::GetColour(wxSystemColour WXUNUSED(index))
+{
+    return wxColour();
+}
+
+wxColour wxDarkModeSettings::GetMenuColour(wxMenuColour WXUNUSED(which))
+{
+    return wxColour();
+}
+
+wxPen wxDarkModeSettings::GetBorderPen()
+{
+    return wxPen{};
+}
+
 namespace wxMSWDarkMode
 {
 
@@ -782,7 +797,7 @@ void EnableForTLW(HWND WXUNUSED(hwnd))
 {
 }
 
-void AllowForWindow(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeClass))
+void AllowForWindow(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeClass), const wchar_t* WXUNUSED(themeId))
 {
 }
 
