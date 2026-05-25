@@ -628,7 +628,7 @@
 
     Recommended setting: 1, only set to 0 if wayland-client is not available.
  */
-#cmakedefine01 wxHAVE_WAYLAND_CLIENT
+#cmakedefine wxHAVE_WAYLAND_CLIENT 1
 
 /*
    Use XTest extension to implement wxUIActionSimulator?
@@ -736,6 +736,11 @@
  * Use SDL for audio (Unix)
  */
 #cmakedefine01 wxUSE_LIBSDL
+
+/*
+ * Use SDL 3.x (rather than SDL 2.x or 1.x) for the SDL audio backend
+ */
+#cmakedefine01 wxUSE_LIBSDL3
 
 /*
  * Compile sound backends as plugins
