@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapwin.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include  <rpc.h>                       // UUID related functions
@@ -139,7 +140,7 @@ void Uuid::UuidToCForm()
   if ( m_pszCForm == nullptr )
     m_pszCForm = new wxChar[UUID_CSTRLEN];
 
-  wsprintf(m_pszCForm, wxT("0x%8.8X,0x%4.4X,0x%4.4X,0x%2.2X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X"),
+  wxSnprintf(m_pszCForm, UUID_CSTRLEN, wxT("0x%8.8X,0x%4.4X,0x%4.4X,0x%2.2X,0x%2.2X,0x%2.2X,0x%2.2X,0x%2.2X,0x%2.2X,0x%2.2X,0x%2.2X"),
            m_uuid.Data1, m_uuid.Data2, m_uuid.Data3,
            m_uuid.Data4[0], m_uuid.Data4[1], m_uuid.Data4[2], m_uuid.Data4[3],
            m_uuid.Data4[4], m_uuid.Data4[5], m_uuid.Data4[6], m_uuid.Data4[7]);
