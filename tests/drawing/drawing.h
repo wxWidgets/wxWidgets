@@ -9,6 +9,7 @@
 #ifndef _WX_TESTS_DRAWING_H_
 #define _WX_TESTS_DRAWING_H_
 
+#include "wx/brush.h"
 #include "wx/graphics.h"
 
 class GraphicsContextDrawingTestCase
