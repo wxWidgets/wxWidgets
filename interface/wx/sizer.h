@@ -440,15 +440,29 @@ public:
     virtual bool Detach(wxSizer* sizer);
 
     /**
-        Detach an item at position @a index from the sizer without destroying it.
+        Detach the child sizer or window in item at position @a index without
+        destroying it.
 
         This method does not cause any layout or resizing to take place, call Layout()
         to update the layout "on screen" after detaching a child from the sizer.
+
         Returns @true if the child item was found and detached, @false otherwise.
 
         @see Remove()
     */
     virtual bool Detach(int index);
+
+    /**
+        Detach the item at position @a index without destroying it.
+
+        This method does not cause any layout or resizing to take place, call Layout()
+        to update the layout "on screen" after detaching a child from the sizer.
+
+        Returns the item if it was found and detached, @nullptr otherwise.
+
+        @see Remove(), Add()
+     */
+    virtual wxSizerItem *DetachItem(int index);
 
     /**
         Tell the sizer to resize the @a window so that its client area matches the
