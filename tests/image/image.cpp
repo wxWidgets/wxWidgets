@@ -1231,6 +1231,41 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::ReadCorruptedTGA", "[image]")
     );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadBMPPaletteIndex", "[image][bmp][error]")
+{
+    // A 4-bit BMP that declares only a single palette entry (biClrUsed = 1)
+    // but uses a higher nibble value as the pixel index. The 8-bit decode
+    // path rejects indices >= ncolors, but the 4-bit path used to read
+    // cmap[index] for any 0..15 nibble, running past the palette array.
+    static const unsigned char data[] =
+    {
+        'B','M',
+        0x3e,0,0,0,         // file size = 62
+        0,0,0,0,            // reserved
+        0x3a,0,0,0,         // pixel data offset = 58
+
+        0x28,0,0,0,         // DIB header size = 40
+        1,0,0,0,            // width = 1
+        1,0,0,0,            // height = 1
+        1,0,                // planes
+        4,0,                // bpp = 4
+        0,0,0,0,            // compression = BI_RGB
+        0,0,0,0,            // image size
+        0,0,0,0,            // x ppm
+        0,0,0,0,            // y ppm
+        1,0,0,0,            // biClrUsed = 1
+        0,0,0,0,            // biClrImportant
+
+        0,0,0,0,            // single palette entry (BGRA)
+
+        0xf0,0,0,0          // one scanline, high nibble = 15
+    };
+
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_BMP) );
+}
+
 #if wxUSE_GIF
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SaveAnimatedGIF", "[image]")
