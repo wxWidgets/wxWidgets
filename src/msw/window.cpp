@@ -5110,6 +5110,9 @@ bool wxWindowMSW::HandleSysColorChange()
 
     (void)HandleWindowEvent(event);
 
+    if ( IsTopLevel() )
+        Refresh();
+
     // always let the system carry on the default processing to allow the
     // native controls to react to the colours update
     return false;
