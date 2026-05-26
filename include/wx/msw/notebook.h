@@ -139,6 +139,9 @@ protected:
   // common part of all ctors
   void Init();
 
+  virtual void MSWUpdateDarkMode(const wchar_t* themeName,
+                                 const wchar_t* themeId) override;
+
   virtual int MSWGetToolTipMessage() const override;
 
   // hides the currently shown page and shows the given one (if not -1) and

@@ -31,6 +31,7 @@
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private/button.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/private/window.h"
 #include "wx/msw/missing.h"
 
@@ -91,16 +92,14 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-bool wxCheckBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxCheckBox::MSWUpdateDarkMode(const wchar_t* themeName,
+                                   const wchar_t* themeId)
 {
-    // Just as radio buttons, check boxes have some dark theme support, but we
-    // still need to change their foreground manually to make it readable in
-    // dark mode.
-    wxCheckBoxBase::MSWGetDarkModeSupport(support);
+    wxCheckBoxBase::MSWUpdateDarkMode(themeName, themeId);
 
-    support.setForeground = true;
-
-    return true;
+    // Text color does not respond when switching to light mode.
+    if ( wxMSWDarkMode::IsChanging() )
+        SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
 }
 
 // ----------------------------------------------------------------------------

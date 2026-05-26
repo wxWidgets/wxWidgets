@@ -4103,14 +4103,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     }
 
     if ( wxMSWDarkMode::IsActive() )
-    {
-        // We currently allow customizing the theme at wxControl level as some
-        // native controls require using a different theme, but for plain
-        // windows it looks like the default ("Explorer") should always be used
-        // and its only (but important) effect is to make their scrollbars
-        // dark, if they're used.
-        wxMSWDarkMode::AllowForWindow(m_hWnd);
-    }
+        MSWUpdateDarkMode(L"Explorer", nullptr);
 
     SubclassWin(m_hWnd);
 
@@ -4141,6 +4134,17 @@ WXHWND wxWindowMSW::MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* 
     }
 
     return hWnd;
+}
+
+void wxWindowMSW::MSWUpdateDarkMode(const wchar_t* themeName,
+                                    const wchar_t* themeId)
+{
+    // For top level window, update non-client area
+    if ( IsTopLevel() )
+        wxMSWDarkMode::ConfigureTLW(GetHwnd());
+
+    // Update scroll bars, if any.
+    wxMSWDarkMode::AllowForWindow(m_hWnd, themeName, themeId);
 }
 
 // ===========================================================================
@@ -5110,6 +5114,8 @@ bool wxWindowMSW::HandleSysColorChange()
 
     (void)HandleWindowEvent(event);
 
+    wxMSWDarkMode::HandleSysColorChange();
+
     // always let the system carry on the default processing to allow the
     // native controls to react to the colours update
     return false;
@@ -5294,6 +5300,14 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
         // FIXME-MT
         gs_hasStdCmap = false;
     }
+
+    if ( wxMSWDarkMode::IsChanging() )
+    {
+        // Update the parent before the children because they often inherit
+        // parent colors.
+        MSWUpdateDarkMode(L"Explorer", nullptr);
+    }
+
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {

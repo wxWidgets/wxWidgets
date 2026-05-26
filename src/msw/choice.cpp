@@ -212,21 +212,17 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attrs;
 }
 
-bool wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxChoice::MSWUpdateDarkMode(const wchar_t* WXUNUSED(themeName),
+                                 const wchar_t* WXUNUSED(themeId))
 {
-    support.themeName = L"CFD";
+    wxChoiceBase::MSWUpdateDarkMode(L"CFD", nullptr);
 
-    // It is slightly improper to do this in a const function, but as we know
-    // that this will only be called when we're using the dark mode, we also
-    // use it to enable it for the drop down list, if any, to ensure that it
-    // uses dark scrollbars.
+    // Update scroll bar.
     WinStruct<COMBOBOXINFO> info;
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
         wxMSWDarkMode::AllowForWindow(info.hwndList);
     }
-
-    return true;
 }
 
 wxChoice::~wxChoice()

@@ -93,7 +93,8 @@ protected:
                            int sizeFlags = wxSIZE_AUTO) override;
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
-    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    virtual void MSWUpdateDarkMode(const wchar_t* themeName,
+                                   const wchar_t* themeId) override;
 
     // This function can be used as event handle for wxEVT_DPI_CHANGED event.
     void WXHandleDPIChanged(wxDPIChangedEvent& event);
@@ -205,16 +206,6 @@ bool wxMSWHeaderCtrl::Create(wxWindow *parent,
 
     Bind(wxEVT_DPI_CHANGED, &wxMSWHeaderCtrl::WXHandleDPIChanged, this);
 
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        // Note that it may have been already allocated by MSWCreateControl()
-        // which calls SetFont() from InheritAttributes(), so don't recreate it
-        // in this case.
-        if ( !m_customDraw )
-            m_customDraw.reset(new wxMSWHeaderCtrlCustomDraw());
-        m_customDraw->UseHeaderThemeColors(GetHwnd());
-    }
-
     // special hack for margins when using comctl32.dll v6 or later: the
     // default margin is too big and results in label truncation when the
     // column width is just about right to show it together with the sort
@@ -245,11 +236,15 @@ WXDWORD wxMSWHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-bool wxMSWHeaderCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxMSWHeaderCtrl::MSWUpdateDarkMode(const wchar_t* WXUNUSED(themeName),
+                                        const wchar_t* WXUNUSED(themeId))
 {
-    support.themeName = L"ItemsView";
+    wxControl::MSWUpdateDarkMode(L"ItemsView", nullptr);
 
-    return true;
+    // Native control does not show correct text color. Enable custom drawing.
+    if ( !m_customDraw )
+        m_customDraw.reset(new wxMSWHeaderCtrlCustomDraw());
+    m_customDraw->UseHeaderThemeColors(m_hWnd);
 }
 
 // ----------------------------------------------------------------------------

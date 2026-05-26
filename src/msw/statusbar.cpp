@@ -664,16 +664,15 @@ bool wxStatusBar::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM* W
 }
 #endif // wxUSE_TOOLTIPS
 
-bool wxStatusBar::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxStatusBar::MSWUpdateDarkMode(const wchar_t* WXUNUSED(themeName),
+                                    const wchar_t* WXUNUSED(themeId))
 {
     // This is not documented anywhere but seems to work (except for the size
     // grip which we draw ourselves in our WM_PAINT handler).
     //
     // Note that we should _not_ set the theme name to "Explorer", this ID only
     // works if we do _not_ do it.
-    support.themeId = L"ExplorerStatusBar";
-
-    return true;
+    wxStatusBarBase::MSWUpdateDarkMode(nullptr, L"ExplorerStatusBar");
 }
 
 wxVisualAttributes wxStatusBar::GetDefaultAttributes() const

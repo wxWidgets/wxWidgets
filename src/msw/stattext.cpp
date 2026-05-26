@@ -214,6 +214,15 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
     return false;
 }
 
+void wxStaticText::MSWUpdateDarkMode(const wchar_t* themeName,
+                                     const wchar_t* themeId)
+{
+    wxStaticTextBase::MSWUpdateDarkMode(themeName, themeId);
+    // Text color does not respond when switching to light mode.
+    if (wxMSWDarkMode::IsChanging())
+        SetForegroundColour(GetDefaultAttributes().colFg);
+}
+
 void wxStaticText::SetLabel(const wxString& label)
 {
     // If the label doesn't really change, avoid flicker by not doing anything.

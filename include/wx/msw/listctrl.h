@@ -401,7 +401,8 @@ protected:
 
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
-    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    virtual void MSWUpdateDarkMode(const wchar_t* themeName,
+                                   const wchar_t* themeId) override;
 
     virtual int MSWGetToolTipMessage() const override;
 

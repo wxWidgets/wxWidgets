@@ -487,13 +487,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // and check for it in our SetDropTarget()
         m_dropTarget = wxRICHTEXT_DEFAULT_DROPTARGET;
 #endif // wxUSE_DRAG_AND_DROP
-
-        if ( wxMSWDarkMode::IsActive() )
-        {
-            // We need to set the colours explicitly for rich text controls.
-            SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-            SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-        }
     }
 #endif // wxUSE_RICHEDIT
 
@@ -654,20 +647,6 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 #if wxUSE_RICHEDIT
     if (IsRich())
     {
-        // RICHEDIT50W automatically adds WS_EX_CLIENTEDGE to its style for
-        // some reason and while this isn't very noticeable in light mode, it
-        // looks really bad in dark mode, so forcibly remove it unless it was
-        // explicitly requested.
-        if ( GetBorder() != wxBORDER_SUNKEN && wxMSWDarkMode::IsActive() )
-        {
-            const auto origExStyle = ::GetWindowLongPtr(GetHwnd(), GWL_EXSTYLE);
-            if ( origExStyle & WS_EX_CLIENTEDGE )
-            {
-                ::SetWindowLongPtr(GetHwnd(), GWL_EXSTYLE,
-                                   origExStyle & ~WS_EX_CLIENTEDGE);
-            }
-        }
-
 #if wxUSE_INKEDIT
         if (IsInkEdit())
         {
@@ -2946,6 +2925,63 @@ void wxTextCtrl::MSWSetRichZoom()
     num = UINT(100 * ratio);
     denom = 100;
     ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
+}
+
+void wxTextCtrl::MSWUpdateDarkMode(const wchar_t* themeName,
+                                   const wchar_t* themeId)
+{
+    wxTextCtrlBase::MSWUpdateDarkMode(themeName, themeId);
+
+#if wxUSE_RICHEDIT
+    if ( IsRich() )
+    {
+        // We need to set the colours explicitly for rich text controls.
+        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+        SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+
+        // For single-line style, background does not respond when switching
+        // to light mode. Reset the font background.
+        if ( wxMSWDarkMode::IsChanging() )
+        {
+            wxTextAttr textAttr;
+            textAttr.SetFont(m_font);
+            textAttr.SetBackgroundColour(GetBackgroundColour());
+            SetStyle(-1, -1, textAttr);
+        }
+    }
+#endif
+
+    // The text control automatically adds WS_EX_CLIENTEDGE to its style for
+    // some reason and while this isn't very noticeable in light mode, it
+    // looks really bad in dark mode, so forcibly remove it unless it was
+    // explicitly requested.
+    const auto border = GetBorder();
+    if ( border != wxBORDER_SUNKEN )
+    {
+        const auto exStyle = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
+        ::SetWindowLongPtr(m_hWnd, GWL_EXSTYLE, exStyle & ~WS_EX_CLIENTEDGE);
+    }
+
+    // When created in dark mode, the text control has a gray border.
+    // But when switched from light to dark, that border is missing.
+    // Explicitly enable it by toggling WS_BORDER, unless that was already
+    // explicitly requested.
+    if ( wxMSWDarkMode::IsChanging() && border != wxBORDER_SIMPLE )
+    {
+        auto style = GetWindowLongPtr(m_hWnd, GWL_STYLE);
+        if (wxMSWDarkMode::IsActive()) {
+            style |= WS_BORDER;
+        } else {
+            style &= ~WS_BORDER;
+        }
+        SetWindowLongPtr(m_hWnd, GWL_STYLE, style);
+        SetWindowPos(m_hWnd, nullptr, 0, 0, 0, 0,
+            SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
+    }
+
+    // Reset cached colors
+    m_defaultStyle.SetBackgroundColour(wxNullColour);
+    m_defaultStyle.SetTextColour(wxNullColour);
 }
 
 void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)

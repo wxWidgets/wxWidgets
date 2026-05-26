@@ -20,6 +20,12 @@ namespace wxMSWDarkMode
 WXDLLIMPEXP_CORE
 bool IsActive();
 
+// Return true if the system is switching between dark and light modes. This
+// function can be called inside MSWUpdateDarkMode() to distinguish changes
+// needed only for switching modes, and not needed for window creation.
+WXDLLIMPEXP_CORE
+bool IsChanging();
+
 // Enable or disable dark mode for the given TLW if appropriate.
 void ConfigureTLW(HWND hwnd);
 
@@ -64,6 +70,8 @@ HandleMenuMessage(WXLRESULT* result,
                   WXUINT nMsg,
                   WXWPARAM wParam,
                   WXLPARAM lParam);
+
+void HandleSysColorChange();
 
 } // namespace wxMSWDarkMode
 

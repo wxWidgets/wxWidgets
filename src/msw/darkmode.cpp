@@ -151,6 +151,19 @@ enum PreferredAppMode
 
 PreferredAppMode gs_appMode = AppMode_Default;
 
+// The initial dark mode state.
+bool gs_isActive;
+
+// The return value for IsChanging(). We never bother resetting this variable
+// because that would require additional complexity for little benefit. The
+// difficulty with knowing when to reset is that the system color change
+// involves multiple WM_SETTINGCHANGE "ImmersiveColorSet" messages. It is
+// difficult to detect when that sequence is finished. Resetting is not really
+// needed because the IsChanging() function is used to avoid making dark mode
+// settings unless actually needed for dark mode. But, if the mode ever
+// changed, then dark mode must have been enabled already at least once.
+bool gs_isChanging;
+
 template <typename T>
 bool TryLoadByOrd(T& func, const wxDynamicLibrary& lib, int ordinal)
 {
@@ -178,9 +191,33 @@ namespace wxMSWImpl
 // don't appear in the SDK headers at all.
 //
 // Note that, not being public, they use C++ bool type and not Win32 BOOL.
-bool (WINAPI *ShouldAppsUseDarkMode)() = nullptr;
-bool (WINAPI *AllowDarkModeForWindow)(HWND hwnd, bool allow) = nullptr;
-DWORD (WINAPI *SetPreferredAppMode)(DWORD) = nullptr;
+bool (WINAPI *gs_ShouldAppsUseDarkMode)() = nullptr;
+bool (WINAPI *gs_AllowDarkModeForWindow)(HWND hwnd, bool allow) = nullptr;
+PreferredAppMode (WINAPI *gs_SetPreferredAppMode)(PreferredAppMode appMode) = nullptr;
+
+// Wrappers for the undocumented functions, to make sure we never dereference
+// a null function pointer.
+
+bool ShouldAppsUseDarkMode()
+{
+    if (gs_ShouldAppsUseDarkMode == nullptr)
+        return false;
+    return gs_ShouldAppsUseDarkMode();
+}
+
+bool AllowDarkModeForWindow(HWND hwnd, bool allow)
+{
+    if (gs_AllowDarkModeForWindow == nullptr)
+        return false;
+    return gs_AllowDarkModeForWindow(hwnd, allow);
+}
+
+PreferredAppMode SetPreferredAppMode(PreferredAppMode appMode)
+{
+    if (gs_SetPreferredAppMode == nullptr)
+        return AppMode_Default;
+    return gs_SetPreferredAppMode(appMode);
+}
 
 bool InitDarkMode()
 {
@@ -199,9 +236,9 @@ bool InitDarkMode()
 
     // These functions are not only undocumented but are not even exported by
     // name, and have to be resolved using their ordinals.
-    return TryLoadByOrd(ShouldAppsUseDarkMode, dllUxTheme, 132) &&
-           TryLoadByOrd(AllowDarkModeForWindow, dllUxTheme, 133) &&
-           TryLoadByOrd(SetPreferredAppMode, dllUxTheme, 135);
+    return TryLoadByOrd(gs_ShouldAppsUseDarkMode, dllUxTheme, 132) &&
+           TryLoadByOrd(gs_AllowDarkModeForWindow, dllUxTheme, 133) &&
+           TryLoadByOrd(gs_SetPreferredAppMode, dllUxTheme, 135);
 }
 
 // This function is only used in this file as it's more clear than using
@@ -255,6 +292,7 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
     }
 
     gs_appMode = mode;
+    gs_isActive = wxMSWDarkMode::IsActive();
 
     // Set up the settings to use, allocating a default one if none specified.
     if ( !settings )
@@ -425,6 +463,11 @@ bool IsActive()
     return wxMSWImpl::ShouldUseDarkMode();
 }
 
+bool IsChanging()
+{
+    return gs_isChanging;
+}
+
 void ConfigureTLW(HWND hwnd)
 {
     BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
@@ -453,15 +496,11 @@ void ConfigureTLW(HWND hwnd)
     if ( FAILED(hr) )
         wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
 
-    if ( wxMSWImpl::AllowDarkModeForWindow != nullptr )
-        wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
+    wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
 }
 
 void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
 {
-    if ( !wxMSWImpl::ShouldUseDarkMode() )
-        return;
-
     if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, true) )
         wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
 
@@ -474,6 +513,10 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
                                            hwnd, themeName, themeId), hr);
         }
     }
+
+    // Some native controls need this message to switch themes, such as
+    // buttons, tooltips and controls with scroll bars
+    ::SendMessage(hwnd, WM_THEMECHANGED, 0, 0);
 }
 
 wxColour GetColour(wxSystemColour index)
@@ -751,6 +794,12 @@ HandleMenuMessage(WXLRESULT* result,
     }
 
     return false;
+}
+
+void HandleSysColorChange()
+{
+    if ( IsActive() != gs_isActive )
+        gs_isChanging = true;
 }
 
 } // namespace wxMSWDarkMode

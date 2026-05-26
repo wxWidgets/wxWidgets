@@ -618,6 +618,13 @@ protected:
     {
     }
 
+    // Update the window for dark mode for window creation or for switching
+    // between dark and light modes. The parameters are for SetWindowTheme().
+    // The general purpose theme name "Explorer" should be specified unless
+    // a specific theme is required.
+    virtual void MSWUpdateDarkMode(const wchar_t* themeName,
+                                   const wchar_t* themeId);
+
     // Translate wxBORDER_THEME to a standard border style or return it as is
     // if themed border should be used, depending on CanApplyThemeBorder().
     wxBorder DoTranslateBorder(wxBorder border) const;
