@@ -618,6 +618,35 @@ protected:
     {
     }
 
+    // Struct used for MSWGetDarkModeSupport() below.
+    // This specifies the arguments to the SetWindowTheme API for dark mode.
+    struct MSWDarkModeSupport
+    {
+        // The name of the theme to use (also called "app name").
+        const wchar_t* themeName = nullptr;
+
+        // The theme IDs to use. If neither this field nor the theme name is
+        // set, no theme is applied to the window.
+        const wchar_t* themeId = nullptr;
+    };
+
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;
+
+    // The reason for calling MSWSetDarkOrLightMode below.
+    enum class SetMode
+    {
+        // Set dark mode for a newly created window.
+        Initial,
+
+        // Set dark mode or light mode for an existing window.
+        Change
+    };
+
+    // Configure a window for dark mode settings immediately after creation or
+    // upon switching into or out of dark mode. This function is not called
+    // unless dark mode was enabled, or is being enabled.
+    virtual void MSWSetDarkOrLightMode(SetMode setmode);
+
     // Translate wxBORDER_THEME to a standard border style or return it as is
     // if themed border should be used, depending on CanApplyThemeBorder().
     wxBorder DoTranslateBorder(wxBorder border) const;

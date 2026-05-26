@@ -468,19 +468,6 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
     }
 #endif // wxUSE_TOOLTIPS
 
-    // Change the color scheme when using the dark mode even though MSDN says
-    // that it's not used with comctl32 v6, it actually still is for "3D"
-    // separator above the toolbar, which is drawn partially in white by
-    // default and so looks very ugly in dark mode.
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        COLORSCHEME colScheme;
-        colScheme.dwSize = sizeof(COLORSCHEME);
-        colScheme.clrBtnHighlight =
-        colScheme.clrBtnShadow = wxSysColourToRGB(wxSYS_COLOUR_WINDOW);
-        ::SendMessage(GetHwnd(), TB_SETCOLORSCHEME, 0, (LPARAM)&colScheme);
-    }
-
     return true;
 }
 
@@ -732,15 +719,26 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-bool wxToolBar::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxToolBar::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    wxToolBarBase::MSWGetDarkModeSupport(support);
+    wxToolBarBase::MSWSetDarkOrLightMode(setmode);
+
+    // Background color does not respond when switching to dark mode.
+    const auto attrs = GetDefaultAttributes();
+    if ( setmode == SetMode::Change )
+        SetBackgroundColour(attrs.colBg);
 
     // This ensures GetForegroundColour(), used in our custom draw code,
     // returns the correct colour.
-    support.setForeground = true;
+    SetForegroundColour(attrs.colFg);
 
-    return true;
+    // Update the separator above the toolbar which is drawn partially in
+    // white by default and so looks very ugly in dark mode.
+    COLORSCHEME colScheme;
+    colScheme.dwSize = sizeof(COLORSCHEME);
+    colScheme.clrBtnHighlight =
+    colScheme.clrBtnShadow = wxSysColourToRGB(wxSYS_COLOUR_WINDOW);
+    ::SendMessage(GetHwnd(), TB_SETCOLORSCHEME, 0, (LPARAM)&colScheme);
 }
 
 int wxToolBar::MSWGetToolTipMessage() const
@@ -2053,14 +2051,6 @@ void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     // let the event propagate further in any case
     event.Skip();
-
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        // We currently don't use system colours in dark mode, although we
-        // should, of course. For now at least don't switch to using light mode
-        // colours.
-        return;
-    }
 
     if ( !UseBgCol() )
         wxRGBToColour(m_backgroundColour, ::GetSysColor(COLOR_BTNFACE));

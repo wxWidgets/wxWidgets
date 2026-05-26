@@ -115,28 +115,7 @@ protected:
     // Look in our GetSubcontrols() for the windows with the given ID.
     virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const override;
 
-
-    // Struct used for MSWGetDarkModeSupport() below.
-    struct MSWDarkModeSupport
-    {
-        // The name of the theme to use (also called "app name").
-        const wchar_t* themeName = nullptr;
-
-        // The theme IDs to use. If neither this field nor the theme name is
-        // set, no theme is applied to the window.
-        const wchar_t* themeId = nullptr;
-
-        // For some controls we need to set the foreground explicitly, even if
-        // they have some support for the dark theme.
-        bool setForeground = false;
-    };
-
-    // Called after creating the control to enable dark mode support if needed.
-    //
-    // If this function returns true, wxControl allows using dark mode for the
-    // window and set its theme to the one specified by MSWDarkModeSupport
-    // fields.
-    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;
+    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
 
     // Return the message that can be used to retrieve the tooltip window used
     // by a native control. If this message is non-zero and sending it returns

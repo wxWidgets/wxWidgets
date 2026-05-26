@@ -4103,14 +4103,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     }
 
     if ( wxMSWDarkMode::IsActive() )
-    {
-        // We currently allow customizing the theme at wxControl level as some
-        // native controls require using a different theme, but for plain
-        // windows it looks like the default ("Explorer") should always be used
-        // and its only (but important) effect is to make their scrollbars
-        // dark, if they're used.
-        wxMSWDarkMode::AllowForWindow(m_hWnd);
-    }
+        MSWSetDarkOrLightMode(SetMode::Initial);
 
     SubclassWin(m_hWnd);
 
@@ -4141,6 +4134,23 @@ WXHWND wxWindowMSW::MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* 
     }
 
     return hWnd;
+}
+
+void wxWindowMSW::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // This theme works for a few controls (buttons, texts, comboboxes) and
+    // doesn't seem to do any harm for those that don't support it, so use it
+    // by default.
+    support.themeName = L"Explorer";
+}
+
+void wxWindowMSW::MSWSetDarkOrLightMode(SetMode WXUNUSED(setmode))
+{
+    MSWDarkModeSupport support;
+    MSWGetDarkModeSupport(support);
+
+    // This updates scroll bars, if there are any.
+    wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
 }
 
 // ===========================================================================
@@ -5105,6 +5115,10 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 
 bool wxWindowMSW::HandleSysColorChange()
 {
+    // Update dark mode status before event handlers run since they may need
+    // that information.
+    wxMSWDarkMode::NotifySysColorChange();
+
     wxSysColourChangedEvent event;
     event.SetEventObject(this);
 
@@ -5297,6 +5311,14 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
         // FIXME-MT
         gs_hasStdCmap = false;
     }
+
+    if ( wxMSWDarkMode::HasChanged() )
+    {
+        // Update the parent before the children because they often inherit
+        // parent colors.
+        MSWSetDarkOrLightMode(SetMode::Change);
+    }
+
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {

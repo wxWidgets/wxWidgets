@@ -211,30 +211,10 @@ bool wxNotebook::Create(wxWindow *parent,
 
     // Inherit parent attributes and, unlike the default, also inherit the
     // parent background colour in order to blend in with its background if
-    // it's set to a non-default value -- or if we're using dark mode, in which
-    // the default colour always needs to be changed.
+    // it's set to a non-default value
     InheritAttributes();
-    if ( !UseBgCol() )
-    {
-        wxColour colBg;
-        if ( parent->InheritsBackgroundColour() )
-        {
-            colBg = parent->GetBackgroundColour();
-        }
-        else if ( wxMSWDarkMode::IsActive() )
-        {
-            colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-
-            // We also need to change the foreground in this case to ensure a
-            // good contrast with the dark background.
-            SetForegroundColour(
-                wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT)
-            );
-        }
-
-        if ( colBg.IsOk() )
-            SetBackgroundColour(colBg);
-    }
+    if ( !UseBgCol() && parent->InheritsBackgroundColour() )
+        SetBackgroundColour(parent->GetBackgroundColour());
 
     if ( HasFlag(wxNB_NOPAGETHEME) ||
             wxSystemOptions::IsFalse(wxT("msw.notebook.themed-background")) )
@@ -285,6 +265,14 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
         tabStyle |= TCS_VERTICAL | TCS_RIGHT;
 
     return tabStyle;
+}
+
+void wxNotebook::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxNotebookBase::MSWSetDarkOrLightMode(setmode);
+
+    // Background must always be set.
+    SetBackgroundColour(GetDefaultAttributes().colBg);
 }
 
 int wxNotebook::MSWGetToolTipMessage() const

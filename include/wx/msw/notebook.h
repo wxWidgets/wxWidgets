@@ -139,6 +139,8 @@ protected:
   // common part of all ctors
   void Init();
 
+  virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
+
   virtual int MSWGetToolTipMessage() const override;
 
   // hides the currently shown page and shows the given one (if not -1) and

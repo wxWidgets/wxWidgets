@@ -130,21 +130,8 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         return false;
     }
 
-    MSWDarkModeSupport support;
-    if ( wxMSWDarkMode::IsActive() && MSWGetDarkModeSupport(support) )
-    {
-        wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
-
-        if ( support.setForeground )
-            SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
-
-        if ( const int msgTT = MSWGetToolTipMessage() )
-        {
-            const HWND hwndTT = (HWND)::SendMessage(GetHwnd(), msgTT, 0, 0);
-            if ( ::IsWindow(hwndTT) )
-                wxMSWDarkMode::AllowForWindow(hwndTT);
-        }
-    }
+    if ( wxMSWDarkMode::IsActive() )
+        MSWSetDarkOrLightMode(SetMode::Initial);
 
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()
@@ -192,14 +179,16 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     return true;
 }
 
-bool wxControl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxControl::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    // This theme works for a few controls (buttons, texts, comboboxes) and
-    // doesn't seem to do any harm for those that don't support it, so use it
-    // by default.
-    support.themeName = L"Explorer";
+    wxControlBase::MSWSetDarkOrLightMode(setmode);
 
-    return true;
+    if ( const int msgTT = MSWGetToolTipMessage() )
+    {
+        const HWND hwndTT = (HWND)::SendMessage(GetHwnd(), msgTT, 0, 0);
+        if ( ::IsWindow(hwndTT) )
+            wxMSWDarkMode::AllowForWindow(hwndTT);
+    }
 }
 
 // ----------------------------------------------------------------------------

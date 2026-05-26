@@ -257,21 +257,8 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
-    const wxVisualAttributes& defAttrs = GetDefaultAttributes();
-
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        MSWInitHeader();
-
-        // We also need to explicitly set the background colour as the value
-        // returned by GetBackgroundColour() by default doesn't match the
-        // actually used colour either when using dark mode.
-        SetBackgroundColour(defAttrs.colBg);
-    }
-    else
-    {
+    if ( !wxMSWDarkMode::IsActive() )
         EnableSystemThemeByDefault();
-    }
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
     // versions of _some_ messages (notably LVN_GETDISPINFOA)
@@ -280,7 +267,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     // We must set the default text colour to the system/theme color, otherwise
     // GetTextColour will always return black even if this is not what is used
     // by default.
-    SetTextColour(defAttrs.colFg);
+    SetTextColour(GetDefaultAttributes().colFg);
 
     if ( InReportView() )
         MSWSetExListStyles();
@@ -345,8 +332,9 @@ void wxListCtrl::MSWSetExListStyles()
 
 void wxListCtrl::MSWInitHeader()
 {
-    // Currently we only need to do something here in dark mode.
-    if ( !wxMSWDarkMode::IsActive() )
+    // Currently we only need to do something here in dark mode or switching
+    // between modes.
+    if ( !(wxMSWDarkMode::IsActive() || wxMSWDarkMode::HasChanged()) )
         return;
 
     // It's not an error if the header doesn't exist.
@@ -601,25 +589,22 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-bool wxListCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxListCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    // There doesn't seem to be any theme that works well out of the box:
-    //
-    //  - "Explorer" draws bluish hover highlight rectangle which is not at
-    //    all like the greyish one used by the actual Explorer in dark mode.
-    //    It also draws vertical separator lines, unlike the Explorer itself,
-    //    which wouldn't be too bad if they were not misaligned with the
-    //    separators drawn in the header, when it is used, which looks ugly.
-    //  - "DarkMode_Explorer" uses the same selection colours as the light mode
-    //    and doesn't draw hover rectangle at all.
-    //  - "ItemsView" draws the selection and hover as expected, but uses light
-    //    mode scrollbars and also misaligned vertical separators.
-    //
-    // We currently use Explorer, in Report view we can override all drawing,
-    // the other views will still have the bluish hover colour.
-    support.themeName = L"Explorer";
+    wxListCtrlBase::MSWSetDarkOrLightMode(setmode);
 
-    return true;
+    // Update header.
+    MSWInitHeader();
+
+    // Background color must always be set.
+    // Verified with the widgets sample, selecting the wxFileCtrl page.
+    const auto attrs = GetDefaultAttributes();
+    SetBackgroundColour(attrs.colBg);
+
+    // When switching modes, the text color remains the same. We must
+    // explicitly update the color.
+    if ( setmode == SetMode::Change )
+        SetTextColour(attrs.colFg);
 }
 
 int wxListCtrl::MSWGetToolTipMessage() const
@@ -3348,8 +3333,6 @@ wxColour GetEffectiveBackgroundColour(wxListCtrl* listctrl)
 {
     if ( listctrl->IsEnabled() )
         return listctrl->GetBackgroundColour();
-    else if ( wxMSWDarkMode::IsActive() )
-        return wxMSWDarkMode::GetColour(wxSYS_COLOUR_BTNFACE);
     else
         return wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
 }

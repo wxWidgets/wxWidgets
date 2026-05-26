@@ -36,6 +36,7 @@
 
 #include "wx/dynlib.h"
 #include "wx/msw/missing.h"
+#include "wx/msw/private/darkmode.h"
 
 #include <memory>
 
@@ -226,6 +227,14 @@ bool wxNonOwnedWindow::IsThisEnabled() const
     // using default ctor but before calling Create().
     return m_hWnd ? !(::GetWindowLong(GetHwnd(), GWL_STYLE) & WS_DISABLED)
                   : m_isEnabled;
+}
+
+void wxNonOwnedWindow::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxNonOwnedWindowBase::MSWSetDarkOrLightMode(setmode);
+
+    // Update non-client area
+    wxMSWDarkMode::ConfigureTLW(GetHwnd());
 }
 
 WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
