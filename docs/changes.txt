@@ -273,6 +273,7 @@ All (GUI):
 - Avoid out-of-bounds read in wxXPMDecoder (MarkLee131, #26442).
 - Fix reading ANI images with invalid frame count (dxbjavid, #26492).
 - Avoid out-of-bounds write for invalid BMP RLE runs (dxbjavid, #26496).
+- Fix out-of-bounds read when loading invalid 4bpp BMPs (dxbjavid, #26511).
 - Avoid out-of-bounds write on bad BMHD chunk in wxIFFDecoder (jmestwa, #26497).
 - Fix write overflow in TGA files with invalid colour map (dxbjavid, #26493).
 - Fix read overflow in wxXPMDecoder on unterminated quote (dxbjavid, #26499).
