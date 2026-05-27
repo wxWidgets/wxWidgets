@@ -109,8 +109,7 @@ protected:
     // common part of all ctors
     void Init();
 
-    virtual void MSWUpdateDarkMode(const wchar_t* themeName,
-                                   const wchar_t* themeId) override;
+    virtual void MSWUpdateDarkMode() override;
     virtual int MSWGetToolTipMessage() const override;
 
     // create the native toolbar control

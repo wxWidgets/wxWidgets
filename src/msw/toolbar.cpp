@@ -719,14 +719,13 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxToolBar::MSWUpdateDarkMode(const wchar_t* themeName,
-                                  const wchar_t* themeId)
+void wxToolBar::MSWUpdateDarkMode()
 {
-    wxToolBarBase::MSWUpdateDarkMode(themeName, themeId);
+    wxToolBarBase::MSWUpdateDarkMode();
 
     // Background color does not respond when switching to dark mode.
     const auto attrs = GetDefaultAttributes();
-    if ( wxMSWDarkMode::IsChanging() )
+    if ( wxMSWDarkMode::HasChanged() )
         SetBackgroundColour(attrs.colBg);
 
     // This ensures GetForegroundColour(), used in our custom draw code,

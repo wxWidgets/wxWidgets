@@ -92,13 +92,13 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxCheckBox::MSWUpdateDarkMode(const wchar_t* themeName,
-                                   const wchar_t* themeId)
+void wxCheckBox::MSWUpdateDarkMode()
 {
-    wxCheckBoxBase::MSWUpdateDarkMode(themeName, themeId);
+    wxCheckBoxBase::MSWUpdateDarkMode();
 
-    // Text color does not respond when switching to light mode.
-    if ( wxMSWDarkMode::IsChanging() )
+    // When switching to light mode, the text color remains the same. We must
+    // explicitly update the color.
+    if ( wxMSWDarkMode::HasChanged() )
         SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
 }
 

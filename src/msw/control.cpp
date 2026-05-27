@@ -131,7 +131,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     }
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWUpdateDarkMode(L"Explorer", nullptr);
+        MSWUpdateDarkMode();
 
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()
@@ -179,10 +179,9 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     return true;
 }
 
-void wxControl::MSWUpdateDarkMode(const wchar_t* themeName,
-                                  const wchar_t* themeId)
+void wxControl::MSWUpdateDarkMode()
 {
-    wxControlBase::MSWUpdateDarkMode(themeName, themeId);
+    wxControlBase::MSWUpdateDarkMode();
 
     if ( const int msgTT = MSWGetToolTipMessage() )
     {

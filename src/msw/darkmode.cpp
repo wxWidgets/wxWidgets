@@ -152,17 +152,10 @@ enum PreferredAppMode
 PreferredAppMode gs_appMode = AppMode_Default;
 
 // The initial dark mode state.
-bool gs_isActive;
+bool gs_isActive = false;
 
-// The return value for IsChanging(). We never bother resetting this variable
-// because that would require additional complexity for little benefit. The
-// difficulty with knowing when to reset is that the system color change
-// involves multiple WM_SETTINGCHANGE "ImmersiveColorSet" messages. It is
-// difficult to detect when that sequence is finished. Resetting is not really
-// needed because the IsChanging() function is used to avoid making dark mode
-// settings unless actually needed for dark mode. But, if the mode ever
-// changed, then dark mode must have been enabled already at least once.
-bool gs_isChanging;
+// The return value for HasChanged().
+bool gs_hasChanged = false;
 
 template <typename T>
 bool TryLoadByOrd(T& func, const wxDynamicLibrary& lib, int ordinal)
@@ -463,9 +456,9 @@ bool IsActive()
     return wxMSWImpl::ShouldUseDarkMode();
 }
 
-bool IsChanging()
+bool HasChanged()
 {
-    return gs_isChanging;
+    return gs_hasChanged;
 }
 
 void ConfigureTLW(HWND hwnd)
@@ -796,10 +789,10 @@ HandleMenuMessage(WXLRESULT* result,
     return false;
 }
 
-void HandleSysColorChange()
+void NotifySysColorChange()
 {
     if ( IsActive() != gs_isActive )
-        gs_isChanging = true;
+        gs_hasChanged = true;
 }
 
 } // namespace wxMSWDarkMode

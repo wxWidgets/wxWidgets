@@ -334,7 +334,7 @@ void wxListCtrl::MSWInitHeader()
 {
     // Currently we only need to do something here in dark mode or switching
     // between modes.
-    if ( !(wxMSWDarkMode::IsActive() || wxMSWDarkMode::IsChanging()) )
+    if ( !(wxMSWDarkMode::IsActive() || wxMSWDarkMode::HasChanged()) )
         return;
 
     // It's not an error if the header doesn't exist.
@@ -589,10 +589,9 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-void wxListCtrl::MSWUpdateDarkMode(const wchar_t* themeName,
-                                   const wchar_t* themeId)
+void wxListCtrl::MSWUpdateDarkMode()
 {
-    wxListCtrlBase::MSWUpdateDarkMode(themeName, themeId);
+    wxListCtrlBase::MSWUpdateDarkMode();
 
     // Update header.
     MSWInitHeader();
@@ -601,11 +600,11 @@ void wxListCtrl::MSWUpdateDarkMode(const wchar_t* themeName,
     // Verified with the widgets sample, selecting the wxFileCtrl page.
     const auto attrs = GetDefaultAttributes();
     SetBackgroundColour(attrs.colBg);
-    if (wxMSWDarkMode::IsChanging())
-    {
-        // Text color does not respond when switching modes.
+
+    // When switching modes, the text color remains the same. We must
+    // explicitly update the color.
+    if (wxMSWDarkMode::HasChanged())
         SetTextColour(attrs.colFg);
-    }
 }
 
 int wxListCtrl::MSWGetToolTipMessage() const

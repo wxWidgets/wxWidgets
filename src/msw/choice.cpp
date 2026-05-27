@@ -212,10 +212,14 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attrs;
 }
 
-void wxChoice::MSWUpdateDarkMode(const wchar_t* WXUNUSED(themeName),
-                                 const wchar_t* WXUNUSED(themeId))
+void wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    wxChoiceBase::MSWUpdateDarkMode(L"CFD", nullptr);
+    support.themeName = L"CFD";
+}
+
+void wxChoice::MSWUpdateDarkMode()
+{
+    wxChoiceBase::MSWUpdateDarkMode();
 
     // Update scroll bar.
     WinStruct<COMBOBOXINFO> info;

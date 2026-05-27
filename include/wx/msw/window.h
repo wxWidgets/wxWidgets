@@ -618,12 +618,23 @@ protected:
     {
     }
 
-    // Update the window for dark mode for window creation or for switching
-    // between dark and light modes. The parameters are for SetWindowTheme().
-    // The general purpose theme name "Explorer" should be specified unless
-    // a specific theme is required.
-    virtual void MSWUpdateDarkMode(const wchar_t* themeName,
-                                   const wchar_t* themeId);
+    // Struct used for MSWGetDarkModeSupport() below.
+    // This specifies the arguments to the SetWindowTheme API for dark mode.
+    struct MSWDarkModeSupport
+    {
+        // The name of the theme to use (also called "app name").
+        const wchar_t* themeName = nullptr;
+
+        // The theme IDs to use. If neither this field nor the theme name is
+        // set, no theme is applied to the window.
+        const wchar_t* themeId = nullptr;
+    };
+
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;
+
+    // Update the window for dark mode window creation or for switching
+    // between dark and light modes.
+    virtual void MSWUpdateDarkMode();
 
     // Translate wxBORDER_THEME to a standard border style or return it as is
     // if themed border should be used, depending on CanApplyThemeBorder().

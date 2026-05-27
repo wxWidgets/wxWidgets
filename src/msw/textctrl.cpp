@@ -2927,26 +2927,33 @@ void wxTextCtrl::MSWSetRichZoom()
     ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
 }
 
-void wxTextCtrl::MSWUpdateDarkMode(const wchar_t* themeName,
-                                   const wchar_t* themeId)
+void wxTextCtrl::MSWUpdateDarkMode()
 {
-    wxTextCtrlBase::MSWUpdateDarkMode(themeName, themeId);
+    wxTextCtrlBase::MSWUpdateDarkMode();
 
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
-        // We need to set the colours explicitly for rich text controls.
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-        SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+        // The window background color is wrong. We must always set it.
+        ::SendMessage(GetHwnd(), EM_SETBKGNDCOLOR, 0, wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
 
-        // For single-line style, background does not respond when switching
-        // to light mode. Reset the font background.
-        if ( wxMSWDarkMode::IsChanging() )
+        if ( wxMSWDarkMode::HasChanged() )
         {
+            // Unfortunately we must set the text background and text colour
+            // to prevent text disappearing. This overwrites any customized
+            // colours. We have no better option.
+
+            // Set the text background color.
             wxTextAttr textAttr;
             textAttr.SetFont(m_font);
             textAttr.SetBackgroundColour(GetBackgroundColour());
             SetStyle(-1, -1, textAttr);
+
+            // Set text colour.
+            WinStruct<CHARFORMAT> cf;
+            cf.dwMask = CFM_COLOR;
+            cf.crTextColor = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+            ::SendMessage(GetHwnd(), EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
         }
     }
 #endif
@@ -2966,22 +2973,17 @@ void wxTextCtrl::MSWUpdateDarkMode(const wchar_t* themeName,
     // But when switched from light to dark, that border is missing.
     // Explicitly enable it by toggling WS_BORDER, unless that was already
     // explicitly requested.
-    if ( wxMSWDarkMode::IsChanging() && border != wxBORDER_SIMPLE )
+    if ( wxMSWDarkMode::HasChanged() && border != wxBORDER_SIMPLE )
     {
         auto style = GetWindowLongPtr(m_hWnd, GWL_STYLE);
-        if (wxMSWDarkMode::IsActive()) {
+        if (wxMSWDarkMode::IsActive())
             style |= WS_BORDER;
-        } else {
+        else
             style &= ~WS_BORDER;
-        }
         SetWindowLongPtr(m_hWnd, GWL_STYLE, style);
         SetWindowPos(m_hWnd, nullptr, 0, 0, 0, 0,
             SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
     }
-
-    // Reset cached colors
-    m_defaultStyle.SetBackgroundColour(wxNullColour);
-    m_defaultStyle.SetTextColour(wxNullColour);
 }
 
 void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)

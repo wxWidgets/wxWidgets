@@ -214,12 +214,13 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
     return false;
 }
 
-void wxStaticText::MSWUpdateDarkMode(const wchar_t* themeName,
-                                     const wchar_t* themeId)
+void wxStaticText::MSWUpdateDarkMode()
 {
-    wxStaticTextBase::MSWUpdateDarkMode(themeName, themeId);
-    // Text color does not respond when switching to light mode.
-    if (wxMSWDarkMode::IsChanging())
+    wxStaticTextBase::MSWUpdateDarkMode();
+
+    // When switching to light mode, the text color remains the same. We must
+    // explicitly update the color.
+    if (wxMSWDarkMode::HasChanged())
         SetForegroundColour(GetDefaultAttributes().colFg);
 }
 

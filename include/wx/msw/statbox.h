@@ -78,8 +78,7 @@ public:
 protected:
     virtual wxWindowList GetCompositeWindowParts() const override;
 
-    virtual void MSWUpdateDarkMode(const wchar_t* themeName,
-                                   const wchar_t* themeId) override;
+    virtual void MSWUpdateDarkMode() override;
 
     // return the region with all the windows inside this static box excluded
     WXHRGN MSWGetRegionWithoutChildren();

@@ -93,8 +93,8 @@ protected:
                            int sizeFlags = wxSIZE_AUTO) override;
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
-    virtual void MSWUpdateDarkMode(const wchar_t* themeName,
-                                   const wchar_t* themeId) override;
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    virtual void MSWUpdateDarkMode() override;
 
     // This function can be used as event handle for wxEVT_DPI_CHANGED event.
     void WXHandleDPIChanged(wxDPIChangedEvent& event);
@@ -236,12 +236,18 @@ WXDWORD wxMSWHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxMSWHeaderCtrl::MSWUpdateDarkMode(const wchar_t* WXUNUSED(themeName),
-                                        const wchar_t* WXUNUSED(themeId))
+void wxMSWHeaderCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    wxControl::MSWUpdateDarkMode(L"ItemsView", nullptr);
+    support.themeName = L"ItemsView";
+}
 
-    // Native control does not show correct text color. Enable custom drawing.
+void wxMSWHeaderCtrl::MSWUpdateDarkMode()
+{
+    wxControl::MSWUpdateDarkMode();
+
+    // The Windows native header control does not respond to changes in the
+    // dark/light mode. The text color always stays as it was created. We have
+    // no choice but to use the custom drawing both for dark mode.
     if ( !m_customDraw )
         m_customDraw.reset(new wxMSWHeaderCtrlCustomDraw());
     m_customDraw->UseHeaderThemeColors(m_hWnd);

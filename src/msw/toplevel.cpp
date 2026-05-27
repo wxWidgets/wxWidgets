@@ -513,7 +513,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     MSWUpdateUIState(UIS_INITIALIZE);
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWUpdateDarkMode(L"Explorer", nullptr);
+        MSWUpdateDarkMode();
 
     return true;
 }

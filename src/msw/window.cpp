@@ -4103,7 +4103,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     }
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWUpdateDarkMode(L"Explorer", nullptr);
+        MSWUpdateDarkMode();
 
     SubclassWin(m_hWnd);
 
@@ -4136,15 +4136,21 @@ WXHWND wxWindowMSW::MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* 
     return hWnd;
 }
 
-void wxWindowMSW::MSWUpdateDarkMode(const wchar_t* themeName,
-                                    const wchar_t* themeId)
+void wxWindowMSW::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    // For top level window, update non-client area
-    if ( IsTopLevel() )
-        wxMSWDarkMode::ConfigureTLW(GetHwnd());
+    // This theme works for a few controls (buttons, texts, comboboxes) and
+    // doesn't seem to do any harm for those that don't support it, so use it
+    // by default.
+    support.themeName = L"Explorer";
+}
 
-    // Update scroll bars, if any.
-    wxMSWDarkMode::AllowForWindow(m_hWnd, themeName, themeId);
+void wxWindowMSW::MSWUpdateDarkMode()
+{
+    MSWDarkModeSupport support;
+    MSWGetDarkModeSupport(support);
+
+    // This updates scroll bars, if there are any.
+    wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
 }
 
 // ===========================================================================
@@ -5114,7 +5120,7 @@ bool wxWindowMSW::HandleSysColorChange()
 
     (void)HandleWindowEvent(event);
 
-    wxMSWDarkMode::HandleSysColorChange();
+    wxMSWDarkMode::NotifySysColorChange();
 
     if ( IsTopLevel() )
         Refresh();
@@ -5304,11 +5310,11 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
         gs_hasStdCmap = false;
     }
 
-    if ( wxMSWDarkMode::IsChanging() )
+    if ( wxMSWDarkMode::HasChanged() )
     {
         // Update the parent before the children because they often inherit
         // parent colors.
-        MSWUpdateDarkMode(L"Explorer", nullptr);
+        MSWUpdateDarkMode();
     }
 
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();

@@ -69,8 +69,7 @@ protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result) override;
 #endif
 
-    virtual void MSWUpdateDarkMode(const wchar_t* themeName,
-                                   const wchar_t* themeId) override;
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
 
     // implementation of the public SetStatusWidths()
     void MSWUpdateFieldsWidths();

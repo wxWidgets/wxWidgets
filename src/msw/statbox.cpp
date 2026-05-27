@@ -95,10 +95,9 @@ bool wxStaticBox::Create(wxWindow *parent,
     return true;
 }
 
-void wxStaticBox::MSWUpdateDarkMode(const wchar_t* themeName,
-                                    const wchar_t* themeId)
+void wxStaticBox::MSWUpdateDarkMode()
 {
-    wxStaticBoxBase::MSWUpdateDarkMode(themeName, themeId);
+    wxStaticBoxBase::MSWUpdateDarkMode();
 
     // Static boxes don't seem to have any dark mode support, so just set the
     // foreground colour contrasting with the dark background for them.
