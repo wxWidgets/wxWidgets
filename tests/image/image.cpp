@@ -1542,6 +1542,26 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPMUnterminatedQuote",
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_XPM) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPMWidthOverflow",
+                 "[image][xpm][error]")
+{
+    // width * chars_per_pixel was computed in 32-bit unsigned in
+    // wxXPMDecoder::ReadData() and used to check that each image line is long
+    // enough, but the per-pixel index uses size_t arithmetic. With width =
+    // 68174085 and chars_per_pixel = 63 the product is 4 294 967 355, which
+    // wraps to 59, so a one-pixel image line passes the length check and the
+    // key-reading loop then runs off the end of the buffer. Loading such a
+    // file must be rejected.
+    const std::string key(63, 'a');
+    const std::string xpm =
+        "\"68174085 1 1 63\"\n"
+        "\"" + key + " c #ffffff\"\n"
+        "\"" + key + "\"\n";
+    wxMemoryInputStream mis(xpm.data(), xpm.size());
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_XPM) );
+}
+
 #endif // wxUSE_XPM
 
 #if wxUSE_IFF
