@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxSizer::DetachItem() (Ryan Ogurek, #26512).
