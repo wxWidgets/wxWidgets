@@ -176,6 +176,7 @@ def main():
         f'-DwxUSE_WEBVIEW=OFF '
         f'-DwxUSE_RIBBON=OFF '
         f'-DwxUSE_LIBSDL=OFF '
+        f'-DwxUSE_WEBREQUEST_CURL=OFF '
         f'-DwxUSE_WEBREQUEST=OFF '
         f'-DwxUSE_LIBNOTIFY=OFF '
         f'-DwxUSE_MEDIACTRL=OFF '
