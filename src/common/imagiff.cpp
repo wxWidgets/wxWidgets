@@ -276,7 +276,7 @@ static void decomprle(const byte *sptr, byte *dptr, long slen, long dlen)
 
     else if (codeByte > 0x80) {
         codeByte = 0x81 - (codeByte & 0x7f);
-        if ((slen > (long) 0) && (dlen >= (long) codeByte)) {
+        if ((slen > (long) 1) && (dlen >= (long) codeByte)) {
         dataByte = *sptr++;
         slen -= 2;
         dlen -= codeByte;

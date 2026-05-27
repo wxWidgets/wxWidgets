@@ -1595,6 +1595,43 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadIFFBodyTruncated",
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_IFF) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadIFFRLEBody",
+                 "[image][iff][error]")
+{
+    // A run-length encoded (compression == 1) BODY whose data is a single
+    // replicate control byte (0xFF) with no following data byte. decomprle()
+    // only checked that one source byte remained before reading the replicate
+    // packet's data byte, so it read bodyptr[1], one byte past the end of the
+    // heap-allocated input buffer. transparentColor = 0x4000 makes
+    // ConvertToImage() reject the result so the load fails with the fix.
+    wxImage::AddHandler(new wxIFFHandler);
+
+    static const unsigned char data[] =
+    {
+        0x46,0x4f,0x52,0x4d,            // "FORM"
+        0x00,0x00,0x00,0x29,            // FORM length (not validated)
+        0x49,0x4c,0x42,0x4d,            // "ILBM"
+        0x42,0x4d,0x48,0x44,            // "BMHD"
+        0x00,0x00,0x00,0x14,            // BMHD chunk length = 20
+        0x00,0x08,                      // width  = 8
+        0x00,0x01,                      // height = 1
+        0x00,0x00,0x00,0x00,            // x, y
+        0x01,                           // nPlanes
+        0x00,                           // masking
+        0x01,                           // compression = 1 (RLE)
+        0x00,                           // pad
+        0x40,0x00,                      // transparentColor = 0x4000
+        0x00,0x00,                      // x/y aspect
+        0x00,0x00,0x00,0x00,            // page width / height
+        0x42,0x4f,0x44,0x59,            // "BODY"
+        0x00,0x00,0x00,0x64,            // BODY chunk length = 100 (lie)
+        0xff,                           // lone replicate control byte
+    };
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_IFF) );
+}
+
 #endif // wxUSE_IFF
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::DibPadding", "[image]")
