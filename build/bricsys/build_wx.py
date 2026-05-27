@@ -194,6 +194,8 @@ def main():
         configure_command += f'-DCMAKE_MACOSX_RPATH=OFF '
         configure_command += f'-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=TRUE '
         configure_command += f'-DCMAKE_INSTALL_NAME_DIR="@executable_path" '
+    elif PLATFORM == 'linux':
+         configure_command += f'-DCMAKE_INSTALL_LIBDIR=lib '
     if args.cmake_config_args is not None:
         configure_command += args.cmake_config_args
 
