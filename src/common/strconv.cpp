@@ -702,7 +702,7 @@ size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
                     len++;
                     src++;
                 }
-                else if ( utf7unb64[(unsigned)*src] == 0xff )
+                else if ( utf7unb64[(unsigned char)*src] == 0xff )
                 {
                     // empty encoded chunks are not allowed
                     if ( !len )
