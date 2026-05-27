@@ -259,8 +259,8 @@ public:
     bool IsEmpty() const;
 
     /**
-        Returns @true if a valid [absolute] URI, otherwise this URI is a URI
-        reference and not a full URI, and this function returns @false.
+        Returns @false if a valid [absolute] URI, otherwise this URI is a URI
+        reference and not a full URI, and this function returns @true.
     */
     bool IsReference() const;
 
