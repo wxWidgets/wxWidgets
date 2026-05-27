@@ -9138,6 +9138,11 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
         if ( m_colFrozenLabelWin )
             m_colFrozenLabelWin->SetBackgroundColour( colour );
 
+        // start Bricsys change
+        if ( IsUsingNativeHeader() )
+            GetGridColHeader()->SetBackgroundColour( colour );
+        // end Bricsys change
+
         if ( ShouldRefresh() )
         {
             m_rowLabelWin->Refresh();
@@ -9172,12 +9177,14 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
 // start Bricsys change
 #ifdef __UNIX__
 void wxGrid::SetColumnLabelBackgroundColour( const wxColour& colour ) {
-    UseNativeColHeader();
+    if ( !UseNativeColHeader() )
+        return;
     GetGridColHeader()->SetColumnLabelBackgroundColour(colour);
 }
 
 void wxGrid::SetColumnLabelTextColour( const wxColour& colour ) {
-    UseNativeColHeader();
+    if ( !UseNativeColHeader() )
+        return;
     GetGridColHeader()->SetColumnLabelTextColour(colour);
 }
 #endif

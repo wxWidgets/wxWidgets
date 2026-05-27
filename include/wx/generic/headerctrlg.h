@@ -189,6 +189,7 @@ private:
 #ifdef __UNIX__
     wxColour m_columnLabelBackgroundColour;
     wxColour m_columnLabelTextColour;
+    bool m_hasCustomColours;
 #endif
     // end Bricsys change
 

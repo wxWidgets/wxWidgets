@@ -60,6 +60,7 @@ void wxHeaderCtrl::Init()
 #ifdef __UNIX__
     m_columnLabelBackgroundColour = wxColour(255, 255, 255);
     m_columnLabelTextColour = wxColour(0, 0, 0);
+    m_hasCustomColours = false;
 #endif
     // end Bricsys change
 }
@@ -86,10 +87,12 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
 #ifdef __UNIX__
 void wxHeaderCtrl::SetColumnLabelBackgroundColour( const wxColour& colour ) {
     m_columnLabelBackgroundColour = colour;
+    m_hasCustomColours = true;
 }
 
 void wxHeaderCtrl::SetColumnLabelTextColour(const wxColour& colour) {
     m_columnLabelTextColour = colour;
+    m_hasCustomColours = true;
 }
 #endif
 // end Bricsys change
@@ -584,28 +587,52 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         params.m_labelBitmap = col.GetBitmapBundle().GetBitmapFor(this);
         params.m_labelAlignment = col.GetAlignment();
 
-        // start Bricsys change
-#ifdef __UNIX__
-        params.m_labelColour = m_columnLabelTextColour;
-#endif
-        // end Bricsys change
-
 #ifdef __WXGTK__
         if (i == m_numColumns - 1 && xpos + colWidth >= w)
-        {
             state |= wxCONTROL_DIRTY;
-        }
 #endif
 
-        wxRendererNative::Get().DrawHeaderButton
-                                (
-                                    this,
-                                    dc,
-                                    wxRect(xpos, 0, colWidth, h),
-                                    state,
-                                    sortArrow,
-                                    &params
-                                );
+        // start Bricsys change
+        // When custom colours are active (refs RM-73429): paint the background
+        // ourselves with a hover blend, then draw only text+arrow so the native
+        // renderer cannot overwrite the background.  Falls back to the normal
+        // DrawHeaderButton path when no custom colours have been set.
+#ifdef __UNIX__
+        if ( m_hasCustomColours )
+        {
+            params.m_labelColour = m_columnLabelTextColour;
+
+            wxColour bgColor = m_columnLabelBackgroundColour;
+            if ( state & wxCONTROL_CURRENT )
+            {
+                // Bidirectional blend: darken light bg, lighten dark bg.
+                const int lum = (77  * bgColor.Red()   +
+                                 150 * bgColor.Green() +
+                                 29  * bgColor.Blue()) >> 8;
+                if ( lum > 128 )
+                    bgColor = wxColour(bgColor.Red()   * 4 / 5,
+                                       bgColor.Green() * 4 / 5,
+                                       bgColor.Blue()  * 4 / 5);
+                else
+                    bgColor = wxColour(
+                        bgColor.Red()   + (255 - bgColor.Red())   / 5,
+                        bgColor.Green() + (255 - bgColor.Green()) / 5,
+                        bgColor.Blue()  + (255 - bgColor.Blue())  / 5);
+            }
+            dc.SetBrush(wxBrush(bgColor));
+            dc.SetPen(*wxTRANSPARENT_PEN);
+            dc.DrawRectangle(wxRect(xpos, 0, colWidth, h));
+
+            wxRendererNative::Get().DrawHeaderButtonContents(
+                this, dc, wxRect(xpos, 0, colWidth, h), state, sortArrow, &params);
+        }
+        else
+#endif // __UNIX__
+        // end Bricsys change
+        {
+            wxRendererNative::Get().DrawHeaderButton(
+                this, dc, wxRect(xpos, 0, colWidth, h), state, sortArrow, &params);
+        }
 
         xpos += colWidth;
         if ( xpos > w )

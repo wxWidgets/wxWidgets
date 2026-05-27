@@ -172,11 +172,11 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
 {
 
 // start Bricsys change
-// Don't use native rendering
-// We draw the button using the dc
-#if 0
+    // Use generic rendering when the OS is in dark mode; HITheme ignores
+    // theme colours in that case (refs RM-73429).
     if ( wxSystemSettings::GetAppearance().IsDark() )
-        return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
+        return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
+// end Bricsys change
 
     const wxCoord x = rect.x;
     const wxCoord y = rect.y;
@@ -239,12 +239,8 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     }
     flags &= ~wxCONTROL_PRESSED;
 
-#endif
-
-    return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
-// end Bricsys change
+    return DrawHeaderButtonContents(win, dc, newRect, flags, sortArrow, params);
 }
-
 
 int wxRendererMac::GetHeaderButtonHeight(wxWindow* WXUNUSED(win))
 {

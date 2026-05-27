@@ -205,6 +205,13 @@ private:
     // the custom draw helper: initially NULL, created on demand, use
     // GetCustomDraw() to do it
     wxMSWHeaderCtrlCustomDraw *m_customDraw;
+
+    // start Bricsys change
+    // Index of the item currently under the cursor (-1 = none).
+    // Used for manual hover highlight since CDIS_HOT is not reliable when
+    // we return CDRF_SKIPDEFAULT from CDDS_ITEMPREPAINT (refs RM-73429).
+    int m_hotItem;
+    // end Bricsys change
 };
 
 // ============================================================================
@@ -225,6 +232,7 @@ void wxMSWHeaderCtrl::Init()
     m_colBeingDragged = -1;
     m_isColBeingResized = false;
     m_customDraw = NULL;
+    m_hotItem = -1;
 
     Bind(wxEVT_DPI_CHANGED, &wxMSWHeaderCtrl::WXHandleDPIChanged, this);
 }
@@ -255,6 +263,37 @@ bool wxMSWHeaderCtrl::Create(wxWindow *parent,
     {
         (void)Header_SetBitmapMargin(GetHwnd(), wxGetSystemMetrics(SM_CXEDGE, parent));
     }
+
+    // start Bricsys change
+    // Track hover manually: CDIS_HOT is not set when we return CDRF_SKIPDEFAULT,
+    // so we hit-test the cursor ourselves and force a repaint when it changes
+    // (refs RM-73429).
+    Bind(wxEVT_MOTION, [this](wxMouseEvent& event) {
+        if ( m_customDraw )
+        {
+            HDHITTESTINFO hti;
+            hti.pt = { event.GetX(), event.GetY() };
+            int newHot = (int)::SendMessage(GetHwnd(), HDM_HITTEST, 0,
+                                            (LPARAM)&hti);
+            if ( !(hti.flags & HHT_ONHEADER) )
+                newHot = -1;
+            if ( newHot != m_hotItem )
+            {
+                m_hotItem = newHot;
+                ::InvalidateRect(GetHwnd(), NULL, FALSE);
+            }
+        }
+        event.Skip();
+    });
+    Bind(wxEVT_LEAVE_WINDOW, [this](wxMouseEvent& event) {
+        if ( m_customDraw && m_hotItem != -1 )
+        {
+            m_hotItem = -1;
+            ::InvalidateRect(GetHwnd(), NULL, FALSE);
+        }
+        event.Skip();
+    });
+    // end Bricsys change
 
     return true;
 }
@@ -973,12 +1012,122 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // ------------
 
         case NM_CUSTOMDRAW:
+            // start Bricsys change
+            // Full custom draw when custom colours are active (refs RM-73429).
+            // DrawThemeBackground ignores SetBkColor/SetTextColor, so we handle
+            // all painting directly.
             if ( m_customDraw )
             {
-                *result = m_customDraw->HandleCustomDraw(lParam);
-                if ( *result != CDRF_DODEFAULT )
+                NMCUSTOMDRAW* nmcd = reinterpret_cast<NMCUSTOMDRAW*>(lParam);
+                if ( nmcd->dwDrawStage == CDDS_PREPAINT )
+                {
+                    *result = CDRF_NOTIFYITEMDRAW;
                     return true;
+                }
+                if ( nmcd->dwDrawStage == CDDS_ITEMPREPAINT )
+                {
+                    HDC hdc = nmcd->hdc;
+                    const wxItemAttr& attr = m_customDraw->m_attr;
+                    RECT rc = nmcd->rc;
+
+                    ::SaveDC(hdc);
+
+                    // Background: apply hover blend if this is the hot item.
+                    // CDIS_HOT is not set when we return CDRF_SKIPDEFAULT,
+                    // so we use our own m_hotItem tracker (refs RM-73429).
+                    wxColour bgCol = attr.HasBackgroundColour()
+                        ? attr.GetBackgroundColour()
+                        : GetBackgroundColour();
+
+                    if ( (int)nmcd->dwItemSpec == m_hotItem )
+                    {
+                        // Bidirectional blend: lighten dark bg / darken light bg
+                        unsigned r = bgCol.Red(), g = bgCol.Green(), b = bgCol.Blue();
+                        const int lum = (77 * r + 150 * g + 29 * b) >> 8;
+                        if ( lum < 128 )
+                        {
+                            r = r + (255 - r) / 5;
+                            g = g + (255 - g) / 5;
+                            b = b + (255 - b) / 5;
+                        }
+                        else
+                        {
+                            r = r * 4 / 5;
+                            g = g * 4 / 5;
+                            b = b * 4 / 5;
+                        }
+                        bgCol.Set(r, g, b);
+                    }
+
+                    HBRUSH hbr = ::CreateSolidBrush(wxColourToRGB(bgCol));
+                    ::FillRect(hdc, &rc, hbr);
+                    ::DeleteObject(hbr);
+
+                    // Separator: contrasting line on the right edge.
+                    // hpen is declared here so it can be deleted after
+                    // RestoreDC (must not delete a GDI object while it is
+                    // still selected into a DC).
+                    const int sepLum = (77  * bgCol.Red() +
+                                        150 * bgCol.Green() +
+                                        29  * bgCol.Blue()) >> 8;
+                    const wxColour sepCol = (sepLum < 128)
+                        ? wxColour(wxMin(255, (int)bgCol.Red()   + 40),
+                                   wxMin(255, (int)bgCol.Green() + 40),
+                                   wxMin(255, (int)bgCol.Blue()  + 40))
+                        : wxColour(wxMax(0, (int)bgCol.Red()   - 40),
+                                   wxMax(0, (int)bgCol.Green() - 40),
+                                   wxMax(0, (int)bgCol.Blue()  - 40));
+                    HPEN hpen = ::CreatePen(PS_SOLID, 1, wxColourToRGB(sepCol));
+                    ::SelectObject(hdc, hpen);
+                    ::MoveToEx(hdc, rc.right - 1, rc.top + 2, NULL);
+                    ::LineTo(hdc, rc.right - 1, rc.bottom - 2);
+
+                    // Text
+                    wxColour fgCol = attr.HasTextColour()
+                        ? attr.GetTextColour()
+                        : GetForegroundColour();
+                    ::SetTextColor(hdc, wxColourToRGB(fgCol));
+                    ::SetBkMode(hdc, TRANSPARENT);
+                    if ( attr.HasFont() )
+                        ::SelectObject(hdc, GetHfontOf(attr.GetFont()));
+
+                    const int nativeIdx = (int)nmcd->dwItemSpec;
+                    if ( nativeIdx < 0 || nativeIdx >= GetShownColumnsCount() )
+                    {
+                        ::RestoreDC(hdc, -1);
+                        ::DeleteObject(hpen);
+                        break;
+                    }
+                    int col = MSWFromNativeIdx(nativeIdx);
+                    if ( col < 0 || (unsigned)col >= m_header.GetColumnCount() )
+                    {
+                        ::RestoreDC(hdc, -1);
+                        ::DeleteObject(hpen);
+                        break;
+                    }
+                    wxString text = m_header.GetColumn(col).GetTitle();
+
+                    HDITEM hdi = {};
+                    hdi.mask = HDI_FORMAT;
+                    ::SendMessage(GetHwnd(), HDM_GETITEM, nmcd->dwItemSpec, (LPARAM)&hdi);
+                    UINT dtFlags = DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS | DT_NOPREFIX;
+                    if ( hdi.fmt & HDF_CENTER )      dtFlags |= DT_CENTER;
+                    else if ( hdi.fmt & HDF_RIGHT )  dtFlags |= DT_RIGHT;
+                    else                             dtFlags |= DT_LEFT;
+
+                    RECT rcText = rc;
+                    rcText.left += 6;
+                    rcText.right -= 6;
+                    ::DrawText(hdc, text.wc_str(), -1, &rcText, dtFlags);
+
+                    ::RestoreDC(hdc, -1);   // deselects hpen before we delete it
+                    ::DeleteObject(hpen);
+
+                    *result = CDRF_SKIPDEFAULT;
+                    return true;
+                }
             }
+            // end Bricsys change
             break;
     }
 
@@ -1063,6 +1212,29 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
     SetWindowStyle(newStyle);
 
     Bind(wxEVT_SIZE, &wxHeaderCtrl::OnSize, this);
+
+    // start Bricsys change
+    // wxCompositeWindow only forwards key and focus events from child parts
+    // to the composite parent — mouse events are NOT forwarded automatically.
+    // Forward wxEVT_MOTION from the native HWND child so that handlers bound
+    // on GetGridColLabelWindow() (which returns this wxHeaderCtrl) receive
+    // mouse-move events.  ScrollHorz() can shift m_nativeControl horizontally,
+    // so translate via screen coordinates to keep the position correct in the
+    // composite parent's client space (refs RM-73429).
+    // Always call event.Skip() so the native HEADER32 control also processes
+    // the WM_MOUSEMOVE for HDS_HOTTRACK support.
+    m_nativeControl->Bind(wxEVT_MOTION, [this](wxMouseEvent& event) {
+        wxMouseEvent fwdEvent(event);
+        fwdEvent.SetEventObject(this);
+        fwdEvent.SetId(GetId());
+        const wxPoint pt = ScreenToClient(
+            m_nativeControl->ClientToScreen(event.GetPosition()));
+        fwdEvent.m_x = pt.x;
+        fwdEvent.m_y = pt.y;
+        ProcessWindowEvent(fwdEvent);
+        event.Skip(); // always let native HEADER32 process for hot-tracking
+    });
+    // end Bricsys change
 
     return true;
 }

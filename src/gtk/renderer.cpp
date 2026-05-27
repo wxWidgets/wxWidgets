@@ -215,10 +215,12 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxHeaderButtonParams* params)
 {
 // start Bricsys change
-// Don't use native rendering
-// We draw the button using the dc
-#if 0
-    
+    // Use generic rendering when the OS is in dark mode; the native GTK
+    // header renderer ignores theme colours in that case (refs RM-73429).
+    if ( wxSystemSettings::GetAppearance().IsDark() )
+        return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
+// end Bricsys change
+
     GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
     if (flags & wxCONTROL_SPECIAL)
         button = wxGTKPrivate::GetHeaderButtonWidgetFirst();
@@ -297,9 +299,6 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     );
 #endif
 
-#endif
-// end Bricsys change
-    
     return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 
