@@ -1360,6 +1360,36 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIFLZWMinCodeSize",
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_GIF) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIFPaletteIndex",
+                 "[image][gif][error]")
+{
+    // A 1x1 GIF whose LSDB declares a 2-entry global colour table but whose
+    // LZW minimum code size is 3, giving an 8-literal alphabet. The frame's
+    // LZW data emits CLEAR, literal 2, EOI -- pixel value 2 is a valid LZW
+    // literal but past the end of the 2-entry palette, so the
+    // pal[3*(*src) + ...] reads in wxGIFDecoder::ConvertToImage() previously
+    // pulled uninitialised bytes from the unpopulated tail of the 768-byte
+    // pimg->pal buffer into the decoded image. The index stays inside the
+    // buffer (a pixel byte is at most 255) so ASAN won't flag it, but it is
+    // an uninitialised read that MSAN catches and leaks junk into the pixels.
+    static const unsigned char data[] =
+    {
+        0x47, 0x49, 0x46, 0x38, 0x39, 0x61,             // "GIF89a"
+        0x01, 0x00, 0x01, 0x00, 0x80, 0x00, 0x00,       // LSDB: 1x1, GCT, 2col
+        0x00, 0x00, 0x00, 0xff, 0xff, 0xff,             // GCT entries
+        0x2c,                                           // image separator
+        0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, // 1x1 frame at 0,0
+        0x00,                                           // no LCT
+        0x03,                                           // LZW min code size=3
+        0x02, 0x28, 0x09,                               // sub-block: CLEAR,2,EOI
+        0x00,                                           // sub-block terminator
+        0x3b,                                           // trailer
+    };
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_GIF) );
+}
+
 #endif // wxUSE_GIF
 
 #if wxUSE_PCX
