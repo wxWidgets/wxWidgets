@@ -10,11 +10,15 @@ set ACTION_TYPE=build
 if not "%~1" == "" set ACTION_TYPE=%~1
 if not "%~2" == "" set BUILD_TYPE=%~2
 
+:: Map "release" to "release_debug" to use RelWithDebInfo
+set PYTHON_BUILD_TYPE=%BUILD_TYPE%
+if "%BUILD_TYPE%" == "release" set PYTHON_BUILD_TYPE=release_debug
+
 if "%ACTION_TYPE%" == "generate" (
     python build/bricsys/build_wx.py --wx_src_dir=. --wx_install_dir=./install_bsys --platform=windows --action=generate
 )
 
 if "%ACTION_TYPE%" == "build" (
-    python build/bricsys/build_wx.py --wx_src_dir=. --wx_install_dir=./install_bsys --platform=windows --action=build --build_type=%BUILD_TYPE%
+    python build/bricsys/build_wx.py --wx_src_dir=. --wx_install_dir=./install_bsys --platform=windows --action=build --build_type=%PYTHON_BUILD_TYPE%
 )
 
