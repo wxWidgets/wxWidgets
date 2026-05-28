@@ -271,7 +271,7 @@ wxPathOnly (wxChar *path)
 
         int l = wxStrlen(path);
         int i = l - 1;
-        if ( i >= _MAXPATHLEN )
+        if ( l >= _MAXPATHLEN )
             return nullptr;
 
         // Local copy
@@ -320,7 +320,7 @@ wxString wxPathOnly (const wxString& path)
         int l = path.length();
         int i = l - 1;
 
-        if ( i >= _MAXPATHLEN )
+        if ( l >= _MAXPATHLEN )
             return wxString();
 
         // Local copy
