@@ -94,6 +94,12 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
     wprintf(L"Using wxCRT_VsnprintfW\n");
 #endif
 
+    // If the output buffer is of size 0 we can't write anything to it, not
+    // even the terminating NUL, so just bail out: continuing would underflow
+    // lenCur below and access buf[(size_t)-1], writing out of bounds.
+    if ( lenMax == 0 )
+        return -1;
+
     wxPrintfConvSpecParser<CharType> parser(format);
 
     wxPrintfArg argdata[wxMAX_SVNPRINTF_ARGUMENTS];

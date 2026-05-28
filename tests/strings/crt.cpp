@@ -278,3 +278,25 @@ TEST_CASE("CRT::Strtox", "[crt][strtod][strtol]")
 #endif
     }
 }
+
+TEST_CASE("CRT::SnprintfZeroSize", "[crt][snprintf]")
+{
+    // wxVsnprintf() used to unconditionally execute str[size - 1] = 0 on
+    // return; with size == 0 this wraps to str[SIZE_MAX] and corrupts memory
+    // (or crashes). The same off-by-one was present in the underlying
+    // ConvertStringToBuf() helper which performed memcpy of (outsize-1) bytes
+    // when outsize was 0. Check that both narrow and wide overloads of
+    // wxSnprintf() leave the supplied buffer untouched when size is 0.
+    char    bufa[8] = { 'a','b','c','d','e','f','g','h' };
+    wchar_t bufw[8] = { L'a',L'b',L'c',L'd',L'e',L'f',L'g',L'h' };
+
+    (void)wxSnprintf(bufa, 0, "test");
+    (void)wxSnprintf(bufw, 0, L"test");
+
+    for ( size_t i = 0; i < 8; i++ )
+    {
+        INFO("i=" << i);
+        CHECK( bufa[i] == "abcdefgh"[i] );
+        CHECK( bufw[i] == L"abcdefgh"[i] );
+    }
+}
