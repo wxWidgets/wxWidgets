@@ -282,6 +282,7 @@ All (GUI):
 - Fix out-of-bounds read in wxSound on 0-length LIST chunk (dxbjavid, #26506).
 - Fix reading too short extra field in ZIP64 files (dxbjavid, #26507).
 - Fix out-of-bounds table read in wxMBConvUTF7::ToWChar() (dxbjavid, #26517).
+- Fix buffer overflow reading corrupted message catalogs (dxbjavid, #26513).
 
 wxGTK:
 
