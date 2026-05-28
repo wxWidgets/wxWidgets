@@ -34,7 +34,12 @@ WXDLLIMPEXP_CORE int VKToWX(WXWORD vk, WXLPARAM lParam = 0, wchar_t *uc = NULL);
 // Translate wxKeyCode enum element (passed as int for compatibility reasons)
 // to MSW virtual key code. isExtended is set to true if the key corresponds to
 // a non-numpad version of a key that exists both on numpad and outside it.
+#if 1 // Bricsys change (refs RM-44840)
+// add keyboard layout to virtual key conversion
+WXDLLIMPEXP_CORE WXWORD WXToVK(int id, bool* isExtended = NULL, HKL* hkl = NULL);
+#else
 WXDLLIMPEXP_CORE WXWORD WXToVK(int id, bool *isExtended = NULL);
+#endif
 
 } // namespace wxMSWKeyboard
 
