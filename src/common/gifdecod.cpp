@@ -860,6 +860,14 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 interl = ((buf[8] & 0x40)? 1 : 0);
                 size = pimg->w * pimg->h;
 
+                // Reject frames with zero width or height: malloc(0) below
+                // returns an empty allocation that the dgif() decode loop
+                // still writes into. The subsequent-frames check above
+                // rejects zero size in animations but the first frame and
+                // the non-animated GIF87a path both reach here unchecked.
+                if (size == 0)
+                    return wxGIF_INVFORMAT;
+
                 pimg->transparent = transparent;
                 pimg->disposal = disposal;
                 pimg->delay = delay;

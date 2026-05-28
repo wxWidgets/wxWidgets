@@ -1390,6 +1390,35 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIFPaletteIndex",
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_GIF) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIFZeroFrameSize",
+                 "[image][gif][error]")
+{
+    // Per-frame width/height are read from the image descriptor without
+    // checking for zero. When either dimension is zero, pimg->w * pimg->h
+    // is 0 and the subsequent malloc(0) leaves an empty buffer that dgif()
+    // still writes into as soon as the LZW stream emits a literal code,
+    // overflowing the heap allocation. The existing zero-size check only
+    // covers the second and later frames of an animation; the first frame
+    // of an animation, and any GIF87a frame, both reach the allocation
+    // unchecked.
+    static const unsigned char data[] =
+    {
+        0x47, 0x49, 0x46, 0x38, 0x37, 0x61,             // "GIF87a"
+        0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,       // LSDB: 1x1, no GCT
+        0x2c,                                           // image separator
+        0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, // frame at 0,0, w=1 h=0
+        0x80,                                           // LCT, depth=0 (2 col)
+        0x00, 0x00, 0x00, 0xff, 0xff, 0xff,             // LCT entries
+        0x02,                                           // LZW min code size=2
+        0x02, 0x44, 0x01,                               // sub-block: CLR/lit/EOI
+        0x00,                                           // sub-block terminator
+        0x3b,                                           // trailer
+    };
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_GIF) );
+}
+
 #endif // wxUSE_GIF
 
 #if wxUSE_PCX

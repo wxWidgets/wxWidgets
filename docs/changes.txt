@@ -282,7 +282,7 @@ All (GUI):
 - Fix read overflow in wxXPMDecoder on unterminated quote (dxbjavid, #26499).
 - Fix read overflow in wxXPMDecoder on invalid width (dxbjavid, #26519).
 - Reject more invalid GIFs and do it without leaking memory (dxbjavid, #26501).
-- Fix buffer overflows decoding invalid GIFs (dxbjavid, #26521).
+- Fix buffer overflows decoding invalid GIFs (dxbjavid, #26521, #26524).
 - Fix multiple buffer overflows in wxIFFDecoder (dxbjavid, #26505, #26518).
 - Fix multiple buffer overflows in wxSound (dxbjavid, #26506, #26525).
 - Fix reading too short extra field in ZIP64 files (dxbjavid, #26507).
