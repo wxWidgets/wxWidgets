@@ -873,7 +873,7 @@ private:
         const wxMsgTableEntry * const ent = pTable + n;
 
         // this check could fail for a corrupt message catalog
-        size_t32 ofsString = Swap(ent->ofsString);
+        wxULongLong_t ofsString = Swap(ent->ofsString);
         if ( ofsString + Swap(ent->nLen) > m_data.length())
         {
             return nullptr;
