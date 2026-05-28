@@ -259,6 +259,7 @@ All:
 
 - Support defining wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR in wxString (#26307).
 - Fix wxCondition and wxSemaphore::WaitTimeout() after 2038 under Unix (#26466).
+- Fix buffer overflow in wxGethostby{addr,name}_r() (dxbjavid, #26528).
 
 All (GUI):
 
