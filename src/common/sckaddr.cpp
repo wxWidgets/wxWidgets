@@ -131,7 +131,7 @@ hostent *deepCopyHostent(hostent *h,
 
     /* copy name */
     int len = strlen(h->h_name);
-    if (len > size)
+    if (len >= size)
     {
         *err = ENOMEM;
         return nullptr;
