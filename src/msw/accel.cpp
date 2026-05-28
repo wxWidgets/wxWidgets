@@ -80,6 +80,59 @@ wxAcceleratorRefData::~wxAcceleratorRefData()
 // wxAcceleratorTable
 // ----------------------------------------------------------------------------
 
+#if 1 // Bricsys change (refs RM-44840)
+struct KbdLayoutLoader
+{
+    KbdLayoutLoader()
+    {
+        const static WORD EN_US_LANGID = 0x0409;
+
+        HKL hklCur = ::GetKeyboardLayout(0);
+        if (hklCur && LOWORD(hklCur) == EN_US_LANGID)
+            return; // En layout already active
+
+        m_hasEnLayout = false;
+
+        const int layoutCnt = ::GetKeyboardLayoutList(0, NULL);
+        if (layoutCnt)
+        {
+            std::vector<HKL> layouts(layoutCnt);
+            ::GetKeyboardLayoutList(layoutCnt, layouts.data());
+            for (short i = 0; i < layoutCnt; i++)
+            {
+                if (LOWORD(layouts[i]) == EN_US_LANGID)
+                {
+                    m_hasEnLayout = true;
+                    break;
+                }
+            }
+        }
+        // activate En layout
+        m_hklEn = ::LoadKeyboardLayout(L"00000409", KLF_ACTIVATE | KLF_NOTELLSHELL);
+        if (m_hklEn)
+            m_hklOld = ::ActivateKeyboardLayout(m_hklEn, 0);
+    }
+
+    ~KbdLayoutLoader()
+    {
+        // restore old layout
+        if (m_hklOld)
+            ::ActivateKeyboardLayout(m_hklOld, 0);
+
+        // unload En layout if it was added
+        if (m_hklEn && !m_hasEnLayout)
+            ::UnloadKeyboardLayout(m_hklEn);
+    }
+
+    HKL hkl() const { return m_hklEn; }
+
+private:
+    HKL  m_hklEn = NULL;
+    HKL  m_hklOld = NULL;
+    bool m_hasEnLayout = true;
+};
+#endif
+
 // Load from .rc resource
 wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
 {
@@ -95,6 +148,11 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 {
     m_refData = new wxAcceleratorRefData;
 
+#if 1 // Bricsys change (refs RM-44840)
+    KbdLayoutLoader kll;
+    HKL hkl = kll.hkl();
+#endif
+
     ACCEL* arr = new ACCEL[n];
     for ( int i = 0; i < n; i++ )
     {
@@ -108,7 +166,11 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
         if ( flags & wxACCEL_CTRL )
             fVirt |= FCONTROL;
 
+#if 1 // Bricsys change (refs RM-44840)
+        WORD key = wxMSWKeyboard::WXToVK(entries[i].GetKeyCode(), NULL, &hkl);
+#else
         WORD key = wxMSWKeyboard::WXToVK(entries[i].GetKeyCode());
+#endif
 
         arr[i].fVirt = fVirt;
         arr[i].key = key;

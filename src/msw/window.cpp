@@ -6963,7 +6963,12 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
     return wxk;
 }
 
+#if 1 // Bricsys change (refs RM-44840) 
+// add keyboard layout to virtual key conversion
+WXWORD WXToVK(int wxk, bool* isExtended, HKL* hkl)
+#else
 WXWORD WXToVK(int wxk, bool *isExtended)
+#endif
 {
     // check the table first
     for ( size_t n = 0; n < WXSIZEOF(gs_specialKeys); n++ )
@@ -7057,7 +7062,11 @@ WXWORD WXToVK(int wxk, bool *isExtended)
 
         default:
             // check to see if its one of the OEM key codes.
+#if 1 // Bricsys change (refs RM-44840)
+            BYTE vks = hkl && *hkl ? LOBYTE(VkKeyScanEx(wxk, *hkl)) : LOBYTE(VkKeyScan(wxk));
+#else
             BYTE vks = LOBYTE(VkKeyScan(wxk));
+#endif
             if ( vks != 0xff )
             {
                 vk = vks;
