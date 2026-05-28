@@ -37,15 +37,14 @@ def initialize_and_update_submodules(sub_modules, cwd, env):
             break
 
     if needs_init:
-        print("Submodules not initialized. Running git submodule update --init...")
-        command_text = 'git submodule update --init '
-        for module in sub_modules:
-            run_command(command_text + module, cwd=cwd, env=env)
+        print(f"Submodules not initialized. Running 'git submodule update --init ...'")
+        command_text = 'git submodule update --init ' + " ".join(sub_modules)
+        run_command(command_text, cwd=cwd, env=env)
     else:
         print("Submodules already initialized. Skipping git submodule update --init.")
 
 def main():
-    parser = argparse.ArgumentParser(description='Build Qt from source.')
+    parser = argparse.ArgumentParser(description='Build Wx from source.')
     parser.add_argument(
         '--action',
         default='all',
@@ -53,11 +52,12 @@ def main():
     )
     parser.add_argument('--platform', required='True', help='Platform: windows, linux, mac')
     parser.add_argument('--cmake_generator', help='The CMake Generator to use')
-    parser.add_argument('--build_type', default='debug', help='Build type: release, debug, release_de    bug')
-    parser.add_argument('--wx_src_dir', default='../../', help='Qt source directory (default: qt/src)')
-    parser.add_argument('--wx_build_dir', help='Qt build directory (default: build_bsys)')
+    parser.add_argument('--cmake_config_args', help='Extra cmake configure arguments')
+    parser.add_argument('--build_type', default='debug', help='Build type: release, debug, release_debug')
+    parser.add_argument('--wx_src_dir', default='../../', help='Wx source directory (default: qt/src)')
+    parser.add_argument('--wx_build_dir', help='Wx build directory (default: $wx_src_dir/build_bsys)')
     parser.add_argument('--wx_install_dir', help='Wx install directory (default: ../)')
-    parser.add_argument('-j', '--jobs', type=int, default=None, help='Number of parallel jobs for building (default: let CMake decide)')
+    parser.add_argument('-j', '--jobs', type=int, default=None, help='Number of parallel jobs for building (default: 12 jobs)')
     args = parser.parse_args()
 
     # Apply conditional default
@@ -87,11 +87,12 @@ def main():
     SKIP_MODULES = ''
     CMAKE_GENERATOR =  args.cmake_generator # Adjust based on your platform and compiler
 
-   
     # Build type
     if args.build_type == "debug":
         BUILD_TYPE = 'Debug'
     elif args.build_type == "release":
+        BUILD_TYPE = 'Release'
+    elif args.build_type == "release_debug":
         BUILD_TYPE = 'RelWithDebInfo'
     else:
         print(f"Unknown build type: {args.build_type}")
@@ -163,7 +164,7 @@ def main():
         f'"{SRC_DIR}" '
         f'-C "{SRC_DIR}/build/bricsys/toolchain.cmake" '
         f'-DCMAKE_BUILD_TYPE={BUILD_TYPE} '
-        f'-DwxBUILD_SHARED=ON ' 
+        f'-DwxBUILD_SHARED=ON '
         f'-DwxUSE_STL=ON '
         f'-DwxUSE_XRC=ON '
         f'-DwxUSE_AUI=ON '
@@ -174,7 +175,12 @@ def main():
         f'-DwxUSE_GLCANVAS_EGL=OFF '
         f'-DwxUSE_WEBVIEW=OFF '
         f'-DwxUSE_RIBBON=OFF '
-        f'-DwxBUILD_SAMPLES=OFF ' 
+        f'-DwxUSE_LIBSDL=OFF '
+        f'-DwxUSE_WEBREQUEST_CURL=OFF '
+        f'-DwxUSE_WEBREQUEST=OFF '
+        f'-DwxUSE_LIBNOTIFY=OFF '
+        f'-DwxUSE_MEDIACTRL=OFF '
+        f'-DwxBUILD_SAMPLES=OFF '
         f'-DwxBUILD_TESTS=OFF '
         f'-DwxBUILD_INSTALL=ON '
     )
@@ -188,6 +194,10 @@ def main():
         configure_command += f'-DCMAKE_MACOSX_RPATH=OFF '
         configure_command += f'-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=TRUE '
         configure_command += f'-DCMAKE_INSTALL_NAME_DIR="@executable_path" '
+    elif PLATFORM == 'linux':
+         configure_command += f'-DCMAKE_INSTALL_LIBDIR=lib '
+    if args.cmake_config_args is not None:
+        configure_command += args.cmake_config_args
 
     if Action.CHECKOUT in ACTION or Action.GENERATE in ACTION:
         initialize_and_update_submodules(SUBMODULES, SRC_DIR, ENV)
