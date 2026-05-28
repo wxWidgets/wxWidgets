@@ -5115,12 +5115,14 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 
 bool wxWindowMSW::HandleSysColorChange()
 {
+    // Update dark mode status before event handlers run since they may need
+    // that information.
+    wxMSWDarkMode::NotifySysColorChange();
+
     wxSysColourChangedEvent event;
     event.SetEventObject(this);
 
     (void)HandleWindowEvent(event);
-
-    wxMSWDarkMode::NotifySysColorChange();
 
     if ( IsTopLevel() )
         Refresh();

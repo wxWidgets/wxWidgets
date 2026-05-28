@@ -2932,29 +2932,64 @@ void wxTextCtrl::MSWUpdateDarkMode()
     wxTextCtrlBase::MSWUpdateDarkMode();
 
 #if wxUSE_RICHEDIT
-    if ( IsRich() )
+    // The rich edit control does not change colours automatically. We adjust
+    // colours only if no custom colours occur. When we leave the control
+    // as-is, it might update partially and look bad. That is better than
+    // overwriting custom colours. The app user can revert the theme without
+    // losing anything.
+    if ( IsRich() && !UseBgCol() && !UseForegroundColour() )
     {
-        // The window background color is wrong. We must always set it.
-        ::SendMessage(GetHwnd(), EM_SETBKGNDCOLOR, 0, wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
+        // True if we need to update the background colour.
+        bool setBackground = false;
 
         if ( wxMSWDarkMode::HasChanged() )
         {
-            // Unfortunately we must set the text background and text colour
-            // to prevent text disappearing. This overwrites any customized
-            // colours. We have no better option.
-
-            // Set the text background color.
-            wxTextAttr textAttr;
-            textAttr.SetFont(m_font);
-            textAttr.SetBackgroundColour(GetBackgroundColour());
-            SetStyle(-1, -1, textAttr);
-
-            // Set text colour.
+            // Get formatting info for all the text.
+            long sel1, sel2;
+            GetSelection(&sel1, &sel2);
+            DoSetSelection(-1, -1, SetSel_NoScroll);
             WinStruct<CHARFORMAT> cf;
-            cf.dwMask = CFM_COLOR;
-            cf.crTextColor = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-            ::SendMessage(GetHwnd(), EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
+            ::SendMessage(m_hWnd, EM_GETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
+            DoSetSelection(sel1, sel2, SetSel_NoScroll);
+
+            // Check if all text has the same colour.
+            if ( cf.dwMask & CFM_COLOR )
+            {
+                // If the text colour has not been set or matches the default,
+                // update it. The theme switch may not have finished so we
+                // compare against both the dark and light mode defaults.
+                const auto col = wxColour(cf.crTextColor);
+                const wxColor defDk = wxMSWDarkMode::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+                const wxColor defLt = wxRGBToColour(GetSysColor(COLOR_WINDOWTEXT));
+                if ( !col.IsOk() || col == defDk || col == defLt )
+                {
+                    // Set the text background color.
+                    wxTextAttr attr;
+                    attr.SetFont(m_font);
+                    attr.SetBackgroundColour(
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+                    SetStyle(-1, -1, attr);
+
+                    // Set text colour.
+                    WinStruct<CHARFORMAT> cf2;
+                    cf2.dwMask = CFM_COLOR;
+                    cf2.crTextColor = wxColourToRGB(
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+                    ::SendMessage(m_hWnd, EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf2);
+
+                    setBackground = true;
+                }
+            }
         }
+        else
+        {
+            // Upon window creation, all we need to do is set the background.
+            // The text colour was already set during Create().
+            setBackground = true;
+        }
+
+        if (setBackground)
+            ::SendMessage(m_hWnd, EM_SETBKGNDCOLOR, 0, wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
     }
 #endif
 
