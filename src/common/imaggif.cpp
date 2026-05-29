@@ -556,6 +556,16 @@ bool wxGIFHandler_GetPalette(const wxImage& image,
     const wxPalette& palette = image.GetPalette();
     int palCount = palette.GetColoursCount();
 
+    // The caller's pal[] buffer only has room for the 256 entries a GIF can
+    // hold. A wxImage palette may be larger, e.g. when the image was loaded
+    // from an XPM declaring more than 256 colours, and such an image can't be
+    // represented as a GIF, so fail the save here rather than overflow pal[].
+    if (palCount > 256)
+    {
+        wxLogError(_("Image palette has too many colours to save as GIF."));
+        return false;
+    }
+
     for (int i = 0; i < palCount; ++i)
     {
         if (!palette.GetRGB(i, &pal[i].red, &pal[i].green, &pal[i].blue))

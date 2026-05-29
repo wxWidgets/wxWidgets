@@ -1304,6 +1304,30 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SaveAnimatedGIF", "[image]")
 #endif // #if wxUSE_PALETTE
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SaveGIFBigPalette", "[image][gif][error]")
+{
+#if wxUSE_PALETTE
+    // An image palette can have more than the 256 entries a GIF supports, for
+    // instance when the image was loaded from an XPM declaring a larger colour
+    // count. Saving such an image as GIF must not overflow the fixed 256-entry
+    // palette buffer used by the encoder; instead the save should fail cleanly.
+    const int numColours = 300;
+    unsigned char r[numColours], g[numColours], b[numColours];
+    for (int i = 0; i < numColours; ++i)
+    {
+        r[i] = g[i] = b[i] = static_cast<unsigned char>(i);
+    }
+
+    wxImage image(1, 1);
+    image.SetRGB(0, 0, 0, 0, 0);
+    image.SetPalette(wxPalette(numColours, r, g, b));
+
+    wxMemoryOutputStream memOut;
+    wxLogNull noLog;
+    CHECK( !image.SaveFile(memOut, wxBITMAP_TYPE_GIF) );
+#endif // wxUSE_PALETTE
+}
+
 static void TestGIFComment(const wxString& comment)
 {
     wxImage image("horse.gif");
