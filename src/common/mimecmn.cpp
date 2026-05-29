@@ -139,6 +139,15 @@ wxString wxFileType::ExpandCommand(const wxString& command,
     wxString str;
     for ( const wxChar *pc = command.c_str(); *pc != wxT('\0'); pc++ ) {
         if ( *pc == wxT('%') ) {
+            // A trailing '%' must be handled here: otherwise the increment in
+            // the switch below would step onto the terminating NUL and the
+            // loop increment would then move pc one byte past the end of the
+            // string, reading out of bounds on the next condition check.
+            if ( pc[1] == wxT('\0') ) {
+                str << wxT('%');
+                break;
+            }
+
             switch ( *++pc ) {
                 case wxT('s'):
                     // don't quote the file name if it's already quoted: notice
