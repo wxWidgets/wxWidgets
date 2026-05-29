@@ -261,6 +261,7 @@ All:
 - Fix wxCondition and wxSemaphore::WaitTimeout() after 2038 under Unix (#26466).
 - Fix buffer overflow in wxGethostby{addr,name}_r() (dxbjavid, #26528).
 - Fix buffer overflow in wxTarInputStream (dxbjavid, #26530).
+- Fix out-of-bounds read in wxFileType::ExpandCommand() (dxbjavid, #26531).
 
 All (GUI):
 
