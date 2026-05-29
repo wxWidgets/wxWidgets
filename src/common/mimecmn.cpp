@@ -138,7 +138,9 @@ wxString wxFileType::ExpandCommand(const wxString& command,
 
     wxString str;
     for ( const wxChar *pc = command.c_str(); *pc != wxT('\0'); pc++ ) {
-        if ( *pc == wxT('%') ) {
+        // Make sure to leave any trailing '%' alone to avoid going past the
+        // end of string.
+        if ( *pc == wxT('%') && pc[1] != wxT('\0') ) {
             switch ( *++pc ) {
                 case wxT('s'):
                     // don't quote the file name if it's already quoted: notice
