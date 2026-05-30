@@ -196,7 +196,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
         if (*q == '\0')
             break;
 
-        strncpy(xpm_buffer + i, p + 1, q - p - 1);
+        memmove(xpm_buffer + i, p + 1, q - p - 1);
         i += q - p - 1;
         xpm_buffer[i++] = '\n';
         p = q + 1;

@@ -1552,12 +1552,11 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPMWidthOverflow",
     // wraps to 59, so a one-pixel image line passes the length check and the
     // key-reading loop then runs off the end of the buffer. Loading such a
     // file must be rejected.
-    const std::string key(63, 'a');
-    const std::string xpm =
-        "/* XPM */\n"
-        "\"68174085 1 1 63\"\n"
-        "\"" + key + " c #ffffff\"\n"
-        "\"" + key + "\"\n";
+    const std::string xpm = R"("/* XPM */"
+"68174085 1 1 63"
+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa c #ffffff"
+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+)";
     wxMemoryInputStream mis(xpm.data(), xpm.size());
     wxImage img;
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_XPM) );
