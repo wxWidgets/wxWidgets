@@ -295,6 +295,7 @@ TEST_CASE("CRT::SnprintfZeroSize", "[crt][snprintf]")
 
     for ( size_t i = 0; i < 8; i++ )
     {
+        INFO("i=" << i);
         CHECK( bufa[i] == "abcdefgh"[i] );
         CHECK( bufw[i] == L"abcdefgh"[i] );
     }
