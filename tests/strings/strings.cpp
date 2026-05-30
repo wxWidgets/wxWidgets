@@ -1259,6 +1259,9 @@ void StringTestCase::ScopedBuffers()
     wxCharBuffer buf5(5);
     buf5.extend(len);
     CPPUNIT_ASSERT_EQUAL('\0', buf5.data()[len]);
+
+    const char buf8[8] = { };
+    CPPUNIT_ASSERT_EQUAL( 8, wxCharTypeBuffer<char>(buf8, sizeof(buf8)).length() );
 }
 
 void StringTestCase::SupplementaryUniChar()
