@@ -1233,6 +1233,9 @@ TEST_CASE("StringScopedBuffers", "[wxString]")
     wxCharBuffer buf5(5);
     buf5.extend(len);
     CHECK( buf5.data()[len] == '\0' );
+
+    const char buf8[8] = { };
+    CHECK( wxCharTypeBuffer<char>(buf8, sizeof(buf8)).length() == 8 );
 }
 
 TEST_CASE("StringSupplementaryUniChar", "[wxString]")
