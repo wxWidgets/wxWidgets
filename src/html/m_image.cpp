@@ -427,8 +427,8 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
                         SetImage(svgBundle);
                         readImg = false;
                     }
-#endif // wxHAS_SVG
                 }
+#endif // wxHAS_SVG
 
 #if wxUSE_GIF && wxUSE_TIMER
                 if ( readImg && m_windowIface &&
@@ -462,9 +462,9 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
                         wxDELETE(m_gifDecoder);
                     }
                 }
+#endif // wxUSE_GIF && wxUSE_TIMER
 
                 if ( readImg )
-#endif // wxUSE_GIF && wxUSE_TIMER
                 {
                     wxImage image(*s, wxBITMAP_TYPE_ANY);
                     if ( image.IsOk() )
