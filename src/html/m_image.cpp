@@ -35,6 +35,10 @@
 #include "wx/bmpbndl.h"
 #include "wx/mstream.h"
 
+#if wxUSE_ZLIB
+    #include "wx/zstream.h"
+#endif
+
 FORCE_LINK_ME(m_image)
 
 
@@ -395,11 +399,24 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
             {
                 bool readImg = true;
                 wxString loc = input->GetLocation();
+#ifdef wxHAS_SVG
+#if wxUSE_ZLIB
+                if ( loc.Lower().EndsWith(".svgz") )
+                {
+                    wxZlibInputStream zlibStream(*s);
+                    wxBitmapBundle svgBundle =
+                        wxBitmapBundle::FromSVG(zlibStream, wxDefaultSize);
+                    if ( svgBundle.IsOk() )
+                    {
+                        SetImage(svgBundle);
+                        readImg = false;
+                    }
+                }
+#endif
 
                 // SVG image path
-                if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
+                if ( loc.Matches("*.svg") || loc.Matches("*.SVG"))
                 {
-#ifdef wxHAS_SVG
                     wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*s, wxDefaultSize);
                     if ( svgBundle.IsOk() )
                     {

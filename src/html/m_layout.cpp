@@ -21,6 +21,10 @@
 #include "wx/html/htmlwin.h"
 #include "wx/mstream.h"
 
+#if wxUSE_ZLIB
+    #include "wx/zstream.h"
+#endif
+
 FORCE_LINK_ME(m_layout)
 
 #include <stdlib.h>                     // bsearch()
@@ -331,12 +335,26 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
                     wxString loc = fileBgImage->GetLocation();
 
                     // SVG background image path
-                    if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
+                    if ( loc.Matches("*.svg") || loc.Matches("*.SVG") ||
+                         loc.Matches("*.svgz") || loc.Matches("*.SVGZ") )
                     {
 #ifdef wxHAS_SVG
-                        wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*is, wxDefaultSize);
-                        if ( svgBundle.IsOk() )
-                            winIface->SetHTMLBackgroundImage(svgBundle);
+#if wxUSE_ZLIB
+                        if ( loc.Lower().EndsWith(".svgz") )
+                        {
+                            wxZlibInputStream zlibStream(*is);
+                            wxBitmapBundle svgBundle =
+                                wxBitmapBundle::FromSVG(zlibStream, wxDefaultSize);
+                            if ( svgBundle.IsOk() )
+                                winIface->SetHTMLBackgroundImage(svgBundle);
+                        }
+                        else
+#endif // wxUSE_ZLIB
+                        {
+                            wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*is, wxDefaultSize);
+                            if ( svgBundle.IsOk() )
+                                winIface->SetHTMLBackgroundImage(svgBundle);
+                        }
 #endif // wxHAS_SVG
                     }
                     else
