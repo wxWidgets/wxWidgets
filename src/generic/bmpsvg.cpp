@@ -38,6 +38,10 @@
 
 #include "wx/rawbmp.h"
 
+#if wxUSE_STREAMS
+    #include "wx/mstream.h"
+#endif // wxUSE_STREAMS
+
 // ============================================================================
 // private helpers
 // ============================================================================
@@ -446,5 +450,23 @@ wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& s
 
     return wxBitmapBundle();
 }
+
+#if wxUSE_STREAMS
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVG(wxInputStream& stream, const wxSize& sizeDef)
+{
+    wxMemoryOutputStream memOut;
+    stream.Read(memOut);
+
+    const wxStreamBuffer* const sb = memOut.GetOutputStreamBuffer();
+    const size_t len = sb->GetBufferSize();
+    if ( !len )
+        return wxBitmapBundle();
+
+    return FromSVG(static_cast<const wxByte*>(sb->GetBufferStart()), len, sizeDef);
+}
+
+#endif // wxUSE_STREAMS
 
 #endif // wxHAS_SVG
