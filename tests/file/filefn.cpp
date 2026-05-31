@@ -494,15 +494,10 @@ TEST_CASE_METHOD(FileFunctionsTestCase,
                  "FileFunctions::PathOnlyLong",
                  "[filefn]")
 {
-    // wxPathOnly() copies its input into a local wxChar[_MAXPATHLEN] buffer
-    // using wxStrcpy(), so the maximum length that fits including the
-    // terminating NUL is _MAXPATHLEN - 1. The length check used to reject
-    // only when strlen >= _MAXPATHLEN + 1 (i.e. it tested i = l - 1 against
-    // _MAXPATHLEN), so a path of length exactly _MAXPATHLEN passed the check
-    // and wxStrcpy then wrote one wxChar past the end of the buffer. ASan
-    // flags this as a stack/global buffer overflow.
-    const int kMaxPathLen = 1024; // matches _MAXPATHLEN in src/common/filefn.cpp
-    wxString longPath(kMaxPathLen, wxT('a'));
+    // A long path with no directory separator used to overflow a fixed-size
+    // wxChar buffer inside wxPathOnly(). It now has no path part, so the
+    // result must simply be empty.
+    wxString longPath(1024, wxT('a'));
     CHECK( wxPathOnly(longPath).empty() );
 }
 
