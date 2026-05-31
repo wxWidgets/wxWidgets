@@ -86,9 +86,7 @@ class WXDLLIMPEXP_BASE wxMsgCatalog
 public:
     // Ctor is protected, because CreateFromXXX functions must be used,
     // but destruction should be unrestricted
-#if !wxUSE_UNICODE
     ~wxMsgCatalog();
-#endif
 
     // load the catalog from disk or from data; caller is responsible for
     // deleting them if not NULL

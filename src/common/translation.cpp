@@ -1225,9 +1225,9 @@ bool wxMsgCatalogFile::FillHash(wxStringToStringHashMap& hash,
 // wxMsgCatalog class
 // ----------------------------------------------------------------------------
 
-#if !wxUSE_UNICODE
 wxMsgCatalog::~wxMsgCatalog()
 {
+#if !wxUSE_UNICODE
     if ( m_conv )
     {
         if ( wxConvUI == m_conv )
@@ -1239,8 +1239,8 @@ wxMsgCatalog::~wxMsgCatalog()
 
         delete m_conv;
     }
-}
 #endif // !wxUSE_UNICODE
+}
 
 /* static */
 wxMsgCatalog *wxMsgCatalog::CreateFromFile(const wxString& filename,
