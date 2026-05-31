@@ -141,11 +141,6 @@
 
 #endif /* (__WXGTK__ || __WXQT__) && __WINDOWS__ */
 
-#ifdef __ANDROID__
-#   define __WXANDROID__
-#   include "wx/android/config_android.h"
-#endif
-
 #include "wx/compiler.h"
 
 /*
