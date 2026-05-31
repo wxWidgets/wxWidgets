@@ -3910,6 +3910,12 @@ case "${host}" in
 
             CPPFLAGS="-D_HPUX_SOURCE $CPPFLAGS"
   ;;
+  *-*-android* )
+    USE_LINUX=1
+    $as_echo "#define __LINUX__ 1" >>confdefs.h
+
+    LIBS="-llog $LIBS"
+  ;;
   *-*-linux* )
     USE_LINUX=1
     $as_echo "#define __LINUX__ 1" >>confdefs.h

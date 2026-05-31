@@ -94,21 +94,30 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
     #define wxHAS_REENTRANT_GETHOSTBY_FUNCS
 #endif
 
+#if defined(HAVE_FUNC_GETSERVBYNAME_R_6) || defined(HAVE_FUNC_GETSERVBYNAME_R_5)
+    #define wxHAS_REENTRANT_GETSERVBYNAME
+#endif
+
 typedef char wxGethostBuf[4096];
 typedef char wxGetservBuf[4096];
 
 #if defined(wxHAS_MT_SAFE_GETBY_FUNCS) || !wxUSE_THREADS
     #define wxLOCK_GETBY_MUTEX(name)
 #else // may need mutexes to protect getxxxbyxxx() calls
-    #ifndef wxHAS_REENTRANT_GETHOSTBY_FUNCS
+    #if !defined(wxHAS_REENTRANT_GETHOSTBY_FUNCS) || \
+        !defined(wxHAS_REENTRANT_GETSERVBYNAME)
         #include "wx/thread.h"
 
         namespace
         {
             // these mutexes are used to serialize
-            wxMutex nameLock,   // gethostbyname()
-                    addrLock,   // gethostbyaddr()
-                    servLock;   // getservbyname()
+            #if !defined(wxHAS_REENTRANT_GETHOSTBY_FUNCS)
+                wxMutex nameLock,   // gethostbyname()
+                        addrLock;   // gethostbyaddr()
+            #endif
+            #if !defined(wxHAS_REENTRANT_GETSERVBYNAME)
+                wxMutex servLock;   // getservbyname()
+            #endif
         }
 
         #define wxLOCK_GETBY_MUTEX(name) wxMutexLocker locker(name ## Lock)
@@ -256,7 +265,7 @@ hostent *wxGethostbyaddr_r(const char *addr_buf,
     return he;
 }
 
-#ifndef wxHAS_REENTRANT_GETHOSTBY_FUNCS
+#if !defined(wxHAS_REENTRANT_GETSERVBYNAME)
 servent *deepCopyServent(servent *s,
                          servent *se,
                          char *buffer,
@@ -318,7 +327,7 @@ servent *deepCopyServent(servent *s,
     s->s_aliases = s_aliases; /* copy pointer to pointers */
     return s;
 }
-#endif // !wxHAS_REENTRANT_GETHOSTBY_FUNCS
+#endif // !wxHAS_REENTRANT_GETSERVBYNAME
 
 servent *wxGetservbyname_r(const char *port,
                            const char *protocol,
