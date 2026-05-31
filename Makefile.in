@@ -123,7 +123,7 @@ WXREGEX_OBJECTS =  \
 	wxregex_pcre2_valid_utf.o \
 	wxregex_pcre2_xclass.o
 WXZLIB_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG $(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) \
-	$(CFLAGS) -include unistd.h
+	$(CFLAGS)
 WXZLIB_OBJECTS =  \
 	wxzlib_adler32.o \
 	wxzlib_compress.o \
