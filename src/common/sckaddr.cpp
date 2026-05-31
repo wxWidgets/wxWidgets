@@ -112,6 +112,17 @@ typedef char wxGetservBuf[4096];
         }
 
         #define wxLOCK_GETBY_MUTEX(name) wxMutexLocker locker(name ## Lock)
+    #elif defined(__ANDROID__)
+        // Android has gethostbyname_r/gethostbyaddr_r but not getservbyname_r,
+        // so we only need the mutex for the getservbyname() fallback.
+        #include "wx/thread.h"
+
+        namespace
+        {
+            wxMutex servLock;   // getservbyname()
+        }
+
+        #define wxLOCK_GETBY_MUTEX(name) wxMutexLocker locker(name ## Lock)
     #endif // we don't have _r functions
 #endif // wxUSE_THREADS
 
@@ -256,7 +267,7 @@ hostent *wxGethostbyaddr_r(const char *addr_buf,
     return he;
 }
 
-#ifndef wxHAS_REENTRANT_GETHOSTBY_FUNCS
+#if !defined(wxHAS_REENTRANT_GETHOSTBY_FUNCS) || defined(__ANDROID__)
 servent *deepCopyServent(servent *s,
                          servent *se,
                          char *buffer,
@@ -318,7 +329,7 @@ servent *deepCopyServent(servent *s,
     s->s_aliases = s_aliases; /* copy pointer to pointers */
     return s;
 }
-#endif // !wxHAS_REENTRANT_GETHOSTBY_FUNCS
+#endif // !wxHAS_REENTRANT_GETHOSTBY_FUNCS || __ANDROID__
 
 servent *wxGetservbyname_r(const char *port,
                            const char *protocol,
