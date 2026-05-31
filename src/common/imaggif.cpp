@@ -554,7 +554,7 @@ bool wxGIFHandler_GetPalette(const wxImage& image,
     }
 
     const wxPalette& palette = image.GetPalette();
-    const int palCount = palette.GetColoursCount();
+    int palCount = palette.GetColoursCount();
 
     // The caller's pal[] buffer only has room for the 256 entries a GIF can
     // hold. A wxImage palette may be larger, e.g. when the image was loaded
