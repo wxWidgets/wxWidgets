@@ -106,6 +106,12 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
     unsigned int length;
     unsigned char buf[4];
 
+    // A pixel is at most 4 bytes (32 bpp); a larger pixelSize comes from a
+    // corrupt bpp field in the header and would overflow buf when reading an
+    // RLE run below.
+    if ( pixelSize > (short)sizeof(buf) )
+        return wxTGA_INVFORMAT;
+
     while (outputLength < imageSize)
     {
         int ch = stream.GetC();

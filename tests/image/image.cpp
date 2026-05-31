@@ -1229,6 +1229,39 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::ReadCorruptedTGA", "[image]")
     REQUIRE(
         !tgaImage.LoadFile(badPaletteStream, wxBITMAP_TYPE_TGA)
     );
+
+    /*
+    An RLE TGA whose bpp field gives a pixel size larger than 4 bytes.
+    DecodeRLE() reads one run's pixel into a 4-byte buffer, so this would
+    overflow it on the stream read before the bpp is otherwise rejected.
+    */
+    static const unsigned char bigBppTGA[] =
+    {
+        0,          // ID length
+        0,          // Color map type (none)
+        10,         // Image type = RLE RGB
+
+        0, 0,       // Color map origin
+        0, 0,       // Color map length
+        0,          // Color map entry size
+
+        0, 0,       // X-origin
+        0, 0,       // Y-origin
+
+        1, 0,       // Width = 1
+        1, 0,       // Height = 1
+
+        64,         // Bits per pixel (pixel size = 8 bytes)
+        0,          // Image descriptor
+
+        0x80,       // RLE packet, run length 1
+        1, 2, 3, 4, 5, 6, 7, 8 // 8 bytes of pixel data
+    };
+
+    wxMemoryInputStream bigBppStream(bigBppTGA, WXSIZEOF(bigBppTGA));
+    REQUIRE( bigBppStream.IsOk() );
+
+    REQUIRE( !tgaImage.LoadFile(bigBppStream, wxBITMAP_TYPE_TGA) );
 }
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadBMPPaletteIndex", "[image][bmp][error]")
