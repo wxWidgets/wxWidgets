@@ -18,6 +18,8 @@
 #include "wx/slider.h"
 #include "wx/statline.h"
 
+#include "wx/winui/winui.h"
+
 #if !wxUSE_WINUI3
     #error "This sample requires wxUSE_WINUI3"
 #endif
@@ -91,9 +93,13 @@ public:
         wxButton *button = new wxButton(panel, wxID_ANY, "WinUI Button");
         sizer->Add(button, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
+        m_themeButton = new wxButton(panel, wxID_ANY, "Theme: System");
+        sizer->Add(m_themeButton, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
         panel->SetSizer(sizer);
 
         button->Bind(wxEVT_BUTTON, &WinUISampleFrame::OnButton, this);
+        m_themeButton->Bind(wxEVT_BUTTON, &WinUISampleFrame::OnToggleTheme, this);
         m_text->Bind(wxEVT_TEXT, &WinUISampleFrame::OnText, this);
         m_choice->Bind(wxEVT_CHOICE, &WinUISampleFrame::OnChoice, this);
         m_check->Bind(wxEVT_CHECKBOX, &WinUISampleFrame::OnCheckBox, this);
@@ -105,6 +111,38 @@ public:
     }
 
 private:
+    void OnToggleTheme(wxCommandEvent&)
+    {
+        // Cycle System -> Light -> Dark and route the change through the
+        // standard wxApp::SetAppearance() so it works exactly like it would in
+        // any other wxWidgets application.
+        const char *label = "Theme: System";
+        switch ( m_theme )
+        {
+            case wxWinUIAppTheme::System:
+                m_theme = wxWinUIAppTheme::Light;
+                label = "Theme: Light";
+                break;
+            case wxWinUIAppTheme::Light:
+                m_theme = wxWinUIAppTheme::Dark;
+                label = "Theme: Dark";
+                break;
+            case wxWinUIAppTheme::Dark:
+                m_theme = wxWinUIAppTheme::System;
+                label = "Theme: System";
+                break;
+        }
+
+        wxApp::Appearance appearance = wxApp::Appearance::System;
+        if ( m_theme == wxWinUIAppTheme::Light )
+            appearance = wxApp::Appearance::Light;
+        else if ( m_theme == wxWinUIAppTheme::Dark )
+            appearance = wxApp::Appearance::Dark;
+
+        wxTheApp->SetAppearance(appearance);
+        m_themeButton->SetLabel(label);
+    }
+
     void OnButton(wxCommandEvent&)
     {
         m_status->SetLabel("Button clicked; text is: " + m_text->GetValue());
@@ -142,6 +180,8 @@ private:
     wxRadioButton *m_radioA = nullptr;
     wxRadioButton *m_radioB = nullptr;
     wxSlider *m_slider = nullptr;
+    wxButton *m_themeButton = nullptr;
+    wxWinUIAppTheme m_theme = wxWinUIAppTheme::System;
 };
 
 class WinUISampleApp : public wxApp
@@ -154,6 +194,8 @@ public:
 
         WinUISampleFrame *frame = new WinUISampleFrame;
         frame->Show();
+        // Give the window a Mica backdrop and a theme-matching title bar.
+        wxWinUIApplyWindowBackdrop(frame);
         return true;
     }
 };

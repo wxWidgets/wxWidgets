@@ -19,6 +19,9 @@
 
 #include "private.h"
 
+#include <cmath>
+#include <limits>
+
 class wxWinUIButtonImpl
 {
 public:
@@ -96,7 +99,13 @@ bool wxButton::Create(wxWindow *parent,
 void wxButton::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
+    InvalidateBestSize();
     UpdateWinUIContent();
+
+    if ( GetParent() && GetParent()->GetSizer() )
+        GetParent()->Layout();
+    else
+        SetSize(GetBestSize());
 }
 
 void wxButton::Command(wxCommandEvent& event)
@@ -113,7 +122,38 @@ bool wxButton::SendClickEvent()
 
 wxSize wxButton::DoGetBestSize() const
 {
-    return GetDefaultSize(const_cast<wxButton *>(this));
+    const wxSize defaultSize = GetDefaultSize(const_cast<wxButton *>(this));
+
+    const wxString text = DontShowLabel()
+                              ? wxString()
+                              : wxControl::GetLabelText(GetLabel());
+    if ( text.empty() )
+        return defaultSize;
+
+    // Measure the label with the actual WinUI font (wxGetTextExtent uses the
+    // classic GDI font, which is narrower and would clip the text), then add
+    // the WinUI Button content padding around it.
+    wxSize best(0, 0);
+    try
+    {
+        const float inf = std::numeric_limits<float>::infinity();
+        winrt::Microsoft::UI::Xaml::Controls::TextBlock probe;
+        probe.Text(wxWinUIToHString(text));
+        probe.Measure({ inf, inf });
+        const auto desired = probe.DesiredSize();
+        best.x = static_cast<int>(std::ceil(desired.Width));
+        best.y = static_cast<int>(std::ceil(desired.Height));
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        best = GetTextExtent(text);
+    }
+
+    best.x += FromDIP(28);
+    best.y += FromDIP(14);
+
+    best.IncTo(defaultSize);
+    return best;
 }
 
 void wxButton::UpdateWinUIContent()
@@ -122,14 +162,12 @@ void wxButton::UpdateWinUIContent()
         return;
 
     const wxString text = DontShowLabel() ? wxString() : wxControl::GetLabelText(GetLabel());
-    m_winui->button.Background(wxWinUIBrush(248, 248, 248));
-    m_winui->button.BorderBrush(wxWinUIBrush(128, 128, 128));
-    m_winui->button.Foreground(wxWinUIBrush(32, 32, 32));
 
+    // Leave the brushes unset so the button follows the active WinUI theme.
     winrt::Microsoft::UI::Xaml::Controls::TextBlock textBlock;
     textBlock.Text(wxWinUIToHString(text));
-    textBlock.Foreground(wxWinUIBrush(32, 32, 32));
     m_winui->button.Content(textBlock);
+    m_winui->host.ForceRender();
 }
 
 wxSize wxButtonBase::GetDefaultSize(wxWindow *win)

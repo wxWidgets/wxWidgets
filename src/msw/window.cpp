@@ -3141,6 +3141,14 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_PAINT:
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            if ( ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") )
+            {
+                ::ValidateRect(GetHwnd(), nullptr);
+                processed = true;
+                break;
+            }
+#endif
             if ( wParam )
             {
                 wxPaintDCEx dc((wxWindow *)this, (WXHDC)wParam);
@@ -3583,14 +3591,30 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_ERASEBKGND:
             {
-#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
-                // check if an override was configured for this window
-                EraseBgHooks::const_iterator it = gs_eraseBgHooks.find(this);
-                if ( it != gs_eraseBgHooks.end() )
-                    processed = it->second->MSWEraseBgHook((WXHDC)wParam);
+                bool skipEraseForWinUIBackdrop = false;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                skipEraseForWinUIBackdrop =
+                    ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") != nullptr;
+#endif
+
+                if ( skipEraseForWinUIBackdrop )
+                {
+                    processed = true;
+                }
                 else
-#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+                {
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
+                    // check if an override was configured for this window
+                    EraseBgHooks::const_iterator it = gs_eraseBgHooks.find(this);
+                    if ( it != gs_eraseBgHooks.end() )
+                        processed = it->second->MSWEraseBgHook((WXHDC)wParam);
+                    else
+                        processed = HandleEraseBkgnd((WXHDC)wParam);
+#else
                     processed = HandleEraseBkgnd((WXHDC)wParam);
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+                }
             }
 
             if ( processed )

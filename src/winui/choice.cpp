@@ -81,6 +81,10 @@ bool wxChoice::Create(wxWindow *parent,
                   !(style & wxCB_SIMPLE),
                   wxT("this style flag is ignored by wxChoice") );
 
+    // The WinUI ComboBox draws its own border, so suppress the native control
+    // border to avoid an extra grey frame around the island.
+    style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
@@ -91,9 +95,6 @@ bool wxChoice::Create(wxWindow *parent,
     try
     {
         m_winui->comboBox = winrt::Microsoft::UI::Xaml::Controls::ComboBox();
-        m_winui->comboBox.Background(wxWinUIBrush(255, 255, 255));
-        m_winui->comboBox.BorderBrush(wxWinUIBrush(128, 128, 128));
-        m_winui->comboBox.Foreground(wxWinUIBrush(32, 32, 32));
         m_winui->comboBox.IsEditable(false);
         m_winui->comboBox.PlaceholderText(wxWinUIToHString("Select an item"));
         m_winui->comboBox.MaxDropDownHeight(240);
@@ -277,7 +278,6 @@ void wxChoice::ApplyItemsToPeer()
         {
             winrt::Microsoft::UI::Xaml::Controls::ComboBoxItem item;
             item.Content(winrt::box_value(wxWinUIToHString(m_items[i])));
-            item.Foreground(wxWinUIBrush(32, 32, 32));
             items.Append(item);
         }
 
@@ -298,6 +298,7 @@ void wxChoice::ApplySelectionToPeer()
     m_updatingPeer = true;
     m_winui->comboBox.SelectedIndex(m_selection);
     m_updatingPeer = false;
+    m_winui->host.ForceRender();
 }
 
 void wxChoice::SendSelectionEvent()

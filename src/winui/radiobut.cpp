@@ -139,14 +139,13 @@ void wxRadioButton::UpdateWinUIContent()
         return;
 
     m_winui->updating = true;
-    m_winui->radioButton.Foreground(wxWinUIBrush(32, 32, 32));
 
     winrt::Microsoft::UI::Xaml::Controls::TextBlock textBlock;
     textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(GetLabel())));
-    textBlock.Foreground(wxWinUIBrush(32, 32, 32));
     m_winui->radioButton.Content(textBlock);
     m_winui->radioButton.IsChecked(m_isChecked);
     m_winui->updating = false;
+    m_winui->host.ForceRender();
 }
 
 void wxRadioButton::ClearRadioGroup()

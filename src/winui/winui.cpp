@@ -54,7 +54,12 @@ winrt::Microsoft::UI::Xaml::Hosting::WindowsXamlManager
 winrt::Microsoft::UI::Xaml::Application gs_winuiApplication{ nullptr };
 bool gs_winuiOwnsXamlManager = false;
 
-using wxWinUIContentPreTranslateMessage = BOOL (WINAPI *)(MSG *);
+// ContentPreTranslateMessage() routes input (including character keys) to the
+// focused WinUI island.  It lives in a Windows App SDK runtime DLL that is only
+// on the search path after the bootstrapper has run, so it must be resolved
+// dynamically rather than statically linked (a static import would make the
+// process fail to start because the DLL is absent at load time).
+using wxWinUIContentPreTranslateMessage = BOOL (WINAPI *)(const MSG *);
 wxWinUIContentPreTranslateMessage gs_winuiContentPreTranslateMessage = nullptr;
 
 struct wxWinUIApplication :
@@ -219,6 +224,29 @@ bool wxWinUIEnsureXamlManager()
     }
 }
 
+// Instantiate our own application object so that it becomes
+// Application::Current() and provides the XAML metadata provider before the
+// XAML framework would otherwise create a default application of its own.
+bool wxWinUIEnsureApplication()
+{
+    try
+    {
+        using namespace winrt::Microsoft::UI::Xaml;
+
+        if ( Application::Current() )
+            return true;
+
+        gs_winuiApplication =
+            winrt::make<wxWinUIApplication>().as<Application>();
+        return static_cast<bool>(gs_winuiApplication);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI application creation", e);
+        return false;
+    }
+}
+
 bool wxWinUIEnsureApplicationResources()
 {
     try
@@ -228,11 +256,7 @@ bool wxWinUIEnsureApplicationResources()
 
         auto app = Application::Current();
         if ( !app )
-        {
-            gs_winuiApplication =
-                winrt::make<wxWinUIApplication>().as<Application>();
-            app = gs_winuiApplication;
-        }
+            return false;
 
         auto resources = app.Resources();
         if ( !resources )
@@ -261,33 +285,36 @@ wxWinUIContentPreTranslateMessage wxWinUIGetContentPreTranslateMessage()
     if ( gs_winuiContentPreTranslateMessage )
         return gs_winuiContentPreTranslateMessage;
 
-    HMODULE module = ::GetModuleHandleW(L"Microsoft.UI.Windowing.Core.dll");
-    if ( !module )
-        module = ::LoadLibraryW(L"Microsoft.UI.Windowing.Core.dll");
-
-    if ( !module )
+    static const wchar_t *dlls[] =
     {
-        if ( !gs_winuiContentPreTranslateLogShown )
-        {
-            gs_winuiContentPreTranslateLogShown = true;
-            wxWinUILogHresult("LoadLibrary(Microsoft.UI.Windowing.Core.dll)",
-                              HRESULT_FROM_WIN32(::GetLastError()));
-        }
-        return nullptr;
+        L"Microsoft.UI.Windowing.Core.dll",
+        L"Microsoft.UI.Windowing.dll",
+        L"Microsoft.ui.xaml.dll",
+    };
+
+    for ( const wchar_t *name : dlls )
+    {
+        HMODULE module = ::GetModuleHandleW(name);
+        if ( !module )
+            module = ::LoadLibraryW(name);
+        if ( !module )
+            continue;
+
+        gs_winuiContentPreTranslateMessage =
+            reinterpret_cast<wxWinUIContentPreTranslateMessage>(
+                ::GetProcAddress(module, "ContentPreTranslateMessage"));
+        if ( gs_winuiContentPreTranslateMessage )
+            return gs_winuiContentPreTranslateMessage;
     }
 
-    gs_winuiContentPreTranslateMessage =
-        reinterpret_cast<wxWinUIContentPreTranslateMessage>(
-            ::GetProcAddress(module, "ContentPreTranslateMessage"));
-    if ( !gs_winuiContentPreTranslateMessage &&
-         !gs_winuiContentPreTranslateLogShown )
+    if ( !gs_winuiContentPreTranslateLogShown )
     {
         gs_winuiContentPreTranslateLogShown = true;
-        wxLogWarning(
-            "ContentPreTranslateMessage export not found in Microsoft.UI.Windowing.Core.dll.");
+        wxLogWarning("ContentPreTranslateMessage export not found; "
+                     "WinUI keyboard input may not work.");
     }
 
-    return gs_winuiContentPreTranslateMessage;
+    return nullptr;
 }
 
 } // namespace
@@ -295,7 +322,7 @@ wxWinUIContentPreTranslateMessage wxWinUIGetContentPreTranslateMessage()
 bool wxWinUI3Initialize()
 {
     if ( gs_winuiBootstrapInitialized )
-        return true;
+        return wxWinUIEnsureDispatcherQueue();
 
     bool comInitialized = false;
     try
@@ -337,7 +364,11 @@ bool wxWinUI3Initialize()
         return false;
     }
 
-    if ( !wxWinUIEnsureXamlManager() )
+    // The application object (which provides the XAML metadata provider) must
+    // exist before the XAML manager spins up a default application of its own,
+    // otherwise XamlControlsResources cannot be constructed and the controls
+    // render without their templates.
+    if ( !wxWinUIEnsureApplication() )
     {
         if ( gs_winuiDispatcherQueueController )
         {
@@ -350,6 +381,22 @@ bool wxWinUI3Initialize()
         return false;
     }
 
+    if ( !wxWinUIEnsureXamlManager() )
+    {
+        gs_winuiApplication = nullptr;
+        if ( gs_winuiDispatcherQueueController )
+        {
+            gs_winuiDispatcherQueueController.ShutdownQueue();
+            gs_winuiDispatcherQueueController = nullptr;
+        }
+        ::MddBootstrapShutdown();
+        if ( comInitialized )
+            winrt::uninit_apartment();
+        return false;
+    }
+
+    // Theme resources can only be loaded once the framework is initialized by
+    // the XAML manager above; do it now that our application is current.
     if ( !wxWinUIEnsureApplicationResources() )
     {
         if ( gs_winuiXamlManager )
@@ -359,6 +406,7 @@ bool wxWinUI3Initialize()
             gs_winuiXamlManager = nullptr;
             gs_winuiOwnsXamlManager = false;
         }
+        gs_winuiApplication = nullptr;
         if ( gs_winuiDispatcherQueueController )
         {
             gs_winuiDispatcherQueueController.ShutdownQueue();
@@ -426,8 +474,13 @@ void wxWinUI3Uninitialize()
 
 bool wxWinUI3PreTranslateMessage(WXMSG *msg)
 {
+    // Give the focused WinUI island a chance to process the message; this is
+    // what routes keyboard input (including character keys) to XAML controls.
+    if ( !gs_winuiBootstrapInitialized )
+        return false;
+
     wxWinUIContentPreTranslateMessage fn = wxWinUIGetContentPreTranslateMessage();
-    return fn && fn(reinterpret_cast<MSG *>(msg)) != FALSE;
+    return fn && fn(reinterpret_cast<const MSG *>(msg)) != FALSE;
 }
 
 class wxWinUI3Module : public wxModule

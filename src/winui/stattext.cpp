@@ -60,9 +60,17 @@ bool wxStaticText::Create(wxWindow *parent,
     try
     {
         m_winui->textBlock = winrt::Microsoft::UI::Xaml::Controls::TextBlock();
-        m_winui->textBlock.Foreground(wxWinUIBrush(32, 32, 32));
+        // Don't wrap by default: classic wxStaticText shows a single line and
+        // wrapping here makes the last word disappear when the measured width is
+        // slightly too small.
         m_winui->textBlock.TextWrapping(
-            winrt::Microsoft::UI::Xaml::TextWrapping::Wrap);
+            winrt::Microsoft::UI::Xaml::TextWrapping::NoWrap);
+        m_winui->textBlock.TextTrimming(
+            winrt::Microsoft::UI::Xaml::TextTrimming::None);
+        m_winui->textBlock.HorizontalAlignment(
+            winrt::Microsoft::UI::Xaml::HorizontalAlignment::Stretch);
+        m_winui->textBlock.VerticalAlignment(
+            winrt::Microsoft::UI::Xaml::VerticalAlignment::Top);
 
         UpdateWinUIContent();
         m_winui->host.SetContent(m_winui->textBlock);
@@ -81,8 +89,12 @@ void wxStaticText::SetLabel(const wxString& label)
     if ( !UpdateLabelOrig(label) )
         return;
 
+    InvalidateBestSize();
     WXSetVisibleLabel(label);
-    AutoResizeIfNecessary();
+    if ( GetContainingSizer() )
+        Refresh();
+    else
+        AutoResizeIfNecessary();
 }
 
 bool wxStaticText::SetFont(const wxFont& font)
@@ -102,7 +114,12 @@ bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 
 wxSize wxStaticText::DoGetBestClientSize() const
 {
-    return GetTextExtent(GetLabelText());
+    // WinUI's default font renders slightly taller than wx measures, so add a
+    // little headroom to avoid clipping the text vertically.
+    wxSize best = GetTextExtent(GetLabelText());
+    best.x += FromDIP(4);
+    best.y += FromDIP(8);
+    return best;
 }
 
 wxString wxStaticText::WXGetVisibleLabel() const
@@ -121,7 +138,13 @@ void wxStaticText::UpdateWinUIContent()
     if ( !m_winui || !m_winui->textBlock )
         return;
 
+    const wxSize sizeDIP = ToDIP(GetClientSize());
+    if ( sizeDIP.x > 0 )
+        m_winui->textBlock.Width(sizeDIP.x);
+
     m_winui->textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(m_visibleLabel)));
+    m_winui->textBlock.UpdateLayout();
+    m_winui->host.ForceRender();
 }
 
 #endif // wxUSE_STATTEXT

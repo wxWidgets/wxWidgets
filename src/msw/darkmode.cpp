@@ -44,6 +44,29 @@
 
 #include "wx/msw/private/darkmode.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+#endif
+
+// In the WinUI port, the appearance is driven by the WinUI element theme, which
+// can be changed at any time (unlike the classic dark mode support which can
+// only be set up before the windows are created).
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+static wxApp::AppearanceResult wxWinUIForwardAppearance(wxApp::Appearance a)
+{
+    wxWinUIAppTheme theme;
+    switch ( a )
+    {
+        case wxApp::Appearance::Light: theme = wxWinUIAppTheme::Light; break;
+        case wxApp::Appearance::Dark:  theme = wxWinUIAppTheme::Dark;  break;
+        default:                       theme = wxWinUIAppTheme::System; break;
+    }
+
+    wxWinUISetAppTheme(theme);
+    return wxApp::AppearanceResult::Ok;
+}
+#endif
+
 // ----------------------------------------------------------------------------
 // Module keeping dark mode-related data and wrapping DwmSetWindowAttribute()
 // ----------------------------------------------------------------------------
@@ -267,6 +290,10 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
 
 wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return wxWinUIForwardAppearance(appearance);
+#endif
+
     // We currently can't change the appearance of the existing windows because
     // we initialize/create them differently depending on the mode value in a
     // lot of places, so don't even try as we risk finishing with a horrible
@@ -764,9 +791,14 @@ wxApp::MSWEnableDarkMode(int WXUNUSED(flags),
     return false;
 }
 
-wxApp::AppearanceResult wxApp::SetAppearance(Appearance WXUNUSED(appearance))
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    return wxWinUIForwardAppearance(appearance);
+#else
+    wxUnusedVar(appearance);
     return AppearanceResult::Failure;
+#endif
 }
 
 wxColour wxDarkModeSettings::GetColour(wxSystemColour WXUNUSED(index))

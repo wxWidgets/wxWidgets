@@ -158,11 +158,9 @@ void wxCheckBox::UpdateWinUIContent()
         return;
 
     m_winui->updating = true;
-    m_winui->checkBox.Foreground(wxWinUIBrush(32, 32, 32));
 
     winrt::Microsoft::UI::Xaml::Controls::TextBlock textBlock;
     textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(GetLabel())));
-    textBlock.Foreground(wxWinUIBrush(32, 32, 32));
     m_winui->checkBox.Content(textBlock);
 
     if ( m_state == wxCHK_UNDETERMINED )
@@ -171,6 +169,7 @@ void wxCheckBox::UpdateWinUIContent()
         m_winui->checkBox.IsChecked(m_state == wxCHK_CHECKED);
 
     m_winui->updating = false;
+    m_winui->host.ForceRender();
 }
 
 #endif // wxUSE_CHECKBOX

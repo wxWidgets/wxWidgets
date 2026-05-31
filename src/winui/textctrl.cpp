@@ -25,6 +25,7 @@ public:
     wxWinUIControlHost host;
     winrt::Microsoft::UI::Xaml::Controls::TextBox textBox{ nullptr };
     winrt::event_token textChangedToken{};
+    winrt::event_token keyDownToken{};
 };
 
 namespace
@@ -37,6 +38,58 @@ long wxWinUIClampTextPos(long pos, long len)
     if ( pos > len )
         return len;
     return pos;
+}
+
+wxString wxWinUITranslateKeyToText(winrt::Windows::System::VirtualKey key)
+{
+    const bool altGrDown = ::GetKeyState(VK_RMENU) < 0;
+    if ( !altGrDown &&
+            (::GetKeyState(VK_CONTROL) < 0 || ::GetKeyState(VK_MENU) < 0) )
+        return wxString();
+
+    const UINT virtualKey = static_cast<UINT>(key);
+    switch ( virtualKey )
+    {
+        case VK_BACK:
+        case VK_DELETE:
+        case VK_RETURN:
+        case VK_TAB:
+        case VK_ESCAPE:
+        case VK_LEFT:
+        case VK_RIGHT:
+        case VK_UP:
+        case VK_DOWN:
+        case VK_HOME:
+        case VK_END:
+        case VK_PRIOR:
+        case VK_NEXT:
+        case VK_INSERT:
+            return wxString();
+    }
+
+    BYTE keyboardState[256];
+    if ( !::GetKeyboardState(keyboardState) )
+        return wxString();
+
+    const UINT scanCode = ::MapVirtualKeyW(virtualKey, MAPVK_VK_TO_VSC);
+
+    wchar_t buffer[8] = {};
+    const int len = ::ToUnicode(virtualKey,
+                                scanCode,
+                                keyboardState,
+                                buffer,
+                                WXSIZEOF(buffer),
+                                0);
+    if ( len <= 0 )
+        return wxString();
+
+    for ( int i = 0; i < len; ++i )
+    {
+        if ( buffer[i] < L' ' || buffer[i] == 0x7f )
+            return wxString();
+    }
+
+    return wxString(buffer, len);
 }
 
 } // namespace
@@ -76,6 +129,10 @@ bool wxTextCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
+    // The WinUI TextBox draws its own border, so suppress the native control
+    // border to avoid an extra grey frame around the island.
+    style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
@@ -91,9 +148,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
     try
     {
         m_winui->textBox = winrt::Microsoft::UI::Xaml::Controls::TextBox();
-        m_winui->textBox.Background(wxWinUIBrush(255, 255, 255));
-        m_winui->textBox.BorderBrush(wxWinUIBrush(128, 128, 128));
-        m_winui->textBox.Foreground(wxWinUIBrush(32, 32, 32));
         m_winui->textBox.AcceptsReturn((style & wxTE_MULTILINE) != 0);
         m_winui->textBox.TextWrapping(
             (style & wxTE_DONTWRAP)
@@ -113,6 +167,28 @@ bool wxTextCtrl::Create(wxWindow *parent,
                 m_selectionStart = m_selectionEnd = m_insertionPoint;
                 m_modified = true;
                 SendTextEvent();
+            });
+
+        m_winui->keyDownToken = m_winui->textBox.KeyDown(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   winrt::Microsoft::UI::Xaml::Input::KeyRoutedEventArgs const& event)
+            {
+                if ( !m_winui || !m_editable || event.Handled() )
+                    return;
+
+                const wxString text = wxWinUITranslateKeyToText(event.Key());
+                if ( text.empty() )
+                    return;
+
+                const long selectionStart = m_winui->textBox.SelectionStart();
+                const long selectionEnd =
+                    selectionStart + m_winui->textBox.SelectionLength();
+
+                m_selectionStart = selectionStart;
+                m_selectionEnd = selectionEnd;
+                m_insertionPoint = selectionEnd;
+                WriteText(text);
+                event.Handled(true);
             });
 
         ApplyValueToPeer();
@@ -438,7 +514,9 @@ wxPoint wxTextCtrl::DoPositionToCoords(long WXUNUSED(pos)) const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    return wxWindow::FromDIP(IsMultiLine() ? wxSize(240, 96) : wxSize(180, 32),
+    // A WinUI TextBox needs a bit more than the classic 32px height for its
+    // text not to be clipped by the control's internal padding.
+    return wxWindow::FromDIP(IsMultiLine() ? wxSize(240, 96) : wxSize(180, 40),
                              const_cast<wxTextCtrl *>(this));
 }
 
@@ -455,6 +533,7 @@ void wxTextCtrl::ApplyValueToPeer()
         : m_selectionStart - m_selectionEnd;
     m_winui->textBox.SelectionLength(static_cast<int32_t>(selectionLength));
     m_updatingPeer = false;
+    m_winui->host.ForceRender();
 }
 
 void wxTextCtrl::SendTextEvent()

@@ -93,8 +93,6 @@ bool wxSlider::Create(wxWindow *parent,
         using namespace winrt::Microsoft::UI::Xaml::Controls::Primitives;
 
         m_winui->slider = Slider();
-        m_winui->slider.Foreground(wxWinUIBrush(0, 120, 215));
-        m_winui->slider.Background(wxWinUIBrush(216, 216, 216));
         m_winui->slider.Orientation(
             HasFlag(wxSL_VERTICAL) ? Orientation::Vertical : Orientation::Horizontal);
         m_winui->slider.IsDirectionReversed(HasFlag(wxSL_INVERSE));
@@ -194,6 +192,7 @@ void wxSlider::ApplyRangeToPeer()
     if ( m_tickFreq > 0 )
         m_winui->slider.TickFrequency(m_tickFreq);
     m_updatingPeer = false;
+    m_winui->host.ForceRender();
 }
 
 void wxSlider::ApplyValueToPeer()
@@ -204,6 +203,7 @@ void wxSlider::ApplyValueToPeer()
     m_updatingPeer = true;
     m_winui->slider.Value(m_value);
     m_updatingPeer = false;
+    m_winui->host.ForceRender();
 }
 
 void wxSlider::SendSliderEvent()

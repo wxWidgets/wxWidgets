@@ -242,6 +242,7 @@ list(APPEND wxTOOLKIT_LIBRARIES
     "${wxWINUI3_DISPATCHING_LIB}"
     windowsapp
     runtimeobject
+    dwmapi
     )
 list(APPEND wxTOOLKIT_EXTRA "WinUI 3 ${wxWINUI3_WINDOWSAPPSDK_VERSION}")
 

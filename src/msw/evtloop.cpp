@@ -126,6 +126,9 @@ void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     if ( wxWinUI3PreTranslateMessage(msg) )
         return;
+
+    if ( wxWinUI3ProcessTabNavigation(msg) )
+        return;
 #endif
 
     // Workaround for the workaround for the problem of IME hanging if it
