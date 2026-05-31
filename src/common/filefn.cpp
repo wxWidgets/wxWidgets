@@ -262,55 +262,6 @@ wxString wxFileNameFromPath (const wxString& path)
 }
 
 // Return just the directory, or nullptr if no directory
-wxChar *
-wxPathOnly (wxChar *path)
-{
-    if (path && *path)
-    {
-        static wxChar buf[_MAXPATHLEN];
-
-        int l = wxStrlen(path);
-        int i = l - 1;
-        if ( i >= _MAXPATHLEN )
-            return nullptr;
-
-        // Local copy
-        wxStrcpy (buf, path);
-
-        // Search backward for a backward or forward slash
-        while (i > -1)
-        {
-            // Unix like or Windows
-            if (path[i] == wxT('/') || path[i] == wxT('\\'))
-            {
-                buf[i] = 0;
-                return buf;
-            }
-#ifdef __VMS__
-            if (path[i] == wxT(']'))
-            {
-                buf[i+1] = 0;
-                return buf;
-            }
-#endif
-            i --;
-        }
-
-#if defined(__WINDOWS__)
-        // Try Drive specifier
-        if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
-        {
-            // A:junk --> A:. (since A:.\junk Not A:\junk)
-            buf[2] = wxT('.');
-            buf[3] = wxT('\0');
-            return buf;
-        }
-#endif
-    }
-    return nullptr;
-}
-
-// Return just the directory, or nullptr if no directory
 wxString wxPathOnly (const wxString& path)
 {
     if (!path.empty())
