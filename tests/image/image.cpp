@@ -1422,9 +1422,10 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIFPaletteIndex",
     // LZW data emits CLEAR, literal 2, EOI -- pixel value 2 is a valid LZW
     // literal but past the end of the 2-entry palette, so the
     // pal[3*(*src) + ...] reads in wxGIFDecoder::ConvertToImage() previously
-    // returned uninitialised bytes from past the loaded portion of the
-    // 768-byte malloc'd pimg->pal buffer (ASAN with detect_uninits or msan
-    // would flag this as a use of uninitialised heap memory).
+    // pulled uninitialised bytes from the unpopulated tail of the 768-byte
+    // pimg->pal buffer into the decoded image. The index stays inside the
+    // buffer (a pixel byte is at most 255) so ASAN won't flag it, but it is
+    // an uninitialised read that MSAN catches and leaks junk into the pixels.
     static const unsigned char data[] =
     {
         0x47, 0x49, 0x46, 0x38, 0x39, 0x61,             // "GIF89a"

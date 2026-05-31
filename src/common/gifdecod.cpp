@@ -154,10 +154,13 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
     // Reject decoded pixels that reference palette entries past the
     // loaded portion of the per-frame palette buffer: GIF files where
     // the LZW minimum code size implies a larger alphabet than the
-    // declared colour table can emit literal codes >= ncolours, and
-    // pimg->pal is malloc'd at a fixed 768 bytes with only 3*ncolours
-    // of them populated from the file, so the pal[3*(*src) + ...] reads
-    // below would otherwise yield uninitialised heap bytes.
+    // declared colour table can emit literal codes >= ncolours. pimg->pal
+    // is a fixed 768 bytes but only 3*ncolours of them are populated from
+    // the file (the rest is left uninitialised), so the pal[3*(*src) + ...]
+    // reads below would otherwise pull uninitialised bytes into the image.
+    // The index stays within the 768-byte buffer (a pixel byte is at most
+    // 255), so this is an uninitialised read rather than an out-of-bounds
+    // one, but it still leaks junk into the decoded pixels.
     unsigned long npixel =
         static_cast<unsigned long>(sz.GetWidth()) * sz.GetHeight();
     const unsigned int ncolours = GetNcolours(frame);
