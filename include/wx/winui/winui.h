@@ -19,6 +19,11 @@ WXDLLIMPEXP_CORE void wxWinUI3Uninitialize();
 WXDLLIMPEXP_CORE bool wxWinUI3PreTranslateMessage(WXMSG *msg);
 WXDLLIMPEXP_CORE bool wxWinUI3ProcessTabNavigation(WXMSG *msg);
 
+// When a WinUI island has the keyboard focus, dispatch keyboard messages
+// directly to it, bypassing wxWidgets' dialog navigation which would otherwise
+// swallow character keys (causing lost input and the Windows error beep).
+WXDLLIMPEXP_CORE bool wxWinUI3DispatchIslandKeyboard(WXMSG *msg);
+
 // Application-wide theme applied to all live WinUI islands.  System follows
 // the OS light/dark setting; Light and Dark force the respective theme.
 enum class wxWinUIAppTheme

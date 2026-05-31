@@ -25,7 +25,6 @@ public:
     wxWinUIControlHost host;
     winrt::Microsoft::UI::Xaml::Controls::TextBox textBox{ nullptr };
     winrt::event_token textChangedToken{};
-    winrt::event_token keyDownToken{};
 };
 
 namespace
@@ -38,58 +37,6 @@ long wxWinUIClampTextPos(long pos, long len)
     if ( pos > len )
         return len;
     return pos;
-}
-
-wxString wxWinUITranslateKeyToText(winrt::Windows::System::VirtualKey key)
-{
-    const bool altGrDown = ::GetKeyState(VK_RMENU) < 0;
-    if ( !altGrDown &&
-            (::GetKeyState(VK_CONTROL) < 0 || ::GetKeyState(VK_MENU) < 0) )
-        return wxString();
-
-    const UINT virtualKey = static_cast<UINT>(key);
-    switch ( virtualKey )
-    {
-        case VK_BACK:
-        case VK_DELETE:
-        case VK_RETURN:
-        case VK_TAB:
-        case VK_ESCAPE:
-        case VK_LEFT:
-        case VK_RIGHT:
-        case VK_UP:
-        case VK_DOWN:
-        case VK_HOME:
-        case VK_END:
-        case VK_PRIOR:
-        case VK_NEXT:
-        case VK_INSERT:
-            return wxString();
-    }
-
-    BYTE keyboardState[256];
-    if ( !::GetKeyboardState(keyboardState) )
-        return wxString();
-
-    const UINT scanCode = ::MapVirtualKeyW(virtualKey, MAPVK_VK_TO_VSC);
-
-    wchar_t buffer[8] = {};
-    const int len = ::ToUnicode(virtualKey,
-                                scanCode,
-                                keyboardState,
-                                buffer,
-                                WXSIZEOF(buffer),
-                                0);
-    if ( len <= 0 )
-        return wxString();
-
-    for ( int i = 0; i < len; ++i )
-    {
-        if ( buffer[i] < L' ' || buffer[i] == 0x7f )
-            return wxString();
-    }
-
-    return wxString(buffer, len);
 }
 
 } // namespace
@@ -169,27 +116,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
                 SendTextEvent();
             });
 
-        m_winui->keyDownToken = m_winui->textBox.KeyDown(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   winrt::Microsoft::UI::Xaml::Input::KeyRoutedEventArgs const& event)
-            {
-                if ( !m_winui || !m_editable || event.Handled() )
-                    return;
-
-                const wxString text = wxWinUITranslateKeyToText(event.Key());
-                if ( text.empty() )
-                    return;
-
-                const long selectionStart = m_winui->textBox.SelectionStart();
-                const long selectionEnd =
-                    selectionStart + m_winui->textBox.SelectionLength();
-
-                m_selectionStart = selectionStart;
-                m_selectionEnd = selectionEnd;
-                m_insertionPoint = selectionEnd;
-                WriteText(text);
-                event.Handled(true);
-            });
+        // Text insertion is owned by the native WinUI TextBox; m_value is kept
+        // in sync from TextChanged above.  Do NOT insert characters manually
+        // from a KeyDown handler -- doing so double-inserts layout-dependent
+        // keys (e.g. '(', '&', ''' on AZERTY) and triggers the Windows error
+        // beep because the key message ends up handled twice.
 
         ApplyValueToPeer();
         m_winui->host.SetContent(m_winui->textBox);

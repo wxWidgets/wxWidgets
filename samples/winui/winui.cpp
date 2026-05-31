@@ -145,17 +145,22 @@ private:
 
     void OnButton(wxCommandEvent&)
     {
-        m_status->SetLabel("Button clicked; text is: " + m_text->GetValue());
+        // Escape mnemonics: a status label is a wxControl label, so a bare '&'
+        // in user text would be treated as a mnemonic marker and swallowed.
+        m_status->SetLabel("Button clicked; text is: " +
+                           wxControl::EscapeMnemonics(m_text->GetValue()));
     }
 
     void OnText(wxCommandEvent& event)
     {
-        m_status->SetLabel("Text changed: " + event.GetString());
+        m_status->SetLabel("Text changed: " +
+                           wxControl::EscapeMnemonics(event.GetString()));
     }
 
     void OnChoice(wxCommandEvent& event)
     {
-        m_status->SetLabel("Choice selected: " + event.GetString());
+        m_status->SetLabel("Choice selected: " +
+                           wxControl::EscapeMnemonics(event.GetString()));
     }
 
     void OnCheckBox(wxCommandEvent&)

@@ -568,6 +568,43 @@ bool wxWinUI3ProcessTabNavigation(WXMSG *msg)
     return false;
 }
 
+bool wxWinUI3DispatchIslandKeyboard(WXMSG *msg)
+{
+    if ( !msg )
+        return false;
+
+    switch ( msg->message )
+    {
+        case WM_KEYDOWN:
+        case WM_KEYUP:
+        case WM_CHAR:
+        case WM_DEADCHAR:
+        case WM_SYSKEYDOWN:
+        case WM_SYSKEYUP:
+        case WM_SYSCHAR:
+        case WM_SYSDEADCHAR:
+        case WM_UNICHAR:
+            break;
+        default:
+            return false;
+    }
+
+    // Only take over keyboard input while a WinUI island actually has focus.
+    if ( !wxWinUIFindHostContainingFocus(::GetFocus()) )
+        return false;
+
+    // ContentPreTranslateMessage() (called earlier from
+    // wxWinUI3PreTranslateMessage) has already had its chance to consume the
+    // message.  Since it did not, dispatch it straight to the focused island,
+    // exactly like the canonical XAML-island message loop does.  Crucially we
+    // skip wxWidgets' own PreProcessMessage(): its dialog navigation treats
+    // character keys as mnemonic candidates, swallows them and plays the error
+    // sound instead of letting the TextBox insert the text.
+    ::TranslateMessage(reinterpret_cast<MSG *>(msg));
+    ::DispatchMessage(reinterpret_cast<MSG *>(msg));
+    return true;
+}
+
 void wxWinUIApplyWindowBackdrop(wxWindow *tlw)
 {
     if ( !tlw )

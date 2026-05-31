@@ -129,6 +129,9 @@ void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
 
     if ( wxWinUI3ProcessTabNavigation(msg) )
         return;
+
+    if ( wxWinUI3DispatchIslandKeyboard(msg) )
+        return;
 #endif
 
     // Workaround for the workaround for the problem of IME hanging if it
