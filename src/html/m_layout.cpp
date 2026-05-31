@@ -334,21 +334,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
                     if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
                     {
 #ifdef wxHAS_SVG
-                        // Read the entire stream into a buffer for SVG
-                        wxMemoryBuffer svgBuf;
-                        for ( ;; )
-                        {
-                            char tmp[4096];
-                            is->Read(tmp, WXSIZEOF(tmp));
-                            const size_t n = is->LastRead();
-                            if ( n == 0 )
-                                break;
-                            svgBuf.AppendData(tmp, n);
-                        }
-                        wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(
-                            static_cast<const wxByte*>(svgBuf.GetData()),
-                            svgBuf.GetDataLen(),
-                            wxDefaultSize);
+                        wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*is, wxDefaultSize);
                         if ( svgBundle.IsOk() )
                             winIface->SetHTMLBackgroundImage(svgBundle);
 #endif // wxHAS_SVG

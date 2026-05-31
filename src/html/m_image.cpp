@@ -400,19 +400,7 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
                 if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
                 {
 #ifdef wxHAS_SVG
-                    // Read the entire stream into a buffer for SVG
-                    wxMemoryBuffer svgBuf;
-                    for ( ;; )
-                    {
-                        char tmp[4096];
-                        s->Read(tmp, WXSIZEOF(tmp));
-                        const size_t n = s->LastRead();
-                        if ( n == 0 )
-                            break;
-                        svgBuf.AppendData(tmp, n);
-                    }
-                    wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(
-                        static_cast<const wxByte*>(svgBuf.GetData()), svgBuf.GetDataLen(), wxDefaultSize);
+                    wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*s, wxDefaultSize);
                     if ( svgBundle.IsOk() )
                     {
                         SetImage(svgBundle);
