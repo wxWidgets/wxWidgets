@@ -412,10 +412,10 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
                         readImg = false;
                     }
                 }
-#endif
+#endif // wxUSE_ZLIB
 
                 // SVG image path
-                if ( loc.Matches("*.svg") || loc.Matches("*.SVG"))
+                if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
                 {
                     wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*s, wxDefaultSize);
                     if ( svgBundle.IsOk() )

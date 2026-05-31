@@ -334,30 +334,28 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
                 {
                     wxString loc = fileBgImage->GetLocation();
 
-                    // SVG background image path
-                    if ( loc.Matches("*.svg") || loc.Matches("*.SVG") ||
-                         loc.Matches("*.svgz") || loc.Matches("*.SVGZ") )
-                    {
 #ifdef wxHAS_SVG
 #if wxUSE_ZLIB
-                        if ( loc.Lower().EndsWith(".svgz") )
-                        {
-                            wxZlibInputStream zlibStream(*is);
-                            wxBitmapBundle svgBundle =
-                                wxBitmapBundle::FromSVG(zlibStream, wxDefaultSize);
-                            if ( svgBundle.IsOk() )
-                                winIface->SetHTMLBackgroundImage(svgBundle);
-                        }
-                        else
-#endif // wxUSE_ZLIB
-                        {
-                            wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*is, wxDefaultSize);
-                            if ( svgBundle.IsOk() )
-                                winIface->SetHTMLBackgroundImage(svgBundle);
-                        }
-#endif // wxHAS_SVG
+                    if ( loc.Lower().EndsWith(".svgz") )
+                    {
+                        wxZlibInputStream zlibStream(*is);
+                        wxBitmapBundle svgBundle =
+                            wxBitmapBundle::FromSVG(zlibStream, wxDefaultSize);
+                        if ( svgBundle.IsOk() )
+                            winIface->SetHTMLBackgroundImage(svgBundle);
                     }
                     else
+#endif // wxUSE_ZLIB
+
+                    // SVG background image path
+                    if ( loc.Matches("*.svg") || loc.Matches("*.SVG") )
+                    {
+                        wxBitmapBundle svgBundle = wxBitmapBundle::FromSVG(*is, wxDefaultSize);
+                        if ( svgBundle.IsOk() )
+                            winIface->SetHTMLBackgroundImage(svgBundle);
+                    }
+                    else
+#endif // wxHAS_SVG
                     {
                         wxImage image(*is);
                         if ( image.IsOk() )
