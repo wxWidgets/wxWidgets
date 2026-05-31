@@ -41,6 +41,7 @@ Where:
 
  - `base`
  - `msw`
+ - `winui` (experimental, CMake-only)
  - `gtk`, `gtk2`, `gtk3`, `gtk4`
  - `osx_cocoa`, `osx_iphone`
  - `x11`

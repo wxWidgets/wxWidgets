@@ -84,6 +84,8 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/statline.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/statline.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/statline.h"
 #elif defined(__WXGTK__)

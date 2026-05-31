@@ -24,6 +24,34 @@ if(WXMSW)
     if(NOT wxUSE_OLE)
         wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/" "src/generic/dirdlgg.cpp")
     endif()
+    if(WXWINUI AND wxUSE_WINUI3)
+        list(REMOVE_ITEM CORE_SRC
+            "${wxSOURCE_DIR}/src/msw/button.cpp"
+            "${wxSOURCE_DIR}/src/msw/bmpcbox.cpp"
+            "${wxSOURCE_DIR}/src/msw/checkbox.cpp"
+            "${wxSOURCE_DIR}/src/msw/choice.cpp"
+            "${wxSOURCE_DIR}/src/msw/combobox.cpp"
+            "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
+            "${wxSOURCE_DIR}/src/msw/slider.cpp"
+            "${wxSOURCE_DIR}/src/msw/statline.cpp"
+            "${wxSOURCE_DIR}/src/msw/stattext.cpp"
+            "${wxSOURCE_DIR}/src/msw/textctrl.cpp"
+            )
+        wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/"
+            src/winui/winui.cpp
+            src/winui/ctrlhost.cpp
+            src/winui/xamlhost.cpp
+            src/winui/button.cpp
+            src/winui/checkbox.cpp
+            src/winui/choice.cpp
+            src/winui/combobox.cpp
+            src/winui/radiobut.cpp
+            src/winui/slider.cpp
+            src/winui/statline.cpp
+            src/winui/stattext.cpp
+            src/winui/textctrl.cpp
+            )
+    endif()
 elseif(WXGTK)
     if(WXGTK2)
         set(GTK2_LOWLEVEL_HDR ${GTK_LOWLEVEL_HDR})
@@ -60,6 +88,9 @@ elseif(WXX11)
 endif()
 
 wx_add_library(wxcore ${CORE_SRC})
+if(WXWINUI AND wxUSE_WINUI3)
+    wx_winui3_configure_target(wxcore)
+endif()
 foreach(lib JPEG PNG TIFF NANOSVG WebP LUNASVG)
     if(${lib}_LIBRARIES)
         wx_lib_link_libraries(wxcore PRIVATE ${${lib}_LIBRARIES})

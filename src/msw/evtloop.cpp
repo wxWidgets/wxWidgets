@@ -30,6 +30,9 @@
 #include "wx/thread.h"
 #include "wx/except.h"
 #include "wx/msw/private.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+#endif
 
 #include "wx/tooltip.h"
 #if wxUSE_THREADS
@@ -120,6 +123,11 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 
 void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( wxWinUI3PreTranslateMessage(msg) )
+        return;
+#endif
+
     // Workaround for the workaround for the problem of IME hanging if it
     // doesn't get all keyboard messages in wxKeyboardHook(): as we can't
     // afford to ignore the keyboard event at Windows level, we ignore it here

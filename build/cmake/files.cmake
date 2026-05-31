@@ -1826,6 +1826,17 @@ set(MSW_HDR
     wx/msw/textentry.h
     wx/msw/tglbtn.h
     wx/msw/treectrl.h
+    wx/winui/button.h
+    wx/winui/checkbox.h
+    wx/winui/choice.h
+    wx/winui/combobox.h
+    wx/winui/radiobut.h
+    wx/winui/slider.h
+    wx/winui/statline.h
+    wx/winui/stattext.h
+    wx/winui/textctrl.h
+    wx/winui/winui.h
+    wx/winui/xamlhost.h
     wx/msw/calctrl.h
     wx/msw/bmpcbox.h
     wx/msw/datectrl.h

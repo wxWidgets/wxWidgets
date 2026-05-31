@@ -104,7 +104,7 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // ----------------------------------------------------------------------------
 
 // wxOSX and wxMSW support RTF in wxTextCtrl.
-#if defined(__WXOSX__) || (defined(__WXMSW__) && wxUSE_RICHEDIT)
+#if defined(__WXOSX__) || (defined(__WXMSW__) && !defined(__WXWINUI__) && wxUSE_RICHEDIT)
     #define wxHAS_TEXTCTRL_RTF
 #endif
 
@@ -964,6 +964,8 @@ protected:
     #include "wx/x11/textctrl.h"
 #elif defined(__WXUNIVERSAL__)
     #include "wx/univ/textctrl.h"
+#elif defined(__WXWINUI__)
+    #include "wx/winui/textctrl.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textctrl.h"
 #elif defined(__WXGTK__)
