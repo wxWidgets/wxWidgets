@@ -1207,6 +1207,49 @@ wxString wxGetOsDescription()
                            info.dwMinorVersion);
             }
 
+            DWORD productType = 0;
+            if ( !wxIsWindowsServer()
+                && GetProductInfo(
+                    info.dwMajorVersion, info.dwMinorVersion,
+                    0, 0, // service pack major/minor
+                    &productType) )
+            {
+                switch (productType) {
+                case PRODUCT_PROFESSIONAL:
+                    str << " Pro";
+                    break;
+
+                case PRODUCT_CORE:
+                    str << " Home";
+                    break;
+
+                case PRODUCT_ENTERPRISE:
+                    str << " Enterprise";
+                    break;
+
+                default:
+                    // There are dozens of other possibilities (see
+                    // GetProductInfo docs), but for now we only care
+                    // about the most common ones.
+                    break;
+                }
+            }
+
+#if wxUSE_REGKEY
+            wxRegKey key(wxRegKey::HKLM,
+                "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion");
+
+            if ( key.Exists() )
+            {
+                wxString displayVersion;
+                if ( key.QueryValue("DisplayVersion", displayVersion)
+                    && !displayVersion.empty() )
+                {
+                    str << " " << displayVersion;
+                }
+            }
+#endif // wxUSE_REGKEY
+
             str << wxT(" (")
                 << wxString::Format(
                        /* TRANSLATORS: MS Windows build number */_("build %lu"),
