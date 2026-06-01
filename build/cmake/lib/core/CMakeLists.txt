@@ -31,11 +31,13 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/checkbox.cpp"
             "${wxSOURCE_DIR}/src/msw/choice.cpp"
             "${wxSOURCE_DIR}/src/msw/combobox.cpp"
+            "${wxSOURCE_DIR}/src/msw/gauge.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
             "${wxSOURCE_DIR}/src/msw/slider.cpp"
             "${wxSOURCE_DIR}/src/msw/statline.cpp"
             "${wxSOURCE_DIR}/src/msw/stattext.cpp"
             "${wxSOURCE_DIR}/src/msw/textctrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/tglbtn.cpp"
             )
         wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/"
             src/winui/winui.cpp
@@ -45,11 +47,13 @@ if(WXMSW)
             src/winui/checkbox.cpp
             src/winui/choice.cpp
             src/winui/combobox.cpp
+            src/winui/gauge.cpp
             src/winui/radiobut.cpp
             src/winui/slider.cpp
             src/winui/statline.cpp
             src/winui/stattext.cpp
             src/winui/textctrl.cpp
+            src/winui/tglbtn.cpp
             )
     endif()
 elseif(WXGTK)

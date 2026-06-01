@@ -14,9 +14,12 @@
 #endif
 
 #include "wx/choice.h"
+#include "wx/gauge.h"
 #include "wx/radiobut.h"
+#include "wx/scrolwin.h"
 #include "wx/slider.h"
 #include "wx/statline.h"
+#include "wx/tglbtn.h"
 
 #include "wx/winui/winui.h"
 
@@ -33,7 +36,8 @@ public:
     WinUISampleFrame()
         : wxFrame(nullptr, wxID_ANY, "wxWinUI sample", wxDefaultPosition, wxSize(720, 480))
     {
-        wxPanel *panel = new wxPanel(this);
+        wxScrolledWindow *panel = new wxScrolledWindow(this, wxID_ANY);
+        panel->SetScrollRate(0, FromDIP(10)); // vertical scrolling only
         wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
         m_status = new wxStaticText
@@ -90,8 +94,15 @@ public:
         m_slider = new wxSlider(panel, wxID_ANY, 40, 0, 100);
         sizer->Add(m_slider, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
+        m_gauge = new wxGauge(panel, wxID_ANY, 100);
+        m_gauge->SetValue(40);
+        sizer->Add(m_gauge, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
         wxButton *button = new wxButton(panel, wxID_ANY, "WinUI Button");
         sizer->Add(button, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        m_toggle = new wxToggleButton(panel, wxID_ANY, "WinUI ToggleButton");
+        sizer->Add(m_toggle, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         m_themeButton = new wxButton(panel, wxID_ANY, "Theme: System");
         sizer->Add(m_themeButton, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
@@ -99,6 +110,7 @@ public:
         panel->SetSizer(sizer);
 
         button->Bind(wxEVT_BUTTON, &WinUISampleFrame::OnButton, this);
+        m_toggle->Bind(wxEVT_TOGGLEBUTTON, &WinUISampleFrame::OnToggle, this);
         m_themeButton->Bind(wxEVT_BUTTON, &WinUISampleFrame::OnToggleTheme, this);
         m_text->Bind(wxEVT_TEXT, &WinUISampleFrame::OnText, this);
         m_choice->Bind(wxEVT_CHOICE, &WinUISampleFrame::OnChoice, this);
@@ -151,6 +163,11 @@ private:
                            wxControl::EscapeMnemonics(m_text->GetValue()));
     }
 
+    void OnToggle(wxCommandEvent& event)
+    {
+        m_status->SetLabel(event.IsChecked() ? "Toggle is ON" : "Toggle is OFF");
+    }
+
     void OnText(wxCommandEvent& event)
     {
         m_status->SetLabel("Text changed: " +
@@ -176,6 +193,7 @@ private:
     void OnSlider(wxCommandEvent& event)
     {
         m_status->SetLabel(wxString::Format("Slider value: %d", event.GetInt()));
+        m_gauge->SetValue(event.GetInt());
     }
 
     wxStaticText *m_status = nullptr;
@@ -185,6 +203,8 @@ private:
     wxRadioButton *m_radioA = nullptr;
     wxRadioButton *m_radioB = nullptr;
     wxSlider *m_slider = nullptr;
+    wxGauge *m_gauge = nullptr;
+    wxToggleButton *m_toggle = nullptr;
     wxButton *m_themeButton = nullptr;
     wxWinUIAppTheme m_theme = wxWinUIAppTheme::System;
 };

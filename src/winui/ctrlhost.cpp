@@ -134,6 +134,27 @@ wxWinUIControlHost *wxWinUIFindHostContainingFocus(HWND hwnd)
     return nullptr;
 }
 
+// Theme a window's native scrollbars (and other common controls) to match the
+// light/dark app theme.  SetWindowTheme is loaded dynamically to avoid pulling
+// in <uxtheme.h> here (which conflicts with the C++/WinRT headers).
+void wxWinUIApplyScrollbarTheme(HWND hwnd, bool dark)
+{
+    typedef HRESULT (WINAPI *SetWindowTheme_t)(HWND, LPCWSTR, LPCWSTR);
+    static SetWindowTheme_t s_setWindowTheme = []() -> SetWindowTheme_t
+    {
+        HMODULE module = ::GetModuleHandleW(L"uxtheme.dll");
+        if ( !module )
+            module = ::LoadLibraryW(L"uxtheme.dll");
+        return module
+            ? reinterpret_cast<SetWindowTheme_t>(
+                  ::GetProcAddress(module, "SetWindowTheme"))
+            : nullptr;
+    }();
+
+    if ( s_setWindowTheme )
+        s_setWindowTheme(hwnd, dark ? L"DarkMode_Explorer" : L"Explorer", nullptr);
+}
+
 void wxWinUIApplyMicaBackground(wxWindow *win, bool micaEnabled)
 {
     if ( !win )
@@ -152,6 +173,9 @@ void wxWinUIApplyMicaBackground(wxWindow *win, bool micaEnabled)
             ::SetPropW(hwnd, wxWinUIBackdropTransparentProp, reinterpret_cast<HANDLE>(1));
         else
             ::RemovePropW(hwnd, wxWinUIBackdropTransparentProp);
+
+        // Match native scrollbars (e.g. wxScrolledWindow) to the app theme.
+        wxWinUIApplyScrollbarTheme(hwnd, wxWinUIEffectiveDark());
     }
 
     if ( !micaEnabled )
