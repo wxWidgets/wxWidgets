@@ -24,6 +24,7 @@
 #include "wx/radiobut.h"
 #include "wx/scrolwin.h"
 #include "wx/slider.h"
+#include "wx/spinctrl.h"
 #include "wx/statline.h"
 #include "wx/tglbtn.h"
 
@@ -135,6 +136,16 @@ public:
 
         m_toggle = new wxToggleButton(panel, wxID_ANY, "WinUI ToggleButton");
         sizer->Add(m_toggle, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxSpinCtrl *spin = new wxSpinCtrl(panel, wxID_ANY, wxEmptyString,
+            wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 42);
+        sizer->Add(spin, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxSpinCtrlDouble *spinDouble = new wxSpinCtrlDouble(panel, wxID_ANY,
+            wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
+            0.0, 10.0, 2.5, 0.5);
+        spinDouble->SetDigits(1);
+        sizer->Add(spinDouble, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         wxHyperlinkCtrl *link = new wxHyperlinkCtrl(panel, wxID_ANY,
             "WinUI HyperlinkButton (wxWidgets.org)", "https://www.wxwidgets.org/");

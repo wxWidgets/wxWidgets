@@ -6005,7 +6005,7 @@ bool wxWindowMSW::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
     }
     else
     {
-#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
+#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
         // the text ctrl which is logically part of wxSpinCtrl sends WM_COMMAND
         // notifications to its parent which we want to reflect back to
         // wxSpinCtrl
@@ -7423,7 +7423,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 
     // spin control text buddy window should be mapped to spin ctrl
     // itself so try it too
-#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
+#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
     if ( !win )
     {
         win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);
