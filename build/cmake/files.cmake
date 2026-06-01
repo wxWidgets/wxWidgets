@@ -1833,6 +1833,7 @@ set(MSW_HDR
     wx/winui/combobox.h
     wx/winui/gauge.h
     wx/winui/listbox.h
+    wx/winui/notebook.h
     wx/winui/radiobut.h
     wx/winui/slider.h
     wx/winui/statline.h

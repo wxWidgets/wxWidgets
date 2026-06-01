@@ -34,6 +34,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/combobox.cpp"
             "${wxSOURCE_DIR}/src/msw/gauge.cpp"
             "${wxSOURCE_DIR}/src/msw/listbox.cpp"
+            "${wxSOURCE_DIR}/src/msw/notebook.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
             "${wxSOURCE_DIR}/src/msw/slider.cpp"
             "${wxSOURCE_DIR}/src/msw/statline.cpp"
@@ -52,6 +53,7 @@ if(WXMSW)
             src/winui/combobox.cpp
             src/winui/gauge.cpp
             src/winui/listbox.cpp
+            src/winui/notebook.cpp
             src/winui/radiobut.cpp
             src/winui/slider.cpp
             src/winui/statline.cpp

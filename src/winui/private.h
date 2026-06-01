@@ -67,6 +67,13 @@ public:
     bool ContainsFocus(HWND hwnd) const;
     bool NavigateFocus(bool forward);
 
+    // Limit the island bridge to the top portion of the control's client area
+    // (in physical pixels), leaving the area below free of any XAML island.
+    // Used by wxNotebook so that its page windows -- and crucially their native
+    // scrollbars -- are not occluded by the TabView's composition surface.
+    // Pass 0 to fill the whole client area (the default).
+    void SetBridgeHeightLimit(int physicalHeight);
+
 private:
     void UpdateContentSize(int width, int height);
     void MoveAndResize();
@@ -82,6 +89,7 @@ private:
     winrt::Microsoft::UI::Xaml::UIElement m_content{ nullptr };
     winrt::event_token m_takeFocusRequestedToken{};
     bool m_backdropApplied = false;
+    int m_bridgeHeightLimit = 0;
 };
 
 // Current element theme requested by the application (Default == follow system).

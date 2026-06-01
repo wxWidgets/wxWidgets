@@ -395,6 +395,15 @@ void wxWinUIControlHost::ApplyTheme(winrt::Microsoft::UI::Xaml::ElementTheme the
     ForceRender();
 }
 
+void wxWinUIControlHost::SetBridgeHeightLimit(int physicalHeight)
+{
+    if ( m_bridgeHeightLimit == physicalHeight )
+        return;
+
+    m_bridgeHeightLimit = physicalHeight;
+    MoveAndResize();
+}
+
 void wxWinUIControlHost::UpdateContentSize(int width, int height)
 {
     if ( !m_content )
@@ -419,9 +428,12 @@ void wxWinUIControlHost::ForceRender()
         return;
 
     const int width = rect.right - rect.left;
-    const int height = rect.bottom - rect.top;
+    int height = rect.bottom - rect.top;
     if ( width <= 0 || height <= 0 )
         return;
+
+    if ( m_bridgeHeightLimit > 0 && m_bridgeHeightLimit < height )
+        height = m_bridgeHeightLimit;
 
     try
     {
@@ -484,9 +496,12 @@ void wxWinUIControlHost::MoveAndResize()
         return;
 
     const int width = rect.right - rect.left;
-    const int height = rect.bottom - rect.top;
+    int height = rect.bottom - rect.top;
     if ( width <= 0 || height <= 0 )
         return;
+
+    if ( m_bridgeHeightLimit > 0 && m_bridgeHeightLimit < height )
+        height = m_bridgeHeightLimit;
 
     try
     {
@@ -498,10 +513,14 @@ void wxWinUIControlHost::MoveAndResize()
         m_source.SiteBridge().Show();
         if ( m_bridgeHwnd )
         {
+            // Keep the island at the bottom of the sibling z-order.  This is
+            // irrelevant for normal (non-overlapping) controls but essential
+            // for container controls such as wxNotebook, whose page windows are
+            // siblings of this bridge and must render on top of it.
             ::SetWindowPos
             (
                 m_bridgeHwnd,
-                HWND_TOP,
+                HWND_BOTTOM,
                 0,
                 0,
                 width,

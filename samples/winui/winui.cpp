@@ -17,6 +17,7 @@
 #include "wx/choice.h"
 #include "wx/gauge.h"
 #include "wx/listbox.h"
+#include "wx/notebook.h"
 #include "wx/radiobut.h"
 #include "wx/scrolwin.h"
 #include "wx/slider.h"
@@ -38,7 +39,9 @@ public:
     WinUISampleFrame()
         : wxFrame(nullptr, wxID_ANY, "wxWinUI sample", wxDefaultPosition, wxSize(720, 480))
     {
-        wxScrolledWindow *panel = new wxScrolledWindow(this, wxID_ANY);
+        wxNotebook *notebook = new wxNotebook(this, wxID_ANY);
+
+        wxScrolledWindow *panel = new wxScrolledWindow(notebook, wxID_ANY);
         panel->SetScrollRate(0, FromDIP(10)); // vertical scrolling only
         wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
@@ -134,6 +137,22 @@ public:
         sizer->Add(m_themeButton, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         panel->SetSizer(sizer);
+        // Set the scrolled window's virtual size from the sizer so the vertical
+        // scrollbar appears when the controls overflow the page area.
+        sizer->FitInside(panel);
+
+        // Second notebook page, to show the WinUI TabView switching pages.
+        wxPanel *page2 = new wxPanel(notebook, wxID_ANY);
+        wxBoxSizer *page2Sizer = new wxBoxSizer(wxVERTICAL);
+        page2Sizer->Add(new wxStaticText(page2, wxID_ANY,
+                            "This is a second WinUI TabView page."),
+                        0, wxALL, FromDIP(16));
+        wxButton *page2Button = new wxButton(page2, wxID_ANY, "A button on page 2");
+        page2Sizer->Add(page2Button, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(16));
+        page2->SetSizer(page2Sizer);
+
+        notebook->AddPage(panel, "Controls", true);
+        notebook->AddPage(page2, "More");
 
         button->Bind(wxEVT_BUTTON, &WinUISampleFrame::OnButton, this);
         m_toggle->Bind(wxEVT_TOGGLEBUTTON, &WinUISampleFrame::OnToggle, this);
