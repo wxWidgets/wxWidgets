@@ -1841,6 +1841,7 @@ set(MSW_HDR
     wx/winui/radiobut.h
     wx/winui/slider.h
     wx/winui/spinctrl.h
+    wx/winui/srchctrl.h
     wx/winui/statbmp.h
     wx/winui/statline.h
     wx/winui/timectrl.h

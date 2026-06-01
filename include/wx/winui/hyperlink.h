@@ -70,4 +70,9 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxHyperlinkCtrl);
 };
 
+// Some code (e.g. the widgets sample) refers to wxGenericHyperlinkCtrl
+// explicitly; under the WinUI toolkit there is no separate generic class, so
+// make it an alias of the WinUI control for source compatibility.
+typedef wxHyperlinkCtrl wxGenericHyperlinkCtrl;
+
 #endif // _WX_WINUI_HYPERLINK_H_

@@ -29,6 +29,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/generic/activityindicator.cpp"
             "${wxSOURCE_DIR}/src/generic/hyperlinkg.cpp"
             "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
+            "${wxSOURCE_DIR}/src/generic/srchctlg.cpp"
             "${wxSOURCE_DIR}/src/msw/button.cpp"
             "${wxSOURCE_DIR}/src/msw/datectrl.cpp"
             "${wxSOURCE_DIR}/src/msw/datetimectrl.cpp"
@@ -71,6 +72,7 @@ if(WXMSW)
             src/winui/radiobut.cpp
             src/winui/slider.cpp
             src/winui/spinctrl.cpp
+            src/winui/srchctrl.cpp
             src/winui/statbmp.cpp
             src/winui/statline.cpp
             src/winui/timectrl.cpp

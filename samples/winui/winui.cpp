@@ -150,9 +150,17 @@ public:
         m_toggle = new wxToggleButton(panel, wxID_ANY, "WinUI ToggleButton");
         sizer->Add(m_toggle, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
-        wxSearchCtrl *search = new wxSearchCtrl(panel, wxID_ANY, "search me");
+        wxSearchCtrl *search = new wxSearchCtrl(panel, wxID_ANY);
         search->ShowSearchButton(true);
         search->ShowCancelButton(true);
+        search->SetDescriptiveText("Search the WinUI AutoSuggestBox");
+        wxArrayString suggestions;
+        suggestions.Add("apple");
+        suggestions.Add("apricot");
+        suggestions.Add("banana");
+        suggestions.Add("cherry");
+        suggestions.Add("grape");
+        search->AutoComplete(suggestions);
         sizer->Add(search, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         wxSpinCtrl *spin = new wxSpinCtrl(panel, wxID_ANY, wxEmptyString,
