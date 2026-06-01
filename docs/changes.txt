@@ -263,6 +263,7 @@ All:
 - Fix buffer overflow in wxTarInputStream (dxbjavid, #26530).
 - Fix out-of-bounds read in wxFileType::ExpandCommand() (dxbjavid, #26531).
 - Fix buffer overflow in wxVsnprintf() (dxbjavid, #26522).
+- Fix out-of-bounds read in wxRegEx::Replace() (dxbjavid, #26541).
 
 All (GUI):
 

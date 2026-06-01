@@ -161,6 +161,10 @@ TEST_CASE("wxRegEx::Replace", "[regex][replace]")
     CheckReplace(patn, "123foo456foo", "\\0\\0", "123foo456foo456foo", 1);
     CheckReplace(patn, "foo123foo123", "bar", "barbar", 2);
     CheckReplace(patn, "foo123_foo456_foo789", "bar", "bar_bar_bar", 3);
+
+    // A replacement string ending with a lone backslash used to read one byte
+    // past the end of the buffer; the backslash is now kept verbatim.
+    CheckReplace(patn, "foo123", "bar\\", "bar\\", 1);
 }
 
 TEST_CASE("wxRegEx::QuoteMeta", "[regex][meta]")
