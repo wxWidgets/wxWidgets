@@ -670,7 +670,7 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                                  const wxRect& rect,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    wxUxThemeHandle hTheme(win, L"TREEVIEW", L"DarkMode_Explorer::TreeView");
     if ( !hTheme )
     {
         m_rendererNative.DrawTreeItemButton(win, dc, rect, flags);
@@ -851,7 +851,7 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    wxUxThemeHandle hTheme(win, L"TREEVIEW", L"DarkMode_Explorer::TreeView");
     if ( hTheme )
     {
         if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
