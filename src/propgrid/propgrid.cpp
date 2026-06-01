@@ -1367,6 +1367,15 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
 void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &event)
 {
     CalculateFontAndBitmapStuff(m_vspacing);
+
+    if ( !HasExtraStyle(wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
+    {
+        // Recreate the back buffer with correct DPI.
+        delete m_doubleBuffer;
+        m_doubleBuffer = nullptr;
+        ReallocDoubleBufferIfNeeded();
+    }
+
     Refresh();
 
     if ( wxPGProperty* const selected = GetSelection() )
