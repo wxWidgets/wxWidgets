@@ -28,6 +28,7 @@ if(WXMSW)
         list(REMOVE_ITEM CORE_SRC
             "${wxSOURCE_DIR}/src/generic/activityindicator.cpp"
             "${wxSOURCE_DIR}/src/generic/hyperlinkg.cpp"
+            "${wxSOURCE_DIR}/src/generic/infobar.cpp"
             "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
             "${wxSOURCE_DIR}/src/generic/srchctlg.cpp"
             "${wxSOURCE_DIR}/src/msw/button.cpp"
@@ -67,6 +68,7 @@ if(WXMSW)
             src/winui/combobox.cpp
             src/winui/gauge.cpp
             src/winui/hyperlink.cpp
+            src/winui/infobar.cpp
             src/winui/listbox.cpp
             src/winui/notebook.cpp
             src/winui/radiobox.cpp

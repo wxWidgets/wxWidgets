@@ -20,6 +20,7 @@
 #include "wx/datectrl.h"
 #include "wx/gauge.h"
 #include "wx/hyperlink.h"
+#include "wx/infobar.h"
 #include "wx/listbox.h"
 #include "wx/notebook.h"
 #include "wx/radiobox.h"
@@ -214,6 +215,10 @@ public:
                         0, wxALL, FromDIP(16));
         wxButton *page2Button = new wxButton(page2, wxID_ANY, "A button on page 2");
         page2Sizer->Add(page2Button, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(16));
+
+        wxInfoBar *infoBar = new wxInfoBar(page2);
+        page2Sizer->Add(infoBar, 0, wxEXPAND | wxALL, FromDIP(16));
+        infoBar->ShowMessage("This is a WinUI InfoBar.", wxICON_INFORMATION);
         page2->SetSizer(page2Sizer);
 
         notebook->AddPage(panel, "Controls", true);

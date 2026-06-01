@@ -55,8 +55,11 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxInfoBarBase);
 };
 
-// currently only GTK+ has a native implementation
-#if defined(__WXGTK218__) && !defined(__WXUNIVERSAL__)
+// currently only GTK+ and wxWinUI have a native implementation
+#if defined(__WXWINUI__)
+    #include "wx/winui/infobar.h"
+    #define wxHAS_NATIVE_INFOBAR
+#elif defined(__WXGTK218__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/infobar.h"
     #define wxHAS_NATIVE_INFOBAR
 #endif // wxGTK2

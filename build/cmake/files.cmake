@@ -1835,6 +1835,7 @@ set(MSW_HDR
     wx/winui/combobox.h
     wx/winui/gauge.h
     wx/winui/hyperlink.h
+    wx/winui/infobar.h
     wx/winui/listbox.h
     wx/winui/notebook.h
     wx/winui/radiobox.h
