@@ -23100,9 +23100,6 @@ else
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
-    if test -z "$CPP"; then
-        CPP="$CC -E"
-    fi
     eval "CPP=\"$CPP $MACOSX_SDK_OPTS\""
     eval "CC=\"$CC $MACOSX_SDK_OPTS\""
     eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
@@ -23119,9 +23116,6 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
         fi
     else
         MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
-    fi
-    if test -z "$CPP"; then
-        CPP="$CC -E"
     fi
     eval "CPP=\"$CPP $MACOSX_VERSION_MIN_OPTS\""
     eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
