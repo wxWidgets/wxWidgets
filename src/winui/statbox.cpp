@@ -228,14 +228,30 @@ void wxStaticBox::UpdateWinUIContent()
             const wxString label = GetLabelText(GetLabel());
             if ( !label.empty() )
             {
+                // Put the label in a panel with an opaque, theme-coloured
+                // background so it masks the border line running behind it
+                // (the classic "group box" look where the frame is broken by
+                // the title), instead of the line showing through the text.
+                MUXC::Border labelBg;
+                labelBg.Background(dark ? wxWinUIBrush(32, 32, 32)
+                                        : wxWinUIBrush(243, 243, 243));
+                labelBg.VerticalAlignment(MUX::VerticalAlignment::Top);
+                labelBg.HorizontalAlignment(MUX::HorizontalAlignment::Left);
+
+                MUX::Thickness labelMargin{};
+                labelMargin.Left = FromDIP(8);
+                labelBg.Margin(labelMargin);
+
+                MUX::Thickness labelPad{};
+                labelPad.Left = FromDIP(4);
+                labelPad.Right = FromDIP(4);
+                labelBg.Padding(labelPad);
+
                 MUXC::TextBlock text;
                 text.Text(wxWinUIToHString(label));
-                text.VerticalAlignment(MUX::VerticalAlignment::Top);
+                labelBg.Child(text);
 
-                MUX::Thickness margin{};
-                margin.Left = FromDIP(10);
-                text.Margin(margin);
-                root.Children().Append(text);
+                root.Children().Append(labelBg);
             }
         }
 
