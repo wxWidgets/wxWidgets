@@ -82,6 +82,10 @@
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/dcclient.h"
 #include "wx/msw/seh.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+#endif
 #include "wx/private/textmeasure.h"
 #include "wx/private/rescale.h"
 
@@ -3092,6 +3096,16 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_EXITSIZEMOVE:
             {
                 processed = HandleExitSizeMove();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // Dragging the window onto a different monitor (e.g. HDR <->
+                // SDR) requires priming the DWM Mica backdrop there with a real
+                // size change, otherwise it renders as an opaque rectangle until
+                // the user resizes manually.  wxWinUIPrimeBackdrop() does this
+                // once per monitor.
+                if ( ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") )
+                    wxWinUIPrimeBackdrop(GetHwnd());
+#endif
             }
             break;
 
@@ -3591,15 +3605,27 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_ERASEBKGND:
             {
-                bool skipEraseForWinUIBackdrop = false;
+                bool eraseForWinUIBackdrop = false;
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-                skipEraseForWinUIBackdrop =
+                eraseForWinUIBackdrop =
                     ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") != nullptr;
 #endif
 
-                if ( skipEraseForWinUIBackdrop )
+                if ( eraseForWinUIBackdrop )
                 {
+                    // Fill the client with black so that, combined with the
+                    // DWM system backdrop and a frame extended over the whole
+                    // client area, Windows substitutes the Mica material for
+                    // the black pixels.  This is the technique used by Win32
+                    // Mica tools (e.g. MicaForEveryone) and, unlike simply
+                    // skipping the erase, renders reliably on both HDR and SDR
+                    // monitors.
+                    HDC hdc = (HDC)wParam;
+                    RECT rcBackdrop;
+                    if ( hdc && ::GetClientRect(GetHwnd(), &rcBackdrop) )
+                        ::FillRect(hdc, &rcBackdrop,
+                                   (HBRUSH)::GetStockObject(BLACK_BRUSH));
                     processed = true;
                 }
                 else

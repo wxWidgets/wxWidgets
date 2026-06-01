@@ -21,12 +21,14 @@
     #include "wx/window.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/settings.h"
 #include "wx/toplevel.h"
 
 #include <dwmapi.h>
 
 #include <algorithm>
+#include <set>
 #include <vector>
 
 #ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
@@ -49,6 +51,10 @@ const wchar_t wxWinUIBackdropTransparentProp[] =
 
 // All live control hosts, so the theme can be switched on the fly.
 std::vector<wxWinUIControlHost *> gs_winuiHosts;
+
+// Monitors whose DWM backdrop surface has already been primed (see
+// wxWinUIPrimeBackdrop): each monitor needs a one-time size nudge.
+std::set<HMONITOR> gs_winuiPrimedMonitors;
 
 wxWinUIAppTheme gs_winuiAppTheme = wxWinUIAppTheme::System;
 winrt::Microsoft::UI::Xaml::ElementTheme gs_winuiElementTheme =
@@ -136,25 +142,16 @@ void wxWinUIApplyMicaBackground(wxWindow *win, bool micaEnabled)
     HWND hwnd = static_cast<HWND>(win->GetHWND());
     if ( hwnd )
     {
+        // The prop drives the WM_ERASEBKGND handler in src/msw/window.cpp: when
+        // present, the window is erased with black so the DWM Mica backdrop
+        // shows through.  WS_EX_TRANSPARENT is deliberately NOT used -- it does
+        // not make the HWND alpha-transparent to DWM and only reorders child
+        // painting, which produced inconsistent (opaque) results on SDR
+        // monitors.
         if ( micaEnabled )
-        {
             ::SetPropW(hwnd, wxWinUIBackdropTransparentProp, reinterpret_cast<HANDLE>(1));
-            if ( !win->IsTopLevel() )
-            {
-                const LONG_PTR exstyle = ::GetWindowLongPtr(hwnd, GWL_EXSTYLE);
-                ::SetWindowLongPtr(hwnd, GWL_EXSTYLE, exstyle | WS_EX_TRANSPARENT);
-            }
-        }
         else
-        {
             ::RemovePropW(hwnd, wxWinUIBackdropTransparentProp);
-            if ( !win->IsTopLevel() )
-            {
-                const LONG_PTR exstyle = ::GetWindowLongPtr(hwnd, GWL_EXSTYLE);
-                ::SetWindowLongPtr(hwnd, GWL_EXSTYLE,
-                                   exstyle & ~static_cast<LONG_PTR>(WS_EX_TRANSPARENT));
-            }
-        }
     }
 
     if ( !micaEnabled )
@@ -316,6 +313,32 @@ void wxWinUIControlHost::SetContent(const winrt::Microsoft::UI::Xaml::UIElement&
     m_source.Content(element);
     ApplyTheme(gs_winuiElementTheme);
     MoveAndResize();
+
+    // Apply the island's own Mica backdrop, but only once the message loop is
+    // running: setting it synchronously during control creation deadlocks
+    // because the backdrop controller waits on the dispatcher queue, which is
+    // not being pumped yet.
+    if ( m_window && !m_backdropApplied )
+    {
+        m_backdropApplied = true;
+        m_window->CallAfter([this]() { ApplyBackdropMaterial(); });
+    }
+}
+
+void wxWinUIControlHost::ApplyBackdropMaterial()
+{
+    if ( !m_source )
+        return;
+
+    try
+    {
+        m_source.SystemBackdrop(
+            winrt::Microsoft::UI::Xaml::Media::MicaBackdrop{});
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("DesktopWindowXamlSource::SystemBackdrop", e);
+    }
 }
 
 void wxWinUIControlHost::ClearContent()
@@ -634,6 +657,52 @@ void wxWinUIApplyWindowBackdrop(wxWindow *tlw)
 
     wxWinUIApplyMicaBackground(tlw, micaEnabled);
     tlw->Refresh();
+
+    if ( micaEnabled )
+        wxWinUIPrimeBackdrop(hwnd);
+}
+
+void wxWinUIPrimeBackdrop(WXHWND hwndArg)
+{
+    HWND hwnd = static_cast<HWND>(hwndArg);
+    if ( !hwnd )
+        return;
+
+    // The DWM backdrop surface only becomes "live" once the window is actually
+    // resized on a given monitor; before that it can show as an opaque
+    // rectangle (most visibly on SDR monitors).  Nudge the window size by one
+    // pixel and back the first time it appears on each monitor to force the
+    // backdrop to initialise, without requiring the user to resize manually.
+    HMONITOR monitor = ::MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+    if ( !monitor || gs_winuiPrimedMonitors.count(monitor) )
+        return;
+
+    RECT rect;
+    if ( !::GetWindowRect(hwnd, &rect) )
+        return;
+
+    const int width = rect.right - rect.left;
+    const int height = rect.bottom - rect.top;
+    if ( width <= 1 || height <= 1 )
+        return;  // not yet laid out; prime on a later call
+
+    gs_winuiPrimedMonitors.insert(monitor);
+
+    const UINT flags = SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE |
+                       SWP_NOOWNERZORDER;
+
+    // Shrink the window by one pixel now, then restore it on the NEXT event
+    // loop iteration (not immediately).  A manual resize works because the
+    // message loop runs between size steps, letting DWM commit each one; two
+    // back-to-back SetWindowPos calls are coalesced into "no change" and do not
+    // initialise the backdrop.  Deferring the restore reproduces the manual
+    // resize and primes the window backdrop as well as every child island.
+    ::SetWindowPos(hwnd, nullptr, 0, 0, width, height - 1, flags);
+    wxTheApp->CallAfter(
+        [hwnd, width, height, flags]()
+        {
+            ::SetWindowPos(hwnd, nullptr, 0, 0, width, height, flags);
+        });
 }
 
 void wxWinUISetAppTheme(wxWinUIAppTheme theme)

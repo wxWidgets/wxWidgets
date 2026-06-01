@@ -43,6 +43,13 @@ WXDLLIMPEXP_CORE wxWinUIAppTheme wxWinUIGetAppTheme();
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 WXDLLIMPEXP_CORE void wxWinUIApplyWindowBackdrop(wxWindow *tlw);
 
+// The DWM Mica backdrop surface only initialises after the window is actually
+// resized on a given monitor; until then it can render as an opaque rectangle
+// (notably on SDR monitors).  This nudges the window size once per monitor to
+// prime the backdrop without requiring a manual resize.  No-op after a monitor
+// has already been primed.
+WXDLLIMPEXP_CORE void wxWinUIPrimeBackdrop(WXHWND hwnd);
+
 #endif // wxUSE_WINUI3
 
 #endif // _WX_WINUI_WINUI_H_

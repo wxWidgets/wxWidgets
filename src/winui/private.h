@@ -57,6 +57,11 @@ public:
     // not become visible until the next resize.
     void ForceRender();
 
+    // Apply the island's native Mica backdrop.  Must run while the message loop
+    // is pumping (deferred via CallAfter), otherwise the backdrop controller
+    // deadlocks on the dispatcher queue.
+    void ApplyBackdropMaterial();
+
     HWND GetHostHWND() const { return m_hostHwnd; }
     HWND GetBridgeHWND() const { return m_bridgeHwnd; }
     bool ContainsFocus(HWND hwnd) const;
@@ -76,6 +81,7 @@ private:
     winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource m_source{ nullptr };
     winrt::Microsoft::UI::Xaml::UIElement m_content{ nullptr };
     winrt::event_token m_takeFocusRequestedToken{};
+    bool m_backdropApplied = false;
 };
 
 // Current element theme requested by the application (Default == follow system).
