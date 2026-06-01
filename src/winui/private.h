@@ -95,6 +95,7 @@ private:
 
 // Current element theme requested by the application (Default == follow system).
 winrt::Microsoft::UI::Xaml::ElementTheme wxWinUIGetCurrentElementTheme();
+bool wxWinUIIsDarkTheme();
 
 void wxWinUILogException(const char *what, const winrt::hresult_error& e);
 winrt::hstring wxWinUIToHString(const wxString& str);

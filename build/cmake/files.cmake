@@ -1849,11 +1849,13 @@ set(MSW_HDR
     wx/winui/spinctrl.h
     wx/winui/srchctrl.h
     wx/winui/statbmp.h
+    wx/winui/statbox.h
     wx/winui/statline.h
     wx/winui/timectrl.h
     wx/winui/stattext.h
     wx/winui/textctrl.h
     wx/winui/tglbtn.h
+    wx/winui/treectrl.h
     wx/winui/winui.h
     wx/winui/xamlhost.h
     wx/msw/calctrl.h

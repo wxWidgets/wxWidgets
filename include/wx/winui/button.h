@@ -43,6 +43,11 @@ public:
 protected:
     bool SendClickEvent();
     wxSize DoGetBestSize() const override;
+    wxBitmap DoGetBitmap(State which) const override;
+    void DoSetBitmap(const wxBitmapBundle& bitmap, State which) override;
+    wxSize DoGetBitmapMargins() const override;
+    void DoSetBitmapMargins(wxCoord x, wxCoord y) override;
+    void DoSetBitmapPosition(wxDirection dir) override;
 
 private:
     void UpdateWinUIContent();

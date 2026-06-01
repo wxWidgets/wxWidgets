@@ -41,10 +41,13 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/checkbox.cpp"
             "${wxSOURCE_DIR}/src/msw/choice.cpp"
             "${wxSOURCE_DIR}/src/msw/checklst.cpp"
+            "${wxSOURCE_DIR}/src/msw/combo.cpp"
             "${wxSOURCE_DIR}/src/msw/combobox.cpp"
             "${wxSOURCE_DIR}/src/msw/gauge.cpp"
+            "${wxSOURCE_DIR}/src/msw/headerctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/hyperlink.cpp"
             "${wxSOURCE_DIR}/src/msw/listbox.cpp"
+            "${wxSOURCE_DIR}/src/msw/listctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/notebook.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobox.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
@@ -53,13 +56,17 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/spinbutt.cpp"
             "${wxSOURCE_DIR}/src/msw/spinctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/statbmp.cpp"
+            "${wxSOURCE_DIR}/src/msw/statbox.cpp"
             "${wxSOURCE_DIR}/src/msw/statline.cpp"
             "${wxSOURCE_DIR}/src/msw/timectrl.cpp"
             "${wxSOURCE_DIR}/src/msw/stattext.cpp"
             "${wxSOURCE_DIR}/src/msw/textctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/tglbtn.cpp"
+            "${wxSOURCE_DIR}/src/msw/treectrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/commandlinkbutton.cpp"
             )
         wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/"
+            src/generic/listctrl.cpp
             src/winui/winui.cpp
             src/winui/ctrlhost.cpp
             src/winui/xamlhost.cpp
@@ -86,11 +93,13 @@ if(WXMSW)
             src/winui/spinctrl.cpp
             src/winui/srchctrl.cpp
             src/winui/statbmp.cpp
+            src/winui/statbox.cpp
             src/winui/statline.cpp
             src/winui/timectrl.cpp
             src/winui/stattext.cpp
             src/winui/textctrl.cpp
             src/winui/tglbtn.cpp
+            src/winui/treectrl.cpp
             )
     endif()
 elseif(WXGTK)

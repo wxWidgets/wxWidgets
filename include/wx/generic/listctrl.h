@@ -245,7 +245,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxGenericListCtrl);
 };
 
-#if !(defined(__WXMSW__) || defined(__WXQT__)) || defined(__WXUNIVERSAL__ )
+#if !(defined(__WXMSW__) || defined(__WXQT__)) || defined(__WXUNIVERSAL__ ) || defined(__WXWINUI__)
 /*
  * wxListCtrl has to be a real class or we have problems with
  * the run-time information.
@@ -269,6 +269,6 @@ public:
     }
 
 };
-#endif // !__WXMSW__ || __WXUNIVERSAL__
+#endif // !__WXMSW__ || __WXUNIVERSAL__ || __WXWINUI__
 
 #endif // _WX_GENERIC_LISTCTRL_H_

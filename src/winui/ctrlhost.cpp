@@ -269,6 +269,11 @@ winrt::Microsoft::UI::Xaml::ElementTheme wxWinUIGetCurrentElementTheme()
     return gs_winuiElementTheme;
 }
 
+bool wxWinUIIsDarkTheme()
+{
+    return wxWinUIEffectiveDark();
+}
+
 wxWinUIControlHost::~wxWinUIControlHost()
 {
     Close();
@@ -372,7 +377,9 @@ void wxWinUIControlHost::Close()
             m_takeFocusRequestedToken = {};
         }
 
-        m_source.Content(nullptr);
+        // Avoid clearing Content explicitly here: doing this while another
+        // XAML island is dispatching an event can crash inside
+        // Microsoft.UI.Xaml.dll. Closing the source releases its content.
         m_source.Close();
     }
     catch ( const winrt::hresult_error& e )

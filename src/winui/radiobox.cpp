@@ -129,7 +129,12 @@ bool wxRadioBox::DoCreate(wxWindow *parent, wxWindowID id, const wxString& title
             {
                 if ( !m_winui || m_updating )
                     return;
-                m_selection = m_winui->radio.SelectedIndex();
+
+                const int selection = m_winui->radio.SelectedIndex();
+                if ( selection == m_selection )
+                    return;
+
+                m_selection = selection;
                 SendSelectionEvent();
             });
 

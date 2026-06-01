@@ -1,0 +1,1366 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        src/winui/treectrl.cpp
+// Purpose:     wxWinUI wxTreeCtrl implementation
+// Author:      wxWidgets development team
+// Created:     2026-06-01
+// Copyright:   (c) wxWidgets development team
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#include "wx/wxprec.h"
+
+#if wxUSE_TREECTRL
+
+#include "wx/treectrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/settings.h"
+#endif
+
+#include "private.h"
+
+#include <algorithm>
+#include <cstdint>
+#include <memory>
+#include <vector>
+
+namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+namespace WFC = winrt::Windows::Foundation::Collections;
+
+class wxWinUITreeItem
+{
+public:
+    explicit wxWinUITreeItem(wxWinUITreeItem *parentItem = nullptr)
+        : parent(parentItem)
+    {
+        std::fill(images, images + wxTreeItemIcon_Max, wxTreeCtrl::NO_IMAGE);
+    }
+
+    ~wxWinUITreeItem()
+    {
+        delete data;
+    }
+
+    wxString text;
+    int images[wxTreeItemIcon_Max];
+    int state = wxTREE_ITEMSTATE_NONE;
+    wxTreeItemData *data = nullptr;
+    wxWinUITreeItem *parent = nullptr;
+    std::vector<std::unique_ptr<wxWinUITreeItem>> children;
+    bool expanded = false;
+    bool selected = false;
+    bool bold = false;
+    bool hasChildrenOverride = false;
+    wxColour textColour;
+    wxColour backgroundColour;
+    wxFont font;
+    MUXC::TreeViewNode node{ nullptr };
+};
+
+class wxWinUITreeCtrlImpl
+{
+public:
+    wxWinUIControlHost host;
+    MUXC::TreeView treeView{ nullptr };
+    winrt::event_token selectionChangedToken{};
+    winrt::event_token expandingToken{};
+    winrt::event_token collapsedToken{};
+    winrt::event_token itemInvokedToken{};
+
+    std::unique_ptr<wxWinUITreeItem> root;
+    wxWinUITreeItem *selection = nullptr;
+    wxWinUITreeItem *focused = nullptr;
+};
+
+static wxWinUITreeItem *wxWinUIFindItemByNode(wxWinUITreeItem *item,
+                                              const MUXC::TreeViewNode& node)
+{
+    if ( !item || !node )
+        return nullptr;
+
+    if ( item->node && winrt::get_abi(item->node) == winrt::get_abi(node) )
+        return item;
+
+    for ( const auto& child : item->children )
+    {
+        if ( wxWinUITreeItem *found = wxWinUIFindItemByNode(child.get(), node) )
+            return found;
+    }
+
+    return nullptr;
+}
+
+static size_t wxWinUIGetSubtreeCount(const wxWinUITreeItem *item)
+{
+    size_t count = 0;
+    for ( const auto& child : item->children )
+        count += 1 + wxWinUIGetSubtreeCount(child.get());
+    return count;
+}
+
+static bool wxWinUIIsDescendantOf(const wxWinUITreeItem *item,
+                                  const wxWinUITreeItem *ancestor)
+{
+    for ( const wxWinUITreeItem *parent = item; parent; parent = parent->parent )
+    {
+        if ( parent == ancestor )
+            return true;
+    }
+
+    return false;
+}
+
+static WFC::IVector<MUXC::TreeViewNode>
+wxWinUIGetPeerChildren(const wxTreeCtrl *tree,
+                       wxWinUITreeCtrlImpl *impl,
+                       wxWinUITreeItem *parent)
+{
+    if ( parent )
+    {
+        if ( !parent->parent && tree->HasFlag(wxTR_HIDE_ROOT) )
+            return impl->treeView.RootNodes();
+
+        return parent->node.Children();
+    }
+
+    return impl->treeView.RootNodes();
+}
+
+static void wxWinUIRemovePeerNode(const wxTreeCtrl *tree,
+                                  wxWinUITreeCtrlImpl *impl,
+                                  wxWinUITreeItem *item)
+{
+    if ( !impl->treeView || !item || !item->node )
+        return;
+
+    auto nodes = wxWinUIGetPeerChildren(tree, impl, item->parent);
+    for ( uint32_t i = 0; i < nodes.Size(); ++i )
+    {
+        if ( winrt::get_abi(nodes.GetAt(i)) == winrt::get_abi(item->node) )
+        {
+            nodes.RemoveAt(i);
+            return;
+        }
+    }
+}
+
+static bool wxWinUIItemIsVisible(const wxTreeCtrl *tree,
+                                 const wxWinUITreeItem *item)
+{
+    if ( !item )
+        return false;
+
+    if ( !item->parent )
+        return !tree->HasFlag(wxTR_HIDE_ROOT);
+
+    for ( const wxWinUITreeItem *parent = item->parent; parent; parent = parent->parent )
+    {
+        if ( !parent->parent )
+            return tree->HasFlag(wxTR_HIDE_ROOT) || parent->expanded;
+
+        if ( !parent->expanded )
+            return false;
+    }
+
+    return true;
+}
+
+static wxWinUITreeItem *wxWinUIGetNextSiblingItem(wxWinUITreeItem *item)
+{
+    if ( !item || !item->parent )
+        return nullptr;
+
+    auto& siblings = item->parent->children;
+    for ( size_t i = 0; i + 1 < siblings.size(); ++i )
+    {
+        if ( siblings[i].get() == item )
+            return siblings[i + 1].get();
+    }
+
+    return nullptr;
+}
+
+static wxWinUITreeItem *wxWinUIGetPrevSiblingItem(wxWinUITreeItem *item)
+{
+    if ( !item || !item->parent )
+        return nullptr;
+
+    auto& siblings = item->parent->children;
+    for ( size_t i = 1; i < siblings.size(); ++i )
+    {
+        if ( siblings[i].get() == item )
+            return siblings[i - 1].get();
+    }
+
+    return nullptr;
+}
+
+static wxWinUITreeItem *wxWinUIGetDeepestVisibleChild(wxWinUITreeItem *item)
+{
+    while ( item && item->expanded && !item->children.empty() )
+        item = item->children.back().get();
+
+    return item;
+}
+
+wxTreeCtrl::wxTreeCtrl()
+{
+}
+
+wxTreeCtrl::wxTreeCtrl(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+    Create(parent, id, pos, size, style, validator, name);
+}
+
+wxTreeCtrl::~wxTreeCtrl() = default;
+
+bool wxTreeCtrl::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxValidator& validator,
+                        const wxString& name)
+{
+    style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+
+    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
+        return false;
+
+    m_winui.reset(new wxWinUITreeCtrlImpl);
+    if ( !m_winui->host.Initialize(this) )
+        return false;
+
+    try
+    {
+        m_winui->treeView = MUXC::TreeView();
+        m_winui->treeView.SelectionMode(HasFlag(wxTR_MULTIPLE)
+            ? MUXC::TreeViewSelectionMode::Multiple
+            : MUXC::TreeViewSelectionMode::Single);
+
+        const wchar_t *itemTemplate =
+            LR"(<DataTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Image Width="16" Height="16"
+                               VerticalAlignment="Center"
+                               Source="{Binding Content[Image]}"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding Content[Text]}"/>
+                    </StackPanel>
+                </DataTemplate>)";
+        m_winui->treeView.ItemTemplate(
+            winrt::Microsoft::UI::Xaml::Markup::XamlReader::Load(itemTemplate)
+                .as<MUX::DataTemplate>());
+
+        m_winui->selectionChangedToken = m_winui->treeView.SelectionChanged(
+            [this](MUXC::TreeView const&,
+                   MUXC::TreeViewSelectionChangedEventArgs const&)
+            {
+                if ( !m_winui || m_updatingPeer )
+                    return;
+                OnPeerSelectionChanged();
+            });
+
+        m_winui->expandingToken = m_winui->treeView.Expanding(
+            [this](MUXC::TreeView const&,
+                   MUXC::TreeViewExpandingEventArgs const& event)
+            {
+                if ( !m_winui || m_updatingPeer )
+                    return;
+                OnPeerNodeExpanded(wxWinUIFindItemByNode(m_winui->root.get(),
+                                                         event.Node()));
+            });
+
+        m_winui->collapsedToken = m_winui->treeView.Collapsed(
+            [this](MUXC::TreeView const&,
+                   MUXC::TreeViewCollapsedEventArgs const& event)
+            {
+                if ( !m_winui || m_updatingPeer )
+                    return;
+                OnPeerNodeCollapsed(wxWinUIFindItemByNode(m_winui->root.get(),
+                                                          event.Node()));
+            });
+
+        m_winui->itemInvokedToken = m_winui->treeView.ItemInvoked(
+            [this](MUXC::TreeView const&,
+                   MUXC::TreeViewItemInvokedEventArgs const&)
+            {
+                if ( m_winui && m_winui->selection )
+                    SendTreeEvent(wxEVT_TREE_ITEM_ACTIVATED, m_winui->selection);
+            });
+
+        m_winui->host.SetContent(m_winui->treeView);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TreeView creation", e);
+        return false;
+    }
+
+    SetInitialSize(size);
+    return true;
+}
+
+unsigned int wxTreeCtrl::GetCount() const
+{
+    if ( !m_winui || !m_winui->root )
+        return 0;
+
+    const size_t count = wxWinUIGetSubtreeCount(m_winui->root.get());
+    return static_cast<unsigned int>(HasFlag(wxTR_HIDE_ROOT) ? count : count + 1);
+}
+
+unsigned int wxTreeCtrl::GetIndent() const
+{
+    return m_indent;
+}
+
+void wxTreeCtrl::SetIndent(unsigned int indent)
+{
+    m_indent = indent;
+}
+
+void wxTreeCtrl::SetStateImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesState.SetImages(images);
+    RefreshPeerItems();
+}
+
+void wxTreeCtrl::SetImageList(wxImageList *imageList)
+{
+    wxWithImages::SetImageList(imageList);
+}
+
+void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
+{
+    m_imagesState.SetImageList(imageList);
+    RefreshPeerItems();
+}
+
+wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_MSG( treeItem, wxString(), wxT("invalid tree item") );
+    return treeItem->text;
+}
+
+int wxTreeCtrl::GetItemImage(const wxTreeItemId& item, wxTreeItemIcon which) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_MSG( treeItem, NO_IMAGE, wxT("invalid tree item") );
+    return treeItem->images[which];
+}
+
+wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem ? treeItem->data : nullptr;
+}
+
+wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem ? treeItem->textColour : wxColour();
+}
+
+wxColour wxTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem ? treeItem->backgroundColour : wxColour();
+}
+
+wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem ? treeItem->font : wxFont();
+}
+
+void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    treeItem->text = text;
+    UpdatePeerItem(treeItem);
+}
+
+void wxTreeCtrl::SetItemImage(const wxTreeItemId& item,
+                              int image,
+                              wxTreeItemIcon which)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    treeItem->images[which] = image;
+    UpdatePeerItem(treeItem);
+}
+
+void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+
+    delete treeItem->data;
+    treeItem->data = data;
+    if ( data )
+        data->SetId(item);
+}
+
+void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    treeItem->hasChildrenOverride = has;
+    if ( treeItem->node )
+        treeItem->node.HasUnrealizedChildren(has && treeItem->children.empty());
+}
+
+void wxTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    treeItem->bold = bold;
+    UpdatePeerItem(treeItem);
+}
+
+void wxTreeCtrl::SetItemDropHighlight(const wxTreeItemId& WXUNUSED(item),
+                                      bool WXUNUSED(highlight))
+{
+}
+
+void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item, const wxColour& col)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    treeItem->textColour = col;
+    UpdatePeerItem(treeItem);
+}
+
+void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item, const wxColour& col)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    treeItem->backgroundColour = col;
+    UpdatePeerItem(treeItem);
+}
+
+void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    treeItem->font = font;
+    UpdatePeerItem(treeItem);
+}
+
+bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
+{
+    return wxWinUIItemIsVisible(this, GetItem(item));
+}
+
+bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem && (!treeItem->children.empty() || treeItem->hasChildrenOverride);
+}
+
+bool wxTreeCtrl::IsExpanded(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem && treeItem->expanded;
+}
+
+bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem && treeItem->selected;
+}
+
+bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem && treeItem->bold;
+}
+
+size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_MSG( treeItem, 0, wxT("invalid tree item") );
+
+    if ( !recursively )
+        return treeItem->children.size();
+
+    return wxWinUIGetSubtreeCount(treeItem);
+}
+
+wxTreeItemId wxTreeCtrl::GetRootItem() const
+{
+    return m_winui ? MakeId(m_winui->root.get()) : wxTreeItemId();
+}
+
+wxTreeItemId wxTreeCtrl::GetSelection() const
+{
+    return m_winui ? MakeId(m_winui->selection) : wxTreeItemId();
+}
+
+size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
+{
+    selections.Empty();
+
+    if ( !m_winui || !m_winui->root )
+        return 0;
+
+    std::vector<wxWinUITreeItem *> stack;
+    stack.push_back(m_winui->root.get());
+    while ( !stack.empty() )
+    {
+        wxWinUITreeItem *item = stack.back();
+        stack.pop_back();
+
+        if ( item->selected )
+            selections.Add(MakeId(item));
+
+        for ( const auto& child : item->children )
+            stack.push_back(child.get());
+    }
+
+    return selections.GetCount();
+}
+
+wxTreeItemId wxTreeCtrl::GetFocusedItem() const
+{
+    return m_winui ? MakeId(m_winui->focused) : wxTreeItemId();
+}
+
+void wxTreeCtrl::ClearFocusedItem()
+{
+    if ( m_winui )
+        m_winui->focused = nullptr;
+}
+
+void wxTreeCtrl::SetFocusedItem(const wxTreeItemId& item)
+{
+    if ( m_winui )
+        m_winui->focused = GetItem(item);
+}
+
+wxTreeItemId wxTreeCtrl::GetItemParent(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem ? MakeId(treeItem->parent) : wxTreeItemId();
+}
+
+wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
+                                       wxTreeItemIdValue& cookie) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    if ( !treeItem || treeItem->children.empty() )
+    {
+        cookie = nullptr;
+        return wxTreeItemId();
+    }
+
+    cookie = reinterpret_cast<wxTreeItemIdValue>(static_cast<uintptr_t>(1));
+    return MakeId(treeItem->children.front().get());
+}
+
+wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& item,
+                                      wxTreeItemIdValue& cookie) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    const uintptr_t index = reinterpret_cast<uintptr_t>(cookie);
+    if ( !treeItem || index >= treeItem->children.size() )
+    {
+        cookie = nullptr;
+        return wxTreeItemId();
+    }
+
+    cookie = reinterpret_cast<wxTreeItemIdValue>(index + 1);
+    return MakeId(treeItem->children[index].get());
+}
+
+wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    if ( !treeItem || treeItem->children.empty() )
+        return wxTreeItemId();
+
+    return MakeId(treeItem->children.back().get());
+}
+
+wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
+{
+    return MakeId(wxWinUIGetNextSiblingItem(GetItem(item)));
+}
+
+wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
+{
+    return MakeId(wxWinUIGetPrevSiblingItem(GetItem(item)));
+}
+
+wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
+{
+    if ( !m_winui || !m_winui->root )
+        return wxTreeItemId();
+
+    if ( HasFlag(wxTR_HIDE_ROOT) )
+    {
+        return m_winui->root->children.empty()
+            ? wxTreeItemId()
+            : MakeId(m_winui->root->children.front().get());
+    }
+
+    return MakeId(m_winui->root.get());
+}
+
+wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    if ( !treeItem )
+        return wxTreeItemId();
+
+    if ( treeItem->expanded && !treeItem->children.empty() )
+        return MakeId(treeItem->children.front().get());
+
+    while ( treeItem )
+    {
+        if ( wxWinUITreeItem *next = wxWinUIGetNextSiblingItem(treeItem) )
+            return MakeId(next);
+
+        treeItem = treeItem->parent;
+        if ( treeItem && !treeItem->parent && HasFlag(wxTR_HIDE_ROOT) )
+            return wxTreeItemId();
+    }
+
+    return wxTreeItemId();
+}
+
+wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    if ( !treeItem )
+        return wxTreeItemId();
+
+    if ( wxWinUITreeItem *prev = wxWinUIGetPrevSiblingItem(treeItem) )
+        return MakeId(wxWinUIGetDeepestVisibleChild(prev));
+
+    if ( treeItem->parent && (!HasFlag(wxTR_HIDE_ROOT) || treeItem->parent->parent) )
+        return MakeId(treeItem->parent);
+
+    return wxTreeItemId();
+}
+
+wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
+                                 int image,
+                                 int selectedImage,
+                                 wxTreeItemData *data)
+{
+    DeleteAllItems();
+
+    m_winui->root.reset(new wxWinUITreeItem);
+    m_winui->root->text = text;
+    m_winui->root->images[wxTreeItemIcon_Normal] = image;
+    m_winui->root->images[wxTreeItemIcon_Selected] = selectedImage;
+    m_winui->root->data = data;
+    m_winui->root->node = MUXC::TreeViewNode();
+    if ( data )
+        data->SetId(MakeId(m_winui->root.get()));
+
+    UpdatePeerItem(m_winui->root.get());
+
+    if ( !HasFlag(wxTR_HIDE_ROOT) )
+    {
+        m_updatingPeer = true;
+        m_winui->treeView.RootNodes().Append(m_winui->root->node);
+        m_updatingPeer = false;
+    }
+
+    return MakeId(m_winui->root.get());
+}
+
+void wxTreeCtrl::Delete(const wxTreeItemId& item)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+
+    if ( treeItem == m_winui->root.get() )
+    {
+        DeleteAllItems();
+        return;
+    }
+
+    if ( m_winui->selection && wxWinUIIsDescendantOf(m_winui->selection, treeItem) )
+        ChangeSelection(nullptr, false, true);
+
+    wxWinUIRemovePeerNode(this, m_winui.get(), treeItem);
+
+    auto& siblings = treeItem->parent->children;
+    siblings.erase(std::remove_if(siblings.begin(), siblings.end(),
+        [treeItem](const std::unique_ptr<wxWinUITreeItem>& child)
+        {
+            return child.get() == treeItem;
+        }), siblings.end());
+
+    m_winui->host.ForceRender();
+}
+
+void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+
+    if ( m_winui->selection && wxWinUIIsDescendantOf(m_winui->selection, treeItem) &&
+         m_winui->selection != treeItem )
+    {
+        ChangeSelection(nullptr, false, true);
+    }
+
+    if ( treeItem->node )
+    {
+        if ( treeItem == m_winui->root.get() && HasFlag(wxTR_HIDE_ROOT) )
+            m_winui->treeView.RootNodes().Clear();
+        else
+            treeItem->node.Children().Clear();
+    }
+
+    treeItem->children.clear();
+    treeItem->expanded = false;
+    m_winui->host.ForceRender();
+}
+
+void wxTreeCtrl::DeleteAllItems()
+{
+    if ( !m_winui )
+        return;
+
+    m_updatingPeer = true;
+    if ( m_winui->treeView )
+        m_winui->treeView.RootNodes().Clear();
+    m_winui->root.reset();
+    m_winui->selection = nullptr;
+    m_winui->focused = nullptr;
+    m_updatingPeer = false;
+}
+
+void wxTreeCtrl::Expand(const wxTreeItemId& item)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || treeItem != m_winui->root.get(),
+                 wxT("can't expand hidden root") );
+
+    if ( treeItem->expanded || !ItemHasChildren(item) )
+        return;
+
+    SendTreeEvent(wxEVT_TREE_ITEM_EXPANDING, treeItem);
+    treeItem->expanded = true;
+
+    m_updatingPeer = true;
+    try
+    {
+        treeItem->node.IsExpanded(true);
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+    m_updatingPeer = false;
+
+    if ( !treeItem->children.empty() )
+        SendTreeEvent(wxEVT_TREE_ITEM_EXPANDED, treeItem);
+}
+
+void wxTreeCtrl::Collapse(const wxTreeItemId& item)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || treeItem != m_winui->root.get(),
+                 wxT("can't collapse hidden root") );
+
+    if ( !treeItem->expanded )
+        return;
+
+    SendTreeEvent(wxEVT_TREE_ITEM_COLLAPSING, treeItem);
+    treeItem->expanded = false;
+
+    m_updatingPeer = true;
+    try
+    {
+        treeItem->node.IsExpanded(false);
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+    m_updatingPeer = false;
+
+    SendTreeEvent(wxEVT_TREE_ITEM_COLLAPSED, treeItem);
+}
+
+void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item)
+{
+    Collapse(item);
+    DeleteChildren(item);
+}
+
+void wxTreeCtrl::Toggle(const wxTreeItemId& item)
+{
+    if ( IsExpanded(item) )
+        Collapse(item);
+    else
+        Expand(item);
+}
+
+void wxTreeCtrl::Unselect()
+{
+    if ( m_winui && m_winui->selection )
+        SelectItem(MakeId(m_winui->selection), false);
+}
+
+void wxTreeCtrl::UnselectAll()
+{
+    if ( !m_winui || !m_winui->root )
+        return;
+
+    std::vector<wxWinUITreeItem *> stack;
+    stack.push_back(m_winui->root.get());
+    while ( !stack.empty() )
+    {
+        wxWinUITreeItem *item = stack.back();
+        stack.pop_back();
+        item->selected = false;
+        for ( const auto& child : item->children )
+            stack.push_back(child.get());
+    }
+
+    m_winui->selection = nullptr;
+    ApplySelectionToPeer();
+}
+
+void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem || !select, wxT("invalid tree item") );
+
+    if ( select )
+        ChangeSelection(treeItem, true, true);
+    else if ( treeItem && treeItem->selected )
+    {
+        if ( IsSelectionChangeAllowed(nullptr, treeItem) )
+        {
+            treeItem->selected = false;
+            if ( m_winui->selection == treeItem )
+                m_winui->selection = nullptr;
+            ApplySelectionToPeer();
+            SendTreeEvent(wxEVT_TREE_SEL_CHANGED, treeItem);
+        }
+    }
+}
+
+void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
+{
+    wxWinUITreeItem *treeItem = GetItem(parent);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+
+    for ( const auto& child : treeItem->children )
+        child->selected = true;
+
+    if ( !treeItem->children.empty() )
+        m_winui->selection = treeItem->children.front().get();
+
+    ApplySelectionToPeer();
+}
+
+void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    if ( !treeItem )
+        return;
+
+    for ( wxWinUITreeItem *parent = treeItem->parent; parent; parent = parent->parent )
+    {
+        if ( parent->parent || !HasFlag(wxTR_HIDE_ROOT) )
+        {
+            parent->expanded = true;
+            try
+            {
+                parent->node.IsExpanded(true);
+            }
+            catch ( const winrt::hresult_error& )
+            {
+            }
+        }
+    }
+
+    ApplySelectionToPeer();
+}
+
+void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
+{
+    EnsureVisible(item);
+}
+
+wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& WXUNUSED(item),
+                                  wxClassInfo* WXUNUSED(textCtrlClass))
+{
+    return nullptr;
+}
+
+wxTextCtrl *wxTreeCtrl::GetEditControl() const
+{
+    return nullptr;
+}
+
+void wxTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item),
+                              bool WXUNUSED(discardChanges))
+{
+}
+
+void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+
+    std::sort(treeItem->children.begin(), treeItem->children.end(),
+        [this](const std::unique_ptr<wxWinUITreeItem>& a,
+               const std::unique_ptr<wxWinUITreeItem>& b)
+        {
+            return OnCompareItems(MakeId(a.get()), MakeId(b.get())) < 0;
+        });
+
+    RefreshPeerItems();
+}
+
+bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
+                                 wxRect& rect,
+                                 bool WXUNUSED(textOnly)) const
+{
+    if ( !GetItem(item) )
+        return false;
+
+    rect = wxRect(wxPoint(0, 0), wxSize(GetClientSize().x, FromDIP(32)));
+    return true;
+}
+
+wxVisualAttributes
+wxTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    wxVisualAttributes attrs;
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    return attrs;
+}
+
+int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    return treeItem ? treeItem->state : wxTREE_ITEMSTATE_NONE;
+}
+
+void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
+{
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_RET( treeItem, wxT("invalid tree item") );
+    treeItem->state = state;
+    UpdatePeerItem(treeItem);
+}
+
+wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
+                                      size_t pos,
+                                      const wxString& text,
+                                      int image,
+                                      int selImage,
+                                      wxTreeItemData *data)
+{
+    wxWinUITreeItem *parentItem = GetItem(parent);
+    wxCHECK_MSG( parentItem, wxTreeItemId(), wxT("invalid tree parent") );
+
+    auto newItem = std::make_unique<wxWinUITreeItem>(parentItem);
+    wxWinUITreeItem *newItemRaw = newItem.get();
+    newItemRaw->text = text;
+    newItemRaw->images[wxTreeItemIcon_Normal] = image;
+    newItemRaw->images[wxTreeItemIcon_Selected] = selImage;
+    newItemRaw->data = data;
+    newItemRaw->node = MUXC::TreeViewNode();
+    if ( data )
+        data->SetId(MakeId(newItemRaw));
+
+    UpdatePeerItem(newItemRaw);
+
+    if ( pos == static_cast<size_t>(-1) || pos > parentItem->children.size() )
+        pos = parentItem->children.size();
+
+    parentItem->children.insert(parentItem->children.begin() + pos, std::move(newItem));
+
+    m_updatingPeer = true;
+    auto peerChildren = wxWinUIGetPeerChildren(this, m_winui.get(), parentItem);
+    if ( pos >= peerChildren.Size() )
+        peerChildren.Append(newItemRaw->node);
+    else
+        peerChildren.InsertAt(static_cast<uint32_t>(pos), newItemRaw->node);
+    m_updatingPeer = false;
+
+    m_winui->host.ForceRender();
+    return MakeId(newItemRaw);
+}
+
+wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
+                                       const wxTreeItemId& idPrevious,
+                                       const wxString& text,
+                                       int image,
+                                       int selImage,
+                                       wxTreeItemData *data)
+{
+    wxWinUITreeItem *parentItem = GetItem(parent);
+    wxWinUITreeItem *previousItem = GetItem(idPrevious);
+    wxCHECK_MSG( parentItem, wxTreeItemId(), wxT("invalid tree parent") );
+
+    size_t pos = 0;
+    if ( previousItem )
+    {
+        auto it = std::find_if(parentItem->children.begin(), parentItem->children.end(),
+            [previousItem](const std::unique_ptr<wxWinUITreeItem>& child)
+            {
+                return child.get() == previousItem;
+            });
+        pos = it == parentItem->children.end()
+            ? parentItem->children.size()
+            : static_cast<size_t>(std::distance(parentItem->children.begin(), it)) + 1;
+    }
+
+    return DoInsertItem(parent, pos, text, image, selImage, data);
+}
+
+wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
+{
+    flags = wxTREE_HITTEST_NOWHERE;
+    if ( point.x < 0 || point.y < 0 || point.x >= GetClientSize().x )
+        return wxTreeItemId();
+
+    const int itemHeight = FromDIP(32);
+    const int target = itemHeight > 0 ? point.y / itemHeight : 0;
+    int index = 0;
+
+    for ( wxTreeItemId id = GetFirstVisibleItem(); id.IsOk(); id = GetNextVisible(id) )
+    {
+        if ( index == target )
+        {
+            flags = wxTREE_HITTEST_ONITEM | wxTREE_HITTEST_ONITEMLABEL;
+            return id;
+        }
+        ++index;
+    }
+
+    return wxTreeItemId();
+}
+
+wxSize wxTreeCtrl::DoGetBestSize() const
+{
+    return FromDIP(wxSize(180, 240));
+}
+
+void wxTreeCtrl::OnImagesChanged()
+{
+    RefreshPeerItems();
+}
+
+wxWinUITreeItem *wxTreeCtrl::GetItem(const wxTreeItemId& item) const
+{
+    return static_cast<wxWinUITreeItem *>(item.GetID());
+}
+
+wxTreeItemId wxTreeCtrl::MakeId(wxWinUITreeItem *item) const
+{
+    return wxTreeItemId(item);
+}
+
+bool wxTreeCtrl::IsSelectionChangeAllowed(wxWinUITreeItem *item,
+                                          wxWinUITreeItem *oldItem)
+{
+    wxTreeEvent event(wxEVT_TREE_SEL_CHANGING, this, MakeId(item));
+    event.SetOldItem(MakeId(oldItem));
+    return !GetEventHandler()->ProcessEvent(event) || event.IsAllowed();
+}
+
+void wxTreeCtrl::SendTreeEvent(wxEventType type,
+                               wxWinUITreeItem *item,
+                               wxWinUITreeItem *oldItem)
+{
+    wxTreeEvent event(type, this, MakeId(item));
+    event.SetOldItem(MakeId(oldItem));
+    GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxTreeCtrl::ChangeSelection(wxWinUITreeItem *item,
+                                 bool sendEvent,
+                                 bool updatePeer)
+{
+    wxWinUITreeItem *oldItem = m_winui->selection;
+    if ( oldItem == item )
+        return true;
+
+    if ( sendEvent && !IsSelectionChangeAllowed(item, oldItem) )
+        return false;
+
+    if ( !HasFlag(wxTR_MULTIPLE) && m_winui->root )
+    {
+        std::vector<wxWinUITreeItem *> stack;
+        stack.push_back(m_winui->root.get());
+        while ( !stack.empty() )
+        {
+            wxWinUITreeItem *current = stack.back();
+            stack.pop_back();
+            current->selected = false;
+
+            for ( const auto& child : current->children )
+                stack.push_back(child.get());
+        }
+    }
+
+    if ( oldItem )
+        oldItem->selected = false;
+
+    if ( item )
+    {
+        wxTreeItemId parent = GetItemParent(MakeId(item));
+        while ( parent.IsOk() )
+        {
+            wxWinUITreeItem *parentItem = GetItem(parent);
+            if ( parentItem && (parentItem->parent || !HasFlag(wxTR_HIDE_ROOT)) )
+            {
+                parentItem->expanded = true;
+                try
+                {
+                    parentItem->node.IsExpanded(true);
+                }
+                catch ( const winrt::hresult_error& )
+                {
+                }
+            }
+            parent = GetItemParent(parent);
+        }
+
+        item->selected = true;
+    }
+
+    m_winui->selection = item;
+    m_winui->focused = item;
+
+    if ( updatePeer )
+        ApplySelectionToPeer();
+
+    if ( sendEvent )
+        SendTreeEvent(wxEVT_TREE_SEL_CHANGED, item, oldItem);
+
+    return true;
+}
+
+void wxTreeCtrl::ApplySelectionToPeer()
+{
+    if ( !m_winui || !m_winui->treeView )
+        return;
+
+    const bool wasUpdating = m_updatingPeer;
+    m_updatingPeer = true;
+    try
+    {
+        if ( HasFlag(wxTR_MULTIPLE) )
+        {
+            auto selectedNodes = m_winui->treeView.SelectedNodes();
+            selectedNodes.Clear();
+
+            wxArrayTreeItemIds selections;
+            GetSelections(selections);
+            for ( size_t i = 0; i < selections.GetCount(); ++i )
+            {
+                if ( wxWinUITreeItem *item = GetItem(selections[i]) )
+                    selectedNodes.Append(item->node);
+            }
+        }
+        else
+        {
+            m_winui->treeView.SelectedNode(m_winui->selection
+                ? m_winui->selection->node
+                : MUXC::TreeViewNode{ nullptr });
+        }
+
+        if ( m_winui->selection )
+        {
+            try
+            {
+                m_winui->selection->node.IsExpanded(m_winui->selection->expanded);
+            }
+            catch ( const winrt::hresult_error& )
+            {
+            }
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TreeView selection", e);
+    }
+    m_updatingPeer = wasUpdating;
+
+    m_winui->host.ForceRender();
+}
+
+void wxTreeCtrl::UpdatePeerItem(wxWinUITreeItem *item)
+{
+    if ( !item || !item->node )
+        return;
+
+    try
+    {
+        WFC::PropertySet content;
+        content.Insert(L"Text", winrt::box_value(wxWinUIToHString(item->text)));
+
+        int image = item->images[wxTreeItemIcon_Normal];
+        if ( item->selected && item->expanded &&
+             item->images[wxTreeItemIcon_SelectedExpanded] != NO_IMAGE )
+        {
+            image = item->images[wxTreeItemIcon_SelectedExpanded];
+        }
+        else if ( item->selected &&
+                  item->images[wxTreeItemIcon_Selected] != NO_IMAGE )
+        {
+            image = item->images[wxTreeItemIcon_Selected];
+        }
+        else if ( item->expanded &&
+                  item->images[wxTreeItemIcon_Expanded] != NO_IMAGE )
+        {
+            image = item->images[wxTreeItemIcon_Expanded];
+        }
+
+        if ( image != NO_IMAGE && image >= 0 && image < GetImageCount() )
+        {
+            const wxBitmap bitmap = GetImageBitmapFor(this, image);
+            if ( bitmap.IsOk() )
+            {
+                if ( auto source = wxWinUIWriteableBitmapFromBitmap(bitmap) )
+                    content.Insert(L"Image", source);
+            }
+        }
+
+        item->node.Content(content);
+
+        item->node.HasUnrealizedChildren(item->hasChildrenOverride &&
+                                         item->children.empty());
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TreeView item update", e);
+    }
+}
+
+void wxTreeCtrl::RefreshPeerItems()
+{
+    if ( !m_winui || !m_winui->root || !m_winui->treeView )
+        return;
+
+    m_updatingPeer = true;
+    try
+    {
+        m_winui->treeView.RootNodes().Clear();
+
+        std::vector<wxWinUITreeItem *> stack;
+        stack.push_back(m_winui->root.get());
+        while ( !stack.empty() )
+        {
+            wxWinUITreeItem *item = stack.back();
+            stack.pop_back();
+            UpdatePeerItem(item);
+            item->node.Children().Clear();
+
+            for ( auto it = item->children.rbegin(); it != item->children.rend(); ++it )
+                stack.push_back(it->get());
+        }
+
+        if ( HasFlag(wxTR_HIDE_ROOT) )
+        {
+            for ( const auto& child : m_winui->root->children )
+                m_winui->treeView.RootNodes().Append(child->node);
+        }
+        else
+        {
+            m_winui->treeView.RootNodes().Append(m_winui->root->node);
+        }
+
+        std::vector<wxWinUITreeItem *> rebuild;
+        rebuild.push_back(m_winui->root.get());
+        while ( !rebuild.empty() )
+        {
+            wxWinUITreeItem *item = rebuild.back();
+            rebuild.pop_back();
+
+            if ( item != m_winui->root.get() || !HasFlag(wxTR_HIDE_ROOT) )
+                item->node.IsExpanded(item->expanded);
+
+            for ( const auto& child : item->children )
+            {
+                if ( item != m_winui->root.get() || !HasFlag(wxTR_HIDE_ROOT) )
+                    item->node.Children().Append(child->node);
+                rebuild.push_back(child.get());
+            }
+        }
+
+        ApplySelectionToPeer();
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TreeView refresh", e);
+    }
+    m_updatingPeer = false;
+
+    m_winui->host.ForceRender();
+}
+
+void wxTreeCtrl::OnPeerSelectionChanged()
+{
+    wxWinUITreeItem *item = nullptr;
+
+    try
+    {
+        if ( HasFlag(wxTR_MULTIPLE) )
+        {
+            auto selected = m_winui->treeView.SelectedNodes();
+            if ( selected.Size() )
+                item = wxWinUIFindItemByNode(m_winui->root.get(), selected.GetAt(0));
+        }
+        else
+        {
+            item = wxWinUIFindItemByNode(m_winui->root.get(),
+                                         m_winui->treeView.SelectedNode());
+        }
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+
+    if ( !ChangeSelection(item, true, false) )
+        ApplySelectionToPeer();
+}
+
+void wxTreeCtrl::OnPeerNodeExpanded(wxWinUITreeItem *item)
+{
+    if ( !item || item->expanded )
+        return;
+
+    SendTreeEvent(wxEVT_TREE_ITEM_EXPANDING, item);
+    item->expanded = true;
+    SendTreeEvent(wxEVT_TREE_ITEM_EXPANDED, item);
+}
+
+void wxTreeCtrl::OnPeerNodeCollapsed(wxWinUITreeItem *item)
+{
+    if ( !item || !item->expanded )
+        return;
+
+    SendTreeEvent(wxEVT_TREE_ITEM_COLLAPSING, item);
+    item->expanded = false;
+    SendTreeEvent(wxEVT_TREE_ITEM_COLLAPSED, item);
+}
+
+#endif // wxUSE_TREECTRL
