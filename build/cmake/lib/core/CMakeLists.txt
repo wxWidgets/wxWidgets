@@ -32,6 +32,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
             "${wxSOURCE_DIR}/src/generic/srchctlg.cpp"
             "${wxSOURCE_DIR}/src/msw/button.cpp"
+            "${wxSOURCE_DIR}/src/msw/calctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/datectrl.cpp"
             "${wxSOURCE_DIR}/src/msw/datetimectrl.cpp"
             "${wxSOURCE_DIR}/src/msw/bmpcbox.cpp"
@@ -61,6 +62,7 @@ if(WXMSW)
             src/winui/xamlhost.cpp
             src/winui/activityindicator.cpp
             src/winui/button.cpp
+            src/winui/calctrl.cpp
             src/winui/checkbox.cpp
             src/winui/checklst.cpp
             src/winui/datectrl.cpp

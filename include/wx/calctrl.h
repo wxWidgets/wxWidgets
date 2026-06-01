@@ -343,7 +343,10 @@ protected:
 #define wxCalendarNameStr "CalendarCtrl"
 
 #ifndef __WXUNIVERSAL__
-    #if defined(__WXGTK__)
+    #if defined(__WXWINUI__)
+        #define wxHAS_NATIVE_CALENDARCTRL
+        #include "wx/winui/calctrl.h"
+    #elif defined(__WXGTK__)
         #define wxHAS_NATIVE_CALENDARCTRL
         #include "wx/gtk/calctrl.h"
         #define wxCalendarCtrl wxGtkCalendarCtrl

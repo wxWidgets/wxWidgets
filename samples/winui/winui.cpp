@@ -15,6 +15,7 @@
 
 #include "wx/activityindicator.h"
 #include "wx/artprov.h"
+#include "wx/calctrl.h"
 #include "wx/checklst.h"
 #include "wx/choice.h"
 #include "wx/datectrl.h"
@@ -219,6 +220,10 @@ public:
         wxInfoBar *infoBar = new wxInfoBar(page2);
         page2Sizer->Add(infoBar, 0, wxEXPAND | wxALL, FromDIP(16));
         infoBar->ShowMessage("This is a WinUI InfoBar.", wxICON_INFORMATION);
+
+        wxCalendarCtrl *calendar = new wxCalendarCtrl(page2, wxID_ANY);
+        page2Sizer->Add(calendar, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(16));
+
         page2->SetSizer(page2Sizer);
 
         notebook->AddPage(panel, "Controls", true);
