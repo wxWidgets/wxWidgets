@@ -27,6 +27,7 @@ if(WXMSW)
     if(WXWINUI AND wxUSE_WINUI3)
         list(REMOVE_ITEM CORE_SRC
             "${wxSOURCE_DIR}/src/generic/activityindicator.cpp"
+            "${wxSOURCE_DIR}/src/generic/clrpickerg.cpp"
             "${wxSOURCE_DIR}/src/generic/hyperlinkg.cpp"
             "${wxSOURCE_DIR}/src/generic/infobar.cpp"
             "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
@@ -65,6 +66,7 @@ if(WXMSW)
             src/winui/calctrl.cpp
             src/winui/checkbox.cpp
             src/winui/checklst.cpp
+            src/winui/clrpicker.cpp
             src/winui/datectrl.cpp
             src/winui/choice.cpp
             src/winui/combobox.cpp

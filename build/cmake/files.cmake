@@ -1832,6 +1832,7 @@ set(MSW_HDR
     wx/winui/checkbox.h
     wx/winui/checklst.h
     wx/winui/choice.h
+    wx/winui/clrpicker.h
     wx/winui/datectrl.h
     wx/winui/combobox.h
     wx/winui/gauge.h

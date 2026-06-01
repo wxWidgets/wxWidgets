@@ -17,6 +17,7 @@
 #include "wx/artprov.h"
 #include "wx/calctrl.h"
 #include "wx/checklst.h"
+#include "wx/clrpicker.h"
 #include "wx/choice.h"
 #include "wx/datectrl.h"
 #include "wx/gauge.h"
@@ -180,6 +181,10 @@ public:
             0.0, 10.0, 2.5, 0.5);
         spinDouble->SetDigits(1);
         sizer->Add(spinDouble, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxColourPickerCtrl *colourPicker = new wxColourPickerCtrl(panel, wxID_ANY,
+            *wxBLUE);
+        sizer->Add(colourPicker, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         wxDatePickerCtrl *datePicker = new wxDatePickerCtrl(panel, wxID_ANY);
         sizer->Add(datePicker, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
