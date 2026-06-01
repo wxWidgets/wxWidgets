@@ -719,9 +719,9 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxToolBar::MSWUpdateDarkMode()
+void wxToolBar::MSWSwitchMode()
 {
-    wxToolBarBase::MSWUpdateDarkMode();
+    wxToolBarBase::MSWSwitchMode();
 
     // Background color does not respond when switching to dark mode.
     const auto attrs = GetDefaultAttributes();

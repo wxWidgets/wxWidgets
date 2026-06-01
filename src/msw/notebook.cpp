@@ -267,9 +267,9 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
     return tabStyle;
 }
 
-void wxNotebook::MSWUpdateDarkMode()
+void wxNotebook::MSWSwitchMode()
 {
-    wxNotebookBase::MSWUpdateDarkMode();
+    wxNotebookBase::MSWSwitchMode();
 
     // Background must always be set.
     SetBackgroundColour(GetDefaultAttributes().colBg);

@@ -152,7 +152,7 @@ enum PreferredAppMode
 PreferredAppMode gs_appMode = AppMode_Default;
 
 // The initial dark mode state.
-bool gs_isActive = false;
+bool gs_wasActiveOnStartup  = false;
 
 // The return value for HasChanged().
 bool gs_hasChanged = false;
@@ -285,7 +285,7 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
     }
 
     gs_appMode = mode;
-    gs_isActive = wxMSWDarkMode::IsActive();
+    gs_wasActiveOnStartup = wxMSWDarkMode::IsActive();
 
     // Set up the settings to use, allocating a default one if none specified.
     if ( !settings )
@@ -791,7 +791,7 @@ HandleMenuMessage(WXLRESULT* result,
 
 void NotifySysColorChange()
 {
-    if ( IsActive() != gs_isActive )
+    if ( IsActive() != gs_wasActiveOnStartup )
         gs_hasChanged = true;
 }
 

@@ -139,7 +139,7 @@ protected:
   // common part of all ctors
   void Init();
 
-  virtual void MSWUpdateDarkMode() override;
+  virtual void MSWSwitchMode() override;
 
   virtual int MSWGetToolTipMessage() const override;
 

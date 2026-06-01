@@ -214,9 +214,9 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
     return false;
 }
 
-void wxStaticText::MSWUpdateDarkMode()
+void wxStaticText::MSWSwitchMode()
 {
-    wxStaticTextBase::MSWUpdateDarkMode();
+    wxStaticTextBase::MSWSwitchMode();
 
     // When switching to light mode, the text color remains the same. We must
     // explicitly update the color.

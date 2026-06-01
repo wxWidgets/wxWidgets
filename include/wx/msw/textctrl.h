@@ -247,7 +247,7 @@ protected:
 
     virtual wxString DoGetValue() const override;
 
-    virtual void MSWUpdateDarkMode() override;
+    virtual void MSWSwitchMode() override;
 
 #if wxUSE_RICHEDIT
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;

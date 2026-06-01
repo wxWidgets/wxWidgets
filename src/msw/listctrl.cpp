@@ -589,9 +589,9 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-void wxListCtrl::MSWUpdateDarkMode()
+void wxListCtrl::MSWSwitchMode()
 {
-    wxListCtrlBase::MSWUpdateDarkMode();
+    wxListCtrlBase::MSWSwitchMode();
 
     // Update header.
     MSWInitHeader();

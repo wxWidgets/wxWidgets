@@ -57,7 +57,7 @@ protected:
                                   WXWPARAM wParam,
                                   WXLPARAM lParam) override;
 
-    virtual void MSWUpdateDarkMode() override;
+    virtual void MSWSwitchMode() override;
 
     virtual wxString WXGetVisibleLabel() const override;
     virtual void WXSetVisibleLabel(const wxString& str) override;

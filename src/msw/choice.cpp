@@ -217,9 +217,9 @@ void wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     support.themeName = L"CFD";
 }
 
-void wxChoice::MSWUpdateDarkMode()
+void wxChoice::MSWSwitchMode()
 {
-    wxChoiceBase::MSWUpdateDarkMode();
+    wxChoiceBase::MSWSwitchMode();
 
     // Update scroll bar.
     WinStruct<COMBOBOXINFO> info;

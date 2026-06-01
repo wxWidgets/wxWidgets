@@ -115,7 +115,7 @@ protected:
     // Look in our GetSubcontrols() for the windows with the given ID.
     virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const override;
 
-    virtual void MSWUpdateDarkMode() override;
+    virtual void MSWSwitchMode() override;
 
     // Return the message that can be used to retrieve the tooltip window used
     // by a native control. If this message is non-zero and sending it returns

@@ -32,7 +32,7 @@ protected:
     virtual bool DoSetPathShape(const wxGraphicsPath& path) override;
 #endif // wxUSE_GRAPHICS_CONTEXT
 
-    virtual void MSWUpdateDarkMode() override;
+    virtual void MSWSwitchMode() override;
 
     virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) override;
 
