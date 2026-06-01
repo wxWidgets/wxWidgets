@@ -1843,6 +1843,7 @@ set(MSW_HDR
     wx/winui/notebook.h
     wx/winui/radiobox.h
     wx/winui/radiobut.h
+    wx/winui/scrolbar.h
     wx/winui/slider.h
     wx/winui/spinbutt.h
     wx/winui/spinctrl.h

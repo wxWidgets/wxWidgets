@@ -28,6 +28,7 @@
 #include "wx/notebook.h"
 #include "wx/radiobox.h"
 #include "wx/radiobut.h"
+#include "wx/scrolbar.h"
 #include "wx/scrolwin.h"
 #include "wx/slider.h"
 #include "wx/spinbutt.h"
@@ -144,6 +145,11 @@ public:
 
         m_slider = new wxSlider(panel, wxID_ANY, 40, 0, 100);
         sizer->Add(m_slider, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxScrollBar *scrollBar = new wxScrollBar(panel, wxID_ANY,
+            wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL);
+        scrollBar->SetScrollbar(20, 10, 100, 10);
+        sizer->Add(scrollBar, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         m_gauge = new wxGauge(panel, wxID_ANY, 100);
         m_gauge->SetValue(40);

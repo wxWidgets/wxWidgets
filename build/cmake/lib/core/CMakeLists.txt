@@ -48,6 +48,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/notebook.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobox.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
+            "${wxSOURCE_DIR}/src/msw/scrolbar.cpp"
             "${wxSOURCE_DIR}/src/msw/slider.cpp"
             "${wxSOURCE_DIR}/src/msw/spinbutt.cpp"
             "${wxSOURCE_DIR}/src/msw/spinctrl.cpp"
@@ -79,6 +80,7 @@ if(WXMSW)
             src/winui/notebook.cpp
             src/winui/radiobox.cpp
             src/winui/radiobut.cpp
+            src/winui/scrolbar.cpp
             src/winui/slider.cpp
             src/winui/spinbutt.cpp
             src/winui/spinctrl.cpp
