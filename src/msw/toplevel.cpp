@@ -46,6 +46,10 @@
 
 #include "wx/display.h"
 
+#ifdef __WXWINUI__
+    #include "wx/winui/winui.h"
+#endif
+
 // NB: wxDlgProc must be defined here and not in dialog.cpp because the latter
 //     is not included by wxUniv build which does need wxDlgProc
 INT_PTR APIENTRY
@@ -637,6 +641,14 @@ bool wxTopLevelWindowMSW::Show(bool show)
 #endif // wxUSE_DEFERRED_SIZING
 
     DoShowWindow(nShowCmd);
+
+#ifdef __WXWINUI__
+    // Under the WinUI toolkit, give every top-level window a Mica backdrop and
+    // a theme-matching title bar automatically, so existing applications get
+    // the modern look without any code changes.
+    if ( show )
+        wxWinUIApplyWindowBackdrop(this);
+#endif // __WXWINUI__
 
     if ( show && nShowCmd == SW_MAXIMIZE )
     {
