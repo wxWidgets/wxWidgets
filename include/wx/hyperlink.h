@@ -137,7 +137,9 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     wx__DECLARE_EVT1(wxEVT_HYPERLINK, id, wxHyperlinkEventHandler(fn))
 
 
-#if defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXWINUI__)
+    #include "wx/winui/hyperlink.h"
+#elif defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/hyperlink.h"
 #elif defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/hyperlink.h"

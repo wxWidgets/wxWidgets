@@ -26,6 +26,8 @@ if(WXMSW)
     endif()
     if(WXWINUI AND wxUSE_WINUI3)
         list(REMOVE_ITEM CORE_SRC
+            "${wxSOURCE_DIR}/src/generic/activityindicator.cpp"
+            "${wxSOURCE_DIR}/src/generic/hyperlinkg.cpp"
             "${wxSOURCE_DIR}/src/msw/button.cpp"
             "${wxSOURCE_DIR}/src/msw/bmpcbox.cpp"
             "${wxSOURCE_DIR}/src/msw/checkbox.cpp"
@@ -33,6 +35,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/checklst.cpp"
             "${wxSOURCE_DIR}/src/msw/combobox.cpp"
             "${wxSOURCE_DIR}/src/msw/gauge.cpp"
+            "${wxSOURCE_DIR}/src/msw/hyperlink.cpp"
             "${wxSOURCE_DIR}/src/msw/listbox.cpp"
             "${wxSOURCE_DIR}/src/msw/notebook.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
@@ -46,12 +49,14 @@ if(WXMSW)
             src/winui/winui.cpp
             src/winui/ctrlhost.cpp
             src/winui/xamlhost.cpp
+            src/winui/activityindicator.cpp
             src/winui/button.cpp
             src/winui/checkbox.cpp
             src/winui/checklst.cpp
             src/winui/choice.cpp
             src/winui/combobox.cpp
             src/winui/gauge.cpp
+            src/winui/hyperlink.cpp
             src/winui/listbox.cpp
             src/winui/notebook.cpp
             src/winui/radiobut.cpp

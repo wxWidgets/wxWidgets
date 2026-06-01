@@ -13,9 +13,11 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/activityindicator.h"
 #include "wx/checklst.h"
 #include "wx/choice.h"
 #include "wx/gauge.h"
+#include "wx/hyperlink.h"
 #include "wx/listbox.h"
 #include "wx/notebook.h"
 #include "wx/radiobut.h"
@@ -132,6 +134,14 @@ public:
 
         m_toggle = new wxToggleButton(panel, wxID_ANY, "WinUI ToggleButton");
         sizer->Add(m_toggle, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxHyperlinkCtrl *link = new wxHyperlinkCtrl(panel, wxID_ANY,
+            "WinUI HyperlinkButton (wxWidgets.org)", "https://www.wxwidgets.org/");
+        sizer->Add(link, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxActivityIndicator *activity = new wxActivityIndicator(panel, wxID_ANY);
+        activity->Start();
+        sizer->Add(activity, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         m_themeButton = new wxButton(panel, wxID_ANY, "Theme: System");
         sizer->Add(m_themeButton, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));

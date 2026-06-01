@@ -42,7 +42,10 @@ protected:
 };
 
 #ifndef __WXUNIVERSAL__
-#if defined(__WXGTK220__)
+#if defined(__WXWINUI__)
+    #define wxHAS_NATIVE_ACTIVITYINDICATOR
+    #include "wx/winui/activityindicator.h"
+#elif defined(__WXGTK220__)
     #define wxHAS_NATIVE_ACTIVITYINDICATOR
     #include "wx/gtk/activityindicator.h"
 #elif defined(__WXOSX_COCOA__)
