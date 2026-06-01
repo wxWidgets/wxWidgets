@@ -36,15 +36,23 @@ namespace
 // Build a RepeatButton showing a Segoe Fluent chevron glyph.
 MUXCP::RepeatButton wxWinUIMakeArrow(const wchar_t* glyph)
 {
+    namespace MUX = winrt::Microsoft::UI::Xaml;
+
     MUXC::FontIcon icon;
     icon.Glyph(glyph);
-    icon.FontSize(8);
+    icon.FontSize(12);
 
     MUXCP::RepeatButton button;
     button.Content(icon);
-    button.Padding(winrt::Microsoft::UI::Xaml::ThicknessHelper::FromUniformLength(0));
+    button.Padding(MUX::ThicknessHelper::FromUniformLength(0));
     button.MinWidth(0);
     button.MinHeight(0);
+    // Fill the cell so the two buttons together cover the whole control, like
+    // the inline spin buttons of a WinUI NumberBox.
+    button.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
+    button.VerticalAlignment(MUX::VerticalAlignment::Stretch);
+    button.HorizontalContentAlignment(MUX::HorizontalAlignment::Center);
+    button.VerticalContentAlignment(MUX::VerticalAlignment::Center);
     return button;
 }
 
@@ -76,13 +84,14 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
     if ( !m_winui->host.Initialize(this) )
         return false;
 
-    const bool horizontal = (style & wxSP_HORIZONTAL) != 0;
 
     try
     {
-        // Up/down (or left/right) chevrons, laid out in a stack panel.
-        m_winui->up = wxWinUIMakeArrow(horizontal ? L"" : L"");   // right / up
-        m_winui->down = wxWinUIMakeArrow(horizontal ? L"" : L""); // left / down
+        // Two chevrons side by side, like the WinUI NumberBox inline spin
+        // buttons (down on the left, up on the right), regardless of the wx
+        // orientation style.
+        m_winui->up = wxWinUIMakeArrow(L"\uE70E");   // ChevronUp
+        m_winui->down = wxWinUIMakeArrow(L"\uE70D"); // ChevronDown
 
         m_winui->upToken = m_winui->up.Click(
             [this](winrt::Windows::Foundation::IInspectable const&,
@@ -97,24 +106,24 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
                 Step(-1);
             });
 
-        MUXC::StackPanel panel;
-        panel.Orientation(horizontal
-            ? winrt::Microsoft::UI::Xaml::Controls::Orientation::Horizontal
-            : winrt::Microsoft::UI::Xaml::Controls::Orientation::Vertical);
-        // For a vertical control the "up" arrow goes on top; for a horizontal
-        // one the "down"/left arrow goes first.
-        if ( horizontal )
-        {
-            panel.Children().Append(m_winui->down);
-            panel.Children().Append(m_winui->up);
-        }
-        else
-        {
-            panel.Children().Append(m_winui->up);
-            panel.Children().Append(m_winui->down);
-        }
+        // Lay the two buttons out in two equal columns so they fill the control.
+        namespace MUX = winrt::Microsoft::UI::Xaml;
+        MUXC::Grid grid;
+        auto starLength = MUX::GridLengthHelper::FromValueAndType(
+            1, MUX::GridUnitType::Star);
 
-        m_winui->host.SetContent(panel);
+        MUXC::ColumnDefinition c1, c2;
+        c1.Width(starLength);
+        c2.Width(starLength);
+        grid.ColumnDefinitions().Append(c1);
+        grid.ColumnDefinitions().Append(c2);
+        MUXC::Grid::SetColumn(m_winui->down, 0);
+        MUXC::Grid::SetColumn(m_winui->up, 1);
+
+        grid.Children().Append(m_winui->up);
+        grid.Children().Append(m_winui->down);
+
+        m_winui->host.SetContent(grid);
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -154,9 +163,9 @@ int wxSpinButton::GetIncrement() const
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    const bool horizontal = (GetWindowStyle() & wxSP_HORIZONTAL) != 0;
-    return wxWindow::FromDIP(horizontal ? wxSize(48, 22) : wxSize(22, 44),
-                            const_cast<wxSpinButton*>(this));
+    // The buttons are always laid out side by side (WinUI style), so the
+    // control is wider than tall regardless of the wx orientation.
+    return wxWindow::FromDIP(wxSize(64, 28), const_cast<wxSpinButton*>(this));
 }
 
 void wxSpinButton::Step(int direction)

@@ -59,18 +59,30 @@ bool wxStaticText::Create(wxWindow *parent,
 
     try
     {
-        m_winui->textBlock = winrt::Microsoft::UI::Xaml::Controls::TextBlock();
+        namespace MUX = winrt::Microsoft::UI::Xaml;
+        m_winui->textBlock = MUX::Controls::TextBlock();
         // Don't wrap by default: classic wxStaticText shows a single line and
         // wrapping here makes the last word disappear when the measured width is
         // slightly too small.
-        m_winui->textBlock.TextWrapping(
-            winrt::Microsoft::UI::Xaml::TextWrapping::NoWrap);
-        m_winui->textBlock.TextTrimming(
-            winrt::Microsoft::UI::Xaml::TextTrimming::None);
-        m_winui->textBlock.HorizontalAlignment(
-            winrt::Microsoft::UI::Xaml::HorizontalAlignment::Stretch);
-        m_winui->textBlock.VerticalAlignment(
-            winrt::Microsoft::UI::Xaml::VerticalAlignment::Top);
+        m_winui->textBlock.TextWrapping(MUX::TextWrapping::NoWrap);
+        m_winui->textBlock.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
+        m_winui->textBlock.VerticalAlignment(MUX::VerticalAlignment::Top);
+
+        // Honor the wxStaticText alignment flags.
+        MUX::TextAlignment align = MUX::TextAlignment::Left;
+        if ( style & wxALIGN_RIGHT )
+            align = MUX::TextAlignment::Right;
+        else if ( style & wxALIGN_CENTRE_HORIZONTAL )
+            align = MUX::TextAlignment::Center;
+        m_winui->textBlock.TextAlignment(align);
+
+        // Honor the wxST_ELLIPSIZE_* flags (WinUI only offers ellipsis at the
+        // end, so all variants map to it).
+        if ( style & (wxST_ELLIPSIZE_START | wxST_ELLIPSIZE_MIDDLE |
+                      wxST_ELLIPSIZE_END) )
+            m_winui->textBlock.TextTrimming(MUX::TextTrimming::CharacterEllipsis);
+        else
+            m_winui->textBlock.TextTrimming(MUX::TextTrimming::None);
 
         UpdateWinUIContent();
         m_winui->host.SetContent(m_winui->textBlock);
