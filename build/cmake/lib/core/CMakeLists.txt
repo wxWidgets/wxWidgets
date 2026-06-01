@@ -39,6 +39,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/hyperlink.cpp"
             "${wxSOURCE_DIR}/src/msw/listbox.cpp"
             "${wxSOURCE_DIR}/src/msw/notebook.cpp"
+            "${wxSOURCE_DIR}/src/msw/radiobox.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
             "${wxSOURCE_DIR}/src/msw/slider.cpp"
             "${wxSOURCE_DIR}/src/msw/spinctrl.cpp"
@@ -62,6 +63,7 @@ if(WXMSW)
             src/winui/hyperlink.cpp
             src/winui/listbox.cpp
             src/winui/notebook.cpp
+            src/winui/radiobox.cpp
             src/winui/radiobut.cpp
             src/winui/slider.cpp
             src/winui/spinctrl.cpp

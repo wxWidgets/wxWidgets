@@ -21,6 +21,7 @@
 #include "wx/hyperlink.h"
 #include "wx/listbox.h"
 #include "wx/notebook.h"
+#include "wx/radiobox.h"
 #include "wx/radiobut.h"
 #include "wx/scrolwin.h"
 #include "wx/slider.h"
@@ -123,6 +124,15 @@ public:
                                          checkItems);
         m_checkList->Check(0, true);
         sizer->Add(m_checkList, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        const wxString radioChoices[] =
+        {
+            "WinUI RadioBox 1", "WinUI RadioBox 2", "WinUI RadioBox 3"
+        };
+        wxRadioBox *radioBox = new wxRadioBox(panel, wxID_ANY, "WinUI RadioBox",
+            wxDefaultPosition, wxDefaultSize, WXSIZEOF(radioChoices),
+            radioChoices, 1, wxRA_SPECIFY_COLS);
+        sizer->Add(radioBox, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         m_slider = new wxSlider(panel, wxID_ANY, 40, 0, 100);
         sizer->Add(m_slider, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
