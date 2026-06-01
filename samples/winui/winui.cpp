@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/activityindicator.h"
+#include "wx/artprov.h"
 #include "wx/checklst.h"
 #include "wx/choice.h"
 #include "wx/gauge.h"
@@ -142,6 +143,11 @@ public:
         wxActivityIndicator *activity = new wxActivityIndicator(panel, wxID_ANY);
         activity->Start();
         sizer->Add(activity, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxStaticBitmap *bitmap = new wxStaticBitmap(panel, wxID_ANY,
+            wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_OTHER,
+                                           FromDIP(wxSize(32, 32))));
+        sizer->Add(bitmap, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         m_themeButton = new wxButton(panel, wxID_ANY, "Theme: System");
         sizer->Add(m_themeButton, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));

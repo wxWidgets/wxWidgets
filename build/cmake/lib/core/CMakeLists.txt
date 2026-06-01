@@ -40,6 +40,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/notebook.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
             "${wxSOURCE_DIR}/src/msw/slider.cpp"
+            "${wxSOURCE_DIR}/src/msw/statbmp.cpp"
             "${wxSOURCE_DIR}/src/msw/statline.cpp"
             "${wxSOURCE_DIR}/src/msw/stattext.cpp"
             "${wxSOURCE_DIR}/src/msw/textctrl.cpp"
@@ -61,6 +62,7 @@ if(WXMSW)
             src/winui/notebook.cpp
             src/winui/radiobut.cpp
             src/winui/slider.cpp
+            src/winui/statbmp.cpp
             src/winui/statline.cpp
             src/winui/stattext.cpp
             src/winui/textctrl.cpp
