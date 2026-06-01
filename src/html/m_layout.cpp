@@ -332,9 +332,9 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
                 wxInputStream *is = fileBgImage->GetStream();
                 if ( is )
                 {
-                    wxString loc = fileBgImage->GetLocation();
 
 #ifdef wxHAS_SVG
+                    wxString loc = fileBgImage->GetLocation();
 #if wxUSE_ZLIB
                     if ( loc.Lower().EndsWith(".svgz") )
                     {
