@@ -45,6 +45,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/radiobox.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
             "${wxSOURCE_DIR}/src/msw/slider.cpp"
+            "${wxSOURCE_DIR}/src/msw/spinbutt.cpp"
             "${wxSOURCE_DIR}/src/msw/spinctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/statbmp.cpp"
             "${wxSOURCE_DIR}/src/msw/statline.cpp"
@@ -71,6 +72,7 @@ if(WXMSW)
             src/winui/radiobox.cpp
             src/winui/radiobut.cpp
             src/winui/slider.cpp
+            src/winui/spinbutt.cpp
             src/winui/spinctrl.cpp
             src/winui/srchctrl.cpp
             src/winui/statbmp.cpp

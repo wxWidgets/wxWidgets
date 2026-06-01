@@ -26,6 +26,7 @@
 #include "wx/radiobut.h"
 #include "wx/scrolwin.h"
 #include "wx/slider.h"
+#include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 #include "wx/srchctrl.h"
 #include "wx/statline.h"
@@ -166,6 +167,11 @@ public:
         wxSpinCtrl *spin = new wxSpinCtrl(panel, wxID_ANY, wxEmptyString,
             wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 42);
         sizer->Add(spin, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxSpinButton *spinButton = new wxSpinButton(panel, wxID_ANY);
+        spinButton->SetRange(0, 100);
+        spinButton->SetValue(20);
+        sizer->Add(spinButton, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         wxSpinCtrlDouble *spinDouble = new wxSpinCtrlDouble(panel, wxID_ANY,
             wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS,
