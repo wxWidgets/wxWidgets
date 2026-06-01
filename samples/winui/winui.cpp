@@ -13,8 +13,10 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/checklst.h"
 #include "wx/choice.h"
 #include "wx/gauge.h"
+#include "wx/listbox.h"
 #include "wx/radiobut.h"
 #include "wx/scrolwin.h"
 #include "wx/slider.h"
@@ -91,6 +93,30 @@ public:
         radioSizer->Add(m_radioB, 0);
         sizer->Add(radioSizer, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
+        const wxString listItems[] =
+        {
+            "WinUI ListBox item 1",
+            "WinUI ListBox item 2",
+            "WinUI ListBox item 3",
+            "WinUI ListBox item 4"
+        };
+        m_list = new wxListBox(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                               WXSIZEOF(listItems), listItems);
+        m_list->SetSelection(0);
+        sizer->Add(m_list, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        const wxString checkItems[] =
+        {
+            "WinUI CheckListBox A",
+            "WinUI CheckListBox B",
+            "WinUI CheckListBox C"
+        };
+        m_checkList = new wxCheckListBox(panel, wxID_ANY, wxDefaultPosition,
+                                         wxDefaultSize, WXSIZEOF(checkItems),
+                                         checkItems);
+        m_checkList->Check(0, true);
+        sizer->Add(m_checkList, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
         m_slider = new wxSlider(panel, wxID_ANY, 40, 0, 100);
         sizer->Add(m_slider, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
@@ -118,6 +144,8 @@ public:
         m_radioA->Bind(wxEVT_RADIOBUTTON, &WinUISampleFrame::OnRadio, this);
         m_radioB->Bind(wxEVT_RADIOBUTTON, &WinUISampleFrame::OnRadio, this);
         m_slider->Bind(wxEVT_SLIDER, &WinUISampleFrame::OnSlider, this);
+        m_list->Bind(wxEVT_LISTBOX, &WinUISampleFrame::OnListBox, this);
+        m_checkList->Bind(wxEVT_CHECKLISTBOX, &WinUISampleFrame::OnCheckList, this);
 
         Centre();
     }
@@ -196,6 +224,19 @@ private:
         m_gauge->SetValue(event.GetInt());
     }
 
+    void OnListBox(wxCommandEvent& event)
+    {
+        m_status->SetLabel("ListBox selected: " +
+                           wxControl::EscapeMnemonics(event.GetString()));
+    }
+
+    void OnCheckList(wxCommandEvent& event)
+    {
+        const int n = event.GetInt();
+        m_status->SetLabel(wxString::Format("CheckListBox item %d %s", n,
+                           m_checkList->IsChecked(n) ? "checked" : "unchecked"));
+    }
+
     wxStaticText *m_status = nullptr;
     wxTextCtrl *m_text = nullptr;
     wxChoice *m_choice = nullptr;
@@ -203,6 +244,8 @@ private:
     wxRadioButton *m_radioA = nullptr;
     wxRadioButton *m_radioB = nullptr;
     wxSlider *m_slider = nullptr;
+    wxListBox *m_list = nullptr;
+    wxCheckListBox *m_checkList = nullptr;
     wxGauge *m_gauge = nullptr;
     wxToggleButton *m_toggle = nullptr;
     wxButton *m_themeButton = nullptr;

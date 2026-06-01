@@ -30,8 +30,10 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/bmpcbox.cpp"
             "${wxSOURCE_DIR}/src/msw/checkbox.cpp"
             "${wxSOURCE_DIR}/src/msw/choice.cpp"
+            "${wxSOURCE_DIR}/src/msw/checklst.cpp"
             "${wxSOURCE_DIR}/src/msw/combobox.cpp"
             "${wxSOURCE_DIR}/src/msw/gauge.cpp"
+            "${wxSOURCE_DIR}/src/msw/listbox.cpp"
             "${wxSOURCE_DIR}/src/msw/radiobut.cpp"
             "${wxSOURCE_DIR}/src/msw/slider.cpp"
             "${wxSOURCE_DIR}/src/msw/statline.cpp"
@@ -45,9 +47,11 @@ if(WXMSW)
             src/winui/xamlhost.cpp
             src/winui/button.cpp
             src/winui/checkbox.cpp
+            src/winui/checklst.cpp
             src/winui/choice.cpp
             src/winui/combobox.cpp
             src/winui/gauge.cpp
+            src/winui/listbox.cpp
             src/winui/radiobut.cpp
             src/winui/slider.cpp
             src/winui/statline.cpp

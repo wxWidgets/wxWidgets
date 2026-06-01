@@ -1828,9 +1828,11 @@ set(MSW_HDR
     wx/msw/treectrl.h
     wx/winui/button.h
     wx/winui/checkbox.h
+    wx/winui/checklst.h
     wx/winui/choice.h
     wx/winui/combobox.h
     wx/winui/gauge.h
+    wx/winui/listbox.h
     wx/winui/radiobut.h
     wx/winui/slider.h
     wx/winui/statline.h
