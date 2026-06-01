@@ -311,16 +311,36 @@ public:
     /// @overload
     static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
 
+    /**
+        Create a bundle from the SVG image read from the given stream.
+
+        This function reads the SVG data from the given @a stream and calls
+        FromSVG() with it. As it is just a wrapper for FromSVG(), please see
+        that function documentation for more information about SVG support.
+
+        @param stream The input stream to read SVG data from.
+        @param sizeDef The default size to return from GetDefaultSize() for
+            this bundle. If an empty wxSize or wxDefaultSize is provided,
+            the size of the SVG will be the default size.
+
+        @since 3.3.3
+     */
+
+    /// @overload
+    static wxBitmapBundle FromSVG(wxInputStream& stream, const wxSize& sizeDef);
 
     /**
         Create a bundle from the SVG image loaded from the given file.
 
         This function loads the SVG data from the given @a path and calls
-        FromSVG() with it. As it is just a wrapper for FromSVG(), please see
-        that function documentation for more information about SVG support.
+        FromSVG() with it. If the filename has a .svgz extension, then it
+        will first be decompressed before converting it into a bundle (new
+        since wxWidgets 3.3.3). As this function is just a wrapper for
+        FromSVG(), please see that function documentation for more information
+        about SVG support.
 
-        @param path Path to the SVG file. Notice that it should a local file,
-            not an URL.
+        @param path Path to the SVG file. Notice that it should be a local
+            file, not a URL.
         @param sizeDef The default size to return from GetDefaultSize() for
             this bundle. If an empty wxSize or wxDefaultSize is provided,
             the size of the SVG will be the default size.
