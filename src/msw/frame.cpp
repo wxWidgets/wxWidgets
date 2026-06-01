@@ -43,6 +43,10 @@
 
 #include "wx/generic/statusbr.h"
 
+#ifdef __WXWINUI__
+    #include "wx/winui/winui.h"
+#endif
+
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"
     #include "wx/univ/colschem.h"
@@ -397,12 +401,33 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
     }
 }
 
+#ifdef __WXWINUI__
+bool wxFrame::IsOneOfBars(const wxWindow *win) const
+{
+    if ( win && win == m_winuiMenuBarWin )
+        return true;
+    return wxFrameBase::IsOneOfBars(win);
+}
+
+void wxFrame::MSWRefreshWinUIMenuBar()
+{
+    wxWinUIRefreshFrameMenuBar(m_winuiMenuBarWin);
+}
+#endif // __WXWINUI__
+
 void wxFrame::InternalSetMenuBar()
 {
+#ifdef __WXWINUI__
+    // Replace the native menu bar by a WinUI MenuBar hosted at the top of the
+    // frame; the client area is reduced for it in GetClientAreaOrigin().
+    m_winuiMenuBarWin = wxWinUIAttachFrameMenuBar(this, GetMenuBar(),
+                                                  m_winuiMenuBarWin);
+#else
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
     {
         wxLogLastError(wxT("SetMenu"));
     }
+#endif // __WXWINUI__
 }
 
 #endif // wxUSE_MENUS_NATIVE
@@ -993,6 +1018,12 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
+
+#if wxUSE_MENUS && defined(__WXWINUI__)
+    // The WinUI menu bar (if any) occupies a strip across the top of the frame.
+    if ( m_winuiMenuBarWin && m_winuiMenuBarWin->IsShown() )
+        pt.y += m_winuiMenuBarWin->GetSize().y;
+#endif // wxUSE_MENUS && __WXWINUI__
 
 #if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__)
     wxToolBar * const toolbar = GetToolBar();

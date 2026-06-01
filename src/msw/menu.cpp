@@ -924,7 +924,15 @@ void wxMenuBar::Refresh()
 
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
+#ifdef __WXWINUI__
+    // No native menu bar under the WinUI toolkit: rebuild the WinUI MenuBar to
+    // reflect menus added/removed/renamed while attached.
+    if ( wxFrame *frame = GetFrame() )
+        frame->MSWRefreshWinUIMenuBar();
+    return;
+#else
     DrawMenuBar(GetHwndOf(GetFrame()));
+#endif
 }
 
 WXHMENU wxMenuBar::Create()

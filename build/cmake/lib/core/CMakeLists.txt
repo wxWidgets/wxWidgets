@@ -84,6 +84,7 @@ if(WXMSW)
             src/winui/hyperlink.cpp
             src/winui/infobar.cpp
             src/winui/listbox.cpp
+            src/winui/menubar.cpp
             src/winui/notebook.cpp
             src/winui/radiobox.cpp
             src/winui/radiobut.cpp

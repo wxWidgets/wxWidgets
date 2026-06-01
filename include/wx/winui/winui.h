@@ -50,6 +50,19 @@ WXDLLIMPEXP_CORE void wxWinUIApplyWindowBackdrop(wxWindow *tlw);
 // has already been primed.
 WXDLLIMPEXP_CORE void wxWinUIPrimeBackdrop(WXHWND hwnd);
 
+// Build (or rebuild) a WinUI MenuBar hosted across the top of a frame from the
+// given wxMenuBar, replacing the native HMENU.  Pass the previously returned
+// window as "existing" to replace it; returns the new menu-bar window (or null
+// if menubar is null).  Menu commands are routed to the frame as wxEVT_MENU.
+class WXDLLIMPEXP_FWD_CORE wxMenuBar;
+WXDLLIMPEXP_CORE wxWindow* wxWinUIAttachFrameMenuBar(wxWindow *frame,
+                                                     wxMenuBar *menubar,
+                                                     wxWindow *existing);
+
+// Rebuild the WinUI MenuBar of a frame after its wxMenuBar changed (menus
+// added/removed/renamed while the bar is attached).
+WXDLLIMPEXP_CORE void wxWinUIRefreshFrameMenuBar(wxWindow *menuBarWin);
+
 #endif // wxUSE_WINUI3
 
 #endif // _WX_WINUI_WINUI_H_
