@@ -1207,6 +1207,34 @@ wxString wxGetOsDescription()
                            info.dwMinorVersion);
             }
 
+            DWORD productType = 0;
+            if ( !wxIsWindowsServer()
+                && GetProductInfo(
+                    info.dwMajorVersion, info.dwMinorVersion,
+                    0, 0, // service pack major/minor
+                    &productType) )
+            {
+                switch (productType) {
+                case PRODUCT_PROFESSIONAL:
+                    str << " Pro";
+                    break;
+
+                case PRODUCT_CORE:
+                    str << " Home";
+                    break;
+
+                case PRODUCT_ENTERPRISE:
+                    str << " Enterprise";
+                    break;
+
+                default:
+                    // There are dozens of other possibilities (see
+                    // GetProductInfo docs), but for now we only care
+                    // about the most common ones.
+                    break;
+                }
+            }
+
             str << wxT(" (")
                 << wxString::Format(
                        /* TRANSLATORS: MS Windows build number */_("build %lu"),
