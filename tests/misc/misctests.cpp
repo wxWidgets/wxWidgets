@@ -262,6 +262,17 @@ TEST_CASE("wxFileTypeInfo", "[mime]")
         CHECK( fti.GetExtensions()[1] == "jpeg" );
     }
 }
+
+TEST_CASE("wxFileType::ExpandCommand", "[mime]")
+{
+    const wxFileType::MessageParameters params("file.txt", "text/plain");
+
+    CHECK( wxFileType::ExpandCommand("view %s", params) == "view file.txt" );
+
+    // A command ending with a bare '%' used to read past the end of the
+    // string; check that the trailing '%' is just copied verbatim instead.
+    CHECK( wxFileType::ExpandCommand("show %s %", params) == "show file.txt %" );
+}
 #endif // wxUSE_MIMETYPE
 
 TEST_CASE("wxVersionInfo", "[version]")

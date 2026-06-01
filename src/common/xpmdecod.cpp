@@ -196,7 +196,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
         if (*q == '\0')
             break;
 
-        strncpy(xpm_buffer + i, p + 1, q - p - 1);
+        memmove(xpm_buffer + i, p + 1, q - p - 1);
         i += q - p - 1;
         xpm_buffer[i++] = '\n';
         p = q + 1;
@@ -787,7 +787,8 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
         for (i = 0; i < width; i++, img_data += 3)
         {
             const char *xpmImgLine = xpm_data[1 + colors_cnt + j];
-            if ( !xpmImgLine || strlen(xpmImgLine) < width*chars_per_pixel )
+            if ( !xpmImgLine ||
+                    strlen(xpmImgLine) < (unsigned long long)width*chars_per_pixel )
             {
                 wxLogError(_("XPM: truncated image data at line %d!"),
                            (int)(1 + colors_cnt + j));

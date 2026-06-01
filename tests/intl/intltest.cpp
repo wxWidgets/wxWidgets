@@ -18,6 +18,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/intl.h"
+#include "wx/translation.h"
 #include "wx/uilocale.h"
 #include "wx/scopeguard.h"
 
@@ -289,6 +290,46 @@ TEST_CASE("wxTranslations::AddCatalog", "[translations]")
         // But using a completely different language should not.
         CHECK_FALSE( trans.AddCatalog(domain, wxLANGUAGE_DUTCH) );
     }
+}
+
+TEST_CASE("wxTranslations::CorruptCatalog", "[translations]")
+{
+    // Build a minimal MO catalog with two strings whose second translated
+    // entry declares a length of 0xffffffff. Adding this to the (valid) string
+    // offset wraps around in 32-bit arithmetic and used to defeat the bounds
+    // check in StringAtOfs(), letting FillHash() read past the end of the data.
+    //
+    // The catalog is 64 bytes; the backing array has one extra byte because
+    // wxCharTypeBuffer copies len+1 bytes (it assumes a trailing NUL).
+    const size_t moLen = 64;
+    unsigned char mo[moLen + 1];
+    memset(mo, 0, sizeof(mo));
+
+    auto put32 = [](unsigned char* p, wxUint32 v)
+    {
+        p[0] = (unsigned char)(v & 0xff);
+        p[1] = (unsigned char)((v >> 8) & 0xff);
+        p[2] = (unsigned char)((v >> 16) & 0xff);
+        p[3] = (unsigned char)((v >> 24) & 0xff);
+    };
+
+    put32(mo +  0, 0x950412de); // magic
+    put32(mo +  8, 2);          // number of strings
+    put32(mo + 12, 28);         // offset of original strings table
+    put32(mo + 16, 44);         // offset of translated strings table
+    // original strings table
+    put32(mo + 28, 0);  put32(mo + 32, 60); // ""
+    put32(mo + 36, 1);  put32(mo + 40, 61); // "x"
+    // translated strings table
+    put32(mo + 44, 0);          put32(mo + 48, 60); // ""
+    put32(mo + 52, 0xffffffff); put32(mo + 56, 63); // bogus length
+    mo[61] = 'x';
+    mo[63] = 'A'; // unterminated string at the very end of the buffer
+
+    wxCharTypeBuffer<char> data(reinterpret_cast<const char*>(mo), moLen);
+    wxMsgCatalog* const cat = wxMsgCatalog::CreateFromData(data, "corrupt");
+    CHECK( cat == nullptr );
+    delete cat;
 }
 
 TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")

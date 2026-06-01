@@ -617,6 +617,8 @@ public:
     virtual bool Detach( wxSizer *sizer );
     virtual bool Detach( int index );
 
+    wxNODISCARD virtual wxSizerItem *DetachItem(size_t index);
+
     virtual bool Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive = false );
     virtual bool Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive = false );
     virtual bool Replace( size_t index, wxSizerItem *newitem );

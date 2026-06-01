@@ -1099,6 +1099,23 @@ bool wxSizer::Detach( int index )
     return true;
 }
 
+wxSizerItem *wxSizer::DetachItem(size_t index)
+{
+    const auto node = GetChildNode(index);
+    if ( !node )
+        return nullptr;
+
+    wxSizerItem *item = node->GetData();
+
+    wxWindow *window = item->GetWindow();
+    if ( window != nullptr )
+        window->SetContainingSizer(nullptr);
+
+    m_children.Erase( node );
+
+    return item;
+}
+
 bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
 {
     wxASSERT_MSG( oldwin, wxT("Replacing null window") );

@@ -154,6 +154,11 @@ case "${host}" in
     dnl _HPUX_SOURCE is defined, see stdsyms(5)
     CPPFLAGS="-D_HPUX_SOURCE $CPPFLAGS"
   ;;
+  *-*-android* )
+    USE_LINUX=1
+    AC_DEFINE(__LINUX__)
+    LIBS="-llog $LIBS"
+  ;;
   *-*-linux* )
     USE_LINUX=1
     AC_DEFINE(__LINUX__)

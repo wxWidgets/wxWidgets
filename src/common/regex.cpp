@@ -1158,6 +1158,13 @@ int wxRegExImpl::Replace(wxString *text,
                         index = (size_t)wxStrtoul(p, &end, 10);
                         p = end - 1; // -1 to compensate for p++ in the loop
                     }
+                    else if ( !*p )
+                    {
+                        // trailing backslash: keep it verbatim and stop here so
+                        // the loop's p++ doesn't read past the terminating NUL
+                        textNew += wxT('\\');
+                        break;
+                    }
                     //else: backslash used as escape character
                 }
                 else if ( *p == wxT('&') )

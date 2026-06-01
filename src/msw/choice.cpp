@@ -225,7 +225,7 @@ void wxChoice::MSWSwitchMode()
     WinStruct<COMBOBOXINFO> info;
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
-        wxMSWDarkMode::AllowForWindow(info.hwndList);
+        wxMSWDarkMode::AllowForWindow(info.hwndList, L"Explorer", L"ScrollBar");
     }
 }
 

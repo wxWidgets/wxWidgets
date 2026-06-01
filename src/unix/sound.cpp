@@ -714,8 +714,10 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
     memcpy(&ul, &data[data_offset + 4u], 4);
     ul = wxUINT32_SWAP_ON_BE(ul);
 
-    // ensure we actually have at least that much data in the input
-    if (ul > length - FMT_INDEX - waveformat.uiSize - 16)
+    // ensure we actually have at least that much data in the input; use
+    // data_offset rather than the fixed FMT_INDEX + uiSize + 16 expression
+    // so that an optional LIST chunk is accounted for here as well.
+    if (ul > length - data_offset - 8u)
         return false;
 
     m_data = new wxSoundData;

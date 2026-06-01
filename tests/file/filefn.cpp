@@ -488,6 +488,17 @@ TEST_CASE_METHOD(FileFunctionsTestCase,
     wxString pathOnly = wxPathOnly(filename.GetFullPath());
     if ( !wxDirExists(pathOnly) )
         CHECK( pathOnly == wxString() );
+
+    CHECK( wxPathOnly(wxString{}) == "" );
+    CHECK( wxPathOnly("foo") == "" );
+    CHECK( wxPathOnly("foo/") == "foo" );
+    CHECK( wxPathOnly("/foo/") == wxString(wxFILE_SEP_PATH) + "foo" );
+
+#ifdef __WINDOWS__
+    CHECK( wxPathOnly("c:\\foo.exe") == "c:" );
+    CHECK( wxPathOnly("c:foo.exe") == "c:." );
+    CHECK( wxPathOnly("foo\\bar.dll") == "foo" );
+#endif
 }
 
 // Unit tests for Mkdir and Rmdir doesn't cover non-ASCII directory names.

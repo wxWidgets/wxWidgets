@@ -933,8 +933,9 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
         while (isdigit((unsigned char) *p))
             recSize = recSize * 10 + *p++ - '0';
 
-        // validity checks
-        if (recPos + recSize > len)
+        // validity checks: write this carefully to avoid adding anything to
+        // recSize as addition could overflow
+        if (recSize > len - recPos)
             break;
         if (recSize < p - pRec + (size_t)3 || *p != ' '
                 || pRec[recSize - 1] != '\012') {

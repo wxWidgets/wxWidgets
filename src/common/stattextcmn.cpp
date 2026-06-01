@@ -272,7 +272,11 @@ void wxStaticTextBase::Wrap(int width)
                                     : m_unwrappedLabel;
     if ( !m_unwrappedLabel.empty() )
     {
-        SetLabel( m_unwrappedLabel );
+        // This is tricky: we can't pass m_unwrappedLabel itself to SetLabel()
+        // because it can/will be reset to empty string by this call before it
+        // is used. So pass a copy of it which is not affected by the changes
+        // to m_unwrappedLabel.
+        SetLabel( unwrappedLabel );
     }
     wxLabelWrapper wrapper;
     wrapper.WrapLabel(this, width);

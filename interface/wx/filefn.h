@@ -294,6 +294,19 @@ wxString wxGetWorkingDirectory(char* buf = nullptr, int sz = 1000);
 /**
     Returns the directory part of the filename.
 
+    @deprecated Please use wxFileName::GetPath() instead.
+
+    Note that the behaviour of this function is slightly different for Windows
+    paths including drive letters: it returns a string without trailing
+    backslash for the absolute paths with drive letters and a string with
+    trailing dot for the relative paths with drive letters.
+
+    Since wxWidgets 3.3.3 all path separators are normalized to the current
+    platform path separator in the returned path, i.e. under Windows forward
+    slashes in @a path will be replaced with backslashes in the returned value.
+    Previous versions of wxWidgets didn't perform this normalization and
+    returned the path with the same separators as in @a path.
+
     @header{wx/filefn.h}
 */
 wxString wxPathOnly(const wxString& path);
