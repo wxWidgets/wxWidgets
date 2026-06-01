@@ -21,6 +21,8 @@
 #include "wx/clrpicker.h"
 #include "wx/choice.h"
 #include "wx/datectrl.h"
+#include "wx/filepicker.h"
+#include "wx/fontpicker.h"
 #include "wx/gauge.h"
 #include "wx/hyperlink.h"
 #include "wx/infobar.h"
@@ -245,6 +247,17 @@ public:
 
         wxCalendarCtrl *calendar = new wxCalendarCtrl(page2, wxID_ANY);
         page2Sizer->Add(calendar, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(16));
+
+        // File / directory / font pickers: these are picker composites built on
+        // the WinUI button plus the native OS dialogs.
+        wxFilePickerCtrl *filePicker = new wxFilePickerCtrl(page2, wxID_ANY);
+        page2Sizer->Add(filePicker, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(16));
+
+        wxDirPickerCtrl *dirPicker = new wxDirPickerCtrl(page2, wxID_ANY);
+        page2Sizer->Add(dirPicker, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(16));
+
+        wxFontPickerCtrl *fontPicker = new wxFontPickerCtrl(page2, wxID_ANY);
+        page2Sizer->Add(fontPicker, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(16));
 
         page2->SetSizer(page2Sizer);
 
