@@ -30,6 +30,8 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/generic/hyperlinkg.cpp"
             "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
             "${wxSOURCE_DIR}/src/msw/button.cpp"
+            "${wxSOURCE_DIR}/src/msw/datectrl.cpp"
+            "${wxSOURCE_DIR}/src/msw/datetimectrl.cpp"
             "${wxSOURCE_DIR}/src/msw/bmpcbox.cpp"
             "${wxSOURCE_DIR}/src/msw/checkbox.cpp"
             "${wxSOURCE_DIR}/src/msw/choice.cpp"
@@ -45,6 +47,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/spinctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/statbmp.cpp"
             "${wxSOURCE_DIR}/src/msw/statline.cpp"
+            "${wxSOURCE_DIR}/src/msw/timectrl.cpp"
             "${wxSOURCE_DIR}/src/msw/stattext.cpp"
             "${wxSOURCE_DIR}/src/msw/textctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/tglbtn.cpp"
@@ -57,6 +60,7 @@ if(WXMSW)
             src/winui/button.cpp
             src/winui/checkbox.cpp
             src/winui/checklst.cpp
+            src/winui/datectrl.cpp
             src/winui/choice.cpp
             src/winui/combobox.cpp
             src/winui/gauge.cpp
@@ -69,6 +73,7 @@ if(WXMSW)
             src/winui/spinctrl.cpp
             src/winui/statbmp.cpp
             src/winui/statline.cpp
+            src/winui/timectrl.cpp
             src/winui/stattext.cpp
             src/winui/textctrl.cpp
             src/winui/tglbtn.cpp

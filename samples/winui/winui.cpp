@@ -17,6 +17,7 @@
 #include "wx/artprov.h"
 #include "wx/checklst.h"
 #include "wx/choice.h"
+#include "wx/datectrl.h"
 #include "wx/gauge.h"
 #include "wx/hyperlink.h"
 #include "wx/listbox.h"
@@ -26,8 +27,10 @@
 #include "wx/scrolwin.h"
 #include "wx/slider.h"
 #include "wx/spinctrl.h"
+#include "wx/srchctrl.h"
 #include "wx/statline.h"
 #include "wx/tglbtn.h"
+#include "wx/timectrl.h"
 
 #include "wx/winui/winui.h"
 
@@ -147,6 +150,11 @@ public:
         m_toggle = new wxToggleButton(panel, wxID_ANY, "WinUI ToggleButton");
         sizer->Add(m_toggle, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
+        wxSearchCtrl *search = new wxSearchCtrl(panel, wxID_ANY, "search me");
+        search->ShowSearchButton(true);
+        search->ShowCancelButton(true);
+        sizer->Add(search, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
         wxSpinCtrl *spin = new wxSpinCtrl(panel, wxID_ANY, wxEmptyString,
             wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 42);
         sizer->Add(spin, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
@@ -156,6 +164,12 @@ public:
             0.0, 10.0, 2.5, 0.5);
         spinDouble->SetDigits(1);
         sizer->Add(spinDouble, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxDatePickerCtrl *datePicker = new wxDatePickerCtrl(panel, wxID_ANY);
+        sizer->Add(datePicker, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxTimePickerCtrl *timePicker = new wxTimePickerCtrl(panel, wxID_ANY);
+        sizer->Add(timePicker, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         wxHyperlinkCtrl *link = new wxHyperlinkCtrl(panel, wxID_ANY,
             "WinUI HyperlinkButton (wxWidgets.org)", "https://www.wxwidgets.org/");

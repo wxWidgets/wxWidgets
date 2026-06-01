@@ -1831,6 +1831,7 @@ set(MSW_HDR
     wx/winui/checkbox.h
     wx/winui/checklst.h
     wx/winui/choice.h
+    wx/winui/datectrl.h
     wx/winui/combobox.h
     wx/winui/gauge.h
     wx/winui/hyperlink.h
@@ -1842,6 +1843,7 @@ set(MSW_HDR
     wx/winui/spinctrl.h
     wx/winui/statbmp.h
     wx/winui/statline.h
+    wx/winui/timectrl.h
     wx/winui/stattext.h
     wx/winui/textctrl.h
     wx/winui/tglbtn.h

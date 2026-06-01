@@ -81,7 +81,11 @@ public:
 // by native wxDatePickerCtrl implementations.
 typedef wxDatePickerCtrlCommonBase<wxDateTimePickerCtrl> wxDatePickerCtrlBase;
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXWINUI__)
+    #include "wx/winui/datectrl.h"
+
+    #define wxHAS_NATIVE_DATEPICKCTRL
+#elif defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/datectrl.h"
 
     #define wxHAS_NATIVE_DATEPICKCTRL
