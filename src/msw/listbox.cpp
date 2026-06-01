@@ -173,6 +173,14 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+bool wxListBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    support.themeName = L"Explorer";
+    support.themeId = L"ScrollBar";
+
+    return true;
+}
+
 void wxListBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     wxListBoxBase::MSWUpdateFontOnDPIChange(newDPI);

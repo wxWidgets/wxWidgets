@@ -223,7 +223,7 @@ bool wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     WinStruct<COMBOBOXINFO> info;
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
-        wxMSWDarkMode::AllowForWindow(info.hwndList);
+        wxMSWDarkMode::AllowForWindow(info.hwndList, L"Explorer", L"ScrollBar");
     }
 
     return true;
