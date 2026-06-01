@@ -112,7 +112,7 @@ private:
 #if defined(__WXUNIVERSAL__)
     #include "wx/generic/bmpcbox.h"
 #elif defined(__WXWINUI__)
-    #include "wx/generic/bmpcbox.h"
+    #include "wx/winui/bmpcbox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/bmpcbox.h"
 #elif defined(__WXGTK__)

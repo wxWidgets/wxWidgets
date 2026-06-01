@@ -15,6 +15,7 @@
 
 #include "wx/activityindicator.h"
 #include "wx/artprov.h"
+#include "wx/bmpcbox.h"
 #include "wx/calctrl.h"
 #include "wx/checklst.h"
 #include "wx/clrpicker.h"
@@ -185,6 +186,16 @@ public:
         wxColourPickerCtrl *colourPicker = new wxColourPickerCtrl(panel, wxID_ANY,
             *wxBLUE);
         sizer->Add(colourPicker, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
+
+        wxBitmapComboBox *bmpCombo = new wxBitmapComboBox(panel, wxID_ANY);
+        bmpCombo->Append("Information",
+            wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_OTHER, FromDIP(wxSize(16, 16))));
+        bmpCombo->Append("Warning",
+            wxArtProvider::GetBitmapBundle(wxART_WARNING, wxART_OTHER, FromDIP(wxSize(16, 16))));
+        bmpCombo->Append("Error",
+            wxArtProvider::GetBitmapBundle(wxART_ERROR, wxART_OTHER, FromDIP(wxSize(16, 16))));
+        bmpCombo->SetSelection(0);
+        sizer->Add(bmpCombo, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));
 
         wxDatePickerCtrl *datePicker = new wxDatePickerCtrl(panel, wxID_ANY);
         sizer->Add(datePicker, 0, wxLEFT | wxRIGHT | wxBOTTOM, FromDIP(12));

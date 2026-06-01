@@ -1827,6 +1827,7 @@ set(MSW_HDR
     wx/msw/tglbtn.h
     wx/msw/treectrl.h
     wx/winui/activityindicator.h
+    wx/winui/bmpcbox.h
     wx/winui/button.h
     wx/winui/calctrl.h
     wx/winui/checkbox.h

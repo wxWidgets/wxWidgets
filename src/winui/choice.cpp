@@ -264,6 +264,16 @@ wxSize wxChoice::DoGetBestSize() const
     return wxWindow::FromDIP(wxSize(180, 32), const_cast<wxChoice *>(this));
 }
 
+wxBitmap wxChoice::WinUIGetItemBitmap(unsigned int WXUNUSED(n)) const
+{
+    return wxBitmap();
+}
+
+void wxChoice::WinUIRefreshItems()
+{
+    ApplyItemsToPeer();
+}
+
 void wxChoice::ApplyItemsToPeer()
 {
     if ( !m_winui || !m_winui->comboBox )
@@ -272,12 +282,42 @@ void wxChoice::ApplyItemsToPeer()
     m_updatingPeer = true;
     try
     {
+        namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
         auto items = m_winui->comboBox.Items();
         items.Clear();
         for ( unsigned int i = 0; i < m_items.GetCount(); ++i )
         {
-            winrt::Microsoft::UI::Xaml::Controls::ComboBoxItem item;
-            item.Content(winrt::box_value(wxWinUIToHString(m_items[i])));
+            MUXC::ComboBoxItem item;
+
+            const wxBitmap bmp = WinUIGetItemBitmap(i);
+            if ( bmp.IsOk() )
+            {
+                // Show an image in front of the text (wxBitmapComboBox).
+                MUXC::StackPanel panel;
+                panel.Orientation(winrt::Microsoft::UI::Xaml::Controls::Orientation::Horizontal);
+                panel.Spacing(8);
+
+                if ( auto source = wxWinUIWriteableBitmapFromBitmap(bmp) )
+                {
+                    MUXC::Image image;
+                    image.Source(source);
+                    image.Width(bmp.GetWidth());
+                    image.Height(bmp.GetHeight());
+                    panel.Children().Append(image);
+                }
+
+                MUXC::TextBlock text;
+                text.Text(wxWinUIToHString(m_items[i]));
+                text.VerticalAlignment(winrt::Microsoft::UI::Xaml::VerticalAlignment::Center);
+                panel.Children().Append(text);
+
+                item.Content(panel);
+            }
+            else
+            {
+                item.Content(winrt::box_value(wxWinUIToHString(m_items[i])));
+            }
+
             items.Append(item);
         }
 

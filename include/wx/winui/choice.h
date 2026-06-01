@@ -10,6 +10,8 @@
 #ifndef _WX_WINUI_CHOICE_H_
 #define _WX_WINUI_CHOICE_H_
 
+#include "wx/bitmap.h"
+
 #include <memory>
 #include <vector>
 
@@ -76,7 +78,15 @@ protected:
     void* DoGetItemClientData(unsigned int n) const override;
     wxSize DoGetBestSize() const override;
 
-private:
+    // Hook allowing derived classes (wxBitmapComboBox) to show a per-item
+    // image in the dropdown; returns an invalid bitmap by default, in which
+    // case the item is rendered as plain text.
+    virtual wxBitmap WinUIGetItemBitmap(unsigned int n) const;
+
+    // Rebuild the WinUI item list from the wx-side state (used by derived
+    // classes after changing per-item images).
+    void WinUIRefreshItems();
+
     void ApplyItemsToPeer();
     void ApplySelectionToPeer();
     void SendSelectionEvent();

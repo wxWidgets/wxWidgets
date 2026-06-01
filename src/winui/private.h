@@ -33,6 +33,7 @@
 #include <winrt/Microsoft.UI.Xaml.Input.h>
 #include <winrt/Microsoft.UI.Xaml.Markup.h>
 #include <winrt/Microsoft.UI.Xaml.Media.h>
+#include <winrt/Microsoft.UI.Xaml.Media.Imaging.h>
 #include <winrt/Windows.System.h>
 
 class wxWinUIControlHost
@@ -98,6 +99,12 @@ winrt::Microsoft::UI::Xaml::ElementTheme wxWinUIGetCurrentElementTheme();
 void wxWinUILogException(const char *what, const winrt::hresult_error& e);
 winrt::hstring wxWinUIToHString(const wxString& str);
 wxString wxWinUIFromHString(const winrt::hstring& str);
+
+// Convert a wxBitmap to a WinUI WriteableBitmap (premultiplied BGRA).  Returns
+// nullptr for an invalid bitmap.
+class wxBitmap;
+winrt::Microsoft::UI::Xaml::Media::Imaging::WriteableBitmap
+wxWinUIWriteableBitmapFromBitmap(const wxBitmap& bitmap);
 
 inline winrt::Microsoft::UI::Xaml::Media::SolidColorBrush
 wxWinUIBrush(unsigned char red,

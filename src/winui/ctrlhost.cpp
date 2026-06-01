@@ -19,6 +19,8 @@
     #include "wx/log.h"
     #include "wx/string.h"
     #include "wx/window.h"
+    #include "wx/bitmap.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/app.h"
@@ -26,6 +28,7 @@
 #include "wx/toplevel.h"
 
 #include <dwmapi.h>
+#include <winrt/Windows.Storage.Streams.h>
 
 #include <algorithm>
 #include <set>
@@ -207,6 +210,58 @@ winrt::hstring wxWinUIToHString(const wxString& str)
 wxString wxWinUIFromHString(const winrt::hstring& str)
 {
     return wxString(str.c_str());
+}
+
+namespace
+{
+
+// COM interface giving direct access to an IBuffer's bytes.
+struct __declspec(uuid("905a0fef-bc53-11df-8c49-001e4fc686da"))
+IWxHostBufferByteAccess : ::IUnknown
+{
+    virtual HRESULT __stdcall Buffer(uint8_t** value) = 0;
+};
+
+} // namespace
+
+winrt::Microsoft::UI::Xaml::Media::Imaging::WriteableBitmap
+wxWinUIWriteableBitmapFromBitmap(const wxBitmap& bitmap)
+{
+    if ( !bitmap.IsOk() )
+        return nullptr;
+
+    wxImage image = bitmap.ConvertToImage();
+    if ( !image.IsOk() )
+        return nullptr;
+
+    const int w = image.GetWidth();
+    const int h = image.GetHeight();
+    const unsigned char *rgb = image.GetData();
+    const unsigned char *alpha = image.HasAlpha() ? image.GetAlpha() : nullptr;
+
+    winrt::Microsoft::UI::Xaml::Media::Imaging::WriteableBitmap wb(w, h);
+
+    uint8_t *dst = nullptr;
+    auto access = wb.PixelBuffer().as<IWxHostBufferByteAccess>();
+    if ( FAILED(access->Buffer(&dst)) || !dst )
+        return nullptr;
+
+    for ( int i = 0; i < w * h; ++i )
+    {
+        const unsigned char r = rgb[i * 3 + 0];
+        const unsigned char g = rgb[i * 3 + 1];
+        const unsigned char b = rgb[i * 3 + 2];
+        const unsigned char a = alpha ? alpha[i] : 255;
+
+        // WriteableBitmap expects premultiplied BGRA.
+        dst[i * 4 + 0] = static_cast<uint8_t>(b * a / 255);
+        dst[i * 4 + 1] = static_cast<uint8_t>(g * a / 255);
+        dst[i * 4 + 2] = static_cast<uint8_t>(r * a / 255);
+        dst[i * 4 + 3] = a;
+    }
+
+    wb.Invalidate();
+    return wb;
 }
 
 winrt::Microsoft::UI::Xaml::ElementTheme wxWinUIGetCurrentElementTheme()
