@@ -1235,6 +1235,21 @@ wxString wxGetOsDescription()
                 }
             }
 
+#if wxUSE_REGKEY
+            wxRegKey key(wxRegKey::HKLM,
+                "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion");
+
+            if ( key.Exists() )
+            {
+                wxString displayVersion;
+                if ( key.QueryValue("DisplayVersion", displayVersion)
+                    && !displayVersion.empty() )
+                {
+                    str << " " << displayVersion;
+                }
+            }
+#endif // wxUSE_REGKEY
+
             str << wxT(" (")
                 << wxString::Format(
                        /* TRANSLATORS: MS Windows build number */_("build %lu"),
