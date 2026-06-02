@@ -311,14 +311,24 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         {
             const wxSize minSize = ClientToWindowSize(sizer->GetMinSize());
             wxSize diff = minSize - newRect.GetSize();
-            diff.IncTo(wxSize(0, 0));
+
+            // We don't want to shrink the window as if the user had increased
+            // it beyond its minimum size, we should not make it smaller again
+            // just because the DPI has changed, but if the window is not
+            // resizeable, then we do want to make it exactly of its minimum
+            // size because the user couldn't resize it and making it bigger
+            // than needed would just show unnecessary extra empty space.
+            if ( HasFlag(wxRESIZE_BORDER) )
+            {
+                diff.IncTo(wxSize(0, 0));
+            }
 
             // Use wxRect::Inflate() to ensure that the center of the bigger
             // rectangle is at the same position as the center of the proposed
             // one, to prevent moving the window back to the old display from
             // which it might have been just moved to this one, as doing this
             // would result in an infinite stream of WM_DPICHANGED messages.
-            actualNewRect.Inflate(diff);
+            actualNewRect.Inflate(diff / 2);
         }
 
         SetSize(actualNewRect);
