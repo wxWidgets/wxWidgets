@@ -1241,9 +1241,12 @@ wxString wxGetOsDescription()
 
             if ( key.Exists() )
             {
+                constexpr const char* VALUE_DISPLAY_VERSION = "DisplayVersion";
+
                 wxString displayVersion;
-                if ( key.QueryValue("DisplayVersion", displayVersion)
-                    && !displayVersion.empty() )
+                if ( key.HasValue(VALUE_DISPLAY_VERSION) &&
+                        key.QueryValue(VALUE_DISPLAY_VERSION, displayVersion) &&
+                            !displayVersion.empty() )
                 {
                     str << " " << displayVersion;
                 }
