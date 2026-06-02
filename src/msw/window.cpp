@@ -4103,7 +4103,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     }
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWSetDarkOrLightMode(SetMode::Change);
+        MSWSetDarkOrLightMode(SetMode::Initial);
 
     SubclassWin(m_hWnd);
 
