@@ -219,6 +219,7 @@ hostent *deepCopyHostent(hostent *h,
     char **h_addr_list = (char **)(buffer + pos);
     while(*(p++) != 0)
         pos += sizeof(char *);
+    pos += sizeof(char *); /* and one slot for the null terminator */
 
     /* copy addresses and fill new pointer list */
     for (p = h->h_addr_list, q = h_addr_list; *p != 0; p++, q++)
@@ -232,7 +233,7 @@ hostent *deepCopyHostent(hostent *h,
         *q = buffer + pos; /* set copied pointer to copied content */
         pos += len;
     }
-    *++q = 0; /* null terminate the pointer list */
+    *q = 0; /* null terminate the pointer list */
     h->h_addr_list = h_addr_list; /* copy pointer to pointers */
 
     /* ensure word alignment of pointers */
@@ -245,6 +246,7 @@ hostent *deepCopyHostent(hostent *h,
     char **h_aliases = (char **)(buffer + pos);
     while(*(p++) != 0)
         pos += sizeof(char *);
+    pos += sizeof(char *); /* and one slot for the null terminator */
 
     /* copy aliases and fill new pointer list */
     for (p = h->h_aliases, q = h_aliases; *p != 0; p++, q++)
@@ -260,7 +262,7 @@ hostent *deepCopyHostent(hostent *h,
         *q = buffer + pos; /* set copied pointer to copied content */
         pos += len + 1;
     }
-    *++q = 0; /* null terminate the pointer list */
+    *q = 0; /* null terminate the pointer list */
     h->h_aliases = h_aliases; /* copy pointer to pointers */
 
     return h;
@@ -374,6 +376,7 @@ servent *deepCopyServent(servent *s,
     char **s_aliases = (char **)(buffer + pos);
     while(*(p++) != 0)
         pos += sizeof(char *);
+    pos += sizeof(char *); /* and one slot for the null terminator */
 
     /* copy addresses and fill new pointer list */
     for (p = s->s_aliases, q = s_aliases; *p != 0; p++, q++){
@@ -387,7 +390,7 @@ servent *deepCopyServent(servent *s,
         *q = buffer + pos; /* set copied pointer to copied content */
         pos += len + 1;
     }
-    *++q = 0; /* null terminate the pointer list */
+    *q = 0; /* null terminate the pointer list */
     s->s_aliases = s_aliases; /* copy pointer to pointers */
     return s;
 }

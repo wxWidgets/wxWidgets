@@ -266,6 +266,7 @@ All:
 - Fix out-of-bounds read in wxRegEx::Replace() (dxbjavid, #26541).
 - Fix out-of-bounds read in wxUString (dxbjavid, #26548).
 - Fix wxDateTime::Format() handling of invalid format (dxbjavid, #26543).
+- Fix buffer overflow in wxGethostbyxxx_r() on some systems (dxbjavid, #26553).
 
 All (GUI):
 
