@@ -55,12 +55,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           submodules: 'recursive'
 
       - name: Install CCache
-        uses: hendrikmuhs/ccache-action@v1.2.3
+        uses: hendrikmuhs/ccache-action@v1.2.23
         with:
           key: ubuntu-22.04-default
 
