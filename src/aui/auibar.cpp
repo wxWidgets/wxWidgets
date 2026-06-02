@@ -2477,6 +2477,25 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
 
 void wxAuiToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
+    for ( auto& item : m_items )
+    {
+        switch ( item.m_kind )
+        {
+            case wxITEM_NORMAL:
+            case wxITEM_CHECK:
+            case wxITEM_RADIO:
+            case wxITEM_SEPARATOR:
+            case wxITEM_LABEL:
+                break;
+
+            case wxITEM_CONTROL:
+                // Take into account the new minimum control size when
+                // performing layout in Realize() called below.
+                item.m_minSize = item.m_window->GetEffectiveMinSize();
+                break;
+        }
+    }
+
     Realize();
 
     event.Skip();

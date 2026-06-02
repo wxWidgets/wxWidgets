@@ -1009,47 +1009,47 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // add a bunch of panes
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test1").Caption("Pane Caption").
+                  Name("top").Caption("Pane Caption").
                   Top());
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test2").Caption("Client Size Reporter").
+                  Name("with_close").Caption("Client Size Reporter").
                   Bottom().Position(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test3").Caption("Client Size Reporter").
+                  Name("with_close_and_maximize").Caption("Client Size Reporter").
                   Bottom().
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test4").Caption("Pane Caption").
+                  Name("left").Caption("Pane Caption").
                   Left());
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test5").Caption("No Close Button").
+                  Name("right").Caption("No Close Button").
                   Right().CloseButton(false));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test6").Caption("Client Size Reporter").
+                  Name("row_1").Caption("Client Size Reporter").
                   Right().Row(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test7").Caption("Float Client Size 111x222").
+                  Name("layer_1").Caption("Float Client Size 111x222").
                   MinSize(FromDIP(wxSize(11,22))).
                   FloatingClientSize(wxSize(111, 222)).
                   Left().Layer(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-                  Name("test8").Caption("Tree Pane").
+                  Name("tree").Caption("Tree Pane").
                   Left().Layer(1).Position(1).
                   CloseButton(true).MaximizeButton(true).MinimizeButton().
                   IconMin(wxArtProvider::GetBitmapBundle(wxART_CUT, wxART_MENU)));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test9").Caption("Min Size 200x100").
+                  Name("minsize_200x100").Caption("Min Size 200x100").
                   BestSize(FromDIP(wxSize(200,100))).MinSize(FromDIP(wxSize(200,100))).
                   Bottom().Layer(1).
                   CloseButton(true).MaximizeButton(true));
@@ -1063,7 +1063,7 @@ MyFrame::MyFrame(wxWindow* parent,
     iconSize &= ~1;
 
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
-                  Name("test10").Caption("Text Pane with Hide Prompt").
+                  Name("text").Caption("Text Pane with Hide Prompt").
                   Bottom().Layer(1).Position(1).
                   MaximizeButton().MinimizeButton().
                   Icon(wxArtProvider::GetBitmapBundle(wxART_WARNING,
@@ -1072,7 +1072,7 @@ MyFrame::MyFrame(wxWindow* parent,
                   IconMin(wxArtProvider::GetBitmapBundle(wxART_PASTE, wxART_MENU)));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test11").Caption("Fixed Pane").
+                  Name("fixed").Caption("Fixed Pane").
                   Bottom().Layer(1).Position(2).Fixed());
 
 
@@ -1102,28 +1102,28 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // add the toolbars to the manager
     m_mgr.AddPane(tb1, wxAuiPaneInfo().
-                  Name("tb1").Caption("Big Toolbar").
+                  Name("horz_tb").Caption("Big Toolbar").
                   ToolbarPane().Top());
 
     m_mgr.AddPane(tb2, wxAuiPaneInfo().
-                  Name("tb2").Caption("Toolbar 2 (Horizontal)").
+                  Name("question_icon_tb").Caption("Toolbar 2 (Horizontal)").
                   ToolbarPane().Top().Row(1));
 
     m_mgr.AddPane(tb3, wxAuiPaneInfo().
-                  Name("tb3").Caption("Toolbar 3").
+                  Name("folder_icon_tb").Caption("Toolbar 3").
                   ToolbarPane().Top().Row(1).Position(1));
 
     m_mgr.AddPane(tb4, wxAuiPaneInfo().
-                  Name("tb4").Caption("Sample Bookmark Toolbar").
+                  Name("bookmark_tb").Caption("Sample Bookmark Toolbar").
                   ToolbarPane().Top().Row(2));
 
     m_mgr.AddPane(tb5, wxAuiPaneInfo().
-                  Name("tb5").Caption("Sample Vertical Toolbar").
+                  Name("vert_tb").Caption("Sample Vertical Toolbar").
                   ToolbarPane().Left().
                   GripperTop());
 
     m_mgr.AddPane(new wxButton(this, wxID_ANY, _("Test Button")),
-                  wxAuiPaneInfo().Name("tb6").
+                  wxAuiPaneInfo().Name("button_tb").
                   ToolbarPane().Top().Row(2).Position(1).
                   LeftDockable(false).RightDockable(false));
 
@@ -1136,10 +1136,10 @@ MyFrame::MyFrame(wxWindow* parent,
         if (!pane.IsToolbar())
             pane.Hide();
     }
-    m_mgr.GetPane("tb1").Hide();
-    m_mgr.GetPane("tb6").Hide();
-    m_mgr.GetPane("test8").Show().Left().Layer(0).Row(0).Position(0);
-    m_mgr.GetPane("test10").Show().Bottom().Layer(0).Row(0).Position(0);
+    m_mgr.GetPane("horz_tb").Hide();
+    m_mgr.GetPane("button_tb").Hide();
+    m_mgr.GetPane("tree").Show().Left().Layer(0).Row(0).Position(0);
+    m_mgr.GetPane("text").Show().Bottom().Layer(0).Row(0).Position(0);
     m_mgr.GetPane("notebook_content").Show();
     wxString perspectiveDefault = m_mgr.SavePerspective();
 
@@ -1650,7 +1650,7 @@ void MyFrame::OnNotebookDeleteTab(wxCommandEvent& WXUNUSED(evt))
 
 void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
 {
-    if (evt.pane->name == "test10")
+    if (evt.pane->name == "text")
     {
         int res = wxMessageBox("Are you sure you want to close/hide this pane?",
                                "wxAUI",

@@ -640,6 +640,7 @@ protected:
     void OnHintFadeTimer(wxTimerEvent& evt);
     void OnFindManager(wxAuiManagerEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
 protected:
 
