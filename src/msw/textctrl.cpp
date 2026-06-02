@@ -2927,9 +2927,9 @@ void wxTextCtrl::MSWSetRichZoom()
     ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
 }
 
-void wxTextCtrl::MSWSwitchMode()
+void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    wxTextCtrlBase::MSWSwitchMode();
+    wxTextCtrlBase::MSWSetDarkOrLightMode(setmode);
 
 #if wxUSE_RICHEDIT
     // The rich edit control does not change colours automatically. We adjust
@@ -2942,7 +2942,7 @@ void wxTextCtrl::MSWSwitchMode()
         // True if we need to update the background colour.
         bool setBackground = false;
 
-        if ( wxMSWDarkMode::HasChanged() )
+        if ( setmode == SetMode::Change )
         {
             // Get formatting info for all the text.
             long sel1, sel2;

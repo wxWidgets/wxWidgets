@@ -632,18 +632,20 @@ protected:
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;
 
-    // Configure dark mode settings immediately after creation or upon
-    // switching into or out of dark mode. This function gets called for one
-    // of the reasons below which can be distinguished using the functions
-    // wxMSWDarkMode::IsActive() and wxMSWDarkMode::HasChanged() if needed.
-    //
-    // 1. The window was just created, so enable dark mode.
-    //    IsActive()==true, HasChanged()==false
-    // 2. The theme switched to dark mode, so enable dark mode.
-    //    IsActive()==true, HasChanged()==true
-    // 3. The theme switched to light mode, so disable dark mode.
-    //    IsActive()==false, HasChanged()==true
-    virtual void MSWSwitchMode();
+    // The reason for calling MSWSetDarkOrLightMode below.
+    enum class SetMode
+    {
+        // Set dark mode for a newly created window.
+        Initial,
+
+        // Set dark mode or light mode for an existing window.
+        Change
+    };
+
+    // Configure a window for dark mode settings immediately after creation or
+    // upon switching into or out of dark mode. This function is not called
+    // unless dark mode was enabled, or is being enabled.
+    virtual void MSWSetDarkOrLightMode(SetMode setmode);
 
     // Translate wxBORDER_THEME to a standard border style or return it as is
     // if themed border should be used, depending on CanApplyThemeBorder().

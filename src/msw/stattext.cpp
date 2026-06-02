@@ -214,13 +214,13 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
     return false;
 }
 
-void wxStaticText::MSWSwitchMode()
+void wxStaticText::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    wxStaticTextBase::MSWSwitchMode();
+    wxStaticTextBase::MSWSetDarkOrLightMode(setmode);
 
     // When switching to light mode, the text color remains the same. We must
     // explicitly update the color.
-    if (wxMSWDarkMode::HasChanged())
+    if ( setmode == SetMode::Change )
         SetForegroundColour(GetDefaultAttributes().colFg);
 }
 

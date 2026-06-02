@@ -4103,7 +4103,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     }
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWSwitchMode();
+        MSWSetDarkOrLightMode(SetMode::Change);
 
     SubclassWin(m_hWnd);
 
@@ -4144,7 +4144,7 @@ void wxWindowMSW::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     support.themeName = L"Explorer";
 }
 
-void wxWindowMSW::MSWSwitchMode()
+void wxWindowMSW::MSWSetDarkOrLightMode(SetMode WXUNUSED(setmode))
 {
     MSWDarkModeSupport support;
     MSWGetDarkModeSupport(support);
@@ -5316,7 +5316,7 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     {
         // Update the parent before the children because they often inherit
         // parent colors.
-        MSWSwitchMode();
+        MSWSetDarkOrLightMode(SetMode::Change);
     }
 
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();

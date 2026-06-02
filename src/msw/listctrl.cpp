@@ -589,9 +589,9 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-void wxListCtrl::MSWSwitchMode()
+void wxListCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    wxListCtrlBase::MSWSwitchMode();
+    wxListCtrlBase::MSWSetDarkOrLightMode(setmode);
 
     // Update header.
     MSWInitHeader();
@@ -603,7 +603,7 @@ void wxListCtrl::MSWSwitchMode()
 
     // When switching modes, the text color remains the same. We must
     // explicitly update the color.
-    if (wxMSWDarkMode::HasChanged())
+    if ( setmode == SetMode::Change )
         SetTextColour(attrs.colFg);
 }
 

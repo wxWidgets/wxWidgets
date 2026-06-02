@@ -513,7 +513,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     MSWUpdateUIState(UIS_INITIALIZE);
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWSwitchMode();
+        MSWSetDarkOrLightMode(SetMode::Initial);
 
     return true;
 }

@@ -131,7 +131,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     }
 
     if ( wxMSWDarkMode::IsActive() )
-        MSWSwitchMode();
+        MSWSetDarkOrLightMode(SetMode::Initial);
 
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()
@@ -179,9 +179,9 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     return true;
 }
 
-void wxControl::MSWSwitchMode()
+void wxControl::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    wxControlBase::MSWSwitchMode();
+    wxControlBase::MSWSetDarkOrLightMode(setmode);
 
     if ( const int msgTT = MSWGetToolTipMessage() )
     {

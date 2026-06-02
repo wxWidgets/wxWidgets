@@ -94,7 +94,7 @@ protected:
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
-    virtual void MSWSwitchMode() override;
+    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
 
     // This function can be used as event handle for wxEVT_DPI_CHANGED event.
     void WXHandleDPIChanged(wxDPIChangedEvent& event);
@@ -241,9 +241,9 @@ void wxMSWHeaderCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     support.themeName = L"ItemsView";
 }
 
-void wxMSWHeaderCtrl::MSWSwitchMode()
+void wxMSWHeaderCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    wxControl::MSWSwitchMode();
+    wxControl::MSWSetDarkOrLightMode(setmode);
 
     // The Windows native header control does not respond to changes in the
     // dark/light mode. The text color always stays as it was created. We have
