@@ -190,7 +190,7 @@ public:
     {
         wxClipboardLocker lockClip;
 
-        event.Enable( wxTheClipboard->IsSupported(wxDF_TEXT) );
+        event.Enable( wxTheClipboard->IsSupported(wxDF_TEXT) || wxTheClipboard->IsSupported(wxDF_UNICODETEXT) );
     }
 
     void OnUpdateCopyToClipboard(wxUpdateUIEvent& event)
