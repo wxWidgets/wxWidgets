@@ -318,7 +318,7 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
             // one, to prevent moving the window back to the old display from
             // which it might have been just moved to this one, as doing this
             // would result in an infinite stream of WM_DPICHANGED messages.
-            actualNewRect.Inflate(diff);
+            actualNewRect.Inflate(diff / 2);
         }
 
         SetSize(actualNewRect);
