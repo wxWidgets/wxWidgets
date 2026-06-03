@@ -47,6 +47,10 @@ namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace MUXD = winrt::Microsoft::UI::Xaml::Documents;
 namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
 
+// ----------------------------------------------------------------------------
+// local helpers
+// ----------------------------------------------------------------------------
+
 namespace
 {
 
@@ -133,6 +137,30 @@ wxBitmap wxWinUICreateDisabledBitmap(const wxBitmap& bitmap)
         return wxBitmap();
 
     return bitmap.ConvertToDisabled();
+}
+
+// Measure a single-line label with the real WinUI font: wxGetTextExtent() uses
+// the classic GDI font which is narrower and would lead to clipped text.  When
+// "font" is not Ok the probe keeps the WinUI default font/size so the measure
+// matches what the button (which also keeps the WinUI default) will render.
+wxSize wxWinUIMeasureText(const wxWindow *win, const wxString& text,
+                          const wxFont& font)
+{
+    try
+    {
+        const float inf = std::numeric_limits<float>::infinity();
+        MUXC::TextBlock probe;
+        probe.Text(wxWinUIToHString(text));
+        wxWinUIApplyFont(probe, font);
+        probe.Measure({ inf, inf });
+        const auto desired = probe.DesiredSize();
+        return wxSize(static_cast<int>(std::ceil(desired.Width)),
+                      static_cast<int>(std::ceil(desired.Height)));
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        return win->GetTextExtent(text);
+    }
 }
 
 #if wxUSE_MARKUP
@@ -236,7 +264,176 @@ private:
 };
 #endif // wxUSE_MARKUP
 
+// Build the button label element, either as plain text or from wx markup.
+MUXC::TextBlock wxWinUIMakeTextBlock(const wxString& text,
+                                     const wxString& markup,
+                                     bool useFg,
+                                     const wxColour& fg)
+{
+#if !wxUSE_MARKUP
+    wxUnusedVar(markup);
+#endif
+    MUXC::TextBlock tb;
+    tb.VerticalAlignment(MUX::VerticalAlignment::Center);
+    tb.HorizontalAlignment(MUX::HorizontalAlignment::Center);
+    if ( useFg )
+        tb.Foreground(wxWinUIBrushFromColour(fg));
+
+#if wxUSE_MARKUP
+    if ( !markup.empty() )
+    {
+        auto inlines = tb.Inlines();
+        inlines.Clear();
+        wxWinUIButtonMarkupToInlines output(inlines);
+        wxMarkupParser parser(output);
+        parser.Parse(markup);
+    }
+    else
+#endif // wxUSE_MARKUP
+    {
+        tb.Text(wxWinUIToHString(text));
+    }
+    return tb;
+}
+
+// Build an image element for the button bitmap, honouring the bitmap margins
+// and (optionally) adding the gap between the image and the label.
+MUXC::Image wxWinUIMakeImage(const wxBitmap& bmp,
+                             const wxSize& margins,
+                             wxDirection pos,
+                             bool withGap,
+                             double gap)
+{
+    MUXC::Image image;
+    image.Source(wxWinUIWriteableBitmapFromBitmap(bmp));
+    const wxSize dip = bmp.GetDIPSize();
+    image.Width(static_cast<double>(dip.x));
+    image.Height(static_cast<double>(dip.y));
+    image.VerticalAlignment(MUX::VerticalAlignment::Center);
+    image.HorizontalAlignment(MUX::HorizontalAlignment::Center);
+
+    MUX::Thickness margin{};
+    margin.Left = margin.Right = margins.x;
+    margin.Top = margin.Bottom = margins.y;
+    if ( withGap )
+    {
+        switch ( pos )
+        {
+            case wxLEFT:   margin.Right  += gap; break;
+            case wxRIGHT:  margin.Left   += gap; break;
+            case wxTOP:    margin.Bottom += gap; break;
+            case wxBOTTOM: margin.Top    += gap; break;
+            default: break;
+        }
+    }
+    image.Margin(margin);
+    return image;
+}
+
+// Build the UAC shield image shown for SetAuthNeeded().
+MUXC::Image wxWinUIMakeAuthImage(const wxBitmap& bmp, bool withGap, double gap)
+{
+    MUXC::Image image;
+    image.Source(wxWinUIWriteableBitmapFromBitmap(bmp));
+    const wxSize dip = bmp.GetDIPSize();
+    image.Width(static_cast<double>(dip.x));
+    image.Height(static_cast<double>(dip.y));
+    image.VerticalAlignment(MUX::VerticalAlignment::Center);
+    image.HorizontalAlignment(MUX::HorizontalAlignment::Center);
+    if ( withGap )
+    {
+        MUX::Thickness margin{};
+        margin.Right = gap;
+        image.Margin(margin);
+    }
+    return image;
+}
+
+// Build the command-link content (a leading icon/shield plus a bold title and
+// an optional dimmed note), used when the label contains an embedded newline.
+MUXC::Grid wxWinUIMakeCommandLink(wxWindow *win,
+                                  const wxString& title,
+                                  const wxString& note,
+                                  const wxBitmap& authBitmap,
+                                  bool useFg,
+                                  const wxColour& fg)
+{
+    MUXC::Grid grid;
+    grid.VerticalAlignment(MUX::VerticalAlignment::Center);
+    grid.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
+    grid.MinWidth(0);
+    grid.MinHeight(0);
+
+    MUXC::ColumnDefinition iconCol;
+    iconCol.Width(MUX::GridLengthHelper::Auto());
+    grid.ColumnDefinitions().Append(iconCol);
+
+    MUXC::ColumnDefinition textCol;
+    textCol.Width(MUX::GridLengthHelper::FromValueAndType(1, MUX::GridUnitType::Star));
+    grid.ColumnDefinitions().Append(textCol);
+
+    MUX::FrameworkElement leading{ nullptr };
+    if ( authBitmap.IsOk() )
+    {
+        MUXC::Image authImage;
+        authImage.Source(wxWinUIWriteableBitmapFromBitmap(authBitmap));
+        const wxSize dip = authBitmap.GetDIPSize();
+        authImage.Width(static_cast<double>(dip.x));
+        authImage.Height(static_cast<double>(dip.y));
+        leading = authImage;
+    }
+    else
+    {
+        MUXC::FontIcon arrow;
+        arrow.Glyph(L"\xE72A");
+        arrow.FontSize(win->FromDIP(13));
+        leading = arrow;
+    }
+
+    leading.Width(win->FromDIP(16));
+    leading.Height(win->FromDIP(16));
+    leading.VerticalAlignment(MUX::VerticalAlignment::Top);
+    leading.HorizontalAlignment(MUX::HorizontalAlignment::Center);
+    MUX::Thickness iconMargin{};
+    iconMargin.Right = win->FromDIP(4);
+    leading.Margin(iconMargin);
+    MUXC::Grid::SetColumn(leading, 0);
+    grid.Children().Append(leading);
+
+    MUXC::StackPanel textPanel;
+    textPanel.Orientation(MUXC::Orientation::Vertical);
+    textPanel.VerticalAlignment(MUX::VerticalAlignment::Top);
+
+    MUXC::TextBlock titleBlock;
+    titleBlock.Text(wxWinUIToHString(title));
+    titleBlock.TextWrapping(MUX::TextWrapping::NoWrap);
+    titleBlock.FontWeight(winrt::Microsoft::UI::Text::FontWeights::SemiBold());
+    if ( useFg )
+        titleBlock.Foreground(wxWinUIBrushFromColour(fg));
+    textPanel.Children().Append(titleBlock);
+
+    if ( !note.empty() )
+    {
+        MUXC::TextBlock noteBlock;
+        noteBlock.Text(wxWinUIToHString(note));
+        noteBlock.TextWrapping(MUX::TextWrapping::NoWrap);
+        noteBlock.FontSize(wxMax(1.0, wxWinUIGetFontSize(win->GetFont()) - 2.0));
+        noteBlock.Opacity(0.75);
+        if ( useFg )
+            noteBlock.Foreground(wxWinUIBrushFromColour(fg));
+        textPanel.Children().Append(noteBlock);
+    }
+
+    MUXC::Grid::SetColumn(textPanel, 1);
+    grid.Children().Append(textPanel);
+    return grid;
+}
+
 } // namespace
+
+// ----------------------------------------------------------------------------
+// wxWinUIButtonImpl
+// ----------------------------------------------------------------------------
 
 class wxWinUIButtonImpl
 {
@@ -244,20 +441,28 @@ public:
     wxWinUIControlHost host;
     MUXC::Button button{ nullptr };
     winrt::event_token clickToken{};
+
+    // The handlers below are attached lazily (EnsureStateHandlers) and only
+    // exist to swap per-state bitmaps for wxBitmapButton.  A plain button never
+    // pays for them: the WinUI Button already renders its own visual states.
     winrt::event_token pointerEnteredToken{};
     winrt::event_token pointerExitedToken{};
-    winrt::event_token pointerPressedToken{};
-    winrt::event_token pointerReleasedToken{};
     winrt::event_token pointerCaptureLostToken{};
     winrt::event_token gotFocusToken{};
     winrt::event_token lostFocusToken{};
     MUX::Input::PointerEventHandler routedPointerPressed{ nullptr };
     MUX::Input::PointerEventHandler routedPointerReleased{ nullptr };
+
+    bool stateHandlersAttached = false;
     bool hovered = false;
     bool pressed = false;
     bool focused = false;
     bool destroying = false;
 };
+
+// ----------------------------------------------------------------------------
+// construction / destruction
+// ----------------------------------------------------------------------------
 
 wxButton::wxButton()
     : m_bitmapMargins(0, 0),
@@ -284,11 +489,6 @@ wxButton::~wxButton()
     if ( !m_winui )
         return;
 
-    wxWinUIDebugLog("wxButton::~wxButton enter this=%p hwnd=%p impl=%p",
-                    static_cast<void *>(this),
-                    reinterpret_cast<void *>(GetHWND()),
-                    static_cast<void *>(m_winui.get()));
-
     m_winui->destroying = true;
 
     try
@@ -297,20 +497,28 @@ wxButton::~wxButton()
         {
             if ( m_winui->clickToken.value )
                 m_winui->button.Click(m_winui->clickToken);
-            if ( m_winui->pointerEnteredToken.value )
-                m_winui->button.PointerEntered(m_winui->pointerEnteredToken);
-            if ( m_winui->pointerExitedToken.value )
-                m_winui->button.PointerExited(m_winui->pointerExitedToken);
-            if ( m_winui->pointerPressedToken.value )
-                m_winui->button.PointerPressed(m_winui->pointerPressedToken);
-            if ( m_winui->pointerReleasedToken.value )
-                m_winui->button.PointerReleased(m_winui->pointerReleasedToken);
-            if ( m_winui->pointerCaptureLostToken.value )
-                m_winui->button.PointerCaptureLost(m_winui->pointerCaptureLostToken);
-            if ( m_winui->gotFocusToken.value )
-                m_winui->button.GotFocus(m_winui->gotFocusToken);
-            if ( m_winui->lostFocusToken.value )
-                m_winui->button.LostFocus(m_winui->lostFocusToken);
+
+            if ( m_winui->stateHandlersAttached )
+            {
+                if ( m_winui->pointerEnteredToken.value )
+                    m_winui->button.PointerEntered(m_winui->pointerEnteredToken);
+                if ( m_winui->pointerExitedToken.value )
+                    m_winui->button.PointerExited(m_winui->pointerExitedToken);
+                if ( m_winui->pointerCaptureLostToken.value )
+                    m_winui->button.PointerCaptureLost(m_winui->pointerCaptureLostToken);
+                if ( m_winui->gotFocusToken.value )
+                    m_winui->button.GotFocus(m_winui->gotFocusToken);
+                if ( m_winui->lostFocusToken.value )
+                    m_winui->button.LostFocus(m_winui->lostFocusToken);
+                if ( m_winui->routedPointerPressed )
+                    m_winui->button.RemoveHandler(
+                        MUX::UIElement::PointerPressedEvent(),
+                        winrt::box_value(m_winui->routedPointerPressed));
+                if ( m_winui->routedPointerReleased )
+                    m_winui->button.RemoveHandler(
+                        MUX::UIElement::PointerReleasedEvent(),
+                        winrt::box_value(m_winui->routedPointerReleased));
+            }
 
             m_winui->button.Content(
                 winrt::Windows::Foundation::IInspectable{ nullptr });
@@ -318,15 +526,11 @@ wxButton::~wxButton()
     }
     catch ( const winrt::hresult_error& e )
     {
-        wxWinUILogException("WinUI Button event cleanup", e);
+        wxWinUILogException("WinUI Button cleanup", e);
     }
 
     m_winui->host.Close();
-    wxWinUIDebugLog("wxButton::~wxButton after host.Close this=%p",
-                    static_cast<void *>(this));
     m_winui.reset();
-    wxWinUIDebugLog("wxButton::~wxButton leave this=%p",
-                    static_cast<void *>(this));
 }
 
 bool wxButton::Create(wxWindow *parent,
@@ -367,108 +571,10 @@ bool wxButton::Create(wxWindow *parent,
 
                 SendClickEvent();
             });
-        m_winui->pointerEnteredToken = m_winui->button.PointerEntered(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::Input::PointerRoutedEventArgs const&)
-            {
-                if ( !m_winui || m_winui->destroying )
-                    return;
-
-                m_winui->hovered = true;
-                UpdateWinUIContent();
-            });
-        m_winui->pointerExitedToken = m_winui->button.PointerExited(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::Input::PointerRoutedEventArgs const&)
-            {
-                if ( !m_winui || m_winui->destroying )
-                    return;
-
-                m_winui->hovered = false;
-                m_winui->pressed = false;
-                UpdateWinUIContent();
-            });
-        m_winui->pointerPressedToken = m_winui->button.PointerPressed(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::Input::PointerRoutedEventArgs const&)
-            {
-                if ( !m_winui || m_winui->destroying )
-                    return;
-
-                m_winui->pressed = true;
-                UpdateWinUIContent();
-            });
-        m_winui->pointerReleasedToken = m_winui->button.PointerReleased(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::Input::PointerRoutedEventArgs const&)
-            {
-                if ( !m_winui || m_winui->destroying )
-                    return;
-
-                m_winui->pressed = false;
-                UpdateWinUIContent();
-            });
-        m_winui->pointerCaptureLostToken = m_winui->button.PointerCaptureLost(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::Input::PointerRoutedEventArgs const&)
-            {
-                if ( !m_winui || m_winui->destroying )
-                    return;
-
-                m_winui->pressed = false;
-                UpdateWinUIContent();
-            });
-        m_winui->routedPointerPressed =
-            MUX::Input::PointerEventHandler(
-                [this](winrt::Windows::Foundation::IInspectable const&,
-                       MUX::Input::PointerRoutedEventArgs const&)
-                {
-                    if ( !m_winui || m_winui->destroying )
-                        return;
-
-                    m_winui->pressed = true;
-                    UpdateWinUIContent();
-                });
-        m_winui->routedPointerReleased =
-            MUX::Input::PointerEventHandler(
-                [this](winrt::Windows::Foundation::IInspectable const&,
-                       MUX::Input::PointerRoutedEventArgs const&)
-                {
-                    if ( !m_winui || m_winui->destroying )
-                        return;
-
-                    m_winui->pressed = false;
-                    UpdateWinUIContent();
-                });
-        m_winui->button.AddHandler(MUX::UIElement::PointerPressedEvent(),
-                                   winrt::box_value(m_winui->routedPointerPressed),
-                                   true);
-        m_winui->button.AddHandler(MUX::UIElement::PointerReleasedEvent(),
-                                   winrt::box_value(m_winui->routedPointerReleased),
-                                   true);
-        m_winui->gotFocusToken = m_winui->button.GotFocus(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::RoutedEventArgs const&)
-            {
-                if ( !m_winui || m_winui->destroying )
-                    return;
-
-                m_winui->focused = true;
-                UpdateWinUIContent();
-            });
-        m_winui->lostFocusToken = m_winui->button.LostFocus(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::RoutedEventArgs const&)
-            {
-                if ( !m_winui || m_winui->destroying )
-                    return;
-
-                m_winui->focused = false;
-                UpdateWinUIContent();
-            });
 
         UpdateWinUIContent();
         UpdateWinUIAppearance();
+        ApplyToolTip();
         m_winui->host.SetContent(m_winui->button);
     }
     catch ( const winrt::hresult_error& e )
@@ -481,6 +587,10 @@ bool wxButton::Create(wxWindow *parent,
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// public API
+// ----------------------------------------------------------------------------
 
 void wxButton::SetLabel(const wxString& label)
 {
@@ -496,6 +606,18 @@ void wxButton::SetLabel(const wxString& label)
         GetParent()->Layout();
     else
         SetSize(GetBestSize());
+}
+
+wxWindow *wxButton::SetDefault()
+{
+    wxWindow * const winOldDefault = wxButtonBase::SetDefault();
+
+    if ( wxButton * const oldButton = wxDynamicCast(winOldDefault, wxButton) )
+        oldButton->ApplyDefaultStyle(false);
+
+    ApplyDefaultStyle(true);
+
+    return winOldDefault;
 }
 
 void wxButton::Command(wxCommandEvent& event)
@@ -554,114 +676,14 @@ void wxButton::DoEnable(bool enable)
     if ( m_winui && m_winui->button )
     {
         m_winui->button.IsEnabled(enable);
+        // The current bitmap may depend on the enabled state (State_Disabled).
         UpdateWinUIContent();
     }
 }
 
-wxSize wxButton::DoGetBestSize() const
-{
-    const wxSize defaultSize = GetDefaultSize(const_cast<wxButton *>(this));
-    const wxString label = GetLabel();
-
-    if ( !DontShowLabel() && label.Find('\n') != wxNOT_FOUND )
-    {
-        const wxString title = wxControl::GetLabelText(label.BeforeFirst('\n'));
-        const wxString note = wxControl::GetLabelText(label.AfterFirst('\n'));
-
-        const wxSize titleSize = GetTextExtent(title);
-        const wxSize noteSize = note.empty() ? wxSize(0, 0) : GetTextExtent(note);
-
-        wxSize best;
-        best.x = wxMax(titleSize.x, noteSize.x) + FromDIP(8 + 16 + 4 + 10);
-        best.y = titleSize.y + noteSize.y + FromDIP(10);
-
-        if ( !HasFlag(wxBU_EXACTFIT) )
-            best.IncTo(wxSize(defaultSize.x + FromDIP(40), FromDIP(40)));
-
-        return best;
-    }
-
-    const wxString text = DontShowLabel()
-                              ? wxString()
-                              : wxControl::GetLabelText(label);
-    const wxBitmap bitmap = GetBitmapForState(State_Normal);
-
-    if ( text.empty() && !bitmap.IsOk() && !m_authNeeded )
-        return defaultSize;
-
-    // Measure the label with the actual WinUI font (wxGetTextExtent uses the
-    // classic GDI font, which is narrower and would clip the text), then add
-    // the WinUI Button content padding around it.
-    wxSize textSize(0, 0);
-    if ( !text.empty() )
-    {
-        try
-        {
-            const float inf = std::numeric_limits<float>::infinity();
-            MUXC::TextBlock probe;
-            probe.Text(wxWinUIToHString(text));
-            wxWinUIApplyFont(probe, GetFont());
-            probe.Measure({ inf, inf });
-            const auto desired = probe.DesiredSize();
-            textSize.x = static_cast<int>(std::ceil(desired.Width));
-            textSize.y = static_cast<int>(std::ceil(desired.Height));
-        }
-        catch ( const winrt::hresult_error& )
-        {
-            textSize = GetTextExtent(text);
-        }
-    }
-
-    wxSize imageSize(0, 0);
-    if ( bitmap.IsOk() )
-    {
-        imageSize = bitmap.GetDIPSize();
-        imageSize.x += 2 * m_bitmapMargins.x;
-        imageSize.y += 2 * m_bitmapMargins.y;
-    }
-
-    const int gap = text.empty() || !bitmap.IsOk() ? 0 : FromDIP(6);
-    wxSize best(0, 0);
-
-    if ( bitmap.IsOk() && !text.empty() )
-    {
-        if ( m_bitmapPosition == wxTOP || m_bitmapPosition == wxBOTTOM )
-        {
-            best.x = wxMax(textSize.x, imageSize.x);
-            best.y = textSize.y + imageSize.y + gap;
-        }
-        else
-        {
-            best.x = textSize.x + imageSize.x + gap;
-            best.y = wxMax(textSize.y, imageSize.y);
-        }
-    }
-    else if ( bitmap.IsOk() )
-    {
-        best = imageSize;
-    }
-    else
-    {
-        best = textSize;
-    }
-
-    if ( m_authNeeded )
-    {
-        const int authSize = FromDIP(16);
-        if ( best.x > 0 )
-            best.x += FromDIP(6);
-        best.x += authSize;
-        best.y = wxMax(best.y, authSize);
-    }
-
-    best.x += FromDIP(28);
-    best.y += FromDIP(14);
-
-    if ( !HasFlag(wxBU_EXACTFIT) )
-        best.IncTo(defaultSize);
-
-    return best;
-}
+// ----------------------------------------------------------------------------
+// bitmaps / auth / markup
+// ----------------------------------------------------------------------------
 
 wxBitmap wxButton::DoGetBitmap(State which) const
 {
@@ -689,6 +711,10 @@ void wxButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
              !m_bitmaps[State_Current].IsOk() )
             m_bitmaps[State_Current] = bitmap;
     }
+
+    // Attach the pointer/focus handlers now if we just gained an interactive
+    // per-state bitmap that we need to react to.
+    EnsureStateHandlers();
 
     InvalidateBestSize();
     UpdateWinUIContent();
@@ -745,27 +771,121 @@ bool wxButton::DoSetLabelMarkup(const wxString& markup)
 void wxButton::DoSetToolTipText(const wxString& tip)
 {
     m_tooltipText = tip;
-    wxWinUIDebugLog("wxButton::DoSetToolTipText enter this=%p hwnd=%p tipLen=%lu",
-                    static_cast<void *>(this),
-                    reinterpret_cast<void *>(GetHWND()),
-                    static_cast<unsigned long>(tip.length()));
-    wxWinUIDebugLog("wxButton::DoSetToolTipText leave this=%p",
-                    static_cast<void *>(this));
+    ApplyToolTip();
 }
 
 void wxButton::DoSetToolTip(wxToolTip *tip)
 {
+    // wxWindowBase::SetToolTip(wxToolTip*) forwards ownership to us without
+    // storing it, so we are responsible for deleting the object.
     m_tooltipText = tip ? tip->GetTip() : wxString();
-    wxWinUIDebugLog("wxButton::DoSetToolTip enter this=%p hwnd=%p tip=%p tipLen=%lu",
-                    static_cast<void *>(this),
-                    reinterpret_cast<void *>(GetHWND()),
-                    static_cast<void *>(tip),
-                    static_cast<unsigned long>(m_tooltipText.length()));
     delete tip;
-    wxWinUIDebugLog("wxButton::DoSetToolTip leave this=%p",
-                    static_cast<void *>(this));
+    ApplyToolTip();
 }
 #endif // wxUSE_TOOLTIPS
+
+// ----------------------------------------------------------------------------
+// sizing
+// ----------------------------------------------------------------------------
+
+wxSize wxButton::DoGetBestSize() const
+{
+    const wxSize defaultSize = GetDefaultSize(const_cast<wxButton *>(this));
+    const wxString label = GetLabel();
+
+    // Command-link buttons stack a bold title above a smaller note.
+    if ( !DontShowLabel() && label.Find('\n') != wxNOT_FOUND )
+    {
+        const wxString title = wxControl::GetLabelText(label.BeforeFirst('\n'));
+        const wxString note = wxControl::GetLabelText(label.AfterFirst('\n'));
+
+        const wxSize titleSize = GetTextExtent(title);
+        const wxSize noteSize = note.empty() ? wxSize(0, 0) : GetTextExtent(note);
+
+        wxSize best;
+        best.x = wxMax(titleSize.x, noteSize.x) + FromDIP(8 + 16 + 4 + 10);
+        best.y = titleSize.y + noteSize.y + FromDIP(10);
+
+        if ( !HasFlag(wxBU_EXACTFIT) )
+            best.IncTo(wxSize(defaultSize.x + FromDIP(40), FromDIP(40)));
+
+        return best;
+    }
+
+    const wxString text = DontShowLabel()
+                              ? wxString()
+                              : wxControl::GetLabelText(label);
+    const wxBitmap bitmap = GetBitmapForState(State_Normal);
+
+    if ( text.empty() && !bitmap.IsOk() && !m_authNeeded )
+        return defaultSize;
+
+    const wxSize textSize = text.empty()
+        ? wxSize(0, 0)
+        : wxWinUIMeasureText(this, text, m_hasFont ? GetFont() : wxFont());
+
+    wxSize imageSize(0, 0);
+    if ( bitmap.IsOk() )
+    {
+        imageSize = bitmap.GetDIPSize();
+        imageSize.x += 2 * m_bitmapMargins.x;
+        imageSize.y += 2 * m_bitmapMargins.y;
+    }
+
+    const int gap = text.empty() || !bitmap.IsOk() ? 0 : FromDIP(6);
+    wxSize best(0, 0);
+
+    if ( bitmap.IsOk() && !text.empty() )
+    {
+        if ( m_bitmapPosition == wxTOP || m_bitmapPosition == wxBOTTOM )
+        {
+            best.x = wxMax(textSize.x, imageSize.x);
+            best.y = textSize.y + imageSize.y + gap;
+        }
+        else
+        {
+            best.x = textSize.x + imageSize.x + gap;
+            best.y = wxMax(textSize.y, imageSize.y);
+        }
+    }
+    else if ( bitmap.IsOk() )
+    {
+        best = imageSize;
+    }
+    else
+    {
+        best = textSize;
+    }
+
+    if ( m_authNeeded )
+    {
+        const int authSize = FromDIP(16);
+        if ( best.x > 0 )
+            best.x += FromDIP(6);
+        best.x += authSize;
+        best.y = wxMax(best.y, authSize);
+    }
+
+    // WinUI Button content padding.
+    best.x += FromDIP(28);
+    best.y += FromDIP(14);
+
+    if ( !HasFlag(wxBU_EXACTFIT) )
+        best.IncTo(defaultSize);
+
+    return best;
+}
+
+// ----------------------------------------------------------------------------
+// per-state bitmaps
+// ----------------------------------------------------------------------------
+
+bool wxButton::HasInteractiveStateBitmap() const
+{
+    return m_bitmaps[State_Current].IsOk()
+        || m_bitmaps[State_Pressed].IsOk()
+        || m_bitmaps[State_Focused].IsOk();
+}
 
 wxBitmap wxButton::GetBitmapForState(State which) const
 {
@@ -783,24 +903,6 @@ wxBitmap wxButton::GetBitmapForState(State which) const
         return wxWinUICreateDisabledBitmap(normal);
 
     return normal;
-}
-
-wxBitmap wxButton::GetAuthBitmap() const
-{
-#ifdef SHGSI_ICON
-    WinStruct<SHSTOCKICONINFO> sii;
-    const HRESULT hr = ::SHGetStockIconInfo(SIID_SHIELD,
-                                            SHGSI_ICON | SHGSI_SMALLICON,
-                                            &sii);
-    if ( hr == S_OK && sii.hIcon )
-    {
-        wxIcon icon;
-        if ( icon.CreateFromHICON(reinterpret_cast<WXHICON>(sii.hIcon)) )
-            return wxBitmap(icon);
-    }
-#endif // SHGSI_ICON
-
-    return wxBitmap();
 }
 
 wxAnyButton::State wxButton::GetCurrentBitmapState() const
@@ -823,112 +925,135 @@ wxAnyButton::State wxButton::GetCurrentBitmapState() const
     return State_Normal;
 }
 
+void wxButton::EnsureStateHandlers()
+{
+    if ( !m_winui || m_winui->destroying || !m_winui->button ||
+         m_winui->stateHandlersAttached || !HasInteractiveStateBitmap() )
+        return;
+
+    auto& impl = *m_winui;
+
+    impl.pointerEnteredToken = impl.button.PointerEntered(
+        [this](winrt::Windows::Foundation::IInspectable const&,
+               MUX::Input::PointerRoutedEventArgs const&)
+        {
+            if ( !m_winui || m_winui->destroying )
+                return;
+            m_winui->hovered = true;
+            UpdateWinUIContent();
+        });
+    impl.pointerExitedToken = impl.button.PointerExited(
+        [this](winrt::Windows::Foundation::IInspectable const&,
+               MUX::Input::PointerRoutedEventArgs const&)
+        {
+            if ( !m_winui || m_winui->destroying )
+                return;
+            m_winui->hovered = false;
+            m_winui->pressed = false;
+            UpdateWinUIContent();
+        });
+    impl.pointerCaptureLostToken = impl.button.PointerCaptureLost(
+        [this](winrt::Windows::Foundation::IInspectable const&,
+               MUX::Input::PointerRoutedEventArgs const&)
+        {
+            if ( !m_winui || m_winui->destroying )
+                return;
+            m_winui->pressed = false;
+            UpdateWinUIContent();
+        });
+    impl.gotFocusToken = impl.button.GotFocus(
+        [this](winrt::Windows::Foundation::IInspectable const&,
+               MUX::RoutedEventArgs const&)
+        {
+            if ( !m_winui || m_winui->destroying )
+                return;
+            m_winui->focused = true;
+            UpdateWinUIContent();
+        });
+    impl.lostFocusToken = impl.button.LostFocus(
+        [this](winrt::Windows::Foundation::IInspectable const&,
+               MUX::RoutedEventArgs const&)
+        {
+            if ( !m_winui || m_winui->destroying )
+                return;
+            m_winui->focused = false;
+            UpdateWinUIContent();
+        });
+
+    // The Button marks PointerPressed/Released as handled, so the normal
+    // events would not fire; register with handledEventsToo = true.
+    impl.routedPointerPressed = MUX::Input::PointerEventHandler(
+        [this](winrt::Windows::Foundation::IInspectable const&,
+               MUX::Input::PointerRoutedEventArgs const&)
+        {
+            if ( !m_winui || m_winui->destroying )
+                return;
+            m_winui->pressed = true;
+            UpdateWinUIContent();
+        });
+    impl.routedPointerReleased = MUX::Input::PointerEventHandler(
+        [this](winrt::Windows::Foundation::IInspectable const&,
+               MUX::Input::PointerRoutedEventArgs const&)
+        {
+            if ( !m_winui || m_winui->destroying )
+                return;
+            m_winui->pressed = false;
+            UpdateWinUIContent();
+        });
+    impl.button.AddHandler(MUX::UIElement::PointerPressedEvent(),
+                           winrt::box_value(impl.routedPointerPressed), true);
+    impl.button.AddHandler(MUX::UIElement::PointerReleasedEvent(),
+                           winrt::box_value(impl.routedPointerReleased), true);
+
+    impl.stateHandlersAttached = true;
+}
+
+// ----------------------------------------------------------------------------
+// content
+// ----------------------------------------------------------------------------
+
 void wxButton::UpdateWinUIContent()
 {
     if ( !m_winui || m_winui->destroying || !m_winui->button )
         return;
 
+#if wxUSE_MARKUP
+    const wxString markup = m_markup;
+#else
+    const wxString markup;
+#endif
+
     try
     {
         const wxString label = GetLabel();
-        const wxString text = DontShowLabel()
-                                  ? wxString()
-                                  : wxControl::GetLabelText(label);
-        const bool hasText = !text.empty();
-        const bool commandLinkLabel = label.Find('\n') != wxNOT_FOUND;
-        const wxBitmap bitmap = m_authNeeded && commandLinkLabel
-                                    ? wxBitmap()
-                                    : GetBitmapForState(GetCurrentBitmapState());
-        const wxBitmap authBitmap = m_authNeeded ? GetAuthBitmap() : wxBitmap();
-        const bool hasBitmap = bitmap.IsOk();
-        const bool hasAuthBitmap = authBitmap.IsOk();
+        const bool showLabel = !DontShowLabel();
 
-        if ( commandLinkLabel )
+        // Command-link buttons use a dedicated two-line layout.
+        if ( showLabel && label.Find('\n') != wxNOT_FOUND )
         {
-            MUXC::Grid grid;
-            grid.VerticalAlignment(MUX::VerticalAlignment::Center);
-            grid.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
-            grid.MinWidth(0);
-            grid.MinHeight(0);
-
-            MUXC::ColumnDefinition iconCol;
-            iconCol.Width(MUX::GridLengthHelper::Auto());
-            grid.ColumnDefinitions().Append(iconCol);
-
-            MUXC::ColumnDefinition textCol;
-            textCol.Width(MUX::GridLengthHelper::FromValueAndType(
-                1, MUX::GridUnitType::Star));
-            grid.ColumnDefinitions().Append(textCol);
-
             const wxString title = wxControl::GetLabelText(label.BeforeFirst('\n'));
             const wxString note = wxControl::GetLabelText(label.AfterFirst('\n'));
+            const wxBitmap authBitmap = m_authNeeded ? GetAuthBitmap() : wxBitmap();
 
-            MUX::FrameworkElement leading{ nullptr };
-            if ( hasAuthBitmap )
-            {
-                MUXC::Image authImage;
-                authImage.Source(wxWinUIWriteableBitmapFromBitmap(authBitmap));
-                authImage.Width(static_cast<double>(authBitmap.GetDIPSize().x));
-                authImage.Height(static_cast<double>(authBitmap.GetDIPSize().y));
-                leading = authImage;
-            }
-            else
-            {
-                MUXC::FontIcon arrow;
-                arrow.Glyph(L"\xE72A");
-                arrow.FontSize(FromDIP(13));
-                leading = arrow;
-            }
-
-            leading.Width(FromDIP(16));
-            leading.Height(FromDIP(16));
-            leading.VerticalAlignment(MUX::VerticalAlignment::Top);
-            leading.HorizontalAlignment(MUX::HorizontalAlignment::Center);
-            MUX::Thickness iconMargin{};
-            iconMargin.Top = FromDIP(0);
-            iconMargin.Right = FromDIP(4);
-            leading.Margin(iconMargin);
-            MUXC::Grid::SetColumn(leading, 0);
-            grid.Children().Append(leading);
-
-            MUXC::StackPanel textPanel;
-            textPanel.Orientation(MUXC::Orientation::Vertical);
-            textPanel.VerticalAlignment(MUX::VerticalAlignment::Top);
-
-            MUXC::TextBlock titleBlock;
-            titleBlock.Text(wxWinUIToHString(title));
-            titleBlock.TextWrapping(MUX::TextWrapping::NoWrap);
-            titleBlock.FontWeight(winrt::Microsoft::UI::Text::FontWeights::SemiBold());
-            if ( UseForegroundColour() )
-                titleBlock.Foreground(wxWinUIBrushFromColour(GetForegroundColour()));
-            textPanel.Children().Append(titleBlock);
-
-            if ( !note.empty() )
-            {
-                MUXC::TextBlock noteBlock;
-                noteBlock.Text(wxWinUIToHString(note));
-                noteBlock.TextWrapping(MUX::TextWrapping::NoWrap);
-                noteBlock.FontSize(wxMax(1.0, wxWinUIGetFontSize(GetFont()) - 2.0));
-                noteBlock.Opacity(0.75);
-                if ( UseForegroundColour() )
-                    noteBlock.Foreground(wxWinUIBrushFromColour(GetForegroundColour()));
-                textPanel.Children().Append(noteBlock);
-            }
-
-            MUXC::Grid::SetColumn(textPanel, 1);
-            grid.Children().Append(textPanel);
-
-            m_winui->button.Content(grid);
+            m_winui->button.Content(
+                wxWinUIMakeCommandLink(this, title, note, authBitmap,
+                                       UseForegroundColour(),
+                                       GetForegroundColour()));
             UpdateWinUIAppearance();
             m_winui->host.ForceRender();
             return;
         }
 
-        if ( hasText && !hasBitmap && !m_authNeeded
-#if wxUSE_MARKUP
-             && m_markup.empty()
-#endif // wxUSE_MARKUP
-             && !commandLinkLabel )
+        const wxString text = showLabel ? wxControl::GetLabelText(label)
+                                        : wxString();
+        const bool hasText = !text.empty();
+        const wxBitmap bitmap = GetBitmapForState(GetCurrentBitmapState());
+        const bool hasBitmap = bitmap.IsOk();
+        const wxBitmap authBitmap = m_authNeeded ? GetAuthBitmap() : wxBitmap();
+        const bool hasAuth = authBitmap.IsOk();
+
+        // Fast path: a plain text label with no bitmap, auth icon or markup.
+        if ( hasText && !hasBitmap && !hasAuth && markup.empty() )
         {
             m_winui->button.Content(winrt::box_value(wxWinUIToHString(text)));
             UpdateWinUIAppearance();
@@ -936,143 +1061,63 @@ void wxButton::UpdateWinUIContent()
             return;
         }
 
-        MUXC::TextBlock textBlock{ nullptr };
-        if ( hasText )
+        const double gap = FromDIP(6);
+        const int count = (hasAuth ? 1 : 0) + (hasBitmap ? 1 : 0) +
+                          (hasText ? 1 : 0);
+
+        winrt::Windows::Foundation::IInspectable content{ nullptr };
+
+        if ( count == 1 )
         {
-            textBlock = MUXC::TextBlock();
-            textBlock.VerticalAlignment(MUX::VerticalAlignment::Center);
-            textBlock.HorizontalAlignment(MUX::HorizontalAlignment::Center);
-            if ( commandLinkLabel )
-                textBlock.TextWrapping(MUX::TextWrapping::NoWrap);
-
-            if ( UseForegroundColour() )
-                textBlock.Foreground(wxWinUIBrushFromColour(GetForegroundColour()));
-
-#if wxUSE_MARKUP
-            if ( !m_markup.empty() )
-            {
-                auto inlines = textBlock.Inlines();
-                inlines.Clear();
-
-                wxWinUIButtonMarkupToInlines output(inlines);
-                wxMarkupParser parser(output);
-                parser.Parse(m_markup);
-            }
-            else
-#endif // wxUSE_MARKUP
-            {
-                textBlock.Text(wxWinUIToHString(text));
-            }
-        }
-
-        MUXC::Image image{ nullptr };
-        if ( hasBitmap )
-        {
-            image = MUXC::Image();
-            image.Source(wxWinUIWriteableBitmapFromBitmap(bitmap));
-            image.Width(static_cast<double>(bitmap.GetDIPSize().x));
-            image.Height(static_cast<double>(bitmap.GetDIPSize().y));
-            image.VerticalAlignment(MUX::VerticalAlignment::Center);
-            image.HorizontalAlignment(MUX::HorizontalAlignment::Center);
-
-            MUX::Thickness margin{};
-            margin.Left = m_bitmapMargins.x;
-            margin.Top = m_bitmapMargins.y;
-            margin.Right = m_bitmapMargins.x;
-            margin.Bottom = m_bitmapMargins.y;
-
-            if ( hasText )
-            {
-                const double gap = FromDIP(6);
-                switch ( m_bitmapPosition )
-                {
-                    case wxLEFT:
-                        margin.Right += gap;
-                        break;
-                    case wxRIGHT:
-                        margin.Left += gap;
-                        break;
-                    case wxTOP:
-                        margin.Bottom += gap;
-                        break;
-                    case wxBOTTOM:
-                        margin.Top += gap;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            image.Margin(margin);
-        }
-
-        MUXC::Image authImage{ nullptr };
-        if ( m_authNeeded && hasAuthBitmap )
-        {
-            authImage = MUXC::Image();
-            authImage.Source(wxWinUIWriteableBitmapFromBitmap(authBitmap));
-            authImage.Width(static_cast<double>(authBitmap.GetDIPSize().x));
-            authImage.Height(static_cast<double>(authBitmap.GetDIPSize().y));
-            authImage.VerticalAlignment(MUX::VerticalAlignment::Center);
-            authImage.HorizontalAlignment(MUX::HorizontalAlignment::Center);
-
-            if ( hasText || hasBitmap )
-            {
-                MUX::Thickness margin{};
-                margin.Right = FromDIP(6);
-                authImage.Margin(margin);
-            }
-        }
-
-        const int elementCount = (hasAuthBitmap ? 1 : 0) +
-                                 (hasBitmap ? 1 : 0) +
-                                 (hasText ? 1 : 0);
-
-        if ( elementCount == 0 )
-        {
-            m_winui->button.Content(
-                winrt::Windows::Foundation::IInspectable{ nullptr });
-        }
-        else if ( elementCount == 1 )
-        {
-            if ( hasAuthBitmap )
-                m_winui->button.Content(authImage);
+            if ( hasAuth )
+                content = wxWinUIMakeAuthImage(authBitmap, false, gap);
             else if ( hasBitmap )
-                m_winui->button.Content(image);
+                content = wxWinUIMakeImage(bitmap, m_bitmapMargins,
+                                           m_bitmapPosition, false, gap);
             else
-                m_winui->button.Content(textBlock);
+                content = wxWinUIMakeTextBlock(text, markup,
+                                               UseForegroundColour(),
+                                               GetForegroundColour());
         }
-        else
+        else if ( count > 1 )
         {
             MUXC::StackPanel panel;
-            panel.Orientation(m_bitmapPosition == wxTOP || m_bitmapPosition == wxBOTTOM
+            panel.Orientation(m_bitmapPosition == wxTOP ||
+                              m_bitmapPosition == wxBOTTOM
                                   ? MUXC::Orientation::Vertical
                                   : MUXC::Orientation::Horizontal);
-            panel.VerticalAlignment(wxWinUIGetVerticalAlignment(this));
-            panel.HorizontalAlignment(wxWinUIGetHorizontalAlignment(this));
-
+            panel.VerticalAlignment(MUX::VerticalAlignment::Center);
+            panel.HorizontalAlignment(MUX::HorizontalAlignment::Center);
             auto children = panel.Children();
-            if ( hasAuthBitmap )
-                children.Append(authImage);
+
+            if ( hasAuth )
+                children.Append(
+                    wxWinUIMakeAuthImage(authBitmap, hasText || hasBitmap, gap));
+
+            const MUXC::Image image = hasBitmap
+                ? wxWinUIMakeImage(bitmap, m_bitmapMargins, m_bitmapPosition,
+                                   hasText, gap)
+                : MUXC::Image{ nullptr };
+            const MUXC::TextBlock textBlock = hasText
+                ? wxWinUIMakeTextBlock(text, markup, UseForegroundColour(),
+                                       GetForegroundColour())
+                : MUXC::TextBlock{ nullptr };
 
             if ( m_bitmapPosition == wxRIGHT || m_bitmapPosition == wxBOTTOM )
             {
-                if ( hasText )
-                    children.Append(textBlock);
-                if ( hasBitmap )
-                    children.Append(image);
+                if ( hasText ) children.Append(textBlock);
+                if ( hasBitmap ) children.Append(image);
             }
             else
             {
-                if ( hasBitmap )
-                    children.Append(image);
-                if ( hasText )
-                    children.Append(textBlock);
+                if ( hasBitmap ) children.Append(image);
+                if ( hasText ) children.Append(textBlock);
             }
 
-            m_winui->button.Content(panel);
+            content = panel;
         }
 
+        m_winui->button.Content(content);
         UpdateWinUIAppearance();
     }
     catch ( const winrt::hresult_error& e )
@@ -1104,7 +1149,21 @@ void wxButton::UpdateWinUIAppearance()
         m_winui->button.FlowDirection(wxWinUIGetFlowDirection(GetLayoutDirection()));
         m_winui->button.MinWidth(0.0);
         m_winui->button.MinHeight(0.0);
-        wxWinUIApplyFont(m_winui->button, GetFont());
+
+        // Only override the font when the user explicitly set one: otherwise
+        // keep the WinUI default content font (14px) so our buttons match the
+        // size of stock XAML buttons instead of shrinking to the wx GUI font.
+        if ( m_hasFont )
+        {
+            wxWinUIApplyFont(m_winui->button, GetFont());
+        }
+        else
+        {
+            m_winui->button.ClearValue(MUXC::Control::FontSizeProperty());
+            m_winui->button.ClearValue(MUXC::Control::FontFamilyProperty());
+            m_winui->button.ClearValue(MUXC::Control::FontWeightProperty());
+            m_winui->button.ClearValue(MUXC::Control::FontStyleProperty());
+        }
 
         if ( commandLinkLabel )
         {
@@ -1121,22 +1180,14 @@ void wxButton::UpdateWinUIAppearance()
         }
 
         if ( UseForegroundColour() )
-        {
             m_winui->button.Foreground(wxWinUIBrushFromColour(GetForegroundColour()));
-        }
         else
-        {
             m_winui->button.ClearValue(MUXC::Control::ForegroundProperty());
-        }
 
         if ( UseBackgroundColour() )
-        {
             m_winui->button.Background(wxWinUIBrushFromColour(GetBackgroundColour()));
-        }
         else
-        {
             m_winui->button.ClearValue(MUXC::Control::BackgroundProperty());
-        }
 
         const long border = GetWindowStyleFlag() & wxBORDER_MASK;
         if ( border == wxBORDER_NONE )
@@ -1147,10 +1198,7 @@ void wxButton::UpdateWinUIAppearance()
         else if ( border )
         {
             MUX::Thickness thickness{};
-            thickness.Left = 1;
-            thickness.Top = 1;
-            thickness.Right = 1;
-            thickness.Bottom = 1;
+            thickness.Left = thickness.Top = thickness.Right = thickness.Bottom = 1;
             m_winui->button.BorderThickness(thickness);
         }
         else
@@ -1166,6 +1214,85 @@ void wxButton::UpdateWinUIAppearance()
     }
 
     m_winui->host.ForceRender();
+}
+
+// ----------------------------------------------------------------------------
+// default button (accent) / tooltip / auth shield
+// ----------------------------------------------------------------------------
+
+void wxButton::ApplyDefaultStyle(bool on)
+{
+    m_isDefault = on;
+
+    if ( !m_winui || m_winui->destroying || !m_winui->button )
+        return;
+
+    if ( on )
+    {
+        // Use the standard WinUI accent style for the default button.  The
+        // resource lives in the merged XamlControlsResources dictionary, so we
+        // must use Lookup() (which traverses merged dictionaries) rather than
+        // HasKey() (which does not).  Lookup() throws if the key is genuinely
+        // absent, which we treat as "no accent style available".
+        MUX::Style style{ nullptr };
+        try
+        {
+            auto app = MUX::Application::Current();
+            auto resources = app ? app.Resources()
+                                 : MUX::ResourceDictionary{ nullptr };
+            if ( resources )
+                style = resources
+                    .Lookup(winrt::box_value(winrt::hstring(L"AccentButtonStyle")))
+                    .try_as<MUX::Style>();
+        }
+        catch ( const winrt::hresult_error& )
+        {
+            // AccentButtonStyle not present; leave the button with its default
+            // (non-accent) style.
+        }
+
+        if ( style )
+            m_winui->button.Style(style);
+    }
+    else
+    {
+        try
+        {
+            m_winui->button.ClearValue(MUX::FrameworkElement::StyleProperty());
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("WinUI Button default style", e);
+        }
+    }
+
+    m_winui->host.ForceRender();
+}
+
+void wxButton::ApplyToolTip()
+{
+#if wxUSE_TOOLTIPS
+    if ( m_winui && !m_winui->destroying && m_winui->button )
+        wxWinUISetToolTip(m_winui->button, m_tooltipText);
+#endif // wxUSE_TOOLTIPS
+}
+
+wxBitmap wxButton::GetAuthBitmap() const
+{
+#ifdef SHGSI_ICON
+    WinStruct<SHSTOCKICONINFO> sii;
+    const HRESULT hr = ::SHGetStockIconInfo(SIID_SHIELD,
+                                            SHGSI_ICON | SHGSI_SMALLICON,
+                                            &sii);
+    if ( hr == S_OK && sii.hIcon )
+    {
+        wxIcon icon;
+        if ( icon.CreateFromHICON(reinterpret_cast<WXHICON>(sii.hIcon)) )
+            return wxBitmap(icon);
+    }
+#endif // SHGSI_ICON
+
+    return wxBitmap();
 }
 
 wxSize wxButtonBase::GetDefaultSize(wxWindow *win)

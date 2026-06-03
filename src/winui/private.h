@@ -107,6 +107,12 @@ class wxBitmap;
 winrt::Microsoft::UI::Xaml::Media::Imaging::WriteableBitmap
 wxWinUIWriteableBitmapFromBitmap(const wxBitmap& bitmap);
 
+// Set (or clear, when tip is empty) a WinUI tooltip on a hosted XAML element.
+// Shared by the wxWinUI controls so that wxWindow::SetToolTip() actually shows
+// a tooltip over the XAML island instead of being silently dropped.
+void wxWinUISetToolTip(const winrt::Microsoft::UI::Xaml::UIElement& element,
+                       const wxString& tip);
+
 inline winrt::Microsoft::UI::Xaml::Media::SolidColorBrush
 wxWinUIBrush(unsigned char red,
              unsigned char green,

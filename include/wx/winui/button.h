@@ -40,6 +40,7 @@ public:
                 const wxString& name = wxASCII_STR(wxButtonNameStr));
 
     void SetLabel(const wxString& label) override;
+    wxWindow *SetDefault() override;
     void Command(wxCommandEvent& event) override;
     bool Show(bool show = true) override;
     bool SetBackgroundColour(const wxColour& colour) override;
@@ -69,6 +70,13 @@ protected:
 private:
     void UpdateWinUIContent();
     void UpdateWinUIAppearance();
+    void ApplyToolTip();
+    // Apply or clear the WinUI "Accent" button style used for the default button.
+    void ApplyDefaultStyle(bool on);
+    // Lazily attach the pointer/focus handlers needed to swap per-state bitmaps;
+    // only done when an interactive-state bitmap (current/pressed/focused) is set.
+    void EnsureStateHandlers();
+    bool HasInteractiveStateBitmap() const;
     wxBitmap GetBitmapForState(State which) const;
     State GetCurrentBitmapState() const;
     wxBitmap GetAuthBitmap() const;
@@ -78,6 +86,7 @@ private:
     wxSize m_bitmapMargins;
     wxDirection m_bitmapPosition;
     bool m_authNeeded;
+    bool m_isDefault = false;
 #if wxUSE_MARKUP
     wxString m_markup;
 #endif // wxUSE_MARKUP

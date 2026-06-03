@@ -342,6 +342,27 @@ wxWinUIWriteableBitmapFromBitmap(const wxBitmap& bitmap)
     return wb;
 }
 
+void wxWinUISetToolTip(const winrt::Microsoft::UI::Xaml::UIElement& element,
+                       const wxString& tip)
+{
+    if ( !element )
+        return;
+
+    try
+    {
+        namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+        if ( tip.empty() )
+            MUXC::ToolTipService::SetToolTip(element, nullptr);
+        else
+            MUXC::ToolTipService::SetToolTip(
+                element, winrt::box_value(wxWinUIToHString(tip)));
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI tooltip", e);
+    }
+}
+
 winrt::Microsoft::UI::Xaml::ElementTheme wxWinUIGetCurrentElementTheme()
 {
     return gs_winuiElementTheme;
