@@ -173,6 +173,13 @@ private:
                        wxWinUITreeItem *oldItem = nullptr);
     bool ChangeSelection(wxWinUITreeItem *item, bool sendEvent, bool updatePeer);
     void ApplySelectionToPeer();
+    // Push the current selection back to the WinUI TreeView, but deferred to
+    // the dispatcher queue.  This is required when a selection change is
+    // rejected (e.g. a wxTreebook category page that has no associated page):
+    // the TreeView ignores a SelectedNode write made synchronously from inside
+    // its own SelectionChanged callback, so the correction has to run once the
+    // control's selection transaction has completed.
+    void SchedulePeerSelectionCorrection();
     void UpdatePeerItem(wxWinUITreeItem *item);
     void RefreshPeerItems();
     void OnPeerSelectionChanged();
@@ -182,6 +189,18 @@ private:
     std::unique_ptr<wxWinUITreeCtrlImpl> m_winui;
     unsigned int m_indent = 16;
     bool m_updatingPeer = false;
+
+    // Set while we are handling a SelectionChanged notification coming from the
+    // WinUI TreeView: in this state a peer-selection write must be deferred (see
+    // SchedulePeerSelectionCorrection).
+    bool m_inPeerSelectionChange = false;
+    // True while a deferred selection correction is queued: incoming peer
+    // selection changes are ignored until it runs, to avoid an event storm.
+    bool m_peerCorrectionPending = false;
+    // The item whose selection the application refused; if the control keeps
+    // trying to select it we just push the real selection back without
+    // re-dispatching the (rejected) selection event.
+    wxWinUITreeItem *m_peerRejectedItem = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);

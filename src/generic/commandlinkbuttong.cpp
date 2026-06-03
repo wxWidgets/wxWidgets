@@ -106,7 +106,9 @@ bool wxGenericCommandLinkButton::Create(wxWindow *parent,
 
 void wxGenericCommandLinkButton::SetDefaultBitmap()
 {
+#if !defined(__WXWINUI__)
     SetBitmap(wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_BUTTON));
+#endif
 }
 
 #endif // wxUSE_COMMANDLINKBUTTON

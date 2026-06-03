@@ -91,6 +91,7 @@ protected:
                   const wxString& name);
     void RebuildItems();
     void SendSelectionEvent();
+    int FindSelectedItem() const;
 
     std::unique_ptr<wxWinUIRadioBoxImpl> m_winui;
     wxArrayString m_strings;

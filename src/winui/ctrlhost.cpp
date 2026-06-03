@@ -31,6 +31,8 @@
 #include <winrt/Windows.Storage.Streams.h>
 
 #include <algorithm>
+#include <cstdarg>
+#include <cstring>
 #include <set>
 #include <vector>
 
@@ -202,6 +204,57 @@ void wxWinUILogException(const char *what, const winrt::hresult_error& e)
                  wxString(e.message().c_str()));
 }
 
+void wxWinUIDebugLog(const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    const wxString message = wxString::FormatV(wxString::FromAscii(format),
+                                               argptr);
+    va_end(argptr);
+
+    const wxString line = wxString::Format(
+        "[%llu pid=%lu tid=%lu] %s\r\n",
+        static_cast<unsigned long long>(::GetTickCount64()),
+        static_cast<unsigned long>(::GetCurrentProcessId()),
+        static_cast<unsigned long>(::GetCurrentThreadId()),
+        message.c_str());
+
+    ::OutputDebugString(line.t_str());
+
+    wchar_t tempPath[MAX_PATH];
+    const DWORD len = ::GetTempPathW(WXSIZEOF(tempPath), tempPath);
+    if ( !len || len >= WXSIZEOF(tempPath) )
+        return;
+
+    wxString filename(tempPath);
+    filename += wxS("wxwinui-tooltip.log");
+
+    HANDLE file = ::CreateFile(filename.t_str(),
+                               FILE_APPEND_DATA,
+                               FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                               nullptr,
+                               OPEN_ALWAYS,
+                               FILE_ATTRIBUTE_NORMAL,
+                               nullptr);
+    if ( file == INVALID_HANDLE_VALUE )
+        return;
+
+    const wxCharBuffer utf8 = line.utf8_str();
+    const char *data = utf8.data();
+    if ( data )
+    {
+        DWORD written = 0;
+        ::WriteFile(file,
+                    data,
+                    static_cast<DWORD>(std::strlen(data)),
+                    &written,
+                    nullptr);
+        ::FlushFileBuffers(file);
+    }
+
+    ::CloseHandle(file);
+}
+
 winrt::hstring wxWinUIToHString(const wxString& str)
 {
     return winrt::hstring(str.ToStdWstring());
@@ -210,6 +263,24 @@ winrt::hstring wxWinUIToHString(const wxString& str)
 wxString wxWinUIFromHString(const winrt::hstring& str)
 {
     return wxString(str.c_str());
+}
+
+bool wxWinUIIsHostWindow(wxWindow *win)
+{
+    if ( !win )
+        return false;
+
+    const HWND hwnd = static_cast<HWND>(win->GetHWND());
+    if ( !hwnd )
+        return false;
+
+    for ( wxWinUIControlHost *host : gs_winuiHosts )
+    {
+        if ( host->GetHostHWND() == hwnd )
+            return true;
+    }
+
+    return false;
 }
 
 namespace
@@ -233,6 +304,13 @@ wxWinUIWriteableBitmapFromBitmap(const wxBitmap& bitmap)
     wxImage image = bitmap.ConvertToImage();
     if ( !image.IsOk() )
         return nullptr;
+
+    // Many icons (e.g. from wxArtProvider) carry a colour mask rather than a
+    // real alpha channel; without this the masked (transparent) areas would
+    // render as opaque black.  Convert the mask to alpha so they composite
+    // transparently.
+    if ( !image.HasAlpha() && image.HasMask() )
+        image.InitAlpha();
 
     const int w = image.GetWidth();
     const int h = image.GetHeight();
@@ -276,7 +354,14 @@ bool wxWinUIIsDarkTheme()
 
 wxWinUIControlHost::~wxWinUIControlHost()
 {
+    wxWinUIDebugLog("wxWinUIControlHost::~ enter this=%p host=%p bridge=%p source=%d",
+                    static_cast<void *>(this),
+                    static_cast<void *>(m_hostHwnd),
+                    static_cast<void *>(m_bridgeHwnd),
+                    m_source ? 1 : 0);
     Close();
+    wxWinUIDebugLog("wxWinUIControlHost::~ leave this=%p",
+                    static_cast<void *>(this));
 }
 
 bool wxWinUIControlHost::Initialize(wxWindow *window)
@@ -352,6 +437,12 @@ bool wxWinUIControlHost::Initialize(wxWindow *window)
 
 void wxWinUIControlHost::Close()
 {
+    wxWinUIDebugLog("wxWinUIControlHost::Close enter this=%p window=%p host=%p bridge=%p source=%d",
+                    static_cast<void *>(this),
+                    static_cast<void *>(m_window),
+                    static_cast<void *>(m_hostHwnd),
+                    static_cast<void *>(m_bridgeHwnd),
+                    m_source ? 1 : 0);
     gs_winuiHosts.erase(
         std::remove(gs_winuiHosts.begin(), gs_winuiHosts.end(), this),
         gs_winuiHosts.end());
@@ -367,7 +458,11 @@ void wxWinUIControlHost::Close()
     m_content = nullptr;
 
     if ( !m_source )
+    {
+        wxWinUIDebugLog("wxWinUIControlHost::Close no source this=%p",
+                        static_cast<void *>(this));
         return;
+    }
 
     try
     {
@@ -380,7 +475,11 @@ void wxWinUIControlHost::Close()
         // Avoid clearing Content explicitly here: doing this while another
         // XAML island is dispatching an event can crash inside
         // Microsoft.UI.Xaml.dll. Closing the source releases its content.
+        wxWinUIDebugLog("wxWinUIControlHost::Close before source.Close this=%p",
+                        static_cast<void *>(this));
         m_source.Close();
+        wxWinUIDebugLog("wxWinUIControlHost::Close after source.Close this=%p",
+                        static_cast<void *>(this));
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -388,6 +487,8 @@ void wxWinUIControlHost::Close()
     }
 
     m_source = nullptr;
+    wxWinUIDebugLog("wxWinUIControlHost::Close leave this=%p",
+                    static_cast<void *>(this));
 }
 
 void wxWinUIControlHost::SetContent(const winrt::Microsoft::UI::Xaml::UIElement& element)

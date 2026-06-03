@@ -51,6 +51,7 @@ private:
 
     std::unique_ptr<wxWinUIStaticTextImpl> m_winui;
     wxString m_visibleLabel;
+    wxString m_markup;          // non-empty when the label is set as markup
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText);
 };

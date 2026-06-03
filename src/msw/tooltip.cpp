@@ -35,6 +35,13 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/winui.h"
+    #define wxMSWWinUITooltipLog(...) wxWinUIDebugLog(__VA_ARGS__)
+#else
+    #define wxMSWWinUITooltipLog(...) ((void)0)
+#endif
+
 #ifndef TTTOOLINFO_V1_SIZE
     #define TTTOOLINFO_V1_SIZE 0x28
 #endif
@@ -296,6 +303,8 @@ void wxToolTip::DeleteToolTipCtrl()
 /* static */
 WXHWND wxToolTip::GetToolTipCtrl()
 {
+    wxMSWWinUITooltipLog("wxToolTip::GetToolTipCtrl enter existing=%p",
+                         static_cast<void *>(ms_hwndTT));
     if ( !ms_hwndTT )
     {
         WXDWORD exflags = 0;
@@ -313,8 +322,10 @@ WXHWND wxToolTip::GetToolTipCtrl()
                                              CW_USEDEFAULT, CW_USEDEFAULT,
                                              CW_USEDEFAULT, CW_USEDEFAULT,
                                              nullptr, nullptr,
-                                             wxGetInstance(),
-                                             nullptr);
+                                              wxGetInstance(),
+                                              nullptr);
+        wxMSWWinUITooltipLog("wxToolTip::GetToolTipCtrl CreateWindowEx result=%p",
+                             static_cast<void *>(ms_hwndTT));
        if ( ms_hwndTT )
        {
            HWND hwnd = (HWND)ms_hwndTT;
@@ -329,6 +340,8 @@ WXHWND wxToolTip::GetToolTipCtrl()
        }
     }
 
+    wxMSWWinUITooltipLog("wxToolTip::GetToolTipCtrl leave hwnd=%p",
+                         static_cast<void *>(ms_hwndTT));
     return ms_hwndTT;
 }
 
@@ -375,6 +388,9 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject);
 wxToolTip::wxToolTip(const wxString &tip)
          : m_text(tip)
 {
+    wxMSWWinUITooltipLog("wxToolTip::ctor text this=%p tipLen=%lu",
+                         static_cast<void *>(this),
+                         static_cast<unsigned long>(tip.length()));
     m_window = nullptr;
     m_others = nullptr;
 
@@ -389,6 +405,12 @@ wxToolTip::wxToolTip(const wxString &tip)
 wxToolTip::wxToolTip(wxWindow* win, unsigned int id, const wxString &tip, const wxRect& rc)
          : m_text(tip), m_rect(rc), m_id(id)
 {
+    wxMSWWinUITooltipLog("wxToolTip::ctor window this=%p win=%p hwnd=%p id=%u tipLen=%lu",
+                         static_cast<void *>(this),
+                         static_cast<void *>(win),
+                         win ? reinterpret_cast<void *>(win->GetHWND()) : nullptr,
+                         id,
+                         static_cast<unsigned long>(tip.length()));
     m_window = nullptr;
     m_others = nullptr;
 
@@ -397,11 +419,16 @@ wxToolTip::wxToolTip(wxWindow* win, unsigned int id, const wxString &tip, const 
 
 wxToolTip::~wxToolTip()
 {
+    wxMSWWinUITooltipLog("wxToolTip::dtor enter this=%p window=%p",
+                         static_cast<void *>(this),
+                         static_cast<void *>(m_window));
     // the tooltip has to be removed before deleting. Otherwise, if it is visible
     // while being deleted, there will be a delay before it goes away.
     Remove();
 
     delete m_others;
+    wxMSWWinUITooltipLog("wxToolTip::dtor leave this=%p",
+                         static_cast<void *>(this));
 }
 
 // ----------------------------------------------------------------------------
@@ -448,6 +475,11 @@ void wxToolTip::AddOtherWindow(WXHWND hWnd)
 void wxToolTip::DoAddHWND(WXHWND hWnd)
 {
     HWND hwnd = (HWND)hWnd;
+    wxMSWWinUITooltipLog("wxToolTip::DoAddHWND enter this=%p hwnd=%p window=%p tipLen=%lu",
+                         static_cast<void *>(this),
+                         static_cast<void *>(hwnd),
+                         static_cast<void *>(m_window),
+                         static_cast<unsigned long>(m_text.length()));
 
     wxToolInfo ti(hwnd, m_id, m_rect);
 
@@ -460,7 +492,11 @@ void wxToolTip::DoAddHWND(WXHWND hWnd)
     ti.hwnd = hwnd;
     ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
 
-    if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
+    const bool added = SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) != 0;
+    wxMSWWinUITooltipLog("wxToolTip::DoAddHWND first TTM_ADDTOOL hwnd=%p added=%d",
+                         static_cast<void *>(hwnd),
+                         added ? 1 : 0);
+    if ( !added )
     {
         wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text);
 
@@ -476,16 +512,32 @@ void wxToolTip::DoAddHWND(WXHWND hWnd)
         m_text.Replace(wxT("\n"), wxT(" "));
         ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
 
-        if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
+        const bool addedAfterReplace =
+            SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) != 0;
+        wxMSWWinUITooltipLog("wxToolTip::DoAddHWND second TTM_ADDTOOL hwnd=%p added=%d",
+                             static_cast<void *>(hwnd),
+                             addedAfterReplace ? 1 : 0);
+        if ( !addedAfterReplace )
         {
             wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text);
         }
     }
+
+    wxMSWWinUITooltipLog("wxToolTip::DoAddHWND leave this=%p hwnd=%p",
+                         static_cast<void *>(this),
+                         static_cast<void *>(hwnd));
 }
 
 void wxToolTip::SetWindow(wxWindow *win)
 {
+    wxMSWWinUITooltipLog("wxToolTip::SetWindow enter this=%p oldWindow=%p newWindow=%p newHwnd=%p",
+                         static_cast<void *>(this),
+                         static_cast<void *>(m_window),
+                         static_cast<void *>(win),
+                         win ? reinterpret_cast<void *>(win->GetHWND()) : nullptr);
     Remove();
+    wxMSWWinUITooltipLog("wxToolTip::SetWindow after Remove this=%p",
+                         static_cast<void *>(this));
 
     m_window = win;
 
@@ -494,6 +546,9 @@ void wxToolTip::SetWindow(wxWindow *win)
     {
         DoAddHWND(m_window->GetHWND());
     }
+    wxMSWWinUITooltipLog("wxToolTip::SetWindow after main hwnd this=%p window=%p",
+                         static_cast<void *>(this),
+                         static_cast<void *>(m_window));
 #if !defined(__WXUNIVERSAL__)
     // and all of its subcontrols (e.g. radio buttons in a radiobox) as well
     wxControl *control = wxDynamicCast(m_window, wxControl);
@@ -520,6 +575,9 @@ void wxToolTip::SetWindow(wxWindow *win)
         }
     }
 #endif // !defined(__WXUNIVERSAL__)
+    wxMSWWinUITooltipLog("wxToolTip::SetWindow leave this=%p window=%p",
+                         static_cast<void *>(this),
+                         static_cast<void *>(m_window));
 }
 
 void wxToolTip::SetRect(const wxRect& rc)
@@ -535,6 +593,10 @@ void wxToolTip::SetRect(const wxRect& rc)
 
 void wxToolTip::SetTip(const wxString& tip)
 {
+    wxMSWWinUITooltipLog("wxToolTip::SetTip enter this=%p tipLen=%lu window=%p",
+                         static_cast<void *>(this),
+                         static_cast<unsigned long>(tip.length()),
+                         static_cast<void *>(m_window));
     m_text = tip;
 
 #ifdef TTM_SETMAXTIPWIDTH
@@ -547,10 +609,16 @@ void wxToolTip::SetTip(const wxString& tip)
     }
 
     DoForAllWindows(&wxToolTip::DoSetTip);
+    wxMSWWinUITooltipLog("wxToolTip::SetTip leave this=%p",
+                         static_cast<void *>(this));
 }
 
 void wxToolTip::DoSetTip(WXHWND hWnd)
 {
+    wxMSWWinUITooltipLog("wxToolTip::DoSetTip enter this=%p hwnd=%p tipLen=%lu",
+                         static_cast<void *>(this),
+                         static_cast<void *>(hWnd),
+                         static_cast<unsigned long>(m_text.length()));
     // update the tip text shown by the control
     wxToolInfo ti((HWND)hWnd, m_id, m_rect);
 
@@ -562,6 +630,9 @@ void wxToolTip::DoSetTip(WXHWND hWnd)
 
     ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
     (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
+    wxMSWWinUITooltipLog("wxToolTip::DoSetTip leave this=%p hwnd=%p",
+                         static_cast<void *>(this),
+                         static_cast<void *>(hWnd));
 }
 
 bool wxToolTip::AdjustMaxWidth()

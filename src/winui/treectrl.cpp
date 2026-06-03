@@ -24,6 +24,8 @@
 #include <memory>
 #include <vector>
 
+#include <winrt/Microsoft.UI.Dispatching.h>
+
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace WFC = winrt::Windows::Foundation::Collections;
@@ -1163,6 +1165,16 @@ void wxTreeCtrl::ApplySelectionToPeer()
     if ( !m_winui || !m_winui->treeView )
         return;
 
+    // The WinUI TreeView silently ignores a SelectedNode write performed
+    // synchronously from inside its own SelectionChanged callback.  When we
+    // need to correct the selection in that context (e.g. an application
+    // vetoed the change), defer the write to the dispatcher queue instead.
+    if ( m_inPeerSelectionChange )
+    {
+        SchedulePeerSelectionCorrection();
+        return;
+    }
+
     const bool wasUpdating = m_updatingPeer;
     m_updatingPeer = true;
     try
@@ -1205,6 +1217,31 @@ void wxTreeCtrl::ApplySelectionToPeer()
     m_updatingPeer = wasUpdating;
 
     m_winui->host.ForceRender();
+}
+
+void wxTreeCtrl::SchedulePeerSelectionCorrection()
+{
+    if ( m_peerCorrectionPending || !m_winui || !m_winui->treeView )
+        return;
+
+    m_peerCorrectionPending = true;
+
+    auto dispatcher = m_winui->treeView.DispatcherQueue();
+    if ( !dispatcher )
+    {
+        // No dispatcher available: fall back to a direct write.  This may be
+        // ignored by the control, but it is the best we can do.
+        m_peerCorrectionPending = false;
+        ApplySelectionToPeer();
+        return;
+    }
+
+    dispatcher.TryEnqueue([this]()
+    {
+        m_peerCorrectionPending = false;
+        if ( m_winui && m_winui->treeView )
+            ApplySelectionToPeer();
+    });
 }
 
 void wxTreeCtrl::UpdatePeerItem(wxWinUITreeItem *item)
@@ -1319,6 +1356,11 @@ void wxTreeCtrl::RefreshPeerItems()
 
 void wxTreeCtrl::OnPeerSelectionChanged()
 {
+    // A correction is already queued: ignore the control's intermediate
+    // selection thrashing until it runs (see SchedulePeerSelectionCorrection).
+    if ( m_peerCorrectionPending )
+        return;
+
     wxWinUITreeItem *item = nullptr;
 
     try
@@ -1339,8 +1381,25 @@ void wxTreeCtrl::OnPeerSelectionChanged()
     {
     }
 
+    // If the control insists on re-selecting an item whose selection the
+    // application already refused (typically a wxTreebook category that has no
+    // page), don't dispatch the event again: just push the real selection back.
+    if ( item && item == m_peerRejectedItem )
+    {
+        SchedulePeerSelectionCorrection();
+        return;
+    }
+
+    m_inPeerSelectionChange = true;
     if ( !ChangeSelection(item, true, false) )
         ApplySelectionToPeer();
+    m_inPeerSelectionChange = false;
+
+    // If a deferred correction got scheduled while dispatching the event, the
+    // selection of "item" was refused: remember it so we can short-circuit any
+    // further attempts by the control to select it.  Otherwise the selection
+    // was accepted, so clear any previous rejection.
+    m_peerRejectedItem = m_peerCorrectionPending ? item : nullptr;
 }
 
 void wxTreeCtrl::OnPeerNodeExpanded(wxWinUITreeItem *item)

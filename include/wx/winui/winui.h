@@ -39,9 +39,17 @@ enum class wxWinUIAppTheme
 WXDLLIMPEXP_CORE void wxWinUISetAppTheme(wxWinUIAppTheme theme);
 WXDLLIMPEXP_CORE wxWinUIAppTheme wxWinUIGetAppTheme();
 
+// Crash-safe debug logging for the WinUI port. Appends to
+// %TEMP%\wxwinui-tooltip.log and flushes each line.
+WXDLLIMPEXP_CORE void wxWinUIDebugLog(const char *format, ...);
+
 // Apply the current backdrop (Mica) and title-bar theme to a top-level window.
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 WXDLLIMPEXP_CORE void wxWinUIApplyWindowBackdrop(wxWindow *tlw);
+
+// Return true for wxWindows whose HWND is used as a WinUI XAML island host.
+// They must not be passed to native MSW tooltip registration directly.
+WXDLLIMPEXP_CORE bool wxWinUIIsHostWindow(wxWindow *win);
 
 // The DWM Mica backdrop surface only initialises after the window is actually
 // resized on a given monitor; until then it can render as an opaque rectangle

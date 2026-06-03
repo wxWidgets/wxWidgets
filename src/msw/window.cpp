@@ -85,6 +85,9 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/winui.h"
+    #define wxMSWWinUITooltipLog(...) wxWinUIDebugLog(__VA_ARGS__)
+#else
+    #define wxMSWWinUITooltipLog(...) ((void)0)
 #endif
 #include "wx/private/textmeasure.h"
 #include "wx/private/rescale.h"
@@ -1791,10 +1794,43 @@ void wxWindowMSW::DragAcceptFiles(bool accept)
 
 void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 {
+    wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip enter this=%p hwnd=%p tooltip=%p",
+                         static_cast<void *>(this),
+                         reinterpret_cast<void *>(GetHWND()),
+                         static_cast<void *>(tooltip));
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( wxWinUIIsHostWindow(static_cast<wxWindow *>(this)) )
+    {
+        wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip WinUI host before base this=%p",
+                             static_cast<void *>(this));
+        wxWindowBase::DoSetToolTip(tooltip);
+        wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip WinUI host leave this=%p stored=%p",
+                             static_cast<void *>(this),
+                             static_cast<void *>(m_tooltip));
+        return;
+    }
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
+    wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip before base this=%p",
+                         static_cast<void *>(this));
     wxWindowBase::DoSetToolTip(tooltip);
+    wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip after base this=%p stored=%p",
+                         static_cast<void *>(this),
+                         static_cast<void *>(m_tooltip));
 
     if ( m_tooltip )
+    {
+        wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip before SetWindow this=%p tooltip=%p",
+                             static_cast<void *>(this),
+                             static_cast<void *>(m_tooltip));
         m_tooltip->SetWindow((wxWindow *)this);
+        wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip after SetWindow this=%p tooltip=%p",
+                             static_cast<void *>(this),
+                             static_cast<void *>(m_tooltip));
+    }
+
+    wxMSWWinUITooltipLog("wxWindowMSW::DoSetToolTip leave this=%p",
+                         static_cast<void *>(this));
 }
 
 #endif // wxUSE_TOOLTIPS

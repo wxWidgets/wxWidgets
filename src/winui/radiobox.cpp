@@ -130,7 +130,10 @@ bool wxRadioBox::DoCreate(wxWindow *parent, wxWindowID id, const wxString& title
                 if ( !m_winui || m_updating )
                     return;
 
-                const int selection = m_winui->radio.SelectedIndex();
+                const int selection = FindSelectedItem();
+                if ( selection == wxNOT_FOUND )
+                    return;
+
                 if ( selection == m_selection )
                     return;
 
@@ -280,6 +283,21 @@ void wxRadioBox::RebuildItems()
                 button.IsEnabled(m_itemEnabled[i]);
             if ( i < m_itemShown.size() && !m_itemShown[i] )
                 button.Visibility(winrt::Microsoft::UI::Xaml::Visibility::Collapsed);
+            button.Checked(
+                [this, i](winrt::Windows::Foundation::IInspectable const&,
+                          winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+                {
+                    if ( !m_winui || m_updating )
+                        return;
+
+                    const int selection = static_cast<int>(i);
+                    if ( selection == m_selection )
+                        return;
+
+                    m_selection = selection;
+                    m_winui->radio.SelectedIndex(selection);
+                    SendSelectionEvent();
+                });
 
             items.Append(button);
             m_winui->buttons.push_back(button);
@@ -293,6 +311,25 @@ void wxRadioBox::RebuildItems()
     }
     m_updating = false;
     m_winui->host.ForceRender();
+}
+
+int wxRadioBox::FindSelectedItem() const
+{
+    if ( !m_winui )
+        return wxNOT_FOUND;
+
+    for ( size_t i = 0; i < m_winui->buttons.size(); ++i )
+    {
+        const auto checked = m_winui->buttons[i].IsChecked();
+        if ( checked && checked.Value() )
+            return static_cast<int>(i);
+    }
+
+    const int selected = m_winui->radio.SelectedIndex();
+    if ( selected >= 0 && static_cast<size_t>(selected) < m_winui->buttons.size() )
+        return selected;
+
+    return wxNOT_FOUND;
 }
 
 void wxRadioBox::SendSelectionEvent()

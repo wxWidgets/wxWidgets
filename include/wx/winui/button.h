@@ -10,6 +10,8 @@
 #ifndef _WX_WINUI_BUTTON_H_
 #define _WX_WINUI_BUTTON_H_
 
+#include "wx/bmpbndl.h"
+
 #include <memory>
 
 class wxWinUIButtonImpl;
@@ -39,20 +41,49 @@ public:
 
     void SetLabel(const wxString& label) override;
     void Command(wxCommandEvent& event) override;
+    bool Show(bool show = true) override;
+    bool SetBackgroundColour(const wxColour& colour) override;
+    bool SetForegroundColour(const wxColour& colour) override;
+    bool SetFont(const wxFont& font) override;
+    void SetLayoutDirection(wxLayoutDirection dir) override;
 
 protected:
     bool SendClickEvent();
+    void DoEnable(bool enable) override;
     wxSize DoGetBestSize() const override;
     wxBitmap DoGetBitmap(State which) const override;
     void DoSetBitmap(const wxBitmapBundle& bitmap, State which) override;
     wxSize DoGetBitmapMargins() const override;
     void DoSetBitmapMargins(wxCoord x, wxCoord y) override;
     void DoSetBitmapPosition(wxDirection dir) override;
+    bool DoGetAuthNeeded() const override;
+    void DoSetAuthNeeded(bool show) override;
+#if wxUSE_MARKUP
+    bool DoSetLabelMarkup(const wxString& markup) override;
+#endif // wxUSE_MARKUP
+#if wxUSE_TOOLTIPS
+    void DoSetToolTipText(const wxString& tip) override;
+    void DoSetToolTip(wxToolTip *tip) override;
+#endif // wxUSE_TOOLTIPS
 
 private:
     void UpdateWinUIContent();
+    void UpdateWinUIAppearance();
+    wxBitmap GetBitmapForState(State which) const;
+    State GetCurrentBitmapState() const;
+    wxBitmap GetAuthBitmap() const;
 
     std::unique_ptr<wxWinUIButtonImpl> m_winui;
+    wxBitmapBundle m_bitmaps[State_Max];
+    wxSize m_bitmapMargins;
+    wxDirection m_bitmapPosition;
+    bool m_authNeeded;
+#if wxUSE_MARKUP
+    wxString m_markup;
+#endif // wxUSE_MARKUP
+#if wxUSE_TOOLTIPS
+    wxString m_tooltipText;
+#endif // wxUSE_TOOLTIPS
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };

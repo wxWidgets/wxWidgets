@@ -15,12 +15,159 @@
 
 #include "private.h"
 
+#if wxUSE_MARKUP
+    #include "wx/private/markupparser.h"
+#endif
+
+#include <winrt/Microsoft.UI.Xaml.Documents.h>
+#include <winrt/Microsoft.UI.Text.h>
+#include <winrt/Windows.UI.Text.h>
+
+namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXD = winrt::Microsoft::UI::Xaml::Documents;
+
 class wxWinUIStaticTextImpl
 {
 public:
     wxWinUIControlHost host;
-    winrt::Microsoft::UI::Xaml::Controls::TextBlock textBlock{ nullptr };
+    MUX::Controls::TextBlock textBlock{ nullptr };
 };
+
+namespace
+{
+
+using InlineCollection =
+    winrt::Windows::Foundation::Collections::IVector<MUXD::Inline>;
+
+// Append a run of text with the given attributes, turning embedded newlines
+// into XAML line breaks so multi-line labels render on several lines.
+void wxWinUIAppendStyledText(InlineCollection const& inlines,
+                             const wxString& text,
+                             bool bold, bool italic, bool underline,
+                             const wxColour& fg)
+{
+    wxString remaining = text;
+    bool first = true;
+    for ( ;; )
+    {
+        const int nl = remaining.Find('\n');
+        const wxString line = nl == wxNOT_FOUND ? remaining
+                                                : remaining.Left(nl);
+
+        if ( !first )
+            inlines.Append(MUXD::LineBreak());
+        first = false;
+
+        if ( !line.empty() )
+        {
+            MUXD::Run run;
+            run.Text(wxWinUIToHString(line));
+            if ( bold )
+                run.FontWeight(winrt::Microsoft::UI::Text::FontWeights::Bold());
+            if ( italic )
+                run.FontStyle(winrt::Windows::UI::Text::FontStyle::Italic);
+            if ( underline )
+                run.TextDecorations(winrt::Windows::UI::Text::TextDecorations::Underline);
+            if ( fg.IsOk() )
+                run.Foreground(wxWinUIBrush(fg.Red(), fg.Green(), fg.Blue(),
+                                            fg.Alpha()));
+            inlines.Append(run);
+        }
+
+        if ( nl == wxNOT_FOUND )
+            break;
+        remaining = remaining.Mid(nl + 1);
+    }
+}
+
+// Append a plain label, underlining the mnemanic character (the one following
+// a single '&') as classic wxStaticText does.
+void wxWinUIAppendLabel(InlineCollection const& inlines, const wxString& label)
+{
+    wxString chunk;
+    for ( size_t i = 0; i < label.length(); ++i )
+    {
+        const wxChar ch = label[i];
+        if ( ch == '&' && i + 1 < label.length() )
+        {
+            const wxChar next = label[i + 1];
+            if ( next == '&' )
+            {
+                chunk += '&';
+                ++i;
+                continue;
+            }
+
+            // Flush the normal text, then emit the underlined mnemonic char.
+            wxWinUIAppendStyledText(inlines, chunk, false, false, false, wxColour());
+            chunk.clear();
+            wxWinUIAppendStyledText(inlines, wxString(next), false, false, true, wxColour());
+            ++i;
+            continue;
+        }
+
+        chunk += ch;
+    }
+
+    wxWinUIAppendStyledText(inlines, chunk, false, false, false, wxColour());
+}
+
+#if wxUSE_MARKUP
+// Turns wx markup into a sequence of styled runs appended to a TextBlock.
+class wxWinUIMarkupToInlines : public wxMarkupParserOutput
+{
+public:
+    explicit wxWinUIMarkupToInlines(InlineCollection const& inlines)
+        : m_inlines(inlines) {}
+
+    void OnText(const wxString& text) override
+    {
+        wxWinUIAppendStyledText(m_inlines, text,
+                                m_bold > 0, m_italic > 0, m_underline > 0, m_fg);
+    }
+
+    void OnBoldStart() override { ++m_bold; }
+    void OnBoldEnd() override { --m_bold; }
+    void OnItalicStart() override { ++m_italic; }
+    void OnItalicEnd() override { --m_italic; }
+    void OnUnderlinedStart() override { ++m_underline; }
+    void OnUnderlinedEnd() override { --m_underline; }
+    void OnStrikethroughStart() override {}
+    void OnStrikethroughEnd() override {}
+    void OnBigStart() override {}
+    void OnBigEnd() override {}
+    void OnSmallStart() override {}
+    void OnSmallEnd() override {}
+    void OnTeletypeStart() override {}
+    void OnTeletypeEnd() override {}
+
+    void OnSpanStart(const wxMarkupSpanAttributes& attrs) override
+    {
+        m_fgStack.push_back(m_fg);
+        if ( !attrs.m_fgCol.empty() )
+        {
+            const wxColour col(attrs.m_fgCol);
+            if ( col.IsOk() )
+                m_fg = col;
+        }
+    }
+    void OnSpanEnd(const wxMarkupSpanAttributes& WXUNUSED(attrs)) override
+    {
+        m_fg = m_fgStack.back();
+        m_fgStack.pop_back();
+    }
+
+private:
+    InlineCollection m_inlines;
+    int m_bold = 0;
+    int m_italic = 0;
+    int m_underline = 0;
+    wxColour m_fg;
+    std::vector<wxColour> m_fgStack;
+};
+#endif // wxUSE_MARKUP
+
+} // namespace
 
 wxStaticText::wxStaticText()
 {
@@ -59,16 +206,12 @@ bool wxStaticText::Create(wxWindow *parent,
 
     try
     {
-        namespace MUX = winrt::Microsoft::UI::Xaml;
         m_winui->textBlock = MUX::Controls::TextBlock();
-        // Don't wrap by default: classic wxStaticText shows a single line and
-        // wrapping here makes the last word disappear when the measured width is
-        // slightly too small.
+        // Multi-line labels (embedded newlines) are rendered via explicit line
+        // breaks in BuildInlines(), so disable wrapping.
         m_winui->textBlock.TextWrapping(MUX::TextWrapping::NoWrap);
-        m_winui->textBlock.HorizontalAlignment(MUX::HorizontalAlignment::Stretch);
         m_winui->textBlock.VerticalAlignment(MUX::VerticalAlignment::Top);
 
-        // Honor the wxStaticText alignment flags.
         MUX::TextAlignment align = MUX::TextAlignment::Left;
         if ( style & wxALIGN_RIGHT )
             align = MUX::TextAlignment::Right;
@@ -76,13 +219,9 @@ bool wxStaticText::Create(wxWindow *parent,
             align = MUX::TextAlignment::Center;
         m_winui->textBlock.TextAlignment(align);
 
-        // Honor the wxST_ELLIPSIZE_* flags (WinUI only offers ellipsis at the
-        // end, so all variants map to it).
         if ( style & (wxST_ELLIPSIZE_START | wxST_ELLIPSIZE_MIDDLE |
                       wxST_ELLIPSIZE_END) )
             m_winui->textBlock.TextTrimming(MUX::TextTrimming::CharacterEllipsis);
-        else
-            m_winui->textBlock.TextTrimming(MUX::TextTrimming::None);
 
         UpdateWinUIContent();
         m_winui->host.SetContent(m_winui->textBlock);
@@ -98,6 +237,8 @@ bool wxStaticText::Create(wxWindow *parent,
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    m_markup.clear();
+
     if ( !UpdateLabelOrig(label) )
         return;
 
@@ -120,15 +261,44 @@ bool wxStaticText::SetFont(const wxFont& font)
 #if wxUSE_MARKUP
 bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 {
-    return wxControlBase::DoSetLabelMarkup(markup);
+    if ( !wxControlBase::DoSetLabelMarkup(markup) )
+        return false;
+
+    // Keep the original markup so we can rebuild the rich runs, and remember
+    // the stripped text for measuring.
+    m_markup = markup;
+    m_visibleLabel = GetLabel();
+
+    InvalidateBestSize();
+    UpdateWinUIContent();
+    AutoResizeIfNecessary();
+    return true;
 }
-#endif
+#endif // wxUSE_MARKUP
 
 wxSize wxStaticText::DoGetBestClientSize() const
 {
-    // WinUI's default font renders slightly taller than wx measures, so add a
-    // little headroom to avoid clipping the text vertically.
-    wxSize best = GetTextExtent(GetLabelText());
+    // Measure the (mnemonic- and markup-stripped) text line by line so multi
+    // line labels are not clipped.  WinUI's default font is a touch taller than
+    // wx measures, so add a little headroom.
+    const wxString text = wxControl::GetLabelText(m_visibleLabel);
+
+    wxSize best(0, 0);
+    wxString remaining = text;
+    for ( ;; )
+    {
+        const int nl = remaining.Find('\n');
+        const wxString line = nl == wxNOT_FOUND ? remaining : remaining.Left(nl);
+
+        const wxSize lineSize = GetTextExtent(line.empty() ? wxString(" ") : line);
+        best.x = wxMax(best.x, lineSize.x);
+        best.y += lineSize.y;
+
+        if ( nl == wxNOT_FOUND )
+            break;
+        remaining = remaining.Mid(nl + 1);
+    }
+
     best.x += FromDIP(4);
     best.y += FromDIP(8);
     return best;
@@ -150,12 +320,31 @@ void wxStaticText::UpdateWinUIContent()
     if ( !m_winui || !m_winui->textBlock )
         return;
 
-    const wxSize sizeDIP = ToDIP(GetClientSize());
-    if ( sizeDIP.x > 0 )
-        m_winui->textBlock.Width(sizeDIP.x);
+    try
+    {
+        auto inlines = m_winui->textBlock.Inlines();
+        inlines.Clear();
 
-    m_winui->textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(m_visibleLabel)));
-    m_winui->textBlock.UpdateLayout();
+#if wxUSE_MARKUP
+        if ( !m_markup.empty() )
+        {
+            wxWinUIMarkupToInlines output(inlines);
+            wxMarkupParser parser(output);
+            parser.Parse(m_markup);
+        }
+        else
+#endif // wxUSE_MARKUP
+        {
+            wxWinUIAppendLabel(inlines, m_visibleLabel);
+        }
+
+        m_winui->textBlock.UpdateLayout();
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TextBlock content", e);
+    }
+
     m_winui->host.ForceRender();
 }
 
