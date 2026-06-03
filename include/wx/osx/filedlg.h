@@ -91,6 +91,9 @@ protected:
     wxArrayString m_filterNames;
     wxChoice* m_filterChoice;
     wxWindow* m_filterPanel;
+    // Hidden in-process window owning the accessory controls; see
+    // wxFileDialog::SetupExtraControls() in filedlg.mm.
+    wxWindow* m_accessoryHost;
     bool m_useFileTypeFilter;
     int m_firstFileTypeFilter;
     wxArrayString m_currentExtensions;
