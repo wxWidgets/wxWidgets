@@ -806,8 +806,8 @@ TEST_CASE("wxDateTime::Format", "[datetime]")
     // enough to be heap-allocated so the over-read trips ASAN without the fix.
     //
     // The MSVC CRT considers a trailing '%' an invalid format string and
-    // aborts, so skip this check there.
-#ifndef _MSC_VER
+    // aborts, so skip this check there. This CRT is also used by MinGW.
+#if !defined(_MSC_VER) && !defined(__MINGW32__)
     CHECK( dt.Format("a long enough format ending in a percent sign %") ==
                      "a long enough format ending in a percent sign %" );
 #endif
