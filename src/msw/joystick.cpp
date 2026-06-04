@@ -435,7 +435,7 @@ wxString wxJoystick::GetProductName() const
     if (joyGetDevCaps(m_joystick, &joyCaps, sizeof(joyCaps)) != JOYERR_NOERROR)
         return wxEmptyString;
 
-    auto GetNameFromReg = [=](wxRegKey::StdKey root) -> wxString
+    auto GetNameFromReg = [this, joyCaps](wxRegKey::StdKey root) -> wxString
     {
         wxString result;
         wxString subKey1 = wxString::Format(wxT("%s\\%s\\%s"), REGSTR_PATH_JOYCONFIG, joyCaps.szRegKey, REGSTR_KEY_JOYCURR);
