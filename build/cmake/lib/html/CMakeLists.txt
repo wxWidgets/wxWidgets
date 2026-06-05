@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_HTML)
+    wx_append_install_headers(HTML_CMN_HDR)
+    return()
+endif()
+
 wx_append_sources(HTML_FILES HTML_CMN)
 
 if(WXMSW)
