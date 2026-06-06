@@ -13,6 +13,8 @@
 #include "testprec.h"
 
 
+#if wxUSE_PROTOCOL_FTP
+
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif // WX_PRECOMP
@@ -134,3 +136,5 @@ TEST_CASE("FTP", "[net][.]")
         CHECK( ftp.GetLastResult() == "11" );
     }
 }
+
+#endif // wxUSE_PROTOCOL_FTP

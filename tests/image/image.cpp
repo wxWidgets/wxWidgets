@@ -135,6 +135,8 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadFromFile", "[image]")
     CHECK(img.LoadFile("image/bitfields.bmp", wxBITMAP_TYPE_BMP));
 }
 
+#if wxUSE_URL
+
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadFromSocketStream", "[image]")
 {
     // This test doesn't work any more even using the IP address below as the
@@ -160,6 +162,8 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadFromSocketStream", "[image]")
     //       requires a seekable stream!
     CHECK( img.LoadFile(*in_stream, wxBITMAP_TYPE_PNG) );
 }
+
+#endif // wxUSE_URL
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadFromZipStream", "[image]")
 {
