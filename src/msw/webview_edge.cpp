@@ -1193,6 +1193,7 @@ void wxWebViewEdge::OnParentShow(wxShowEvent& event)
     if ( m_impl && m_impl->m_webViewController )
     {
         m_impl->m_webViewController->put_IsVisible(event.IsShown());
+        // Force a refresh by refreshing its paint area
         if ( event.IsShown() )
         {
             // put_Bounds is a no-op when the rect is unchanged, so collapse to
