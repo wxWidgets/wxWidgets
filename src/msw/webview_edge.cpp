@@ -1127,6 +1127,8 @@ wxWebViewEdge::wxWebViewEdge(wxWindow* parent,
 
 wxWebViewEdge::~wxWebViewEdge()
 {
+    Unbind(wxEVT_SIZE, &wxWebViewEdge::OnSize, this);
+    Unbind(wxEVT_SET_FOCUS, &wxWebViewEdge::OnSetFocus, this);
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Unbind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
