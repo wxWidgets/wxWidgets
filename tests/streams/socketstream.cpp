@@ -11,6 +11,8 @@
 #include "testprec.h"
 
 
+#if wxUSE_SOCKETS
+
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -243,3 +245,5 @@ void socketStream::DoCheckInputStream(wxSocketInputStream& stream_in)
 
 // Register the stream sub suite, by using some stream helper macro.
 STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(socketStream)
+
+#endif // wxUSE_SOCKETS

@@ -448,6 +448,7 @@ extern void SetProcessEventFunc(ProcessEventFunc func)
 
 static bool DoCheckConnection()
 {
+#if wxUSE_SOCKETS
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
 
@@ -466,6 +467,9 @@ static bool DoCheckConnection()
                     (sock.Write(HTTP_GET, strlen(HTTP_GET)), sock.WaitForRead(1));
 
     return online;
+#else
+    return false;
+#endif
 }
 
 extern bool IsNetworkAvailable()

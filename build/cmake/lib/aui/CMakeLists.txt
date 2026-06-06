@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_AUI)
+    wx_append_install_headers(AUI_CMN_HDR)
+    return()
+endif()
+
 wx_append_sources(AUI_FILES AUI_CMN)
 
 if(WXMSW)

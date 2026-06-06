@@ -7,6 +7,10 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_WEBVIEW OR NOT wxUSE_WEBVIEW_CHROMIUM)
+    return()
+endif()
+
 include(../../source_groups.cmake)
 
 set(KNOWN_CONFIGS "Debug;Release;RelWithDebInfo;MinSizeRel")

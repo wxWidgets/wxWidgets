@@ -60,15 +60,18 @@ macro(wx_append_sources src_var source_base_name)
     endif()
     if(DEFINED ${source_base_name}_HDR)
         wx_add_headers(${src_var} ${${source_base_name}_HDR})
-
-        list(APPEND wxINSTALL_HEADERS ${${source_base_name}_HDR})
-        set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
+        wx_append_install_headers(${source_base_name}_HDR)
     endif()
 
     if(DEFINED ${source_base_name}_RSC)
-        list(APPEND wxINSTALL_HEADERS ${${source_base_name}_RSC})
-        set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
+        wx_append_install_headers(${source_base_name}_RSC)
     endif()
+endmacro()
+
+# Add headers from a variable to the list of headers to install
+macro(wx_append_install_headers header_base_name)
+    list(APPEND wxINSTALL_HEADERS ${${header_base_name}})
+    set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
 endmacro()
 
 # Add prefix to list of items

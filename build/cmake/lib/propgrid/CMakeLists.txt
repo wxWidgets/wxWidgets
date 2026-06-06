@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_PROPGRID)
+    wx_append_install_headers(PROPGRID_HDR)
+    return()
+endif()
+
 wx_append_sources(PROPGRID_FILES PROPGRID)
 
 wx_add_library(wxpropgrid ${PROPGRID_FILES})
