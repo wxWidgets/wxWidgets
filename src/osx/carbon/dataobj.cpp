@@ -33,8 +33,6 @@
 
 #include <memory>
 
-static CFStringRef kUTTypeTraditionalMacText = CFSTR("com.apple.traditional-mac-plain-text");
-
 static wxString privateUTIPrefix = "org.wxwidgets.private.";
 
 // ----------------------------------------------------------------------------
