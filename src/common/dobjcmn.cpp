@@ -345,7 +345,11 @@ inline wxMBConv& GetConv(const wxDataFormat& format)
     static wxMBConvUTF16 s_UTF16Converter;
 
     return format == wxDF_UNICODETEXT ? static_cast<wxMBConv&>(s_UTF16Converter)
+#ifdef __WXOSX__
+                                      : static_cast<wxMBConv&>(wxConvUTF8);
+#else
                                       : static_cast<wxMBConv&>(wxConvLocal);
+#endif
 }
 
 } // anonymous namespace

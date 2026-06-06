@@ -140,6 +140,11 @@ Changes in behaviour not resulting in compilation errors
   already didn't do it in wxMSW. Call Show() explicitly before Raise() if
   necessary.
 
+- wxDF_TEXT on macOS now corresponds to the text in UTF-8 encoding instead of
+  previously used MacRoman. No changes are necessary for the programs using
+  wxTextDataObject, but for the code working with the raw bytes in this format
+  you may need to change it to use wxConvUTF8 instead of wxConvLocal.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

@@ -33,8 +33,6 @@
 
 #include <memory>
 
-static CFStringRef kUTTypeTraditionalMacText = CFSTR("com.apple.traditional-mac-plain-text");
-
 static wxString privateUTIPrefix = "org.wxwidgets.private.";
 
 // ----------------------------------------------------------------------------
@@ -94,7 +92,7 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
     switch (type)
     {
         case wxDF_TEXT:
-            f = kUTTypeTraditionalMacText;
+            f = kUTTypeUTF8PlainText;
             break;
 
         case wxDF_UNICODETEXT:
