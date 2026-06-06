@@ -1132,6 +1132,7 @@ wxWebViewEdge::~wxWebViewEdge()
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Unbind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
+    Unbind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
     delete m_impl;
 }
 
@@ -1159,6 +1160,7 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Bind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
+    Bind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
 
     LoadURL(url);
     return true;
@@ -1181,6 +1183,27 @@ void wxWebViewEdge::OnTopLevelParentIconized(wxIconizeEvent& event)
 {
     if (m_impl && m_impl->m_webViewController)
         m_impl->m_webViewController->put_IsVisible(!event.IsIconized());
+    event.Skip();
+}
+
+void wxWebViewEdge::OnShow(wxShowEvent& event)
+{
+    if ( m_impl && m_impl->m_webViewController )
+    {
+        m_impl->m_webViewController->put_IsVisible(event.IsShown());
+        // Force a refresh by refreshing its paint area
+        if ( event.IsShown() )
+        {
+            // put_Bounds is a no-op when the rect is unchanged, so collapse to
+            // zero first to guarantee a bounds change that forces a repaint
+            m_impl->m_webViewController->put_Bounds(RECT{});
+            CallAfter([this]
+            {
+                if ( m_impl && m_impl->m_webViewController )
+                    m_impl->UpdateBounds();
+            });
+        }
+    }
     event.Skip();
 }
 
