@@ -94,7 +94,7 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
     switch (type)
     {
         case wxDF_TEXT:
-            f = kUTTypeTraditionalMacText;
+            f = kUTTypeUTF8PlainText;
             break;
 
         case wxDF_UNICODETEXT:
