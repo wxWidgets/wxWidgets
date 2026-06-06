@@ -1166,7 +1166,7 @@ bool wxWebViewEdge::Create(wxWindow* parent,
 void wxWebViewEdge::OnSize(wxSizeEvent& event)
 {
     if ( m_impl )
-    m_impl->UpdateBounds();
+        m_impl->UpdateBounds();
     event.Skip();
 }
 
