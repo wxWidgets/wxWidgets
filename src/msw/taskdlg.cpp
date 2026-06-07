@@ -94,7 +94,6 @@ struct TDPageState
 {
     wxUxThemeHandle hTD ; // TaskDialog panel + glyph parts
     wxUxThemeHandle hButton ; // Button (checkbox glyph)
-    bool   isDark = false;   // native dark theme available
     bool   themesOk = false;
 
     AutoHBRUSH brPrimary{TDDarkCol::kPrimary};
@@ -227,10 +226,9 @@ static bool TDHasNativeDarkTheme()
 
 static void TDRefreshThemes(HWND hwnd, TDPageState& s)
 {
-    s.isDark = TDHasNativeDarkTheme();
     const int dpi = wxGetWindowDPI(hwnd).x;
 
-    if ( s.isDark )
+    if ( TDHasNativeDarkTheme() )
     {
         const wchar_t* mainClass = L"DarkMode_Explorer::TaskDialog";
         const wchar_t* btnClass = L"DarkMode_Explorer::Button";
@@ -249,7 +247,7 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
 
 static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
 {
-    if (s.isDark)
+    if ( TDHasNativeDarkTheme() )
     {
         COLORREF c = TDDarkCol::kTextNormal;
         if (SUCCEEDED(GetThemeColor(s.hTD, uiPart, 0, TMT_TEXTCOLOR, &c)))
