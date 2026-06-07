@@ -956,8 +956,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
     {
         RECT rc = ConvertToRECT(dc, rect);
 
-        DTTOPTS textOpts;
-        textOpts.dwSize = sizeof(textOpts);
+        WinStructWordSize<DTTOPTS> textOpts;
         textOpts.dwFlags = DTT_STATEID;
         textOpts.iStateId = itemState;
 

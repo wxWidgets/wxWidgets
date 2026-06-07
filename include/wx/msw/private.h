@@ -195,6 +195,23 @@ struct WinStruct : public T
     }
 };
 
+// Life wouldn't be fun if Windows didn't call the size member differently in
+// different structs, so define the equivalent of the above for the ones where
+// it's called dwSize.
+//
+// When we can require C++17 or preferably C++20 we could merge this with
+// WinStruct by detecting the presence of cbSize/dwSize member using SFINAE,
+// but for now just define it separately to keep things simple.
+template <class T>
+struct WinStructWordSize : public T
+{
+    WinStructWordSize()
+    {
+        wxZeroMemory(*this);
+
+        this->dwSize = sizeof(T);
+    }
+};
 
 // Macros for converting wxString to the type expected by API functions.
 //

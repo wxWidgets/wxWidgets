@@ -734,8 +734,7 @@ void wxToolBar::MSWSetDarkOrLightMode(SetMode setmode)
 
     // Update the separator above the toolbar which is drawn partially in
     // white by default and so looks very ugly in dark mode.
-    COLORSCHEME colScheme;
-    colScheme.dwSize = sizeof(COLORSCHEME);
+    WinStructWordSize<COLORSCHEME> colScheme;
     colScheme.clrBtnHighlight =
     colScheme.clrBtnShadow = wxSysColourToRGB(wxSYS_COLOUR_WINDOW);
     ::SendMessage(GetHwnd(), TB_SETCOLORSCHEME, 0, (LPARAM)&colScheme);

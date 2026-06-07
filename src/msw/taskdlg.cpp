@@ -605,7 +605,8 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
 
         if (!native)
         {
-            DTTOPTS opts = { sizeof(opts) }; opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
+            WinStructWordSize<DTTOPTS> opts;
+            opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
             opts.crText = TDGetTextColour(s, part);
             FillRect(hdc, &rcT, brBg);
             ::DrawThemeTextEx(s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, &rcT, &opts);
@@ -780,7 +781,8 @@ static LRESULT CALLBACK TDRadioButtonSubclassProc(
         GetWindowTextW(hwnd, text, static_cast<int>(std::size(text)));
         auto gs = hBtn.GetTrueSize(BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL);
         RECT rcT = { gs.x + 2,0,rcC.right,rcC.bottom };
-        DTTOPTS opts = { sizeof(opts) };
+
+        WinStructWordSize<DTTOPTS> opts;
         opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
         opts.crText = TDDarkCol::kTextNormal;
         LOGFONT lf = {};

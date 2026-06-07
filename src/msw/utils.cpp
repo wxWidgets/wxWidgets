@@ -818,9 +818,7 @@ int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc, int flags)
     }
 
     //Fill in the size of the structure before using it.
-    PROCESSENTRY32 pe;
-    wxZeroMemory(pe);
-    pe.dwSize = sizeof(PROCESSENTRY32);
+    WinStructWordSize<PROCESSENTRY32> pe;
 
     // Walk the snapshot of the processes, and for each process,
     // kill it if its parent is pid.

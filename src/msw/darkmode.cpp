@@ -774,8 +774,7 @@ HandleMenuMessage(WXLRESULT* result,
                 // We have to specify the text colour explicitly as by default
                 // black would be used, making the menu label unreadable on the
                 // (almost) black background.
-                DTTOPTS textOpts;
-                textOpts.dwSize = sizeof(textOpts);
+                WinStructWordSize<DTTOPTS> textOpts;
                 textOpts.dwFlags = DTT_TEXTCOLOR;
                 textOpts.crText = wxColourToRGB(GetMenuColour(colText));
 
