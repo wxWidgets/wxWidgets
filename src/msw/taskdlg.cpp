@@ -402,17 +402,22 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
     RGBQUAD* pPx = nullptr; int rw = 0;
     if (FAILED(GetBufferedPaintBits(hbp, &pPx, &rw))) return;
 
-    COLORREF srcPri = RGB(255, 255, 255), srcSec = RGB(240, 240, 240);
-    COLORREF srcSep = RGB(128, 128, 128), srcSp2 = RGB(223, 223, 223);
+    wxColour srcPri(0xff, 0xff, 0xff),
+             srcSec(0xf0, 0xf0, 0xf0),
+             srcSep(0x80, 0x80, 0x80),
+             srcSp2(0xdf, 0xdf, 0xdf);
 
-    wxUxThemeHandle hL (wxUxThemeHandle ::NewAtStdDPI(L"TaskDialog"));
-    if (hL)
-    {
-        GetThemeColor(hL, TDLG_PRIMARYPANEL, 0, TMT_FILLCOLOR, &srcPri);
-        GetThemeColor(hL, TDLG_SECONDARYPANEL, 0, TMT_FILLCOLOR, &srcSec);
-        GetThemeColor(hL, TDLG_FOOTNOTESEPARATOR, 0, TMT_FILLCOLOR, &srcSep);
-    }
+    // Get the primary colour from the theme in case it's different.
+    //
+    // Note that under Windows 10 the theme doesn't define the other colours
+    // and under Windows 11 this code is not executed at all because it has
+    // native task dialog dark theme.
+    wxUxThemeHandle theme(wxUxThemeHandle::NewAtStdDPI(L"TaskDialog"));
+    if ( theme )
+        srcPri = theme.GetColour(TDLG_PRIMARYPANEL, TMT_FILLCOLOR);
 
+    // Define our own macros doing explicit cast because the standard
+    // Get[RGB]Value() result in warnings about "truncating constant value".
 #define GET_B(c) static_cast<BYTE>((c) & 0xFF)
 #define GET_G(c) static_cast<BYTE>(((c) >> 8) & 0xFF)
 #define GET_R(c) static_cast<BYTE>(((c) >> 16) & 0xFF)
@@ -420,13 +425,13 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
     struct Rule { BYTE sR, sG, sB, dR, dG, dB; };
     const Rule rules[] =
     {
-        { GET_R(srcPri), GET_G(srcPri), GET_B(srcPri),
+        { srcPri.Red(), srcPri.Green(), srcPri.Blue(),
           GET_R(TDDarkCol::kPrimary), GET_G(TDDarkCol::kPrimary), GET_B(TDDarkCol::kPrimary) },
-        { GET_R(srcSec), GET_G(srcSec), GET_B(srcSec),
+        { srcSec.Red(), srcSec.Green(), srcSec.Blue(),
           GET_R(TDDarkCol::kSecondary), GET_G(TDDarkCol::kSecondary), GET_B(TDDarkCol::kSecondary) },
-        { GET_R(srcSep), GET_G(srcSep), GET_B(srcSep),
+        { srcSep.Red(), srcSep.Green(), srcSep.Blue(),
           GET_R(TDDarkCol::kSeparator), GET_G(TDDarkCol::kSeparator), GET_B(TDDarkCol::kSeparator) },
-        { GET_R(srcSp2), GET_G(srcSp2), GET_B(srcSp2),
+        { srcSp2.Red(), srcSp2.Green(), srcSp2.Blue(),
           GET_R(TDDarkCol::kSeparator), GET_G(TDDarkCol::kSeparator), GET_B(TDDarkCol::kSeparator) },
     };
 
