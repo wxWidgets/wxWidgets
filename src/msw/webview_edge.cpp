@@ -1161,8 +1161,7 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Bind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
-    if (GetParent())
-        GetParent()->Bind(wxEVT_SHOW, &wxWebViewEdge::OnParentShow, this);
+    GetParent()->Bind(wxEVT_SHOW, &wxWebViewEdge::OnParentShow, this);
 
     LoadURL(url);
     return true;
