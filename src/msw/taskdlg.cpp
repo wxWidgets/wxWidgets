@@ -40,6 +40,7 @@
 
 #include "wx/msw/private/comptr.h"
 #include <uiautomation.h>
+#include <windowsx.h>
 
 // ============================================================================
 // TaskDialog dark mode — implementation detail types
@@ -63,6 +64,7 @@ namespace TDDarkCol
     static constexpr COLORREF kTextFtrExp = RGB(0xb0, 0xb0, 0xb0);
     static constexpr COLORREF kTextRadio = RGB(0xe0, 0xe0, 0xe0);
 }
+
 namespace
 {
 
@@ -94,7 +96,7 @@ struct TDPageState
 {
     wxUxThemeHandle hTD ; // TaskDialog panel + glyph parts
     wxUxThemeHandle hButton ; // Button (checkbox glyph)
-    bool   themesOk = false;
+    bool themesOk = false;
 
     AutoHBRUSH brPrimary{TDDarkCol::kPrimary};
     AutoHBRUSH brSecondary{TDDarkCol::kSecondary};
@@ -254,24 +256,24 @@ static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
             return wxColourToRGB(col);
     }
 
-    switch (uiPart)
+    switch ( uiPart )
     {
-    case TDLG_MAININSTRUCTIONPANE:
-        return TDDarkCol::kTextInstruct;
-    case TDLG_CONTENTPANE:
-        return TDDarkCol::kTextContent;
-    case TDLG_EXPANDOTEXT:
-        return TDDarkCol::kTextExpando;
-    case TDLG_VERIFICATIONTEXT:
-        return TDDarkCol::kTextVerify;
-    case TDLG_FOOTNOTEPANE:
-        return TDDarkCol::kTextFootnote;
-    case TDLG_EXPANDEDFOOTERAREA:
-        return TDDarkCol::kTextFtrExp;
-    case TDLG_RADIOBUTTONPANE:
-        return TDDarkCol::kTextRadio;
-    default:
-        return TDDarkCol::kTextNormal;
+        case TDLG_MAININSTRUCTIONPANE:
+            return TDDarkCol::kTextInstruct;
+        case TDLG_CONTENTPANE:
+            return TDDarkCol::kTextContent;
+        case TDLG_EXPANDOTEXT:
+            return TDDarkCol::kTextExpando;
+        case TDLG_VERIFICATIONTEXT:
+            return TDDarkCol::kTextVerify;
+        case TDLG_FOOTNOTEPANE:
+            return TDDarkCol::kTextFootnote;
+        case TDLG_EXPANDEDFOOTERAREA:
+            return TDDarkCol::kTextFtrExp;
+        case TDLG_RADIOBUTTONPANE:
+            return TDDarkCol::kTextRadio;
+        default:
+            return TDDarkCol::kTextNormal;
     }
 }
 
@@ -281,36 +283,39 @@ static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
 
 static HICON TDLoadStockIcon(const TASKDIALOGCONFIG* cfg, bool isMain)
 {
-    if (!cfg)
+    if ( !cfg )
         return nullptr;
 
-    if (isMain && (cfg->dwFlags & TDF_USE_HICON_MAIN))
-        return cfg->hMainIcon;
-    if (!isMain && (cfg->dwFlags & TDF_USE_HICON_FOOTER))
-        return cfg->hFooterIcon;
+    if ( isMain )
+    {
+        if ( cfg->dwFlags & TDF_USE_HICON_MAIN )
+            return cfg->hMainIcon;
+    }
+    else
+    {
+        if ( cfg->dwFlags & TDF_USE_HICON_FOOTER )
+            return cfg->hFooterIcon;
+    }
 
-    LPCWSTR res = isMain ? cfg->pszMainIcon : cfg->pszFooterIcon;
-    if (!res || !IS_INTRESOURCE(res))
+    SHSTOCKICONID id;
+
+    const LPCWSTR res = isMain ? cfg->pszMainIcon : cfg->pszFooterIcon;
+    if ( res == TD_WARNING_ICON )
+        id = SIID_WARNING;
+    else if ( res == TD_ERROR_ICON )
+        id = SIID_ERROR;
+    else if ( res == TD_INFORMATION_ICON )
+        id = SIID_INFO;
+    else if ( res == TD_SHIELD_ICON )
+        id = SIID_SHIELD;
+    else
+         return nullptr;
+
+    WinStruct<SHSTOCKICONINFO> sii;
+    if ( ::SHGetStockIconInfo(id, SHGSI_ICON | SHGSI_LARGEICON, &sii) != S_OK )
         return nullptr;
 
-    auto Stock = [](SHSTOCKICONID id) -> HICON
-        {
-         SHSTOCKICONINFO sii = { sizeof(sii)
-        };
-        return SUCCEEDED(SHGetStockIconInfo(id,
-            SHGSI_ICON | SHGSI_LARGEICON, &sii))
-            ? sii.hIcon : nullptr;
-        };
-    if (res == TD_WARNING_ICON)
-        return Stock(SIID_WARNING);
-    if (res == TD_ERROR_ICON)
-        return Stock(SIID_ERROR);
-    if (res == TD_INFORMATION_ICON)
-        return Stock(SIID_INFO);
-    if (res == TD_SHIELD_ICON)
-        return Stock(SIID_SHIELD);
-
-    return nullptr;
+    return sii.hIcon;
 }
 
 // ============================================================================
@@ -321,58 +326,66 @@ static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
 {
     out.clear();
     IUIAutomation* const pAuto = wxTaskDialogDarkModule::GetUIAutomation();
-    if (!pAuto)
+    if ( !pAuto )
         return;
 
-   wxCOMPtr <IUIAutomationElement> pRoot;
-    if (FAILED(pAuto->ElementFromHandle(hwnd, &pRoot)))
+    wxCOMPtr <IUIAutomationElement> pRoot;
+    if ( FAILED(pAuto->ElementFromHandle(hwnd, &pRoot)) )
         return;
 
     wxCOMPtr<IUIAutomationTreeWalker> pWalker;
     pAuto->get_ContentViewWalker(&pWalker);
-    if (!pWalker)
+    if ( !pWalker )
         return;
 
     wxCOMPtr<IUIAutomationElement> pChild;
     pWalker->GetFirstChildElement(pRoot, &pChild);
 
-    while (pChild)
+    while ( pChild )
     {
-        TDLayoutElement info{};
+        TDLayoutElement info;
         pChild->get_CurrentBoundingRectangle(&info.rect);
-        ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.left));
-        ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.right));
+        ::ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.left));
+        ::ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.right));
 
-        {
-            BSTR b;
-            pChild->get_CurrentAutomationId(&b);
-            if (b) info.automationId = static_cast<LPCWSTR>(b);
-        }
-        {
-            BSTR b;
-            pChild->get_CurrentName(&b);
-            if (b) info.name = static_cast<LPCWSTR>(b);
-        }
+        BSTR b;
+        if ( pChild->get_CurrentAutomationId(&b) == S_OK )
+            info.automationId = b;
 
-        if (info.automationId == L"VerificationCheckBox")
+        if ( pChild->get_CurrentName(&b) == S_OK )
+            info.name = b;
+
+        if ( info.automationId == L"VerificationCheckBox" )
         {
-            VARIANT v; VariantInit(&v);
-            if (SUCCEEDED(pChild->GetCurrentPropertyValue(
-                UIA_LegacyIAccessibleStatePropertyId, &v)) && v.vt == VT_I4)
+            VARIANT v;
+            ::VariantInit(&v);
+
+            if ( SUCCEEDED(pChild->GetCurrentPropertyValue
+                                   (
+                                    UIA_LegacyIAccessibleStatePropertyId,
+                                    &v
+                                   )) && v.vt == VT_I4 )
+            {
                 info.legacyState = v.lVal;
-            VariantClear(&v);
+            }
+
+            ::VariantClear(&v);
         }
 
-        if (!info.automationId.empty() && !IsRectEmpty(&info.rect))
+        if ( !info.automationId.empty() && !::IsRectEmpty(&info.rect) )
         {
             const std::wstring& id = info.automationId;
-            if (id == L"MainIcon" || id == L"FootnoteIcon" ||
-                id == L"MainInstruction" || id == L"ContentText" ||
-                id == L"ExpandedFooterText" || id == L"FootnoteText" ||
-                id == L"ExpandoButton" || id == L"VerificationCheckBox" ||
-                id.find(L"RadioButton_") == 0 ||
-                id.find(L"CommandLink_") == 0 ||
-                id.find(L"CommandButton_") == 0)
+            if ( id == L"MainIcon" ||
+                 id == L"FootnoteIcon" ||
+                 id == L"MainInstruction" ||
+                 id == L"ContentText" ||
+                 id == L"ExpandedFooterText" ||
+                 id == L"FootnoteText" ||
+                 id == L"ExpandoButton" ||
+                 id == L"VerificationCheckBox" ||
+                 id.find(L"RadioButton_") == 0 ||
+                 id.find(L"CommandLink_") == 0 ||
+                 id.find(L"CommandButton_") == 0 )
             {
                 out.push_back(std::move(info));
             }
@@ -386,25 +399,33 @@ static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
 
 static void TDUpdateLayoutCache(HWND hwnd, TDPageState& s)
 {
-    if (!s.elemsOk)
+    if ( !s.elemsOk )
     {
         TDBuildLayoutCache(hwnd, s.elements);
         s.elemsOk = true;
     }
-    for (const auto& el : s.elements)
-        if (el.automationId == L"VerificationCheckBox")
+
+    for ( const auto& el : s.elements )
+    {
+        if ( el.automationId == L"VerificationCheckBox" )
         {
             s.isChecked = (el.legacyState & STATE_SYSTEM_CHECKED) != 0;
             break;
         }
-    if (s.defChecked)
+    }
+
+    if ( s.defChecked )
         s.isChecked = true;
 }
 
 static int TDHitTest(const std::vector<TDLayoutElement>& els, POINT pt)
 {
-    for (int i = 0; i < static_cast<int>(els.size()); ++i)
-        if (PtInRect(&els[i].rect, pt)) return i;
+    for ( int i = 0; i < wxSsize(els); ++i )
+    {
+        if ( ::PtInRect(&els[i].rect, pt) )
+            return i;
+    }
+
     return -1;
 }
 
@@ -414,8 +435,10 @@ static int TDHitTest(const std::vector<TDLayoutElement>& els, POINT pt)
 
 static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
 {
-    RGBQUAD* pPx = nullptr; int rw = 0;
-    if (FAILED(GetBufferedPaintBits(hbp, &pPx, &rw))) return;
+    RGBQUAD* pPx = nullptr;
+    int rw = 0;
+    if ( FAILED(::GetBufferedPaintBits(hbp, &pPx, &rw)) )
+        return;
 
     wxColour srcPri(0xff, 0xff, 0xff),
              srcSec(0xf0, 0xf0, 0xf0),
@@ -454,90 +477,122 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
 #undef GET_G
 #undef GET_R
 
-    for (int y = 0; y < h; ++y)
+    for ( int y = 0; y < h; ++y )
     {
         RGBQUAD* row = pPx + static_cast<ptrdiff_t>(y) * rw;
-        for (int x = 0; x < w; ++x)
+        for ( int x = 0; x < w; ++x )
         {
             RGBQUAD& p = row[x];
-            for (const Rule& r : rules)
-                if (p.rgbRed == r.sR && p.rgbGreen == r.sG && p.rgbBlue == r.sB)
+            for ( const Rule& r : rules )
+            {
+                if ( p.rgbRed == r.sR && p.rgbGreen == r.sG && p.rgbBlue == r.sB )
                 {
-                    p.rgbRed = r.dR; p.rgbGreen = r.dG; p.rgbBlue = r.dB;
+                    p.rgbRed = r.dR;
+                    p.rgbGreen = r.dG;
+                    p.rgbBlue = r.dB;
                     p.rgbReserved = 55;
                     break;
                 }
+            }
         }
     }
 }
 
 static void TDPaintIcons(HDC hdc, const TDPageState& s)
 {
-    if (!s.pCfg || TDHasNativeDarkTheme()) return;
-    for (const auto& el : s.elements)
+    if ( !s.pCfg || TDHasNativeDarkTheme() )
+        return;
+
+    for ( const auto& el : s.elements )
     {
-        if (IsRectEmpty(&el.rect)) continue;
-        HICON hIcon = nullptr; HBRUSH brBg = nullptr;
-        if (el.automationId == L"MainIcon")
+        if ( ::IsRectEmpty(&el.rect) )
+            continue;
+
+        HICON hIcon = nullptr;
+        HBRUSH brBg = nullptr;
+        if ( el.automationId == L"MainIcon" )
         {
             hIcon = TDLoadStockIcon(s.pCfg, true);
             brBg = s.brPrimary;
         }
-        else if (el.automationId == L"FootnoteIcon")
+        else if ( el.automationId == L"FootnoteIcon" )
         {
             hIcon = TDLoadStockIcon(s.pCfg, false);
             brBg = s.brFootnote;
         }
-        if (!hIcon || !brBg) continue;
-        FillRect(hdc, &el.rect, brBg);
-        DrawIconEx(hdc, el.rect.left, el.rect.top, hIcon,
-            el.rect.right - el.rect.left, el.rect.bottom - el.rect.top,
-            0, nullptr, DI_NORMAL);
+
+        if ( !hIcon )
+            continue;
+
+        ::FillRect(hdc, &el.rect, brBg);
+        ::DrawIconEx
+        (
+            hdc,
+            el.rect.left,
+            el.rect.top,
+            hIcon,
+            el.rect.right - el.rect.left,
+            el.rect.bottom - el.rect.top,
+            0,
+            nullptr,
+            DI_NORMAL
+        );
     }
 }
 
 static void TDPaintGlyphs(HDC hdc, TDPageState& s)
 {
-    if (!s.hTD && !s.hButton)
+    if ( !s.hTD && !s.hButton )
         return;
 
     if ( TDHasNativeDarkTheme() )
         return;
 
-    for (int i = 0; i < static_cast<int>(s.elements.size()); ++i)
+    for ( int i = 0; i < wxSsize(s.elements); ++i )
     {
         const TDLayoutElement& el = s.elements[i];
-        if (IsRectEmpty(&el.rect))
+        if ( ::IsRectEmpty(&el.rect) )
             continue;
-        const bool hot = (i == s.hotIdx), press = hot && s.pressing;
 
-        if (el.automationId == L"ExpandoButton" && s.hTD)
+        const bool hot = i == s.hotIdx;
+        const bool press = hot && s.pressing;
+
+        if ( el.automationId == L"ExpandoButton" && s.hTD )
         {
             const int width =
                 s.hTD.GetTrueSize(TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, hdc).x;
 
-            RECT rcG = el.rect; rcG.right = el.rect.left + width + 3;
-            int st = (press && s.isExpanded) ? TDLGEBS_EXPANDEDPRESSED :
-                press ? TDLGEBS_PRESSED :
-                (hot && s.isExpanded) ? TDLGEBS_EXPANDEDHOVER :
-                hot ? TDLGEBS_HOVER :
-                s.isExpanded ? TDLGEBS_EXPANDEDNORMAL : TDLGEBS_NORMAL;
-            FillRect(hdc, &rcG, s.brSecondary);
+            RECT rc = el.rect;
+            rc.right = el.rect.left + width + 3;
+
+            int state;
+            if ( press )
+                state = s.isExpanded ? TDLGEBS_EXPANDEDPRESSED : TDLGEBS_PRESSED;
+            else if ( hot )
+                state = s.isExpanded ? TDLGEBS_EXPANDEDHOVER : TDLGEBS_HOVER;
+            else
+                state = s.isExpanded ? TDLGEBS_EXPANDEDNORMAL : TDLGEBS_NORMAL;
+
+            ::FillRect(hdc, &rc, s.brSecondary);
             s.hTD.DrawBackground(hdc, rc, TDLG_EXPANDOBUTTON, state, &el.rect);
         }
-        else if (el.automationId == L"VerificationCheckBox" && s.hButton)
+        else if ( el.automationId == L"VerificationCheckBox" && s.hButton )
         {
             const wxSize size =
                 s.hButton.GetDrawSize(BP_CHECKBOX, CBS_UNCHECKEDNORMAL, hdc);
 
-            int mg = (el.rect.bottom - el.rect.top - size.y) / 3;
-            RECT rcG = { el.rect.left + mg + 1,el.rect.top + mg + 1,el.rect.left + mg + 1 + size.x,el.rect.bottom };
-            int st = (press && s.isChecked) ? CBS_CHECKEDPRESSED :
-                press ? CBS_UNCHECKEDPRESSED :
-                (hot && s.isChecked) ? CBS_CHECKEDHOT :
-                hot ? CBS_UNCHECKEDHOT :
-                s.isChecked ? CBS_CHECKEDNORMAL : CBS_UNCHECKEDNORMAL;
-            FillRect(hdc, &rcG, s.brSecondary);
+            const int mg = (el.rect.bottom - el.rect.top - size.y) / 3;
+            RECT rc = { el.rect.left + mg + 1,el.rect.top + mg + 1,el.rect.left + mg + 1 + size.x,el.rect.bottom };
+
+            int state;
+            if ( press )
+                state = s.isChecked ? CBS_CHECKEDPRESSED : CBS_UNCHECKEDPRESSED;
+            else if ( hot )
+                state = s.isChecked ? CBS_CHECKEDHOT : CBS_UNCHECKEDHOT;
+            else
+                state = s.isChecked ? CBS_CHECKEDNORMAL : CBS_UNCHECKEDNORMAL;
+
+            ::FillRect(hdc, &rc, s.brSecondary);
             s.hButton.DrawBackground(hdc, rc, BP_CHECKBOX, state);
         }
     }
@@ -547,97 +602,106 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
 {
     if ( !s.hTD )
         return;
-     const bool native = TDHasNativeDarkTheme();
 
-    for (const auto& el : s.elements)
+    const bool native = TDHasNativeDarkTheme();
+
+    for ( const auto& el : s.elements )
     {
-        if (IsRectEmpty(&el.rect))
+        if ( ::IsRectEmpty(&el.rect) )
             continue;
-        RECT   rcT = el.rect;
+
+        RECT   rcText = el.rect;
         int    part = 0;
-        HBRUSH brBg = s.brPrimary;
+        HBRUSH brBg = 0;
         DWORD  dtF = DT_LEFT | DT_VCENTER | DT_WORDBREAK | DT_NOPREFIX;
 
-        if (el.automationId == L"MainInstruction")
+        if ( el.automationId == L"MainInstruction" )
         {
             part = TDLG_MAININSTRUCTIONPANE;
             brBg = s.brPrimary;
         }
-        else if (el.automationId == L"ContentText")
+        else if ( el.automationId == L"ContentText" )
         {
             part = TDLG_CONTENTPANE;
             brBg = s.brPrimary;
         }
-        else if (el.automationId == L"ExpandedFooterText")
+        else if ( el.automationId == L"ExpandedFooterText" )
         {
             part = TDLG_EXPANDEDFOOTERAREA;
             brBg = s.brFootnote;
         }
-        else if (el.automationId == L"FootnoteText")
+        else if ( el.automationId == L"FootnoteText" )
         {
             part = TDLG_FOOTNOTEPANE;
             brBg = s.brFootnote;
         }
-        else if (el.automationId == L"ExpandoButton" && s.hTD)
+        else if ( el.automationId == L"ExpandoButton" && s.hTD )
         {
             const int width =
                 s.hTD.GetTrueSize(TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, hdc).x;
 
             MARGINS vm = {};
             s.hTD.GetMargins(vm, TDLG_VERIFICATIONTEXT, TMT_CONTENTMARGINS, 0, hdc);
-            rcT.left += width + vm.cxLeftWidth - 2; rcT.top += 1;
-            part = TDLG_EXPANDOTEXT; brBg = s.brSecondary;
+            rcText.left += width + vm.cxLeftWidth - 2;
+            rcText.top += 1;
+
+            part = TDLG_EXPANDOTEXT;
+            brBg = s.brSecondary;
+
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
         }
-        else if (el.automationId == L"VerificationCheckBox" && s.hButton && s.hTD)
+        else if ( el.automationId == L"VerificationCheckBox" && s.hButton && s.hTD )
         {
             const int width =
                 s.hButton.GetDrawSize(BP_CHECKBOX, CBS_UNCHECKEDNORMAL, hdc).x;
 
             MARGINS tm = {};
             s.hTD.GetMargins(tm, TDLG_VERIFICATIONTEXT, TMT_CONTENTMARGINS, 0, hdc);
-            rcT.left = el.rect.left + width + tm.cxLeftWidth + 3; rcT.top += 5;
-            part = TDLG_VERIFICATIONTEXT; brBg = s.brSecondary;
+            rcText.left = el.rect.left + width + tm.cxLeftWidth + 3;
+            rcText.top += 5;
+
+            part = TDLG_VERIFICATIONTEXT;
+            brBg = s.brSecondary;
+
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
         }
-        if (!part)
+
+        if ( !part )
             continue;
 
-        if (!native)
+        WinStructWordSize<DTTOPTS> opts;
+        if ( !native )
         {
-            WinStructWordSize<DTTOPTS> opts;
             opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
             opts.crText = TDGetTextColour(s, part);
-            FillRect(hdc, &rcT, brBg);
-            ::DrawThemeTextEx(s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, &rcT, &opts);
-        }
-        else
-        {
 
-            ::DrawThemeText(s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, 0, &rcT);
+            ::FillRect(hdc, &rcText, brBg);
         }
+
+        ::DrawThemeTextEx(s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, &rcText, &opts);
     }
 }
 
 static void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
 {
-    if (!s.themesOk)
+    if ( !s.themesOk )
         TDRefreshThemes(hwnd, s);
 
-    RECT rc; GetClientRect(hwnd, &rc);
-    HDC hdcBuf = hdcWin;
-    HPAINTBUFFER hbp = BeginBufferedPaint(hdcWin, &rc, BPBF_TOPDOWNDIB, nullptr, &hdcBuf);
-    if (!hbp)
+    const RECT rc = wxGetClientRect(hwnd);
+    HDC hdcBuf = 0;
+    HPAINTBUFFER hbp = ::BeginBufferedPaint(hdcWin, &rc, BPBF_TOPDOWNDIB, nullptr, &hdcBuf);
+    if ( !hbp )
     {
-        DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcWin), PRF_CLIENT);
+        ::DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcWin), PRF_CLIENT);
         return;
     }
 
-    DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcBuf), PRF_CLIENT);
+    ::DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcBuf), PRF_CLIENT);
 
-    if (!TDHasNativeDarkTheme())
+    if ( !TDHasNativeDarkTheme() )
     {
-        RECT rcBuf; GetBufferedPaintTargetRect(hbp, &rcBuf);
+        RECT rcBuf;
+        ::GetBufferedPaintTargetRect(hbp, &rcBuf);
         TDPaintPixelSwap(hbp, rcBuf.right - rcBuf.left, rcBuf.bottom - rcBuf.top);
     }
 
@@ -645,173 +709,242 @@ static void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
     TDPaintGlyphs(hdcBuf, s);
     TDPaintText(hdcBuf, s);
 
-    EndBufferedPaint(hbp, TRUE);
+    ::EndBufferedPaint(hbp, TRUE);
 }
 
 // ============================================================================
 // Subclass procedures
 // ============================================================================
 
-static LRESULT CALLBACK TDPageSubclassProc(
-    HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam,
-    UINT_PTR uId, DWORD_PTR)
+static LRESULT CALLBACK
+TDPageSubclassProc(HWND hwnd,
+                   UINT msg,
+                   WPARAM wParam,
+                   LPARAM lParam,
+                   UINT_PTR uId,
+                   DWORD_PTR WXUNUSED(dwRef))
 {
-    switch (msg)
+    switch ( msg )
     {
-    case WM_ERASEBKGND:
-        return TRUE;
+        case WM_ERASEBKGND:
+            return TRUE;
 
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps; HDC hdc = BeginPaint(hwnd, &ps);
-        TDPageState& s = TDPageState::Get(hwnd);
-        s.isExpanded = !!GetProp(GetParent(hwnd), L"IsExpanded");
-        s.elemsOk = false;
-        TDUpdateLayoutCache(hwnd, s);
-        TDPaintPage(hwnd, hdc, s);
-        EndPaint(hwnd, &ps);
-        return 0;
+        case WM_PAINT:
+            {
+                PAINTSTRUCT ps;
+                HDC hdc = ::BeginPaint(hwnd, &ps);
+                TDPageState& s = TDPageState::Get(hwnd);
+                s.isExpanded = ::GetPropW(GetParent(hwnd), L"IsExpanded");
+                s.elemsOk = false;
+                TDUpdateLayoutCache(hwnd, s);
+                TDPaintPage(hwnd, hdc, s);
+                ::EndPaint(hwnd, &ps);
+            }
+            return 0;
+
+        case WM_MOUSEMOVE:
+            {
+                TDPageState& s = TDPageState::Get(hwnd);
+                if ( !s.tracking )
+                {
+                    WinStruct<TRACKMOUSEEVENT> tme;
+                    tme.dwFlags = TME_LEAVE;
+                    tme.hwndTrack = hwnd;
+                    ::TrackMouseEvent(&tme);
+
+                    s.tracking = true;
+                }
+                POINT pt{GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
+
+                const int nh = TDHitTest(s.elements, pt);
+                if ( nh != s.hotIdx )
+                {
+                    s.hotIdx = nh;
+                    ::InvalidateRect(hwnd, nullptr, FALSE);
+                }
+            }
+            break;
+
+        case WM_MOUSELEAVE:
+            {
+                TDPageState& s = TDPageState::Get(hwnd);
+                s.tracking = false;
+                s.pressing = false;
+
+                if ( s.hotIdx != -1 )
+                {
+                    s.hotIdx = -1;
+                    ::InvalidateRect(hwnd, nullptr, FALSE);
+                }
+            }
+            break;
+
+        case WM_LBUTTONDOWN:
+            TDPageState::Get(hwnd).pressing = true;
+            TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
+            ::InvalidateRect(hwnd, nullptr, FALSE);
+            break;
+
+        case WM_LBUTTONUP:
+            TDPageState::Get(hwnd).pressing = false;
+            TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
+            ::InvalidateRect(hwnd, nullptr, FALSE);
+            break;
+
+        case WM_THEMECHANGED:
+            {
+                TDPageState& s = TDPageState::Get(hwnd);
+                s.themesOk = false;
+                s.elemsOk = false;
+                ::InvalidateRect(hwnd, nullptr, FALSE);
+            }
+            break;
+
+        case WM_DESTROY:
+            TDPageState::Destroy(hwnd);
+            ::RemoveWindowSubclass(hwnd, TDPageSubclassProc, uId);
+            break;
     }
-    case WM_MOUSEMOVE:
-    {
-        TDPageState& s = TDPageState::Get(hwnd);
-        if (!s.tracking)
-        {
-            TRACKMOUSEEVENT tme = { sizeof(tme),TME_LEAVE,hwnd,0 };
-            TrackMouseEvent(&tme); s.tracking = true;
-        }
-        POINT pt = { (int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam) };
-        int nh = TDHitTest(s.elements, pt);
-        if (nh != s.hotIdx)
-        {
-            s.hotIdx = nh;
-            InvalidateRect(hwnd, nullptr, FALSE);
-        }
-        break;
-    }
-    case WM_MOUSELEAVE:
-    {
-        TDPageState& s = TDPageState::Get(hwnd);
-        s.tracking = false;
-        s.pressing = false;
-        if (s.hotIdx != -1)
-        {
-            s.hotIdx = -1;
-            InvalidateRect(hwnd, nullptr, FALSE);
-        }
-        break;
-    }
-    case WM_LBUTTONDOWN:
-        TDPageState::Get(hwnd).pressing = true;
-        TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
-        InvalidateRect(hwnd, nullptr, FALSE);
-        break;
-    case WM_LBUTTONUP:
-        TDPageState::Get(hwnd).pressing = false;
-        TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
-        InvalidateRect(hwnd, nullptr, FALSE);
-        break;
-    case WM_THEMECHANGED:
-    {
-        TDPageState& s = TDPageState::Get(hwnd);
-        s.themesOk = false;
-        s.elemsOk = false;
-        InvalidateRect(hwnd, nullptr, FALSE);
-        break;
-    }
-    case WM_DESTROY:
-        TDPageState::Destroy(hwnd);
-        RemoveWindowSubclass(hwnd, TDPageSubclassProc, uId);
-        break;
-    }
-    return DefSubclassProc(hwnd, msg, wParam, lParam);
+
+    return ::DefSubclassProc(hwnd, msg, wParam, lParam);
 }
 
-static LRESULT CALLBACK TDCtrlContainerSubclassProc(
-    HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam,
-    UINT_PTR uId, DWORD_PTR dwRef)
+static LRESULT CALLBACK
+TDCtrlContainerSubclassProc(HWND hwnd,
+                            UINT msg,
+                            WPARAM wParam,
+                            LPARAM lParam,
+                            UINT_PTR uId,
+                            DWORD_PTR dwRef)
 {
-    switch (msg)
+    HBRUSH hbr = reinterpret_cast<HBRUSH>(dwRef);
+
+    switch ( msg )
     {
-    case WM_ERASEBKGND:
-        if (dwRef)
-        {
-            HDC hdc = reinterpret_cast<HDC>(wParam); RECT rc; GetClientRect(hwnd, &rc);
-            FillRect(hdc, &rc, reinterpret_cast<HBRUSH>(dwRef)); return 1;
-        }
-        break;
-    case WM_CTLCOLORMSGBOX:
-    case WM_CTLCOLOREDIT:
-    case WM_CTLCOLORLISTBOX:
-    case WM_CTLCOLORBTN:
-    case WM_CTLCOLORDLG:
-    case WM_CTLCOLORSCROLLBAR:
-    case WM_CTLCOLORSTATIC:
-    {
-        HDC hdc = reinterpret_cast<HDC>(wParam);
-        COLORREF bg = TDDarkCol::kSecondary;
-        if (dwRef) { LOGBRUSH lb = {}; GetObject(reinterpret_cast<HBRUSH>(dwRef), sizeof(lb), &lb); if (lb.lbStyle == BS_SOLID) bg = lb.lbColor; }
-        SetBkColor(hdc, bg); SetTextColor(hdc, TDDarkCol::kTextNormal);
-        return reinterpret_cast<LRESULT>(dwRef ? reinterpret_cast<HBRUSH>(dwRef) : CreateSolidBrush(TDDarkCol::kSecondary));
+        case WM_ERASEBKGND:
+            {
+                HDC hdc = reinterpret_cast<HDC>(wParam);
+                wxFillRect(hwnd, hdc, hbr);
+                return 1;
+            }
+
+        case WM_CTLCOLORMSGBOX:
+        case WM_CTLCOLOREDIT:
+        case WM_CTLCOLORLISTBOX:
+        case WM_CTLCOLORBTN:
+        case WM_CTLCOLORDLG:
+        case WM_CTLCOLORSCROLLBAR:
+        case WM_CTLCOLORSTATIC:
+            {
+                HDC hdc = reinterpret_cast<HDC>(wParam);
+                COLORREF bg = TDDarkCol::kSecondary;
+                if ( hbr )
+                {
+                    LOGBRUSH lb = {};
+                    ::GetObject(hbr, sizeof(lb), &lb);
+                    if ( lb.lbStyle == BS_SOLID )
+                        bg = lb.lbColor;
+                }
+
+                ::SetBkColor(hdc, bg);
+                ::SetTextColor(hdc, TDDarkCol::kTextNormal);
+
+                if ( !hbr )
+                    hbr = ::CreateSolidBrush(TDDarkCol::kSecondary);
+
+                return reinterpret_cast<LRESULT>(hbr);
+            }
+
+        case WM_DESTROY:
+            ::DeleteObject(hbr);
+            ::RemoveWindowSubclass(hwnd, TDCtrlContainerSubclassProc, uId);
+            break;
     }
-    case WM_DESTROY:
-        if (dwRef) DeleteObject(reinterpret_cast<HBRUSH>(dwRef));
-        RemoveWindowSubclass(hwnd, TDCtrlContainerSubclassProc, uId);
-        return DefSubclassProc(hwnd, msg, wParam, lParam);
-    }
-    return DefSubclassProc(hwnd, msg, wParam, lParam);
+
+    return ::DefSubclassProc(hwnd, msg, wParam, lParam);
 }
 
-static LRESULT CALLBACK TDRadioButtonSubclassProc(
-    HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam,
-    UINT_PTR uId, DWORD_PTR)
+static LRESULT CALLBACK
+TDRadioButtonSubclassProc(HWND hwnd,
+                          UINT msg,
+                          WPARAM wParam,
+                          LPARAM lParam,
+                          UINT_PTR uId,
+                          DWORD_PTR WXUNUSED(dwRef))
 {
-    if (msg == WM_PAINT)
+    switch ( msg )
     {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-        const int dpi = wxGetWindowDPI(hwnd).x;
-        auto hStyle = wxUxThemeHandle::NewAtStdDPI(L"TaskDialogStyle");
-        auto  hBtn = wxUxThemeHandle::NewAtDPI(nullptr, L"Button",dpi);
-        RECT rcC; GetClientRect(hwnd, &rcC);
-        HDC hdcBuf = hdc;
-        HPAINTBUFFER hbp = BeginBufferedPaint(hdc, &rcC, BPBF_TOPDOWNDIB, nullptr, &hdcBuf);
-        DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcBuf), PRF_CLIENT);
-        wchar_t text[512] = {};
-        GetWindowTextW(hwnd, text, static_cast<int>(std::size(text)));
-        auto gs = hBtn.GetTrueSize(BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL);
-        RECT rcT = { gs.x + 2,0,rcC.right,rcC.bottom };
+        case WM_PAINT:
+            {
+                PAINTSTRUCT ps;
+                HDC hdc = ::BeginPaint(hwnd, &ps);
 
-        WinStructWordSize<DTTOPTS> opts;
-        opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
-        opts.crText = TDDarkCol::kTextNormal;
-        LOGFONT lf = {};
-        if (SUCCEEDED(GetThemeFont(hStyle, hdcBuf, TDLG_RADIOBUTTONPANE, 0, TMT_FONT, &lf)))
-        {
-            HFONT hF = CreateFontIndirect(&lf), hO = static_cast<HFONT>(SelectObject(hdcBuf, hF));
-            DrawThemeTextEx(hStyle, hdcBuf, TDLG_RADIOBUTTONPANE, 0, text, -1, DT_LEFT | DT_VCENTER | DT_END_ELLIPSIS, &rcT, &opts);
-            SelectObject(hdcBuf, hO); DeleteObject(hF);
-        }
-        if (hbp)
-            EndBufferedPaint(hbp, TRUE);
-        EndPaint(hwnd, &ps); return 0;
+                const int dpi = wxGetWindowDPI(hwnd).x;
+                auto hStyle = wxUxThemeHandle::NewAtStdDPI(L"TaskDialogStyle");
+                auto hBtn = wxUxThemeHandle::NewAtDPI(nullptr, L"Button", dpi);
+
+                const RECT rcClient = wxGetClientRect(hwnd);
+                HDC hdcBuf = 0;
+                HPAINTBUFFER hbp = ::BeginBufferedPaint(hdc, &rcClient, BPBF_TOPDOWNDIB, nullptr, &hdcBuf);
+
+                ::DefSubclassProc(hwnd, WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdcBuf), PRF_CLIENT);
+
+                wchar_t text[512] = {};
+                GetWindowTextW(hwnd, text, static_cast<int>(std::size(text)));
+
+                auto gs = hBtn.GetTrueSize(BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL);
+                RECT rcText = { gs.x + 2, 0, rcClient.right, rcClient.bottom };
+
+                WinStructWordSize<DTTOPTS> opts;
+                opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
+                opts.crText = TDDarkCol::kTextNormal;
+
+                LOGFONT lf = {};
+                if ( hStyle.GetFont(lf, hdcBuf, TDLG_RADIOBUTTONPANE) )
+                {
+                    AutoHFONT hFont(lf);
+                    SelectInHDC sel(hdcBuf, hFont);
+
+                    ::DrawThemeTextEx(hStyle, hdcBuf, TDLG_RADIOBUTTONPANE, 0,
+                                      text, -1,
+                                      DT_LEFT | DT_VCENTER | DT_END_ELLIPSIS,
+                                      &rcText, &opts);
+                }
+
+                if ( hbp )
+                    ::EndBufferedPaint(hbp, TRUE);
+                ::EndPaint(hwnd, &ps);
+            }
+            return 0;
+
+        case WM_DESTROY:
+            ::RemoveWindowSubclass(hwnd, TDRadioButtonSubclassProc, uId);
+            break;
     }
-    if (msg == WM_DESTROY)
-        RemoveWindowSubclass(hwnd, TDRadioButtonSubclassProc, uId);
-    return DefSubclassProc(hwnd, msg, wParam, lParam);
+
+    return ::DefSubclassProc(hwnd, msg, wParam, lParam);
 }
 
 // ============================================================================
 // Attachment helpers
 // ============================================================================
 
-static void TDSubclassContainer(HWND hP, COLORREF bg)
+static void TDSubclassContainer(HWND hwndParent, COLORREF bg)
 {
-    if (!hP) return;
-    DWORD_PTR ex = 0;
-    if (!GetWindowSubclass(hP, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &ex))
-        SetWindowSubclass(hP, TDCtrlContainerSubclassProc, kTDCtrlSubclassId,
-            reinterpret_cast<DWORD_PTR>(CreateSolidBrush(bg)));
+    if ( !hwndParent )
+        return;
+
+    DWORD_PTR dwRef = 0;
+    if ( !::GetWindowSubclass(hwndParent, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &dwRef) )
+    {
+        ::SetWindowSubclass
+        (
+            hwndParent,
+            TDCtrlContainerSubclassProc,
+            kTDCtrlSubclassId,
+            reinterpret_cast<DWORD_PTR>(::CreateSolidBrush(bg))
+        );
+    }
 }
 
 static void TDApplyToChildren(IUIAutomationElement* pEl)
@@ -822,27 +955,36 @@ static void TDApplyToChildren(IUIAutomationElement* pEl)
 
     const bool native = TDHasNativeDarkTheme();
 
-    wxCOMPtr<IUIAutomationTreeWalker> pW;
-    uiAuto->get_ContentViewWalker(&pW);
-    if (!pW) return;
-    wxCOMPtr<IUIAutomationElement> pChild;
-    pW->GetFirstChildElement(pEl, &pChild);
+    wxCOMPtr<IUIAutomationTreeWalker> pWalker;
+    uiAuto->get_ContentViewWalker(&pWalker);
+    if ( !pWalker )
+        return;
 
-    while (pChild)
+    wxCOMPtr<IUIAutomationElement> pChild;
+    pWalker->GetFirstChildElement(pEl, &pChild);
+
+    while ( pChild )
     {
         CONTROLTYPEID ct = 0;
         pChild->get_CurrentControlType(&ct);
-        if (ct == UIA_ButtonControlTypeId || ct == UIA_RadioButtonControlTypeId ||
-            ct == UIA_ProgressBarControlTypeId || ct == UIA_HyperlinkControlTypeId ||
-            ct == UIA_ScrollBarControlTypeId || ct == UIA_PaneControlTypeId)
+
+        if ( ct == UIA_ButtonControlTypeId ||
+             ct == UIA_RadioButtonControlTypeId ||
+             ct == UIA_ProgressBarControlTypeId ||
+             ct == UIA_HyperlinkControlTypeId ||
+             ct == UIA_ScrollBarControlTypeId ||
+             ct == UIA_PaneControlTypeId)
         {
             if ( const HWND hBtn = GetHWNDFromElement(pChild) )
             {
-                BSTR bId; pChild->get_CurrentAutomationId(&bId);
-                const std::wstring id(bId ? static_cast<LPCWSTR>(bId) : L"");
-                HWND hP = GetParent(hBtn);
+                BSTR bId;
+                pChild->get_CurrentAutomationId(&bId);
 
-                if (ct == UIA_ProgressBarControlTypeId)
+                const std::wstring id(bId ? bId : L"");
+
+                HWND hwndParent = ::GetParent(hBtn);
+
+                if ( ct == UIA_ProgressBarControlTypeId )
                 {
                     wxMSWDarkMode::SetTheme
                     (
@@ -852,24 +994,27 @@ static void TDApplyToChildren(IUIAutomationElement* pEl)
                             : L"DarkMode_Explorer"
                     );
                 }
-                else if (ct == UIA_RadioButtonControlTypeId || id.find(L"RadioButton_") == 0 || ct == UIA_HyperlinkControlTypeId)
+                else if ( ct == UIA_RadioButtonControlTypeId ||
+                            id.find(L"RadioButton_") == 0 ||
+                                ct == UIA_HyperlinkControlTypeId )
                 {
-                    if (native)
+                    if ( native )
                     {
                         wxMSWDarkMode::SetTheme(hBtn, L"DarkMode_DarkTheme");
                     }
                     else
                     {
-                        DWORD_PTR ex = 0;
-                        if (!GetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &ex))
-                            SetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, 0);
+                        DWORD_PTR dwRef = 0;
+                        if ( !::GetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &dwRef) )
+                            ::SetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, 0);
                     }
-                    TDSubclassContainer(hP, native ? TDDarkCol::kSecondary : TDDarkCol::kPrimary);
+
+                    TDSubclassContainer(hwndParent, native ? TDDarkCol::kSecondary : TDDarkCol::kPrimary);
                 }
-                else if (id.find(L"CommandLink_") == 0 || id.find(L"CommandButton_") == 0)
+                else if ( id.find(L"CommandLink_") == 0 || id.find(L"CommandButton_") == 0 )
                 {
                     wxMSWDarkMode::SetTheme(hBtn, L"DarkMode_Explorer");
-                    TDSubclassContainer(hP, TDDarkCol::kSecondary);
+                    TDSubclassContainer(hwndParent, TDDarkCol::kSecondary);
                 }
                 else
                 {
@@ -877,7 +1022,9 @@ static void TDApplyToChildren(IUIAutomationElement* pEl)
                 }
             }
         }
-        wxCOMPtr<IUIAutomationElement> pNext; pW->GetNextSiblingElement(pChild, &pNext);
+
+        wxCOMPtr<IUIAutomationElement> pNext;
+        pWalker->GetNextSiblingElement(pChild, &pNext);
         pChild = pNext;
     }
 }
@@ -907,14 +1054,24 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     // SysLink controls (footnote / content hyperlinks)
     if ( wcscmp(cls, L"CCSysLink") == 0 )
     {
-        if ( const HWND hL = GetHWNDFromElement(pEl) )
+        if ( const HWND hLink = GetHWNDFromElement(pEl) )
         {
             BSTR bId;
             pEl->get_CurrentAutomationId(&bId);
-            const std::wstring id(bId ? static_cast<LPCWSTR>(bId) : L"");
-            bool isFn = id.find(L"Footnote") != std::wstring::npos || id.find(L"ExpandedFooter") != std::wstring::npos;
-            TDSubclassContainer(GetParent(hL), (isFn && !TDHasNativeDarkTheme()) ? TDDarkCol::kFootnote : TDDarkCol::kPrimary);
+
+            const std::wstring id(bId ? bId : L"");
+            bool isFn = id.find(L"Footnote") != std::wstring::npos ||
+                            id.find(L"ExpandedFooter") != std::wstring::npos;
+
+            TDSubclassContainer
+            (
+                GetParent(hLink),
+                isFn && !TDHasNativeDarkTheme()
+                    ? TDDarkCol::kFootnote
+                    : TDDarkCol::kPrimary
+            );
         }
+
         return TRUE;
     }
 
@@ -928,9 +1085,17 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
 
     // Class background brush
     {
-        HBRUSH nb = CreateSolidBrush(TDDarkCol::kSecondary);
-        HBRUSH ob = reinterpret_cast<HBRUSH>(SetClassLongPtr(hDUI, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb)));
-        if (ob && ob != GetSysColorBrush(COLOR_WINDOW) && ob != GetSysColorBrush(COLOR_BTNFACE)) DeleteObject(ob);
+        HBRUSH nb = ::CreateSolidBrush(TDDarkCol::kSecondary);
+
+        HBRUSH ob = reinterpret_cast<HBRUSH>(
+            ::SetClassLongPtr(hDUI, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb))
+        );
+        if ( ob &&
+                ob != ::GetSysColorBrush(COLOR_WINDOW) &&
+                    ob != ::GetSysColorBrush(COLOR_BTNFACE))
+        {
+            ::DeleteObject(ob);
+        }
     }
 
     TDApplyToChildren(pEl);
@@ -942,14 +1107,14 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     s.pCfg = d->pCfg;
     s.defExpanded = d->pCfg && (d->pCfg->dwFlags & TDF_EXPANDED_BY_DEFAULT);
     s.defChecked = d->pCfg && (d->pCfg->dwFlags & TDF_VERIFICATION_FLAG_CHECKED);
-    s.isExpanded = GetProp(d->hwndTD, L"IsExpanded");
-    s.isChecked = s.defChecked || GetProp(d->hwndTD, L"IsChecked");
+    s.isExpanded = ::GetPropW(d->hwndTD, L"IsExpanded");
+    s.isChecked = s.defChecked || ::GetPropW(d->hwndTD, L"IsChecked");
     s.elemsOk = false;
     TDUpdateLayoutCache(hDUI, s);
 
-    DWORD_PTR ex = 0;
-    if (!GetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, &ex))
-        SetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, 0);
+    DWORD_PTR dwRef = 0;
+    if ( !::GetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, &dwRef) )
+        ::SetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, 0);
 
     d->found = true;
     return TRUE;
@@ -957,22 +1122,24 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
 
 static BOOL CALLBACK TDEnumSysColorProc(HWND h, LPARAM)
 {
-    SendMessage(h, WM_SYSCOLORCHANGE, 0, 0);
+    ::SendMessage(h, WM_SYSCOLORCHANGE, 0, 0);
     return TRUE;
 }
 
 static BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
 {
-    DWORD_PTR ex = 0;
-    if (GetWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId, &ex))
+    DWORD_PTR dwRef = 0;
+    if ( ::GetWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId, &dwRef) )
     {
-        RemoveWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId);
+        ::RemoveWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId);
         TDPageState::Destroy(hChild);
     }
-    if (GetWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &ex))
-        RemoveWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId);
-    if (GetWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &ex))
-        RemoveWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId);
+
+    if ( ::GetWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &dwRef) )
+        ::RemoveWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId);
+
+    if ( ::GetWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &dwRef) )
+        ::RemoveWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId);
 
     ::SetWindowTheme(hChild, nullptr, nullptr);
 
@@ -987,29 +1154,31 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
     data.hwndTD = hwndTD;
     data.pCfg = pCfg;
 
-    EnumChildWindows(hwndTD, TDEnumAttachProc, reinterpret_cast<LPARAM>(&data));
+    ::EnumChildWindows(hwndTD, TDEnumAttachProc, reinterpret_cast<LPARAM>(&data));
 
-    if (!data.found)
+    if ( !data.found )
         return;
 
-    if (native)
+    if ( native )
         wxMSWDarkMode::AllowForWindow(hwndTD, L"DarkMode_Explorer", nullptr);
-    DWORD_PTR ex;
-    if (!GetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, &ex))
-        SetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, 0);
+
+    DWORD_PTR dwRef;
+    if ( !::GetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, &dwRef) )
+        ::SetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, 0);
+
     // Dark title bar
     wxMSWDarkMode::ConfigureTLW(hwndTD);
-    HBRUSH nb = CreateSolidBrush(TDDarkCol::kPrimary);
-    SetClassLongPtr(hwndTD, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb));
-    EnumChildWindows(hwndTD, TDEnumSysColorProc, 0);
-    SendMessage(hwndTD, WM_THEMECHANGED, 0, 0);
+    HBRUSH nb = ::CreateSolidBrush(TDDarkCol::kPrimary);
+    ::SetClassLongPtr(hwndTD, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb));
+    ::EnumChildWindows(hwndTD, TDEnumSysColorProc, 0);
+    ::SendMessage(hwndTD, WM_THEMECHANGED, 0, 0);
 }
 
 static void TDDetach(HWND hwndTD)
 {
-    EnumChildWindows(hwndTD, TDEnumDetachProc, 0);
+    ::EnumChildWindows(hwndTD, TDEnumDetachProc, 0);
+}
 
-} // TDDetach
 } // anonymous namespace
 
 #endif // wxUSE_DARK_MODE
@@ -1026,11 +1195,12 @@ void wxMSWDarkMode::AllowForTaskDialog(HWND hwnd, const TASKDIALOGCONFIG* pCfg)
 
     // Ensure COM is initialised for UIA on this thread.
     // S_FALSE means already initialised by the caller — that is fine.
-    const HRESULT hr = CoInitializeEx(
-        nullptr,
-        COINIT_APARTMENTTHREADED |
-        COINIT_DISABLE_OLE1DDE);
-    if (FAILED(hr) && hr != S_FALSE)
+    const HRESULT hr = CoInitializeEx
+                       (
+                        nullptr,
+                        COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE
+                       );
+    if ( FAILED(hr) && hr != S_FALSE )
         return;
 
     TDAttach(hwnd, pCfg);
