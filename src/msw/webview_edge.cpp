@@ -1132,8 +1132,7 @@ wxWebViewEdge::~wxWebViewEdge()
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Unbind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
-    if (GetParent())
-        GetParent()->Unbind(wxEVT_SHOW, &wxWebViewEdge::OnParentShow, this);
+    GetParent()->Unbind(wxEVT_SHOW, &wxWebViewEdge::OnParentShow, this);
     delete m_impl;
 }
 
