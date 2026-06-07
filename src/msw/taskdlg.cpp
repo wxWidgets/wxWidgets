@@ -39,7 +39,6 @@
 #include "wx/msw/private/darkmode.h"
 
 #include "wx/msw/private/comptr.h"
-#include "wx/msw/ole/oleutils.h"
 #include <uiautomation.h>
 
 // ============================================================================
@@ -899,9 +898,9 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lp)
         return TRUE;
     BSTR cls;
     pEl->get_CurrentClassName(&cls);
-    wxBasicString str = wxBasicString(cls);
+
     // SysLink controls (footnote / content hyperlinks)
-    if (wxString(str).IsSameAs(wxS("CCSysLink")))
+    if ( wcscmp(cls, L"CCSysLink") == 0 )
     {
         if ( const HWND hL = GetHWNDFromElement(pEl) )
         {
@@ -915,7 +914,7 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lp)
     }
 
     // Main TaskPage (DirectUI "TaskDialog" class)
-    if (!wxString(str).IsSameAs(wxS("TaskDialog")))
+    if ( wcscmp(cls, L"TaskDialog") != 0 )
         return TRUE;
 
     const HWND hDUI = GetHWNDFromElement(pEl);
