@@ -881,21 +881,25 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
     }
 }
 
-// EnumData is used by TDEnumAttachProc below, so it lives at namespace scope.
+// EnumData is used by TDEnumAttachProc below to get the input parameters and
+// return the "found" result.
 struct TDEnumData
 {
-    HWND hwndTD;
-    const TASKDIALOGCONFIG* pCfg;
-    IUIAutomation* pAuto;
-    bool found;
+    HWND hwndTD = 0;
+    const TASKDIALOGCONFIG* pCfg = nullptr;
+    bool found = false;
 };
 
 static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
 {
-    TDEnumData* d = reinterpret_cast<TDEnumData*>(lparam);
+    IUIAutomation* const uiAuto = wxTaskDialogDarkModule::GetUIAutomation();
+    if ( !uiAuto )
+        return FALSE;
+
     wxCOMPtr<IUIAutomationElement> pEl;
-    if (FAILED(d->pAuto->ElementFromHandle(hwndChild, &pEl)))
+    if ( FAILED(uiAuto->ElementFromHandle(hwndChild, &pEl)) )
         return TRUE;
+
     BSTR cls;
     pEl->get_CurrentClassName(&cls);
 
@@ -928,10 +932,11 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
         if (ob && ob != GetSysColorBrush(COLOR_WINDOW) && ob != GetSysColorBrush(COLOR_BTNFACE)) DeleteObject(ob);
     }
 
-    TDApplyToChildren(pEl, d->pAuto);
+    TDApplyToChildren(pEl, uiAuto);
     SetWindowTheme(hDUI, L"DarkMode_Explorer", nullptr);
 
     // Initialise per-page state
+    TDEnumData* const d = reinterpret_cast<TDEnumData*>(lparam);
     TDPageState& s = TDPageState::Get(hDUI);
     s.pCfg = d->pCfg;
     s.defExpanded = d->pCfg && (d->pCfg->dwFlags & TDF_EXPANDED_BY_DEFAULT);
@@ -973,12 +978,11 @@ static BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
 
 static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
 {
-    IUIAutomation* const pAuto = wxTaskDialogDarkModule::GetUIAutomation();
-    if (!pAuto)
-        return;
     const bool native = TDHasNativeDarkTheme();
 
-    TDEnumData data = { hwndTD,pCfg,pAuto,false };
+    TDEnumData data;
+    data.hwndTD = hwndTD;
+    data.pCfg = pCfg;
 
     EnumChildWindows(hwndTD, TDEnumAttachProc, reinterpret_cast<LPARAM>(&data));
 
