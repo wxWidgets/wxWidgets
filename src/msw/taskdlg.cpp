@@ -120,7 +120,6 @@ struct TDPageState
 
 // Thread-local state map and UIA singleton
 static thread_local std::unordered_map<HWND, TDPageState> tls_tdStates;
-static thread_local wxCOMPtr<IUIAutomation>                 tls_tdAutomation;
 
 static TDPageState& GetTDPageState(HWND h) { return tls_tdStates[h]; }
 
@@ -140,12 +139,22 @@ const GUID CLSID_CUIAutomation = { 0xff48dba4, 0x60ef, 0x4201, { 0xaa, 0x87, 0x5
 // Also usually paired with the IID for IUIAutomation:
 // {30cbe57d-d9d0-452a-ab13-7ac5ac4825ee}
 const IID IID_IUIAutomation = { 0x30cbe57d, 0xd9d0, 0x452a, { 0xab, 0x13, 0x7a, 0xc5, 0xac, 0x48, 0x25, 0xee } };
+
 // Function to get IUIAutomation instance
 static IUIAutomation* GetTDAutomation()
 {
+    static thread_local wxCOMPtr<IUIAutomation> tls_tdAutomation;
+
     if (!tls_tdAutomation)
     {
-        HRESULT hr = CoCreateInstance(CLSID_CUIAutomation, nullptr, CLSCTX_INPROC_SERVER, IID_IUIAutomation, reinterpret_cast<void**>(&tls_tdAutomation));
+        HRESULT hr = CoCreateInstance
+                     (
+                        CLSID_CUIAutomation,
+                        nullptr,
+                        CLSCTX_INPROC_SERVER,
+                        IID_IUIAutomation,
+                        reinterpret_cast<void**>(&tls_tdAutomation)
+                     );
         if (FAILED(hr))
         {
             tls_tdAutomation = nullptr;
@@ -153,6 +162,7 @@ static IUIAutomation* GetTDAutomation()
     }
     return tls_tdAutomation;
 }
+
 // Subclass IDs
 static constexpr UINT_PTR kTDMainSubclassId = 0xDEADBEEFul;
 static constexpr UINT_PTR kTDPageSubclassId = 0xBADF00Dul;
