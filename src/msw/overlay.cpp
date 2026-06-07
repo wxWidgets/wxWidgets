@@ -274,6 +274,8 @@ void wxOverlayImpl::SetOpacity(int alpha)
         m_alpha = wxClip(alpha, -1, 255);
     }
     else if ( IsUsingConstantOpacity() )
+#else
+    if ( IsOk() )
 #endif // wxUSE_GRAPHICS_CONTEXT
     {
         m_alpha = wxClip(alpha, 0, 255);
