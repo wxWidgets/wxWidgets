@@ -631,7 +631,7 @@ static LRESULT CALLBACK TDPageSubclassProc(
     switch (msg)
     {
     case WM_ERASEBKGND:
-        return 1;
+        return TRUE;
 
     case WM_PAINT:
     {
