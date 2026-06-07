@@ -93,7 +93,6 @@ struct TDLayoutElement
 struct TDPageState
 {
     wxUxThemeHandle hTD ; // TaskDialog panel + glyph parts
-    wxUxThemeHandle hTDS ; // TaskDialogStyle / text fonts
     wxUxThemeHandle hButton ; // Button (checkbox glyph)
     bool   isDark = false;   // native dark theme available
     bool   themesOk = false;
@@ -231,27 +230,29 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
     s.isDark = TDHasNativeDarkTheme();
     const int dpi = wxGetWindowDPI(hwnd).x;
 
-    const wchar_t* mainClass = s.isDark
-        ? L"DarkMode_Explorer::TaskDialog"
-        : L"TaskDialog";
-    const wchar_t* btnClass = s.isDark
-        ? L"DarkMode_Explorer::Button" : L"Button";
-    // For TaskDialog style, likely same as mainClass; could be different.
-    const wchar_t* mainClassDark = s.isDark ? L"DarkMode_Explorer::TaskDialog" : nullptr; // or nullptr if not needed
+    if ( s.isDark )
+    {
+        const wchar_t* mainClass = L"DarkMode_Explorer::TaskDialog";
+        const wchar_t* btnClass = L"DarkMode_Explorer::Button";
 
-    s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, mainClass, mainClassDark, dpi);
-    s.hTDS = wxUxThemeHandle::NewAtDPI(hwnd, mainClass, mainClassDark, dpi);
-    s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, btnClass, dpi);
+        s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, mainClass, mainClass, dpi);
+        s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, btnClass, btnClass, dpi);
+    }
+    else // Try the best we can with the themes available on older OS versions.
+    {
+        s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, L"TaskDialog", dpi);
+        s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, L"Button", dpi);
+    }
 
     s.themesOk = true;
 }
 
 static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
 {
-    if (s.isDark && s.hTDS)
+    if (s.isDark)
     {
         COLORREF c = TDDarkCol::kTextNormal;
-        if (SUCCEEDED(GetThemeColor(s.hTDS, uiPart, 0, TMT_TEXTCOLOR, &c)))
+        if (SUCCEEDED(GetThemeColor(s.hTD, uiPart, 0, TMT_TEXTCOLOR, &c)))
             return c;
     }
     switch (uiPart)
@@ -543,7 +544,7 @@ static void TDPaintGlyphs(HDC hdc, TDPageState& s)
 
 static void TDPaintText(HDC hdc, const TDPageState& s)
 {
-    if (!s.hTDS && !s.hTD)
+    if ( !s.hTD )
         return;
      const bool native = TDHasNativeDarkTheme();
 
@@ -604,12 +605,12 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
             DTTOPTS opts = { sizeof(opts) }; opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
             opts.crText = TDGetTextColour(s, part);
             FillRect(hdc, &rcT, brBg);
-            ::DrawThemeTextEx(s.hTDS ? s.hTDS : s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, &rcT, &opts);
+            ::DrawThemeTextEx(s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, &rcT, &opts);
         }
         else
         {
 
-            ::DrawThemeText(s.hTDS ? s.hTDS : s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, 0, &rcT);
+            ::DrawThemeText(s.hTD, hdc, part, 0, el.name.c_str(), -1, dtF, 0, &rcT);
         }
     }
 }
