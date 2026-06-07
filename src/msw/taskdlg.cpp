@@ -82,6 +82,18 @@ HWND GetHWNDFromElement(IUIAutomationElement* element)
     return reinterpret_cast<HWND>(hwnd);
 }
 
+// Another helper to get the automation ID of an element.
+std::wstring GetCurrentAutomationId(IUIAutomationElement* element)
+{
+    std::wstring result;
+
+    BSTR bstr;
+    if ( element->get_CurrentAutomationId(&bstr) == S_OK )
+        result = bstr;
+
+    return result;
+}
+
 // Cached bounding rect + metadata for a single TaskDialog UI element.
 struct TDLayoutElement
 {
@@ -348,10 +360,9 @@ static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
         ::ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.left));
         ::ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.right));
 
-        BSTR b;
-        if ( pChild->get_CurrentAutomationId(&b) == S_OK )
-            info.automationId = b;
+        info.automationId = GetCurrentAutomationId(pChild);
 
+        BSTR b;
         if ( pChild->get_CurrentName(&b) == S_OK )
             info.name = b;
 
@@ -977,10 +988,7 @@ static void TDApplyToChildren(IUIAutomationElement* pEl)
         {
             if ( const HWND hBtn = GetHWNDFromElement(pChild) )
             {
-                BSTR bId;
-                pChild->get_CurrentAutomationId(&bId);
-
-                const std::wstring id(bId ? bId : L"");
+                const std::wstring id = GetCurrentAutomationId(pChild);
 
                 HWND hwndParent = ::GetParent(hBtn);
 
@@ -1056,10 +1064,7 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     {
         if ( const HWND hLink = GetHWNDFromElement(pEl) )
         {
-            BSTR bId;
-            pEl->get_CurrentAutomationId(&bId);
-
-            const std::wstring id(bId ? bId : L"");
+            const std::wstring id = GetCurrentAutomationId(pEl);
             bool isFn = id.find(L"Footnote") != std::wstring::npos ||
                             id.find(L"ExpandedFooter") != std::wstring::npos;
 
