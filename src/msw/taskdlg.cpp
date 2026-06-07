@@ -86,9 +86,9 @@ struct TDPageState
     bool   isDark = false;   // native dark theme available
     bool   themesOk = false;
 
-    HBRUSH brPrimary = nullptr;
-    HBRUSH brSecondary = nullptr;
-    HBRUSH brFootnote = nullptr;
+    AutoHBRUSH brPrimary{TDDarkCol::kPrimary};
+    AutoHBRUSH brSecondary{TDDarkCol::kSecondary};
+    AutoHBRUSH brFootnote{TDDarkCol::kFootnote};
 
     std::vector<TDLayoutElement> elements;
     bool elemsOk = false;
@@ -116,13 +116,6 @@ struct TDPageState
     {
         themesOk = false;
     }
-    void DestroyBrushes()
-    {
-        if (brPrimary) { DeleteObject(brPrimary);   brPrimary = nullptr; }
-        if (brSecondary) { DeleteObject(brSecondary); brSecondary = nullptr; }
-        if (brFootnote) { DeleteObject(brFootnote);  brFootnote = nullptr; }
-    }
-    void Destroy() { CloseThemes(); DestroyBrushes(); elements.clear(); elemsOk = false; }
 };
 
 // Thread-local state map and UIA singleton
@@ -134,7 +127,10 @@ static TDPageState& GetTDPageState(HWND h) { return tls_tdStates[h]; }
 static void DestroyTDPageState(HWND h)
 {
     auto it = tls_tdStates.find(h);
-    if (it != tls_tdStates.end()) { it->second.Destroy(); tls_tdStates.erase(it); }
+    if ( it != tls_tdStates.end() )
+    {
+        tls_tdStates.erase(it);
+    }
 }
 
 // GUID definitions
@@ -228,13 +224,6 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
     resetTheme(s.hButton, btnClass, nullptr);
 
     s.themesOk = true;
-}
-
-static void TDEnsureBrushes(TDPageState& s)
-{
-    if (!s.brPrimary)   s.brPrimary = CreateSolidBrush(TDDarkCol::kPrimary);
-    if (!s.brSecondary) s.brSecondary = CreateSolidBrush(TDDarkCol::kSecondary);
-    if (!s.brFootnote)  s.brFootnote = CreateSolidBrush(TDDarkCol::kFootnote);
 }
 
 static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
@@ -596,7 +585,6 @@ static void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
 {
     if (!s.themesOk)
         TDRefreshThemes(hwnd, s);
-    TDEnsureBrushes(s);
 
     RECT rc; GetClientRect(hwnd, &rc);
     HDC hdcBuf = hdcWin;
