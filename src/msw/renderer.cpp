@@ -693,7 +693,7 @@ wxRendererXP::DoDrawXPButton(int kind,
                              const wxRect& rect,
                              int flags)
 {
-    wxUxThemeHandle hTheme(win, L"BUTTON");
+    wxUxThemeHandle hTheme(win, L"BUTTON", L"DarkMode_Explorer::Button");
     if ( !hTheme )
         return false;
 
@@ -821,7 +821,7 @@ wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win, int flags)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    wxUxThemeHandle hTheme(win, L"BUTTON");
+    wxUxThemeHandle hTheme(win, L"BUTTON", L"DarkMode_Explorer::Button");
     if (hTheme)
     {
         if (::IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
