@@ -39,6 +39,7 @@
 #include "wx/stdpaths.h"
 #if wxUSE_SVG
 #include "wx/dcsvg.h"
+#include "wx/svggc.h"
 #endif
 #if wxUSE_POSTSCRIPT
 #include "wx/dcps.h"
@@ -2160,6 +2161,12 @@ void MyCanvas::Draw(wxDC& pdc)
             context = m_renderer->CreateContext(*metadc);
         }
 #endif
+#if wxUSE_SVG
+        else if ( wxSVGFileDC *svgdc = wxDynamicCast(&pdc, wxSVGFileDC) )
+        {
+            context = wxSVGGraphicsContext::Create(*svgdc);
+        }
+#endif
         else
         {
             wxFAIL_MSG( "Unknown wxDC kind" );
@@ -2851,15 +2858,6 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_SVG
         if (ext == "svg")
         {
-#if wxUSE_GRAPHICS_CONTEXT
-            // Graphics screen can only be drawn using GraphicsContext
-            if (m_canvas->GetPage() == File_ShowGraphics) {
-                wxLogMessage("Graphics screen can not be saved as SVG.");
-                return;
-            }
-            wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
-            m_canvas->UseGraphicRenderer(nullptr);
-#endif
             wxSize svgSize;
             wxSVGFileDC tempSvgDC(svgSize);
             m_canvas->Draw(tempSvgDC);
@@ -2870,9 +2868,6 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             wxSVGFileDC svgDC(svgSize, dlg.GetPath(), "Drawing sample");
             svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
             m_canvas->Draw(svgDC);
-#if wxUSE_GRAPHICS_CONTEXT
-            m_canvas->UseGraphicRenderer(tempRenderer);
-#endif
         }
         else
 #endif
