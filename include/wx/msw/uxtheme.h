@@ -204,9 +204,14 @@ public:
         return NewAtStdDPI(0, classes, classesDark);
     }
 
+    // Default ctor, use move assignment to really initialize this object later.
+    wxUxThemeHandle() = default;
+
     // wxWindow pointer here must be valid and its DPI is always used.
     // If classesDark is non-nullptr and the dark mode is active, it's used
     // instead of classes.
+    //
+    // Prefer using factory functions above instead of this ctor for clarity.
     wxUxThemeHandle(const wxWindow* win,
                     const wchar_t* classes,
                     const wchar_t* classesDark = nullptr);
@@ -217,14 +222,20 @@ public:
         other.m_hTheme = 0;
     }
 
+    wxUxThemeHandle& operator=(wxUxThemeHandle&& other)
+    {
+        Free();
+        m_hTheme = other.m_hTheme;
+        other.m_hTheme = 0;
+
+        return *this;
+    }
+
     operator HTHEME() const { return m_hTheme; }
 
     ~wxUxThemeHandle()
     {
-        if ( m_hTheme )
-        {
-            ::CloseThemeData(m_hTheme);
-        }
+        Free();
     }
 
     // Return the colour for the given part, property and state.
@@ -270,11 +281,18 @@ private:
     {
     }
 
+    void Free()
+    {
+        if ( m_hTheme )
+        {
+            ::CloseThemeData(m_hTheme);
+        }
+    }
+
     wxSize DoGetSize(int part, int state, THEMESIZE ts) const;
 
 
-    // This is almost, but not quite, const: it's only reset in move ctor.
-    HTHEME m_hTheme;
+    HTHEME m_hTheme = 0;
 
     wxDECLARE_NO_COPY_CLASS(wxUxThemeHandle);
 };

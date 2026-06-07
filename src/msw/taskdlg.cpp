@@ -88,12 +88,6 @@ struct TDPageState
 
     std::vector<TDLayoutElement> elements;
     bool elemsOk = false;
-    TDPageState()
-        : hTD(wxUxThemeHandle::NewAtStdDPI(L"")),   // Invalid class -> empty handle
-        hTDS(wxUxThemeHandle::NewAtStdDPI(L"")),
-        hButton(wxUxThemeHandle::NewAtStdDPI(L""))
-    {
-    }
 
     // Mouse interaction (message-driven, no polling)
     bool tracking = false;
@@ -200,13 +194,6 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
     s.CloseThemes();
     s.isDark = TDHasNativeDarkTheme();
     int dpi = GetWindowDPI(hwnd);
-    auto resetTheme = [&](wxUxThemeHandle& member, const wchar_t* classes, const wchar_t* classesDark)
-        {
-            // Destroy the old handle
-            member.~wxUxThemeHandle();
-            // Create a new temporary using the factory, then move-construct in place
-            new (&member) wxUxThemeHandle(wxUxThemeHandle::NewAtDPI(hwnd, classes, classesDark, dpi));
-        };
 
     const wchar_t* mainClass = s.isDark
         ? L"DarkMode_Explorer::TaskDialog"
@@ -216,9 +203,9 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
     // For TaskDialog style, likely same as mainClass; could be different.
     const wchar_t* mainClassDark = s.isDark ? L"DarkMode_Explorer::TaskDialog" : nullptr; // or nullptr if not needed
 
-    resetTheme(s.hTD, mainClass, mainClassDark);
-    resetTheme(s.hTDS, mainClass, mainClassDark);
-    resetTheme(s.hButton, btnClass, nullptr);
+    s.hTD = wxUxThemeHandle::NewAtDPI(hwnd, mainClass, mainClassDark, dpi);
+    s.hTDS = wxUxThemeHandle::NewAtDPI(hwnd, mainClass, mainClassDark, dpi);
+    s.hButton = wxUxThemeHandle::NewAtDPI(hwnd, btnClass, dpi);
 
     s.themesOk = true;
 }
