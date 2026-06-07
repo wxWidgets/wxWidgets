@@ -4862,10 +4862,7 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 // DPI
 // ---------------------------------------------------------------------------
 
-namespace
-{
-
-static wxSize GetWindowDPI(HWND hwnd)
+wxSize wxGetWindowDPI(HWND hwnd)
 {
     typedef UINT (WINAPI *GetDpiForWindow_t)(HWND hwnd);
     static GetDpiForWindow_t s_pfnGetDpiForWindow = nullptr;
@@ -4885,8 +4882,6 @@ static wxSize GetWindowDPI(HWND hwnd)
     }
 
     return wxSize();
-}
-
 }
 
 /*extern*/
@@ -4979,7 +4974,7 @@ wxSize wxWindowMSW::GetDPI() const
         }
     }
 
-    wxSize dpi = GetWindowDPI(hwnd);
+    wxSize dpi = wxGetWindowDPI(hwnd);
 
     if ( !dpi.x || !dpi.y )
     {

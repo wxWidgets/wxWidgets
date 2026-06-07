@@ -198,29 +198,6 @@ static constexpr UINT_PTR kTDMainSubclassId = 0xDEADBEEFul;
 static constexpr UINT_PTR kTDPageSubclassId = 0xBADF00Dul;
 static constexpr UINT_PTR kTDCtrlSubclassId = 0xC0FFEE01ul;
 
-static int GetWindowDPI(HWND hwnd)
-{
-    typedef UINT(WINAPI* GetDpiForWindow_t)(HWND hwnd);
-    static GetDpiForWindow_t s_pfnGetDpiForWindow = nullptr;
-    static bool s_initDone = false;
-
-    if (!s_initDone)
-    {
-        wxLoadedDLL dllUser32("user32.dll");
-        wxDL_INIT_FUNC(s_pfn, GetDpiForWindow, dllUser32);
-        s_initDone = true;
-    }
-
-    if (s_pfnGetDpiForWindow)
-    {
-        const int dpi = static_cast<int>(s_pfnGetDpiForWindow(hwnd));
-        return dpi;
-    }
-
-    return 0;
-}
-
-
 // ============================================================================
 // TaskDialog theme helpers
 // ============================================================================
@@ -242,7 +219,7 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
 {
     s.CloseThemes();
     s.isDark = TDHasNativeDarkTheme();
-    int dpi = GetWindowDPI(hwnd);
+    const int dpi = wxGetWindowDPI(hwnd).x;
 
     const wchar_t* mainClass = s.isDark
         ? L"DarkMode_Explorer::TaskDialog"
@@ -777,7 +754,7 @@ static LRESULT CALLBACK TDRadioButtonSubclassProc(
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
-        int dpi = GetWindowDPI(hwnd);
+        const int dpi = wxGetWindowDPI(hwnd).x;
         auto hStyle = wxUxThemeHandle::NewAtStdDPI(L"TaskDialogStyle");
         auto  hBtn = wxUxThemeHandle::NewAtDPI(nullptr, L"Button",dpi);
         RECT rcC; GetClientRect(hwnd, &rcC);

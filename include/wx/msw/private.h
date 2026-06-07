@@ -313,6 +313,12 @@ extern HICON wxBitmapToHICON(const wxBitmap& bmp);
 extern
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
 
+// Return DPI for the given window.
+//
+// Implemented in src/msw/window.cpp.
+wxSize wxGetWindowDPI(HWND hwnd);
+
+// Also implemented in src/msw/window.cpp.
 extern int wxGetSystemMetrics(int nIndex, const wxWindow* win);
 
 extern bool wxSystemParametersInfo(UINT uiAction, UINT uiParam,
