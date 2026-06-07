@@ -118,11 +118,6 @@ struct TDPageState
 
     const TASKDIALOGCONFIG* pCfg = nullptr;
 
-    void CloseThemes()
-    {
-        themesOk = false;
-    }
-
     using TDStateMap = std::unordered_map<HWND, TDPageState>;
 
     static TDStateMap& GetAll()
@@ -233,7 +228,6 @@ static bool TDHasNativeDarkTheme()
 
 static void TDRefreshThemes(HWND hwnd, TDPageState& s)
 {
-    s.CloseThemes();
     s.isDark = TDHasNativeDarkTheme();
     const int dpi = wxGetWindowDPI(hwnd).x;
 
@@ -715,7 +709,8 @@ static LRESULT CALLBACK TDPageSubclassProc(
     case WM_THEMECHANGED:
     {
         TDPageState& s = TDPageState::Get(hwnd);
-        s.CloseThemes(); s.elemsOk = false;
+        s.themesOk = false;
+        s.elemsOk = false;
         InvalidateRect(hwnd, nullptr, FALSE);
         break;
     }
