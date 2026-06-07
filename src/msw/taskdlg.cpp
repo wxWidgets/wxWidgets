@@ -31,6 +31,8 @@
 #if wxUSE_DARK_MODE
 
 #include "wx/dynlib.h"
+#include "wx/log.h"
+#include "wx/module.h"
 
 #include "wx/msw/uxtheme.h"
 
@@ -106,43 +108,76 @@ struct TDPageState
     {
         themesOk = false;
     }
-};
 
-// Thread-local state map and UIA singleton
-static thread_local std::unordered_map<HWND, TDPageState> tls_tdStates;
+    using TDStateMap = std::unordered_map<HWND, TDPageState>;
 
-static TDPageState& GetTDPageState(HWND h) { return tls_tdStates[h]; }
-
-static void DestroyTDPageState(HWND h)
-{
-    auto it = tls_tdStates.find(h);
-    if ( it != tls_tdStates.end() )
+    static TDStateMap& GetAll()
     {
-        tls_tdStates.erase(it);
+        static TDStateMap s_states;
+        return s_states;
     }
-}
 
-// Function to get IUIAutomation instance
-static IUIAutomation* GetTDAutomation()
-{
-    static thread_local wxCOMPtr<IUIAutomation> tls_tdAutomation;
-
-    if (!tls_tdAutomation)
+    static TDPageState& Get(HWND h)
     {
-        HRESULT hr = CoCreateInstance
-                     (
-                        CLSID_CUIAutomation,
-                        nullptr,
-                        CLSCTX_INPROC_SERVER,
-                        wxIID_PPV_ARGS(IUIAutomation, &tls_tdAutomation)
-                     );
-        if (FAILED(hr))
+        return GetAll()[h];
+    }
+
+    static void Destroy(HWND h)
+    {
+        auto& states = GetAll();
+        auto const it = states.find(h);
+        if ( it != states.end() )
         {
-            tls_tdAutomation = nullptr;
+            states.erase(it);
         }
     }
-    return tls_tdAutomation;
-}
+};
+
+// ----------------------------------------------------------------------------
+// Module for cleaning up resources used by the code in this file
+// ----------------------------------------------------------------------------
+
+// Function to get IUIAutomation instance
+class wxTaskDialogDarkModule : public wxModule
+{
+public:
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override
+    {
+        ms_uiAutomation.reset();
+        TDPageState::GetAll().clear();
+    }
+
+    static IUIAutomation* GetUIAutomation()
+    {
+        if ( !ms_uiAutomation )
+        {
+            HRESULT hr = CoCreateInstance
+                         (
+                            CLSID_CUIAutomation,
+                            nullptr,
+                            CLSCTX_INPROC_SERVER,
+                            wxIID_PPV_ARGS(IUIAutomation, &ms_uiAutomation)
+                         );
+            if ( FAILED(hr) )
+            {
+                wxLogLastError("CoCreateInstance(IUIAutomation)");
+            }
+        }
+
+        return ms_uiAutomation.get();
+    }
+
+private:
+    static wxCOMPtr<IUIAutomation> ms_uiAutomation;
+
+    wxDECLARE_DYNAMIC_CLASS(wxTaskDialogDarkModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxTaskDialogDarkModule, wxModule);
+
+wxCOMPtr<IUIAutomation> wxTaskDialogDarkModule::ms_uiAutomation;
+
 
 // Subclass IDs
 static constexpr UINT_PTR kTDMainSubclassId = 0xDEADBEEFul;
@@ -284,7 +319,7 @@ static HICON TDLoadStockIcon(const TASKDIALOGCONFIG* cfg, bool isMain)
 static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
 {
     out.clear();
-    IUIAutomation* pAuto = GetTDAutomation();
+    IUIAutomation* const pAuto = wxTaskDialogDarkModule::GetUIAutomation();
     if (!pAuto)
         return;
 
@@ -623,7 +658,7 @@ static LRESULT CALLBACK TDPageSubclassProc(
     case WM_PAINT:
     {
         PAINTSTRUCT ps; HDC hdc = BeginPaint(hwnd, &ps);
-        TDPageState& s = GetTDPageState(hwnd);
+        TDPageState& s = TDPageState::Get(hwnd);
         s.isExpanded = !!GetProp(GetParent(hwnd), L"IsExpanded");
         s.elemsOk = false;
         TDUpdateLayoutCache(hwnd, s);
@@ -633,7 +668,7 @@ static LRESULT CALLBACK TDPageSubclassProc(
     }
     case WM_MOUSEMOVE:
     {
-        TDPageState& s = GetTDPageState(hwnd);
+        TDPageState& s = TDPageState::Get(hwnd);
         if (!s.tracking)
         {
             TRACKMOUSEEVENT tme = { sizeof(tme),TME_LEAVE,hwnd,0 };
@@ -650,7 +685,7 @@ static LRESULT CALLBACK TDPageSubclassProc(
     }
     case WM_MOUSELEAVE:
     {
-        TDPageState& s = GetTDPageState(hwnd);
+        TDPageState& s = TDPageState::Get(hwnd);
         s.tracking = false;
         s.pressing = false;
         if (s.hotIdx != -1)
@@ -661,24 +696,24 @@ static LRESULT CALLBACK TDPageSubclassProc(
         break;
     }
     case WM_LBUTTONDOWN:
-        GetTDPageState(hwnd).pressing = true;
-        TDUpdateLayoutCache(hwnd, GetTDPageState(hwnd));
+        TDPageState::Get(hwnd).pressing = true;
+        TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
         InvalidateRect(hwnd, nullptr, FALSE);
         break;
     case WM_LBUTTONUP:
-        GetTDPageState(hwnd).pressing = false;
-        TDUpdateLayoutCache(hwnd, GetTDPageState(hwnd));
+        TDPageState::Get(hwnd).pressing = false;
+        TDUpdateLayoutCache(hwnd, TDPageState::Get(hwnd));
         InvalidateRect(hwnd, nullptr, FALSE);
         break;
     case WM_THEMECHANGED:
     {
-        TDPageState& s = GetTDPageState(hwnd);
+        TDPageState& s = TDPageState::Get(hwnd);
         s.CloseThemes(); s.elemsOk = false;
         InvalidateRect(hwnd, nullptr, FALSE);
         break;
     }
     case WM_DESTROY:
-        DestroyTDPageState(hwnd);
+        TDPageState::Destroy(hwnd);
         RemoveWindowSubclass(hwnd, TDPageSubclassProc, uId);
         break;
     }
@@ -884,7 +919,7 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lp)
     SetWindowTheme(hDUI, L"DarkMode_Explorer", nullptr);
 
     // Initialise per-page state
-    TDPageState& s = GetTDPageState(hDUI);
+    TDPageState& s = TDPageState::Get(hDUI);
     s.pCfg = d->pCfg;
     s.defExpanded = d->pCfg && (d->pCfg->dwFlags & TDF_EXPANDED_BY_DEFAULT);
     s.defChecked = d->pCfg && (d->pCfg->dwFlags & TDF_VERIFICATION_FLAG_CHECKED);
@@ -912,7 +947,8 @@ static BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
     DWORD_PTR ex = 0;
     if (GetWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId, &ex))
     {
-        RemoveWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId); DestroyTDPageState(hChild);
+        RemoveWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId);
+        TDPageState::Destroy(hChild);
     }
     if (GetWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &ex))
         RemoveWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId);
@@ -924,7 +960,7 @@ static BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
 
 static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
 {
-    IUIAutomation* pAuto = GetTDAutomation();
+    IUIAutomation* const pAuto = wxTaskDialogDarkModule::GetUIAutomation();
     if (!pAuto)
         return;
     const bool native = TDHasNativeDarkTheme();
