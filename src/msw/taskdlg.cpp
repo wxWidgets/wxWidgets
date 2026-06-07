@@ -40,10 +40,6 @@
 #include "wx/msw/ole/oleutils.h"
 #include <uiautomation.h>
 
-#define GET_B(c) static_cast<BYTE>((c) & 0xFF)
-#define GET_G(c) static_cast<BYTE>(((c) >> 8) & 0xFF)
-#define GET_R(c) static_cast<BYTE>(((c) >> 16) & 0xFF)
-
 // ============================================================================
 // TaskDialog dark mode — implementation detail types
 // ============================================================================
@@ -417,6 +413,10 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
         GetThemeColor(hL, TDLG_FOOTNOTESEPARATOR, 0, TMT_FILLCOLOR, &srcSep);
     }
 
+#define GET_B(c) static_cast<BYTE>((c) & 0xFF)
+#define GET_G(c) static_cast<BYTE>(((c) >> 8) & 0xFF)
+#define GET_R(c) static_cast<BYTE>(((c) >> 16) & 0xFF)
+
     struct Rule { BYTE sR, sG, sB, dR, dG, dB; };
     const Rule rules[] =
     {
@@ -429,6 +429,10 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
         { GET_R(srcSp2), GET_G(srcSp2), GET_B(srcSp2),
           GET_R(TDDarkCol::kSeparator), GET_G(TDDarkCol::kSeparator), GET_B(TDDarkCol::kSeparator) },
     };
+
+#undef GET_B
+#undef GET_G
+#undef GET_R
 
     for (int y = 0; y < h; ++y)
     {
