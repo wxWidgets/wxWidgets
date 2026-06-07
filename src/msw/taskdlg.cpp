@@ -202,17 +202,33 @@ static constexpr UINT_PTR kTDCtrlSubclassId = 0xC0FFEE01ul;
 // TaskDialog theme helpers
 // ============================================================================
 
+// Check if the theme with the "dark" name exists and is different from the
+// standard one.
+static bool
+wxHasRealDarkTheme(const wchar_t* stdClass, const wchar_t* darkClass)
+{
+    const auto darkTheme = wxUxThemeHandle::NewAtStdDPI(darkClass);
+    if ( darkTheme )
+    {
+        const auto stdTheme = wxUxThemeHandle::NewAtStdDPI(stdClass);
+        if ( stdTheme && stdTheme != darkTheme )
+            return true;
+    }
+
+    return false;
+}
+
 // Cached probe: does the OS have a native dark TaskDialog theme (Win11+)?
 static bool TDHasNativeDarkTheme()
 {
-    static int s_cached = -1;
-    if (s_cached == -1)
+    static int s_hasDarkTheme = -1;
+    if ( s_hasDarkTheme == -1 )
     {
-       wxUxThemeHandle hD (wxUxThemeHandle::NewAtStdDPI( L"DarkMode_DarkTheme::TaskDialog"));
-       wxUxThemeHandle hB(wxUxThemeHandle::NewAtStdDPI(L"TaskDialog"));
-        s_cached = (hD && hD != hB) ? 1 : 0;
+        s_hasDarkTheme = wxHasRealDarkTheme(L"TaskDialog",
+                                            L"DarkMode_DarkTheme::TaskDialog");
     }
-    return s_cached == 1;
+
+    return s_hasDarkTheme == 1;
 }
 
 static void TDRefreshThemes(HWND hwnd, TDPageState& s)
@@ -827,16 +843,19 @@ static void TDApplyToChildren(IUIAutomationElement* pEl)
 
                 if (ct == UIA_ProgressBarControlTypeId)
                 {
-                    wxUxThemeHandle hCE = wxUxThemeHandle::NewAtStdDPI(L"DarkMode_CopyEngine::Progress");
-                    wxUxThemeHandle hBase = wxUxThemeHandle::NewAtStdDPI(L"Progress");
-                    bool hasCE = (hCE && hCE != hBase);
-                    SetWindowTheme(hBtn, hasCE ? L"DarkMode_CopyEngine" : L"DarkMode_Explorer", nullptr);
+                    wxMSWDarkMode::SetTheme
+                    (
+                        hBtn,
+                        wxHasRealDarkTheme(L"Progress", L"DarkMode_CopyEngine::Progress")
+                            ? L"DarkMode_CopyEngine"
+                            : L"DarkMode_Explorer"
+                    );
                 }
                 else if (ct == UIA_RadioButtonControlTypeId || id.find(L"RadioButton_") == 0 || ct == UIA_HyperlinkControlTypeId)
                 {
                     if (native)
                     {
-                        SetWindowTheme(hBtn, L"DarkMode_DarkTheme", nullptr);
+                        wxMSWDarkMode::SetTheme(hBtn, L"DarkMode_DarkTheme");
                     }
                     else
                     {
@@ -848,12 +867,12 @@ static void TDApplyToChildren(IUIAutomationElement* pEl)
                 }
                 else if (id.find(L"CommandLink_") == 0 || id.find(L"CommandButton_") == 0)
                 {
-                    SetWindowTheme(hBtn, L"DarkMode_Explorer", nullptr);
+                    wxMSWDarkMode::SetTheme(hBtn, L"DarkMode_Explorer");
                     TDSubclassContainer(hP, TDDarkCol::kSecondary);
                 }
                 else
                 {
-                    SetWindowTheme(hBtn, L"DarkMode_Explorer", nullptr);
+                    wxMSWDarkMode::SetTheme(hBtn, L"DarkMode_Explorer");
                 }
             }
         }
@@ -914,7 +933,7 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     }
 
     TDApplyToChildren(pEl);
-    SetWindowTheme(hDUI, L"DarkMode_Explorer", nullptr);
+    wxMSWDarkMode::SetTheme(hDUI, L"DarkMode_Explorer");
 
     // Initialise per-page state
     TDEnumData* const d = reinterpret_cast<TDEnumData*>(lparam);
@@ -953,7 +972,9 @@ static BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
         RemoveWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId);
     if (GetWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &ex))
         RemoveWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId);
-    SetWindowTheme(hChild, nullptr, nullptr);
+
+    ::SetWindowTheme(hChild, nullptr, nullptr);
+
     return TRUE;
 }
 
