@@ -820,12 +820,16 @@ static void TDSubclassContainer(HWND hP, COLORREF bg)
             reinterpret_cast<DWORD_PTR>(CreateSolidBrush(bg)));
 }
 
-static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
+static void TDApplyToChildren(IUIAutomationElement* pEl)
 {
+    IUIAutomation* const uiAuto = wxTaskDialogDarkModule::GetUIAutomation();
+    if ( !uiAuto )
+        return;
+
     const bool native = TDHasNativeDarkTheme();
 
     wxCOMPtr<IUIAutomationTreeWalker> pW;
-    pAuto->get_ContentViewWalker(&pW);
+    uiAuto->get_ContentViewWalker(&pW);
     if (!pW) return;
     wxCOMPtr<IUIAutomationElement> pChild;
     pW->GetFirstChildElement(pEl, &pChild);
@@ -932,7 +936,7 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
         if (ob && ob != GetSysColorBrush(COLOR_WINDOW) && ob != GetSysColorBrush(COLOR_BTNFACE)) DeleteObject(ob);
     }
 
-    TDApplyToChildren(pEl, uiAuto);
+    TDApplyToChildren(pEl);
     SetWindowTheme(hDUI, L"DarkMode_Explorer", nullptr);
 
     // Initialise per-page state
