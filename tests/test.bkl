@@ -141,7 +141,6 @@
         <sources>
             test.cpp
             drawing/drawing.cpp
-            drawing/plugindriver.cpp
             drawing/basictest.cpp
             drawing/fonttest.cpp
         </sources>
@@ -149,25 +148,6 @@
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
-
-    <!--
-      This is a sample plugin, it simply uses a wxImage based
-      wxGraphicsContext. It should render the same as the built-in test. Use
-      the WX_TEST_SUITE_GC_DRAWING_PLUGINS variable to specify the location of
-      the produced DLL/so to get it loaded and tested. To make your own plugin,
-      you can copy this sample and link toward your own implementation of
-      wxGraphicsContext interface, building the appropriate DrawingTestGCFactory
-      -->
-    <module id="test_drawingplugin" template="wx"
-                                    template_append="wx_append"
-            cond="USE_GUI=='1' and SHARED=='1'">
-        <define>$(DLLFLAG)</define>
-        <sources>
-            drawing/pluginsample.cpp
-        </sources>
-        <wx-lib>core</wx-lib>
-        <wx-lib>base</wx-lib>
-    </module>
 
     <template id="stc_append">
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">

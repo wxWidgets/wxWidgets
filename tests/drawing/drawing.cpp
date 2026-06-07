@@ -40,10 +40,6 @@
 //  wxGraphicsContext and a way to create, dispose of and save it so that it is
 //  possible to compare it with a reference file
 
-// A plugin system is implemented to let developers of contributed libraries
-// test their library without the need to impact the test system and its
-// dependencies. See RunPluginsDrawingCase.
-
 // The crossing of drawing case and life cycles is implemented by
 // RunIndividualDrawingCase
 
@@ -75,10 +71,6 @@
 //      Once this is done duplicate all the CPP UNIT test functions
 //      and entries "DrawToImage_YYY" to your new GC "DrawTo<newGc>_YYYY"
 //
-// - if it is not built-in (contributed library/wxCode...), make a plugin for it
-//      test.bkl contains a sample "test_drawingplugin" target, you can use
-//      drawingplgsample.cpp as a start, see RunPluginsDrawingCase declaration
-//      for information about how to run the tests
 
 wxString GraphicsContextDrawingTestCase::ms_referenceDirectory;
 bool GraphicsContextDrawingTestCase::ms_buildReference;
