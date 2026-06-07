@@ -95,23 +95,10 @@ struct TDPageState
     TDPageState()
         : hTD(wxUxThemeHandle::NewAtStdDPI(L"")),   // Invalid class -> empty handle
         hTDS(wxUxThemeHandle::NewAtStdDPI(L"")),
-        hButton(wxUxThemeHandle::NewAtStdDPI(L"")),
-        isDark(false),
-        themesOk(false),
-        brPrimary(nullptr),
-        brSecondary(nullptr),
-        brFootnote(nullptr),
-        elemsOk(false),
-        tracking(false),
-        pressing(false),
-        hotIdx(-1),
-        isExpanded(false),
-        isChecked(false),
-        defExpanded(false),
-        defChecked(false),
-        pCfg(nullptr)
+        hButton(wxUxThemeHandle::NewAtStdDPI(L""))
     {
     }
+
     // Mouse interaction (message-driven, no polling)
     bool tracking = false;
     bool pressing = false;
