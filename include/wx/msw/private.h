@@ -1165,6 +1165,21 @@ inline wxLayoutDirection wxGetEditLayoutDirection(WXHWND hWnd)
                                     : wxLayout_LeftToRight;
 }
 
+// Check if WM_SETTINGCHANGE notifies about the system colours change.
+inline bool wxIsSystemColourChange(LPARAM lParam)
+{
+    // Note that "ImmersiveColorSet" is set both when switching between
+    // light and dark themes and also when changing high contrast mode,
+    // for which an additional message with "WindowsThemeElement" is
+    // also sent, but we don't need to check for it as handling this
+    // one is enough
+    if ( !lParam )
+       return false;
+
+    auto* const what = reinterpret_cast<const TCHAR*>(lParam);
+    return wxStrcmp(what, wxT("ImmersiveColorSet")) == 0;
+}
+
 // ----------------------------------------------------------------------------
 // functions mapping HWND to wxWindow
 // ----------------------------------------------------------------------------

@@ -3566,12 +3566,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_SETTINGCHANGE:
             // Check for the special case of the message which notifies about
             // the colours change.
-            // Note that "ImmersiveColorSet" is set both when switching between
-            // light and dark themes and also when changing high contrast mode,
-            // for which an additional message with "WindowsThemeElement" is
-            // also sent, but we don't need to check for it as handling this
-            // one is enough
-            if ( lParam && wxStrcmp((TCHAR*)lParam, wxT("ImmersiveColorSet")) == 0 )
+            if ( wxIsSystemColourChange(lParam) )
                 processed = HandleSysColorChange();
             else
                 processed = HandleSettingChange(wParam, lParam);
