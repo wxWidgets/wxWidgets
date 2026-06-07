@@ -152,8 +152,7 @@ static IUIAutomation* GetTDAutomation()
                         CLSID_CUIAutomation,
                         nullptr,
                         CLSCTX_INPROC_SERVER,
-                        IID_IUIAutomation,
-                        reinterpret_cast<void**>(&tls_tdAutomation)
+                        wxIID_PPV_ARGS(IUIAutomation, &tls_tdAutomation)
                      );
         if (FAILED(hr))
         {
