@@ -247,21 +247,34 @@ public:
     // Return the size of a theme element, either "as is" (TS_TRUE size) or as
     // it would be used for drawing (TS_DRAW size).
     //
-    // For now we don't allow specifying the HDC or rectangle as they don't
-    // seem to be useful.
-    wxSize GetTrueSize(int part, int state = 0) const
+    // For now we don't allow specifying the rectangle as it doesn't seem to be
+    // useful.
+    wxSize GetTrueSize(int part, int state = 0, HDC hdc = 0) const
     {
-        return DoGetSize(part, state, TS_TRUE);
+        return DoGetSize(hdc, part, state, TS_TRUE);
     }
 
-    wxSize GetDrawSize(int part, int state = 0) const
+    wxSize GetDrawSize(int part, int state = 0, HDC hdc = 0) const
     {
-        return DoGetSize(part, state, TS_DRAW);
+        return DoGetSize(hdc, part, state, TS_DRAW);
     }
+
+    // Get the margins of a theme element in the output parameter.
+    //
+    // The output parameter is not modified if the function fails, so it can be
+    // initialized with some default values before calling this function.
+    bool
+    GetMargins(MARGINS& margins,
+               int part, int prop, int state = 0, HDC hdc = 0) const;
+
+    // Get the font of a theme element.
+    bool GetFont(LOGFONTW& lf, HDC hdc, int part, int state = 0) const;
+
 
     // Draw theme background: if the caller already has a RECT, it can be
     // provided directly, otherwise wxRect is converted to it.
-    void DrawBackground(HDC hdc, const RECT& rc, int part, int state = 0);
+    void DrawBackground(HDC hdc, const RECT& rc, int part, int state = 0,
+                        const RECT* rcClip = nullptr);
     void DrawBackground(HDC hdc, const wxRect& rect, int part, int state = 0);
 
 private:
@@ -289,7 +302,7 @@ private:
         }
     }
 
-    wxSize DoGetSize(int part, int state, THEMESIZE ts) const;
+    wxSize DoGetSize(HDC hdc, int part, int state, THEMESIZE ts) const;
 
 
     HTHEME m_hTheme = 0;

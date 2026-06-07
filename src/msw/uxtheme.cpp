@@ -110,10 +110,11 @@ wxColour wxUxThemeHandle::GetColour(int part, int prop, int state) const
     return wxRGBToColour(col);
 }
 
-wxSize wxUxThemeHandle::DoGetSize(int part, int state, THEMESIZE ts) const
+wxSize
+wxUxThemeHandle::DoGetSize(HDC hdc, int part, int state, THEMESIZE ts) const
 {
     SIZE size;
-    HRESULT hr = ::GetThemePartSize(m_hTheme, nullptr, part, state, nullptr, ts,
+    HRESULT hr = ::GetThemePartSize(m_hTheme, hdc, part, state, nullptr, ts,
                                     &size);
     if ( FAILED(hr) )
     {
@@ -127,10 +128,51 @@ wxSize wxUxThemeHandle::DoGetSize(int part, int state, THEMESIZE ts) const
     return wxSize{size.cx, size.cy};
 }
 
-void
-wxUxThemeHandle::DrawBackground(HDC hdc, const RECT& rc, int part, int state)
+bool
+wxUxThemeHandle::GetMargins(MARGINS& margins,
+                            int part,
+                            int prop,
+                            int state,
+                            HDC hdc) const
 {
-    HRESULT hr = ::DrawThemeBackground(m_hTheme, hdc, part, state, &rc, nullptr);
+    HRESULT hr = ::GetThemeMargins(m_hTheme, hdc, part, state, prop, nullptr,
+                                   &margins);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(
+            wxString::Format("GetThemeMargins(%i, %i, %i)", part, state, prop),
+            hr
+        );
+        return false;
+    }
+
+    return true;
+}
+
+bool
+wxUxThemeHandle::GetFont(LOGFONTW& lf, HDC hdc, int part, int state) const
+{
+    HRESULT hr = ::GetThemeFont(m_hTheme, hdc, part, state, TMT_FONT, &lf);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(
+            wxString::Format("GetThemeFont(%i, %i)", part, state),
+            hr
+        );
+        return false;
+    }
+
+    return true;
+}
+
+void
+wxUxThemeHandle::DrawBackground(HDC hdc,
+                                const RECT& rc,
+                                int part,
+                                int state,
+                                const RECT* rcClip)
+{
+    HRESULT hr = ::DrawThemeBackground(m_hTheme, hdc, part, state, &rc, rcClip);
     if ( FAILED(hr) )
     {
         wxLogApiError(

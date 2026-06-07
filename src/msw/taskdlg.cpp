@@ -249,10 +249,11 @@ static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
 {
     if ( TDHasNativeDarkTheme() )
     {
-        COLORREF c = TDDarkCol::kTextNormal;
-        if (SUCCEEDED(GetThemeColor(s.hTD, uiPart, 0, TMT_TEXTCOLOR, &c)))
-            return c;
+        const wxColour col = s.hTD.GetColour(uiPart, TMT_TEXTCOLOR);
+        if ( col.IsOk() )
+            return wxColourToRGB(col);
     }
+
     switch (uiPart)
     {
     case TDLG_MAININSTRUCTIONPANE:
@@ -512,28 +513,32 @@ static void TDPaintGlyphs(HDC hdc, TDPageState& s)
 
         if (el.automationId == L"ExpandoButton" && s.hTD)
         {
-            SIZE sz = {}; GetThemePartSize(s.hTD, hdc, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, nullptr, TS_TRUE, &sz);
-            RECT rcG = el.rect; rcG.right = el.rect.left + sz.cx + 3;
+            const int width =
+                s.hTD.GetTrueSize(TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, hdc).x;
+
+            RECT rcG = el.rect; rcG.right = el.rect.left + width + 3;
             int st = (press && s.isExpanded) ? TDLGEBS_EXPANDEDPRESSED :
                 press ? TDLGEBS_PRESSED :
                 (hot && s.isExpanded) ? TDLGEBS_EXPANDEDHOVER :
                 hot ? TDLGEBS_HOVER :
                 s.isExpanded ? TDLGEBS_EXPANDEDNORMAL : TDLGEBS_NORMAL;
             FillRect(hdc, &rcG, s.brSecondary);
-            DrawThemeBackground(s.hTD, hdc, TDLG_EXPANDOBUTTON, st, &rcG, &el.rect);
+            s.hTD.DrawBackground(hdc, rc, TDLG_EXPANDOBUTTON, state, &el.rect);
         }
         else if (el.automationId == L"VerificationCheckBox" && s.hButton)
         {
-            SIZE cs = {}; GetThemePartSize(s.hButton, hdc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, nullptr, TS_DRAW, &cs);
-            int mg = (el.rect.bottom - el.rect.top - cs.cy) / 3;
-            RECT rcG = { el.rect.left + mg + 1,el.rect.top + mg + 1,el.rect.left + mg + 1 + cs.cx,el.rect.bottom };
+            const wxSize size =
+                s.hButton.GetDrawSize(BP_CHECKBOX, CBS_UNCHECKEDNORMAL, hdc);
+
+            int mg = (el.rect.bottom - el.rect.top - size.y) / 3;
+            RECT rcG = { el.rect.left + mg + 1,el.rect.top + mg + 1,el.rect.left + mg + 1 + size.x,el.rect.bottom };
             int st = (press && s.isChecked) ? CBS_CHECKEDPRESSED :
                 press ? CBS_UNCHECKEDPRESSED :
                 (hot && s.isChecked) ? CBS_CHECKEDHOT :
                 hot ? CBS_UNCHECKEDHOT :
                 s.isChecked ? CBS_CHECKEDNORMAL : CBS_UNCHECKEDNORMAL;
             FillRect(hdc, &rcG, s.brSecondary);
-            DrawThemeBackground(s.hButton, hdc, BP_CHECKBOX, st, &rcG, nullptr);
+            s.hButton.DrawBackground(hdc, rc, BP_CHECKBOX, state);
         }
     }
 }
@@ -575,21 +580,23 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
         }
         else if (el.automationId == L"ExpandoButton" && s.hTD)
         {
-            SIZE sz = {};
-            ::GetThemePartSize(s.hTD, hdc, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, nullptr, TS_TRUE, &sz);
+            const int width =
+                s.hTD.GetTrueSize(TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL, hdc).x;
+
             MARGINS vm = {};
-            ::GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, nullptr, &vm);
-            rcT.left += sz.cx + vm.cxLeftWidth - 2; rcT.top += 1;
+            s.hTD.GetMargins(vm, TDLG_VERIFICATIONTEXT, TMT_CONTENTMARGINS, 0, hdc);
+            rcT.left += width + vm.cxLeftWidth - 2; rcT.top += 1;
             part = TDLG_EXPANDOTEXT; brBg = s.brSecondary;
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
         }
         else if (el.automationId == L"VerificationCheckBox" && s.hButton && s.hTD)
         {
-            SIZE cs = {};
-            ::GetThemePartSize(s.hButton, hdc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, nullptr, TS_DRAW, &cs);
+            const int width =
+                s.hButton.GetDrawSize(BP_CHECKBOX, CBS_UNCHECKEDNORMAL, hdc).x;
+
             MARGINS tm = {};
-            ::GetThemeMargins(s.hTD, hdc, TDLG_VERIFICATIONTEXT, 0, TMT_CONTENTMARGINS, nullptr, &tm);
-            rcT.left = el.rect.left + cs.cx + tm.cxLeftWidth + 3; rcT.top += 5;
+            s.hTD.GetMargins(tm, TDLG_VERIFICATIONTEXT, TMT_CONTENTMARGINS, 0, hdc);
+            rcT.left = el.rect.left + width + tm.cxLeftWidth + 3; rcT.top += 5;
             part = TDLG_VERIFICATIONTEXT; brBg = s.brSecondary;
             dtF = DT_LEFT | DT_VCENTER | DT_NOPREFIX;
         }
