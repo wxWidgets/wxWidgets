@@ -55,10 +55,10 @@ enum wxRibbonDisplayMode
 class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
 {
 public:
-    wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
-                       int win_id = 0,
+    wxRibbonBarEvent(wxEventType commandType = wxEVT_NULL,
+                       int winId = 0,
                        wxRibbonPage* page = nullptr)
-        : wxNotifyEvent(command_type, win_id)
+        : wxNotifyEvent(commandType, winId)
         , m_page(page)
     {
     }
@@ -66,8 +66,8 @@ public:
     wxRibbonBarEvent(const wxRibbonBarEvent& e) = default;
     wxNODISCARD wxEvent *Clone() const override { return new wxRibbonBarEvent(*this); }
 
-    wxRibbonPage* GetPage() {return m_page;}
-    void SetPage(wxRibbonPage* page) {m_page = page;}
+    wxRibbonPage* GetPage() { return m_page; }
+    void SetPage(wxRibbonPage* page) { m_page = page; }
 
 protected:
     wxRibbonPage* m_page = nullptr;
@@ -81,16 +81,16 @@ private:
 class WXDLLIMPEXP_RIBBON wxRibbonPageTabInfo
 {
 public:
-    wxRect rect;
-    wxRibbonPage* page = nullptr;
-    int ideal_width;
-    int small_begin_need_separator_width;
-    int small_must_have_separator_width;
-    int minimum_width;
-    bool active;
-    bool hovered;
-    bool highlight;
-    bool shown;
+    wxRect m_rect;
+    wxRibbonPage* m_page = nullptr;
+    int m_idealWidth;
+    int m_smallBeginNeedSeparatorWidth;
+    int m_smallMustHaveSeparatorWidth;
+    int m_minimumWidth;
+    bool m_active;
+    bool m_hovered;
+    bool m_highlight;
+    bool m_shown;
 };
 
 // This must be a class because it's forward declared.
@@ -147,7 +147,7 @@ public:
     void ShowPanels(bool show = true);
     void HidePanels() { ShowPanels(wxRIBBON_BAR_MINIMIZED); }
     bool ArePanelsShown() const { return m_arePanelsShown; }
-    wxRibbonDisplayMode GetDisplayMode() const { return m_ribbon_state; }
+    wxRibbonDisplayMode GetDisplayMode() const { return m_ribbonState; }
 
     virtual bool HasMultiplePages() const override { return true; }
 
@@ -156,8 +156,8 @@ public:
     virtual bool Realize() override;
 
     // Implementation only.
-    bool IsToggleButtonHovered() const { return m_toggle_button_hovered; }
-    bool IsHelpButtonHovered() const { return m_help_button_hovered; }
+    bool IsToggleButtonHovered() const { return m_toggleButtonHovered; }
+    bool IsHelpButtonHovered() const { return m_helpButtonHovered; }
 
     void HideIfExpanded();
 
@@ -173,7 +173,7 @@ protected:
     virtual wxSize DoGetBestSize() const override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = nullptr);
-    void HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hover_flag);
+    void HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hoverFlag);
 
     void CommonInit(long style);
     void AddPage(wxRibbonPage *page);
@@ -197,34 +197,34 @@ protected:
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
     void OnMouseDoubleClick(wxMouseEvent& evt);
-    void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type);
+    void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tabEventType);
     void OnKillFocus(wxFocusEvent& evt);
 
     wxRibbonPageTabInfoArray m_pages;
-    wxRect m_tab_scroll_left_button_rect;
-    wxRect m_tab_scroll_right_button_rect;
-    wxRect m_toggle_button_rect;
-    wxRect m_help_button_rect;
+    wxRect m_tabScrollLeftButtonRect;
+    wxRect m_tabScrollRightButtonRect;
+    wxRect m_toggleButtonRect;
+    wxRect m_helpButtonRect;
     long m_flags;
-    int m_tabs_total_width_ideal;
-    int m_tabs_total_width_minimum;
-    int m_tab_margin_left;
-    int m_tab_margin_right;
-    int m_tab_height;
-    int m_tab_scroll_amount;
-    int m_current_page;
-    int m_current_hovered_page;
-    int m_tab_scroll_left_button_state;
-    int m_tab_scroll_right_button_state;
-    bool m_tab_scroll_buttons_shown;
+    int m_tabsTotalWidthIdeal;
+    int m_tabsTotalWidthMinimum;
+    int m_tabMarginLeft;
+    int m_tabMarginRight;
+    int m_tabHeight;
+    int m_tabScrollAmount;
+    int m_currentPage;
+    int m_currentHoveredPage;
+    int m_tabScrollLeftButtonState;
+    int m_tabScrollRightButtonState;
+    bool m_tabScrollButtonsShown;
     bool m_arePanelsShown;
-    bool m_bar_hovered;
-    bool m_toggle_button_hovered;
-    bool m_help_button_hovered;
+    bool m_barHovered;
+    bool m_toggleButtonHovered;
+    bool m_helpButtonHovered;
 
-    wxRibbonDisplayMode m_ribbon_state;
+    wxRibbonDisplayMode m_ribbonState;
 
-    wxVector<wxImageList*> m_image_lists;
+    wxVector<wxImageList*> m_imageLists;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonBar);

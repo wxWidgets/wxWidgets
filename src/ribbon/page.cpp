@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 // Name:        src/ribbon/page.cpp
 // Purpose:     Container for ribbon-bar-style interface panels
 // Author:      Peter Cawley
@@ -20,7 +20,7 @@
 #endif
 
 #ifdef __WXMSW__
-#include "wx/msw/private.h"
+    #include "wx/msw/private.h"
 #endif
 
 static int GetSizeInOrientation(wxSize size, wxOrientation orientation);
@@ -95,7 +95,7 @@ void wxRibbonPageScrollButton::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 void wxRibbonPageScrollButton::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxAutoBufferedPaintDC dc(this);
-    if(m_art)
+    if ( m_art )
     {
         m_art->DrawScrollButton(dc, this, GetSize(), m_flags);
     }
@@ -122,11 +122,11 @@ void wxRibbonPageScrollButton::OnMouseDown(wxMouseEvent& WXUNUSED(evt))
 
 void wxRibbonPageScrollButton::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
 {
-    if(m_flags & wxRIBBON_SCROLL_BTN_ACTIVE)
+    if ( m_flags & wxRIBBON_SCROLL_BTN_ACTIVE )
     {
         m_flags &= ~wxRIBBON_SCROLL_BTN_ACTIVE;
         Refresh(false);
-        switch(m_flags & wxRIBBON_SCROLL_BTN_DIRECTION_MASK)
+        switch ( m_flags & wxRIBBON_SCROLL_BTN_DIRECTION_MASK )
         {
         case wxRIBBON_SCROLL_BTN_DOWN:
         case wxRIBBON_SCROLL_BTN_RIGHT:
@@ -153,10 +153,10 @@ wxEND_EVENT_TABLE()
 
 wxRibbonPage::wxRibbonPage()
 {
-    m_scroll_left_btn = nullptr;
-    m_scroll_right_btn = nullptr;
-    m_scroll_amount = 0;
-    m_scroll_buttons_visible = false;
+    m_scrollLeftBtn = nullptr;
+    m_scrollRightBtn = nullptr;
+    m_scrollAmount = 0;
+    m_scrollButtonsVisible = false;
 }
 
 wxRibbonPage::wxRibbonPage(wxRibbonBar* parent,
@@ -171,9 +171,9 @@ wxRibbonPage::wxRibbonPage(wxRibbonBar* parent,
 
 wxRibbonPage::~wxRibbonPage()
 {
-    delete[] m_size_calc_array;
-    delete m_scroll_left_btn;
-    delete m_scroll_right_btn;
+    delete[] m_sizeCalcArray;
+    delete m_scrollLeftBtn;
+    delete m_scrollRightBtn;
 }
 
 bool wxRibbonPage::Create(wxRibbonBar* parent,
@@ -182,7 +182,7 @@ bool wxRibbonPage::Create(wxRibbonBar* parent,
                 const wxBitmapBundle& icon,
                 long WXUNUSED(style))
 {
-    if(!wxRibbonControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE))
+    if ( !wxRibbonControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE) )
         return false;
 
     CommonInit(label, icon);
@@ -196,16 +196,16 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmapBundle& icon)
 
     SetLabel(label);
     m_icon = icon;
-    m_scroll_left_btn = nullptr;
-    m_scroll_right_btn = nullptr;
-    m_size_calc_array = nullptr;
-    m_size_calc_array_size = 0;
-    m_scroll_amount = 0;
-    m_scroll_buttons_visible = false;
+    m_scrollLeftBtn = nullptr;
+    m_scrollRightBtn = nullptr;
+    m_sizeCalcArray = nullptr;
+    m_sizeCalcArraySize = 0;
+    m_scrollAmount = 0;
+    m_scrollButtonsVisible = false;
 
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
-    if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
+    if ( auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()) )
         bar->AddPage(this);
 }
 
@@ -217,54 +217,54 @@ void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
           node = node->GetNext() )
     {
         wxWindow* child = node->GetData();
-        wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
-        if(ribbon_child)
+        wxRibbonControl* ribbonChild = wxDynamicCast(child, wxRibbonControl);
+        if ( ribbonChild )
         {
-            ribbon_child->SetArtProvider(art);
+            ribbonChild->SetArtProvider(art);
         }
     }
 
     // The scroll buttons are children of the parent ribbon control, not the
     // page, so they're not taken into account by the loop above, but they
     // still use the same art provider, so we need to update them too.
-    if ( m_scroll_left_btn )
-        m_scroll_left_btn->SetArtProvider(art);
-    if ( m_scroll_right_btn )
-        m_scroll_right_btn->SetArtProvider(art);
+    if ( m_scrollLeftBtn )
+        m_scrollLeftBtn->SetArtProvider(art);
+    if ( m_scrollRightBtn )
+        m_scrollRightBtn->SetArtProvider(art);
 }
 
 void wxRibbonPage::AdjustRectToIncludeScrollButtons(wxRect* rect) const
 {
-    if(m_scroll_buttons_visible)
+    if ( m_scrollButtonsVisible )
     {
-        if(GetMajorAxis() == wxVERTICAL)
+        if ( GetMajorAxis() == wxVERTICAL )
         {
-            if(m_scroll_left_btn)
+            if ( m_scrollLeftBtn )
             {
                 rect->SetY(rect->GetY() -
-                    m_scroll_left_btn->GetSize().GetHeight());
+                    m_scrollLeftBtn->GetSize().GetHeight());
                 rect->SetHeight(rect->GetHeight() +
-                    m_scroll_left_btn->GetSize().GetHeight());
+                    m_scrollLeftBtn->GetSize().GetHeight());
             }
-            if(m_scroll_right_btn)
+            if ( m_scrollRightBtn )
             {
                 rect->SetHeight(rect->GetHeight() +
-                    m_scroll_right_btn->GetSize().GetHeight());
+                    m_scrollRightBtn->GetSize().GetHeight());
             }
         }
         else
         {
-            if(m_scroll_left_btn)
+            if ( m_scrollLeftBtn )
             {
                 rect->SetX(rect->GetX() -
-                    m_scroll_left_btn->GetSize().GetWidth());
+                    m_scrollLeftBtn->GetSize().GetWidth());
                 rect->SetWidth(rect->GetWidth() +
-                    m_scroll_left_btn->GetSize().GetWidth());
+                    m_scrollLeftBtn->GetSize().GetWidth());
             }
-            if(m_scroll_right_btn)
+            if ( m_scrollRightBtn )
             {
                 rect->SetWidth(rect->GetWidth() +
-                    m_scroll_right_btn->GetSize().GetWidth());
+                    m_scrollRightBtn->GetSize().GetWidth());
             }
         }
     }
@@ -287,7 +287,7 @@ void wxRibbonPage::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
 wxOrientation wxRibbonPage::GetMajorAxis() const
 {
-    if(m_art && (m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL))
+    if ( m_art && (m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL) )
     {
         return wxVERTICAL;
     }
@@ -304,24 +304,24 @@ bool wxRibbonPage::ScrollLines(int lines)
 
 bool wxRibbonPage::ScrollPixels(int pixels)
 {
-    if(pixels < 0)
+    if ( pixels < 0 )
     {
-        if(m_scroll_amount == 0)
+        if ( m_scrollAmount == 0 )
             return false;
-        if(m_scroll_amount < -pixels)
-            pixels = -m_scroll_amount;
+        if ( m_scrollAmount < -pixels )
+            pixels = -m_scrollAmount;
     }
-    else if(pixels > 0)
+    else if ( pixels > 0 )
     {
-        if(m_scroll_amount == m_scroll_amount_limit)
+        if ( m_scrollAmount == m_scrollAmountLimit )
             return false;
-        if(m_scroll_amount + pixels > m_scroll_amount_limit)
-            pixels = m_scroll_amount_limit - m_scroll_amount;
+        if ( m_scrollAmount + pixels > m_scrollAmountLimit )
+            pixels = m_scrollAmountLimit - m_scrollAmount;
     }
     else
         return false;
 
-    m_scroll_amount += pixels;
+    m_scrollAmount += pixels;
 
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
@@ -330,14 +330,14 @@ bool wxRibbonPage::ScrollPixels(int pixels)
         wxWindow* child = node->GetData();
         int x, y;
         child->GetPosition(&x, &y);
-        if(GetMajorAxis() == wxHORIZONTAL)
+        if ( GetMajorAxis() == wxHORIZONTAL )
             x -= pixels;
         else
             y -= pixels;
         child->SetPosition(wxPoint(x, y));
     }
 
-    if (ShowScrollButtons())
+    if ( ShowScrollButtons() )
         DoActualLayout();
     Refresh();
     return true;
@@ -356,15 +356,15 @@ bool wxRibbonPage::ScrollSections(int sections)
     // much if the available width is smaller than the items.
 
     // Scroll at minimum the same amount as ScrollLines(1):
-    int minscroll = sections * 8;
+    int minScroll = sections * 8;
     // How many pixels to scroll:
     int pixels = 0;
 
     // Determine the scroll position, that is, the page border where items
     // are appearing.
-    int scrollpos = 0;
+    int scrollPos = 0;
 
-    wxOrientation major_axis = GetMajorAxis();
+    wxOrientation majorAxis = GetMajorAxis();
     int gap = 0;
 
     int width = 0;
@@ -373,45 +373,45 @@ bool wxRibbonPage::ScrollSections(int sections)
     int y = 0;
     GetSize(&width, &height);
     GetPosition(&x, &y);
-    if(major_axis == wxHORIZONTAL)
+    if ( majorAxis == wxHORIZONTAL )
     {
         gap = m_art->GetMetric(wxRIBBON_ART_PANEL_X_SEPARATION_SIZE);
-        if (scrollForward)
+        if ( scrollForward )
         {
-            scrollpos = width - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
+            scrollPos = width - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
         }
         else
         {
-            scrollpos = m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE);
+            scrollPos = m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE);
         }
     }
     else
     {
         gap = m_art->GetMetric(wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE);
-        if (scrollForward)
+        if ( scrollForward )
         {
-            scrollpos = width - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
+            scrollPos = width - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
         }
         else
         {
-            scrollpos = m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE);
+            scrollPos = m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE);
         }
     }
 
     // Find the child that is partially shown or just beyond the scroll position
-    for(wxWindowList::compatibility_iterator
+    for ( wxWindowList::compatibility_iterator
             node = scrollForward ? GetChildren().GetFirst()
                                  : GetChildren().GetLast();
         node;
         node = scrollForward ? node->GetNext()
-                             : node->GetPrevious())
+                             : node->GetPrevious() )
     {
         wxWindow* child = node->GetData();
         child->GetSize(&width, &height);
         child->GetPosition(&x, &y);
         int pos0 = 0;
         int pos1 = 0;
-        if (major_axis == wxHORIZONTAL)
+        if ( majorAxis == wxHORIZONTAL )
         {
             pos0 = x;
             pos1 = x + width + gap;
@@ -421,27 +421,27 @@ bool wxRibbonPage::ScrollSections(int sections)
             pos0 = y;
             pos1 = y + height + gap;
         }
-        if (scrollpos >= pos0 && scrollpos <= pos1)
+        if ( scrollPos >= pos0 && scrollPos <= pos1 )
         {
             // This section is partially visible, scroll to make it fully visible.
-            if (scrollForward)
+            if ( scrollForward )
             {
-                pixels += pos1 - scrollpos;
+                pixels += pos1 - scrollPos;
             }
             else
             {
-                pixels += pos0 - scrollpos;
+                pixels += pos0 - scrollPos;
             }
-            if (abs(pixels) >= abs(minscroll))
+            if ( abs(pixels) >= abs(minScroll) )
                 break;
         }
-        if (scrollpos <= pos0 && scrollForward)
+        if ( scrollPos <= pos0 && scrollForward )
         {
             // This section is next, scroll the entire section width
             pixels += (pos1 - pos0);
             break;
         }
-        if (scrollpos >= pos1 && !scrollForward)
+        if ( scrollPos >= pos1 && !scrollForward )
         {
             // This section is next, scroll the entire section width
             pixels += (pos0 - pos1);
@@ -449,11 +449,11 @@ bool wxRibbonPage::ScrollSections(int sections)
         }
     }
     // Do a final safety sanity check, should not be necessary, but will not hurt either.
-    if (pixels == 0)
+    if ( pixels == 0 )
     {
-        pixels = minscroll;
+        pixels = minScroll;
     }
-    if (pixels * minscroll < 0)
+    if ( pixels * minScroll < 0 )
     {
         pixels = -pixels;
     }
@@ -463,43 +463,43 @@ bool wxRibbonPage::ScrollSections(int sections)
 
 void wxRibbonPage::SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height)
 {
-    if(m_scroll_buttons_visible)
+    if ( m_scrollButtonsVisible )
     {
-        if(GetMajorAxis() == wxHORIZONTAL)
+        if ( GetMajorAxis() == wxHORIZONTAL )
         {
-            if(m_scroll_left_btn)
+            if ( m_scrollLeftBtn )
             {
-                int w = m_scroll_left_btn->GetSize().GetWidth();
-                m_scroll_left_btn->SetPosition(wxPoint(x, y));
+                int w = m_scrollLeftBtn->GetSize().GetWidth();
+                m_scrollLeftBtn->SetPosition(wxPoint(x, y));
                 x += w;
                 width -= w;
             }
-            if(m_scroll_right_btn)
+            if ( m_scrollRightBtn )
             {
-                int w = m_scroll_right_btn->GetSize().GetWidth();
+                int w = m_scrollRightBtn->GetSize().GetWidth();
                 width -= w;
-                m_scroll_right_btn->SetPosition(wxPoint(x + width, y));
+                m_scrollRightBtn->SetPosition(wxPoint(x + width, y));
             }
         }
         else
         {
-            if(m_scroll_left_btn)
+            if ( m_scrollLeftBtn )
             {
-                int h = m_scroll_left_btn->GetSize().GetHeight();
-                m_scroll_left_btn->SetPosition(wxPoint(x, y));
+                int h = m_scrollLeftBtn->GetSize().GetHeight();
+                m_scrollLeftBtn->SetPosition(wxPoint(x, y));
                 y += h;
                 height -= h;
             }
-            if(m_scroll_right_btn)
+            if ( m_scrollRightBtn )
             {
-                int h = m_scroll_right_btn->GetSize().GetHeight();
+                int h = m_scrollRightBtn->GetSize().GetHeight();
                 height -= h;
-                m_scroll_right_btn->SetPosition(wxPoint(x, y + height));
+                m_scrollRightBtn->SetPosition(wxPoint(x, y + height));
             }
         }
     }
-    if (width < 0) width = 0;
-    if (height < 0) height = 0;
+    if ( width < 0 ) width = 0;
+    if ( height < 0 ) height = 0;
     SetSize(x, y, width, height);
 }
 
@@ -510,26 +510,26 @@ void wxRibbonPage::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // and report the 1st size to the 2nd size event. Hence the most recent size is
     // remembered internally and used in Layout() where appropriate.
 
-    if(GetMajorAxis() == wxHORIZONTAL)
+    if ( GetMajorAxis() == wxHORIZONTAL )
     {
-        m_size_in_major_axis_for_children = width;
-        if(m_scroll_buttons_visible)
+        m_sizeInMajorAxisForChildren = width;
+        if ( m_scrollButtonsVisible )
         {
-            if(m_scroll_left_btn)
-                m_size_in_major_axis_for_children += m_scroll_left_btn->GetSize().GetWidth();
-            if(m_scroll_right_btn)
-                m_size_in_major_axis_for_children += m_scroll_right_btn->GetSize().GetWidth();
+            if ( m_scrollLeftBtn )
+                m_sizeInMajorAxisForChildren += m_scrollLeftBtn->GetSize().GetWidth();
+            if ( m_scrollRightBtn )
+                m_sizeInMajorAxisForChildren += m_scrollRightBtn->GetSize().GetWidth();
         }
     }
     else
     {
-        m_size_in_major_axis_for_children = height;
-        if(m_scroll_buttons_visible)
+        m_sizeInMajorAxisForChildren = height;
+        if ( m_scrollButtonsVisible )
         {
-            if(m_scroll_left_btn)
-                m_size_in_major_axis_for_children += m_scroll_left_btn->GetSize().GetHeight();
-            if(m_scroll_right_btn)
-                m_size_in_major_axis_for_children += m_scroll_right_btn->GetSize().GetHeight();
+            if ( m_scrollLeftBtn )
+                m_sizeInMajorAxisForChildren += m_scrollLeftBtn->GetSize().GetHeight();
+            if ( m_scrollRightBtn )
+                m_sizeInMajorAxisForChildren += m_scrollRightBtn->GetSize().GetHeight();
         }
     }
 
@@ -538,18 +538,18 @@ void wxRibbonPage::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxRibbonPage::OnSize(wxSizeEvent& evt)
 {
-    wxSize new_size = evt.GetSize();
+    wxSize newSize = evt.GetSize();
 
-    if (m_art)
+    if ( m_art )
     {
-        wxMemoryDC temp_dc;
-        wxRect invalid_rect = m_art->GetPageBackgroundRedrawArea(temp_dc, this, m_old_size, new_size);
-        Refresh(true, &invalid_rect);
+        wxMemoryDC tempDc;
+        wxRect invalidRect = m_art->GetPageBackgroundRedrawArea(tempDc, this, m_oldSize, newSize);
+        Refresh(true, &invalidRect);
     }
 
-    m_old_size = new_size;
+    m_oldSize = newSize;
 
-    if(new_size.GetX() > 0 && new_size.GetY() > 0)
+    if ( newSize.GetX() > 0 && newSize.GetY() > 0 )
     {
         Layout();
     }
@@ -557,7 +557,7 @@ void wxRibbonPage::OnSize(wxSizeEvent& evt)
     {
         // Simplify other calculations by pretending new size is zero in both
         // X and Y
-        new_size.Set(0, 0);
+        newSize.Set(0, 0);
         // When size == 0, no point in doing any layout
     }
 
@@ -573,27 +573,27 @@ void wxRibbonPage::OnDPIChanged(wxDPIChangedEvent& event)
 void wxRibbonPage::RemoveChild(wxWindowBase *child)
 {
     // Remove all references to the child from the collapse stack
-    size_t count = m_collapse_stack.GetCount();
+    size_t count = m_collapseStack.GetCount();
     size_t src, dst;
-    for(src = 0, dst = 0; src < count; ++src, ++dst)
+    for ( src = 0, dst = 0; src < count; ++src, ++dst )
     {
-        wxRibbonControl *item = m_collapse_stack.Item(src);
-        if(item == child)
+        wxRibbonControl *item = m_collapseStack.Item(src);
+        if ( item == child )
         {
             ++src;
-            if(src == count)
+            if ( src == count )
             {
                 break;
             }
         }
-        if(src != dst)
+        if ( src != dst )
         {
-            m_collapse_stack.Item(dst) = item;
+            m_collapseStack.Item(dst) = item;
         }
     }
-    if(src > dst)
+    if ( src > dst )
     {
-        m_collapse_stack.RemoveAt(dst, src - dst);
+        m_collapseStack.RemoveAt(dst, src - dst);
     }
 
     // ... and then proceed as normal
@@ -604,17 +604,17 @@ bool wxRibbonPage::Realize()
 {
     bool status = true;
 
-    m_collapse_stack.Clear();
-    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+    m_collapseStack.Clear();
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                   node;
-                  node = node->GetNext())
+                  node = node->GetNext() )
     {
         wxRibbonControl* child = wxDynamicCast(node->GetData(), wxRibbonControl);
-        if(child == nullptr)
+        if ( child == nullptr )
         {
             continue;
         }
-        if(!child->Realize())
+        if ( !child->Realize() )
         {
             status = false;
         }
@@ -624,7 +624,7 @@ bool wxRibbonPage::Realize()
     return DoActualLayout() && status;
 }
 
-void wxRibbonPage::PopulateSizeCalcArray(wxSize (wxWindow::*get_size)(void) const)
+void wxRibbonPage::PopulateSizeCalcArray(wxSize (wxWindow::*getSize)(void) const)
 {
     wxSize parentSize = GetSize();
     parentSize.x -= m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE);
@@ -632,30 +632,30 @@ void wxRibbonPage::PopulateSizeCalcArray(wxSize (wxWindow::*get_size)(void) cons
     parentSize.y -= m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE);
     parentSize.y -= m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
 
-    if(m_size_calc_array_size != GetChildren().GetCount())
+    if ( m_sizeCalcArraySize != GetChildren().GetCount() )
     {
-        delete[] m_size_calc_array;
-        m_size_calc_array_size = GetChildren().GetCount();
-        m_size_calc_array = new wxSize[m_size_calc_array_size];
+        delete[] m_sizeCalcArray;
+        m_sizeCalcArraySize = GetChildren().GetCount();
+        m_sizeCalcArray = new wxSize[m_sizeCalcArraySize];
     }
 
-    wxSize* node_size = m_size_calc_array;
+    wxSize* nodeSize = m_sizeCalcArray;
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
-          node = node->GetNext(), ++node_size )
+          node = node->GetNext(), ++nodeSize )
     {
         wxWindow* child = node->GetData();
         wxRibbonPanel* panel = wxDynamicCast(child, wxRibbonPanel);
-        if (panel && panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE)
-            *node_size = panel->GetBestSizeForParentSize(parentSize);
+        if ( panel && panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE )
+            *nodeSize = panel->GetBestSizeForParentSize(parentSize);
         else
-            *node_size = (child->*get_size)();
+            *nodeSize = (child->*getSize)();
     }
 }
 
 bool wxRibbonPage::Layout()
 {
-    if(GetChildren().GetCount() == 0)
+    if ( GetChildren().GetCount() == 0 )
     {
         return true;
     }
@@ -669,95 +669,95 @@ bool wxRibbonPage::Layout()
 bool wxRibbonPage::DoActualLayout()
 {
     wxPoint origin(m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE), m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE));
-    wxOrientation major_axis = GetMajorAxis();
+    wxOrientation majorAxis = GetMajorAxis();
     int gap;
-    int minor_axis_size;
-    int available_space;
-    if(major_axis == wxHORIZONTAL)
+    int minorAxisSize;
+    int availableSpace;
+    if ( majorAxis == wxHORIZONTAL )
     {
         gap = m_art->GetMetric(wxRIBBON_ART_PANEL_X_SEPARATION_SIZE);
-        minor_axis_size = GetSize().GetHeight() - origin.y - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
-        available_space = m_size_in_major_axis_for_children - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE) - origin.x;
+        minorAxisSize = GetSize().GetHeight() - origin.y - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
+        availableSpace = m_sizeInMajorAxisForChildren - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE) - origin.x;
     }
     else
     {
         gap = m_art->GetMetric(wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE);
-        minor_axis_size = GetSize().GetWidth() - origin.x - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
-        available_space = m_size_in_major_axis_for_children - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE) - origin.y;
+        minorAxisSize = GetSize().GetWidth() - origin.x - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
+        availableSpace = m_sizeInMajorAxisForChildren - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE) - origin.y;
     }
-    if (minor_axis_size < 0) minor_axis_size = 0;
-    size_t size_index;
-    for(size_index = 0; size_index < m_size_calc_array_size; ++size_index)
+    if ( minorAxisSize < 0 ) minorAxisSize = 0;
+    size_t sizeIndex;
+    for ( sizeIndex = 0; sizeIndex < m_sizeCalcArraySize; ++sizeIndex )
     {
-        if(major_axis == wxHORIZONTAL)
+        if ( majorAxis == wxHORIZONTAL )
         {
-            available_space -= m_size_calc_array[size_index].GetWidth();
-            m_size_calc_array[size_index].SetHeight(minor_axis_size);
+            availableSpace -= m_sizeCalcArray[sizeIndex].GetWidth();
+            m_sizeCalcArray[sizeIndex].SetHeight(minorAxisSize);
         }
         else
         {
-            available_space -= m_size_calc_array[size_index].GetHeight();
-            m_size_calc_array[size_index].SetWidth(minor_axis_size);
+            availableSpace -= m_sizeCalcArray[sizeIndex].GetHeight();
+            m_sizeCalcArray[sizeIndex].SetWidth(minorAxisSize);
         }
-        if(size_index != 0)
-            available_space -= gap;
+        if ( sizeIndex != 0 )
+            availableSpace -= gap;
     }
-    bool todo_hide_scroll_buttons = false;
-    bool todo_show_scroll_buttons = false;
-    if(available_space >= 0)
+    bool todoHideScrollButtons = false;
+    bool todoShowScrollButtons = false;
+    if ( availableSpace >= 0 )
     {
-        if(m_scroll_buttons_visible)
-            todo_hide_scroll_buttons = true;
-        if(available_space > 0)
-            ExpandPanels(major_axis, available_space);
+        if ( m_scrollButtonsVisible )
+            todoHideScrollButtons = true;
+        if ( availableSpace > 0 )
+            ExpandPanels(majorAxis, availableSpace);
     }
     else
     {
-        if(m_scroll_buttons_visible)
+        if ( m_scrollButtonsVisible )
         {
             // Scroll buttons already visible - not going to be able to downsize any more
-            m_scroll_amount_limit = -available_space;
-            if(m_scroll_amount > m_scroll_amount_limit)
+            m_scrollAmountLimit = -availableSpace;
+            if ( m_scrollAmount > m_scrollAmountLimit )
             {
-                m_scroll_amount = m_scroll_amount_limit;
-                todo_show_scroll_buttons = true;
+                m_scrollAmount = m_scrollAmountLimit;
+                todoShowScrollButtons = true;
             }
         }
         else
         {
-            if(!CollapsePanels(major_axis, -available_space))
+            if ( !CollapsePanels(majorAxis, -availableSpace) )
             {
-                m_scroll_amount = 0;
-                m_scroll_amount_limit = -available_space;
-                todo_show_scroll_buttons = true;
+                m_scrollAmount = 0;
+                m_scrollAmountLimit = -availableSpace;
+                todoShowScrollButtons = true;
             }
         }
     }
-    if(m_scroll_buttons_visible)
+    if ( m_scrollButtonsVisible )
     {
-        if(major_axis == wxHORIZONTAL)
+        if ( majorAxis == wxHORIZONTAL )
         {
-            origin.x -= m_scroll_amount;
-            if(m_scroll_left_btn)
-                origin.x -= m_scroll_left_btn->GetSize().GetWidth();
+            origin.x -= m_scrollAmount;
+            if ( m_scrollLeftBtn )
+                origin.x -= m_scrollLeftBtn->GetSize().GetWidth();
         }
         else
         {
-            origin.y -= m_scroll_amount;
-            if(m_scroll_left_btn)
-                origin.y -= m_scroll_left_btn->GetSize().GetHeight();
+            origin.y -= m_scrollAmount;
+            if ( m_scrollLeftBtn )
+                origin.y -= m_scrollLeftBtn->GetSize().GetHeight();
         }
     }
-    size_index = 0;
-    for(wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+    sizeIndex = 0;
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
         node;
-        node = node->GetNext(), ++size_index )
+        node = node->GetNext(), ++sizeIndex )
     {
         wxWindow* child = node->GetData();
-        int w = m_size_calc_array[size_index].GetWidth();
-        int h = m_size_calc_array[size_index].GetHeight();
+        int w = m_sizeCalcArray[sizeIndex].GetWidth();
+        int h = m_sizeCalcArray[sizeIndex].GetHeight();
         child->SetSize(origin.x, origin.y, w, h);
-        if(major_axis == wxHORIZONTAL)
+        if ( majorAxis == wxHORIZONTAL )
         {
             origin.x += w + (child->IsShown() ? gap : 0);
         }
@@ -767,11 +767,11 @@ bool wxRibbonPage::DoActualLayout()
         }
     }
 
-    if(todo_show_scroll_buttons)
+    if ( todoShowScrollButtons )
         ShowScrollButtons();
-    else if(todo_hide_scroll_buttons)
+    else if ( todoHideScrollButtons )
         HideScrollButtons();
-    else if(m_scroll_buttons_visible)
+    else if ( m_scrollButtonsVisible )
         ShowScrollButtons();
 
     Refresh();
@@ -780,120 +780,120 @@ bool wxRibbonPage::DoActualLayout()
 
 bool wxRibbonPage::Show(bool show)
 {
-    if(m_scroll_left_btn)
-        m_scroll_left_btn->Show(show);
-    if(m_scroll_right_btn)
-        m_scroll_right_btn->Show(show);
+    if ( m_scrollLeftBtn )
+        m_scrollLeftBtn->Show(show);
+    if ( m_scrollRightBtn )
+        m_scrollRightBtn->Show(show);
     return wxRibbonControl::Show(show);
 }
 
 void wxRibbonPage::HideScrollButtons()
 {
-    m_scroll_amount = 0;
-    m_scroll_amount_limit = 0;
+    m_scrollAmount = 0;
+    m_scrollAmountLimit = 0;
     ShowScrollButtons();
 }
 
 bool wxRibbonPage::ShowScrollButtons()
 {
-    bool show_left = true;
-    bool show_right = true;
+    bool showLeft = true;
+    bool showRight = true;
     bool reposition = false;
-    if(m_scroll_amount == 0)
+    if ( m_scrollAmount == 0 )
     {
-        show_left = false;
+        showLeft = false;
     }
-    if(m_scroll_amount >= m_scroll_amount_limit)
+    if ( m_scrollAmount >= m_scrollAmountLimit )
     {
-        show_right = false;
-        m_scroll_amount = m_scroll_amount_limit;
+        showRight = false;
+        m_scrollAmount = m_scrollAmountLimit;
     }
-    m_scroll_buttons_visible = show_left || show_right;
+    m_scrollButtonsVisible = showLeft || showRight;
 
-    if(show_left)
+    if ( showLeft )
     {
-        wxMemoryDC temp_dc;
+        wxMemoryDC tempDc;
         wxSize size;
         long direction;
-        if(GetMajorAxis() == wxHORIZONTAL)
+        if ( GetMajorAxis() == wxHORIZONTAL )
         {
               direction = wxRIBBON_SCROLL_BTN_LEFT;
-              size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+              size = m_art->GetScrollButtonMinimumSize(tempDc, GetParent(), direction);
               size.SetHeight(GetSize().GetHeight());
         }
         else
         {
               direction = wxRIBBON_SCROLL_BTN_UP;
-              size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+              size = m_art->GetScrollButtonMinimumSize(tempDc, GetParent(), direction);
               size.SetWidth(GetSize().GetWidth());
         }
-        if (m_scroll_left_btn)
+        if ( m_scrollLeftBtn )
         {
-              m_scroll_left_btn->SetSize(size);
+              m_scrollLeftBtn->SetSize(size);
         }
         else
         {
-              m_scroll_left_btn = new wxRibbonPageScrollButton(this, wxID_ANY, GetPosition(), size, direction);
+              m_scrollLeftBtn = new wxRibbonPageScrollButton(this, wxID_ANY, GetPosition(), size, direction);
               reposition = true;
         }
-        if(!IsShown())
+        if ( !IsShown() )
         {
-              m_scroll_left_btn->Hide();
+              m_scrollLeftBtn->Hide();
         }
     }
     else
     {
-        if(m_scroll_left_btn != nullptr)
+        if ( m_scrollLeftBtn != nullptr )
         {
-            m_scroll_left_btn->Destroy();
-            m_scroll_left_btn = nullptr;
+            m_scrollLeftBtn->Destroy();
+            m_scrollLeftBtn = nullptr;
             reposition = true;
         }
     }
 
-    if(show_right)
+    if ( showRight )
     {
-        wxMemoryDC temp_dc;
+        wxMemoryDC tempDc;
         wxSize size;
         long direction;
-        if(GetMajorAxis() == wxHORIZONTAL)
+        if ( GetMajorAxis() == wxHORIZONTAL )
         {
               direction = wxRIBBON_SCROLL_BTN_RIGHT;
-              size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+              size = m_art->GetScrollButtonMinimumSize(tempDc, GetParent(), direction);
               size.SetHeight(GetSize().GetHeight());
         }
         else
         {
               direction = wxRIBBON_SCROLL_BTN_DOWN;
-              size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+              size = m_art->GetScrollButtonMinimumSize(tempDc, GetParent(), direction);
               size.SetWidth(GetSize().GetWidth());
         }
-        wxPoint initial_pos = GetPosition() + GetSize() - size;
-        if (m_scroll_right_btn)
+        wxPoint initialPos = GetPosition() + GetSize() - size;
+        if ( m_scrollRightBtn )
         {
-              m_scroll_right_btn->SetSize(size);
+              m_scrollRightBtn->SetSize(size);
         }
         else
         {
-              m_scroll_right_btn = new wxRibbonPageScrollButton(this, wxID_ANY, initial_pos, size, direction);
+              m_scrollRightBtn = new wxRibbonPageScrollButton(this, wxID_ANY, initialPos, size, direction);
               reposition = true;
         }
-        if(!IsShown())
+        if ( !IsShown() )
         {
-              m_scroll_right_btn->Hide();
+              m_scrollRightBtn->Hide();
         }
     }
     else
     {
-        if(m_scroll_right_btn != nullptr)
+        if ( m_scrollRightBtn != nullptr )
         {
-            m_scroll_right_btn->Destroy();
-            m_scroll_right_btn = nullptr;
+            m_scrollRightBtn->Destroy();
+            m_scrollRightBtn = nullptr;
             reposition = true;
         }
     }
 
-    if(reposition)
+    if ( reposition )
     {
         wxASSERT_MSG(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
         static_cast<wxRibbonBar*>(GetParent())->RepositionPage(this);
@@ -904,7 +904,7 @@ bool wxRibbonPage::ShowScrollButtons()
 
 static int GetSizeInOrientation(wxSize size, wxOrientation orientation)
 {
-    switch(orientation)
+    switch ( orientation )
     {
     case wxHORIZONTAL: return size.GetWidth();
     case wxVERTICAL: return size.GetHeight();
@@ -915,85 +915,85 @@ static int GetSizeInOrientation(wxSize size, wxOrientation orientation)
 
 bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
 {
-    bool expanded_something = false;
-    while(maximum_amount > 0)
+    bool expandedSomething = false;
+    while ( maximum_amount > 0 )
     {
-        int smallest_size = INT_MAX;
-        wxRibbonPanel* smallest_panel = nullptr;
-        wxSize* smallest_panel_size = nullptr;
-        wxSize* panel_size = m_size_calc_array;
+        int smallestSize = INT_MAX;
+        wxRibbonPanel* smallestPanel = nullptr;
+        wxSize* smallestPanelSize = nullptr;
+        wxSize* panelSize = m_sizeCalcArray;
         for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                   node;
-                  node = node->GetNext(), ++panel_size )
+                  node = node->GetNext(), ++panelSize )
         {
             wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-            if(panel == nullptr || !panel->IsShown())
+            if ( panel == nullptr || !panel->IsShown() )
             {
                 continue;
             }
-            if (panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE)
+            if ( panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE )
             {
                 // Don't change if it's flexible since we already calculated the
                 // correct size for the panel.
             }
-            else if(panel->IsSizingContinuous())
+            else if ( panel->IsSizingContinuous() )
             {
-                int size = GetSizeInOrientation(*panel_size, direction);
-                if(size < smallest_size)
+                int size = GetSizeInOrientation(*panelSize, direction);
+                if ( size < smallestSize )
                 {
-                    smallest_size = size;
-                    smallest_panel = panel;
-                    smallest_panel_size = panel_size;
+                    smallestSize = size;
+                    smallestPanel = panel;
+                    smallestPanelSize = panelSize;
                 }
             }
             else
             {
-                int size = GetSizeInOrientation(*panel_size, direction);
-                if(size < smallest_size)
+                int size = GetSizeInOrientation(*panelSize, direction);
+                if ( size < smallestSize )
                 {
-                    wxSize larger = panel->GetNextLargerSize(direction, *panel_size);
-                    if(larger != (*panel_size) && GetSizeInOrientation(larger, direction) > size)
+                    wxSize larger = panel->GetNextLargerSize(direction, *panelSize);
+                    if ( larger != (*panelSize) && GetSizeInOrientation(larger, direction) > size )
                     {
-                        smallest_size = size;
-                        smallest_panel = panel;
-                        smallest_panel_size = panel_size;
+                        smallestSize = size;
+                        smallestPanel = panel;
+                        smallestPanelSize = panelSize;
                     }
                 }
             }
         }
-        if(smallest_panel != nullptr)
+        if ( smallestPanel != nullptr )
         {
-            if(smallest_panel->IsSizingContinuous())
+            if ( smallestPanel->IsSizingContinuous() )
             {
                 int amount = maximum_amount;
-                if(amount > 32)
+                if ( amount > 32 )
                 {
                     // For "large" growth, grow this panel a bit, and then re-allocate
                     // the remainder (which may come to this panel again anyway)
                     amount = 32;
                 }
-                if(direction & wxHORIZONTAL)
+                if ( direction & wxHORIZONTAL )
                 {
-                    smallest_panel_size->x += amount;
+                    smallestPanelSize->x += amount;
                 }
-                if(direction & wxVERTICAL)
+                if ( direction & wxVERTICAL )
                 {
-                    smallest_panel_size->y += amount;
+                    smallestPanelSize->y += amount;
                 }
                 maximum_amount -= amount;
-                m_collapse_stack.Add(smallest_panel);
-                expanded_something = true;
+                m_collapseStack.Add(smallestPanel);
+                expandedSomething = true;
             }
             else
             {
-                wxSize larger = smallest_panel->GetNextLargerSize(direction, *smallest_panel_size);
-                wxSize delta = larger - (*smallest_panel_size);
-                if(GetSizeInOrientation(delta, direction) <= maximum_amount)
+                wxSize larger = smallestPanel->GetNextLargerSize(direction, *smallestPanelSize);
+                wxSize delta = larger - (*smallestPanelSize);
+                if ( GetSizeInOrientation(delta, direction) <= maximum_amount )
                 {
-                    *smallest_panel_size = larger;
+                    *smallestPanelSize = larger;
                     maximum_amount -= GetSizeInOrientation(delta, direction);
-                    m_collapse_stack.Add(smallest_panel);
-                    expanded_something = true;
+                    m_collapseStack.Add(smallestPanel);
+                    expandedSomething = true;
                 }
                 else
                 {
@@ -1006,100 +1006,100 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
             break;
         }
     }
-    return expanded_something;
+    return expandedSomething;
 }
 
 bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
 {
-    while(minimum_amount > 0)
+    while ( minimum_amount > 0 )
     {
-        wxRibbonPanel* largest_panel = nullptr;
-        wxSize* largest_panel_size = nullptr;
-        wxSize* panel_size = m_size_calc_array;
-        if(!m_collapse_stack.IsEmpty())
+        wxRibbonPanel* largestPanel = nullptr;
+        wxSize* largestPanelSize = nullptr;
+        wxSize* panelSize = m_sizeCalcArray;
+        if ( !m_collapseStack.IsEmpty() )
         {
             // For a more consistent panel layout, try to collapse panels which
             // were recently expanded.
-            largest_panel = wxDynamicCast(m_collapse_stack.Last(), wxRibbonPanel);
-            m_collapse_stack.RemoveAt(m_collapse_stack.GetCount() - 1);
-            for(wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+            largestPanel = wxDynamicCast(m_collapseStack.Last(), wxRibbonPanel);
+            m_collapseStack.RemoveAt(m_collapseStack.GetCount() - 1);
+            for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                       node;
-                      node = node->GetNext(), ++panel_size )
+                      node = node->GetNext(), ++panelSize )
             {
                 wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-                if(panel == largest_panel && panel->IsShown())
+                if ( panel == largestPanel && panel->IsShown() )
                 {
-                    largest_panel_size = panel_size;
+                    largestPanelSize = panelSize;
                     break;
                 }
             }
         }
         else
         {
-            int largest_size = 0;
-            for(wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+            int largestSize = 0;
+            for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                       node;
-                      node = node->GetNext(), ++panel_size )
+                      node = node->GetNext(), ++panelSize )
             {
                 wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-                if(panel == nullptr || !panel->IsShown())
+                if ( panel == nullptr || !panel->IsShown() )
                 {
                     continue;
                 }
-                if(panel->IsSizingContinuous())
+                if ( panel->IsSizingContinuous() )
                 {
-                    int size = GetSizeInOrientation(*panel_size, direction);
-                    if(size > largest_size)
+                    int size = GetSizeInOrientation(*panelSize, direction);
+                    if ( size > largestSize )
                     {
-                        largest_size = size;
-                        largest_panel = panel;
-                        largest_panel_size = panel_size;
+                        largestSize = size;
+                        largestPanel = panel;
+                        largestPanelSize = panelSize;
                     }
                 }
                 else
                 {
-                    int size = GetSizeInOrientation(*panel_size, direction);
-                    if(size > largest_size)
+                    int size = GetSizeInOrientation(*panelSize, direction);
+                    if ( size > largestSize )
                     {
-                        wxSize smaller = panel->GetNextSmallerSize(direction, *panel_size);
-                        if(smaller != (*panel_size) &&
-                            GetSizeInOrientation(smaller, direction) < size)
+                        wxSize smaller = panel->GetNextSmallerSize(direction, *panelSize);
+                        if ( smaller != (*panelSize) &&
+                            GetSizeInOrientation(smaller, direction) < size )
                         {
-                            largest_size = size;
-                            largest_panel = panel;
-                            largest_panel_size = panel_size;
+                            largestSize = size;
+                            largestPanel = panel;
+                            largestPanelSize = panelSize;
                         }
                     }
                 }
             }
         }
-        if(largest_panel != nullptr && largest_panel_size != nullptr)
+        if ( largestPanel != nullptr && largestPanelSize != nullptr )
         {
-            if(largest_panel->IsSizingContinuous())
+            if ( largestPanel->IsSizingContinuous() )
             {
                 int amount = minimum_amount;
-                if(amount > 32)
+                if ( amount > 32 )
                 {
                     // For "large" contraction, reduce this panel a bit, and
                     // then re-allocate the remainder of the quota (which may
                     // come to this panel again anyway)
                     amount = 32;
                 }
-                if(direction & wxHORIZONTAL)
+                if ( direction & wxHORIZONTAL )
                 {
-                    largest_panel_size->x -= amount;
+                    largestPanelSize->x -= amount;
                 }
-                if(direction & wxVERTICAL)
+                if ( direction & wxVERTICAL )
                 {
-                    largest_panel_size->y -= amount;
+                    largestPanelSize->y -= amount;
                 }
                 minimum_amount -= amount;
             }
             else
             {
-                wxSize smaller = largest_panel->GetNextSmallerSize(direction, *largest_panel_size);
-                wxSize delta = (*largest_panel_size) - smaller;
-                *largest_panel_size = smaller;
+                wxSize smaller = largestPanel->GetNextSmallerSize(direction, *largestPanelSize);
+                wxSize delta = (*largestPanelSize) - smaller;
+                *largestPanelSize = smaller;
                 minimum_amount -= GetSizeInOrientation(delta, direction);
             }
         }
@@ -1168,11 +1168,11 @@ bool wxRibbonPage::DismissExpandedPanel()
               node = node->GetNext() )
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-        if(panel == nullptr || !panel->IsShown())
+        if ( panel == nullptr || !panel->IsShown() )
         {
             continue;
         }
-        if(panel->GetExpandedPanel() != nullptr)
+        if ( panel->GetExpandedPanel() != nullptr )
         {
             return panel->HideExpanded();
         }
@@ -1189,23 +1189,23 @@ wxSize wxRibbonPage::GetMinSize() const
           node = node->GetNext() )
     {
         wxWindow* child = node->GetData();
-        wxSize child_min(child->GetMinSize());
+        wxSize childMin(child->GetMinSize());
 
-        min.x = wxMax(min.x, child_min.x);
-        min.y = wxMax(min.y, child_min.y);
+        min.x = wxMax(min.x, childMin.x);
+        min.y = wxMax(min.y, childMin.y);
     }
 
-    if(GetMajorAxis() == wxHORIZONTAL)
+    if ( GetMajorAxis() == wxHORIZONTAL )
     {
         min.x = wxDefaultCoord;
-        if(min.y != wxDefaultCoord)
+        if ( min.y != wxDefaultCoord )
         {
             min.y += m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE) + m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
         }
     }
     else
     {
-        if(min.x != wxDefaultCoord)
+        if ( min.x != wxDefaultCoord )
         {
             min.x += m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE) + m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
         }
@@ -1220,7 +1220,7 @@ wxSize wxRibbonPage::DoGetBestSize() const
     wxSize best(0, 0);
     size_t count = 0;
 
-    if(GetMajorAxis() == wxHORIZONTAL)
+    if ( GetMajorAxis() == wxHORIZONTAL )
     {
         best.y = wxDefaultCoord;
 
@@ -1229,18 +1229,18 @@ wxSize wxRibbonPage::DoGetBestSize() const
           node = node->GetNext() )
         {
             wxWindow* child = node->GetData();
-            wxSize child_best(child->GetBestSize());
+            wxSize childBest(child->GetBestSize());
 
-            if(child_best.x != wxDefaultCoord)
+            if ( childBest.x != wxDefaultCoord )
             {
-                best.IncBy(child_best.x, 0);
+                best.IncBy(childBest.x, 0);
             }
-            best.y = wxMax(best.y, child_best.y);
+            best.y = wxMax(best.y, childBest.y);
 
             ++count;
         }
 
-        if(count > 1)
+        if ( count > 1 )
         {
             best.IncBy((count - 1) * m_art->GetMetric(wxRIBBON_ART_PANEL_X_SEPARATION_SIZE), 0);
         }
@@ -1254,28 +1254,28 @@ wxSize wxRibbonPage::DoGetBestSize() const
           node = node->GetNext() )
         {
             wxWindow* child = node->GetData();
-            wxSize child_best(child->GetBestSize());
+            wxSize childBest(child->GetBestSize());
 
-            best.x = wxMax(best.x, child_best.x);
-            if(child_best.y != wxDefaultCoord)
+            best.x = wxMax(best.x, childBest.x);
+            if ( childBest.y != wxDefaultCoord )
             {
-                best.IncBy(0, child_best.y);
+                best.IncBy(0, childBest.y);
             }
 
             ++count;
         }
 
-        if(count > 1)
+        if ( count > 1 )
         {
             best.IncBy(0, (count - 1) * m_art->GetMetric(wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE));
         }
     }
 
-    if(best.x != wxDefaultCoord)
+    if ( best.x != wxDefaultCoord )
     {
         best.x += m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE) + m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
     }
-    if(best.y != wxDefaultCoord)
+    if ( best.y != wxDefaultCoord )
     {
         best.y += m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE) + m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
     }
@@ -1284,7 +1284,7 @@ wxSize wxRibbonPage::DoGetBestSize() const
 
 void wxRibbonPage::HideIfExpanded()
 {
-    if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
+    if ( auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()) )
         bar->HideIfExpanded();
 }
 

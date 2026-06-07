@@ -27,10 +27,10 @@ public:
     wxRibbonGallery();
 
     wxRibbonGallery(wxWindow* parent,
-                  wxWindowID id = wxID_ANY,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxDefaultSize,
-                  long style = 0);
+                    wxWindowID id = wxID_ANY,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0);
 
     virtual ~wxRibbonGallery();
 
@@ -92,29 +92,29 @@ protected:
 
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                        wxSize relative_to) const override;
+                                        wxSize relativeTo) const override;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                       wxSize relative_to) const override;
+                                       wxSize relativeTo) const override;
 
     wxArrayRibbonGalleryItem m_items;
-    wxRibbonGalleryItem* m_selected_item;
-    wxRibbonGalleryItem* m_hovered_item;
-    wxRibbonGalleryItem* m_active_item;
-    wxSize m_bitmap_size;
-    wxSize m_bitmap_padded_size;
-    wxSize m_best_size;
-    wxRect m_client_rect;
-    wxRect m_scroll_up_button_rect;
-    wxRect m_scroll_down_button_rect;
-    wxRect m_extension_button_rect;
-    const wxRect* m_mouse_active_rect = nullptr;
-    int m_item_separation_x;
-    int m_item_separation_y;
-    int m_scroll_amount;
-    int m_scroll_limit;
-    wxRibbonGalleryButtonState m_up_button_state;
-    wxRibbonGalleryButtonState m_down_button_state;
-    wxRibbonGalleryButtonState m_extension_button_state;
+    wxRibbonGalleryItem* m_selectedItem;
+    wxRibbonGalleryItem* m_hoveredItem;
+    wxRibbonGalleryItem* m_activeItem;
+    wxSize m_bitmapSize;
+    wxSize m_bitmapPaddedSize;
+    wxSize m_bestSize;
+    wxRect m_clientRect;
+    wxRect m_scrollUpButtonRect;
+    wxRect m_scrollDownButtonRect;
+    wxRect m_extensionButtonRect;
+    const wxRect* m_mouseActiveRect = nullptr;
+    int m_itemSeparationX;
+    int m_itemSeparationY;
+    int m_scrollAmount;
+    int m_scrollLimit;
+    wxRibbonGalleryButtonState m_upButtonState;
+    wxRibbonGalleryButtonState m_downButtonState;
+    wxRibbonGalleryButtonState m_extensionButtonState;
     bool m_hovered;
 
 #ifndef SWIG
@@ -126,11 +126,11 @@ protected:
 class WXDLLIMPEXP_RIBBON wxRibbonGalleryEvent : public wxCommandEvent
 {
 public:
-    wxRibbonGalleryEvent(wxEventType command_type = wxEVT_NULL,
-                       int win_id = 0,
+    wxRibbonGalleryEvent(wxEventType commandType = wxEVT_NULL,
+                       int winId = 0,
                        wxRibbonGallery* gallery = nullptr,
                        wxRibbonGalleryItem* item = nullptr)
-        : wxCommandEvent(command_type, win_id)
+        : wxCommandEvent(commandType, winId)
         , m_gallery(gallery), m_item(item)
     {
     }

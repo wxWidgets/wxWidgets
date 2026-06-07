@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/ribbon/art.h
 // Purpose:     Art providers for ribbon-bar-style interface
 // Author:      Peter Cawley
@@ -217,11 +217,11 @@ public:
     virtual void SetFlags(long flags) = 0;
     virtual long GetFlags() const = 0;
 
-    virtual int GetMetric(int id)  const = 0;
-    virtual void SetMetric(int id, int new_val) = 0;
+    virtual int GetMetric(int id) const = 0;
+    virtual void SetMetric(int id, int newVal) = 0;
     virtual void SetFont(int id, const wxFont& font) = 0;
-    virtual wxFont GetFont(int id)  const = 0;
-    virtual wxColour GetColour(int id)  const = 0;
+    virtual wxFont GetFont(int id) const = 0;
+    virtual wxColour GetColour(int id) const = 0;
     virtual void SetColour(int id, const wxColor& colour) = 0;
     wxColour GetColor(int id) const { return GetColour(id); }
     void SetColor(int id, const wxColour& color) { SetColour(id, color); }
@@ -291,8 +291,8 @@ public:
                         wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
-                        const wxBitmap& bitmap_large,
-                        const wxBitmap& bitmap_small) = 0;
+                        const wxBitmap& bitmapLarge,
+                        const wxBitmap& bitmapSmall) = 0;
 
     virtual void DrawToolBarBackground(
                         wxDC& dc,
@@ -329,8 +329,8 @@ public:
                         const wxString& label,
                         const wxBitmap& bitmap,
                         int* ideal,
-                        int* small_begin_need_separator,
-                        int* small_must_have_separator,
+                        int* smallBeginNeedSeparator,
+                        int* smallMustHaveSeparator,
                         int* minimum) = 0;
 
     virtual int GetTabCtrlHeight(
@@ -346,14 +346,14 @@ public:
     virtual wxSize GetPanelSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize client_size,
-                        wxPoint* client_offset) = 0;
+                        wxSize clientSize,
+                        wxPoint* clientOffset) = 0;
 
     virtual wxSize GetPanelClientSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
-                        wxPoint* client_offset) = 0;
+                        wxPoint* clientOffset) = 0;
 
     virtual wxRect GetPanelExtButtonArea(
                         wxReadOnlyDC& dc,
@@ -363,22 +363,22 @@ public:
     virtual wxSize GetGallerySize(
                         wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
-                        wxSize client_size) = 0;
+                        wxSize clientSize) = 0;
 
     virtual wxSize GetGalleryClientSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
                         wxSize size,
-                        wxPoint* client_offset,
-                        wxRect* scroll_up_button,
-                        wxRect* scroll_down_button,
-                        wxRect* extension_button) = 0;
+                        wxPoint* clientOffset,
+                        wxRect* scrollUpButton,
+                        wxRect* scrollDownButton,
+                        wxRect* extensionButton) = 0;
 
     virtual wxRect GetPageBackgroundRedrawArea(
                         wxReadOnlyDC& dc,
                         const wxRibbonPage* wnd,
-                        wxSize page_old_size,
-                        wxSize page_new_size) = 0;
+                        wxSize pageOldSize,
+                        wxSize pageNewSize) = 0;
 
     virtual bool GetButtonBarButtonSize(
                         wxReadOnlyDC& dc,
@@ -386,12 +386,12 @@ public:
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
-                        wxCoord text_min_width,
-                        wxSize bitmap_size_large,
-                        wxSize bitmap_size_small,
-                        wxSize* button_size,
-                        wxRect* normal_region,
-                        wxRect* dropdown_region) = 0;
+                        wxCoord textMinWidth,
+                        wxSize bitmapSizeLarge,
+                        wxSize bitmapSizeSmall,
+                        wxSize* buttonSize,
+                        wxRect* normalRegion,
+                        wxRect* dropdownRegion) = 0;
 
     virtual wxCoord GetButtonBarButtonTextWidth(
                         wxReadOnlyDC& dc, const wxString& label,
@@ -401,17 +401,17 @@ public:
     virtual wxSize GetMinimisedPanelMinimumSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize* desired_bitmap_size,
-                        wxDirection* expanded_panel_direction) = 0;
+                        wxSize* desiredBitmapSize,
+                        wxDirection* expandedPanelDirection) = 0;
 
     virtual wxSize GetToolSize(
                         wxReadOnlyDC& dc,
                         wxWindow* wnd,
-                        wxSize bitmap_size,
+                        wxSize bitmapSize,
                         wxRibbonButtonKind kind,
-                        bool is_first,
-                        bool is_last,
-                        wxRect* dropdown_region) = 0;
+                        bool isFirst,
+                        bool isLast,
+                        wxRect* dropdownRegion) = 0;
 
     virtual wxRect GetBarToggleButtonArea(const wxRect& rect)= 0;
 
@@ -429,7 +429,7 @@ public:
     long GetFlags() const override;
 
     int GetMetric(int id) const override;
-    void SetMetric(int id, int new_val) override;
+    void SetMetric(int id, int newVal) override;
     void SetFont(int id, const wxFont& font) override;
     wxFont GetFont(int id) const override;
     wxColour GetColour(int id) const override;
@@ -506,8 +506,8 @@ public:
                         wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
-                        const wxBitmap& bitmap_large,
-                        const wxBitmap& bitmap_small) override;
+                        const wxBitmap& bitmapLarge,
+                        const wxBitmap& bitmapSmall) override;
 
     void DrawToolBarBackground(
                         wxDC& dc,
@@ -543,8 +543,8 @@ public:
                         const wxString& label,
                         const wxBitmap& bitmap,
                         int* ideal,
-                        int* small_begin_need_separator,
-                        int* small_must_have_separator,
+                        int* smallBeginNeedSeparator,
+                        int* smallMustHaveSeparator,
                         int* minimum) override;
 
     wxSize GetScrollButtonMinimumSize(
@@ -555,14 +555,14 @@ public:
     wxSize GetPanelSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize client_size,
-                        wxPoint* client_offset) override;
+                        wxSize clientSize,
+                        wxPoint* clientOffset) override;
 
     wxSize GetPanelClientSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
-                        wxPoint* client_offset) override;
+                        wxPoint* clientOffset) override;
 
     wxRect GetPanelExtButtonArea(
                         wxReadOnlyDC& dc,
@@ -572,22 +572,22 @@ public:
     wxSize GetGallerySize(
                         wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
-                        wxSize client_size) override;
+                        wxSize clientSize) override;
 
     wxSize GetGalleryClientSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
                         wxSize size,
-                        wxPoint* client_offset,
-                        wxRect* scroll_up_button,
-                        wxRect* scroll_down_button,
-                        wxRect* extension_button) override;
+                        wxPoint* clientOffset,
+                        wxRect* scrollUpButton,
+                        wxRect* scrollDownButton,
+                        wxRect* extensionButton) override;
 
     wxRect GetPageBackgroundRedrawArea(
                         wxReadOnlyDC& dc,
                         const wxRibbonPage* wnd,
-                        wxSize page_old_size,
-                        wxSize page_new_size) override;
+                        wxSize pageOldSize,
+                        wxSize pageNewSize) override;
 
     bool GetButtonBarButtonSize(
                         wxReadOnlyDC& dc,
@@ -595,12 +595,12 @@ public:
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
-                        wxCoord text_min_width,
-                        wxSize bitmap_size_large,
-                        wxSize bitmap_size_small,
-                        wxSize* button_size,
-                        wxRect* normal_region,
-                        wxRect* dropdown_region) override;
+                        wxCoord textMinWidth,
+                        wxSize bitmapSizeLarge,
+                        wxSize bitmapSizeSmall,
+                        wxSize* buttonSize,
+                        wxRect* normalRegion,
+                        wxRect* dropdownRegion) override;
 
     wxCoord GetButtonBarButtonTextWidth(
                         wxReadOnlyDC& dc, const wxString& label,
@@ -610,17 +610,17 @@ public:
     wxSize GetMinimisedPanelMinimumSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize* desired_bitmap_size,
-                        wxDirection* expanded_panel_direction) override;
+                        wxSize* desiredBitmapSize,
+                        wxDirection* expandedPanelDirection) override;
 
     wxSize GetToolSize(
                         wxReadOnlyDC& dc,
                         wxWindow* wnd,
-                        wxSize bitmap_size,
+                        wxSize bitmapSize,
                         wxRibbonButtonKind kind,
-                        bool is_first,
-                        bool is_last,
-                        wxRect* dropdown_region) override;
+                        bool isFirst,
+                        bool isLast,
+                        wxRect* dropdownRegion) override;
 
     wxRect GetBarToggleButtonArea(const wxRect& rect) override;
 
@@ -629,11 +629,11 @@ public:
 protected:
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);
     void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect,
-        bool allow_hovered = true);
+        bool allowHovered = true);
     void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect,
          wxRibbonPage* page, wxPoint offset, bool hovered = false);
-    void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primary_colour,
-        wxPen& secondary_colour);
+    void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primaryColour,
+        wxPen& secondaryColour);
     void RemovePanelPadding(wxRect* rect);
     void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
     void DrawGalleryBackgroundCommon(wxDC& dc, wxRibbonGallery* wnd,
@@ -646,149 +646,149 @@ protected:
                         wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
-                        const wxBitmap& bitmap_large,
-                        const wxBitmap& bitmap_small);
+                        const wxBitmap& bitmapLarge,
+                        const wxBitmap& bitmapSmall);
     void DrawMinimisedPanelCommon(
                         wxDC& dc,
                         wxRibbonPanel* wnd,
                         const wxRect& rect,
-                        wxRect* preview_rect);
+                        wxRect* previewRect);
     void CloneTo(wxRibbonMSWArtProvider* copy) const;
 
-    wxBitmap m_cached_tab_separator;
-    wxBitmapBundle m_gallery_up_bundle[4];
-    wxBitmapBundle m_gallery_down_bundle[4];
-    wxBitmapBundle m_gallery_extension_bundle[4];
-    wxBitmapBundle m_toolbar_drop_bundle;
-    wxBitmapBundle m_panel_extension_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_up_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_down_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_pin_bundle[2];
-    wxBitmapBundle m_ribbon_bar_help_button_bundle[2];
+    wxBitmap m_cachedTabSeparator;
+    wxBitmapBundle m_galleryUpBundle[4];
+    wxBitmapBundle m_galleryDownBundle[4];
+    wxBitmapBundle m_galleryExtensionBundle[4];
+    wxBitmapBundle m_toolbarDropBundle;
+    wxBitmapBundle m_panelExtensionBundle[2];
+    wxBitmapBundle m_ribbonToggleUpBundle[2];
+    wxBitmapBundle m_ribbonToggleDownBundle[2];
+    wxBitmapBundle m_ribbonTogglePinBundle[2];
+    wxBitmapBundle m_ribbonBarHelpButtonBundle[2];
 
-    wxColour m_primary_scheme_colour;
-    wxColour m_secondary_scheme_colour;
-    wxColour m_tertiary_scheme_colour;
+    wxColour m_primarySchemeColour;
+    wxColour m_secondarySchemeColour;
+    wxColour m_tertiarySchemeColour;
 
-    wxColour m_button_bar_label_colour;
-    wxColour m_button_bar_label_disabled_colour;
-    wxColour m_tab_label_colour;
-    wxColour m_tab_active_label_colour;
-    wxColour m_tab_hover_label_colour;
-    wxColour m_tab_separator_colour;
-    wxColour m_tab_separator_gradient_colour;
-    wxColour m_tab_active_background_colour;
-    wxColour m_tab_active_background_gradient_colour;
-    wxColour m_tab_hover_background_colour;
-    wxColour m_tab_hover_background_gradient_colour;
-    wxColour m_tab_hover_background_top_colour;
-    wxColour m_tab_hover_background_top_gradient_colour;
-    wxColour m_tab_highlight_top_colour;
-    wxColour m_tab_highlight_top_gradient_colour;
-    wxColour m_tab_highlight_colour;
-    wxColour m_tab_highlight_gradient_colour;
-    wxColour m_panel_label_colour;
-    wxColour m_panel_minimised_label_colour;
-    wxColour m_panel_hover_label_colour;
-    wxColour m_panel_active_background_colour;
-    wxColour m_panel_active_background_gradient_colour;
-    wxColour m_panel_active_background_top_colour;
-    wxColour m_panel_active_background_top_gradient_colour;
-    wxColour m_panel_button_face_colour;
-    wxColour m_panel_button_hover_face_colour;
-    wxColour m_page_toggle_face_colour;
-    wxColour m_page_toggle_hover_face_colour;
-    wxColour m_page_background_colour;
-    wxColour m_page_background_gradient_colour;
-    wxColour m_page_background_top_colour;
-    wxColour m_page_background_top_gradient_colour;
-    wxColour m_page_hover_background_colour;
-    wxColour m_page_hover_background_gradient_colour;
-    wxColour m_page_hover_background_top_colour;
-    wxColour m_page_hover_background_top_gradient_colour;
-    wxColour m_button_bar_hover_background_colour;
-    wxColour m_button_bar_hover_background_gradient_colour;
-    wxColour m_button_bar_hover_background_top_colour;
-    wxColour m_button_bar_hover_background_top_gradient_colour;
-    wxColour m_button_bar_active_background_colour;
-    wxColour m_button_bar_active_background_gradient_colour;
-    wxColour m_button_bar_active_background_top_colour;
-    wxColour m_button_bar_active_background_top_gradient_colour;
-    wxColour m_gallery_button_background_colour;
-    wxColour m_gallery_button_background_gradient_colour;
-    wxColour m_gallery_button_hover_background_colour;
-    wxColour m_gallery_button_hover_background_gradient_colour;
-    wxColour m_gallery_button_active_background_colour;
-    wxColour m_gallery_button_active_background_gradient_colour;
-    wxColour m_gallery_button_disabled_background_colour;
-    wxColour m_gallery_button_disabled_background_gradient_colour;
-    wxColour m_gallery_button_face_colour;
-    wxColour m_gallery_button_hover_face_colour;
-    wxColour m_gallery_button_active_face_colour;
-    wxColour m_gallery_button_disabled_face_colour;
+    wxColour m_buttonBarLabelColour;
+    wxColour m_buttonBarLabelDisabledColour;
+    wxColour m_tabLabelColour;
+    wxColour m_tabActiveLabelColour;
+    wxColour m_tabHoverLabelColour;
+    wxColour m_tabSeparatorColour;
+    wxColour m_tabSeparatorGradientColour;
+    wxColour m_tabActiveBackgroundColour;
+    wxColour m_tabActiveBackgroundGradientColour;
+    wxColour m_tabHoverBackgroundColour;
+    wxColour m_tabHoverBackgroundGradientColour;
+    wxColour m_tabHoverBackgroundTopColour;
+    wxColour m_tabHoverBackgroundTopGradientColour;
+    wxColour m_tabHighlightTopColour;
+    wxColour m_tabHighlightTopGradientColour;
+    wxColour m_tabHighlightColour;
+    wxColour m_tabHighlightGradientColour;
+    wxColour m_panelLabelColour;
+    wxColour m_panelMinimisedLabelColour;
+    wxColour m_panelHoverLabelColour;
+    wxColour m_panelActiveBackgroundColour;
+    wxColour m_panelActiveBackgroundGradientColour;
+    wxColour m_panelActiveBackgroundTopColour;
+    wxColour m_panelActiveBackgroundTopGradientColour;
+    wxColour m_panelButtonFaceColour;
+    wxColour m_panelButtonHoverFaceColour;
+    wxColour m_pageToggleFaceColour;
+    wxColour m_pageToggleHoverFaceColour;
+    wxColour m_pageBackgroundColour;
+    wxColour m_pageBackgroundGradientColour;
+    wxColour m_pageBackgroundTopColour;
+    wxColour m_pageBackgroundTopGradientColour;
+    wxColour m_pageHoverBackgroundColour;
+    wxColour m_pageHoverBackgroundGradientColour;
+    wxColour m_pageHoverBackgroundTopColour;
+    wxColour m_pageHoverBackgroundTopGradientColour;
+    wxColour m_buttonBarHoverBackgroundColour;
+    wxColour m_buttonBarHoverBackgroundGradientColour;
+    wxColour m_buttonBarHoverBackgroundTopColour;
+    wxColour m_buttonBarHoverBackgroundTopGradientColour;
+    wxColour m_buttonBarActiveBackgroundColour;
+    wxColour m_buttonBarActiveBackgroundGradientColour;
+    wxColour m_buttonBarActiveBackgroundTopColour;
+    wxColour m_buttonBarActiveBackgroundTopGradientColour;
+    wxColour m_galleryButtonBackgroundColour;
+    wxColour m_galleryButtonBackgroundGradientColour;
+    wxColour m_galleryButtonHoverBackgroundColour;
+    wxColour m_galleryButtonHoverBackgroundGradientColour;
+    wxColour m_galleryButtonActiveBackgroundColour;
+    wxColour m_galleryButtonActiveBackgroundGradientColour;
+    wxColour m_galleryButtonDisabledBackgroundColour;
+    wxColour m_galleryButtonDisabledBackgroundGradientColour;
+    wxColour m_galleryButtonFaceColour;
+    wxColour m_galleryButtonHoverFaceColour;
+    wxColour m_galleryButtonActiveFaceColour;
+    wxColour m_galleryButtonDisabledFaceColour;
 
-    wxColour m_tool_face_colour;
-    wxColour m_tool_background_top_colour;
-    wxColour m_tool_background_top_gradient_colour;
-    wxColour m_tool_background_colour;
-    wxColour m_tool_background_gradient_colour;
-    wxColour m_tool_hover_background_top_colour;
-    wxColour m_tool_hover_background_top_gradient_colour;
-    wxColour m_tool_hover_background_colour;
-    wxColour m_tool_hover_background_gradient_colour;
-    wxColour m_tool_active_background_top_colour;
-    wxColour m_tool_active_background_top_gradient_colour;
-    wxColour m_tool_active_background_colour;
-    wxColour m_tool_active_background_gradient_colour;
+    wxColour m_toolFaceColour;
+    wxColour m_toolBackgroundTopColour;
+    wxColour m_toolBackgroundTopGradientColour;
+    wxColour m_toolBackgroundColour;
+    wxColour m_toolBackgroundGradientColour;
+    wxColour m_toolHoverBackgroundTopColour;
+    wxColour m_toolHoverBackgroundTopGradientColour;
+    wxColour m_toolHoverBackgroundColour;
+    wxColour m_toolHoverBackgroundGradientColour;
+    wxColour m_toolActiveBackgroundTopColour;
+    wxColour m_toolActiveBackgroundTopGradientColour;
+    wxColour m_toolActiveBackgroundColour;
+    wxColour m_toolActiveBackgroundGradientColour;
 
-    wxBrush m_tab_ctrl_background_brush;
-    wxBrush m_panel_label_background_brush;
-    wxBrush m_panel_hover_label_background_brush;
-    wxBrush m_panel_hover_button_background_brush;
-    wxBrush m_gallery_hover_background_brush;
-    wxBrush m_gallery_button_background_top_brush;
-    wxBrush m_gallery_button_hover_background_top_brush;
-    wxBrush m_gallery_button_active_background_top_brush;
-    wxBrush m_gallery_button_disabled_background_top_brush;
-    wxBrush m_ribbon_toggle_brush;
+    wxBrush m_tabCtrlBackgroundBrush;
+    wxBrush m_panelLabelBackgroundBrush;
+    wxBrush m_panelHoverLabelBackgroundBrush;
+    wxBrush m_panelHoverButtonBackgroundBrush;
+    wxBrush m_galleryHoverBackgroundBrush;
+    wxBrush m_galleryButtonBackgroundTopBrush;
+    wxBrush m_galleryButtonHoverBackgroundTopBrush;
+    wxBrush m_galleryButtonActiveBackgroundTopBrush;
+    wxBrush m_galleryButtonDisabledBackgroundTopBrush;
+    wxBrush m_ribbonToggleBrush;
 
-    wxFont m_tab_label_font;
-    wxFont m_panel_label_font;
-    wxFont m_button_bar_label_font;
+    wxFont m_tabLabelFont;
+    wxFont m_panelLabelFont;
+    wxFont m_buttonBarLabelFont;
 
-    wxPen m_page_border_pen;
-    wxPen m_panel_border_pen;
-    wxPen m_panel_border_gradient_pen;
-    wxPen m_panel_hover_border_pen;
-    wxPen m_panel_hover_border_gradient_pen;
-    wxPen m_panel_minimised_border_pen;
-    wxPen m_panel_minimised_border_gradient_pen;
-    wxPen m_panel_hover_button_border_pen;
-    wxPen m_tab_border_pen;
-    wxPen m_button_bar_hover_border_pen;
-    wxPen m_button_bar_active_border_pen;
-    wxPen m_gallery_border_pen;
-    wxPen m_gallery_item_border_pen;
-    wxPen m_toolbar_border_pen;
-    wxPen m_ribbon_toggle_pen;
+    wxPen m_pageBorderPen;
+    wxPen m_panelBorderPen;
+    wxPen m_panelBorderGradientPen;
+    wxPen m_panelHoverBorderPen;
+    wxPen m_panelHoverBorderGradientPen;
+    wxPen m_panelMinimisedBorderPen;
+    wxPen m_panelMinimisedBorderGradientPen;
+    wxPen m_panelHoverButtonBorderPen;
+    wxPen m_tabBorderPen;
+    wxPen m_buttonBarHoverBorderPen;
+    wxPen m_buttonBarActiveBorderPen;
+    wxPen m_galleryBorderPen;
+    wxPen m_galleryItemBorderPen;
+    wxPen m_toolbarBorderPen;
+    wxPen m_ribbonTogglePen;
 
-    double m_cached_tab_separator_visibility;
+    double m_cachedTabSeparatorVisibility;
     long m_flags;
 
-    int m_tab_separation_size;
-    int m_page_border_left;
-    int m_page_border_top;
-    int m_page_border_right;
-    int m_page_border_bottom;
-    int m_panel_x_separation_size;
-    int m_panel_y_separation_size;
-    int m_tool_group_separation_size;
-    int m_gallery_bitmap_padding_left_size;
-    int m_gallery_bitmap_padding_right_size;
-    int m_gallery_bitmap_padding_top_size;
-    int m_gallery_bitmap_padding_bottom_size;
-    int m_toggle_button_offset;
-    int m_help_button_offset;
+    int m_tabSeparationSize;
+    int m_pageBorderLeft;
+    int m_pageBorderTop;
+    int m_pageBorderRight;
+    int m_pageBorderBottom;
+    int m_panelXSeparationSize;
+    int m_panelYSeparationSize;
+    int m_toolGroupSeparationSize;
+    int m_galleryBitmapPaddingLeftSize;
+    int m_galleryBitmapPaddingRightSize;
+    int m_galleryBitmapPaddingTopSize;
+    int m_galleryBitmapPaddingBottomSize;
+    int m_toggleButtonOffset;
+    int m_helpButtonOffset;
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWFlatArtProvider : public wxRibbonMSWArtProvider
@@ -854,8 +854,8 @@ public:
                         wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
-                        const wxBitmap& bitmap_large,
-                        const wxBitmap& bitmap_small) override;
+                        const wxBitmap& bitmapLarge,
+                        const wxBitmap& bitmapSmall) override;
 
     void DrawToolBarBackground(
                         wxDC& dc,
@@ -884,11 +884,11 @@ protected:
     void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& r,
         wxRibbonPage* page, wxPoint offset, bool hovered = false);
     void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd,
-        const wxRect& rect, bool allow_hovered = true);
+        const wxRect& rect, bool allowHovered = true);
     void DrawGalleryButton(wxDC& dc, wxRect rect,
         wxRibbonGalleryButtonState state, wxBitmapBundle* bundles, wxWindow* wnd) override;
-    void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primary_colour,
-        wxPen& secondary_colour);
+    void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primaryColour,
+        wxPen& secondaryColour);
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect,
         double visibility);
 };
@@ -922,14 +922,14 @@ public:
     wxSize GetPanelSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize client_size,
-                        wxPoint* client_offset) override;
+                        wxSize clientSize,
+                        wxPoint* clientOffset) override;
 
     wxSize GetPanelClientSize(
                         wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
-                        wxPoint* client_offset) override;
+                        wxPoint* clientOffset) override;
 
     wxRect GetPanelExtButtonArea(
                         wxReadOnlyDC& dc,
@@ -952,8 +952,8 @@ public:
                         const wxString& label,
                         const wxBitmap& bitmap,
                         int* ideal,
-                        int* small_begin_need_separator,
-                        int* small_must_have_separator,
+                        int* smallBeginNeedSeparator,
+                        int* smallMustHaveSeparator,
                         int* minimum) override;
 
     void DrawTab(wxDC& dc,
@@ -1005,8 +1005,8 @@ public:
                         wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
-                        const wxBitmap& bitmap_large,
-                        const wxBitmap& bitmap_small) override;
+                        const wxBitmap& bitmapLarge,
+                        const wxBitmap& bitmapSmall) override;
 
     void DrawToolBarBackground(
                         wxDC& dc,
@@ -1032,27 +1032,27 @@ protected:
     void DrawGalleryButton(wxDC& dc, wxRect rect,
         wxRibbonGalleryButtonState state, wxBitmapBundle* bundles, wxWindow* wnd) override;
 
-    wxColour m_tab_ctrl_background_colour;
-    wxColour m_tab_ctrl_background_gradient_colour;
-    wxColour m_panel_label_background_colour;
-    wxColour m_panel_label_background_gradient_colour;
-    wxColour m_panel_hover_label_background_colour;
-    wxColour m_panel_hover_label_background_gradient_colour;
+    wxColour m_tabCtrlBackgroundColour;
+    wxColour m_tabCtrlBackgroundGradientColour;
+    wxColour m_panelLabelBackgroundColour;
+    wxColour m_panelLabelBackgroundGradientColour;
+    wxColour m_panelHoverLabelBackgroundColour;
+    wxColour m_panelHoverLabelBackgroundGradientColour;
 
-    wxBrush m_background_brush;
-    wxBrush m_tab_active_top_background_brush;
-    wxBrush m_tab_hover_background_brush;
-    wxBrush m_button_bar_hover_background_brush;
-    wxBrush m_button_bar_active_background_brush;
-    wxBrush m_gallery_button_active_background_brush;
-    wxBrush m_gallery_button_hover_background_brush;
-    wxBrush m_gallery_button_disabled_background_brush;
-    wxBrush m_tool_hover_background_brush;
-    wxBrush m_tool_active_background_brush;
+    wxBrush m_backgroundBrush;
+    wxBrush m_tabActiveTopBackgroundBrush;
+    wxBrush m_tabHoverBackgroundBrush;
+    wxBrush m_buttonBarHoverBackgroundBrush;
+    wxBrush m_buttonBarActiveBackgroundBrush;
+    wxBrush m_galleryButtonActiveBackgroundBrush;
+    wxBrush m_galleryButtonHoverBackgroundBrush;
+    wxBrush m_galleryButtonDisabledBackgroundBrush;
+    wxBrush m_toolHoverBackgroundBrush;
+    wxBrush m_toolActiveBackgroundBrush;
 
-    wxPen m_toolbar_hover_borden_pen;
+    wxPen m_toolbarHoverBordenPen;
 
-    wxFont m_tab_active_label_font;
+    wxFont m_tabActiveLabelFont;
 };
 
 #if defined(__WXMSW__)

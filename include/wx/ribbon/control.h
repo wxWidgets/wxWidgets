@@ -43,18 +43,18 @@ public:
             const wxString& name = wxASCII_STR(wxControlNameStr));
 
     virtual void SetArtProvider(wxRibbonArtProvider* art);
-    wxRibbonArtProvider* GetArtProvider() const {return m_art;}
+    wxRibbonArtProvider* GetArtProvider() const { return m_art; }
 
-    virtual bool IsSizingContinuous() const {return true;}
-    wxSize GetNextSmallerSize(wxOrientation direction, wxSize relative_to) const;
-    wxSize GetNextLargerSize(wxOrientation direction, wxSize relative_to) const;
+    virtual bool IsSizingContinuous() const { return true; }
+    wxSize GetNextSmallerSize(wxOrientation direction, wxSize relativeTo) const;
+    wxSize GetNextLargerSize(wxOrientation direction, wxSize relativeTo) const;
     wxSize GetNextSmallerSize(wxOrientation direction) const;
     wxSize GetNextLargerSize(wxOrientation direction) const;
 
     virtual bool Realize();
-    bool Realise() {return Realize();}
+    bool Realise() { return Realize(); }
 
-    virtual wxRibbonBar* GetAncestorRibbonBar()const;
+    virtual wxRibbonBar* GetAncestorRibbonBar() const;
 
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& WXUNUSED(parentSize)) const { return GetBestSize(); }
@@ -63,9 +63,9 @@ protected:
     wxRibbonArtProvider* m_art;
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                        wxSize relative_to) const;
+                                        wxSize relativeTo) const;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                       wxSize relative_to) const;
+                                       wxSize relativeTo) const;
 
 private:
     void Init() { m_art = nullptr; }

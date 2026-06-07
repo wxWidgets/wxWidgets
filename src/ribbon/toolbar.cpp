@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 // Name:        src/ribbon/toolbar.cpp
 // Purpose:     Ribbon-style tool bar
 // Author:      Peter Cawley
@@ -21,7 +21,7 @@
 #endif
 
 #ifdef __WXMSW__
-#include "wx/msw/private.h"
+    #include "wx/msw/private.h"
 #endif
 
 #include <memory>
@@ -29,13 +29,13 @@
 class wxRibbonToolBarToolBase
 {
 public:
-    wxString help_string;
+    wxString helpString;
     wxBitmapBundle bitmap;
-    wxBitmapBundle bitmap_disabled;
+    wxBitmapBundle bitmapDisabled;
     wxRect dropdown;
     wxPoint position;
     wxSize size;
-    wxObject* client_data = nullptr;
+    wxObject* clientData = nullptr;
     int id;
     wxRibbonButtonKind kind;
     long state;
@@ -47,7 +47,7 @@ class wxRibbonToolBarToolGroup
 {
 public:
     // To identify the group as a wxRibbonToolBarToolBase*
-    wxRibbonToolBarToolBase dummy_tool;
+    wxRibbonToolBarToolBase dummyTool;
 
     wxArrayRibbonToolBarToolBase tools;
     wxPoint position;
@@ -93,7 +93,7 @@ bool wxRibbonToolBar::Create(wxWindow* parent,
                 const wxSize& size,
                 long style)
 {
-    if(!wxRibbonControl::Create(parent, id, pos, size, wxBORDER_NONE))
+    if ( !wxRibbonControl::Create(parent, id, pos, size, wxBORDER_NONE) )
     {
         return false;
     }
@@ -105,10 +105,10 @@ bool wxRibbonToolBar::Create(wxWindow* parent,
 void wxRibbonToolBar::CommonInit(long WXUNUSED(style))
 {
     AppendGroup();
-    m_hover_tool = nullptr;
-    m_active_tool = nullptr;
-    m_nrows_min = 1;
-    m_nrows_max = 1;
+    m_hoverTool = nullptr;
+    m_activeTool = nullptr;
+    m_nrowsMin = 1;
+    m_nrowsMax = 1;
     m_sizes = new wxSize[1];
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
@@ -117,11 +117,11 @@ wxRibbonToolBar::~wxRibbonToolBar()
 {
     size_t count = m_groups.GetCount();
     size_t i, t;
-    for(i = 0; i < count; ++i)
+    for ( i = 0; i < count; ++i )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(i);
-        size_t tool_count = group->tools.GetCount();
-        for(t = 0; t < tool_count; ++t)
+        size_t toolCount = group->tools.GetCount();
+        for ( t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             delete tool;
@@ -133,150 +133,150 @@ wxRibbonToolBar::~wxRibbonToolBar()
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddTool(
-                int tool_id,
+                int toolId,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string,
+                const wxString& helpString,
                 wxRibbonButtonKind kind)
 {
-    return AddTool(tool_id, bitmap, wxBitmapBundle(), help_string, kind, nullptr);
+    return AddTool(toolId, bitmap, wxBitmapBundle(), helpString, kind, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddDropdownTool(
-            int tool_id,
+            int toolId,
             const wxBitmapBundle& bitmap,
-            const wxString& help_string)
+            const wxString& helpString)
 {
-    return AddTool(tool_id, bitmap, wxBitmapBundle(), help_string,
+    return AddTool(toolId, bitmap, wxBitmapBundle(), helpString,
         wxRIBBON_BUTTON_DROPDOWN, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddHybridTool(
-            int tool_id,
+            int toolId,
             const wxBitmapBundle& bitmap,
-            const wxString& help_string)
+            const wxString& helpString)
 {
-    return AddTool(tool_id, bitmap, wxBitmapBundle(), help_string,
+    return AddTool(toolId, bitmap, wxBitmapBundle(), helpString,
         wxRIBBON_BUTTON_HYBRID, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddToggleTool(
-        int tool_id,
+        int toolId,
         const wxBitmapBundle& bitmap,
-        const wxString& help_string)
+        const wxString& helpString)
 {
-    return AddTool(tool_id, bitmap, wxBitmapBundle(), help_string,
+    return AddTool(toolId, bitmap, wxBitmapBundle(), helpString,
         wxRIBBON_BUTTON_TOGGLE, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddTool(
-            int tool_id,
+            int toolId,
             const wxBitmapBundle& bitmap,
-            const wxBitmapBundle& bitmap_disabled,
-            const wxString& help_string,
+            const wxBitmapBundle& bitmapDisabled,
+            const wxString& helpString,
             wxRibbonButtonKind kind,
-            wxObject* client_data)
+            wxObject* clientData)
 {
-    return InsertTool(GetToolCount(), tool_id, bitmap, bitmap_disabled,
-        help_string, kind, client_data);
+    return InsertTool(GetToolCount(), toolId, bitmap, bitmapDisabled,
+        helpString, kind, clientData);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::AddSeparator()
 {
-    if(m_groups.Last()->tools.IsEmpty())
+    if ( m_groups.Last()->tools.IsEmpty() )
         return nullptr;
 
     AppendGroup();
-    return &m_groups.Last()->dummy_tool;
+    return &m_groups.Last()->dummyTool;
 }
 
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
                 size_t pos,
-                int tool_id,
+                int toolId,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string,
+                const wxString& helpString,
                 wxRibbonButtonKind kind)
 {
-    return InsertTool(pos, tool_id, bitmap, wxBitmapBundle(), help_string, kind,
+    return InsertTool(pos, toolId, bitmap, wxBitmapBundle(), helpString, kind,
         nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertDropdownTool(
             size_t pos,
-            int tool_id,
+            int toolId,
             const wxBitmapBundle& bitmap,
-            const wxString& help_string)
+            const wxString& helpString)
 {
-    return InsertTool(pos, tool_id, bitmap, wxBitmapBundle(), help_string,
+    return InsertTool(pos, toolId, bitmap, wxBitmapBundle(), helpString,
         wxRIBBON_BUTTON_DROPDOWN, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertHybridTool(
             size_t pos,
-            int tool_id,
+            int toolId,
             const wxBitmapBundle& bitmap,
-            const wxString& help_string)
+            const wxString& helpString)
 {
-    return InsertTool(pos, tool_id, bitmap, wxBitmapBundle(), help_string,
+    return InsertTool(pos, toolId, bitmap, wxBitmapBundle(), helpString,
         wxRIBBON_BUTTON_HYBRID, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertToggleTool(
         size_t pos,
-        int tool_id,
+        int toolId,
         const wxBitmapBundle& bitmap,
-        const wxString& help_string)
+        const wxString& helpString)
 {
-    return InsertTool(pos, tool_id, bitmap, wxBitmapBundle(), help_string,
+    return InsertTool(pos, toolId, bitmap, wxBitmapBundle(), helpString,
         wxRIBBON_BUTTON_TOGGLE, nullptr);
 }
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
             size_t pos,
-            int tool_id,
+            int toolId,
             const wxBitmapBundle& bitmap,
-            const wxBitmapBundle& bitmap_disabled,
-            const wxString& help_string,
+            const wxBitmapBundle& bitmapDisabled,
+            const wxString& helpString,
             wxRibbonButtonKind kind,
-            wxObject* client_data)
+            wxObject* clientData)
 {
     wxASSERT(bitmap.IsOk());
 
     // Create the wxRibbonToolBarToolBase with parameters
     std::unique_ptr<wxRibbonToolBarToolBase> tool(new wxRibbonToolBarToolBase);
-    tool->id = tool_id;
+    tool->id = toolId;
     tool->bitmap = bitmap;
-    if(bitmap_disabled.IsOk())
+    if ( bitmapDisabled.IsOk() )
     {
-        wxASSERT(bitmap.GetDefaultSize() == bitmap_disabled.GetDefaultSize());
-        tool->bitmap_disabled = bitmap_disabled;
+        wxASSERT(bitmap.GetDefaultSize() == bitmapDisabled.GetDefaultSize());
+        tool->bitmapDisabled = bitmapDisabled;
     }
     else
     {
         // Generate disabled bitmap from normal bitmap
         wxBitmap bmp = bitmap.GetBitmap(bitmap.GetDefaultSize());
-        tool->bitmap_disabled = wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
+        tool->bitmapDisabled = wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
     }
-    tool->help_string = help_string;
+    tool->helpString = helpString;
     tool->kind = kind;
-    tool->client_data = client_data;
+    tool->clientData = clientData;
     tool->state = 0;
 
     // Find the position where insert tool
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        if(pos <= tool_count)
+        size_t toolCount = group->tools.GetCount();
+        if ( pos <= toolCount )
         {
             // Give the ownership of the tool to group->tools
             wxRibbonToolBarToolBase* const p = tool.release();
             group->tools.Insert(p, pos);
             return p;
         }
-        pos -= tool_count + 1;
+        pos -= toolCount + 1;
     }
     wxFAIL_MSG("Tool position out of toolbar bounds.");
     return nullptr;
@@ -284,34 +284,34 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::InsertSeparator(size_t pos)
 {
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
-        if(pos==0) // Prepend group
-            return &InsertGroup(g)->dummy_tool;
-        if(pos==group_count) // Append group
-            return &InsertGroup(g+1)->dummy_tool;
+        if ( pos== 0 ) // Prepend group
+            return &InsertGroup(g)->dummyTool;
+        if ( pos == groupCount ) // Append group
+            return &InsertGroup(g+1)->dummyTool;
 
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        if(pos < tool_count)
+        size_t toolCount = group->tools.GetCount();
+        if ( pos < toolCount )
         {
-            wxRibbonToolBarToolGroup* new_group = InsertGroup(g+1);
+            wxRibbonToolBarToolGroup* newGroup = InsertGroup(g+1);
 
-            for(size_t t = pos; t < tool_count; t++)
-                new_group->tools.Add(group->tools[t]);
-            group->tools.RemoveAt(pos, tool_count-pos);
+            for ( size_t t = pos; t < toolCount; t++ )
+                newGroup->tools.Add(group->tools[t]);
+            group->tools.RemoveAt(pos, toolCount-pos);
 
-            return &group->dummy_tool;
+            return &group->dummyTool;
         }
-        pos -= tool_count + 1;
+        pos -= toolCount + 1;
     }
     // Add an empty group at the end of the bar.
-    if(m_groups.Last()->tools.IsEmpty())
+    if ( m_groups.Last()->tools.IsEmpty() )
         return nullptr;
     AppendGroup();
-    return &m_groups.Last()->dummy_tool;
+    return &m_groups.Last()->dummyTool;
 }
 
 wxRibbonToolBarToolGroup* wxRibbonToolBar::InsertGroup(size_t pos)
@@ -325,11 +325,11 @@ void wxRibbonToolBar::ClearTools()
 {
     size_t count = m_groups.GetCount();
     size_t i, t;
-    for(i = 0; i < count; ++i)
+    for ( i = 0; i < count; ++i )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(i);
-        size_t tool_count = group->tools.GetCount();
-        for(t = 0; t < tool_count; ++t)
+        size_t toolCount = group->tools.GetCount();
+        for ( t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             delete tool;
@@ -339,18 +339,18 @@ void wxRibbonToolBar::ClearTools()
     m_groups.Clear();
 }
 
-bool wxRibbonToolBar::DeleteTool(int tool_id)
+bool wxRibbonToolBar::DeleteTool(int toolId)
 {
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        for(t = 0; t < tool_count; ++t)
+        size_t toolCount = group->tools.GetCount();
+        for ( t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-            if(tool->id == tool_id)
+            if ( tool->id == toolId )
             {
                 group->tools.RemoveAt(t);
                 delete tool;
@@ -363,13 +363,13 @@ bool wxRibbonToolBar::DeleteTool(int tool_id)
 
 bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
 {
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        if(pos<tool_count)
+        size_t toolCount = group->tools.GetCount();
+        if ( pos < toolCount )
         {
             // Remove tool
             wxRibbonToolBarToolBase* tool = group->tools.Item(pos);
@@ -377,36 +377,36 @@ bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
             delete tool;
             return true;
         }
-        else if(pos==tool_count)
+        else if ( pos == toolCount )
         {
             // Remove separator
-            if(g < group_count - 1)
+            if ( g < groupCount - 1 )
             {
-                wxRibbonToolBarToolGroup* next_group = m_groups.Item(g+1);
-                for(t = 0; t < next_group->tools.GetCount(); ++t)
-                    group->tools.Add(next_group->tools[t]);
+                wxRibbonToolBarToolGroup* nextGroup = m_groups.Item(g+1);
+                for ( t = 0; t < nextGroup->tools.GetCount(); ++t )
+                    group->tools.Add(nextGroup->tools[t]);
                 m_groups.RemoveAt(g+1);
-                delete next_group;
+                delete nextGroup;
             }
             return true;
         }
-        pos -= tool_count+1;
+        pos -= toolCount + 1;
     }
     return false;
 }
 
-wxRibbonToolBarToolBase* wxRibbonToolBar::FindById(int tool_id)const
+wxRibbonToolBarToolBase* wxRibbonToolBar::FindById(int toolId) const
 {
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        for(t = 0; t < tool_count; ++t)
+        size_t toolCount = group->tools.GetCount();
+        for ( t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-            if(tool->id == tool_id)
+            if ( tool->id == toolId )
             {
                 return tool;
             }
@@ -415,39 +415,39 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::FindById(int tool_id)const
     return nullptr;
 }
 
-wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(size_t pos)const
+wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(size_t pos) const
 {
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        if(pos<tool_count)
+        size_t toolCount = group->tools.GetCount();
+        if ( pos < toolCount )
         {
             return group->tools[pos];
         }
-        else if(pos==tool_count)
+        else if ( pos == toolCount )
         {
             return nullptr;
         }
-        pos -= tool_count+1;
+        pos -= toolCount + 1;
     }
     return nullptr;
 }
 
-wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(wxCoord x, wxCoord y)const
+wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(wxCoord x, wxCoord y) const
 {
-    size_t group_count = m_groups.GetCount();
-    for ( size_t g = 0; g < group_count; ++g )
+    size_t groupCount = m_groups.GetCount();
+    for ( size_t g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        for ( size_t t = 0; t < tool_count; ++t )
+        size_t toolCount = group->tools.GetCount();
+        for ( size_t t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             wxRect rect(group->position + tool->position, tool->size);
-            if(rect.Contains(x, y))
+            if ( rect.Contains(x, y) )
             {
                 return tool;
             }
@@ -459,19 +459,19 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(wxCoord x, wxCoord y)cons
 size_t wxRibbonToolBar::GetToolCount() const
 {
     size_t count = 0;
-    for(size_t g = 0; g < m_groups.GetCount(); ++g)
+    for ( size_t g = 0; g < m_groups.GetCount(); ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
         count += group->tools.GetCount();
     }
     // There is a splitter in front of every group except for the first
     // If only one group, no separator.
-    if(m_groups.GetCount()>1)
+    if ( m_groups.GetCount() > 1 )
         count += m_groups.GetCount() - 1;
     return count;
 }
 
-int wxRibbonToolBar::GetToolId(const wxRibbonToolBarToolBase* tool)const
+int wxRibbonToolBar::GetToolId(const wxRibbonToolBarToolBase* tool) const
 {
     wxCHECK_MSG(tool != nullptr , wxNOT_FOUND, "The tool pointer must not be null");
     return tool->id;
@@ -479,50 +479,50 @@ int wxRibbonToolBar::GetToolId(const wxRibbonToolBarToolBase* tool)const
 
 wxRibbonToolBarToolBase* wxRibbonToolBar::GetActiveTool() const
 {
-    return m_active_tool == nullptr ? nullptr : m_active_tool;
+    return m_activeTool == nullptr ? nullptr : m_activeTool;
 }
 
-wxObject* wxRibbonToolBar::GetToolClientData(int tool_id)const
+wxObject* wxRibbonToolBar::GetToolClientData(int toolId) const
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_MSG(tool != nullptr , nullptr, "Invalid tool id");
-    return tool->client_data;
+    return tool->clientData;
 }
 
-bool wxRibbonToolBar::GetToolEnabled(int tool_id)const
+bool wxRibbonToolBar::GetToolEnabled(int toolId) const
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_MSG(tool != nullptr , false, "Invalid tool id");
     return (tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED) == 0;
 }
 
-wxString wxRibbonToolBar::GetToolHelpString(int tool_id)const
+wxString wxRibbonToolBar::GetToolHelpString(int toolId) const
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_MSG(tool != nullptr , wxEmptyString, "Invalid tool id");
-    return tool->help_string;
+    return tool->helpString;
 }
 
-wxRibbonButtonKind wxRibbonToolBar::GetToolKind(int tool_id)const
+wxRibbonButtonKind wxRibbonToolBar::GetToolKind(int toolId) const
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_MSG(tool != nullptr , wxRIBBON_BUTTON_NORMAL, "Invalid tool id");
     return tool->kind;
 }
 
-int wxRibbonToolBar::GetToolPos(int tool_id)const
+int wxRibbonToolBar::GetToolPos(int toolId) const
 {
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
     int pos = 0;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        for(t = 0; t < tool_count; ++t)
+        size_t toolCount = group->tools.GetCount();
+        for ( t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-            if(tool->id == tool_id)
+            if ( tool->id == toolId )
             {
                 return pos;
             }
@@ -533,19 +533,19 @@ int wxRibbonToolBar::GetToolPos(int tool_id)const
     return wxNOT_FOUND;
 }
 
-wxRect wxRibbonToolBar::GetToolRect(int tool_id)const
+wxRect wxRibbonToolBar::GetToolRect(int toolId) const
 {
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
 
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        for(t = 0; t < tool_count; ++t)
+        size_t toolCount = group->tools.GetCount();
+        for ( t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-            if (tool->id == tool_id)
+            if ( tool->id == toolId )
             {
                 return wxRect(group->position + tool->position, tool->size);
             }
@@ -554,9 +554,9 @@ wxRect wxRibbonToolBar::GetToolRect(int tool_id)const
     return wxRect();
 }
 
-bool wxRibbonToolBar::GetToolState(int tool_id)const
+bool wxRibbonToolBar::GetToolState(int toolId) const
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_MSG(tool != nullptr , false, "Invalid tool id");
     return (tool->state & wxRIBBON_TOOLBAR_TOOL_TOGGLED) != 0;
 }
@@ -578,41 +578,41 @@ bool wxRibbonToolBar::IsSizingContinuous() const
     return false;
 }
 
-void wxRibbonToolBar::SetToolClientData(int tool_id, wxObject* clientData)
+void wxRibbonToolBar::SetToolClientData(int toolId, wxObject* clientData)
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
-    tool->client_data = clientData;
+    tool->clientData = clientData;
 }
 
-void wxRibbonToolBar::SetToolDisabledBitmap(int tool_id, const wxBitmapBundle &bitmap)
+void wxRibbonToolBar::SetToolDisabledBitmap(int toolId, const wxBitmapBundle &bitmap)
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
-    tool->bitmap_disabled = bitmap;
+    tool->bitmapDisabled = bitmap;
 }
 
-void wxRibbonToolBar::SetToolHelpString(int tool_id, const wxString& helpString)
+void wxRibbonToolBar::SetToolHelpString(int toolId, const wxString& helpString)
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
-    tool->help_string = helpString;
+    tool->helpString = helpString;
 }
 
-void wxRibbonToolBar::SetToolNormalBitmap(int tool_id, const wxBitmapBundle &bitmap)
+void wxRibbonToolBar::SetToolNormalBitmap(int toolId, const wxBitmapBundle &bitmap)
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
     tool->bitmap = bitmap;
 }
 
-void wxRibbonToolBar::EnableTool(int tool_id, bool enable)
+void wxRibbonToolBar::EnableTool(int toolId, bool enable)
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
-    if(enable)
+    if ( enable )
     {
-        if(tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
+        if ( tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED )
         {
             tool->state &= ~wxRIBBON_TOOLBAR_TOOL_DISABLED;
             Refresh();
@@ -620,7 +620,7 @@ void wxRibbonToolBar::EnableTool(int tool_id, bool enable)
     }
     else
     {
-        if((tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)==0)
+        if ( (tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED) == 0 )
         {
             tool->state |= wxRIBBON_TOOLBAR_TOOL_DISABLED;
             Refresh();
@@ -628,13 +628,13 @@ void wxRibbonToolBar::EnableTool(int tool_id, bool enable)
     }
 }
 
-void wxRibbonToolBar::ToggleTool(int tool_id, bool checked)
+void wxRibbonToolBar::ToggleTool(int toolId, bool checked)
 {
-    wxRibbonToolBarToolBase* tool = FindById(tool_id);
+    wxRibbonToolBarToolBase* tool = FindById(toolId);
     wxCHECK_RET(tool != nullptr , "Invalid tool id");
-    if(checked)
+    if ( checked )
     {
-        if((tool->state & wxRIBBON_TOOLBAR_TOOL_TOGGLED) == 0)
+        if ( (tool->state & wxRIBBON_TOOLBAR_TOOL_TOGGLED) == 0 )
         {
             tool->state |= wxRIBBON_TOOLBAR_TOOL_TOGGLED;
             Refresh();
@@ -642,7 +642,7 @@ void wxRibbonToolBar::ToggleTool(int tool_id, bool checked)
     }
     else
     {
-        if(tool->state & wxRIBBON_TOOLBAR_TOOL_TOGGLED)
+        if ( tool->state & wxRIBBON_TOOLBAR_TOOL_TOGGLED )
         {
             tool->state &= ~wxRIBBON_TOOLBAR_TOOL_TOGGLED;
             Refresh();
@@ -652,7 +652,7 @@ void wxRibbonToolBar::ToggleTool(int tool_id, bool checked)
 
 static int GetSizeInOrientation(wxSize size, wxOrientation orientation)
 {
-    switch(orientation)
+    switch ( orientation )
     {
     case wxHORIZONTAL: return size.GetWidth();
     case wxVERTICAL: return size.GetHeight();
@@ -662,42 +662,42 @@ static int GetSizeInOrientation(wxSize size, wxOrientation orientation)
 }
 
 wxSize wxRibbonToolBar::DoGetNextSmallerSize(wxOrientation direction,
-                                      wxSize relative_to) const
+                                      wxSize relativeTo) const
 {
-    wxSize result(relative_to);
+    wxSize result(relativeTo);
     int area = 0;
     int nrows;
-    for(nrows = m_nrows_min; nrows <= m_nrows_max; ++nrows)
+    for ( nrows = m_nrowsMin; nrows <= m_nrowsMax; ++nrows )
     {
-        wxSize size(m_sizes[nrows - m_nrows_min]);
+        wxSize size(m_sizes[nrows - m_nrowsMin]);
         wxSize original(size);
-        switch(direction)
+        switch ( direction )
         {
         case wxHORIZONTAL:
-            if(size.GetWidth() < relative_to.GetWidth()
-                && size.GetHeight() <= relative_to.GetHeight())
+            if ( size.GetWidth() < relativeTo.GetWidth()
+                && size.GetHeight() <= relativeTo.GetHeight() )
             {
-                size.SetHeight(relative_to.GetHeight());
+                size.SetHeight(relativeTo.GetHeight());
                 break;
             }
             continue;
         case wxVERTICAL:
-            if(size.GetWidth() <= relative_to.GetWidth()
-                && size.GetHeight() < relative_to.GetHeight())
+            if ( size.GetWidth() <= relativeTo.GetWidth()
+                && size.GetHeight() < relativeTo.GetHeight() )
             {
-                size.SetWidth(relative_to.GetWidth());
+                size.SetWidth(relativeTo.GetWidth());
                 break;
             }
             continue;
         case wxBOTH:
-            if(size.GetWidth() < relative_to.GetWidth()
-                && size.GetHeight() < relative_to.GetHeight())
+            if ( size.GetWidth() < relativeTo.GetWidth()
+                && size.GetHeight() < relativeTo.GetHeight() )
             {
                 break;
             }
             continue;
         }
-        if(GetSizeInOrientation(original, direction) > area)
+        if ( GetSizeInOrientation(original, direction) > area )
         {
             result = size;
             area = GetSizeInOrientation(original, direction);
@@ -707,43 +707,43 @@ wxSize wxRibbonToolBar::DoGetNextSmallerSize(wxOrientation direction,
 }
 
 wxSize wxRibbonToolBar::DoGetNextLargerSize(wxOrientation direction,
-                                 wxSize relative_to) const
+                                 wxSize relativeTo) const
 {
     // Pick the smallest of our sizes which are larger than the given size
-    wxSize result(relative_to);
+    wxSize result(relativeTo);
     int area = INT_MAX;
     int nrows;
-    for(nrows = m_nrows_min; nrows <= m_nrows_max; ++nrows)
+    for ( nrows = m_nrowsMin; nrows <= m_nrowsMax; ++nrows )
     {
-        wxSize size(m_sizes[nrows - m_nrows_min]);
+        wxSize size(m_sizes[nrows - m_nrowsMin]);
         wxSize original(size);
-        switch(direction)
+        switch ( direction )
         {
         case wxHORIZONTAL:
-            if(size.GetWidth() > relative_to.GetWidth()
-                && size.GetHeight() <= relative_to.GetHeight())
+            if ( size.GetWidth() > relativeTo.GetWidth()
+                && size.GetHeight() <= relativeTo.GetHeight() )
             {
-                size.SetHeight(relative_to.GetHeight());
+                size.SetHeight(relativeTo.GetHeight());
                 break;
             }
             continue;
         case wxVERTICAL:
-            if(size.GetWidth() <= relative_to.GetWidth()
-                && size.GetHeight() > relative_to.GetHeight())
+            if ( size.GetWidth() <= relativeTo.GetWidth()
+                && size.GetHeight() > relativeTo.GetHeight() )
             {
-                size.SetWidth(relative_to.GetWidth());
+                size.SetWidth(relativeTo.GetWidth());
                 break;
             }
             continue;
         case wxBOTH:
-            if(size.GetWidth() > relative_to.GetWidth()
-                && size.GetHeight() > relative_to.GetHeight())
+            if ( size.GetWidth() > relativeTo.GetWidth()
+                && size.GetHeight() > relativeTo.GetHeight() )
             {
                 break;
             }
             continue;
         }
-        if(GetSizeInOrientation(original, direction) < area)
+        if ( GetSizeInOrientation(original, direction) < area )
         {
             result = size;
             area = GetSizeInOrientation(original, direction);
@@ -755,49 +755,49 @@ wxSize wxRibbonToolBar::DoGetNextLargerSize(wxOrientation direction,
 
 void wxRibbonToolBar::SetRows(int nMin, int nMax)
 {
-    if(nMax == -1)
+    if ( nMax == -1 )
         nMax = nMin;
 
     wxASSERT(1 <= nMin);
     wxASSERT(nMin <= nMax);
 
-    m_nrows_min = nMin;
-    m_nrows_max = nMax;
+    m_nrowsMin = nMin;
+    m_nrowsMax = nMax;
 
     delete[] m_sizes;
-    m_sizes = new wxSize[m_nrows_max - m_nrows_min + 1];
+    m_sizes = new wxSize[m_nrowsMax - m_nrowsMin + 1];
 
     Realize();
 }
 
 bool wxRibbonToolBar::Realize()
 {
-    if(m_art == nullptr)
+    if ( m_art == nullptr )
         return false;
 
     // Calculate the size of each group and the position/size of each tool
-    wxMemoryDC temp_dc;
-    size_t group_count = m_groups.GetCount();
+    wxMemoryDC tempDc;
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolBase* prev = nullptr;
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
+        size_t toolCount = group->tools.GetCount();
         int tallest = 0;
-        for(t = 0; t < tool_count; ++t)
+        for ( t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-            tool->size = m_art->GetToolSize(temp_dc, this,
+            tool->size = m_art->GetToolSize(tempDc, this,
                 tool->bitmap.GetPreferredLogicalSizeFor(this), tool->kind, t == 0,
-                t == (tool_count - 1), &tool->dropdown);
-            if(t == 0)
+                t == (toolCount - 1), &tool->dropdown);
+            if ( t == 0 )
                 tool->state |= wxRIBBON_TOOLBAR_TOOL_FIRST;
-            if(t == tool_count - 1)
+            if ( t == toolCount - 1 )
                 tool->state |= wxRIBBON_TOOLBAR_TOOL_LAST;
-            if(tool->size.GetHeight() > tallest)
+            if ( tool->size.GetHeight() > tallest )
                 tallest = tool->size.GetHeight();
-            if(prev)
+            if ( prev )
             {
                 tool->position = prev->position;
                 tool->position.x += prev->size.x;
@@ -808,12 +808,12 @@ bool wxRibbonToolBar::Realize()
             }
             prev = tool;
         }
-        if(tool_count == 0)
+        if ( toolCount == 0 )
             group->size = wxSize(0, 0);
         else
         {
             group->size = wxSize(prev->position.x + prev->size.x, tallest);
-            for(t = 0; t < tool_count; ++t)
+            for ( t = 0; t < toolCount; ++t )
                 group->tools.Item(t)->size.SetHeight(tallest);
         }
     }
@@ -821,9 +821,9 @@ bool wxRibbonToolBar::Realize()
     // Calculate the minimum size for each possible number of rows
     int nrows, r;
     int sep = m_art->GetMetric(wxRIBBON_ART_TOOL_GROUP_SEPARATION_SIZE);
-    int smallest_area = INT_MAX;
-    wxSize* row_sizes = new wxSize[m_nrows_max];
-    wxOrientation major_axis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
+    int smallestArea = INT_MAX;
+    wxSize* rowSizes = new wxSize[m_nrowsMax];
+    wxOrientation majorAxis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
         wxVERTICAL : wxHORIZONTAL;
 
     SetMinSize(wxSize(0, 0));
@@ -832,152 +832,152 @@ bool wxRibbonToolBar::Realize()
     // See if we're sizing flexibly (i.e. wrapping), and set min size differently
     bool sizingFlexibly = false;
     wxRibbonPanel* panel = wxDynamicCast(GetParent(), wxRibbonPanel);
-    if (panel && (panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE))
+    if ( panel && (panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE) )
         sizingFlexibly = true;
 
     // Without this, there will be redundant horizontal space because SetMinSize will
     // use the smallest possible height (and therefore largest width).
-    if (sizingFlexibly)
-        major_axis = wxHORIZONTAL;
+    if ( sizingFlexibly )
+        majorAxis = wxHORIZONTAL;
 
-    for(nrows = m_nrows_min; nrows <= m_nrows_max; ++nrows)
+    for ( nrows = m_nrowsMin; nrows <= m_nrowsMax; ++nrows )
     {
-        for(r = 0; r < nrows; ++r)
-            row_sizes[r] = wxSize(0, 0);
-        for(g = 0; g < group_count; ++g)
+        for ( r = 0; r < nrows; ++r )
+            rowSizes[r] = wxSize(0, 0);
+        for ( g = 0; g < groupCount; ++g )
         {
             wxRibbonToolBarToolGroup* group = m_groups.Item(g);
             int shortest_row = 0;
-            for(r = 1; r < nrows; ++r)
+            for ( r = 1; r < nrows; ++r )
             {
-                if(row_sizes[r].GetWidth() < row_sizes[shortest_row].GetWidth())
+                if ( rowSizes[r].GetWidth() < rowSizes[shortest_row].GetWidth() )
                     shortest_row = r;
             }
-            row_sizes[shortest_row].x += group->size.x + sep;
-            if(group->size.y > row_sizes[shortest_row].y)
-                row_sizes[shortest_row].y = group->size.y;
+            rowSizes[shortest_row].x += group->size.x + sep;
+            if ( group->size.y > rowSizes[shortest_row].y )
+                rowSizes[shortest_row].y = group->size.y;
         }
         wxSize size(0, 0);
-        for(r = 0; r < nrows; ++r)
+        for ( r = 0; r < nrows; ++r )
         {
-            if(row_sizes[r].GetWidth() != 0)
-                row_sizes[r].DecBy(sep, 0);
-            if(row_sizes[r].GetWidth() > size.GetWidth())
-                size.SetWidth(row_sizes[r].GetWidth());
-            size.IncBy(0, row_sizes[r].y);
+            if ( rowSizes[r].GetWidth() != 0 )
+                rowSizes[r].DecBy(sep, 0);
+            if ( rowSizes[r].GetWidth() > size.GetWidth() )
+                size.SetWidth(rowSizes[r].GetWidth());
+            size.IncBy(0, rowSizes[r].y);
         }
-        m_sizes[nrows - m_nrows_min] = size;
+        m_sizes[nrows - m_nrowsMin] = size;
 
-        if(GetSizeInOrientation(size, major_axis) < smallest_area)
+        if ( GetSizeInOrientation(size, majorAxis) < smallestArea )
         {
-            smallest_area = GetSizeInOrientation(size, major_axis);
+            smallestArea = GetSizeInOrientation(size, majorAxis);
             SetMinSize(size);
         }
 
-        if (sizingFlexibly)
+        if ( sizingFlexibly )
         {
-            if (size.x < minSize.x)
+            if ( size.x < minSize.x )
                 minSize.x = size.x;
-            if (size.y < minSize.y)
+            if ( size.y < minSize.y )
                 minSize.y = size.y;
         }
     }
 
-    if (sizingFlexibly)
+    if ( sizingFlexibly )
     {
         // Give it the min size in either direction regardless of row,
         // so that we're able to vary the size of the panel according to
         // the space the toolbar takes up.
         SetMinSize(minSize);
     }
-    delete[] row_sizes;
+    delete[] rowSizes;
 
     // Position the groups
-    wxSizeEvent dummy_event(GetSize());
-    OnSize(dummy_event);
+    wxSizeEvent dummyEvent(GetSize());
+    OnSize(dummyEvent);
 
     return true;
 }
 
 void wxRibbonToolBar::OnSize(wxSizeEvent& evt)
 {
-    if(m_art == nullptr)
+    if ( m_art == nullptr )
         return;
 
     // Choose row count with largest possible area
     wxSize size = evt.GetSize();
-    int row_count = m_nrows_max;
-    wxOrientation major_axis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
+    int rowCount = m_nrowsMax;
+    wxOrientation majorAxis = m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL ?
         wxVERTICAL : wxHORIZONTAL;
 
     // See if we're sizing flexibly, and set min size differently
     bool sizingFlexibly = false;
     wxRibbonPanel* panel = wxDynamicCast(GetParent(), wxRibbonPanel);
-    if (panel && (panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE))
+    if ( panel && (panel->GetFlags() & wxRIBBON_PANEL_FLEXIBLE) )
         sizingFlexibly = true;
 
     // Without this, there will be redundant horizontal space because SetMinSize will
     // use the smallest possible height (and therefore largest width).
-    if (sizingFlexibly)
-        major_axis = wxHORIZONTAL;
+    if ( sizingFlexibly )
+        majorAxis = wxHORIZONTAL;
 
-    if(m_nrows_max != m_nrows_min)
+    if ( m_nrowsMax != m_nrowsMin )
     {
         int area = 0;
-        for(int i = 0; i <= m_nrows_max - m_nrows_min; ++i)
+        for ( int i = 0; i <= m_nrowsMax - m_nrowsMin; ++i )
         {
-            if(m_sizes[i].x <= size.x && m_sizes[i].y <= size.y &&
-                GetSizeInOrientation(m_sizes[i], major_axis) > area)
+            if ( m_sizes[i].x <= size.x && m_sizes[i].y <= size.y &&
+                GetSizeInOrientation(m_sizes[i], majorAxis) > area )
             {
-                area = GetSizeInOrientation(m_sizes[i], major_axis);
-                row_count = m_nrows_min + i;
+                area = GetSizeInOrientation(m_sizes[i], majorAxis);
+                rowCount = m_nrowsMin + i;
             }
         }
     }
 
     // Assign groups to rows and calculate row widths
-    wxSize* row_sizes = new wxSize[row_count];
+    wxSize* rowSizes = new wxSize[rowCount];
     int sep = m_art->GetMetric(wxRIBBON_ART_TOOL_GROUP_SEPARATION_SIZE);
 
     int r;
     size_t g;
-    size_t group_count = m_groups.GetCount();
-    for(g = 0; g < group_count; ++g)
+    size_t groupCount = m_groups.GetCount();
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
         int shortest_row = 0;
-        for(r = 1; r < row_count; ++r)
+        for ( r = 1; r < rowCount; ++r )
         {
-            if(row_sizes[r].GetWidth() < row_sizes[shortest_row].GetWidth())
+            if ( rowSizes[r].GetWidth() < rowSizes[shortest_row].GetWidth() )
                 shortest_row = r;
         }
-        group->position = wxPoint(row_sizes[shortest_row].x, shortest_row);
-        row_sizes[shortest_row].x += group->size.x + sep;
-        if(group->size.y > row_sizes[shortest_row].y)
-            row_sizes[shortest_row].y = group->size.y;
+        group->position = wxPoint(rowSizes[shortest_row].x, shortest_row);
+        rowSizes[shortest_row].x += group->size.x + sep;
+        if ( group->size.y > rowSizes[shortest_row].y )
+            rowSizes[shortest_row].y = group->size.y;
     }
 
     // Calculate row positions
-    int total_height = 0;
-    for(r = 0; r < row_count; ++r)
-        total_height += row_sizes[r].GetHeight();
-    int rowsep = (size.GetHeight() - total_height) / (row_count + 1);
-    int* rowypos = new int[row_count];
+    int totalHeight = 0;
+    for ( r = 0; r < rowCount; ++r )
+        totalHeight += rowSizes[r].GetHeight();
+    int rowsep = (size.GetHeight() - totalHeight) / (rowCount + 1);
+    int* rowypos = new int[rowCount];
     rowypos[0] = rowsep;
-    for(r = 1; r < row_count; ++r)
+    for ( r = 1; r < rowCount; ++r )
     {
-        rowypos[r] = rowypos[r - 1] + row_sizes[r - 1].GetHeight() + rowsep;
+        rowypos[r] = rowypos[r - 1] + rowSizes[r - 1].GetHeight() + rowsep;
     }
 
     // Set group y positions
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
         group->position.y = rowypos[group->position.y];
     }
 
     delete[] rowypos;
-    delete[] row_sizes;
+    delete[] rowSizes;
 }
 
 void wxRibbonToolBar::OnDPIChanged(wxDPIChangedEvent& event)
@@ -989,7 +989,7 @@ void wxRibbonToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 // Finds the best width and height given the parents' width and height
 wxSize wxRibbonToolBar::GetBestSizeForParentSize(const wxSize& parentSize) const
 {
-    if (!m_sizes)
+    if ( !m_sizes )
         return GetMinSize();
 
     // Choose row count with largest possible area
@@ -998,18 +998,18 @@ wxSize wxRibbonToolBar::GetBestSizeForParentSize(const wxSize& parentSize) const
     // A toolbar should maximize its width whether vertical or horizontal, so
     // force the major axis to be horizontal. Without this, there will be
     // redundant horizontal space.
-    wxOrientation major_axis = wxHORIZONTAL;
+    wxOrientation majorAxis = wxHORIZONTAL;
     wxSize bestSize = m_sizes[0];
 
-    if(m_nrows_max != m_nrows_min)
+    if ( m_nrowsMax != m_nrowsMin )
     {
         int area = 0;
-        for(int i = 0; i <= m_nrows_max - m_nrows_min; ++i)
+        for ( int i = 0; i <= m_nrowsMax - m_nrowsMin; ++i )
         {
-            if(m_sizes[i].x <= size.x && m_sizes[i].y <= size.y &&
-                GetSizeInOrientation(m_sizes[i], major_axis) > area)
+            if ( m_sizes[i].x <= size.x && m_sizes[i].y <= size.y &&
+                GetSizeInOrientation(m_sizes[i], majorAxis) > area )
             {
-                area = GetSizeInOrientation(m_sizes[i], major_axis);
+                area = GetSizeInOrientation(m_sizes[i], majorAxis);
                 bestSize = m_sizes[i];
             }
         }
@@ -1030,29 +1030,29 @@ void wxRibbonToolBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 void wxRibbonToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxAutoBufferedPaintDC dc(this);
-    if(m_art == nullptr)
+    if ( m_art == nullptr )
         return;
 
     m_art->DrawToolBarBackground(dc, this, GetSize());
 
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        if(tool_count != 0)
+        size_t toolCount = group->tools.GetCount();
+        if ( toolCount != 0 )
         {
             m_art->DrawToolGroupBackground(dc, this,
                 wxRect(group->position, group->size));
-            for(t = 0; t < tool_count; ++t)
+            for ( t = 0; t < toolCount; ++t )
             {
                 wxRibbonToolBarToolBase* tool = group->tools.Item(t);
                 wxRect rect(group->position + tool->position, tool->size);
                 // Resolve bitmap bundle to actual bitmap for current DPI
                 wxBitmap bmp;
-                if(tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
-                    bmp = tool->bitmap_disabled.GetBitmapFor(this);
+                if ( tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED )
+                    bmp = tool->bitmapDisabled.GetBitmapFor(this);
                 else
                     bmp = tool->bitmap.GetBitmapFor(this);
                 m_art->DrawTool(dc, this, rect, bmp, tool->kind, tool->state);
@@ -1064,26 +1064,26 @@ void wxRibbonToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
 {
     wxPoint pos(evt.GetPosition());
-    wxRibbonToolBarToolBase *new_hover = nullptr;
+    wxRibbonToolBarToolBase *newHover = nullptr;
 
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        if(group->position.x <= pos.x && pos.x < group->position.x + group->size.x
-            && group->position.y <= pos.y && pos.y < group->position.y + group->size.y)
+        if ( group->position.x <= pos.x && pos.x < group->position.x + group->size.x
+            && group->position.y <= pos.y && pos.y < group->position.y + group->size.y )
         {
-            size_t tool_count = group->tools.GetCount();
+            size_t toolCount = group->tools.GetCount();
             pos -= group->position;
-            for(t = 0; t < tool_count; ++t)
+            for ( t = 0; t < toolCount; ++t )
             {
                 wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-                if(tool->position.x <= pos.x && pos.x < tool->position.x + tool->size.x
-                    && tool->position.y <= pos.y && pos.y < tool->position.y + tool->size.y)
+                if ( tool->position.x <= pos.x && pos.x < tool->position.x + tool->size.x
+                    && tool->position.y <= pos.y && pos.y < tool->position.y + tool->size.y )
                 {
                     pos -= tool->position;
-                    new_hover = tool;
+                    newHover = tool;
                     break;
                 }
             }
@@ -1092,60 +1092,60 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
     }
 
 #if wxUSE_TOOLTIPS
-    if(new_hover)
+    if ( newHover )
     {
-        if (new_hover != m_hover_tool &&
-                !(new_hover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE))
-            SetToolTip(new_hover->help_string);
+        if ( newHover != m_hoverTool &&
+                !(newHover->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE) )
+            SetToolTip(newHover->helpString);
     }
-    else if(GetToolTip())
+    else if ( GetToolTip() )
     {
         UnsetToolTip();
     }
 #endif
 
-    if(new_hover != m_hover_tool)
+    if ( newHover != m_hoverTool )
     {
-        if(m_hover_tool)
+        if ( m_hoverTool )
         {
-            m_hover_tool->state &= ~(wxRIBBON_TOOLBAR_TOOL_HOVER_MASK
+            m_hoverTool->state &= ~(wxRIBBON_TOOLBAR_TOOL_HOVER_MASK
                 | wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK);
         }
-        m_hover_tool = new_hover;
+        m_hoverTool = newHover;
 
-        if(new_hover && new_hover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
-            new_hover = nullptr; // A disabled tool can not be highlighted
+        if ( newHover && newHover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED )
+            newHover = nullptr; // A disabled tool can not be highlighted
 
-        if(new_hover)
+        if ( newHover )
         {
             long what = wxRIBBON_TOOLBAR_TOOL_NORMAL_HOVERED;
-            if(new_hover->dropdown.Contains(pos))
+            if ( newHover->dropdown.Contains(pos) )
                 what = wxRIBBON_TOOLBAR_TOOL_DROPDOWN_HOVERED;
 
-            new_hover->state |= what;
+            newHover->state |= what;
 
-            if(new_hover == m_active_tool)
+            if ( newHover == m_activeTool )
             {
-                new_hover->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
-                new_hover->state |= (what << 2);
+                newHover->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
+                newHover->state |= (what << 2);
             }
         }
         Refresh(false);
     }
-    else if(m_hover_tool && m_hover_tool->kind == wxRIBBON_BUTTON_HYBRID)
+    else if ( m_hoverTool && m_hoverTool->kind == wxRIBBON_BUTTON_HYBRID )
     {
-        long newstate = m_hover_tool->state &~wxRIBBON_TOOLBAR_TOOL_HOVER_MASK;
+        long newState = m_hoverTool->state &~wxRIBBON_TOOLBAR_TOOL_HOVER_MASK;
         long what = wxRIBBON_TOOLBAR_TOOL_NORMAL_HOVERED;
-        if(m_hover_tool->dropdown.Contains(pos))
+        if ( m_hoverTool->dropdown.Contains(pos) )
             what = wxRIBBON_TOOLBAR_TOOL_DROPDOWN_HOVERED;
-        newstate |= what;
-        if(newstate != m_hover_tool->state)
+        newState |= what;
+        if ( newState != m_hoverTool->state )
         {
-            m_hover_tool->state = newstate;
-            if(m_hover_tool == m_active_tool)
+            m_hoverTool->state = newState;
+            if ( m_hoverTool == m_activeTool )
             {
-                m_hover_tool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
-                m_hover_tool->state |= (what << 2);
+                m_hoverTool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
+                m_hoverTool->state |= (what << 2);
             }
             Refresh(false);
         }
@@ -1155,11 +1155,11 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
 void wxRibbonToolBar::OnMouseDown(wxMouseEvent& evt)
 {
     OnMouseMove(evt);
-    if(m_hover_tool)
+    if ( m_hoverTool )
     {
-        m_active_tool = m_hover_tool;
-        m_active_tool->state |=
-            (m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_HOVER_MASK) << 2;
+        m_activeTool = m_hoverTool;
+        m_activeTool->state |=
+            (m_activeTool->state & wxRIBBON_TOOLBAR_TOOL_HOVER_MASK) << 2;
         UnsetToolTip();
         Refresh(false);
     }
@@ -1167,45 +1167,45 @@ void wxRibbonToolBar::OnMouseDown(wxMouseEvent& evt)
 
 void wxRibbonToolBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
-    if(m_hover_tool)
+    if ( m_hoverTool )
     {
-        m_hover_tool->state &= ~wxRIBBON_TOOLBAR_TOOL_HOVER_MASK;
-        m_hover_tool = nullptr;
+        m_hoverTool->state &= ~wxRIBBON_TOOLBAR_TOOL_HOVER_MASK;
+        m_hoverTool = nullptr;
         Refresh(false);
     }
 }
 
 void wxRibbonToolBar::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
 {
-    if(m_active_tool)
+    if ( m_activeTool )
     {
-        if(m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK)
+        if ( m_activeTool->state & wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK )
         {
-            wxEventType evt_type = wxEVT_RIBBONTOOLBAR_CLICKED;
-            if(m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE)
-                evt_type = wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED;
-            wxRibbonToolBarEvent notification(evt_type, m_active_tool->id);
-            if(m_active_tool->kind == wxRIBBON_BUTTON_TOGGLE)
+            wxEventType evtType = wxEVT_RIBBONTOOLBAR_CLICKED;
+            if ( m_activeTool->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE )
+                evtType = wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED;
+            wxRibbonToolBarEvent notification(evtType, m_activeTool->id);
+            if ( m_activeTool->kind == wxRIBBON_BUTTON_TOGGLE )
             {
-                m_active_tool->state ^=
+                m_activeTool->state ^=
                     wxRIBBON_TOOLBAR_TOOL_TOGGLED;
-                notification.SetInt(m_active_tool->state &
+                notification.SetInt(m_activeTool->state &
                     wxRIBBON_TOOLBAR_TOOL_TOGGLED);
             }
             notification.SetEventObject(this);
             notification.SetBar(this);
             ProcessEvent(notification);
 
-            if (auto* const panel = wxCheckedStaticCast<wxRibbonPanel>(GetParent()))
+            if ( auto* const panel = wxCheckedStaticCast<wxRibbonPanel>(GetParent()) )
                 panel->HideIfExpanded();
         }
 
-        // Notice that m_active_tool could have been reset by the event handler
+        // Notice that m_activeTool could have been reset by the event handler
         // above so we need to test it again.
-        if (m_active_tool)
+        if ( m_activeTool )
         {
-            m_active_tool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
-            m_active_tool = nullptr;
+            m_activeTool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
+            m_activeTool = nullptr;
             Refresh(false);
         }
     }
@@ -1213,10 +1213,10 @@ void wxRibbonToolBar::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
 
 void wxRibbonToolBar::OnMouseEnter(wxMouseEvent& evt)
 {
-    if(m_active_tool && !evt.LeftIsDown())
+    if ( m_activeTool && !evt.LeftIsDown() )
     {
-        m_active_tool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
-        m_active_tool = nullptr;
+        m_activeTool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
+        m_activeTool = nullptr;
     }
 }
 
@@ -1228,13 +1228,13 @@ void wxRibbonToolBar::UpdateWindowUI(long flags)
     if ( !IsShown() )
         return;
 
-    size_t group_count = m_groups.GetCount();
+    size_t groupCount = m_groups.GetCount();
     size_t g, t;
-    for(g = 0; g < group_count; ++g)
+    for ( g = 0; g < groupCount; ++g )
     {
         wxRibbonToolBarToolGroup* group = m_groups.Item(g);
-        size_t tool_count = group->tools.GetCount();
-        for(t = 0; t < tool_count; ++t)
+        size_t toolCount = group->tools.GetCount();
+        for ( t = 0; t < toolCount; ++t )
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             int id = tool->id;
@@ -1256,24 +1256,24 @@ void wxRibbonToolBar::UpdateWindowUI(long flags)
 bool wxRibbonToolBarEvent::PopupMenu(wxMenu* menu)
 {
     wxPoint pos = wxDefaultPosition;
-    if(m_bar->m_active_tool)
+    if ( m_bar->m_activeTool )
     {
         // Find the group which contains the tool
-        size_t group_count = m_bar->m_groups.GetCount();
+        size_t groupCount = m_bar->m_groups.GetCount();
         size_t g, t;
-        for(g = 0; g < group_count; ++g)
+        for ( g = 0; g < groupCount; ++g )
         {
             wxRibbonToolBarToolGroup* group = m_bar->m_groups.Item(g);
-            size_t tool_count = group->tools.GetCount();
-            for(t = 0; t < tool_count; ++t)
+            size_t toolCount = group->tools.GetCount();
+            for ( t = 0; t < toolCount; ++t )
             {
                 wxRibbonToolBarToolBase* tool = group->tools.Item(t);
-                if(tool == m_bar->m_active_tool)
+                if ( tool == m_bar->m_activeTool )
                 {
                     pos = group->position;
                     pos += tool->position;
                     pos.y += tool->size.GetHeight();
-                    g = group_count;
+                    g = groupCount;
                     break;
                 }
             }

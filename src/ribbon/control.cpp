@@ -19,7 +19,7 @@
 #endif
 
 #ifdef __WXMSW__
-#include "wx/msw/private.h"
+    #include "wx/msw/private.h"
 #endif
 
 wxIMPLEMENT_CLASS(wxRibbonControl, wxControl);
@@ -33,10 +33,10 @@ bool wxRibbonControl::Create(wxWindow *parent, wxWindowID id,
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    wxRibbonControl *ribbon_parent = wxDynamicCast(parent, wxRibbonControl);
-    if(ribbon_parent)
+    wxRibbonControl *ribbonParent = wxDynamicCast(parent, wxRibbonControl);
+    if ( ribbonParent )
     {
-        m_art = ribbon_parent->GetArtProvider();
+        m_art = ribbonParent->GetArtProvider();
     }
 
     return true;
@@ -52,11 +52,11 @@ wxSize wxRibbonControl::DoGetNextSmallerSize(wxOrientation direction,
 {
     // Dummy implementation for code which doesn't check for IsSizingContinuous() == true
     wxSize minimum(GetMinSize());
-    if((direction & wxHORIZONTAL) && size.x > minimum.x)
+    if ( (direction & wxHORIZONTAL) && size.x > minimum.x )
     {
         size.x--;
     }
-    if((direction & wxVERTICAL) && size.y > minimum.y)
+    if ( (direction & wxVERTICAL) && size.y > minimum.y )
     {
         size.y--;
     }
@@ -67,11 +67,11 @@ wxSize wxRibbonControl::DoGetNextLargerSize(wxOrientation direction,
                                           wxSize size) const
 {
     // Dummy implementation for code which doesn't check for IsSizingContinuous() == true
-    if(direction & wxHORIZONTAL)
+    if ( direction & wxHORIZONTAL )
     {
         size.x++;
     }
-    if(direction & wxVERTICAL)
+    if ( direction & wxVERTICAL )
     {
         size.y++;
     }
@@ -79,15 +79,15 @@ wxSize wxRibbonControl::DoGetNextLargerSize(wxOrientation direction,
 }
 
 wxSize wxRibbonControl::GetNextSmallerSize(wxOrientation direction,
-                                           wxSize relative_to) const
+                                           wxSize relativeTo) const
 {
-    return DoGetNextSmallerSize(direction, relative_to);
+    return DoGetNextSmallerSize(direction, relativeTo);
 }
 
 wxSize wxRibbonControl::GetNextLargerSize(wxOrientation direction,
-                                          wxSize relative_to) const
+                                          wxSize relativeTo) const
 {
-    return DoGetNextLargerSize(direction, relative_to);
+    return DoGetNextLargerSize(direction, relativeTo);
 }
 
 wxSize wxRibbonControl::GetNextSmallerSize(wxOrientation direction) const
@@ -105,7 +105,7 @@ bool wxRibbonControl::Realize()
     return true;
 }
 
-wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
+wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar() const
 {
     for ( wxWindow* win = GetParent(); win; win = win->GetParent() )
     {

@@ -46,82 +46,82 @@ public:
                 long style = 0);
 
     virtual wxRibbonButtonBarButtonBase* AddButton(
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string,
+                const wxString& helpString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
-    // NB: help_string cannot be optional as that would cause the signature
+    // NB: helpString cannot be optional as that would cause the signature
     // to be identical to the full version of AddButton when 3 arguments are
     // given.
 
     virtual wxRibbonButtonBarButtonBase* AddDropdownButton(
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string = wxEmptyString);
+                const wxString& helpString = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* AddHybridButton(
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string = wxEmptyString);
+                const wxString& helpString = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* AddToggleButton(
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string = wxEmptyString);
+                const wxString& helpString = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* AddButton(
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
-                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
-                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmapSmall = wxBitmapBundle(),
+                const wxBitmapBundle& bitmapDisabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmapSmallDisabled = wxBitmapBundle(),
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                const wxString& help_string = wxEmptyString);
+                const wxString& helpString = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* InsertButton(
                 size_t pos,
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string,
+                const wxString& helpString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
 
     virtual wxRibbonButtonBarButtonBase* InsertDropdownButton(
                 size_t pos,
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string = wxEmptyString);
+                const wxString& helpString = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* InsertHybridButton(
                 size_t pos,
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string = wxEmptyString);
+                const wxString& helpString = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* InsertToggleButton(
                 size_t pos,
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxString& help_string = wxEmptyString);
+                const wxString& helpString = wxEmptyString);
 
     virtual wxRibbonButtonBarButtonBase* InsertButton(
                 size_t pos,
-                int button_id,
+                int buttonId,
                 const wxString& label,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
-                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
-                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmapSmall = wxBitmapBundle(),
+                const wxBitmapBundle& bitmapDisabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmapSmallDisabled = wxBitmapBundle(),
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                const wxString& help_string = wxEmptyString);
+                const wxString& helpString = wxEmptyString);
 
     void SetItemClientObject(wxRibbonButtonBarButtonBase* item, wxClientData* data);
     wxClientData* GetItemClientObject(const wxRibbonButtonBarButtonBase* item) const;
@@ -132,30 +132,30 @@ public:
     virtual wxRibbonButtonBarButtonBase *GetItem(size_t n) const;
     virtual wxRibbonButtonBarButtonBase *GetItemById(int id) const;
     virtual int GetItemId(wxRibbonButtonBarButtonBase *button) const;
-    virtual wxRect GetItemRect(int button_id) const;
+    virtual wxRect GetItemRect(int buttonId) const;
 
 
     virtual bool Realize() override;
     virtual void ClearButtons();
-    virtual bool DeleteButton(int button_id);
-    virtual void EnableButton(int button_id, bool enable = true);
-    virtual void ToggleButton(int button_id, bool checked);
+    virtual bool DeleteButton(int buttonId);
+    virtual void EnableButton(int buttonId, bool enable = true);
+    virtual void ToggleButton(int buttonId, bool checked);
 
     virtual void SetButtonIcon(
-                int button_id,
+                int buttonId,
                 const wxBitmapBundle& bitmap,
-                const wxBitmapBundle& bitmap_small = wxBitmapBundle(),
-                const wxBitmapBundle& bitmap_disabled = wxBitmapBundle(),
-                const wxBitmapBundle& bitmap_small_disabled = wxBitmapBundle());
+                const wxBitmapBundle& bitmapSmall = wxBitmapBundle(),
+                const wxBitmapBundle& bitmapDisabled = wxBitmapBundle(),
+                const wxBitmapBundle& bitmapSmallDisabled = wxBitmapBundle());
 
-    virtual void SetButtonText(int button_id, const wxString& label);
-    virtual void SetButtonTextMinWidth(int button_id,
-                int min_width_medium, int min_width_large);
-    virtual void SetButtonTextMinWidth(int button_id, const wxString& label);
-    virtual void SetButtonMinSizeClass(int button_id,
-                wxRibbonButtonBarButtonState min_size_class);
-    virtual void SetButtonMaxSizeClass(int button_id,
-                wxRibbonButtonBarButtonState max_size_class);
+    virtual void SetButtonText(int buttonId, const wxString& label);
+    virtual void SetButtonTextMinWidth(int buttonId,
+                int minWidthMedium, int minWidthLarge);
+    virtual void SetButtonTextMinWidth(int buttonId, const wxString& label);
+    virtual void SetButtonMinSizeClass(int buttonId,
+                wxRibbonButtonBarButtonState minSizeClass);
+    virtual void SetButtonMaxSizeClass(int buttonId,
+                wxRibbonButtonBarButtonState maxSizeClass);
 
     virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
     virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
@@ -187,31 +187,31 @@ protected:
     void OnDPIChanged(wxDPIChangedEvent& evt);
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                      wxSize relative_to) const override;
+                                      wxSize relativeTo) const override;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                     wxSize relative_to) const override;
+                                     wxSize relativeTo) const override;
 
     void CommonInit(long style);
     void MakeLayouts();
     void TryCollapseLayout(wxRibbonButtonBarLayout* original,
-                     size_t first_btn, size_t* last_button,
-                     wxRibbonButtonBarButtonState target_size);
+                     size_t firstBtn, size_t* lastButton,
+                     wxRibbonButtonBarButtonState targetSize);
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         wxRibbonButtonBarButtonState size, wxReadOnlyDC& dc);
     virtual void UpdateWindowUI(long flags) override;
 
     wxArrayRibbonButtonBarLayout m_layouts;
     wxArrayRibbonButtonBarButtonBase m_buttons;
-    wxRibbonButtonBarButtonInstance* m_hovered_button = nullptr;
-    wxRibbonButtonBarButtonInstance* m_active_button = nullptr;
+    wxRibbonButtonBarButtonInstance* m_hoveredButton = nullptr;
+    wxRibbonButtonBarButtonInstance* m_activeButton = nullptr;
 
-    wxPoint m_layout_offset;
-    wxSize m_bitmap_size_large;
-    wxSize m_bitmap_size_small;
-    int m_current_layout;
-    bool m_layouts_valid;
-    bool m_lock_active_state;
-    bool m_show_tooltips_for_disabled;
+    wxPoint m_layoutOffset;
+    wxSize m_bitmapSizeLarge;
+    wxSize m_bitmapSizeSmall;
+    int m_currentLayout;
+    bool m_layoutsValid;
+    bool m_lockActiveState;
+    bool m_showTooltipsForDisabled;
 
     std::vector<wxBitmapBundle> m_bundlesLarge;         // Large button icons
     std::vector<wxBitmapBundle> m_bundlesSmall;         // Small button icons
@@ -231,11 +231,11 @@ private:
 class WXDLLIMPEXP_RIBBON wxRibbonButtonBarEvent : public wxCommandEvent
 {
 public:
-    wxRibbonButtonBarEvent(wxEventType command_type = wxEVT_NULL,
-                       int win_id = 0,
+    wxRibbonButtonBarEvent(wxEventType commandType = wxEVT_NULL,
+                       int winId = 0,
                        wxRibbonButtonBar* bar = nullptr,
                        wxRibbonButtonBarButtonBase* button = nullptr)
-        : wxCommandEvent(command_type, win_id)
+        : wxCommandEvent(commandType, winId)
         , m_bar(bar), m_button(button)
     {
     }
@@ -243,9 +243,9 @@ public:
     wxRibbonButtonBarEvent(const wxRibbonButtonBarEvent& e) = default;
     wxNODISCARD wxEvent *Clone() const override { return new wxRibbonButtonBarEvent(*this); }
 
-    wxRibbonButtonBar* GetBar() {return m_bar;}
+    wxRibbonButtonBar* GetBar() { return m_bar; }
     wxRibbonButtonBarButtonBase *GetButton() { return m_button; }
-    void SetBar(wxRibbonButtonBar* bar) {m_bar = bar;}
+    void SetBar(wxRibbonButtonBar* bar) { m_bar = bar; }
     void SetButton(wxRibbonButtonBarButtonBase* button) { m_button = button; }
     bool PopupMenu(wxMenu* menu);
 

@@ -17,11 +17,11 @@
 #include "wx/settings.h"
 
 WXDLLIMPEXP_RIBBON wxColour wxRibbonInterpolateColour(
-                                const wxColour& start_colour,
-                                const wxColour& end_colour,
+                                const wxColour& startColour,
+                                const wxColour& endColour,
                                 int position,
-                                int start_position,
-                                int end_position);
+                                int startPosition,
+                                int endPosition);
 
 WXDLLIMPEXP_RIBBON bool wxRibbonCanLabelBreakAtPosition(
                                 const wxString& label,
@@ -29,15 +29,15 @@ WXDLLIMPEXP_RIBBON bool wxRibbonCanLabelBreakAtPosition(
 
 WXDLLIMPEXP_RIBBON void wxRibbonDrawParallelGradientLines(
                                 wxDC& dc,
-                                int nlines,
-                                const wxPoint* line_origins,
-                                int stepx,
-                                int stepy,
-                                int numsteps,
-                                int offset_x,
-                                int offset_y,
-                                const wxColour& start_colour,
-                                const wxColour& end_colour);
+                                int nLines,
+                                const wxPoint* lineOrigins,
+                                int stepX,
+                                int stepY,
+                                int numSteps,
+                                int offsetX,
+                                int offsetY,
+                                const wxColour& startColour,
+                                const wxColour& endColour);
 
 WXDLLIMPEXP_RIBBON wxBitmap wxRibbonLoadPixmap(
                                 const char* const* bits,
@@ -56,30 +56,30 @@ WXDLLIMPEXP_RIBBON wxBitmap wxRibbonLoadPixmap(
 class WXDLLIMPEXP_RIBBON wxRibbonHSLColour
 {
 public:
-   wxRibbonHSLColour()
-       : hue(0.0), saturation(0.0), luminance(0.0) {}
-   wxRibbonHSLColour(float H, float S, float L)
-       : hue(H), saturation(S), luminance(L) { }
-   wxRibbonHSLColour(const wxColour& C);
+    wxRibbonHSLColour()
+        : m_hue(0.0), m_saturation(0.0), m_luminance(0.0) { }
+    wxRibbonHSLColour(float h, float s, float l)
+        : m_hue(h), m_saturation(s), m_luminance(l) { }
+    wxRibbonHSLColour(const wxColour& col);
 
-   wxColour    ToRGB() const;
+    wxColour ToRGB() const;
 
-   // In dark mode, makes the colour darker, while in light mode make it
-   // lighter.
-   wxRibbonHSLColour AdjustLuminance(float delta)
-   {
-       return wxSystemSettings::GetAppearance().IsDark()
-           ? Darker(delta)
-           : Lighter(delta);
-   }
+    // In dark mode, makes the colour darker, while in light mode make it
+    // lighter.
+    wxRibbonHSLColour AdjustLuminance(float delta)
+    {
+        return wxSystemSettings::GetAppearance().IsDark()
+            ? Darker(delta)
+            : Lighter(delta);
+    }
 
-   wxRibbonHSLColour Darker(float delta) const;
-   wxRibbonHSLColour Lighter(float delta) const;
-   wxRibbonHSLColour Saturated(float delta) const;
-   wxRibbonHSLColour Desaturated(float delta) const;
-   wxRibbonHSLColour ShiftHue(float delta) const;
+    wxRibbonHSLColour Darker(float delta) const;
+    wxRibbonHSLColour Lighter(float delta) const;
+    wxRibbonHSLColour Saturated(float delta) const;
+    wxRibbonHSLColour Desaturated(float delta) const;
+    wxRibbonHSLColour ShiftHue(float delta) const;
 
-   float       hue, saturation, luminance;
+    float m_hue, m_saturation, m_luminance;
 };
 
 WXDLLIMPEXP_RIBBON wxRibbonHSLColour wxRibbonShiftLuminance(

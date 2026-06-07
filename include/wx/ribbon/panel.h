@@ -35,7 +35,7 @@ public:
     wxRibbonPanel(wxWindow* parent,
                   wxWindowID id = wxID_ANY,
                   const wxString& label = wxEmptyString,
-                  const wxBitmapBundle& minimised_icon = wxBitmapBundle(),
+                  const wxBitmapBundle& minimisedIcon = wxBitmapBundle(),
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = wxRIBBON_PANEL_DEFAULT_STYLE);
@@ -50,10 +50,10 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxRIBBON_PANEL_DEFAULT_STYLE);
 
-    wxBitmap GetMinimisedIcon() {return m_minimised_icon.GetBitmapFor(this);}
-    const wxBitmapBundle& GetMinimisedIconBundle() const {return m_minimised_icon;}
+    wxBitmap GetMinimisedIcon() { return m_minimisedIcon.GetBitmapFor(this); }
+    const wxBitmapBundle& GetMinimisedIconBundle() const { return m_minimisedIcon; }
     bool IsMinimised() const;
-    bool IsMinimised(wxSize at_size) const;
+    bool IsMinimised(wxSize atSize) const;
     bool IsHovered() const;
     bool IsExtButtonHovered() const;
     bool CanAutoMinimise() const;
@@ -92,9 +92,9 @@ protected:
     wxSize GetMinNotMinimisedSize() const;
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                      wxSize relative_to) const override;
+                                      wxSize relativeTo) const override;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                     wxSize relative_to) const override;
+                                     wxSize relativeTo) const override;
 
     void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO) override;
     void OnSize(wxSizeEvent& evt);
@@ -116,22 +116,22 @@ protected:
 
     void CommonInit(const wxString& label, const wxBitmapBundle& icon, long style);
     static wxRect GetExpandedPosition(wxRect panel,
-                                      wxSize expanded_size,
+                                      wxSize expandedSize,
                                       wxDirection direction);
 
-    wxBitmapBundle m_minimised_icon;
-    wxBitmap m_minimised_icon_resized;
-    wxSize m_smallest_unminimised_size;
-    wxSize m_minimised_size;
-    wxDirection m_preferred_expand_direction;
-    wxRibbonPanel* m_expanded_dummy;
-    wxRibbonPanel* m_expanded_panel;
-    wxWindow* m_child_with_focus;
+    wxBitmapBundle m_minimisedIcon;
+    wxBitmap m_minimisedIconResized;
+    wxSize m_smallestUnminimisedSize;
+    wxSize m_minimisedSize;
+    wxDirection m_preferredExpandDirection;
+    wxRibbonPanel* m_expandedDummy;
+    wxRibbonPanel* m_expandedPanel;
+    wxWindow* m_childWithFocus;
     long m_flags;
     bool m_minimised;
     bool m_hovered;
-    bool m_ext_button_hovered;
-    wxRect m_ext_button_rect;
+    bool m_extButtonHovered;
+    wxRect m_extButtonRect;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonPanel);
@@ -143,10 +143,10 @@ protected:
 class WXDLLIMPEXP_RIBBON wxRibbonPanelEvent : public wxCommandEvent
 {
 public:
-    wxRibbonPanelEvent(wxEventType command_type = wxEVT_NULL,
-                       int win_id = 0,
+    wxRibbonPanelEvent(wxEventType commandType = wxEVT_NULL,
+                       int winId = 0,
                        wxRibbonPanel* panel = nullptr)
-        : wxCommandEvent(command_type, win_id)
+        : wxCommandEvent(commandType, winId)
         , m_panel(panel)
     {
     }
@@ -154,8 +154,8 @@ public:
     wxRibbonPanelEvent(const wxRibbonPanelEvent& e) = default;
     wxNODISCARD wxEvent *Clone() const override { return new wxRibbonPanelEvent(*this); }
 
-    wxRibbonPanel* GetPanel() {return m_panel;}
-    void SetPanel(wxRibbonPanel* panel) {m_panel = panel;}
+    wxRibbonPanel* GetPanel() { return m_panel; }
+    void SetPanel(wxRibbonPanel* panel) { m_panel = panel; }
 
 protected:
     wxRibbonPanel* m_panel;

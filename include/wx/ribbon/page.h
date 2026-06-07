@@ -42,8 +42,8 @@ public:
 
     void SetArtProvider(wxRibbonArtProvider* art) override;
 
-    wxBitmap GetIcon() {return m_icon.GetBitmapFor(this);}
-    const wxBitmapBundle& GetIconBundle() const {return m_icon;}
+    wxBitmap GetIcon() { return m_icon.GetBitmapFor(this); }
+    const wxBitmapBundle& GetIconBundle() const { return m_icon; }
     virtual wxSize GetMinSize() const override;
     void SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height);
     void AdjustRectToIncludeScrollButtons(wxRect* rect) const;
@@ -78,26 +78,26 @@ protected:
     void OnSize(wxSizeEvent& evt);
     void OnDPIChanged(wxDPIChangedEvent& evt);
 
-    bool ExpandPanels(wxOrientation direction, int maximum_amount);
-    bool CollapsePanels(wxOrientation direction, int minimum_amount);
+    bool ExpandPanels(wxOrientation direction, int maximumAmount);
+    bool CollapsePanels(wxOrientation direction, int minimumAmount);
     bool ShowScrollButtons();
     void HideScrollButtons();
 
     void CommonInit(const wxString& label, const wxBitmapBundle& icon);
-    void PopulateSizeCalcArray(wxSize (wxWindow::*get_size)(void) const);
+    void PopulateSizeCalcArray(wxSize (wxWindow::*getSize)(void) const);
 
-    wxArrayRibbonControl m_collapse_stack;
+    wxArrayRibbonControl m_collapseStack;
     wxBitmapBundle m_icon;
-    wxSize m_old_size;
+    wxSize m_oldSize;
     // NB: Scroll button windows are siblings rather than children (to get correct clipping of children)
-    wxRibbonPageScrollButton* m_scroll_left_btn = nullptr;
-    wxRibbonPageScrollButton* m_scroll_right_btn = nullptr;
-    wxSize* m_size_calc_array = nullptr;
-    size_t m_size_calc_array_size;
-    int m_scroll_amount;
-    int m_scroll_amount_limit;
-    int m_size_in_major_axis_for_children;
-    bool m_scroll_buttons_visible;
+    wxRibbonPageScrollButton* m_scrollLeftBtn = nullptr;
+    wxRibbonPageScrollButton* m_scrollRightBtn = nullptr;
+    wxSize* m_sizeCalcArray = nullptr;
+    size_t m_sizeCalcArraySize;
+    int m_scrollAmount;
+    int m_scrollAmountLimit;
+    int m_sizeInMajorAxisForChildren;
+    bool m_scrollButtonsVisible;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonPage);
