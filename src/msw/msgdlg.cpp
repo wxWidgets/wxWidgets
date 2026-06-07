@@ -592,7 +592,7 @@ HRESULT CALLBACK
 wxTaskDialogCallback(HWND hwnd,
                      UINT msg,
                      WPARAM wParam,
-                     LPARAM lParam,
+                     LPARAM WXUNUSED(lParam),
                      LONG_PTR refData)
 {
     const auto* const
@@ -617,18 +617,6 @@ wxTaskDialogCallback(HWND hwnd,
         case TDN_DESTROYED:
             // Clean up all resources allocated by AllowForTaskDialog().
             wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
-            break;
-
-        case WM_SETTINGCHANGE:
-            if ( wxIsSystemColourChange(lParam) )
-            {
-                // Re-apply (or remove) theming when the OS light/dark
-                // preference changes while the dialog is open.
-                if ( wxMSWDarkMode::IsActive() )
-                    wxMSWDarkMode::AllowForTaskDialog(hwnd, config);
-                else
-                    wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
-            }
             break;
     }
 

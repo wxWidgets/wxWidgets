@@ -1130,7 +1130,7 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                                 HWND hwnd,
                                 UINT uNotification,
                                 WPARAM wParam,
-                                LPARAM lParam,
+                                LPARAM WXUNUSED(lParam),
                                 LONG_PTR dwRefData
                             )
 {
@@ -1183,18 +1183,6 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
         case TDN_DESTROYED:
             // Clean up all resources allocated by AllowForTaskDialog().
             wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
-            break;
-
-        case WM_SETTINGCHANGE:
-            if ( wxIsSystemColourChange(lParam) )
-            {
-                // Re-apply (or remove) theming when the OS light/dark preference
-                // changes while the dialog is open.
-                if ( wxMSWDarkMode::IsActive() )
-                    wxMSWDarkMode::AllowForTaskDialog(hwnd);
-                else
-                    wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
-            }
             break;
 
         case TDN_BUTTON_CLICKED:
