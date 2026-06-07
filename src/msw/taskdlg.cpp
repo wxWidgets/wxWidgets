@@ -890,9 +890,9 @@ struct TDEnumData
     bool found;
 };
 
-static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lp)
+static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
 {
-    TDEnumData* d = reinterpret_cast<TDEnumData*>(lp);
+    TDEnumData* d = reinterpret_cast<TDEnumData*>(lparam);
     wxCOMPtr<IUIAutomationElement> pEl;
     if (FAILED(d->pAuto->ElementFromHandle(hwndChild, &pEl)))
         return TRUE;
