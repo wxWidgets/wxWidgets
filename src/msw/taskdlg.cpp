@@ -200,10 +200,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxTaskDialogDarkModule, wxModule);
 wxCOMPtr<IUIAutomation> wxTaskDialogDarkModule::ms_uiAutomation;
 
 
-// Subclass IDs
-static constexpr UINT_PTR kTDMainSubclassId = 0xDEADBEEFul;
-static constexpr UINT_PTR kTDPageSubclassId = 0xBADF00Dul;
-static constexpr UINT_PTR kTDCtrlSubclassId = 0xC0FFEE01ul;
+// Subclass IDs: 0x7778 == "wx"
+static constexpr UINT_PTR kTDMainSubclassId = 0x77780010ul;
+static constexpr UINT_PTR kTDPageSubclassId = 0x77780011ul;
+static constexpr UINT_PTR kTDCtrlSubclassId = 0x77780012ul;
 
 // ============================================================================
 // TaskDialog theme helpers
