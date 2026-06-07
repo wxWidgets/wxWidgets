@@ -211,7 +211,7 @@ static constexpr UINT_PTR kTDCtrlSubclassId = 0xC0FFEE01ul;
 
 // Check if the theme with the "dark" name exists and is different from the
 // standard one.
-static bool
+bool
 wxHasRealDarkTheme(const wchar_t* stdClass, const wchar_t* darkClass)
 {
     const auto darkTheme = wxUxThemeHandle::NewAtStdDPI(darkClass);
@@ -226,7 +226,7 @@ wxHasRealDarkTheme(const wchar_t* stdClass, const wchar_t* darkClass)
 }
 
 // Cached probe: does the OS have a native dark TaskDialog theme (Win11+)?
-static bool TDHasNativeDarkTheme()
+bool TDHasNativeDarkTheme()
 {
     static int s_hasDarkTheme = -1;
     if ( s_hasDarkTheme == -1 )
@@ -238,7 +238,7 @@ static bool TDHasNativeDarkTheme()
     return s_hasDarkTheme == 1;
 }
 
-static void TDRefreshThemes(HWND hwnd, TDPageState& s)
+void TDRefreshThemes(HWND hwnd, TDPageState& s)
 {
     const int dpi = wxGetWindowDPI(hwnd).x;
 
@@ -259,7 +259,7 @@ static void TDRefreshThemes(HWND hwnd, TDPageState& s)
     s.themesOk = true;
 }
 
-static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
+COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
 {
     if ( TDHasNativeDarkTheme() )
     {
@@ -293,7 +293,7 @@ static COLORREF TDGetTextColour(const TDPageState& s, int uiPart)
 // Icon loading
 // ============================================================================
 
-static HICON TDLoadStockIcon(const TASKDIALOGCONFIG* cfg, bool isMain)
+HICON TDLoadStockIcon(const TASKDIALOGCONFIG* cfg, bool isMain)
 {
     if ( !cfg )
         return nullptr;
@@ -334,7 +334,7 @@ static HICON TDLoadStockIcon(const TASKDIALOGCONFIG* cfg, bool isMain)
 // UIA layout cache
 // ============================================================================
 
-static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
+void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
 {
     out.clear();
     IUIAutomation* const pAuto = wxTaskDialogDarkModule::GetUIAutomation();
@@ -408,7 +408,7 @@ static void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
     }
 }
 
-static void TDUpdateLayoutCache(HWND hwnd, TDPageState& s)
+void TDUpdateLayoutCache(HWND hwnd, TDPageState& s)
 {
     if ( !s.elemsOk )
     {
@@ -429,7 +429,7 @@ static void TDUpdateLayoutCache(HWND hwnd, TDPageState& s)
         s.isChecked = true;
 }
 
-static int TDHitTest(const std::vector<TDLayoutElement>& els, POINT pt)
+int TDHitTest(const std::vector<TDLayoutElement>& els, POINT pt)
 {
     for ( int i = 0; i < wxSsize(els); ++i )
     {
@@ -444,7 +444,7 @@ static int TDHitTest(const std::vector<TDLayoutElement>& els, POINT pt)
 // Paint routines
 // ============================================================================
 
-static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
+void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
 {
     RGBQUAD* pPx = nullptr;
     int rw = 0;
@@ -509,7 +509,7 @@ static void TDPaintPixelSwap(HPAINTBUFFER hbp, int w, int h)
     }
 }
 
-static void TDPaintIcons(HDC hdc, const TDPageState& s)
+void TDPaintIcons(HDC hdc, const TDPageState& s)
 {
     if ( !s.pCfg || TDHasNativeDarkTheme() )
         return;
@@ -551,7 +551,7 @@ static void TDPaintIcons(HDC hdc, const TDPageState& s)
     }
 }
 
-static void TDPaintGlyphs(HDC hdc, TDPageState& s)
+void TDPaintGlyphs(HDC hdc, TDPageState& s)
 {
     if ( !s.hTD && !s.hButton )
         return;
@@ -609,7 +609,7 @@ static void TDPaintGlyphs(HDC hdc, TDPageState& s)
     }
 }
 
-static void TDPaintText(HDC hdc, const TDPageState& s)
+void TDPaintText(HDC hdc, const TDPageState& s)
 {
     if ( !s.hTD )
         return;
@@ -693,7 +693,7 @@ static void TDPaintText(HDC hdc, const TDPageState& s)
     }
 }
 
-static void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
+void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
 {
     if ( !s.themesOk )
         TDRefreshThemes(hwnd, s);
@@ -727,7 +727,7 @@ static void TDPaintPage(HWND hwnd, HDC hdcWin, TDPageState& s)
 // Subclass procedures
 // ============================================================================
 
-static LRESULT CALLBACK
+LRESULT CALLBACK
 TDPageSubclassProc(HWND hwnd,
                    UINT msg,
                    WPARAM wParam,
@@ -820,7 +820,7 @@ TDPageSubclassProc(HWND hwnd,
     return ::DefSubclassProc(hwnd, msg, wParam, lParam);
 }
 
-static LRESULT CALLBACK
+LRESULT CALLBACK
 TDCtrlContainerSubclassProc(HWND hwnd,
                             UINT msg,
                             WPARAM wParam,
@@ -875,7 +875,7 @@ TDCtrlContainerSubclassProc(HWND hwnd,
     return ::DefSubclassProc(hwnd, msg, wParam, lParam);
 }
 
-static LRESULT CALLBACK
+LRESULT CALLBACK
 TDRadioButtonSubclassProc(HWND hwnd,
                           UINT msg,
                           WPARAM wParam,
@@ -940,7 +940,7 @@ TDRadioButtonSubclassProc(HWND hwnd,
 // Attachment helpers
 // ============================================================================
 
-static void TDSubclassContainer(HWND hwndParent, COLORREF bg)
+void TDSubclassContainer(HWND hwndParent, COLORREF bg)
 {
     if ( !hwndParent )
         return;
@@ -958,7 +958,7 @@ static void TDSubclassContainer(HWND hwndParent, COLORREF bg)
     }
 }
 
-static void TDApplyToChildren(IUIAutomationElement* pEl)
+void TDApplyToChildren(IUIAutomationElement* pEl)
 {
     IUIAutomation* const uiAuto = wxTaskDialogDarkModule::GetUIAutomation();
     if ( !uiAuto )
@@ -1046,7 +1046,7 @@ struct TDEnumData
     bool found = false;
 };
 
-static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
+BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
 {
     IUIAutomation* const uiAuto = wxTaskDialogDarkModule::GetUIAutomation();
     if ( !uiAuto )
@@ -1125,13 +1125,13 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     return TRUE;
 }
 
-static BOOL CALLBACK TDEnumSysColorProc(HWND h, LPARAM)
+BOOL CALLBACK TDEnumSysColorProc(HWND h, LPARAM)
 {
     ::SendMessage(h, WM_SYSCOLORCHANGE, 0, 0);
     return TRUE;
 }
 
-static BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
+BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
 {
     DWORD_PTR dwRef = 0;
     if ( ::GetWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId, &dwRef) )
@@ -1151,7 +1151,7 @@ static BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
     return TRUE;
 }
 
-static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
+void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
 {
     const bool native = TDHasNativeDarkTheme();
 
@@ -1179,7 +1179,7 @@ static void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
     ::SendMessage(hwndTD, WM_THEMECHANGED, 0, 0);
 }
 
-static void TDDetach(HWND hwndTD)
+void TDDetach(HWND hwndTD)
 {
     ::EnumChildWindows(hwndTD, TDEnumDetachProc, 0);
 }
