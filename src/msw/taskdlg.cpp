@@ -499,7 +499,9 @@ static void TDPaintGlyphs(HDC hdc, TDPageState& s)
 {
     if (!s.hTD && !s.hButton)
         return;
-    const bool native = TDHasNativeDarkTheme();
+
+    if ( TDHasNativeDarkTheme() )
+        return;
 
     for (int i = 0; i < static_cast<int>(s.elements.size()); ++i)
     {
@@ -517,10 +519,8 @@ static void TDPaintGlyphs(HDC hdc, TDPageState& s)
                 (hot && s.isExpanded) ? TDLGEBS_EXPANDEDHOVER :
                 hot ? TDLGEBS_HOVER :
                 s.isExpanded ? TDLGEBS_EXPANDEDNORMAL : TDLGEBS_NORMAL;
-            if (!native) {
-                FillRect(hdc, &rcG, s.brSecondary);
-                DrawThemeBackground(s.hTD, hdc, TDLG_EXPANDOBUTTON, st, &rcG, &el.rect);
-            }
+            FillRect(hdc, &rcG, s.brSecondary);
+            DrawThemeBackground(s.hTD, hdc, TDLG_EXPANDOBUTTON, st, &rcG, &el.rect);
         }
         else if (el.automationId == L"VerificationCheckBox" && s.hButton)
         {
@@ -532,10 +532,8 @@ static void TDPaintGlyphs(HDC hdc, TDPageState& s)
                 (hot && s.isChecked) ? CBS_CHECKEDHOT :
                 hot ? CBS_UNCHECKEDHOT :
                 s.isChecked ? CBS_CHECKEDNORMAL : CBS_UNCHECKEDNORMAL;
-            if (!native) {
-                FillRect(hdc, &rcG, s.brSecondary);
-                DrawThemeBackground(s.hButton, hdc, BP_CHECKBOX, st, &rcG, nullptr);
-            }
+            FillRect(hdc, &rcG, s.brSecondary);
+            DrawThemeBackground(s.hButton, hdc, BP_CHECKBOX, st, &rcG, nullptr);
         }
     }
 }
