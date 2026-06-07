@@ -66,6 +66,21 @@ namespace TDDarkCol
 }
 namespace
 {
+
+// Helper function to get an HWND from IUIAutomationElement.
+HWND GetHWNDFromElement(IUIAutomationElement* element)
+{
+    UIA_HWND hwnd = 0;
+    HRESULT hr = element->get_CurrentNativeWindowHandle(&hwnd);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("get_CurrentNativeWindowHandle", hr);
+        return 0;
+    }
+
+    return reinterpret_cast<HWND>(hwnd);
+}
+
 // Cached bounding rect + metadata for a single TaskDialog UI element.
 struct TDLayoutElement
 {
@@ -824,9 +839,7 @@ static void TDApplyToChildren(IUIAutomationElement* pEl, IUIAutomation* pAuto)
             ct == UIA_ProgressBarControlTypeId || ct == UIA_HyperlinkControlTypeId ||
             ct == UIA_ScrollBarControlTypeId || ct == UIA_PaneControlTypeId)
         {
-            HWND hBtn = nullptr;
-            pChild->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hBtn));
-            if (hBtn)
+            if ( const HWND hBtn = GetHWNDFromElement(pChild) )
             {
                 BSTR bId; pChild->get_CurrentAutomationId(&bId);
                 const std::wstring id(bId ? static_cast<LPCWSTR>(bId) : L"");
@@ -890,8 +903,8 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lp)
     // SysLink controls (footnote / content hyperlinks)
     if (wxString(str).IsSameAs(wxS("CCSysLink")))
     {
-        HWND hL = nullptr; pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hL));
-        if (hL) {
+        if ( const HWND hL = GetHWNDFromElement(pEl) )
+        {
             BSTR bId;
             pEl->get_CurrentAutomationId(&bId);
             const std::wstring id(bId ? static_cast<LPCWSTR>(bId) : L"");
@@ -904,8 +917,9 @@ static BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lp)
     // Main TaskPage (DirectUI "TaskDialog" class)
     if (!wxString(str).IsSameAs(wxS("TaskDialog")))
         return TRUE;
-    HWND hDUI = nullptr;
-    if (FAILED(pEl->get_CurrentNativeWindowHandle(reinterpret_cast<UIA_HWND*>(&hDUI))) || !hDUI)
+
+    const HWND hDUI = GetHWNDFromElement(pEl);
+    if ( !hDUI )
         return TRUE;
 
     // Class background brush
