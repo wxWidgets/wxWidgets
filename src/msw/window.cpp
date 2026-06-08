@@ -3855,6 +3855,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         // the default drawing uses light mode colours.
                         drawBorder = wxMSWDarkMode::IsActive();
                         break;
+                    case wxBORDER_NONE:
+                    case wxBORDER_SIMPLE:
+                    default:
+                        break;
                 }
                 if ( drawBorder )
                 {
