@@ -794,6 +794,8 @@ private:
     bool MSWSafeIsDialogMessage(WXMSG* msg);
 #endif // __WXUNIVERSAL__
 
+    int MSWGetBorderThickness() const;
+
     static inline bool MSWIsPositionDirectlySupported(int x, int y)
     {
         // The supported coordinate intervals for various functions are:
