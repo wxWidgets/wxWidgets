@@ -24,6 +24,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/brush.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private/taskdlg.h"
