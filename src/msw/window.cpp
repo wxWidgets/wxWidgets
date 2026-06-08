@@ -3884,7 +3884,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     // The EDIT theme gives a good general purpose border in light mode.
                     // There does not seem to be a dark mode EDIT theme that looks good.
                     // The ListView theme below looks good in dark mode.
-                    wxUxThemeHandle hTheme(this, L"EDIT", L"DarkMode_DarkTheme::ListView");
+                    wxUxThemeHandle hTheme((const wxWindow *)this, L"EDIT",
+                        L"DarkMode_DarkTheme::ListView");
                     // The part and state we use are the same values for EDIT and ListView.
                     static_assert((int)EP_EDITTEXT == (int)LVP_LISTITEM);
                     static_assert((int)ETS_NORMAL == (int)LISS_NORMAL);
