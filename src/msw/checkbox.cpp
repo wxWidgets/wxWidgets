@@ -96,11 +96,10 @@ void wxCheckBox::MSWSetDarkOrLightMode(SetMode setmode)
 {
     wxCheckBoxBase::MSWSetDarkOrLightMode(setmode);
 
-    // The control properly handles switching to dark mode. But when switching
-    // to light mode, the text color remains the same. We must explicitly
-    // update the color.
-    if ( setmode == SetMode::Change )
-        SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
+    // On Windows 11, the control properly handles switching to dark mode. But
+    // when switching to light mode, the text color remains the same.
+    // On Windows 10, the text color is always wrong.
+    SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
 }
 
 // ----------------------------------------------------------------------------
