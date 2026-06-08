@@ -19,8 +19,11 @@
 #include "wx/wxprec.h"
 
 #ifndef wxUSE_DARK_MODE
-    // Otherwise enable it by default.
-    #define wxUSE_DARK_MODE 1
+    #ifdef __WXUNIVERSAL__
+        #define wxUSE_DARK_MODE 0
+    #else
+        #define wxUSE_DARK_MODE 1
+    #endif
 #endif
 
 #ifndef WX_PRECOMP
