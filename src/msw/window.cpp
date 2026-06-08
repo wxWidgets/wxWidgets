@@ -3881,8 +3881,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     // The ListView theme below looks good in dark mode.
                     wxUxThemeHandle hTheme(this, L"EDIT", L"DarkMode_DarkTheme::ListView");
                     // The part and state we use are the same values for EDIT and ListView.
-                    static_assert(EP_EDITTEXT == LVP_LISTITEM);
-                    static_assert(ETS_NORMAL == LISS_NORMAL);
+                    static_assert((int)EP_EDITTEXT == (int)LVP_LISTITEM);
+                    static_assert((int)ETS_NORMAL == (int)LISS_NORMAL);
 
                     // Make sure the background is in a proper state
                     if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
