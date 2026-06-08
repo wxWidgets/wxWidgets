@@ -2992,33 +2992,6 @@ void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
             ::SendMessage(m_hWnd, EM_SETBKGNDCOLOR, 0, wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
     }
 #endif
-
-    // The text control automatically adds WS_EX_CLIENTEDGE to its style for
-    // some reason and while this isn't very noticeable in light mode, it
-    // looks really bad in dark mode, so forcibly remove it unless it was
-    // explicitly requested.
-    const auto border = GetBorder();
-    if ( border != wxBORDER_SUNKEN )
-    {
-        const auto exStyle = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-        ::SetWindowLongPtr(m_hWnd, GWL_EXSTYLE, exStyle & ~WS_EX_CLIENTEDGE);
-    }
-
-    // When created in dark mode, the text control has a gray border.
-    // But when switched from light to dark, that border is missing.
-    // Explicitly enable it by toggling WS_BORDER, unless that was already
-    // explicitly requested.
-    if ( wxMSWDarkMode::HasChanged() && border != wxBORDER_SIMPLE )
-    {
-        auto style = GetWindowLongPtr(m_hWnd, GWL_STYLE);
-        if (wxMSWDarkMode::IsActive())
-            style |= WS_BORDER;
-        else
-            style &= ~WS_BORDER;
-        SetWindowLongPtr(m_hWnd, GWL_STYLE, style);
-        SetWindowPos(m_hWnd, nullptr, 0, 0, 0, 0,
-            SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
-    }
 }
 
 void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)

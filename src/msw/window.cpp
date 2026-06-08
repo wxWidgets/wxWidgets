@@ -1466,14 +1466,6 @@ wxBorder wxWindowMSW::DoTranslateBorder(wxBorder border) const
 {
     if (border == wxBORDER_THEME)
     {
-        // In dark mode the standard sunken border is too bright, so prefer
-        // using a simple(r) and darker border instead.
-        //
-        // And themed borders don't look good either in dark mode, so don't
-        // use them in it.
-        if ( wxMSWDarkMode::IsActive() )
-            return wxBORDER_SIMPLE;
-
         if (CanApplyThemeBorder())
         {
             if ( wxUxThemeIsActive() )
@@ -3820,6 +3812,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         // If we want the default themed border then we need to draw it ourselves
         case WM_NCCALCSIZE:
             {
+                // The default handling for this message is proper for all
+                // border styles except wxBORDER_THEME.
                 if (DoTranslateBorder(GetBorder()) == wxBORDER_THEME)
                 {
                     // first ask the widget to calculate the border size
@@ -3839,93 +3833,65 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     {
                         rect = (RECT *)lParam;
                     }
-
-                    wxUxThemeHandle hTheme((const wxWindow *)this, L"EDIT");
-
-                    // There is no need to initialize rcClient: either it will
-                    // be done by GetThemeBackgroundContentRect() or we'll do
-                    // it below if it fails.
-                    RECT rcClient;
-
-                    ClientHDC hdc(GetHwnd());
-
-                    if ( ::GetThemeBackgroundContentRect
-                                (
-                                 hTheme,
-                                 hdc,
-                                 EP_EDITTEXT,
-                                 IsEnabled() ? ETS_NORMAL : ETS_DISABLED,
-                                 rect,
-                                 &rcClient) != S_OK )
-                    {
-                        // If GetThemeBackgroundContentRect() failed, as can
-                        // happen with at least some custom themes, just use
-                        // the original client rectangle.
-                        rcClient = *rect;
-                    }
-
-                    InflateRect(&rcClient, -1, -1);
-                    if (wParam)
-                        csparam->rgrc[0] = rcClient;
-                    else
-                        *((RECT*)lParam) = rcClient;
-
-                    // WVR_REDRAW triggers a bug whereby child windows are moved up and left,
-                    // so don't use.
-                    // rc.result = WVR_REDRAW;
+                    const auto borderWidth = GetWindowBorderSize().x / 2;
+                    InflateRect(rect, -borderWidth, -borderWidth);
                 }
             }
             break;
 
         case WM_NCPAINT:
             {
-                if (DoTranslateBorder(GetBorder()) == wxBORDER_THEME)
+                // Determine whether we should draw a border.
+                bool drawBorder = false;
+                switch ( DoTranslateBorder(GetBorder()) )
+                {
+                    case wxBORDER_THEME:
+                        drawBorder = true;
+                        break;
+                    case wxBORDER_STATIC:
+                    case wxBORDER_RAISED:
+                    case wxBORDER_SUNKEN:
+                        // In dark mode, explicitly draw these border styles because
+                        // the default drawing uses light mode colours.
+                        drawBorder = wxMSWDarkMode::IsActive();
+                        break;
+                }
+                if ( drawBorder )
                 {
                     // first ask the widget to paint its non-client area, such as scrollbars, etc.
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
                     processed = true;
 
-                    wxUxThemeHandle hTheme((const wxWindow *)this, L"EDIT");
                     wxWindowDC dc((wxWindow *)this);
                     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-
-                    // Clip the DC so that you only draw on the non-client area
                     RECT rcBorder;
                     wxCopyRectToRECT(GetSize(), rcBorder);
 
-                    RECT rcClient;
-
-                    const int nState = IsEnabled() ? ETS_NORMAL : ETS_DISABLED;
-
-                    if ( ::GetThemeBackgroundContentRect
-                                (
-                                 hTheme,
-                                 GetHdcOf(*impl),
-                                 EP_EDITTEXT,
-                                 nState,
-                                 &rcBorder,
-                                 &rcClient
-                                ) != S_OK )
-                    {
-                        // As above in WM_NCCALCSIZE, fall back on something
-                        // reasonable for themes which don't implement this
-                        // function.
-                        rcClient = rcBorder;
-                    }
-
-                    InflateRect(&rcClient, -1, -1);
-
+                    // Exclude the client area and any scroll bars.
+                    RECT rcClient = rcBorder;
+                    const auto borderWidth = GetWindowBorderSize().x / 2;
+                    InflateRect(&rcClient, -borderWidth, -borderWidth);
                     ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
                                       rcClient.right, rcClient.bottom);
 
+                    // Draw the theme border and background.
+
+                    // The EDIT theme gives a good general purpose border in light mode.
+                    // There does not seem to be a dark mode EDIT theme that looks good.
+                    // The ListView theme below looks good in dark mode.
+                    wxUxThemeHandle hTheme(this, L"EDIT", L"DarkMode_DarkTheme::ListView");
+                    // The part and state we use are the same values for EDIT and ListView.
+                    static_assert(EP_EDITTEXT == LVP_LISTITEM);
+                    static_assert(ETS_NORMAL == LISS_NORMAL);
+
                     // Make sure the background is in a proper state
-                    if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, nState))
+                    if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
                     {
                         ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
                     }
 
                     // Draw the border
-                    hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, nState);
+                    hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, ETS_NORMAL);
                 }
             }
             break;
