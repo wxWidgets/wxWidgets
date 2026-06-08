@@ -38,10 +38,100 @@
 #include "wx/msw/uxtheme.h"
 
 #include "wx/msw/private/darkmode.h"
+#include "wx/msw/wrapcctl.h"
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+namespace
+{
+
+constexpr UINT_PTR wxID_CHOICE_POPUP_BORDER_SUBCLASS = 1;
+
+void wxMSWDrawChoicePopupBorder(HWND hwnd)
+{
+    if ( !wxMSWDarkMode::IsActive() )
+        return;
+
+    RECT rc;
+    if ( !::GetWindowRect(hwnd, &rc) )
+        return;
+
+    ::OffsetRect(&rc, -rc.left, -rc.top);
+
+    HDC hdc = ::GetWindowDC(hwnd);
+    if ( !hdc )
+        return;
+
+    // Use the system highlight colour: it matches the blue outline shown by
+    // native focused combo popups better than the white CFD border.
+    wxColour col = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    if ( !col.IsOk() )
+        col = wxColour(0x4d4d4d);
+
+    HPEN pen = ::CreatePen(PS_SOLID, 1, wxColourToRGB(col));
+    HGDIOBJ oldPen = ::SelectObject(hdc, pen);
+
+    HGDIOBJ oldBrush = ::SelectObject(hdc, ::GetStockObject(NULL_BRUSH));
+
+    ::MoveToEx(hdc, 0, 0, nullptr);
+    ::LineTo(hdc, rc.right - 1, 0);
+    ::LineTo(hdc, rc.right - 1, rc.bottom - 1);
+    ::LineTo(hdc, 0, rc.bottom - 1);
+    ::LineTo(hdc, 0, 0);
+
+    ::SelectObject(hdc, oldBrush);
+    ::SelectObject(hdc, oldPen);
+    ::DeleteObject(pen);
+
+    ::ReleaseDC(hwnd, hdc);
+}
+
+LRESULT CALLBACK wxChoicePopupListProc(HWND hwnd,
+                                       UINT msg,
+                                       WPARAM wParam,
+                                       LPARAM lParam,
+                                       UINT_PTR idSubclass,
+                                       DWORD_PTR WXUNUSED(refData))
+{
+    switch ( msg )
+    {
+        case WM_NCPAINT:
+        case WM_PAINT:
+            {
+                const LRESULT rc = ::DefSubclassProc(hwnd, msg, wParam, lParam);
+                wxMSWDrawChoicePopupBorder(hwnd);
+                return rc;
+            }
+
+        case WM_WINDOWPOSCHANGED:
+            {
+                const LRESULT rc = ::DefSubclassProc(hwnd, msg, wParam, lParam);
+                if ( ::IsWindowVisible(hwnd) )
+                    wxMSWDrawChoicePopupBorder(hwnd);
+                return rc;
+            }
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, wxChoicePopupListProc, idSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, msg, wParam, lParam);
+}
+
+void wxMSWFixChoicePopupBorder(HWND hwndList)
+{
+    ::SetWindowSubclass(hwndList,
+                        wxChoicePopupListProc,
+                        wxID_CHOICE_POPUP_BORDER_SUBCLASS,
+                        0);
+
+    ::RedrawWindow(hwndList, nullptr, nullptr, RDW_INVALIDATE | RDW_FRAME);
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // creation
@@ -221,11 +311,18 @@ void wxChoice::MSWSetDarkOrLightMode(SetMode setmode)
 {
     wxChoiceBase::MSWSetDarkOrLightMode(setmode);
 
-    // Update scroll bar.
+    // Update the popup list HWND.
     WinStruct<COMBOBOXINFO> info;
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
+        // Keep this exact theme: it preserves the readable selection from
+        // #26535 and keeps the dark scrollbar from #26538.
         wxMSWDarkMode::AllowForWindow(info.hwndList, L"Explorer", L"ScrollBar");
+
+        // But Explorer/ScrollBar no longer gives the combo popup frame, see
+        // #26573. Draw only the missing border ourselves instead of applying
+        // ComboBox/CFD, which breaks either selection or scrollbars.
+        wxMSWFixChoicePopupBorder(info.hwndList);
     }
 }
 
