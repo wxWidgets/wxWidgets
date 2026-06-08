@@ -565,6 +565,11 @@ void TDPaintIcons(HDC hdc, const TDPageState& s)
             nullptr,
             DI_NORMAL
         );
+
+        if ( ::DestroyIcon(hIcon) == 0 )
+        {
+            wxLogLastError("DestroyIcon");
+        }
     }
 }
 
