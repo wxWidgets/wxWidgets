@@ -1269,6 +1269,9 @@ void wxMSWDarkMode::AllowForTaskDialog(HWND hwnd, const TASKDIALOGCONFIG* pCfg)
     TDAttach(hwnd, pCfg);
 
     CoUninitialize();
+#else // !wxUSE_DARK_MODE
+    wxUnusedVar(hwnd);
+    wxUnusedVar(pCfg);
 #endif // wxUSE_DARK_MODE
 }
 
@@ -1276,5 +1279,7 @@ void wxMSWDarkMode::RemoveFromTaskDialog(HWND hwnd)
 {
 #if wxUSE_DARK_MODE
     TDDetach(hwnd);
+#else // !wxUSE_DARK_MODE
+    wxUnusedVar(hwnd);
 #endif // wxUSE_DARK_MODE
 }
