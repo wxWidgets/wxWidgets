@@ -2266,23 +2266,20 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
     }
 }
 
-wxSize wxWindowMSW::GetWindowBorderSize() const
+int wxWindowMSW::MSWGetBorderThickness() const
 {
-    wxCoord border;
     switch ( GetBorder() )
     {
         case wxBORDER_STATIC:
         case wxBORDER_SIMPLE:
-            border = 1;
-            break;
+            return 1;
 
         case wxBORDER_SUNKEN:
         case wxBORDER_THEME:
-            border = 2;
-            break;
+            return 2;
 
         case wxBORDER_RAISED:
-            border = 3;
+            return 3;
             break;
 
         default:
@@ -2290,9 +2287,13 @@ wxSize wxWindowMSW::GetWindowBorderSize() const
             wxFALLTHROUGH;
 
         case wxBORDER_NONE:
-            border = 0;
+            return 0;
     }
+}
 
+wxSize wxWindowMSW::GetWindowBorderSize() const
+{
+    const auto border = MSWGetBorderThickness();
     return 2*wxSize(border, border);
 }
 
@@ -3833,8 +3834,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     {
                         rect = (RECT *)lParam;
                     }
-                    const auto borderWidth = GetWindowBorderSize().x / 2;
-                    InflateRect(rect, -borderWidth, -borderWidth);
+                    const auto thickness = MSWGetBorderThickness();
+                    InflateRect(rect, -thickness, -thickness);
                 }
             }
             break;
@@ -3873,8 +3874,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     // Exclude the client area and any scroll bars.
                     RECT rcClient = rcBorder;
-                    const auto borderWidth = GetWindowBorderSize().x / 2;
-                    InflateRect(&rcClient, -borderWidth, -borderWidth);
+                    const auto thickness = MSWGetBorderThickness();
+                    InflateRect(&rcClient, -thickness, -thickness);
                     ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
                                       rcClient.right, rcClient.bottom);
 
