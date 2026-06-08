@@ -940,22 +940,78 @@ TDRadioButtonSubclassProc(HWND hwnd,
 // Attachment helpers
 // ============================================================================
 
+// Helper which calls SetWindowSubclass() only if the subclass is not already
+// set.
+//
+// This is a simple overload when we don't need to pass any reference data to
+// the subclass procedure.
+void
+SetWindowSubclassIfNeeded(HWND hwnd,
+                           SUBCLASSPROC proc,
+                           UINT_PTR uId)
+{
+    DWORD_PTR dwRef = 0;
+    if ( ::GetWindowSubclass(hwnd, proc, uId, &dwRef) )
+        return;
+
+    if ( !::SetWindowSubclass(hwnd, proc, uId, 0) )
+    {
+        wxLogLastError("SetWindowSubclass");
+    }
+}
+
+// This overload takes a lambda as the last parameter which is called to create
+// the reference data if the subclass needs to be set and to avoid creating any
+// resources passed to the subclass procedure unnecessarily.
+template <typename InitFunc>
+void
+SetWindowSubclassIfNeeded(HWND hwnd,
+                           SUBCLASSPROC proc,
+                           UINT_PTR uId,
+                           InitFunc initFunc)
+{
+    DWORD_PTR dwRef = 0;
+    if ( ::GetWindowSubclass(hwnd, proc, uId, &dwRef) )
+        return;
+
+    dwRef = reinterpret_cast<DWORD_PTR>(initFunc());
+    if ( !::SetWindowSubclass(hwnd, proc, uId, dwRef) )
+    {
+        wxLogLastError("SetWindowSubclass");
+    }
+}
+
+// Remove the subclass if it was installed.
+//
+// Return false if it wasn't.
+bool RemoveWindowSubclassIfNeeded(HWND hwnd, SUBCLASSPROC proc, UINT_PTR uId)
+{
+    DWORD_PTR dwRef = 0;
+    if ( !::GetWindowSubclass(hwnd, proc, uId, &dwRef) )
+        return false;
+
+    if ( !::RemoveWindowSubclass(hwnd, proc, uId) )
+    {
+        wxLogLastError("RemoveWindowSubclass");
+    }
+
+    return true;
+}
+
 void TDSubclassContainer(HWND hwndParent, COLORREF bg)
 {
     if ( !hwndParent )
         return;
 
-    DWORD_PTR dwRef = 0;
-    if ( !::GetWindowSubclass(hwndParent, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &dwRef) )
-    {
-        ::SetWindowSubclass
-        (
-            hwndParent,
-            TDCtrlContainerSubclassProc,
-            kTDCtrlSubclassId,
-            reinterpret_cast<DWORD_PTR>(::CreateSolidBrush(bg))
-        );
-    }
+    // The brush created here is passed to the subclass procedure as reference
+    // data and is deleted in the WM_DESTROY handler there.
+    SetWindowSubclassIfNeeded
+    (
+        hwndParent,
+        TDCtrlContainerSubclassProc,
+        kTDCtrlSubclassId,
+        [bg]() { return ::CreateSolidBrush(bg); }
+    );
 }
 
 void TDApplyToChildren(IUIAutomationElement* pEl)
@@ -1012,9 +1068,7 @@ void TDApplyToChildren(IUIAutomationElement* pEl)
                     }
                     else
                     {
-                        DWORD_PTR dwRef = 0;
-                        if ( !::GetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &dwRef) )
-                            ::SetWindowSubclass(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId, 0);
+                        SetWindowSubclassIfNeeded(hBtn, TDRadioButtonSubclassProc, kTDCtrlSubclassId);
                     }
 
                     TDSubclassContainer(hwndParent, native ? TDDarkCol::kSecondary : TDDarkCol::kPrimary);
@@ -1117,9 +1171,7 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     s.elemsOk = false;
     TDUpdateLayoutCache(hDUI, s);
 
-    DWORD_PTR dwRef = 0;
-    if ( !::GetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, &dwRef) )
-        ::SetWindowSubclass(hDUI, TDPageSubclassProc, kTDPageSubclassId, 0);
+    SetWindowSubclassIfNeeded(hDUI, TDPageSubclassProc, kTDPageSubclassId);
 
     d->found = true;
     return TRUE;
@@ -1133,18 +1185,12 @@ BOOL CALLBACK TDEnumSysColorProc(HWND h, LPARAM)
 
 BOOL CALLBACK TDEnumDetachProc(HWND hChild, LPARAM)
 {
-    DWORD_PTR dwRef = 0;
-    if ( ::GetWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId, &dwRef) )
-    {
-        ::RemoveWindowSubclass(hChild, TDPageSubclassProc, kTDPageSubclassId);
+    if ( RemoveWindowSubclassIfNeeded(hChild, TDPageSubclassProc, kTDPageSubclassId) )
         TDPageState::Destroy(hChild);
-    }
 
-    if ( ::GetWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId, &dwRef) )
-        ::RemoveWindowSubclass(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId);
+    RemoveWindowSubclassIfNeeded(hChild, TDCtrlContainerSubclassProc, kTDCtrlSubclassId);
 
-    if ( ::GetWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId, &dwRef) )
-        ::RemoveWindowSubclass(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId);
+    RemoveWindowSubclassIfNeeded(hChild, TDRadioButtonSubclassProc, kTDCtrlSubclassId);
 
     ::SetWindowTheme(hChild, nullptr, nullptr);
 
@@ -1167,9 +1213,7 @@ void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
     if ( native )
         wxMSWDarkMode::AllowForWindow(hwndTD, L"DarkMode_Explorer", nullptr);
 
-    DWORD_PTR dwRef;
-    if ( !::GetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, &dwRef) )
-        ::SetWindowSubclass(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId, 0);
+    SetWindowSubclassIfNeeded(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId);
 
     // Dark title bar
     wxMSWDarkMode::ConfigureTLW(hwndTD);
