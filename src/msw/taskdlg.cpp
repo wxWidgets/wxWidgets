@@ -68,6 +68,19 @@ namespace TDDarkCol
 namespace
 {
 
+// Helper function create an HBRUSH from a brush stored in wxTheBrushList.
+// This allows not to recreate the brushes for the same colour and also ensures
+// that the brushes are eventually deleted.
+HBRUSH GetSolidBrush(COLORREF rgb)
+{
+    const wxColour col = wxRGBToColour(rgb);
+    wxBrush* const brush = wxTheBrushList->FindOrCreateBrush(col);
+    if ( !brush )
+        return 0;
+
+    return GetHbrushOf(*brush);
+}
+
 // Helper function to get an HWND from IUIAutomationElement.
 HWND GetHWNDFromElement(IUIAutomationElement* element)
 {
@@ -861,13 +874,12 @@ TDCtrlContainerSubclassProc(HWND hwnd,
                 ::SetTextColor(hdc, TDDarkCol::kTextNormal);
 
                 if ( !hbr )
-                    hbr = ::CreateSolidBrush(TDDarkCol::kSecondary);
+                    hbr = GetSolidBrush(TDDarkCol::kSecondary);
 
                 return reinterpret_cast<LRESULT>(hbr);
             }
 
         case WM_DESTROY:
-            ::DeleteObject(hbr);
             ::RemoveWindowSubclass(hwnd, TDCtrlContainerSubclassProc, uId);
             break;
     }
@@ -1003,14 +1015,12 @@ void TDSubclassContainer(HWND hwndParent, COLORREF bg)
     if ( !hwndParent )
         return;
 
-    // The brush created here is passed to the subclass procedure as reference
-    // data and is deleted in the WM_DESTROY handler there.
     SetWindowSubclassIfNeeded
     (
         hwndParent,
         TDCtrlContainerSubclassProc,
         kTDCtrlSubclassId,
-        [bg]() { return ::CreateSolidBrush(bg); }
+        [bg]() { return GetSolidBrush(bg); }
     );
 }
 
@@ -1144,7 +1154,7 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
 
     // Class background brush
     {
-        HBRUSH nb = ::CreateSolidBrush(TDDarkCol::kSecondary);
+        HBRUSH nb = GetSolidBrush(TDDarkCol::kSecondary);
 
         HBRUSH ob = reinterpret_cast<HBRUSH>(
             ::SetClassLongPtr(hDUI, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb))
@@ -1217,7 +1227,7 @@ void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
 
     // Dark title bar
     wxMSWDarkMode::ConfigureTLW(hwndTD);
-    HBRUSH nb = ::CreateSolidBrush(TDDarkCol::kPrimary);
+    HBRUSH nb = GetSolidBrush(TDDarkCol::kPrimary);
     ::SetClassLongPtr(hwndTD, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb));
     ::EnumChildWindows(hwndTD, TDEnumSysColorProc, 0);
     ::SendMessage(hwndTD, WM_THEMECHANGED, 0, 0);
