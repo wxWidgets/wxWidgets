@@ -95,15 +95,6 @@ bool wxStaticBox::Create(wxWindow *parent,
     return true;
 }
 
-void wxStaticBox::MSWSetDarkOrLightMode(SetMode setmode)
-{
-    wxStaticBoxBase::MSWSetDarkOrLightMode(setmode);
-
-    // Static boxes don't seem to have any dark mode support, so just set the
-    // foreground colour contrasting with the dark background for them.
-    SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
-}
-
 bool wxStaticBox::ShouldUseCustomPaint() const
 {
     // When not using double buffering, we paint the box ourselves by default
@@ -293,7 +284,11 @@ bool wxStaticBox::SetFont(const wxFont& font)
 
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( nMsg == WM_NCHITTEST )
+    if ( nMsg == WM_ENABLE )
+    {
+        Refresh();
+    }
+    else if ( nMsg == WM_NCHITTEST )
     {
         // This code breaks some other processing such as enter/leave tracking
         // so it's off by default.
@@ -314,8 +309,7 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
                 return (long)HTCLIENT;
         }
     }
-
-    if ( nMsg == WM_PRINTCLIENT )
+    else if ( nMsg == WM_PRINTCLIENT )
     {
         // we have to process WM_PRINTCLIENT ourselves as otherwise child
         // windows' background (eg buttons in radio box) would never be drawn
@@ -582,7 +576,8 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
     // background mode changes anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
     // ourselves if we have a non default fg colour
-    if ( m_hasFgCol && wxUxThemeIsActive() && !m_labelWin && !GetLabel().empty() )
+    if ( (m_hasFgCol || wxMSWDarkMode::IsActive()) && wxUxThemeIsActive() &&
+        !m_labelWin && !GetLabel().empty() )
     {
         // draw over the text in default colour in our colour
         HDC hdc = GetHdcOf(*impl);
