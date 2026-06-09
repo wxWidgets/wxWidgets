@@ -35,8 +35,8 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
-#include "wx/msw/private/darkmode.h"
 #include "wx/msw/wrapwin.h"
+#include "wx/msw/private/darkmode.h"
 
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI
