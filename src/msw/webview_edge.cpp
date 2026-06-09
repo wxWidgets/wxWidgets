@@ -1132,7 +1132,8 @@ wxWebViewEdge::~wxWebViewEdge()
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Unbind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
-    GetParent()->Unbind(wxEVT_SHOW, &wxWebViewEdge::OnParentShow, this);
+    Unbind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
+    GetParent()->Unbind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
     delete m_impl;
 }
 
@@ -1160,7 +1161,8 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Bind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
-    GetParent()->Bind(wxEVT_SHOW, &wxWebViewEdge::OnParentShow, this);
+    Bind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
+    GetParent()->Bind(wxEVT_SHOW, &wxWebViewEdge::OnShow, this);
 
     LoadURL(url);
     return true;
@@ -1186,7 +1188,7 @@ void wxWebViewEdge::OnTopLevelParentIconized(wxIconizeEvent& event)
     event.Skip();
 }
 
-void wxWebViewEdge::OnParentShow(wxShowEvent& event)
+void wxWebViewEdge::OnShow(wxShowEvent& event)
 {
     if ( m_impl && m_impl->m_webViewController )
     {

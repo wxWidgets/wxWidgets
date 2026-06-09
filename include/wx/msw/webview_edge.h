@@ -130,7 +130,7 @@ private:
 
     void OnTopLevelParentIconized(wxIconizeEvent& event);
 
-    void OnParentShow(wxShowEvent& event);
+    void OnShow(wxShowEvent& event);
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewEdge);
 
