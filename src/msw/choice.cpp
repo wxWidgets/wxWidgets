@@ -225,7 +225,7 @@ void wxChoice::MSWSetDarkOrLightMode(SetMode setmode)
     WinStruct<COMBOBOXINFO> info;
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
-        wxMSWDarkMode::AllowForWindow(info.hwndList, L"Explorer", L"ScrollBar");
+        wxMSWDarkMode::AllowForWindow(info.hwndList, L"DarkMode_DarkTheme");
     }
 }
 
