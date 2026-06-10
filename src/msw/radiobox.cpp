@@ -36,7 +36,6 @@
 #endif // wxUSE_TOOLTIPS
 
 #include "wx/msw/wrapwin.h"
-#include "wx/msw/private/darkmode.h"
 
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI
@@ -407,9 +406,6 @@ bool wxRadioBox::Enable(bool enable)
 
     for ( auto button : m_radioButtons )
         button->Enable(enable);
-
-    if ( wxMSWDarkMode::IsActive() )
-        ::SendMessage(m_hWnd, WM_THEMECHANGED, 0, 0);
 
     return true;
 }
