@@ -284,7 +284,11 @@ bool wxStaticBox::SetFont(const wxFont& font)
 
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( nMsg == WM_NCHITTEST )
+    if ( nMsg == WM_ENABLE )
+    {
+        Refresh();
+    }
+    else if ( nMsg == WM_NCHITTEST )
     {
         // This code breaks some other processing such as enter/leave tracking
         // so it's off by default.
@@ -305,8 +309,7 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
                 return (long)HTCLIENT;
         }
     }
-
-    if ( nMsg == WM_PRINTCLIENT )
+    else if ( nMsg == WM_PRINTCLIENT )
     {
         // we have to process WM_PRINTCLIENT ourselves as otherwise child
         // windows' background (eg buttons in radio box) would never be drawn

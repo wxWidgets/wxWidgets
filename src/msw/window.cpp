@@ -589,9 +589,7 @@ bool wxWindowMSW::MSWEnableHWND(WXHWND hWnd, bool enable)
     if ( !enable && ::GetFocus() == hWnd )
         Navigate();
 
-    const bool result = ::EnableWindow(hWnd, (BOOL)enable) != 0;
-    Refresh();
-    return result;
+    return ::EnableWindow(hWnd, (BOOL)enable) != 0;
 }
 
 bool wxWindowMSW::Show(bool show)
