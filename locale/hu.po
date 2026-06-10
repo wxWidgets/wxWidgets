@@ -230,10 +230,9 @@ msgid "Delete"
 msgstr "&Törlés"
 
 #: ../src/common/accelcmn.cpp:48
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Del"
-msgstr "&Törlés"
+msgstr "Del"
 
 #: ../src/common/accelcmn.cpp:49
 #, fuzzy
