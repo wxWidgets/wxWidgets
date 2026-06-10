@@ -964,23 +964,6 @@ TDRadioButtonSubclassProc(HWND hwnd,
 // Helper which calls SetWindowSubclass() only if the subclass is not already
 // set.
 //
-// This is a simple overload when we don't need to pass any reference data to
-// the subclass procedure.
-void
-SetWindowSubclassIfNeeded(HWND hwnd,
-                           SUBCLASSPROC proc,
-                           UINT_PTR uId)
-{
-    DWORD_PTR dwRef = 0;
-    if ( ::GetWindowSubclass(hwnd, proc, uId, &dwRef) )
-        return;
-
-    if ( !::SetWindowSubclass(hwnd, proc, uId, 0) )
-    {
-        wxLogLastError("SetWindowSubclass");
-    }
-}
-
 // This overload takes a lambda as the last parameter which is called to create
 // the reference data if the subclass needs to be set and to avoid creating any
 // resources passed to the subclass procedure unnecessarily.
@@ -1000,6 +983,16 @@ SetWindowSubclassIfNeeded(HWND hwnd,
     {
         wxLogLastError("SetWindowSubclass");
     }
+}
+
+// This is a simple overload when we don't need to pass any reference data to
+// the subclass procedure.
+void
+SetWindowSubclassIfNeeded(HWND hwnd,
+                           SUBCLASSPROC proc,
+                           UINT_PTR uId)
+{
+    return SetWindowSubclassIfNeeded(hwnd, proc, uId, []() { return 0; });
 }
 
 // Remove the subclass if it was installed.
