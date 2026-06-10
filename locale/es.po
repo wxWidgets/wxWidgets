@@ -221,7 +221,7 @@ msgstr "Eliminar"
 #: ../src/common/accelcmn.cpp:48
 msgctxt "keyboard key"
 msgid "Del"
-msgstr "Eliminar"
+msgstr "Supr"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"
