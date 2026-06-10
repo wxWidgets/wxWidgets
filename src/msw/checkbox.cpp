@@ -96,10 +96,8 @@ void wxCheckBox::MSWSetDarkOrLightMode(SetMode setmode)
 {
     wxCheckBoxBase::MSWSetDarkOrLightMode(setmode);
 
-    // On Windows 11, the control properly handles switching to dark mode. But
-    // when switching to light mode, the text color remains the same.
-    // On Windows 10, the text color is always wrong.
-    MSWMakeOwnerDrawn(true);
+    // Use owner-draw mode if needed for dark mode or custom text colour
+    MSWMakeOwnerDrawn(wxMSWDarkMode::IsActive() || m_hasFgCol);
 }
 
 // ----------------------------------------------------------------------------
