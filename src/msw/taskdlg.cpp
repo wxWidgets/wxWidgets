@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/taskdlg.cpp
 // Purpose:     Dark mode support for native TaskDialog.
-// Author:      Mohmed Abdel-Fattah
+// Author:      Mohmed Abdel-Fattah (memoarfaa)
 // Created:     2026-06-07
 // Copyright:   (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
