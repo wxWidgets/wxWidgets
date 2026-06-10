@@ -394,7 +394,16 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
         item->book = book;
         int parentShift = CacheReadInt32(f);
         if (parentShift != 0)
+        {
+            // parentShift is a back-reference into the index entries loaded so
+            // far; it comes straight from the (possibly malicious) .cached file
+            // so an out-of-range value would make the subtraction below wrap
+            // around and leave item->parent pointing outside m_index, which is
+            // later dereferenced when the index is sorted.
+            if (parentShift < 0 || (size_t)parentShift > m_index.size())
+                return false;
             item->parent = &m_index[m_index.size() - parentShift];
+        }
         m_index.Add(item);
     }
     return true;
