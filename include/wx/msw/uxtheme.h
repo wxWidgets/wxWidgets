@@ -207,7 +207,7 @@ public:
     // wxWindow pointer here must be valid and its DPI is always used.
     // If classesDark is non-nullptr and the dark mode is active, it's used
     // instead of classes.
-    wxUxThemeHandle(const wxWindow* win,
+    wxUxThemeHandle(const wxWindowMSW* win,
                     const wchar_t* classes,
                     const wchar_t* classesDark = nullptr);
 

@@ -43,7 +43,7 @@ bool wxUxThemeIsActive()
     return s_isActive != 0;
 }
 
-wxUxThemeHandle::wxUxThemeHandle(const wxWindow* win,
+wxUxThemeHandle::wxUxThemeHandle(const wxWindowMSW* win,
                                  const wchar_t* classes,
                                  const wchar_t* classesDark)
     : m_hTheme{DoOpenThemeData(GetHwndOf(win),
