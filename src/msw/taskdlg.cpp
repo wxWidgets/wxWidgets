@@ -755,7 +755,7 @@ TDPageSubclassProc(HWND hwnd,
                    WPARAM wParam,
                    LPARAM lParam,
                    UINT_PTR uId,
-                   DWORD_PTR WXUNUSED(dwRef))
+                   DWORD_PTR dwRef)
 {
     switch ( msg )
     {
@@ -834,6 +834,8 @@ TDPageSubclassProc(HWND hwnd,
             break;
 
         case WM_DESTROY:
+            // Restore the original class brush we had changed.
+            ::SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, dwRef);
             TDPageState::Destroy(hwnd);
             ::RemoveWindowSubclass(hwnd, TDPageSubclassProc, uId);
             break;
@@ -978,7 +980,7 @@ SetWindowSubclassIfNeeded(HWND hwnd,
     if ( ::GetWindowSubclass(hwnd, proc, uId, &dwRef) )
         return;
 
-    dwRef = reinterpret_cast<DWORD_PTR>(initFunc());
+    dwRef = static_cast<DWORD_PTR>(initFunc());
     if ( !::SetWindowSubclass(hwnd, proc, uId, dwRef) )
     {
         wxLogLastError("SetWindowSubclass");
@@ -1022,7 +1024,7 @@ void TDSubclassContainer(HWND hwndParent, COLORREF bg)
         hwndParent,
         TDCtrlContainerSubclassProc,
         kTDCtrlSubclassId,
-        [bg]() { return GetSolidBrush(bg); }
+        [bg]() { return reinterpret_cast<DWORD_PTR>(GetSolidBrush(bg)); }
     );
 }
 
@@ -1154,21 +1156,6 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     if ( !hDUI )
         return TRUE;
 
-    // Class background brush
-    {
-        HBRUSH nb = GetSolidBrush(TDDarkCol::kSecondary);
-
-        HBRUSH ob = reinterpret_cast<HBRUSH>(
-            ::SetClassLongPtr(hDUI, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb))
-        );
-        if ( ob &&
-                ob != ::GetSysColorBrush(COLOR_WINDOW) &&
-                    ob != ::GetSysColorBrush(COLOR_BTNFACE))
-        {
-            ::DeleteObject(ob);
-        }
-    }
-
     TDApplyToChildren(pEl);
     wxMSWDarkMode::SetTheme(hDUI, L"DarkMode_Explorer");
 
@@ -1183,7 +1170,20 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     s.elemsOk = false;
     TDUpdateLayoutCache(hDUI, s);
 
-    SetWindowSubclassIfNeeded(hDUI, TDPageSubclassProc, kTDPageSubclassId);
+    SetWindowSubclassIfNeeded
+    (
+        hDUI,
+        TDPageSubclassProc,
+        kTDPageSubclassId,
+        [hDUI]()
+        {
+            // Change class background brush when subclassing.
+            const auto newBrush = reinterpret_cast<LONG_PTR>(
+                GetSolidBrush(TDDarkCol::kSecondary)
+            );
+            return ::SetClassLongPtr(hDUI, GCLP_HBRBACKGROUND, newBrush);
+        }
+    );
 
     d->found = true;
     return TRUE;
