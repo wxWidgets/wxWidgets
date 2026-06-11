@@ -72,6 +72,38 @@ namespace TDDarkCol
 namespace
 {
 
+// Small helper class freeing BSTR automatically if necessary.
+class AutoBSTR
+{
+public:
+    AutoBSTR() = default;
+
+    AutoBSTR(const AutoBSTR&) = delete;
+    AutoBSTR& operator=(const AutoBSTR&) = delete;
+
+    ~AutoBSTR()
+    {
+        if ( m_bstr )
+            ::SysFreeString(m_bstr);
+    }
+
+    operator const wchar_t*() const
+    {
+        return m_bstr;
+    }
+
+    // May be called once to fill in the BSTR, which will be freed in dtor.
+    BSTR* Out()
+    {
+        wxASSERT_MSG( !m_bstr, "Can't reuse same object" );
+
+        return &m_bstr;
+    }
+
+private:
+    BSTR m_bstr = nullptr;
+};
+
 // Helper function create an HBRUSH from a brush stored in wxTheBrushList.
 // This allows not to recreate the brushes for the same colour and also ensures
 // that the brushes are eventually deleted.
@@ -104,8 +136,8 @@ std::wstring GetCurrentAutomationId(IUIAutomationElement* element)
 {
     std::wstring result;
 
-    BSTR bstr;
-    if ( element->get_CurrentAutomationId(&bstr) == S_OK )
+    AutoBSTR bstr;
+    if ( element->get_CurrentAutomationId(bstr.Out()) == S_OK && bstr )
         result = bstr;
 
     return result;
@@ -379,8 +411,8 @@ void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
 
         info.automationId = GetCurrentAutomationId(pChild);
 
-        BSTR b;
-        if ( pChild->get_CurrentName(&b) == S_OK )
+        AutoBSTR b;
+        if ( pChild->get_CurrentName(b.Out()) == S_OK && b )
             info.name = b;
 
         if ( info.automationId == L"VerificationCheckBox" )
@@ -1124,11 +1156,11 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     if ( FAILED(uiAuto->ElementFromHandle(hwndChild, &pEl)) )
         return TRUE;
 
-    BSTR cls;
-    pEl->get_CurrentClassName(&cls);
+    AutoBSTR cls;
+    pEl->get_CurrentClassName(cls.Out());
 
     // SysLink controls (footnote / content hyperlinks)
-    if ( wcscmp(cls, L"CCSysLink") == 0 )
+    if ( cls && wcscmp(cls, L"CCSysLink") == 0 )
     {
         if ( const HWND hLink = GetHWNDFromElement(pEl) )
         {
@@ -1149,7 +1181,7 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     }
 
     // Main TaskPage (DirectUI "TaskDialog" class)
-    if ( wcscmp(cls, L"TaskDialog") != 0 )
+    if ( cls && wcscmp(cls, L"TaskDialog") != 0 )
         return TRUE;
 
     const HWND hDUI = GetHWNDFromElement(pEl);
