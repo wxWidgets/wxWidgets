@@ -735,7 +735,17 @@ void TDPaintText(HDC hdc, const TDPageState& s)
             continue;
 
         WinStructWordSize<DTTOPTS> opts;
-        if ( !native )
+        if ( native )
+        {
+            if (part == TDLG_EXPANDEDFOOTERAREA)
+            {
+                WinStructWordSize<DTBGOPTS> optsBg;
+                optsBg.dwFlags = DTBG_OMITBORDER;
+
+                ::DrawThemeBackgroundEx(s.hTD, hdc, TDLG_SECONDARYPANEL, 0, &el.rect, &optsBg);
+            }
+        }
+        else
         {
             opts.dwFlags = DTT_COMPOSITED | DTT_TEXTCOLOR;
             opts.crText = TDGetTextColour(s, part);
