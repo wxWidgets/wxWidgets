@@ -75,9 +75,6 @@ protected:
     // display properties in the control panel, so avoid doing this for them.
     virtual bool MSWShouldSetDefaultFont() const { return true; }
 
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const override;
-
     // return default best size (doesn't really make any sense, override this)
     virtual wxSize DoGetBestSize() const override;
 
