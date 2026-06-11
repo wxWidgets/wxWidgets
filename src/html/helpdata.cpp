@@ -32,6 +32,8 @@
 #include "wx/html/htmlfilt.h"
 #include "wx/filename.h"
 
+#include "wx/private/make_unique.h"
+
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxHtmlBookRecArray)
 WX_DEFINE_OBJARRAY(wxHtmlHelpDataItems)
@@ -387,7 +389,7 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
     m_index.Alloc(newsize);
     for (i = st; i < newsize; i++)
     {
-        wxHtmlHelpDataItem *item = new wxHtmlHelpDataItem;
+        auto item = std::make_unique<wxHtmlHelpDataItem>();
         item->name = CacheReadString(f);
         item->page = CacheReadString(f);
         item->level = CacheReadInt32(f);
@@ -404,7 +406,7 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
                 return false;
             item->parent = &m_index[m_index.size() - parentShift];
         }
-        m_index.Add(item);
+        m_index.Add(item.release());
     }
     return true;
 }
