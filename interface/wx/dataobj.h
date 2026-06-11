@@ -751,8 +751,8 @@ public:
 
     /**
         Returns 2 under wxMac and wxGTK, where text data coming from the
-        clipboard may be provided as ANSI (@c wxDF_TEXT) or as Unicode text
-        (@c wxDF_UNICODETEXT).
+        clipboard may be provided as (@c wxDF_TEXT), in ANSI (wxGTK) or UTF8 (wxMac),
+        or as Unicode text (@c wxDF_UNICODETEXT).
 
         Returns 1 under other platforms (e.g. wxMSW).
     */
