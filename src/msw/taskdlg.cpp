@@ -1257,12 +1257,18 @@ void TDAttach(HWND hwndTD, const TASKDIALOGCONFIG* pCfg)
     if ( native )
         wxMSWDarkMode::AllowForWindow(hwndTD, L"DarkMode_Explorer", nullptr);
 
-    SetWindowSubclassIfNeeded(hwndTD, TDCtrlContainerSubclassProc, kTDMainSubclassId);
+    HBRUSH nb = GetSolidBrush(TDDarkCol::kPrimary);
+
+    SetWindowSubclassIfNeeded
+    (
+        hwndTD,
+        TDCtrlContainerSubclassProc,
+        kTDMainSubclassId,
+        [nb]() { return reinterpret_cast<DWORD_PTR>(nb); }
+    );
 
     // Dark title bar
     wxMSWDarkMode::ConfigureTLW(hwndTD);
-    HBRUSH nb = GetSolidBrush(TDDarkCol::kPrimary);
-    ::SetClassLongPtr(hwndTD, GCLP_HBRBACKGROUND, reinterpret_cast<LONG_PTR>(nb));
     ::EnumChildWindows(hwndTD, TDEnumSysColorProc, 0);
     ::SendMessage(hwndTD, WM_THEMECHANGED, 0, 0);
 }
