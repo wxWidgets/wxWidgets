@@ -1159,8 +1159,11 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     AutoBSTR cls;
     pEl->get_CurrentClassName(cls.Out());
 
+    if ( !cls )
+        return TRUE;
+
     // SysLink controls (footnote / content hyperlinks)
-    if ( cls && wcscmp(cls, L"CCSysLink") == 0 )
+    if ( wcscmp(cls, L"CCSysLink") == 0 )
     {
         if ( const HWND hLink = GetHWNDFromElement(pEl) )
         {
@@ -1181,7 +1184,7 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     }
 
     // Main TaskPage (DirectUI "TaskDialog" class)
-    if ( cls && wcscmp(cls, L"TaskDialog") != 0 )
+    if ( wcscmp(cls, L"TaskDialog") != 0 )
         return TRUE;
 
     const HWND hDUI = GetHWNDFromElement(pEl);
