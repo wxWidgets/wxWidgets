@@ -1183,6 +1183,16 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
         return TRUE;
     }
 
+    if ( wcscmp(cls, L"CCVScrollBar") == 0 || wcscmp(cls, L"CCHScrollBar") == 0 )
+    {
+        if ( const HWND hScroll = GetHWNDFromElement(pEl) )
+        {
+            wxMSWDarkMode::SetTheme(hScroll, L"DarkMode_Explorer");
+        }
+
+        return TRUE;
+    }
+
     // Main TaskPage (DirectUI "TaskDialog" class)
     if ( wcscmp(cls, L"TaskDialog") != 0 )
         return TRUE;
