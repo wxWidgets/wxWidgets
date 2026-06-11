@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/private/window.h"
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
@@ -336,6 +337,14 @@ int wxRadioButton::MSWGetButtonCheckedFlag() const
 void wxRadioButton::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
 {
     wxRendererNative::Get().DrawRadioBitmap(this, dc, rect, flags);
+}
+
+void wxRadioButton::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxRadioButtonBase::MSWSetDarkOrLightMode(setmode);
+
+    // Use owner-draw mode if needed for dark mode or custom text colour
+    MSWMakeOwnerDrawn(wxMSWDarkMode::IsActive() || m_hasFgCol);
 }
 
 #if wxUSE_ACCESSIBILITY

@@ -68,6 +68,7 @@ protected:
     virtual void
         MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags) override;
 
+    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
 
 private:
     // common part of all ctors
