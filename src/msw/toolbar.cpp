@@ -723,15 +723,6 @@ void wxToolBar::MSWSetDarkOrLightMode(SetMode setmode)
 {
     wxToolBarBase::MSWSetDarkOrLightMode(setmode);
 
-    // Background color does not respond when switching to dark mode.
-    const auto attrs = GetDefaultAttributes();
-    if ( setmode == SetMode::Change )
-        SetBackgroundColour(attrs.colBg);
-
-    // This ensures GetForegroundColour(), used in our custom draw code,
-    // returns the correct colour.
-    SetForegroundColour(attrs.colFg);
-
     // Update the separator above the toolbar which is drawn partially in
     // white by default and so looks very ugly in dark mode.
     COLORSCHEME colScheme;
@@ -2051,9 +2042,6 @@ void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     // let the event propagate further in any case
     event.Skip();
-
-    if ( !UseBgCol() )
-        wxRGBToColour(m_backgroundColour, ::GetSysColor(COLOR_BTNFACE));
 
     // Remap the buttons
     Realize();
