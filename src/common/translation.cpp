@@ -1472,8 +1472,14 @@ using UntranslatedStrings = std::unordered_set<wxString>;
     in global variables outside of this class and only relying on the dtor to
     be executed when any thread (not necessarily created by wxWidgets) exits to
     ensure that we always perform the required cleanup.
+
+    thread_local seems to work correctly in MSYS2 MinGW as of May 2026,
+    see https://www.msys2.org/news/#2026-05-11-native-thread-local-storage-tls-with-gcc-16
+    Around that same time the major version was incremented to 15, so use that
+    to check if thread_local can be used.
  */
-#ifdef __MINGW32__
+#if defined(__MINGW32__) && \
+    (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 15)
 
 class UntranslatedStringHolder
 {
