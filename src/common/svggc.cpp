@@ -786,6 +786,21 @@ wxSVGGraphicsPenData::wxSVGGraphicsPenData(wxGraphicsRenderer* renderer,
     m_pen.SetColour(info.GetColour());
     m_pen.SetWidth(static_cast<int>(info.GetWidth() + 0.5));
     m_pen.SetStyle(info.GetStyle());
+    m_pen.SetCap(info.GetCap());
+    m_pen.SetJoin(info.GetJoin());
+
+    if (m_pen.GetStyle() == wxPENSTYLE_USER_DASH)
+    {
+        wxDash* dashes;
+        if (int nb_dashes = info.GetDashes(&dashes))
+            m_pen.SetDashes(nb_dashes, dashes);
+    }
+
+    if (m_pen.GetStyle() == wxPENSTYLE_STIPPLE)
+    {
+        m_pen.SetStipple(info.GetStipple());
+    }
+
 }
 
 wxSVGGraphicsBrushData::wxSVGGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush& brush)
@@ -1307,7 +1322,11 @@ void wxSVGGraphicsContext::SetBrush(const wxGraphicsBrush& brush)
 
     auto* data = static_cast<wxSVGGraphicsBrushData*>(brush.GetRefData());
     if ( data != nullptr )
+    {
+        m_writer->WriteBrushFill(data->GetBrush());
+
         SyncBrushToDC(data->GetBrush());
+    }
 }
 
 void wxSVGGraphicsContext::SetFont(const wxGraphicsFont& font)
@@ -1408,11 +1427,12 @@ void wxSVGGraphicsContext::StrokePath(const wxGraphicsPath& path)
                                      m_currentPen.GetStyle());
     }
 
+    const wxString penPattern = wxSVG::GetPenPattern(m_currentPen);
     const wxString transform = GetCurrentTransformAttr();
 
     const wxString s = wxString::Format(
-        wxS("  <path d=\"%s\" fill=\"none\" %s stroke-width=\"%d\"%s/>\n"),
-        data->GetDString(), stroke, m_currentPen.GetWidth(), transform);
+        wxS("  <path d=\"%s\" fill=\"none\" %s stroke-width=\"%d\" %s%s/>\n"),
+        data->GetDString(), stroke, m_currentPen.GetWidth(), penPattern, transform);
 
     m_writer->Write(s);
 
@@ -1437,19 +1457,27 @@ void wxSVGGraphicsContext::FillPath(const wxGraphicsPath& path, wxPolygonFillMod
 
     if ( fill.empty() )
     {
+        auto* brushData = static_cast<wxSVGGraphicsBrushData*>(m_brush.GetRefData());
+        if ( brushData )
+            fill = wxSVG::GetBrushPattern(brushData->GetBrush());
+    }
+
+    if ( fill.empty() )
+    {
         fill = m_currentBrush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT
             ? wxString(wxS("fill=\"none\""))
             : wxSVG::GetBrushFill(m_currentBrush.GetColour(),
                                   m_currentBrush.GetStyle());
     }
 
+    const wxString penPattern = wxSVG::GetPenPattern(m_currentPen);
     const wxString transform = GetCurrentTransformAttr();
     const wxString rule = (fillStyle == wxODDEVEN_RULE)
         ? wxS("evenodd") : wxS("nonzero");
 
     const wxString s = wxString::Format(
-        wxS("  <path d=\"%s\" %s fill-rule=\"%s\" stroke=\"none\"%s/>\n"),
-        data->GetDString(), fill, rule, transform);
+        wxS("  <path d=\"%s\" %s fill-rule=\"%s\" stroke=\"none\" %s%s/>\n"),
+        data->GetDString(), fill, rule, penPattern, transform);
 
     m_writer->Write(s);
 
