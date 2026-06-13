@@ -20,6 +20,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/anidecod.h" // wxImageArray
+#include "wx/gifdecod.h"
 #include "wx/bitmap.h"
 #include "wx/cursor.h"
 #include "wx/icon.h"
@@ -1470,6 +1471,36 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIFPaletteIndex",
     wxMemoryInputStream mis(data, WXSIZEOF(data));
     wxImage img;
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_GIF) );
+}
+
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::GIFBadBackgroundIndex",
+                 "[image][gif][error]")
+{
+    // The logical screen descriptor's background colour index is read straight
+    // from the file and used to index the global colour table, but only the
+    // first 3*global_ncolors bytes of the 768-byte palette buffer are populated
+    // from the stream. This GIF declares a 2-entry global colour table and a
+    // background index of 255, so wxGIFDecoder::LoadGIF() used to take the
+    // background colour from the uninitialised tail of the buffer and expose it
+    // via GetBackgroundColour(). The frame itself is valid so loading still
+    // succeeds; the background should simply be left unset.
+    static const unsigned char data[] =
+    {
+        0x47, 0x49, 0x46, 0x38, 0x39, 0x61,             // "GIF89a"
+        0x01, 0x00, 0x01, 0x00, 0x80, 0xff, 0x00,       // LSD 1x1, GCT 2col, bg=255
+        0x00, 0x00, 0x00, 0xff, 0xff, 0xff,             // GCT entries
+        0x2c,                                           // image separator
+        0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, // 1x1 frame at 0,0
+        0x00,                                           // no LCT
+        0x02,                                           // LZW min code size=2
+        0x02, 0x44, 0x01,                               // sub-block CLEAR,0,EOI
+        0x00,                                           // sub-block terminator
+        0x3b,                                           // trailer
+    };
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxGIFDecoder decoder;
+    REQUIRE( decoder.LoadGIF(mis) == wxGIF_OK );
+    CHECK( !decoder.GetBackgroundColour().IsOk() );
 }
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIFZeroFrameSize",
