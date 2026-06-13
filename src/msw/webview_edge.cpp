@@ -1472,6 +1472,83 @@ void wxWebViewEdge::Print(const wxPrintData& printData, int flags)
 }
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
+bool wxWebViewEdge::DoCallPrintToPdf(const wxString& filePath, ICoreWebView2PrintSettings* printSettings)
+{
+    wxCOMPtr<ICoreWebView2_7> webView7;
+    if (FAILED(m_impl->m_webView->QueryInterface(IID_PPV_ARGS(&webView7))))
+    {
+        wxLogError(_("PDF export requires a newer version of the WebView2 runtime."));
+        return false;
+    }
+
+    const wxString filePathCopy = filePath;
+    HRESULT hr = webView7->PrintToPdf(
+        filePath.wc_str(),
+        printSettings,
+        Callback<ICoreWebView2PrintToPdfCompletedHandler>(
+            [this, filePathCopy](HRESULT errorCode, BOOL isSuccessful) -> HRESULT
+            {
+                wxWebViewEvent* event = new wxWebViewEvent(wxEVT_WEBVIEW_PDF_SAVED, GetId(), filePathCopy, wxString());
+                event->SetInt((SUCCEEDED(errorCode) && isSuccessful) ? 1 : 0);
+                event->SetEventObject(this);
+                QueueEvent(event);
+                return S_OK;
+            }).Get());
+
+    if (FAILED(hr))
+    {
+        wxLogApiError("ICoreWebView2_7::PrintToPdf", hr);
+        return false;
+    }
+    return true;
+}
+
+bool wxWebViewEdge::PrintToPDF(const wxString& filePath)
+{
+    if (!m_impl->m_webView)
+        return false;
+
+    return DoCallPrintToPdf(filePath, nullptr);
+}
+
+#if wxUSE_PRINTING_ARCHITECTURE
+bool wxWebViewEdge::PrintToPDF(const wxString& filePath, const wxPrintData& printData)
+{
+    if (!m_impl->m_webView)
+        return false;
+
+    wxCOMPtr<ICoreWebView2Environment6> environment6;
+    if (FAILED(m_impl->m_webViewEnvironment->QueryInterface(IID_PPV_ARGS(&environment6))))
+        return PrintToPDF(filePath);
+
+    wxCOMPtr<ICoreWebView2PrintSettings> printSettings;
+    HRESULT hr = environment6->CreatePrintSettings(&printSettings);
+    if (FAILED(hr))
+    {
+        wxLogApiError("CreatePrintSettings", hr);
+        return PrintToPDF(filePath);
+    }
+
+    printSettings->put_Orientation(
+        printData.GetOrientation() == wxLANDSCAPE
+            ? COREWEBVIEW2_PRINT_ORIENTATION_LANDSCAPE
+            : COREWEBVIEW2_PRINT_ORIENTATION_PORTRAIT);
+
+    wxSize paperSizeTenthsMM = wxThePrintPaperDatabase->GetSize(printData.GetPaperId());
+    if (paperSizeTenthsMM.x > 0 && paperSizeTenthsMM.y > 0)
+    {
+        double widthInches = paperSizeTenthsMM.x / 254.0;
+        double heightInches = paperSizeTenthsMM.y / 254.0;
+        printSettings->put_PageWidth(widthInches);
+        printSettings->put_PageHeight(heightInches);
+    }
+
+    printSettings->put_ShouldPrintHeaderAndFooter(FALSE);
+
+    return DoCallPrintToPdf(filePath, printSettings);
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
+
 float wxWebViewEdge::GetZoomFactor() const
 {
     double old_zoom_factor = 0.0;

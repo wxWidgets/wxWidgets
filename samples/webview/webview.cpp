@@ -50,6 +50,7 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 #include "wx/cmndata.h"
 #include "wx/choicdlg.h"
+#include "wx/filedlgcustomize.h"
 #endif
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -163,6 +164,10 @@ public:
     void OnError(wxWebViewEvent& evt);
     void OnPrint(wxCommandEvent& evt);
     void OnPrintWithSettings(wxCommandEvent& evt);
+    void OnPrintToPDF(wxCommandEvent& evt);
+#if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
+    void OnPrintToPDFWithSettings(wxCommandEvent& evt);
+#endif
     void OnOpenPrivateWindow(wxCommandEvent& evt);
     void OnCut(wxCommandEvent& evt);
     void OnCopy(wxCommandEvent& evt);
@@ -605,6 +610,14 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
         }
 
 
+        m_browser->Bind(wxEVT_WEBVIEW_PDF_SAVED, [](wxWebViewEvent& event) {
+            if (event.IsError())
+                wxLogError("Failed to save PDF to '%s'", event.GetURL());
+            else
+                wxLogMessage("PDF saved to '%s'", event.GetURL());
+            event.Skip();
+        });
+
         m_browser->Bind(wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, [](wxWebViewEvent& event) {
             if (event.IsError())
                 wxLogError("Failed to clear browsing data");
@@ -646,6 +659,10 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     wxMenuItem* print = m_tools_menu->Append(wxID_ANY , _("Print"));
 #if wxUSE_PRINTING_ARCHITECTURE
     wxMenuItem* printWithSettings = m_tools_menu->Append(wxID_ANY , _("Print with Settings..."));
+#endif
+    wxMenuItem* printToPDF = m_tools_menu->Append(wxID_ANY, _("Save as PDF..."));
+#if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
+    wxMenuItem* printToPDFWithSettings = m_tools_menu->Append(wxID_ANY, _("Save as PDF with Settings..."));
 #endif
     wxMenuItem* setPage = m_tools_menu->Append(wxID_ANY , _("Set page text"));
     wxMenuItem* viewSource = m_tools_menu->Append(wxID_ANY , _("View Source"));
@@ -814,6 +831,10 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     Bind(wxEVT_MENU, &WebFrame::OnPrint, this, print->GetId());
 #if wxUSE_PRINTING_ARCHITECTURE
     Bind(wxEVT_MENU, &WebFrame::OnPrintWithSettings, this, printWithSettings->GetId());
+#endif
+    Bind(wxEVT_MENU, &WebFrame::OnPrintToPDF, this, printToPDF->GetId());
+#if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
+    Bind(wxEVT_MENU, &WebFrame::OnPrintToPDFWithSettings, this, printToPDFWithSettings->GetId());
 #endif
     Bind(wxEVT_MENU, &WebFrame::OnOpenPrivateWindow, this, openPrivate->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnZoomLayout, this, m_tools_layout->GetId());
@@ -1752,6 +1773,73 @@ void WebFrame::OnPrintWithSettings(wxCommandEvent& WXUNUSED(evt))
 #endif
 }
 #endif // wxUSE_PRINTING_ARCHITECTURE
+
+void WebFrame::OnPrintToPDF(wxCommandEvent& WXUNUSED(evt))
+{
+    wxFileDialog dlg(this, _("Save as PDF"), wxEmptyString, wxEmptyString,
+                     _("PDF files (*.pdf)|*.pdf"),
+                     wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (dlg.ShowModal() != wxID_OK)
+        return;
+
+    if (!m_browser->PrintToPDF(dlg.GetPath()))
+        wxLogError("PrintToPDF is not supported by this browser backend.");
+}
+
+#if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
+
+class WebFramePDFSettingsHook : public wxFileDialogCustomizeHook
+{
+public:
+    void AddCustomControls(wxFileDialogCustomize& customizer) override
+    {
+        const wxString choices[] = {
+            _("Letter (Portrait)"), _("Letter (Landscape)"),
+            _("A4 (Portrait)"),     _("A4 (Landscape)"),
+            _("Legal (Portrait)"),  _("Legal (Landscape)")
+        };
+        customizer.AddStaticText(_("Paper size:"));
+        m_choice = customizer.AddChoice(WXSIZEOF(choices), choices);
+        m_choice->SetSelection(m_sel);
+    }
+
+    void TransferDataFromCustomControls() override
+    {
+        m_sel = m_choice->GetSelection();
+    }
+
+    int GetSelection() const { return m_sel; }
+
+private:
+    wxFileDialogChoice* m_choice = nullptr;
+    int m_sel = 2; // A4 Portrait
+};
+
+void WebFrame::OnPrintToPDFWithSettings(wxCommandEvent& WXUNUSED(evt))
+{
+    WebFramePDFSettingsHook hook;
+    wxFileDialog dlg(this, _("Save as PDF"), wxEmptyString, wxEmptyString,
+                     _("PDF files (*.pdf)|*.pdf"),
+                     wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    dlg.SetCustomizeHook(hook);
+    if (dlg.ShowModal() != wxID_OK)
+        return;
+
+    wxPrintData printData;
+    switch (hook.GetSelection())
+    {
+        case 0: printData.SetPaperId(wxPAPER_LETTER); printData.SetOrientation(wxPORTRAIT);  break;
+        case 1: printData.SetPaperId(wxPAPER_LETTER); printData.SetOrientation(wxLANDSCAPE); break;
+        case 2: printData.SetPaperId(wxPAPER_A4);     printData.SetOrientation(wxPORTRAIT);  break;
+        case 3: printData.SetPaperId(wxPAPER_A4);     printData.SetOrientation(wxLANDSCAPE); break;
+        case 4: printData.SetPaperId(wxPAPER_LEGAL);  printData.SetOrientation(wxPORTRAIT);  break;
+        case 5: printData.SetPaperId(wxPAPER_LEGAL);  printData.SetOrientation(wxLANDSCAPE); break;
+    }
+
+    if (!m_browser->PrintToPDF(dlg.GetPath(), printData))
+        wxLogError("PrintToPDF is not supported by this browser backend.");
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
 
 void WebFrame::OnOpenPrivateWindow(wxCommandEvent& WXUNUSED(evt))
 {

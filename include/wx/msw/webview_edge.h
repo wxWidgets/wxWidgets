@@ -18,6 +18,7 @@
 #include "wx/webview.h"
 
 class wxWebViewEdgeImpl;
+struct ICoreWebView2PrintSettings;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewEdge : public wxWebView
 {
@@ -73,6 +74,11 @@ public:
     using wxWebView::Print;
 #endif
 
+    virtual bool PrintToPDF(const wxString& filePath) override;
+#if wxUSE_PRINTING_ARCHITECTURE
+    virtual bool PrintToPDF(const wxString& filePath, const wxPrintData& printData) override;
+#endif
+
     virtual float GetZoomFactor() const override;
     virtual void SetZoomFactor(float zoom) override;
 
@@ -123,6 +129,8 @@ protected:
 
 private:
     wxWebViewEdgeImpl* m_impl;
+
+    bool DoCallPrintToPdf(const wxString& filePath, ICoreWebView2PrintSettings* printSettings);
 
     void OnSize(wxSizeEvent& event);
 

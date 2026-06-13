@@ -1040,6 +1040,12 @@ public:
         Process a @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event
         only available in wxWidgets 3.3.0 or later. For usage details see
         ClearBrowsingData().
+    @event{EVT_WEBVIEW_PDF_SAVED(id, func)}
+        Process a @c wxEVT_WEBVIEW_PDF_SAVED event, generated when a
+        PrintToPDF() operation completes. Use wxWebViewEvent::GetURL() to
+        retrieve the output file path and wxWebViewEvent::IsError() to check
+        whether the save succeeded.
+        Only available in wxWidgets 3.3.3 or later.
     @endEventTable
 
     @since 2.9.3
@@ -1307,6 +1313,54 @@ public:
     */
     virtual void Print(const wxPrintData& printData,
                        int flags = wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER);
+
+    /**
+        Saves the currently displayed page as a PDF file to @a filePath.
+
+        This operation is asynchronous. When it completes, a
+        @c wxEVT_WEBVIEW_PDF_SAVED event is generated. Use
+        wxWebViewEvent::GetURL() to retrieve the output file path and
+        wxWebViewEvent::IsError() to check whether the operation succeeded.
+
+        @return @true if the export was started successfully, @false if the
+            backend does not support PDF export or if an error prevented the
+            operation from starting.
+
+        @note Currently implemented on the Edge (MSW), WebKit (macOS 11.0+),
+            and WebKit2GTK (GTK) backends. Returns @false on all other
+            backends.
+
+        @see PrintToPDF(const wxString&, const wxPrintData&)
+
+        @since 3.3.3
+    */
+    virtual bool PrintToPDF(const wxString& filePath);
+
+    /**
+        Saves the currently displayed page as a PDF file using the given print
+        settings.
+
+        This overload allows specifying paper size and orientation via
+        @a printData. Backend support for these settings varies:
+
+        - Edge (MSW): paper size (derived from the wxPrintData paper ID) and
+          orientation are both applied to the output PDF.
+        - macOS: @a printData is not used; this behaves identically to
+          PrintToPDF(const wxString&).
+        - GTK (WebKit2GTK): paper size, orientation, copies, and collation
+          are all applied to the output PDF.
+
+        This overload is only available when @c wxUSE_PRINTING_ARCHITECTURE is
+        set to 1.
+
+        @return @true if the export was started successfully, @false if the
+            backend does not support PDF export.
+
+        @see PrintToPDF(const wxString&)
+
+        @since 3.3.3
+    */
+    virtual bool PrintToPDF(const wxString& filePath, const wxPrintData& printData);
 
     /**
         Registers a custom scheme handler.
@@ -2153,7 +2207,8 @@ public:
     /**
         Returns @true if the operation failed.
         Only valid for events of type
-        @c wxEVT_WEBVIEW_SCRIPT_RESULT and @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED
+        @c wxEVT_WEBVIEW_SCRIPT_RESULT, @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED
+        and @c wxEVT_WEBVIEW_PDF_SAVED
 
         @since 3.1.6
     */
@@ -2184,3 +2239,4 @@ wxEventType wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED;
 wxEventType wxEVT_WEBVIEW_SCRIPT_RESULT;
 wxEventType wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED;
 wxEventType wxEVT_WEBVIEW_BROWSING_DATA_CLEARED;
+wxEventType wxEVT_WEBVIEW_PDF_SAVED;

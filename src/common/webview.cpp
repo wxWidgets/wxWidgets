@@ -60,6 +60,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, wxWebViewEvent);
+wxDEFINE_EVENT( wxEVT_WEBVIEW_PDF_SAVED, wxWebViewEvent);
 
 // wxWebViewConfiguration
 wxWebViewConfiguration::wxWebViewConfiguration(const wxString& backend, wxWebViewConfigurationImpl* impl):
