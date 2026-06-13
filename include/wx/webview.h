@@ -276,6 +276,13 @@ public:
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual void Print(const wxPrintData& printData, int flags = wxWEBVIEW_PRINT_DEFAULT);
 #endif
+    virtual bool PrintToPDF(const wxString& WXUNUSED(filePath))
+    { return false; }
+#if wxUSE_PRINTING_ARCHITECTURE
+    virtual bool PrintToPDF(const wxString& WXUNUSED(filePath),
+                            const wxPrintData& WXUNUSED(printData))
+    { return false; }
+#endif
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
     virtual bool SetUserAgent(const wxString& userAgent) { wxUnusedVar(userAgent); return false; }
@@ -460,6 +467,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_FULLSCREEN_CHANGED,
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, wxWebViewEvent);
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_PDF_SAVED, wxWebViewEvent);
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -505,6 +513,10 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 
 #define EVT_WEBVIEW_SCRIPT_RESULT(id, fn) \
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_SCRIPT_RESULT, id, \
+                     wxWebViewEventHandler(fn))
+
+#define EVT_WEBVIEW_PDF_SAVED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_PDF_SAVED, id, \
                      wxWebViewEventHandler(fn))
 
 // old wxEVT_COMMAND_* constants

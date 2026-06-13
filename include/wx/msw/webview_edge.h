@@ -73,6 +73,11 @@ public:
     using wxWebView::Print;
 #endif
 
+    virtual bool PrintToPDF(const wxString& filePath) override;
+#if wxUSE_PRINTING_ARCHITECTURE
+    virtual bool PrintToPDF(const wxString& filePath, const wxPrintData& printData) override;
+#endif
+
     virtual float GetZoomFactor() const override;
     virtual void SetZoomFactor(float zoom) override;
 
