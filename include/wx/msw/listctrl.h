@@ -466,6 +466,12 @@ private:
     // Draw the sort arrow in the header.
     void DrawSortArrow();
 
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    // Set the native control's text and background colours to the
+    // current foreground and background colours.
+    void UpdateNativeColours();
+
     // Object using for header custom drawing if necessary, may be null.
     wxMSWHeaderCtrlCustomDraw* m_headerCustomDraw;
 

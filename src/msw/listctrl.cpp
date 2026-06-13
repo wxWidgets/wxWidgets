@@ -220,6 +220,7 @@ wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
     EVT_DPI_CHANGED(wxListCtrl::OnDPIChanged)
+    EVT_SYS_COLOUR_CHANGED(wxListCtrl::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -267,7 +268,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     // We must set the default text colour to the system/theme color, otherwise
     // GetTextColour will always return black even if this is not what is used
     // by default.
-    SetTextColour(GetDefaultAttributes().colFg);
+    UpdateNativeColours();
 
     if ( InReportView() )
         MSWSetExListStyles();
@@ -595,16 +596,6 @@ void wxListCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 
     // Update header.
     MSWInitHeader();
-
-    // Background color must always be set.
-    // Verified with the widgets sample, selecting the wxFileCtrl page.
-    const auto attrs = GetDefaultAttributes();
-    SetBackgroundColour(attrs.colBg);
-
-    // When switching modes, the text color remains the same. We must
-    // explicitly update the color.
-    if ( setmode == SetMode::Change )
-        SetTextColour(attrs.colFg);
 }
 
 int wxListCtrl::MSWGetToolTipMessage() const
@@ -652,7 +643,7 @@ bool wxListCtrl::SetForegroundColour(const wxColour& col)
     if ( !wxWindow::SetForegroundColour(col) )
         return false;
 
-    SetTextColour(col);
+    UpdateNativeColours();
 
     return true;
 }
@@ -663,15 +654,19 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
     if ( !wxWindow::SetBackgroundColour(col) )
         return false;
 
-    // we set the same colour for both the "empty" background and the items
-    // background
-    COLORREF color = wxColourToRGB(col);
-    if ( !ListView_SetBkColor(GetHwnd(), color) )
-        wxLogLastError(wxS("ListView_SetBkColor()"));
-    if ( !ListView_SetTextBkColor(GetHwnd(), color) )
-        wxLogLastError(wxS("ListView_SetTextBkColor()"));
+    UpdateNativeColours();
 
     return true;
+}
+
+void wxListCtrl::UpdateNativeColours()
+{
+    // we set the same colour for both the "empty" background and the items
+    // background
+    const auto colBg = wxColourToRGB(GetBackgroundColour());
+    ListView_SetBkColor(m_hWnd, colBg);
+    ListView_SetTextBkColor(m_hWnd, colBg);
+    ListView_SetTextColor(m_hWnd, wxColourToRGB(GetForegroundColour()));
 }
 
 bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
@@ -1578,16 +1573,13 @@ int wxListCtrl::GetSelectedItemCount() const
 // Gets the text colour of the listview
 wxColour wxListCtrl::GetTextColour() const
 {
-    COLORREF ref = ListView_GetTextColor(GetHwnd());
-    wxColour col(GetRValue(ref), GetGValue(ref), GetBValue(ref));
-    return col;
+    return GetForegroundColour();
 }
 
 // Sets the text colour of the listview
 void wxListCtrl::SetTextColour(const wxColour& col)
 {
-    if ( !ListView_SetTextColor(GetHwnd(), wxColourToPalRGB(col)) )
-        wxLogLastError(wxS("ListView_SetTextColor()"));
+    SetForegroundColour(col);
 }
 
 // Gets the index of the topmost visible item when in
@@ -3698,6 +3690,12 @@ void wxListCtrl::OnCharHook(wxKeyEvent& event)
         }
     }
 
+    event.Skip();
+}
+
+void wxListCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    UpdateNativeColours();
     event.Skip();
 }
 
