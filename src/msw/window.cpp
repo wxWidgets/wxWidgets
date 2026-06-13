@@ -3555,12 +3555,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_SETTINGCHANGE:
             // Check for the special case of the message which notifies about
             // the colours change.
-            // Note that "ImmersiveColorSet" is set both when switching between
-            // light and dark themes and also when changing high contrast mode,
-            // for which an additional message with "WindowsThemeElement" is
-            // also sent, but we don't need to check for it as handling this
-            // one is enough
-            if ( lParam && wxStrcmp((TCHAR*)lParam, wxT("ImmersiveColorSet")) == 0 )
+            if ( wxIsSystemColourChange(lParam) )
                 processed = HandleSysColorChange();
             else
                 processed = HandleSettingChange(wParam, lParam);
@@ -4839,10 +4834,7 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 // DPI
 // ---------------------------------------------------------------------------
 
-namespace
-{
-
-static wxSize GetWindowDPI(HWND hwnd)
+wxSize wxGetWindowDPI(HWND hwnd)
 {
     typedef UINT (WINAPI *GetDpiForWindow_t)(HWND hwnd);
     static GetDpiForWindow_t s_pfnGetDpiForWindow = nullptr;
@@ -4862,8 +4854,6 @@ static wxSize GetWindowDPI(HWND hwnd)
     }
 
     return wxSize();
-}
-
 }
 
 /*extern*/
@@ -4956,7 +4946,7 @@ wxSize wxWindowMSW::GetDPI() const
         }
     }
 
-    wxSize dpi = GetWindowDPI(hwnd);
+    wxSize dpi = wxGetWindowDPI(hwnd);
 
     if ( !dpi.x || !dpi.y )
     {

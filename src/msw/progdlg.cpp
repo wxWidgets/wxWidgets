@@ -30,8 +30,10 @@
     #include "wx/msw/private.h"
 #endif
 
-#include "wx/msw/private/msgdlg.h"
 #include "wx/evtloop.h"
+#include "wx/msw/private/darkmode.h"
+#include "wx/msw/private/msgdlg.h"
+#include "wx/msw/private/taskdlg.h"
 
 using namespace wxMSWMessageDialog;
 
@@ -1144,6 +1146,11 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
     switch ( uNotification )
     {
         case TDN_CREATED:
+            // The dialog is fully constructed now, so we can enable dark mode
+            // for it if necessary (doing it on TDN_DIALOG_CONSTRUCTED wouldn't
+            // work because all dialog elements wouldn't be constructed yet).
+            wxMSWDarkMode::AllowForTaskDialog(hwnd);
+
             // Let the main thread know that the dialog can be used.
             sharedData->m_status = wxProgressDialogStatus::Initialized;
 
@@ -1164,6 +1171,18 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
             // when the progress ends (and not even then with wxPD_AUTO_HIDE).
             if ( !(sharedData->m_style & wxPD_CAN_ABORT) )
                 EnableCloseButtons(hwnd, false);
+            break;
+
+        case TDN_EXPANDO_BUTTON_CLICKED:
+            // Store the expanded state as a window property so the subclassed
+            // TaskPage panel can read it during WM_PAINT without a UIA call.
+            SetProp(hwnd, L"IsExpanded",
+                reinterpret_cast<HANDLE>(static_cast<ULONG_PTR>(wParam)));
+            break;
+
+        case TDN_DESTROYED:
+            // Clean up all resources allocated by AllowForTaskDialog().
+            wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
             break;
 
         case TDN_BUTTON_CLICKED:

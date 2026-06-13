@@ -599,15 +599,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
             if ( hTheme )
             {
                 LOGFONTW themeFont;
-                if ( ::GetThemeFont
-                                             (
-                                                hTheme,
-                                                hdc,
-                                                BP_GROUPBOX,
-                                                GBS_NORMAL,
-                                                TMT_FONT,
-                                                &themeFont
-                                             ) == S_OK )
+                if ( hTheme.GetFont(themeFont, hdc, BP_GROUPBOX, GBS_NORMAL) )
                 {
                     font.Init(themeFont);
                     if ( font )

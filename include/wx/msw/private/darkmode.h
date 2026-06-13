@@ -31,6 +31,11 @@ bool HasChanged();
 // Enable or disable dark mode for the given TLW if appropriate.
 void ConfigureTLW(HWND hwnd);
 
+// Helper function: call SetWindowTheme() and log a debug error if it fails.
+void SetTheme(HWND hwnd,
+              const wchar_t* themeName,
+              const wchar_t* themeId = nullptr);
+
 // Set dark theme for the given (child) window if appropriate.
 //
 // Optional theme name and ID can be specified if something other than the

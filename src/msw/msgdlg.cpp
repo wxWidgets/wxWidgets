@@ -27,6 +27,7 @@
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
+#include "wx/msw/private/taskdlg.h"
 #include "wx/modalhook.h"
 #include "wx/fontutil.h"
 #include "wx/textbuf.h"
@@ -588,12 +589,34 @@ namespace
 {
 
 HRESULT CALLBACK
-wxTaskDialogCallback(HWND hwnd, UINT msg, WPARAM, LPARAM, LONG_PTR)
+wxTaskDialogCallback(HWND hwnd,
+                     UINT msg,
+                     WPARAM wParam,
+                     LPARAM WXUNUSED(lParam),
+                     LONG_PTR refData)
 {
+    const auto* const
+        config = reinterpret_cast<const TASKDIALOGCONFIG*>(refData);
+
     switch ( msg )
     {
-        case TDN_DIALOG_CONSTRUCTED:
-            wxMSWDarkMode::ConfigureTLW(hwnd);
+        case TDN_CREATED:
+            // The dialog is fully constructed now, so we can enable dark mode
+            // for it if necessary (doing it on TDN_DIALOG_CONSTRUCTED wouldn't
+            // work because all dialog elements wouldn't be constructed yet).
+            wxMSWDarkMode::AllowForTaskDialog(hwnd, config);
+            break;
+
+        case TDN_EXPANDO_BUTTON_CLICKED:
+            // Store the expanded state as a window property so the subclassed
+            // TaskPage panel can read it during WM_PAINT without a UIA call.
+            SetProp(hwnd, L"IsExpanded",
+                reinterpret_cast<HANDLE>(static_cast<ULONG_PTR>(wParam)));
+            break;
+
+        case TDN_DESTROYED:
+            // Clean up all resources allocated by AllowForTaskDialog().
+            wxMSWDarkMode::RemoveFromTaskDialog(hwnd);
             break;
     }
 
@@ -757,6 +780,7 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     }
 
     tdc.pfCallback = wxTaskDialogCallback;
+    tdc.lpCallbackData = (LONG_PTR) &tdc;
 }
 
 void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,

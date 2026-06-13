@@ -492,6 +492,16 @@ void ConfigureTLW(HWND hwnd)
     wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
 }
 
+void SetTheme(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
+{
+    HRESULT hr = ::SetWindowTheme(hwnd, themeName, themeId);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(wxString::Format("SetWindowTheme(%p, %s, %s)",
+                                       hwnd, themeName, themeId), hr);
+    }
+}
+
 void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
 {
     if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, true) )
@@ -499,12 +509,7 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
 
     if ( themeName || themeId )
     {
-        HRESULT hr = ::SetWindowTheme(hwnd, themeName, themeId);
-        if ( FAILED(hr) )
-        {
-            wxLogApiError(wxString::Format("SetWindowTheme(%p, %s, %s)",
-                                           hwnd, themeName, themeId), hr);
-        }
+        SetTheme(hwnd, themeName, themeId);
     }
 
     // Some native controls need this message to switch themes, such as
@@ -769,8 +774,7 @@ HandleMenuMessage(WXLRESULT* result,
                 // We have to specify the text colour explicitly as by default
                 // black would be used, making the menu label unreadable on the
                 // (almost) black background.
-                DTTOPTS textOpts;
-                textOpts.dwSize = sizeof(textOpts);
+                WinStructWordSize<DTTOPTS> textOpts;
                 textOpts.dwFlags = DTT_TEXTCOLOR;
                 textOpts.crText = wxColourToRGB(GetMenuColour(colText));
 
