@@ -4223,7 +4223,9 @@ wxAuiNotebook::SaveLayout(const wxString& name,
         const wxAuiTabCtrl* const
             tabCtrl = static_cast<wxAuiTabFrame*>(pane.window)->m_tabs;
 
-        tab.active = tabCtrl->GetActivePage();
+        auto* const activePage =
+            tabCtrl->GetWindowFromIdx(tabCtrl->GetActivePage());
+        tab.active = m_tabs.GetIdxFromWindow(activePage);
 
         // As an optimization, don't bother with saving the pages order for the
         // main control if it hasn't been changed from the default.
