@@ -1680,6 +1680,30 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPMWidthOverflow",
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_XPM) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadXPMDuplicateColourKey",
+                 "[image][xpm][error]")
+{
+    // The colour table declares two colours but reuses the same key on both
+    // lines, so the colour map only ends up with one distinct entry.
+    // wxXPMDecoder::ReadData() sized the palette arrays by the declared colour
+    // count while filling only the entries actually in the map, so the last
+    // palette entry was left uninitialised for wxPalette() to read (and the
+    // wxASSERT() in debug builds fired). The image data itself is valid and
+    // must still load, now with a palette holding only the distinct colour.
+    const std::string xpm = R"(/* XPM */
+"2 1 2 1"
+"a c #ff0000"
+"a c #0000ff"
+"aa"
+)";
+    wxMemoryInputStream mis(xpm.data(), xpm.size());
+    wxImage img;
+    REQUIRE( img.LoadFile(mis, wxBITMAP_TYPE_XPM) );
+#if wxUSE_PALETTE
+    CHECK( img.GetPalette().GetColoursCount() == 1 );
+#endif
+}
+
 #endif // wxUSE_XPM
 
 #if wxUSE_IFF

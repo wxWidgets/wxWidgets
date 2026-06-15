@@ -819,9 +819,15 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
         }
     }
 #if wxUSE_PALETTE
-    unsigned char* r = new unsigned char[colors_cnt];
-    unsigned char* g = new unsigned char[colors_cnt];
-    unsigned char* b = new unsigned char[colors_cnt];
+    // The header colour count can be larger than the number of entries
+    // actually in the map if a malformed XPM reuses the same key on several
+    // colour lines, as the map then collapses them into a single entry. Build
+    // the palette from the real number of distinct colours so we don't read
+    // past the part of the arrays we filled in below.
+    const size_t palette_cnt = clr_tbl.size();
+    unsigned char* r = new unsigned char[palette_cnt];
+    unsigned char* g = new unsigned char[palette_cnt];
+    unsigned char* b = new unsigned char[palette_cnt];
 
     for (it = clr_tbl.begin(), i = 0; it != clr_tbl.end(); ++it, ++i)
     {
@@ -829,8 +835,8 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
         g[i] = it->second.G;
         b[i] = it->second.B;
     }
-    wxASSERT(i == colors_cnt);
-    img.SetPalette(wxPalette(colors_cnt, r, g, b));
+    wxASSERT(i == palette_cnt);
+    img.SetPalette(wxPalette(palette_cnt, r, g, b));
     delete[] r;
     delete[] g;
     delete[] b;
