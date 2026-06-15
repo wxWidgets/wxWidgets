@@ -1509,6 +1509,36 @@ public:
 
         @see RunScriptAsync()
     */
+
+    /**
+        Runs the given JavaScript code.
+        
+        See @ref wxWebViewScriptResult for information about the script result and
+        errors.
+
+        A simple example using @c RunScript() is available in
+        @c samples/webview/localhtml. It demonstrates loading a local HTML file
+        into @c wxWebView and calling JavaScript functions from C++ to switch
+        between sections in the displayed page.
+
+        The sample can also be built as a standalone program on systems providing
+        @c wx-config using:
+        @code
+        g++ runscript.cpp -o wxWebViewExample `wx-config --cxxflags --libs std,webview`
+        @endcode
+
+        @param javascript JavaScript code to execute.
+        @param output The string containing the result of the script execution,
+            if not @NULL.
+        @return @true if there is a result and @a output is filled.
+        
+        @note When using @c wxWebViewIE, @a output will contain the string
+        representation of the executed JavaScript.
+        
+        @since 2.9.5
+        @see RunScriptAsync()
+    */
+
     virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const = 0;
 
     /**
