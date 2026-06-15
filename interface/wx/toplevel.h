@@ -384,10 +384,11 @@ public:
         @note This function should normally be only used when the application
               is not already in foreground.
 
-        This function is currently implemented for Win32 where it flashes
-        the window icon in the taskbar, and for wxGTK with task bars
-        supporting it.
-
+        This function is currently implemented under Windows where it flashes
+        the window icon in the taskbar, and in wxGTK, but its behaviour there
+        depends on support from the desktop environment or window manager: if
+        the current environment does not support window urgency hints, calling
+        this function has no visible effect.
     */
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
