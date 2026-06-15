@@ -271,8 +271,9 @@ void wxNotebook::MSWSetDarkOrLightMode(SetMode setmode)
 {
     wxNotebookBase::MSWSetDarkOrLightMode(setmode);
 
-    // Background must always be set.
-    SetBackgroundColour(GetDefaultAttributes().colBg);
+    // Background must always be set, unless there is a custom colour.
+    if ( !m_hasBgCol )
+        m_backgroundColour = GetDefaultAttributes().colBg;
 }
 
 int wxNotebook::MSWGetToolTipMessage() const
@@ -1344,19 +1345,19 @@ void wxNotebook::MSWNotebookPaint()
 
 void wxNotebook::OnPaint(wxPaintEvent& event)
 {
-    // We can rely on the default implementation if we don't have a custom
-    // background colour (note that it is always set when using dark mode).
-    if ( !m_hasBgCol )
-    {
-        event.Skip();
-        return;
-    }
-
     if ( wxMSWDarkMode::IsActive() )
     {
         // We can't use default painting in dark mode, it just doesn't work
         // there, whichever theme we use, so draw everything ourselves.
         MSWNotebookPaint();
+        return;
+    }
+
+    // We can rely on the default implementation if we don't have a custom
+    // background colour.
+    if ( !m_hasBgCol )
+    {
+        event.Skip();
         return;
     }
 
