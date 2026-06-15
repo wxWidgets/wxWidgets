@@ -40,7 +40,7 @@ public:
 
 // Constructor for the main window
 MyFrame::MyFrame(const wxString& title)
-    : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(400, 300)) {
+    : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(400, 300)) {
 
     // Creates a default status bar at the bottom of the window
     wxStatusBar *statusBar = CreateStatusBar();
