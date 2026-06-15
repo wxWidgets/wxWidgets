@@ -220,8 +220,8 @@ void wxStaticText::MSWSetDarkOrLightMode(SetMode setmode)
 
     // When switching to light mode, the text color remains the same. We must
     // explicitly update the color.
-    if ( setmode == SetMode::Change )
-        SetForegroundColour(GetDefaultAttributes().colFg);
+    if ( setmode == SetMode::Change && !m_hasFgCol )
+        m_foregroundColour = GetDefaultAttributes().colFg;
 }
 
 void wxStaticText::SetLabel(const wxString& label)
