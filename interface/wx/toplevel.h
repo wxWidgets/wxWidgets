@@ -388,6 +388,12 @@ public:
         the window icon in the taskbar, and for wxGTK with task bars
         supporting it.
 
+
+        Note that under wxGTK this function relies on support from the
+        desktop environment or window manager: if the current environment
+        does not support window urgency hints, calling this function has no
+        visible effect and no error is reported.
+
     */
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
