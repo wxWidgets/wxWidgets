@@ -1512,7 +1512,7 @@ public:
 
     /**
         Runs the given JavaScript code.
-        
+
         See @ref wxWebViewScriptResult for information about the script result and
         errors.
 
@@ -1531,10 +1531,10 @@ public:
         @param output The string containing the result of the script execution,
             if not @NULL.
         @return @true if there is a result and @a output is filled.
-        
+
         @note When using @c wxWebViewIE, @a output will contain the string
         representation of the executed JavaScript.
-        
+
         @since 2.9.5
         @see RunScriptAsync()
     */
