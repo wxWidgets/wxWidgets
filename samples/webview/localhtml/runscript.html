@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Script Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .page {
+            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body onload="showPage('page1')">
+    <div id="page1" class="page">
+        <h1>Page 1</h1>
+        <p>This is the first page.</p>
+        <p>Click the second button in the wxWidgets window to switch to Page 2.</p>
+    </div>
+
+    <div id="page2" class="page">
+        <h1>Page 2</h1>
+        <p>This is the second page.</p>
+        <p>Click the first button in the wxWidgets window to go back to Page 1.</p>
+    </div>
+
+    <script src="runscript.js"></script>
+</body>
+</html>
