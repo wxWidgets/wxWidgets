@@ -143,7 +143,7 @@ Changes in behaviour not resulting in compilation errors
 - wxDF_TEXT on macOS is now in UTF8 encoding, while it was MacRoman before. This
   was necessary, because more applications do not provide their data
   in this traditional MacRoman encoding anymore. When working with data through
-  a wxTextDataObject no changes are necessary - but if you retrieve raw bytes 
+  a wxTextDataObject no changes are necessary - but if you retrieve raw bytes
   this may mean e.g. changing your converter from wxConvLocal to wxConvUTF8
 
 Changes in behaviour which may result in build errors
