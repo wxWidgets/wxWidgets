@@ -260,32 +260,58 @@ public:
     wxWindow *SetTmpDefaultItem(wxWindow *win);
 
 
-    // Class for saving/restoring fields describing the window geometry.
+    // Class for saving/restoring values describing the window geometry.
     //
     // This class is used by the functions below to allow saving the geometry
     // of the window and restoring it later. The components describing geometry
     // are platform-dependent, so there is no struct containing them and
     // instead the methods of this class are used to save or [try to] restore
     // whichever components are used under the current platform.
-    class GeometrySerializer
+    class GeometryStore
     {
     public:
-        virtual ~GeometrySerializer() = default;
+        virtual ~GeometryStore() = default;
 
-        // If saving a field returns false, it's fatal error and SaveGeometry()
+        // If saving a value returns false, it's fatal error and SaveGeometry()
         // will return false.
-        virtual bool SaveField(const wxString& name, int value) const = 0;
+        virtual bool SaveValue(const wxString& name, int value) = 0;
 
-        // If restoring a field returns false, it just means that the field is
+        // If restoring a value returns false, it just means that the value is
         // not present and RestoreToGeometry() still continues with restoring
         // the other values.
-        virtual bool RestoreField(const wxString& name, int* value) = 0;
+        virtual bool RestoreValue(const wxString& name, int* value) const = 0;
     };
 
     // Save the current window geometry using the provided serializer and
     // restore the window to the previously saved geometry.
-    bool SaveGeometry(const GeometrySerializer& ser) const;
-    bool RestoreToGeometry(GeometrySerializer& ser);
+    bool SaveGeometry(GeometryStore& store) const;
+    bool RestoreToGeometry(const GeometryStore& store);
+
+
+    // Deprecated class using wrong const qualifiers for its member functions,
+    // change your code to use GeometryStore instead and don't use in new code.
+    class wxDEPRECATED_MSG("Use GeometryStore instead") GeometrySerializer
+        : public GeometryStore
+    {
+    public:
+        virtual bool SaveValue(const wxString& name, int value) override
+        {
+            return SaveField(name, value);
+        }
+
+        virtual bool RestoreValue(const wxString& name, int* value) const override
+        {
+            // gcc 4.8 gives a warning for const-cast below.
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+            return const_cast<GeometrySerializer*>(this)->RestoreField(name, value);
+
+            wxGCC_WARNING_RESTORE(deprecated-declarations)
+        }
+
+        virtual bool SaveField(const wxString& name, int value) const = 0;
+        virtual bool RestoreField(const wxString& name, int* value) = 0;
+    };
 
 
     // implementation only from now on
