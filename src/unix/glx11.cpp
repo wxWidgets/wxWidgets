@@ -500,7 +500,7 @@ wxGLContextX11::wxGLContextX11(wxGLCanvas *win,
     wxCHECK_RET(tempContext, "glXCreateContext failed" );
 
     GLXFBConfig* const fbc = winX11->GetGLXFBConfig();
-    PFNGLXCREATECONTEXTATTRIBSARBPROC wx_glXCreateContextAttribsARB = 0;
+    PFNGLXCREATECONTEXTATTRIBSARBPROC wx_glXCreateContextAttribsARB = nullptr;
     if (fbc)
     {
         wx_glXCreateContextAttribsARB =
