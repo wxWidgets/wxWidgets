@@ -2332,6 +2332,9 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 
     wxCHECK_MSG(page, false, wxT("page pointer must be non-null"));
 
+    wxCHECK_MSG(page->GetParent() == this, false,
+                wxT("page must be a child of the notebook"));
+
     wxAuiNotebookPage info;
     info.window = page;
     info.caption = caption;
