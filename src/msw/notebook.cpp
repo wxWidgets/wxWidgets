@@ -1701,7 +1701,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
     if ( ::IsRectEmpty(&rc) )
         return 0;
 
-    wxUxThemeHandle theme(this, L"TAB", L"DarkMode_DarkTheme::Tab");
+    wxUxThemeHandle theme(this, L"TAB", L"DarkMode::ItemsView");
     if ( !theme )
         return 0;
 
@@ -1780,7 +1780,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
     }
     else // No solid background colour, try to use themed background.
     {
-        wxUxThemeHandle theme(child, L"TAB", L"DarkMode_DarkTheme::Tab");
+        wxUxThemeHandle theme(child, L"TAB", L"DarkMode::ItemsView");
         if ( theme )
         {
             // we have the content area (page size), but we need to draw all of the
