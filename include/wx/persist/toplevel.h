@@ -28,12 +28,12 @@
 //                  as maximized/iconized/restore state
 // ----------------------------------------------------------------------------
 
-class wxPersistentTLW : public wxPersistentWindow<wxTopLevelWindow>,
-                        private wxTopLevelWindow::GeometrySerializer
+class wxPersistentTLW : public wxPersistentWindow<wxTopLevelWindow>
 {
 public:
     wxPersistentTLW(wxTopLevelWindow *tlw)
-        : wxPersistentWindow<wxTopLevelWindow>(tlw)
+        : wxPersistentWindow<wxTopLevelWindow>(tlw),
+          m_store{this}
     {
     }
 
@@ -41,28 +41,45 @@ public:
     {
         const wxTopLevelWindow * const tlw = Get();
 
-        tlw->SaveGeometry(*this);
+        tlw->SaveGeometry(m_store);
     }
 
     virtual bool Restore() override
     {
         wxTopLevelWindow * const tlw = Get();
 
-        return tlw->RestoreToGeometry(*this);
+        return tlw->RestoreToGeometry(m_store);
     }
 
     virtual wxString GetKind() const override { return wxASCII_STR(wxPERSIST_TLW_KIND); }
 
 private:
-    virtual bool SaveField(const wxString& name, int value) const override
+    class PersistentStore : public wxTopLevelWindow::GeometryStore
     {
-        return SaveValue(name, value);
-    }
+    public:
+        explicit PersistentStore(wxPersistentTLW *pers)
+            : m_pers(pers)
+        {
+        }
 
-    virtual bool RestoreField(const wxString& name, int* value) override
-    {
-        return RestoreValue(name, value);
-    }
+        virtual bool SaveValue(const wxString& name, int value) override
+        {
+            return m_pers->SaveValue(name, value);
+        }
+
+        virtual bool RestoreValue(const wxString& name, int* value) const override
+        {
+            return m_pers->RestoreValue(name, value);
+        }
+
+    private:
+        wxPersistentTLW* const m_pers;
+    };
+
+    // This is mutable because we need to be able to call SaveValue() from
+    // const Save(). It is fine for the object which doesn't have any internal
+    // state anyhow.
+    mutable PersistentStore m_store;
 };
 
 inline wxPersistentObject *wxCreatePersistentObject(wxTopLevelWindow *tlw)

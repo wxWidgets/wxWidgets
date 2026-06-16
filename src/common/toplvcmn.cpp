@@ -333,19 +333,19 @@ wxWindow* wxTopLevelWindowBase::SetTmpDefaultItem(wxWindow* win)
 // Saving/restoring geometry
 // ----------------------------------------------------------------------------
 
-bool wxTopLevelWindowBase::SaveGeometry(const GeometrySerializer& ser) const
+bool wxTopLevelWindowBase::SaveGeometry(GeometryStore& store) const
 {
     wxTLWGeometry geom;
     if ( !geom.GetFrom(static_cast<const wxTopLevelWindow*>(this)) )
         return false;
 
-    return geom.Save(ser);
+    return geom.Save(store);
 }
 
-bool wxTopLevelWindowBase::RestoreToGeometry(GeometrySerializer& ser)
+bool wxTopLevelWindowBase::RestoreToGeometry(const GeometryStore& store)
 {
     wxTLWGeometry geom;
-    if ( !geom.Restore(ser) )
+    if ( !geom.Restore(store) )
         return false;
 
     return geom.ApplyTo(static_cast<wxTopLevelWindow*>(this));
