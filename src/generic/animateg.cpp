@@ -450,7 +450,7 @@ void wxGenericAnimationCtrl::DisplayStaticImage()
     // m_bmpStaticReal will be updated only if necessary...
     UpdateStaticImage();
 
-    if (m_bmpStaticReal.IsOk())
+    if (m_bmpStaticReal.IsOk() && m_backingStore.IsOk())
     {
         // copy the inactive bitmap in the backing store
         // eventually using the mask or the alpha if the static
