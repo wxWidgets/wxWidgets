@@ -2199,7 +2199,7 @@ TEST_CASE_METHOD(GridTestCase,
         int row, col, rows, cols;
 
         // Check main cell.
-        row = multi.row,
+        row = multi.row;
         col = multi.col;
         wxGrid::CellSpan span = m_grid->GetCellSize(row, col, &rows, &cols);
 

@@ -463,13 +463,13 @@ static bool DoCheckConnection()
 
     wxSocketClient sock;
     sock.SetTimeout(10);    // 10 secs
-    bool online = sock.Connect(addr) &&
-                    (sock.Write(HTTP_GET, strlen(HTTP_GET)), sock.WaitForRead(1));
-
-    return online;
-#else
-    return false;
+    if (sock.Connect(addr))
+    {
+        sock.Write(HTTP_GET, strlen(HTTP_GET));
+        return sock.WaitForRead(1);
+    }
 #endif
+    return false;
 }
 
 extern bool IsNetworkAvailable()
