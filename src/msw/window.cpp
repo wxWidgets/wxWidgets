@@ -5555,6 +5555,24 @@ void wxWindowMSW::MSWSetEraseBgHook(wxWindow *child)
 bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 {
     HBRUSH hbr = (HBRUSH)MSWGetBgBrush(hDC);
+
+    // If we have no custom brush and we are in dark mode and there is a
+    // system colour background, make a dark mode brush. Otherwise, the
+    // default system erase would be light mode.
+    if ( !hbr && wxMSWDarkMode::IsActive() )
+    {
+        // Get window class background, which is WNDCLASS::hbrBackground.
+        const auto bg = GetClassLongPtr(m_hWnd, GCLP_HBRBACKGROUND);
+        // Check if background is a system colour index plus 1.
+        if ( bg > 0 && bg <= wxSYS_COLOUR_MAX )
+        {
+            // Make brush for that colour.
+            wxColour col = wxSystemSettings::GetColour(wxSystemColour(bg - 1));
+            wxBrush* brush = wxTheBrushList->FindOrCreateBrush(col);
+            hbr = GetHbrushOf(*brush);
+        }
+    }
+
     if ( !hbr )
         return false;
 
