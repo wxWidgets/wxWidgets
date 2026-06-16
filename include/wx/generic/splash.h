@@ -79,7 +79,6 @@ public:
     wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER);
 
     void OnPaint(wxPaintEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
 
     void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
     wxBitmap& GetBitmap() { return m_bitmap; }
