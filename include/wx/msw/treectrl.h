@@ -310,7 +310,11 @@ private:
     bool MSWDeleteItem(const wxTreeItemId& item);
 
     void OnDPIChanged(wxDPIChangedEvent& event);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
+    // Set the native control's text and background colours to the
+    // current foreground and background colours.
+    void UpdateNativeColours();
 
     // Return guaranteed non-null non-owning pointer to the attribute for the
     // given item.
