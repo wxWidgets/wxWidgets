@@ -210,6 +210,8 @@ namespace
 {
 
 // This is used to store context used for determining the best tree size.
+//
+// It should only be used for non-empty tree, i.e. with a valid root item.
 class TreeSizer
 {
 public:
@@ -224,11 +226,7 @@ public:
 
     wxSize GetSize() const
     {
-        const wxTreeItemId id = treeCtrl->GetRootItem();
-        if ( !id.IsOk() )
-            return wxSize(0, 0);
-
-        return DoGetSizeOf(id, 1);
+        return DoGetSizeOf(treeCtrl->GetRootItem(), 1);
     }
 
 private:
@@ -295,6 +293,13 @@ wxSize TreeSizer::DoGetSizeOf(wxTreeItemId id, int depth) const
 
 wxSize wxTreeCtrlBase::DoGetBestSize() const
 {
+    const wxTreeItemId root = GetRootItem();
+    if ( !root.IsOk() )
+    {
+        // need some minimal size even for empty tree
+        return wxControl::DoGetBestSize();
+    }
+
     wxSize size;
 
     // this doesn't really compute the total bounding rectangle of all items
@@ -303,7 +308,7 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
 
     if (GetQuickBestSize())
     {
-        for ( wxTreeItemId item = GetRootItem();
+        for ( wxTreeItemId item = root;
               item.IsOk();
               item = GetLastChild(item) )
         {
@@ -327,11 +332,15 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
         size = TreeSizer{this}.GetSize();
     }
 
-    // need some minimal size even for empty tree
-    if ( !size.x || !size.y )
-        size = wxControl::DoGetBestSize();
-    else // add border size
-        size += GetWindowBorderSize();
+    // Arbitrarily limit the tree height to ~20 lines of text because we don't
+    // want to make it too high even if it contains a lot of items.
+    const int maxHeight = 25 * GetCharHeight();
+
+    if ( size.y > maxHeight )
+        size.y = maxHeight;
+
+    // add border size
+    size += GetWindowBorderSize();
 
     return size;
 }
