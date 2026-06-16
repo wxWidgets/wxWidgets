@@ -274,6 +274,8 @@ void wxNotebook::MSWSetDarkOrLightMode(SetMode setmode)
     // Background must always be set, unless there is a custom colour.
     if ( !m_hasBgCol )
         m_backgroundColour = GetDefaultAttributes().colBg;
+
+    UpdateBgBrush();
 }
 
 int wxNotebook::MSWGetToolTipMessage() const
@@ -1699,7 +1701,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
     if ( ::IsRectEmpty(&rc) )
         return 0;
 
-    wxUxThemeHandle theme(this, L"TAB");
+    wxUxThemeHandle theme(this, L"TAB", L"DarkMode::ItemsView");
     if ( !theme )
         return 0;
 
@@ -1778,7 +1780,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
     }
     else // No solid background colour, try to use themed background.
     {
-        wxUxThemeHandle theme(child, L"TAB");
+        wxUxThemeHandle theme(child, L"TAB", L"DarkMode::ItemsView");
         if ( theme )
         {
             // we have the content area (page size), but we need to draw all of the
