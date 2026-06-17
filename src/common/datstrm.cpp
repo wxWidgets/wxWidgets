@@ -20,6 +20,8 @@
     #include "wx/math.h"
 #endif //WX_PRECOMP
 
+#include <vector>
+
 namespace
 {
 
@@ -208,13 +210,12 @@ static
 void DoReadLL(T *buffer, size_t size, wxInputStream *input, bool be_order)
 {
     typedef T DataType;
-    unsigned char *pchBuffer = new unsigned char[size * 8];
+    std::vector<unsigned char> pchBuffer(size * 8);
     // TODO: Check for overflow when size is of type uint and is > than 512m
-    if ( input->Read(pchBuffer, size * 8).LastRead() != size * 8 )
+    if ( input->Read(pchBuffer.data(), size * 8).LastRead() != size * 8 )
     {
         // Stream is truncated, don't use the partially read data.
         input->Reset(wxSTREAM_READ_ERROR);
-        delete[] pchBuffer;
         return;
     }
     size_t idx_base = 0;
@@ -246,14 +247,13 @@ void DoReadLL(T *buffer, size_t size, wxInputStream *input, bool be_order)
             idx_base += 8;
         }
     }
-    delete[] pchBuffer;
 }
 
 template <class T>
 static void DoWriteLL(const T *buffer, size_t size, wxOutputStream *output, bool be_order)
 {
     typedef T DataType;
-    unsigned char *pchBuffer = new unsigned char[size * 8];
+    std::vector<unsigned char> pchBuffer(size * 8);
     size_t idx_base = 0;
     if ( be_order )
     {
@@ -287,8 +287,7 @@ static void DoWriteLL(const T *buffer, size_t size, wxOutputStream *output, bool
     }
 
     // TODO: Check for overflow when size is of type uint and is > than 512m
-    output->Write(pchBuffer, size * 8);
-    delete[] pchBuffer;
+    output->Write(pchBuffer.data(), size * 8);
 }
 
 template <class T>
