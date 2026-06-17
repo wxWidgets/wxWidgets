@@ -1,0 +1,1 @@
+wxAll: Treat truncated reads as errors in wxDataInputStream (dxbjavid, #26600).
