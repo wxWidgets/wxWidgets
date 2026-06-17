@@ -911,6 +911,14 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
 
     // round length up to a whole number of blocks
     size_t len = m_hdr->GetOctal(TAR_SIZE);
+
+    // An extended header just holds metadata records and is meant to be small.
+    static const size_t MAX_EXTENDED_HEADER = 1024 * 1024;
+    if (len > MAX_EXTENDED_HEADER) {
+        wxLogWarning(_("invalid data in extended tar header"));
+        return false;
+    }
+
     size_t size = RoundUpSize(len);
 
     // read in the whole header since it should be small
