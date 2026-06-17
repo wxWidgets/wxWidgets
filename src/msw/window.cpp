@@ -4105,6 +4105,7 @@ WXHWND wxWindowMSW::MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* 
 
 void wxWindowMSW::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
+    // This is the default theme name for dark mode.
     // This theme works for a few controls (buttons, texts, comboboxes) and
     // doesn't seem to do any harm for those that don't support it, so use it
     // by default.
@@ -4114,7 +4115,15 @@ void wxWindowMSW::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 void wxWindowMSW::MSWSetDarkOrLightMode(SetMode WXUNUSED(setmode))
 {
     MSWDarkModeSupport support;
-    MSWGetDarkModeSupport(support);
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        MSWGetDarkModeSupport(support);
+    }
+    else
+    {
+        // This is the theme name for light mode.
+        support.themeName = L"Explorer";
+    }
 
     // This updates scroll bars, if there are any.
     wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
