@@ -18,6 +18,7 @@
 #include "wx/webview.h"
 
 class wxWebViewEdgeImpl;
+struct ICoreWebView2PrintSettings;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewEdge : public wxWebView
 {
@@ -128,6 +129,8 @@ protected:
 
 private:
     wxWebViewEdgeImpl* m_impl;
+
+    bool DoCallPrintToPdf(const wxString& filePath, ICoreWebView2PrintSettings* printSettings);
 
     void OnSize(wxSizeEvent& event);
 

@@ -1472,11 +1472,8 @@ void wxWebViewEdge::Print(const wxPrintData& printData, int flags)
 }
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
-bool wxWebViewEdge::PrintToPDF(const wxString& filePath)
+bool wxWebViewEdge::DoCallPrintToPdf(const wxString& filePath, ICoreWebView2PrintSettings* printSettings)
 {
-    if (!m_impl->m_webView)
-        return false;
-
     wxCOMPtr<ICoreWebView2_7> webView7;
     if (FAILED(m_impl->m_webView->QueryInterface(IID_PPV_ARGS(&webView7))))
         return false;
@@ -1484,14 +1481,14 @@ bool wxWebViewEdge::PrintToPDF(const wxString& filePath)
     const wxString filePathCopy = filePath;
     HRESULT hr = webView7->PrintToPdf(
         filePath.wc_str(),
-        nullptr,
+        printSettings,
         Callback<ICoreWebView2PrintToPdfCompletedHandler>(
             [this, filePathCopy](HRESULT errorCode, BOOL isSuccessful) -> HRESULT
             {
-                wxWebViewEvent event(wxEVT_WEBVIEW_PDF_SAVED, GetId(), filePathCopy, wxString());
-                event.SetInt((SUCCEEDED(errorCode) && isSuccessful) ? 1 : 0);
-                event.SetEventObject(this);
-                AddPendingEvent(event);
+                wxWebViewEvent* event = new wxWebViewEvent(wxEVT_WEBVIEW_PDF_SAVED, GetId(), filePathCopy, wxString());
+                event->SetInt((SUCCEEDED(errorCode) && isSuccessful) ? 1 : 0);
+                event->SetEventObject(this);
+                QueueEvent(event);
                 return S_OK;
             }).Get());
 
@@ -1503,14 +1500,18 @@ bool wxWebViewEdge::PrintToPDF(const wxString& filePath)
     return true;
 }
 
-#if wxUSE_PRINTING_ARCHITECTURE
-bool wxWebViewEdge::PrintToPDF(const wxString& filePath, const wxPrintData& printData)
+bool wxWebViewEdge::PrintToPDF(const wxString& filePath)
 {
     if (!m_impl->m_webView)
         return false;
 
-    wxCOMPtr<ICoreWebView2_7> webView7;
-    if (FAILED(m_impl->m_webView->QueryInterface(IID_PPV_ARGS(&webView7))))
+    return DoCallPrintToPdf(filePath, nullptr);
+}
+
+#if wxUSE_PRINTING_ARCHITECTURE
+bool wxWebViewEdge::PrintToPDF(const wxString& filePath, const wxPrintData& printData)
+{
+    if (!m_impl->m_webView)
         return false;
 
     wxCOMPtr<ICoreWebView2Environment6> environment6;
@@ -1541,26 +1542,7 @@ bool wxWebViewEdge::PrintToPDF(const wxString& filePath, const wxPrintData& prin
 
     printSettings->put_ShouldPrintHeaderAndFooter(FALSE);
 
-    const wxString filePathCopy = filePath;
-    hr = webView7->PrintToPdf(
-        filePath.wc_str(),
-        printSettings,
-        Callback<ICoreWebView2PrintToPdfCompletedHandler>(
-            [this, filePathCopy](HRESULT errorCode, BOOL isSuccessful) -> HRESULT
-            {
-                wxWebViewEvent event(wxEVT_WEBVIEW_PDF_SAVED, GetId(), filePathCopy, wxString());
-                event.SetInt((SUCCEEDED(errorCode) && isSuccessful) ? 1 : 0);
-                event.SetEventObject(this);
-                AddPendingEvent(event);
-                return S_OK;
-            }).Get());
-
-    if (FAILED(hr))
-    {
-        wxLogApiError("ICoreWebView2_7::PrintToPdf", hr);
-        return false;
-    }
-    return true;
+    return DoCallPrintToPdf(filePath, printSettings);
 }
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
