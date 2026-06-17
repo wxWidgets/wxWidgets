@@ -4118,6 +4118,19 @@ void wxWindowMSW::MSWSetDarkOrLightMode(SetMode WXUNUSED(setmode))
 
     // This updates scroll bars, if there are any.
     wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
+
+    // If the window class has a background brush, update it.
+    // This is the value in WNDCLASS::hbrBackground.
+    if ( ::GetClassLongPtr(m_hWnd, GCLP_HBRBACKGROUND) != 0 )
+    {
+        // The brush value was originally a colour index plus 1, for example
+        // wxSYS_COLOUR_WINDOW+1. Assume that colour index matches the colour
+        // returned by GetDefaultAttributes().
+        wxColour colBg = GetDefaultAttributes().colBg;
+        wxBrush* brush = wxTheBrushList->FindOrCreateBrush(colBg);
+        HBRUSH hbr = GetHbrushOf(*brush);
+        ::SetClassLongPtr(m_hWnd, GCLP_HBRBACKGROUND, LONG_PTR(hbr));
+    }
 }
 
 // ===========================================================================
