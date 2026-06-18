@@ -50,8 +50,7 @@ class wxIPCMessageBase;
 // Global variables
 // --------------------------------------------------------------------------
 
-wxCRIT_SECT_DECLARE_MEMBER(gs_critical_read);
-wxCRIT_SECT_DECLARE_MEMBER(gs_critical_write);
+wxCRIT_SECT_DECLARE_MEMBER(gs_critical_io);
 
 // --------------------------------------------------------------------------
 // macros and constants
@@ -1614,15 +1613,17 @@ bool wxTCPEventHandler::FindMessage(IPCCode code,
             // The correct message has been found, but there may still be
             // messages waiting in the socket data buffer. Place an event in
             // the socket event queue so that they will be read out later.
-
-            if (socket && socket->GetEventHandler())
+            if ( PeekAtMessageInSocket(socket) )
             {
-                wxSocketEvent event(wxID_ANY);
-                event.m_event = wxSOCKET_INPUT;
-                event.m_clientData = socket->GetClientData();
-                event.SetEventObject(socket);
+                if (socket && socket->GetEventHandler())
+                {
+                    wxSocketEvent event(wxID_ANY);
+                    event.m_event = wxSOCKET_INPUT;
+                    event.m_clientData = socket->GetClientData();
+                    event.SetEventObject(socket);
 
-                socket->GetEventHandler()->AddPendingEvent(event);
+                    socket->GetEventHandler()->AddPendingEvent(event);
+                }
             }
 
             if (return_msgptr)
@@ -1669,9 +1670,9 @@ void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
 // message was read.  The returned message must be freed by the caller.
 wxIPCMessageBase* wxTCPEventHandler::ReadMessageFromSocket(wxSocketBase* socket)
 {
-    // ensure that we read from the socket without any read call from another
-    // thread
-    wxCRIT_SECT_LOCKER(lock, gs_critical_read);
+    // Serialize all socket I/O: wxSocketBase is not safe for concurrent use
+    // from multiple threads on the same connection.
+    wxCRIT_SECT_LOCKER(lock, gs_critical_io);
 
     wxIPCMessageNull* null_msg = new wxIPCMessageNull(socket);
     if ( !null_msg->ReadIPCCode() )
@@ -1742,9 +1743,9 @@ wxIPCMessageBase* wxTCPEventHandler::ReadMessageFromSocket(wxSocketBase* socket)
 // Writes this message object to the socket.
 bool wxTCPEventHandler::WriteMessageToSocket(wxIPCMessageBase& msg)
 {
-    // ensure that we write to the socket without any write call from another
-    // thread
-    wxCRIT_SECT_LOCKER(lock, gs_critical_write);
+    // Serialize all socket I/O: wxSocketBase is not safe for concurrent use
+    // from multiple threads on the same connection.
+    wxCRIT_SECT_LOCKER(lock, gs_critical_io);
 
     return msg.WriteIPCCode() && msg.DataToSocket();
 };
@@ -1754,7 +1755,9 @@ bool wxTCPEventHandler::WriteMessageToSocket(wxIPCMessageBase& msg)
 // IPCCode.
 bool wxTCPEventHandler::PeekAtMessageInSocket(wxSocketBase* socket)
 {
-    wxCRIT_SECT_LOCKER(lock, gs_critical_read);
+    // Serialize all socket I/O: wxSocketBase is not safe for concurrent use
+    // from multiple threads on the same connection.
+    wxCRIT_SECT_LOCKER(lock, gs_critical_io);
 
     if ( !socket || !socket->IsOk() )
         return false;
