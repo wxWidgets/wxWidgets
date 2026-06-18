@@ -49,7 +49,7 @@ function readInt($file)
 function readString($file)
 {
   $result="";
-  while (($c = fgetc($file)) !== false && ord($c) !== 0) 
+  while (($c = fgetc($file)) !== false && ord($c) !== 0)
   {
     $result.=$c;
   }
@@ -216,7 +216,7 @@ function combine_results($results,&$docs)
 function filter_results($docs,&$requiredWords,&$forbiddenWords)
 {
   $filteredDocs=array();
-  foreach ($docs as $key => $val) 
+  foreach ($docs as $key => $val)
   {
     $words = &$docs[$key]["words"];
     $copy=1; // copy entry by default
