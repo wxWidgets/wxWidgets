@@ -38,23 +38,37 @@ function report_matches()
 
 function readInt($file)
 {
-  $b1 = ord(fgetc($file)); $b2 = ord(fgetc($file));
-  $b3 = ord(fgetc($file)); $b4 = ord(fgetc($file));
-  return ($b1<<24)|($b2<<16)|($b3<<8)|$b4;
+  $b1 = fgetc($file); if ($b1 === false) return 0;
+  $b2 = fgetc($file); if ($b2 === false) return 0;
+  $b3 = fgetc($file); if ($b3 === false) return 0;
+  $b4 = fgetc($file); if ($b4 === false) return 0;
+
+  return (ord($b1)<<24)|(ord($b2)<<16)|(ord($b3)<<8)|ord($b4);
 }
 
 function readString($file)
 {
   $result="";
-  while (ord($c=fgetc($file))) $result.=$c;
+  while (($c = fgetc($file)) !== false && ord($c) !== 0) 
+  {
+    $result.=$c;
+  }
   return $result;
 }
 
 function readHeader($file)
 {
-  $header =fgetc($file); $header.=fgetc($file);
-  $header.=fgetc($file); $header.=fgetc($file);
-  return $header;
+  $h1 = fgetc($file);
+  $h2 = fgetc($file);
+  $h3 = fgetc($file);
+  $h4 = fgetc($file);
+
+  if ($h1 === false || $h2 === false || $h3 === false || $h4 === false)
+  {
+    return "";
+  }
+
+  return $h1 . $h2 . $h3 . $h4;
 }
 
 function computeIndex($word)
@@ -62,10 +76,10 @@ function computeIndex($word)
   // Simple hashing that allows for substring search
   if (strlen($word)<2) return -1;
   // high char of the index
-  $hi = ord($word{0});
+  $hi = ord($word[0]);
   if ($hi==0) return -1;
   // low char of the index
-  $lo = ord($word{1});
+  $lo = ord($word[1]);
   if ($lo==0) return -1;
   // return index
   return $hi*256+$lo;
@@ -87,7 +101,7 @@ function search($file,$word,&$statsList)
       while ($w)
       {
         $statIdx = readInt($file);
-        if ($word==substr($w,0,strlen($word)))
+        if ($w !== false && $word == substr($w, 0, strlen($word)))
         { // found word that matches (as substring)
           $statsList[$count++]=array(
               "word"=>$word,
@@ -202,7 +216,7 @@ function combine_results($results,&$docs)
 function filter_results($docs,&$requiredWords,&$forbiddenWords)
 {
   $filteredDocs=array();
-  while (list ($key, $val) = each ($docs)) 
+  foreach ($docs as $key => $val) 
   {
     $words = &$docs[$key]["words"];
     $copy=1; // copy entry by default
@@ -322,8 +336,8 @@ function run_query($query)
   $word=strtok($query," ");
   while ($word) // for each word in the search query
   {
-    if (($word{0}=='+')) { $word=substr($word,1); $requiredWords[]=$word; }
-    if (($word{0}=='-')) { $word=substr($word,1); $forbiddenWords[]=$word; }
+    if (($word[0]=='+')) { $word=substr($word,1); $requiredWords[]=$word; }
+    if (($word[0]=='-')) { $word=substr($word,1); $forbiddenWords[]=$word; }
     if (!in_array($word,$foundWords))
     {
       $foundWords[]=$word;
