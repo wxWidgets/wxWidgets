@@ -3877,13 +3877,19 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     // The EDIT theme gives a good general purpose border in light mode.
                     // There does not seem to be a dark mode EDIT theme that looks good.
-                    // The ListView theme below looks good in dark mode.
-                    wxUxThemeHandle hTheme(this, L"EDIT", L"DarkMode_DarkTheme::ListView");
+                    // The ListView class below looks good in dark mode on Windows 11.
+                    // Windows 10 does not have DarkMode_DarkTheme. The Button class
+                    // below looks good in dark mode on Windows 10 (but not Windows 11).
+                    const auto darkTheme = wxGetWinVersion() > wxWinVersion_10 ?
+                        L"DarkMode_DarkTheme::ListView" :
+                        L"DarkMode_Explorer::Button";
+                    wxUxThemeHandle hTheme(this, L"EDIT", darkTheme);
 
-                    // Ensure that the part and state we use have the same
-                    // values for both EDIT and ListView.
+                    // The part and state values match for the themes we use.
                     static_assert((int)EP_EDITTEXT == (int)LVP_LISTITEM, "parts differ?");
+                    static_assert((int)EP_EDITTEXT == (int)BP_PUSHBUTTON, "parts differ?");
                     static_assert((int)ETS_NORMAL == (int)LISS_NORMAL, "states differ?");
+                    static_assert((int)ETS_NORMAL == (int)PBS_NORMAL, "states differ?");
 
                     // Make sure the background is in a proper state
                     if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
