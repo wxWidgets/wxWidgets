@@ -225,10 +225,10 @@ void wxChoice::MSWSetDarkOrLightMode(SetMode setmode)
     WinStruct<COMBOBOXINFO> info;
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
-        // The default theme does not look good on Windows 11 starting with
-        // build 26300.8553. DarkMode_DarkTheme looks OK, but Windows 10 does
-        // not have that.
-        if ( wxGetWinVersion() > wxWinVersion_10 )
+        // The default theme does not look good on starting with Windows 11
+        // build 26300.8553. DarkMode_DarkTheme looks OK and was available
+        // starting with Windows 11 build 26200.
+        if ( wxCheckOsVersion(10, 0, 26200) )
             wxMSWDarkMode::AllowForWindow(info.hwndList, L"DarkMode_DarkTheme");
         else
             wxMSWDarkMode::AllowForWindow(info.hwndList);
