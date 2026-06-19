@@ -765,10 +765,10 @@ wxGridCellCoords wxGridSelection::GetExtensionAnchor() const
 
 wxGridCellCoordsArray wxGridSelection::GetCellSelection() const
 {
-    if ( m_selectionMode != wxGrid::wxGridSelectCells )
-        return wxGridCellCoordsArray();
-
     wxGridCellCoordsArray cells;
+    if ( m_selectionMode != wxGrid::wxGridSelectCells )
+        return cells;
+
     const size_t count = m_selection.size();
     cells.reserve(count);
     for ( size_t n = 0; n < count; n++ )
@@ -816,9 +816,11 @@ wxGridCellCoordsArray wxGridSelection::GetBlockSelectionBottomRight() const
 // is, anyhow, the best we can do.
 wxArrayInt wxGridSelection::GetRowSelection() const
 {
+    wxArrayInt result;
+
     if ( m_selectionMode == wxGrid::wxGridSelectColumns ||
             m_selectionMode == wxGrid::wxGridSelectNone )
-        return wxArrayInt();
+        return result;
 
     wxIntSortedArray uniqueRows;
     const size_t count = m_selection.size();
@@ -836,7 +838,6 @@ wxArrayInt wxGridSelection::GetRowSelection() const
         }
     }
 
-    wxArrayInt result;
     result.reserve(uniqueRows.size());
     for( size_t i = 0; i < uniqueRows.size(); ++i )
     {
@@ -848,9 +849,11 @@ wxArrayInt wxGridSelection::GetRowSelection() const
 // See comments for GetRowSelection().
 wxArrayInt wxGridSelection::GetColSelection() const
 {
+    wxArrayInt result;
+
     if ( m_selectionMode == wxGrid::wxGridSelectRows ||
             m_selectionMode == wxGrid::wxGridSelectNone )
-        return wxArrayInt();
+        return result;
 
     wxIntSortedArray uniqueCols;
     const size_t count = m_selection.size();
@@ -868,7 +871,6 @@ wxArrayInt wxGridSelection::GetColSelection() const
         }
     }
 
-    wxArrayInt result;
     result.reserve(uniqueCols.size());
     for( size_t i = 0; i < uniqueCols.size(); ++i )
     {

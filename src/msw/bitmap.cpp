@@ -1740,11 +1740,12 @@ wxBitmap wxMask::GetBitmap() const
     BITMAP bm;
     ::GetObject(m_maskBitmap, sizeof(bm), (LPVOID)&bm);
 
+    wxBitmap bmp;
     HBITMAP hNewBitmap = ::CreateBitmapIndirect(&bm);
     if ( !hNewBitmap )
     {
         wxLogLastError(wxS("CreateBitmapIndirect"));
-        return wxNullBitmap;
+        return bmp;
     }
 
     // Copy the bitmap.
@@ -1763,7 +1764,6 @@ wxBitmap wxMask::GetBitmap() const
     ::DeleteDC(hdcMem);
 
     // Create and return a new wxBitmap.
-    wxBitmap bmp;
     bmp.InitFromHBITMAP((WXHBITMAP)hNewBitmap, bm.bmWidth, bm.bmHeight, bm.bmBitsPixel);
 
     return bmp;

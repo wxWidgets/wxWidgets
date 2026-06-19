@@ -41,9 +41,11 @@
 #if wxUSE_DETECT_SM
 static wxString GetSM()
 {
+    wxString ret;
+
     wxX11Display dpy;
     if ( !dpy )
-        return wxEmptyString;
+        return ret;
 
     char smerr[256];
     char *client_id;
@@ -60,11 +62,11 @@ static wxString GetSM()
         {
             wxLogDebug("Failed to connect to session manager: %s", smerr);
         }
-        return wxEmptyString;
+        return ret;
     }
 
     char *vendor = SmcVendor(smc_conn);
-    wxString ret = wxString::FromAscii( vendor );
+    ret = wxString::FromAscii( vendor );
     free(vendor);
 
     SmcCloseConnection(smc_conn, 0, nullptr);

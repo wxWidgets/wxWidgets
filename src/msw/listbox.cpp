@@ -435,13 +435,13 @@ int wxListBox::GetSelection() const
 // Find string for position
 wxString wxListBox::GetString(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), wxEmptyString,
+    wxString result;
+    wxCHECK_MSG( IsValid(n), result,
                  wxT("invalid index in wxListBox::GetString") );
 
     int len = ListBox_GetTextLen(GetHwnd(), n);
 
     // +1 for terminating NUL
-    wxString result;
     ListBox_GetText(GetHwnd(), n, (wxChar*)wxStringBuffer(result, len + 1));
 
     return result;

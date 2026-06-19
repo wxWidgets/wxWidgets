@@ -6465,13 +6465,13 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxReadO
 /// Get the bullet text for this paragraph.
 wxString wxRichTextParagraph::GetBulletText()
 {
+    wxString text;
     if (GetAttributes().GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE ||
         (GetAttributes().GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_BITMAP))
-        return wxEmptyString;
+        return text;
 
     int number = GetAttributes().GetBulletNumber();
 
-    wxString text;
     if ((GetAttributes().GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_ARABIC) || (GetAttributes().GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_OUTLINE))
     {
         text.Printf(wxT("%d"), number);
@@ -12986,12 +12986,14 @@ wxString wxRichTextDecimalToRoman(long n)
     static wxArrayInt decimalNumbers;
     static wxArrayString romanNumbers;
 
+    wxString roman;
+
     // Clean up arrays
     if (n == -1)
     {
         decimalNumbers.Clear();
         romanNumbers.Clear();
-        return wxEmptyString;
+        return roman;
     }
 
     if (decimalNumbers.GetCount() == 0)
@@ -13014,7 +13016,6 @@ wxString wxRichTextDecimalToRoman(long n)
     }
 
     int i = 0;
-    wxString roman;
 
     while (n > 0 && i < 13)
     {

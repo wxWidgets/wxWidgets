@@ -259,7 +259,7 @@ static wxString wxWinHTTPQueryOptionString(HINTERNET hInternet, DWORD dwOption)
         if ( !bufferLen || (bufferLen % sizeof(wchar_t)) )
         {
             wxLogDebug("Unexpected size of option %lu: %lu", dwOption, bufferLen);
-            return wxString();
+            return result;
         }
 
         wxWCharBuffer resBuf(bufferLen / sizeof(wchar_t) - 1);

@@ -890,21 +890,21 @@ wxGraphicsMatrix wxSVGGraphicsRenderer::CreateMatrix(wxDouble a, wxDouble b,
 
 wxGraphicsPen wxSVGGraphicsRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
-    if ( info.GetStyle() == wxPENSTYLE_TRANSPARENT )
-        return wxNullGraphicsPen;
-
     wxGraphicsPen p;
-    p.SetRefData(new wxSVGGraphicsPenData(this, info));
+
+    if ( info.GetStyle() != wxPENSTYLE_TRANSPARENT )
+        p.SetRefData(new wxSVGGraphicsPenData(this, info));
+
     return p;
 }
 
 wxGraphicsBrush wxSVGGraphicsRenderer::CreateBrush(const wxBrush& brush)
 {
-    if ( !brush.IsOk() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
-        return wxNullGraphicsBrush;
-
     wxGraphicsBrush b;
-    b.SetRefData(new wxSVGGraphicsBrushData(this, brush));
+
+    if ( brush.IsOk() && brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
+        b.SetRefData(new wxSVGGraphicsBrushData(this, brush));
+
     return b;
 }
 
@@ -931,11 +931,11 @@ wxSVGGraphicsRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble start
 
 wxGraphicsFont wxSVGGraphicsRenderer::CreateFont(const wxFont& font, const wxColour& col)
 {
-    if ( !font.IsOk() )
-        return wxNullGraphicsFont;
-
     wxGraphicsFont f;
-    f.SetRefData(new wxSVGGraphicsFontData(this, font, col));
+
+    if ( font.IsOk() )
+        f.SetRefData(new wxSVGGraphicsFontData(this, font, col));
+
     return f;
 }
 
@@ -957,11 +957,11 @@ wxGraphicsFont wxSVGGraphicsRenderer::CreateFontAtDPI(const wxFont& font,
 
 wxGraphicsBitmap wxSVGGraphicsRenderer::CreateBitmap(const wxBitmap& bmp)
 {
-    if ( !bmp.IsOk() )
-        return wxNullGraphicsBitmap;
-
     wxGraphicsBitmap b;
-    b.SetRefData(new wxSVGGraphicsBitmapData(this, bmp));
+
+    if ( bmp.IsOk() )
+        b.SetRefData(new wxSVGGraphicsBitmapData(this, bmp));
+
     return b;
 }
 

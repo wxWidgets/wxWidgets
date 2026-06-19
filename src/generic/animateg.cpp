@@ -58,7 +58,7 @@ wxImage wxAnimationGenericImpl::GetFrame(unsigned int i) const
 {
     wxImage ret;
     if (!m_decoder->ConvertToImage(i, &ret))
-        return wxNullImage;
+        ret.UnRef();
     return ret;
 }
 

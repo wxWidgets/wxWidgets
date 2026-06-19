@@ -878,6 +878,7 @@ bool wxIPV6address::IsLocalHost() const
 
 wxString wxIPV6address::IPAddress() const
 {
+    wxString result;
     union
     {
         in6_addr addr6;
@@ -885,7 +886,7 @@ wxString wxIPV6address::IPAddress() const
     } u;
 
     if ( !GetImpl().GetHostAddress(&u.addr6) )
-        return wxString();
+        return result;
 
     const wxUint8 * const addr = u.bytes;
 
@@ -901,7 +902,6 @@ wxString wxIPV6address::IPAddress() const
             ++prefix_zero_count;
     }
 
-    wxString result;
     if ( prefix_zero_count == 8 )
     {
         result = wxT( "::" );

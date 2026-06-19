@@ -411,7 +411,8 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 
 wxString wxNotebook::GetPageText(size_t nPage) const
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, wxT("notebook page out of range") );
+    wxString str;
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), str, wxT("notebook page out of range") );
 
     wxChar buf[256];
     TC_ITEM tcItem;
@@ -419,7 +420,6 @@ wxString wxNotebook::GetPageText(size_t nPage) const
     tcItem.pszText = buf;
     tcItem.cchTextMax = WXSIZEOF(buf);
 
-    wxString str;
     if ( TabCtrl_GetItem(GetHwnd(), nPage, &tcItem) )
         str = tcItem.pszText;
 

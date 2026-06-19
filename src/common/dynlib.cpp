@@ -213,11 +213,11 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
 /*static*/
 wxString wxDynamicLibrary::GetPluginsDirectory()
 {
+    wxString dir;
 #ifdef __UNIX__
     wxString format = wxGetInstallPrefix();
     if ( format.empty() )
-        return wxEmptyString;
-    wxString dir;
+        return dir;
     format << wxFILE_SEP_PATH
            << wxT("lib") << wxFILE_SEP_PATH
            << wxT("wx") << wxFILE_SEP_PATH
@@ -229,11 +229,8 @@ wxString wxDynamicLibrary::GetPluginsDirectory()
     dir.Printf(format.c_str(),
                wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER);
 #endif
+#endif // __UNIX__
     return dir;
-
-#else // ! __UNIX__
-    return wxEmptyString;
-#endif
 }
 
 

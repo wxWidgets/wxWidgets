@@ -2163,10 +2163,11 @@ static wxString FilterInValue(const wxString& str)
 // quote the string before writing it to file
 static wxString FilterOutValue(const wxString& str)
 {
-   if ( str.empty() )
-      return str;
-
   wxString strResult;
+
+   if ( str.empty() )
+      return strResult;
+
   strResult.Alloc(str.Len());
 
   // quoting is necessary to preserve spaces in the beginning of the string

@@ -97,19 +97,21 @@ public:
 
     wxString GetVerb(size_t i)
     {
+        wxString sTmp;
         if (i > GetLineCount() )
-            return wxEmptyString;
+            return sTmp;
 
-        wxString sTmp = GetLine(i).BeforeFirst(wxT('='));
+        sTmp = GetLine(i).BeforeFirst(wxT('='));
         return sTmp;
     }
 
     wxString GetCmd(size_t i)
     {
+        wxString sTmp;
         if (i > GetLineCount() )
-            return wxEmptyString;
+            return sTmp;
 
-        wxString sTmp = GetLine(i).AfterFirst(wxT('='));
+        sTmp = GetLine(i).AfterFirst(wxT('='));
         return sTmp;
     }
 

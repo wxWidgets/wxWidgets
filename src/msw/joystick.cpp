@@ -428,7 +428,7 @@ wxString wxJoystick::GetProductName() const
 #if !defined(__WINE__) && wxUSE_REGKEY
     JOYCAPS joyCaps;
     if (joyGetDevCaps(m_joystick, &joyCaps, sizeof(joyCaps)) != JOYERR_NOERROR)
-        return wxEmptyString;
+        return str;
 
     auto GetNameFromReg = [this, joyCaps](wxRegKey::StdKey root) -> wxString
     {

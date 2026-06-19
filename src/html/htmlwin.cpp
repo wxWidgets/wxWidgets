@@ -988,10 +988,10 @@ bool wxHtmlWindow::IsSelectionEnabled() const
 #if wxUSE_CLIPBOARD
 wxString wxHtmlWindow::DoSelectionToText(wxHtmlSelection *sel)
 {
-    if ( !sel )
-        return wxEmptyString;
-
     wxString text;
+
+    if ( !sel )
+        return text;
 
     wxHtmlTerminalCellsInterator i(sel->GetFromCell(), sel->GetToCell());
     const wxHtmlCell *prev = nullptr;

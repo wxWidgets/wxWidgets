@@ -1424,13 +1424,14 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
         available.push_back(additionalAvailableLanguage.BeforeFirst('_'));
     }
 
+    wxString lang;
+
     if ( !m_lang.empty() )
     {
         wxLogTrace(TRACE_I18N,
                    "searching for best translation to %s for domain '%s'",
                    m_lang, domain);
 
-        wxString lang;
         if ( available.Index(m_lang) != wxNOT_FOUND )
         {
             lang = m_lang;
@@ -1450,7 +1451,7 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
         return lang;
     }
 
-    const wxString lang = GetPreferredUILanguage(available.AsVector());
+    lang = GetPreferredUILanguage(available.AsVector());
     wxLogTrace(TRACE_I18N, " => using language '%s'", lang);
     return lang;
 }

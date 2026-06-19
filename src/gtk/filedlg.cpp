@@ -577,9 +577,10 @@ void wxFileDialog::SetFilename(const wxString& name)
 
 wxString wxFileDialog::GetFilename() const
 {
-    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
+    wxString currentFilename;
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), currentFilename, "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
 
-    wxString currentFilename(GetFileChooser().GetFilename());
+    currentFilename = GetFileChooser().GetFilename();
     if (currentFilename.empty())
     {
         // m_fc.GetFilename() will return empty until the dialog has been shown

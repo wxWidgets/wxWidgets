@@ -737,11 +737,11 @@ void wxImageDataObject::SetImage(const wxImage& image)
 
 wxImage wxImageDataObject::GetImage() const
 {
-    wxCHECK_MSG(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != nullptr, wxNullImage,
+    wxImage image;
+    wxCHECK_MSG(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != nullptr, image,
         wxIMAGE_FORMAT_NAME " image handler must be installed to use clipboard with image");
 
     wxMemoryInputStream mem(GetData(), GetSize());
-    wxImage image;
     image.LoadFile(mem, wxIMAGE_FORMAT_BITMAP_TYPE);
     return image;
 }

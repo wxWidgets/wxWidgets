@@ -200,11 +200,13 @@ wxString wxPathList::FindValidPath (const wxString& file) const
 
 wxString wxPathList::FindAbsoluteValidPath (const wxString& file) const
 {
+    wxString buf;
+
     wxString f = FindValidPath(file);
     if ( f.empty() || wxIsAbsolutePath(f) )
-        return f;
+        return buf;
 
-    wxString buf = ::wxGetCwd();
+    buf = ::wxGetCwd();
 
     if ( !wxEndsWithPathSeparator(buf) )
     {

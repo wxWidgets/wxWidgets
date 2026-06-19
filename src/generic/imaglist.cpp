@@ -201,11 +201,10 @@ wxBitmap wxGenericImageList::GetBitmap(int index) const
 wxIcon wxGenericImageList::GetIcon(int index) const
 {
     const wxBitmap* bmp = DoGetPtr(index);
-    if (!bmp)
-        return wxNullIcon;
 
     wxIcon icon;
-    icon.CopyFromBitmap(*bmp);
+    if (bmp)
+        icon.CopyFromBitmap(*bmp);
     return icon;
 }
 

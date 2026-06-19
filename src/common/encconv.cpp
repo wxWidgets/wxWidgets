@@ -432,6 +432,8 @@ static bool FindEncoding(const wxFontEncodingArray& arr, wxFontEncoding f)
 
 wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding enc, int platform)
 {
+    wxFontEncodingArray arr;
+
     if (platform == wxPLATFORM_CURRENT)
     {
 #if defined(__WINDOWS__)
@@ -452,13 +454,11 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
 
         default:
             wxFAIL_MSG(wxS("Invalid platform specified"));
-            return wxFontEncodingArray();
+            return arr;
     }
 
     int i, clas, e ;
     const wxFontEncoding *f;
-    wxFontEncodingArray arr;
-
     clas = 0;
     while (EquivalentEncodings[clas][0][0] != STOP)
     {

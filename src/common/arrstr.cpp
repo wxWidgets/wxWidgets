@@ -666,14 +666,15 @@ struct wxStringFragment
 
 wxStringFragment GetFragment(wxString& text)
 {
+    wxStringFragment fragment;
+
     if ( text.empty() )
-        return wxStringFragment();
+        return fragment;
 
     // the maximum length of a sequence of digits that
     // can fit into wxUint64 when converted to a number
     static const ptrdiff_t maxDigitSequenceLength = 19;
 
-    wxStringFragment         fragment;
     wxString::const_iterator it;
 
     for ( it = text.cbegin(); it != text.cend(); ++it )

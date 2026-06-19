@@ -5313,31 +5313,21 @@ wxGraphicsMatrix wxD2DRenderer::CreateMatrix(
 
 wxGraphicsPen wxD2DRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
-    if ( info.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    wxGraphicsPen p;
+    if ( info.GetStyle() != wxPENSTYLE_TRANSPARENT )
     {
-        return wxNullGraphicsPen;
-    }
-    else
-    {
-        wxGraphicsPen p;
         wxD2DPenData* penData = new wxD2DPenData(this, m_direct2dFactory, info);
         p.SetRefData(penData);
-        return p;
     }
+    return p;
 }
 
 wxGraphicsBrush wxD2DRenderer::CreateBrush(const wxBrush& brush)
 {
-    if ( !brush.IsOk() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
-    {
-        return wxNullGraphicsBrush;
-    }
-    else
-    {
-        wxGraphicsBrush b;
+    wxGraphicsBrush b;
+    if ( brush.IsOk() && brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
         b.SetRefData(new wxD2DBrushData(this, brush));
-        return b;
-    }
+    return b;
 }
 
 wxGraphicsBrush wxD2DRenderer::CreateLinearGradientBrush(
@@ -5434,16 +5424,16 @@ wxGraphicsFont wxD2DRenderer::CreateFontAtDPI(const wxFont& font,
                                               const wxRealPoint& dpi,
                                               const wxColour& col)
 {
+    wxGraphicsFont graphicsFont;
     wxD2DFontData* fontData = new wxD2DFontData(this, font, dpi, col);
     if ( !fontData->GetFont() )
     {
         // Apparently a non-TrueType font is given and hence
         // corresponding DirectWrite font couldn't be created.
         delete fontData;
-        return wxNullGraphicsFont;
+        return graphicsFont;
     }
 
-    wxGraphicsFont graphicsFont;
     graphicsFont.SetRefData(fontData);
 
     return graphicsFont;

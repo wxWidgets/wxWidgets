@@ -1127,8 +1127,9 @@ wxString wxPGProperty::ValueToStringWithCheck(wxVariant& variant, wxPGPropValFor
 wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
                                       wxPGPropValFormatFlags flags ) const
 {
+    wxString text;
     wxCHECK_MSG( HasAnyChild(),
-                 wxString(),
+                 text,
                  wxS("If user property does not have any children, it must ")
                  wxS("override GetValueAsString") );
 
@@ -1137,7 +1138,6 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
                   wxS("Sorry, currently default wxPGProperty::ValueToString() ")
                   wxS("implementation only works if value is m_value.") );
 
-    wxString text;
     DoGenerateComposedValue(text, flags);
     return text;
 }

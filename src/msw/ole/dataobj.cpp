@@ -1500,7 +1500,7 @@ wxString wxURLDataObject::GetURL() const
     {
         const size_t len = m_dataObjectLast->GetDataSize();
         if ( !len )
-            return wxString();
+            return url;
 
         // CFSTR_SHELLURL is always ANSI so we need to convert it from it in
         // Unicode build

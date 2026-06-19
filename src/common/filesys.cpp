@@ -156,8 +156,16 @@ wxString wxFileSystemHandler::GetProtocol(const wxString& location)
     for (i = l-1; (i >= 0) && ((location[i] != wxT('#')) || (!fnd)); i--) {
         if ((location[i] == wxT(':')) && (i != 1 /*win: C:\path*/)) fnd = true;
     }
-    if (!fnd) return wxT("file");
-    for (++i; (i < l) && (location[i] != wxT(':')); i++) s << location[i];
+    if (fnd)
+    {
+        for (++i; (i < l) && (location[i] != wxT(':')); i++)
+            s << location[i];
+    }
+    else
+    {
+        s = wxT("file");
+    }
+
     return s;
 }
 

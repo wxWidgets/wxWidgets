@@ -813,8 +813,8 @@ wxULongLong_t wxPropertyGridInterface::GetPropertyValueAsULongLong(wxPGPropArg i
 
 wxArrayInt wxPropertyGridInterface::GetPropertyValueAsArrayInt(wxPGPropArg id) const
 {
-    wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxArrayInt_VariantType, wxArrayInt())
     wxArrayInt arr;
+    wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxArrayInt_VariantType, arr)
     arr << value;
     return arr;
 }
