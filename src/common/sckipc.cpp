@@ -42,6 +42,8 @@
 #include <stdio.h>
 #include <errno.h>
 
+#include <set>
+
 #include "wx/socket.h"
 
 class wxIPCMessageBase;
@@ -175,6 +177,18 @@ public:
 
     char* GetBufPtr(size_t size);
 
+    // This event handler is a process-wide singleton shared by every IPC
+    // connection (client and server) and it lives until the program exits.
+    // Socket events are queued on it and may still be pending after the socket
+    // they refer to has been destroyed: dispatching such a stale event would
+    // dereference a dangling wxSocketBase pointer. To guard against this we
+    // keep the set of sockets that currently have a live connection and ignore
+    // events for any socket which is not in it. The check compares only
+    // pointer values, so it is safe even if the socket has already been freed.
+    void RegisterConnectionSocket(wxSocketBase* socket);
+    void UnregisterConnectionSocket(wxSocketBase* socket);
+    bool IsConnectionSocket(wxSocketBase* socket);
+
     wxCRIT_SECT_DECLARE_MEMBER(m_cs_process_msgs);
 
 private:
@@ -184,6 +198,9 @@ private:
 
     char* m_bufferList[MAX_MSG_BUFFERS];
     int m_nextAvailable;
+
+    wxCRIT_SECT_DECLARE_MEMBER(m_cs_connection_sockets);
+    std::set<wxSocketBase*> m_connectionSockets;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTCPEventHandler);
@@ -1003,6 +1020,7 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
 
                     client->SetEventHandler(*handler, _CLIENT_ONREQUEST_ID);
                     client->SetClientData(connection);
+                    handler->RegisterConnectionSocket(client);
                     client->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
                     client->Notify(true);
                     return connection;
@@ -1159,6 +1177,8 @@ wxTCPConnection::~wxTCPConnection()
 
     if ( m_sock )
     {
+        if ( m_handler )
+            m_handler->UnregisterConnectionSocket(m_sock);
         m_sock->SetClientData(nullptr);
         m_sock->Destroy();
     }
@@ -1299,6 +1319,16 @@ wxEND_EVENT_TABLE()
 void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
     wxSocketBase *sock = event.GetSocket();
+
+    // This handler is a shared, process-lifetime singleton, so it may receive
+    // a socket event that was queued before its socket was destroyed (e.g. a
+    // wxSOCKET_LOST generated as a connection is being torn down). Such an
+    // event must be ignored without touching the socket, as it now points to
+    // freed memory. IsConnectionSocket() only compares the pointer value and
+    // never dereferences it, so it is safe to call here.
+    if ( !IsConnectionSocket(sock) )
+        return;
+
     wxTCPConnection * connection = GetConnection(sock);
 
     // This socket is being deleted
@@ -1389,6 +1419,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
                             sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
                                                   _CLIENT_ONREQUEST_ID);
                             sock->SetClientData(new_connection);
+                            RegisterConnectionSocket(sock);
                             sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
                             sock->Notify(true);
                             return;
@@ -1654,6 +1685,7 @@ void wxTCPEventHandler::SendFailMessage(const wxString& reason, wxSocketBase* so
 void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
 {
     // connection was closed (either gracefully or not): destroy everything
+    UnregisterConnectionSocket(connection->m_sock);
     connection->m_sock->Notify(false);
     connection->m_sock->Close();
 
@@ -1790,6 +1822,24 @@ wxTCPConnection* wxTCPEventHandler::GetConnection(wxSocketBase* socket)
         return nullptr;
 
     return static_cast<wxTCPConnection *>(socket->GetClientData());
+}
+
+void wxTCPEventHandler::RegisterConnectionSocket(wxSocketBase* socket)
+{
+    wxCRIT_SECT_LOCKER(lock, m_cs_connection_sockets);
+    m_connectionSockets.insert(socket);
+}
+
+void wxTCPEventHandler::UnregisterConnectionSocket(wxSocketBase* socket)
+{
+    wxCRIT_SECT_LOCKER(lock, m_cs_connection_sockets);
+    m_connectionSockets.erase(socket);
+}
+
+bool wxTCPEventHandler::IsConnectionSocket(wxSocketBase* socket)
+{
+    wxCRIT_SECT_LOCKER(lock, m_cs_connection_sockets);
+    return m_connectionSockets.find(socket) != m_connectionSockets.end();
 }
 
 #endif // wxUSE_SOCKETS && wxUSE_IPC
