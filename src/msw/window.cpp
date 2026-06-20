@@ -4983,46 +4983,6 @@ void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
     }
 }
 
-// Called from MSWUpdateonDPIChange() to recursively update the window
-// sizer and any child sizers and spacers.
-static void UpdateSizerOnDPIChange(wxSizer* sizer, wxSize oldDPI, wxSize newDPI)
-{
-    if ( !sizer )
-    {
-        return;
-    }
-
-    for ( wxSizerItemList::compatibility_iterator
-            node = sizer->GetChildren().GetFirst();
-            node;
-            node = node->GetNext() )
-    {
-        wxSizerItem* sizerItem = node->GetData();
-
-        int border = sizerItem->GetBorder();
-        border = wxRescaleCoord(border).From(oldDPI).To(newDPI);
-        sizerItem->SetBorder(border);
-
-        // only scale sizers and spacers, not windows
-        if ( sizerItem->IsSizer() || sizerItem->IsSpacer() )
-        {
-            wxSize min = sizerItem->GetMinSize();
-            min = wxRescaleCoord(min).From(oldDPI).To(newDPI);
-            sizerItem->SetMinSize(min);
-
-            if ( sizerItem->IsSpacer() )
-            {
-                wxSize size = sizerItem->GetSize();
-                size = wxRescaleCoord(size).From(oldDPI).To(newDPI);
-                sizerItem->SetDimension(wxDefaultPosition, size);
-            }
-
-            // Update any child sizers if this is a sizer
-            UpdateSizerOnDPIChange(sizerItem->GetSizer(), oldDPI, newDPI);
-        }
-    }
-}
-
 bool
 wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 {
@@ -5041,7 +5001,8 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
     MSWUpdateFontOnDPIChange(newDPI);
 
     // update sizers
-    UpdateSizerOnDPIChange(GetSizer(), oldDPI, newDPI);
+    if ( wxSizer* const sizer = GetSizer() )
+        sizer->UpdateOnDPIChange(oldDPI, newDPI);
 
     // update children
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
