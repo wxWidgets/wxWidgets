@@ -17,6 +17,7 @@
 #include "archivetest.h"
 #include "wx/tarstrm.h"
 #include "wx/mstream.h"
+#include "wx/wfstream.h"
 
 #include <memory>
 
@@ -234,4 +235,30 @@ TEST_CASE("Tar::BadExtendedHeaderRecordLen", "[tar][error]")
     CHECK( entry->GetInternalName() == "a.txt" );
 }
 
+// This can be used to test loading an arbitrary tar file by setting the
+// environment variable WX_TEST_TAR_PATH to point to it.
+TEST_CASE("Tar::LoadFile", "[.]")
+{
+    wxString path;
+    REQUIRE( wxGetEnv("WX_TEST_TAR_PATH", &path) );
+
+    wxFileInputStream stream(path);
+    REQUIRE( stream.IsOk() );
+
+    wxTarInputStream tar(stream);
+
+    for (;;)
+    {
+        std::unique_ptr<wxTarEntry> entry(tar.GetNextEntry());
+        if ( !entry )
+            break;
+
+        wxFprintf(stderr, "%3o\t%16lld\t%s\t%s\n",
+                 entry->GetMode(),
+                 entry->GetSize(),
+                 entry->GetDateTime().FormatISOCombined(' '),
+                 entry->GetName()
+                 );
+    }
+}
 #endif // wxUSE_STREAMS
