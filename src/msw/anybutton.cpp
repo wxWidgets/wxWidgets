@@ -1506,22 +1506,9 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     // finally draw the label
     if ( ShowsLabel() )
     {
-        COLORREF colFg;
-        if ( state & ODS_DISABLED )
-        {
-            colFg = ::GetSysColor(COLOR_GRAYTEXT);
-        }
-        else if ( wxUxThemeIsActive() &&
-                    GetButtonState(this, state) == wxAnyButton::State_Current )
-        {
-            // The button is highlighted, use the standard colour to ensure
-            // that its text is readable.
-            colFg = ::GetSysColor(COLOR_BTNTEXT);
-        }
-        else
-        {
-            colFg = wxColourToRGB(GetForegroundColour());
-        }
+        COLORREF colFg = state & ODS_DISABLED
+                            ? ::GetSysColor(COLOR_GRAYTEXT)
+                            : wxColourToRGB(GetForegroundColour());
 
         wxTextColoursChanger changeFg(hdc, colFg, CLR_INVALID);
         wxBkModeChanger changeBkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
