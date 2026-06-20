@@ -2504,8 +2504,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     // We need to reset any previous set min size to allow decreasing the pane
     // size by dragging the sash between it and other panes, so always set it
     // to something, even if it's not specified.
-    if (min_size == wxDefaultSize)
-        min_size = wxSize(1, 1);
+    min_size.IncTo(wxSize(1, 1));
 
     sizer_item->SetMinSize(min_size);
 
