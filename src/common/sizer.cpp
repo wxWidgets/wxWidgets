@@ -1624,6 +1624,8 @@ bool wxSizer::IsShown( size_t index ) const
 // Recursively update the sizer and any child sizers and spacers.
 void wxSizer::UpdateOnDPIChange(wxSize oldDPI, wxSize newDPI)
 {
+    m_minSize = wxRescaleCoord(m_minSize).From(oldDPI).To(newDPI);
+
     for ( wxSizerItemList::compatibility_iterator
             node = GetChildren().GetFirst();
             node;
