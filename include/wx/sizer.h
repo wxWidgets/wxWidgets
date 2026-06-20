@@ -831,6 +831,10 @@ public:
     // (for internal use only)
     int CalcRowsCols(int& rows, int& cols) const;
 
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    virtual void UpdateOnDPIChange(wxSize oldDPI, wxSize newDPI) override;
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+
 protected:
     // the number of rows/columns in the sizer, if 0 then it is determined
     // dynamically depending on the total number of items
