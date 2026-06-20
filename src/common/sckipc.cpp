@@ -1318,14 +1318,18 @@ wxEND_EVENT_TABLE()
 
 void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
-    wxSocketBase *sock = event.GetSocket();
-
     // This handler is a shared, process-lifetime singleton, so it may receive
     // a socket event that was queued before its socket was destroyed (e.g. a
     // wxSOCKET_LOST generated as a connection is being torn down). Such an
     // event must be ignored without touching the socket, as it now points to
-    // freed memory. IsConnectionSocket() only compares the pointer value and
-    // never dereferences it, so it is safe to call here.
+    // freed memory. Even obtaining the typed pointer via GetSocket() performs a
+    // checked downcast (wxObject* -> wxSocketBase*), which is undefined behavior
+    // on a freed object and trips UBSAN's vptr check, so use reinterpret_cast
+    // (not vptr-instrumented) purely for the registry pointer-value lookup
+    // below. IsConnectionSocket() only compares the pointer value and never
+    // dereferences it, so it is safe to call here.
+    wxSocketBase *sock =
+        reinterpret_cast<wxSocketBase *>(event.GetEventObject());
     if ( !IsConnectionSocket(sock) )
         return;
 
