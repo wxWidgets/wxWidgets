@@ -1641,20 +1641,24 @@ bool wxTCPEventHandler::FindMessage(IPCCode code,
 
         if ( msg && msg->GetIPCCode() == code )
         {
-            // The correct message has been found, but there may still be
-            // messages waiting in the socket data buffer. Place an event in
-            // the socket event queue so that they will be read out later.
-            if ( PeekAtMessageInSocket(socket) )
+            // The correct message has been found, but more messages may follow
+            // it: either already buffered in the socket, or arriving just after
+            // this read. This read happened off the main event loop (a worker
+            // thread calling Request()/Advise() here), so the socket's own
+            // wxSOCKET_INPUT notification for the trailing data may already have
+            // been consumed and never reach the main loop. Unconditionally
+            // re-post a wxSOCKET_INPUT event so the main event loop is always
+            // nudged to re-scan this socket and drain any remaining messages
+            // (e.g. Advise notifications). A spurious event is harmless: the
+            // handler simply peeks, finds nothing, and returns.
+            if (socket && socket->GetEventHandler())
             {
-                if (socket && socket->GetEventHandler())
-                {
-                    wxSocketEvent event(wxID_ANY);
-                    event.m_event = wxSOCKET_INPUT;
-                    event.m_clientData = socket->GetClientData();
-                    event.SetEventObject(socket);
+                wxSocketEvent event(wxID_ANY);
+                event.m_event = wxSOCKET_INPUT;
+                event.m_clientData = socket->GetClientData();
+                event.SetEventObject(socket);
 
-                    socket->GetEventHandler()->AddPendingEvent(event);
-                }
+                socket->GetEventHandler()->AddPendingEvent(event);
             }
 
             if (return_msgptr)
