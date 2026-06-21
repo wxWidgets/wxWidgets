@@ -32,6 +32,7 @@
 #include "wx/log.h"
 #include "wx/gtk/private/webview_webkit2_extension.h"
 #include "wx/gtk/private/string.h"
+#include "wx/weakref.h"
 #include "wx/gtk/private/webkit.h"
 #include "wx/gtk/private/error.h"
 #include "wx/gtk/private/object.h"
@@ -1535,7 +1536,7 @@ struct wxWebViewGtkPDFData
         : webView(webView_), filePath(filePath_), printop(printop_) {}
     ~wxWebViewGtkPDFData() { g_object_unref(printop); }
 
-    wxWebViewWebKit* webView;
+    wxWeakRef<wxWebViewWebKit> webView;
     wxString filePath;
     WebKitPrintOperation* printop;
 };
@@ -1543,11 +1544,14 @@ struct wxWebViewGtkPDFData
 static void wxDoHandlePDFResult(gpointer user_data, int success)
 {
     wxWebViewGtkPDFData* data = static_cast<wxWebViewGtkPDFData*>(user_data);
-    wxWebViewEvent event(wxEVT_WEBVIEW_PDF_SAVED, data->webView->GetId(),
-                         data->filePath, wxString());
-    event.SetInt(success);
-    event.SetEventObject(data->webView);
-    data->webView->HandleWindowEvent(event);
+    if (data->webView)
+    {
+        wxWebViewEvent event(wxEVT_WEBVIEW_PDF_SAVED, data->webView->GetId(),
+                             data->filePath, wxString());
+        event.SetInt(success);
+        event.SetEventObject(data->webView);
+        data->webView->HandleWindowEvent(event);
+    }
     delete data;
 }
 
