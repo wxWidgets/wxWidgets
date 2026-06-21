@@ -26,6 +26,7 @@
 #endif
 
 #include <memory>
+#include <set>
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
@@ -46,7 +47,7 @@ wxString GetPenStroke(const wxColour& c, int style = wxPENSTYLE_SOLID);
 wxString GetBrushFill(const wxColour& c, int style = wxBRUSHSTYLE_SOLID);
 
 // Returns a <pattern> element definition for hatched brushes, or empty.
-wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode);
+wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode, wxString& patternName);
 
 // Returns a "shape-rendering=..." attribute fragment.
 wxString GetRenderMode(wxSVGShapeRenderingMode style);
@@ -123,6 +124,9 @@ public:
     // handler on first use). Sets the write-error flag on failure.
     void WriteBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y);
 
+    // Writes a brush fill pattern if it has not been written before
+    void WriteBrushFill(const wxBrush& brush);
+
     // Returns the next gradient/clip id and increments the shared counter.
     size_t GetNextGradientId() { return ms_gradientUniqueId++; }
     size_t GetNextClipId() { return ms_clipUniqueId++; }
@@ -181,6 +185,8 @@ private:
     int m_accessibleGroupDepth = 0;
     int m_layerDepth = 0;
     int m_clipNestingLevel = 0;
+
+    std::set<wxString> m_usedBrushPatterns;
 
     static size_t ms_clipUniqueId;
     static size_t ms_gradientUniqueId;

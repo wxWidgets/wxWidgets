@@ -319,10 +319,10 @@ wxString GetRenderMode(wxSVGShapeRenderingMode style)
     return s;
 }
 
-wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
+wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode, wxString& patternName)
 {
     wxString s;
-    wxString patternName = GetBrushStyleName(brush);
+    patternName = GetBrushStyleName(brush);
 
     if (!patternName.empty())
     {
@@ -1455,13 +1455,7 @@ void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
 
     m_writer->MarkGraphicsChanged();
 
-    wxString pattern = CreateBrushFill(m_brush, m_writer->GetShapeRenderingMode());
-    if ( !pattern.empty() )
-    {
-        NewGraphicsIfNeeded();
-
-        write(pattern);
-    }
+    m_writer->WriteBrushFill(m_brush);
 }
 
 void wxSVGFileDCImpl::SetPen(const wxPen& pen)
@@ -1813,6 +1807,19 @@ void wxSVGWriter::WriteBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y)
     wxStringOutputStream stream(&m_svgDocument);
     if ( !m_bmpHandler->ProcessBitmap(bmp, x, y, stream) )
         m_writeError = true;
+}
+
+void wxSVGWriter::WriteBrushFill(const wxBrush& brush)
+{
+    if ( !brush.IsOk() )
+        return;
+
+    wxString patternName;
+    wxString pattern = CreateBrushFill(brush, GetShapeRenderingMode(), patternName);
+    if ( !pattern.empty() && !patternName.empty() && m_usedBrushPatterns.insert(patternName).second )
+    {
+        Write(pattern);
+    }
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
