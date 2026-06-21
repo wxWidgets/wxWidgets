@@ -294,6 +294,7 @@ All (GUI):
 - Fix out-of-bounds table read in wxMBConvUTF7::ToWChar() (dxbjavid, #26517).
 - Fix buffer overflow reading corrupted message catalogs (dxbjavid, #26513).
 - Fix buffer overflow for too big tables in wxHTML (dxbjavid, #26554).
+- Add wxGrid::GetFrozen{Row,Col}LabelWindow() (Jorge Moraleda, #26617).
 
 wxGTK:
 
