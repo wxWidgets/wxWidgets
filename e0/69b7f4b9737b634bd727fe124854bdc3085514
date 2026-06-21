@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxGrid::GetFrozenRowLabelWindow() and GetFrozenColLabelWindow() (Jorge Moraleda, #26617).
