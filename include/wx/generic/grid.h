@@ -2456,6 +2456,8 @@ public:
     wxWindow* GetFrozenCornerGridWindow()const { return (wxWindow*)m_frozenCornerGridWin; }
     wxWindow* GetFrozenRowGridWindow() const   { return (wxWindow*)m_frozenRowGridWin; }
     wxWindow* GetFrozenColGridWindow() const   { return (wxWindow*)m_frozenColGridWin; }
+    wxWindow* GetFrozenRowLabelWindow() const  { return (wxWindow*)m_rowFrozenLabelWin; }
+    wxWindow* GetFrozenColLabelWindow() const  { return m_colFrozenLabelWin; }
     wxWindow* GetGridRowLabelWindow() const    { return (wxWindow*)m_rowLabelWin; }
     wxWindow* GetGridColLabelWindow() const    { return m_colLabelWin; }
     wxWindow* GetGridCornerLabelWindow() const { return (wxWindow*)m_cornerLabelWin; }
