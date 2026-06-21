@@ -50,6 +50,7 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 #include "wx/cmndata.h"
 #include "wx/choicdlg.h"
+#include "wx/filedlgcustomize.h"
 #endif
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -1786,32 +1787,46 @@ void WebFrame::OnPrintToPDF(wxCommandEvent& WXUNUSED(evt))
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
+
+class WebFramePDFSettingsHook : public wxFileDialogCustomizeHook
+{
+public:
+    void AddCustomControls(wxFileDialogCustomize& customizer) override
+    {
+        const wxString choices[] = {
+            _("Letter (Portrait)"), _("Letter (Landscape)"),
+            _("A4 (Portrait)"),     _("A4 (Landscape)"),
+            _("Legal (Portrait)"),  _("Legal (Landscape)")
+        };
+        customizer.AddStaticText(_("Paper size:"));
+        m_choice = customizer.AddChoice(WXSIZEOF(choices), choices);
+        m_choice->SetSelection(m_sel);
+    }
+
+    void TransferDataFromCustomControls() override
+    {
+        m_sel = m_choice->GetSelection();
+    }
+
+    int GetSelection() const { return m_sel; }
+
+private:
+    wxFileDialogChoice* m_choice = nullptr;
+    int m_sel = 2; // A4 Portrait
+};
+
 void WebFrame::OnPrintToPDFWithSettings(wxCommandEvent& WXUNUSED(evt))
 {
-    wxArrayString paperChoices;
-    paperChoices.Add("Letter (Portrait)");
-    paperChoices.Add("Letter (Landscape)");
-    paperChoices.Add("A4 (Portrait)");
-    paperChoices.Add("A4 (Landscape)");
-    paperChoices.Add("Legal (Portrait)");
-    paperChoices.Add("Legal (Landscape)");
-
-    int sel = wxGetSingleChoiceIndex(
-        _("Select paper size and orientation:"),
-        _("Save as PDF with Settings"),
-        paperChoices,
-        this);
-    if (sel == -1)
-        return;
-
+    WebFramePDFSettingsHook hook;
     wxFileDialog dlg(this, _("Save as PDF"), wxEmptyString, wxEmptyString,
                      _("PDF files (*.pdf)|*.pdf"),
                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    dlg.SetCustomizeHook(hook);
     if (dlg.ShowModal() != wxID_OK)
         return;
 
     wxPrintData printData;
-    switch (sel)
+    switch (hook.GetSelection())
     {
         case 0: printData.SetPaperId(wxPAPER_LETTER); printData.SetOrientation(wxPORTRAIT);  break;
         case 1: printData.SetPaperId(wxPAPER_LETTER); printData.SetOrientation(wxLANDSCAPE); break;
