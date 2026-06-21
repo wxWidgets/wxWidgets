@@ -1326,8 +1326,9 @@ public:
             backend does not support PDF export or if an error prevented the
             operation from starting.
 
-        @note Currently implemented on the Edge (MSW) and WebKit (macOS 11.0+)
-            backends. Returns @false on all other backends.
+        @note Currently implemented on the Edge (MSW), WebKit (macOS 11.0+),
+            and WebKit2GTK (GTK) backends. Returns @false on all other
+            backends.
 
         @see PrintToPDF(const wxString&, const wxPrintData&)
 
@@ -1346,6 +1347,8 @@ public:
           orientation are both applied to the output PDF.
         - macOS: @a printData is not used; this behaves identically to
           PrintToPDF(const wxString&).
+        - GTK (WebKit2GTK): paper size, orientation, copies, and collation
+          are all applied to the output PDF.
 
         This overload is only available when @c wxUSE_PRINTING_ARCHITECTURE is
         set to 1.

@@ -164,7 +164,7 @@ public:
     void OnPrint(wxCommandEvent& evt);
     void OnPrintWithSettings(wxCommandEvent& evt);
     void OnPrintToPDF(wxCommandEvent& evt);
-#if wxUSE_PRINTING_ARCHITECTURE && defined(__WXMSW__)
+#if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
     void OnPrintToPDFWithSettings(wxCommandEvent& evt);
 #endif
     void OnOpenPrivateWindow(wxCommandEvent& evt);
@@ -660,7 +660,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     wxMenuItem* printWithSettings = m_tools_menu->Append(wxID_ANY , _("Print with Settings..."));
 #endif
     wxMenuItem* printToPDF = m_tools_menu->Append(wxID_ANY, _("Save as PDF..."));
-#if wxUSE_PRINTING_ARCHITECTURE && defined(__WXMSW__)
+#if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
     wxMenuItem* printToPDFWithSettings = m_tools_menu->Append(wxID_ANY, _("Save as PDF with Settings..."));
 #endif
     wxMenuItem* setPage = m_tools_menu->Append(wxID_ANY , _("Set page text"));
@@ -832,7 +832,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     Bind(wxEVT_MENU, &WebFrame::OnPrintWithSettings, this, printWithSettings->GetId());
 #endif
     Bind(wxEVT_MENU, &WebFrame::OnPrintToPDF, this, printToPDF->GetId());
-#if wxUSE_PRINTING_ARCHITECTURE && defined(__WXMSW__)
+#if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
     Bind(wxEVT_MENU, &WebFrame::OnPrintToPDFWithSettings, this, printToPDFWithSettings->GetId());
 #endif
     Bind(wxEVT_MENU, &WebFrame::OnOpenPrivateWindow, this, openPrivate->GetId());
@@ -1785,7 +1785,7 @@ void WebFrame::OnPrintToPDF(wxCommandEvent& WXUNUSED(evt))
         wxLogError("PrintToPDF is not supported by this browser backend.");
 }
 
-#if wxUSE_PRINTING_ARCHITECTURE && defined(__WXMSW__)
+#if wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
 void WebFrame::OnPrintToPDFWithSettings(wxCommandEvent& WXUNUSED(evt))
 {
     wxArrayString paperChoices;
@@ -1824,7 +1824,7 @@ void WebFrame::OnPrintToPDFWithSettings(wxCommandEvent& WXUNUSED(evt))
     if (!m_browser->PrintToPDF(dlg.GetPath(), printData))
         wxLogError("PrintToPDF is not supported by this browser backend.");
 }
-#endif // wxUSE_PRINTING_ARCHITECTURE && defined(__WXMSW__)
+#endif // wxUSE_PRINTING_ARCHITECTURE && (defined(__WXMSW__) || defined(__WXGTK__))
 
 void WebFrame::OnOpenPrivateWindow(wxCommandEvent& WXUNUSED(evt))
 {
