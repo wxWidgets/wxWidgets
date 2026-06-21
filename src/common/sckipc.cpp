@@ -43,8 +43,10 @@
 #include <errno.h>
 
 #include <set>
+#include <functional>
 
 #include "wx/socket.h"
+#include "wx/thread.h"
 
 class wxIPCMessageBase;
 
@@ -160,13 +162,22 @@ public:
                 delete[] m_bufferList[i];
     }
 
-    void Client_OnRequest(wxSocketEvent& event);
-    void Server_OnRequest(wxSocketEvent& event);
+    void OnSocketInput(wxSocketEvent& event);
+    void OnSocketConnection(wxSocketEvent& event);
 
-    bool ExecuteMessage(wxIPCMessageBase* msg, wxSocketBase *socket);
-    bool FindMessage(IPCCode code,
-                     wxSocketBase* socket,
-                     wxIPCMessageBase** msgptr);
+    bool ProcessMessage(wxIPCMessageBase* msg, wxSocketBase *socket);
+
+    bool SendAndGetReply(wxIPCMessageBase& send_msg,
+                         IPCCode expected_code,
+                         wxSocketBase* socket,
+                         wxIPCMessageBase** return_msgptr);
+    bool SendAndGetReply_MainThread(wxIPCMessageBase& send_msg,
+                                    IPCCode expected_code,
+                                    wxSocketBase* socket,
+                                    wxIPCMessageBase** return_msgptr);
+    bool SendAndGetReply_WorkerThread(wxIPCMessageBase& send_msg,
+                                      IPCCode expected_code,
+                                      wxIPCMessageBase** return_msgptr);
 
     void SendFailMessage(const wxString& reason, wxSocketBase* socket);
     void HandleDisconnect(wxTCPConnection *connection);
@@ -177,20 +188,49 @@ public:
 
     char* GetBufPtr(size_t size);
 
-    // This event handler is a process-wide singleton shared by every IPC
+    // This event handler is a single process-wide object shared by every IPC
     // connection (client and server) and it lives until the program exits.
     // Socket events are queued on it and may still be pending after the socket
-    // they refer to has been destroyed: dispatching such a stale event would
-    // dereference a dangling wxSocketBase pointer. To guard against this we
-    // keep the set of sockets that currently have a live connection and ignore
-    // events for any socket which is not in it. The check compares only
-    // pointer values, so it is safe even if the socket has already been freed.
+    // they refer to has been destroyed: Dispatching a stale event would
+    // dereference a dangling wxSocketBase pointer. To guard against this we keep
+    // the set of sockets that currently have a live connection and ignore events
+    // for any socket which is not in it. The check compares only pointer values,
+    // so it is safe even if the socket has already been freed.
     void RegisterConnectionSocket(wxSocketBase* socket);
     void UnregisterConnectionSocket(wxSocketBase* socket);
     bool IsConnectionSocket(wxSocketBase* socket);
 
-    wxCRIT_SECT_DECLARE_MEMBER(m_cs_process_msgs);
+    wxCRIT_SECT_DECLARE_MEMBER(m_cs_socket_processing);
 
+    // Runs fn on the main thread, blocking the caller until completion (on the
+    // main thread fn runs directly). All IPC socket I/O must happen on the main
+    // thread: the wxFDIODispatcher used by the main event loop in Unix+Mac is not
+    // safe to mutate from worker threads, so worker-thread socket usage is
+    // funneled through this method.
+    void RunOnMainThread(const std::function<void()>& fn);
+
+    // The handoff objects between a worker thread blocked in SendAndGetReply()
+    // and the main thread's OnSocketInput(). Only one reply is ever pending at a
+    // time, which is guaranteed by m_cs_awaiting_reply.
+    wxMutex m_replyMutex;
+    wxCondition m_replyCond{m_replyMutex};
+    struct PendingReply
+    {
+        bool              active   = false;
+        IPCCode           expected = IPC_NULL;
+        wxIPCMessageBase* reply    = nullptr;
+        bool              done     = false;
+        bool              failed   = false;
+    } m_pending;
+
+    wxCRIT_SECT_DECLARE_MEMBER(m_cs_awaiting_reply);
+
+    bool DeliverPendingReply(wxIPCMessageBase* msg);
+    void FailPendingReply();
+
+    wxIPCMessageBase* GetIPCMessageFromCode(IPCCode code, wxSocketBase* socket);
+
+    void PostSocketInputEvent(wxSocketBase* socket);
 private:
     wxTCPConnection* GetConnection(wxSocketBase* socket);
 
@@ -208,8 +248,8 @@ private:
 
 enum
 {
-    _CLIENT_ONREQUEST_ID = 1000,
-    _SERVER_ONREQUEST_ID
+    _SOCKET_INPUT_ID = 1000,
+    _SERVER_SOCKET_CONNECTION_ID
 };
 
 // --------------------------------------------------------------------------
@@ -479,8 +519,9 @@ protected:
     wxDECLARE_CLASS(wxIPCMessageBase);
 };
 
-// Reads a 32-bit size from the socket, allocates a buffer of that size, then
-// read nbytes worth of data from the socket into m_read_data.
+// Reads a 32-bit word to get the desired buffer m_size from the socket, allocates
+// a buffer of that size, then read m_size bytes worth of data from the socket
+// into m_read_data.
 bool wxIPCMessageBase::ReadSizeAndData()
 {
     if (!Read32(m_size))
@@ -803,7 +844,7 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxIPCMessageAdvise);
 };
 
-// Member var item to be used for failure reason (for debug)
+// m_item to be used for failure reason (for debug)
 class wxIPCMessageFail : public wxIPCMessageBase
 {
 public:
@@ -1018,7 +1059,7 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
                     connection->m_handler = handler;
                     connection->m_topic = topic;
 
-                    client->SetEventHandler(*handler, _CLIENT_ONREQUEST_ID);
+                    client->SetEventHandler(*handler, _SOCKET_INPUT_ID);
                     client->SetClientData(connection);
                     handler->RegisterConnectionSocket(client);
                     client->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
@@ -1128,7 +1169,7 @@ bool wxTCPServer::Create(const wxString& serverName)
     }
 
     m_server->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
-                              _SERVER_ONREQUEST_ID);
+                              _SERVER_SOCKET_CONNECTION_ID);
     m_server->SetClientData(this);
     m_server->SetNotify(wxSOCKET_CONNECTION_FLAG);
     m_server->Notify(true);
@@ -1229,16 +1270,10 @@ const void *wxTCPConnection::Request(const wxString& item,
     if ( !m_handler )
         return nullptr;
 
-    // Don't let ProcessIncomingMessages interfere with getting a response
-    wxCRIT_SECT_LOCKER(lock, m_handler->m_cs_process_msgs);
-
     wxIPCMessageRequest msg(m_sock, item, format);
-    if ( !m_handler->WriteMessageToSocket(msg) )
-        return nullptr;
-
     wxIPCMessageBase* msg_reply = nullptr;
 
-    if ( !m_handler->FindMessage(IPC_REQUEST_REPLY, m_sock, &msg_reply) )
+    if ( !m_handler->SendAndGetReply(msg, IPC_REQUEST_REPLY, m_sock, &msg_reply) )
         return nullptr;
 
     wxIPCMessageBaseLocker lockmsg(msg_reply);
@@ -1246,7 +1281,7 @@ const void *wxTCPConnection::Request(const wxString& item,
         return nullptr;
 
     if (size)
-        *size = msg_reply->GetSize();
+      *size = msg_reply->GetSize();
 
     return msg_reply->GetReadData();
 }
@@ -1268,14 +1303,8 @@ bool wxTCPConnection::StartAdvise(const wxString& item)
     if ( !m_handler )
         return false;
 
-    // Don't let ProcessIncomingMessages interfere with getting a response
-    wxCRIT_SECT_LOCKER(lock, m_handler->m_cs_process_msgs);
-
     wxIPCMessageAdviseStart msg(m_sock, item);
-    if ( !m_handler->WriteMessageToSocket(msg) )
-        return false;
-
-    return m_handler->FindMessage(IPC_ADVISE_START, m_sock, wxNO_RETURN_MESSAGE);
+    return m_handler->SendAndGetReply(msg, IPC_ADVISE_START, m_sock, wxNO_RETURN_MESSAGE);
 }
 
 bool wxTCPConnection::StopAdvise (const wxString& item)
@@ -1283,18 +1312,12 @@ bool wxTCPConnection::StopAdvise (const wxString& item)
     if ( !m_handler )
         return false;
 
-    // Don't let ProcessIncomingMessages interfere with getting a response
-    wxCRIT_SECT_LOCKER(lock, m_handler->m_cs_process_msgs);
-
     wxIPCMessageAdviseStop msg(m_sock, item);
-    if ( !m_handler->WriteMessageToSocket(msg) )
-        return false;
-
-    return m_handler->FindMessage(IPC_ADVISE_STOP, m_sock, wxNO_RETURN_MESSAGE);
+    return m_handler->SendAndGetReply(msg, IPC_ADVISE_STOP, m_sock, wxNO_RETURN_MESSAGE);
 }
 
 
-// Calls that SERVER can make
+// Calls that Server can make
 bool wxTCPConnection::DoAdvise(const wxString& item,
                                const void *data,
                                size_t size,
@@ -1312,22 +1335,25 @@ bool wxTCPConnection::DoAdvise(const wxString& item,
 // --------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(wxTCPEventHandler, wxEvtHandler)
-    EVT_SOCKET(_CLIENT_ONREQUEST_ID, wxTCPEventHandler::Client_OnRequest)
-    EVT_SOCKET(_SERVER_ONREQUEST_ID, wxTCPEventHandler::Server_OnRequest)
+    EVT_SOCKET(_SOCKET_INPUT_ID, wxTCPEventHandler::OnSocketInput)
+    EVT_SOCKET(_SERVER_SOCKET_CONNECTION_ID, wxTCPEventHandler::OnSocketConnection)
 wxEND_EVENT_TABLE()
 
-void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
+// Function that gets called when wxSocket receives info. It always
+// runs on wxThread::Main
+void wxTCPEventHandler::OnSocketInput(wxSocketEvent &event)
 {
-    // This handler is a shared, process-lifetime singleton, so it may receive
-    // a socket event that was queued before its socket was destroyed (e.g. a
-    // wxSOCKET_LOST generated as a connection is being torn down). Such an
-    // event must be ignored without touching the socket, as it now points to
-    // freed memory. Even obtaining the typed pointer via GetSocket() performs a
-    // checked downcast (wxObject* -> wxSocketBase*), which is undefined behavior
-    // on a freed object and trips UBSAN's vptr check, so use reinterpret_cast
-    // (not vptr-instrumented) purely for the registry pointer-value lookup
-    // below. IsConnectionSocket() only compares the pointer value and never
-    // dereferences it, so it is safe to call here.
+    wxCRIT_SECT_LOCKER(socket_processing_lock, m_cs_socket_processing);
+
+    // The handler may receive a socket event that was queued before its socket
+    // was destroyed (e.g. a wxSOCKET_LOST generated as a connection is being torn
+    // down). Such an event must be ignored without dereferencing the socket,
+    // since it now points to freed memory. Even obtaining the typed pointer via
+    // GetSocket() performs a checked downcast (wxObject* -> wxSocketBase*), which
+    // is undefined behavior on a freed object and trips UBSAN's vptr check, so
+    // use reinterpret_cast (not vptr-instrumented) purely for the registry
+    // pointer-value lookup below. IsConnectionSocket() only compares the pointer
+    // value and never dereferences it, so it is safe to call here.
     wxSocketBase *sock =
         reinterpret_cast<wxSocketBase *>(event.GetEventObject());
     if ( !IsConnectionSocket(sock) )
@@ -1337,35 +1363,39 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 
     // This socket is being deleted
     if ( !connection )
+    {
+        FailPendingReply();
         return;
+    }
 
     if ( event.GetSocketEvent() == wxSOCKET_LOST )
     {
+        FailPendingReply();
         HandleDisconnect(connection);
         return;
     }
 
-    // Process incoming messages. Block any IPC command that uses
-    // FindMessage until this method finishes.
-    wxCRIT_SECT_LOCKER(lock, m_cs_process_msgs);
-
-    // More than one wxIPCMessage can be sent to the socket before the socket
-    // notifies us of another read event, so loop until there are no new
-    // messages.
+    // Process all of the pending messages in the socket buffer.
     while ( PeekAtMessageInSocket(sock) )
     {
         wxIPCMessageBase* msg = ReadMessageFromSocket(sock);
+
+        // If a worker thread is blocked waiting for this reply, hand it over.
+        if ( DeliverPendingReply(msg) )
+            continue;   // msg ownership handed to the waiting worker
+
         wxIPCMessageBaseLocker lock_msg(msg);
-
-        if ( !ExecuteMessage(msg, sock) )
+        if ( !ProcessMessage(msg, sock) )
+        {
+            FailPendingReply();
             break;
+        }
     };
-
 }
 
-
-// This method is called for incoming connections to wxServer only.
-void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
+// Process a wxSOCKET_CONNECTION event for wxServer. It always runs on
+// wxThread::Main
+void wxTCPEventHandler::OnSocketConnection(wxSocketEvent &event)
 {
     wxSocketServer *server = (wxSocketServer *) event.GetSocket();
     if (!server)
@@ -1421,7 +1451,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 
                             sock->SetTimeout(wxIPCTimeout);
                             sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
-                                                  _CLIENT_ONREQUEST_ID);
+                                                  _SOCKET_INPUT_ID);
                             sock->SetClientData(new_connection);
                             RegisterConnectionSocket(sock);
                             sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
@@ -1443,7 +1473,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 // Process a single wxIPCMessage from the socket. Returns true if processing
 // can continue, or false if processing should stop, usually because a
 // disconnect was received.
-bool wxTCPEventHandler::ExecuteMessage(wxIPCMessageBase* msg, wxSocketBase *socket)
+bool wxTCPEventHandler::ProcessMessage(wxIPCMessageBase* msg, wxSocketBase *socket)
 {
     if ( !msg || !msg->IsOk() )
         return false;
@@ -1631,39 +1661,69 @@ bool wxTCPEventHandler::ExecuteMessage(wxIPCMessageBase* msg, wxSocketBase *sock
     return true;
 }
 
-// Find a message with IPCCode code. Returns true when a valid message with
-// the matching IPCCode is found.  If msgptr is non-null, then the message is
-// also returned and the caller is responsible for deleting the returned
-// message.
-bool wxTCPEventHandler::FindMessage(IPCCode code,
-                                    wxSocketBase* socket,
-                                    wxIPCMessageBase** return_msgptr)
+//Runs fn on the main thread, blocking the caller until completion. On the
+// main thread, fn runs directly.
+void wxTCPEventHandler::RunOnMainThread(const std::function<void()>& fn)
 {
+    if ( wxThread::IsMain() )
+    {
+        fn();
+        return;
+    }
+
+    // Marshal to the main thread and block until it has run the work. CallAfter()
+    // posts an async method-call event that the main event loop dispatches; the
+    // worker waits on the semaphore meanwhile, so the by-reference captures stay
+    // valid. The wait is bounded by wxIPCTimeout.
+    wxSemaphore done;
+    CallAfter([&fn, &done] {
+        fn();
+        done.Post();
+    });
+    done.Wait();
+}
+
+// Messages that are sent to the server with an expected reply are handled here.
+// The main complication is making sure that the request and reply are matched,
+// which is handle by making sure that there is only one pending request at a
+// time.
+bool wxTCPEventHandler::SendAndGetReply(wxIPCMessageBase& send_msg,
+                                        IPCCode expected_code,
+                                        wxSocketBase* socket,
+                                        wxIPCMessageBase** return_msgptr)
+{
+    // The structure of FindMessage changes greatly whether we are on
+    // wxThread::Main or not.  Divide them into two submethods:
+    if (wxThread::IsMain())
+        return SendAndGetReply_MainThread(send_msg, expected_code, socket, return_msgptr);
+    else
+        return SendAndGetReply_WorkerThread(send_msg, expected_code, return_msgptr);
+}
+
+// Take over socket processing from OnSocketInput until we find the
+// return message.
+bool wxTCPEventHandler::SendAndGetReply_MainThread(wxIPCMessageBase& send_msg,
+                                                   IPCCode expected_code,
+                                                   wxSocketBase* socket,
+                                                   wxIPCMessageBase** return_msgptr)
+{
+    wxCRIT_SECT_LOCKER(find_message_lock, m_cs_awaiting_reply);
+
+    wxCRIT_SECT_LOCKER(socket_processing_lock, m_cs_socket_processing);
+
+    if ( !WriteMessageToSocket(send_msg) )
+        return false;
+
     while ( GetConnection(socket) )
     {
         wxIPCMessageBase* msg = ReadMessageFromSocket(socket);
+        PostSocketInputEvent(socket); // in case more messages are waiting
 
-        if ( msg && msg->GetIPCCode() == code )
+        if ( msg && msg->GetIPCCode() == expected_code )
         {
-            // The correct message has been found, but more messages may follow
-            // it: either already buffered in the socket, or arriving just after
-            // this read. This read happened off the main event loop (a worker
-            // thread calling Request()/Advise() here), so the socket's own
-            // wxSOCKET_INPUT notification for the trailing data may already have
-            // been consumed and never reach the main loop. Unconditionally
-            // re-post a wxSOCKET_INPUT event so the main event loop is always
-            // nudged to re-scan this socket and drain any remaining messages
-            // (e.g. Advise notifications). A spurious event is harmless: the
-            // handler simply peeks, finds nothing, and returns.
-            if (socket && socket->GetEventHandler())
-            {
-                wxSocketEvent event(wxID_ANY);
-                event.m_event = wxSOCKET_INPUT;
-                event.m_clientData = socket->GetClientData();
-                event.SetEventObject(socket);
-
-                socket->GetEventHandler()->AddPendingEvent(event);
-            }
+            // The correct message has been found, but more messages
+            // may follow.
+            PostSocketInputEvent(socket);
 
             if (return_msgptr)
                 *return_msgptr = msg;
@@ -1675,11 +1735,165 @@ bool wxTCPEventHandler::FindMessage(IPCCode code,
 
         // Not the correct msg to be returned.
         wxIPCMessageBaseLocker lock(msg);
-        if (!ExecuteMessage(msg, socket) )
+        if (!ProcessMessage(msg, socket) )
             return false;
     };
 
     return false;
+}
+
+// worker thread
+bool wxTCPEventHandler::SendAndGetReply_WorkerThread(wxIPCMessageBase& send_msg,
+                                                     IPCCode expected_code,
+                                                     wxIPCMessageBase** return_msgptr)
+{
+    // Serialize reply-expecting commands: only one reply is pending at a time.
+    wxCRIT_SECT_LOCKER(txlock, m_cs_awaiting_reply);
+
+    // Register the pending reply *before* writing, so a reply that comes back
+    // before we start waiting is still recorded (DeliverPendingReply() stores it
+    // and we observe it via the predicate in the wait loop below, rather than
+    // blocking forever, so there is no lost-wakeup race even though we release
+    // m_replyMutex between here and the wait).
+    {
+        wxMutexLocker setup(m_replyMutex);
+        m_pending.active   = true;
+        m_pending.expected = expected_code;
+        m_pending.reply    = nullptr;
+        m_pending.failed   = false;
+    }
+
+    // Write WITHOUT holding m_replyMutex. WriteMessageToSocket() marshals the
+    // actual I/O to the main thread (RunOnMainThread) and blocks this worker
+    // until the main thread runs it. The main thread's OnSocketInput() needs
+    // m_replyMutex to hand replies over (DeliverPendingReply()), so holding it
+    // across the write would deadlock: the worker waits on the main thread while
+    // the main thread waits on the mutex the worker holds.
+    bool ok = false;
+    if ( WriteMessageToSocket(send_msg) )
+    {
+        wxMutexLocker waitlock(m_replyMutex);
+
+        // wxCondition requires its mutex be held around WaitTimeout() (the wait
+        // releases it while blocked and re-acquires it before returning). The
+        // predicate guards against a reply delivered between the write and here.
+        while ( !m_pending.reply && !m_pending.failed )
+        {
+            if ( m_replyCond.WaitTimeout(wxIPCTimeout * 1000) == wxCOND_TIMEOUT )
+                break;
+        }
+
+        if ( m_pending.reply && m_pending.reply->GetIPCCode() == expected_code )
+        {
+            if ( return_msgptr )
+                *return_msgptr = m_pending.reply;
+            else
+                delete m_pending.reply;
+            m_pending.reply = nullptr;
+            ok = true;
+        }
+    }
+
+    // Drop any reply we are not handing back to the caller, and clear the
+    // pending state under the lock.
+    wxMutexLocker cleanup(m_replyMutex);
+    if ( !ok && m_pending.reply )
+    {
+        delete m_pending.reply;
+        m_pending.reply = nullptr;
+    }
+    m_pending.active = false;
+    return ok;
+}
+
+bool wxTCPEventHandler::DeliverPendingReply(wxIPCMessageBase* msg)
+{
+    // The match against m_pending must be tested under m_replyMutex. Reading
+    // m_pending.active / m_pending.expected here without the lock races the
+    // worker thread updating them.
+    wxMutexLocker lock(m_replyMutex);
+
+    if ( !m_pending.active )
+        return false;
+
+    if ( !msg || msg->GetIPCCode() != m_pending.expected )
+        return false;
+
+    m_pending.reply = msg;     // worker now owns msg
+    m_replyCond.Signal();
+    return true;
+}
+
+// When a worker is waiting on a pending reply and some failure occurs,
+// FailPendingReply makes the worker fail fast instead of waiting for timeout.
+void wxTCPEventHandler::FailPendingReply()
+{
+    wxMutexLocker lock(m_replyMutex);
+    if ( !m_pending.active )
+        return;
+
+    m_pending.failed = true;
+    m_replyCond.Signal();
+}
+
+// Utility to post a wxSOCKET_INPUT event to the socket. This is sometimes
+// necessary because sometimes we receive a single wxSOCKET_INPUT for several
+// wxIPCMessages received, but we processed only one.  By reposting
+// wxSOCKET_INPUT, the main loop re-scans and drains the rest of the pending
+// IPCMessages.  A spurious event is harmless: the handler peeks, finds nothing,
+// and returns.
+void wxTCPEventHandler::PostSocketInputEvent(wxSocketBase* socket)
+{
+    if ( socket && socket->GetEventHandler() )
+    {
+        wxSocketEvent event(wxID_ANY);
+        event.m_event = wxSOCKET_INPUT;
+        event.m_clientData = socket->GetClientData();
+        event.SetEventObject(socket);
+
+        socket->GetEventHandler()->AddPendingEvent(event);
+    }
+}
+
+// Create a wxIPCMessage object from the given code. Caller is responsible for
+// deleting the message when done.
+wxIPCMessageBase* wxTCPEventHandler::GetIPCMessageFromCode(IPCCode code, wxSocketBase* socket)
+{
+    switch ( code )
+    {
+    case IPC_EXECUTE:
+        return new wxIPCMessageExecute(socket, this);
+
+    case IPC_REQUEST:
+        return new wxIPCMessageRequest(socket);
+
+    case IPC_POKE:
+        return new wxIPCMessagePoke(socket, this);
+
+    case IPC_ADVISE_START:
+        return new wxIPCMessageAdviseStart(socket);
+
+    case IPC_ADVISE:
+        return new wxIPCMessageAdvise(socket, this);
+
+    case IPC_ADVISE_STOP:
+        return new wxIPCMessageAdviseStop(socket);
+
+    case IPC_REQUEST_REPLY:
+        return new wxIPCMessageRequestReply(socket, this);
+
+    case IPC_FAIL:
+        return new wxIPCMessageFail(socket);
+
+    case IPC_CONNECT:
+        return new wxIPCMessageConnect(socket);
+
+    case IPC_DISCONNECT:
+        return new wxIPCMessageDisconnect(socket);
+
+    default:
+        return new wxIPCMessageNull(socket);
+    }
 }
 
 void wxTCPEventHandler::SendFailMessage(const wxString& reason, wxSocketBase* socket)
@@ -1692,12 +1906,12 @@ void wxTCPEventHandler::SendFailMessage(const wxString& reason, wxSocketBase* so
 
 void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
 {
-    // connection was closed (either gracefully or not): destroy everything
+    // Connection was closed (either gracefully or not): destroy everything
     UnregisterConnectionSocket(connection->m_sock);
     connection->m_sock->Notify(false);
     connection->m_sock->Close();
 
-    // don't leave references to this soon-to-be-dangling connection in the
+    // Don't leave references to this soon-to-be-dangling connection in the
     // socket as it won't be destroyed immediately as its destruction will be
     // delayed in case there are more events pending for it
     connection->m_sock->SetClientData(nullptr);
@@ -1710,84 +1924,47 @@ void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
 // message was read.  The returned message must be freed by the caller.
 wxIPCMessageBase* wxTCPEventHandler::ReadMessageFromSocket(wxSocketBase* socket)
 {
-    // Serialize all socket I/O: wxSocketBase is not safe for concurrent use
-    // from multiple threads on the same connection.
-    wxCRIT_SECT_LOCKER(lock, gs_critical_io);
-
-    wxIPCMessageNull* null_msg = new wxIPCMessageNull(socket);
-    if ( !null_msg->ReadIPCCode() )
-        return null_msg;
-
     // ptr to returned message when successful
     wxIPCMessageBase *msg = nullptr;
+    IPCCode code = IPC_NULL;
+    bool ok_read = false;
 
-    switch ( null_msg->GetIPCCode() )
-    {
-    case IPC_EXECUTE:
-        msg = new wxIPCMessageExecute(socket, this);
-        break;
+    RunOnMainThread( [&] {
+        // Serialize all socket I/O: wxSocketBase is not safe for concurrent use
+        // from multiple threads on the same connection. The lock is taken here,
+        // inside the marshalled work, so it is only ever held on the thread that
+        // actually performs the I/O.
+        wxCRIT_SECT_LOCKER(lock, gs_critical_io);
+        wxIPCMessageNull null_msg(socket);
+        ok_read = null_msg.ReadIPCCode();
+        if (ok_read)
+        {
+            code = null_msg.GetIPCCode();
+            msg = GetIPCMessageFromCode(null_msg.GetIPCCode(), socket);
+            ok_read = msg->DataFromSocket();
+        }
+    });
 
-    case IPC_REQUEST:
-        msg = new wxIPCMessageRequest(socket);
-        break;
+    if ( ok_read )
+        return msg;
 
-    case IPC_POKE:
-        msg = new wxIPCMessagePoke(socket, this);
-        break;
-
-    case IPC_ADVISE_START:
-        msg = new wxIPCMessageAdviseStart(socket);
-        break;
-
-    case IPC_ADVISE:
-        msg = new wxIPCMessageAdvise(socket, this);
-        break;
-
-    case IPC_ADVISE_STOP:
-        msg = new wxIPCMessageAdviseStop(socket);
-        break;
-
-    case IPC_REQUEST_REPLY:
-        msg = new wxIPCMessageRequestReply(socket, this);
-        break;
-
-    case IPC_FAIL:
-        msg = new wxIPCMessageFail(socket);
-        break;
-
-    case IPC_CONNECT:
-        msg = new wxIPCMessageConnect(socket);
-        break;
-
-    case IPC_DISCONNECT:
-        msg = new wxIPCMessageDisconnect(socket);
-        break;
-
-    default:
-        // faulty message indicates data misalignment
-        null_msg->SetError(wxSOCKET_IOERR);
-        return null_msg;
-    }
-
-    if (!msg->DataFromSocket())
-    {
-        null_msg->SetError(msg->GetError());
-        delete msg;
-        return null_msg;
-    }
-
-    delete null_msg;
-    return msg;
+    // failure
+    delete msg;
+    return new wxIPCMessageNull(socket);
 };
 
 // Writes this message object to the socket.
 bool wxTCPEventHandler::WriteMessageToSocket(wxIPCMessageBase& msg)
 {
-    // Serialize all socket I/O: wxSocketBase is not safe for concurrent use
-    // from multiple threads on the same connection.
-    wxCRIT_SECT_LOCKER(lock, gs_critical_io);
+    bool ok_write = false;
+    RunOnMainThread( [&] {
+        // See ReadMessageFromSocket(): gs_critical_io is taken inside the
+        // marshalled work so it is never held across the worker->main handoff.
+        wxCRIT_SECT_LOCKER(lock, gs_critical_io);
+        ok_write = msg.WriteIPCCode() && msg.DataToSocket();
+    });
 
-    return msg.WriteIPCCode() && msg.DataToSocket();
+    return ok_write;
 };
 
 // We determine if there is more data waiting in the socket buffer for read.
@@ -1795,18 +1972,21 @@ bool wxTCPEventHandler::WriteMessageToSocket(wxIPCMessageBase& msg)
 // IPCCode.
 bool wxTCPEventHandler::PeekAtMessageInSocket(wxSocketBase* socket)
 {
-    // Serialize all socket I/O: wxSocketBase is not safe for concurrent use
-    // from multiple threads on the same connection.
-    wxCRIT_SECT_LOCKER(lock, gs_critical_io);
-
     if ( !socket || !socket->IsOk() )
         return false;
 
     wxUint32 code_with_header = 0;
+    bool enough = false;
 
-    socket->Peek(reinterpret_cast<char *>(&code_with_header), 4);
+    RunOnMainThread( [&] {
+        // See ReadMessageFromSocket(): gs_critical_io is taken inside the
+        // marshalled work so it is never held across the worker->main handoff.
+        wxCRIT_SECT_LOCKER(lock, gs_critical_io);
+        socket->Peek(reinterpret_cast<char *>(&code_with_header), 4);
+        enough = socket->LastCount() == 4;
+    });
 
-    return socket->LastCount() == 4;
+    return enough;
 }
 
 char* wxTCPEventHandler::GetBufPtr(size_t size)
