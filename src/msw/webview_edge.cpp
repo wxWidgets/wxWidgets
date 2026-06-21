@@ -1476,7 +1476,10 @@ bool wxWebViewEdge::DoCallPrintToPdf(const wxString& filePath, ICoreWebView2Prin
 {
     wxCOMPtr<ICoreWebView2_7> webView7;
     if (FAILED(m_impl->m_webView->QueryInterface(IID_PPV_ARGS(&webView7))))
+    {
+        wxLogError(_("PDF export requires a newer version of the WebView2 runtime."));
         return false;
+    }
 
     const wxString filePathCopy = filePath;
     HRESULT hr = webView7->PrintToPdf(
