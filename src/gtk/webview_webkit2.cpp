@@ -1529,6 +1529,12 @@ void wxWebViewWebKit::Print(const wxPrintData& printData, int WXUNUSED(flags))
 
 struct wxWebViewGtkPDFData
 {
+    wxWebViewGtkPDFData(wxWebViewWebKit* webView_,
+                        const wxString& filePath_,
+                        WebKitPrintOperation* printop_)
+        : webView(webView_), filePath(filePath_), printop(printop_) {}
+    ~wxWebViewGtkPDFData() { g_object_unref(printop); }
+
     wxWebViewWebKit* webView;
     wxString filePath;
     WebKitPrintOperation* printop;
@@ -1542,7 +1548,6 @@ static void wxDoHandlePDFResult(gpointer user_data, int success)
     event.SetInt(success);
     event.SetEventObject(data->webView);
     data->webView->HandleWindowEvent(event);
-    g_object_unref(data->printop);
     delete data;
 }
 
@@ -1566,24 +1571,31 @@ wxgtk_webview_webkit_pdf_failed(WebKitPrintOperation*,
 
 } // extern "C"
 
-bool wxWebViewWebKit::PrintToPDF(const wxString& filePath)
+static bool wxDoStartPDFPrint(wxWebViewWebKit* webView,
+                               const wxString& filePath,
+                               const void* printData = nullptr)
 {
-    gchar* uri = g_filename_to_uri(filePath.utf8_str(), nullptr, nullptr);
+    wxGtkString uri(g_filename_to_uri(filePath.utf8_str(), nullptr, nullptr));
     if (!uri)
         return false;
 
-    WebKitPrintOperation* printop = webkit_print_operation_new(m_web_view);
+    WebKitPrintOperation* printop = webkit_print_operation_new(
+        static_cast<WebKitWebView*>(webView->GetNativeBackend()));
 
     wxGtkObject<GtkPrintSettings> settings(gtk_print_settings_new());
     // Do NOT translate this; this is the name of the "printer" that GTK looks up
     gtk_print_settings_set_printer(settings, "Print to File");
     gtk_print_settings_set(settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT, "pdf");
     gtk_print_settings_set(settings, GTK_PRINT_SETTINGS_OUTPUT_URI, uri);
-    g_free(uri);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if (printData)
+        wxApplyPrintData(printop, settings, *static_cast<const wxPrintData*>(printData));
+#endif
 
     webkit_print_operation_set_print_settings(printop, settings);
 
-    wxWebViewGtkPDFData* data = new wxWebViewGtkPDFData{this, filePath, printop};
+    wxWebViewGtkPDFData* data = new wxWebViewGtkPDFData{webView, filePath, printop};
     g_signal_connect(printop, "finished", G_CALLBACK(wxgtk_webview_webkit_pdf_finished), data);
     g_signal_connect(printop, "failed", G_CALLBACK(wxgtk_webview_webkit_pdf_failed), data);
 
@@ -1591,32 +1603,15 @@ bool wxWebViewWebKit::PrintToPDF(const wxString& filePath)
     return true;
 }
 
+bool wxWebViewWebKit::PrintToPDF(const wxString& filePath)
+{
+    return wxDoStartPDFPrint(this, filePath);
+}
+
 #if wxUSE_PRINTING_ARCHITECTURE
 bool wxWebViewWebKit::PrintToPDF(const wxString& filePath, const wxPrintData& printData)
 {
-    gchar* uri = g_filename_to_uri(filePath.utf8_str(), nullptr, nullptr);
-    if (!uri)
-        return false;
-
-    WebKitPrintOperation* printop = webkit_print_operation_new(m_web_view);
-
-    wxGtkObject<GtkPrintSettings> settings(gtk_print_settings_new());
-    // Do NOT translate this; this is the name of the "printer" that GTK looks up
-    gtk_print_settings_set_printer(settings, "Print to File");
-    gtk_print_settings_set(settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT, "pdf");
-    gtk_print_settings_set(settings, GTK_PRINT_SETTINGS_OUTPUT_URI, uri);
-    g_free(uri);
-
-    wxApplyPrintData(printop, settings, printData);
-
-    webkit_print_operation_set_print_settings(printop, settings);
-
-    wxWebViewGtkPDFData* data = new wxWebViewGtkPDFData{this, filePath, printop};
-    g_signal_connect(printop, "finished", G_CALLBACK(wxgtk_webview_webkit_pdf_finished), data);
-    g_signal_connect(printop, "failed", G_CALLBACK(wxgtk_webview_webkit_pdf_failed), data);
-
-    webkit_print_operation_print(printop);
-    return true;
+    return wxDoStartPDFPrint(this, filePath, &printData);
 }
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
