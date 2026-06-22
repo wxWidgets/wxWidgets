@@ -311,8 +311,7 @@ wxString GetRenderMode(wxSVGShapeRenderingMode style)
         mode = wxS("geometricPrecision");
         break;
     case wxSVG_SHAPE_RENDERING_AUTO:
-        mode = wxS("auto");
-        break;
+        return wxString();
     }
 
     wxString s = wxString::Format(wxS("shape-rendering=\"%s\""), mode);
