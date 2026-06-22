@@ -203,6 +203,8 @@ wxString GetPenPattern(const wxPen& pen)
         // these penstyles do not need a pattern.
         break;
     }
+    if (!s.empty())
+        s.Prepend(wxS(" "));
     return s;
 }
 
@@ -291,7 +293,7 @@ wxString GetBrushPattern(const wxBrush& brush)
     wxString brushStyle = GetBrushStyleName(brush);
 
     if (!brushStyle.empty())
-        s = wxString::Format(wxS("fill=\"url(#%s)\""), brushStyle);
+        s = wxString::Format(wxS(" fill=\"url(#%s)\""), brushStyle);
 
     return s;
 }
@@ -311,12 +313,10 @@ wxString GetRenderMode(wxSVGShapeRenderingMode style)
         mode = wxS("geometricPrecision");
         break;
     case wxSVG_SHAPE_RENDERING_AUTO:
-        mode = wxS("auto");
-        break;
+        return wxString();
     }
 
-    wxString s = wxString::Format(wxS("shape-rendering=\"%s\""), mode);
-    return s;
+    return wxString::Format(wxS(" shape-rendering=\"%s\""), mode);
 }
 
 wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode, wxString& patternName)
@@ -357,7 +357,7 @@ wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode, wxS
 
         s += wxString::Format(wxS("  <pattern id=\"%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
             patternName);
-        s += wxString::Format(wxS("    <path stroke=\"%s\" stroke-opacity=\"%s\" %s %s %s/>\n"),
+        s += wxString::Format(wxS("    <path stroke=\"%s\" stroke-opacity=\"%s\" %s %s%s/>\n"),
             brushColourStr, NumStr(opacity), brushStrokeStr, pattern, GetRenderMode(mode));
         s += wxS("  </pattern>\n");
     }
@@ -698,8 +698,7 @@ void wxSVGFileDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     NewGraphicsIfNeeded();
 
-    wxString s;
-    s = wxString::Format(wxS("  <path d=\"M%d %d L%d %d\" %s %s/>\n"),
+    const wxString s = wxString::Format(wxS("  <path d=\"M%d %d L%d %d\"%s%s/>\n"),
         x1, y1, x2, y2, GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen));
 
     write(s);
@@ -713,9 +712,7 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
     if (n > 1)
     {
         NewGraphicsIfNeeded();
-        wxString s;
-
-        s = wxString::Format(wxS("  <path d=\"M%d %d"),
+        wxString s = wxString::Format(wxS("  <path d=\"M%d %d"),
             (points[0].x + xoffset), (points[0].y + yoffset));
 
         if ( AreAutomaticBoundingBoxUpdatesEnabled() )
@@ -728,7 +725,7 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
                 CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
         }
 
-        s += wxString::Format(wxS("\" fill=\"none\" %s %s/>\n"),
+        s += wxString::Format(wxS("\" fill=\"none\"%s%s/>\n"),
             GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen));
 
         write(s);
@@ -787,7 +784,7 @@ void wxSVGFileDCImpl::DoDrawSpline(const wxPointList* points)
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(wxRound(p2.m_x), wxRound(p2.m_y));
 
-    s += wxString::Format("\" fill=\"none\" %s %s/>\n",
+    s += wxString::Format("\" fill=\"none\"%s%s/>\n",
                           GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen));
     write(s);
 }
@@ -912,7 +909,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
 #endif
 
             s = wxString::Format(
-                wxS("  <rect x=\"%s\" y=\"%s\" width=\"%d\" height=\"%d\" %s %s transform=\"%s\"/>\n"),
+                wxS("  <rect x=\"%s\" y=\"%s\" width=\"%d\" height=\"%d\"%s %s transform=\"%s\"/>\n"),
                 NumStr(xRect), NumStr(yRect), ww, hh,
                 GetRenderMode(m_writer->GetShapeRenderingMode()), rectStyle, rectTransform);
 
@@ -952,9 +949,7 @@ void wxSVGFileDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoo
 void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
     NewGraphicsIfNeeded();
-    wxString s;
-
-    s = wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" %s %s %s/>\n"),
+    const wxString s = wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\"%s%s%s/>\n"),
         x, y, width, height, NumStr(radius),
         GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen), GetBrushPattern(m_brush));
 
@@ -981,7 +976,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
             CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
     }
 
-    s += wxString::Format(wxS("\" %s %s %s fill-rule=\"%s\"/>\n"),
+    s += wxString::Format(wxS("\"%s%s%s fill-rule=\"%s\"/>\n"),
         GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen), GetBrushPattern(m_brush),
         fillStyle == wxODDEVEN_RULE ? wxS("evenodd") : wxS("nonzero"));
 
@@ -1037,8 +1032,7 @@ void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord
     const double rh = height / 2.0;
     const double rw = width / 2.0;
 
-    wxString s;
-    s = wxString::Format(wxS("  <ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" %s %s"),
+    wxString s = wxString::Format(wxS("  <ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\"%s%s"),
         NumStr(x + rw), NumStr(y + rh), NumStr(rw), NumStr(rh),
         GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen));
     s += wxS("/>\n");
@@ -1108,7 +1102,7 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
             x1, y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, line);
     }
 
-    s += wxString::Format(wxS("\" %s %s/>\n"),
+    s += wxString::Format(wxS("\"%s%s/>\n"),
         GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen));
 
     write(s);
@@ -1200,7 +1194,7 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
         NewGraphicsIfNeeded();
 
         wxString arcFill = arcPath;
-        arcFill += wxString::Format(wxS(" L%s %s z\" %s %s/>\n"),
+        arcFill += wxString::Format(wxS(" L%s %s z\"%s%s/>\n"),
             NumStr(xc), NumStr(yc),
             GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen));
         write(arcFill);
@@ -1209,7 +1203,7 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     wxDCBrushChanger setTransp(*GetOwner(), *wxTRANSPARENT_BRUSH);
     NewGraphicsIfNeeded();
 
-    wxString arcLine = wxString::Format(wxS("%s\" %s %s/>\n"),
+    wxString arcLine = wxString::Format(wxS("%s\"%s%s/>\n"),
         arcPath, GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen));
     write(arcLine);
 
@@ -1247,7 +1241,7 @@ void wxSVGFileDCImpl::DoGradientFillLinear(const wxRect& rect,
     s += wxS("    </linearGradient>\n");
     s += wxS("  </defs>\n");
 
-    s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"url(#gradient%zu)\" %s %s %s/>\n"),
+    s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"url(#gradient%zu)\"%s%s%s/>\n"),
         rect.x, rect.y, rect.width, rect.height, gradId,
         GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen), GetBrushPattern(m_brush));
 
@@ -1287,7 +1281,7 @@ void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
     s += wxS("    </radialGradient>\n");
     s += wxS("  </defs>\n");
 
-    s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"url(#gradient%zu)\" %s %s %s/>\n"),
+    s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"url(#gradient%zu)\"%s%s%s/>\n"),
         rect.x, rect.y, rect.width, rect.height, gradId,
         GetRenderMode(m_writer->GetShapeRenderingMode()), GetPenPattern(m_pen), GetBrushPattern(m_brush));
 
