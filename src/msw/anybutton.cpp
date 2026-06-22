@@ -1262,10 +1262,59 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
                             TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
 
-    if ( button->UseBgCol() && iState != PBS_HOT )
+    if ( button->UseBgCol() )
     {
-        COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
-        AutoHBRUSH hbrushBackground(colBg);
+        wxColour col = button->GetBackgroundColour();
+
+        // We don't currently have a way to specify a different background
+        // colour for the hot/current state, but we want it to be visually
+        // different from the normal state, so construct a slightly different
+        // shade of this colour automatically.
+#if wxUSE_IMAGE
+        if ( iState == PBS_HOT )
+        {
+            wxImage::RGBValue rgb(col.Red(), col.Green(), col.Blue());
+            wxImage::HSVValue hsv = wxImage::RGBtoHSV(rgb);
+
+            // If the background is light, make it slightly darker, otherwise
+            // make it lighter.
+            //
+            // Note that we assume that the contrast with the text will remain
+            // good enough, a better solution would be to check the contrast
+            // and somehow find the shade of the background colour which still
+            // gives sufficient contrast with the text colour, but this is more
+            // complicated and this simple version works well enough for the
+            // colours with sufficient contrast.
+            double valueHot = hsv.value;
+            if ( hsv.value < 0.5 )
+            {
+                valueHot += 0.2;
+
+                // Don't make it completely white.
+                if ( valueHot > 0.95 )
+                {
+                    // But also don't make it darker than the original colour.
+                    valueHot = wxMax(0.95, hsv.value);
+                }
+            }
+            else // Same logic as above, but in reverse.
+            {
+                valueHot -= 0.2;
+
+                if ( valueHot < 0.05 )
+                {
+                    hsv.value = wxMin(0.05, hsv.value);
+                }
+            }
+
+            hsv.value = valueHot;
+
+            rgb = wxImage::HSVtoRGB(hsv);
+            col = wxColour(rgb.red, rgb.green, rgb.blue);
+        }
+#endif // wxUSE_IMAGE
+
+        AutoHBRUSH hbrushBackground(wxColourToRGB(col));
 
         FillRect(hdc, &rectBtn, hbrushBackground);
     }
@@ -1506,22 +1555,9 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     // finally draw the label
     if ( ShowsLabel() )
     {
-        COLORREF colFg;
-        if ( state & ODS_DISABLED )
-        {
-            colFg = ::GetSysColor(COLOR_GRAYTEXT);
-        }
-        else if ( wxUxThemeIsActive() &&
-                    GetButtonState(this, state) == wxAnyButton::State_Current )
-        {
-            // The button is highlighted, use the standard colour to ensure
-            // that its text is readable.
-            colFg = ::GetSysColor(COLOR_BTNTEXT);
-        }
-        else
-        {
-            colFg = wxColourToRGB(GetForegroundColour());
-        }
+        COLORREF colFg = state & ODS_DISABLED
+                            ? ::GetSysColor(COLOR_GRAYTEXT)
+                            : wxColourToRGB(GetForegroundColour());
 
         wxTextColoursChanger changeFg(hdc, colFg, CLR_INVALID);
         wxBkModeChanger changeBkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
