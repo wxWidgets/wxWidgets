@@ -8,22 +8,17 @@
 
 #include "testprec.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/font.h"
-#endif // WX_PRECOMP
-
 #include "drawing.h"
 
-void GraphicsContextDrawingTestCase::DoBasicDrawings (wxGraphicsContext *gc)
+#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+
+void DoBasicDrawings(wxGraphicsContext *gc)
 {
-    // this test is expected to be portable, on any platform, in order to keep
-    //  that property, it should contain only axis aligned/integer drawings so
-    //  that the anti-aliasing method does not cause troubles.
-
     wxGraphicsBrush gbBackground =
-        gc->CreateBrush (wxBrush (wxColour (255, 255, 255)));
+        gc->CreateBrush(wxBrush(wxColour(255, 255, 255)));
 
-    gc->SetBrush (gbBackground);
-    gc->DrawRectangle (0, 0, 800, 600);
+    gc->SetBrush(gbBackground);
+    gc->DrawRectangle(0, 0, 800, 600);
 }
+
+#endif // wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)

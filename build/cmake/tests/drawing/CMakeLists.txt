@@ -24,7 +24,6 @@ set(TEST_DRAWING_SRC
     testableframe.h
     testimage.h
     drawing/drawing.h
-    drawing/testimagefile.h
     )
 
 wx_add_test(test_drawing CONSOLE_GUI ${TEST_DRAWING_SRC})

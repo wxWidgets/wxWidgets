@@ -17,78 +17,13 @@
 #include "wx/svggc.h"
 #endif
 
-//// ORGANIZATION /////////////////////////////////////////////////////////////
+#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
 
-// This test suite is organized around two axes:
-// - drawing test cases
-// - drawing contexts life cycle
-// => each drawing test case represent a serie of drawing primitives to execute
-//  for whichever context
-// => each drawing context life cycle represent a particular class of
-//  wxGraphicsContext and a way to create, dispose of and save it so that it is
-//  possible to compare it with a reference file
-
-// The crossing of drawing case and life cycles is implemented by
-// RunIndividualDrawingCase
-
-// The CPPUNIT test case class present a test per drawing case per life cycle
-// so that it is easy to run a particular test
-
-// The test requires reference files and must produce them when an
-// implementation changed and new good references are known to be produced.
-// Environment variables control where reference files are located and when to
-// produce them:
-//  - WX_TEST_SUITE_BUILD_REFERENCE must be "1" to request production of
-//      reference files (by default only testing is done)
-//  - WX_TEST_SUITE_REFERENCE_DIR must be a path to a directory containing the
-//      sub-directory "gcdrawing-references" (by default the parent directory
-//      of the directory of the test program is used)
-
-//// WRITING NEW TEST CASES
-
-// - add a new function to realize the drawing in the "cases functions" section
-// - add a case structure declaration for it in the "test cases" section
-// - use drawingbasic.cpp as a sample to add your own test case implementation
-
-//// WRITING NEW FACTORIES
-
-// - if the wxGraphicsContext is a class built-in wxWidgets, add a
-//      DrawingTestGCFactory derived sub-class in drawing.h header
-//      together with a declaration for it and its implementation
-//      can be placed in drawing.cpp
-//      Once this is done duplicate all the CPP UNIT test functions
-//      and entries "DrawToImage_YYY" to your new GC "DrawTo<newGc>_YYYY"
-//
-
-wxString GraphicsContextDrawingTestCase::ms_referenceDirectory;
-bool GraphicsContextDrawingTestCase::ms_buildReference;
-bool GraphicsContextDrawingTestCase::ms_buildReferenceDetermined;
-GraphicsContextDrawingTestCase::ImageGraphicsContextLifeCycle
-    GraphicsContextDrawingTestCase::ms_imageLifeCycle;
-
-#if wxUSE_SVG
-    GraphicsContextDrawingTestCase::SvgGraphicsContextLifeCycle
-        GraphicsContextDrawingTestCase::ms_svgLifeCycle;
-#endif // wxUSE_SVG
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( GraphicsContextDrawingTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( GraphicsContextDrawingTestCase,
-    "GraphicsContextDrawingTestCase" );
-
-// ----------------------------------------------------------------------------
-// GraphicsContextDrawingTestCase implementation
-// ----------------------------------------------------------------------------
-
-void GraphicsContextDrawingTestCase::DoFullDrawings (wxGraphicsContext *gc)
+void DoFullDrawings(wxGraphicsContext *gc)
 {
-    // Background
     gc->SetBrush(*wxWHITE_BRUSH);
     gc->DrawRectangle(0, 0, 800, 600);
 
-    // Some shapes
     gc->SetPen(wxPen(*wxRED, 2));
     gc->SetBrush(*wxBLUE_BRUSH);
     gc->DrawRectangle(50, 50, 200, 100);
@@ -100,7 +35,6 @@ void GraphicsContextDrawingTestCase::DoFullDrawings (wxGraphicsContext *gc)
     gc->SetBrush(*wxCYAN_BRUSH);
     gc->DrawRoundedRectangle(50, 250, 150, 80, 15);
 
-    // Gradients
     wxGraphicsGradientStops stops;
     stops.Add(*wxRED, 0.0);
     stops.Add(*wxBLUE, 1.0);
@@ -108,10 +42,11 @@ void GraphicsContextDrawingTestCase::DoFullDrawings (wxGraphicsContext *gc)
     gc->SetBrush(grad);
     gc->DrawRectangle(300, 250, 200, 100);
 
-    // Text
     gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
     gc->DrawText(wxASCII_STR("wxSVGGraphicsContext Full Test"), 50, 400);
 }
+
+#endif // wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
 
 // ----------------------------------------------------------------------------
 // SVG Test Cases
@@ -142,11 +77,9 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
             wxGraphicsContext* gc = gcSvg.get();
             REQUIRE(gc);
 
-            // Background
             gc->SetBrush(*wxWHITE_BRUSH);
             gc->DrawRectangle(0, 0, width, height);
 
-            // Shapes
             gc->SetPen(wxPen(*wxRED, 2));
             gc->SetBrush(*wxBLUE_BRUSH);
             gc->DrawRectangle(10, 10, 100, 50);
@@ -157,7 +90,6 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
             gc->SetPen(wxPen(*wxBLACK, 3));
             gc->StrokeLine(10, 100, 390, 100);
 
-            // Gradients
             wxGraphicsGradientStops stops;
             stops.Add(wxColour(255, 0, 0), 0.0);
             stops.Add(wxColour(0, 0, 255), 1.0);
@@ -165,11 +97,9 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
             gc->SetBrush(grad);
             gc->DrawRectangle(10, 150, 100, 50);
 
-            // Text
             gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
             gc->DrawText(wxASCII_STR("SVG Graphics Context"), 150, 170);
 
-            // Transformations
             gc->PushState();
             gc->Translate(200, 250);
             gc->Rotate(M_PI / 4);
@@ -178,7 +108,6 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
             gc->PopState();
         }
 
-        // Check if file exists and contains basic SVG tags
         wxString content;
         REQUIRE(wxFFile(filename, "r").ReadAll(&content));
 
@@ -217,8 +146,7 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
         wxGraphicsContext* gc = gcSvg.get();
         REQUIRE(gc);
 
-        // Exercise the "Full" drawing logic
-        GraphicsContextDrawingTestCase::DoFullDrawings(gc);
+        DoFullDrawings(gc);
 
         wxString svg = gcSvg->GetSVGDocument();
         CHECK(svg.Contains("viewBox=\"0 0 800 600\""));
@@ -237,7 +165,7 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
         wxGraphicsContext* gc = gcSvg.get();
         REQUIRE(gc);
 
-        GraphicsContextDrawingTestCase::DoBasicDrawings(gc);
+        DoBasicDrawings(gc);
 
         wxString svg = gcSvg->GetSVGDocument();
         CHECK(svg.Contains("fill=\"#FFFFFF\""));
@@ -251,16 +179,14 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
         wxGraphicsContext* gc = gcSvg.get();
         REQUIRE(gc);
 
-        GraphicsContextDrawingTestCase::DoFontDrawings(gc);
+        DoFontDrawings(gc);
 
         wxString svg = gcSvg->GetSVGDocument();
         CHECK(svg.Contains("<text"));
         CHECK(svg.Contains("This is text"));
         CHECK(svg.Contains("Another visible text"));
-        // Multiline text is emitted as one <text> element per line.
         CHECK(svg.Contains(">And<"));
         CHECK(svg.Contains(">more<"));
-        // Rotated multiline text emits a rotate() transform per line.
         CHECK(svg.Contains(">Rotated text<"));
         CHECK(svg.Contains("rotate("));
     }
@@ -310,7 +236,6 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
         wxGraphicsContext* gc = gcSvg.get();
         REQUIRE(gc);
 
-        // Explicitly set the embed handler to ensure data URLs are generated
         gcSvg->SetBitmapHandler(new wxSVGBitmapEmbedHandler());
 
         wxBitmap bmp(32, 32);
@@ -389,7 +314,6 @@ TEST_CASE("SVGGraphicsContext", "[svggc][graphics][svg]")
 
     SECTION("wxSVGFileDC")
     {
-        // Verify that the underlying DC also works correctly
         wxSVGFileDC dc(wxString(), 400, 300);
         dc.SetBrush(*wxRED_BRUSH);
         dc.DrawRectangle(10, 10, 100, 100);
