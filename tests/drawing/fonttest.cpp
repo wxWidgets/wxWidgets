@@ -9,6 +9,7 @@
 #include "testprec.h"
 
 #include "drawing.h"
+#include "wx/brush.h"
 
 #ifdef __WXGTK__
 #include "glib-object.h"
