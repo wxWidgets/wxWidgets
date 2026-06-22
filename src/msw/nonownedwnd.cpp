@@ -34,6 +34,7 @@
     #include "wx/graphics.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+#include "wx/display.h"
 #include "wx/dynlib.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/private/darkmode.h"
@@ -318,7 +319,7 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         wxRect actualNewRect = newRect;
         if ( wxSizer* sizer = GetSizer() )
         {
-            const wxSize minSize = ClientToWindowSize(sizer->GetMinSize());
+            const wxSize minSize = sizer->ComputeFittingClientSize(this);
             wxSize diff = minSize - newRect.GetSize();
 
             // We don't want to shrink the window as if the user had increased
@@ -338,6 +339,14 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
             // which it might have been just moved to this one, as doing this
             // would result in an infinite stream of WM_DPICHANGED messages.
             actualNewRect.Inflate(diff / 2);
+
+            // However still ensure that the window origin is visible on its
+            // display, we don't move to move it out of visible space.
+            const wxRect screenRect = wxDisplay(this).GetClientArea();
+            if ( actualNewRect.x < screenRect.x )
+                actualNewRect.x = screenRect.x;
+            if ( actualNewRect.y < screenRect.y )
+                actualNewRect.y = screenRect.y;
         }
 
         SetSize(actualNewRect);

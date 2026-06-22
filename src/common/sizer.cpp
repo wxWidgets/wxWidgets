@@ -33,6 +33,10 @@
 #include "wx/listimpl.cpp"
 #include "wx/private/window.h"
 
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    #include "wx/private/rescale.h"
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+
 #include <memory>
 
 //---------------------------------------------------------------------------
@@ -1615,6 +1619,46 @@ bool wxSizer::IsShown( size_t index ) const
     return node->GetData()->IsShown();
 }
 
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+
+// Recursively update the sizer and any child sizers and spacers.
+void wxSizer::UpdateOnDPIChange(wxSize oldDPI, wxSize newDPI)
+{
+    m_minSize = wxRescaleCoord(m_minSize).From(oldDPI).To(newDPI);
+
+    for ( wxSizerItemList::compatibility_iterator
+            node = GetChildren().GetFirst();
+            node;
+            node = node->GetNext() )
+    {
+        wxSizerItem* sizerItem = node->GetData();
+
+        int border = sizerItem->GetBorder();
+        border = wxRescaleCoord(border).From(oldDPI).To(newDPI);
+        sizerItem->SetBorder(border);
+
+        // only scale sizers and spacers, not windows
+        if ( sizerItem->IsSizer() || sizerItem->IsSpacer() )
+        {
+            wxSize min = sizerItem->GetMinSize();
+            min = wxRescaleCoord(min).From(oldDPI).To(newDPI);
+            sizerItem->SetMinSize(min);
+
+            if ( sizerItem->IsSpacer() )
+            {
+                wxSize size = sizerItem->GetSize();
+                size = wxRescaleCoord(size).From(oldDPI).To(newDPI);
+                sizerItem->SetDimension(wxDefaultPosition, size);
+            }
+
+            // Update any child sizers if this is a sizer
+            if ( wxSizer* childSizer = sizerItem->GetSizer() )
+                childSizer->UpdateOnDPIChange(oldDPI, newDPI);
+        }
+    }
+}
+
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
 //---------------------------------------------------------------------------
 // wxGridSizer
@@ -1843,6 +1887,19 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
 
     item->SetDimension(pt, sz);
 }
+
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+
+// Recursively update the sizer and any child sizers and spacers.
+void wxGridSizer::UpdateOnDPIChange(wxSize oldDPI, wxSize newDPI)
+{
+    m_vgap = wxRescaleCoord(m_vgap).From(oldDPI).To(newDPI);
+    m_hgap = wxRescaleCoord(m_hgap).From(oldDPI).To(newDPI);
+
+    wxSizer::UpdateOnDPIChange(oldDPI, newDPI);
+}
+
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
 //---------------------------------------------------------------------------
 // wxFlexGridSizer

@@ -748,6 +748,15 @@ public:
     virtual bool InformFirstDirection( int WXUNUSED(direction), int WXUNUSED(size), int WXUNUSED(availableOtherDir) )
         { return false; }
 
+    // Update stored dimensions expressed in logical pixels on DPI change.
+    // This is only needed on the platforms where logical pixels differ from
+    // the physical ones, e.g MSW.
+    //
+    // This is an internal function, only called by wxWidgets itself.
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    virtual void UpdateOnDPIChange(wxSize oldDPI, wxSize newDPI);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+
 protected:
     wxSize              m_size;
     wxSize              m_minSize;
@@ -821,6 +830,10 @@ public:
     // return the number of total items and the number of columns and rows
     // (for internal use only)
     int CalcRowsCols(int& rows, int& cols) const;
+
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    virtual void UpdateOnDPIChange(wxSize oldDPI, wxSize newDPI) override;
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
 protected:
     // the number of rows/columns in the sizer, if 0 then it is determined
