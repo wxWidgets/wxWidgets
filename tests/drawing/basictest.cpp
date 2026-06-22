@@ -9,6 +9,7 @@
 #include "testprec.h"
 
 #include "drawing.h"
+#include "wx/brush.h"
 
 #if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
 

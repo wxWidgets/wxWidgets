@@ -9,9 +9,11 @@
 #include "testprec.h"
 
 #include "drawing.h"
+#include "wx/brush.h"
 #include "wx/dcmemory.h"
 #include "wx/ffile.h"
 #include "wx/filename.h"
+#include "wx/pen.h"
 
 #if wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT
 #include "wx/svggc.h"
