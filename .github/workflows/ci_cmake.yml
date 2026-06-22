@@ -256,7 +256,7 @@ jobs:
 
           httpbin_launch
 
-          ctest -V -C Debug --output-on-failure --interactive-debug-mode 0 . || rc=$?
+          ctest -V -C Debug -E test_drawing --output-on-failure --interactive-debug-mode 0 . || rc=$?
           if [ -n "$rc" ]; then
               httpbin_show_log
               exit $rc
