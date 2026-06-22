@@ -220,6 +220,7 @@ wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
     EVT_DPI_CHANGED(wxListCtrl::OnDPIChanged)
+    EVT_SYS_COLOUR_CHANGED(wxListCtrl::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -257,21 +258,8 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
-    const wxVisualAttributes& defAttrs = GetDefaultAttributes();
-
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        MSWInitHeader();
-
-        // We also need to explicitly set the background colour as the value
-        // returned by GetBackgroundColour() by default doesn't match the
-        // actually used colour either when using dark mode.
-        SetBackgroundColour(defAttrs.colBg);
-    }
-    else
-    {
+    if ( !wxMSWDarkMode::IsActive() )
         EnableSystemThemeByDefault();
-    }
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
     // versions of _some_ messages (notably LVN_GETDISPINFOA)
@@ -280,7 +268,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     // We must set the default text colour to the system/theme color, otherwise
     // GetTextColour will always return black even if this is not what is used
     // by default.
-    SetTextColour(defAttrs.colFg);
+    UpdateNativeColours();
 
     if ( InReportView() )
         MSWSetExListStyles();
@@ -345,8 +333,9 @@ void wxListCtrl::MSWSetExListStyles()
 
 void wxListCtrl::MSWInitHeader()
 {
-    // Currently we only need to do something here in dark mode.
-    if ( !wxMSWDarkMode::IsActive() )
+    // Currently we only need to do something here in dark mode or switching
+    // between modes.
+    if ( !(wxMSWDarkMode::IsActive() || wxMSWDarkMode::HasChanged()) )
         return;
 
     // It's not an error if the header doesn't exist.
@@ -601,25 +590,12 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-bool wxListCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxListCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 {
-    // There doesn't seem to be any theme that works well out of the box:
-    //
-    //  - "Explorer" draws bluish hover highlight rectangle which is not at
-    //    all like the greyish one used by the actual Explorer in dark mode.
-    //    It also draws vertical separator lines, unlike the Explorer itself,
-    //    which wouldn't be too bad if they were not misaligned with the
-    //    separators drawn in the header, when it is used, which looks ugly.
-    //  - "DarkMode_Explorer" uses the same selection colours as the light mode
-    //    and doesn't draw hover rectangle at all.
-    //  - "ItemsView" draws the selection and hover as expected, but uses light
-    //    mode scrollbars and also misaligned vertical separators.
-    //
-    // We currently use Explorer, in Report view we can override all drawing,
-    // the other views will still have the bluish hover colour.
-    support.themeName = L"Explorer";
+    wxListCtrlBase::MSWSetDarkOrLightMode(setmode);
 
-    return true;
+    // Update header.
+    MSWInitHeader();
 }
 
 int wxListCtrl::MSWGetToolTipMessage() const
@@ -667,7 +643,7 @@ bool wxListCtrl::SetForegroundColour(const wxColour& col)
     if ( !wxWindow::SetForegroundColour(col) )
         return false;
 
-    SetTextColour(col);
+    UpdateNativeColours();
 
     return true;
 }
@@ -678,15 +654,19 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
     if ( !wxWindow::SetBackgroundColour(col) )
         return false;
 
-    // we set the same colour for both the "empty" background and the items
-    // background
-    COLORREF color = wxColourToRGB(col);
-    if ( !ListView_SetBkColor(GetHwnd(), color) )
-        wxLogLastError(wxS("ListView_SetBkColor()"));
-    if ( !ListView_SetTextBkColor(GetHwnd(), color) )
-        wxLogLastError(wxS("ListView_SetTextBkColor()"));
+    UpdateNativeColours();
 
     return true;
+}
+
+void wxListCtrl::UpdateNativeColours()
+{
+    // we set the same colour for both the "empty" background and the items
+    // background
+    const auto colBg = wxColourToRGB(GetBackgroundColour());
+    ListView_SetBkColor(m_hWnd, colBg);
+    ListView_SetTextBkColor(m_hWnd, colBg);
+    ListView_SetTextColor(m_hWnd, wxColourToRGB(GetForegroundColour()));
 }
 
 bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
@@ -1403,20 +1383,29 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
 
     wxCopyRECTToRect(rectWin, rect);
 
-    // We can't use wxGetListCtrlSubItemRect() for the 0th subitem as 0 means
-    // the entire row for this function, so we need to calculate it ourselves.
-    if ( subItem == 0 && code == wxLIST_RECT_BOUNDS )
+    // We can't trust the native LVM_GETSUBITEMRECT for LVIR_BOUNDS because:
+    //  - subitem 0 returns the entire row bounds, not just column 0
+    //  - when column 0 is narrower than the icon, the native control clamps
+    //    all subitems' left edge to at least the icon width, misaligning them
+    //
+    // So for all subitems we calculate x and width from GetColumnWidth() in
+    // visual (column order) order, which always reflects the real column sizes.
+    if ( subItem != wxLIST_GETSUBITEMRECT_WHOLEITEM && code == wxLIST_RECT_BOUNDS )
     {
-        // Because the columns can be reordered, we need to sum the widths of
-        // all preceding columns to get the correct x position.
+        // Start from the row's left edge (which accounts for scrolling).
+        RECT rowRect;
+        wxGetListCtrlItemRect(GetHwnd(), item, LVIR_BOUNDS, rowRect);
+        int x = rowRect.left;
+
         for ( auto col : GetColumnsOrder() )
         {
             if ( col == subItem )
                 break;
 
-            rect.x += GetColumnWidth(col);
+            x += GetColumnWidth(col);
         }
 
+        rect.x = x;
         rect.width = GetColumnWidth(subItem);
     }
 
@@ -1584,16 +1573,13 @@ int wxListCtrl::GetSelectedItemCount() const
 // Gets the text colour of the listview
 wxColour wxListCtrl::GetTextColour() const
 {
-    COLORREF ref = ListView_GetTextColor(GetHwnd());
-    wxColour col(GetRValue(ref), GetGValue(ref), GetBValue(ref));
-    return col;
+    return GetForegroundColour();
 }
 
 // Sets the text colour of the listview
 void wxListCtrl::SetTextColour(const wxColour& col)
 {
-    if ( !ListView_SetTextColor(GetHwnd(), wxColourToPalRGB(col)) )
-        wxLogLastError(wxS("ListView_SetTextColor()"));
+    SetForegroundColour(col);
 }
 
 // Gets the index of the topmost visible item when in
@@ -3339,8 +3325,6 @@ wxColour GetEffectiveBackgroundColour(wxListCtrl* listctrl)
 {
     if ( listctrl->IsEnabled() )
         return listctrl->GetBackgroundColour();
-    else if ( wxMSWDarkMode::IsActive() )
-        return wxMSWDarkMode::GetColour(wxSYS_COLOUR_BTNFACE);
     else
         return wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
 }
@@ -3706,6 +3690,12 @@ void wxListCtrl::OnCharHook(wxKeyEvent& event)
         }
     }
 
+    event.Skip();
+}
+
+void wxListCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    UpdateNativeColours();
     event.Skip();
 }
 

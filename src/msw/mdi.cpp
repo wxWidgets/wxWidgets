@@ -522,10 +522,7 @@ void wxMDIParentFrame::OnIconized(wxIconizeEvent& event)
 void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     if ( m_clientWindow )
-    {
         m_clientWindow->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
-        m_clientWindow->Refresh();
-    }
 
     event.Skip();
 }
@@ -1467,6 +1464,13 @@ void wxMDIChildFrame::OnIdle(wxIdleEvent& event)
     }
 
     event.Skip();
+}
+
+wxVisualAttributes wxMDIChildFrame::GetDefaultAttributes() const
+{
+    auto attrs = wxMDIChildFrameBase::GetDefaultAttributes();
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    return attrs;
 }
 
 // ---------------------------------------------------------------------------

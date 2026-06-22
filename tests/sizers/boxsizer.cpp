@@ -448,6 +448,40 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::Replace", "[sizer]")
     m_sizer->Replace(0, new wxSizerItem(new wxWindow(m_win, wxID_ANY)));
 }
 
+TEST_CASE_METHOD(BoxSizerTestCase, "Sizer::DetachItem", "[sizer]")
+{
+    wxSizerItem *item = nullptr;
+
+    SECTION("Spacer")
+    {
+        item = new wxSizerItem(0, 0);
+    }
+
+    SECTION("Sizer")
+    {
+        item = new wxSizerItem(new wxBoxSizer(wxVERTICAL));
+    }
+
+    SECTION("Window")
+    {
+        item = new wxSizerItem(new wxWindow(m_win, wxID_ANY));
+    }
+
+    m_sizer->Add(item);
+
+    // Test re-insertion
+    auto *detached = m_sizer->DetachItem(0);
+    CHECK( item == detached );
+
+    m_sizer->Insert(0, detached);
+
+    // Test deletion after detach.
+    detached = m_sizer->DetachItem(0);
+    CHECK( item == detached );
+
+    delete detached;
+}
+
 TEST_CASE("Sizer::CombineFlags", "[sizer]")
 {
     // This is a compile-time test which simply verifies that we can combine

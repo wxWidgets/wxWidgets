@@ -384,10 +384,11 @@ public:
         @note This function should normally be only used when the application
               is not already in foreground.
 
-        This function is currently implemented for Win32 where it flashes
-        the window icon in the taskbar, and for wxGTK with task bars
-        supporting it.
-
+        This function is currently implemented under Windows where it flashes
+        the window icon in the taskbar, and in wxGTK, but its behaviour there
+        depends on support from the desktop environment or window manager: if
+        the current environment does not support window urgency hints, calling
+        this function has no visible effect.
     */
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
@@ -407,16 +408,16 @@ public:
         Class used with SaveGeometry() and RestoreToGeometry().
 
         This is an abstract base class, i.e. to use it you must define a
-        derived class implementing the pure virtual SaveField() and
-        RestoreField() methods.
+        derived class implementing the pure virtual SaveValue() and
+        RestoreValue() methods.
 
         For example, if you wished to store the window geometry in a database,
         you could derive a class saving fields such as "width" or "height" in a
         table in this database and restoring them from it later.
 
-        @since 3.1.2
+        @since 3.3.0
      */
-    class GeometrySerializer
+    class GeometryStore
     {
         /**
             Save a single field with the given value.
@@ -433,12 +434,12 @@ public:
             @return @true if the field was saved or @false if saving it failed,
                 resulting in wxTopLevelWindow::SaveGeometry() failure.
          */
-        virtual bool SaveField(const wxString& name, int value) const = 0;
+        virtual bool SaveValue(const wxString& name, int value) = 0;
 
         /**
             Try to restore a single field.
 
-            Unlike for SaveField(), returning @false from this function may
+            Unlike for SaveValue(), returning @false from this function may
             indicate that the value simply wasn't present and doesn't prevent
             RestoreToGeometry() from continuing with trying to restore the
             other values.
@@ -450,7 +451,7 @@ public:
             @return @true if the value was retrieved or @false if it wasn't
                 found or an error occurred.
          */
-        virtual bool RestoreField(const wxString& name, int* value) = 0;
+        virtual bool RestoreValue(const wxString& name, int* value) const = 0;
     };
 
     /**
@@ -459,7 +460,7 @@ public:
         This is a companion function to SaveGeometry() and can be called later
         to restore the window to the geometry it had when it was saved.
 
-        @param ser An object implementing GeometrySerializer virtual methods.
+        @param ser An object implementing GeometryStore virtual methods.
 
         @return @true if any (and, usually, but not necessarily, all) of the
             window geometry attributes were restored or @false if there was no
@@ -467,7 +468,7 @@ public:
 
         @since 3.1.2
      */
-    bool RestoreToGeometry(GeometrySerializer& ser);
+    bool RestoreToGeometry(const GeometryStore& ser);
 
     /**
         Save the current window geometry to allow restoring it later.
@@ -483,13 +484,13 @@ public:
         simplest possible way. However is more flexibility is required, it can
         be also used directly with a custom serializer object.
 
-        @param ser An object implementing GeometrySerializer virtual methods.
+        @param ser An object implementing GeometryStore virtual methods.
 
         @return @true if the geometry was saved, @false if doing it failed
 
         @since 3.1.2
      */
-    bool SaveGeometry(const GeometrySerializer& ser) const;
+    bool SaveGeometry(GeometryStore& ser) const;
 
     /**
         Changes the default item for the panel, usually @a win is a button.

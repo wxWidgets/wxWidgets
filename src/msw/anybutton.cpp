@@ -52,30 +52,6 @@
 
 using namespace wxMSWImpl;
 
-#if wxUSE_UXTHEME
-    // provide the necessary declarations ourselves if they're missing from
-    // headers
-    #ifndef BCM_SETIMAGELIST
-        #define BCM_SETIMAGELIST    0x1602
-        #define BCM_SETTEXTMARGIN   0x1604
-
-        enum
-        {
-            BUTTON_IMAGELIST_ALIGN_LEFT,
-            BUTTON_IMAGELIST_ALIGN_RIGHT,
-            BUTTON_IMAGELIST_ALIGN_TOP,
-            BUTTON_IMAGELIST_ALIGN_BOTTOM
-        };
-
-        struct BUTTON_IMAGELIST
-        {
-            HIMAGELIST himl;
-            RECT margin;
-            UINT uAlign;
-        };
-    #endif
-#endif // wxUSE_UXTHEME
-
 #ifndef ODS_NOACCEL
     #define ODS_NOACCEL         0x0100
 #endif
@@ -84,9 +60,7 @@ using namespace wxMSWImpl;
     #define ODS_NOFOCUSRECT     0x0200
 #endif
 
-#if wxUSE_UXTHEME
 extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
-#endif // wxUSE_UXTHEME
 
 // Create a disabled bitmap from the normal one taking the application mode
 // (light or dark) into account.
@@ -295,8 +269,6 @@ private:
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxODButtonImageData, wxButtonImageData);
 
-#if wxUSE_UXTHEME
-
 // somehow the margin is one pixel greater than the value returned by
 // GetThemeMargins() call
 const int XP_BUTTON_EXTRA_MARGIN = 1;
@@ -480,8 +452,6 @@ private:
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxXPButtonImageData, wxButtonImageData);
 
-#endif // wxUSE_UXTHEME
-
 // Right- and bottom-aligned images stored in the image list
 // (BUTTON_IMAGELIST) for some reasons are not drawn with proper
 // margins so for such alignments we need to switch to owner-drawn
@@ -648,7 +618,6 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
     {
         int marginH = 0,
             marginV = 0;
-#if wxUSE_UXTHEME
         if ( wxUxThemeIsActive() )
         {
             wxUxThemeHandle theme(const_cast<wxAnyButton *>(this), L"BUTTON");
@@ -674,7 +643,6 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
                         + 2*XP_BUTTON_EXTRA_MARGIN;
         }
         else
-#endif // wxUSE_UXTHEME
         {
             marginH =
             marginV = OD_BUTTON_MARGIN;
@@ -734,14 +702,12 @@ WXLRESULT wxAnyButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
 
         // and continue with processing the message normally as well
     }
-#if wxUSE_UXTHEME
     else if ( nMsg == WM_THEMECHANGED )
     {
         // need to recalculate the best size here
         // as the theme size might have changed
         InvalidateBestSize();
     }
-#endif // wxUSE_UXTHEME
     // must use m_mouseInWindow here instead of IsMouseInWindow()
     // since we need to know the first time the mouse enters the window
     // and IsMouseInWindow() would return true in this case
@@ -812,9 +778,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
         return;
     }
 
-#if wxUSE_UXTHEME
     wxXPButtonImageData *oldData = nullptr;
-#endif // wxUSE_UXTHEME
 
     // Check if we already had bitmaps of different size.
     if ( m_imageData &&
@@ -824,7 +788,6 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
         wxASSERT_MSG( which == State_Normal,
                       "Must set normal bitmap with the new size first" );
 
-#if wxUSE_UXTHEME
         // We can't change the size of the images stored in wxImageList
         // in wxXPButtonImageData::m_iml so force recreating it below but
         // keep the current data to copy its values into the new one.
@@ -833,14 +796,12 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
         {
             m_imageData = nullptr;
         }
-#endif // wxUSE_UXTHEME
         //else: wxODButtonImageData doesn't require anything special
     }
 
     // allocate the image data when the first bitmap is set
     if ( !m_imageData )
     {
-#if wxUSE_UXTHEME
         // using image list doesn't work correctly if we don't have any label
         // (even if we use BUTTON_IMAGELIST_ALIGN_CENTER alignment and
         // BS_BITMAP style), at least under Windows 2003 so use owner drawn
@@ -864,7 +825,6 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
             }
         }
         else
-#endif // wxUSE_UXTHEME
         {
             m_imageData = new wxODButtonImageData(this, bitmapBundle);
             MakeOwnerDrawn();
@@ -1255,7 +1215,6 @@ void DrawButtonFrame(HDC hdc, RECT& rectBtn,
     InflateRect(&rectBtn, -OD_BUTTON_MARGIN, -OD_BUTTON_MARGIN);
 }
 
-#if wxUSE_UXTHEME
 void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
 {
     wxUxThemeHandle theme(button, L"BUTTON");
@@ -1313,7 +1272,6 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
 
     ::InflateRect(&rectBtn, -XP_BUTTON_EXTRA_MARGIN, -XP_BUTTON_EXTRA_MARGIN);
 }
-#endif // wxUSE_UXTHEME
 
 } // anonymous namespace
 
@@ -1442,13 +1400,11 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     // draw the button background
     if ( !HasFlag(wxBORDER_NONE) )
     {
-#if wxUSE_UXTHEME
         if ( wxUxThemeIsActive() )
         {
             DrawXPBackground(this, hdc, rectBtn, state);
         }
         else
-#endif // wxUSE_UXTHEME
         {
             COLORREF colBg = wxColourToRGB(GetBackgroundColour());
 
@@ -1476,15 +1432,10 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         {
             DrawFocusRect(hdc, &rectBtn);
 
-#if wxUSE_UXTHEME
-            if ( !wxUxThemeIsActive() )
-#endif // wxUSE_UXTHEME
+            if ( !wxUxThemeIsActive() && pushed )
             {
-                if ( pushed )
-                {
-                    // the label is shifted by 1 pixel to create "pushed" effect
-                    OffsetRect(&rectBtn, 1, 1);
-                }
+                // the label is shifted by 1 pixel to create "pushed" effect
+                OffsetRect(&rectBtn, 1, 1);
             }
         }
     }
@@ -1560,7 +1511,6 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         {
             colFg = ::GetSysColor(COLOR_GRAYTEXT);
         }
-#if wxUSE_UXTHEME
         else if ( wxUxThemeIsActive() &&
                     GetButtonState(this, state) == wxAnyButton::State_Current )
         {
@@ -1568,7 +1518,6 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
             // that its text is readable.
             colFg = ::GetSysColor(COLOR_BTNTEXT);
         }
-#endif // wxUSE_UXTHEME
         else
         {
             colFg = wxColourToRGB(GetForegroundColour());

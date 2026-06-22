@@ -19,19 +19,64 @@
 
 //// ORGANIZATION /////////////////////////////////////////////////////////////
 
-// This test suite is organized around Catch2 TEST_CASE and SECTIONs.
-// The SVG tests verify the XML structure directly. This approach is:
-// - Cross-platform: XML output is deterministic regardless of the OS.
-// - Self-contained: No external reference files are required.
-// - Robust: Uses string matching to verify drawing commands and attributes.
+// This test suite is organized around two axes:
+// - drawing test cases
+// - drawing contexts life cycle
+// => each drawing test case represent a serie of drawing primitives to execute
+//  for whichever context
+// => each drawing context life cycle represent a particular class of
+//  wxGraphicsContext and a way to create, dispose of and save it so that it is
+//  possible to compare it with a reference file
+
+// The crossing of drawing case and life cycles is implemented by
+// RunIndividualDrawingCase
+
+// The CPPUNIT test case class present a test per drawing case per life cycle
+// so that it is easy to run a particular test
+
+// The test requires reference files and must produce them when an
+// implementation changed and new good references are known to be produced.
+// Environment variables control where reference files are located and when to
+// produce them:
+//  - WX_TEST_SUITE_BUILD_REFERENCE must be "1" to request production of
+//      reference files (by default only testing is done)
+//  - WX_TEST_SUITE_REFERENCE_DIR must be a path to a directory containing the
+//      sub-directory "gcdrawing-references" (by default the parent directory
+//      of the directory of the test program is used)
 
 //// WRITING NEW TEST CASES
 
-// - To add a new drawing test:
-//   1. Add a SECTION to the relevant TEST_CASE (e.g., SVGGraphicsContext).
-//   2. Create a wxSVGGraphicsContext instance.
-//   3. Use wxGraphicsContext drawing primitives (or helpers in GraphicsContextDrawingTestCase).
-//   4. Use CHECK(svg.Contains(...)) to verify the generated XML.
+// - add a new function to realize the drawing in the "cases functions" section
+// - add a case structure declaration for it in the "test cases" section
+// - use drawingbasic.cpp as a sample to add your own test case implementation
+
+//// WRITING NEW FACTORIES
+
+// - if the wxGraphicsContext is a class built-in wxWidgets, add a
+//      DrawingTestGCFactory derived sub-class in drawing.h header
+//      together with a declaration for it and its implementation
+//      can be placed in drawing.cpp
+//      Once this is done duplicate all the CPP UNIT test functions
+//      and entries "DrawToImage_YYY" to your new GC "DrawTo<newGc>_YYYY"
+//
+
+wxString GraphicsContextDrawingTestCase::ms_referenceDirectory;
+bool GraphicsContextDrawingTestCase::ms_buildReference;
+bool GraphicsContextDrawingTestCase::ms_buildReferenceDetermined;
+GraphicsContextDrawingTestCase::ImageGraphicsContextLifeCycle
+    GraphicsContextDrawingTestCase::ms_imageLifeCycle;
+
+#if wxUSE_SVG
+    GraphicsContextDrawingTestCase::SvgGraphicsContextLifeCycle
+        GraphicsContextDrawingTestCase::ms_svgLifeCycle;
+#endif // wxUSE_SVG
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( GraphicsContextDrawingTestCase );
+
+// also include in its own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( GraphicsContextDrawingTestCase,
+    "GraphicsContextDrawingTestCase" );
 
 // ----------------------------------------------------------------------------
 // GraphicsContextDrawingTestCase implementation

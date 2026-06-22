@@ -98,6 +98,7 @@ set(TEST_GUI_SRC
     image/image.cpp
     image/imagwebp.cpp
     image/rawbmp.cpp
+    html/helpdata.cpp
     html/htmlparser.cpp
     html/htmlwindow.cpp
     html/htmprint.cpp

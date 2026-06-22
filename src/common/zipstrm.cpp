@@ -1026,7 +1026,28 @@ bool wxZipEntry::LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool lo
             }
 
             // Data block for extra field with Header ID = 1 (ZIP64)
-            // can have length up to 28 bytes.
+            // can have length up to 28 bytes. A ZIP64 extra field is only
+            // required to contain a 64-bit value for each of the size,
+            // compressed size and offset fields whose 32-bit value in the
+            // surrounding header was set to the ZIP64 sentinel 0xffffffff.
+            // Reject the entry if fieldLen is too small to cover those
+            // values, otherwise wxZipHeader::Read64() would walk past the
+            // end of its initialised data and yield uninitialised bytes
+            // from the stack-allocated header buffer.
+            size_t z64Required = 0;
+            if ( m_Size == 0xffffffff )
+                z64Required += 8;
+            if ( m_CompressedSize == 0xffffffff )
+                z64Required += 8;
+            if ( !localInfo && m_Offset == 0xffffffff )
+                z64Required += 8;
+            if ( fieldLen < z64Required )
+            {
+                wxLogWarning(_("Ignoring malformed extra data record, "
+                               "ZIP file may be corrupted"));
+                return false;
+            }
+
             wxZipHeader ds(extraData+4, wxMin(fieldLen, 28));
             // A file may contain larger size, compressed size or offset
             // in a zip64 extra data block. Use the 64 bit values if available

@@ -2544,6 +2544,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
                 }
                 break;
             case wxRIBBON_BUTTONBAR_BUTTON_MEDIUM:
+            case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
                 {
                     int iArrowWidth = 9;
                     if(state & wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED)
@@ -2565,8 +2566,6 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
                             bg_rect_top.x - 1, rect.y + rect.height);
                     }
                 }
-                break;
-            case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
                 break;
             }
         }
@@ -2700,8 +2699,20 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
             }
             break;
         }
+    case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
+        {
+            int avail_width = rect.width;
+            if(kind != wxRIBBON_BUTTON_NORMAL)
+            {
+                avail_width -= 8;
+                DrawDropdownArrow(dc, rect.x + avail_width + 4, rect.y + rect.height / 2, arrowColour);
+            }
+            int x_cursor = rect.x + (avail_width - bitmap_small.GetLogicalWidth()) / 2;
+            dc.DrawBitmap(bitmap_small, x_cursor,
+                    rect.y + (rect.height - bitmap_small.GetLogicalHeight()) / 2, true);
+            break;
+        }
     default:
-        // TODO
         break;
     }
 }

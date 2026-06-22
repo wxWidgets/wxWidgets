@@ -226,6 +226,8 @@ public:
 
     void OnIdle(wxIdleEvent& event);
 
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
+
 protected:
     virtual void DoGetScreenPosition(int *x, int *y) const override;
     virtual void DoGetPosition(int *x, int *y) const override;

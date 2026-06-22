@@ -800,6 +800,17 @@ TEST_CASE("wxDateTime::Format", "[datetime]")
 
     wxDateTime dt(29, wxDateTime::May, 1976, 18, 30, 15, 678);
     CHECK( dt.Format("%F %T.%l") == "1976-05-29 18:30:15.678" );
+
+    // A format ending in a lone '%' must not read past the end of the format
+    // string; the trailing percent is output verbatim. The literal is long
+    // enough to be heap-allocated so the over-read trips ASAN without the fix.
+    //
+    // The MSVC CRT considers a trailing '%' an invalid format string and
+    // aborts, so skip this check there. This CRT is also used by MinGW.
+#if !defined(_MSC_VER) && !defined(__MINGW32__)
+    CHECK( dt.Format("a long enough format ending in a percent sign %") ==
+                     "a long enough format ending in a percent sign %" );
+#endif
 }
 
 TEST_CASE("wxDateTime::ParseFormat", "[datetime]")

@@ -39,6 +39,9 @@ protected:
     // pointers to this class (and protected dtor enforces this).
     ~wxMSWOwnerDrawnButtonBase() = default;
 
+    // Make the control owner drawn or reset it to normal style.
+    void MSWMakeOwnerDrawn(bool ownerDrawn);
+
     // Make the control owner drawn if necessary to implement support for the
     // given foreground colour.
     void MSWMakeOwnerDrawnIfNecessary(const wxColour& colFg);
@@ -73,9 +76,6 @@ protected:
 
 
 private:
-    // Make the control owner drawn or reset it to normal style.
-    void MSWMakeOwnerDrawn(bool ownerDrawn);
-
     // Event handlers used to update the appearance of owner drawn button.
     void OnMouseEnterOrLeave(wxMouseEvent& event);
     void OnMouseLeft(wxMouseEvent& event);
@@ -100,7 +100,7 @@ private:
 template <class T>
 class wxMSWOwnerDrawnButton
     : public T,
-      private wxMSWOwnerDrawnButtonBase
+      protected wxMSWOwnerDrawnButtonBase
 {
 private:
     typedef T Base;

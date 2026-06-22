@@ -261,105 +261,34 @@ wxString wxFileNameFromPath (const wxString& path)
     return wxFileName(path).GetFullName();
 }
 
-// Return just the directory, or nullptr if no directory
-wxChar *
-wxPathOnly (wxChar *path)
-{
-    if (path && *path)
-    {
-        static wxChar buf[_MAXPATHLEN];
-
-        int l = wxStrlen(path);
-        int i = l - 1;
-        if ( i >= _MAXPATHLEN )
-            return nullptr;
-
-        // Local copy
-        wxStrcpy (buf, path);
-
-        // Search backward for a backward or forward slash
-        while (i > -1)
-        {
-            // Unix like or Windows
-            if (path[i] == wxT('/') || path[i] == wxT('\\'))
-            {
-                buf[i] = 0;
-                return buf;
-            }
-#ifdef __VMS__
-            if (path[i] == wxT(']'))
-            {
-                buf[i+1] = 0;
-                return buf;
-            }
-#endif
-            i --;
-        }
-
-#if defined(__WINDOWS__)
-        // Try Drive specifier
-        if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
-        {
-            // A:junk --> A:. (since A:.\junk Not A:\junk)
-            buf[2] = wxT('.');
-            buf[3] = wxT('\0');
-            return buf;
-        }
-#endif
-    }
-    return nullptr;
-}
-
-// Return just the directory, or nullptr if no directory
+// Return just the directory, or empty string if no directory
 wxString wxPathOnly (const wxString& path)
 {
-    if (!path.empty())
-    {
-        wxChar buf[_MAXPATHLEN];
+    wxString res = wxFileName(path).GetPath();
 
-        int l = path.length();
-        int i = l - 1;
-
-        if ( i >= _MAXPATHLEN )
-            return wxString();
-
-        // Local copy
-        wxStrcpy(buf, path);
-
-        // Search backward for a backward or forward slash
-        while (i > -1)
-        {
-            // Unix like or Windows
-            if (path[i] == wxT('/') || path[i] == wxT('\\'))
-            {
-                // Don't return an empty string
-                if (i == 0)
-                    i ++;
-                buf[i] = 0;
-                return wxString(buf);
-            }
-#ifdef __VMS__
-            if (path[i] == wxT(']'))
-            {
-                buf[i+1] = 0;
-                return wxString(buf);
-            }
-#endif
-            i --;
-        }
-
+    // For compatibility with the old behaviour of this function, we need to
+    // return "X:" for paths with volume and absolute path under Windows and
+    // "X:." for paths with volume and relative path.
 #if defined(__WINDOWS__)
-        // Try Drive specifier
-        if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
+    if ( res.size() >= 2 && wxIsalpha(res[0]) && res[1] == wxT(':') )
+    {
+        switch ( res.size() )
         {
-            // A:junk --> A:. (since A:.\junk Not A:\junk)
-            buf[2] = wxT('.');
-            buf[3] = wxT('\0');
-            return wxString(buf);
+            case 2:
+                // "X:" --> "X:."
+                res += wxT('.');
+                break;
+
+            case 3:
+                // "X:\" --> "X:"
+                if ( res[2] == wxFILE_SEP_PATH )
+                    res.erase(2);
+                break;
         }
-#endif
     }
-    return wxEmptyString;
+#endif // __WINDOWS__
+
+    return res;
 }
 
 // Utility for converting delimiters in DOS filenames to UNIX style

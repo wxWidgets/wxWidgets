@@ -1344,18 +1344,35 @@ void wxBitmap::SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg, c
         return;
     }
 
+    const GdkPixbuf* const pixbuf = bmpData->m_pixbufNoMask;
+
     // Silently ignore attempts to draw uninitialized bitmap,
     // because other platforms don't complain about it
-    if (bmpData->m_pixbufNoMask == nullptr)
+    if (pixbuf == nullptr)
         return;
 
     if (bmpData->m_bpp == 1)
         SetSourceSurface1(bmpData, cr, x, y, fg, bg);
-    else
+    else if (size_t(bmpData->m_width) * bmpData->m_height < 3000 * 3000)
     {
-        gdk_cairo_set_source_pixbuf(cr, bmpData->m_pixbufNoMask, x, y);
+        // This uses cairo_surface_create_similar_image(), which results in
+        // a faster-drawing surface on X11, but requires more memory and
+        // restricts the maximum size to considerably less than a
+        // CAIRO_SURFACE_TYPE_IMAGE, so don't use it for very large sizes.
+        gdk_cairo_set_source_pixbuf(cr, pixbuf, x, y);
         cairo_pattern_get_surface(cairo_get_source(cr), &bmpData->m_surface);
         cairo_surface_reference(bmpData->m_surface);
+    }
+    else
+    {
+        cairo_surface_t* surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
+        cairo_t* cr2 = cairo_create(surf);
+        cairo_surface_destroy(surf);
+        gdk_cairo_set_source_pixbuf(cr2, pixbuf, 0, 0);
+        cairo_pattern_get_surface(cairo_get_source(cr2), &bmpData->m_surface);
+        cairo_surface_reference(bmpData->m_surface);
+        cairo_destroy(cr2);
+        cairo_set_source_surface(cr, bmpData->m_surface, x, y);
     }
 }
 

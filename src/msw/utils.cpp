@@ -818,9 +818,7 @@ int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc, int flags)
     }
 
     //Fill in the size of the structure before using it.
-    PROCESSENTRY32 pe;
-    wxZeroMemory(pe);
-    pe.dwSize = sizeof(PROCESSENTRY32);
+    WinStructWordSize<PROCESSENTRY32> pe;
 
     // Walk the snapshot of the processes, and for each process,
     // kill it if its parent is pid.
@@ -1206,6 +1204,52 @@ wxString wxGetOsDescription()
                            info.dwMajorVersion,
                            info.dwMinorVersion);
             }
+
+            DWORD productType = 0;
+            if ( !wxIsWindowsServer()
+                && GetProductInfo(
+                    info.dwMajorVersion, info.dwMinorVersion,
+                    0, 0, // service pack major/minor
+                    &productType) )
+            {
+                switch (productType) {
+                case PRODUCT_PROFESSIONAL:
+                    str << " Pro";
+                    break;
+
+                case PRODUCT_CORE:
+                    str << " Home";
+                    break;
+
+                case PRODUCT_ENTERPRISE:
+                    str << " Enterprise";
+                    break;
+
+                default:
+                    // There are dozens of other possibilities (see
+                    // GetProductInfo docs), but for now we only care
+                    // about the most common ones.
+                    break;
+                }
+            }
+
+#if wxUSE_REGKEY
+            wxRegKey key(wxRegKey::HKLM,
+                "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion");
+
+            if ( key.Exists() )
+            {
+                constexpr const char* VALUE_DISPLAY_VERSION = "DisplayVersion";
+
+                wxString displayVersion;
+                if ( key.HasValue(VALUE_DISPLAY_VERSION) &&
+                        key.QueryValue(VALUE_DISPLAY_VERSION, displayVersion) &&
+                            !displayVersion.empty() )
+                {
+                    str << " " << displayVersion;
+                }
+            }
+#endif // wxUSE_REGKEY
 
             str << wxT(" (")
                 << wxString::Format(

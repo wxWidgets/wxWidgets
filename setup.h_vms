@@ -714,8 +714,6 @@ typedef pid_t GPid;
 
 #define wxUSE_TASKBARBUTTON 0
 
-#define wxUSE_UXTHEME           0
-
 #define wxUSE_INKEDIT  0
 
 #define wxUSE_INICONF 0

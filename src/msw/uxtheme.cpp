@@ -19,8 +19,6 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_UXTHEME
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/toplevel.h"
@@ -45,7 +43,7 @@ bool wxUxThemeIsActive()
     return s_isActive != 0;
 }
 
-wxUxThemeHandle::wxUxThemeHandle(const wxWindow* win,
+wxUxThemeHandle::wxUxThemeHandle(const wxWindowMSW* win,
                                  const wchar_t* classes,
                                  const wchar_t* classesDark)
     : m_hTheme{DoOpenThemeData(GetHwndOf(win),
@@ -112,10 +110,11 @@ wxColour wxUxThemeHandle::GetColour(int part, int prop, int state) const
     return wxRGBToColour(col);
 }
 
-wxSize wxUxThemeHandle::DoGetSize(int part, int state, THEMESIZE ts) const
+wxSize
+wxUxThemeHandle::DoGetSize(HDC hdc, int part, int state, THEMESIZE ts) const
 {
     SIZE size;
-    HRESULT hr = ::GetThemePartSize(m_hTheme, nullptr, part, state, nullptr, ts,
+    HRESULT hr = ::GetThemePartSize(m_hTheme, hdc, part, state, nullptr, ts,
                                     &size);
     if ( FAILED(hr) )
     {
@@ -129,10 +128,51 @@ wxSize wxUxThemeHandle::DoGetSize(int part, int state, THEMESIZE ts) const
     return wxSize{size.cx, size.cy};
 }
 
-void
-wxUxThemeHandle::DrawBackground(HDC hdc, const RECT& rc, int part, int state)
+bool
+wxUxThemeHandle::GetMargins(MARGINS& margins,
+                            int part,
+                            int prop,
+                            int state,
+                            HDC hdc) const
 {
-    HRESULT hr = ::DrawThemeBackground(m_hTheme, hdc, part, state, &rc, nullptr);
+    HRESULT hr = ::GetThemeMargins(m_hTheme, hdc, part, state, prop, nullptr,
+                                   &margins);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(
+            wxString::Format("GetThemeMargins(%i, %i, %i)", part, state, prop),
+            hr
+        );
+        return false;
+    }
+
+    return true;
+}
+
+bool
+wxUxThemeHandle::GetFont(LOGFONTW& lf, HDC hdc, int part, int state) const
+{
+    HRESULT hr = ::GetThemeFont(m_hTheme, hdc, part, state, TMT_FONT, &lf);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(
+            wxString::Format("GetThemeFont(%i, %i)", part, state),
+            hr
+        );
+        return false;
+    }
+
+    return true;
+}
+
+void
+wxUxThemeHandle::DrawBackground(HDC hdc,
+                                const RECT& rc,
+                                int part,
+                                int state,
+                                const RECT* rcClip)
+{
+    HRESULT hr = ::DrawThemeBackground(m_hTheme, hdc, part, state, &rc, rcClip);
     if ( FAILED(hr) )
     {
         wxLogApiError(
@@ -150,10 +190,3 @@ wxUxThemeHandle::DrawBackground(HDC hdc, const wxRect& rect, int part, int state
 
     DrawBackground(hdc, rc, part, state);
 }
-
-#else
-bool wxUxThemeIsActive()
-{
-    return false;
-}
-#endif // wxUSE_UXTHEME

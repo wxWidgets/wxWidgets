@@ -78,6 +78,15 @@ wxUString &wxUString::assignFromUTF8( const char *str )
         size_type len = tableUtf8Lengths[c];
         if (!len)
            return assign( wxUString() );  // don't try to convert invalid UTF-8
+
+        // a multibyte sequence truncated by the terminating NUL must not make
+        // us skip past the end of the string
+        for ( size_type i = 1; i < len; i++ )
+        {
+            if ( !p[i] )
+                return assign( wxUString() );
+        }
+
         ucs4_len++;
         p += len;
     }

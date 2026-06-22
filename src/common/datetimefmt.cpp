@@ -405,8 +405,17 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
             continue;
         }
 
+        // advance to the format specifier following the '%': a trailing '%'
+        // is not a valid format, so output it verbatim and stop here instead
+        // of letting the loop's own ++p move the iterator past the end
+        if ( ++p == format.end() )
+        {
+            res += wxT('%');
+            break;
+        }
+
         // set the default format
-        switch ( (*++p).GetValue() )
+        switch ( (*p).GetValue() )
         {
             case wxT('Y'):               // year has 4 digits
             case wxT('G'):               // (and ISO week year too)

@@ -9,7 +9,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_AUI && wxUSE_UXTHEME
+#if wxUSE_AUI
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -432,4 +432,4 @@ int wxAuiMSWToolBarArt::ShowDropDown(wxWindow* wnd,
     return wxAuiGenericToolBarArt::ShowDropDown(wnd, items);
 }
 
-#endif // wxUSE_AUI && wxUSE_UXTHEME
+#endif // wxUSE_AUI

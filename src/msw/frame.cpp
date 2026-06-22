@@ -123,8 +123,6 @@ bool wxFrame::Create(wxWindow *parent,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
 
-    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
-
 #if wxUSE_TASKBARBUTTON
     static bool s_taskbarButtonCreatedMsgRegistered = false;
     if ( !s_taskbarButtonCreatedMsgRegistered )
@@ -472,25 +470,8 @@ wxTaskBarButton* wxFrame::MSWGetTaskBarButton()
 }
 #endif // wxUSE_TASKBARBUTTON
 
-// Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    // Don't override the colour explicitly set by the user, if any.
-    if ( !UseBgCol() )
-    {
-        SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
-        Refresh();
-    }
-
-#if wxUSE_STATUSBAR
-    if ( m_frameStatusBar )
-    {
-        wxSysColourChangedEvent event2;
-        event2.SetEventObject( m_frameStatusBar );
-        m_frameStatusBar->HandleWindowEvent(event2);
-    }
-#endif // wxUSE_STATUSBAR
-
 #if wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
     if ( wxMenuBar* const menuBar = GetMenuBar() )
     {
@@ -498,8 +479,8 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 #endif // wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
 
-    // Propagate the event to the non-top-level children
-    wxWindow::OnSysColourChanged(event);
+    // Let children react to this event too.
+    event.Skip();
 }
 
 // Pass true to show full screen, false to restore.
@@ -727,6 +708,13 @@ void wxFrame::IconizeChildFrames(bool bIconize)
                 frame->Iconize(bIconize);
         }
     }
+}
+
+wxVisualAttributes wxFrame::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs = GetClassDefaultAttributes(GetWindowVariant());
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
+    return attrs;
 }
 
 WXHICON wxFrame::GetDefaultIcon() const

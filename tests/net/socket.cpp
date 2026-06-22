@@ -288,6 +288,7 @@ void SocketTestCase::ReadAnotherThread()
 
 void SocketTestCase::UrlTest()
 {
+#if wxUSE_URL
     if ( gs_serverHost.empty() )
         return;
 
@@ -300,6 +301,7 @@ void SocketTestCase::UrlTest()
 
     wxStringOutputStream out;
     CPPUNIT_ASSERT_EQUAL( wxSTREAM_EOF, in->Read(out).GetLastError() );
+#endif
 }
 
 TEST_CASE("wxDatagramSocket::ShortRead", "[socket][dgram]")

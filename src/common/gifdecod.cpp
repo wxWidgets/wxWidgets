@@ -151,6 +151,25 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
     dst = image->GetData();
     transparent = GetTransparentColourIndex(frame);
 
+    // Reject decoded pixels that reference palette entries past the
+    // loaded portion of the per-frame palette buffer: GIF files where
+    // the LZW minimum code size implies a larger alphabet than the
+    // declared colour table can emit literal codes >= ncolours. pimg->pal
+    // is a fixed 768 bytes but only 3*ncolours of them are populated from
+    // the file (the rest is left uninitialised), so the pal[3*(*src) + ...]
+    // reads below would otherwise pull uninitialised bytes into the image.
+    // The index stays within the 768-byte buffer (a pixel byte is at most
+    // 255), so this is an uninitialised read rather than an out-of-bounds
+    // one, but it still leaks junk into the decoded pixels.
+    unsigned long npixel =
+        static_cast<unsigned long>(sz.GetWidth()) * sz.GetHeight();
+    const unsigned int ncolours = GetNcolours(frame);
+    for (i = 0; i < npixel; i++)
+    {
+        if (src[i] >= ncolours)
+            return false;
+    }
+
     // set transparent colour mask
     if (transparent != -1)
     {
@@ -223,7 +242,6 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
 #endif // wxUSE_PALETTE
 
     // copy image data
-    unsigned long npixel = sz.GetWidth() * sz.GetHeight();
     for (i = 0; i < npixel; i++, src++)
     {
         *(dst++) = pal[3 * (*src) + 0];
@@ -671,7 +689,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
     // load global color map if available
     if ((buf[4] & 0x80) == 0x80)
     {
-        int backgroundColIndex = buf[5];
+        unsigned int backgroundColIndex = buf[5];
 
         global_ncolors = 2 << (buf[4] & 0x07);
         unsigned int numBytes = 3 * global_ncolors;
@@ -681,9 +699,18 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             return wxGIF_INVFORMAT;
         }
 
-        m_background.Set(pal[backgroundColIndex*3 + 0],
-                         pal[backgroundColIndex*3 + 1],
-                         pal[backgroundColIndex*3 + 2]);
+        // The background colour index must reference an entry in the global
+        // colour table: only the first 3*global_ncolors bytes of pal were read
+        // from the file above, so an index past that would take the background
+        // colour from the uninitialised tail of the buffer (and leak it out
+        // through GetBackgroundColour()). Leave the background unset in that
+        // case, as we do for a GIF that doesn't specify one at all.
+        if (backgroundColIndex < global_ncolors)
+        {
+            m_background.Set(pal[backgroundColIndex*3 + 0],
+                             pal[backgroundColIndex*3 + 1],
+                             pal[backgroundColIndex*3 + 2]);
+        }
     }
 
     // transparent colour, disposal method and delay default to unused
@@ -838,6 +865,14 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
 
                 interl = ((buf[8] & 0x40)? 1 : 0);
                 size = pimg->w * pimg->h;
+
+                // Reject frames with zero width or height: malloc(0) below
+                // returns an empty allocation that the dgif() decode loop
+                // still writes into. The subsequent-frames check above
+                // rejects zero size in animations but the first frame and
+                // the non-animated GIF87a path both reach here unchecked.
+                if (size == 0)
+                    return wxGIF_INVFORMAT;
 
                 pimg->transparent = transparent;
                 pimg->disposal = disposal;

@@ -168,8 +168,6 @@ private:
 // wxRendererXP: wxRendererNative implementation for Windows XP and later
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UXTHEME
-
 class wxRendererXP : public wxRendererMSWBase
 {
 public:
@@ -310,8 +308,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxRendererXP);
 };
 
-#endif // wxUSE_UXTHEME
-
 
 // ============================================================================
 // wxRendererMSWBase implementation
@@ -394,10 +390,8 @@ void wxRendererMSWBase::DrawComboBox(wxWindow* win,
 /* static */
 wxRendererNative& wxRendererNative::GetDefault()
 {
-#if wxUSE_UXTHEME
     if ( wxUxThemeIsActive() )
         return wxRendererXP::Get();
-#endif // wxUSE_UXTHEME
 
     return wxRendererMSW::Get();
 }
@@ -571,8 +565,6 @@ int wxRendererMSW::GetHeaderButtonMargin(wxWindow *win)
 // wxRendererXP implementation
 // ============================================================================
 
-#if wxUSE_UXTHEME
-
 namespace
 {
 
@@ -678,7 +670,7 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                                  const wxRect& rect,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    wxUxThemeHandle hTheme(win, L"TREEVIEW", L"DarkMode_Explorer::TreeView");
     if ( !hTheme )
     {
         m_rendererNative.DrawTreeItemButton(win, dc, rect, flags);
@@ -701,7 +693,7 @@ wxRendererXP::DoDrawXPButton(int kind,
                              const wxRect& rect,
                              int flags)
 {
-    wxUxThemeHandle hTheme(win, L"BUTTON");
+    wxUxThemeHandle hTheme(win, L"BUTTON", L"DarkMode_Explorer::Button");
     if ( !hTheme )
         return false;
 
@@ -829,7 +821,7 @@ wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win, int flags)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    wxUxThemeHandle hTheme(win, L"BUTTON");
+    wxUxThemeHandle hTheme(win, L"BUTTON", L"DarkMode_Explorer::Button");
     if (hTheme)
     {
         if (::IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
@@ -859,7 +851,7 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    wxUxThemeHandle hTheme(win, L"TREEVIEW", L"DarkMode_Explorer::TreeView");
     if ( hTheme )
     {
         if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
@@ -964,8 +956,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
     {
         RECT rc = ConvertToRECT(dc, rect);
 
-        DTTOPTS textOpts;
-        textOpts.dwSize = sizeof(textOpts);
+        WinStructWordSize<DTTOPTS> textOpts;
         textOpts.dwFlags = DTT_STATEID;
         textOpts.iStateId = itemState;
 
@@ -1287,5 +1278,3 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
 
     m_rendererNative.DrawSplitterSash(win, dc, size, position, orient, flags);
 }
-
-#endif // wxUSE_UXTHEME

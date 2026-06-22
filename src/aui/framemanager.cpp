@@ -616,6 +616,44 @@ void wxAuiManager::OnSysColourChanged(wxSysColourChangedEvent& event)
     event.Skip(true);
 }
 
+// We don't need to scale the positions and sizes on DPI change if they use
+// DPI-independent pixels.
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+
+void wxAuiManager::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    event.Skip();
+
+    for( wxAuiPaneInfo& pinfo : GetAllPanes() )
+    {
+        pinfo.min_size = event.Scale(pinfo.min_size);
+        pinfo.best_size = event.Scale(pinfo.best_size);
+
+        switch ( pinfo.dock_direction )
+        {
+            case wxAUI_DOCK_LEFT:
+            case wxAUI_DOCK_RIGHT:
+            case wxAUI_DOCK_CENTER:
+                pinfo.dock_pos = event.ScaleY(pinfo.dock_pos);
+                pinfo.dock_size = event.ScaleY(pinfo.dock_size);
+                break;
+
+            case wxAUI_DOCK_TOP:
+            case wxAUI_DOCK_BOTTOM:
+                pinfo.dock_pos = event.ScaleX(pinfo.dock_pos);
+                pinfo.dock_size = event.ScaleX(pinfo.dock_size);
+                break;
+        }
+    }
+
+    // Force recreating the docks after updating the panes.
+    m_docks.clear();
+
+    Update();
+}
+
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+
 // creates a floating frame for the windows
 wxAuiFloatingFrame* wxAuiManager::CreateFloatingFrame(wxWindow* parent,
                                                       const wxAuiPaneInfo& paneInfo)
@@ -773,6 +811,9 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
     m_frame->Bind(wxEVT_CHILD_FOCUS, &wxAuiManager::OnChildFocus, this);
     m_frame->Bind(wxEVT_AUI_FIND_MANAGER, &wxAuiManager::OnFindManager, this);
     m_frame->Bind(wxEVT_SYS_COLOUR_CHANGED, &wxAuiManager::OnSysColourChanged, this);
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    m_frame->Bind(wxEVT_DPI_CHANGED, &wxAuiManager::OnDPIChanged, this);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
 #if wxUSE_MDI
     // if the owner is going to manage an MDI parent frame,
@@ -828,6 +869,9 @@ void wxAuiManager::UnInit()
         m_frame->Unbind(wxEVT_CHILD_FOCUS, &wxAuiManager::OnChildFocus, this);
         m_frame->Unbind(wxEVT_AUI_FIND_MANAGER, &wxAuiManager::OnFindManager, this);
         m_frame->Unbind(wxEVT_SYS_COLOUR_CHANGED, &wxAuiManager::OnSysColourChanged, this);
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+        m_frame->Unbind(wxEVT_DPI_CHANGED, &wxAuiManager::OnDPIChanged, this);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
         m_frame = nullptr;
     }
 }

@@ -13,6 +13,8 @@
 #include "testprec.h"
 
 
+#if wxUSE_XML
+
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif // WX_PRECOMP
@@ -626,3 +628,5 @@ TEST_CASE("XML::Load", "[xml][.]")
 
     WARN("Dump of " << file << ":\n" << sos.GetString());
 }
+
+#endif // wxUSE_XML

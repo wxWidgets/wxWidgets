@@ -120,7 +120,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
 
@@ -159,7 +159,7 @@ jobs:
         echo "PATH=/opt/homebrew/bin:/opt/homebrew/opt/ccache/libexec:$PATH" >> $GITHUB_ENV
 
     - name: Install CCache
-      uses: hendrikmuhs/ccache-action@v1.2
+      uses: hendrikmuhs/ccache-action@v1.2.23
       with:
         key: ${{ matrix.name }}
 
@@ -219,9 +219,9 @@ jobs:
 
     - name: Setup Go
       if: matrix.skip_testing != true
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v6
       with:
-        go-version: '>=1.21.0'
+        go-version: '>=1.25.0'
         cache: false
 
     - name: Testing

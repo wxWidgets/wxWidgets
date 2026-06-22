@@ -1495,4 +1495,9 @@ TEST_CASE("wxMBConv::cMB2WC", "[mbconv][mb2wc]")
     CHECK( wxConvUTF7.cMB2WC("").length() == 0 );
     CHECK( wxConvUTF7.cMB2WC(wxCharBuffer()).length() == 0 );
     CHECK( wxConvUTF7.cMB2WC("+AKM-").length() == 1 );
+
+    // A non-ASCII byte right after the shift character used to be read past
+    // the end of the base-64 decoding table (signed char index), now it's
+    // just rejected as an invalid encoded chunk.
+    CHECK( wxConvUTF7.cMB2WC("+\xc3").length() == 0 );
 }

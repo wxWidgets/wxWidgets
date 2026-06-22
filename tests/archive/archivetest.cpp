@@ -771,7 +771,8 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
     if ((m_options & PipeIn) == 0)
         OnArchiveExtracted(*arc, expectedTotal);
 
-    while (entry = EntryPtr(arc->GetNextEntry()), entry.get() != nullptr) {
+    while ((entry = EntryPtr(arc->GetNextEntry())).get())
+    {
         wxString name = entry->GetName(wxPATH_UNIX);
 
         // provide some context for the error message so that we know which

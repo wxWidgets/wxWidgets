@@ -266,9 +266,8 @@ bool wxJoystick::GetButtonState(unsigned id) const
 int wxJoystick::GetPOVPosition() const
 {
 #ifndef NO_JOYGETPOSEX
-    JOYINFOEX joyInfo;
+    WinStructWordSize<JOYINFOEX> joyInfo;
     joyInfo.dwFlags = JOY_RETURNPOV;
-    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -288,9 +287,8 @@ int wxJoystick::GetPOVPosition() const
 int wxJoystick::GetPOVCTSPosition() const
 {
 #ifndef NO_JOYGETPOSEX
-    JOYINFOEX joyInfo;
+    WinStructWordSize<JOYINFOEX> joyInfo;
     joyInfo.dwFlags = JOY_RETURNPOVCTS;
-    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -306,9 +304,8 @@ int wxJoystick::GetPOVCTSPosition() const
 int wxJoystick::GetRudderPosition() const
 {
 #ifndef NO_JOYGETPOSEX
-    JOYINFOEX joyInfo;
+    WinStructWordSize<JOYINFOEX> joyInfo;
     joyInfo.dwFlags = JOY_RETURNR;
-    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -324,9 +321,8 @@ int wxJoystick::GetRudderPosition() const
 int wxJoystick::GetUPosition() const
 {
 #ifndef NO_JOYGETPOSEX
-    JOYINFOEX joyInfo;
+    WinStructWordSize<JOYINFOEX> joyInfo;
     joyInfo.dwFlags = JOY_RETURNU;
-    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -342,9 +338,8 @@ int wxJoystick::GetUPosition() const
 int wxJoystick::GetVPosition() const
 {
 #ifndef NO_JOYGETPOSEX
-    JOYINFOEX joyInfo;
+    WinStructWordSize<JOYINFOEX> joyInfo;
     joyInfo.dwFlags = JOY_RETURNV;
-    joyInfo.dwSize = sizeof(joyInfo);
     MMRESULT res = joyGetPosEx(m_joystick, & joyInfo);
     if (res == JOYERR_NOERROR )
     {
@@ -435,7 +430,7 @@ wxString wxJoystick::GetProductName() const
     if (joyGetDevCaps(m_joystick, &joyCaps, sizeof(joyCaps)) != JOYERR_NOERROR)
         return wxEmptyString;
 
-    auto GetNameFromReg = [=](wxRegKey::StdKey root) -> wxString
+    auto GetNameFromReg = [this, joyCaps](wxRegKey::StdKey root) -> wxString
     {
         wxString result;
         wxString subKey1 = wxString::Format(wxT("%s\\%s\\%s"), REGSTR_PATH_JOYCONFIG, joyCaps.szRegKey, REGSTR_KEY_JOYCURR);

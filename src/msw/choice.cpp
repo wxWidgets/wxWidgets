@@ -212,21 +212,27 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attrs;
 }
 
-bool wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
     support.themeName = L"CFD";
+}
 
-    // It is slightly improper to do this in a const function, but as we know
-    // that this will only be called when we're using the dark mode, we also
-    // use it to enable it for the drop down list, if any, to ensure that it
-    // uses dark scrollbars.
+void wxChoice::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxChoiceBase::MSWSetDarkOrLightMode(setmode);
+
+    // Update scroll bar.
     WinStruct<COMBOBOXINFO> info;
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
-        wxMSWDarkMode::AllowForWindow(info.hwndList);
+        // The default theme does not look good on starting with Windows 11
+        // build 26300.8553. DarkMode_DarkTheme looks OK and was available
+        // starting with Windows 11 build 26200.
+        if ( wxCheckOsVersion(10, 0, 26200) )
+            wxMSWDarkMode::AllowForWindow(info.hwndList, L"DarkMode_DarkTheme");
+        else
+            wxMSWDarkMode::AllowForWindow(info.hwndList);
     }
-
-    return true;
 }
 
 wxChoice::~wxChoice()

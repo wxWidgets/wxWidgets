@@ -487,13 +487,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // and check for it in our SetDropTarget()
         m_dropTarget = wxRICHTEXT_DEFAULT_DROPTARGET;
 #endif // wxUSE_DRAG_AND_DROP
-
-        if ( wxMSWDarkMode::IsActive() )
-        {
-            // We need to set the colours explicitly for rich text controls.
-            SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-            SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-        }
     }
 #endif // wxUSE_RICHEDIT
 
@@ -654,20 +647,6 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 #if wxUSE_RICHEDIT
     if (IsRich())
     {
-        // RICHEDIT50W automatically adds WS_EX_CLIENTEDGE to its style for
-        // some reason and while this isn't very noticeable in light mode, it
-        // looks really bad in dark mode, so forcibly remove it unless it was
-        // explicitly requested.
-        if ( GetBorder() != wxBORDER_SUNKEN && wxMSWDarkMode::IsActive() )
-        {
-            const auto origExStyle = ::GetWindowLongPtr(GetHwnd(), GWL_EXSTYLE);
-            if ( origExStyle & WS_EX_CLIENTEDGE )
-            {
-                ::SetWindowLongPtr(GetHwnd(), GWL_EXSTYLE,
-                                   origExStyle & ~WS_EX_CLIENTEDGE);
-            }
-        }
-
 #if wxUSE_INKEDIT
         if (IsInkEdit())
         {
@@ -2948,6 +2927,73 @@ void wxTextCtrl::MSWSetRichZoom()
     ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
 }
 
+void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxTextCtrlBase::MSWSetDarkOrLightMode(setmode);
+
+#if wxUSE_RICHEDIT
+    // The rich edit control does not change colours automatically. We adjust
+    // colours only if no custom colours occur. When we leave the control
+    // as-is, it might update partially and look bad. That is better than
+    // overwriting custom colours. The app user can revert the theme without
+    // losing anything.
+    if ( IsRich() && !UseBgCol() && !UseForegroundColour() )
+    {
+        // True if we need to update the background colour.
+        bool setBackground = false;
+
+        if ( setmode == SetMode::Change )
+        {
+            // Get formatting info for all the text.
+            long sel1, sel2;
+            GetSelection(&sel1, &sel2);
+            DoSetSelection(-1, -1, SetSel_NoScroll);
+            WinStruct<CHARFORMAT> cf;
+            ::SendMessage(m_hWnd, EM_GETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
+            DoSetSelection(sel1, sel2, SetSel_NoScroll);
+
+            // Check if all text has the same colour.
+            if ( cf.dwMask & CFM_COLOR )
+            {
+                // If the text colour has not been set or matches the default,
+                // update it. The theme switch may not have finished so we
+                // compare against both the dark and light mode defaults.
+                const auto col = wxColour(cf.crTextColor);
+                const wxColor defDk = wxMSWDarkMode::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+                const wxColor defLt = wxRGBToColour(GetSysColor(COLOR_WINDOWTEXT));
+                if ( !col.IsOk() || col == defDk || col == defLt )
+                {
+                    // Set the text background color.
+                    wxTextAttr attr;
+                    attr.SetFont(m_font);
+                    attr.SetBackgroundColour(
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+                    SetStyle(-1, -1, attr);
+
+                    // Set text colour.
+                    WinStruct<CHARFORMAT> cf2;
+                    cf2.dwMask = CFM_COLOR;
+                    cf2.crTextColor = wxColourToRGB(
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+                    ::SendMessage(m_hWnd, EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf2);
+
+                    setBackground = true;
+                }
+            }
+        }
+        else
+        {
+            // Upon window creation, all we need to do is set the background.
+            // The text colour was already set during Create().
+            setBackground = true;
+        }
+
+        if (setBackground)
+            ::SendMessage(m_hWnd, EM_SETBKGNDCOLOR, 0, wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
+    }
+#endif
+}
+
 void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     // Don't use MSWUpdateFontOnDPIChange for the rich edit controls, they
@@ -3611,10 +3657,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
     LOGFONT lf;
     lf.lfWidth = 0;
-    lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
+    lf.lfCharSet = (cf.dwMask & CFM_CHARSET) ? cf.bCharSet : DEFAULT_CHARSET;
     lf.lfClipPrecision = 0;
     lf.lfEscapement = 0;
-    wxStrcpy(lf.lfFaceName, cf.szFaceName);
+    wxStrlcpy(lf.lfFaceName, cf.szFaceName, WXSIZEOF(lf.lfFaceName));
 
     //NOTE:  we _MUST_ set each of these values to _something_ since we
     //do not call wxZeroMemory on the LOGFONT lf

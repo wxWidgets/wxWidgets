@@ -1300,7 +1300,7 @@ wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_CHAR(wxAuiTabCtrl::OnChar)
     EVT_MOUSE_CAPTURE_LOST(wxAuiTabCtrl::OnCaptureLost)
     EVT_SYS_COLOUR_CHANGED(wxAuiTabCtrl::OnSysColourChanged)
-    EVT_DPI_CHANGED(wxAuiTabCtrl::OnDpiChanged)
+    EVT_DPI_CHANGED(wxAuiTabCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 
@@ -1871,7 +1871,7 @@ void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
         event.Skip();
 }
 
-void wxAuiTabCtrl::OnDpiChanged(wxDPIChangedEvent& event)
+void wxAuiTabCtrl::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_art->UpdateDpi();
     event.Skip();
@@ -2033,7 +2033,7 @@ wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxBookCtrlBase)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocusNotebook)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
     EVT_SYS_COLOUR_CHANGED(wxAuiNotebook::OnSysColourChanged)
-    EVT_DPI_CHANGED(wxAuiNotebook::OnDpiChanged)
+    EVT_DPI_CHANGED(wxAuiNotebook::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 namespace
@@ -2068,7 +2068,7 @@ void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
     Refresh();
 }
 
-void wxAuiNotebook::OnDpiChanged(wxDPIChangedEvent& event)
+void wxAuiNotebook::OnDPIChanged(wxDPIChangedEvent& event)
 {
     UpdateTabCtrlHeight();
     event.Skip();
@@ -2331,6 +2331,9 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     wxCHECK_MSG(page_idx <= GetPageCount(), false, wxT("invalid page index"));
 
     wxCHECK_MSG(page, false, wxT("page pointer must be non-null"));
+
+    wxCHECK_MSG(page->GetParent() == this, false,
+                wxT("page must be a child of the notebook"));
 
     wxAuiNotebookPage info;
     info.window = page;
@@ -4223,7 +4226,9 @@ wxAuiNotebook::SaveLayout(const wxString& name,
         const wxAuiTabCtrl* const
             tabCtrl = static_cast<wxAuiTabFrame*>(pane.window)->m_tabs;
 
-        tab.active = tabCtrl->GetActivePage();
+        auto* const activePage =
+            tabCtrl->GetWindowFromIdx(tabCtrl->GetActivePage());
+        tab.active = m_tabs.GetIdxFromWindow(activePage);
 
         // As an optimization, don't bother with saving the pages order for the
         // main control if it hasn't been changed from the default.

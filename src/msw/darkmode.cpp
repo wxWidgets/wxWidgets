@@ -111,6 +111,9 @@ std::unique_ptr<wxDarkModeSettings> wxDarkModeModule::ms_settings;
 DwmSetWindowAttribute_t
 wxDarkModeModule::ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
 
+// Implemented here to ensure that it's generated inside the DLL.
+wxDarkModeSettings::~wxDarkModeSettings() = default;
+
 #if wxUSE_DARK_MODE
 
 #ifndef WX_PRECOMP
@@ -148,6 +151,12 @@ enum PreferredAppMode
 
 PreferredAppMode gs_appMode = AppMode_Default;
 
+// The initial dark mode state.
+bool gs_wasActiveOnStartup  = false;
+
+// The return value for HasChanged().
+bool gs_hasChanged = false;
+
 template <typename T>
 bool TryLoadByOrd(T& func, const wxDynamicLibrary& lib, int ordinal)
 {
@@ -175,16 +184,42 @@ namespace wxMSWImpl
 // don't appear in the SDK headers at all.
 //
 // Note that, not being public, they use C++ bool type and not Win32 BOOL.
-bool (WINAPI *ShouldAppsUseDarkMode)() = nullptr;
-bool (WINAPI *AllowDarkModeForWindow)(HWND hwnd, bool allow) = nullptr;
-DWORD (WINAPI *SetPreferredAppMode)(DWORD) = nullptr;
+bool (WINAPI *gs_ShouldAppsUseDarkMode)() = nullptr;
+bool (WINAPI *gs_AllowDarkModeForWindow)(HWND hwnd, bool allow) = nullptr;
+PreferredAppMode (WINAPI *gs_SetPreferredAppMode)(PreferredAppMode appMode) = nullptr;
+
+// Wrappers for the undocumented functions, to make sure we never dereference
+// a null function pointer.
+
+bool ShouldAppsUseDarkMode()
+{
+    if (gs_ShouldAppsUseDarkMode == nullptr)
+        return false;
+    return gs_ShouldAppsUseDarkMode();
+}
+
+bool AllowDarkModeForWindow(HWND hwnd, bool allow)
+{
+    if (gs_AllowDarkModeForWindow == nullptr)
+        return false;
+    return gs_AllowDarkModeForWindow(hwnd, allow);
+}
+
+PreferredAppMode SetPreferredAppMode(PreferredAppMode appMode)
+{
+    if (gs_SetPreferredAppMode == nullptr)
+        return AppMode_Default;
+    return gs_SetPreferredAppMode(appMode);
+}
 
 bool InitDarkMode()
 {
-    // In theory, dark mode support was added in v1809 (build 17763), so enable
+    // Enable dark mode for Windows 10 1903 (build 18362) and later.
+    // In theory, dark mode support was added in v1809 (build 17763). However,
+    // the undocumented functions changed in v1903. So enable
     // it for all later versions, even though in practice this code has been
     // mostly tested under v2004 ("20H1", build number 19041) and later ones.
-    if ( !wxCheckOsVersion(10, 0, 17763) )
+    if ( !wxCheckOsVersion(10, 0, 18362) )
     {
         wxLogTrace(TRACE_DARKMODE, "Unsupported due to OS version");
         return false;
@@ -194,9 +229,9 @@ bool InitDarkMode()
 
     // These functions are not only undocumented but are not even exported by
     // name, and have to be resolved using their ordinals.
-    return TryLoadByOrd(ShouldAppsUseDarkMode, dllUxTheme, 132) &&
-           TryLoadByOrd(AllowDarkModeForWindow, dllUxTheme, 133) &&
-           TryLoadByOrd(SetPreferredAppMode, dllUxTheme, 135);
+    return TryLoadByOrd(gs_ShouldAppsUseDarkMode, dllUxTheme, 132) &&
+           TryLoadByOrd(gs_AllowDarkModeForWindow, dllUxTheme, 133) &&
+           TryLoadByOrd(gs_SetPreferredAppMode, dllUxTheme, 135);
 }
 
 // This function is only used in this file as it's more clear than using
@@ -250,6 +285,7 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
     }
 
     gs_appMode = mode;
+    gs_wasActiveOnStartup = wxMSWDarkMode::IsActive();
 
     // Set up the settings to use, allocating a default one if none specified.
     if ( !settings )
@@ -293,9 +329,6 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 // ----------------------------------------------------------------------------
 // Default wxDarkModeSettings implementation
 // ----------------------------------------------------------------------------
-
-// Implemented here to ensure that it's generated inside the DLL.
-wxDarkModeSettings::~wxDarkModeSettings() = default;
 
 wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
 {
@@ -423,13 +456,14 @@ bool IsActive()
     return wxMSWImpl::ShouldUseDarkMode();
 }
 
-void EnableForTLW(HWND hwnd)
+bool HasChanged()
 {
-    // Nothing to do, dark mode support not enabled or dark mode is not used.
-    if ( !wxMSWImpl::ShouldUseDarkMode() )
-        return;
+    return gs_hasChanged;
+}
 
-    BOOL useDarkMode = TRUE;
+void ConfigureTLW(HWND hwnd)
+{
+    BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
 
     // DWMWA_USE_IMMERSIVE_DARK_MODE is 19 for v1809, but is 20 for later
     // versions, so to set title bar black for both v1809 and later versions,
@@ -458,23 +492,29 @@ void EnableForTLW(HWND hwnd)
     wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
 }
 
+void SetTheme(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
+{
+    HRESULT hr = ::SetWindowTheme(hwnd, themeName, themeId);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(wxString::Format("SetWindowTheme(%p, %s, %s)",
+                                       hwnd, themeName, themeId), hr);
+    }
+}
+
 void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
 {
-    if ( !wxMSWImpl::ShouldUseDarkMode() )
-        return;
-
     if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, true) )
         wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
 
     if ( themeName || themeId )
     {
-        HRESULT hr = ::SetWindowTheme(hwnd, themeName, themeId);
-        if ( FAILED(hr) )
-        {
-            wxLogApiError(wxString::Format("SetWindowTheme(%p, %s, %s)",
-                                           hwnd, themeName, themeId), hr);
-        }
+        SetTheme(hwnd, themeName, themeId);
     }
+
+    // Some native controls need this message to switch themes, such as
+    // buttons, tooltips and controls with scroll bars
+    ::SendMessage(hwnd, WM_THEMECHANGED, 0, 0);
 }
 
 wxColour GetColour(wxSystemColour index)
@@ -682,7 +722,7 @@ HandleMenuMessage(WXLRESULT* result,
                 WinStruct<MENUITEMINFO> mii;
                 mii.fMask = MIIM_STRING;
                 mii.dwTypeData = buf;
-                mii.cch = sizeof(buf) - 1;
+                mii.cch = WXSIZEOF(buf);
 
                 // Note that we need to use the iPosition field of the
                 // undocumented struct here because DRAWITEMSTRUCT::itemID is
@@ -734,8 +774,7 @@ HandleMenuMessage(WXLRESULT* result,
                 // We have to specify the text colour explicitly as by default
                 // black would be used, making the menu label unreadable on the
                 // (almost) black background.
-                DTTOPTS textOpts;
-                textOpts.dwSize = sizeof(textOpts);
+                WinStructWordSize<DTTOPTS> textOpts;
                 textOpts.dwFlags = DTT_TEXTCOLOR;
                 textOpts.crText = wxColourToRGB(GetMenuColour(colText));
 
@@ -754,6 +793,12 @@ HandleMenuMessage(WXLRESULT* result,
     return false;
 }
 
+void NotifySysColorChange()
+{
+    if ( IsActive() != gs_wasActiveOnStartup )
+        gs_hasChanged = true;
+}
+
 } // namespace wxMSWDarkMode
 
 #else // !wxUSE_DARK_MODE
@@ -770,6 +815,21 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance WXUNUSED(appearance))
     return AppearanceResult::Failure;
 }
 
+wxColour wxDarkModeSettings::GetColour(wxSystemColour WXUNUSED(index))
+{
+    return wxColour();
+}
+
+wxColour wxDarkModeSettings::GetMenuColour(wxMenuColour WXUNUSED(which))
+{
+    return wxColour();
+}
+
+wxPen wxDarkModeSettings::GetBorderPen()
+{
+    return wxPen{};
+}
+
 namespace wxMSWDarkMode
 {
 
@@ -778,11 +838,11 @@ bool IsActive()
     return false;
 }
 
-void EnableForTLW(HWND WXUNUSED(hwnd))
+void ConfigureTLW(HWND WXUNUSED(hwnd))
 {
 }
 
-void AllowForWindow(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeClass))
+void AllowForWindow(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeClass), const wchar_t* WXUNUSED(themeId))
 {
 }
 

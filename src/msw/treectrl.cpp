@@ -807,8 +807,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wxString{}, pos, size) )
         return false;
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
+    UpdateNativeColours();
 
     wxSetCCUnicodeFormat(GetHwnd());
 
@@ -824,6 +823,8 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 
     // And ensure we adjust it again if the DPI changes in the future.
     Bind(wxEVT_DPI_CHANGED, &wxTreeCtrl::OnDPIChanged, this);
+
+    Bind(wxEVT_SYS_COLOUR_CHANGED, &wxTreeCtrl::OnSysColourChanged, this);
 
     return true;
 }
@@ -1033,6 +1034,12 @@ bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
     ::SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
 
     return true;
+}
+
+void wxTreeCtrl::UpdateNativeColours()
+{
+    ::SendMessage(m_hWnd, TVM_SETBKCOLOR, 0, GetBackgroundColour().GetPixel());
+    ::SendMessage(m_hWnd, TVM_SETTEXTCOLOR, 0, GetForegroundColour().GetPixel());
 }
 
 // ----------------------------------------------------------------------------
@@ -2343,6 +2350,12 @@ void wxTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
     // Adjust the indent to the new DPI scaling factor as Windows doesn't do it.
     DoSetIndent();
 
+    event.Skip();
+}
+
+void wxTreeCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    UpdateNativeColours();
     event.Skip();
 }
 

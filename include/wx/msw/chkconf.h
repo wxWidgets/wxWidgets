@@ -117,14 +117,6 @@
 #   endif
 #endif /* wxUSE_TASKBARBUTTON */
 
-#ifndef wxUSE_UXTHEME
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_UXTHEME must be defined."
-#    else
-#        define wxUSE_UXTHEME 0
-#    endif
-#endif  /* wxUSE_UXTHEME */
-
 #ifndef wxUSE_WINSOCK2
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_WINSOCK2 must be defined."
