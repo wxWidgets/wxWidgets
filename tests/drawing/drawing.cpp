@@ -19,7 +19,7 @@
 #include "wx/svggc.h"
 #endif
 
-#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+#if wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT
 
 void DoFullDrawings(wxGraphicsContext *gc)
 {
@@ -48,7 +48,7 @@ void DoFullDrawings(wxGraphicsContext *gc)
     gc->DrawText(wxASCII_STR("wxSVGGraphicsContext Full Test"), 50, 400);
 }
 
-#endif // wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+#endif // wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT
 
 // ----------------------------------------------------------------------------
 // SVG Test Cases

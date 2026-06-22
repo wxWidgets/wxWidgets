@@ -9,7 +9,7 @@
 #ifndef _WX_TESTS_DRAWING_H_
 #define _WX_TESTS_DRAWING_H_
 
-#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+#if wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/graphics.h"
 
@@ -17,6 +17,6 @@ void DoBasicDrawings(wxGraphicsContext *gc);
 void DoFontDrawings(wxGraphicsContext *gc);
 void DoFullDrawings(wxGraphicsContext *gc);
 
-#endif // wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+#endif // wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT
 
 #endif // _WX_TESTS_DRAWING_H_

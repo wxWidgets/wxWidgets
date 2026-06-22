@@ -15,7 +15,7 @@
 #include "glib-object.h"
 #endif
 
-#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+#if wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT
 
 void DoFontDrawings(wxGraphicsContext *gc)
 {
@@ -90,4 +90,4 @@ void DoFontDrawings(wxGraphicsContext *gc)
                  110, y, wxDegToRad(15));
 }
 
-#endif // wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+#endif // wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT

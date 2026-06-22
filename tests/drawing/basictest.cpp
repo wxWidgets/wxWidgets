@@ -11,7 +11,7 @@
 #include "drawing.h"
 #include "wx/brush.h"
 
-#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+#if wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT
 
 void DoBasicDrawings(wxGraphicsContext *gc)
 {
@@ -22,4 +22,4 @@ void DoBasicDrawings(wxGraphicsContext *gc)
     gc->DrawRectangle(0, 0, 800, 600);
 }
 
-#endif // wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+#endif // wxUSE_SVG && wxUSE_GRAPHICS_CONTEXT
