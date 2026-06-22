@@ -821,7 +821,7 @@ public:
     @section backend_descriptions Backend Descriptions
 
     This class supports using multiple backends, corresponding to different
-    implementations of the same functionality. wxWebViewChrome is available
+    implementations of the same functionality. wxWebViewChromium is available
     on all three major platforms and each platform also has its own default
     native backend. Backends are identified by their names, documented in
     the backend descriptions below.
