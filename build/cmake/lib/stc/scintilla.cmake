@@ -11,7 +11,6 @@ include(../../source_groups.cmake)
 set(SCINTILLA_SRC_DIR src/stc/scintilla)
 
 wx_add_builtin_library(wxscintilla
-    ${SCINTILLA_SRC_DIR}/include/Compat.h
     ${SCINTILLA_SRC_DIR}/include/ILexer.h
     ${SCINTILLA_SRC_DIR}/include/ILoader.h
     ${SCINTILLA_SRC_DIR}/include/Platform.h
@@ -85,15 +84,24 @@ wx_add_builtin_library(wxscintilla
     ${SCINTILLA_SRC_DIR}/src/ViewStyle.h
     ${SCINTILLA_SRC_DIR}/src/XPM.cxx
     ${SCINTILLA_SRC_DIR}/src/XPM.h
+    ${SCINTILLA_SRC_DIR}/gtk/Converter.h
+    ${SCINTILLA_SRC_DIR}/gtk/PlatGTK.cxx
+    ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.cxx
+    ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTKAccessible.h
+    ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTK.cxx
+    ${SCINTILLA_SRC_DIR}/gtk/ScintillaGTK.h
+    ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.c
+    ${SCINTILLA_SRC_DIR}/gtk/scintilla-marshal.h
 )
 
 target_include_directories(wxscintilla PRIVATE
     ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/include
     ${wxSOURCE_DIR}/${SCINTILLA_SRC_DIR}/src
+    ${wxTOOLKIT_INCLUDE_DIRS}
 )
 
-target_compile_definitions(wxscintilla PUBLIC
-    __WX__
+target_compile_definitions(wxscintilla PRIVATE
+    GTK
 )
 
 wx_target_enable_precomp(wxscintilla

@@ -2905,6 +2905,13 @@ set(STC_CMN_HDR
     wx/stc/minimap.h
 )
 
+set(STC_GTK_SRC
+    src/stc/stc_gtk.cpp
+)
+
+set(STC_GTK_HDR
+)
+
 set(STC_OSX_COCOA_SRC
     src/stc/PlatWXcocoa.mm
 )

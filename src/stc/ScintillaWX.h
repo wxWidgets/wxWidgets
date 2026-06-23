@@ -17,6 +17,8 @@
 #define __ScintillaWX_h__
 #include "wx/defs.h"
 
+#error "this shouldn't be used"
+
 //----------------------------------------------------------------------
 
 #include <stdexcept>
@@ -190,8 +192,6 @@ public:
     void FullPaintDC(wxDC* dc);
     bool CanPaste() override;
     bool GetHideSelection() { return view.hideSelection; }
-    void DoScrollToLine(int line);
-    void DoScrollToColumn(int column);
     void ClipChildren(wxDC& dc, PRectangle rect);
     SurfaceData* GetSurfaceData() const {return m_surfaceData;}
     void SetPaintAbandoned(){paintState = paintAbandoned;}

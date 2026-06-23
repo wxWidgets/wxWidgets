@@ -17,7 +17,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_STC
+#if 0
 
 #ifndef WX_PRECOMP
     #include "wx/scrolbar.h"
@@ -1294,15 +1294,6 @@ void ScintillaWX::DoDragLeave() {
 }
 #endif // wxUSE_DRAG_AND_DROP
 //----------------------------------------------------------------------
-
-void ScintillaWX::DoScrollToLine(int line) {
-    ScrollTo(line);
-}
-
-
-void ScintillaWX::DoScrollToColumn(int column) {
-    HorizontalScrollTo(wxRound(column * vs.spaceWidth));
-}
 
 // wxGTK doesn't appear to need this explicit clipping code any longer, but I
 // will leave it here commented out for a while just in case...
