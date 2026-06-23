@@ -107,6 +107,8 @@ public:
 
     virtual bool SetProxy(const wxString& proxy) override;
 
+    virtual bool DisableGPUOptimization() override;
+
     virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
                                    wxDateTime since = {}) override;
 

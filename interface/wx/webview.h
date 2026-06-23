@@ -918,11 +918,8 @@ public:
     The predefined @c wxWebViewBackendWebKit constant contains the name of this
     backend.
 
-    @note WebKitGTK 2.42+ may fail to render content due to
-    DMA-BUF hardware acceleration issues. This can be resolved by calling
-    @code
-    wxSetEnv("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
-    @endcode
+    @note WebKitGTK 2.42+ may fail to render content due to DMA-BUF hardware
+    acceleration issues. This can be resolved by calling DisableGPUOptimization()
     before creating a @c wxWebView instance.
 
     @subsection wxWEBVIEW_WEBKIT_MACOS wxWEBVIEW_WEBKIT (macOS)
@@ -1461,6 +1458,26 @@ public:
             e.g. because this is not supported by the currently used backend.
      */
     virtual bool SetProxy(const wxString& proxy);
+
+    /**
+        Disables GPU hardware acceleration for the web view.
+
+        This can be useful when diagnosing rendering issues or when targeting
+        machines with older or unsupported video cards.
+
+        This must be called @b before creating any wxWebView instance. Once
+        called, GPU acceleration will remain disabled for the lifetime of the
+        application.
+
+        @return @true if the setting was applied successfully, @false if it is
+            not supported by the currently used backend.
+
+        @note This is currently only implemented for the Edge (MSW) and
+            WebKit2GTK (GTK) backends.
+
+        @since 3.3.3
+    */
+    virtual bool DisableGPUOptimization();
 
     /**
         Clears the browsing data of the web view.
