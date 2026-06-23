@@ -2344,6 +2344,11 @@ long wxWindowMac::MacGetBottomBorderSize() const {
     return MacGetBorderSize().bottom;
 }
 
+void wxWindowMac::MacInvalidateInsetCache() const {
+    if ( GetPeer() )
+        GetPeer()->InvalidateLayoutInset();
+}
+
 long wxWindowMac::MacRemoveBordersFromStyle( long style )
 {
     return style & ~wxBORDER_MASK ;
