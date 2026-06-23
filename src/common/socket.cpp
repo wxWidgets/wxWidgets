@@ -41,6 +41,7 @@
 #include "wx/thread.h"
 #include "wx/evtloop.h"
 #include "wx/link.h"
+#include "wx/vector.h"
 
 #include "wx/private/fd.h"
 #include "wx/private/socket.h"
@@ -1157,7 +1158,7 @@ wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
     void* readbuf;
     wxUint32 readbytes;
     const wxUint32 DGRAM_MIN_READ = 65536;  // 64K is enough for UDP
-    std::vector<unsigned char> peekbuf;
+    wxVector<unsigned char> peekbuf;
     bool usePeekbuf = !m_impl->m_stream && nbytes < DGRAM_MIN_READ;
     if ( usePeekbuf )
     {
