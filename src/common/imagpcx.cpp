@@ -24,6 +24,8 @@
 #include "wx/imagpcx.h"
 #include "wx/wfstream.h"
 
+#include <vector>
+
 //-----------------------------------------------------------------------------
 // wxPCXHandler
 //-----------------------------------------------------------------------------
@@ -224,8 +226,8 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     if (!image->IsOk())
         return wxPCX_MEMERR;
 
-    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == nullptr)
-        return wxPCX_MEMERR;
+    std::vector<unsigned char> scanline(bytesperline * nplanes);
+    p = scanline.data();
 
     // Now start reading the file, line by line, and store
     // the data in the format required by wxImage.
@@ -240,10 +242,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
         {
             stream.Read(p, bytesperline * nplanes);
             if (stream.LastRead() != bytesperline * nplanes)
-            {
-                free(p);
                 return wxPCX_INVFORMAT;
-            }
         }
 
         switch (format)
@@ -270,8 +269,6 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
             }
         }
     }
-
-    free(p);
 
     // For 8 bit images, we read the palette, and then do a second
     // pass replacing indexes with their RGB values;
