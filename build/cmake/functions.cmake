@@ -188,6 +188,13 @@ function(wx_set_common_target_properties target_name)
         RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
         )
 
+    if(wxUSE_UNICODE)
+        if(WIN32)
+            target_compile_definitions(${target_name} PUBLIC UNICODE)
+        endif()
+        target_compile_definitions(${target_name} PUBLIC _UNICODE)
+    endif()
+
     if(wxBUILD_PIC)
         set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     endif()
@@ -411,13 +418,6 @@ function(wx_set_target_properties target_name)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
     else()
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=0)
-    endif()
-
-    if(wxUSE_UNICODE)
-        if(WIN32)
-            target_compile_definitions(${target_name} PUBLIC UNICODE)
-        endif()
-        target_compile_definitions(${target_name} PUBLIC _UNICODE)
     endif()
 
     if(MSVC)
@@ -718,16 +718,27 @@ macro(wx_set_builtin_target_ouput_name target target_name)
     )
 endmacro()
 
-# Set common properties for a builtin third party library
-function(wx_set_builtin_target_properties target_name)
-    wx_set_builtin_target_ouput_name(${target_name} "${target_name}")
+# Add a third party builtin library
+function(wx_add_builtin_library target_name)
+    wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
 
-    if(wxUSE_UNICODE)
-        if(WIN32)
-            target_compile_definitions(${target_name} PUBLIC UNICODE)
-        endif()
-        target_compile_definitions(${target_name} PUBLIC _UNICODE)
+    list(GET src_list 0 src_file)
+    if(NOT EXISTS "${src_file}")
+        message(FATAL_ERROR "${target_name} file does not exist: \"${src_file}\".\
+        Make sure you checkout the git submodules.")
     endif()
+
+    add_library(${target_name} STATIC ${src_list})
+
+    if(${target_name} MATCHES "wx.*")
+        string(SUBSTRING ${target_name} 2 -1 name_short)
+        set(name_long ${target_name})
+    else()
+        set(name_short ${target_name})
+        set(name_long "wx${target_name}")
+    endif()
+
+    wx_set_builtin_target_ouput_name(${target_name} ${name_long})
 
     if(MSVC)
         # we're not interested in deprecation warnings about the use of
@@ -742,47 +753,29 @@ function(wx_set_builtin_target_properties target_name)
 
     target_include_directories(${target_name} BEFORE PRIVATE ${wxSETUP_HEADER_PATH})
 
-    set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
-
+    set_target_properties(${target_name} PROPERTIES
+        PROJECT_LABEL ${name_short}
+        FOLDER "Third Party Libraries"
+    )
     if(wxBUILD_SHARED OR wxBUILD_PIC)
         set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     endif()
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
-    if(NOT wxBUILD_SHARED)
-        wx_get_install_platform_dir(archive)
-        wx_install(TARGETS ${name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "${archive_dir}")
-    endif()
-endfunction()
 
-# Add a third party builtin library
-function(wx_add_builtin_library name)
-    list(APPEND wxLIB_BUILTIN_TARGETS ${name})
+    add_library(wx::${name_short} ALIAS ${target_name})
+    add_library(wxWidgets::${name_short} ALIAS ${target_name})
+    if(CREATE_WX_TARGET)
+        target_link_libraries(wxWidgets INTERFACE ${target_name})
+    endif()
+
+    list(APPEND wxLIB_BUILTIN_TARGETS ${target_name})
     set(wxLIB_BUILTIN_TARGETS ${wxLIB_BUILTIN_TARGETS} PARENT_SCOPE)
 
-    wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
-
-    list(GET src_list 0 src_file)
-    if(NOT EXISTS "${src_file}")
-        message(FATAL_ERROR "${name} file does not exist: \"${src_file}\".\
-        Make sure you checkout the git submodules.")
+    if(NOT wxBUILD_SHARED)
+        wx_get_install_platform_dir(archive)
+        wx_install(TARGETS ${target_name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "${archive_dir}")
     endif()
-
-    if(${name} MATCHES "wx.*")
-        string(SUBSTRING ${name} 2 -1 name_short)
-    else()
-        set(name_short ${name})
-    endif()
-
-    add_library(${name} STATIC ${src_list})
-    add_library(wx::${name_short} ALIAS ${name})
-    add_library(wxWidgets::${name_short} ALIAS ${name})
-    if(CREATE_WX_TARGET)
-        target_link_libraries(wxWidgets INTERFACE ${name})
-    endif()
-
-    wx_set_builtin_target_properties(${name})
-    set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 endfunction()
 
 # List of third party libraries added via wx_add_thirdparty_library()
