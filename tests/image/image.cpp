@@ -1560,6 +1560,33 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadPCX", "[image][pcx][error]")
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_PCX) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::TruncatedPCXPalette", "[image][pcx][error]")
+{
+    // A 1x1 8-bit PCX whose 256-colour palette (which follows the 0x0c
+    // marker at the very end of the file) is truncated. ReadPCX() used to
+    // read the fixed 768-byte palette without checking how many bytes were
+    // actually present, so the unread tail of the buffer stayed
+    // uninitialised and was then copied into the image data and the
+    // wxImage palette.
+    unsigned char data[128 + 2 + 1 + 10] = { 0 };
+    data[0] = 0x0a;   // manufacturer
+    data[1] = 0x05;   // version
+    data[2] = 0x01;   // RLE encoding
+    data[3] = 0x08;   // bits per pixel
+    // xmin/ymin/xmax/ymax all zero gives a 1x1 image
+    data[65] = 0x01;  // one plane
+    data[66] = 0x01;  // bytes per line
+    // a single RLE run for one pixel with palette index 255
+    data[128] = 0xc1;
+    data[129] = 0xff;
+    // palette marker followed by only 10 of the expected 768 palette bytes
+    data[130] = 0x0c;
+
+    wxMemoryInputStream mis(data, WXSIZEOF(data));
+    wxImage img;
+    REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_PCX) );
+}
+
 #endif // wxUSE_PCX
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadANI", "[image][ani][error]")

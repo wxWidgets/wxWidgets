@@ -173,6 +173,8 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     // be at least 5 or higher for 8 bit and 24 bit images).
 
     stream.Read(hdr, 128);
+    if (stream.LastRead() != 128)
+        return wxPCX_INVFORMAT;
 
     if (hdr[HDR_VERSION] < 5) return wxPCX_VERERR;
 
@@ -235,7 +237,14 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
         if (encoding)
             RLEdecode(p, bytesperline * nplanes, stream);
         else
+        {
             stream.Read(p, bytesperline * nplanes);
+            if (stream.LastRead() != bytesperline * nplanes)
+            {
+                free(p);
+                return wxPCX_INVFORMAT;
+            }
+        }
 
         switch (format)
         {
@@ -273,6 +282,8 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
             return wxPCX_INVFORMAT;
 
         stream.Read(pal, 768);
+        if (stream.LastRead() != 768)
+            return wxPCX_INVFORMAT;
 
         p = image->GetData();
         for (unsigned long k = height * width; k; k--)
