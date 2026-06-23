@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_WEBVIEW)
+    wx_append_install_headers(WEBVIEW_CMN_HDR)
+    return()
+endif()
+
 macro(wx_set_webview2_arch)
     if(wxPLATFORM_ARCH)
         set(WEBVIEW2_ARCH ${wxPLATFORM_ARCH})

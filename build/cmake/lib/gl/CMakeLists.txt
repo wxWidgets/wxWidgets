@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_OPENGL)
+    wx_append_install_headers(OPENGL_CMN_HDR)
+    return()
+endif()
+
 wx_append_sources(GL_FILES OPENGL_CMN)
 
 if(WXMSW)

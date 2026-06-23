@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_STC)
+    wx_append_install_headers(STC_CMN_HDR)
+    return()
+endif()
+
 wx_append_sources(STC_FILES STC_CMN)
 
 if(WXOSX_COCOA)

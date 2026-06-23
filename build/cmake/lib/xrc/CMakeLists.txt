@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_XRC)
+    wx_append_install_headers(XRC_HDR)
+    return()
+endif()
+
 wx_append_sources(XRC_FILES XRC)
 
 wx_add_library(wxxrc ${XRC_FILES})
