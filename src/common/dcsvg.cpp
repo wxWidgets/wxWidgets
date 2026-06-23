@@ -1438,6 +1438,7 @@ void wxSVGFileDCImpl::SetBitmapHandler(wxSVGBitmapHandler* handler)
 void wxSVGFileDCImpl::SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode)
 {
     m_writer->SetShapeRenderingMode(renderingMode);
+    m_writer->MarkGraphicsChanged();
 }
 
 void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
@@ -1513,11 +1514,12 @@ void wxSVGFileDCImpl::DoStartNewGraphics()
     if ( penStroke.empty() )
         penStroke = GetPenStroke(m_pen.GetColour(), m_pen.GetStyle());
 
-    s = wxString::Format(wxS("<g %s %s %s %s transform=\"translate(%d %d) scale(%s %s)\">\n"),
+    s = wxString::Format(wxS("<g %s %s %s %s %s transform=\"translate(%d %d) scale(%s %s)\">\n"),
         GetPenStyle(m_pen),
         brushFill,
         penStroke,
         style,
+        GetRenderMode(m_writer->GetShapeRenderingMode()),
         (m_deviceOriginX - m_logicalOriginX) * m_signX,
         (m_deviceOriginY - m_logicalOriginY) * m_signY,
         NumStr(m_scaleX * m_signX),
