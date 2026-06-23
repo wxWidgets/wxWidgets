@@ -319,7 +319,7 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         wxRect actualNewRect = newRect;
         if ( wxSizer* sizer = GetSizer() )
         {
-            const wxSize minSize = sizer->ComputeFittingClientSize(this);
+            const wxSize minSize = sizer->ComputeFittingWindowSize(this);
             wxSize diff = minSize - newRect.GetSize();
 
             // We don't want to shrink the window as if the user had increased
