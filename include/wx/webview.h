@@ -172,6 +172,7 @@ public:
     void SetDataPath(const wxString& path);
     wxString GetDataPath() const;
     bool EnablePersistentStorage(bool enable);
+    static bool DisableGPUAcceleration();
 
     const wxString& GetBackend() const { return m_backend; }
 
