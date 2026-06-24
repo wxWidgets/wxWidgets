@@ -490,6 +490,18 @@ wxWebView::GetBackendVersionInfo(const wxString& backend,
         return wxVersionInfo();
 }
 
+// static
+bool wxWebViewConfiguration::DisableGPUAcceleration()
+{
+#if defined(__WXGTK__)
+    return wxSetEnv("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+#elif defined(__WXMSW__)
+    return wxSetEnv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-gpu");
+#else
+    return false;
+#endif
+}
+
 wxWebViewConfiguration wxWebView::NewConfiguration(const wxString& backend)
 {
     wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
