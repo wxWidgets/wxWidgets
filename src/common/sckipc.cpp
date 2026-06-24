@@ -241,7 +241,13 @@ public:
         void * const data = conn->GetBufferAtLeast(*size);
         wxCHECK_MSG( data, nullptr, "IPC buffer allocation failed" );
 
-        m_socketStream.Read(data, *size);
+        // The buffer returned by GetBufferAtLeast() is not zero-filled: it is
+        // either freshly allocated (so uninitialised) or reused from a previous,
+        // possibly larger, message. If the peer announces more data than it
+        // actually sends, the unread tail would leak that memory to the caller,
+        // so refuse the truncated message instead of using the partial buffer.
+        if ( m_socketStream.Read(data, *size).LastRead() != *size )
+            return nullptr;
 
         return data;
     }
