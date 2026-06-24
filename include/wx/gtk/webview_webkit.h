@@ -95,7 +95,6 @@ public:
     virtual bool IsAccessToDevToolsEnabled() const override;
     virtual bool SetUserAgent(const wxString& userAgent) override;
     virtual bool SetProxy(const wxString& proxy) override;
-    virtual bool DisableGPUOptimization() override;
 #endif
 
     void SetZoomType(wxWebViewZoomType) override;

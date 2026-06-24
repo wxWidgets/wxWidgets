@@ -1072,11 +1072,6 @@ bool wxWebViewWebKit::SetUserAgent(const wxString& userAgent)
     return true;
 }
 
-bool wxWebViewWebKit::DisableGPUOptimization()
-{
-    return wxSetEnv("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
-}
-
 bool wxWebViewWebKit::SetProxy(const wxString& proxy)
 {
 #if WEBKIT_CHECK_VERSION(2, 16, 0)

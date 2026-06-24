@@ -1701,11 +1701,6 @@ wxString wxWebViewEdge::GetUserAgent() const
 }
 
 
-bool wxWebViewEdge::DisableGPUOptimization()
-{
-    return wxSetEnv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-gpu");
-}
-
 bool wxWebViewEdge::SetProxy(const wxString& proxy)
 {
     wxCHECK_MSG(!m_impl->m_webViewController, false,

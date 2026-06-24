@@ -288,7 +288,6 @@ public:
     virtual bool SetUserAgent(const wxString& userAgent) { wxUnusedVar(userAgent); return false; }
     virtual wxString GetUserAgent() const;
     virtual bool SetProxy(const wxString& proxy) { wxUnusedVar(proxy); return false; }
-    virtual bool DisableGPUOptimization() { return false; }
     virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
                                    wxDateTime since = {})
     { wxUnusedVar(types); wxUnusedVar(since); return false; }
