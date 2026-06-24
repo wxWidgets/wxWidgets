@@ -241,7 +241,10 @@ public:
         void * const data = conn->GetBufferAtLeast(*size);
         wxCHECK_MSG( data, nullptr, "IPC buffer allocation failed" );
 
-        m_socketStream.Read(data, *size);
+        // We should always read exactly the provided number of bytes,
+        // otherwise something is wrong and we must return an error.
+        if ( m_socketStream.Read(data, *size).LastRead() != *size )
+            return nullptr;
 
         return data;
     }
