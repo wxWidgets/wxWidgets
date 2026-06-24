@@ -723,12 +723,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         // non-rich read-only multiline controls have grey background by
         // default under MSW but this is not always appropriate, so forcefully
         // reset the background colour to normal default
-        //
-        // this is not ideal but, after a long discussion on wx-dev (see
-        // http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/116360/) it
-        // was finally deemed to be the best behaviour by default (and ideally
-        // we'd have a way to change this, see #11521)
-        SetBackgroundColour(GetClassDefaultAttributes().colBg);
+        m_backgroundColour = GetClassDefaultAttributes().colBg;
     }
 
     // Without this, if we pass the size in the constructor and then don't change it,
@@ -2930,6 +2925,15 @@ void wxTextCtrl::MSWSetRichZoom()
 void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 {
     wxTextCtrlBase::MSWSetDarkOrLightMode(setmode);
+
+    // Update the background for non-rich read-only multiline, unless there
+    // are custom colours. The foreground is updated by
+    // wxControl::DoMSWControlColor().
+    if ( !IsRich() && HasFlag(wxTE_MULTILINE) && HasFlag(wxTE_READONLY) &&
+        !m_hasBgCol && !m_hasFgCol )
+    {
+        m_backgroundColour = GetClassDefaultAttributes().colBg;
+    }
 
 #if wxUSE_RICHEDIT
     // The rich edit control does not change colours automatically. We adjust
