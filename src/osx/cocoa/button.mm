@@ -66,6 +66,19 @@
     }
 }
 
+- (void) setBezelStyle: (NSBezelStyle) s
+{
+    [super setBezelStyle:s];
+
+    // Setting the bezel style may change the layout insets, so the cache
+    // needs to be invalidated to avoid incorrect layout.
+    // Done here so it's handled for both internal wx usage and application
+    // code when accessed with `wxWindow::GetHandle()`
+    auto *impl{wxWidgetImpl::FindFromWXWidget(self)};
+    if (impl)
+        impl->InvalidateLayoutInset();
+}
+
 - (void) setTrackingTag: (NSTrackingRectTag)tag
 {
     rectTag = tag;
