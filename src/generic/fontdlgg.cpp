@@ -46,7 +46,8 @@
 class WXDLLEXPORT wxFontPreviewer : public wxWindow
 {
 public:
-    wxFontPreviewer(wxWindow *parent, const wxSize& sz = wxDefaultSize) : wxWindow(parent, wxID_ANY, wxDefaultPosition, sz)
+    wxFontPreviewer(wxWindow *parent, const wxSize& sz = wxDefaultSize)
+        : wxWindow(parent, wxID_ANY, wxDefaultPosition, sz, wxBORDER_SIMPLE)
     {
     }
 
@@ -66,13 +67,10 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxSize size = GetSize();
     wxFont font = GetFont();
 
-    dc.SetPen(*wxBLACK_PEN);
-    dc.SetBrush(*wxWHITE_BRUSH);
-    dc.DrawRectangle(0, 0, size.x, size.y);
-
     if ( font.IsOk() )
     {
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
         dc.DrawText(_("ABCDEFGabcdefg12345"),
                      10, (size.y - dc.GetTextExtent(wxT("X")).y)/2);
         dc.DestroyClippingRegion();
