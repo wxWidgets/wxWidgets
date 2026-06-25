@@ -75,36 +75,6 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     if ( !wxWindow::Create(parent, winid, wxDefaultPosition, wxDefaultSize, style) )
         return false;
 
-    // use special, easy to notice, colours
-    wxColour colBg, colFg;
-    if ( !m_hasBgCol && !m_hasFgCol )
-    {
-        // We want to use the native infobar colours for consistency with the
-        // native implementation under GTK, but only do it for 3.24, as both
-        // the CSS structure and the default colour values have changed in this
-        // version compared to all the previous ones and it seems safer to keep
-        // the old behaviour for the older GTK versions, see #25048.
-#ifdef __WXGTK3__
-        if ( wx_is_at_least_gtk3(24) )
-        {
-            wxGtkStyleContext sc;
-            sc.Add(GTK_TYPE_INFO_BAR, "infobar", "info", nullptr);
-            sc.Add("revealer");
-            sc.Add("box");
-            sc.Bg(colBg);
-            sc.Fg(colFg);
-        }
-        else
-#endif // GTK 3
-        {
-            colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK);
-            colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT);
-        }
-    }
-
-    if( !m_hasBgCol )
-        SetBackgroundColour(colBg);
-
     // create the controls: icon, text and the button to dismiss the
     // message.
 
@@ -115,17 +85,15 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
                               wxDefaultPosition, wxDefaultSize,
                               wxST_ELLIPSIZE_MIDDLE);
 
-    if(!m_hasFgCol)
-        m_text->SetForegroundColour(colFg);
-
     m_button = wxBitmapButton::NewCloseButton(this, wxID_CLOSE);
     m_button->SetToolTip(_("Hide this notification message."));
 
     m_checkbox =
         new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
             wxDefaultSize, 0, wxGenericValidator(&m_checked));
-    m_checkbox->SetForegroundColour(
-        wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+
+    UpdateColours();
+    Bind(wxEVT_SYS_COLOUR_CHANGED, &wxInfoBarGeneric::OnSysColourChanged, this);
 
     // center the text inside the sizer with an icon to the left of it and a
     // button at the very right
@@ -502,6 +470,53 @@ void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
         m_checkbox->SetLabel(checkBoxText);
         GetSizer()->Show(m_checkbox, !checkBoxText.empty(), true);
     }
+}
+
+void wxInfoBarGeneric::UpdateColours()
+{
+    // use special, easy to notice, colours
+    wxColour colBg, colFg;
+    if ( !m_hasBgCol && !m_hasFgCol )
+    {
+        // We want to use the native infobar colours for consistency with the
+        // native implementation under GTK, but only do it for 3.24, as both
+        // the CSS structure and the default colour values have changed in this
+        // version compared to all the previous ones and it seems safer to keep
+        // the old behaviour for the older GTK versions, see #25048.
+#ifdef __WXGTK3__
+        if ( wx_is_at_least_gtk3(24) )
+        {
+            wxGtkStyleContext sc;
+            sc.Add(GTK_TYPE_INFO_BAR, "infobar", "info", nullptr);
+            sc.Add("revealer");
+            sc.Add("box");
+            sc.Bg(colBg);
+            sc.Fg(colFg);
+        }
+        else
+#endif // GTK 3
+        {
+            colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK);
+            colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT);
+        }
+    }
+
+    if ( !m_hasBgCol )
+        m_backgroundColour = colBg;
+
+    if ( !m_hasFgCol )
+        m_text->SetForegroundColour(colFg);
+
+    m_checkbox->SetForegroundColour(
+        wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+
+    m_button->SetBackgroundColour(GetBackgroundColour());
+}
+
+void wxInfoBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    UpdateColours();
+    event.Skip();
 }
 
 #endif // wxUSE_INFOBAR
