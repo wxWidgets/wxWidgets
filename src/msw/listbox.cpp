@@ -190,6 +190,29 @@ void wxListBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
         wxListBoxBase::MSWGetDarkModeSupport(support);
 }
 
+void wxListBox::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxListBoxBase::MSWSetDarkOrLightMode(setmode);
+
+    // Convert border styles that flicker to wxBORDER_SIMPLE. With
+    // DarkMode_DarkTheme (Windows 11 build 26200 and later), wxBORDER_STATIC
+    // and wxBORDER_RAISED flicker. Otherwise, all border styles except
+    // wxBORDER_SIMPLE flicker. Unfortunately, if the system switches back to
+    // light mode, the original border style will not be restored.
+    const auto border = GetBorder();
+    if ( border == wxBORDER_STATIC ||
+         border == wxBORDER_RAISED ||
+         !wxCheckOsVersion(10, 0, 26200) )
+    {
+        auto style = GetWindowStyleFlag();
+        style &= ~wxBORDER_MASK;
+        style |= wxBORDER_SIMPLE;
+        SetWindowStyleFlag(style);
+        ::SetWindowPos(m_hWnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE |
+            SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+    }
+}
+
 void wxListBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     wxListBoxBase::MSWUpdateFontOnDPIChange(newDPI);

@@ -3012,6 +3012,25 @@ void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
             ::SendMessage(m_hWnd, EM_SETBKGNDCOLOR, 0, wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
     }
 #endif
+
+    // Convert border styles that flicker to wxBORDER_SIMPLE. With the rich
+    // edit, no borders flicker. Otherwise, with DarkMode_DarkTheme (Windows
+    // 11 build 26200 and later), wxBORDER_STATIC and wxBORDER_RAISED flicker.
+    // Otherwise, all border styles except wxBORDER_SIMPLE flicker.
+    // Unfortunately, if the system switches back to light mode, the original
+    // border style will not be restored.
+    const auto border = GetBorder();
+    if ( !IsRich() && (border == wxBORDER_STATIC ||
+                       border == wxBORDER_RAISED ||
+                       !wxCheckOsVersion(10, 0, 26200)) )
+    {
+        auto style = GetWindowStyleFlag();
+        style &= ~wxBORDER_MASK;
+        style |= wxBORDER_SIMPLE;
+        SetWindowStyleFlag(style);
+        ::SetWindowPos(m_hWnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE |
+            SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+    }
 }
 
 void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
