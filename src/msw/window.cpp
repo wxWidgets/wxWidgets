@@ -3855,6 +3855,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         break;
                 }
 
+                if ( drawBorder && wxMSWDarkMode::IsActive() )
+                {
+                    MSWDarkModeSupport support;
+                    MSWGetDarkModeSupport(support);
+                    drawBorder = support.drawBorder;
+                }
+
                 if ( drawBorder )
                 {
                     // first ask the widget to paint its non-client area, such as scrollbars, etc.

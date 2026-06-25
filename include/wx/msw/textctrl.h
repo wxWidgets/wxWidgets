@@ -204,6 +204,8 @@ public:
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg) override;
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
+    void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+
 protected:
     // common part of all ctors
     void Init();

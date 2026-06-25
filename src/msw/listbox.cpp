@@ -179,7 +179,13 @@ void wxListBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     // build 26300.8553. DarkMode_DarkTheme looks OK and was available
     // starting with Windows 11 build 26200.
     if ( wxCheckOsVersion(10, 0, 26200) )
+    {
         support.themeName = L"DarkMode_DarkTheme";
+        // The static and raised style borders look bad.
+        const auto border = GetBorder();
+        support.drawBorder = border == wxBORDER_STATIC ||
+                             border == wxBORDER_RAISED;
+    }
     else
         wxListBoxBase::MSWGetDarkModeSupport(support);
 }

@@ -628,6 +628,12 @@ protected:
         // The theme IDs to use. If neither this field nor the theme name is
         // set, no theme is applied to the window.
         const wchar_t* themeId = nullptr;
+
+        // If true, draw our themed border. Set this false when a control
+        // draws a good dark mode border. This reduces flicker that happens
+        // when a control generates too many WM_NCPAINT messages which cause
+        // the border to be redrawn repeatedly.
+        bool drawBorder = true;
     };
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;

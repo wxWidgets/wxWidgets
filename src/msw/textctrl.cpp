@@ -889,6 +889,26 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+void wxTextCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // Use DarkMode_DarkTheme if available. This theme draws good dark mode
+    // borders for most styles including the default, wxBORDER_THEME. This
+    // eliminates border flicker that occurs with the non-rich edit with most
+    // border styles.
+    if ( wxCheckOsVersion(10, 0, 26200) )
+    {
+        support.themeName = L"DarkMode_DarkTheme";
+        // With the rich edit, all border styles look bad.
+        // With the non-rich, the static and raised styles look bad.
+        const auto border = GetBorder();
+        support.drawBorder = IsRich() ||
+                             border == wxBORDER_STATIC ||
+                             border == wxBORDER_RAISED;
+    }
+    else
+        wxTextCtrlBase::MSWGetDarkModeSupport(support);
+}
+
 #if wxUSE_RICHEDIT && wxUSE_SPELLCHECK
 
 bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
