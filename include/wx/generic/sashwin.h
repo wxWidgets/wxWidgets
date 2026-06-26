@@ -157,6 +157,7 @@ public:
 
 private:
     void Init();
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     wxSashEdge  m_sashes[4];
     int         m_dragMode;
