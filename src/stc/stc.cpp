@@ -5810,8 +5810,10 @@ void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt) {
 }
 
 
-void wxStyledTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(evt)) {
+void wxStyledTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& evt)
+{
     m_swx->DoInvalidateStyleData();
+    evt.Skip();
 }
 
 
