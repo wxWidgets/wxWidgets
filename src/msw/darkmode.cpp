@@ -517,6 +517,103 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
     ::SendMessage(hwnd, WM_THEMECHANGED, 0, 0);
 }
 
+// Draws a raised or sunken border using two shades (light/dark)
+// for dark mode. The rectangle `rc` is in device coordinates (e.g., window).
+// Draws a raised or sunken border with three shades (light, mid, dark)
+// to mimic the classic Windows 3D effect, using dark-mode colours.
+// The rectangle `rc` is in device coordinates (e.g., the full window).
+void DrawDarkModeEdge(HDC hdc, const RECT& rc, int borderStyle, int thickness)
+{
+    // Dark mode colours – adjust to match your theme
+    COLORREF clrHighlight = RGB(90, 90, 90);   // lightest (top/left outer)
+    COLORREF clrMid = RGB(65, 65, 65);   // middle (inner band)
+    COLORREF clrShadow = RGB(35, 35, 35);   // darkest (bottom/right outer)
+
+    // For sunken edges, the colours are reversed: top/left use shadow,
+    // bottom/right use highlight, and the middle band is still mid-tone.
+    bool raised = (borderStyle == wxBORDER_RAISED);
+
+    // Determine which colour to use for each side
+    COLORREF colTopLeftOuter = raised ? clrHighlight : clrShadow;
+    COLORREF colTopLeftInner = clrMid;
+    COLORREF colBottomRightInner = clrMid;
+    COLORREF colBottomRightOuter = raised ? clrShadow : clrHighlight;
+
+    // If thickness is 1, we only draw a single band (the outer edge).
+    // For thickness >= 2, we draw outer and inner bands.
+    // We'll create brushes for each colour only once.
+    HBRUSH brushOuterTL = CreateSolidBrush(colTopLeftOuter);
+    HBRUSH brushInner = CreateSolidBrush(clrMid);
+    HBRUSH brushOuterBR = CreateSolidBrush(colBottomRightOuter);
+
+    // Helper to fill a rectangle safely
+    auto FillRectSafe = [&](const RECT& rect, HBRUSH brush) {
+        if (rect.right > rect.left && rect.bottom > rect.top)
+            FillRect(hdc, &rect, brush);
+        };
+
+    // We'll draw the border as a set of non-overlapping rectangles.
+    // The border occupies the outer 'thickness' pixels of `rc`.
+    // We'll split into layers: outer layer (first pixel) and inner layer (remaining).
+
+    // Outer layer (1 pixel thick) – always present
+    if (thickness >= 1)
+    {
+        // Top outer
+        RECT rcTopOuter = { rc.left, rc.top, rc.right, rc.top + 1 };
+        FillRectSafe(rcTopOuter, brushOuterTL);
+
+        // Left outer
+        RECT rcLeftOuter = { rc.left, rc.top + 1, rc.left + 1, rc.bottom - 1 };
+        FillRectSafe(rcLeftOuter, brushOuterTL);
+
+        // Bottom outer
+        RECT rcBottomOuter = { rc.left, rc.bottom - 1, rc.right, rc.bottom };
+        FillRectSafe(rcBottomOuter, brushOuterBR);
+
+        // Right outer
+        RECT rcRightOuter = { rc.right - 1, rc.top + 1, rc.right, rc.bottom - 1 };
+        FillRectSafe(rcRightOuter, brushOuterBR);
+    }
+
+    // Inner layer(s) – for thickness >= 2
+    if (thickness >= 2)
+    {
+        // The inner band occupies the remaining pixels (from pixel 1 to thickness-1)
+        // We draw it as a continuous band of mid colour, but we need to handle corners.
+        // To avoid overlaps, we shrink the rectangle by 1 on each side.
+        RECT innerRect = rc;
+        InflateRect(&innerRect, -1, -1); // remove outer pixel
+
+        // Now draw a full inner border of thickness (thickness - 1) using the mid colour.
+        // We'll draw top, left, bottom, right bands within innerRect.
+        int innerThick = thickness - 1;
+        if (innerThick > 0)
+        {
+            // Top inner band
+            RECT rcTopInner = { innerRect.left, innerRect.top, innerRect.right, innerRect.top + innerThick };
+            FillRectSafe(rcTopInner, brushInner);
+
+            // Left inner band
+            RECT rcLeftInner = { innerRect.left, innerRect.top + innerThick, innerRect.left + innerThick, innerRect.bottom - innerThick };
+            FillRectSafe(rcLeftInner, brushInner);
+
+            // Bottom inner band
+            RECT rcBottomInner = { innerRect.left, innerRect.bottom - innerThick, innerRect.right, innerRect.bottom };
+            FillRectSafe(rcBottomInner, brushInner);
+
+            // Right inner band
+            RECT rcRightInner = { innerRect.right - innerThick, innerRect.top + innerThick, innerRect.right, innerRect.bottom - innerThick };
+            FillRectSafe(rcRightInner, brushInner);
+        }
+    }
+
+    // Clean up brushes
+    DeleteObject(brushOuterTL);
+    DeleteObject(brushInner);
+    DeleteObject(brushOuterBR);
+}
+
 wxColour GetColour(wxSystemColour index)
 {
     return wxDarkModeModule::GetSettings().GetColour(index);

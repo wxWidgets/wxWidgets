@@ -3835,7 +3835,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             {
                 // Determine whether we should draw a border.
                 bool drawBorder = false;
-                switch ( DoTranslateBorder(GetBorder()) )
+                int border = DoTranslateBorder(GetBorder());
+                switch (border)
                 {
                     case wxBORDER_THEME:
                         drawBorder = true;
@@ -3857,48 +3858,118 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                 if ( drawBorder )
                 {
-                    // first ask the widget to paint its non-client area, such as scrollbars, etc.
-                    rc.result = MSWDefWindowProc(message, wParam, lParam);
-                    processed = true;
-
-                    wxWindowDC dc((wxWindow *)this);
-                    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-                    RECT rcBorder;
-                    wxCopyRectToRECT(GetSize(), rcBorder);
-
-                    // Exclude the client area and any scroll bars.
-                    RECT rcClient = rcBorder;
+                    HWND hwnd = GetHWND();
+                    RECT rcWin, rcClient, rcVscroll, rcHscroll;
+                    ::GetWindowRect(hwnd, &rcWin);
+                    ::GetClientRect(hwnd, &rcClient); // Get the client area dimensions.
                     const auto thickness = MSWGetBorderThickness();
-                    InflateRect(&rcClient, -thickness, -thickness);
-                    ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
-                                      rcClient.right, rcClient.bottom);
+                    RECT rcClip = rcWin;
+                    rcClip.left += thickness;
+                    rcClip.top += thickness;
+                    rcClip.right -= thickness;
+                    rcClip.bottom -= thickness;
 
-                    // Draw the theme border and background.
-
-                    // The EDIT class gives a good general purpose border in light mode.
-                    // There does not seem to be a dark mode EDIT class that looks good.
-                    // The ListView class below looks good in dark mode but was not
-                    // available until Windows 11 build 26200. The Button class below
-                    // looks OK in dark mode on older Windows.
-                    const auto darkClass = wxCheckOsVersion(10, 0, 26200) ?
-                        L"DarkMode_DarkTheme::ListView" :
-                        L"DarkMode_Explorer::Button";
-                    wxUxThemeHandle hTheme(this, L"EDIT", darkClass);
-
-                    // The part and state values match for the themes we use.
-                    static_assert((int)EP_EDITTEXT == (int)LVP_LISTITEM, "parts differ?");
-                    static_assert((int)EP_EDITTEXT == (int)BP_PUSHBUTTON, "parts differ?");
-                    static_assert((int)ETS_NORMAL == (int)LISS_NORMAL, "states differ?");
-                    static_assert((int)ETS_NORMAL == (int)PBS_NORMAL, "states differ?");
-
-                    // Make sure the background is in a proper state
-                    if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                    /* New clipping region passed to default proc to exclude border */
+                    HRGN cliprgn = CreateRectRgnIndirect(&rcClip);
+                    ::MapWindowPoints(nullptr, hwnd, (LPPOINT)&rcWin, 2); // useful for right to left;
+                    ::OffsetRect(&rcClient, -rcWin.left, -rcWin.top); // Adjust to (0,0) origin.
+                    ::OffsetRect(&rcWin, -rcWin.left, -rcWin.top);
+                    SCROLLBARINFO vSbi = { sizeof(vSbi) };
+                    if (GetScrollBarInfo((HWND)GetHWND(), OBJID_VSCROLL, &vSbi)
+                        && vSbi.rcScrollBar.bottom > vSbi.rcScrollBar.top)
                     {
-                        ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
+                        MapWindowPoints(nullptr, hwnd, (POINT*)&vSbi.rcScrollBar, 2);
+                        OffsetRect(&vSbi.rcScrollBar, -rcWin.left, -rcWin.top);
+                        rcVscroll = vSbi.rcScrollBar;
+                        rcVscroll.top += thickness;
+                    }
+                    SCROLLBARINFO hSbi = { sizeof(vSbi) };
+                    if (GetScrollBarInfo((HWND)GetHWND(), OBJID_HSCROLL, &hSbi)
+                        && hSbi.rcScrollBar.bottom > hSbi.rcScrollBar.top)
+                    {
+                        MapWindowPoints(nullptr, hwnd, (POINT*)&hSbi.rcScrollBar, 2);
+                        OffsetRect(&hSbi.rcScrollBar, -rcWin.left, -rcWin.top);
+                        rcHscroll = hSbi.rcScrollBar;
+                        rcHscroll.left += thickness;
+                    }
+                    bool hasRegion = ::GetObjectType(reinterpret_cast<HGDIOBJ>(wParam)) == OBJ_REGION;
+                    DWORD flags = DCX_WINDOW | DCX_CACHE;
+                    LONG style = GetWindowLong(GetHWND(), GWL_STYLE);
+                    if (style & WS_CLIPCHILDREN) flags |= DCX_CLIPCHILDREN;
+                    if (style & WS_CLIPSIBLINGS) flags |= DCX_CLIPSIBLINGS;
+                    HRGN hNewRgn = CreateRectRgn(0, 0, 0, 0);
+                    if (hasRegion)
+                    {
+                        CombineRgn(hNewRgn, (HRGN)wParam, nullptr, RGN_COPY);
+                        CombineRgn(cliprgn, cliprgn, hNewRgn, RGN_AND);
                     }
 
-                    // Draw the border
-                    hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, ETS_NORMAL);
+                     HRGN regionCopy = hasRegion ? hNewRgn : nullptr;
+                    if (regionCopy)
+                    {
+                        flags |= DCX_INTERSECTRGN;
+                    }
+                    else
+                    {
+                        flags |= DCX_LOCKWINDOWUPDATE;
+                    }
+
+                    HDC  dc = GetDCEx(hwnd, regionCopy, flags);
+                    ::ExcludeClipRect(dc, rcClient.left, rcClient.top, rcClient.right, rcClient.bottom);
+                    if (vSbi.rcScrollBar.bottom > vSbi.rcScrollBar.top)
+                    {
+                        ::ExcludeClipRect(dc, rcVscroll.left, rcVscroll.top, rcVscroll.right, rcVscroll.bottom);
+                    }
+                    if (hSbi.rcScrollBar.bottom > hSbi.rcScrollBar.top)
+                    {
+                        ::ExcludeClipRect(dc, rcHscroll.left, rcHscroll.top, rcHscroll.right, rcHscroll.bottom);
+                    }
+
+                    RECT rcBorder;
+                    wxCopyRectToRECT(GetSize(), rcBorder);
+                    if ((border == wxBORDER_RAISED || border == wxBORDER_SUNKEN) && wxMSWDarkMode::IsActive())
+                    {
+                         // Draw with dark-mode edge colours
+
+                        wxMSWDarkMode::DrawDarkModeEdge(dc, rcBorder, border, thickness);
+                    }
+                    else
+                    {
+                        // For flat styles (wxBORDER_THEME, wxBORDER_STATIC, wxBORDER_SIMPLE)
+                        // Keep your themed drawing:
+                        //
+                        // The EDIT class gives a good general purpose border in light mode.
+                        // There does not seem to be a dark mode EDIT class that looks good.
+                        // The ListView class below looks good in dark mode but was not
+                        // available until Windows 11 build 26200. The Button class below
+                         // looks OK in dark mode on older Windows.
+                        const auto darkClass = wxCheckOsVersion(10, 0, 26200) ?
+                            L"DarkMode_DarkTheme::ListView" :
+                            L"DarkMode_Explorer::Button";
+                        wxUxThemeHandle hTheme(this, L"EDIT", darkClass);
+
+                        // The part and state values match for the themes we use.
+                        static_assert((int)EP_EDITTEXT == (int)BP_PUSHBUTTON, "parts differ?");
+                        static_assert((int)ETS_NORMAL == (int)LISS_NORMAL, "states differ?");
+
+                        // Make sure the background is in a proper state
+                        if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                        {
+                            ::DrawThemeParentBackground(GetHwnd(), dc, &rcBorder);
+                        }
+
+                        // Draw the border
+                        hTheme.DrawBackground(dc, rcBorder, EP_EDITTEXT, ETS_NORMAL);
+                    }
+
+                    ReleaseDC(hwnd, dc);
+
+                    /* Call default proc with our Clip Riogn to get the scrollbars etc. also painted */
+                    rc.result = MSWDefWindowProc(message, (WPARAM)cliprgn, lParam);
+                    processed = true;
+
+                    if (cliprgn != nullptr)
+                        DeleteObject(cliprgn);
                 }
             }
             break;
