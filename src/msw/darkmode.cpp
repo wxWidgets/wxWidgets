@@ -465,10 +465,6 @@ void ConfigureTLW(HWND hwnd)
 {
     BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
 
-    // DWMWA_USE_IMMERSIVE_DARK_MODE is 19 for v1809, but is 20 for later
-    // versions, so to set title bar black for both v1809 and later versions,
-    // we try to call GetDwmSetWindowAttribute() with the current value first,
-    // but if it fails, we also retry with the old one.
     HRESULT hr = wxDarkModeModule::GetDwmSetWindowAttribute()
                  (
                     hwnd,
@@ -476,16 +472,6 @@ void ConfigureTLW(HWND hwnd)
                     &useDarkMode,
                     sizeof(useDarkMode)
                  );
-    if ( FAILED(hr) )
-    {
-        hr = wxDarkModeModule::GetDwmSetWindowAttribute()
-             (
-                hwnd,
-                19,
-                &useDarkMode,
-                sizeof(useDarkMode)
-             );
-    }
     if ( FAILED(hr) )
         wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
 
