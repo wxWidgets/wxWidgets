@@ -3859,7 +3859,9 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 if ( drawBorder )
                 {
                     HWND hwnd = GetHWND();
-                    RECT rcWin, rcClient, rcVscroll, rcHscroll;
+                    RECT rcWin, rcClient;
+                    RECT  rcVscroll = {};
+                    RECT rcHscroll = {};
                     ::GetWindowRect(hwnd, &rcWin);
                     ::GetClientRect(hwnd, &rcClient); // Get the client area dimensions.
                     const auto thickness = MSWGetBorderThickness();
@@ -3875,7 +3877,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     ::OffsetRect(&rcClient, -rcWin.left, -rcWin.top); // Adjust to (0,0) origin.
                     ::OffsetRect(&rcWin, -rcWin.left, -rcWin.top);
                     SCROLLBARINFO vSbi = { sizeof(vSbi) };
-                    if (GetScrollBarInfo((HWND)GetHWND(), OBJID_VSCROLL, &vSbi)
+                    if (GetScrollBarInfo(hwnd, OBJID_VSCROLL, &vSbi)
                         && vSbi.rcScrollBar.bottom > vSbi.rcScrollBar.top)
                     {
                         MapWindowPoints(nullptr, hwnd, (POINT*)&vSbi.rcScrollBar, 2);
@@ -3884,7 +3886,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         rcVscroll.top += thickness;
                     }
                     SCROLLBARINFO hSbi = { sizeof(vSbi) };
-                    if (GetScrollBarInfo((HWND)GetHWND(), OBJID_HSCROLL, &hSbi)
+                    if (GetScrollBarInfo(hwnd, OBJID_HSCROLL, &hSbi)
                         && hSbi.rcScrollBar.bottom > hSbi.rcScrollBar.top)
                     {
                         MapWindowPoints(nullptr, hwnd, (POINT*)&hSbi.rcScrollBar, 2);

@@ -535,8 +535,6 @@ void DrawDarkModeEdge(HDC hdc, const RECT& rc, int borderStyle, int thickness)
 
     // Determine which colour to use for each side
     COLORREF colTopLeftOuter = raised ? clrHighlight : clrShadow;
-    COLORREF colTopLeftInner = clrMid;
-    COLORREF colBottomRightInner = clrMid;
     COLORREF colBottomRightOuter = raised ? clrShadow : clrHighlight;
 
     // If thickness is 1, we only draw a single band (the outer edge).
