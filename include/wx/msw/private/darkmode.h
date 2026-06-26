@@ -45,6 +45,13 @@ void AllowForWindow(HWND hwnd,
                     const wchar_t* themeName = L"Explorer",
                     const wchar_t* themeId = nullptr);
 
+// Draws a raised or sunken border using two shades (light/dark)
+// for dark mode. The rectangle `rc` is in device coordinates (e.g., window).
+// Draws a raised or sunken border with three shades (light, mid, dark)
+// to mimic the classic Windows 3D effect, using dark-mode colours.
+// The rectangle `rc` is in device coordinates (e.g., the full window).
+void DrawDarkModeEdge(HDC hdc, const RECT& rc, int borderStyle, int thickness);
+
 // Return the colour value appropriate for dark mode if it's used or an invalid
 // colour if it isn't.
 wxColour GetColour(wxSystemColour index);
