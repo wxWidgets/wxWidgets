@@ -1281,8 +1281,8 @@ wxGetDescFromOSRelease(wxString* distName, wxString* version,
 
             *version = fc.Read("VERSION");
 
-            *parentName = fc.Read("ID_LIKE", wxEmptyString);
-            *parentCodeName = fc.Read("UBUNTU_CODENAME", wxEmptyString);
+            *parentName = fc.Read("ID_LIKE");
+            *parentCodeName = fc.Read("UBUNTU_CODENAME");
 
             return true;
         }
