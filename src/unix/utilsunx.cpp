@@ -1152,6 +1152,8 @@ wxGetValuesFromOSRelease(const wxString& filename, wxLinuxDistributionInfo& ret)
     ret.Description = fc.Read(wxS("PRETTY_NAME"), wxEmptyString);
     ret.Release = fc.Read(wxS("VERSION_ID"), wxEmptyString);
     ret.CodeName = fc.Read(wxS("VERSION_CODENAME"), wxEmptyString);
+    ret.ParentName = fc.Read(wxS("ID_LIKE"), wxEmptyString);
+    ret.ParentCodeName = fc.Read(wxS("UBUNTU_CODENAME"), wxEmptyString);
 
     return true;
 #else
@@ -1254,7 +1256,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 }
 
 static bool
-wxGetDescFromOSRelease(wxString* distName, wxString* version)
+wxGetDescFromOSRelease(wxString* distName, wxString* version,
+                       wxString* parentName, wxString* parentCodeName)
 {
 #if wxUSE_CONFIG
     // Read /etc/os-release and fall back to /usr/lib/os-release per below
@@ -1278,6 +1281,9 @@ wxGetDescFromOSRelease(wxString* distName, wxString* version)
 
             *version = fc.Read("VERSION");
 
+            *parentName = fc.Read("ID_LIKE");
+            *parentCodeName = fc.Read("UBUNTU_CODENAME");
+
             return true;
         }
     }
@@ -1291,13 +1297,31 @@ wxString wxGetOsDescription()
 #ifdef __VMS
     return wxGetCommandOutput(wxT("uname -s -v -m"));
 #else
-    wxString distName, version;
-    if ( wxGetDescFromOSRelease(&distName, &version) )
+    wxString distName, version, parentName, parentCodeName;
+    if ( wxGetDescFromOSRelease(&distName, &version, &parentName, &parentCodeName) )
     {
         wxString osDesc = distName;
         if ( !version.empty() )
         {
             osDesc += " " + version;
+        }
+        if ( !parentName.empty() )
+        {
+            if ( !parentCodeName.empty() )
+            {
+                /* TRANSLATORS: first %s is a Linux distribution parent name, second %s is its codename. */
+                osDesc += wxString::Format(_(", based on %s (%s)"), parentName, parentCodeName);
+            }
+            else
+            {
+                /* TRANSLATORS: %s is a Linux distribution parent name. */
+                osDesc += wxString::Format(_(", based on %s"), parentName);
+            }
+        }
+        else if ( !parentCodeName.empty() )
+        {
+            /* TRANSLATORS: %s is an upstream codename. */
+            osDesc += wxString::Format(_(", based on %s"), parentCodeName);
         }
         osDesc += ",";
 

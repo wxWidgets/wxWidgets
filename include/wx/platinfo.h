@@ -125,13 +125,17 @@ struct wxLinuxDistributionInfo
     wxString Release;
     wxString CodeName;
     wxString Description;
+    wxString ParentName;
+    wxString ParentCodeName;
 
     bool operator==(const wxLinuxDistributionInfo& ldi) const
     {
         return Id == ldi.Id &&
                Release == ldi.Release &&
                CodeName == ldi.CodeName &&
-               Description == ldi.Description;
+               Description == ldi.Description &&
+               ParentName == ldi.ParentName &&
+               ParentCodeName == ldi.ParentCodeName;
     }
 
     bool operator!=(const wxLinuxDistributionInfo& ldi) const
