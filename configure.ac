@@ -1314,16 +1314,10 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" = "xno"; then
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
     if test "x$wxUSE_MACOSX_SDK" != "x"; then
         AC_MSG_CHECKING([SDK deployment version])
-dnl We need to quote the next line where we don't need macros and do need [] in the regex
-[
-        MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" buildSettings | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
-]
-        # If that failed, try again with the new key
-        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
-[
-            MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
-]
-        fi
+        # Take the first (earliest, because they are sorted) supported
+        # deployment target from the SDKSettings.plist file and remove quotes
+        # and trailing comma from it.
+        MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | sed 1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d | head -n 1 | sed -e 's/"//g' -e s/,//`
 
         if test "x$MACOSX_SDK_PLIST_VERSION_MIN" != "x"; then
             wxUSE_MACOSX_VERSION_MIN=$MACOSX_SDK_PLIST_VERSION_MIN
