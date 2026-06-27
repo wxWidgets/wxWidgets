@@ -237,6 +237,8 @@ public:
         wxCHECK_MSG( size, nullptr, "null size parameter" );
 
         *size = Read32();
+        if ( !*size )
+            return nullptr;
 
         void * const data = conn->GetBufferAtLeast(*size);
         wxCHECK_MSG( data, nullptr, "IPC buffer allocation failed" );
