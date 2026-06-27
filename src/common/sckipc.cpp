@@ -238,15 +238,22 @@ public:
 
         *size = Read32();
         if ( !*size )
+        {
+            wxLogDebug("IPC: data unexpectedly has zero size");
             return nullptr;
+        }
 
         void * const data = conn->GetBufferAtLeast(*size);
         wxCHECK_MSG( data, nullptr, "IPC buffer allocation failed" );
 
         // We should always read exactly the provided number of bytes,
         // otherwise something is wrong and we must return an error.
-        if ( m_socketStream.Read(data, *size).LastRead() != *size )
+        auto const read = m_socketStream.Read(data, *size).LastRead();
+        if ( read != *size )
+        {
+            wxLogDebug("IPC: got %zu bytes (expected %zu)", read, *size);
             return nullptr;
+        }
 
         return data;
     }
