@@ -1317,7 +1317,7 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
         # Take the first (earliest, because they are sorted) supported
         # deployment target from the SDKSettings.plist file and remove quotes
         # and trailing comma from it.
-        MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | sed 1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d | head -n 1 | sed -e 's/"//g' -e s/,//`
+        MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | sed 1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d | head -n 1 | sed -e 's/^ *//' -e 's/"//g' -e s/,//`
 
         if test "x$MACOSX_SDK_PLIST_VERSION_MIN" != "x"; then
             wxUSE_MACOSX_VERSION_MIN=$MACOSX_SDK_PLIST_VERSION_MIN
