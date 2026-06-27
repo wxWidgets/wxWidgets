@@ -152,7 +152,7 @@ enum wxRibbonScrollButtonStyle
 
     wxRIBBON_SCROLL_BTN_DIRECTION_MASK = 3,
 
-    wxRIBBON_SCROLL_BTN_NORMAL = 0,
+    wxRIBBON_SCROLL_BTN_NORMAL = 0, // This must have value 0
     wxRIBBON_SCROLL_BTN_HOVERED = 4,
     wxRIBBON_SCROLL_BTN_ACTIVE = 8,
 
