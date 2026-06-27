@@ -3630,7 +3630,7 @@ public:
     // Allocate a non-standard number of margins.
     void SetMarginCount(int margins);
 
-    // How many margins are there?.
+    // Returns the count of margins.
     int GetMarginCount() const;
 
     // Clear all the styles and make equivalent to the global default style.

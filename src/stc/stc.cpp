@@ -824,7 +824,7 @@ void wxStyledTextCtrl::SetMarginCount(int margins)
     SendMsg(SCI_SETMARGINS, margins, 0);
 }
 
-// How many margins are there?.
+// Returns the count of margins.
 int wxStyledTextCtrl::GetMarginCount() const
 {
     return SendMsg(SCI_GETMARGINS, 0, 0);
