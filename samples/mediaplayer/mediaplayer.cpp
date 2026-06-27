@@ -349,9 +349,9 @@ public:
         virtual bool OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                          const wxArrayString& files) override
     {
-        for (size_t i = 0; i < files.GetCount(); ++i)
+        for (const auto& file : files)
         {
-            m_list.AddToPlayList(files[i]);
+            m_list.AddToPlayList(file);
         }
         return true;
     }
