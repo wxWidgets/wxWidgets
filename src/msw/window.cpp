@@ -3989,7 +3989,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     if (wxMSWDarkMode::IsActive())
                     {
-                        wxPaintDCEx wxWindc(this, dc);
+                        wxPaintDCEx wxWindc(wxGetWindowFromHWND(hwnd), dc);
                         wxBitmap bufferBitmap(rcWin.right - rcWin.left, rcWin.bottom - rcWin.top, -1);
                         wxMemoryDC memDC;
                         memDC.SelectObject(bufferBitmap);
