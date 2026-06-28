@@ -123,9 +123,17 @@ public:
     @note If you want complete HTML/CSS support as well as a Javascript engine,
           consider using wxWebView instead.
 
-    wxHtmlWindow uses the wxImage class for displaying images, so you need to
-    initialize the handlers for any image formats you use before loading a page.
+    wxHtmlWindow uses the wxBitmapBundle class for displaying images, so you
+    need to initialize the handlers for any raster formats you use before
+    loading a page.
     See ::wxInitAllImageHandlers and wxImage::AddHandler.
+
+    New to wxWidgets 3.3.3 is the ability to load vector graphics in SVG format
+    as well. To enable this support, you need to use a port with wxHAS_SVG
+    defined and, optionally, if you want to use LunaSVG library for better
+    SVG support, define wxUSE_LUNASVG and use a C++17 (or later) compiler.
+    Define wxUSE_ZLIB to load compressed SVGZ files. See
+    wxBitmapBundle::FromSVG() for more details.
 
     @beginStyleTable
     @style{wxHW_SCROLLBAR_NEVER}
