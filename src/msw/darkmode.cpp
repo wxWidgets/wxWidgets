@@ -461,6 +461,21 @@ bool HasChanged()
     return gs_hasChanged;
 }
 
+
+
+bool IsDarkThemeActive(const wchar_t* stdClass, const wchar_t* darkClass)
+{
+    const auto darkTheme = wxUxThemeHandle::NewAtStdDPI(darkClass);
+    if (darkTheme)
+    {
+        const auto stdTheme = wxUxThemeHandle::NewAtStdDPI(stdClass);
+        if (stdTheme && stdTheme != darkTheme)
+            return true;
+    }
+
+    return false;
+}
+
 void ConfigureTLW(HWND hwnd)
 {
     BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
@@ -501,6 +516,150 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
     // Some native controls need this message to switch themes, such as
     // buttons, tooltips and controls with scroll bars
     ::SendMessage(hwnd, WM_THEMECHANGED, 0, 0);
+}
+
+
+void DrawDarkModeBorder(wxDC& dc, const wxRect& rc, wxBorder borderStyle, int thickness, int state)
+{
+    // Colour palette converted to wxColour
+    const wxColour clrNormalFlat(100, 100, 100);
+    const wxColour clrHoverFlat(140, 140, 140);
+    const wxColour clrDisabledFlat(60, 60, 60);
+    const wxColour clrReadonlyFlat(80, 80, 80);
+
+    const wxColour clrHighlight(90, 90, 90);
+    const wxColour clrMid(65, 65, 65);
+    const wxColour clrShadow(35, 35, 35);
+
+    const wxColour clrHoverHL(120, 120, 120);
+    const wxColour clrHoverMid(86, 86, 86);
+    const wxColour clrHoverShadow(50, 50, 50);
+
+    const wxColour clrDisabled3D(60, 60, 60);
+
+    // Focus ring: use system accent colour
+    const wxColour clrFocus = wxDarkModeModule::GetSettings().GetColour(wxSYS_COLOUR_HIGHLIGHT);
+
+    // Safe fill helper using wxDC methods
+    auto Fill = [&](const wxRect& r, const wxColour& c)
+        {
+            dc.SetBrush(wxBrush(c));
+            dc.SetPen(*wxTRANSPARENT_PEN);
+            dc.DrawRectangle(r);
+        };
+
+    // Draw a uniform 1-pixel border of one colour
+    auto DrawFlat = [&](const wxRect& r, const wxColour& c)
+        {
+            Fill({ r.x,             r.y,              r.width,     1 }, c);
+            Fill({ r.x,             r.y + 1,          1,           r.height - 2 }, c);
+            Fill({ r.x,             r.y + r.height - 1, r.width,     1 }, c);
+            Fill({ r.x + r.width - 1, r.y + 1,          1,           r.height - 2 }, c);
+        };
+
+    // Draw 3D border (outer 1px asymmetric + inner band of mid colour)
+    auto Draw3D = [&](const wxRect& r, const wxColour& tlOuter, const wxColour& mid, const wxColour& brOuter)
+        {
+            // Outer layer
+            Fill({ r.x,             r.y,              r.width,     1 }, tlOuter);
+            Fill({ r.x,             r.y + 1,          1,           r.height - 2 }, tlOuter);
+            Fill({ r.x,             r.y + r.height - 1, r.width,     1 }, brOuter);
+            Fill({ r.x + r.width - 1, r.y + 1,          1,           r.height - 2 }, brOuter);
+
+            if (thickness < 2) return;
+
+            // Inner band
+            wxRect inner = r;
+            inner.Deflate(1);
+            int t = thickness - 1;
+
+            Fill({ inner.x,                 inner.y,                 inner.width,     t }, mid);
+            Fill({ inner.x,                 inner.y + t,             t,               inner.height - (2 * t) }, mid);
+            Fill({ inner.x,                 inner.y + inner.height - t, inner.width,     t }, mid);
+            Fill({ inner.x + inner.width - t, inner.y + t,             t,               inner.height - (2 * t) }, mid);
+        };
+
+    // Draw focus ring 1px outside rc
+    auto DrawFocusRing = [&](const wxRect& r)
+        {
+            wxRect ring = r;
+            ring.Inflate(1);
+            DrawFlat(ring, clrFocus);
+        };
+
+    const bool disabled = (state == ETS_DISABLED);
+    const bool focused = (state == ETS_FOCUSED);
+    const bool hovered = (state == ETS_HOT);
+    const bool readonly = (state == ETS_READONLY);
+
+    // ── Flat styles ──────────────────────────────────────────────────────────
+    if (borderStyle == wxBORDER_SIMPLE || borderStyle == wxBORDER_STATIC)
+    {
+        wxColour c = disabled ? clrDisabledFlat : clrNormalFlat;
+        DrawFlat(rc, c);
+        return;
+    }
+
+    if (borderStyle == wxBORDER_THEME)
+    {
+        wxColour c;
+        if (disabled)      c = clrDisabledFlat;
+        else if (readonly) c = clrReadonlyFlat;
+        else if (focused)
+        {
+            DrawFlat(rc, clrFocus);
+            return;
+        }
+        else if (hovered)  c = clrHoverFlat;
+        else               c = clrNormalFlat;
+
+        DrawFlat(rc, c);
+        return;
+    }
+
+    // ── 3D styles ─────────────────────────────────────────────────────────────
+    const bool raised = (borderStyle == wxBORDER_RAISED);
+
+    if (disabled)
+    {
+        DrawFlat(rc, clrDisabled3D);
+        return;
+    }
+
+    if (focused)
+    {
+        if(borderStyle == wxBORDER_RAISED || borderStyle == wxBORDER_SUNKEN)
+            DrawFocusRing(rc);
+        if (raised)
+            Draw3D(rc, clrHighlight, clrMid, clrShadow);
+        else
+            Draw3D(rc, clrShadow, clrMid, clrHighlight);
+        DrawFlat(rc, clrFocus);
+        return;
+    }
+
+    if (hovered)
+    {
+        if (raised)
+            Draw3D(rc, clrHoverHL, clrHoverMid, clrHoverShadow);
+        else
+            Draw3D(rc, clrHoverShadow, clrHoverMid, clrHoverHL);
+        return;
+    }
+
+    if (readonly && !raised)
+    {
+        const wxColour clrROShadow(50, 50, 50);
+        const wxColour clrROMid(45, 45, 45);
+        const wxColour clrROHL(80, 80, 80);
+        Draw3D(rc, clrROShadow, clrROMid, clrROHL);
+        return;
+    }
+
+    if (raised)
+        Draw3D(rc, clrHighlight, clrMid, clrShadow);
+    else
+        Draw3D(rc, clrShadow, clrMid, clrHighlight);
 }
 
 wxColour GetColour(wxSystemColour index)
