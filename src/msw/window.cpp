@@ -4019,7 +4019,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     ReleaseDC(hwnd, dc);
 
-                    /* Call default proc with our Clip Riogn to get the scrollbars etc. also painted */
+                    /* Call default proc with our clip region to get the scrollbars etc. also painted */
                     rc.result = MSWDefWindowProc(message, (WXWPARAM)(HRGN)cliprgn, lParam);
                     processed = true;
                 }
