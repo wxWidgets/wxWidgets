@@ -461,6 +461,21 @@ bool HasChanged()
     return gs_hasChanged;
 }
 
+
+
+bool IsDarkThemeActive(const wchar_t* stdClass, const wchar_t* darkClass)
+{
+    const auto darkTheme = wxUxThemeHandle::NewAtStdDPI(darkClass);
+    if (darkTheme)
+    {
+        const auto stdTheme = wxUxThemeHandle::NewAtStdDPI(stdClass);
+        if (stdTheme && stdTheme != darkTheme)
+            return true;
+    }
+
+    return false;
+}
+
 void ConfigureTLW(HWND hwnd)
 {
     BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
@@ -517,99 +532,148 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
     ::SendMessage(hwnd, WM_THEMECHANGED, 0, 0);
 }
 
-// Draws a raised or sunken border using two shades (light/dark)
-// for dark mode. The rectangle `rc` is in device coordinates (e.g., window).
-// Draws a raised or sunken border with three shades (light, mid, dark)
-// to mimic the classic Windows 3D effect, using dark-mode colours.
-// The rectangle `rc` is in device coordinates (e.g., the full window).
-void DrawDarkModeEdge(HDC hdc, const RECT& rc, int borderStyle, int thickness)
+
+void DrawDarkModeBorder(wxDC& dc, const wxRect& rc, wxBorder borderStyle, int thickness, int state)
 {
-    // Dark mode colours – adjust to match your theme
-    COLORREF clrHighlight = RGB(90, 90, 90);   // lightest (top/left outer)
-    COLORREF clrMid = RGB(65, 65, 65);   // middle (inner band)
-    COLORREF clrShadow = RGB(35, 35, 35);   // darkest (bottom/right outer)
+    // Colour palette converted to wxColour
+    const wxColour clrNormalFlat(100, 100, 100);
+    const wxColour clrHoverFlat(140, 140, 140);
+    const wxColour clrDisabledFlat(60, 60, 60);
+    const wxColour clrReadonlyFlat(80, 80, 80);
 
-    // For sunken edges, the colours are reversed: top/left use shadow,
-    // bottom/right use highlight, and the middle band is still mid-tone.
-    bool raised = (borderStyle == wxBORDER_RAISED);
+    const wxColour clrHighlight(90, 90, 90);
+    const wxColour clrMid(65, 65, 65);
+    const wxColour clrShadow(35, 35, 35);
 
-    // Determine which colour to use for each side
-    COLORREF colTopLeftOuter = raised ? clrHighlight : clrShadow;
-    COLORREF colBottomRightOuter = raised ? clrShadow : clrHighlight;
+    const wxColour clrHoverHL(120, 120, 120);
+    const wxColour clrHoverMid(86, 86, 86);
+    const wxColour clrHoverShadow(50, 50, 50);
 
-    // If thickness is 1, we only draw a single band (the outer edge).
-    // For thickness >= 2, we draw outer and inner bands.
-    // We'll create brushes for each colour only once.
-    HBRUSH brushOuterTL = CreateSolidBrush(colTopLeftOuter);
-    HBRUSH brushInner = CreateSolidBrush(clrMid);
-    HBRUSH brushOuterBR = CreateSolidBrush(colBottomRightOuter);
+    const wxColour clrDisabled3D(60, 60, 60);
 
-    // Helper to fill a rectangle safely
-    auto FillRectSafe = [&](const RECT& rect, HBRUSH brush) {
-        if (rect.right > rect.left && rect.bottom > rect.top)
-            FillRect(hdc, &rect, brush);
+    // Focus ring: use system accent colour
+    const wxColour clrFocus = wxDarkModeModule::GetSettings().GetColour(wxSYS_COLOUR_HIGHLIGHT);
+
+    // Safe fill helper using wxDC methods
+    auto Fill = [&](const wxRect& r, const wxColour& c)
+        {
+            dc.SetBrush(wxBrush(c));
+            dc.SetPen(*wxTRANSPARENT_PEN);
+            dc.DrawRectangle(r);
         };
 
-    // We'll draw the border as a set of non-overlapping rectangles.
-    // The border occupies the outer 'thickness' pixels of `rc`.
-    // We'll split into layers: outer layer (first pixel) and inner layer (remaining).
-
-    // Outer layer (1 pixel thick) – always present
-    if (thickness >= 1)
-    {
-        // Top outer
-        RECT rcTopOuter = { rc.left, rc.top, rc.right, rc.top + 1 };
-        FillRectSafe(rcTopOuter, brushOuterTL);
-
-        // Left outer
-        RECT rcLeftOuter = { rc.left, rc.top + 1, rc.left + 1, rc.bottom - 1 };
-        FillRectSafe(rcLeftOuter, brushOuterTL);
-
-        // Bottom outer
-        RECT rcBottomOuter = { rc.left, rc.bottom - 1, rc.right, rc.bottom };
-        FillRectSafe(rcBottomOuter, brushOuterBR);
-
-        // Right outer
-        RECT rcRightOuter = { rc.right - 1, rc.top + 1, rc.right, rc.bottom - 1 };
-        FillRectSafe(rcRightOuter, brushOuterBR);
-    }
-
-    // Inner layer(s) – for thickness >= 2
-    if (thickness >= 2)
-    {
-        // The inner band occupies the remaining pixels (from pixel 1 to thickness-1)
-        // We draw it as a continuous band of mid colour, but we need to handle corners.
-        // To avoid overlaps, we shrink the rectangle by 1 on each side.
-        RECT innerRect = rc;
-        InflateRect(&innerRect, -1, -1); // remove outer pixel
-
-        // Now draw a full inner border of thickness (thickness - 1) using the mid colour.
-        // We'll draw top, left, bottom, right bands within innerRect.
-        int innerThick = thickness - 1;
-        if (innerThick > 0)
+    // Draw a uniform 1-pixel border of one colour
+    auto DrawFlat = [&](const wxRect& r, const wxColour& c)
         {
-            // Top inner band
-            RECT rcTopInner = { innerRect.left, innerRect.top, innerRect.right, innerRect.top + innerThick };
-            FillRectSafe(rcTopInner, brushInner);
+            Fill({ r.x,             r.y,              r.width,     1 }, c);
+            Fill({ r.x,             r.y + 1,          1,           r.height - 2 }, c);
+            Fill({ r.x,             r.y + r.height - 1, r.width,     1 }, c);
+            Fill({ r.x + r.width - 1, r.y + 1,          1,           r.height - 2 }, c);
+        };
 
-            // Left inner band
-            RECT rcLeftInner = { innerRect.left, innerRect.top + innerThick, innerRect.left + innerThick, innerRect.bottom - innerThick };
-            FillRectSafe(rcLeftInner, brushInner);
+    // Draw 3D border (outer 1px asymmetric + inner band of mid colour)
+    auto Draw3D = [&](const wxRect& r, const wxColour& tlOuter, const wxColour& mid, const wxColour& brOuter)
+        {
+            // Outer layer
+            Fill({ r.x,             r.y,              r.width,     1 }, tlOuter);
+            Fill({ r.x,             r.y + 1,          1,           r.height - 2 }, tlOuter);
+            Fill({ r.x,             r.y + r.height - 1, r.width,     1 }, brOuter);
+            Fill({ r.x + r.width - 1, r.y + 1,          1,           r.height - 2 }, brOuter);
 
-            // Bottom inner band
-            RECT rcBottomInner = { innerRect.left, innerRect.bottom - innerThick, innerRect.right, innerRect.bottom };
-            FillRectSafe(rcBottomInner, brushInner);
+            if (thickness < 2) return;
 
-            // Right inner band
-            RECT rcRightInner = { innerRect.right - innerThick, innerRect.top + innerThick, innerRect.right, innerRect.bottom - innerThick };
-            FillRectSafe(rcRightInner, brushInner);
-        }
+            // Inner band
+            wxRect inner = r;
+            inner.Deflate(1);
+            int t = thickness - 1;
+
+            Fill({ inner.x,                 inner.y,                 inner.width,     t }, mid);
+            Fill({ inner.x,                 inner.y + t,             t,               inner.height - (2 * t) }, mid);
+            Fill({ inner.x,                 inner.y + inner.height - t, inner.width,     t }, mid);
+            Fill({ inner.x + inner.width - t, inner.y + t,             t,               inner.height - (2 * t) }, mid);
+        };
+
+    // Draw focus ring 1px outside rc
+    auto DrawFocusRing = [&](const wxRect& r)
+        {
+            wxRect ring = r;
+            ring.Inflate(1);
+            DrawFlat(ring, clrFocus);
+        };
+
+    const bool disabled = (state == ETS_DISABLED);
+    const bool focused = (state == ETS_FOCUSED);
+    const bool hovered = (state == ETS_HOT);
+    const bool readonly = (state == ETS_READONLY);
+
+    // ── Flat styles ──────────────────────────────────────────────────────────
+    if (borderStyle == wxBORDER_SIMPLE || borderStyle == wxBORDER_STATIC)
+    {
+        wxColour c = disabled ? clrDisabledFlat : clrNormalFlat;
+        DrawFlat(rc, c);
+        return;
     }
 
-    // Clean up brushes
-    DeleteObject(brushOuterTL);
-    DeleteObject(brushInner);
-    DeleteObject(brushOuterBR);
+    if (borderStyle == wxBORDER_THEME)
+    {
+        wxColour c;
+        if (disabled)      c = clrDisabledFlat;
+        else if (readonly) c = clrReadonlyFlat;
+        else if (focused)
+        {
+            DrawFlat(rc, clrFocus);
+            return;
+        }
+        else if (hovered)  c = clrHoverFlat;
+        else               c = clrNormalFlat;
+
+        DrawFlat(rc, c);
+        return;
+    }
+
+    // ── 3D styles ─────────────────────────────────────────────────────────────
+    const bool raised = (borderStyle == wxBORDER_RAISED);
+
+    if (disabled)
+    {
+        DrawFlat(rc, clrDisabled3D);
+        return;
+    }
+
+    if (focused)
+    {
+        if(borderStyle == wxBORDER_RAISED || borderStyle == wxBORDER_SUNKEN)
+            DrawFocusRing(rc);
+        if (raised)
+            Draw3D(rc, clrHighlight, clrMid, clrShadow);
+        else
+            Draw3D(rc, clrShadow, clrMid, clrHighlight);
+        DrawFlat(rc, clrFocus);
+        return;
+    }
+
+    if (hovered)
+    {
+        if (raised)
+            Draw3D(rc, clrHoverHL, clrHoverMid, clrHoverShadow);
+        else
+            Draw3D(rc, clrHoverShadow, clrHoverMid, clrHoverHL);
+        return;
+    }
+
+    if (readonly && !raised)
+    {
+        const wxColour clrROShadow(50, 50, 50);
+        const wxColour clrROMid(45, 45, 45);
+        const wxColour clrROHL(80, 80, 80);
+        Draw3D(rc, clrROShadow, clrROMid, clrROHL);
+        return;
+    }
+
+    if (raised)
+        Draw3D(rc, clrHighlight, clrMid, clrShadow);
+    else
+        Draw3D(rc, clrShadow, clrMid, clrHighlight);
 }
 
 wxColour GetColour(wxSystemColour index)

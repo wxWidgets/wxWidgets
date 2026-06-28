@@ -3119,10 +3119,35 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_SETFOCUS:
             processed = HandleSetFocus((WXHWND)wParam);
+
+            if (wxMSWDarkMode::IsActive())
+            {
+                wxBorder border = DoTranslateBorder(GetBorder());
+                if (border == wxBORDER_SIMPLE ||
+                    border == wxBORDER_STATIC ||
+                    border == wxBORDER_RAISED ||
+                    border == wxBORDER_SUNKEN ||
+                    border == wxBORDER_THEME)
+                {
+                    RedrawWindow(GetHwnd(), nullptr, nullptr, RDW_INVALIDATE | RDW_FRAME);
+                }
+            }
             break;
 
         case WM_KILLFOCUS:
             processed = HandleKillFocus((WXHWND)wParam);
+            if (wxMSWDarkMode::IsActive())
+            {
+                wxBorder border = DoTranslateBorder(GetBorder());
+                if (border == wxBORDER_SIMPLE ||
+                    border == wxBORDER_STATIC ||
+                    border == wxBORDER_RAISED ||
+                    border == wxBORDER_SUNKEN ||
+                    border == wxBORDER_THEME)
+                {
+                    RedrawWindow(GetHwnd(), nullptr, nullptr, RDW_INVALIDATE | RDW_FRAME);
+                }
+            }
             break;
 
         case WM_PRINTCLIENT:
@@ -3835,13 +3860,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             {
                 // Determine whether we should draw a border.
                 bool drawBorder = false;
-                int border = DoTranslateBorder(GetBorder());
+                wxBorder border = DoTranslateBorder(GetBorder());
                 switch (border)
                 {
                     case wxBORDER_THEME:
                         drawBorder = true;
                         break;
-
+                    case wxBORDER_SIMPLE:
                     case wxBORDER_STATIC:
                     case wxBORDER_RAISED:
                     case wxBORDER_SUNKEN:
@@ -3849,9 +3874,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         // the default drawing uses light mode colours.
                         drawBorder = wxMSWDarkMode::IsActive();
                         break;
-
                     case wxBORDER_NONE:
-                    case wxBORDER_SIMPLE:
                     default:
                         break;
                 }
@@ -3859,23 +3882,54 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 if ( drawBorder )
                 {
                     HWND hwnd = GetHWND();
+
+                    // Skip windows with WS_CAPTION for now because full title bar /
+                    // non-client caption painting is not yet implemented .
+                    // We only handle simple bordered controls (EDIT, STATIC, etc.).
+                    LONG style = GetWindowLong(hwnd, GWL_STYLE);
+                    if(style & WS_CAPTION)
+                        break;
+
+                    // Prepare DC flags
+                    DWORD flags = DCX_WINDOW | DCX_CACHE;
+                    if (style & WS_CLIPCHILDREN) flags |= DCX_CLIPCHILDREN;
+                    if (style & WS_CLIPSIBLINGS) flags |= DCX_CLIPSIBLINGS;
+
                     RECT rcWin, rcClient;
                     RECT  rcVscroll = {};
                     RECT rcHscroll = {};
-                    ::GetWindowRect(hwnd, &rcWin);
-                    ::GetClientRect(hwnd, &rcClient); // Get the client area dimensions.
                     const auto thickness = MSWGetBorderThickness();
+
+                    // Prepare border states.
+                    int nState = ETS_NORMAL;
+                    if (!::IsWindowEnabled(hwnd))
+                        nState = ETS_DISABLED;
+                    else if (::GetFocus() == hwnd)
+                        nState = ETS_FOCUSED;
+
+                    // Get rectangles with screen coordinates.
+                    ::GetWindowRect(hwnd, &rcWin);
+                    ::GetClientRect(hwnd, &rcClient);
                     RECT rcClip = rcWin;
+
+                    // Map from screen → window coordinates. MapWindowPoints() is used
+                    // (instead of ScreenToClient) because it properly supports RTL/mirrored windows.
+                    ::MapWindowPoints(nullptr, hwnd, (LPPOINT)&rcWin, 2);
+
+                    // Adjust to (0,0) origin.
+                    ::OffsetRect(&rcClient, -rcWin.left, -rcWin.top);
+                    ::OffsetRect(&rcWin, -rcWin.left, -rcWin.top);
+
+                    // Shrink rcClip to exclude the custom border area
                     rcClip.left += thickness;
                     rcClip.top += thickness;
                     rcClip.right -= thickness;
                     rcClip.bottom -= thickness;
 
                     /* New clipping region passed to default proc to exclude border */
-                    HRGN cliprgn = CreateRectRgnIndirect(&rcClip);
-                    ::MapWindowPoints(nullptr, hwnd, (LPPOINT)&rcWin, 2); // useful for right to left;
-                    ::OffsetRect(&rcClient, -rcWin.left, -rcWin.top); // Adjust to (0,0) origin.
-                    ::OffsetRect(&rcWin, -rcWin.left, -rcWin.top);
+                    AutoHRGN cliprgn = CreateRectRgnIndirect(&rcClip);
+
+                    //Prepare scrollbars states.
                     SCROLLBARINFO vSbi = { sizeof(vSbi) };
                     if (GetScrollBarInfo(hwnd, OBJID_VSCROLL, &vSbi)
                         && vSbi.rcScrollBar.bottom > vSbi.rcScrollBar.top)
@@ -3890,24 +3944,29 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         && hSbi.rcScrollBar.bottom > hSbi.rcScrollBar.top)
                     {
                         MapWindowPoints(nullptr, hwnd, (POINT*)&hSbi.rcScrollBar, 2);
-                        OffsetRect(&hSbi.rcScrollBar, -rcWin.left, -rcWin.top);
+                         OffsetRect(&hSbi.rcScrollBar, -rcWin.left, -rcWin.top);
                         rcHscroll = hSbi.rcScrollBar;
                         rcHscroll.left += thickness;
                     }
+
+                    // Check if wParam is real Region int
                     bool hasRegion = ::GetObjectType(reinterpret_cast<HGDIOBJ>(wParam)) == OBJ_REGION;
-                    DWORD flags = DCX_WINDOW | DCX_CACHE;
-                    LONG style = GetWindowLong(GetHWND(), GWL_STYLE);
-                    if (style & WS_CLIPCHILDREN) flags |= DCX_CLIPCHILDREN;
-                    if (style & WS_CLIPSIBLINGS) flags |= DCX_CLIPSIBLINGS;
-                    HRGN hNewRgn = CreateRectRgn(0, 0, 0, 0);
+                    HRGN intersectRgnCopy = nullptr;
                     if (hasRegion)
                     {
-                        CombineRgn(hNewRgn, (HRGN)wParam, nullptr, RGN_COPY);
-                        CombineRgn(cliprgn, cliprgn, hNewRgn, RGN_AND);
+                        // We duplicate the region because we later call MSWDefWindowProc()
+                        // with our clipped region (cliprgn).
+                        //
+                        // DCX_INTERSECTRGN makes the OS take ownership and destroy the
+                        // region during ReleaseDC(). We must make our own copy of the
+                        // original wParam region to prevent destroying the system region
+                        // while still being able to draw over it and call the default proc.
+                        intersectRgnCopy = CreateRectRgn(0, 0, 0, 0);
+                        CombineRgn(intersectRgnCopy, (HRGN)wParam, nullptr, RGN_COPY);
+                        CombineRgn(cliprgn, cliprgn, intersectRgnCopy, RGN_AND);
                     }
 
-                     HRGN regionCopy = hasRegion ? hNewRgn : nullptr;
-                    if (regionCopy)
+                    if (intersectRgnCopy)
                     {
                         flags |= DCX_INTERSECTRGN;
                     }
@@ -3916,7 +3975,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         flags |= DCX_LOCKWINDOWUPDATE;
                     }
 
-                    HDC  dc = GetDCEx(hwnd, regionCopy, flags);
+                    HDC  dc = GetDCEx(hwnd, intersectRgnCopy, flags);
+
                     ::ExcludeClipRect(dc, rcClient.left, rcClient.top, rcClient.right, rcClient.bottom);
                     if (vSbi.rcScrollBar.bottom > vSbi.rcScrollBar.top)
                     {
@@ -3927,51 +3987,41 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         ::ExcludeClipRect(dc, rcHscroll.left, rcHscroll.top, rcHscroll.right, rcHscroll.bottom);
                     }
 
-                    RECT rcBorder;
-                    wxCopyRectToRECT(GetSize(), rcBorder);
-                    if ((border == wxBORDER_RAISED || border == wxBORDER_SUNKEN) && wxMSWDarkMode::IsActive())
+                    if (wxMSWDarkMode::IsActive())
                     {
-                         // Draw with dark-mode edge colours
-
-                        wxMSWDarkMode::DrawDarkModeEdge(dc, rcBorder, border, thickness);
+                        wxPaintDCEx wxWindc(this, dc);
+                        wxBitmap bufferBitmap(rcWin.right - rcWin.left, rcWin.bottom - rcWin.top, -1);
+                        wxMemoryDC memDC;
+                        memDC.SelectObject(bufferBitmap);
+                        memDC.Clear();
+                        // Draw the background
+                        memDC.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
+                        memDC.SetPen(*wxTRANSPARENT_PEN);
+                        memDC.DrawRectangle(rcWin.left, rcWin.top, rcWin.right, rcWin.bottom);
+                        // Draw The Border
+                        wxMSWDarkMode::DrawDarkModeBorder(memDC, wxRect(GetSize()), border, thickness, nState);
+                        wxWindc.Blit(rcWin.left, rcWin.top, rcWin.right, rcWin.bottom, &memDC, 0, 0, wxCOPY);
+                        memDC.SelectObject(wxNullBitmap);
                     }
                     else
                     {
-                        // For flat styles (wxBORDER_THEME, wxBORDER_STATIC, wxBORDER_SIMPLE)
-                        // Keep your themed drawing:
-                        //
-                        // The EDIT class gives a good general purpose border in light mode.
-                        // There does not seem to be a dark mode EDIT class that looks good.
-                        // The ListView class below looks good in dark mode but was not
-                        // available until Windows 11 build 26200. The Button class below
-                         // looks OK in dark mode on older Windows.
-                        const auto darkClass = wxCheckOsVersion(10, 0, 26200) ?
-                            L"DarkMode_DarkTheme::ListView" :
-                            L"DarkMode_Explorer::Button";
-                        wxUxThemeHandle hTheme(this, L"EDIT", darkClass);
 
-                        // The part and state values match for the themes we use.
-                        static_assert((int)EP_EDITTEXT == (int)BP_PUSHBUTTON, "parts differ?");
-                        static_assert((int)ETS_NORMAL == (int)LISS_NORMAL, "states differ?");
-
+                        wxUxThemeHandle hTheme(this, L"EDIT");
                         // Make sure the background is in a proper state
-                        if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                        if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, nState))
                         {
-                            ::DrawThemeParentBackground(GetHwnd(), dc, &rcBorder);
+                            ::DrawThemeParentBackground(hwnd, dc, &rcWin);
                         }
 
                         // Draw the border
-                        hTheme.DrawBackground(dc, rcBorder, EP_EDITTEXT, ETS_NORMAL);
+                        hTheme.DrawBackground(dc, rcWin, EP_EDITTEXT, nState);
                     }
 
                     ReleaseDC(hwnd, dc);
 
                     /* Call default proc with our Clip Riogn to get the scrollbars etc. also painted */
-                    rc.result = MSWDefWindowProc(message, (WPARAM)cliprgn, lParam);
+                    rc.result = MSWDefWindowProc(message, (WXWPARAM)(HRGN)cliprgn, lParam);
                     processed = true;
-
-                    if (cliprgn != nullptr)
-                        DeleteObject(cliprgn);
                 }
             }
             break;

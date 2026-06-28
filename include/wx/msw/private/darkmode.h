@@ -11,7 +11,6 @@
 #define _WX_MSW_PRIVATE_DARKMODE_H_
 
 #include "wx/settings.h"
-
 namespace wxMSWDarkMode
 {
 
@@ -27,6 +26,19 @@ bool IsActive();
 // background and foreground colours.
 WXDLLIMPEXP_CORE
 bool HasChanged();
+
+/**
+ * @brief Dynamic Runtime Check for Aero.msstyles Dark Mode Support
+ *
+ * Verifies if a specific dark-theme class variant is actively supported and
+ * distinct from the standard light-theme appearance inside the active OS visual style.
+ *
+ * @param stdClass The standard/light window class name (e.g., L"EDIT", L"Button").
+ * @param darkClass The specialized dark mode class path (e.g., L"DarkMode_DarkTheme::ListView").
+ * @return true If the dark class successfully loads and provides a unique theme handle.
+ * @return false If the theme subsystem falls back to light styles or fails to load.
+ */
+bool IsDarkThemeActive(const wchar_t* stdClass, const wchar_t* darkClass);
 
 // Enable or disable dark mode for the given TLW if appropriate.
 void ConfigureTLW(HWND hwnd);
@@ -45,13 +57,13 @@ void AllowForWindow(HWND hwnd,
                     const wchar_t* themeName = L"Explorer",
                     const wchar_t* themeId = nullptr);
 
-// Draws a raised or sunken border using two shades (light/dark)
-// for dark mode. The rectangle `rc` is in device coordinates (e.g., window).
-// Draws a raised or sunken border with three shades (light, mid, dark)
-// to mimic the classic Windows 3D effect, using dark-mode colours.
-// The rectangle `rc` is in device coordinates (e.g., the full window).
-void DrawDarkModeEdge(HDC hdc, const RECT& rc, int borderStyle, int thickness);
-
+// Draws a custom dark mode border for controls (e.g. EDIT, STATIC, etc.).
+// Supports flat (SIMPLE/STATIC/THEME) and 3D (RAISED/SUNKEN) styles.
+// Uses multi-tone dark colours to simulate classic Windows 3D depth.
+// The rectangle `rc` is in device coordinates (full window size).
+// `state` is one of ETS_NORMAL, ETS_DISABLED, ETS_FOCUSED, ETS_HOT, ETS_READONLY.
+void DrawDarkModeBorder(wxDC& dc, const wxRect& rc, wxBorder borderStyle,
+    int thickness, int state = ETS_NORMAL);
 // Return the colour value appropriate for dark mode if it's used or an invalid
 // colour if it isn't.
 wxColour GetColour(wxSystemColour index);
