@@ -2163,7 +2163,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                 /* A.) check for descender definition */
                 if (strncmp(line,"Descender",9)==0)
                 {
-                    if ((sscanf(line,"%s%d",descString,&lastDescender)!=2) ||
+                    if ((sscanf(line,"%19s%d",descString,&lastDescender)!=2) ||
                             (strcmp(descString,"Descender")!=0))
                     {
                         wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad descender)"), afmName,line );
@@ -2172,7 +2172,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                 /* JC 1.) check for UnderlinePosition */
                 else if(strncmp(line,"UnderlinePosition",17)==0)
                 {
-                    if ((sscanf(line,"%s%lf",upString,&UnderlinePosition)!=2) ||
+                    if ((sscanf(line,"%29s%lf",upString,&UnderlinePosition)!=2) ||
                             (strcmp(upString,"UnderlinePosition")!=0))
                     {
                         wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad UnderlinePosition)"), afmName, line );
@@ -2181,7 +2181,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                 /* JC 2.) check for UnderlineThickness */
                 else if(strncmp(line,"UnderlineThickness",18)==0)
                 {
-                    if ((sscanf(line,"%s%lf",utString,&UnderlineThickness)!=2) ||
+                    if ((sscanf(line,"%29s%lf",utString,&UnderlineThickness)!=2) ||
                             (strcmp(utString,"UnderlineThickness")!=0))
                     {
                         wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad UnderlineThickness)"), afmName, line );
@@ -2190,7 +2190,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                 /* JC 3.) check for EncodingScheme */
                 else if(strncmp(line,"EncodingScheme",14)==0)
                 {
-                    if ((sscanf(line,"%s%s",utString,encString)!=2) ||
+                    if ((sscanf(line,"%29s%49s",utString,encString)!=2) ||
                             (strcmp(utString,"EncodingScheme")!=0))
                     {
                         wxLogDebug( wxT("AFM-file '%s': line '%s' has error (bad EncodingScheme)"), afmName, line );
@@ -2204,7 +2204,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
                 /* B.) check for char-width */
                 else if(strncmp(line,"C ",2)==0)
                 {
-                    if (sscanf(line,"%s%d%s%s%d",cString,&ascii,semiString,WXString,&cWidth)!=5)
+                    if (sscanf(line,"%9s%d%9s%9s%d",cString,&ascii,semiString,WXString,&cWidth)!=5)
                     {
                         wxLogDebug(wxT("AFM-file '%s': line '%s' has an error (bad character width)"),afmName,line);
                     }
