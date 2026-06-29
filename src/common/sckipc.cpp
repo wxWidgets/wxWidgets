@@ -245,6 +245,15 @@ private:
     wxCRIT_SECT_DECLARE_MEMBER(m_cs_connection_sockets);
     std::set<wxSocketBase*> m_connectionSockets;
 
+    // Sockets the main thread is currently reading. A WAITALL Read/Peek pumps the
+    // event loop while it waits, so on MSW the GUI message pump can re-dispatch a
+    // wxSOCKET_INPUT for a socket we are already reading; OnSocketInput() consults
+    // this set and bails to avoid a re-entrant read (which trips wxSocketReadGuard,
+    // "read reentrancy?"). All reads run on the main thread, so this needs no lock.
+    std::set<wxSocketBase*> m_socketsBeingRead;
+    bool IsReadingSocket(wxSocketBase* socket) const
+        { return m_socketsBeingRead.count(socket) != 0; }
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTCPEventHandler);
 };
@@ -254,6 +263,27 @@ enum
     _SOCKET_INPUT_ID = 1000,
     _SERVER_SOCKET_CONNECTION_ID
 };
+
+namespace
+{
+
+// RAII marker recording that the main thread is reading a given socket, so a
+// re-entrant OnSocketInput() (dispatched while a WAITALL Read/Peek pumps the
+// event loop) can detect it and bail instead of re-reading the same socket.
+class MainThreadReadGuard
+{
+public:
+    MainThreadReadGuard(std::set<wxSocketBase*>& set, wxSocketBase* socket)
+        : m_set(set), m_socket(socket) { m_set.insert(m_socket); }
+    ~MainThreadReadGuard() { m_set.erase(m_socket); }
+
+private:
+    std::set<wxSocketBase*>& m_set;
+    wxSocketBase* const m_socket;
+    wxDECLARE_NO_COPY_CLASS(MainThreadReadGuard);
+};
+
+} // anonymous namespace
 
 // --------------------------------------------------------------------------
 // wxTCPEventHandlerModule (private class)
@@ -1362,6 +1392,15 @@ void wxTCPEventHandler::OnSocketInput(wxSocketEvent &event)
     if ( !IsConnectionSocket(sock) )
         return;
 
+    // Re-entrancy guard (see m_socketsBeingRead): the WAITALL Read/Peek below pumps
+    // the event loop while waiting, and on MSW the GUI message pump can re-dispatch
+    // a wxSOCKET_INPUT for a socket this thread is already reading. Bail rather than
+    // re-read it (which trips wxSocketReadGuard, "read reentrancy?"): the in-progress
+    // read consumes the data, and the outer loop / a re-posted wxSOCKET_INPUT drains
+    // anything left.
+    if ( IsReadingSocket(sock) )
+        return;
+
     wxTCPConnection * connection = GetConnection(sock);
 
     // This socket is being deleted
@@ -1379,6 +1418,7 @@ void wxTCPEventHandler::OnSocketInput(wxSocketEvent &event)
     }
 
     // Process all of the pending messages in the socket buffer.
+    MainThreadReadGuard readGuard(m_socketsBeingRead, sock);
     while ( PeekAtMessageInSocket(sock) )
     {
         wxIPCMessageBase* msg = ReadMessageFromSocket(sock);
@@ -1754,6 +1794,11 @@ bool wxTCPEventHandler::SendAndGetReply_MainThread(wxIPCMessageBase& send_msg,
     CritSectLeaver find_message_lock(m_cs_awaiting_reply);
 
     wxCRIT_SECT_LOCKER(socket_processing_lock, m_cs_socket_processing);
+
+    // Mark the socket as being read on this thread so a wxSOCKET_INPUT re-dispatched
+    // while our Read/Write below pumps the event loop bails out of OnSocketInput()
+    // instead of re-reading the socket (see m_socketsBeingRead).
+    MainThreadReadGuard readGuard(m_socketsBeingRead, socket);
 
     if ( !WriteMessageToSocket(send_msg) )
         return false;
