@@ -188,6 +188,7 @@ protected:
     void DoEraseBackground(wxDC& dc);
     void OnSize(wxSizeEvent& evt);
     void OnDPIChanged(wxDPIChangedEvent& evt);
+    void OnSysColourChanged(wxSysColourChangedEvent& evt);
     void OnMouseLeftDown(wxMouseEvent& evt);
     void OnMouseLeftUp(wxMouseEvent& evt);
     void OnMouseMiddleDown(wxMouseEvent& evt);

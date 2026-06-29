@@ -194,6 +194,10 @@ bool MyApp::OnInit()
     if(!wxApp::OnInit())
         return false;
 
+#ifdef __WXMSW__
+    MSWEnableDarkMode();
+#endif
+
     wxFrame* frame = new MyFrame;
     frame->Show();
 

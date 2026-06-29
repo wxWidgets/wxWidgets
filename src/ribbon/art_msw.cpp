@@ -311,6 +311,24 @@ wxRibbonMSWArtProvider::~wxRibbonMSWArtProvider()
 {
 }
 
+void wxRibbonMSWArtProvider::UpdateColoursFromSystem()
+{
+    if (wxSystemSettings::GetAppearance().IsDark())
+    {
+        SetColourScheme(
+            wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE),
+            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
+            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+    }
+    else
+    {
+        SetColourScheme(
+            wxColour(194, 216, 241),
+            wxColour(255, 223, 114),
+            wxColour(0, 0, 0));
+    }
+}
+
 void wxRibbonMSWArtProvider::GetColourScheme(
                          wxColour* primary,
                          wxColour* secondary,

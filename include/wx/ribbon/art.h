@@ -232,6 +232,8 @@ public:
                         const wxColour& secondary,
                         const wxColour& tertiary) = 0;
 
+    virtual void UpdateColoursFromSystem() {}
+
     virtual void DrawTabCtrlBackground(
                         wxDC& dc,
                         wxWindow* wnd,
@@ -440,6 +442,8 @@ public:
     void SetColourScheme(const wxColour& primary,
                          const wxColour& secondary,
                          const wxColour& tertiary) override;
+
+    void UpdateColoursFromSystem() override;
 
     int GetTabCtrlHeight(
                         wxReadOnlyDC& dc,
