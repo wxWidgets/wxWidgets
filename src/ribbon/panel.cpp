@@ -264,7 +264,6 @@ void wxRibbonPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
     m_art->UpdateColoursFromSystem();
-    Refresh();
 }
 
 void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags)

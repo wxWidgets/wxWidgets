@@ -961,7 +961,6 @@ void wxRibbonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
     m_art->UpdateColoursFromSystem();
-    Refresh();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)

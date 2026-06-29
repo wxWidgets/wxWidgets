@@ -991,7 +991,6 @@ void wxRibbonToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
     m_art->UpdateColoursFromSystem();
-    Refresh();
 }
 
 // Finds the best width and height given the parents' width and height

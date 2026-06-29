@@ -575,7 +575,6 @@ void wxRibbonPage::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
     m_art->UpdateColoursFromSystem();
-    Refresh();
 }
 
 void wxRibbonPage::RemoveChild(wxWindowBase *child)
