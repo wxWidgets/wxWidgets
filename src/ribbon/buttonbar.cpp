@@ -42,6 +42,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonButtonBar, wxRibbonControl)
     EVT_LEFT_DCLICK(wxRibbonButtonBar::OnMouseDown)
     EVT_LEFT_UP(wxRibbonButtonBar::OnMouseUp)
     EVT_DPI_CHANGED(wxRibbonButtonBar::OnDPIChanged)
+    EVT_SYS_COLOUR_CHANGED(wxRibbonButtonBar::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 class wxRibbonButtonBarButtonSizeInfo
@@ -1601,6 +1602,12 @@ void wxRibbonButtonBar::OnDPIChanged(wxDPIChangedEvent& event)
     Realize();
     Refresh();
     event.Skip();
+}
+
+void wxRibbonButtonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+    m_art->UpdateColoursFromSystem();
 }
 
 #endif // wxUSE_RIBBON

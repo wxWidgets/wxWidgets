@@ -73,6 +73,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)
     EVT_PAINT(wxRibbonGallery::OnPaint)
     EVT_SIZE(wxRibbonGallery::OnSize)
     EVT_DPI_CHANGED(wxRibbonGallery::OnDPIChanged)
+    EVT_SYS_COLOUR_CHANGED(wxRibbonGallery::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 wxRibbonGallery::wxRibbonGallery()
@@ -537,6 +538,12 @@ void wxRibbonGallery::OnDPIChanged(wxDPIChangedEvent& event)
 {
     Realize();
     event.Skip();
+}
+
+void wxRibbonGallery::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+    m_art->UpdateColoursFromSystem();
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id)

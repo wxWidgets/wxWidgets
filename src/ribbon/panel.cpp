@@ -43,6 +43,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
     EVT_PAINT(wxRibbonPanel::OnPaint)
     EVT_SIZE(wxRibbonPanel::OnSize)
     EVT_DPI_CHANGED(wxRibbonPanel::OnDPIChanged)
+    EVT_SYS_COLOUR_CHANGED(wxRibbonPanel::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 wxRibbonPanel::wxRibbonPanel() : m_expanded_dummy(nullptr), m_expanded_panel(nullptr)
@@ -257,6 +258,12 @@ void wxRibbonPanel::OnDPIChanged(wxDPIChangedEvent& event)
 {
     Realize();
     event.Skip();
+}
+
+void wxRibbonPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+    m_art->UpdateColoursFromSystem();
 }
 
 void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags)

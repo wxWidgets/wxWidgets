@@ -273,22 +273,7 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
     m_panel_label_font = m_tab_label_font;
 
     if(set_colour_scheme)
-    {
-        if (wxSystemSettings::GetAppearance().IsDark())
-        {
-            SetColourScheme(
-                wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE),
-                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
-                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-        }
-        else
-        {
-            SetColourScheme(
-                wxColour(194, 216, 241),
-                wxColour(255, 223, 114),
-                wxColour(0, 0, 0));
-        }
-    }
+        UpdateColoursFromSystem();
 
     m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
     m_tab_separation_size = 3;
@@ -309,6 +294,24 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
 
 wxRibbonMSWArtProvider::~wxRibbonMSWArtProvider()
 {
+}
+
+void wxRibbonMSWArtProvider::UpdateColoursFromSystem()
+{
+    if (wxSystemSettings::GetAppearance().IsDark())
+    {
+        SetColourScheme(
+            wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE),
+            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
+            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+    }
+    else
+    {
+        SetColourScheme(
+            wxColour(194, 216, 241),
+            wxColour(255, 223, 114),
+            wxColour(0, 0, 0));
+    }
 }
 
 void wxRibbonMSWArtProvider::GetColourScheme(

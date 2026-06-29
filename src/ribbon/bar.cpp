@@ -55,6 +55,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
   EVT_SIZE(wxRibbonBar::OnSize)
   EVT_KILL_FOCUS(wxRibbonBar::OnKillFocus)
   EVT_DPI_CHANGED(wxRibbonBar::OnDPIChanged)
+  EVT_SYS_COLOUR_CHANGED(wxRibbonBar::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 void wxRibbonBar::AddPage(wxRibbonPage *page)
@@ -954,6 +955,12 @@ void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
 
     Refresh();
     event.Skip();
+}
+
+void wxRibbonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+    m_art->UpdateColoursFromSystem();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)

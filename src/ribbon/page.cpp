@@ -149,6 +149,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonPage, wxRibbonControl)
     EVT_PAINT(wxRibbonPage::OnPaint)
     EVT_SIZE(wxRibbonPage::OnSize)
     EVT_DPI_CHANGED(wxRibbonPage::OnDPIChanged)
+    EVT_SYS_COLOUR_CHANGED(wxRibbonPage::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 wxRibbonPage::wxRibbonPage()
@@ -568,6 +569,12 @@ void wxRibbonPage::OnDPIChanged(wxDPIChangedEvent& event)
 {
     Realize();
     event.Skip();
+}
+
+void wxRibbonPage::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+    m_art->UpdateColoursFromSystem();
 }
 
 void wxRibbonPage::RemoveChild(wxWindowBase *child)
