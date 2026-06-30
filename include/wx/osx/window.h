@@ -204,6 +204,10 @@ public:
     virtual long            MacGetTopBorderSize() const;
     virtual long            MacGetBottomBorderSize() const;
 
+    // Must be called whenever window style changes result in changes to layout
+    // insets (`-[NSView alignmentRectInsets:]`, used for MacGetBorderSize())
+    virtual void        MacInvalidateInsetCache() const;
+
     virtual void        MacSuperChangedPosition() ;
 
     // absolute coordinates of this window's root have changed
