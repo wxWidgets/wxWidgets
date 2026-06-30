@@ -1237,7 +1237,7 @@ wxRendererXP::GetSplitterParams(const wxWindow * win)
     if ( win->HasFlag(wxSP_NO_XP_THEME) )
         return m_rendererNative.GetSplitterParams(win);
     else
-        return wxSplitterRenderParams(SASH_WIDTH, 0, false);
+        return wxSplitterRenderParams(win->FromDIP(SASH_WIDTH), 0, false);
 }
 
 void
@@ -1264,13 +1264,14 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
     {
         wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
         wxDCBrushChanger setBrush(dc, wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)));
+        const int sashWidth = win->FromDIP(SASH_WIDTH);
         if ( orient == wxVERTICAL )
         {
-            dc.DrawRectangle(position, 0, SASH_WIDTH, size.y);
+            dc.DrawRectangle(position, 0, sashWidth, size.y);
         }
         else // wxHORIZONTAL
         {
-            dc.DrawRectangle(0, position, size.x, SASH_WIDTH);
+            dc.DrawRectangle(0, position, size.x, sashWidth);
         }
 
         return;
