@@ -360,7 +360,7 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     // finally also set the background colour for text drawing: without this,
     // the text in an edit control is drawn using the default background even
     // if we return a valid brush
-    if ( colBg.IsOk() || m_hasBgCol )
+    if ( colBg.IsOk() || m_backgroundColour.IsOk() )
     {
         if ( !colBg.IsOk() )
             colBg = GetBackgroundColour();

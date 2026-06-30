@@ -781,6 +781,8 @@ docOverrides = {
     'GetText':('Retrieve all the text in the document.',),
     'GetTextRange':('Retrieve a range of text.',),
 
+    'GetMargins':('Returns the count of margins.',),
+
     'GetWordChars':
         ('Get the set of characters making up words for when moving or selecting by word.',),
 

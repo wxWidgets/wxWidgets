@@ -5592,9 +5592,10 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child)
         return hbrush;
     }
 
-    // Otherwise see if we have a custom background colour or if we're a TLW,
-    // as nothing else would provide the brush in the latter case.
-    if ( m_hasBgCol || IsTopLevel() )
+    // Otherwise see if we have a background colour (which is only set if we
+    // need to use it) or if we're a TLW (in which case nothing else would
+    // provide the brush, so we have to do it).
+    if ( m_backgroundColour.IsOk() || IsTopLevel() )
     {
         wxBrush *
             brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());

@@ -82,10 +82,6 @@ bool wxVListBox::Create(wxWindow *parent,
     if ( style & wxLB_MULTIPLE )
         m_selStore = new wxSelectionStore;
 
-    // make sure the native widget has the right colour since we do
-    // transparent drawing by default
-    SetBackgroundColour(GetBackgroundColour());
-
     // leave m_colBgSel in an invalid state: it means for OnDrawBackground()
     // to use wxRendererNative instead of painting selection bg ourselves
     m_colBgSel = wxNullColour;

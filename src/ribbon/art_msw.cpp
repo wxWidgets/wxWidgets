@@ -339,7 +339,9 @@ void wxRibbonMSWArtProvider::SetColourScheme(
 
     // Map primary saturation from [0, 1] to [.25, .75]
     bool primary_is_gray = false;
-    static const float gray_saturation_threshold = 0.01f;
+    // Higher threshold in dark mode prevents near-zero saturation from mapping to a visible hue
+    const float gray_saturation_threshold =
+        wxSystemSettings::GetAppearance().IsDark() ? 0.05f : 0.01f;
     if(primary_hsl.saturation <= gray_saturation_threshold)
         primary_is_gray = true;
     else
