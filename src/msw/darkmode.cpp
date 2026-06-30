@@ -824,6 +824,11 @@ bool IsActive()
     return false;
 }
 
+bool HasChanged()
+{
+    return false;
+}
+
 void ConfigureTLW(HWND WXUNUSED(hwnd))
 {
 }
@@ -865,6 +870,10 @@ HandleMenuMessage(WXLRESULT* WXUNUSED(result),
                   WXLPARAM WXUNUSED(lParam))
 {
     return false;
+}
+
+void NotifySysColorChange()
+{
 }
 
 } // namespace wxMSWDarkMode
