@@ -76,9 +76,8 @@ static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
                     size_t distanceFromEnd = label.end() - i;
 
                     // is this ampersand introducing a mnemonic or rather an entity?
-                    for (size_t j=0; j < WXSIZEOF(entitiesNames); j++)
+                    for (auto entity : entitiesNames)
                     {
-                        const char *entity = entitiesNames[j];
                         size_t entityLen = wxStrlen(entity);
 
                         if (distanceFromEnd >= entityLen &&

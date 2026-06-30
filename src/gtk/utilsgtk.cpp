@@ -203,14 +203,12 @@ public:
     {
         ProcessFrames(0);
 
-        for ( wxVector<Frame>::const_iterator it = m_frames.begin();
-              it != m_frames.end();
-              ++it )
+        for (const auto & m_frame : m_frames)
         {
             gtk_assert_dialog_append_stack_frame(m_dlg,
-                                                 it->name.utf8_str(),
-                                                 it->file.utf8_str(),
-                                                 it->line);
+                                                 m_frame.name.utf8_str(),
+                                                 m_frame.file.utf8_str(),
+                                                 m_frame.line);
         }
 
         m_frames.clear();

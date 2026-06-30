@@ -607,10 +607,10 @@ protected:
         };
 
         int native_flags = 0;
-        for ( unsigned int i=0; i < WXSIZEOF(flag_mapping); ++i)
+        for (auto i : flag_mapping)
         {
-            if (flags & flag_mapping[i][0])
-                native_flags |= flag_mapping[i][1];
+            if (flags & i[0])
+                native_flags |= i[1];
         }
 
         return native_flags;

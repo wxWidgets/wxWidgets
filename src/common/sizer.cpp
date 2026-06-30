@@ -2068,11 +2068,8 @@ wxSize wxFlexGridSizer::CalcMin()
     m_rowHeights.assign(nrows, -1);
     m_colWidths.assign(ncols, -1);
 
-    for ( wxSizerItemList::iterator i = m_children.begin();
-          i != m_children.end();
-          ++i)
+    for (auto item : m_children)
     {
-        wxSizerItem * const item = *i;
         if ( item->IsShown() )
         {
             item->CalcMin();
@@ -2207,9 +2204,9 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& origina
         {
             int nrows = CalcRows();
 
-            for ( size_t n = 0; n < m_growableRows.size(); n++ )
+            for (int m_growableRow : m_growableRows)
             {
-                wxASSERT_MSG( m_growableRows[n] < nrows,
+                wxASSERT_MSG( m_growableRow < nrows,
                               "invalid growable row index" );
             }
         }
@@ -2218,9 +2215,9 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& origina
         {
             int ncols = CalcCols();
 
-            for ( size_t n = 0; n < m_growableCols.size(); n++ )
+            for (int m_growableCol : m_growableCols)
             {
-                wxASSERT_MSG( m_growableCols[n] < ncols,
+                wxASSERT_MSG( m_growableCol < ncols,
                               "invalid growable column index" );
             }
         }
@@ -2253,11 +2250,9 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& origina
         // Iterate over all items and inform about column width
         const int ncols = GetEffectiveColsCount();
         int col = 0;
-        for ( wxSizerItemList::iterator i = m_children.begin();
-              i != m_children.end();
-              ++i )
+        for (auto & i : m_children)
         {
-            didAdjustMinSize |= (*i)->InformFirstDirection(wxHORIZONTAL, m_colWidths[col], sz.y - minSize.y);
+            didAdjustMinSize |= i->InformFirstDirection(wxHORIZONTAL, m_colWidths[col], sz.y - minSize.y);
             if ( ++col == ncols )
                 col = 0;
         }

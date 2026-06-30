@@ -674,12 +674,9 @@ void wxLog::ClearTraceMasks()
     wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
     const wxArrayString& masks = GetTraceMasks();
-    for ( wxArrayString::const_iterator it = masks.begin(),
-                                        en = masks.end();
-          it != en;
-          ++it )
+    for (const auto & it : masks)
     {
-        if ( *it == mask)
+        if ( it == mask)
             return true;
     }
 
@@ -752,11 +749,9 @@ void wxLog::FlushThreadMessages()
 
     if ( !bufferedLogRecords.empty() )
     {
-        for ( wxLogRecords::const_iterator it = bufferedLogRecords.begin();
-              it != bufferedLogRecords.end();
-              ++it )
+        for (const auto & bufferedLogRecord : bufferedLogRecords)
         {
-            CallDoLogNow(it->level, it->msg, it->info);
+            CallDoLogNow(bufferedLogRecord.level, bufferedLogRecord.msg, bufferedLogRecord.info);
         }
     }
 }

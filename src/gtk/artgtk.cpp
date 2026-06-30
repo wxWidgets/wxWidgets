@@ -175,30 +175,30 @@ GtkIconSize FindClosestIconSize(const wxSize& size)
         s_sizes[3].icon = GTK_ICON_SIZE_BUTTON;
         s_sizes[4].icon = GTK_ICON_SIZE_DND;
         s_sizes[5].icon = GTK_ICON_SIZE_DIALOG;
-        for (size_t i = 0; i < NUM_SIZES; i++)
+        for (auto & s_size : s_sizes)
         {
-            gtk_icon_size_lookup(s_sizes[i].icon,
-                                 &s_sizes[i].x, &s_sizes[i].y);
+            gtk_icon_size_lookup(s_size.icon,
+                                 &s_size.x, &s_size.y);
         }
         s_sizesInitialized = true;
     }
 
     GtkIconSize best = GTK_ICON_SIZE_DIALOG; // presumably largest
     unsigned distance = INT_MAX;
-    for (size_t i = 0; i < NUM_SIZES; i++)
+    for (auto & s_size : s_sizes)
     {
         // only use larger bitmaps, scaling down looks better than scaling up:
-        if (size.x > s_sizes[i].x || size.y > s_sizes[i].y)
+        if (size.x > s_size.x || size.y > s_size.y)
             continue;
 
-        unsigned dist = (size.x - s_sizes[i].x) * (size.x - s_sizes[i].x) +
-                        (size.y - s_sizes[i].y) * (size.y - s_sizes[i].y);
+        unsigned dist = (size.x - s_size.x) * (size.x - s_size.x) +
+                        (size.y - s_size.y) * (size.y - s_size.y);
         if (dist == 0)
-            return s_sizes[i].icon;
+            return s_size.icon;
         else if (dist < distance)
         {
             distance = dist;
-            best = s_sizes[i].icon;
+            best = s_size.icon;
         }
     }
     return best;

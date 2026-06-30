@@ -1320,14 +1320,14 @@ wxString wxRegEx::QuoteMeta(const wxString& str)
     // character were escaped.
     strEscaped.reserve(str.length() * 2);
 
-    for ( wxString::const_iterator it = str.begin(); it != str.end(); ++it )
+    for (auto it : str)
     {
-        if ( s_strMetaChars.find(*it) != wxString::npos )
+        if ( s_strMetaChars.find(it) != wxString::npos )
         {
             strEscaped += wxS('\\');
         }
 
-        strEscaped += *it;
+        strEscaped += it;
     }
 
     strEscaped.shrink_to_fit();

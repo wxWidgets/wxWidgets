@@ -1100,11 +1100,9 @@ int wxUILocale::GetSystemLanguage()
     size_t count = languagesDB.size();
     wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
 
-    for (wxVector<wxString>::const_iterator j = preferred.begin();
-        j != preferred.end();
-        ++j)
+    for (const auto & j : preferred)
     {
-        wxLocaleIdent localeId = wxLocaleIdent::FromTag(*j);
+        wxLocaleIdent localeId = wxLocaleIdent::FromTag(j);
         wxString lang = localeId.GetTag(wxLOCALE_TAGTYPE_BCP47);
         size_t pos = lang.find('-');
         wxString langShort = (pos != wxString::npos) ? lang.substr(0, pos) : wxString();

@@ -445,9 +445,9 @@ void wxGenericDirCtrl::ShowHidden( bool show )
         wxArrayString paths;
         GetPaths(paths);
         ReCreateTree();
-        for ( unsigned n = 0; n < paths.size(); n++ )
+        for (const auto & path : paths)
         {
-            ExpandPath(paths[n]);
+            ExpandPath(path);
         }
     }
     else
@@ -994,9 +994,8 @@ void wxGenericDirCtrl::GetPaths(wxArrayString& paths) const
 
     wxArrayTreeItemIds items;
     m_treeCtrl->GetSelections(items);
-    for ( unsigned n = 0; n < items.size(); n++ )
+    for (auto treeid : items)
     {
-        wxTreeItemId treeid = items[n];
         paths.push_back(GetPath(treeid));
     }
 }
@@ -1022,9 +1021,8 @@ void wxGenericDirCtrl::GetFilePaths(wxArrayString& paths) const
 
     wxArrayTreeItemIds items;
     m_treeCtrl->GetSelections(items);
-    for ( unsigned n = 0; n < items.size(); n++ )
+    for (auto treeid : items)
     {
-        wxTreeItemId treeid = items[n];
         wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
         if ( !data->m_isDir )
             paths.Add(data->m_path);
@@ -1063,9 +1061,9 @@ void wxGenericDirCtrl::SelectPaths(const wxArrayString& paths)
     if ( HasFlag(wxDIRCTRL_MULTIPLE) )
     {
         UnselectAll();
-        for ( unsigned n = 0; n < paths.size(); n++ )
+        for (const auto & path : paths)
         {
-            SelectPath(paths[n]);
+            SelectPath(path);
         }
     }
 }

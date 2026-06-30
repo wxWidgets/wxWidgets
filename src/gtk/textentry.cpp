@@ -456,11 +456,9 @@ public:
     {
         wxGtkObject<GtkListStore> store(gtk_list_store_new (1, G_TYPE_STRING));
 
-        for ( wxArrayString::const_iterator i = strings.begin();
-              i != strings.end();
-              ++i )
+        for (const auto & string : strings)
         {
-            AppendToStore(store, *i);
+            AppendToStore(store, string);
         }
 
         UseModel(store);

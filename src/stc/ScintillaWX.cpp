@@ -241,8 +241,8 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
 
 
 ScintillaWX::~ScintillaWX() {
-    for ( TimersHash::iterator i=timers.begin(); i!=timers.end(); ++i ) {
-        delete i->second;
+    for (auto & timer : timers) {
+        delete timer.second;
     }
     timers.clear();
 

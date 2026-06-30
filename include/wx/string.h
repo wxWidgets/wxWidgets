@@ -4430,10 +4430,8 @@ void wxStringIteratorNode::clear()
 template<bool (T)(const wxUniChar& c)>
     inline bool wxStringCheck(const wxString& val)
     {
-        for ( wxString::const_iterator i = val.begin();
-              i != val.end();
-              ++i )
-            if (T(*i) == 0)
+        for (auto i : val)
+            if (T(i) == 0)
                 return false;
         return true;
     }

@@ -3226,8 +3226,8 @@ wxString wxImage::GetImageExtWildcard()
     {
         wxImageHandler* Handler = (wxImageHandler*)Node->GetData();
         fmts += wxT("*.") + Handler->GetExtension();
-        for (size_t i = 0; i < Handler->GetAltExtensions().size(); i++)
-            fmts += wxT(";*.") + Handler->GetAltExtensions()[i];
+        for (const auto & i : Handler->GetAltExtensions())
+            fmts += wxT(";*.") + i;
         Node = Node->GetNext();
         if ( Node ) fmts += wxT(";");
     }
