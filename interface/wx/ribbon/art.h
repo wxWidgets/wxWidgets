@@ -345,6 +345,15 @@ public:
                         const wxColour& tertiary) = 0;
 
     /**
+        Called when the system colours change to allow the art provider to
+        update its colours. Override to recalculate colours from the current
+        system settings.
+
+        @since 3.3.3
+    */
+    virtual void UpdateColoursFromSystem() {}
+
+    /**
         Draw the background of the tab region of a ribbon bar.
 
         @param dc
