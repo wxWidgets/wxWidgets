@@ -23083,10 +23083,15 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
     if test "x$wxUSE_MACOSX_SDK" != "x"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking SDK deployment version" >&5
 $as_echo_n "checking SDK deployment version... " >&6; }
-        # Take the first (earliest, because they are sorted) supported
-        # deployment target from the SDKSettings.plist file and remove quotes
-        # and trailing comma from it.
-        MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | sed 1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d | head -n 1 | sed -e 's/^ *//' -e 's/"//g' -e s/,//`
+        defaultProperties=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties`
+
+                                MACOSX_SDK_PLIST_VERSION_MIN=`echo $defaultProperties | sed -n -e '1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d; s/^ *//; s/"//g; s/,//p; q'`
+
+                        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
+
+                MACOSX_SDK_PLIST_VERSION_MIN=`echo $defaultProperties | sed -n -e 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/p'`
+
+        fi
 
         if test "x$MACOSX_SDK_PLIST_VERSION_MIN" != "x"; then
             wxUSE_MACOSX_VERSION_MIN=$MACOSX_SDK_PLIST_VERSION_MIN
