@@ -3857,8 +3857,16 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                 if ( drawBorder )
                 {
-                    // first ask the widget to paint its non-client area, such as scrollbars, etc.
-                    rc.result = MSWDefWindowProc(message, wParam, lParam);
+                    // Have the window draw its scrollbars, if any. To avoid flicker,
+                    // prevent the border from being drawn by specifing a clipping,
+                    // region with everything inside the border. For simplicity,
+                    // ignore any existing clipping region in the wParam argument.
+                    RECT rcClip;
+                    ::GetWindowRect(m_hWnd, &rcClip);
+                    const auto thickness = MSWGetBorderThickness();
+                    ::InflateRect(&rcClip, -thickness, -thickness);
+                    AutoHRGN cliprgn = ::CreateRectRgnIndirect(&rcClip);
+                    rc.result = MSWDefWindowProc(message, (WXWPARAM)(HRGN)cliprgn, lParam);
                     processed = true;
 
                     wxWindowDC dc((wxWindow *)this);
@@ -3868,7 +3876,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     // Exclude the client area and any scroll bars.
                     RECT rcClient = rcBorder;
-                    const auto thickness = MSWGetBorderThickness();
                     InflateRect(&rcClient, -thickness, -thickness);
                     ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
                                       rcClient.right, rcClient.bottom);
