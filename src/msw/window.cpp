@@ -3858,7 +3858,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 if ( drawBorder )
                 {
                     // Have the window draw its scrollbars, if any. To avoid flicker,
-                    // prevent the border from being drawn by specifing a clipping,
+                    // prevent the border from being drawn by specifing a clipping
                     // region with everything inside the border. For simplicity,
                     // ignore any existing clipping region in the wParam argument.
                     RECT rcClip;
