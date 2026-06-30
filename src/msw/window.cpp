@@ -3858,7 +3858,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 if ( drawBorder )
                 {
                     // Have the window draw its scrollbars, if any. To avoid flicker,
-                    // prevent the border from being drawn by specifing a clipping,
+                    // prevent the border from being drawn by specifing a clipping
                     // region with everything inside the border. For simplicity,
                     // ignore any existing clipping region in the wParam argument.
                     RECT rcClip;
@@ -3881,31 +3881,35 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                       rcClient.right, rcClient.bottom);
 
                     // Draw the theme border and background.
-
-                    // The EDIT class gives a good general purpose border in light mode.
-                    // There does not seem to be a dark mode EDIT class that looks good.
-                    // The ListView class below looks good in dark mode but was not
-                    // available until Windows 11 build 26200. The Button class below
-                    // looks OK in dark mode on older Windows.
-                    const auto darkClass = wxCheckOsVersion(10, 0, 26200) ?
-                        L"DarkMode_DarkTheme::ListView" :
-                        L"DarkMode_Explorer::Button";
-                    wxUxThemeHandle hTheme(this, L"EDIT", darkClass);
-
-                    // The part and state values match for the themes we use.
-                    static_assert((int)EP_EDITTEXT == (int)LVP_LISTITEM, "parts differ?");
-                    static_assert((int)EP_EDITTEXT == (int)BP_PUSHBUTTON, "parts differ?");
-                    static_assert((int)ETS_NORMAL == (int)LISS_NORMAL, "states differ?");
-                    static_assert((int)ETS_NORMAL == (int)PBS_NORMAL, "states differ?");
-
-                    // Make sure the background is in a proper state
-                    if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                    if ( wxMSWDarkMode::IsActive() )
                     {
-                        ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
+                        // There does not seem to be a theme class that draws a good
+                        // border on all supported versions of Windows. Manually draw a
+                        // 1-pixel thick border. Use the observed colour of the simple
+                        // border, WS_BORDER.
+                        AutoHBRUSH brushBorder(0x646464);
+                        ::FrameRect(GetHdcOf(*impl), &rcBorder, brushBorder);
+                        // Draw the background with consecutively smaller 1-pixel thick
+                        // rectangles.
+                        AutoHBRUSH brushBg(GetBackgroundColour().GetPixel());
+                        for (int count = 1; count < thickness; count++)
+                        {
+                            ::InflateRect(&rcBorder, -1, -1);
+                            ::FrameRect(GetHdcOf(*impl), &rcBorder, brushBg);
+                        }
                     }
-
-                    // Draw the border
-                    hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, ETS_NORMAL);
+                    else
+                    {
+                        // The EDIT class gives a good general purpose border in light mode.
+                        wxUxThemeHandle hTheme(this, L"EDIT");
+                        // Make sure the background is in a proper state
+                        if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                        {
+                            ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
+                        }
+                        // Draw the border
+                        hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, ETS_NORMAL);
+                    }
                 }
             }
             break;
