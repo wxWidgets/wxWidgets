@@ -1,0 +1,1 @@
+wxAll: Add wxTarInputStream::SetMaxExtendedHeaderSize() (Arthur Chan, #26607).
