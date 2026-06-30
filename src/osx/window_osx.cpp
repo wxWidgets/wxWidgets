@@ -946,7 +946,8 @@ void wxWindowMac::MacInvalidateBorders()
     wxRect topupdate( tx-outerBorder, ty-outerBorder, tw + 2 * outerBorder, outerBorder );
     wxRect bottomupdate( tx-outerBorder, ty + th, tw + 2 * outerBorder, outerBorder );
 
-    if (GetParent()) {
+    if (GetParent())
+    {
         GetParent()->GetPeer()->SetNeedsDisplay(&leftupdate);
         GetParent()->GetPeer()->SetNeedsDisplay(&rightupdate);
         GetParent()->GetPeer()->SetNeedsDisplay(&topupdate);
@@ -2328,23 +2329,28 @@ wxMacBorderSize wxWindowMac::MacGetBorderSize() const
     return border;
 }
 
-long wxWindowMac::MacGetLeftBorderSize() const {
+long wxWindowMac::MacGetLeftBorderSize() const
+{
     return MacGetBorderSize().left;
 }
 
-long wxWindowMac::MacGetRightBorderSize() const {
+long wxWindowMac::MacGetRightBorderSize() const
+{
     return MacGetBorderSize().right;
 }
 
-long wxWindowMac::MacGetTopBorderSize() const {
+long wxWindowMac::MacGetTopBorderSize() const
+{
     return MacGetBorderSize().top;
 }
 
-long wxWindowMac::MacGetBottomBorderSize() const {
+long wxWindowMac::MacGetBottomBorderSize() const
+{
     return MacGetBorderSize().bottom;
 }
 
-void wxWindowMac::MacInvalidateInsetCache() const {
+void wxWindowMac::MacInvalidateInsetCache() const
+{
     if ( GetPeer() )
         GetPeer()->InvalidateLayoutInset();
 }
