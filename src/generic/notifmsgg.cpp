@@ -326,10 +326,9 @@ void wxNotificationMessageWindow::OnActionButtonClicked(wxCommandEvent& event)
 void wxNotificationMessageWindow::AddVisibleNotification(wxNotificationMessageWindow* notif)
 {
     bool found = false;
-    for ( wxVector<wxNotificationMessageWindow*>::iterator it = ms_visibleNotifications.begin();
-        it != ms_visibleNotifications.end(); ++it )
+    for (auto & ms_visibleNotification : ms_visibleNotifications)
     {
-        if ( *it == notif )
+        if ( ms_visibleNotification == notif )
         {
             found = true;
             break;
@@ -386,10 +385,9 @@ void wxNotificationMessageWindow::ResizeAndFitVisibleNotifications()
     int maxWidth = -1;
 
     // Determine max width
-    for (wxVector<wxNotificationMessageWindow*>::iterator notif = ms_visibleNotifications.begin();
-        notif != ms_visibleNotifications.end(); ++notif)
+    for (auto & ms_visibleNotification : ms_visibleNotifications)
     {
-        wxSize notifSize = (*notif)->GetSize();
+        wxSize notifSize = ms_visibleNotification->GetSize();
         if ( notifSize.GetWidth() > maxWidth )
             maxWidth = notifSize.GetWidth();
     }
@@ -401,16 +399,15 @@ void wxNotificationMessageWindow::ResizeAndFitVisibleNotifications()
 
     int prevNotifHeight = 0;
 
-    for (wxVector<wxNotificationMessageWindow*>::iterator notif = ms_visibleNotifications.begin();
-        notif != ms_visibleNotifications.end(); ++notif)
+    for (auto & ms_visibleNotification : ms_visibleNotifications)
     {
         // Modify existing maxwidth
-        wxSize notifSize = (*notif)->GetSize();
+        wxSize notifSize = ms_visibleNotification->GetSize();
         if ( notifSize.GetWidth() < maxWidth )
         {
             notifSize.SetWidth(maxWidth);
-            (*notif)->SetSize(notifSize);
-            (*notif)->Layout();
+            ms_visibleNotification->SetSize(notifSize);
+            ms_visibleNotification->Layout();
         }
 
         if ( ms_presentationDirection > 0 )
@@ -423,7 +420,7 @@ void wxNotificationMessageWindow::ResizeAndFitVisibleNotifications()
             presentPos.y -= (notifPadding + notifSize.GetHeight());
         }
 
-        (*notif)->SetPosition(presentPos);
+        ms_visibleNotification->SetPosition(presentPos);
     }
 }
 

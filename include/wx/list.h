@@ -1186,9 +1186,9 @@ public:
         wxVector<T> vector(size());
         size_t i = 0;
 
-        for ( const_iterator it = begin(); it != end(); ++it )
+        for (auto it : *this)
         {
-            vector[i++] = static_cast<T>(*it);
+            vector[i++] = static_cast<T>(it);
         }
 
         return vector;

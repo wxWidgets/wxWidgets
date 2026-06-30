@@ -152,12 +152,8 @@ private:
     {
         // Simply call the setters for all parts of this composite window.
         const wxWindowList parts = GetCompositeWindowParts();
-        for ( wxWindowList::const_iterator i = parts.begin();
-              i != parts.end();
-              ++i )
+        for (auto child : parts)
         {
-            wxWindow * const child = *i;
-
             // Allow null elements in the list, this makes the code of derived
             // composite controls which may have optionally shown children
             // simpler and it doesn't cost us much here.

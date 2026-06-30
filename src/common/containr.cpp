@@ -66,13 +66,8 @@ bool wxControlContainerBase::UpdateCanFocusChildren()
 bool wxControlContainerBase::HasAnyFocusableChildren() const
 {
     const wxWindowList& children = m_winParent->GetChildren();
-    for ( wxWindowList::const_iterator i = children.begin(),
-                                     end = children.end();
-          i != end;
-          ++i )
+    for (auto child : children)
     {
-        const wxWindow * const child = *i;
-
         if ( !m_winParent->IsClientAreaChild(child) )
             continue;
 
@@ -88,13 +83,8 @@ bool wxControlContainerBase::HasAnyFocusableChildren() const
 bool wxControlContainerBase::HasAnyChildrenAcceptingFocus() const
 {
     const wxWindowList& children = m_winParent->GetChildren();
-    for ( wxWindowList::const_iterator i = children.begin(),
-                                     end = children.end();
-          i != end;
-          ++i )
+    for (auto child : children)
     {
-        const wxWindow * const child = *i;
-
         if ( !m_winParent->IsClientAreaChild(child) )
             continue;
 

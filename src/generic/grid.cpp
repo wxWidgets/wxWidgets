@@ -960,11 +960,9 @@ void KeyToCoords(wxGridCoordsToAttrMap::key_type key, int *pRow, int *pCol)
 
 wxGridCellAttrData::~wxGridCellAttrData()
 {
-    for ( wxGridCoordsToAttrMap::iterator it = m_attrs.begin();
-          it != m_attrs.end();
-          ++it )
+    for (auto & m_attr : m_attrs)
     {
-        it->second->DecRef();
+        m_attr.second->DecRef();
     }
 
     m_attrs.clear();
@@ -1030,12 +1028,10 @@ void UpdateCellAttrRowsOrCols(wxGridCoordsToAttrMap& attrs, int editPos,
     // without now deleted attributes.
     wxGridCoordsToAttrMap newAttrs;
 
-    for ( wxGridCoordsToAttrMap::iterator it = attrs.begin();
-          it != attrs.end();
-          ++it )
+    for (auto & it : attrs)
     {
-        const wxGridCoordsToAttrMap::key_type oldCoords = it->first;
-        wxGridCellAttr* cellAttr = it->second;
+        const wxGridCoordsToAttrMap::key_type oldCoords = it.first;
+        wxGridCellAttr* cellAttr = it.second;
 
         int cellRows, cellCols;
         cellAttr->GetSize(&cellRows, &cellCols);
@@ -11307,10 +11303,10 @@ DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
 {
     wxGridBlockCoordsVector res;
 
-    for ( wxGridBlocks::iterator it = blocks.begin(); it != blocks.end(); ++it )
+    for (auto it : blocks)
     {
-        const int firstNew = oper.SelectFirst(*it);
-        const int lastNew = oper.SelectLast(*it);
+        const int firstNew = oper.SelectFirst(it);
+        const int lastNew = oper.SelectLast(it);
 
         // Check if this block intersects any of the existing ones.
         //
@@ -11324,7 +11320,7 @@ DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
             {
                 // We didn't find any overlapping blocks, so add this one to
                 // the end.
-                res.push_back(*it);
+                res.push_back(it);
                 break;
             }
 
@@ -11336,7 +11332,7 @@ DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
             {
                 // Not only it doesn't overlap this block, but it won't overlap
                 // any subsequent ones either, so insert it here and stop.
-                res.insert(res.begin() + n, *it);
+                res.insert(res.begin() + n, it);
                 break;
             }
 

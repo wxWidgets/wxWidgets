@@ -104,8 +104,8 @@ void LogTraceArray(const char *prefix, const wxVector<wxString>& arr)
 void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 {
     wxLogTrace(TRACE_I18N, "%s:", prefix);
-    for ( wxArrayString::const_iterator i = arr.begin(); i != arr.end(); ++i )
-        wxLogTrace(TRACE_I18N, "    %s", *i);
+    for (const auto & i : arr)
+        wxLogTrace(TRACE_I18N, "    %s", i);
 }
 
 #else // !wxUSE_LOG_TRACE
@@ -1767,11 +1767,9 @@ wxString GetFullSearchPath(const wxString& lang)
 
     const wxArrayString prefixes = GetSearchPrefixes();
 
-    for ( wxArrayString::const_iterator i = prefixes.begin();
-          i != prefixes.end();
-          ++i )
+    for (const auto & prefixe : prefixes)
     {
-        const wxString p = GetMsgCatalogSubdirs(*i, lang);
+        const wxString p = GetMsgCatalogSubdirs(prefixe, lang);
 
         if ( !searchPath.empty() )
             searchPath += wxPATH_SEP;
@@ -1830,14 +1828,12 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
         prefixes
     );
 
-    for ( wxArrayString::const_iterator i = prefixes.begin();
-          i != prefixes.end();
-          ++i )
+    for (const auto & prefixe : prefixes)
     {
-        if ( i->empty() )
+        if ( prefixe.empty() )
             continue;
         wxDir dir;
-        if ( !dir.Open(*i) )
+        if ( !dir.Open(prefixe) )
             continue;
 
         wxString lang;
@@ -1845,7 +1841,7 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
               ok;
               ok = dir.GetNext(&lang) )
         {
-            const wxString langdir = *i + wxFILE_SEP_PATH + lang;
+            const wxString langdir = prefixe + wxFILE_SEP_PATH + lang;
             if ( HasMsgCatalogInDir(langdir, domain) )
             {
 #ifdef __WXOSX__

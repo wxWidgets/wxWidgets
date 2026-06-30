@@ -128,8 +128,8 @@ public:
     {
         reserve(src.size());
 
-        for ( size_t n = 0; n < src.size(); n++ )
-            Add(src[n]);
+        for (const auto & n : src)
+            Add(n);
     }
     explicit wxSortedArrayString(wxArrayString::CompareFunction compareFunction)
         : wxSortedArrayStringBase(compareFunction)

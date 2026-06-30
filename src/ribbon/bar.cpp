@@ -731,9 +731,9 @@ wxRibbonBar::~wxRibbonBar()
 {
     SetArtProvider(nullptr);
 
-    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    for (auto & m_image_list : m_image_lists)
     {
-        delete m_image_lists[n];
+        delete m_image_list;
     }
 }
 
@@ -773,10 +773,10 @@ void wxRibbonBar::CommonInit(long style)
 
 wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
 {
-    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    for (auto & m_image_list : m_image_lists)
     {
-        if ( m_image_lists[n]->GetSize() == size )
-            return m_image_lists[n];
+        if ( m_image_list->GetSize() == size )
+            return m_image_list;
     }
 
     wxImageList* const
