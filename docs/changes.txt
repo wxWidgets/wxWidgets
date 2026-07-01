@@ -264,6 +264,9 @@ All:
 - Fix out-of-bounds read in wxFileType::ExpandCommand() (dxbjavid, #26531).
 - Fix buffer overflow in wxVsnprintf() (dxbjavid, #26522).
 - Fix out-of-bounds read in wxRegEx::Replace() (dxbjavid, #26541).
+- Fix out-of-bounds read in wxUString (dxbjavid, #26548).
+- Fix wxDateTime::Format() handling of invalid format (dxbjavid, #26543).
+- Fix buffer overflow in wxGethostbyxxx_r() on some systems (dxbjavid, #26553).
 
 All (GUI):
 
@@ -290,12 +293,15 @@ All (GUI):
 - Fix reading too short extra field in ZIP64 files (dxbjavid, #26507).
 - Fix out-of-bounds table read in wxMBConvUTF7::ToWChar() (dxbjavid, #26517).
 - Fix buffer overflow reading corrupted message catalogs (dxbjavid, #26513).
+- Fix buffer overflow for too big tables in wxHTML (dxbjavid, #26554).
+- Add wxGrid::GetFrozen{Row,Col}LabelWindow() (Jorge Moraleda, #26617).
 
 wxGTK:
 
 - Fix copy/paste when a clipboard manager is running (David Edmundson, #26265).
 - Fix crash with EGL-based wxGLCanvas in wxNotebook (Florian Larysch, #26340).
 - Fix possible wxTextCtrl crash with GSpell attached (#26464).
+- Fix drawing of very large bitmaps (#25656).
 - Fix memory leak in wxDataViewChoiceRenderer.
 - Fix resource leak when using EGL with X11 (Florian Larysch, #26341).
 - Fix showing title bar under Wayland with wxBORDER_NONE (#26357).

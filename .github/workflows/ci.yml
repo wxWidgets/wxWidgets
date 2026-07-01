@@ -199,13 +199,13 @@ jobs:
 
       - name: Checkout
         if: matrix.container != 'ubuntu:18.04'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: 'recursive'
 
       - name: Install CCache
         if: matrix.container != 'ubuntu:18.04'
-        uses: hendrikmuhs/ccache-action@v1.2.12
+        uses: hendrikmuhs/ccache-action@v1.2.23
         with:
           key: ${{ matrix.name }}
 
@@ -335,9 +335,10 @@ jobs:
 
       - name: Setup Go
         if: matrix.container != 'ubuntu:18.04'
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1'
+          cache: false
 
       - name: Testing
         working-directory: tests

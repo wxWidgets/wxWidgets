@@ -27,6 +27,14 @@
 # build/bakefiles/version.bkl to indicate that new APIs have been added and
 # rebake!
 
+# public symbols added in 3.2.11 (please keep in alphabetical order):
+@WX_VERSION_TAG@.11 {
+    extern "C++" {
+        "wxGrid::GetFrozenRowLabelWindow() const";
+        "wxGrid::GetFrozenColLabelWindow() const";
+    };
+};
+
 # public symbols added in 3.2.10 (please keep in alphabetical order):
 @WX_VERSION_TAG@.10 {
     extern "C++" {
