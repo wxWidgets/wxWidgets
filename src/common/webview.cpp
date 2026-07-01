@@ -496,7 +496,11 @@ bool wxWebViewConfiguration::DisableGPUAcceleration()
 #if defined(__WXGTK__)
     return wxSetEnv("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
 #elif defined(__WXMSW__)
-    return wxSetEnv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-gpu");
+    wxString existingArgs;
+    if ( wxGetEnv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", &existingArgs) && !existingArgs.empty() )
+        return wxSetEnv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", existingArgs + " --disable-gpu");
+    else
+        return wxSetEnv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", "--disable-gpu");
 #else
     return false;
 #endif
