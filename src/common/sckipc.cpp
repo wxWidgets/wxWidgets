@@ -214,7 +214,7 @@ public:
 
     // The handoff objects between a worker thread blocked in SendAndGetReply()
     // and the main thread's OnSocketInput(). Only one reply is ever pending at a
-    // time, which is guaranteed by m_cs_awaiting_reply.
+    // time, which is serialized by m_cs_awaiting_reply.
     wxMutex m_replyMutex;
     wxCondition m_replyCond{m_replyMutex};
     struct PendingReply
@@ -1057,6 +1057,14 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
         return nullptr;
 
     wxSocketClient * const client = new wxSocketClient(wxSOCKET_WAITALL);
+
+    // Bound the connection attempt (the TCP connect and the topic handshake
+    // that follows) by the IPC timeout instead of leaving it at the socket's
+    // long default: without this, connecting to a listener that is not yet
+    // ready to complete the handshake blocks for the default timeout (ten
+    // minutes) rather than failing promptly so the caller can retry. The
+    // per-connection socket timeout is set to the same value once connected.
+    client->SetTimeout(wxIPCTimeout);
 
     bool ok = client->Connect(*addr);
     delete addr;
