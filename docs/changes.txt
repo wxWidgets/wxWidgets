@@ -295,6 +295,7 @@ All (GUI):
 - Fix buffer overflow reading corrupted message catalogs (dxbjavid, #26513).
 - Fix buffer overflow for too big tables in wxHTML (dxbjavid, #26554).
 - Add wxGrid::GetFrozen{Row,Col}LabelWindow() (Jorge Moraleda, #26617).
+- Fix wxPG macros with wxNO_IMPLICIT_WXSTRING_ENCODING (Lunar-YZ, #26651).
 
 wxGTK:
 
