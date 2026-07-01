@@ -524,7 +524,7 @@ expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
 #define WX_PG_IMPLEMENT_VARIANT_DATA_GETTER(classname, expdecl) \
 expdecl classname& operator << ( classname &value, const wxVariant &variant )\
 {\
-    wxASSERT( variant.GetType() == #classname );\
+    wxASSERT( variant.GetType() == wxS(#classname) );\
     \
     classname##VariantData *data = (classname##VariantData*) variant.GetData();\
     value = data->GetValue();\
