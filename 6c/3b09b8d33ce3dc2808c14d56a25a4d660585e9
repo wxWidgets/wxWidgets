@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxWebViewConfiguration::DisableGPUAcceleration() (Blake-Madden, #26626).
