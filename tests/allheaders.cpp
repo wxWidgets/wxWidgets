@@ -428,3 +428,7 @@ TEST_CASE("wxNO_IMPLICIT_WXSTRING_ENCODING", "[string]")
     wxPLURAL(L"sing", L"plur", 3);
     wxGETTEXT_IN_CONTEXT_PLURAL(L"context", L"sing", L"plur", 3);
 }
+
+// Check that wxPropertyGrid macros compile without warnings too.
+WX_PG_DECLARE_VARIANT_DATA(wxArrayDouble)
+WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxArrayDouble)
