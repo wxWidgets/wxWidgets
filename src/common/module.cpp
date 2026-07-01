@@ -89,10 +89,8 @@ bool wxModule::DoInitializeModule(wxModule *module,
     const wxArrayClassInfo& dependencies = module->m_dependencies;
 
     // satisfy module dependencies by loading them before the current module
-    for ( unsigned int i = 0; i < dependencies.size(); ++i )
+    for (auto cinfo : dependencies)
     {
-        wxClassInfo * cinfo = dependencies[i];
-
         // Check if the module is already initialized
         wxModuleList::const_iterator it;
         for ( it = initializedModules.begin();
@@ -157,11 +155,9 @@ void wxModule::AddModuleIfNecessary(const wxClassInfo *classInfo)
                   wxS("Class info must be for wxModule-derived class") );
 
     const wxString className(classInfo->GetClassName());
-    for ( wxModuleList::const_iterator it = ms_modules.begin();
-          it != ms_modules.end();
-          ++it )
+    for (auto ms_module : ms_modules)
     {
-        if ( (*it)->GetClassInfo()->GetClassName() == className )
+        if ( ms_module->GetClassInfo()->GetClassName() == className )
         {
             // Already initialized or at least registered and will be
             // initialized later.
@@ -192,12 +188,8 @@ bool wxModule::InitializeModules()
 {
     wxModuleList initializedModules;
 
-    for ( wxModuleList::const_iterator it = ms_modules.begin();
-          it != ms_modules.end();
-          ++it )
+    for (auto module : ms_modules)
     {
-        wxModule *module = *it;
-
         // the module could have been already initialized as dependency of
         // another one
         if ( module->m_state == State_Registered )
@@ -250,11 +242,9 @@ void wxModule::DoCleanUpModules(const wxModuleList& modules)
     }
 
     // clear all modules, even the non-initialized ones
-    for ( wxModuleList::const_iterator it = ms_modules.begin();
-          it != ms_modules.end();
-          ++it )
+    for (auto ms_module : ms_modules)
     {
-        delete *it;
+        delete ms_module;
     }
 
     ms_modules.clear();
@@ -263,9 +253,9 @@ void wxModule::DoCleanUpModules(const wxModuleList& modules)
 bool wxModule::ResolveNamedDependencies()
 {
     // first resolve required dependencies
-    for ( size_t i = 0; i < m_namedDependencies.size(); ++i )
+    for (const auto & m_namedDependencie : m_namedDependencies)
     {
-        wxClassInfo *info = wxClassInfo::FindClass(m_namedDependencies[i]);
+        wxClassInfo *info = wxClassInfo::FindClass(m_namedDependencie);
 
         if ( !info )
         {

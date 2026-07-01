@@ -638,11 +638,11 @@ typedef wxVector<SizePrefWithCount> SizePrefs;
 
 void RecordSizePref(SizePrefs& prefs, const wxSize& size)
 {
-    for ( size_t n = 0; n < prefs.size(); ++n )
+    for (auto & pref : prefs)
     {
-        if ( prefs[n].size == size )
+        if ( pref.size == size )
         {
-            prefs[n].count++;
+            pref.count++;
             return;
         }
     }
@@ -672,18 +672,18 @@ wxBitmapBundle::GetConsensusSizeFor(double scale,
     // different for different bitmap bundles, so record all their preferences
     // first.
     SizePrefs prefs;
-    for ( size_t n = 0; n < bundles.size(); ++n )
+    for (const auto & bundle : bundles)
     {
-        RecordSizePref(prefs, bundles[n].GetPreferredBitmapSizeAtScale(scale));
+        RecordSizePref(prefs, bundle.GetPreferredBitmapSizeAtScale(scale));
     }
 
     // Now find the size preferred by most tools.
     int countMax = 0;
     wxSize sizePreferred;
-    for ( size_t n = 0; n < prefs.size(); ++n )
+    for (auto & pref : prefs)
     {
-        const int countThis = prefs[n].count;
-        const wxSize sizeThis = prefs[n].size;
+        const int countThis = pref.count;
+        const wxSize sizeThis = pref.size;
 
         if ( countThis > countMax )
         {
@@ -717,9 +717,9 @@ wxBitmapBundle::CreateImageList(const wxWindow* win,
 
     wxImageList* const iml = new wxImageList(size.x, size.y);
 
-    for ( size_t n = 0; n < bundles.size(); ++n )
+    for (const auto & bundle : bundles)
     {
-        iml->Add(bundles[n].GetBitmap(size));
+        iml->Add(bundle.GetBitmap(size));
     }
 
     return iml;

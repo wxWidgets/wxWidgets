@@ -253,8 +253,8 @@ wxFileDialogCustomize::~wxFileDialogCustomize()
 {
     // For consistency with the rest of wx API, we own all the custom controls
     // pointers and delete them when we're deleted.
-    for ( size_t n = 0; n < m_controls.size(); ++n )
-        delete m_controls[n];
+    for (auto & m_control : m_controls)
+        delete m_control;
 
     // Do not delete m_impl, the derived classes use this object itself as
     // implementation, which allows us to avoid allocating it on the heap in

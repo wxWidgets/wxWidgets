@@ -421,12 +421,11 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
         // zero unused colours
         memset(pal, 0, sizeof(pal));
 
-        for (wxImageHistogram::iterator entry = histogram.begin();
-             entry != histogram.end(); ++entry )
+        for (auto & entry : histogram)
         {
-            key = entry->first;
+            key = entry.first;
             unsigned long index;
-            index = entry->second.index;
+            index = entry.second.index;
             pal[3 * index]     = (unsigned char)(key >> 16);
             pal[3 * index + 1] = (unsigned char)(key >> 8);
             pal[3 * index + 2] = (unsigned char)(key);

@@ -317,11 +317,9 @@ locale_t TryCreateMatchingLocale(wxLocaleIdent& locId)
         const wxString lang = locId.GetLanguage();
 
         const wxLanguageInfos& infos = wxGetLanguageInfos();
-        for ( wxLanguageInfos::const_iterator it = infos.begin();
-              it != infos.end();
-              ++it )
+        for (const auto & info : infos)
         {
-            const wxString& fullname = it->GetCanonicalWithRegion();
+            const wxString& fullname = info.GetCanonicalWithRegion();
             if ( fullname.BeforeFirst('_') == lang )
             {
                 // We never have encoding in our canonical names, but we

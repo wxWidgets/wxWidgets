@@ -203,9 +203,8 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
 
     #undef BITMAP_DATA
 
-    for ( unsigned n = 0; n < WXSIZEOF(s_allBitmaps); n++ )
+    for (const auto & entry : s_allBitmaps)
     {
-        const BitmapEntry& entry = s_allBitmaps[n];
         if ( entry.id != id )
             continue;
 
