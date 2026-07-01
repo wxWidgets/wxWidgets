@@ -430,6 +430,7 @@ TEST_CASE("wxNO_IMPLICIT_WXSTRING_ENCODING", "[string]")
 }
 
 // Check that wxPropertyGrid macros compile without warnings too.
+#if wxUSE_PROPGRID
 
 // Except that it proposes const attribute to the function declared by the
 // macro which would be a wrong thing to do it general, so suppress it.
@@ -439,3 +440,5 @@ TEST_CASE("wxNO_IMPLICIT_WXSTRING_ENCODING", "[string]")
 
 WX_PG_DECLARE_VARIANT_DATA(wxArrayDouble)
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxArrayDouble)
+
+#endif // wxUSE_PROPGRID
