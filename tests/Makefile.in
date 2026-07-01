@@ -102,6 +102,7 @@ TEST_OBJECTS =  \
 	test_pathlist.o \
 	test_typeinfotest.o \
 	test_ipc.o \
+	test_ipc_test_server.o \
 	test_socket.o \
 	test_webrequest.o \
 	test_regextest.o \
@@ -162,7 +163,7 @@ TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../samples $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CATCH2_CFLAGS) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-DTEST_HAS_IPC_SERVER $(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(__test_gui___win32rc) \
 	test_gui_asserthelper.o \
@@ -265,6 +266,8 @@ TEST_GUI_OBJECTS =  \
 	test_gui_settings.o \
 	test_gui_textwrap.o \
 	test_gui_socket.o \
+	test_gui_ipc.o \
+	test_gui_ipc_test_server.o \
 	test_gui_tlw.o \
 	test_gui_dataview.o \
 	test_gui_rowheightcachetest.o \
@@ -291,6 +294,7 @@ TEST_ALLHEADERS_OBJECTS =  \
 	test_allheaders_testableframe.o
 TEST_ALLHEADERS_ODEP = \
 	$(_____pch_testprec_test_allheaders_testprec_h_gch___depname)
+
 
 ### Conditionally set variables: ###
 
@@ -562,7 +566,7 @@ test$(EXEEXT): $(TEST_OBJECTS) $(__test___win32rc)
 @COND_USE_PCH_1@./.pch/testprec_test_allheaders/testprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test_allheaders/testprec.h.gch testprec.h $(CXX) $(TEST_ALLHEADERS_CXXFLAGS)
 
-data: 
+data:
 	@mkdir -p .
 	@for f in testdata.conf horse.svg; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
@@ -650,7 +654,7 @@ test_test_rc.o: $(srcdir)/../tests/test.rc $(TEST_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_9) $(__DEBUG_DEFINE_p_9)  $(__EXCEPTIONS_DEFINE_p_9) $(__RTTI_DEFINE_p_9) $(__THREAD_DEFINE_p_9) --include-dir $(srcdir) $(__DLLFLAG_p_9) --define wxUSE_GUI=0 --include-dir $(top_srcdir)/samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 test_test.o: $(srcdir)/test.cpp $(TEST_ODEP)
-	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/test.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) -DTEST_HAS_IPC_SERVER $(srcdir)/test.cpp
 
 test_anytest.o: $(srcdir)/any/anytest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/any/anytest.cpp
@@ -780,6 +784,9 @@ test_typeinfotest.o: $(srcdir)/misc/typeinfotest.cpp $(TEST_ODEP)
 
 test_ipc.o: $(srcdir)/net/ipc.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/net/ipc.cpp
+
+test_ipc_test_server.o: $(srcdir)/net/ipc_test_server.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/net/ipc_test_server.cpp
 
 test_socket.o: $(srcdir)/net/socket.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/net/socket.cpp
@@ -1224,6 +1231,12 @@ test_gui_textwrap.o: $(srcdir)/misc/textwrap.cpp $(TEST_GUI_ODEP)
 
 test_gui_socket.o: $(srcdir)/net/socket.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/net/socket.cpp
+
+test_gui_ipc.o: $(srcdir)/net/ipc.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/net/ipc.cpp
+
+test_gui_ipc_test_server.o: $(srcdir)/net/ipc_test_server.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/net/ipc_test_server.cpp
 
 test_gui_tlw.o: $(srcdir)/persistence/tlw.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/persistence/tlw.cpp

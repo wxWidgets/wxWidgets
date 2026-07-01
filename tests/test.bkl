@@ -34,6 +34,7 @@
 
     <exe id="test" template="wx_sample_console,wx_test"
                    template_append="wx_append_base">
+        <cxxflags>-DTEST_HAS_IPC_SERVER</cxxflags>
         <sources>
             test.cpp
             any/anytest.cpp
@@ -79,6 +80,7 @@
             misc/pathlist.cpp
             misc/typeinfotest.cpp
             net/ipc.cpp
+            net/ipc_test_server.cpp
             net/socket.cpp
             net/webrequest.cpp
             regex/regextest.cpp
@@ -164,6 +166,9 @@
 
         <!-- link against GUI libraries, but be a console app: -->
         <app-type>console</app-type>
+
+        <!-- needed by the duplicated net/ipc.cpp test below -->
+        <cxxflags>-DTEST_HAS_IPC_SERVER</cxxflags>
 
         <sources>
             asserthelper.cpp
@@ -276,11 +281,13 @@
             misc/settings.cpp
             misc/textwrap.cpp
             <!--
-                This one is intentionally duplicated here (it is also part of
-                non-GUI test) as sockets behave differently in console and GUI
-                applications.
+                These are intentionally duplicated here (they are also part of
+                the non-GUI test) as sockets and IPC behave differently in
+                console and GUI applications.
              -->
             net/socket.cpp
+            net/ipc.cpp
+            net/ipc_test_server.cpp
             persistence/tlw.cpp
             persistence/dataview.cpp
             rowheightcache/rowheightcachetest.cpp
