@@ -75,6 +75,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_pathlist.obj \
 	$(OBJS)\test_typeinfotest.obj \
 	$(OBJS)\test_ipc.obj \
+	$(OBJS)\test_ipc_test_server.obj \
 	$(OBJS)\test_socket.obj \
 	$(OBJS)\test_webrequest.obj \
 	$(OBJS)\test_regextest.obj \
@@ -149,7 +150,8 @@ TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_59)$(__DEBUGRUNTIME) /DWIN32 \
 	/I$(SETUPHDIR) /I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
 	$(__DLLFLAG_p) /I.\..\samples /DNOPCH /I.\..\3rdparty\catch\single_include \
 	/D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"testprec.h" \
-	/Fp"$(OBJS)\testprec_test_gui.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/Fp"$(OBJS)\testprec_test_gui.pch" -DTEST_HAS_IPC_SERVER $(CPPFLAGS) \
+	$(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_dummy.obj \
 	$(OBJS)\test_gui_asserthelper.obj \
@@ -251,6 +253,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_settings.obj \
 	$(OBJS)\test_gui_textwrap.obj \
 	$(OBJS)\test_gui_socket.obj \
+	$(OBJS)\test_gui_ipc.obj \
+	$(OBJS)\test_gui_ipc_test_server.obj \
 	$(OBJS)\test_gui_tlw.obj \
 	$(OBJS)\test_gui_dataview.obj \
 	$(OBJS)\test_gui_rowheightcachetest.obj \
@@ -893,7 +897,7 @@ $(OBJS)\test_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
 $(OBJS)\test_test.obj: .\test.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\test.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) /DTEST_HAS_IPC_SERVER .\test.cpp
 
 $(OBJS)\test_anytest.obj: .\any\anytest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\any\anytest.cpp
@@ -1023,6 +1027,9 @@ $(OBJS)\test_typeinfotest.obj: .\misc\typeinfotest.cpp
 
 $(OBJS)\test_ipc.obj: .\net\ipc.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\net\ipc.cpp
+
+$(OBJS)\test_ipc_test_server.obj: .\net\ipc_test_server.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\net\ipc_test_server.cpp
 
 $(OBJS)\test_socket.obj: .\net\socket.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\net\socket.cpp
@@ -1470,6 +1477,12 @@ $(OBJS)\test_gui_textwrap.obj: .\misc\textwrap.cpp
 
 $(OBJS)\test_gui_socket.obj: .\net\socket.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\net\socket.cpp
+
+$(OBJS)\test_gui_ipc.obj: .\net\ipc.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\net\ipc.cpp
+
+$(OBJS)\test_gui_ipc_test_server.obj: .\net\ipc_test_server.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\net\ipc_test_server.cpp
 
 $(OBJS)\test_gui_tlw.obj: .\persistence\tlw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\persistence\tlw.cpp

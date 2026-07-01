@@ -55,6 +55,14 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
 #include "wx/socket.h"
 #include "wx/evtloop.h"
 
+// __WXQT__ guard: see the longer note in tests/net/ipc.cpp. The IPC test (and
+// its server) is excluded from wxQt (cross-thread CallAfter() not processed by
+// the wxQt event loop, fixed separately on branch
+// jpmattia/wxQT-CallAfter-wxWakeUpIdle).
+#if wxUSE_THREADS && defined(TEST_HAS_IPC_SERVER) && !defined(__WXQT__)
+    #include "net/ipc_test_server.h"
+#endif
+
 using namespace std;
 
 // ----------------------------------------------------------------------------
@@ -340,6 +348,22 @@ public:
 
     virtual int OnRun() override
     {
+#if wxUSE_THREADS && defined(TEST_HAS_IPC_SERVER) && !defined(__WXQT__)
+        // The IPC test re-executes this same binary as its server (with
+        // WX_IPC_TEST_SERVER set), so test_gui must run the server here too,
+        // exactly as the console test does in the non-GUI OnRun() below. See the
+        // note there and tests/net/ipc.cpp for the wxQt exclusion.
+        if ( wxGetEnv("WX_IPC_TEST_SERVER", nullptr) )
+        {
+            // Suppress the idle-driven test runner: RunIPCServerUntilStopped()
+            // spins its own event loop, and our OnIdle() would otherwise fire
+            // there and run the whole test suite inside the server process.
+            m_runTests = false;
+            RunIPCServerUntilStopped();
+            return 0;
+        }
+#endif // wxUSE_THREADS && TEST_HAS_IPC_SERVER && !__WXQT__
+
         if ( !IsGUIEnabled() )
             return 0;
 
@@ -351,6 +375,18 @@ public:
 #else // !wxUSE_GUI
     virtual int OnRun() override
     {
+#if wxUSE_THREADS && defined(TEST_HAS_IPC_SERVER) && !defined(__WXQT__)
+        // The IPC test starts its server by re-executing this same binary with
+        // WX_IPC_TEST_SERVER set and then running a bare event loop here. The IPC
+        // sources and TEST_HAS_IPC_SERVER are built into both the console "test"
+        // and "test_gui" programs, so the GUI OnRun() above has the same hook.
+        if ( wxGetEnv("WX_IPC_TEST_SERVER", nullptr) )
+        {
+            RunIPCServerUntilStopped();
+            return 0;
+        }
+#endif // wxUSE_THREADS && TEST_HAS_IPC_SERVER && !__WXQT__
+
         return RunTests();
     }
 #endif // wxUSE_GUI/!wxUSE_GUI

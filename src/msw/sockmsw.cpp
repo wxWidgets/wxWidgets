@@ -182,22 +182,6 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
         switch ( WSAGETSELECTEVENT(lParam) )
         {
             case FD_READ:
-                // We may get a FD_READ notification even when there is no data
-                // to read on the socket, in particular this happens on socket
-                // creation when we seem to always get FD_CONNECT, FD_WRITE and
-                // FD_READ notifications all at once (but it doesn't happen
-                // only then). Ignore such dummy notifications.
-                {
-                    fd_set fds;
-                    wxTimeVal_t tv = { 0, 0 };
-
-                    wxFD_ZERO(&fds);
-                    wxFD_SET(socket->m_fd, &fds);
-
-                    if ( select(socket->m_fd + 1, &fds, nullptr, nullptr, &tv) != 1 )
-                        return 0;
-                }
-
                 event = wxSOCKET_INPUT;
                 break;
 
@@ -294,6 +278,13 @@ wxSocketError wxSocketImplMSW::GetLastError() const
 
         case WSAENOTSOCK:
             return wxSOCKET_INVSOCK;
+
+        // Trying to read or peek on the socket when there
+        // is no data waiting will result in ERROR_ACCESS_DENIED
+        // and/or WSAECONNABORTED. We return wxSOCKET_WOULDBLOCK
+        // so the caller can keep trying.
+        case ERROR_ACCESS_DENIED:
+        case WSAECONNABORTED:
 
         case WSAEWOULDBLOCK:
             return wxSOCKET_WOULDBLOCK;

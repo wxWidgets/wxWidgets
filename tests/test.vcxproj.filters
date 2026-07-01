@@ -124,6 +124,9 @@
     <ClCompile Include="net\ipc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="net\ipc_test_server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="streams\largefile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

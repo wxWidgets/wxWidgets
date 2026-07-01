@@ -972,6 +972,7 @@
     <ClCompile Include="misc\pathlist.cpp" />
     <ClCompile Include="misc\typeinfotest.cpp" />
     <ClCompile Include="net\ipc.cpp" />
+    <ClCompile Include="net\ipc_test_server.cpp" />
     <ClCompile Include="net\socket.cpp" />
     <ClCompile Include="net\webrequest.cpp" />
     <ClCompile Include="regex\regextest.cpp" />
@@ -1002,7 +1003,9 @@
     <ClCompile Include="strings\vararg.cpp" />
     <ClCompile Include="strings\vsnprintf.cpp" />
     <ClCompile Include="strings\hexconv.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="test.cpp">
+      <PreprocessorDefinitions>TEST_HAS_IPC_SERVER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="textfile\textfiletest.cpp" />
     <ClCompile Include="thread\atomic.cpp" />
     <ClCompile Include="thread\misc.cpp" />
