@@ -142,7 +142,9 @@ public:
     virtual void ShowPosition(long pos) override;
     virtual void WriteText(const wxString& str) override ;
     virtual void SetFont(const wxFont & font) override;
-
+    virtual int GetPhysicalLineCount() const;
+    virtual int GetLogicalLineCount() const;
+ 
     virtual bool GetStyle(long position, wxTextAttr& style) override;
     virtual void SetStyle(long start, long end, const wxTextAttr& style) override;
 
