@@ -659,6 +659,13 @@ TEST_CASE_METHOD(LogTestCase, "wxFileConfig::Error", "[fileconfig][error]")
 
     // Check that it's the second quote which is unexpected, not the first one.
     checkWarning(R"(foo="x"y)", R"(unexpected " at position 3)");
+
+    // Check that a duplicate group is detected as an error.
+    checkWarning(R"([foo]
+bar=1
+[foo]
+baz=2
+)", "duplicate group 'foo'");
 }
 
 // This test is disabled by default as it requires the environment variable
