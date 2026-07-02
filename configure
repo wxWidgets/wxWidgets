@@ -23083,13 +23083,13 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
     if test "x$wxUSE_MACOSX_SDK" != "x"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking SDK deployment version" >&5
 $as_echo_n "checking SDK deployment version... " >&6; }
+        defaultProperties=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties`
 
-        MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" buildSettings | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
+                                MACOSX_SDK_PLIST_VERSION_MIN=`echo "$defaultProperties" | sed -n -e '1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d; s/^ *//; s/"//g; s/,//p; q'`
 
-        # If that failed, try again with the new key
-        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
+                        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
 
-            MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
+                MACOSX_SDK_PLIST_VERSION_MIN=`echo "$defaultProperties" | sed -n -e 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/p'`
 
         fi
 
