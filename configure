@@ -23085,11 +23085,11 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
 $as_echo_n "checking SDK deployment version... " >&6; }
         defaultProperties=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties`
 
-                                MACOSX_SDK_PLIST_VERSION_MIN=`echo $defaultProperties | sed -n -e '1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d; s/^ *//; s/"//g; s/,//p; q'`
+                                MACOSX_SDK_PLIST_VERSION_MIN=`echo "$defaultProperties" | sed -n -e '1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d; s/^ *//; s/"//g; s/,//p; q'`
 
                         if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
 
-                MACOSX_SDK_PLIST_VERSION_MIN=`echo $defaultProperties | sed -n -e 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/p'`
+                MACOSX_SDK_PLIST_VERSION_MIN=`echo "$defaultProperties" | sed -n -e 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/p'`
 
         fi
 

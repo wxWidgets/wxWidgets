@@ -1319,14 +1319,14 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
         dnl Take the first (earliest, because they are sorted) supported
         dnl deployment target from the SDKSettings.plist file and remove
         dnl leading spaces, quotes and trailing comma from it.
-        MACOSX_SDK_PLIST_VERSION_MIN=`echo $defaultProperties | sed -n -e '1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d; s/^ *//; s/"//g; s/,//p; q'`
+        MACOSX_SDK_PLIST_VERSION_MIN=`echo "$defaultProperties" | sed -n -e '1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d; s/^ *//; s/"//g; s/,//p; q'`
 
         dnl If DEPLOYMENT_TARGET_SUGGESTED_VALUES doesn't exist, as it was in
         dnl 10.11..10.13 SDKs, try MACOSX_DEPLOYMENT_TARGET instead.
         if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
             dnl We need to quote the next line where we don't need macros and do need [] in the regex
             [
-                MACOSX_SDK_PLIST_VERSION_MIN=`echo $defaultProperties | sed -n -e 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/p'`
+                MACOSX_SDK_PLIST_VERSION_MIN=`echo "$defaultProperties" | sed -n -e 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/p'`
             ]
         fi
 
