@@ -203,12 +203,12 @@ public:
     {
         ProcessFrames(0);
 
-        for (const auto & m_frame : m_frames)
+        for (const auto& frame : m_frames)
         {
             gtk_assert_dialog_append_stack_frame(m_dlg,
-                                                 m_frame.name.utf8_str(),
-                                                 m_frame.file.utf8_str(),
-                                                 m_frame.line);
+                                                 frame.name.utf8_str(),
+                                                 frame.file.utf8_str(),
+                                                 frame.line);
         }
 
         m_frames.clear();

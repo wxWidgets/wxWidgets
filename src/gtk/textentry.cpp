@@ -456,7 +456,7 @@ public:
     {
         wxGtkObject<GtkListStore> store(gtk_list_store_new (1, G_TYPE_STRING));
 
-        for (const auto & string : strings)
+        for (const auto& string : strings)
         {
             AppendToStore(store, string);
         }

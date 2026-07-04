@@ -317,7 +317,7 @@ locale_t TryCreateMatchingLocale(wxLocaleIdent& locId)
         const wxString lang = locId.GetLanguage();
 
         const wxLanguageInfos& infos = wxGetLanguageInfos();
-        for (const auto & info : infos)
+        for (const auto& info : infos)
         {
             const wxString& fullname = info.GetCanonicalWithRegion();
             if ( fullname.BeforeFirst('_') == lang )

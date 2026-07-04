@@ -1987,9 +1987,9 @@ void wxComboCtrlBase::CreatePopup()
         wxEVT_MAGNIFY,
     };
 
-    for (auto allMouseEventType : allMouseEventTypes)
+    for ( size_t n = 0; n < WXSIZEOF(allMouseEventTypes); ++n )
     {
-        m_popup->Bind(allMouseEventType,
+        m_popup->Bind(allMouseEventTypes[n],
                       &wxComboCtrlBase::OnPopupMouseEvent, this);
     }
 

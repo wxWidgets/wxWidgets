@@ -710,10 +710,10 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     if ( !m_grid->UsesOverlaySelection() && !m_grid->GetBatchCount() )
     {
         wxGridBlockDiffResult refreshBlocks = block.SymDifference(newBlock);
-        for (auto refreshBlock : refreshBlocks.m_parts)
+        for (const auto& part : refreshBlocks.m_parts)
         {
-            m_grid->RefreshBlock(refreshBlock.GetTopLeft(),
-                                 refreshBlock.GetBottomRight());
+            m_grid->RefreshBlock(part.GetTopLeft(),
+                                 part.GetBottomRight());
         }
     }
 

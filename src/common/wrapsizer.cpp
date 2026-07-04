@@ -91,8 +91,12 @@ void wxWrapSizer::ClearRows()
     // sizers in RepositionChildren()), so we need to detach them from the row
     // sizer to avoid double deletion
     wxSizerItemList& rows = m_rows.GetChildren();
-    for (auto item : rows)
+    for ( wxSizerItemList::iterator i = rows.begin(),
+                                  end = rows.end();
+          i != end;
+          ++i )
     {
+        wxSizerItem * const item = *i;
         wxSizer * const row = item->GetSizer();
         if ( !row )
         {
@@ -504,8 +508,11 @@ void wxWrapSizer::RepositionChildren(const wxSize& WXUNUSED(minSize))
                 *itemSpace = nullptr;  // spacer which we delayed adding
 
     // Now put our child items into child sizers instead
-    for (auto item : m_children)
+    for ( wxSizerItemList::iterator i = m_children.begin();
+          i != m_children.end();
+          ++i )
     {
+        wxSizerItem * const item = *i;
         if ( !item->IsShown() )
             continue;
 

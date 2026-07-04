@@ -261,12 +261,12 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
                                          WXK_F1, 1, 24);
             if ( !keyCode )
             {
-                for (const auto & kn : wxKeyNames)
+                for (const auto& key : wxKeyNames)
                 {
-                    if ( CompareAccelString(current, kn.name)
-                         || ( kn.display_name && CompareAccelString(current, kn.display_name) ) )
+                    if ( CompareAccelString(current, key.name)
+                         || ( key.display_name && CompareAccelString(current, key.display_name) ) )
                     {
-                        keyCode = kn.code;
+                        keyCode = key.code;
                         break;
                     }
                 }

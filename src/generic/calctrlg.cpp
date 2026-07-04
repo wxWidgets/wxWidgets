@@ -144,9 +144,9 @@ void wxGenericCalendarCtrl::Init()
         m_weekdays[wd] = wxDateTime::GetWeekDayName(wd, wxDateTime::NameForm().Abbr().Standalone());
     }
 
-    for (auto & m_attr : m_attrs)
+    for (auto*& attr : m_attrs)
     {
-        m_attr = nullptr;
+        attr = nullptr;
     }
 
     InitColours();
@@ -220,9 +220,10 @@ bool wxGenericCalendarCtrl::Create(wxWindow *parent,
 
 wxGenericCalendarCtrl::~wxGenericCalendarCtrl()
 {
-    for (auto & m_attr : m_attrs)
+    for (auto*& attr : m_attrs)
     {
-        delete m_attr;
+        delete attr;
+        attr = nullptr;
     }
 
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
@@ -1724,11 +1725,11 @@ void wxGenericCalendarCtrl::SetHoliday(size_t day)
 
 void wxGenericCalendarCtrl::ResetHolidayAttrs()
 {
-    for (auto & m_attr : m_attrs)
+    for (auto*& attr : m_attrs)
     {
-        if ( m_attr )
+        if ( attr )
         {
-            m_attr->SetHoliday(false);
+            attr->SetHoliday(false);
         }
     }
 }

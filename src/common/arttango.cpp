@@ -203,7 +203,7 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
 
     #undef BITMAP_DATA
 
-    for (const auto & entry : s_allBitmaps)
+    for (const auto& entry : s_allBitmaps)
     {
         if ( entry.id != id )
             continue;

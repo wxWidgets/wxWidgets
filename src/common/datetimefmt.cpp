@@ -1891,9 +1891,9 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     };
 
     const size_t lenRest = pEnd - p;
-    for (auto & literalDate : literalDates)
+    for (const auto& ld : literalDates)
     {
-        const wxString dateStr = wxGetTranslation(literalDate.str);
+        const wxString dateStr = wxGetTranslation(ld.str);
         size_t len = dateStr.length();
 
         if ( len > lenRest )
@@ -1906,7 +1906,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
 
             p = pEndStr;
 
-            int dayDiffFromToday = literalDate.dayDiffFromToday;
+            int dayDiffFromToday = ld.dayDiffFromToday;
             *this = Today();
             if ( dayDiffFromToday )
             {
@@ -2263,12 +2263,12 @@ wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
         // anything else?
     };
 
-    for (auto stdTime : stdTimes)
+    for (const auto& st : stdTimes)
     {
-        const wxString timeString = wxGetTranslation(stdTime.name);
+        const wxString timeString = wxGetTranslation(st.name);
         if ( timeString.CmpNoCase(wxString(time, timeString.length())) == 0 )
         {
-            Set(stdTime.hour, 0, 0);
+            Set(st.hour, 0, 0);
 
             if ( end )
                 *end = time.begin() + timeString.length();
@@ -2293,9 +2293,9 @@ wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
         // TODO: parse timezones
     };
 
-    for (auto timeFormat : timeFormats)
+    for (const auto* fmt : timeFormats)
     {
-        if ( ParseFormat(time, timeFormat, end) )
+        if ( ParseFormat(time, fmt, end) )
             return true;
     }
 

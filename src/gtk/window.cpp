@@ -1507,9 +1507,9 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
         return false;
 
     bool processed = false;
-    for(auto pstr : data)
+    for (const wxUniChar ch : data)
     {
-        event.m_uniChar = pstr;
+        event.m_uniChar = ch;
 
         // Set key code to the Unicode value for ASCII characters.
         if ( event.m_uniChar < WXK_DELETE )

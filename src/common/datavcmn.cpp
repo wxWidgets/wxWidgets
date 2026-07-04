@@ -1699,9 +1699,9 @@ wxDataViewCtrlBase::CreateDataObject(const wxVector<wxDataFormat>& formats)
     }
 
     wxDataObjectComposite *dataObject(new wxDataObjectComposite);
-    for (auto format : formats)
+    for (const wxDataFormat& fmt : formats)
     {
-        switch (format.GetType())
+        switch (fmt.GetType())
         {
             case wxDF_TEXT:
             case wxDF_OEMTEXT:
@@ -1735,7 +1735,7 @@ wxDataViewCtrlBase::CreateDataObject(const wxVector<wxDataFormat>& formats)
             case wxDF_LOCALE:
             case wxDF_PRIVATE:
             default: // any other custom format
-                dataObject->Add(new wxCustomDataObject(format));
+                dataObject->Add(new wxCustomDataObject(fmt));
                 break;
 
             case wxDF_INVALID:

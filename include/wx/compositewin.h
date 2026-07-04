@@ -152,7 +152,7 @@ private:
     {
         // Simply call the setters for all parts of this composite window.
         const wxWindowList parts = GetCompositeWindowParts();
-        for (auto child : parts)
+        for (const auto& child : parts)
         {
             // Allow null elements in the list, this makes the code of derived
             // composite controls which may have optionally shown children

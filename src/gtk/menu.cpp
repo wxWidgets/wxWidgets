@@ -120,7 +120,7 @@ static void UpdateSubMenuItemLabels(wxMenuItem* itemMenu)
     wxCHECK_RET( menu, "should only be called for sub menus" );
 
     const wxMenuItemList& items = menu->GetMenuItems();
-    for (auto item : items)
+    for (auto* item : items)
     {
         if ( !item->IsSeparator() )
         {

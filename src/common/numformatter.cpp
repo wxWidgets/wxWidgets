@@ -419,12 +419,12 @@ bool wxNumberFormatter::FromString(wxString s, wxULongLong_t *val)
     // the same thing, but here we really want to accept the "true" unsigned
     // numbers only, so check for leading minus, possibly preceded by some
     // whitespace.
-    for (auto it : s)
+    for (const wxUniChar& ch : s)
     {
-        if ( it == '-' )
+        if ( ch == '-' )
             return false;
 
-        if ( it != ' ' && it != '\t' )
+        if ( ch != ' ' && ch != '\t' )
             break;
     }
 

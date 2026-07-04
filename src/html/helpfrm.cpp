@@ -192,7 +192,7 @@ void wxHtmlHelpFrame::AddGrabIfNeeded()
 
     // Check if there are any modal windows present,
     // in which case we need to add a grab.
-    for (auto win : wxTopLevelWindows)
+    for (const auto* win : wxTopLevelWindows)
     {
         wxDialog *dialog = wxDynamicCast(win, wxDialog);
 

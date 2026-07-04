@@ -80,12 +80,12 @@ public:
     // close the pipe descriptors
     void Close()
     {
-        for (int & m_fd : m_fds)
+        for (int& fd : m_fds)
         {
-            if ( m_fd != INVALID_FD )
+            if ( fd != INVALID_FD )
             {
-                close(m_fd);
-                m_fd = INVALID_FD;
+                close(fd);
+                fd = INVALID_FD;
             }
         }
     }
