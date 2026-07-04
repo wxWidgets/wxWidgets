@@ -33,6 +33,7 @@
 #include "wx/private/spinctrl.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 #include "wx/scopeguard.h"
@@ -326,6 +327,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         return false;
     }
 
+    m_buddyStyle = msStyle;
+    m_buddyExStyle = exStyle;
 
     // create the spin button without any border as it doesn't make sense for
     // it (even if it doesn't seem to be actually taken into account anyhow)
@@ -733,6 +736,46 @@ bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
     *result = 0;  // never reject UP and DOWN events
 
     return TRUE;
+}
+
+void wxSpinCtrl::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxSpinButton::MSWSetDarkOrLightMode(setmode);
+
+    // In dark mode, set the buddy text control border to wxBORDER_SIMPLE
+    // (WS_BORDER), unless the original border style was wxBORDER_NONE. When
+    // switching to light mode, restore the border to the original style.
+    //
+    // The control has an anomaly to work around: We do not set WS_BORDER if
+    // the control was created with WS_BORDER because then the control
+    // incorrectly shows a 2-pixel thick border. The control remembers how it
+    // was created and shows the WS_BORDER without WS_BORDER being set again.
+
+    // Get current window style and extended style, without border flags.
+    auto style = ::GetWindowLongPtr(m_hwndBuddy, GWL_STYLE) & ~WS_BORDER;
+    const auto exMask = WS_EX_CLIENTEDGE | WS_EX_DLGMODALFRAME | WS_EX_STATICEDGE;
+    auto exStyle = ::GetWindowLongPtr(m_hwndBuddy, GWL_EXSTYLE) & ~exMask;
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // Set WSBORDER unless the control was created with WS_BORDER (and the
+        // anomaly described above would occur) or the control should have no
+        // border.
+        if ( !(m_buddyStyle & WS_BORDER) && (m_buddyExStyle & exMask) )
+            style |= WS_BORDER;
+    }
+    else
+    {
+        // Restore exStyle border flags. Do not restore WS_BORDER due to the
+        // anomaly described above.
+        exStyle |= m_buddyExStyle & exMask;
+    }
+
+    // Set new border.
+    ::SetWindowLongPtr(m_hwndBuddy, GWL_STYLE, style);
+    ::SetWindowLongPtr(m_hwndBuddy, GWL_EXSTYLE, exStyle);
+    ::SetWindowPos(m_hwndBuddy, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED |
+        SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 // Reuse the function defined in src/msw/textentry.cpp.

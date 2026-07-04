@@ -132,6 +132,7 @@ protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control) override;
+    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
     // handle processing of special keys
@@ -175,6 +176,11 @@ private:
 
     // Calculate the best size for the number with the given number of digits.
     wxSize GetBestSizeFromDigitsCount(int digitsCount) const;
+
+    // The window style and extended style that the buddy text control was
+    // created with.
+    WXDWORD m_buddyStyle;
+    WXDWORD m_buddyExStyle;
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
     wxDECLARE_EVENT_TABLE();

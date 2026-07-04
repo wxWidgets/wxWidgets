@@ -134,14 +134,11 @@ bool wxSpinButton::Create(wxWindow *parent,
     SubclassWin(m_hWnd);
 
     Bind(wxEVT_PAINT, &wxSpinButton::OnPaint, this);
-    Bind(wxEVT_ERASE_BACKGROUND, [](wxEraseEvent& event)
-    {
-        // Do nothing in dark mode, the background will be erased in OnPaint().
-        if ( !wxMSWDarkMode::IsActive() )
-            event.Skip();
-    });
 
     SetInitialSize(size);
+
+    if ( wxMSWDarkMode::IsActive() )
+        MSWSetDarkOrLightMode(SetMode::Initial);
 
     return true;
 }
@@ -175,7 +172,10 @@ wxSize wxSpinButton::DoGetBestSize() const
 
 void wxSpinButton::OnPaint(wxPaintEvent& event)
 {
-    if ( wxMSWDarkMode::IsActive() )
+    // The underlying control responds properly to dark mode starting with
+    // Windows 11 22H2. If we're in dark mode on an older OS, invert the
+    // result of the control's light mode painting.
+    if ( wxMSWDarkMode::IsActive() && !wxCheckOsVersion(10, 0, 22621) )
     {
         // Unfortunately PaintIfNecessary() can't be used here as we need to
         // handle the extra border below, so duplicate what it does here.
