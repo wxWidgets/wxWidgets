@@ -4854,13 +4854,11 @@ void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 
     D2D1_DRAW_TEXT_OPTIONS drawTextOptions = D2D1_DRAW_TEXT_OPTIONS_NONE;
 
-#ifdef D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT
     if ( wxCheckOsVersion(6, 3) )
     {
         // Enable color font option on Windows 8.1 and later
-        drawTextOptions |= D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT;
+        drawTextOptions |= 4; // D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT
     }
-#endif
 
     // Render the text
     GetRenderTarget()->DrawTextLayout(
