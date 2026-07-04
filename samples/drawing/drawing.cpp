@@ -1145,6 +1145,18 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.SetFont(wxFontInfo(12).Family(wxFONTFAMILY_TELETYPE));
     dc.SetTextForeground(wxColour(150, 75, 0));
     dc.DrawText("And some text with tab characters:\n123456789012345678901234567890\n\taa\tbbb\tcccc", dc.FromDIP(10), y);
+
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+#ifdef __WXMSW__
+    dc.SetFont(wxFontInfo(12).FaceName("Segoe UI Emoji"));
+#else
+    dc.SetFont(*wxSWISS_FONT);
+#endif
+    dc.DrawText(wxString::FromUTF8("Smile in colour"
+#ifdef __WXMSW__
+                                   " (only when using Direct2D)"
+#endif
+                                   ": \U0001F60A"), dc.FromDIP(400), y);
 }
 
 static const struct
