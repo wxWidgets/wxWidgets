@@ -749,6 +749,14 @@
  */
 #cmakedefine01 wxUSE_LIBGNOMEVFS
 /*
+ * Use AppIndicator/SNI for system tray support (works on Wayland and X11).
+ */
+#cmakedefine01 wxUSE_APPINDICATOR
+/*
+ * Use the Ayatana (freedesktop.org) variant of AppIndicator.
+ */
+#cmakedefine01 wxUSE_AYATANA_APPINDICATOR
+/*
  * Use libnotify library.
  */
 #cmakedefine01 wxUSE_LIBNOTIFY

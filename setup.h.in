@@ -748,6 +748,14 @@
  */
 #define wxUSE_LIBGNOMEVFS 0
 /*
+ * Use AppIndicator/SNI for system tray support (works on Wayland and X11).
+ */
+#define wxUSE_APPINDICATOR 0
+/*
+ * Use the Ayatana (freedesktop.org) variant of AppIndicator.
+ */
+#define wxUSE_AYATANA_APPINDICATOR 0
+/*
  * Use libnotify library.
  */
 #define wxUSE_LIBNOTIFY 0
