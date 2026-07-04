@@ -281,9 +281,9 @@ wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
 {
     wxSize size;
 
-    for (const auto & m_choice : m_choices)
+    for (const wxString& choice : m_choices)
     {
-        size.IncTo(DoGetBestSize(attr, dc, m_choice));
+        size.IncTo(DoGetBestSize(attr, dc, choice));
     }
 
     return size;
@@ -408,7 +408,7 @@ wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
         return logicalLines;
 
     wxArrayString physicalLines;
-    for (const auto & line : logicalLines)
+    for (const auto& line : logicalLines)
     {
         if ( dc.GetTextExtent(line).x > maxWidth )
         {

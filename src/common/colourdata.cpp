@@ -82,7 +82,7 @@ wxString wxColourData::ToString() const
 {
     wxString str(m_chooseFull ? '1' : '0');
 
-    for (const auto & clr : m_custColours)
+    for (const auto& clr : m_custColours)
     {
         str += wxCOL_DATA_SEP;
 

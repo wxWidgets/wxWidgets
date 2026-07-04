@@ -607,10 +607,10 @@ protected:
         };
 
         int native_flags = 0;
-        for (auto i : flag_mapping)
+        for (const auto& entry : flag_mapping)
         {
-            if (flags & i[0])
-                native_flags |= i[1];
+            if (flags & entry[0])
+                native_flags |= entry[1];
         }
 
         return native_flags;

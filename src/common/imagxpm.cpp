@@ -191,7 +191,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
                    (image->GetMaskGreen() << 8) | image->GetMaskBlue();
 
     // 2b. generate colour table:
-    for (auto & entry : histogram)
+    for (const auto& entry : histogram)
     {
         unsigned long index = entry.second.index;
         symbols[index] = symbols_data + index * (chars_per_pixel+1);

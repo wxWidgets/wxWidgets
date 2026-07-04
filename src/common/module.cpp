@@ -89,7 +89,7 @@ bool wxModule::DoInitializeModule(wxModule *module,
     const wxArrayClassInfo& dependencies = module->m_dependencies;
 
     // satisfy module dependencies by loading them before the current module
-    for (auto cinfo : dependencies)
+    for (const auto& dep : dependencies)
     {
         // Check if the module is already initialized
         wxModuleList::const_iterator it;
@@ -97,7 +97,7 @@ bool wxModule::DoInitializeModule(wxModule *module,
               it != initializedModules.end();
               ++it )
         {
-            if ( (*it)->GetClassInfo() == cinfo )
+            if ( (*it)->GetClassInfo() == dep )
                 break;
         }
 
@@ -111,7 +111,7 @@ bool wxModule::DoInitializeModule(wxModule *module,
         for ( it = ms_modules.begin(); it != ms_modules.end(); ++it )
         {
             wxModule *moduleDep = *it;
-            if ( moduleDep->GetClassInfo() == cinfo )
+            if ( moduleDep->GetClassInfo() == dep )
             {
                 if ( !DoInitializeModule(moduleDep, initializedModules ) )
                 {
@@ -126,7 +126,7 @@ bool wxModule::DoInitializeModule(wxModule *module,
         if ( it == ms_modules.end() )
         {
             wxLogError(_("Dependency \"%s\" of module \"%s\" doesn't exist."),
-                       cinfo->GetClassName(),
+                       dep->GetClassName(),
                        module->GetClassInfo()->GetClassName());
             return false;
         }
@@ -155,9 +155,9 @@ void wxModule::AddModuleIfNecessary(const wxClassInfo *classInfo)
                   wxS("Class info must be for wxModule-derived class") );
 
     const wxString className(classInfo->GetClassName());
-    for (auto ms_module : ms_modules)
+    for (const auto& module : ms_modules)
     {
-        if ( ms_module->GetClassInfo()->GetClassName() == className )
+        if ( module->GetClassInfo()->GetClassName() == className )
         {
             // Already initialized or at least registered and will be
             // initialized later.
@@ -188,7 +188,7 @@ bool wxModule::InitializeModules()
 {
     wxModuleList initializedModules;
 
-    for (auto module : ms_modules)
+    for (auto* module : ms_modules)
     {
         // the module could have been already initialized as dependency of
         // another one
@@ -242,9 +242,9 @@ void wxModule::DoCleanUpModules(const wxModuleList& modules)
     }
 
     // clear all modules, even the non-initialized ones
-    for (auto ms_module : ms_modules)
+    for (auto* module : ms_modules)
     {
-        delete ms_module;
+        delete module;
     }
 
     ms_modules.clear();

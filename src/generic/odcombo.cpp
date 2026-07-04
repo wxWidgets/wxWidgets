@@ -572,8 +572,8 @@ void wxVListBoxComboPopup::ClearClientDatas()
 {
     if ( m_clientDataItemsType == wxClientData_Object )
     {
-        for (auto & m_clientData : m_clientDatas)
-            delete (wxClientData*) m_clientData;
+        for ( wxVector<void*>::iterator it = m_clientDatas.begin(); it != m_clientDatas.end(); ++it )
+            delete (wxClientData*) *it;
     }
 
     m_clientDatas.clear();

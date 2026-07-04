@@ -1000,14 +1000,14 @@ const wxScopedCharBuffer wxString::ToAscii(char replaceWith) const
     wxCharBuffer buffer(length());
     char *dest = buffer.data();
 
-    for (auto c : *this)
+    for (const wxUniChar ch : *this)
     {
         // FIXME-UTF8: unify substituted char ('_') with wxUniChar ('?')
-        *dest++ = c.IsAscii() ? (char)c : replaceWith;
+        *dest++ = ch.IsAscii() ? (char)ch : replaceWith;
 
         // the output string can't have embedded NULs anyhow, so we can safely
         // stop at first of them even if we do have any
-        if ( !c )
+        if (!ch)
             break;
     }
 
@@ -1280,9 +1280,9 @@ size_t wxString::Replace(const wxString& strOld,
 
 bool wxString::IsAscii() const
 {
-    for (auto i : *this)
+    for (const wxUniChar ch : *this)
     {
-        if ( !i.IsAscii() )
+        if ( !ch.IsAscii() )
             return false;
     }
 
@@ -1291,9 +1291,9 @@ bool wxString::IsAscii() const
 
 bool wxString::IsWord() const
 {
-    for (auto i : *this)
+    for (const wxUniChar ch : *this)
     {
-        if ( !wxIsalpha(i) )
+        if ( !wxIsalpha(ch) )
             return false;
     }
 
@@ -1333,16 +1333,16 @@ wxString wxString::Strip(stripType w) const
 
 wxString& wxString::MakeUpper()
 {
-  for (auto && it : *this)
-    it = (wxChar)wxToupper(it);
+  for (auto&& ch : *this)
+    ch = (wxChar)wxToupper(ch);
 
   return *this;
 }
 
 wxString& wxString::MakeLower()
 {
-  for (auto && it : *this)
-    it = (wxChar)wxTolower(it);
+  for (auto&& ch : *this)
+    ch = (wxChar)wxTolower(ch);
 
   return *this;
 }
@@ -2244,9 +2244,9 @@ match:
 int wxString::Freq(wxUniChar ch) const
 {
     int count = 0;
-    for (auto i : *this)
+    for (const wxUniChar c : *this)
     {
-        if ( i == ch )
+        if ( c == ch )
             count ++;
     }
     return count;

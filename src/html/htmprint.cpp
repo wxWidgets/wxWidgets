@@ -237,8 +237,8 @@ wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 
 void wxHtmlPrintout::CleanUpStatics()
 {
-    for (auto & m_Filter : m_Filters)
-        delete m_Filter;
+    for (auto* filter : m_Filters)
+        delete filter;
 
     m_Filters.clear();
 }
@@ -462,11 +462,11 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
     wxHtmlFilterHTML defaultFilter;
     wxString doc;
 
-    for (auto h : m_Filters)
+    for (auto* filter : m_Filters)
     {
-        if (h->CanRead(*ff))
+        if (filter->CanRead(*ff))
         {
-            doc = h->ReadFile(*ff);
+            doc = filter->ReadFile(*ff);
             done = true;
             break;
         }

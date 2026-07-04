@@ -2098,9 +2098,9 @@ wxEventBlocker::~wxEventBlocker()
 bool wxEventBlocker::ProcessEvent(wxEvent& event)
 {
     // should this event be blocked?
-    for (int i : m_eventsToBlock)
+    for (const int evt : m_eventsToBlock)
     {
-        wxEventType t = (wxEventType)i;
+        wxEventType t = (wxEventType)evt;
         if ( t == wxEVT_ANY || t == event.GetEventType() )
             return true;   // yes, it should: mark this event as processed
     }

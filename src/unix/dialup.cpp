@@ -649,9 +649,9 @@ wxDialUpManagerImpl::CheckIfconfig()
             wxT("/etc"),          // AIX 5
         };
 
-        for (auto ifconfigLocation : ifconfigLocations)
+        for (const auto* location : ifconfigLocations)
         {
-            wxString path(ifconfigLocation);
+            wxString path(location);
             path << wxT("/ifconfig");
 
             if ( wxFileExists(path) )

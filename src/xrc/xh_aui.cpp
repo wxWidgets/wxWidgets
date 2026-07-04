@@ -57,10 +57,10 @@ wxAuiXmlHandler::wxAuiXmlHandler()
 
 wxAuiManager *wxAuiXmlHandler::GetAuiManager( wxWindow *managed ) const
 {
-    for (auto mgr : m_managers)
+    for (auto* manager : m_managers)
     {
-        if ( mgr->GetManagedWindow() == managed )
-            return mgr;
+        if ( manager->GetManagedWindow() == managed )
+            return manager;
     }
 
     return nullptr;

@@ -961,9 +961,9 @@ void KeyToCoords(wxGridCoordsToAttrMap::key_type key, int *pRow, int *pCol)
 
 wxGridCellAttrData::~wxGridCellAttrData()
 {
-    for (auto & m_attr : m_attrs)
+    for (auto& entry : m_attrs)
     {
-        m_attr.second->DecRef();
+        entry.second->DecRef();
     }
 
     m_attrs.clear();
@@ -1029,10 +1029,10 @@ void UpdateCellAttrRowsOrCols(wxGridCoordsToAttrMap& attrs, int editPos,
     // without now deleted attributes.
     wxGridCoordsToAttrMap newAttrs;
 
-    for (auto & it : attrs)
+    for (auto& entry : attrs)
     {
-        const wxGridCoordsToAttrMap::key_type oldCoords = it.first;
-        wxGridCellAttr* cellAttr = it.second;
+        const wxGridCoordsToAttrMap::key_type oldCoords = entry.first;
+        wxGridCellAttr* cellAttr = entry.second;
 
         int cellRows, cellCols;
         cellAttr->GetSize(&cellRows, &cellCols);
@@ -11313,10 +11313,10 @@ DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
 {
     wxGridBlockCoordsVector res;
 
-    for (auto it : blocks)
+    for (const auto& newBlock : blocks)
     {
-        const int firstNew = oper.SelectFirst(it);
-        const int lastNew = oper.SelectLast(it);
+        const int firstNew = oper.SelectFirst(newBlock);
+        const int lastNew = oper.SelectLast(newBlock);
 
         // Check if this block intersects any of the existing ones.
         //
@@ -11330,7 +11330,7 @@ DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
             {
                 // We didn't find any overlapping blocks, so add this one to
                 // the end.
-                res.push_back(it);
+                res.push_back(newBlock);
                 break;
             }
 
@@ -11342,7 +11342,7 @@ DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
             {
                 // Not only it doesn't overlap this block, but it won't overlap
                 // any subsequent ones either, so insert it here and stop.
-                res.insert(res.begin() + n, it);
+                res.insert(res.begin() + n, newBlock);
                 break;
             }
 

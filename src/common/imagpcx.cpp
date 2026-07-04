@@ -421,7 +421,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
         // zero unused colours
         memset(pal, 0, sizeof(pal));
 
-        for (auto & entry : histogram)
+        for (const auto& entry : histogram)
         {
             key = entry.first;
             unsigned long index;
