@@ -196,9 +196,47 @@ protected:
         CreatePopupMenu(), not destroyed when the user dismisses it, allowing
         to reuse the same menu pointer multiple times.
 
+        @note On the AppIndicator/SNI backend (GTK, Wayland), the AppIndicator
+              protocol requires a persistent GtkMenu to be attached to the
+              indicator at all times, so this method (or CreatePopupMenu() if
+              it's not overridden) is also called whenever the icon is shown
+              or updated, not just when the user requests the popup menu.
+              Overriding GetPopupMenu() rather than CreatePopupMenu() is
+              recommended when using this backend, to avoid recreating the
+              menu on every icon update.
+
         @since 3.1.5
     */
     virtual wxMenu* GetPopupMenu();
+
+    /**
+        Sets the icon name to use with the AppIndicator/SNI backend (GTK, Wayland).
+
+        When set, the named icon from the system icon theme is used instead of
+        converting the wxBitmap passed to SetIcon() to a temporary PNG file.
+        Must be called before SetIcon(). Has no effect on non-GTK ports or when
+        AppIndicator support is not compiled in.
+
+        @param name  Icon name as found in the hicolor icon theme (e.g. "myapp").
+
+        @onlyfor{wxgtk}
+        @since 3.2.12
+    */
+    void SetSNIIconName(const wxString& name);
+
+    /**
+        Sets an extra icon theme search path for the AppIndicator/SNI backend.
+
+        Registers an additional directory with GTK's icon theme so that named
+        icons set via SetSNIIconName() can be found without being installed to
+        the system theme. Useful for uninstalled or development builds.
+
+        @param path  Directory containing a hicolor icon theme subtree.
+
+        @onlyfor{wxgtk}
+        @since 3.2.12
+    */
+    void SetSNIIconThemePath(const wxString& path);
 };
 
 

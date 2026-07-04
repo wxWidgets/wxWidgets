@@ -936,6 +936,10 @@ CAIRO_LIBS
 CAIRO_CFLAGS
 WEBKIT_LIBS
 WEBKIT_CFLAGS
+APPINDICATOR_LIBS
+APPINDICATOR_CFLAGS
+AYATANA_APPINDICATOR_LIBS
+AYATANA_APPINDICATOR_CFLAGS
 COND_PYTHON
 PYTHON
 PRIVATE_FONTS_LIBS
@@ -1109,6 +1113,7 @@ with_libmspack
 with_gtkprint
 with_gnomevfs
 with_libnotify
+with_appindicator
 with_opengl
 with_xtest
 with_nanosvg
@@ -1456,6 +1461,10 @@ XTST_CFLAGS
 XTST_LIBS
 PRIVATE_FONTS_CFLAGS
 PRIVATE_FONTS_LIBS
+AYATANA_APPINDICATOR_CFLAGS
+AYATANA_APPINDICATOR_LIBS
+APPINDICATOR_CFLAGS
+APPINDICATOR_LIBS
 WEBKIT_CFLAGS
 WEBKIT_LIBS
 CAIRO_CFLAGS
@@ -2398,6 +2407,7 @@ Optional Packages:
   --without-gtkprint      don't use GTK printing support
   --with-gnomevfs         use GNOME VFS for associating MIME types
   --with-libnotify        use libnotify for notifications
+  --with-appindicator     use AppIndicator/SNI for system tray (Wayland)
   --with-opengl           use OpenGL (or Mesa)
   --with-xtest            use XTest extension
   --with-nanosvg          use NanoSVG for rasterizing SVG
@@ -2514,6 +2524,14 @@ Some influential environment variables:
               C compiler flags for PRIVATE_FONTS, overriding pkg-config
   PRIVATE_FONTS_LIBS
               linker flags for PRIVATE_FONTS, overriding pkg-config
+  AYATANA_APPINDICATOR_CFLAGS
+              C compiler flags for AYATANA_APPINDICATOR, overriding pkg-config
+  AYATANA_APPINDICATOR_LIBS
+              linker flags for AYATANA_APPINDICATOR, overriding pkg-config
+  APPINDICATOR_CFLAGS
+              C compiler flags for APPINDICATOR, overriding pkg-config
+  APPINDICATOR_LIBS
+              linker flags for APPINDICATOR, overriding pkg-config
   WEBKIT_CFLAGS
               C compiler flags for WEBKIT, overriding pkg-config
   WEBKIT_LIBS linker flags for WEBKIT, overriding pkg-config
@@ -5098,6 +5116,35 @@ fi
 
 
           eval "$wx_cv_use_libnotify"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-appindicator was given.
+if test "${with_appindicator+set}" = set; then :
+  withval=$with_appindicator;
+                        if test "$withval" = yes; then
+                          wx_cv_use_appindicator='wxUSE_APPINDICATOR=yes'
+                        else
+                          wx_cv_use_appindicator='wxUSE_APPINDICATOR=no'
+                        fi
+
+else
+
+                        wx_cv_use_appindicator='wxUSE_APPINDICATOR=${'DEFAULT_wxUSE_APPINDICATOR":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_appindicator"
 
 
           withstring=
@@ -42098,6 +42145,260 @@ if test "$wxUSE_TASKBARICON" = "yes"; then
                 $as_echo "#define wxUSE_TASKBARICON_BALLOONS 1" >>confdefs.h
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
+
+    if test "$wxUSE_GTK" = 1 -a "$wxUSE_APPINDICATOR" = "yes"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for AYATANA_APPINDICATOR" >&5
+$as_echo_n "checking for AYATANA_APPINDICATOR... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$AYATANA_APPINDICATOR_CFLAGS"; then
+        pkg_cv_AYATANA_APPINDICATOR_CFLAGS="$AYATANA_APPINDICATOR_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ayatana-appindicator3-0.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "ayatana-appindicator3-0.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_AYATANA_APPINDICATOR_CFLAGS=`$PKG_CONFIG --cflags "ayatana-appindicator3-0.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$AYATANA_APPINDICATOR_LIBS"; then
+        pkg_cv_AYATANA_APPINDICATOR_LIBS="$AYATANA_APPINDICATOR_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ayatana-appindicator3-0.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "ayatana-appindicator3-0.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_AYATANA_APPINDICATOR_LIBS=`$PKG_CONFIG --libs "ayatana-appindicator3-0.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        AYATANA_APPINDICATOR_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "ayatana-appindicator3-0.1"`
+        else
+	        AYATANA_APPINDICATOR_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "ayatana-appindicator3-0.1"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$AYATANA_APPINDICATOR_PKG_ERRORS" >&5
+
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for APPINDICATOR" >&5
+$as_echo_n "checking for APPINDICATOR... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$APPINDICATOR_CFLAGS"; then
+        pkg_cv_APPINDICATOR_CFLAGS="$APPINDICATOR_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"appindicator3-0.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "appindicator3-0.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_APPINDICATOR_CFLAGS=`$PKG_CONFIG --cflags "appindicator3-0.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$APPINDICATOR_LIBS"; then
+        pkg_cv_APPINDICATOR_LIBS="$APPINDICATOR_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"appindicator3-0.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "appindicator3-0.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_APPINDICATOR_LIBS=`$PKG_CONFIG --libs "appindicator3-0.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        APPINDICATOR_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "appindicator3-0.1"`
+        else
+	        APPINDICATOR_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "appindicator3-0.1"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$APPINDICATOR_PKG_ERRORS" >&5
+
+
+                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)" >&5
+$as_echo "$as_me: WARNING: AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)" >&2;}
+                        wxUSE_APPINDICATOR="no"
+
+
+elif test $pkg_failed = untried; then
+
+                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)" >&5
+$as_echo "$as_me: WARNING: AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)" >&2;}
+                        wxUSE_APPINDICATOR="no"
+
+
+else
+	APPINDICATOR_CFLAGS=$pkg_cv_APPINDICATOR_CFLAGS
+	APPINDICATOR_LIBS=$pkg_cv_APPINDICATOR_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $APPINDICATOR_LIBS"
+                        CFLAGS="$APPINDICATOR_CFLAGS $CFLAGS"
+                        CXXFLAGS="$APPINDICATOR_CFLAGS $CXXFLAGS"
+                        $as_echo "#define wxUSE_APPINDICATOR 1" >>confdefs.h
+
+
+fi
+
+
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for APPINDICATOR" >&5
+$as_echo_n "checking for APPINDICATOR... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$APPINDICATOR_CFLAGS"; then
+        pkg_cv_APPINDICATOR_CFLAGS="$APPINDICATOR_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"appindicator3-0.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "appindicator3-0.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_APPINDICATOR_CFLAGS=`$PKG_CONFIG --cflags "appindicator3-0.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$APPINDICATOR_LIBS"; then
+        pkg_cv_APPINDICATOR_LIBS="$APPINDICATOR_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"appindicator3-0.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "appindicator3-0.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_APPINDICATOR_LIBS=`$PKG_CONFIG --libs "appindicator3-0.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        APPINDICATOR_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "appindicator3-0.1"`
+        else
+	        APPINDICATOR_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "appindicator3-0.1"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$APPINDICATOR_PKG_ERRORS" >&5
+
+
+                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)" >&5
+$as_echo "$as_me: WARNING: AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)" >&2;}
+                        wxUSE_APPINDICATOR="no"
+
+
+elif test $pkg_failed = untried; then
+
+                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)" >&5
+$as_echo "$as_me: WARNING: AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)" >&2;}
+                        wxUSE_APPINDICATOR="no"
+
+
+else
+	APPINDICATOR_CFLAGS=$pkg_cv_APPINDICATOR_CFLAGS
+	APPINDICATOR_LIBS=$pkg_cv_APPINDICATOR_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $APPINDICATOR_LIBS"
+                        CFLAGS="$APPINDICATOR_CFLAGS $CFLAGS"
+                        CXXFLAGS="$APPINDICATOR_CFLAGS $CXXFLAGS"
+                        $as_echo "#define wxUSE_APPINDICATOR 1" >>confdefs.h
+
+
+fi
+
+
+else
+	AYATANA_APPINDICATOR_CFLAGS=$pkg_cv_AYATANA_APPINDICATOR_CFLAGS
+	AYATANA_APPINDICATOR_LIBS=$pkg_cv_AYATANA_APPINDICATOR_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $AYATANA_APPINDICATOR_LIBS"
+                CFLAGS="$AYATANA_APPINDICATOR_CFLAGS $CFLAGS"
+                CXXFLAGS="$AYATANA_APPINDICATOR_CFLAGS $CXXFLAGS"
+                $as_echo "#define wxUSE_APPINDICATOR 1" >>confdefs.h
+
+                $as_echo "#define wxUSE_AYATANA_APPINDICATOR 1" >>confdefs.h
+
+
+fi
+    fi
 fi
 
 

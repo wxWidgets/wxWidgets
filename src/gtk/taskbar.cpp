@@ -21,6 +21,7 @@
     #include "wx/toplevel.h"
     #include "wx/menu.h"
     #include "wx/icon.h"
+    #include "wx/filename.h"
 #endif
 
 #include "wx/gtk/private/wrapgtk.h"
@@ -30,6 +31,16 @@
 #endif
 #ifndef __WXGTK3__
     #include "eggtrayicon.h"
+#endif
+
+#if wxUSE_APPINDICATOR
+#   if wxUSE_AYATANA_APPINDICATOR
+#       include <libayatana-appindicator/app-indicator.h>
+#   else
+#       include <libappindicator/app-indicator.h>
+#   endif
+#   include <sys/stat.h>
+#   include <unistd.h>
 #endif
 
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
@@ -64,6 +75,11 @@ public:
     ~Private();
     void SetIcon();
     void size_allocate(int width, int height);
+#if wxUSE_APPINDICATOR
+    // gets the menu to attach to the indicator: GetPopupMenu() if overridden
+    // (kept alive, not owned by us), else CreatePopupMenu() (owned by us)
+    wxMenu* GetSNIMenu(bool& owned);
+#endif
 
     // owning wxTaskBarIcon
     wxTaskBarIcon* m_taskBarIcon;
@@ -73,6 +89,15 @@ public:
     wxWindow* m_win;
     wxBitmapBundle m_bitmap;
     wxString m_tipText;
+#if wxUSE_APPINDICATOR
+    AppIndicator* m_appIndicator;
+    wxMenu*       m_appIndicatorMenu;      // kept alive while indicator shows it
+    bool          m_appIndicatorMenuOwned; // true if m_appIndicatorMenu must be deleted by us
+    wxString      m_sniIconName;
+    wxString      m_sniIconThemePath;
+    wxString      m_iconThemeDir;      // /tmp/wx-tray-<pid>
+    wxString      m_iconPath;          // current icon PNG (deleted on next update)
+#endif
 #ifndef __WXGTK3__
     // used when GTK+ < 2.10
     GtkWidget* m_eggTrayIcon;
@@ -150,6 +175,9 @@ status_icon_popup_menu(GtkStatusIcon*, guint, guint, wxTaskBarIcon* taskBarIcon)
 
 bool wxTaskBarIconBase::IsAvailable()
 {
+#if wxUSE_APPINDICATOR
+    return true;
+#else
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
     if (!wxGTKImpl::IsX11(NULL))
@@ -167,6 +195,7 @@ bool wxTaskBarIconBase::IsAvailable()
 #else
     return true;
 #endif
+#endif // wxUSE_APPINDICATOR
 }
 //-----------------------------------------------------------------------------
 
@@ -175,6 +204,11 @@ wxTaskBarIcon::Private::Private(wxTaskBarIcon* taskBarIcon)
     m_taskBarIcon = taskBarIcon;
     m_statusIcon = NULL;
     m_win = NULL;
+#if wxUSE_APPINDICATOR
+    m_appIndicator = NULL;
+    m_appIndicatorMenu = NULL;
+    m_appIndicatorMenuOwned = false;
+#endif
 #ifndef __WXGTK3__
     m_eggTrayIcon = NULL;
     m_tooltips = NULL;
@@ -184,6 +218,27 @@ wxTaskBarIcon::Private::Private(wxTaskBarIcon* taskBarIcon)
 
 wxTaskBarIcon::Private::~Private()
 {
+#if wxUSE_APPINDICATOR
+    if (m_appIndicator)
+    {
+        g_object_unref(m_appIndicator);
+        m_appIndicator = NULL;
+    }
+    // Delete menu AFTER releasing indicator so it can drop its GtkMenu ref first
+    if (m_appIndicatorMenuOwned)
+        delete m_appIndicatorMenu;
+    m_appIndicatorMenu = NULL;
+    if (!m_iconPath.empty())
+        unlink(m_iconPath.utf8_str());
+    if (!m_iconThemeDir.empty())
+    {
+        rmdir((m_iconThemeDir + "/hicolor/32x32/apps").utf8_str());
+        rmdir((m_iconThemeDir + "/hicolor/32x32").utf8_str());
+        unlink((m_iconThemeDir + "/hicolor/index.theme").utf8_str());
+        rmdir((m_iconThemeDir + "/hicolor").utf8_str());
+        rmdir(m_iconThemeDir.utf8_str());
+    }
+#endif
     if (m_statusIcon)
         g_object_unref(m_statusIcon);
 #ifndef __WXGTK3__
@@ -209,6 +264,118 @@ wxTaskBarIcon::Private::~Private()
 
 void wxTaskBarIcon::Private::SetIcon()
 {
+#if wxUSE_APPINDICATOR
+    if (!m_sniIconName.empty())
+    {
+        wxString name = m_sniIconName;
+        m_sniIconName.clear();
+
+        if (!m_appIndicator)
+        {
+            wxString appId = wxString::Format("wxTaskBarIcon-%d", (int)getpid());
+            m_appIndicator = app_indicator_new(appId.utf8_str(), name.utf8_str(),
+                                               APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+            if (m_appIndicator && !m_sniIconThemePath.empty())
+            {
+                const char* tp = m_sniIconThemePath.utf8_str();
+                gtk_icon_theme_prepend_search_path(gtk_icon_theme_get_default(), tp);
+                app_indicator_set_icon_theme_path(m_appIndicator, tp);
+            }
+        }
+        else
+        {
+            app_indicator_set_icon_full(m_appIndicator, name.utf8_str(), "");
+        }
+        if (m_appIndicator)
+        {
+            bool owned;
+            wxMenu* menu = GetSNIMenu(owned);
+            if (menu)
+            {
+                menu->SetEventHandler(m_taskBarIcon);
+                app_indicator_set_menu(m_appIndicator, GTK_MENU(menu->m_menu));
+                if (m_appIndicatorMenuOwned)
+                    delete m_appIndicatorMenu;
+                m_appIndicatorMenu = menu;
+                m_appIndicatorMenuOwned = owned;
+            }
+            app_indicator_set_status(m_appIndicator, APP_INDICATOR_STATUS_ACTIVE);
+        }
+        return;
+    }
+
+    wxBitmap bmp = m_win ? m_bitmap.GetBitmapFor(m_win) : GetBitmapFromBundle(m_bitmap);
+    if (!bmp.IsOk())
+        return;
+
+    if (m_iconThemeDir.empty())
+    {
+        m_iconThemeDir = wxFileName::GetTempDir() +
+                         wxString::Format("/wx-tray-%d", (int)getpid());
+        mkdir(m_iconThemeDir.utf8_str(), 0700);
+        wxString themeRoot = m_iconThemeDir + "/hicolor";
+        mkdir(themeRoot.utf8_str(), 0700);
+        mkdir((themeRoot + "/32x32").utf8_str(), 0700);
+        mkdir((themeRoot + "/32x32/apps").utf8_str(), 0700);
+        if (FILE* f = fopen((themeRoot + "/index.theme").utf8_str(), "w"))
+        {
+            fputs("[Icon Theme]\nName=hicolor\nDirectories=32x32/apps\n\n"
+                  "[32x32/apps]\nSize=32\nType=Fixed\n", f);
+            fclose(f);
+        }
+        gtk_icon_theme_prepend_search_path(gtk_icon_theme_get_default(),
+                                           m_iconThemeDir.utf8_str());
+    }
+
+    static int s_serial = 0;
+    wxString iconName = wxString::Format("wx-tray-%d-%d", (int)getpid(), ++s_serial);
+    wxString iconPath = m_iconThemeDir + "/hicolor/32x32/apps/" + iconName + ".png";
+
+    GdkPixbuf* pb = bmp.GetPixbuf();
+    if (!pb)
+        return;
+    GError* err = NULL;
+    gdk_pixbuf_save(pb, iconPath.utf8_str(), "png", &err, NULL);
+    if (err)
+    {
+        g_error_free(err);
+        return;
+    }
+
+    if (!m_iconPath.empty())
+        unlink(m_iconPath.utf8_str());
+    m_iconPath = iconPath;
+
+    if (!m_appIndicator)
+    {
+        wxString appId = wxString::Format("wxTaskBarIcon-%d", (int)getpid());
+        m_appIndicator = app_indicator_new(appId.utf8_str(), iconName.utf8_str(),
+                                           APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+        if (m_appIndicator)
+            app_indicator_set_icon_theme_path(m_appIndicator, m_iconThemeDir.utf8_str());
+    }
+    else
+    {
+        app_indicator_set_icon_full(m_appIndicator, iconName.utf8_str(), "");
+    }
+    if (m_appIndicator)
+    {
+        bool owned;
+        wxMenu* menu = GetSNIMenu(owned);
+        if (menu)
+        {
+            menu->SetEventHandler(m_taskBarIcon);
+            app_indicator_set_menu(m_appIndicator, GTK_MENU(menu->m_menu));
+            if (m_appIndicatorMenuOwned)
+                delete m_appIndicatorMenu;
+            m_appIndicatorMenu = menu;
+            m_appIndicatorMenuOwned = owned;
+        }
+        app_indicator_set_status(m_appIndicator, APP_INDICATOR_STATUS_ACTIVE);
+    }
+    return;
+#endif // wxUSE_APPINDICATOR
+
 #if GTK_CHECK_VERSION(2,10,0)
     if (wx_is_at_least_gtk2(10))
     {
@@ -289,6 +456,24 @@ void wxTaskBarIcon::Private::SetIcon()
 #endif // wxUSE_TOOLTIPS
 }
 
+#if wxUSE_APPINDICATOR
+wxMenu* wxTaskBarIcon::Private::GetSNIMenu(bool& owned)
+{
+    // GetPopupMenu() is documented to return a menu that is kept alive and
+    // not destroyed by the library, which is exactly what's needed for the
+    // persistent GtkMenu the AppIndicator/SNI protocol requires. Fall back
+    // to CreatePopupMenu(), whose result we do own and must delete, if it's
+    // not overridden.
+    if (wxMenu* menu = m_taskBarIcon->GetPopupMenu())
+    {
+        owned = false;
+        return menu;
+    }
+    owned = true;
+    return m_taskBarIcon->CreatePopupMenu();
+}
+#endif // wxUSE_APPINDICATOR
+
 #ifndef __WXGTK3__
 void wxTaskBarIcon::Private::size_allocate(int width, int height)
 {
@@ -338,6 +523,18 @@ bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
 
 bool wxTaskBarIcon::RemoveIcon()
 {
+#if wxUSE_APPINDICATOR
+    if (m_priv->m_appIndicator)
+    {
+        app_indicator_set_status(m_priv->m_appIndicator, APP_INDICATOR_STATUS_PASSIVE);
+        if (!m_priv->m_iconPath.empty())
+        {
+            unlink(m_priv->m_iconPath.utf8_str());
+            m_priv->m_iconPath.clear();
+        }
+        return true;
+    }
+#endif
     delete m_priv;
     m_priv = new Private(this);
     return true;
@@ -345,6 +542,10 @@ bool wxTaskBarIcon::RemoveIcon()
 
 bool wxTaskBarIcon::IsIconInstalled() const
 {
+#if wxUSE_APPINDICATOR
+    if (m_priv->m_appIndicator)
+        return app_indicator_get_status(m_priv->m_appIndicator) == APP_INDICATOR_STATUS_ACTIVE;
+#endif
 #ifdef __WXGTK3__
     return m_priv->m_statusIcon != NULL;
 #else
@@ -352,8 +553,43 @@ bool wxTaskBarIcon::IsIconInstalled() const
 #endif
 }
 
+void wxTaskBarIcon::SetSNIIconName(const wxString& name)
+{
+#if wxUSE_APPINDICATOR
+    m_priv->m_sniIconName = name;
+#else
+    wxUnusedVar(name);
+#endif
+}
+
+void wxTaskBarIcon::SetSNIIconThemePath(const wxString& path)
+{
+#if wxUSE_APPINDICATOR
+    m_priv->m_sniIconThemePath = path;
+#else
+    wxUnusedVar(path);
+#endif
+}
+
 bool wxTaskBarIcon::PopupMenu(wxMenu* menu)
 {
+#if wxUSE_APPINDICATOR
+    if (m_priv->m_appIndicator)
+    {
+        if (menu)
+        {
+            menu->SetEventHandler(this);
+            app_indicator_set_menu(m_priv->m_appIndicator, GTK_MENU(menu->m_menu));
+            if (m_priv->m_appIndicatorMenuOwned)
+                delete m_priv->m_appIndicatorMenu;
+            m_priv->m_appIndicatorMenu = menu;
+            // menu is a caller-supplied parameter, like elsewhere in wx's
+            // PopupMenu() API, so it's not owned/deleted by us
+            m_priv->m_appIndicatorMenuOwned = false;
+        }
+        return true;
+    }
+#endif
 #if wxUSE_MENUS
     if (m_priv->m_win == NULL)
     {
