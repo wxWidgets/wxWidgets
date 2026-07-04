@@ -760,6 +760,10 @@
  */
 #define wxUSE_LIBGNOMEVFS 0
 /*
+ * Use AppIndicator for wxTaskBarIcon (required for Wayland).
+ */
+#define wxUSE_APPINDICATOR 0
+/*
  * Use libnotify library.
  */
 #define wxUSE_LIBNOTIFY 0

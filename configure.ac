@@ -544,6 +544,7 @@ WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing sup
 WX_ARG_WITHOUT(wayland,    [  --without-wayland       don't use Wayland-specific code], wxUSE_WAYLAND)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
+WX_ARG_WITH(appindicator,  [  --with-appindicator     use AppIndicator (required for wxTaskBarIcon under Wayland)], wxUSE_APPINDICATOR)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 WX_ARG_WITH(nanosvg,       [  --with-nanosvg          use NanoSVG for rasterizing SVG], wxUSE_NANOSVG)
@@ -3169,6 +3170,28 @@ installed, where VER is 2, 3 or 4.
                 )
             else
                 AC_MSG_WARN([Wayland-specific code will be disabled])
+            fi
+        fi
+
+        if test "$wxUSE_TASKBARICON" = "yes"; then
+            if test "$wxUSE_APPINDICATOR" = "yes"; then
+                if test "$WXGTK3" = 1; then
+                    PKG_CHECK_MODULES(APPINDICATOR,
+                        [ayatana-appindicator3-0.1],
+                        [
+                            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $APPINDICATOR_LIBS"
+                            CFLAGS="$APPINDICATOR_CFLAGS $CFLAGS"
+                            CXXFLAGS="$APPINDICATOR_CFLAGS $CXXFLAGS"
+                            AC_DEFINE(wxUSE_APPINDICATOR)
+                        ],
+                        [
+                            AC_MSG_WARN([libayatana-appindicator not found; wxTaskBarIcon won't work under Wayland])
+                        ])
+                else
+                    dnl In principle, we could look for ayatana-appindicator-0.1
+                    dnl when using GTK2, but for now we don't support it there.
+                    wxUSE_APPINDICATOR=no
+                fi
             fi
         fi
     fi

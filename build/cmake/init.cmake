@@ -743,6 +743,22 @@ if(wxUSE_GUI)
         set(wxUSE_LIBNOTIFY OFF)
     endif()
 
+    # In principle, we could look for ayatana-appindicator-0.1 when using GTK2,
+    # but for now we don't support it there and only support it with GTK3.
+    if(wxUSE_TASKBARICON AND UNIX AND WXGTK3 AND wxUSE_APPINDICATOR)
+        find_package(PkgConfig)
+        pkg_check_modules(APPINDICATOR IMPORTED_TARGET QUIET ayatana-appindicator3-0.1)
+
+        if(NOT APPINDICATOR_FOUND)
+            message(WARNING "AppIndicator not found; wxTaskBarIcon won't work under Wayland")
+            wx_option_force_value(wxUSE_APPINDICATOR OFF)
+        else()
+            list(APPEND wxTOOLKIT_EXTRA "appindicator")
+        endif()
+    else()
+        set(wxUSE_APPINDICATOR OFF)
+    endif()
+
     if(wxUSE_UIACTIONSIMULATOR AND UNIX AND WXGTK)
         if(wxHAVE_GDK_X11 AND wxUSE_XTEST)
             find_package(XTEST)
