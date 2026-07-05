@@ -45,8 +45,8 @@
 #include <stdio.h>
 #include <errno.h>
 
-#include <set>
 #include <functional>
+#include <unordered_set>
 
 #include "wx/socket.h"
 #include "wx/thread.h"
@@ -243,14 +243,15 @@ private:
     int m_nextAvailable;
 
     wxCRIT_SECT_DECLARE_MEMBER(m_cs_connection_sockets);
-    std::set<wxSocketBase*> m_connectionSockets;
+    std::unordered_set<wxSocketBase*> m_connectionSockets;
 
     // Sockets the main thread is currently reading. A WAITALL Read/Peek pumps the
     // event loop while it waits, so on MSW the GUI message pump can re-dispatch a
     // wxSOCKET_INPUT for a socket we are already reading; OnSocketInput() consults
     // this set and bails to avoid a re-entrant read (which trips wxSocketReadGuard,
     // "read reentrancy?"). All reads run on the main thread, so this needs no lock.
-    std::set<wxSocketBase*> m_socketsBeingRead;
+    std::unordered_set<wxSocketBase*> m_socketsBeingRead;
+
     bool IsReadingSocket(wxSocketBase* socket) const
         { return m_socketsBeingRead.count(socket) != 0; }
 
@@ -273,12 +274,12 @@ namespace
 class MainThreadReadGuard
 {
 public:
-    MainThreadReadGuard(std::set<wxSocketBase*>& set, wxSocketBase* socket)
+    MainThreadReadGuard(std::unordered_set<wxSocketBase*>& set, wxSocketBase* socket)
         : m_set(set), m_socket(socket) { m_set.insert(m_socket); }
     ~MainThreadReadGuard() { m_set.erase(m_socket); }
 
 private:
-    std::set<wxSocketBase*>& m_set;
+    std::unordered_set<wxSocketBase*>& m_set;
     wxSocketBase* const m_socket;
     wxDECLARE_NO_COPY_CLASS(MainThreadReadGuard);
 };
