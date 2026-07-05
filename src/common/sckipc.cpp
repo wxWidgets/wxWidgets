@@ -133,16 +133,15 @@ GetAddressFromName(const wxString& serverName,
         return addr;
     }
 #endif // Unix/!Unix
-    {
-        auto addr = std::make_unique<wxIPV4address>();
-        addr->Service(serverName);
-        if ( !host.empty() )
-        {
-            addr->Hostname(host);
-        }
 
-        return addr;
+    auto addr = std::make_unique<wxIPV4address>();
+    addr->Service(serverName);
+    if ( !host.empty() )
+    {
+        addr->Hostname(host);
     }
+
+    return addr;
 }
 
 // --------------------------------------------------------------------------
