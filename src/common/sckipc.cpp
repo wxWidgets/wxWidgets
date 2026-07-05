@@ -51,6 +51,8 @@
 #include "wx/socket.h"
 #include "wx/thread.h"
 
+#include "wx/private/make_unique.h"
+
 class wxIPCMessageBase;
 
 // --------------------------------------------------------------------------
@@ -115,7 +117,7 @@ constexpr int MAX_MSG_BUFFERS = 2048;
 // ----------------------------------------------------------------------------
 
 // get the address object for the given server name, the caller must delete it
-static wxSockAddress *
+static std::unique_ptr<wxSockAddress>
 GetAddressFromName(const wxString& serverName,
                    const wxString& host = wxEmptyString)
 {
@@ -125,14 +127,14 @@ GetAddressFromName(const wxString& serverName,
     // socket instead of AF_INET one
     if ( serverName.Find(wxT('/')) != wxNOT_FOUND )
     {
-        wxUNIXaddress *addr = new wxUNIXaddress;
+        auto addr = std::make_unique<wxUNIXaddress>();
         addr->Filename(serverName);
 
         return addr;
     }
 #endif // Unix/!Unix
     {
-        wxIPV4address *addr = new wxIPV4address;
+        auto addr = std::make_unique<wxIPV4address>();
         addr->Service(serverName);
         if ( !host.empty() )
         {
@@ -1048,7 +1050,7 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
                                               const wxString& serverName,
                                               const wxString& topic)
 {
-    wxSockAddress *addr = GetAddressFromName(serverName, host);
+    auto addr = GetAddressFromName(serverName, host);
     if ( !addr )
         return nullptr;
 
@@ -1063,7 +1065,6 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
     client->SetTimeout(wxIPCTimeout);
 
     bool ok = client->Connect(*addr);
-    delete addr;
 
 
     if ( ok )
@@ -1143,7 +1144,7 @@ bool wxTCPServer::Create(const wxString& serverName)
         m_server = nullptr;
     }
 
-    wxSockAddress *addr = GetAddressFromName(serverName);
+    auto addr = GetAddressFromName(serverName);
     if ( !addr )
         return false;
 
@@ -1156,8 +1157,6 @@ bool wxTCPServer::Create(const wxString& serverName)
         int rc = remove(serverName.fn_str());
         if ( rc < 0 && errno != ENOENT )
         {
-            delete addr;
-
             return false;
         }
 
@@ -1186,8 +1185,6 @@ bool wxTCPServer::Create(const wxString& serverName)
         m_filename = serverName;
     }
 #endif // __UNIX_LIKE__
-
-    delete addr;
 
     if (!m_server->IsOk())
     {
