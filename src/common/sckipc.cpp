@@ -1071,30 +1071,26 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
         // OK! Confirmation.
         if ( msg_reply->GetIPCCode() == IPC_CONNECT )
         {
-            wxTCPConnection *
-                connection = (wxTCPConnection *)OnMakeConnection ();
+            auto* const connectionBase = OnMakeConnection ();
 
-            if ( connection )
+            if (auto* const connection = wxDynamicCast(connectionBase, wxTCPConnection))
             {
-                if (wxDynamicCast(connection, wxTCPConnection))
-                {
-                    connection->m_sock = client;
-                    connection->m_sock->SetTimeout(wxIPCTimeout);
-                    connection->m_handler = handler;
-                    connection->m_topic = topic;
+                connection->m_sock = client;
+                connection->m_sock->SetTimeout(wxIPCTimeout);
+                connection->m_handler = handler;
+                connection->m_topic = topic;
 
-                    client->SetEventHandler(*handler, _SOCKET_INPUT_ID);
-                    client->SetClientData(connection);
-                    handler->RegisterConnectionSocket(client);
-                    client->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
-                    client->Notify(true);
-                    return connection;
-                }
-                else
-                {
-                    delete connection;
-                    // and fall through to delete everything else
-                }
+                client->SetEventHandler(*handler, _SOCKET_INPUT_ID);
+                client->SetClientData(connection);
+                handler->RegisterConnectionSocket(client);
+                client->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
+                client->Notify(true);
+                return connection;
+            }
+            else
+            {
+                delete connection;
+                // and fall through to delete everything else
             }
         }
         else if ( msg_reply->GetIPCCode() == IPC_FAIL )
@@ -1463,35 +1459,31 @@ void wxTCPEventHandler::OnSocketConnection(wxSocketEvent &event)
             {
                 wxString topic = msg_conn->GetTopic();
 
-                wxTCPConnection *new_connection =
-                    (wxTCPConnection *) ipcserv->OnAcceptConnection(topic);
+                auto* const connectionBase = ipcserv->OnAcceptConnection(topic);
 
-                if ( new_connection )
+                if ( auto* const new_connection = wxDynamicCast(connectionBase, wxTCPConnection) )
                 {
-                    if ( wxDynamicCast(new_connection, wxTCPConnection) )
+                    // Acknowledge success
+                    wxIPCMessageConnect msg_reply(sock, topic);
+
+                    if ( WriteMessageToSocket(msg_reply) )
                     {
-                        // Acknowledge success
-                        wxIPCMessageConnect msg_reply(sock, topic);
+                        new_connection->m_topic = topic;
+                        new_connection->m_sock = sock;
+                        new_connection->m_handler = &wxTCPEventHandlerModule::GetHandler();
 
-                        if ( WriteMessageToSocket(msg_reply) )
-                        {
-                            new_connection->m_topic = topic;
-                            new_connection->m_sock = sock;
-                            new_connection->m_handler = &wxTCPEventHandlerModule::GetHandler();
-
-                            sock->SetTimeout(wxIPCTimeout);
-                            sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
-                                                  _SOCKET_INPUT_ID);
-                            sock->SetClientData(new_connection);
-                            RegisterConnectionSocket(sock);
-                            sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
-                            sock->Notify(true);
-                            return;
-                        }
+                        sock->SetTimeout(wxIPCTimeout);
+                        sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
+                                              _SOCKET_INPUT_ID);
+                        sock->SetClientData(new_connection);
+                        RegisterConnectionSocket(sock);
+                        sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
+                        sock->Notify(true);
+                        return;
                     }
-
-                    delete new_connection;
                 }
+
+                delete connectionBase;
             }
         }
     }
