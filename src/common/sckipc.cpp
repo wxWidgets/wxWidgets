@@ -340,7 +340,6 @@ public:
     {
         Init(socket);
     }
-    virtual ~wxIPCMessageBase() {};
 
     bool IsOk() const { return m_ipc_code != IPC_NULL; }
 
