@@ -4852,14 +4852,10 @@ void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
         textLayout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
     }
 
-    D2D1_DRAW_TEXT_OPTIONS drawTextOptions = D2D1_DRAW_TEXT_OPTIONS_NONE;
-
-    if ( wxCheckOsVersion(6, 3) )
-    {
-        // Enable color font option on Windows 8.1 and later
-        drawTextOptions = static_cast<D2D1_DRAW_TEXT_OPTIONS>(drawTextOptions | 4);
-        // 4 is D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT enumerator
-    }
+    // Enable colour font option when supported (Windows 8.1 and later).
+    static const auto drawTextOptions = wxCheckOsVersion(6, 3)
+        ? D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT
+        : D2D1_DRAW_TEXT_OPTIONS_NONE;
 
     // Render the text
     GetRenderTarget()->DrawTextLayout(
