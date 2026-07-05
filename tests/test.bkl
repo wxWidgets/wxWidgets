@@ -34,7 +34,7 @@
 
     <exe id="test" template="wx_sample_console,wx_test"
                    template_append="wx_append_base">
-        <cxxflags>-DTEST_HAS_IPC_SERVER</cxxflags>
+        <define>TEST_HAS_IPC_SERVER</define>
         <sources>
             test.cpp
             any/anytest.cpp
@@ -168,7 +168,7 @@
         <app-type>console</app-type>
 
         <!-- needed by the duplicated net/ipc.cpp test below -->
-        <cxxflags>-DTEST_HAS_IPC_SERVER</cxxflags>
+        <define>TEST_HAS_IPC_SERVER</define>
 
         <sources>
             asserthelper.cpp
