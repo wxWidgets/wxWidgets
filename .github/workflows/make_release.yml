@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: 'recursive'
 
@@ -39,7 +39,7 @@ jobs:
             sha1sum * | tee -a ../../../docs/release.md
 
       - name: Create Draft Release
-        uses: softprops/action-gh-release@v2.2.2
+        uses: softprops/action-gh-release@v3
         id: create_release
         with:
           name: wxWidgets ${{ inputs.version }}
@@ -58,7 +58,7 @@ jobs:
       # because it can't be downloaded from a draft release without
       # impersonating the same user and I don't know how to do it.
       - name: Upload Release Archive
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wxWidgets-${{ inputs.version }}-source-archive
           path: distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}.zip
@@ -71,10 +71,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download Release Archive
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: wxWidgets-${{ inputs.version }}-source-archive
 
@@ -106,7 +106,7 @@ jobs:
             type ..\..\..\checksums
 
       - name: Add Files to the Release
-        uses: softprops/action-gh-release@v2.2.2
+        uses: softprops/action-gh-release@v3
         with:
           name: wxWidgets ${{ inputs.version }}
           body_path: checksums
