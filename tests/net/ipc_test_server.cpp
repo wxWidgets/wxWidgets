@@ -382,8 +382,9 @@ void IPCServerConnection::WaitForAdviseWorkers()
 {
     for ( wxThread* thread : m_adviseThreads )
     {
-        if ( thread->IsRunning() )
-            thread->Wait();
+        // Wait() even if the thread has already finished: a joinable thread
+        // must always be joined to release its resources.
+        thread->Wait();
 
         delete thread;
     }
