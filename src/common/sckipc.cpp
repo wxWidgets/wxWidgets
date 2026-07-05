@@ -1029,6 +1029,27 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageDisconnect,wxIPCMessageBase);
 wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageFail,wxIPCMessageBase);
 wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageNull,wxIPCMessageBase);
 
+namespace
+{
+
+// Cast a message read from the socket to its concrete type after its IPC code
+// has been checked.
+//
+// The concrete type of a message is uniquely determined by its IPC code (see
+// GetIPCMessageFromCode(), the only place where the messages read from the
+// socket are created), so the cast cannot fail and a static_cast is enough;
+// still verify the invariant in debug builds.
+template <typename T>
+T* wxIPCMessageCast(wxIPCMessageBase* msg)
+{
+    wxASSERT_MSG( wxDynamicCast(msg, T),
+                  "IPC message type doesn't correspond to its IPC code" );
+
+    return static_cast<T*>(msg);
+}
+
+} // anonymous namespace
+
 // --------------------------------------------------------------------------
 // wxTCPClient
 // --------------------------------------------------------------------------
@@ -1102,17 +1123,16 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
             }
             else
             {
-                delete connection;
+                delete connectionBase;
                 // and fall through to delete everything else
             }
         }
         else if ( msg_reply->GetIPCCode() == IPC_FAIL )
         {
-            wxIPCMessageFail* msg_fail =
-                wxDynamicCast(msg_reply, wxIPCMessageFail);
-
-            if (msg_fail)
-                wxLogDebug("FailMessage received: " + msg_fail->GetItem());
+            // The cast is done inside the macro argument so that no unused
+            // variable is left behind when wxLogDebug() expands to nothing.
+            wxLogDebug("FailMessage received: " +
+                       wxIPCMessageCast<wxIPCMessageFail>(msg_reply)->GetItem());
         }
     }
 
@@ -1460,41 +1480,35 @@ void wxTCPEventHandler::OnSocketConnection(wxSocketEvent &event)
 
     if ( msg->GetIPCCode() == IPC_CONNECT )
     {
-        wxIPCMessageConnect* msg_conn = (wxIPCMessageConnect*) msg;
+        wxIPCMessageConnect* msg_conn = wxIPCMessageCast<wxIPCMessageConnect>(msg);
 
-        if ( msg_conn )
+        wxString topic = msg_conn->GetTopic();
+
+        auto* const connectionBase = ipcserv->OnAcceptConnection(topic);
+
+        if ( auto* const new_connection = wxDynamicCast(connectionBase, wxTCPConnection) )
         {
-            if (wxDynamicCast(msg, wxIPCMessageConnect))
+            // Acknowledge success
+            wxIPCMessageConnect msg_reply(sock, topic);
+
+            if ( WriteMessageToSocket(msg_reply) )
             {
-                wxString topic = msg_conn->GetTopic();
+                new_connection->m_topic = topic;
+                new_connection->m_sock = sock;
+                new_connection->m_handler = &wxTCPEventHandlerModule::GetHandler();
 
-                auto* const connectionBase = ipcserv->OnAcceptConnection(topic);
-
-                if ( auto* const new_connection = wxDynamicCast(connectionBase, wxTCPConnection) )
-                {
-                    // Acknowledge success
-                    wxIPCMessageConnect msg_reply(sock, topic);
-
-                    if ( WriteMessageToSocket(msg_reply) )
-                    {
-                        new_connection->m_topic = topic;
-                        new_connection->m_sock = sock;
-                        new_connection->m_handler = &wxTCPEventHandlerModule::GetHandler();
-
-                        sock->SetTimeout(wxIPCTimeout);
-                        sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
-                                              _SOCKET_INPUT_ID);
-                        sock->SetClientData(new_connection);
-                        RegisterConnectionSocket(sock);
-                        sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
-                        sock->Notify(true);
-                        return;
-                    }
-                }
-
-                delete connectionBase;
+                sock->SetTimeout(wxIPCTimeout);
+                sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
+                                      _SOCKET_INPUT_ID);
+                sock->SetClientData(new_connection);
+                RegisterConnectionSocket(sock);
+                sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
+                sock->Notify(true);
+                return;
             }
         }
+
+        delete connectionBase;
     }
 
     SendFailMessage("IPC CONNECT failed to create valid connection", sock);
@@ -1520,44 +1534,32 @@ bool wxTCPEventHandler::ProcessMessage(wxIPCMessageBase* msg, wxSocketBase *sock
     case IPC_EXECUTE:
     {
         wxIPCMessageExecute* msg_execute =
-            wxDynamicCast(msg, wxIPCMessageExecute);
+            wxIPCMessageCast<wxIPCMessageExecute>(msg);
 
-        if ( msg_execute )
-            connection->OnExecute(connection->m_topic,
-                                  msg_execute->GetReadData(),
-                                  msg_execute->GetSize(),
-                                  msg_execute->GetIPCFormat());
-        else
-            errmsg = "No data read for IPC Execute";
+        connection->OnExecute(connection->m_topic,
+                              msg_execute->GetReadData(),
+                              msg_execute->GetSize(),
+                              msg_execute->GetIPCFormat());
     }
     break;
 
     case IPC_ADVISE:
     {
         wxIPCMessageAdvise* msg_advise =
-            wxDynamicCast(msg, wxIPCMessageAdvise);
+            wxIPCMessageCast<wxIPCMessageAdvise>(msg);
 
-        if ( msg_advise )
-            connection->OnAdvise(connection->m_topic,
-                                 msg_advise->GetItem(),
-                                 msg_advise->GetReadData(),
-                                 msg_advise->GetSize(),
-                                 msg_advise->GetIPCFormat());
-        else
-            errmsg = "No data read for IPC Advise";
+        connection->OnAdvise(connection->m_topic,
+                             msg_advise->GetItem(),
+                             msg_advise->GetReadData(),
+                             msg_advise->GetSize(),
+                             msg_advise->GetIPCFormat());
     }
     break;
 
     case IPC_ADVISE_START:
     {
         wxIPCMessageAdviseStart* msg_advise_start =
-            wxDynamicCast(msg, wxIPCMessageAdviseStart);
-
-        if ( !msg_advise_start )
-        {
-            errmsg = "No data read for IPC Advise Start";
-            break;
-        }
+            wxIPCMessageCast<wxIPCMessageAdviseStart>(msg);
 
         if ( connection->OnStartAdvise(connection->m_topic,
                                        msg_advise_start->GetItem()) )
@@ -1579,13 +1581,7 @@ bool wxTCPEventHandler::ProcessMessage(wxIPCMessageBase* msg, wxSocketBase *sock
     case IPC_ADVISE_STOP:
     {
         wxIPCMessageAdviseStop* msg_advise_stop =
-            wxDynamicCast(msg, wxIPCMessageAdviseStop);
-
-        if ( !msg_advise_stop )
-        {
-            errmsg = "No data read for IPC Advise Stop";
-            break;
-        }
+            wxIPCMessageCast<wxIPCMessageAdviseStop>(msg);
 
         if ( connection->OnStopAdvise(connection->m_topic, msg_advise_stop->GetItem()) )
         {
@@ -1605,30 +1601,18 @@ bool wxTCPEventHandler::ProcessMessage(wxIPCMessageBase* msg, wxSocketBase *sock
     case IPC_POKE:
     {
         wxIPCMessagePoke* msg_poke =
-            wxDynamicCast(msg, wxIPCMessagePoke);
+            wxIPCMessageCast<wxIPCMessagePoke>(msg);
 
-        if ( msg_poke )
-            connection->OnPoke(connection->m_topic,
-                               msg_poke->GetItem(),
-                               msg_poke->GetReadData(),
-                               msg_poke->GetSize(),
-                               msg_poke->GetIPCFormat());
-        else
-            errmsg = "No data read for IPC Poke";
+        connection->OnPoke(connection->m_topic,
+                           msg_poke->GetItem(),
+                           msg_poke->GetReadData(),
+                           msg_poke->GetSize(),
+                           msg_poke->GetIPCFormat());
     }
     break;
 
     case IPC_REQUEST:
     {
-        wxIPCMessageRequest* msg_request =
-            wxDynamicCast(msg, wxIPCMessageRequest);
-
-        if ( !msg_request )
-        {
-            errmsg = "No data read for IPC Request";
-            break;
-        }
-
         size_t user_size = wxNO_LEN;
         const void *user_data = connection->OnRequest(connection->m_topic,
                                                       msg->GetItem(),
@@ -1657,13 +1641,10 @@ bool wxTCPEventHandler::ProcessMessage(wxIPCMessageBase* msg, wxSocketBase *sock
 
     case IPC_FAIL:
     {
-        wxIPCMessageFail* msg_fail =
-            wxDynamicCast(msg, wxIPCMessageFail);
-
-        if ( msg_fail )
-            wxLogDebug("Unexpected IPC_FAIL received: " + msg_fail->GetItem());
-        else
-            wxLogDebug("Unexpected IPC_FAIL, and data read failed.");
+        // The cast is done inside the macro argument so that no unused
+        // variable is left behind when wxLogDebug() expands to nothing.
+        wxLogDebug("Unexpected IPC_FAIL received: " +
+                   wxIPCMessageCast<wxIPCMessageFail>(msg)->GetItem());
 
         return false;
     }
