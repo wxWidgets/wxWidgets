@@ -81,7 +81,7 @@ jobs:
       - name: Install Prerequisites
         run: |
             choco install -y --no-progress graphviz html-help-workshop
-            choco install -y doxygen.install --version=1.9.15
+            choco install -y doxygen.install --version=1.15.0
 
       - name: Create MSW Installer and Help File
         shell: cmd
