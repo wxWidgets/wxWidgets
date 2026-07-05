@@ -69,6 +69,11 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
     {
         return wxGetEnv("WX_IPC_TEST_SERVER", nullptr);
     }
+#else // not using IPC test server
+    static bool ShouldRunTestIPCServer()
+    {
+        return false;
+    }
 #endif
 
 using namespace std;
@@ -718,8 +723,10 @@ bool TestApp::OnInit()
 
     // Hack: don't call TestAppBase::OnInit() to let CATCH handle command line.
 
-    // Output some important information about the test environment.
-    ShowTestInformation();
+    // Output some important information about the test environment unless
+    // we're running as a helper IPC server process.
+    if ( !ShouldRunTestIPCServer() )
+        ShowTestInformation();
 
     // Optionally allow executing the tests in the locale specified by the
     // standard environment variable, this is especially useful to use UTF-8
