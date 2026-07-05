@@ -233,6 +233,7 @@ public:
     wxIPCMessageBase* GetIPCMessageFromCode(IPCCode code, wxSocketBase* socket);
 
     void PostSocketInputEvent(wxSocketBase* socket);
+
 private:
     wxTCPConnection* GetConnection(wxSocketBase* socket);
 
@@ -252,7 +253,9 @@ private:
     std::unordered_set<wxSocketBase*> m_socketsBeingRead;
 
     bool IsReadingSocket(wxSocketBase* socket) const
-        { return m_socketsBeingRead.count(socket) != 0; }
+    {
+        return m_socketsBeingRead.count(socket) != 0;
+    }
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTCPEventHandler);
@@ -273,13 +276,22 @@ namespace
 class MainThreadReadGuard
 {
 public:
+    // First argument is always wxTCPEventHandler::m_socketsBeingRead.
     MainThreadReadGuard(std::unordered_set<wxSocketBase*>& set, wxSocketBase* socket)
-        : m_set(set), m_socket(socket) { m_set.insert(m_socket); }
-    ~MainThreadReadGuard() { m_set.erase(m_socket); }
+        : m_set(set), m_socket(socket)
+    {
+        m_set.insert(m_socket);
+    }
+
+    ~MainThreadReadGuard()
+    {
+        m_set.erase(m_socket);
+    }
 
 private:
     std::unordered_set<wxSocketBase*>& m_set;
     wxSocketBase* const m_socket;
+
     wxDECLARE_NO_COPY_CLASS(MainThreadReadGuard);
 };
 
@@ -329,22 +341,22 @@ class wxIPCMessageBase : public wxObject
 public:
     wxIPCMessageBase(wxSocketBase* socket = nullptr,
                      wxTCPEventHandler* handler = nullptr)
-        : m_write_data(nullptr), m_handler(handler)
+        : m_writeData(nullptr), m_handler(handler)
     {
         Init(socket);
     }
 
     wxIPCMessageBase(wxSocketBase* socket, const void* data)
-        : m_write_data(data), m_handler(nullptr)
+        : m_writeData(data), m_handler(nullptr)
     {
         Init(socket);
     }
 
-    bool IsOk() const { return m_ipc_code != IPC_NULL; }
+    bool IsOk() const { return m_ipcCode != IPC_NULL; }
 
     // Accessors for the base object
-    IPCCode GetIPCCode() const { return m_ipc_code; }
-    void SetIPCCode(IPCCode ipc_code) { m_ipc_code = ipc_code; }
+    IPCCode GetIPCCode() const { return m_ipcCode; }
+    void SetIPCCode(IPCCode ipc_code) { m_ipcCode = ipc_code; }
 
     wxSocketBase* GetSocket() const { return m_socket; }
     void SetSocket(wxSocketBase* socket) { m_socket = socket; }
@@ -353,11 +365,11 @@ public:
     void SetError(wxSocketError error) { m_error = error; }
 
     // These accessors are here to avoid repetition in the derived objects.
-    wxIPCFormat GetIPCFormat() const { return m_ipc_format; }
-    void SetIPCFormat(wxIPCFormat ipc_format) { m_ipc_format = ipc_format; }
+    wxIPCFormat GetIPCFormat() const { return m_ipcFormat; }
+    void SetIPCFormat(wxIPCFormat ipc_format) { m_ipcFormat = ipc_format; }
 
-    const void* GetReadData() const { return m_read_data; }
-    void SetReadData(void *data) { m_read_data = data; }
+    const void* GetReadData() const { return m_readData; }
+    void SetReadData(void *data) { m_readData = data; }
 
     size_t GetSize() const { return m_size; }
     void SetSize(size_t size) { m_size = size; }
@@ -384,7 +396,8 @@ protected:
 
     bool VerifyValidSocket()
     {
-        if (m_socket && m_socket->IsOk() && m_socket->IsConnected() ) return true;
+        if (m_socket && m_socket->IsOk() && m_socket->IsConnected() )
+            return true;
 
         SetError(wxSOCKET_INVSOCK);
         return false;
@@ -436,7 +449,7 @@ protected:
         if ( !VerifyValidSocket() )
             return false;
 
-        m_socket->Read(reinterpret_cast<char *>(&m_ipc_format), 1);
+        m_socket->Read(reinterpret_cast<char *>(&m_ipcFormat), 1);
 
         return VerifyLastReadCount(1);
     }
@@ -487,7 +500,7 @@ protected:
         if (!Write32(m_size))
             return false;
 
-        return WriteData(m_write_data, m_size);
+        return WriteData(m_writeData, m_size);
     }
 
     bool WriteIPCCode()
@@ -501,7 +514,7 @@ protected:
         if ( !VerifyValidSocket() )
             return false;
 
-        m_socket->Write(reinterpret_cast<char *>(&m_ipc_format), 1);
+        m_socket->Write(reinterpret_cast<char *>(&m_ipcFormat), 1);
 
         return VerifyLastWriteCount(1);
     }
@@ -527,21 +540,21 @@ protected:
         return true;
     }
 
-    IPCCode m_ipc_code;
+    IPCCode m_ipcCode;
 
     wxSocketBase* m_socket;
     wxSocketError m_error;
 
     // Members used in most of the derived messages
     wxUint32 m_size;
-    wxIPCFormat m_ipc_format;
+    wxIPCFormat m_ipcFormat;
     wxString m_item;
 
     // immutable pointer to data from connection object
-    const void* m_write_data;
+    const void* m_writeData;
 
     // pointer to data read from socket
-    void* m_read_data;
+    void* m_readData;
 
     wxTCPEventHandler *m_handler;
 
@@ -553,7 +566,7 @@ protected:
 
 // Reads a 32-bit word to get the desired buffer m_size from the socket, allocates
 // a buffer of that size, then read m_size bytes worth of data from the socket
-// into m_read_data.
+// into m_readData.
 bool wxIPCMessageBase::ReadSizeAndData()
 {
     if (!Read32(m_size))
@@ -561,9 +574,9 @@ bool wxIPCMessageBase::ReadSizeAndData()
 
     wxCHECK_MSG( m_handler, false, "No handler for read allocation");
 
-    m_read_data = m_handler->GetBufPtr(m_size);
+    m_readData = m_handler->GetBufPtr(m_size);
 
-    m_socket->Read(m_read_data, m_size);
+    m_socket->Read(m_readData, m_size);
     return VerifyLastReadCount(m_size);
 }
 
