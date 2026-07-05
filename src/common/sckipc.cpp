@@ -88,7 +88,7 @@ enum IPCCode
 // A random header, which is used to detect a loss-of-sync on the IPC
 // data stream. The header is 24-bits, and the IPCCode above is sent in the
 // last 8 bits.
-const wxUint32 IPCCodeHeader=0x439d9600;
+constexpr wxUint32 IPCCodeHeader = 0x439d9600;
 
 } // anonymous namespace
 
@@ -98,16 +98,16 @@ const wxUint32 IPCCodeHeader=0x439d9600;
     #include <sys/stat.h>
 #endif // __UNIX_LIKE__
 
-#define wxNO_RETURN_MESSAGE nullptr
+constexpr auto wxNO_RETURN_MESSAGE = nullptr;
 
-const long wxIPCTimeout = 10; // socket timeout, in seconds
+constexpr long wxIPCTimeout = 10; // socket timeout, in seconds
 
 
 // For IPC returning a char* buffer. wxWidgets docs say that the user is not
 // supposed to free the memory.  Each buffer pointer is assigned to a list
 // sequentially, and the buffer memory is not freed until MAX_MSG_BUFFERS have
 // been assigned.
-#define MAX_MSG_BUFFERS 2048
+constexpr int MAX_MSG_BUFFERS = 2048;
 
 
 // ----------------------------------------------------------------------------
@@ -152,17 +152,16 @@ class wxTCPEventHandler : public wxEvtHandler
 public:
     wxTCPEventHandler() : wxEvtHandler()
     {
-        for (int i = 0; i < MAX_MSG_BUFFERS; i++)
-            m_bufferList[i] = nullptr;
+        for ( auto& buf : m_bufferList )
+            buf = nullptr;
 
         m_nextAvailable = 0;
     }
 
     ~wxTCPEventHandler()
     {
-        for (int i = 0; i < MAX_MSG_BUFFERS; i++)
-            if (m_bufferList[i])
-                delete[] m_bufferList[i];
+        for ( auto& buf : m_bufferList )
+            delete[] buf;
     }
 
     void OnSocketInput(wxSocketEvent& event);
