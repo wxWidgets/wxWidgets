@@ -298,6 +298,9 @@ wxFsEventsFileSystemWatcher::wxFsEventsFileSystemWatcher(const wxFileName& path,
 
 wxFsEventsFileSystemWatcher::~wxFsEventsFileSystemWatcher()
 {
+    // Remove all watches to ensure this object is not used any more.
+    RemoveAll();
+
     delete m_pImpl;
 }
 

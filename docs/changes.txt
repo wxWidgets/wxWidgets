@@ -317,6 +317,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix crash after destroying wxFileSystemWatcher (Juraj Kavka, #26658).
 - Fix possible crash in wxFont::SetNativeFontInfo() (Václav Slavík, #26411).
 
 
