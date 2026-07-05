@@ -1139,11 +1139,7 @@ wxConnectionBase *wxTCPClient::OnMakeConnection()
 // wxTCPServer
 // --------------------------------------------------------------------------
 
-wxTCPServer::wxTCPServer()
-    : wxServerBase()
-{
-    m_server = nullptr;
-}
+wxTCPServer::wxTCPServer() = default;
 
 bool wxTCPServer::Create(const wxString& serverName)
 {
