@@ -16,7 +16,9 @@ on:
       - 'docs/**'
       - 'interface/**'
   workflow_dispatch:
-
+    inputs:
+      version:
+        description: 'Version to generate docs for'
 
 permissions:
   contents: read
@@ -58,25 +60,28 @@ jobs:
           DOCS_WEBSITE_KEY: ${{secrets.DOCS_WEBSITE_KEY}}
           DOCS_WEBSITE_SSH_CONFIG: ${{secrets.DOCS_WEBSITE_SSH_CONFIG}}
         run: |
-          ref="${{github.ref}}"
-          case "$ref" in
-            refs/heads/3.2)
-              dst=3.2
-              ;;
+          dst=${{ inputs.version }}
+          if [[ -z "$dst" ]]; then
+            ref="${{github.ref}}"
+            case "$ref" in
+              refs/heads/3.2)
+                dst=3.2
+                ;;
 
-            refs/tags/v*)
-              dst=${ref#refs/tags/v}
-              ;;
+              refs/tags/v*)
+                dst=${ref#refs/tags/v}
+                ;;
 
-            refs/pull/*/merge)
-              echo "Skipping docs upload for pull request"
-              exit 0
-              ;;
+              refs/pull/*/merge)
+                echo "Skipping docs upload for pull request"
+                exit 0
+                ;;
 
-            *)
-              echo "Skipping docs upload for $ref of unknown type"
-              exit 2
-          esac
+              *)
+                echo "Skipping docs upload for $ref of unknown type"
+                exit 2
+            esac
+          fi
           mkdir "$HOME/.ssh"
           echo "$DOCS_WEBSITE_KEY" > "$HOME/.ssh/docs_website_key"
           chmod 600 "$HOME/.ssh/docs_website_key"
