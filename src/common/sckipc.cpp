@@ -130,7 +130,11 @@ GetAddressFromName(const wxString& serverName,
         auto addr = std::make_unique<wxUNIXaddress>();
         addr->Filename(serverName);
 
-        return addr;
+        // The explicit conversion is needed by g++ 4.8, which can't
+        // implicitly move a returned local to the base class pointer, while
+        // "return std::move(addr)" triggers -Wredundant-move in C++20 mode
+        // with newer compilers.
+        return std::unique_ptr<wxSockAddress>(std::move(addr));
     }
 #endif // Unix/!Unix
 
@@ -141,7 +145,8 @@ GetAddressFromName(const wxString& serverName,
         addr->Hostname(host);
     }
 
-    return addr;
+    // See above.
+    return std::unique_ptr<wxSockAddress>(std::move(addr));
 }
 
 // --------------------------------------------------------------------------
