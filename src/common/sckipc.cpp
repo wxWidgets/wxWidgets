@@ -560,9 +560,7 @@ bool wxIPCMessageBase::ReadSizeAndData()
     if (!Read32(m_size))
         return false;
 
-    wxASSERT_MSG( m_handler, "No handler for read allocation");
-    if ( !m_handler )
-        return false;
+    wxCHECK_MSG( m_handler, false, "No handler for read allocation");
 
     m_read_data = m_handler->GetBufPtr(m_size);
 
