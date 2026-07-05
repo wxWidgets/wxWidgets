@@ -255,31 +255,64 @@ Changes in behaviour which may result in build errors
   make sense and was removed, please use the other overload instead if needed.
 
 
-3.3.3: (released 2026-??-??)
+3.3.3: (released 2026-07-07)
 ----------------------------
 
-NOTE: In addition to the note below, also incorporate (either by
-      copy or by reference) all the changes in the 3.2 branch (i.e.
-      everything in this file after 3.2.0 in that branch).
+Please note that this is a list of changes compared to 3.2.11, the full list of
+changes since 3.3.2 also includes all changes between 3.2.10 and 3.2.11.
 
-NOTE: This file is updated only before the release, please use
-    $ git log --notes=changelog --format='%N' v3.3.2..|grep .
-      to see all the change log entries since the last release.
+All:
 
-      To update the notes, fetch them first:
-    $ git fetch origin refs/notes/changelog:refs/notes/changelog
-      then use the following command to update them locally
-    $ git notes --ref=changelog add -m 'wxPort: description.'
-      and finally push it to the server.
-    $ git push origin refs/notes/changelog:refs/notes/changelog
+- Add wxMoveToTrash() function (Blake-Madden, #26256).
+- Add wxTarInputStream::SetMaxExtendedHeaderSize() (Arthur Chan, #26607).
+- CMake improvements to installation and wxbase_only (Maarten Bent, #26325).
+- Implement C++20 <=> operator for wxString (#26306).
+- Make wxGetOsDescription() more useful under Linux (Lauri Nurmi, #26231).
+- Treat truncated reads as errors in wxDataInputStream (dxbjavid, #26600).
 
-      If this fails due to a conflict because you had forgotten to
-      run git-fetch first, you can always reset your local notes
-      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
-    $ git fetch origin refs/notes/changelog
-    $ git update-ref refs/notes/changelog FETCH_HEAD
+All (GUI):
 
-      and then redo "git-notes add" and git-push.
+- Add accessibility support to wxSVGFileDC (Blake-Madden, #26379).
+- Add fluent UI-like wxRibbon art provider (Blake-Madden, #26253).
+- Add support for print settings to wxWebView::Print() (Blake-Madden, #26239).
+- Add wxGrid::GetFrozenRowLabelWindow() and GetFrozenColLabelWindow() (Jorge Moraleda, #26617).
+- Add wxSVGFileDC::GetSVGDocument() (Blake-Madden, #26344).
+- Add wxSizer::DetachItem() (Ryan Ogurek, #26512).
+- Add wxWebView::PrintToPDF() (Blake-Madden, #26583).
+- Add wxWebViewConfiguration::DisableGPUAcceleration() (Blake-Madden, #26626).
+- Fix wxRibbon icons in high DPI (Blake-Madden, #26409).
+- Use wxBitmapBundle in wxRibbon (Randalphwa, #26117).
+
+wxGTK:
+
+- Add support for high DPI bitmaps to wxAboutBox (#22192).
+- Fix assert when clipboard has non-ASCII targets (#26263).
+- Fix regression in building with GTK without Wayland support (#26269).
+- Fix regression when using wxImageList in high DPI (#26349).
+- Fix wxStaticText label wrapping.
+
+wxMSW:
+
+- Add dark mode support to wxMessageDialog (Mohmed abdel-fattah, #26570).
+- Add support for stylus events (Iulian-Nicu Serbanoiu, #26223).
+- Enable drawing color emoji using Direct2D (Tobias Predel, #26657).
+- Fix combo/listbox colours in dark mode in latest Windows 11 (Fefedu973, #26535).
+- Fix regression in drawing text with Direct2D graphics context (#26259).
+- Fix regression with wxCheckBox label in screen readers (#26270).
+- Fix regression with wxPD_CAN_SKIP in 3.3.2 (#26287).
+- Implement support for switching between light/dark modes (Steve Cornett, #26516).
+- Use inches in page setup dialog if needed (Richard, #9177).
+
+wxOSX:
+
+- Fix dataview icons rendering under macOS 26 (#26374).
+- Fix wxOverlay leaving phantoms in Mission Control (Daniel DeMoney, #26380).
+- Set value in EVT_DATAVIEW_ITEM_EDITING_DONE (Robert Roebling, #26367).
+- Update XCode project to support macOS 27 (#26578).
+
+wxQt
+
+- Add support for private fonts (AtesComp, #26403).
 
 
 3.3.2: (released 2026-03-03)

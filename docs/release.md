@@ -1,6 +1,6 @@
 Welcome to wxWidgets, a free and open source cross-platform C++ framework for writing advanced GUI applications using native controls.
 
-wxWidgets 3.3.3 is the third release in the 3.3 development branch, bringing many new features and improvements compared to the stable 3.2 branch while remaining mostly API-compatible with it.
+wxWidgets 3.3.3 is the fourth release in the 3.3 development branch, bringing many new features and improvements compared to the stable 3.2 branch while remaining mostly API-compatible with it.
 
 Please note that even this is not a "stable" release, it is still considered to be suitable to be used in production, the only difference with the stable releases is that API and ABI compatibility are not guaranteed for the releases in this series. In practice, however, backwards-incompatible API changes are expected to be rare.
 
@@ -19,15 +19,15 @@ Finally, Microsoft Windows users may download [Setup.exe file](https://github.co
 
 To verify your download please use the following SHA-1 checksums:
 
-    12baaf00dad5812e20736153d84d9541452de878  wxMSW-3.3.3-Setup.exe
-    ebae0bef61afd3b58840c9a226a8ab60b5f2245e  wxWidgets-3.3.3-docs-chm.zip
-    87bcd85664ba3601d56b66c748209cd34c069e49  wxWidgets-3.3.3-docs-html.tar.bz2
-    8741eebcd50bc051174fd631dd2ede3ba08c9c6b  wxWidgets-3.3.3-docs-html.zip
-    5d2b42af1caa0d965b09c68e53b8c4af455c6091  wxWidgets-3.3.3-headers.7z
-    7226a2dd7a2de9c3d95eaf64f8e6a554d0e30231  wxWidgets-3.3.3.7z
-    825d76242e4a066170b67e8cdc3ce2e1dd03e200  wxWidgets-3.3.3.chm
-    64ca276f82ccb2b1459bceb4b8fda33609461d69  wxWidgets-3.3.3.tar.bz2
-    2b2900a750edd5ac5f09e5fd579ed8983bb05a0b  wxWidgets-3.3.3.zip
+    0000000000000000000000000000000000000000  wxMSW-3.3.3-Setup.exe
+    0000000000000000000000000000000000000000  wxWidgets-3.3.3-docs-chm.zip
+    0000000000000000000000000000000000000000  wxWidgets-3.3.3-docs-html.tar.bz2
+    0000000000000000000000000000000000000000  wxWidgets-3.3.3-docs-html.zip
+    0000000000000000000000000000000000000000  wxWidgets-3.3.3-headers.7z
+    0000000000000000000000000000000000000000  wxWidgets-3.3.3.7z
+    0000000000000000000000000000000000000000  wxWidgets-3.3.3.chm
+    0000000000000000000000000000000000000000  wxWidgets-3.3.3.tar.bz2
+    0000000000000000000000000000000000000000  wxWidgets-3.3.3.zip
 
 ## Binaries
 
@@ -59,13 +59,13 @@ End users may download one of `wxMSW-3.3.3_vc14x_x64_ReleaseDLL.7z` or `wxMSW-3.
 
 To verify your download please use the following SHA-1 checksums:
 
-    920e1c9d8e3c897f40005757eeffcb014b2a2d09 wxMSW-3.3.3_gcc1420UCRT_x64_Dev.7z
-    23ebabdc1ffa80496e170717aa01714bef3639a4 wxMSW-3.3.3_gcc1420UCRT_x64_ReleaseDLL.7z
-    da70b61c9a279f97d6e661b89d93183909592d12 wxMSW-3.3.3_gcc1520_x64_Dev.7z
-    9408dfe14cb28ca9107a3bcc20b8dcf0e0c1dcd5 wxMSW-3.3.3_gcc1520_x64_ReleaseDLL.7z
-    05898468b0b7c2116b140c3ff5ad18f43a5640d8 wxMSW-3.3.3_vc14x_x64_Dev.7z
-    41e680074d45485176000b4e57a758c96578e2a1 wxMSW-3.3.3_vc14x_x64_ReleaseDLL.7z
-    6efb4fb63a4ee0e547d1aab54881287531f5d3d7 wxMSW-3.3.3_vc14x_x64_ReleasePDB.7z
+    0000000000000000000000000000000000000000 wxMSW-3.3.3_gcc1420UCRT_x64_Dev.7z
+    0000000000000000000000000000000000000000 wxMSW-3.3.3_gcc1420UCRT_x64_ReleaseDLL.7z
+    0000000000000000000000000000000000000000 wxMSW-3.3.3_gcc1520_x64_Dev.7z
+    0000000000000000000000000000000000000000 wxMSW-3.3.3_gcc1520_x64_ReleaseDLL.7z
+    0000000000000000000000000000000000000000 wxMSW-3.3.3_vc14x_x64_Dev.7z
+    0000000000000000000000000000000000000000 wxMSW-3.3.3_vc14x_x64_ReleaseDLL.7z
+    0000000000000000000000000000000000000000 wxMSW-3.3.3_vc14x_x64_ReleasePDB.7z
 
 ## Reporting Problems
 

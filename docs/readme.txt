@@ -32,43 +32,34 @@ installation instructions.
 
 
 
-Changes since 3.3.1
+Changes since 3.3.2
 -------------------
 
-This release contains almost a 1000 commits since 3.3.1, including a number of
-new features and improvements:
+This release contains more than 600 commits from 55 contributors since 3.3.2,
+including a number of new features and improvements:
 
-- Improve accessibility support: fix it for wxCheckBox in dark mode (#26184),
-  add it for wxCheckListBox (#25948), wxStyledTextCtrl (#25956) and minimal
-  support for wxRichTextCtrl (#26202).
-- Add support for minimizing panes in wxAUI (#23986) and improve splitting
-  behaviour in wxAuiNotebook (#26081).
-- Add wxStyledTextCtrlMiniMap (#25887).
-- Allow using GLX and EGL in the same program in wxGTK (#26023).
-- Add support for using LunaSVG for SVG rendering (#25902).
-- Include projects and solution files for MSVC 2026 (#26131).
-- Many visual fixes for macOS 26 Tahoe (#25766, #25743, #25767)
-- Support scrolling, wxListCtrl, wxNotebook in wxiOS (#25827, #25857, #25858).
-- Implement printing support and wxArtProvider in wxQt (#26126, #26210).
-- Generate suspend/resume events in wxOSX (#25778).
-- Make automatic scrolling in wxScrolled<> configurable (#25978).
-- Improve number and currency formatting (#25765).
-- Significant improvements in wxSVGFileDC (#25723).
-- Allow configuring timeouts in wxWebRequest (#25673) and add new
-  wxWebRequestDebugLogger class (#26086).
-- All bundled 3rd party libraries were updated to latest versions (#26010).
+- Add dark mode support to wxMessageBox and other dialogs in wxMSW (#26570).
+- Support switching between light/dark modes in wxMSW (#26516).
+- Add support for stylus events to wxMSW (#26223).
+- Add accessibility support to wxSVGFileDC (#26379).
+- Add wxWebView::Print() and PrintToPDF() (#26239, #26583).
+- Improve wxRibbon appearance in high DPI (#26117, #26409).
+- Improve wxStaticText label wrapping in wxGTK.
+- Add wxMoveToTrash() function (#26256).
+- Enable drawing color emoji using Direct2D in wxMSW (#26657).
+- Implement C++20 <=> operator for wxString (#26306).
+- Add support for private fonts to wxQt (#26403).
+- Support building wxOSX under macOS 27 (#26578).
 
-There were, of course, also a number of bug fixes:
+There were also a number of bug fixes, the most important ones being:
 
-- Fix using wxSOCKET_NOWAIT_READ and wxSOCKET_WAITALL_WRITE together (#17114).
-- Fix crash on mouse hover after closing tab in wxAuiNotebook (#25959).
-- More dark mode fixes in wxMSW: fix or improve rendering of several controls
-  (#25835), toolbar (#25892) and menus (#26182).
-- More high DPI fixes as well: for wxToolBar (#26038), wxAuiToolBar (#26076),
-  wxPGMultiButton (#26069), wxTreeCtrl state images (#26059), generic
-  wxCalendarCtrl (#25713) and bitmap position in wxDC::DrawLabel() (#25888).
-- Many RTL layout fixes in wxMSW, wxGTK and wxQt (#25426, #25822).
-- Fix multiple bugs in gesture handling in wxGTK (#26241).
+- Improve wxTarInputStream robustness (#26607).
+- Treat truncated reads as errors in wxDataInputStream (#26600).
+- Fix regression when using wxImageList in high DPI in wxGTK (#26349).
+- Fix regression with wxCheckBox label in screen readers in wxMSW (#26270).
+- Fix regression with wxPD_CAN_SKIP in 3.3.2 in wxMSW (#26287).
+- Fix dataview icons rendering under macOS 26 (#26374).
+- Fix wxOSX wxOverlay leaving phantoms in Mission Control (#26380).
 
 Please see the change log for the more complete list:
 
@@ -76,9 +67,12 @@ https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.3/docs/changes.txt
 
 and also see
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.10/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.11/docs/changes.txt
 
-as the changes in 3.2.9 and 3.2.10 releases are also included in this one.
+as the changes in 3.2.11 release are also included in this one and notably
+include multiple buffer overflows in different image handlers and other
+components.
+
 
 Note that in spite of all these changes, wxWidgets 3.3.3 is almost fully
 compatible with wxWidgets 3.2 and updating the existing applications to
@@ -94,7 +88,7 @@ This version of wxWidgets supports the following primary platforms:
 
 * Windows 7, 8, 10 and 11 (32/64 bits).
 * Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
-* macOS (10.10 or newer) using Cocoa (x86-64 or ARM).
+* macOS (10.10 or newer, up to 27) using Cocoa (x86-64 or ARM).
 
 There is some support for the following platforms:
 
@@ -177,4 +171,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, July 2025
+The wxWidgets Team, July 2026
