@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   add_release_sources:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-26.04
     name: Create Release with Source Archives
 
     steps:
@@ -81,7 +81,7 @@ jobs:
       - name: Install Prerequisites
         run: |
             choco install -y --no-progress graphviz html-help-workshop
-            choco install -y doxygen.install --version=1.9.1
+            choco install -y doxygen.install --version=1.9.15
 
       - name: Create MSW Installer and Help File
         shell: cmd
