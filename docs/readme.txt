@@ -32,27 +32,63 @@ installation instructions.
 
 
 
-Changes since 3.2.9
--------------------
+Changes since 3.2.10
+--------------------
 
-This is a minor bug-fix release with just a single new addition: wxWidgets now
-includes project files for Microsoft Visual Studio 2026.
+This release contains a big number of important fixes, including for potential
+security problems, and upgrading to it is strongly recommended for all
+wxWidgets users.
 
-It does contain a number of important bug fixes for macOS port of wxWidgets,
-notably:
+The following bugs were fixed:
 
-- Fix install names of the libraries when using "make install" (#25675).
-- Fix crash on some key presses in wxDataViewCtrl (#26160).
-- Fix memory leaks in a number of controls (#26208).
-- Fix regression in wxFileDialog filters in 3.2.9 (#26148).
-- Many fixes for macOS 26 Tahoe (#26058, #25767, #26121, #26095).
-
-Some other bugs fixed in this release:
-
-- Don't use first image for wxListCtrl items without images in wxMSW (#26062).
-- Fix regression in wxStaticBitmap::SetBitmap() in wxMSW 3.2.9 (#26106).
-- Handle font names longer than 31 characters in wxMSW (moi15moi, #25333).
-- Fix right/middle click events in vertical wxAuiToolBar (#26242).
+- Fix wxCondition and wxSemaphore::WaitTimeout() after 2038 under Unix (#26466).
+- Fix buffer overflow in wxGethostby{addr,name}_r() (#26528).
+- Fix buffer overflow in wxTarInputStream (#26530).
+- Fix out-of-bounds read in wxFileType::ExpandCommand() (#26531).
+- Fix buffer overflow in wxVsnprintf() (#26522).
+- Fix out-of-bounds read in wxRegEx::Replace() (#26541).
+- Fix out-of-bounds read in wxUString (#26548).
+- Fix wxDateTime::Format() handling of invalid format (#26543).
+- Fix buffer overflow in wxGethostbyxxx_r() on some systems (#26553).
+- Fix wxCaret position in scrolled windows (#26282).
+- Correct delta-RLE bitmap background colour (#23599).
+- Correct loading of `BI_BITFIELDS` bitmaps (#23601).
+- Fix loading 32bpp BMP files without valid alpha (#24219).
+- Fix buffer overwrite when loading malformed BMPs with invalid RLE data.
+- Avoid out-of-bounds palette read in 8bpp BMP decoder (#26438).
+- Avoid out-of-bounds palette write in wxIFFDecoder (#26440).
+- Avoid out-of-bounds read in wxPCXHandler (#26441).
+- Avoid out-of-bounds read in wxXPMDecoder (#26442).
+- Fix reading ANI images with invalid frame count (#26492).
+- Avoid out-of-bounds write for invalid BMP RLE runs (#26496).
+- Fix out-of-bounds read when loading invalid 4bpp BMPs (#26511).
+- Avoid out-of-bounds write on bad BMHD chunk in wxIFFDecoder (#26497).
+- Fix write overflow in TGA files with invalid colour map (#26493).
+- Fix read overflow in wxXPMDecoder on unterminated quote (#26499).
+- Fix read overflow in wxXPMDecoder on invalid width (#26519).
+- Reject more invalid GIFs and do it without leaking memory (#26501).
+- Fix buffer overflows decoding invalid GIFs (#26521, #26524).
+- Fix multiple buffer overflows in wxIFFDecoder (#26505, #26518).
+- Fix multiple buffer overflows in wxSound (#26506, #26525).
+- Fix reading too short extra field in ZIP64 files (#26507).
+- Fix out-of-bounds table read in wxMBConvUTF7::ToWChar(#26517).
+- Fix buffer overflow reading corrupted message catalogs (#26513).
+- Fix buffer overflow for too big tables in wxHTML (#26554).
+- Add wxGrid::GetFrozen{Row,Col}LabelWindow() (#26617).
+- Fix wxPropertyGrid macros with wxNO_IMPLICIT_WXSTRING_ENCODING (#26651).
+- Fix copy/paste in wxGTK when a clipboard manager is running (#26265).
+- Fix crash with EGL-based wxGLCanvas in wxNotebook (#26340).
+- Fix possible wxTextCtrl crash with GSpell attached (#26464).
+- Fix drawing of very large bitmaps in wxGTK (#25656).
+- Fix memory leak in wxDataViewChoiceRenderer.
+- Fix resource leak when using EGL with X11 (#26341).
+- Fix showing title bar under Wayland with wxBORDER_NONE (#26357).
+- Remove maximum text length limitation in "picker" controls in wxGTK (#26314).
+- Fix appearance of dashed lines drawn by wxDC::DrawLine() in wxGTK (#26449).
+- Fix non-resizable TLW size when setting client size in wxGTK (#26480).
+- Fix wxBufferedPaintDC when using RTL layout in wxMSW (#26266).
+- Fix crash after destroying wxFileSystemWatcher in wxOSX (#26658).
+- Fix possible crash in wxFont::SetNativeFontInfo() in wxOSX (#26411).
 
 Please see the full change log for more details:
 
