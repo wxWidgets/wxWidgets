@@ -668,21 +668,8 @@ TestApp::TestApp()
 #endif // wxUSE_GUI
 }
 
-// Init
-//
-bool TestApp::OnInit()
+static void ShowTestInformation()
 {
-#if wxUSE_GUI
-    if ( !IsGUIEnabled() )
-    {
-        wxFputs(wxASCII_STR("Not running tests because GUI is disabled.\n"), stderr);
-        return true;
-    }
-#endif // wxUSE_GUI
-
-    // Hack: don't call TestAppBase::OnInit() to let CATCH handle command line.
-
-    // Output some important information about the test environment.
 #if wxUSE_GUI
     cout << "Test program for wxWidgets GUI features\n"
 #else
@@ -715,6 +702,24 @@ bool TestApp::OnInit()
 
     cout << " as " << wxGetUserId()
          << std::endl;
+}
+
+// Init
+//
+bool TestApp::OnInit()
+{
+#if wxUSE_GUI
+    if ( !IsGUIEnabled() )
+    {
+        wxFputs(wxASCII_STR("Not running tests because GUI is disabled.\n"), stderr);
+        return true;
+    }
+#endif // wxUSE_GUI
+
+    // Hack: don't call TestAppBase::OnInit() to let CATCH handle command line.
+
+    // Output some important information about the test environment.
+    ShowTestInformation();
 
     // Optionally allow executing the tests in the locale specified by the
     // standard environment variable, this is especially useful to use UTF-8
