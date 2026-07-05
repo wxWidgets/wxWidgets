@@ -576,23 +576,14 @@ bool wxIPCMessageBase::ReadString(wxString& str)
 
     if ( len > 0 )
     {
-
-#if wxUSE_UNICODE
         wxCharBuffer buf(len);
         if ( !buf || !ReadData(buf.data(), len) )
             return false;
-#else
-        wxStringBuffer buf(str, len);
-        if ( !buf || !ReadData(buf,len) )
-            return false;
-#endif
 
         if ( !VerifyLastReadCount(len))
             return false;
 
-#if wxUSE_UNICODE
-        str = wxConvUTF8.cMB2WC(buf.data(), len, nullptr);
-#endif
+        str = wxString::FromUTF8(buf.data(), len);
     }
 
     return true;
@@ -600,13 +591,8 @@ bool wxIPCMessageBase::ReadString(wxString& str)
 
 bool wxIPCMessageBase::WriteString(const wxString& str)
 {
-#if wxUSE_UNICODE
-    const wxWX2MBbuf buf = str.mb_str(wxConvUTF8);
+    const wxScopedCharBuffer& buf = str.utf8_str();
     size_t len = buf.length();
-#else
-    const wxWX2MBbuf buf = str.mb_str();
-    size_t len = str.size();
-#endif
 
     if (len > 0)
         return Write32(len) && WriteData(buf, len);
