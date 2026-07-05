@@ -122,7 +122,7 @@ public:
     virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) override;
 
 protected:
-    wxSocketServer *m_server;
+    wxSocketServer *m_server = nullptr;
 
 #ifdef __UNIX_LIKE__
     // the name of the file associated to the Unix domain socket, may be empty
