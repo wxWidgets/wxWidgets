@@ -1982,9 +1982,10 @@ bool wxWindowMac::MacDoRedraw( long time )
                     eevent.SetEventObject( this );
                     if ( ProcessWindowEvent( eevent ) )
                         break;
-
+#ifdef __WXOSX_IPHONE__
                     if (!UseBgCol())
                         dc.Clear();
+#endif
                 }
 
                 if ( UseBgCol() )
