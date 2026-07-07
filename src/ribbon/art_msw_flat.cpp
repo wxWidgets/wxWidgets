@@ -1042,30 +1042,50 @@ wxRibbonMSWFlatArtProvider::DrawToggleButton(wxDC& dc,
                                          const wxRect& rect,
                                          wxRibbonDisplayMode mode)
 {
-    int bindex = 0;
     DrawPartialPageBackground(dc, wnd, rect, false);
 
     dc.DestroyClippingRegion();
     dc.SetClippingRegion(rect);
 
-    if ( wnd->IsToggleButtonHovered() )
+    const bool isHovered = wnd->IsToggleButtonHovered();
+    if ( isHovered )
     {
         dc.SetPen(m_ribbon_toggle_pen);
         dc.SetBrush(m_ribbon_toggle_brush);
         dc.DrawRoundedRectangle(rect.GetX(), rect.GetY(), 20, 20, 1.0);
-        bindex = 1;
     }
+
+    const wxColour& faceColour = isHovered ? m_page_toggle_hover_face_colour : m_page_toggle_face_colour;
+    dc.SetPen(wxPen(faceColour, 2));
+    dc.SetBrush(wxBrush(faceColour));
+
+    const int cx = rect.GetX() + 10;
+
     switch ( mode )
     {
         case wxRIBBON_BAR_PINNED:
-            dc.DrawBitmap(m_ribbon_toggle_up_bundle[bindex].GetBitmapFor(wnd), rect.GetX()+7, rect.GetY()+6, true);
+            dc.DrawLine(cx - 3, rect.GetY() + 13, cx, rect.GetY() + 10);
+            dc.DrawLine(cx, rect.GetY() + 10, cx + 3, rect.GetY() + 13);
+            dc.DrawLine(cx - 3, rect.GetY() + 9, cx, rect.GetY() + 6);
+            dc.DrawLine(cx, rect.GetY() + 6, cx + 3, rect.GetY() + 9);
             break;
         case wxRIBBON_BAR_MINIMIZED:
-            dc.DrawBitmap(m_ribbon_toggle_down_bundle[bindex].GetBitmapFor(wnd), rect.GetX()+7, rect.GetY()+6, true);
+            dc.DrawLine(cx - 3, rect.GetY() + 7, cx, rect.GetY() + 10);
+            dc.DrawLine(cx, rect.GetY() + 10, cx + 3, rect.GetY() + 7);
+            dc.DrawLine(cx - 3, rect.GetY() + 11, cx, rect.GetY() + 14);
+            dc.DrawLine(cx, rect.GetY() + 14, cx + 3, rect.GetY() + 11);
             break;
         case wxRIBBON_BAR_EXPANDED:
-            dc.DrawBitmap(m_ribbon_toggle_pin_bundle[bindex].GetBitmapFor(wnd), rect.GetX()+4, rect.GetY()+5, true);
+        {
+            const int x = rect.GetX() + 4;
+            const int y = rect.GetY() + 10;
+            dc.DrawLine(x + 2, y, x + 6, y);
+            const wxPoint body[] = {{x + 6, y}, {x + 14, y - 3}, {x + 14, y + 3}};
+            dc.DrawPolygon(3, body);
+            const wxPoint flare[] = {{x + 8, y - 3}, {x + 12, y}, {x + 8, y + 3}};
+            dc.DrawPolygon(3, flare);
             break;
+        }
     }
 }
 
@@ -1078,17 +1098,21 @@ void wxRibbonMSWFlatArtProvider::DrawHelpButton(wxDC& dc,
     dc.DestroyClippingRegion();
     dc.SetClippingRegion(rect);
 
-    if ( wnd->IsHelpButtonHovered() )
+    const bool isHovered = wnd->IsHelpButtonHovered();
+    if ( isHovered )
     {
         dc.SetPen(m_ribbon_toggle_pen);
         dc.SetBrush(m_ribbon_toggle_brush);
         dc.DrawRoundedRectangle(rect.GetX(), rect.GetY(), 20, 20, 1.0);
-        dc.DrawBitmap(m_ribbon_bar_help_button_bundle[1].GetBitmapFor(wnd), rect.GetX()+4, rect.GetY()+5, true);
     }
-    else
-    {
-        dc.DrawBitmap(m_ribbon_bar_help_button_bundle[0].GetBitmapFor(wnd), rect.GetX()+4, rect.GetY()+5, true);
-    }
+
+    dc.SetFont(m_tab_label_font);
+    dc.SetTextForeground(isHovered ? m_page_toggle_hover_face_colour : m_page_toggle_face_colour);
+    const wxString label("?");
+    wxSize sz = dc.GetTextExtent(label);
+    dc.DrawText(label,
+                rect.GetX() + (20 - sz.GetWidth()) / 2,
+                rect.GetY() + (20 - sz.GetHeight()) / 2);
 }
 
 void wxRibbonMSWFlatArtProvider::DrawTool(

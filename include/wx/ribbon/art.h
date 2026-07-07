@@ -667,10 +667,6 @@ protected:
     wxBitmapBundle m_gallery_extension_bundle[4];
     wxBitmapBundle m_toolbar_drop_bundle;
     wxBitmapBundle m_panel_extension_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_up_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_down_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_pin_bundle[2];
-    wxBitmapBundle m_ribbon_bar_help_button_bundle[2];
 
     wxColour m_primary_scheme_colour;
     wxColour m_secondary_scheme_colour;
