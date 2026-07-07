@@ -115,7 +115,11 @@ wxTimerImpl *wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
 wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
 #if wxUSE_CONSOLE_EVENTLOOP
-    return new wxEventLoop();
+    // Use wxConsoleEventLoop explicitly and not wxEventLoop because the
+    // latter is defined as wxGUIEventLoop when this file is compiled as part
+    // of a monolithic library (which is always built with wxUSE_GUI==1) and
+    // using a GUI event loop in console applications doesn't work, see #24909.
+    return new wxConsoleEventLoop();
 #else // !wxUSE_CONSOLE_EVENTLOOP
     return nullptr;
 #endif // wxUSE_CONSOLE_EVENTLOOP/!wxUSE_CONSOLE_EVENTLOOP
