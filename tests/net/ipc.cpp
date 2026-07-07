@@ -471,6 +471,16 @@ private:
 // connect attempt is time-bounded (wxIPCTimeout, see wxTCPClient::MakeConnection)
 // so a not-yet-ready server fails the attempt promptly and the readiness poll
 // below retries, rather than blocking on the socket's long default timeout.)
+// The re-exec'd server process is much slower to become ready under
+// sanitizers (instrumented startup plus full toolkit init), so use a longer
+// readiness bound there to avoid a spurious REQUIRE(serverReady) failure.
+#if defined(__SANITIZE_ADDRESS__) || defined(__SANITIZE_THREAD__) || \
+    WX_HAS_CLANG_FEATURE(address_sanitizer) || WX_HAS_CLANG_FEATURE(thread_sanitizer)
+static constexpr int gs_serverReadyTimeoutMs = 120000;
+#else
+static constexpr int gs_serverReadyTimeoutMs = 30000;
+#endif
+
 class IPCFixture
 {
     // Declared first so it is constructed first and destroyed last: the watchdog
@@ -490,6 +500,31 @@ public:
         DrainPendingIPCEvents();
 
         gs_clientLoop = m_clientLoop.get();
+
+        // The constructor can still throw below (a REQUIRE() fails, or the
+        // server never becomes ready). If it does, this object never becomes
+        // alive, so ~IPCFixture() will not run to clear the globals set here --
+        // yet our members are still destroyed during unwinding, which would
+        // leave gs_clientLoop dangling at a freed wxEventLoop and leak gs_client.
+        // A later fixture's DrainPendingIPCEvents() would then dereference that
+        // freed loop (a use-after-free). This guard undoes the global state on
+        // any early exit and is dismissed only once construction fully succeeds.
+        struct CtorGuard
+        {
+            bool dismiss = false;
+            ~CtorGuard()
+            {
+                if ( dismiss )
+                    return;
+
+                gs_clientLoop = nullptr;
+                delete gs_client;
+                gs_client = nullptr;
+#if wxUSE_SOCKETS_FOR_IPC
+                wxSocketBase::Shutdown();
+#endif // wxUSE_SOCKETS_FOR_IPC
+            }
+        } ctorGuard;
 
         // Activate the client loop once for the lifetime of this fixture so its
         // worker threads see a stable wxEventLoopBase::ms_activeLoop. Activating
@@ -513,7 +548,7 @@ public:
         // not-yet-ready server fails promptly and we retry rather than blocking.
         bool serverReady = false;
         wxStopWatch sw;
-        while ( !serverReady && sw.Time() < 30000 )   // up to 30s
+        while ( !serverReady && sw.Time() < gs_serverReadyTimeoutMs )
         {
             if ( gs_client->Connect("localhost", IPC_TEST_PORT, IPC_TEST_TOPIC) )
             {
@@ -533,6 +568,8 @@ public:
             }
         }
         REQUIRE( serverReady );
+
+        ctorGuard.dismiss = true;
     }
 
     ~IPCFixture()
