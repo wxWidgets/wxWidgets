@@ -4,6 +4,7 @@
 // Author:      Vadim Zeitlin
 // Created:     23.09.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWidgets licence (part of base library)
 /////////////////////////////////////////////////////////////////////////////
 
@@ -288,6 +289,55 @@ wxString wxAssocQueryString(ASSOCSTR assoc,
     return wxString(bufOut);
 }
 
+static bool MSWGetStockApplicationIconLocation(wxIconLocation *iconLoc)
+{
+#ifdef SHGSI_ICON
+    WinStruct<SHSTOCKICONINFO> sii;
+
+    if ( ::SHGetStockIconInfo(SIID_APPLICATION, SHGSI_ICONLOCATION, &sii) != S_OK ||
+            !sii.szPath[0] )
+        return false;
+
+    if ( iconLoc )
+    {
+        iconLoc->SetFileName(sii.szPath);
+        iconLoc->SetIndex(sii.iIcon);
+    }
+
+    return true;
+#else
+    wxUnusedVar(iconLoc);
+
+    return false;
+#endif // SHGSI_ICON
+}
+
+static bool MSWGetIconLocationForExtension(const wxString& ext,
+                                           wxIconLocation *iconLoc)
+{
+    SHFILEINFO fi = {};
+
+    if ( !::SHGetFileInfo(ext.t_str(), FILE_ATTRIBUTE_NORMAL,
+                          &fi, sizeof(SHFILEINFO),
+                          SHGFI_USEFILEATTRIBUTES | SHGFI_ICONLOCATION) )
+        return false;
+
+    if ( !fi.szDisplayName[0] )
+        return MSWGetStockApplicationIconLocation(iconLoc);
+
+    if ( iconLoc )
+    {
+        iconLoc->SetFileName(fi.szDisplayName);
+        iconLoc->SetIndex(fi.iIcon);
+    }
+
+    return true;
+}
+
+static bool MSWIsIconPlaceholder(const wxString& iconFile)
+{
+    return iconFile == "%1" || iconFile == "%L";
+}
 
 wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 {
@@ -413,10 +463,13 @@ bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
         if ( strFullPath.StartsWith('"') && strFullPath.EndsWith('"') )
             strFullPath = strFullPath.substr(1, strFullPath.length() - 2);
 
+        const wxString iconFile = wxExpandEnvVars(strFullPath);
+        if ( m_ext.CmpNoCase(".exe") == 0 && MSWIsIconPlaceholder(iconFile) )
+            return MSWGetIconLocationForExtension(m_ext, iconLoc);
+
         if ( iconLoc )
         {
-            iconLoc->SetFileName(wxExpandEnvVars(strFullPath));
-
+            iconLoc->SetFileName(iconFile);
             iconLoc->SetIndex(wxAtoi(strIndex));
         }
 
