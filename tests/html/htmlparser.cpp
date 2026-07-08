@@ -25,6 +25,29 @@
 #include "wx/html/winpars.h"
 
 #include <memory>
+#include <vector>
+
+namespace
+{
+
+void AddTextCells(const wxHtmlCell *cell,
+                  std::vector<const wxHtmlCell *>& cells)
+{
+    if ( !cell )
+        return;
+
+    const wxString text = cell->ConvertToText(nullptr);
+    if ( !text.empty() )
+        cells.push_back(cell);
+
+    for ( const wxHtmlCell *child = cell->GetFirstChild(); child;
+          child = child->GetNext() )
+    {
+        AddTextCells(child, cells);
+    }
+}
+
+} // anonymous namespace
 
 namespace
 {
@@ -87,6 +110,32 @@ TEST_CASE("wxHtmlParser::ImageAlignCenter", "[html][parser]")
 
     CHECK( word->GetPosY() + word->GetHeight() / 2 ==
            image->GetPosY() + image->GetHeight() / 2 );
+}
+
+TEST_CASE("wxHtmlParser::NBSPLineBreak", "[html][parser]")
+{
+    wxBitmap bmp(100, 100);
+    wxMemoryDC dc(bmp);
+    wxHtmlWinParser p;
+    p.SetDC(&dc);
+
+    const wxString html = "aaa <font color=\"#ff0000\">"
+                          "&nbsp;&nbsp;</font>bbb";
+    std::unique_ptr<wxHtmlContainerCell> const top(
+        static_cast<wxHtmlContainerCell *>(p.Parse(html)));
+    REQUIRE(top);
+
+    top->Layout(1);
+
+    std::vector<const wxHtmlCell *> cells;
+    AddTextCells(top.get(), cells);
+
+    REQUIRE(cells.size() >= 3);
+    CHECK(cells[0]->ConvertToText(nullptr) == "aaa ");
+    CHECK(cells[1]->ConvertToText(nullptr) == wxString(L'\xa0', 2));
+    CHECK(cells[2]->ConvertToText(nullptr) == "bbb");
+    CHECK(cells[0]->GetAbsPos().y == cells[1]->GetAbsPos().y);
+    CHECK(cells[1]->GetAbsPos().y == cells[2]->GetAbsPos().y);
 }
 
 TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
