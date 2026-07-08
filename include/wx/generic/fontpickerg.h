@@ -73,6 +73,11 @@ protected:
     wxFontData m_data;
 
 private:
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    // True if the user selected a text colour in the font dialog.
+    bool m_colourSelected = false;
+
     wxDECLARE_DYNAMIC_CLASS(wxGenericFontButton);
 };
 
