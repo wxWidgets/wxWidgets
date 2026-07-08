@@ -3,6 +3,7 @@
 // Purpose:     wxHtml module for tables
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -683,8 +684,24 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
     TAG_HANDLER_VARS
         wxHtmlTableCell* m_Table;
-        wxString m_tAlign, m_rAlign;
+        wxString m_rAlign;
         wxHtmlContainerCell *m_enclosingContainer;
+
+        void SetTableAlignment(wxHtmlContainerCell *c, const wxHtmlTag& tag)
+        {
+            wxString align;
+            if ( !tag.GetParamAsString("ALIGN", &align) )
+                return;
+
+            align.MakeUpper();
+
+            if ( align == "RIGHT" )
+                c->SetAlignHor(wxHTML_ALIGN_RIGHT);
+            else if ( align == "LEFT" )
+                c->SetAlignHor(wxHTML_ALIGN_LEFT);
+            else if ( align == "CENTER" )
+                c->SetAlignHor(wxHTML_ALIGN_CENTER);
+        }
 
         // Call ParseInner() preserving background colour and mode after any
         // changes done by it.
@@ -721,7 +738,6 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
     {
         m_Table = nullptr;
         m_enclosingContainer = nullptr;
-        m_tAlign.clear();
         m_rAlign.clear();
     }
 
@@ -734,9 +750,11 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
         if (tag.GetName() == wxT("TABLE"))
         {
             wxHtmlTableCell *oldt = m_Table;
+            const wxString oldRowAlign = m_rAlign;
 
             wxHtmlContainerCell *oldEnclosing = m_enclosingContainer;
             m_enclosingContainer = c = m_WParser->OpenContainer();
+            SetTableAlignment(c, tag);
 
             m_Table = new wxHtmlTableCell(c, tag, m_WParser->GetPixelScale());
 
@@ -759,8 +777,6 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                     m_Table->SetWidthFloat(0, wxHTML_UNITS_PIXELS);
             }
             int oldAlign = m_WParser->GetAlign();
-            if (!tag.GetParamAsString(wxT("ALIGN"), &m_tAlign))
-                m_tAlign.clear();
 
             CallParseInnerWithBg(tag, m_Table->GetBackgroundColour());
 
@@ -769,6 +785,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             m_WParser->CloseContainer();
 
             m_Table = oldt;
+            m_rAlign = oldRowAlign;
             m_enclosingContainer = oldEnclosing;
 
             return true; // ParseInner() called
@@ -781,8 +798,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             if (tag.GetName() == wxT("TR"))
             {
                 m_Table->AddRow(tag);
-                if (!tag.GetParamAsString(wxT("ALIGN"), &m_rAlign))
-                    m_rAlign = m_tAlign;
+                if ( !tag.GetParamAsString("ALIGN", &m_rAlign) )
+                    m_rAlign.clear();
             }
 
             // new cell
