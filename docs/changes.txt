@@ -261,6 +261,7 @@ All:
 
 All (GUI):
 
+- Handle mouse capture loss when using wxContextHelp (Richard Thomson, #21534).
 - Always recognize common file types in wxHTML (Richard Thomson, #20967).
 - Respect background colour when printing in wxHTML (Richard Thomson, #20652).
 

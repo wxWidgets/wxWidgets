@@ -5,6 +5,7 @@
 // Modified by:
 // Created:     08/09/2000
 // Copyright:   (c) 2000 Julian Smart, Vadim Zeitlin
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -135,7 +136,8 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     EventLoop();
 
-    win->ReleaseMouse();
+    if ( win->HasCapture() )
+        win->ReleaseMouse();
 
 #ifdef __WXMOTIF__
     wxPushOrPopEventHandlers(this, win, false);
@@ -204,10 +206,11 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
         return true;
     }
 
-    if ((event.GetEventType() == wxEVT_CHAR) ||
-        (event.GetEventType() == wxEVT_KEY_DOWN) ||
-        (event.GetEventType() == wxEVT_ACTIVATE) ||
-        (event.GetEventType() == wxEVT_MOUSE_CAPTURE_CHANGED))
+    if ( (event.GetEventType() == wxEVT_CHAR) ||
+         (event.GetEventType() == wxEVT_KEY_DOWN) ||
+         (event.GetEventType() == wxEVT_ACTIVATE) ||
+         (event.GetEventType() == wxEVT_MOUSE_CAPTURE_CHANGED) ||
+         (event.GetEventType() == wxEVT_MOUSE_CAPTURE_LOST) )
     {
         // May have already been set to true by a left-click
         //m_contextHelp->SetStatus(false);
