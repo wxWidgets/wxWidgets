@@ -4,6 +4,7 @@
 // Author:      Vadim Zeitlin
 // Created:     2018-05-22
 // Copyright:   (c) 2018 Vadim Zeitlin <vadim@wxwidgets.org>
+//              (c) 2026 wxWidgets development team
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -16,7 +17,10 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
+    #include "wx/brush.h"
     #include "wx/dcmemory.h"
+    #include "wx/image.h"
 #endif // WX_PRECOMP
 
 #include "wx/html/htmprint.h"
@@ -43,6 +47,31 @@ int CountPages(wxHtmlPrintout& pr)
 }
 
 } // anonymous namespace
+
+TEST_CASE("wxHtmlDCRenderer::BodyBgColour", "[html][print]")
+{
+    const wxColour bg(0x12, 0x34, 0x56);
+    wxBitmap bmp(100, 100);
+    {
+        wxMemoryDC dc(bmp);
+        dc.SetBackground(*wxWHITE_BRUSH);
+        dc.Clear();
+
+        wxHtmlDCRenderer renderer;
+        renderer.SetDC(&dc);
+        renderer.SetSize(bmp.GetWidth(), bmp.GetHeight());
+        renderer.SetHtmlText("<body bgcolor=\"#123456\">"
+                             "<p>Hello world!</p>"
+                             "</body>");
+        renderer.Render(0, 0);
+    }
+
+    const wxImage image = bmp.ConvertToImage();
+    const wxColour actual(image.GetRed(90, 90),
+                          image.GetGreen(90, 90),
+                          image.GetBlue(90, 90));
+    CHECK(actual == bg);
+}
 
 TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
 {

@@ -4,6 +4,7 @@
 // Author:      Vaclav Slavik
 // Created:     25/09/99
 // Copyright:   (c) Vaclav Slavik, 1999
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -112,6 +113,10 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
     wxHtmlContainerCell* const cell = (wxHtmlContainerCell*) m_Parser.Parse(html);
     wxCHECK_RET( cell, "Failed to parse HTML" );
 
+    const wxColour bg = m_Parser.GetActualBackgroundColor();
+    if ( bg.IsOk() )
+        cell->SetBackgroundColour(bg);
+
     DoSetHtmlCell(cell);
 
     m_ownsCells = true;
@@ -187,8 +192,15 @@ void wxHtmlDCRenderer::Render(int x, int y, int from, int to)
     wxHtmlRenderingInfo rinfo;
     wxDefaultHtmlRenderingStyle rstyle;
     rinfo.SetStyle(&rstyle);
-    m_DC->SetBrush(*wxWHITE_BRUSH);
     wxDCClipper clip(*m_DC, x, y, m_Width, hght);
+    {
+        wxColour bg = m_Cells->GetBackgroundColour();
+        if ( !bg.IsOk() )
+            bg = *wxWHITE;
+        wxDCBrushChanger brushChanger(*m_DC, wxBrush(bg));
+        wxDCPenChanger penChanger(*m_DC, *wxTRANSPARENT_PEN);
+        m_DC->DrawRectangle(x, y, m_Width, hght);
+    }
     m_Cells->Draw(*m_DC,
                   x, (y - from),
                   y, y + hght,
