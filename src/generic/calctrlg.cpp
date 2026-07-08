@@ -4,6 +4,7 @@
 // Author:      Vadim Zeitlin
 // Created:     29.12.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -928,7 +929,10 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 
     // then the calendar itself
-    dc.SetTextForeground(GetForegroundColour());
+    const wxColour colDefaultFg = GetForegroundColour();
+    const wxColour colDefaultBg = GetBackgroundColour();
+
+    dc.SetTextForeground(colDefaultFg);
 
     wxDateTime date = GetStartDate();
 
@@ -954,7 +958,9 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         for ( int wd = 0; wd < 7; wd++ )
         {
-            dc.SetTextBackground(m_colBackground);
+            dc.SetTextForeground(colDefaultFg);
+            dc.SetTextBackground(colDefaultBg);
+
             if ( IsDateShown(date) )
             {
                 // don't use wxDate::Format() which prepends 0s
@@ -1034,7 +1040,7 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                     }
                     else
                     {
-                        colBorder = GetForegroundColour();
+                        colBorder = colDefaultFg;
                     }
 
                     wxPen pen(colBorder, 1, wxPENSTYLE_SOLID);
@@ -1061,8 +1067,8 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
                 if ( changedColours )
                 {
-                    dc.SetTextForeground(GetForegroundColour());
-                    dc.SetTextBackground(GetBackgroundColour());
+                    dc.SetTextForeground(colDefaultFg);
+                    dc.SetTextBackground(colDefaultBg);
                 }
 
                 if ( changedFont )
