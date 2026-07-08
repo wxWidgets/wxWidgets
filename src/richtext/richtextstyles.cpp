@@ -1117,7 +1117,9 @@ void wxRichTextStyleListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void wxRichTextStyleListCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    if ( !m_hasBgCol )
+        m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
     event.Skip();
 }
 
