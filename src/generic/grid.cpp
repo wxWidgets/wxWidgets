@@ -5,6 +5,7 @@
 // Modified by: Robin Dunn, Vadim Zeitlin, Santiago Palacios
 // Created:     1/08/1999
 // Copyright:   (c) Michael Bedward (mbedward@ozemail.com.au)
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -2891,6 +2892,7 @@ wxGrid::~wxGrid()
     // otherwise we crash later when the editor tries to do something with the
     // half destroyed grid
     HideCellEditControl();
+    m_activeCellEditor.reset(nullptr);
 
     // Must do this or ~wxScrollHelper will pop the wrong event handler
     SetTargetWindow(this);
@@ -3397,7 +3399,7 @@ void wxGrid::CalcDimensions()
     // take into account editor if shown
     if ( IsCellEditControlShown() )
     {
-        const wxRect rect = GetCurrentCellEditorPtr()->GetWindow()->GetRect();
+        const wxRect rect = GetActiveCellEditorPtr()->GetWindow()->GetRect();
         if ( rect.GetRight() > w )
             w = rect.GetRight();
         if ( rect.GetBottom() > h )
@@ -5150,7 +5152,7 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
             ClearSelection();
 
             if ( DoEnableCellEditControl(wxGridActivationSource::From(event)) )
-                GetCurrentCellEditorPtr()->StartingClick();
+                GetActiveCellEditorPtr()->StartingClick();
 
             m_waitForSlowClick = false;
         }
@@ -6594,7 +6596,7 @@ void wxGrid::OnChar( wxKeyEvent& event )
 
             if ( DoEnableCellEditControl(wxGridActivationSource::From(event))
                     && !specialEditKey )
-                editor->StartingKey(event);
+                GetActiveCellEditorPtr()->StartingKey(event);
         }
         else
         {
@@ -6893,7 +6895,7 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     // Note: However, only if it is really _shown_, i.e. not hidden!
     if ( isCurrent && IsCellEditControlShown() )
     {
-        attr->GetEditorPtr(this, row, col)->PaintBackground(dc, rect, *attr);
+        GetActiveCellEditorPtr()->PaintBackground(dc, rect, *attr);
     }
     else
     {
@@ -8003,7 +8005,7 @@ bool wxGrid::IsCellEditControlShown() const
 
     if ( m_cellEditCtrlEnabled )
     {
-        if ( wxGridCellEditorPtr editor = GetCurrentCellEditorPtr() )
+        if ( wxGridCellEditorPtr editor = GetActiveCellEditorPtr() )
         {
             if ( editor->IsCreated() )
             {
@@ -8022,6 +8024,7 @@ void wxGrid::ShowCellEditControl()
         if ( !IsVisible( m_currentCellCoords, false ) )
         {
             m_cellEditCtrlEnabled = false;
+            m_activeCellEditor.reset(nullptr);
             return;
         }
 
@@ -8082,6 +8085,7 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
     // before generating any events in case their user-defined handlers decide
     // to call EnableCellEditControl() to avoid reentrancy problems.
     m_cellEditCtrlEnabled = true;
+    m_activeCellEditor = editor;
 
     wxGridWindow *gridWindow = CellToGridWindow(row, col);
 
@@ -8216,7 +8220,7 @@ void wxGrid::HideCellEditControl()
 
 void wxGrid::DoHideCellEditControl()
 {
-    wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
+    wxGridCellEditorPtr editor = GetActiveCellEditorPtr();
     const bool editorHadFocus = editor->GetWindow()->IsDescendant(FindFocus());
 
     if ( editor->GetWindow()->GetParent() != m_gridWin )
@@ -8279,6 +8283,7 @@ void wxGrid::DoAcceptCellEditControl()
     DoHideCellEditControl();
 
     DoSaveEditControlValue();
+    m_activeCellEditor.reset(nullptr);
 }
 
 void wxGrid::SaveEditControlValue()
@@ -8296,7 +8301,7 @@ void wxGrid::DoSaveEditControlValue()
 
     wxString oldval = GetCellValue(m_currentCellCoords);
 
-    wxGridCellEditorPtr editor = GetCurrentCellEditorPtr();
+    wxGridCellEditorPtr editor = GetActiveCellEditorPtr();
 
     wxString newval;
     if ( !editor->EndEdit(row, col, this, oldval, &newval) )

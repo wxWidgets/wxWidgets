@@ -5,6 +5,7 @@
 // Modified by: Santiago Palacios
 // Created:     1/08/1999
 // Copyright:   (c) Michael Bedward
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -2827,6 +2828,9 @@ protected:
     bool       m_editable;              // applies to whole grid
     bool       m_cellEditCtrlEnabled;   // is in-place edit currently shown?
 
+    // Editor used by the currently active edit control.
+    wxGridCellEditorPtr m_activeCellEditor;
+
     TabBehaviour m_tabBehaviour;        // determines how the TAB key behaves
 
     void Init();        // common part of all ctors
@@ -3168,6 +3172,15 @@ private:
                     m_currentCellCoords.GetRow(),
                     m_currentCellCoords.GetCol()
                 );
+    }
+
+    // Return the editor actually being used by the current edit control.
+    wxGridCellEditorPtr GetActiveCellEditorPtr() const
+    {
+        if ( m_activeCellEditor )
+            return m_activeCellEditor;
+
+        return GetCurrentCellEditorPtr();
     }
 
     // Show/hide the cell editor for the current cell unconditionally.
