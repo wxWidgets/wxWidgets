@@ -3,6 +3,7 @@
 // Purpose:     wxHtml module for displaying images
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik, Joel Lucsy
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -291,6 +292,7 @@ public:
                     int w = wxDefaultCoord, bool wpercent = false,
                     int h = wxDefaultCoord, bool hpresent = false,
                     double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM,
+                    int textHeight = 0, int textDescent = 0,
                     const wxString& mapname = wxEmptyString);
     virtual ~wxHtmlImageCell();
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
@@ -318,6 +320,7 @@ public:
 private:
     wxBitmap           *m_bitmap;
     int                 m_align;
+    int                 m_textHeight, m_textDescent;
     int                 m_bmpW, m_bmpH;
     bool                m_bmpWpercent:1;
     bool                m_bmpHpresent:1;
@@ -364,7 +367,7 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
                                  wxHtmlWindowInterface *windowIface,
                                  wxFSFile *input, double scaleHDPI,
                                  int w, bool wpercent, int h, bool hpresent, double scale, int align,
-                                 const wxString& mapname) : wxHtmlCell(tag)
+                                 int textHeight, int textDescent, const wxString& mapname) : wxHtmlCell(tag)
     , m_mapName(mapname)
 {
     m_windowIface = windowIface;
@@ -374,6 +377,8 @@ wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
     m_bmpW   = w;
     m_bmpH   = h;
     m_align  = align;
+    m_textHeight = textHeight;
+    m_textDescent = textDescent;
     m_bmpWpercent = wpercent;
     m_bmpHpresent = hpresent;
     m_imageMap = nullptr;
@@ -564,7 +569,7 @@ void wxHtmlImageCell::Layout(int w)
             m_Descent = m_Height;
             break;
         case wxHTML_ALIGN_CENTER :
-            m_Descent = m_Height / 2;
+            m_Descent = (m_Height - m_textHeight) / 2 + m_textDescent;
             break;
         case wxHTML_ALIGN_BOTTOM :
         default :
@@ -748,12 +753,16 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                         mn = mn.Mid( 1 );
                     }
                 }
+                wxCoord textWidth, textHeight, textDescent;
+                m_WParser->CreateCurrentFont();
+                m_WParser->GetDC()->GetTextExtent("H", &textWidth,
+                                                  &textHeight, &textDescent);
                 wxHtmlImageCell *cel = new wxHtmlImageCell(
                                           tag,
                                           m_WParser->GetWindowInterface(),
                                           str, scaleHDPI, w, wpercent, h, hpresent,
                                           m_WParser->GetPixelScale(),
-                                          al, mn);
+                                          al, textHeight, textDescent, mn);
                 m_WParser->ApplyStateToCell(cel);
                 m_WParser->StopCollapsingSpaces();
                 cel->SetAlt(tag.GetParam(wxT("alt")));

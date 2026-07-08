@@ -4,6 +4,7 @@
 // Author:      Vadim Zeitlin
 // Created:     2011-01-13
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
+//              (c) 2026 wxWidgets development team
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -17,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/html/winpars.h"
@@ -40,6 +42,35 @@ TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
     delete p.Parse("<foo");
     delete p.Parse("<!--");
     delete p.Parse("<!---");
+}
+
+TEST_CASE("wxHtmlParser::ImageAlignCenter", "[html][parser]")
+{
+    wxBitmap bmp(200, 200);
+    wxMemoryDC dc(bmp);
+
+    wxHtmlWinParser p;
+    p.SetDC(&dc);
+
+    wxLogNull noLog;
+    std::unique_ptr<wxHtmlContainerCell> const cells(
+        static_cast<wxHtmlContainerCell*>(p.Parse(
+            "<img id=\"img\" width=\"100\" height=\"100\" "
+            "align=\"center\" src=\"dummy\"/>Text")));
+
+    REQUIRE( cells );
+    cells->Layout(200);
+
+    const wxString id("img");
+    const wxHtmlCell* const image = cells->Find(wxHTML_COND_ISANCHOR, &id);
+    REQUIRE( image );
+
+    const wxHtmlCell* const word = image->GetNext();
+    REQUIRE( word );
+    REQUIRE_FALSE( word->IsFormattingCell() );
+
+    CHECK( word->GetPosY() + word->GetHeight() / 2 ==
+           image->GetPosY() + image->GetHeight() / 2 );
 }
 
 TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
