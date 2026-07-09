@@ -1115,134 +1115,39 @@ int wxWindowsPageSetupDialog::ShowModal()
         return wxID_CANCEL;
 }
 
-static bool IsImperialPaperSize( wxPaperSize size )
+static bool wxMSWPageSetupUsesMetricUnits()
 {
-    switch ( size )
+    wxChar buf[2];
+    if ( ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_IMEASURE,
+                         buf, WXSIZEOF(buf)) )
     {
-    case wxPAPER_LETTER:
-    case wxPAPER_LEGAL:
-    case wxPAPER_CSHEET:
-    case wxPAPER_DSHEET:
-    case wxPAPER_ESHEET:
-    case wxPAPER_LETTERSMALL:
-    case wxPAPER_TABLOID:
-    case wxPAPER_LEDGER:
-    case wxPAPER_STATEMENT:
-    case wxPAPER_EXECUTIVE:
-    case wxPAPER_FOLIO:
-    case wxPAPER_10X14:
-    case wxPAPER_11X17:
-    case wxPAPER_NOTE:
-    case wxPAPER_ENV_9:
-    case wxPAPER_ENV_10:
-    case wxPAPER_ENV_11:
-    case wxPAPER_ENV_12:
-    case wxPAPER_ENV_14:
-    case wxPAPER_ENV_MONARCH:
-    case wxPAPER_ENV_PERSONAL:
-    case wxPAPER_FANFOLD_US:
-    case wxPAPER_FANFOLD_STD_GERMAN:
-    case wxPAPER_FANFOLD_LGL_GERMAN:
-    case wxPAPER_9X11:
-    case wxPAPER_10X11:
-    case wxPAPER_15X11:
-    case wxPAPER_LETTER_EXTRA:
-    case wxPAPER_LEGAL_EXTRA:
-    case wxPAPER_TABLOID_EXTRA:
-    case wxPAPER_LETTER_TRANSVERSE:
-    case wxPAPER_LETTER_EXTRA_TRANSVERSE:
-    case wxPAPER_LETTER_PLUS:
-    case wxPAPER_LETTER_ROTATED:
-    case wxPAPER_12X11:
-        return true;
-
-    case wxPAPER_NONE:
-    case wxPAPER_A4:
-    case wxPAPER_A3:
-    case wxPAPER_A4SMALL:
-    case wxPAPER_A5:
-    case wxPAPER_B4:
-    case wxPAPER_B5:
-    case wxPAPER_QUARTO:
-    case wxPAPER_ENV_DL:
-    case wxPAPER_ENV_C5:
-    case wxPAPER_ENV_C3:
-    case wxPAPER_ENV_C4:
-    case wxPAPER_ENV_C6:
-    case wxPAPER_ENV_C65:
-    case wxPAPER_ENV_B4:
-    case wxPAPER_ENV_B5:
-    case wxPAPER_ENV_B6:
-    case wxPAPER_ENV_ITALY:
-    case wxPAPER_ISO_B4:
-    case wxPAPER_JAPANESE_POSTCARD:
-    case wxPAPER_ENV_INVITE:
-    case wxPAPER_A4_EXTRA:
-    case wxPAPER_A4_TRANSVERSE:
-    case wxPAPER_A_PLUS:
-    case wxPAPER_B_PLUS:
-    case wxPAPER_A4_PLUS:
-    case wxPAPER_A5_TRANSVERSE:
-    case wxPAPER_B5_TRANSVERSE:
-    case wxPAPER_A3_EXTRA:
-    case wxPAPER_A5_EXTRA:
-    case wxPAPER_B5_EXTRA:
-    case wxPAPER_A2:
-    case wxPAPER_A3_TRANSVERSE:
-    case wxPAPER_A3_EXTRA_TRANSVERSE:
-    case wxPAPER_DBL_JAPANESE_POSTCARD:
-    case wxPAPER_A6:
-    case wxPAPER_JENV_KAKU2:
-    case wxPAPER_JENV_KAKU3:
-    case wxPAPER_JENV_CHOU3:
-    case wxPAPER_JENV_CHOU4:
-    case wxPAPER_A3_ROTATED:
-    case wxPAPER_A4_ROTATED:
-    case wxPAPER_A5_ROTATED:
-    case wxPAPER_B4_JIS_ROTATED:
-    case wxPAPER_B5_JIS_ROTATED:
-    case wxPAPER_JAPANESE_POSTCARD_ROTATED:
-    case wxPAPER_DBL_JAPANESE_POSTCARD_ROTATED:
-    case wxPAPER_A6_ROTATED:
-    case wxPAPER_JENV_KAKU2_ROTATED:
-    case wxPAPER_JENV_KAKU3_ROTATED:
-    case wxPAPER_JENV_CHOU3_ROTATED:
-    case wxPAPER_JENV_CHOU4_ROTATED:
-    case wxPAPER_B6_JIS:
-    case wxPAPER_B6_JIS_ROTATED:
-    case wxPAPER_JENV_YOU4:
-    case wxPAPER_JENV_YOU4_ROTATED:
-    case wxPAPER_P16K:
-    case wxPAPER_P32K:
-    case wxPAPER_P32KBIG:
-    case wxPAPER_PENV_1:
-    case wxPAPER_PENV_2:
-    case wxPAPER_PENV_3:
-    case wxPAPER_PENV_4:
-    case wxPAPER_PENV_5:
-    case wxPAPER_PENV_6:
-    case wxPAPER_PENV_7:
-    case wxPAPER_PENV_8:
-    case wxPAPER_PENV_9:
-    case wxPAPER_PENV_10:
-    case wxPAPER_P16K_ROTATED:
-    case wxPAPER_P32K_ROTATED:
-    case wxPAPER_P32KBIG_ROTATED:
-    case wxPAPER_PENV_1_ROTATED:
-    case wxPAPER_PENV_2_ROTATED:
-    case wxPAPER_PENV_3_ROTATED:
-    case wxPAPER_PENV_4_ROTATED:
-    case wxPAPER_PENV_5_ROTATED:
-    case wxPAPER_PENV_6_ROTATED:
-    case wxPAPER_PENV_7_ROTATED:
-    case wxPAPER_PENV_8_ROTATED:
-    case wxPAPER_PENV_9_ROTATED:
-    case wxPAPER_PENV_10_ROTATED:
-    case wxPAPER_A0:
-    case wxPAPER_A1:
-      break;
+        return buf[0] == wxT('0');
     }
-    return false;
+
+    return true;
+}
+
+static DWORD wxMSWGetPageSetupUnits()
+{
+    return wxMSWPageSetupUsesMetricUnits()
+        ? PSD_INHUNDREDTHSOFMILLIMETERS
+        : PSD_INTHOUSANDTHSOFINCHES;
+}
+
+static int wxPageToNative(int mm, DWORD units)
+{
+    if ( units == PSD_INTHOUSANDTHSOFINCHES )
+        return ::MulDiv(mm, 10000, 254);
+
+    return mm * 100;
+}
+
+static int wxPageFromNative(int value, DWORD units)
+{
+    if ( units == PSD_INTHOUSANDTHSOFINCHES )
+        return ::MulDiv(value, 254, 10000);
+
+    return value / 100;
 }
 
 bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
@@ -1304,32 +1209,32 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     if ( data.GetEnableHelp() )
         pd->Flags |= PSD_SHOWHELP;
 
-    // We want the units to be in hundredths of a millimetre, except for imperial paper sizes
-    DWORD paperUnits{ PSD_INHUNDREDTHSOFMILLIMETERS };
-    DWORD unitScaleFactor{ 100 }; // hundredths of millimeters
-    if ( IsImperialPaperSize( data.GetPrintData().GetPaperId() ) )
-    {
-        paperUnits = PSD_INTHOUSANDTHSOFINCHES;
-        unitScaleFactor = 1000;
-    }
-    pd->Flags |= paperUnits;
+    const DWORD pageSetupUnits = wxMSWGetPageSetupUnits();
+    pd->Flags |= pageSetupUnits;
 
     pd->lStructSize = sizeof( PAGESETUPDLG );
     pd->hwndOwner = nullptr;
     pd->hInstance = nullptr;
-    //   PAGESETUPDLG is in hundreds of a mm
-    pd->ptPaperSize.x = data.GetPaperSize().x * unitScaleFactor;
-    pd->ptPaperSize.y = data.GetPaperSize().y * unitScaleFactor;
+    pd->ptPaperSize.x = wxPageToNative(data.GetPaperSize().x, pageSetupUnits);
+    pd->ptPaperSize.y = wxPageToNative(data.GetPaperSize().y, pageSetupUnits);
 
-    pd->rtMinMargin.left = data.GetMinMarginTopLeft().x * unitScaleFactor;
-    pd->rtMinMargin.top = data.GetMinMarginTopLeft().y * unitScaleFactor;
-    pd->rtMinMargin.right = data.GetMinMarginBottomRight().x * unitScaleFactor;
-    pd->rtMinMargin.bottom = data.GetMinMarginBottomRight().y * unitScaleFactor;
+    pd->rtMinMargin.left =
+        wxPageToNative(data.GetMinMarginTopLeft().x, pageSetupUnits);
+    pd->rtMinMargin.top =
+        wxPageToNative(data.GetMinMarginTopLeft().y, pageSetupUnits);
+    pd->rtMinMargin.right =
+        wxPageToNative(data.GetMinMarginBottomRight().x, pageSetupUnits);
+    pd->rtMinMargin.bottom =
+        wxPageToNative(data.GetMinMarginBottomRight().y, pageSetupUnits);
 
-    pd->rtMargin.left = data.GetMarginTopLeft().x * unitScaleFactor;
-    pd->rtMargin.top = data.GetMarginTopLeft().y * unitScaleFactor;
-    pd->rtMargin.right = data.GetMarginBottomRight().x * unitScaleFactor;
-    pd->rtMargin.bottom = data.GetMarginBottomRight().y * unitScaleFactor;
+    pd->rtMargin.left =
+        wxPageToNative(data.GetMarginTopLeft().x, pageSetupUnits);
+    pd->rtMargin.top =
+        wxPageToNative(data.GetMarginTopLeft().y, pageSetupUnits);
+    pd->rtMargin.right =
+        wxPageToNative(data.GetMarginBottomRight().x, pageSetupUnits);
+    pd->rtMargin.bottom =
+        wxPageToNative(data.GetMarginBottomRight().y, pageSetupUnits);
 
     pd->lCustData = 0;
     pd->lpfnPageSetupHook = nullptr;
@@ -1378,6 +1283,10 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
 
     data.GetPrintData().ConvertFromNative();
 
+    const DWORD pageSetupUnits = (pd->Flags & PSD_INTHOUSANDTHSOFINCHES)
+        ? PSD_INTHOUSANDTHSOFINCHES
+        : PSD_INHUNDREDTHSOFMILLIMETERS;
+
     pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
 
     data.SetDefaultMinMargins( ((pd->Flags & PSD_DEFAULTMINMARGINS) == PSD_DEFAULTMINMARGINS) );
@@ -1388,24 +1297,32 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
     data.SetDefaultInfo( ((pd->Flags & PSD_RETURNDEFAULT) == PSD_RETURNDEFAULT) );
     data.EnableHelp( ((pd->Flags & PSD_SHOWHELP) == PSD_SHOWHELP) );
 
-    // PAGESETUPDLG is in hundreds of a mm
-    DWORD unitScaleFactor{ 100 };
-    if ( IsImperialPaperSize( data.GetPrintData().GetPaperId() ) )
+    if ( data.GetPrintData().GetOrientation() == wxLANDSCAPE )
     {
-        // PAGESETUPDLG is in thousandths of an inch
-        unitScaleFactor = 1000;
+        data.SetPaperSize(wxSize(
+            wxPageFromNative(pd->ptPaperSize.y, pageSetupUnits),
+            wxPageFromNative(pd->ptPaperSize.x, pageSetupUnits)));
+    }
+    else
+    {
+        data.SetPaperSize(wxSize(
+            wxPageFromNative(pd->ptPaperSize.x, pageSetupUnits),
+            wxPageFromNative(pd->ptPaperSize.y, pageSetupUnits)));
     }
 
-    if (data.GetPrintData().GetOrientation() == wxLANDSCAPE)
-        data.SetPaperSize( wxSize(pd->ptPaperSize.y / unitScaleFactor, pd->ptPaperSize.x / unitScaleFactor) );
-    else
-        data.SetPaperSize( wxSize(pd->ptPaperSize.x / unitScaleFactor, pd->ptPaperSize.y / unitScaleFactor) );
+    data.SetMinMarginTopLeft(wxPoint(
+        wxPageFromNative(pd->rtMinMargin.left, pageSetupUnits),
+        wxPageFromNative(pd->rtMinMargin.top, pageSetupUnits)));
+    data.SetMinMarginBottomRight(wxPoint(
+        wxPageFromNative(pd->rtMinMargin.right, pageSetupUnits),
+        wxPageFromNative(pd->rtMinMargin.bottom, pageSetupUnits)));
 
-    data.SetMinMarginTopLeft( wxPoint(pd->rtMinMargin.left / unitScaleFactor, pd->rtMinMargin.top / unitScaleFactor) );
-    data.SetMinMarginBottomRight( wxPoint(pd->rtMinMargin.right / unitScaleFactor, pd->rtMinMargin.bottom / unitScaleFactor) );
-
-    data.SetMarginTopLeft( wxPoint(pd->rtMargin.left / unitScaleFactor, pd->rtMargin.top / unitScaleFactor) );
-    data.SetMarginBottomRight( wxPoint(pd->rtMargin.right / unitScaleFactor, pd->rtMargin.bottom / unitScaleFactor) );
+    data.SetMarginTopLeft(wxPoint(
+        wxPageFromNative(pd->rtMargin.left, pageSetupUnits),
+        wxPageFromNative(pd->rtMargin.top, pageSetupUnits)));
+    data.SetMarginBottomRight(wxPoint(
+        wxPageFromNative(pd->rtMargin.right, pageSetupUnits),
+        wxPageFromNative(pd->rtMargin.bottom, pageSetupUnits)));
 
     return true;
 }
