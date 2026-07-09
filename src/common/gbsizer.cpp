@@ -447,6 +447,9 @@ wxSize wxGridBagSizer::CalcMin()
     m_rowHeights.Empty();
     m_colWidths.Empty();
 
+    wxArrayInt rowHasItem;
+    wxArrayInt colHasItem;
+
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
@@ -460,18 +463,42 @@ wxSize wxGridBagSizer::CalcMin()
 
             // fill heights and widths up to this item if needed
             while ( (int)m_rowHeights.GetCount() <= endrow )
-                m_rowHeights.Add(m_emptyCellSize.GetHeight());
+            {
+                m_rowHeights.Add(0);
+                rowHasItem.Add(0);
+            }
             while ( (int)m_colWidths.GetCount() <= endcol )
-                m_colWidths.Add(m_emptyCellSize.GetWidth());
+            {
+                m_colWidths.Add(0);
+                colHasItem.Add(0);
+            }
 
             // See if this item increases the size of its row(s) or col(s)
             wxSize size(item->CalcMin());
             for (idx=row; idx <= endrow; idx++)
+            {
+                rowHasItem[idx] = 1;
                 m_rowHeights[idx] = wxMax(m_rowHeights[idx], size.GetHeight() / (endrow-row+1));
+            }
             for (idx=col; idx <= endcol; idx++)
+            {
+                colHasItem[idx] = 1;
                 m_colWidths[idx] = wxMax(m_colWidths[idx], size.GetWidth() / (endcol-col+1));
+            }
         }
         node = node->GetNext();
+    }
+
+    for (idx=0; idx < (int)m_rowHeights.GetCount(); idx++)
+    {
+        if ( !rowHasItem[idx] )
+            m_rowHeights[idx] = m_emptyCellSize.GetHeight();
+    }
+
+    for (idx=0; idx < (int)m_colWidths.GetCount(); idx++)
+    {
+        if ( !colHasItem[idx] )
+            m_colWidths[idx] = m_emptyCellSize.GetWidth();
     }
 
     AdjustForOverflow();
