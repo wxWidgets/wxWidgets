@@ -111,6 +111,7 @@ protected:
 
 private:
     void OnClose(wxCloseEvent& event);
+    void OnSize(wxSizeEvent& event);
 
     // close all children, return false if any of them vetoed it
     bool CloseAll();
