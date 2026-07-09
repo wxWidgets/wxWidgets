@@ -819,7 +819,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.DrawLine(dc.FromDIP(400), dc.FromDIP(170), dc.FromDIP(400), dc.FromDIP(210));
     dc.DrawLine(dc.FromDIP(300), dc.FromDIP(200), dc.FromDIP(410), dc.FromDIP(200));
 
-    // a few more tests of this kind
+    // Draw tiny rectangles, including MSW GDI edge cases.
     dc.SetPen(*wxRED_PEN);
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawRectangle(dc.FromDIP(300), dc.FromDIP(220), dc.FromDIP(1), dc.FromDIP(1));

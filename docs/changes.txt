@@ -279,6 +279,7 @@ wxGTK
 wxMSW:
 
 - Fix wrong refresh in wxStaticBitmap::SetBitmap() (Steve Murphree, #26730).
+- Fix drawing of 1x1 rectangles (Richard Thomson, #3096).
 
 wxOSX:
 
