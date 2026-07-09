@@ -3191,6 +3191,13 @@ private:
     // Return false if the editor was activated instead of being shown and also
     // sets m_cellEditCtrlEnabled to true when it returns true as a side effect.
     bool DoShowCellEditControl(const wxGridActivationSource& actSource);
+    void PositionCellEditControl();
+    void PositionCellEditControl(wxGridCellEditor* editor,
+                                 wxGridCellAttr* attr,
+                                 wxGridWindow* gridWindow,
+                                 int row,
+                                 int col,
+                                 wxRect rect);
     void DoHideCellEditControl();
 
     // Unconditionally try showing the editor for the current cell.
