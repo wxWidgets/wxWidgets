@@ -1103,6 +1103,27 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
         pinfo.best_size.IncTo(pinfo.min_size);
     }
 
+    if ( pinfo.dock_size == 0 && paneInfo.best_size != wxDefaultSize )
+    {
+        switch ( pinfo.dock_direction )
+        {
+            case wxAUI_DOCK_LEFT:
+            case wxAUI_DOCK_RIGHT:
+                if ( pinfo.best_size.x != wxDefaultCoord )
+                    pinfo.dock_size = pinfo.best_size.x;
+                break;
+
+            case wxAUI_DOCK_TOP:
+            case wxAUI_DOCK_BOTTOM:
+                if ( pinfo.best_size.y != wxDefaultCoord )
+                    pinfo.dock_size = pinfo.best_size.y;
+                break;
+
+            default:
+                break;
+        }
+    }
+
     AddPaneToMinDockIfNecessary(pinfo);
 
     return true;

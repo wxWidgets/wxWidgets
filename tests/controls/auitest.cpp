@@ -17,12 +17,14 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/frame.h"
 #endif // WX_PRECOMP
 
 #include "wx/panel.h"
 
 #include "wx/aui/auibar.h"
 #include "wx/aui/auibook.h"
+#include "wx/aui/framemanager.h"
 #include "wx/aui/serializer.h"
 
 #include "asserthelper.h"
@@ -50,9 +52,62 @@ protected:
     wxAuiNotebook* const nb;
 };
 
+class AuiManagerTestCase
+{
+public:
+    AuiManagerTestCase()
+        : frame(new wxFrame(nullptr, wxID_ANY, "wxAuiManager test"))
+        , manager(frame.get())
+    {
+        frame->SetClientSize(800, 600);
+    }
+
+    ~AuiManagerTestCase()
+    {
+        manager.UnInit();
+    }
+
+protected:
+    std::unique_ptr<wxFrame> frame;
+    wxAuiManager manager;
+};
+
 // ----------------------------------------------------------------------------
 // the tests themselves
 // ----------------------------------------------------------------------------
+
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::AddPaneBestSize", "[aui]")
+{
+    wxWindow* const pane = new wxPanel(frame.get());
+    wxWindow* const center = new wxPanel(frame.get());
+
+    wxAuiPaneInfo paneInfo;
+    paneInfo.BestSize(320, 200).Left().CaptionVisible(false).PaneBorder(false);
+
+    REQUIRE( manager.AddPane(pane, paneInfo) );
+    REQUIRE( manager.AddPane(center, wxAuiPaneInfo().CenterPane()) );
+
+    manager.Update();
+
+    CHECK( pane->GetSize().x == 320 );
+}
+
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::AddPaneDockSize", "[aui]")
+{
+    wxWindow* const pane = new wxPanel(frame.get());
+    wxWindow* const center = new wxPanel(frame.get());
+
+    wxAuiPaneInfo paneInfo;
+    paneInfo.BestSize(320, 200).Left().CaptionVisible(false).PaneBorder(false);
+    paneInfo.dock_size = 180;
+
+    REQUIRE( manager.AddPane(pane, paneInfo) );
+    REQUIRE( manager.AddPane(center, wxAuiPaneInfo().CenterPane()) );
+
+    manager.Update();
+
+    CHECK( pane->GetSize().x == 180 );
+}
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
 {
