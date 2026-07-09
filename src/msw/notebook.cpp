@@ -48,11 +48,6 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
-// you can set USE_NOTEBOOK_ANTIFLICKER to 0 for desktop Windows versions too
-// to disable code which results in flicker-less notebook redrawing at the
-// expense of some extra GDI resource consumption
-#define USE_NOTEBOOK_ANTIFLICKER    1
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -74,8 +69,6 @@
 // global variables
 // ----------------------------------------------------------------------------
 
-#if USE_NOTEBOOK_ANTIFLICKER
-
 // the pointer to standard spin button wnd proc
 static WXWNDPROC gs_wndprocNotebookSpinBtn = nullptr;
 
@@ -84,8 +77,6 @@ static WXWNDPROC gs_wndprocNotebook = nullptr;
 
 LRESULT APIENTRY
 wxNotebookWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-#endif // USE_NOTEBOOK_ANTIFLICKER
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -122,10 +113,7 @@ wxEND_EVENT_TABLE()
 void wxNotebook::Init()
 {
     m_hbrBackground = nullptr;
-
-#if USE_NOTEBOOK_ANTIFLICKER
     m_hasSubclassedUpdown = false;
-#endif // USE_NOTEBOOK_ANTIFLICKER
 }
 
 // default for dynamic class
@@ -162,7 +150,6 @@ bool wxNotebook::Create(wxWindow *parent,
 
     LPCTSTR className = WC_TABCONTROL;
 
-#if USE_NOTEBOOK_ANTIFLICKER
     // SysTabCtl32 class has natively CS_HREDRAW and CS_VREDRAW enabled and it
     // causes horrible flicker when resizing notebook, so get rid of it by
     // using a class without these styles (but otherwise identical to it)
@@ -198,7 +185,6 @@ bool wxNotebook::Create(wxWindow *parent,
             className = s_clsNotebook.GetName().c_str();
         }
     }
-#endif // USE_NOTEBOOK_ANTIFLICKER
 
     if ( !CreateControl(parent, id, pos, size, style | wxTAB_TRAVERSAL,
                         wxDefaultValidator, name) )
@@ -975,8 +961,6 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 // flicker-less notebook redraw
 // ----------------------------------------------------------------------------
 
-#if USE_NOTEBOOK_ANTIFLICKER
-
 // wnd proc for the spin button
 LRESULT APIENTRY
 wxNotebookSpinBtnWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -1444,8 +1428,6 @@ void wxNotebook::OnPaint(wxPaintEvent& event)
     dc.Blit(0, 0, rc.right, rc.bottom, &memdc, 0, 0);
 }
 
-#endif // USE_NOTEBOOK_ANTIFLICKER
-
 // ----------------------------------------------------------------------------
 // wxNotebook callbacks
 // ----------------------------------------------------------------------------
@@ -1546,7 +1528,6 @@ void wxNotebook::OnSize(wxSizeEvent& event)
                     false);
     }
 
-#if USE_NOTEBOOK_ANTIFLICKER
     // subclass the spin control used by the notebook to scroll pages to
     // prevent it from flickering on resize
     if ( !m_hasSubclassedUpdown )
@@ -1572,7 +1553,6 @@ void wxNotebook::OnSize(wxSizeEvent& event)
             }
         }
     }
-#endif // USE_NOTEBOOK_ANTIFLICKER
 
     event.Skip();
 }
@@ -1683,13 +1663,11 @@ bool wxNotebook::SetBackgroundColour(const wxColour& colour)
 
     UpdateBgBrush();
 
-#if USE_NOTEBOOK_ANTIFLICKER
     Unbind(wxEVT_ERASE_BACKGROUND, &wxNotebook::OnEraseBackground, this);
     if ( m_hasBgCol || !wxUxThemeIsActive() )
     {
         Bind(wxEVT_ERASE_BACKGROUND, &wxNotebook::OnEraseBackground, this);
     }
-#endif // USE_NOTEBOOK_ANTIFLICKER
 
     return true;
 }
