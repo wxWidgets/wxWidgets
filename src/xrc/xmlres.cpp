@@ -21,6 +21,7 @@
     #include "wx/panel.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
+    #include "wx/sizer.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
@@ -590,6 +591,29 @@ wxXmlResource::DoLoadObject(wxObject *instance,
 }
 
 
+namespace
+{
+
+void UpdateSizeHintsForAttachedUnknownControl(wxWindow *container,
+                                              wxWindow *control)
+{
+    if ( wxWindow* const window = wxGetTopLevelParent(container) )
+    {
+        wxSizer * const sizer = window->GetSizer();
+        if ( sizer )
+        {
+            sizer->SetSizeHints(window);
+            // SetSizeHints() can resize the TLW without immediately laying out
+            // its children, as happens in wxQt, so force the attached control
+            // to take the expanded placeholder size now.
+            window->Layout();
+            control->SetSize(wxRect(container->GetClientSize()));
+        }
+    }
+}
+
+} // anonymous namespace
+
 bool wxXmlResource::AttachUnknownControl(const wxString& name,
                                          wxWindow *control, wxWindow *parent)
 {
@@ -601,7 +625,12 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
         wxLogError("Cannot find container for unknown control '%s'.", name);
         return false;
     }
-    return control->Reparent(container);
+
+    const bool attached = control->Reparent(container);
+    if ( attached )
+        UpdateSizeHintsForAttachedUnknownControl(container, control);
+
+    return attached;
 }
 
 
