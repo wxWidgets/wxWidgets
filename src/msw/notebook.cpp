@@ -716,6 +716,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     DoSetSelectionAfterInsertion(nPage, bSelect);
 
     InvalidateBestSize();
+    MSWSubclassSpin();
 
     return true;
 }
