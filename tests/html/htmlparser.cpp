@@ -190,6 +190,15 @@ TEST_CASE("wxHtmlParser::NBSPLineBreak", "[html][parser]")
     CHECK(cells[1]->GetAbsPos().y == cells[2]->GetAbsPos().y);
 }
 
+TEST_CASE("wxHtmlEntitiesParser::StrokedD", "[html][parser][entity]")
+{
+    wxHtmlEntitiesParser p;
+    wxString expected;
+    expected << wxUniChar(0x0110) << wxUniChar(0x0111);
+
+    CHECK( p.Parse("&Dstrok;&dstrok;") == expected );
+}
+
 TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
 {
     wxMemoryDC dc;

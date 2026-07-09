@@ -3,6 +3,7 @@
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -555,6 +556,7 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
             ENTITY("Chi", 935),
             ENTITY("Dagger", 8225),
             ENTITY("Delta", 916),
+            ENTITY("Dstrok", 272),
             ENTITY("ETH", 208),
             ENTITY("Eacute", 201),
             ENTITY("Ecirc", 202),
@@ -639,6 +641,7 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
             ENTITY("delta", 948),
             ENTITY("diams", 9830),
             ENTITY("divide", 247),
+            ENTITY("dstrok", 273),
             ENTITY("eacute", 233),
             ENTITY("ecirc", 234),
             ENTITY("egrave", 232),
