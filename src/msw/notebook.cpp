@@ -730,6 +730,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     DoSetSelectionAfterInsertion(nPage, bSelect);
 
     InvalidateBestSize();
+    MSWSubclassSpin();
 
     return true;
 }
@@ -994,6 +995,24 @@ wxNotebookSpinBtnWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocNotebookSpinBtn,
                             hwnd, message, wParam, lParam);
+}
+
+void wxNotebook::MSWSubclassSpin()
+{
+    if ( !m_hasSubclassedUpdown )
+    {
+        // Find the spin button.
+        HWND hwndSpin = FindWindowExA(m_hWnd, nullptr, UPDOWN_CLASSA, nullptr);
+        if ( hwndSpin )
+        {
+            // Subclass the spin button.
+            if ( !gs_wndprocNotebookSpinBtn )
+                gs_wndprocNotebookSpinBtn = wxGetWindowProc(hwndSpin);
+
+            wxSetWindowProc(hwndSpin, wxNotebookSpinBtnWndProc);
+            m_hasSubclassedUpdown = true;
+        }
+    }
 }
 
 LRESULT APIENTRY
@@ -1547,31 +1566,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     }
 
 #if USE_NOTEBOOK_ANTIFLICKER
-    // subclass the spin control used by the notebook to scroll pages to
-    // prevent it from flickering on resize
-    if ( !m_hasSubclassedUpdown )
-    {
-        // iterate over all child windows to find spin button
-        for ( HWND child = ::GetWindow(GetHwnd(), GW_CHILD);
-              child;
-              child = ::GetWindow(child, GW_HWNDNEXT) )
-        {
-            wxWindow *childWindow = wxFindWinFromHandle((WXHWND)child);
-
-            // see if it exists, if no wxWindow found then assume it's the spin
-            // btn
-            if ( !childWindow )
-            {
-                // subclass the spin button to override WM_ERASEBKGND
-                if ( !gs_wndprocNotebookSpinBtn )
-                    gs_wndprocNotebookSpinBtn = wxGetWindowProc(child);
-
-                wxSetWindowProc(child, wxNotebookSpinBtnWndProc);
-                m_hasSubclassedUpdown = true;
-                break;
-            }
-        }
-    }
+    MSWSubclassSpin();
 #endif // USE_NOTEBOOK_ANTIFLICKER
 
     event.Skip();
