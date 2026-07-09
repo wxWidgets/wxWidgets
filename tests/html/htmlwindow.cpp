@@ -42,6 +42,7 @@ private:
     CPPUNIT_TEST_SUITE( HtmlWindowTestCase );
         CPPUNIT_TEST( SelectionToText );
         CPPUNIT_TEST( Title );
+        CPPUNIT_TEST( InitialLineBreak );
 #if wxUSE_UIACTIONSIMULATOR
         WXUISIM_TEST( CellClick );
         WXUISIM_TEST( LinkClick );
@@ -55,6 +56,7 @@ private:
 
     void SelectionToText();
     void Title();
+    void InitialLineBreak();
     void CellClick();
     void LinkClick();
 #if wxUSE_WXHTML_HELP
@@ -193,6 +195,25 @@ void HtmlWindowTestCase::Title()
     m_win->SetPage(TEST_MARKUP);
 
     CPPUNIT_ASSERT_EQUAL("Page", m_win->GetOpenedPageTitle());
+}
+
+void HtmlWindowTestCase::InitialLineBreak()
+{
+    m_win->SetBorders(0);
+    m_win->SetPage("<html><body>TEXT</body></html>");
+
+    wxHtmlContainerCell *plainTextRoot = m_win->GetInternalRepresentation();
+
+    CPPUNIT_ASSERT(plainTextRoot);
+
+    int plainTextHeight = plainTextRoot->GetHeight();
+
+    m_win->SetPage("<html><body><br>TEXT</body></html>");
+
+    wxHtmlContainerCell *rootWithBreak = m_win->GetInternalRepresentation();
+
+    CPPUNIT_ASSERT(rootWithBreak);
+    CPPUNIT_ASSERT(rootWithBreak->GetHeight() > plainTextHeight);
 }
 
 #if wxUSE_UIACTIONSIMULATOR

@@ -90,7 +90,31 @@ wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int pageHeight) const
     return false;
 }
 
+class wxHtmlLineBreakCell : public wxHtmlCell
+{
+public:
+    wxHtmlLineBreakCell(const wxHtmlTag& tag, int height) : wxHtmlCell(tag)
+        { m_Height = height; }
 
+    void Draw(wxDC& WXUNUSED(dc),
+              int WXUNUSED(x), int WXUNUSED(y),
+              int WXUNUSED(view_y1), int WXUNUSED(view_y2),
+              wxHtmlRenderingInfo& WXUNUSED(info)) override {}
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxHtmlLineBreakCell);
+};
+
+static bool HasLayoutContent(wxHtmlContainerCell *c)
+{
+    for ( wxHtmlCell *cell = c->GetFirstChild(); cell; cell = cell->GetNext() )
+    {
+        if ( !cell->IsTerminalCell() || !cell->IsFormattingCell() )
+            return true;
+    }
+
+    return false;
+}
 
 TAG_HANDLER_BEGIN(P, "P")
     TAG_HANDLER_CONSTR(P) { }
@@ -119,14 +143,29 @@ TAG_HANDLER_BEGIN(BR, "BR")
     TAG_HANDLER_PROC(tag)
     {
         int al = m_WParser->GetContainer()->GetAlignHor();
-        wxHtmlContainerCell *c;
+        wxHtmlContainerCell *c = m_WParser->GetContainer();
 
-        m_WParser->CloseContainer();
-        c = m_WParser->OpenContainer();
-        c->CopyId(tag);
+        if ( !HasLayoutContent(c) && !c->HasId() )
+        {
+            c->CopyId(tag);
+            c->SetAlignHor(al);
+            c->SetAlign(tag);
+            c->InsertCell(
+                new wxHtmlLineBreakCell(tag, m_WParser->GetCharHeight()));
+
+            m_WParser->CloseContainer();
+            c = m_WParser->OpenContainer();
+        }
+        else
+        {
+            m_WParser->CloseContainer();
+            c = m_WParser->OpenContainer();
+            c->CopyId(tag);
+            c->SetMinHeight(m_WParser->GetCharHeight());
+        }
+
         c->SetAlignHor(al);
         c->SetAlign(tag);
-        c->SetMinHeight(m_WParser->GetCharHeight());
         return false;
     }
 
