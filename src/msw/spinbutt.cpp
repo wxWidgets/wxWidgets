@@ -30,6 +30,7 @@
 
 #include "wx/spinbutt.h"
 
+#include "wx/dcbuffer.h"
 #include "wx/msw/dc.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
@@ -252,7 +253,10 @@ void wxSpinButton::OnPaint(wxPaintEvent& event)
         bmp = wxBitmap(image);
 #endif // wxUSE_IMAGE
 
-        wxPaintDC dc(this);
+        wxBufferedPaintDC dc(this);
+        // Clear the background, otherwise alpha transparency in the bitmap
+        // appears white.
+        dc.Clear();
         dc.DrawBitmap(bmp, 0, 0);
     }
     else
