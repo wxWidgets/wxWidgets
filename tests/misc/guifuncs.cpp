@@ -26,6 +26,12 @@
 #include "wx/dataobj.h"
 #include "wx/panel.h"
 
+#if defined(__WXMSW__) && wxUSE_PRINTING_ARCHITECTURE
+    #include "wx/msw/wrapwin.h"
+    #include "wx/msw/private.h"
+    #include "wx/msw/printdlg.h"
+#endif
+
 #include "asserthelper.h"
 #include "waitfor.h"
 
@@ -173,6 +179,47 @@ TEST_CASE("GUI::ParseFileDialogFilter", "[guifuncs]")
         )
     );
 }
+
+#if defined(__WXMSW__) && wxUSE_PRINTING_ARCHITECTURE
+
+TEST_CASE("wxPrintData::MSWDuplexDefault", "[print][msw]")
+{
+    wxWindowsPrintNativeData nativeData;
+    GlobalPtr hDevMode(sizeof(DEVMODE), GMEM_FIXED | GMEM_ZEROINIT);
+    REQUIRE( static_cast<HGLOBAL>(hDevMode) );
+
+    DEVMODE * const devMode =
+        static_cast<DEVMODE *>(static_cast<HGLOBAL>(hDevMode));
+    devMode->dmSize = sizeof(DEVMODE);
+    devMode->dmFields = DM_DUPLEX;
+    devMode->dmDuplex = DMDUP_VERTICAL;
+
+    // wxWindowsPrintNativeData takes ownership and frees the handle.
+    nativeData.SetDevMode(hDevMode.Release());
+
+    SECTION("Default")
+    {
+        wxPrintData data;
+
+        REQUIRE( nativeData.TransferFrom(data) );
+
+        CHECK( (devMode->dmFields & DM_DUPLEX) != 0 );
+        CHECK( devMode->dmDuplex == DMDUP_VERTICAL );
+    }
+
+    SECTION("ExplicitSimplex")
+    {
+        wxPrintData data;
+        data.SetDuplex(wxDUPLEX_SIMPLEX);
+
+        REQUIRE( nativeData.TransferFrom(data) );
+
+        CHECK( (devMode->dmFields & DM_DUPLEX) != 0 );
+        CHECK( devMode->dmDuplex == DMDUP_SIMPLEX );
+    }
+}
+
+#endif // defined(__WXMSW__) && wxUSE_PRINTING_ARCHITECTURE
 
 TEST_CASE("GUI::ClientToScreen", "[guifuncs]")
 {

@@ -358,7 +358,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
         }
     }
     else
-        data.SetDuplex( wxDUPLEX_SIMPLEX );
+        data.ResetDuplex();
 
     //// Quality
 
@@ -661,22 +661,25 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         }
 
         //// Duplex
-        short duplex;
-        switch (data.GetDuplex())
+        if ( data.IsDuplexSpecified() )
         {
-            case wxDUPLEX_HORIZONTAL:
-                duplex = DMDUP_HORIZONTAL;
-                break;
-            case wxDUPLEX_VERTICAL:
-                duplex = DMDUP_VERTICAL;
-                break;
-            default:
-            // in fact case wxDUPLEX_SIMPLEX:
-                duplex = DMDUP_SIMPLEX;
-                break;
+            short duplex;
+            switch ( data.GetDuplex() )
+            {
+                case wxDUPLEX_HORIZONTAL:
+                    duplex = DMDUP_HORIZONTAL;
+                    break;
+                case wxDUPLEX_VERTICAL:
+                    duplex = DMDUP_VERTICAL;
+                    break;
+                default:
+                // in fact case wxDUPLEX_SIMPLEX:
+                    duplex = DMDUP_SIMPLEX;
+                    break;
+            }
+            devMode->dmDuplex = duplex;
+            devMode->dmFields |= DM_DUPLEX;
         }
-        devMode->dmDuplex = duplex;
-        devMode->dmFields |= DM_DUPLEX;
 
         //// Quality
 
