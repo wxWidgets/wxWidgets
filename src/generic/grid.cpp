@@ -8783,26 +8783,17 @@ void wxGrid::MakeCellVisible( int row, int col )
         int ch;
         gridWindow->GetClientSize(nullptr, &ch);
 
-        if ( top < gridOffset.y )
+        // special handling for tall cells: show always top part of the cell!
+        if ( top < gridOffset.y || (bottom - top) >= ch )
         {
             ypos = r.GetTop() - gridOffset.y;
         }
         else if ( bottom > (ch + gridOffset.y) )
         {
-            int h = r.GetHeight();
-
-            ypos = r.GetTop() - gridOffset.y;
-
-            int i;
-            for ( i = row - 1; i >= 0; i-- )
-            {
-                int rowHeight = GetRowHeight(i);
-                if ( h + rowHeight > ch )
-                    break;
-
-                h += rowHeight;
-                ypos -= rowHeight;
-            }
+            // Position the view so that the cell is on the bottom.
+            int x0, y0;
+            CalcGridWindowUnscrolledPosition(0, 0, &x0, &y0, gridWindow);
+            ypos = y0 + (bottom - ch);
 
             // we divide it later by GRID_SCROLL_LINE, make sure that we don't
             // have rounding errors (this is important, because if we do,

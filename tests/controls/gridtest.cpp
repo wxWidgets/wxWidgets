@@ -1110,6 +1110,24 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ScrollWhenSelect", "[grid]")
     CHECK( m_grid->IsVisible(9, 1) );
 }
 
+TEST_CASE_METHOD(GridTestCase, "Grid::MakeCellVisibleWithVariableRowHeights", "[grid]")
+{
+    m_grid->AppendRows(30);
+    m_grid->SetSize(240, 120);
+
+    for ( int row = 0; row < 30; ++row )
+    {
+        if ( row % 3 == 0 )
+            m_grid->SetRowSize(row, 50);
+    }
+
+    m_grid->SetRowSize(0, 57);
+    m_grid->SetRowSize(29, 20);
+
+    m_grid->MakeCellVisible(30, 0);
+    CHECK( m_grid->IsVisible(30, 0) );
+}
+
 TEST_CASE_METHOD(GridTestCase, "Grid::MoveGridCursorUsingEndKey", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
