@@ -48,26 +48,6 @@ protected:
     const std::unique_ptr<wxAuiNotebook> nb;
 };
 
-class AuiManagerTestCase
-{
-public:
-    AuiManagerTestCase()
-        : frame(new wxFrame(nullptr, wxID_ANY, "wxAuiManager test"))
-        , manager(frame.get())
-    {
-        frame->SetClientSize(800, 600);
-    }
-
-    ~AuiManagerTestCase()
-    {
-        manager.UnInit();
-    }
-
-protected:
-    std::unique_ptr<wxFrame> frame;
-    wxAuiManager manager;
-};
-
 class TestAuiNotebook : public wxAuiNotebook
 {
 public:
@@ -80,6 +60,71 @@ public:
     using wxAuiNotebook::OnTabMiddleUp;
     using wxAuiNotebook::OnTabRightDown;
     using wxAuiNotebook::OnTabRightUp;
+};
+
+class TestAuiManager : public wxAuiManager
+{
+public:
+    TestAuiManager(wxWindow* managedWindow)
+        : wxAuiManager(managedWindow)
+    {
+    }
+
+    wxAuiDockUIPart* FindPaneSizer()
+    {
+        for ( auto& part : m_uiParts )
+        {
+            if ( part.type == wxAuiDockUIPart::typePaneSizer )
+                return &part;
+        }
+
+        return nullptr;
+    }
+
+    void ClickWithoutMoving(wxAuiDockUIPart* part)
+    {
+        const wxPoint pos = part->rect.GetPosition() +
+            wxPoint(part->rect.GetWidth()/2, part->rect.GetHeight()/2);
+
+        wxMouseEvent down(wxEVT_LEFT_DOWN);
+        down.m_x = pos.x;
+        down.m_y = pos.y;
+        OnLeftDown(down);
+
+        wxMouseEvent motion(wxEVT_MOTION);
+        motion.m_x = pos.x;
+        motion.m_y = pos.y;
+        OnMotion(motion);
+
+        wxMouseEvent up(wxEVT_LEFT_UP);
+        up.m_x = pos.x;
+        up.m_y = pos.y;
+        OnLeftUp(up);
+    }
+};
+
+class AuiManagerTestCase
+{
+public:
+    AuiManagerTestCase()
+        : frame(new wxFrame(nullptr, wxID_ANY, "wxAuiManager test"))
+        , manager(frame.get())
+    {
+        frame->SetClientSize(800, 600);
+        // GTK needs a realized TLW before the synthetic sash click below can
+        // capture the mouse.
+        frame->Show();
+        wxYield();
+    }
+
+    ~AuiManagerTestCase()
+    {
+        manager.UnInit();
+    }
+
+protected:
+    std::unique_ptr<wxFrame> frame;
+    TestAuiManager manager;
 };
 
 // ----------------------------------------------------------------------------
@@ -117,6 +162,42 @@ TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::AddPaneDockSize", "[aui]")
     manager.Update();
 
     CHECK( pane->GetSize().x == 180 );
+}
+
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::SizerClick", "[aui]")
+{
+    wxWindow* const first = new wxPanel(frame.get());
+    wxWindow* const second = new wxPanel(frame.get());
+    wxWindow* const center = new wxPanel(frame.get());
+
+    REQUIRE( manager.AddPane(first, wxAuiPaneInfo().Top().
+        MinSize(200, 100).CaptionVisible(false).PaneBorder(false)) );
+    REQUIRE( manager.AddPane(second, wxAuiPaneInfo().Top().
+        MinSize(200, 100).CaptionVisible(false).PaneBorder(false)) );
+    REQUIRE( manager.AddPane(center, wxAuiPaneInfo().CenterPane()) );
+
+    manager.Update();
+
+    const wxSize firstSize = first->GetSize();
+    const wxSize secondSize = second->GetSize();
+    const int firstProportion = manager.GetPane(first).dock_proportion;
+    const int secondProportion = manager.GetPane(second).dock_proportion;
+
+    wxAuiDockUIPart* sizer = manager.FindPaneSizer();
+    REQUIRE( sizer );
+
+    for ( int n = 0; n < 4; n++ )
+    {
+        manager.ClickWithoutMoving(sizer);
+
+        sizer = manager.FindPaneSizer();
+        REQUIRE( sizer );
+    }
+
+    CHECK( first->GetSize() == firstSize );
+    CHECK( second->GetSize() == secondSize );
+    CHECK( manager.GetPane(first).dock_proportion == firstProportion );
+    CHECK( manager.GetPane(second).dock_proportion == secondProportion );
 }
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")

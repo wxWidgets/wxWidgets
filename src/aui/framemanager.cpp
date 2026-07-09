@@ -5072,6 +5072,9 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
 {
     if (m_action == actionResize)
     {
+        const bool wasDragged =
+            event.GetPosition() != m_actionStart || m_currentDragItem != -1;
+
         m_frame->ReleaseMouse();
 
         if (!HasLiveResize())
@@ -5079,10 +5082,14 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
             // get rid of the hint rectangle
             m_overlay.Reset();
         }
-        if (m_currentDragItem != -1 && HasLiveResize())
-            m_actionPart = & (m_uiParts.Item(m_currentDragItem));
 
-        DoEndResizeAction(event);
+        if ( wasDragged )
+        {
+            if (m_currentDragItem != -1 && HasLiveResize())
+                m_actionPart = & (m_uiParts.Item(m_currentDragItem));
+
+            DoEndResizeAction(event);
+        }
 
         m_currentDragItem = -1;
 
@@ -5180,6 +5187,9 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
     if (m_action == actionResize)
     {
+        if ( mouse_pos == m_actionStart && m_currentDragItem == -1 )
+            return;
+
         // It's necessary to reset m_actionPart since it destroyed
         // by the Update within DoEndResizeAction.
         if (m_currentDragItem != -1)
