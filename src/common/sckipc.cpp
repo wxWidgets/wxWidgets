@@ -46,6 +46,7 @@
 #include <errno.h>
 
 #include <functional>
+#include <map>
 #include <unordered_set>
 
 #include "wx/socket.h"
@@ -105,13 +106,6 @@ constexpr auto wxNO_RETURN_MESSAGE = nullptr;
 constexpr long wxIPCTimeout = 5; // socket timeout, in seconds
 
 
-// For IPC returning a char* buffer. wxWidgets docs say that the user is not
-// supposed to free the memory.  Each buffer pointer is assigned to a list
-// sequentially, and the buffer memory is not freed until MAX_MSG_BUFFERS have
-// been assigned.
-constexpr int MAX_MSG_BUFFERS = 2048;
-
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -156,19 +150,7 @@ GetAddressFromName(const wxString& serverName,
 class wxTCPEventHandler : public wxEvtHandler
 {
 public:
-    wxTCPEventHandler() : wxEvtHandler()
-    {
-        for ( auto& buf : m_bufferList )
-            buf = nullptr;
-
-        m_nextAvailable = 0;
-    }
-
-    ~wxTCPEventHandler()
-    {
-        for ( auto& buf : m_bufferList )
-            delete[] buf;
-    }
+    wxTCPEventHandler() = default;
 
     void OnSocketInput(wxSocketEvent& event);
     void OnSocketConnection(wxSocketEvent& event);
@@ -193,8 +175,6 @@ public:
     wxIPCMessageBase* ReadMessageFromSocket(wxSocketBase *socket);
     bool WriteMessageToSocket(wxIPCMessageBase& msg);
     bool PeekAtMessageInSocket(wxSocketBase *socket);
-
-    char* GetBufPtr(size_t size);
 
     // This event handler is a single process-wide object shared by every IPC
     // connection (client and server) and it lives until the program exits.
@@ -242,11 +222,6 @@ public:
 
 private:
     wxTCPConnection* GetConnection(wxSocketBase* socket);
-
-    wxCRIT_SECT_DECLARE_MEMBER(m_cs_assign_buffer);
-
-    char* m_bufferList[MAX_MSG_BUFFERS];
-    int m_nextAvailable;
 
     wxCRIT_SECT_DECLARE_MEMBER(m_cs_connection_sockets);
     std::unordered_set<wxSocketBase*> m_connectionSockets;
@@ -345,15 +320,14 @@ wxTCPEventHandler *wxTCPEventHandlerModule::ms_handler = nullptr;
 class wxIPCMessageBase : public wxObject
 {
 public:
-    wxIPCMessageBase(wxSocketBase* socket = nullptr,
-                     wxTCPEventHandler* handler = nullptr)
-        : m_writeData(nullptr), m_handler(handler)
+    wxIPCMessageBase(wxSocketBase* socket = nullptr)
+        : m_writeData(nullptr)
     {
         Init(socket);
     }
 
     wxIPCMessageBase(wxSocketBase* socket, const void* data)
-        : m_writeData(data), m_handler(nullptr)
+        : m_writeData(data)
     {
         Init(socket);
     }
@@ -376,6 +350,14 @@ public:
 
     const void* GetReadData() const { return m_readData; }
     void SetReadData(void *data) { m_readData = data; }
+
+    // Relinquish ownership of the buffer allocated by ReadSizeAndData() to
+    // the caller, which becomes responsible for delete[]-ing it.
+    char* ReleaseReadData()
+    {
+        m_readData = nullptr;
+        return m_readDataBuf.release();
+    }
 
     size_t GetSize() const { return m_size; }
     void SetSize(size_t size) { m_size = size; }
@@ -562,7 +544,10 @@ protected:
     // pointer to data read from socket
     void* m_readData;
 
-    wxTCPEventHandler *m_handler;
+    // owns the buffer m_readData points to when it was allocated by
+    // ReadSizeAndData(), so that the data read from the socket is freed with
+    // the message unless ReleaseReadData() has passed it on
+    std::unique_ptr<char[]> m_readDataBuf;
 
     friend wxTCPEventHandler;
 
@@ -572,15 +557,15 @@ protected:
 
 // Reads a 32-bit word to get the desired buffer m_size from the socket, allocates
 // a buffer of that size, then read m_size bytes worth of data from the socket
-// into m_readData.
+// into m_readData. The buffer is owned by this message and is freed with it,
+// unless ReleaseReadData() is used to take it over.
 bool wxIPCMessageBase::ReadSizeAndData()
 {
     if (!Read32(m_size))
         return false;
 
-    wxCHECK_MSG( m_handler, false, "No handler for read allocation");
-
-    m_readData = m_handler->GetBufPtr(m_size);
+    m_readDataBuf.reset(new char[m_size]);
+    m_readData = m_readDataBuf.get();
 
     m_socket->Read(m_readData, m_size);
     return VerifyLastReadCount(m_size);
@@ -626,9 +611,8 @@ bool wxIPCMessageBase::WriteString(const wxString& str)
 class wxIPCMessageExecute : public wxIPCMessageBase
 {
 public:
-    wxIPCMessageExecute(wxSocketBase* socket = nullptr,
-                        wxTCPEventHandler* handler = nullptr)
-        : wxIPCMessageBase(socket, handler)
+    wxIPCMessageExecute(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
     {
         SetIPCCode(IPC_EXECUTE);
     }
@@ -695,9 +679,8 @@ protected:
 class wxIPCMessageRequestReply : public wxIPCMessageBase
 {
 public:
-    wxIPCMessageRequestReply(wxSocketBase* socket = nullptr,
-                             wxTCPEventHandler* handler = nullptr)
-        : wxIPCMessageBase(socket, handler)
+    wxIPCMessageRequestReply(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
     {
         SetIPCCode(IPC_REQUEST_REPLY);
     }
@@ -748,9 +731,8 @@ protected:
 class wxIPCMessagePoke : public wxIPCMessageBase
 {
 public:
-    wxIPCMessagePoke(wxSocketBase* socket = nullptr,
-                     wxTCPEventHandler* handler = nullptr)
-        : wxIPCMessageBase(socket, handler)
+    wxIPCMessagePoke(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
     {
         SetIPCCode(IPC_POKE);
     }
@@ -845,9 +827,8 @@ protected:
 class wxIPCMessageAdvise : public wxIPCMessageBase
 {
 public:
-    wxIPCMessageAdvise(wxSocketBase* socket = nullptr,
-                       wxTCPEventHandler* handler = nullptr)
-        : wxIPCMessageBase(socket, handler)
+    wxIPCMessageAdvise(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
     {
         SetIPCCode(IPC_ADVISE);
     }
@@ -1010,6 +991,95 @@ public:
 
     wxIPCMessageBase* m_msg;
 };
+
+namespace
+{
+
+/*
+    Per-thread holder for the last data buffer returned to user code by
+    Request(): wxWidgets docs say the user must not free that pointer, so we
+    keep it alive here until the same thread makes its next Request() call,
+    which replaces (and frees) it. Each thread has its own slot, so requests
+    made concurrently from several threads cannot invalidate each other's
+    returned data.
+
+    See UntranslatedStringHolder in translation.cpp for the explanation of the
+    MinGW thread_local bug requiring the first version of this class: the
+    destructor runs after the object's memory has been deallocated, so the
+    buffers are kept in a global map and the destructor only touches globals.
+ */
+#if defined(__MINGW32__) && \
+    (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 15)
+
+class IPCRequestBufferHolder
+{
+private:
+    static wxCriticalSection ms_criticalSection;
+    static std::map<wxThreadIdType, char*> ms_buffersMap;
+
+public:
+    IPCRequestBufferHolder() = default;
+
+    const void* assign(char* buf)
+    {
+        wxCriticalSectionLocker locker(ms_criticalSection);
+        char*& slot = ms_buffersMap[wxThread::GetCurrentId()];
+        delete[] slot;
+        slot = buf;
+        return buf;
+    }
+
+    ~IPCRequestBufferHolder()
+    {
+        // This code is run after this object memory has been deallocated so we
+        // cannot access any member variables, but we can access global ones.
+        wxCriticalSectionLocker locker(ms_criticalSection);
+        const auto it = ms_buffersMap.find(wxThread::GetCurrentId());
+        if ( it != ms_buffersMap.end() )
+        {
+            delete[] it->second;
+            ms_buffersMap.erase(it);
+        }
+    }
+
+    wxDECLARE_NO_COPY_CLASS(IPCRequestBufferHolder);
+};
+
+wxCriticalSection IPCRequestBufferHolder::ms_criticalSection;
+
+std::map<wxThreadIdType, char*> IPCRequestBufferHolder::ms_buffersMap;
+
+#else // !__MINGW32__
+
+class IPCRequestBufferHolder
+{
+private:
+    std::unique_ptr<char[]> m_buf;
+
+public:
+    IPCRequestBufferHolder() = default;
+
+    const void* assign(char* buf)
+    {
+        m_buf.reset(buf);
+        return buf;
+    }
+
+    wxDECLARE_NO_COPY_CLASS(IPCRequestBufferHolder);
+};
+
+#endif // __MINGW32__/!__MINGW32__
+
+// Transfer ownership of the message's read buffer to the calling thread and
+// return it: the buffer stays valid until the next call to this function on
+// the same thread, or until the thread ends.
+const void* TakeReadDataForThisThread(wxIPCMessageBase* msg)
+{
+    thread_local IPCRequestBufferHolder wxPerThreadIPCBuffer;
+    return wxPerThreadIPCBuffer.assign(msg->ReleaseReadData());
+}
+
+} // anonymous namespace
 
 // ==========================================================================
 // implementation
@@ -1333,7 +1403,10 @@ const void *wxTCPConnection::Request(const wxString& item,
     if (size)
       *size = msg_reply->GetSize();
 
-    return msg_reply->GetReadData();
+    // The reply message is deleted when this function returns, so hand its
+    // buffer over to the calling thread, which keeps it valid until the next
+    // Request() on this thread.
+    return TakeReadDataForThisThread(msg_reply);
 }
 
 bool wxTCPConnection::DoPoke(const wxString& item,
@@ -1925,25 +1998,25 @@ wxIPCMessageBase* wxTCPEventHandler::GetIPCMessageFromCode(IPCCode code, wxSocke
     switch ( code )
     {
     case IPC_EXECUTE:
-        return new wxIPCMessageExecute(socket, this);
+        return new wxIPCMessageExecute(socket);
 
     case IPC_REQUEST:
         return new wxIPCMessageRequest(socket);
 
     case IPC_POKE:
-        return new wxIPCMessagePoke(socket, this);
+        return new wxIPCMessagePoke(socket);
 
     case IPC_ADVISE_START:
         return new wxIPCMessageAdviseStart(socket);
 
     case IPC_ADVISE:
-        return new wxIPCMessageAdvise(socket, this);
+        return new wxIPCMessageAdvise(socket);
 
     case IPC_ADVISE_STOP:
         return new wxIPCMessageAdviseStop(socket);
 
     case IPC_REQUEST_REPLY:
-        return new wxIPCMessageRequestReply(socket, this);
+        return new wxIPCMessageRequestReply(socket);
 
     case IPC_FAIL:
         return new wxIPCMessageFail(socket);
@@ -2050,21 +2123,6 @@ bool wxTCPEventHandler::PeekAtMessageInSocket(wxSocketBase* socket)
     });
 
     return enough;
-}
-
-char* wxTCPEventHandler::GetBufPtr(size_t size)
-{
-    wxCRIT_SECT_LOCKER(lock, m_cs_assign_buffer);
-
-    if (m_bufferList[m_nextAvailable] != nullptr)
-        delete[] m_bufferList[m_nextAvailable];  // Free the memory from the last use
-
-    char* ptr = new char[size];
-
-    m_bufferList[m_nextAvailable] = ptr;
-    m_nextAvailable = (m_nextAvailable + 1) % MAX_MSG_BUFFERS;
-
-    return ptr;
 }
 
 wxTCPConnection* wxTCPEventHandler::GetConnection(wxSocketBase* socket)
