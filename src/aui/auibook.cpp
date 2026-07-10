@@ -2012,8 +2012,11 @@ public:
     wxRect m_tab_rect;
     wxAuiTabCtrl* const m_tabs;
     int m_tabCtrlHeight = 0;
+
+    wxDECLARE_CLASS(wxAuiTabFrame);
 };
 
+wxIMPLEMENT_CLASS(wxAuiTabFrame, wxWindow);
 
 const int wxAuiBaseTabCtrlId = 5380;
 
@@ -2058,6 +2061,22 @@ bool IsDummyPane(const wxAuiPaneInfo& pane)
 }
 
 } // anonymous namespace
+
+bool wxAuiNotebook::wxAuiNotebookManager::CanAddPane(
+    wxWindow* window, const wxAuiPaneInfo& paneInfo) const
+{
+    if ( !wxAuiManager::CanAddPane(window, paneInfo) )
+        return false;
+
+    // wxAuiNotebook creates a hidden dummy pane before any real tab frames.
+    if ( IsDummyPane(paneInfo) && m_panes.empty() )
+        return true;
+
+    wxCHECK_MSG(wxDynamicCast(window, wxAuiTabFrame), false,
+                wxT("Can't add non-tab panes to wxAuiNotebook's manager"));
+
+    return true;
+}
 
 void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
 {
