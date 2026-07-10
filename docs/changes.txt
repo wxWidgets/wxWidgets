@@ -145,6 +145,10 @@ Changes in behaviour not resulting in compilation errors
   wxTextDataObject, but for the code working with the raw bytes in this format
   you may need to change it to use wxConvUTF8 instead of wxConvLocal.
 
+- Creating central wxAUI pane window with non-zero layer, row or position
+  values was previously silently allowed but couldn't work correctly, so now
+  attempting to do it will assert. Don't set these values for the central pane.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

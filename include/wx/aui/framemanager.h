@@ -243,9 +243,16 @@ public:
     wxAuiPaneInfo& Right() { dock_direction = wxAUI_DOCK_RIGHT; return *this; }
     wxAuiPaneInfo& Top() { dock_direction = wxAUI_DOCK_TOP; return *this; }
     wxAuiPaneInfo& Bottom() { dock_direction = wxAUI_DOCK_BOTTOM; return *this; }
-    wxAuiPaneInfo& Center() { dock_direction = wxAUI_DOCK_CENTER; return *this; }
-    wxAuiPaneInfo& Centre() { dock_direction = wxAUI_DOCK_CENTRE; return *this; }
-    wxAuiPaneInfo& Direction(int direction) { dock_direction = direction; return *this; }
+    wxAuiPaneInfo& Center() { dock_direction = wxAUI_DOCK_CENTER; return Layer(0).Row(0).Position(0); }
+    wxAuiPaneInfo& Centre() { dock_direction = wxAUI_DOCK_CENTRE; return Layer(0).Row(0).Position(0); }
+    wxAuiPaneInfo& Direction(int direction)
+    {
+        if (dock_direction == wxAUI_DOCK_CENTRE)
+            return Centre();
+
+        dock_direction = direction;
+        return *this;
+    }
     wxAuiPaneInfo& Layer(int layer) { dock_layer = layer; return *this; }
     wxAuiPaneInfo& Row(int row) { dock_row = row; return *this; }
     wxAuiPaneInfo& Position(int pos) { dock_pos = pos; return *this; }
