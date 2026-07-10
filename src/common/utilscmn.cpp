@@ -1413,19 +1413,48 @@ void wxInfoMessageBox(wxWindow* parent)
 
 #if wxUSE_TEXTDLG
 
+namespace
+{
+
+// Common part of wxGetTextFromUser() and wxGetPasswordFromUser(): check the
+// position, resetting it if it is invalid, and return the dialog style to use.
+long PrepareTextEntryDialog(wxPoint& pos, bool centre)
+{
+    if ( pos != wxDefaultPosition && !pos.IsFullySpecified() )
+    {
+        wxFAIL_MSG("Either both x and y must be valid or none of them.");
+        pos = wxDefaultPosition;
+    }
+
+    long style = wxTextEntryDialogStyle;
+
+    // Explicitly specified position takes precedence over centring.
+    if ( !centre || pos != wxDefaultPosition )
+        style &= ~wxCENTRE;
+
+    return style;
+}
+
+} // anonymous namespace
+
 wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         const wxString& defaultValue, wxWindow *parent,
                         wxCoord x, wxCoord y, bool centre )
 {
+    return wxGetTextFromUser(message, caption, defaultValue, parent,
+                             wxPoint(x, y), wxDefaultSize, centre);
+}
+
+wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
+                        const wxString& defaultValue, wxWindow *parent,
+                        const wxPoint& posOrig, const wxSize& size, bool centre )
+{
+    wxPoint pos = posOrig;
+    const long style = PrepareTextEntryDialog(pos, centre);
+
     wxString str;
-    long style = wxTextEntryDialogStyle;
-
-    if (centre)
-        style |= wxCENTRE;
-    else
-        style &= ~wxCENTRE;
-
-    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style, wxPoint(x, y));
+    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style,
+                             pos, size);
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -1441,16 +1470,12 @@ wxString wxGetPasswordFromUser(const wxString& message,
                                wxWindow *parent,
                                wxCoord x, wxCoord y, bool centre )
 {
+    wxPoint pos(x, y);
+    const long style = PrepareTextEntryDialog(pos, centre);
+
     wxString str;
-    long style = wxTextEntryDialogStyle;
-
-    if (centre)
-        style |= wxCENTRE;
-    else
-        style &= ~wxCENTRE;
-
     wxPasswordEntryDialog dialog(parent, message, caption, defaultValue,
-                             style, wxPoint(x, y));
+                                 style, pos);
     if ( dialog.ShowModal() == wxID_OK )
     {
         str = dialog.GetValue();
