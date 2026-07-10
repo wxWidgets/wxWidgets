@@ -678,6 +678,16 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::NumberedBullet",
     CHECK(bullet.GetLeftIndent() == 15);
     CHECK(bullet.GetLeftSubIndent() == 20);
 
+    wxRichTextParagraph *firstPara =
+        m_rich->GetFocusObject()->GetParagraphAtPosition(5);
+    wxRichTextAttr nextBullet;
+
+    REQUIRE(m_rich->GetFocusObject()->FindNextParagraphNumber(firstPara,
+                                                              nextBullet));
+    CHECK(nextBullet.HasBulletStyle());
+    CHECK(nextBullet.HasBulletNumber());
+    CHECK(nextBullet.GetBulletNumber() == 2);
+
     m_rich->GetStyle(15, bullet);
 
     CHECK(bullet.HasBulletStyle());
