@@ -30,6 +30,7 @@
 #include "wx/private/tlwdrag.h"
 
 #ifdef __WXMSW__
+#include "wx/msw/wrapwin.h"
 #include "wx/msw/private.h"
 #endif
 
@@ -249,6 +250,26 @@ bool wxAuiFloatingFrame::IsTopNavigationDomain(NavigationKind kind) const
     return wxAuiFloatingFrameBaseClass::IsTopNavigationDomain(kind);
 }
 
+bool wxAuiFloatingFrame::DockPane()
+{
+    if ( !m_ownerMgr )
+        return false;
+
+    wxAuiPaneInfo& pane = m_ownerMgr->GetPane(m_paneWindow);
+    if ( !pane.IsOk() || !pane.IsFloating() ||
+            pane.frame != this || !pane.IsDockable() )
+        return false;
+
+    if ( m_ownerMgr->m_hasMaximized )
+        m_ownerMgr->RestoreMaximizedPane();
+
+    pane.Dock();
+    m_ownerMgr->AddPaneToMinDockIfNecessary(pane);
+    m_ownerMgr->Update();
+
+    return true;
+}
+
 void wxAuiFloatingFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if (m_ownerMgr)
@@ -269,6 +290,29 @@ void wxAuiFloatingFrame::OnClose(wxCloseEvent& evt)
         Destroy();
     }
 }
+
+void wxAuiFloatingFrame::OnLeftDClick(wxMouseEvent& event)
+{
+    if ( !DockPane() )
+        event.Skip();
+}
+
+#ifdef __WXMSW__
+
+WXLRESULT wxAuiFloatingFrame::MSWWindowProc(WXUINT message,
+                                            WXWPARAM wParam,
+                                            WXLPARAM lParam)
+{
+    if ( message == WM_NCLBUTTONDBLCLK && wParam == HTCAPTION )
+    {
+        if ( DockPane() )
+            return 0;
+    }
+
+    return wxAuiFloatingFrameBaseClass::MSWWindowProc(message, wParam, lParam);
+}
+
+#endif // __WXMSW__
 
 void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 {
@@ -439,6 +483,7 @@ wxBEGIN_EVENT_TABLE(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass)
     EVT_SIZE(wxAuiFloatingFrame::OnSize)
     EVT_MOVE(wxAuiFloatingFrame::OnMoveEvent)
     EVT_MOVING(wxAuiFloatingFrame::OnMoveEvent)
+    EVT_LEFT_DCLICK(wxAuiFloatingFrame::OnLeftDClick)
     EVT_CLOSE(wxAuiFloatingFrame::OnClose)
     EVT_IDLE(wxAuiFloatingFrame::OnIdle)
     EVT_ACTIVATE(wxAuiFloatingFrame::OnActivate)

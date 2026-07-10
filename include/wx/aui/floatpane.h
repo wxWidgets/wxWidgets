@@ -56,12 +56,20 @@ protected:
     virtual void OnMoveFinished();
 
 private:
+    bool DockPane();
     void OnSize(wxSizeEvent& event);
     void OnClose(wxCloseEvent& event);
     void OnMoveEvent(wxMoveEvent& event);
+    void OnLeftDClick(wxMouseEvent& event);
     void OnIdle(wxIdleEvent& event);
     void OnActivate(wxActivateEvent& event);
     static bool isMouseDown();
+
+#ifdef __WXMSW__
+    virtual WXLRESULT MSWWindowProc(WXUINT message,
+                                    WXWPARAM wParam,
+                                    WXLPARAM lParam) override;
+#endif
 
 private:
     wxWindow* m_paneWindow;    // pane window being managed
