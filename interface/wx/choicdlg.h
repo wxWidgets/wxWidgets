@@ -259,6 +259,13 @@ public:
     Same as wxGetSingleChoice() but returns the index representing the
     selected string. If the user pressed cancel, -1 is returned.
 
+    Note that unlike the other overloads, the overloads taking wxPoint and
+    wxSize parameters do use them: the dialog is created at the given position,
+    unless @a centre is @true, in which case it is centred on the screen or on
+    its parent window, and with the given size, which is only used if it is
+    bigger than the minimal size required by the dialog contents. These
+    overloads are only available since wxWidgets 3.3.4.
+
     @header{wx/choicdlg.h}
 
     @beginWxPerlOnly
@@ -300,6 +307,24 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            int n, const wxString *choices,
                            int initialSelection,
                            wxWindow *parent = nullptr);
+
+int wxGetSingleChoiceIndex(const wxString& message,
+                           const wxString& caption,
+                           const wxArrayString& aChoices,
+                           wxWindow* parent,
+                           const wxPoint& pos,
+                           const wxSize& size = wxDefaultSize,
+                           bool centre = true,
+                           int initialSelection = 0);
+
+int wxGetSingleChoiceIndex(const wxString& message,
+                           const wxString& caption,
+                           int n, const wxString *choices,
+                           wxWindow* parent,
+                           const wxPoint& pos,
+                           const wxSize& size = wxDefaultSize,
+                           bool centre = true,
+                           int initialSelection = 0);
 ///@}
 
 /** @addtogroup group_funcmacro_dialog */
@@ -323,6 +348,13 @@ int wxGetSingleChoiceIndex(const wxString& message,
     all ignored. To change the dialog's position or size, create a @c
     wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
     change its size before showing it.
+
+    Note that unlike the other overloads, the overloads taking wxPoint and
+    wxSize parameters do use them: the dialog is created at the given position,
+    unless @a centre is @true, in which case it is centred on the screen or on
+    its parent window, and with the given size, which is only used if it is
+    bigger than the minimal size required by the dialog contents. These
+    overloads are only available since wxWidgets 3.3.4.
 
     @header{wx/choicdlg.h}
 
@@ -365,6 +397,24 @@ wxString wxGetSingleChoice(const wxString& message,
                            int initialSelection,
                            wxWindow *parent = nullptr);
 
+wxString wxGetSingleChoice(const wxString& message,
+                           const wxString& caption,
+                           const wxArrayString& aChoices,
+                           wxWindow* parent,
+                           const wxPoint& pos,
+                           const wxSize& size = wxDefaultSize,
+                           bool centre = true,
+                           int initialSelection = 0);
+
+wxString wxGetSingleChoice(const wxString& message,
+                           const wxString& caption,
+                           int n, const wxString *choices,
+                           wxWindow* parent,
+                           const wxPoint& pos,
+                           const wxSize& size = wxDefaultSize,
+                           bool centre = true,
+                           int initialSelection = 0);
+
 ///@}
 
 /** @addtogroup group_funcmacro_dialog */
@@ -380,6 +430,13 @@ wxString wxGetSingleChoice(const wxString& message,
     all ignored. To change the dialog's position or size, create a @c
     wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
     change its size before showing it.
+
+    Note that unlike the other overloads, the overloads taking wxPoint and
+    wxSize parameters do use them: the dialog is created at the given position,
+    unless @a centre is @true, in which case it is centred on the screen or on
+    its parent window, and with the given size, which is only used if it is
+    bigger than the minimal size required by the dialog contents. These
+    overloads are only available since wxWidgets 3.3.4.
 
     @header{wx/choicdlg.h}
 
@@ -426,6 +483,26 @@ void* wxGetSingleChoiceData(const wxString& message,
                             int initialSelection,
                             wxWindow *parent = nullptr);
 
+void* wxGetSingleChoiceData(const wxString& message,
+                            const wxString& caption,
+                            const wxArrayString& choices,
+                            void **client_data,
+                            wxWindow* parent,
+                            const wxPoint& pos,
+                            const wxSize& size = wxDefaultSize,
+                            bool centre = true,
+                            int initialSelection = 0);
+
+void* wxGetSingleChoiceData(const wxString& message,
+                            const wxString& caption,
+                            int n, const wxString *choices,
+                            void **client_data,
+                            wxWindow* parent,
+                            const wxPoint& pos,
+                            const wxSize& size = wxDefaultSize,
+                            bool centre = true,
+                            int initialSelection = 0);
+
 ///@}
 
 /** @addtogroup group_funcmacro_dialog */
@@ -447,6 +524,13 @@ void* wxGetSingleChoiceData(const wxString& message,
     all ignored. To change the dialog's position or size, create a @c
     wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
     change its size before showing it.
+
+    Note that unlike the other overloads, the overloads taking wxPoint and
+    wxSize parameters do use them: the dialog is created at the given position,
+    unless @a centre is @true, in which case it is centred on the screen or on
+    its parent window, and with the given size, which is only used if it is
+    bigger than the minimal size required by the dialog contents. These
+    overloads are only available since wxWidgets 3.3.4.
 
     @header{wx/choicdlg.h}
 
@@ -478,6 +562,25 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             bool centre = true,
                             int width = wxCHOICE_WIDTH,
                             int height = wxCHOICE_HEIGHT);
+
+int wxGetSelectedChoices(wxArrayInt& selections,
+                            const wxString& message,
+                            const wxString& caption,
+                            const wxArrayString& aChoices,
+                            wxWindow* parent,
+                            const wxPoint& pos,
+                            const wxSize& size = wxDefaultSize,
+                            bool centre = true);
+
+int wxGetSelectedChoices(wxArrayInt& selections,
+                            const wxString& message,
+                            const wxString& caption,
+                            int n,
+                            const wxString& choices[],
+                            wxWindow* parent,
+                            const wxPoint& pos,
+                            const wxSize& size = wxDefaultSize,
+                            bool centre = true);
 
 ///@}
 

@@ -1243,6 +1243,23 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, dialog.GetStringSelection(), "Got string");
         dialog2.ShowModal();
     }
+
+    // wxGetSingleChoiceIndex() can also be used directly, without having to
+    // create a wxSingleChoiceDialog object explicitly, and, unlike its other
+    // overloads, this one does honour the given position and size.
+    const int index = wxGetSingleChoiceIndex(
+                            "This is a small sample\n"
+                            "A single-choice convenience dialog\n"
+                            "using an explicit position and size",
+                            "Please select a value",
+                            WXSIZEOF(choices), choices,
+                            this,
+                            GetPosition() + wxSize(50, 50),
+                            wxSize(500, 400));
+    if ( index != -1 )
+    {
+        wxLogMessage("You selected \"%s\"", choices[index]);
+    }
 }
 
 void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
@@ -1254,13 +1271,19 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
         "Eleven", "Twelve", "Seventeen",
     };
 
+    // Use the overload taking an explicit position and size, unlike the
+    // other overloads of this function, to demonstrate that doing this
+    // actually works.
     wxArrayInt selections;
     const int count = wxGetSelectedChoices(selections,
                                         "This is a small sample\n"
-                                        "A multi-choice convenience dialog",
+                                        "A multi-choice convenience dialog\n"
+                                        "using an explicit position and size",
                                         "Please select a value",
                                         WXSIZEOF(choices), choices,
-                                        this);
+                                        this,
+                                        GetPosition() + wxSize(50, 50),
+                                        wxSize(500, 400));
     if ( count >= 0 )
     {
         wxString msg;

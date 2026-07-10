@@ -255,6 +255,15 @@ Changes in behaviour which may result in build errors
   make sense and was removed, please use the other overload instead if needed.
 
 
+3.3.4: (released 2026-??-??)
+----------------------------
+
+All (GUI):
+
+- Add wxGetSingleChoice(), wxGetSingleChoiceIndex(), wxGetSingleChoiceData()
+  and wxGetSelectedChoices() overloads using position and size (Lukas Buricin).
+
+
 3.3.3: (released 2026-07-07)
 ----------------------------
 
