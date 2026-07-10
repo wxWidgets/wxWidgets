@@ -29,6 +29,10 @@
 
 #include "asserthelper.h"
 
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#endif
+
 #include <memory>
 
 // ----------------------------------------------------------------------------
@@ -169,6 +173,35 @@ TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::AddPaneDockSize", "[aui]")
     manager.Update();
 
     CHECK( pane->GetSize().x == 180 );
+}
+
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::DockFloatingPaneOnDClick", "[aui]")
+{
+    wxPanel* const panel = new wxPanel(frame.get());
+
+    REQUIRE( manager.AddPane(panel,
+                             wxAuiPaneInfo().Name("pane").Caption("Pane").Left()) );
+    manager.Update();
+
+    wxAuiPaneInfo& pane = manager.GetPane(panel);
+    pane.Float();
+    manager.Update();
+
+    wxFrame* const floatingFrame = pane.frame;
+    REQUIRE( floatingFrame );
+    CHECK( panel->GetParent() == floatingFrame );
+
+#ifdef __WXMSW__
+    (void)::SendMessage((HWND)floatingFrame->GetHWND(), WM_NCLBUTTONDBLCLK,
+                        HTCAPTION, 0);
+#else
+    wxMouseEvent event(wxEVT_LEFT_DCLICK);
+    floatingFrame->GetEventHandler()->ProcessEvent(event);
+#endif
+
+    CHECK( pane.IsDocked() );
+    CHECK( pane.frame == nullptr );
+    CHECK( panel->GetParent() == frame.get() );
 }
 
 TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::SizerClick", "[aui]")
