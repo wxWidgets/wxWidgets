@@ -784,7 +784,7 @@ void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
         color = m_pen.GetColour().GetPixel();
     }
 
-    SetPixel(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), color);
+    SetPixelV(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), color);
 
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(x, y);
