@@ -167,7 +167,14 @@ WrapSizerFrame::WrapSizerFrame()
     // Set sizer for the panel
     m_panel->SetSizer(sizerRoot);
 
-    SetClientSize(m_panel->GetBestSize());
+    wxSize sizeBest = m_panel->GetBestSize();
+    // wxWrapSizer needs to know the available width to calculate its height.
+    const wxSize sizeWrapped =
+        m_panel->GetMinSizeFromKnownDirection(wxHORIZONTAL, sizeBest.x, -1);
+    if ( sizeWrapped != wxDefaultSize )
+        sizeBest.y = sizeWrapped.y;
+
+    SetClientSize(sizeBest);
 
     Show();
 }
