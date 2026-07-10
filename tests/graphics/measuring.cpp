@@ -29,6 +29,7 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/dcps.h"
+#include "wx/image.h"
 #include "wx/metafile.h"
 
 #include "asserthelper.h"
@@ -39,6 +40,59 @@
 
 namespace
 {
+
+#ifdef __WXMSW__
+
+int FindFirstNonWhitePixelX(const wxBitmap& bmp)
+{
+    const wxImage img = bmp.ConvertToImage();
+    const int width = img.GetWidth();
+    const int height = img.GetHeight();
+
+    for ( int x = 0; x < width; ++x )
+    {
+        for ( int y = 0; y < height; ++y )
+        {
+            if ( img.GetRed(x, y) < 250 || img.GetGreen(x, y) < 250 ||
+                 img.GetBlue(x, y) < 250 )
+                return x;
+        }
+    }
+
+    return width;
+}
+
+enum DrawTextWithTabsMode
+{
+    DrawTextDirectly,
+    DrawTextAsLabel
+};
+
+int DrawTextWithTabAndFindFirstInk(DrawTextWithTabsMode mode, int* charWidth)
+{
+    wxBitmap bmp(200, 50, 24);
+    wxMemoryDC dc(bmp);
+
+    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.Clear();
+    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetTextForeground(*wxBLACK);
+    dc.SetFont(wxFont(wxFontInfo(12).Family(wxFONTFAMILY_MODERN)));
+
+    *charWidth = dc.GetCharWidth();
+
+    const wxString text("\tX");
+    if ( mode == DrawTextAsLabel )
+        dc.DrawLabel(text, wxRect(0, 0, bmp.GetWidth(), bmp.GetHeight()));
+    else
+        dc.DrawText(text, 0, 0);
+
+    dc.SelectObject(wxNullBitmap);
+
+    return FindFirstNonWhitePixelX(bmp);
+}
+
+#endif // __WXMSW__
 
 // Run a couple of simple tests for GetTextExtent().
 template <typename T>
@@ -82,6 +136,23 @@ TEST_CASE("wxDC::GetTextExtent", "[dc][text-extent]")
 
     // And even empty strings count like one line.
     CHECK( dc.GetMultiLineTextExtent(wxString()) == wxSize(0, sz.y) );
+}
+
+TEST_CASE("wxDC::DrawTextWithTabs", "[dc][text][msw]")
+{
+#ifdef __WXMSW__
+    int charWidth = 0;
+    int firstInkX =
+        DrawTextWithTabAndFindFirstInk(DrawTextDirectly, &charWidth);
+
+    REQUIRE( firstInkX < 200 );
+    CHECK( firstInkX > 2*charWidth );
+
+    firstInkX = DrawTextWithTabAndFindFirstInk(DrawTextAsLabel, &charWidth);
+
+    REQUIRE( firstInkX < 200 );
+    CHECK( firstInkX > 2*charWidth );
+#endif // __WXMSW__
 }
 
 TEST_CASE("wxMemoryDC::GetTextExtent", "[memdc][text-extent]")
