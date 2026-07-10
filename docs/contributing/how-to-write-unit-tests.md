@@ -96,6 +96,11 @@ clicking buttons or typing text. A simple example of this can be found in
 `tests/controls/buttontest.cpp`. After simulating some user input always
 call `wxYield()` to allow event processing. When writing a test using
 `wxUIActionSimulator` wrap it in `#if wxUSE_UIACTIONSIMULATOR` block.
+Use `GetMouseButtonPrimary()` for normal mouse-button actions and
+`GetMouseButtonSecondary()` for context-menu actions instead of relying on
+the default mouse button or passing `wxMOUSE_BTN_LEFT` or
+`wxMOUSE_BTN_RIGHT` directly. This keeps the tests working when primary and
+secondary mouse buttons are swapped.
 
 There are a number of classes that are available to help with testing GUI
 elements. Firstly throughout the test run there is a frame of type

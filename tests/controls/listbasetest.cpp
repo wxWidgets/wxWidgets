@@ -356,7 +356,7 @@ void ListBaseTestCase::ItemClick()
     sim.MouseDblClick();
     wxYield();
 
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseClick();
     wxYield();
 
     // We want a point within the listctrl but below any items

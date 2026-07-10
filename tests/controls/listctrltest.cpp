@@ -210,7 +210,7 @@ TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::ColumnClick", "[listctrl]")
     wxYield();
 
     sim.MouseClick();
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseClick();
     wxYield();
 
     CHECK( colclick.GetCount() == 1 );
