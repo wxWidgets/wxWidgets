@@ -50,6 +50,20 @@ protected:
     wxAuiNotebook* const nb;
 };
 
+class TestAuiNotebook : public wxAuiNotebook
+{
+public:
+    TestAuiNotebook()
+        : wxAuiNotebook(wxTheApp->GetTopWindow())
+    {
+    }
+
+    using wxAuiNotebook::OnTabMiddleDown;
+    using wxAuiNotebook::OnTabMiddleUp;
+    using wxAuiNotebook::OnTabRightDown;
+    using wxAuiNotebook::OnTabRightUp;
+};
+
 // ----------------------------------------------------------------------------
 // the tests themselves
 // ----------------------------------------------------------------------------
@@ -167,6 +181,72 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::FindPage", "[aui]")
     CHECK( nb->FindPage(p1) == 0 );
     CHECK( nb->FindPage(p2) == 1 );
     CHECK( nb->FindPage(p3) == wxNOT_FOUND );
+}
+
+TEST_CASE("wxAuiNotebook::SplitTabEventSelections", "[aui]")
+{
+    TestAuiNotebook nb;
+    wxPanel *p1 = new wxPanel(&nb);
+    wxPanel *p2 = new wxPanel(&nb);
+    REQUIRE( nb.AddPage(p1, "Page 1") );
+    REQUIRE( nb.AddPage(p2, "Page 2") );
+
+    nb.Split(1, wxRIGHT);
+
+    wxAuiTabCtrl *tabCtrl = nullptr;
+    int tabIdx = wxNOT_FOUND;
+    REQUIRE( nb.FindTab(p2, &tabCtrl, &tabIdx) );
+    REQUIRE( tabCtrl );
+    CHECK( tabIdx == 0 );
+
+    std::vector<int> selections;
+
+    SECTION( "Middle down" )
+    {
+        nb.Bind(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN,
+                [&](wxAuiNotebookEvent& event)
+                {
+                    selections.push_back(event.GetSelection());
+                });
+
+        nb.OnTabMiddleDown(tabCtrl, tabIdx);
+    }
+
+    SECTION( "Middle up" )
+    {
+        nb.Bind(wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP,
+                [&](wxAuiNotebookEvent& event)
+                {
+                    selections.push_back(event.GetSelection());
+                });
+
+        nb.OnTabMiddleUp(tabCtrl, tabIdx);
+    }
+
+    SECTION( "Right down" )
+    {
+        nb.Bind(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN,
+                [&](wxAuiNotebookEvent& event)
+                {
+                    selections.push_back(event.GetSelection());
+                });
+
+        nb.OnTabRightDown(tabCtrl, tabIdx);
+    }
+
+    SECTION( "Right up" )
+    {
+        nb.Bind(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP,
+                [&](wxAuiNotebookEvent& event)
+                {
+                    selections.push_back(event.GetSelection());
+                });
+
+        nb.OnTabRightUp(tabCtrl, tabIdx);
+    }
+
+    REQUIRE( selections.size() == 1 );
+    CHECK( selections[0] == 1 );
 }
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::Layout", "[aui]")
