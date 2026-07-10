@@ -13,7 +13,7 @@
 
     The four static methods, wxToolTip::Enable(), wxToolTip::SetDelay()
     wxToolTip::SetAutoPop() and wxToolTip::SetReshow() can be used to globally
-    alter tooltips behaviour.
+    alter tooltips behaviour where supported.
 
     @library{wxcore}
     @category{help}
@@ -29,7 +29,9 @@ public:
     /**
         Enable or disable tooltips globally.
 
-        @note May not be supported on all platforms (eg. wxCocoa).
+        @note This function is only effective for the tooltips set using
+        wxWindow::SetToolTip() in wxMSW. It is not implemented in wxOSX or wxQt
+        and doesn't have any effect in wxGTK with GTK 3.10 or later.
     */
     static void Enable(bool flag);
 
