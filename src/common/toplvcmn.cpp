@@ -244,18 +244,28 @@ void wxTopLevelWindowBase::DoCentre(int dir)
         return;
 
     // we need the display rect anyhow so store it first: notice that we should
-    // be centered on the same display as our parent window, the display of
-    // this window itself is not really defined yet
-    wxDisplay dpy(GetParent() ? GetParent() : this);
+    // be centered on the same display as our parent window, or the currently
+    // active window for a parentless TLW, as the display of this window itself
+    // is not really defined yet
+    wxWindow* const parent = GetParent();
+    wxWindow* winDisplay = parent;
+    if ( !winDisplay )
+    {
+        winDisplay = wxGetTopLevelParent(wxGetActiveWindow());
+        if ( winDisplay == this )
+            winDisplay = nullptr;
+    }
+
+    wxDisplay dpy(winDisplay ? winDisplay : this);
     const wxRect rectDisplay(dpy.GetClientArea());
 
     // what should we centre this window on?
     wxRect rectParent;
-    if ( !(dir & wxCENTRE_ON_SCREEN) && GetParent() )
+    if ( !(dir & wxCENTRE_ON_SCREEN) && parent )
     {
         // centre on parent window: notice that we need screen coordinates for
         // positioning this TLW
-        rectParent = GetParent()->GetScreenRect();
+        rectParent = parent->GetScreenRect();
 
         // if the parent is entirely off screen (happens at least with MDI
         // parent frame under Mac but could happen elsewhere too if the frame
