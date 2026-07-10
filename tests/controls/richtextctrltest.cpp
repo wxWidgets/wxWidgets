@@ -659,6 +659,27 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TextColour",
     CHECK(colour.GetTextColour() == m_rich->GetBasicStyle().GetTextColour());
 }
 
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::AppendTextStyle",
+                 "[richtextctrl]")
+{
+    m_rich->BeginTextColour(*wxRED);
+    m_rich->WriteText("red");
+    m_rich->EndTextColour();
+
+    m_rich->BeginTextColour(*wxBLUE);
+    m_rich->AppendText("blue");
+    m_rich->EndTextColour();
+
+    wxTextAttr colour;
+    m_rich->GetStyle(1, colour);
+
+    CHECK(colour.GetTextColour() == *wxRED);
+
+    m_rich->GetStyle(5, colour);
+
+    CHECK(colour.GetTextColour() == *wxBLUE);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::NumberedBullet",
                  "[richtextctrl]")
 {

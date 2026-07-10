@@ -3340,7 +3340,13 @@ void wxRichTextCtrl::DoWriteText(const wxString& value, int flags)
 
 void wxRichTextCtrl::AppendText(const wxString& text)
 {
+    const bool hasStyleStack = GetBuffer().GetStyleStackSize() > 0;
+    const wxRichTextAttr defaultStyle = GetDefaultStyleEx();
+
     SetInsertionPointEnd();
+
+    if ( hasStyleStack )
+        SetDefaultStyle(defaultStyle);
 
     WriteText(text);
 }
