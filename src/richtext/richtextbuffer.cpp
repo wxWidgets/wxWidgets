@@ -2617,6 +2617,7 @@ wxRichTextLine* wxRichTextParagraphLayoutBox::GetLineAtPosition(long pos, bool c
             if (child)
             {
                 wxRichTextLineVector::const_iterator it = child->GetLines().begin();
+                wxRichTextLine* endOfParagraphLine = nullptr;
                 while (it != child->GetLines().end())
                 {
                     wxRichTextLine* line = *it;
@@ -2628,10 +2629,18 @@ wxRichTextLine* wxRichTextParagraphLayoutBox::GetLineAtPosition(long pos, bool c
                         // If the position is end-of-paragraph, then return the last line of
                         // of the paragraph.
                         ((range.GetEnd() == child->GetRange().GetEnd()-1) && (pos == child->GetRange().GetEnd())))
-                        return line;
+                    {
+                        if ( pos != child->GetRange().GetEnd() )
+                            return line;
+
+                        endOfParagraphLine = line;
+                    }
 
                     ++it;
                 }
+
+                if ( endOfParagraphLine )
+                    return endOfParagraphLine;
             }
         }
 
@@ -5063,6 +5072,7 @@ bool wxRichTextParagraph::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& con
     int lineCount = 0;
     int lineAscent = 0;
     int lineDescent = 0;
+    bool lastLineEndedWithLineBreak = false;
 
     wxRichTextObjectList::compatibility_iterator node;
 
@@ -5314,6 +5324,10 @@ bool wxRichTextParagraph::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& con
             // Let's find the actual size of the current line now
             wxSize actualSize;
             wxRichTextRange actualRange(lastCompletedEndPos+1, wrapPosition);
+            const bool lineEndsWithLineBreak =
+                nextBreakPos == wrapPosition && nextBreakPos > -1;
+            if ( lineEndsWithLineBreak )
+                actualRange.SetEnd(actualRange.GetEnd() - 1);
 
             childDescent = 0;
 
@@ -5375,6 +5389,7 @@ bool wxRichTextParagraph::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& con
 
             lastEndPos = wrapPosition;
             lastCompletedEndPos = lastEndPos;
+            lastLineEndedWithLineBreak = lineEndsWithLineBreak;
 
             lineHeight = 0;
 
@@ -5414,6 +5429,7 @@ bool wxRichTextParagraph::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& con
 
             maxWidth = wxMax(maxWidth, currentWidth+currentPosition.x);
             lastEndPos = child->GetRange().GetEnd();
+            lastLineEndedWithLineBreak = false;
 
             node = node->GetNext();
         }
@@ -5423,7 +5439,8 @@ bool wxRichTextParagraph::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& con
 
     // Add the last line - it's the current pos -> last para pos
     // Subtract -1 because the last position is always the end-paragraph position.
-    if ((lastCompletedEndPos < GetRange().GetEnd()-1) || lineCount == 0)
+    if ((lastCompletedEndPos < GetRange().GetEnd()-1) ||
+        lineCount == 0 || lastLineEndedWithLineBreak)
     {
         int startOffset = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
         availableRect = wxRect(rect.x + startOffset, rect.y + currentPosition.y,

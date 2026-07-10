@@ -392,6 +392,46 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::CaretPosition",
     CHECK(m_rich->GetCaretPosition() == 21);
 }
 
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::LineBreak",
+                 "[richtextctrl]")
+{
+    m_rich->WriteText("one");
+
+    REQUIRE(m_rich->LineBreak());
+
+    m_rich->LayoutContent();
+
+    CHECK(m_rich->GetFocusObject()->GetLineCount() == 2);
+    CHECK(m_rich->GetCaretPosition() == 3);
+    CHECK(m_rich->GetCaretAtLineStart());
+
+    m_rich->MoveLeft();
+
+    CHECK(m_rich->GetCaretPosition() == 2);
+    CHECK(!m_rich->GetCaretAtLineStart());
+
+    m_rich->MoveRight();
+
+    CHECK(m_rich->GetCaretPosition() == 3);
+    CHECK(m_rich->GetCaretAtLineStart());
+
+    m_rich->WriteText("two");
+
+    wxString text;
+    text << "one" << wxRichTextLineBreakChar << "two";
+
+    CHECK(m_rich->GetValue() == text);
+
+    m_rich->MoveToLineStart();
+
+    CHECK(m_rich->GetCaretPosition() == 3);
+    CHECK(m_rich->GetCaretAtLineStart());
+
+    m_rich->MoveToLineEnd();
+
+    CHECK(m_rich->GetCaretPosition() == 6);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Selection",
                  "[richtextctrl]")
 {
