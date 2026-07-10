@@ -1654,6 +1654,7 @@ wxDateTime::ParseFormat(const wxString& date,
     }
 
     // format matched, try to construct a date from what we have now
+    bool usingFallbackDate = false;
     Tm tmDef;
     if ( dateDef.IsValid() )
     {
@@ -1669,6 +1670,7 @@ wxDateTime::ParseFormat(const wxString& date,
     {
         // no default and this date is invalid - fall back to Today()
         tmDef = Today().GetTm();
+        usingFallbackDate = true;
     }
 
     Tm tm = tmDef;
@@ -1703,6 +1705,20 @@ wxDateTime::ParseFormat(const wxString& date,
 
         tm.mon = tm2.mon;
         tm.mday = tm2.mday;
+    }
+    else
+    {
+        // The default day can become invalid after replacing the month or
+        // year above. Only adjust the implicit Today() fallback, as an
+        // explicitly provided default date should be preserved or rejected.
+        const wxDateTime_t maxMDay = GetNumberOfDays(tm.mon, tm.year);
+        if ( tm.mday > maxMDay )
+        {
+            if ( !usingFallbackDate )
+                return false;
+
+            tm.mday = maxMDay;
+        }
     }
 
     // deal with AM/PM
