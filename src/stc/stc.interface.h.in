@@ -61,6 +61,11 @@
     wxStyledTextCtrl is a 1 to 1 mapping of "raw" scintilla interface, whose
     documentation can be found in the Scintilla website (http://www.scintilla.org/).
 
+    @note
+    Line numbers used by marker methods, such as MarkerAdd(), MarkerDelete(),
+    MarkerGet(), MarkerNext(), MarkerPrevious(), and MarkerLineFromHandle(),
+    are zero-based.
+
     Please see wxStyledTextEvent for the documentation of all event types you
     can use with wxStyledTextCtrl.
 
