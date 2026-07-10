@@ -9,7 +9,6 @@
 
 #include "testprec.h"
 
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/window.h"
@@ -26,6 +25,7 @@
 #include "wx/caret.h"
 #include "wx/cshelp.h"
 #include "wx/dcclient.h"
+#include "wx/richtooltip.h"
 #include "wx/timer.h"
 #include "wx/tooltip.h"
 #include "wx/wupdlock.h"
@@ -444,6 +444,23 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ToolTip", "[window]")
     CHECK( m_window->GetToolTipText() == "other tip" );
 }
 #endif // wxUSE_TOOLTIPS
+
+#if wxUSE_RICHTOOLTIP
+TEST_CASE_METHOD(WindowTestCase, "Window::RichToolTip", "[window][richtooltip]")
+{
+    wxRichToolTip tip1("First title", "First message");
+    tip1.SetTimeout(100);
+    tip1.ShowFor(m_window);
+
+    wxRichToolTip tip2("Second title", "Second message");
+    tip2.SetTimeout(10);
+    tip2.ShowFor(m_window);
+
+    YieldForAWhile();
+
+    SUCCEED();
+}
+#endif // wxUSE_RICHTOOLTIP
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Help", "[window]")
 {
