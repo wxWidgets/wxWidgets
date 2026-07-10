@@ -1475,6 +1475,11 @@ void wxGridCellChoiceEditor::Create(wxWindow* parent,
                                style);
 
     wxGridCellEditor::Create(parent, id, evtHandler);
+
+    m_control->Bind(wxEVT_COMBOBOX_CLOSEUP,
+                    &wxGridCellChoiceEditor::OnComboCloseUp, this);
+    m_control->Bind(wxEVT_TEXT_ENTER,
+                    &wxGridCellChoiceEditor::OnTextEnter, this);
 }
 
 void wxGridCellChoiceEditor::SetSize(const wxRect& rect)
@@ -1497,16 +1502,12 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be created first!"));
 
-    wxGridCellEditorEvtHandler* evtHandler = nullptr;
-    if (m_control)
-    {
-        // This event handler is needed to properly dismiss the editor when the popup is closed
-        m_control->Bind(wxEVT_COMBOBOX_CLOSEUP, &wxGridCellChoiceEditor::OnComboCloseUp, this);
-        evtHandler = wxDynamicCast(m_control->GetEventHandler(), wxGridCellEditorEvtHandler);
-    }
+    wxGridCellEditorEvtHandler* const
+        evtHandler = wxDynamicCast(m_control->GetEventHandler(),
+                                   wxGridCellEditorEvtHandler);
 
     // Don't immediately end if we get a kill focus event within BeginEdit
-    if (evtHandler)
+    if ( evtHandler )
         evtHandler->SetInSetFocus(true);
 
     m_value = grid->GetTable()->GetValue(row, col);
@@ -1523,7 +1524,7 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     Combo()->Popup();
 #endif
 
-    if (evtHandler)
+    if ( evtHandler )
     {
         // When dropping down the menu, a kill focus event
         // happens after this point, so we can't reset the flag yet.
@@ -1573,6 +1574,11 @@ void wxGridCellChoiceEditor::Reset()
     }
 }
 
+void wxGridCellChoiceEditor::StartingClick()
+{
+    Combo()->Popup();
+}
+
 void wxGridCellChoiceEditor::SetParameters(const wxString& params)
 {
     if ( params.empty() )
@@ -1602,17 +1608,28 @@ wxString wxGridCellChoiceEditor::GetValue() const
   return Combo()->GetValue();
 }
 
-void wxGridCellChoiceEditor::OnComboCloseUp(wxCommandEvent& WXUNUSED(evt))
+void wxGridCellChoiceEditor::DismissEditor()
 {
-    wxGridCellEditorEvtHandler* evtHandler = wxDynamicCast(m_control->GetEventHandler(),
-                                                           wxGridCellEditorEvtHandler);
+    wxGridCellEditorEvtHandler* const
+        evtHandler = wxDynamicCast(m_control->GetEventHandler(),
+                                   wxGridCellEditorEvtHandler);
 
     if ( !evtHandler )
         return;
 
-    // Close the grid editor when the combobox closes, otherwise it leaves the
-    // dropdown arrow visible in the cell.
+    // Close the grid editor through the regular deferred path to avoid
+    // leaving the dropdown arrow visible in the cell.
     evtHandler->DismissEditor();
+}
+
+void wxGridCellChoiceEditor::OnComboCloseUp(wxCommandEvent& WXUNUSED(evt))
+{
+    DismissEditor();
+}
+
+void wxGridCellChoiceEditor::OnTextEnter(wxCommandEvent& WXUNUSED(evt))
+{
+    DismissEditor();
 }
 
 #endif // wxUSE_COMBOBOX

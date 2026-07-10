@@ -19,6 +19,10 @@
 
 #include "wx/grid.h"
 #include "wx/headerctrl.h"
+#include "wx/textctrl.h"
+#if wxUSE_COMBOBOX && defined(__WXOSX_COCOA__)
+    #include "wx/combobox.h"
+#endif // wxUSE_COMBOBOX && __WXOSX_COCOA__
 #include "testableframe.h"
 #include "asserthelper.h"
 #include "wx/uiaction.h"
@@ -32,7 +36,7 @@
 
     #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         #define wxHAS_QT5
-    #endif
+#endif
 #endif
 
 #include "waitfor.h"
@@ -109,6 +113,43 @@ struct EditInfo
              wxGridDirection direction = wxGRID_COLUMN)
         : pos(pos), count(count), direction(direction) { }
 };
+
+#if wxUSE_COMBOBOX && defined(__WXOSX_COCOA__)
+
+// Avoid opening or focusing the native wxOSX popup in this test helper: it
+// waits for real user interaction on CI, while the test sends wxEVT_TEXT_ENTER
+// directly and only needs the editor control created to verify that Enter
+// dismisses it.
+//
+class TestChoiceEditorNoPopup : public wxGridCellChoiceEditor
+{
+public:
+    explicit TestChoiceEditorNoPopup(const wxArrayString& choices)
+        : wxGridCellChoiceEditor(choices)
+    {
+    }
+
+    virtual void BeginEdit(int row, int col, wxGrid* grid) override
+    {
+        wxASSERT_MSG(m_control,
+                     wxT("The wxGridCellEditor must be created first!"));
+
+        m_value = grid->GetTable()->GetValue(row, col);
+        Reset();
+    }
+
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
+        { return new TestChoiceEditorNoPopup(*this); }
+};
+
+using TestChoiceEditor = TestChoiceEditorNoPopup;
+
+#else
+
+// Otherwise use regular grid cell choice editor
+using TestChoiceEditor = wxGridCellChoiceEditor;
+
+#endif // wxUSE_COMBOBOX && __WXOSX_COCOA__
 
 // Derive a new class inheriting from wxGrid, also to get access to its
 // protected GetCellAttr(). This is not pretty, but we don't have any other way
@@ -1743,6 +1784,35 @@ TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
     CHECK(created.GetCount() == 1);
 #endif
 }
+
+#if wxUSE_COMBOBOX
+TEST_CASE_METHOD(GridTestCase, "Grid::ChoiceEditorEnter", "[grid]")
+{
+    wxArrayString choices;
+    choices.push_back("one");
+    choices.push_back("two");
+
+    m_grid->SetCellValue(1, 1, choices[0]);
+    m_grid->SetCellEditor(1, 1, new TestChoiceEditor(choices));
+
+    wxGridCellEditorPtr editor(m_grid->GetCellEditor(1, 1));
+    REQUIRE( editor );
+
+    m_grid->SetGridCursor(1, 1);
+    m_grid->EnableCellEditControl();
+
+    wxWindow* const editorWindow = editor->GetWindow();
+    REQUIRE( editorWindow );
+
+    wxCommandEvent event(wxEVT_TEXT_ENTER, editorWindow->GetId());
+    event.SetEventObject(editorWindow);
+    editorWindow->ProcessWindowEvent(event);
+
+    CHECK( WaitFor("choice editor to close", [&]() {
+        return !m_grid->IsCellEditControlEnabled();
+    }) );
+}
+    #endif
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 {
