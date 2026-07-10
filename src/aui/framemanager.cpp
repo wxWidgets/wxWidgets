@@ -532,6 +532,12 @@ static int PaneSortFunc(wxAuiPaneInfo** p1, wxAuiPaneInfo** p2)
 
 bool wxAuiPaneInfo::IsValid() const
 {
+    if ( dock_direction == wxAUI_DOCK_CENTRE &&
+        !(dock_layer == 0 && dock_row == 0 && dock_pos == 0) )
+    {
+        return false;
+    }
+
     // Should this RTTI and function call be rewritten as
     // sending a new event type to allow other window types
     // to check the pane settings?
