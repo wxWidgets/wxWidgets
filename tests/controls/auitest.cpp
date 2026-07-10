@@ -169,6 +169,40 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::FindPage", "[aui]")
     CHECK( nb->FindPage(p3) == wxNOT_FOUND );
 }
 
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::RemoveLastPageEvent", "[aui]")
+{
+    wxPanel *p = new wxPanel(nb);
+    REQUIRE( nb->AddPage(p, "Page 1") );
+    CHECK( nb->GetSelection() == 0 );
+
+    int numChanged = 0;
+    int oldSelection = wxNOT_FOUND;
+    int selection = wxNOT_FOUND;
+
+    nb->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED,
+             [&](wxAuiNotebookEvent& event)
+             {
+                 numChanged++;
+                 oldSelection = event.GetOldSelection();
+                 selection = event.GetSelection();
+             });
+
+    SECTION( "DeletePage" )
+    {
+        REQUIRE( nb->DeletePage(0) );
+    }
+
+    SECTION( "RemovePage" )
+    {
+        REQUIRE( nb->RemovePage(0) );
+    }
+
+    CHECK( nb->GetSelection() == wxNOT_FOUND );
+    CHECK( numChanged == 1 );
+    CHECK( oldSelection == 0 );
+    CHECK( selection == wxNOT_FOUND );
+}
+
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::Layout", "[aui]")
 {
     const auto addPage = [this](int n)
