@@ -1,0 +1,54 @@
+#/////////////////////////////////////////////////////////////////////////////
+# Name:        .clang-format
+# Purpose:     clang-format rules for wxWidgets
+# Author:      wxWidgets development team
+# Created:     2026-07-10
+# Copyright:   (c) 2026 wxWidgets development team
+# Licence:     wxWindows licence
+#/////////////////////////////////////////////////////////////////////////////
+
+---
+Language: Cpp
+BasedOnStyle: LLVM
+Standard: c++11
+
+LineEnding: CRLF
+AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+BinPackArguments: true
+BinPackParameters: true
+BreakBeforeBraces: Allman
+ColumnLimit: 80
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: false
+DerivePointerAlignment: false
+
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: Never
+FixNamespaceComments: false
+IncludeBlocks: Preserve
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+IndentWidth: 4
+NamespaceIndentation: None
+PointerAlignment: Right
+PPIndentWidth: 4
+QualifierAlignment: Leave
+ReferenceAlignment: Pointer
+ReflowComments: false
+SortIncludes: false
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpacesInParens: Custom
+SpacesInParensOptions:
+    InConditionalStatements: true
+TabWidth: 4
+UseTab: Never
+...
