@@ -20,6 +20,7 @@
     #include "wx/frame.h"
 #endif // WX_PRECOMP
 
+#include "wx/button.h"
 #include "wx/panel.h"
 
 #include "wx/aui/auibar.h"
@@ -28,6 +29,7 @@
 #include "wx/aui/serializer.h"
 
 #include "asserthelper.h"
+#include "waitfor.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
@@ -556,6 +558,36 @@ TEST_CASE("wxAuiNotebook::ButtonEvent", "[aui]")
         // closed, as this was the case in the previous versions too.
         CHECK( nb.GetPageCount() == 2 );
     }
+}
+
+TEST_CASE_METHOD(AuiNotebookTestCase,
+                 "wxAuiNotebook::ChildFocusUsesCurrentFocus", "[aui][focus]")
+{
+    wxPanel *const page1 = new wxPanel(nb.get());
+    wxButton *const button1 = new wxButton(page1, wxID_ANY, "Button 1");
+    wxPanel *const page2 = new wxPanel(nb.get());
+    wxButton *const button2 = new wxButton(page2, wxID_ANY, "Button 2");
+
+    REQUIRE( nb->AddPage(page1, "Page 1", true) );
+    REQUIRE( nb->AddPage(page2, "Page 2") );
+
+    nb->SetSize(nb->FromDIP(wxSize(400, 300)));
+
+    REQUIRE( nb->SetSelection(1) == 0 );
+
+    button2->SetFocus();
+
+    if ( !WaitFor("second page button focus",
+                  [button2]() { return wxWindow::FindFocus() == button2; }) )
+    {
+        WARN("Skipping stale child focus test: couldn't focus the button");
+        return;
+    }
+
+    wxChildFocusEvent event(button1);
+    nb->ProcessWindowEvent(event);
+
+    CHECK( nb->GetSelection() == 1 );
 }
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::Layout", "[aui]")

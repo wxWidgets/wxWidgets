@@ -3596,22 +3596,38 @@ void wxAuiNotebook::OnChildFocusNotebook(wxChildFocusEvent& evt)
     }
 
 
-    // find the page containing the focused child
-    wxWindow* win = evt.GetWindow();
-    while ( win )
+    const auto findPageFromWindow = [this](wxWindow* win) -> wxWindow*
     {
-        // pages have the notebook as the parent, so stop when we reach one
-        // (and also stop in the impossible case of no parent at all)
-        wxWindow* const parent = win->GetParent();
-        if ( !parent || parent == this )
-            break;
+        while ( win )
+        {
+            // pages have the notebook as the parent, so stop when we reach one
+            // (and also stop in the impossible case of no parent at all)
+            wxWindow* const parent = win->GetParent();
+            if ( !parent )
+                return nullptr;
 
-        win = parent;
-    }
+            if ( parent == this )
+                return win;
+
+            win = parent;
+        }
+
+        return nullptr;
+    };
+
+    // Prefer the actual current focus: this event can be delayed and refer to a
+    // page whose handler has already selected another page.
+    wxWindow* win = findPageFromWindow(wxWindow::FindFocus());
+
+    if ( !win )
+        win = findPageFromWindow(evt.GetWindow());
+
+    if ( !win )
+        return;
 
     // change the tab selection to this page
     int idx = m_tabs.GetIdxFromWindow(win);
-    if (idx != -1 && idx != m_curPage)
+    if ( idx != wxNOT_FOUND && idx != m_curPage )
     {
         SetSelection(idx);
     }
