@@ -901,6 +901,33 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Cursor", "[grid]")
 
     CHECK(m_grid->GetGridCursorCol() == 1);
     CHECK(m_grid->GetGridCursorRow() == 0);
+
+    m_grid->SetGridCursor(1, 0);
+    m_grid->HideRow(2);
+
+    CHECK(m_grid->MoveCursorDown(false));
+    CHECK(m_grid->GetGridCursorCol() == 0);
+    CHECK(m_grid->GetGridCursorRow() == 3);
+    CHECK(m_grid->IsRowShown(m_grid->GetGridCursorRow()));
+
+    CHECK(m_grid->MoveCursorUp(false));
+    CHECK(m_grid->GetGridCursorCol() == 0);
+    CHECK(m_grid->GetGridCursorRow() == 1);
+    CHECK(m_grid->IsRowShown(m_grid->GetGridCursorRow()));
+
+    m_grid->AppendCols(2);
+    m_grid->SetGridCursor(0, 0);
+    m_grid->HideCol(1);
+
+    CHECK(m_grid->MoveCursorRight(false));
+    CHECK(m_grid->GetGridCursorCol() == 2);
+    CHECK(m_grid->GetGridCursorRow() == 0);
+    CHECK(m_grid->IsColShown(m_grid->GetGridCursorCol()));
+
+    CHECK(m_grid->MoveCursorLeft(false));
+    CHECK(m_grid->GetGridCursorCol() == 0);
+    CHECK(m_grid->GetGridCursorRow() == 0);
+    CHECK(m_grid->IsColShown(m_grid->GetGridCursorCol()));
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::KeyboardSelection", "[grid][selection]")
