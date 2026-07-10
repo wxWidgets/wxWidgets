@@ -232,7 +232,17 @@ public:
     more convenient to use, using the dialog directly is more flexible, e.g. it
     allows you to specify the @c wxTE_MULTILINE to allow the user enter
     multiple lines of text while this function is limited to single line entry
-    only.
+    only. See also wxGetMultiLineTextFromUser() for a convenience function
+    allowing multiline entry.
+
+    Note that unlike the overload above, the overload taking wxPoint and an
+    explicit width does use them: the dialog is created at the given
+    position, unless @a centre is @true, in which case it is centred on the
+    screen or on its parent window, and it is widened as needed to be at
+    least @a width pixels wide. There is no corresponding height parameter,
+    as the height of this dialog is entirely determined by its contents,
+    given that it can only ever show a single line of text. This overload is
+    only available since wxWidgets 3.3.4.
 
     @header{wx/textdlg.h}
 */
@@ -242,6 +252,14 @@ wxString wxGetTextFromUser(const wxString& message,
                            wxWindow* parent = nullptr,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
+                           bool centre = true);
+
+wxString wxGetTextFromUser(const wxString& message,
+                           const wxString& caption,
+                           const wxString& default_value,
+                           wxWindow* parent,
+                           const wxPoint& pos,
+                           int width = wxDefaultCoord,
                            bool centre = true);
 
 /**
@@ -258,6 +276,27 @@ wxString wxGetPasswordFromUser(const wxString& message,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true);
+
+/**
+    Same as wxGetTextFromUser() but allows the user to enter more than one
+    line of text, using a multiline wxTextEntryDialog internally.
+
+    Unlike wxGetTextFromUser(), both the given position and size are used:
+    the dialog is created at @a pos, unless @a centre is @true, in which case
+    it is centred on the screen or on its parent window, and it is enlarged
+    as needed to be at least as big as @a size, in either or both directions.
+
+    @since 3.3.4
+
+    @header{wx/textdlg.h}
+*/
+wxString wxGetMultiLineTextFromUser(const wxString& message,
+                           const wxString& caption = wxGetTextFromUserPromptStr,
+                           const wxString& default_value = wxEmptyString,
+                           wxWindow* parent = nullptr,
+                           const wxPoint& pos = wxDefaultPosition,
+                           const wxSize& size = wxDefaultSize,
+                           bool centre = true);
 
 ///@}
 

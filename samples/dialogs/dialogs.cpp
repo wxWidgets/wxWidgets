@@ -1184,6 +1184,22 @@ void MyFrame::LineEntry(wxCommandEvent& WXUNUSED(event))
     {
         wxMessageBox(dialog.GetValue(), "Got string", wxOK | wxICON_INFORMATION, this);
     }
+
+    // wxGetTextFromUser() can also be used directly, without having to
+    // create a wxTextEntryDialog object explicitly, and, unlike its other
+    // overload, this one does honour the given position and width.
+    const wxString value = wxGetTextFromUser(
+                                "This is a small sample\n"
+                                "Using an explicit position and width this time",
+                                "Please enter a string",
+                                "Default value",
+                                this,
+                                GetPosition() + wxSize(50, 50),
+                                500);
+    if ( !value.empty() )
+    {
+        wxLogMessage("You entered \"%s\"", value);
+    }
 }
 
 void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
@@ -1197,6 +1213,22 @@ void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
     if (dialog.ShowModal() == wxID_OK)
     {
         wxMessageBox(dialog.GetValue(), "Got text", wxOK | wxICON_INFORMATION, this);
+    }
+
+    // wxGetMultiLineTextFromUser() is the multiline counterpart of
+    // wxGetTextFromUser(), and, unlike that function, it does honour the
+    // given position and size.
+    const wxString value = wxGetMultiLineTextFromUser(
+                                "You can enter a multiline string here too\n"
+                                "using an explicit position and size",
+                                "Please enter some text",
+                                "First line\nSecond one\nAnd another one too",
+                                this,
+                                GetPosition() + wxSize(50, 50),
+                                wxSize(500, 400));
+    if ( !value.empty() )
+    {
+        wxLogMessage("You entered \"%s\"", value);
     }
 }
 #endif // wxUSE_TEXTDLG

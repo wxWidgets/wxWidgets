@@ -1435,6 +1435,60 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
     return str;
 }
 
+wxString wxGetTextFromUser(const wxString& message,
+                        const wxString& caption,
+                        const wxString& defaultValue,
+                        wxWindow *parent,
+                        const wxPoint& pos,
+                        int width,
+                        bool centre)
+{
+    wxString str;
+    long style = wxTextEntryDialogStyle;
+
+    if (centre)
+        style |= wxCENTRE;
+    else
+        style &= ~wxCENTRE;
+
+    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style,
+                             pos, wxSize(width, wxDefaultCoord));
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        str = dialog.GetValue();
+    }
+
+    return str;
+}
+
+wxString wxGetMultiLineTextFromUser(const wxString& message,
+                                    const wxString& caption,
+                                    const wxString& defaultValue,
+                                    wxWindow *parent,
+                                    const wxPoint& pos,
+                                    const wxSize& size,
+                                    bool centre)
+{
+    wxString str;
+    long style = wxTextEntryDialogStyle | wxTE_MULTILINE;
+
+    if (centre)
+        style |= wxCENTRE;
+    else
+        style &= ~wxCENTRE;
+
+    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style,
+                             pos, size);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        str = dialog.GetValue();
+    }
+
+    return str;
+}
+
 wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& caption,
                                const wxString& defaultValue,

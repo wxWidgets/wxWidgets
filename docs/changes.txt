@@ -262,6 +262,8 @@ All (GUI):
 
 - Add wxGetSingleChoice(), wxGetSingleChoiceIndex(), wxGetSingleChoiceData()
   and wxGetSelectedChoices() overloads using position and size (Lukas Buricin).
+- Add wxGetTextFromUser() overload using position and width (Lukas Buricin).
+- Add wxGetMultiLineTextFromUser() (Lukas Buricin).
 
 
 3.3.3: (released 2026-07-07)
