@@ -6,6 +6,67 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @struct wxActiveXEventNativeMSW
+
+    Native MSW/OLE parameters of an ActiveX event.
+
+    wxActiveXEvent::GetNativeParameters() returns this struct for event
+    handlers that need to process event parameters directly as they were passed
+    to IDispatch::Invoke(), for example when wxVariant conversion is not
+    sufficient.
+
+    The returned pointer and all pointer members are only valid while the
+    event handler is being executed.
+
+    @onlyfor{wxmsw}
+
+    @library{wxcore}
+    @category{events}
+*/
+struct wxActiveXEventNativeMSW
+{
+    /**
+        Dispatch identifier of the invoked event.
+    */
+    DISPID dispIdMember;
+
+    /**
+        Interface identifier passed to IDispatch::Invoke().
+    */
+    REFIID riid;
+
+    /**
+        Locale context passed to IDispatch::Invoke().
+    */
+    LCID lcid;
+
+    /**
+        Invocation flags passed to IDispatch::Invoke().
+    */
+    WORD wFlags;
+
+    /**
+        Event arguments and named arguments.
+    */
+    DISPPARAMS *pDispParams;
+
+    /**
+        Location for the event return value, if any.
+    */
+    VARIANT *pVarResult;
+
+    /**
+        Location for exception information if an error is returned.
+    */
+    EXCEPINFO *pExcepInfo;
+
+    /**
+        Location for the index of an argument with an error, if any.
+    */
+    unsigned int *puArgErr;
+};
+
+/**
     @class wxActiveXEvent
 
     An event class for handling ActiveX events passed from wxActiveXContainer.
@@ -25,7 +86,7 @@
     abilities of wxVariant. If 'operator[]' fails, prints an error messages or
     crashes the application, event handlers should use GetNativeParameters()
     instead to obtain the original event information.
-    Calls to operator[] and GetNativeParmeters() can be mixed. It is valid
+    Calls to operator[] and GetNativeParameters() can be mixed. It is valid
     to handle some parameters of an event with operator[] and others directly
     through GetNativeParameters(). It is \b not valid however to manipulate
     the same parameter using both approaches at the same time.
