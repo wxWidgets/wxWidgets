@@ -102,7 +102,7 @@ constexpr wxUint32 IPCCodeHeader = 0x439d9600;
 
 constexpr auto wxNO_RETURN_MESSAGE = nullptr;
 
-constexpr long wxIPCTimeout = 10; // socket timeout, in seconds
+constexpr long wxIPCTimeout = 5; // socket timeout, in seconds
 
 
 // For IPC returning a char* buffer. wxWidgets docs say that the user is not
