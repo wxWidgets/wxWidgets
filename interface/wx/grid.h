@@ -1877,14 +1877,14 @@ public:
     wxGridTableMessage();
 
     /**
-        Constructor really initialize the message.
+        Constructor initializes the message.
 
         @param table Pointer to the grid table
         @param id One of wxGridTableRequest enum elements.
         @param comInt1 For the insert/delete messages, position at which the
             rows or columns are inserted/deleted. For the append messages, the
             number of rows or columns that were appended.
-        @param comInt2 For the insert/deleted messages, number of rows or
+        @param comInt2 For the insert/delete messages, number of rows or
             columns to be inserted/deleted. For the append messages, this
             parameter is not used.
     */
@@ -1911,12 +1911,12 @@ public:
     int GetId() const;
 
     /**
-        Set the position at which the insertion/deletion occurs
+        Set the position at which the insertion/deletion occurs.
     */
     void SetCommandInt( int comInt1 );
 
     /**
-        Get the position at which the insertion/deletion occurs
+        Get the position at which the insertion/deletion occurs.
     */
     int GetCommandInt() const;
 
@@ -1937,7 +1937,10 @@ public:
     stored in memory.
 
     The number of rows and columns in the table can be specified initially but
-    may also be changed later dynamically.
+    may also be changed later dynamically. Its InsertRows(), AppendRows(),
+    DeleteRows(), InsertCols(), AppendCols(), and DeleteCols() functions update
+    the table storage and also send the appropriate wxGridTableMessage to the
+    associated grid, if any.
  */
 class wxGridStringTable : public wxGridTableBase
 {
