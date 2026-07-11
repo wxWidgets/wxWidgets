@@ -25,6 +25,7 @@
 
 #include "wx/aui/auibar.h"
 #include "wx/aui/auibook.h"
+#include "wx/aui/floatpane.h"
 #include "wx/aui/framemanager.h"
 #include "wx/aui/serializer.h"
 
@@ -867,6 +868,48 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::ScrollButtonDClick", "[aui
     tabCtrl.LeftDClickButton();
 
     CHECK( tabCtrl.GetTabOffset() == 1 );
+}
+
+TEST_CASE("wxAuiFloatingFrame::SetPaneWindow", "[aui]")
+{
+    auto frame = make_unique<wxFrame>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                      "wxAuiFloatingFrame test");
+    wxAuiManager manager(frame.get());
+
+    wxPanel * const paneWindow = new wxPanel(frame.get());
+    const wxSize floatingSize(300, 250);
+
+    wxAuiPaneInfo paneInfo;
+    paneInfo.Name("pane").
+             Float().
+             FloatingSize(floatingSize).
+             MinSize(100, 100);
+
+    REQUIRE( manager.AddPane(paneWindow, paneInfo) );
+
+    wxAuiPaneInfo& pane = manager.GetPane(paneWindow);
+    std::unique_ptr<wxAuiFloatingFrame> const
+        floatingFrame{manager.CreateFloatingFrame(frame.get(), pane)};
+
+#ifndef __WXQT__
+    bool paneSizeChanged = false;
+    floatingFrame->Bind(wxEVT_SIZE,
+        [&](wxSizeEvent& event)
+        {
+            manager.GetPane(paneWindow).FloatingSize(10, 10);
+            paneSizeChanged = true;
+            event.Skip();
+        });
+#endif // !__WXQT__
+
+    floatingFrame->SetPaneWindow(pane);
+
+#ifndef __WXQT__
+    // wxQt defers resizeEvent() for this hidden top-level window,
+    // but the other ports send it synchronously from SetPaneWindow().
+    CHECK( paneSizeChanged );
+#endif // !__WXQT__
+    CHECK( floatingFrame->GetSize() == floatingSize );
 }
 
 TEST_CASE("wxAuiToolBar::Items", "[aui][toolbar]")
