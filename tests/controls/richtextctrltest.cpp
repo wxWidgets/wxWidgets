@@ -461,6 +461,21 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::LineBreak",
     CHECK(m_rich->GetCaretPosition() == 6);
 }
 
+TEST_CASE_METHOD(RichTextCtrlTestCase,
+                 "RichTextCtrl::MoveDownToSingleCharacterLine",
+                 "[richtextctrl]")
+{
+    m_rich->SetValue("This line contains several characters.\nX");
+
+    m_rich->SetInsertionPointEnd();
+    const long endOfSingleCharacterLine = m_rich->GetCaretPosition();
+
+    m_rich->SetInsertionPoint(10);
+    REQUIRE(m_rich->MoveDown());
+
+    CHECK(m_rich->GetCaretPosition() == endOfSingleCharacterLine);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Selection",
                  "[richtextctrl]")
 {
