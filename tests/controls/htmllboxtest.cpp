@@ -45,5 +45,18 @@ HtmlListBoxTestCase::HtmlListBoxTestCase()
                                                   wxID_ANY);
 }
 
+TEST_CASE_METHOD(HtmlListBoxTestCase, "HtmlListBox::EmptyPaging",
+                 "[htmllistbox]")
+{
+    wxKeyEvent eventPageDown(wxEVT_KEY_DOWN);
+    eventPageDown.m_keyCode = WXK_PAGEDOWN;
+    REQUIRE(m_htmllbox->GetEventHandler()->ProcessEvent(eventPageDown));
+
+    wxKeyEvent eventPageUp(wxEVT_KEY_DOWN);
+    eventPageUp.m_keyCode = WXK_PAGEUP;
+    REQUIRE(m_htmllbox->GetEventHandler()->ProcessEvent(eventPageUp));
+
+    CHECK(m_htmllbox->GetSelection() == wxNOT_FOUND);
+}
 
 #endif //wxUSE_HTML
