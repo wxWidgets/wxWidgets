@@ -1549,7 +1549,20 @@ void wxAuiTabCtrl::OnLeftDClick(wxMouseEvent& evt)
 {
     wxPoint pos = evt.GetPosition();
 
-    if (!TabHitTest(pos) && !ButtonHitTest(pos))
+    const wxAuiTabContainerButton* const button = ButtonHitTest(pos);
+    if ( button )
+    {
+        if ( !(button->curState & wxAUI_BUTTON_STATE_DISABLED) &&
+             (button->id == wxAUI_BUTTON_LEFT ||
+              button->id == wxAUI_BUTTON_RIGHT) )
+        {
+            OnButton(GetIdxFromWindow(m_clickTab), button->id);
+        }
+
+        return;
+    }
+
+    if ( !TabHitTest(pos) )
     {
         wxAuiTabEventSource::TabBgDClick(this);
     }
