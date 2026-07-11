@@ -1892,6 +1892,29 @@ void GridTestCase::CheckFirstColAutoSize(int expected)
     CHECK(m_grid->GetColSize(0) == expected);
 }
 
+TEST_CASE_METHOD(GridTestCase, "Grid::AutoWrapStringRendererBestHeight",
+                 "[grid]")
+{
+    wxGridCellAutoWrapStringRenderer renderer;
+    wxGridCellAttrPtr attr(new wxGridCellAttr);
+
+    const int autoWrapMargin = 4;
+    const wxFont cellFont = m_grid->GetDefaultCellFont().Smaller();
+    attr->SetFont(cellFont);
+
+    m_grid->SetCellValue(0, 0, "one line");
+
+    wxClientDC dc(m_grid->GetGridWindow());
+    dc.SetFont(m_grid->GetDefaultCellFont().Larger());
+
+    const int height =
+        renderer.GetBestHeight(*m_grid, *attr, dc, 0, 0,
+                               m_grid->GetColSize(0));
+
+    dc.SetFont(cellFont);
+    CHECK( height == dc.GetCharHeight() + autoWrapMargin );
+}
+
 TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
 {
 #ifdef wxHAS_NATIVE_HEADER
@@ -1998,6 +2021,36 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
         wxYield();
         CHECK( m_grid->GetRowSize(0) == m_grid->GetDefaultRowSize() );
     }
+}
+
+TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeRow", "[grid]")
+{
+    // Hardcoded extra margin for the rows used in grid.cpp.
+    const int margin = m_grid->FromDIP(6);
+    const int autoWrapMargin = 4;
+
+    m_grid->SetRowLabelValue(0, wxString());
+
+    const wxFont cellFont = m_grid->GetDefaultCellFont();
+    m_grid->SetCellFont(0, 0, cellFont);
+
+    wxClientDC dc(m_grid->GetGridWindow());
+    dc.SetFont(cellFont);
+
+    const wxString text = "Spanned text should fit";
+    const int textWidth = dc.GetTextExtent(text).x;
+
+    m_grid->SetCellValue(0, 0, text);
+    m_grid->SetCellRenderer(0, 0, new wxGridCellAutoWrapStringRenderer);
+    m_grid->SetCellSize(0, 0, 1, 2);
+    m_grid->SetColSize(0, textWidth / 2);
+    m_grid->SetColSize(1, textWidth - textWidth / 2);
+
+    m_grid->AutoSizeRow(0);
+
+    wxYield();
+    CHECK( m_grid->GetRowSize(0) ==
+           dc.GetCharHeight() + autoWrapMargin + margin );
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::DrawInvalidCell", "[grid][multicell]")
