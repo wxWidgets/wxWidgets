@@ -989,7 +989,12 @@ void wxNotebook::MSWSubclassSpin()
         HWND hwndSpin = FindWindowExA(m_hWnd, nullptr, UPDOWN_CLASSA, nullptr);
         if ( hwndSpin )
         {
-            // Subclass the spin button.
+            // Keep the hidden spin button out of TAB traversal while still
+            // subclassing it to override WM_ERASEBKGND.
+            const long style = ::GetWindowLong(hwndSpin, GWL_STYLE);
+            if ( style & WS_TABSTOP )
+                ::SetWindowLong(hwndSpin, GWL_STYLE, style & ~WS_TABSTOP);
+
             if ( !gs_wndprocNotebookSpinBtn )
                 gs_wndprocNotebookSpinBtn = wxGetWindowProc(hwndSpin);
 

@@ -18,6 +18,10 @@
 
 #include "wx/notebook.h"
 
+#ifdef __WXMSW__
+    #include "wx/msw/private.h"
+#endif // __WXMSW__
+
 #include "asserthelper.h"
 #include "bookctrlbasetest.h"
 #include "testableframe.h"
@@ -279,5 +283,42 @@ TEST_CASE_METHOD(NotebookTestCase, "Notebook::HitTestFlags", "[notebook]")
     WX_ASSERT_FAILS_WITH_ASSERT(notebook->GetTabRect(0));
 #endif // ports
 }
+
+#ifdef __WXMSW__
+
+TEST_CASE_METHOD(NotebookTestCase, "Notebook::HiddenSpinButtonNotFocusable",
+                 "[notebook]")
+{
+    if ( wxIsRunningUnderWine() )
+        return;
+
+    m_notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxPoint(0, 0), wxSize(80, 200));
+
+    for ( size_t i = 0; i < 30; i++ )
+        m_notebook->AddPage(new wxPanel(m_notebook.get()), "Page");
+
+    m_notebook->SendSizeEvent();
+    m_notebook->Update();
+
+    bool foundNativeChild = false;
+
+    for ( HWND child = ::GetWindow(GetHwndOf(m_notebook.get()), GW_CHILD);
+          child;
+          child = ::GetWindow(child, GW_HWNDNEXT) )
+    {
+        if ( wxFindWinFromHandle((WXHWND)child) )
+            continue;
+
+        foundNativeChild = true;
+
+        const long style = ::GetWindowLong(child, GWL_STYLE);
+        CHECK(!(style & WS_TABSTOP));
+    }
+
+    REQUIRE(foundNativeChild);
+}
+
+#endif // __WXMSW__
 
 #endif //wxUSE_NOTEBOOK
