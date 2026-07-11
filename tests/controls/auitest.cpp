@@ -17,14 +17,15 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/frame.h"
 #endif // WX_PRECOMP
 
 #include "wx/button.h"
+#include "wx/frame.h"
 #include "wx/panel.h"
 
 #include "wx/aui/auibar.h"
 #include "wx/aui/auibook.h"
+#include "wx/aui/floatpane.h"
 #include "wx/aui/framemanager.h"
 #include "wx/aui/serializer.h"
 
@@ -867,6 +868,52 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::ScrollButtonDClick", "[aui
     tabCtrl.LeftDClickButton();
 
     CHECK( tabCtrl.GetTabOffset() == 1 );
+}
+
+TEST_CASE("wxAuiFloatingFrame::SetPaneWindow", "[aui]")
+{
+    wxFrame * const frame = new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY,
+                                        "wxAuiFloatingFrame test");
+    wxAuiManager manager(frame);
+
+    wxPanel * const paneWindow = new wxPanel(frame);
+    const wxSize floatingSize(300, 250);
+
+    wxAuiPaneInfo paneInfo;
+    paneInfo.Name("pane").
+             Float().
+             FloatingSize(floatingSize).
+             MinSize(100, 100);
+
+    REQUIRE( manager.AddPane(paneWindow, paneInfo) );
+
+    wxAuiPaneInfo& pane = manager.GetPane(paneWindow);
+    wxAuiFloatingFrame * const floatingFrame =
+        manager.CreateFloatingFrame(frame, pane);
+
+#ifndef __WXQT__
+    bool paneSizeChanged = false;
+    floatingFrame->Bind(wxEVT_SIZE,
+        [&](wxSizeEvent& event)
+        {
+            manager.GetPane(paneWindow).FloatingSize(10, 10);
+            paneSizeChanged = true;
+            event.Skip();
+        });
+#endif // !__WXQT__
+
+    floatingFrame->SetPaneWindow(pane);
+
+#ifndef __WXQT__
+    // wxQt defers resizeEvent() for this hidden top-level window,
+    // but the other ports send it synchronously from SetPaneWindow().
+    CHECK( paneSizeChanged );
+#endif // !__WXQT__
+    CHECK( floatingFrame->GetSize() == floatingSize );
+
+    delete floatingFrame;
+    manager.UnInit();
+    delete frame;
 }
 
 TEST_CASE("wxAuiToolBar::Items", "[aui][toolbar]")

@@ -170,7 +170,10 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     m_mgr.AddPane(m_paneWindow, contained_pane);
     m_mgr.Update();
 
-    if (pane.min_size.IsFullySpecified())
+    const wxSize floatingSize = pane.floating_size;
+    const wxSize floatingClientSize = pane.floating_client_size;
+
+    if ( pane.min_size.IsFullySpecified() )
     {
         // because SetSizeHints() calls Fit() too (which sets the window
         // size to its minimum allowed), we keep the size before calling
@@ -191,9 +194,9 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     // So we must call it first but doing it generates a size event and updates
     // pane.floating_size from inside it so we must also record its original
     // value before doing it.
-    const bool hasFloatingSize = pane.floating_size != wxDefaultSize ||
-                                    pane.floating_client_size != wxDefaultSize;
-    if (pane.IsFixed())
+    const bool hasFloatingSize =
+        floatingSize != wxDefaultSize || floatingClientSize != wxDefaultSize;
+    if ( pane.IsFixed() )
     {
         SetWindowStyleFlag(GetWindowStyleFlag() & ~wxRESIZE_BORDER);
     }
@@ -201,13 +204,13 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     if ( hasFloatingSize )
     {
         // give floating_client_size precedence over floating_size
-        if (pane.floating_client_size != wxDefaultSize)
+        if ( floatingClientSize != wxDefaultSize )
         {
-            SetClientSize(pane.floating_client_size);
+            SetClientSize(floatingClientSize);
         }
         else
         {
-            SetSize(pane.floating_size);
+            SetSize(floatingSize);
         }
     }
     else
