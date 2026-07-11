@@ -30,6 +30,35 @@
 
 #include <memory>
 
+class RefreshCountingRichTextCtrl : public wxRichTextCtrl
+{
+public:
+    RefreshCountingRichTextCtrl(wxWindow *parent)
+        : wxRichTextCtrl(parent, wxID_ANY, "", wxDefaultPosition,
+                         wxSize(400, 200), wxWANTS_CHARS)
+    {
+    }
+
+    void Refresh(bool eraseBackground = true,
+                 const wxRect *rect = nullptr) override
+    {
+        m_refreshCount++;
+        wxRichTextCtrl::Refresh(eraseBackground, rect);
+    }
+
+    int GetRefreshCount() const
+    {
+        return m_refreshCount;
+    }
+
+    void ResetRefreshCount()
+    {
+        m_refreshCount = 0;
+    }
+private:
+    int m_refreshCount = 0;
+};
+
 class RichTextCtrlTestCase
 {
 public:
@@ -836,6 +865,28 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Delete",
     m_rich->Delete(wxRichTextRange(14, 29));
 
     CHECK(m_rich->GetValue() == "long long line");
+}
+
+TEST_CASE("RichTextCtrl::DeleteParagraphEndRefresh", "[richtextctrl]")
+{
+    auto rich =
+        make_unique<RefreshCountingRichTextCtrl>(wxTheApp->GetTopWindow());
+
+    rich->AddParagraph("first paragraph");
+    const wxRichTextRange range = rich->AddParagraph("second paragraph");
+    rich->AddParagraph("third paragraph");
+
+    rich->ResetRefreshCount();
+
+    rich->SetSelection(range.GetStart(), range.GetEnd() + 1);
+    REQUIRE(rich->HasSelection());
+
+    rich->DeleteSelectedContent();
+
+    CHECK(rich->GetRefreshCount() > 0);
+    CHECK(rich->GetValue().Contains("first paragraph"));
+    CHECK(!rich->GetValue().Contains("second paragraph"));
+    CHECK(rich->GetValue().Contains("third paragraph"));
 }
 
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Url", "[richtextctrl]")

@@ -11932,6 +11932,26 @@ void wxRichTextAction::CalculateRefreshOptimizations(wxArrayInt& optimizationLin
 #endif
 }
 
+static bool wxRichTextRangeDeletesParagraphEnd(wxRichTextParagraphLayoutBox* container,
+                                               const wxRichTextRange& range)
+{
+    wxRichTextObjectList::compatibility_iterator node =
+        container->GetChildren().GetFirst();
+
+    while ( node )
+    {
+        wxRichTextParagraph* child =
+            wxDynamicCast(node->GetData(), wxRichTextParagraph);
+
+        if ( child && range.Contains(child->GetRange().GetEnd()) )
+            return true;
+
+        node = node->GetNext();
+    }
+
+    return false;
+}
+
 bool wxRichTextAction::Do()
 {
     m_buffer->Modify(true);
@@ -11999,9 +12019,12 @@ bool wxRichTextAction::Do()
             wxArrayInt optimizationLineCharPositions;
             wxArrayInt optimizationLineYPositions;
             wxRect oldFloatRect;
+            const bool deletesParagraphEnd =
+                wxRichTextRangeDeletesParagraphEnd(container, GetRange());
 
 #if wxRICHTEXT_USE_OPTIMIZED_DRAWING
-            CalculateRefreshOptimizations(optimizationLineCharPositions, optimizationLineYPositions, oldFloatRect);
+            if ( !deletesParagraphEnd )
+                CalculateRefreshOptimizations(optimizationLineCharPositions, optimizationLineYPositions, oldFloatRect);
 #endif
 
             // Check if the current object focus needs to be changed before deletion of content
@@ -12029,7 +12052,10 @@ bool wxRichTextAction::Do()
             if (caretPos >= container->GetOwnRange().GetEnd())
                 caretPos --;
 
-            UpdateAppearance(caretPos, true /* send update event */, oldFloatRect, & optimizationLineCharPositions, & optimizationLineYPositions, true /* do */);
+            UpdateAppearance(caretPos, true /* send update event */, oldFloatRect,
+                             deletesParagraphEnd ? nullptr : & optimizationLineCharPositions,
+                             deletesParagraphEnd ? nullptr : & optimizationLineYPositions,
+                             true /* do */);
 
             wxRichTextEvent cmdEvent(
                 wxEVT_RICHTEXT_CONTENT_DELETED,
