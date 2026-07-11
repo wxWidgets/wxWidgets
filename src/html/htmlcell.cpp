@@ -343,6 +343,26 @@ void wxHtmlWordCell::SetPreviousWord(wxHtmlWordCell *cell)
     }
 }
 
+void wxHtmlWordCell::AdjustWidthForKerning(const wxDC& dc,
+                                           const wxString& nextWord)
+{
+    wxCoord thisWidth, nextWidth, combinedWidth, height;
+
+    dc.GetTextExtent(m_Word, &thisWidth, &height);
+    if ( thisWidth != m_Width )
+        return;
+
+    dc.GetTextExtent(nextWord, &nextWidth, &height);
+
+    wxString combinedWord(m_Word);
+    combinedWord += nextWord;
+    dc.GetTextExtent(combinedWord, &combinedWidth, &height);
+
+    const int adjustment = thisWidth + nextWidth - combinedWidth;
+    if ( adjustment > 0 && adjustment < m_Width )
+        m_Width -= adjustment;
+}
+
 // Splits m_Word into up to three parts according to selection, returns
 // substring before, in and after selection and the points (in relative coords)
 // where s2 and s3 start:
