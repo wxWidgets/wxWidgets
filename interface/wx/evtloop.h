@@ -19,8 +19,7 @@
     used by wxApp to run the main application event loop.
     Temporary event loops are usually created by wxDialog::ShowModal().
 
-    You can create your own event loop if you need, provided that you restore
-    the main event loop once yours is destroyed (see wxEventLoopActivator).
+    You can create your own event loop if you need.
 
     Notice that there can be more than one event loop at any given moment, e.g.
     an event handler called from the main loop can show a modal dialog, which
@@ -34,6 +33,30 @@
     be stopped while an inner one is still running. It is however possible to
     ask an outer event loop to terminate as soon as all its nested loops exit
     and the control returns back to it by using ScheduleExit().
+
+    For simple custom GUI event loops, derive from wxGUIEventLoop and override
+    the operation you need to customize. It is not necessary to use
+    wxEventLoopActivator when calling Run(), because Run() makes the loop
+    active and restores the previously active loop before returning:
+
+    @code
+        class MyEventLoop : public wxGUIEventLoop
+        {
+        public:
+            bool Dispatch() override
+            {
+                wxLogTrace("eventloop", "Dispatching the next event");
+
+                return wxGUIEventLoop::Dispatch();
+            }
+        };
+
+        void RunMyLoop()
+        {
+            MyEventLoop loop;
+            loop.Run();
+        }
+    @endcode
 
     @library{wxbase}
     @category{appmanagement}
@@ -82,9 +105,14 @@ public:
         implement it like this (e.g. wxGTK does not) so you shouldn't rely on
         Dispatch() being called from inside this function.
 
+        This method makes this loop the active one for the duration of the call
+        and restores the previously active loop before returning. Code using
+        the inherited Run() implementation doesn't need to use
+        wxEventLoopActivator explicitly.
+
         @return The argument passed to Exit() which terminated this event loop.
      */
-    virtual int Run() = 0;
+    virtual int Run();
 
     /**
         Return true if this event loop is currently running.
@@ -298,6 +326,11 @@ protected:
     @class wxEventLoopActivator
 
     Makes an event loop temporarily active.
+
+    You normally don't need to use this class before calling
+    wxEventLoopBase::Run(), as Run() already uses it. Use this class only when
+    an event loop must be temporarily active without entering Run(), or from a
+    custom Run() implementation which doesn't call the base class version.
 
     This class is used to make the event loop active during its life-time,
     e.g.:
