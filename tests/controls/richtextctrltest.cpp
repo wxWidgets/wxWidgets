@@ -842,6 +842,26 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Font", "[richtextctrl]")
     CHECK(fontstyle.GetFont() == font);
 }
 
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TextEffects",
+                 "[richtextctrl]")
+{
+    const int effect = wxTEXT_ATTR_EFFECT_SUPERSCRIPT;
+
+    m_rich->ApplyTextEffectToSelection(effect);
+    CHECK(m_rich->DoesSelectionHaveTextEffectFlag(effect));
+
+    m_rich->WriteText("x");
+
+    m_rich->ApplyTextEffectToSelection(effect);
+    CHECK(!m_rich->DoesSelectionHaveTextEffectFlag(effect));
+
+    m_rich->WriteText("y");
+
+    wxTextAttr style;
+    m_rich->GetStyle(1, style);
+    CHECK((style.GetTextEffects() & effect) == 0);
+}
+
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Delete",
                  "[richtextctrl]")
 {
