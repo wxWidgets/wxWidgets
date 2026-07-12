@@ -15,6 +15,12 @@
 #include "wx/filedlg.h"
 #include "wx/timer.h"
 
+#if wxUSE_WIZARDDLG
+    #include "wx/sizer.h"
+    #include "wx/stattext.h"
+    #include "wx/wizard.h"
+#endif // wxUSE_WIZARDDLG
+
 // This test suite tests helpers from wx/testing.h intended for testing of code
 // that calls modal dialogs. It does not test the implementation of wxWidgets'
 // dialogs.
@@ -179,3 +185,31 @@ TEST_CASE("Modal::EndModalDuringInit", "[modal]")
     CHECK_FALSE( dlg.IsModal() );
     CHECK_FALSE( dlg.IsShown() );
 }
+
+#if wxUSE_WIZARDDLG && defined(__WXMSW__)
+
+TEST_CASE("wxWizard::EmptyPageFocus", "[wizard][focus][msw]")
+{
+    if ( IsAutomaticTest() )
+        return;
+
+    wxWizard wizard(wxTheApp->GetTopWindow(), wxID_ANY, "Wizard");
+    wxWizardPageSimple *page1 = new wxWizardPageSimple(&wizard);
+    wxWizardPageSimple *page2 = new wxWizardPageSimple(&wizard);
+    wxWizardPageSimple::Chain(page1, page2);
+
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(new wxStaticText(page1, wxID_ANY, "No focusable controls"));
+    page1->SetSizer(sizer);
+
+    wizard.Show();
+    wizard.Raise();
+    wxYield();
+
+    REQUIRE( wizard.ShowPage(page1) );
+    wxYield();
+
+    CHECK( wxWindow::FindFocus() == wizard.FindWindow(wxID_FORWARD) );
+}
+
+#endif // wxUSE_WIZARDDLG && __WXMSW__
