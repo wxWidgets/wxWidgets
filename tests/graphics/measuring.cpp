@@ -13,6 +13,8 @@
 
 #include "testprec.h"
 
+#include "wx/bitmap.h"
+#include "wx/colour.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -59,6 +61,60 @@ void GetTextExtentTester(const T& obj)
     CHECK( obj.GetTextExtent(wxString()) == wxSize() );
 }
 
+// Currently this is known to work in wxMSW and wxGTK3, to be checked (and
+// enabled) for the other ports.
+#if defined(__WXMSW__) || defined(__WXGTK3__)
+    #define wxHAS_ROTATED_TEXT_RIGHT_ANGLE_TEST
+#endif
+
+#ifdef wxHAS_ROTATED_TEXT_RIGHT_ANGLE_TEST
+
+const wxSize ROTATED_TEXT_BITMAP_SIZE(240, 240);
+const wxPoint ROTATED_TEXT_ORIGIN(120, 120);
+
+wxRect GetRotatedTextBounds(double angle)
+{
+    wxBitmap bitmap(ROTATED_TEXT_BITMAP_SIZE);
+    wxMemoryDC dc(bitmap);
+    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.Clear();
+    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetTextForeground(*wxBLACK);
+    dc.SetFont(wxFont(wxFontInfo(24).Family(wxFONTFAMILY_SWISS)));
+    dc.DrawRotatedText("TEST", ROTATED_TEXT_ORIGIN.x, ROTATED_TEXT_ORIGIN.y,
+                       angle);
+    dc.SelectObject(wxNullBitmap);
+
+    const wxImage image = bitmap.ConvertToImage();
+
+    int left = ROTATED_TEXT_BITMAP_SIZE.x;
+    int top = ROTATED_TEXT_BITMAP_SIZE.y;
+    int right = -1;
+    int bottom = -1;
+
+    for ( int y = 0; y < ROTATED_TEXT_BITMAP_SIZE.y; ++y )
+    {
+        for ( int x = 0; x < ROTATED_TEXT_BITMAP_SIZE.x; ++x )
+        {
+            if ( image.GetRed(x, y) < 250 || image.GetGreen(x, y) < 250 ||
+                 image.GetBlue(x, y) < 250 )
+            {
+                left = wxMin(left, x);
+                top = wxMin(top, y);
+                right = wxMax(right, x);
+                bottom = wxMax(bottom, y);
+            }
+        }
+    }
+
+    if ( right < left || bottom < top )
+        return wxRect();
+
+    return wxRect(left, top, right - left + 1, bottom - top + 1);
+}
+
+#endif // wxHAS_ROTATED_TEXT_RIGHT_ANGLE_TEST
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -99,6 +155,27 @@ TEST_CASE("wxMemoryDC::GetTextExtent", "[memdc][text-extent]")
     GetTextExtentTester(memdc);
 #endif // __WXMSW__
 }
+
+#ifdef wxHAS_ROTATED_TEXT_RIGHT_ANGLE_TEST
+
+TEST_CASE("wxMemoryDC::DrawRotatedText cardinal angles", "[dc][text][msw]")
+{
+    const wxRect bounds90 = GetRotatedTextBounds(90);
+    const wxRect bounds180 = GetRotatedTextBounds(180);
+    const wxRect bounds270 = GetRotatedTextBounds(270);
+
+    REQUIRE(!bounds90.IsEmpty());
+    REQUIRE(!bounds180.IsEmpty());
+    REQUIRE(!bounds270.IsEmpty());
+
+    // Check the bitmap footprint to catch cardinal angles accidentally taking
+    // the unrotated text drawing path.
+    CHECK(bounds90.GetHeight() > bounds90.GetWidth());
+    CHECK(bounds180.GetRight() <= ROTATED_TEXT_ORIGIN.x + 2);
+    CHECK(bounds270.GetHeight() > bounds270.GetWidth());
+}
+
+#endif // wxHAS_ROTATED_TEXT_RIGHT_ANGLE_TEST
 
 #if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
 TEST_CASE("wxPostScriptDC::GetTextExtent", "[psdc][text-extent]")
