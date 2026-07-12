@@ -600,6 +600,33 @@ TEST_CASE("wxFileName::UNC", "[filename]")
     fn.Assign("\\\\x\\dir\\file");
     CHECK( fn.GetFullPath() == "\\\\x\\dir\\file" );
 #endif // __WINDOWS__
+
+    fn.Assign("\\\\x\\dir\\file", wxPATH_DOS);
+    CHECK( fn.GetVolume() == "\\\\x" );
+    CHECK( GetDOSPath(fn) == "\\dir" );
+}
+
+TEST_CASE("wxFileName::DOSVolume", "[filename]")
+{
+    wxFileName fn("c:xxx.yyy", wxPATH_DOS);
+    CHECK( fn.IsOk() );
+    CHECK( fn.GetVolume() == "c" );
+    CHECK( fn.GetFullPath(wxPATH_DOS) == "c:xxx.yyy" );
+
+    fn.Assign("xxx:yyy.zzz", wxPATH_DOS);
+    CHECK( !fn.IsOk() );
+
+    fn.Assign("1:yyy.zzz", wxPATH_DOS);
+    CHECK( !fn.IsOk() );
+
+    wxString volume, path, name, ext;
+    wxFileName::SplitPath("xxx:yyy.zzz", &volume, &path, &name, &ext,
+                          wxPATH_DOS);
+
+    CHECK( volume.empty() );
+    CHECK( path.empty() );
+    CHECK( name.empty() );
+    CHECK( ext.empty() );
 }
 
 TEST_CASE("wxFileName::VolumeUniqueName", "[filename]")

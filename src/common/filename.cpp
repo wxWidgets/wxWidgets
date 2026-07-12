@@ -302,6 +302,36 @@ static bool IsUNCPath(const wxString& path)
                             !IsDOSPathSep(path[2u]);
 }
 
+static bool IsValidDOSDriveVolume(const wxString& path, size_t posColon)
+{
+    return posColon == 1 && wxIsalpha(path[0u]);
+}
+
+static bool HasInvalidDOSVolumeSeparator(const wxString& path)
+{
+    const auto posFirstColon = path.find(wxFILE_SEP_DSK);
+
+    if ( posFirstColon == wxString::npos )
+        return false;
+
+    if ( path.StartsWith(wxMSW_EXTENDED_PATH_PREFIX) )
+    {
+        const auto posNextSep =
+            path.find(wxFILE_SEP_PATH_DOS, wxMSW_EXTENDED_PATH_PREFIX_LEN);
+
+        return posNextSep != wxString::npos &&
+               path.find(wxFILE_SEP_DSK, posNextSep) != wxString::npos;
+    }
+
+    if ( IsUNCPath(path) )
+        return true;
+
+    if ( !IsValidDOSDriveVolume(path, posFirstColon) )
+        return true;
+
+    return path.find(wxFILE_SEP_DSK, posFirstColon + 1) != wxString::npos;
+}
+
 // Under Unix-ish systems (basically everything except Windows but we can't
 // just test for non-__WINDOWS__ because Cygwin defines it, yet we want to use
 // lstat() under it, so test for all the rest explicitly) we may work either
@@ -513,6 +543,13 @@ wxFileName::DoSetPath(const wxString& pathOrig, wxPathFormat format, int flags)
 void wxFileName::Assign(const wxString& fullpath,
                         wxPathFormat format)
 {
+    if ( GetFormat(format) == wxPATH_DOS &&
+         HasInvalidDOSVolumeSeparator(fullpath) )
+    {
+        Clear();
+        return;
+    }
+
     wxString volume, path, name, ext;
     bool hasExt;
     SplitPath(fullpath, &volume, &path, &name, &ext, &hasExt, format);
@@ -559,6 +596,13 @@ void wxFileName::Assign(const wxString& pathOrig,
                         const wxString& ext,
                         wxPathFormat format)
 {
+    if ( GetFormat(format) == wxPATH_DOS &&
+         HasInvalidDOSVolumeSeparator(pathOrig) )
+    {
+        Clear();
+        return;
+    }
+
     wxString volume,
              path;
     SplitVolume(pathOrig, &volume, &path, format);
@@ -2570,7 +2614,9 @@ wxFileName::SplitVolume(const wxString& fullpath,
                 // string as it can't be a volume separator (nor can this be a valid
                 // DOS file name at all but we'll leave dealing with this to our caller)
                 size_t posFirstColon = fullpath.find_first_of(sepVol);
-                if ( posFirstColon && posFirstColon != wxString::npos )
+                if ( posFirstColon && posFirstColon != wxString::npos &&
+                     (format != wxPATH_DOS ||
+                      IsValidDOSDriveVolume(fullpath, posFirstColon)) )
                 {
                     if ( pstrVolume )
                     {
@@ -2613,6 +2659,23 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
                            wxPathFormat format)
 {
     format = GetFormat(format);
+
+    if ( format == wxPATH_DOS &&
+         HasInvalidDOSVolumeSeparator(fullpathWithVolume) )
+    {
+        if ( pstrVolume )
+            pstrVolume->Empty();
+        if ( pstrPath )
+            pstrPath->Empty();
+        if ( pstrName )
+            pstrName->Empty();
+        if ( pstrExt )
+            pstrExt->Empty();
+        if ( hasExt )
+            *hasExt = false;
+
+        return;
+    }
 
     wxString fullpath;
     SplitVolume(fullpathWithVolume, pstrVolume, &fullpath, format);
