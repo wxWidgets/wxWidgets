@@ -1836,7 +1836,30 @@ public:
     A message object of this class must be sent to the grid using
     wxGrid::ProcessTableMessage() every time the table changes, e.g. rows are
     added/deleted. The messages are just notifications and don't result in any
-    actual changes but just allow the view to react to changes to the model.
+    changes to the table data, but allow the view to react to changes to the
+    model.
+
+    The table must be updated before sending the notification. For example, a
+    custom wxGridTableBase::InsertRows() implementation should first insert the
+    rows into its own data storage and only then notify the grid:
+
+    @code
+    bool MyTable::InsertRows(size_t pos, size_t numRows)
+    {
+        DoInsertRowsInDataModel(pos, numRows);
+
+        if ( GetView() )
+        {
+            GetView()->ProcessTableMessage(
+                this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, pos, numRows);
+        }
+
+        return true;
+    }
+    @endcode
+
+    The same rule applies to the other row and column modification messages:
+    update the table first, then notify the grid.
 */
 class wxGridTableMessage
 {
@@ -1851,7 +1874,7 @@ public:
 
         @param table Pointer to the grid table
         @param id One of wxGridTableRequest enum elements.
-        @param comInt1 For the insert/delete messages, position after which the
+        @param comInt1 For the insert/delete messages, position at which the
             rows or columns are inserted/deleted. For the append messages, the
             number of rows or columns that were appended.
         @param comInt2 For the insert/deleted messages, number of rows or
@@ -1881,12 +1904,12 @@ public:
     int GetId() const;
 
     /**
-        Set the position after which the insertion/deletion occur
+        Set the position at which the insertion/deletion occurs
     */
     void SetCommandInt( int comInt1 );
 
     /**
-        Get the position after which the insertion/deletion occur
+        Get the position at which the insertion/deletion occurs
     */
     int GetCommandInt() const;
 
