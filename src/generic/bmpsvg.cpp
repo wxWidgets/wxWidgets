@@ -38,6 +38,15 @@
 
 #include "wx/rawbmp.h"
 
+#if wxUSE_STREAMS
+    #include "wx/mstream.h"
+#endif // wxUSE_STREAMS
+
+#if wxUSE_ZLIB
+    #include "wx/wfstream.h"
+    #include "wx/zstream.h"
+#endif // wxUSE_ZLIB
+
 // ============================================================================
 // private helpers
 // ============================================================================
@@ -440,11 +449,44 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxS
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef)
 {
+#if wxUSE_ZLIB
+    // Handle gzip-compressed SVG files (.svgz)
+    if ( path.Lower().EndsWith(".svgz") )
+    {
+        wxFileInputStream fileStream(path);
+        if ( fileStream.IsOk() )
+        {
+            wxZlibInputStream zlibStream(fileStream);
+            return FromSVG(zlibStream, sizeDef);
+        }
+
+        return wxBitmapBundle();
+    }
+#endif // wxUSE_ZLIB
+
     wxCharBuffer buf = LoadSVGFile(path);
     if ( buf.data() )
         return wxBitmapBundle::FromSVG(buf.data(), sizeDef);
 
     return wxBitmapBundle();
 }
+
+#if wxUSE_STREAMS
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVG(wxInputStream& stream, const wxSize& sizeDef)
+{
+    wxMemoryOutputStream memOut;
+    stream.Read(memOut);
+
+    const wxStreamBuffer* const sb = memOut.GetOutputStreamBuffer();
+    const size_t len = sb->GetBufferSize();
+    if ( !len )
+        return wxBitmapBundle();
+
+    return FromSVG(static_cast<const wxByte*>(sb->GetBufferStart()), len, sizeDef);
+}
+
+#endif // wxUSE_STREAMS
 
 #endif // wxHAS_SVG

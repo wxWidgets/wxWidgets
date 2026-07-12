@@ -17,6 +17,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/image.h"
 #include "wx/sysopt.h"
 #include "wx/html/htmlwin.h"
@@ -89,6 +90,8 @@ public:
     void OnDefaultWebBrowser(wxCommandEvent& event);
     void OnBack(wxCommandEvent& event);
     void OnForward(wxCommandEvent& event);
+    void OnUpdateBack(wxUpdateUIEvent& event);
+    void OnUpdateForward(wxUpdateUIEvent& event);
     void OnProcessor(wxCommandEvent& event);
     void OnDrawCustomBg(wxCommandEvent& event);
 
@@ -230,6 +233,19 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     SetIcon(wxIcon(sample_xpm));
 
+#if wxUSE_TOOLBAR
+    // Create a toolbar with Back and Forward navigation buttons
+    wxToolBar *toolbar = CreateToolBar();
+    auto* toolBack = toolbar->AddTool(ID_Back, _("Go Back"),
+                              wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_TOOLBAR));
+    Bind(wxEVT_UPDATE_UI, &MyFrame::OnUpdateBack, this, toolBack->GetId());
+    auto* toolForward = toolbar->AddTool(ID_Forward, _("Go Forward"),
+                                 wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_TOOLBAR));
+    Bind(wxEVT_UPDATE_UI, &MyFrame::OnUpdateForward, this, toolForward->GetId());
+
+    toolbar->Realize();
+#endif // wxUSE_TOOLBAR
+
 #if wxUSE_ACCEL
     // Create convenient accelerators for Back and Forward navigation
     wxAcceleratorEntry entries[2];
@@ -330,6 +346,16 @@ void MyFrame::OnForward(wxCommandEvent& WXUNUSED(event))
     {
         wxMessageBox(_("No more items in history!"));
     }
+}
+
+void MyFrame::OnUpdateBack(wxUpdateUIEvent& event)
+{
+    event.Enable(m_Html->HistoryCanBack());
+}
+
+void MyFrame::OnUpdateForward(wxUpdateUIEvent& event)
+{
+    event.Enable(m_Html->HistoryCanForward());
 }
 
 void MyFrame::OnProcessor(wxCommandEvent& WXUNUSED(event))
