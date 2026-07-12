@@ -3,7 +3,6 @@
 // Purpose:     wxHtml module for tables
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
-//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -362,7 +361,8 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         if (bk.IsOk())
             cell->SetBackgroundColour(bk);
     }
-    if (m_Border > 0)
+    const int cellBorder = m_Border > 0 ? 1 : 0;
+    if ( m_Border > 0 )
         cell->SetBorder(TABLE_BORDER_CLR_2, TABLE_BORDER_CLR_1);
 
     // vertical alignment:
@@ -381,7 +381,9 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
     // nowrap
     m_CellInfo[r][c].nowrap = tag.HasParam(wxT("NOWRAP"));
 
-    cell->SetIndent(m_Padding, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
+    // Border drawing consumes one pixel from the cell contents area.
+    cell->SetIndent(m_Padding + cellBorder, wxHTML_INDENT_ALL,
+                    wxHTML_UNITS_PIXELS);
 }
 
 void wxHtmlTableCell::ComputeMinMaxWidths()

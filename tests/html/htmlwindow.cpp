@@ -87,6 +87,13 @@ static const char *TEST_MARKUP_IMAGEMAP =
     "</map>"
     "</body></html>";
 
+static const char *TEST_MARKUP_TABLE_PADDING =
+    "<html><body>"
+    "<table border=\"4\" cellpadding=\"0\" cellspacing=\"1\">"
+    "<tr><td id=\"cell\">Text</td></tr>"
+    "</table>"
+    "</body></html>";
+
 #if wxUSE_WXHTML_HELP
 
 class CloseModalHelpDialogTimer : public wxTimer
@@ -139,6 +146,44 @@ static wxHtmlCell *FindCellWithLink(wxHtmlCell *cell, wxPoint *pos)
           child = child->GetNext() )
     {
         wxHtmlCell *found = FindCellWithLink(child, pos);
+        if ( found )
+            return found;
+    }
+
+    return nullptr;
+}
+
+static wxHtmlCell *FindCellById(wxHtmlCell *cell, const wxString& id)
+{
+    if ( !cell )
+        return nullptr;
+
+    if ( cell->GetId() == id )
+        return cell;
+
+    for ( wxHtmlCell *child = cell->GetFirstChild(); child;
+          child = child->GetNext() )
+    {
+        wxHtmlCell *found = FindCellById(child, id);
+        if ( found )
+            return found;
+    }
+
+    return nullptr;
+}
+
+static wxHtmlCell *FindFirstTerminal(wxHtmlCell *cell)
+{
+    if ( !cell )
+        return nullptr;
+
+    if ( cell->IsTerminalCell() )
+        return cell;
+
+    for ( wxHtmlCell *child = cell->GetFirstChild(); child;
+          child = child->GetNext() )
+    {
+        wxHtmlCell *found = FindFirstTerminal(child);
         if ( found )
             return found;
     }
@@ -275,6 +320,23 @@ TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::AppendToPage", "[html][htmlwin
 
     CHECK(m_win->ToText() == "link A new paragraph");
 #endif // wxUSE_CLIPBOARD
+}
+
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::TableCellPadding", "[html][htmlwindow]")
+{
+    m_win->SetPage(TEST_MARKUP_TABLE_PADDING);
+
+    wxHtmlCell * const cell =
+        FindCellById(m_win->GetInternalRepresentation(), "cell");
+    REQUIRE(cell);
+
+    wxHtmlCell * const text = FindFirstTerminal(cell);
+    REQUIRE(text);
+
+    const wxPoint textPos = text->GetAbsPos(cell);
+
+    CHECK(textPos.x > 0);
+    CHECK(textPos.y > 0);
 }
 
 #endif //wxUSE_HTML
