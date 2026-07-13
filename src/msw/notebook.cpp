@@ -1066,8 +1066,7 @@ ExpandSelectedTab(wxRect& rectTab, wxDirection tabOrient)
 // Note that this function relies on the appropriate pen being selected into
 // the DC and uses the current pen for drawing the tab borders.
 void
-DrawNotebookTab(wxWindow* win,
-                wxDC& dc,
+DrawNotebookTab(wxDC& dc,
                 const wxRect& rectOrig,
                 const wxString& label,
                 const wxBitmap& image,
@@ -1080,7 +1079,7 @@ DrawNotebookTab(wxWindow* win,
     {
         dc.SetClippingRegion(ExpandSelectedTab(rectTab, tabOrient));
 
-        colTab = win->GetBackgroundColour();
+        colTab = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
     }
     else // not the selected tab
     {
@@ -1259,7 +1258,7 @@ void wxNotebook::MSWNotebookPaint()
         if ( n == 0 )
             flags |= wxCONTROL_SPECIAL;
 
-        DrawNotebookTab(this, dc, rect,
+        DrawNotebookTab(dc, rect,
                         GetPageText(n),
                         GetImageBitmapFor(this, GetPageImage(n)),
                         tabOrient,
@@ -1276,7 +1275,7 @@ void wxNotebook::MSWNotebookPaint()
         rectTabArea.SetRight(sizeWindow.x);
     else
         rectTabArea.SetBottom(sizeWindow.y);
-    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+    dc.SetBrush(GetBackgroundColour());
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(rectTabArea);
 
