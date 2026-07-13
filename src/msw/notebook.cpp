@@ -1277,36 +1277,37 @@ void wxNotebook::MSWNotebookPaint()
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(rectTabArea);
 
-    // Set colour for tab borders (it's not really the same as menu bar colour,
+    // Set colour for borders (it's not really the same as menu bar colour,
     // but this seems to look acceptable, so use it for now).
     dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-    // Draw the separating line of the tab area.
-    wxPoint ptStart = rectTabArea.GetTopLeft();
-    wxPoint ptEnd = rectTabArea.GetBottomRight();
+    // Draw the body border.
+    wxRect rectBody = GetClientRect();
     switch ( tabOrient )
     {
         case wxTOP:
-            ptStart.y = ptEnd.y;
+            rectBody.y = rectTabArea.height - 1;
+            rectBody.height -= rectBody.y;
             break;
 
         case wxBOTTOM:
-            ptEnd.y = ptStart.y;
+            rectBody.height = rectTabArea.y + 1;
             break;
 
         case wxLEFT:
-            ptStart.x = ptEnd.x;
+            rectBody.x = rectTabArea.width - 1;
+            rectBody.width -= rectBody.x;
             break;
 
         case wxRIGHT:
-            ptEnd.x = ptStart.x;
+            rectBody.width = rectTabArea.x + 1;
             break;
 
         default:
             wxFAIL_MSG("unreachable");
     }
-
-    dc.DrawLine(ptStart, ptEnd);
+    dc.DrawRectangle(rectBody);
 
     // Then draw all the individual tabs.
     for ( size_t n = 0; n < pages; ++n )
