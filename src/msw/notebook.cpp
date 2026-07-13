@@ -1077,7 +1077,7 @@ DrawNotebookTab(wxWindow* win,
     {
         dc.SetClippingRegion(ExpandSelectedTab(rectTab, tabOrient));
 
-        colTab = win->GetBackgroundColour();
+        colTab = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
     }
     else // not the selected tab
     {
@@ -1273,7 +1273,7 @@ void wxNotebook::MSWNotebookPaint()
         rectTabArea.SetRight(sizeWindow.x);
     else
         rectTabArea.SetBottom(sizeWindow.y);
-    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+    dc.SetBrush(GetBackgroundColour());
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(rectTabArea);
 
