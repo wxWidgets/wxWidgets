@@ -1063,8 +1063,7 @@ ExpandSelectedTab(wxRect& rectTab, wxDirection tabOrient)
 // Note that this function relies on the appropriate pen being selected into
 // the DC and uses the current pen for drawing the tab borders.
 void
-DrawNotebookTab(wxWindow* win,
-                wxDC& dc,
+DrawNotebookTab(wxDC& dc,
                 const wxRect& rectOrig,
                 const wxString& label,
                 const wxBitmap& image,
@@ -1256,7 +1255,7 @@ void wxNotebook::MSWNotebookPaint()
         if ( n == 0 )
             flags |= wxCONTROL_SPECIAL;
 
-        DrawNotebookTab(this, dc, rect,
+        DrawNotebookTab(dc, rect,
                         GetPageText(n),
                         GetImageBitmapFor(this, GetPageImage(n)),
                         tabOrient,
