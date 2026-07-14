@@ -1784,6 +1784,8 @@ wxPoint wxTextCtrl::DoPositionToCoords(long pos) const
         LRESULT rc = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, (WPARAM)&pt, pos);
         if ( rc != -1 )
             return wxPoint(pt.x, pt.y);
+
+        return wxDefaultPosition;
     }
     else
 #endif // wxUSE_RICHEDIT
@@ -1852,8 +1854,6 @@ wxPoint wxTextCtrl::DoPositionToCoords(long pos) const
         return wxPoint(static_cast<short>(LOWORD(rc)),
                         static_cast<short>(HIWORD(rc)));
     }
-
-    return wxDefaultPosition;
 }
 
 
@@ -2922,6 +2922,8 @@ void wxTextCtrl::MSWSetRichZoom()
     ::SendMessage(GetHWND(), EM_SETZOOM, (WPARAM)num, (LPARAM)denom);
 }
 
+#endif // wxUSE_RICHEDIT
+
 void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 {
     wxTextCtrlBase::MSWSetDarkOrLightMode(setmode);
@@ -2997,6 +2999,8 @@ void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
     }
 #endif
 }
+
+#if wxUSE_RICHEDIT
 
 void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
