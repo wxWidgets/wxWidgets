@@ -184,12 +184,20 @@ namespace wxMSWImpl
 // don't appear in the SDK headers at all.
 //
 // Note that, not being public, they use C++ bool type and not Win32 BOOL.
+void (WINAPI *gs_RefreshImmersiveColorPolicyState)() = nullptr;
 bool (WINAPI *gs_ShouldAppsUseDarkMode)() = nullptr;
 bool (WINAPI *gs_AllowDarkModeForWindow)(HWND hwnd, bool allow) = nullptr;
 PreferredAppMode (WINAPI *gs_SetPreferredAppMode)(PreferredAppMode appMode) = nullptr;
 
 // Wrappers for the undocumented functions, to make sure we never dereference
 // a null function pointer.
+
+void RefreshImmersiveColorPolicyState()
+{
+    if ( gs_RefreshImmersiveColorPolicyState == nullptr )
+        return;
+    gs_RefreshImmersiveColorPolicyState();
+}
 
 bool ShouldAppsUseDarkMode()
 {
@@ -229,7 +237,8 @@ bool InitDarkMode()
 
     // These functions are not only undocumented but are not even exported by
     // name, and have to be resolved using their ordinals.
-    return TryLoadByOrd(gs_ShouldAppsUseDarkMode, dllUxTheme, 132) &&
+    return TryLoadByOrd(gs_RefreshImmersiveColorPolicyState, dllUxTheme, 104) &&
+           TryLoadByOrd(gs_ShouldAppsUseDarkMode, dllUxTheme, 132) &&
            TryLoadByOrd(gs_AllowDarkModeForWindow, dllUxTheme, 133) &&
            TryLoadByOrd(gs_SetPreferredAppMode, dllUxTheme, 135);
 }
@@ -283,6 +292,11 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
                    "SetPreferredAppMode(%d) unexpectedly returned %d",
                    mode, rc);
     }
+
+    // Update the active state so that ShouldAppsUseDarkMode() called by
+    // wxMSWDarkMode::IsActive() returns the correct value even if no windows
+    // had been created yet.
+    wxMSWImpl::RefreshImmersiveColorPolicyState();
 
     gs_appMode = mode;
     gs_wasActiveOnStartup = wxMSWDarkMode::IsActive();

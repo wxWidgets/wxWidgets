@@ -3556,7 +3556,16 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // Check for the special case of the message which notifies about
             // the colours change.
             if ( wxIsSystemColourChange(lParam) )
-                processed = HandleSysColorChange();
+            {
+                // When switching between light and dark modes, Windows normally
+                // sends two WM_SETTINGCHANGE messages with "ImmersiveColorSet",
+                // one before and one after. Sometimes the second message does not
+                // appear. To guarantee we process at least one system colour
+                // change event after the switch, defer processing this message
+                // until after the switch.
+                ::PostMessage(m_hWnd, WM_SYSCOLORCHANGE, 0, 0);
+                processed = true;
+            }
             else
                 processed = HandleSettingChange(wParam, lParam);
             break;
