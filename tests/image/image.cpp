@@ -3138,7 +3138,7 @@ static wxSize ParseEnvVarAsSize(const wxString& varname)
 // Compute difference between the 2 images by summing up squares of (naively
 // computed, i.e. without any perception-based correction) distances between
 // colours for each pixel.
-static float ComputeImageDiff(const wxImage& img1, const wxImage& img2)
+static double ComputeImageDiff(const wxImage& img1, const wxImage& img2)
 {
     const wxSize size = img1.GetSize();
 
@@ -3155,10 +3155,10 @@ static float ComputeImageDiff(const wxImage& img1, const wxImage& img2)
           p1 != end;
           p1 += 3, p2 += 3 )
     {
-        diff += sqrt(sqr(p1[0] - p2[0]) + sqr(p1[1] - p2[1]) + sqr(p1[2] - p2[2]));
+        diff += sqrtf(sqr(p1[0] - p2[0]) + sqr(p1[1] - p2[1]) + sqr(p1[2] - p2[2]));
     }
 
-    return diff / numPixels;
+    return double(diff / numPixels);
 }
 
 // The purpose of this test is to compute "resize quality" which is defined as
