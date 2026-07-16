@@ -52,6 +52,7 @@ jobs:
                 ':!install-sh' \
                 ':!build/cmake/modules/cotire.cmake' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
+                ':!misc/unictabl/mappings/*.TXT' \
                 ':!samples/widgets/widgets.bkl' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \

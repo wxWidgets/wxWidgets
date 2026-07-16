@@ -255,6 +255,10 @@ Changes in behaviour which may result in build errors
 3.2.12: (released 2026-??-??)
 -----------------------------
 
+All:
+
+- Update Unicode mapping tables to current versions (Scott Talbert, #26700).
+
 All (GUI):
 
 - Always recognize common file types in wxHTML (Richard Thomson, #20967).
