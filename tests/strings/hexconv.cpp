@@ -50,7 +50,7 @@ TEST_CASE("HexConvTestCase", "[string][hexconv]")
 static void DecToHex1()
 {
     // Conversion to wxString
-    for ( int i = 0; i < 256; i++ )
+    for ( unsigned i = 0; i < 256; i++ )
     {
         char szHexStrRef[16];
         sprintf(szHexStrRef, "%02X", i);
@@ -65,7 +65,7 @@ static void DecToHex1()
 static void DecToHex2()
 {
     // Conversion to wxChar string
-    for ( int i = 0; i < 256; i++ )
+    for ( unsigned i = 0; i < 256; i++ )
     {
         char szHexStrRef[16];
         sprintf(szHexStrRef, "%02X", i);
@@ -85,7 +85,7 @@ static void DecToHex2()
 static void DecToHex3()
 {
     // Conversion to 2 characters
-    for ( int i = 0; i < 256; i++ )
+    for ( unsigned i = 0; i < 256; i++ )
     {
         char szHexStrRef[16];
         sprintf(szHexStrRef, "%02X", i);
@@ -105,7 +105,7 @@ static void HexToDec1()
     for ( int i = 0; i < 256; i++ )
     {
         char szHexStr[16];
-        sprintf(szHexStr, "%02X", i);
+        sprintf(szHexStr, "%02X", unsigned(i));
 
         int n = wxHexToDec(szHexStr);
         CHECK(n == i);
@@ -118,7 +118,7 @@ static void HexToDec2()
     for ( int i = 0; i < 256; i++ )
     {
         char szHexStr[16];
-        sprintf(szHexStr, "%02X", i);
+        sprintf(szHexStr, "%02X", unsigned(i));
         wxString hexStr = wxString(szHexStr);
 
         int n = wxHexToDec(hexStr);
