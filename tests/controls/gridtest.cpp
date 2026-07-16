@@ -254,28 +254,6 @@ WaitForEventAt(
 
 } // anonymous namespace
 
-namespace Catch
-{
-
-template <> struct StringMaker<TestableGrid>
-{
-    static std::string convert(const TestableGrid& grid)
-    {
-        return ("Content before edit:\n" + grid.m_beforeGridAnnotated
-                + "\nContent after edit:\n" + grid.ToString()).ToStdString();
-    }
-};
-
-template <> struct StringMaker<Multicell>
-{
-    static std::string convert(const Multicell& multi)
-    {
-        return multi.ToString().ToStdString();
-    }
-};
-
-} // namespace Catch
-
 class GridTestCase
 {
 public:
