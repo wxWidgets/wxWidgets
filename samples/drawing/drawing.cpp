@@ -1156,7 +1156,7 @@ void MyCanvas::DrawText(wxDC& dc)
 #ifdef __WXMSW__
                                    " (only when using Direct2D)"
 #endif
-                                   ": \U0001F60A"), dc.FromDIP(400), y);
+                                   ": \xF0\x9F\x98\x8A"), dc.FromDIP(400), y);
 }
 
 static const struct
