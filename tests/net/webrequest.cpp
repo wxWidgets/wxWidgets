@@ -1148,7 +1148,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         return;
     }
 
-    Create("redirect-to?url=post&status_code=307");
+    Create("redirect-to?url=/post&status_code=307");
     request.SetData("app=WebRequestRedirect&version=1", "application/x-www-form-urlencoded");
     REQUIRE( Execute() );
     CHECK( response.GetStatus() == 200 );
@@ -1226,7 +1226,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Password after redirect")
     {
-        Create("redirect-to?url=basic-auth/wxtest/wxwidgets");
+        Create("redirect-to?url=/basic-auth/wxtest/wxwidgets");
         request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
 
         CHECK( Execute() );
