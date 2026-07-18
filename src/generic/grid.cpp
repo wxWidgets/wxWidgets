@@ -2928,10 +2928,6 @@ wxGrid::~wxGrid()
 // ----- internal init and update functions
 //
 
-// NOTE: If using the default visual attributes works everywhere then this can
-// be removed as well as the #else cases below.
-#define _USE_VISATTR 0
-
 void wxGrid::Create()
 {
     // create the type registry
@@ -2950,19 +2946,10 @@ void wxGrid::Create()
     m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
     m_defaultCellAttr->SetFitMode(wxGridFitMode::Overflow());
 
-#if _USE_VISATTR
-    wxVisualAttributes gva = wxListBox::GetClassDefaultAttributes();
-    wxVisualAttributes lva = wxPanel::GetClassDefaultAttributes();
-
-    m_defaultCellAttr->SetTextColour(gva.colFg);
-    m_defaultCellAttr->SetBackgroundColour(gva.colBg);
-
-#else
     m_defaultCellAttr->SetTextColour(
         wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     m_defaultCellAttr->SetBackgroundColour(
         wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-#endif
 
     m_numRows = 0;
     m_numCols = 0;
@@ -2978,17 +2965,10 @@ void wxGrid::Create()
 
     SetTargetWindow( m_gridWin );
 
-#if _USE_VISATTR
-    wxColour gfg = gva.colFg;
-    wxColour gbg = gva.colBg;
-    wxColour lfg = lva.colFg;
-    wxColour lbg = lva.colBg;
-#else
     wxColour gfg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     wxColour gbg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
     wxColour lfg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     wxColour lbg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
-#endif
 
     m_cornerLabelWin->SetOwnForegroundColour(lfg);
     m_cornerLabelWin->SetOwnBackgroundColour(lbg);
