@@ -168,11 +168,7 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
 {
     GtkEntry *entry = GTK_ENTRY (editable);
 
-#if GTK_CHECK_VERSION(3,0,0) || defined(GSEAL_ENABLE)
-    const int text_max_length = gtk_entry_buffer_get_max_length(gtk_entry_get_buffer(entry));
-#else
-    const int text_max_length = entry->text_max_length;
-#endif
+    const int text_max_length = gtk_entry_get_max_length(entry);
 
     bool handled = false;
 
