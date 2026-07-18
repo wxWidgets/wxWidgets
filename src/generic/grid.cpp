@@ -2865,6 +2865,7 @@ wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_DPI_CHANGED( wxGrid::OnDPIChanged )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
     EVT_CHAR ( wxGrid::OnChar )
+    EVT_SYS_COLOUR_CHANGED(wxGrid::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 bool wxGrid::Create(wxWindow *parent, wxWindowID id,
@@ -2946,11 +2947,6 @@ void wxGrid::Create()
     m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
     m_defaultCellAttr->SetFitMode(wxGridFitMode::Overflow());
 
-    m_defaultCellAttr->SetTextColour(
-        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_defaultCellAttr->SetBackgroundColour(
-        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-
     m_numRows = 0;
     m_numCols = 0;
     m_numFrozenRows = 0;
@@ -2965,23 +2961,7 @@ void wxGrid::Create()
 
     SetTargetWindow( m_gridWin );
 
-    wxColour gfg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-    wxColour gbg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-    wxColour lfg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-    wxColour lbg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
-
-    m_cornerLabelWin->SetOwnForegroundColour(lfg);
-    m_cornerLabelWin->SetOwnBackgroundColour(lbg);
-    m_rowLabelWin->SetOwnForegroundColour(lfg);
-    m_rowLabelWin->SetOwnBackgroundColour(lbg);
-    m_colLabelWin->SetOwnForegroundColour(lfg);
-    m_colLabelWin->SetOwnBackgroundColour(lbg);
-
-    m_gridWin->SetOwnForegroundColour(gfg);
-    m_gridWin->SetOwnBackgroundColour(gbg);
-
-    m_labelBackgroundColour = m_rowLabelWin->GetBackgroundColour();
-    m_labelTextColour = m_rowLabelWin->GetForegroundColour();
+    UpdateColours();
 
     InitPixelFields();
 
@@ -6259,6 +6239,47 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
     event.Skip();
 }
 
+void wxGrid::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    UpdateColours();
+    event.Skip();
+}
+
+void wxGrid::UpdateColours()
+{
+    auto windowText = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+
+    if ( !m_hasUserCellBg )
+    {
+        auto window = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+        m_defaultCellAttr->SetBackgroundColour(window);
+        m_gridWin->SetBackgroundColour(window);
+    }
+
+    if ( !m_hasUserCellFg )
+    {
+        m_defaultCellAttr->SetTextColour(windowText);
+        m_gridWin->SetForegroundColour(windowText);
+    }
+
+    if ( !m_hasUserLabelBg )
+    {
+        auto btnFace = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+        m_labelBackgroundColour = btnFace;
+        m_cornerLabelWin->SetBackgroundColour(btnFace);
+        m_rowLabelWin->SetBackgroundColour(btnFace);
+        m_colLabelWin->SetBackgroundColour(btnFace);
+    }
+
+    if ( !m_hasUserLabelFg )
+    {
+        m_labelTextColour = windowText;
+        m_cornerLabelWin->SetForegroundColour(windowText);
+        m_rowLabelWin->SetForegroundColour(windowText);
+        m_colLabelWin->SetForegroundColour(windowText);
+    }
+}
+
 void wxGrid::OnKeyDown( wxKeyEvent& event )
 {
     // propagate the event up and see if it gets processed
@@ -9352,6 +9373,7 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
             RefreshArea(wxGA_Labels);
         }
     }
+    m_hasUserLabelBg = true;
 }
 
 void wxGrid::SetLabelTextColour( const wxColour& colour )
@@ -9368,6 +9390,7 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
             RefreshArea(wxGA_Labels);
         }
     }
+    m_hasUserLabelFg = true;
 }
 
 void wxGrid::SetLabelFont( const wxFont& font )
@@ -9727,11 +9750,13 @@ void wxGrid::SetDefaultCellBackgroundColour( const wxColour& col )
 #if defined(__WXGTK__) || defined(__WXQT__)
     m_gridWin->SetBackgroundColour(col);
 #endif
+    m_hasUserCellBg = true;
 }
 
 void wxGrid::SetDefaultCellTextColour( const wxColour& col )
 {
     m_defaultCellAttr->SetTextColour(col);
+    m_hasUserCellFg = true;
 }
 
 void wxGrid::SetDefaultCellAlignment( int horiz, int vert )
