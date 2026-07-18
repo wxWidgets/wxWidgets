@@ -101,13 +101,14 @@ void wxGTKCairoDCImpl::DoDrawText(const wxString& text, int x, int y)
         return;
     }
 
-    int w, h;
-    DoGetTextExtent(text, &w, &h);
+    const bool yInverted = m_signY < 0;
+    int w = 0, h = 0;
+    if (xInverted || yInverted || AreAutomaticBoundingBoxUpdatesEnabled())
+        DoGetTextExtent(text, &w, &h);
 
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
-    const bool yInverted = m_signY < 0;
     if (xInverted || yInverted)
         m_graphicContext->PushState();
     if (xInverted)
