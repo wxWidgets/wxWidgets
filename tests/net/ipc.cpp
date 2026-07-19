@@ -459,15 +459,6 @@ private:
 // connect attempt is time-bounded (wxIPCTimeout, see wxTCPClient::MakeConnection)
 // so a not-yet-ready server fails the attempt promptly and the readiness poll
 // below retries, rather than blocking on the socket's long default timeout.)
-// The re-exec'd server process is much slower to become ready under
-// sanitizers (instrumented startup plus full toolkit init), so use a longer
-// readiness bound there to avoid a spurious REQUIRE(serverReady) failure.
-#if defined(__SANITIZE_ADDRESS__) || defined(__SANITIZE_THREAD__) || \
-    WX_HAS_CLANG_FEATURE(address_sanitizer) || WX_HAS_CLANG_FEATURE(thread_sanitizer)
-static constexpr int gs_serverReadyTimeoutMs = 120000;
-#else
-static constexpr int gs_serverReadyTimeoutMs = 30000;
-#endif
 
 class IPCFixture
 {
@@ -536,7 +527,10 @@ public:
         // not-yet-ready server fails promptly and we retry rather than blocking.
         bool serverReady = false;
         wxStopWatch sw;
-        while ( !serverReady && sw.Time() < gs_serverReadyTimeoutMs )
+
+        // Make the timeout big enough to give the server the time to start up
+        // even when sanitizers are enabled (which makes startup much slower).
+        while ( !serverReady && sw.Time() < 120000 )
         {
             if ( gs_client->Connect("localhost", IPC_TEST_PORT, IPC_TEST_TOPIC) )
             {
