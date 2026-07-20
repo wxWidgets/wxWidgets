@@ -79,6 +79,7 @@ if(WXMSW)
             src/winui/checkbox.cpp
             src/winui/checklst.cpp
             src/winui/clrpicker.cpp
+            src/winui/colordlg.cpp
             src/winui/datectrl.cpp
             src/winui/choice.cpp
             src/winui/combobox.cpp
