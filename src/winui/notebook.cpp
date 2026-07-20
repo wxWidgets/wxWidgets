@@ -161,6 +161,9 @@ bool wxNotebook::InsertPage(size_t nPage,
     m_winui->items.insert(m_winui->items.begin() + nPage, item);
     m_winui->markers.insert(m_winui->markers.begin() + nPage, marker);
 
+    if ( imageId != NO_IMAGE )
+        UpdateTabIcon(nPage);
+
     // The page is hidden until it becomes the selected one.
     pPage->Show(false);
     pPage->SetSize(GetPageRect());
@@ -322,9 +325,45 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
     wxCHECK_MSG( nPage < m_pageImages.GetCount(), false, wxT("invalid notebook page") );
 
-    // Images are stored but not yet rendered as TabView icons.
     m_pageImages[nPage] = nImage;
+    UpdateTabIcon(nPage);
     return true;
+}
+
+void wxNotebook::UpdateTabIcon(size_t nPage)
+{
+    if ( !m_winui || nPage >= m_winui->items.size() )
+        return;
+
+    try
+    {
+        auto& item = m_winui->items[nPage];
+
+        const int imageId = m_pageImages[nPage];
+        wxBitmap bmp;
+        if ( imageId != NO_IMAGE )
+            bmp = GetImageBitmapFor(this, imageId);
+
+        if ( bmp.IsOk() )
+        {
+            if ( auto source = wxWinUIWriteableBitmapFromBitmap(bmp) )
+            {
+                MUXC::ImageIconSource icon;
+                icon.ImageSource(source);
+                item.IconSource(icon);
+            }
+        }
+        else
+        {
+            item.IconSource(nullptr);
+        }
+
+        m_winui->host.ForceRender();
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TabView page icon", e);
+    }
 }
 
 void wxNotebook::SetPadding(const wxSize& WXUNUSED(padding))

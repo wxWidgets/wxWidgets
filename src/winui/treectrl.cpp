@@ -338,6 +338,7 @@ void wxTreeCtrl::SetStateImages(const wxVector<wxBitmapBundle>& images)
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
 {
     wxWithImages::SetImageList(imageList);
+    RefreshPeerItems();
 }
 
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)

@@ -90,6 +90,9 @@ protected:
     bool m_updating = false;
 
 private:
+    // Render the page's image-list icon (if any) on its TabViewItem.
+    void UpdateTabIcon(size_t nPage);
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook);
 };
 
