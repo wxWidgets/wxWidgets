@@ -2399,7 +2399,7 @@ void wxTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         // Draw each character one at a time. This mimics the line spacing,
         // character spacing, and word wrap layout.
-        for (long pos = start; pos < text.length(); pos++)
+        for (long pos = start; pos < (long)text.length(); pos++)
         {
             wxPoint pt = PositionToCoords(pos);
             if ( pt.y > rect.height )
