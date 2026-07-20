@@ -156,8 +156,9 @@ public:
 // Install the Fluent renderer; called once from wxWinUI3Initialize().
 void wxWinUIInstallRenderer()
 {
-    static wxRendererWinUI s_renderer;
-    wxRendererNative::Set(&s_renderer);
+    // wxRendererNative takes ownership of the pointer and deletes it during
+    // the library cleanup, so it must be heap-allocated.
+    wxRendererNative::Set(new wxRendererWinUI);
 }
 
 #endif // wxUSE_WINUI3
