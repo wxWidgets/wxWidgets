@@ -138,3 +138,47 @@ Bring the already-rendering controls up to the **button's level of API
 integration** — i.e. make every parameter on their `widgets.exe` page behave
 exactly like the Win32 version. Suggested order (most-used first): checkbox,
 radio button/box, choice/combobox, slider, gauge, text ctrl, then the pickers.
+
+---
+
+## Update — 2026-07-20 implementation pass
+
+Landed since the review plan (untested — needs a full build + widgets.exe
+pass):
+
+- **Hygiene**: `wxUSE_WINUI3` documented in `setup.h` + defaulted/validated in
+  `chkconf.h`; debug logging gated behind `wxUSE_WINUI3_DEBUG_LOG` (default 0);
+  duplicated dialog helpers factored into `private.h`
+  (`wxWinUIRemoveMnemonics`, `wxWinUISetDialogText`, shared
+  `wxWinUIChoiceImpl`); dead code removed (radiobox ternary, statbar
+  `RefreshAllFields`); menubar radio-group name collision fixed.
+- **wxComboBox**: rewritten on top of wxChoice — editable text via inner
+  TextBox (`TextProperty` callback), correct `wxEVT_COMBOBOX` + `wxEVT_TEXT`
+  ordering, `wxEVT_TEXT_ENTER`, clipboard/undo forwarding, `Popup/Dismiss`,
+  style handling.
+- **wxSlider**: full `wxEVT_SCROLL_*` family (THUMBTRACK, THUMBRELEASE,
+  CHANGED), line/page size mapped to Small/LargeChange.
+- **wxTextCtrl**: real caret/selection tracking (SelectionChanged),
+  `wxEVT_TEXT_MAXLEN`, `DoPositionToCoords`.
+- **Quick wins**: spinctrl digits formatting + `wxEVT_TEXT`; search ctrl
+  `wxEVT_SEARCH_CANCEL`; statline theme divider brush; timectrl locale
+  12/24h; hyperlink custom colours; bitmap toggle button content; notebook
+  tab icons; treectrl icons refresh on `SetImageList`.
+- **Dialogs**: wxMessageDialog/wxTextEntryDialog made app-modal
+  (`wxWindowDisabler`); **new wxColourDialog** (ContentDialog + ColorPicker,
+  `wxEVT_COLOUR_CHANGED`, alpha support) replacing the Win32 common dialog.
+- **wxTreeCtrl**: real hit-test/bounding rect from realized containers,
+  right-click (`ITEM_RIGHT_CLICK`/`ITEM_MENU`), `wxEVT_TREE_KEY_DOWN`,
+  in-place label editing (`EditLabel` + BEGIN/END events).
+- **Popup menus**: `wxWindow::PopupMenu` now shows a WinUI `MenuFlyout`
+  (transient island + nested loop, TrackPopupMenu-like deferred command
+  dispatch, MENU_OPEN/CLOSE) with Win32 fallback.
+- **Small gaps**: gauge `wxGA_VERTICAL`; datepicker `wxDP_ALLOWNONE`;
+  calendar first-day-of-week + `DOUBLECLICKED`; listbox
+  `GetTopItem`/`GetCountPerPage`/`EnsureVisible`; colour picker button
+  `wxCLRP_SHOW_LABEL`.
+
+Still open (next priorities): toolbar → CommandBar, list/table family
+(`wxListCtrl`/`wxHeaderCtrl`/`wxDataViewCtrl`), font/find-replace dialogs,
+search ctrl menu, tree drag & drop, scrollbar skinning, UIA accessibility,
+`WM_DPICHANGED`, RTL, CI for the winui toolkit.
