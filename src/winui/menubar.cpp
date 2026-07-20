@@ -26,6 +26,7 @@
 #include "private.h"
 
 #include <memory>
+#include <winrt/Microsoft.UI.Dispatching.h>
 #include <winrt/Windows.Foundation.h>
 
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;

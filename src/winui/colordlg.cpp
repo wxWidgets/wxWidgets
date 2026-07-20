@@ -17,10 +17,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/colordlg.h"
     #include "wx/intl.h"
     #include "wx/utils.h"
 #endif
+
+// Not part of wx/wx.h, so include it explicitly even with precompiled headers.
+#include "wx/colordlg.h"
 
 #include "wx/evtloop.h"
 #include "wx/modalhook.h"
@@ -65,42 +67,13 @@ int wxColourDialog::ShowModal()
 
     try
     {
-        using namespace winrt::Microsoft::UI;
-        using namespace winrt::Microsoft::UI::Content;
-        using namespace winrt::Microsoft::UI::Xaml;
         using namespace winrt::Microsoft::UI::Xaml::Controls;
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
-        using namespace winrt::Windows::Foundation;
 
-        DesktopWindowXamlSource source;
-        const auto windowId = GetWindowIdFromWindow(hwndParent);
-        source.Initialize(windowId);
-        source.SiteBridge().ResizePolicy(ContentSizePolicy::ResizeContentToParentWindow);
-
-        const HWND hwndBridge = GetWindowFromWindowId(source.SiteBridge().WindowId());
-        ::SetWindowLongPtr
-        (
-            hwndBridge,
-            GWL_STYLE,
-            ::GetWindowLongPtr(hwndBridge, GWL_STYLE) |
-                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
-        );
-        ::SetWindowPos(hwndBridge, HWND_TOP, 0, 0, 0, 0,
-                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
-
-        Grid root;
-        root.RequestedTheme(wxWinUIGetCurrentElementTheme());
-        source.Content(root);
-
-        if ( !root.XamlRoot() )
-        {
-            source.Close();
+        wxWinUIDialogIsland island;
+        if ( !island.Create(parent) )
             return wxID_CANCEL;
-        }
 
-        ContentDialog dialog;
-        dialog.XamlRoot(root.XamlRoot());
-        dialog.RequestedTheme(wxWinUIGetCurrentElementTheme());
+        ContentDialog dialog = island.CreateDialog();
         dialog.Title(winrt::box_value(wxWinUIToHString(
             m_title.empty() ? wxString(_("Choose colour")) : m_title)));
         dialog.DefaultButton(ContentDialogButton::Primary);
@@ -136,37 +109,7 @@ int wxColourDialog::ShowModal()
 
         dialog.Content(picker);
 
-        ContentDialogResult dialogResult = ContentDialogResult::None;
-        bool done = false;
-        bool loopIsRunning = false;
-        wxEventLoop* loopRunning = nullptr;
-
-        // Behave app-modally: block the other top-level windows while the
-        // dialog is up (the parent hosts the island and must stay enabled).
-        wxWindowDisabler disabler(parent);
-
-        auto operation = dialog.ShowAsync();
-        operation.Completed(
-            [&](IAsyncOperation<ContentDialogResult> const& async,
-                AsyncStatus status)
-            {
-                if ( status == AsyncStatus::Completed )
-                    dialogResult = async.GetResults();
-
-                done = true;
-                if ( loopRunning && loopIsRunning )
-                    loopRunning->Exit();
-            });
-
-        wxEventLoop loop;
-        loopRunning = &loop;
-        if ( !done )
-        {
-            loopIsRunning = true;
-            loop.Run();
-            loopIsRunning = false;
-        }
-        loopRunning = nullptr;
+        const ContentDialogResult dialogResult = island.ShowDialog(dialog);
 
         wxColour chosen;
         if ( dialogResult == ContentDialogResult::Primary )
@@ -175,7 +118,7 @@ int wxColourDialog::ShowModal()
             chosen = wxColour(c.R, c.G, c.B, c.A);
         }
 
-        source.Close();
+        island.Close();
 
         if ( chosen.IsOk() )
         {

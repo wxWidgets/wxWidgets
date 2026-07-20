@@ -126,14 +126,13 @@
 #endif  /* wxUSE_WINSOCK2 */
 
 /* wxUSE_WINUI3 is a recent addition, default it instead of erroring out so
-   that existing user setup.h files keep working. */
+   that existing user setup.h files keep working.  Note that it can be
+   defined without __WXWINUI__ in the non-GUI parts of the build (which only
+   get the platform defines, not the toolkit ones), so don't check for any
+   particular combination of the two here. */
 #ifndef wxUSE_WINUI3
 #   define wxUSE_WINUI3 0
 #endif /* wxUSE_WINUI3 */
-
-#if wxUSE_WINUI3 && !defined(__WXWINUI__)
-#   error "wxUSE_WINUI3 requires building with the winui toolkit (__WXWINUI__)"
-#endif
 
 #ifndef wxUSE_REGKEY
 #    ifdef wxABORT_ON_CONFIG_ERROR
