@@ -396,6 +396,9 @@ MUXC::Grid wxWinUIMakeCommandLink(wxWindow *win,
     leading.HorizontalAlignment(MUX::HorizontalAlignment::Center);
     MUX::Thickness iconMargin{};
     iconMargin.Right = win->FromDIP(4);
+    // Nudge the 16px icon down so it lines up with the vertical centre of the
+    // (taller) main title line rather than its top.
+    iconMargin.Top = win->FromDIP(2);
     leading.Margin(iconMargin);
     MUXC::Grid::SetColumn(leading, 0);
     grid.Children().Append(leading);
@@ -804,10 +807,13 @@ wxSize wxButton::DoGetBestSize() const
 
         wxSize best;
         best.x = wxMax(titleSize.x, noteSize.x) + FromDIP(8 + 16 + 4 + 10);
-        best.y = titleSize.y + noteSize.y + FromDIP(10);
+        // GetTextExtent() uses the classic (smaller) GDI font, but the command
+        // link renders with the larger WinUI font, so add generous vertical
+        // headroom (plus the content padding) to avoid clipping the note line.
+        best.y = titleSize.y + noteSize.y + FromDIP(20);
 
         if ( !HasFlag(wxBU_EXACTFIT) )
-            best.IncTo(wxSize(defaultSize.x + FromDIP(40), FromDIP(40)));
+            best.IncTo(wxSize(defaultSize.x + FromDIP(40), FromDIP(50)));
 
         return best;
     }
@@ -1169,9 +1175,9 @@ void wxButton::UpdateWinUIAppearance()
         {
             MUX::Thickness padding{};
             padding.Left = FromDIP(8);
-            padding.Top = FromDIP(5);
+            padding.Top = FromDIP(7);
             padding.Right = FromDIP(10);
-            padding.Bottom = FromDIP(5);
+            padding.Bottom = FromDIP(8);
             m_winui->button.Padding(padding);
         }
         else

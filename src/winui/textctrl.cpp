@@ -12,6 +12,11 @@
 #if wxUSE_TEXTCTRL
 
 #include "wx/textctrl.h"
+#include "wx/winui/winui.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/font.h"
+#endif
 
 #include "wx/arrstr.h"
 #include "wx/clipbrd.h"
@@ -19,13 +24,18 @@
 
 #include "private.h"
 
-class wxWinUITextCtrlImpl
-{
-public:
-    wxWinUIControlHost host;
-    winrt::Microsoft::UI::Xaml::Controls::TextBox textBox{ nullptr };
-    winrt::event_token textChangedToken{};
-};
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif
+
+#include <winrt/Microsoft.UI.Text.h>
+#include <winrt/Windows.UI.Text.h>
+
+#include <cmath>
+#include <limits>
+
+namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
 namespace
 {
@@ -39,7 +49,72 @@ long wxWinUIClampTextPos(long pos, long len)
     return pos;
 }
 
+// Apply a wxFont to a WinUI Control; no-op for an invalid font.
+void wxWinUIApplyControlFont(const MUXC::Control& control, const wxFont& font)
+{
+    if ( !control || !font.IsOk() )
+        return;
+
+    const wxString face = font.GetFaceName();
+    if ( !face.empty() )
+        control.FontFamily(
+            winrt::Microsoft::UI::Xaml::Media::FontFamily(wxWinUIToHString(face)));
+
+    const double pt = font.GetFractionalPointSize();
+    control.FontSize(pt > 0.0 ? pt * 96.0 / 72.0 : 14.0);
+    control.FontWeight(font.GetNumericWeight() >= wxFONTWEIGHT_BOLD
+        ? winrt::Microsoft::UI::Text::FontWeights::Bold()
+        : winrt::Microsoft::UI::Text::FontWeights::Normal());
+    control.FontStyle(font.GetStyle() == wxFONTSTYLE_NORMAL
+        ? winrt::Windows::UI::Text::FontStyle::Normal
+        : winrt::Windows::UI::Text::FontStyle::Italic);
+}
+
 } // namespace
+
+// A wxTextCtrl is backed by a WinUI TextBox, except for password fields which
+// use a PasswordBox (the TextBox has no masking).  The impl hides the
+// difference behind a few small accessors.
+class wxWinUITextCtrlImpl
+{
+public:
+    wxWinUIControlHost host;
+    MUXC::TextBox textBox{ nullptr };
+    MUXC::PasswordBox passwordBox{ nullptr };
+    winrt::event_token changedToken{};
+    winrt::event_token keyDownToken{};
+
+    MUXC::Control control() const
+    {
+        if ( passwordBox )
+            return passwordBox;
+        return textBox;
+    }
+
+    MUX::UIElement element() const
+    {
+        if ( passwordBox )
+            return passwordBox;
+        return textBox;
+    }
+
+    wxString GetText() const
+    {
+        if ( passwordBox )
+            return wxWinUIFromHString(passwordBox.Password());
+        if ( textBox )
+            return wxWinUIFromHString(textBox.Text());
+        return wxString();
+    }
+
+    void SetText(const wxString& s)
+    {
+        if ( passwordBox )
+            passwordBox.Password(wxWinUIToHString(s));
+        else if ( textBox )
+            textBox.Text(wxWinUIToHString(s));
+    }
+};
 
 wxTextCtrl::wxTextCtrl()
     : m_insertionPoint(0),
@@ -76,8 +151,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
-    // The WinUI TextBox draws its own border, so suppress the native control
-    // border to avoid an extra grey frame around the island.
+    // The WinUI control draws its own border, so suppress the native one.
     style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
 
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
@@ -92,38 +166,101 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( !m_winui->host.Initialize(this) )
         return false;
 
+    const bool password = (style & wxTE_PASSWORD) != 0;
+    const bool multiline = (style & wxTE_MULTILINE) != 0;
+
     try
     {
-        m_winui->textBox = winrt::Microsoft::UI::Xaml::Controls::TextBox();
-        m_winui->textBox.AcceptsReturn((style & wxTE_MULTILINE) != 0);
-        m_winui->textBox.TextWrapping(
-            (style & wxTE_DONTWRAP)
-                ? winrt::Microsoft::UI::Xaml::TextWrapping::NoWrap
-                : winrt::Microsoft::UI::Xaml::TextWrapping::Wrap);
-        m_winui->textBox.IsReadOnly(!m_editable);
+        if ( password )
+        {
+            m_winui->passwordBox = MUXC::PasswordBox();
+            m_winui->changedToken = m_winui->passwordBox.PasswordChanged(
+                [this](winrt::Windows::Foundation::IInspectable const&,
+                       MUX::RoutedEventArgs const&)
+                {
+                    if ( !m_winui || m_updatingPeer )
+                        return;
+                    m_value = m_winui->GetText();
+                    m_insertionPoint = m_value.length();
+                    m_selectionStart = m_selectionEnd = m_insertionPoint;
+                    m_modified = true;
+                    SendTextEvent();
+                });
+        }
+        else
+        {
+            MUXC::TextBox textBox;
+            textBox.AcceptsReturn(multiline);
 
-        m_winui->textChangedToken = m_winui->textBox.TextChanged(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   winrt::Microsoft::UI::Xaml::Controls::TextChangedEventArgs const&)
-            {
-                if ( !m_winui || m_updatingPeer )
-                    return;
+            // Wrap style (only meaningful for multiline).  Note: a TextBox only
+            // supports NoWrap and Wrap -- WrapWholeWords is TextBlock-only and
+            // throws E_INVALIDARG here, so all wx wrap styles map to Wrap.
+            textBox.TextWrapping(
+                (multiline && !(style & wxTE_DONTWRAP))
+                    ? MUX::TextWrapping::Wrap
+                    : MUX::TextWrapping::NoWrap);
 
-                m_value = wxWinUIFromHString(m_winui->textBox.Text());
-                m_insertionPoint = m_value.length();
-                m_selectionStart = m_selectionEnd = m_insertionPoint;
-                m_modified = true;
-                SendTextEvent();
-            });
+            // Alignment.
+            if ( style & wxTE_RIGHT )
+                textBox.TextAlignment(MUX::TextAlignment::Right);
+            else if ( style & wxTE_CENTRE )
+                textBox.TextAlignment(MUX::TextAlignment::Center);
+            else
+                textBox.TextAlignment(MUX::TextAlignment::Left);
 
-        // Text insertion is owned by the native WinUI TextBox; m_value is kept
-        // in sync from TextChanged above.  Do NOT insert characters manually
-        // from a KeyDown handler -- doing so double-inserts layout-dependent
-        // keys (e.g. '(', '&', ''' on AZERTY) and triggers the Windows error
-        // beep because the key message ends up handled twice.
+            textBox.IsReadOnly(!m_editable);
+
+            // NB: do NOT set ScrollViewer.VerticalScrollBarVisibility on the
+            // TextBox here -- doing so on a multiline TextBox hosted in a XAML
+            // island crashes/deadlocks the island.  The multiline TextBox shows
+            // its scrollbar automatically; wxTE_NO_VSCROLL is not honoured for
+            // now (to be revisited).
+
+            m_winui->textBox = textBox;
+            m_winui->changedToken = textBox.TextChanged(
+                [this](winrt::Windows::Foundation::IInspectable const&,
+                       MUXC::TextChangedEventArgs const&)
+                {
+                    if ( !m_winui || m_updatingPeer )
+                        return;
+                    m_value = m_winui->GetText();
+                    m_insertionPoint = m_value.length();
+                    m_selectionStart = m_selectionEnd = m_insertionPoint;
+                    m_modified = true;
+                    SendTextEvent();
+                });
+        }
+
+        if ( m_maxLength )
+        {
+            if ( m_winui->textBox )
+                m_winui->textBox.MaxLength(static_cast<int32_t>(m_maxLength));
+            else if ( m_winui->passwordBox )
+                m_winui->passwordBox.MaxLength(static_cast<int32_t>(m_maxLength));
+        }
+
+        // wxTE_PROCESS_ENTER: report Enter as wxEVT_TEXT_ENTER.
+        if ( style & wxTE_PROCESS_ENTER )
+        {
+            m_winui->keyDownToken = m_winui->element().KeyDown(
+                [this](winrt::Windows::Foundation::IInspectable const&,
+                       MUX::Input::KeyRoutedEventArgs const& args)
+                {
+                    if ( args.Key() != winrt::Windows::System::VirtualKey::Enter )
+                        return;
+
+                    wxCommandEvent event(wxEVT_TEXT_ENTER, GetId());
+                    event.SetEventObject(this);
+                    event.SetString(m_value);
+                    if ( GetEventHandler()->ProcessEvent(event) )
+                        args.Handled(true);
+                });
+        }
 
         ApplyValueToPeer();
-        m_winui->host.SetContent(m_winui->textBox);
+        UpdateWinUIAppearance();
+        ApplyToolTip();
+        m_winui->host.SetContent(m_winui->element());
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -131,6 +268,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         return false;
     }
 
+    SetInitialSize(size);
     return true;
 }
 
@@ -236,20 +374,24 @@ void wxTextCtrl::Paste()
 
 void wxTextCtrl::Undo()
 {
+    if ( m_winui && m_winui->textBox )
+        m_winui->textBox.Undo();
 }
 
 void wxTextCtrl::Redo()
 {
+    if ( m_winui && m_winui->textBox )
+        m_winui->textBox.Redo();
 }
 
 bool wxTextCtrl::CanUndo() const
 {
-    return false;
+    return m_winui && m_winui->textBox && m_winui->textBox.CanUndo();
 }
 
 bool wxTextCtrl::CanRedo() const
 {
-    return false;
+    return m_winui && m_winui->textBox && m_winui->textBox.CanRedo();
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
@@ -319,6 +461,8 @@ void wxTextCtrl::SetMaxLength(unsigned long len)
     m_maxLength = len;
     if ( m_winui && m_winui->textBox )
         m_winui->textBox.MaxLength(static_cast<int32_t>(len));
+    else if ( m_winui && m_winui->passwordBox )
+        m_winui->passwordBox.MaxLength(static_cast<int32_t>(len));
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
@@ -418,6 +562,17 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& WXUNUSED(pt), long *p
     return wxTE_HT_UNKNOWN;
 }
 
+void wxTextCtrl::DoEnable(bool enable)
+{
+    wxControl::DoEnable(enable);
+
+    if ( m_winui && m_winui->control() )
+    {
+        m_winui->control().IsEnabled(enable);
+        m_winui->host.ForceRender();
+    }
+}
+
 void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 {
     m_value = value;
@@ -445,27 +600,144 @@ wxPoint wxTextCtrl::DoPositionToCoords(long WXUNUSED(pos)) const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    // A WinUI TextBox needs a bit more than the classic 32px height for its
-    // text not to be clipped by the control's internal padding.
-    return wxWindow::FromDIP(IsMultiLine() ? wxSize(240, 96) : wxSize(180, 40),
-                             const_cast<wxTextCtrl *>(this));
+    if ( IsMultiLine() )
+        return wxWindow::FromDIP(wxSize(180, 90), const_cast<wxTextCtrl *>(this));
+
+    // Single line: use the WinUI control's own (smaller) natural height instead
+    // of a hard-coded, too-tall value.
+    int height = FromDIP(32);
+    if ( m_winui && m_winui->control() )
+    {
+        try
+        {
+            const float inf = std::numeric_limits<float>::infinity();
+            m_winui->control().Measure({ inf, inf });
+            const auto desired = m_winui->control().DesiredSize();
+            if ( desired.Height > 0 )
+                height = static_cast<int>(std::ceil(desired.Height));
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+    }
+
+    return wxSize(FromDIP(120), height);
 }
 
 void wxTextCtrl::ApplyValueToPeer()
 {
-    if ( !m_winui || !m_winui->textBox )
+    if ( !m_winui )
         return;
 
     m_updatingPeer = true;
-    m_winui->textBox.Text(wxWinUIToHString(m_value));
-    m_winui->textBox.SelectionStart(static_cast<int32_t>(m_selectionStart));
-    const long selectionLength = m_selectionEnd > m_selectionStart
-        ? m_selectionEnd - m_selectionStart
-        : m_selectionStart - m_selectionEnd;
-    m_winui->textBox.SelectionLength(static_cast<int32_t>(selectionLength));
+    try
+    {
+        m_winui->SetText(m_value);
+
+        // Selection only applies to the TextBox (PasswordBox has no API).
+        if ( m_winui->textBox )
+        {
+            m_winui->textBox.SelectionStart(static_cast<int32_t>(m_selectionStart));
+            const long selectionLength = m_selectionEnd > m_selectionStart
+                ? m_selectionEnd - m_selectionStart
+                : m_selectionStart - m_selectionEnd;
+            m_winui->textBox.SelectionLength(static_cast<int32_t>(selectionLength));
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TextBox value", e);
+    }
     m_updatingPeer = false;
     m_winui->host.ForceRender();
 }
+
+void wxTextCtrl::UpdateWinUIAppearance()
+{
+    if ( !m_winui || !m_winui->control() )
+        return;
+
+    try
+    {
+        const MUXC::Control control = m_winui->control();
+
+        if ( m_hasFont )
+            wxWinUIApplyControlFont(control, GetFont());
+        else
+            control.ClearValue(MUXC::Control::FontSizeProperty());
+
+        if ( UseForegroundColour() )
+        {
+            const wxColour& c = GetForegroundColour();
+            control.Foreground(wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
+        }
+        else
+        {
+            control.ClearValue(MUXC::Control::ForegroundProperty());
+        }
+
+        if ( UseBackgroundColour() )
+        {
+            const wxColour& c = GetBackgroundColour();
+            control.Background(wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
+        }
+        else
+        {
+            control.ClearValue(MUXC::Control::BackgroundProperty());
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI TextBox appearance", e);
+    }
+
+    m_winui->host.ForceRender();
+}
+
+void wxTextCtrl::ApplyToolTip()
+{
+#if wxUSE_TOOLTIPS
+    if ( m_winui && m_winui->element() )
+        wxWinUISetToolTip(m_winui->element(), m_tooltipText);
+#endif // wxUSE_TOOLTIPS
+}
+
+bool wxTextCtrl::SetFont(const wxFont& font)
+{
+    const bool rc = wxControl::SetFont(font);
+    InvalidateBestSize();
+    UpdateWinUIAppearance();
+    return rc;
+}
+
+bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
+{
+    const bool rc = wxControl::SetForegroundColour(colour);
+    UpdateWinUIAppearance();
+    return rc;
+}
+
+bool wxTextCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    const bool rc = wxControl::SetBackgroundColour(colour);
+    UpdateWinUIAppearance();
+    return rc;
+}
+
+#if wxUSE_TOOLTIPS
+void wxTextCtrl::DoSetToolTipText(const wxString& tip)
+{
+    m_tooltipText = tip;
+    ApplyToolTip();
+}
+
+void wxTextCtrl::DoSetToolTip(wxToolTip *tip)
+{
+    m_tooltipText = tip ? tip->GetTip() : wxString();
+    delete tip;
+    ApplyToolTip();
+}
+#endif // wxUSE_TOOLTIPS
 
 void wxTextCtrl::SendTextEvent()
 {

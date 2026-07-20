@@ -35,9 +35,10 @@ public:
     {
         m_frame = frame;
         m_menubar = menubar;
+        m_barHeight = frame->FromDIP(40);
 
         if ( !wxControl::Create(frame, wxID_ANY, wxPoint(0, 0),
-                                wxSize(wxDefaultCoord, frame->FromDIP(40)),
+                                wxSize(wxDefaultCoord, m_barHeight),
                                 wxBORDER_NONE) )
             return false;
 
@@ -77,13 +78,19 @@ private:
         // GetClientAreaOrigin() (which already includes our own height), so it
         // would push us down by our height.  The frame reserves our height in
         // GetClientAreaOrigin() so the real content sits below us.
+        //
+        // The height must be our fixed bar height, never GetSize().y: when the
+        // menu bar is a frame's only child (e.g. minimal.exe), the frame's
+        // single-child auto-layout (wxTopLevelWindowBase::Layout) transiently
+        // resizes us to fill the whole client area before m_winuiMenuBarWin is
+        // recognised as a bar.  Reading GetSize().y back then would make us
+        // cover the entire window.
         HWND hwnd = static_cast<HWND>(GetHWND());
         if ( !hwnd )
             return;
 
         const int width = m_frame->GetClientSize().x;
-        const int height = GetSize().y;
-        ::SetWindowPos(hwnd, nullptr, 0, 0, width, height,
+        ::SetWindowPos(hwnd, nullptr, 0, 0, width, m_barHeight,
                        SWP_NOZORDER | SWP_NOACTIVATE);
     }
 
@@ -102,11 +109,76 @@ private:
         m_frame->GetEventHandler()->ProcessEvent(event);
     }
 
+    // --- dynamic status-bar help, mirroring the classic Win32 behaviour ------
+
+    void SendMenuEvent(wxEventType type, int id)
+    {
+        if ( !m_frame )
+            return;
+        wxMenuEvent event(type, id);
+        event.SetEventObject(m_frame);
+        m_frame->GetEventHandler()->ProcessEvent(event);
+    }
+
+    // Show the help string of the highlighted item in the status bar (the frame
+    // looks it up from the id); wxID_NONE clears it (e.g. on a submenu title).
+    void HighlightItem(int id) { SendMenuEvent(wxEVT_MENU_HIGHLIGHT, id); }
+
+    // Track how many flyout items are currently realised so we can detect when
+    // any menu is open (text is cleared, saving the previous status text) and
+    // when everything is closed again (the previous status text is restored).
+    void NoteItemLoaded()
+    {
+        if ( m_openItems++ == 0 )
+        {
+            SendMenuEvent(wxEVT_MENU_OPEN, wxID_ANY);
+            HighlightItem(wxID_NONE);
+        }
+    }
+
+    void NoteItemUnloaded()
+    {
+        if ( m_openItems > 0 && --m_openItems == 0 )
+            SendMenuEvent(wxEVT_MENU_CLOSE, wxID_ANY);
+    }
+
+    // Wire the help/open/close behaviour onto a flyout item (id is wxID_NONE for
+    // submenu titles, which have no command help).
+    void AttachItemHelp(MUXC::MenuFlyoutItemBase const& item, int id)
+    {
+        item.PointerEntered(
+            [this, id](winrt::Windows::Foundation::IInspectable const&,
+                       winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const&)
+            {
+                HighlightItem(id);
+            });
+        item.Loaded(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+            {
+                NoteItemLoaded();
+            });
+        item.Unloaded(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+            {
+                NoteItemUnloaded();
+            });
+    }
+
     void Populate(
         winrt::Windows::Foundation::Collections::IVector<MUXC::MenuFlyoutItemBase> const& items,
         wxMenu *menu)
     {
         const size_t count = menu->GetMenuItemCount();
+
+        // wx groups *consecutive* radio items together; mirror that with a new
+        // WinUI radio group name each time a run of radio items starts so that
+        // mutually-exclusive radio items are shown (and behave) distinctly from
+        // independently-checkable items.
+        int radioGroup = 0;
+        bool inRadioRun = false;
+
         for ( size_t i = 0; i < count; ++i )
         {
             wxMenuItem *item = menu->FindItemByPosition(i);
@@ -115,20 +187,67 @@ private:
 
             if ( item->IsSeparator() )
             {
+                inRadioRun = false;
                 items.Append(MUXC::MenuFlyoutSeparator());
                 continue;
             }
 
             if ( item->IsSubMenu() )
             {
+                inRadioRun = false;
                 MUXC::MenuFlyoutSubItem sub;
                 sub.Text(wxWinUIToHString(item->GetItemLabelText()));
                 Populate(sub.Items(), item->GetSubMenu());
+                AttachItemHelp(sub, wxID_NONE);
                 items.Append(sub);
                 continue;
             }
 
             const int id = item->GetId();
+
+            if ( item->GetKind() == wxITEM_RADIO )
+            {
+                if ( !inRadioRun )
+                {
+                    ++radioGroup;
+                    inRadioRun = true;
+                }
+
+                MUXC::RadioMenuFlyoutItem radio;
+                radio.Text(wxWinUIToHString(item->GetItemLabelText()));
+                radio.GroupName(wxWinUIToHString(
+                    wxString::Format("wxRadioGroup_%p_%d", menu, radioGroup)));
+                radio.IsEnabled(item->IsEnabled());
+                radio.IsChecked(item->IsChecked());
+                radio.Click(
+                    [this, id](winrt::Windows::Foundation::IInspectable const& sender,
+                               winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+                    {
+                        bool checked = true;
+                        if ( auto r = sender.try_as<MUXC::RadioMenuFlyoutItem>() )
+                            checked = r.IsChecked();
+                        FireMenu(id, true, checked);
+                    });
+                // A RadioMenuFlyoutItem does not render its initial selection
+                // dot when IsChecked is set before the item is realised (it is
+                // only realised when its submenu is first opened).  Re-apply the
+                // current wx state from its Loaded event so the default choice
+                // shows its dot without needing a manual click.
+                radio.Loaded(
+                    [this, id](winrt::Windows::Foundation::IInspectable const& sender,
+                               winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+                    {
+                        auto r = sender.try_as<MUXC::RadioMenuFlyoutItem>();
+                        wxMenuItem *mi = m_menubar ? m_menubar->FindItem(id) : nullptr;
+                        if ( r && mi )
+                            r.IsChecked(mi->IsChecked());
+                    });
+                AttachItemHelp(radio, id);
+                items.Append(radio);
+                continue;
+            }
+
+            inRadioRun = false;
 
             if ( item->IsCheckable() )
             {
@@ -145,6 +264,7 @@ private:
                             checked = t.IsChecked();
                         FireMenu(id, true, checked);
                     });
+                AttachItemHelp(toggle, id);
                 items.Append(toggle);
             }
             else
@@ -158,6 +278,7 @@ private:
                     {
                         FireMenu(id, false, false);
                     });
+                AttachItemHelp(entry, id);
                 items.Append(entry);
             }
         }
@@ -191,6 +312,8 @@ private:
     wxWinUIControlHost m_host;
     wxWindow *m_frame = nullptr;
     wxMenuBar *m_menubar = nullptr;
+    int m_barHeight = 0;
+    int m_openItems = 0;   // realised flyout items, for menu open/close tracking
 };
 
 // ----------------------------------------------------------------------------

@@ -42,7 +42,16 @@ public:
     void SetLabel(const wxString& label) override;
     void Command(wxCommandEvent& event) override;
 
+    bool SetFont(const wxFont& font) override;
+    bool SetForegroundColour(const wxColour& colour) override;
+    bool SetBackgroundColour(const wxColour& colour) override;
+#if wxUSE_TOOLTIPS
+    void DoSetToolTipText(const wxString& tip) override;
+    void DoSetToolTip(wxToolTip *tip) override;
+#endif // wxUSE_TOOLTIPS
+
 protected:
+    void DoEnable(bool enable) override;
     wxSize DoGetBestClientSize() const override;
     void DoSet3StateValue(wxCheckBoxState value) override;
     wxCheckBoxState DoGet3StateValue() const override;
@@ -50,9 +59,14 @@ protected:
 private:
     void SendCheckBoxEvent();
     void UpdateWinUIContent();
+    void UpdateWinUIAppearance();
+    void ApplyToolTip();
 
     std::unique_ptr<wxWinUICheckBoxImpl> m_winui;
     wxCheckBoxState m_state;
+#if wxUSE_TOOLTIPS
+    wxString m_tooltipText;
+#endif // wxUSE_TOOLTIPS
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox);
 };

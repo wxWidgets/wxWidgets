@@ -15,15 +15,56 @@
 
 #ifndef WX_PRECOMP
     #include "wx/event.h"
+    #include "wx/font.h"
 #endif
 
 #include "private.h"
+
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif
+
+#include <winrt/Microsoft.UI.Text.h>
+#include <winrt/Windows.UI.Text.h>
+
+#include <cmath>
+#include <limits>
+
+namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+
+namespace
+{
+
+// Apply a wxFont (family/size/weight/style) to a WinUI Control; no-op for an
+// invalid font so default controls keep the native WinUI font.
+void wxWinUIApplyControlFont(const MUXC::Control& control, const wxFont& font)
+{
+    if ( !control || !font.IsOk() )
+        return;
+
+    const wxString face = font.GetFaceName();
+    if ( !face.empty() )
+        control.FontFamily(
+            winrt::Microsoft::UI::Xaml::Media::FontFamily(wxWinUIToHString(face)));
+
+    const double pt = font.GetFractionalPointSize();
+    control.FontSize(pt > 0.0 ? pt * 96.0 / 72.0 : 14.0);
+    control.FontWeight(font.GetNumericWeight() >= wxFONTWEIGHT_BOLD
+        ? winrt::Microsoft::UI::Text::FontWeights::Bold()
+        : winrt::Microsoft::UI::Text::FontWeights::Normal());
+    control.FontStyle(font.GetStyle() == wxFONTSTYLE_NORMAL
+        ? winrt::Windows::UI::Text::FontStyle::Normal
+        : winrt::Windows::UI::Text::FontStyle::Italic);
+}
+
+} // namespace
 
 class wxWinUIRadioButtonImpl
 {
 public:
     wxWinUIControlHost host;
-    winrt::Microsoft::UI::Xaml::Controls::RadioButton radioButton{ nullptr };
+    MUXC::RadioButton radioButton{ nullptr };
     winrt::event_token checkedToken{};
     bool updating = false;
 };
@@ -68,10 +109,10 @@ bool wxRadioButton::Create(wxWindow *parent,
 
     try
     {
-        m_winui->radioButton = winrt::Microsoft::UI::Xaml::Controls::RadioButton();
+        m_winui->radioButton = MUXC::RadioButton();
         m_winui->checkedToken = m_winui->radioButton.Checked(
             [this](winrt::Windows::Foundation::IInspectable const&,
-                   winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+                   MUX::RoutedEventArgs const&)
             {
                 if ( !m_winui || m_winui->updating )
                     return;
@@ -82,6 +123,8 @@ bool wxRadioButton::Create(wxWindow *parent,
             });
 
         UpdateWinUIContent();
+        UpdateWinUIAppearance();
+        ApplyToolTip();
         m_winui->host.SetContent(m_winui->radioButton);
     }
     catch ( const winrt::hresult_error& e )
@@ -89,6 +132,8 @@ bool wxRadioButton::Create(wxWindow *parent,
         wxWinUILogException("WinUI RadioButton creation", e);
         return false;
     }
+
+    SetInitialSize(size);
 
     if ( HasFlag(wxRB_GROUP) )
         SetValue(true);
@@ -119,7 +164,13 @@ bool wxRadioButton::GetValue() const
 void wxRadioButton::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
+    InvalidateBestSize();
     UpdateWinUIContent();
+
+    if ( GetParent() && GetParent()->GetSizer() )
+        GetParent()->Layout();
+    else
+        SetSize(GetBestSize());
 }
 
 void wxRadioButton::Command(wxCommandEvent& event)
@@ -128,9 +179,74 @@ void wxRadioButton::Command(wxCommandEvent& event)
     ProcessCommand(event);
 }
 
+bool wxRadioButton::SetFont(const wxFont& font)
+{
+    const bool rc = wxControl::SetFont(font);
+    InvalidateBestSize();
+    UpdateWinUIAppearance();
+    return rc;
+}
+
+bool wxRadioButton::SetForegroundColour(const wxColour& colour)
+{
+    const bool rc = wxControl::SetForegroundColour(colour);
+    UpdateWinUIAppearance();
+    return rc;
+}
+
+bool wxRadioButton::SetBackgroundColour(const wxColour& colour)
+{
+    const bool rc = wxControl::SetBackgroundColour(colour);
+    UpdateWinUIAppearance();
+    return rc;
+}
+
+#if wxUSE_TOOLTIPS
+void wxRadioButton::DoSetToolTipText(const wxString& tip)
+{
+    m_tooltipText = tip;
+    ApplyToolTip();
+}
+
+void wxRadioButton::DoSetToolTip(wxToolTip *tip)
+{
+    m_tooltipText = tip ? tip->GetTip() : wxString();
+    delete tip;
+    ApplyToolTip();
+}
+#endif // wxUSE_TOOLTIPS
+
+void wxRadioButton::DoEnable(bool enable)
+{
+    wxControl::DoEnable(enable);
+
+    if ( m_winui && m_winui->radioButton )
+    {
+        m_winui->radioButton.IsEnabled(enable);
+        m_winui->host.ForceRender();
+    }
+}
+
 wxSize wxRadioButton::DoGetBestSize() const
 {
-    return wxWindow::FromDIP(wxSize(140, 32), const_cast<wxRadioButton *>(this));
+    // Measure the actual WinUI radio button (glyph + label + padding).
+    if ( m_winui && m_winui->radioButton )
+    {
+        try
+        {
+            const float inf = std::numeric_limits<float>::infinity();
+            m_winui->radioButton.Measure({ inf, inf });
+            const auto desired = m_winui->radioButton.DesiredSize();
+            if ( desired.Width > 0 && desired.Height > 0 )
+                return wxSize(static_cast<int>(std::ceil(desired.Width)),
+                              static_cast<int>(std::ceil(desired.Height)));
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+    }
+
+    return wxWindow::FromDIP(wxSize(120, 32), const_cast<wxRadioButton *>(this));
 }
 
 void wxRadioButton::UpdateWinUIContent()
@@ -140,12 +256,81 @@ void wxRadioButton::UpdateWinUIContent()
 
     m_winui->updating = true;
 
-    winrt::Microsoft::UI::Xaml::Controls::TextBlock textBlock;
-    textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(GetLabel())));
-    m_winui->radioButton.Content(textBlock);
-    m_winui->radioButton.IsChecked(m_isChecked);
+    try
+    {
+        MUXC::TextBlock textBlock;
+        textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(GetLabel())));
+
+        if ( HasFlag(wxALIGN_RIGHT) )
+        {
+            m_winui->radioButton.FlowDirection(MUX::FlowDirection::RightToLeft);
+            textBlock.FlowDirection(MUX::FlowDirection::LeftToRight);
+        }
+        else
+        {
+            m_winui->radioButton.FlowDirection(MUX::FlowDirection::LeftToRight);
+        }
+
+        m_winui->radioButton.Content(textBlock);
+        m_winui->radioButton.IsChecked(m_isChecked);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI RadioButton content", e);
+    }
+
     m_winui->updating = false;
     m_winui->host.ForceRender();
+}
+
+void wxRadioButton::UpdateWinUIAppearance()
+{
+    if ( !m_winui || !m_winui->radioButton )
+        return;
+
+    try
+    {
+        if ( m_hasFont )
+            wxWinUIApplyControlFont(m_winui->radioButton, GetFont());
+        else
+            m_winui->radioButton.ClearValue(MUXC::Control::FontSizeProperty());
+
+        if ( UseForegroundColour() )
+        {
+            const wxColour& c = GetForegroundColour();
+            m_winui->radioButton.Foreground(
+                wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
+        }
+        else
+        {
+            m_winui->radioButton.ClearValue(MUXC::Control::ForegroundProperty());
+        }
+
+        if ( UseBackgroundColour() )
+        {
+            const wxColour& c = GetBackgroundColour();
+            m_winui->radioButton.Background(
+                wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
+        }
+        else
+        {
+            m_winui->radioButton.ClearValue(MUXC::Control::BackgroundProperty());
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI RadioButton appearance", e);
+    }
+
+    m_winui->host.ForceRender();
+}
+
+void wxRadioButton::ApplyToolTip()
+{
+#if wxUSE_TOOLTIPS
+    if ( m_winui && m_winui->radioButton )
+        wxWinUISetToolTip(m_winui->radioButton, m_tooltipText);
+#endif // wxUSE_TOOLTIPS
 }
 
 void wxRadioButton::ClearRadioGroup()

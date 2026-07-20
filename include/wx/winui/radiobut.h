@@ -42,17 +42,31 @@ public:
     void SetLabel(const wxString& label) override;
     void Command(wxCommandEvent& event) override;
 
+    bool SetFont(const wxFont& font) override;
+    bool SetForegroundColour(const wxColour& colour) override;
+    bool SetBackgroundColour(const wxColour& colour) override;
+#if wxUSE_TOOLTIPS
+    void DoSetToolTipText(const wxString& tip) override;
+    void DoSetToolTip(wxToolTip *tip) override;
+#endif // wxUSE_TOOLTIPS
+
 protected:
+    void DoEnable(bool enable) override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     wxSize DoGetBestSize() const override;
 
 private:
     void UpdateWinUIContent();
+    void UpdateWinUIAppearance();
+    void ApplyToolTip();
     void ClearRadioGroup();
     void SendRadioEvent();
 
     std::unique_ptr<wxWinUIRadioButtonImpl> m_winui;
     bool m_isChecked;
+#if wxUSE_TOOLTIPS
+    wxString m_tooltipText;
+#endif // wxUSE_TOOLTIPS
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioButton);
 };

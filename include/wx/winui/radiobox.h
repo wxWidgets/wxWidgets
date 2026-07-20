@@ -82,7 +82,13 @@ public:
     bool Enable(bool enable = true) override { return wxControl::Enable(enable); }
     bool Show(bool show = true) override { return wxControl::Show(show); }
 
+#if wxUSE_TOOLTIPS
+    void DoSetToolTipText(const wxString& tip) override;
+    void DoSetToolTip(wxToolTip *tip) override;
+#endif // wxUSE_TOOLTIPS
+
 protected:
+    void DoEnable(bool enable) override;
     wxSize DoGetBestSize() const override;
 
     bool DoCreate(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -90,6 +96,7 @@ protected:
                   long style, const wxValidator& validator,
                   const wxString& name);
     void RebuildItems();
+    void ApplyToolTip();
     void SendSelectionEvent();
     int FindSelectedItem() const;
 
@@ -99,6 +106,9 @@ protected:
     std::vector<bool> m_itemShown;
     int m_selection = wxNOT_FOUND;
     bool m_updating = false;
+#if wxUSE_TOOLTIPS
+    wxString m_tooltipText;
+#endif // wxUSE_TOOLTIPS
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioBox);

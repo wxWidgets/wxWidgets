@@ -63,6 +63,14 @@ public:
     void SetEditable(bool editable) override;
     void SetMaxLength(unsigned long len) override;
 
+    bool SetFont(const wxFont& font) override;
+    bool SetForegroundColour(const wxColour& colour) override;
+    bool SetBackgroundColour(const wxColour& colour) override;
+#if wxUSE_TOOLTIPS
+    void DoSetToolTipText(const wxString& tip) override;
+    void DoSetToolTip(wxToolTip *tip) override;
+#endif // wxUSE_TOOLTIPS
+
     int GetLineLength(long lineNo) const override;
     wxString GetLineText(long lineNo) const override;
     int GetNumberOfLines() const override;
@@ -85,6 +93,7 @@ public:
     }
 
 protected:
+    void DoEnable(bool enable) override;
     void DoSetValue(const wxString& value, int flags = 0) override;
     wxString DoGetValue() const override;
     wxPoint DoPositionToCoords(long pos) const override;
@@ -92,6 +101,8 @@ protected:
 
 private:
     void ApplyValueToPeer();
+    void UpdateWinUIAppearance();
+    void ApplyToolTip();
     void SendTextEvent();
     void ClampInsertionPoint();
     wxArrayString GetLines() const;
@@ -106,6 +117,9 @@ private:
     bool m_modified;
     bool m_editable;
     bool m_updatingPeer;
+#if wxUSE_TOOLTIPS
+    wxString m_tooltipText;
+#endif // wxUSE_TOOLTIPS
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl);
 };
