@@ -1,0 +1,1 @@
+wxAll (GUI): Fix crash in wxGrid when changing the editor (Richard Thomson, #21986).
