@@ -21,8 +21,6 @@
 
 #include "wx/ipcbase.h"
 #include "wx/socket.h"
-#include "wx/sckstrm.h"
-#include "wx/datstrm.h"
 
 /*
  * Mini-DDE implementation
@@ -51,7 +49,7 @@
 class WXDLLIMPEXP_FWD_NET wxTCPServer;
 class WXDLLIMPEXP_FWD_NET wxTCPClient;
 
-class wxIPCSocketStreams;
+class wxTCPEventHandler;
 
 class WXDLLIMPEXP_NET wxTCPConnection : public wxConnectionBase
 {
@@ -94,8 +92,8 @@ protected:
     // for IPC server)
     wxSocketBase *m_sock;
 
-    // various streams that we use
-    wxIPCSocketStreams *m_streams;
+    // Handler of events and r/w of messages to the socket
+    wxTCPEventHandler *m_handler;
 
     // the topic of this connection
     wxString m_topic;
@@ -124,7 +122,7 @@ public:
     virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) override;
 
 protected:
-    wxSocketServer *m_server;
+    wxSocketServer *m_server = nullptr;
 
 #ifdef __UNIX_LIKE__
     // the name of the file associated to the Unix domain socket, may be empty

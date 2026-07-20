@@ -55,6 +55,27 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
 #include "wx/socket.h"
 #include "wx/evtloop.h"
 
+// __WXQT__ guard: see the longer note in tests/net/ipc.cpp. The IPC test (and
+// its server) is excluded from wxQt (cross-thread CallAfter() not processed by
+// the wxQt event loop, fixed separately on branch
+// jpmattia/wxQT-CallAfter-wxWakeUpIdle).
+#if wxUSE_THREADS && defined(TEST_HAS_IPC_SERVER) && !defined(__WXQT__)
+    #define wxHAS_TEST_IPC_SERVER
+
+    #include "net/ipc_test_server.h"
+
+    // Return true if the test should run in the special "IPC server" mode.
+    static bool ShouldRunTestIPCServer()
+    {
+        return wxGetEnv("WX_IPC_TEST_SERVER", nullptr);
+    }
+#else // not using IPC test server
+    static bool ShouldRunTestIPCServer()
+    {
+        return false;
+    }
+#endif
+
 using namespace std;
 
 // ----------------------------------------------------------------------------
@@ -340,6 +361,22 @@ public:
 
     virtual int OnRun() override
     {
+#ifdef wxHAS_TEST_IPC_SERVER
+        // The IPC test re-executes this same binary as its server (with
+        // WX_IPC_TEST_SERVER set), so test_gui must run the server here too,
+        // exactly as the console test does in the non-GUI OnRun() below. See the
+        // note there and tests/net/ipc.cpp for the wxQt exclusion.
+        if ( ShouldRunTestIPCServer() )
+        {
+            // Suppress the idle-driven test runner: RunIPCServerUntilStopped()
+            // spins its own event loop, and our OnIdle() would otherwise fire
+            // there and run the whole test suite inside the server process.
+            m_runTests = false;
+            RunIPCServerUntilStopped();
+            return 0;
+        }
+#endif // wxHAS_TEST_IPC_SERVER
+
         if ( !IsGUIEnabled() )
             return 0;
 
@@ -351,6 +388,18 @@ public:
 #else // !wxUSE_GUI
     virtual int OnRun() override
     {
+#ifdef wxHAS_TEST_IPC_SERVER
+        // The IPC test starts its server by re-executing this same binary with
+        // WX_IPC_TEST_SERVER set and then running a bare event loop here. The IPC
+        // sources and TEST_HAS_IPC_SERVER are built into both the console "test"
+        // and "test_gui" programs, so the GUI OnRun() above has the same hook.
+        if ( ShouldRunTestIPCServer() )
+        {
+            RunIPCServerUntilStopped();
+            return 0;
+        }
+#endif // wxHAS_TEST_IPC_SERVER
+
         return RunTests();
     }
 #endif // wxUSE_GUI/!wxUSE_GUI
@@ -624,21 +673,8 @@ TestApp::TestApp()
 #endif // wxUSE_GUI
 }
 
-// Init
-//
-bool TestApp::OnInit()
+static void ShowTestInformation()
 {
-#if wxUSE_GUI
-    if ( !IsGUIEnabled() )
-    {
-        wxFputs(wxASCII_STR("Not running tests because GUI is disabled.\n"), stderr);
-        return true;
-    }
-#endif // wxUSE_GUI
-
-    // Hack: don't call TestAppBase::OnInit() to let CATCH handle command line.
-
-    // Output some important information about the test environment.
 #if wxUSE_GUI
     cout << "Test program for wxWidgets GUI features\n"
 #else
@@ -671,6 +707,26 @@ bool TestApp::OnInit()
 
     cout << " as " << wxGetUserId()
          << std::endl;
+}
+
+// Init
+//
+bool TestApp::OnInit()
+{
+#if wxUSE_GUI
+    if ( !IsGUIEnabled() )
+    {
+        wxFputs(wxASCII_STR("Not running tests because GUI is disabled.\n"), stderr);
+        return true;
+    }
+#endif // wxUSE_GUI
+
+    // Hack: don't call TestAppBase::OnInit() to let CATCH handle command line.
+
+    // Output some important information about the test environment unless
+    // we're running as a helper IPC server process.
+    if ( !ShouldRunTestIPCServer() )
+        ShowTestInformation();
 
     // Optionally allow executing the tests in the locale specified by the
     // standard environment variable, this is especially useful to use UTF-8
