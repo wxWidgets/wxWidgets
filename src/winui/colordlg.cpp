@@ -69,18 +69,13 @@ int wxColourDialog::ShowModal()
     {
         using namespace winrt::Microsoft::UI::Xaml::Controls;
 
-        wxWinUIDialogIsland island;
-        if ( !island.Create(parent) )
+        wxWinUIDialogPresenter presenter;
+        if ( !presenter.Create(parent,
+                               m_title.empty() ? wxString(_("Choose colour"))
+                                               : m_title) )
+        {
             return wxID_CANCEL;
-
-        ContentDialog dialog = island.CreateDialog();
-        dialog.Title(winrt::box_value(wxWinUIToHString(
-            m_title.empty() ? wxString(_("Choose colour")) : m_title)));
-        dialog.DefaultButton(ContentDialogButton::Primary);
-        dialog.PrimaryButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(
-            wxGetStockLabel(wxID_OK, wxSTOCK_FOR_BUTTON))));
-        dialog.CloseButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(
-            wxGetStockLabel(wxID_CANCEL, wxSTOCK_FOR_BUTTON))));
+        }
 
         ColorPicker picker;
         picker.IsAlphaEnabled(m_colourData.GetChooseAlpha());
@@ -107,18 +102,23 @@ int wxColourDialog::ShowModal()
             });
         wxUnusedVar(colorChangedToken);
 
-        dialog.Content(picker);
+        presenter.SetContent(picker);
+        // The picker needs a fair amount of room: colour spectrum, sliders and
+        // the value fields revealed by the "more" button.
+        presenter.SetContentSize(
+            wxSize(340, m_colourData.GetChooseAlpha() ? 460 : 420));
 
-        const ContentDialogResult dialogResult = island.ShowDialog(dialog);
+        presenter.AddButton(wxID_OK,
+                            wxGetStockLabel(wxID_OK, wxSTOCK_FOR_BUTTON), true);
+        presenter.AddButton(wxID_CANCEL,
+                            wxGetStockLabel(wxID_CANCEL, wxSTOCK_FOR_BUTTON));
 
         wxColour chosen;
-        if ( dialogResult == ContentDialogResult::Primary )
+        if ( presenter.ShowModal() == wxID_OK )
         {
             const auto c = picker.Color();
             chosen = wxColour(c.R, c.G, c.B, c.A);
         }
-
-        island.Close();
 
         if ( chosen.IsOk() )
         {

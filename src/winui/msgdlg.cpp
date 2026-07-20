@@ -182,13 +182,9 @@ int wxMessageDialog::ShowModal()
     {
         using namespace winrt::Microsoft::UI::Xaml::Controls;
 
-        wxWinUIDialogIsland island;
-        if ( !island.Create(parent) )
+        wxWinUIDialogPresenter presenter;
+        if ( !presenter.Create(parent, GetCaption()) )
             return wxWinUIFallbackMessageBox(*this);
-
-        ContentDialog dialog = island.CreateDialog();
-        dialog.Title(winrt::box_value(wxWinUIToHString(GetCaption())));
-        dialog.DefaultButton(buttons.defaultButton);
 
         wxString message = GetMessage();
         wxString extended = GetExtendedMessage();
@@ -217,31 +213,55 @@ int wxMessageDialog::ShowModal()
             content.Children().Append(extendedText);
         }
 
-        dialog.Content(content);
+        presenter.SetContent(content);
+
+        // Wrap the message at a comfortable width and give the dialog enough
+        // room for it: the XAML text can't be measured before it is realised.
+        const int textWidth = 380;
+        wxString allText = message;
+        if ( !extended.empty() )
+            allText << wxASCII_STR("\n\n") << extended;
+
+        wxSize textSize = GetTextExtent(allText);
+        int lines = 1 + static_cast<int>(allText.Freq('\n'));
+        if ( textSize.x > 0 )
+            lines += textSize.x / ToDIP(textWidth);
+        presenter.SetContentSize(
+            wxSize(textWidth, wxMax(48, lines * 22)));
+
+        const int defaultId =
+            buttons.defaultButton == ContentDialogButton::Secondary
+                ? buttons.secondary.id
+                : buttons.defaultButton == ContentDialogButton::Close
+                    ? buttons.close.id
+                    : buttons.primary.id;
 
         if ( buttons.primary.id != wxID_NONE )
-            dialog.PrimaryButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(buttons.primary.label)));
-        if ( buttons.secondary.id != wxID_NONE )
-            dialog.SecondaryButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(buttons.secondary.label)));
-        if ( buttons.close.id != wxID_NONE )
-            dialog.CloseButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(buttons.close.label)));
-
-        const ContentDialogResult dialogResult = island.ShowDialog(dialog);
-        island.Close();
-
-        switch ( dialogResult )
         {
-            case ContentDialogResult::Primary:
-                return buttons.primary.id;
-            case ContentDialogResult::Secondary:
-                return buttons.secondary.id;
-            case ContentDialogResult::None:
-                if ( buttons.close.id != wxID_NONE )
-                    return buttons.close.id;
-                if ( !(GetMessageDialogStyle() & (wxYES_NO | wxCANCEL)) )
-                    return wxID_OK;
-                return wxID_CANCEL;
+            presenter.AddButton(buttons.primary.id, buttons.primary.label,
+                                buttons.primary.id == defaultId);
         }
+        if ( buttons.secondary.id != wxID_NONE )
+        {
+            presenter.AddButton(buttons.secondary.id, buttons.secondary.label,
+                                buttons.secondary.id == defaultId);
+        }
+        if ( buttons.close.id != wxID_NONE )
+        {
+            presenter.AddButton(buttons.close.id, buttons.close.label,
+                                buttons.close.id == defaultId);
+        }
+
+        const int result = presenter.ShowModal();
+        if ( result != wxID_CANCEL )
+            return result;
+
+        // Cancelled: report the dismissal the way the caller expects.
+        if ( buttons.close.id != wxID_NONE )
+            return buttons.close.id;
+        if ( !(GetMessageDialogStyle() & (wxYES_NO | wxCANCEL)) )
+            return wxID_OK;
+        return wxID_CANCEL;
     }
     catch ( const winrt::hresult_error& e )
     {

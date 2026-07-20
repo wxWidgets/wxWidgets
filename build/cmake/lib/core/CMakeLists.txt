@@ -87,6 +87,7 @@ if(WXMSW)
             src/winui/clrpicker.cpp
             src/winui/colordlg.cpp
             src/winui/datectrl.cpp
+            src/winui/dlgpresenter.cpp
             src/winui/choice.cpp
             src/winui/combobox.cpp
             src/winui/gauge.cpp

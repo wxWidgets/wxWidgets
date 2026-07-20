@@ -61,6 +61,28 @@ WXDLLIMPEXP_CORE bool wxWinUIIsHostWindow(wxWindow *win);
 class WXDLLIMPEXP_FWD_CORE wxCursor;
 WXDLLIMPEXP_CORE void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor);
 
+// How the WinUI-drawn common dialogs (wxMessageDialog, wxTextEntryDialog,
+// wxColourDialog, ...) are presented.
+enum class wxWinUIDialogPresentation
+{
+    // Classic behaviour, and the default: the dialog is a real top-level
+    // window of its own, with its own title bar, which simply happens to be
+    // drawn with WinUI controls.  It can be moved anywhere on screen and
+    // blocks its parent like any other modal dialog.
+    Window,
+
+    // Modern in-window behaviour: the dialog is a WinUI ContentDialog shown
+    // over the parent's client area, which is dimmed behind it.  It has no
+    // window of its own and cannot leave the parent's bounds.
+    Overlay
+};
+
+// Set/get the presentation used by the WinUI common dialogs.  This is a global
+// application setting; set it before showing a dialog.
+WXDLLIMPEXP_CORE void
+wxWinUISetDialogPresentation(wxWinUIDialogPresentation presentation);
+WXDLLIMPEXP_CORE wxWinUIDialogPresentation wxWinUIGetDialogPresentation();
+
 // Whether wxRadioBox draws a Win32-style titled frame around its items (on by
 // default, for consistency with the other toolkits).  Turn it off for a flatter,
 // pure-WinUI look.  Affects radio boxes created afterwards.

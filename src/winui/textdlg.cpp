@@ -113,20 +113,9 @@ int wxTextEntryDialog::ShowModal()
         using namespace winrt::Microsoft::UI::Xaml;
         using namespace winrt::Microsoft::UI::Xaml::Controls;
 
-        wxWinUIDialogIsland island;
-        if ( !island.Create(parent) )
+        wxWinUIDialogPresenter presenter;
+        if ( !presenter.Create(parent, m_caption) )
             return wxID_CANCEL;
-
-        ContentDialog dialog = island.CreateDialog();
-        dialog.Title(winrt::box_value(wxWinUIToHString(m_caption)));
-        dialog.DefaultButton(ContentDialogButton::Primary);
-        dialog.PrimaryButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(
-            wxGetStockLabel(wxID_OK, wxSTOCK_FOR_BUTTON))));
-        if ( m_dialogStyle & wxCANCEL )
-        {
-            dialog.CloseButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(
-                wxGetStockLabel(wxID_CANCEL, wxSTOCK_FOR_BUTTON))));
-        }
 
         StackPanel content;
         content.Spacing(8);
@@ -175,15 +164,21 @@ int wxTextEntryDialog::ShowModal()
         errorText.Visibility(Visibility::Collapsed);
         content.Children().Append(errorText);
 
-        dialog.Content(content);
+        presenter.SetContent(content);
+        presenter.SetContentSize(
+            wxSize(360, (m_dialogStyle & wxTE_MULTILINE) ? 220 : 90));
 
         bool accepted = false;
         wxString acceptedValue;
 
-        dialog.PrimaryButtonClick(
-            [&](ContentDialog const& WXUNUSED(sender),
-                ContentDialogButtonClickEventArgs const& event)
+        // Validate on OK; returning false keeps the dialog open with the error
+        // message shown under the entry field.
+        presenter.SetAcceptHandler(
+            [&](int id) -> bool
             {
+                if ( id != wxID_OK )
+                    return true;
+
                 wxString value = m_isPassword
                     ? wxWinUIFromHString(passwordBox.Password())
                     : wxWinUIFromHString(textBox.Text());
@@ -199,20 +194,25 @@ int wxTextEntryDialog::ShowModal()
                     {
                         errorText.Text(wxWinUIToHString(error));
                         errorText.Visibility(Visibility::Visible);
-                        event.Cancel(true);
-                        return;
+                        return false;
                     }
                 }
 #endif
 
                 acceptedValue = value;
                 accepted = true;
+                return true;
             });
 
-        const ContentDialogResult dialogResult = island.ShowDialog(dialog);
-        island.Close();
+        presenter.AddButton(wxID_OK,
+                            wxGetStockLabel(wxID_OK, wxSTOCK_FOR_BUTTON), true);
+        if ( m_dialogStyle & wxCANCEL )
+        {
+            presenter.AddButton(wxID_CANCEL,
+                                wxGetStockLabel(wxID_CANCEL, wxSTOCK_FOR_BUTTON));
+        }
 
-        if ( dialogResult == ContentDialogResult::Primary && accepted )
+        if ( presenter.ShowModal() == wxID_OK && accepted )
         {
             m_value = acceptedValue;
             return wxID_OK;
