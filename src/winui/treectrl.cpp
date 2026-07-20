@@ -21,6 +21,8 @@
 
 #include "private.h"
 
+#include "wx/msw/private/keyboard.h"
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
@@ -73,6 +75,7 @@ public:
     winrt::event_token collapsedToken{};
     winrt::event_token itemInvokedToken{};
     winrt::event_token rightTappedToken{};
+    winrt::event_token keyDownToken{};
 
     std::unique_ptr<wxWinUITreeItem> root;
     wxWinUITreeItem *selection = nullptr;
@@ -300,6 +303,35 @@ bool wxTreeCtrl::Create(wxWindow *parent,
             {
                 if ( m_winui && m_winui->selection )
                     SendTreeEvent(wxEVT_TREE_ITEM_ACTIVATED, m_winui->selection);
+            });
+
+        m_winui->keyDownToken = m_winui->treeView.KeyDown(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   MUX::Input::KeyRoutedEventArgs const& event)
+            {
+                if ( !m_winui )
+                    return;
+
+                wchar_t uc = 0;
+                const int code = wxMSWKeyboard::VKToWX(
+                    static_cast<WXWORD>(event.Key()), 0, &uc);
+                if ( code == WXK_NONE )
+                    return;
+
+                wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
+                keyEvent.m_keyCode = code;
+#if wxUSE_UNICODE
+                keyEvent.m_uniChar = uc;
+#endif
+                keyEvent.m_shiftDown = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
+                keyEvent.m_controlDown = (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
+                keyEvent.m_altDown = (::GetKeyState(VK_MENU) & 0x8000) != 0;
+                keyEvent.SetEventObject(this);
+                keyEvent.SetId(GetId());
+
+                wxTreeEvent treeEvent(wxEVT_TREE_KEY_DOWN, this);
+                treeEvent.SetKeyEvent(keyEvent);
+                GetEventHandler()->ProcessEvent(treeEvent);
             });
 
         m_winui->rightTappedToken = m_winui->treeView.RightTapped(
