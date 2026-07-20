@@ -257,11 +257,17 @@ bool wxTreeCtrl::Create(wxWindow *parent,
             ? MUXC::TreeViewSelectionMode::Multiple
             : MUXC::TreeViewSelectionMode::Single);
 
+        // The Image is collapsed for items without an icon, otherwise an
+        // always-present 16px image reserves a blank gutter in front of every
+        // label in a tree that has no image list at all.  The visibility comes
+        // from an explicit value put in the item's property set: WinUI has no
+        // implicit null-to-Visibility conversion for a classic Binding.
         const wchar_t *itemTemplate =
             LR"(<DataTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <Image Width="16" Height="16"
                                VerticalAlignment="Center"
+                               Visibility="{Binding Content[ImageVisibility]}"
                                Source="{Binding Content[Image]}"/>
                         <TextBlock VerticalAlignment="Center"
                                    Text="{Binding Content[Text]}"/>
@@ -1523,15 +1529,24 @@ void wxTreeCtrl::UpdatePeerItem(wxWinUITreeItem *item)
             image = item->images[wxTreeItemIcon_Expanded];
         }
 
+        bool hasImage = false;
         if ( image != NO_IMAGE && image >= 0 && image < GetImageCount() )
         {
             const wxBitmap bitmap = GetImageBitmapFor(this, image);
             if ( bitmap.IsOk() )
             {
                 if ( auto source = wxWinUIWriteableBitmapFromBitmap(bitmap) )
+                {
                     content.Insert(L"Image", source);
+                    hasImage = true;
+                }
             }
         }
+
+        content.Insert(L"ImageVisibility",
+                       winrt::box_value(hasImage
+                           ? MUX::Visibility::Visible
+                           : MUX::Visibility::Collapsed));
 
         item->node.Content(content);
 

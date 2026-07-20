@@ -611,6 +611,18 @@ void wxFrame::PositionToolBar()
         int width, height;
         wxWindow::DoGetClientSize(&width, &height);
 
+        // Under the WinUI toolkit the menu bar is an ordinary child window
+        // occupying a strip across the top of the frame rather than a native
+        // menu outside the client area, so the tool bar has to start below it.
+        int yTop = 0;
+#if wxUSE_MENUS && defined(__WXWINUI__)
+        if ( m_winuiMenuBarWin && m_winuiMenuBarWin->IsShown() )
+        {
+            yTop = m_winuiMenuBarWin->GetSize().y;
+            height -= yTop;
+        }
+#endif // wxUSE_MENUS && __WXWINUI__
+
 #if wxUSE_STATUSBAR
         wxStatusBar *statbar = GetStatusBar();
         if ( statbar && statbar->IsShown() )
@@ -627,17 +639,17 @@ void wxFrame::PositionToolBar()
         if ( toolbar->HasFlag(wxTB_BOTTOM) )
         {
             x = 0;
-            y = height - th;
+            y = yTop + height - th;
         }
         else if ( toolbar->HasFlag(wxTB_RIGHT) )
         {
             x = width - tw;
-            y = 0;
+            y = yTop;
         }
         else // left or top
         {
             x = 0;
-            y = 0;
+            y = yTop;
         }
 
         if ( toolbar->HasFlag(wxTB_BOTTOM) )

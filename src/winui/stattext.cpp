@@ -278,9 +278,18 @@ bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 
 wxSize wxStaticText::DoGetBestClientSize() const
 {
-    // Measure the (mnemonic- and markup-stripped) text line by line so multi
-    // line labels are not clipped.  WinUI's default font is a touch taller than
-    // wx measures, so add a little headroom.
+    // Ask the TextBlock itself: wxGetTextExtent() measures with the classic GDI
+    // font, which is noticeably narrower than the WinUI one, so every label
+    // would end up clipped by a character or two.
+    if ( m_winui )
+    {
+        const wxSize size = m_winui->host.MeasureContent();
+        if ( size != wxDefaultSize )
+            return size;
+    }
+
+    // Not realised yet: measure line by line with the GDI font, leaving enough
+    // slack for the wider WinUI one until the real size becomes available.
     const wxString text = wxControl::GetLabelText(m_visibleLabel);
 
     wxSize best(0, 0);
@@ -299,7 +308,9 @@ wxSize wxStaticText::DoGetBestClientSize() const
         remaining = remaining.Mid(nl + 1);
     }
 
-    best.x += FromDIP(4);
+    // Scale rather than add a fixed margin: a fixed one is never enough for
+    // long strings, which is exactly where the clipping was visible.
+    best.x = best.x * 11 / 10 + FromDIP(4);
     best.y += FromDIP(8);
     return best;
 }
