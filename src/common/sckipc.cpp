@@ -101,6 +101,14 @@ constexpr wxUint32 IPCCodeHeader = 0x439d9600;
     #include <sys/stat.h>
 #endif // __UNIX_LIKE__
 
+// headers needed for IPPROTO_TCP and TCP_NODELAY, used by DisableNagle()
+#ifdef __WINDOWS__
+    #include "wx/msw/wrapwin.h"
+#else
+    #include <netinet/in.h>
+    #include <netinet/tcp.h>
+#endif
+
 constexpr auto wxNO_RETURN_MESSAGE = nullptr;
 
 constexpr long wxIPCTimeout = 5; // socket timeout, in seconds
@@ -109,6 +117,18 @@ constexpr long wxIPCTimeout = 5; // socket timeout, in seconds
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
+
+// Disable Nagle's algorithm on a connection socket. IPC messages are small
+// and each one is sent as more than one short write (the code word, then the
+// payload), so with Nagle enabled every request/reply round trip stalls for
+// a delayed-ACK period (tens of milliseconds), even on loopback. The call
+// fails harmlessly on sockets where the option does not apply, such as the
+// Unix domain sockets used when the server name is a path.
+static void DisableNagle(wxSocketBase* socket)
+{
+    int nodelay = 1;
+    socket->SetOption(IPPROTO_TCP, TCP_NODELAY, &nodelay, sizeof(nodelay));
+}
 
 // get the address object for the given server name, the caller must delete it
 static std::unique_ptr<wxSockAddress>
@@ -1164,6 +1184,8 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
 
     if ( ok )
     {
+        DisableNagle(client);
+
         wxTCPEventHandler* handler = &wxTCPEventHandlerModule::GetHandler();
 
         // Send topic name, and enquire whether this has succeeded
@@ -1552,6 +1574,8 @@ void wxTCPEventHandler::OnSocketConnection(wxSocketEvent &event)
         sock->Destroy();
         return;
     }
+
+    DisableNagle(sock);
 
     wxIPCMessageBase* msg = ReadMessageFromSocket(sock);
     wxIPCMessageBaseLocker lock(msg);
