@@ -46,8 +46,8 @@ public:
     void SetRange(int minValue, int maxValue) override;
     int GetMin() const override { return m_rangeMin; }
     int GetMax() const override { return m_rangeMax; }
-    void SetLineSize(int lineSize) override { m_lineSize = lineSize; }
-    void SetPageSize(int pageSize) override { m_pageSize = pageSize; }
+    void SetLineSize(int lineSize) override;
+    void SetPageSize(int pageSize) override;
     int GetLineSize() const override { return m_lineSize; }
     int GetPageSize() const override { return m_pageSize; }
     void SetThumbLength(int lenPixels) override { m_thumbLength = lenPixels; }
@@ -66,6 +66,8 @@ private:
     void ApplyRangeToPeer();
     void ApplyValueToPeer();
     void SendSliderEvent();
+    void SendScrollEvent(wxEventType type);
+    void SendScrollEnd();
 
     std::unique_ptr<wxWinUISliderImpl> m_winui;
     int m_value;
@@ -75,6 +77,7 @@ private:
     int m_pageSize;
     int m_thumbLength;
     int m_tickFreq;
+    int m_lastEndValue = 0;
     bool m_updatingPeer;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider);

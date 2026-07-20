@@ -27,6 +27,8 @@ public:
     wxWinUIControlHost host;
     winrt::Microsoft::UI::Xaml::Controls::Slider slider{ nullptr };
     winrt::event_token valueChangedToken{};
+    winrt::event_token pointerCaptureLostToken{};
+    winrt::event_token keyUpToken{};
 };
 
 wxSlider::wxSlider()
@@ -109,8 +111,40 @@ bool wxSlider::Create(wxWindow *parent,
                     return;
 
                 m_value = ClampValue(static_cast<int>(std::lround(event.NewValue())));
+
+                // wxMSW sends the wxScrollEvent family for every user change
+                // followed by wxEVT_SLIDER; the drag-in-progress event is
+                // THUMBTRACK, the end of interaction is reported separately.
+                SendScrollEvent(wxEVT_SCROLL_THUMBTRACK);
                 SendSliderEvent();
             });
+
+        // End-of-interaction: releasing the thumb (pointer capture lost) or a
+        // keyboard change key going up maps to THUMBRELEASE + CHANGED.
+        m_winui->pointerCaptureLostToken = m_winui->slider.PointerCaptureLost(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   winrt::Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const&)
+            {
+                if ( !m_winui || m_updatingPeer )
+                    return;
+
+                SendScrollEvent(wxEVT_SCROLL_THUMBRELEASE);
+                SendScrollEnd();
+            });
+
+        m_winui->keyUpToken = m_winui->slider.KeyUp(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   winrt::Microsoft::UI::Xaml::Input::KeyRoutedEventArgs const&)
+            {
+                if ( !m_winui || m_updatingPeer )
+                    return;
+
+                SendScrollEnd();
+            });
+
+        m_winui->slider.SmallChange(m_lineSize);
+        m_winui->slider.LargeChange(m_pageSize);
+        m_lastEndValue = m_value;
 
         ApplyRangeToPeer();
         m_winui->host.SetContent(m_winui->slider);
@@ -148,6 +182,21 @@ void wxSlider::SetRange(int minValue, int maxValue)
 
 void wxSlider::SetTick(int WXUNUSED(tickPos))
 {
+    // WinUI sliders only support evenly-spaced ticks (TickFrequency).
+}
+
+void wxSlider::SetLineSize(int lineSize)
+{
+    m_lineSize = lineSize;
+    if ( m_winui && m_winui->slider )
+        m_winui->slider.SmallChange(lineSize);
+}
+
+void wxSlider::SetPageSize(int pageSize)
+{
+    m_pageSize = pageSize;
+    if ( m_winui && m_winui->slider )
+        m_winui->slider.LargeChange(pageSize);
 }
 
 void wxSlider::Command(wxCommandEvent& event)
@@ -212,6 +261,25 @@ void wxSlider::SendSliderEvent()
     event.SetEventObject(this);
     event.SetInt(m_value);
     ProcessCommand(event);
+}
+
+void wxSlider::SendScrollEvent(wxEventType type)
+{
+    wxScrollEvent event(type, GetId(), m_value,
+                        HasFlag(wxSL_VERTICAL) ? wxVERTICAL : wxHORIZONTAL);
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
+}
+
+void wxSlider::SendScrollEnd()
+{
+    // Only report an end-of-interaction if the value actually changed since
+    // the last one, mirroring wxMSW's wxEVT_SCROLL_CHANGED semantics.
+    if ( m_value == m_lastEndValue )
+        return;
+
+    m_lastEndValue = m_value;
+    SendScrollEvent(wxEVT_SCROLL_CHANGED);
 }
 
 #endif // wxUSE_SLIDER
