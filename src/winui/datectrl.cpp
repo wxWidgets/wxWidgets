@@ -86,7 +86,10 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_value = dt.IsValid() ? dt : wxDateTime::Today();
+    if ( dt.IsValid() || (style & wxDP_ALLOWNONE) )
+        m_value = dt;
+    else
+        m_value = wxDateTime::Today();
 
     m_winui.reset(new wxWinUIDatePickerImpl);
     if ( !m_winui->host.Initialize(this) )
@@ -119,6 +122,9 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
 
 void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 {
+    wxCHECK_RET( dt.IsValid() || HasFlag(wxDP_ALLOWNONE),
+                 wxT("this control requires a valid date") );
+
     m_value = dt;
     ApplyToPeer();
 }
@@ -175,7 +181,19 @@ void wxDatePickerCtrl::OnPeerDateChanged()
     try
     {
         if ( auto ref = m_winui->picker.Date() )
+        {
             m_value = wxWinUIFromDateTime(ref.Value());
+        }
+        else if ( HasFlag(wxDP_ALLOWNONE) )
+        {
+            m_value = wxDefaultDateTime;
+        }
+        else
+        {
+            // The picker cleared the date but we require one: restore it.
+            ApplyToPeer();
+            return;
+        }
     }
     catch ( const winrt::hresult_error& )
     {

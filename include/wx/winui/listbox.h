@@ -60,6 +60,10 @@ public:
     int GetSelection() const override;
     int GetSelections(wxArrayInt& aSelections) const override;
 
+    int GetTopItem() const override;
+    int GetCountPerPage() const override;
+    void EnsureVisible(int n) override;
+
 protected:
     void DoSetFirstItem(int n) override;
     void DoSetSelection(int n, bool select) override;

@@ -240,6 +240,72 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
     return static_cast<int>(aSelections.GetCount());
 }
 
+int wxListBox::GetTopItem() const
+{
+    if ( !m_winui || !m_winui->listView )
+        return wxNOT_FOUND;
+
+    try
+    {
+        const double viewHeight = m_winui->listView.ActualHeight();
+        auto items = m_winui->listView.Items();
+        const uint32_t count = items.Size();
+        for ( uint32_t i = 0; i < count; ++i )
+        {
+            const auto container = m_winui->listView.ContainerFromIndex(i)
+                .try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>();
+            if ( !container )
+                continue;
+
+            const auto origin = container.TransformToVisual(m_winui->listView)
+                .TransformPoint(winrt::Windows::Foundation::Point{ 0, 0 });
+            if ( origin.Y + container.ActualHeight() > 0 && origin.Y < viewHeight )
+                return static_cast<int>(i);
+        }
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+
+    return wxNOT_FOUND;
+}
+
+int wxListBox::GetCountPerPage() const
+{
+    if ( !m_winui || !m_winui->listView )
+        return -1;
+
+    try
+    {
+        const double viewHeight = m_winui->listView.ActualHeight();
+        if ( viewHeight <= 0 )
+            return -1;
+
+        const uint32_t count = m_winui->listView.Items().Size();
+        for ( uint32_t i = 0; i < count; ++i )
+        {
+            const auto container = m_winui->listView.ContainerFromIndex(i)
+                .try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>();
+            if ( container && container.ActualHeight() > 0 )
+            {
+                const int perPage =
+                    static_cast<int>(viewHeight / container.ActualHeight());
+                return perPage > 0 ? perPage : 1;
+            }
+        }
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+
+    return -1;
+}
+
+void wxListBox::EnsureVisible(int n)
+{
+    DoSetFirstItem(n);
+}
+
 void wxListBox::DoSetFirstItem(int n)
 {
     wxCHECK_RET( n >= 0 && static_cast<unsigned int>(n) < m_items.GetCount(),

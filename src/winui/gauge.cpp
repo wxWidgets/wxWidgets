@@ -15,11 +15,16 @@
 
 #include "private.h"
 
+namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+
 class wxWinUIGaugeImpl
 {
 public:
     wxWinUIControlHost host;
-    winrt::Microsoft::UI::Xaml::Controls::ProgressBar progressBar{ nullptr };
+    MUXC::ProgressBar progressBar{ nullptr };
+    MUXC::Grid panel{ nullptr };
+    winrt::event_token sizeChangedToken{};
 };
 
 wxGauge::wxGauge()
@@ -61,11 +66,39 @@ bool wxGauge::Create(wxWindow *parent,
 
     try
     {
-        m_winui->progressBar =
-            winrt::Microsoft::UI::Xaml::Controls::ProgressBar();
+        m_winui->progressBar = MUXC::ProgressBar();
         m_winui->progressBar.Minimum(0);
         ApplyToPeer();
-        m_winui->host.SetContent(m_winui->progressBar);
+
+        if ( HasFlag(wxGA_VERTICAL) )
+        {
+            // ProgressBar is horizontal-only: rotate it a quarter turn around
+            // its centre and keep its width equal to the host height so the
+            // rotated bar spans the control (filling bottom to top).
+            winrt::Microsoft::UI::Xaml::Media::RotateTransform rotate;
+            rotate.Angle(-90.0);
+            m_winui->progressBar.RenderTransform(rotate);
+            m_winui->progressBar.RenderTransformOrigin({ 0.5f, 0.5f });
+            m_winui->progressBar.HorizontalAlignment(
+                MUX::HorizontalAlignment::Center);
+            m_winui->progressBar.VerticalAlignment(
+                MUX::VerticalAlignment::Center);
+
+            m_winui->panel = MUXC::Grid();
+            m_winui->panel.Children().Append(m_winui->progressBar);
+            m_winui->sizeChangedToken = m_winui->panel.SizeChanged(
+                [this](winrt::Windows::Foundation::IInspectable const&,
+                       MUX::SizeChangedEventArgs const& event)
+                {
+                    if ( m_winui && m_winui->progressBar )
+                        m_winui->progressBar.Width(event.NewSize().Height);
+                });
+            m_winui->host.SetContent(m_winui->panel);
+        }
+        else
+        {
+            m_winui->host.SetContent(m_winui->progressBar);
+        }
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -108,8 +141,10 @@ void wxGauge::Pulse()
 wxSize wxGauge::DoGetBestSize() const
 {
     // A WinUI ProgressBar is a thin horizontal bar; use a sensible default
-    // width and the control's natural (small) height.
-    return wxWindow::FromDIP(wxSize(100, 18), const_cast<wxGauge *>(this));
+    // length and the control's natural (small) thickness.
+    const wxSize size = HasFlag(wxGA_VERTICAL) ? wxSize(18, 100)
+                                               : wxSize(100, 18);
+    return wxWindow::FromDIP(size, const_cast<wxGauge *>(this));
 }
 
 void wxGauge::ApplyToPeer()

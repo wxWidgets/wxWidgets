@@ -15,6 +15,8 @@
 
 #include "private.h"
 
+#include <winrt/Windows.Globalization.h>
+
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace WF = winrt::Windows::Foundation;
 
@@ -44,6 +46,7 @@ public:
     wxWinUIControlHost host;
     MUXC::CalendarView cal{ nullptr };
     winrt::event_token selectionToken{};
+    winrt::event_token doubleTappedToken{};
 };
 
 wxCalendarCtrl::wxCalendarCtrl()
@@ -80,6 +83,23 @@ bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id,
     {
         m_winui->cal = MUXC::CalendarView();
         m_winui->cal.SelectionMode(MUXC::CalendarViewSelectionMode::Single);
+
+        if ( style & wxCAL_MONDAY_FIRST )
+            m_winui->cal.FirstDayOfWeek(winrt::Windows::Globalization::DayOfWeek::Monday);
+        else if ( style & wxCAL_SUNDAY_FIRST )
+            m_winui->cal.FirstDayOfWeek(winrt::Windows::Globalization::DayOfWeek::Sunday);
+        // Otherwise keep the locale default.
+
+        m_winui->doubleTappedToken = m_winui->cal.DoubleTapped(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   winrt::Microsoft::UI::Xaml::Input::DoubleTappedRoutedEventArgs const&)
+            {
+                if ( !m_winui )
+                    return;
+
+                wxCalendarEvent event(this, m_date, wxEVT_CALENDAR_DOUBLECLICKED);
+                HandleWindowEvent(event);
+            });
 
         m_winui->selectionToken = m_winui->cal.SelectedDatesChanged(
             [this](MUXC::CalendarView const&,
