@@ -1,0 +1,1 @@
+wxAll (GUI): Fix custom background colour in generic wxCalendarCtrl (Richard Thomson, #21885).
