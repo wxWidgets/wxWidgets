@@ -260,6 +260,11 @@ int wxMessageDialog::ShowModal()
         bool loopIsRunning = false;
         wxEventLoop* loopRunning = nullptr;
 
+        // Behave app-modally: block the other top-level windows while the
+        // dialog is up.  The parent itself must stay enabled since it hosts
+        // the dialog's island (its client area is covered by the smoke layer).
+        wxWindowDisabler disabler(parent);
+
         auto operation = dialog.ShowAsync();
         operation.Completed(
             [&](IAsyncOperation<ContentDialogResult> const& async,

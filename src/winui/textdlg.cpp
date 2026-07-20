@@ -19,6 +19,7 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/textdlg.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/evtloop.h"
@@ -235,6 +236,10 @@ int wxTextEntryDialog::ShowModal()
         bool done = false;
         bool loopIsRunning = false;
         wxEventLoop* loopRunning = nullptr;
+
+        // Behave app-modally: block the other top-level windows while the
+        // dialog is up (the parent hosts the island and must stay enabled).
+        wxWindowDisabler disabler(parent);
 
         auto operation = dialog.ShowAsync();
         operation.Completed(
