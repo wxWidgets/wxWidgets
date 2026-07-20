@@ -17,9 +17,16 @@
     #include "wx/menu.h"
     #include "wx/frame.h"
     #include "wx/event.h"
+    #include "wx/utils.h"
 #endif
 
+#include "wx/evtloop.h"
+#include "wx/msw/private.h"
+
 #include "private.h"
+
+#include <memory>
+#include <winrt/Windows.Foundation.h>
 
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
@@ -345,6 +352,286 @@ void wxWinUIRefreshFrameMenuBar(wxWindow *menuBarWin)
     // wxWinUIAttachFrameMenuBar(), so this cast is safe.
     if ( menuBarWin )
         static_cast<wxWinUIMenuBarWindow*>(menuBarWin)->Rebuild();
+}
+
+// ----------------------------------------------------------------------------
+// wxWinUIPopupMenu: show a wxMenu as a WinUI MenuFlyout
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// The item picked by the user, recorded from the Click handlers and acted
+// upon only after the flyout has closed (mirroring TrackPopupMenu semantics:
+// the command is processed once the menu is gone).
+struct wxWinUIPopupSelection
+{
+    int id = wxID_NONE;
+    bool checkable = false;
+    bool checked = false;
+};
+
+void wxWinUIPopulatePopupItems(
+    winrt::Windows::Foundation::Collections::IVector<MUXC::MenuFlyoutItemBase> const& items,
+    wxMenu *menu,
+    std::shared_ptr<wxWinUIPopupSelection> const& sel)
+{
+    const size_t count = menu->GetMenuItemCount();
+
+    // Same consecutive-run grouping as in wxWinUIMenuBarWindow::Populate().
+    int radioGroup = 0;
+    bool inRadioRun = false;
+
+    for ( size_t i = 0; i < count; ++i )
+    {
+        wxMenuItem *item = menu->FindItemByPosition(i);
+        if ( !item )
+            continue;
+
+        if ( item->IsSeparator() )
+        {
+            inRadioRun = false;
+            items.Append(MUXC::MenuFlyoutSeparator());
+            continue;
+        }
+
+        if ( item->IsSubMenu() )
+        {
+            inRadioRun = false;
+            MUXC::MenuFlyoutSubItem sub;
+            sub.Text(wxWinUIToHString(item->GetItemLabelText()));
+            sub.IsEnabled(item->IsEnabled());
+            wxWinUIPopulatePopupItems(sub.Items(), item->GetSubMenu(), sel);
+            items.Append(sub);
+            continue;
+        }
+
+        const int id = item->GetId();
+
+        if ( item->GetKind() == wxITEM_RADIO )
+        {
+            if ( !inRadioRun )
+            {
+                ++radioGroup;
+                inRadioRun = true;
+            }
+
+            MUXC::RadioMenuFlyoutItem radio;
+            radio.Text(wxWinUIToHString(item->GetItemLabelText()));
+            radio.GroupName(wxWinUIToHString(
+                wxString::Format("wxPopupRadioGroup_%p_%d", menu, radioGroup)));
+            radio.IsEnabled(item->IsEnabled());
+            radio.IsChecked(item->IsChecked());
+            radio.Click(
+                [sel, id](winrt::Windows::Foundation::IInspectable const& sender,
+                          winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+                {
+                    sel->id = id;
+                    sel->checkable = true;
+                    sel->checked = true;
+                    if ( auto r = sender.try_as<MUXC::RadioMenuFlyoutItem>() )
+                        sel->checked = r.IsChecked();
+                });
+            // Re-apply the checked state once realised (see the identical
+            // workaround in wxWinUIMenuBarWindow::Populate()).
+            radio.Loaded(
+                [menu, id](winrt::Windows::Foundation::IInspectable const& sender,
+                           winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+                {
+                    auto r = sender.try_as<MUXC::RadioMenuFlyoutItem>();
+                    wxMenuItem *mi = menu->FindItem(id);
+                    if ( r && mi )
+                        r.IsChecked(mi->IsChecked());
+                });
+            items.Append(radio);
+            continue;
+        }
+
+        inRadioRun = false;
+
+        if ( item->IsCheckable() )
+        {
+            MUXC::ToggleMenuFlyoutItem toggle;
+            toggle.Text(wxWinUIToHString(item->GetItemLabelText()));
+            toggle.IsChecked(item->IsChecked());
+            toggle.IsEnabled(item->IsEnabled());
+            toggle.Click(
+                [sel, id](winrt::Windows::Foundation::IInspectable const& sender,
+                          winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+                {
+                    sel->id = id;
+                    sel->checkable = true;
+                    if ( auto t = sender.try_as<MUXC::ToggleMenuFlyoutItem>() )
+                        sel->checked = t.IsChecked();
+                });
+            items.Append(toggle);
+        }
+        else
+        {
+            MUXC::MenuFlyoutItem entry;
+            entry.Text(wxWinUIToHString(item->GetItemLabelText()));
+            entry.IsEnabled(item->IsEnabled());
+            entry.Click(
+                [sel, id](winrt::Windows::Foundation::IInspectable const&,
+                          winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+                {
+                    sel->id = id;
+                });
+            items.Append(entry);
+        }
+    }
+}
+
+} // anonymous namespace
+
+// Called from wxWindowMSW::DoPopupMenu(); returns false to fall back to the
+// classic Win32 TrackPopupMenu().
+bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y)
+{
+    if ( !win || !menu || !wxWinUI3Initialize() )
+        return false;
+
+    HWND hwnd = GetHwndOf(win);
+    if ( !hwnd )
+        return false;
+
+    try
+    {
+        using namespace winrt::Microsoft::UI;
+        using namespace winrt::Microsoft::UI::Content;
+        using namespace winrt::Microsoft::UI::Xaml;
+        using namespace winrt::Microsoft::UI::Xaml::Controls;
+        using namespace winrt::Microsoft::UI::Xaml::Hosting;
+        using namespace winrt::Windows::Foundation;
+
+        DesktopWindowXamlSource source;
+        source.Initialize(GetWindowIdFromWindow(hwnd));
+        source.SiteBridge().ResizePolicy(ContentSizePolicy::ResizeContentToParentWindow);
+
+        const HWND hwndBridge = GetWindowFromWindowId(source.SiteBridge().WindowId());
+        ::SetWindowLongPtr
+        (
+            hwndBridge,
+            GWL_STYLE,
+            ::GetWindowLongPtr(hwndBridge, GWL_STYLE) |
+                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+        );
+        ::SetWindowPos(hwndBridge, HWND_TOP, 0, 0, 0, 0,
+                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+
+        Grid root;
+        root.RequestedTheme(wxWinUIGetCurrentElementTheme());
+        source.Content(root);
+
+        if ( !root.XamlRoot() )
+        {
+            source.Close();
+            return false;
+        }
+
+        auto sel = std::make_shared<wxWinUIPopupSelection>();
+
+        MUXC::MenuFlyout flyout;
+        // The island is only as large as the window: let the flyout become a
+        // windowed popup instead of being clipped to the island bounds.
+        flyout.ShouldConstrainToRootBounds(false);
+        wxWinUIPopulatePopupItems(flyout.Items(), menu, sel);
+
+        wxPoint pos;
+        if ( x == wxDefaultCoord && y == wxDefaultCoord )
+            pos = win->ScreenToClient(wxGetMousePosition());
+        else
+            pos = wxPoint(x, y);
+        const wxPoint dip = win->ToDIP(pos);
+
+        bool done = false;
+        bool loopIsRunning = false;
+        wxEventLoop* loopRunning = nullptr;
+
+        flyout.Closed(
+            [&](IInspectable const&, IInspectable const&)
+            {
+                done = true;
+                if ( loopRunning && loopIsRunning )
+                    loopRunning->Exit();
+            });
+
+        {
+            wxMenuEvent event(wxEVT_MENU_OPEN, wxID_ANY, menu);
+            event.SetEventObject(menu);
+            win->GetEventHandler()->ProcessEvent(event);
+        }
+
+        flyout.ShowAt(root, Point{ static_cast<float>(dip.x),
+                                   static_cast<float>(dip.y) });
+
+        wxEventLoop loop;
+        loopRunning = &loop;
+        if ( !done )
+        {
+            loopIsRunning = true;
+            loop.Run();
+            loopIsRunning = false;
+        }
+        loopRunning = nullptr;
+
+        // The item Click callback may still be queued behind the Closed
+        // notification: run the dispatcher for one more turn so any pending
+        // click is delivered before we act on the selection.
+        if ( auto queue = root.DispatcherQueue() )
+        {
+            bool drained = false;
+            bool drainIsRunning = false;
+            wxEventLoop drainLoop;
+            wxEventLoop* drainRunning = &drainLoop;
+            queue.TryEnqueue([&]()
+            {
+                drained = true;
+                if ( drainRunning && drainIsRunning )
+                    drainRunning->Exit();
+            });
+            if ( !drained )
+            {
+                drainIsRunning = true;
+                drainLoop.Run();
+                drainIsRunning = false;
+            }
+        }
+
+        {
+            wxMenuEvent event(wxEVT_MENU_CLOSE, wxID_ANY, menu);
+            event.SetEventObject(menu);
+            win->GetEventHandler()->ProcessEvent(event);
+        }
+
+        source.Close();
+
+        if ( sel->id != wxID_NONE )
+        {
+            wxMenuItem * const item = menu->FindItem(sel->id);
+            if ( item && sel->checkable )
+                item->Check(sel->checked);
+
+            // Process the command immediately (the menu may be a local
+            // variable in the caller), routing it through the menu so that
+            // handlers bound to the menu itself and to the invoking window
+            // both work.
+            wxMenuInvokingWindowSetter setInvokingWin(*menu, win);
+            wxCommandEvent event(wxEVT_MENU, sel->id);
+            event.SetEventObject(menu);
+            if ( sel->checkable )
+                event.SetInt(sel->checked ? 1 : 0);
+            menu->ProcessEvent(event);
+        }
+
+        return true;
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI popup menu", e);
+    }
+
+    return false;
 }
 
 #endif // wxUSE_WINUI3 && wxUSE_MENUS

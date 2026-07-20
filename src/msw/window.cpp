@@ -2423,8 +2423,19 @@ static void wxYieldForCommandsOnly()
     }
 }
 
+#if wxUSE_WINUI3
+// Implemented in src/winui/menubar.cpp: shows the menu as a WinUI MenuFlyout,
+// returning false if the classic Win32 menu should be used instead.
+extern bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y);
+#endif // wxUSE_WINUI3
+
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
+#if wxUSE_WINUI3
+    if ( wxWinUIPopupMenu(this, menu, x, y) )
+        return true;
+#endif // wxUSE_WINUI3
+
     wxPoint pt;
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
