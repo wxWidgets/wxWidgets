@@ -188,10 +188,8 @@ public:
         // unsafe bits of "dest"
         source.window = window;
         source.frame = frame;
-        wxCHECK_RET(source.IsValid(),
-                    "window settings and pane settings are incompatible");
-        // now assign
-        *this = source;
+        if (source.IsValid())
+            *this = source;
     }
 
     bool IsOk() const { return window != nullptr; }
@@ -230,9 +228,8 @@ public:
     {
         wxAuiPaneInfo test(*this);
         test.window = w;
-        wxCHECK_MSG(test.IsValid(), *this,
-                    "window settings and pane settings are incompatible");
-        *this = test;
+        if ( test.IsValid() )
+            *this = test;
         return *this;
     }
     wxAuiPaneInfo& Name(const wxString& n) { name = n; return *this; }
@@ -305,9 +302,8 @@ public:
                  optionLeftDockable | optionRightDockable |
                  optionFloatable | optionMovable | optionResizable |
                  optionCaption | optionPaneBorder | buttonClose;
-        wxCHECK_MSG(test.IsValid(), *this,
-                    "window settings and pane settings are incompatible");
-        *this = test;
+        if (test.IsValid())
+            *this = test;
         return *this;
     }
 
@@ -335,9 +331,8 @@ public:
             test.state |= flag;
         else
             test.state &= ~flag;
-        wxCHECK_MSG(test.IsValid(), *this,
-                    "window settings and pane settings are incompatible");
-        *this = test;
+        if (test.IsValid())
+            *this = test;
         return *this;
     }
 
@@ -421,6 +416,8 @@ public:
 
     wxRect rect;              // current rectangle (populated by wxAUI)
 
+    // If the pane settings are internally consistent, return true, otherwise
+    // return false and trigger an assertion failure in debug builds.
     bool IsValid() const;
 };
 
