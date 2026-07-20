@@ -214,3 +214,38 @@ search ctrl menu, tree drag & drop, scrollbar skinning, UIA accessibility,
 - wxSingleChoice/MultiChoice/NumberEntry/Progress/About/Tip/BusyInfo: the
   wx generic dialogs are used as-is — they already render with the
   WinUI-ported controls, so no dedicated ContentDialog port is needed.
+
+---
+
+## Update — 2026-07-20 (3): phases 3 & 4
+
+- **wxToolBar → CommandBar**: AppBarButton/AppBarToggleButton/
+  AppBarSeparator built from the tools in Realize(); labels per
+  wxTB_TEXT/wxTB_HORZ_TEXT, icons from the bitmap bundles, tooltips from
+  the short help, radio-group handling, vetoable wxEVT_TOOL.  Vertical
+  bars use a StackPanel of the same elements (CommandBar is
+  horizontal-only).  Control tools not supported yet.  Unblocks
+  wxToolbook.
+- **Fluent wxRendererNative** (`src/winui/renderer.cpp`, installed from
+  `wxWinUI3Initialize()`): flat hover-tinted headers with hairline
+  divider, rounded selection pills, rounded focus outline, chevron tree
+  expanders.  This themes the whole generic family at once — the
+  pragmatic answer for phase 4.
+- **wxRichToolTip → TeachingTip**: transient island + light-dismiss
+  TeachingTip with dispatcher-timer timeout and self-owning lifetime;
+  generic balloon as fallback.
+
+### Explicit decisions
+
+- **Scrollbars of wxScrolledWindow** stay native for now: bridging
+  SetScrollInfo to scrollbar islands (or rehosting in a ScrollViewer)
+  risks destabilising every scrolling window; revisit once the rest of
+  the port has soaked.
+- **wxListCtrl/wxDataViewCtrl/wxGrid remain the generic
+  implementations**, now Fluent-themed by the renderer above.  A real
+  ListView/ItemsView-backed wxListCtrl (virtualisation, report headers)
+  and a virtualised wxDataViewCtrl are the next big chunks of work and
+  need iterative on-screen testing, not a blind port.
+- wxListbook (NavigationView), wxAuiNotebook (TabView),
+  wxEditableListBox and wxFileCtrl: future work; their generic versions
+  already render with the ported controls and themed renderer.
