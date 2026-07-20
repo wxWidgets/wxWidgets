@@ -1,0 +1,1 @@
+wxAll (GUI): Fix line breaking with NBSP in wxHTML (Richard Thomson, #20399).
