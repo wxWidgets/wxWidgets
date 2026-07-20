@@ -101,6 +101,7 @@ protected:
 
 private:
     void ApplyValueToPeer();
+    void ReadSelectionFromPeer();
     void UpdateWinUIAppearance();
     void ApplyToolTip();
     void SendTextEvent();

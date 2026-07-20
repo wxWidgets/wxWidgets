@@ -83,6 +83,8 @@ public:
     MUXC::PasswordBox passwordBox{ nullptr };
     winrt::event_token changedToken{};
     winrt::event_token keyDownToken{};
+    winrt::event_token selectionChangedToken{};
+    winrt::event_token maxLenKeyToken{};
 
     MUXC::Control control() const
     {
@@ -224,10 +226,20 @@ bool wxTextCtrl::Create(wxWindow *parent,
                     if ( !m_winui || m_updatingPeer )
                         return;
                     m_value = m_winui->GetText();
-                    m_insertionPoint = m_value.length();
-                    m_selectionStart = m_selectionEnd = m_insertionPoint;
+                    ReadSelectionFromPeer();
                     m_modified = true;
                     SendTextEvent();
+                });
+
+            // Keep the wx-side caret/selection in sync with the real one so
+            // that GetInsertionPoint()/GetSelection() reflect user clicks.
+            m_winui->selectionChangedToken = textBox.SelectionChanged(
+                [this](winrt::Windows::Foundation::IInspectable const&,
+                       MUX::RoutedEventArgs const&)
+                {
+                    if ( !m_winui || m_updatingPeer )
+                        return;
+                    ReadSelectionFromPeer();
                 });
         }
 
@@ -256,6 +268,52 @@ bool wxTextCtrl::Create(wxWindow *parent,
                         args.Handled(true);
                 });
         }
+
+        // wxEVT_TEXT_MAXLEN: report typing rejected at the length limit, as
+        // wxMSW does on EN_MAXTEXT.
+        m_winui->maxLenKeyToken = m_winui->element().KeyDown(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   MUX::Input::KeyRoutedEventArgs const& args)
+            {
+                if ( !m_winui || !m_maxLength ||
+                     m_value.length() < m_maxLength )
+                    return;
+
+                // Ignore editing/navigation keys which are still accepted.
+                using winrt::Windows::System::VirtualKey;
+                switch ( args.Key() )
+                {
+                    case VirtualKey::Back:
+                    case VirtualKey::Delete:
+                    case VirtualKey::Left:
+                    case VirtualKey::Right:
+                    case VirtualKey::Up:
+                    case VirtualKey::Down:
+                    case VirtualKey::Home:
+                    case VirtualKey::End:
+                    case VirtualKey::PageUp:
+                    case VirtualKey::PageDown:
+                    case VirtualKey::Tab:
+                    case VirtualKey::Enter:
+                    case VirtualKey::Escape:
+                    case VirtualKey::Shift:
+                    case VirtualKey::Control:
+                    case VirtualKey::Menu:
+                    case VirtualKey::CapitalLock:
+                        return;
+                    default:
+                        break;
+                }
+
+                // A non-empty selection would be replaced, not appended to.
+                if ( m_selectionStart != m_selectionEnd )
+                    return;
+
+                wxCommandEvent event(wxEVT_TEXT_MAXLEN, GetId());
+                event.SetEventObject(this);
+                event.SetString(m_value);
+                ProcessCommand(event);
+            });
 
         ApplyValueToPeer();
         UpdateWinUIAppearance();
@@ -593,8 +651,23 @@ wxString wxTextCtrl::DoGetValue() const
     return m_value;
 }
 
-wxPoint wxTextCtrl::DoPositionToCoords(long WXUNUSED(pos)) const
+wxPoint wxTextCtrl::DoPositionToCoords(long pos) const
 {
+    if ( m_winui && m_winui->textBox )
+    {
+        try
+        {
+            const auto rect = m_winui->textBox.GetRectFromCharacterIndex(
+                static_cast<int32_t>(wxWinUIClampTextPos(pos, m_value.length())),
+                false);
+            return wxPoint(static_cast<int>(std::lround(rect.X)),
+                           static_cast<int>(std::lround(rect.Y)));
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+    }
+
     return wxDefaultPosition;
 }
 
@@ -650,6 +723,24 @@ void wxTextCtrl::ApplyValueToPeer()
     }
     m_updatingPeer = false;
     m_winui->host.ForceRender();
+}
+
+void wxTextCtrl::ReadSelectionFromPeer()
+{
+    if ( !m_winui || !m_winui->textBox )
+        return;
+
+    try
+    {
+        const long start = m_winui->textBox.SelectionStart();
+        const long length = m_winui->textBox.SelectionLength();
+        m_selectionStart = start;
+        m_selectionEnd = start + length;
+        m_insertionPoint = m_selectionEnd;
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
 }
 
 void wxTextCtrl::UpdateWinUIAppearance()
