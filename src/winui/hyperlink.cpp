@@ -138,6 +138,14 @@ void wxHyperlinkCtrl::UpdateWinUIContent()
 
     MUXC::TextBlock textBlock;
     textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(GetLabel())));
+
+    // Apply the wx link colours when set; otherwise keep the theme default.
+    const wxColour& c = m_visited && m_visitedColour.IsOk()
+        ? m_visitedColour
+        : m_normalColour;
+    if ( c.IsOk() )
+        textBlock.Foreground(wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
+
     m_winui->button.Content(textBlock);
     m_winui->host.ForceRender();
 }

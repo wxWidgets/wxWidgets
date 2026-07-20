@@ -19,6 +19,8 @@
 
 #include "private.h"
 
+#include <winrt/Windows.Globalization.NumberFormatting.h>
+
 #include <cmath>
 
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
@@ -45,6 +47,22 @@ MUXC::NumberBox wxWinUICreateNumberBox()
     box.SpinButtonPlacementMode(MUXC::NumberBoxSpinButtonPlacementMode::Inline);
     box.ValidationMode(MUXC::NumberBoxValidationMode::InvalidInputOverwritten);
     return box;
+}
+
+// Display exactly the given number of fraction digits (0 for integers).
+void wxWinUIApplyDigits(MUXC::NumberBox const& box, unsigned digits)
+{
+    using namespace winrt::Windows::Globalization::NumberFormatting;
+
+    DecimalFormatter formatter;
+    formatter.IntegerDigits(1);
+    formatter.FractionDigits(static_cast<int32_t>(digits));
+
+    IncrementNumberRounder rounder;
+    rounder.Increment(std::pow(10.0, -static_cast<double>(digits)));
+    formatter.NumberRounder(rounder);
+
+    box.NumberFormatter(formatter);
 }
 
 } // namespace
@@ -100,6 +118,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     try
     {
         m_winui->box = wxWinUICreateNumberBox();
+        wxWinUIApplyDigits(m_winui->box, 0);
         m_winui->valueChangedToken = m_winui->box.ValueChanged(
             [this](MUXC::NumberBox const&,
                    MUXC::NumberBoxValueChangedEventArgs const& args)
@@ -205,6 +224,12 @@ void wxSpinCtrl::OnPeerValueChanged(double newValue)
 
     m_value = v;
 
+    // wxMSW sends wxEVT_TEXT for the text change before the spin event.
+    wxCommandEvent textEvent(wxEVT_TEXT, GetId());
+    textEvent.SetEventObject(this);
+    textEvent.SetString(GetTextValue());
+    HandleWindowEvent(textEvent);
+
     wxSpinEvent event(wxEVT_SPINCTRL, GetId());
     event.SetEventObject(this);
     event.SetInt(m_value);
@@ -267,6 +292,7 @@ bool wxSpinCtrlDouble::Create(wxWindow *parent,
     try
     {
         m_winui->box = wxWinUICreateNumberBox();
+        wxWinUIApplyDigits(m_winui->box, m_digits);
         m_winui->valueChangedToken = m_winui->box.ValueChanged(
             [this](MUXC::NumberBox const&,
                    MUXC::NumberBoxValueChangedEventArgs const& args)
@@ -319,6 +345,19 @@ void wxSpinCtrlDouble::SetIncrement(double inc)
 void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
     m_digits = digits;
+
+    if ( m_winui && m_winui->box )
+    {
+        try
+        {
+            wxWinUIApplyDigits(m_winui->box, m_digits);
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("WinUI NumberBox digits", e);
+        }
+        m_winui->host.ForceRender();
+    }
 }
 
 wxString wxSpinCtrlDouble::GetTextValue() const
@@ -366,6 +405,12 @@ void wxSpinCtrlDouble::OnPeerValueChanged(double newValue)
         return;
 
     m_value = v;
+
+    // wxMSW sends wxEVT_TEXT for the text change before the spin event.
+    wxCommandEvent textEvent(wxEVT_TEXT, GetId());
+    textEvent.SetEventObject(this);
+    textEvent.SetString(GetTextValue());
+    HandleWindowEvent(textEvent);
 
     wxSpinDoubleEvent event(wxEVT_SPINCTRLDOUBLE, GetId(), m_value);
     event.SetEventObject(this);

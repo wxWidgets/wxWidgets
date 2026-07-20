@@ -62,22 +62,30 @@ void wxStaticLine::UpdateWinUIContent()
     if ( !m_winui )
         return;
 
-    try
-    {
-        const char *xaml = IsVertical()
-            ? "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" "
-              "Background=\"#808080\" Width=\"1\" />"
-            : "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" "
-              "Background=\"#808080\" Height=\"1\" />";
+    // Use the theme divider brush so the line follows light/dark mode; fall
+    // back to a fixed grey if the resource is unavailable.
+    const char *fmtTheme =
+        "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" "
+        "Background=\"{ThemeResource DividerStrokeColorDefaultBrush}\" %s=\"1\" />";
+    const char *fmtFixed =
+        "<Border xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" "
+        "Background=\"#808080\" %s=\"1\" />";
+    const char *dim = IsVertical() ? "Width" : "Height";
 
-        const auto loaded =
-            winrt::Microsoft::UI::Xaml::Markup::XamlReader::Load(wxWinUIToHString(xaml));
-        m_winui->element = loaded.as<winrt::Microsoft::UI::Xaml::UIElement>();
-        m_winui->host.SetContent(m_winui->element);
-    }
-    catch ( const winrt::hresult_error& e )
+    for ( const char *fmt : { fmtTheme, fmtFixed } )
     {
-        wxWinUILogException("WinUI static line creation", e);
+        try
+        {
+            const auto loaded = winrt::Microsoft::UI::Xaml::Markup::XamlReader::Load(
+                wxWinUIToHString(wxString::Format(fmt, dim)));
+            m_winui->element = loaded.as<winrt::Microsoft::UI::Xaml::UIElement>();
+            m_winui->host.SetContent(m_winui->element);
+            return;
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("WinUI static line creation", e);
+        }
     }
 }
 

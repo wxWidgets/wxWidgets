@@ -41,15 +41,18 @@ public:
     void SetHoverColour(const wxColour& colour) override { m_hoverColour = colour; }
 
     wxColour GetNormalColour() const override { return m_normalColour; }
-    void SetNormalColour(const wxColour& colour) override { m_normalColour = colour; }
+    void SetNormalColour(const wxColour& colour) override
+        { m_normalColour = colour; UpdateWinUIContent(); }
 
     wxColour GetVisitedColour() const override { return m_visitedColour; }
-    void SetVisitedColour(const wxColour& colour) override { m_visitedColour = colour; }
+    void SetVisitedColour(const wxColour& colour) override
+        { m_visitedColour = colour; UpdateWinUIContent(); }
 
     wxString GetURL() const override { return m_url; }
     void SetURL(const wxString& url) override { m_url = url; }
 
-    void SetVisited(bool visited = true) override { m_visited = visited; }
+    void SetVisited(bool visited = true) override
+        { m_visited = visited; UpdateWinUIContent(); }
     bool GetVisited() const override { return m_visited; }
 
     void SetLabel(const wxString& label) override;

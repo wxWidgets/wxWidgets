@@ -90,6 +90,9 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
                     return;
                 }
 
+                const bool cleared = !m_value.empty() &&
+                    sender.Text().empty();
+
                 m_value = wxWinUIFromHString(sender.Text());
                 m_insertionPoint = m_selectionStart = m_selectionEnd = m_value.length();
                 ApplySuggestions(m_suggestions);
@@ -98,6 +101,15 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
                 event.SetEventObject(this);
                 event.SetString(m_value);
                 ProcessCommand(event);
+
+                // The AutoSuggestBox clear affordance empties the text; report
+                // it as the cancel button, as wxMSW does.
+                if ( cleared )
+                {
+                    wxCommandEvent cancel(wxEVT_SEARCH_CANCEL, GetId());
+                    cancel.SetEventObject(this);
+                    ProcessCommand(cancel);
+                }
             });
 
         m_winui->querySubmittedToken = m_winui->box.QuerySubmitted(

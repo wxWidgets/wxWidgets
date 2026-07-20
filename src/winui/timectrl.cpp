@@ -86,7 +86,14 @@ bool wxTimePickerCtrl::Create(wxWindow *parent,
     try
     {
         m_winui->picker = MUXC::TimePicker();
-        m_winui->picker.ClockIdentifier(L"24HourClock");
+
+        // Follow the user's locale for the 12/24-hour clock, as the native
+        // control does.
+        wchar_t itime[2] = L"1";
+        ::GetLocaleInfoEx(LOCALE_NAME_USER_DEFAULT, LOCALE_ITIME, itime,
+                          WXSIZEOF(itime));
+        m_winui->picker.ClockIdentifier(
+            itime[0] == L'0' ? L"12HourClock" : L"24HourClock");
         m_winui->selectedTimeChangedToken = m_winui->picker.SelectedTimeChanged(
             [this](MUXC::TimePicker const&,
                    MUXC::TimePickerSelectedValueChangedEventArgs const&)

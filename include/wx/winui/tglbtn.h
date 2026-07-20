@@ -50,7 +50,7 @@ protected:
     wxSize DoGetBestSize() const override;
 
     void SendToggleEvent();
-    void UpdateWinUIContent();
+    virtual void UpdateWinUIContent();
 
     std::unique_ptr<wxWinUIToggleButtonImpl> m_winui;
     bool m_state = false;
@@ -91,7 +91,14 @@ public:
     void SetLabel(const wxString& label) override
         { wxToggleButton::SetLabel(label); }
 
+protected:
+    wxSize DoGetBestSize() const override;
+    void UpdateWinUIContent() override;
+    void DoSetBitmap(const wxBitmapBundle& bitmap, State which) override;
+
 private:
+    wxBitmapBundle m_bitmap;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapToggleButton);
 };
 

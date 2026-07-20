@@ -188,17 +188,68 @@ void wxToggleButton::UpdateWinUIContent()
 
 bool wxBitmapToggleButton::Create(wxWindow *parent,
                                   wxWindowID id,
-                                  const wxBitmapBundle& WXUNUSED(label),
+                                  const wxBitmapBundle& label,
                                   const wxPoint& pos,
                                   const wxSize& size,
                                   long style,
                                   const wxValidator& validator,
                                   const wxString& name)
 {
-    // TODO: render the bitmap via a WinUI Image; for now create a plain toggle
-    // so that bitmap toggle buttons remain functional under the WinUI port.
+    // Store the bitmap first so that the base Create's UpdateWinUIContent
+    // call (virtual) already renders it.
+    m_bitmap = label;
+
     return wxToggleButton::Create(parent, id, wxString(), pos, size, style,
                                   validator, name);
+}
+
+void wxBitmapToggleButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
+{
+    if ( which != State_Normal )
+        return;
+
+    m_bitmap = bitmap;
+    UpdateWinUIContent();
+    InvalidateBestSize();
+}
+
+wxSize wxBitmapToggleButton::DoGetBestSize() const
+{
+    if ( !m_bitmap.IsOk() )
+        return wxToggleButton::DoGetBestSize();
+
+    const wxSize bmp = m_bitmap.GetPreferredLogicalSizeFor(this);
+    return wxSize(bmp.x + FromDIP(24), bmp.y + FromDIP(14));
+}
+
+void wxBitmapToggleButton::UpdateWinUIContent()
+{
+    if ( !m_winui || !m_winui->button )
+        return;
+
+    if ( !m_bitmap.IsOk() )
+    {
+        wxToggleButton::UpdateWinUIContent();
+        return;
+    }
+
+    try
+    {
+        const wxBitmap bmp = m_bitmap.GetBitmapFor(this);
+        if ( auto source = wxWinUIWriteableBitmapFromBitmap(bmp) )
+        {
+            winrt::Microsoft::UI::Xaml::Controls::Image image;
+            image.Source(source);
+            image.Width(bmp.GetLogicalWidth());
+            image.Height(bmp.GetLogicalHeight());
+            m_winui->button.Content(image);
+        }
+        m_winui->host.ForceRender();
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI BitmapToggleButton content", e);
+    }
 }
 
 #endif // wxUSE_TOGGLEBTN
