@@ -20,14 +20,6 @@
 
 #include "private.h"
 
-class wxWinUIChoiceImpl
-{
-public:
-    wxWinUIControlHost host;
-    winrt::Microsoft::UI::Xaml::Controls::ComboBox comboBox{ nullptr };
-    winrt::event_token selectionChangedToken{};
-};
-
 wxChoice::wxChoice()
     : m_selection(wxNOT_FOUND),
       m_updatingPeer(false)
@@ -96,7 +88,6 @@ bool wxChoice::Create(wxWindow *parent,
     {
         m_winui->comboBox = winrt::Microsoft::UI::Xaml::Controls::ComboBox();
         m_winui->comboBox.IsEditable(false);
-        m_winui->comboBox.PlaceholderText(wxWinUIToHString("Select an item"));
         m_winui->comboBox.MaxDropDownHeight(240);
 
         m_winui->selectionChangedToken = m_winui->comboBox.SelectionChanged(

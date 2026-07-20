@@ -89,7 +89,10 @@ protected:
 
     void ApplyItemsToPeer();
     void ApplySelectionToPeer();
-    void SendSelectionEvent();
+
+    // Fire the selection event for a user selection; wxComboBox overrides it
+    // to send wxEVT_COMBOBOX (+ wxEVT_TEXT) instead of wxEVT_CHOICE.
+    virtual void SendSelectionEvent();
 
     std::unique_ptr<wxWinUIChoiceImpl> m_winui;
     wxArrayString m_items;

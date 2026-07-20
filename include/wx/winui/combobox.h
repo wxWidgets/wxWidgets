@@ -98,10 +98,13 @@ protected:
     wxWindow *GetEditableWindow() override { return this; }
     void DoSetValue(const wxString& value, int flags = 0) override;
     void EnableTextChangedEvents(bool enable) override;
+    void SendSelectionEvent() override;
 
 private:
     void SendTextEvent();
     void ClampTextState();
+    void ApplyTextToPeer();
+    void OnPeerTextChanged();
     WXHWND GetEditHWND() const override { return GetHWND(); }
 
     wxString m_value;

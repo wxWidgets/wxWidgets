@@ -124,6 +124,22 @@ class wxBitmap;
 winrt::Microsoft::UI::Xaml::Media::Imaging::WriteableBitmap
 wxWinUIWriteableBitmapFromBitmap(const wxBitmap& bitmap);
 
+// Peer state shared by wxChoice and wxComboBox (which reconfigures the same
+// WinUI ComboBox to be editable).
+class wxWinUIChoiceImpl
+{
+public:
+    wxWinUIControlHost host;
+    winrt::Microsoft::UI::Xaml::Controls::ComboBox comboBox{ nullptr };
+    winrt::event_token selectionChangedToken{};
+
+    // wxComboBox only: the inner TextBox of an editable ComboBox (resolved
+    // lazily from the control template once it is loaded), and its hooks.
+    winrt::Microsoft::UI::Xaml::Controls::TextBox editBox{ nullptr };
+    winrt::event_token textSubmittedToken{};
+    long long textChangedCallbackToken = 0;
+};
+
 // Strip '&' mnemonics ("&&" -> "&"): WinUI labels don't support them.
 wxString wxWinUIRemoveMnemonics(const wxString& label);
 
