@@ -1,0 +1,1 @@
+wxAll (GUI): Fix "align" attribute with tables in wxHTML (Richard Thomson, #21853).
