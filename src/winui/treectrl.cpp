@@ -17,6 +17,7 @@
     #include "wx/app.h"
     #include "wx/settings.h"
     #include "wx/textctrl.h"
+    #include "wx/utils.h"
 #endif
 
 #include "private.h"
@@ -76,6 +77,8 @@ public:
     winrt::event_token itemInvokedToken{};
     winrt::event_token rightTappedToken{};
     winrt::event_token keyDownToken{};
+    winrt::event_token dragStartingToken{};
+    winrt::event_token dragCompletedToken{};
 
     std::unique_ptr<wxWinUITreeItem> root;
     wxWinUITreeItem *selection = nullptr;
@@ -303,6 +306,49 @@ bool wxTreeCtrl::Create(wxWindow *parent,
             {
                 if ( m_winui && m_winui->selection )
                     SendTreeEvent(wxEVT_TREE_ITEM_ACTIVATED, m_winui->selection);
+            });
+
+        // Item dragging: wx semantics are that the application performs the
+        // actual move itself from the END_DRAG handler, so keep the WinUI
+        // automatic reordering off and only report the gesture.
+        m_winui->treeView.CanDragItems(true);
+        m_winui->treeView.CanReorderItems(false);
+
+        m_winui->dragStartingToken = m_winui->treeView.DragItemsStarting(
+            [this](MUXC::TreeView const&,
+                   MUXC::TreeViewDragItemsStartingEventArgs const& args)
+            {
+                if ( !m_winui )
+                    return;
+
+                wxWinUITreeItem *item = m_winui->selection;
+                wxTreeEvent event(wxEVT_TREE_BEGIN_DRAG, this, MakeId(item));
+                event.SetPoint(ScreenToClient(wxGetMousePosition()));
+
+                // As in the other ports, dragging must be explicitly allowed
+                // by the handler calling event.Allow().
+                if ( GetEventHandler()->ProcessEvent(event) && event.IsAllowed() )
+                    m_dragItem = item;
+                else
+                    args.Cancel(true);
+            });
+
+        m_winui->dragCompletedToken = m_winui->treeView.DragItemsCompleted(
+            [this](MUXC::TreeView const&,
+                   MUXC::TreeViewDragItemsCompletedEventArgs const&)
+            {
+                if ( !m_winui || !m_dragItem )
+                    return;
+
+                m_dragItem = nullptr;
+
+                const wxPoint pt = ScreenToClient(wxGetMousePosition());
+                int flags = 0;
+                const wxTreeItemId target = DoTreeHitTest(pt, flags);
+
+                wxTreeEvent event(wxEVT_TREE_END_DRAG, this, target);
+                event.SetPoint(pt);
+                GetEventHandler()->ProcessEvent(event);
             });
 
         m_winui->keyDownToken = m_winui->treeView.KeyDown(

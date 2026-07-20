@@ -210,6 +210,9 @@ private:
     wxTextCtrl *m_editControl = nullptr;
     wxWinUITreeItem *m_editItem = nullptr;
 
+    // The item being dragged, if the application allowed the drag.
+    wxWinUITreeItem *m_dragItem = nullptr;
+
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);
 };
