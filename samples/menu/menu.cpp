@@ -638,7 +638,7 @@ MyFrame::MyFrame()
     menuMenu->AppendSeparator();
 #endif
 
-    menuMenu->Append(Menu_Menu_GetInfo, "Get menu item in&fo\tAlt-F",
+    menuMenu->Append(Menu_Menu_GetInfo, "Get menu item inf&o\tAlt-O",
                      "Show the state of the last menu item");
 #if wxUSE_TEXTDLG
     menuMenu->Append(Menu_Menu_SetLabel, "Set menu item label\tAlt-L",
