@@ -182,6 +182,10 @@ private:
     void SchedulePeerSelectionCorrection();
     void UpdatePeerItem(wxWinUITreeItem *item);
     void RefreshPeerItems();
+    // Retrieve the on-screen rectangle of the item's realized container, in
+    // client coordinates.  Fails if the container is not realized (yet).
+    bool GetItemPeerRect(wxWinUITreeItem *item, wxRect& rect) const;
+    void OnPeerRightTapped(const wxPoint& pt);
     void OnPeerSelectionChanged();
     void OnPeerNodeExpanded(wxWinUITreeItem *item);
     void OnPeerNodeCollapsed(wxWinUITreeItem *item);
@@ -201,6 +205,10 @@ private:
     // trying to select it we just push the real selection back without
     // re-dispatching the (rejected) selection event.
     wxWinUITreeItem *m_peerRejectedItem = nullptr;
+
+    // In-place label editing state.
+    wxTextCtrl *m_editControl = nullptr;
+    wxWinUITreeItem *m_editItem = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);

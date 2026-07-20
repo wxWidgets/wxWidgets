@@ -14,12 +14,15 @@
 #include "wx/treectrl.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/settings.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "private.h"
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <memory>
 #include <vector>
@@ -69,6 +72,7 @@ public:
     winrt::event_token expandingToken{};
     winrt::event_token collapsedToken{};
     winrt::event_token itemInvokedToken{};
+    winrt::event_token rightTappedToken{};
 
     std::unique_ptr<wxWinUITreeItem> root;
     wxWinUITreeItem *selection = nullptr;
@@ -296,6 +300,19 @@ bool wxTreeCtrl::Create(wxWindow *parent,
             {
                 if ( m_winui && m_winui->selection )
                     SendTreeEvent(wxEVT_TREE_ITEM_ACTIVATED, m_winui->selection);
+            });
+
+        m_winui->rightTappedToken = m_winui->treeView.RightTapped(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   MUX::Input::RightTappedRoutedEventArgs const& event)
+            {
+                if ( !m_winui )
+                    return;
+
+                const auto pos = event.GetPosition(m_winui->treeView);
+                OnPeerRightTapped(FromDIP(wxPoint(
+                    static_cast<int>(std::lround(pos.X)),
+                    static_cast<int>(std::lround(pos.Y)))));
             });
 
         m_winui->host.SetContent(m_winui->treeView);
@@ -696,6 +713,9 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
         return;
     }
 
+    if ( m_editItem && wxWinUIIsDescendantOf(m_editItem, treeItem) )
+        EndEditLabel(MakeId(m_editItem), true);
+
     if ( m_winui->selection && wxWinUIIsDescendantOf(m_winui->selection, treeItem) )
         ChangeSelection(nullptr, false, true);
 
@@ -715,6 +735,12 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 {
     wxWinUITreeItem *treeItem = GetItem(item);
     wxCHECK_RET( treeItem, wxT("invalid tree item") );
+
+    if ( m_editItem && wxWinUIIsDescendantOf(m_editItem, treeItem) &&
+         m_editItem != treeItem )
+    {
+        EndEditLabel(MakeId(m_editItem), true);
+    }
 
     if ( m_winui->selection && wxWinUIIsDescendantOf(m_winui->selection, treeItem) &&
          m_winui->selection != treeItem )
@@ -739,6 +765,9 @@ void wxTreeCtrl::DeleteAllItems()
 {
     if ( !m_winui )
         return;
+
+    if ( m_editControl )
+        EndEditLabel(MakeId(m_editItem), true);
 
     m_updatingPeer = true;
     if ( m_winui->treeView )
@@ -905,20 +934,97 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
     EnsureVisible(item);
 }
 
-wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& WXUNUSED(item),
-                                  wxClassInfo* WXUNUSED(textCtrlClass))
+wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item,
+                                  wxClassInfo* textCtrlClass)
 {
-    return nullptr;
+    wxWinUITreeItem *treeItem = GetItem(item);
+    wxCHECK_MSG( treeItem, nullptr, wxT("invalid tree item") );
+
+    // Only one edit at a time.
+    if ( m_editControl )
+        EndEditLabel(MakeId(m_editItem), true);
+
+    wxTreeEvent event(wxEVT_TREE_BEGIN_LABEL_EDIT, this, item);
+    if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+        return nullptr;
+
+    wxRect rect;
+    if ( !GetBoundingRect(item, rect, true) )
+        rect = wxRect(0, 0, GetClientSize().x, FromDIP(32));
+
+    // The edit control is a plain wx child of the tree: its HWND (and island)
+    // paints above the TreeView island, which is pinned to the bottom.
+    wxTextCtrl *text = wxStaticCast(textCtrlClass->CreateObject(), wxTextCtrl);
+    if ( !text->Create(this, wxID_ANY, treeItem->text,
+                       rect.GetPosition(),
+                       wxSize(wxMax(rect.width, FromDIP(80)), rect.height),
+                       wxTE_PROCESS_ENTER) )
+    {
+        delete text;
+        return nullptr;
+    }
+
+    m_editControl = text;
+    m_editItem = treeItem;
+
+    text->SelectAll();
+    text->SetFocus();
+
+    text->Bind(wxEVT_TEXT_ENTER,
+        [this](wxCommandEvent&)
+        {
+            EndEditLabel(MakeId(m_editItem), false);
+        });
+    text->Bind(wxEVT_KILL_FOCUS,
+        [this](wxFocusEvent& e)
+        {
+            e.Skip();
+            EndEditLabel(MakeId(m_editItem), false);
+        });
+    text->Bind(wxEVT_CHAR_HOOK,
+        [this](wxKeyEvent& e)
+        {
+            if ( e.GetKeyCode() == WXK_ESCAPE )
+                EndEditLabel(MakeId(m_editItem), true);
+            else
+                e.Skip();
+        });
+
+    return text;
 }
 
 wxTextCtrl *wxTreeCtrl::GetEditControl() const
 {
-    return nullptr;
+    return m_editControl;
 }
 
 void wxTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item),
-                              bool WXUNUSED(discardChanges))
+                              bool discardChanges)
 {
+    if ( !m_editControl )
+        return;
+
+    wxTextCtrl * const text = m_editControl;
+    wxWinUITreeItem * const treeItem = m_editItem;
+    m_editControl = nullptr;
+    m_editItem = nullptr;
+
+    const wxString value = text->GetValue();
+
+    // We may be called from one of the edit control's own event handlers, so
+    // don't delete it right away.
+    text->Hide();
+    wxTheApp->ScheduleForDestruction(text);
+
+    wxTreeEvent event(wxEVT_TREE_END_LABEL_EDIT, this, MakeId(treeItem));
+    event.SetLabel(value);
+    event.SetEditCanceled(discardChanges);
+
+    const bool processed = GetEventHandler()->ProcessEvent(event);
+    if ( !discardChanges && (!processed || event.IsAllowed()) )
+        SetItemText(MakeId(treeItem), value);
+
+    SetFocus();
 }
 
 void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
@@ -936,13 +1042,48 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
     RefreshPeerItems();
 }
 
+bool wxTreeCtrl::GetItemPeerRect(wxWinUITreeItem *item, wxRect& rect) const
+{
+    if ( !m_winui || !m_winui->treeView || !item || !item->node )
+        return false;
+
+    try
+    {
+        const auto container = m_winui->treeView.ContainerFromNode(item->node);
+        const auto element = container.try_as<MUX::FrameworkElement>();
+        if ( !element || element.ActualHeight() <= 0 )
+            return false;
+
+        const auto transform = element.TransformToVisual(m_winui->treeView);
+        const auto origin =
+            transform.TransformPoint(winrt::Windows::Foundation::Point{ 0, 0 });
+
+        rect = wxRect(FromDIP(wxPoint(
+                          static_cast<int>(std::lround(origin.X)),
+                          static_cast<int>(std::lround(origin.Y)))),
+                      FromDIP(wxSize(
+                          static_cast<int>(std::lround(element.ActualWidth())),
+                          static_cast<int>(std::lround(element.ActualHeight())))));
+        return true;
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        return false;
+    }
+}
+
 bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
                                  wxRect& rect,
                                  bool WXUNUSED(textOnly)) const
 {
-    if ( !GetItem(item) )
+    wxWinUITreeItem *treeItem = GetItem(item);
+    if ( !treeItem )
         return false;
 
+    if ( GetItemPeerRect(treeItem, rect) )
+        return true;
+
+    // The container isn't realized: fall back to an estimate.
     rect = wxRect(wxPoint(0, 0), wxSize(GetClientSize().x, FromDIP(32)));
     return true;
 }
@@ -1039,10 +1180,42 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
 
 wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
 {
-    flags = wxTREE_HITTEST_NOWHERE;
-    if ( point.x < 0 || point.y < 0 || point.x >= GetClientSize().x )
+    flags = 0;
+    const wxSize client = GetClientSize();
+    if ( point.x < 0 )
+        flags |= wxTREE_HITTEST_TOLEFT;
+    if ( point.x >= client.x )
+        flags |= wxTREE_HITTEST_TORIGHT;
+    if ( point.y < 0 )
+        flags |= wxTREE_HITTEST_ABOVE;
+    if ( point.y >= client.y )
+        flags |= wxTREE_HITTEST_BELOW;
+    if ( flags )
         return wxTreeItemId();
 
+    flags = wxTREE_HITTEST_NOWHERE;
+
+    // Prefer the real geometry of the realized item containers.
+    bool anyRealized = false;
+    for ( wxTreeItemId id = GetFirstVisibleItem(); id.IsOk(); id = GetNextVisible(id) )
+    {
+        wxRect rect;
+        if ( !GetItemPeerRect(GetItem(id), rect) )
+            continue;
+
+        anyRealized = true;
+        if ( point.y >= rect.y && point.y < rect.y + rect.height )
+        {
+            flags = wxTREE_HITTEST_ONITEM | wxTREE_HITTEST_ONITEMLABEL;
+            return id;
+        }
+    }
+
+    if ( anyRealized )
+        return wxTreeItemId();
+
+    // No containers realized (control not shown yet): estimate with a fixed
+    // row height.
     const int itemHeight = FromDIP(32);
     const int target = itemHeight > 0 ? point.y / itemHeight : 0;
     int index = 0;
@@ -1401,6 +1574,23 @@ void wxTreeCtrl::OnPeerSelectionChanged()
     // further attempts by the control to select it.  Otherwise the selection
     // was accepted, so clear any previous rejection.
     m_peerRejectedItem = m_peerCorrectionPending ? item : nullptr;
+}
+
+void wxTreeCtrl::OnPeerRightTapped(const wxPoint& pt)
+{
+    int flags = 0;
+    const wxTreeItemId id = DoTreeHitTest(pt, flags);
+    if ( !id.IsOk() )
+        return;
+
+    wxTreeEvent rclick(wxEVT_TREE_ITEM_RIGHT_CLICK, this, id);
+    rclick.SetPoint(pt);
+    GetEventHandler()->ProcessEvent(rclick);
+
+    // As under wxMSW, a right click is also the context menu request.
+    wxTreeEvent menu(wxEVT_TREE_ITEM_MENU, this, id);
+    menu.SetPoint(pt);
+    GetEventHandler()->ProcessEvent(menu);
 }
 
 void wxTreeCtrl::OnPeerNodeExpanded(wxWinUITreeItem *item)
