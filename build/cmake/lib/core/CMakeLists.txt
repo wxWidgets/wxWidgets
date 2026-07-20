@@ -68,6 +68,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/commandlinkbutton.cpp"
             "${wxSOURCE_DIR}/src/msw/fdrepdlg.cpp"
             "${wxSOURCE_DIR}/src/msw/fontdlg.cpp"
+            "${wxSOURCE_DIR}/src/msw/richtooltip.cpp"
             "${wxSOURCE_DIR}/src/msw/toolbar.cpp"
             )
         wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/"
@@ -98,6 +99,7 @@ if(WXMSW)
             src/winui/radiobox.cpp
             src/winui/radiobut.cpp
             src/winui/renderer.cpp
+            src/winui/richtooltip.cpp
             src/winui/scrolbar.cpp
             src/winui/slider.cpp
             src/winui/spinbutt.cpp
