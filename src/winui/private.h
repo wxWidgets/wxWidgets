@@ -18,6 +18,16 @@
     #undef GetCurrentTime
 #endif
 
+// C++/WinRT's base.h uses std::array in constexpr code which the min/max macros
+// from <windows.h> break (they may be pulled in, without NOMINMAX, by wx headers
+// included before this one).  Undefine them before including any winrt header.
+#ifdef min
+    #undef min
+#endif
+#ifdef max
+    #undef max
+#endif
+
 #include <winrt/base.h>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
@@ -75,6 +85,13 @@ public:
     // Pass 0 to fill the whole client area (the default).
     void SetBridgeHeightLimit(int physicalHeight);
 
+    // Reflect a wxWindow::SetCursor() on this island (per-window cursor, e.g.
+    // setting a wait cursor on a single control).  Mapped to ProtectedCursor.
+    void ApplyWxCursor(const wxCursor& cursor);
+
+    // The wx control whose HWND hosts this island.
+    wxWindow *HostedWindow() const { return m_window; }
+
 private:
     void UpdateContentSize(int width, int height);
     void MoveAndResize();
@@ -106,6 +123,13 @@ wxString wxWinUIFromHString(const winrt::hstring& str);
 class wxBitmap;
 winrt::Microsoft::UI::Xaml::Media::Imaging::WriteableBitmap
 wxWinUIWriteableBitmapFromBitmap(const wxBitmap& bitmap);
+
+// Strip '&' mnemonics ("&&" -> "&"): WinUI labels don't support them.
+wxString wxWinUIRemoveMnemonics(const wxString& label);
+
+// Set wrapped, selectable text on a dialog TextBlock.
+void wxWinUISetDialogText(winrt::Microsoft::UI::Xaml::Controls::TextBlock const& text,
+                          const wxString& value);
 
 // Set (or clear, when tip is empty) a WinUI tooltip on a hosted XAML element.
 // Shared by the wxWinUI controls so that wxWindow::SetToolTip() actually shows

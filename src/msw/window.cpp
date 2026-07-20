@@ -805,6 +805,12 @@ void wxWindowMSW::WXUpdateCursor()
     // Call the base class version to update m_cursor.
     wxWindowBase::WXUpdateCursor();
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // XAML islands draw their own cursor and ignore ::SetCursor(), so reflect
+    // the per-window cursor onto the island through XAML as well.
+    wxWinUISetWindowCursor(static_cast<wxWindow *>(this), m_cursor);
+#endif
+
     // don't "overwrite" busy cursor
     if ( wxIsBusy() )
         return;

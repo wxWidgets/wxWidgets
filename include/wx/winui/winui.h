@@ -40,7 +40,11 @@ WXDLLIMPEXP_CORE void wxWinUISetAppTheme(wxWinUIAppTheme theme);
 WXDLLIMPEXP_CORE wxWinUIAppTheme wxWinUIGetAppTheme();
 
 // Crash-safe debug logging for the WinUI port. Appends to
-// %TEMP%\wxwinui-tooltip.log and flushes each line.
+// %TEMP%\wxwinui-tooltip.log and flushes each line.  Compiled out (no-op)
+// unless wxUSE_WINUI3_DEBUG_LOG is defined as 1 when building the library.
+#ifndef wxUSE_WINUI3_DEBUG_LOG
+    #define wxUSE_WINUI3_DEBUG_LOG 0
+#endif
 WXDLLIMPEXP_CORE void wxWinUIDebugLog(const char *format, ...);
 
 // Apply the current backdrop (Mica) and title-bar theme to a top-level window.
@@ -50,6 +54,18 @@ WXDLLIMPEXP_CORE void wxWinUIApplyWindowBackdrop(wxWindow *tlw);
 // Return true for wxWindows whose HWND is used as a WinUI XAML island host.
 // They must not be passed to native MSW tooltip registration directly.
 WXDLLIMPEXP_CORE bool wxWinUIIsHostWindow(wxWindow *win);
+
+// Reflect a wxWindow::SetCursor() onto its WinUI island, so per-window cursors
+// (e.g. a wait cursor on a single control) are shown over the XAML content.
+// Called from wxWindowMSW::WXUpdateCursor() under __WXWINUI__.
+class WXDLLIMPEXP_FWD_CORE wxCursor;
+WXDLLIMPEXP_CORE void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor);
+
+// Whether wxRadioBox draws a Win32-style titled frame around its items (on by
+// default, for consistency with the other toolkits).  Turn it off for a flatter,
+// pure-WinUI look.  Affects radio boxes created afterwards.
+WXDLLIMPEXP_CORE void wxWinUISetRadioBoxBorder(bool useBorder);
+WXDLLIMPEXP_CORE bool wxWinUIGetRadioBoxBorder();
 
 // The DWM Mica backdrop surface only initialises after the window is actually
 // resized on a given monitor; until then it can render as an opaque rectangle

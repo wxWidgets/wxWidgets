@@ -21,6 +21,8 @@
     #include "wx/window.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
+    #include "wx/cursor.h"
+    #include "wx/font.h"
 #endif
 
 #include "wx/app.h"
@@ -29,10 +31,12 @@
 
 #include <dwmapi.h>
 #include <winrt/Windows.Storage.Streams.h>
+#include <winrt/Microsoft.UI.Input.h>
 
 #include <algorithm>
 #include <cstdarg>
 #include <cstring>
+#include <map>
 #include <set>
 #include <vector>
 
@@ -56,6 +60,78 @@ const wchar_t wxWinUIBackdropTransparentProp[] =
 
 // All live control hosts, so the theme can be switched on the fly.
 std::vector<wxWinUIControlHost *> gs_winuiHosts;
+
+// A Grid subclass used as the (single-child) root of every island so we can
+// override the pointer cursor.  ProtectedCursor() is a protected UIElement
+// method only reachable from a derived element, hence the subclass.  This is how
+// a per-window wxWindow::SetCursor() (e.g. a wait cursor on a single control) is
+// reflected over XAML islands, which otherwise insist on rendering their own
+// arrow cursor.  Setting ProtectedCursor on the island root is non-blocking:
+// input still reaches the real controls.
+struct wxWinUICursorGrid
+    : winrt::Microsoft::UI::Xaml::Controls::GridT<wxWinUICursorGrid>
+{
+    void SetWindowCursor(winrt::Microsoft::UI::Input::InputCursor const& cursor)
+    {
+        m_windowCursor = cursor;
+        try
+        {
+            // A null cursor means "use the default arrow".
+            ProtectedCursor(m_windowCursor);
+        }
+        catch ( const winrt::hresult_error& )
+        {
+            // Ignore: not being able to set the cursor is never fatal.
+        }
+    }
+
+    winrt::Microsoft::UI::Input::InputCursor m_windowCursor{ nullptr };
+};
+
+// The cursor-root Grid for each live control host.
+std::map<wxWinUIControlHost *,
+         winrt::com_ptr<wxWinUICursorGrid>> gs_cursorGrids;
+
+// Map a wxCursor to the equivalent WinUI input cursor (null == default arrow).
+winrt::Microsoft::UI::Input::InputCursor
+wxWinUIInputCursorFromWxCursor(const wxCursor& cursor)
+{
+    namespace MUI = winrt::Microsoft::UI::Input;
+    if ( !cursor.IsOk() )
+        return nullptr;
+
+    const HCURSOR h = reinterpret_cast<HCURSOR>(cursor.GetHCURSOR());
+    if ( !h )
+        return nullptr;
+
+    static const struct { const wchar_t *id; MUI::InputSystemCursorShape shape; }
+    s_map[] =
+    {
+        { IDC_WAIT,       MUI::InputSystemCursorShape::Wait },
+        { IDC_APPSTARTING,MUI::InputSystemCursorShape::AppStarting },
+        { IDC_ARROW,      MUI::InputSystemCursorShape::Arrow },
+        { IDC_HAND,       MUI::InputSystemCursorShape::Hand },
+        { IDC_IBEAM,      MUI::InputSystemCursorShape::IBeam },
+        { IDC_CROSS,      MUI::InputSystemCursorShape::Cross },
+        { IDC_SIZEALL,    MUI::InputSystemCursorShape::SizeAll },
+        { IDC_SIZENWSE,   MUI::InputSystemCursorShape::SizeNorthwestSoutheast },
+        { IDC_SIZENESW,   MUI::InputSystemCursorShape::SizeNortheastSouthwest },
+        { IDC_SIZEWE,     MUI::InputSystemCursorShape::SizeWestEast },
+        { IDC_SIZENS,     MUI::InputSystemCursorShape::SizeNorthSouth },
+        { IDC_NO,         MUI::InputSystemCursorShape::UniversalNo },
+        { IDC_HELP,       MUI::InputSystemCursorShape::Help },
+        { IDC_UPARROW,    MUI::InputSystemCursorShape::UpArrow },
+    };
+
+    for ( const auto& e : s_map )
+    {
+        if ( h == ::LoadCursorW(nullptr, e.id) )
+            return MUI::InputSystemCursor::Create(e.shape);
+    }
+
+    // Unknown (e.g. a custom cursor): fall back to the default arrow.
+    return nullptr;
+}
 
 // Monitors whose DWM backdrop surface has already been primed (see
 // wxWinUIPrimeBackdrop): each monitor needs a one-time size nudge.
@@ -206,6 +282,9 @@ void wxWinUILogException(const char *what, const winrt::hresult_error& e)
 
 void wxWinUIDebugLog(const char *format, ...)
 {
+#if !wxUSE_WINUI3_DEBUG_LOG
+    wxUnusedVar(format);
+#else
     va_list argptr;
     va_start(argptr, format);
     const wxString message = wxString::FormatV(wxString::FromAscii(format),
@@ -253,6 +332,7 @@ void wxWinUIDebugLog(const char *format, ...)
     }
 
     ::CloseHandle(file);
+#endif // wxUSE_WINUI3_DEBUG_LOG
 }
 
 winrt::hstring wxWinUIToHString(const wxString& str)
@@ -263,6 +343,40 @@ winrt::hstring wxWinUIToHString(const wxString& str)
 wxString wxWinUIFromHString(const winrt::hstring& str)
 {
     return wxString(str.c_str());
+}
+
+wxString wxWinUIRemoveMnemonics(const wxString& label)
+{
+    wxString stripped;
+    stripped.reserve(label.length());
+
+    for ( size_t i = 0; i < label.length(); ++i )
+    {
+        if ( label[i] == '&' )
+        {
+            if ( i + 1 < label.length() && label[i + 1] == '&' )
+            {
+                stripped += '&';
+                ++i;
+            }
+        }
+        else
+        {
+            stripped += label[i];
+        }
+    }
+
+    return stripped;
+}
+
+void wxWinUISetDialogText(winrt::Microsoft::UI::Xaml::Controls::TextBlock const& text,
+                          const wxString& value)
+{
+    using namespace winrt::Microsoft::UI::Xaml;
+
+    text.Text(wxWinUIToHString(value));
+    text.TextWrapping(TextWrapping::Wrap);
+    text.IsTextSelectionEnabled(true);
 }
 
 bool wxWinUIIsHostWindow(wxWindow *win)
@@ -477,6 +591,7 @@ void wxWinUIControlHost::Close()
     m_hostHwnd = nullptr;
     m_bridgeHwnd = nullptr;
     m_content = nullptr;
+    gs_cursorGrids.erase(this);
 
     if ( !m_source )
     {
@@ -518,7 +633,17 @@ void wxWinUIControlHost::SetContent(const winrt::Microsoft::UI::Xaml::UIElement&
         return;
 
     m_content = element;
-    m_source.Content(element);
+
+    // Wrap the control's element in a cursor-capable Grid that becomes the
+    // island root, so we can override the pointer cursor (busy / per-window)
+    // without blocking input.  The element is sized explicitly in
+    // UpdateContentSize(), so the Grid simply wraps tightly around it.
+    auto cursorGrid = winrt::make_self<wxWinUICursorGrid>();
+    auto cursorRoot = cursorGrid.as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
+    cursorRoot.Children().Append(element);
+    gs_cursorGrids[this] = cursorGrid;
+
+    m_source.Content(cursorRoot);
     ApplyTheme(gs_winuiElementTheme);
     MoveAndResize();
 
@@ -555,7 +680,30 @@ void wxWinUIControlHost::ClearContent()
         return;
 
     m_content = nullptr;
+    gs_cursorGrids.erase(this);
     m_source.Content(nullptr);
+}
+
+void wxWinUIControlHost::ApplyWxCursor(const wxCursor& cursor)
+{
+    const auto it = gs_cursorGrids.find(this);
+    if ( it != gs_cursorGrids.end() )
+        it->second->SetWindowCursor(wxWinUIInputCursorFromWxCursor(cursor));
+}
+
+void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor)
+{
+    if ( !win )
+        return;
+
+    for ( wxWinUIControlHost *host : gs_winuiHosts )
+    {
+        if ( host->HostedWindow() == win )
+        {
+            host->ApplyWxCursor(cursor);
+            return;
+        }
+    }
 }
 
 void wxWinUIControlHost::ApplyTheme(winrt::Microsoft::UI::Xaml::ElementTheme theme)
