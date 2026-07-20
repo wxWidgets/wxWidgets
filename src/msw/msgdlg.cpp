@@ -41,6 +41,8 @@
 
 using namespace wxMSWMessageDialog;
 
+#ifndef __WXWINUI__
+
 wxIMPLEMENT_CLASS(wxMessageDialog, wxDialog);
 
 // the order in this array is the one in which buttons appear in the
@@ -579,6 +581,8 @@ void wxMessageDialog::DoCentre(int dir)
 
     wxMessageDialogBase::DoCentre(dir);
 }
+
+#endif // !__WXWINUI__
 
 // ----------------------------------------------------------------------------
 // Helpers of the wxMSWMessageDialog namespace

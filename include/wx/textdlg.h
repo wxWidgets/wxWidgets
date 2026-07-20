@@ -10,7 +10,11 @@
 #ifndef _WX_TEXTDLG_H_BASE_
 #define _WX_TEXTDLG_H_BASE_
 
-#include "wx/generic/textdlgg.h"
+#if defined(__WXWINUI__)
+    #include "wx/winui/textdlg.h"
+#else
+    #include "wx/generic/textdlgg.h"
+#endif
 
 #endif // _WX_TEXTDLG_H_BASE_
 

@@ -33,6 +33,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/generic/infobar.cpp"
             "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
             "${wxSOURCE_DIR}/src/generic/srchctlg.cpp"
+            "${wxSOURCE_DIR}/src/generic/textdlgg.cpp"
             "${wxSOURCE_DIR}/src/msw/button.cpp"
             "${wxSOURCE_DIR}/src/msw/calctrl.cpp"
             "${wxSOURCE_DIR}/src/msw/datectrl.cpp"
@@ -58,6 +59,7 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/statbmp.cpp"
             "${wxSOURCE_DIR}/src/msw/statbox.cpp"
             "${wxSOURCE_DIR}/src/msw/statline.cpp"
+            "${wxSOURCE_DIR}/src/msw/statusbar.cpp"
             "${wxSOURCE_DIR}/src/msw/timectrl.cpp"
             "${wxSOURCE_DIR}/src/msw/stattext.cpp"
             "${wxSOURCE_DIR}/src/msw/textctrl.cpp"
@@ -85,6 +87,7 @@ if(WXMSW)
             src/winui/infobar.cpp
             src/winui/listbox.cpp
             src/winui/menubar.cpp
+            src/winui/msgdlg.cpp
             src/winui/notebook.cpp
             src/winui/radiobox.cpp
             src/winui/radiobut.cpp
@@ -95,10 +98,12 @@ if(WXMSW)
             src/winui/srchctrl.cpp
             src/winui/statbmp.cpp
             src/winui/statbox.cpp
+            src/winui/statbar.cpp
             src/winui/statline.cpp
             src/winui/timectrl.cpp
             src/winui/stattext.cpp
             src/winui/textctrl.cpp
+            src/winui/textdlg.cpp
             src/winui/tglbtn.cpp
             src/winui/treectrl.cpp
             )

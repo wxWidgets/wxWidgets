@@ -83,6 +83,57 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData)
 namespace wxMSWImpl
 {
 
+#ifdef __WXWINUI__
+
+int GetWinUIResizeGripSize(const wxDialog* dialog)
+{
+    return dialog->FromDIP(18);
+}
+
+void PaintWinUIResizeGrip(wxDialog* dialog, HWND hwnd)
+{
+    PAINTSTRUCT ps;
+    HDC hdc = ::BeginPaint(hwnd, &ps);
+    if ( !hdc )
+        return;
+
+    RECT rc;
+    ::GetClientRect(hwnd, &rc);
+
+    const wxColour bg = dialog->GetBackgroundColour();
+    HBRUSH bgBrush = ::CreateSolidBrush(RGB(bg.Red(), bg.Green(), bg.Blue()));
+    if ( bgBrush )
+    {
+        ::FillRect(hdc, &rc, bgBrush);
+        ::DeleteObject(bgBrush);
+    }
+
+    const wxColour fg = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+    HPEN pen = ::CreatePen(PS_SOLID, wxMax(1, dialog->FromDIP(1)),
+                           RGB(fg.Red(), fg.Green(), fg.Blue()));
+    HGDIOBJ oldPen = nullptr;
+    if ( pen )
+        oldPen = ::SelectObject(hdc, pen);
+
+    const int margin = dialog->FromDIP(3);
+    const int step = dialog->FromDIP(5);
+    for ( int n = 0; n < 3; ++n )
+    {
+        const int offset = n * step;
+        ::MoveToEx(hdc, rc.right - margin - offset, rc.bottom - margin, nullptr);
+        ::LineTo(hdc, rc.right - margin, rc.bottom - margin - offset);
+    }
+
+    if ( oldPen )
+        ::SelectObject(hdc, oldPen);
+    if ( pen )
+        ::DeleteObject(pen);
+
+    ::EndPaint(hwnd, &ps);
+}
+
+#endif // __WXWINUI__
+
 LRESULT CALLBACK
 GripperProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam,
             UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
@@ -91,6 +142,14 @@ GripperProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam,
 
     switch ( nMsg )
     {
+#ifdef __WXWINUI__
+        case WM_NCHITTEST:
+            return HTTRANSPARENT;
+
+        case WM_PAINT:
+            PaintWinUIResizeGrip(self, hwnd);
+            return 0;
+#else
         case WM_PAINT:
             {
                 const auto bg = self->GetBackgroundColour();
@@ -129,6 +188,7 @@ GripperProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam,
                 );
             }
             return 0;
+#endif // __WXWINUI__
 
         case WM_NCDESTROY:
             ::RemoveWindowSubclass(hwnd, GripperProc, uIdSubclass);
@@ -290,6 +350,21 @@ void wxDialog::CreateGripper()
     if ( !m_hGripper )
     {
         // just create it here, it will be positioned and shown later
+#ifdef __WXWINUI__
+        m_hGripper = (WXHWND)::CreateWindow
+                               (
+                                    wxT("STATIC"),
+                                    wxT(""),
+                                    WS_CHILD |
+                                    WS_CLIPSIBLINGS |
+                                    SS_NOTIFY,
+                                    0, 0, 0, 0,
+                                    GetHwnd(),
+                                    0,
+                                    wxGetInstance(),
+                                    nullptr
+                               );
+#else
         m_hGripper = (WXHWND)::CreateWindow
                                (
                                     wxT("SCROLLBAR"),
@@ -305,6 +380,7 @@ void wxDialog::CreateGripper()
                                     wxGetInstance(),
                                     nullptr
                                );
+#endif // __WXWINUI__
 
         wxMSWDarkMode::AllowForWindow((HWND)m_hGripper);
 
@@ -350,6 +426,16 @@ void wxDialog::ResizeGripper()
 
     HWND hwndGripper = (HWND)m_hGripper;
 
+#ifdef __WXWINUI__
+    const wxSize gripSize(wxMSWImpl::GetWinUIResizeGripSize(this),
+                          wxMSWImpl::GetWinUIResizeGripSize(this));
+    const wxSize pos = GetClientSize() - gripSize;
+
+    ::SetWindowPos(hwndGripper, HWND_BOTTOM,
+                   pos.x, pos.y,
+                   gripSize.x, gripSize.y,
+                   SWP_NOACTIVATE);
+#else
     const wxRect rectGripper = wxRectFromRECT(wxGetWindowRect(hwndGripper));
     const wxSize size = GetClientSize() - rectGripper.GetSize();
 
@@ -357,6 +443,7 @@ void wxDialog::ResizeGripper()
                    size.x, size.y,
                    rectGripper.width, rectGripper.height,
                    SWP_NOACTIVATE);
+#endif // __WXWINUI__
 }
 
 void wxDialog::OnWindowCreate(wxWindowCreateEvent& event)
@@ -387,6 +474,29 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
 
     switch ( message )
     {
+#ifdef __WXWINUI__
+        case WM_NCHITTEST:
+            if ( HasFlag(wxRESIZE_BORDER) )
+            {
+                const int gripSize = wxMSWImpl::GetWinUIResizeGripSize(this);
+                const POINT pt =
+                {
+                    static_cast<LONG>(static_cast<short>(LOWORD(lParam))),
+                    static_cast<LONG>(static_cast<short>(HIWORD(lParam)))
+                };
+                RECT rect;
+                ::GetWindowRect(GetHwnd(), &rect);
+
+                if ( pt.x >= rect.right - gripSize &&
+                        pt.y >= rect.bottom - gripSize )
+                {
+                    rc = HTBOTTOMRIGHT;
+                    processed = true;
+                }
+            }
+            break;
+#endif // __WXWINUI__
+
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the
             // message - otherwise it would close us

@@ -1840,6 +1840,7 @@ set(MSW_HDR
     wx/winui/hyperlink.h
     wx/winui/infobar.h
     wx/winui/listbox.h
+    wx/winui/msgdlg.h
     wx/winui/notebook.h
     wx/winui/radiobox.h
     wx/winui/radiobut.h
@@ -1850,10 +1851,12 @@ set(MSW_HDR
     wx/winui/srchctrl.h
     wx/winui/statbmp.h
     wx/winui/statbox.h
+    wx/winui/statusbar.h
     wx/winui/statline.h
     wx/winui/timectrl.h
     wx/winui/stattext.h
     wx/winui/textctrl.h
+    wx/winui/textdlg.h
     wx/winui/tglbtn.h
     wx/winui/treectrl.h
     wx/winui/winui.h
