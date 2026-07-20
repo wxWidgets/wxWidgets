@@ -308,6 +308,7 @@ private:
     void MSWDeleteWordBack();
 
     void OnKeyDown(wxKeyEvent& event);
+    void OnPaint(wxPaintEvent& event);
 
     // Used by EN_MAXTEXT handler to increase the size limit (will do nothing
     // if the current limit is big enough). Should never be called directly.

@@ -382,6 +382,7 @@ wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_KEY_DOWN(wxTextCtrl::OnKeyDown)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
+    EVT_PAINT(wxTextCtrl::OnPaint)
 
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
@@ -2376,6 +2377,36 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 
     // no, we didn't process it
     event.Skip();
+}
+
+void wxTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    // In dark mode, when a rich edit control is disabled, it paints the
+    // background light instead of dark. Work around this by custom drawing
+    // the control.
+    if ( wxMSWDarkMode::IsActive() && IsRich() && !m_isEnabled )
+    {
+        wxPaintDC dc(this);
+        dc.SetBackground(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+        dc.Clear();
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+
+        // Set up for traversing the visible text.
+        long firstLine = ::SendMessage(m_hWnd, EM_GETFIRSTVISIBLELINE, 0, 0);
+        long start = XYToPosition(0, firstLine);
+        const wxString text = GetValue();
+        wxRect rect = GetClientRect();
+
+        // Draw each character one at a time. This mimics the line spacing,
+        // character spacing, and word wrap layout.
+        for (long pos = start; pos < text.length(); pos++)
+        {
+            wxPoint pt = PositionToCoords(pos);
+            if ( pt.y > rect.height )
+                break;
+            dc.DrawText(text[pos], pt);
+        }
+    }
 }
 
 void wxTextCtrl::Paste()
