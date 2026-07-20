@@ -182,3 +182,35 @@ Still open (next priorities): toolbar → CommandBar, list/table family
 (`wxListCtrl`/`wxHeaderCtrl`/`wxDataViewCtrl`), font/find-replace dialogs,
 search ctrl menu, tree drag & drop, scrollbar skinning, UIA accessibility,
 `WM_DPICHANGED`, RTL, CI for the winui toolkit.
+
+---
+
+## Update — 2026-07-20 (2): phases 1 & 2 wrap-up
+
+- **Builds again**: `wxcore` (toolkit winui, Debug) compiles; the
+  too-strict `wxUSE_WINUI3`/`__WXWINUI__` consistency check in `chkconf.h`
+  was removed (non-GUI libs get the platform defines only).
+- **wxWinUIDialogIsland** (`private.h`/`ctrlhost.cpp`): shared helper for
+  the ContentDialog dialogs (island setup, theming, app-modality, nested
+  loop); wxMessageDialog/wxTextEntryDialog/wxColourDialog now use it.
+- **wxTextEntryDialog** now creates a real (hidden) dialog HWND so it
+  behaves like a normal wxDialog for the application.
+- **wxFontDialog / wxFindReplaceDialog**: dispatched to the generic
+  dialogs under the winui toolkit — they are rendered with the
+  WinUI-ported controls, unlike the dated Win32 common dialogs
+  (`src/msw/fontdlg.cpp`/`fdrepdlg.cpp` compiled out).
+- **wxTreeCtrl drag & drop**: BEGIN_DRAG (must be Allow()ed, otherwise the
+  WinUI drag is cancelled) and END_DRAG with the drop target from a real
+  hit-test; WinUI auto-reordering stays off, the app performs the move.
+
+### Phase 1 decisions
+
+- `wxTE_RICH`/`wxTE_RICH2`: accepted but rendered with the plain TextBox
+  (no RichEditBox backend for now) — behaviour equals a non-rich control.
+- `wxSearchCtrl::SetMenu()`: the menu is stored but no drop-down UI is
+  shown (AutoSuggestBox has no menu affordance); apps can use PopupMenu().
+- Slider `wxSL_LABELS`/`wxSL_MIN_MAX_LABELS`: not available on the WinUI
+  Slider (no built-in labels); ticks are supported via SetTickFreq.
+- wxSingleChoice/MultiChoice/NumberEntry/Progress/About/Tip/BusyInfo: the
+  wx generic dialogs are used as-is — they already render with the
+  WinUI-ported controls, so no dedicated ContentDialog port is needed.
