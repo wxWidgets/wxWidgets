@@ -140,6 +140,49 @@ public:
     long long textChangedCallbackToken = 0;
 };
 
+// ----------------------------------------------------------------------------
+// wxWinUIDialogIsland: a transient XAML island covering a top-level window,
+// used to show a ContentDialog over it.  Handles the bridge window setup,
+// theming, app-modality (all other top-level windows are disabled while the
+// dialog runs) and the nested event loop.
+// ----------------------------------------------------------------------------
+
+class wxWinUIDialogIsland
+{
+public:
+    wxWinUIDialogIsland() = default;
+    ~wxWinUIDialogIsland() { Close(); }
+
+    wxWinUIDialogIsland(const wxWinUIDialogIsland&) = delete;
+    wxWinUIDialogIsland& operator=(const wxWinUIDialogIsland&) = delete;
+
+    // Create the island over the given parent; false on failure (no parent,
+    // no HWND or XAML initialisation problems).
+    bool Create(wxWindow *parent);
+
+    // The root element covering the parent, valid after a successful Create().
+    winrt::Microsoft::UI::Xaml::Controls::Grid const& GetRoot() const
+        { return m_root; }
+
+    // Create a ContentDialog attached to the island root with the current
+    // theme applied; title, content and buttons are up to the caller.
+    winrt::Microsoft::UI::Xaml::Controls::ContentDialog CreateDialog() const;
+
+    // Show the dialog app-modally: all other top-level windows are disabled
+    // (the parent stays enabled as it hosts the island, its client area being
+    // covered by the dialog's smoke layer) and a nested event loop runs until
+    // the dialog is dismissed.
+    winrt::Microsoft::UI::Xaml::Controls::ContentDialogResult
+    ShowDialog(winrt::Microsoft::UI::Xaml::Controls::ContentDialog const& dialog);
+
+    void Close();
+
+private:
+    wxWindow *m_parent = nullptr;
+    winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource m_source{ nullptr };
+    winrt::Microsoft::UI::Xaml::Controls::Grid m_root{ nullptr };
+};
+
 // Strip '&' mnemonics ("&&" -> "&"): WinUI labels don't support them.
 wxString wxWinUIRemoveMnemonics(const wxString& label);
 

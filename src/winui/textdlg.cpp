@@ -88,7 +88,12 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     m_size = sz;
     m_isPassword = (style & wxTE_PASSWORD) != 0;
 
-    return true;
+    // Create a real (hidden) dialog window so that this object behaves like a
+    // normal wxDialog for the application (valid GetHandle(), event routing,
+    // parent relationship); the UI actually shown by ShowModal() is a WinUI
+    // ContentDialog over the parent, this window is never made visible.
+    return wxDialog::Create(parent, wxID_ANY, caption, pos, sz,
+                            wxDEFAULT_DIALOG_STYLE);
 }
 
 int wxTextEntryDialog::ShowModal()
@@ -105,42 +110,14 @@ int wxTextEntryDialog::ShowModal()
 
     try
     {
-        using namespace winrt::Microsoft::UI;
-        using namespace winrt::Microsoft::UI::Content;
         using namespace winrt::Microsoft::UI::Xaml;
         using namespace winrt::Microsoft::UI::Xaml::Controls;
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
-        using namespace winrt::Windows::Foundation;
 
-        DesktopWindowXamlSource source;
-        const auto windowId = GetWindowIdFromWindow(hwndParent);
-        source.Initialize(windowId);
-        source.SiteBridge().ResizePolicy(ContentSizePolicy::ResizeContentToParentWindow);
-
-        const HWND hwndBridge = GetWindowFromWindowId(source.SiteBridge().WindowId());
-        ::SetWindowLongPtr
-        (
-            hwndBridge,
-            GWL_STYLE,
-            ::GetWindowLongPtr(hwndBridge, GWL_STYLE) |
-                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
-        );
-        ::SetWindowPos(hwndBridge, HWND_TOP, 0, 0, 0, 0,
-                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
-
-        Grid root;
-        root.RequestedTheme(wxWinUIGetCurrentElementTheme());
-        source.Content(root);
-
-        if ( !root.XamlRoot() )
-        {
-            source.Close();
+        wxWinUIDialogIsland island;
+        if ( !island.Create(parent) )
             return wxID_CANCEL;
-        }
 
-        ContentDialog dialog;
-        dialog.XamlRoot(root.XamlRoot());
-        dialog.RequestedTheme(wxWinUIGetCurrentElementTheme());
+        ContentDialog dialog = island.CreateDialog();
         dialog.Title(winrt::box_value(wxWinUIToHString(m_caption)));
         dialog.DefaultButton(ContentDialogButton::Primary);
         dialog.PrimaryButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(
@@ -232,39 +209,8 @@ int wxTextEntryDialog::ShowModal()
                 accepted = true;
             });
 
-        ContentDialogResult dialogResult = ContentDialogResult::None;
-        bool done = false;
-        bool loopIsRunning = false;
-        wxEventLoop* loopRunning = nullptr;
-
-        // Behave app-modally: block the other top-level windows while the
-        // dialog is up (the parent hosts the island and must stay enabled).
-        wxWindowDisabler disabler(parent);
-
-        auto operation = dialog.ShowAsync();
-        operation.Completed(
-            [&](IAsyncOperation<ContentDialogResult> const& async,
-                AsyncStatus status)
-            {
-                if ( status == AsyncStatus::Completed )
-                    dialogResult = async.GetResults();
-
-                done = true;
-                if ( loopRunning && loopIsRunning )
-                    loopRunning->Exit();
-            });
-
-        wxEventLoop loop;
-        loopRunning = &loop;
-        if ( !done )
-        {
-            loopIsRunning = true;
-            loop.Run();
-            loopIsRunning = false;
-        }
-        loopRunning = nullptr;
-
-        source.Close();
+        const ContentDialogResult dialogResult = island.ShowDialog(dialog);
+        island.Close();
 
         if ( dialogResult == ContentDialogResult::Primary && accepted )
         {

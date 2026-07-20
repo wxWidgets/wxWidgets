@@ -26,8 +26,11 @@
 #endif
 
 #include "wx/app.h"
+#include "wx/evtloop.h"
 #include "wx/settings.h"
 #include "wx/toplevel.h"
+#include "wx/utils.h"
+#include "wx/msw/private.h"
 
 #include <dwmapi.h>
 #include <winrt/Windows.Storage.Streams.h>
@@ -1113,6 +1116,131 @@ void wxWinUISetAppTheme(wxWinUIAppTheme theme)
 wxWinUIAppTheme wxWinUIGetAppTheme()
 {
     return gs_winuiAppTheme;
+}
+
+// ----------------------------------------------------------------------------
+// wxWinUIDialogIsland
+// ----------------------------------------------------------------------------
+
+bool wxWinUIDialogIsland::Create(wxWindow *parent)
+{
+    m_parent = parent;
+
+    HWND hwndParent = parent ? GetHwndOf(parent) : nullptr;
+    if ( !hwndParent )
+        return false;
+
+    try
+    {
+        using namespace winrt::Microsoft::UI;
+        using namespace winrt::Microsoft::UI::Content;
+        using namespace winrt::Microsoft::UI::Xaml;
+        using namespace winrt::Microsoft::UI::Xaml::Controls;
+        using namespace winrt::Microsoft::UI::Xaml::Hosting;
+
+        m_source = DesktopWindowXamlSource();
+        m_source.Initialize(GetWindowIdFromWindow(hwndParent));
+        m_source.SiteBridge().ResizePolicy(
+            ContentSizePolicy::ResizeContentToParentWindow);
+
+        const HWND hwndBridge =
+            GetWindowFromWindowId(m_source.SiteBridge().WindowId());
+        ::SetWindowLongPtr
+        (
+            hwndBridge,
+            GWL_STYLE,
+            ::GetWindowLongPtr(hwndBridge, GWL_STYLE) |
+                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+        );
+        ::SetWindowPos(hwndBridge, HWND_TOP, 0, 0, 0, 0,
+                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+
+        m_root = Grid();
+        m_root.RequestedTheme(wxWinUIGetCurrentElementTheme());
+        m_source.Content(m_root);
+
+        if ( !m_root.XamlRoot() )
+        {
+            Close();
+            return false;
+        }
+
+        return true;
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI dialog island creation", e);
+        Close();
+    }
+
+    return false;
+}
+
+winrt::Microsoft::UI::Xaml::Controls::ContentDialog
+wxWinUIDialogIsland::CreateDialog() const
+{
+    winrt::Microsoft::UI::Xaml::Controls::ContentDialog dialog;
+    dialog.XamlRoot(m_root.XamlRoot());
+    dialog.RequestedTheme(wxWinUIGetCurrentElementTheme());
+    return dialog;
+}
+
+winrt::Microsoft::UI::Xaml::Controls::ContentDialogResult
+wxWinUIDialogIsland::ShowDialog(
+    winrt::Microsoft::UI::Xaml::Controls::ContentDialog const& dialog)
+{
+    using namespace winrt::Microsoft::UI::Xaml::Controls;
+    using namespace winrt::Windows::Foundation;
+
+    ContentDialogResult dialogResult = ContentDialogResult::None;
+    bool done = false;
+    bool loopIsRunning = false;
+    wxEventLoop* loopRunning = nullptr;
+
+    // Behave app-modally: block the other top-level windows while the dialog
+    // is up (the parent stays enabled as it hosts the island).
+    wxWindowDisabler disabler(m_parent);
+
+    auto operation = dialog.ShowAsync();
+    operation.Completed(
+        [&](IAsyncOperation<ContentDialogResult> const& async,
+            AsyncStatus status)
+        {
+            if ( status == AsyncStatus::Completed )
+                dialogResult = async.GetResults();
+
+            done = true;
+            if ( loopRunning && loopIsRunning )
+                loopRunning->Exit();
+        });
+
+    wxEventLoop loop;
+    loopRunning = &loop;
+    if ( !done )
+    {
+        loopIsRunning = true;
+        loop.Run();
+        loopIsRunning = false;
+    }
+    loopRunning = nullptr;
+
+    return dialogResult;
+}
+
+void wxWinUIDialogIsland::Close()
+{
+    if ( m_source )
+    {
+        try
+        {
+            m_source.Close();
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+        m_source = nullptr;
+    }
+    m_root = nullptr;
 }
 
 #endif // wxUSE_WINUI3

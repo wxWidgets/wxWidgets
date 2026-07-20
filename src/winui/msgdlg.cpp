@@ -180,42 +180,13 @@ int wxMessageDialog::ShowModal()
 
     try
     {
-        using namespace winrt::Microsoft::UI;
-        using namespace winrt::Microsoft::UI::Content;
-        using namespace winrt::Microsoft::UI::Xaml;
         using namespace winrt::Microsoft::UI::Xaml::Controls;
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
-        using namespace winrt::Windows::Foundation;
 
-        DesktopWindowXamlSource source;
-        const auto windowId = GetWindowIdFromWindow(hwndParent);
-        source.Initialize(windowId);
-        source.SiteBridge().ResizePolicy(ContentSizePolicy::ResizeContentToParentWindow);
-
-        const HWND hwndBridge = GetWindowFromWindowId(source.SiteBridge().WindowId());
-        ::SetWindowLongPtr
-        (
-            hwndBridge,
-            GWL_STYLE,
-            ::GetWindowLongPtr(hwndBridge, GWL_STYLE) |
-                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
-        );
-        ::SetWindowPos(hwndBridge, HWND_TOP, 0, 0, 0, 0,
-                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
-
-        Grid root;
-        root.RequestedTheme(wxWinUIGetCurrentElementTheme());
-        source.Content(root);
-
-        if ( !root.XamlRoot() )
-        {
-            source.Close();
+        wxWinUIDialogIsland island;
+        if ( !island.Create(parent) )
             return wxWinUIFallbackMessageBox(*this);
-        }
 
-        ContentDialog dialog;
-        dialog.XamlRoot(root.XamlRoot());
-        dialog.RequestedTheme(wxWinUIGetCurrentElementTheme());
+        ContentDialog dialog = island.CreateDialog();
         dialog.Title(winrt::box_value(wxWinUIToHString(GetCaption())));
         dialog.DefaultButton(buttons.defaultButton);
 
@@ -255,40 +226,8 @@ int wxMessageDialog::ShowModal()
         if ( buttons.close.id != wxID_NONE )
             dialog.CloseButtonText(wxWinUIToHString(wxWinUIRemoveMnemonics(buttons.close.label)));
 
-        ContentDialogResult dialogResult = ContentDialogResult::None;
-        bool done = false;
-        bool loopIsRunning = false;
-        wxEventLoop* loopRunning = nullptr;
-
-        // Behave app-modally: block the other top-level windows while the
-        // dialog is up.  The parent itself must stay enabled since it hosts
-        // the dialog's island (its client area is covered by the smoke layer).
-        wxWindowDisabler disabler(parent);
-
-        auto operation = dialog.ShowAsync();
-        operation.Completed(
-            [&](IAsyncOperation<ContentDialogResult> const& async,
-                AsyncStatus status)
-            {
-                if ( status == AsyncStatus::Completed )
-                    dialogResult = async.GetResults();
-
-                done = true;
-                if ( loopRunning && loopIsRunning )
-                    loopRunning->Exit();
-            });
-
-        wxEventLoop loop;
-        loopRunning = &loop;
-        if ( !done )
-        {
-            loopIsRunning = true;
-            loop.Run();
-            loopIsRunning = false;
-        }
-        loopRunning = nullptr;
-
-        source.Close();
+        const ContentDialogResult dialogResult = island.ShowDialog(dialog);
+        island.Close();
 
         switch ( dialogResult )
         {
