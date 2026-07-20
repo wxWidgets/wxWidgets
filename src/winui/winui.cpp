@@ -418,6 +418,11 @@ bool wxWinUI3Initialize()
         return false;
     }
 
+    // Give the generic controls (wxListCtrl, wxDataViewCtrl, wxGrid, ...)
+    // Fluent-looking chrome; implemented in src/winui/renderer.cpp.
+    extern void wxWinUIInstallRenderer();
+    wxWinUIInstallRenderer();
+
     gs_winuiBootstrapInitialized = true;
     gs_winuiComInitialized = comInitialized;
     return true;

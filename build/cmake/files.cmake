@@ -1855,6 +1855,7 @@ set(MSW_HDR
     wx/winui/statusbar.h
     wx/winui/statline.h
     wx/winui/timectrl.h
+    wx/winui/toolbar.h
     wx/winui/stattext.h
     wx/winui/textctrl.h
     wx/winui/textdlg.h
