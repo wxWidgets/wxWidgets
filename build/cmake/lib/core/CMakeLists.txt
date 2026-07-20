@@ -66,8 +66,12 @@ if(WXMSW)
             "${wxSOURCE_DIR}/src/msw/tglbtn.cpp"
             "${wxSOURCE_DIR}/src/msw/treectrl.cpp"
             "${wxSOURCE_DIR}/src/msw/commandlinkbutton.cpp"
+            "${wxSOURCE_DIR}/src/msw/fdrepdlg.cpp"
+            "${wxSOURCE_DIR}/src/msw/fontdlg.cpp"
             )
         wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/"
+            src/generic/fdrepdlg.cpp
+            src/generic/fontdlgg.cpp
             src/generic/listctrl.cpp
             src/winui/winui.cpp
             src/winui/ctrlhost.cpp

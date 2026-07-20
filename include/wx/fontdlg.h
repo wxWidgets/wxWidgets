@@ -65,6 +65,11 @@ protected:
 #if defined(__WXUNIVERSAL__)
     #include "wx/generic/fontdlgg.h"
     #define wxFontDialog wxGenericFontDialog
+#elif defined(__WXWINUI__)
+    // The generic dialog is rendered with the WinUI-ported controls, unlike
+    // the dated native ChooseFont() common dialog.
+    #include "wx/generic/fontdlgg.h"
+    #define wxFontDialog wxGenericFontDialog
 #elif defined(__WXMSW__)
     #include "wx/msw/fontdlg.h"
 #elif defined(__WXGTK__)

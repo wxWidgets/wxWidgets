@@ -123,7 +123,10 @@ protected:
 };
 
 // include wxFindReplaceDialog declaration
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+//
+// N.B.: under the winui toolkit the generic dialog is used, as it is rendered
+// with the WinUI-ported controls unlike the legacy Win32 common dialog.
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
     #include "wx/msw/fdrepdlg.h"
 #else
     #define wxGenericFindReplaceDialog wxFindReplaceDialog
