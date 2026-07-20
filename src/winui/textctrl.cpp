@@ -676,22 +676,14 @@ wxSize wxTextCtrl::DoGetBestSize() const
     if ( IsMultiLine() )
         return wxWindow::FromDIP(wxSize(180, 90), const_cast<wxTextCtrl *>(this));
 
-    // Single line: use the WinUI control's own (smaller) natural height instead
-    // of a hard-coded, too-tall value.
+    // Single line: use the WinUI control's own natural height instead of a
+    // hard-coded value (which was both too tall and, at other DPIs, too short).
     int height = FromDIP(32);
-    if ( m_winui && m_winui->control() )
+    if ( m_winui )
     {
-        try
-        {
-            const float inf = std::numeric_limits<float>::infinity();
-            m_winui->control().Measure({ inf, inf });
-            const auto desired = m_winui->control().DesiredSize();
-            if ( desired.Height > 0 )
-                height = static_cast<int>(std::ceil(desired.Height));
-        }
-        catch ( const winrt::hresult_error& )
-        {
-        }
+        const wxSize size = m_winui->host.MeasureContent();
+        if ( size != wxDefaultSize && size.y > 0 )
+            height = size.y;
     }
 
     return wxSize(FromDIP(120), height);

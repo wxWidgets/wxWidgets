@@ -14,6 +14,9 @@
 
 #include "wx/msw/wrapwin.h"
 
+#include <functional>
+#include <vector>
+
 #ifdef GetCurrentTime
     #undef GetCurrentTime
 #endif
@@ -89,12 +92,26 @@ public:
     // setting a wait cursor on a single control).  Mapped to ProtectedCursor.
     void ApplyWxCursor(const wxCursor& cursor);
 
+    // The natural size of the hosted XAML content, in physical pixels, or
+    // wxDefaultSize if it can't be measured (no content yet).
+    //
+    // This must be used instead of measuring the element directly: the content
+    // is given an explicit Width/Height in UpdateContentSize() so that it fills
+    // the control, and Measure() would simply return that imposed size back,
+    // locking in whatever (possibly wrong) size the control had first.
+    wxSize MeasureContent() const;
+
+    // True once the hosted content has been loaded in a live visual tree, i.e.
+    // once its template is applied and MeasureContent() is meaningful.
+    bool IsContentLoaded() const { return m_contentLoaded; }
+
     // The wx control whose HWND hosts this island.
     wxWindow *HostedWindow() const { return m_window; }
 
 private:
     void UpdateContentSize(int width, int height);
     void MoveAndResize();
+    void OnContentLoaded();
     void OnWindowSize(wxSizeEvent& event);
     void OnSetFocus(wxFocusEvent& event);
     void OnTakeFocusRequested(
@@ -106,7 +123,9 @@ private:
     winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource m_source{ nullptr };
     winrt::Microsoft::UI::Xaml::UIElement m_content{ nullptr };
     winrt::event_token m_takeFocusRequestedToken{};
+    winrt::event_token m_loadedToken{};
     bool m_backdropApplied = false;
+    bool m_contentLoaded = false;
     int m_bridgeHeightLimit = 0;
 };
 
@@ -138,6 +157,70 @@ public:
     winrt::Microsoft::UI::Xaml::Controls::TextBox editBox{ nullptr };
     winrt::event_token textSubmittedToken{};
     long long textChangedCallbackToken = 0;
+};
+
+// ----------------------------------------------------------------------------
+// wxWinUIDialogPresenter: shows a WinUI-drawn dialog, either as a real
+// top-level window (the default) or as a ContentDialog overlaying the parent,
+// depending on wxWinUIGetDialogPresentation().
+//
+// Callers describe the dialog abstractly -- a title, a XAML body, and up to
+// three buttons -- and get back the id of the button that dismissed it.  This
+// keeps every common dialog free of any presentation-specific code.
+// ----------------------------------------------------------------------------
+
+class wxWinUIDialogPresenter
+{
+public:
+    wxWinUIDialogPresenter();
+    ~wxWinUIDialogPresenter();
+
+    wxWinUIDialogPresenter(const wxWinUIDialogPresenter&) = delete;
+    wxWinUIDialogPresenter& operator=(const wxWinUIDialogPresenter&) = delete;
+
+    // Prepare the dialog; false if WinUI is unavailable and the caller should
+    // fall back to a native dialog.
+    bool Create(wxWindow *parent, const wxString& title);
+
+    // The body of the dialog.
+    void SetContent(winrt::Microsoft::UI::Xaml::UIElement const& content);
+
+    // Natural size of the body, in DIPs.  Used to size the dialog window; the
+    // XAML content can't be measured reliably before it is realised, so the
+    // caller has to say how much room it needs.
+    void SetContentSize(const wxSize& dipSize) { m_contentSize = dipSize; }
+
+    // Add a button.  At most three may be added: in Overlay mode they map to
+    // the ContentDialog primary/secondary/close buttons respectively.  Exactly
+    // one button should be marked as the default one.
+    void AddButton(int id, const wxString& label, bool isDefault = false);
+
+    // Called when a button is about to dismiss the dialog; returning false
+    // keeps the dialog open (used to report a failed validation).
+    void SetAcceptHandler(std::function<bool (int)> handler)
+        { m_onAccept = std::move(handler); }
+
+    // Show the dialog modally and return the id of the button that dismissed
+    // it, or wxID_CANCEL if it was closed some other way.
+    int ShowModal();
+
+private:
+    struct Button
+    {
+        int id = wxID_NONE;
+        wxString label;
+        bool isDefault = false;
+    };
+
+    int ShowAsWindow();
+    int ShowAsOverlay();
+
+    wxWindow *m_parent = nullptr;
+    wxString m_title;
+    winrt::Microsoft::UI::Xaml::UIElement m_content{ nullptr };
+    wxSize m_contentSize{ 320, 120 };
+    std::vector<Button> m_buttons;
+    std::function<bool (int)> m_onAccept;
 };
 
 // ----------------------------------------------------------------------------

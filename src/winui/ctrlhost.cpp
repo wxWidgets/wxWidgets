@@ -28,8 +28,10 @@
 #include "wx/app.h"
 #include "wx/evtloop.h"
 #include "wx/settings.h"
+#include "wx/sizer.h"
 #include "wx/toplevel.h"
 #include "wx/utils.h"
+#include "wx/weakref.h"
 #include "wx/msw/private.h"
 
 #include <dwmapi.h>
@@ -37,6 +39,8 @@
 #include <winrt/Microsoft.UI.Input.h>
 
 #include <algorithm>
+#include <cmath>
+#include <limits>
 #include <cstdarg>
 #include <cstring>
 #include <map>
@@ -636,6 +640,25 @@ void wxWinUIControlHost::SetContent(const winrt::Microsoft::UI::Xaml::UIElement&
         return;
 
     m_content = element;
+    m_contentLoaded = false;
+
+    // The natural size of a XAML element is only known once its control
+    // template has been applied, which happens when it is loaded into a live
+    // visual tree -- i.e. some time after this call.  Until then Measure()
+    // under-reports (typically it returns the bare glyph of a check box,
+    // without its label), so the control would be laid out far too small and
+    // its content clipped away.  Re-query the best size when the content is
+    // actually loaded and let the layout catch up.
+    if ( auto framework =
+             element.try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>() )
+    {
+        m_loadedToken = framework.Loaded(
+            [this](winrt::Windows::Foundation::IInspectable const&,
+                   winrt::Microsoft::UI::Xaml::RoutedEventArgs const&)
+            {
+                OnContentLoaded();
+            });
+    }
 
     // Wrap the control's element in a cursor-capable Grid that becomes the
     // island root, so we can override the pointer cursor (busy / per-window)
@@ -739,16 +762,96 @@ void wxWinUIControlHost::SetBridgeHeightLimit(int physicalHeight)
     MoveAndResize();
 }
 
+wxSize wxWinUIControlHost::MeasureContent() const
+{
+    if ( !m_content || !m_window )
+        return wxDefaultSize;
+
+    auto element =
+        m_content.try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>();
+    if ( !element )
+        return wxDefaultSize;
+
+    try
+    {
+        // UpdateContentSize() pins the element to the control's current size;
+        // clear that while measuring, otherwise we'd just get it back.
+        const double savedWidth = element.Width();
+        const double savedHeight = element.Height();
+        const double unset = std::numeric_limits<double>::quiet_NaN();
+
+        element.Width(unset);
+        element.Height(unset);
+
+        const float inf = std::numeric_limits<float>::infinity();
+        element.Measure({ inf, inf });
+        const auto desired = element.DesiredSize();
+
+        element.Width(savedWidth);
+        element.Height(savedHeight);
+
+        if ( desired.Width > 0 && desired.Height > 0 )
+        {
+            // DesiredSize is expressed in DIPs.
+            return m_window->FromDIP(
+                wxSize(static_cast<int>(std::ceil(desired.Width)),
+                       static_cast<int>(std::ceil(desired.Height))));
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("wxWinUIControlHost::MeasureContent", e);
+    }
+
+    return wxDefaultSize;
+}
+
+void wxWinUIControlHost::OnContentLoaded()
+{
+    if ( m_contentLoaded || !m_window )
+        return;
+
+    m_contentLoaded = true;
+
+    // Don't touch the wx layout from inside a XAML callback.
+    wxWeakRef<wxWindow> win(m_window);
+    m_window->CallAfter([win]()
+    {
+        if ( !win )
+            return;
+
+        win->InvalidateBestSize();
+
+        // The control's best size just changed, so the sizer that positions it
+        // has to run again.  Relayout from the top-level window since the new
+        // size may propagate through nested sizers (a static box has to grow
+        // for its children, and so on).
+        wxWindow * const top = wxGetTopLevelParent(win);
+        if ( top && top->GetSizer() )
+            top->Layout();
+        else if ( wxWindow * const parent = win->GetParent() )
+        {
+            if ( parent->GetSizer() )
+                parent->Layout();
+        }
+    });
+}
+
 void wxWinUIControlHost::UpdateContentSize(int width, int height)
 {
-    if ( !m_content )
+    if ( !m_content || !m_window )
         return;
 
     if ( auto element =
              m_content.try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>() )
     {
-        element.Width(width);
-        element.Height(height);
+        // Width/Height are expressed in DIPs while the client rect we get from
+        // Windows is in physical pixels: without this conversion the content is
+        // laid out too large for the island at any scaling above 100% and gets
+        // clipped on the right.
+        const wxSize dip = m_window->ToDIP(wxSize(width, height));
+        element.Width(dip.x);
+        element.Height(dip.y);
         element.UpdateLayout();
     }
 }
@@ -773,6 +876,20 @@ void wxWinUIControlHost::ForceRender()
     try
     {
         UpdateContentSize(width, height);
+
+        // Re-sending the current (unchanged) rect to the site bridge is
+        // coalesced away by the window manager, so it can't be relied on to
+        // produce a new frame.  Drive the XAML layout pass explicitly instead:
+        // this is what actually makes the island recompose after a property
+        // change that doesn't resize the control.
+        if ( auto root = m_source.Content()
+                 .try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>() )
+        {
+            root.InvalidateMeasure();
+            root.InvalidateArrange();
+            root.UpdateLayout();
+        }
+
         m_source.SiteBridge().MoveAndResize({ 0, 0, width, height });
         m_source.SiteBridge().Show();
         if ( m_bridgeHwnd )

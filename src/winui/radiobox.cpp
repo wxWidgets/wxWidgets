@@ -256,8 +256,13 @@ wxSize wxRadioBox::DoGetBestSize() const
             {
                 button.Measure({ inf, inf });
                 const auto d = button.DesiredSize();   // includes the margins
-                itemW = wxMax(itemW, static_cast<int>(std::ceil(d.Width)));
-                itemH = wxMax(itemH, static_cast<int>(std::ceil(d.Height)));
+                // DesiredSize is in DIPs, the rest of this function works in
+                // physical pixels.
+                const wxSize item = FromDIP(
+                    wxSize(static_cast<int>(std::ceil(d.Width)),
+                           static_cast<int>(std::ceil(d.Height))));
+                itemW = wxMax(itemW, item.x);
+                itemH = wxMax(itemH, item.y);
             }
             catch ( const winrt::hresult_error& )
             {

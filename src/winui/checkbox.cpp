@@ -236,23 +236,21 @@ wxSize wxCheckBox::DoGetBestClientSize() const
 {
     // Measure the actual WinUI check box (glyph + label + padding) so the size
     // matches the real rendering rather than a hard-coded guess.
-    if ( m_winui && m_winui->checkBox )
+    if ( m_winui )
     {
-        try
-        {
-            const float inf = std::numeric_limits<float>::infinity();
-            m_winui->checkBox.Measure({ inf, inf });
-            const auto desired = m_winui->checkBox.DesiredSize();
-            if ( desired.Width > 0 && desired.Height > 0 )
-                return wxSize(static_cast<int>(std::ceil(desired.Width)),
-                              static_cast<int>(std::ceil(desired.Height)));
-        }
-        catch ( const winrt::hresult_error& )
-        {
-        }
+        const wxSize size = m_winui->host.MeasureContent();
+        if ( size != wxDefaultSize )
+            return size;
     }
 
-    return wxWindow::FromDIP(wxSize(120, 32), const_cast<wxCheckBox *>(this));
+    // Not realised yet: fall back to a guess big enough for the label, which
+    // will be corrected once the content is loaded.
+    wxSize best = wxWindow::FromDIP(wxSize(32, 32), const_cast<wxCheckBox *>(this));
+    const wxString text = wxControl::GetLabelText(GetLabel());
+    if ( !text.empty() )
+        best.x += GetTextExtent(text).x;
+
+    return best;
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState value)
