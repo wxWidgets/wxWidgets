@@ -2919,6 +2919,9 @@ private:
     // out the grid.
     void OnDPIChanged(wxDPIChangedEvent& event);
 
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void UpdateColours();
+
     // implement wxScrolledCanvas method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) override;
 
@@ -3215,6 +3218,12 @@ private:
     // elements (which is the default)
     wxGridFixedIndicesSet *m_setFixedRows,
                           *m_setFixedCols;
+
+    // Whether background and text colours were set by the user.
+    bool m_hasUserCellBg = false;
+    bool m_hasUserCellFg = false;
+    bool m_hasUserLabelBg = false;
+    bool m_hasUserLabelFg = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxGrid);
     wxDECLARE_EVENT_TABLE();
