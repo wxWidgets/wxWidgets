@@ -1638,6 +1638,16 @@
 // Recommended setting: 1, set to 0 for a small library size reduction
 #define wxUSE_OWNER_DRAWN 1
 
+// Set this to 1 to render the controls with WinUI 3 (Windows App SDK) XAML
+// islands instead of the classic Win32 ones.  Requires building with the
+// "winui" toolkit (which defines both __WXWINUI__ and __WXMSW__) and the
+// Windows App SDK runtime on the target machine.
+//
+// Default is 0; the CMake build sets it automatically for -DwxBUILD_TOOLKIT=winui.
+//
+// Recommended setting: 0 unless building the experimental WinUI port
+#define wxUSE_WINUI3 0
+
 // Set this to 1 to enable MSW-specific wxTaskBarIcon::ShowBalloon() method. It
 // is required by native wxNotificationMessage implementation.
 //
