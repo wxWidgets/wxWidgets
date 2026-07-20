@@ -26,6 +26,7 @@
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/private/fileback.h"
+#include "wx/private/make_unique.h"
 #include "wx/utils.h"
 
 // ----------------------------------------------------------------------------
@@ -137,14 +138,10 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
             s_MinimalMimeEnsured = true;
         }
 
-        wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
+        std::unique_ptr<wxFileType>
+            ft(wxTheMimeTypesManager->GetFileTypeFromExtension(ext));
         if ( ft && ft->GetMimeType(&mime) && !mime.empty() )
-        {
-            delete ft;
             return mime;
-        }
-
-        delete ft;
     }
 #endif // wxUSE_MIMETYPE
 
@@ -289,19 +286,16 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     // we need to check whether we can really read from this file, otherwise
     // wxFSFile is not going to work
 #if wxUSE_FFILE
-    wxFFileInputStream *is = new wxFFileInputStream(fullpath);
+    auto is = std::make_unique<wxFFileInputStream>(fullpath);
 #elif wxUSE_FILE
-    wxFileInputStream *is = new wxFileInputStream(fullpath);
+    auto is = std::make_unique<wxFileInputStream>(fullpath);
 #else
 #error One of wxUSE_FILE or wxUSE_FFILE must be set to 1 for wxFSHandler to work
 #endif
     if ( !is->IsOk() )
-    {
-        delete is;
         return nullptr;
-    }
 
-    return new wxFSFile(is,
+    return new wxFSFile(is.get(),
                         location,
                         wxEmptyString,
                         GetAnchor(location)
@@ -601,10 +595,9 @@ bool wxFileSystem::FindFileInPath(wxString *pStr,
             strFile += wxFILE_SEP_PATH;
         strFile += name;
 
-        wxFSFile *file = OpenFile(strFile);
+        std::unique_ptr<wxFSFile> file(OpenFile(strFile));
         if ( file )
         {
-            delete file;
             *pStr = strFile;
             return true;
         }
