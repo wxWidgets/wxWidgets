@@ -44,6 +44,7 @@ public:
     wxWinUIControlHost host;
     MUXC::DropDownButton button{ nullptr };
     winrt::Microsoft::UI::Xaml::Controls::Border swatch{ nullptr };
+    MUXC::TextBlock label{ nullptr };
     MUXC::ColorPicker picker{ nullptr };
     MUXC::Flyout flyout{ nullptr };
     winrt::event_token colorChangedToken{};
@@ -106,7 +107,24 @@ bool wxWinUIColourButton::Create(wxWindow *parent, wxWindowID id,
         m_winui->flyout.ShouldConstrainToRootBounds(false);
 
         m_winui->button = MUXC::DropDownButton();
-        m_winui->button.Content(m_winui->swatch);
+        if ( style & wxCLRP_SHOW_LABEL )
+        {
+            // Show the colour value as text next to the swatch.
+            m_winui->label = MUXC::TextBlock();
+            m_winui->label.VerticalAlignment(
+                winrt::Microsoft::UI::Xaml::VerticalAlignment::Center);
+
+            MUXC::StackPanel face;
+            face.Orientation(MUXC::Orientation::Horizontal);
+            face.Spacing(8);
+            face.Children().Append(m_winui->swatch);
+            face.Children().Append(m_winui->label);
+            m_winui->button.Content(face);
+        }
+        else
+        {
+            m_winui->button.Content(m_winui->swatch);
+        }
         m_winui->button.Flyout(m_winui->flyout);
 
         m_winui->colorChangedToken = m_winui->picker.ColorChanged(
@@ -159,6 +177,9 @@ void wxWinUIColourButton::ApplyColourToPeer()
         if ( m_winui->swatch )
             m_winui->swatch.Background(wxWinUIBrush(m_colour.Red(),
                 m_colour.Green(), m_colour.Blue(), m_colour.Alpha()));
+        if ( m_winui->label )
+            m_winui->label.Text(wxWinUIToHString(
+                m_colour.GetAsString(wxC2S_HTML_SYNTAX)));
         if ( m_winui->picker )
             m_winui->picker.Color(wxWinUIToColor(m_colour));
     }
@@ -177,7 +198,9 @@ void wxWinUIColourButton::SendColourEvent(wxEventType type)
 
 wxSize wxWinUIColourButton::DoGetBestSize() const
 {
-    return wxWindow::FromDIP(wxSize(72, 32), const_cast<wxWinUIColourButton*>(this));
+    const wxSize size = HasFlag(wxCLRP_SHOW_LABEL) ? wxSize(140, 32)
+                                                   : wxSize(72, 32);
+    return wxWindow::FromDIP(size, const_cast<wxWinUIColourButton*>(this));
 }
 
 #endif // wxUSE_COLOURPICKERCTRL
