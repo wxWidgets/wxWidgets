@@ -25,6 +25,8 @@
 
 #include "wx/private/glibc.h"
 
+#include "testfile.h"
+
 #if wxUSE_INTL
 
 // ----------------------------------------------------------------------------
@@ -255,47 +257,23 @@ class TranslationsTestCatalogs
 {
 public:
     TranslationsTestCatalogs()
+        : m_prefix("wxintltest-")
     {
-        m_prefix = wxFileName::CreateTempFileName("wxintltest-");
-        REQUIRE( !m_prefix.empty() );
-        REQUIRE( wxRemoveFile(m_prefix) );
-        REQUIRE( wxMkdir(m_prefix) );
+        REQUIRE(!m_prefix.GetName().empty());
 
-        try
-        {
-            CopyCatalog("en_GB");
-            CopyCatalog("fr");
-            CopyCatalog("ja");
-            CopyCatalog("xart-dothraki");
+        CopyCatalog("en_GB");
+        CopyCatalog("fr");
+        CopyCatalog("ja");
+        CopyCatalog("xart-dothraki");
 
-            wxFileTranslationsLoader::AddCatalogLookupPathPrefix(m_prefix);
-        }
-        catch ( ... )
-        {
-            Cleanup();
-            throw;
-        }
-    }
-
-    ~TranslationsTestCatalogs()
-    {
-        Cleanup();
+        wxFileTranslationsLoader::AddCatalogLookupPathPrefix(
+            m_prefix.GetName());
     }
 
 private:
-    void Cleanup()
-    {
-        RemoveCatalog("en_GB");
-        RemoveCatalog("fr");
-        RemoveCatalog("ja");
-        RemoveCatalog("xart-dothraki");
-
-        wxRmdir(m_prefix);
-    }
-
     void CopyCatalog(const wxString& lang)
     {
-        wxFileName dir(m_prefix, wxString());
+        wxFileName dir(m_prefix.GetName(), wxString());
         dir.AppendDir(lang);
         REQUIRE( wxMkdir(dir.GetPath()) );
 
@@ -306,15 +284,7 @@ private:
         REQUIRE( wxCopyFile(src.GetFullPath(), dst.GetFullPath()) );
     }
 
-    void RemoveCatalog(const wxString& lang)
-    {
-        wxFileName fn(m_prefix, GetTranslationsTestDomain(), "mo");
-        fn.AppendDir(lang);
-        wxRemoveFile(fn.GetFullPath());
-        wxRmdir(fn.GetPath());
-    }
-
-    wxString m_prefix;
+    TempDir m_prefix;
 };
 
 } // anonymous namespace

@@ -24,7 +24,6 @@
 #include "wx/filefn.h"
 #include "wx/fswatcher.h"
 #include "wx/log.h"
-#include "wx/stdpaths.h"
 #include "wx/vector.h"
 
 #include "testfile.h"
@@ -133,16 +132,11 @@ public:
         if (ms_watchDir.DirExists())
             return ms_watchDir;
 
-        wxString tmp = wxStandardPaths::Get().GetTempDir();
-        ms_watchDir.AssignDir(tmp);
-
-        // XXX look for more unique name? there is no function to generate
-        // unique filename, the file always get created...
-        ms_watchDir.AppendDir("fswatcher_test");
-        REQUIRE(!ms_watchDir.DirExists());
+        ms_watchDirData.reset(new TempDir("fswatcher_test"));
+        REQUIRE(!ms_watchDirData->GetName().empty());
 
         TestLogEnabler enableLogs;
-        REQUIRE(ms_watchDir.Mkdir());
+        ms_watchDir.AssignDir(ms_watchDirData->GetName());
 
         REQUIRE(ms_watchDir.DirExists());
 
@@ -153,8 +147,10 @@ public:
     {
         REQUIRE(ms_watchDir.DirExists());
 
-        // just to be really sure we know what we remove
-        REQUIRE( ms_watchDir.GetDirs().Last() == "fswatcher_test" );
+        // Make sure we only remove the directory owned by the TempDir helper.
+        REQUIRE(ms_watchDirData);
+        REQUIRE(ms_watchDir.GetPath() == wxFileName::DirName(
+            ms_watchDirData->GetName()).GetPath());
 
         // Sometimes the directory can't be destroyed immediately because,
         // apparently, Windows itself keeps a handle to it (or one of the files
@@ -162,9 +158,12 @@ public:
         TestLogEnabler enableLogs;
         for ( int i = 0; i < 3; ++i )
         {
-            if ( ms_watchDir.Rmdir(wxPATH_RMDIR_RECURSIVE) )
+            if ( ms_watchDirData && ms_watchDirData->Remove() )
             {
                 ms_watchDir = wxFileName();
+                ms_watchDirData.reset();
+                delete ms_instance;
+                ms_instance = nullptr;
                 return;
             }
 
@@ -198,10 +197,12 @@ protected:
     static EventGenerator* ms_instance;
 
 private:
+    static std::unique_ptr<TempDir> ms_watchDirData;
     static wxFileName ms_watchDir;
 };
 
 EventGenerator* EventGenerator::ms_instance = nullptr;
+std::unique_ptr<TempDir> EventGenerator::ms_watchDirData;
 wxFileName EventGenerator::ms_watchDir;
 
 
@@ -375,19 +376,12 @@ class FileSystemWatcherTestCase
 public:
     FileSystemWatcherTestCase()
     {
-        // Before each test, remove the dir if it exists.
-        // It would exist if the previous test run was aborted.
-        wxString tmp = wxStandardPaths::Get().GetTempDir();
-        wxFileName dir;
-        dir.AssignDir(tmp);
-        dir.AppendDir("fswatcher_test");
-        dir.Rmdir(wxPATH_RMDIR_RECURSIVE);
-        EventGenerator::Get().GetWatchDir();
+        EventGenerator::GetWatchDir();
     }
 
     ~FileSystemWatcherTestCase()
     {
-        EventGenerator::Get().RemoveWatchDir();
+        EventGenerator::RemoveWatchDir();
     }
 };
 
