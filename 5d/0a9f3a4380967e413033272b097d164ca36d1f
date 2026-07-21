@@ -1,0 +1,1 @@
+wxAll (GUI): Fix nested definition lists in wxHTML (Richard Thomson, #20752).
