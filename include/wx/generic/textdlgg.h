@@ -136,6 +136,21 @@ WXDLLIMPEXP_CORE wxString
                     wxCoord y = wxDefaultCoord,
                     bool centre = true);
 
+// Unlike the overload above, this one does use the given position and
+// width: the dialog is created at the given position (unless centre is
+// true, in which case it is centred on the screen or its parent) and is
+// widened as needed to be at least as wide as requested. There is no
+// equivalent height parameter as the height of this single line text entry
+// dialog is fixed by its contents.
+WXDLLIMPEXP_CORE wxString
+    wxGetTextFromUser(const wxString& message,
+                    const wxString& caption,
+                    const wxString& default_value,
+                    wxWindow *parent,
+                    const wxPoint& pos,
+                    int width = wxDefaultCoord,
+                    bool centre = true);
+
 WXDLLIMPEXP_CORE wxString
     wxGetPasswordFromUser(const wxString& message,
                         const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),
@@ -144,6 +159,19 @@ WXDLLIMPEXP_CORE wxString
                         wxCoord x = wxDefaultCoord,
                         wxCoord y = wxDefaultCoord,
                         bool centre = true);
+
+// Same as wxGetTextFromUser() but for multiline text entry: unlike that
+// function, this one honours the given size, in addition to the position,
+// as both dimensions are meaningful when more than one line of text can be
+// entered.
+WXDLLIMPEXP_CORE wxString
+    wxGetMultiLineTextFromUser(const wxString& message,
+                    const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
+                    const wxString& default_value = wxEmptyString,
+                    wxWindow *parent = nullptr,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    bool centre = true);
 
 #endif
     // wxUSE_TEXTDLG
