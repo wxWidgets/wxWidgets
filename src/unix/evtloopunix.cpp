@@ -222,7 +222,11 @@ void wxConsoleEventLoop::DoYieldFor(long eventsToProcess)
 
 wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
-    return new wxEventLoop();
+    // Use wxConsoleEventLoop explicitly and not wxEventLoop because the
+    // latter is defined as wxGUIEventLoop when this file is compiled as part
+    // of a monolithic library (which is always built with wxUSE_GUI==1) and
+    // using a GUI event loop in console applications doesn't work, see #24909.
+    return new wxConsoleEventLoop();
 }
 
 #endif // wxUSE_CONSOLE_EVENTLOOP
