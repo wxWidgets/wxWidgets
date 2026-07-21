@@ -1,0 +1,1 @@
+wxAll (GUI): Fix ribbon buttons in high DPI and/or dark mode (Blake Madden, #26663).
