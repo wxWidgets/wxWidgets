@@ -3017,10 +3017,10 @@ should be processed on. It is filtered out and ignored on any other platforms.
 
 Possible elemental values are:
 @beginDefList
-@itemdef{ @c msw, Windows, preferred platform name }
-@itemdef{ @c win, Windows, alternative synonym }
-@itemdef{ @c mac, macOS or iOS }
-@itemdef{ @c unix, Any Unix platform @em except macOS }
+@itemdef{ <tt>msw</tt>, Windows, preferred platform name }
+@itemdef{ <tt>win</tt>, Windows, alternative synonym }
+@itemdef{ <tt>mac</tt>, macOS or iOS }
+@itemdef{ <tt>unix</tt>, Any Unix platform @em except macOS }
 @endDefList
 
 Examples:
