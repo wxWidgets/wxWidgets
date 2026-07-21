@@ -549,7 +549,7 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
     return true;
   }
   // Give up
-  wxLogSysError(_("File '%s' couldn't be renamed '%s'"), file1, file2);
+  wxLogSysError(_("File '%s' couldn't be renamed to '%s'"), file1, file2);
   return false;
 }
 
