@@ -1,0 +1,1 @@
+wxMSW: Fix icon returned for .exe files from wxFileType (Richard Thomson, #21794).
