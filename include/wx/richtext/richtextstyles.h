@@ -637,6 +637,7 @@ public:
     void OnSize(wxSizeEvent& event);
 
 private:
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     wxRichTextStyleListBox* m_styleListBox;
     wxChoice*               m_styleChoice;

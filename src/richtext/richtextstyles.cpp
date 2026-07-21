@@ -1018,6 +1018,7 @@ wxIMPLEMENT_CLASS(wxRichTextStyleListCtrl, wxControl);
 wxBEGIN_EVENT_TABLE(wxRichTextStyleListCtrl, wxControl)
     EVT_CHOICE(wxID_ANY, wxRichTextStyleListCtrl::OnChooseType)
     EVT_SIZE(wxRichTextStyleListCtrl::OnSize)
+    EVT_SYS_COLOUR_CHANGED(wxRichTextStyleListCtrl::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 wxRichTextStyleListCtrl::wxRichTextStyleListCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos,
@@ -1035,7 +1036,7 @@ bool wxRichTextStyleListCtrl::Create(wxWindow* parent, wxWindowID id, const wxPo
 
     wxControl::Create(parent, id, pos, size, style);
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
     if (size != wxDefaultSize)
         SetInitialSize(size);
 
@@ -1112,6 +1113,14 @@ void wxRichTextStyleListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if (GetAutoLayout())
         Layout();
+}
+
+void wxRichTextStyleListCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    if ( !m_hasBgCol )
+        m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
+    event.Skip();
 }
 
 /// Get the choice index for style type
