@@ -4,6 +4,7 @@
 // Author:      Steven Lamerton
 // Created:     2010-07-10
 // Copyright:   (c) 2010 Steven Lamerton
+//              (c) 2026 wxWidgets development team
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"
@@ -23,8 +24,10 @@
 #include "wx/uiaction.h"
 #include "wx/caret.h"
 #include "wx/cshelp.h"
+#include "wx/dcclient.h"
 #include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
+#include "wx/timer.h"
 #include "wx/tooltip.h"
 #include "wx/wupdlock.h"
 
@@ -53,6 +56,82 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(WindowTestCase);
 };
+
+#if wxUSE_HELP
+class ContextHelpCaptureLostTester : public wxWindow
+{
+public:
+    ContextHelpCaptureLostTester(wxWindow* parent)
+        : wxWindow(parent, wxID_ANY)
+    {
+    }
+
+    void SimulateCaptureLost()
+    {
+        DoReleaseMouse();
+        NotifyCaptureLost();
+    }
+};
+
+class ContextHelpCaptureLostState : public wxEvtHandler
+{
+public:
+    explicit ContextHelpCaptureLostState(ContextHelpCaptureLostTester* win)
+        : m_win(win),
+          m_captureLostTimer(this),
+          m_fallbackTimer(this)
+    {
+        m_done = false;
+        m_captureLostSent = false;
+        m_fallbackUsed = false;
+
+        Bind(wxEVT_TIMER, &ContextHelpCaptureLostState::OnTimer, this);
+    }
+
+    void Start()
+    {
+        m_captureLostTimer.StartOnce(1);
+    }
+
+    void Done()
+    {
+        m_done = true;
+        m_captureLostTimer.Stop();
+        m_fallbackTimer.Stop();
+    }
+
+    bool WasCaptureLostSent() const { return m_captureLostSent; }
+    bool WasFallbackUsed() const { return m_fallbackUsed; }
+
+private:
+    void OnTimer(wxTimerEvent& event)
+    {
+        if ( m_done )
+            return;
+
+        if ( &event.GetTimer() == &m_captureLostTimer )
+        {
+            m_captureLostSent = true;
+            m_win->SimulateCaptureLost();
+            m_fallbackTimer.StartOnce(100);
+            return;
+        }
+
+        m_fallbackUsed = true;
+
+        wxKeyEvent eventKey(wxEVT_KEY_DOWN);
+        eventKey.SetEventObject(m_win);
+        m_win->GetEventHandler()->ProcessEvent(eventKey);
+    }
+
+    ContextHelpCaptureLostTester* const m_win;
+    wxTimer m_captureLostTimer;
+    wxTimer m_fallbackTimer;
+    bool m_done;
+    bool m_captureLostSent;
+    bool m_fallbackUsed;
+};
+#endif // wxUSE_HELP
 
 static void DoTestShowHideEvent(wxWindow* window)
 {
@@ -177,6 +256,28 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 
     CHECK(!m_window->HasCapture());
 }
+
+#if wxUSE_HELP
+TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
+                 "[window][help]")
+{
+    wxScopedPtr<ContextHelpCaptureLostTester>
+        winPtr(new ContextHelpCaptureLostTester(wxTheApp->GetTopWindow()));
+    ContextHelpCaptureLostTester* const win = winPtr.get();
+
+    ContextHelpCaptureLostState state(win);
+    state.Start();
+
+    wxContextHelp contextHelp(win, false);
+
+    CHECK(contextHelp.BeginContextHelp(win));
+
+    state.Done();
+    CHECK(state.WasCaptureLostSent());
+    CHECK(!state.WasFallbackUsed());
+    CHECK(!win->HasCapture());
+}
+#endif // wxUSE_HELP
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Properties", "[window]")
 {
