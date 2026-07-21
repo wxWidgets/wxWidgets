@@ -15,6 +15,7 @@
 #if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
 
 #include "archivetest.h"
+#include "testfile.h"
 #include "wx/dir.h"
 #include <string>
 #include <list>
@@ -281,79 +282,35 @@ private:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Clean-up for temp directory
+// Clean-up for temp directory.
+//
+// This helper uses TempDir to create and remove the temporary directory, but
+// also changes into it because the archive tests use relative paths.
 
-class TempDir
+class ArchiveTempDir
 {
 public:
-    TempDir();
-    ~TempDir();
-    wxString GetName() const { return m_tmp; }
+    ArchiveTempDir();
+    ~ArchiveTempDir();
+    wxString GetName() const { return m_tmp.GetName(); }
 
 private:
-    void RemoveDir(wxString& path);
-    wxString m_tmp;
+    TempDir m_tmp;
     wxString m_original;
 };
 
-TempDir::TempDir()
+ArchiveTempDir::ArchiveTempDir()
+    : m_tmp(wxT("arctest-"))
 {
-    wxString tmp = wxFileName::CreateTempFileName(wxT("arctest-"));
-    if (!tmp.empty()) {
-        wxRemoveFile(tmp);
-        m_original = wxGetCwd();
-        CPPUNIT_ASSERT(wxMkdir(tmp, 0700));
-        m_tmp = tmp;
-        CPPUNIT_ASSERT(wxSetWorkingDirectory(tmp));
-    }
+    CPPUNIT_ASSERT(!m_tmp.GetName().empty());
+    m_original = wxGetCwd();
+    CPPUNIT_ASSERT(wxSetWorkingDirectory(m_tmp.GetName()));
 }
 
-TempDir::~TempDir()
+ArchiveTempDir::~ArchiveTempDir()
 {
-    if (!m_tmp.empty()) {
+    if ( !m_original.empty() )
         wxSetWorkingDirectory(m_original);
-        RemoveDir(m_tmp);
-    }
-}
-
-void TempDir::RemoveDir(wxString& path)
-{
-    wxCHECK_RET(!m_tmp.empty() && path.substr(0, m_tmp.length()) == m_tmp,
-                wxT("remove '") + path + wxT("' fails safety check"));
-
-    const wxChar *files[] = {
-        wxT("text/empty"),
-        wxT("text/small"),
-        wxT("bin/bin1000"),
-        wxT("bin/bin4095"),
-        wxT("bin/bin4096"),
-        wxT("bin/bin4097"),
-        wxT("bin/bin16384"),
-        wxT("zero/zero5"),
-        wxT("zero/zero1024"),
-        wxT("zero/zero32768"),
-        wxT("zero/zero16385"),
-        wxT("zero/newname"),
-        wxT("newfile"),
-    };
-
-    const wxChar *dirs[] = {
-        wxT("text/"), wxT("bin/"), wxT("zero/"), wxT("empty/")
-    };
-
-    wxString tmp = m_tmp + wxFileName::GetPathSeparator();
-    size_t i;
-
-    for (i = 0; i < WXSIZEOF(files); i++)
-        wxRemoveFile(tmp + wxFileName(files[i], wxPATH_UNIX).GetFullPath());
-
-    for (i = 0; i < WXSIZEOF(dirs); i++)
-        wxRmdir(tmp + wxFileName(dirs[i], wxPATH_UNIX).GetFullPath());
-
-    if (!wxRmdir(m_tmp))
-    {
-        wxLogSysError(wxT("can't remove temporary dir '%s'"), m_tmp);
-    }
 }
 
 
@@ -616,7 +573,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
 {
     // for an external archiver the test data need to be written to
     // temp files
-    TempDir tmpdir;
+    ArchiveTempDir tmpdir;
 
     // write the files
     TestEntries::iterator i;
@@ -862,7 +819,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
                                                     const wxString& unarchiver)
 {
     // for an external unarchiver, unarchive to a tempdir
-    TempDir tmpdir;
+    ArchiveTempDir tmpdir;
 
     if ((m_options & PipeIn) == 0) {
         wxFileName fn(tmpdir.GetName());
