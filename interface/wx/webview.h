@@ -958,7 +958,7 @@ public:
     connections (this includes HTTP and unverified HTTPS). You have to include
     additional fields in your Info.plist to enable such connections.
     For further details see the documentation on NSAppTransportSecurity
-    <a target=_blank href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
+    <a target="_blank" href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
 
     The predefined @c wxWebViewBackendWebKit constant contains the name of this
     backend.
