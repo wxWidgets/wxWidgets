@@ -295,7 +295,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     if ( !is->IsOk() )
         return nullptr;
 
-    return new wxFSFile(is.get(),
+    return new wxFSFile(is.release(),
                         location,
                         wxEmptyString,
                         GetAnchor(location)
