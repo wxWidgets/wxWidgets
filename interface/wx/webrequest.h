@@ -85,7 +85,7 @@
     connections (this includes HTTP and unverified HTTPS). You have to include
     additional fields in your Info.plist to enable such connections.
     For further details see the documentation on NSAppTransportSecurity
-    <a target=_new href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
+    <a target=_blank href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
 
     @section descriptions Implementation Descriptions
 
@@ -98,7 +98,7 @@
     <tr>
         <td>Windows</td>
         <td>
-            <a target=_new href="https://docs.microsoft.com/en-us/windows/desktop/WinHttp/about-winhttp">WinHTTP</a>
+            <a target=_blank href="https://docs.microsoft.com/en-us/windows/desktop/WinHttp/about-winhttp">WinHTTP</a>
         </td>
         <td>Yes</td>
         <td>Windows 10 1607</td>
@@ -106,7 +106,7 @@
     <tr>
         <td>macOS</td>
         <td>
-            <a target=_new href="https://developer.apple.com/documentation/foundation/urlsession">NSURLSession</a>
+            <a target=_blank href="https://developer.apple.com/documentation/foundation/urlsession">NSURLSession</a>
         </td>
         <td>macOS 10.9</td>
         <td>macOS 10.11</td>
@@ -114,7 +114,7 @@
     <tr>
         <td>iOS</td>
         <td>
-            <a target=_new href="https://developer.apple.com/documentation/foundation/urlsession">NSURLSession</a>
+            <a target=_blank href="https://developer.apple.com/documentation/foundation/urlsession">NSURLSession</a>
         </td>
         <td>iOS 7.0</td>
         <td>iOS 9.0</td>
@@ -122,7 +122,7 @@
     <tr>
         <td>Linux</td>
         <td>
-            <a target=_new href="https://curl.haxx.se/libcurl/">libcurl</a>
+            <a target=_blank href="https://curl.haxx.se/libcurl/">libcurl</a>
         </td>
         <td>Yes</td>
         <td>7.47.0</td>
