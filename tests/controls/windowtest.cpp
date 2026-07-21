@@ -257,10 +257,10 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     CHECK(!m_window->HasCapture());
 }
 
+#if wxUSE_HELP
 TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
                  "[window][help]")
 {
-#if wxUSE_HELP
     wxScopedPtr<ContextHelpCaptureLostTester>
         winPtr(new ContextHelpCaptureLostTester(wxTheApp->GetTopWindow()));
     ContextHelpCaptureLostTester* const win = winPtr.get();
@@ -276,8 +276,8 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
     CHECK(state.WasCaptureLostSent());
     CHECK(!state.WasFallbackUsed());
     CHECK(!win->HasCapture());
-#endif // wxUSE_HELP
 }
+#endif // wxUSE_HELP
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Properties", "[window]")
 {
