@@ -2402,7 +2402,7 @@ void wxTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         for (long pos = start; pos < (long)text.length(); pos++)
         {
             wxPoint pt = PositionToCoords(pos);
-            if ( pt.y > rect.height )
+            if ( pt.y >= rect.height )
                 break;
             dc.DrawText(text[pos], pt);
         }
