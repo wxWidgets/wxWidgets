@@ -1115,6 +1115,14 @@ function(wx_add name group)
         VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}"
         )
 
+    # GUI executables of a wxWinUI build need the unpackaged Windows App SDK
+    # runtime payload next to them; the helper only exists in WinUI builds, so
+    # this is a no-op for every other toolkit.  Console targets link wxbase
+    # only and never initialize XAML.
+    if(NOT APP_DLL AND NOT APP_CONSOLE AND COMMAND wx_winui3_deploy_runtime)
+        wx_winui3_deploy_runtime(${target_name})
+    endif()
+
     if(group STREQUAL Tests)
         add_test(NAME ${target_name}
             COMMAND ${target_name}
