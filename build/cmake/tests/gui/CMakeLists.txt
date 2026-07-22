@@ -52,6 +52,7 @@ set(TEST_GUI_SRC
     controls/itemcontainertest.cpp
     controls/infobar.cpp
     controls/label.cpp
+    controls/winuihostlifecycle.cpp
     controls/listbasetest.cpp
     controls/listbooktest.cpp
     controls/listboxtest.cpp
@@ -233,6 +234,10 @@ wx_add_test(test_gui ${APP_TYPE} ${TEST_GUI_SRC}
     DATA ${TEST_GUI_DATA}
     RES_BUNDLE ${TEST_GUI_RES_BUNDLE}
     )
+if(WXWINUI AND wxUSE_WINUI3 AND MSVC)
+    # controls/winuihostlifecycle.cpp includes the C++/WinRT projection
+    target_compile_options(test_gui PRIVATE /bigobj)
+endif()
 if(wxUSE_AUI)
     wx_exe_link_libraries(test_gui wxaui)
 endif()

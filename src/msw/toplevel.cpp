@@ -1357,6 +1357,17 @@ void wxTopLevelWindowMSW::DoFreeze()
 void wxTopLevelWindowMSW::DoThaw()
 {
     // intentionally empty -- see DoFreeze()
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // ... except for the shared XAML island host: it suspends its coalesced
+    // geometry flush while the TLW is frozen (never rescheduling during the
+    // freeze) and waits for this notification to run the single catch-up
+    // flush.  It must be sent from this TLW override: wxWindowBase::Thaw()
+    // ends a freeze by calling DoThaw() here, and a TLW may thaw without
+    // any child window running wxWindowMSW::DoThaw().
+    extern void wxWinUITLWHostNotifyThaw(wxWindow *window);
+    wxWinUITLWHostNotifyThaw(this);
+#endif // __WXWINUI__ && wxUSE_WINUI3
 }
 
 
