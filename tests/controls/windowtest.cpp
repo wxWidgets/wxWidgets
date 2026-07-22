@@ -26,11 +26,16 @@
 #include "wx/caret.h"
 #include "wx/cshelp.h"
 #include "wx/dcclient.h"
-#include "wx/timer.h"
 #include "wx/tooltip.h"
 #include "wx/wupdlock.h"
 
 #include "wx/private/make_unique.h"
+
+// Context help capture loss test currently hangs forever when using wxQt, so
+// don't try running it there.
+#if wxUSE_HELP && !defined(__WXQT__)
+    #define wxHAS_CAPTURE_LOST_TEST
+#endif
 
 class WindowTestCase
 {
@@ -57,7 +62,10 @@ protected:
     wxDECLARE_NO_COPY_CLASS(WindowTestCase);
 };
 
-#if wxUSE_HELP
+#ifdef wxHAS_CAPTURE_LOST_TEST
+
+#include "wx/timer.h"
+
 class ContextHelpCaptureLostTester : public wxWindow
 {
 public:
@@ -127,7 +135,7 @@ private:
     bool m_captureLostSent = false;
     bool m_fallbackUsed = false;
 };
-#endif // wxUSE_HELP
+#endif // wxHAS_CAPTURE_LOST_TEST
 
 static void DoTestShowHideEvent(wxWindow* window)
 {
@@ -253,7 +261,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     CHECK(!m_window->HasCapture());
 }
 
-#if wxUSE_HELP
+#ifdef wxHAS_CAPTURE_LOST_TEST
 TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
                  "[window][help]")
 {
@@ -273,7 +281,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
     CHECK(!state.WasFallbackUsed());
     CHECK(!win->HasCapture());
 }
-#endif // wxUSE_HELP
+#endif // wxHAS_CAPTURE_LOST_TEST
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Properties", "[window]")
 {
