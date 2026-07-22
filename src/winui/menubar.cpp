@@ -20,10 +20,14 @@
     #include "wx/utils.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/evtloop.h"
+#include "wx/weakref.h"
 #include "wx/msw/private.h"
 
 #include "private.h"
+
+#include "wx/winui/private/tlwhost.h"
 
 #include <memory>
 #include <winrt/Microsoft.UI.Dispatching.h>
@@ -110,11 +114,23 @@ private:
                 item->Check(checked);
         }
 
-        wxCommandEvent event(wxEVT_MENU, id);
-        event.SetEventObject(m_frame);
-        if ( checkable )
-            event.SetInt(checked ? 1 : 0);
-        m_frame->GetEventHandler()->ProcessEvent(event);
+        // Defer the command: it runs from inside the flyout item's Click,
+        // i.e. while the flyout is still on screen.  A handler entering a
+        // modal loop (a dialog) would freeze the menu open over it; letting
+        // the dispatcher unwind first closes it, like the classic Win32
+        // menu does before the command runs.
+        wxWeakRef<wxWindow> frame(m_frame);
+        wxTheApp->CallAfter([frame, id, checkable, checked]()
+        {
+            if ( !frame )
+                return;
+
+            wxCommandEvent event(wxEVT_MENU, id);
+            event.SetEventObject(frame.get());
+            if ( checkable )
+                event.SetInt(checked ? 1 : 0);
+            frame->GetEventHandler()->ProcessEvent(event);
+        });
     }
 
     // --- dynamic status-bar help, mirroring the classic Win32 behaviour ------
@@ -492,64 +508,44 @@ bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y)
     if ( !win || !menu || !wxWinUI3Initialize() )
         return false;
 
-    HWND hwnd = GetHwndOf(win);
-    if ( !hwnd )
+    if ( !GetHwndOf(win) )
+        return false;
+
+    // The flyout lives on the parent's shared per-TLW island: no transient
+    // island is created any more.
+    wxWinUITopLevelHost * const host = wxWinUITopLevelHost::ForWindow(win, true);
+    if ( !host || !host->GetXamlRoot() )
         return false;
 
     try
     {
-        using namespace winrt::Microsoft::UI;
-        using namespace winrt::Microsoft::UI::Content;
         using namespace winrt::Microsoft::UI::Xaml;
-        using namespace winrt::Microsoft::UI::Xaml::Controls;
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
         using namespace winrt::Windows::Foundation;
-
-        DesktopWindowXamlSource source;
-        source.Initialize(GetWindowIdFromWindow(hwnd));
-        source.SiteBridge().ResizePolicy(ContentSizePolicy::ResizeContentToParentWindow);
-
-        const HWND hwndBridge = GetWindowFromWindowId(source.SiteBridge().WindowId());
-        ::SetWindowLongPtr
-        (
-            hwndBridge,
-            GWL_STYLE,
-            ::GetWindowLongPtr(hwndBridge, GWL_STYLE) |
-                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
-        );
-        ::SetWindowPos(hwndBridge, HWND_TOP, 0, 0, 0, 0,
-                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
-
-        Grid root;
-        root.RequestedTheme(wxWinUIGetCurrentElementTheme());
-        source.Content(root);
-
-        if ( !root.XamlRoot() )
-        {
-            source.Close();
-            return false;
-        }
 
         auto sel = std::make_shared<wxWinUIPopupSelection>();
 
         MUXC::MenuFlyout flyout;
-        // The island is only as large as the window: let the flyout become a
-        // windowed popup instead of being clipped to the island bounds.
+        // Let the flyout become a windowed popup so it can extend past the
+        // top-level window when opened near an edge.
         flyout.ShouldConstrainToRootBounds(false);
         wxWinUIPopulatePopupItems(flyout.Items(), menu, sel);
 
-        wxPoint pos;
+        // Anchor point in the root-canvas (TLW-client DIP) space.
+        wxPoint screenPos;
         if ( x == wxDefaultCoord && y == wxDefaultCoord )
-            pos = win->ScreenToClient(wxGetMousePosition());
+            screenPos = wxGetMousePosition();
         else
-            pos = wxPoint(x, y);
-        const wxPoint dip = win->ToDIP(pos);
+            screenPos = win->ClientToScreen(wxPoint(x, y));
+        const wxPoint dip = host->ScreenToRootDIP(screenPos);
 
         bool done = false;
         bool loopIsRunning = false;
         wxEventLoop* loopRunning = nullptr;
 
-        flyout.Closed(
+        // The flyout lives on the shared island and may outlive this call:
+        // the token is revoked below so this by-reference lambda can never
+        // fire on dead stack locals.
+        const auto closedToken = flyout.Closed(
             [&](IInspectable const&, IInspectable const&)
             {
                 done = true;
@@ -563,8 +559,8 @@ bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y)
             win->GetEventHandler()->ProcessEvent(event);
         }
 
-        flyout.ShowAt(root, Point{ static_cast<float>(dip.x),
-                                   static_cast<float>(dip.y) });
+        flyout.ShowAt(host->Root(), Point{ static_cast<float>(dip.x),
+                                           static_cast<float>(dip.y) });
 
         wxEventLoop loop;
         loopRunning = &loop;
@@ -579,7 +575,7 @@ bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y)
         // The item Click callback may still be queued behind the Closed
         // notification: run the dispatcher for one more turn so any pending
         // click is delivered before we act on the selection.
-        if ( auto queue = root.DispatcherQueue() )
+        if ( auto queue = host->Root().DispatcherQueue() )
         {
             bool drained = false;
             bool drainIsRunning = false;
@@ -599,13 +595,19 @@ bool wxWinUIPopupMenu(wxWindow *win, wxMenu *menu, int x, int y)
             }
         }
 
+        try
+        {
+            flyout.Closed(closedToken);
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+
         {
             wxMenuEvent event(wxEVT_MENU_CLOSE, wxID_ANY, menu);
             event.SetEventObject(menu);
             win->GetEventHandler()->ProcessEvent(event);
         }
-
-        source.Close();
 
         if ( sel->id != wxID_NONE )
         {

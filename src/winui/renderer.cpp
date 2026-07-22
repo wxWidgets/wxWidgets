@@ -22,6 +22,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/settings.h"
+    #include "wx/utils.h"
     #include "wx/window.h"
 #endif
 
@@ -123,6 +124,36 @@ public:
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
         dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
         dc.DrawRoundedRectangle(rect, win->FromDIP(4));
+    }
+
+    // A Fluent surface has no 3-D edges: draw nothing for the border and a
+    // flat, theme-coloured sash.  Otherwise wxSP_3D splitters show the classic
+    // light highlight line, which reads as a bright scar on a dark theme.
+    void DrawSplitterBorder(wxWindow *WXUNUSED(win),
+                            wxDC& WXUNUSED(dc),
+                            const wxRect& WXUNUSED(rect),
+                            int WXUNUSED(flags) = 0) override
+    {
+    }
+
+    void DrawSplitterSash(wxWindow *WXUNUSED(win),
+                          wxDC& WXUNUSED(dc),
+                          const wxSize& WXUNUSED(size),
+                          wxCoord WXUNUSED(position),
+                          wxOrientation WXUNUSED(orient),
+                          int WXUNUSED(flags) = 0) override
+    {
+        // Draw nothing: the sash area keeps the black fill done in
+        // WM_ERASEBKGND, i.e. it shows the window backdrop like any other gap
+        // between controls.  Painting it with the window background colour
+        // would not do, as that colour stays the (light) system one while the
+        // backdrop is in use.
+    }
+
+    wxSplitterRenderParams GetSplitterParams(const wxWindow *win) override
+    {
+        // No 3-D border, whatever the window style asks for.
+        return wxSplitterRenderParams(win->FromDIP(6), 0, false);
     }
 
     void DrawTreeItemButton(wxWindow *win,

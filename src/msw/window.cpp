@@ -574,6 +574,17 @@ wxWindow *wxWindowBase::DoFindFocus()
     HWND hWnd = ::GetFocus();
     if ( hWnd )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // When the native focus sits inside a per-TLW island bridge, it
+        // belongs to the wx control owning the focused slot: the plain
+        // parent-chain walk below would wrongly resolve it to the top-level
+        // window itself.
+        extern wxWindow *wxWinUITLWHostResolveFocus(WXHWND hwnd);
+        wxWindow * const islandFocus = wxWinUITLWHostResolveFocus((WXHWND)hWnd);
+        if ( islandFocus )
+            return islandFocus;
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
         return wxGetWindowFromHWND((WXHWND)hWnd);
     }
 
@@ -3191,6 +3202,68 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 WXHWND hwnd;
                 UnpackActivate(wParam, lParam, &state, &minimized, &hwnd);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+                // An OWNED island-hosting top-level window pays a massive
+                // per-step tax in the interactive move/size loop (XAML
+                // composition throttled from 165Hz to ~45Hz while dragging,
+                // WM_WINDOWPOSCHANGED going from 0.2ms to 6-80ms per step,
+                // WM_GETICON storms) and its boundary hover transitions
+                // degrade too.  Ablation proved the ownership LINK itself is
+                // the cause: the collapse follows ANY owner -- even a bare
+                // invisible one -- and only the unowned window is fluid.
+                //
+                // The link is only ever NEEDED while the window is inactive:
+                // that is when the parent could be raised above it.  While
+                // ACTIVE the window is naturally on top, so drop the owner
+                // for exactly that span and restore it on deactivation --
+                // dialogs drag/resize/hover at full rate, and the
+                // stay-above-parent guarantee is intact whenever it can
+                // matter.
+                if ( IsTopLevel() &&
+                        ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") )
+                {
+                    static const wchar_t s_ownerProp[] = L"wxWinUIStashedOwner";
+                    bool ownerChanged = false;
+                    if ( state != WA_INACTIVE )
+                    {
+                        const HWND owner = reinterpret_cast<HWND>(
+                            ::GetWindowLongPtr(GetHwnd(), GWLP_HWNDPARENT));
+                        if ( owner && !::GetPropW(GetHwnd(), s_ownerProp) )
+                        {
+                            ::SetPropW(GetHwnd(), s_ownerProp, owner);
+                            ::SetWindowLongPtr(GetHwnd(), GWLP_HWNDPARENT, 0);
+                            ownerChanged = true;
+                        }
+                    }
+                    else // deactivating: restore the stay-above-parent link
+                    {
+                        const HWND owner = reinterpret_cast<HWND>(
+                            ::GetPropW(GetHwnd(), s_ownerProp));
+                        if ( owner )
+                        {
+                            ::RemovePropW(GetHwnd(), s_ownerProp);
+                            if ( ::IsWindow(owner) )
+                            {
+                                ::SetWindowLongPtr(
+                                    GetHwnd(), GWLP_HWNDPARENT,
+                                    reinterpret_cast<LONG_PTR>(owner));
+                                ownerChanged = true;
+                            }
+                        }
+                    }
+
+                    // Changing the owner makes DWM rebuild the window frame,
+                    // which silently drops the composed backdrop: without
+                    // re-priming, the dialog paints an opaque background
+                    // until the user happens to resize it.
+                    if ( ownerChanged )
+                    {
+                        ::RemovePropW(GetHwnd(), L"wxWinUIBackdropPrimed");
+                        wxWinUIPrimeBackdrop(GetHwnd());
+                    }
+                }
+#endif // WinUI
+
                 processed = HandleActivate(state, minimized != 0, (WXHWND)hwnd);
             }
             break;
@@ -3208,14 +3281,14 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_PAINT:
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-            if ( ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") )
-            {
-                ::ValidateRect(GetHwnd(), nullptr);
-                processed = true;
-                break;
-            }
-#endif
+            // N.B. windows marked as transparent to the WinUI backdrop are
+            // *not* special-cased here.  Discarding WM_PAINT for them would
+            // also discard the wxEVT_PAINT of everything drawing itself with
+            // wx -- the generic wxDataViewCtrl, wxGrid, wxBannerWindow or any
+            // user window with an EVT_PAINT handler -- which then rendered as
+            // an empty rectangle.  The transparency comes from the black fill
+            // done in WM_ERASEBKGND below, and a window with nothing to paint
+            // simply leaves that fill untouched.
             if ( wParam )
             {
                 wxPaintDCEx dc((wxWindow *)this, (WXHDC)wParam);
@@ -3663,6 +3736,40 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 #if defined(__WXWINUI__) && wxUSE_WINUI3
                 eraseForWinUIBackdrop =
                     ::GetPropW(GetHwnd(), L"wxWinUIBackdropTransparent") != nullptr;
+
+                if ( !eraseForWinUIBackdrop )
+                {
+                    // The recursive marking runs when the backdrop is applied
+                    // to the top-level window, so windows created later (lazy
+                    // notebook pages and their controls...) would miss it and
+                    // erase with the default (light) brush.  Inherit the mark
+                    // from the ancestor chain on first erase instead: the TLW
+                    // itself is always marked, so this converges in one pass.
+                    //
+                    // The walk MUST stop at the first non-child window:
+                    // ::GetParent() returns the OWNER for owned top-level
+                    // windows, and a dialog deliberately left unmarked (it
+                    // has no composed backdrop, its children use the solid
+                    // themed background) must not re-inherit the mark from
+                    // its owner frame.
+                    for ( HWND ancestor = GetHwnd(); ancestor; )
+                    {
+                        if ( !(::GetWindowLongPtr(ancestor, GWL_STYLE) & WS_CHILD) )
+                            break;
+
+                        ancestor = ::GetParent(ancestor);
+                        if ( !ancestor )
+                            break;
+
+                        if ( ::GetPropW(ancestor, L"wxWinUIBackdropTransparent") )
+                        {
+                            ::SetPropW(GetHwnd(), L"wxWinUIBackdropTransparent",
+                                       reinterpret_cast<HANDLE>(1));
+                            eraseForWinUIBackdrop = true;
+                            break;
+                        }
+                    }
+                }
 #endif
 
                 if ( eraseForWinUIBackdrop )

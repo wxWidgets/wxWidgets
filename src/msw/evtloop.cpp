@@ -124,10 +124,20 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
 {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-    if ( wxWinUI3PreTranslateMessage(msg) )
+    // Tab must be handled BEFORE ContentPreTranslateMessage: otherwise the
+    // shared per-TLW island consumes it and walks its own internal tree
+    // order instead of the wx tab order.
+    if ( wxWinUI3ProcessTabNavigation(msg) )
         return;
 
-    if ( wxWinUI3ProcessTabNavigation(msg) )
+    // Every other message already went through ContentPreTranslateMessage in
+    // the thread-wide WH_GETMESSAGE hook (winui.cpp), which skips Tab
+    // precisely so that the wx navigation above wins; give the island its
+    // chance at the Tab it did not see there.  Do not pre-translate the rest
+    // a second time: the island input machinery must see each message once.
+    if ( (msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN) &&
+            msg->wParam == VK_TAB &&
+                wxWinUI3PreTranslateMessage(msg) )
         return;
 
     if ( wxWinUI3DispatchIslandKeyboard(msg) )

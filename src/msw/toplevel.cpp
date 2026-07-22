@@ -215,6 +215,21 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 
 WXHWND wxTopLevelWindowMSW::MSWGetParent() const
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Dialogs are created as plain windows of the wx class under the WinUI
+    // port (see Create()), so reproduce here the owner that the
+    // CreateDialogIndirect() path would have used.
+    if ( GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
+    {
+        wxWindow * const parent =
+            const_cast<wxDialog *>(static_cast<const wxDialog *>(this))
+                ->GetParentForModalDialog();
+        if ( parent )
+            return GetHwndOf(parent);
+        // an orphan dialog: fall through to the frame logic below
+    }
+#endif // WinUI
+
     // for the frames without wxFRAME_FLOAT_ON_PARENT style we should use null
     // parent HWND or it would be always on top of its parent which is not what
     // we usually want (in fact, we only want it for frames with the
@@ -454,6 +469,38 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
     if ( GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // A real dialog-manager window (class #32770 with DefDlgProc in its
+        // wndproc chain) makes every step of an interactive move/size of an
+        // island-hosting dialog catastrophically expensive: the themed
+        // caption machinery re-resolves the window icon on each step
+        // (WM_GETICON storms) and a single WM_WINDOWPOSCHANGED costs
+        // 6-80ms against 0.2ms on a frame-class window, throttling the
+        // thread's XAML composition pump from 165 to ~45 frames per second
+        // for as long as a wxDialog is dragged or resized.  wx uses none of
+        // the dialog manager services anyway (navigation, default button and
+        // Enter/Escape handling are implemented on the wx side, and the
+        // per-TLW island handles Tab and focus), so create dialogs as
+        // regular windows of the wx class with the same styles and owner
+        // the dialog template would have produced.
+        WXDWORD dlgExStyle;
+        WXDWORD dlgStyle = MSWGetStyle(style, &dlgExStyle);
+
+        // all dialogs are popups
+        dlgStyle |= WS_POPUP;
+
+        // the classic icon-less dialog caption (what DS_MODALFRAME gives a
+        // real dialog)
+        if ( style & (wxRESIZE_BORDER | wxCAPTION) )
+            dlgExStyle |= WS_EX_DLGMODALFRAME;
+
+        if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
+            dlgExStyle |= WS_EX_LAYOUTRTL;
+
+        if ( !MSWCreate(GetMSWClassName(GetWindowStyle()), title.t_str(), pos,
+                        sizeReal, dlgStyle, dlgExStyle) )
+            return false;
+#else // regular wxMSW: real dialog template
         // we have different dialog templates to allows creation of dialogs
         // with & without captions under MSWindows, resizable or not (but a
         // resizable dialog always has caption - otherwise it would look too
@@ -498,6 +545,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
         if ( !CreateDialog(dlgTemplate, title, pos, sizeReal) )
             return false;
+#endif // WinUI/regular MSW
     }
     else // !dialog
     {

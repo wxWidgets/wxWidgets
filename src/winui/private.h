@@ -49,6 +49,17 @@
 #include <winrt/Microsoft.UI.Xaml.Media.Imaging.h>
 #include <winrt/Windows.System.h>
 
+// The per-control host: since the one-island-per-TLW re-architecture this is
+// a thin PROXY over wxWinUITopLevelHost (wx/winui/private/tlwhost.h) -- the
+// control's XAML element lives as a slot in the shared per-top-level island,
+// and everything (composition, geometry sync, input routing/synthesis, focus)
+// is done by the TLW host.  The historical 7-method contract is preserved so
+// the ~30 control implementations stay untouched.
+//
+// The proxy deliberately caches no pointer to the TLW host or the slot: both
+// are looked up on demand through the registry, which keeps it safe against
+// every teardown/reparenting order (the TLW host dies with its TLW and takes
+// the slots with it).
 class wxWinUIControlHost
 {
 public:
@@ -57,7 +68,7 @@ public:
     bool Initialize(wxWindow *window);
     void Close();
 
-    bool IsOk() const { return static_cast<bool>(m_source); }
+    bool IsOk() const;
 
     void SetContent(const winrt::Microsoft::UI::Xaml::UIElement& element);
     void ClearContent();
@@ -65,68 +76,52 @@ public:
     // Apply an element theme to the hosted content, if it is a FrameworkElement.
     void ApplyTheme(winrt::Microsoft::UI::Xaml::ElementTheme theme);
 
-    // Force the island to recompose after a programmatic change.  Hosted XAML
-    // islands only commit a new composition frame when the site bridge is
-    // resized, so property changes made outside of user input would otherwise
-    // not become visible until the next resize.
+    // Historically: force the per-control island to recompose (islands only
+    // committed a frame on a bridge resize).  In the shared tree a plain
+    // layout invalidation of the slot container is enough -- and mostly
+    // redundant, since XAML invalidates on property changes by itself.
     void ForceRender();
 
-    // Apply the island's native Mica backdrop.  Must run while the message loop
-    // is pumping (deferred via CallAfter), otherwise the backdrop controller
-    // deadlocks on the dispatcher queue.
+    // No-op kept for source compatibility: the per-island Mica backdrop is
+    // gone, the DWM window backdrop shows through the transparent island.
     void ApplyBackdropMaterial();
 
-    HWND GetHostHWND() const { return m_hostHwnd; }
-    HWND GetBridgeHWND() const { return m_bridgeHwnd; }
+    HWND GetHostHWND() const;
+    HWND GetBridgeHWND() const;
     bool ContainsFocus(HWND hwnd) const;
     bool NavigateFocus(bool forward);
 
-    // Limit the island bridge to the top portion of the control's client area
-    // (in physical pixels), leaving the area below free of any XAML island.
-    // Used by wxNotebook so that its page windows -- and crucially their native
-    // scrollbars -- are not occluded by the TabView's composition surface.
-    // Pass 0 to fill the whole client area (the default).
+    // Limit the slot to the top portion of the control's client area (in
+    // physical pixels), leaving the area below free of any XAML content.
+    // Used by wxNotebook so that its page windows -- and crucially their
+    // native scrollbars -- are not covered by the TabView band.  Pass 0 to
+    // fill the whole client area (the default).
     void SetBridgeHeightLimit(int physicalHeight);
 
-    // Reflect a wxWindow::SetCursor() on this island (per-window cursor, e.g.
+    // Reflect a wxWindow::SetCursor() on the slot (per-window cursor, e.g.
     // setting a wait cursor on a single control).  Mapped to ProtectedCursor.
     void ApplyWxCursor(const wxCursor& cursor);
 
     // The natural size of the hosted XAML content, in physical pixels, or
-    // wxDefaultSize if it can't be measured (no content yet).
-    //
-    // This must be used instead of measuring the element directly: the content
-    // is given an explicit Width/Height in UpdateContentSize() so that it fills
-    // the control, and Measure() would simply return that imposed size back,
-    // locking in whatever (possibly wrong) size the control had first.
+    // wxDefaultSize if it can't be measured (no content yet).  The element is
+    // not size-pinned any more (the slot container is), so this is a plain
+    // unconstrained Measure().
     wxSize MeasureContent() const;
 
     // True once the hosted content has been loaded in a live visual tree, i.e.
     // once its template is applied and MeasureContent() is meaningful.
     bool IsContentLoaded() const { return m_contentLoaded; }
 
-    // The wx control whose HWND hosts this island.
+    // The wx control whose slot this is.
     wxWindow *HostedWindow() const { return m_window; }
 
 private:
-    void UpdateContentSize(int width, int height);
-    void MoveAndResize();
     void OnContentLoaded();
-    void OnWindowSize(wxSizeEvent& event);
-    void OnSetFocus(wxFocusEvent& event);
-    void OnTakeFocusRequested(
-        winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSourceTakeFocusRequestedEventArgs const& event);
 
     wxWindow *m_window = nullptr;
-    HWND m_hostHwnd = nullptr;
-    HWND m_bridgeHwnd = nullptr;
-    winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource m_source{ nullptr };
     winrt::Microsoft::UI::Xaml::UIElement m_content{ nullptr };
-    winrt::event_token m_takeFocusRequestedToken{};
     winrt::event_token m_loadedToken{};
-    bool m_backdropApplied = false;
     bool m_contentLoaded = false;
-    int m_bridgeHeightLimit = 0;
 };
 
 // Current element theme requested by the application (Default == follow system).
@@ -221,49 +216,6 @@ private:
     wxSize m_contentSize{ 320, 120 };
     std::vector<Button> m_buttons;
     std::function<bool (int)> m_onAccept;
-};
-
-// ----------------------------------------------------------------------------
-// wxWinUIDialogIsland: a transient XAML island covering a top-level window,
-// used to show a ContentDialog over it.  Handles the bridge window setup,
-// theming, app-modality (all other top-level windows are disabled while the
-// dialog runs) and the nested event loop.
-// ----------------------------------------------------------------------------
-
-class wxWinUIDialogIsland
-{
-public:
-    wxWinUIDialogIsland() = default;
-    ~wxWinUIDialogIsland() { Close(); }
-
-    wxWinUIDialogIsland(const wxWinUIDialogIsland&) = delete;
-    wxWinUIDialogIsland& operator=(const wxWinUIDialogIsland&) = delete;
-
-    // Create the island over the given parent; false on failure (no parent,
-    // no HWND or XAML initialisation problems).
-    bool Create(wxWindow *parent);
-
-    // The root element covering the parent, valid after a successful Create().
-    winrt::Microsoft::UI::Xaml::Controls::Grid const& GetRoot() const
-        { return m_root; }
-
-    // Create a ContentDialog attached to the island root with the current
-    // theme applied; title, content and buttons are up to the caller.
-    winrt::Microsoft::UI::Xaml::Controls::ContentDialog CreateDialog() const;
-
-    // Show the dialog app-modally: all other top-level windows are disabled
-    // (the parent stays enabled as it hosts the island, its client area being
-    // covered by the dialog's smoke layer) and a nested event loop runs until
-    // the dialog is dismissed.
-    winrt::Microsoft::UI::Xaml::Controls::ContentDialogResult
-    ShowDialog(winrt::Microsoft::UI::Xaml::Controls::ContentDialog const& dialog);
-
-    void Close();
-
-private:
-    wxWindow *m_parent = nullptr;
-    winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource m_source{ nullptr };
-    winrt::Microsoft::UI::Xaml::Controls::Grid m_root{ nullptr };
 };
 
 // Strip '&' mnemonics ("&&" -> "&"): WinUI labels don't support them.

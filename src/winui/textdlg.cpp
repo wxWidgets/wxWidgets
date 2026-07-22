@@ -51,18 +51,9 @@ int wxWinUIContentDialogMaxLength(unsigned long len)
 
 } // anonymous namespace
 
-wxTextEntryDialog::wxTextEntryDialog()
-{
-    m_textctrl = nullptr;
-    m_dialogStyle = 0;
-    m_winuiParent = nullptr;
-    m_maxLength = 0;
-    m_forceUpper = false;
-    m_isPassword = false;
-#if wxUSE_VALIDATORS
-    m_validator = nullptr;
-#endif
-}
+// All the members carry default initializers in the class declaration, so
+// both constructors start from the same clean state.
+wxTextEntryDialog::wxTextEntryDialog() = default;
 
 wxTextEntryDialog::~wxTextEntryDialog()
 {

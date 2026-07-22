@@ -15,6 +15,8 @@
 
 #include "private.h"
 
+#include "wx/winui/private/tlwhost.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/string.h"
@@ -28,7 +30,9 @@
 #include "wx/app.h"
 #include "wx/evtloop.h"
 #include "wx/settings.h"
+#include "wx/panel.h"
 #include "wx/sizer.h"
+#include "wx/splitter.h"
 #include "wx/toplevel.h"
 #include "wx/utils.h"
 #include "wx/weakref.h"
@@ -40,6 +44,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <limits>
 #include <cstdarg>
 #include <cstring>
@@ -56,6 +61,9 @@
 #ifndef DWMSBT_MAINWINDOW
     #define DWMSBT_MAINWINDOW 2  // Mica
 #endif
+#ifndef DWMSBT_TRANSIENTWINDOW
+    #define DWMSBT_TRANSIENTWINDOW 3  // Mica Alt, for popups/dialogs
+#endif
 
 void wxWinUILogException(const char *what, const winrt::hresult_error& e);
 
@@ -64,40 +72,6 @@ namespace
 
 const wchar_t wxWinUIBackdropTransparentProp[] =
     L"wxWinUIBackdropTransparent";
-
-// All live control hosts, so the theme can be switched on the fly.
-std::vector<wxWinUIControlHost *> gs_winuiHosts;
-
-// A Grid subclass used as the (single-child) root of every island so we can
-// override the pointer cursor.  ProtectedCursor() is a protected UIElement
-// method only reachable from a derived element, hence the subclass.  This is how
-// a per-window wxWindow::SetCursor() (e.g. a wait cursor on a single control) is
-// reflected over XAML islands, which otherwise insist on rendering their own
-// arrow cursor.  Setting ProtectedCursor on the island root is non-blocking:
-// input still reaches the real controls.
-struct wxWinUICursorGrid
-    : winrt::Microsoft::UI::Xaml::Controls::GridT<wxWinUICursorGrid>
-{
-    void SetWindowCursor(winrt::Microsoft::UI::Input::InputCursor const& cursor)
-    {
-        m_windowCursor = cursor;
-        try
-        {
-            // A null cursor means "use the default arrow".
-            ProtectedCursor(m_windowCursor);
-        }
-        catch ( const winrt::hresult_error& )
-        {
-            // Ignore: not being able to set the cursor is never fatal.
-        }
-    }
-
-    winrt::Microsoft::UI::Input::InputCursor m_windowCursor{ nullptr };
-};
-
-// The cursor-root Grid for each live control host.
-std::map<wxWinUIControlHost *,
-         winrt::com_ptr<wxWinUICursorGrid>> gs_cursorGrids;
 
 // Map a wxCursor to the equivalent WinUI input cursor (null == default arrow).
 winrt::Microsoft::UI::Input::InputCursor
@@ -139,10 +113,6 @@ wxWinUIInputCursorFromWxCursor(const wxCursor& cursor)
     // Unknown (e.g. a custom cursor): fall back to the default arrow.
     return nullptr;
 }
-
-// Monitors whose DWM backdrop surface has already been primed (see
-// wxWinUIPrimeBackdrop): each monitor needs a one-time size nudge.
-std::set<HMONITOR> gs_winuiPrimedMonitors;
 
 wxWinUIAppTheme gs_winuiAppTheme = wxWinUIAppTheme::System;
 winrt::Microsoft::UI::Xaml::ElementTheme gs_winuiElementTheme =
@@ -194,34 +164,6 @@ wxColour wxWinUIBackgroundColour()
                                   : wxColour(243, 243, 243);
 }
 
-wxWinUIControlHost *wxWinUIFindHostForTabHWND(HWND hwnd)
-{
-    if ( !hwnd )
-        return nullptr;
-
-    for ( wxWinUIControlHost *host : gs_winuiHosts )
-    {
-        if ( host->GetHostHWND() == hwnd || host->GetBridgeHWND() == hwnd )
-            return host;
-    }
-
-    return nullptr;
-}
-
-wxWinUIControlHost *wxWinUIFindHostContainingFocus(HWND hwnd)
-{
-    if ( !hwnd )
-        return nullptr;
-
-    for ( wxWinUIControlHost *host : gs_winuiHosts )
-    {
-        if ( host->ContainsFocus(hwnd) )
-            return host;
-    }
-
-    return nullptr;
-}
-
 // Theme a window's native scrollbars (and other common controls) to match the
 // light/dark app theme.  SetWindowTheme is loaded dynamically to avoid pulling
 // in <uxtheme.h> here (which conflicts with the C++/WinRT headers).
@@ -248,6 +190,11 @@ void wxWinUIApplyMicaBackground(wxWindow *win, bool micaEnabled)
     if ( !win )
         return;
 
+    // Every window is marked, as it originally was: no class has to be singled
+    // out here.  The transparency comes from the WM_ERASEBKGND black fill in
+    // src/msw/window.cpp, which does not stop a window from painting its own
+    // content on top of it -- WM_PAINT is no longer discarded for these
+    // windows, which is what used to blank every wx-drawn control.
     HWND hwnd = static_cast<HWND>(win->GetHWND());
     if ( hwnd )
     {
@@ -391,17 +338,9 @@ bool wxWinUIIsHostWindow(wxWindow *win)
     if ( !win )
         return false;
 
-    const HWND hwnd = static_cast<HWND>(win->GetHWND());
-    if ( !hwnd )
-        return false;
-
-    for ( wxWinUIControlHost *host : gs_winuiHosts )
-    {
-        if ( host->GetHostHWND() == hwnd )
-            return true;
-    }
-
-    return false;
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(win, false);
+    return host && host->FindSlot(win) != nullptr;
 }
 
 namespace
@@ -496,148 +435,103 @@ bool wxWinUIIsDarkTheme()
 
 wxWinUIControlHost::~wxWinUIControlHost()
 {
-    wxWinUIDebugLog("wxWinUIControlHost::~ enter this=%p host=%p bridge=%p source=%d",
-                    static_cast<void *>(this),
-                    static_cast<void *>(m_hostHwnd),
-                    static_cast<void *>(m_bridgeHwnd),
-                    m_source ? 1 : 0);
     Close();
-    wxWinUIDebugLog("wxWinUIControlHost::~ leave this=%p",
-                    static_cast<void *>(this));
 }
 
 bool wxWinUIControlHost::Initialize(wxWindow *window)
 {
-    if ( m_source )
+    if ( m_window )
         return true;
 
     if ( !window || !wxWinUI3Initialize() )
         return false;
 
-    try
-    {
-        using namespace winrt::Microsoft::UI::Content;
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
-
-        m_source = DesktopWindowXamlSource();
-
-        // Parent the XAML island bridge directly to the control's own window
-        // and let it fill the client area.  Because the bridge is a child of
-        // the control, it is moved together with it by the OS, which avoids the
-        // flicker that results from repositioning a top-level-parented island
-        // manually on every resize.
-        HWND hwnd = static_cast<HWND>(window->GetHWND());
-        ::SetWindowLongPtr
-        (
-            hwnd,
-            GWL_STYLE,
-            ::GetWindowLongPtr(hwnd, GWL_STYLE) |
-                WS_CLIPCHILDREN | WS_CLIPSIBLINGS
-        );
-
-        m_hostHwnd = hwnd;
-        const auto windowId = winrt::Microsoft::UI::GetWindowIdFromWindow(m_hostHwnd);
-
-        m_source.Initialize(windowId);
-        m_source.SiteBridge().ResizePolicy(
-            ContentSizePolicy::ResizeContentToParentWindow);
-        m_takeFocusRequestedToken = m_source.TakeFocusRequested(
-            [this](
-                winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource const&,
-                winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSourceTakeFocusRequestedEventArgs const& event)
-            {
-                OnTakeFocusRequested(event);
-            });
-
-        m_bridgeHwnd = winrt::Microsoft::UI::GetWindowFromWindowId(
-            m_source.SiteBridge().WindowId());
-        ::SetWindowLongPtr
-        (
-            m_bridgeHwnd,
-            GWL_STYLE,
-            ::GetWindowLongPtr(m_bridgeHwnd, GWL_STYLE) |
-                WS_CHILD | WS_VISIBLE | WS_TABSTOP
-        );
-
-        m_window = window;
-        m_window->Bind(wxEVT_SIZE, &wxWinUIControlHost::OnWindowSize, this);
-        m_window->Bind(wxEVT_SET_FOCUS, &wxWinUIControlHost::OnSetFocus, this);
-        gs_winuiHosts.push_back(this);
-        MoveAndResize();
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("DesktopWindowXamlSource initialization", e);
-        m_window = nullptr;
-        m_hostHwnd = nullptr;
-        m_source = nullptr;
+    // Find or create the shared island of this window's top-level parent;
+    // the slot itself is only registered by SetContent().
+    if ( !wxWinUITopLevelHost::ForWindow(window, true) )
         return false;
-    }
 
+    m_window = window;
     return true;
+}
+
+bool wxWinUIControlHost::IsOk() const
+{
+    return m_window &&
+           wxWinUITopLevelHost::ForWindow(m_window, false) != nullptr;
+}
+
+HWND wxWinUIControlHost::GetHostHWND() const
+{
+    return m_window ? static_cast<HWND>(m_window->GetHWND()) : nullptr;
+}
+
+HWND wxWinUIControlHost::GetBridgeHWND() const
+{
+    wxWinUITopLevelHost * const host =
+        m_window ? wxWinUITopLevelHost::ForWindow(m_window, false) : nullptr;
+    return host ? host->GetBridgeHwnd() : nullptr;
 }
 
 void wxWinUIControlHost::Close()
 {
-    wxWinUIDebugLog("wxWinUIControlHost::Close enter this=%p window=%p host=%p bridge=%p source=%d",
-                    static_cast<void *>(this),
-                    static_cast<void *>(m_window),
-                    static_cast<void *>(m_hostHwnd),
-                    static_cast<void *>(m_bridgeHwnd),
-                    m_source ? 1 : 0);
-    gs_winuiHosts.erase(
-        std::remove(gs_winuiHosts.begin(), gs_winuiHosts.end(), this),
-        gs_winuiHosts.end());
-
-    if ( m_window )
-    {
-        m_window->Unbind(wxEVT_SIZE, &wxWinUIControlHost::OnWindowSize, this);
-        m_window->Unbind(wxEVT_SET_FOCUS, &wxWinUIControlHost::OnSetFocus, this);
-        m_window = nullptr;
-    }
-    m_hostHwnd = nullptr;
-    m_bridgeHwnd = nullptr;
-    m_content = nullptr;
-    gs_cursorGrids.erase(this);
-
-    if ( !m_source )
-    {
-        wxWinUIDebugLog("wxWinUIControlHost::Close no source this=%p",
-                        static_cast<void *>(this));
+    if ( !m_window )
         return;
-    }
 
-    try
+    // Revoke the Loaded hook first: the lambda captures "this".
+    if ( m_loadedToken.value && m_content )
     {
-        if ( m_takeFocusRequestedToken.value )
+        try
         {
-            m_source.TakeFocusRequested(m_takeFocusRequestedToken);
-            m_takeFocusRequestedToken = {};
+            if ( auto framework = m_content
+                     .try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>() )
+            {
+                framework.Loaded(m_loadedToken);
+            }
         }
-
-        // Avoid clearing Content explicitly here: doing this while another
-        // XAML island is dispatching an event can crash inside
-        // Microsoft.UI.Xaml.dll. Closing the source releases its content.
-        wxWinUIDebugLog("wxWinUIControlHost::Close before source.Close this=%p",
-                        static_cast<void *>(this));
-        m_source.Close();
-        wxWinUIDebugLog("wxWinUIControlHost::Close after source.Close this=%p",
-                        static_cast<void *>(this));
+        catch ( const winrt::hresult_error& )
+        {
+        }
     }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("DesktopWindowXamlSource::Close", e);
-    }
+    m_loadedToken = {};
 
-    m_source = nullptr;
-    wxWinUIDebugLog("wxWinUIControlHost::Close leave this=%p",
-                    static_cast<void *>(this));
+    // The TLW host may already be gone (it dies with its top-level window,
+    // taking every slot with it), hence the tolerant lookup.
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(m_window, false);
+    if ( host )
+        host->UnregisterSlot(m_window);
+
+    m_content = nullptr;
+    m_window = nullptr;
 }
 
 void wxWinUIControlHost::SetContent(const winrt::Microsoft::UI::Xaml::UIElement& element)
 {
-    if ( !m_source )
+    if ( !m_window )
         return;
+
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(m_window, true);
+    if ( !host )
+        return;
+
+    // Re-setting the content drops the previous Loaded hook.
+    if ( m_loadedToken.value && m_content )
+    {
+        try
+        {
+            if ( auto framework = m_content
+                     .try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>() )
+            {
+                framework.Loaded(m_loadedToken);
+            }
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+        m_loadedToken = {};
+    }
 
     m_content = element;
     m_contentLoaded = false;
@@ -660,61 +554,40 @@ void wxWinUIControlHost::SetContent(const winrt::Microsoft::UI::Xaml::UIElement&
             });
     }
 
-    // Wrap the control's element in a cursor-capable Grid that becomes the
-    // island root, so we can override the pointer cursor (busy / per-window)
-    // without blocking input.  The element is sized explicitly in
-    // UpdateContentSize(), so the Grid simply wraps tightly around it.
-    auto cursorGrid = winrt::make_self<wxWinUICursorGrid>();
-    auto cursorRoot = cursorGrid.as<winrt::Microsoft::UI::Xaml::Controls::Grid>();
-    cursorRoot.Children().Append(element);
-    gs_cursorGrids[this] = cursorGrid;
-
-    m_source.Content(cursorRoot);
-    ApplyTheme(gs_winuiElementTheme);
-    MoveAndResize();
-
-    // Apply the island's own Mica backdrop, but only once the message loop is
-    // running: setting it synchronously during control creation deadlocks
-    // because the backdrop controller waits on the dispatcher queue, which is
-    // not being pumped yet.
-    if ( m_window && !m_backdropApplied )
-    {
-        m_backdropApplied = true;
-        m_window->CallAfter([this]() { ApplyBackdropMaterial(); });
-    }
+    host->RegisterSlot(m_window, element);
 }
 
 void wxWinUIControlHost::ApplyBackdropMaterial()
 {
-    if ( !m_source )
-        return;
-
-    try
-    {
-        m_source.SystemBackdrop(
-            winrt::Microsoft::UI::Xaml::Media::MicaBackdrop{});
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("DesktopWindowXamlSource::SystemBackdrop", e);
-    }
+    // Nothing to do: the per-island Mica backdrop is gone, the DWM window
+    // backdrop shows through the shared island's transparent pixels.
 }
 
 void wxWinUIControlHost::ClearContent()
 {
-    if ( !m_source )
+    if ( !m_window )
         return;
 
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(m_window, false);
+    if ( host )
+    {
+        if ( wxWinUISlot * const slot = host->FindSlot(m_window) )
+            slot->SetContent(nullptr);
+    }
+
     m_content = nullptr;
-    gs_cursorGrids.erase(this);
-    m_source.Content(nullptr);
 }
 
 void wxWinUIControlHost::ApplyWxCursor(const wxCursor& cursor)
 {
-    const auto it = gs_cursorGrids.find(this);
-    if ( it != gs_cursorGrids.end() )
-        it->second->SetWindowCursor(wxWinUIInputCursorFromWxCursor(cursor));
+    if ( !m_window )
+        return;
+
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(m_window, false);
+    if ( host )
+        host->SetSlotCursor(m_window, wxWinUIInputCursorFromWxCursor(cursor));
 }
 
 void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor)
@@ -722,14 +595,10 @@ void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor)
     if ( !win )
         return;
 
-    for ( wxWinUIControlHost *host : gs_winuiHosts )
-    {
-        if ( host->HostedWindow() == win )
-        {
-            host->ApplyWxCursor(cursor);
-            return;
-        }
-    }
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(win, false);
+    if ( host && host->FindSlot(win) )
+        host->SetSlotCursor(win, wxWinUIInputCursorFromWxCursor(cursor));
 }
 
 void wxWinUIControlHost::ApplyTheme(winrt::Microsoft::UI::Xaml::ElementTheme theme)
@@ -749,17 +618,17 @@ void wxWinUIControlHost::ApplyTheme(winrt::Microsoft::UI::Xaml::ElementTheme the
             wxWinUILogException("FrameworkElement::RequestedTheme", e);
         }
     }
-
-    ForceRender();
 }
 
 void wxWinUIControlHost::SetBridgeHeightLimit(int physicalHeight)
 {
-    if ( m_bridgeHeightLimit == physicalHeight )
+    if ( !m_window )
         return;
 
-    m_bridgeHeightLimit = physicalHeight;
-    MoveAndResize();
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(m_window, false);
+    if ( host )
+        host->SetSlotClipHeight(m_window, physicalHeight);
 }
 
 wxSize wxWinUIControlHost::MeasureContent() const
@@ -774,21 +643,12 @@ wxSize wxWinUIControlHost::MeasureContent() const
 
     try
     {
-        // UpdateContentSize() pins the element to the control's current size;
-        // clear that while measuring, otherwise we'd just get it back.
-        const double savedWidth = element.Width();
-        const double savedHeight = element.Height();
-        const double unset = std::numeric_limits<double>::quiet_NaN();
-
-        element.Width(unset);
-        element.Height(unset);
-
+        // The element itself is no longer size-pinned (its slot container
+        // is), so an unconstrained Measure() reports the natural size
+        // directly.
         const float inf = std::numeric_limits<float>::infinity();
         element.Measure({ inf, inf });
         const auto desired = element.DesiredSize();
-
-        element.Width(savedWidth);
-        element.Height(savedHeight);
 
         if ( desired.Width > 0 && desired.Height > 0 )
         {
@@ -806,6 +666,81 @@ wxSize wxWinUIControlHost::MeasureContent() const
     return wxDefaultSize;
 }
 
+namespace
+{
+
+// Pending relayout pass, coalesced across every control whose content loads
+// in the same burst (at startup they all load together: one pass, not one
+// per control).
+bool gs_winuiRelayoutPending = false;
+std::vector<wxWeakRef<wxWindow>> gs_winuiRelayoutTops;
+
+void wxWinUIScheduleContentRelayout(wxWindow *top)
+{
+    for ( const auto& weak : gs_winuiRelayoutTops )
+    {
+        if ( weak.get() == top )
+        {
+            top = nullptr;
+            break;
+        }
+    }
+    if ( top )
+        gs_winuiRelayoutTops.push_back(wxWeakRef<wxWindow>(top));
+
+    if ( gs_winuiRelayoutPending )
+        return;
+    gs_winuiRelayoutPending = true;
+
+    wxTheApp->CallAfter([]()
+    {
+        gs_winuiRelayoutPending = false;
+
+        std::vector<wxWeakRef<wxWindow>> tops;
+        tops.swap(gs_winuiRelayoutTops);
+
+        for ( const auto& weak : tops )
+        {
+            wxWindow * const top = weak.get();
+            if ( !top )
+                continue;
+
+            if ( top->GetSizer() )
+                top->Layout();
+
+            // A single top-level Layout() is NOT enough: when it hands an
+            // intermediate panel the very size it already had, that panel's
+            // own sizer never reruns and keeps the geometry computed with
+            // the pre-loading best sizes (cropped labels in static boxes...)
+            // until something resizes the window.  Relayout DEEP, parents
+            // first, and let every scrolling window recompute its virtual
+            // size too -- otherwise the bottom of a page that grew during
+            // loading stays out of reach.
+            std::function<void (wxWindow *)> walk = [&](wxWindow *win)
+            {
+                for ( wxWindow *child : win->GetChildren() )
+                {
+                    if ( child->GetSizer() )
+                        child->Layout();
+
+                    const HWND hwnd = static_cast<HWND>(child->GetHWND());
+                    if ( hwnd )
+                    {
+                        const LONG_PTR style =
+                            ::GetWindowLongPtr(hwnd, GWL_STYLE);
+                        if ( style & (WS_VSCROLL | WS_HSCROLL) )
+                            child->SendSizeEvent();
+                    }
+                    walk(child);
+                }
+            };
+            walk(top);
+        }
+    });
+}
+
+} // anonymous namespace
+
 void wxWinUIControlHost::OnContentLoaded()
 {
     if ( m_contentLoaded || !m_window )
@@ -813,90 +748,37 @@ void wxWinUIControlHost::OnContentLoaded()
 
     m_contentLoaded = true;
 
-    // Don't touch the wx layout from inside a XAML callback.
-    wxWeakRef<wxWindow> win(m_window);
-    m_window->CallAfter([win]()
-    {
-        if ( !win )
-            return;
+    // Clearing the cached best size is safe from inside the XAML callback;
+    // the actual relayout is deferred (and coalesced globally).
+    m_window->InvalidateBestSize();
 
-        win->InvalidateBestSize();
-
-        // The control's best size just changed, so the sizer that positions it
-        // has to run again.  Relayout from the top-level window since the new
-        // size may propagate through nested sizers (a static box has to grow
-        // for its children, and so on).
-        wxWindow * const top = wxGetTopLevelParent(win);
-        if ( top && top->GetSizer() )
-            top->Layout();
-        else if ( wxWindow * const parent = win->GetParent() )
-        {
-            if ( parent->GetSizer() )
-                parent->Layout();
-        }
-    });
-}
-
-void wxWinUIControlHost::UpdateContentSize(int width, int height)
-{
-    if ( !m_content || !m_window )
-        return;
-
-    if ( auto element =
-             m_content.try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>() )
-    {
-        // Width/Height are expressed in DIPs while the client rect we get from
-        // Windows is in physical pixels: without this conversion the content is
-        // laid out too large for the island at any scaling above 100% and gets
-        // clipped on the right.
-        const wxSize dip = m_window->ToDIP(wxSize(width, height));
-        element.Width(dip.x);
-        element.Height(dip.y);
-        element.UpdateLayout();
-    }
+    wxWindow * const top = wxGetTopLevelParent(m_window);
+    if ( top )
+        wxWinUIScheduleContentRelayout(top);
+    else if ( wxWindow * const parent = m_window->GetParent() )
+        wxWinUIScheduleContentRelayout(parent);
 }
 
 void wxWinUIControlHost::ForceRender()
 {
-    if ( !m_source || !m_window )
+    // Property changes invalidate the shared XAML tree by themselves; a slot
+    // layout refresh is kept as belt and braces for the historical call
+    // sites.
+    if ( !m_window )
         return;
 
-    RECT rect;
-    if ( !::GetClientRect(m_hostHwnd, &rect) )
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(m_window, false);
+    wxWinUISlot * const slot = host ? host->FindSlot(m_window) : nullptr;
+    if ( !slot )
         return;
-
-    const int width = rect.right - rect.left;
-    int height = rect.bottom - rect.top;
-    if ( width <= 0 || height <= 0 )
-        return;
-
-    if ( m_bridgeHeightLimit > 0 && m_bridgeHeightLimit < height )
-        height = m_bridgeHeightLimit;
 
     try
     {
-        UpdateContentSize(width, height);
-
-        // Re-sending the current (unchanged) rect to the site bridge is
-        // coalesced away by the window manager, so it can't be relied on to
-        // produce a new frame.  Drive the XAML layout pass explicitly instead:
-        // this is what actually makes the island recompose after a property
-        // change that doesn't resize the control.
-        if ( auto root = m_source.Content()
-                 .try_as<winrt::Microsoft::UI::Xaml::FrameworkElement>() )
-        {
-            root.InvalidateMeasure();
-            root.InvalidateArrange();
-            root.UpdateLayout();
-        }
-
-        m_source.SiteBridge().MoveAndResize({ 0, 0, width, height });
-        m_source.SiteBridge().Show();
-        if ( m_bridgeHwnd )
-        {
-            ::InvalidateRect(m_bridgeHwnd, nullptr, FALSE);
-            ::UpdateWindow(m_bridgeHwnd);
-        }
+        const auto container = slot->GetContainer();
+        container.InvalidateMeasure();
+        container.InvalidateArrange();
+        container.UpdateLayout();
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -906,143 +788,30 @@ void wxWinUIControlHost::ForceRender()
 
 bool wxWinUIControlHost::ContainsFocus(HWND hwnd) const
 {
-    if ( !hwnd )
+    if ( !hwnd || !m_window )
         return false;
 
-    return hwnd == m_hostHwnd ||
-           hwnd == m_bridgeHwnd ||
-           (m_hostHwnd && ::IsChild(m_hostHwnd, hwnd)) ||
-           (m_bridgeHwnd && ::IsChild(m_bridgeHwnd, hwnd));
-}
-
-bool wxWinUIControlHost::NavigateFocus(bool forward)
-{
-    if ( !m_source )
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(m_window, false);
+    if ( !host || host->GetFocusOwner() != m_window )
         return false;
 
-    try
-    {
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
+    const HWND bridge = host->GetBridgeHwnd();
+    return hwnd == bridge || (bridge && ::IsChild(bridge, hwnd));
+}
 
-        XamlSourceFocusNavigationRequest request(
-            forward ? XamlSourceFocusNavigationReason::First
-                    : XamlSourceFocusNavigationReason::Last);
-        const XamlSourceFocusNavigationResult result =
-            m_source.NavigateFocus(request);
-        return result.WasFocusMoved();
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("DesktopWindowXamlSource::NavigateFocus", e);
+bool wxWinUIControlHost::NavigateFocus(bool WXUNUSED(forward))
+{
+    if ( !m_window )
         return false;
-    }
-}
 
-void wxWinUIControlHost::MoveAndResize()
-{
-    if ( !m_source || !m_window )
-        return;
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(m_window, false);
+    if ( !host || !host->FindSlot(m_window) )
+        return false;
 
-    RECT rect;
-    if ( !::GetClientRect(m_hostHwnd, &rect) )
-        return;
-
-    const int width = rect.right - rect.left;
-    int height = rect.bottom - rect.top;
-    if ( width <= 0 || height <= 0 )
-        return;
-
-    if ( m_bridgeHeightLimit > 0 && m_bridgeHeightLimit < height )
-        height = m_bridgeHeightLimit;
-
-    try
-    {
-        UpdateContentSize(width, height);
-
-        // The bridge is a child of the control window, so it always fills the
-        // client area at the origin and follows the control automatically.
-        m_source.SiteBridge().MoveAndResize({ 0, 0, width, height });
-        m_source.SiteBridge().Show();
-        if ( m_bridgeHwnd )
-        {
-            // Keep the island at the bottom of the sibling z-order.  This is
-            // irrelevant for normal (non-overlapping) controls but essential
-            // for container controls such as wxNotebook, whose page windows are
-            // siblings of this bridge and must render on top of it.
-            ::SetWindowPos
-            (
-                m_bridgeHwnd,
-                HWND_BOTTOM,
-                0,
-                0,
-                width,
-                height,
-                SWP_NOACTIVATE | SWP_SHOWWINDOW
-            );
-        }
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("DesktopWindowXamlSource::MoveAndResize", e);
-    }
-}
-
-void wxWinUIControlHost::OnWindowSize(wxSizeEvent& event)
-{
-    MoveAndResize();
-    event.Skip();
-}
-
-void wxWinUIControlHost::OnSetFocus(wxFocusEvent& event)
-{
-    // When wx gives the keyboard focus to the host control, hand it to the
-    // island so that character input (WM_CHAR) is delivered to the XAML control
-    // instead of being consumed by wx's dialog navigation.
-    if ( m_bridgeHwnd )
-        ::SetFocus(m_bridgeHwnd);
-
-    if ( auto control =
-             m_content.try_as<winrt::Microsoft::UI::Xaml::Controls::Control>() )
-    {
-        try
-        {
-            control.Focus(winrt::Microsoft::UI::Xaml::FocusState::Programmatic);
-        }
-        catch ( const winrt::hresult_error& )
-        {
-        }
-    }
-
-    event.Skip();
-}
-
-void wxWinUIControlHost::OnTakeFocusRequested(
-    winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSourceTakeFocusRequestedEventArgs const& event)
-{
-    if ( !m_hostHwnd )
-        return;
-
-    using namespace winrt::Microsoft::UI::Xaml::Hosting;
-
-    const bool previous =
-        event.Request().Reason() == XamlSourceFocusNavigationReason::Last;
-    HWND parent = ::GetParent(m_hostHwnd);
-    if ( !parent )
-        parent = ::GetAncestor(m_hostHwnd, GA_ROOT);
-    if ( !parent )
-        return;
-
-    HWND next = ::GetNextDlgTabItem(parent, m_hostHwnd, previous);
-    if ( !next || next == m_hostHwnd )
-        return;
-
-    if ( wxWinUIControlHost *host = wxWinUIFindHostForTabHWND(next) )
-    {
-        host->NavigateFocus(!previous);
-        return;
-    }
-
-    ::SetFocus(next);
+    host->FocusSlot(m_window);
+    return true;
 }
 
 bool wxWinUI3ProcessTabNavigation(WXMSG *msg)
@@ -1056,28 +825,40 @@ bool wxWinUI3ProcessTabNavigation(WXMSG *msg)
     if ( !focus )
         return false;
 
-    wxWinUIControlHost *currentHost = wxWinUIFindHostContainingFocus(focus);
-    HWND current = currentHost ? currentHost->GetHostHWND() : focus;
+    // Resolve the logical current control: with the focus inside an island,
+    // it is the slot owner recorded by the arbiter.
+    wxWindow *current = wxWinUITopLevelHost::ResolveFocusHwnd((WXHWND)focus);
+    const bool focusInIsland = current != nullptr;
+    if ( !current )
+        current = wxGetWindowFromHWND((WXHWND)focus);
     if ( !current )
         return false;
 
-    HWND parent = ::GetParent(current);
-    if ( !parent )
-        parent = ::GetAncestor(current, GA_ROOT);
-    if ( !parent )
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ForWindow(current, false);
+    if ( !host )
+        return false;   // no island in this TLW: default wx processing
+
+    const HWND hwndCurrent = static_cast<HWND>(current->GetHWND());
+    const HWND hwndTLW = static_cast<HWND>(host->GetTLW()->GetHWND());
+    if ( !hwndCurrent || !hwndTLW )
         return false;
 
     const bool previous = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
-    HWND next = ::GetNextDlgTabItem(parent, current, previous);
-    if ( (!next || next == current) && parent != ::GetAncestor(current, GA_ROOT) )
-        next = ::GetNextDlgTabItem(::GetAncestor(current, GA_ROOT), current, previous);
-    if ( !next || next == current )
+    HWND next = ::GetNextDlgTabItem(hwndTLW, hwndCurrent, previous);
+    if ( !next || next == hwndCurrent )
         return false;
 
-    if ( wxWinUIControlHost *host = wxWinUIFindHostForTabHWND(next) )
-        return host->NavigateFocus(!previous);
+    wxWindow * const nextWin = wxGetWindowFromHWND((WXHWND)next);
+    if ( nextWin && host->FindSlot(nextWin) )
+    {
+        host->FocusSlot(nextWin);
+        return true;
+    }
 
-    if ( currentHost )
+    // Only take over the Tab when leaving an island: between two plain wx
+    // windows the standard wx navigation must keep running.
+    if ( focusInIsland )
     {
         ::SetFocus(next);
         return true;
@@ -1108,7 +889,7 @@ bool wxWinUI3DispatchIslandKeyboard(WXMSG *msg)
     }
 
     // Only take over keyboard input while a WinUI island actually has focus.
-    if ( !wxWinUIFindHostContainingFocus(::GetFocus()) )
+    if ( !wxWinUITopLevelHost::ResolveFocusHwnd((WXHWND)::GetFocus()) )
         return false;
 
     // ContentPreTranslateMessage() (called earlier from
@@ -1140,6 +921,12 @@ void wxWinUIApplyWindowBackdrop(wxWindow *tlw)
     // Let DWM provide the same Mica backdrop used by normal Win32 apps.  The
     // client background is made transparent below so this is visible behind
     // wx panels without requiring a WinUI MicaController/DispatcherQueue.
+    //
+    // OWNED top-level windows (dialogs) get it too: an earlier conclusion
+    // that DWM never composes the backdrop on them was wrong (re-verified
+    // on the spike's modal dialog: with the marking + per-window priming
+    // below the material composes fine, and the mismatched black control
+    // patches disappear).
     int backdrop = DWMSBT_MAINWINDOW;
     const bool micaEnabled =
         SUCCEEDED(::DwmSetWindowAttribute(hwnd, DWMWA_SYSTEMBACKDROP_TYPE,
@@ -1164,12 +951,16 @@ void wxWinUIPrimeBackdrop(WXHWND hwndArg)
         return;
 
     // The DWM backdrop surface only becomes "live" once the window is actually
-    // resized on a given monitor; before that it can show as an opaque
-    // rectangle (most visibly on SDR monitors).  Nudge the window size by one
-    // pixel and back the first time it appears on each monitor to force the
-    // backdrop to initialise, without requiring the user to resize manually.
-    HMONITOR monitor = ::MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-    if ( !monitor || gs_winuiPrimedMonitors.count(monitor) )
+    // resized; before that it can show as an opaque rectangle (most visibly on
+    // SDR monitors).  Nudge the window size by one pixel and back once PER
+    // WINDOW to force its backdrop to initialise, without requiring the user
+    // to resize manually.  (This used to be done once per monitor, which left
+    // every dialog opened after the main frame with a flat, Mica-less
+    // background.)
+    // Tracked with a window prop (not a static set) so the flag dies with
+    // the window and a recycled handle value cannot skip a new window.
+    static const wchar_t s_primedProp[] = L"wxWinUIBackdropPrimed";
+    if ( ::GetPropW(hwnd, s_primedProp) )
         return;
 
     RECT rect;
@@ -1181,7 +972,7 @@ void wxWinUIPrimeBackdrop(WXHWND hwndArg)
     if ( width <= 1 || height <= 1 )
         return;  // not yet laid out; prime on a later call
 
-    gs_winuiPrimedMonitors.insert(monitor);
+    ::SetPropW(hwnd, s_primedProp, reinterpret_cast<HANDLE>(1));
 
     const UINT flags = SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE |
                        SWP_NOOWNERZORDER;
@@ -1218,8 +1009,7 @@ void wxWinUISetAppTheme(wxWinUIAppTheme theme)
             break;
     }
 
-    for ( wxWinUIControlHost *host : gs_winuiHosts )
-        host->ApplyTheme(gs_winuiElementTheme);
+    wxWinUITopLevelHost::ApplyThemeToAll(gs_winuiElementTheme);
 
     // Refresh the backdrop/title-bar of all top-level windows.
     for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin();
@@ -1235,129 +1025,5 @@ wxWinUIAppTheme wxWinUIGetAppTheme()
     return gs_winuiAppTheme;
 }
 
-// ----------------------------------------------------------------------------
-// wxWinUIDialogIsland
-// ----------------------------------------------------------------------------
-
-bool wxWinUIDialogIsland::Create(wxWindow *parent)
-{
-    m_parent = parent;
-
-    HWND hwndParent = parent ? GetHwndOf(parent) : nullptr;
-    if ( !hwndParent )
-        return false;
-
-    try
-    {
-        using namespace winrt::Microsoft::UI;
-        using namespace winrt::Microsoft::UI::Content;
-        using namespace winrt::Microsoft::UI::Xaml;
-        using namespace winrt::Microsoft::UI::Xaml::Controls;
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
-
-        m_source = DesktopWindowXamlSource();
-        m_source.Initialize(GetWindowIdFromWindow(hwndParent));
-        m_source.SiteBridge().ResizePolicy(
-            ContentSizePolicy::ResizeContentToParentWindow);
-
-        const HWND hwndBridge =
-            GetWindowFromWindowId(m_source.SiteBridge().WindowId());
-        ::SetWindowLongPtr
-        (
-            hwndBridge,
-            GWL_STYLE,
-            ::GetWindowLongPtr(hwndBridge, GWL_STYLE) |
-                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
-        );
-        ::SetWindowPos(hwndBridge, HWND_TOP, 0, 0, 0, 0,
-                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
-
-        m_root = Grid();
-        m_root.RequestedTheme(wxWinUIGetCurrentElementTheme());
-        m_source.Content(m_root);
-
-        if ( !m_root.XamlRoot() )
-        {
-            Close();
-            return false;
-        }
-
-        return true;
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("WinUI dialog island creation", e);
-        Close();
-    }
-
-    return false;
-}
-
-winrt::Microsoft::UI::Xaml::Controls::ContentDialog
-wxWinUIDialogIsland::CreateDialog() const
-{
-    winrt::Microsoft::UI::Xaml::Controls::ContentDialog dialog;
-    dialog.XamlRoot(m_root.XamlRoot());
-    dialog.RequestedTheme(wxWinUIGetCurrentElementTheme());
-    return dialog;
-}
-
-winrt::Microsoft::UI::Xaml::Controls::ContentDialogResult
-wxWinUIDialogIsland::ShowDialog(
-    winrt::Microsoft::UI::Xaml::Controls::ContentDialog const& dialog)
-{
-    using namespace winrt::Microsoft::UI::Xaml::Controls;
-    using namespace winrt::Windows::Foundation;
-
-    ContentDialogResult dialogResult = ContentDialogResult::None;
-    bool done = false;
-    bool loopIsRunning = false;
-    wxEventLoop* loopRunning = nullptr;
-
-    // Behave app-modally: block the other top-level windows while the dialog
-    // is up (the parent stays enabled as it hosts the island).
-    wxWindowDisabler disabler(m_parent);
-
-    auto operation = dialog.ShowAsync();
-    operation.Completed(
-        [&](IAsyncOperation<ContentDialogResult> const& async,
-            AsyncStatus status)
-        {
-            if ( status == AsyncStatus::Completed )
-                dialogResult = async.GetResults();
-
-            done = true;
-            if ( loopRunning && loopIsRunning )
-                loopRunning->Exit();
-        });
-
-    wxEventLoop loop;
-    loopRunning = &loop;
-    if ( !done )
-    {
-        loopIsRunning = true;
-        loop.Run();
-        loopIsRunning = false;
-    }
-    loopRunning = nullptr;
-
-    return dialogResult;
-}
-
-void wxWinUIDialogIsland::Close()
-{
-    if ( m_source )
-    {
-        try
-        {
-            m_source.Close();
-        }
-        catch ( const winrt::hresult_error& )
-        {
-        }
-        m_source = nullptr;
-    }
-    m_root = nullptr;
-}
 
 #endif // wxUSE_WINUI3

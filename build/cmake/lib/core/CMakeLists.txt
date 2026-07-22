@@ -77,6 +77,7 @@ if(WXMSW)
             src/generic/listctrl.cpp
             src/winui/winui.cpp
             src/winui/ctrlhost.cpp
+            src/winui/tlwhost.cpp
             src/winui/xamlhost.cpp
             src/winui/activityindicator.cpp
             src/winui/bmpcbox.cpp

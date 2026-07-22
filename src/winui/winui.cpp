@@ -317,6 +317,54 @@ wxWinUIContentPreTranslateMessage wxWinUIGetContentPreTranslateMessage()
     return nullptr;
 }
 
+// ----------------------------------------------------------------------------
+// Thread-wide GetMessage hook
+// ----------------------------------------------------------------------------
+
+// ContentPreTranslateMessage() must see every message the GUI thread pumps or
+// the islands' input and presentation machinery starves.  Our own event loop
+// calls it (wxGUIEventLoop::ProcessMessage), but the system runs plenty of
+// message loops we do not control: the SC_MOVE/SC_SIZE loop while the user
+// drags or resizes a window, MessageBox(), native menus, OLE waits...  While
+// one of those pumps, XAML content degrades to ~1 Hz: hover states stop
+// answering, hosted dialogs stall, and interactive resizes leave stale-pixel
+// trails.  This is the documented island contract for exactly this case:
+// hook WH_GETMESSAGE and pre-translate from there so nested native loops
+// keep the islands alive.
+HHOOK gs_winuiGetMsgHook = nullptr;
+
+LRESULT CALLBACK wxWinUIGetMsgHookProc(int code, WPARAM wParam, LPARAM lParam)
+{
+    if ( code >= 0 && wParam == PM_REMOVE )
+    {
+        MSG * const msg = reinterpret_cast<MSG *>(lParam);
+
+        // Leave Tab alone: wxGUIEventLoop::ProcessMessage must run the wx
+        // tab-order navigation before the island may consume the key (it
+        // pre-translates the Tab itself afterwards).
+        const bool isTab =
+            (msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN) &&
+                msg->wParam == VK_TAB;
+
+        if ( !isTab )
+        {
+            // Use the cached pointer only: no library loading from a hook.
+            const wxWinUIContentPreTranslateMessage fn =
+                gs_winuiContentPreTranslateMessage;
+            if ( fn && fn(msg) )
+            {
+                // Handled by an island: neutralize the message so whichever
+                // loop retrieved it dispatches a no-op.
+                msg->message = WM_NULL;
+                msg->wParam = 0;
+                msg->lParam = 0;
+            }
+        }
+    }
+
+    return ::CallNextHookEx(gs_winuiGetMsgHook, code, wParam, lParam);
+}
+
 } // namespace
 
 bool wxWinUI3Initialize()
@@ -423,6 +471,15 @@ bool wxWinUI3Initialize()
     extern void wxWinUIInstallRenderer();
     wxWinUIInstallRenderer();
 
+    // Resolve the pre-translate export now and keep every message loop on
+    // this thread feeding it -- the native modal ones included (see
+    // wxWinUIGetMsgHookProc above).
+    wxWinUIGetContentPreTranslateMessage();
+    gs_winuiGetMsgHook = ::SetWindowsHookExW(WH_GETMESSAGE,
+                                             wxWinUIGetMsgHookProc,
+                                             nullptr,
+                                             ::GetCurrentThreadId());
+
     gs_winuiBootstrapInitialized = true;
     gs_winuiComInitialized = comInitialized;
     return true;
@@ -430,6 +487,12 @@ bool wxWinUI3Initialize()
 
 void wxWinUI3Uninitialize()
 {
+    if ( gs_winuiGetMsgHook )
+    {
+        ::UnhookWindowsHookEx(gs_winuiGetMsgHook);
+        gs_winuiGetMsgHook = nullptr;
+    }
+
     if ( gs_winuiXamlManager )
     {
         if ( gs_winuiOwnsXamlManager )

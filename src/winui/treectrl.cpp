@@ -31,6 +31,9 @@
 #include <vector>
 
 #include <winrt/Microsoft.UI.Dispatching.h>
+#include <winrt/Microsoft.UI.Xaml.Automation.h>
+#include <winrt/Microsoft.UI.Xaml.Controls.Primitives.h>
+#include <winrt/Microsoft.UI.Xaml.Media.h>
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
@@ -71,7 +74,10 @@ class wxWinUITreeCtrlImpl
 public:
     wxWinUIControlHost host;
     MUXC::TreeView treeView{ nullptr };
+    MUXC::TreeViewList treeList{ nullptr };
     winrt::event_token selectionChangedToken{};
+    winrt::event_token listHookLoadedToken{};
+    winrt::event_token containerContentChangingToken{};
     winrt::event_token expandingToken{};
     winrt::event_token collapsedToken{};
     winrt::event_token itemInvokedToken{};
@@ -84,6 +90,97 @@ public:
     wxWinUITreeItem *selection = nullptr;
     wxWinUITreeItem *focused = nullptr;
 };
+
+// The item text as stored in the node's PropertySet content (see the
+// ItemTemplate bindings), used to give the generated TreeViewItem a UIA name.
+static winrt::hstring wxWinUITreeNodeName(const MUXC::TreeViewNode& node)
+{
+    if ( node )
+    {
+        if ( auto content = node.Content().try_as<WFC::IPropertySet>() )
+        {
+            if ( content.HasKey(L"Text") )
+                return winrt::unbox_value_or<winrt::hstring>(
+                    content.Lookup(L"Text"), {});
+        }
+    }
+
+    return {};
+}
+
+static MUXC::TreeViewList
+wxWinUIFindTreeViewList(const MUX::DependencyObject& root)
+{
+    using winrt::Microsoft::UI::Xaml::Media::VisualTreeHelper;
+
+    const int count = VisualTreeHelper::GetChildrenCount(root);
+    for ( int i = 0; i < count; ++i )
+    {
+        const auto child = VisualTreeHelper::GetChild(root, i);
+        if ( auto list = child.try_as<MUXC::TreeViewList>() )
+            return list;
+        if ( auto deeper = wxWinUIFindTreeViewList(child) )
+            return deeper;
+    }
+
+    return nullptr;
+}
+
+// Name every already-realized container from its item text.
+static void wxWinUINameRealizedTreeItems(wxWinUITreeCtrlImpl *impl)
+{
+    if ( !impl->treeList )
+        return;
+
+    const auto panel = impl->treeList.ItemsPanelRoot();
+    if ( !panel )
+        return;
+
+    using winrt::Microsoft::UI::Xaml::Automation::AutomationProperties;
+
+    const auto children = panel.Children();
+    for ( uint32_t i = 0; i < children.Size(); ++i )
+    {
+        if ( auto item = children.GetAt(i).try_as<MUXC::TreeViewItem>() )
+        {
+            AutomationProperties::SetName(item,
+                wxWinUITreeNodeName(impl->treeView.NodeFromContainer(item)));
+        }
+    }
+}
+
+// The generated TreeViewItem announces the data object's ToString()
+// ("Microsoft.UI.Xaml.Controls.TreeViewNode") to UIA.  Name every realized
+// container from the item text instead, via the inner TreeViewList's
+// container pipeline so recycled containers are renamed too.
+static void wxWinUIHookTreeListNaming(wxWinUITreeCtrlImpl *impl)
+{
+    if ( impl->treeList )
+        return;
+
+    impl->treeList = wxWinUIFindTreeViewList(impl->treeView);
+    if ( !impl->treeList )
+        return;
+
+    impl->containerContentChangingToken =
+        impl->treeList.ContainerContentChanging(
+            [](MUXC::ListViewBase const&,
+               MUXC::ContainerContentChangingEventArgs const& args)
+            {
+                const auto container = args.ItemContainer();
+                if ( !container )
+                    return;
+
+                using winrt::Microsoft::UI::Xaml::Automation::
+                    AutomationProperties;
+                AutomationProperties::SetName(
+                    container,
+                    wxWinUITreeNodeName(
+                        args.Item().try_as<MUXC::TreeViewNode>()));
+            });
+
+    wxWinUINameRealizedTreeItems(impl);
+}
 
 static wxWinUITreeItem *wxWinUIFindItemByNode(wxWinUITreeItem *item,
                                               const MUXC::TreeViewNode& node)
@@ -262,9 +359,14 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         // label in a tree that has no image list at all.  The visibility comes
         // from an explicit value put in the item's property set: WinUI has no
         // implicit null-to-Visibility conversion for a classic Binding.
+        // The Margin binding reclaims the expander gutter that a TreeViewItem
+        // always reserves, even for items that can't be expanded: without it a
+        // tree that has no expandable item at all (a plain list, as used for
+        // navigation panes) shows every label pushed right by an empty column.
         const wchar_t *itemTemplate =
             LR"(<DataTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8"
+                                Margin="{Binding Content[ContentMargin]}">
                         <Image Width="16" Height="16"
                                VerticalAlignment="Center"
                                Visibility="{Binding Content[ImageVisibility]}"
@@ -276,6 +378,23 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         m_winui->treeView.ItemTemplate(
             winrt::Microsoft::UI::Xaml::Markup::XamlReader::Load(itemTemplate)
                 .as<MUX::DataTemplate>());
+
+        // Hook the container-naming pipeline before anything can be
+        // realized: force the template (the inner TreeViewList only exists
+        // once it is applied), and keep a Loaded retry for the case where
+        // the template really cannot resolve this early.
+        m_winui->treeView.ApplyTemplate();
+        wxWinUIHookTreeListNaming(m_winui.get());
+        if ( !m_winui->treeList )
+        {
+            m_winui->listHookLoadedToken = m_winui->treeView.Loaded(
+                [this](winrt::Windows::Foundation::IInspectable const&,
+                       MUX::RoutedEventArgs const&)
+                {
+                    if ( m_winui && m_winui->treeView )
+                        wxWinUIHookTreeListNaming(m_winui.get());
+                });
+        }
 
         m_winui->selectionChangedToken = m_winui->treeView.SelectionChanged(
             [this](MUXC::TreeView const&,
@@ -1126,6 +1245,39 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
     RefreshPeerItems();
 }
 
+bool wxTreeCtrl::HasExpandableItem() const
+{
+    if ( !m_winui || !m_winui->root )
+        return false;
+
+    // The hidden root doesn't own an expander of its own, so start from its
+    // children in that case.
+    std::vector<const wxWinUITreeItem *> stack;
+    if ( HasFlag(wxTR_HIDE_ROOT) )
+    {
+        for ( const auto& child : m_winui->root->children )
+            stack.push_back(child.get());
+    }
+    else
+    {
+        stack.push_back(m_winui->root.get());
+    }
+
+    while ( !stack.empty() )
+    {
+        const wxWinUITreeItem *item = stack.back();
+        stack.pop_back();
+
+        if ( !item->children.empty() || item->hasChildrenOverride )
+            return true;
+
+        for ( const auto& child : item->children )
+            stack.push_back(child.get());
+    }
+
+    return false;
+}
+
 bool wxTreeCtrl::GetItemPeerRect(wxWinUITreeItem *item, wxRect& rect) const
 {
     if ( !m_winui || !m_winui->treeView || !item || !item->node )
@@ -1230,6 +1382,15 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     else
         peerChildren.InsertAt(static_cast<uint32_t>(pos), newItemRaw->node);
     m_updatingPeer = false;
+
+    // The very first item that gives the tree an expandable node makes the
+    // expander column meaningful, so the margin that hides it has to go from
+    // every item that was already created.
+    if ( HasExpandableItem() != m_hadExpandableItem )
+    {
+        m_hadExpandableItem = !m_hadExpandableItem;
+        RefreshPeerItems();
+    }
 
     m_winui->host.ForceRender();
     return MakeId(newItemRaw);
@@ -1548,10 +1709,26 @@ void wxTreeCtrl::UpdatePeerItem(wxWinUITreeItem *item)
                            ? MUX::Visibility::Visible
                            : MUX::Visibility::Collapsed));
 
+        // Pull the content back over the (empty) expander column when nothing
+        // in this tree can ever be expanded.
+        content.Insert(L"ContentMargin",
+                       winrt::box_value(MUX::ThicknessHelper::FromLengths(
+                           HasExpandableItem() ? 0 : -28, 0, 0, 0)));
+
         item->node.Content(content);
 
         item->node.HasUnrealizedChildren(item->hasChildrenOverride &&
                                          item->children.empty());
+
+        // Keep the UIA name of an already-realized container in sync with a
+        // text change; unrealized ones are named on realization by the
+        // ContainerContentChanging hook.
+        if ( auto container = m_winui->treeView.ContainerFromNode(item->node) )
+        {
+            using winrt::Microsoft::UI::Xaml::Automation::AutomationProperties;
+            AutomationProperties::SetName(container,
+                                          wxWinUIToHString(item->text));
+        }
     }
     catch ( const winrt::hresult_error& e )
     {

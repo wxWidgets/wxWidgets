@@ -20,12 +20,17 @@
     #include "wx/utils.h"
 #endif
 
+#include "wx/evtloop.h"
+
 #include "wx/msw/private.h"
 
 #include "private.h"
 
+#include "wx/winui/private/tlwhost.h"
+
 #include <cmath>
 #include <limits>
+#include <memory>
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
@@ -37,18 +42,29 @@ namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace
 {
 
+// In-window (ContentDialog over the parent's shared island) is the default
+// presentation: the one-island-per-TLW architecture dims the whole client
+// area correctly, wx-drawn regions included.
 wxWinUIDialogPresentation gs_dialogPresentation =
-    wxWinUIDialogPresentation::Window;
+    wxWinUIDialogPresentation::Overlay;
+bool gs_dialogPresentationSet = false;
 
 } // anonymous namespace
 
 void wxWinUISetDialogPresentation(wxWinUIDialogPresentation presentation)
 {
     gs_dialogPresentation = presentation;
+    gs_dialogPresentationSet = true;
 }
 
 wxWinUIDialogPresentation wxWinUIGetDialogPresentation()
 {
+    // Unless the application chose explicitly, allow the classic
+    // separate-window presentation to be turned on from the environment:
+    // this makes it possible to compare both with any existing program.
+    if ( !gs_dialogPresentationSet && wxGetEnv("WX_WINUI_DIALOG_WINDOW", nullptr) )
+        return wxWinUIDialogPresentation::Window;
+
     return gs_dialogPresentation;
 }
 
@@ -270,13 +286,20 @@ int wxWinUIDialogPresenter::ShowAsWindow()
 
 int wxWinUIDialogPresenter::ShowAsOverlay()
 {
-    wxWinUIDialogIsland island;
-    if ( !island.Create(m_parent) )
+    // The dialog lives on the parent's shared per-TLW island: its smoke
+    // layer covers the whole client area (wx-drawn HWNDs included, since the
+    // island band composes above them), and the island hit-test treats an
+    // open popup as capturing everything, so the modality is airtight.
+    wxWinUITopLevelHost * const host =
+        m_parent ? wxWinUITopLevelHost::ForWindow(m_parent, true) : nullptr;
+    if ( !host || !host->GetXamlRoot() )
         return ShowAsWindow();   // no island: degrade to a real window
 
     try
     {
-        MUXC::ContentDialog dialog = island.CreateDialog();
+        MUXC::ContentDialog dialog;
+        dialog.XamlRoot(host->GetXamlRoot());
+        dialog.RequestedTheme(wxWinUIGetCurrentElementTheme());
         dialog.Title(winrt::box_value(wxWinUIToHString(m_title)));
 
         if ( m_content )
@@ -320,34 +343,125 @@ int wxWinUIDialogPresenter::ShowAsOverlay()
         }
 
         // Let the accept handler veto a dismissal.
+        //
+        // CRUCIAL lifetime rule: the ContentDialog lives on the SHARED
+        // island and survives this function (closing animation, delayed
+        // XAML callbacks), while the presenter is a stack local of the
+        // caller's ShowModal().  The handlers must therefore never capture
+        // "this": they share a heap state instead, and are revoked before
+        // returning.  (With the old per-dialog transient island the island
+        // died here, taking the callbacks with it -- on the shared island a
+        // late callback into a dead presenter was a use-after-free crashing
+        // a few seconds after the dialog was dismissed.)
+        struct AcceptState
+        {
+            std::function<bool (int)> onAccept;
+        };
+        auto acceptState = std::make_shared<AcceptState>();
+        acceptState->onAccept = m_onAccept;
+
+        winrt::event_token primaryToken{};
+        winrt::event_token secondaryToken{};
+
         if ( m_onAccept )
         {
             if ( count > 0 )
             {
                 const int id = m_buttons[0].id;
-                dialog.PrimaryButtonClick(
-                    [this, id](MUXC::ContentDialog const&,
+                primaryToken = dialog.PrimaryButtonClick(
+                    [acceptState, id](MUXC::ContentDialog const&,
                                MUXC::ContentDialogButtonClickEventArgs const& e)
                     {
-                        if ( !m_onAccept(id) )
+                        if ( acceptState->onAccept &&
+                                 !acceptState->onAccept(id) )
                             e.Cancel(true);
                     });
             }
             if ( count > 1 )
             {
                 const int id = m_buttons[1].id;
-                dialog.SecondaryButtonClick(
-                    [this, id](MUXC::ContentDialog const&,
+                secondaryToken = dialog.SecondaryButtonClick(
+                    [acceptState, id](MUXC::ContentDialog const&,
                                MUXC::ContentDialogButtonClickEventArgs const& e)
                     {
-                        if ( !m_onAccept(id) )
+                        if ( acceptState->onAccept &&
+                                 !acceptState->onAccept(id) )
                             e.Cancel(true);
                     });
             }
         }
 
-        const MUXC::ContentDialogResult dialogResult = island.ShowDialog(dialog);
-        island.Close();
+        // Behave app-modally: the other top-level windows are disabled while
+        // the dialog is up (the parent stays enabled as it hosts the island,
+        // whose hit-test captures all input for the open dialog).
+        MUXC::ContentDialogResult dialogResult =
+            MUXC::ContentDialogResult::None;
+        {
+            wxWindowDisabler disabler(wxGetTopLevelParent(m_parent));
+
+            bool done = false;
+            wxEventLoop loop;
+
+            // The exit must not run while the XAML click dispatch is still
+            // on the stack (see below); the shared cell lets the deferred
+            // lambda no-op safely if we already returned without running
+            // the loop.
+            auto loopCell = std::make_shared<wxEventLoop *>(nullptr);
+
+            auto operation = dialog.ShowAsync();
+            operation.Completed(
+                [&dialogResult, &done, loopCell](
+                    winrt::Windows::Foundation::IAsyncOperation<
+                        MUXC::ContentDialogResult> const& async,
+                    winrt::Windows::Foundation::AsyncStatus status)
+                {
+                    if ( status ==
+                             winrt::Windows::Foundation::AsyncStatus::Completed )
+                        dialogResult = async.GetResults();
+
+                    done = true;
+
+                    // CRUCIAL: Completed fires SYNCHRONOUSLY from inside the
+                    // XAML button-click dispatch (ContentDialog::
+                    // OnCommandButtonClicked).  Exiting the nested wx loop
+                    // right here would let ShowModal() return -- and the
+                    // caller destroy its wx dialog object -- while that
+                    // native XAML stack is still unwinding and about to
+                    // touch the dialog again: a use-after-free crashing a
+                    // few seconds later.  Defer the exit to the next event
+                    // loop turn, once the XAML stack has fully returned.
+                    wxTheApp->CallAfter([loopCell]()
+                    {
+                        if ( *loopCell && (*loopCell)->IsRunning() )
+                            (*loopCell)->Exit();
+                    });
+                });
+
+            if ( !done )
+            {
+                *loopCell = &loop;
+                loop.Run();
+                *loopCell = nullptr;
+            }
+        }
+
+        // The dialog is dismissed but not dead (the shared island keeps it
+        // through its closing animation): disarm every callback that could
+        // still fire, and detach the caller-owned content -- the accept
+        // callback typically references the wx dialog object, which the
+        // caller destroys right after ShowModal() returns.
+        acceptState->onAccept = nullptr;
+        try
+        {
+            if ( primaryToken.value )
+                dialog.PrimaryButtonClick(primaryToken);
+            if ( secondaryToken.value )
+                dialog.SecondaryButtonClick(secondaryToken);
+            dialog.Content(nullptr);
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
 
         switch ( dialogResult )
         {

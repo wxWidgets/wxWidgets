@@ -74,22 +74,26 @@ public:
     void OnOK(wxCommandEvent& event);
 
 protected:
-    wxTextCtrl* m_textctrl;
+    // Initialized here and not in the constructors: the non-default
+    // constructor only calls Create(), and an uninitialized m_validator made
+    // the destructor delete a garbage pointer -- an immediate crash when
+    // lucky, a delayed heap corruption when not.
+    wxTextCtrl* m_textctrl = nullptr;
     wxString m_value;
-    long m_dialogStyle;
+    long m_dialogStyle = 0;
 
-    wxWindow* m_winuiParent;
+    wxWindow* m_winuiParent = nullptr;
     wxString m_message;
     wxString m_caption;
     wxString m_hint;
     wxPoint m_pos;
     wxSize m_size;
-    unsigned long m_maxLength;
-    bool m_forceUpper;
-    bool m_isPassword;
+    unsigned long m_maxLength = 0;
+    bool m_forceUpper = false;
+    bool m_isPassword = false;
 
 #if wxUSE_VALIDATORS
-    wxTextValidator* m_validator;
+    wxTextValidator* m_validator = nullptr;
 #endif
 
 private:

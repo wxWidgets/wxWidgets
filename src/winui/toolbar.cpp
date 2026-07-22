@@ -24,6 +24,21 @@
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
+namespace
+{
+
+// Standard WinUI command-bar metrics, in DIPs.  An AppBar button is 48 tall
+// when it shows no label or a label beside its icon, and 68 when the label
+// goes under the icon; using the exact values (rather than measuring, which is
+// only reliable once the island is realised) keeps the bar the right height
+// from the very first layout, so the buttons are never clipped.
+constexpr int wxWINUI_TOOL_HEIGHT = 48;
+constexpr int wxWINUI_TOOL_HEIGHT_LABEL_BELOW = 68;
+constexpr int wxWINUI_TOOL_MIN_WIDTH = 48;
+constexpr int wxWINUI_TOOL_SEPARATOR_WIDTH = 12;
+
+} // anonymous namespace
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl);
 
 // ----------------------------------------------------------------------------
@@ -66,9 +81,7 @@ class wxWinUIToolBarImpl
 public:
     wxWinUIControlHost host;
 
-    // Horizontal bars use a CommandBar, vertical ones a StackPanel of the
-    // same AppBar elements (CommandBar itself is horizontal-only).
-    MUXC::CommandBar bar{ nullptr };
+    // The tools live in this panel, laid out along the bar's direction.
     MUXC::StackPanel panel{ nullptr };
 };
 
@@ -113,33 +126,27 @@ bool wxToolBar::Create(wxWindow *parent,
 
     try
     {
+        // A CommandBar always right-aligns its primary commands and reserves
+        // room for its overflow affordance, neither of which matches a
+        // wxToolBar: use a plain panel of AppBar elements, which gives the
+        // same Fluent item chrome with wx's left-to-right (or top-to-bottom)
+        // layout and no wasted space.
+        m_winui->panel = MUXC::StackPanel();
+        m_winui->panel.Orientation(IsVertical() ? MUXC::Orientation::Vertical
+                                                : MUXC::Orientation::Horizontal);
+        // Pack the tools against the bar's leading edge and centre them across
+        // its thickness, as every other toolkit does.
         if ( IsVertical() )
         {
-            m_winui->panel = MUXC::StackPanel();
-            m_winui->panel.Orientation(MUXC::Orientation::Vertical);
-            m_winui->host.SetContent(m_winui->panel);
+            m_winui->panel.HorizontalAlignment(MUX::HorizontalAlignment::Center);
+            m_winui->panel.VerticalAlignment(MUX::VerticalAlignment::Top);
         }
         else
         {
-            m_winui->bar = MUXC::CommandBar();
-            m_winui->bar.IsOpen(false);
-            m_winui->bar.IsSticky(false);
-
-            MUXC::CommandBarDefaultLabelPosition labelPos =
-                MUXC::CommandBarDefaultLabelPosition::Collapsed;
-            if ( HasFlag(wxTB_HORZ_TEXT) )
-                labelPos = MUXC::CommandBarDefaultLabelPosition::Right;
-            else if ( HasFlag(wxTB_TEXT) )
-                labelPos = MUXC::CommandBarDefaultLabelPosition::Bottom;
-            m_winui->bar.DefaultLabelPosition(labelPos);
-
-            if ( HasFlag(wxTB_NO_TOOLTIPS) )
-            {
-                // Nothing special: we simply don't set tooltips below.
-            }
-
-            m_winui->host.SetContent(m_winui->bar);
+            m_winui->panel.HorizontalAlignment(MUX::HorizontalAlignment::Left);
+            m_winui->panel.VerticalAlignment(MUX::VerticalAlignment::Center);
         }
+        m_winui->host.SetContent(m_winui->panel);
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -236,15 +243,12 @@ bool wxToolBar::Realize()
 
 void wxToolBar::RebuildPeer()
 {
-    if ( !m_winui || (!m_winui->bar && !m_winui->panel) )
+    if ( !m_winui || !m_winui->panel )
         return;
 
     try
     {
-        if ( m_winui->bar )
-            m_winui->bar.PrimaryCommands().Clear();
-        else
-            m_winui->panel.Children().Clear();
+        m_winui->panel.Children().Clear();
 
         for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
               node;
@@ -259,8 +263,6 @@ void wxToolBar::RebuildPeer()
             {
                 MUXC::AppBarSeparator separator;
                 element = separator;
-                if ( m_winui->bar )
-                    m_winui->bar.PrimaryCommands().Append(separator);
             }
             else if ( tool->IsControl() )
             {
@@ -292,12 +294,30 @@ void wxToolBar::RebuildPeer()
                 const winrt::hstring label = wxWinUIToHString(
                     wxWinUIRemoveMnemonics(tool->GetLabel()));
 
+                // An AppBar button shows its label under the icon unless it is
+                // explicitly collapsed; wx only wants it with wxTB_TEXT.
+                const bool showLabel = HasFlag(wxTB_TEXT);
+                const MUXC::CommandBarLabelPosition labelPos =
+                    showLabel ? MUXC::CommandBarLabelPosition::Default
+                              : MUXC::CommandBarLabelPosition::Collapsed;
+
+                // Pin the button to the standard command-bar metrics: left to
+                // itself an AppBar button keeps the 68 DIP height it uses
+                // inside a CommandBar even with its label collapsed, which
+                // overflows a bar sized for icons only.
+                const int buttonHeight = showLabel
+                    ? wxWINUI_TOOL_HEIGHT_LABEL_BELOW
+                    : wxWINUI_TOOL_HEIGHT;
+
                 if ( tool->CanBeToggled() )
                 {
                     MUXC::AppBarToggleButton button;
                     if ( icon )
                         button.Icon(icon);
                     button.Label(label);
+                    button.LabelPosition(labelPos);
+                    button.Height(buttonHeight);
+                    button.MinWidth(wxWINUI_TOOL_MIN_WIDTH);
                     button.IsChecked(tool->IsToggled());
                     button.IsEnabled(tool->IsEnabled());
                     button.Click(
@@ -307,8 +327,6 @@ void wxToolBar::RebuildPeer()
                             OnToolClicked(toolid);
                         });
                     element = button;
-                    if ( m_winui->bar )
-                        m_winui->bar.PrimaryCommands().Append(button);
                 }
                 else
                 {
@@ -316,6 +334,9 @@ void wxToolBar::RebuildPeer()
                     if ( icon )
                         button.Icon(icon);
                     button.Label(label);
+                    button.LabelPosition(labelPos);
+                    button.Height(buttonHeight);
+                    button.MinWidth(wxWINUI_TOOL_MIN_WIDTH);
                     button.IsEnabled(tool->IsEnabled());
                     button.Click(
                         [this, toolid](winrt::Windows::Foundation::IInspectable const&,
@@ -324,8 +345,6 @@ void wxToolBar::RebuildPeer()
                             OnToolClicked(toolid);
                         });
                     element = button;
-                    if ( m_winui->bar )
-                        m_winui->bar.PrimaryCommands().Append(button);
                 }
 
                 if ( !HasFlag(wxTB_NO_TOOLTIPS) && !tool->GetShortHelp().empty() )
@@ -398,25 +417,27 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 
 wxSize wxToolBar::DoGetBestSize() const
 {
-    // The standard closed CommandBar is 48 DIPs tall (64 with bottom labels).
-    const int thickness =
-        FromDIP(HasFlag(wxTB_TEXT) && !HasFlag(wxTB_HORZ_TEXT) ? 64 : 48);
+    // The buttons are pinned to the standard metrics in RebuildPeer(), so the
+    // bar's size follows from them directly.  Deriving it rather than
+    // measuring matters here: the frame lays the tool bar out before its
+    // island is realised, and a measured value would then be wrong exactly
+    // once -- leaving the bar too short and clipping the buttons (which shows
+    // up as their hover highlight overflowing the bar).
+    const int thickness = FromDIP(HasFlag(wxTB_TEXT)
+                                      ? wxWINUI_TOOL_HEIGHT_LABEL_BELOW
+                                      : wxWINUI_TOOL_HEIGHT);
 
     int length = 0;
-    const int itemExtent = FromDIP(48);
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
     {
         const wxToolBarToolBase * const tool = node->GetData();
-        length += tool->IsSeparator() ? FromDIP(12) : itemExtent;
+        length += FromDIP(tool->IsSeparator() ? wxWINUI_TOOL_SEPARATOR_WIDTH
+                                              : wxWINUI_TOOL_MIN_WIDTH);
     }
     if ( length == 0 )
-        length = itemExtent;
-
-    // Leave room for the CommandBar "see more" affordance.
-    if ( !IsVertical() )
-        length += FromDIP(48);
+        length = FromDIP(wxWINUI_TOOL_MIN_WIDTH);
 
     return IsVertical() ? wxSize(thickness, length)
                         : wxSize(length, thickness);

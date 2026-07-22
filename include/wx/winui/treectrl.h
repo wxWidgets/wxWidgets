@@ -185,6 +185,9 @@ private:
     // Retrieve the on-screen rectangle of the item's realized container, in
     // client coordinates.  Fails if the container is not realized (yet).
     bool GetItemPeerRect(wxWinUITreeItem *item, wxRect& rect) const;
+    // True if any item in the tree has (or claims to have) children, i.e. if
+    // the expander column is ever going to be used.
+    bool HasExpandableItem() const;
     void OnPeerRightTapped(const wxPoint& pt);
     void OnPeerSelectionChanged();
     void OnPeerNodeExpanded(wxWinUITreeItem *item);
@@ -212,6 +215,10 @@ private:
 
     // The item being dragged, if the application allowed the drag.
     wxWinUITreeItem *m_dragItem = nullptr;
+
+    // Last known value of HasExpandableItem(), to detect when the expander
+    // column becomes (ir)relevant and the item margins must be refreshed.
+    bool m_hadExpandableItem = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);

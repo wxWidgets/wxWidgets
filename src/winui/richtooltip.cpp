@@ -24,6 +24,8 @@
 
 #include "private.h"
 
+#include "wx/winui/private/tlwhost.h"
+
 #include <chrono>
 #include <winrt/Microsoft.UI.Dispatching.h>
 
@@ -32,14 +34,16 @@ namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace
 {
 
-// Keeps the transient island and the TeachingTip alive until the tip is
-// closed (the wxRichToolTip object itself is typically destroyed right after
-// ShowFor() returns); deletes itself once the tip goes away.
+// Keeps the TeachingTip (and its anchor) alive until it is closed (the
+// wxRichToolTip object itself is typically destroyed right after ShowFor()
+// returns); removes them from the shared island and deletes itself once the
+// tip goes away.
 class wxWinUITeachingTipHost
 {
 public:
-    winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource source{ nullptr };
+    winrt::Microsoft::UI::Xaml::Controls::Canvas root{ nullptr };
     MUXC::TeachingTip tip{ nullptr };
+    winrt::Microsoft::UI::Xaml::UIElement anchor{ nullptr };
     winrt::Microsoft::UI::Dispatching::DispatcherQueueTimer timer{ nullptr };
 
     ~wxWinUITeachingTipHost()
@@ -48,8 +52,16 @@ public:
         {
             if ( timer )
                 timer.Stop();
-            if ( source )
-                source.Close();
+
+            // Detach from the shared island's tree.
+            if ( root )
+            {
+                uint32_t index = 0;
+                if ( tip && root.Children().IndexOf(tip, index) )
+                    root.Children().RemoveAt(index);
+                if ( anchor && root.Children().IndexOf(anchor, index) )
+                    root.Children().RemoveAt(index);
+            }
         }
         catch ( const winrt::hresult_error& )
         {
@@ -92,45 +104,21 @@ bool wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win)
     if ( !win || !wxWinUI3Initialize() )
         return false;
 
-    HWND hwnd = GetHwndOf(win);
-    if ( !hwnd )
+    if ( !GetHwndOf(win) )
+        return false;
+
+    // The tip lives on the window's shared per-TLW island.
+    wxWinUITopLevelHost * const tlwHost =
+        wxWinUITopLevelHost::ForWindow(win, true);
+    if ( !tlwHost || !tlwHost->GetXamlRoot() )
         return false;
 
     try
     {
-        using namespace winrt::Microsoft::UI;
-        using namespace winrt::Microsoft::UI::Content;
         using namespace winrt::Microsoft::UI::Xaml;
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
 
         auto host = new wxWinUITeachingTipHost;
-
-        host->source = DesktopWindowXamlSource();
-        host->source.Initialize(GetWindowIdFromWindow(hwnd));
-        host->source.SiteBridge().ResizePolicy(
-            ContentSizePolicy::ResizeContentToParentWindow);
-
-        const HWND hwndBridge =
-            GetWindowFromWindowId(host->source.SiteBridge().WindowId());
-        ::SetWindowLongPtr
-        (
-            hwndBridge,
-            GWL_STYLE,
-            ::GetWindowLongPtr(hwndBridge, GWL_STYLE) |
-                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
-        );
-        ::SetWindowPos(hwndBridge, HWND_TOP, 0, 0, 0, 0,
-                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
-
-        MUXC::Grid root;
-        root.RequestedTheme(wxWinUIGetCurrentElementTheme());
-        host->source.Content(root);
-
-        if ( !root.XamlRoot() )
-        {
-            delete host;
-            return false;
-        }
+        host->root = tlwHost->Root();
 
         MUXC::TeachingTip tip;
         tip.Title(wxWinUIToHString(m_title));
@@ -138,9 +126,34 @@ bool wxWinUIRichToolTipImpl::ShowTeachingTip(wxWindow* win)
         tip.IsLightDismissEnabled(true);
         tip.ShouldConstrainToRootBounds(false);
         tip.PreferredPlacement(MUXC::TeachingTipPlacementMode::Top);
-        tip.Target(root);
 
-        root.Children().Append(tip);
+        // Anchor the tip on the window's own slot when it has one; any other
+        // window gets a zero-size anchor at its top center, so the placement
+        // is right in both cases.
+        winrt::Microsoft::UI::Xaml::FrameworkElement target{ nullptr };
+        if ( wxWinUISlot * const slot = tlwHost->FindSlot(win) )
+        {
+            target = slot->GetContainer();
+        }
+        else
+        {
+            const wxRect rect = win->GetScreenRect();
+            const wxPoint dip = tlwHost->ScreenToRootDIP(
+                wxPoint(rect.x + rect.width/2, rect.y));
+
+            MUXC::Border anchor;
+            anchor.IsHitTestVisible(false);
+            anchor.Width(1);
+            anchor.Height(1);
+            MUXC::Canvas::SetLeft(anchor, dip.x);
+            MUXC::Canvas::SetTop(anchor, dip.y);
+            host->root.Children().Append(anchor);
+            host->anchor = anchor;
+            target = anchor;
+        }
+        tip.Target(target);
+
+        host->root.Children().Append(tip);
         host->tip = tip;
 
         tip.Closed(
