@@ -153,6 +153,7 @@ bool wxContextHelp::EventLoop()
 
     while ( m_inHelp )
     {
+#ifndef __WXQT__
         if (wxTheApp->Pending())
         {
             wxTheApp->Dispatch();
@@ -161,6 +162,9 @@ bool wxContextHelp::EventLoop()
         {
             wxTheApp->ProcessIdle();
         }
+#else
+        wxTheApp->Dispatch();
+#endif
     }
 
     return true;
