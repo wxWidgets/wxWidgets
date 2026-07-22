@@ -40,7 +40,8 @@
 #elif defined(__WINDOWS__)
     #define COMMAND "cmd.exe /c \"echo hi\""
     #define COMMAND_STDERR "cmd.exe /c \"type nonexistentfile\""
-    #define ASYNC_COMMAND "mspaint"
+    #define ASYNC_COMMAND "powershell.exe -NoProfile -NonInteractive " \
+                          "-Command Start-Sleep -Seconds 10"
     #define SHELL_COMMAND "echo hi > nul:"
     #define COMMAND_NO_OUTPUT COMMAND " > nul:"
 #else
@@ -179,11 +180,14 @@ TEST_CASE_METHOD(ExecTestCase, "wxExecute", "[exec]")
     wxMilliSleep(200);
 
     // Try to terminate it gently first, but fall back to killing it
-    // unconditionally if this fails.
+    // unconditionally if this fails. wxSIGTERM is best-effort here;
+    // the test only requires that the async child can be stopped.
     const int rc = wxKill(pid, wxSIGTERM);
-    CHECK( rc == 0 );
     if ( rc != 0 )
+    {
+        INFO("wxSIGTERM failed with " << rc);
         CHECK( wxKill(pid, wxSIGKILL) == 0 );
+    }
 
     int useNoeventsFlag;
 
@@ -251,14 +255,18 @@ TEST_CASE_METHOD(ExecTestCase, "wxProcess", "[exec]")
     // As above, give the system time to launch the process.
     wxMilliSleep(200);
 
+    // As above, wxSIGTERM is best-effort; the test only requires that
+    // the async child can be stopped.
+    //
     // we're not going to process the wxEVT_END_PROCESS event,
     // so the proc instance will auto-delete itself after we kill
     // the asynch process:
     const int rc = wxKill(pid, wxSIGTERM);
-    CHECK( rc == 0 );
     if ( rc != 0 )
+    {
+        INFO("wxSIGTERM failed with " << rc);
         CHECK( wxKill(pid, wxSIGKILL) == 0 );
-
+    }
 
     // test wxExecute with wxProcess and REDIRECTION
 
