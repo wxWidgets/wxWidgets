@@ -1933,10 +1933,10 @@ public:
     wxString GetColLabelValue( int col ) const;
     wxString GetCornerLabelValue() const;
 
-    wxColour GetCellHighlightColour() const { return m_cellHighlightColour; }
+    wxColour GetCellHighlightColour() const;
     int      GetCellHighlightPenWidth() const { return m_cellHighlightPenWidth; }
     int      GetCellHighlightROPenWidth() const { return m_cellHighlightROPenWidth; }
-    wxColor  GetGridFrozenBorderColour() const { return m_gridFrozenBorderColour; }
+    wxColor  GetGridFrozenBorderColour() const;
     int      GetGridFrozenBorderPenWidth() const { return m_gridFrozenBorderPenWidth; }
 
     // this one will use wxHeaderCtrl for the column labels
@@ -2073,7 +2073,7 @@ public:
 
     // this can be used to change the global grid lines colour
     void SetGridLineColour(const wxColour& col);
-    wxColour GetGridLineColour() const { return m_gridLineColour; }
+    wxColour GetGridLineColour() const;
 
     // these methods may be overridden to customize individual grid lines
     // appearance
@@ -2421,10 +2421,8 @@ public:
                            const wxRect& renderExtent) const;
 
     // Access or update the selection fore/back colours
-    wxColour GetSelectionBackground() const
-        { return m_selectionBackground; }
-    wxColour GetSelectionForeground() const
-        { return m_selectionForeground; }
+    wxColour GetSelectionBackground() const;
+    wxColour GetSelectionForeground() const;
 
     void SetSelectionBackground(const wxColour& c) { m_selectionBackground = c; }
     void SetSelectionForeground(const wxColour& c) { m_selectionForeground = c; }
