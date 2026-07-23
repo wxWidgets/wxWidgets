@@ -3181,14 +3181,11 @@ void wxGrid::Init()
     m_minAcceptableColWidth  =
     m_minAcceptableRowHeight = 0;
 
-    m_gridLineColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRIDLINES);
     m_gridLinesEnabled = true;
     m_gridLinesClipHorz =
     m_gridLinesClipVert = true;
-    m_cellHighlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     m_cellHighlightPenWidth = 2;
     m_cellHighlightROPenWidth = 1;
-    m_gridFrozenBorderColour = wxSystemSettings::SelectLightDark(*wxBLACK, *wxWHITE);
     m_gridFrozenBorderPenWidth = 2;
 
     m_canDragRowMove = false;
@@ -3227,9 +3224,6 @@ void wxGrid::Init()
     m_colResizeCursor = wxCursor( wxCURSOR_SIZEWE );
 
     m_currentCellCoords = wxGridNoCellCoords;
-
-    m_selectionBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-    m_selectionForeground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 
     m_editable = true;  // default for whole grid
 
@@ -6942,7 +6936,7 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         // use the cellHighlightColour if the cell is inside a selection, this
         // will ensure the cell is always visible.
         const auto penCol = (UsesOverlaySelection() || !IsInSelection(row, col))
-                          ? m_cellHighlightColour : m_selectionForeground;
+                          ? GetCellHighlightColour() : GetSelectionForeground();
 
         dc.SetPen(wxPen(penCol, penWidth));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -7072,7 +7066,7 @@ void wxGrid::DrawFrozenBorder(wxDC& dc, wxGridWindow *gridWindow, const wxRect& 
         {
             right = wxMin(right, GetColRight(m_numCols - 1));
 
-            dc.SetPen(wxPen(m_gridFrozenBorderColour,
+            dc.SetPen(wxPen(GetGridFrozenBorderColour(),
                             gridFrozenBorderPenWidth));
             dc.DrawLine(left, bottom, right, bottom);
         }
@@ -7081,7 +7075,7 @@ void wxGrid::DrawFrozenBorder(wxDC& dc, wxGridWindow *gridWindow, const wxRect& 
         {
             bottom = wxMin(bottom, GetRowBottom(m_numRows - 1));
 
-            dc.SetPen(wxPen(m_gridFrozenBorderColour,
+            dc.SetPen(wxPen(GetGridFrozenBorderColour(),
                             gridFrozenBorderPenWidth));
             dc.DrawLine(right, top, right, bottom);
         }
@@ -7095,7 +7089,7 @@ void wxGrid::DrawLabelFrozenBorder(wxDC& dc, wxWindow *window, bool isRow)
         int cw, ch;
         window->GetClientSize(&cw, &ch);
 
-        dc.SetPen(wxPen(m_gridFrozenBorderColour,
+        dc.SetPen(wxPen(GetGridFrozenBorderColour(),
                         m_gridFrozenBorderPenWidth));
 
         if ( isRow )
@@ -9596,6 +9590,12 @@ void wxGrid::SetCornerLabelValue( const wxString& s )
     }
 }
 
+wxColour wxGrid::GetGridLineColour() const
+{
+    return m_gridLineColour.IsOk() ? m_gridLineColour :
+        wxSystemSettings::GetColour(wxSYS_COLOUR_GRIDLINES);
+}
+
 void wxGrid::SetGridLineColour( const wxColour& colour )
 {
     if ( m_gridLineColour != colour )
@@ -9605,6 +9605,12 @@ void wxGrid::SetGridLineColour( const wxColour& colour )
         if ( GridLinesEnabled() )
             RedrawGridLines();
     }
+}
+
+wxColour wxGrid::GetCellHighlightColour() const
+{
+    return m_cellHighlightColour.IsOk() ? m_cellHighlightColour :
+        wxSystemSettings::SelectLightDark(*wxBLACK, *wxWHITE);
 }
 
 void wxGrid::SetCellHighlightColour( const wxColour& colour )
@@ -9656,6 +9662,12 @@ void wxGrid::SetCellHighlightROPenWidth(int width)
     }
 }
 
+wxColor wxGrid::GetGridFrozenBorderColour() const
+{
+    return m_gridFrozenBorderColour.IsOk() ? m_gridFrozenBorderColour :
+        wxSystemSettings::SelectLightDark(*wxBLACK, *wxWHITE);
+}
+
 void wxGrid::SetGridFrozenBorderColour(const wxColour &colour)
 {
     if ( m_gridFrozenBorderColour != colour )
@@ -9686,6 +9698,18 @@ void wxGrid::SetGridFrozenBorderPenWidth(int width)
                 m_frozenColGridWin->Refresh();
         }
     }
+}
+
+wxColour wxGrid::GetSelectionBackground() const
+{
+    return m_selectionBackground.IsOk() ? m_selectionBackground :
+        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+}
+
+wxColour wxGrid::GetSelectionForeground() const
+{
+    return m_selectionForeground.IsOk() ? m_selectionForeground :
+        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 }
 
 void wxGrid::RedrawGridLines()
