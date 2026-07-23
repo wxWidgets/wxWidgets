@@ -265,6 +265,10 @@ All (GUI):
 - Always recognize common file types in wxHTML (Richard Thomson, #20967).
 - Respect background colour when printing in wxHTML (Richard Thomson, #20652).
 
+wxMSW:
+
+- Fix wrong refresh in wxStaticBitmap::SetBitmap() (Steve Murphree, #26730).
+
 
 3.2.11: (released 2026-07-07)
 -----------------------------
