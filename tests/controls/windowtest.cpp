@@ -560,6 +560,15 @@ TEST_CASE_METHOD(WindowTestCase, "Window::SizerErrors", "[window][sizer][error]"
 TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
 {
     wxWindow* const parent = m_window;
+
+    // Ensure that the window doesn't need a redraw before starting this test:
+    // it could need one if some other window overlapping it created by a
+    // previously running test was destroyed but this window was not repainted
+    // after that yet. Without this, child1 could still get repainted even if
+    // we don't refresh it and this is exactly what happened under Mac.
+    parent->Refresh();
+    wxYield();
+
     wxWindow* const child1 = new wxWindow(parent, wxID_ANY, wxPoint(10, 20), wxSize(80, 50));
     wxWindow* const child2 = new wxWindow(parent, wxID_ANY, wxPoint(110, 20), wxSize(80, 50));
     wxWindow* const child3 = new wxWindow(parent, wxID_ANY, wxPoint(210, 20), wxSize(80, 50));
