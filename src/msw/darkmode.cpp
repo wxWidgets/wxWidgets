@@ -135,8 +135,6 @@ wxDarkModeSettings::~wxDarkModeSettings() = default;
 static const char* TRACE_DARKMODE = "msw-darkmode";
 #endif // wxUSE_LOG_TRACE
 
-#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
-
 namespace
 {
 
@@ -478,6 +476,10 @@ bool HasChanged()
 void ConfigureTLW(HWND hwnd)
 {
     BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
+
+    // The value of DWMWA_USE_IMMERSIVE_DARK_MODE is 20 since Windows 10 v2004
+    // ("20H1", build 19041). Before that it was 19.
+    auto DWMWA_USE_IMMERSIVE_DARK_MODE = wxCheckOsVersion(10, 0, 19041) ? 20 : 19;
 
     HRESULT hr = wxDarkModeModule::GetDwmSetWindowAttribute()
                  (
