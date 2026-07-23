@@ -567,7 +567,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
     // after that yet. Without this, child1 could still get repainted even if
     // we don't refresh it and this is exactly what happened under Mac.
     parent->Refresh();
-    wxYield();
+    WaitForPaint waitForPaint(parent);
 
     wxWindow* const child1 = new wxWindow(parent, wxID_ANY, wxPoint(10, 20), wxSize(80, 50));
     wxWindow* const child2 = new wxWindow(parent, wxID_ANY, wxPoint(110, 20), wxSize(80, 50));
