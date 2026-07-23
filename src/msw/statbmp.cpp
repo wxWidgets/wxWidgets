@@ -320,7 +320,8 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
         SetSize(GetBestSize());
     }
 
-    RECT rect = wxGetWindowRect(GetHwnd());
+    RECT rect;
+    wxCopyRectToRECT(GetRect(), rect);
     ::InvalidateRect(GetHwndOf(GetParent()), &rect, TRUE);
 }
 
