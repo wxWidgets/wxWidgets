@@ -135,6 +135,19 @@ void LoadTestXrc()
     LoadXrcFrom(wxString::FromAscii(xrcText));
 }
 
+class XrcSizeHintPanel : public wxPanel
+{
+public:
+    explicit XrcSizeHintPanel(wxWindow *parent)
+        : wxPanel(parent, wxID_ANY)
+    {
+        wxBoxSizer * const sizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(220, 120);
+        SetSizer(sizer);
+        sizer->SetSizeHints(this);
+    }
+};
+
 } // anon namespace
 
 
@@ -210,6 +223,42 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::IDRanges", "[xrc]")
         // Unload the xrc, so it can be reloaded and the tests rerun
         CHECK( wxXmlResource::Get()->Unload(TEST_XRC_FILE) );
     }
+}
+
+TEST_CASE("XRC::UnknownControlSizeHints", "[xrc]")
+{
+    wxXmlResource::Get()->InitAllHandlers();
+
+    LoadXrcFrom(R"(<?xml version="1.0" ?>
+<resource>
+  <object class="wxDialog" name="unknown_dialog">
+    <title>unknown</title>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="unknown" name="unknown_panel">
+          <size>100,100</size>
+        </object>
+      </object>
+    </object>
+  </object>
+</resource>
+    )");
+
+    wxDialog dlg;
+    REQUIRE( wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "unknown_dialog") );
+
+    const wxSize sizeBefore = dlg.GetClientSize();
+    XrcSizeHintPanel * const panel = new XrcSizeHintPanel(&dlg);
+    const wxSize panelMin = panel->GetMinSize();
+
+    REQUIRE( panelMin.x > sizeBefore.x );
+    REQUIRE( wxXmlResource::Get()->AttachUnknownControl("unknown_panel",
+                                                        panel,
+                                                        &dlg) );
+
+    CHECK( dlg.GetClientSize().x >= panelMin.x );
+    CHECK( panel->GetSize().x >= panelMin.x );
 }
 
 TEST_CASE("XRC::PathWithFragment", "[xrc][uri]")
