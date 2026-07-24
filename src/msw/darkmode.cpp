@@ -284,21 +284,30 @@ bool ShouldUseDarkMode()
 // Public API
 // ----------------------------------------------------------------------------
 
-bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
+bool wxApp::MSWEnableDarkMode(DarkMode flags, wxDarkModeSettings* settings)
 {
     if ( !wxMSWImpl::InitDarkMode() )
         return false;
 
-    PreferredAppMode mode = PreferredAppMode::AppMode_AllowDark;
+    PreferredAppMode mode = PreferredAppMode::AppMode_Default;
     switch ( flags )
     {
+        case DarkMode_Auto:
+            mode = PreferredAppMode::AppMode_AllowDark;
+            break;
+
         case DarkMode_Always:
             mode = PreferredAppMode::AppMode_ForceDark;
             break;
+
         case DarkMode_Never:
             mode = PreferredAppMode::AppMode_ForceLight;
             break;
     }
+
+    wxCHECK_MSG( mode != PreferredAppMode::AppMode_Default, false,
+                 "invalid dark mode flags specified" );
+
     const DWORD rc = wxMSWImpl::SetPreferredAppMode(mode);
 
     // It's supposed to return the old mode normally.
@@ -342,11 +351,11 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
 
 wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 {
-    int flags = 0;
+    DarkMode flags = DarkMode_Auto;
     switch ( appearance )
     {
         case Appearance::System:
-            flags = DarkMode_Auto;
+            // Already set to this value.
             break;
 
         case Appearance::Light:

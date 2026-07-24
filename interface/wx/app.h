@@ -1416,6 +1416,18 @@ public:
     //@{
 
     /**
+        Possible flags for MSWEnableDarkMode().
+
+        @since 3.3.4
+    */
+    enum DarkMode
+    {
+        DarkMode_Auto   = 0, ///< Use dark mode if the system is using it.
+        DarkMode_Always = 1, ///< Force using dark mode.
+        DarkMode_Never  = 2, ///< Force using light mode.
+    };
+
+    /**
         Enable experimental dark mode support for MSW applications.
 
         This function uses @e undocumented, and unsupported by Microsoft,
@@ -1455,7 +1467,7 @@ public:
         @since 3.3.0
      */
     bool
-    MSWEnableDarkMode(int flags = 0, wxDarkModeSettings* settings = nullptr);
+    MSWEnableDarkMode(DarkMode flags = 0, wxDarkModeSettings* settings = nullptr);
 
     //@}
 };

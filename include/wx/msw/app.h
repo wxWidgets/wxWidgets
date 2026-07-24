@@ -43,14 +43,15 @@ public:
     //
     // If settings are specified, the function takes ownership of the pointer,
     // otherwise the defaults are used.
-    enum
+    enum DarkMode
     {
         DarkMode_Auto   = 0,  // Use dark mode if the system is using it.
         DarkMode_Always,      // Force using dark mode.
         DarkMode_Never        // Force light mode.
     };
     bool
-    MSWEnableDarkMode(int flags = 0, wxDarkModeSettings* settings = nullptr);
+    MSWEnableDarkMode(DarkMode flags = DarkMode_Auto,
+                      wxDarkModeSettings* settings = nullptr);
 
     // implementation only
     void OnIdle(wxIdleEvent& event);
