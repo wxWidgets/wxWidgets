@@ -495,7 +495,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellClick", "[grid]")
     CHECK(lclick.GetCount() == 1);
     CHECK(ldclick.GetCount() == 1);
 
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseClick();
     if ( !WaitForEventAt(point, "right click to be processed", [&]() {
             return rclick.GetCount() != 0;
         }) )
@@ -503,7 +503,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellClick", "[grid]")
     CHECK(rclick.GetCount() == 1);
     rclick.Clear();
 
-    sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseDblClick();
     if ( !WaitForEventAt(point, "right double click to be processed", [&]() {
             return rclick.GetCount() != 0 || rdclick.GetCount() != 0;
         }) )
@@ -634,7 +634,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
         return;
     CHECK(ldclick.GetCount() == 1);
 
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseClick();
     if ( !WaitForEventAt(pos, "mouse right click to be processed", [&]() {
             return rclick.GetCount() != 0;
         }) )
@@ -642,7 +642,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
     CHECK(rclick.GetCount() == 1);
     rclick.Clear();
 
-    sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseDblClick();
     if ( !WaitForEventAt(pos, "mouse right double click to be processed", [&]() {
             return rclick.GetCount() != 0;
         }) )

@@ -3,6 +3,7 @@
 // Purpose:     Test program for wxWidgets
 // Author:      Mike Wetherell
 // Copyright:   (c) 2004 Mike Wetherell
+// Copyright:   (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -33,11 +34,16 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
 
 #include "wx/apptrait.h"
 #include "wx/cmdline.h"
+#include "wx/mousestate.h"
 #include <exception>
 #include <iostream>
 
 #ifdef __WINDOWS__
     #include "wx/msw/msvcrt.h"
+#endif
+
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
 #endif
 
 #ifdef __WXOSX__
@@ -238,6 +244,30 @@ TestLogEnabler::~TestLogEnabler()
 }
 
 #endif // wxUSE_LOG
+
+#if wxUSE_GUI && wxUSE_UIACTIONSIMULATOR
+
+int GetMouseButtonPrimary()
+{
+#ifdef __WXMSW__
+    if ( ::GetSystemMetrics(SM_SWAPBUTTON) )
+        return wxMOUSE_BTN_RIGHT;
+#endif
+
+    return wxMOUSE_BTN_LEFT;
+}
+
+int GetMouseButtonSecondary()
+{
+#ifdef __WXMSW__
+    if ( ::GetSystemMetrics(SM_SWAPBUTTON) )
+        return wxMOUSE_BTN_LEFT;
+#endif
+
+    return wxMOUSE_BTN_RIGHT;
+}
+
+#endif // wxUSE_GUI && wxUSE_UIACTIONSIMULATOR
 
 #if wxUSE_GUI
     typedef wxApp TestAppBase;

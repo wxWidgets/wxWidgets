@@ -763,7 +763,7 @@ void EventPropagationTestCase::ContextMenuEvent()
     // parent.
     g_str.clear();
     sim.MouseMove(origin + wxPoint(10, 10));
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseClick();
 
     // At least with MSW, for WM_CONTEXTMENU to be synthesized by the system
     // from the right mouse click event, we must dispatch the mouse messages.
@@ -782,7 +782,7 @@ void EventPropagationTestCase::ContextMenuEvent()
     // parent.
     g_str.clear();
     sim.MouseMove(origin + wxPoint(60, 60));
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseClick();
     wxYield();
     CPPUNIT_ASSERT_EQUAL( "p", g_str );
 }

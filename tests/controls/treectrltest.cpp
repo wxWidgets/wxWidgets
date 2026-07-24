@@ -225,7 +225,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick", "[treectrl]")
     sim.MouseDblClick();
     wxYield();
 
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseClick();
     wxYield();
 
     CHECK(activated.GetCount() == 1);
@@ -491,7 +491,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu", "[treectrl]")
     sim.MouseMove(point);
     wxYield();
 
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.SecondaryMouseClick();
     wxYield();
 
     CHECK(menu.GetCount() == 1);

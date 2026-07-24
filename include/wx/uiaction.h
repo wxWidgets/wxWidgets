@@ -32,17 +32,25 @@ public:
     bool MouseMove(long x, long y);
     bool MouseMove(const wxPoint& point) { return MouseMove(point.x, point.y); }
 
-    bool MouseDown(int button = wxMOUSE_BTN_LEFT);
-    bool MouseUp(int button = wxMOUSE_BTN_LEFT);
+    bool MouseDown(int button = PrimaryMouseButton());
+    bool MouseUp(int button = PrimaryMouseButton());
 
     // Higher level interface, use it if possible instead
-    bool MouseClick(int button = wxMOUSE_BTN_LEFT);
-    bool MouseDblClick(int button = wxMOUSE_BTN_LEFT);
+    bool MouseClick(int button = PrimaryMouseButton());
+    bool SecondaryMouseClick()
+        { return MouseClick(SecondaryMouseButton()); }
+    bool MouseDblClick(int button = PrimaryMouseButton());
+    bool SecondaryMouseDblClick()
+        { return MouseDblClick(SecondaryMouseButton()); }
     bool MouseDragDrop(long x1, long y1, long x2, long y2,
-                       int button = wxMOUSE_BTN_LEFT);
+                       int button = PrimaryMouseButton());
+    bool SecondaryDragDrop(long x1, long y1, long x2, long y2)
+        { return MouseDragDrop(x1, y1, x2, y2, SecondaryMouseButton()); }
     bool MouseDragDrop(const wxPoint& p1, const wxPoint& p2,
-                       int button = wxMOUSE_BTN_LEFT)
-    { return MouseDragDrop(p1.x, p1.y, p2.x, p2.y, button); }
+                       int button = PrimaryMouseButton())
+        { return MouseDragDrop(p1.x, p1.y, p2.x, p2.y, button); }
+    bool SecondaryMouseDragDrop(const wxPoint& p1, const wxPoint& p2)
+        { return MouseDragDrop(p1, p2, SecondaryMouseButton()); }
 
     // Keyboard simulation
     // -------------------
@@ -64,7 +72,17 @@ public:
     // Select the item with the given text in the currently focused control.
     bool Select(const wxString& text);
 
+    // Use these helpers for mouse input to respect primary/secondary button
+    // assignment on systems configured with swapped mouse buttons.
+    static int PrimaryMouseButton()
+        { return MouseButtonsSwapped() ? wxMOUSE_BTN_RIGHT : wxMOUSE_BTN_LEFT; }
+    static int SecondaryMouseButton()
+        { return MouseButtonsSwapped() ? wxMOUSE_BTN_LEFT : wxMOUSE_BTN_RIGHT; }
+
 private:
+    static bool MouseButtonsSwapped()
+        { return wxSystemSettings::GetMetric(wxSYS_SWAP_BUTTONS) != 0; }
+
     // This is the common part of Key{Down,Up}() methods: while we keep them
     // separate at public API level for consistency with Mouse{Down,Up}(), at
     // implementation level it makes more sense to have them in a single
