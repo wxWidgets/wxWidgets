@@ -133,7 +133,7 @@ public:
             return ms_watchDir;
 
         ms_watchDirData.reset(new TempDir("fswatcher_test"));
-        REQUIRE(!ms_watchDirData->GetName().empty());
+        REQUIRE(ms_watchDirData->IsOk());
 
         TestLogEnabler enableLogs;
         ms_watchDir.AssignDir(ms_watchDirData->GetName());

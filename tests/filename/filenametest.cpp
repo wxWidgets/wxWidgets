@@ -747,7 +747,7 @@ TEST_CASE("wxFileName::Exists", "[filename]")
 #endif // __LINUX__
 #ifndef __VMS
     TempDir socktempdir("socktmpdir");
-    REQUIRE(!socktempdir.GetName().empty());
+    REQUIRE(socktempdir.IsOk());
     wxFileName sockfilename(socktempdir.GetName(), "socket");
     wxString sockfile = sockfilename.GetFullPath();
     wxTCPServer server;
@@ -791,7 +791,7 @@ TEST_CASE("wxFileName::SameAs", "[filename]")
 
 #if defined(__UNIX__)
     TempDir tempdir("wxfn");
-    REQUIRE(!tempdir.GetName().empty());
+    REQUIRE(tempdir.IsOk());
 
     wxFileName tempdir1fn;
     tempdir1fn.AssignDir(tempdir.GetName());
@@ -826,7 +826,7 @@ TEST_CASE("wxFileName::SameAs", "[filename]")
 TEST_CASE("wxFileName::Symlinks", "[filename]")
 {
     TempDir tempdirRoot("filenametest");
-    REQUIRE(!tempdirRoot.GetName().empty());
+    REQUIRE(tempdirRoot.IsOk());
 
     const wxString tmpdir(wxFileName::GetTempDir());
     wxFileName tmpfn(wxFileName::DirName(tmpdir));

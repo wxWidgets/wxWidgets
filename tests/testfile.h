@@ -90,6 +90,11 @@ public:
 
     ~TempDir() { Remove(); }
 
+    bool IsOk() const
+    {
+        return !m_name.empty();
+    }
+
     const wxString& GetName() const { return m_name; }
 
     bool Remove()
