@@ -544,6 +544,7 @@ WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing sup
 WX_ARG_WITHOUT(wayland,    [  --without-wayland       don't use Wayland-specific code], wxUSE_WAYLAND)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
+WX_ARG_WITH(appindicator,  [  --with-appindicator     use AppIndicator/SNI for system tray (Wayland)], wxUSE_APPINDICATOR)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 WX_ARG_WITH(nanosvg,       [  --with-nanosvg          use NanoSVG for rasterizing SVG], wxUSE_NANOSVG)
@@ -6995,6 +6996,32 @@ if test "$wxUSE_TASKBARICON" = "yes"; then
     dnl harmless to have it defined even if it's unnecessary.
     AC_DEFINE(wxUSE_TASKBARICON_BALLOONS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
+
+    if test "$wxUSE_GTK" = 1 -a "$wxUSE_APPINDICATOR" = "yes"; then
+        PKG_CHECK_MODULES(AYATANA_APPINDICATOR, [ayatana-appindicator3-0.1],
+            [
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $AYATANA_APPINDICATOR_LIBS"
+                CFLAGS="$AYATANA_APPINDICATOR_CFLAGS $CFLAGS"
+                CXXFLAGS="$AYATANA_APPINDICATOR_CFLAGS $CXXFLAGS"
+                AC_DEFINE(wxUSE_APPINDICATOR)
+                AC_DEFINE(wxUSE_AYATANA_APPINDICATOR)
+            ],
+            [
+                PKG_CHECK_MODULES(APPINDICATOR, [appindicator3-0.1],
+                    [
+                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $APPINDICATOR_LIBS"
+                        CFLAGS="$APPINDICATOR_CFLAGS $CFLAGS"
+                        CXXFLAGS="$APPINDICATOR_CFLAGS $CXXFLAGS"
+                        AC_DEFINE(wxUSE_APPINDICATOR)
+                    ],
+                    [
+                        AC_MSG_WARN([AppIndicator not found; wxTaskBarIcon will use XEmbed only (no Wayland tray)])
+                        wxUSE_APPINDICATOR="no"
+                    ]
+                )
+            ]
+        )
+    fi
 fi
 
 

@@ -20,6 +20,8 @@ public:
     virtual bool PopupMenu(wxMenu* menu) override;
     bool IsOk() const { return true; }
     bool IsIconInstalled() const;
+    void SetSNIIconName(const wxString& name);
+    void SetSNIIconThemePath(const wxString& path);
 
     class Private;
 
