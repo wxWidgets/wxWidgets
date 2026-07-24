@@ -606,7 +606,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
                  "[window][help]")
 {
     auto const winPtr =
-        std::make_unique<ContextHelpCaptureLostTester>(wxTheApp->GetTopWindow());
+        std::make_unique<ContextHelpCaptureLostTester>(m_window);
     auto* const win = winPtr.get();
 
     ContextHelpCaptureLostState state(win);
