@@ -53,9 +53,9 @@ YieldForAWhile(int timeout = 50)
 }
 
 // Class used to check if we received the (first) paint event: this is
-// currently used under GTK andMac, as MSW doesn't seem to need to wait for the
-// things to work.
-#if defined(__WXGTK__) || defined(__WXOSX__)
+// currently used under GTK only, as MSW doesn't seem to need to wait for the
+// things to work, while under Mac nothing works anyhow.
+#ifdef __WXGTK__
 
 class WaitForPaint
 {
@@ -110,7 +110,7 @@ private:
     } m_handler;
 };
 
-#else // !(__WXGTK__ || __WXOSX__)
+#else // !__WXGTK__
 
 class WaitForPaint
 {
@@ -124,6 +124,6 @@ public:
     }
 };
 
-#endif // __WXGTK__ || __WXGTK__/!(__WXGTK__ || __WXOSX__)
+#endif // __WXGTK__/!__WXGTK__
 
 #endif // _WX_TESTS_WAITFOR_H_
