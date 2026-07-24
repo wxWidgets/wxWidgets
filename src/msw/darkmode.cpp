@@ -151,6 +151,7 @@ PreferredAppMode gs_appMode = AppMode_Default;
 
 // The initial dark mode state.
 bool gs_wasActiveOnStartup  = false;
+bool gs_wasActiveOnStartupIsSet = false;
 
 // The return value for HasChanged().
 bool gs_hasChanged = false;
@@ -186,6 +187,7 @@ void (WINAPI *gs_RefreshImmersiveColorPolicyState)() = nullptr;
 bool (WINAPI *gs_ShouldAppsUseDarkMode)() = nullptr;
 bool (WINAPI *gs_AllowDarkModeForWindow)(HWND hwnd, bool allow) = nullptr;
 PreferredAppMode (WINAPI *gs_SetPreferredAppMode)(PreferredAppMode appMode) = nullptr;
+void (WINAPI *gs_FlushMenuThemes)() = nullptr;
 
 // Wrappers for the undocumented functions, to make sure we never dereference
 // a null function pointer.
@@ -218,6 +220,13 @@ PreferredAppMode SetPreferredAppMode(PreferredAppMode appMode)
     return gs_SetPreferredAppMode(appMode);
 }
 
+void FlushMenuThemes()
+{
+    if ( gs_FlushMenuThemes == nullptr )
+        return;
+    gs_FlushMenuThemes();
+}
+
 bool InitDarkMode()
 {
     // Enable dark mode for Windows 10 1903 (build 18362) and later.
@@ -238,7 +247,8 @@ bool InitDarkMode()
     return TryLoadByOrd(gs_RefreshImmersiveColorPolicyState, dllUxTheme, 104) &&
            TryLoadByOrd(gs_ShouldAppsUseDarkMode, dllUxTheme, 132) &&
            TryLoadByOrd(gs_AllowDarkModeForWindow, dllUxTheme, 133) &&
-           TryLoadByOrd(gs_SetPreferredAppMode, dllUxTheme, 135);
+           TryLoadByOrd(gs_SetPreferredAppMode, dllUxTheme, 135) &&
+           TryLoadByOrd(gs_FlushMenuThemes, dllUxTheme, 136);
 }
 
 // This function is only used in this file as it's more clear than using
@@ -279,8 +289,16 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
     if ( !wxMSWImpl::InitDarkMode() )
         return false;
 
-    const PreferredAppMode mode = flags & DarkMode_Always ? AppMode_ForceDark
-                                                          : AppMode_AllowDark;
+    PreferredAppMode mode = PreferredAppMode::AppMode_AllowDark;
+    switch ( flags )
+    {
+        case DarkMode_Always:
+            mode = PreferredAppMode::AppMode_ForceDark;
+            break;
+        case DarkMode_Never:
+            mode = PreferredAppMode::AppMode_ForceLight;
+            break;
+    }
     const DWORD rc = wxMSWImpl::SetPreferredAppMode(mode);
 
     // It's supposed to return the old mode normally.
@@ -297,7 +315,15 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
     wxMSWImpl::RefreshImmersiveColorPolicyState();
 
     gs_appMode = mode;
-    gs_wasActiveOnStartup = wxMSWDarkMode::IsActive();
+
+    // Initialize gs_wasActiveOnStartup only one time and only before a window
+    // is created. If we first reach here after a window was created, then
+    // dark mode was not active upon startup.
+    if ( !gs_wasActiveOnStartupIsSet && wxTopLevelWindows.IsEmpty() )
+    {
+        gs_wasActiveOnStartup = wxMSWDarkMode::IsActive();
+        gs_wasActiveOnStartupIsSet = true;
+    }
 
     // Set up the settings to use, allocating a default one if none specified.
     if ( !settings )
@@ -305,18 +331,17 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
 
     wxDarkModeModule::SetSettings(settings);
 
+    // If we were called after the main window was created, propagate the
+    // change.
+    wxWindow* topWindow = GetTopWindow();
+    if ( topWindow != nullptr )
+        ::SendMessage(topWindow->GetHWND(), WM_SYSCOLORCHANGE, 0, 0);
+
     return true;
 }
 
 wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 {
-    // We currently can't change the appearance of the existing windows because
-    // we initialize/create them differently depending on the mode value in a
-    // lot of places, so don't even try as we risk finishing with a horrible
-    // mix of light and dark mode elements.
-    if ( !wxTopLevelWindows.empty() || gs_appMode != AppMode_Default )
-        return AppearanceResult::CannotChange;
-
     int flags = 0;
     switch ( appearance )
     {
@@ -325,8 +350,8 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
             break;
 
         case Appearance::Light:
-            // Nothing to do, this is the default.
-            return AppearanceResult::Ok;
+            flags = DarkMode_Never;
+            break;
 
         case Appearance::Dark:
             flags = DarkMode_Always;
@@ -492,6 +517,19 @@ void ConfigureTLW(HWND hwnd)
         wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
 
     wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
+
+    // Purge cached theme data for existing menus so that menu colours are
+    // updated. This is needed when explicitly switching from dark to light.
+    wxMSWImpl::FlushMenuThemes();
+
+    // When explicitly switching modes, Windows 10 fails to repaint the title
+    // bar. Force it to repaint.
+    if ( wxGetWinVersion() < wxWinVersion_11 )
+    {
+        bool isActive = ::GetActiveWindow() == hwnd;
+        ::SendMessage(hwnd, WM_NCACTIVATE, !isActive, 0);
+        ::SendMessage(hwnd, WM_NCACTIVATE, isActive, 0);
+    }
 }
 
 void SetTheme(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
