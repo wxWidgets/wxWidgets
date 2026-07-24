@@ -456,6 +456,41 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellEdit", "[grid]")
 #endif
 }
 
+TEST_CASE_METHOD(GridTestCase, "Grid::CellEditResize", "[grid]")
+{
+    wxWindow *editorWindow = nullptr;
+
+    m_grid->Bind(wxEVT_GRID_EDITOR_CREATED,
+        [&editorWindow](wxGridEditorCreatedEvent& event)
+        {
+            editorWindow = event.GetWindow();
+            event.Skip();
+        });
+
+    m_grid->SetColSize(0, 100);
+    m_grid->SetColSize(1, 100);
+    m_grid->SetGridCursor(1, 1);
+    m_grid->EnableCellEditControl();
+
+    REQUIRE(editorWindow);
+    REQUIRE(editorWindow->IsShown());
+
+    wxWindow * const gridWindow = editorWindow->GetParent();
+    const int widthExtra = m_grid->GetSize().x -
+        gridWindow->GetClientSize().x;
+    const int editorWidth = editorWindow->GetSize().x;
+    const int targetGridWinWidth = editorWidth + 20;
+
+    REQUIRE(editorWindow->GetPosition().x > 20);
+
+    m_grid->SetSize(widthExtra + targetGridWinWidth, m_grid->GetSize().y);
+    wxYield();
+
+    const wxRect editorRect = editorWindow->GetRect();
+    CHECK(editorWindow->IsShown());
+    CHECK(editorRect.GetRight() < gridWindow->GetClientSize().x);
+}
+
 TEST_CASE_METHOD(GridTestCase, "Grid::CellClick", "[grid]")
 {
 #if wxUSE_UIACTIONSIMULATOR
