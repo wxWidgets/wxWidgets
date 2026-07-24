@@ -57,78 +57,6 @@ protected:
     wxDECLARE_NO_COPY_CLASS(WindowTestCase);
 };
 
-#if wxUSE_HELP
-class ContextHelpCaptureLostTester : public wxWindow
-{
-public:
-    ContextHelpCaptureLostTester(wxWindow* parent)
-        : wxWindow(parent, wxID_ANY)
-    {
-    }
-
-    void SimulateCaptureLost()
-    {
-        DoReleaseMouse();
-        NotifyCaptureLost();
-    }
-};
-
-class ContextHelpCaptureLostState : public wxEvtHandler
-{
-public:
-    explicit ContextHelpCaptureLostState(ContextHelpCaptureLostTester* win)
-        : m_win(win),
-          m_captureLostTimer(this),
-          m_fallbackTimer(this)
-    {
-        Bind(wxEVT_TIMER, &ContextHelpCaptureLostState::OnTimer, this);
-    }
-
-    void Start()
-    {
-        m_captureLostTimer.StartOnce(1);
-    }
-
-    void Done()
-    {
-        m_done = true;
-        m_captureLostTimer.Stop();
-        m_fallbackTimer.Stop();
-    }
-
-    bool WasCaptureLostSent() const { return m_captureLostSent; }
-    bool WasFallbackUsed() const { return m_fallbackUsed; }
-
-private:
-    void OnTimer(wxTimerEvent& event)
-    {
-        if ( m_done )
-            return;
-
-        if ( &event.GetTimer() == &m_captureLostTimer )
-        {
-            m_captureLostSent = true;
-            m_win->SimulateCaptureLost();
-            m_fallbackTimer.StartOnce(100);
-            return;
-        }
-
-        m_fallbackUsed = true;
-
-        wxKeyEvent eventKey(wxEVT_KEY_DOWN);
-        eventKey.SetEventObject(m_win);
-        m_win->GetEventHandler()->ProcessEvent(eventKey);
-    }
-
-    ContextHelpCaptureLostTester* const m_win;
-    wxTimer m_captureLostTimer;
-    wxTimer m_fallbackTimer;
-    bool m_done = false;
-    bool m_captureLostSent = false;
-    bool m_fallbackUsed = false;
-};
-#endif // wxUSE_HELP
-
 static void DoTestShowHideEvent(wxWindow* window)
 {
     EventCounter show(window, wxEVT_SHOW);
@@ -252,28 +180,6 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 
     CHECK(!m_window->HasCapture());
 }
-
-#if wxUSE_HELP
-TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
-                 "[window][help]")
-{
-    auto const winPtr =
-        std::make_unique<ContextHelpCaptureLostTester>(wxTheApp->GetTopWindow());
-    auto* const win = winPtr.get();
-
-    ContextHelpCaptureLostState state(win);
-    state.Start();
-
-    wxContextHelp contextHelp(win, false);
-
-    CHECK(contextHelp.BeginContextHelp(win));
-
-    state.Done();
-    CHECK(state.WasCaptureLostSent());
-    CHECK(!state.WasFallbackUsed());
-    CHECK(!win->HasCapture());
-}
-#endif // wxUSE_HELP
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Properties", "[window]")
 {
@@ -623,3 +529,97 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
     CHECK(isChild2Painted == true);
     CHECK(isChild3Painted == true);
 }
+
+#if wxUSE_HELP
+
+class ContextHelpCaptureLostTester : public wxWindow
+{
+public:
+    ContextHelpCaptureLostTester(wxWindow* parent)
+        : wxWindow(parent, wxID_ANY)
+    {
+    }
+
+    void SimulateCaptureLost()
+    {
+        DoReleaseMouse();
+        NotifyCaptureLost();
+    }
+};
+
+class ContextHelpCaptureLostState : public wxEvtHandler
+{
+public:
+    explicit ContextHelpCaptureLostState(ContextHelpCaptureLostTester* win)
+        : m_win(win),
+          m_captureLostTimer(this),
+          m_fallbackTimer(this)
+    {
+        Bind(wxEVT_TIMER, &ContextHelpCaptureLostState::OnTimer, this);
+    }
+
+    void Start()
+    {
+        m_captureLostTimer.StartOnce(1);
+    }
+
+    void Done()
+    {
+        m_done = true;
+        m_captureLostTimer.Stop();
+        m_fallbackTimer.Stop();
+    }
+
+    bool WasCaptureLostSent() const { return m_captureLostSent; }
+    bool WasFallbackUsed() const { return m_fallbackUsed; }
+
+private:
+    void OnTimer(wxTimerEvent& event)
+    {
+        if ( m_done )
+            return;
+
+        if ( &event.GetTimer() == &m_captureLostTimer )
+        {
+            m_captureLostSent = true;
+            m_win->SimulateCaptureLost();
+            m_fallbackTimer.StartOnce(100);
+            return;
+        }
+
+        m_fallbackUsed = true;
+
+        wxKeyEvent eventKey(wxEVT_KEY_DOWN);
+        eventKey.SetEventObject(m_win);
+        m_win->GetEventHandler()->ProcessEvent(eventKey);
+    }
+
+    ContextHelpCaptureLostTester* const m_win;
+    wxTimer m_captureLostTimer;
+    wxTimer m_fallbackTimer;
+    bool m_done = false;
+    bool m_captureLostSent = false;
+    bool m_fallbackUsed = false;
+};
+
+TEST_CASE_METHOD(WindowTestCase, "Window::ContextHelpCaptureLost",
+                 "[window][help]")
+{
+    auto const winPtr =
+        std::make_unique<ContextHelpCaptureLostTester>(wxTheApp->GetTopWindow());
+    auto* const win = winPtr.get();
+
+    ContextHelpCaptureLostState state(win);
+    state.Start();
+
+    wxContextHelp contextHelp(win, false);
+
+    CHECK(contextHelp.BeginContextHelp(win));
+
+    state.Done();
+    CHECK(state.WasCaptureLostSent());
+    CHECK(!state.WasFallbackUsed());
+    CHECK(!win->HasCapture());
+}
+
+#endif // wxUSE_HELP
