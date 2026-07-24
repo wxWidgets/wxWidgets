@@ -1440,9 +1440,10 @@ public:
           and use the same (light) background as by default in it.
 
         @param flags Can be @c wxApp::DarkMode_Always to force dark mode
-            regardless of the system mode, @c wxApp::DarkMode_Light to likewise
+            regardless of the system mode, @c wxApp::DarkMode_Never to likewise
             force light mode, or @c wxApp::DarkMode_Auto to follow the system
-            mode.
+            mode. The constant @c wxApp::DarkMode_Never is available since
+            wxWidgets 3.3.4.
         @param settings If specified, allows to customize dark mode appearance.
             Please see wxDarkModeSettings documentation for more information.
 

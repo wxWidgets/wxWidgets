@@ -299,7 +299,7 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
         case DarkMode_Always:
             mode = PreferredAppMode::AppMode_ForceDark;
             break;
-        case DarkMode_Light:
+        case DarkMode_Never:
             mode = PreferredAppMode::AppMode_ForceLight;
             break;
     }
@@ -354,7 +354,7 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
             break;
 
         case Appearance::Light:
-            flags = DarkMode_Light;
+            flags = DarkMode_Never;
             break;
 
         case Appearance::Dark:
