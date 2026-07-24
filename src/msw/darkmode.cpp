@@ -289,13 +289,9 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
     if ( !wxMSWImpl::InitDarkMode() )
         return false;
 
-    PreferredAppMode mode;
+    PreferredAppMode mode = PreferredAppMode::AppMode_AllowDark;
     switch ( flags )
     {
-        default:
-        case DarkMode_Auto:
-            mode = PreferredAppMode::AppMode_AllowDark;
-            break;
         case DarkMode_Always:
             mode = PreferredAppMode::AppMode_ForceDark;
             break;
