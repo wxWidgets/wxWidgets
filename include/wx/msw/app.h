@@ -46,7 +46,8 @@ public:
     enum
     {
         DarkMode_Auto   = 0,  // Use dark mode if the system is using it.
-        DarkMode_Always = 1   // Force using dark mode.
+        DarkMode_Always,      // Force using dark mode.
+        DarkMode_Light        // Force light mode.
     };
     bool
     MSWEnableDarkMode(int flags = 0, wxDarkModeSettings* settings = nullptr);
