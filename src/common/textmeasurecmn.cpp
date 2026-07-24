@@ -276,12 +276,9 @@ bool wxTextMeasureBase::DoGetPartialTextExtents(const wxString& text,
     // Calculate the position of each character based on the widths of
     // the previous characters. This is inexact for not fixed fonts.
     int n = 0;
-    for ( wxString::const_iterator it = text.begin();
-          it != text.end();
-          ++it )
+    for (const wxUniChar ch : text)
     {
-        const wxUniChar c = *it;
-        unsigned int c_int = (unsigned int)c;
+        unsigned int c_int = (unsigned int)ch;
 
         int w;
         if ((c_int < FWC_SIZE) && (s_fontWidthCache.m_widths[c_int] != 0))
@@ -291,7 +288,7 @@ bool wxTextMeasureBase::DoGetPartialTextExtents(const wxString& text,
         else
         {
             int dummyHeight;
-            DoGetTextExtent(c, &w, &dummyHeight);
+            DoGetTextExtent(ch, &w, &dummyHeight);
             if (c_int < FWC_SIZE)
                 s_fontWidthCache.m_widths[c_int] = w;
         }

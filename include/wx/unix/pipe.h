@@ -80,12 +80,12 @@ public:
     // close the pipe descriptors
     void Close()
     {
-        for ( size_t n = 0; n < WXSIZEOF(m_fds); n++ )
+        for (int& fd : m_fds)
         {
-            if ( m_fds[n] != INVALID_FD )
+            if ( fd != INVALID_FD )
             {
-                close(m_fds[n]);
-                m_fds[n] = INVALID_FD;
+                close(fd);
+                fd = INVALID_FD;
             }
         }
     }

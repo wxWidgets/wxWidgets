@@ -1243,10 +1243,8 @@ void wxWindowBase::Freeze()
         DoFreeze();
 
         // and recursively freeze all children:
-        for ( wxWindowList::iterator i = GetChildren().begin();
-              i != GetChildren().end(); ++i )
+        for (auto* child : GetChildren())
         {
-            wxWindow *child = *i;
             if ( child->IsTopLevel() )
                 continue;
 
@@ -1262,10 +1260,8 @@ void wxWindowBase::Thaw()
     if ( !--m_freezeCount )
     {
         // recursively thaw all children:
-        for ( wxWindowList::iterator i = GetChildren().begin();
-              i != GetChildren().end(); ++i )
+        for (auto* child : GetChildren())
         {
-            wxWindow *child = *i;
             if ( child->IsTopLevel() )
                 continue;
 
@@ -2028,11 +2024,9 @@ public:
         }
 
         wxWindowList& children = m_win->GetChildren();
-        for ( wxWindowList::iterator i = children.begin();
-              i != children.end();
-              ++i )
+        for (auto* item : children)
         {
-            wxWindow* const child = (*i)->AsWindow();
+            wxWindow* const child = item->AsWindow();
 
             // Notice that validation should never recurse into top level
             // children, e.g. some other dialog which might happen to be
@@ -3347,11 +3341,9 @@ wxRecursionGuardFlag changing;
 
 bool IsInCaptureStack(wxWindowBase* win)
 {
-    for ( wxVector<wxWindow*>::const_iterator it = stack.begin();
-          it != stack.end();
-          ++it )
+    for (const auto* item : stack)
     {
-        if ( *it == win )
+        if ( item == win )
             return true;
     }
 

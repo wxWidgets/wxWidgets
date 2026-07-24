@@ -207,19 +207,18 @@ void wxRearrangeList::DoDeleteOneItem(unsigned int n)
         idxDeleted = ~idxDeleted;
     m_order.RemoveAt(n);
     // Remaining items have to be reindexed.
-    for( size_t i = 0; i < m_order.size(); i++ )
+    for (int& idx : m_order)
     {
-        int idx = m_order[i];
         if ( idx < 0 )
         {
             idx = ~idx;
             if ( idx > idxDeleted )
-                m_order[i] = ~(idx-1);
+                idx = ~(idx-1);
         }
         else
         {
             if ( idx > idxDeleted )
-                m_order[i] = idx-1;
+                idx = idx-1;
         }
     }
 }

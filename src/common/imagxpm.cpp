@@ -191,10 +191,9 @@ bool wxXPMHandler::SaveFile(wxImage * image,
                    (image->GetMaskGreen() << 8) | image->GetMaskBlue();
 
     // 2b. generate colour table:
-    for (wxImageHistogram::iterator entry = histogram.begin();
-         entry != histogram.end(); ++entry )
+    for (const auto& entry : histogram)
     {
-        unsigned long index = entry->second.index;
+        unsigned long index = entry.second.index;
         symbols[index] = symbols_data + index * (chars_per_pixel+1);
         char *sym = symbols[index];
 
@@ -205,7 +204,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         }
         sym[j] = '\0';
 
-        unsigned long key = entry->first;
+        unsigned long key = entry.first;
 
         if (key == 0)
             sprintf( tmpbuf, "\"%s c Black\",\n", sym);

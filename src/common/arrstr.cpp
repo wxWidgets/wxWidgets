@@ -548,9 +548,9 @@ wxString wxJoin(const wxArrayString& arr, const wxChar sep, const wxChar escape)
     }
     else // use escape character
     {
-        for ( size_t n = 0; n < count; n++ )
+        for ( size_t i = 0; i < count; i++ )
         {
-            if ( n )
+            if ( i )
             {
                 // We don't escape the escape characters in the middle of the
                 // string because this is not needed, strictly speaking, but we
@@ -563,12 +563,8 @@ wxString wxJoin(const wxArrayString& arr, const wxChar sep, const wxChar escape)
                 str += sep;
             }
 
-            for ( wxString::const_iterator i = arr[n].begin(),
-                                         end = arr[n].end();
-                  i != end;
-                  ++i )
+            for (const wxUniChar& ch : arr[i])
             {
-                const wxUniChar ch = *i;
                 if ( ch == sep )
                     str += escape;      // escape this separator
                 str += ch;

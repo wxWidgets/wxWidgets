@@ -64,17 +64,17 @@ wxSelectSets::Callback wxSelectSets::ms_handlers[wxSelectSets::Max] =
 
 wxSelectSets::wxSelectSets()
 {
-    for ( int n = 0; n < Max; n++ )
+    for (auto& fd : m_fds)
     {
-        wxFD_ZERO(&m_fds[n]);
+        wxFD_ZERO(&fd);
     }
 }
 
 bool wxSelectSets::HasFD(int fd) const
 {
-    for ( int n = 0; n < Max; n++ )
+    for (const auto& fdSet : m_fds)
     {
-        if ( wxFD_ISSET(fd, const_cast<fd_set*>(&m_fds[n])) )
+        if ( wxFD_ISSET(fd, const_cast<fd_set*>(&fdSet)) )
             return true;
     }
 
@@ -175,13 +175,11 @@ bool wxSelectDispatcher::UnregisterFD(int fd)
         {
             // need to find new max fd
             m_maxFD = -1;
-            for ( wxFDIOHandlerMap::const_iterator it = m_handlers.begin();
-                  it != m_handlers.end();
-                  ++it )
+            for (const auto& handler : m_handlers)
             {
-                if ( it->first > m_maxFD )
+                if ( handler.first > m_maxFD )
                 {
-                    m_maxFD = it->first;
+                    m_maxFD = handler.first;
                 }
             }
         }

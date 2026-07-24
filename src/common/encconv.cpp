@@ -423,9 +423,8 @@ static const wxFontEncoding
 
 static bool FindEncoding(const wxFontEncodingArray& arr, wxFontEncoding f)
 {
-    for (wxFontEncodingArray::const_iterator it = arr.begin(), en = arr.end();
-         it != en; ++it)
-        if (*it == f)
+    for (const auto& enc : arr)
+        if (enc == f)
             return true;
     return false;
 }

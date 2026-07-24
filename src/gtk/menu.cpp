@@ -120,10 +120,8 @@ static void UpdateSubMenuItemLabels(wxMenuItem* itemMenu)
     wxCHECK_RET( menu, "should only be called for sub menus" );
 
     const wxMenuItemList& items = menu->GetMenuItems();
-    for ( wxMenuItemList::const_iterator
-            it = items.begin(); it != items.end(); ++it )
+    for (auto* item : items)
     {
-        wxMenuItem* const item = *it;
         if ( !item->IsSeparator() )
         {
             item->SetGtkLabel();

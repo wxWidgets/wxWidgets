@@ -87,11 +87,9 @@ public:
     virtual bool RemoveAll()
     {
         bool ret = true;
-        for ( wxFSWatchEntries::iterator it = m_watches.begin();
-              it != m_watches.end();
-              ++it )
+        for (const auto& watch : m_watches)
         {
-            if ( !DoRemove(it->second) )
+            if ( !DoRemove(watch.second) )
                ret = false;
         }
         m_watches.clear();
