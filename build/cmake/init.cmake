@@ -811,7 +811,7 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_DETECT_SM)
-        if(APPLE OR WIN32)
+        if(NOT X11_FOUND)
             wx_option_force_value(wxUSE_DETECT_SM OFF)
         else()
             find_package(PkgConfig)
