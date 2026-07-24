@@ -140,11 +140,25 @@ void GraphicsContextDrawingTestCase::RunIndividualDrawingCase (
     }
     else if (gcFactory.UseImageComparison())
     {
+        if (!refFileName.FileExists())
+        {
+            WARN("Skipping comparison with missing reference file \""
+                 << refFileName.GetFullPath() << "\"");
+            return;
+        }
+
         WX_ASSERT_SAME_AS_IMAGE_FILE(fileName.GetFullPath(),
                                      refFileName.GetFullPath());
     }
     else
     {
+        if (!refFileName.FileExists())
+        {
+            WARN("Skipping comparison with missing reference file \""
+                 << refFileName.GetFullPath() << "\"");
+            return;
+        }
+
         WX_ASSERT_SAME_AS_FILE(fileName.GetFullPath(),
                                refFileName.GetFullPath());
     }
@@ -172,14 +186,29 @@ wxString GraphicsContextDrawingTestCase::GetTestsReferenceDirectory() const
                         &ms_referenceDirectory) )
         {
             refDir = wxFileName(wxStandardPaths::Get().GetExecutablePath());
-            refDir.RemoveLastDir();
+            refDir.SetFullName(wxString());
+            refDir.AppendDir("drawing");
+            refDir.AppendDir("references");
+
+            if (!refDir.DirExists())
+            {
+                refDir = wxFileName(wxStandardPaths::Get().GetExecutablePath());
+                refDir.RemoveLastDir();
+            }
         }
         else
         {
             refDir = wxFileName(ms_referenceDirectory, wxT(""));
         }
-        refDir.AppendDir ("drawing");
-        refDir.AppendDir ("references");
+
+        // The full path can end with a separator, so check the path component.
+        if (refDir.GetDirs().empty() ||
+            refDir.GetDirs().Last().CmpNoCase("references") != 0)
+        {
+            refDir.AppendDir("drawing");
+            refDir.AppendDir("references");
+        }
+
         ms_referenceDirectory = refDir.GetPath();
     }
     return ms_referenceDirectory;

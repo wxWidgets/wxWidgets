@@ -27,6 +27,7 @@
 #include "wx/private/make_unique.h"
 
 #include <memory>
+#include <string>
 #include <unordered_map>
 
 // This test uses httpbin service and by default uses the mirror at the
@@ -274,6 +275,27 @@ protected:
         }
     }
 
+    wxString GetRedirectTarget(const wxString& relURL) const
+    {
+        // The default httpbin service is mounted below /httpbin, but the
+        // redirect target is host-root-relative, so preserve the base path.
+        wxURI baseURI(baseURL);
+        wxString target = baseURI.GetPath();
+        if ( !target.EndsWith('/') )
+            target += '/';
+        target += relURL;
+        target.Replace("/", "%2F");
+        return target;
+    }
+
+    bool ShouldSkipDigestAuth()
+    {
+        // Digest auth works with the local go-httpbin used by CI, but WinHTTP
+        // doesn't authenticate successfully with the default public mirror.
+        return baseURL == WX_TEST_WEBREQUEST_URL_DEFAULT &&
+               GetSession().GetLibraryVersionInfo().GetName() == "WinHTTP";
+    }
+
 private:
     wxString baseURL;
 };
@@ -412,11 +434,34 @@ public:
 // default buffer size works correctly.
 constexpr int DOWNLOAD_BYTES = 99999;
 
-// Substring used to check that we got the expected response after
-// authenticating successfully. It is so weird because httpbin and go-httpbin
-// use different strings for this: one uses "authenticated" while the other
-// ones uses "authorized", so we use a substring common to both of them.
-constexpr char AUTHORIZED_SUBSTRING[] = R"(ed": true)";
+// httpbin-compatible servers don't use identical JSON formatting, so check
+// simple values without depending on whitespace after the colon.
+static bool HasJsonValue(const wxString& response,
+                         const char* name,
+                         const char* value)
+{
+    std::string withSpace;
+    withSpace += '"';
+    withSpace += name;
+    withSpace += "\": ";
+    withSpace += value;
+
+    std::string withoutSpace;
+    withoutSpace += '"';
+    withoutSpace += name;
+    withoutSpace += "\":";
+    withoutSpace += value;
+
+    const std::string text(response.utf8_string());
+    return text.find(withSpace) != std::string::npos ||
+           text.find(withoutSpace) != std::string::npos;
+}
+
+static bool HasSuccessfulAuth(const wxString& response)
+{
+    return HasJsonValue(response, "authenticated", "true") ||
+           HasJsonValue(response, "authorized", "true");
+}
 
 TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::Bytes", "[net][webrequest][get]")
@@ -668,8 +713,7 @@ TEST_CASE_METHOD(RequestFixture,
     Run();
 
     const wxString& response = request.GetResponse().AsString();
-    CHECK_THAT( response.utf8_string(),
-                Catch::Contains(R"("bloordyblop": 17)") );
+    CHECK( HasJsonValue(response, "bloordyblop", "17") );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -690,8 +734,7 @@ TEST_CASE_METHOD(RequestFixture,
 
         const auto& response = request.GetResponse();
         CHECK( response.GetStatus() == 200 );
-        CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Bad password")
@@ -715,8 +758,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     Run();
 
-    CHECK_THAT( request.GetResponse().AsString().utf8_string(),
-                Catch::Contains(AUTHORIZED_SUBSTRING) );
+    CHECK( HasSuccessfulAuth(request.GetResponse().AsString()) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -737,8 +779,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     const auto& response = request.GetResponse();
     CHECK( response.GetStatus() == 200 );
-    CHECK_THAT( response.AsString().utf8_string(),
-                Catch::Contains(AUTHORIZED_SUBSTRING) );
+    CHECK( HasSuccessfulAuth(response.AsString()) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -746,6 +787,12 @@ TEST_CASE_METHOD(RequestFixture,
 {
     if ( !InitBaseURL() )
         return;
+
+    if ( ShouldSkipDigestAuth() )
+    {
+        WARN("Skipping Digest auth test with default URL and WinHTTP backend");
+        return;
+    }
 
     Create("digest-auth/auth/wxtest/wxwidgets");
     Run(wxWebRequest::State_Unauthorized, 401);
@@ -759,8 +806,7 @@ TEST_CASE_METHOD(RequestFixture,
 
         const auto& response = request.GetResponse();
         CHECK( response.GetStatus() == 200 );
-        CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Bad password")
@@ -785,8 +831,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     const auto& response = request.GetResponse();
     CHECK( response.GetStatus() == 200 );
-    CHECK_THAT( response.AsString().utf8_string(),
-                Catch::Contains(AUTHORIZED_SUBSTRING) );
+    CHECK( HasSuccessfulAuth(response.AsString()) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -795,6 +840,12 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
+    if ( ShouldSkipDigestAuth() )
+    {
+        WARN("Skipping Digest auth test with default URL and WinHTTP backend");
+        return;
+    }
+
     CreateWithAuth("digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
     Run();
 
@@ -802,8 +853,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     const auto& response = request.GetResponse();
     CHECK( response.GetStatus() == 200 );
-    CHECK_THAT( response.AsString().utf8_string(),
-                Catch::Contains(AUTHORIZED_SUBSTRING) );
+    CHECK( HasSuccessfulAuth(response.AsString()) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -1182,8 +1232,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     REQUIRE( Execute() );
 
     CHECK( response.GetStatus() == 200 );
-    CHECK_THAT( response.AsString().utf8_string(),
-                Catch::Contains(R"("bloordyblop": 17)") );
+    CHECK( HasJsonValue(response.AsString(), "bloordyblop", "17") );
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
@@ -1207,8 +1256,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Explicit basic auth")
@@ -1220,21 +1268,20 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Password after redirect")
     {
-        Create("redirect-to?url=/basic-auth/wxtest/wxwidgets");
+        Create("redirect-to?url=" +
+               GetRedirectTarget("basic-auth/wxtest/wxwidgets"));
         request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
 
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Bad password")
@@ -1268,8 +1315,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 }
 
@@ -1278,6 +1324,12 @@ TEST_CASE_METHOD(SyncRequestFixture,
 {
     if ( !InitBaseURL() )
         return;
+
+    if ( ShouldSkipDigestAuth() )
+    {
+        WARN("Skipping Digest auth test with default URL and WinHTTP backend");
+        return;
+    }
 
     const auto& versionInfo = wxWebSession::GetDefault().GetLibraryVersionInfo();
     if ( versionInfo.GetName() == "libcurl" && !versionInfo.AtLeast(7, 60) )
@@ -1305,8 +1357,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Bad password")

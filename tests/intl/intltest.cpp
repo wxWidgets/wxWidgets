@@ -21,8 +21,11 @@
 #include "wx/translation.h"
 #include "wx/uilocale.h"
 #include "wx/scopeguard.h"
+#include "wx/filename.h"
 
 #include "wx/private/glibc.h"
+
+#include "testfile.h"
 
 #if wxUSE_INTL
 
@@ -241,14 +244,59 @@ void IntlTestCase::IsAvailable()
     CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, nullptr) );
 }
 
+namespace
+{
+
+const wxString& GetTranslationsTestDomain()
+{
+    static const wxString s_domain("wx_test_internat");
+    return s_domain;
+}
+
+class TranslationsTestCatalogs
+{
+public:
+    TranslationsTestCatalogs()
+        : m_prefix("wxintltest-")
+    {
+        REQUIRE(m_prefix.IsOk());
+
+        CopyCatalog("en_GB");
+        CopyCatalog("fr");
+        CopyCatalog("ja");
+        CopyCatalog("xart-dothraki");
+
+        wxFileTranslationsLoader::AddCatalogLookupPathPrefix(
+            m_prefix.GetName());
+    }
+
+private:
+    void CopyCatalog(const wxString& lang)
+    {
+        wxFileName dir(m_prefix.GetName(), wxString());
+        dir.AppendDir(lang);
+        REQUIRE( wxMkdir(dir.GetPath()) );
+
+        wxFileName src("intl", "internat", "mo");
+        src.AppendDir(lang);
+
+        wxFileName dst(dir.GetPath(), GetTranslationsTestDomain(), "mo");
+        REQUIRE( wxCopyFile(src.GetFullPath(), dst.GetFullPath()) );
+    }
+
+    TempDir m_prefix;
+};
+
+} // anonymous namespace
+
 TEST_CASE("wxTranslations::AddCatalog", "[translations]")
 {
     // We currently have translations for British English, French and Japanese
     // in this test directory, check that loading those succeeds but loading
     // others doesn't.
-    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+    TranslationsTestCatalogs catalogs;
 
-    const wxString domain("internat");
+    const wxString domain(GetTranslationsTestDomain());
 
     wxTranslations trans;
 
@@ -334,9 +382,9 @@ TEST_CASE("wxTranslations::CorruptCatalog", "[translations]")
 
 TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
 {
-    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+    TranslationsTestCatalogs catalogs;
 
-    const wxString domain("internat");
+    const wxString domain(GetTranslationsTestDomain());
 
     wxTranslations trans;
     wxON_BLOCK_EXIT1( wxUnsetEnv, "WXLANGUAGE" );
