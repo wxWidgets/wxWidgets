@@ -1148,7 +1148,7 @@ public:
     {
         Failure,     ///< Changing the appearance failed.
         Ok,          ///< Appearance was successfully changed.
-        CannotChange ///< Appearance can't be changed any more.
+        CannotChange ///< Appearance can't be changed any more (currently not used).
     };
 
     /**
@@ -1163,27 +1163,24 @@ public:
         AppearanceResult::Ok, and affects all the existing windows as well
         as any windows created after this call.
 
-        Under MSW, the default appearance is always light and the applications
-        that want to follow the system appearance need to explicitly call this
-        function with Appearance::System parameter in order to do it. Please
-        note using dark appearance under MSW requires using non-documented
-        system functions and has several known limitations, please see
-        MSWEnableDarkMode() for more details. Also, on this platform the
-        appearance can be only set before any windows are created and calling
-        this function too late will return AppearanceResult::CannotChange.
+        Please note that using dark appearance under MSW requires using
+        undocumented system functions and has several known limitations.
+        Therefore, the system dark theme is not followed automatically by
+        default there. See MSWEnableDarkMode() for more details.
 
         Note that to query the current appearance, you can use
         wxSystemAppearance, see wxSystemSettings::GetAppearance().
 
         @return AppearanceResult::Ok if the appearance was successfully
-            changed or had been already set to the requested value,
-            AppearanceResult::CannotChange if the appearance can't be changed
-            any more because it's too late to do it but could be changed if
-            done immediately on next program launch (only returned by wxMSW
-            currently) or AppearanceResult::Failure if changing the appearance
+            changed or had been already set to the requested value;
+            or AppearanceResult::Failure if changing the appearance
             failed for some other reason, e.g. because `GTK_THEME` is defined
-            when using wxGTK of this function is not implemented at all for
-            the current platform.
+            when using wxGTK or if this function is not implemented at all for
+            the current platform. Note that AppearanceResult::CannotChange is
+            currently never returned, but reserved for the future in case the
+            appearance can't be changed any more, e.g. because it can only be
+            done before creating the first window and the application has
+            already done so.
 
         @since 3.3.0
     */
