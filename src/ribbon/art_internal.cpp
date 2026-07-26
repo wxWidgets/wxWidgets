@@ -59,6 +59,11 @@ bool wxRibbonCanLabelBreakAtPosition(const wxString& label, size_t pos)
     return label[pos] == ' ';
 }
 
+wxColour wxRibbonGetContrastingLabelColour(const wxColour& background)
+{
+    return background.GetLuminance() < 0.5 ? *wxWHITE : *wxBLACK;
+}
+
 void wxRibbonDrawParallelGradientLines(wxDC& dc,
                                     int nlines,
                                     const wxPoint* line_origins,
