@@ -990,9 +990,11 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl)
 
     WinStruct<SCROLLBARINFO> sbiV, sbiH;
 
+    const auto hwnd = ctrl->GetHWND();
+
     // Check if both scrollbars are actually visible.
-    if (::GetScrollBarInfo(ctrl->GetHWND(), OBJID_VSCROLL, &sbiV) &&
-        ::GetScrollBarInfo(ctrl->GetHWND(), OBJID_HSCROLL, &sbiH) &&
+    if (::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) &&
+        ::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) &&
         !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
         !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
     {
@@ -1005,12 +1007,12 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl)
 
         // SCROLLBARINFO::rcScrollBar contains screen coordinates,
         // but we need client ones, so subtract the window origin.
-        const RECT rcWin = wxGetWindowRect(ctrl->GetHWND());
+        const RECT rcWin = wxGetWindowRect(hwnd);
 
-        int x = sbiV.rcScrollBar.left - rcWin.left;
-        int y = sbiH.rcScrollBar.top - rcWin.top;
-        int width = sbiV.rcScrollBar.right - sbiV.rcScrollBar.left;
-        int height = sbiH.rcScrollBar.bottom - sbiH.rcScrollBar.top;
+        const int x = sbiV.rcScrollBar.left - rcWin.left;
+        const int y = sbiH.rcScrollBar.top - rcWin.top;
+        const int width = sbiV.rcScrollBar.right - sbiV.rcScrollBar.left;
+        const int height = sbiH.rcScrollBar.bottom - sbiH.rcScrollBar.top;
 
         dc.DrawRectangle(x, y, width, height);
     }
