@@ -988,17 +988,9 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl, HWND hwnd)
 {
     if (!ctrl) return;
 
-    // Use standard WinStruct templates correctly
     WinStruct<SCROLLBARINFO> sbiV, sbiH;
 
     // Check if both scrollbars are actually visible.
-    // rgstate[0] represents the state of the scroll bar itself.
-
-    if (::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) &&
-        ::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) &&
-        !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
-        !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
-
     if (::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) &&
         ::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) &&
         !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
@@ -1008,17 +1000,18 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl, HWND hwnd)
         wxWindowDC dc(ctrl);
         dc.SetPen(*wxTRANSPARENT_PEN);
 
-        // Dark mode background color
+        // We don't have any wxSYS_COLOUR_XXX value matching this.
         dc.SetBrush(wxColour(0x17, 0x17, 0x17));
 
-        // Use native Win32 API to convert screen coordinates safely to client area.
-        // This avoids misalignment bugs caused by manually subtracting window rects.
-        POINT pt = { sbiV.rcScrollBar.left, sbiH.rcScrollBar.top };
-        ::ScreenToClient(hwnd, &pt);
+        // SCROLLBARINFO::rcScrollBar contains screen coordinates,
+        // but we need client ones, so subtract the window origin.
+        const RECT rcWin = wxGetWindowRect(hwnd);
 
+        int x = sbiV.rcScrollBar.left - rcWin.left;
+        int y = sbiH.rcScrollBar.top - rcWin.top;
         int width = sbiV.rcScrollBar.right - sbiV.rcScrollBar.left;
         int height = sbiH.rcScrollBar.bottom - sbiH.rcScrollBar.top;
 
-        dc.DrawRectangle(pt.x, pt.y, width, height);
+        dc.DrawRectangle(x, y, width, height);
     }
 }
