@@ -89,6 +89,10 @@ namespace wxMSWImpl
 // so it's implemented there as well.
 void EnableRoundCorners(HWND hwnd);
 
+// This function draws over the section where the scroll bars meet
+// to maintain a consistent theme
+void PaintScrollBarCorner(HWND hwnd);
+
 } // namespace wxMSWImpl
 
 #endif // _WX_MSW_PRIVATE_DARKMODE_H_
