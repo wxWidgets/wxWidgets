@@ -983,3 +983,42 @@ void wxMSWImpl::EnableRoundCorners(HWND hwnd)
     DWORD color = static_cast<DWORD>(wxColourToRGB(colBorder));
     dwmSetWinAttr(hwnd, DWMWA_BORDER_COLOR, &color, sizeof(color));
 }
+
+void wxMSWImpl::PaintScrollBarCorner(wxControl* ctrl)
+{
+    if (!ctrl) return;
+
+    // Use standard WinStruct templates correctly
+    WinStruct<SCROLLBARINFO> sbiV, sbiH;
+
+    // Check if both scrollbars are actually visible.
+    // rgstate[0] represents the state of the scroll bar itself.
+
+    if (::GetScrollBarInfo(ctrl->GetHWND(), OBJID_VSCROLL, &sbiV) &&
+        ::GetScrollBarInfo(ctrl->GetHWND(), OBJID_HSCROLL, &sbiH) &&
+        !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
+        !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
+
+    if (::GetScrollBarInfo(ctrl->GetHWND(), OBJID_VSCROLL, &sbiV) &&
+        ::GetScrollBarInfo(ctrl->GetHWND(), OBJID_HSCROLL, &sbiH) &&
+        !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
+        !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
+    {
+        // They are, so now paint the corner between them.
+        wxWindowDC dc(ctrl);
+        dc.SetPen(*wxTRANSPARENT_PEN);
+
+        // Dark mode background color
+        dc.SetBrush(wxColour(0x17, 0x17, 0x17));
+
+        // Use native Win32 API to convert screen coordinates safely to client area.
+        // This avoids misalignment bugs caused by manually subtracting window rects.
+        POINT pt = { sbiV.rcScrollBar.left, sbiH.rcScrollBar.top };
+        ::ScreenToClient(ctrl->GetHWND(), &pt);
+
+        int width = sbiV.rcScrollBar.right - sbiV.rcScrollBar.left;
+        int height = sbiH.rcScrollBar.bottom - sbiH.rcScrollBar.top;
+
+        dc.DrawRectangle(pt.x, pt.y, width, height);
+    }
+}

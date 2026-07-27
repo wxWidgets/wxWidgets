@@ -36,6 +36,7 @@
 #include <windowsx.h> // needed by GET_X_LPARAM and GET_Y_LPARAM macros
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/winundef.h"
 #include "wx/msw/private/winstyle.h"
 
@@ -2786,6 +2787,16 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     bool processed = false;
     WXLRESULT rc = 0;
     bool isMultiple = HasFlag(wxTR_MULTIPLE);
+
+    if (nMsg == WM_PAINT)
+    {
+        auto const paint_rc = wxTreeCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+        if (wxMSWDarkMode::IsActive())
+        {
+            wxMSWImpl::PaintScrollBarCorner(this);
+        }
+        return paint_rc;
+    }
 
     if ( nMsg == WM_CONTEXTMENU )
     {
