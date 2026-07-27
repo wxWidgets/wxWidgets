@@ -984,7 +984,7 @@ void wxMSWImpl::EnableRoundCorners(HWND hwnd)
     dwmSetWinAttr(hwnd, DWMWA_BORDER_COLOR, &color, sizeof(color));
 }
 
-void wxMSWImpl::PaintScrollBarCorner(wxControl* ctrl)
+void wxMSWImpl::PaintScrollBarCorner(wxControl* ctrl, HWND hwnd)
 {
     if (!ctrl) return;
 
@@ -994,13 +994,13 @@ void wxMSWImpl::PaintScrollBarCorner(wxControl* ctrl)
     // Check if both scrollbars are actually visible.
     // rgstate[0] represents the state of the scroll bar itself.
 
-    if (::GetScrollBarInfo(ctrl->GetHWND(), OBJID_VSCROLL, &sbiV) &&
-        ::GetScrollBarInfo(ctrl->GetHWND(), OBJID_HSCROLL, &sbiH) &&
+    if (::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) &&
+        ::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) &&
         !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
         !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
 
-    if (::GetScrollBarInfo(ctrl->GetHWND(), OBJID_VSCROLL, &sbiV) &&
-        ::GetScrollBarInfo(ctrl->GetHWND(), OBJID_HSCROLL, &sbiH) &&
+    if (::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) &&
+        ::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) &&
         !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
         !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
     {
@@ -1014,7 +1014,7 @@ void wxMSWImpl::PaintScrollBarCorner(wxControl* ctrl)
         // Use native Win32 API to convert screen coordinates safely to client area.
         // This avoids misalignment bugs caused by manually subtracting window rects.
         POINT pt = { sbiV.rcScrollBar.left, sbiH.rcScrollBar.top };
-        ::ScreenToClient(ctrl->GetHWND(), &pt);
+        ::ScreenToClient(hwnd, &pt);
 
         int width = sbiV.rcScrollBar.right - sbiV.rcScrollBar.left;
         int height = sbiH.rcScrollBar.bottom - sbiH.rcScrollBar.top;
