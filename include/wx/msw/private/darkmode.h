@@ -91,7 +91,7 @@ void EnableRoundCorners(HWND hwnd);
 
 // This function draws over the section where the scroll bars meet
 // to maintain a consistent theme 
-void PaintScrollBarCorner(wxControl* ctrl, HWND hwnd);
+void PaintScrollBarCorner(wxWindow* ctrl, HWND hwnd);
 
 } // namespace wxMSWImpl
 

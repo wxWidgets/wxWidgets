@@ -984,7 +984,7 @@ void wxMSWImpl::EnableRoundCorners(HWND hwnd)
     dwmSetWinAttr(hwnd, DWMWA_BORDER_COLOR, &color, sizeof(color));
 }
 
-void wxMSWImpl::PaintScrollBarCorner(wxControl* ctrl, HWND hwnd)
+void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl, HWND hwnd)
 {
     if (!ctrl) return;
 
