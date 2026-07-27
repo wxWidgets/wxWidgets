@@ -3747,7 +3747,7 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             {
                 // Let the control paint itself first.
                 auto const nc_paint_rc = wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
-                wxMSWImpl::PaintScrollBarCorner(this,GetHwnd());
+                wxMSWImpl::PaintScrollBarCorner(this);
                 return nc_paint_rc;
             }
             break;

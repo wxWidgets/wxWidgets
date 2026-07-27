@@ -2793,7 +2793,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         auto const paint_rc = wxTreeCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
         if (wxMSWDarkMode::IsActive())
         {
-            wxMSWImpl::PaintScrollBarCorner(this, GetHwnd());
+            wxMSWImpl::PaintScrollBarCorner(this);
         }
         return paint_rc;
     }

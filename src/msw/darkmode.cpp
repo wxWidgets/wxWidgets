@@ -984,15 +984,15 @@ void wxMSWImpl::EnableRoundCorners(HWND hwnd)
     dwmSetWinAttr(hwnd, DWMWA_BORDER_COLOR, &color, sizeof(color));
 }
 
-void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl, HWND hwnd)
+void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl)
 {
     if (!ctrl) return;
 
     WinStruct<SCROLLBARINFO> sbiV, sbiH;
 
     // Check if both scrollbars are actually visible.
-    if (::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) &&
-        ::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) &&
+    if (::GetScrollBarInfo(ctrl->GetHWND(), OBJID_VSCROLL, &sbiV) &&
+        ::GetScrollBarInfo(ctrl->GetHWND(), OBJID_HSCROLL, &sbiH) &&
         !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
         !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
     {
@@ -1005,7 +1005,7 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl, HWND hwnd)
 
         // SCROLLBARINFO::rcScrollBar contains screen coordinates,
         // but we need client ones, so subtract the window origin.
-        const RECT rcWin = wxGetWindowRect(hwnd);
+        const RECT rcWin = wxGetWindowRect(ctrl->GetHWND());
 
         int x = sbiV.rcScrollBar.left - rcWin.left;
         int y = sbiH.rcScrollBar.top - rcWin.top;
