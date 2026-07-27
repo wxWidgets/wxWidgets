@@ -1448,7 +1448,7 @@ wxDocTemplateVector GetVisibleTemplates(const wxList& allTemplates)
     {
         templates.reserve(totalNumTemplates);
 
-        for (auto* item : allTemplates)
+        for ( const auto* item : allTemplates )
         {
             wxDocTemplate * const temp = (wxDocTemplate *)item;
             if ( temp->IsVisible() )
@@ -1475,7 +1475,7 @@ void wxDocument::Activate()
 wxDocument* wxDocManager::FindDocumentByPath(const wxString& path) const
 {
     const wxFileName fileName(path);
-    for (auto* item : m_docs)
+    for ( const auto* item : m_docs )
     {
         wxDocument * const doc = wxStaticCast(item, wxDocument);
 

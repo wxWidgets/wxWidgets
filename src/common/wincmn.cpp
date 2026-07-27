@@ -1243,7 +1243,7 @@ void wxWindowBase::Freeze()
         DoFreeze();
 
         // and recursively freeze all children:
-        for (auto* child : GetChildren())
+        for ( auto* child : GetChildren() )
         {
             if ( child->IsTopLevel() )
                 continue;
@@ -1260,7 +1260,7 @@ void wxWindowBase::Thaw()
     if ( !--m_freezeCount )
     {
         // recursively thaw all children:
-        for (auto* child : GetChildren())
+        for ( auto* child : GetChildren() )
         {
             if ( child->IsTopLevel() )
                 continue;
@@ -2024,7 +2024,7 @@ public:
         }
 
         wxWindowList& children = m_win->GetChildren();
-        for (auto* item : children)
+        for ( auto* item : children )
         {
             wxWindow* const child = item->AsWindow();
 
@@ -3341,7 +3341,7 @@ wxRecursionGuardFlag changing;
 
 bool IsInCaptureStack(wxWindowBase* win)
 {
-    for (const auto* item : stack)
+    for ( const auto* item : stack )
     {
         if ( item == win )
             return true;

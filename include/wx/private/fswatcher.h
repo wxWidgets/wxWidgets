@@ -87,7 +87,7 @@ public:
     virtual bool RemoveAll()
     {
         bool ret = true;
-        for (const auto& watch : m_watches)
+        for ( const auto& watch : m_watches )
         {
             if ( !DoRemove(watch.second) )
                ret = false;

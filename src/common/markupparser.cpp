@@ -231,14 +231,14 @@ bool wxMarkupParser::OutputTag(const TagAndAttrs& tagAndAttrs, bool start)
                     &wxMarkupParserOutput::OnTeletypeEnd },
         };
 
-        for (const auto& handler : tagHandlers)
+        for ( const auto& h : tagHandlers )
         {
-            if ( tagAndAttrs.name.CmpNoCase(handler.name) == 0 )
+            if ( tagAndAttrs.name.CmpNoCase(h.name) == 0 )
             {
                 if ( start )
-                    (m_output.*(handler.startFunc))();
+                    (m_output.*(h.startFunc))();
                 else
-                    (m_output.*(handler.endFunc))();
+                    (m_output.*(h.endFunc))();
 
                 return true;
             }
@@ -402,13 +402,13 @@ wxString wxMarkupParser::Quote(const wxString& text)
     wxString quoted;
     quoted.reserve(text.length());
 
-    for (const wxUniChar ch : text)
+    for ( const auto& c : text )
     {
         unsigned n;
         for ( n = 0; n < WXSIZEOF(xmlEntities); n++ )
         {
             const XMLEntity& xmlEnt = xmlEntities[n];
-            if ( ch == xmlEnt.value )
+            if ( c == xmlEnt.value )
             {
                 quoted << '&' << xmlEnt.name << ';';
                 break;
@@ -416,7 +416,7 @@ wxString wxMarkupParser::Quote(const wxString& text)
         }
 
         if ( n == WXSIZEOF(xmlEntities) )
-            quoted += ch;
+            quoted += c;
     }
 
     return quoted;

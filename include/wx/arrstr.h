@@ -128,7 +128,7 @@ public:
     {
         reserve(src.size());
 
-        for (const auto& str : src)
+        for ( const auto& str : src )
             Add(str);
     }
     explicit wxSortedArrayString(wxArrayString::CompareFunction compareFunction)

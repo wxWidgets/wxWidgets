@@ -253,7 +253,7 @@ wxFileDialogCustomize::~wxFileDialogCustomize()
 {
     // For consistency with the rest of wx API, we own all the custom controls
     // pointers and delete them when we're deleted.
-    for (auto* ctrl : m_controls)
+    for ( const auto* ctrl : m_controls )
         delete ctrl;
 
     // Do not delete m_impl, the derived classes use this object itself as

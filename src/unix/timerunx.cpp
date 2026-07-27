@@ -160,7 +160,7 @@ bool wxTimerScheduler::NotifyExpired()
     if ( toNotify.empty() )
         return false;
 
-    for (auto* item : toNotify)
+    for ( auto* item : toNotify )
     {
         item->Notify();
     }

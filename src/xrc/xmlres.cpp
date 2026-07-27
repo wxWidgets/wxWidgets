@@ -375,7 +375,7 @@ bool wxXmlResource::LoadAllFiles(const wxString& dirname)
 
     wxDir::GetAllFiles(dirname, &files, "*.xrc");
 
-    for (const auto& file : files)
+    for ( const auto& file : files )
     {
         if ( !LoadFile(file) )
             ok = false;
@@ -2077,7 +2077,7 @@ wxXmlResourceHandlerImpl::GetBitmapBundle(const wxXmlNode* node,
         // it is a bundle from bitmaps
         wxVector<wxBitmap> bitmaps;
         wxArrayString paths = wxSplit(paramValue, ';', '\0');
-        for (const auto& path : paths)
+        for ( const auto& path : paths )
         {
             wxBitmap bmpNext = LoadBitmapFromFS(this, path, size, node->GetName());
             if ( !bmpNext.IsOk() )
@@ -3179,9 +3179,9 @@ int wxXmlResource::DoGetXRCID(const char *str_id, int value_if_not_found)
 /* static */
 wxString wxXmlResource::FindXRCIDById(int numId)
 {
-    for (const auto* record : XRCID_Records)
+    for ( const auto* record : XRCID_Records )
     {
-        for (const XRCID_record* rec = record; rec; rec = rec->next)
+        for ( const auto* rec = record; rec; rec = rec->next )
         {
             if ( rec->id == numId )
                 return wxString(rec->key);
@@ -3204,7 +3204,7 @@ static void CleanXRCID_Record(XRCID_record *rec)
 
 static void CleanXRCID_Records()
 {
-    for (auto*& record : XRCID_Records)
+    for ( auto*& record : XRCID_Records )
     {
         CleanXRCID_Record(record);
         record = nullptr;

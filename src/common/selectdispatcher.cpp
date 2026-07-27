@@ -64,7 +64,7 @@ wxSelectSets::Callback wxSelectSets::ms_handlers[wxSelectSets::Max] =
 
 wxSelectSets::wxSelectSets()
 {
-    for (auto& fd : m_fds)
+    for ( auto& fd : m_fds )
     {
         wxFD_ZERO(&fd);
     }
@@ -72,7 +72,7 @@ wxSelectSets::wxSelectSets()
 
 bool wxSelectSets::HasFD(int fd) const
 {
-    for (const auto& fdSet : m_fds)
+    for ( const auto& fdSet : m_fds )
     {
         if ( wxFD_ISSET(fd, const_cast<fd_set*>(&fdSet)) )
             return true;
@@ -175,7 +175,7 @@ bool wxSelectDispatcher::UnregisterFD(int fd)
         {
             // need to find new max fd
             m_maxFD = -1;
-            for (const auto& handler : m_handlers)
+            for ( const auto& handler : m_handlers )
             {
                 if ( handler.first > m_maxFD )
                 {

@@ -78,7 +78,7 @@ public:
 
     ~wxHtmlListBoxCache()
     {
-        for (auto* cell : m_cells)
+        for ( const auto* cell : m_cells )
         {
             delete cell;
         }

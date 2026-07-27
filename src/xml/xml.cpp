@@ -598,9 +598,9 @@ void wxXmlDocument::AppendToProlog(wxXmlNode *node)
 // returns true if the given string contains only whitespaces
 bool wxIsWhiteOnly(const wxString& buf)
 {
-    for (const wxUniChar ch : buf)
+    for ( const auto& c : buf )
     {
-        if ( ch != wxS(' ') && ch != wxS('\t') && ch != wxS('\n') && ch != wxS('\r'))
+        if ( c != wxS(' ') && c != wxS('\t') && c != wxS('\n') && c != wxS('\r'))
             return false;
     }
     return true;
@@ -946,9 +946,9 @@ bool OutputEscapedString(wxOutputStream& stream,
     wxString escaped;
     escaped.reserve(str.length());
 
-    for (const wxUniChar ch : str)
+    for ( const auto& c : str )
     {
-        switch ( ch.GetValue() )
+        switch ( c.GetValue() )
         {
             case wxS('<'):
                 escaped.append(wxS("&lt;"));
@@ -965,7 +965,7 @@ bool OutputEscapedString(wxOutputStream& stream,
             default:
                 if ( mode == Escape_Attribute )
                 {
-                    switch ( ch.GetValue() )
+                    switch ( c.GetValue() )
                     {
                         case wxS('"'):
                             escaped.append(wxS("&quot;"));
@@ -977,13 +977,13 @@ bool OutputEscapedString(wxOutputStream& stream,
                             escaped.append(wxS("&#xA;"));
                             break;
                         default:
-                            escaped.append(ch);
+                            escaped.append(c);
                     }
 
                 }
                 else
                 {
-                    escaped.append(ch);
+                    escaped.append(c);
                 }
         }
     }

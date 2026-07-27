@@ -57,7 +57,7 @@ void wxStaticBoxBase::WXDestroyWithoutChildren()
     // Reparent() calls in the loop.
     const wxWindowList children = GetChildren();
     wxWindow* const parent = GetParent();
-    for (wxWindow* child : children)
+    for ( const auto& child : children )
     {
         // The label window doesn't count as our child, it's really a part of
         // static box itself and it makes no sense to leave it alive when the
@@ -94,7 +94,7 @@ bool wxStaticBoxBase::Enable(bool enable)
         m_areChildrenEnabled = enable;
 
         const wxWindowList& children = GetChildren();
-        for (wxWindow* child : children)
+        for ( const auto& child : children )
         {
             if ( child != m_labelWin )
                 child->Enable(enable);

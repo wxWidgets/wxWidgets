@@ -2143,13 +2143,13 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
         {
             wxLogDebug( wxT("GetTextExtent: can't open AFM file '%s'"), afmName );
             wxLogDebug( wxT("               using approximate values"));
-            for (int & lastWidth : lastWidths) lastWidth = 500; /* an approximate value */
+            for (auto& lastWidth : lastWidths) lastWidth = 500; /* an approximate value */
             lastDescender = -150; /* dito. */
         }
         else
         {
             /* init the widths array */
-            for(int & lastWidth : lastWidths) lastWidth = INT_MIN;
+            for(auto& lastWidth : lastWidths) lastWidth = INT_MIN;
             /* some variables for holding parts of a line */
             char cString[10], semiString[10], WXString[10];
             char descString[20];

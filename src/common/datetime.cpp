@@ -2234,7 +2234,7 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
         // DoIsHoliday() and DoGetHolidaysInRange() may have implementations
         // completely independent of each other, but it would be nice if both
         // consider the same days to be holidays.
-        for (const wxDateTime& dt : hol)
+        for ( const auto& dt : hol )
         {
             wxASSERT( ms_authorities[nAuth]->DoIsHoliday(dt) );
         }

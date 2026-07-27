@@ -1100,7 +1100,7 @@ int wxUILocale::GetSystemLanguage()
     size_t count = languagesDB.size();
     wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
 
-    for (const wxString& tag : preferred)
+    for ( const auto& tag : preferred )
     {
         wxLocaleIdent localeId = wxLocaleIdent::FromTag(tag);
         wxString lang = localeId.GetTag(wxLOCALE_TAGTYPE_BCP47);

@@ -104,7 +104,7 @@ void LogTraceArray(const char *prefix, const wxVector<wxString>& arr)
 void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 {
     wxLogTrace(TRACE_I18N, "%s:", prefix);
-    for (const wxString& str : arr)
+    for ( const auto& str : arr )
         wxLogTrace(TRACE_I18N, "    %s", str);
 }
 
@@ -1767,7 +1767,7 @@ wxString GetFullSearchPath(const wxString& lang)
 
     const wxArrayString prefixes = GetSearchPrefixes();
 
-    for (const wxString& prefix : prefixes)
+    for ( const auto& prefix : prefixes )
     {
         const wxString p = GetMsgCatalogSubdirs(prefix, lang);
 
@@ -1828,7 +1828,7 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
         prefixes
     );
 
-    for (const wxString& prefix : prefixes)
+    for ( const auto& prefix : prefixes )
     {
         if ( prefix.empty() )
             continue;

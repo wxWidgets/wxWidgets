@@ -39,9 +39,9 @@ wxDEFINE_EVENT( wxEVT_CLIPBOARD_CHANGED, wxClipboardEvent );
 bool wxClipboardEvent::SupportsFormat( const wxDataFormat &format ) const
 {
 #ifdef __WXGTK__
-    for (const auto& fmt : m_formats)
+    for ( const auto& fmt : m_formats )
     {
-        if (fmt == format)
+        if ( fmt == format )
             return true;
     }
 

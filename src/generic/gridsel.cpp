@@ -710,7 +710,7 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
     if ( !m_grid->UsesOverlaySelection() && !m_grid->GetBatchCount() )
     {
         wxGridBlockDiffResult refreshBlocks = block.SymDifference(newBlock);
-        for (const auto& part : refreshBlocks.m_parts)
+        for ( const auto& part : refreshBlocks.m_parts )
         {
             m_grid->RefreshBlock(part.GetTopLeft(),
                                  part.GetBottomRight());
@@ -837,7 +837,7 @@ wxArrayInt wxGridSelection::GetRowSelection() const
 
     wxArrayInt result;
     result.reserve(uniqueRows.size());
-    for(int uniqueRow : uniqueRows)
+    for( const auto& uniqueRow : uniqueRows )
     {
         result.push_back(uniqueRow);
     }
@@ -869,7 +869,7 @@ wxArrayInt wxGridSelection::GetColSelection() const
 
     wxArrayInt result;
     result.reserve(uniqueCols.size());
-    for(int uniqueCol : uniqueCols)
+    for( const auto& uniqueCol : uniqueCols )
     {
         result.push_back(uniqueCol);
     }

@@ -1699,9 +1699,9 @@ wxDataViewCtrlBase::CreateDataObject(const wxVector<wxDataFormat>& formats)
     }
 
     wxDataObjectComposite *dataObject(new wxDataObjectComposite);
-    for (const wxDataFormat& fmt : formats)
+    for ( const auto& fmt : formats )
     {
-        switch (fmt.GetType())
+        switch ( fmt.GetType() )
         {
             case wxDF_TEXT:
             case wxDF_OEMTEXT:

@@ -39,13 +39,13 @@
 
 static bool wxIsNumeric(const wxString& val)
 {
-    for (const wxUniChar ch : val)
+    for ( const auto& c : val )
     {
         // Allow for "," (French) as well as "." -- in future we should
         // use wxSystemSettings or other to do better localisation
-        if ((!wxIsdigit(ch)) &&
-            (ch != wxS('.')) && (ch != wxS(',')) && (ch != wxS('e')) &&
-            (ch != wxS('E')) && (ch != wxS('+')) && (ch != wxS('-')))
+        if ((!wxIsdigit(c)) &&
+            (c != wxS('.')) && (c != wxS(',')) && (c != wxS('e')) &&
+            (c != wxS('E')) && (c != wxS('+')) && (c != wxS('-')))
             return false;
     }
     return true;
@@ -234,7 +234,7 @@ void wxTextValidator::SetIncludes(const wxArrayString& includes)
     // to store the list of char includes.
     if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
     {
-        for (const auto& include : includes)
+        for ( const auto& include : includes )
         {
             AddCharIncludes(include);
         }
@@ -256,7 +256,7 @@ void wxTextValidator::SetExcludes(const wxArrayString& excludes)
     // to store the list of char excludes.
     if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
     {
-        for (const auto& exclude : excludes)
+        for ( const auto& exclude : excludes )
         {
             AddCharExcludes(exclude);
         }
@@ -324,7 +324,7 @@ void wxTextValidator::OnPaste(wxClipboardTextEvent& event)
     bool hasInvalid = false;
 
     // Examine all characters one by one.
-    for (const wxUniChar ch : text)
+    for ( const auto& ch : text )
     {
         if ( IsValidChar(ch) )
         {
@@ -401,7 +401,7 @@ bool wxTextValidator::IsValidChar(const wxUniChar& c) const
 // kept for compatibility reasons.
 bool wxTextValidator::ContainsOnlyIncludedCharacters(const wxString& str) const
 {
-    for (const wxUniChar ch : str)
+    for ( const auto& ch : str )
     {
         if ( !IsCharIncluded(ch) )
             return false;
@@ -413,7 +413,7 @@ bool wxTextValidator::ContainsOnlyIncludedCharacters(const wxString& str) const
 // kept for compatibility reasons.
 bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
 {
-    for (const wxUniChar ch : str)
+    for ( const auto& ch : str )
     {
         if (IsCharExcluded(ch))
             return true;

@@ -732,7 +732,7 @@ wxStockGDI::~wxStockGDI()
 
 void wxStockGDI::DeleteAll()
 {
-    for (auto*& obj : ms_stockObject)
+    for ( auto*& obj : ms_stockObject )
     {
         wxDELETE(obj);
     }

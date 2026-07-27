@@ -961,7 +961,7 @@ void KeyToCoords(wxGridCoordsToAttrMap::key_type key, int *pRow, int *pCol)
 
 wxGridCellAttrData::~wxGridCellAttrData()
 {
-    for (auto& entry : m_attrs)
+    for ( auto& entry : m_attrs )
     {
         entry.second->DecRef();
     }
@@ -1029,7 +1029,7 @@ void UpdateCellAttrRowsOrCols(wxGridCoordsToAttrMap& attrs, int editPos,
     // without now deleted attributes.
     wxGridCoordsToAttrMap newAttrs;
 
-    for (auto& entry : attrs)
+    for ( auto& entry : attrs )
     {
         const wxGridCoordsToAttrMap::key_type oldCoords = entry.first;
         wxGridCellAttr* cellAttr = entry.second;
@@ -11337,7 +11337,7 @@ DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
 {
     wxGridBlockCoordsVector res;
 
-    for (const auto& newBlock : blocks)
+    for ( const auto& newBlock : blocks )
     {
         const int firstNew = oper.SelectFirst(newBlock);
         const int lastNew = oper.SelectLast(newBlock);

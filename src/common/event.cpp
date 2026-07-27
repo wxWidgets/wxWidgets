@@ -2098,7 +2098,7 @@ wxEventBlocker::~wxEventBlocker()
 bool wxEventBlocker::ProcessEvent(wxEvent& event)
 {
     // should this event be blocked?
-    for (const int evt : m_eventsToBlock)
+    for ( const auto& evt : m_eventsToBlock )
     {
         wxEventType t = (wxEventType)evt;
         if ( t == wxEVT_ANY || t == event.GetEventType() )

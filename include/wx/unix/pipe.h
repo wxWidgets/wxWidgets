@@ -80,7 +80,7 @@ public:
     // close the pipe descriptors
     void Close()
     {
-        for (int& fd : m_fds)
+        for ( auto& fd : m_fds )
         {
             if ( fd != INVALID_FD )
             {

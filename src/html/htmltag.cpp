@@ -212,7 +212,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     }
 
     // ok, we're done, now we'll free .Name members of cache - we don't need it anymore:
-    for (auto& entry : Cache())
+    for ( auto& entry : Cache() )
     {
         wxDELETEA(entry.Name);
     }
@@ -468,12 +468,12 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
     };
 
     wxHtmlStyleParams styleParams(*this);
-    for (const auto& entry : equivAttrs)
+    for ( const auto& ea : equivAttrs )
     {
-        if ( styleParams.HasParam(entry.style) && !HasParam(entry.attr) )
+        if ( styleParams.HasParam(ea.style) && !HasParam(ea.attr) )
         {
-            m_ParamNames.Add(entry.attr);
-            m_ParamValues.Add(styleParams.GetParam(entry.style));
+            m_ParamNames.Add(ea.attr);
+            m_ParamValues.Add(styleParams.GetParam(ea.style));
         }
     }
 }

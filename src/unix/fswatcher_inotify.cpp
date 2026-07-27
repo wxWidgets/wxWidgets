@@ -607,7 +607,7 @@ protected:
         };
 
         int native_flags = 0;
-        for (const auto& entry : flag_mapping)
+        for ( const auto& entry : flag_mapping )
         {
             if (flags & entry[0])
                 native_flags |= entry[1];
