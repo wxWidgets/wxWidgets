@@ -815,6 +815,8 @@ protected:
     void MSWMoveWindowToAnyPosition(WXHWND hwnd, int x, int y,
                                     int width, int height, bool bRepaint);
 
+    virtual void MSWDrawThemeBorder(WXHDC hdc);
+
 #if wxUSE_DEFERRED_SIZING
     // this function is called after the window was resized to its new size
     virtual void MSWEndDeferWindowPos()

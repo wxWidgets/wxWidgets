@@ -496,8 +496,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
 // returns true if the platform should explicitly apply a theme border
 bool wxTextCtrl::CanApplyThemeBorder() const
 {
-    // Standard text control already handles theming
-    return ((GetWindowStyle() & (wxTE_RICH|wxTE_RICH2)) != 0);
+    // Standard text control already handles theming in light mode.
+    return IsRich() || wxMSWDarkMode::IsActive();
 }
 
 bool wxTextCtrl::MSWCreateText(const wxString& value,
@@ -2855,6 +2855,58 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
     }
 
     event.Skip();
+}
+
+void wxTextCtrl::MSWDrawThemeBorder(WXHDC hdc)
+{
+    if ( IsRich() )
+    {
+        // Always draw a simple border.
+        wxTextCtrlBase::MSWDrawThemeBorder(hdc);
+    }
+    else
+    {
+        // Draw a dark mode border similar to how the control looks in light
+        // mode. If the control has the focus, a blue line appears along the
+        // bottom otherwise a light gray line.
+        RECT rect;
+        wxCopyRectToRECT(GetSize(), rect);
+
+        // Colour for top, left, and right. Taken from WinUI 3 TextBox.
+        const COLORREF colTop = 0x303030;
+        // Colour for bottom when unfocused. Taken from WinUI 3 TextBox.
+        const COLORREF colBotGray = 0x9a9a9a;
+        // Colour for bottom when focused. This accent colour matches the
+        // Win32 checkbox when checked, and the radio button when selected.
+        const COLORREF colBotBlue = 0xffcd60;
+
+        // Draw outer 1 pixel thick border with a rectangle. The bottom will be
+        // drawn over later.
+        AutoHBRUSH brushBorder(colTop);
+        ::FrameRect(hdc, &rect, brushBorder);
+        // Draw inner 1 pixel thick rectangle as background colour.
+        AutoHBRUSH brushBg(GetBackgroundColour().GetPixel());
+        RECT rcInner = rect;
+        ::InflateRect(&rcInner, -1, -1);
+        ::FrameRect(hdc, &rcInner, brushBg);
+        // Draw 1 or 2 pixel thick bottom line.
+        COLORREF colBot;
+        int thicknessBot;
+        if ( HasFocus() )
+        {
+            colBot = colBotBlue;
+            thicknessBot = 2;
+        }
+        else
+        {
+            colBot = colBotGray;
+            thicknessBot = 1;
+        }
+        AutoHBRUSH brushBottom(colBot);
+        RECT rcBottom = rect;
+        rcBottom.top = rect.bottom - thicknessBot;
+        ::FillRect(hdc, &rcBottom, brushBottom);
+    }
 }
 
 // the rest of the file only deals with the rich edit controls

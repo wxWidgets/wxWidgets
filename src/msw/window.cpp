@@ -3836,7 +3836,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             {
                 // Determine whether we should draw a border.
                 bool drawBorder = false;
-                switch ( DoTranslateBorder(GetBorder()) )
+                wxBorder border = DoTranslateBorder(GetBorder());
+                switch ( border )
                 {
                     case wxBORDER_THEME:
                         drawBorder = true;
@@ -3871,45 +3872,23 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     processed = true;
 
                     wxWindowDC dc((wxWindow *)this);
-                    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-                    RECT rcBorder;
-                    wxCopyRectToRECT(GetSize(), rcBorder);
 
                     // Exclude the client area and any scroll bars.
-                    RECT rcClient = rcBorder;
+                    RECT rcClient;
+                    wxCopyRectToRECT(GetSize(), rcClient);
                     InflateRect(&rcClient, -thickness, -thickness);
-                    ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
+                    HDC hdc = dc.GetHDC();
+                    ::ExcludeClipRect(hdc, rcClient.left, rcClient.top,
                                       rcClient.right, rcClient.bottom);
 
-                    // Draw the theme border and background.
-                    if ( wxMSWDarkMode::IsActive() )
-                    {
-                        // There does not seem to be a theme class that draws a good
-                        // border on all supported versions of Windows. Manually draw a
-                        // 1-pixel thick border. Use the observed colour of the simple
-                        // border, WS_BORDER.
-                        AutoHBRUSH brushBorder(0x646464);
-                        ::FrameRect(GetHdcOf(*impl), &rcBorder, brushBorder);
-                        // Draw the background with consecutively smaller 1-pixel thick
-                        // rectangles.
-                        AutoHBRUSH brushBg(GetBackgroundColour().GetPixel());
-                        for (int count = 1; count < thickness; count++)
-                        {
-                            ::InflateRect(&rcBorder, -1, -1);
-                            ::FrameRect(GetHdcOf(*impl), &rcBorder, brushBg);
-                        }
-                    }
+                    // Draw the border.
+                    if ( border == wxBORDER_THEME )
+                        MSWDrawThemeBorder(hdc);
                     else
                     {
-                        // The EDIT class gives a good general purpose border in light mode.
-                        wxUxThemeHandle hTheme(this, L"EDIT");
-                        // Make sure the background is in a proper state
-                        if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
-                        {
-                            ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
-                        }
-                        // Draw the border
-                        hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, ETS_NORMAL);
+                        // In dark mode, draw a simple border for all the 3D border styles.
+                        wxASSERT(wxMSWDarkMode::IsActive());
+                        wxWindowMSW::MSWDrawThemeBorder(hdc);
                     }
                 }
             }
@@ -3931,6 +3910,44 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
     *result = rc.result;
 
     return true;
+}
+
+// Draw a simple generic border.
+void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc)
+{
+    RECT rcBorder;
+    wxCopyRectToRECT(GetSize(), rcBorder);
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // There does not seem to be a theme class that draws a good
+        // border on all supported versions of Windows. Manually draw a
+        // 1-pixel thick border. Use the observed colour of the simple
+        // border, WS_BORDER.
+        AutoHBRUSH brushBorder(0x646464);
+        ::FrameRect(hdc, &rcBorder, brushBorder);
+        // Draw the background with consecutively smaller 1-pixel thick
+        // rectangles.
+        AutoHBRUSH brushBg(GetBackgroundColour().GetPixel());
+        const auto thickness = MSWGetBorderThickness();
+        for (int count = 1; count < thickness; count++)
+        {
+            ::InflateRect(&rcBorder, -1, -1);
+            ::FrameRect(hdc, &rcBorder, brushBg);
+        }
+    }
+    else
+    {
+        // The EDIT class gives a good general purpose border in light mode.
+        wxUxThemeHandle hTheme(this, L"EDIT");
+        // Make sure the background is in a proper state
+        if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+        {
+            ::DrawThemeParentBackground(m_hWnd, hdc, &rcBorder);
+        }
+        // Draw the border
+        hTheme.DrawBackground(hdc, rcBorder, EP_EDITTEXT, ETS_NORMAL);
+    }
 }
 
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
