@@ -299,19 +299,11 @@ static bool wxIsTouchEventMSW()
     return (::GetMessageExtraInfo() & SIGNATURE_MASK) == MI_WP_SIGNATURE;
 }
 
-// ---------------------------------------------------------------------------
-// event tables
-// ---------------------------------------------------------------------------
-
 // in wxUniv/MSW this class is abstract because it doesn't have DoPopupMenu()
 // method
 #ifdef __WXUNIVERSAL__
     wxIMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase);
 #endif // __WXUNIVERSAL__
-
-wxBEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
-    EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
-wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // implementation
@@ -4829,7 +4821,6 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
     {
         return item->MSWOnDraw(itemStruct);
     }
-
 #endif // wxUSE_CONTROLS
 
     return false;
@@ -5090,10 +5081,7 @@ bool wxWindowMSW::HandleSysColorChange()
     // that information.
     wxMSWDarkMode::NotifySysColorChange();
 
-    wxSysColourChangedEvent event;
-    event.SetEventObject(this);
-
-    (void)HandleWindowEvent(event);
+    SendSysColourChangedEvents();
 
     if ( IsTopLevel() )
         Refresh();
@@ -5271,8 +5259,7 @@ bool wxWindowMSW::HandleQueryNewPalette()
     return HandleWindowEvent(event) && event.GetPaletteRealized();
 }
 
-// Responds to colour changes: passes event on to children.
-void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+void wxWindowMSW::SendSysColourChangedEvents()
 {
     // the top level window also reset the standard colour map as it might have
     // changed (there is no need to do it for the non top level windows as we
@@ -5290,6 +5277,10 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
         MSWSetDarkOrLightMode(SetMode::Change);
     }
 
+    wxSysColourChangedEvent event;
+    event.SetEventObject(this);
+    ProcessWindowEvent(event);
+
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
@@ -5306,6 +5297,8 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 
         node = node->GetNext();
     }
+
+    // Base class functionality is duplicated here, so don't chain up
 }
 
 extern wxCOLORMAP *wxGetStdColourMap()

@@ -113,7 +113,6 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxWindowBase, wxEvtHandler);
 // ----------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
-    EVT_SYS_COLOUR_CHANGED(wxWindowBase::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowBase::OnInitDialog)
     EVT_MIDDLE_DOWN(wxWindowBase::OnMiddleClick)
 
@@ -3019,8 +3018,12 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt) const
 // ----------------------------------------------------------------------------
 
 // propagate the colour change event to the subwindows
-void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+void wxWindowBase::SendSysColourChangedEvents()
 {
+    wxSysColourChangedEvent event;
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
+
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
@@ -3028,9 +3031,7 @@ void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
         wxWindow *win = node->GetData();
         if ( !win->IsTopLevel() )
         {
-            wxSysColourChangedEvent event2;
-            event2.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event2);
+            win->SendSysColourChangedEvents();
         }
 
         node = node->GetNext();
