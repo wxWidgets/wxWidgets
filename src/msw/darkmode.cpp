@@ -1007,7 +1007,7 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl)
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(wxColour(0x17, 0x17, 0x17));
 
-        // The +2 padding ensures fractional DPI sub-pixel gaps (like at 125% or 150%) 
+        // The +2 padding ensures fractional DPI sub-pixel gaps (like at 125% or 150%)
         constexpr int HighDpiRoundingPadding = 2;
         dc.DrawRectangle(x, y, sbWidth + HighDpiRoundingPadding, sbHeight + HighDpiRoundingPadding);
     }
