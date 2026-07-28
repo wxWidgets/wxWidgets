@@ -38,6 +38,7 @@
 
 #include "wx/dynlib.h"
 #include "wx/module.h"
+#include "wx/dcclient.h"
 
 #include "wx/msw/darkmode.h"
 #include "wx/msw/uxtheme.h"
@@ -988,32 +989,26 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl)
 {
     if (!ctrl) return;
 
+    const auto hwnd = ctrl->GetHWND();
     WinStruct<SCROLLBARINFO> sbiV, sbiH;
 
-    const auto hwnd = ctrl->GetHWND();
-
-    // Check if both scrollbars are actually visible.
     if (::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) &&
         ::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) &&
         !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
         !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
     {
-        // They are, so now paint the corner between them.
+        const wxSize clientSize = ctrl->GetClientSize();
+        const int sbWidth = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, ctrl);
+        const int sbHeight = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, ctrl);
+        const int x = clientSize.x;
+        const int y = clientSize.y;
+
         wxWindowDC dc(ctrl);
         dc.SetPen(*wxTRANSPARENT_PEN);
-
-        // We don't have any wxSYS_COLOUR_XXX value matching this.
         dc.SetBrush(wxColour(0x17, 0x17, 0x17));
 
-        // SCROLLBARINFO::rcScrollBar contains screen coordinates,
-        // but we need client ones, so subtract the window origin.
-        const RECT rcWin = wxGetWindowRect(hwnd);
-
-        const int x = sbiV.rcScrollBar.left - rcWin.left;
-        const int y = sbiH.rcScrollBar.top - rcWin.top;
-        const int width = sbiV.rcScrollBar.right - sbiV.rcScrollBar.left;
-        const int height = sbiH.rcScrollBar.bottom - sbiH.rcScrollBar.top;
-
-        dc.DrawRectangle(x, y, width, height);
+        // The +2 padding ensures fractional DPI sub-pixel gaps (like at 125% or 150%) 
+        constexpr int HighDpiRoundingPadding = 2;
+        dc.DrawRectangle(x, y, sbWidth + HighDpiRoundingPadding, sbHeight + HighDpiRoundingPadding);
     }
 }

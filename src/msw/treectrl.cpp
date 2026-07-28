@@ -2788,14 +2788,14 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     WXLRESULT rc = 0;
     bool isMultiple = HasFlag(wxTR_MULTIPLE);
 
-    if ( nMsg == WM_PAINT )
+    if ( nMsg == WM_PAINT || nMsg == WM_NCPAINT )
     {
-        const auto rcPaint = wxTreeCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+        const auto wmPaintRc = wxTreeCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
         if (wxMSWDarkMode::IsActive())
         {
             wxMSWImpl::PaintScrollBarCorner(this);
         }
-        return rcPaint;
+        return wmPaintRc;
     }
 
     if ( nMsg == WM_CONTEXTMENU )

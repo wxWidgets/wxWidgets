@@ -3745,10 +3745,9 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         case WM_NCPAINT:
             if ( wxMSWDarkMode::IsActive() )
             {
-                // Let the control paint itself first.
-                auto const nc_paint_rc = wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+                auto const ncPaintRc = wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
                 wxMSWImpl::PaintScrollBarCorner(this);
-                return nc_paint_rc;
+                return ncPaintRc;
             }
             break;
 
