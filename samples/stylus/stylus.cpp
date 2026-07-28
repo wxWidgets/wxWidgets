@@ -11,7 +11,6 @@
 #include "wx/wx.h"
 #include "wx/dcbuffer.h"
 
-#include <array>
 #include <deque>
 
 // Define a new application
@@ -40,24 +39,24 @@ struct colorInfo {
     const wxColor *color;
     bool selected;
 } clrInfo[] = {
-    { ID_COLOR_BLACK,"Black","1",wxBLACK,false},
-    { ID_COLOR_RED,"Red","2",wxRED,false},
-    { ID_COLOR_GREEN,"Green","3",wxGREEN,false},
-    { ID_COLOR_BLUE,"Blue","4",wxBLUE,true},
+    { ID_COLOR_BLACK, "Black", "1", wxBLACK, false},
+    { ID_COLOR_RED, "Red", "2", wxRED, false},
+    { ID_COLOR_GREEN, "Green", "3", wxGREEN, false},
+    { ID_COLOR_BLUE, "Blue", "4", wxBLUE, true},
 };
 
 class MyFrame: public wxFrame
 {
 private:
-    wxColor m_drawingColor;
-    wxColor m_backgroundColor;
-    bool m_penDown;
+    wxColor m_drawingColor{*clrInfo[0].color};
+    wxColor m_backgroundColor{*wxWHITE};
+    bool m_penDown{false};
     wxBitmap m_backingBitmap;
     std::deque<wxPoint> m_positions;
     void DrawLines(int thickness, const wxColor& color);
     void DrawInfo();
 public:
-    MyFrame(wxFrame *parent, const wxString& title);
+    MyFrame(wxFrame* parent = nullptr, const wxString& title = "Tablet Drawing Test");
 
     void OnPenDown(wxStylusEvent& event);
     void OnPenUp(wxStylusEvent& event);
@@ -76,14 +75,14 @@ bool wxMyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    wxFrame* frame = new MyFrame(nullptr, "Tablet Drawing Test");
+    wxFrame* frame = new MyFrame();
     frame->CenterOnScreen();
     frame->Show(true);
 
     return true;
 }
 
-MyFrame::MyFrame(wxFrame *parent, const wxString& title)
+MyFrame::MyFrame(wxFrame* parent, const wxString& title)
     : wxFrame(parent, wxID_ANY, title,
               wxDefaultPosition, wxDefaultSize,
               wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL)
@@ -91,35 +90,27 @@ MyFrame::MyFrame(wxFrame *parent, const wxString& title)
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetClientSize(FromDIP(wxSize(800, 600)));
 
-    wxMenuBar* menu_bar = new wxMenuBar();
-    {
-        wxMenu* file_menu = new wxMenu();
-        file_menu->Append(wxID_EXIT);
-        menu_bar->Append(file_menu, "&File");
-    }
+    wxMenuBar* menuBar = new wxMenuBar();
+    wxMenu* fileMenu = new wxMenu();
+    wxMenu* colorMenu = new wxMenu();
 
+    fileMenu->Append(wxID_EXIT);
+    menuBar->Append(fileMenu, "&File");
+
+    for ( size_t i = 0; i < WXSIZEOF(clrInfo); i++ )
     {
-        m_drawingColor = *clrInfo[0].color; // make sure it's initialized
-        wxMenu* colorMenu = new wxMenu();
-        for (int i = 0; i < WXSIZEOF(clrInfo); i++)
+        auto& info = clrInfo[i];
+        auto menuItem = colorMenu->AppendRadioItem(info.id, wxString::Format("%s\t%s", info.name, info.accelerator));
+
+        if ( info.selected )
         {
-            auto& info = clrInfo[i];
-            wxString text(info.name);
-            text += wxString("\t");
-            text += wxString(info.accelerator);
-            auto menuItem = colorMenu->AppendRadioItem(info.id, text);
-            if (info.selected)
-            {
-                menuItem->Check();
-                m_drawingColor = *info.color;
-            }
+            menuItem->Check();
+            m_drawingColor = *info.color;
         }
-        menu_bar->Append(colorMenu, "&Color");
     }
-    SetMenuBar(menu_bar);
+    menuBar->Append(colorMenu, "&Color");
 
-    m_penDown = false;
-    m_backgroundColor = *wxWHITE;
+    SetMenuBar(menuBar);
 
     Bind(wxEVT_STYLUS_DOWN, &MyFrame::OnPenDown, this);
     Bind(wxEVT_STYLUS_UP, &MyFrame::OnPenUp, this);
@@ -157,17 +148,15 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 }
 
 
-void MyFrame::OnPenDown(wxStylusEvent& event)
+void MyFrame::OnPenDown(wxStylusEvent& WXUNUSED(event))
 {
-    wxUnusedVar(event);
     SetCursor(*wxCROSS_CURSOR);
     m_positions.clear();
     m_penDown = true;
 }
 
-void MyFrame::OnPenUp(wxStylusEvent& event)
+void MyFrame::OnPenUp(wxStylusEvent& WXUNUSED(event))
 {
-    wxUnusedVar(event);
     SetCursor(*wxSTANDARD_CURSOR);
     m_positions.clear();
     m_penDown = false;
@@ -175,60 +164,52 @@ void MyFrame::OnPenUp(wxStylusEvent& event)
 
 void MyFrame::OnPenUpdate(wxStylusEvent& event)
 {
-    bool skip = false;
-    if (!m_penDown)
-    {
-        skip = true;
-    }
-    const double p = event.GetPressure();
-    if (p < 0.0)
-    {
-        skip = true;
-    }
+    const double pressure = event.GetPressure();
 
-    if (skip)
+    if ( !m_penDown || pressure < 0.0 )
     {
         event.Skip();
         return;
     }
 
     const bool eraser = event.IsUsingEraser();
-    wxColor color = eraser ? m_backgroundColor : m_drawingColor;
+    const wxColor color = eraser ? m_backgroundColor : m_drawingColor;
     const int maxThicknes = eraser ? 36 : 12;
     const int minThickness = eraser ? 6 : 2;
-    const int thickness = minThickness + p * (maxThicknes - minThickness);
+    const int thickness = minThickness + pressure * (maxThicknes - minThickness);
 
-    wxPoint newPos = event.GetPosition();
-    m_positions.push_back(newPos);
+    m_positions.push_back(event.GetPosition());
 
     DrawLines(thickness, color);
 }
 
 void MyFrame::OnColorChange(wxCommandEvent& event)
 {
-    int index = event.GetId() - ID_COLOR_FIRST;
+    const int index = event.GetId() - ID_COLOR_FIRST;
     m_drawingColor = *clrInfo[index].color;
 }
 
 void MyFrame::DrawLines(int thickness, const wxColor& color)
 {
-    if (m_positions.size() < 2) {
+    if ( m_positions.size() < 2 )
+    {
         return;
     }
+
     wxMemoryDC dc(m_backingBitmap);
     dc.SetPen(wxPen(color, thickness));
     dc.SetBrush(wxBrush(color));
 
     wxPoint p1, p2;
     p1 = m_positions.front();
-    for (;;)
+    for ( ;; )
     {
         m_positions.pop_front();
         p2 = m_positions.front();
 
         dc.DrawLine(p1, p2);
 
-        if (m_positions.size() > 1)
+        if ( m_positions.size() > 1 )
         {
             m_positions.pop_front();
             p1 = p2; // last point of line is now the first point of next line
@@ -245,10 +226,8 @@ void MyFrame::DrawLines(int thickness, const wxColor& color)
 void MyFrame::DrawInfo()
 {
     wxMemoryDC dc(m_backingBitmap);
-    wxString info("This is a pen drawing demo.");
-    info += wxString("\n");
-    info += wxString("Only pen events are accepted for drawing.");
-    info += wxString("\n");
-    info += wxString("This demo uses the pressure and eraser features of the tablet pen.");
+    wxString info("This is a pen drawing demo.\n");
+    info += "Only pen events are accepted for drawing.\n";
+    info += "This demo uses the pressure and eraser features of the tablet pen.";
     dc.DrawText(info, wxPoint(0, 0));
 }
