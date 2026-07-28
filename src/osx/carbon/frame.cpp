@@ -43,7 +43,6 @@ int GetMacStatusbarHeight()
 
 wxBEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)
-  EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -179,23 +178,18 @@ void wxFrame::PositionStatusBar()
 }
 #endif // wxUSE_STATUSBAR
 
-// Responds to colour changes, and passes event on to children.
-void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxFrame::SendSysColourChangedEvents()
 {
     Refresh();
 
 #if wxUSE_STATUSBAR
     if ( m_frameStatusBar )
     {
-        wxSysColourChangedEvent event2;
-
-        event2.SetEventObject( m_frameStatusBar );
-        m_frameStatusBar->GetEventHandler()->ProcessEvent(event2);
+        m_frameStatusBar->SendSysColourChangedEvents();
     }
 #endif // wxUSE_STATUSBAR
 
-    // Propagate the event to the non-top-level children
-    wxWindow::OnSysColourChanged(event);
+    BaseType::SendSysColourChangedEvents();
 }
 
 // Default activation behaviour - set the focus for the first child

@@ -1612,14 +1612,12 @@ void wxGenericCalendarCtrl::OnYearTextChange(wxCommandEvent& event)
     HandleYearChange(event);
 }
 
-// Responds to colour changes, and passes event on to children.
 void wxGenericCalendarCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     // reinit colours
     InitColours();
 
-    // Propagate the event to the children
-    wxControl::OnSysColourChanged(event);
+    event.Skip();
 
     // Redraw control area
     SetBackgroundColour(m_colBackground);

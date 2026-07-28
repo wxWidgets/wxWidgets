@@ -564,9 +564,7 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
 extern "C" {
 static void notify_gtk_theme_name(GObject*, GParamSpec*, wxTopLevelWindowGTK* win)
 {
-    wxSysColourChangedEvent event;
-    event.SetEventObject(win);
-    win->HandleWindowEvent(event);
+    win->SendSysColourChangedEvents();
 }
 }
 
