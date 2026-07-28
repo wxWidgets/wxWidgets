@@ -3880,11 +3880,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     processed = true;
 
                     wxWindowDC dc((wxWindow *)this);
-                    RECT rcBorder;
-                    wxCopyRectToRECT(GetSize(), rcBorder);
 
                     // Exclude the client area and any scroll bars.
-                    RECT rcClient = rcBorder;
+                    RECT rcClient;
+                    wxCopyRectToRECT(GetSize(), rcClient);
                     InflateRect(&rcClient, -thickness, -thickness);
                     HDC hdc = dc.GetHDC();
                     ::ExcludeClipRect(hdc, rcClient.left, rcClient.top,
@@ -3892,12 +3891,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     // Draw the border.
                     if ( border == wxBORDER_THEME )
-                        MSWDrawThemeBorder(hdc, rcBorder, thickness);
+                        MSWDrawThemeBorder(hdc, thickness);
                     else
                     {
                         // In dark mode, draw a simple border for all the 3D border styles.
                         wxASSERT(wxMSWDarkMode::IsActive());
-                        wxWindowMSW::MSWDrawThemeBorder(hdc, rcBorder, thickness);
+                        wxWindowMSW::MSWDrawThemeBorder(hdc, thickness);
                     }
                 }
             }
@@ -3922,8 +3921,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 }
 
 // Draw a simple generic border.
-void wxWindowMSW::MSWDrawThemeBorder(HDC hdc, RECT& rcBorder, int thickness)
+void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc, int thickness)
 {
+    RECT rcBorder;
+    wxCopyRectToRECT(GetSize(), rcBorder);
+
     if ( wxMSWDarkMode::IsActive() )
     {
         // There does not seem to be a theme class that draws a good
@@ -3948,7 +3950,7 @@ void wxWindowMSW::MSWDrawThemeBorder(HDC hdc, RECT& rcBorder, int thickness)
         // Make sure the background is in a proper state
         if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
         {
-            ::DrawThemeParentBackground(GetHwnd(), hdc, &rcBorder);
+            ::DrawThemeParentBackground(m_hWnd, hdc, &rcBorder);
         }
         // Draw the border
         hTheme.DrawBackground(hdc, rcBorder, EP_EDITTEXT, ETS_NORMAL);

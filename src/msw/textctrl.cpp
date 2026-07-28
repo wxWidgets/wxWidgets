@@ -2857,12 +2857,12 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
     event.Skip();
 }
 
-void wxTextCtrl::MSWDrawThemeBorder(HDC hdc, RECT& rect, int thickness)
+void wxTextCtrl::MSWDrawThemeBorder(WXHDC hdc, int thickness)
 {
     if ( IsRich() )
     {
         // Always draw a simple border.
-        wxTextCtrlBase::MSWDrawThemeBorder(hdc, rect, thickness);
+        wxTextCtrlBase::MSWDrawThemeBorder(hdc, thickness);
     }
     else
     {
@@ -2871,6 +2871,8 @@ void wxTextCtrl::MSWDrawThemeBorder(HDC hdc, RECT& rect, int thickness)
         // bottom otherwise a light gray line.
         wxASSERT(wxMSWDarkMode::IsActive());
         wxASSERT(thickness == 2);
+        RECT rect;
+        wxCopyRectToRECT(GetSize(), rect);
 
         // Colour for top, left, and right. Taken from WinUI 3 TextBox.
         const COLORREF colTop = 0x303030;
