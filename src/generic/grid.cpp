@@ -352,15 +352,23 @@ void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
     wxColour colText;
     if ( !grid.IsEnabled() )
     {
-        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT);
-        dc.SetTextForeground(colText);
+        // Don't use 3D shadows in dark mode, also just as wxGenericStaticText.
+        if ( wxSystemSettings::GetAppearance().IsDark() )
+        {
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+        }
+        else
+        {
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT);
+            dc.SetTextForeground(colText);
 
-        wxRect rectShadow = rect;
-        rectShadow.Offset(1, 1);
-        grid.DrawTextRectangle(dc, value, rectShadow,
-                               horizAlign, vertAlign, textOrientation);
+            wxRect rectShadow = rect;
+            rectShadow.Offset(1, 1);
+            grid.DrawTextRectangle(dc, value, rectShadow,
+                horizAlign, vertAlign, textOrientation);
 
-        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+        }
     }
     else
     {

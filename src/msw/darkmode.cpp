@@ -435,14 +435,14 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
             // Selected text background in File Open dialog
             return wxColour(isWindows10 ? 0xd77800 : 0xd47800);
 
+        case wxSYS_COLOUR_3DLIGHT:
         case wxSYS_COLOUR_BTNHIGHLIGHT:
-            return wxColour(0x777777);
+            return wxColour(0x303030);
 
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
             return wxColour(0xaaaaaa);
 
         case wxSYS_COLOUR_3DDKSHADOW:
-        case wxSYS_COLOUR_3DLIGHT:
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_DESKTOP:
         case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
