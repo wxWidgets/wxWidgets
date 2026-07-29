@@ -9,8 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#include <cmath>
-
 #if wxUSE_RIBBON
 
 #include "wx/ribbon/art.h"
@@ -58,38 +56,6 @@ wxColour wxRibbonInterpolateColour(const wxColour& start_colour,
 bool wxRibbonCanLabelBreakAtPosition(const wxString& label, size_t pos)
 {
     return label[pos] == ' ';
-}
-
-// Same contrast formula as wxAuiGetColourContrast()
-static float wxRibbonGetSRGBComponent(float c)
-{
-    return c <= 0.03928f ? c / 12.92f : std::pow((c + 0.055f) / 1.055f, 2.4f);
-}
-
-static float wxRibbonGetRelativeLuminance(const wxColour& c)
-{
-    return 0.2126f * wxRibbonGetSRGBComponent(c.Red()   / 255.0f) +
-           0.7152f * wxRibbonGetSRGBComponent(c.Green() / 255.0f) +
-           0.0722f * wxRibbonGetSRGBComponent(c.Blue()  / 255.0f);
-}
-
-static float wxRibbonGetColourContrast(const wxColour& c1, const wxColour& c2)
-{
-    const float l1 = wxRibbonGetRelativeLuminance(c1);
-    const float l2 = wxRibbonGetRelativeLuminance(c2);
-    return l1 > l2 ? (l1 + 0.05f) / (l2 + 0.05f)
-                    : (l2 + 0.05f) / (l1 + 0.05f);
-}
-
-wxColour wxRibbonGetContrastingLabelColour(const wxColour& foreground,
-                                           const wxColour& background)
-{
-    if (wxRibbonGetColourContrast(foreground, background) >= 4.5f)
-        return foreground;
-
-    return wxRibbonGetColourContrast(*wxWHITE, background)
-                > wxRibbonGetColourContrast(*wxBLACK, background)
-        ? *wxWHITE : *wxBLACK;
 }
 
 void wxRibbonDrawParallelGradientLines(wxDC& dc,
