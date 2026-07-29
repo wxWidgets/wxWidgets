@@ -2788,13 +2788,12 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     WXLRESULT rc = 0;
     bool isMultiple = HasFlag(wxTR_MULTIPLE);
 
-    if ( nMsg == WM_NCPAINT )
+    if ( nMsg == WM_NCPAINT && wxMSWDarkMode::IsActive() )
     {
+        // As with wxListCtrl, we need to draw the corner between two
+        // scrollbars ourselves in dark mode to give it correct colour.
         rc = wxTreeCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
-        if (wxMSWDarkMode::IsActive())
-        {
-            wxMSWImpl::PaintScrollBarCorner(this);
-        }
+        wxMSWImpl::PaintScrollBarCorner(GetHwnd());
         return rc;
     }
 

@@ -3743,11 +3743,16 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             return MSWDefWindowProc(nMsg, wParam, lParam);
 
         case WM_NCPAINT:
+            // In dark mode the corner between the 2 scrollbars is not drawn in
+            // the correct colour by default, so paint it over if necessary.
             if ( wxMSWDarkMode::IsActive() )
             {
-                auto const ncPaintRc = wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
-                wxMSWImpl::PaintScrollBarCorner(this);
-                return ncPaintRc;
+                // Let the control paint itself first.
+                auto const rc =
+                    wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+
+                wxMSWImpl::PaintScrollBarCorner(GetHwnd());
+                return rc;
             }
             break;
 
