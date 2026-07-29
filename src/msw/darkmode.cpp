@@ -987,28 +987,36 @@ void wxMSWImpl::EnableRoundCorners(HWND hwnd)
 
 void wxMSWImpl::PaintScrollBarCorner(wxWindow* ctrl)
 {
-    if (!ctrl) return;
+    wxCHECK_RET(ctrl, "Invalid window pointer in PaintScrollBarCorner");
 
     const auto hwnd = ctrl->GetHWND();
     WinStruct<SCROLLBARINFO> sbiV, sbiH;
 
-    if (::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) &&
-        ::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) &&
-        !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
-        !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
+    if (!::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) ||
+        !::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) ||
+        (sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) ||
+        (sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
     {
-        const wxSize clientSize = ctrl->GetClientSize();
-        const int sbWidth = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, ctrl);
-        const int sbHeight = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, ctrl);
-        const int x = clientSize.x;
-        const int y = clientSize.y;
+        return;
+    }
 
-        wxWindowDC dc(ctrl);
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(wxColour(0x17, 0x17, 0x17));
+    RECT windowRect;
+    wxCHECK_RET(::GetWindowRect(hwnd, &windowRect), "Failed to get window rect in PaintScrollBarCorner");
 
-        // The +2 padding ensures fractional DPI sub-pixel gaps (like at 125% or 150%)
-        constexpr int HighDpiRoundingPadding = 2;
-        dc.DrawRectangle(x, y, sbWidth + HighDpiRoundingPadding, sbHeight + HighDpiRoundingPadding);
+    RECT rectToPaint{};
+    rectToPaint.left = sbiV.rcScrollBar.left - windowRect.left;
+    rectToPaint.top = sbiH.rcScrollBar.top - windowRect.top;
+
+    // Constrain outer limits by exactly -1 to snap cleanly to the visual frame edge
+    rectToPaint.right = (windowRect.right - windowRect.left) - 1;
+    rectToPaint.bottom = (windowRect.bottom - windowRect.top) - 1;
+
+    HDC hdcWin = ::GetWindowDC(hwnd);
+    if (hdcWin)
+    {
+        HBRUSH hBrush = ::CreateSolidBrush(RGB(0x17, 0x17, 0x17));
+        ::FillRect(hdcWin, &rectToPaint, hBrush);
+        ::DeleteObject(hBrush);
+        ::ReleaseDC(hwnd, hdcWin);
     }
 }
