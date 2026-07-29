@@ -27,8 +27,9 @@ WXDLLIMPEXP_RIBBON bool wxRibbonCanLabelBreakAtPosition(
                                 const wxString& label,
                                 size_t pos);
 
-// Returns white or black, whichever contrasts better against background.
+// Returns foreground as-is if it's readable on background, else black or white.
 WXDLLIMPEXP_RIBBON wxColour wxRibbonGetContrastingLabelColour(
+                                const wxColour& foreground,
                                 const wxColour& background);
 
 WXDLLIMPEXP_RIBBON void wxRibbonDrawParallelGradientLines(

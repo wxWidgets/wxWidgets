@@ -296,8 +296,8 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     // The active/pressed background can end up much lighter (or darker)
     // than the normal button label colour was chosen for, so pick a label
     // colour that stays legible against it specifically.
-    m_button_bar_active_label_colour =
-        wxRibbonGetContrastingLabelColour(m_button_bar_active_background_colour);
+    m_button_bar_active_label_colour = wxRibbonGetContrastingLabelColour(
+        m_button_bar_label_colour, m_button_bar_active_background_colour);
 
     m_toolbar_border_pen = LikePrimary(1.4f, -0.21f, -0.16f);
     SetColour(wxRIBBON_ART_TOOLBAR_FACE_COLOUR, LikePrimary(1.4f, -0.17f, -0.22f));
