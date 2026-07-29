@@ -1007,7 +1007,7 @@ public:
     // to allow the event processing by the base classes (calling event.Skip()
     // is the analog of calling the base class version of a virtual function)
     void Skip(bool skip = true) { m_skipped = skip; }
-    bool GetSkipped() const { return m_skipped; }
+    bool GetSkipped() const { return m_skipped || m_requireSkip; }
 
     // This function is used to create a copy of the event polymorphically and
     // all derived classes must implement it because otherwise wxPostEvent()
@@ -1138,6 +1138,11 @@ protected:
 protected:
     wxEvent(const wxEvent&);            // for implementing Clone()
     wxEvent& operator=(const wxEvent&); // for derived classes operator=()
+
+    // If true, this is a critical system event and all handlers should be
+    // called. Processing of the event does not stop when an event handler
+    // either does not call Skip() or calls Skip(false).
+    bool m_requireSkip = false;
 
 private:
     // It needs to access our m_propagationLevel and m_propagatedFrom fields.
@@ -3141,7 +3146,9 @@ class WXDLLIMPEXP_CORE wxSysColourChangedEvent : public wxEvent
 public:
     wxSysColourChangedEvent()
         : wxEvent(0, wxEVT_SYS_COLOUR_CHANGED)
-        { }
+    {
+        m_requireSkip = true;
+    }
 
     wxNODISCARD virtual wxEvent *Clone() const override { return new wxSysColourChangedEvent(*this); }
 
@@ -3257,7 +3264,9 @@ public:
         : wxEvent(0, wxEVT_DPI_CHANGED),
           m_oldDPI(oldDPI),
           m_newDPI(newDPI)
-        { }
+    {
+        m_requireSkip = true;
+    }
 
     wxSize GetOldDPI() const { return m_oldDPI; }
     wxSize GetNewDPI() const { return m_newDPI; }

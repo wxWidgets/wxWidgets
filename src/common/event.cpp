@@ -398,6 +398,7 @@ wxEvent::wxEvent(const wxEvent& src)
     , m_isCommandEvent(src.m_isCommandEvent)
     , m_wasProcessed(false)
     , m_willBeProcessedAgain(false)
+    , m_requireSkip(src.m_requireSkip)
 {
 }
 
@@ -421,6 +422,7 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
     // While the original again could be passed to another handler, this one
     // isn't going to be processed anywhere else by default.
     m_willBeProcessedAgain = false;
+    m_requireSkip = src.m_requireSkip;
 
     return *this;
 }
