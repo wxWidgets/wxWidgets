@@ -162,7 +162,9 @@ TEST_CASE("wxList::std", "[list][std]")
 
     // Sort the list in the reverse order.
     list1.Sort([](const void *a, const void *b) -> int {
-        return *static_cast<const int*>(b) - *static_cast<const int*>(a);
+        const auto pa = reinterpret_cast<wxIntPtr>(*static_cast<int* const*>(a));
+        const auto pb = reinterpret_cast<wxIntPtr>(*static_cast<int* const*>(b));
+        return int(pb - pa);
     });
     REQUIRE( list1.size() == 5 );
     CHECK( list1.front() == (int *)4 );
