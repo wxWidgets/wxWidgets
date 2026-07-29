@@ -2,7 +2,6 @@
 // Name:        stylus.cpp
 // Purpose:     Stylus sample
 // Author:      Iulian Serbanoiu
-// Modified by:
 // Created:     2026-02-02
 // Copyright:   (c) Iulian Serbanoiu
 // Licence:     wxWindows licence
@@ -36,7 +35,7 @@ struct colorInfo {
     int id;
     const char* name;
     const char* accelerator;
-    const wxColor *color;
+    const wxColor* color;
     bool selected;
 } clrInfo[] = {
     { ID_COLOR_BLACK, "Black", "1", wxBLACK, false},
@@ -56,7 +55,7 @@ private:
     void DrawLines(int thickness, const wxColor& color);
     void DrawInfo();
 public:
-    MyFrame(wxFrame* parent = nullptr, const wxString& title = "Tablet Drawing Test");
+    MyFrame();
 
     void OnPenDown(wxStylusEvent& event);
     void OnPenUp(wxStylusEvent& event);
@@ -82,8 +81,8 @@ bool wxMyApp::OnInit()
     return true;
 }
 
-MyFrame::MyFrame(wxFrame* parent, const wxString& title)
-    : wxFrame(parent, wxID_ANY, title,
+MyFrame::MyFrame()
+    : wxFrame(nullptr, wxID_ANY, "Tablet Drawing Test",
               wxDefaultPosition, wxDefaultSize,
               wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL)
 {
@@ -97,9 +96,8 @@ MyFrame::MyFrame(wxFrame* parent, const wxString& title)
     fileMenu->Append(wxID_EXIT);
     menuBar->Append(fileMenu, "&File");
 
-    for ( size_t i = 0; i < WXSIZEOF(clrInfo); i++ )
+    for ( const auto& info : clrInfo )
     {
-        auto& info = clrInfo[i];
         auto menuItem = colorMenu->AppendRadioItem(info.id, wxString::Format("%s\t%s", info.name, info.accelerator));
 
         if ( info.selected )
@@ -136,8 +134,7 @@ void MyFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    wxSize size = GetClientSize();
-    m_backingBitmap = wxBitmap(size.x, size.y, 24);
+    m_backingBitmap.CreateWithLogicalSize(GetClientSize(), GetDPIScaleFactor());
 
     wxMemoryDC dc(m_backingBitmap);
     dc.SetBackground(*wxWHITE_BRUSH);
@@ -225,9 +222,10 @@ void MyFrame::DrawLines(int thickness, const wxColor& color)
 
 void MyFrame::DrawInfo()
 {
+    const wxString info("This is a pen drawing demo.\n"
+                        "Only pen events are accepted for drawing.\n"
+                        "This demo uses the pressure and eraser features of the tablet pen.");
     wxMemoryDC dc(m_backingBitmap);
-    wxString info("This is a pen drawing demo.\n");
-    info += "Only pen events are accepted for drawing.\n";
-    info += "This demo uses the pressure and eraser features of the tablet pen.";
-    dc.DrawText(info, wxPoint(0, 0));
+
+    dc.DrawText(info, FromDIP(wxPoint(5, 5)));
 }
