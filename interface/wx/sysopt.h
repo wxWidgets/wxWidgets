@@ -83,10 +83,10 @@
         e.g. the Terminal font in small sizes is not and this option may be
         used if wider fonts selection is more important than higher quality.
     @flag{msw.dark-mode}
-        If set to 1, enable experimental support of dark mode if the system is
-        using it, i.e. this has the same effect as calling
-        wxApp::MSWEnableDarkMode(). If set to 2, use dark mode unconditionally,
-        as if this function were called with wxApp::DarkMode_Always argument.
+        If set to 1, enable dark mode if the system is using it, i.e. this has
+        the same effect as calling wxApp::MSWEnableDarkMode(). If set to 2, use
+        dark mode unconditionally, as if this function were called with
+        wxApp::DarkMode_Always argument.
     @flag{msw.native-dialogs-pmdpi}
         Some native win32 dialogs (like the font and colour pickers) are not
         per-monitor DPI aware, and wxWidgets will forcefully show them as
