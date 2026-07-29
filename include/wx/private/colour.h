@@ -51,7 +51,7 @@ wxGetContrastingFgColour(const wxColour& fg, const wxColour& bg)
     using namespace wxPrivate;
 
     // No need to change the colour if it has sufficient contrast.
-    if ( wxComputeContrast(*fg, bg) >= 4.5f )
+    if ( wxComputeContrast(fg, bg) >= 4.5f )
         return fg;
 
     // Otherwise pick the colour that provides better contrast.
