@@ -18,13 +18,14 @@
 namespace wxPrivate
 {
 
-inline float wxGetSRGB(float r) {
-    return r <= 0.03928f ? r / 12.92f : std::pow((r + 0.055f) / 1.055f, 2.4f);
+inline float wxGetSRGB(float r)
+{
+    return r <= 0.04045f ? r / 12.92f : std::pow((r + 0.055f) / 1.055f, 2.4f);
 }
 
 inline float wxGetRelativeLuminance(const wxColour& c)
 {
-    // based on https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+    // See https://www.w3.org/TR/WCAG21/#dfn-relative-luminance
     return
         0.2126f * wxGetSRGB(c.Red()   / 255.0f) +
         0.7152f * wxGetSRGB(c.Green() / 255.0f) +
@@ -33,7 +34,7 @@ inline float wxGetRelativeLuminance(const wxColour& c)
 
 inline float wxComputeContrast(const wxColour& c1, const wxColour& c2)
 {
-    // based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html
+    // See https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio
     float L1 = wxGetRelativeLuminance(c1);
     float L2 = wxGetRelativeLuminance(c2);
     return L1 > L2 ? (L1 + 0.05f) / (L2 + 0.05f) : (L2 + 0.05f) / (L1 + 0.05f);
@@ -43,7 +44,7 @@ inline float wxComputeContrast(const wxColour& c1, const wxColour& c2)
 
 // Return the colour if it has sufficient contrast ratio (4.5 recommended)
 // with the background or return either white or black if it doesn't.
-// (based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html)
+// (see https://www.w3.org/TR/WCAG21/#contrast-minimum)
 inline wxColour
 wxGetContrastingFgColour(const wxColour& fg, const wxColour& bg)
 {
