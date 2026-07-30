@@ -3891,12 +3891,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     // Draw the border.
                     if ( border == wxBORDER_THEME )
-                        MSWDrawThemeBorder(hdc, thickness);
+                        MSWDrawThemeBorder(hdc);
                     else
                     {
                         // In dark mode, draw a simple border for all the 3D border styles.
                         wxASSERT(wxMSWDarkMode::IsActive());
-                        wxWindowMSW::MSWDrawThemeBorder(hdc, thickness);
+                        wxWindowMSW::MSWDrawThemeBorder(hdc);
                     }
                 }
             }
@@ -3921,7 +3921,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 }
 
 // Draw a simple generic border.
-void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc, int thickness)
+void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc)
 {
     RECT rcBorder;
     wxCopyRectToRECT(GetSize(), rcBorder);
@@ -3937,6 +3937,7 @@ void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc, int thickness)
         // Draw the background with consecutively smaller 1-pixel thick
         // rectangles.
         AutoHBRUSH brushBg(GetBackgroundColour().GetPixel());
+        const auto thickness = MSWGetBorderThickness();
         for (int count = 1; count < thickness; count++)
         {
             ::InflateRect(&rcBorder, -1, -1);

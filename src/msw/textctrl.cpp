@@ -2857,20 +2857,18 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
     event.Skip();
 }
 
-void wxTextCtrl::MSWDrawThemeBorder(WXHDC hdc, int thickness)
+void wxTextCtrl::MSWDrawThemeBorder(WXHDC hdc)
 {
     if ( IsRich() )
     {
         // Always draw a simple border.
-        wxTextCtrlBase::MSWDrawThemeBorder(hdc, thickness);
+        wxTextCtrlBase::MSWDrawThemeBorder(hdc);
     }
     else
     {
         // Draw a dark mode border similar to how the control looks in light
         // mode. If the control has the focus, a blue line appears along the
         // bottom otherwise a light gray line.
-        wxASSERT(wxMSWDarkMode::IsActive());
-        wxASSERT(thickness == 2);
         RECT rect;
         wxCopyRectToRECT(GetSize(), rect);
 
