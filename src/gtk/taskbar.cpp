@@ -131,6 +131,19 @@ icon_popup_menu(GtkWidget*, wxTaskBarIcon* taskBarIcon)
     return true;
 }
 
+#if wxUSE_APPINDICATOR
+static void
+appindicator_activate(AppIndicator*, gint, gint, wxTaskBarIcon* taskBarIcon)
+{
+    // AppIndicator's "activate" signal only fires for a genuine double-click
+    // (the SNI host itself decides single-click/right-click go to the menu
+    // instead), so map it straight to LEFT_DCLICK rather than trying
+    // LEFT_DOWN first the way icon_activate() does for a real single click.
+    wxTaskBarIconEvent event(wxEVT_TASKBAR_LEFT_DCLICK, taskBarIcon);
+    taskBarIcon->SafelyProcessEvent(event);
+}
+#endif // wxUSE_APPINDICATOR
+
 #ifndef __WXGTK3__
 static gboolean
 icon_button_press_event(GtkWidget*, GdkEventButton* event, wxTaskBarIcon* taskBarIcon)
@@ -258,11 +271,16 @@ void wxTaskBarIcon::Private::SetIcon()
             wxString appId = wxString::Format("wxTaskBarIcon-%d", (int)getpid());
             m_appIndicator = app_indicator_new(appId.utf8_str(), name.utf8_str(),
                                                APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
-            if (m_appIndicator && !m_sniIconThemePath.empty())
+            if (m_appIndicator)
             {
-                const char* tp = m_sniIconThemePath.utf8_str();
-                gtk_icon_theme_prepend_search_path(gtk_icon_theme_get_default(), tp);
-                app_indicator_set_icon_theme_path(m_appIndicator, tp);
+                g_signal_connect(m_appIndicator, "activate",
+                    G_CALLBACK(appindicator_activate), m_taskBarIcon);
+                if (!m_sniIconThemePath.empty())
+                {
+                    const char* tp = m_sniIconThemePath.utf8_str();
+                    gtk_icon_theme_prepend_search_path(gtk_icon_theme_get_default(), tp);
+                    app_indicator_set_icon_theme_path(m_appIndicator, tp);
+                }
             }
         }
         else
@@ -335,7 +353,11 @@ void wxTaskBarIcon::Private::SetIcon()
         m_appIndicator = app_indicator_new(appId.utf8_str(), iconName.utf8_str(),
                                            APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
         if (m_appIndicator)
+        {
+            g_signal_connect(m_appIndicator, "activate",
+                G_CALLBACK(appindicator_activate), m_taskBarIcon);
             app_indicator_set_icon_theme_path(m_appIndicator, m_iconThemeDir.utf8_str());
+        }
     }
     else
     {
