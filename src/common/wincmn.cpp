@@ -73,7 +73,9 @@
 #include "wx/display.h"
 #include "wx/platinfo.h"
 #include "wx/recguard.h"
+#include "wx/module.h"
 #include "wx/private/rescale.h"
+#include "wx/private/textinput.h"
 #include "wx/private/window.h"
 
 #if defined(__WXOSX__)
@@ -82,6 +84,10 @@
 #endif
 
 #include <math.h>
+
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    #include <unordered_map>
+#endif
 
 // Windows List
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
@@ -92,6 +98,51 @@ wxMenu *wxCurrentPopupMenu = nullptr;
 #endif // wxUSE_MENUS
 
 extern WXDLLEXPORT_DATA(const char) wxPanelNameStr[] = "panel";
+
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+
+namespace
+{
+using wxTextInputClients =
+    std::unordered_map<const wxWindowBase*, wxTextInputClient*>;
+
+wxTextInputClients& wxGetTextInputClients()
+{
+    static wxTextInputClients clients;
+    return clients;
+}
+} // anonymous namespace
+
+void wxAssociateTextInputClient(wxWindowBase* window,
+                                wxTextInputClient* client)
+{
+    if ( client )
+        wxGetTextInputClients()[window] = client;
+    else
+        wxGetTextInputClients().erase(window);
+}
+
+wxTextInputClient* wxFindTextInputClient(const wxWindowBase* window)
+{
+    const auto it = wxGetTextInputClients().find(window);
+    return it == wxGetTextInputClients().end() ? nullptr : it->second;
+}
+
+// Module clearing the client map on library shutdown: entries normally
+// unregister themselves, but a leaked window mustn't leave a dangling
+// pointer behind if the library is initialized again.
+class wxTextInputClientsModule : public wxModule
+{
+public:
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxGetTextInputClients().clear(); }
+
+    wxDECLARE_DYNAMIC_CLASS(wxTextInputClientsModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxTextInputClientsModule, wxModule);
+
+#endif // wxHAS_TEXT_INPUT_CLIENT
 
 namespace wxMouseCapture
 {

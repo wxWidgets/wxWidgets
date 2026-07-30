@@ -1071,7 +1071,17 @@ extendedDocs = {
 
     'SetIMEInteraction':
         ('The input should be one of the',
-        '@link wxStyledTextCtrl::wxSTC_IME_WINDOWED wxSTC_IME_* @endlink constants.',),
+        '@link wxStyledTextCtrl::wxSTC_IME_WINDOWED wxSTC_IME_* @endlink',
+        'constants.',
+        '@remarks',
+        'Inline IME interaction is used by default under wxGTK and wxOSX.',
+        'The other ports use windowed IME interaction by default.',
+        'Inline interaction also requires undo collection to be enabled,',
+        'windowed interaction is used while it is disabled.',
+        'With inline interaction, the text being composed is shown in the',
+        "control itself and inserted using wxEVT_CHAR events once it's",
+        'confirmed. Programmatically modifying the control contents ends',
+        'the composition in progress, if any.',),
 
     'GetIndentationGuides':
         ('The return value will be one of the',

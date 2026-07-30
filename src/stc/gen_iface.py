@@ -913,6 +913,19 @@ methodOverrideMap = {
     SendMsg(%s, codePage);'''
     ),
 
+    'SetIMEInteraction' :
+    (0,
+     0,
+     '''void %s(int imeInteraction) {
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    // Roll the composition back first, while the pre-edit state is still
+    // fully consistent with the current mode.
+    if ( imeInteraction != wxSTC_IME_INLINE && m_swx )
+        m_swx->CancelComposition();
+#endif
+    SendMsg(%s, imeInteraction);
+    wxUpdateTextInputClient(this);'''
+    ),
 
     'GrabFocus' : (None, 0, 0),
 

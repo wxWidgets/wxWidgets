@@ -214,6 +214,9 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     wheelVRotation = 0;
     wheelHRotation = 0;
     Initialise();
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    wxAssociateTextInputClient(stc, this);
+#endif
 #ifdef __WXMSW__
     sysCaretBitmap = 0;
     sysCaretWidth = 0;
@@ -241,6 +244,16 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
 
 
 ScintillaWX::~ScintillaWX() {
+    m_destroying = true;
+
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    wxAssociateTextInputClient(stc, nullptr);
+    // Still roll any composition back, as the document may be shared with
+    // another control and outlive this one, but with m_destroying set the
+    // modifications this makes won't be notified to the application.
+    CancelComposition();
+#endif
+
     for ( auto& entry : timers ) {
         delete entry.second;
     }
@@ -456,11 +469,45 @@ bool ScintillaWX::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) {
 
 
 void ScintillaWX::NotifyChange() {
+    // Don't send events from a control which is being destroyed.
+    if (m_destroying)
+        return;
+
     stc->NotifyChange();
 }
 
 
 void ScintillaWX::NotifyParent(SCNotification scn) {
+    if (m_destroying)
+        return;
+
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    // Each composition update rolls back the previous pre-edit text and
+    // inserts the new one, which Scintilla reports as starting a new action
+    // every time. From the application point of view the whole composition,
+    // including the insertion of its result, is a single user action, so
+    // only report the start of the first one.
+    if ( scn.nmhdr.code == SCN_MODIFIED &&
+         (m_compositionActive || m_committingComposition) )
+    {
+        if ( m_compositionActionStarted )
+            scn.modificationType &= ~SC_STARTACTION;
+        else if ( scn.modificationType & SC_STARTACTION )
+            m_compositionActionStarted = true;
+    }
+
+    // Scintilla notifies about each character of the text being composed
+    // too, and does it again whenever it's updated. Applications can't
+    // distinguish these notifications from the normal ones, as the character
+    // source isn't available in wxStyledTextEvent, so don't send them: the
+    // result of the composition is notified about once it's confirmed.
+    if ( scn.nmhdr.code == SCN_CHARADDED &&
+         scn.characterSource == SC_CHARACTERSOURCE_TENTATIVE_INPUT )
+    {
+        return;
+    }
+#endif // wxHAS_TEXT_INPUT_CLIENT
+
     stc->NotifyParent(&scn);
 }
 
@@ -660,6 +707,14 @@ void ScintillaWX::UpdateSystemCaret() {
         ::SetCaretPos(wxRound(pos.x), wxRound(pos.y));
     }
 #endif
+#ifdef __WXGTK__
+    // Let the input method know where its windows should appear, so that
+    // their position is correct from the very start of a composition.
+    // During one, the pre-edit update callback positions them itself,
+    // using the caret position it computes after applying the update.
+    if ( hasFocus && IsTextInputEnabled() && !HasActiveComposition() )
+        stc->UpdateInputMethodCursorRect(GetIMEContextRect());
+#endif
 }
 
 
@@ -792,6 +847,68 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
 
         case SCI_GETDIRECTPOINTER:
             return reinterpret_cast<sptr_t>(this);
+
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+        case SCI_SETTEXT:
+        case SCI_CLEARALL:
+            // Unlike after the local modifications below, nothing remains
+            // for the pending composition to apply to after replacing the
+            // entire contents, so also make the input method drop it instead
+            // of letting it reappear in the new contents.
+            CancelComposition();
+            if ( hasFocus )
+                wxResetTextInput(stc);
+            break;
+
+        case SCI_ADDTEXT:
+        case SCI_ADDSTYLEDTEXT:
+        case SCI_INSERTTEXT:
+        case SCI_APPENDTEXT:
+        case SCI_DELETERANGE:
+        case SCI_REPLACESEL:
+        case SCI_REPLACETARGET:
+        case SCI_REPLACETARGETRE:
+        case SCI_UNDO:
+        case SCI_REDO:
+            // Undo history is linear, so rolling the pre-edit text back
+            // after any other modification would undo that modification
+            // together with it. End composition before the modification
+            // instead, while the tentative actions are still the last ones.
+            CancelComposition();
+            break;
+
+        case SCI_EMPTYUNDOBUFFER:
+            // Doesn't modify the contents, but drops the tentative actions
+            // needed to roll the pre-edit text back, so roll back while
+            // they still exist.
+            CancelComposition();
+            break;
+
+        case SCI_SETDOCPOINTER:
+        case SCI_SETUNDOCOLLECTION:
+        {
+            // Tentative input belongs to the current document and its
+            // recorded undo actions, so roll back while both are still
+            // attached. Turning undo collection on invalidates nothing and
+            // needs no rollback.
+            if ( iMessage != SCI_SETUNDOCOLLECTION || !wParam )
+                CancelComposition();
+
+            // As with SCI_SETTEXT above, the new document has nothing to do
+            // with the pending composition.
+            if ( iMessage == SCI_SETDOCPOINTER && hasFocus )
+                wxResetTextInput(stc);
+
+            const sptr_t result =
+                ScintillaBase::WndProc(iMessage, wParam, lParam);
+
+            // Both messages can change IsTextInputEnabled(), so apply the
+            // new mode to the native IM context.
+            wxUpdateTextInputClient(stc);
+
+            return result;
+        }
+#endif
 
 #ifdef __WXMSW__
         // ScintillaWin
@@ -1079,6 +1196,449 @@ void ScintillaWX::DoAddChar(wxUniChar key) {
     InsertCharacter(buf, buf.length(), CharacterSource::directInput);
 }
 
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+
+Sci::Position ScintillaWX::PositionFromUTF16(long position) const
+{
+    if ( position < 0 )
+        return Sci::invalidPosition;
+
+    return RelativePositionUTF16Clamped(0, position);
+}
+
+long ScintillaWX::PositionToUTF16(Sci::Position position) const
+{
+    position = std::max<Sci::Position>(0,
+                std::min<Sci::Position>(position, pdoc->Length()));
+    return static_cast<long>(pdoc->CountUTF16(0, position));
+}
+
+// Unlike Document::GetRelativePositionUTF16(), never fails: an offset falling
+// inside a surrogate pair is extended to the end of that character and
+// walking off the document end stops there. Native text input APIs may
+// propose ranges with either problem and expect them to be adjusted to the
+// nearest valid ones rather than rejected.
+//
+// If unitsShort is non-null, it's set to the number of UTF-16 code units by
+// which the walk fell short of lengthUTF16 because the document ended.
+Sci::Position
+ScintillaWX::RelativePositionUTF16Clamped(Sci::Position position,
+                                          long lengthUTF16,
+                                          long* unitsShort) const
+{
+    long remaining = lengthUTF16;
+    while ( remaining > 0 )
+    {
+        const Sci::Position next = pdoc->NextPosition(position, 1);
+        if ( next == position )
+            break;
+
+        // Character of 4 UTF-8 bytes = 2 UTF-16 code units.
+        remaining -= next - position > 3 ? 2 : 1;
+        position = next;
+    }
+
+    if ( unitsShort )
+        *unitsShort = std::max<long>(0, remaining);
+
+    return position;
+}
+
+Sci::Position ScintillaWX::InsertCompositionText(const wxString& text,
+                                                 CharacterSource source)
+{
+    const wxScopedCharBuffer utf8 = text.utf8_str();
+    const char* const bytes = utf8.data();
+    const size_t length = utf8.length();
+    const Sci::Position start = CurrentPosition();
+
+    for ( size_t offset = 0; offset < length; )
+    {
+        const unsigned char lead = static_cast<unsigned char>(bytes[offset]);
+        size_t charLength = UTF8BytesOfLead[lead];
+        if ( charLength == 0 || offset + charLength > length )
+            charLength = 1;
+
+        InsertCharacter(bytes + offset, static_cast<unsigned int>(charLength),
+                        source);
+        offset += charLength;
+    }
+
+    return CurrentPosition() - start;
+}
+
+void ScintillaWX::SendCompositionResult(const wxString& text)
+{
+    // Insert the result in the same way as text typed without composition,
+    // via wxEVT_CHAR events, so that the application can filter it as usual.
+    // Whether the key pressed before was consumed or not is irrelevant for
+    // this text, so don't let OnChar() drop it because of that.
+    stc->SetLastKeydownProcessed(false);
+    wxSendTextInputAsChars(stc, text);
+    ShowCaretAtCurrentPosition();
+}
+
+void ScintillaWX::ClearCompositionIndicator()
+{
+    pdoc->DecorationSetCurrentIndicator(INDICATOR_IME);
+    pdoc->DecorationFillRange(0, 0, pdoc->Length());
+}
+
+void ScintillaWX::UndoCompositionText()
+{
+    if ( pdoc->TentativeActive() )
+        pdoc->TentativeUndo();
+
+    ClearCompositionIndicator();
+    SetEmptySelection(m_compositionStart);
+    m_compositionLength = 0;
+}
+
+bool ScintillaWX::StartComposition(long replacementStart,
+                                   long replacementLength)
+{
+    if ( pdoc->IsReadOnly() )
+        return false;
+
+    if ( m_compositionActive )
+    {
+        UndoCompositionText();
+        return true;
+    }
+
+    // Rolling the pre-edit text back relies on tentative undo actions being
+    // recorded, so composition can't start while undo collection is disabled.
+    if ( !pdoc->IsCollectingUndo() )
+        return false;
+
+    // Cocoa text input only supports a single selection. GTK composition is
+    // also kept to the main selection to make the marked range unambiguous.
+    sel.SetSelection(sel.RangeMain());
+
+    if ( replacementStart >= 0 )
+    {
+        const Sci::Position start = PositionFromUTF16(replacementStart);
+        const Sci::Position end = RelativePositionUTF16Clamped(
+                                start, std::max<long>(0, replacementLength));
+
+        if ( RangeContainsProtected(start, end) )
+            return false;
+
+        SetSelection(end, start);
+    }
+    else if ( SelectionContainsProtected() )
+    {
+        return false;
+    }
+
+    // Selection deletion and virtual-space realization must precede the
+    // tentative transaction so undo restores the original text correctly.
+    //
+    // When the selection contains text, collapse explicitly at its original
+    // start: document modification tracking can otherwise move an endpoint
+    // to the end of the document when all selected text is deleted. An empty
+    // selection may however still be in virtual space, which
+    // ClearBeforeTentativeStart() realizes by inserting actual whitespace,
+    // and its final position is only known from the tracked selection
+    // afterwards.
+    const bool selectionDeletesText = sel.RangeMain().Length() != 0;
+    Sci::Position insertionPosition = sel.RangeMain().Start().Position();
+
+    ClearBeforeTentativeStart();
+    if ( !sel.Empty() )
+        return false;
+
+    if ( !selectionDeletesText )
+        insertionPosition = sel.RangeMain().Start().Position();
+
+    SetEmptySelection(insertionPosition);
+    m_compositionStart = insertionPosition;
+    m_compositionLength = 0;
+    m_compositionActive = true;
+    m_compositionActionStarted = false;
+    return true;
+}
+
+#ifdef __WXGTK__
+
+bool ScintillaWX::UpdateComposition(const wxString& text,
+                                    int cursorCharacters)
+{
+    // GTK emits a final preedit-changed signal with an empty string when
+    // composition ends. Don't start a new composition for this notification,
+    // as doing so would leave a stale start position and could alter the
+    // current selection.
+    if ( text.empty() )
+    {
+        CancelComposition();
+        return true;
+    }
+
+    if ( !StartComposition(wxTextInputClient::NoPosition, 0) )
+        return false;
+
+    pdoc->TentativeStart();
+    m_compositionLength =
+        InsertCompositionText(text, CharacterSource::tentativeInput);
+
+    pdoc->DecorationSetCurrentIndicator(INDICATOR_IME);
+    pdoc->DecorationFillRange(m_compositionStart, 1, m_compositionLength);
+
+    Sci::Position caret = pdoc->GetRelativePosition(
+                              m_compositionStart,
+                              std::max(0, cursorCharacters));
+    if ( caret == Sci::invalidPosition ||
+         caret > m_compositionStart + m_compositionLength )
+    {
+        caret = m_compositionStart + m_compositionLength;
+    }
+    SetEmptySelection(caret);
+
+    EnsureCaretVisible();
+    ShowCaretAtCurrentPosition();
+    return true;
+}
+
+bool ScintillaWX::CommitComposition(const wxString& text)
+{
+    if ( !m_compositionActive )
+        return false;
+
+    UndoCompositionText();
+    m_compositionActive = false;
+    m_compositionLength = 0;
+    m_committingComposition = true;
+    SendCompositionResult(text);
+    m_committingComposition = false;
+    return true;
+}
+
+#endif // __WXGTK__
+
+void ScintillaWX::CancelComposition()
+{
+    if ( !m_compositionActive )
+        return;
+
+    UndoCompositionText();
+    m_compositionActive = false;
+    m_compositionLength = 0;
+    ShowCaretAtCurrentPosition();
+}
+
+#ifdef __WXGTK__
+
+wxRect ScintillaWX::GetIMEContextRect()
+{
+    const Point pt = PointMainCaret();
+    // Keep the candidate window from overlapping the current line.
+    return wxRect(static_cast<int>(pt.x),
+                  static_cast<int>(pt.y + std::max(4, vs.lineHeight / 4)),
+                  0, vs.lineHeight);
+}
+
+#endif // __WXGTK__
+
+#ifdef __WXOSX_COCOA__
+
+bool ScintillaWX::InsertText(const wxString& text,
+                            long replacementStart,
+                            long replacementLength)
+{
+    // The accent chooser can pass NSNotFound-1 to describe a range which
+    // doesn't exist and must not be replaced.
+    if ( replacementStart == wxTextInputClient::InvalidPosition )
+    {
+        CancelComposition();
+        return true;
+    }
+
+    const bool wasComposing = m_compositionActive;
+
+    // Let the normal wx key event path handle ordinary, non-composed input.
+    if ( !wasComposing && replacementStart < 0 )
+        return false;
+
+    if ( wasComposing )
+    {
+        // AppKit normally passes either the marked range or NSNotFound here.
+        // The stored composition range is authoritative and applying the
+        // replacement range as well would replace it twice.
+        UndoCompositionText();
+    }
+    else if ( !StartComposition(replacementStart, replacementLength) )
+    {
+        return true;
+    }
+
+    m_compositionActive = false;
+    m_compositionLength = 0;
+    m_committingComposition = wasComposing;
+    SendCompositionResult(text);
+    m_committingComposition = false;
+    return true;
+}
+
+bool ScintillaWX::SetMarkedText(const wxString& text,
+                               long selectedStart,
+                               long selectedLength,
+                               long replacementStart,
+                               long replacementLength)
+{
+    // Once composition has started, the existing marked range is replaced.
+    if ( m_compositionActive )
+        replacementStart = wxTextInputClient::NoPosition;
+
+    if ( !StartComposition(replacementStart, replacementLength) )
+        return false;
+
+    if ( text.empty() )
+    {
+        UnmarkText();
+        return true;
+    }
+
+    pdoc->TentativeStart();
+    m_compositionLength =
+        InsertCompositionText(text, CharacterSource::tentativeInput);
+
+    pdoc->DecorationSetCurrentIndicator(INDICATOR_IME);
+    pdoc->DecorationFillRange(m_compositionStart, 1, m_compositionLength);
+
+    const Sci::Position compositionEnd =
+        m_compositionStart + m_compositionLength;
+    const Sci::Position selectionStart = std::min(
+        RelativePositionUTF16Clamped(m_compositionStart,
+                                     std::max<long>(0, selectedStart)),
+        compositionEnd);
+    const Sci::Position selectionEnd = std::min(
+        RelativePositionUTF16Clamped(selectionStart,
+                                     std::max<long>(0, selectedLength)),
+        compositionEnd);
+
+    SetSelection(selectionEnd, selectionStart);
+    EnsureCaretVisible();
+    ShowCaretAtCurrentPosition();
+    return true;
+}
+
+void ScintillaWX::UnmarkText()
+{
+    if ( !m_compositionActive )
+        return;
+
+    // Accept the marked text by delivering it in the same way as the result
+    // passed to InsertText() instead of keeping the tentative text.
+    const std::string marked =
+        RangeText(m_compositionStart, m_compositionStart + m_compositionLength);
+
+    UndoCompositionText();
+    m_compositionActive = false;
+    m_compositionLength = 0;
+
+    if ( !marked.empty() )
+    {
+        m_committingComposition = true;
+        SendCompositionResult(wxString::FromUTF8(marked.data(), marked.length()));
+        m_committingComposition = false;
+    }
+}
+
+bool ScintillaWX::GetMarkedTextRange(long* start, long* length) const
+{
+    if ( !m_compositionActive || m_compositionLength == 0 )
+        return false;
+
+    *start = PositionToUTF16(m_compositionStart);
+    *length = static_cast<long>(
+        pdoc->CountUTF16(m_compositionStart,
+                         m_compositionStart + m_compositionLength));
+    return true;
+}
+
+bool ScintillaWX::GetSelectedTextRange(long* start, long* length) const
+{
+    const Sci::Position positionStart = sel.RangeMain().Start().Position();
+    const Sci::Position positionEnd = sel.RangeMain().End().Position();
+    *start = PositionToUTF16(positionStart);
+    *length = static_cast<long>(pdoc->CountUTF16(positionStart, positionEnd));
+    return true;
+}
+
+bool ScintillaWX::GetTextInRange(long start, long length,
+                                wxString* text,
+                                long* actualStart,
+                                long* actualLength) const
+{
+    if ( start < 0 )
+        return false;
+
+    // Convert the start position directly instead of comparing against the
+    // total document length in UTF-16, which would need a walk over the
+    // whole document to compute.
+    long unitsShort = 0;
+    const Sci::Position positionStart =
+        RelativePositionUTF16Clamped(0, start, &unitsShort);
+    if ( unitsShort > 0 )
+    {
+        // The start position lies beyond the end of the document.
+        return false;
+    }
+
+    const Sci::Position positionEnd =
+        RelativePositionUTF16Clamped(positionStart, std::max<long>(0, length));
+
+    const std::string range = RangeText(positionStart, positionEnd);
+    *text = wxString::FromUTF8(range.data(), range.length());
+    // Report the range adjusted to character boundaries, which may differ
+    // from the requested one if it split a surrogate pair.
+    *actualStart = PositionToUTF16(positionStart);
+    *actualLength = static_cast<long>(
+        pdoc->CountUTF16(positionStart, positionEnd));
+    return true;
+}
+
+bool ScintillaWX::GetTextRect(long start, long length,
+                             wxRect* rect,
+                             long* actualStart,
+                             long* actualLength)
+{
+    wxString unused;
+    if ( !GetTextInRange(start, length, &unused,
+                         actualStart, actualLength) )
+    {
+        return false;
+    }
+
+    const Sci::Position positionStart = PositionFromUTF16(*actualStart);
+    const Sci::Position positionEnd =
+        RelativePositionUTF16Clamped(positionStart, *actualLength);
+
+    const Point pointStart = LocationFromPosition(positionStart);
+    const Point pointEnd = LocationFromPosition(positionEnd);
+    const int width = pointStart.y == pointEnd.y
+                    ? std::max(0, static_cast<int>(pointEnd.x - pointStart.x))
+                    : 0;
+    *rect = wxRect(static_cast<int>(pointStart.x),
+                   static_cast<int>(pointStart.y),
+                   width, vs.lineHeight);
+    return true;
+}
+
+bool ScintillaWX::GetTextPosition(const wxPoint& point, long* position)
+{
+    const Sci::Position documentPosition =
+        PositionFromLocation(Point::FromInts(point.x, point.y), true, true);
+    if ( documentPosition == Sci::invalidPosition )
+        return false;
+
+    *position = PositionToUTF16(documentPosition);
+    return true;
+}
+
+#endif // __WXOSX_COCOA__
+
+#endif // wxHAS_TEXT_INPUT_CLIENT
 
 int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
 {
