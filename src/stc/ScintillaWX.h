@@ -69,6 +69,7 @@ wxGCC_WARNING_RESTORE(double-promotion)
 
 #include "wx/dnd.h"
 #include "wx/event.h"
+#include "wx/private/textinput.h"
 #ifdef __WXMSW__
 #include "wx/msw/wrapwin.h"                     // HBITMAP
 #endif
@@ -112,7 +113,11 @@ private:
 
 //----------------------------------------------------------------------
 
-class ScintillaWX : public ScintillaBase {
+class ScintillaWX : public ScintillaBase
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+                  , public wxTextInputClient
+#endif
+{
 public:
 
     ScintillaWX(wxStyledTextCtrl* win);
@@ -186,6 +191,47 @@ public:
     void DoOnListBox();
     void DoMouseCaptureLost();
 
+    // Native text input composition.
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    // Rolling the pre-edit text back relies on tentative undo actions being
+    // recorded, so inline composition also requires undo collection.
+    bool IsTextInputEnabled() const override
+        { return imeInteraction == imeInline && pdoc->IsCollectingUndo(); }
+    bool HasActiveComposition() const override
+        { return m_compositionActive; }
+    void CancelComposition() override;
+#endif
+
+#ifdef __WXGTK__
+    bool UpdateComposition(const wxString& text,
+                           int cursorCharacters) override;
+    bool CommitComposition(const wxString& text) override;
+    wxRect GetIMEContextRect() override;
+#endif // __WXGTK__
+
+#ifdef __WXOSX_COCOA__
+    bool InsertText(const wxString& text,
+                    long replacementStart,
+                    long replacementLength) override;
+    bool SetMarkedText(const wxString& text,
+                       long selectedStart,
+                       long selectedLength,
+                       long replacementStart,
+                       long replacementLength) override;
+    void UnmarkText() override;
+    bool HasMarkedText() const override
+        { return HasActiveComposition() && m_compositionLength != 0; }
+    bool GetMarkedTextRange(long* start, long* length) const override;
+    bool GetSelectedTextRange(long* start, long* length) const override;
+    bool GetTextInRange(long start, long length, wxString* text,
+                        long* actualStart,
+                        long* actualLength) const override;
+    bool GetTextRect(long start, long length, wxRect* rect,
+                     long* actualStart,
+                     long* actualLength) override;
+    bool GetTextPosition(const wxPoint& point, long* position) override;
+#endif // __WXOSX_COCOA__
+
 
     // helpers
     void FullPaint();
@@ -216,6 +262,22 @@ private:
     int                 wheelVRotation;
     int                 wheelHRotation;
     SurfaceData*        m_surfaceData;
+
+#ifdef wxHAS_TEXT_INPUT_CLIENT
+    bool                m_compositionActive;
+    Sci::Position       m_compositionStart;
+    Sci::Position       m_compositionLength;
+
+    bool StartComposition(long replacementStart, long replacementLength);
+    void UndoCompositionText();
+    void ClearCompositionIndicator();
+    Sci::Position InsertCompositionText(const wxString& text,
+                                        CharacterSource source);
+    Sci::Position PositionFromUTF16(long position) const;
+    long PositionToUTF16(Sci::Position position) const;
+    Sci::Position RelativePositionUTF16Clamped(Sci::Position position,
+                                               long lengthUTF16) const;
+#endif
 
     // For use in creating a system caret
     bool HasCaretSizeChanged();
