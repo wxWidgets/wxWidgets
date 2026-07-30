@@ -74,6 +74,9 @@
 #include "wx/platinfo.h"
 #include "wx/recguard.h"
 #include "wx/private/rescale.h"
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__)
+    #include "wx/private/textinput.h"
+#endif
 #include "wx/private/window.h"
 
 #if defined(__WXOSX__)
@@ -82,6 +85,10 @@
 #endif
 
 #include <math.h>
+
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__)
+    #include <unordered_map>
+#endif
 
 // Windows List
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
@@ -92,6 +99,37 @@ wxMenu *wxCurrentPopupMenu = nullptr;
 #endif // wxUSE_MENUS
 
 extern WXDLLEXPORT_DATA(const char) wxPanelNameStr[] = "panel";
+
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__)
+
+namespace
+{
+using wxTextInputClients =
+    std::unordered_map<const wxWindowBase*, wxTextInputClient*>;
+
+wxTextInputClients& wxGetTextInputClients()
+{
+    static wxTextInputClients clients;
+    return clients;
+}
+} // anonymous namespace
+
+void wxAssociateTextInputClient(wxWindowBase* window,
+                                wxTextInputClient* client)
+{
+    if ( client )
+        wxGetTextInputClients()[window] = client;
+    else
+        wxGetTextInputClients().erase(window);
+}
+
+wxTextInputClient* wxFindTextInputClient(const wxWindowBase* window)
+{
+    const auto it = wxGetTextInputClients().find(window);
+    return it == wxGetTextInputClients().end() ? nullptr : it->second;
+}
+
+#endif // __WXGTK__ || __WXOSX_COCOA__
 
 namespace wxMouseCapture
 {

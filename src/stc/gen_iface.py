@@ -913,6 +913,19 @@ methodOverrideMap = {
     SendMsg(%s, codePage);'''
     ),
 
+    'SetIMEInteraction' :
+    (0,
+     0,
+     '''void %s(int imeInteraction) {
+    SendMsg(%s, imeInteraction);
+#ifdef __WXGTK__
+    wxUpdateTextInputClient(this);
+#endif
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__)
+    if ( imeInteraction != wxSTC_IME_INLINE && m_swx )
+        m_swx->CancelComposition();
+#endif'''
+    ),
 
     'GrabFocus' : (None, 0, 0),
 
