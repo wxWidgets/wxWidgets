@@ -177,7 +177,6 @@ protected:
         int incW, int incH);
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
-    virtual void KillFocus();
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
@@ -186,6 +185,8 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    void KillFocus();
 
     wxString m_Label;
 
