@@ -319,9 +319,26 @@ inline static void CacheWriteInt32(wxOutputStream *f, wxInt32 value)
 
 inline static wxInt32 CacheReadInt32(wxInputStream *f)
 {
-    wxInt32 x;
+    wxInt32 x = 0;
     f->Read(&x, sizeof(x));
     return wxINT32_SWAP_ON_BE(x);
+}
+
+// Check a count read from the file before it is used to reserve memory: every
+// item takes at least one byte, so a count larger than the file itself can
+// only come from a corrupted or hostile .cached file.
+inline static bool CacheReadCount(wxInputStream *f, int& count)
+{
+    const wxInt32 stored = CacheReadInt32(f);
+    if ( stored < 0 )
+        return false;
+
+    const wxFileOffset available = f->GetLength();
+    if ( available != wxInvalidOffset && (wxFileOffset)stored > available )
+        return false;
+
+    count = stored;
+    return true;
 }
 
 inline static void CacheWriteString(wxOutputStream *f, const wxString& str)
@@ -332,12 +349,41 @@ inline static void CacheWriteString(wxOutputStream *f, const wxString& str)
     f->Write((const char*)mbstr, len);
 }
 
-inline static wxString CacheReadString(wxInputStream *f)
+// Read a string written by CacheWriteString(), i.e. a byte count including the
+// trailing NUL followed by that many bytes. Returns false for a length that
+// can't have been produced by CacheWriteString(), leaving the file to be
+// treated as unusable by the caller.
+inline static bool CacheReadString(wxInputStream *f, wxString& str)
 {
-    size_t len = (size_t)CacheReadInt32(f);
-    wxCharBuffer str(len-1);
-    f->Read(str.data(), len);
-    return wxString(str, wxConvUTF8);
+    const wxInt32 stored = CacheReadInt32(f);
+
+    // CacheWriteString() always counts the trailing NUL, so the shortest
+    // string it can write has a length of 1. Anything less would underflow
+    // when computing the size of the buffer below.
+    if ( stored < 1 )
+        return false;
+
+    const size_t len = (size_t)stored;
+
+    // A single string can't be longer than the file containing it.
+    const wxFileOffset available = f->GetLength();
+    if ( available != wxInvalidOffset && (wxFileOffset)len > available )
+        return false;
+
+    // wxCharBuffer allocates len + 1 bytes and puts a NUL in the last one, so
+    // reading len bytes into it leaves that terminator intact.
+    wxCharBuffer buf(len);
+    if ( f->Read(buf.data(), len).LastRead() != len )
+        return false;
+
+    // CacheWriteString() always writes the terminator, so a file lacking it is
+    // malformed. Checking for it also means the conversion below never has to
+    // go looking for one.
+    if ( buf.data()[len - 1] != '\0' )
+        return false;
+
+    str = wxString(buf.data(), wxConvUTF8, len - 1);
+    return true;
 }
 
 #define CURRENT_CACHED_BOOK_VERSION     5
@@ -368,29 +414,40 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
         return false;
 
     /* load contents : */
+    int count;
+    if (!CacheReadCount(f, count))
+        return false;
     st = m_contents.size();
-    newsize = st + CacheReadInt32(f);
+    newsize = st + count;
     m_contents.Alloc(newsize);
     for (i = st; i < newsize; i++)
     {
         wxHtmlHelpDataItem *item = new wxHtmlHelpDataItem;
         item->level = CacheReadInt32(f);
         item->id = CacheReadInt32(f);
-        item->name = CacheReadString(f);
-        item->page = CacheReadString(f);
+        if (!CacheReadString(f, item->name) || !CacheReadString(f, item->page))
+        {
+            delete item;
+            return false;
+        }
         item->book = book;
         m_contents.Add(item);
     }
 
     /* load index : */
+    if (!CacheReadCount(f, count))
+        return false;
     st = m_index.size();
-    newsize = st + CacheReadInt32(f);
+    newsize = st + count;
     m_index.Alloc(newsize);
     for (i = st; i < newsize; i++)
     {
         wxHtmlHelpDataItem *item = new wxHtmlHelpDataItem;
-        item->name = CacheReadString(f);
-        item->page = CacheReadString(f);
+        if (!CacheReadString(f, item->name) || !CacheReadString(f, item->page))
+        {
+            delete item;
+            return false;
+        }
         item->level = CacheReadInt32(f);
         item->book = book;
         int parentShift = CacheReadInt32(f);
