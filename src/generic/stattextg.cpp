@@ -72,14 +72,22 @@ void wxGenericStaticText::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxRect rect = GetClientRect();
     if ( !IsEnabled() )
     {
-        // draw shadow of the text
-        dc.SetTextForeground(
-                       wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT));
-        wxRect rectShadow = rect;
-        rectShadow.Offset(1, 1);
-        DoDrawLabel(dc, rectShadow);
-        dc.SetTextForeground(
-                       wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+        if ( wxSystemSettings::GetAppearance().IsDark() )
+        {
+            dc.SetTextForeground(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+        }
+        else
+        {
+            // draw shadow of the text
+            dc.SetTextForeground(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT));
+            wxRect rectShadow = rect;
+            rectShadow.Offset(1, 1);
+            DoDrawLabel(dc, rectShadow);
+            dc.SetTextForeground(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+        }
     }
     DoDrawLabel(dc, rect);
 }
