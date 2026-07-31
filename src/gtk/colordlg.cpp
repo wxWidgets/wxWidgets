@@ -100,7 +100,7 @@ void wxColourDialog::ColourDataToDialog()
     if (color.IsOk())
     {
 #ifdef __WXGTK3__
-        gtk_color_selection_set_current_rgba(sel, color);
+        gtk_color_selection_set_current_rgba(sel, color.GTKGetRGBA());
 #else
         gtk_color_selection_set_current_color(sel, color.GetColor());
         // Convert alpha range: [0,255] -> [0,65535]

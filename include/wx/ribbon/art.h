@@ -644,6 +644,9 @@ protected:
     void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
     void DrawGalleryBackgroundCommon(wxDC& dc, wxRibbonGallery* wnd,
                         const wxRect& rect);
+    // Picks the button bar label colour appropriate for the given
+    // wxRIBBON_BUTTONBAR_BUTTON_* state flags.
+    wxColour GetButtonBarLabelColour(long state) const;
     virtual void DrawGalleryButton(wxDC& dc, wxRect rect,
         wxRibbonGalleryButtonState state, wxBitmapBundle* bundles, wxWindow* wnd);
     void DrawButtonBarButtonForeground(
@@ -674,6 +677,7 @@ protected:
 
     wxColour m_button_bar_label_colour;
     wxColour m_button_bar_label_disabled_colour;
+    wxColour m_button_bar_active_label_colour;
     wxColour m_tab_label_colour;
     wxColour m_tab_active_label_colour;
     wxColour m_tab_hover_label_colour;

@@ -245,7 +245,7 @@ const GdkColor *wxColourImpl::GetColor() const
 }
 
 #ifdef __WXGTK3__
-wxColourImpl::operator const GdkRGBA*() const
+const GdkRGBA* wxColourImpl::GTKGetRGBA() const
 {
     const GdkRGBA* c = nullptr;
     if (IsOk())

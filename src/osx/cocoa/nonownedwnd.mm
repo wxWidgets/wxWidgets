@@ -702,9 +702,7 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
                                        objectForKey:@"NSBackingPropertyOldColorSpaceKey"];
         if (![newColorSpace isEqual:oldColorSpace])
         {
-            wxSysColourChangedEvent event;
-            event.SetEventObject(wxpeer);
-            wxpeer->HandleWindowEvent(event);
+            wxpeer->SendSysColourChangedEvents();
         }
     }
 }
@@ -731,9 +729,7 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
         wxNonOwnedWindow* wxpeer = windowimpl ? windowimpl->GetWXPeer() : nullptr;
         if (wxpeer)
         {
-            wxSysColourChangedEvent event;
-            event.SetEventObject(wxpeer);
-            wxpeer->HandleWindowEvent(event);
+            wxpeer->SendSysColourChangedEvents();
         }
     }
 }

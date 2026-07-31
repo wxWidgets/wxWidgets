@@ -544,8 +544,7 @@ public:
                            wxShowEffect effect,
                            unsigned timeout);
 
-    // Responds to colour changes: passes event on to children.
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    virtual void SendSysColourChangedEvents() override;
 
     // initialize various fields of wxMouseEvent (common part of MSWOnMouseXXX)
     void InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags);
@@ -816,6 +815,8 @@ protected:
     void MSWMoveWindowToAnyPosition(WXHWND hwnd, int x, int y,
                                     int width, int height, bool bRepaint);
 
+    virtual void MSWDrawThemeBorder(WXHDC hdc);
+
 #if wxUSE_DEFERRED_SIZING
     // this function is called after the window was resized to its new size
     virtual void MSWEndDeferWindowPos()
@@ -837,7 +838,6 @@ protected:
 private:
     wxDECLARE_DYNAMIC_CLASS(wxWindowMSW);
     wxDECLARE_NO_COPY_CLASS(wxWindowMSW);
-    wxDECLARE_EVENT_TABLE();
 };
 
 // window creation helper class: before creating a new HWND, instantiate an

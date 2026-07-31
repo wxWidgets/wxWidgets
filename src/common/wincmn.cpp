@@ -113,7 +113,6 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxWindowBase, wxEvtHandler);
 // ----------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
-    EVT_SYS_COLOUR_CHANGED(wxWindowBase::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowBase::OnInitDialog)
     EVT_MIDDLE_DOWN(wxWindowBase::OnMiddleClick)
 
@@ -1243,10 +1242,8 @@ void wxWindowBase::Freeze()
         DoFreeze();
 
         // and recursively freeze all children:
-        for ( wxWindowList::iterator i = GetChildren().begin();
-              i != GetChildren().end(); ++i )
+        for ( auto* child : GetChildren() )
         {
-            wxWindow *child = *i;
             if ( child->IsTopLevel() )
                 continue;
 
@@ -1262,10 +1259,8 @@ void wxWindowBase::Thaw()
     if ( !--m_freezeCount )
     {
         // recursively thaw all children:
-        for ( wxWindowList::iterator i = GetChildren().begin();
-              i != GetChildren().end(); ++i )
+        for ( auto* child : GetChildren() )
         {
-            wxWindow *child = *i;
             if ( child->IsTopLevel() )
                 continue;
 
@@ -2028,11 +2023,9 @@ public:
         }
 
         wxWindowList& children = m_win->GetChildren();
-        for ( wxWindowList::iterator i = children.begin();
-              i != children.end();
-              ++i )
+        for ( auto* item : children )
         {
-            wxWindow* const child = (*i)->AsWindow();
+            wxWindow* const child = item->AsWindow();
 
             // Notice that validation should never recurse into top level
             // children, e.g. some other dialog which might happen to be
@@ -3019,8 +3012,12 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt) const
 // ----------------------------------------------------------------------------
 
 // propagate the colour change event to the subwindows
-void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+void wxWindowBase::SendSysColourChangedEvents()
 {
+    wxSysColourChangedEvent event;
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
+
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
@@ -3028,9 +3025,7 @@ void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
         wxWindow *win = node->GetData();
         if ( !win->IsTopLevel() )
         {
-            wxSysColourChangedEvent event2;
-            event2.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event2);
+            win->SendSysColourChangedEvents();
         }
 
         node = node->GetNext();
@@ -3347,11 +3342,9 @@ wxRecursionGuardFlag changing;
 
 bool IsInCaptureStack(wxWindowBase* win)
 {
-    for ( wxVector<wxWindow*>::const_iterator it = stack.begin();
-          it != stack.end();
-          ++it )
+    for ( const auto* item : stack )
     {
-        if ( *it == win )
+        if ( item == win )
             return true;
     }
 
