@@ -92,7 +92,7 @@ public:
     // is this item the current one?
     bool IsCurrent(size_t item) const { return item == (size_t)m_current; }
     #ifdef __WXUNIVERSAL__
-    bool IsCurrent() const { return wxVScrolledCanvas::IsCurrent(); }
+    using wxVScrolledCanvas::IsCurrent;
     #endif
 
     // get current item
