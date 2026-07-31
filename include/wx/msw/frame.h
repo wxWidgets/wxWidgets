@@ -16,6 +16,7 @@ class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
+    typedef wxFrameBase BaseType;
 public:
     // construction
     wxFrame() { Init(); }
@@ -46,9 +47,6 @@ public:
 
     // implementation only from now on
     // -------------------------------
-
-    // event handlers
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // Toolbar
 #if wxUSE_TOOLBAR
@@ -87,6 +85,8 @@ public:
 
     // override the base class function to handle iconized/maximized frames
     virtual void SendSizeEvent(int flags = 0) override;
+
+    virtual void SendSysColourChangedEvents() override;
 
     virtual wxPoint GetClientAreaOrigin() const override;
 
@@ -186,7 +186,6 @@ private:
     wxTaskBarButton* m_taskBarButton;
 #endif
 
-    wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxFrame);
 };
 

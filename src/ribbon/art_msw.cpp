@@ -26,6 +26,8 @@
 #include "wx/msw/private.h"
 #endif
 
+#include "wx/private/colour.h"
+
 static const char* const gallery_up_xpm[] = {
   "5 5 2 1",
   "  c None",
@@ -293,6 +295,12 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     m_button_bar_active_background_colour = LikeSecondary(-9.9f, 0.14f, -0.14f);
     m_button_bar_active_background_gradient_colour = LikeSecondary(-8.7f, 0.17f, -0.03f);
 
+    // The active/pressed background can end up much lighter (or darker)
+    // than the normal button label colour was chosen for, so pick a label
+    // colour that stays legible against it specifically.
+    m_button_bar_active_label_colour = wxGetContrastingFgColour(
+        m_button_bar_label_colour, m_button_bar_active_background_colour);
+
     m_toolbar_border_pen = LikePrimary(1.4f, -0.21f, -0.16f);
     SetColour(wxRIBBON_ART_TOOLBAR_FACE_COLOUR, LikePrimary(1.4f, -0.17f, -0.22f));
     m_tool_background_top_colour = LikePrimary(-1.9f, -0.07f, 0.06f);
@@ -366,6 +374,7 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
 
     copy->m_button_bar_label_colour = m_button_bar_label_colour;
     copy->m_button_bar_label_disabled_colour = m_button_bar_label_disabled_colour;
+    copy->m_button_bar_active_label_colour = m_button_bar_active_label_colour;
     copy->m_tab_label_colour = m_tab_label_colour;
     copy->m_tab_active_label_colour = m_tab_active_label_colour;
     copy->m_tab_hover_label_colour = m_tab_hover_label_colour;
@@ -2305,6 +2314,15 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(
     dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 }
 
+wxColour wxRibbonMSWArtProvider::GetButtonBarLabelColour(long state) const
+{
+    if(state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED)
+        return m_button_bar_label_disabled_colour;
+    if(state & wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK)
+        return m_button_bar_active_label_colour;
+    return m_button_bar_label_colour;
+}
+
 void wxRibbonMSWArtProvider::DrawButtonBarButton(
                         wxDC& dc,
                         wxWindow* WXUNUSED(wnd),
@@ -2425,9 +2443,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
     }
 
     dc.SetFont(m_button_bar_label_font);
-    dc.SetTextForeground(state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED
-                            ? m_button_bar_label_disabled_colour
-                            : m_button_bar_label_colour);
+    dc.SetTextForeground(GetButtonBarLabelColour(state));
     DrawButtonBarButtonForeground(dc, rect, kind, state, label, bitmap_large,
         bitmap_small);
 }
@@ -2441,10 +2457,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
                         const wxBitmap& bitmap_large,
                         const wxBitmap& bitmap_small)
 {
-    const wxColour
-        arrowColour(state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED
-                        ? m_button_bar_label_disabled_colour
-                        : m_button_bar_label_colour);
+    const wxColour arrowColour(GetButtonBarLabelColour(state));
 
     switch(state & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
     {

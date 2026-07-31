@@ -17,16 +17,16 @@ In addition, we provide archives containing the documentation in either HTML or 
 
 Finally, Microsoft Windows users may download [Setup.exe file](https://github.com/wxWidgets/wxWidgets/releases/download/v3.3.4/wxMSW-3.3.4-Setup.exe) containing both sources and documentation, however please note that this file does _not_ contain any binaries, please see below for those.
 
-To verify your download please use the following SHA-1 checksums:
+To verify your download please use the following SHA-256 checksums:
 
-    f23bb4c805cf733a7b8aafff7cca86a78dc46d0d  wxMSW-3.3.4-Setup.exe
-    2bb7b6f08cd6006b418d57d95a8fac9027e553d3  wxWidgets-3.3.4-docs-chm.zip
-    8ed1c251e1828e72fc8b8c7607a54e8251bfde74  wxWidgets-3.3.4-docs-html.tar.bz2
-    526885ab4ad22195567992f3b1d128986c468eb2  wxWidgets-3.3.4-docs-html.zip
-    164c0321605f42f47ef88ee3b6546782d8220a71  wxWidgets-3.3.4-headers.7z
-    3ab86816d727a6d183e1f19c8831690eac220a44  wxWidgets-3.3.4.7z
-    0f7cec37b22ec5719805849716254cbb2d943f59  wxWidgets-3.3.4.tar.bz2
-    c72a835b2bfccf0b6c3c1cf49bdc603593a379fc  wxWidgets-3.3.4.zip
+    0000000000000000000000000000000000000000000000000000000000000000  wxMSW-3.3.4-Setup.exe
+    0000000000000000000000000000000000000000000000000000000000000000  wxWidgets-3.3.4-docs-chm.zip
+    0000000000000000000000000000000000000000000000000000000000000000  wxWidgets-3.3.4-docs-html.tar.bz2
+    0000000000000000000000000000000000000000000000000000000000000000  wxWidgets-3.3.4-docs-html.zip
+    0000000000000000000000000000000000000000000000000000000000000000  wxWidgets-3.3.4-headers.7z
+    0000000000000000000000000000000000000000000000000000000000000000  wxWidgets-3.3.4.7z
+    0000000000000000000000000000000000000000000000000000000000000000  wxWidgets-3.3.4.tar.bz2
+    0000000000000000000000000000000000000000000000000000000000000000  wxWidgets-3.3.4.zip
 
 ## Binaries
 
@@ -56,15 +56,15 @@ End users may download one of `wxMSW-3.3.4_vc14x_x64_ReleaseDLL.7z` or `wxMSW-3.
 
 ### Binary File Download Verification
 
-To verify your download please use the following SHA-1 checksums:
+To verify your download please use the following SHA-256 checksums:
 
-    d4d6f092b6088cd0d0716810d8e1eb10d8beb906 wxMSW-3.3.4_gcc1420UCRT_x64_Dev.7z
-    3de235804320033ab3c6958d61737607af7f160a wxMSW-3.3.4_gcc1420UCRT_x64_ReleaseDLL.7z
-    7058a62f85f56eaa95efc8b435fb88578bb9b827 wxMSW-3.3.4_gcc1610_x64_Dev.7z
-    45becf4f8e7e5545597acb7eb45c37b9185286bf wxMSW-3.3.4_gcc1610_x64_ReleaseDLL.7z
-    66cdb09b5445e609f82fdd332da094bd41dd52de wxMSW-3.3.4_vc14x_x64_Dev.7z
-    94e3c79bb8adc14bf39c9969587535639ae14a29 wxMSW-3.3.4_vc14x_x64_ReleaseDLL.7z
-    acca573822072e08c7c8aa3d72c42b7183e8da88 wxMSW-3.3.4_vc14x_x64_ReleasePDB.7z
+    0000000000000000000000000000000000000000000000000000000000000000 wxMSW-3.3.4_gcc1420UCRT_x64_Dev.7z
+    0000000000000000000000000000000000000000000000000000000000000000 wxMSW-3.3.4_gcc1420UCRT_x64_ReleaseDLL.7z
+    0000000000000000000000000000000000000000000000000000000000000000 wxMSW-3.3.4_gcc1610_x64_Dev.7z
+    0000000000000000000000000000000000000000000000000000000000000000 wxMSW-3.3.4_gcc1610_x64_ReleaseDLL.7z
+    0000000000000000000000000000000000000000000000000000000000000000 wxMSW-3.3.4_vc14x_x64_Dev.7z
+    0000000000000000000000000000000000000000000000000000000000000000 wxMSW-3.3.4_vc14x_x64_ReleaseDLL.7z
+    0000000000000000000000000000000000000000000000000000000000000000 wxMSW-3.3.4_vc14x_x64_ReleasePDB.7z
 
 ## Reporting Problems
 

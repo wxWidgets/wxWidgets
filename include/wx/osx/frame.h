@@ -18,6 +18,7 @@ class WXDLLIMPEXP_FWD_CORE wxMacToolTip ;
 
 class WXDLLIMPEXP_CORE wxFrame: public wxFrameBase
 {
+    typedef wxFrameBase BaseType;
 public:
     // construction
     wxFrame() = default;
@@ -53,7 +54,6 @@ public:
 
     // event handlers
     void OnActivate(wxActivateEvent& event);
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // Toolbar
 #if wxUSE_TOOLBAR
@@ -78,6 +78,8 @@ public:
 
     // internal response to size events
     virtual void MacOnInternalSize() override { PositionBars(); }
+
+    virtual void SendSysColourChangedEvents() override;
 
 protected:
 #if wxUSE_TOOLBAR

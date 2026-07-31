@@ -172,7 +172,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                 if (!tag)
                     tag = gtk_text_buffer_create_tag( text_buffer, buf,
                                                       "underline-rgba-set", TRUE,
-                                                      "underline-rgba", static_cast<const GdkRGBA*>(colour),
+                                                      "underline-rgba", colour.GTKGetRGBA(),
                                                       nullptr );
                 gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
             }

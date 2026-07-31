@@ -36,7 +36,7 @@ jobs:
         working-directory: distrib/release/${{ inputs.version }}
         run: |
             printf '\n# THESE CHECKSUMS MUST BE MOVED ABOVE!\n\n````\n' >> ../../../docs/release.md
-            sha1sum * | tee -a ../../../docs/release.md
+            sha256sum * | tee -a ../../../docs/release.md
 
       - name: Create Draft Release
         uses: softprops/action-gh-release@v3
@@ -102,7 +102,7 @@ jobs:
         working-directory: distrib/release/${{ inputs.version }}
         shell: cmd
         run: |
-            sha1sum * > ..\..\..\checksums
+            sha256sum * > ..\..\..\checksums
             type ..\..\..\checksums
 
       - name: Add Files to the Release
