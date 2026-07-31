@@ -590,7 +590,7 @@ void wxToolBarTool::UpdateImages()
 {
     [(NSButton*) m_controlHandle setImage:wxOSXGetImageFromBundle(m_bmpNormal)];
 
-    if ( CanBeToggled() )
+    if ( CanBeToggled() && m_bmpNormal.IsOk() )
     {
         // TODO CS this should use the best current representation, or optionally iterate through all
         wxSize sz = m_bmpNormal.GetDefaultSize();

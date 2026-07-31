@@ -271,6 +271,10 @@ wxMSW:
 
 - Fix wrong refresh in wxStaticBitmap::SetBitmap() (Steve Murphree, #26730).
 
+wxOSX:
+
+- Fix crash toggling a toolbar item without a bitmap (Alexandru Ilie, #26763).
+
 
 3.2.11: (released 2026-07-07)
 -----------------------------
