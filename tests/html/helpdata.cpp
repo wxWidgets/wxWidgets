@@ -78,4 +78,91 @@ TEST_CASE("wxHtmlHelpData::BadCachedParent", "[html][help][error]")
     CHECK( !data.DoLoadCachedBook(&book, is) );
 }
 
+namespace
+{
+
+// Write a string field whose declared length is decided by the caller instead
+// of being derived from the payload, which is what CacheWriteString() does and
+// so what a hostile file can do.
+void CacheWriteRawString(wxMemoryOutputStream& s, wxInt32 declaredLen,
+                         const char* payload, size_t payloadLen)
+{
+    CacheWriteInt32(s, declaredLen);
+    if ( payloadLen )
+        s.Write(payload, payloadLen);
+}
+
+// A .cached file carrying a single contents item, whose name field is written
+// by the caller.
+bool LoadWithContentsName(wxInt32 declaredLen,
+                          const char* payload, size_t payloadLen)
+{
+    wxMemoryOutputStream os;
+    CacheWriteInt32(os, 5); // CURRENT_CACHED_BOOK_VERSION
+    CacheWriteInt32(os, 1); // CACHED_BOOK_FORMAT_FLAGS
+
+    CacheWriteInt32(os, 1); // contents count
+    CacheWriteInt32(os, 0); // level
+    CacheWriteInt32(os, 0); // id
+    CacheWriteRawString(os, declaredLen, payload, payloadLen);
+    CacheWriteString(os, "page.htm");
+
+    CacheWriteInt32(os, 0); // index count
+
+    wxStreamBuffer* buf = os.GetOutputStreamBuffer();
+    wxMemoryInputStream is(buf->GetBufferStart(), buf->GetIntPosition());
+
+    wxHtmlBookRecord book("test.hhp", "", "Test", "page.htm");
+    TestHelpData data;
+    return data.DoLoadCachedBook(&book, is);
+}
+
+} // anonymous namespace
+
+// CacheWriteString() counts the trailing NUL, so a length of 0 cannot occur in
+// a file it produced. Reading one used to compute a buffer size of len - 1,
+// which underflows to SIZE_MAX, and wxCharBuffer then allocated (SIZE_MAX + 1)
+// bytes, i.e. none, before writing a NUL one byte in front of the block.
+TEST_CASE("wxHtmlHelpData::CachedStringZeroLength", "[html][help][error]")
+{
+    CHECK( !LoadWithContentsName(0, nullptr, 0) );
+}
+
+// A length that is not followed by a terminator used to leave the wxString
+// constructor scanning past the end of the buffer.
+TEST_CASE("wxHtmlHelpData::CachedStringUnterminated", "[html][help][error]")
+{
+    CHECK( !LoadWithContentsName(8, "AAAAAAAA", 8) );
+}
+
+// A string cannot be longer than the file holding it.
+TEST_CASE("wxHtmlHelpData::CachedStringTooLong", "[html][help][error]")
+{
+    CHECK( !LoadWithContentsName(0x7FFFFFFF, nullptr, 0) );
+}
+
+// Nor can a negative length, which used to be cast to a huge size_t.
+TEST_CASE("wxHtmlHelpData::CachedStringNegativeLength", "[html][help][error]")
+{
+    CHECK( !LoadWithContentsName(-1, nullptr, 0) );
+}
+
+// The item counts are used to reserve memory before anything is read, so they
+// have to be bounded by the file as well.
+TEST_CASE("wxHtmlHelpData::CachedCountTooLarge", "[html][help][error]")
+{
+    wxMemoryOutputStream os;
+    CacheWriteInt32(os, 5);
+    CacheWriteInt32(os, 1);
+    CacheWriteInt32(os, 0x7FFFFFF0); // contents count, far beyond the file
+
+    wxStreamBuffer* buf = os.GetOutputStreamBuffer();
+    wxMemoryInputStream is(buf->GetBufferStart(), buf->GetIntPosition());
+
+    wxHtmlBookRecord book("test.hhp", "", "Test", "page.htm");
+    TestHelpData data;
+
+    CHECK( !data.DoLoadCachedBook(&book, is) );
+}
+
 #endif // wxUSE_HTML
