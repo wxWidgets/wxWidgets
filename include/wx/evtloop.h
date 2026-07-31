@@ -316,9 +316,9 @@ public:
     wxGUIEventLoop() { m_impl = nullptr; }
     virtual ~wxGUIEventLoop();
 
-    virtual bool Pending() const;
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout)
+    virtual bool Pending() const override;
+    virtual bool Dispatch() override;
+    virtual int DispatchTimeout(unsigned long timeout) override
     {
         // TODO: this is, of course, horribly inefficient and a proper wait with
         //       timeout should be implemented for all ports natively...
@@ -332,12 +332,12 @@ public:
                 return -1;
         }
     }
-    virtual void WakeUp() { }
+    virtual void WakeUp() override { }
 
 protected:
-    virtual int DoRun();
-    virtual void DoStop(int rc);
-    virtual void DoYieldFor(long eventsToProcess);
+    virtual int DoRun() override;
+    virtual void DoStop(int rc) override;
+    virtual void DoYieldFor(long eventsToProcess) override;
 
     // the pointer to the port specific implementation class
     wxEventLoopImpl *m_impl;

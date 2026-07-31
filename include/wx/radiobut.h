@@ -26,8 +26,12 @@ class WXDLLIMPEXP_FWD_CORE wxRadioButton;
     #include "wx/checkbox.h"
 
     typedef wxCheckBox wxRadioButtonBaseBase;
+
+    #define wxOVERRIDE_CHECKBOX override
 #else
     typedef wxControl wxRadioButtonBaseBase;
+
+    #define wxOVERRIDE_CHECKBOX
 #endif
 
 class WXDLLIMPEXP_CORE wxRadioButtonBase : public wxRadioButtonBaseBase
@@ -36,8 +40,8 @@ public:
     wxRadioButtonBase() = default;
 
     // Methods to be implemented by the derived classes:
-    virtual void SetValue(bool value) = 0;
-    virtual bool GetValue() const = 0;
+    virtual void SetValue(bool value) wxOVERRIDE_CHECKBOX = 0;
+    virtual bool GetValue() const wxOVERRIDE_CHECKBOX = 0;
 
 
     // Methods implemented by this class itself.

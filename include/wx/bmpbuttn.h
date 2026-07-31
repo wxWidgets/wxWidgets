@@ -98,17 +98,17 @@ protected:
     // function called when any of the bitmaps changes
     virtual void OnSetBitmap() { InvalidateBestSize(); Refresh(); }
 
-    virtual wxBitmap DoGetBitmap(State which) const
+    virtual wxBitmap DoGetBitmap(State which) const override
         { return m_bitmaps[which].GetBitmap(wxDefaultSize); }
-    virtual void DoSetBitmap(const wxBitmapBundle& bitmap, State which)
+    virtual void DoSetBitmap(const wxBitmapBundle& bitmap, State which) override
         { m_bitmaps[which] = bitmap; OnSetBitmap(); }
 
-    virtual wxSize DoGetBitmapMargins() const
+    virtual wxSize DoGetBitmapMargins() const override
     {
         return wxSize(m_marginX, m_marginY);
     }
 
-    virtual void DoSetBitmapMargins(int x, int y)
+    virtual void DoSetBitmapMargins(int x, int y) override
     {
         m_marginX = x;
         m_marginY = y;

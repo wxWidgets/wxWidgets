@@ -773,13 +773,13 @@ void wxWindowX11::SetDropTarget(wxDropTarget * WXUNUSED(pDropTarget))
     // TODO
 }
 
-#endif
-
 // Old style file-manager drag&drop
 void wxWindowX11::DragAcceptFiles(bool WXUNUSED(accept))
 {
     // TODO
 }
+
+#endif
 
 // ----------------------------------------------------------------------------
 // tooltips
