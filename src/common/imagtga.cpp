@@ -235,6 +235,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
     // Read in the TGA header
     unsigned char hdr[HDR_SIZE];
     stream.Read(hdr, HDR_SIZE);
+    if ( stream.LastRead() != HDR_SIZE )
+        return wxTGA_INVFORMAT;
 
     short offset = hdr[HDR_OFFSET] + HDR_SIZE;
     short colorType = hdr[HDR_COLORTYPE];
@@ -249,6 +251,29 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
                  (hdr[HDR_YORIGIN] + 256 * hdr[HDR_YORIGIN + 1]);
     short bpp = hdr[HDR_BPP];
     short orientation = hdr[HDR_ORIENTATION] & 0x20;
+    const short pixelSize = bpp / 8;
+
+    // Sanity-check the dimensions before allocating any buffers. The
+    // claimed image size must fit the input stream: uncompressed TGAs
+    // (image types 1-3) store exactly width*height*pixelSize payload
+    // bytes; RLE variants (types 9-11) can expand by at most ~128:1
+    // per chunk.
+    if (width <= 0 || height <= 0 || pixelSize == 0)
+        return wxTGA_INVFORMAT;
+
+    const unsigned long long imageSize64 =
+        static_cast<unsigned long long>(width) * height * pixelSize;
+
+    const wxFileOffset streamLen = stream.GetLength();
+    if (streamLen > 0)
+    {
+        const bool isRLE = imageType == 9 || imageType == 10 || imageType == 11;
+        const unsigned long long maxAllowed = isRLE
+            ? 128ULL * static_cast<unsigned long long>(streamLen)
+            : static_cast<unsigned long long>(streamLen);
+        if (imageSize64 > maxAllowed)
+            return wxTGA_INVFORMAT;
+    }
 
     image->Create(width, height);
 
@@ -257,9 +282,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
         return wxTGA_MEMERR;
     }
 
-    const short pixelSize = bpp / 8;
-
-    const unsigned long imageSize = static_cast<unsigned long>(width) * height * pixelSize;
+    const unsigned long imageSize = static_cast<unsigned long>(imageSize64);
 
     wxScopedArray<unsigned char> imageData(imageSize);
 
@@ -374,6 +397,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
             // No compression read the data directly to imageData.
 
             stream.Read(imageData.get(), imageSize);
+            if ( stream.LastRead() != imageSize )
+                return wxTGA_INVFORMAT;
 
             // If orientation == 0, then the image is stored upside down.
             // We need to store it right side up.
@@ -445,6 +470,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
             // No compression read the data directly to imageData.
 
             stream.Read(imageData.get(), imageSize);
+            if ( stream.LastRead() != imageSize )
+                return wxTGA_INVFORMAT;
 
             // If orientation == 0, then the image is stored upside down.
             // We need to store it right side up.
@@ -522,6 +549,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
             // No compression read the data directly to imageData.
 
             stream.Read(imageData.get(), imageSize);
+            if ( stream.LastRead() != imageSize )
+                return wxTGA_INVFORMAT;
 
             // If orientation == 0, then the image is stored upside down.
             // We need to store it right side up.
@@ -940,6 +969,8 @@ bool wxTGAHandler::DoCanRead(wxInputStream& stream)
     // read the fixed-size TGA headers
     unsigned char hdr[HDR_SIZE];
     stream.Read(hdr, HDR_SIZE);     // it's ok to modify the stream position here
+    if ( stream.LastRead() != HDR_SIZE )
+        return false;               // too short to be a TGA, hdr is not filled in
 
     // Check whether we can read the file or not.
 
