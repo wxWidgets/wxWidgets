@@ -114,7 +114,7 @@ public:
 
     virtual bool InitGLVisual(const int *attribList) override;
 
-    virtual void* GetXVisualInfo();
+    virtual void* GetXVisualInfo() override;
 
     // and override this wxApp method to clean up
     virtual int OnExit() override;

@@ -58,10 +58,10 @@ public:
     // implement wxGLCanvasUnix methods
     // --------------------------------
 
-    virtual unsigned long GetXWindow() const;
+    virtual unsigned long GetXWindow() const override;
 
 protected:
-    virtual int GetColourIndex(const wxColour& col);
+    virtual int GetColourIndex(const wxColour& col) override;
 
     wxDECLARE_CLASS(wxGLCanvas);
 };

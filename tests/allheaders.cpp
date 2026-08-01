@@ -321,6 +321,11 @@
     GCC_TURN_OFF(suggest-override)
 #endif
 
+    // There are just too many of those in wxDFB headers.
+#if defined(__WXDFB__)
+    GCC_TURN_OFF(suggest-override)
+#endif
+
     // The rest are the warnings that we don't ever want to enable.
 
     // This one is given whenever inheriting from std:: classes without using

@@ -75,7 +75,7 @@ public:
     // we have our own input handler and our own actions
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0l,
-                               const wxString& strArg = wxEmptyString);
+                               const wxString& strArg = wxEmptyString) override;
 #endif
 
 protected:
