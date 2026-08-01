@@ -286,7 +286,8 @@ if(WIN32)
         wx_add_sample(taskbarbutton DEPENDS wxUSE_TASKBARBUTTON)
 
         # only check if MFC is available when the mfc sample is enabled
-        if(wxBUILD_SAMPLES STREQUAL "ALL")
+        # MFC sample links MFC dynamically, which cannot be done when linking the CRT statically
+        if(wxBUILD_SAMPLES STREQUAL "ALL" AND NOT wxBUILD_USE_STATIC_RUNTIME)
             find_package(MFC QUIET)
             if(MFC_FOUND)
                 wx_add_sample(mfc mfctest.cpp mfctest.h resource.h stdafx.h RES mfctest.rc)
