@@ -6,6 +6,49 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @class wxActiveXEventNativeMSW
+
+    Structure containing native MSW OLE @c IDispatch::Invoke event parameters.
+
+    Event handlers for @c wxActiveXEvent can use GetNativeParameters() to access these
+    low-level parameters when an event parameter is beyond the scope of @c wxVariant.
+
+    @onlyfor{wxmsw}
+
+    @library{wxcore}
+    @category{events}
+
+    @see wxActiveXEvent, wxActiveXContainer
+*/
+struct wxActiveXEventNativeMSW
+{
+    /// Dispatch ID of the member being invoked.
+    DISPID dispIdMember;
+
+    /// Reserved for future use by COM; must be IID_NULL.
+    REFIID riid;
+
+    /// Locale context for interpreting arguments.
+    LCID lcid;
+
+    /// Flags describing context of the Invoke call.
+    WORD wFlags;
+
+    /// Pointer to structure containing array of arguments.
+    DISPPARAMS *pDispParams;
+
+    /// Pointer to location where result is stored, or @NULL if caller expects no result.
+    VARIANT *pVarResult;
+
+    /// Pointer to structure containing exception information.
+    EXCEPINFO *pExcepInfo;
+
+    /// Index within pDispParams->rgvarg of first argument that has an error.
+    unsigned int *puArgErr;
+};
+
+
+/**
     @class wxActiveXEvent
 
     An event class for handling ActiveX events passed from wxActiveXContainer.
