@@ -267,6 +267,10 @@ All (GUI):
 - Fix handling TGA files with invalid size (MarkLee131, #26760).
 - Fix buffer overflow with invalid cached help books (MarkLee131, #26765).
 
+wxGTK
+
+- Fix using SetBitmap() on wxMenuItem created without a bitmap (ykne, #26771).
+
 wxMSW:
 
 - Fix wrong refresh in wxStaticBitmap::SetBitmap() (Steve Murphree, #26730).
