@@ -429,16 +429,13 @@ if(wxUSE_GUI)
         set(wxUSE_ENH_METAFILE ON)
     endif()
 
-    # Direct2D check
-    if(WIN32 AND wxUSE_GRAPHICS_DIRECT2D)
+    # Direct2D check: skip it for MSVC which is known to always have it
+    if(WIN32 AND wxUSE_GRAPHICS_DIRECT2D AND NOT MSVC)
         check_include_file(d2d1.h HAVE_D2D1_H)
         if (NOT HAVE_D2D1_H)
             wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D OFF)
         endif()
     endif()
-     if(MSVC) # match setup.h
-        wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D ${wxUSE_GRAPHICS_CONTEXT})
-     endif()
 
     # WXQT checks
     if(WXQT)
