@@ -1,0 +1,1 @@
+wxGTK: Support using SDL 3 for wxSound (Andy Vandijck, #26773).
