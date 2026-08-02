@@ -190,6 +190,12 @@ if(TARGET wx::wxgl AND NOT (APPLE AND IOS))
     find_dependency(OpenGL)
 endif()
 
+if(@wxUSE_LIBSDL3@)
+    # make sure SDL3 targets are available:
+    # The link interface of target "wx::wxcore" contains: SDL3::SDL3(-shared)
+    find_dependency(SDL3)
+endif()
+
 # make sure Threads targets are available
 find_dependency(Threads)
 
