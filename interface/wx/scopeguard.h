@@ -41,34 +41,18 @@ public:
 ///@{
 /**
     Returns a scope guard object which will call the specified function with
-    the given parameters on scope exit; actually, there four defined, for zero
-    to three parameters.
+    the given parameters on scope exit; actually, there are four defined, for
+    zero to three parameters.
 
     This function is overloaded to take several parameters up to some
-    implementation-defined (but relatively low) limit.
+    implementation-defined (but relatively low) limit (actually three).
 
     The @a func should be a functor taking parameters of the types P1, ..., PN,
     i.e. the expression @c func(p1, ..., pN) should be valid.
-
-    In pseudo-code:
-
-    @code
-    template <typename F, typename P1, ..., typename PN>
-    wxScopeGuard wxMakeGuard(F func, P1 p1, ..., PN pN);
-    @endcode
  */
 
-template <typename F>
-wxScopeGuard wxMakeGuard(F fun);
-
-template <typename F, typename P1>
-wxScopeGuard wxMakeGuard(F fun, P1 p1);
-
-template <typename F, typename P1, typename P2>
-wxScopeGuard wxMakeGuard(F fun, P1 p1, P2 p2);
-
-template <typename F, typename P1, typename P2, typename P3>
-wxScopeGuard wxMakeGuard(F fun, P1 p1, P2 p2, P3 p3);
+template <typename F, typename ...P>
+wxScopeGuard wxMakeGuard(F fun, P ...p);
 
 ///@}
 
