@@ -625,7 +625,7 @@
 
     This is needed by any Wayland-specific code in wxGTK implementation.
 
-    Recommended setting: 1, only set to 0 if wayland-client is not available.
+    Define if wayland-client is available.
  */
 #undef wxHAVE_WAYLAND_CLIENT
 
