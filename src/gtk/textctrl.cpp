@@ -551,6 +551,10 @@ au_insert_text_callback(GtkTextBuffer *buffer,
                         gint len,
                         wxTextCtrl *win)
 {
+    // Iterator will not be valid if text was modified by wxEVT_TEXT handler
+    if (gtk_text_iter_get_buffer(end) == nullptr)
+        return;
+
     GtkTextIter start = *end;
     gtk_text_iter_backward_chars(&start, g_utf8_strlen(text, len));
 
@@ -611,6 +615,10 @@ au_delete_range_callback(GtkTextBuffer * WXUNUSED(buffer),
                          wxTextCtrl *win)
 {
     if( !(win->GetWindowStyleFlag() & wxTE_AUTO_URL) )
+        return;
+
+    // Iterators will not be valid if text was modified by wxEVT_TEXT handler
+    if (gtk_text_iter_get_buffer(start) == nullptr)
         return;
 
     GtkTextIter line_start = *start, line_end = *end;
