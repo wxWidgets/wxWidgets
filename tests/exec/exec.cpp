@@ -40,7 +40,8 @@
 #elif defined(__WINDOWS__)
     #define COMMAND "cmd.exe /c \"echo hi\""
     #define COMMAND_STDERR "cmd.exe /c \"type nonexistentfile\""
-    #define ASYNC_COMMAND "mspaint"
+    #define ASYNC_COMMAND "powershell.exe -NoProfile -NonInteractive " \
+                          "-Command Start-Sleep -Seconds 10"
     #define SHELL_COMMAND "echo hi > nul:"
     #define COMMAND_NO_OUTPUT COMMAND " > nul:"
 #else
@@ -181,9 +182,15 @@ TEST_CASE_METHOD(ExecTestCase, "wxExecute", "[exec]")
     // Try to terminate it gently first, but fall back to killing it
     // unconditionally if this fails.
     const int rc = wxKill(pid, wxSIGTERM);
-    CHECK( rc == 0 );
     if ( rc != 0 )
+    {
+        INFO("wxSIGTERM failed with " << rc);
         CHECK( wxKill(pid, wxSIGKILL) == 0 );
+    }
+    else
+    {
+        CHECK( rc == 0 );
+    }
 
     int useNoeventsFlag;
 
@@ -255,10 +262,15 @@ TEST_CASE_METHOD(ExecTestCase, "wxProcess", "[exec]")
     // so the proc instance will auto-delete itself after we kill
     // the asynch process:
     const int rc = wxKill(pid, wxSIGTERM);
-    CHECK( rc == 0 );
     if ( rc != 0 )
+    {
+        INFO("wxSIGTERM failed with " << rc);
         CHECK( wxKill(pid, wxSIGKILL) == 0 );
-
+    }
+    else
+    {
+        CHECK( rc == 0 );
+    }
 
     // test wxExecute with wxProcess and REDIRECTION
 

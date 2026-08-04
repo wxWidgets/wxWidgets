@@ -1125,7 +1125,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectUsingEndKey", "[grid]")
     CHECK( bottomright.Item(0).GetCol() == 11 );
     CHECK( bottomright.Item(0).GetRow() == 9 );
 
-    CHECK( m_grid->IsVisible(8, 9) );
+    const wxGridCellCoords target = bottomright.Item(0);
+    CHECK( WaitFor("grid target cell to become visible", [this, target]() {
+        return m_grid->IsVisible(target, false);
+    }) );
 #endif
 }
 
