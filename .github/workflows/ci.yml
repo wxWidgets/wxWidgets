@@ -169,11 +169,30 @@ jobs:
                   exit 1
               esac
 
+              # Ubuntu servers sometimes fail because of transient network
+              # issues, so retry apt-get commands a few times before giving up.
+              retry_apt()
+              {
+                attempts=5
+                delay=30
+                attempt=1
+
+                while ! "$@"; do
+                  if [[ $attempt -ge $attempts ]]; then
+                    return 1
+                  fi
+
+                  echo "Command failed, retrying in ${delay}s (attempt $((attempt + 1))/$attempts): $*"
+                  attempt=$((attempt + 1))
+                  sleep $delay
+                done
+              }
+              retry_apt apt-get update -qq
+
               # Explanation for installing some less obvious packages:
               #   - coreutils contains nproc used in proc_count.sh called below.
               #   - xvfb is used for running the GUI tests.
-              apt-get update -qq
-              apt-get install -qq coreutils ${compiler_packages} git make pkg-config sudo xvfb
+              retry_apt apt-get install -qq coreutils ${compiler_packages} git make pkg-config sudo xvfb
               ;;
 
             '')
