@@ -1425,15 +1425,12 @@ public:
     };
 
     /**
-        Enable experimental dark mode support for MSW applications.
+        Enable unofficial dark mode support for MSW applications.
 
         This function uses @e undocumented, and unsupported by Microsoft,
         functions to enable dark mode support for the desktop applications
         under Windows 10 versions later than v1809 (which includes Windows 10
-        LTSC 2019) and all Windows 11 versions. Please note that dark mode
-        testing under versions of Windows earlier than 20H1 (i.e. v2004) has
-        been limited, make sure to test your application especially carefully
-        if you target these versions and want to enable dark mode support.
+        LTSC 2019) and all Windows 11 versions.
 
         Note that dark mode can also be enabled by setting the "msw.dark-mode"
         @ref wxSystemOptions "system option" via an environment variable from

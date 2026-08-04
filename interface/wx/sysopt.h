@@ -83,7 +83,7 @@
         e.g. the Terminal font in small sizes is not and this option may be
         used if wider fonts selection is more important than higher quality.
     @flag{msw.dark-mode}
-        If set to 1, enable experimental support of dark mode if the system is
+        If set to 1, enable unofficial support of dark mode if the system is
         using it, i.e. this has the same effect as calling
         wxApp::MSWEnableDarkMode(). If set to 2, use dark mode unconditionally,
         as if this function were called with wxApp::DarkMode_Always argument.

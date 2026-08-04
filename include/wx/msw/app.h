@@ -39,7 +39,7 @@ public:
 
     virtual AppearanceResult SetAppearance(Appearance appearance) override;
 
-    // MSW-specific function to enable experimental dark mode support.
+    // MSW-specific function to enable unofficial dark mode support.
     //
     // If settings are specified, the function takes ownership of the pointer,
     // otherwise the defaults are used.
