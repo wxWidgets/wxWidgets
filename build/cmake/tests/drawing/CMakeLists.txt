@@ -24,18 +24,9 @@ set(TEST_DRAWING_SRC
     testableframe.h
     testimage.h
     drawing/drawing.h
-    drawing/testimagefile.h
     )
 
-set(TEST_DRAWING_DATA
-    drawing/references/image_test_image_cairo-1.8_2_ref.png
-    drawing/references/image_test_image_cg-10.5_2_ref.png
-    drawing/references/image_test_image_gdiplus-6.1_2_ref.png
-    )
-
-wx_add_test(test_drawing CONSOLE_GUI ${TEST_DRAWING_SRC}
-    DATA ${TEST_DRAWING_DATA}
-    )
+wx_add_test(test_drawing CONSOLE_GUI ${TEST_DRAWING_SRC})
 if(wxUSE_SOCKETS)
     wx_exe_link_libraries(test_drawing wxnet)
 endif()
