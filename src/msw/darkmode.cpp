@@ -865,13 +865,17 @@ static BOOL CALLBACK EnableDialogChild(HWND hwnd, LPARAM WXUNUSED(lParam))
     wchar_t className[16] = { };
     ::GetClassNameW(hwnd, className, sizeof(className) / sizeof(wchar_t));
     auto style = ::GetWindowLongPtrW(hwnd, GWL_STYLE);
-    auto button = style & BS_TYPEMASK;
-    if ( wcscmp(className, L"Button") == 0 &&
-        (button == BS_AUTORADIOBUTTON || button == BS_GROUPBOX) )
+    if ( wcscmp(className, L"Button") == 0 )
     {
-        // The text should be white but is black. Disable theme rendering and
-        // instead rely on the colors set by handling WM_CTLCOLORSTATIC.
-        ::SetWindowTheme(hwnd, L"", L"");
+        auto bs = style & BS_TYPEMASK;
+        if ( bs == BS_AUTOCHECKBOX || bs == BS_AUTORADIOBUTTON ||
+            bs == BS_GROUPBOX )
+        {
+            // The text should be white but is black. Disable theme rendering
+            // and instead rely on the colors set by handling
+            // WM_CTLCOLORSTATIC.
+            ::SetWindowTheme(hwnd, L"", L"");
+        }
     }
     else if ( wcscmp(className, L"Edit") == 0 )
     {
