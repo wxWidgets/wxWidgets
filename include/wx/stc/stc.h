@@ -6160,7 +6160,7 @@ public:
 #ifndef SWIG
     wxStyledTextEvent(const wxStyledTextEvent& event);
 #endif
-    ~wxStyledTextEvent() = default;
+    ~wxStyledTextEvent() {}
 
     void SetPosition(int pos)             { m_position = pos; }
     void SetKey(int k)                    { m_key = k; }
