@@ -849,6 +849,90 @@ void NotifySysColorChange()
         gs_hasChanged = true;
 }
 
+// Enable dark mode for a common dialog child.
+static BOOL CALLBACK EnableDialogChild(HWND hwnd, LPARAM WXUNUSED(lParam))
+{
+    // If available, apply DarkMode_DarkTheme. It makes most controls look good.
+    if ( wxCheckOsVersion(10, 0, 26200) )
+    {
+        AllowForWindow(hwnd, L"DarkMode_DarkTheme");
+        return true;
+    }
+
+    AllowForWindow(hwnd);
+
+    // Apply changes to specific control classes.
+    wchar_t className[16] = { };
+    ::GetClassNameW(hwnd, className, sizeof(className) / sizeof(wchar_t));
+    auto style = ::GetWindowLongPtrW(hwnd, GWL_STYLE);
+    auto button = style & BS_TYPEMASK;
+    if ( wcscmp(className, L"Button") == 0 &&
+        (button == BS_AUTORADIOBUTTON || button == BS_GROUPBOX) )
+    {
+        // The text should be white but is black. Disable theme rendering and
+        // instead rely on the colors set by handling WM_CTLCOLORSTATIC.
+        ::SetWindowTheme(hwnd, L"", L"");
+    }
+    else if ( wcscmp(className, L"Edit") == 0 )
+    {
+        // The border looks bad. Change it to a simple border.
+        auto exStyle = ::GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+        exStyle &= ~WS_EX_CLIENTEDGE;
+        ::SetWindowLongPtrW(hwnd, GWL_EXSTYLE, exStyle);
+        style |= WS_BORDER;
+        ::SetWindowLongPtrW(hwnd, GWL_STYLE, style);
+        ::SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
+            SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+    }
+    return true;
+}
+
+UINT_PTR CALLBACK DialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
+    LPARAM WXUNUSED(lParam))
+{
+    if ( !IsActive() )
+        return 0;
+
+    // Window background brush. There is only one handle instance which is
+    // adequate if there is only one common dialog shown at a time. In the
+    // unlikely event more than one is shown at a time, the only problem is
+    // some dark/light drawing inconsistencies, which is an acceptable
+    // trade-off for the simplicity of managing this handle locally.
+    static HBRUSH s_bgBrush = nullptr;
+
+    switch ( uiMsg )
+    {
+        case WM_INITDIALOG:
+            // Enable dark for dialog window.
+            wxMSWDarkMode::ConfigureTLW(hwnd);
+            s_bgBrush = CreateSolidBrush(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel());
+
+            // Enable dark mode for children.
+            EnumChildWindows(hwnd, EnableDialogChild, 0);
+            break;
+
+        case WM_CTLCOLORBTN:
+        case WM_CTLCOLORDLG:
+            return (INT_PTR)s_bgBrush;
+
+        case WM_CTLCOLOREDIT:
+        case WM_CTLCOLORSTATIC:
+            SetBkColor((HDC)wParam,
+                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel());
+            SetTextColor((HDC)wParam,
+                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT).GetPixel());
+            return (INT_PTR)s_bgBrush;
+
+        case WM_NCDESTROY:
+            DeleteObject(s_bgBrush);
+            s_bgBrush = nullptr;
+            break;
+    }
+
+    return 0;
+}
+
 } // namespace wxMSWDarkMode
 
 void wxMSWImpl::PaintScrollBarCorner(HWND hwnd)
@@ -881,7 +965,7 @@ void wxMSWImpl::PaintScrollBarCorner(HWND hwnd)
 #else // !wxUSE_DARK_MODE
 
 bool
-wxApp::MSWEnableDarkMode(int WXUNUSED(flags),
+wxApp::MSWEnableDarkMode(DarkMode WXUNUSED(flags),
                          wxDarkModeSettings* WXUNUSED(settings))
 {
     return false;
@@ -921,6 +1005,10 @@ bool HasChanged()
 }
 
 void ConfigureTLW(HWND WXUNUSED(hwnd))
+{
+}
+
+void SetTheme(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeName), const wchar_t* WXUNUSED(themeId))
 {
 }
 
@@ -965,6 +1053,11 @@ HandleMenuMessage(WXLRESULT* WXUNUSED(result),
 
 void NotifySysColorChange()
 {
+}
+
+UINT_PTR CALLBACK DialogHookProc(HWND WXUNUSED(hwnd), UINT WXUNUSED(uiMsg), WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
+{
+    return 0;
 }
 
 } // namespace wxMSWDarkMode
