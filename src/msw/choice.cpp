@@ -214,7 +214,13 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
 void wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    support.themeName = L"CFD";
+    // Theme DarkMode_DarkTheme looks good, so use it if available. Theme
+    // "CFD" works well on older Windows versions although the border is a bit
+    // light.
+    if ( wxCheckOsVersion(10, 0, 26200) )
+        support.themeName = L"DarkMode_DarkTheme";
+    else
+        support.themeName = L"CFD";
 }
 
 void wxChoice::MSWSetDarkOrLightMode(SetMode setmode)
