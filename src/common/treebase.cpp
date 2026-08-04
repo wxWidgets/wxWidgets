@@ -53,7 +53,7 @@ wxDEFINE_EVENT( wxEVT_TREE_END_DRAG, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_TREE_STATE_IMAGE_CLICK, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_TREE_ITEM_GETTOOLTIP, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_TREE_ITEM_MENU, wxTreeEvent );
-
+wxDEFINE_EVENT( wxEVT_TREE_ITEM_LEFT_CLICK, wxTreeEvent );
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
