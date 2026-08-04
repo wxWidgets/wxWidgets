@@ -21,6 +21,7 @@
     #include "wx/panel.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
+    #include "wx/sizer.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
@@ -616,6 +617,26 @@ wxXmlResource::DoLoadObject(wxObject *instance,
 }
 
 
+namespace
+{
+
+void UpdateSizeHintsForAttachedUnknownControl(wxWindow *container)
+{
+    wxWindow *window = container;
+
+    while ( window && !window->IsTopLevel() )
+        window = window->GetParent();
+
+    if ( window )
+    {
+        wxSizer * const sizer = window->GetSizer();
+        if ( sizer )
+            sizer->SetSizeHints(window);
+    }
+}
+
+} // anonymous namespace
+
 bool wxXmlResource::AttachUnknownControl(const wxString& name,
                                          wxWindow *control, wxWindow *parent)
 {
@@ -627,7 +648,12 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
         wxLogError("Cannot find container for unknown control '%s'.", name);
         return false;
     }
-    return control->Reparent(container);
+
+    const bool attached = control->Reparent(container);
+    if ( attached )
+        UpdateSizeHintsForAttachedUnknownControl(container);
+
+    return attached;
 }
 
 // Small helper returning true if any of the tokens in the given string
