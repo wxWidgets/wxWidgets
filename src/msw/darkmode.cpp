@@ -881,7 +881,7 @@ static BOOL CALLBACK EnableDialogChild(HWND hwnd, LPARAM WXUNUSED(lParam))
         ::SetWindowLongPtrW(hwnd, GWL_EXSTYLE, exStyle);
         style |= WS_BORDER;
         ::SetWindowLongPtrW(hwnd, GWL_STYLE, style);
-        ::SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
+        ::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
             SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
     }
     return true;
