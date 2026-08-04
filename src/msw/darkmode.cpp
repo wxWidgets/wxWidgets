@@ -893,28 +893,18 @@ UINT_PTR CALLBACK DialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
     if ( !IsActive() )
         return 0;
 
-    // Window background brush. There is only one handle instance which is
-    // adequate if there is only one common dialog shown at a time. In the
-    // unlikely event more than one is shown at a time, the only problem is
-    // some dark/light drawing inconsistencies, which is an acceptable
-    // trade-off for the simplicity of managing this handle locally.
-    static HBRUSH s_bgBrush = nullptr;
-
     switch ( uiMsg )
     {
         case WM_INITDIALOG:
             // Enable dark for dialog window.
             wxMSWDarkMode::ConfigureTLW(hwnd);
-            s_bgBrush = CreateSolidBrush(
-                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel());
-
             // Enable dark mode for children.
-            EnumChildWindows(hwnd, EnableDialogChild, 0);
+            ::EnumChildWindows(hwnd, EnableDialogChild, 0);
             break;
 
         case WM_CTLCOLORBTN:
         case WM_CTLCOLORDLG:
-            return (INT_PTR)s_bgBrush;
+            return (INT_PTR)GetBackgroundBrush();
 
         case WM_CTLCOLOREDIT:
         case WM_CTLCOLORSTATIC:
@@ -922,12 +912,7 @@ UINT_PTR CALLBACK DialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
                 wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel());
             SetTextColor((HDC)wParam,
                 wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT).GetPixel());
-            return (INT_PTR)s_bgBrush;
-
-        case WM_NCDESTROY:
-            DeleteObject(s_bgBrush);
-            s_bgBrush = nullptr;
-            break;
+            return (INT_PTR)GetBackgroundBrush();
     }
 
     return 0;
