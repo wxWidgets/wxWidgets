@@ -909,9 +909,9 @@ UINT_PTR CALLBACK DialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
         case WM_CTLCOLOREDIT:
         case WM_CTLCOLORSTATIC:
             SetBkColor((HDC)wParam,
-                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE).GetPixel());
+                wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel());
             SetTextColor((HDC)wParam,
-                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT).GetPixel());
+                wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel());
             return (INT_PTR)GetBackgroundBrush();
     }
 
