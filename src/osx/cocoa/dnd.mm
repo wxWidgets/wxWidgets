@@ -16,6 +16,7 @@
 #endif
 
 #include "wx/dnd.h"
+#include "wx/osx/cocoa/private/dnd.h"
 #include "wx/clipbrd.h"
 #include "wx/filename.h"
 #include "wx/recguard.h"
@@ -268,24 +269,6 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     return wxDragNone;
 }
 
-@interface DropSourceDelegate : NSObject<NSDraggingSource>
-{
-    BOOL dragFinished;
-    int resultCode;
-    wxDropSource* impl;
-
-    // Flags for drag and drop operations (wxDrag_* ).
-    int m_dragFlags;
-}
-
-- (void)setImplementation:(wxDropSource *)dropSource flags:(int)flags;
-- (BOOL)finished;
-- (NSDragOperation)code;
-- (NSDragOperation)draggingSession:(nonnull NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context;
-- (void)draggedImage:(NSImage *)anImage movedTo:(NSPoint)aPoint;
-- (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
-@end
-
 @implementation DropSourceDelegate
 
 - (id)init
@@ -296,6 +279,9 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
         resultCode = NSDragOperationNone;
         impl = nullptr;
         m_dragFlags = wxDrag_CopyOnly;
+        m_copy_cursor = nil;
+        m_move_cursor = nil;
+        m_none_cursor = nil;
     }
     return self;
 }
@@ -397,6 +383,42 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     dragFinished = YES;
 }
 
+- (NSImage*)cursorForStatus:(wxDragResult)status
+{
+    NSImage* cursor_img = nil;
+    switch(status){
+    case wxDragCopy:
+        cursor_img = m_copy_cursor;
+        break;
+    case wxDragMove:
+        cursor_img = m_move_cursor;
+        break;
+    default:
+        cursor_img = m_none_cursor;
+        break;
+    }
+    if (cursor_img != nil)
+        return cursor_img;
+
+    wxCursor indicate_cursor = impl->GetCursorBundle(status).GetCursorForMainWindow();
+
+    if (indicate_cursor.IsOk()) {
+        NSCursor *cursor = (NSCursor*)indicate_cursor.GetHCURSOR();
+        cursor_img = [[cursor image] retain];
+        switch(status){
+        case wxDragCopy:
+            m_copy_cursor = cursor_img;
+            break;
+        case wxDragMove:
+            m_move_cursor = cursor_img;
+            break;
+        default:
+            m_none_cursor = cursor_img;
+            break;
+        }
+    }
+    return cursor_img;
+}
 @end
 
 wxDropTarget::wxDropTarget( wxDataObject *data )

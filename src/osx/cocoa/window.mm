@@ -36,6 +36,9 @@
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
     #include "wx/clipbrd.h"
+    #ifdef __WXOSX_MAC__
+    #include "wx/osx/cocoa/private/dnd.h"
+    #endif
 #endif
 
 #if wxUSE_TOOLTIPS
@@ -1428,6 +1431,22 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
 
         default :
             break;
+    }
+    if (!entered){
+        NSView* the_view = viewImpl->GetWXWidget();
+        [sender enumerateDraggingItemsWithOptions:NSDraggingItemEnumerationConcurrent forView:the_view
+            classes:[NSArray arrayWithObject:[NSPasteboardItem class]] searchOptions:nil
+            usingBlock:^(NSDraggingItem *draggingItem, NSInteger idx, BOOL *stop) {
+                           wxUnusedVar(idx);
+                           NSRect theFrame = draggingItem.draggingFrame;
+                           DropSourceDelegate* drop_src_delegate = sender.draggingSource;
+                           NSImage* newDragImage = [drop_src_delegate cursorForStatus:result];
+                           if (newDragImage != nil){
+                               NSRect newFrame = NSMakeRect(theFrame.origin.x, theFrame.origin.y, newDragImage.size.width, newDragImage.size.height);
+                               [draggingItem setDraggingFrame:newFrame contents:newDragImage];
+                           }
+                           *stop = NO;
+                       }];
     }
     return nsresult;
 }
