@@ -417,6 +417,7 @@ wxgtk_webview_webkit_uri_scheme_request_cb(WebKitURISchemeRequest *request,
                                                                        g_free);
             wxString mime = file->GetMimeType();
             webkit_uri_scheme_request_finish(request, stream, length, mime.utf8_str());
+            g_object_unref(stream);
         }
         else
         {
