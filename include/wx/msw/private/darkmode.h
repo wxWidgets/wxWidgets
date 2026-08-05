@@ -81,7 +81,7 @@ HandleMenuMessage(WXLRESULT* result,
 void NotifySysColorChange();
 
 // Hook procedure to enable dark mode for a common dialog.
-UINT_PTR CALLBACK DialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
+UINT_PTR CALLBACK CommonDialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
     LPARAM lParam);
 
 } // namespace wxMSWDarkMode

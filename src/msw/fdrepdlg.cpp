@@ -279,13 +279,13 @@ wxFindReplaceDialogHookProc(HWND hwnd,
 
         ::SetWindowText(hwnd, dialog->GetTitle().t_str());
 
-        wxMSWDarkMode::DialogHookProc(hwnd, uiMsg, wParam, lParam);
+        wxMSWDarkMode::CommonDialogHookProc(hwnd, uiMsg, wParam, lParam);
 
         // don't return FALSE from here or the dialog won't be shown
         return TRUE;
     }
 
-    return wxMSWDarkMode::DialogHookProc(hwnd, uiMsg, wParam, lParam);
+    return wxMSWDarkMode::CommonDialogHookProc(hwnd, uiMsg, wParam, lParam);
 }
 
 // ============================================================================

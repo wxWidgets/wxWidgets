@@ -849,9 +849,93 @@ void NotifySysColorChange()
         gs_hasChanged = true;
 }
 
-// Enable dark mode for a common dialog child.
-static BOOL CALLBACK EnableDialogChild(HWND hwnd, LPARAM WXUNUSED(lParam))
+// This function is for subclassing common dialogs as well as ComboBox
+// controls in common dialogs. The WM_DRAWITEM message for a ComboBox goes to
+// the dialog, whereas the WM_DRAWITEM for the ComboLBox goes to the ComboBox.
+static LRESULT CALLBACK CommonDialogProc(HWND hwnd, UINT uMsg,
+    WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
+    DWORD_PTR WXUNUSED(dwRefData))
 {
+    switch ( uMsg )
+    {
+        // For a ComboBox (ODT_COMBOBOX), draw the selected item shown at the
+        // top. For a ComboLBox (ODT_LISTBOX), draw an item in the list.
+        case WM_DRAWITEM:
+        {
+            auto dis = (DRAWITEMSTRUCT*)lParam;
+            // If this is an empty ComboLBox, do nothing.
+            if ( dis->CtlType == ODT_LISTBOX && dis->itemID == (UINT)-1 )
+                return true;
+
+            // Determine background and text colours.
+            wxSystemColour bg = wxSYS_COLOUR_WINDOW;
+            wxSystemColour fg = wxSYS_COLOUR_WINDOWTEXT;
+            bool isSelected = (dis->itemState & ODS_SELECTED) != 0;
+            bool hasFocus = (dis->itemState & ODS_FOCUS) != 0;
+            if ( dis->CtlType == ODT_COMBOBOX )
+            {
+                if ( isSelected && hasFocus )
+                {
+                    bg = wxSYS_COLOUR_HIGHLIGHT;
+                    fg = wxSYS_COLOUR_HIGHLIGHTTEXT;
+                }
+            }
+            else
+            {
+                if ( isSelected )
+                    bg = wxSYS_COLOUR_LISTBOXHIGHLIGHT;
+                else
+                    bg = wxSYS_COLOUR_LISTBOX;
+                fg = wxSYS_COLOUR_LISTBOXTEXT;
+            }
+
+            // Paint background
+            AutoHBRUSH hBrush(wxSystemSettings::GetColour(bg).GetPixel());
+            HDC hdc = dis->hDC;
+            ::FillRect(hdc, &dis->rcItem, hBrush);
+
+            // Draw text, if any.
+            if ( dis->itemID != (UINT)-1 )
+            {
+                wchar_t itemText[256] = { 0 };
+                HWND tHwnd = dis->CtlType == ODT_COMBOBOX ? dis->hwndItem : hwnd;
+                ::SendMessageW(tHwnd, CB_GETLBTEXT, dis->itemID, (LPARAM)itemText);
+                ::SetBkMode(hdc, TRANSPARENT);
+                ::SetTextColor(hdc, wxSystemSettings::GetColour(fg).GetPixel());
+                ::DrawTextW(hdc, itemText, -1, &dis->rcItem,
+                    DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
+            }
+            return true;
+        }
+
+    case WM_NCDESTROY:
+        ::RemoveWindowSubclass(hwnd, CommonDialogProc, uIdSubclass);
+        break;
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+// Enable dark mode for a common dialog child control.
+static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
+{
+    // Get control info.
+    wchar_t className[16] = { };
+    ::GetClassNameW(hwnd, className, sizeof(className) / sizeof(wchar_t));
+    auto style = ::GetWindowLongPtrW(hwnd, GWL_STYLE);
+
+    if ( wcscmp(className, L"ComboBox") == 0 )
+    {
+        // If the control is owner-draw, subclass it to draw the ComboLBox.
+        if ( style & CBS_OWNERDRAWFIXED )
+            ::SetWindowSubclass(hwnd, CommonDialogProc, 1, 0);
+
+        // Handle the inner ComboLBox.
+        WinStruct<COMBOBOXINFO> info;
+        ::GetComboBoxInfo(hwnd, &info);
+        CommonDialogChild(info.hwndList, lParam);
+    }
+
     // If available, apply DarkMode_DarkTheme. It makes most controls look good.
     if ( wxCheckOsVersion(10, 0, 26200) )
     {
@@ -859,21 +943,22 @@ static BOOL CALLBACK EnableDialogChild(HWND hwnd, LPARAM WXUNUSED(lParam))
         return true;
     }
 
-    AllowForWindow(hwnd);
+    // Special handling for controls needed for older Windows versions.
 
-    // Apply changes to specific control classes.
-    wchar_t className[16] = { };
-    ::GetClassNameW(hwnd, className, sizeof(className) / sizeof(wchar_t));
-    auto style = ::GetWindowLongPtrW(hwnd, GWL_STYLE);
+    if ( wcscmp(className, L"ComboBox") == 0 )
+        AllowForWindow(hwnd, L"CFD");
+    else
+        AllowForWindow(hwnd);
+
     if ( wcscmp(className, L"Button") == 0 )
     {
+        // For the button types below, the text should be white but is black.
+        // Disable theme rendering and instead rely on the colors set by
+        // handling WM_CTLCOLORSTATIC.
         auto bs = style & BS_TYPEMASK;
         if ( bs == BS_AUTOCHECKBOX || bs == BS_AUTORADIOBUTTON ||
-            bs == BS_GROUPBOX )
+            bs == BS_GROUPBOX || bs == BS_RADIOBUTTON )
         {
-            // The text should be white but is black. Disable theme rendering
-            // and instead rely on the colors set by handling
-            // WM_CTLCOLORSTATIC.
             ::SetWindowTheme(hwnd, L"", L"");
         }
     }
@@ -891,7 +976,7 @@ static BOOL CALLBACK EnableDialogChild(HWND hwnd, LPARAM WXUNUSED(lParam))
     return true;
 }
 
-UINT_PTR CALLBACK DialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
+UINT_PTR CALLBACK CommonDialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
     LPARAM WXUNUSED(lParam))
 {
     if ( !IsActive() )
@@ -903,7 +988,9 @@ UINT_PTR CALLBACK DialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
             // Enable dark for dialog window.
             wxMSWDarkMode::ConfigureTLW(hwnd);
             // Enable dark mode for children.
-            ::EnumChildWindows(hwnd, EnableDialogChild, 0);
+            ::EnumChildWindows(hwnd, CommonDialogChild, 0);
+            // Subclass the dialog.
+            ::SetWindowSubclass(hwnd, CommonDialogProc, 1, 0);
             break;
 
         case WM_CTLCOLORBTN:
@@ -911,10 +998,11 @@ UINT_PTR CALLBACK DialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
             return (INT_PTR)GetBackgroundBrush();
 
         case WM_CTLCOLOREDIT:
+        case WM_CTLCOLORLISTBOX:
         case WM_CTLCOLORSTATIC:
-            SetBkColor((HDC)wParam,
+            ::SetBkColor((HDC)wParam,
                 wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel());
-            SetTextColor((HDC)wParam,
+            ::SetTextColor((HDC)wParam,
                 wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel());
             return (INT_PTR)GetBackgroundBrush();
     }
@@ -1044,7 +1132,8 @@ void NotifySysColorChange()
 {
 }
 
-UINT_PTR CALLBACK DialogHookProc(HWND WXUNUSED(hwnd), UINT WXUNUSED(uiMsg), WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
+UINT_PTR CALLBACK CommonDialogHookProc(HWND WXUNUSED(hwnd),
+    UINT WXUNUSED(uiMsg), WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
 {
     return 0;
 }

@@ -145,7 +145,7 @@ wxColourDialogHookProc(HWND hwnd,
             break;
     }
 
-    return wxMSWDarkMode::DialogHookProc(hwnd, uiMsg, wParam, lParam);
+    return wxMSWDarkMode::CommonDialogHookProc(hwnd, uiMsg, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------
