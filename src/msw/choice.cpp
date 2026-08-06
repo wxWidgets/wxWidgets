@@ -226,9 +226,10 @@ void wxChoice::MSWSetDarkOrLightMode(SetMode setmode)
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
         // The default theme does not look good on starting with Windows 11
-        // build 26300.8553. DarkMode_DarkTheme looks OK and was available
-        // starting with Windows 11 build 26200.
-        if ( wxCheckOsVersion(10, 0, 26200) )
+        // build 26300.8553. DarkMode_DarkTheme looks OK and is available
+        // starting with Windows 11 25H2 (build 26200), but is always dark, so
+        // don't use it in light mode or the scrollbar would be dark in it too.
+        if ( wxMSWDarkMode::IsActive() && wxCheckOsVersion(10, 0, 26200) )
             wxMSWDarkMode::AllowForWindow(info.hwndList, L"DarkMode_DarkTheme");
         else
             wxMSWDarkMode::AllowForWindow(info.hwndList);

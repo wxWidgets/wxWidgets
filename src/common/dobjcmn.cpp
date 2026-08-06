@@ -185,7 +185,7 @@ size_t wxDataObjectComposite::GetDataSize(const wxDataFormat& format) const
     wxCHECK_MSG( dataObj, 0,
                  wxT("unsupported format in wxDataObjectComposite"));
 
-    return dataObj->GetDataSize();
+    return dataObj->GetDataSize(format);
 }
 
 bool wxDataObjectComposite::GetDataHere(const wxDataFormat& format,
@@ -196,7 +196,7 @@ bool wxDataObjectComposite::GetDataHere(const wxDataFormat& format,
     wxCHECK_MSG( dataObj, false,
                  wxT("unsupported format in wxDataObjectComposite"));
 
-    return dataObj->GetDataHere( buf );
+    return dataObj->GetDataHere(format, buf);
 }
 
 bool wxDataObjectComposite::SetData(const wxDataFormat& format,

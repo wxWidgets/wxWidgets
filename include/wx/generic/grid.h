@@ -5,6 +5,7 @@
 // Modified by: Santiago Palacios
 // Created:     1/08/1999
 // Copyright:   (c) Michael Bedward
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1932,10 +1933,10 @@ public:
     wxString GetColLabelValue( int col ) const;
     wxString GetCornerLabelValue() const;
 
-    wxColour GetCellHighlightColour() const { return m_cellHighlightColour; }
+    wxColour GetCellHighlightColour() const;
     int      GetCellHighlightPenWidth() const { return m_cellHighlightPenWidth; }
     int      GetCellHighlightROPenWidth() const { return m_cellHighlightROPenWidth; }
-    wxColor  GetGridFrozenBorderColour() const { return m_gridFrozenBorderColour; }
+    wxColor  GetGridFrozenBorderColour() const;
     int      GetGridFrozenBorderPenWidth() const { return m_gridFrozenBorderPenWidth; }
 
     // this one will use wxHeaderCtrl for the column labels
@@ -2072,7 +2073,7 @@ public:
 
     // this can be used to change the global grid lines colour
     void SetGridLineColour(const wxColour& col);
-    wxColour GetGridLineColour() const { return m_gridLineColour; }
+    wxColour GetGridLineColour() const;
 
     // these methods may be overridden to customize individual grid lines
     // appearance
@@ -2420,10 +2421,8 @@ public:
                            const wxRect& renderExtent) const;
 
     // Access or update the selection fore/back colours
-    wxColour GetSelectionBackground() const
-        { return m_selectionBackground; }
-    wxColour GetSelectionForeground() const
-        { return m_selectionForeground; }
+    wxColour GetSelectionBackground() const;
+    wxColour GetSelectionForeground() const;
 
     void SetSelectionBackground(const wxColour& c) { m_selectionBackground = c; }
     void SetSelectionForeground(const wxColour& c) { m_selectionForeground = c; }
@@ -2827,6 +2826,9 @@ protected:
     bool       m_editable;              // applies to whole grid
     bool       m_cellEditCtrlEnabled;   // is in-place edit currently shown?
 
+    // Editor used by the currently active edit control.
+    wxGridCellEditorPtr m_activeCellEditor;
+
     TabBehaviour m_tabBehaviour;        // determines how the TAB key behaves
 
     void Init();        // common part of all ctors
@@ -2914,6 +2916,9 @@ private:
     // Event handler for DPI change event recomputes pixel values and relays
     // out the grid.
     void OnDPIChanged(wxDPIChangedEvent& event);
+
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void UpdateColours();
 
     // implement wxScrolledCanvas method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) override;
@@ -3170,6 +3175,15 @@ private:
                 );
     }
 
+    // Return the editor actually being used by the current edit control.
+    wxGridCellEditorPtr GetActiveCellEditorPtr() const
+    {
+        if ( m_activeCellEditor )
+            return m_activeCellEditor;
+
+        return GetCurrentCellEditorPtr();
+    }
+
     // Show/hide the cell editor for the current cell unconditionally.
 
     // Return false if the editor was activated instead of being shown and also
@@ -3202,6 +3216,12 @@ private:
     // elements (which is the default)
     wxGridFixedIndicesSet *m_setFixedRows,
                           *m_setFixedCols;
+
+    // Whether background and text colours were set by the user.
+    bool m_hasUserCellBg = false;
+    bool m_hasUserCellFg = false;
+    bool m_hasUserLabelBg = false;
+    bool m_hasUserLabelFg = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxGrid);
     wxDECLARE_EVENT_TABLE();

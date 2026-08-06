@@ -572,9 +572,13 @@ int wxAuiTabContainer::GetAvailableForTabs(const wxRect& rect,
                                            wxReadOnlyDC& dc,
                                            wxWindow* wnd)
 {
-    // This function is similar to RenderButtons() but is only used when
-    // wxAUI_NB_MULTILINE is on, so we can simplify things here compared to
-    // the other functions, notable we can assume that all tabs are visible.
+    /*
+        Note that this function always ignores LEFT/RIGHT buttons because
+        either it's called from LayoutMultiLineTabs() in which case the buttons
+        are never used (tabs are multiline XOR scrollable) or it is called from
+        RenderButtons() to determine the maximum available width for the tabs,
+        which corresponds to the situation when these buttons are hidden.
+     */
 
     size_t i;
     const size_t button_count = m_buttons.size();
@@ -590,7 +594,7 @@ int wxAuiTabContainer::GetAvailableForTabs(const wxRect& rect,
             continue;
         if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
             continue;
-        if (button.id == wxAUI_BUTTON_RIGHT) // Never used in multi-line mode.
+        if (button.id == wxAUI_BUTTON_RIGHT) // See the block comment above.
             continue;
 
         wxRect button_rect = rect;
@@ -620,7 +624,7 @@ int wxAuiTabContainer::GetAvailableForTabs(const wxRect& rect,
             continue;
         if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
             continue;
-        if (button.id == wxAUI_BUTTON_LEFT) // Never used in multi-line mode.
+        if (button.id == wxAUI_BUTTON_LEFT) // See the block comment above.
             continue;
 
         wxRect button_rect(left_buttons_width, 1, 1000, rect.height);
@@ -747,7 +751,9 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
         }
     }
 
-    if (total_width > m_rect.GetWidth() || m_tabOffset != 0)
+    const int availableWidth = GetAvailableForTabs(m_rect, dc, wnd);
+
+    if (total_width > availableWidth || m_tabOffset != 0)
     {
         // show left/right buttons
         for (i = 0; i < button_count; ++i)

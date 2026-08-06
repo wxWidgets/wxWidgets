@@ -9,7 +9,6 @@
 
 #include "wx/wxprec.h"
 
-
 #if wxUSE_RIBBON
 
 #include "wx/ribbon/art.h"

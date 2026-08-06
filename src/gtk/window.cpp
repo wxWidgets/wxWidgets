@@ -1507,9 +1507,9 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
         return false;
 
     bool processed = false;
-    for( wxString::const_iterator pstr = data.begin(); pstr != data.end(); ++pstr )
+    for ( const auto& ch : data )
     {
-        event.m_uniChar = *pstr;
+        event.m_uniChar = ch;
 
         // Set key code to the Unicode value for ASCII characters.
         if ( event.m_uniChar < WXK_DELETE )
@@ -5917,7 +5917,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
             else if (m_backgroundColour.IsOk() && gtk_check_version(3,20,0) == nullptr)
             {
                 cairo_save(cr);
-                gdk_cairo_set_source_rgba(cr, m_backgroundColour);
+                gdk_cairo_set_source_rgba(cr, m_backgroundColour.GTKGetRGBA());
                 cairo_paint(cr);
                 cairo_restore(cr);
             }
@@ -6176,12 +6176,12 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
         if (isFg)
         {
             g_string_append_printf(css, "color:%s;",
-                wxGtkString(gdk_rgba_to_string(fg)).c_str());
+                wxGtkString(gdk_rgba_to_string(fg.GTKGetRGBA())).c_str());
         }
         if (isBg)
         {
             g_string_append_printf(css, "background:%s;",
-                wxGtkString(gdk_rgba_to_string(bg)).c_str());
+                wxGtkString(gdk_rgba_to_string(bg.GTKGetRGBA())).c_str());
         }
         if (isFont)
         {
@@ -6278,8 +6278,8 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
             // controls, and seems to do no harm to apply to all.
             const wxColour fg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
             const wxColour bg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-            wxGtkString fg_sel_string(gdk_rgba_to_string(fg_sel));
-            wxGtkString bg_sel_string(gdk_rgba_to_string(bg_sel));
+            wxGtkString fg_sel_string(gdk_rgba_to_string(fg_sel.GTKGetRGBA()));
+            wxGtkString bg_sel_string(gdk_rgba_to_string(bg_sel.GTKGetRGBA()));
             g_string_append_printf(css,
                 "selection{color:%s;background:%s}"
                 "*:selected{color:%s;background:%s}",
@@ -6289,7 +6289,7 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
             if (isFg && wx_is_at_least_gtk3(20))
             {
                 g_string_append_printf(css, "*{caret-color:%s}",
-                    wxGtkString(gdk_rgba_to_string(fg)).c_str());
+                    wxGtkString(gdk_rgba_to_string(fg.GTKGetRGBA())).c_str());
             }
             if (isBg)
             {

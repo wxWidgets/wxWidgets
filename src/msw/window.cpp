@@ -299,19 +299,11 @@ static bool wxIsTouchEventMSW()
     return (::GetMessageExtraInfo() & SIGNATURE_MASK) == MI_WP_SIGNATURE;
 }
 
-// ---------------------------------------------------------------------------
-// event tables
-// ---------------------------------------------------------------------------
-
 // in wxUniv/MSW this class is abstract because it doesn't have DoPopupMenu()
 // method
 #ifdef __WXUNIVERSAL__
     wxIMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase);
 #endif // __WXUNIVERSAL__
-
-wxBEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
-    EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
-wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // implementation
@@ -3556,7 +3548,16 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // Check for the special case of the message which notifies about
             // the colours change.
             if ( wxIsSystemColourChange(lParam) )
-                processed = HandleSysColorChange();
+            {
+                // When switching between light and dark modes, Windows normally
+                // sends two WM_SETTINGCHANGE messages with "ImmersiveColorSet",
+                // one before and one after. Sometimes the second message does not
+                // appear. To guarantee we process at least one system colour
+                // change event after the switch, defer processing this message
+                // until after the switch.
+                ::PostMessage(m_hWnd, WM_SYSCOLORCHANGE, 0, 0);
+                processed = true;
+            }
             else
                 processed = HandleSettingChange(wParam, lParam);
             break;
@@ -3835,7 +3836,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             {
                 // Determine whether we should draw a border.
                 bool drawBorder = false;
-                switch ( DoTranslateBorder(GetBorder()) )
+                wxBorder border = DoTranslateBorder(GetBorder());
+                switch ( border )
                 {
                     case wxBORDER_THEME:
                         drawBorder = true;
@@ -3870,45 +3872,23 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     processed = true;
 
                     wxWindowDC dc((wxWindow *)this);
-                    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-                    RECT rcBorder;
-                    wxCopyRectToRECT(GetSize(), rcBorder);
 
                     // Exclude the client area and any scroll bars.
-                    RECT rcClient = rcBorder;
+                    RECT rcClient;
+                    wxCopyRectToRECT(GetSize(), rcClient);
                     InflateRect(&rcClient, -thickness, -thickness);
-                    ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
+                    HDC hdc = dc.GetHDC();
+                    ::ExcludeClipRect(hdc, rcClient.left, rcClient.top,
                                       rcClient.right, rcClient.bottom);
 
-                    // Draw the theme border and background.
-                    if ( wxMSWDarkMode::IsActive() )
-                    {
-                        // There does not seem to be a theme class that draws a good
-                        // border on all supported versions of Windows. Manually draw a
-                        // 1-pixel thick border. Use the observed colour of the simple
-                        // border, WS_BORDER.
-                        AutoHBRUSH brushBorder(0x646464);
-                        ::FrameRect(GetHdcOf(*impl), &rcBorder, brushBorder);
-                        // Draw the background with consecutively smaller 1-pixel thick
-                        // rectangles.
-                        AutoHBRUSH brushBg(GetBackgroundColour().GetPixel());
-                        for (int count = 1; count < thickness; count++)
-                        {
-                            ::InflateRect(&rcBorder, -1, -1);
-                            ::FrameRect(GetHdcOf(*impl), &rcBorder, brushBg);
-                        }
-                    }
+                    // Draw the border.
+                    if ( border == wxBORDER_THEME )
+                        MSWDrawThemeBorder(hdc);
                     else
                     {
-                        // The EDIT class gives a good general purpose border in light mode.
-                        wxUxThemeHandle hTheme(this, L"EDIT");
-                        // Make sure the background is in a proper state
-                        if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
-                        {
-                            ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
-                        }
-                        // Draw the border
-                        hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, ETS_NORMAL);
+                        // In dark mode, draw a simple border for all the 3D border styles.
+                        wxASSERT(wxMSWDarkMode::IsActive());
+                        wxWindowMSW::MSWDrawThemeBorder(hdc);
                     }
                 }
             }
@@ -3930,6 +3910,44 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
     *result = rc.result;
 
     return true;
+}
+
+// Draw a simple generic border.
+void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc)
+{
+    RECT rcBorder;
+    wxCopyRectToRECT(GetSize(), rcBorder);
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // There does not seem to be a theme class that draws a good
+        // border on all supported versions of Windows. Manually draw a
+        // 1-pixel thick border. Use the observed colour of the simple
+        // border, WS_BORDER.
+        AutoHBRUSH brushBorder(0x646464);
+        ::FrameRect(hdc, &rcBorder, brushBorder);
+        // Draw the background with consecutively smaller 1-pixel thick
+        // rectangles.
+        AutoHBRUSH brushBg(GetBackgroundColour().GetPixel());
+        const auto thickness = MSWGetBorderThickness();
+        for (int count = 1; count < thickness; count++)
+        {
+            ::InflateRect(&rcBorder, -1, -1);
+            ::FrameRect(hdc, &rcBorder, brushBg);
+        }
+    }
+    else
+    {
+        // The EDIT class gives a good general purpose border in light mode.
+        wxUxThemeHandle hTheme(this, L"EDIT");
+        // Make sure the background is in a proper state
+        if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+        {
+            ::DrawThemeParentBackground(m_hWnd, hdc, &rcBorder);
+        }
+        // Draw the border
+        hTheme.DrawBackground(hdc, rcBorder, EP_EDITTEXT, ETS_NORMAL);
+    }
 }
 
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
@@ -4820,7 +4838,6 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
     {
         return item->MSWOnDraw(itemStruct);
     }
-
 #endif // wxUSE_CONTROLS
 
     return false;
@@ -5081,10 +5098,7 @@ bool wxWindowMSW::HandleSysColorChange()
     // that information.
     wxMSWDarkMode::NotifySysColorChange();
 
-    wxSysColourChangedEvent event;
-    event.SetEventObject(this);
-
-    (void)HandleWindowEvent(event);
+    SendSysColourChangedEvents();
 
     if ( IsTopLevel() )
         Refresh();
@@ -5262,8 +5276,7 @@ bool wxWindowMSW::HandleQueryNewPalette()
     return HandleWindowEvent(event) && event.GetPaletteRealized();
 }
 
-// Responds to colour changes: passes event on to children.
-void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+void wxWindowMSW::SendSysColourChangedEvents()
 {
     // the top level window also reset the standard colour map as it might have
     // changed (there is no need to do it for the non top level windows as we
@@ -5281,6 +5294,10 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
         MSWSetDarkOrLightMode(SetMode::Change);
     }
 
+    wxSysColourChangedEvent event;
+    event.SetEventObject(this);
+    ProcessWindowEvent(event);
+
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
@@ -5297,6 +5314,8 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 
         node = node->GetNext();
     }
+
+    // Base class functionality is duplicated here, so don't chain up
 }
 
 extern wxCOLORMAP *wxGetStdColourMap()

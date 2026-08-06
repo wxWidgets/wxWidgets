@@ -88,7 +88,7 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#if defined( VMS_GTK2 ) || defined( __WXX11__ ) 
+#if defined( VMS_GTK2 ) || defined( __WXX11__ )
 #define wxUSE_CAIRO 1
 #else
 #define wxUSE_CAIRO 0
@@ -764,6 +764,12 @@ typedef pid_t GPid;
  * Use SDL for audio (Unix)
  */
 #define wxUSE_LIBSDL 0
+
+/*
+ * Use SDL 3.x (rather than SDL 2.x or 1.x) for the SDL audio backend
+ */
+#define wxUSE_LIBSDL3 0
+
 /*
  * Use GTK print for printing under GTK+ 2.10+
  */

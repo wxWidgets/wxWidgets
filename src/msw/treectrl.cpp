@@ -36,6 +36,7 @@
 #include <windowsx.h> // needed by GET_X_LPARAM and GET_Y_LPARAM macros
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/winundef.h"
 #include "wx/msw/private/winstyle.h"
 
@@ -2786,6 +2787,15 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     bool processed = false;
     WXLRESULT rc = 0;
     bool isMultiple = HasFlag(wxTR_MULTIPLE);
+
+    if ( nMsg == WM_NCPAINT && wxMSWDarkMode::IsActive() )
+    {
+        // As with wxListCtrl, we need to draw the corner between two
+        // scrollbars ourselves in dark mode to give it correct colour.
+        rc = wxTreeCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+        wxMSWImpl::PaintScrollBarCorner(GetHwnd());
+        return rc;
+    }
 
     if ( nMsg == WM_CONTEXTMENU )
     {

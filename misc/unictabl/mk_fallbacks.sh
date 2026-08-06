@@ -14,6 +14,7 @@ add_fallback()
 echo "  * getting list of needed unicode characters..."
 
 cat mappings/*.TXT | sed -n '/^0x../p' | \
+    sed 's/#[\t ]*/#\t/' | sed -E 's/0x([0-9a-fA-F]+)/0x\U\1/g' | \
     cut -f2,4 | sort | uniq | sed -n '/^0x/p' > _tmp1
 cat _tmp1 | cut -f1 | sort | uniq > _tmp2
 
@@ -35,7 +36,7 @@ echo "      - for latin capital letters..."
 
 cat _tmp3 | grep 'LATIN CAPITAL LETTER [A-Z]$' > _tmp6
 cat _tmp3 | grep 'LATIN CAPITAL LETTER [A-Z] WITH' >> _tmp6
-cat _tmp6 | sort +2 > _tmp4
+cat _tmp6 | sort -k3 > _tmp4
 
 cat _tmp4 | while read i ; do
     code=`echo $i | cut -c1-6`
@@ -49,7 +50,7 @@ echo "      - for latin small letters..."
 
 cat _tmp3 | grep 'LATIN SMALL LETTER [A-Z]$' > _tmp6
 cat _tmp3 | grep 'LATIN SMALL LETTER [A-Z] WITH' >> _tmp6
-cat _tmp6 | sort +2 > _tmp4
+cat _tmp6 | sort -k3 > _tmp4
 
 cat _tmp4 | while read i ; do
     code=`echo $i | cut -c1-6`
@@ -70,4 +71,3 @@ echo "  * removing infinite loops from fallback tables..."
 cat _tmp5 | grep -v '\(0x....\)	\1' | sort > Fallbacks
 
 rm -f _tmp1 _tmp2 _tmp3 _tmp4 _tmp5 _tmp6
-

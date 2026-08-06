@@ -33,8 +33,8 @@ which are implementation details.
 Running Doxygen
 ---------------
 
-First, make sure you have a recent version of Doxygen (currently Doxygen 1.8.8
-is used) and Graphviz installed in your system (under Windows Graphviz
+First, make sure you have the exact version of Doxygen supported (currently
+1.15.0 is used) and Graphviz installed in your system (under Windows Graphviz
 location should be in %PATH%).
 
 On Unix:

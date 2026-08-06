@@ -188,10 +188,8 @@ public:
         // unsafe bits of "dest"
         source.window = window;
         source.frame = frame;
-        wxCHECK_RET(source.IsValid(),
-                    "window settings and pane settings are incompatible");
-        // now assign
-        *this = source;
+        if (source.IsValid())
+            *this = source;
     }
 
     bool IsOk() const { return window != nullptr; }
@@ -230,9 +228,8 @@ public:
     {
         wxAuiPaneInfo test(*this);
         test.window = w;
-        wxCHECK_MSG(test.IsValid(), *this,
-                    "window settings and pane settings are incompatible");
-        *this = test;
+        if ( test.IsValid() )
+            *this = test;
         return *this;
     }
     wxAuiPaneInfo& Name(const wxString& n) { name = n; return *this; }
@@ -243,9 +240,16 @@ public:
     wxAuiPaneInfo& Right() { dock_direction = wxAUI_DOCK_RIGHT; return *this; }
     wxAuiPaneInfo& Top() { dock_direction = wxAUI_DOCK_TOP; return *this; }
     wxAuiPaneInfo& Bottom() { dock_direction = wxAUI_DOCK_BOTTOM; return *this; }
-    wxAuiPaneInfo& Center() { dock_direction = wxAUI_DOCK_CENTER; return *this; }
-    wxAuiPaneInfo& Centre() { dock_direction = wxAUI_DOCK_CENTRE; return *this; }
-    wxAuiPaneInfo& Direction(int direction) { dock_direction = direction; return *this; }
+    wxAuiPaneInfo& Center() { dock_direction = wxAUI_DOCK_CENTER; return Layer(0).Row(0).Position(0); }
+    wxAuiPaneInfo& Centre() { dock_direction = wxAUI_DOCK_CENTRE; return Layer(0).Row(0).Position(0); }
+    wxAuiPaneInfo& Direction(int direction)
+    {
+        if (dock_direction == wxAUI_DOCK_CENTRE)
+            return Centre();
+
+        dock_direction = direction;
+        return *this;
+    }
     wxAuiPaneInfo& Layer(int layer) { dock_layer = layer; return *this; }
     wxAuiPaneInfo& Row(int row) { dock_row = row; return *this; }
     wxAuiPaneInfo& Position(int pos) { dock_pos = pos; return *this; }
@@ -298,9 +302,8 @@ public:
                  optionLeftDockable | optionRightDockable |
                  optionFloatable | optionMovable | optionResizable |
                  optionCaption | optionPaneBorder | buttonClose;
-        wxCHECK_MSG(test.IsValid(), *this,
-                    "window settings and pane settings are incompatible");
-        *this = test;
+        if (test.IsValid())
+            *this = test;
         return *this;
     }
 
@@ -328,9 +331,8 @@ public:
             test.state |= flag;
         else
             test.state &= ~flag;
-        wxCHECK_MSG(test.IsValid(), *this,
-                    "window settings and pane settings are incompatible");
-        *this = test;
+        if (test.IsValid())
+            *this = test;
         return *this;
     }
 
@@ -414,6 +416,8 @@ public:
 
     wxRect rect;              // current rectangle (populated by wxAUI)
 
+    // If the pane settings are internally consistent, return true, otherwise
+    // return false and trigger an assertion failure in debug builds.
     bool IsValid() const;
 };
 

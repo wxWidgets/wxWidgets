@@ -4,6 +4,7 @@
 // Author:      Steven Lamerton
 // Created:     2010-06-25
 // Copyright:   (c) 2010 Steven Lamerton
+//              (c) 2026 wxWidgets development team
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"
@@ -253,28 +254,6 @@ WaitForEventAt(
 }
 
 } // anonymous namespace
-
-namespace Catch
-{
-
-template <> struct StringMaker<TestableGrid>
-{
-    static std::string convert(const TestableGrid& grid)
-    {
-        return ("Content before edit:\n" + grid.m_beforeGridAnnotated
-                + "\nContent after edit:\n" + grid.ToString()).ToStdString();
-    }
-};
-
-template <> struct StringMaker<Multicell>
-{
-    static std::string convert(const Multicell& multi)
-    {
-        return multi.ToString().ToStdString();
-    }
-};
-
-} // namespace Catch
 
 class GridTestCase
 {
@@ -1561,6 +1540,29 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ReadOnly", "[grid]")
 
     CHECK(created.GetCount() == 0);
 #endif
+}
+
+TEST_CASE_METHOD(GridTestCase, "Grid::ChangeEditorWhileEditing", "[grid]")
+{
+    wxGridCellAttr* attr = new wxGridCellAttr();
+    attr->SetEditor(new wxGridCellBoolEditor);
+    attr->SetRenderer(new wxGridCellBoolRenderer);
+    m_grid->SetColAttr(0, attr);
+
+    m_grid->SetCellValue(0, 0, "1");
+    m_grid->SetGridCursor(0, 0);
+    m_grid->EnableCellEditControl();
+
+    REQUIRE(m_grid->IsCellEditControlShown());
+
+    attr = new wxGridCellAttr();
+    attr->SetEditor(new wxGridCellBoolEditor);
+    attr->SetRenderer(new wxGridCellBoolRenderer);
+    m_grid->SetColAttr(0, attr);
+
+    m_grid->DisableCellEditControl();
+
+    CHECK(!m_grid->IsCellEditControlShown());
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")

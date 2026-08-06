@@ -522,10 +522,6 @@ void wxComboBox::MSWRecreate()
         m_backgroundColour = wxNullColour;
         SetBackgroundColour(colBg);
     }
-    else
-    {
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    }
 
     // Revert the old string value
     if ( !HasFlag(wxCB_READONLY) )

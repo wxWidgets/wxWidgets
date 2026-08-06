@@ -532,11 +532,26 @@ static int PaneSortFunc(wxAuiPaneInfo** p1, wxAuiPaneInfo** p2)
 
 bool wxAuiPaneInfo::IsValid() const
 {
+    if ( dock_direction == wxAUI_DOCK_CENTRE &&
+        !(dock_layer == 0 && dock_row == 0 && dock_pos == 0) )
+    {
+        wxFAIL_MSG("Center pane must have dock layer, row and pos set to 0");
+
+        return false;
+    }
+
     // Should this RTTI and function call be rewritten as
     // sending a new event type to allow other window types
     // to check the pane settings?
     wxAuiToolBar* toolbar = wxDynamicCast(window, wxAuiToolBar);
-    return !toolbar || toolbar->IsPaneValid(*this);
+    if ( toolbar && !toolbar->IsPaneValid(*this) )
+    {
+        wxFAIL_MSG("toolbar style and pane docking flags are incompatible");
+
+        return false;
+    }
+
+    return true;
 }
 
 // -- wxAuiManager class implementation --
@@ -1031,8 +1046,8 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
         {
             // see whether non-default docking flags are valid
             test.window = window;
-            wxCHECK_MSG(test.IsValid(), false,
-                        "toolbar style and pane docking flags are incompatible");
+            if (!test.IsValid())
+                return false;
         }
     }
 

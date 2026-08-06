@@ -1005,7 +1005,6 @@ void wxPreviewCanvas::OnDPIChanged(wxDPIChangedEvent& event)
     event.Skip();
 }
 
-// Responds to colour changes, and passes event on to children.
 void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
 #ifdef __WXMAC__
@@ -1020,8 +1019,7 @@ void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
     SetBackgroundColour(wxSystemSettings::GetColour(colourIndex));
     Refresh();
 
-    // Propagate the event to the non-top-level children
-    wxWindow::OnSysColourChanged(event);
+    event.Skip();
 }
 
 void wxPreviewCanvas::OnChar(wxKeyEvent &event)

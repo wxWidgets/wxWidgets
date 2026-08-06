@@ -1,29 +1,36 @@
-# KOI8-R.TXT
-# Date: 2016-01-04 23:05:00 GMT [KW]
+# KOI8-U.TXT
+# Date: 2016-01-04 23:09:00 GMT [KW]
 # © 2016 Unicode®, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 #
-#	Name:             KOI8-R (RFC1489) to Unicode
-#	Unicode version:  3.0
+#
+#	Name:             KOI8-U (RFC2319) to Unicode
+#	Unicode version:  5.1
 #	Table version:    2.0
 #	Table format:     Format A
-#	Date:             18 August 1999 (header updated: 2016-January-04)
-#	Authors:          Helmut Richter <richter@lrz.de>
+#	Date:             13 October 2008 (header updated: 2016-January-04)
+#	Authors:          Philippe Verdy <verdy_p AT wanadoo.fr>,
+#	                  Helmut Richter <richter@lrz.de>
 #
 #	General notes:
 #
 #	This table contains the data the Unicode Consortium has on how
-#       KOI8-R characters map into Unicode. The underlying document is the
-#	mapping described in RFC 1489. No statements are made as to whether
+#	KOI8-U characters map into Unicode. The underlying document is the
+#	mapping described in RFC 2319. No statements are made as to whether
 #	this mapping is the same as the mapping defined as "Code Page 878"
 #	with some vendors.
 #
+#	The KOI8-U (RFC2319) encoding is a variant based on KOI8-R (RFC1489),
+#	where the support for four additional Cyrillic letters was added (both small
+#	and capital letters), replacing 8 box-drawing characters. It is still widely
+#	used to encode texts in Ukrainian, Byelorussian and Bulgarian.
+#
 #	Format:  Three tab-separated columns
-#		 Column #1 is the KOI8-R code (in hex as 0xXX)
+#		 Column #1 is the KOI8-U code (in hex as 0xXX)
 #		 Column #2 is the Unicode (in hex as 0xXXXX)
 #		 Column #3 the Unicode name (follows a comment sign, '#')
 #
-#	The entries are in KOI8-R order.
+#	The entries are in KOI8-U order.
 #
 #	Version history
 #	1.0 version: created.
@@ -31,10 +38,10 @@
 #       changes to character mappings
 #
 #	Updated versions of this file may be found in:
-#		http://www.unicode.org/Public/MAPPINGS/
+#		<http://www.unicode.org/Public/MAPPINGS/>
 #
-#	Any comments or problems, contact us at:
-#       http://www.unicode.org/reporting.html
+#	Any comments or problems, contact the Unicode Consortium at:
+#	        <http://www.unicode.org/reporting.html>
 #
 0x00	0x0000	#	NULL
 0x01	0x0001	#	START OF HEADING
@@ -200,32 +207,32 @@
 0xA1	0x2551	#	BOX DRAWINGS DOUBLE VERTICAL
 0xA2	0x2552	#	BOX DRAWINGS DOWN SINGLE AND RIGHT DOUBLE
 0xA3	0x0451	#	CYRILLIC SMALL LETTER IO
-0xA4	0x2553	#	BOX DRAWINGS DOWN DOUBLE AND RIGHT SINGLE
+0xA4	0x0454	#	CYRILLIC SMALL LETTER UKRAINIAN IE
 0xA5	0x2554	#	BOX DRAWINGS DOUBLE DOWN AND RIGHT
-0xA6	0x2555	#	BOX DRAWINGS DOWN SINGLE AND LEFT DOUBLE
-0xA7	0x2556	#	BOX DRAWINGS DOWN DOUBLE AND LEFT SINGLE
+0xA6	0x0456	#	CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
+0xA7	0x0457	#	CYRILLIC SMALL LETTER YI (UKRAINIAN)
 0xA8	0x2557	#	BOX DRAWINGS DOUBLE DOWN AND LEFT
 0xA9	0x2558	#	BOX DRAWINGS UP SINGLE AND RIGHT DOUBLE
 0xAA	0x2559	#	BOX DRAWINGS UP DOUBLE AND RIGHT SINGLE
 0xAB	0x255A	#	BOX DRAWINGS DOUBLE UP AND RIGHT
 0xAC	0x255B	#	BOX DRAWINGS UP SINGLE AND LEFT DOUBLE
-0xAD	0x255C	#	BOX DRAWINGS UP DOUBLE AND LEFT SINGLE
+0xAD	0x0491	#	CYRILLIC SMALL LETTER GHE WITH UPTURN
 0xAE	0x255D	#	BOX DRAWINGS DOUBLE UP AND LEFT
 0xAF	0x255E	#	BOX DRAWINGS VERTICAL SINGLE AND RIGHT DOUBLE
 0xB0	0x255F	#	BOX DRAWINGS VERTICAL DOUBLE AND RIGHT SINGLE
 0xB1	0x2560	#	BOX DRAWINGS DOUBLE VERTICAL AND RIGHT
 0xB2	0x2561	#	BOX DRAWINGS VERTICAL SINGLE AND LEFT DOUBLE
 0xB3	0x0401	#	CYRILLIC CAPITAL LETTER IO
-0xB4	0x2562	#	BOX DRAWINGS VERTICAL DOUBLE AND LEFT SINGLE
+0xB4	0x0404	#	CYRILLIC CAPITAL LETTER UKRAINIAN IE
 0xB5	0x2563	#	BOX DRAWINGS DOUBLE VERTICAL AND LEFT
-0xB6	0x2564	#	BOX DRAWINGS DOWN SINGLE AND HORIZONTAL DOUBLE
-0xB7	0x2565	#	BOX DRAWINGS DOWN DOUBLE AND HORIZONTAL SINGLE
+0xB6	0x0406	#	CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
+0xB7	0x0407	#	CYRILLIC CAPITAL LETTER YI (UKRAINIAN)
 0xB8	0x2566	#	BOX DRAWINGS DOUBLE DOWN AND HORIZONTAL
 0xB9	0x2567	#	BOX DRAWINGS UP SINGLE AND HORIZONTAL DOUBLE
 0xBA	0x2568	#	BOX DRAWINGS UP DOUBLE AND HORIZONTAL SINGLE
 0xBB	0x2569	#	BOX DRAWINGS DOUBLE UP AND HORIZONTAL
 0xBC	0x256A	#	BOX DRAWINGS VERTICAL SINGLE AND HORIZONTAL DOUBLE
-0xBD	0x256B	#	BOX DRAWINGS VERTICAL DOUBLE AND HORIZONTAL SINGLE
+0xBD	0x0490	#	CYRILLIC CAPITAL LETTER GHE WITH UPTURN
 0xBE	0x256C	#	BOX DRAWINGS DOUBLE VERTICAL AND HORIZONTAL
 0xBF	0x00A9	#	COPYRIGHT SIGN
 0xC0	0x044E	#	CYRILLIC SMALL LETTER YU

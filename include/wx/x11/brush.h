@@ -35,14 +35,14 @@ public:
     bool operator==(const wxBrush& brush) const;
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 
-    wxBrushStyle GetStyle() const;
-    wxColour GetColour() const;
-    wxBitmap *GetStipple() const;
+    wxBrushStyle GetStyle() const override;
+    wxColour GetColour() const override;
+    wxBitmap *GetStipple() const override;
 
-    void SetColour( const wxColour& col );
-    void SetColour( unsigned char r, unsigned char g, unsigned char b );
-    void SetStyle( wxBrushStyle style );
-    void SetStipple( const wxBitmap& stipple );
+    void SetColour( const wxColour& col ) override;
+    void SetColour( unsigned char r, unsigned char g, unsigned char b ) override;
+    void SetStyle( wxBrushStyle style ) override;
+    void SetStipple( const wxBitmap& stipple ) override;
 
 
     wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants")
@@ -52,8 +52,8 @@ public:
     void SetStyle(int style) { SetStyle((wxBrushStyle)style); }
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxBrush);
 };

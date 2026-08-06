@@ -205,9 +205,9 @@ void wxAnyTestCase::Equality()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble1.As<double>(),
                                  m_anyDoubleDouble1.As<double>(),
                                  FEQ_DELTA);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble1.As<double>(),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble1.As<float>(),
                                  TEST_FLOAT_CONST,
-                                 FEQ_DELTA);
+                                 float(FEQ_DELTA));
     CPPUNIT_ASSERT(m_anyWxObjectPtr1.As<wxObject*>()
                         == dummyWxObjectPointer);
     CPPUNIT_ASSERT(m_anyVoidPtr1.As<void*>() == dummyVoidPointer);
@@ -220,9 +220,9 @@ void wxAnyTestCase::Equality()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble2.As<double>(),
                                  m_anyDoubleDouble2.As<double>(),
                                  FEQ_DELTA);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble2.As<double>(),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble2.As<float>(),
                                  TEST_FLOAT_CONST,
-                                 FEQ_DELTA);
+                                 float(FEQ_DELTA));
     CPPUNIT_ASSERT(m_anyWxObjectPtr2.As<wxObject*>()
                         == dummyWxObjectPointer);
     CPPUNIT_ASSERT(m_anyVoidPtr2.As<void*>() == dummyVoidPointer);
@@ -328,7 +328,7 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(s == "15");
     res = m_anySignedLong1.GetAs(&f);
     CPPUNIT_ASSERT(res);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0, FEQ_DELTA);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0f, float(FEQ_DELTA));
     res = m_anySignedLong1.GetAs(&b);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(b == true);
@@ -342,7 +342,7 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(s == "15");
     res = m_anyUnsignedLong1.GetAs(&f);
     CPPUNIT_ASSERT(res);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0, FEQ_DELTA);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0f, float(FEQ_DELTA));
     res = m_anyUnsignedLong1.GetAs(&b);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(b == true);
@@ -366,7 +366,7 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT_EQUAL(ul, static_cast<unsigned long>(15));
     res = anyString.GetAs(&f);
     CPPUNIT_ASSERT(res);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0, FEQ_DELTA);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0f, float(FEQ_DELTA));
     anyString = "TRUE";
     res = anyString.GetAs(&b);
     CPPUNIT_ASSERT(res);
@@ -400,7 +400,7 @@ void wxAnyTestCase::GetAs()
     double d2;
     res = s.ToCDouble(&d2);
     CPPUNIT_ASSERT(res);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(d2, TEST_FLOAT_CONST, FEQ_DELTA);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(d2, TEST_DOUBLE_CONST, FEQ_DELTA);
 }
 
 
@@ -502,7 +502,7 @@ void wxAnyTestCase::wxVariantConversions()
     // Prepare wxVariants
     wxVariant vLong(123L);
     wxVariant vString("ABC");
-    wxVariant vDouble(TEST_FLOAT_CONST);
+    wxVariant vDouble(TEST_DOUBLE_CONST);
     wxVariant vBool((bool)true);
     wxVariant vChar('A');
     wxVariant vLongLong(wxLongLong(wxLL(0xAABBBBCCCC)));
@@ -560,11 +560,11 @@ void wxAnyTestCase::wxVariantConversions()
 
     any = vDouble;
     double d = any.As<double>();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(d, TEST_FLOAT_CONST, FEQ_DELTA);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(d, TEST_DOUBLE_CONST, FEQ_DELTA);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(variant.GetDouble(),
-                                 TEST_FLOAT_CONST,
+                                 TEST_DOUBLE_CONST,
                                  FEQ_DELTA);
 
     any = vBool;

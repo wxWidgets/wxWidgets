@@ -13,7 +13,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.3.3], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.3.4], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -39,7 +39,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=3
-wx_release_number=3
+wx_release_number=4
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -5320,23 +5320,34 @@ WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
   if test "$USE_UNIX" = 1 -a "$USE_MAC" != 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
-      PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
+      PKG_CHECK_MODULES([SDL], [sdl3 >= 3.0.0],
                   [
                     EXTRALIBS_SDL="$SDL_LIBS"
                     CFLAGS="$SDL_CFLAGS $CFLAGS"
                     CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                     AC_DEFINE(wxUSE_LIBSDL)
+                    AC_DEFINE(wxUSE_LIBSDL3)
                   ],
                   [
-                    AC_MSG_NOTICE([SDL 2.0 not available. Falling back to 1.2.])
-                    AM_PATH_SDL([1.2.0],
+                    AC_MSG_NOTICE([SDL 3.0 not available. Falling back to SDL 2.0.])
+                    PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
                                 [
                                   EXTRALIBS_SDL="$SDL_LIBS"
                                   CFLAGS="$SDL_CFLAGS $CFLAGS"
                                   CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                                   AC_DEFINE(wxUSE_LIBSDL)
                                 ],
-                                [wxUSE_LIBSDL="no"])
+                                [
+                                  AC_MSG_NOTICE([SDL 2.0 not available. Falling back to 1.2.])
+                                  AM_PATH_SDL([1.2.0],
+                                              [
+                                                EXTRALIBS_SDL="$SDL_LIBS"
+                                                CFLAGS="$SDL_CFLAGS $CFLAGS"
+                                                CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
+                                                AC_DEFINE(wxUSE_LIBSDL)
+                                              ],
+                                              [wxUSE_LIBSDL="no"])
+                                ])
                   ])
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1

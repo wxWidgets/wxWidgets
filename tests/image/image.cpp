@@ -1271,6 +1271,88 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadBMPPaletteIndex", "[image][bmp]
     REQUIRE( !img.LoadFile(mis, wxBITMAP_TYPE_BMP) );
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadTGADimensions", "[image][tga][error]")
+{
+    /*
+    A 22 byte file whose header claims a 31232x16382 image at 24bpp.
+    width*height*pixelSize is ~1.5 GB, which the loader used to allocate
+    twice over, for the image and for the scratch buffer, before reading
+    any pixels. It then decoded the whole uninitialised scratch buffer
+    into the image and reported success.
+    */
+    static const unsigned char tooBigTGA[] =
+    {
+        0,          // ID length
+        0,          // Color map type
+        2,          // Image type = uncompressed RGB
+
+        0, 0,       // Color map origin
+        0, 0,       // Color map length
+        0,          // Color map entry size
+
+        0, 0,       // X-origin
+        2, 0,       // Y-origin
+
+        0x00, 0x7a, // Width = 31232
+        0x00, 0x40, // Height = 16384, minus the Y-origin gives 16382
+
+        24,         // Bits per pixel
+        0x20,       // Image descriptor
+
+        // Four bytes of "payload", against the ~1.5 GB claimed above
+        0x00, 0x00, 0xff, 0xff
+    };
+
+    wxMemoryInputStream tooBigStream(tooBigTGA, WXSIZEOF(tooBigTGA));
+
+    REQUIRE( tooBigStream.IsOk() );
+
+    wxImage tgaImage;
+
+    REQUIRE( !tgaImage.LoadFile(tooBigStream, wxBITMAP_TYPE_TGA) );
+}
+
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::TruncatedTGA", "[image][tga][error]")
+{
+    /*
+    A 2x2 24bpp image needs 12 bytes of pixel data but only 6 follow the
+    header. The declared size is small enough to look plausible next to
+    the stream length, so only checking the amount actually read catches
+    this: the loader used to decode the 6 bytes it never received out of
+    the uninitialised scratch buffer and report success.
+    */
+    static const unsigned char truncatedTGA[] =
+    {
+        0,          // ID length
+        0,          // Color map type
+        2,          // Image type = uncompressed RGB
+
+        0, 0,       // Color map origin
+        0, 0,       // Color map length
+        0,          // Color map entry size
+
+        0, 0,       // X-origin
+        0, 0,       // Y-origin
+
+        2, 0,       // Width = 2
+        2, 0,       // Height = 2
+
+        24,         // Bits per pixel
+        0x20,       // Image descriptor
+
+        // Half of the 12 bytes of pixel data the header promises
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x66
+    };
+
+    wxMemoryInputStream truncatedStream(truncatedTGA, WXSIZEOF(truncatedTGA));
+
+    REQUIRE( truncatedStream.IsOk() );
+
+    wxImage tgaImage;
+
+    REQUIRE( !tgaImage.LoadFile(truncatedStream, wxBITMAP_TYPE_TGA) );
+}
+
 #if wxUSE_GIF
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SaveAnimatedGIF", "[image]")
@@ -3138,7 +3220,7 @@ static wxSize ParseEnvVarAsSize(const wxString& varname)
 // Compute difference between the 2 images by summing up squares of (naively
 // computed, i.e. without any perception-based correction) distances between
 // colours for each pixel.
-static float ComputeImageDiff(const wxImage& img1, const wxImage& img2)
+static double ComputeImageDiff(const wxImage& img1, const wxImage& img2)
 {
     const wxSize size = img1.GetSize();
 
@@ -3155,10 +3237,10 @@ static float ComputeImageDiff(const wxImage& img1, const wxImage& img2)
           p1 != end;
           p1 += 3, p2 += 3 )
     {
-        diff += sqrt(sqr(p1[0] - p2[0]) + sqr(p1[1] - p2[1]) + sqr(p1[2] - p2[2]));
+        diff += sqrtf(sqr(p1[0] - p2[0]) + sqr(p1[1] - p2[1]) + sqr(p1[2] - p2[2]));
     }
 
-    return diff / numPixels;
+    return double(diff / numPixels);
 }
 
 // The purpose of this test is to compute "resize quality" which is defined as

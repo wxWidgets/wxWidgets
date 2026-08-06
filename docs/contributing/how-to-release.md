@@ -131,7 +131,8 @@ Update https://www.wxwidgets.org:
 * Push the changes (or create the PR with them) to GitHub. Note that this will
   trigger the site rebuild which will fail if the release statistics are not
   available yet, so make sure to publish the release on GitHub first (or wait
-  an hour for the next scheduled site rebuild to happen).
+  an hour for the next scheduled site rebuild to happen). Also check that the
+  workflow actually ran as GitHub disables it after 60 days of inactivity.
 * If this is a new minor release, update `docs/index.md` to add a link to the
   documentation for the new branch and update the existing links descriptions.
 

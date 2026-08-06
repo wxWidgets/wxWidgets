@@ -39,7 +39,7 @@ public:
 
     // Implementation part
 #ifdef __WXGTK3__
-    operator const GdkRGBA*() const;
+    const GdkRGBA* GTKGetRGBA() const;
 #else
     void CalcPixel( GdkColormap *cmap );
     int GetPixel() const;

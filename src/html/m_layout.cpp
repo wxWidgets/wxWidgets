@@ -3,6 +3,7 @@
 // Purpose:     wxHtml module for basic paragraphs/layout handling
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -12,6 +13,7 @@
 #if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WX_PRECOMP
+    #include "wx/brush.h"
     #include "wx/image.h"
 #endif
 
@@ -313,34 +315,39 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if (tag.GetParamAsColour(wxT("LINK"), &clr))
             m_WParser->SetLinkColor(clr);
 
-        wxHtmlWindowInterface *winIface = m_WParser->GetWindowInterface();
-        // the rest of this function requires a window:
-        if ( !winIface )
-            return false;
-
-        wxString bg;
-        if (tag.GetParamAsString(wxT("BACKGROUND"), &bg))
+        const bool hasBgColour = tag.GetParamAsColour("BGCOLOR", &clr);
+        if ( hasBgColour )
         {
-            wxFSFile *fileBgImage = m_WParser->OpenURL(wxHTML_URL_IMAGE, bg);
-            if ( fileBgImage )
-            {
-                wxInputStream *is = fileBgImage->GetStream();
-                if ( is )
-                {
-                    wxImage image(*is);
-                    if ( image.IsOk() )
-                        winIface->SetHTMLBackgroundImage(image);
-                }
-
-                delete fileBgImage;
-            }
-        }
-
-        if (tag.GetParamAsColour(wxT("BGCOLOR"), &clr))
-        {
+            m_WParser->SetActualBackgroundColor(clr);
+            m_WParser->SetActualBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
             m_WParser->GetContainer()->InsertCell(
                 new wxHtmlColourCell(clr, wxHTML_CLR_TRANSPARENT_BACKGROUND));
-            winIface->SetHTMLBackgroundColour(clr);
+        }
+
+        wxHtmlWindowInterface *winIface = m_WParser->GetWindowInterface();
+        if ( winIface )
+        {
+            if ( hasBgColour )
+                winIface->SetHTMLBackgroundColour(clr);
+
+            wxString bg;
+            if (tag.GetParamAsString("BACKGROUND", &bg))
+            {
+                wxFSFile *fileBgImage =
+                    m_WParser->OpenURL(wxHTML_URL_IMAGE, bg);
+                if ( fileBgImage )
+                {
+                    wxInputStream *is = fileBgImage->GetStream();
+                    if ( is )
+                    {
+                        wxImage image(*is);
+                        if ( image.IsOk() )
+                            winIface->SetHTMLBackgroundImage(image);
+                    }
+
+                    delete fileBgImage;
+                }
+            }
         }
 
         return false;

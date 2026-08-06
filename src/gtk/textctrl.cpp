@@ -172,7 +172,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                 if (!tag)
                     tag = gtk_text_buffer_create_tag( text_buffer, buf,
                                                       "underline-rgba-set", TRUE,
-                                                      "underline-rgba", static_cast<const GdkRGBA*>(colour),
+                                                      "underline-rgba", colour.GTKGetRGBA(),
                                                       nullptr );
                 gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
             }
@@ -551,6 +551,10 @@ au_insert_text_callback(GtkTextBuffer *buffer,
                         gint len,
                         wxTextCtrl *win)
 {
+    // Iterator will not be valid if text was modified by wxEVT_TEXT handler
+    if (gtk_text_iter_get_buffer(end) == nullptr)
+        return;
+
     GtkTextIter start = *end;
     gtk_text_iter_backward_chars(&start, g_utf8_strlen(text, len));
 
@@ -611,6 +615,10 @@ au_delete_range_callback(GtkTextBuffer * WXUNUSED(buffer),
                          wxTextCtrl *win)
 {
     if( !(win->GetWindowStyleFlag() & wxTE_AUTO_URL) )
+        return;
+
+    // Iterators will not be valid if text was modified by wxEVT_TEXT handler
+    if (gtk_text_iter_get_buffer(start) == nullptr)
         return;
 
     GtkTextIter line_start = *start, line_end = *end;
@@ -722,12 +730,10 @@ wxTextCtrl::~wxTextCtrl()
     if (m_text)
         GTKDisconnect(m_text);
     if (m_buffer)
+    {
         GTKDisconnect(m_buffer);
-
-    // this is also done by wxWindowGTK dtor, but has to be done here so our
-    // DoThaw() override is called
-    while (IsFrozen())
-        Thaw();
+        g_object_unref(m_buffer);
+    }
 
     if (m_anonymousMarkList)
         g_slist_free_full(m_anonymousMarkList, g_object_unref);
@@ -774,8 +780,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // Create view
         m_text = gtk_text_view_new_with_buffer(m_buffer);
         GTKConnectFreezeWidget(m_text);
-        // gtk_text_view_set_buffer adds its own reference
-        g_object_unref(m_buffer);
         g_signal_handler_disconnect(m_buffer, sig_id);
 
         // create "ShowPosition" marker
@@ -2322,7 +2326,6 @@ void wxTextCtrl::DoFreeze()
     if ( HasFlag(wxTE_MULTILINE) )
     {
         // removing buffer dramatically speeds up insertion:
-        g_object_ref(m_buffer);
         GtkTextBuffer* buf_new = gtk_text_buffer_new(nullptr);
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
         // gtk_text_view_set_buffer adds its own reference
@@ -2352,7 +2355,6 @@ void wxTextCtrl::DoThaw()
         // reattach buffer:
         gulong sig_id = g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
-        g_object_unref(m_buffer);
         g_signal_handler_disconnect(m_buffer, sig_id);
 
         if (m_showPositionDefer)

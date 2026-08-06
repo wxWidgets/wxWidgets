@@ -568,6 +568,18 @@
       <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
       <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
     </Project>
+    <Project Path="stylus/stylus.vcxproj" Id="554243bc-0022-4c08-bf96-49f9a76e8799">
+      <BuildDependency Project="../build/msw/wx_base.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_core.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_custom_build.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxexpat.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxjpeg.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxpng.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxregex.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxtiff.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxwebp.vcxproj" />
+      <BuildDependency Project="../build/msw/wx_wxzlib.vcxproj" />
+    </Project>
     <Project Path="touchtest/touchtest.vcxproj" Id="2c187c8d-a452-4730-9eb0-da6f2b65a1c6">
       <BuildDependency Project="../build/msw/wx_base.vcxproj" />
       <BuildDependency Project="../build/msw/wx_core.vcxproj" />

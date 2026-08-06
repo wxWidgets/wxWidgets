@@ -3751,33 +3751,7 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 auto const rc =
                     wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 
-                WinStruct<SCROLLBARINFO> sbiV, sbiH;
-
-                // Check if both scrollbars are actually visible.
-                if ( ::GetScrollBarInfo(GetHwnd(), OBJID_VSCROLL, &sbiV) &&
-                     ::GetScrollBarInfo(GetHwnd(), OBJID_HSCROLL, &sbiH) &&
-                        !(sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) &&
-                        !(sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE) )
-                {
-                    // They are, so now paint the corner between them.
-                    wxWindowDC dc(this);
-                    dc.SetPen(*wxTRANSPARENT_PEN);
-
-                    // We don't have any wxSYS_COLOUR_XXX value matching this.
-                    dc.SetBrush(wxColour(0x17, 0x17, 0x17));
-
-                    // SCROLLBARINFO::rcScrollBar contains screen coordinates,
-                    // but we need client ones, so subtract the window origin.
-                    const RECT rcWin = wxGetWindowRect(GetHwnd());
-
-                    int x = sbiV.rcScrollBar.left - rcWin.left;
-                    int y = sbiH.rcScrollBar.top - rcWin.top;
-                    int width = sbiV.rcScrollBar.right - sbiV.rcScrollBar.left;
-                    int height = sbiH.rcScrollBar.bottom - sbiH.rcScrollBar.top;
-
-                    dc.DrawRectangle(x, y, width, height);
-                }
-
+                wxMSWImpl::PaintScrollBarCorner(GetHwnd());
                 return rc;
             }
             break;

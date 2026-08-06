@@ -78,25 +78,25 @@ public:
     // bool Create(const wxNativeFontInfo& fontinfo);
 
     // implement base class pure virtuals
-    virtual double GetFractionalPointSize() const;
-    virtual wxFontStyle GetStyle() const;
-    virtual int GetNumericWeight() const;
-    virtual bool GetUnderlined() const;
+    virtual double GetFractionalPointSize() const override;
+    virtual wxFontStyle GetStyle() const override;
+    virtual int GetNumericWeight() const override;
+    virtual bool GetUnderlined() const override;
     virtual bool GetStrikethrough() const override;
-    virtual wxString GetFaceName() const;
-    virtual wxFontEncoding GetEncoding() const;
-    virtual const wxNativeFontInfo *GetNativeFontInfo() const;
+    virtual wxString GetFaceName() const override;
+    virtual wxFontEncoding GetEncoding() const override;
+    virtual const wxNativeFontInfo *GetNativeFontInfo() const override;
 
-    virtual bool IsFixedWidth() const;
+    virtual bool IsFixedWidth() const override;
 
-    virtual void SetFractionalPointSize(double pointSize);
-    virtual void SetFamily(wxFontFamily family);
-    virtual void SetStyle(wxFontStyle style);
-    virtual void SetNumericWeight(int weight);
-    virtual bool SetFaceName(const wxString& faceName);
-    virtual void SetUnderlined(bool underlined);
+    virtual void SetFractionalPointSize(double pointSize) override;
+    virtual void SetFamily(wxFontFamily family) override;
+    virtual void SetStyle(wxFontStyle style) override;
+    virtual void SetNumericWeight(int weight) override;
+    virtual bool SetFaceName(const wxString& faceName) override;
+    virtual void SetUnderlined(bool underlined) override;
     virtual void SetStrikethrough(bool strikethrough) override;
-    virtual void SetEncoding(wxFontEncoding encoding);
+    virtual void SetEncoding(wxFontEncoding encoding) override;
 
     wxDECLARE_COMMON_FONT_METHODS();
 
@@ -122,11 +122,11 @@ public:
     bool SetPangoAttrs(PangoLayout* layout) const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
-    virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );
-    virtual wxFontFamily DoGetFamily() const;
+    virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info ) override;
+    virtual wxFontFamily DoGetFamily() const override;
 
     void Unshare();
 
