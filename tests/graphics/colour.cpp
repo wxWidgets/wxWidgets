@@ -196,6 +196,9 @@ TEST_CASE("wxColour::Database", "[colour][database]")
         CHECK( db.Find(maybeOtherName) == colour );
     }
 
+    // Check that using spaces and arbitrary capitalization works too.
+    CHECK_THAT( db.Find("Dark RED"), RGBSameAs(0x8b, 0, 0) );
+
     // Check that green uses CSS value by default.
     CHECK_THAT( db.Find("green"), RGBSameAs(0, 0x80, 0) );
 
