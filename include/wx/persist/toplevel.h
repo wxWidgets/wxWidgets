@@ -67,7 +67,17 @@ private:
             return m_pers->SaveValue(name, value);
         }
 
+        virtual bool SaveString(const wxString& name, const wxString& value) override
+        {
+            return m_pers->SaveValue(name, value);
+        }
+
         virtual bool RestoreValue(const wxString& name, int* value) const override
+        {
+            return m_pers->RestoreValue(name, value);
+        }
+
+        virtual bool RestoreString(const wxString& name, wxString* value) const override
         {
             return m_pers->RestoreValue(name, value);
         }
