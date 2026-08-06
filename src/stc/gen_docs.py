@@ -1071,7 +1071,11 @@ extendedDocs = {
 
     'SetIMEInteraction':
         ('The input should be one of the',
-        '@link wxStyledTextCtrl::wxSTC_IME_WINDOWED wxSTC_IME_* @endlink constants.',),
+        '@link wxStyledTextCtrl::wxSTC_IME_WINDOWED wxSTC_IME_* @endlink',
+        'constants.',
+        '@remarks',
+        'Inline IME interaction is used by default under wxGTK and wxOSX.',
+        'The other ports use windowed IME interaction by default.',),
 
     'GetIndentationGuides':
         ('The return value will be one of the',

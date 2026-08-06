@@ -212,6 +212,13 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     // Put Scintilla into unicode (UTF-8) mode
     SetCodePage(wxSTC_CP_UTF8);
 
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__)
+    // The generic wxSTC backend can display composition itself on these
+    // platforms, so prefer inline input instead of relying on an IM module to
+    // provide a separate pre-edit window.
+    SetIMEInteraction(wxSTC_IME_INLINE);
+#endif
+
     SetInitialSize(size);
 
     // Reduces flicker on GTK+/X11
@@ -616,9 +623,15 @@ int wxStyledTextCtrl::GetIMEInteraction() const
 }
 
 // Choose to display the IME in a window or inline.
-void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction)
-{
-    SendMsg(SCI_SETIMEINTERACTION, imeInteraction, 0);
+void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction) {
+    SendMsg(SCI_SETIMEINTERACTION, imeInteraction);
+#ifdef __WXGTK__
+    wxUpdateTextInputClient(this);
+#endif
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__)
+    if ( imeInteraction != wxSTC_IME_INLINE && m_swx )
+        m_swx->CancelComposition();
+#endif
 }
 
 // Set the symbol used for a particular marker number,
