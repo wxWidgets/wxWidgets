@@ -1415,6 +1415,8 @@ public:
     /**
         Possible flags for MSWEnableDarkMode().
 
+        @onlyfor{wxmsw}
+
         @since 3.3.4
     */
     enum DarkMode
