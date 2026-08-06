@@ -106,23 +106,6 @@ public:
     virtual bool Layout();
 
     /**
-        The default handler for @c wxEVT_SYS_COLOUR_CHANGED.
-
-        @param event
-            The colour change event.
-
-        @remarks Changes the panel's colour to conform to the current settings.
-                 Add an event table entry for your panel class if you wish the
-                 behaviour to be different (such as keeping a user-defined
-                 background colour). If you do override this function, call
-                 wxEvent::Skip() to propagate the notification to child windows
-                 and controls.
-
-        @see wxSysColourChangedEvent
-    */
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    /**
         Overrides wxWindow::SetFocus().
 
         This method uses the (undocumented) mix-in class wxControlContainer which manages
