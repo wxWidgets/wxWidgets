@@ -631,6 +631,13 @@
 #cmakedefine wxHAVE_WAYLAND_CLIENT 1
 
 /*
+    Use Wayland session-management protocol.
+
+    This is defined if GTK is new enough to support it.
+ */
+#cmakedefine wxHAVE_WAYLAND_SESSION_MANAGEMENT 1
+
+/*
    Use XTest extension to implement wxUIActionSimulator?
 
    Default is 1, it is set to 0 if the necessary headers/libraries are not
