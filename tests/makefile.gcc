@@ -25,11 +25,11 @@ TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(SETUPHDIR) -I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. \
 	$(__DLLFLAG_p) -DwxUSE_GUI=0 -I.\..\3rdparty\catch\single_include \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-DTEST_HAS_IPC_SERVER $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
-	$(OBJS)\test_test_rc.o \
 	$(OBJS)\test_dummy.o \
+	$(OBJS)\test_test_rc.o \
 	$(OBJS)\test_test.o \
 	$(OBJS)\test_anytest.o \
 	$(OBJS)\test_archivetest.o \
@@ -74,6 +74,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_pathlist.o \
 	$(OBJS)\test_typeinfotest.o \
 	$(OBJS)\test_ipc.o \
+	$(OBJS)\test_ipc_test_server.o \
 	$(OBJS)\test_socket.o \
 	$(OBJS)\test_webrequest.o \
 	$(OBJS)\test_regextest.o \
@@ -135,11 +136,11 @@ TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(SETUPHDIR) -I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. \
 	$(__DLLFLAG_p) -I.\..\samples -DNOPCH -I.\..\3rdparty\catch\single_include \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-DTEST_HAS_IPC_SERVER $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
-	$(OBJS)\test_gui_test_rc.o \
 	$(OBJS)\test_gui_dummy.o \
+	$(OBJS)\test_gui_test_rc.o \
 	$(OBJS)\test_gui_asserthelper.o \
 	$(OBJS)\test_gui_test.o \
 	$(OBJS)\test_gui_testableframe.o \
@@ -240,6 +241,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_settings.o \
 	$(OBJS)\test_gui_textwrap.o \
 	$(OBJS)\test_gui_socket.o \
+	$(OBJS)\test_gui_ipc.o \
+	$(OBJS)\test_gui_ipc_test_server.o \
 	$(OBJS)\test_gui_tlw.o \
 	$(OBJS)\test_gui_dataview.o \
 	$(OBJS)\test_gui_rowheightcachetest.o \
@@ -578,11 +581,11 @@ xart-dothraki:
 	if not exist $(OBJS)\intl\xart-dothraki mkdir $(OBJS)\intl\xart-dothraki
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\xart-dothraki\%%f copy .\intl\xart-dothraki\%%f $(OBJS)\intl\xart-dothraki
 
-$(OBJS)\test_test_rc.o: ./../tests/test.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_9) $(__DEBUG_DEFINE_p_9) $(__NDEBUG_DEFINE_p_9) $(__EXCEPTIONS_DEFINE_p_9) $(__RTTI_DEFINE_p_9) $(__THREAD_DEFINE_p_9) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_9) --define wxUSE_GUI=0 --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
-
 $(OBJS)\test_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_test_rc.o: ./../tests/test.rc
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_9) $(__DEBUG_DEFINE_p_9) $(__NDEBUG_DEFINE_p_9) $(__EXCEPTIONS_DEFINE_p_9) $(__RTTI_DEFINE_p_9) $(__THREAD_DEFINE_p_9) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_9) --define wxUSE_GUI=0 --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include --define TEST_HAS_IPC_SERVER
 
 $(OBJS)\test_test.o: ./test.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
@@ -714,6 +717,9 @@ $(OBJS)\test_typeinfotest.o: ./misc/typeinfotest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_ipc.o: ./net/ipc.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_ipc_test_server.o: ./net/ipc_test_server.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_socket.o: ./net/socket.cpp
@@ -860,11 +866,11 @@ $(OBJS)\test_drawing_basictest.o: ./drawing/basictest.cpp
 $(OBJS)\test_drawing_fonttest.o: ./drawing/fonttest.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\test_gui_test_rc.o: ./../tests/test.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_9) $(__DEBUG_DEFINE_p_9) $(__NDEBUG_DEFINE_p_9) $(__EXCEPTIONS_DEFINE_p_9) $(__RTTI_DEFINE_p_9) $(__THREAD_DEFINE_p_9) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_9) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../samples --define NOPCH --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
-
 $(OBJS)\test_gui_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_test_rc.o: ./../tests/test.rc
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_9) $(__DEBUG_DEFINE_p_9) $(__NDEBUG_DEFINE_p_9) $(__EXCEPTIONS_DEFINE_p_9) $(__RTTI_DEFINE_p_9) $(__THREAD_DEFINE_p_9) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_9) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../samples --define NOPCH --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include --define TEST_HAS_IPC_SERVER
 
 $(OBJS)\test_gui_asserthelper.o: ./asserthelper.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
@@ -1164,6 +1170,12 @@ $(OBJS)\test_gui_textwrap.o: ./misc/textwrap.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_socket.o: ./net/socket.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_ipc.o: ./net/ipc.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_ipc_test_server.o: ./net/ipc_test_server.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_tlw.o: ./persistence/tlw.cpp
