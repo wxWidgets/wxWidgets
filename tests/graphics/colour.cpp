@@ -34,6 +34,9 @@ public:
 
     bool match(const wxColour& c) const override
     {
+        if ( !c.IsOk() )
+            return false;
+
         return c.Red() == m_red && c.Green() == m_green && c.Blue() == m_blue;
     }
 
