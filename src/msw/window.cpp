@@ -3836,7 +3836,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             {
                 // Determine whether we should draw a border.
                 bool drawBorder = false;
-                wxBorder border = DoTranslateBorder(GetBorder());
+                wxBorder rawBorder = GetBorder();
+                wxBorder border = DoTranslateBorder(rawBorder);
                 switch ( border )
                 {
                     case wxBORDER_THEME:
@@ -3882,7 +3883,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                       rcClient.right, rcClient.bottom);
 
                     // Draw the border.
-                    if ( border == wxBORDER_THEME )
+                    if ( rawBorder == wxBORDER_THEME )
                         MSWDrawThemeBorder(hdc);
                     else
                     {

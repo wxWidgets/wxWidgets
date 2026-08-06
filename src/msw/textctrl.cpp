@@ -496,8 +496,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
 // returns true if the platform should explicitly apply a theme border
 bool wxTextCtrl::CanApplyThemeBorder() const
 {
-    // Standard text control already handles theming in light mode.
-    return IsRich() || wxMSWDarkMode::IsActive();
+    // Standard text control already handles theming.
+    return IsRich();
 }
 
 bool wxTextCtrl::MSWCreateText(const wxString& value,
