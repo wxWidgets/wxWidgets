@@ -30,6 +30,7 @@
 
 #include "wx/spinbutt.h"
 
+#include "wx/dcbuffer.h"
 #include "wx/msw/dc.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
@@ -143,6 +144,9 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     SetInitialSize(size);
 
+    if ( wxMSWDarkMode::IsActive() )
+        MSWSetDarkOrLightMode(SetMode::Initial);
+
     return true;
 }
 
@@ -177,8 +181,9 @@ void wxSpinButton::OnPaint(wxPaintEvent& event)
 {
     if ( wxMSWDarkMode::IsActive() )
     {
-        // Unfortunately PaintIfNecessary() can't be used here as we need to
-        // handle the extra border below, so duplicate what it does here.
+        // Have the updown control draw itself, then modify the result with a
+        // border and possibly inverted colours.
+
         const RECT rc = wxGetClientRect(GetHwnd());
         const wxSize size{rc.right - rc.left, rc.bottom - rc.top};
 
@@ -212,6 +217,10 @@ void wxSpinButton::OnPaint(wxPaintEvent& event)
 
         wxImage image = bmp.ConvertToImage();
 
+        // Prior to Windows 11 22H2 (build 22621), the updown control always
+        // draws in light mode, so invert the colours to make it dark.
+        const bool shouldInvert = !wxCheckOsVersion(10, 0, 22621);
+
         const int width = image.GetWidth();
         const int height = image.GetHeight();
         unsigned char *data = image.GetData();
@@ -229,7 +238,7 @@ void wxSpinButton::OnPaint(wxPaintEvent& event)
                     if ( alpha )
                         *alpha = wxALPHA_OPAQUE;
                 }
-                else
+                else if ( shouldInvert )
                 {
                     // This uses a slightly different formula than the one in
                     // InvertBitmapPixel() because the one there results in the
@@ -252,7 +261,10 @@ void wxSpinButton::OnPaint(wxPaintEvent& event)
         bmp = wxBitmap(image);
 #endif // wxUSE_IMAGE
 
-        wxPaintDC dc(this);
+        wxBufferedPaintDC dc(this);
+        // Clear the background, otherwise alpha transparency in the bitmap
+        // appears white.
+        dc.Clear();
         dc.DrawBitmap(bmp, 0, 0);
     }
     else

@@ -2158,7 +2158,7 @@ public:
         Returns the writable pointer to a buffer of the size at least equal to the
         length specified in the constructor.
     */
-    wxChar* operator wxChar *();
+    operator wxChar *();
 };
 
 
@@ -2192,7 +2192,7 @@ public:
         Returns the writable pointer to a buffer of the size at least equal to the
         length specified in the constructor.
     */
-    wxStringCharType* operator wxStringCharType *();
+    operator wxStringCharType *();
 };
 
 

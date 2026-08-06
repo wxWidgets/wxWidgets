@@ -59,6 +59,7 @@ jobs:
                 ':!build/vcxproj-clone' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!misc/languages/data/unicode/*.xml' \
+                ':!misc/unictabl/mappings/*.TXT' \
                 ':!samples/widgets/widgets.bkl' \
                 ':!tests/test.bkl' \
                 ':!**/*akefile*' \

@@ -41,9 +41,9 @@ public:
     // override base class (pure) virtuals
     // -----------------------------------
 
-    virtual void WakeUpIdle();
+    virtual void WakeUpIdle() override;
 
-    virtual bool OnInitGui();
+    virtual bool OnInitGui() override;
 
     // implementation from now on
     // --------------------------
@@ -53,8 +53,8 @@ public:
 
 public:
     // Implementation
-    virtual bool Initialize(int& argc, wxChar **argv);
-    virtual void CleanUp();
+    virtual bool Initialize(int& argc, wxChar **argv) override;
+    virtual void CleanUp() override;
 
     WXWindow       GetTopLevelWidget() const { return m_topLevelWidget; }
     WXColormap     GetMainColormap(WXDisplay* display);

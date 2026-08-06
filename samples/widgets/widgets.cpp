@@ -113,7 +113,11 @@ enum
     TextEntry_AutoCompleteKeyLength,
 
     TextEntry_SetHint,
-    TextEntry_End
+    TextEntry_End,
+
+    Theme_Light,
+    Theme_Dark,
+    Theme_System,
 };
 
 const wxChar *WidgetsCategories[MAX_PAGES] = {
@@ -248,6 +252,8 @@ protected:
     {
         event.Enable( CurrentPage()->GetTextEntry() != nullptr );
     }
+
+    void OnTheme(wxCommandEvent& event);
 #endif // wxUSE_MENUS
 
     // initialize the book: add all pages to it
@@ -375,6 +381,10 @@ wxBEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
                         WidgetsFrame::OnUpdateTextUI)
 
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
+
+    EVT_MENU(Theme_Light, WidgetsFrame::OnTheme)
+    EVT_MENU(Theme_Dark, WidgetsFrame::OnTheme)
+    EVT_MENU(Theme_System, WidgetsFrame::OnTheme)
 #endif // wxUSE_MENUS
 wxEND_EVENT_TABLE()
 
@@ -583,6 +593,12 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                                  style, "Widgets");
 
     InitBook();
+
+    wxMenu* menuTheme = new wxMenu;
+    menuTheme->Append(Theme_System, "&System");
+    menuTheme->Append(Theme_Light, "&Light");
+    menuTheme->Append(Theme_Dark, "&Dark");
+    mbar->Append(menuTheme, "T&heme");
 
     // the lower one only has the log listbox and a button to clear it
 #if USE_LOG
@@ -1297,6 +1313,25 @@ void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
     {
         wxLogMessage("Text hints not supported.");
     }
+}
+
+void WidgetsFrame::OnTheme(wxCommandEvent& event)
+{
+    wxApp::Appearance appearance;
+    switch ( event.GetId() )
+    {
+        case Theme_Dark:
+            appearance = wxApp::Appearance::Dark;
+            break;
+        case Theme_Light:
+            appearance = wxApp::Appearance::Light;
+            break;
+        default:
+            appearance = wxApp::Appearance::System;
+            break;
+    }
+    if ( wxTheApp->SetAppearance(appearance) == wxApp::AppearanceResult::Failure)
+        wxLogMessage("SetAppearance: failure");
 }
 
 #endif // wxUSE_MENUS

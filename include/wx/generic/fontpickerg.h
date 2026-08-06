@@ -73,6 +73,13 @@ protected:
     wxFontData m_data;
 
 private:
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    // Set to true if the user selected a text colour in the font dialog, in
+    // which case we use this colour and not update to the default one when the
+    // system colours change.
+    bool m_useUserColour = false;
+
     wxDECLARE_DYNAMIC_CLASS(wxGenericFontButton);
 };
 

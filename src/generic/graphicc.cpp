@@ -1703,7 +1703,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                 // the upper 8 bits unused. Red, Green, and Blue are stored in
                 // the remaining 24 bits in that order.  The 32-bit quantities
                 // are stored native-endian.
-                *data = (wxALPHA_OPAQUE << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue() );
+                *data = wxUint32(wxALPHA_OPAQUE) << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue();
                 ++data;
                 ++p;
             }

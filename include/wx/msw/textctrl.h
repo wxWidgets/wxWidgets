@@ -247,6 +247,8 @@ protected:
 
     virtual wxString DoGetValue() const override;
 
+    virtual void MSWDrawThemeBorder(WXHDC hdc) override;
+
     virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
 
 #if wxUSE_RICHEDIT

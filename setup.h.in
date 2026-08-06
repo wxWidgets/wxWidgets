@@ -625,7 +625,7 @@
 
     This is needed by any Wayland-specific code in wxGTK implementation.
 
-    Recommended setting: 1, only set to 0 if wayland-client is not available.
+    Define if wayland-client is available.
  */
 #undef wxHAVE_WAYLAND_CLIENT
 
@@ -733,6 +733,11 @@
  * Use SDL for audio (Unix)
  */
 #define wxUSE_LIBSDL 0
+
+/*
+ * Use SDL 3.x (rather than SDL 2.x or 1.x) for the SDL audio backend
+ */
+#define wxUSE_LIBSDL3 0
 
 /*
  * Compile sound backends as plugins

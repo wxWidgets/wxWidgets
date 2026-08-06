@@ -3,6 +3,7 @@
 // Purpose:     wxHtmlCell - basic element of HTML output
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+//              (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -306,6 +307,18 @@ wxString wxHtmlCell::Dump(int indent) const
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlWordCell, wxHtmlCell);
 
+static constexpr unsigned NBSP_VALUE = 0x00a0;
+
+static bool wxHtmlIsNBSP(wxUniChar c)
+{
+    return c == wxUniChar(NBSP_VALUE);
+}
+
+static bool wxHtmlIsLineBreakingSpace(wxUniChar c)
+{
+    return !wxHtmlIsNBSP(c) && wxIsspace(c);
+}
+
 wxHtmlWordCell::wxHtmlWordCell(const wxString& word, const wxDC& dc) : wxHtmlCell()
     , m_Word(word)
 {
@@ -316,12 +329,15 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, const wxDC& dc) : wxHtmlCel
     m_Descent = d;
     SetCanLiveOnPagebreak(false);
     m_allowLinebreak = true;
+    if ( !m_Word.empty() && wxHtmlIsNBSP(m_Word[0u]) )
+        m_allowLinebreak = false;
 }
 
 void wxHtmlWordCell::SetPreviousWord(wxHtmlWordCell *cell)
 {
     if ( cell && m_Parent == cell->m_Parent &&
-         !wxIsspace(cell->m_Word.Last()) && !wxIsspace(m_Word[0u]) )
+         !wxHtmlIsLineBreakingSpace(cell->m_Word.Last()) &&
+         !wxHtmlIsLineBreakingSpace(m_Word[0u]) )
     {
         m_allowLinebreak = false;
     }

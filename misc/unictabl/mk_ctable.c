@@ -1,6 +1,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
         unsigned char c;
@@ -31,13 +32,13 @@ int main(int argc, char *argv[])
         scanf("%i\t%i\n", &enc, &unic);
         table[enc].u = unic;
         table[enc].c = enc;
-        if (enc < 128 && enc != unic) 
-            fprintf(stderr, "7bit ASCII incompatibilit (%s): %i->%i\n", 
+        if (enc < 128 && enc != unic)
+            fprintf(stderr, "7bit ASCII incompatibilit (%s): %i->%i\n",
                     argv[2], enc, unic);
     }
-    
+
     /* dump it: */
-    
+
     printf("\n\n"
            "/*\n"
            " * %s to Unicode recoding table\n"
@@ -45,9 +46,9 @@ int main(int argc, char *argv[])
            " */\n\n"
            "static const wxUint16 encoding_table__%s[128] = {",
            argv[2], argv[1], argv[2]);
-           
+
     for (i = 128; i < 256; i++)
-    { 
+    {
         if (i % 8 == 0)
             printf("\n   ");
         printf(" 0x%04X%c", table[i].u, (i == 255) ? '\n' : ',');
@@ -65,9 +66,9 @@ int main(int argc, char *argv[])
     printf("\n"
            "static wxUint16 encoding_table_rev__%s[128] = {",
            argv[2]);
-           
+
     for (i = 128; i < 256; i++)
-    { 
+    {
         if (i % 4 == 0)
             printf("\n    ");
         printf("{c:0x%02X,u:0x%04X}%c ", table[i].c, table[i].u, (i == 255) ? '\n' : ',');

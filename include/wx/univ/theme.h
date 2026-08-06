@@ -87,11 +87,11 @@ public:
     wxDelegateTheme(const wxString& theme);
     virtual ~wxDelegateTheme();
 
-    virtual wxRenderer *GetRenderer();
-    virtual wxArtProvider *GetArtProvider();
+    virtual wxRenderer *GetRenderer() override;
+    virtual wxArtProvider *GetArtProvider() override;
     virtual wxInputHandler *GetInputHandler(const wxString& control,
-                                            wxInputConsumer *consumer);
-    virtual wxColourScheme *GetColourScheme();
+                                            wxInputConsumer *consumer) override;
+    virtual wxColourScheme *GetColourScheme() override;
 
 protected:
     // gets or creates theme and sets m_theme to point to it,

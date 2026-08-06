@@ -1994,7 +1994,7 @@ public:
 
         @since 3.3.0
      */
-    bool IsFullySpecified() const
+    bool IsFullySpecified() const;
 
     /**
         Assignment operator for coordinate types.
