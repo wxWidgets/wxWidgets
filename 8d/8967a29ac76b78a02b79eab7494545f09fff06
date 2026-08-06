@@ -1,0 +1,1 @@
+wxAll (Unix): Many bug fixes in TCP-based wxIPC (JP Mattia, #24858).
