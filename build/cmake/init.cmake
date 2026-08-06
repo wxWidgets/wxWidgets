@@ -471,36 +471,36 @@ if(wxUSE_GUI)
                         set(wx_protocols_temp_dir ${wxOUTPUT_DIR}/wx/protocols)
                         set(wx_protocols_output_dir ${wxSETUP_HEADER_PATH}/wx/protocols)
 
-                        # Note that we need multiple execute_process()
-                        # invocations as single one would run commands
-                        # concurrently and not sequentially.
                         execute_process(
                             COMMAND
-                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_temp_dir}
-                        )
-                        execute_process(
-                            COMMAND
-                                ${WAYLAND_SCANNER} client-header
-                                    ${wx_protocols_input_dir}/pointer-warp-v1.xml
-                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.h
-                        )
-                        execute_process(
-                            COMMAND
-                                ${WAYLAND_SCANNER} private-code
-                                    ${wx_protocols_input_dir}/pointer-warp-v1.xml
-                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.c
-                        )
-
-                        execute_process(
-                            COMMAND
-                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_output_dir}
-                        )
-                        execute_process(
-                            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.h
-                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.c
+                                ${CMAKE_COMMAND} -E make_directory
+                                    ${wx_protocols_temp_dir}
                                     ${wx_protocols_output_dir}
                         )
+
+                        # This function takes the protocol name and the directory
+                        # containing the corresponding XML file.
+                        function(wx_generate_wayland_protocol protocol_dir protocol)
+                            execute_process(
+                                COMMAND
+                                    ${WAYLAND_SCANNER} client-header
+                                        ${protocol_dir}/${protocol}.xml
+                                        ${wx_protocols_temp_dir}/${protocol}-client-protocol.h
+                                COMMAND
+                                    ${WAYLAND_SCANNER} private-code
+                                        ${protocol_dir}/${protocol}.xml
+                                        ${wx_protocols_temp_dir}/${protocol}-client-protocol.c
+                            )
+
+                            execute_process(
+                                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                                        ${wx_protocols_temp_dir}/${protocol}-client-protocol.h
+                                        ${wx_protocols_temp_dir}/${protocol}-client-protocol.c
+                                        ${wx_protocols_output_dir}
+                            )
+                        endfunction()
+
+                        wx_generate_wayland_protocol(${wx_protocols_input_dir} pointer-warp-v1)
 
                         set(wxHAVE_WAYLAND_CLIENT ON)
                         list(APPEND wxTOOLKIT_INCLUDE_DIRS ${WAYLAND_CLIENT_INCLUDE_DIRS})
