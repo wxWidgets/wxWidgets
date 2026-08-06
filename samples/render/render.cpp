@@ -208,6 +208,7 @@ private:
         if ( m_renderer )
         {
             wxGraphicsContext* ctx = m_renderer->CreateContext(pdc);
+            gdc.SetTextForeground(GetForegroundColour());
             gdc.SetBackground(GetBackgroundColour());
             gdc.SetGraphicsContext(ctx);
         }
