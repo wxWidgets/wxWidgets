@@ -20,7 +20,8 @@ class WXDLLIMPEXP_FWD_CORE wxListBoxBase;
 // some constants
 // ----------------------------------------------------------------------------
 
-// These constants are no longer used and only remain here for compatibility.
+// These constants are no longer used as defaults (replaced by wxDefaultCoord)
+// and only remain here for compatibility.
 #define wxCHOICE_HEIGHT 150
 #define wxCHOICE_WIDTH 200
 
@@ -230,8 +231,8 @@ WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
                                        int x = wxDefaultCoord,
                                        int y = wxDefaultCoord,
                                        bool centre = true,
-                                       int width = wxCHOICE_WIDTH,
-                                       int height = wxCHOICE_HEIGHT,
+                                       int width = wxDefaultCoord,
+                                       int height = wxDefaultCoord,
                                        int initialSelection = 0);
 
 WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
@@ -241,8 +242,8 @@ WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
                                        int x = wxDefaultCoord,
                                        int y = wxDefaultCoord,
                                        bool centre = true,
-                                       int width = wxCHOICE_WIDTH,
-                                       int height = wxCHOICE_HEIGHT,
+                                       int width = wxDefaultCoord,
+                                       int height = wxDefaultCoord,
                                        int initialSelection = 0);
 
 WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
@@ -256,29 +257,6 @@ WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
                                             int n, const wxString *choices,
                                             int initialSelection,
                                             wxWindow *parent = nullptr);
-
-// Unlike the overloads above, these ones do use the provided position and
-// size: the dialog is created at the given position (unless centre is true,
-// in which case it is centred on the screen or its parent) and with the
-// given size (which is only used if it is bigger than the minimal size
-// required by the dialog contents).
-WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
-                                            const wxString& caption,
-                                            const wxArrayString& choices,
-                                            wxWindow *parent,
-                                            const wxPoint& pos,
-                                            const wxSize& size = wxDefaultSize,
-                                            bool centre = true,
-                                            int initialSelection = 0);
-
-WXDLLIMPEXP_CORE wxString wxGetSingleChoice(const wxString& message,
-                                            const wxString& caption,
-                                            int n, const wxString *choices,
-                                            wxWindow *parent,
-                                            const wxPoint& pos,
-                                            const wxSize& size = wxDefaultSize,
-                                            bool centre = true,
-                                            int initialSelection = 0);
 
 // Same as above but gets position in list of strings, instead of string,
 // or -1 if no selection
@@ -289,8 +267,8 @@ WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
                                        int x = wxDefaultCoord,
                                        int y = wxDefaultCoord,
                                        bool centre = true,
-                                       int width = wxCHOICE_WIDTH,
-                                       int height = wxCHOICE_HEIGHT,
+                                       int width = wxDefaultCoord,
+                                       int height = wxDefaultCoord,
                                        int initialSelection = 0);
 
 WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
@@ -300,8 +278,8 @@ WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
                                        int x = wxDefaultCoord,
                                        int y = wxDefaultCoord,
                                        bool centre = true,
-                                       int width = wxCHOICE_WIDTH,
-                                       int height = wxCHOICE_HEIGHT,
+                                       int width = wxDefaultCoord,
+                                       int height = wxDefaultCoord,
                                        int initialSelection = 0);
 
 WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
@@ -315,29 +293,6 @@ WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
                                             int n, const wxString *choices,
                                             int initialSelection,
                                             wxWindow *parent = nullptr);
-
-// Unlike the overloads above, these ones do use the provided position and
-// size: the dialog is created at the given position (unless centre is true,
-// in which case it is centred on the screen or its parent) and with the
-// given size (which is only used if it is bigger than the minimal size
-// required by the dialog contents).
-WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
-                                            const wxString& caption,
-                                            const wxArrayString& choices,
-                                            wxWindow *parent,
-                                            const wxPoint& pos,
-                                            const wxSize& size = wxDefaultSize,
-                                            bool centre = true,
-                                            int initialSelection = 0);
-
-WXDLLIMPEXP_CORE int wxGetSingleChoiceIndex(const wxString& message,
-                                            const wxString& caption,
-                                            int n, const wxString *choices,
-                                            wxWindow *parent,
-                                            const wxPoint& pos,
-                                            const wxSize& size = wxDefaultSize,
-                                            bool centre = true,
-                                            int initialSelection = 0);
 
 // Return client data instead or nullptr if canceled
 WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
@@ -348,8 +303,8 @@ WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
                                         int x = wxDefaultCoord,
                                         int y = wxDefaultCoord,
                                         bool centre = true,
-                                        int width = wxCHOICE_WIDTH,
-                                        int height = wxCHOICE_HEIGHT,
+                                        int width = wxDefaultCoord,
+                                        int height = wxDefaultCoord,
                                         int initialSelection = 0);
 
 WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
@@ -360,8 +315,8 @@ WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
                                         int x = wxDefaultCoord,
                                         int y = wxDefaultCoord,
                                         bool centre = true,
-                                        int width = wxCHOICE_WIDTH,
-                                        int height = wxCHOICE_HEIGHT,
+                                        int width = wxDefaultCoord,
+                                        int height = wxDefaultCoord,
                                         int initialSelection = 0);
 
 WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
@@ -378,31 +333,6 @@ WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
                                              void **client_data,
                                              int initialSelection,
                                              wxWindow *parent = nullptr);
-
-// Unlike the overloads above, these ones do use the provided position and
-// size: the dialog is created at the given position (unless centre is true,
-// in which case it is centred on the screen or its parent) and with the
-// given size (which is only used if it is bigger than the minimal size
-// required by the dialog contents).
-WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
-                                             const wxString& caption,
-                                             const wxArrayString& choices,
-                                             void **client_data,
-                                             wxWindow *parent,
-                                             const wxPoint& pos,
-                                             const wxSize& size = wxDefaultSize,
-                                             bool centre = true,
-                                             int initialSelection = 0);
-
-WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
-                                             const wxString& caption,
-                                             int n, const wxString *choices,
-                                             void **client_data,
-                                             wxWindow *parent,
-                                             const wxPoint& pos,
-                                             const wxSize& size = wxDefaultSize,
-                                             bool centre = true,
-                                             int initialSelection = 0);
 
 // fill the array with the indices of the chosen items, it will be empty
 // if no items were selected or Cancel was pressed - return the number of
@@ -415,8 +345,8 @@ WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
                                         int x = wxDefaultCoord,
                                         int y = wxDefaultCoord,
                                         bool centre = true,
-                                        int width = wxCHOICE_WIDTH,
-                                        int height = wxCHOICE_HEIGHT);
+                                        int width = wxDefaultCoord,
+                                        int height = wxDefaultCoord);
 
 WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
                                         const wxString& message,
@@ -426,30 +356,7 @@ WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
                                         int x = wxDefaultCoord,
                                         int y = wxDefaultCoord,
                                         bool centre = true,
-                                        int width = wxCHOICE_WIDTH,
-                                        int height = wxCHOICE_HEIGHT);
-
-// Unlike the overloads above, these ones do use the provided position and
-// size: the dialog is created at the given position (unless centre is true,
-// in which case it is centred on the screen or its parent) and with the
-// given size (which is only used if it is bigger than the minimal size
-// required by the dialog contents).
-WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
-                                        const wxString& message,
-                                        const wxString& caption,
-                                        int n, const wxString *choices,
-                                        wxWindow *parent,
-                                        const wxPoint& pos,
-                                        const wxSize& size = wxDefaultSize,
-                                        bool centre = true);
-
-WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
-                                        const wxString& message,
-                                        const wxString& caption,
-                                        const wxArrayString& choices,
-                                        wxWindow *parent,
-                                        const wxPoint& pos,
-                                        const wxSize& size = wxDefaultSize,
-                                        bool centre = true);
+                                        int width = wxDefaultCoord,
+                                        int height = wxDefaultCoord);
 
 #endif // _WX_GENERIC_CHOICDGG_H_

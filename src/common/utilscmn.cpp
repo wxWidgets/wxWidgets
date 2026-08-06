@@ -1415,7 +1415,7 @@ void wxInfoMessageBox(wxWindow* parent)
 
 wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         const wxString& defaultValue, wxWindow *parent,
-                        wxCoord x, wxCoord y, bool centre )
+                        wxCoord x, wxCoord y, bool centre, wxCoord width )
 {
     wxString str;
     long style = wxTextEntryDialogStyle;
@@ -1427,59 +1427,20 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
 
     wxTextEntryDialog dialog(parent, message, caption, defaultValue, style, wxPoint(x, y));
 
-    if (dialog.ShowModal() == wxID_OK)
+    if (width != wxDefaultCoord)
     {
-        str = dialog.GetValue();
+        wxSize sz = dialog.GetSize();
+        sz.SetWidth(wxMax(sz.GetWidth(), width));
+        dialog.SetSize(sz);
     }
 
-    return str;
-}
-
-wxString wxGetTextFromUser(const wxString& message,
-                        const wxString& caption,
-                        const wxString& defaultValue,
-                        wxWindow *parent,
-                        const wxPoint& pos,
-                        int width,
-                        bool centre)
-{
-    wxString str;
-    long style = wxTextEntryDialogStyle;
-
-    if (centre)
-        style |= wxCENTRE;
-    else
-        style &= ~wxCENTRE;
-
-    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style,
-                             pos, wxSize(width, wxDefaultCoord));
-
-    if (dialog.ShowModal() == wxID_OK)
+    if ( x != wxDefaultCoord || y != wxDefaultCoord )
     {
-        str = dialog.GetValue();
+        if ( centre )
+            dialog.Centre();
+        else
+            dialog.Move(x, y);
     }
-
-    return str;
-}
-
-wxString wxGetMultiLineTextFromUser(const wxString& message,
-                                    const wxString& caption,
-                                    const wxString& defaultValue,
-                                    wxWindow *parent,
-                                    const wxPoint& pos,
-                                    const wxSize& size,
-                                    bool centre)
-{
-    wxString str;
-    long style = wxTextEntryDialogStyle | wxTE_MULTILINE;
-
-    if (centre)
-        style |= wxCENTRE;
-    else
-        style &= ~wxCENTRE;
-
-    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style,
-                             pos, size);
 
     if (dialog.ShowModal() == wxID_OK)
     {

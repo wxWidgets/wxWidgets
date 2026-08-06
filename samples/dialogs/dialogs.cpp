@@ -1186,15 +1186,16 @@ void MyFrame::LineEntry(wxCommandEvent& WXUNUSED(event))
     }
 
     // wxGetTextFromUser() can also be used directly, without having to
-    // create a wxTextEntryDialog object explicitly, and, unlike its other
-    // overload, this one does honour the given position and width.
+    // create a wxTextEntryDialog object explicitly. This overload honours
+    // the given position and width.
     const wxString value = wxGetTextFromUser(
                                 "This is a small sample\n"
                                 "Using an explicit position and width this time",
                                 "Please enter a string",
                                 "Default value",
                                 this,
-                                GetPosition() + wxSize(50, 50),
+                                GetPosition().x + 50, GetPosition().y + 50,
+                                true,
                                 500);
     if ( !value.empty() )
     {
@@ -1213,22 +1214,6 @@ void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
     if (dialog.ShowModal() == wxID_OK)
     {
         wxMessageBox(dialog.GetValue(), "Got text", wxOK | wxICON_INFORMATION, this);
-    }
-
-    // wxGetMultiLineTextFromUser() is the multiline counterpart of
-    // wxGetTextFromUser(), and, unlike that function, it does honour the
-    // given position and size.
-    const wxString value = wxGetMultiLineTextFromUser(
-                                "You can enter a multiline string here too\n"
-                                "using an explicit position and size",
-                                "Please enter some text",
-                                "First line\nSecond one\nAnd another one too",
-                                this,
-                                GetPosition() + wxSize(50, 50),
-                                wxSize(500, 400));
-    if ( !value.empty() )
-    {
-        wxLogMessage("You entered \"%s\"", value);
     }
 }
 #endif // wxUSE_TEXTDLG
@@ -1277,8 +1262,8 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
     }
 
     // wxGetSingleChoiceIndex() can also be used directly, without having to
-    // create a wxSingleChoiceDialog object explicitly, and, unlike its other
-    // overloads, this one does honour the given position and size.
+    // create a wxSingleChoiceDialog object explicitly. This overload honours
+    // the given position and size.
     const int index = wxGetSingleChoiceIndex(
                             "This is a small sample\n"
                             "A single-choice convenience dialog\n"
@@ -1286,8 +1271,10 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
                             "Please select a value",
                             WXSIZEOF(choices), choices,
                             this,
-                            GetPosition() + wxSize(50, 50),
-                            wxSize(500, 400));
+                            GetPosition().x + 50, GetPosition().y + 50,
+                            true,
+                            500, 400,
+                            2);
     if ( index != -1 )
     {
         wxLogMessage("You selected \"%s\"", choices[index]);
@@ -1314,8 +1301,9 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
                                         "Please select a value",
                                         WXSIZEOF(choices), choices,
                                         this,
-                                        GetPosition() + wxSize(50, 50),
-                                        wxSize(500, 400));
+                                        GetPosition().x + 50, GetPosition().y + 50,
+                                        true,
+                                        500, 400);
     if ( count >= 0 )
     {
         wxString msg;
