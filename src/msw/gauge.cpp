@@ -31,7 +31,9 @@
 
 #include "wx/appprogress.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
+#include "wx/msw/uxtheme.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -92,6 +94,43 @@ bool wxGauge::Create(wxWindow *parent,
 
 wxGauge::~wxGauge()
 {
+}
+
+void wxGauge::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxGaugeBase::MSWSetDarkOrLightMode(setmode);
+
+    // Get window styles, for the border style.
+    auto style = ::GetWindowLong(m_hWnd, GWL_STYLE);
+    auto exStyle = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // Disable visual styles so colour messages take effect.
+        ::SetWindowTheme(m_hWnd, L"", L"");
+        // Colours taken from a progress bar with DarkMode_DarkTheme.
+        ::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, 0x131313);
+        ::SendMessage(m_hWnd, PBM_SETBARCOLOR, 0, 0x5fcb6c);
+
+        // The default border looks bad. Use simple border.
+        style |= WS_BORDER;
+        exStyle &= ~WS_EX_STATICEDGE;
+    }
+    else
+    {
+        // Restore default border.
+        style &= ~WS_BORDER;
+        exStyle |= WS_EX_STATICEDGE;
+    }
+
+    // Set new border unless a non-default border was specified.
+    if ( (GetWindowStyleFlag() & wxBORDER_MASK) == wxBORDER_DEFAULT )
+    {
+        ::SetWindowLong(m_hWnd, GWL_STYLE, style);
+        ::SetWindowLong(m_hWnd, GWL_EXSTYLE, exStyle);
+        ::SetWindowPos(m_hWnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED |
+            SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
+    }
 }
 
 WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
