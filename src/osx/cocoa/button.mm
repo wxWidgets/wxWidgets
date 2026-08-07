@@ -142,7 +142,9 @@ wxOSXSetBezelStyleFromBorderFlags(WX_NSButton v,
             case wxBORDER_NONE:
                 bezel = NSShadowlessSquareBezelStyle;
                 [v setBordered:NO];
+#if wxUSE_TOGGLEBTN
                 toggleButtonType = NSToggleButton;
+#endif
                 break;
 
             case wxBORDER_SIMPLE:
