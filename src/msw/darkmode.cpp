@@ -849,10 +849,72 @@ void NotifySysColorChange()
         gs_hasChanged = true;
 }
 
-// This function is for subclassing common dialogs as well as ComboBox
-// controls in common dialogs. The WM_DRAWITEM message for a ComboBox goes to
+// This subclass procedure draws check box controls.
+static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
+    WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
+    DWORD_PTR WXUNUSED(dwRefData))
+{
+    switch (uMsg)
+    {
+        case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = ::BeginPaint(hwnd, &ps);
+            RECT rcClient;
+            ::GetClientRect(hwnd, &rcClient);
+
+            // Clear background.
+            AutoHBRUSH hBgBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel());
+            ::FillRect(hdc, &rcClient, hBgBrush);
+
+            // Draw the box.
+            const LONG boxSize = 13;
+            RECT rcBox = { };
+            rcBox.top = (rcClient.bottom - boxSize) / 2;
+            rcBox.right = boxSize;
+            rcBox.bottom = rcBox.top + boxSize;
+            AutoHBRUSH hFgBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT).GetPixel());
+            ::FrameRect(hdc, &rcBox, hFgBrush);
+
+            // Set the font.
+            HFONT hFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0);
+            HFONT hOldFont = (HFONT)::SelectObject(hdc, hFont);
+
+            // Draw check mark, if checked.
+            ::SetBkMode(hdc, TRANSPARENT);
+            ::SetTextColor(hdc, wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT).GetPixel());
+            if ( ::SendMessage(hwnd, BM_GETCHECK, 0, 0) == BST_CHECKED )
+            {
+                // Draw a Unicode check mark character.
+                ::DrawTextW(hdc, L"\x2713", -1, &rcBox, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+            }
+
+            // Draw the text.
+            wchar_t text[64];
+            ::GetWindowTextW(hwnd, text, sizeof(text) / sizeof(wchar_t));
+            RECT textRect = rcClient;
+            textRect.left = boxSize + 3;
+            ::DrawTextW(hdc, text, -1, &textRect, DT_SINGLELINE | DT_VCENTER);
+
+            if (hOldFont) {
+                ::SelectObject(hdc, hOldFont);
+            }
+            ::EndPaint(hwnd, &ps);
+            return 0;
+        }
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, CommonDialogCheckBoxProc, uIdSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+// This subclass procedure draws ComboBox controls. It handles WM_DRAWITEM in
+// both the dialog and the ComboBox. The WM_DRAWITEM for a ComboBox goes to
 // the dialog, whereas the WM_DRAWITEM for the ComboLBox goes to the ComboBox.
-static LRESULT CALLBACK CommonDialogProc(HWND hwnd, UINT uMsg,
+static LRESULT CALLBACK CommonDialogComboBoxProc(HWND hwnd, UINT uMsg,
     WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
     DWORD_PTR WXUNUSED(dwRefData))
 {
@@ -909,7 +971,7 @@ static LRESULT CALLBACK CommonDialogProc(HWND hwnd, UINT uMsg,
         }
 
     case WM_NCDESTROY:
-        ::RemoveWindowSubclass(hwnd, CommonDialogProc, uIdSubclass);
+        ::RemoveWindowSubclass(hwnd, CommonDialogComboBoxProc, uIdSubclass);
         break;
     }
 
@@ -928,7 +990,7 @@ static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
     {
         // If the control is owner-draw, subclass it to draw the ComboLBox.
         if ( style & CBS_OWNERDRAWFIXED )
-            ::SetWindowSubclass(hwnd, CommonDialogProc, 1, 0);
+            ::SetWindowSubclass(hwnd, CommonDialogComboBoxProc, 1, 0);
 
         // Handle the inner ComboLBox.
         WinStruct<COMBOBOXINFO> info;
@@ -961,6 +1023,10 @@ static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
         {
             ::SetWindowTheme(hwnd, L"", L"");
         }
+
+        // Custom draw check boxes.
+        if ( bs == BS_AUTOCHECKBOX )
+            ::SetWindowSubclass(hwnd, CommonDialogCheckBoxProc, 1, 0);
     }
     else if ( wcscmp(className, L"Edit") == 0 )
     {
@@ -990,7 +1056,7 @@ UINT_PTR CALLBACK CommonDialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
             // Enable dark mode for children.
             ::EnumChildWindows(hwnd, CommonDialogChild, 0);
             // Subclass the dialog.
-            ::SetWindowSubclass(hwnd, CommonDialogProc, 1, 0);
+            ::SetWindowSubclass(hwnd, CommonDialogComboBoxProc, 1, 0);
             break;
 
         case WM_CTLCOLORBTN:
