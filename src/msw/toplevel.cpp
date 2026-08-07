@@ -505,6 +505,11 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     {
         EnableCloseButton(false);
     }
+    else
+    {
+        ::GetSystemMenu(GetHwnd(), FALSE);
+    }
+
 
     // for standard dialogs the dialog manager generates WM_CHANGEUISTATE
     // itself but for custom windows we have to do it ourselves in order to
