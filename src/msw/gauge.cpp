@@ -120,11 +120,8 @@ void wxGauge::MSWSetDarkOrLightMode(SetMode setmode)
             ::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, 0x131313);
             ::SendMessage(m_hWnd, PBM_SETBARCOLOR, 0, 0x5fcb6c);
         }
-        else
-        {
-            ::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, CLR_DEFAULT);
-            ::SendMessage(m_hWnd, PBM_SETBARCOLOR, 0, CLR_DEFAULT);
-        }
+        // Else when going to light mode, the theme was restored by the base
+        // class MSWSetDarkOrLightMode() call above.
     }
 
     // Adjust the border unless a border was specified.
