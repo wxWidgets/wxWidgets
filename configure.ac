@@ -3100,15 +3100,71 @@ installed, where VER is 2, 3 or 4.
             fi
 
             if test -n "$WAYLAND_SCANNER" ; then
+                dnl Check if we can use the session management protocol which
+                dnl normally requires GTK >= 3.24.53 but allow using it with
+                dnl the versions of 3.24.52 that already have the support
+                dnl required for it, at least until 3.24.53 is released.
+                AC_CACHE_CHECK([for support of the Wayland session management protocol],
+                    wx_cv_gtk_wayland_sm,
+                    [
+                        GTK_VERSION=`$PKG_CONFIG --modversion gtk+-3.0`
+                        AS_VERSION_COMPARE([$GTK_VERSION], [3.24.52],
+                            wx_cv_gtk_wayland_sm=no,
+                            wx_cv_gtk_wayland_sm=maybe,
+                            wx_cv_gtk_wayland_sm=yes
+                        )
+
+                        if test "$wx_cv_gtk_wayland_sm" = "maybe"; then
+                            save_CFLAGS=$CFLAGS
+                            save_LIBS=$LIBS
+                            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+                            LIBS="$LIBS $GUI_TK_LIBRARY"
+                            AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <gdk/gdkwayland.h>],
+                                [
+                                    gdk_wayland_window_get_xdg_toplevel(0)
+                                ])],
+                                wx_cv_gtk_wayland_sm=yes,
+                                wx_cv_gtk_wayland_sm=no
+                            )
+                            LIBS=$save_LIBS
+                            CFLAGS=$save_CFLAGS
+                        fi
+                    ]
+                )
+
+                if test "$wx_cv_gtk_wayland_sm" = "yes"; then
+                    dnl We don't check for wayland-protocols being installed as
+                    dnl it's a dependency of libgtk-3-dev or similar, and so
+                    dnl should be available.
+                    AC_CACHE_CHECK([for wayland-protocols data directory],
+                        wx_cv_wayland_protocols_dir,
+                        [
+                            wx_cv_wayland_protocols_dir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols`
+                        ]
+                    )
+                    WAYLAND_PROTOCOLS_DIR=$wx_cv_wayland_protocols_dir
+
+                    AC_DEFINE(wxHAVE_WAYLAND_SESSION_MANAGEMENT)
+                else
+                    dnl Don't bother running wayland-scanner for this protocol.
+                    WAYLAND_SM_SUPPORT=':'
+                fi
+
                 AC_DEFINE(wxHAVE_WAYLAND_CLIENT)
                 AC_CONFIG_COMMANDS([wayland-protocols],
                     [
                         mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
                         $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
                         $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
+                        $WAYLAND_SM_SUPPORT $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/xdg-session-management-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-session-management-v1-client-protocol.h
+                        $WAYLAND_SM_SUPPORT $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/xdg-session-management-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-session-management-v1-client-protocol.c
+                        $WAYLAND_SM_SUPPORT $WAYLAND_SCANNER client-header $WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-shell-client-protocol.h
+                        $WAYLAND_SM_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-shell-client-protocol.c
                     ],
                     [
                         WAYLAND_SCANNER=$WAYLAND_SCANNER
+                        WAYLAND_SM_SUPPORT=$WAYLAND_SM_SUPPORT
+                        WAYLAND_PROTOCOLS_DIR=$WAYLAND_PROTOCOLS_DIR
                     ]
                 )
             else

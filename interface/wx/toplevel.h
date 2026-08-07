@@ -437,6 +437,24 @@ public:
         virtual bool SaveValue(const wxString& name, int value) = 0;
 
         /**
+            Save a single field with the given string value.
+
+            This function is similar to SaveValue(), but is currently only used
+            when using wxGTK with Wayland XDG session management protocol and
+            so can be left unimplemented when not targeting this platform.
+
+            @param name uniquely identifies the field but is otherwise
+                arbitrary.
+            @param value value of the field, currently always non-empty.
+
+            @return @true if the field was saved or @false if saving it failed,
+                resulting in wxTopLevelWindow::SaveGeometry() failure.
+
+            @since 3.3.4
+         */
+        virtual bool SaveString(const wxString& name, const wxString& value);
+
+        /**
             Try to restore a single field.
 
             Unlike for SaveValue(), returning @false from this function may
@@ -452,6 +470,24 @@ public:
                 found or an error occurred.
          */
         virtual bool RestoreValue(const wxString& name, int* value) const = 0;
+
+        /**
+            Try to restore a single string-valued field.
+
+            This function is similar to RestoreValue(), but is currently only
+            used when using wxGTK with Wayland XDG session management protocol
+            and so can be left unimplemented when not targeting this platform.
+
+            @param name uniquely identifies the field.
+            @param value non-null pointer to the value to be filled by this
+                function.
+
+            @return @true if the field was retrieved or @false if it wasn't
+                found or an error occurred,
+
+            @since 3.3.4
+         */
+        virtual bool RestoreString(const wxString& name, wxString* value) const;
     };
 
     /**
