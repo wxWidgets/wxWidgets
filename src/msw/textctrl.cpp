@@ -2872,37 +2872,40 @@ void wxTextCtrl::MSWDrawThemeBorder(WXHDC hdc)
         RECT rect;
         wxCopyRectToRECT(GetSize(), rect);
 
-        // Colour for top, left, and right. Taken from WinUI 3 TextBox.
-        const COLORREF colTop = 0x303030;
-        // Colour for bottom when unfocused. Taken from WinUI 3 TextBox.
-        const COLORREF colBotGray = 0x9a9a9a;
-        // Colour for bottom when focused. This accent colour matches the
-        // Win32 checkbox when checked, and the radio button when selected.
-        const COLORREF colBotBlue = 0xffcd60;
-
-        // Draw outer 1 pixel thick border with a rectangle. The bottom will be
-        // drawn over later.
-        AutoHBRUSH brushBorder(colTop);
-        ::FrameRect(hdc, &rect, brushBorder);
-        // Draw inner 1 pixel thick rectangle as background colour.
-        AutoHBRUSH brushBg(GetBackgroundColour().GetPixel());
-        RECT rcInner = rect;
-        ::InflateRect(&rcInner, -1, -1);
-        ::FrameRect(hdc, &rcInner, brushBg);
-        // Draw 1 or 2 pixel thick bottom line.
-        COLORREF colBot;
+        // Colors taken from the Edit control rendered with
+        // DarkMode_DarkTheme, as can be seen with wxFindReplaceDialog.
+        const COLORREF colOuter = 0x383838;
+        const COLORREF colInnerFocus = 0x212121;
+        const COLORREF colInnerNoFocus = 0x2c2c2c;
+        const COLORREF colBottomFocus = 0xffc24c;
+        const COLORREF colBottomNoFocus = 0xa4a4a4;
+        COLORREF colInner;
+        COLORREF colBottom;
         int thicknessBot;
         if ( HasFocus() )
         {
-            colBot = colBotBlue;
+            colInner = colInnerFocus;
+            colBottom = colBottomFocus;
             thicknessBot = 2;
         }
         else
         {
-            colBot = colBotGray;
+            colInner = colInnerNoFocus;
+            colBottom = colBottomNoFocus;
             thicknessBot = 1;
         }
-        AutoHBRUSH brushBottom(colBot);
+
+        // Draw outer 1 pixel thick border with a rectangle. The bottom will be
+        // drawn over later.
+        AutoHBRUSH brushBorder(colOuter);
+        ::FrameRect(hdc, &rect, brushBorder);
+        // Draw inner 1 pixel thick rectangle.
+        AutoHBRUSH brushBg(colInner);
+        RECT rcInner = rect;
+        ::InflateRect(&rcInner, -1, -1);
+        ::FrameRect(hdc, &rcInner, brushBg);
+        // Draw 1 or 2 pixel thick bottom line.
+        AutoHBRUSH brushBottom(colBottom);
         RECT rcBottom = rect;
         rcBottom.top = rect.bottom - thicknessBot;
         ::FillRect(hdc, &rcBottom, brushBottom);
