@@ -851,33 +851,6 @@ void NotifySysColorChange()
 
 } // namespace wxMSWDarkMode
 
-void wxMSWImpl::PaintScrollBarCorner(HWND hwnd)
-{
-    WinStruct<SCROLLBARINFO> sbiV, sbiH;
-
-    if ( !::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) ||
-         !::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) ||
-            (sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) ||
-            (sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
-    {
-        return;
-    }
-
-    const RECT windowRect = wxGetWindowRect(hwnd);
-
-    RECT rectToPaint;
-    rectToPaint.left = sbiV.rcScrollBar.left - windowRect.left;
-    rectToPaint.top = sbiH.rcScrollBar.top - windowRect.top;
-
-    // Constrain outer limits by exactly -1 to snap cleanly to the visual frame edge
-    rectToPaint.right = (windowRect.right - windowRect.left) - 1;
-    rectToPaint.bottom = (windowRect.bottom - windowRect.top) - 1;
-
-    WindowHDC hdcWin(hwnd);
-    AutoHBRUSH hBrush(RGB(0x17, 0x17, 0x17));
-    ::FillRect(hdcWin, &rectToPaint, hBrush);
-}
-
 #else // !wxUSE_DARK_MODE
 
 bool
@@ -968,10 +941,6 @@ void NotifySysColorChange()
 }
 
 } // namespace wxMSWDarkMode
-
-void wxMSWImpl::PaintScrollBarCorner(HWND WXUNUSED(hwnd))
-{
-}
 
 #endif // wxUSE_DARK_MODE/!wxUSE_DARK_MODE
 
