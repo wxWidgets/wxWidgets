@@ -38,6 +38,7 @@
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/variant.h"
 #include "wx/private/jsscriptwrapper.h"
+#include "wx/scopedptr.h"
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSValueRef.h>
 #include <JavaScriptCore/JSStringRef.h>
@@ -500,7 +501,7 @@ wxgtk_webview_webkit_uri_scheme_request_cb(WebKitURISchemeRequest *request,
     {
         const wxString uri = wxString::FromUTF8(webkit_uri_scheme_request_get_uri(request));
 
-        wxFSFile* file = handler->GetFile(uri);
+        wxScopedPtr<wxFSFile> file(handler->GetFile(uri));
         if(file)
         {
             gint64 length = file->GetStream()->GetLength();

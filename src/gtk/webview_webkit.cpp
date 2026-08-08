@@ -20,6 +20,7 @@
 #include "wx/log.h"
 
 #include "wx/private/webview.h"
+#include "wx/scopedptr.h"
 
 #include <webkit/webkit.h>
 
@@ -158,7 +159,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
         if(handler)
         {
             webKitCtrl->m_guard = true;
-            wxFSFile* file = handler->GetFile(wxuri);
+            wxScopedPtr<wxFSFile> file(handler->GetFile(wxuri));
             if(file)
             {
                 webKitCtrl->SetPage(*file->GetStream(), wxuri);
@@ -385,7 +386,7 @@ wxgtk_webview_webkit_resource_req(WebKitWebView *,
         if(webKitCtrl->m_vfsurl == uri)
             return;
 
-        wxFSFile* file = handler->GetFile(uri);
+        wxScopedPtr<wxFSFile> file(handler->GetFile(uri));
         if(file)
         {
             //We load the data into a data url to save it being written out again
