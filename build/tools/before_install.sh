@@ -128,7 +128,7 @@ case $(uname -s) in
         fi
 
         if [ -f /etc/redhat-release ]; then
-            dnf install -y ${WX_EXTRA_PACKAGES} gawk expat-devel findutils g++ git-core gspell-devel gstreamer1-plugins-base-devel gtk3-devel make libcurl-devel libjpeg-devel libnotify-devel libpng-devel libSM-devel libsecret-devel libtiff-devel SDL-devel webkit2gtk4.1-devel zlib-devel
+            dnf install -y ${WX_EXTRA_PACKAGES} gawk expat-devel findutils g++ git-core gspell-devel gstreamer1-plugins-base-devel gtk3-devel make libcurl-devel libjpeg-devel libnotify-devel libpng-devel libSM-devel libsecret-devel libtiff-devel SDL-devel wayland-protocols-devel webkit2gtk4.1-devel zlib-devel
         fi
         ;;
 
