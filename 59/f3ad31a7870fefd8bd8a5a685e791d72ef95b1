@@ -1,0 +1,1 @@
+wxGTK: Support restoring window geometry under Wayland (#26324).
