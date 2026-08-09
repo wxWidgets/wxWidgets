@@ -158,6 +158,39 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 
     return copy;
 }
+
+-(NSString*) description
+{
+    // wxCustomCell's -stringValue (inherited, unmodified, from
+    // NSTextFieldCell) falls back to "-[objectValue description]" whenever
+    // the cell's objectValue -- one of these -- isn't itself a string. Both
+    // VoiceOver and the ordinary tooltip mechanism read a cell's text this
+    // way, and NSObject's default -description produces exactly the debug
+    // representation ("<wxCustomRendererObject: 0x...>") both were seen to
+    // leak. Overriding it here, on this private wx-internal value holder,
+    // gets every one of those callers a real answer for free.
+    if ( customRenderer )
+    {
+        const wxString text = customRenderer->GetAccessibleText();
+        if ( !text.empty() )
+        {
+            // wxCFStringRef::AsNSString() does not retain: the NSString it
+            // returns is only valid for as long as the wxCFStringRef that
+            // produced it is alive. Keeping that wxCFStringRef as a named
+            // local -- rather than a temporary in the same expression used
+            // to initialize nsText -- keeps it alive across the retain
+            // below; a temporary would be destroyed, releasing the
+            // underlying CFStringRef, at the end of the initialization
+            // statement, before the retain on the next line ever ran,
+            // handing the caller a dangling pointer.
+            wxCFStringRef cfText(text);
+            NSString * const nsText = cfText.AsNSString();
+            return [[nsText retain] autorelease];
+        }
+    }
+
+    return [super description];
+}
 @end
 
 // ----------------------------------------------------------------------------

@@ -384,6 +384,23 @@ public:
     virtual void SetEnabled(bool enabled) override;
     bool GetEnabled() const { return m_enabled; }
 
+    // Return a plain text representation of the value currently rendered by
+    // this cell, e.g. for use by screen readers. Unlike
+    // GetAccessibleDescription() (see wxDataViewRendererBase above), this is
+    // always available regardless of wxUSE_ACCESSIBILITY: on ports whose
+    // native accessibility support doesn't go through wxAccessible --
+    // currently only macOS -- GetAccessibleDescription() is never called,
+    // and a custom renderer would otherwise have no way at all to describe
+    // itself to e.g. VoiceOver.
+    //
+    // The default implementation stringifies the value returned by
+    // GetValue(), mirroring what
+    // wxDataViewCustomRenderer::GetAccessibleDescription() already does for
+    // the generic implementation; override it if the renderer draws
+    // something a bare wxVariant::MakeString() can't usefully describe
+    // (e.g. a progress bar).
+    virtual wxString GetAccessibleText() const;
+
 
     // Implementation only from now on
 
