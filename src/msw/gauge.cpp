@@ -31,7 +31,9 @@
 
 #include "wx/appprogress.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
+#include "wx/msw/uxtheme.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -92,6 +94,58 @@ bool wxGauge::Create(wxWindow *parent,
 
 wxGauge::~wxGauge()
 {
+}
+
+void wxGauge::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    if ( wxCheckOsVersion(10, 0, 26200) )
+        support.themeName = L"DarkMode_DarkTheme";
+    else
+        wxGaugeBase::MSWGetDarkModeSupport(support);
+}
+
+void wxGauge::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxGaugeBase::MSWSetDarkOrLightMode(setmode);
+
+    // Adjust colours unless we use DarkMode_DarkTheme in
+    // MSWGetDarkModeSupport().
+    if ( !wxCheckOsVersion(10, 0, 26200) )
+    {
+        if ( wxMSWDarkMode::IsActive() )
+        {
+            // Disable visual styles so colour messages take effect.
+            ::SetWindowTheme(m_hWnd, L"", L"");
+            // Colours taken from a progress bar with DarkMode_DarkTheme.
+            ::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, 0x131313);
+            ::SendMessage(m_hWnd, PBM_SETBARCOLOR, 0, 0x5fcb6c);
+        }
+        // Else when going to light mode, the theme was restored by the base
+        // class MSWSetDarkOrLightMode() call above.
+    }
+
+    // Adjust the border unless a border was specified.
+    if ( (GetWindowStyleFlag() & wxBORDER_MASK) == wxBORDER_DEFAULT )
+    {
+        auto style = ::GetWindowLong(m_hWnd, GWL_STYLE);
+        auto exStyle = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
+        if ( wxMSWDarkMode::IsActive() )
+        {
+            // The default border looks bad. Use simple border.
+            style |= WS_BORDER;
+            exStyle &= ~WS_EX_STATICEDGE;
+        }
+        else
+        {
+            // Restore default border.
+            style &= ~WS_BORDER;
+            exStyle |= WS_EX_STATICEDGE;
+        }
+        ::SetWindowLong(m_hWnd, GWL_STYLE, style);
+        ::SetWindowLong(m_hWnd, GWL_EXSTYLE, exStyle);
+        ::SetWindowPos(m_hWnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED |
+            SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
+    }
 }
 
 WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
