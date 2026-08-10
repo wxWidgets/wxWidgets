@@ -112,16 +112,24 @@ void wxGauge::MSWSetDarkOrLightMode(SetMode setmode)
     // MSWGetDarkModeSupport().
     if ( !wxCheckOsVersion(10, 0, 26200) )
     {
+        // Disable visual styles so colour messages take effect.
+        ::SetWindowTheme(m_hWnd, L"", L"");
         if ( wxMSWDarkMode::IsActive() )
         {
-            // Disable visual styles so colour messages take effect.
-            ::SetWindowTheme(m_hWnd, L"", L"");
             // Colours taken from a progress bar with DarkMode_DarkTheme.
             ::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, 0x131313);
             ::SendMessage(m_hWnd, PBM_SETBARCOLOR, 0, 0x5fcb6c);
         }
-        // Else when going to light mode, the theme was restored by the base
-        // class MSWSetDarkOrLightMode() call above.
+        else
+        {
+            // The control does not go back into themed mode, so we must
+            // explicitly set the colours.
+            ::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, CLR_DEFAULT);
+            // For the foreground, CLR_DEFAULT apparently sets the unthemed
+            // colour, which is blue instead of green. Use the actual observed
+            // theme colour.
+            ::SendMessage(m_hWnd, PBM_SETBARCOLOR, 0, 0x25b006);
+        }
     }
 
     // Adjust the border unless a border was specified.
