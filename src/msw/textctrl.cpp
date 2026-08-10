@@ -2874,24 +2874,20 @@ void wxTextCtrl::MSWDrawThemeBorder(WXHDC hdc)
 
         // Colors taken from the Edit control rendered with
         // DarkMode_DarkTheme, as can be seen with wxFindReplaceDialog.
-        const COLORREF colOuter = 0x383838;
-        const COLORREF colInnerFocus = 0x212121;
-        const COLORREF colInnerNoFocus = 0x2c2c2c;
-        const COLORREF colBottomFocus = 0xffc24c;
-        const COLORREF colBottomNoFocus = 0xa4a4a4;
+        const COLORREF colOuter = wxHexToCR(wxMSWDarkMode::COLOUR_EDIT_OUTER);
         COLORREF colInner;
         COLORREF colBottom;
         int thicknessBot;
         if ( HasFocus() )
         {
-            colInner = colInnerFocus;
-            colBottom = colBottomFocus;
+            colInner = wxHexToCR(wxMSWDarkMode::COLOUR_EDIT_INNER_FOCUS);
+            colBottom = wxHexToCR(wxMSWDarkMode::COLOUR_EDIT_BOTTOM_FOCUS);
             thicknessBot = 2;
         }
         else
         {
-            colInner = colInnerNoFocus;
-            colBottom = colBottomNoFocus;
+            colInner = wxHexToCR(wxMSWDarkMode::COLOUR_EDIT_INNER_NOFOCUS);
+            colBottom = wxHexToCR(wxMSWDarkMode::COLOUR_EDIT_BOTTOM_NOFOCUS);
             thicknessBot = 1;
         }
 

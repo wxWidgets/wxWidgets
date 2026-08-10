@@ -260,6 +260,15 @@ inline void wxRGBToColour(wxColour& c, COLORREF rgb)
     c.Set(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
 }
 
+// Convert colour from hex format 0xRRGGBB to COLORREF 0xBBGGRR
+inline COLORREF wxHexToCR(DWORD hex)
+{
+    BYTE r = (hex >> 16) & 0xff;
+    BYTE g = (hex >> 8) & 0xff;
+    BYTE b = hex & 0xff;
+    return RGB(r, g, b);
+}
+
 // get the standard colour map for some standard colours - see comment in this
 // function to understand why is it needed and when should it be used
 //

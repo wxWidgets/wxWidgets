@@ -15,6 +15,31 @@
 namespace wxMSWDarkMode
 {
 
+// Colour values needed for dark mode support. Unlike wxSystemColour, these
+// colours have no useful equivalent on other platforms and are only needed
+// for Windows dark mode support. When possible, these colours are chosen to
+// accurately match the native Windows look.
+enum Colour {
+    // Generic border. Value choosen arbitrarily. There does not seem to be
+    // any standard colour.
+    COLOUR_BORDER = 0x808080,
+    // Simple EDIT control border. Taken from appearance with
+    // DarkMode_DarkTheme on Windows 11 25H2.
+    COLOUR_EDIT_OUTER = 0x383838,
+    COLOUR_EDIT_INNER_FOCUS = 0x212121,
+    COLOUR_EDIT_INNER_NOFOCUS = 0x2c2c2c,
+    COLOUR_EDIT_BOTTOM_FOCUS = 0x4cc2ff,
+    COLOUR_EDIT_BOTTOM_NOFOCUS = 0xa4a4a4,
+    // wxGauge background and bar. Dark colours taken from appearance with
+    // DarkMode_DarkTheme on Windows 11 25H2. Light colours taken from the
+    // default theme on the most recent Windows without DarkMode_DarkTheme,
+    // Windows 11 24H2.
+    COLOUR_GAUGE_DARK_BK = 0x131313,
+    COLOUR_GAUGE_DARK_BAR = 0x6ccb5f,
+    COLOUR_GAUGE_LIGHT_BK = 0xe6e6e6,
+    COLOUR_GAUGE_LIGHT_BAR = 0x0f7b0f,
+};
+
 // Return true if the application is using dark mode: note that this will only
 // be the case if wxApp::MSWEnableDarkMode() was called.
 WXDLLIMPEXP_CORE

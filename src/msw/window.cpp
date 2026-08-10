@@ -3923,9 +3923,8 @@ void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc)
     {
         // There does not seem to be a theme class that draws a good
         // border on all supported versions of Windows. Manually draw a
-        // 1-pixel thick border. Use the observed colour of the simple
-        // border, WS_BORDER.
-        AutoHBRUSH brushBorder(0x646464);
+        // 1-pixel thick border.
+        AutoHBRUSH brushBorder(wxHexToCR(wxMSWDarkMode::COLOUR_BORDER));
         ::FrameRect(hdc, &rcBorder, brushBorder);
         // Draw the background with consecutively smaller 1-pixel thick
         // rectangles.

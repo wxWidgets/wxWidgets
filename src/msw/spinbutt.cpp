@@ -209,7 +209,7 @@ void wxSpinButton::OnPaint(wxPaintEvent& event)
         wxImage::RGBValue border;
         if ( drawBorder )
         {
-            const auto col = wxMSWDarkMode::GetBorderPen().GetColour();
+            const auto col = wxColour(wxMSWDarkMode::COLOUR_BORDER);
             border.red = col.GetRed();
             border.green = col.GetGreen();
             border.blue = col.GetBlue();

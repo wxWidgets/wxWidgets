@@ -484,11 +484,7 @@ wxColour wxDarkModeSettings::GetMenuColour(wxMenuColour which)
 
 wxPen wxDarkModeSettings::GetBorderPen()
 {
-    // Use a darker pen than the default white one by default. There doesn't
-    // seem to be any standard colour to use for it, Windows itself uses both
-    // 0x666666 and 0x797979 for the borders in the "Colours" control panel
-    // window, so it doesn't seem like anybody cares about consistency here.
-    return *wxGREY_PEN;
+    return wxColour(wxMSWDarkMode::COLOUR_BORDER);
 }
 
 // ----------------------------------------------------------------------------

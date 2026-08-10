@@ -117,8 +117,8 @@ void wxGauge::MSWSetDarkOrLightMode(SetMode setmode)
             // Disable visual styles so colour messages take effect.
             ::SetWindowTheme(m_hWnd, L"", L"");
             // Colours taken from a progress bar with DarkMode_DarkTheme.
-            ::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, 0x131313);
-            ::SendMessage(m_hWnd, PBM_SETBARCOLOR, 0, 0x5fcb6c);
+            ::SendMessage(m_hWnd, PBM_SETBKCOLOR, 0, wxHexToCR(wxMSWDarkMode::COLOUR_GAUGE_DARK_BK));
+            ::SendMessage(m_hWnd, PBM_SETBARCOLOR, 0, wxHexToCR(wxMSWDarkMode::COLOUR_GAUGE_DARK_BAR));
         }
         // Else when going to light mode, the theme was restored by the base
         // class MSWSetDarkOrLightMode() call above.
