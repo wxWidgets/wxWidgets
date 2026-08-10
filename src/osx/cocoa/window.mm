@@ -242,11 +242,11 @@ void wxWidgetCocoaImpl::ApplyScrollViewBorderType()
 // and the code here:
 // http://inquisitivecocoa.com/category/objective-c/
 @interface NSEvent (OsGuiUtilsAdditions)
-- (NSString*) charactersIgnoringModifiersIncludingShift;
+- (NSString*) charactersIgnoringModifiersIncludingShift:(int)eventType;
 @end
 
 @implementation NSEvent (OsGuiUtilsAdditions)
-- (NSString*) charactersIgnoringModifiersIncludingShift {
+- (NSString*) charactersIgnoringModifiersIncludingShift:(int)eventType {
     // First try -charactersIgnoringModifiers and look for keys which UCKeyTranslate translates
     // differently than AppKit.
     NSString* c = [self charactersIgnoringModifiers];
@@ -285,6 +285,26 @@ void wxWidgetCocoaImpl::ApplyScrollViewBorderType()
                                          &actualStringLength,
                                          unicodeString);
 
+        // For wxEVT_CHAR, redo non-letters with Shift instead of Command, so
+        // e.g. Ctrl+Shift+Minus gives '_' not '-'. Letters are left alone so
+        // Ctrl+C and Ctrl+Shift+C still fold to the same control char.
+        // Non-wxEVT_CHAR events remain mapped to the base keycode.
+        if (eventType == wxEVT_CHAR && status == noErr && actualStringLength == 1 &&
+            !(unicodeString[0] >= 'a' && unicodeString[0] <= 'z') &&
+            ([self modifierFlags] & NSShiftKeyMask))
+        {
+            status = UCKeyTranslate(keyboardLayout,
+                                    [self keyCode],
+                                    kUCKeyActionDown,
+                                    shiftKey >> 8,
+                                    LMGetKbdType(),
+                                    kUCKeyTranslateNoDeadKeysMask,
+                                    &deadKeyState,
+                                    maxStringLength,
+                                    &actualStringLength,
+                                    unicodeString);
+        }
+
         if(status == noErr)
             result = [NSString stringWithCharacters:unicodeString length:(NSInteger)actualStringLength];
     }
@@ -298,13 +318,19 @@ long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
 
     if ([event type] != NSFlagsChanged)
     {
-        NSString* s = [event charactersIgnoringModifiersIncludingShift];
+        NSString* s = [event charactersIgnoringModifiersIncludingShift:eventType];
         // backspace char reports as delete w/modifiers for some reason
         if ([s length] == 1)
         {
-            if ( eventType == wxEVT_CHAR && ([event modifierFlags] & NSControlKeyMask) && ( [s characterAtIndex:0] >= 'a' && [s characterAtIndex:0] <= 'z' ) )
+            unichar wxevtCharCode = [s characterAtIndex:0];
+            if ( eventType == wxEVT_CHAR && ([event modifierFlags] & NSControlKeyMask) &&
+                 ( ( wxevtCharCode >= 'a' && wxevtCharCode <= 'z' ) ||
+                   wxevtCharCode == '[' || wxevtCharCode == '\\' || wxevtCharCode == ']' ||
+                   wxevtCharCode == '^' || wxevtCharCode == '_' ) )
             {
-                retval = WXK_CONTROL_A + ([s characterAtIndex:0] - 'a');
+                // When control is pressed, ASCII letters along with punctuation between
+                // 0x5b and 0x5f are mapped to control characters 0x01-0x1f.
+                retval = wxevtCharCode & 0x1F;
             }
             else
             {
@@ -487,7 +513,8 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     wxString chars;
     if ( eventType != NSFlagsChanged )
     {
-        NSString* nschars = [[nsEvent charactersIgnoringModifiersIncludingShift] uppercaseString];
+        NSString* nschars = [[nsEvent charactersIgnoringModifiersIncludingShift:
+            wxevent.GetEventType()] uppercaseString];
         if ( charString )
         {
             // if charString is set, it did not come from key up / key down
@@ -550,6 +577,17 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
             keyval = wxToupper( aunichar ) ;
         else
             keyval = aunichar;
+    }
+
+    // When control is pressed, ASCII letters along with punctuation between
+    // 0x5b and 0x5f are mapped to control characters 0x01-0x1f.
+    if ( wxevent.GetEventType() == wxEVT_CHAR && wxevent.m_rawControlDown &&
+         ( ( aunichar >= 'a' && aunichar <= 'z' ) ||
+           ( aunichar >= 'A' && aunichar <= 'Z' ) ||
+           aunichar == '[' || aunichar == '\\' || aunichar == ']' ||
+           aunichar == '^' || aunichar == '_' ) )
+    {
+        aunichar &= 0x1F;
     }
 
     // OS X generates events with key codes in Unicode private use area for
