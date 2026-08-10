@@ -20,7 +20,7 @@ namespace wxMSWDarkMode
 // for Windows dark mode support. When possible, these colours are chosen to
 // accurately match the native Windows look.
 enum Colour {
-    // Generic border. Value choosen arbitrarily. There does not seem to be
+    // Generic border. Value chosen arbitrarily. There does not seem to be
     // any standard colour.
     COLOUR_BORDER = 0x808080,
     // Simple EDIT control border. Taken from appearance with
