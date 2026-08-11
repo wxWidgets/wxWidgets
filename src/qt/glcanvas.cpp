@@ -263,7 +263,7 @@ wxGLAttributes& wxGLAttributes::Stencil(int val)
 {
     if ( val >= 0 )
     {
-        AddAttribute(WX_GL_DEPTH_SIZE);
+        AddAttribute(WX_GL_STENCIL_SIZE);
         AddAttribute(val);
     }
     return *this;
