@@ -99,7 +99,10 @@ wxGauge::~wxGauge()
 void wxGauge::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
     if ( wxCheckOsVersion(10, 0, 26200) )
+    {
         support.themeName = L"DarkMode_DarkTheme";
+        support.themeId = L"Progress";
+    }
     else
         wxGaugeBase::MSWGetDarkModeSupport(support);
 }
