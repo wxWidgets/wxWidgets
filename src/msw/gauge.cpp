@@ -98,7 +98,7 @@ wxGauge::~wxGauge()
 
 void wxGauge::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    if ( wxCheckOsVersion(10, 0, 26200) )
+    if ( wxMSWDarkMode::HasDarkModeDarkTheme() )
         support.themeName = L"DarkMode_DarkTheme";
     else
         wxGaugeBase::MSWGetDarkModeSupport(support);
@@ -110,7 +110,7 @@ void wxGauge::MSWSetDarkOrLightMode(SetMode setmode)
 
     // Adjust colours unless we use DarkMode_DarkTheme in
     // MSWGetDarkModeSupport().
-    if ( !wxCheckOsVersion(10, 0, 26200) )
+    if ( !wxMSWDarkMode::HasDarkModeDarkTheme() )
     {
         if ( wxMSWDarkMode::IsActive() )
         {
