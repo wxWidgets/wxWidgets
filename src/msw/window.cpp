@@ -4176,6 +4176,11 @@ void wxWindowMSW::MSWSetDarkOrLightMode(SetMode WXUNUSED(setmode))
         HBRUSH hbr = GetHbrushOf(*brush);
         ::SetClassLongPtr(m_hWnd, GCLP_HBRBACKGROUND, LONG_PTR(hbr));
     }
+
+    if ( m_tooltip )
+    {
+        wxToolTip::SetDarkOrLightMode();
+    }
 }
 
 // ===========================================================================
