@@ -3892,7 +3892,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         wxWindowMSW::MSWDrawThemeBorder(hdc);
                     }
                 }
-
+#ifndef __WXUNIVERSAL__ // wxUniversal doesn't support wxMSW dark mode and MSWDarkPaintScrollBarCorner() would not build there
                 if ( wxMSWDarkMode::IsActive() )
                 {
                     const long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
@@ -3909,6 +3909,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         MSWDarkPaintScrollBarCorner();
                     }
                 }
+#endif //#ifndef __WXUNIVERSAL__
             }
             break;
 
@@ -3972,6 +3973,9 @@ void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc)
 // to maintain a consistent theme in dark mode.
 void wxWindowMSW::MSWDarkPaintScrollBarCorner()
 {
+// wxUniversal doesn't support wxMSW dark mode
+// the code would not even build there due to wxWindow* argument type mismatch in wxGetSystemMetrics() calls
+#ifndef __WXUNIVERSAL__
     const HWND hwnd = GetHwnd();
     WinStruct<SCROLLBARINFO> sbiV, sbiH;
 
@@ -3994,6 +3998,7 @@ void wxWindowMSW::MSWDarkPaintScrollBarCorner()
     WindowHDC hdcWin(hwnd);
     AutoHBRUSH hBrush(RGB(0x17, 0x17, 0x17));
     ::FillRect(hdcWin, &rectToPaint, hBrush);
+#endif // ifndef __WXUNIVERSAL__
 }
 
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
