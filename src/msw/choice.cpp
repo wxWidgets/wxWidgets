@@ -217,7 +217,7 @@ void wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     // Theme DarkMode_DarkTheme looks good, so use it if available. Theme
     // "CFD" works well on older Windows versions although the border is a bit
     // light.
-    if ( wxCheckOsVersion(10, 0, 26200) )
+    if ( wxMSWDarkMode::HasDarkTheme() )
         support.themeName = L"DarkMode_DarkTheme";
     else
         support.themeName = L"CFD";
@@ -232,10 +232,9 @@ void wxChoice::MSWSetDarkOrLightMode(SetMode setmode)
     if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
     {
         // The default theme does not look good on starting with Windows 11
-        // build 26300.8553. DarkMode_DarkTheme looks OK and is available
-        // starting with Windows 11 25H2 (build 26200), but is always dark, so
+        // build 26300.8553. DarkMode_DarkTheme looks OK, but is always dark, so
         // don't use it in light mode or the scrollbar would be dark in it too.
-        if ( wxMSWDarkMode::IsActive() && wxCheckOsVersion(10, 0, 26200) )
+        if ( wxMSWDarkMode::IsActive() && wxMSWDarkMode::HasDarkTheme() )
             wxMSWDarkMode::AllowForWindow(info.hwndList, L"DarkMode_DarkTheme");
         else
             wxMSWDarkMode::AllowForWindow(info.hwndList);

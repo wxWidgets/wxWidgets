@@ -846,6 +846,11 @@ void NotifySysColorChange()
         gs_hasChanged = true;
 }
 
+bool HasDarkTheme()
+{
+    return wxCheckOsVersion(10, 0, 26200);
+}
+
 } // namespace wxMSWDarkMode
 
 void wxMSWImpl::PaintScrollBarCorner(HWND hwnd)
@@ -962,6 +967,11 @@ HandleMenuMessage(WXLRESULT* WXUNUSED(result),
 
 void NotifySysColorChange()
 {
+}
+
+bool HasDarkTheme()
+{
+    return false;
 }
 
 } // namespace wxMSWDarkMode

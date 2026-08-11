@@ -98,7 +98,7 @@ wxGauge::~wxGauge()
 
 void wxGauge::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    if ( wxCheckOsVersion(10, 0, 26200) )
+    if ( wxMSWDarkMode::HasDarkTheme() )
     {
         support.themeName = L"DarkMode_DarkTheme";
         support.themeId = L"Progress";
@@ -113,7 +113,7 @@ void wxGauge::MSWSetDarkOrLightMode(SetMode setmode)
 
     // Adjust colours unless we use DarkMode_DarkTheme in
     // MSWGetDarkModeSupport().
-    if ( !wxCheckOsVersion(10, 0, 26200) )
+    if ( !wxMSWDarkMode::HasDarkTheme() )
     {
         // Disable visual styles so colour messages take effect.
         ::SetWindowTheme(m_hWnd, L"", L"");
