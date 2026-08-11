@@ -157,6 +157,9 @@ void wxGauge::MSWSetDarkOrLightMode(SetMode setmode)
         ::SetWindowPos(m_hWnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED |
             SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
     }
+
+    // Restore the position shown by the control.
+    ::SendMessage(m_hWnd, PBM_SETPOS, GetValue(), 0);
 }
 
 WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
