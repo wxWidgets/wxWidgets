@@ -849,7 +849,7 @@ void NotifySysColorChange()
         gs_hasChanged = true;
 }
 
-bool HasDarkModeDarkTheme()
+bool HasDarkTheme()
 {
     return wxCheckOsVersion(10, 0, 26200);
 }
@@ -972,7 +972,7 @@ void NotifySysColorChange()
 {
 }
 
-bool HasDarkModeDarkTheme()
+bool HasDarkTheme()
 {
     return false;
 }

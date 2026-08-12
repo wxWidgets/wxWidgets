@@ -82,7 +82,7 @@ void NotifySysColorChange();
 
 // Return true if the DarkMode_DarkTheme theme is available. This theme was
 // added in Windows 11 25H2 (build 26200).
-bool HasDarkModeDarkTheme();
+bool HasDarkTheme();
 
 } // namespace wxMSWDarkMode
 

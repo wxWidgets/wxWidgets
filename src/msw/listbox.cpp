@@ -178,7 +178,7 @@ void wxListBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
     // The default theme does not look good on starting with Windows 11
     // build 26300.8553. DarkMode_DarkTheme looks OK.
-    if ( wxMSWDarkMode::HasDarkModeDarkTheme() )
+    if ( wxMSWDarkMode::HasDarkTheme() )
         support.themeName = L"DarkMode_DarkTheme";
     else
         wxListBoxBase::MSWGetDarkModeSupport(support);
