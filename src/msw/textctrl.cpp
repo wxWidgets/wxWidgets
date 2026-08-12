@@ -2857,6 +2857,14 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+bool wxTextCtrl::MSWShouldDrawDarkThemeBorder() const
+{
+    // We need to draw the border for rich edit and when we are not using
+    // DarkMode_DarkTheme. The non-rich control draws a good themed border
+    // with DarkMode_DarkTheme.
+    return IsRich() && !wxMSWDarkMode::HasDarkTheme();
+}
+
 void wxTextCtrl::MSWDrawThemeBorder(WXHDC hdc)
 {
     if ( IsRich() )
@@ -2978,6 +2986,14 @@ void wxTextCtrl::MSWSetRichZoom()
 }
 
 #endif // wxUSE_RICHEDIT
+
+void wxTextCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    if ( wxMSWDarkMode::HasDarkTheme() )
+        support.themeName = L"DarkMode_DarkTheme";
+    else
+        wxTextCtrlBase::MSWGetDarkModeSupport(support);
+}
 
 void wxTextCtrl::MSWSetDarkOrLightMode(SetMode setmode)
 {

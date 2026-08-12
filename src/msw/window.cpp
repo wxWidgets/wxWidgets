@@ -3846,10 +3846,18 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     case wxBORDER_STATIC:
                     case wxBORDER_RAISED:
-                    case wxBORDER_SUNKEN:
                         // In dark mode, explicitly draw these border styles because
                         // the default drawing uses light mode colours.
                         drawBorder = wxMSWDarkMode::IsActive();
+                        break;
+
+                    case wxBORDER_SUNKEN:
+                        // In dark mode, explicitly draw the border unless the window
+                        // draws a good border itself. When the window draws a good
+                        // border, DoTranslateBorder() translates wxBORDER_THEME to
+                        // wxBORDER_SUNKEN.
+                        drawBorder = wxMSWDarkMode::IsActive() &&
+                            MSWShouldDrawDarkThemeBorder();
                         break;
 
                     case wxBORDER_NONE:
