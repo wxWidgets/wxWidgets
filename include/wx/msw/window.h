@@ -650,6 +650,10 @@ protected:
     // if themed border should be used, depending on CanApplyThemeBorder().
     wxBorder DoTranslateBorder(wxBorder border) const;
 
+    // Returns true if the window does not draw a good dark mode themed
+    // border and therefore we should explicitly draw it.
+    virtual bool MSWShouldDrawDarkThemeBorder() const { return true; }
+
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;
 #endif // wxUSE_MENUS_NATIVE
