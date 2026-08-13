@@ -29,8 +29,8 @@ public:
                                  wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
                                  wxHeaderButtonParams* WXUNUSED(params) = nullptr) override
     {
-        dc.SetBrush(*wxCYAN_BRUSH);
-        dc.SetTextForeground(*wxRED);
+        wxDCBrushChanger brushChanger(dc, *wxCYAN_BRUSH);
+        wxDCTextColourChanger textFgChanger(dc, *wxRED);
         dc.DrawRoundedRectangle(rect, 10);
         dc.DrawLabel("MyDllRenderer", wxNullBitmap, rect, wxALIGN_CENTER);
 
