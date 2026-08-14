@@ -473,6 +473,7 @@ bool wxWebViewEdgeImpl::Create()
     m_isBusy = false;
     m_inEventCallback = false;
     m_pendingContextMenuEnabled = -1;
+    // 0 to turn off dev tools by default
     m_pendingAccessToDevToolsEnabled = 0;
     m_pendingEnableBrowserAcceleratorKeys = -1;
 
@@ -966,7 +967,7 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     if (m_pendingAccessToDevToolsEnabled != -1)
     {
         m_ctrl->EnableAccessToDevTools(m_pendingAccessToDevToolsEnabled == 1);
-        m_pendingContextMenuEnabled = -1;
+        m_pendingAccessToDevToolsEnabled = -1;
     }
 
     if (m_pendingEnableBrowserAcceleratorKeys != -1)
