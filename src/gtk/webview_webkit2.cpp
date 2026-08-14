@@ -786,21 +786,21 @@ private:
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
         if (wx_check_webkit_version(2, 10, 0))
         {
-            gchar* cachePath = nullptr;
-            gchar* dataPath = nullptr;
+            wxGtkString cachePath(nullptr);
+            wxGtkString dataPath(nullptr);
             if (!m_dataPath.empty())
             {
                 wxFileName configCachePath = wxFileName::DirName(m_dataPath);
                 configCachePath.AppendDir("cache");
-                cachePath = g_strdup(configCachePath.GetPath().utf8_str());
+                cachePath = wxGtkString(g_strdup(configCachePath.GetPath().utf8_str()));
                 wxFileName configDataPath = wxFileName::DirName(m_dataPath);
                 configDataPath.AppendDir("data");
-                dataPath = g_strdup(configDataPath.GetPath().utf8_str());
+                dataPath = wxGtkString(g_strdup(configDataPath.GetPath().utf8_str()));
             }
 
             m_websiteDataManager = webkit_website_data_manager_new(
-                "base-cache-directory", cachePath,
-                "base-data-directory", dataPath,
+                "base-cache-directory", cachePath.c_str(),
+                "base-data-directory", dataPath.c_str(),
                 nullptr);
             m_webContext = webkit_web_context_new_with_website_data_manager(m_websiteDataManager);
         }
@@ -1370,7 +1370,7 @@ wxString wxWebViewWebKit::GetPageSource() const
     if (source)
     {
         const wxString& wxs = wxString::FromUTF8((const char*)source, length);
-        free(source);
+        g_free(source);
         return wxs;
     }
     return wxString();
