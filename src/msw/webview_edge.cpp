@@ -1746,6 +1746,7 @@ bool wxWebViewEdge::ClearBrowsingData(int types, wxDateTime since)
 
             case wxWEBVIEW_BROWSING_DATA_DOM_STORAGE:
                 dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_DOM_STORAGE;
+                break;
 
             case wxWEBVIEW_BROWSING_DATA_COOKIES | wxWEBVIEW_BROWSING_DATA_DOM_STORAGE:
                 dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_SITE;
