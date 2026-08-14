@@ -557,10 +557,7 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
     if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, true) )
         wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
 
-    if ( themeName || themeId )
-    {
-        SetTheme(hwnd, themeName, themeId);
-    }
+    SetTheme(hwnd, themeName, themeId);
 
     // Some native controls need this message to switch themes, such as
     // buttons, tooltips and controls with scroll bars
