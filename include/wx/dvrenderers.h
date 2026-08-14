@@ -416,7 +416,18 @@ public:
     // GetAccessibleDescription() does for the generic implementation;
     // override it if the renderer draws something a bare
     // wxVariant::MakeString() can't usefully describe (e.g. a progress bar).
+    //
+    // `override` is only added where wxUSE_ACCESSIBILITY is genuinely 1: on
+    // wxOSX (wxUSE_DATAVIEW_A11Y but not wxUSE_ACCESSIBILITY), the base
+    // class's own virtual of this name isn't even compiled in, so there is
+    // nothing to override yet -Winconsistent-missing-override would still
+    // flag its absence there once wxUSE_ACCESSIBILITY is 1 elsewhere in the
+    // same build (that's the whole point of the split below).
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const override;
+#else
     virtual wxString GetAccessibleDescription() const;
+#endif
 #endif // wxUSE_DATAVIEW_A11Y
 
 
