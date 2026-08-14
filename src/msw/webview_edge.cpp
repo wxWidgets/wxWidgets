@@ -473,6 +473,7 @@ bool wxWebViewEdgeImpl::Create()
     m_isBusy = false;
     m_inEventCallback = false;
     m_pendingContextMenuEnabled = -1;
+    // 0 to turn off dev tools by default
     m_pendingAccessToDevToolsEnabled = 0;
     m_pendingEnableBrowserAcceleratorKeys = -1;
 
@@ -966,7 +967,7 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     if (m_pendingAccessToDevToolsEnabled != -1)
     {
         m_ctrl->EnableAccessToDevTools(m_pendingAccessToDevToolsEnabled == 1);
-        m_pendingContextMenuEnabled = -1;
+        m_pendingAccessToDevToolsEnabled = -1;
     }
 
     if (m_pendingEnableBrowserAcceleratorKeys != -1)
@@ -1745,6 +1746,7 @@ bool wxWebViewEdge::ClearBrowsingData(int types, wxDateTime since)
 
             case wxWEBVIEW_BROWSING_DATA_DOM_STORAGE:
                 dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_DOM_STORAGE;
+                break;
 
             case wxWEBVIEW_BROWSING_DATA_COOKIES | wxWEBVIEW_BROWSING_DATA_DOM_STORAGE:
                 dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_SITE;
