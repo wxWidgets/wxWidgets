@@ -1370,7 +1370,7 @@ wxString wxWebViewWebKit::GetPageSource() const
     if (source)
     {
         const wxString& wxs = wxString::FromUTF8((const char*)source, length);
-        free(source);
+        g_free(source);
         return wxs;
     }
     return wxString();
