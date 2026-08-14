@@ -171,7 +171,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
     // gets every one of those callers a real answer for free.
     if ( customRenderer )
     {
-        const wxString text = customRenderer->GetAccessibleText();
+        const wxString text = customRenderer->GetAccessibleDescription();
         if ( !text.empty() )
         {
             // wxCFStringRef::AsNSString() does not retain: the NSString it

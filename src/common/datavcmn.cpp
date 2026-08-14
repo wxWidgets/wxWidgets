@@ -1109,7 +1109,8 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
         GetEllipsizeMode());
 }
 
-wxString wxDataViewCustomRendererBase::GetAccessibleText() const
+#if wxUSE_DATAVIEW_A11Y
+wxString wxDataViewCustomRendererBase::GetAccessibleDescription() const
 {
     wxVariant value;
     GetValue(value);
@@ -1135,6 +1136,7 @@ wxString wxDataViewCustomRendererBase::GetAccessibleText() const
 
     return value.MakeString();
 }
+#endif // wxUSE_DATAVIEW_A11Y
 
 void wxDataViewCustomRendererBase::SetEnabled(bool enabled)
 {
