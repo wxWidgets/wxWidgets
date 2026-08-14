@@ -1,0 +1,1 @@
+wxOSX: Fix wxEVT_CHAR key codes for events with Ctrl (Michael Adler, #26810).
