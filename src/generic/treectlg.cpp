@@ -1497,7 +1497,7 @@ wxGenericTreeCtrl::DoGetNext(const wxTreeItemId& item, int flags) const
     wxGenericTreeItem *i = GetItemPtr(item);
 
     // First see if there are any children.
-    if ( !(flags & Next_Visible) || i->IsExpanded() )
+    if ( !(flags & Next_Opened) || i->IsExpanded() )
     {
         wxGenericTreeItems& children = i->GetChildren();
         if (!children.empty())
@@ -1538,7 +1538,7 @@ wxTreeItemId wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
     wxASSERT_MSG( IsVisible(item), wxT("this item itself should be visible") );
 
-    return DoGetNext(item, Next_Visible);
+    return DoGetNext(item, Next_Opened);
 }
 
 wxTreeItemId wxGenericTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
@@ -1606,13 +1606,13 @@ wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
     wxTreeItemId itemid = idParent;
     if ( prefix.length() == 1 )
     {
-        itemid = DoGetNext(itemid, Next_Visible);
+        itemid = DoGetNext(itemid, Next_Opened);
     }
 
     // look for the item starting with the given prefix after it
     while ( itemid.IsOk() && !GetItemText(itemid).Lower().StartsWith(prefix) )
     {
-        itemid = DoGetNext(itemid, Next_Visible);
+        itemid = DoGetNext(itemid, Next_Opened);
     }
 
     // if we haven't found anything...
@@ -1623,14 +1623,14 @@ wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
         if ( HasFlag(wxTR_HIDE_ROOT) )
         {
             // can't select virtual root
-            itemid = DoGetNext(itemid, Next_Visible);
+            itemid = DoGetNext(itemid, Next_Opened);
         }
 
         // and try all the items (stop when we get to the one we started from)
         while ( itemid.IsOk() && itemid != idParent &&
                     !GetItemText(itemid).Lower().StartsWith(prefix) )
         {
-            itemid = DoGetNext(itemid, Next_Visible);
+            itemid = DoGetNext(itemid, Next_Opened);
         }
         // If we haven't found the item but wrapped back to the one we started
         // from, id.IsOk() must be false
