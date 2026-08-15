@@ -624,13 +624,22 @@ void wxDocument::OnChangedViewList()
 
 void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
 {
-    wxList::compatibility_iterator node = m_documentViews.GetFirst();
-    while (node)
+    // Tolerate wxView::OnUpdate() performing multiple removals
+    wxViewVector initialState = GetViewsVector();
+    for (wxView *view : initialState)
     {
-        wxView *view = (wxView *)node->GetData();
-        if (view != sender)
-            view->OnUpdate(sender, hint);
-        node = node->GetNext();
+        wxList::compatibility_iterator node = m_documentViews.GetFirst();
+        while (node)
+        {
+            wxView *present = (wxView *)node->GetData();
+            if (present == view)
+            {
+                view->OnUpdate(sender, hint);
+                break;
+            }
+            node = node->GetNext();
+            wxASSERT(node);
+        }
     }
 }
 
