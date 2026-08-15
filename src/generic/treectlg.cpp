@@ -1538,7 +1538,48 @@ wxTreeItemId wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
     wxASSERT_MSG( IsVisible(item), wxT("this item itself should be visible") );
 
-    return DoGetNext(item, Next_Opened);
+    const wxSize clientSize = GetClientSize();
+    wxRect rect;
+
+    for ( ;; )
+    {
+        wxTreeItemId itemid = DoGetNext(item, Next_Opened);
+        if ( !itemid.IsOk() )
+        {
+            // There are no more items at all.
+            break;
+        }
+
+        // We could just use IsVisible() here and keep iterating until we find
+        // a visible item or run out of them, but this is inefficient because
+        // we would keep going (possibly long after) the visible area.
+        //
+        // Also, IsVisible() checks that the item is in an opened branch, but
+        // this is always the case for the items returned by DoGetNext() with
+        // Next_Opened flag, so here we just need to check the item rectangle.
+        GetBoundingRect(itemid, rect);
+
+        if ( rect.GetTop() > clientSize.y )
+        {
+            // This item is below the visible area, there won't be any other
+            // items beneath it.
+            break;
+        }
+
+        if ( rect.GetBottom() < 0 )
+        {
+            // This item is above the visible area, try the next one.
+            continue;
+        }
+
+        if ( rect.GetRight() > 0 && rect.GetLeft() < clientSize.x )
+        {
+            // This item is at least partially visible, return it.
+            return itemid;
+        }
+    }
+
+    return wxTreeItemId();
 }
 
 wxTreeItemId wxGenericTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
