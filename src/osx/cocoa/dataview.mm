@@ -173,20 +173,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
     {
         const wxString text = customRenderer->GetAccessibleDescription();
         if ( !text.empty() )
-        {
-            // wxCFStringRef::AsNSString() does not retain: the NSString it
-            // returns is only valid for as long as the wxCFStringRef that
-            // produced it is alive. Keeping that wxCFStringRef as a named
-            // local -- rather than a temporary in the same expression used
-            // to initialize nsText -- keeps it alive across the retain
-            // below; a temporary would be destroyed, releasing the
-            // underlying CFStringRef, at the end of the initialization
-            // statement, before the retain on the next line ever ran,
-            // handing the caller a dangling pointer.
-            wxCFStringRef cfText(text);
-            NSString * const nsText = cfText.AsNSString();
-            return [[nsText retain] autorelease];
-        }
+            return [[wxCFStringRef(text).AsNSString() retain] autorelease];
     }
 
     return [super description];

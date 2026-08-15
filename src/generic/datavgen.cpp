@@ -1179,6 +1179,15 @@ wxString wxDataViewCustomRenderer::GetAccessibleDescription() const
         /* TRANSLATORS: Name of Boolean false value */
                                : _("false");
     }
+    else if ( val.IsType(wxS("wxDataViewIconText")) )
+    {
+        // wxVariant::MakeString() doesn't know how to stringify this one:
+        // wxDataViewIconTextVariantData doesn't override Write(), so the
+        // wxVariantData base's does-nothing default leaves this empty.
+        wxDataViewIconText iconText;
+        iconText << val;
+        strVal = iconText.GetText();
+    }
     else
     {
         strVal = val.MakeString();
