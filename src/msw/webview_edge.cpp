@@ -555,7 +555,7 @@ void wxWebViewEdgeImpl::UpdateBounds()
 {
     RECT r;
     wxCopyRectToRECT(m_ctrl->GetClientRect(), r);
-    if (m_webView)
+    if ( m_webViewController )
         m_webViewController->put_Bounds(r);
 }
 
