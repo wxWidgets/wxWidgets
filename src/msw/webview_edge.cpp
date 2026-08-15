@@ -837,7 +837,11 @@ HRESULT wxWebViewEdgeImpl::OnWebResourceRequested(ICoreWebView2* WXUNUSED(sender
     wxSharedPtr<wxWebViewHandler> handler;
 
     if (uri.HasServer())
-        handler = m_handlers[uri.GetServer()];
+    {
+        const auto it = m_handlers.find(uri.GetServer());
+        if ( it != m_handlers.end() )
+            handler = it->second;
+    }
 
     if (!handler)
     {
