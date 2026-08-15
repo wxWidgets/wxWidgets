@@ -183,7 +183,7 @@ private:
             if ( !size.IsFullySpecified() )
             {
                 // We must have some valid size.
-                size = wxSize(16, 16);
+                size = wxWindow::FromDIP(wxSize(16, 16), nullptr);
             }
         }
 
@@ -330,7 +330,13 @@ wxWindowsArtProvider::CreateBitmapBundle(const wxArtID& id,
     int icon = 0;
     if ( GetStockIconInfo(id, path, icon) )
     {
-        const wxSize sizeNeeded = GetActualSize(client, size);
+        wxSize sizeNeeded = GetActualSize(client, size);
+
+        // When no size is specified, GetActualSize returns a size scaled to
+        // the primary display. wxWindowsStockIconImpl needs a DPI-independent
+        // size, so GetPreferredBitmapSizeAtScale works correctly.
+        if ( !size.IsFullySpecified() )
+            sizeNeeded = wxWindow::ToDIP(sizeNeeded, nullptr);
 
         return wxBitmapBundle::FromImpl(
                 new wxWindowsStockIconImpl(path, icon, sizeNeeded)
