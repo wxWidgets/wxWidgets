@@ -104,7 +104,7 @@ public:
         {
             rect.top += cyTopHeight;
             rect.left += cxLeftWidth;
-            rect.right -= cyTopHeight;
+            rect.right -= cxRightWidth;
             rect.bottom -= cyBottomHeight;
         }
 
@@ -112,7 +112,7 @@ public:
         {
             rect.top -= cyTopHeight;
             rect.left -= cxLeftWidth;
-            rect.right += cyTopHeight;
+            rect.right += cxRightWidth;
             rect.bottom += cyBottomHeight;
         }
     };
