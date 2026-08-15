@@ -627,6 +627,10 @@ protected:
         // The theme IDs to use. If neither this field nor the theme name is
         // set, no theme is applied to the window.
         const wchar_t* themeId = nullptr;
+
+        // True if we should apply theme L"Explorer" when switching to light
+        // mode. Otherwise, nullptr is used.
+        bool isLightModeThemed = true;
     };
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;
