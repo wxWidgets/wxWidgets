@@ -1342,9 +1342,6 @@ bool wxGenericTreeCtrl::IsVisible(const wxTreeItemId& item) const
         parent = parent->GetParent();
     }
 
-    int startX, startY;
-    GetViewStart(& startX, & startY);
-
     wxSize clientSize = GetClientSize();
 
     wxRect rect;
