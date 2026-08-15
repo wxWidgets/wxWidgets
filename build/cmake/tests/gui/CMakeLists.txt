@@ -85,6 +85,7 @@ set(TEST_GUI_SRC
     controls/webtest.cpp
     controls/windowtest.cpp
     controls/dialogtest.cpp
+    docview/updateallviews.cpp
     events/clone.cpp
     events/enterleave.cpp
     # Duplicate this file here to test GUI event loops too.

@@ -157,6 +157,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_asserthelper.obj \
 	$(OBJS)\test_gui_test.obj \
 	$(OBJS)\test_gui_testableframe.obj \
+	$(OBJS)\test_gui_updateallviews.obj \
 	$(OBJS)\test_gui_rect.obj \
 	$(OBJS)\test_gui_size.obj \
 	$(OBJS)\test_gui_point.obj \
@@ -1169,6 +1170,9 @@ $(OBJS)\test_gui_test.obj: .\test.cpp
 
 $(OBJS)\test_gui_testableframe.obj: .\testableframe.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\testableframe.cpp
+
+$(OBJS)\test_gui_updateallviews.obj: .\docview\updateallviews.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\docview\updateallviews.cpp
 
 $(OBJS)\test_gui_rect.obj: .\geometry\rect.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\geometry\rect.cpp
