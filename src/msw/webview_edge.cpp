@@ -1552,14 +1552,18 @@ bool wxWebViewEdge::PrintToPDF(const wxString& filePath, const wxPrintData& prin
 
 float wxWebViewEdge::GetZoomFactor() const
 {
-    double old_zoom_factor = 0.0;
-    m_impl->m_webViewController->get_ZoomFactor(&old_zoom_factor);
-    return old_zoom_factor;
+    if ( !m_impl->m_webViewController )
+        return 1.0f;
+
+    double zoomFactor = 1.0;
+    m_impl->m_webViewController->get_ZoomFactor(&zoomFactor);
+    return zoomFactor;
 }
 
 void wxWebViewEdge::SetZoomFactor(float zoom)
 {
-    m_impl->m_webViewController->put_ZoomFactor(zoom);
+    if ( m_impl->m_webViewController )
+        m_impl->m_webViewController->put_ZoomFactor(zoom);
 }
 
 bool wxWebViewEdge::CanUndo() const
