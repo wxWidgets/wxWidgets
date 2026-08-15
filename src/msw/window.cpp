@@ -4150,16 +4150,20 @@ void wxWindowMSW::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 
 void wxWindowMSW::MSWSetDarkOrLightMode(SetMode WXUNUSED(setmode))
 {
+    const wchar_t* themeName = nullptr;
+    const wchar_t* themeId = nullptr;
     MSWDarkModeSupport support;
+    MSWGetDarkModeSupport(support);
     if ( wxMSWDarkMode::IsActive() )
     {
-        MSWGetDarkModeSupport(support);
+        themeName = support.themeName;
+        themeId = support.themeId;
     }
-    // Else to restore light mode, use support.themeName == nullptr and
-    // support.themeId == nullptr.
+    else if ( support.isLightModeThemed )
+        themeName = L"Explorer";
 
     // This updates scroll bars, if there are any.
-    wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
+    wxMSWDarkMode::AllowForWindow(m_hWnd, themeName, themeId);
 
     // If the window class has a background brush, update it.
     // This is the value in WNDCLASS::hbrBackground.
