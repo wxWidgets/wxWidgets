@@ -507,12 +507,10 @@ wxgtk_webview_webkit_uri_scheme_request_cb(WebKitURISchemeRequest *request,
             gint64 length = file->GetStream()->GetLength();
             guint8 *data = g_new(guint8, length);
             file->GetStream()->Read(data, length);
-            GInputStream *stream = g_memory_input_stream_new_from_data(data,
-                                                                       length,
-                                                                       g_free);
+            wxGtkObject<GInputStream>
+                stream(g_memory_input_stream_new_from_data(data, length, g_free));
             wxString mime = file->GetMimeType();
             webkit_uri_scheme_request_finish(request, stream, length, mime.utf8_str());
-            g_object_unref(stream);
         }
         else
         {
@@ -1239,15 +1237,15 @@ static void wxgtk_can_execute_editing_command_cb(GObject*,
 
 bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
 {
-    GAsyncResult *result = nullptr;
+    wxGtkObject<GAsyncResult> result;
     webkit_web_view_can_execute_editing_command(m_web_view,
                                                 command,
                                                 nullptr,
                                                 wxgtk_can_execute_editing_command_cb,
-                                                &result);
+                                                result.Out());
 
     GMainContext *main_context = g_main_context_get_thread_default();
-    while (!result)
+    while (!result.get())
     {
         g_main_context_iteration(main_context, TRUE);
     }
@@ -1255,7 +1253,6 @@ bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
     gboolean can_execute = webkit_web_view_can_execute_editing_command_finish(m_web_view,
                                                                               result,
                                                                               nullptr);
-    g_object_unref(result);
 
     return can_execute != 0;
 }
@@ -1348,13 +1345,13 @@ wxString wxWebViewWebKit::GetPageSource() const
         return wxString();
     }
 
-    GAsyncResult *result = nullptr;
+    wxGtkObject<GAsyncResult> result;
     webkit_web_resource_get_data(resource, nullptr,
                                  wxgtk_web_resource_get_data_cb,
-                                 &result);
+                                 result.Out());
 
     GMainContext *main_context = g_main_context_get_thread_default();
-    while (!result)
+    while (!result.get())
     {
         g_main_context_iteration(main_context, TRUE);
     }
@@ -1362,10 +1359,6 @@ wxString wxWebViewWebKit::GetPageSource() const
     size_t length;
     guchar *source = webkit_web_resource_get_data_finish(resource, result,
                                                          &length, nullptr);
-    if (result)
-    {
-        g_object_unref(result);
-    }
 
     if (source)
     {
@@ -1420,9 +1413,8 @@ void wxWebViewWebKit::DoSetPage(const wxString& html, const wxString& baseUri)
 
 void wxWebViewWebKit::Print()
 {
-    WebKitPrintOperation* printop = webkit_print_operation_new(m_web_view);
+    wxGtkObject<WebKitPrintOperation> printop(webkit_print_operation_new(m_web_view));
     webkit_print_operation_run_dialog(printop, nullptr);
-    g_object_unref(printop);
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -1536,11 +1528,10 @@ struct wxWebViewGtkPDFData
                         const wxString& filePath_,
                         WebKitPrintOperation* printop_)
         : webView(webView_), filePath(filePath_), printop(printop_) {}
-    ~wxWebViewGtkPDFData() { g_object_unref(printop); }
 
     wxWeakRef<wxWebViewWebKit> webView;
     wxString filePath;
-    WebKitPrintOperation* printop;
+    wxGtkObject<WebKitPrintOperation> printop;
 };
 
 static void wxDoHandlePDFResult(gpointer user_data, int success)
@@ -1585,6 +1576,7 @@ static bool wxDoStartPDFPrint(wxWebViewWebKit* webView,
     if (!uri)
         return false;
 
+    // Not a wxGtkObject; ownership passes to wxWebViewGtkPDFData below
     WebKitPrintOperation* printop = webkit_print_operation_new(
         static_cast<WebKitWebView*>(webView->GetNativeBackend()));
 
