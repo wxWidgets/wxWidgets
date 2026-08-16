@@ -38,10 +38,14 @@
 
     #include "wx/app.h"
     #include "wx/filename.h"
+    #include "wx/log.h"
     #include "wx/scopedptr.h"
     #include "wx/stdpaths.h"
 
+    #include "wx/gtk/private/error.h"
     #include "wx/gtk/private/object.h"
+
+    #define TRACE_APPINDICATOR "appindicator"
 #endif // wxUSE_APPINDICATOR
 
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
@@ -236,7 +240,42 @@ status_icon_popup_menu(GtkStatusIcon*, guint, guint, wxTaskBarIcon* taskBarIcon)
 bool wxTaskBarIconBase::IsAvailable()
 {
 #if wxUSE_APPINDICATOR
-    return true;
+    wxGtkError error;
+    wxGtkObject<GDBusConnection>
+        conn(g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, error.Out()));
+    if ( !conn )
+    {
+        wxLogTrace(TRACE_APPINDICATOR, "Failed to connect to session bus: %s",
+                   error.GetMessage());
+        return false;
+    }
+
+    GVariant* const res = g_dbus_connection_call_sync(
+        conn,
+        "org.freedesktop.DBus",
+        "/org/freedesktop/DBus",
+        "org.freedesktop.DBus",
+        "NameHasOwner",
+        g_variant_new("(s)", "org.kde.StatusNotifierWatcher"),
+        G_VARIANT_TYPE("(b)"),
+        G_DBUS_CALL_FLAGS_NONE,
+        -1,
+        NULL,
+        error.Out()
+    );
+
+    if ( !res )
+    {
+        wxLogTrace(TRACE_APPINDICATOR, "NameHasOwner(org.kde.StatusNotifierWatcher) failed: %s",
+                   error.GetMessage());
+        return false;
+    }
+
+    gboolean hasOwner = FALSE;
+    g_variant_get(res, "(b)", &hasOwner);
+    g_variant_unref(res);
+
+    return hasOwner != FALSE;
 #else // !wxUSE_APPINDICATOR
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__
