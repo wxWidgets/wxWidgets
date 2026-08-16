@@ -10,13 +10,14 @@
 #if wxUSE_GLCANVAS
 
 #include "wx/qt/private/winevent.h"
-#include "wx/glcanvas.h"
 
 #include <QOpenGLContext>
 #include <QOpenGLWidget>
 #include <QSurfaceFormat>
 #include <QtWidgets/QGestureRecognizer>
 #include <QtWidgets/QGestureEvent>
+
+#include "wx/glcanvas.h"
 
 wxGCC_WARNING_SUPPRESS(unused-parameter)
 
@@ -506,145 +507,121 @@ bool wxGLCanvas::QtCanPaintWithoutActivePainter() const
 /* static */
 bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxGLContextAttrs wxCtxAttrs, QSurfaceFormat &format)
 {
-    const int *glattrs = wxGLAttrs.GetGLAttrs();
-    const int *ctxattrs = wxCtxAttrs.GetGLAttrs();
-
     // set default parameters to false
     format.setDepthBufferSize(0);
     format.setAlphaBufferSize(0);
     format.setStencilBufferSize(0);
 
-    for (int arg = 0; glattrs && glattrs[arg] != 0; arg++)
+    if (const int* glattrs = wxGLAttrs.GetGLAttrs())
     {
-        // indicates whether we have a boolean attribute
-        bool isBoolAttr = false;
-
-        int v = glattrs[arg+1];
-        switch ( glattrs[arg] )
+        for (; *glattrs != 0; ++glattrs)
         {
-            // Pixel format attributes
+            switch ( *glattrs )
+            {
+                // Pixel format attributes
 
-            case WX_GL_BUFFER_SIZE:
-                // Not supported
-                return false;
+                case WX_GL_BUFFER_SIZE:
+                    // Not supported
+                    return false;
 
-            case WX_GL_LEVEL:
-                // Not supported
-                return false;
+                case WX_GL_LEVEL:
+                    // Not supported
+                    return false;
 
-            case WX_GL_RGBA:
-                // Non-RGBA is not supported
-                isBoolAttr = true;
-                break;
+                case WX_GL_RGBA:
+                    // Non-RGBA is not supported
+                    break;
 
-            case WX_GL_DOUBLEBUFFER:
-                // Since QOpenGLWidget copies the framebuffer data to a
-                // texture, we already have tear-free behaviour.
-                // Using SwapBehavior::DoubleBuffer just increases latency.
-                isBoolAttr = true;
-                break;
+                case WX_GL_DOUBLEBUFFER:
+                    // Since QOpenGLWidget copies the framebuffer data to a
+                    // texture, we already have tear-free behaviour.
+                    // Using SwapBehavior::DoubleBuffer just increases latency.
+                    break;
 
-            case WX_GL_STEREO:
-                format.setStereo(true);
-                isBoolAttr = true;
-                break;
+                case WX_GL_STEREO:
+                    format.setStereo(true);
+                    break;
 
-            case WX_GL_AUX_BUFFERS:
-                // don't know how to implement
-                return false;
+                case WX_GL_AUX_BUFFERS:
+                    // don't know how to implement
+                    return false;
 
-            case WX_GL_MIN_RED:
-                format.setRedBufferSize(v);
-                break;
+                case WX_GL_MIN_RED:
+                    format.setRedBufferSize(*++glattrs);
+                    break;
 
-            case WX_GL_MIN_GREEN:
-                format.setGreenBufferSize(v);
-                break;
+                case WX_GL_MIN_GREEN:
+                    format.setGreenBufferSize(*++glattrs);
+                    break;
 
-            case WX_GL_MIN_BLUE:
-                format.setBlueBufferSize(v);
-                break;
+                case WX_GL_MIN_BLUE:
+                    format.setBlueBufferSize(*++glattrs);
+                    break;
 
-            case WX_GL_MIN_ALPHA:
-                format.setAlphaBufferSize(v);
-                break;
+                case WX_GL_MIN_ALPHA:
+                    format.setAlphaBufferSize(*++glattrs);
+                    break;
 
-            case WX_GL_DEPTH_SIZE:
-                format.setDepthBufferSize(v);
-                break;
+                case WX_GL_DEPTH_SIZE:
+                    format.setDepthBufferSize(*++glattrs);
+                    break;
 
-            case WX_GL_STENCIL_SIZE:
-                format.setStencilBufferSize(v);
-                break;
+                case WX_GL_STENCIL_SIZE:
+                    format.setStencilBufferSize(*++glattrs);
+                    break;
 
-            case WX_GL_MIN_ACCUM_RED:
-            case WX_GL_MIN_ACCUM_GREEN:
-            case WX_GL_MIN_ACCUM_BLUE:
-            case WX_GL_MIN_ACCUM_ALPHA:
-                // Not supported
-                return false;
+                case WX_GL_MIN_ACCUM_RED:
+                case WX_GL_MIN_ACCUM_GREEN:
+                case WX_GL_MIN_ACCUM_BLUE:
+                case WX_GL_MIN_ACCUM_ALPHA:
+                    // Not supported
+                    return false;
 
-            case WX_GL_SAMPLE_BUFFERS:
-                format.setSamples(v > 0 ? std::max(4, format.samples()) : -1);
-                // can we somehow indicate if it's not supported?
-                break;
+                case WX_GL_SAMPLE_BUFFERS:
+                    format.setSamples(*++glattrs > 0 ? std::max(4, format.samples()) : -1);
+                    // can we somehow indicate if it's not supported?
+                    break;
 
-            case WX_GL_SAMPLES:
-                format.setSamples(v);
-                // can we somehow indicate if it's not supported?
-                break;
+                case WX_GL_SAMPLES:
+                    format.setSamples(*++glattrs);
+                    // can we somehow indicate if it's not supported?
+                    break;
 
-            default:
-                wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
-                           glattrs[arg]);
-                continue;
-        }
-
-        if ( !isBoolAttr )
-        {
-            if ( !v )
-                return false; // zero parameter
-            arg++;
+                default:
+                    wxLogDebug(wxT("Unsupported OpenGL attribute %d"), *glattrs);
+                    return false;
+            }
         }
     }
 
-    for (int arg = 0; ctxattrs && ctxattrs[arg] != 0; arg++)
+    if (const int *ctxattrs = wxCtxAttrs.GetGLAttrs())
     {
-        // indicates whether we have a boolean attribute
-        bool isBoolAttr = false;
-
-        int v = ctxattrs[arg+1];
-        switch ( ctxattrs[arg] )
+        for (; *ctxattrs != 0; ++ctxattrs)
         {
-            // Context attributes
+            switch ( *ctxattrs )
+            {
+                // Context attributes
 
-            case WX_GL_MAJOR_VERSION:
-                format.setVersion ( v, format.minorVersion() );
-                break;
+                case WX_GL_MAJOR_VERSION:
+                    format.setVersion ( *++ctxattrs, format.minorVersion() );
+                    break;
 
-            case WX_GL_MINOR_VERSION:
-                format.setVersion ( format.majorVersion(), v );
-                break;
+                case WX_GL_MINOR_VERSION:
+                    format.setVersion ( format.majorVersion(), *++ctxattrs );
+                    break;
 
-            case WX_GL_CORE_PROFILE:
-                format.setProfile(QSurfaceFormat::CoreProfile);
-                break;
+                case WX_GL_CORE_PROFILE:
+                    format.setProfile(QSurfaceFormat::CoreProfile);
+                    break;
 
-            case WX_GL_COMPAT_PROFILE:
-                format.setProfile(QSurfaceFormat::CompatibilityProfile);
-                break;
+                case WX_GL_COMPAT_PROFILE:
+                    format.setProfile(QSurfaceFormat::CompatibilityProfile);
+                    break;
 
-            default:
-                wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
-                           ctxattrs[arg]);
-                continue;
-        }
-
-        if ( !isBoolAttr )
-        {
-            if ( !v )
-                return false; // zero parameter
-            arg++;
+                default:
+                    wxLogDebug(wxT("Unsupported OpenGL attribute %d"), *ctxattrs);
+                    return false;
+            }
         }
     }
 
