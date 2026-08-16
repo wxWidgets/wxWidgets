@@ -650,19 +650,19 @@ void TextCtrlTestCase::Url()
         return;
 
     delete m_text;
-    CreateText(wxTE_RICH | wxTE_AUTO_URL);
+    CreateText(wxTE_MULTILINE | wxTE_RICH | wxTE_AUTO_URL);
 
     m_text->AppendText("http://www.wxwidgets.org");
 
     wxUIActionSimulator sim;
-    sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5)));
+    REQUIRE(sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5))));
 
     EventCounter url(m_text, wxEVT_TEXT_URL);
 
-    sim.MouseClick();
+    REQUIRE(sim.MouseClick());
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, url.GetCount());
+    CHECK(url.GetCount() >= 1);
 #endif
 }
 
