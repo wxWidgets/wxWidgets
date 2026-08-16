@@ -190,11 +190,11 @@ protected:
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
 
     wxArrayRibbonToolBarToolGroup m_groups;
-    wxRibbonToolBarToolBase* m_hover_tool;
-    wxRibbonToolBarToolBase* m_active_tool;
-    wxSize* m_sizes;
-    int m_nrows_min;
-    int m_nrows_max;
+    wxRibbonToolBarToolBase* m_hover_tool = nullptr;
+    wxRibbonToolBarToolBase* m_active_tool = nullptr;
+    wxSize* m_sizes = nullptr;
+    int m_nrows_min = 0;
+    int m_nrows_max = 0;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonToolBar);
