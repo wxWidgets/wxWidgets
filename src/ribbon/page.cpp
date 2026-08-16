@@ -391,7 +391,7 @@ bool wxRibbonPage::ScrollSections(int sections)
         gap = m_art->GetMetric(wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE);
         if (scrollForward)
         {
-            scrollpos = width - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
+            scrollpos = height - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
         }
         else
         {
