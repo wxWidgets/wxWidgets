@@ -521,11 +521,11 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxG
                 // Pixel format attributes
 
                 case WX_GL_BUFFER_SIZE:
-                    // Not supported
+                    wxFAIL_MSG("wxGLAttributes::BufferSize() not supported in wxQt.");
                     return false;
 
                 case WX_GL_LEVEL:
-                    // Not supported
+                    wxFAIL_MSG("wxGLAttributes::Level() not supported in wxQt.");
                     return false;
 
                 case WX_GL_RGBA:
@@ -544,6 +544,7 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxG
 
                 case WX_GL_AUX_BUFFERS:
                     // don't know how to implement
+                    wxFAIL_MSG("wxGLAttributes::AuxBuffers() not supported in wxQt.");
                     return false;
 
                 case WX_GL_MIN_RED:
@@ -574,7 +575,7 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxG
                 case WX_GL_MIN_ACCUM_GREEN:
                 case WX_GL_MIN_ACCUM_BLUE:
                 case WX_GL_MIN_ACCUM_ALPHA:
-                    // Not supported
+                    wxFAIL_MSG("wxGLAttributes::MinAcumRGBA() not supported in wxQt.");
                     return false;
 
                 case WX_GL_SAMPLE_BUFFERS:
