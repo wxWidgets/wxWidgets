@@ -933,7 +933,7 @@ endfunction()
 
 function(wx_add name group)
     cmake_parse_arguments(APP
-        "CONSOLE;CONSOLE_GUI;DLL;IMPORTANT"
+        "CONSOLE;CONSOLE_GUI;DLL;IMPORTANT;NO_CTEST"
         "NAME;FOLDER"
         "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES;RES_BUNDLE;PLIST;CHARSET"
         ${ARGN}
@@ -1118,7 +1118,7 @@ function(wx_add name group)
         VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}"
         )
 
-    if(group STREQUAL Tests)
+    if(group STREQUAL Tests AND NOT APP_NO_CTEST)
         add_test(NAME ${target_name}
             COMMAND ${target_name}
             WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
