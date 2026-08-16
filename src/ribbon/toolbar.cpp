@@ -76,6 +76,7 @@ wxEND_EVENT_TABLE()
 
 wxRibbonToolBar::wxRibbonToolBar()
 {
+    CommonInit(0);
 }
 
 wxRibbonToolBar::wxRibbonToolBar(wxWindow* parent,
