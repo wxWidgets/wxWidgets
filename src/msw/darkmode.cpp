@@ -895,9 +895,7 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
             textRect.left = boxSize + 3;
             ::DrawTextW(hdc, text, -1, &textRect, DT_SINGLELINE | DT_VCENTER);
 
-            if (hOldFont) {
-                ::SelectObject(hdc, hOldFont);
-            }
+            ::SelectObject(hdc, hOldFont);
             ::EndPaint(hwnd, &ps);
             return 0;
         }
