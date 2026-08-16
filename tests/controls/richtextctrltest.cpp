@@ -17,9 +17,16 @@
 
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
+#include "wx/uiaction.h"
+
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
+    #include "wx/clipbrd.h"
+    #include "wx/dataobj.h"
+#endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
+
 #include "testableframe.h"
 #include "asserthelper.h"
-#include "wx/uiaction.h"
+#include "waitfor.h"
 
 class RichTextCtrlTestCase : public CppUnit::TestCase
 {
@@ -102,6 +109,37 @@ CPPUNIT_TEST_SUITE_REGISTRATION( RichTextCtrlTestCase );
 
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RichTextCtrlTestCase, "RichTextCtrlTestCase" );
+
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
+
+namespace
+{
+
+bool SetClipboardText(const wxString &text)
+{
+    wxClipboardLocker lock;
+
+    if ( !lock )
+        return false;
+
+    wxTheClipboard->Clear();
+    return wxTheClipboard->SetData(new wxTextDataObject(text));
+}
+
+bool ClipboardContainsText(const wxString &text)
+{
+    wxClipboardLocker lock;
+
+    if ( !lock )
+        return false;
+
+    wxTextDataObject data;
+    return wxTheClipboard->GetData(data) && data.GetText() == text;
+}
+
+} // anonymous namespace
+
+#endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
 
 void RichTextCtrlTestCase::setUp()
 {
@@ -258,33 +296,62 @@ void RichTextCtrlTestCase::TextEvent()
 
 void RichTextCtrlTestCase::CutCopyPaste()
 {
-#ifndef __WXOSX__
-    m_rich->AppendText("sometext");
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
+    const wxString text("sometext");
+    const wxString sentinel("not sometext");
+
+    auto waitForPaste = [&]()
+    {
+        return WaitFor("wxRichTextCtrl paste clipboard update",
+                       [&]()
+                       {
+                           if ( m_rich->GetValue() == text )
+                               return true;
+
+                           m_rich->Paste();
+                           return m_rich->GetValue() == text;
+                       });
+    };
+
+    m_rich->AppendText(text);
     m_rich->SelectAll();
 
-    if(m_rich->CanCut() && m_rich->CanPaste())
+    REQUIRE(WaitFor("wxRichTextCtrl clipboard setup",
+                    [&]() { return SetClipboardText(sentinel); }));
+
+    if ( m_rich->CanCut() )
     {
-        m_rich->Cut();
+        REQUIRE(WaitFor("wxRichTextCtrl cut clipboard update",
+                        [&]()
+                        {
+                            m_rich->Cut();
+                            return m_rich->IsEmpty() &&
+                                   ClipboardContainsText(text);
+                        }));
         CPPUNIT_ASSERT(m_rich->IsEmpty());
 
-        wxYield();
-
-        m_rich->Paste();
-        CPPUNIT_ASSERT_EQUAL("sometext", m_rich->GetValue());
+        REQUIRE(waitForPaste());
+        CPPUNIT_ASSERT_EQUAL(text, m_rich->GetValue());
     }
 
     m_rich->SelectAll();
 
-    if(m_rich->CanCopy() && m_rich->CanPaste())
+    REQUIRE(WaitFor("wxRichTextCtrl clipboard setup",
+                    [&]() { return SetClipboardText(sentinel); }));
+
+    if ( m_rich->CanCopy() )
     {
-        m_rich->Copy();
+        REQUIRE(WaitFor("wxRichTextCtrl copy clipboard update",
+                        [&]()
+                        {
+                            m_rich->Copy();
+                            return ClipboardContainsText(text);
+                        }));
         m_rich->Clear();
         CPPUNIT_ASSERT(m_rich->IsEmpty());
 
-        wxYield();
-
-        m_rich->Paste();
-        CPPUNIT_ASSERT_EQUAL("sometext", m_rich->GetValue());
+        REQUIRE(waitForPaste());
+        CPPUNIT_ASSERT_EQUAL(text, m_rich->GetValue());
     }
 #endif
 }

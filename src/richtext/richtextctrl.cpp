@@ -3489,11 +3489,13 @@ void wxRichTextCtrl::Cut()
     if (CanCut())
     {
         wxRichTextRange range = GetInternalSelectionRange();
-        GetBuffer().CopyToClipboard(range);
-
-        DeleteSelectedContent();
-        LayoutContent();
-        Refresh(false);
+        // Keep the selection if it couldn't be put on the clipboard.
+        if ( GetBuffer().CopyToClipboard(range) )
+        {
+            DeleteSelectedContent();
+            LayoutContent();
+            Refresh(false);
+        }
     }
 }
 
