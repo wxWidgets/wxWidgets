@@ -258,6 +258,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Update Unicode mapping tables to current versions (Scott Talbert, #26700).
+- Add wxPATH_RMDIR_PARENTS flag to wxFileName::Rmdir().
 
 All (GUI):
 
