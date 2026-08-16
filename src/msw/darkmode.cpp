@@ -890,8 +890,7 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
             }
 
             // Draw the text.
-            wchar_t text[64];
-            ::GetWindowTextW(hwnd, text, sizeof(text) / sizeof(wchar_t));
+            const auto text = wxGetWindowText(hwnd);
             RECT textRect = rcClient;
             textRect.left = boxSize + 3;
             ::DrawTextW(hdc, text, -1, &textRect, DT_SINGLELINE | DT_VCENTER);
