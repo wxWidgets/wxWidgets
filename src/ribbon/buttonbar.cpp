@@ -1175,6 +1175,11 @@ void wxRibbonButtonBar::MakeLayouts()
                               wxRIBBON_BUTTONBAR_BUTTON_SMALL);
         }
     }
+
+    // Removing buttons can result in fewer layouts from before,
+    // so clamp if necessary.
+    if ( m_current_layout >= (int)m_layouts.GetCount() )
+        m_current_layout = (int)m_layouts.GetCount() - 1;
 }
 
 void wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
