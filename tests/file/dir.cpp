@@ -68,7 +68,7 @@ void DirTestCase::CreateTempFile(const wxString& path)
 DirTestCase::DirTestCase()
     : m_dirTestFolder("dirtest")
 {
-    CPPUNIT_ASSERT(m_dirTestFolder.IsOk());
+    m_dirTestFolder.RequireOk();
 
     const wxString& dirTestFolder = GetDirTestFolder();
 
