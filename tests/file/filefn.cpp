@@ -19,6 +19,7 @@
 #include "wx/filefn.h"
 #include "wx/textfile.h"
 #include "wx/filesys.h"
+#include "wx/utils.h"
 
 #include "testfile.h"
 
@@ -45,6 +46,7 @@ protected:
                       const wxString& filePath2,
                       const wxString& destFilePath);
 
+    TempDir m_tempDir;
     wxString m_fileNameASCII;
     wxString m_fileNameNonASCII;
     wxString m_fileNameWork;
@@ -56,37 +58,35 @@ protected:
 // test fixture implementation
 // ----------------------------------------------------------------------------
 
-FileFunctionsTestCase::FileFunctionsTestCase()
+static wxString GetFileFunctionsTempDirPrefix()
 {
+    // Put the varying part first because MSW uses the leading prefix
+    // characters for temporary names.
+    return wxString::Format("%03lx-filefn", wxGetProcessId() & 0xfff);
+}
+
+FileFunctionsTestCase::FileFunctionsTestCase()
+    : m_tempDir(GetFileFunctionsTempDirPrefix())
+{
+    CPPUNIT_ASSERT(m_tempDir.IsOk());
+
     // Initialize local data
 
-    wxFileName fn1(wxFileName::GetTempDir(), wxT("wx_file_mask.txt"));
+    wxFileName fn1(m_tempDir.GetName(), "wx_file_mask.txt");
     m_fileNameASCII = fn1.GetFullPath();
 
     // This file name is 'wx_file_mask.txt' in Russian.
-    wxFileName fn2(wxFileName::GetTempDir(),
+    wxFileName fn2(m_tempDir.GetName(),
       wxT("wx_\u043C\u0430\u0441\u043A\u0430_\u0444\u0430\u0439\u043B\u0430.txt"));
     m_fileNameNonASCII = fn2.GetFullPath();
 
-    wxFileName fn3(wxFileName::GetTempDir(), wxT("wx_test_copy"));
+    wxFileName fn3(m_tempDir.GetName(), "wx_test_copy");
     m_fileNameWork = fn3.GetFullPath();
 }
 
 FileFunctionsTestCase::~FileFunctionsTestCase()
 {
-    // Remove all remaining temporary files
-    if ( wxFileExists(m_fileNameASCII) )
-    {
-        wxRemoveFile(m_fileNameASCII);
-    }
-    if ( wxFileExists(m_fileNameNonASCII) )
-    {
-        wxRemoveFile(m_fileNameNonASCII);
-    }
-    if ( wxFileExists(m_fileNameWork) )
-    {
-        wxRemoveFile(m_fileNameWork);
-    }
+    m_tempDir.Remove();
 }
 
 // ----------------------------------------------------------------------------
