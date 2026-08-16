@@ -85,7 +85,7 @@ protected:
 
 public:
     VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler);
-    virtual ~VirtualProtocol() = default;
+    virtual ~VirtualProtocol();
 
     //IUnknown
     DECLARE_IUNKNOWN_METHODS;

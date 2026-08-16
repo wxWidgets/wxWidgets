@@ -38,6 +38,7 @@
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/variant.h"
 #include "wx/private/jsscriptwrapper.h"
+#include "wx/scopedptr.h"
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSValueRef.h>
 #include <JavaScriptCore/JSStringRef.h>
@@ -500,15 +501,14 @@ wxgtk_webview_webkit_uri_scheme_request_cb(WebKitURISchemeRequest *request,
     {
         const wxString uri = wxString::FromUTF8(webkit_uri_scheme_request_get_uri(request));
 
-        wxFSFile* file = handler->GetFile(uri);
+        wxScopedPtr<wxFSFile> file(handler->GetFile(uri));
         if(file)
         {
             gint64 length = file->GetStream()->GetLength();
             guint8 *data = g_new(guint8, length);
             file->GetStream()->Read(data, length);
-            GInputStream *stream = g_memory_input_stream_new_from_data(data,
-                                                                       length,
-                                                                       g_free);
+            wxGtkObject<GInputStream>
+                stream(g_memory_input_stream_new_from_data(data, length, g_free));
             wxString mime = file->GetMimeType();
             webkit_uri_scheme_request_finish(request, stream, length, mime.utf8_str());
         }
@@ -715,6 +715,15 @@ wxgtk_authorize_authenticated_peer_cb(GDBusAuthObserver *,
 class wxWebViewConfigurationImplWebKit : public wxWebViewConfigurationImpl
 {
 public:
+    ~wxWebViewConfigurationImplWebKit()
+    {
+        // The context holds a reference to the data manager, so release it first.
+        // Also, use g_clear_object instead of g_object_unref in case they were not initialized.
+        g_clear_object(&m_webContext);
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+        g_clear_object(&m_websiteDataManager);
+#endif
+    }
 
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
     wxString GetDataPath() const override
@@ -776,6 +785,7 @@ private:
 #ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
         if (!m_persistentStorage)
         {
+            // transfer full
             m_webContext = webkit_web_context_new_ephemeral();
             return m_webContext;
         }
@@ -784,27 +794,36 @@ private:
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
         if (wx_check_webkit_version(2, 10, 0))
         {
-            gchar* cachePath = nullptr;
-            gchar* dataPath = nullptr;
+            wxGtkString cachePath(nullptr);
+            wxGtkString dataPath(nullptr);
             if (!m_dataPath.empty())
             {
                 wxFileName configCachePath = wxFileName::DirName(m_dataPath);
                 configCachePath.AppendDir("cache");
-                cachePath = g_strdup(configCachePath.GetPath().utf8_str());
+                cachePath = wxGtkString(g_strdup(configCachePath.GetPath().utf8_str()));
                 wxFileName configDataPath = wxFileName::DirName(m_dataPath);
                 configDataPath.AppendDir("data");
-                dataPath = g_strdup(configDataPath.GetPath().utf8_str());
+                dataPath = wxGtkString(g_strdup(configDataPath.GetPath().utf8_str()));
             }
 
+            // transfer full
             m_websiteDataManager = webkit_website_data_manager_new(
-                "base-cache-directory", cachePath,
-                "base-data-directory", dataPath,
+                "base-cache-directory", cachePath.c_str(),
+                "base-data-directory", dataPath.c_str(),
                 nullptr);
+            // transfer full
             m_webContext = webkit_web_context_new_with_website_data_manager(m_websiteDataManager);
         }
         else
 #endif
+        {
+            // transfer none
             m_webContext = webkit_web_context_get_default();
+
+            // transfer none, so add a ref count
+            g_object_ref(m_webContext);
+        }
+
         return m_webContext;
     }
 
@@ -1237,15 +1256,15 @@ static void wxgtk_can_execute_editing_command_cb(GObject*,
 
 bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
 {
-    GAsyncResult *result = nullptr;
+    wxGtkObject<GAsyncResult> result;
     webkit_web_view_can_execute_editing_command(m_web_view,
                                                 command,
                                                 nullptr,
                                                 wxgtk_can_execute_editing_command_cb,
-                                                &result);
+                                                result.Out());
 
     GMainContext *main_context = g_main_context_get_thread_default();
-    while (!result)
+    while (!result.get())
     {
         g_main_context_iteration(main_context, TRUE);
     }
@@ -1253,7 +1272,6 @@ bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
     gboolean can_execute = webkit_web_view_can_execute_editing_command_finish(m_web_view,
                                                                               result,
                                                                               nullptr);
-    g_object_unref(result);
 
     return can_execute != 0;
 }
@@ -1346,13 +1364,13 @@ wxString wxWebViewWebKit::GetPageSource() const
         return wxString();
     }
 
-    GAsyncResult *result = nullptr;
+    wxGtkObject<GAsyncResult> result;
     webkit_web_resource_get_data(resource, nullptr,
                                  wxgtk_web_resource_get_data_cb,
-                                 &result);
+                                 result.Out());
 
     GMainContext *main_context = g_main_context_get_thread_default();
-    while (!result)
+    while (!result.get())
     {
         g_main_context_iteration(main_context, TRUE);
     }
@@ -1360,15 +1378,11 @@ wxString wxWebViewWebKit::GetPageSource() const
     size_t length;
     guchar *source = webkit_web_resource_get_data_finish(resource, result,
                                                          &length, nullptr);
-    if (result)
-    {
-        g_object_unref(result);
-    }
 
     if (source)
     {
         const wxString& wxs = wxString::FromUTF8((const char*)source, length);
-        free(source);
+        g_free(source);
         return wxs;
     }
     return wxString();
@@ -1418,9 +1432,8 @@ void wxWebViewWebKit::DoSetPage(const wxString& html, const wxString& baseUri)
 
 void wxWebViewWebKit::Print()
 {
-    WebKitPrintOperation* printop = webkit_print_operation_new(m_web_view);
+    wxGtkObject<WebKitPrintOperation> printop(webkit_print_operation_new(m_web_view));
     webkit_print_operation_run_dialog(printop, nullptr);
-    g_object_unref(printop);
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -1534,11 +1547,10 @@ struct wxWebViewGtkPDFData
                         const wxString& filePath_,
                         WebKitPrintOperation* printop_)
         : webView(webView_), filePath(filePath_), printop(printop_) {}
-    ~wxWebViewGtkPDFData() { g_object_unref(printop); }
 
     wxWeakRef<wxWebViewWebKit> webView;
     wxString filePath;
-    WebKitPrintOperation* printop;
+    wxGtkObject<WebKitPrintOperation> printop;
 };
 
 static void wxDoHandlePDFResult(gpointer user_data, int success)
@@ -1583,6 +1595,7 @@ static bool wxDoStartPDFPrint(wxWebViewWebKit* webView,
     if (!uri)
         return false;
 
+    // Not a wxGtkObject; ownership passes to wxWebViewGtkPDFData below
     WebKitPrintOperation* printop = webkit_print_operation_new(
         static_cast<WebKitWebView*>(webView->GetNativeBackend()));
 

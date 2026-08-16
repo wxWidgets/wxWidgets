@@ -373,7 +373,7 @@ private:
     enum
     {
         Next_Any     = 0,
-        Next_Visible = 1
+        Next_Opened  = 1
     };
     wxTreeItemId DoGetNext(const wxTreeItemId& item, int flags = 0) const;
 

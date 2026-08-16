@@ -3191,6 +3191,18 @@ private:
     bool DoShowCellEditControl(const wxGridActivationSource& actSource);
     void DoHideCellEditControl();
 
+    // Reposition the cell editor if it is currently shown.
+    void RepositionCellEditControlIfNecessary();
+
+    // DoShowCellEditControl() and RepositionCellEditControlIfNecessary() use
+    // this function to really position the editor control.
+    void PositionCellEditControl(wxGridCellEditor* editor,
+                                 wxGridCellAttr* attr,
+                                 wxGridWindow* gridWindow,
+                                 int row,
+                                 int col,
+                                 wxRect rect);
+
     // Unconditionally try showing the editor for the current cell.
     //
     // Returns false if the user code vetoed wxEVT_GRID_EDITOR_SHOWN or if the

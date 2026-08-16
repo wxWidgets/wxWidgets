@@ -216,11 +216,14 @@ public:
             return false;
         }
         // Mark event as completed
-        hr = m_deferral->Complete();
-        if (FAILED(hr))
+        if ( m_deferral )
         {
-            wxLogApiError("deferral->Complete()", hr);
-            return false;
+            hr = m_deferral->Complete();
+            if (FAILED(hr))
+            {
+                wxLogApiError("deferral->Complete()", hr);
+                return false;
+            }
         }
 
         return true;
@@ -369,7 +372,8 @@ public:
     {
         wxPoint result(-1, -1);
         BOOL hasPosition;
-        if (SUCCEEDED(m_windowFeatures->get_HasPosition(&hasPosition)) && hasPosition)
+        if (m_windowFeatures &&
+            SUCCEEDED(m_windowFeatures->get_HasPosition(&hasPosition)) && hasPosition)
         {
             UINT32 x, y;
             if (SUCCEEDED(m_windowFeatures->get_Left(&x)) &&
@@ -383,7 +387,8 @@ public:
     {
         wxSize result(-1, -1);
         BOOL hasSize;
-        if (SUCCEEDED(m_windowFeatures->get_HasSize(&hasSize)) && hasSize)
+        if (m_windowFeatures &&
+            SUCCEEDED(m_windowFeatures->get_HasSize(&hasSize)) && hasSize)
         {
             UINT32 width, height;
             if (SUCCEEDED(m_windowFeatures->get_Width(&width)) &&
@@ -396,7 +401,8 @@ public:
     virtual bool ShouldDisplayMenuBar() const override
     {
         BOOL result;
-        if (SUCCEEDED(m_windowFeatures->get_ShouldDisplayMenuBar(&result)))
+        if (m_windowFeatures &&
+            SUCCEEDED(m_windowFeatures->get_ShouldDisplayMenuBar(&result)))
             return result;
         else
             return true;
@@ -405,7 +411,8 @@ public:
     virtual bool ShouldDisplayStatusBar() const override
     {
         BOOL result;
-        if (SUCCEEDED(m_windowFeatures->get_ShouldDisplayStatus(&result)))
+        if (m_windowFeatures &&
+            SUCCEEDED(m_windowFeatures->get_ShouldDisplayStatus(&result)))
             return result;
         else
             return true;
@@ -413,7 +420,8 @@ public:
     virtual bool ShouldDisplayToolBar() const override
     {
         BOOL result;
-        if (SUCCEEDED(m_windowFeatures->get_ShouldDisplayToolbar(&result)))
+        if (m_windowFeatures &&
+            SUCCEEDED(m_windowFeatures->get_ShouldDisplayToolbar(&result)))
             return result;
         else
             return true;
@@ -422,7 +430,8 @@ public:
     virtual bool ShouldDisplayScrollBars() const override
     {
         BOOL result;
-        if (SUCCEEDED(m_windowFeatures->get_ShouldDisplayScrollBars(&result)))
+        if (m_windowFeatures &&
+            SUCCEEDED(m_windowFeatures->get_ShouldDisplayScrollBars(&result)))
             return result;
         else
             return true;
@@ -473,6 +482,7 @@ bool wxWebViewEdgeImpl::Create()
     m_isBusy = false;
     m_inEventCallback = false;
     m_pendingContextMenuEnabled = -1;
+    // 0 to turn off dev tools by default
     m_pendingAccessToDevToolsEnabled = 0;
     m_pendingEnableBrowserAcceleratorKeys = -1;
 
@@ -554,7 +564,7 @@ void wxWebViewEdgeImpl::UpdateBounds()
 {
     RECT r;
     wxCopyRectToRECT(m_ctrl->GetClientRect(), r);
-    if (m_webView)
+    if ( m_webViewController )
         m_webViewController->put_Bounds(r);
 }
 
@@ -827,7 +837,11 @@ HRESULT wxWebViewEdgeImpl::OnWebResourceRequested(ICoreWebView2* WXUNUSED(sender
     wxSharedPtr<wxWebViewHandler> handler;
 
     if (uri.HasServer())
-        handler = m_handlers[uri.GetServer()];
+    {
+        const auto it = m_handlers.find(uri.GetServer());
+        if ( it != m_handlers.end() )
+            handler = it->second;
+    }
 
     if (!handler)
     {
@@ -966,7 +980,7 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     if (m_pendingAccessToDevToolsEnabled != -1)
     {
         m_ctrl->EnableAccessToDevTools(m_pendingAccessToDevToolsEnabled == 1);
-        m_pendingContextMenuEnabled = -1;
+        m_pendingAccessToDevToolsEnabled = -1;
     }
 
     if (m_pendingEnableBrowserAcceleratorKeys != -1)
@@ -1004,7 +1018,7 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     {
         if (FAILED(m_newWindowArgs->put_NewWindow(baseWebView)))
             SendErrorEventForAPI("WebView2::WebViewCreated (put_NewWindow)", hr);
-        if (FAILED(m_newWindowDeferral->Complete()))
+        if (m_newWindowDeferral && FAILED(m_newWindowDeferral->Complete()))
             SendErrorEventForAPI("WebView2::WebViewCreated (Complete)", hr);
         m_newWindowArgs.reset();
         m_newWindowDeferral.reset();
@@ -1551,14 +1565,18 @@ bool wxWebViewEdge::PrintToPDF(const wxString& filePath, const wxPrintData& prin
 
 float wxWebViewEdge::GetZoomFactor() const
 {
-    double old_zoom_factor = 0.0;
-    m_impl->m_webViewController->get_ZoomFactor(&old_zoom_factor);
-    return old_zoom_factor;
+    if ( !m_impl->m_webViewController )
+        return 1.0f;
+
+    double zoomFactor = 1.0;
+    m_impl->m_webViewController->get_ZoomFactor(&zoomFactor);
+    return zoomFactor;
 }
 
 void wxWebViewEdge::SetZoomFactor(float zoom)
 {
-    m_impl->m_webViewController->put_ZoomFactor(zoom);
+    if ( m_impl->m_webViewController )
+        m_impl->m_webViewController->put_ZoomFactor(zoom);
 }
 
 bool wxWebViewEdge::CanUndo() const
@@ -1626,6 +1644,9 @@ void wxWebViewEdge::EnableAccessToDevTools(bool enable)
 
 bool wxWebViewEdge::ShowDevTools()
 {
+    if ( !m_impl->m_webView )
+        return false;
+
     const HRESULT hr = m_impl->m_webView->OpenDevToolsWindow();
     if ( FAILED(hr) )
     {
@@ -1713,6 +1734,9 @@ bool wxWebViewEdge::SetProxy(const wxString& proxy)
 
 bool wxWebViewEdge::ClearBrowsingData(int types, wxDateTime since)
 {
+    if ( !m_impl->m_webView )
+        return false;
+
     wxCOMPtr<ICoreWebView2_13> webView13;
     if (FAILED(m_impl->m_webView->QueryInterface(IID_PPV_ARGS(&webView13))))
         return false;
@@ -1745,6 +1769,7 @@ bool wxWebViewEdge::ClearBrowsingData(int types, wxDateTime since)
 
             case wxWEBVIEW_BROWSING_DATA_DOM_STORAGE:
                 dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_DOM_STORAGE;
+                break;
 
             case wxWEBVIEW_BROWSING_DATA_COOKIES | wxWEBVIEW_BROWSING_DATA_DOM_STORAGE:
                 dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_SITE;

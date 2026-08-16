@@ -86,11 +86,28 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) nullptr ) override;
 
+    // GTK-specific accessor returning true if Wayland XDG session management
+    // protocol is available.
+    //
+    // Returns false when not using Wayland at all.
+    static bool HasWaylandXDGSessionManagement();
+
+    // Set the XDG session ID to use: calling this even with an empty string
+    // registers this window as part of XDG toplevel session, meaning that its
+    // geometry will be saved/restored by the compositor.
+    bool SetWaylandXDGSessionId(const wxString& sessionId);
+
+    // Return the XDG session used by this object, if any.
+    wxString GetWaylandXDGSessionId() const;
+
+
     // implementation from now on
     // --------------------------
 
     // GTK callbacks
     virtual void GTKHandleRealized() override;
+    virtual void GTKHandleUnrealized() override;
+
     void GTKHandleMapped();
 
     void GTKConfigureEvent(int x, int y);
@@ -127,6 +144,10 @@ public:
     void GTKUpdateDecorSize(const DecorSize& decorSize);
 
     void GTKDoAfterShow();
+
+#ifdef wxHAVE_WAYLAND_SESSION_MANAGEMENT
+    class wxXDGSessionData *m_xdgSessionData = nullptr;
+#endif // wxHAVE_WAYLAND_SESSION_MANAGEMENT
 
 #ifdef __WXGTK3__
     void GTKUpdateClientSizeIfNecessary();

@@ -69,6 +69,8 @@ public:
     // the window it's associated with is hidden.
     static void UpdateVisibility();
 
+    static void SetDarkOrLightMode();
+
 private:
     // This module calls our DeleteToolTipCtrl().
     friend class wxToolTipModule;

@@ -557,10 +557,7 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
     if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, true) )
         wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
 
-    if ( themeName || themeId )
-    {
-        SetTheme(hwnd, themeName, themeId);
-    }
+    SetTheme(hwnd, themeName, themeId);
 
     // Some native controls need this message to switch themes, such as
     // buttons, tooltips and controls with scroll bars
@@ -1072,6 +1069,11 @@ UINT_PTR CALLBACK CommonDialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
     return 0;
 }
 
+bool HasDarkTheme()
+{
+    return wxCheckOsVersion(10, 0, 26200);
+}
+
 } // namespace wxMSWDarkMode
 
 void wxMSWImpl::PaintScrollBarCorner(HWND hwnd)
@@ -1198,6 +1200,11 @@ UINT_PTR CALLBACK CommonDialogHookProc(HWND WXUNUSED(hwnd),
     UINT WXUNUSED(uiMsg), WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
 {
     return 0;
+}
+
+bool HasDarkTheme()
+{
+    return false;
 }
 
 } // namespace wxMSWDarkMode

@@ -44,6 +44,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
 #include "wx/msw/uxtheme.h"
+#include "wx/msw/private/dc.h"
 
 // ---------------------------------------------------------------------------
 // macro
@@ -51,78 +52,6 @@
 
 // hide the ugly cast
 #define GetHMenuOf(menu)    ((HMENU)menu->GetHMenu())
-
-// ----------------------------------------------------------------------------
-// helper classes for temporarily changing HDC parameters
-// ----------------------------------------------------------------------------
-
-namespace
-{
-
-// This class just stores an HDC.
-class HDCHandler
-{
-protected:
-    HDCHandler(HDC hdc) : m_hdc(hdc) { }
-
-    const HDC m_hdc;
-};
-
-class HDCTextColChanger : HDCHandler
-{
-public:
-    HDCTextColChanger(HDC hdc, COLORREF col)
-        : HDCHandler(hdc),
-          m_colOld(::SetTextColor(hdc, col))
-    {
-    }
-
-    ~HDCTextColChanger()
-    {
-        ::SetTextColor(m_hdc, m_colOld);
-    }
-
-private:
-    COLORREF m_colOld;
-};
-
-class HDCBgColChanger : HDCHandler
-{
-public:
-    HDCBgColChanger(HDC hdc, COLORREF col)
-        : HDCHandler(hdc),
-          m_colOld(::SetBkColor(hdc, col))
-    {
-    }
-
-    ~HDCBgColChanger()
-    {
-        ::SetBkColor(m_hdc, m_colOld);
-    }
-
-private:
-    COLORREF m_colOld;
-};
-
-class HDCBgModeChanger : HDCHandler
-{
-public:
-    HDCBgModeChanger(HDC hdc, int mode)
-        : HDCHandler(hdc),
-          m_modeOld(::SetBkMode(hdc, mode))
-    {
-    }
-
-    ~HDCBgModeChanger()
-    {
-        ::SetBkMode(m_hdc, m_modeOld);
-    }
-
-private:
-    int m_modeOld;
-};
-
-} // anonymous namespace
 
 // ============================================================================
 // implementation
@@ -175,7 +104,7 @@ public:
         {
             rect.top += cyTopHeight;
             rect.left += cxLeftWidth;
-            rect.right -= cyTopHeight;
+            rect.right -= cxRightWidth;
             rect.bottom -= cyBottomHeight;
         }
 
@@ -183,7 +112,7 @@ public:
         {
             rect.top -= cyTopHeight;
             rect.left -= cxLeftWidth;
-            rect.right += cyTopHeight;
+            rect.right += cxRightWidth;
             rect.bottom += cyBottomHeight;
         }
     };
@@ -879,8 +808,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 {
     const MenuDrawData* data = MenuDrawData::Get(GetMenu());
 
-    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-    HDC hdc = GetHdcOf(*impl);
+    HDC hdc = dc.GetHDC();
 
     RECT rect;
     wxCopyRectToRECT(rc, rect);
@@ -1048,9 +976,8 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         // draw text label
         // using native API because it recognizes '&'
 
-        HDCTextColChanger changeTextCol(hdc, colText.GetPixel());
-        HDCBgColChanger changeBgCol(hdc, colBack.GetPixel());
-        HDCBgModeChanger changeBgMode(hdc, TRANSPARENT);
+        wxMSWImpl::wxTextColoursChanger textCol(hdc, colText, colBack);
+        wxMSWImpl::wxBkModeChanger bkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
 
         SelectInHDC selFont(hdc, GetHfontOf(font));
 
@@ -1187,32 +1114,30 @@ namespace
 {
 
 // helper function for draw coloured check mark
-void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask, int idxColor)
+void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask, wxSystemColour color)
 {
-    const COLORREF colBlack = RGB(0, 0, 0);
-    const COLORREF colWhite = RGB(255, 255, 255);
-
-    HDCTextColChanger changeTextCol(hdc, colBlack);
-    HDCBgColChanger changeBgCol(hdc, colWhite);
-    HDCBgModeChanger changeBgMode(hdc, TRANSPARENT);
+    wxMSWImpl::wxTextColoursChanger textCol(hdc, *wxBLACK, *wxWHITE);
+    wxMSWImpl::wxBkModeChanger bkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
 
     // memory DC for color bitmap
     MemoryHDC hdcMem(hdc);
     CompatibleBitmap hbmpMem(hdc, cx, cy);
     SelectInHDC selMem(hdcMem, hbmpMem);
 
+    const wxColour colCheck = wxSystemSettings::GetColour(color);
+    AutoHBRUSH hbr(colCheck.GetPixel());
+    SelectInHDC selBrush(hdcMem, hbr);
     RECT rect = { 0, 0, cx, cy };
-    ::FillRect(hdcMem, &rect, ::GetSysColorBrush(idxColor));
+    ::FillRect(hdcMem, &rect, hbr);
 
-    const COLORREF colCheck = ::GetSysColor(idxColor);
-    if ( colCheck == colWhite )
+    if ( colCheck == *wxWHITE )
     {
         ::BitBlt(hdc, x, y, cx, cy, hdcCheckMask, 0, 0, MERGEPAINT);
         ::BitBlt(hdc, x, y, cx, cy, hdcMem, 0, 0, SRCAND);
     }
     else
     {
-        if ( colCheck != colBlack )
+        if ( colCheck != *wxBLACK )
         {
             const DWORD ROP_DSna = 0x00220326;  // dest = (NOT src) AND dest
             ::BitBlt(hdcMem, 0, 0, cx, cy, hdcCheckMask, 0, 0, ROP_DSna);
@@ -1225,10 +1150,8 @@ void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask,
 
 } // anonymous namespace
 
-void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
+void wxMenuItem::DrawStdCheckMark(WXHDC hdc, const tagRECT* rc, wxODStatus stat)
 {
-    HDC hdc = (HDC)hdc_;
-
     if ( MenuDrawData::IsUxThemeActive() )
     {
         wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU" , L"DARKMODE::MENU");
@@ -1279,15 +1202,15 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
         if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
         {
             DrawColorCheckMark(hdc, rc->left + 1, rc->top + 1,
-                               cx, cy, hdcMask, COLOR_3DHILIGHT);
+                               cx, cy, hdcMask, wxSYS_COLOUR_3DHILIGHT);
         }
 
         // then draw a check mark
-        int color = COLOR_MENUTEXT;
+        wxSystemColour color = wxSYS_COLOUR_MENUTEXT;
         if ( stat & wxODDisabled )
-            color = COLOR_BTNSHADOW;
+            color = wxSYS_COLOUR_BTNSHADOW;
         else if ( stat & wxODSelected )
-            color = COLOR_HIGHLIGHTTEXT;
+            color = wxSYS_COLOUR_HIGHLIGHTTEXT;
 
         DrawColorCheckMark(hdc, rc->left, rc->top, cx, cy, hdcMask, color);
     }

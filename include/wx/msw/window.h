@@ -627,6 +627,10 @@ protected:
         // The theme IDs to use. If neither this field nor the theme name is
         // set, no theme is applied to the window.
         const wchar_t* themeId = nullptr;
+
+        // True if we should apply theme L"Explorer" when switching to light
+        // mode. Otherwise, nullptr is used.
+        bool isLightModeThemed = true;
     };
 
     virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;
@@ -649,6 +653,10 @@ protected:
     // Translate wxBORDER_THEME to a standard border style or return it as is
     // if themed border should be used, depending on CanApplyThemeBorder().
     wxBorder DoTranslateBorder(wxBorder border) const;
+
+    // Returns true if the window does not draw a good dark mode themed
+    // border and therefore we should explicitly draw it.
+    virtual bool MSWShouldDrawDarkThemeBorder() const { return true; }
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;

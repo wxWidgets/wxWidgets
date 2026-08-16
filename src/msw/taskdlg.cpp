@@ -37,12 +37,11 @@
 #include "wx/dynlib.h"
 #include "wx/log.h"
 #include "wx/module.h"
-
 #include "wx/msw/uxtheme.h"
-
+#include "wx/msw/ole/oleutils.h"
+#include "wx/msw/private/comptr.h"
 #include "wx/msw/private/darkmode.h"
 
-#include "wx/msw/private/comptr.h"
 #include <uiautomation.h>
 #include <windowsx.h>
 
@@ -71,39 +70,6 @@ namespace TDDarkCol
 
 namespace
 {
-
-// Small helper class freeing BSTR automatically if necessary.
-class AutoBSTR
-{
-public:
-    AutoBSTR() = default;
-
-    AutoBSTR(const AutoBSTR&) = delete;
-    AutoBSTR& operator=(const AutoBSTR&) = delete;
-
-    ~AutoBSTR()
-    {
-        if ( m_bstr )
-            ::SysFreeString(m_bstr);
-    }
-
-    operator const wchar_t*() const
-    {
-        return m_bstr;
-    }
-
-    // May be called once to fill in the BSTR, which will be freed in dtor.
-    BSTR* Out()
-    {
-        wxASSERT_MSG( !m_bstr, "Can't reuse same object" );
-
-        return &m_bstr;
-    }
-
-private:
-    BSTR m_bstr = nullptr;
-};
-
 // Helper function create an HBRUSH from a brush stored in wxTheBrushList.
 // This allows not to recreate the brushes for the same colour and also ensures
 // that the brushes are eventually deleted.
@@ -136,8 +102,8 @@ std::wstring GetCurrentAutomationId(IUIAutomationElement* element)
 {
     std::wstring result;
 
-    AutoBSTR bstr;
-    if ( element->get_CurrentAutomationId(bstr.Out()) == S_OK && bstr )
+    wxBasicString bstr;
+    if ( element->get_CurrentAutomationId(bstr.ByRef()) == S_OK && bstr )
         result = bstr;
 
     return result;
@@ -411,8 +377,8 @@ void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
 
         info.automationId = GetCurrentAutomationId(pChild);
 
-        AutoBSTR b;
-        if ( pChild->get_CurrentName(b.Out()) == S_OK && b )
+        wxBasicString b;
+        if ( pChild->get_CurrentName(b.ByRef()) == S_OK && b )
             info.name = b;
 
         if ( info.automationId == L"VerificationCheckBox" )
@@ -1166,8 +1132,8 @@ BOOL CALLBACK TDEnumAttachProc(HWND hwndChild, LPARAM lparam)
     if ( FAILED(uiAuto->ElementFromHandle(hwndChild, &pEl)) )
         return TRUE;
 
-    AutoBSTR cls;
-    pEl->get_CurrentClassName(cls.Out());
+    wxBasicString cls;
+    pEl->get_CurrentClassName(cls.ByRef());
 
     if ( !cls )
         return TRUE;

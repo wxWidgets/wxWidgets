@@ -163,10 +163,11 @@ protected:
     wxColour GetGalleryColour(wxRibbonGallery *gallery,
         wxRibbonGalleryItem* item, wxString* name);
     void ResetGalleryArtProviders();
-    void SetArtProvider(wxRibbonArtProvider* prov);
+    void SetArtProvider(int button_id, wxRibbonArtProvider* prov);
     void SetBarStyle(long style);
 
     wxRibbonBar* m_ribbon;
+    wxRibbonButtonBar* m_provider_bar;
     wxRibbonGallery* m_primary_gallery;
     wxRibbonGallery* m_secondary_gallery;
     wxTextCtrl* m_logwindow;
@@ -604,15 +605,17 @@ MyFrame::MyFrame()
         wxRibbonPanel *provider_panel = new wxRibbonPanel(scheme, wxID_ANY,
             "Art", wxBitmapBundle(), wxDefaultPosition, wxDefaultSize,
             wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-        wxRibbonButtonBar *provider_bar = new wxRibbonButtonBar(provider_panel, wxID_ANY);
-        provider_bar->AddButton(ID_DEFAULT_PROVIDER, "Default Provider",
+        m_provider_bar = new wxRibbonButtonBar(provider_panel, wxID_ANY);
+        m_provider_bar->AddToggleButton(ID_DEFAULT_PROVIDER, "Default Provider",
             wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(32, 32)));
-        provider_bar->AddButton(ID_AUI_PROVIDER, "AUI Provider",
+        m_provider_bar->AddToggleButton(ID_AUI_PROVIDER, "AUI Provider",
             MakeSvgBundle(aui_style_svg, wxSize(32, 32)));
-        provider_bar->AddButton(ID_MSW_PROVIDER, "MSW Provider",
+        m_provider_bar->AddToggleButton(ID_MSW_PROVIDER, "MSW Provider",
             MakeSvgBundle(msw_style_svg, wxSize(32, 32)));
-        provider_bar->AddButton(ID_MSW_FLAT_PROVIDER, "MSW Flat Provider",
+        m_provider_bar->AddToggleButton(ID_MSW_FLAT_PROVIDER, "MSW Flat Provider",
             MakeSvgBundle(msw_flat_style_svg, wxSize(32, 32)));
+
+        m_provider_bar->ToggleButton(ID_DEFAULT_PROVIDER, true);
         wxRibbonPanel *primary_panel = new wxRibbonPanel(scheme, wxID_ANY,
             "Primary Colour", MakeSvgBundle(colours_svg, wxSize(16, 16)));
         m_primary_gallery = PopulateColoursPanel(primary_panel,
@@ -1275,28 +1278,28 @@ void MyFrame::OnColourGalleryButton(wxCommandEvent& evt)
 void MyFrame::OnDefaultProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_ribbon->DismissExpandedPanel();
-    SetArtProvider(new wxRibbonDefaultArtProvider);
+    SetArtProvider(ID_DEFAULT_PROVIDER, new wxRibbonDefaultArtProvider);
 }
 
 void MyFrame::OnAUIProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_ribbon->DismissExpandedPanel();
-    SetArtProvider(new wxRibbonAUIArtProvider);
+    SetArtProvider(ID_AUI_PROVIDER, new wxRibbonAUIArtProvider);
 }
 
 void MyFrame::OnMSWProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_ribbon->DismissExpandedPanel();
-    SetArtProvider(new wxRibbonMSWArtProvider);
+    SetArtProvider(ID_MSW_PROVIDER, new wxRibbonMSWArtProvider);
 }
 
 void MyFrame::OnMSWFlatProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     m_ribbon->DismissExpandedPanel();
-    SetArtProvider(new wxRibbonMSWFlatArtProvider);
+    SetArtProvider(ID_MSW_FLAT_PROVIDER, new wxRibbonMSWFlatArtProvider);
 }
 
-void MyFrame::SetArtProvider(wxRibbonArtProvider *prov)
+void MyFrame::SetArtProvider(int button_id, wxRibbonArtProvider *prov)
 {
     m_ribbon->Freeze();
     m_ribbon->SetArtProvider(prov);
@@ -1307,6 +1310,15 @@ void MyFrame::SetArtProvider(wxRibbonArtProvider *prov)
         ID_PRIMARY_COLOUR);
     PopulateColoursPanel(m_secondary_gallery->GetParent(), m_default_secondary,
         ID_SECONDARY_COLOUR);
+
+    m_provider_bar->ToggleButton(ID_DEFAULT_PROVIDER,
+        button_id == ID_DEFAULT_PROVIDER);
+    m_provider_bar->ToggleButton(ID_AUI_PROVIDER,
+        button_id == ID_AUI_PROVIDER);
+    m_provider_bar->ToggleButton(ID_MSW_PROVIDER,
+        button_id == ID_MSW_PROVIDER);
+    m_provider_bar->ToggleButton(ID_MSW_FLAT_PROVIDER,
+        button_id == ID_MSW_FLAT_PROVIDER);
 
     m_ribbon->Realize();
     m_ribbon->Thaw();

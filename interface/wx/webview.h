@@ -731,7 +731,9 @@ public:
     wxWebViewHandler(const wxString& scheme);
 
     /**
-        @return A pointer to the file represented by @c uri.
+        @return A pointer to the file represented by @c uri, or @NULL. The
+        caller takes ownership of the returned pointer and is responsible for
+        deleting it.
     */
     virtual wxFSFile* GetFile(const wxString &uri);
 

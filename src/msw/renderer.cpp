@@ -851,7 +851,10 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    wxUxThemeHandle hTheme(win, L"TREEVIEW", L"DarkMode_Explorer::TreeView");
+    // Do not specify a dark theme as we do in DrawTreeItemButton() because
+    // that may give incorrect high DPI behavior, particularly on old Windows
+    // versions. The light mode theme gives the correct size.
+    wxUxThemeHandle hTheme(win, L"TREEVIEW");
     if ( hTheme )
     {
         if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )

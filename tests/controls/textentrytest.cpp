@@ -462,7 +462,8 @@ private:
         // window when running this test with wxGTK, apparently because the
         // dialog itself needs to be raised to the front first, so simulate a
         // click doing this.
-        sim.MouseMove(m_control->GetScreenPosition() + wxPoint(5, 5));
+        sim.MouseMove(m_control->ClientToScreen(
+                          wxPoint(5, m_control->GetClientSize().y / 2)));
         wxYield();
         sim.MouseClick();
         wxYield();

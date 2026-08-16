@@ -60,6 +60,7 @@ bool wxFrame::Create(wxWindow *parent,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
 
+#if wxUSE_TOOLBAR
     if ( wxTheApp->OSXIsFullScreenApp() )
     {
         if ((parent != nullptr) && (HasFlag(wxCAPTION) || HasFlag(wxCLOSE_BOX)))
@@ -80,6 +81,7 @@ bool wxFrame::Create(wxWindow *parent,
             tb->Realize();
         }
     }
+#endif
 
     return true;
 }

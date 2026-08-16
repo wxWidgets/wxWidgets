@@ -3836,7 +3836,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             {
                 // Determine whether we should draw a border.
                 bool drawBorder = false;
-                wxBorder border = DoTranslateBorder(GetBorder());
+                wxBorder rawBorder = GetBorder();
+                wxBorder border = DoTranslateBorder(rawBorder);
                 switch ( border )
                 {
                     case wxBORDER_THEME:
@@ -3845,10 +3846,18 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     case wxBORDER_STATIC:
                     case wxBORDER_RAISED:
-                    case wxBORDER_SUNKEN:
                         // In dark mode, explicitly draw these border styles because
                         // the default drawing uses light mode colours.
                         drawBorder = wxMSWDarkMode::IsActive();
+                        break;
+
+                    case wxBORDER_SUNKEN:
+                        // In dark mode, explicitly draw the border unless the window
+                        // draws a good border itself. When the window draws a good
+                        // border, DoTranslateBorder() translates wxBORDER_THEME to
+                        // wxBORDER_SUNKEN.
+                        drawBorder = wxMSWDarkMode::IsActive() &&
+                            MSWShouldDrawDarkThemeBorder();
                         break;
 
                     case wxBORDER_NONE:
@@ -3882,7 +3891,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                       rcClient.right, rcClient.bottom);
 
                     // Draw the border.
-                    if ( border == wxBORDER_THEME )
+                    if ( rawBorder == wxBORDER_THEME )
                         MSWDrawThemeBorder(hdc);
                     else
                     {
@@ -4149,19 +4158,24 @@ void wxWindowMSW::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 
 void wxWindowMSW::MSWSetDarkOrLightMode(SetMode WXUNUSED(setmode))
 {
+    const wchar_t* themeName = nullptr;
+    const wchar_t* themeId = nullptr;
+
     MSWDarkModeSupport support;
+    MSWGetDarkModeSupport(support);
     if ( wxMSWDarkMode::IsActive() )
     {
-        MSWGetDarkModeSupport(support);
+        themeName = support.themeName;
+        themeId = support.themeId;
     }
-    else
+    else if ( support.isLightModeThemed )
     {
-        // This is the theme name for light mode.
-        support.themeName = L"Explorer";
+        themeName = L"Explorer";
     }
+    //else: Disable themes.
 
     // This updates scroll bars, if there are any.
-    wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
+    wxMSWDarkMode::AllowForWindow(m_hWnd, themeName, themeId);
 
     // If the window class has a background brush, update it.
     // This is the value in WNDCLASS::hbrBackground.
@@ -4175,6 +4189,13 @@ void wxWindowMSW::MSWSetDarkOrLightMode(SetMode WXUNUSED(setmode))
         HBRUSH hbr = GetHbrushOf(*brush);
         ::SetClassLongPtr(m_hWnd, GCLP_HBRBACKGROUND, LONG_PTR(hbr));
     }
+
+#if wxUSE_TOOLTIPS
+    if ( m_tooltip )
+    {
+        wxToolTip::SetDarkOrLightMode();
+    }
+#endif
 }
 
 // ===========================================================================
