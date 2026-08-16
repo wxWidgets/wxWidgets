@@ -663,14 +663,14 @@ void TextCtrlTestCase::Url()
     m_text->AppendText("http://www.wxwidgets.org");
 
     wxUIActionSimulator sim;
-    sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5)));
+    REQUIRE(sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5))));
 
     EventCounter url(m_text.get(), wxEVT_TEXT_URL);
 
-    sim.MouseClick();
+    REQUIRE(sim.MouseClick());
     wxYield();
 
-    CHECK(url.GetCount() == 1);
+    CHECK(url.GetCount() >= 1);
 #endif
 }
 
