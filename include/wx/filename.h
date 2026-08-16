@@ -102,7 +102,8 @@ enum
 enum
 {
     wxPATH_RMDIR_FULL       = 0x0001,  // delete with subdirectories if empty
-    wxPATH_RMDIR_RECURSIVE  = 0x0002   // delete all recursively (dangerous!)
+    wxPATH_RMDIR_RECURSIVE  = 0x0002,  // delete all recursively (dangerous!)
+    wxPATH_RMDIR_PARENTS    = 0x0004,  // also delete empty parent directories
 };
 
 // FileExists flags
