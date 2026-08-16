@@ -155,6 +155,7 @@ bool wxFSWatcherImplMSW::DoSetUpWatch(wxFSWatchEntryMSW& watch)
     }
 
     int flags = Watcher2NativeFlags(watch.GetFlags());
+    ::ResetEvent(watch.GetOverlapped()->hEvent);
     int ret = ReadDirectoryChangesW(watch.GetHandle(), watch.GetBuffer(),
                                     wxFSWatchEntryMSW::BUFFER_SIZE,
                                     bWatchSubtree,
@@ -230,6 +231,9 @@ bool wxIOCPThread::ReadEvents()
             return true; // error was logged already, we don't want to exit
 
         case wxIOCPService::Status_Deleted:
+            if ( m_iocp->CompleteRemoval(watch) )
+                return true;
+
             {
                 wxFileSystemWatcherEvent
                     removeEvent(wxFSW_EVENT_DELETE,
@@ -247,6 +251,11 @@ bool wxIOCPThread::ReadEvents()
         case wxIOCPService::Status_Exit:
             return false; // stop reading events
     }
+
+    // First check if we're still interested in this watch, we could have
+    // removed it in the meanwhile.
+    if ( watch && m_iocp->CompleteRemoval(watch) )
+        return true;
 
     // if the thread got woken up but we got an empty packet it means that
     // there was an overflow, too many events and not all could fit in
@@ -278,11 +287,6 @@ bool wxIOCPThread::ReadEvents()
     wxLogTrace( wxTRACE_FSWATCHER, "[iocp] Read entry: path='%s'",
                 watch->GetPath());
 
-    // First check if we're still interested in this watch, we could have
-    // removed it in the meanwhile.
-    if ( m_iocp->CompleteRemoval(watch) )
-        return true;
-
     // extract events from buffer info our vector container
     wxVector<wxEventProcessingData> events;
     const char* memory = static_cast<const char*>(watch->GetBuffer());
@@ -301,6 +305,9 @@ bool wxIOCPThread::ReadEvents()
 
     // process events
     ProcessNativeEvents(events);
+
+    if ( m_iocp->CompleteRemoval(watch) )
+        return true;
 
     // reissue the watch. ignore possible errors, we will return true anyway
     (void) m_service->SetUpWatch(*watch);
