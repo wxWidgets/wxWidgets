@@ -207,10 +207,14 @@ MyFrame::MyFrame()
     m_paneSizer->AddSpacer( 20 );
     m_paneSizer->Add( paneSubSizer, 1 );
 
-    paneSubSizer->Add( new wxStaticText(win, -1, "Static text" ), 0, wxALIGN_LEFT | wxALL, 3 );
-    paneSubSizer->Add( new wxStaticText(win, -1, "Yet another one!" ), 0, wxALIGN_LEFT | wxALL, 3 );
-    paneSubSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, "Text control", wxDefaultPosition, wxSize(80,-1) ), 0, wxALIGN_LEFT | wxALL, 3 );
-    paneSubSizer->Add( new wxButton(win, PANE_BUTTON, "Press to align right" ), 0, wxALIGN_LEFT | wxALL, 3 );
+    paneSubSizer->Add( new wxStaticText(win, -1, "Static text" ),
+                       wxSizerFlags().Left().Border() );
+    paneSubSizer->Add( new wxStaticText(win, -1, "Yet another one!" ),
+                       wxSizerFlags().Left().Border() );
+    paneSubSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, "Text control", wxDefaultPosition, wxSize(80,-1) ),
+                       wxSizerFlags().Left().Border() );
+    paneSubSizer->Add( new wxButton(win, PANE_BUTTON, "Press to align right" ),
+                       wxSizerFlags().Left().Border() );
 
     win->SetSizer( m_paneSizer );
 
@@ -315,24 +319,28 @@ MyDialog::MyDialog(wxFrame *parent)
     wxSizer *sz = new wxBoxSizer(wxVERTICAL);
     sz->Add(new wxStaticText(this, -1,
         "This dialog allows you to test the wxCollapsiblePane control"),
-        0, wxALL, 5);
+        wxSizerFlags().Border());
     sz->Add(new wxButton(this, PANEDLG_TOGGLESTATUS_BTN, "Change status"),
-        1, wxGROW|wxALL, 5);
+        wxSizerFlags(1).Expand().Border());
 
     m_collPane = new wxCollapsiblePane(this, -1, "Click here for a surprise");
-    sz->Add(m_collPane, 0, wxGROW|wxALL, 5);
-    sz->Add(new wxTextCtrl(this, -1, "just a test"), 0, wxGROW|wxALL, 5);
+    sz->Add(m_collPane, wxSizerFlags().Expand().Border());
+    sz->Add(new wxTextCtrl(this, -1, "just a test"), wxSizerFlags().Expand().Border());
     sz->AddSpacer(10);
-    sz->Add(new wxButton(this, wxID_OK), 0, wxALIGN_RIGHT|wxALL, 5);
+    sz->Add(new wxButton(this, wxID_OK), wxSizerFlags().Right().Border());
 
     // now add test controls in the collapsible pane
     wxWindow *win = m_collPane->GetPane();
     m_paneSizer = new wxGridSizer(4, 1, 5, 5);
 
-    m_paneSizer->Add( new wxStaticText(win, -1, "Static text" ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxStaticText(win, -1, "Yet another one!" ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, "Text control", wxDefaultPosition, wxSize(80,-1) ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxButton(win, PANE_BUTTON, "Press to align right" ), 0, wxALIGN_LEFT );
+    m_paneSizer->Add( new wxStaticText(win, -1, "Static text" ),
+                      wxSizerFlags().Left() );
+    m_paneSizer->Add( new wxStaticText(win, -1, "Yet another one!" ),
+                      wxSizerFlags().Left() );
+    m_paneSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, "Text control", wxDefaultPosition, wxSize(80,-1) ),
+                      wxSizerFlags().Left() );
+    m_paneSizer->Add( new wxButton(win, PANE_BUTTON, "Press to align right" ),
+                      wxSizerFlags().Left() );
     win->SetSizer( m_paneSizer );
 
     win->SetSizer( m_paneSizer );

@@ -1036,23 +1036,23 @@ DnDFrame::DnDFrame()
 #endif // wxUSE_DRAG_AND_DROP
 
     wxBoxSizer *sizer_top = new wxBoxSizer( wxHORIZONTAL );
-    sizer_top->Add(m_ctrlFile, 1, wxEXPAND );
-    sizer_top->Add(m_ctrlText, 1, wxEXPAND );
+    sizer_top->Add(m_ctrlFile, wxSizerFlags(1).Expand());
+    sizer_top->Add(m_ctrlText, wxSizerFlags(1).Expand());
 
     wxBoxSizer *sizerDirCtrl = new wxBoxSizer(wxVERTICAL);
     sizerDirCtrl->Add(new wxStaticText(this, wxID_ANY, "Drag files from here"),
                       wxSizerFlags().Centre().Border());
     sizerDirCtrl->Add(m_ctrlDir, wxSizerFlags(1).Expand());
-    sizer_top->Add(sizerDirCtrl, 1, wxEXPAND );
+    sizer_top->Add(sizerDirCtrl, wxSizerFlags(1).Expand());
 
     // make all columns of reasonable minimal size
     for ( unsigned n = 0; n < sizer_top->GetChildren().size(); n++ )
         sizer_top->SetItemMinSize(n, 200, 300);
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
-    sizer->Add(sizer_top, 1, wxEXPAND );
+    sizer->Add(sizer_top, wxSizerFlags(1).Expand());
 #if wxUSE_LOG
-    sizer->Add(m_ctrlLog, 1, wxEXPAND);
+    sizer->Add(m_ctrlLog, wxSizerFlags(1).Expand());
     sizer->SetItemMinSize(m_ctrlLog, 450, 200);
 #endif // wxUSE_LOG
     sizer->AddSpacer(50);
@@ -1615,8 +1615,8 @@ DnDShapeDialog::DnDShapeDialog(wxWindow *parent, DnDShape *shape)
     m_radio = new wxRadioBox( this, wxID_ANY, "&Shape",
                               wxDefaultPosition, wxDefaultSize, 4, choices, 4,
                               wxRA_SPECIFY_COLS );
-    shapesSizer->Add( m_radio, 0, wxGROW|wxALL, 5 );
-    topSizer->Add( shapesSizer, 0, wxALL, 2 );
+    shapesSizer->Add( m_radio, wxSizerFlags().Expand().Border());
+    topSizer->Add( shapesSizer, wxSizerFlags().Border(wxALL, FromDIP(2)) );
 
     // attributes
     wxStaticBox* box = new wxStaticBox( this, wxID_ANY, "&Attributes" );
@@ -1628,40 +1628,40 @@ DnDShapeDialog::DnDShapeDialog(wxWindow *parent, DnDShape *shape)
     st = new wxStaticText( this, wxID_ANY, "Position &X:" );
     m_textX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxGROW|wxALL, 2 );
-    xywhSizer->Add( m_textX, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( st, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(2)) );
+    xywhSizer->Add( m_textX, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(2)) );
 
     st = new wxStaticText( this, wxID_ANY, "Size &width:" );
     m_textW = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxGROW|wxALL, 2 );
-    xywhSizer->Add( m_textW, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( st, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(2)) );
+    xywhSizer->Add( m_textW, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(2)) );
 
     st = new wxStaticText( this, wxID_ANY, "&Y:" );
     m_textY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 );
-    xywhSizer->Add( m_textY, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( st, wxSizerFlags(1).Right().Border(wxALL, FromDIP(2)) );
+    xywhSizer->Add( m_textY, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(2)) );
 
     st = new wxStaticText( this, wxID_ANY, "&height:" );
     m_textH = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 );
-    xywhSizer->Add( m_textH, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( st, wxSizerFlags(1).Right().Border(wxALL, FromDIP(2)) );
+    xywhSizer->Add( m_textH, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(2)) );
 
     wxButton* col = new wxButton( this, Button_Colour, "&Colour..." );
-    attrSizer->Add( xywhSizer, 1, wxGROW );
-    attrSizer->Add( col, 0, wxALL|wxALIGN_CENTRE_VERTICAL, 2 );
-    topSizer->Add( attrSizer, 0, wxGROW|wxALL, 5 );
+    attrSizer->Add( xywhSizer, wxSizerFlags(1).Expand());
+    attrSizer->Add( col, wxSizerFlags().CenterVertical().Border(wxALL, FromDIP(2)) );
+    topSizer->Add( attrSizer, wxSizerFlags().Expand().Border());
 
     // buttons
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
     wxButton* bt;
     bt = new wxButton( this, wxID_OK, "Ok" );
-    buttonSizer->Add( bt, 0, wxALL, 2 );
+    buttonSizer->Add( bt, wxSizerFlags().Border(wxALL, FromDIP(2)) );
     bt = new wxButton( this, wxID_CANCEL, "Cancel" );
-    buttonSizer->Add( bt, 0, wxALL, 2 );
-    topSizer->Add( buttonSizer, 0, wxALL|wxALIGN_RIGHT, 2 );
+    buttonSizer->Add( bt, wxSizerFlags().Border(wxALL, FromDIP(2)) );
+    topSizer->Add( buttonSizer, wxSizerFlags().Right().Border(wxALL, FromDIP(2)));
 
     SetSizerAndFit( topSizer );
 }

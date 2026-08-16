@@ -223,15 +223,15 @@ void DatePickerWidgetsPage::CreateContent()
 
     m_datePicker = new wxDatePickerCtrl(this, DatePickerPage_Picker);
 
-    sizerRight->Add(0, 0, 1, wxCENTRE);
-    sizerRight->Add(m_datePicker, 1, wxCENTRE);
-    sizerRight->Add(0, 0, 1, wxCENTRE);
+    sizerRight->Add(0, 0, wxSizerFlags(1).Centre());
+    sizerRight->Add(m_datePicker, wxSizerFlags(1).Centre());
+    sizerRight->Add(0, 0, wxSizerFlags(1).Centre());
     m_sizerDatePicker = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 0, (wxTOP | wxBOTTOM), 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(sizerMiddle, wxSizerFlags().DoubleBorder(wxTOP | wxBOTTOM));
+    sizerTop->Add(sizerRight, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     // final initializations
     m_chkStyleCentury->SetValue(true);
@@ -287,9 +287,9 @@ void DatePickerWidgetsPage::CreateDatePicker()
 
     NotifyWidgetRecreation(m_datePicker);
 
-    m_sizerDatePicker->Add(0, 0, 1, wxCENTRE);
-    m_sizerDatePicker->Add(m_datePicker, 1, wxCENTRE);
-    m_sizerDatePicker->Add(0, 0, 1, wxCENTRE);
+    m_sizerDatePicker->Add(0, 0, wxSizerFlags(1).Centre());
+    m_sizerDatePicker->Add(m_datePicker, wxSizerFlags(1).Centre());
+    m_sizerDatePicker->Add(0, 0, wxSizerFlags(1).Centre());
     m_sizerDatePicker->Layout();
 }
 

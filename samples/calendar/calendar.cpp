@@ -759,8 +759,8 @@ MyPanel::MyPanel(wxWindow *parent)
     bool horizontal = ( wxSystemSettings::GetMetric(wxSYS_SCREEN_X) > wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
     m_sizer = new wxBoxSizer( horizontal ? wxHORIZONTAL : wxVERTICAL );
 
-    m_sizer->Add(m_date, 0, wxALIGN_CENTER | wxALL, 10 );
-    m_sizer->Add(m_calendar, 0, wxALIGN_CENTER | wxALIGN_LEFT);
+    m_sizer->Add(m_date, wxSizerFlags().Center().DoubleBorder());
+    m_sizer->Add(m_calendar, wxSizerFlags().Center());
 
     SetSizer( m_sizer );
     m_sizer->SetSizeHints( this );

@@ -1541,7 +1541,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_playlist->SetDropTarget(new wxPlayListDropTarget(*m_playlist));
 #endif
 
-    sizer->Add(m_playlist, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5);
+    sizer->Add(m_playlist, wxSizerFlags().CentreHorizontal().Expand().Border());
 
     //
     //  Create the control buttons
@@ -1571,14 +1571,14 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_vuButton->Create(this, wxID_BUTTONVU, "))");
     m_vuButton->SetToolTip("Volume up");
 
-    vertsizer->Add(m_prevButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-    vertsizer->Add(m_playButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-    vertsizer->Add(m_stopButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-    vertsizer->Add(m_nextButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-    vertsizer->Add(m_vdButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-    vertsizer->Add(m_vuButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-    horsizer1->Add(vertsizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-    sizer->Add(horsizer1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    vertsizer->Add(m_prevButton, wxSizerFlags().CentreVertical().Border());
+    vertsizer->Add(m_playButton, wxSizerFlags().CentreVertical().Border());
+    vertsizer->Add(m_stopButton, wxSizerFlags().CentreVertical().Border());
+    vertsizer->Add(m_nextButton, wxSizerFlags().CentreVertical().Border());
+    vertsizer->Add(m_vdButton, wxSizerFlags().CentreVertical().Border());
+    vertsizer->Add(m_vuButton, wxSizerFlags().CentreVertical().Border());
+    horsizer1->Add(vertsizer, wxSizerFlags().CentreVertical().Border());
+    sizer->Add(horsizer1, wxSizerFlags().Centre().Border());
 
 
     //
@@ -1589,7 +1589,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
                             1, // end, dummy but must be greater than start
                             wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
-    sizer->Add(m_slider, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
+    sizer->Add(m_slider, wxSizerFlags().CentreHorizontal().Expand().Border());
 
     //
     //  Create the gauge
@@ -1597,7 +1597,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_gauge = new wxGauge();
     m_gauge->Create(this, wxID_GAUGE, 0, wxDefaultPosition, wxDefaultSize,
                         wxGA_HORIZONTAL | wxGA_SMOOTH);
-    sizer->Add(m_gauge, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
+    sizer->Add(m_gauge, wxSizerFlags().CentreHorizontal().Expand().Border());
 
 
     //
@@ -1610,15 +1610,15 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
                             100, // end
                             wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
-    horsizer3->Add(m_volSlider, 1, wxALL, 5);
+    horsizer3->Add(m_volSlider, wxSizerFlags(1).Border());
 
     m_pbSlider = new wxSlider(this, wxID_PBSLIDER, 4, // init
                             1, // start
                             16, // end
                             wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
-    horsizer3->Add(m_pbSlider, 1, wxALL, 5);
-    sizer->Add(horsizer3, 1, wxCENTRE | wxALL, 5);
+    horsizer3->Add(m_pbSlider, wxSizerFlags(1).Border());
+    sizer->Add(horsizer3, wxSizerFlags(1).Centre().Border());
 
     // Now that we have all our rows make some of them growable
     sizer->AddGrowableRow(0);
