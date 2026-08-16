@@ -17,8 +17,9 @@
 #include "wx/filename.h"
 #include "wx/stdpaths.h"
 
-#define DIRTEST_FOLDER      wxString("dirTest_folder")
 #define SEP                 wxFileName::GetPathSeparator()
+
+#include "testfile.h"
 
 // We can't use wxFileSelectorDefaultWildcardStr from wxCore here, so define
 // our own.
@@ -46,6 +47,10 @@ protected:
                                int flags = wxDIR_DEFAULT,
                                const wxString& filespec = wxEmptyString);
 
+    const wxString& GetDirTestFolder() const { return m_dirTestFolder.GetName(); }
+
+    TempDir m_dirTestFolder;
+
     wxDECLARE_NO_COPY_CLASS(DirTestCase);
 };
 
@@ -61,26 +66,27 @@ void DirTestCase::CreateTempFile(const wxString& path)
 }
 
 DirTestCase::DirTestCase()
+    : m_dirTestFolder("dirtest")
 {
-    // create a test directory hierarchy
-    wxDir::Make(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-    wxDir::Make(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-    wxDir::Make(DIRTEST_FOLDER + SEP + "folder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-    wxDir::Make(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+    CPPUNIT_ASSERT(m_dirTestFolder.IsOk());
 
-    CreateTempFile(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
-    CreateTempFile(DIRTEST_FOLDER + SEP + "dummy");
-    CreateTempFile(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo");
-    CreateTempFile(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo.bar");
+    const wxString& dirTestFolder = GetDirTestFolder();
+
+    // create a test directory hierarchy
+    wxDir::Make(dirTestFolder + SEP + "folder1" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+    wxDir::Make(dirTestFolder + SEP + "folder1" + SEP + "subfolder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+    wxDir::Make(dirTestFolder + SEP + "folder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+    wxDir::Make(dirTestFolder + SEP + "folder3" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+    CreateTempFile(dirTestFolder + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
+    CreateTempFile(dirTestFolder + SEP + "dummy");
+    CreateTempFile(dirTestFolder + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo");
+    CreateTempFile(dirTestFolder + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo.bar");
 }
 
 DirTestCase::~DirTestCase()
 {
-    wxRemove(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
-    wxRemove(DIRTEST_FOLDER + SEP + "dummy");
-    wxRemove(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo");
-    wxRemove(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo.bar");
-    wxDir::Remove(DIRTEST_FOLDER, wxPATH_RMDIR_RECURSIVE);
+    m_dirTestFolder.Remove();
 }
 
 wxArrayString DirTestCase::DirEnumHelper(wxDir& dir,
@@ -107,7 +113,7 @@ wxArrayString DirTestCase::DirEnumHelper(wxDir& dir,
 
 TEST_CASE_METHOD(DirTestCase, "Dir::Enum", "[dir]")
 {
-    wxDir dir(DIRTEST_FOLDER);
+    wxDir dir(GetDirTestFolder());
     CHECK( dir.IsOpened() );
 
     // enumerating everything in test directory
@@ -151,30 +157,32 @@ public:
 
 TEST_CASE_METHOD(DirTestCase, "Dir::Traverse", "[dir]")
 {
+    const wxString& dirTestFolder = GetDirTestFolder();
+
     // enum all files
     wxArrayString files;
-    CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files) == 4 );
+    CHECK( wxDir::GetAllFiles(dirTestFolder, &files) == 4 );
 
     // enum all files using an explicit wildcard
-    CHECK(wxDir::GetAllFiles(DIRTEST_FOLDER, &files, WILDCARD_ALL) == 4);
+    CHECK(wxDir::GetAllFiles(dirTestFolder, &files, WILDCARD_ALL) == 4);
 
     // enum all files using an explicit wildcard different from WILDCARD_ALL
     //
     // broken under Wine, see https://bugs.winehq.org/show_bug.cgi?id=55677
     if ( !wxIsRunningUnderWine() )
     {
-        CHECK(wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "d" + WILDCARD_ALL) == 4);
+        CHECK(wxDir::GetAllFiles(dirTestFolder, &files, "d" + WILDCARD_ALL) == 4);
     }
-    else if (wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "d" + WILDCARD_ALL) == 4)
+    else if (wxDir::GetAllFiles(dirTestFolder, &files, "d" + WILDCARD_ALL) == 4)
     {
         WARN("PathMatchSpec() seems to work under Wine now");
     }
 
     // enum all files according to the filter
-    CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "*.foo") == 1 );
+    CHECK( wxDir::GetAllFiles(dirTestFolder, &files, "*.foo") == 1 );
 
     // enum again with custom traverser
-    wxDir dir(DIRTEST_FOLDER);
+    wxDir dir(dirTestFolder);
     TestDirTraverser traverser;
     dir.Traverse(traverser, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN);
     CHECK( traverser.dirs.size() == 6 );
