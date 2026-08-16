@@ -610,9 +610,6 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxG
 
     for (int arg = 0; ctxattrs && ctxattrs[arg] != 0; arg++)
     {
-        // indicates whether we have a boolean attribute
-        bool isBoolAttr = false;
-
         int v = ctxattrs[arg+1];
         switch ( ctxattrs[arg] )
         {
@@ -640,12 +637,9 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxG
                 continue;
         }
 
-        if ( !isBoolAttr )
-        {
-            if ( !v )
-                return false; // zero parameter
-            arg++;
-        }
+        if ( !v )
+            return false; // zero parameter
+        arg++;
     }
 
     return true;
