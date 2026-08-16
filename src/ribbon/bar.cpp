@@ -389,6 +389,15 @@ void wxRibbonBar::DeletePage(size_t n)
         {
             m_current_page--;
         }
+
+        if ( m_current_hovered_page == static_cast<int>(n) )
+        {
+            m_current_hovered_page = wxNOT_FOUND;
+        }
+        else if ( m_current_hovered_page > static_cast<int>(n) )
+        {
+            m_current_hovered_page--;
+        }
     }
 }
 
@@ -410,6 +419,7 @@ void wxRibbonBar::ClearPages()
     m_pages.Empty();
     Realize();
     m_current_page = wxNOT_FOUND;
+    m_current_hovered_page = wxNOT_FOUND;
     Refresh();
 }
 
