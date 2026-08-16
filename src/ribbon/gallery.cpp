@@ -543,7 +543,8 @@ void wxRibbonGallery::OnDPIChanged(wxDPIChangedEvent& event)
 void wxRibbonGallery::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
-    m_art->UpdateColoursFromSystem();
+    if ( m_art )
+        m_art->UpdateColoursFromSystem();
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmapBundle& bitmap, int id)

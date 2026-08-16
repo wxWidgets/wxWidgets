@@ -799,6 +799,9 @@ wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
 {
+    if ( art == m_art )
+        return;
+
     wxRibbonArtProvider *old = m_art;
     m_art = art;
 
@@ -970,7 +973,8 @@ void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
 void wxRibbonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
-    m_art->UpdateColoursFromSystem();
+    if ( m_art )
+        m_art->UpdateColoursFromSystem();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)

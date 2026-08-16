@@ -1614,7 +1614,8 @@ void wxRibbonButtonBar::OnDPIChanged(wxDPIChangedEvent& event)
 void wxRibbonButtonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
-    m_art->UpdateColoursFromSystem();
+    if ( m_art )
+        m_art->UpdateColoursFromSystem();
 }
 
 #endif // wxUSE_RIBBON
