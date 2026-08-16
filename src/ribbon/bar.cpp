@@ -389,6 +389,19 @@ void wxRibbonBar::DeletePage(size_t n)
         {
             m_current_page--;
         }
+
+        // If the current hovered page is the one getting deleted, then we
+        // don't have a hovered page anymore.
+        if ( m_current_hovered_page == static_cast<int>(n) )
+        {
+            m_current_hovered_page = wxNOT_FOUND;
+        }
+        // ...otherwise, the pages after it shifted down by one,
+        // so adjust the index to keep referring to the same (still hovered) page.
+        else if ( m_current_hovered_page > static_cast<int>(n) )
+        {
+            m_current_hovered_page--;
+        }
     }
 }
 
@@ -410,6 +423,7 @@ void wxRibbonBar::ClearPages()
     m_pages.Empty();
     Realize();
     m_current_page = wxNOT_FOUND;
+    m_current_hovered_page = wxNOT_FOUND;
     Refresh();
 }
 
@@ -789,6 +803,9 @@ wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
 {
+    if ( art == m_art )
+        return;
+
     wxRibbonArtProvider *old = m_art;
     m_art = art;
 
@@ -960,7 +977,8 @@ void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
 void wxRibbonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
-    m_art->UpdateColoursFromSystem();
+    if ( m_art )
+        m_art->UpdateColoursFromSystem();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)

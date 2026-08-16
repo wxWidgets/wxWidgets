@@ -563,6 +563,8 @@ void wxRibbonButtonBar::ClearButtons()
         delete button;
     }
     m_buttons.Clear();
+    m_hovered_button = nullptr;
+    m_active_button = nullptr;
     Realize();
 }
 
@@ -1173,6 +1175,11 @@ void wxRibbonButtonBar::MakeLayouts()
                               wxRIBBON_BUTTONBAR_BUTTON_SMALL);
         }
     }
+
+    // Removing buttons can result in fewer layouts from before,
+    // so clamp if necessary.
+    if ( m_current_layout >= (int)m_layouts.GetCount() )
+        m_current_layout = (int)m_layouts.GetCount() - 1;
 }
 
 void wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
@@ -1607,7 +1614,8 @@ void wxRibbonButtonBar::OnDPIChanged(wxDPIChangedEvent& event)
 void wxRibbonButtonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
-    m_art->UpdateColoursFromSystem();
+    if ( m_art )
+        m_art->UpdateColoursFromSystem();
 }
 
 #endif // wxUSE_RIBBON

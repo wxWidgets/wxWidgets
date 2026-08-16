@@ -338,6 +338,12 @@ void wxRibbonToolBar::ClearTools()
         delete group;
     }
     m_groups.Clear();
+
+    m_hover_tool = nullptr;
+    m_active_tool = nullptr;
+
+    // at least one group should be available
+    AppendGroup();
 }
 
 bool wxRibbonToolBar::DeleteTool(int tool_id)
@@ -354,6 +360,10 @@ bool wxRibbonToolBar::DeleteTool(int tool_id)
             if(tool->id == tool_id)
             {
                 group->tools.RemoveAt(t);
+                if ( tool == m_hover_tool )
+                    m_hover_tool = nullptr;
+                if ( tool == m_active_tool )
+                    m_active_tool = nullptr;
                 delete tool;
                 return true;
             }
@@ -375,6 +385,10 @@ bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
             // Remove tool
             wxRibbonToolBarToolBase* tool = group->tools.Item(pos);
             group->tools.RemoveAt(pos);
+            if (tool == m_hover_tool )
+                m_hover_tool = nullptr;
+            if ( tool == m_active_tool )
+                m_active_tool = nullptr;
             delete tool;
             return true;
         }
@@ -990,7 +1004,8 @@ void wxRibbonToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 void wxRibbonToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     event.Skip();
-    m_art->UpdateColoursFromSystem();
+    if ( m_art )
+        m_art->UpdateColoursFromSystem();
 }
 
 // Finds the best width and height given the parents' width and height
