@@ -10,13 +10,14 @@
 #if wxUSE_GLCANVAS
 
 #include "wx/qt/private/winevent.h"
-#include "wx/glcanvas.h"
 
 #include <QOpenGLContext>
 #include <QOpenGLWidget>
 #include <QSurfaceFormat>
 #include <QtWidgets/QGestureRecognizer>
 #include <QtWidgets/QGestureEvent>
+
+#include "wx/glcanvas.h"
 
 wxGCC_WARNING_SUPPRESS(unused-parameter)
 
