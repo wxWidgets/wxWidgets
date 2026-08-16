@@ -982,11 +982,10 @@ static LRESULT CALLBACK CommonDialogComboBoxProc(HWND hwnd, UINT uMsg,
 static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
 {
     // Get control info.
-    wchar_t className[16] = { };
-    ::GetClassNameW(hwnd, className, sizeof(className) / sizeof(wchar_t));
+    const auto className = wxGetWindowClass(hwnd);
     auto style = ::GetWindowLongPtrW(hwnd, GWL_STYLE);
 
-    if ( wcscmp(className, L"ComboBox") == 0 )
+    if ( className == "ComboBox" )
     {
         // If the control is owner-draw, subclass it to draw the ComboLBox.
         if ( style & CBS_OWNERDRAWFIXED )
@@ -1007,12 +1006,12 @@ static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
 
     // Special handling for controls needed for older Windows versions.
 
-    if ( wcscmp(className, L"ComboBox") == 0 )
+    if ( className == "ComboBox" )
         AllowForWindow(hwnd, L"CFD");
     else
         AllowForWindow(hwnd);
 
-    if ( wcscmp(className, L"Button") == 0 )
+    if ( className == "Button" )
     {
         // For the button types below, the text should be white but is black.
         // Disable theme rendering and instead rely on the colors set by
@@ -1028,7 +1027,7 @@ static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
         if ( bs == BS_AUTOCHECKBOX )
             ::SetWindowSubclass(hwnd, CommonDialogCheckBoxProc, 1, 0);
     }
-    else if ( wcscmp(className, L"Edit") == 0 )
+    else if ( className == "Edit" )
     {
         // The border looks bad. Change it to a simple border.
         auto exStyle = ::GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
