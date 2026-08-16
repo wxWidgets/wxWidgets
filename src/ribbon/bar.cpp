@@ -390,10 +390,14 @@ void wxRibbonBar::DeletePage(size_t n)
             m_current_page--;
         }
 
+        // If the current hovered page is the one getting deleted, then we
+        // don't have a hovered page anymore.
         if ( m_current_hovered_page == static_cast<int>(n) )
         {
             m_current_hovered_page = wxNOT_FOUND;
         }
+        // ...otherwise, the pages after it shifted down by one,
+        // so adjust the index to keep referring to the same (still hovered) page.
         else if ( m_current_hovered_page > static_cast<int>(n) )
         {
             m_current_hovered_page--;
