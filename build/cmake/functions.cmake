@@ -98,7 +98,7 @@ endmacro()
 # wx_install_symlink(...)
 # Create symlink dst pointing to src
 # try different symlink and copy methods until one succeeds
-macro(wx_install_symlink src dst)
+function(wx_install_symlink src dst)
     if(wxBUILD_INSTALL)
         install(CODE "
             set(SYMLINK_SRC \"${src}\")
@@ -129,7 +129,7 @@ macro(wx_install_symlink src dst)
             endif()
         ")
     endif()
-endmacro()
+endfunction()
 
 # Get a valid flavour name with optional prefix
 macro(wx_get_flavour flavour prefix)
