@@ -66,8 +66,8 @@ wxFontDialogHookProc(HWND hwnd,
         CHOOSEFONT *pCH = (CHOOSEFONT *)lParam;
         wxFontDialog * const
             dialog = reinterpret_cast<wxFontDialog *>(pCH->lCustData);
-        auto title = dialog->GetTitle();
-        if ( title.length() != 0 )
+        const auto& title = dialog->GetTitle();
+        if ( !title.empty() )
             ::SetWindowText(hwnd, title.t_str());
     }
 
