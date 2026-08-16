@@ -1,0 +1,1 @@
+wxAll: Add wxPATH_RMDIR_PARENTS flag for wxFileName::Rmdir().
