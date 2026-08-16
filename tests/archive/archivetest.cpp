@@ -302,7 +302,7 @@ private:
 ArchiveTempDir::ArchiveTempDir()
     : m_tmp(wxT("arctest-"))
 {
-    CPPUNIT_ASSERT(m_tmp.IsOk());
+    m_tmp.RequireOk();
     m_original = wxGetCwd();
     CPPUNIT_ASSERT(wxSetWorkingDirectory(m_tmp.GetName()));
 }

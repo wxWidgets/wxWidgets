@@ -68,7 +68,7 @@ static wxString GetFileFunctionsTempDirPrefix()
 FileFunctionsTestCase::FileFunctionsTestCase()
     : m_tempDir(GetFileFunctionsTempDirPrefix())
 {
-    CPPUNIT_ASSERT(m_tempDir.IsOk());
+    m_tempDir.RequireOk();
 
     // Initialize local data
 
