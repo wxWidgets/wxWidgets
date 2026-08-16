@@ -624,21 +624,26 @@ void wxDocument::OnChangedViewList()
 
 void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
 {
-    // Tolerate wxView::OnUpdate() performing multiple removals
-    wxViewVector initialState = GetViewsVector();
-    for (wxView *view : initialState)
+    // wxView::OnUpdate() may remove the view it's called on (relatively common)
+    // or, potentially, even another view from the document, so make a
+    // copy of the existing view container before starting to iterate
+    // over it.
+    const wxViewVector initialState = GetViewsVector();
+    for (wxView * const view : initialState)
     {
-        wxList::compatibility_iterator node = m_documentViews.GetFirst();
-        while (node)
+        if (view != sender)
         {
-            wxView *present = (wxView *)node->GetData();
-            if (present == view)
+            wxList::compatibility_iterator node = m_documentViews.GetFirst();
+            while (node)
             {
-                view->OnUpdate(sender, hint);
-                break;
+                wxView * const present = (wxView *)node->GetData();
+                if (present == view)
+                {
+                    view->OnUpdate(sender, hint);
+                    break;
+                }
+                node = node->GetNext();
             }
-            node = node->GetNext();
-            wxASSERT(node);
         }
     }
 }
