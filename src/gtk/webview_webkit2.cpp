@@ -715,6 +715,15 @@ wxgtk_authorize_authenticated_peer_cb(GDBusAuthObserver *,
 class wxWebViewConfigurationImplWebKit : public wxWebViewConfigurationImpl
 {
 public:
+    ~wxWebViewConfigurationImplWebKit()
+    {
+        // The context holds a reference to the data manager, so release it first.
+        // Also, use g_clear_object instead of g_object_unref in case they were not initialized.
+        g_clear_object(&m_webContext);
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+        g_clear_object(&m_websiteDataManager);
+#endif
+    }
 
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
     wxString GetDataPath() const override
@@ -776,6 +785,7 @@ private:
 #ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
         if (!m_persistentStorage)
         {
+            // transfer full
             m_webContext = webkit_web_context_new_ephemeral();
             return m_webContext;
         }
@@ -796,15 +806,24 @@ private:
                 dataPath = wxGtkString(g_strdup(configDataPath.GetPath().utf8_str()));
             }
 
+            // transfer full
             m_websiteDataManager = webkit_website_data_manager_new(
                 "base-cache-directory", cachePath.c_str(),
                 "base-data-directory", dataPath.c_str(),
                 nullptr);
+            // transfer full
             m_webContext = webkit_web_context_new_with_website_data_manager(m_websiteDataManager);
         }
         else
 #endif
+        {
+            // transfer none
             m_webContext = webkit_web_context_get_default();
+
+            // transfer none, so add a ref count
+            g_object_ref(m_webContext);
+        }
+
         return m_webContext;
     }
 
