@@ -563,6 +563,8 @@ void wxRibbonButtonBar::ClearButtons()
         delete button;
     }
     m_buttons.Clear();
+    m_hovered_button = nullptr;
+    m_active_button = nullptr;
     Realize();
 }
 
