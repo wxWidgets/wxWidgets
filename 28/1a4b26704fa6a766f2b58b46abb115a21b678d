@@ -1,0 +1,1 @@
+wxAll (GUI): Improve clipboard handling in wxRichTextCtrl (Richard Thomson, #26865).
