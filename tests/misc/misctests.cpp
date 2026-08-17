@@ -37,35 +37,8 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// test class
+// tests
 // ----------------------------------------------------------------------------
-
-class MiscTestCase : public CppUnit::TestCase
-{
-public:
-    MiscTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( MiscTestCase );
-        CPPUNIT_TEST( Assert );
-        CPPUNIT_TEST( CallForEach );
-        CPPUNIT_TEST( Delete );
-        CPPUNIT_TEST( StaticCast );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Assert();
-    void CallForEach();
-    void Delete();
-    void StaticCast();
-
-    wxDECLARE_NO_COPY_CLASS(MiscTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( MiscTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MiscTestCase, "MiscTestCase" );
 
 namespace
 {
@@ -79,7 +52,7 @@ bool AssertIfOdd(int n)
 
 } // anonymous namespace
 
-void MiscTestCase::Assert()
+TEST_CASE("wxAssertHandler", "[assert]")
 {
     AssertIfOdd(0);
     WX_ASSERT_FAILS_WITH_ASSERT(AssertIfOdd(1));
@@ -90,35 +63,35 @@ void MiscTestCase::Assert()
     wxSetAssertHandler(oldHandler);
 }
 
-void MiscTestCase::CallForEach()
+TEST_CASE("wxCALL_FOR_EACH", "[misc]")
 {
     #define MY_MACRO(pos, str) s += str;
 
     wxString s;
     wxCALL_FOR_EACH(MY_MACRO, "foo", "bar", "baz");
 
-    CPPUNIT_ASSERT_EQUAL( "foobarbaz", s );
+    CHECK( s == "foobarbaz" );
 
     #undef MY_MACRO
 }
 
-void MiscTestCase::Delete()
+TEST_CASE("wxDELETE", "[misc]")
 {
     // Allocate some arbitrary memory to get a valid pointer:
     long *pointer = new long;
-    CPPUNIT_ASSERT( pointer != nullptr );
+    CHECK( pointer != nullptr );
 
     // Check that wxDELETE sets the pointer to nullptr:
     wxDELETE( pointer );
-    CPPUNIT_ASSERT( pointer == nullptr );
+    CHECK( pointer == nullptr );
 
     // Allocate some arbitrary array to get a valid pointer:
     long *array = new long[ 3 ];
-    CPPUNIT_ASSERT( array != nullptr );
+    CHECK( array != nullptr );
 
     // Check that wxDELETEA sets the pointer to nullptr:
     wxDELETEA( array );
-    CPPUNIT_ASSERT( array == nullptr );
+    CHECK( array == nullptr );
 
     // this results in compilation error, as it should
 #if 0
@@ -143,19 +116,19 @@ bool IsNull(void *p)
 
 } // anonymous namespace
 
-void MiscTestCase::StaticCast()
+TEST_CASE("wxStaticCast", "[rtti]")
 {
 #if wxUSE_TARSTREAM
     wxTarEntry tarEntry;
-    CPPUNIT_ASSERT( wxStaticCast(&tarEntry, wxArchiveEntry) );
+    CHECK( wxStaticCast(&tarEntry, wxArchiveEntry) );
 
     wxArchiveEntry *entry = &tarEntry;
-    CPPUNIT_ASSERT( wxStaticCast(entry, wxTarEntry) );
+    CHECK( wxStaticCast(entry, wxTarEntry) );
 
 #if wxUSE_ZIPSTREAM
     wxZipEntry zipEntry;
     entry = &zipEntry;
-    CPPUNIT_ASSERT( wxStaticCast(entry, wxZipEntry) );
+    CHECK( wxStaticCast(entry, wxZipEntry) );
     WX_ASSERT_FAILS_WITH_ASSERT( IsNull(wxStaticCast(&zipEntry, wxTarEntry)) );
 #endif // wxUSE_ZIPSTREAM
 

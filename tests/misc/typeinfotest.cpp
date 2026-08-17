@@ -11,30 +11,8 @@
 #include "wx/typeinfo.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// test types
 // ----------------------------------------------------------------------------
-
-class TypeInfoTestCase : public CppUnit::TestCase
-{
-public:
-    TypeInfoTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( TypeInfoTestCase );
-        CPPUNIT_TEST( Test );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Test();
-
-    wxDECLARE_NO_COPY_CLASS(TypeInfoTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( TypeInfoTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TypeInfoTestCase, "TypeInfoTestCase" );
-
 
 namespace UserNameSpace {
     class UserType1
@@ -61,7 +39,11 @@ public:
 
 WX_DEFINE_TYPEINFO(UserType2)
 
-void TypeInfoTestCase::Test()
+// ----------------------------------------------------------------------------
+// tests
+// ----------------------------------------------------------------------------
+
+TEST_CASE("TypeInfo::Compare", "[typeinfo]")
 {
     UserNameSpace::UserType1 uns_ut1;
     UserNameSpace::UserType1* uns_ut1_p = new UserNameSpace::UserType1();
@@ -71,14 +53,14 @@ void TypeInfoTestCase::Test()
     UserType2* ut2_p = new UserType2();
 
     // These type comparison should match
-    CPPUNIT_ASSERT(wxTypeId(uns_ut1) == wxTypeId(*uns_ut1_p));
-    CPPUNIT_ASSERT(wxTypeId(ut1) == wxTypeId(*ut1_p));
-    CPPUNIT_ASSERT(wxTypeId(ut2) == wxTypeId(*ut2_p));
+    CHECK(wxTypeId(uns_ut1) == wxTypeId(*uns_ut1_p));
+    CHECK(wxTypeId(ut1) == wxTypeId(*ut1_p));
+    CHECK(wxTypeId(ut2) == wxTypeId(*ut2_p));
 
     // These type comparison should not match
-    CPPUNIT_ASSERT(wxTypeId(uns_ut1) != wxTypeId(ut1));
-    CPPUNIT_ASSERT(wxTypeId(uns_ut1) != wxTypeId(ut2));
-    CPPUNIT_ASSERT(wxTypeId(ut1) != wxTypeId(ut2));
+    CHECK(wxTypeId(uns_ut1) != wxTypeId(ut1));
+    CHECK(wxTypeId(uns_ut1) != wxTypeId(ut2));
+    CHECK(wxTypeId(ut1) != wxTypeId(ut2));
 
     delete uns_ut1_p;
     delete ut1_p;
