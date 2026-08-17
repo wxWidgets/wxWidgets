@@ -6,13 +6,11 @@
 // Copyright:   (c) 2010 wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
 
 #include "testprec.h"
-
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
@@ -34,32 +32,7 @@ const int sleepTime = 500;
 // test class
 // --------------------------------------------------------------------------
 
-class StopWatchTestCase : public CppUnit::TestCase
-{
-public:
-    StopWatchTestCase() {}
-
-private:
-    CPPUNIT_TEST_SUITE( StopWatchTestCase );
-        CPPUNIT_TEST( Misc );
-        CPPUNIT_TEST( BackwardsClockBug );
-        CPPUNIT_TEST( RestartBug );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Misc();
-    void BackwardsClockBug();
-    void RestartBug();
-
-    wxDECLARE_NO_COPY_CLASS(StopWatchTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( StopWatchTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( StopWatchTestCase, "StopWatchTestCase" );
-
-void StopWatchTestCase::Misc()
+TEST_CASE("StopWatch::Misc", "[stopwatch]")
 {
     // Buildbot machines are quite slow and sleep doesn't work reliably there,
     // i.e. it can sleep for much longer than requested. This is not really an
@@ -77,31 +50,24 @@ void StopWatchTestCase::Misc()
 
     // verify that almost no time elapsed
     usec = sw.TimeInMicro();
-    WX_ASSERT_MESSAGE
-    (
-        ("Elapsed time was %" wxLongLongFmtSpec "dus", usec),
-        usec < tolerance*1000
-    );
+    wxINFO_FMT("Elapsed time was %" wxLongLongFmtSpec "dus", usec);
+    CHECK( usec < tolerance*1000 );
 
     wxSleep(1);
     t = sw.Time();
 
     // check that the stop watch doesn't advance while paused
-    WX_ASSERT_MESSAGE
-    (
-        ("Actual time value is %ld", t),
-        t >= 0 && t < tolerance
-    );
+    wxINFO_FMT("Actual time value is %ld", t);
+    CHECK( t >= 0 );
+    CHECK( t < tolerance );
 
     sw.Resume();
     wxMilliSleep(sleepTime);
     t = sw.Time();
     // check that it did advance now by ~1.5s
-    WX_ASSERT_MESSAGE
-    (
-        ("Actual time value is %ld", t),
-        t > sleepTime - tolerance && t < 2*sleepTime
-    );
+    wxINFO_FMT("Actual time value is %ld", t);
+    CHECK( t > sleepTime - tolerance );
+    CHECK( t < 2*sleepTime );
 
     sw.Pause();
 
@@ -113,14 +79,12 @@ void StopWatchTestCase::Misc()
     t = sw.Time();
 
     // and it should advance again
-    WX_ASSERT_MESSAGE
-    (
-        ("Actual time value is %ld", t),
-        t > 2*sleepTime - tolerance && t < 3*sleepTime
-    );
+    wxINFO_FMT("Actual time value is %ld", t);
+    CHECK( t > 2*sleepTime - tolerance );
+    CHECK( t < 3*sleepTime );
 }
 
-void StopWatchTestCase::BackwardsClockBug()
+TEST_CASE("StopWatch::BackwardsClockBug", "[stopwatch]")
 {
     wxStopWatch sw;
     wxStopWatch sw2;
@@ -131,13 +95,13 @@ void StopWatchTestCase::BackwardsClockBug()
 
         for ( size_t m = 0; m < 10000; m++ )
         {
-            CPPUNIT_ASSERT( sw.Time() >= 0 );
-            CPPUNIT_ASSERT( sw2.Time() >= 0 );
+            CHECK( sw.Time() >= 0 );
+            CHECK( sw2.Time() >= 0 );
         }
     }
 }
 
-void StopWatchTestCase::RestartBug()
+TEST_CASE("StopWatch::RestartBug", "[stopwatch]")
 {
     wxStopWatch sw;
     sw.Pause();
@@ -148,22 +112,16 @@ void StopWatchTestCase::RestartBug()
     wxMilliSleep(sleepTime);
 
     long t = sw.Time();
-    WX_ASSERT_MESSAGE
-    (
-        ("Actual time value is %ld", t),
-        t >= offset + sleepTime - tolerance
-    );
+    wxINFO_FMT("Actual time value is %ld", t);
+    CHECK( t >= offset + sleepTime - tolerance );
 
     // As above, this is not actually due to the fact of the test being
     // automatic but just because buildbot machines are usually pretty slow, so
     // this test often fails there simply because of the high load on them.
     if ( !IsAutomaticTest() )
     {
+        wxINFO_FMT("Actual time value is %ld", t);
 
-        WX_ASSERT_MESSAGE
-        (
-            ("Actual time value is %ld", t),
-            t < offset + sleepTime + tolerance
-        );
+        CHECK( t < offset + sleepTime + tolerance );
     }
 }

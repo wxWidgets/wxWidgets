@@ -34,53 +34,12 @@
 #define TEST_STDPATHS
 #define TEST_VOLUME
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class InteractiveOutputTestCase : public CppUnit::TestCase
-{
-public:
-    InteractiveOutputTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( InteractiveOutputTestCase );
-        CPPUNIT_TEST( TestDllListLoaded );
-        CPPUNIT_TEST( TestMimeEnum );
-        CPPUNIT_TEST( TestMimeAssociate );
-        CPPUNIT_TEST( TestMimeFilename );
-        CPPUNIT_TEST( TestOsInfo );
-        CPPUNIT_TEST( TestPlatformInfo );
-        CPPUNIT_TEST( TestUserInfo );
-        CPPUNIT_TEST( TestStackWalk );
-        CPPUNIT_TEST( TestStandardPaths );
-        CPPUNIT_TEST( TestFSVolume );
-    CPPUNIT_TEST_SUITE_END();
-
-    void TestDllListLoaded();
-    void TestMimeEnum();
-    void TestMimeAssociate();
-    void TestMimeFilename();
-    void TestOsInfo();
-    void TestPlatformInfo();
-    void TestUserInfo();
-    void TestStackWalk();
-    void TestStandardPaths();
-    void TestFSVolume();
-
-    wxDECLARE_NO_COPY_CLASS(InteractiveOutputTestCase);
-};
-
-// ----------------------------------------------------------------------------
-// CppUnit macros
-// ----------------------------------------------------------------------------
-
-wxREGISTER_UNIT_TEST_WITH_TAGS(InteractiveOutputTestCase,
-                               "[!hide][interactive][output]");
-
 // ============================================================================
-// implementation
+// tests
 // ============================================================================
+
+// Note that all the tests here are hidden, i.e. not run by default, as they
+// require user interaction.
 
 // ----------------------------------------------------------------------------
 // wxDllLoader
@@ -92,7 +51,7 @@ wxREGISTER_UNIT_TEST_WITH_TAGS(InteractiveOutputTestCase,
 
 #include "wx/dynlib.h"
 
-void InteractiveOutputTestCase::TestDllListLoaded()
+TEST_CASE("InteractiveOutput::DllListLoaded", "[!hide][interactive][output]")
 {
 #ifdef TEST_DYNLIB
     wxPuts(wxT("*** testing wxDynamicLibrary::ListLoaded() ***\n"));
@@ -126,7 +85,7 @@ void InteractiveOutputTestCase::TestDllListLoaded()
 
 #include "wx/mimetype.h"
 
-void InteractiveOutputTestCase::TestMimeEnum()
+TEST_CASE("InteractiveOutput::MimeEnum", "[!hide][interactive][output]")
 {
 #ifdef TEST_MIME
     wxPuts(wxT("*** Testing wxMimeTypesManager::EnumAllFileTypes() ***\n"));
@@ -171,7 +130,7 @@ void InteractiveOutputTestCase::TestMimeEnum()
 #endif // TEST_MIME
 }
 
-void InteractiveOutputTestCase::TestMimeFilename()
+TEST_CASE("InteractiveOutput::MimeFilename", "[!hide][interactive][output]")
 {
 #ifdef TEST_MIME
     wxPuts(wxT("*** Testing MIME type from filename query ***\n"));
@@ -216,7 +175,7 @@ void InteractiveOutputTestCase::TestMimeFilename()
 #endif // TEST_MIME
 }
 
-void InteractiveOutputTestCase::TestMimeAssociate()
+TEST_CASE("InteractiveOutput::MimeAssociate", "[!hide][interactive][output]")
 {
 #ifdef TEST_MIME
     wxPuts(wxT("*** Testing creation of filetype association ***\n"));
@@ -249,7 +208,7 @@ void InteractiveOutputTestCase::TestMimeAssociate()
 
 #include "wx/utils.h"
 
-void InteractiveOutputTestCase::TestOsInfo()
+TEST_CASE("InteractiveOutput::OsInfo", "[!hide][interactive][output]")
 {
 #ifdef TEST_INFO_FUNCTIONS
     wxPuts(wxT("*** Testing OS info functions ***\n"));
@@ -268,7 +227,7 @@ void InteractiveOutputTestCase::TestOsInfo()
 #endif // TEST_INFO_FUNCTIONS
 }
 
-void InteractiveOutputTestCase::TestPlatformInfo()
+TEST_CASE("InteractiveOutput::PlatformInfo", "[!hide][interactive][output]")
 {
 #ifdef TEST_INFO_FUNCTIONS
     wxPuts(wxT("*** Testing wxPlatformInfo functions ***\n"));
@@ -287,7 +246,7 @@ void InteractiveOutputTestCase::TestPlatformInfo()
 #endif // TEST_INFO_FUNCTIONS
 }
 
-void InteractiveOutputTestCase::TestUserInfo()
+TEST_CASE("InteractiveOutput::UserInfo", "[!hide][interactive][output]")
 {
 #ifdef TEST_INFO_FUNCTIONS
     wxPuts(wxT("*** Testing user info functions ***\n"));
@@ -356,7 +315,7 @@ protected:
 };
 #endif
 
-void InteractiveOutputTestCase::TestStackWalk()
+TEST_CASE("InteractiveOutput::StackWalk", "[!hide][interactive][output]")
 {
 #ifdef TEST_STACKWALKER
 #if wxUSE_STACKWALKER
@@ -379,7 +338,7 @@ void InteractiveOutputTestCase::TestStackWalk()
 #include "wx/stdpaths.h"
 #include "wx/wxchar.h"      // wxPrintf
 
-void InteractiveOutputTestCase::TestStandardPaths()
+TEST_CASE("InteractiveOutput::StandardPaths", "[!hide][interactive][output]")
 {
 #ifdef TEST_STDPATHS
     wxPuts(wxT("*** Testing wxStandardPaths ***"));
@@ -441,7 +400,7 @@ static const wxChar *volumeKinds[] =
 
 #endif
 
-void InteractiveOutputTestCase::TestFSVolume()
+TEST_CASE("InteractiveOutput::FSVolume", "[!hide][interactive][output]")
 {
 #ifdef TEST_VOLUME
     wxPuts(wxT("*** Testing wxFSVolume class ***"));
