@@ -653,7 +653,7 @@ MyFrame::MyFrame(const wxString& title)
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
                    "OwnerDrawnComboBox with owner-drawn items:"),
-                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT, FromDIP(4)) );
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
     colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -684,7 +684,7 @@ MyFrame::MyFrame(const wxString& title)
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
                    "OwnerDrawnComboBox with owner-drawn items and button on the left:"),
-                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT, FromDIP(4)) );
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
     colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -808,7 +808,7 @@ MyFrame::MyFrame(const wxString& title)
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
                    "OwnerDrawnComboBox with simple dropbutton graphics:"),
-                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT, FromDIP(4)) );
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
 
     colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
@@ -860,7 +860,7 @@ MyFrame::MyFrame(const wxString& title)
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
                         "wxComboCtrl with custom button and custom main control:"),
-                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT, FromDIP(4)) );
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
 
 
     colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());

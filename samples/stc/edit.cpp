@@ -845,15 +845,15 @@ EditProperties::EditProperties (Edit *edit,
     wxGridSizer *textinfo = new wxGridSizer (4, 0, 2);
     textinfo->Add (new wxStaticText (this, wxID_ANY, _("Language"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
-                   wxSizerFlags().Left().CenterVertical().Border(wxLEFT, FromDIP(4)));
+                   wxSizerFlags().Left().CenterVertical().Border(wxLEFT));
     textinfo->Add (new wxStaticText (this, wxID_ANY, edit->m_language->name),
-                   wxSizerFlags().Left().CenterVertical().Border(wxRIGHT, FromDIP(4)));
+                   wxSizerFlags().Left().CenterVertical().Border(wxRIGHT));
     textinfo->Add (new wxStaticText (this, wxID_ANY, _("Lexer-ID: "),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
-                   wxSizerFlags().Left().CenterVertical().Border(wxLEFT, FromDIP(4)));
+                   wxSizerFlags().Left().CenterVertical().Border(wxLEFT));
     text = wxString::Format ("%d", edit->GetLexer());
     textinfo->Add (new wxStaticText (this, wxID_ANY, text),
-                   wxSizerFlags().Right().CenterVertical().Border(wxRIGHT, FromDIP(4)));
+                   wxSizerFlags().Right().CenterVertical().Border(wxRIGHT));
     wxString EOLtype;
     switch (edit->GetEOLMode()) {
         case wxSTC_EOL_CR: {EOLtype = "CR (Unix)"; break; }
@@ -862,9 +862,9 @@ EditProperties::EditProperties (Edit *edit,
     }
     textinfo->Add (new wxStaticText (this, wxID_ANY, _("Line endings"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
-                   wxSizerFlags().Left().CenterVertical().Border(wxLEFT, FromDIP(4)));
+                   wxSizerFlags().Left().CenterVertical().Border(wxLEFT));
     textinfo->Add (new wxStaticText (this, wxID_ANY, EOLtype),
-                   wxSizerFlags().Left().CenterVertical().Border(wxRIGHT, FromDIP(4)));
+                   wxSizerFlags().Left().CenterVertical().Border(wxRIGHT));
 
     // text info box
     wxStaticBoxSizer *textinfos = new wxStaticBoxSizer (
@@ -877,28 +877,28 @@ EditProperties::EditProperties (Edit *edit,
     wxGridSizer *statistic = new wxGridSizer (4, 0, 2);
     statistic->Add (new wxStaticText (this, wxID_ANY, _("Total lines"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
-                    wxSizerFlags().Left().CenterVertical().Border(wxLEFT, FromDIP(4)));
+                    wxSizerFlags().Left().CenterVertical().Border(wxLEFT));
     text = wxString::Format ("%d", edit->GetLineCount());
     statistic->Add (new wxStaticText (this, wxID_ANY, text),
-                    wxSizerFlags().Right().CenterVertical().Border(wxRIGHT, FromDIP(4)));
+                    wxSizerFlags().Right().CenterVertical().Border(wxRIGHT));
     statistic->Add (new wxStaticText (this, wxID_ANY, _("Total chars"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
-                    wxSizerFlags().Left().CenterVertical().Border(wxLEFT, FromDIP(4)));
+                    wxSizerFlags().Left().CenterVertical().Border(wxLEFT));
     text = wxString::Format ("%d", edit->GetTextLength());
     statistic->Add (new wxStaticText (this, wxID_ANY, text),
-                    wxSizerFlags().Right().CenterVertical().Border(wxRIGHT, FromDIP(4)));
+                    wxSizerFlags().Right().CenterVertical().Border(wxRIGHT));
     statistic->Add (new wxStaticText (this, wxID_ANY, _("Current line"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
-                    wxSizerFlags().Left().CenterVertical().Border(wxLEFT, FromDIP(4)));
+                    wxSizerFlags().Left().CenterVertical().Border(wxLEFT));
     text = wxString::Format ("%d", edit->GetCurrentLine());
     statistic->Add (new wxStaticText (this, wxID_ANY, text),
-                    wxSizerFlags().Right().CenterVertical().Border(wxRIGHT, FromDIP(4)));
+                    wxSizerFlags().Right().CenterVertical().Border(wxRIGHT));
     statistic->Add (new wxStaticText (this, wxID_ANY, _("Current pos"),
                                      wxDefaultPosition, wxSize(80, wxDefaultCoord)),
-                    wxSizerFlags().Left().CenterVertical().Border(wxLEFT, FromDIP(4)));
+                    wxSizerFlags().Left().CenterVertical().Border(wxLEFT));
     text = wxString::Format ("%d", edit->GetCurrentPos());
     statistic->Add (new wxStaticText (this, wxID_ANY, text),
-                    wxSizerFlags().Right().CenterVertical().Border(wxRIGHT, FromDIP(4)));
+                    wxSizerFlags().Right().CenterVertical().Border(wxRIGHT));
 
     // char/line statistics
     wxStaticBoxSizer *statistics = new wxStaticBoxSizer (

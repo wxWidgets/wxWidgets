@@ -720,7 +720,7 @@ AppAbout::AppAbout (wxWindow *parent,
     appname->SetFont (wxFontInfo(24).Bold());
     totalpane->Add (appname, wxSizerFlags().Centre().Border(wxLEFT | wxRIGHT, FromDIP(40)));
     totalpane->Add (0, 10);
-    totalpane->Add (aboutpane, wxSizerFlags().Expand().Border(wxALL, FromDIP(4)));
+    totalpane->Add (aboutpane, wxSizerFlags().Expand().Border());
     totalpane->Add (new wxStaticText(this, wxID_ANY, APP_DESCR),
                     wxSizerFlags().Centre().DoubleBorder());
     wxButton *okButton = new wxButton (this, wxID_OK, _("OK"));
