@@ -334,7 +334,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
                                                 &m_textChangeHeight,
                                                 sizerOptions->GetStaticBox());
     m_textChangeHeight->SetSize(20, wxDefaultCoord);
-    sizerOptions->Add(sizerRow, wxSizerFlags().FixedMinSize().Border() /*| wxGROW*/);
+    sizerOptions->Add(sizerRow, wxSizerFlags().FixedMinSize().Border());
 
     sizerLeft->Add( sizerOptions, wxSizerFlags().Expand().Border(wxTOP, FromDIP(2)));
 
