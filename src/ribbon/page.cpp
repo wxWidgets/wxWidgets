@@ -580,28 +580,26 @@ void wxRibbonPage::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxRibbonPage::RemoveChild(wxWindowBase *child)
 {
-    // Remove all references to the child from the collapse stack
+    // Remove all references to the child from the collapse stack. It can occur
+    // there any number of times, so keep only the entries which are not it.
     size_t count = m_collapse_stack.GetCount();
     size_t src, dst;
-    for(src = 0, dst = 0; src < count; ++src, ++dst)
+    for( src = 0, dst = 0; src < count; ++src )
     {
         wxRibbonControl *item = m_collapse_stack.Item(src);
         if(item == child)
         {
-            ++src;
-            if(src == count)
-            {
-                break;
-            }
+            continue;
         }
         if(src != dst)
         {
             m_collapse_stack.Item(dst) = item;
         }
+        ++dst;
     }
-    if(src > dst)
+    if( count > dst )
     {
-        m_collapse_stack.RemoveAt(dst, src - dst);
+        m_collapse_stack.RemoveAt(dst, count - dst);
     }
 
     // ... and then proceed as normal
