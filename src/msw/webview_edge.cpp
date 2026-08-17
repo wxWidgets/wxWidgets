@@ -32,6 +32,8 @@
 #include "wx/msw/private/webview_edge.h"
 #include "wx/msw/private/comstream.h"
 
+#include <utility>
+
 #ifdef __VISUALC__
 #include <wrl/event.h>
 using namespace Microsoft::WRL;
@@ -315,13 +317,20 @@ public:
     {
         if (!m_webViewEnvironment)
         {
-            m_webViewsWaitingForEnvironment.push_back(impl);
+            m_webViewsWaitingForEnvironment.push_back({ impl->m_alive, impl });
+
+            // keep us alive until the completion handler below runs, see #26491
+            wxWebViewConfiguration keepAlive = impl->m_config;
             HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
                 ms_browserExecutableDir.wc_str(),
                 GetDataPath().wc_str(),
                 m_webViewEnvironmentOptions,
-                Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
-                    &wxWebViewConfigurationImplEdge::OnEnvironmentCreated).Get());
+                Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+                    [this, keepAlive]
+                    (HRESULT result, ICoreWebView2Environment* env) -> HRESULT
+                    {
+                        return OnEnvironmentCreated(result, env);
+                    }).Get());
             if (FAILED(hr))
             {
                 wxLogApiError("CreateWebView2EnvironmentWithOptions", hr);
@@ -340,14 +349,18 @@ public:
     HRESULT OnEnvironmentCreated(HRESULT WXUNUSED(result), ICoreWebView2Environment* environment)
     {
         m_webViewEnvironment = environment;
-        for (auto impl : m_webViewsWaitingForEnvironment)
-            impl->EnvironmentAvailable(m_webViewEnvironment);
+        for (auto& waiting : m_webViewsWaitingForEnvironment)
+        {
+            if (*waiting.first) // still alive?
+                waiting.second->EnvironmentAvailable(m_webViewEnvironment);
+        }
         m_webViewsWaitingForEnvironment.clear();
         return S_OK;
     }
 
     static wxString ms_browserExecutableDir;
-    std::vector<wxWebViewEdgeImpl*> m_webViewsWaitingForEnvironment;
+    std::vector<std::pair<std::shared_ptr<bool>, wxWebViewEdgeImpl*>>
+        m_webViewsWaitingForEnvironment;
     wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxString m_dataPath;
@@ -460,6 +473,8 @@ wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview) :
 
 wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
 {
+    *m_alive = false;
+
     if (m_webView)
     {
         m_webView->remove_NavigationCompleted(m_navigationCompletedToken);
@@ -498,6 +513,18 @@ void wxWebViewEdgeImpl::EnvironmentAvailable(ICoreWebView2Environment* environme
 {
     environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
     wxCOMPtr<ICoreWebView2Environment10> environment10;
+
+    // guard against completing after we're destroyed, see #26491
+    std::shared_ptr<bool> alive = m_alive;
+    auto onWebViewCreated =
+        [this, alive]
+        (HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
+        {
+            if (!*alive)
+                return S_OK;
+            return OnWebViewCreated(result, controller);
+        };
+
     if (SUCCEEDED(m_webViewEnvironment->QueryInterface(IID_PPV_ARGS(&environment10))))
     {
         wxCOMPtr<ICoreWebView2ControllerOptions> controllerOptions;
@@ -510,14 +537,14 @@ void wxWebViewEdgeImpl::EnvironmentAvailable(ICoreWebView2Environment* environme
                 m_ctrl->GetHWND(),
                 controllerOptions.get(),
                 Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                    this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+                    onWebViewCreated).Get());
         }
     }
     else
         m_webViewEnvironment->CreateCoreWebView2Controller(
             m_ctrl->GetHWND(),
             Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+                onWebViewCreated).Get());
 }
 
 bool wxWebViewEdgeImpl::Initialize()
