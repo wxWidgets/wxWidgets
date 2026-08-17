@@ -435,19 +435,19 @@ void SpinBtnWidgetsPage::CreateSpin()
     NotifyWidgetRecreation(m_spinctrldbl);
 
     // Add spacers, labels and spin controls to the sizer.
-    m_sizerSpin->AddStretchSpacer(1);
+    m_sizerSpin->AddStretchSpacer();
     m_sizerSpin->Add(new wxStaticText(this, wxID_ANY, "wxSpinButton"),
                      wxSizerFlags().Centre().Border());
     m_sizerSpin->Add(m_spinbtn, wxSizerFlags().Centre().Border());
-    m_sizerSpin->AddStretchSpacer(1);
+    m_sizerSpin->AddStretchSpacer();
     m_sizerSpin->Add(new wxStaticText(this, wxID_ANY, "wxSpinCtrl"),
                      wxSizerFlags().Centre().Border());
     m_sizerSpin->Add(m_spinctrl, wxSizerFlags().Centre().Border());
-    m_sizerSpin->AddStretchSpacer(1);
+    m_sizerSpin->AddStretchSpacer();
     m_sizerSpin->Add(new wxStaticText(this, wxID_ANY, "wxSpinCtrlDouble"),
                      wxSizerFlags().Centre().Border());
     m_sizerSpin->Add(m_spinctrldbl, wxSizerFlags().Centre().Border());
-    m_sizerSpin->AddStretchSpacer(1);
+    m_sizerSpin->AddStretchSpacer();
 
     m_sizerSpin->Layout();
 }

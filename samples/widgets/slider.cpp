@@ -521,9 +521,9 @@ void SliderWidgetsPage::CreateSlider()
 
     if ( m_slider->HasFlag(wxSL_VERTICAL) )
     {
-        m_sizerSlider->AddStretchSpacer(1);
+        m_sizerSlider->AddStretchSpacer();
         m_sizerSlider->Add(m_slider, wxSizerFlags(0).Expand().Border());
-        m_sizerSlider->AddStretchSpacer(1);
+        m_sizerSlider->AddStretchSpacer();
     }
     else
     {

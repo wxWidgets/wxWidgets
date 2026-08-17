@@ -509,9 +509,9 @@ void ToggleWidgetsPage::AddButtonToSizer()
 {
     if ( m_chkFit->GetValue() )
     {
-        m_sizerToggle->AddStretchSpacer(1);
+        m_sizerToggle->AddStretchSpacer();
         m_sizerToggle->Add(m_toggle, wxSizerFlags(0).Centre().Border());
-        m_sizerToggle->AddStretchSpacer(1);
+        m_sizerToggle->AddStretchSpacer();
     }
     else // take up the entire space
     {

@@ -673,7 +673,7 @@ MyFrame::MyFrame(const wxString& title)
     odc->SetSelection(0);
 
     rowSizer->Add( odc, wxSizerFlags(1).CenterVertical().Border() );
-    rowSizer->AddStretchSpacer(1);
+    rowSizer->AddStretchSpacer();
     colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
 
@@ -712,7 +712,7 @@ MyFrame::MyFrame(const wxString& title)
                           );
 
     rowSizer->Add( odc, wxSizerFlags(1).CenterVertical().Border() );
-    rowSizer->AddStretchSpacer(1);
+    rowSizer->AddStretchSpacer();
     colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
 

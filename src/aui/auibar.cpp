@@ -2086,9 +2086,9 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
                 wxSizerItem* ctrl_m_sizerItem;
 
                 wxBoxSizer* vert_sizer = new wxBoxSizer(wxVERTICAL);
-                vert_sizer->AddStretchSpacer(1);
+                vert_sizer->AddStretchSpacer();
                 ctrl_m_sizerItem = vert_sizer->Add(item.m_window, 0, wxEXPAND);
-                vert_sizer->AddStretchSpacer(1);
+                vert_sizer->AddStretchSpacer();
                 if ( (m_windowStyle & wxAUI_TB_TEXT) &&
                      m_toolTextOrientation == wxAUI_TBTOOL_TEXT_BOTTOM &&
                      !item.GetLabel().empty() )

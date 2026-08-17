@@ -587,10 +587,10 @@ MyFrame::MyFrame()
 
         wxSizer* sizer_panelsizer_h = new wxBoxSizer(wxHORIZONTAL);
         wxSizer* sizer_panelsizer_v = new wxBoxSizer(wxVERTICAL);
-        sizer_panelsizer_v->AddStretchSpacer(1);
+        sizer_panelsizer_v->AddStretchSpacer();
         sizer_panelsizer_v->Add(sizer_panelcombo, wxSizerFlags().Expand().Border(wxALL, FromDIP(2)));
         sizer_panelsizer_v->Add(sizer_panelcombo2, wxSizerFlags().Expand().Border(wxALL, FromDIP(2)));
-        sizer_panelsizer_v->AddStretchSpacer(1);
+        sizer_panelsizer_v->AddStretchSpacer();
         sizer_panelsizer_h->Add(bar, wxSizerFlags().Expand());
         sizer_panelsizer_h->Add(sizer_panelsizer_v, 0);
         sizer_panel->SetSizer(sizer_panelsizer_h);
