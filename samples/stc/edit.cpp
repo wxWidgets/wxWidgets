@@ -911,9 +911,9 @@ EditProperties::EditProperties (Edit *edit,
     wxBoxSizer *totalpane = new wxBoxSizer (wxVERTICAL);
     totalpane->Add (fullname, wxSizerFlags().Expand().DoubleBorder(wxLEFT | wxRIGHT | wxTOP));
     totalpane->Add (0, 6);
-    totalpane->Add (textinfos, wxSizerFlags().Expand().DoubleBorder(wxLEFT | wxRIGHT));
+    totalpane->Add (textinfos, wxSizerFlags().Expand().DoubleHorzBorder());
     totalpane->Add (0, 10);
-    totalpane->Add (statistics, wxSizerFlags().Expand().DoubleBorder(wxLEFT | wxRIGHT));
+    totalpane->Add (statistics, wxSizerFlags().Expand().DoubleHorzBorder());
     totalpane->Add (0, 6);
     wxButton *okButton = new wxButton (this, wxID_OK, _("OK"));
     okButton->SetDefault();

@@ -3882,7 +3882,7 @@ StdButtonSizerDialog::StdButtonSizerDialog(wxWindow *parent)
 
     sizerTop->Add(sizer3, wxSizerFlags().Border());
 
-    sizerTop->Add(m_chkboxNoDefault, wxSizerFlags().DoubleBorder(wxLEFT|wxRIGHT));
+    sizerTop->Add(m_chkboxNoDefault, wxSizerFlags().DoubleHorzBorder());
 
     EnableDisableControls();
 
@@ -4146,7 +4146,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     spinCtrl->SetValidator(wxGenericValidator(&m_settingsData.m_titleFontSize));
     itemSizer5->Add(spinCtrl, wxSizerFlags().Center().Border());
 
-    item0->Add(itemSizer5, wxSizerFlags().Expand().Border(wxLEFT|wxRIGHT));
+    item0->Add(itemSizer5, wxSizerFlags().Expand().HorzBorder());
 #endif
 
     topSizer->Add( item0, wxSizerFlags(1).Expand().Border() );

@@ -182,7 +182,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     subsub->Add(256, 256);
     subsizer->Add(subsub, wxSizerFlags(1).Border(wxLEFT));
 
-    sizer->Add(subsizer, wxSizerFlags(1).Expand().DoubleBorder(wxLEFT|wxRIGHT));
+    sizer->Add(subsizer, wxSizerFlags(1).Expand().DoubleHorzBorder());
 
     wxButton *ok = new wxButton(this, wxID_OK, "Close");
     ok->SetDefault();

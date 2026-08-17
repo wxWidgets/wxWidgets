@@ -158,7 +158,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     topsizer -> Add(html, wxSizerFlags(1).DoubleBorder());
 
 #if wxUSE_STATLINE
-    topsizer -> Add(new wxStaticLine(&dlg, wxID_ANY), wxSizerFlags().Expand().DoubleBorder(wxLEFT | wxRIGHT));
+    topsizer -> Add(new wxStaticLine(&dlg, wxID_ANY), wxSizerFlags().Expand().DoubleHorzBorder());
 #endif // wxUSE_STATLINE
 
     wxButton *bu1 = new wxButton(&dlg, wxID_OK, _("OK"));

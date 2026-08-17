@@ -538,7 +538,7 @@ void TextWidgetsPage::CreateContent()
                     "Col:",
                     m_textColCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  wxSizerFlags().Border(wxLEFT | wxRIGHT));
+                  wxSizerFlags().HorzBorder());
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     "Row:",
@@ -654,7 +654,7 @@ wxSizer *TextWidgetsPage::CreateTextWithLabelSizer(const wxString& label,
     if ( text2 )
     {
         sizerRow->Add(new wxStaticText(statBoxParent ? statBoxParent : this, wxID_ANY, label2),
-                      wxSizerFlags().CentreVertical().Border(wxLEFT | wxRIGHT));
+                      wxSizerFlags().CentreVertical().HorzBorder());
         sizerRow->Add(text2, wxSizerFlags().CentreVertical());
     }
 
