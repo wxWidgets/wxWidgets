@@ -161,9 +161,9 @@ void ColourPickerWidgetsPage::CreateContent()
 
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
-    m_sizer->Add(1, 1, wxSizerFlags(1).Expand().Border()); // spacer
+    m_sizer->AddStretchSpacer();
     m_sizer->Add(m_clrPicker, wxSizerFlags().Centre().Border());
-    m_sizer->Add(1, 1, wxSizerFlags(1).Expand().Border()); // spacer
+    m_sizer->AddStretchSpacer();
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);

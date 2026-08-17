@@ -494,7 +494,7 @@ void TextWidgetsPage::CreateContent()
 #endif // __WXMSW__
 
     wxButton *btn = new wxButton(sizerLeftBox, TextPage_Reset, "&Reset");
-    sizerLeft->Add(2, 2, wxSizerFlags().Expand().Border(wxALL, FromDIP(1))); // spacer
+    sizerLeft->AddSpacer(FromDIP(4));
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
 
     // middle pane

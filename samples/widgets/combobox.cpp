@@ -289,7 +289,7 @@ void ComboboxWidgetsPage::CreateContent()
     m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeftBottom, "&Read only", wxID_ANY, sizerLeftBottomBox);
     m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeftBottom, "Process &Enter", wxID_ANY, sizerLeftBottomBox);
 
-    sizerLeftBottom->Add(5, 5, wxSizerFlags().Expand().Border()); // spacer
+    sizerLeftBottom->AddSpacer(FromDIP(15));
     sizerLeftBottom->Add(m_radioKind, wxSizerFlags().Expand().Border());
 
     wxButton *btn = new wxButton(sizerLeftBottomBox, ComboPage_Reset, "&Reset");

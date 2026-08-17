@@ -247,7 +247,7 @@ void StaticWidgetsPage::CreateContent()
     m_chkWrap = CreateCheckBoxAndAddToSizer(sizerLeft, "&Wrap", wxID_ANY, sizerLeftBox);
     m_chkWrap->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
 
-    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border()); // spacer
+    sizerLeft->AddSpacer(FromDIP(15));
 
     static const wxString halign[] =
     {
@@ -278,7 +278,7 @@ void StaticWidgetsPage::CreateContent()
     sizerLeft->Add(m_radioVAlign, wxSizerFlags().Expand().Border());
 
 
-    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border()); // spacer
+    sizerLeft->AddSpacer(FromDIP(15));
 
     m_chkEllipsize = CreateCheckBoxAndAddToSizer(sizerLeft, "&Ellipsize", wxID_ANY, sizerLeftBox);
     m_chkEllipsize->Bind(wxEVT_CHECKBOX,

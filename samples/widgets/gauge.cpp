@@ -203,7 +203,7 @@ void GaugeWidgetsPage::CreateContent()
     m_chkSmooth = CreateCheckBoxAndAddToSizer(sizerLeft, "&Smooth", wxID_ANY, sizerLeftBox);
     m_chkProgress = CreateCheckBoxAndAddToSizer(sizerLeft, "&Progress", wxID_ANY, sizerLeftBox);
 
-    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border()); // spacer
+    sizerLeft->AddSpacer(FromDIP(15));
 
     wxButton *btn = new wxButton(sizerLeftBox, GaugePage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());

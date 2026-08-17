@@ -176,7 +176,7 @@ void CheckBoxWidgetsPage::CreateContent()
                     sizerLeftBox
                  );
 
-    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border()); // spacer
+    sizerLeft->AddSpacer(FromDIP(15));
 
     static const wxString kinds[] =
     {

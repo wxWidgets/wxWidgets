@@ -218,7 +218,7 @@ void BookWidgetsPage::CreateContent()
                                    orientations, 1, wxRA_SPECIFY_COLS);
 
     sizerLeft->Add(m_chkImages, wxSizerFlags().Border());
-    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border()); // spacer
+    sizerLeft->AddSpacer(FromDIP(15));
     sizerLeft->Add(m_radioOrient, wxSizerFlags().Border());
 
     wxButton *btn = new wxButton(sizerLeftBox, BookPage_Reset, "&Reset");
