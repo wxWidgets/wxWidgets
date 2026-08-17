@@ -256,6 +256,25 @@ void HtmlWindowTestCase::LinkClick()
 }
 #endif // wxUSE_UIACTIONSIMULATOR
 
+#if wxUSE_WXHTML_HELP
+void HtmlWindowTestCase::DisplayMissingHelpTopic()
+{
+    wxHtmlHelpController controller(
+        wxHF_DEFAULT_STYLE | wxHF_DIALOG | wxHF_MODAL,
+        wxTheApp->GetTopWindow());
+    CloseModalHelpDialogTimer timer(controller);
+
+    timer.StartOnce(50);
+
+    CPPUNIT_ASSERT(!controller.Display("missing topic"));
+
+    timer.Stop();
+
+    CPPUNIT_ASSERT(!timer.WasModalShown());
+    controller.Quit();
+}
+#endif // wxUSE_WXHTML_HELP
+
 void HtmlWindowTestCase::ImageMapCoordinates()
 {
     m_win->SetBorders(0);
