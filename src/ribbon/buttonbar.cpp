@@ -695,6 +695,23 @@ void wxRibbonButtonBar::SetButtonIcon(
                 wxBitmapBundle::FromBitmap(MakeDisabledBitmap(bmp));
         }
     }
+    else if ( bitmap.IsOk() && base->imageIndexSmall >= 0 )
+    {
+        // No dedicated small bitmap was provided, so derive one from the large
+        // bundle. The derived bitmap must have the small default size; otherwise
+        // wxBitmapBundle::GetBitmap() would keep returning bitmaps whose logical
+        // size is the large default size and the "small" buttons would be drawn
+        // too big.
+        const wxSize sizeSmallPhys = ToPhys(FromDIP(m_bitmap_size_small));
+        wxBitmap smallBmp = bitmap.GetBitmap(sizeSmallPhys);
+        smallBmp.SetScaleFactor(static_cast<double>(sizeSmallPhys.y) /
+                                m_bitmap_size_small.y);
+
+        m_bundlesSmall[base->imageIndexSmall] =
+            wxBitmapBundle::FromBitmap(smallBmp);
+        m_bundlesSmallDisabled[base->imageIndexSmallDisabled] =
+            wxBitmapBundle::FromBitmap(MakeDisabledBitmap(smallBmp));
+    }
 
     Refresh();
 }
