@@ -55,13 +55,16 @@ struct StringConversionData
 
             if ( wcs )
             {
-                INFO(Message(n, "MB2WC failed")); CHECK(wbuf.data());
+                INFO(Message(n, "MB2WC failed"));
+                CHECK(wbuf.data());
 
-                INFO(Message(n, "MB2WC", wbuf, wcs)); CHECK(wxStrcmp(wbuf, wcs) == 0);
+                INFO(Message(n, "MB2WC", wbuf, wcs));
+                CHECK(wxStrcmp(wbuf, wcs) == 0);
             }
             else // conversion is supposed to fail
             {
-                INFO(Message(n, "MB2WC succeeded")); CHECK(!wbuf.data());
+                INFO(Message(n, "MB2WC succeeded"));
+                CHECK(!wbuf.data());
             }
         }
 
@@ -71,13 +74,16 @@ struct StringConversionData
 
             if ( str )
             {
-                INFO(Message(n, "WC2MB failed")); CHECK(buf.data());
+                INFO(Message(n, "WC2MB failed"));
+                CHECK(buf.data());
 
-                INFO(Message(n, "WC2MB", buf, str)); CHECK(strcmp(buf, str) == 0);
+                INFO(Message(n, "WC2MB", buf, str));
+                CHECK(strcmp(buf, str) == 0);
             }
             else
             {
-                INFO(Message(n, "WC2MB succeeded")); CHECK(!buf.data());
+                INFO(Message(n, "WC2MB succeeded"));
+                CHECK(!buf.data());
             }
         }
     }
@@ -109,11 +115,11 @@ private:
 TEST_CASE("Unicode::ToFromAscii", "[unicode]")
 {
 
-#define TEST_TO_FROM_ASCII(txt)                              \
-    {                                                        \
-        static const char *msg = txt;                        \
-        wxString s = wxString::FromAscii(msg);               \
-        CHECK( strcmp( s.ToAscii() , msg ) == 0 );  \
+#define TEST_TO_FROM_ASCII(txt)                    \
+    {                                              \
+        static const char *msg = txt;              \
+        wxString s = wxString::FromAscii(msg);     \
+        CHECK( strcmp( s.ToAscii() , msg ) == 0 ); \
     }
 
     TEST_TO_FROM_ASCII( "Hello, world!" );

@@ -1156,7 +1156,8 @@ static void TestStreamDecoder(
     for ( size_t i = 0; i < wideChars; i++ )
     {
         wxChar wc = textInputStream.GetChar();
-        INFO(wxString::Format("At position %lu", (unsigned long)i).ToStdString()); CHECK(wc == wideBuffer[i]);
+        INFO(wxString::Format("At position %lu", (unsigned long)i).ToStdString());
+        CHECK(wc == wideBuffer[i]);
     }
     CHECK( 0 == textInputStream.GetChar() );
     CHECK( memoryInputStream.Eof() );
@@ -1280,7 +1281,11 @@ static size_t wx_wcslen(const wchar_t *s)
 
 // include the option in the error messages so it's possible to see which
 // test failed
-#define UTF8ASSERT(expr) INFO(#expr + errmsg); CHECK(expr)
+#define UTF8ASSERT(expr)      \
+    wxSTATEMENT_MACRO_BEGIN   \
+        INFO(#expr + errmsg); \
+        CHECK(expr);          \
+    wxSTATEMENT_MACRO_END
 
 // The test implementation
 //
