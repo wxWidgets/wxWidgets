@@ -425,6 +425,9 @@ public:
 class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
 {
 public:
+    // Derived classes overriding SetColourScheme() should pass false here and
+    // set their own colour scheme in their constructor, as the scheme set from
+    // here can't use the overridden version of SetColourScheme().
     wxRibbonMSWArtProvider(bool set_colour_scheme = true);
     virtual ~wxRibbonMSWArtProvider();
 
