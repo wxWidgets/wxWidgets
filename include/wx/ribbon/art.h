@@ -636,6 +636,11 @@ public:
     wxRect GetRibbonHelpButtonArea(const wxRect& rect) override;
 
 protected:
+    // Colour scheme used by default, see UpdateColoursFromSystem().
+    static void GetDefaultColourScheme(wxColour& primary,
+                                       wxColour& secondary,
+                                       wxColour& tertiary);
+
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);
     void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect,
         bool allow_hovered = true);
