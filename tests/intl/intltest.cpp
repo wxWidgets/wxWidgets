@@ -24,6 +24,7 @@
 #include "wx/filename.h"
 
 #include "wx/private/glibc.h"
+#include "wx/private/make_unique.h"
 
 #include <memory>
 
