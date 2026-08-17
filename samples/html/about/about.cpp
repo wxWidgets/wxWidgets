@@ -164,7 +164,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxButton *bu1 = new wxButton(&dlg, wxID_OK, _("OK"));
     bu1 -> SetDefault();
 
-    topsizer -> Add(bu1, 0, wxALL | wxALIGN_RIGHT, FromDIP(15));
+    topsizer -> Add(bu1, wxSizerFlags().Right().TripleBorder());
 
     dlg.SetSizer(topsizer);
     topsizer -> Fit(&dlg);
