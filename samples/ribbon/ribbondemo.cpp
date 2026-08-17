@@ -646,9 +646,11 @@ MyFrame::MyFrame()
 
         panel = new wxRibbonPanel(page, wxID_ANY, "Change text", ribbon_small);
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_CHANGE_TEXT1, "One", ribbon_large);
-        bar->AddButton(ID_CHANGE_TEXT2, "Two", ribbon_large);
-        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, "Zero", ribbon_large);
+        bar->AddButton(ID_CHANGE_TEXT1, "Set short text", ribbon_large);
+        bar->AddButton(ID_CHANGE_TEXT2, "Set long text", ribbon_large);
+        // This button is never clicked, its label is set from its
+        // wxEVT_UPDATE_UI handler by the two buttons above.
+        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, "Target", ribbon_large);
 
         //Also set the general disabled text colour:
         wxRibbonArtProvider* artProvider = m_ribbon->GetArtProvider();
@@ -911,12 +913,12 @@ void MyFrame::ResetGalleryArtProviders()
 
 void MyFrame::OnChangeText1(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    m_new_text = "One";
+    m_new_text = "Short";
 }
 
 void MyFrame::OnChangeText2(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    m_new_text = "Two";
+    m_new_text = "A much longer label";
 }
 
 void MyFrame::OnEnable(wxRibbonButtonBarEvent& WXUNUSED(evt))

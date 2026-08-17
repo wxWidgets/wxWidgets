@@ -926,14 +926,22 @@ void wxRibbonButtonBar::UpdateWindowUI(long flags)
                 ToggleButton(id, event.GetChecked());
             if ( event.GetSetText() )
             {
-                btn.label = event.GetText();
+                // this also remeasures the button and invalidates the layouts
+                SetButtonText(id, event.GetText());
                 rerealize = true;
             }
         }
     }
 
     if ( rerealize )
-        Realize();
+    {
+        // The button sizes may have changed, so the panel containing us needs
+        // to be laid out again too and not just this bar.
+        if ( m_ribbonBar )
+            m_ribbonBar->Realize();
+        else
+            Realize();
+    }
 }
 
 void wxRibbonButtonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
