@@ -79,6 +79,7 @@
 #include "wx/msw/private/keyboard.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/paint.h"
+#include "wx/msw/private/power.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/dcclient.h"
 #include "wx/msw/seh.h"
@@ -4331,6 +4332,15 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 {
     if ( gs_queryEndSession == QueryEndSession::Unknown )
     {
+        if ( (logOff & ENDSESSION_LOGOFF) == 0 &&
+             wxMSWPowerResourceIsSystemBlockActive() )
+        {
+            wxMSWUpdateShutdownBlockReason();
+            gs_queryEndSession = QueryEndSession::Veto;
+            *mayEnd = false;
+            return true;
+        }
+
         // Make sure we won't generate another wxEVT_QUERY_END_SESSION.
         gs_queryEndSession = QueryEndSession::Allow;
 
