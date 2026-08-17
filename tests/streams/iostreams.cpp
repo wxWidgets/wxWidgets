@@ -18,32 +18,24 @@
 #include "wx/wfstream.h"
 
 // --------------------------------------------------------------------------
-// test class
+// test fixture
 // --------------------------------------------------------------------------
 
-class IOStreamsTestCase : public CppUnit::TestCase
+namespace
+{
+
+class IOStreamsTestCase
 {
 public:
-    IOStreamsTestCase() { }
+    IOStreamsTestCase() = default;
 
-    virtual void tearDown() override
+    ~IOStreamsTestCase()
     {
         if ( !m_fnTemp.empty() )
-        {
             wxRemoveFile(m_fnTemp);
-            m_fnTemp.clear();
-        }
     }
 
-private:
-    CPPUNIT_TEST_SUITE( IOStreamsTestCase );
-        CPPUNIT_TEST( FStream );
-        CPPUNIT_TEST( FFStream );
-    CPPUNIT_TEST_SUITE_END();
-
-    void FStream() { wxFileStream s(GetTempFName()); DoTest(s); }
-    void FFStream() { wxFFileStream s(GetTempFName()); DoTest(s); }
-
+protected:
     wxString GetTempFName()
     {
         m_fnTemp = wxFileName::CreateTempFileName("wxtest");
@@ -54,21 +46,34 @@ private:
     void DoTest(Stream& s)
     {
         s.PutC('x');
-        CPPUNIT_ASSERT_EQUAL( 1, s.LastWrite() );
+        CHECK( s.LastWrite() == 1 );
 
         s.SeekI(0);
-        CPPUNIT_ASSERT_EQUAL( int('x'), s.GetC() );
+        CHECK( s.GetC() == int('x') );
     }
 
+private:
     wxString m_fnTemp;
 
     wxDECLARE_NO_COPY_CLASS(IOStreamsTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( IOStreamsTestCase );
+} // anonymous namespace
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( IOStreamsTestCase, "IOStreamsTestCase" );
+// --------------------------------------------------------------------------
+// tests
+// --------------------------------------------------------------------------
+
+TEST_CASE_METHOD(IOStreamsTestCase, "IOStreams::FStream", "[iostream][stream]")
+{
+    wxFileStream s(GetTempFName());
+    DoTest(s);
+}
+
+TEST_CASE_METHOD(IOStreamsTestCase, "IOStreams::FFStream", "[iostream][stream]")
+{
+    wxFFileStream s(GetTempFName());
+    DoTest(s);
+}
 
 #endif // wxUSE_STREAMS
