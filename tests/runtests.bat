@@ -1,6 +1,6 @@
 @echo off
 
-REM Runs wxWidgets CppUnit tests
+REM Runs wxWidgets unit tests
 REM This script is used to return the correct return value to the caller
 REM which is required by Buildbot to recognize failures.
 REM Note that in DOS error level is not the return code of the previous
