@@ -382,8 +382,8 @@ MyFrame::MyFrame(const wxString& title)
     logger->DisableTimestamp();
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( button1, wxSizerFlags().Expand().Border());
-    topSizer->Add( button2, wxSizerFlags().Expand().Border());
+    topSizer->Add( button1, wxSizerFlags().Border());
+    topSizer->Add( button2, wxSizerFlags().Border());
     topSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border());
 
     panel->SetSizer( topSizer );
