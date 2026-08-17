@@ -25,6 +25,7 @@
 #include "wx/power.h"
 #include "wx/atomic.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/power.h"
 
 // ----------------------------------------------------------------------------
 // wxPowerResource
@@ -35,6 +36,7 @@ namespace
 
 wxAtomicInt g_powerResourceScreenRefCount = 0;
 wxAtomicInt g_powerResourceSystemRefCount = 0;
+wxString g_powerResourceSystemReason;
 
 bool UpdatePowerResourceExecutionState()
 {
@@ -58,7 +60,7 @@ bool UpdatePowerResourceExecutionState()
 
 bool
 wxPowerResource::Acquire(wxPowerResourceKind kind,
-                         const wxString& WXUNUSED(reason),
+                         const wxString& reason,
                          wxPowerBlockKind blockKind)
 {
     if ( blockKind == wxPOWER_DELAY )
@@ -75,6 +77,11 @@ wxPowerResource::Acquire(wxPowerResourceKind kind,
 
         case wxPOWER_RESOURCE_SYSTEM:
             wxAtomicInc(g_powerResourceSystemRefCount);
+            if ( !reason.empty() )
+            {
+                g_powerResourceSystemReason = reason;
+                wxMSWUpdateShutdownBlockReason();
+            }
             break;
     }
 
@@ -100,6 +107,11 @@ void wxPowerResource::Release(wxPowerResourceKind kind)
             if ( g_powerResourceSystemRefCount > 0 )
             {
                 wxAtomicDec(g_powerResourceSystemRefCount);
+                if ( g_powerResourceSystemRefCount == 0 )
+                {
+                    g_powerResourceSystemReason.clear();
+                    wxMSWUpdateShutdownBlockReason();
+                }
             }
             else
             {
@@ -125,6 +137,29 @@ static inline bool wxGetPowerStatus(SYSTEM_POWER_STATUS *sps)
     }
 
     return true;
+}
+
+bool wxMSWUpdateShutdownBlockReason()
+{
+    for ( wxWindow* win : wxTopLevelWindows )
+    {
+        HWND hwnd = GetHwndOf(win);
+        if ( g_powerResourceSystemRefCount > 0 )
+        {
+            ::ShutdownBlockReasonCreate(hwnd,
+                g_powerResourceSystemReason.wc_str());
+        }
+        else
+        {
+            ::ShutdownBlockReasonDestroy(hwnd);
+        }
+    }
+    return true;
+}
+
+bool wxMSWPowerResourceIsSystemBlockActive()
+{
+    return g_powerResourceSystemRefCount > 0;
 }
 
 // ============================================================================
