@@ -317,6 +317,8 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     return GetFS()->OpenFile(myurl, flags);
 }
 
+static constexpr wxChar CUR_NBSP_VALUE = L'\xA0';
+
 void wxHtmlWinParser::AddText(const wxString& txt)
 {
     if ( m_whitespaceMode == Whitespace_Normal )
@@ -361,6 +363,7 @@ void wxHtmlWinParser::AddText(const wxString& txt)
             if (x)
             {
                 m_tmpStrBuf.append(' ');
+                m_tmpStrBuf.Replace(CUR_NBSP_VALUE, ' ');
                 AddWord(m_tmpStrBuf);
                 m_tmpStrBuf.clear();
 
@@ -392,7 +395,18 @@ void wxHtmlWinParser::AddText(const wxString& txt)
     }
     else // m_whitespaceMode == Whitespace_Pre
     {
-        AddPreBlock(txt);
+        if ( txt.find(CUR_NBSP_VALUE) != wxString::npos )
+        {
+            // we need to substitute spaces for &nbsp; here just like we
+            // did in the Whitespace_Normal branch above
+            wxString txt2(txt);
+            txt2.Replace(CUR_NBSP_VALUE, ' ');
+            AddPreBlock(txt2);
+        }
+        else
+        {
+            AddPreBlock(txt);
+        }
 
         // don't eat any whitespace in <pre> block
         m_tmpLastWasSpace = false;
