@@ -24,6 +24,7 @@
 
 #include "wx/wfstream.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/error.h"
 #include "wx/gtk/private/object.h"
 
 // All animation-related APIs have been deprecated gdk-pixbuf 2.44, suppress
@@ -99,20 +100,20 @@ bool wxAnimationGTKImpl::Load(wxInputStream &stream, wxAnimationType type)
     }
 
     // create a GdkPixbufLoader
-    GError *error = nullptr;
+    wxGtkError error;
     GdkPixbufLoader *loader;
     if (type != wxANIMATION_TYPE_INVALID && type != wxANIMATION_TYPE_ANY)
-        loader = gdk_pixbuf_loader_new_with_type(anim_type, &error);
+        loader = gdk_pixbuf_loader_new_with_type(anim_type, error.Out());
     else
         loader = gdk_pixbuf_loader_new();
 
     wxGtkObject<GdkPixbufLoader> ensureUnrefLoader(loader);
 
     if (!loader ||
-        error != nullptr)  // even if the loader was allocated, an error could have happened
+        error)  // even if the loader was allocated, an error could have happened
     {
         wxLogDebug(wxT("Could not create the loader for '%s' animation type: %s"),
-                   anim_type, error->message);
+                   anim_type, error.GetMessage());
         return false;
     }
 
@@ -133,9 +134,9 @@ bool wxAnimationGTKImpl::Load(wxInputStream &stream, wxAnimationType type)
         }
 
         // fetch all data into the loader
-        if (!gdk_pixbuf_loader_write(loader, buf, stream.LastRead(), &error))
+        if (!gdk_pixbuf_loader_write(loader, buf, stream.LastRead(), error.Out()))
         {
-            wxLogDebug(wxT("Could not write to the loader: %s"), error->message);
+            wxLogDebug(wxT("Could not write to the loader: %s"), error.GetMessage());
 
             // gdk_pixbuf_loader_close wants the GError == nullptr
             gdk_pixbuf_loader_close(loader, nullptr);
@@ -155,9 +156,9 @@ bool wxAnimationGTKImpl::Load(wxInputStream &stream, wxAnimationType type)
     // load complete: gdk_pixbuf_loader_close will now check if the data we
     // wrote inside the pixbuf loader does make sense and will give an error
     // if it doesn't (because of a truncated file, corrupted data or whatelse)
-    if (!gdk_pixbuf_loader_close(loader, &error))
+    if (!gdk_pixbuf_loader_close(loader, error.Out()))
     {
-        wxLogDebug(wxT("Could not close the loader: %s"), error->message);
+        wxLogDebug(wxT("Could not close the loader: %s"), error.GetMessage());
         return false;
     }
 
