@@ -493,10 +493,10 @@ TEST_CASE_METHOD(RequestFixture,
 
     Create("status/200");
     CHECK( request.IsOk() );
-    CHECK( session.GetNativeHandle() );
 
     // Note that the request must be started to have a valid native handle.
     request.Start();
+    CHECK( session.GetNativeHandle() );
     CHECK( request.GetNativeHandle() );
     RunLoopWithTimeout();
     CHECK( request.GetState() == wxWebRequest::State_Completed );
