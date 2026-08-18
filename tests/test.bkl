@@ -169,6 +169,7 @@
             asserthelper.cpp
             test.cpp
             testableframe.cpp
+            docview/doc-updateallviews.cpp
             geometry/rect.cpp
             geometry/size.cpp
             geometry/point.cpp
