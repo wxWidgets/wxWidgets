@@ -690,7 +690,8 @@ public:
     virtual int GetLineLength(long lineNo) const = 0;
     virtual wxString GetLineText(long lineNo) const = 0;
     virtual int GetNumberOfLines() const = 0;
-
+    virtual int GetPhysicalLineCount() const;
+    virtual int GetLogicalLineCount() const;
 
     // file IO
     // -------
