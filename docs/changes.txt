@@ -285,6 +285,16 @@ NOTE: This file is updated only before the release, please use
 
       and then redo "git-notes add" and git-push.
 
+All (GUI):
+
+- Fix wxGetSingleChoice(), wxGetSingleChoiceIndex(), wxGetSingleChoiceData()
+  and wxGetSelectedChoices() to actually use the x, y, width and height
+  parameters (Lukas Buricin).
+- Fix wxGetTextFromUser() to actually use the x, y and width parameters
+  (Lukas Buricin).
+- Replace wxCHOICE_WIDTH/HEIGHT default values with wxDefaultCoord so the
+  dialogs fit their contents by default (Lukas Buricin).
+
 
 3.3.3: (released 2026-07-07)
 ----------------------------
