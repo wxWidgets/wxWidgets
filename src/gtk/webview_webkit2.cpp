@@ -639,7 +639,6 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
             {
                 exepath + "/..",
                 exepath + "/../..",
-                exepath + "/lib",
                 exepath,
             };
 
