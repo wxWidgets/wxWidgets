@@ -441,6 +441,12 @@ bool wxApp::OnInitGui()
     return true;
 }
 
+bool s_gtkAlreadyInitialized = false;
+void wxApp::GTKAlreadyInitialized( bool initialized )
+{
+    s_gtkAlreadyInitialized = initialized;
+}
+
 // use unusual names for the parameters to avoid conflict with wxApp::arg[cv]
 bool wxApp::Initialize(int& argc_, wxChar **argv_)
 {
@@ -521,54 +527,57 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         );
     }
 
-    bool init_result;
-
-    // Prevent gtk_init_check() from changing the locale automatically for
-    // consistency with the other ports that don't do it. If necessary,
-    // wxApp::SetCLocale() may be explicitly called.
-    //
-    // Note that this function generates a warning if it's called more than
-    // once, so avoid them.
-    static bool s_gtkLocalDisabled = false;
-    if ( !s_gtkLocalDisabled )
+    if (!s_gtkAlreadyInitialized)
     {
-        s_gtkLocalDisabled = true;
-        gtk_disable_setlocale();
-    }
+        bool init_result;
 
-#if defined(__WXGTK4__)
-    init_result = gtk_init_check() != 0;
-#else
-    auto argvA = wxInitData::Get().argvA;
-
-    int argcGTK = argc_;
-    init_result = gtk_init_check( &argcGTK, &argvA ) != 0;
-
-    if ( argcGTK != argc_ )
-    {
-        // we have to drop the parameters which were consumed by GTK+
-        for ( int i = 0; i < argcGTK; i++ )
+        // Prevent gtk_init_check() from changing the locale automatically for
+        // consistency with the other ports that don't do it. If necessary,
+        // wxApp::SetCLocale() may be explicitly called.
+        //
+        // Note that this function generates a warning if it's called more than
+        // once, so avoid them.
+        static bool s_gtkLocalDisabled = false;
+        if ( !s_gtkLocalDisabled )
         {
-            while ( strcmp(wxConvUTF8.cWX2MB(argv_[i]), argvA[i]) != 0 )
-            {
-                free(argv_[i]);
-                memmove(argv_ + i, argv_ + i + 1, (argc_ - i)*sizeof(*argv_));
-            }
+            s_gtkLocalDisabled = true;
+            gtk_disable_setlocale();
         }
 
-        argc_ = argcGTK;
-        argv_[argc_] = nullptr;
+#if defined(__WXGTK4__)
+        init_result = gtk_init_check() != 0;
+#else
+        auto argvA = wxInitData::Get().argvA;
 
-        this->argc = argc_;
-        this->argv.Init(argc_, argv_);
-    }
-    //else: gtk_init() didn't modify our parameters
+        int argcGTK = argc_;
+        init_result = gtk_init_check( &argcGTK, &argvA ) != 0;
+
+        if ( argcGTK != argc_ )
+        {
+            // we have to drop the parameters which were consumed by GTK+
+            for ( int i = 0; i < argcGTK; i++ )
+            {
+                while ( strcmp(wxConvUTF8.cWX2MB(argv_[i]), argvA[i]) != 0 )
+                {
+                    free(argv_[i]);
+                    memmove(argv_ + i, argv_ + i + 1, (argc_ - i)*sizeof(*argv_));
+                }
+            }
+
+            argc_ = argcGTK;
+            argv_[argc_] = nullptr;
+
+            this->argc = argc_;
+            this->argv.Init(argc_, argv_);
+        }
+        //else: gtk_init() didn't modify our parameters
 #endif
 
-    if ( !init_result )
-    {
-        wxLogError(_("Unable to initialize GTK+, is DISPLAY set properly?"));
-        return false;
+        if ( !init_result )
+        {
+            wxLogError(_("Unable to initialize GTK+, is DISPLAY set properly?"));
+            return false;
+        }
     }
 
 #if wxUSE_MIMETYPE
