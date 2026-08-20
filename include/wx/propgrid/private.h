@@ -207,7 +207,7 @@ constexpr wxPGFlags wxPGPropertyFlags_HideCustomColour = wxPGFlags::Reserved_2;
 constexpr wxPGFlags wxPGPropertyFlags_ColourHasAlpha = wxPGFlags::Reserved_3;
 
 // wxFileProperty - if set, full path is shown in wxFileProperty.
-constexpr wxPGFlags wxPGPropertyFlags_ShowFullFileName = wxPGFlags::Reserved_1;
+constexpr wxPGFlags wxPGPropertyFlags_ShowFullFileName = wxPGFlags::ShowFullFileName;
 
 // wxLongStringProperty - flag used to mark that edit button
 // should be enabled even in the read-only mode.
