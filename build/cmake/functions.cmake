@@ -326,7 +326,6 @@ function(wx_set_target_properties target_name)
         wx_string_append(dll_version ${wxRELEASE_NUMBER})
     endif()
 
-    set(lib_unicode)
     set(lib_unicode "u")
 
     set(lib_rls)
@@ -535,6 +534,53 @@ function(wx_set_target_properties target_name)
     wx_set_common_target_properties(${target_name})
 endfunction()
 
+
+# output name matching wxDynamicLibrary::CanonicalizePluginName
+function(wx_set_plugin_name target_name)
+    # wxDL_PLUGIN_GUI
+    set(lib_toolkit "_${wxBUILD_TOOLKIT}")
+
+    set(lib_unicode "u")
+
+    set(lib_rls)
+    set(lib_dbg)
+    if(WIN32_MSVC_NAMING)
+        set(lib_dbg "d")
+    endif()
+
+    if(WIN32)
+        set(dll_version "${wxMAJOR_VERSION}${wxMINOR_VERSION}")
+        if(wxVERSION_IS_DEV)
+            wx_string_append(dll_version "${wxRELEASE_NUMBER}")
+        endif()
+    else()
+        set(dll_version "-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
+        if(wxVERSION_IS_DEV)
+            wx_string_append(dll_version ".${wxRELEASE_NUMBER}")
+        endif()
+    endif()
+
+    set(compiler_suffix)
+    if(WIN32)
+        set(compiler_suffix "_${wxCOMPILER_PREFIX}")
+    endif()
+
+    set(lib_prefix "lib")
+    if(WIN32_MSVC_NAMING OR (WIN32 AND wxBUILD_SHARED))
+        set(lib_prefix)
+    elseif (CYGWIN AND wxBUILD_SHARED)
+        set(lib_prefix "cyg")
+    endif()
+
+    set(wxRUNTIME_OUTPUT_NAME       "${target_name}${lib_toolkit}${lib_unicode}${lib_rls}${dll_version}${compiler_suffix}")
+    set(wxRUNTIME_OUTPUT_NAME_DEBUG "${target_name}${lib_toolkit}${lib_unicode}${lib_dbg}${dll_version}${compiler_suffix}")
+
+    set_target_properties(${target_name} PROPERTIES
+        RUNTIME_OUTPUT_NAME       "${wxRUNTIME_OUTPUT_NAME}"
+        RUNTIME_OUTPUT_NAME_DEBUG "${wxRUNTIME_OUTPUT_NAME_DEBUG}"
+        PREFIX                    "${lib_prefix}"
+    )
+endfunction()
 
 # Add a wxWidgets library
 # wx_add_library(<target_name> [IS_BASE;IS_PLUGIN;IS_MONO] <src_files>...)
@@ -888,7 +934,7 @@ function(wx_print_thirdparty_library_summary)
 endfunction()
 
 # Add sample, test, demo or benchmark
-# wx_add(<name> <group> [CONSOLE|CONSOLE_GUI|DLL] [IMPORTANT] [SRC_FILES...]
+# wx_add(<name> <group> [CONSOLE|CONSOLE_GUI|DLL|PLUGIN] [IMPORTANT] [SRC_FILES...]
 #    [NAME target_name] [FOLDER folder]
 #    [DATA ...] [DEFINITIONS ...] [DEPENDS ...] [LIBRARIES ...]
 #    [RES ...] [RES_BUNDLE ...] [PLIST ...] [CHARSET ...])
@@ -933,7 +979,7 @@ endfunction()
 
 function(wx_add name group)
     cmake_parse_arguments(APP
-        "CONSOLE;CONSOLE_GUI;DLL;IMPORTANT"
+        "CONSOLE;CONSOLE_GUI;DLL;PLUGIN;IMPORTANT"
         "NAME;FOLDER"
         "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES;RES_BUNDLE;PLIST;CHARSET"
         ${ARGN}
@@ -1007,8 +1053,11 @@ function(wx_add name group)
         list(APPEND src_files ${bundle_files})
     endif()
 
-    if(APP_DLL)
+    if(APP_DLL OR APP_PLUGIN)
         add_library(${target_name} SHARED ${src_files})
+        if(APP_PLUGIN)
+            wx_set_plugin_name(${target_name})
+        endif()
     else()
         if(APP_CONSOLE OR APP_CONSOLE_GUI)
             set(exe_type)
