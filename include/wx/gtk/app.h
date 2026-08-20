@@ -73,7 +73,7 @@ public:
 
     // Indicate that GTK+ already has been intialized by an
     // external library and skip this in wxApp::Initialize()
-    static void GTKAlreadyInitialized( bool initialized );
+    static void GTKAlreadyInitialized();
 
     // implementation only from now on
     // -------------------------------

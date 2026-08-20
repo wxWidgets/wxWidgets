@@ -441,10 +441,10 @@ bool wxApp::OnInitGui()
     return true;
 }
 
-bool s_gtkAlreadyInitialized = false;
-void wxApp::GTKAlreadyInitialized( bool initialized )
+static bool gs_gtkAlreadyInitialized = false;
+void wxApp::GTKAlreadyInitialized()
 {
-    s_gtkAlreadyInitialized = initialized;
+    gs_gtkAlreadyInitialized = true;
 }
 
 // use unusual names for the parameters to avoid conflict with wxApp::arg[cv]
@@ -527,8 +527,10 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         );
     }
 
-    if (!s_gtkAlreadyInitialized)
+    if (!gs_gtkAlreadyInitialized)
     {
+        gs_gtkAlreadyInitialized = true;
+
         bool init_result;
 
         // Prevent gtk_init_check() from changing the locale automatically for
@@ -537,12 +539,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         //
         // Note that this function generates a warning if it's called more than
         // once, so avoid them.
-        static bool s_gtkLocalDisabled = false;
-        if ( !s_gtkLocalDisabled )
-        {
-            s_gtkLocalDisabled = true;
-            gtk_disable_setlocale();
-        }
+        gtk_disable_setlocale();
 
 #if defined(__WXGTK4__)
         init_result = gtk_init_check() != 0;
