@@ -33,12 +33,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dc.h"
     #include "wx/settings.h"
 #endif
 
 #include "wx/dynlib.h"
 #include "wx/module.h"
-#include "wx/dcclient.h"
+#include "wx/renderer.h"
 
 #include "wx/msw/darkmode.h"
 #include "wx/msw/uxtheme.h"
@@ -1127,6 +1128,36 @@ void wxMSWImpl::PaintScrollBarCorner(wxWindow* w)
     ::FillRect(hdcWin, &rectToPaint, hBrush);
 }
 
+void wxMSWImpl::DrawGauge(wxDC& dc, const wxRect& rect, int value, int max, int flags)
+{
+    const wxColour bkColour(0x131313); // @TODO: Do not hardcode the color
+    const wxPen borderPen = wxMSWDarkMode::GetBorderPen();
+    const wxDCPenChanger penChanger(dc, borderPen);
+    const wxDCBrushChanger brushChanger(dc, *wxTheBrushList->FindOrCreateBrush(bkColour));
+    wxRect paintRect(rect);
+
+    dc.DrawRectangle(paintRect);
+    paintRect.Inflate(-borderPen.GetWidth());
+
+    max = wxMax(0, max);
+    value = wxMax(0, wxMin(value, max));
+
+    if ( value > 0 )
+    {
+        const bool isVertical = (flags & wxCONTROL_SPECIAL) == wxCONTROL_SPECIAL;
+        const int barFilled = wxMulDivInt32(isVertical ? paintRect.GetHeight() : paintRect.GetWidth(), value, max);
+        const wxColour barColour(0x5fcb6c); // @TODO: Do not hardcode the color
+
+        dc.SetPen(*wxThePenList->FindOrCreatePen(barColour));
+        dc.SetBrush(*wxTheBrushList->FindOrCreateBrush(barColour));
+        if ( isVertical )
+           dc.DrawRectangle(paintRect.x, paintRect.GetBottom() - barFilled + 1, paintRect.GetWidth(), barFilled);
+        else
+           dc.DrawRectangle(paintRect.x, paintRect.y, barFilled, paintRect.GetHeight());
+    }
+}
+
+
 #else // !wxUSE_DARK_MODE
 
 bool
@@ -1234,6 +1265,11 @@ bool HasDarkTheme()
 } // namespace wxMSWDarkMode
 
 void wxMSWImpl::PaintScrollBarCorner(wxWindow* WXUNUSED(w))
+{
+}
+
+void wxMSWImpl::DrawGauge(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rect),
+    int WXUNUSED(value), int WXUNUSED(max), int WXUNUSED(flags))
 {
 }
 

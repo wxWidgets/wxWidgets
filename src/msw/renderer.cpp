@@ -35,6 +35,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/wrapcctl.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/dynlib.h"
 
 // ----------------------------------------------------------------------------
@@ -1180,7 +1181,15 @@ void wxRendererXP::DrawGauge(wxWindow* win,
     int max,
     int flags)
 {
-    wxUxThemeHandle hTheme(win, L"PROGRESS");
+    // if DarkTheme is not available, draw the gauge fully by ourselves
+    if ( wxMSWDarkMode::IsActive() && !wxMSWDarkMode::HasDarkTheme() )
+    {
+        wxMSWImpl::DrawGauge(dc, rect, value, max, flags);
+        return;
+    }
+
+    wxUxThemeHandle hTheme(win, L"PROGRESS", L"DarkMode_DarkTheme::Progress");
+
     if ( !hTheme )
     {
         m_rendererNative.DrawGauge(win, dc, rect, value, max, flags);
@@ -1225,6 +1234,15 @@ void wxRendererXP::DrawGauge(wxWindow* win,
         contentRect,
         flags & wxCONTROL_SPECIAL ? PP_CHUNKVERT : PP_CHUNK
     );
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We get here only when wxMSWDarkMode::HasDarkTheme() returns true
+        // but even the DarkTheme still draws a wrong (too dark) border color
+        // so we need to draw the border ourselves with the correct color.
+        AutoHBRUSH hBrush(wxMSWDarkMode::GetBorderPen().GetColour().GetPixel());
+        ::FrameRect(GetHdcOf(dc.GetTempHDC()), &r, hBrush);
+    }
 }
 
 // ----------------------------------------------------------------------------
