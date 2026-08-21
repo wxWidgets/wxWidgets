@@ -20,6 +20,7 @@
 #include "wx/msgdlg.h"
 #include "wx/button.h"
 #include "wx/dcclient.h"
+#include "wx/settings.h"
 #include "wx/timer.h"
 
 #include "wx/datetime.h"
@@ -381,6 +382,8 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
+    const wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT), FromDIP(1));
+    const wxDCPenChanger penChanger(dc, pen);
     const wxSize size = GetClientSize();
     for ( wxCoord x = 0; x < size.x; x += size.x/m_numLines )
         dc.DrawLine(x, 0, x, size.y);
