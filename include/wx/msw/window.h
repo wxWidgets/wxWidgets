@@ -803,6 +803,9 @@ private:
 
     int MSWGetBorderThickness() const;
 
+
+    void MSWDarkPaintScrollBarCorner();
+
     static inline bool MSWIsPositionDirectlySupported(int x, int y)
     {
         // The supported coordinate intervals for various functions are:

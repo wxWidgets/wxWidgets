@@ -3900,6 +3900,24 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         wxWindowMSW::MSWDrawThemeBorder(hdc);
                     }
                 }
+#ifndef __WXUNIVERSAL__ // wxUniversal doesn't support wxMSW dark mode and MSWDarkPaintScrollBarCorner() would not build there
+                if ( wxMSWDarkMode::IsActive() )
+                {
+                    const long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+
+                    // In dark mode the corner between the two scrollbars is not drawn in
+                    // the correct colour by Windows, so we need to paint it ourselves.
+                    if ( (style & WS_HSCROLL) && (style & WS_VSCROLL) )
+                    {
+                        if ( !processed )
+                        {
+                            rc.result = MSWDefWindowProc(message, wParam, lParam);
+                            processed = true;
+                        }
+                        MSWDarkPaintScrollBarCorner();
+                    }
+                }
+#endif //#ifndef __WXUNIVERSAL__
             }
             break;
 
@@ -3957,6 +3975,38 @@ void wxWindowMSW::MSWDrawThemeBorder(WXHDC hdc)
         // Draw the border
         hTheme.DrawBackground(hdc, rcBorder, EP_EDITTEXT, ETS_NORMAL);
     }
+}
+
+// This function draws over the section where the scroll bars meet
+// to maintain a consistent theme in dark mode.
+void wxWindowMSW::MSWDarkPaintScrollBarCorner()
+{
+// wxUniversal doesn't support wxMSW dark mode
+// the code would not even build there due to wxWindow* argument type mismatch in wxGetSystemMetrics() calls
+#ifndef __WXUNIVERSAL__
+    const HWND hwnd = GetHwnd();
+    WinStruct<SCROLLBARINFO> sbiV, sbiH;
+
+    if ( !::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) ||
+         !::GetScrollBarInfo(hwnd, OBJID_HSCROLL, &sbiH) ||
+            (sbiV.rgstate[0] & STATE_SYSTEM_INVISIBLE) ||
+            (sbiH.rgstate[0] & STATE_SYSTEM_INVISIBLE))
+    {
+        return;
+    }
+
+    const RECT windowRect = wxGetWindowRect(hwnd);
+    RECT rectToPaint;
+
+    rectToPaint.left = sbiV.rcScrollBar.left - windowRect.left;
+    rectToPaint.top = sbiH.rcScrollBar.top - windowRect.top;
+    rectToPaint.right = rectToPaint.left + wxGetSystemMetrics(SM_CXVSCROLL, this);
+    rectToPaint.bottom = rectToPaint.top + wxGetSystemMetrics(SM_CYHSCROLL, this);
+
+    WindowHDC hdcWin(hwnd);
+    AutoHBRUSH hBrush(RGB(0x17, 0x17, 0x17));
+    ::FillRect(hdcWin, &rectToPaint, hBrush);
+#endif // ifndef __WXUNIVERSAL__
 }
 
 WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)

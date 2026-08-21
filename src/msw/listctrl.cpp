@@ -3742,20 +3742,6 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             // PRF_CHILDREN flag, so leave it to the native control itself
             return MSWDefWindowProc(nMsg, wParam, lParam);
 
-        case WM_NCPAINT:
-            // In dark mode the corner between the 2 scrollbars is not drawn in
-            // the correct colour by default, so paint it over if necessary.
-            if ( wxMSWDarkMode::IsActive() )
-            {
-                // Let the control paint itself first.
-                auto const rc =
-                    wxListCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
-
-                wxMSWImpl::PaintScrollBarCorner(GetHwnd());
-                return rc;
-            }
-            break;
-
         case WM_CONTEXTMENU:
             // because this message is propagated upwards the child-parent
             // chain, we get it for the right clicks on the header window but
