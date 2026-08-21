@@ -226,7 +226,7 @@ void RadioWidgetsPage::CreateContent()
     sizerLeft->AddSpacer(5);
 
     btn = new wxButton(sizerleftBox, RadioPage_Reset, "&Reset");
-    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, FromDIP(15)));
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
 
     // middle pane
     wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change parameters");
@@ -279,7 +279,7 @@ void RadioWidgetsPage::CreateContent()
     sizerTop->Add(sizerLeft,
                   wxSizerFlags(0).Expand().DoubleBorder((wxALL & ~wxLEFT)));
     sizerTop->Add(sizerMiddle,
-                  wxSizerFlags(1).Expand().DoubleBorder(wxALL));
+                  wxSizerFlags(1).Expand().DoubleBorder());
     sizerTop->Add(sizerRight,
                   wxSizerFlags(0).Expand().DoubleBorder((wxALL & ~wxRIGHT)));
 

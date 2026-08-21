@@ -689,20 +689,20 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     wxButton* btnCancel = new wxButton(this, wxID_CANCEL, "&Cancel");
     btnCancel->SetHelpText(_("The Cancel button cancels the dialog."));
 
-    sizerRow->Add(btnOK, 0, wxALIGN_CENTER | wxALL, 5);
-    sizerRow->Add(btnCancel, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerRow->Add(btnOK, wxSizerFlags().Center().Border());
+    sizerRow->Add(btnCancel, wxSizerFlags().Center().Border());
 
     // Add explicit context-sensitive help button for non-MSW
 #ifndef __WXMSW__
-    sizerRow->Add(new wxContextHelpButton(this), 0, wxALIGN_CENTER | wxALL, 5);
+    sizerRow->Add(new wxContextHelpButton(this), wxSizerFlags().Center().Border());
 #endif
 
     wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, "A demo text control",
                                       wxDefaultPosition, wxSize(300, 100),
                                       wxTE_MULTILINE);
     text->SetHelpText(_("Type text here if you have got nothing more interesting to do"));
-    sizerTop->Add(text, 0, wxEXPAND|wxALL, 5 );
-    sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALL, 5 );
+    sizerTop->Add(text, wxSizerFlags().Expand().Border());
+    sizerTop->Add(sizerRow, wxSizerFlags().Right().Border());
 
     SetSizerAndFit(sizerTop);
 

@@ -142,10 +142,10 @@ void FontPickerWidgetsPage::CreateContent()
     m_chkFontTextCtrl = CreateCheckBoxAndAddToSizer(styleSizer, "With textctrl", wxID_ANY, styleSizerBox);
     m_chkFontDescAsLabel = CreateCheckBoxAndAddToSizer(styleSizer, "Font desc as btn label", wxID_ANY, styleSizerBox);
     m_chkFontUseFontForLabel = CreateCheckBoxAndAddToSizer(styleSizer, "Use font for label", wxID_ANY, styleSizerBox);
-    leftSizer->Add(styleSizer, 0, wxALL|wxGROW, 5);
+    leftSizer->Add(styleSizer, wxSizerFlags().Expand().Border());
 
     leftSizer->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
-                 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+                 wxSizerFlags().CentreHorizontal().TripleBorder());
 
     Reset();    // set checkboxes state
 
@@ -155,14 +155,14 @@ void FontPickerWidgetsPage::CreateContent()
 
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
-    m_sizer->Add(m_fontPicker, 0, wxALIGN_CENTER|wxALL, 5);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
+    m_sizer->AddStretchSpacer();
+    m_sizer->Add(m_fontPicker, wxSizerFlags().Centre().Border());
+    m_sizer->AddStretchSpacer();
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(leftSizer, 0, wxGROW|wxALL, 5);
-    sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
+    sz->Add(leftSizer, wxSizerFlags().Expand().Border());
+    sz->Add(m_sizer, wxSizerFlags(1).Expand().Border());
 
     SetSizer(sz);
 }
@@ -194,7 +194,7 @@ void FontPickerWidgetsPage::RecreatePicker()
 {
     m_sizer->Remove(1);
     CreatePicker();
-    m_sizer->Insert(1, m_fontPicker, 0, wxALIGN_CENTER|wxALL, 5);
+    m_sizer->Insert(1, m_fontPicker, wxSizerFlags().Centre().Border());
 
     m_sizer->Layout();
 }

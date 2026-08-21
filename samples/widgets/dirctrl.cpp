@@ -181,7 +181,7 @@ void DirCtrlWidgetsPage::CreateContent()
     wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
     sizerLeft->Add( CreateSizerWithTextAndButton( DirCtrlPage_SetPath , "Set &path", wxID_ANY, &m_path, sizerLeftBox),
-                    0, wxALL | wxALIGN_RIGHT , 5 );
+                    wxSizerFlags().Right().Border() );
 
     wxStaticBoxSizer *sizerFlags = new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox, "&Flags");
     wxStaticBox* const sizerFlagsBox = sizerFlags->GetStaticBox();
@@ -205,7 +205,7 @@ void DirCtrlWidgetsPage::CreateContent()
     sizerLeft->Add(sizerFilters, wxSizerFlags().Expand().Border());
 
     wxButton *btn = new wxButton(sizerFiltersBox, DirCtrlPage_Reset, "&Reset");
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
 
     // keep consistency between enum and labels of radiobox
     wxCOMPILE_TIME_ASSERT( stdPathMax == WXSIZEOF(stdPaths), EnumForRadioBoxMismatch);
@@ -226,9 +226,9 @@ void DirCtrlWidgetsPage::CreateContent()
     );
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(m_radioStdPath, 0, wxGROW | wxALL , 10);
-    sizerTop->Add(m_dirCtrl, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(m_radioStdPath, wxSizerFlags().Expand().DoubleBorder());
+    sizerTop->Add(m_dirCtrl, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     SetSizer(sizerTop);
 

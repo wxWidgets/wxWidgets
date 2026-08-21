@@ -247,7 +247,7 @@ void StaticWidgetsPage::CreateContent()
     m_chkWrap = CreateCheckBoxAndAddToSizer(sizerLeft, "&Wrap", wxID_ANY, sizerLeftBox);
     m_chkWrap->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(FromDIP(15));
 
     static const wxString halign[] =
     {
@@ -274,11 +274,11 @@ void StaticWidgetsPage::CreateContent()
     m_radioVAlign->SetToolTip("Relevant for Generic wxStaticText only");
     m_radioVAlign->Bind(wxEVT_RADIOBOX, &StaticWidgetsPage::OnRecreate, this);
 
-    sizerLeft->Add(m_radioHAlign, 0, wxGROW | wxALL, 5);
-    sizerLeft->Add(m_radioVAlign, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioHAlign, wxSizerFlags().Expand().Border());
+    sizerLeft->Add(m_radioVAlign, wxSizerFlags().Expand().Border());
 
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(FromDIP(15));
 
     m_chkEllipsize = CreateCheckBoxAndAddToSizer(sizerLeft, "&Ellipsize", wxID_ANY, sizerLeftBox);
     m_chkEllipsize->Bind(wxEVT_CHECKBOX,
@@ -297,11 +297,11 @@ void StaticWidgetsPage::CreateContent()
                                       3);
     m_radioEllipsize->Bind(wxEVT_RADIOBOX, &StaticWidgetsPage::OnRecreate, this);
 
-    sizerLeft->Add(m_radioEllipsize, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioEllipsize, wxSizerFlags().Expand().Border());
 
     wxButton *b0 = new wxButton(sizerLeftBox, wxID_ANY, "&Reset");
     b0->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonReset, this);
-    sizerLeft->Add(b0, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->Add(b0, wxSizerFlags().CentreHorizontal().TripleBorder());
 
     // middle pane
     wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change labels");
@@ -310,16 +310,16 @@ void StaticWidgetsPage::CreateContent()
     m_textBox = new wxTextCtrl(sizerMiddleBox, wxID_ANY, wxEmptyString);
     wxButton *b1 = new wxButton(sizerMiddleBox, wxID_ANY, "Change &box label");
     b1->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonBoxText, this);
-    sizerMiddle->Add(m_textBox, 0, wxEXPAND|wxALL, 5);
-    sizerMiddle->Add(b1, 0, wxLEFT|wxBOTTOM, 5);
+    sizerMiddle->Add(m_textBox, wxSizerFlags().Expand().Border());
+    sizerMiddle->Add(b1, wxSizerFlags().Border(wxLEFT | wxBOTTOM));
 
     m_textLabel = new wxTextCtrl(sizerMiddleBox, wxID_ANY, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE|wxHSCROLL);
     wxButton *b2 = new wxButton(sizerMiddleBox, wxID_ANY, "Change &text label");
     b2->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonLabelText, this);
-    sizerMiddle->Add(m_textLabel, 0, wxEXPAND|wxALL, 5);
-    sizerMiddle->Add(b2, 0, wxLEFT|wxBOTTOM, 5);
+    sizerMiddle->Add(m_textLabel, wxSizerFlags().Expand().Border());
+    sizerMiddle->Add(b2, wxSizerFlags().Border(wxLEFT | wxBOTTOM));
 
 #if wxUSE_MARKUP
     m_textLabelWithMarkup = new wxTextCtrl(sizerMiddleBox, wxID_ANY, wxEmptyString,
@@ -328,8 +328,8 @@ void StaticWidgetsPage::CreateContent()
 
     wxButton *b3 = new wxButton(sizerMiddleBox, wxID_ANY, "Change decorated text label");
     b3->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonLabelWithMarkupText, this);
-    sizerMiddle->Add(m_textLabelWithMarkup, 0, wxEXPAND|wxALL, 5);
-    sizerMiddle->Add(b3, 0, wxLEFT|wxBOTTOM, 5);
+    sizerMiddle->Add(m_textLabelWithMarkup, wxSizerFlags().Expand().Border());
+    sizerMiddle->Add(b3, wxSizerFlags().Border(wxLEFT | wxBOTTOM));
 
     m_chkGreen = CreateCheckBoxAndAddToSizer(sizerMiddle,
                                              "Decorated label on g&reen",
@@ -359,9 +359,9 @@ void StaticWidgetsPage::CreateContent()
     CreateStatic();
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(sizerMiddle, wxSizerFlags().Expand().DoubleBorder());
+    sizerTop->Add(sizerRight, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     SetSizer(sizerTop);
 }
@@ -554,9 +554,9 @@ void StaticWidgetsPage::CreateStatic()
                                   isVert ? wxLI_VERTICAL : wxLI_HORIZONTAL);
 #endif // wxUSE_STATLINE
 
-    m_sizerStatBox->Add(m_statText, 0, wxGROW);
+    m_sizerStatBox->Add(m_statText, wxSizerFlags().Expand());
 #if wxUSE_STATLINE
-    m_sizerStatBox->Add(m_statLine, 0, wxGROW | wxTOP | wxBOTTOM, 10);
+    m_sizerStatBox->Add(m_statLine, wxSizerFlags().Expand().DoubleBorder(wxTOP | wxBOTTOM));
 #endif // wxUSE_STATLINE
 #if wxUSE_MARKUP
     m_sizerStatBox->Add(m_statMarkup);
@@ -570,7 +570,7 @@ void StaticWidgetsPage::CreateStatic()
     NotifyWidgetRecreation(m_statLine);
 #endif
 
-    m_sizerStatic->Add(m_sizerStatBox, 1, wxGROW);
+    m_sizerStatic->Add(m_sizerStatBox, wxSizerFlags(1).Expand());
 
     m_sizerStatic->Layout();
 

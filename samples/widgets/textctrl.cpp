@@ -425,7 +425,7 @@ void TextWidgetsPage::CreateContent()
                                       WXSIZEOF(modes), modes,
                                       1, wxRA_SPECIFY_COLS);
 
-    sizerLeft->Add(m_radioTextLines, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioTextLines, wxSizerFlags().Expand().Border());
     sizerLeft->AddSpacer(5);
 
     m_chkPassword = CreateCheckBoxAndAddToSizer(
@@ -462,7 +462,7 @@ void TextWidgetsPage::CreateContent()
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(wrap), wrap,
                                  1, wxRA_SPECIFY_COLS);
-    sizerLeft->Add(m_radioWrap, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioWrap, wxSizerFlags().Expand().Border());
 
     static const wxString halign[] =
     {
@@ -474,7 +474,7 @@ void TextWidgetsPage::CreateContent()
     m_radioAlign = new wxRadioBox(sizerLeftBox, wxID_ANY, "&Text alignment",
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(halign), halign, 1);
-    sizerLeft->Add(m_radioAlign, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioAlign, wxSizerFlags().Expand().Border());
 
 #ifdef __WXMSW__
     static const wxString kinds[] =
@@ -490,34 +490,34 @@ void TextWidgetsPage::CreateContent()
                                  1, wxRA_SPECIFY_COLS);
 
     sizerLeft->AddSpacer(5);
-    sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioKind, wxSizerFlags().Expand().Border());
 #endif // __WXMSW__
 
     wxButton *btn = new wxButton(sizerLeftBox, TextPage_Reset, "&Reset");
-    sizerLeft->Add(2, 2, 0, wxGROW | wxALL, 1); // spacer
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->AddSpacer(FromDIP(4));
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
 
     // middle pane
     wxStaticBoxSizer *sizerMiddleUp = new wxStaticBoxSizer(wxVERTICAL, this, "&Change contents:");
     wxStaticBox* const sizerMiddleUpBox = sizerMiddleUp->GetStaticBox();
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Set, "&Set text value");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Add, "&Append text");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Insert, "&Insert text");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Load, "&Load file");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Clear, "&Clear");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_StreamRedirector, "St&ream redirection");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     wxStaticBoxSizer *sizerMiddleDown = new wxStaticBoxSizer(wxVERTICAL, this, "&Info:");
     wxStaticBox* const sizerMiddleDownBox = sizerMiddleDown->GetStaticBox();
@@ -532,20 +532,20 @@ void TextWidgetsPage::CreateContent()
                     "Current pos:",
                     m_textPosCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxRIGHT, 5);
+                  wxSizerFlags().Border(wxRIGHT));
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     "Col:",
                     m_textColCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxLEFT | wxRIGHT, 5);
+                  wxSizerFlags().HorzBorder());
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     "Row:",
                     m_textRowCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxLEFT, 5);
-    sizerMiddleDown->Add(sizerRow, 0, wxALL, 5);
+                  wxSizerFlags().Border(wxLEFT));
+    sizerMiddleDown->Add(sizerRow, wxSizerFlags().Border());
 
     m_textLineLast = CreateInfoText(sizerMiddleDownBox);
     m_textPosLast = CreateInfoText(sizerMiddleDownBox);
@@ -559,7 +559,7 @@ void TextWidgetsPage::CreateContent()
                           m_textPosLast,
                           sizerMiddleDownBox
                         ),
-                        0, wxALL, 5
+                        wxSizerFlags().Border()
                      );
 
     m_textSelFrom = CreateInfoText(sizerMiddleDownBox);
@@ -574,7 +574,7 @@ void TextWidgetsPage::CreateContent()
                           m_textSelTo,
                           sizerMiddleDownBox
                         ),
-                        0, wxALL, 5
+                        wxSizerFlags().Border()
                      );
 
     m_textRange = new wxTextCtrl(sizerMiddleDownBox, wxID_ANY, wxEmptyString,
@@ -588,7 +588,7 @@ void TextWidgetsPage::CreateContent()
                           m_textRange,
                           "", nullptr, sizerMiddleDownBox
                         ),
-                        0, wxALL, 5
+                        wxSizerFlags().Border()
                      );
 
     sizerMiddleDown->Add
@@ -603,8 +603,8 @@ void TextWidgetsPage::CreateContent()
                      );
 
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
-    sizerMiddle->Add(sizerMiddleUp, 0, wxGROW);
-    sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
+    sizerMiddle->Add(sizerMiddleUp, wxSizerFlags().Expand());
+    sizerMiddle->Add(sizerMiddleDown, wxSizerFlags(1).Expand().Border(wxTOP));
 
     // right pane
     m_sizerText = new wxStaticBoxSizer(wxHORIZONTAL, this, "&Text:");
@@ -614,9 +614,9 @@ void TextWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the upper part of the window
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
-    sizerTop->Add(m_sizerText, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(sizerMiddle, wxSizerFlags().Expand().DoubleBorder());
+    sizerTop->Add(m_sizerText, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     SetSizer(sizerTop);
 }
@@ -648,14 +648,14 @@ wxSizer *TextWidgetsPage::CreateTextWithLabelSizer(const wxString& label,
                                                  wxWindow* statBoxParent)
 {
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    sizerRow->Add(new wxStaticText(statBoxParent ? statBoxParent : this, wxID_ANY, label), 0,
-                  wxALIGN_CENTRE_VERTICAL | wxRIGHT, 5);
-    sizerRow->Add(text, 0, wxALIGN_CENTRE_VERTICAL);
+    sizerRow->Add(new wxStaticText(statBoxParent ? statBoxParent : this, wxID_ANY, label),
+                  wxSizerFlags().CentreVertical().Border(wxRIGHT));
+    sizerRow->Add(text, wxSizerFlags().CentreVertical());
     if ( text2 )
     {
-        sizerRow->Add(new wxStaticText(statBoxParent ? statBoxParent : this, wxID_ANY, label2), 0,
-                      wxALIGN_CENTRE_VERTICAL | wxLEFT | wxRIGHT, 5);
-        sizerRow->Add(text2, 0, wxALIGN_CENTRE_VERTICAL);
+        sizerRow->Add(new wxStaticText(statBoxParent ? statBoxParent : this, wxID_ANY, label2),
+                      wxSizerFlags().CentreVertical().HorzBorder());
+        sizerRow->Add(text2, wxSizerFlags().CentreVertical());
     }
 
     return sizerRow;
@@ -794,10 +794,9 @@ void TextWidgetsPage::CreateText()
         ;
 #endif // TODO
 
-    // cast to int needed to silence gcc warning about different enums
-    m_sizerText->Add(m_text, 1, wxALL |
-                     (flags & wxTE_MULTILINE ? (int)wxGROW
-                                             : wxALIGN_TOP), 5);
+    m_sizerText->Add(m_text,
+                     (flags & wxTE_MULTILINE ? wxSizerFlags(1).Expand()
+                                              : wxSizerFlags(1).Top()).Border());
     m_sizerText->Layout();
 }
 

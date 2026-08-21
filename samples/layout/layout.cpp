@@ -130,7 +130,7 @@ MyFrame::MyFrame()
     // 2) top: create wxTextCtrl with minimum size (100x60)
     topsizer->Add(
         new wxTextCtrl( p, wxID_ANY, "My text (wxEXPAND).", wxDefaultPosition, FromDIP(wxSize(100,60)), wxTE_MULTILINE),
-        wxSizerFlags(1).Expand().Border(wxALL));
+        wxSizerFlags(1).Expand().Border());
 
     // 2.5) Gratuitous test of wxStaticBoxSizers
     wxBoxSizer *statsizer = new wxStaticBoxSizer(
@@ -140,25 +140,24 @@ MyFrame::MyFrame()
         wxSizerFlags().Border(wxALL, FromDIP(30)));
     topsizer->Add(
         statsizer,
-        wxSizerFlags(1).Expand().DoubleBorder(wxALL));
+        wxSizerFlags(1).Expand().DoubleBorder());
 
     // 2.7) And a test of wxGridSizer
     wxGridSizer *gridsizer = new wxGridSizer(2, 5, 5);
     gridsizer->Add(new wxStaticText(p, wxID_ANY, "Label"),
-                wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags().Right().CenterVertical());
     gridsizer->Add(new wxTextCtrl(p, wxID_ANY, "Grid sizer demo"),
-                wxSizerFlags(1).Align(wxGROW | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags(1).Expand().CenterVertical());
     gridsizer->Add(new wxStaticText(p, wxID_ANY, "Another label"),
-                wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags().Right().CenterVertical());
     gridsizer->Add(new wxTextCtrl(p, wxID_ANY, "More text"),
-                wxSizerFlags(1).Align(wxGROW | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags(1).Expand().CenterVertical());
     gridsizer->Add(new wxStaticText(p, wxID_ANY, "Final label"),
-                wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags().Right().CenterVertical());
     gridsizer->Add(new wxTextCtrl(p, wxID_ANY, "And yet more text"),
-                wxSizerFlags().Align(wxGROW | wxALIGN_CENTER_VERTICAL));
-    topsizer->Add(
-        gridsizer,
-        wxSizerFlags().Proportion(1).Expand().DoubleBorder(wxALL));
+                wxSizerFlags().Expand().CenterVertical());
+    topsizer->Add(gridsizer,
+                wxSizerFlags().Proportion(1).Expand().DoubleBorder());
 
 
 #if wxUSE_STATLINE
@@ -310,7 +309,7 @@ void MyFlexSizerFrame::InitFlexSizer(wxFlexGridSizer *sizer, wxWindow* parent)
                                         );
             if ( (i + j) % 2 )
                 cell->SetBackgroundColour( *wxLIGHT_GREY );
-            sizer->Add(cell, 0, wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALL, 3);
+            sizer->Add(cell, wxSizerFlags().Expand().CenterVertical().Border(wxALL, FromDIP(3)));
         }
     }
 }
@@ -323,70 +322,70 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
 
     // construct the first column
     wxSizer *sizerCol1 = new wxBoxSizer(wxVERTICAL);
-    sizerCol1->Add(new wxStaticText(p, wxID_ANY, "Ungrowable:"), 0, wxCENTER | wxTOP, 20);
+    sizerCol1->Add(new wxStaticText(p, wxID_ANY, "Ungrowable:"), wxSizerFlags().Center().Border(wxTOP, FromDIP(20)));
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
-    sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+    sizerCol1->Add(sizerFlex, wxSizerFlags(1).Expand().DoubleBorder());
 
-    sizerCol1->Add(new wxStaticText(p, wxID_ANY, "Growable middle column:"), 0, wxCENTER | wxTOP, 20);
+    sizerCol1->Add(new wxStaticText(p, wxID_ANY, "Growable middle column:"), wxSizerFlags().Center().Border(wxTOP, FromDIP(20)));
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
-    sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+    sizerCol1->Add(sizerFlex, wxSizerFlags(1).Expand().DoubleBorder());
 
-    sizerCol1->Add(new wxStaticText(p, wxID_ANY, "Growable middle row:"), 0, wxCENTER | wxTOP, 20);
+    sizerCol1->Add(new wxStaticText(p, wxID_ANY, "Growable middle row:"), wxSizerFlags().Center().Border(wxTOP, FromDIP(20)));
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableRow(1);
-    sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+    sizerCol1->Add(sizerFlex, wxSizerFlags(1).Expand().DoubleBorder());
 
-    sizerCol1->Add(new wxStaticText(p, wxID_ANY, "All growable columns:"), 0, wxCENTER | wxTOP, 20);
+    sizerCol1->Add(new wxStaticText(p, wxID_ANY, "All growable columns:"), wxSizerFlags().Center().Border(wxTOP, FromDIP(20)));
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(0, 1);
     sizerFlex->AddGrowableCol(1, 2);
     sizerFlex->AddGrowableCol(2, 3);
-    sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+    sizerCol1->Add(sizerFlex, wxSizerFlags(1).Expand().DoubleBorder());
 
     // the second one
     wxSizer *sizerCol2 = new wxBoxSizer(wxVERTICAL);
-    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Growable middle row and column:"), 0, wxCENTER | wxTOP, 20);
+    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Growable middle row and column:"), wxSizerFlags().Center().Border(wxTOP, FromDIP(20)));
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerFlex->AddGrowableRow(1);
-    sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+    sizerCol2->Add(sizerFlex, wxSizerFlags(1).Expand().DoubleBorder());
 
-    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with horz flex direction"), 0, wxCENTER | wxTOP, 20);
+    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with horz flex direction"), wxSizerFlags().Center().Border(wxTOP, FromDIP(20)));
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerFlex->AddGrowableRow(1);
     sizerFlex->SetFlexibleDirection(wxHORIZONTAL);
-    sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+    sizerCol2->Add(sizerFlex, wxSizerFlags(1).Expand().DoubleBorder());
 
-    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with grow mode == \"none\""), 0, wxCENTER | wxTOP, 20);
+    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with grow mode == \"none\""), wxSizerFlags().Center().Border(wxTOP, FromDIP(20)));
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerFlex->AddGrowableRow(1);
     sizerFlex->SetFlexibleDirection(wxHORIZONTAL);
     sizerFlex->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_NONE);
-    sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+    sizerCol2->Add(sizerFlex, wxSizerFlags(1).Expand().DoubleBorder());
 
-    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with grow mode == \"all\""), 0, wxCENTER | wxTOP, 20);
+    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with grow mode == \"all\""), wxSizerFlags().Center().Border(wxTOP, FromDIP(20)));
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerFlex->AddGrowableRow(1);
     sizerFlex->SetFlexibleDirection(wxHORIZONTAL);
     sizerFlex->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_ALL);
-    sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
+    sizerCol2->Add(sizerFlex, wxSizerFlags(1).Expand().DoubleBorder());
 
     // add both columns to grid sizer
     wxGridSizer *sizerTop = new wxGridSizer(2, 0, 20);
-    sizerTop->Add(sizerCol1, 1, wxEXPAND);
-    sizerTop->Add(sizerCol2, 1, wxEXPAND);
+    sizerTop->Add(sizerCol1, wxSizerFlags(1).Expand());
+    sizerTop->Add(sizerCol2, wxSizerFlags(1).Expand());
 
     p->SetSizer(sizerTop);
     sizerTop->SetSizeHints(this);
@@ -407,10 +406,10 @@ MyNotebookWithSizerDialog::MyNotebookWithSizerDialog(wxWindow *parent, const wxS
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     wxNotebook *notebook = new wxNotebook( this, wxID_ANY );
-    topsizer->Add( notebook, 1, wxGROW );
+    topsizer->Add( notebook, wxSizerFlags(1).Expand());
 
     wxButton *button = new wxButton( this, wxID_OK, "OK" );
-    topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
+    topsizer->Add( button, wxSizerFlags().Right().DoubleBorder() );
 
     // First page: one big text ctrl
     wxTextCtrl *multi = new wxTextCtrl( notebook, wxID_ANY, "TextCtrl.", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
@@ -422,12 +421,12 @@ MyNotebookWithSizerDialog::MyNotebookWithSizerDialog(wxWindow *parent, const wxS
 
     wxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
 
-    wxTextCtrl *text = new wxTextCtrl( panel, wxID_ANY, "TextLine 1.", wxDefaultPosition, wxSize(250,wxDefaultCoord) );
-    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
-    text = new wxTextCtrl( panel, wxID_ANY, "TextLine 2.", wxDefaultPosition, wxSize(250,wxDefaultCoord) );
-    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
+    wxTextCtrl *text = new wxTextCtrl( panel, wxID_ANY, "TextLine 1.", wxDefaultPosition, wxSize(250, wxDefaultCoord) );
+    panelsizer->Add( text, wxSizerFlags().Expand().Border(wxALL, FromDIP(30)));
+    text = new wxTextCtrl( panel, wxID_ANY, "TextLine 2.", wxDefaultPosition, wxSize(250, wxDefaultCoord) );
+    panelsizer->Add( text, wxSizerFlags().Expand().Border(wxALL, FromDIP(30)));
     wxButton *button2 = new wxButton( panel, wxID_ANY, "Hallo" );
-    panelsizer->Add( button2, 0, wxALIGN_RIGHT | wxLEFT|wxRIGHT|wxBOTTOM, 30 );
+    panelsizer->Add( button2, wxSizerFlags().Right().Border(wxLEFT|wxRIGHT|wxBOTTOM, FromDIP(30)) );
 
     panel->SetSizer( panelsizer );
 
@@ -603,9 +602,9 @@ MySimpleSizerFrame::MySimpleSizerFrame(wxFrame* parent)
     wxBoxSizer *main_sizer = new wxBoxSizer( wxHORIZONTAL );
 
     m_target = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 80, wxDefaultCoord ) );
-    main_sizer->Add( m_target, 1, wxALL, 5 );
+    main_sizer->Add( m_target, wxSizerFlags(1).Border() );
 
-    main_sizer->Add( new wxStaticText( this, wxID_ANY, "Set alternating sizes using F4 and F5" ), 0, wxALL, 5 );
+    main_sizer->Add( new wxStaticText( this, wxID_ANY, "Set alternating sizes using F4 and F5" ), wxSizerFlags().Border() );
 
     SetSizer( main_sizer);
 
@@ -647,24 +646,24 @@ MyNestedSizerFrame::MyNestedSizerFrame(wxFrame* parent)
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
 
-    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), 0, wxALIGN_CENTER );
-    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), 0, wxALIGN_CENTER );
-    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), 0, wxALIGN_CENTER );
-    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), 0, wxALIGN_CENTER );
+    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), wxSizerFlags().Center() );
+    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), wxSizerFlags().Center() );
+    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), wxSizerFlags().Center() );
+    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), wxSizerFlags().Center() );
 
     wxPanel *panel = new wxPanel( this, -1, wxDefaultPosition, wxDefaultSize,
                                   wxTAB_TRAVERSAL | wxSUNKEN_BORDER );
-    main_sizer->Add( panel, 0, wxALIGN_CENTER );
+    main_sizer->Add( panel, wxSizerFlags().Center() );
     wxBoxSizer *panel_sizer = new wxBoxSizer( wxVERTICAL );
     panel->SetSizer( panel_sizer );
     panel_sizer->Add( new wxStaticText( panel, -1, "Hello inside" ) );
     panel_sizer->Add( new wxStaticText( panel, -1, "Hello inside" ) );
     panel_sizer->Add( new wxStaticText( panel, -1, "Hello inside" ) );
 
-    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), 0, wxALIGN_CENTER );
+    main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), wxSizerFlags().Center() );
 
     m_target = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 80, wxDefaultCoord ) );
-    main_sizer->Add( m_target, 1, wxALL|wxGROW, 5 );
+    main_sizer->Add( m_target, wxSizerFlags(1).Expand().Border());
 
     SetSizerAndFit( main_sizer);
 }
@@ -709,12 +708,12 @@ MyWrapSizerFrame::MyWrapSizerFrame(wxFrame* parent)
     // A shaped item inside a box sizer
     wxSizer *bottomSizer = new wxStaticBoxSizer( wxVERTICAL, this, "With wxSHAPED item" );
     wxSizer *horzBoxSizer = new wxBoxSizer(wxHORIZONTAL);
-    bottomSizer->Add( horzBoxSizer, 100, wxEXPAND );
-    horzBoxSizer->Add( new wxListBox(this,wxID_ANY,wxPoint(0,0),wxSize(70,70)), 0, wxEXPAND|wxSHAPED );
-    horzBoxSizer->Add( 10,10 );
-    horzBoxSizer->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
+    bottomSizer->Add( horzBoxSizer, wxSizerFlags(100).Expand() );
+    horzBoxSizer->Add( new wxListBox(this,wxID_ANY,wxPoint(0,0),wxSize(70,70)), wxSizerFlags().Expand().Shaped() );
+    horzBoxSizer->Add( 10, 10 );
+    horzBoxSizer->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), wxSizerFlags(100) );
 
-    root->Add( bottomSizer, 1, wxEXPAND | wxALL, 5 );
+    root->Add( bottomSizer, wxSizerFlags(1).Expand().Border());
 
     // Set sizer for window
     SetSizerAndFit( root );

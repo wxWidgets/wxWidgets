@@ -2161,11 +2161,11 @@ FormMain::FormMain(const wxString& title)
     wxBoxSizer* btnSizer = new wxBoxSizer(wxHORIZONTAL);
     btnSizer->Add(new wxButton(m_panel, wxID_ANY,
         "Should be able to move here with Tab"),
-        wxSizerFlags(1).DoubleBorder(wxALL));
+        wxSizerFlags(1).DoubleBorder());
     btnSizer->Add(new wxButton(m_panel, ID_SHOWPOPUP,
         "Show Popup"),
-        wxSizerFlags(1).DoubleBorder(wxALL));
-    m_topSizer->Add(btnSizer, wxSizerFlags(0).Border(wxALL).Expand());
+        wxSizerFlags(1).DoubleBorder());
+    m_topSizer->Add(btnSizer, wxSizerFlags(0).Border().Expand());
 
     m_panel->SetSizer(m_topSizer);
     m_topSizer->SetSizeHints(m_panel);
@@ -3352,7 +3352,7 @@ struct PropertyGridPopup : wxPopupWindow
         ::SetMinSize(m_grid);
 
         m_sizer = new wxBoxSizer( wxVERTICAL );
-        m_sizer->Add(m_grid, wxSizerFlags(0).Expand().Border(wxALL, 0));
+        m_sizer->Add(m_grid, wxSizerFlags().Expand());
         m_panel->SetAutoLayout(true);
         m_panel->SetSizer(m_sizer);
         m_sizer->Fit(m_panel);

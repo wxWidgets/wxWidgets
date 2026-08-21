@@ -652,9 +652,9 @@ MyFrame::MyFrame(const wxString& title)
     //
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
-                   "OwnerDrawnComboBox with owner-drawn items:"), 1,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+                   "OwnerDrawnComboBox with owner-drawn items:"),
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -672,9 +672,9 @@ MyFrame::MyFrame(const wxString& title)
 
     odc->SetSelection(0);
 
-    rowSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    rowSizer->AddStretchSpacer(1);
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    rowSizer->Add( odc, wxSizerFlags(1).CenterVertical().Border() );
+    rowSizer->AddStretchSpacer();
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
 
 
@@ -683,9 +683,9 @@ MyFrame::MyFrame(const wxString& title)
     //
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
-                   "OwnerDrawnComboBox with owner-drawn items and button on the left:"), 1,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+                   "OwnerDrawnComboBox with owner-drawn items and button on the left:"),
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -711,9 +711,9 @@ MyFrame::MyFrame(const wxString& title)
                            2 // horizontal spacing
                           );
 
-    rowSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    rowSizer->AddStretchSpacer(1);
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    rowSizer->Add( odc, wxSizerFlags(1).CenterVertical().Border() );
+    rowSizer->AddStretchSpacer();
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
 
     //
@@ -724,10 +724,10 @@ MyFrame::MyFrame(const wxString& title)
     rowSizer->Add( new wxStaticText(panel,
                         wxID_ANY,
                         "List View wxComboCtrl (custom animation):"),
-                   1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    rowSizer->Add( new wxStaticText(panel,wxID_ANY,"Tree Ctrl wxComboCtrl:"), 1,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
+    rowSizer->Add( new wxStaticText(panel,wxID_ANY,"Tree Ctrl wxComboCtrl:"),
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     cc = new wxComboCtrlWithCustomPopupAnim();
@@ -750,7 +750,7 @@ MyFrame::MyFrame(const wxString& title)
     for ( i=0; i<100; i++ )
         iface->AddSelection( wxString::Format("Item %02i",i));
 
-    rowSizer->Add( cc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    rowSizer->Add( cc, wxSizerFlags(1).CenterVertical().Border() );
 
 
     //
@@ -794,9 +794,9 @@ MyFrame::MyFrame(const wxString& title)
                            0 // horizontal spacing
                           );
 
-    rowSizer->Add( gcc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    rowSizer->Add( gcc, wxSizerFlags(1).CenterVertical().Border() );
 
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
 #if wxUSE_IMAGE
     wxInitAllImageHandlers();
@@ -807,10 +807,10 @@ MyFrame::MyFrame(const wxString& title)
     //
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
-                   "OwnerDrawnComboBox with simple dropbutton graphics:"), 1,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
+                   "OwnerDrawnComboBox with simple dropbutton graphics:"),
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
 
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -848,9 +848,9 @@ MyFrame::MyFrame(const wxString& title)
     //                        0 // horizontal spacing
     //                       );
 
-    rowSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    rowSizer->Add( odc2, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    rowSizer->Add( odc, wxSizerFlags(1).CenterVertical().Border() );
+    rowSizer->Add( odc2, wxSizerFlags(1).CenterVertical().Border() );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 #endif
 
 
@@ -859,11 +859,11 @@ MyFrame::MyFrame(const wxString& title)
     //
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
-                        "wxComboCtrl with custom button and custom main control:"), 1,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
+                        "wxComboCtrl with custom button and custom main control:"),
+                   wxSizerFlags(1).CenterVertical().Border(wxRIGHT) );
 
 
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     wxFileSelectorCombo* fsc;
@@ -896,25 +896,27 @@ MyFrame::MyFrame(const wxString& title)
 
     comboCustom->SetPopupControl(new ListViewComboPopup());
 
-    rowSizer->Add( fsc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    rowSizer->Add( comboCustom, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    rowSizer->Add( fsc, wxSizerFlags(1).CenterVertical().Border() );
+    rowSizer->Add( comboCustom, wxSizerFlags(1).CenterVertical().Border() );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border());
 
 
     // Make sure GetFeatures is implemented
     wxComboCtrl::GetFeatures();
 
 
-    topRowSizer->Add( colSizer, 1, wxALL, 2 );
+    topRowSizer->Add( colSizer, wxSizerFlags(1).Border(wxALL, FromDIP(2)) );
 
     colSizer = new wxBoxSizer( wxVERTICAL );
 
     colSizer->AddSpacer(8);
-    colSizer->Add( new wxStaticText(panel, wxID_ANY, "Log Messages:"), 0, wxTOP|wxLEFT, 3 );
-    colSizer->Add( m_logWin, 1, wxEXPAND|wxALL, 3 );
+    colSizer->Add( new wxStaticText(panel, wxID_ANY, "Log Messages:"),
+                   wxSizerFlags(0).Border(wxTOP|wxLEFT, FromDIP(3)) );
+    colSizer->Add( m_logWin,
+                   wxSizerFlags(1).Expand().Border(wxALL, FromDIP(3)));
 
-    topRowSizer->Add( colSizer, 1, wxEXPAND|wxALL, 2 );
-    topSizer->Add( topRowSizer, 1, wxEXPAND );
+    topRowSizer->Add( colSizer, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(2)));
+    topSizer->Add( topRowSizer, wxSizerFlags(1).Expand());
 
     panel->SetSizer( topSizer );
     topSizer->SetSizeHints( panel );
@@ -959,8 +961,6 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     wxComboBox* cb;
     wxOwnerDrawnComboBox* odc;
 
-    const int border = 4;
-
     wxDialog* dlg = new wxDialog(this,wxID_ANY,
                                  "Compare against wxComboBox",
                                  wxDefaultPosition,wxDefaultSize,
@@ -975,7 +975,7 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(), wxID_ANY,
                      "Writable, with margins, sorted:"),
-                     wxSizerFlags().Expand().Border(wxRIGHT, border) );
+                     wxSizerFlags().Expand().Border(wxRIGHT) );
 
     odc = new wxOwnerDrawnComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                                    wxDefaultPosition, wxDefaultSize,
@@ -987,14 +987,14 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     odc->SetValue("Dot Dash");
     odc->SetMargins(15, 10);
-    groupSizer->Add( odc, wxSizerFlags().Border(wxALL, border) );
+    groupSizer->Add( odc, wxSizerFlags().Border() );
     groupSizer->AddStretchSpacer();
 
     //
     // Readonly ODComboBox
     groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(),wxID_ANY,
                      "Read-only, big font:"),
-                     wxSizerFlags().Border(wxRIGHT, border) );
+                     wxSizerFlags().Border(wxRIGHT) );
 
     odc = new wxOwnerDrawnComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                                    wxDefaultPosition, wxDefaultSize,
@@ -1006,13 +1006,13 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     odc->SetValue("Dot Dash");
     odc->SetText("Dot Dash (Testing SetText)");
 
-    groupSizer->Add( odc, 0, wxALL, border );
+    groupSizer->Add( odc, wxSizerFlags().Border() );
     groupSizer->AddStretchSpacer();
 
     //
     // Disabled read-only ODComboBox
     groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(),wxID_ANY,"Read-only disabled:"),
-                   wxSizerFlags().Border(wxRIGHT, border) );
+                   wxSizerFlags().Border(wxRIGHT) );
 
     odc = new wxOwnerDrawnComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                                      wxDefaultPosition, wxDefaultSize,
@@ -1023,11 +1023,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     odc->SetValue("Dot Dash");
     odc->Enable(false);
 
-    groupSizer->Add( odc, wxSizerFlags(3).Expand().Border(wxALL, border) );
+    groupSizer->Add( odc, wxSizerFlags(3).Expand().Border() );
 
     // Disabled ODComboBox
     groupSizer->Add(new wxStaticText(groupSizer->GetStaticBox(), wxID_ANY, "Disabled:"),
-        wxSizerFlags().Border(wxRIGHT, border));
+        wxSizerFlags().Border(wxRIGHT));
 
     odc = new wxOwnerDrawnComboBox(groupSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, m_arrItems);
@@ -1035,9 +1035,9 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     odc->SetValue("Dot Dash");
     odc->Enable(false);
 
-    groupSizer->Add(odc, wxSizerFlags(3).Expand().Border(wxALL, border));
+    groupSizer->Add(odc, wxSizerFlags(3).Expand().Border());
 
-    rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
+    rowSizer->Add( groupSizer, wxSizerFlags(1).Expand().Border() );
 
 
     groupSizer = new wxStaticBoxSizer(new wxStaticBox(dlg,wxID_ANY," wxComboBox "),
@@ -1048,7 +1048,7 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     //
     groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(),wxID_ANY,
                      "Writable, with margins, sorted:"),
-                     wxSizerFlags().Expand().Border(wxRIGHT, border) );
+                     wxSizerFlags().Expand().Border(wxRIGHT) );
 
     cb = new wxComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
@@ -1060,14 +1060,14 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     cb->SetValue("Dot Dash");
     cb->SetMargins(15, 10);
-    groupSizer->Add( cb, wxSizerFlags().Border(wxALL, border) );
+    groupSizer->Add( cb, wxSizerFlags().Border() );
     groupSizer->AddStretchSpacer();
 
     //
     // Readonly wxComboBox
     groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(), wxID_ANY,
                      "Read-only, big font:"),
-                     wxSizerFlags().Border(wxRIGHT, border) );
+                     wxSizerFlags().Border(wxRIGHT) );
 
     cb = new wxComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
@@ -1078,13 +1078,13 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     cb->SetFont(cb->GetFont().Scale(1.5));
     cb->SetValue("Dot Dash");
 
-    groupSizer->Add( cb, 0, wxALL, border );
+    groupSizer->Add( cb, wxSizerFlags().Border() );
     groupSizer->AddStretchSpacer();
 
     //
     // Disabled read-only wxComboBox
     groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(),wxID_ANY,"Read-only disabled:"),
-                   wxSizerFlags().Border(wxRIGHT, border) );
+                   wxSizerFlags().Border(wxRIGHT) );
 
     cb = new wxComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
@@ -1095,12 +1095,12 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     cb->SetValue("Dot Dash");
     cb->Enable(false);
 
-    groupSizer->Add( cb, wxSizerFlags(3).Expand().Border(wxALL, border) );
+    groupSizer->Add( cb, wxSizerFlags(3).Expand().Border() );
 
     //
     // Disabled wxComboBox
     groupSizer->Add(new wxStaticText(groupSizer->GetStaticBox(), wxID_ANY, "Disabled:"),
-        wxSizerFlags().Border(wxRIGHT, border));
+        wxSizerFlags().Border(wxRIGHT));
 
     cb = new wxComboBox(groupSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, m_arrItems);
@@ -1108,11 +1108,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     cb->SetValue("Dot Dash");
     cb->Enable(false);
 
-    groupSizer->Add(cb, wxSizerFlags(3).Expand().Border(wxALL, border));
+    groupSizer->Add(cb, wxSizerFlags(3).Expand().Border());
 
-    rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
+    rowSizer->Add( groupSizer, wxSizerFlags(1).Expand().Border() );
 
-    colSizer->Add( rowSizer, 1, wxEXPAND|wxALL, border );
+    colSizer->Add( rowSizer, wxSizerFlags(1).Expand().Border());
 
     dlg->SetSizer( colSizer );
     colSizer->SetSizeHints( dlg );

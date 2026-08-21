@@ -128,9 +128,7 @@ public:
             new wxStaticText(this, wxID_ANY,
                              "You need to check the checkbox\n"
                              "below before going to the next page\n"),
-            0,
-            wxALL,
-            5
+            wxSizerFlags().Border()
         );
 
         mainSizer->Add(
@@ -303,7 +301,7 @@ public:
 
 
         wxTextCtrl* textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, textSize, wxTE_MULTILINE);
-        mainSizer->Add(textCtrl, 0, wxALL|wxEXPAND, 5);
+        mainSizer->Add(textCtrl, wxSizerFlags().Expand().Border());
 
         SetSizerAndFit(mainSizer);
     }

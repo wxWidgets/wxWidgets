@@ -689,28 +689,28 @@ AppAbout::AppAbout (wxWindow *parent,
     // about info
     wxGridSizer *aboutinfo = new wxGridSizer (2, 0, 2);
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Written by: ")),
-                    0, wxALIGN_LEFT);
+                    wxSizerFlags().Left());
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_MAINT),
-                    1, wxEXPAND | wxALIGN_LEFT);
+                    wxSizerFlags(1).Expand().Left());
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Version: ")),
-                    0, wxALIGN_LEFT);
+                    wxSizerFlags().Left());
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, versionInfo),
-                    1, wxEXPAND | wxALIGN_LEFT);
+                    wxSizerFlags(1).Expand().Left());
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Licence type: ")),
-                    0, wxALIGN_LEFT);
+                    wxSizerFlags().Left());
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_LICENCE),
-                    1, wxEXPAND | wxALIGN_LEFT);
+                    wxSizerFlags(1).Expand().Left());
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Copyright: ")),
-                    0, wxALIGN_LEFT);
+                    wxSizerFlags().Left());
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, APP_COPYRIGTH),
-                    1, wxEXPAND | wxALIGN_LEFT);
+                    wxSizerFlags(1).Expand().Left());
 
     // about icontitle//info
     wxBoxSizer *aboutpane = new wxBoxSizer (wxHORIZONTAL);
     wxBitmap bitmap = wxBitmap(wxICON (sample));
     aboutpane->Add (new wxStaticBitmap (this, wxID_ANY, bitmap),
-                    0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 20);
-    aboutpane->Add (aboutinfo, 1, wxEXPAND);
+                    wxSizerFlags().Left().CentreVertical().Border(wxLEFT|wxRIGHT, FromDIP(20)));
+    aboutpane->Add (aboutinfo, wxSizerFlags(1).Expand());
     aboutpane->Add (60, 0);
 
     // about complete
@@ -718,14 +718,14 @@ AppAbout::AppAbout (wxWindow *parent,
     totalpane->Add (0, 20);
     wxStaticText *appname = new wxStaticText(this, wxID_ANY, *g_appname);
     appname->SetFont (wxFontInfo(24).Bold());
-    totalpane->Add (appname, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT, 40);
+    totalpane->Add (appname, wxSizerFlags().Centre().Border(wxLEFT | wxRIGHT, FromDIP(40)));
     totalpane->Add (0, 10);
-    totalpane->Add (aboutpane, 0, wxEXPAND | wxALL, 4);
+    totalpane->Add (aboutpane, wxSizerFlags().Expand().Border());
     totalpane->Add (new wxStaticText(this, wxID_ANY, APP_DESCR),
-                    0, wxALIGN_CENTER | wxALL, 10);
+                    wxSizerFlags().Centre().DoubleBorder());
     wxButton *okButton = new wxButton (this, wxID_OK, _("OK"));
     okButton->SetDefault();
-    totalpane->Add (okButton, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+    totalpane->Add (okButton, wxSizerFlags().Centre().DoubleBorder(wxLEFT | wxRIGHT | wxBOTTOM));
 
     SetSizerAndFit (totalpane);
 
@@ -860,7 +860,7 @@ public:
         MinimalEditor* editor = new MinimalEditor(this);
         editor->SetFont(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
         wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-        sizer->Add(editor, 1, wxEXPAND);
+        sizer->Add(editor, wxSizerFlags(1).Expand());
         SetSizer(sizer);
         editor->SetText(
            "<xml>\n"
