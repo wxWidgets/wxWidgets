@@ -5519,7 +5519,11 @@ public:
         Choose to display the IME in a window or inline.
 
         The input should be one of the
-        @link wxStyledTextCtrl::wxSTC_IME_WINDOWED wxSTC_IME_* @endlink constants.
+        @link wxStyledTextCtrl::wxSTC_IME_WINDOWED wxSTC_IME_* @endlink
+        constants.
+        @remarks
+        Inline IME interaction is used by default under wxGTK and wxOSX.
+        The other ports use windowed IME interaction by default.
         @since 3.1.0
     */
     void SetIMEInteraction(int imeInteraction);

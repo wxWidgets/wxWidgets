@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/private/bmpbndl.h"
+#include "wx/private/textinput.h"
 
 #include "wx/evtloop.h"
 
@@ -1020,24 +1021,99 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
 
 @end // wxNSView
 
-// We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
-// Currently, only insertText:(replacementRange:) is
-// implemented here, and the rest of the methods are stubs.
-// It is hoped that someday IME-related functionality is implemented in
-// wxWidgets and the methods of this protocol are fully working.
+// We need to adopt NSTextInputClient for interpretKeyEvents: to work.
+// Custom controls can opt in to the complete protocol through the private
+// text input client interface;
+// other controls retain the existing insertText: behaviour.
 
 @implementation wxNSView(TextInput)
 
 void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
+static wxTextInputClient* wxOSXGetTextInputClient(NSView* view)
+{
+    wxWidgetCocoaImpl* const impl =
+        static_cast<wxWidgetCocoaImpl*>(
+            wxWidgetImpl::FindFromWXWidget(view));
+    if ( !impl )
+        return nullptr;
+
+    wxWindowMac* const peer = impl->GetWXPeer();
+    wxTextInputClient* const client = wxFindTextInputClient(peer);
+    return client && client->IsTextInputEnabled() ? client : nullptr;
+}
+
+static void wxOSXEndTextInput(NSView* view)
+{
+    wxTextInputClient* const client = wxOSXGetTextInputClient(view);
+    if ( !client || !client->HasMarkedText() )
+        return;
+
+    // Stop the input manager from referring to the old marked range, then
+    // commit the displayed tentative text before focus or selection moves.
+    [[view inputContext] discardMarkedText];
+    client->UnmarkText();
+}
+
+static void wxOSXTextInputEventHandled(NSView* view)
+{
+    wxWidgetCocoaImpl* const impl =
+        static_cast<wxWidgetCocoaImpl*>(
+            wxWidgetImpl::FindFromWXWidget(view));
+    if ( impl )
+        impl->textInputEventHandled();
+}
+
+static NSString* wxOSXGetTextInputString(id value)
+{
+    if ( [value isKindOfClass:[NSString class]] )
+        return static_cast<NSString*>(value);
+    if ( [value isKindOfClass:[NSAttributedString class]] )
+        return [static_cast<NSAttributedString*>(value) string];
+    return @"";
+}
+
+static long wxOSXGetTextInputPosition(NSUInteger position)
+{
+    if ( position == NSNotFound )
+        return wxTextInputClient::NoPosition;
+    if ( position == NSNotFound - 1 )
+        return wxTextInputClient::InvalidPosition;
+
+    return static_cast<long>(position);
+}
+
 - (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
 {
-    wxUnusedVar(replacementRange);
-    wxOSX_insertText(self, @selector(insertText:), aString);
+    NSString* const text = wxOSXGetTextInputString(aString);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( client &&
+         client->InsertText(
+             wxStringWithNSString(text),
+             wxOSXGetTextInputPosition(replacementRange.location),
+             static_cast<long>(replacementRange.length)) )
+    {
+        wxOSXTextInputEventHandled(self);
+        return;
+    }
+
+    wxOSX_insertText(self, @selector(insertText:), text);
 }
 
 - (void)doCommandBySelector:(SEL)aSelector
 {
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( client && client->HasMarkedText() &&
+         aSelector == @selector(insertNewline:) )
+    {
+        // Some input methods use this command to accept the selected
+        // candidate instead of calling insertText:. Commit the marked text
+        // and consume Enter so it isn't inserted as a newline too.
+        client->UnmarkText();
+        wxOSXTextInputEventHandled(self);
+        return;
+    }
+
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl)
         impl->doCommandBySelector(aSelector, self, _cmd);
@@ -1045,52 +1121,149 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
 {
-    wxUnusedVar(aString);
-    wxUnusedVar(selectedRange);
-    wxUnusedVar(replacementRange);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( !client )
+        return;
+
+    if ( client->SetMarkedText(
+            wxStringWithNSString(wxOSXGetTextInputString(aString)),
+            wxOSXGetTextInputPosition(selectedRange.location),
+            static_cast<long>(selectedRange.length),
+            wxOSXGetTextInputPosition(replacementRange.location),
+            static_cast<long>(replacementRange.length)) )
+    {
+        wxOSXTextInputEventHandled(self);
+    }
 }
 
 - (void)unmarkText
 {
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( client )
+        client->UnmarkText();
 }
 
 - (NSRange)selectedRange
 {
-    return NSMakeRange(NSNotFound, 0);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    long start, length;
+    if ( !client || !client->GetSelectedTextRange(&start, &length) )
+        return NSMakeRange(NSNotFound, 0);
+
+    if ( length == 0 )
+    {
+        NSTextInputContext* const context =
+            [NSTextInputContext currentInputContext];
+        // Cangjie crashes in malloc when an empty selection is returned with
+        // its actual position, so report no selection for this input method.
+        // Doing this for all input methods prevents the European accented
+        // character chooser from appearing.
+        if ( [[context selectedKeyboardInputSource]
+                isEqualToString:@"com.apple.inputmethod.TCIM.Cangjie"] )
+        {
+            return NSMakeRange(NSNotFound, 0);
+        }
+    }
+
+    return NSMakeRange(static_cast<NSUInteger>(start),
+                       static_cast<NSUInteger>(length));
 }
 
 - (NSRange)markedRange
 {
-    return NSMakeRange(NSNotFound, 0);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    long start, length;
+    if ( !client || !client->GetMarkedTextRange(&start, &length) )
+        return NSMakeRange(NSNotFound, 0);
+
+    return NSMakeRange(static_cast<NSUInteger>(start),
+                       static_cast<NSUInteger>(length));
 }
 
 - (BOOL)hasMarkedText
 {
-    return NO;
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    return client && client->HasMarkedText();
 }
 
 - (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    wxUnusedVar(aRange);
-    wxUnusedVar(actualRange);
-    return nil;
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( !client )
+        return nil;
+
+    wxString text;
+    long start, length;
+    if ( !client->GetTextInRange(
+            static_cast<long>(aRange.location),
+            static_cast<long>(aRange.length),
+            &text, &start, &length) )
+    {
+        return nil;
+    }
+
+    if ( actualRange )
+    {
+        *actualRange = NSMakeRange(static_cast<NSUInteger>(start),
+                                   static_cast<NSUInteger>(length));
+    }
+
+    return [[[NSAttributedString alloc]
+                initWithString:wxCFStringRef(text).AsNSString()]
+                autorelease];
 }
 
 - (NSArray*)validAttributesForMarkedText
 {
-    return nil;
+    return @[];
 }
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    wxUnusedVar(aRange);
-    wxUnusedVar(actualRange);
-    return NSMakeRect(0, 0, 0, 0);
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( !client )
+        return NSZeroRect;
+
+    wxRect rect;
+    long start, length;
+    if ( !client->GetTextRect(
+            static_cast<long>(aRange.location),
+            static_cast<long>(aRange.length),
+            &rect, &start, &length) )
+    {
+        return NSZeroRect;
+    }
+
+    if ( actualRange )
+    {
+        *actualRange = NSMakeRange(static_cast<NSUInteger>(start),
+                                   static_cast<NSUInteger>(length));
+    }
+
+    const NSRect localRect = wxToNSRect(self, rect);
+    const NSRect windowRect = [self convertRect:localRect toView:nil];
+    return [[self window] convertRectToScreen:windowRect];
 }
+
 - (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
 {
-    wxUnusedVar(aPoint);
-    return NSNotFound;
+    wxTextInputClient* const client = wxOSXGetTextInputClient(self);
+    if ( !client || ![self window] )
+        return NSNotFound;
+
+    const NSRect screenRect = NSMakeRect(aPoint.x, aPoint.y, 0, 0);
+    const NSRect windowRect = [[self window] convertRectFromScreen:screenRect];
+    const NSPoint localPoint =
+        [self convertPoint:windowRect.origin fromView:nil];
+
+    long position;
+    if ( !client->GetTextPosition(wxFromNSPoint(self, localPoint),
+                                  &position) )
+    {
+        return NSNotFound;
+    }
+
+    return static_cast<NSUInteger>(position);
 }
 
 @end // wxNSView(TextInput)
@@ -1146,7 +1319,17 @@ void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event)
 
     // We shouldn't let disabled windows get mouse events.
     if (impl->GetWXPeer()->IsEnabled())
+    {
+        const int type = [event type];
+        if ( type == NSLeftMouseDown ||
+             type == NSRightMouseDown ||
+             type == NSOtherMouseDown )
+        {
+            wxOSXEndTextInput(self);
+        }
+
         impl->mouseEvent(event, self, _cmd);
+    }
 }
 
 void wxOSX_cursorUpdate(NSView* self, SEL _cmd, NSEvent *event)
@@ -2360,10 +2543,15 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
     bool result = false;
     if ( HasUserKeyHandling() && !m_hasEditor && [text length] > 0)
     {
-        if ( IsInNativeKeyDown() && [text isEqualToString:[GetLastNativeKeyDownEvent() characters]])
+        if ( IsInNativeKeyDown() &&
+             [text isEqualToString:[GetLastNativeKeyDownEvent() characters]])
         {
             // If we have a corresponding key event, send wxEVT_KEY_DOWN now.
             // (see also: wxWidgetCocoaImpl::DoHandleKeyEvent)
+            // An IME can commit marked text and then insert this character
+            // during the same native key event, in which case the event was
+            // already consumed by the text input client.
+            if ( !WasKeyDownSent() )
             {
                 wxKeyEvent wxevent(wxEVT_KEY_DOWN);
                 SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
@@ -2386,6 +2574,12 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
         wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, text);
     }
+}
+
+void wxWidgetCocoaImpl::textInputEventHandled()
+{
+    if ( IsInNativeKeyDown() && !WasKeyDownSent() )
+        SetKeyDownSent();
 }
 
 bool wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* WXUNUSED(_cmd))
@@ -2451,6 +2645,8 @@ bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 
 bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
 {
+    wxOSXEndTextInput(static_cast<NSView*>(slf));
+
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
 
