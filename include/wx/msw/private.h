@@ -1221,6 +1221,40 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
     return (void *)(LONG_PTR)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_PRINTING_ARCHITECTURE
+// Bounded test seam at the final common-dialog boundary. Production still
+// builds the real PRINTDLGEX/PAGESETUPDLG structures and runs all conversion,
+// owner and lifetime code; tests replace only the blocking Win32 call and
+// receive the native structure as an opaque pointer.
+struct wxMSWPrintDialogNativeOpsForTesting
+{
+    void* context = nullptr;
+    long (WINAPI *printDialogEx)(void*, void*) = nullptr;
+    int (WINAPI *pageSetupDialog)(void*, void*) = nullptr;
+};
+
+WXDLLIMPEXP_CORE void
+wxMSWSetPrintDialogNativeOpsForTesting(
+    const wxMSWPrintDialogNativeOpsForTesting& ops);
+WXDLLIMPEXP_CORE void wxMSWResetPrintDialogNativeOpsForTesting();
+WXDLLIMPEXP_CORE bool wxMSWIsPrinterDialogShownForTesting();
+
+struct wxMSWPrinterDCNativeOpsForTesting
+{
+    void* context = nullptr;
+    int (WINAPI *startDoc)(void*, void*, const void*) = nullptr;
+    int (WINAPI *endDoc)(void*, void*) = nullptr;
+    int (WINAPI *startPage)(void*, void*) = nullptr;
+    int (WINAPI *endPage)(void*, void*) = nullptr;
+};
+
+WXDLLIMPEXP_CORE void
+wxMSWSetPrinterDCNativeOpsForTesting(
+    const wxMSWPrinterDCNativeOpsForTesting& ops);
+WXDLLIMPEXP_CORE void wxMSWResetPrinterDCNativeOpsForTesting();
+WXDLLIMPEXP_CORE bool wxMSWInvokePrintAbortProcForTesting();
+#endif
+
 #endif // wxUSE_GUI && __WXMSW__
 
 #endif // _WX_PRIVATE_H_

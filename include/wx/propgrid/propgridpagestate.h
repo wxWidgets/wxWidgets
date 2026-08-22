@@ -660,6 +660,11 @@ protected:
     // pSplitterHitOffset - Distance from said splitter.
     int HitTestH( int x, int* pSplitterHit, int* pSplitterHitOffset ) const;
 
+    // Convert an unscrolled physical x coordinate to the LTR logical column
+    // coordinate used by m_colWidths. Painting and child placement are
+    // mirrored by the window/DC backend; hit-testing must perform the inverse.
+    int GetColumnLogicalX( int x ) const;
+
     bool PrepareToAddItem( wxPGProperty* property,
                            wxPGProperty* scheduledParent );
 
@@ -705,6 +710,10 @@ protected:
     void PropagateColSizeDec(int column, int decrease, int dir);
 
     void CalculateFontAndBitmapStuff(int vspacing);
+
+    // Scale physical-pixel column geometry owned by this page. On ports using
+    // DPI-independent coordinates this is intentionally a no-op.
+    void ScaleForDPI(const wxDPIChangedEvent& event);
 
     // Returns property by its name.
     wxPGProperty* BaseGetPropertyByName(const wxString& name) const;

@@ -18,51 +18,98 @@
 #endif
 
 #include "private.h"
+#include "wx/winui/private/appearance.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif
 
-#include <winrt/Microsoft.UI.Text.h>
-#include <winrt/Windows.UI.Text.h>
-
-#include <cmath>
-#include <limits>
+#include <memory>
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 
-namespace
+class wxWinUICheckBoxCallbackState final
 {
+public:
+    explicit wxWinUICheckBoxCallbackState(wxCheckBox *owner)
+        : m_owner(owner)
+    {
+    }
 
-// Apply a wxFont (family/size/weight/style) to a WinUI Control; no-op for an
-// invalid font so default controls keep the native WinUI font.
-void wxWinUIApplyControlFont(const MUXC::Control& control, const wxFont& font)
-{
-    if ( !control || !font.IsOk() )
-        return;
+    wxCheckBox *GetOwner() const { return m_owner; }
+    void Invalidate() { m_owner = nullptr; }
 
-    const wxString face = font.GetFaceName();
-    if ( !face.empty() )
-        control.FontFamily(
-            winrt::Microsoft::UI::Xaml::Media::FontFamily(wxWinUIToHString(face)));
-
-    const double pt = font.GetFractionalPointSize();
-    control.FontSize(pt > 0.0 ? pt * 96.0 / 72.0 : 14.0);
-    control.FontWeight(font.GetNumericWeight() >= wxFONTWEIGHT_BOLD
-        ? winrt::Microsoft::UI::Text::FontWeights::Bold()
-        : winrt::Microsoft::UI::Text::FontWeights::Normal());
-    control.FontStyle(font.GetStyle() == wxFONTSTYLE_NORMAL
-        ? winrt::Windows::UI::Text::FontStyle::Normal
-        : winrt::Windows::UI::Text::FontStyle::Italic);
-}
-
-} // namespace
+private:
+    wxCheckBox *m_owner;
+};
 
 class wxWinUICheckBoxImpl
 {
 public:
+    ~wxWinUICheckBoxImpl()
+    {
+        Close();
+    }
+
+    void Close()
+    {
+        // A retained AutomationPeer/provider can keep the XAML CheckBox alive
+        // after its wx owner is gone. Invalidate the shared callback state
+        // before revoking anything, because revocation and host detachment may
+        // synchronously run application/XAML code.
+        if ( callbackState )
+            callbackState->Invalidate();
+
+        if ( checkBox )
+        {
+            const MUXC::CheckBox peer = checkBox;
+            const auto revoke =
+                [](winrt::event_token& token,
+                   auto&& remove,
+                   const char *context)
+                {
+                    if ( !token.value )
+                        return;
+
+                    try
+                    {
+                        remove(token);
+                    }
+                    catch ( const winrt::hresult_error& e )
+                    {
+                        wxWinUILogException(context, e);
+                    }
+                    token = {};
+                };
+
+            revoke(checkedToken,
+                   [peer](winrt::event_token token)
+                   {
+                       peer.Checked(token);
+                   },
+                   "WinUI CheckBox Checked removal");
+            revoke(uncheckedToken,
+                   [peer](winrt::event_token token)
+                   {
+                       peer.Unchecked(token);
+                   },
+                   "WinUI CheckBox Unchecked removal");
+            revoke(indeterminateToken,
+                   [peer](winrt::event_token token)
+                   {
+                       peer.Indeterminate(token);
+                   },
+                   "WinUI CheckBox Indeterminate removal");
+        }
+
+        host.Close();
+        checkBox = nullptr;
+        callbackState.reset();
+    }
+
     wxWinUIControlHost host;
+    std::shared_ptr<wxWinUICheckBoxCallbackState> callbackState;
     MUXC::CheckBox checkBox{ nullptr };
     winrt::event_token checkedToken{};
     winrt::event_token uncheckedToken{};
@@ -88,7 +135,12 @@ wxCheckBox::wxCheckBox(wxWindow *parent,
     Create(parent, id, label, pos, size, style, validator, name);
 }
 
-wxCheckBox::~wxCheckBox() = default;
+wxCheckBox::~wxCheckBox()
+{
+    // Invalidate retained XAML callbacks at destructor entry, before the
+    // remaining derived members are torn down.
+    m_winui.reset();
+}
 
 bool wxCheckBox::Create(wxWindow *parent,
                         wxWindowID id,
@@ -107,8 +159,16 @@ bool wxCheckBox::Create(wxWindow *parent,
     wxControl::SetLabel(label);
 
     m_winui.reset(new wxWinUICheckBoxImpl);
+    m_winui->callbackState =
+        std::make_shared<wxWinUICheckBoxCallbackState>(this);
+    wxWinUICheckBoxImpl * const createImpl = m_winui.get();
+    const std::shared_ptr<wxWinUICheckBoxCallbackState> callbackState =
+        createImpl->callbackState;
     if ( !m_winui->host.Initialize(this) )
+    {
+        m_winui.reset();
         return false;
+    }
 
     try
     {
@@ -121,39 +181,102 @@ bool wxCheckBox::Create(wxWindow *parent,
         m_winui->checkBox.IsThreeState(Is3State() && Is3rdStateAllowedForUser());
 
         auto handler =
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::RoutedEventArgs const&)
+            [callbackState](
+                winrt::Windows::Foundation::IInspectable const&,
+                MUX::RoutedEventArgs const&)
             {
-                if ( !m_winui || m_winui->updating )
+                wxCheckBox * const owner = callbackState->GetOwner();
+                if ( !owner || !owner->m_winui ||
+                     owner->m_winui->callbackState != callbackState ||
+                     owner->m_winui->updating )
+                {
                     return;
+                }
 
-                auto isChecked = m_winui->checkBox.IsChecked();
-                if ( !isChecked )
-                    m_state = wxCHK_UNDETERMINED;
-                else
-                    m_state = isChecked.Value() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
+                try
+                {
+                    auto isChecked = owner->m_winui->checkBox.IsChecked();
+                    if ( !isChecked )
+                        owner->m_state = wxCHK_UNDETERMINED;
+                    else
+                    {
+                        owner->m_state = isChecked.Value()
+                            ? wxCHK_CHECKED
+                            : wxCHK_UNCHECKED;
+                    }
+                }
+                catch ( const winrt::hresult_error& e )
+                {
+                    wxWinUILogException("WinUI CheckBox state read", e);
+                    return;
+                }
 
-                SendCheckBoxEvent();
+                // The event can destroy owner. Nothing may follow it.
+                owner->SendCheckBoxEvent();
             };
 
         m_winui->checkedToken = m_winui->checkBox.Checked(handler);
         m_winui->uncheckedToken = m_winui->checkBox.Unchecked(handler);
         m_winui->indeterminateToken = m_winui->checkBox.Indeterminate(handler);
 
-        UpdateWinUIContent();
-        UpdateWinUIAppearance();
-        ApplyToolTip();
-        m_winui->host.SetContent(m_winui->checkBox);
+        if ( !UpdateWinUIContent(false) ||
+             !UpdateWinUIAppearance(false) )
+        {
+            wxCheckBox * const owner = callbackState->GetOwner();
+            if ( owner && owner->m_winui &&
+                 owner->m_winui.get() == createImpl )
+            {
+                owner->m_winui.reset();
+            }
+            return false;
+        }
+
+        wxCheckBox *owner = callbackState->GetOwner();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != createImpl )
+        {
+            return false;
+        }
+
+        const MUXC::CheckBox peer = createImpl->checkBox;
+        const bool contentSet =
+            createImpl->host.SetContent(peer);
+        owner = callbackState->GetOwner();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != createImpl )
+        {
+            return false;
+        }
+        if ( !contentSet )
+        {
+            owner->m_winui.reset();
+            return false;
+        }
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI CheckBox creation", e);
+        wxCheckBox * const owner = callbackState->GetOwner();
+        if ( owner && owner->m_winui &&
+             owner->m_winui.get() == createImpl )
+        {
+            owner->m_winui.reset();
+        }
         return false;
     }
 
-    SetInitialSize(size);
+    wxCheckBox * const owner = callbackState->GetOwner();
+    if ( !owner || !owner->m_winui ||
+         owner->m_winui.get() != createImpl )
+    {
+        return false;
+    }
 
-    return true;
+    owner->SetInitialSize(size);
+
+    wxCheckBox * const ownerAfterSize = callbackState->GetOwner();
+    return ownerAfterSize && ownerAfterSize->m_winui &&
+           ownerAfterSize->m_winui.get() == createImpl;
 }
 
 void wxCheckBox::SetValue(bool value)
@@ -163,14 +286,17 @@ void wxCheckBox::SetValue(bool value)
 
 bool wxCheckBox::GetValue() const
 {
-    return m_state == wxCHK_CHECKED;
+    // Match the established wx contract: the third state is truthy, only
+    // wxCHK_UNCHECKED maps to false.
+    return m_state != wxCHK_UNCHECKED;
 }
 
 void wxCheckBox::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
     InvalidateBestSize();
-    UpdateWinUIContent();
+    if ( !UpdateWinUIContent() )
+        return;
 
     if ( GetParent() && GetParent()->GetSizer() )
         GetParent()->Layout();
@@ -180,7 +306,31 @@ void wxCheckBox::SetLabel(const wxString& label)
 
 void wxCheckBox::Command(wxCommandEvent& event)
 {
-    SetValue(event.IsChecked());
+    const int state = event.GetInt();
+    wxCHECK_RET( state == wxCHK_UNCHECKED ||
+                 state == wxCHK_CHECKED ||
+                 state == wxCHK_UNDETERMINED,
+                 wxT("event.GetInt() returned an invalid checkbox state") );
+
+    wxWinUICheckBoxImpl * const impl = m_winui.get();
+    const std::shared_ptr<wxWinUICheckBoxCallbackState> callbackState =
+        impl ? impl->callbackState : nullptr;
+
+    DoSet3StateValue(static_cast<wxCheckBoxState>(state));
+
+    if ( callbackState )
+    {
+        wxCheckBox * const owner = callbackState->GetOwner();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != impl ||
+             owner->m_winui->callbackState != callbackState )
+        {
+            return;
+        }
+        owner->ProcessCommand(event);
+        return;
+    }
+
     ProcessCommand(event);
 }
 
@@ -209,27 +359,27 @@ bool wxCheckBox::SetBackgroundColour(const wxColour& colour)
 #if wxUSE_TOOLTIPS
 void wxCheckBox::DoSetToolTipText(const wxString& tip)
 {
-    m_tooltipText = tip;
-    ApplyToolTip();
+    wxControl::DoSetToolTipText(tip);
 }
 
 void wxCheckBox::DoSetToolTip(wxToolTip *tip)
 {
-    m_tooltipText = tip ? tip->GetTip() : wxString();
-    delete tip;
-    ApplyToolTip();
+    wxControl::DoSetToolTip(tip);
 }
 #endif // wxUSE_TOOLTIPS
 
 void wxCheckBox::DoEnable(bool enable)
 {
     wxControl::DoEnable(enable);
+    UpdateWinUIAppearance();
+}
 
-    if ( m_winui && m_winui->checkBox )
-    {
-        m_winui->checkBox.IsEnabled(enable);
-        m_winui->host.ForceRender();
-    }
+bool wxCheckBox::MSWOnEffectiveLayoutDirectionChanged()
+{
+    // UpdateWinUIContent() owns a local FlowDirection in order to implement
+    // wxALIGN_RIGHT, so it must be refreshed explicitly instead of relying on
+    // the shared slot container's inherited direction.
+    return UpdateWinUIContent();
 }
 
 wxSize wxCheckBox::DoGetBestClientSize() const
@@ -271,101 +421,134 @@ void wxCheckBox::SendCheckBoxEvent()
 {
     wxCommandEvent event(wxEVT_CHECKBOX, GetId());
     event.SetEventObject(this);
-    event.SetInt(m_state == wxCHK_CHECKED);
+    event.SetInt(static_cast<int>(m_state));
     ProcessCommand(event);
 }
 
-void wxCheckBox::UpdateWinUIContent()
+bool wxCheckBox::UpdateWinUIContent(bool forceRender)
 {
     if ( !m_winui || !m_winui->checkBox )
-        return;
+        return true;
 
-    m_winui->updating = true;
+    wxWinUICheckBoxImpl * const impl = m_winui.get();
+    const std::shared_ptr<wxWinUICheckBoxCallbackState> callbackState =
+        impl->callbackState;
+    const MUXC::CheckBox peer = impl->checkBox;
+    const auto getCurrentOwner = [callbackState, impl]() -> wxCheckBox *
+    {
+        wxCheckBox * const owner = callbackState
+                                      ? callbackState->GetOwner()
+                                      : nullptr;
+        return owner && owner->m_winui &&
+                       owner->m_winui.get() == impl &&
+                       owner->m_winui->callbackState == callbackState
+                   ? owner
+                   : nullptr;
+    };
+
+    const wxString label = GetLabel();
+    const wxString visibleLabel = wxControl::GetLabelText(label);
+    const bool isRTL = GetLayoutDirection() == wxLayout_RightToLeft;
+    const bool alignRight = HasFlag(wxALIGN_RIGHT);
+    const wxCheckBoxState state = m_state;
+
+    impl->updating = true;
 
     try
     {
         MUXC::TextBlock textBlock;
-        textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(GetLabel())));
+        textBlock.Text(wxWinUIToHString(visibleLabel));
 
-        // wxALIGN_RIGHT puts the label on the *left* of the box.  WinUI always
-        // lays the content out to the right of the box, so flip the control's
-        // flow direction and flip the text back so it still reads left-to-right.
-        if ( HasFlag(wxALIGN_RIGHT) )
-        {
-            m_winui->checkBox.FlowDirection(MUX::FlowDirection::RightToLeft);
-            textBlock.FlowDirection(MUX::FlowDirection::LeftToRight);
-        }
+        const MUX::FlowDirection textDirection =
+            isRTL ? MUX::FlowDirection::RightToLeft
+                  : MUX::FlowDirection::LeftToRight;
+
+        // wxALIGN_RIGHT is the absolute "label to the left of the glyph"
+        // contract. In LTR this requires reversing the CheckBox layout while
+        // restoring the label's own text direction. In RTL the natural
+        // CheckBox layout already places the label on the left.
+        peer.FlowDirection(
+            isRTL || alignRight
+                ? MUX::FlowDirection::RightToLeft
+                : MUX::FlowDirection::LeftToRight);
+        textBlock.FlowDirection(textDirection);
+
+        peer.Content(textBlock);
+        wxWinUIApplyAccessKey(peer, label);
+
+        if ( state == wxCHK_UNDETERMINED )
+            peer.IsChecked(nullptr);
         else
-        {
-            m_winui->checkBox.FlowDirection(MUX::FlowDirection::LeftToRight);
-        }
-
-        m_winui->checkBox.Content(textBlock);
-
-        if ( m_state == wxCHK_UNDETERMINED )
-            m_winui->checkBox.IsChecked(nullptr);
-        else
-            m_winui->checkBox.IsChecked(m_state == wxCHK_CHECKED);
+            peer.IsChecked(state == wxCHK_CHECKED);
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI CheckBox content", e);
+        if ( wxCheckBox * const owner = getCurrentOwner() )
+            owner->m_winui->updating = false;
+        return false;
     }
 
-    m_winui->updating = false;
-    m_winui->host.ForceRender();
+    wxCheckBox * const owner = getCurrentOwner();
+    if ( !owner )
+        return false;
+    owner->m_winui->updating = false;
+    if ( !forceRender )
+        return true;
+
+    owner->m_winui->host.ForceRender();
+    return getCurrentOwner() != nullptr;
 }
 
-void wxCheckBox::UpdateWinUIAppearance()
+bool wxCheckBox::UpdateWinUIAppearance(bool forceRender)
 {
     if ( !m_winui || !m_winui->checkBox )
-        return;
+        return true;
+
+    wxWinUICheckBoxImpl * const impl = m_winui.get();
+    const std::shared_ptr<wxWinUICheckBoxCallbackState> callbackState =
+        impl->callbackState;
+    const MUXC::CheckBox peer = impl->checkBox;
+    const auto getCurrentOwner = [callbackState, impl]() -> wxCheckBox *
+    {
+        wxCheckBox * const owner = callbackState
+                                      ? callbackState->GetOwner()
+                                      : nullptr;
+        return owner && owner->m_winui &&
+                       owner->m_winui.get() == impl &&
+                       owner->m_winui->callbackState == callbackState
+                   ? owner
+                   : nullptr;
+    };
+
+    const wxFont font = m_hasFont ? GetFont() : wxNullFont;
+    const wxColour foreground =
+        UseForegroundColour() ? GetForegroundColour() : wxNullColour;
+    const wxColour background =
+        UseBackgroundColour() ? GetBackgroundColour() : wxNullColour;
+    const bool enabled = IsEnabled();
 
     try
     {
-        // Only override the font when the user set one, so the default check box
-        // keeps the native WinUI font/metrics.
-        if ( m_hasFont )
-            wxWinUIApplyControlFont(m_winui->checkBox, GetFont());
-        else
-            m_winui->checkBox.ClearValue(MUXC::Control::FontSizeProperty());
-
-        if ( UseForegroundColour() )
-        {
-            const wxColour& c = GetForegroundColour();
-            m_winui->checkBox.Foreground(
-                wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
-        }
-        else
-        {
-            m_winui->checkBox.ClearValue(MUXC::Control::ForegroundProperty());
-        }
-
-        if ( UseBackgroundColour() )
-        {
-            const wxColour& c = GetBackgroundColour();
-            m_winui->checkBox.Background(
-                wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
-        }
-        else
-        {
-            m_winui->checkBox.ClearValue(MUXC::Control::BackgroundProperty());
-        }
+        wxWinUIApplyFont(peer, font);
+        wxWinUIApplyForeground(peer, foreground);
+        wxWinUIApplyBackground(peer, background);
+        peer.IsEnabled(enabled);
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI CheckBox appearance", e);
+        return false;
     }
 
-    m_winui->host.ForceRender();
-}
+    wxCheckBox * const owner = getCurrentOwner();
+    if ( !owner )
+        return false;
+    if ( !forceRender )
+        return true;
 
-void wxCheckBox::ApplyToolTip()
-{
-#if wxUSE_TOOLTIPS
-    if ( m_winui && m_winui->checkBox )
-        wxWinUISetToolTip(m_winui->checkBox, m_tooltipText);
-#endif // wxUSE_TOOLTIPS
+    owner->m_winui->host.ForceRender();
+    return getCurrentOwner() != nullptr;
 }
 
 #endif // wxUSE_CHECKBOX

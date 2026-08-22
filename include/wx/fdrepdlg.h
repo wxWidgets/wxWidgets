@@ -110,8 +110,14 @@ public:
     const wxFindReplaceData *GetData() const { return m_FindReplaceData; }
     void SetData(wxFindReplaceData *data) { m_FindReplaceData = data; }
 
-    // implementation only, don't use
+    // implementation only, don't use. If dataAfterSend is non-null, the
+    // current client data is copied into it and detached before invoking any
+    // event handler. This is used by generic modeless dialogs for their close
+    // notification: the application is then free to destroy both the dialog
+    // and the client-owned data from the handler.
     void Send(wxFindDialogEvent& event);
+    void Send(wxFindDialogEvent& event,
+              wxFindReplaceData *dataAfterSend);
 
 protected:
     wxFindReplaceData *m_FindReplaceData;

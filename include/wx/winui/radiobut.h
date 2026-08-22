@@ -45,25 +45,29 @@ public:
     bool SetFont(const wxFont& font) override;
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
+    bool Reparent(wxWindowBase *newParent) override;
 #if wxUSE_TOOLTIPS
     void DoSetToolTipText(const wxString& tip) override;
     void DoSetToolTip(wxToolTip *tip) override;
 #endif // wxUSE_TOOLTIPS
 
 protected:
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
     void DoEnable(bool enable) override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     wxSize DoGetBestSize() const override;
 
 private:
-    void UpdateWinUIContent();
-    void UpdateWinUIAppearance();
-    void ApplyToolTip();
+    bool UpdateWinUIContent(bool forceRender = true);
+    bool UpdateWinUIAppearance(bool forceRender = true);
+    bool UpdateWinUIGroupName(wxRadioButton *groupLeader);
+    static void UpdateGroupNames(wxWindowBase *parent,
+                                 const wxRadioButton *ignored = nullptr);
     void ClearRadioGroup();
     void SendRadioEvent();
 
     std::unique_ptr<wxWinUIRadioButtonImpl> m_winui;
-    bool m_isChecked;
+    bool m_isChecked = false;
 #if wxUSE_TOOLTIPS
     wxString m_tooltipText;
 #endif // wxUSE_TOOLTIPS

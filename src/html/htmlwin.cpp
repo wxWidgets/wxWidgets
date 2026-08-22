@@ -650,12 +650,27 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
                 src = m_DefaultFilter->ReadFile(*f);
             }
 
-            m_FS->ChangePathTo(f->GetLocation());
-            rt_val = SetPage(src);
-            m_OpenedPage = f->GetLocation();
-            if (!f->GetAnchor().empty())
+            // Keep the document location and its anchor as two independent
+            // pieces of state. Some file-system handlers (notably memory:)
+            // return the fragment as part of GetLocation() as well as from
+            // GetAnchor(); storing both made HistoryBack()/Forward() append
+            // the same fragment a second time ("#anchor#anchor") and also
+            // polluted the base used to resolve relative links.
+            wxString openedLocation = f->GetLocation();
+            const wxString openedAnchor = f->GetAnchor();
+            if ( !openedAnchor.empty() )
             {
-                ScrollToAnchor(f->GetAnchor());
+                const int hashPos = openedLocation.Find('#', true);
+                if ( hashPos != wxNOT_FOUND )
+                    openedLocation.Truncate(hashPos);
+            }
+
+            m_FS->ChangePathTo(openedLocation);
+            rt_val = SetPage(src);
+            m_OpenedPage = openedLocation;
+            if (!openedAnchor.empty())
+            {
+                ScrollToAnchor(openedAnchor);
             }
             else
             {

@@ -17,6 +17,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/treebook.h"
+#include "wx/treectrl.h"
+#include "wx/weakref.h"
 #include "bookctrlbasetest.h"
 
 class TreebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
@@ -41,14 +43,20 @@ private:
         CPPUNIT_TEST( Image );
         CPPUNIT_TEST( SubPages );
         CPPUNIT_TEST( ContainerPage );
+        CPPUNIT_TEST( ContainerDeletion );
         CPPUNIT_TEST( Expand );
         CPPUNIT_TEST( Delete );
+        CPPUNIT_TEST( ControllerVetoRestoresSelection );
+        CPPUNIT_TEST( DeleteAllPublishesEmptyTopology );
     CPPUNIT_TEST_SUITE_END();
 
     void SubPages();
     void ContainerPage();
+    void ContainerDeletion();
     void Expand();
     void Delete();
+    void ControllerVetoRestoresSelection();
+    void DeleteAllPublishesEmptyTopology();
 
     wxTreebook *m_treebook;
 
@@ -59,7 +67,9 @@ private:
 CPPUNIT_TEST_SUITE_REGISTRATION( TreebookTestCase );
 
 // also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TreebookTestCase, "TreebookTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(
+    TreebookTestCase,
+    "[TreebookTestCase][winui-v0-supported]");
 
 void TreebookTestCase::setUp()
 {
@@ -103,6 +113,40 @@ void TreebookTestCase::ContainerPage()
 
     m_treebook->AddSubPage(new wxPanel(m_treebook), "Child page");
     CHECK( m_treebook->GetPageParent(1) == 0 );
+}
+
+void TreebookTestCase::ContainerDeletion()
+{
+    CPPUNIT_ASSERT(m_treebook->DeleteAllPages());
+
+    CPPUNIT_ASSERT(m_treebook->AddPage(nullptr, "Container"));
+    wxPanel* const child1 = new wxPanel(m_treebook);
+    wxPanel* const child2 = new wxPanel(m_treebook);
+    const wxWeakRef<wxWindow> child1Lifetime(child1);
+    const wxWeakRef<wxWindow> child2Lifetime(child2);
+    CPPUNIT_ASSERT(m_treebook->AddSubPage(child1, "Child 1"));
+    CPPUNIT_ASSERT(m_treebook->AddSubPage(child2, "Child 2"));
+    wxPanel* const survivor = new wxPanel(m_treebook);
+    CPPUNIT_ASSERT(m_treebook->AddPage(survivor, "Survivor"));
+
+    // A null page is a valid container: success must be derived from the
+    // committed subtree topology, not from the removed window pointer.
+    CPPUNIT_ASSERT(m_treebook->RemovePage(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                         m_treebook->GetPageCount());
+    CPPUNIT_ASSERT(m_treebook->GetPage(0) == survivor);
+    CPPUNIT_ASSERT(!child1Lifetime);
+    CPPUNIT_ASSERT(!child2Lifetime);
+
+    CPPUNIT_ASSERT(m_treebook->DeleteAllPages());
+    CPPUNIT_ASSERT(m_treebook->AddPage(nullptr, "Container"));
+    CPPUNIT_ASSERT(m_treebook->AddSubPage(
+        new wxPanel(m_treebook), "Child"));
+    CPPUNIT_ASSERT(m_treebook->AddPage(
+        new wxPanel(m_treebook), "Survivor"));
+    CPPUNIT_ASSERT(m_treebook->DeletePage(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                         m_treebook->GetPageCount());
 }
 
 void TreebookTestCase::Expand()
@@ -154,6 +198,85 @@ void TreebookTestCase::Delete()
     m_treebook->DeletePage(0);
 
     CPPUNIT_ASSERT_EQUAL(0, m_treebook->GetPageCount());
+}
+
+void TreebookTestCase::ControllerVetoRestoresSelection()
+{
+    class VetoObserver final : public wxEvtHandler
+    {
+    public:
+        void OnChanging(wxBookCtrlEvent& event)
+        {
+            seen = true;
+            event.Veto();
+        }
+
+        bool seen{false};
+    } observer;
+
+    CPPUNIT_ASSERT_EQUAL(0, m_treebook->SetSelection(0));
+
+    wxTreeCtrl* const tree = m_treebook->GetTreeCtrl();
+    wxTreeItemIdValue cookie;
+    const wxTreeItemId first =
+        tree->GetFirstChild(tree->GetRootItem(), cookie);
+    const wxTreeItemId second = tree->GetNextSibling(first);
+    CPPUNIT_ASSERT(first.IsOk());
+    CPPUNIT_ASSERT(second.IsOk());
+
+    m_treebook->Bind(
+        wxEVT_TREEBOOK_PAGE_CHANGING,
+        &VetoObserver::OnChanging,
+        &observer);
+    tree->SelectItem(second);
+    m_treebook->Unbind(
+        wxEVT_TREEBOOK_PAGE_CHANGING,
+        &VetoObserver::OnChanging,
+        &observer);
+
+    CPPUNIT_ASSERT(observer.seen);
+    CPPUNIT_ASSERT_EQUAL(0, m_treebook->GetSelection());
+    CPPUNIT_ASSERT(tree->GetSelection() == first);
+}
+
+void TreebookTestCase::DeleteAllPublishesEmptyTopology()
+{
+    class DeleteObserver final : public wxEvtHandler
+    {
+    public:
+        explicit DeleteObserver(wxTreebook* const book)
+            : m_book(book)
+        {
+        }
+
+        void OnDelete(wxTreeEvent&)
+        {
+            seen = true;
+            const size_t count = m_book->GetPageCount();
+            countsOnlyDecrease = countsOnlyDecrease &&
+                                 count < previousCount;
+            previousCount = count;
+        }
+
+        wxTreebook* const m_book;
+        bool seen{false};
+        size_t previousCount{static_cast<size_t>(-1)};
+        bool countsOnlyDecrease{true};
+    } observer(m_treebook);
+
+    wxTreeCtrl* const tree = m_treebook->GetTreeCtrl();
+    tree->Bind(wxEVT_TREE_DELETE_ITEM,
+               &DeleteObserver::OnDelete,
+               &observer);
+    CPPUNIT_ASSERT(m_treebook->DeleteAllPages());
+    tree->Unbind(wxEVT_TREE_DELETE_ITEM,
+                 &DeleteObserver::OnDelete,
+                 &observer);
+
+    CPPUNIT_ASSERT(observer.seen);
+    CPPUNIT_ASSERT(observer.countsOnlyDecrease);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
+                         m_treebook->GetPageCount());
 }
 
 #endif // wxUSE_TREEBOOK

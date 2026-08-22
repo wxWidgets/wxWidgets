@@ -28,6 +28,9 @@
 #include <stdarg.h>
 
 #include <memory>
+#ifdef __WXWINUI__
+    #include <vector>
+#endif
 
 // ----------------------------------------------------------------------------
 // helper
@@ -99,6 +102,9 @@ private:
         CPPUNIT_TEST( RadioItems );
         CPPUNIT_TEST( RemoveAdd );
         CPPUNIT_TEST( ChangeBitmap );
+#ifdef __WXWINUI__
+        CPPUNIT_TEST( DisabledAccelerators );
+#endif
         WXUISIM_TEST( Events );
     CPPUNIT_TEST_SUITE_END();
 
@@ -115,6 +121,9 @@ private:
     void RadioItems();
     void RemoveAdd();
     void ChangeBitmap();
+#ifdef __WXWINUI__
+    void DisabledAccelerators();
+#endif
     void Events();
 
     wxFrame* m_frame;
@@ -327,6 +336,120 @@ void MenuTestCase::EnableTop()
     bar->EnableTop( 0, true );
     CPPUNIT_ASSERT( bar->IsEnabledTop(0) );
 }
+
+#ifdef __WXWINUI__
+
+namespace
+{
+
+std::vector<ACCEL> GetNativeAccelerators(wxMenuBar* menuBar)
+{
+    const HACCEL haccel = reinterpret_cast<HACCEL>(
+        menuBar->GetAcceleratorTable()->GetHACCEL());
+    if ( !haccel )
+        return {};
+
+    const int count = ::CopyAcceleratorTable(haccel, nullptr, 0);
+    CPPUNIT_ASSERT( count >= 0 );
+
+    std::vector<ACCEL> accels(static_cast<size_t>(count));
+    if ( count )
+    {
+        CPPUNIT_ASSERT_EQUAL(
+            count,
+            ::CopyAcceleratorTable(haccel, accels.data(), count));
+    }
+
+    return accels;
+}
+
+bool HasAcceleratorCommand(const std::vector<ACCEL>& accels, int id)
+{
+    const WORD command = static_cast<WORD>(id);
+    for ( const ACCEL& accel : accels )
+    {
+        if ( accel.cmd == command )
+            return true;
+    }
+
+    return false;
+}
+
+} // anonymous namespace
+
+void MenuTestCase::DisabledAccelerators()
+{
+    enum
+    {
+        AccelInSubmenu = 15000,
+        AccelDirect
+    };
+
+    wxMenuBar* const bar = m_frame->GetMenuBar();
+    const size_t baseline = GetNativeAccelerators(bar).size();
+
+    wxMenu* const submenu = new wxMenu;
+    wxMenuItem* const nested =
+        submenu->Append(AccelInSubmenu, "Nested\tF6");
+
+    // Exercise initial construction with an already disabled item.
+    nested->Enable(false);
+
+    wxMenu* const menu = new wxMenu;
+    wxMenuItem* const submenuItem =
+        menu->AppendSubMenu(submenu, "Submenu");
+    menu->Append(AccelDirect, "Direct\tF7");
+
+    const size_t topPos = bar->GetMenuCount();
+    CPPUNIT_ASSERT( bar->Append(menu, "Accelerators") );
+
+    std::vector<ACCEL> accels = GetNativeAccelerators(bar);
+    CPPUNIT_ASSERT_EQUAL(baseline + 1, accels.size());
+    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+
+    nested->Enable(true);
+    accels = GetNativeAccelerators(bar);
+    CPPUNIT_ASSERT_EQUAL(baseline + 2, accels.size());
+    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelInSubmenu) );
+    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+
+    // Disabling a submenu suppresses all accelerators below it.
+    submenuItem->Enable(false);
+    accels = GetNativeAccelerators(bar);
+    CPPUNIT_ASSERT_EQUAL(baseline + 1, accels.size());
+    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+
+    submenuItem->Enable(true);
+    accels = GetNativeAccelerators(bar);
+    CPPUNIT_ASSERT_EQUAL(baseline + 2, accels.size());
+
+    // And disabling the top-level menu suppresses its complete table slice.
+    bar->EnableTop(topPos, false);
+    accels = GetNativeAccelerators(bar);
+    CPPUNIT_ASSERT_EQUAL(baseline, accels.size());
+    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelDirect) );
+
+    bar->EnableTop(topPos, true);
+    accels = GetNativeAccelerators(bar);
+    CPPUNIT_ASSERT_EQUAL(baseline + 2, accels.size());
+    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelInSubmenu) );
+    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+
+    nested->Enable(false);
+    accels = GetNativeAccelerators(bar);
+    CPPUNIT_ASSERT_EQUAL(baseline + 1, accels.size());
+    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+
+    nested->Enable(true);
+    CPPUNIT_ASSERT_EQUAL(baseline + 2,
+                         GetNativeAccelerators(bar).size());
+}
+
+#endif // __WXWINUI__
 
 void MenuTestCase::Count()
 {

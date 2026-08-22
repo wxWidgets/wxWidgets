@@ -49,11 +49,13 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
                     GetStyle(),
                     GetName());
 
+    SetupWindow(statbar);
+
     int fields = GetLong(wxT("fields"), 1);
     wxString widths = GetParamValue(wxT("widths"));
     wxString styles = GetParamValue(wxT("styles"));
 
-    if (fields > 1 && !widths.IsEmpty())
+    if (fields > 0 && !widths.IsEmpty())
     {
         int *width = new int[fields];
 

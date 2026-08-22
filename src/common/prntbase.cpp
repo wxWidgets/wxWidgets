@@ -42,6 +42,8 @@
 #include "wx/dcprint.h"
 #include "wx/artprov.h"
 #include "wx/display.h"
+#include "wx/private/print.h"
+#include "wx/scopeguard.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -306,16 +308,23 @@ wxIMPLEMENT_CLASS(wxPrinterBase, wxObject);
 wxPrinterBase::wxPrinterBase(wxPrintDialogData *data)
 {
     m_currentPrintout = nullptr;
-    sm_abortWindow = nullptr;
-    sm_abortIt = false;
     if (data)
         m_printDialogData = (*data);
-    sm_lastError = wxPRINTER_NO_ERROR;
+
+    // Constructing another printer from a callback of an active job must not
+    // reset the process-wide abort window, flag or result of the outer job.
+    if ( !sm_printJobActive )
+    {
+        sm_abortWindow = nullptr;
+        sm_abortIt = false;
+        sm_lastError = wxPRINTER_NO_ERROR;
+    }
 }
 
 wxWindow *wxPrinterBase::sm_abortWindow = nullptr;
 bool wxPrinterBase::sm_abortIt = false;
 wxPrinterError wxPrinterBase::sm_lastError = wxPRINTER_NO_ERROR;
+bool wxPrinterBase::sm_printJobActive = false;
 
 wxPrinterBase::~wxPrinterBase()
 {
@@ -563,10 +572,11 @@ void wxPrintAbortDialog::SetProgress(int currentPage, int totalPages,
 
 void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    wxCHECK_RET( wxPrinterBase::sm_abortWindow != nullptr, "OnCancel called twice" );
+    wxCHECK_RET( wxPrinterBase::sm_abortWindow == this,
+                 "OnCancel called for an inactive abort dialog" );
     wxPrinterBase::sm_abortIt = true;
-    wxPrinterBase::sm_abortWindow->Destroy();
     wxPrinterBase::sm_abortWindow = nullptr;
+    Destroy();
 }
 
 //----------------------------------------------------------------------------
@@ -1739,17 +1749,24 @@ wxFrame(parent, wxID_ANY, title, pos, size, style, name),
 
 wxPreviewFrame::~wxPreviewFrame()
 {
-    wxPrintout *printout = m_printPreview->GetPrintout();
-    if (printout)
+    if ( m_printPreview )
     {
-        delete printout;
-        m_printPreview->SetPrintout(nullptr);
+        wxPrintout * const printout = m_printPreview->GetPrintout();
+        if ( printout )
+        {
+            delete printout;
+            m_printPreview->SetPrintout(nullptr);
+        }
+
         m_printPreview->SetCanvas(nullptr);
         m_printPreview->SetFrame(nullptr);
     }
 
-    m_previewCanvas->SetPreview(nullptr);
+    if ( m_previewCanvas )
+        m_previewCanvas->SetPreview(nullptr);
+
     delete m_printPreview;
+    m_printPreview = nullptr;
 }
 
 void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
@@ -2005,8 +2022,16 @@ void wxPrintPreviewBase::AdjustScrollbars(wxPreviewCanvas *canvas)
 
 bool wxPrintPreviewBase::RenderPageIntoDC(wxDC& dc, int pageNum)
 {
-    m_previewPrintout->SetDC(&dc);
-    m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
+    wxPrintout* const printout = m_previewPrintout;
+    if ( !printout )
+        return false;
+
+    printout->SetDC(&dc);
+    const wxScopeGuard clearDC =
+        wxMakeGuard([printout]() { printout->SetDC(nullptr); });
+    wxUnusedVar(clearDC);
+
+    printout->SetPageSizePixels(m_pageWidth, m_pageHeight);
 
     // Need to delay OnPreparePrinting() until here, so we have enough
     // information and a wxDC.
@@ -2014,10 +2039,10 @@ bool wxPrintPreviewBase::RenderPageIntoDC(wxDC& dc, int pageNum)
     {
         m_printingPrepared = true;
 
-        m_previewPrintout->OnPreparePrinting();
+        printout->OnPreparePrinting();
 
         wxPrintPageRanges ranges;
-        const auto all = m_previewPrintout->GetPagesInfo(ranges);
+        const auto all = printout->GetPagesInfo(ranges);
         m_minPage = all.fromPage;
         m_maxPage = all.toPage;
 
@@ -2031,21 +2056,21 @@ bool wxPrintPreviewBase::RenderPageIntoDC(wxDC& dc, int pageNum)
         }
     }
 
-    m_previewPrintout->OnBeginPrinting();
+    wxPrintingGuard printingGuard(printout);
+    wxUnusedVar(printingGuard);
 
-    if (!m_previewPrintout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
+    if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(),
+                                   m_printDialogData.GetToPage()))
     {
         wxMessageBox(_("Could not start document preview."), _("Print Preview Failure"), wxOK);
         return false;
     }
 
-    m_previewPrintout->OnPrintPage(pageNum);
-    m_previewPrintout->OnEndDocument();
-    m_previewPrintout->OnEndPrinting();
+    const wxScopeGuard endDocument =
+        wxMakeGuard([printout]() { printout->OnEndDocument(); });
+    wxUnusedVar(endDocument);
 
-    m_previewPrintout->SetDC(nullptr);
-
-    return true;
+    return printout->OnPrintPage(pageNum);
 }
 
 bool wxPrintPreviewBase::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)

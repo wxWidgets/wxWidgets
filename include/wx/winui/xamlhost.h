@@ -41,6 +41,7 @@ public:
 
     bool SetContentFromXaml(const wxString& xaml);
     void ClearContent();
+    void SetLabel(const wxString& label) override;
 
 private:
     bool InitializeXamlSource();

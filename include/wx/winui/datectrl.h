@@ -10,6 +10,7 @@
 #ifndef _WX_WINUI_DATECTRL_H_
 #define _WX_WINUI_DATECTRL_H_
 
+#include <cstdint>
 #include <memory>
 
 class wxWinUIDatePickerImpl;
@@ -42,20 +43,59 @@ public:
 
     void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) override;
     bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const override;
+    void SetNullText(const wxString& text) override;
+    void SetMinSize(const wxSize& minSize) override;
+
+    // Deterministic seams exercising the real CalendarDatePicker property and
+    // DateChanged delegate without synthesizing mouse or keyboard input.
+    bool WinUISetPeerDateForTesting(const wxDateTime& dt);
+    bool WinUIClearPeerDateForTesting();
+    bool WinUIGetPeerStateForTesting(wxDateTime *value,
+                                     wxDateTime *minimum,
+                                     wxDateTime *maximum) const;
+    bool WinUIGetDefaultPeerRangeForTesting(wxDateTime *minimum,
+                                            wxDateTime *maximum) const;
+    wxString WinUIGetPeerDateFormatForTesting() const;
+    bool WinUIUsesDropdownForTesting() const;
+    bool WinUIGetSpinFieldsForTesting(int *year,
+                                      int *month,
+                                      int *day) const;
+    // part is 0 for year, 1 for month and 2 for day.
+    bool WinUISetSpinPartForTesting(unsigned part, int value);
+    bool WinUIGetSpinPartForTesting(unsigned part,
+                                    int *value,
+                                    bool *blank) const;
+    wxString WinUIGetSpinYearTextForTesting() const;
+    wxString WinUIGetLocaleDatePatternForTesting() const;
+    wxString WinUIGetPeerNullTextForTesting() const;
+    // Returns the previous explicit language. This keeps locale-sensitive
+    // peer creation deterministic in unpackaged desktop test hosts where
+    // ApplicationLanguages::PrimaryLanguageOverride is unavailable.
+    static wxString WinUISetLanguageForTesting(const wxString& language);
 
 protected:
     wxSize DoGetBestSize() const override;
+    void DoSetSize(int x, int y, int width, int height,
+                   int sizeFlags) override;
 
-    void ApplyToPeer();
+    bool ApplyInitialSizeTransaction(const wxSize& size,
+                                     std::uint64_t expectedRevision);
+    void OnLayoutLoaded();
+    bool ApplyToPeer();
+    bool ApplyStateToPeer(const wxDateTime& value,
+                          const wxDateTime& minimum,
+                          const wxDateTime& maximum);
     void OnPeerDateChanged();
+    bool ClearPeerDateAndNotify();
 
     std::unique_ptr<wxWinUIDatePickerImpl> m_winui;
     wxDateTime m_value;
     wxDateTime m_rangeMin;
     wxDateTime m_rangeMax;
-    bool m_updating = false;
 
 private:
+    friend class wxWinUIDatePickerImpl;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl);
 };
 

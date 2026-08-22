@@ -36,6 +36,12 @@ La recommandation est de formaliser ce modèle hybride au lieu de le masquer.
    le bridge doit conserver entrée, capture, scroll, D&D, focus, UIA et thème.
 10. **Aucune annonce de complétude sans gate.** Un composant est Native-Stable
     seulement si son contrat ciblé et ses tests alpha/beta sont verts.
+11. **Un seul broker OLE, deux registrations physiques atomiques.** La même
+    identité `IDropTarget` est enregistrée sur le bridge de composition et sur
+    le HWND du TLW : le bridge reçoit la surface XAML normale et le TLW les
+    trous qui exposent des enfants Win32. La paire est acquise et retirée comme
+    une transaction générationnelle unique. `WM_DROPFILES` reste un contrat
+    distinct reçu et routé par le bridge.
 
 ## Décomposition interne proposée
 
@@ -49,7 +55,7 @@ wxWinUITopLevelHost (façade, registre TLW)
 ├── GeometrySync       rects, clips, scrollbars, DPI, Z signature
 ├── InputRouter        hit-test XAML/native, pointer, capture, hover
 ├── FocusArbiter       focus target, Tab, logical wx focus
-├── DropBroker         IDropTarget bridge et transitions de cible
+├── DropBroker         IDropTarget TLW, routage bridge et transitions de cible
 ├── TransientManager   popup/dialog/tooltip et modal loops
 ├── BackdropPolicy     Mica, priming, owner transitions
 └── AccessibilityMap   Name/Role/state et neutralisation des shells
@@ -124,6 +130,32 @@ intercalation arbitraire XAML↔HWND. Pour la V0 :
 Ne pas multiplier les bridges pour contourner ce problème avant beta : cela
 réintroduirait exactement les problèmes que la refonte supprime.
 
+## Drag-and-drop OLE et `WM_DROPFILES`
+
+Le broker possède une seule identité `IDropTarget`, enregistrée sur les HWND et
+générations courants du bridge **et** du TLW. Il réserve les deux identités avant
+la première frontière native, acquiert les deux registrations comme une
+transaction et les retire en ordre inverse. Un échec ou un état pending du
+second slot annule le premier; une identité périmée n'est jamais révoquée. À
+chaque callback COM, le bridge et le registre de slots servent au hit-test, à la
+conversion de coordonnées et à la résolution d'une unique cible wx logique.
+
+Le diagnostic brut `--ole-drop-delivery-probe` du 2026-08-21 a montré que le
+bridge reçoit la surface normale et que le TLW reçoit le trou natif. La campagne
+RC4 du 2026-08-22 a ensuite apporté la preuve produit inverse : une registration
+TLW-only ne reçoit aucun callback sur la surface normale. Ces deux résultats
+imposent la paire bridge+TLW; le choix ne relève plus d'une préférence de
+structure.
+
+Les gates déterministes shared et static/no-exceptions du broker dual sont
+vertes (27 cas / 1 235 assertions chacune). La gate physique du candidat RC7,
+le DPI per-monitor et les drags inter-processus restent obligatoires avant la
+qualification bêta production-ready du profil Supported V0.
+
+`DragAcceptFiles`/`WM_DROPFILES` ne traverse pas cette session COM. Le bridge
+continue de recevoir ce message et de le router séparément vers le child wx
+logique; un test vert de ce chemin n'est pas une preuve OLE, et réciproquement.
+
 ## Dialogues et surfaces transitoires
 
 Créer un `TransientManager` par TLW avec une petite machine d’état :
@@ -177,7 +209,8 @@ Ajouter des tests d’infrastructure indépendants des composants :
 - destroy/reparent pendant callback/enqueue ;
 - disable parent/child et UIA Invoke ;
 - Tab et accélérateurs dans boucles wx/native ;
-- drag OLE entre slots et HWND générique ;
+- drag OLE entre slots et HWND générique, sur surface XAML normale et dans un
+  trou natif du bridge ;
 - move/resize/freeze/owner detach sous message storm ;
 - DPI 100/150/200, RTL et hot theme ;
 - UIA tree sans shells dupliqués.
@@ -217,4 +250,3 @@ quand les sources WinUI équivalentes sont activées. Avant tout changement :
 La recommandation V0 est de garder les classes wx publiques inchangées et de
 placer uniquement les helpers privés nouveaux dans `wxWinUI`/`wxMSW` si une ADR
 le justifie.
-

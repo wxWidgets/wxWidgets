@@ -28,7 +28,11 @@
 #endif
 
 #include "wx/imaglist.h"
+#include "wx/private/windowlifetime.h"
 #include "wx/treectrl.h"
+#include "wx/weakref.h"
+
+#include <vector>
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
@@ -36,6 +40,59 @@
 
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) ((nPage) < DoInternalGetPageCount())
+
+namespace
+{
+
+// The tree widget, m_treeIds and the common page array form one topology.
+// Callbacks from Hide(), tree deletion and page destructors must never publish
+// a nested half-mutation while an outer operation owns that transaction.
+class wxTreebookTopologyTransaction
+{
+public:
+    explicit wxTreebookTopologyTransaction(wxTreebook* const book)
+        : m_book(book),
+          m_lifetime(book),
+          m_previous(GetActive())
+    {
+        GetActive() = this;
+    }
+
+    ~wxTreebookTopologyTransaction()
+    {
+        wxASSERT(GetActive() == this);
+        GetActive() = m_previous;
+    }
+
+    static bool IsActiveFor(const wxTreebook* const book)
+    {
+        for ( wxTreebookTopologyTransaction* transaction = GetActive();
+              transaction;
+              transaction = transaction->m_previous )
+        {
+            if ( transaction->m_book == book &&
+                    transaction->m_lifetime.get() == book )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+private:
+    static wxTreebookTopologyTransaction*& GetActive()
+    {
+        static thread_local wxTreebookTopologyTransaction* active = nullptr;
+        return active;
+    }
+
+    wxTreebook* const m_book;
+    const wxWeakRef<wxTreebook> m_lifetime;
+    wxTreebookTopologyTransaction* const m_previous;
+};
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // event table
@@ -147,15 +204,92 @@ bool wxTreebook::DoInsertPage(size_t pagePos,
                               bool bSelect,
                               int imageId)
 {
+    if ( wxTreebookTopologyTransaction::IsActiveFor(this) ||
+            IsDeletingAllPages() )
+    {
+        return false;
+    }
+
+    const wxTreebookTopologyTransaction transaction(this);
     wxCHECK_MSG( pagePos <= DoInternalGetPageCount(), false,
                         wxT("Invalid treebook page position") );
 
-    if ( !wxBookCtrlBase::InsertPage(pagePos, page, text, bSelect, imageId) )
-        return false;
+    const wxWeakRef<wxTreebook> weakThis(this);
+    const wxWeakRef<wxWindow> weakPage(page);
+    wxTreeCtrl* const tree = GetTreeCtrl();
+    const wxWeakRef<wxTreeCtrl> weakTree(tree);
+    const size_t controllerCountBefore = m_treeIds.size();
+    const int selectionBefore = m_selection;
+    wxTreeItemId insertedTreeId;
 
-    wxTreeCtrl *tree = GetTreeCtrl();
+    const InsertPageResult modelResult =
+        DoInsertPageIntoModel(pagePos, page, text, bSelect, imageId);
+    if ( modelResult == InsertPageResult::Failed )
+        return false;
+    if ( modelResult == InsertPageResult::OwnershipConsumed )
+        return true;
+
+    const auto finishCommittedInsertion = [&]() -> bool
+    {
+        wxTreebook* book = weakThis.get();
+        if ( book && page &&
+                (weakPage.get() != page || page->GetParent() != book) &&
+                pagePos < book->wxBookCtrlBase::GetPageCount() &&
+                book->wxBookCtrlBase::GetPage(pagePos) == page )
+        {
+            book->DoErasePageRange(pagePos, 1);
+            if ( pagePos < book->m_treeIds.size() &&
+                    book->m_treeIds.size() == controllerCountBefore + 1 &&
+                    (!insertedTreeId.IsOk() ||
+                     book->m_treeIds[pagePos] == insertedTreeId) )
+            {
+                book->m_treeIds.erase(book->m_treeIds.begin() + pagePos);
+            }
+
+            if ( insertedTreeId.IsOk() &&
+                    wxWeakWindowIsAvailableForCallbacks(weakTree, tree) &&
+                    book->GetTreeCtrl() == tree )
+            {
+                tree->Delete(insertedTreeId);
+            }
+
+            book = weakThis.get();
+            if ( book &&
+                    (book->m_selection != selectionBefore ||
+                     static_cast<int>(pagePos) > selectionBefore) )
+            {
+                book->DoSetSelectionAfterRemoval(pagePos);
+            }
+        }
+
+        book = weakThis.get();
+        if ( book )
+            (void)book->DoReconcilePageVisibility();
+
+        return true;
+    };
+    const auto getBeforeMappingPublication = [&]() -> wxTreebook*
+    {
+        wxTreebook* const book = weakThis.get();
+        return book && weakPage.get() == page &&
+               (!page || page->GetParent() == book) &&
+               weakTree.get() == tree &&
+               book->GetTreeCtrl() == tree &&
+               book->m_treeIds.size() == controllerCountBefore &&
+               book->wxBookCtrlBase::GetPageCount() ==
+                    controllerCountBefore + 1 &&
+               pagePos < book->wxBookCtrlBase::GetPageCount() &&
+               book->wxBookCtrlBase::GetPage(pagePos) == page
+                    ? book
+                    : nullptr;
+    };
+
+    wxTreebook* book = getBeforeMappingPublication();
+    if ( !book )
+        return finishCommittedInsertion();
+
     wxTreeItemId newId;
-    if ( pagePos == DoInternalGetPageCount() )
+    if ( pagePos == controllerCountBefore )
     {
         // append the page to the end
         wxTreeItemId rootId = tree->GetRootItem();
@@ -181,21 +315,65 @@ bool wxTreebook::DoInsertPage(size_t pagePos,
             newId = tree->PrependItem(parentId, text, imageId);
         }
     }
+    insertedTreeId = newId;
 
     if ( !newId.IsOk() )
     {
         //something wrong -> cleaning and returning with false
-        (void)wxBookCtrlBase::DoRemovePage(pagePos);
+        book = getBeforeMappingPublication();
+        bool rolledBack = false;
+        if ( book )
+        {
+            (void)book->wxBookCtrlBase::DoRemovePage(pagePos);
+            book = weakThis.get();
+            rolledBack = book &&
+                         book->wxBookCtrlBase::GetPageCount() ==
+                            controllerCountBefore &&
+                         book->m_treeIds.size() == controllerCountBefore;
+        }
 
         wxFAIL_MSG( wxT("Failed to insert treebook page") );
-        return false;
+        return !rolledBack;
     }
 
-    DoInternalAddPage(pagePos, page, newId);
+    book = getBeforeMappingPublication();
+    if ( !book )
+        return finishCommittedInsertion();
 
-    DoUpdateSelection(bSelect, pagePos);
+    book->DoInternalAddPage(pagePos, page, newId);
 
-    return true;
+    book = weakThis.get();
+    if ( !book || weakPage.get() != page ||
+            (page && page->GetParent() != book) ||
+            weakTree.get() != tree ||
+            book->GetTreeCtrl() != tree ||
+            book->m_treeIds.size() != controllerCountBefore + 1 ||
+            book->wxBookCtrlBase::GetPageCount() !=
+                controllerCountBefore + 1 ||
+            book->wxBookCtrlBase::GetPage(pagePos) != page ||
+            book->m_treeIds[pagePos] != newId )
+    {
+        return finishCommittedInsertion();
+    }
+
+    // Hide only after all three topology models are published. Its EVT_SHOW
+    // callback can destroy the book, but same-book topology reentry is
+    // rejected by the transaction above.
+    if ( page )
+    {
+        page->Hide();
+        book = weakThis.get();
+        if ( !book || weakPage.get() != page ||
+                (page && page->GetParent() != book) ||
+                book->wxBookCtrlBase::FindPage(page) == wxNOT_FOUND )
+        {
+            return finishCommittedInsertion();
+        }
+    }
+
+    book->DoUpdateSelection(bSelect, pagePos);
+
+    return finishCommittedInsertion();
 }
 
 bool wxTreebook::DoAddSubPage(wxWindow *page, const wxString& text, bool bSelect, int imageId)
@@ -222,105 +400,494 @@ bool wxTreebook::DoInsertSubPage(size_t pagePos,
                                  bool bSelect,
                                  int imageId)
 {
+    if ( wxTreebookTopologyTransaction::IsActiveFor(this) ||
+            IsDeletingAllPages() )
+    {
+        return false;
+    }
+
+    const wxTreebookTopologyTransaction transaction(this);
     wxTreeItemId parentId = DoInternalGetPage(pagePos);
     wxCHECK_MSG( parentId.IsOk(), false, wxT("invalid tree item") );
 
-    wxTreeCtrl *tree = GetTreeCtrl();
+    const wxWeakRef<wxTreebook> weakThis(this);
+    const wxWeakRef<wxWindow> weakPage(page);
+    wxTreeCtrl* const tree = GetTreeCtrl();
+    const wxWeakRef<wxTreeCtrl> weakTree(tree);
+    const size_t controllerCountBefore = m_treeIds.size();
+    const int selectionBefore = m_selection;
+    wxTreeItemId insertedTreeId;
 
     size_t newPos = pagePos + tree->GetChildrenCount(parentId, true) + 1;
     wxASSERT_MSG( newPos <= DoInternalGetPageCount(),
                     wxT("Internal error in tree insert point calculation") );
 
-    if ( !wxBookCtrlBase::InsertPage(newPos, page, text, bSelect, imageId) )
+    const InsertPageResult modelResult =
+        DoInsertPageIntoModel(newPos, page, text, bSelect, imageId);
+    if ( modelResult == InsertPageResult::Failed )
         return false;
+    if ( modelResult == InsertPageResult::OwnershipConsumed )
+        return true;
+
+    const auto finishCommittedInsertion = [&]() -> bool
+    {
+        wxTreebook* book = weakThis.get();
+        if ( book && page &&
+                (weakPage.get() != page || page->GetParent() != book) &&
+                newPos < book->wxBookCtrlBase::GetPageCount() &&
+                book->wxBookCtrlBase::GetPage(newPos) == page )
+        {
+            book->DoErasePageRange(newPos, 1);
+            if ( newPos < book->m_treeIds.size() &&
+                    book->m_treeIds.size() == controllerCountBefore + 1 &&
+                    (!insertedTreeId.IsOk() ||
+                     book->m_treeIds[newPos] == insertedTreeId) )
+            {
+                book->m_treeIds.erase(book->m_treeIds.begin() + newPos);
+            }
+
+            if ( insertedTreeId.IsOk() &&
+                    wxWeakWindowIsAvailableForCallbacks(weakTree, tree) &&
+                    book->GetTreeCtrl() == tree )
+            {
+                tree->Delete(insertedTreeId);
+            }
+
+            book = weakThis.get();
+            if ( book &&
+                    (book->m_selection != selectionBefore ||
+                     static_cast<int>(newPos) > selectionBefore) )
+            {
+                book->DoSetSelectionAfterRemoval(newPos);
+            }
+        }
+
+        book = weakThis.get();
+        if ( book )
+            (void)book->DoReconcilePageVisibility();
+
+        return true;
+    };
+    const auto getBeforeMappingPublication = [&]() -> wxTreebook*
+    {
+        wxTreebook* const book = weakThis.get();
+        return book && weakPage.get() == page &&
+               (!page || page->GetParent() == book) &&
+               weakTree.get() == tree &&
+               book->GetTreeCtrl() == tree &&
+               book->m_treeIds.size() == controllerCountBefore &&
+               book->wxBookCtrlBase::GetPageCount() ==
+                    controllerCountBefore + 1 &&
+               newPos < book->wxBookCtrlBase::GetPageCount() &&
+               book->wxBookCtrlBase::GetPage(newPos) == page
+                    ? book
+                    : nullptr;
+    };
+
+    wxTreebook* book = getBeforeMappingPublication();
+    if ( !book )
+        return finishCommittedInsertion();
 
     wxTreeItemId newId = tree->AppendItem(parentId, text, imageId);
+    insertedTreeId = newId;
 
     if ( !newId.IsOk() )
     {
-        (void)wxBookCtrlBase::DoRemovePage(newPos);
+        book = getBeforeMappingPublication();
+        bool rolledBack = false;
+        if ( book )
+        {
+            (void)book->wxBookCtrlBase::DoRemovePage(newPos);
+            book = weakThis.get();
+            rolledBack = book &&
+                         book->wxBookCtrlBase::GetPageCount() ==
+                            controllerCountBefore &&
+                         book->m_treeIds.size() == controllerCountBefore;
+        }
 
         wxFAIL_MSG( wxT("Failed to insert treebook page") );
-        return false;
+        return !rolledBack;
     }
 
-    DoInternalAddPage(newPos, page, newId);
+    book = getBeforeMappingPublication();
+    if ( !book )
+        return finishCommittedInsertion();
 
-    DoUpdateSelection(bSelect, newPos);
+    book->DoInternalAddPage(newPos, page, newId);
 
-    return true;
+    book = weakThis.get();
+    if ( !book || weakPage.get() != page ||
+            (page && page->GetParent() != book) ||
+            weakTree.get() != tree ||
+            book->GetTreeCtrl() != tree ||
+            book->m_treeIds.size() != controllerCountBefore + 1 ||
+            book->wxBookCtrlBase::GetPageCount() !=
+                controllerCountBefore + 1 ||
+            book->wxBookCtrlBase::GetPage(newPos) != page ||
+            book->m_treeIds[newPos] != newId )
+    {
+        return finishCommittedInsertion();
+    }
+
+    if ( page )
+    {
+        page->Hide();
+        book = weakThis.get();
+        if ( !book || weakPage.get() != page ||
+                (page && page->GetParent() != book) ||
+                book->wxBookCtrlBase::FindPage(page) == wxNOT_FOUND )
+        {
+            return finishCommittedInsertion();
+        }
+    }
+
+    book->DoUpdateSelection(bSelect, newPos);
+
+    return finishCommittedInsertion();
 }
 
 bool wxTreebook::DeletePage(size_t pagePos)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(pagePos), false, wxT("Invalid tree index") );
+    wxCHECK_MSG( IS_VALID_PAGE(pagePos), false,
+                 wxT("Invalid tree index") );
+    const wxWeakRef<wxTreebook> weakThis(this);
+    wxTreebookPage* const expectedPage =
+        wxBookCtrlBase::GetPage(pagePos);
+    const wxWeakRef<wxWindow> weakExpectedPage(expectedPage);
+    const size_t countBefore = wxBookCtrlBase::GetPageCount();
 
-    wxTreebookPage *oldPage = DoRemovePage(pagePos);
-    if ( !oldPage )
+    wxTreebookPage* oldPage = nullptr;
+    if ( !DoRemovePageAndReport(pagePos, &oldPage) )
+    {
+        wxTreebook* const book = weakThis.get();
+        return book &&
+               book->wxBookCtrlBase::GetPageCount() < countBefore &&
+               expectedPage && weakExpectedPage.get() != expectedPage;
+    }
+
+    if ( oldPage )
+    {
+        if ( weakExpectedPage.get() != oldPage ||
+                oldPage->GetParent() != this ||
+                wxBookCtrlBase::FindPage(oldPage) != wxNOT_FOUND )
+        {
+            return false;
+        }
+        delete oldPage;
+    }
+
+    return true;
+}
+
+bool wxTreebook::RemovePage(size_t pagePos)
+{
+    const wxWeakRef<wxTreebook> weakThis(this);
+    wxTreebookPage* oldPage = nullptr;
+    if ( !DoRemovePageAndReport(pagePos, &oldPage) )
         return false;
 
-    delete oldPage;
+    if ( !oldPage )
+        return weakThis.get() == this;
 
+    const wxWeakRef<wxWindow> weakPage(oldPage);
+    const bool wasShown = oldPage->IsShown();
+    wxTreebook* book = weakThis.get();
+    if ( !book || weakPage.get() != oldPage ||
+            book->wxBookCtrlBase::FindPage(oldPage) != wxNOT_FOUND ||
+            oldPage->GetParent() != book )
+    {
+        return false;
+    }
+
+    if ( wasShown )
+        oldPage->Hide();
+
+    book = weakThis.get();
+    return book && weakPage.get() == oldPage &&
+           book->wxBookCtrlBase::FindPage(oldPage) == wxNOT_FOUND &&
+           oldPage->GetParent() == book;
+}
+
+bool wxTreebook::DoRemovePageAndReport(
+    size_t pagePos,
+    wxTreebookPage** const removedPage)
+{
+    wxCHECK_MSG( removedPage, false, wxT("null removed-page output") );
+    *removedPage = nullptr;
+    wxCHECK_MSG( IS_VALID_PAGE(pagePos), false, wxT("Invalid tree index") );
+
+    wxTreeCtrl* const tree = GetTreeCtrl();
+    const wxTreeItemId pageId = DoInternalGetPage(pagePos);
+    wxCHECK_MSG( pageId.IsOk(), false, wxT("Invalid tree item") );
+
+    const size_t countBefore = wxBookCtrlBase::GetPageCount();
+    const size_t removedCount = tree->GetChildrenCount(pageId, true) + 1;
+    const wxWeakRef<wxTreebook> weakThis(this);
+
+    std::vector<wxTreebookPage*> pagesBefore;
+    std::vector<wxWeakRef<wxWindow>> pageLifetimes;
+    pagesBefore.reserve(countBefore);
+    pageLifetimes.reserve(countBefore);
+    for ( size_t i = 0; i < countBefore; ++i )
+    {
+        wxTreebookPage* const page =
+            wxBookCtrlBase::GetPage(i);
+        pagesBefore.push_back(page);
+        pageLifetimes.emplace_back(page);
+    }
+    const wxVector<wxTreeItemId> idsBefore = m_treeIds;
+    wxTreebookPage* const expectedPage = pagesBefore[pagePos];
+
+    wxTreebookPage* const returnedPage = DoRemovePage(pagePos);
+    wxTreebook* const book = weakThis.get();
+    if ( !book ||
+            returnedPage != expectedPage ||
+            (expectedPage &&
+                pageLifetimes[pagePos].get() != expectedPage) ||
+            book->wxBookCtrlBase::GetPageCount() !=
+                countBefore - removedCount ||
+            book->m_treeIds.size() != countBefore - removedCount )
+    {
+        return false;
+    }
+
+    size_t current = 0;
+    for ( size_t old = 0; old < countBefore; ++old )
+    {
+        if ( old >= pagePos && old < pagePos + removedCount )
+            continue;
+
+        if ( pageLifetimes[old].get() != pagesBefore[old] ||
+                book->wxBookCtrlBase::GetPage(current) != pagesBefore[old] ||
+                book->m_treeIds[current] != idsBefore[old] )
+        {
+            return false;
+        }
+        ++current;
+    }
+
+    if ( expectedPage &&
+            book->wxBookCtrlBase::FindPage(expectedPage) != wxNOT_FOUND )
+    {
+        return false;
+    }
+
+    *removedPage = expectedPage;
     return true;
 }
 
 wxTreebookPage *wxTreebook::DoRemovePage(size_t pagePos)
 {
+    if ( wxTreebookTopologyTransaction::IsActiveFor(this) ||
+         (IsDeletingAllPages() &&
+            !IsPerformingDeleteAllPageRemoval()) )
+    {
+        return nullptr;
+    }
+
+    const wxTreebookTopologyTransaction transaction(this);
     wxTreeItemId pageId = DoInternalGetPage(pagePos);
     wxCHECK_MSG( pageId.IsOk(), nullptr, wxT("Invalid tree index") );
 
-    wxTreebookPage * oldPage = GetPage(pagePos);
-    wxTreeCtrl *tree = GetTreeCtrl();
+    const wxWeakRef<wxTreebook> weakThis(this);
+    wxTreebookPage* const oldPage =
+        wxBookCtrlBase::GetPage(pagePos);
+    wxTreeCtrl* const tree = GetTreeCtrl();
+    const wxWeakRef<wxTreeCtrl> weakTree(tree);
 
-    size_t subCount = tree->GetChildrenCount(pageId, true);
+    const size_t subCount = tree->GetChildrenCount(pageId, true);
+    const size_t removedCount = subCount + 1;
     wxASSERT_MSG ( IS_VALID_PAGE(pagePos + subCount),
                         wxT("Internal error in wxTreebook::DoRemovePage") );
 
-    // here we are going to delete ALL the pages in the range
-    // [pagePos, pagePos + subCount] -- the page and its children
-
-    // deleting all the pages from the base class
-    for ( size_t i = 0; i <= subCount; ++i )
+    std::vector<wxTreebookPage*> removedPages;
+    std::vector<wxWeakRef<wxWindow>> removedLifetimes;
+    removedPages.reserve(removedCount);
+    removedLifetimes.reserve(removedCount);
+    for ( size_t i = 0; i < removedCount; ++i )
     {
-        wxTreebookPage *page = wxBookCtrlBase::DoRemovePage(pagePos);
-
-        // don't delete the page itself though -- it will be deleted in
-        // DeletePage() when we return
-        if ( i )
+        wxTreebookPage* const page =
+            wxBookCtrlBase::GetPage(pagePos + i);
+        removedPages.push_back(page);
+        removedLifetimes.emplace_back(page);
+    }
+    const auto getTransferredRoot = [&]() -> wxTreebookPage*
+    {
+        wxTreebook* const current = weakThis.get();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                !oldPage ||
+                removedLifetimes[0].get() != oldPage ||
+                wxWindowIsUnavailableForCallbacks(oldPage) ||
+                oldPage->GetParent() != current )
         {
-            delete page;
+            return nullptr;
+        }
+
+        return current->wxBookCtrlBase::FindPage(oldPage) == wxNOT_FOUND
+                    ? oldPage
+                    : nullptr;
+    };
+    size_t nextDescendantToDestroy = 1;
+    const auto destroyRemainingDescendants = [&]() -> bool
+    {
+        while ( nextDescendantToDestroy < removedCount )
+        {
+            const size_t i = nextDescendantToDestroy++;
+            wxTreebookPage* const page = removedPages[i];
+            if ( page &&
+                    wxWeakWindowIsAvailableForCallbacks(removedLifetimes[i],
+                                                        page) )
+            {
+                wxTreebook* const current = weakThis.get();
+                if ( !current )
+                    return false;
+
+                if ( page->GetParent() == current &&
+                        current->wxBookCtrlBase::FindPage(page) ==
+                            wxNOT_FOUND )
+                {
+                    delete page;
+                }
+            }
+
+            // Destroying any descendant may destroy the entire book, in which
+            // case its child hierarchy owns the remaining cleanup.
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return false;
+        }
+
+        return true;
+    };
+    const auto finishCommittedRemoval = [&]() -> wxTreebookPage*
+    {
+        // Descendants are implementation-owned by this subtree transaction,
+        // including during DeleteAllPages(). Destroy them immediately after
+        // the atomic model erase so a later hostile public accessor in the
+        // common bulk loop cannot strand them outside every projection.
+        (void)destroyRemainingDescendants();
+        return getTransferredRoot();
+    };
+
+    const int selectionBefore = m_selection;
+    const bool selectionRemoved =
+        selectionBefore != wxNOT_FOUND &&
+        static_cast<size_t>(selectionBefore) >= pagePos &&
+        static_cast<size_t>(selectionBefore) < pagePos + removedCount;
+
+    const wxTreeItemId nextId = tree->GetNextSibling(pageId);
+    const wxTreeItemId parentId = tree->GetItemParent(pageId);
+    const wxTreeItemId rootId = tree->GetRootItem();
+
+    // Publish both index models without crossing a layout/event boundary.
+    // Calling the common single-page remover repeatedly would invalidate best
+    // size after every erase and expose a partially removed subtree.
+    DoErasePageRange(pagePos, removedCount);
+
+    wxVector<wxTreeItemId>::iterator const itPos =
+        m_treeIds.begin() + pagePos;
+    m_treeIds.erase(itPos, itPos + removedCount);
+
+    if ( selectionBefore != wxNOT_FOUND )
+    {
+        if ( static_cast<size_t>(selectionBefore) >=
+                pagePos + removedCount )
+        {
+            m_selection -= static_cast<int>(removedCount);
+        }
+        else if ( selectionRemoved )
+        {
+            m_selection = wxNOT_FOUND;
         }
     }
 
-    DoInternalRemovePageRange(pagePos, subCount);
+    DoInvalidateBestSize();
+    wxTreebook* book = weakThis.get();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+            !wxWeakWindowIsAvailableForCallbacks(weakTree, tree) ||
+            book->GetTreeCtrl() != tree )
+    {
+        return finishCommittedRemoval();
+    }
 
-    tree->DeleteChildren( pageId );
-    tree->Delete( pageId );
+    tree->DeleteChildren(pageId);
+    book = weakThis.get();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+            !wxWeakWindowIsAvailableForCallbacks(weakTree, tree) ||
+            book->GetTreeCtrl() != tree )
+    {
+        return finishCommittedRemoval();
+    }
 
-    return oldPage;
+    tree->Delete(pageId);
+    book = weakThis.get();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+            !wxWeakWindowIsAvailableForCallbacks(weakTree, tree) ||
+            book->GetTreeCtrl() != tree )
+    {
+        return finishCommittedRemoval();
+    }
+
+    // Ownership of the root page is transferred to the caller. Descendant
+    // pages are an implementation detail of the subtree removal and are
+    // destroyed here, with weak guards after every destructor callback.
+    if ( !destroyRemainingDescendants() )
+        return getTransferredRoot();
+
+    book = weakThis.get();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+            !wxWeakWindowIsAvailableForCallbacks(weakTree, tree) ||
+            book->GetTreeCtrl() != tree )
+    {
+        return getTransferredRoot();
+    }
+
+    // Tree deletion can select a surviving item itself. Honour that newer
+    // selection; otherwise preserve the documented next-sibling/parent
+    // replacement policy.
+    if ( selectionRemoved && book->m_selection == wxNOT_FOUND )
+    {
+        wxTreeItemId replacement;
+        if ( nextId.IsOk() &&
+                book->DoInternalFindPageById(nextId) != wxNOT_FOUND )
+        {
+            replacement = nextId;
+        }
+        else if ( parentId.IsOk() && parentId != rootId &&
+                    book->DoInternalFindPageById(parentId) != wxNOT_FOUND )
+        {
+            replacement = parentId;
+        }
+
+        if ( replacement.IsOk() )
+            tree->SelectItem(replacement);
+        else
+            book->DoUpdateSelection(false, wxNOT_FOUND);
+
+        book = weakThis.get();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+            return getTransferredRoot();
+    }
+
+    return getTransferredRoot();
 }
 
 bool wxTreebook::DeleteAllPages()
 {
-    wxBookCtrlBase::DeleteAllPages();
-    m_treeIds.clear();
+    if ( wxTreebookTopologyTransaction::IsActiveFor(this) ||
+            IsDeletingAllPages() )
+    {
+        return false;
+    }
 
-    wxTreeCtrl *tree = GetTreeCtrl();
-    tree->DeleteChildren(tree->GetRootItem());
-
-    return true;
+    return wxBookCtrlBase::DeleteAllPages();
 }
 
 void wxTreebook::DoInternalAddPage(size_t newPos,
-                                   wxTreebookPage *page,
+                                   wxTreebookPage *WXUNUSED(page),
                                    wxTreeItemId pageId)
 {
     wxASSERT_MSG( newPos <= m_treeIds.size(),
                   wxT("Invalid index passed to wxTreebook::DoInternalAddPage") );
-
-    // hide newly inserted page initially (it will be shown when selected)
-    if ( page )
-        page->Hide();
 
     if ( newPos == m_treeIds.size() )
     {
@@ -600,7 +1167,35 @@ void wxTreebook::OnTreeSelectionChange(wxTreeEvent& event)
     int newPos = DoInternalFindPageById(newId);
 
     if ( newPos != wxNOT_FOUND )
-        SetSelection( newPos );
+    {
+        const wxWeakRef<wxTreebook> weakThis(this);
+        wxTreeCtrl* const tree = GetTreeCtrl();
+        const wxWeakRef<wxTreeCtrl> weakTree(tree);
+
+        SetSelection(newPos);
+
+        wxTreebook* const book = weakThis.get();
+        if ( !book || weakTree.get() != tree ||
+                book->GetTreeCtrl() != tree ||
+                book->m_selection == newPos )
+        {
+            return;
+        }
+
+        // The controller changes selection before this notification. If the
+        // wx page-changing event vetoes (or a newer nested writer wins), put
+        // the tree peer back on the actually committed model selection.
+        if ( book->m_selection != wxNOT_FOUND &&
+                static_cast<size_t>(book->m_selection) <
+                    book->m_treeIds.size() )
+        {
+            tree->SelectItem(book->m_treeIds[book->m_selection]);
+        }
+        else
+        {
+            tree->UnselectAll();
+        }
+    }
 }
 
 void wxTreebook::OnTreeNodeExpandedCollapsed(wxTreeEvent & event)

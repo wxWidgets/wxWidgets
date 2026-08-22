@@ -24,6 +24,48 @@
 #endif
 
 #include "wx/wfstream.h"
+#include "wx/weakref.h"
+
+#include <limits>
+#include <memory>
+
+namespace
+{
+
+// A decoder-provided zero delay must not turn the GUI thread into a busy loop.
+// Ten milliseconds bounds the generic fallback to at most 100 transitions/s.
+constexpr int wxGENERIC_ANIMATION_MIN_FRAME_DELAY_MS = 10;
+
+std::uint64_t wxGenericAnimationNextGeneration(std::uint64_t generation)
+{
+    if ( ++generation == 0 )
+        ++generation;
+
+    return generation;
+}
+
+// Decoder methods are application-code boundaries: a custom decoder can
+// synchronously destroy its wxAnimationCtrl owner. Keep a tracker across every
+// such call and, crucially, consult it before reading the owner again.
+class wxGenericAnimationCtrlLifetime final
+{
+public:
+    explicit wxGenericAnimationCtrlLifetime(wxGenericAnimationCtrl* control)
+        : m_control(control)
+    {
+    }
+
+    bool IsAlive() const
+    {
+        wxGenericAnimationCtrl* const control = m_control.get();
+        return control && !control->IsBeingDeleted();
+    }
+
+private:
+    wxWeakRef<wxGenericAnimationCtrl> m_control;
+};
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxAnimation
@@ -103,9 +145,7 @@ bool wxAnimationGenericImpl::LoadFile(const wxString& filename, wxAnimationType 
 
 bool wxAnimationGenericImpl::Load(wxInputStream &stream, wxAnimationType type)
 {
-    UnRef();
-
-    const wxAnimationDecoder *handler;
+    const wxAnimationDecoder *handler = nullptr;
     if ( type == wxANIMATION_TYPE_ANY )
     {
         for ( wxAnimationDecoderList::compatibility_iterator node = wxAnimation::GetHandlers().GetFirst();
@@ -114,39 +154,55 @@ bool wxAnimationGenericImpl::Load(wxInputStream &stream, wxAnimationType type)
             handler=(const wxAnimationDecoder*)node->GetData();
 
             if ( handler->CanRead(stream) )
-            {
-                // do a copy of the handler from the static list which we will own
-                // as our reference data
-                m_decoder = handler->Clone();
-                return m_decoder->Load(stream);
-            }
+                break;
+
+            handler = nullptr;
         }
 
-        wxLogWarning( _("No handler found for animation type.") );
-        return false;
-    }
-
-    handler = wxAnimation::FindHandler(type);
-
-    if (handler == nullptr)
-    {
-        wxLogWarning( _("No animation handler for type %ld defined."), type );
-
-        return false;
-    }
-
-
-    // do a copy of the handler from the static list which we will own
-    // as our reference data
-    m_decoder = handler->Clone();
-
-    if (stream.IsSeekable() && !m_decoder->CanRead(stream))
-    {
-        wxLogError(_("Animation file is not of type %ld."), type);
-        return false;
+        if ( !handler )
+        {
+            wxLogWarning( _("No handler found for animation type.") );
+            return false;
+        }
     }
     else
-        return m_decoder->Load(stream);
+    {
+        handler = wxAnimation::FindHandler(type);
+
+        if ( !handler )
+        {
+            wxLogWarning(
+                _("No animation handler for type %ld defined."), type );
+            return false;
+        }
+
+        if ( stream.IsSeekable() && !handler->CanRead(stream) )
+        {
+            wxLogError(_("Animation file is not of type %ld."), type);
+            return false;
+        }
+    }
+
+    // Decode into an isolated candidate. A malformed/truncated stream must
+    // neither make IsOk() lie (m_decoder != nullptr) nor destroy a previously
+    // valid animation. wxAnimationDecoder is ref-counted wxObjectRefData, so
+    // use DecRef() as the rollback deleter.
+    const auto releaseDecoder = [](wxAnimationDecoder* decoder)
+    {
+        if ( decoder )
+            decoder->DecRef();
+    };
+    std::unique_ptr<wxAnimationDecoder, decltype(releaseDecoder)> candidate(
+        handler->Clone(), releaseDecoder);
+    if ( !candidate || !candidate->Load(stream) ||
+            candidate->GetFrameCount() == 0 ||
+            candidate->GetAnimationSize().x <= 0 ||
+            candidate->GetAnimationSize().y <= 0 )
+        return false;
+
+    UnRef();
+    m_decoder = candidate.release();
+    return true;
 }
 
 void wxAnimationGenericImpl::UnRef()
@@ -166,6 +222,7 @@ wxIMPLEMENT_CLASS(wxGenericAnimationCtrl, wxAnimationCtrlBase);
 wxBEGIN_EVENT_TABLE(wxGenericAnimationCtrl, wxAnimationCtrlBase)
     EVT_PAINT(wxGenericAnimationCtrl::OnPaint)
     EVT_SIZE(wxGenericAnimationCtrl::OnSize)
+    EVT_SHOW(wxGenericAnimationCtrl::OnShow)
     EVT_TIMER(wxID_ANY, wxGenericAnimationCtrl::OnTimer)
 wxEND_EVENT_TABLE()
 
@@ -186,7 +243,7 @@ bool wxGenericAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxAnimation& animation, const wxPoint& pos,
             const wxSize& size, long style, const wxString& name)
 {
-    m_timer.SetOwner(this);
+    InvalidateFrameSchedule();
 
     if (!base_type::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
@@ -201,8 +258,11 @@ bool wxGenericAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
 
 wxGenericAnimationCtrl::~wxGenericAnimationCtrl()
 {
-    if (IsPlaying())
-        Stop();
+    // Never refresh or rebuild a backing bitmap from a partially destroyed
+    // window. wxTimer::Stop() plus its destructor revoke the native timer.
+    m_timer.Stop();
+    m_needToShowNextFrame = false;
+    m_isPlaying = false;
 }
 
 bool wxGenericAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType type)
@@ -215,12 +275,31 @@ bool wxGenericAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType 
 
 bool wxGenericAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
 {
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const std::uint64_t generation = m_timerGeneration;
+
     wxAnimation anim(CreateAnimation());
-    if ( !anim.Load(stream, type) || !anim.IsOk() )
+    if ( !lifetime.IsAlive() || m_timerGeneration != generation )
         return false;
 
+    const bool loaded = anim.Load(stream, type);
+    if ( !lifetime.IsAlive() || m_timerGeneration != generation ||
+            !loaded || !anim.IsOk() )
+    {
+        return false;
+    }
+
+    const std::uint64_t expectedGeneration =
+        wxGenericAnimationNextGeneration(generation);
     SetAnimation(anim);
-    return true;
+    if ( !lifetime.IsAlive() )
+        return false;
+
+    // A nested setter or Stop()/Play() issued by any decoder hook owns the
+    // final state. Report success only when this exact candidate was the
+    // publication that advanced the generation once.
+    return m_timerGeneration == expectedGeneration &&
+           m_animation.IsSameAs(anim);
 }
 
 wxAnimation wxGenericAnimationCtrl::CreateCompatibleAnimation()
@@ -236,43 +315,76 @@ wxAnimationImpl* wxGenericAnimationCtrl::DoCreateAnimationImpl() const
 wxSize wxGenericAnimationCtrl::DoGetBestSize() const
 {
     if (m_animation.IsOk() && !this->HasFlag(wxAC_NO_AUTORESIZE))
-        return m_animation.GetSize();
+    {
+        const wxGenericAnimationCtrlLifetime lifetime(
+            const_cast<wxGenericAnimationCtrl*>(this));
+        const wxAnimation animation = m_animation;
+        const wxSize size = animation.GetSize();
+        return lifetime.IsAlive() ? size : wxDefaultSize;
+    }
 
     return FromDIP(wxSize(100, 100));
 }
 
 void wxGenericAnimationCtrl::SetAnimation(const wxAnimationBundle& animations)
 {
-    if (IsPlaying())
-        Stop();
-
-    m_animations = animations.GetAll();
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    wxAnimations candidates = animations.GetAll();
 
     // Reset animation if we don't have any valid ones.
-    if ( m_animations.empty() )
+    if ( candidates.empty() )
     {
+        InvalidateFrameSchedule();
+        m_isPlaying = false;
+        m_pausedForHidden = false;
+        m_currentFrame = 0;
+        m_animations.clear();
         m_animation.UnRef();
         DisplayStaticImage();
         return;
     }
 
-    // Otherwise choose the animation of the size most appropriate for the
-    // current resolution.
-    const wxSize wantedSize = m_animations[0].GetSize()*GetDPIScaleFactor();
-    for ( const auto& anim: m_animations )
-    {
-        m_animation = anim;
-        if ( m_animation.GetSize().IsAtLeast(wantedSize) )
-            break;
-    }
+    // Decoder access is an application-code boundary for custom handlers.
+    // Select and validate the candidate without publishing it, and abandon
+    // this outer setter if a nested Stop(), Play() or SetAnimation() won.
+    const std::uint64_t selectionGeneration = m_timerGeneration;
+    const double scale = GetDPIScaleFactor();
+    const wxAnimation selected =
+        SelectAnimationForScale(candidates, scale);
+    if ( !lifetime.IsAlive() ||
+            m_timerGeneration != selectionGeneration )
+        return;
 
-    wxCHECK_RET(m_animation.IsCompatibleWith(GetClassInfo()),
-                wxT("incompatible animation") );
+    // Validate before withdrawing the current generation: an incompatible
+    // bundle is a failed setter, not a partially applied animation.
+    wxClassInfo* const classInfo = GetClassInfo();
+    const bool compatible = selected.IsCompatibleWith(classInfo);
+    if ( !lifetime.IsAlive() ||
+            m_timerGeneration != selectionGeneration )
+        return;
+    wxCHECK_RET(compatible, wxT("incompatible animation") );
 
-    if (AnimationImplGetBackgroundColour() == wxNullColour)
+    InvalidateFrameSchedule();
+    const std::uint64_t publicationGeneration = m_timerGeneration;
+    m_isPlaying = false;
+    m_pausedForHidden = false;
+    m_currentFrame = 0;
+    m_animations.swap(candidates);
+    m_animation = selected;
+
+    const wxColour background = AnimationImplGetBackgroundColour();
+    if ( !lifetime.IsAlive() ||
+            m_timerGeneration != publicationGeneration )
+        return;
+    if (background == wxNullColour)
         SetUseWindowBackgroundColour();
     if (!this->HasFlag(wxAC_NO_AUTORESIZE))
+    {
         FitToAnimation();
+        if ( !lifetime.IsAlive() ||
+                m_timerGeneration != publicationGeneration )
+            return;
+    }
 
     DisplayStaticImage();
 }
@@ -292,8 +404,19 @@ void wxGenericAnimationCtrl::SetInactiveBitmap(const wxBitmapBundle &bmp)
 
 void wxGenericAnimationCtrl::FitToAnimation()
 {
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const std::uint64_t generation = m_timerGeneration;
+    const wxAnimation animation = m_animation;
+    wxAnimationImpl* const implementation = GetAnimImpl();
+    const wxSize size = animation.GetSize();
+    if ( !lifetime.IsAlive() || m_timerGeneration != generation ||
+            GetAnimImpl() != implementation )
+    {
+        return;
+    }
+
     InvalidateBestSize();
-    SetSize(m_animation.GetSize());
+    SetSize(size);
 }
 
 bool wxGenericAnimationCtrl::SetBackgroundColour(const wxColour& colour)
@@ -316,8 +439,9 @@ bool wxGenericAnimationCtrl::SetBackgroundColour(const wxColour& colour)
 
 void wxGenericAnimationCtrl::Stop()
 {
-    m_timer.Stop();
+    InvalidateFrameSchedule();
     m_isPlaying = false;
+    m_pausedForHidden = false;
 
     // reset frame counter
     m_currentFrame = 0;
@@ -330,19 +454,56 @@ bool wxGenericAnimationCtrl::Play(bool looped)
     if (!m_animation.IsOk())
         return false;
 
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+
+    // Play() is also a restart operation. Revoke the previous timer identity
+    // first so an already queued notification can't advance the new run.
+    InvalidateFrameSchedule();
+    m_isPlaying = false;
+    m_pausedForHidden = false;
     m_looped = looped;
     m_currentFrame = 0;
 
+    const std::uint64_t playGeneration = m_timerGeneration;
     if (!RebuildBackingStoreUpToFrame(0))
+    {
+        if ( !lifetime.IsAlive() )
+            return false;
+
+        // A decoder callback may have deliberately replaced this request.
+        // Preserve the nested verdict instead of stopping its newer run.
+        return m_timerGeneration != playGeneration ? m_isPlaying : false;
+    }
+    if ( !lifetime.IsAlive() )
         return false;
+    if ( m_timerGeneration != playGeneration )
+        return m_isPlaying;
 
     m_isPlaying = true;
-
-    m_needToShowNextFrame = true;
+    m_pausedForHidden = !IsShown();
+    m_needToShowNextFrame = !m_pausedForHidden;
 
     Refresh();
 
     return true;
+}
+
+void wxGenericAnimationCtrl::InvalidateFrameSchedule()
+{
+    m_timer.Stop();
+    m_needToShowNextFrame = false;
+
+    m_timerGeneration =
+        wxGenericAnimationNextGeneration(m_timerGeneration);
+
+    const std::uint64_t firstTimerId =
+        static_cast<std::uint64_t>(wxID_HIGHEST) + 1;
+    const std::uint64_t timerIdRange =
+        static_cast<std::uint64_t>((std::numeric_limits<int>::max)()) -
+        firstTimerId;
+    m_activeTimerId = static_cast<int>(
+        firstTimerId + (m_timerGeneration % timerIdRange));
+    m_timer.SetOwner(this, m_activeTimerId);
 }
 
 
@@ -353,49 +514,253 @@ bool wxGenericAnimationCtrl::Play(bool looped)
 
 bool wxGenericAnimationCtrl::RebuildBackingStoreUpToFrame(unsigned int frame)
 {
-    // if we've not created the backing store yet or it's too
-    // small, then recreate it
-    wxSize sz = m_animation.GetSize(),
-           winsz = GetClientSize();
-    int w = wxMin(sz.GetWidth(), winsz.GetWidth());
-    int h = wxMin(sz.GetHeight(), winsz.GetHeight());
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const std::uint64_t generation = m_timerGeneration;
+    const wxAnimation animation = m_animation;
+    if ( !animation.IsOk() )
+        return false;
 
-    if ( !m_backingStore.IsOk() ||
-            m_backingStore.GetWidth() < w || m_backingStore.GetHeight() < h )
+    wxAnimationGenericImpl* const implementation =
+        static_cast<wxAnimationGenericImpl*>(GetAnimImpl());
+    if ( !implementation )
+        return false;
+
+    const auto isCurrent = [this, &lifetime, generation, implementation]()
     {
-        if (!m_backingStore.Create(w, h))
-            return false;
-    }
+        return lifetime.IsAlive() &&
+               m_timerGeneration == generation && m_animation.IsOk() &&
+               GetAnimImpl() == implementation;
+    };
+
+    const unsigned int frameCount = implementation->GetFrameCount();
+    if ( !isCurrent() || frame >= frameCount )
+        return false;
+
+    const wxSize animationSize = implementation->GetSize();
+    if ( !isCurrent() )
+        return false;
+
+    const wxSize windowSize = GetClientSize();
+    const int w = wxMin(animationSize.GetWidth(), windowSize.GetWidth());
+    const int h = wxMin(animationSize.GetHeight(), windowSize.GetHeight());
+
+    if ( w <= 0 || h <= 0 )
+        return false;
+
+    // Render into an isolated bitmap. Decoder calls are extension boundaries:
+    // a custom decoder can re-enter Stop(), Play() or SetAnimation(). Nothing
+    // becomes the published backing store unless this generation still owns
+    // the control after every one of those calls.
+    wxBitmap candidate;
+    if ( !candidate.Create(w, h) )
+        return false;
 
     wxMemoryDC dc;
-    dc.SelectObject(m_backingStore);
+    dc.SelectObject(candidate);
 
-    // Draw the background
-    DisposeToBackground(dc);
+    const auto clearBackground = [&](wxDC& target) -> bool
+    {
+        wxColour colour = GetBackgroundColour();
+        if ( !IsUsingWindowBackgroundColour() )
+        {
+            colour = implementation->GetBackgroundColour();
+            if ( !isCurrent() )
+                return false;
+        }
+
+        target.SetBackground(wxBrush(colour));
+        target.Clear();
+        return true;
+    };
+
+    const auto clearFrameRect = [&](wxDC& target,
+                                    unsigned int index) -> bool
+    {
+        const wxPoint position = implementation->GetFramePosition(index);
+        if ( !isCurrent() )
+            return false;
+        const wxSize size = implementation->GetFrameSize(index);
+        if ( !isCurrent() )
+            return false;
+
+        wxColour colour = GetBackgroundColour();
+        if ( !IsUsingWindowBackgroundColour() )
+        {
+            colour = implementation->GetBackgroundColour();
+            if ( !isCurrent() )
+                return false;
+        }
+
+        target.SetBrush(wxBrush(colour));
+        target.SetPen(*wxTRANSPARENT_PEN);
+        target.DrawRectangle(position, size);
+        return true;
+    };
+
+    const auto drawFrame = [&](wxDC& target, unsigned int index) -> bool
+    {
+        const wxImage image = implementation->GetFrame(index);
+        if ( !isCurrent() || !image.IsOk() )
+            return false;
+        const wxPoint position = implementation->GetFramePosition(index);
+        if ( !isCurrent() )
+            return false;
+
+        const wxBitmap bitmap(image);
+        if ( !bitmap.IsOk() )
+            return false;
+        target.DrawBitmap(bitmap, position, true /* use mask */);
+        return true;
+    };
+
+    if ( !clearBackground(dc) )
+    {
+        dc.SelectObject(wxNullBitmap);
+        return false;
+    }
 
     // Draw all intermediate frames that haven't been removed from the animation
     for (unsigned int i = 0; i < frame; i++)
     {
-        if (AnimationImplGetDisposalMethod(i) == wxANIM_DONOTREMOVE ||
-            AnimationImplGetDisposalMethod(i) == wxANIM_UNSPECIFIED)
+        const wxAnimationDisposal disposal =
+            implementation->GetDisposalMethod(i);
+        if ( !isCurrent() )
         {
-            DrawFrame(dc, i);
+            dc.SelectObject(wxNullBitmap);
+            return false;
         }
-        else if (AnimationImplGetDisposalMethod(i) == wxANIM_TOBACKGROUND)
-            DisposeToBackground(dc, AnimationImplGetFramePosition(i),
-                                    AnimationImplGetFrameSize(i));
+
+        if (disposal == wxANIM_DONOTREMOVE ||
+            disposal == wxANIM_UNSPECIFIED)
+        {
+            if ( !drawFrame(dc, i) )
+            {
+                dc.SelectObject(wxNullBitmap);
+                return false;
+            }
+        }
+        else if (disposal == wxANIM_TOBACKGROUND &&
+                 !clearFrameRect(dc, i))
+        {
+            dc.SelectObject(wxNullBitmap);
+            return false;
+        }
     }
 
     // finally draw this frame
-    DrawFrame(dc, frame);
+    if ( !drawFrame(dc, frame) )
+    {
+        dc.SelectObject(wxNullBitmap);
+        return false;
+    }
+
+    dc.SelectObject(wxNullBitmap);
+    if ( !isCurrent() )
+        return false;
+
+    // Animation sizes and client sizes are both expressed in native pixels.
+    // A high-DPI bundle member is already larger and must not be scaled twice.
+    m_backingStore = candidate;
 
     return true;
 }
 
-void wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
+bool wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
 {
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const std::uint64_t generation = m_timerGeneration;
+    const wxAnimation animation = m_animation;
+    if ( !animation.IsOk() || !m_backingStore.IsOk() )
+        return false;
+    wxBitmap backingStore = m_backingStore;
+
+    wxAnimationGenericImpl* const implementation =
+        static_cast<wxAnimationGenericImpl*>(GetAnimImpl());
+    if ( !implementation )
+        return false;
+
+    const auto isCurrent = [this, &lifetime, generation, implementation]()
+    {
+        return lifetime.IsAlive() &&
+               m_timerGeneration == generation && m_animation.IsOk() &&
+               GetAnimImpl() == implementation;
+    };
+
+    const unsigned int frame = m_currentFrame;
+    wxBitmap candidate;
+    if ( !candidate.Create(backingStore.GetWidth(),
+                           backingStore.GetHeight(),
+                           backingStore.GetDepth()) )
+    {
+        return false;
+    }
+
     wxMemoryDC dc;
-    dc.SelectObject(m_backingStore);
+    wxMemoryDC source;
+    dc.SelectObject(candidate);
+    source.SelectObject(backingStore);
+    const bool copied = dc.Blit(0, 0,
+                                backingStore.GetWidth(),
+                                backingStore.GetHeight(),
+                                &source, 0, 0, wxCOPY);
+    source.SelectObject(wxNullBitmap);
+    if ( !copied )
+    {
+        dc.SelectObject(wxNullBitmap);
+        return false;
+    }
+
+    const auto clearBackground = [&](wxDC& target) -> bool
+    {
+        wxColour colour = GetBackgroundColour();
+        if ( !IsUsingWindowBackgroundColour() )
+        {
+            colour = implementation->GetBackgroundColour();
+            if ( !isCurrent() )
+                return false;
+        }
+        target.SetBackground(wxBrush(colour));
+        target.Clear();
+        return true;
+    };
+
+    const auto clearFrameRect = [&](wxDC& target,
+                                    unsigned int index) -> bool
+    {
+        const wxPoint position = implementation->GetFramePosition(index);
+        if ( !isCurrent() )
+            return false;
+        const wxSize size = implementation->GetFrameSize(index);
+        if ( !isCurrent() )
+            return false;
+
+        wxColour colour = GetBackgroundColour();
+        if ( !IsUsingWindowBackgroundColour() )
+        {
+            colour = implementation->GetBackgroundColour();
+            if ( !isCurrent() )
+                return false;
+        }
+        target.SetBrush(wxBrush(colour));
+        target.SetPen(*wxTRANSPARENT_PEN);
+        target.DrawRectangle(position, size);
+        return true;
+    };
+
+    const auto drawFrame = [&](wxDC& target, unsigned int index) -> bool
+    {
+        const wxImage image = implementation->GetFrame(index);
+        if ( !isCurrent() || !image.IsOk() )
+            return false;
+        const wxPoint position = implementation->GetFramePosition(index);
+        if ( !isCurrent() )
+            return false;
+        const wxBitmap bitmap(image);
+        if ( !bitmap.IsOk() )
+            return false;
+        target.DrawBitmap(bitmap, position, true /* use mask */);
+        return true;
+    };
 
     // OPTIMIZATION:
     // since wxAnimationCtrl can only play animations forward, without skipping
@@ -403,18 +768,33 @@ void wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
     // frame and thus we just need to dispose the m_currentFrame-1 frame and
     // render the m_currentFrame-th one.
 
-    if (m_currentFrame == 0)
+    if (frame == 0)
     {
         // before drawing the first frame always dispose to bg colour
-        DisposeToBackground(dc);
+        if ( !clearBackground(dc) )
+        {
+            dc.SelectObject(wxNullBitmap);
+            return false;
+        }
     }
     else
     {
-        switch (AnimationImplGetDisposalMethod(m_currentFrame-1))
+        const wxAnimationDisposal disposal =
+            implementation->GetDisposalMethod(frame - 1);
+        if ( !isCurrent() )
+        {
+            dc.SelectObject(wxNullBitmap);
+            return false;
+        }
+
+        switch (disposal)
         {
         case wxANIM_TOBACKGROUND:
-            DisposeToBackground(dc, AnimationImplGetFramePosition(m_currentFrame-1),
-                                    AnimationImplGetFrameSize(m_currentFrame-1));
+            if ( !clearFrameRect(dc, frame - 1) )
+            {
+                dc.SelectObject(wxNullBitmap);
+                return false;
+            }
             break;
 
         case wxANIM_TOPREVIOUS:
@@ -422,15 +802,21 @@ void wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
             // E.g. GIF specification explicitly say to keep the usage of this
             //      disposal limited to the minimum.
             // In fact it may require a lot of time to restore
-            if (m_currentFrame == 1)
+            if (frame == 1)
             {
                 // if 0-th frame disposal is to restore to previous frame,
                 // the best we can do is to restore to background
-                DisposeToBackground(dc);
+                if ( !clearBackground(dc) )
+                {
+                    dc.SelectObject(wxNullBitmap);
+                    return false;
+                }
             }
             else
-                if (!RebuildBackingStoreUpToFrame(m_currentFrame-2))
-                    Stop();
+            {
+                dc.SelectObject(wxNullBitmap);
+                return RebuildBackingStoreUpToFrame(frame);
+            }
             break;
 
         case wxANIM_DONOTREMOVE:
@@ -440,43 +826,115 @@ void wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
     }
 
     // now just draw the current frame on the top of the backing store
-    DrawFrame(dc, m_currentFrame);
+    if ( !drawFrame(dc, frame) )
+    {
+        dc.SelectObject(wxNullBitmap);
+        return false;
+    }
+
+    dc.SelectObject(wxNullBitmap);
+    if ( !isCurrent() )
+        return false;
+
+    m_backingStore = candidate;
+    return true;
 }
 
 void wxGenericAnimationCtrl::DisplayStaticImage()
 {
     wxASSERT(!IsPlaying());
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const std::uint64_t displayGeneration = m_timerGeneration;
 
-    // m_bmpStaticReal will be updated only if necessary...
+    const wxSize clientSize = GetClientSize();
+    if ( clientSize.x <= 0 || clientSize.y <= 0 )
+    {
+        // A transient 0x0 layout is not evidence that the decoded animation is
+        // invalid. Drop only the derived surface and rebuild it on the next
+        // positive size event.
+        m_backingStore = wxNullBitmap;
+        Refresh();
+        return;
+    }
+
+    // m_bmpStaticReal will be updated only if necessary. Do this after the
+    // zero-size guard: the base implementation cannot create a 0x0 bitmap and
+    // treats that allocation failure as an invalid inactive-bitmap source.
     UpdateStaticImage();
+    if ( !lifetime.IsAlive() ||
+            m_timerGeneration != displayGeneration )
+    {
+        return;
+    }
 
     if (m_bmpStaticReal.IsOk())
     {
+        // Retain the selected bundle member across all extension callbacks.
+        // In particular, never keep a DC selected into a member bitmap while
+        // asking a decoder for its background colour: that callback may delete
+        // this control and destroy the member bitmap synchronously.
+        const wxBitmap staticBitmap = m_bmpStaticReal;
+
         // copy the inactive bitmap in the backing store
         // eventually using the mask or the alpha if the static
         // bitmap has one
-        if ( m_bmpStaticReal.GetMask() || m_bmpStaticReal.HasAlpha() )
+        if ( staticBitmap.GetMask() || staticBitmap.HasAlpha() )
         {
+            wxColour background = GetBackgroundColour();
+            if ( !IsUsingWindowBackgroundColour() )
+            {
+                background = AnimationImplGetBackgroundColour();
+                if ( !lifetime.IsAlive() ||
+                        m_timerGeneration != displayGeneration )
+                {
+                    return;
+                }
+            }
+
+            wxBitmap candidate;
+            if ( !candidate.Create(staticBitmap.GetWidth(),
+                                   staticBitmap.GetHeight(),
+                                   staticBitmap.GetDepth()) )
+            {
+                m_backingStore = wxNullBitmap;
+                Refresh();
+                return;
+            }
             wxMemoryDC temp;
-            temp.SelectObject(m_backingStore);
-            DisposeToBackground(temp);
-            temp.DrawBitmap(m_bmpStaticReal, 0, 0, true /* use mask */);
+            temp.SelectObject(candidate);
+            temp.SetBackground(wxBrush(background));
+            temp.Clear();
+            temp.DrawBitmap(staticBitmap, 0, 0, true /* use mask */);
+            temp.SelectObject(wxNullBitmap);
+            m_backingStore = candidate;
         }
         else
-            m_backingStore = m_bmpStaticReal;
+            m_backingStore = staticBitmap;
     }
     else
     {
         // put in the backing store the first frame of the animation
-        if (!m_animation.IsOk() ||
-            !RebuildBackingStoreUpToFrame(0))
+        if (!m_animation.IsOk())
         {
-            m_animation = wxNullAnimation;
-            DisposeToBackground();
+            m_backingStore = wxNullBitmap;
+        }
+        else
+        {
+            const std::uint64_t generation = m_timerGeneration;
+            const bool rebuilt = RebuildBackingStoreUpToFrame(0);
+            if ( !lifetime.IsAlive() )
+                return;
+            if ( !rebuilt && m_timerGeneration == generation )
+            {
+                // Rendering failure invalidates the derived surface only. The
+                // decoder remains a valid, retryable animation.
+                m_backingStore = wxNullBitmap;
+            }
         }
     }
 
-    Refresh();
+    if ( lifetime.IsAlive() )
+        Refresh();
 }
 
 void wxGenericAnimationCtrl::DrawFrame(wxDC &dc, unsigned int frame)
@@ -487,9 +945,31 @@ void wxGenericAnimationCtrl::DrawFrame(wxDC &dc, unsigned int frame)
     // the wxImage is then converted as a wxBitmap and finally blitted.
     // If wxAnimationDecoder had a function to convert directly from its
     // internal format to a port-specific wxBitmap, it would be somewhat faster.
-    wxBitmap bmp(m_animation.GetFrame(frame));
-    dc.DrawBitmap(bmp, AnimationImplGetFramePosition(frame),
-                  true /* use mask */);
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const std::uint64_t generation = m_timerGeneration;
+    const wxAnimation animation = m_animation;
+    wxAnimationGenericImpl* const implementation =
+        static_cast<wxAnimationGenericImpl*>(GetAnimImpl());
+    if ( !implementation )
+        return;
+
+    const wxImage image = animation.GetFrame(frame);
+    if ( !lifetime.IsAlive() || m_timerGeneration != generation ||
+            GetAnimImpl() != implementation || !image.IsOk() )
+    {
+        return;
+    }
+
+    const wxPoint position = implementation->GetFramePosition(frame);
+    if ( !lifetime.IsAlive() || m_timerGeneration != generation ||
+            GetAnimImpl() != implementation )
+    {
+        return;
+    }
+
+    const wxBitmap bitmap(image);
+    if ( bitmap.IsOk() )
+        dc.DrawBitmap(bitmap, position, true /* use mask */);
 }
 
 void wxGenericAnimationCtrl::DrawCurrentFrame(wxDC& dc)
@@ -503,17 +983,24 @@ void wxGenericAnimationCtrl::DrawCurrentFrame(wxDC& dc)
 void wxGenericAnimationCtrl::DisposeToBackground()
 {
     // clear the backing store
+    wxBitmap backingStore = m_backingStore;
     wxMemoryDC dc;
-    dc.SelectObject(m_backingStore);
+    dc.SelectObject(backingStore);
     if ( dc.IsOk() )
         DisposeToBackground(dc);
 }
 
 void wxGenericAnimationCtrl::DisposeToBackground(wxDC& dc)
 {
-    wxColour col = IsUsingWindowBackgroundColour()
-                    ? GetBackgroundColour()
-                    : AnimationImplGetBackgroundColour();
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const bool useWindowBackground = IsUsingWindowBackgroundColour();
+    wxColour col = GetBackgroundColour();
+    if ( !useWindowBackground )
+    {
+        col = AnimationImplGetBackgroundColour();
+        if ( !lifetime.IsAlive() )
+            return;
+    }
 
     wxBrush brush(col);
     dc.SetBackground(brush);
@@ -522,9 +1009,15 @@ void wxGenericAnimationCtrl::DisposeToBackground(wxDC& dc)
 
 void wxGenericAnimationCtrl::DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz)
 {
-    wxColour col = IsUsingWindowBackgroundColour()
-                    ? GetBackgroundColour()
-                    : AnimationImplGetBackgroundColour();
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const bool useWindowBackground = IsUsingWindowBackgroundColour();
+    wxColour col = GetBackgroundColour();
+    if ( !useWindowBackground )
+    {
+        col = AnimationImplGetBackgroundColour();
+        if ( !lifetime.IsAlive() )
+            return;
+    }
     wxBrush brush(col);
     dc.SetBrush(brush);         // SetBrush and not SetBackground !!
     dc.SetPen(*wxTRANSPARENT_PEN);
@@ -535,8 +1028,84 @@ void wxGenericAnimationCtrl::DisposeToBackground(wxDC& dc, const wxPoint &pos, c
 // wxAnimationCtrl - event handlers
 // ----------------------------------------------------------------------------
 
+bool wxGenericAnimationCtrl::ScheduleNextFrame()
+{
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+
+    if ( !m_needToShowNextFrame )
+        return true;
+
+    m_needToShowNextFrame = false;
+    if ( !m_isPlaying || m_pausedForHidden ||
+            !IsShown() || !m_animation.IsOk() )
+    {
+        return true;
+    }
+
+    const std::uint64_t generation = m_timerGeneration;
+    const wxAnimation animation = m_animation;
+    wxAnimationImpl* const implementation = GetAnimImpl();
+    const unsigned int frame = m_currentFrame;
+
+    // GetDelay() belongs to a custom decoder and can re-enter or destroy this
+    // control. Never inspect the owner until its weak lifetime was checked.
+    int delay = animation.GetDelay(frame);
+    if ( !lifetime.IsAlive() )
+        return false;
+    if ( m_timerGeneration != generation || !m_animation.IsOk() ||
+            GetAnimImpl() != implementation )
+    {
+        return true;
+    }
+
+    if ( delay == -1 )
+    {
+        // -1 is the decoder contract for a frame that remains displayed
+        // forever. Keep IsPlaying() true so Stop() stays meaningful, but
+        // consume no timer or decoder work while holding this frame.
+        return true;
+    }
+    if ( delay < -1 )
+    {
+        // No other negative value belongs to the decoder contract.
+        Stop();
+        return lifetime.IsAlive();
+    }
+    if ( delay == 0 )
+        delay = wxGENERIC_ANIMATION_MIN_FRAME_DELAY_MS;
+    if ( !m_timer.StartOnce(delay) )
+    {
+        Stop();
+        return lifetime.IsAlive();
+    }
+
+    return true;
+}
+
+bool wxGenericAnimationCtrl::ResumeFrameSchedule(std::uint64_t generation)
+{
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+
+    m_pausedForHidden = false;
+    m_needToShowNextFrame = true;
+    Refresh();
+    if ( !lifetime.IsAlive() )
+        return false;
+
+    // The frame is already fully rebuilt and published. Arm it independently
+    // of WM_PAINT: some ports don't synchronously paint a just-restored child,
+    // and forcing Update() here would let a decoder delete the control from a
+    // nested native paint stack.
+    if ( m_timerGeneration == generation )
+        return ScheduleNextFrame();
+
+    return true;
+}
+
 void wxGenericAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+
     // VERY IMPORTANT: the wxPaintDC *must* be created in any case
     wxPaintDC dc(this);
 
@@ -554,22 +1123,50 @@ void wxGenericAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         DisposeToBackground(dc);
     }
 
-    if ( m_needToShowNextFrame )
-    {
-        m_needToShowNextFrame = false;
+    if ( !lifetime.IsAlive() )
+        return;
 
-        // Set the timer for the next frame
-        int delay = m_animation.GetDelay(m_currentFrame);
-        if (delay == 0)
-            delay = 1;      // 0 is invalid timeout for wxTimer.
-        m_timer.StartOnce(delay);
-    }
+    (void)ScheduleNextFrame();
 }
 
-void wxGenericAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
+void wxGenericAnimationCtrl::OnTimer(wxTimerEvent& event)
 {
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+
+    if ( event.GetId() != m_activeTimerId ||
+            !m_isPlaying || m_pausedForHidden ||
+            !m_animation.IsOk() )
+    {
+        return;
+    }
+
+    // A one-shot notification is consumed exactly once. Advance the event ID
+    // before touching decoder state so a duplicate/stale queued event is inert.
+    InvalidateFrameSchedule();
+    const std::uint64_t generation = m_timerGeneration;
+    if ( !IsShown() )
+    {
+        m_pausedForHidden = true;
+        return;
+    }
+
+    const wxAnimation animation = m_animation;
+    wxAnimationImpl* const implementation = GetAnimImpl();
+    const unsigned int frameCount = animation.GetFrameCount();
+    if ( !lifetime.IsAlive() ||
+            m_timerGeneration != generation || !m_animation.IsOk() ||
+            GetAnimImpl() != implementation )
+    {
+        return;
+    }
+    if ( frameCount == 0 )
+    {
+        Stop();
+        return;
+    }
+
     m_currentFrame++;
-    if (m_currentFrame == m_animation.GetFrameCount())
+    if (m_currentFrame == frameCount)
     {
         // Should a non-looped animation display the last frame?
         if (!m_looped)
@@ -581,32 +1178,203 @@ void wxGenericAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
             m_currentFrame = 0;     // let's restart
     }
 
-    IncrementalUpdateBackingStore();
+    if ( !IncrementalUpdateBackingStore() )
+    {
+        if ( lifetime.IsAlive() && m_timerGeneration == generation )
+            Stop();
+        return;
+    }
+
+    if ( !lifetime.IsAlive() || m_timerGeneration != generation )
+        return;
 
     m_needToShowNextFrame = true;
 
     Refresh();
 }
 
-void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
+void wxGenericAnimationCtrl::OnSize(wxSizeEvent& event)
 {
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+
     // NB: resizing an animation control may take a lot of time
     //     for big animations as the backing store must be
     //     extended and rebuilt. Try to avoid it e.g. using
     //     a null proportion value for your wxAnimationCtrls
     //     when using them inside sizers.
-    if (m_animation.IsOk())
+    if (m_animation.IsOk() && IsPlaying())
     {
         // be careful to change the backing store *only* if we are
         // playing the animation as otherwise we may be displaying
         // the inactive bitmap and overwriting the backing store
         // with the last played frame is wrong in this case
-        if (IsPlaying())
+        const wxSize clientSize = GetClientSize();
+        if ( !IsShown() || clientSize.x <= 0 || clientSize.y <= 0 )
         {
-            if (!RebuildBackingStoreUpToFrame(m_currentFrame))
-                Stop();     // in case we are playing
+            InvalidateFrameSchedule();
+            m_pausedForHidden = true;
+            if ( clientSize.x <= 0 || clientSize.y <= 0 )
+                m_backingStore = wxNullBitmap;
+        }
+        else
+        {
+            const std::uint64_t generation = m_timerGeneration;
+            const bool rebuilt =
+                RebuildBackingStoreUpToFrame(m_currentFrame);
+            if ( !lifetime.IsAlive() )
+            {
+                event.Skip();
+                return;
+            }
+
+            if ( rebuilt )
+            {
+                if ( m_timerGeneration == generation && m_pausedForHidden )
+                {
+                    if ( !ResumeFrameSchedule(generation) )
+                    {
+                        event.Skip();
+                        return;
+                    }
+                }
+            }
+            else if ( m_timerGeneration == generation )
+            {
+                Stop();
+            }
         }
     }
+    else
+    {
+        // Resize the inactive bitmap (or rebuild frame zero) as well. This is
+        // especially important for wxAC_NO_AUTORESIZE controls.
+        DisplayStaticImage();
+    }
+
+    event.Skip();
+}
+
+void wxGenericAnimationCtrl::OnShow(wxShowEvent& event)
+{
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+
+    if ( !event.IsShown() )
+    {
+        if ( m_isPlaying )
+        {
+            InvalidateFrameSchedule();
+            m_pausedForHidden = true;
+        }
+    }
+    else if ( m_isPlaying && m_pausedForHidden )
+    {
+        const wxSize clientSize = GetClientSize();
+        if ( clientSize.x <= 0 || clientSize.y <= 0 )
+        {
+            // Remain paused until a positive OnSize notification arrives.
+        }
+        else
+        {
+            const std::uint64_t generation = m_timerGeneration;
+            const bool rebuilt =
+                RebuildBackingStoreUpToFrame(m_currentFrame);
+            if ( !lifetime.IsAlive() )
+            {
+                event.Skip();
+                return;
+            }
+
+            if ( rebuilt )
+            {
+                if ( m_timerGeneration == generation )
+                {
+                    if ( !ResumeFrameSchedule(generation) )
+                    {
+                        event.Skip();
+                        return;
+                    }
+                }
+            }
+            else if ( m_timerGeneration == generation )
+            {
+                Stop();
+            }
+        }
+    }
+
+    event.Skip();
+}
+
+void wxGenericAnimationCtrl::WXHandleDPIChanged(wxDPIChangedEvent& event)
+{
+    const wxGenericAnimationCtrlLifetime lifetime(this);
+    const std::uint64_t generation = m_timerGeneration;
+    const bool wasPlaying = m_isPlaying;
+    const bool wasLooped = m_looped;
+    const wxAnimations animations = m_animations;
+
+    const wxAnimation selected =
+        SelectAnimationForScale(animations, GetDPIScaleFactor());
+    if ( !lifetime.IsAlive() || m_timerGeneration != generation )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxAnimationBundle bundle;
+    for ( const wxAnimation& animation : animations )
+    {
+        bundle.Add(animation);
+        if ( !lifetime.IsAlive() || m_timerGeneration != generation )
+        {
+            event.Skip();
+            return;
+        }
+    }
+
+    const std::uint64_t selectionGeneration =
+        wxGenericAnimationNextGeneration(generation);
+    SetAnimation(bundle);
+    if ( !lifetime.IsAlive() )
+    {
+        event.Skip();
+        return;
+    }
+
+    bool sameBundle = m_animations.size() == animations.size();
+    for ( std::size_t i = 0; sameBundle && i < animations.size(); ++i )
+        sameBundle = m_animations[i].IsSameAs(animations[i]);
+
+    if ( m_timerGeneration != selectionGeneration || !sameBundle ||
+            !m_animation.IsSameAs(selected) )
+    {
+        // A decoder callback published a newer animation transaction.
+        event.Skip();
+        return;
+    }
+
+    UpdateStaticImage();
+    if ( !lifetime.IsAlive() ||
+            m_timerGeneration != selectionGeneration )
+    {
+        event.Skip();
+        return;
+    }
+
+    if ( wasPlaying )
+    {
+        const std::uint64_t playGeneration =
+            wxGenericAnimationNextGeneration(selectionGeneration);
+        (void)Play(wasLooped);
+        if ( !lifetime.IsAlive() ||
+                m_timerGeneration != playGeneration )
+        {
+            event.Skip();
+            return;
+        }
+    }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

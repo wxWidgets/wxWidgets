@@ -7,12 +7,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"
+#include "waitfor.h"
 
 
 #include "wx/testing.h"
 
 #include "wx/msgdlg.h"
 #include "wx/filedlg.h"
+#include "wx/weakref.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
 
 // This test suite tests helpers from wx/testing.h intended for testing of code
 // that calls modal dialogs. It does not test the implementation of wxWidgets'
@@ -142,4 +148,112 @@ TEST_CASE("Modal::InitDialog", "[modal]")
     MyModalDialog dlg;
     dlg.ShowModal();
     CHECK( dlg.WasModal() );
+}
+
+namespace
+{
+
+class SelfDestroyingDialog final : public wxDialog
+{
+public:
+    enum class Action
+    {
+        Validate,
+        Transfer
+    };
+
+    SelfDestroyingDialog(Action action,
+                         int* validateCalls,
+                         int* transferCalls)
+        : wxDialog(nullptr, wxID_ANY, "Self-destroying dialog"),
+          m_action(action),
+          m_validateCalls(validateCalls),
+          m_transferCalls(transferCalls)
+    {
+    }
+
+    void AcceptForTest() { AcceptAndClose(); }
+
+    void ApplyForTest()
+    {
+        wxCommandEvent event(wxEVT_BUTTON, wxID_APPLY);
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
+
+    bool Validate() override
+    {
+        ++*m_validateCalls;
+        if ( m_action == Action::Validate )
+            Destroy();
+        return true;
+    }
+
+    bool TransferDataFromWindow() override
+    {
+        ++*m_transferCalls;
+        if ( m_action == Action::Transfer )
+            Destroy();
+        return true;
+    }
+
+private:
+    const Action m_action;
+    int* const m_validateCalls;
+    int* const m_transferCalls;
+};
+
+} // anonymous namespace
+
+TEST_CASE("Dialog::DestroyDuringValidation", "[dialog][lifetime]")
+{
+    for ( const SelfDestroyingDialog::Action action :
+          { SelfDestroyingDialog::Action::Validate,
+            SelfDestroyingDialog::Action::Transfer } )
+    {
+        for ( const bool apply : { false, true } )
+        {
+            CAPTURE(action, apply);
+            int validateCalls = 0;
+            int transferCalls = 0;
+            SelfDestroyingDialog* const dialog =
+                new SelfDestroyingDialog(action,
+                                         &validateCalls,
+                                         &transferCalls);
+            const wxWeakRef<wxWindow> weakDialog(dialog);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+            {
+                wxWinUITLWHostWindowEventGuard retainedCallback(dialog);
+                if ( apply )
+                    dialog->ApplyForTest();
+                else
+                    dialog->AcceptForTest();
+
+                CHECK(wxWinUITLWHostIsDestroyScheduled(dialog));
+                CHECK(weakDialog.get() == dialog);
+                CHECK(validateCalls == 1);
+                CHECK(transferCalls ==
+                      (action == SelfDestroyingDialog::Action::Transfer
+                           ? 1
+                           : 0));
+            }
+#else
+            if ( apply )
+                dialog->ApplyForTest();
+            else
+                dialog->AcceptForTest();
+
+            CHECK(validateCalls == 1);
+            CHECK(transferCalls ==
+                  (action == SelfDestroyingDialog::Action::Transfer ? 1 : 0));
+#endif
+
+            REQUIRE(WaitFor("self-destroying dialog cleanup",
+                            [&weakDialog]()
+                            {
+                                return weakDialog.get() == nullptr;
+                            }));
+        }
+    }
 }

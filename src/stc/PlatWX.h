@@ -2,6 +2,7 @@
 #define _SRC_STC_PLATWX_H_
 
 #include "wx/defs.h"
+#include "wx/weakref.h"
 
 #if wxUSE_STC
 
@@ -134,6 +135,7 @@ class wxSTCPopupWindow:public wxSTCPopupBase
 public:
     wxSTCPopupWindow(wxWindow*);
     virtual ~wxSTCPopupWindow();
+    virtual bool Show(bool show=true) override;
     virtual bool Destroy() override;
     virtual bool AcceptsFocus() const override;
 
@@ -148,9 +150,11 @@ protected:
     #endif
 
 private:
+    void RebindTopLevelWindow();
+
     wxPoint   m_relPos;
     wxPoint   m_absPos;
-    wxWindow* m_tlw;
+    wxWeakRef<wxWindow> m_tlw;
 };
 
 

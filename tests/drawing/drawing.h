@@ -122,6 +122,10 @@ private:
         DrawingTestGCFactory& gcFactory,
         const DrawingTestCase & testCase);
 
+    bool HasExpectedImageSemantics(
+        const wxString& fileName,
+        const DrawingTestCase& testCase) const;
+
     // enumerates the dll names as specified in WX_TEST_SUITE_GC_DRAWING_PLUGINS
     //  (coma separated list of DLL to load and test)
     // each DLL should have these procedures:

@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/renderer.h"
+#include "wx/msw/private/metrics.h"
 
 #include "private.h"
 
@@ -43,6 +44,43 @@ wxColour wxWinUISubtleFill(const wxColour& base)
 wxColour wxWinUIDividerColour(const wxColour& base)
 {
     return base.ChangeLightness(wxWinUIIsDarkTheme() ? 135 : 80);
+}
+
+bool wxWinUIWindowUsesBackdrop(wxWindow *win)
+{
+    for ( HWND hwnd = win ? GetHwndOf(win) : nullptr; hwnd; )
+    {
+        if ( ::GetPropW(hwnd, L"wxWinUIBackdropTransparent") )
+            return true;
+
+        if ( !(::GetWindowLongPtr(hwnd, GWL_STYLE) & WS_CHILD) )
+            break;
+        hwnd = ::GetParent(hwnd);
+    }
+
+    return false;
+}
+
+wxColour wxWinUISplitterSurfaceColour(wxWindow *win)
+{
+    // Accessibility colours take precedence over the backdrop marker: High
+    // Contrast intentionally disables decorative material assumptions.
+    if ( wxMSWImpl::IsHighContrast() )
+        return wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
+    if ( wxWinUIWindowUsesBackdrop(win) )
+    {
+        // Native children use black as the composition colour key while the
+        // XAML backdrop is active (see wxWinUIControlHost). Keep this named
+        // protocol value here instead of treating it as a theme colour.
+        static const wxColour s_backdropColourKey(0, 0, 0);
+        return s_backdropColourKey;
+    }
+
+    const wxColour background = win->GetBackgroundColour();
+    return background.IsOk()
+        ? background
+        : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 }
 
 class wxRendererWinUI : public wxDelegateRendererNative
@@ -136,18 +174,43 @@ public:
     {
     }
 
-    void DrawSplitterSash(wxWindow *WXUNUSED(win),
-                          wxDC& WXUNUSED(dc),
-                          const wxSize& WXUNUSED(size),
-                          wxCoord WXUNUSED(position),
-                          wxOrientation WXUNUSED(orient),
+    void DrawSplitterSash(wxWindow *win,
+                          wxDC& dc,
+                          const wxSize& size,
+                          wxCoord position,
+                          wxOrientation orient,
                           int WXUNUSED(flags) = 0) override
     {
-        // Draw nothing: the sash area keeps the black fill done in
-        // WM_ERASEBKGND, i.e. it shows the window backdrop like any other gap
-        // between controls.  Painting it with the window background colour
-        // would not do, as that colour stays the (light) system one while the
-        // backdrop is in use.
+        // Paint explicitly: WM_PAINT is allowed without a preceding erase.
+        // Leaving this rectangle untouched was the source of the persistent
+        // white scar after resize. The same policy also remains meaningful
+        // when High Contrast disables Mica.
+        const wxCoord width = win->FromDIP(6);
+        const wxRect sash = orient == wxVERTICAL
+            ? wxRect(position, 0, width, size.y)
+            : wxRect(0, position, size.x, width);
+
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(wxBrush(wxWinUISplitterSurfaceColour(win)));
+        dc.DrawRectangle(sash);
+
+        // High Contrast removes the material cue, so a surface-coloured sash
+        // alone can disappear into its panes. Use system colours only and
+        // retain a visible one-DIP separator in every HC palette.
+        if ( wxMSWImpl::IsHighContrast() )
+        {
+            const wxCoord markerDIP = win->FromDIP(1);
+            const wxCoord markerWidth = markerDIP > 1 ? markerDIP : 1;
+            const wxRect marker = orient == wxVERTICAL
+                ? wxRect(sash.x + (sash.width - markerWidth) / 2,
+                         sash.y, markerWidth, sash.height)
+                : wxRect(sash.x,
+                         sash.y + (sash.height - markerWidth) / 2,
+                         sash.width, markerWidth);
+            dc.SetBrush(wxBrush(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT)));
+            dc.DrawRectangle(marker);
+        }
     }
 
     wxSplitterRenderParams GetSplitterParams(const wxWindow *win) override

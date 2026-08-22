@@ -82,7 +82,17 @@ TEST_CASE_METHOD(HyperlinkCtrlTestCase, "wxHyperlinkCtrl::Url",
 TEST_CASE_METHOD(HyperlinkCtrlTestCase, "wxHyperlinkCtrl::Click",
                  "[hyperlinkctrl]")
 {
-#if wxUSE_UIACTIONSIMULATOR
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The runner's private desktop is not the input desktop, so the
+    // simulator's system-wide USER32 mouse synthesis cannot target it.
+    // Invoke the real HyperlinkButtonAutomationPeer instead: this traverses
+    // the production Click callback and emits the same wx event without
+    // moving or stealing the user's pointer.
+    EventCounter hyperlink(m_hyperlink, wxEVT_HYPERLINK);
+    REQUIRE(m_hyperlink->WinUIInvokeForTesting());
+    wxYield();
+    CHECK(hyperlink.GetCount() == 1);
+#elif wxUSE_UIACTIONSIMULATOR
     if ( !EnableUITests() )
         return;
 

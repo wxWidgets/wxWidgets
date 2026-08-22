@@ -236,13 +236,17 @@ static void DCAttributes(wxDC& dc)
     wxDCFontChanger fontChanger(dc, font);
     wxDCPenChanger penChanger(dc,pen);
     wxDCBrushChanger brushChanger(dc, brush);
+    // SetFont() may adapt a pixel-sized font to this DC's PPI. What this
+    // test needs to preserve across clipping is the font actually selected
+    // into the DC, not the pre-adaptation value passed to SetFont().
+    const wxFont effectiveFont = dc.GetFont();
     wxCoord chWidth = dc.GetCharWidth();
     wxCoord chHeight = dc.GetCharHeight();
     wxFontMetrics fm = dc.GetFontMetrics();
     {
         wxDCClipper clipper(dc, 10, 20, 30, 40);
     }
-    CHECK(dc.GetFont() == font);
+    CHECK(dc.GetFont() == effectiveFont);
     CHECK(dc.GetPen() == pen);
     CHECK(dc.GetBrush() == brush);
     CHECK(dc.GetCharWidth() == chWidth);

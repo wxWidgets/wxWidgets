@@ -11,17 +11,94 @@
 
 #if wxUSE_GAUGE
 
+#include "wx/appprogress.h"
 #include "wx/gauge.h"
 
 #include "private.h"
 
+#include <algorithm>
+
+#include <winrt/Microsoft.UI.Xaml.Automation.h>
+#include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
+
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+
+namespace
+{
+
+// Delegates retain this invalidatable state, never the wx control. The
+// generation check makes a late notification from a retired peer harmless,
+// while invalidating the owner before token revocation covers teardown-time
+// synchronous notifications.
+class wxWinUIGaugeCallbackState
+{
+public:
+    explicit wxWinUIGaugeCallbackState(wxGauge *owner)
+        : m_owner(owner)
+    {
+    }
+
+    std::uint64_t Generation() const
+    {
+        return m_generation.load(std::memory_order_acquire);
+    }
+
+    wxGauge *GetOwner(std::uint64_t generation) const
+    {
+        if ( m_generation.load(std::memory_order_acquire) != generation )
+            return nullptr;
+        return m_owner.load(std::memory_order_acquire);
+    }
+
+    void Invalidate()
+    {
+        m_owner.store(nullptr, std::memory_order_release);
+        m_generation.fetch_add(1, std::memory_order_acq_rel);
+    }
+
+private:
+    std::atomic<wxGauge *> m_owner;
+    std::atomic<std::uint64_t> m_generation{1};
+};
+
+} // anonymous namespace
 
 class wxWinUIGaugeImpl
 {
 public:
+    ~wxWinUIGaugeImpl()
+    {
+        Close();
+    }
+
+    void Close()
+    {
+        if ( callbackState )
+            callbackState->Invalidate();
+
+        if ( panel && sizeChangedToken.value )
+        {
+            try
+            {
+                panel.SizeChanged(sizeChangedToken);
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                wxWinUILogException(
+                    "WinUI Gauge SizeChanged removal", e);
+            }
+        }
+        sizeChangedToken = {};
+
+        host.Close();
+        panel = nullptr;
+        progressBar = nullptr;
+        callbackState.reset();
+    }
+
     wxWinUIControlHost host;
+    std::shared_ptr<wxWinUIGaugeCallbackState> callbackState;
     MUXC::ProgressBar progressBar{ nullptr };
     MUXC::Grid panel{ nullptr };
     winrt::event_token sizeChangedToken{};
@@ -54,13 +131,24 @@ bool wxGauge::Create(wxWindow *parent,
                      const wxValidator& validator,
                      const wxString& name)
 {
-    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
-        return false;
+    m_indeterminate = false;
 
-    m_rangeMax = range;
-    m_gaugePos = 0;
+    // This is not just a window-creation convenience: the common path
+    // initializes the canonical range/value and wxGA_PROGRESS taskbar bridge.
+    if ( !wxGaugeBase::Create(parent, id, range, pos, size,
+                              style, validator, name) )
+    {
+        return false;
+    }
 
     m_winui.reset(new wxWinUIGaugeImpl);
+    m_winui->callbackState =
+        std::make_shared<wxWinUIGaugeCallbackState>(this);
+    wxWinUIGaugeImpl * const createImpl = m_winui.get();
+    const std::shared_ptr<wxWinUIGaugeCallbackState> callbackState =
+        createImpl->callbackState;
+    const std::uint64_t callbackGeneration =
+        callbackState->Generation();
     if ( !m_winui->host.Initialize(this) )
         return false;
 
@@ -87,31 +175,84 @@ bool wxGauge::Create(wxWindow *parent,
             m_winui->panel = MUXC::Grid();
             m_winui->panel.Children().Append(m_winui->progressBar);
             m_winui->sizeChangedToken = m_winui->panel.SizeChanged(
-                [this](winrt::Windows::Foundation::IInspectable const&,
-                       MUX::SizeChangedEventArgs const& event)
+                [callbackState, callbackGeneration](
+                    winrt::Windows::Foundation::IInspectable const&,
+                    MUX::SizeChangedEventArgs const& event)
                 {
-                    if ( m_winui && m_winui->progressBar )
-                        m_winui->progressBar.Width(event.NewSize().Height);
+                    wxGauge * const owner =
+                        callbackState->GetOwner(callbackGeneration);
+                    if ( !owner || !owner->m_winui ||
+                         owner->m_winui->callbackState != callbackState ||
+                         !owner->m_winui->progressBar )
+                    {
+                        return;
+                    }
+
+                    owner->m_winui->progressBar.Width(
+                        event.NewSize().Height);
                 });
-            m_winui->host.SetContent(m_winui->panel);
+            MUX::Automation::AutomationProperties::SetAccessibilityView(
+                createImpl->panel,
+                MUX::Automation::Peers::AccessibilityView::Raw);
+            const bool contentSet =
+                createImpl->host.SetContent(
+                    createImpl->panel, createImpl->progressBar);
+            wxGauge * const owner =
+                callbackState->GetOwner(callbackGeneration);
+            if ( !owner || !owner->m_winui ||
+                 owner->m_winui.get() != createImpl )
+            {
+                return false;
+            }
+            if ( !contentSet )
+            {
+                owner->m_winui.reset();
+                return false;
+            }
         }
         else
         {
-            m_winui->host.SetContent(m_winui->progressBar);
+            const bool contentSet =
+                createImpl->host.SetContent(createImpl->progressBar);
+            wxGauge * const owner =
+                callbackState->GetOwner(callbackGeneration);
+            if ( !owner || !owner->m_winui ||
+                 owner->m_winui.get() != createImpl )
+            {
+                return false;
+            }
+            if ( !contentSet )
+            {
+                owner->m_winui.reset();
+                return false;
+            }
         }
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI ProgressBar creation", e);
+        wxGauge * const owner =
+            callbackState->GetOwner(callbackGeneration);
+        if ( owner && owner->m_winui &&
+             owner->m_winui.get() == createImpl )
+        {
+            owner->m_winui.reset();
+        }
         return false;
     }
 
-    return true;
+    wxGauge * const owner =
+        callbackState->GetOwner(callbackGeneration);
+    return owner && owner->m_winui &&
+           owner->m_winui.get() == createImpl;
 }
 
 void wxGauge::SetRange(int range)
 {
-    m_rangeMax = range;
+    // Like the native MSW control, either determinate setter terminates a
+    // previous Pulse() mode. The base call also updates wxGA_PROGRESS.
+    m_indeterminate = false;
+    wxGaugeBase::SetRange(range);
     ApplyToPeer();
 }
 
@@ -122,8 +263,8 @@ int wxGauge::GetRange() const
 
 void wxGauge::SetValue(int pos)
 {
-    m_gaugePos = pos;
     m_indeterminate = false;
+    wxGaugeBase::SetValue(pos);
     ApplyToPeer();
 }
 
@@ -136,6 +277,13 @@ void wxGauge::Pulse()
 {
     m_indeterminate = true;
     ApplyToPeer();
+
+    // wxGaugeBase::Pulse() emulates a bouncing gauge on WinUI and calls our
+    // virtual SetValue(), which would immediately leave indeterminate mode.
+    // Keep the native XAML peer indeterminate and update only the taskbar
+    // bridge, exactly as the native MSW implementation does.
+    if ( m_appProgressIndicator )
+        m_appProgressIndicator->Pulse();
 }
 
 wxSize wxGauge::DoGetBestSize() const
@@ -152,14 +300,78 @@ void wxGauge::ApplyToPeer()
     if ( !m_winui || !m_winui->progressBar )
         return;
 
-    m_winui->progressBar.IsIndeterminate(m_indeterminate);
-    if ( !m_indeterminate )
+    try
     {
-        m_winui->progressBar.Maximum(m_rangeMax > 0 ? m_rangeMax : 1);
-        m_winui->progressBar.Value(m_gaugePos);
-    }
+        MUXC::ProgressBar const progressBar = m_winui->progressBar;
+        progressBar.IsIndeterminate(m_indeterminate);
+        if ( !m_indeterminate )
+        {
+            // XAML rejects a zero maximum and a value outside [Minimum,
+            // Maximum], while wxGauge deliberately preserves the caller's
+            // model values. Clamp only the peer representation.
+            const double maximum = m_rangeMax > 0 ? m_rangeMax : 1;
+            const double value =
+                std::clamp<double>(m_gaugePos, 0.0, maximum);
 
-    m_winui->host.ForceRender();
+            // Lowering Maximum below the old Value throws. Update in the
+            // direction that keeps every intermediate peer state valid.
+            if ( maximum < progressBar.Maximum() )
+            {
+                progressBar.Value(value);
+                progressBar.Maximum(maximum);
+            }
+            else
+            {
+                progressBar.Maximum(maximum);
+                progressBar.Value(value);
+            }
+        }
+
+        m_winui->host.ForceRender();
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI Gauge state update", e);
+    }
+}
+
+bool wxGauge::WinUIGetPeerStateForTesting(double *maximum,
+                                          double *value,
+                                          bool *indeterminate,
+                                          bool *vertical) const
+{
+    if ( !m_winui || !m_winui->progressBar )
+        return false;
+
+    try
+    {
+        if ( maximum )
+            *maximum = m_winui->progressBar.Maximum();
+        if ( value )
+            *value = m_winui->progressBar.Value();
+        if ( indeterminate )
+            *indeterminate = m_winui->progressBar.IsIndeterminate();
+        if ( vertical )
+        {
+            const auto rotate =
+                m_winui->progressBar.RenderTransform()
+                    .try_as<winrt::Microsoft::UI::Xaml::Media::
+                                RotateTransform>();
+            *vertical = m_winui->panel && rotate &&
+                        rotate.Angle() == -90.0;
+        }
+        return true;
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI Gauge test snapshot", e);
+        return false;
+    }
+}
+
+bool wxGauge::WinUIHasAppProgressForTesting() const
+{
+    return m_appProgressIndicator != nullptr;
 }
 
 #endif // wxUSE_GAUGE

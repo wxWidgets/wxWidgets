@@ -18,6 +18,11 @@
 #include "wx/treelist.h"
 
 #include "wx/app.h"
+#include "wx/dataview.h"
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    #include "wx/headerctrl.h"
+    #include "wx/weakref.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // test class
@@ -36,6 +41,9 @@ private:
         CPPUNIT_TEST( Traversal );
         CPPUNIT_TEST( ItemText );
         CPPUNIT_TEST( ItemCheck );
+        CPPUNIT_TEST( ColumnMutation );
+        CPPUNIT_TEST( ClearColumnsResetsValues );
+        CPPUNIT_TEST( DestructiveColumnCancellation );
     CPPUNIT_TEST_SUITE_END();
 
     // Create the control with the given style.
@@ -52,6 +60,9 @@ private:
     void Traversal();
     void ItemText();
     void ItemCheck();
+    void ColumnMutation();
+    void ClearColumnsResetsValues();
+    void DestructiveColumnCancellation();
 
 
     // The control itself.
@@ -226,6 +237,189 @@ void TreeListCtrlTestCase::ItemCheck()
                           m_treelist->GetCheckedState(m_code_osx) );
     CPPUNIT_ASSERT_EQUAL( wxCHK_UNDETERMINED,
                           m_treelist->GetCheckedState(m_code) );
+}
+
+void TreeListCtrlTestCase::ColumnMutation()
+{
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    wxDataViewCtrl* const view = m_treelist->GetDataView();
+    wxHeaderCtrl* const header = view->GenericGetHeader();
+    CPPUNIT_ASSERT( header );
+
+    wxArrayInt order;
+    order.push_back(2);
+    order.push_back(0);
+    order.push_back(1);
+    header->SetColumnsOrder(order);
+
+    // Removing a logical middle column after a visual reorder must preserve
+    // both the remaining values and their exact display order.
+    CPPUNIT_ASSERT( m_treelist->DeleteColumn(1) );
+    CPPUNIT_ASSERT_EQUAL( 2u, m_treelist->GetColumnCount() );
+    CPPUNIT_ASSERT_EQUAL( wxString("wxOSX"),
+                          m_treelist->GetItemText(m_code_osx, 0) );
+    CPPUNIT_ASSERT_EQUAL( wxString("2.36 MiB"),
+                          m_treelist->GetItemText(m_code_osx, 1) );
+    CPPUNIT_ASSERT_EQUAL( 0u, view->GetColumn(0)->GetModelColumn() );
+    CPPUNIT_ASSERT_EQUAL( 1u, view->GetColumn(1)->GetModelColumn() );
+
+    const wxArrayInt orderAfterMiddleDelete = header->GetColumnsOrder();
+    CPPUNIT_ASSERT_EQUAL( 2, static_cast<int>(orderAfterMiddleDelete.size()) );
+    CPPUNIT_ASSERT_EQUAL( 1, orderAfterMiddleDelete[0] );
+    CPPUNIT_ASSERT_EQUAL( 0, orderAfterMiddleDelete[1] );
+
+    // The old second column is sorted and then promoted to primary. Its
+    // renderer and sort state must be promoted with it.
+    view->GetColumn(1)->SetSortOrder(false);
+    m_treelist->CheckItem(m_code_osx, wxCHK_CHECKED);
+    CPPUNIT_ASSERT( m_treelist->DeleteColumn(0) );
+    CPPUNIT_ASSERT_EQUAL( 1u, m_treelist->GetColumnCount() );
+    CPPUNIT_ASSERT_EQUAL( wxString("2.36 MiB"),
+                          m_treelist->GetItemText(m_code_osx, 0) );
+    CPPUNIT_ASSERT_EQUAL( wxCHK_CHECKED,
+                          m_treelist->GetCheckedState(m_code_osx) );
+
+    wxDataViewColumn* const primary = view->GetColumn(0);
+    CPPUNIT_ASSERT_EQUAL( 0u, primary->GetModelColumn() );
+    CPPUNIT_ASSERT( primary->IsSortKey() );
+    CPPUNIT_ASSERT( !primary->IsSortOrderAscending() );
+    CPPUNIT_ASSERT_EQUAL( primary, view->GetSortingColumn() );
+    CPPUNIT_ASSERT(
+        wxDynamicCast(
+            primary->GetRenderer(),
+            wxDataViewCheckIconTextRenderer) != nullptr );
+
+    // Appending after all these mutations must keep the promoted value in
+    // column zero and create a valid new positional model column.
+    CPPUNIT_ASSERT_EQUAL(
+        1,
+        m_treelist->AppendColumn("Replacement") );
+    m_treelist->SetItemText(m_code_osx, 1, "replacement value");
+    CPPUNIT_ASSERT_EQUAL( wxString("2.36 MiB"),
+                          m_treelist->GetItemText(m_code_osx, 0) );
+    CPPUNIT_ASSERT_EQUAL( wxString("replacement value"),
+                          m_treelist->GetItemText(m_code_osx, 1) );
+
+    CPPUNIT_ASSERT( m_treelist->DeleteColumn(1) );
+    CPPUNIT_ASSERT( m_treelist->DeleteColumn(0) );
+    CPPUNIT_ASSERT_EQUAL( 0u, m_treelist->GetColumnCount() );
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
+}
+
+void TreeListCtrlTestCase::ClearColumnsResetsValues()
+{
+    CPPUNIT_ASSERT_EQUAL(
+        wxString("wxOSX"),
+        m_treelist->GetItemText(m_code_osx, 0) );
+    CPPUNIT_ASSERT_EQUAL(
+        wxString("2.36 MiB"),
+        m_treelist->GetItemText(m_code_osx, 2) );
+
+    m_treelist->ClearColumns();
+    CPPUNIT_ASSERT_EQUAL( 0u, m_treelist->GetColumnCount() );
+
+    CPPUNIT_ASSERT_EQUAL( 0, m_treelist->AppendColumn("Fresh") );
+    CPPUNIT_ASSERT_EQUAL( wxString(),
+                          m_treelist->GetItemText(m_code_osx, 0) );
+    CPPUNIT_ASSERT_EQUAL( wxString(),
+                          m_treelist->GetItemText(m_code_osx_cocoa, 0) );
+
+    m_treelist->SetItemText(m_code_osx, "new primary");
+    CPPUNIT_ASSERT_EQUAL( wxString("new primary"),
+                          m_treelist->GetItemText(m_code_osx, 0) );
+}
+
+void TreeListCtrlTestCase::DestructiveColumnCancellation()
+{
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    delete m_treelist;
+    m_treelist = nullptr;
+
+    const auto createTreeList =
+        []()
+        {
+            auto* const tree = new wxTreeListCtrl(
+                wxTheApp->GetTopWindow(),
+                wxID_ANY,
+                wxDefaultPosition,
+                wxSize(320, 160),
+                wxTL_MULTIPLE);
+            const int flags = wxCOL_RESIZABLE | wxCOL_REORDERABLE;
+            CPPUNIT_ASSERT_EQUAL(
+                0, tree->AppendColumn("first", 80, wxALIGN_LEFT, flags));
+            CPPUNIT_ASSERT_EQUAL(
+                1, tree->AppendColumn("second", 80, wxALIGN_LEFT, flags));
+            const wxTreeListItem item =
+                tree->AppendItem(tree->GetRootItem(), "row");
+            tree->SetItemText(item, 1, "survivor");
+            return tree;
+        };
+
+    const auto beginDrag =
+        [](wxHeaderCtrl* header)
+        {
+            CPPUNIT_ASSERT( header );
+            header->SetSize(0, 0, 320, 40);
+
+            wxMouseEvent down(wxEVT_LEFT_DOWN);
+            down.SetId(header->GetId());
+            down.SetEventObject(header);
+            down.SetPosition(wxPoint(90, 1));
+            header->ProcessWindowEvent(down);
+            CPPUNIT_ASSERT( header->HasCapture() );
+        };
+
+    // Destroying the composite consumes the internal columns. The already
+    // reduced pinned tree model must not be restored from stale node offsets.
+    wxTreeListCtrl* wrapper = createTreeList();
+    wxDataViewCtrl* view = wrapper->GetDataView();
+    wxHeaderCtrl* header = view->GenericGetHeader();
+    beginDrag(header);
+
+    int cancellations = 0;
+    const wxWeakRef<wxTreeListCtrl> weakWrapper(wrapper);
+    const wxWeakRef<wxDataViewCtrl> weakView(view);
+    header->Bind(
+        wxEVT_HEADER_DRAGGING_CANCELLED,
+        [&](wxHeaderCtrlEvent&)
+        {
+            ++cancellations;
+            delete wrapper;
+            wrapper = nullptr;
+        });
+
+    CPPUNIT_ASSERT( wrapper->DeleteColumn(0) );
+    CPPUNIT_ASSERT_EQUAL(1, cancellations);
+    CPPUNIT_ASSERT( !weakWrapper.get() );
+    CPPUNIT_ASSERT( !weakView.get() );
+
+    // GetDataView() is public: its lifetime must be checked independently
+    // from the wrapper before any rollback or column remapping.
+    wrapper = createTreeList();
+    view = wrapper->GetDataView();
+    header = view->GenericGetHeader();
+    beginDrag(header);
+
+    cancellations = 0;
+    const wxWeakRef<wxTreeListCtrl> weakSurvivingWrapper(wrapper);
+    const wxWeakRef<wxDataViewCtrl> weakDestroyedView(view);
+    header->Bind(
+        wxEVT_HEADER_DRAGGING_CANCELLED,
+        [&](wxHeaderCtrlEvent&)
+        {
+            ++cancellations;
+            delete view;
+            view = nullptr;
+        });
+
+    CPPUNIT_ASSERT( wrapper->DeleteColumn(0) );
+    CPPUNIT_ASSERT_EQUAL(1, cancellations);
+    CPPUNIT_ASSERT( weakSurvivingWrapper.get() == wrapper );
+    CPPUNIT_ASSERT( !weakDestroyedView.get() );
+
+    delete wrapper;
+    wrapper = nullptr;
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
 }
 
 #endif // wxUSE_TREELISTCTRL

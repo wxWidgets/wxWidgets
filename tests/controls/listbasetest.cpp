@@ -506,6 +506,14 @@ void ListBaseTestCase::Visible()
     CHECK(!list->IsVisible(9));
 
     CHECK(list->GetTopItem() != 0);
+
+    CHECK(list->EnsureVisible(0));
+    CHECK(list->IsVisible(0));
+    CHECK(list->GetTopItem() == 0);
+
+    CHECK(list->EnsureVisible(count + 9));
+    CHECK(list->IsVisible(count + 9));
+    CHECK(list->GetTopItem() != 0);
 }
 
 void ListBaseTestCase::ItemFormatting()
@@ -610,6 +618,16 @@ void ListBaseTestCase::HitTest()
     wxRect rectSubItem0, rectIcon;
     list->GetSubItemRect(0, 0, rectSubItem0); // column 0
     list->GetItemRect(0, rectIcon, wxLIST_RECT_ICON); // icon
+    wxRect rectSubItemIcon;
+    list->GetSubItemRect(0, 0, rectSubItemIcon, wxLIST_RECT_ICON);
+    CHECK(rectIcon == rectSubItemIcon);
+    CHECK(rectSubItem0.Contains(rectIcon));
+
+    wxRect rectLabel;
+    list->GetItemRect(0, rectLabel, wxLIST_RECT_LABEL);
+    CHECK(rectLabel.GetLeft() > rectIcon.GetLeft());
+    CHECK(!rectLabel.Intersects(rectIcon));
+
     int y = rectSubItem0.GetTop() + (rectSubItem0.GetBottom() -
             rectSubItem0.GetTop()) / 2;
     int flags = 0;
@@ -617,19 +635,19 @@ void ListBaseTestCase::HitTest()
     // state icon (checkbox)
     int xCheckBox = rectSubItem0.GetLeft() + (rectIcon.GetLeft() -
                     rectSubItem0.GetLeft()) / 2;
-    list->HitTest(wxPoint(xCheckBox, y), flags);
+    CHECK(list->HitTest(wxPoint(xCheckBox, y), flags) == 0);
     CHECK( flags == wxLIST_HITTEST_ONITEMSTATEICON );
 
     // icon
     int xIcon = rectIcon.GetLeft() + (rectIcon.GetRight() - rectIcon.GetLeft()) / 2;
-    list->HitTest(wxPoint(xIcon, y), flags);
+    CHECK(list->HitTest(wxPoint(xIcon, y), flags) == 0);
     CHECK( flags == wxLIST_HITTEST_ONITEMICON );
 
     // label, beyond column 0
     wxRect rectItem;
     list->GetItemRect(0, rectItem); // entire item
     int xHit = rectSubItem0.GetRight() + (rectItem.GetRight() - rectSubItem0.GetRight()) / 2;
-    list->HitTest(wxPoint(xHit, y), flags);
+    CHECK(list->HitTest(wxPoint(xHit, y), flags) == 0);
     CHECK( flags == wxLIST_HITTEST_ONITEMLABEL );
 #endif // __WXMSW__
 }

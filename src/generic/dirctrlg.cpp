@@ -82,6 +82,57 @@ extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[];
 
 bool wxIsDriveAvailable(const wxString& dirName);
 
+namespace
+{
+
+bool wxDirCtrlPathsEqual(const wxString& first, const wxString& second)
+{
+    const auto makeKey =
+        [](const wxString& path)
+        {
+            wxString key(path);
+            key.Replace("\\", wxString(wxFILE_SEP_PATH));
+            key.Replace("/", wxString(wxFILE_SEP_PATH));
+            while ( key.length() > 1 && wxEndsWithPathSeparator(key) )
+                key.RemoveLast();
+#if defined(__WINDOWS__)
+            key.MakeLower();
+#endif
+            return key;
+        };
+
+    return makeKey(first) == makeKey(second);
+}
+
+// wxWindowUpdateLocker keeps a raw pointer and so can't be used around the
+// virtual hooks and tree events published by this control. This variant owns
+// exactly one Freeze()/Thaw() level while allowing either the dir control or
+// its public child tree to be destroyed from a callback.
+class wxDirTreeUpdateLocker final
+{
+public:
+    explicit wxDirTreeUpdateLocker(wxTreeCtrl* tree)
+        : m_tree(tree)
+    {
+        if ( tree )
+            tree->Freeze();
+    }
+
+    ~wxDirTreeUpdateLocker()
+    {
+        wxTreeCtrl* const tree = m_tree.get();
+        if ( tree && tree->IsFrozen() )
+            tree->Thaw();
+    }
+
+private:
+    wxWeakRef<wxTreeCtrl> m_tree;
+
+    wxDECLARE_NO_COPY_CLASS(wxDirTreeUpdateLocker);
+};
+
+} // namespace
+
 // ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
@@ -361,11 +412,24 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;
 
-    m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
-                                wxPoint(0,0), GetClientSize(), treeStyle);
+    wxTreeCtrl* const treeCtrl =
+        CreateTreeCtrl(this, wxID_TREECTRL,
+                       wxPoint(0,0), GetClientSize(), treeStyle);
+    if ( !treeCtrl )
+        return false;
+    m_treeCtrl = wxWeakRef<wxTreeCtrl>(treeCtrl);
 
     if (!filter.empty() && (style & wxDIRCTRL_SHOW_FILTERS))
-        m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL);
+    {
+        wxDirFilterListCtrl* const filterList =
+            new wxDirFilterListCtrl;
+        if ( !filterList->Create(this, wxID_FILTERLISTCTRL) )
+        {
+            delete filterList;
+            return false;
+        }
+        m_filterListCtrl = wxWeakRef<wxDirFilterListCtrl>(filterList);
+    }
 
     m_defaultPath = dir;
     m_filter = filter;
@@ -373,10 +437,18 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     if (m_filter.empty())
         m_filter = wxFileSelectorDefaultWildcardStr;
 
-    SetFilterIndex(defaultFilter);
+    wxArrayString filterDescriptions;
+    wxArrayString filterWildcards;
+    const int filterCount =
+        wxParseCommonDialogsFilter(
+            m_filter, filterDescriptions, filterWildcards);
+    const int initialFilter =
+        defaultFilter >= 0 && defaultFilter < filterCount ? defaultFilter : 0;
+
+    SetFilterIndex(initialFilter);
 
     if (m_filterListCtrl)
-        m_filterListCtrl->FillFilterList(filter, defaultFilter);
+        m_filterListCtrl->FillFilterList(filter, initialFilter);
 
     // TODO: set the icon size according to current scaling for this window.
     // Currently, there's insufficient API in wxWidgets to determine what icons
@@ -424,8 +496,8 @@ void wxGenericDirCtrl::Init()
     m_showHidden = false;
     m_currentFilter = 0;
     m_currentFilterStr.clear(); // Default: any file
-    m_treeCtrl = nullptr;
-    m_filterListCtrl = nullptr;
+    m_treeCtrl.Release();
+    m_filterListCtrl.Release();
 }
 
 wxTreeCtrl* wxGenericDirCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID treeid, const wxPoint& pos, const wxSize& size, long treeStyle)
@@ -439,21 +511,28 @@ void wxGenericDirCtrl::ShowHidden( bool show )
         return;
 
     m_showHidden = show;
+    const wxWeakRef<wxWindow> weakThis(this);
 
     if ( HasFlag(wxDIRCTRL_MULTIPLE) )
     {
         wxArrayString paths;
         GetPaths(paths);
         ReCreateTree();
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
         for ( unsigned n = 0; n < paths.size(); n++ )
         {
             ExpandPath(paths[n]);
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return;
         }
     }
     else
     {
         wxString path = GetPath();
         ReCreateTree();
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
         SetPath(path);
     }
 }
@@ -461,43 +540,86 @@ void wxGenericDirCtrl::ShowHidden( bool show )
 const wxTreeItemId
 wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId)
 {
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return wxTreeItemId();
+
+    const wxWeakRef<wxWindow> weakThis(this);
     wxDirItemData *dir_item = new wxDirItemData(path,name,true);
 
-    wxTreeItemId treeid = AppendItem( m_rootId, name, imageId, -1, dir_item);
+    const wxTreeItemId inserted =
+        AppendItem(m_rootId, name, imageId, -1, dir_item);
+    if ( weakThis.get() != this || IsBeingDeleted() ||
+         m_treeCtrl.get() != treeCtrl )
+    {
+        return wxTreeItemId();
+    }
+    if ( !inserted.IsOk() )
+    {
+        delete dir_item;
+        return wxTreeItemId();
+    }
 
-    m_treeCtrl->SetItemHasChildren(treeid);
+    const wxTreeItemId treeid = FindItem(path);
+    if ( treeid.IsOk() )
+        treeCtrl->SetItemHasChildren(treeid);
 
     return treeid;
 }
 
 void wxGenericDirCtrl::SetupSections()
 {
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return;
+
+    const wxTreeItemId rootId = m_rootId;
+    wxDirTreeUpdateLocker updateLocker(treeCtrl);
     wxArrayString paths, names;
     wxArrayInt icons;
 
     size_t n, count = wxGetAvailableDrives(paths, names, icons);
+    const wxWeakRef<wxWindow> weakThis(this);
 
 #ifdef __WXGTK__
     wxString home = wxGetHomeDir();
     AddSection( home, _("Home directory"), 1);
+    if ( weakThis.get() != this || IsBeingDeleted() ||
+         m_treeCtrl.get() != treeCtrl || m_rootId != rootId )
+        return;
     home += wxT("/Desktop");
     AddSection( home, _("Desktop"), 1);
+    if ( weakThis.get() != this || IsBeingDeleted() ||
+         m_treeCtrl.get() != treeCtrl || m_rootId != rootId )
+        return;
 #endif
 
     for (n = 0; n < count; n++)
+    {
         AddSection(paths[n], names[n], icons[n]);
+        if ( weakThis.get() != this || IsBeingDeleted() ||
+             m_treeCtrl.get() != treeCtrl || m_rootId != rootId )
+            return;
+    }
 }
 
 void wxGenericDirCtrl::SetFocus()
 {
     // we don't need focus ourselves, give it to the tree so that the user
     // could navigate it
-    if (m_treeCtrl)
+    if (m_treeCtrl && !m_treeCtrl->IsBeingDeleted())
         m_treeCtrl->SetFocus();
 }
 
 void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
 {
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+    {
+        event.Veto();
+        return;
+    }
+
     // don't rename the main entry "Sections"
     if (event.GetItem() == m_rootId)
     {
@@ -506,7 +628,7 @@ void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
     }
 
     // don't rename the individual sections
-    if (m_treeCtrl->GetItemParent( event.GetItem() ) == m_rootId)
+    if (treeCtrl->GetItemParent( event.GetItem() ) == m_rootId)
     {
         event.Veto();
         return;
@@ -541,16 +663,32 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
 
     wxLogNull log;
 
-    if (wxFileExists(new_name))
+    if (wxFileExists(new_name) || wxDirExists(new_name))
     {
         wxMessageDialog dialog(this, _("File name exists already."), _("Error"), wxOK | wxICON_ERROR );
         dialog.ShowModal();
         event.Veto();
+        return;
     }
 
     if (wxRenameFile(data->m_path,new_name))
     {
-        data->SetNewDirName( new_name );
+        const wxWeakRef<wxWindow> weakThis(this);
+        const wxString oldPath(data->m_path);
+        CollapseDir(treeid);
+        if ( weakThis.get() != this || IsBeingDeleted() || !m_treeCtrl )
+            return;
+
+        // Collapse can synchronously publish child deletion events. Resolve
+        // the item again instead of retaining wxDirItemData/tree IDs across
+        // arbitrary application callbacks.
+        const wxTreeItemId liveItem = FindItem(oldPath);
+        wxDirItemData* const liveData =
+            liveItem.IsOk() ? GetItemData(liveItem) : nullptr;
+        if ( liveData && liveData->m_path == oldPath )
+            liveData->SetNewDirName(new_name);
+        // If an event rebuilt the tree, it already observed the renamed
+        // filesystem entry and no in-place data update is necessary.
     }
     else
     {
@@ -562,6 +700,11 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
 
 void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
 {
+    // Do not leave the originating tree event marked for propagation while
+    // publishing the translated public event: an application is allowed to
+    // destroy this composite (and hence the child tree) from that callback.
+    event.Skip(false);
+    const wxWeakRef<wxWindow> weakThis(this);
     wxTreeEvent changedEvent(wxEVT_DIRCTRL_SELECTIONCHANGED, GetId());
 
     changedEvent.SetEventObject(this);
@@ -570,10 +713,15 @@ void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
     if ( item.IsOk() )
     {
         changedEvent.SetItem(item);
-        changedEvent.SetClientObject(m_treeCtrl->GetItemData(item));
+        changedEvent.SetClientObject(GetItemData(item));
     }
 
-    if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
+    const bool processed =
+        GetEventHandler()->SafelyProcessEvent(changedEvent);
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
+
+    if (processed && !changedEvent.IsAllowed())
         event.Veto();
     else
         event.Skip();
@@ -583,6 +731,8 @@ void wxGenericDirCtrl::OnItemActivated(wxTreeEvent &event)
 {
     wxTreeItemId treeid = event.GetItem();
     const wxDirItemData *data = GetItemData(treeid);
+    if ( !data )
+        return;
 
     if (data->m_isDir)
     {
@@ -592,13 +742,20 @@ void wxGenericDirCtrl::OnItemActivated(wxTreeEvent &event)
     else
     {
         // is file
+        event.Skip(false);
+        const wxWeakRef<wxWindow> weakThis(this);
         wxTreeEvent changedEvent(wxEVT_DIRCTRL_FILEACTIVATED, GetId());
 
         changedEvent.SetEventObject(this);
         changedEvent.SetItem(treeid);
-        changedEvent.SetClientObject(m_treeCtrl->GetItemData(treeid));
+        changedEvent.SetClientObject(GetItemData(treeid));
 
-        if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
+        const bool processed =
+            GetEventHandler()->SafelyProcessEvent(changedEvent);
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
+
+        if (processed && !changedEvent.IsAllowed())
             event.Veto();
         else
             event.Skip();
@@ -607,13 +764,17 @@ void wxGenericDirCtrl::OnItemActivated(wxTreeEvent &event)
 
 void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
 {
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return;
+
     wxTreeItemId parentId = event.GetItem();
 
     // VS: this is needed because the event handler is called from wxTreeCtrl
     //     ctor when wxTR_HIDE_ROOT was specified
 
     if (!m_rootId.IsOk())
-        m_rootId = m_treeCtrl->GetRootItem();
+        m_rootId = treeCtrl->GetRootItem();
 
     ExpandDir(parentId);
 }
@@ -625,31 +786,55 @@ void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
 
 void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
 {
-    wxTreeItemId child;
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return;
 
     wxDirItemData *data = GetItemData(parentId);
-    if (!data->m_isExpanded)
+    if (!data || !data->m_isExpanded)
         return;
 
     data->m_isExpanded = false;
 
-    m_treeCtrl->Freeze();
-    if (parentId != m_treeCtrl->GetRootItem())
-        m_treeCtrl->CollapseAndReset(parentId);
-    m_treeCtrl->DeleteChildren(parentId);
-    m_treeCtrl->Thaw();
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxDirTreeUpdateLocker updateLocker(treeCtrl);
+    if (parentId != treeCtrl->GetRootItem())
+    {
+        treeCtrl->CollapseAndReset(parentId);
+    }
+    else
+    {
+        treeCtrl->DeleteChildren(parentId);
+    }
+    if ( weakThis.get() != this || IsBeingDeleted() ||
+         m_treeCtrl.get() != treeCtrl )
+    {
+        return;
+    }
 }
 
 void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 {
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return;
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    const auto isAlive =
+        [this, &weakThis, treeCtrl]()
+        {
+            return weakThis.get() == this &&
+                   !IsBeingDeleted() &&
+                   m_treeCtrl.get() == treeCtrl;
+        };
     wxDirItemData *data = GetItemData(parentId);
 
-    if (data->m_isExpanded)
+    if (!data || data->m_isExpanded)
         return;
 
     data->m_isExpanded = true;
 
-    if (parentId == m_treeCtrl->GetRootItem())
+    if (parentId == treeCtrl->GetRootItem())
     {
         SetupSections();
         return;
@@ -660,6 +845,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     wxString path;
 
     wxString dirName(data->m_path);
+    const wxString parentPath(data->m_path);
 
 #if defined(__WINDOWS__)
     // Check if this is a root directory and if so,
@@ -705,6 +891,41 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
             while (d.GetNext(&eachFilename));
         }
     }
+
+    // An explicit default/current path must remain reachable even when one of
+    // its ancestors is hidden (the Windows user temp directory commonly sits
+    // below the hidden AppData directory). Keep just the next required
+    // directory visible; unrelated hidden siblings remain excluded.
+    if ( !m_showHidden && !m_defaultPath.empty() )
+    {
+        wxString parentPrefix(dirName);
+        if ( !wxEndsWithPathSeparator(parentPrefix) )
+            parentPrefix += wxFILE_SEP_PATH;
+
+        wxString targetPath(m_defaultPath);
+        targetPath.Replace("/", wxString(wxFILE_SEP_PATH));
+        targetPath.Replace("\\", wxString(wxFILE_SEP_PATH));
+
+        wxString comparableParent(parentPrefix);
+        wxString comparableTarget(targetPath);
+#if defined(__WINDOWS__)
+        comparableParent.MakeLower();
+        comparableTarget.MakeLower();
+#endif
+        if ( comparableTarget.StartsWith(comparableParent) )
+        {
+            const wxString remainder =
+                targetPath.Mid(parentPrefix.length());
+            const wxString requiredChild =
+                remainder.BeforeFirst(wxFILE_SEP_PATH);
+            if ( !requiredChild.empty() &&
+                 dirs.Index(requiredChild) == wxNOT_FOUND &&
+                 wxDirExists(parentPrefix + requiredChild) )
+            {
+                dirs.Add(requiredChild);
+            }
+        }
+    }
     dirs.Sort(wxCmpNatural);
 
     // Now do the filenames -- but only if we're allowed to
@@ -729,7 +950,8 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
                     {
                         if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
                         {
-                            filenames.Add(eachFilename);
+                            if ( filenames.Index(eachFilename) == wxNOT_FOUND )
+                                filenames.Add(eachFilename);
                         }
                     }
                     while (d.GetNext(& eachFilename));
@@ -741,7 +963,10 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
     // Now we really know whether we have any children so tell the tree control
     // about it.
-    m_treeCtrl->SetItemHasChildren(parentId, !dirs.empty() || !filenames.empty());
+    wxDirTreeUpdateLocker updateLocker(treeCtrl);
+    treeCtrl->SetItemHasChildren(parentId, !dirs.empty() || !filenames.empty());
+    if ( !isAlive() )
+        return;
 
     // Add the sorted dirs
     size_t i;
@@ -753,18 +978,45 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
             path += wxString(wxFILE_SEP_PATH);
         path += eachFilename;
 
+        wxDirItemData* liveParentData = GetItemData(parentId);
+        if ( !liveParentData ||
+             !wxDirCtrlPathsEqual(liveParentData->m_path, parentPath) )
+        {
+            parentId = FindItem(parentPath);
+        }
+        if ( !parentId.IsOk() )
+            return;
+
         wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,true);
         wxTreeItemId treeid = AppendItem( parentId, eachFilename,
-                                      wxFileIconsTable::folder, -1, dir_item);
-        m_treeCtrl->SetItemImage( treeid, wxFileIconsTable::folder_open,
-                                  wxTreeItemIcon_Expanded );
+                                       wxFileIconsTable::folder, -1, dir_item);
+        if ( !isAlive() )
+            return;
+        if ( !treeid.IsOk() )
+        {
+            delete dir_item;
+            return;
+        }
+        wxDirItemData* liveItemData =
+            treeid.IsOk() ? GetItemData(treeid) : nullptr;
+        if ( !liveItemData ||
+             !wxDirCtrlPathsEqual(liveItemData->m_path, path) )
+        {
+            treeid = FindItem(path);
+        }
+        if ( !treeid.IsOk() )
+            return;
+        treeCtrl->SetItemImage( treeid, wxFileIconsTable::folder_open,
+                                wxTreeItemIcon_Expanded );
 
         // assume that it does have children by default as it can take a long
         // time to really check for this (think remote drives...)
         //
         // and if we're wrong, we'll correct the icon later if
         // the user really tries to open this item
-        m_treeCtrl->SetItemHasChildren(treeid);
+        treeCtrl->SetItemHasChildren(treeid);
+        if ( !isAlive() )
+            return;
     }
 
     // Add the sorted filenames
@@ -778,11 +1030,29 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
                 path += wxString(wxFILE_SEP_PATH);
             path += eachFilename;
             //path = dirName + wxString(wxT("/")) + eachFilename;
+
+            wxDirItemData* liveParentData = GetItemData(parentId);
+            if ( !liveParentData ||
+                 !wxDirCtrlPathsEqual(liveParentData->m_path, parentPath) )
+            {
+                parentId = FindItem(parentPath);
+            }
+            if ( !parentId.IsOk() )
+                return;
+
             wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,false);
             int image_id = wxFileIconsTable::file;
             if (eachFilename.Find(wxT('.')) != wxNOT_FOUND)
                 image_id = wxTheFileIconsTable->GetIconID(eachFilename.AfterLast(wxT('.')));
-            (void) AppendItem( parentId, eachFilename, image_id, -1, dir_item);
+            const wxTreeItemId inserted =
+                AppendItem(parentId, eachFilename, image_id, -1, dir_item);
+            if ( !isAlive() )
+                return;
+            if ( !inserted.IsOk() )
+            {
+                delete dir_item;
+                return;
+            }
         }
     }
 }
@@ -795,18 +1065,45 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
 void wxGenericDirCtrl::ReCreateTree()
 {
-    CollapseDir(m_treeCtrl->GetRootItem());
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return;
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxDirTreeUpdateLocker updateLocker(treeCtrl);
+    CollapseDir(treeCtrl->GetRootItem());
+    if ( weakThis.get() != this || IsBeingDeleted() ||
+         m_treeCtrl.get() != treeCtrl )
+    {
+        return;
+    }
     ExpandRoot();
 }
 
 void wxGenericDirCtrl::CollapseTree()
 {
+    if ( !m_treeCtrl || m_treeCtrl->IsBeingDeleted() )
+        return;
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxArrayString sectionPaths;
     wxTreeItemIdValue cookie;
     wxTreeItemId child = m_treeCtrl->GetFirstChild(m_rootId, cookie);
     while (child.IsOk())
     {
-        CollapseDir(child);
+        const wxString path = GetPath(child);
+        if ( !path.empty() )
+            sectionPaths.Add(path);
         child = m_treeCtrl->GetNextChild(m_rootId, cookie);
+    }
+
+    for ( const wxString& path : sectionPaths )
+    {
+        const wxTreeItemId liveChild = FindItem(path);
+        if ( liveChild.IsOk() )
+            CollapseDir(liveChild);
+        if ( weakThis.get() != this || IsBeingDeleted() || !m_treeCtrl )
+            return;
     }
 }
 
@@ -815,6 +1112,10 @@ void wxGenericDirCtrl::CollapseTree()
 // then the child for /usr is returned.
 wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& path, bool& done)
 {
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return wxTreeItemId();
+
     wxString path2(path);
 
     // Make sure all separators are as per the current platform
@@ -830,7 +1131,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
 #endif
 
     wxTreeItemIdValue cookie;
-    wxTreeItemId childId = m_treeCtrl->GetFirstChild(parentId, cookie);
+    wxTreeItemId childId = treeCtrl->GetFirstChild(parentId, cookie);
     while (childId.IsOk())
     {
         wxDirItemData* data = GetItemData(childId);
@@ -860,115 +1161,226 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
             }
         }
 
-        childId = m_treeCtrl->GetNextChild(parentId, cookie);
+        childId = treeCtrl->GetNextChild(parentId, cookie);
     }
     wxTreeItemId invalid;
     return invalid;
+}
+
+wxTreeItemId wxGenericDirCtrl::FindItem(const wxString& path)
+{
+    if ( !m_treeCtrl || m_treeCtrl->IsBeingDeleted() || !m_rootId.IsOk() )
+        return wxTreeItemId();
+
+    bool done = false;
+    wxTreeItemId item = FindChild(m_rootId, path, done);
+    while ( item.IsOk() )
+    {
+        if ( done || wxDirCtrlPathsEqual(GetPath(item), path) )
+            return item;
+
+        item = FindChild(item, path, done);
+    }
+
+    return wxTreeItemId();
 }
 
 // Try to expand as much of the given path as possible,
 // and select the given tree item.
 bool wxGenericDirCtrl::ExpandPath(const wxString& path)
 {
-    bool done = false;
-    wxTreeItemId treeid = FindChild(m_rootId, path, done);
-    wxTreeItemId lastId = treeid; // The last non-zero treeid
-    while (treeid.IsOk() && !done)
-    {
-        ExpandDir(treeid);
-
-        treeid = FindChild(treeid, path, done);
-        if (treeid.IsOk())
-            lastId = treeid;
-    }
-    if (!lastId.IsOk())
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
         return false;
 
-    wxDirItemData *data = GetItemData(lastId);
-    if (data->m_isDir)
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxDirTreeUpdateLocker updateLocker(treeCtrl);
+    const auto isAlive =
+        [this, &weakThis, treeCtrl]()
+        {
+            return weakThis.get() == this &&
+                   !IsBeingDeleted() &&
+                   m_treeCtrl.get() == treeCtrl;
+        };
+
+    bool done = false;
+    wxTreeItemId parent = m_rootId;
+    wxString lastPath;
+    while ( parent.IsOk() )
     {
-        m_treeCtrl->Expand(lastId);
+        wxTreeItemId child = FindChild(parent, path, done);
+        if ( !child.IsOk() )
+        {
+            // The filesystem may have changed after this node was populated.
+            // Refresh the closest known ancestor once and retry instead of
+            // silently leaving the old selection in place. This is also what
+            // makes SetPath() useful for a newly-created long/Unicode branch.
+            const bool parentIsRoot = parent == m_rootId;
+            const wxString parentPath =
+                parentIsRoot ? wxString() : GetPath(parent);
+            CollapseDir(parent);
+            if ( !isAlive() )
+                return false;
+
+            parent = parentIsRoot ? m_rootId : FindItem(parentPath);
+            if ( !parent.IsOk() )
+                break;
+
+            ExpandDir(parent);
+            if ( !isAlive() )
+                return false;
+
+            parent = parentIsRoot ? m_rootId : FindItem(parentPath);
+            if ( !parent.IsOk() )
+                break;
+
+            child = FindChild(parent, path, done);
+        }
+        if ( !child.IsOk() )
+            break;
+
+        lastPath = GetPath(child);
+        if ( done )
+            break;
+
+        ExpandDir(child);
+        if ( !isAlive() )
+            return false;
+
+        // ExpandDir()/AppendItem() are virtual and list/tree events can run
+        // arbitrary application code. Never carry the pre-callback item ID
+        // into the next iteration.
+        parent = FindItem(lastPath);
     }
+
+    if ( lastPath.empty() )
+        return false;
+
+    wxTreeItemId lastId = FindItem(lastPath);
+    wxDirItemData* data =
+        lastId.IsOk() ? GetItemData(lastId) : nullptr;
+    if ( !data )
+        return false;
+
+    if ( data->m_isDir )
+    {
+        treeCtrl->Expand(lastId);
+        if ( !isAlive() )
+            return false;
+
+        lastId = FindItem(lastPath);
+        data = lastId.IsOk() ? GetItemData(lastId) : nullptr;
+        if ( !data )
+            return false;
+    }
+
+    const auto selectAndReveal =
+        [this, &isAlive, treeCtrl](const wxString& itemPath)
+        {
+            wxTreeItemId item = FindItem(itemPath);
+            if ( !item.IsOk() )
+                return false;
+
+            treeCtrl->SelectItem(item);
+            if ( !isAlive() )
+                return false;
+
+            item = FindItem(itemPath);
+            if ( !item.IsOk() )
+                return false;
+
+            treeCtrl->EnsureVisible(item);
+            return isAlive();
+        };
+
     if (HasFlag(wxDIRCTRL_SELECT_FIRST) && data->m_isDir)
     {
         // Find the first file in this directory
+        wxString firstFilePath;
         wxTreeItemIdValue cookie;
-        wxTreeItemId childId = m_treeCtrl->GetFirstChild(lastId, cookie);
-        bool selectedChild = false;
+        wxTreeItemId childId = treeCtrl->GetFirstChild(lastId, cookie);
         while (childId.IsOk())
         {
             data = GetItemData(childId);
 
             if (data && !data->m_path.empty() && !data->m_isDir)
             {
-                m_treeCtrl->SelectItem(childId);
-                m_treeCtrl->EnsureVisible(childId);
-                selectedChild = true;
+                firstFilePath = data->m_path;
                 break;
             }
-            childId = m_treeCtrl->GetNextChild(lastId, cookie);
+            childId = treeCtrl->GetNextChild(lastId, cookie);
         }
-        if (!selectedChild)
-        {
-            m_treeCtrl->SelectItem(lastId);
-            m_treeCtrl->EnsureVisible(lastId);
-        }
-    }
-    else
-    {
-        m_treeCtrl->SelectItem(lastId);
-        m_treeCtrl->EnsureVisible(lastId);
+
+        return selectAndReveal(firstFilePath.empty()
+                                 ? lastPath
+                                 : firstFilePath);
     }
 
-    return true;
+    return selectAndReveal(lastPath);
 }
 
 
 bool wxGenericDirCtrl::CollapsePath(const wxString& path)
 {
-    bool done           = false;
-    wxTreeItemId treeid     = FindChild(m_rootId, path, done);
-    wxTreeItemId lastId = treeid; // The last non-zero treeid
-
-    while ( treeid.IsOk() && !done )
-    {
-        CollapseDir(treeid);
-
-        treeid = FindChild(treeid, path, done);
-
-        if ( treeid.IsOk() )
-            lastId = treeid;
-    }
-
-    if ( !lastId.IsOk() )
+    if ( !m_treeCtrl || m_treeCtrl->IsBeingDeleted() )
         return false;
 
-    m_treeCtrl->SelectItem(lastId);
-    m_treeCtrl->EnsureVisible(lastId);
+    const wxWeakRef<wxWindow> weakThis(this);
+    const wxTreeItemId item = FindItem(path);
+    if ( !item.IsOk() )
+        return false;
+
+    CollapseDir(item);
+    if ( weakThis.get() != this || IsBeingDeleted() || !m_treeCtrl )
+        return false;
+
+    const wxTreeItemId liveItem = FindItem(path);
+    if ( !liveItem.IsOk() )
+        return false;
+
+    m_treeCtrl->SelectItem(liveItem);
+    if ( weakThis.get() != this || IsBeingDeleted() || !m_treeCtrl )
+        return false;
+
+    const wxTreeItemId visibleItem = FindItem(path);
+    if ( !visibleItem.IsOk() )
+        return false;
+    m_treeCtrl->EnsureVisible(visibleItem);
 
     return true;
 }
 
 wxDirItemData* wxGenericDirCtrl::GetItemData(wxTreeItemId itemId)
 {
-    return static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    return treeCtrl && !treeCtrl->IsBeingDeleted()
+        ? static_cast<wxDirItemData*>(treeCtrl->GetItemData(itemId))
+        : nullptr;
 }
 
 wxString wxGenericDirCtrl::GetPath(wxTreeItemId itemId) const
 {
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return wxString();
+
     const wxDirItemData*
-        data = static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
+        data = static_cast<wxDirItemData*>(treeCtrl->GetItemData(itemId));
 
     return data ? data->m_path : wxString();
 }
 
 wxString wxGenericDirCtrl::GetPath() const
 {
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return wxString();
+
     // Allow calling GetPath() in multiple selection from OnSelFilter
-    if (m_treeCtrl->HasFlag(wxTR_MULTIPLE))
+    if (treeCtrl->HasFlag(wxTR_MULTIPLE))
     {
         wxArrayTreeItemIds items;
-        m_treeCtrl->GetSelections(items);
+        treeCtrl->GetSelections(items);
         if (items.size() > 0)
         {
             // return first string only
@@ -979,7 +1391,7 @@ wxString wxGenericDirCtrl::GetPath() const
         return wxEmptyString;
     }
 
-    wxTreeItemId treeid = m_treeCtrl->GetSelection();
+    wxTreeItemId treeid = treeCtrl->GetSelection();
     if (treeid)
     {
         return GetPath(treeid);
@@ -992,8 +1404,12 @@ void wxGenericDirCtrl::GetPaths(wxArrayString& paths) const
 {
     paths.clear();
 
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return;
+
     wxArrayTreeItemIds items;
-    m_treeCtrl->GetSelections(items);
+    treeCtrl->GetSelections(items);
     for ( unsigned n = 0; n < items.size(); n++ )
     {
         wxTreeItemId treeid = items[n];
@@ -1003,11 +1419,16 @@ void wxGenericDirCtrl::GetPaths(wxArrayString& paths) const
 
 wxString wxGenericDirCtrl::GetFilePath() const
 {
-    wxTreeItemId treeid = m_treeCtrl->GetSelection();
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return wxString();
+
+    wxTreeItemId treeid = treeCtrl->GetSelection();
     if (treeid)
     {
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
-        if (data->m_isDir)
+        wxDirItemData* data =
+            static_cast<wxDirItemData*>(treeCtrl->GetItemData(treeid));
+        if ( !data || data->m_isDir )
             return wxEmptyString;
         else
             return data->m_path;
@@ -1020,13 +1441,18 @@ void wxGenericDirCtrl::GetFilePaths(wxArrayString& paths) const
 {
     paths.clear();
 
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
+        return;
+
     wxArrayTreeItemIds items;
-    m_treeCtrl->GetSelections(items);
+    treeCtrl->GetSelections(items);
     for ( unsigned n = 0; n < items.size(); n++ )
     {
         wxTreeItemId treeid = items[n];
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
-        if ( !data->m_isDir )
+        wxDirItemData* data =
+            static_cast<wxDirItemData*>(treeCtrl->GetItemData(treeid));
+        if ( data && !data->m_isDir )
             paths.Add(data->m_path);
     }
 }
@@ -1040,39 +1466,32 @@ void wxGenericDirCtrl::SetPath(const wxString& path)
 
 void wxGenericDirCtrl::SelectPath(const wxString& path, bool select)
 {
-    bool done = false;
-    wxTreeItemId treeid = FindChild(m_rootId, path, done);
-    wxTreeItemId lastId = treeid; // The last non-zero treeid
-    while ( treeid.IsOk() && !done )
-    {
-        treeid = FindChild(treeid, path, done);
-        if ( treeid.IsOk() )
-            lastId = treeid;
-    }
-    if ( !lastId.IsOk() )
-        return;
-
-    if ( done )
-    {
-        m_treeCtrl->SelectItem(treeid, select);
-    }
+    const wxTreeItemId item = FindItem(path);
+    if ( item.IsOk() && m_treeCtrl && !m_treeCtrl->IsBeingDeleted() )
+        m_treeCtrl->SelectItem(item, select);
 }
 
 void wxGenericDirCtrl::SelectPaths(const wxArrayString& paths)
 {
     if ( HasFlag(wxDIRCTRL_MULTIPLE) )
     {
+        const wxWeakRef<wxWindow> weakThis(this);
         UnselectAll();
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
         for ( unsigned n = 0; n < paths.size(); n++ )
         {
             SelectPath(paths[n]);
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return;
         }
     }
 }
 
 void wxGenericDirCtrl::UnselectAll()
 {
-    m_treeCtrl->UnselectAll();
+    if ( m_treeCtrl && !m_treeCtrl->IsBeingDeleted() )
+        m_treeCtrl->UnselectAll();
 }
 
 // Not used
@@ -1120,49 +1539,125 @@ void wxGenericDirCtrl::FindChildFiles(wxTreeItemId treeid, int dirFlags, wxArray
 
 void wxGenericDirCtrl::SetFilterIndex(int n)
 {
+    wxArrayString descriptions;
+    wxArrayString filters;
+    const int count = m_filter.empty()
+        ? 0
+        : wxParseCommonDialogsFilter(m_filter, descriptions, filters);
+
+    if ( count > 0 )
+    {
+        if ( n < 0 || n >= count )
+            return;
+    }
+    else if ( n != 0 )
+    {
+        return;
+    }
+
+    wxArrayString selectedPaths;
+    wxString selectedPath;
+    const bool canRestore = m_treeCtrl && m_rootId.IsOk();
+    if ( canRestore )
+    {
+        if ( HasFlag(wxDIRCTRL_MULTIPLE) )
+            wxGenericDirCtrl::GetPaths(selectedPaths);
+        else
+            selectedPath = wxGenericDirCtrl::GetPath();
+    }
+
     m_currentFilter = n;
 
-    wxString f, d;
-    if (ExtractWildcard(m_filter, n, f, d))
-        m_currentFilterStr = f;
+    if ( count > 0 )
+        m_currentFilterStr = filters[static_cast<size_t>(n)];
     else
 #ifdef __UNIX__
         m_currentFilterStr = wxT("*");
 #else
         m_currentFilterStr = wxT("*.*");
 #endif
+
+    if ( m_filterListCtrl &&
+         !m_filterListCtrl->IsBeingDeleted() &&
+         m_filterListCtrl->GetSelection() != n )
+    {
+        m_filterListCtrl->SetSelection(n);
+    }
+
+    if ( !canRestore )
+        return;
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    ReCreateTree();
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
+
+    if ( HasFlag(wxDIRCTRL_MULTIPLE) )
+    {
+        for ( const wxString& path : selectedPaths )
+        {
+            ExpandPath(path);
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return;
+        }
+    }
+    else if ( !selectedPath.empty() )
+    {
+        ExpandPath(selectedPath);
+    }
 }
 
 void wxGenericDirCtrl::SetFilter(const wxString& filter)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
     m_filter = filter;
 
     if (!filter.empty() && !m_filterListCtrl && HasFlag(wxDIRCTRL_SHOW_FILTERS))
-        m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL);
-    else if (filter.empty() && m_filterListCtrl)
     {
-        m_filterListCtrl->Destroy();
-        m_filterListCtrl = nullptr;
+        wxDirFilterListCtrl* const filterList =
+            new wxDirFilterListCtrl;
+        if ( filterList->Create(this, wxID_FILTERLISTCTRL) )
+            m_filterListCtrl = wxWeakRef<wxDirFilterListCtrl>(filterList);
+        else
+            delete filterList;
+    }
+    wxDirFilterListCtrl* const filterList = m_filterListCtrl.get();
+    if (filterList && !filterList->IsBeingDeleted())
+    {
+        // Keep an empty associated child alive but hidden. Destroy() is
+        // deferred on several ports, and recreating another child immediately
+        // would leave two controls with wxID_FILTERLISTCTRL and a queued stale
+        // event.
+        filterList->FillFilterList(m_filter, 0);
+        if ( weakThis.get() != this || IsBeingDeleted() ||
+             m_filterListCtrl.get() != filterList )
+        {
+            return;
+        }
+
+        if ( !filter.empty() )
+            filterList->Show();
+        else
+            filterList->Hide();
+        if ( weakThis.get() != this || IsBeingDeleted() )
+            return;
     }
 
-    wxString f, d;
-    if (ExtractWildcard(m_filter, m_currentFilter, f, d))
-        m_currentFilterStr = f;
-    else
-#ifdef __UNIX__
-        m_currentFilterStr = wxT("*");
-#else
-        m_currentFilterStr = wxT("*.*");
-#endif
-    // current filter index is meaningless after filter change, set it to zero
+    DoResize();
+    if ( weakThis.get() != this || IsBeingDeleted() )
+        return;
+
+    // The previous index is meaningless for a new filter. This also refreshes
+    // the tree and restores the closest still-visible selection.
     SetFilterIndex(0);
-    if (m_filterListCtrl)
-        m_filterListCtrl->FillFilterList(m_filter, 0);
 }
 
 // Extract description and actual filter from overall filter string
 bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxString& filter, wxString& description)
 {
+    if ( filterStr.empty() )
+        return false;
+
     wxArrayString filters, descriptions;
     int count = wxParseCommonDialogsFilter(filterStr, descriptions, filters);
     if (count > 0 && n < count)
@@ -1180,20 +1675,44 @@ void wxGenericDirCtrl::DoResize()
 {
     wxSize sz = GetClientSize();
     int verticalSpacing = 3;
-    if (m_treeCtrl)
+    wxTreeCtrl* const treeCtrl = m_treeCtrl.get();
+    if (treeCtrl && !treeCtrl->IsBeingDeleted() &&
+        treeCtrl->GetParent() == this)
     {
+        const wxWeakRef<wxWindow> weakThis(this);
         wxSize filterSz ;
-        if (m_filterListCtrl)
+        wxDirFilterListCtrl* filterList = m_filterListCtrl.get();
+        wxDirFilterListCtrl* const measuredFilter = filterList;
+        if (filterList && filterList->GetParent() == this &&
+            !filterList->IsBeingDeleted() &&
+            filterList->IsShown())
         {
-            filterSz = m_filterListCtrl->GetBestSize();
+            filterSz = filterList->GetBestSize();
             sz.y -= (filterSz.y + verticalSpacing);
         }
-        m_treeCtrl->SetSize(0, 0, sz.x, sz.y);
-        if (m_filterListCtrl)
+        treeCtrl->SetSize(0, 0, sz.x, sz.y);
+        if ( weakThis.get() != this || IsBeingDeleted() ||
+             m_treeCtrl.get() != treeCtrl )
         {
-            m_filterListCtrl->SetSize(0, sz.y + verticalSpacing, sz.x, filterSz.y);
+            return;
+        }
+
+        filterList = m_filterListCtrl.get();
+        if (filterList && filterList == measuredFilter &&
+            filterList->GetParent() == this &&
+            !filterList->IsBeingDeleted() &&
+            filterList->IsShown())
+        {
+            filterList->SetSize(
+                0, sz.y + verticalSpacing, sz.x, filterSz.y);
+            if ( weakThis.get() != this || IsBeingDeleted() )
+                return;
             // Don't know why, but this needs refreshing after a resize (wxMSW)
-            m_filterListCtrl->Refresh();
+            if ( m_filterListCtrl.get() == filterList &&
+                 !filterList->IsBeingDeleted() )
+            {
+                filterList->Refresh();
+            }
         }
     }
 }
@@ -1240,60 +1759,52 @@ bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent,
                                  const wxSize& size,
                                  long style)
 {
-    m_dirCtrl = parent;
-    return wxChoice::Create(parent, treeid, pos, size, 0, nullptr, style);
+    if ( !wxChoice::Create(parent, treeid, pos, size, 0, nullptr, style) )
+        return false;
+
+    m_dirCtrl = wxWeakRef<wxGenericDirCtrl>(parent);
+    return true;
 }
 
 void wxDirFilterListCtrl::Init()
 {
-    m_dirCtrl = nullptr;
+    m_dirCtrl.Release();
 }
 
 void wxDirFilterListCtrl::OnSelFilter(wxCommandEvent& WXUNUSED(event))
 {
     int sel = GetSelection();
+    wxGenericDirCtrl* const dirCtrl = m_dirCtrl.get();
+    if ( sel == wxNOT_FOUND || !dirCtrl || dirCtrl->IsBeingDeleted() )
+        return;
 
-    if (m_dirCtrl->HasFlag(wxDIRCTRL_MULTIPLE))
-    {
-        wxArrayString paths;
-        m_dirCtrl->GetPaths(paths);
-
-        m_dirCtrl->SetFilterIndex(sel);
-
-        // If the filter has changed, the view is out of date, so
-        // collapse the tree.
-        m_dirCtrl->ReCreateTree();
-
-        // Expand and select the previously selected paths
-        for (unsigned int i = 0; i < paths.GetCount(); i++)
-        {
-            m_dirCtrl->ExpandPath(paths.Item(i));
-        }
-    }
-    else
-    {
-        wxString currentPath = m_dirCtrl->GetPath();
-
-        m_dirCtrl->SetFilterIndex(sel);
-        m_dirCtrl->ReCreateTree();
-
-        // Try to restore the selection, or at least the directory
-        m_dirCtrl->ExpandPath(currentPath);
-    }
+    // SetFilterIndex() owns the atomic filter/tree update and selection
+    // restoration for both single and multiple selection controls.
+    dirCtrl->SetFilterIndex(sel);
 }
 
 void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilter)
 {
     Clear();
+    if ( filter.empty() )
+    {
+        SetSelection(wxNOT_FOUND);
+        return;
+    }
+
     wxArrayString descriptions, filters;
     size_t n = (size_t) wxParseCommonDialogsFilter(filter, descriptions, filters);
 
-    if (n > 0 && defaultFilter < (int) n)
+    if ( n > 0 )
     {
         for (size_t i = 0; i < n; i++)
             Append(descriptions[i]);
-        SetSelection(defaultFilter);
+        SetSelection(defaultFilter >= 0 && defaultFilter < static_cast<int>(n)
+                         ? defaultFilter
+                         : 0);
     }
+    else
+        SetSelection(wxNOT_FOUND);
 }
 #endif // wxUSE_DIRDLG
 

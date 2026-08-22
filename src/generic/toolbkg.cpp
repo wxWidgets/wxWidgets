@@ -20,12 +20,143 @@
 #endif
 
 #include "wx/imaglist.h"
+#include "wx/private/windowlifetime.h"
 #include "wx/sysopt.h"
 #include "wx/toolbook.h"
+#include "wx/weakref.h"
+
+#include <vector>
 
 #if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
 #include "wx/generic/buttonbar.h"
 #endif
+
+namespace
+{
+
+// Rebuilding the WinUI toolbar crosses synchronous Loaded/layout callbacks.
+// Keep each Toolbook topology mutation authoritative across that boundary:
+// same-book nested writers fail normally and may be retried afterwards,
+// instead of publishing only the page model or only its toolbar controller.
+class wxToolbookTopologyTransaction
+{
+public:
+    explicit wxToolbookTopologyTransaction(wxToolbook* const book)
+        : m_book(book),
+          m_lifetime(book),
+          m_previous(GetActive())
+    {
+        GetActive() = this;
+    }
+
+    ~wxToolbookTopologyTransaction()
+    {
+        wxASSERT(GetActive() == this);
+        GetActive() = m_previous;
+    }
+
+    static bool IsActiveFor(wxToolbook* const book)
+    {
+        return FindActive(book) != nullptr;
+    }
+
+    static bool IsControllerPublicationFor(wxToolbook* const book)
+    {
+        wxToolbookTopologyTransaction* const transaction =
+            FindActive(book);
+        return transaction && transaction->m_controllerPublication;
+    }
+
+    static void BeginControllerPublication(wxToolbook* const book)
+    {
+        wxToolbookTopologyTransaction* const transaction =
+            FindActive(book);
+        wxASSERT(transaction);
+        if ( transaction )
+        {
+            wxASSERT(!transaction->m_controllerPublication);
+            transaction->m_controllerPublication = true;
+            transaction->m_hasDeferredSelection = false;
+        }
+    }
+
+    static bool DeferSelection(wxToolbook* const book,
+                               size_t selection,
+                               int flags)
+    {
+        wxToolbookTopologyTransaction* const transaction =
+            FindActive(book);
+        if ( !transaction || !transaction->m_controllerPublication )
+            return false;
+
+        // The XAML candidate is already visible to Loaded callbacks here, but
+        // its wrapper is not inserted into m_tools until DoInsertTool()
+        // returns. Defer selection so PAGE_CHANGED can never expose the two
+        // positional models in different states.
+        transaction->m_hasDeferredSelection = true;
+        transaction->m_deferredSelection = selection;
+        transaction->m_deferredSelectionFlags = flags;
+        return true;
+    }
+
+    static bool EndControllerPublication(wxToolbook* const book,
+                                         bool commit,
+                                         size_t *selection,
+                                         int *flags)
+    {
+        wxToolbookTopologyTransaction* const transaction =
+            FindActive(book);
+        if ( !transaction || !transaction->m_controllerPublication )
+            return false;
+
+        transaction->m_controllerPublication = false;
+        const bool hasDeferred =
+            commit && transaction->m_hasDeferredSelection;
+        if ( hasDeferred )
+        {
+            if ( selection )
+                *selection = transaction->m_deferredSelection;
+            if ( flags )
+                *flags = transaction->m_deferredSelectionFlags;
+        }
+        transaction->m_hasDeferredSelection = false;
+        return hasDeferred;
+    }
+
+private:
+    static wxToolbookTopologyTransaction* FindActive(
+        wxToolbook* const book)
+    {
+        for ( wxToolbookTopologyTransaction* transaction = GetActive();
+              transaction;
+              transaction = transaction->m_previous )
+        {
+            if ( transaction->m_book == book &&
+                    transaction->m_lifetime.get() == book )
+            {
+                return transaction;
+            }
+        }
+
+        return nullptr;
+    }
+
+    static wxToolbookTopologyTransaction*& GetActive()
+    {
+        static thread_local wxToolbookTopologyTransaction* active = nullptr;
+        return active;
+    }
+
+    wxToolbook* const m_book;
+    const wxWeakRef<wxToolbook> m_lifetime;
+    wxToolbookTopologyTransaction* const m_previous;
+    bool m_controllerPublication = false;
+    bool m_hasDeferredSelection = false;
+    size_t m_deferredSelection = 0;
+    int m_deferredSelectionFlags = 0;
+};
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // event table
@@ -118,8 +249,12 @@ bool wxToolbook::Create(wxWindow *parent,
 
 void wxToolbook::OnSize(wxSizeEvent& event)
 {
+    const wxWeakRef<wxToolbook> weakThis(this);
     if (m_needsRealizing)
         Realize();
+
+    if ( !weakThis )
+        return;
 
     wxBookCtrlBase::OnSize(event);
 }
@@ -130,8 +265,16 @@ void wxToolbook::OnSize(wxSizeEvent& event)
 
 bool wxToolbook::SetPageText(size_t n, const wxString& strText)
 {
-    int toolId = PageToToolId(n);
-    wxToolBarToolBase* tool = GetToolBar()->FindById(toolId);
+    if ( n >= wxBookCtrlBase::GetPageCount() ||
+         n >= GetToolBar()->GetToolsCount() ||
+         wxToolbookTopologyTransaction::
+             IsControllerPublicationFor(this) )
+    {
+        return false;
+    }
+
+    wxToolBarToolBase* const tool =
+        GetToolBar()->GetToolByPos(static_cast<int>(n));
     if (tool)
     {
         tool->SetLabel(strText);
@@ -141,10 +284,38 @@ bool wxToolbook::SetPageText(size_t n, const wxString& strText)
         return false;
 }
 
+int wxToolbook::SetSelection(size_t n)
+{
+    wxCHECK_MSG( n < GetPageCount(), m_selection,
+                 wxT("invalid page index in wxToolbook::SetSelection()") );
+    if ( wxToolbookTopologyTransaction::DeferSelection(
+             this, n, SetSelection_SendEvent) )
+    {
+        return m_selection;
+    }
+    return DoSetSelection(n, SetSelection_SendEvent);
+}
+
+int wxToolbook::ChangeSelection(size_t n)
+{
+    wxCHECK_MSG( n < GetPageCount(), m_selection,
+                 wxT("invalid page index in wxToolbook::ChangeSelection()") );
+    if ( wxToolbookTopologyTransaction::DeferSelection(this, n, 0) )
+        return m_selection;
+    return DoSetSelection(n);
+}
+
 wxString wxToolbook::GetPageText(size_t n) const
 {
-    int toolId = PageToToolId(n);
-    wxToolBarToolBase* tool = GetToolBar()->FindById(toolId);
+    wxToolBarBase* const toolbar = GetToolBar();
+    if ( n >= wxBookCtrlBase::GetPageCount() ||
+         n >= toolbar->GetToolsCount() )
+    {
+        return wxEmptyString;
+    }
+
+    wxToolBarToolBase* const tool =
+        toolbar->GetToolByPos(static_cast<int>(n));
     if (tool)
         return tool->GetLabel();
     else
@@ -160,12 +331,17 @@ int wxToolbook::GetPageImage(size_t WXUNUSED(n)) const
 
 bool wxToolbook::SetPageImage(size_t n, int imageId)
 {
+    if ( n >= wxBookCtrlBase::GetPageCount() ||
+         n >= GetToolBar()->GetToolsCount() )
+    {
+        return false;
+    }
+
     wxBitmapBundle bmp = GetBitmapBundle(imageId);
     if ( !bmp.IsOk() )
         return false;
 
-    int toolId = PageToToolId(n);
-    GetToolBar()->SetToolNormalBitmap(toolId, bmp);
+    GetToolBar()->DoSetToolNormalBitmapByPos(n, bmp);
 
     return true;
 }
@@ -186,32 +362,105 @@ void wxToolbook::MakeChangedEvent(wxBookCtrlEvent &event)
 
 void wxToolbook::UpdateSelectedPage(size_t newsel)
 {
-    int toolId = PageToToolId(newsel);
-    GetToolBar()->ToggleTool(toolId, true);
+    GetToolBar()->DoToggleToolByPos(newsel, true);
 }
 
 // Not part of the wxBookctrl API, but must be called in OnIdle or
 // by application to realize the toolbar and select the initial page.
 void wxToolbook::Realize()
 {
+    const wxWeakRef<wxToolbook> weakThis(this);
+    wxToolBarBase* const toolbar = GetToolBar();
+    const wxWeakRef<wxToolBarBase> weakToolbar(toolbar);
+    const size_t pageCount = wxBookCtrlBase::GetPageCount();
+    if ( weakThis.get() != this )
+        return;
+
+    std::vector<wxWindow*> pages;
+    std::vector<wxWeakRef<wxWindow>> pageLifetimes;
+    pages.reserve(pageCount);
+    pageLifetimes.reserve(pageCount);
+    for ( size_t i = 0; i < pageCount; ++i )
+    {
+        wxToolbook* book = weakThis.get();
+        if ( !book ||
+                book->wxBookCtrlBase::GetPageCount() != pageCount )
+            return;
+
+        wxWindow* const page = book->wxBookCtrlBase::GetPage(i);
+        book = weakThis.get();
+        if ( !book ||
+                book->wxBookCtrlBase::GetPageCount() != pageCount )
+            return;
+
+        pages.push_back(page);
+        pageLifetimes.emplace_back(page);
+    }
+    const auto isCurrent = [&]() -> bool
+    {
+        wxToolbook* book = weakThis.get();
+        if ( !book ||
+                weakToolbar.get() != toolbar ||
+                book->GetToolBar() != toolbar ||
+                book->wxBookCtrlBase::GetPageCount() != pages.size() )
+        {
+            return false;
+        }
+
+        for ( size_t i = 0; i < pages.size(); ++i )
+        {
+            if ( pageLifetimes[i].get() != pages[i] )
+            {
+                return false;
+            }
+
+            wxWindow* const currentPage =
+                book->wxBookCtrlBase::GetPage(i);
+            book = weakThis.get();
+            if ( !book || currentPage != pages[i] )
+                return false;
+        }
+
+        return true;
+    };
+
     if (m_needsRealizing)
     {
         m_needsRealizing = false;
 
-        GetToolBar()->Realize();
+        if ( !toolbar->Realize() )
+        {
+            // Keep the retry armed: an idle pass may succeed after the
+            // controller/backend recovers.
+            if ( wxToolbook* const book = weakThis.get() )
+            {
+                if ( weakToolbar.get() == toolbar &&
+                        book->GetToolBar() == toolbar )
+                {
+                    book->m_needsRealizing = true;
+                }
+            }
+            return;
+        }
+        if ( !isCurrent() )
+            return;
     }
 
-    if (m_selection == wxNOT_FOUND)
-        m_selection = 0;
-
-    if (GetPageCount() > 0)
+    if (wxBookCtrlBase::GetPageCount() > 0)
     {
+        if (m_selection == wxNOT_FOUND)
+            m_selection = 0;
+
         int sel = m_selection;
         m_selection = wxNOT_FOUND;
+
         SetSelection(sel);
+        if ( !isCurrent() )
+            return;
     }
 
-    DoSize();
+    if ( isCurrent() )
+        DoSize();
 }
 
 int wxToolbook::HitTest(const wxPoint& pt, long *flags) const
@@ -264,67 +513,459 @@ bool wxToolbook::InsertPage(size_t n,
                        bool bSelect,
                        int imageId)
 {
-    if ( !wxBookCtrlBase::InsertPage(n, page, text, bSelect, imageId) )
+    if ( IsDeletingAllPages() ||
+         wxToolbookTopologyTransaction::IsActiveFor(this) )
         return false;
+
+    const wxWeakRef<wxToolbook> weakThis(this);
+    const wxWeakRef<wxWindow> weakPage(page);
+    wxToolBarBase* const toolbar = GetToolBar();
+    const wxWeakRef<wxToolBarBase> weakToolbar(toolbar);
+    const auto preCommitResult = [&]() -> bool
+    {
+        wxToolbook* const book = weakThis.get();
+        if ( !book || weakPage.get() != page ||
+                page->GetParent() != book )
+            return true;
+
+        return book->wxBookCtrlBase::FindPage(page) != wxNOT_FOUND;
+    };
+    const size_t countBefore = wxBookCtrlBase::GetPageCount();
+    if ( weakThis.get() != this )
+        return preCommitResult();
+
+    const int selectionBefore = m_selection;
+    const int shiftedSelection =
+        selectionBefore != wxNOT_FOUND &&
+        static_cast<int>(n) <= selectionBefore
+            ? selectionBefore + 1
+            : selectionBefore;
+    const bool needsRealizingBefore = m_needsRealizing;
+    std::vector<wxWindow*> pagesBefore;
+    std::vector<wxWeakRef<wxWindow>> pageLifetimesBefore;
+    pagesBefore.reserve(countBefore);
+    pageLifetimesBefore.reserve(countBefore);
+    for ( size_t i = 0; i < countBefore; ++i )
+    {
+        wxToolbook* current = weakThis.get();
+        if ( !current ||
+                current->wxBookCtrlBase::GetPageCount() != countBefore )
+            return preCommitResult();
+
+        wxWindow* const existingPage =
+            current->wxBookCtrlBase::GetPage(i);
+        current = weakThis.get();
+        if ( !current ||
+                current->wxBookCtrlBase::GetPageCount() != countBefore )
+            return preCommitResult();
+
+        pagesBefore.push_back(existingPage);
+        pageLifetimesBefore.emplace_back(existingPage);
+    }
+
+    // Image-list implementations are virtual and may run application code.
+    // Resolve the bitmap before the common model publishes the page, otherwise
+    // reentry here would expose a page for which the toolbar has no tool yet.
+    const wxBitmapBundle bitmap = GetBitmapBundle(imageId);
+    wxToolbook* book = weakThis.get();
+    if ( !book || weakPage.get() != page ||
+            page->GetParent() != book ||
+            weakToolbar.get() != toolbar ||
+            book->GetToolBar() != toolbar ||
+            book->wxBookCtrlBase::GetPageCount() != countBefore ||
+            book->m_selection != selectionBefore ||
+            n > countBefore )
+    {
+        return preCommitResult();
+    }
+
+    for ( size_t i = 0; i < countBefore; ++i )
+    {
+        if ( pageLifetimesBefore[i].get() != pagesBefore[i] )
+        {
+            return preCommitResult();
+        }
+
+        wxWindow* const currentPage =
+            book->wxBookCtrlBase::GetPage(i);
+        book = weakThis.get();
+        if ( !book || currentPage != pagesBefore[i] )
+            return preCommitResult();
+    }
+
+    const InsertPageResult modelResult =
+        DoInsertPageIntoModel(n, page, text, bSelect, imageId);
+    if ( modelResult == InsertPageResult::Failed )
+        return false;
+    if ( modelResult == InsertPageResult::OwnershipConsumed )
+        return true;
+
+    const size_t expectedCount = wxBookCtrlBase::GetPageCount();
+    const size_t controllerCountBefore = toolbar->GetToolsCount();
+    const auto finishCommittedInsertion = [&]() -> bool
+    {
+        wxToolbook* current = weakThis.get();
+        if ( current &&
+                (weakPage.get() != page ||
+                 page->GetParent() != current) &&
+                n < current->wxBookCtrlBase::GetPageCount() &&
+                current->wxBookCtrlBase::GetPage(n) == page )
+        {
+            current->DoErasePageRange(n, 1);
+            if ( wxWeakWindowIsAvailableForCallbacks(
+                     weakToolbar, toolbar) &&
+                    current->GetToolBar() == toolbar &&
+                    toolbar->GetToolsCount() == expectedCount )
+            {
+                (void)toolbar->DeleteToolByPos(n);
+            }
+
+            current = weakThis.get();
+            if ( current )
+            {
+                current->m_needsRealizing = needsRealizingBefore;
+                if ( current->m_selection != selectionBefore ||
+                        shiftedSelection == selectionBefore )
+                {
+                    current->DoSetSelectionAfterRemoval(n);
+                }
+            }
+        }
+
+        current = weakThis.get();
+        if ( current )
+            (void)current->DoReconcilePageVisibility();
+
+        return true;
+    };
+    std::vector<wxWindow*> pages;
+    std::vector<wxWeakRef<wxWindow>> pageLifetimes;
+    pages.reserve(expectedCount);
+    pageLifetimes.reserve(expectedCount);
+    for ( size_t i = 0; i < expectedCount; ++i )
+    {
+        book = weakThis.get();
+        if ( !book ||
+                book->wxBookCtrlBase::GetPageCount() != expectedCount )
+            return finishCommittedInsertion();
+
+        wxWindow* const expectedPage =
+            book->wxBookCtrlBase::GetPage(i);
+        book = weakThis.get();
+        if ( !book ||
+                book->wxBookCtrlBase::GetPageCount() != expectedCount )
+            return finishCommittedInsertion();
+
+        pages.push_back(expectedPage);
+        pageLifetimes.emplace_back(expectedPage);
+    }
+    const auto getCurrent = [&]() -> wxToolbook*
+    {
+        wxToolbook* book = weakThis.get();
+        if ( !book ||
+                weakPage.get() != page ||
+                page->GetParent() != book ||
+                weakToolbar.get() != toolbar ||
+                book->GetToolBar() != toolbar ||
+                book->wxBookCtrlBase::GetPageCount() != expectedCount )
+        {
+            return nullptr;
+        }
+
+        for ( size_t i = 0; i < expectedCount; ++i )
+        {
+            if ( pageLifetimes[i].get() != pages[i] )
+            {
+                return nullptr;
+            }
+
+            wxWindow* const currentPage =
+                book->wxBookCtrlBase::GetPage(i);
+            book = weakThis.get();
+            if ( !book || currentPage != pages[i] )
+                return nullptr;
+        }
+
+        return book;
+    };
+    const auto rollbackCommonPage = [&]() -> bool
+    {
+        wxToolbook* const current = getCurrent();
+        if ( current &&
+                toolbar->GetToolsCount() == controllerCountBefore )
+        {
+            if ( current->m_selection == shiftedSelection )
+                current->m_selection = selectionBefore;
+            current->m_needsRealizing = needsRealizingBefore;
+            wxWindow* const rolledBack =
+                current->wxBookCtrlBase::DoRemovePage(n);
+            if ( rolledBack == page && weakPage.get() == page )
+                return false;
+        }
+
+        return finishCommittedInsertion();
+    };
 
     m_needsRealizing = true;
 
-    wxBitmapBundle bitmap = GetBitmapBundle(imageId);
+    book = getCurrent();
+    if ( !book )
+        return finishCommittedInsertion();
 
-    int toolId = page->GetId();
-    GetToolBar()->InsertTool(n, toolId, text, bitmap, wxBitmapBundle(), wxITEM_RADIO);
+    if ( controllerCountBefore != expectedCount - 1 )
+        return rollbackCommonPage();
 
-    // fix current selection
-    if (m_selection == wxNOT_FOUND)
+    const wxToolbookTopologyTransaction topologyTransaction(this);
+
+    // Publish the shifted selection before the controller mutation. Any
+    // synchronous nested selection then observes the new page indices and is
+    // the authoritative writer if it changes this value. Topology writers for
+    // this same book are rejected until both parallel models are coherent.
+    book->m_selection = shiftedSelection;
+
+    const int toolId = page->GetId();
+    wxToolbookTopologyTransaction::BeginControllerPublication(book);
+    if ( !toolbar->InsertTool(n, toolId, text, bitmap,
+                              wxBitmapBundle(), wxITEM_RADIO) )
     {
-        DoShowPage(page, true);
-        m_selection = n;
+        if ( wxToolbook* const current = getCurrent() )
+        {
+            (void)wxToolbookTopologyTransaction::
+                EndControllerPublication(
+                    current, false, nullptr, nullptr);
+        }
+        return rollbackCommonPage();
     }
-    else if ((size_t) m_selection >= n)
+
+    book = getCurrent();
+    if ( !book || toolbar->GetToolsCount() != expectedCount )
     {
-        DoShowPage(page, false);
-        m_selection++;
+        if ( book )
+        {
+            (void)wxToolbookTopologyTransaction::
+                EndControllerPublication(
+                    book, false, nullptr, nullptr);
+        }
+        return finishCommittedInsertion();
+    }
+
+    size_t deferredSelection = 0;
+    int deferredSelectionFlags = 0;
+    if ( wxToolbookTopologyTransaction::EndControllerPublication(
+             book, true, &deferredSelection,
+             &deferredSelectionFlags) )
+    {
+        book->DoSetSelection(
+            deferredSelection, deferredSelectionFlags);
+        book = getCurrent();
+        if ( !book )
+            return finishCommittedInsertion();
+    }
+
+    const bool selectionOvertaken =
+        book->m_selection != shiftedSelection;
+    if ( selectionOvertaken )
+    {
+        const int overtakenSelection = book->m_selection;
+        wxWindow* const selectedPage =
+            overtakenSelection != wxNOT_FOUND &&
+            static_cast<size_t>(overtakenSelection) < expectedCount
+                ? book->wxBookCtrlBase::GetPage(overtakenSelection)
+                : nullptr;
+        const bool pageShown = page->IsShown();
+        book = getCurrent();
+        if ( !book || book->m_selection != overtakenSelection )
+            return finishCommittedInsertion();
+
+        if ( selectedPage != page && pageShown )
+        {
+            page->Hide();
+            book = getCurrent();
+            if ( !book )
+                return finishCommittedInsertion();
+        }
+    }
+    else if ( selectionBefore == wxNOT_FOUND )
+    {
+        book->DoShowPage(page, true);
+        book = getCurrent();
+        if ( !book || book->m_selection != shiftedSelection )
+            return finishCommittedInsertion();
+
+        book->m_selection = n;
     }
     else
     {
-        DoShowPage(page, false);
+        book->DoShowPage(page, false);
+        book = getCurrent();
+        if ( !book || book->m_selection != shiftedSelection )
+            return finishCommittedInsertion();
     }
 
-    if ( bSelect )
+    if ( !selectionOvertaken &&
+            bSelect && book->m_selection != static_cast<int>(n) )
     {
-        SetSelection(n);
+        book->SetSelection(n);
+        book = getCurrent();
+        if ( !book )
+            return finishCommittedInsertion();
     }
 
-    InvalidateBestSize();
-    return true;
+    // InsertTool() crosses XAML Loaded/layout callbacks before publishing its
+    // wrapper in the toolbar list. A nested ChangeSelection() is the
+    // authoritative writer, but the candidate radio button did not yet exist
+    // when that writer projected the selection. Re-assert the exact positional
+    // item now that both parallel models are coherent.
+    for ( unsigned attempt = 0; attempt < 3; ++attempt )
+    {
+        const int selection = book->m_selection;
+        if ( selection == wxNOT_FOUND )
+        {
+            for ( size_t i = 0; i < expectedCount; ++i )
+                toolbar->DoToggleToolByPos(i, false);
+        }
+        else if ( selection >= 0 &&
+                  static_cast<size_t>(selection) < expectedCount )
+        {
+            toolbar->DoToggleToolByPos(
+                static_cast<size_t>(selection), true);
+        }
+
+        book = getCurrent();
+        if ( !book )
+            return finishCommittedInsertion();
+        if ( book->m_selection == selection )
+            break;
+    }
+
+    book->InvalidateBestSize();
+    return finishCommittedInsertion();
 }
 
 wxWindow *wxToolbook::DoRemovePage(size_t page)
 {
-    int toolId = PageToToolId(page);
-    wxWindow *win = wxBookCtrlBase::DoRemovePage(page);
+    if ( (IsDeletingAllPages() &&
+            !IsPerformingDeleteAllPageRemoval()) ||
+         wxToolbookTopologyTransaction::IsActiveFor(this) )
+        return nullptr;
 
-    if ( win )
+    wxCHECK_MSG( page < wxBookCtrlBase::GetPageCount(), nullptr,
+                 wxT("invalid toolbook page index") );
+
+    const wxWeakRef<wxToolbook> weakThis(this);
+    wxToolBarBase* const toolbar = GetToolBar();
+    const wxWeakRef<wxToolBarBase> weakToolbar(toolbar);
+    wxWindow* const expectedPage = wxBookCtrlBase::GetPage(page);
+    const wxWeakRef<wxWindow> weakExpectedPage(expectedPage);
+    const size_t pageCount = wxBookCtrlBase::GetPageCount();
+    const size_t controllerCount = toolbar->GetToolsCount();
+    if ( controllerCount != pageCount )
+        return nullptr;
+
+    wxToolbookTopologyTransaction transaction(this);
+
+    // Stage the exact controller position first. Even though normal Toolbook
+    // event routing expects unique page IDs, deletion must not accidentally
+    // remove another projection if malformed input contains a duplicate. A
+    // failed transactional toolbar rebuild leaves both models unchanged.
+    if ( !toolbar->DeleteToolByPos(page) )
+        return nullptr;
+
+    wxToolbook* book = weakThis.get();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+            !wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) ||
+            book->GetToolBar() != toolbar ||
+            weakExpectedPage.get() != expectedPage ||
+            book->wxBookCtrlBase::GetPageCount() != pageCount ||
+            toolbar->GetToolsCount() != controllerCount - 1 ||
+            book->wxBookCtrlBase::GetPage(page) != expectedPage )
     {
-        GetToolBar()->DeleteTool(toolId);
-
-        DoSetSelectionAfterRemoval(page);
+        if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) &&
+                book->GetToolBar() == toolbar &&
+                book->wxBookCtrlBase::GetPageCount() == pageCount &&
+                toolbar->GetToolsCount() == controllerCount - 1 &&
+                book->wxBookCtrlBase::GetPage(page) == expectedPage &&
+                weakExpectedPage.get() != expectedPage )
+        {
+            // The toolbar callback consumed the page before common-model
+            // publication. Erase the dangling identity while the topology
+            // transaction still excludes nested writers.
+            book->DoErasePageRange(page, 1);
+            book->DoSetSelectionAfterRemoval(page);
+        }
+        return nullptr;
     }
 
-    return win;
+    wxWindow* const win =
+        book->wxBookCtrlBase::DoRemovePage(page);
+    const wxWeakRef<wxWindow> weakRemoved(win);
+    const auto getTransferredPage = [&]() -> wxWindow*
+    {
+        wxToolbook* const book = weakThis.get();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                !win || win != expectedPage ||
+                weakExpectedPage.get() != win ||
+                !wxWeakWindowIsAvailableForCallbacks(weakRemoved, win) )
+        {
+            return nullptr;
+        }
+
+        return book->wxBookCtrlBase::FindPage(win) == wxNOT_FOUND
+                    ? win
+                    : nullptr;
+    };
+
+    book = weakThis.get();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+            !wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) ||
+            book->GetToolBar() != toolbar ||
+            book->wxBookCtrlBase::GetPageCount() != pageCount - 1 )
+    {
+        return getTransferredPage();
+    }
+
+    // The common model can be committed even when invalidation consumed the
+    // page and therefore returned no transferable pointer.
+    book->DoSetSelectionAfterRemoval(page);
+    return getTransferredPage();
 }
 
 
 bool wxToolbook::DeleteAllPages()
 {
-    GetToolBar()->ClearTools();
-    return wxBookCtrlBase::DeleteAllPages();
+    if ( IsDeletingAllPages() ||
+         wxToolbookTopologyTransaction::IsActiveFor(this) )
+    {
+        return false;
+    }
+
+    const wxWeakRef<wxToolbook> weakThis(this);
+    wxToolBarBase* const toolbar = GetToolBar();
+    const wxWeakRef<wxToolBarBase> weakToolbar(toolbar);
+    const bool deleted = wxBookCtrlBase::DeleteAllPages();
+    wxToolbook* const book = weakThis.get();
+    if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+            wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) &&
+            book->GetToolBar() == toolbar &&
+            book->wxBookCtrlBase::GetPageCount() == 0 &&
+            toolbar->GetToolsCount() == 0 )
+    {
+        book->m_needsRealizing = false;
+    }
+
+    return deleted;
 }
 
 bool wxToolbook::EnablePage(size_t page, bool enable)
 {
-    int toolId = PageToToolId(page);
-    GetToolBar()->EnableTool(toolId, enable);
+    if ( page >= wxBookCtrlBase::GetPageCount() ||
+         page >= GetToolBar()->GetToolsCount() )
+    {
+        return false;
+    }
+
+    GetToolBar()->DoEnableToolByPos(page, enable);
     if (!enable && GetSelection() == (int)page)
     {
         AdvanceSelection();
@@ -385,12 +1026,29 @@ void wxToolbook::OnToolSelected(wxCommandEvent& event)
         return;
     }
 
+    const wxWeakRef<wxToolbook> weakThis(this);
+    wxToolBarBase* const toolbar = GetToolBar();
+    const wxWeakRef<wxToolBarBase> weakToolbar(toolbar);
+
     SetSelection(page);
 
-    // change wasn't allowed, return to previous state
-    if (m_selection != page)
+    wxToolbook* const book = weakThis.get();
+    if ( !book || weakToolbar.get() != toolbar ||
+            book->GetToolBar() != toolbar )
     {
-        GetToolBar()->ToggleTool(m_selection, false);
+        return;
+    }
+
+    // change wasn't allowed, return to previous state
+    if ( book->m_selection != page )
+    {
+        const int selection = book->m_selection;
+        if ( selection != wxNOT_FOUND &&
+                static_cast<size_t>(selection) < book->GetPageCount() )
+        {
+            toolbar->DoToggleToolByPos(
+                static_cast<size_t>(selection), true);
+        }
     }
 }
 

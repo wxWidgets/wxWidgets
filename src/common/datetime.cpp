@@ -1743,12 +1743,6 @@ wxDateSpan wxDateTime::DiffAsDateSpan(const wxDateTime& dt) const
 // Weekday and monthday stuff
 // ----------------------------------------------------------------------------
 
-// convert Sun, Mon, ..., Sat into 6, 0, ..., 5
-static inline int ConvertWeekDayToMondayBase(int wd)
-{
-    return wd == wxDateTime::Sun ? 6 : wd - 1;
-}
-
 /* static */
 wxDateTime
 wxDateTime::SetToWeekOfYear(int year, wxDateTime_t numWeek, WeekDay wd)
@@ -1948,57 +1942,57 @@ wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
     Tm tm(GetTm(tz));
     wxDateTime_t nDayInYear = GetDayOfYearFromTm(tm);
 
-    int wdTarget = GetWeekDay(tz);
-    int wdYearStart = wxDateTime(1, Jan, GetYear()).GetWeekDay();
-    int week;
-    if ( flags == Sunday_First )
-    {
-        // FIXME: First week is not calculated correctly.
-        week = (nDayInYear - wdTarget + 7) / 7;
-        if ( wdYearStart == Wed || wdYearStart == Thu )
-            week++;
-    }
-    else // week starts with monday
-    {
-        // adjust the weekdays to non-US style.
-        wdYearStart = ConvertWeekDayToMondayBase(wdYearStart);
+    const int wdTarget = GetWeekDay(tz);
+    const int firstWeekDay = flags == Sunday_First ? Sun : Mon;
+    const int dayIndex = static_cast<int>(nDayInYear) - 1;
+    const int daysSinceWeekStart =
+        (wdTarget - firstWeekDay + DAYS_PER_WEEK) % DAYS_PER_WEEK;
+    const int weekStart = dayIndex - daysSinceWeekStart;
 
-        // quoting from http://www.cl.cam.ac.uk/~mgk25/iso-time.html:
-        //
-        //      Week 01 of a year is per definition the first week that has the
-        //      Thursday in this year, which is equivalent to the week that
-        //      contains the fourth day of January. In other words, the first
-        //      week of a new year is the week that has the majority of its
-        //      days in the new year. Week 01 might also contain days from the
-        //      previous year and the week before week 01 of a year is the last
-        //      week (52 or 53) of the previous year even if it contains days
-        //      from the new year. A week starts with Monday (day 1) and ends
-        //      with Sunday (day 7).
-        //
-
-        // if Jan 1 is Thursday or less, it is in the first week of this year
-        int dayCountFix = wdYearStart < 4 ? 6 : -1;
-
-        // count the number of week
-        week = (nDayInYear + wdYearStart + dayCountFix) / DAYS_PER_WEEK;
-
-        // check if we happen to be at the last week of previous year:
-        if ( week == 0 )
+    // The representative fourth day belongs to the week-based year iff that
+    // week contains at least four days in it. This is the ISO rule for Monday
+    // weeks and gives the same unambiguous majority rule to Sunday weeks.
+    const int representativeDay = weekStart + 3;
+    const int daysThisYear = IsLeapYear(tm.year) ? 366 : 365;
+    const int wdYearStart =
+        (wdTarget - dayIndex % DAYS_PER_WEEK + DAYS_PER_WEEK) %
+            DAYS_PER_WEEK;
+    const auto firstWeekStart =
+        [firstWeekDay](int firstDayOfYear)
         {
-            week = wxDateTime(31, Dec, GetYear() - 1).GetWeekOfYear();
-        }
-        else if ( week == 53 )
-        {
-            int wdYearEnd = (wdYearStart + 364 + IsLeapYear(GetYear()))
-                                % DAYS_PER_WEEK;
+            const int offset =
+                (firstDayOfYear - firstWeekDay + DAYS_PER_WEEK) %
+                    DAYS_PER_WEEK;
+            int start = -offset;
+            if ( DAYS_PER_WEEK - offset < 4 )
+                start += DAYS_PER_WEEK;
+            return start;
+        };
 
-            // Week 53 only if last day of year is Thursday or later.
-            if ( wdYearEnd < 3 )
-                week = 1;
-        }
+    if ( representativeDay >= daysThisYear )
+        return 1;
+
+    if ( representativeDay < 0 )
+    {
+        const int previousYear = tm.year - 1;
+        const int daysPreviousYear =
+            IsLeapYear(previousYear) ? 366 : 365;
+        const int wdPreviousYearStart =
+            (wdYearStart - daysPreviousYear % DAYS_PER_WEEK +
+             DAYS_PER_WEEK) % DAYS_PER_WEEK;
+        const int startInPreviousYear =
+            daysPreviousYear + weekStart;
+        return static_cast<wxDateTime_t>(
+            (startInPreviousYear -
+             firstWeekStart(wdPreviousYearStart)) /
+                DAYS_PER_WEEK +
+            1);
     }
 
-    return (wxDateTime::wxDateTime_t)week;
+    return static_cast<wxDateTime_t>(
+        (weekStart - firstWeekStart(wdYearStart)) /
+            DAYS_PER_WEEK +
+        1);
 }
 
 int wxDateTime::GetWeekBasedYear(const TimeZone& tz) const

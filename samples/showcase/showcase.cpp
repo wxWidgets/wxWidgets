@@ -951,18 +951,12 @@ wxWindow* ShowcaseFrame::CreateContainerPage()
     notebook->AddPage(new wxPanel(notebook), "Notebook B");
     bookGrid->Add(notebook, 1, wxEXPAND);
 #endif
-#if wxUSE_LISTBOOK && !defined(__WXWINUI__)
+#if wxUSE_LISTBOOK
     wxListbook* listbook = new wxListbook(books->GetStaticBox(), wxID_ANY,
         wxDefaultPosition, FromDIP(wxSize(-1, 120)));
     listbook->AddPage(new wxPanel(listbook), "List A");
     listbook->AddPage(new wxPanel(listbook), "List B");
     bookGrid->Add(listbook, 1, wxEXPAND);
-#elif wxUSE_LISTBOOK
-    wxStaticText* listbookSkipped = new wxStaticText(books->GetStaticBox(), wxID_ANY,
-        "wxListbook: skipped on wxWinUI for now. Its selector creates wxListView, "
-        "which currently asserts through wxGenericListCtrl during initial sizing.");
-    listbookSkipped->Wrap(FromDIP(360));
-    bookGrid->Add(listbookSkipped, 1, wxEXPAND | wxALL, FromDIP(8));
 #endif
 #if wxUSE_CHOICEBOOK
     wxChoicebook* choicebook = new wxChoicebook(books->GetStaticBox(), wxID_ANY,

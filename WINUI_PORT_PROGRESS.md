@@ -1,5 +1,12 @@
 # wxWidgets → WinUI 3 port — progress
 
+> **Journal historique, non canonique.** Les pourcentages et descriptions
+> ci-dessous reflètent différentes étapes du chantier et peuvent être
+> périmés. La promesse courante est définie par la
+> [matrice V0](plans/winui3-v0/component-matrix.md), le
+> [tableau des plans](plans/README.md) et les
+> [preuves de qualification](plans/winui3-v0/verification.md).
+
 Status of the experimental `wxUSE_WINUI3` backend (`-DwxBUILD_TOOLKIT=winui`,
 toolkit `__WXWINUI__`), an *overlay* port where every wx control keeps its real
 Win32 `HWND` and is rendered by a WinUI 3 XAML island composited on top.
@@ -314,12 +321,16 @@ input is dropped, not forwarded. The retained design assumes nothing:
 
 ### Transient surfaces
 
-Popup menus (`wxWinUIPopupMenu`), `wxRichToolTip` (TeachingTip, anchored on
-the target's slot) and the in-window dialogs (`ContentDialog`, now the
-DEFAULT presentation — `WX_WINUI_DIALOG_WINDOW=1` restores the classic
-separate window) all live on the shared island: one `XamlRoot`, correct
-full-client dimming, and the open-popup rule makes the island capture all
-input while one is up. Menu commands are deferred past the flyout close.
+Popup menus (`wxWinUIPopupMenu`) and the optional in-window dialogs
+(`ContentDialog`, selected with `wxWinUISetDialogPresentation(Overlay)` or
+`WX_WINUI_DIALOG_OVERLAY=1`) live on the shared island: one `XamlRoot`, correct
+full-client dimming, and the open-popup rule makes the island capture all input
+while one is up. For the beta contract, public `wxRichToolTip` instead uses the
+managed generic HWND popup registered with the transient manager; the native
+TeachingTip backend is reserved for a private qualification seam until its
+physical retirement boundary is proven. The alpha dialog default is a separate
+top-level Window until the Overlay stacking/focus/lifetime gates are qualified.
+Menu commands are deferred past the flyout close.
 The transient `wxWinUIDialogIsland` and the per-control machinery
 (`gs_winuiHosts`, per-island Mica, `HWND_BOTTOM` pinning, bridge height
 surgery) are deleted.

@@ -32,8 +32,97 @@
 #include "wx/vector.h"
 #include "wx/listimpl.cpp"
 #include "wx/private/window.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/scopeguard.h"
 
 #include <memory>
+#include <cstdint>
+#include <unordered_map>
+#include <vector>
+
+#if wxUSE_BUTTON
+namespace
+{
+
+enum StdDialogButtonSlotIndex
+{
+    StdSlot_Affirmative,
+    StdSlot_Apply,
+    StdSlot_Negative,
+    StdSlot_Cancel,
+    StdSlot_Help,
+    StdSlot_Max
+};
+
+struct StdDialogButtonSlotState
+{
+    wxButton* address { nullptr };
+    wxWeakRef<wxWindow> lifetime;
+};
+
+struct StdDialogButtonSizerState
+{
+    std::uint64_t lifetimeEpoch { 0 };
+    std::uint64_t mutationEpoch { 0 };
+    std::uint64_t realizeRequestEpoch { 0 };
+    bool realizing { false };
+    StdDialogButtonSlotState slots[StdSlot_Max];
+};
+
+using StdDialogButtonSizerStates =
+    std::unordered_map<const wxSizer*, StdDialogButtonSizerState>;
+
+StdDialogButtonSizerStates& GetStdDialogButtonSizerStates()
+{
+    // wxSizer instances may outlive other static objects during shutdown.
+    static StdDialogButtonSizerStates* const states =
+        new StdDialogButtonSizerStates;
+    return *states;
+}
+
+std::uint64_t NextStdDialogButtonSizerLifetimeEpoch()
+{
+    static std::uint64_t epoch = 0;
+    return ++epoch;
+}
+
+void InitializeStdDialogButtonSizerState(wxSizer* sizer)
+{
+    StdDialogButtonSizerState state;
+    state.lifetimeEpoch = NextStdDialogButtonSizerLifetimeEpoch();
+    GetStdDialogButtonSizerStates()[sizer] = state;
+}
+
+void InvalidateStdDialogButtonSizerState(const wxSizer* sizer)
+{
+    GetStdDialogButtonSizerStates().erase(sizer);
+}
+
+StdDialogButtonSizerState* FindStdDialogButtonSizerState(
+    const wxSizer* sizer)
+{
+    StdDialogButtonSizerStates& states = GetStdDialogButtonSizerStates();
+    const StdDialogButtonSizerStates::iterator it = states.find(sizer);
+    return it == states.end() ? nullptr : &it->second;
+}
+
+void RecordStdDialogButtonSlot(wxSizer* sizer,
+                               StdDialogButtonSlotIndex slot,
+                               wxButton* button,
+                               const wxWeakRef<wxWindow>& lifetime)
+{
+    StdDialogButtonSizerState* const state =
+        FindStdDialogButtonSizerState(sizer);
+    if ( !state )
+        return;
+
+    ++state->mutationEpoch;
+    state->slots[slot].address = button;
+    state->slots[slot].lifetime = lifetime;
+}
+
+} // anonymous namespace
+#endif // wxUSE_BUTTON
 
 //---------------------------------------------------------------------------
 
@@ -898,6 +987,12 @@ bool wxSizerItem::IsShown() const
 
 wxSizer::~wxSizer()
 {
+#if wxUSE_BUTTON
+    // The standard-button sidecar is keyed by this address. Erase it before
+    // clearing items so a destruction callback or immediate address reuse can
+    // never make Realize() accept an expired sizer lifetime.
+    InvalidateStdDialogButtonSizerState(this);
+#endif
     wxClearList(m_children);
 }
 
@@ -3053,30 +3148,49 @@ wxStdDialogButtonSizer::wxStdDialogButtonSizer()
     m_buttonNegative = nullptr;
     m_buttonCancel = nullptr;
     m_buttonHelp = nullptr;
+
+    InitializeStdDialogButtonSizerState(this);
 }
 
 void wxStdDialogButtonSizer::AddButton(wxButton *mybutton)
 {
+    if ( !FindStdDialogButtonSizerState(this) || !mybutton )
+        return;
+
+    const wxWeakRef<wxWindow> weakButton(mybutton);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakButton, mybutton) )
+        return;
+
     switch (mybutton->GetId())
     {
         case wxID_OK:
         case wxID_YES:
         case wxID_SAVE:
             m_buttonAffirmative = mybutton;
+            RecordStdDialogButtonSlot(this, StdSlot_Affirmative,
+                                      mybutton, weakButton);
             break;
         case wxID_APPLY:
             m_buttonApply = mybutton;
+            RecordStdDialogButtonSlot(this, StdSlot_Apply,
+                                      mybutton, weakButton);
             break;
         case wxID_NO:
             m_buttonNegative = mybutton;
+            RecordStdDialogButtonSlot(this, StdSlot_Negative,
+                                      mybutton, weakButton);
             break;
         case wxID_CANCEL:
         case wxID_CLOSE:
             m_buttonCancel = mybutton;
+            RecordStdDialogButtonSlot(this, StdSlot_Cancel,
+                                      mybutton, weakButton);
             break;
         case wxID_HELP:
         case wxID_CONTEXT_HELP:
             m_buttonHelp = mybutton;
+            RecordStdDialogButtonSlot(this, StdSlot_Help,
+                                      mybutton, weakButton);
             break;
         default:
             break;
@@ -3085,17 +3199,32 @@ void wxStdDialogButtonSizer::AddButton(wxButton *mybutton)
 
 void wxStdDialogButtonSizer::SetAffirmativeButton( wxButton *button )
 {
+    if ( !FindStdDialogButtonSizerState(this) )
+        return;
+    const wxWeakRef<wxWindow> weakButton(button);
     m_buttonAffirmative = button;
+    RecordStdDialogButtonSlot(this, StdSlot_Affirmative,
+                              button, weakButton);
 }
 
 void wxStdDialogButtonSizer::SetNegativeButton( wxButton *button )
 {
+    if ( !FindStdDialogButtonSizerState(this) )
+        return;
+    const wxWeakRef<wxWindow> weakButton(button);
     m_buttonNegative = button;
+    RecordStdDialogButtonSlot(this, StdSlot_Negative,
+                              button, weakButton);
 }
 
 void wxStdDialogButtonSizer::SetCancelButton( wxButton *button )
 {
+    if ( !FindStdDialogButtonSizerState(this) )
+        return;
+    const wxWeakRef<wxWindow> weakButton(button);
     m_buttonCancel = button;
+    RecordStdDialogButtonSlot(this, StdSlot_Cancel,
+                              button, weakButton);
 }
 
 void wxStdDialogButtonSizer::Realize()
@@ -3126,173 +3255,434 @@ void wxStdDialogButtonSizer::Realize()
         wxButton* m_lastAdded;
     };
 
+    StdDialogButtonSizerState* const initialState =
+        FindStdDialogButtonSizerState(this);
+    if ( !initialState )
+        return;
+
+    // Count the request before testing the recursion guard. A nested Realize()
+    // is bounded to a no-op, but it is still an observable re-entry at an
+    // application callback boundary and must invalidate the outer transaction
+    // so its tab-order side effects are rolled back.
+    const std::uint64_t realizeRequestEpoch =
+        ++initialState->realizeRequestEpoch;
+    if ( initialState->realizing )
+        return;
+
+    const std::uint64_t lifetimeEpoch = initialState->lifetimeEpoch;
+    const std::uint64_t mutationEpoch = initialState->mutationEpoch;
+    const StdDialogButtonSlotState affirmativeSlot =
+        initialState->slots[StdSlot_Affirmative];
+    const StdDialogButtonSlotState applySlot =
+        initialState->slots[StdSlot_Apply];
+    const StdDialogButtonSlotState negativeSlot =
+        initialState->slots[StdSlot_Negative];
+    const StdDialogButtonSlotState cancelSlot =
+        initialState->slots[StdSlot_Cancel];
+    const StdDialogButtonSlotState helpSlot =
+        initialState->slots[StdSlot_Help];
+
+    // Reading the legacy members is safe only after proving that the sidecar
+    // still represents this exact sizer lifetime. Never dereference these raw
+    // values: their weak identities below are the authority.
+    if ( m_buttonAffirmative != affirmativeSlot.address ||
+         m_buttonApply != applySlot.address ||
+         m_buttonNegative != negativeSlot.address ||
+         m_buttonCancel != cancelSlot.address ||
+         m_buttonHelp != helpSlot.address )
+    {
+        return;
+    }
+
+    struct TrackedButton
+    {
+        wxButton* button;
+        wxWeakRef<wxWindow> lifetime;
+    };
+
+    std::vector<TrackedButton> trackedButtons;
+    trackedButtons.reserve(5);
+    wxWindow* owner = nullptr;
+    const auto trackSlot = [&](const StdDialogButtonSlotState& slot)
+    {
+        if ( !slot.address )
+            return true;
+
+        wxWindow* const liveWindow = slot.lifetime.get();
+        if ( liveWindow != slot.address ||
+             wxWindowIsUnavailableForCallbacks(liveWindow) )
+        {
+            return false;
+        }
+
+        wxButton* const button = wxDynamicCast(liveWindow, wxButton);
+        if ( button != slot.address || button->GetContainingSizer() )
+            return false;
+
+        if ( !owner )
+            owner = button->GetParent();
+        if ( !owner || button->GetParent() != owner )
+            return false;
+
+        trackedButtons.push_back({button, slot.lifetime});
+        return true;
+    };
+
+    if ( !trackSlot(affirmativeSlot) ||
+         !trackSlot(applySlot) ||
+         !trackSlot(negativeSlot) ||
+         !trackSlot(cancelSlot) ||
+         !trackSlot(helpSlot) )
+    {
+        return;
+    }
+
+    const wxWeakRef<wxWindow> ownerLifetime(owner);
+    if ( owner &&
+         !wxWeakWindowIsAvailableForCallbacks(ownerLifetime, owner) )
+    {
+        return;
+    }
+
+    struct TrackedChild
+    {
+        wxWindow* window;
+        wxWeakRef<wxWindow> lifetime;
+    };
+    std::vector<TrackedChild> originalChildOrder;
+    if ( owner )
+    {
+        originalChildOrder.reserve(owner->GetChildren().GetCount());
+        for ( wxWindow* const child : owner->GetChildren() )
+            originalChildOrder.push_back({child, wxWeakRef<wxWindow>(child)});
+    }
+
+    std::vector<wxSizerItem*> originalItems;
+    originalItems.reserve(GetChildren().GetCount());
+    for ( wxSizerItem* const item : GetChildren() )
+        originalItems.push_back(item);
+
+    initialState->realizing = true;
+    const auto exactButtonTopologyIsAvailable = [&]()
+    {
+        StdDialogButtonSizerState* const state =
+            FindStdDialogButtonSizerState(this);
+        if ( !state || state->lifetimeEpoch != lifetimeEpoch ||
+             state->mutationEpoch != mutationEpoch ||
+             state->realizeRequestEpoch != realizeRequestEpoch ||
+             !state->realizing )
+        {
+            return false;
+        }
+
+        if ( m_buttonAffirmative != affirmativeSlot.address ||
+             m_buttonApply != applySlot.address ||
+             m_buttonNegative != negativeSlot.address ||
+             m_buttonCancel != cancelSlot.address ||
+             m_buttonHelp != helpSlot.address )
+        {
+            return false;
+        }
+
+        if ( owner &&
+             !wxWeakWindowIsAvailableForCallbacks(ownerLifetime, owner) )
+        {
+            return false;
+        }
+
+        for ( const TrackedButton& tracked : trackedButtons )
+        {
+            if ( !wxWeakWindowIsAvailableForCallbacks(
+                     tracked.lifetime, tracked.button) ||
+                 tracked.button->GetParent() != owner ||
+                 tracked.button->GetContainingSizer() )
+            {
+                return false;
+            }
+        }
+
+        if ( GetChildren().GetCount() != originalItems.size() )
+            return false;
+        size_t itemIndex = 0;
+        for ( wxSizerItem* const item : GetChildren() )
+        {
+            if ( item != originalItems[itemIndex++] )
+                return false;
+        }
+
+        return true;
+    };
+
+    const auto restoreOriginalChildOrder = [&]()
+    {
+        if ( !owner ||
+             !wxWeakWindowIsAvailableForCallbacks(ownerLifetime, owner) ||
+             owner->GetChildren().GetCount() != originalChildOrder.size() )
+        {
+            return;
+        }
+
+        for ( const TrackedChild& child : originalChildOrder )
+        {
+            if ( !wxWeakWindowIsAvailableForCallbacks(
+                     child.lifetime, child.window) ||
+                 child.window->GetParent() != owner ||
+                 !owner->GetChildren().Find(child.window) )
+            {
+                return;
+            }
+        }
+
+        wxWindowList& children = owner->GetChildren();
+        for ( const TrackedChild& child : originalChildOrder )
+            children.DeleteObject(child.window);
+        for ( const TrackedChild& child : originalChildOrder )
+            children.Append(child.window);
+    };
+
+    bool realizeCommitted = false;
+    const wxScopeGuard finishRealize = wxMakeGuard([&]()
+    {
+        if ( !realizeCommitted )
+            restoreOriginalChildOrder();
+
+        StdDialogButtonSizerState* const state =
+            FindStdDialogButtonSizerState(this);
+        if ( state && state->lifetimeEpoch == lifetimeEpoch &&
+             state->realizing )
+        {
+            state->realizing = false;
+        }
+    });
+    wxUnusedVar(finishRealize);
+
+    if ( !exactButtonTopologyIsAvailable() )
+        return;
+
+    // Publish from these weak-validated snapshots only. Slot mutations bump
+    // the sidecar epoch and abort before any item is inserted.
+    wxButton* const buttonAffirmative = affirmativeSlot.address;
+    wxButton* const buttonApply = applySlot.address;
+    wxButton* const buttonNegative = negativeSlot.address;
+    wxButton* const buttonCancel = cancelSlot.address;
+    wxButton* const buttonHelp = helpSlot.address;
+
     TabOrderUpdater tabOrder;
 
 #ifdef __WXMAC__
-        Add(0, 0, 0, wxLEFT, 6);
-        if (m_buttonHelp)
+    // Run every operation capable of dispatching application code before
+    // publishing a single wxSizerItem. An aborted realization is therefore
+    // still an empty, trivially discardable sizer.
+    if (buttonHelp)
+    {
+        tabOrder.Add(buttonHelp);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
+
+    if (buttonNegative)
+    {
+        tabOrder.Add(buttonNegative);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
+
+    if (buttonCancel)
+    {
+        tabOrder.Add(buttonCancel);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
+
+    if (buttonApply)
+    {
+        tabOrder.Add(buttonApply);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
+
+    if (buttonAffirmative)
+    {
+        if (buttonAffirmative->GetId() == wxID_SAVE)
         {
-            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
-            tabOrder.Add(m_buttonHelp);
-        }
-
-        if (m_buttonNegative){
-            // HIG POLICE BULLETIN - destructive buttons need extra padding
-            // 24 pixels on either side
-            Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 12);
-            tabOrder.Add(m_buttonNegative);
-        }
-
-        // extra whitespace between help/negative and cancel/ok buttons
-        Add(0, 0, 1, wxEXPAND, 0);
-
-        if (m_buttonCancel){
-            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
-            // Cancel or help should be default
-            // m_buttonCancel->SetDefaultButton();
-
-            tabOrder.Add(m_buttonCancel);
-        }
-
-        // Ugh, Mac doesn't really have apply dialogs, so I'll just
-        // figure the best place is between Cancel and OK
-        if (m_buttonApply)
-        {
-            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
-            tabOrder.Add(m_buttonApply);
-        }
-
-        if (m_buttonAffirmative){
-            Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 6);
-
-            if (m_buttonAffirmative->GetId() == wxID_SAVE){
-                // these buttons have set labels under Mac so we should use them
-                m_buttonAffirmative->SetLabel(_("Save"));
-                if (m_buttonNegative)
-                    m_buttonNegative->SetLabel(_("Don't Save"));
+            // These buttons have set labels under Mac so we should use them.
+            buttonAffirmative->SetLabel(_("Save"));
+            if ( !exactButtonTopologyIsAvailable() )
+                return;
+            if (buttonNegative)
+            {
+                buttonNegative->SetLabel(_("Don't Save"));
+                if ( !exactButtonTopologyIsAvailable() )
+                    return;
             }
-            tabOrder.Add(m_buttonAffirmative);
         }
+        tabOrder.Add(buttonAffirmative);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
 
-        // Extra space around and at the right
-        Add(12, 40);
+    Add(0, 0, 0, wxLEFT, 6);
+    if (buttonHelp)
+        Add((wxWindow*)buttonHelp, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
+    if (buttonNegative)
+    {
+        // HIG POLICE BULLETIN - destructive buttons need extra padding.
+        Add((wxWindow*)buttonNegative, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, 12);
+    }
+    Add(0, 0, 1, wxEXPAND, 0);
+    if (buttonCancel)
+        Add((wxWindow*)buttonCancel, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
+    if (buttonApply)
+        Add((wxWindow*)buttonApply, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
+    if (buttonAffirmative)
+        Add((wxWindow*)buttonAffirmative, 0,
+            wxALIGN_CENTRE | wxLEFT, 6);
+    Add(12, 40);
 #elif defined(__WXGTK__)
-        // http://library.gnome.org/devel/hig-book/stable/windows-alert.html.en
-        // says that the correct button order is
-        //
-        //      [Help]                  [Alternative] [Cancel] [Affirmative]
+    if (buttonHelp)
+    {
+        tabOrder.Add(buttonHelp);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
+    if (buttonNegative)
+    {
+        tabOrder.Add(buttonNegative);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
+    if (buttonApply)
+    {
+        tabOrder.Add(buttonApply);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
+    if (buttonCancel)
+    {
+        tabOrder.Add(buttonCancel);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
+    if (buttonAffirmative)
+    {
+        tabOrder.Add(buttonAffirmative);
+        if ( !exactButtonTopologyIsAvailable() )
+            return;
+    }
 
-        // Flags ensuring that margins between the buttons are 6 pixels.
-        const wxSizerFlags
-            flagsBtn = wxSizerFlags().Centre().Border(wxLEFT | wxRIGHT, 3);
-
-        // Margin around the entire sizer button should be 12.
-        AddSpacer(9);
-
-        if (m_buttonHelp)
-        {
-            Add(m_buttonHelp, flagsBtn);
-            tabOrder.Add(m_buttonHelp);
-        }
-
-        // Align the rest of the buttons to the right.
-        AddStretchSpacer();
-
-        if (m_buttonNegative)
-        {
-            Add(m_buttonNegative, flagsBtn);
-            tabOrder.Add(m_buttonNegative);
-        }
-
-        if (m_buttonApply)
-        {
-            Add(m_buttonApply, flagsBtn);
-            tabOrder.Add(m_buttonApply);
-        }
-
-        if (m_buttonCancel)
-        {
-            Add(m_buttonCancel, flagsBtn);
-            tabOrder.Add(m_buttonCancel);
-        }
-
-        if (m_buttonAffirmative)
-        {
-            Add(m_buttonAffirmative, flagsBtn);
-            tabOrder.Add(m_buttonAffirmative);
-        }
-
-        // Ensure that the right margin is 12 as well.
-        AddSpacer(9);
+    // http://library.gnome.org/devel/hig-book/stable/windows-alert.html.en
+    // says that the correct button order is
+    //
+    //      [Help]                  [Alternative] [Cancel] [Affirmative]
+    const wxSizerFlags
+        flagsBtn = wxSizerFlags().Centre().Border(wxLEFT | wxRIGHT, 3);
+    AddSpacer(9);
+    if (buttonHelp)
+        Add(buttonHelp, flagsBtn);
+    AddStretchSpacer();
+    if (buttonNegative)
+        Add(buttonNegative, flagsBtn);
+    if (buttonApply)
+        Add(buttonApply, flagsBtn);
+    if (buttonCancel)
+        Add(buttonCancel, flagsBtn);
+    if (buttonAffirmative)
+        Add(buttonAffirmative, flagsBtn);
+    AddSpacer(9);
 #elif defined(__WXMSW__)
-        // Windows
+    int affirmativeBorder = 0;
+    int negativeBorder = 0;
+    int cancelBorder = 0;
+    int applyBorder = 0;
+    int helpBorder = 0;
+    const auto prepareButton = [&](wxButton* button, int& border)
+    {
+        if ( !button )
+            return true;
+        border = button->ConvertDialogToPixels(wxSize(2, 0)).x;
+        if ( !exactButtonTopologyIsAvailable() )
+            return false;
+        tabOrder.Add(button);
+        return exactButtonTopologyIsAvailable();
+    };
 
-        // right-justify buttons
-        Add(0, 0, 1, wxEXPAND, 0);
+    if ( !prepareButton(buttonAffirmative, affirmativeBorder) ||
+         !prepareButton(buttonNegative, negativeBorder) ||
+         !prepareButton(buttonCancel, cancelBorder) ||
+         !prepareButton(buttonApply, applyBorder) ||
+         !prepareButton(buttonHelp, helpBorder) )
+    {
+        return;
+    }
 
-        if (m_buttonAffirmative){
-            Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonAffirmative->ConvertDialogToPixels(wxSize(2, 0)).x);
-            tabOrder.Add(m_buttonAffirmative);
-        }
-
-        if (m_buttonNegative){
-            Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonNegative->ConvertDialogToPixels(wxSize(2, 0)).x);
-            tabOrder.Add(m_buttonNegative);
-        }
-
-        if (m_buttonCancel){
-            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonCancel->ConvertDialogToPixels(wxSize(2, 0)).x);
-            tabOrder.Add(m_buttonCancel);
-        }
-
-        if (m_buttonApply)
-        {
-            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonApply->ConvertDialogToPixels(wxSize(2, 0)).x);
-            tabOrder.Add(m_buttonApply);
-        }
-
-        if (m_buttonHelp)
-        {
-            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(2, 0)).x);
-            tabOrder.Add(m_buttonHelp);
-        }
+    // No callbacks remain below: publish the complete Windows layout only
+    // after all metric and tab-order operations committed the exact topology.
+    Add(0, 0, 1, wxEXPAND, 0);
+    if (buttonAffirmative)
+        Add((wxWindow*)buttonAffirmative, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, affirmativeBorder);
+    if (buttonNegative)
+        Add((wxWindow*)buttonNegative, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, negativeBorder);
+    if (buttonCancel)
+        Add((wxWindow*)buttonCancel, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, cancelBorder);
+    if (buttonApply)
+        Add((wxWindow*)buttonApply, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, applyBorder);
+    if (buttonHelp)
+        Add((wxWindow*)buttonHelp, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, helpBorder);
 #else
-        // GTK+1 and any other platform
+    int helpBorder = 0;
+    int applyBorder = 0;
+    int affirmativeBorder = 0;
+    int negativeBorder = 0;
+    int cancelBorder = 0;
+    const auto prepareButton = [&](wxButton* button, int& border)
+    {
+        if ( !button )
+            return true;
+        border = button->ConvertDialogToPixels(wxSize(4, 0)).x;
+        if ( !exactButtonTopologyIsAvailable() )
+            return false;
+        tabOrder.Add(button);
+        return exactButtonTopologyIsAvailable();
+    };
 
-        // Add(0, 0, 0, wxLEFT, 5); // Not sure what this was for but it unbalances the dialog
-        if (m_buttonHelp)
-        {
-            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(4, 0)).x);
-            tabOrder.Add(m_buttonHelp);
-        }
+    if ( !prepareButton(buttonHelp, helpBorder) ||
+         !prepareButton(buttonApply, applyBorder) ||
+         !prepareButton(buttonAffirmative, affirmativeBorder) ||
+         !prepareButton(buttonNegative, negativeBorder) ||
+         !prepareButton(buttonCancel, cancelBorder) )
+    {
+        return;
+    }
 
-        // extra whitespace between help and cancel/ok buttons
-        Add(0, 0, 1, wxEXPAND, 0);
-
-        if (m_buttonApply)
-        {
-            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonApply->ConvertDialogToPixels(wxSize(4, 0)).x);
-            tabOrder.Add(m_buttonApply);
-        }
-
-        if (m_buttonAffirmative){
-            Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonAffirmative->ConvertDialogToPixels(wxSize(4, 0)).x);
-            tabOrder.Add(m_buttonAffirmative);
-        }
-
-        if (m_buttonNegative){
-            Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonNegative->ConvertDialogToPixels(wxSize(4, 0)).x);
-            tabOrder.Add(m_buttonNegative);
-        }
-
-        if (m_buttonCancel){
-            Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonCancel->ConvertDialogToPixels(wxSize(4, 0)).x);
-            // Cancel or help should be default
-            // m_buttonCancel->SetDefaultButton();
-            tabOrder.Add(m_buttonCancel);
-        }
+    if (buttonHelp)
+        Add((wxWindow*)buttonHelp, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, helpBorder);
+    Add(0, 0, 1, wxEXPAND, 0);
+    if (buttonApply)
+        Add((wxWindow*)buttonApply, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, applyBorder);
+    if (buttonAffirmative)
+        Add((wxWindow*)buttonAffirmative, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, affirmativeBorder);
+    if (buttonNegative)
+        Add((wxWindow*)buttonNegative, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, negativeBorder);
+    if (buttonCancel)
+        Add((wxWindow*)buttonCancel, 0,
+            wxALIGN_CENTRE | wxLEFT | wxRIGHT, cancelBorder);
 
 #endif
+
+    realizeCommitted = true;
 }
 
 #endif // wxUSE_BUTTON

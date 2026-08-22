@@ -23,6 +23,9 @@
 #include "wx/propgrid/props.h"
 #include "wx/propgrid/editors.h"
 #include "wx/propgrid/private.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/scopeguard.h"
+#include "wx/weakref.h"
 
 #if wxPG_USE_RENDERER_NATIVE
 #include "wx/renderer.h"
@@ -34,6 +37,52 @@
                                            // value field.
 
 #define PWC_CHILD_SUMMARY_CHAR_LIMIT    64 // Character limit of summary field when not editing
+
+// Property callbacks are allowed to destroy their grid or request removal of
+// the property. Open a complete callback transaction here instead of relying
+// on the caller to have one already, as these helpers are also public API.
+class wxPGPropertyCallbackGuard final
+{
+public:
+    explicit wxPGPropertyCallbackGuard(const wxPGProperty* property)
+        : m_property(const_cast<wxPGProperty*>(property)),
+          m_grid(property->GetGrid()),
+          m_weakGrid(m_grid)
+    {
+        if ( m_grid )
+            ++wxPGGetPropertyGridTransientState(m_grid).propertyCallbackDepth;
+    }
+
+    ~wxPGPropertyCallbackGuard()
+    {
+        if ( m_grid && m_weakGrid.get() == m_grid )
+        {
+            wxASSERT(wxPGGetPropertyGridTransientState(m_grid).propertyCallbackDepth);
+            --wxPGGetPropertyGridTransientState(m_grid).propertyCallbackDepth;
+        }
+    }
+
+    bool IsValid() const
+    {
+        // Detached properties have no trackable owner. As before, their
+        // explicit lifetime remains the responsibility of their caller.
+        if ( !m_grid )
+            return true;
+
+        return wxWeakWindowIsAvailableForCallbacks(m_weakGrid, m_grid) &&
+               !m_grid->IsPropertyPendingRemoval(m_property);
+    }
+
+private:
+    wxPGPropertyCallbackGuard(const wxPGPropertyCallbackGuard&) = delete;
+    wxPGPropertyCallbackGuard& operator=(
+        const wxPGPropertyCallbackGuard&) = delete;
+
+    wxPGDeferredEditorCallbackEpoch m_deferredEditorCallbackEpoch;
+    wxPGProperty* const m_property;
+    wxPropertyGrid* const m_grid;
+    const wxWeakRef<wxWindow> m_weakGrid;
+};
 
 // -----------------------------------------------------------------------
 
@@ -155,7 +204,17 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPropert
     if ( font.IsOk() )
         dc.SetFont(font);
 
-    wxBitmap bmp = cell.GetBitmap().GetBitmapFor(propGrid);
+    const wxBitmapBundle bitmapBundle = cell.GetBitmap();
+    wxPropertyGrid* const grid =
+        const_cast<wxPropertyGrid*>(propGrid);
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    wxBitmap bmp = bitmapBundle.GetBitmapFor(propGrid);
+    if ( grid &&
+         (!wxWeakWindowIsAvailableForCallbacks(weakGrid, grid)) )
+    {
+        return 0;
+    }
+
     if ( bmp.IsOk() )
     {
         int hMax = rect.height - wxPG_CUSTOM_IMAGE_SPACINGY;
@@ -200,6 +259,30 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                                   const wxPropertyGrid* propertyGrid, wxPGProperty* property,
                                   int column, int item, int flags ) const
 {
+    if ( !propertyGrid || !property )
+        return false;
+
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    wxPropertyGrid* const grid =
+        const_cast<wxPropertyGrid*>(propertyGrid);
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    wxPropertyGridPageState* const state = grid->m_pState;
+    ++wxPGGetPropertyGridTransientState(grid).propertyCallbackDepth;
+    const wxScopeGuard leaveRendering = wxMakeGuard([weakGrid, grid]()
+    {
+        if ( weakGrid.get() == grid )
+            --wxPGGetPropertyGridTransientState(grid).propertyCallbackDepth;
+    });
+    wxUnusedVar(leaveRendering);
+
+    const auto transactionIsValid =
+        [weakGrid, grid, state, property]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) &&
+                   grid->m_pState == state &&
+                   !grid->IsPropertyPendingRemoval(property);
+        };
+
     const wxPGEditor* editor = nullptr;
 
     wxString text;
@@ -209,12 +292,16 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     if ( column == 1 && item == -1 )
     {
         int cmnVal = property->GetCommonValue();
+        if ( !transactionIsValid() )
+            return false;
         if ( cmnVal >= 0 )
         {
             // Common Value
             if ( !isUnspecified )
             {
                 text = propertyGrid->GetCommonValueLabel(cmnVal);
+                if ( !transactionIsValid() )
+                    return false;
                 DrawText( dc, rect, 0, text );
                 if ( !text.empty() )
                     return true;
@@ -225,6 +312,8 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
         // cell settings (colours, etc.) with custom cell settings
         // which can be defined separately for any single choice item.
         selItem = property->GetChoiceSelection();
+        if ( !transactionIsValid() )
+            return false;
     }
 
     int imageWidth = 0;
@@ -233,22 +322,38 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     wxPGCell cell;
 
     property->GetDisplayInfo(column, selItem, flags, &text, &cell);
+    if ( !transactionIsValid() )
+        return false;
 
-    // Property image takes precedence over cell image
-    if ( column == 1 && !isUnspecified && property->GetValueImage() )
-        cell.SetBitmap(wxBitmapBundle());
+    // Property image takes precedence over cell image.
+    if ( column == 1 && !isUnspecified )
+    {
+        wxBitmap* const valueImage = property->GetValueImage();
+        if ( !transactionIsValid() )
+            return false;
+        if ( valueImage )
+            cell.SetBitmap(wxBitmapBundle());
+    }
 
     imageWidth = PreDrawCell( dc, rect, propertyGrid, cell, preDrawFlags );
+    if ( !transactionIsValid() )
+        return false;
 
     if ( column == 1 )
     {
         editor = property->GetColumnEditor(column);
+        if ( !transactionIsValid() )
+            return false;
 
         if ( !isUnspecified )
         {
             // Regular property value
 
-            wxSize imageSize = propertyGrid->GetImageSize(property, item);
+            wxSize imageSize;
+            if ( !propertyGrid->TryGetImageSize(property, item, &imageSize) )
+                return false;
+            if ( !transactionIsValid() )
+                return false;
 
             wxPGPaintData paintdata;
             paintdata.m_parent = propertyGrid;
@@ -267,6 +372,8 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                 paintdata.m_drawnHeight = imageSize.y;
 
                 property->OnCustomPaint( dc, imageRect, paintdata );
+                if ( !transactionIsValid() )
+                    return false;
 
                 imageWidth = paintdata.m_drawnWidth;
             }
@@ -277,11 +384,15 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
 #else
             text = property->GetValueAsString();
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
+            if ( !transactionIsValid() )
+                return false;
 
             // Add units string?
             if ( propertyGrid->GetColumnCount() <= 2 )
             {
                 wxString unitsString = property->GetAttribute(wxPG_ATTR_UNITS, wxString());
+                if ( !transactionIsValid() )
+                    return false;
                 if ( !unitsString.empty() )
                     text = wxString::Format(wxS("%s %s"), text, unitsString );
             }
@@ -290,6 +401,8 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
         if ( text.empty() )
         {
             text = property->GetHintText();
+            if ( !transactionIsValid() )
+                return false;
             if ( !text.empty() )
             {
                 res = true;
@@ -312,6 +425,8 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     int imageOffset = property->GetImageOffset(imageWidth);
 
     DrawEditorValue( dc, rect, imageOffset, text, property, editor );
+    if ( !transactionIsValid() )
+        return false;
 
     // active caption gets nice dotted rectangle
     if ( property->IsCategory() && column == 0 )
@@ -330,12 +445,16 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                                                                                      propertyGrid->GetCaptionFont())
                                       +(wxPG_CAPRECTXMARGIN*2),
                                       propertyGrid->GetFontHeight()+(wxPG_CAPRECTYMARGIN*2) );
+            if ( !transactionIsValid() )
+                return false;
 
 #if WXWIN_COMPATIBILITY_3_0
             wxPGCellRendererDrawCaptionSelectionRectFlag = true;
             DrawCaptionSelectionRect( dc,
                                       rectCaption.x, rectCaption.y,
                                       rectCaption.width, rectCaption.height );
+            if ( !transactionIsValid() )
+                return false;
             if ( wxPGCellRendererDrawCaptionSelectionRectFlag )
             {
                 // This means that the user-defined overridden version of the
@@ -352,10 +471,14 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             DrawCaptionSelectionRect( const_cast<wxPropertyGrid*>(propertyGrid), dc,
                                       rectCaption.x, rectCaption.y,
                                       rectCaption.width, rectCaption.height );
+            if ( !transactionIsValid() )
+                return false;
         }
     }
 
     PostDrawCell(dc, propertyGrid, cell, preDrawFlags);
+    if ( !transactionIsValid() )
+        return false;
 
     return res;
 }
@@ -985,6 +1108,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
                                             const wxVariantList* valueOverrides,
                                             wxPGHashMapS2S* childResults ) const
 {
+    const wxPGPropertyCallbackGuard callbackGuard(this);
     size_t iMax = m_children.size();
 
     text.clear();
@@ -997,7 +1121,10 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
 
     size_t iMaxMinusOne = iMax-1;
 
-    if ( !IsTextEditable() )
+    const bool isTextEditable = IsTextEditable();
+    if ( !callbackGuard.IsValid() )
+        return;
+    if ( !isTextEditable )
         flags |= wxPGPropValFormatFlags::UneditableCompositeFragment;
 
     wxPGProperty* curChild = m_children[0];
@@ -1019,6 +1146,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
     size_t i;
     for ( i = 0; i < iMax; i++ )
     {
+        const wxPGPropertyCallbackGuard childCallbackGuard(curChild);
         wxVariant childValue;
 
         wxString childLabel = curChild->GetLabel();
@@ -1062,6 +1190,12 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
                 s = curChild->ValueToString(childValue,
                                             flags|wxPGPropValFormatFlags::CompositeFragment);
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
+            }
+
+            if ( !callbackGuard.IsValid() ||
+                 !childCallbackGuard.IsValid() )
+            {
+                return;
             }
         }
 
@@ -1109,8 +1243,12 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
 // By call to obsolete function we want to check if user-overriden function is still in use
 wxString wxPGProperty::ValueToStringWithCheck(wxVariant& variant, wxPGPropValFormatFlags flags) const
 {
+    const wxPGPropertyCallbackGuard callbackGuard(this);
     m_oldValueToStringCalled = false;
     wxString res = ValueToString(variant, static_cast<int>(flags));
+    if ( !callbackGuard.IsValid() )
+        return res;
+
     if ( m_oldValueToStringCalled )
     {
         // Our own function was called - this implies that call was forwarded to the new overriding
@@ -1146,8 +1284,12 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
 // By call to obsolete function we want to check if user-overriden function is still in use
 wxString wxPGProperty::GetValueAsStringWithCheck(wxPGPropValFormatFlags flags) const
 {
+    const wxPGPropertyCallbackGuard callbackGuard(this);
     m_oldGetValueAsString = false;
     wxString res = GetValueAsString(static_cast<int>(flags));
+    if ( !callbackGuard.IsValid() )
+        return res;
+
     if ( m_oldGetValueAsString )
     {
         // Our own function was called - this implies that call was forwarded to the new overriding
@@ -1472,24 +1614,32 @@ bool wxPGProperty::SetValueFromInt( long number, wxPGPropValFormatFlags flags )
 
 wxSize wxPGProperty::OnMeasureImage( int WXUNUSED(item) ) const
 {
-    if ( m_valueBitmapBundle.IsOk() )
+    const wxBitmapBundle bitmapBundle = m_valueBitmapBundle;
+    if ( bitmapBundle.IsOk() )
     {
+        const wxPGPropertyCallbackGuard callbackGuard(this);
         wxPropertyGrid* pg = GetGrid();
         wxBitmap bmp;
         double scale = 1.0;
         if ( pg )
         {
-            bmp = m_valueBitmapBundle.GetBitmapFor(pg);
+            bmp = bitmapBundle.GetBitmapFor(pg);
+            if ( !callbackGuard.IsValid() )
+                return wxSize(0, 0);
+
             int hMax = pg->GetImageSize().GetHeight();
-            if ( bmp.GetHeight() > hMax )
+            if ( bmp.IsOk() && bmp.GetHeight() > hMax )
             {
                 scale = (double)hMax / bmp.GetHeight();
             }
         }
         else
         {
-            bmp = m_valueBitmapBundle.GetBitmap(m_valueBitmapBundle.GetDefaultSize());
+            bmp = bitmapBundle.GetBitmap(bitmapBundle.GetDefaultSize());
         }
+
+        if ( !bmp.IsOk() )
+            return wxSize(0, wxDefaultCoord);
 
         return wxSize(wxRound(scale*bmp.GetWidth()), wxDefaultCoord);
     }
@@ -1522,9 +1672,23 @@ void wxPGProperty::OnCustomPaint( wxDC& dc,
                                   const wxRect& rect,
                                   wxPGPaintData& paintData)
 {
-    wxCHECK_RET( m_valueBitmapBundle.IsOk(), wxS("invalid bitmap bundle") );
+    const wxBitmapBundle bitmapBundle = m_valueBitmapBundle;
+    wxCHECK_RET( bitmapBundle.IsOk(), wxS("invalid bitmap bundle") );
 
-    wxBitmap bmp = m_valueBitmapBundle.GetBitmapFor(paintData.m_parent);
+    const wxPGPropertyCallbackGuard callbackGuard(this);
+    const wxPropertyGrid* const propGrid = paintData.m_parent;
+    wxPropertyGrid* const grid =
+        const_cast<wxPropertyGrid*>(propGrid);
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    wxBitmap bmp = bitmapBundle.GetBitmapFor(propGrid);
+    if ( !callbackGuard.IsValid() ||
+         (grid &&
+          (!wxWeakWindowIsAvailableForCallbacks(weakGrid, grid))) ||
+         !bmp.IsOk() )
+    {
+        return;
+    }
+
     int yOfs;
     if ( bmp.GetHeight() <= rect.height )
     {
@@ -2037,7 +2201,11 @@ wxVariant wxPGProperty::DoGetAttribute( const wxString& WXUNUSED(name) ) const
 
 wxVariant wxPGProperty::GetAttribute( const wxString& name ) const
 {
+    const wxPGPropertyCallbackGuard callbackGuard(this);
     wxVariant value = DoGetAttribute(name);
+    if ( !callbackGuard.IsValid() )
+        return value;
+
     return !value.IsNull() ? value : m_attributes.FindValue(name);
 }
 
@@ -2274,7 +2442,14 @@ bool wxPGProperty::SetChoices( const wxPGChoices& choices )
 
 const wxPGEditor* wxPGProperty::GetEditorClass() const
 {
-    const wxPGEditor* editor = m_customEditor ? m_customEditor : DoGetEditorClass();
+    const wxPGEditor* editor = m_customEditor;
+    if ( !editor )
+    {
+        const wxPGPropertyCallbackGuard callbackGuard(this);
+        editor = DoGetEditorClass();
+        if ( !callbackGuard.IsValid() )
+            return editor;
+    }
 
     // Maybe override editor if common value specified
     if ( GetDisplayedCommonValueCount() )
@@ -2856,8 +3031,12 @@ wxPGProperty* wxPGProperty::UpdateParentValues()
     if ( parent && parent->HasFlag(wxPGFlags::ComposedValue) &&
          !parent->IsCategory() && !parent->IsRoot() )
     {
+        const wxPGPropertyCallbackGuard callbackGuard(parent);
         wxString s;
         parent->DoGenerateComposedValue(s);
+        if ( !callbackGuard.IsValid() )
+            return nullptr;
+
         parent->m_value = s;
         return parent->UpdateParentValues();
     }
@@ -2953,14 +3132,22 @@ bool wxPGProperty::SetMaxLength(int maxLen)
 
 wxBitmap* wxPGProperty::GetValueImage() const
 {
-    if ( !m_valueBitmapBundle.IsOk() )
+    const wxBitmapBundle bitmapBundle = m_valueBitmapBundle;
+    if ( !bitmapBundle.IsOk() )
         return nullptr;
 
+    const wxPGPropertyCallbackGuard callbackGuard(this);
     wxPropertyGrid* pg = GetGrid();
+    wxBitmap bitmap;
     if ( pg )
-        m_valueBitmap = m_valueBitmapBundle.GetBitmapFor(pg);
+        bitmap = bitmapBundle.GetBitmapFor(pg);
     else
-        m_valueBitmap = m_valueBitmapBundle.GetBitmap(m_valueBitmapBundle.GetDefaultSize());
+        bitmap = bitmapBundle.GetBitmap(bitmapBundle.GetDefaultSize());
+
+    if ( !callbackGuard.IsValid() )
+        return nullptr;
+
+    m_valueBitmap = bitmap;
 
     return &m_valueBitmap;
 }

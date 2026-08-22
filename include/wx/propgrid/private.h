@@ -14,6 +14,133 @@
 #endif // !WXBUILDING
 
 #include "wx/defs.h"
+#include "wx/recguard.h"
+#include "wx/weakref.h"
+
+#include <cstdint>
+
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridManager;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridPageState;
+
+// Callback/gesture state added while hardening PropertyGrid must not alter the
+// long-standing public class layouts. These implementation-only sidecars are
+// keyed by the wrapper address but also retain its weak identity: reset in the
+// constructor and identity-checked erase in the destructor make address reuse
+// unable to inherit or remove another window's state.
+struct wxPGPropertyGridTransientState
+{
+    explicit wxPGPropertyGridTransientState(wxPropertyGrid* grid = nullptr);
+
+    wxWeakRef<wxWindow> identity;
+    wxPropertyGridPageState* draggedState = nullptr;
+    unsigned int draggedColumnCount = 0;
+    int dragOffset = 0;
+    bool splitterDontCenterBeforeDrag = false;
+    bool splitterWasPreSetBeforeDrag = false;
+    bool splitterEditorsHidden = false;
+    bool splitterBeginDispatching = false;
+    bool splitterBeginInvalidated = false;
+    int keyboardSplitter = -1;
+    bool inPerformValidation = false;
+    unsigned int propertyCallbackDepth = 0;
+    wxRecursionGuardFlag beginLabelEditGuard = 0;
+    bool endingLabelEdit = false;
+    std::uint64_t editorModificationRevision = 0;
+};
+
+WXDLLIMPEXP_PROPGRID wxPGPropertyGridTransientState&
+wxPGGetPropertyGridTransientState(wxPropertyGrid* grid);
+WXDLLIMPEXP_PROPGRID const wxPGPropertyGridTransientState&
+wxPGGetPropertyGridTransientState(const wxPropertyGrid* grid);
+WXDLLIMPEXP_PROPGRID void
+wxPGResetPropertyGridTransientState(wxPropertyGrid* grid);
+WXDLLIMPEXP_PROPGRID void
+wxPGErasePropertyGridTransientState(wxPropertyGrid* grid);
+
+struct wxPGPropertyGridManagerTransientState
+{
+    explicit wxPGPropertyGridManagerTransientState(
+        wxPropertyGridManager* manager = nullptr);
+
+    wxWeakRef<wxWindow> identity;
+    int pageSelectionTarget = wxNOT_FOUND;
+    bool pageSelectionInProgress = false;
+    unsigned int eventDispatchDepth = 0;
+};
+
+WXDLLIMPEXP_PROPGRID wxPGPropertyGridManagerTransientState&
+wxPGGetPropertyGridManagerTransientState(wxPropertyGridManager* manager);
+WXDLLIMPEXP_PROPGRID void
+wxPGResetPropertyGridManagerTransientState(wxPropertyGridManager* manager);
+WXDLLIMPEXP_PROPGRID void
+wxPGErasePropertyGridManagerTransientState(wxPropertyGridManager* manager);
+
+#if wxUSE_TOOLBAR
+// Make the Nth toolbar detachment performed by RemovePage() fail before any
+// native or common toolbar state is changed. This is an implementation-only
+// seam for proving both rollback branches of the page-removal transaction.
+WXDLLIMPEXP_PROPGRID void
+wxPGManagerFailToolbarRemovalForTesting(unsigned int ordinal);
+WXDLLIMPEXP_PROPGRID void
+wxPGManagerResetToolbarRemovalFailuresForTesting();
+#endif
+
+#if wxUSE_HEADERCTRL
+class WXDLLIMPEXP_FWD_CORE wxHeaderCtrlEvent;
+
+WXDLLIMPEXP_PROPGRID bool
+wxPGProcessHeaderResizeEventForTesting(wxPropertyGridManager* manager,
+                                       wxHeaderCtrlEvent& event);
+#endif
+
+#ifdef __WXMSW__
+// Keep deferred editor teardown outside the complete property-grid callback
+// transaction, even when application code runs a nested event/idle loop.
+//
+// This guard is deliberately independent of wxPropertyGrid itself: the grid
+// is allowed to destroy itself while the guarded callback is on the stack.
+class WXDLLIMPEXP_PROPGRID wxPGDeferredEditorCallbackEpoch final
+{
+public:
+    wxPGDeferredEditorCallbackEpoch();
+    ~wxPGDeferredEditorCallbackEpoch();
+
+private:
+    wxPGDeferredEditorCallbackEpoch(
+        const wxPGDeferredEditorCallbackEpoch&) = delete;
+    wxPGDeferredEditorCallbackEpoch& operator=(
+        const wxPGDeferredEditorCallbackEpoch&) = delete;
+};
+
+// One-shot seam for the otherwise exceptional first SetParent(HWND_MESSAGE)
+// failure in deferred editor teardown. The fallback still invokes the real
+// Win32 APIs and is observable only through the bounded host count.
+WXDLLIMPEXP_PROPGRID void
+wxPGMSWFailNextDirectEditorParkingForTesting();
+WXDLLIMPEXP_PROPGRID void
+wxPGMSWFailNextFallbackEditorParkingForTesting();
+WXDLLIMPEXP_PROPGRID void
+wxPGMSWResetEditorParkingFailuresForTesting();
+WXDLLIMPEXP_PROPGRID unsigned int
+wxPGMSWGetEditorParkingHostCountForTesting();
+WXDLLIMPEXP_PROPGRID unsigned int
+wxPGMSWGetDeferredEditorBatchCountForTesting();
+WXDLLIMPEXP_PROPGRID bool
+wxPGMSWIsEditorParkingHostForTesting(WXWidget hwnd);
+#else
+class wxPGDeferredEditorCallbackEpoch final
+{
+public:
+    // Keep this non-trivial even on ports where no global callback epoch is
+    // needed. The many scoped instances in the common PropertyGrid sources
+    // are intentional synchronization markers and must not trigger
+    // -Wunused-variable under non-MSW -Werror builds.
+    wxPGDeferredEditorCallbackEpoch() {}
+    ~wxPGDeferredEditorCallbackEpoch() {}
+};
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -181,7 +308,9 @@
 
 // Events used only internally
 wxDECLARE_EVENT(wxEVT_PG_HSCROLL, wxPropertyGridEvent);
-wxDECLARE_EVENT(wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_PROPGRID,
+                         wxEVT_PG_COLS_RESIZED,
+                         wxPropertyGridEvent);
 
 // -----------------------------------------------------------------------
 

@@ -189,6 +189,9 @@ protected:
     // Under the WinUI toolkit the native menu bar is replaced by a WinUI
     // MenuBar hosted in this child window across the top of the frame.
     wxWindow *m_winuiMenuBarWin = nullptr;
+    // Reject an outer replacement superseded reentrantly from a menu CLOSE
+    // handler. The newest generation is the only one allowed to publish.
+    unsigned long long m_winuiMenuBarGeneration = 0;
 #endif // __WXWINUI__
 #endif // wxUSE_MENUS
 
@@ -202,6 +205,10 @@ private:
 
 #if wxUSE_TASKBARBUTTON
     wxTaskBarButton* m_taskBarButton;
+    // Initial controller construction crosses the injectable COM factory and
+    // Initialize() boundary. Nested access must never publish a second owner.
+    bool m_taskBarButtonCreationInProgress;
+    unsigned long long m_taskBarButtonRevision;
 #endif
 
     wxDECLARE_EVENT_TABLE();

@@ -12,9 +12,11 @@
 
 #include "wx/bmpbndl.h"
 
+#include <cstdint>
 #include <memory>
 
 class wxWinUIToggleButtonImpl;
+class wxDPIChangedEvent;
 
 class WXDLLIMPEXP_CORE wxToggleButton : public wxToggleButtonBase
 {
@@ -44,18 +46,25 @@ public:
 
     void SetLabel(const wxString& label) override;
     void Command(wxCommandEvent& event) override;
-
+    bool SetFont(const wxFont& font) override;
+    bool SetForegroundColour(const wxColour& colour) override;
+    bool SetBackgroundColour(const wxColour& colour) override;
 protected:
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     wxSize DoGetBestSize() const override;
+    void DoEnable(bool enable) override;
 
     void SendToggleEvent();
-    virtual void UpdateWinUIContent();
+    virtual bool UpdateWinUIContent(bool forceRender = true);
 
     std::unique_ptr<wxWinUIToggleButtonImpl> m_winui;
     bool m_state = false;
 
 private:
+    bool UpdateWinUIAppearance(bool forceRender = true);
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton);
 };
 
@@ -67,6 +76,8 @@ class WXDLLIMPEXP_CORE wxBitmapToggleButton : public wxToggleButton
 {
 public:
     wxBitmapToggleButton() = default;
+    ~wxBitmapToggleButton() override;
+
     wxBitmapToggleButton(wxWindow *parent,
                          wxWindowID id,
                          const wxBitmapBundle& label,
@@ -91,13 +102,42 @@ public:
     void SetLabel(const wxString& label) override
         { wxToggleButton::SetLabel(label); }
 
+    // Rebuild and inspect the actual XAML Image source without SendInput.
+    bool WinUIProjectBitmapStateForTesting(State state, double scale);
+    bool WinUIGetPeerBitmapProjectionForTesting(
+        wxSize *pixelSize,
+        State *state,
+        std::uint64_t *generation) const;
+
 protected:
     wxSize DoGetBestSize() const override;
-    void UpdateWinUIContent() override;
+    bool UpdateWinUIContent(bool forceRender = true) override;
+    wxBitmap DoGetBitmap(State which) const override;
     void DoSetBitmap(const wxBitmapBundle& bitmap, State which) override;
+    wxSize DoGetBitmapMargins() const override;
+    void DoSetBitmapMargins(wxCoord x, wxCoord y) override;
+    void DoSetBitmapPosition(wxDirection dir) override;
 
 private:
-    wxBitmapBundle m_bitmap;
+    bool UpdateWinUIBitmapContent(bool forceRender,
+                                  State forcedState,
+                                  double requestedScale);
+    wxBitmap GetBitmapForState(State which,
+                               double requestedScale = 0.0) const;
+    State GetCurrentBitmapState() const;
+
+    // This revision is independent of the XAML peer: public bitmap accessors
+    // are valid before Create() and must detect reentrant bundle replacement.
+    std::uint64_t m_bitmapRevision = 0;
+    // wxWeakRef remains valid until the wxWindow base destructor. Mark the
+    // earlier derived-member teardown explicitly so bundle destructor reentry
+    // cannot observe partially destroyed bitmap state.
+    bool m_bitmapDestroying = false;
+    // The lifetime sentinels above must outlive these application-owned
+    // bundles, whose destructors are allowed to reenter the control.
+    wxBitmapBundle m_bitmaps[State_Max];
+    wxSize m_bitmapMargins{ 0, 0 };
+    wxDirection m_bitmapPosition = wxLEFT;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapToggleButton);
 };

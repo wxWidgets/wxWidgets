@@ -2632,6 +2632,7 @@ set(XRC_SRC
     src/xrc/xh_vlistbox.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
+    src/xrc/xmlrespriv.h
     src/xrc/xmlrsall.cpp
     src/xrc/xh_dataview.cpp
     src/xrc/xh_bookctrlbase.cpp

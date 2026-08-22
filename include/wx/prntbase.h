@@ -224,6 +224,8 @@ protected:
     wxPrintout*           m_currentPrintout;
 
     static wxPrinterError sm_lastError;
+    // Guards the process-wide MSW abort/progress state from recursive jobs.
+    static bool           sm_printJobActive;
 
 public:
     static wxWindow*      sm_abortWindow;

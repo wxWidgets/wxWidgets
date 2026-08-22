@@ -18,12 +18,51 @@
 #endif
 
 #include "private.h"
+#include "wx/winui/private/appearance.h"
+#include "wx/weakref.h"
+
+#include <winrt/Microsoft.UI.Xaml.Automation.h>
+#include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 
 class wxWinUIStaticBoxImpl
 {
 public:
+    ~wxWinUIStaticBoxImpl()
+    {
+        Close();
+    }
+
+    void Close()
+    {
+        host.Close();
+        title = nullptr;
+        frame = nullptr;
+        root = nullptr;
+        automationRoot = nullptr;
+    }
+
     wxWinUIControlHost host;
+    winrt::Microsoft::UI::Xaml::Controls::Border root{ nullptr };
+    winrt::Microsoft::UI::Xaml::Controls::Grid automationRoot{ nullptr };
+    winrt::Microsoft::UI::Xaml::Controls::Border frame{ nullptr };
+    winrt::Microsoft::UI::Xaml::Controls::TextBlock title{ nullptr };
+    double frameTopDIP = 0.0;
+    double titleGapDIP = 0.0;
+    unsigned long long modelRevision = 1;
+    bool usesThemeBrush = false;
+    bool projectionRetryScheduled = false;
 };
+
+namespace
+{
+
+void wxWinUIBumpStaticBoxModelRevision(wxWinUIStaticBoxImpl& impl)
+{
+    if ( ++impl.modelRevision == 0 )
+        ++impl.modelRevision;
+}
+
+} // anonymous namespace
 
 wxStaticBox::wxStaticBox()
 {
@@ -51,7 +90,11 @@ wxStaticBox::wxStaticBox(wxWindow *parent,
     Create(parent, id, label, pos, size, style, name);
 }
 
-wxStaticBox::~wxStaticBox() = default;
+wxStaticBox::~wxStaticBox()
+{
+    if ( m_winui )
+        m_winui->Close();
+}
 
 bool wxStaticBox::Create(wxWindow *parent,
                          wxWindowID id,
@@ -68,10 +111,24 @@ bool wxStaticBox::Create(wxWindow *parent,
 
     m_winui.reset(new wxWinUIStaticBoxImpl);
     if ( !m_winui->host.Initialize(this) )
+    {
+        m_winui.reset();
+        return false;
+    }
+
+    wxWinUIStaticBoxImpl * const impl = m_winui.get();
+    wxWeakRef<wxStaticBox> alive(this);
+    if ( !UpdateWinUIContent() )
+    {
+        if ( alive && alive->m_winui.get() == impl )
+            alive->m_winui.reset();
+        return false;
+    }
+    if ( !alive || alive->m_winui.get() != impl )
         return false;
 
-    UpdateWinUIContent();
-    return true;
+    alive->SetInitialSize(size);
+    return alive && alive->m_winui.get() == impl;
 }
 
 bool wxStaticBox::Create(wxWindow *parent,
@@ -87,49 +144,75 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !Create(parent, id, wxString(), pos, size, style, name) )
         return false;
 
+    wxWinUIStaticBoxImpl * const impl = m_winui.get();
+    wxWeakRef<wxStaticBox> alive(this);
     m_labelWin = label;
+    wxWinUIBumpStaticBoxModelRevision(*impl);
     m_labelWin->Reparent(this);
-    PositionLabelWindow();
+    if ( !alive || alive->m_winui.get() != impl )
+        return false;
 
-    return true;
+    alive->PositionLabelWindow();
+    if ( !alive || alive->m_winui.get() != impl )
+        return false;
+
+    // Create(string) built the frame before m_labelWin existed. Rebuild once
+    // after the owned label has its final size so the top edge contains the
+    // correct gap from the very first rendered frame.
+    if ( !alive->UpdateWinUIContent() )
+        return false;
+    if ( !alive || alive->m_winui.get() != impl )
+        return false;
+
+    alive->SetInitialSize(size);
+    return alive && alive->m_winui.get() == impl;
 }
 
 void wxStaticBox::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
+    if ( m_winui )
+        wxWinUIBumpStaticBoxModelRevision(*m_winui);
     InvalidateBestSize();
     UpdateWinUIContent();
 }
 
 bool wxStaticBox::SetBackgroundColour(const wxColour& colour)
 {
-    if ( !wxStaticBoxBase::SetBackgroundColour(colour) )
-        return false;
+    const bool rc = wxStaticBoxBase::SetBackgroundColour(colour);
 
+    if ( rc && m_winui )
+        wxWinUIBumpStaticBoxModelRevision(*m_winui);
     UpdateWinUIContent();
-    return true;
+    return rc;
 }
 
 bool wxStaticBox::SetForegroundColour(const wxColour& colour)
 {
-    if ( !wxCompositeWindowSettersOnly<wxStaticBoxBase>::SetForegroundColour(colour) )
-        return false;
+    const bool rc =
+        wxCompositeWindowSettersOnly<wxStaticBoxBase>::SetForegroundColour(
+            colour);
 
+    if ( rc && m_winui )
+        wxWinUIBumpStaticBoxModelRevision(*m_winui);
     UpdateWinUIContent();
-    return true;
+    return rc;
 }
 
 bool wxStaticBox::SetFont(const wxFont& font)
 {
-    if ( !wxCompositeWindowSettersOnly<wxStaticBoxBase>::SetFont(font) )
-        return false;
+    const bool rc =
+        wxCompositeWindowSettersOnly<wxStaticBoxBase>::SetFont(font);
 
-    if ( m_labelWin )
+    if ( rc && m_winui )
+        wxWinUIBumpStaticBoxModelRevision(*m_winui);
+    if ( rc && m_labelWin )
         PositionLabelWindow();
 
-    InvalidateBestSize();
+    if ( rc )
+        InvalidateBestSize();
     UpdateWinUIContent();
-    return true;
+    return rc;
 }
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
@@ -181,86 +264,341 @@ void wxStaticBox::PositionLabelWindow()
     if ( !m_labelWin )
         return;
 
-    m_labelWin->SetSize(m_labelWin->GetBestSize());
-    m_labelWin->Move(FromDIP(10), 0);
+    wxWeakRef<wxStaticBox> alive(this);
+    wxWindow * const label = m_labelWin;
+    wxWeakRef<wxWindow> labelAlive(label);
+
+    const wxSize bestSize = label->GetBestSize();
+    wxStaticBox *owner = alive.get();
+    wxWindow *currentLabel = labelAlive.get();
+    if ( !owner || !currentLabel || owner->m_labelWin != currentLabel )
+        return;
+
+    // Compute the final position before SetSize(): its wxEVT_SIZE handler may
+    // synchronously destroy either participant or replace the label window.
+    const int labelX = owner->FromDIP(10);
+    currentLabel->SetSize(bestSize);
+
+    owner = alive.get();
+    currentLabel = labelAlive.get();
+    if ( !owner || !currentLabel || owner->m_labelWin != currentLabel )
+        return;
+
+    currentLabel->Move(labelX, 0);
 }
 
-void wxStaticBox::UpdateWinUIContent()
+wxString wxStaticBox::GetAccessKeyLabel() const
+{
+    if ( m_labelWin )
+    {
+        if ( const wxControl * const control =
+                 wxDynamicCast(m_labelWin, wxControl) )
+        {
+            return control->GetLabel();
+        }
+
+        return m_labelWin->GetName();
+    }
+
+    return GetLabel();
+}
+
+bool wxStaticBox::UpdateWinUIContent()
 {
     if ( !m_winui )
-        return;
+        return false;
+
+    wxWinUIStaticBoxImpl * const impl = m_winui.get();
+    wxWeakRef<wxStaticBox> alive(this);
+
+    const auto queueRetry = [&]()
+    {
+        wxStaticBox * const owner = alive.get();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != impl ||
+             impl->projectionRetryScheduled )
+        {
+            return;
+        }
+
+        impl->projectionRetryScheduled = true;
+        owner->CallAfter(
+            [alive, impl]()
+            {
+                wxStaticBox * const current = alive.get();
+                if ( !current || !current->m_winui ||
+                     current->m_winui.get() != impl )
+                {
+                    return;
+                }
+
+                impl->projectionRetryScheduled = false;
+                current->UpdateWinUIContent();
+            });
+    };
+
+    // A property callback raised while SetContent() is attaching the candidate
+    // may mutate the wx model and attempt a nested rebuild. The shared host
+    // correctly rejects that nested content transaction; this bounded loop
+    // observes the new revision after the outer swap and projects it next.
+    // Continuous application churn is handed to one coalesced event-loop pass
+    // instead of recursing or spinning synchronously.
+    constexpr unsigned MaxSynchronousProjectionPasses = 8;
+    for ( unsigned pass = 0; pass < MaxSynchronousProjectionPasses; ++pass )
+    {
+        try
+        {
+        wxStaticBox * const owner = alive.get();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != impl )
+        {
+            return false;
+        }
+
+        const unsigned long long revision = impl->modelRevision;
+        namespace MUX = winrt::Microsoft::UI::Xaml;
+        namespace MUXA = winrt::Microsoft::UI::Xaml::Automation;
+        namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
+        namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+
+        MUXC::Border root;
+        root.IsHitTestVisible(false);
+        MUXC::Grid automationRoot = wxWinUICreateAccessibleGrid(
+            MUXAP::AutomationControlType::Group, "wxStaticBox");
+        automationRoot.IsHitTestVisible(false);
+        automationRoot.Children().Append(root);
+
+        MUXC::Grid layout;
+        root.Child(layout);
+
+        const auto makeThemedBorder =
+            [](wxWinUIThemeBrushProperty property)
+            {
+                auto border = wxWinUICreateThemeBrushBorder(
+                    "CardStrokeColorDefaultBrush", property);
+                if ( !border )
+                {
+                    border = wxWinUICreateThemeBrushBorder(
+                        "ControlStrokeColorDefaultBrush", property);
+                }
+                return border;
+            };
+
+        const wxString stringLabel =
+            owner->m_labelWin
+                ? wxString()
+                : owner->GetLabelText(owner->GetLabel());
+        const bool hasTitle =
+            owner->m_labelWin || !stringLabel.empty();
+        constexpr double titleLineDIP = 8.0;
+
+        MUXC::Border frame = makeThemedBorder(
+            wxWinUIThemeBrushProperty::BorderBrush);
+        const bool usesThemeBrush = frame != nullptr;
+        if ( !frame )
+            frame = MUXC::Border();
+
+        MUX::Thickness borderThickness{};
+        borderThickness.Left = 1.0;
+        borderThickness.Top = hasTitle ? 0.0 : 1.0;
+        borderThickness.Right = 1.0;
+        borderThickness.Bottom = 1.0;
+        frame.BorderThickness(borderThickness);
+        MUX::CornerRadius radius{};
+        radius.TopLeft = 8.0;
+        radius.TopRight = 8.0;
+        radius.BottomRight = 8.0;
+        radius.BottomLeft = 8.0;
+        frame.CornerRadius(radius);
+
+        MUX::Thickness frameMargin{};
+        frameMargin.Top = hasTitle ? titleLineDIP : 0.0;
+        frame.Margin(frameMargin);
+        const double frameTopDIP = frameMargin.Top;
+        layout.Children().Append(frame);
+
+        MUXC::TextBlock title{ nullptr };
+        double titleGapDIP = 0.0;
+        if ( hasTitle )
+        {
+            // Draw the top edge as two independent theme-coloured segments.
+            // This creates a genuine gap for the title and eliminates the old
+            // opaque light/dark mask, so Mica, custom backgrounds and high
+            // contrast all remain visible through the group header.
+            MUXC::Grid titleRow;
+            titleRow.VerticalAlignment(MUX::VerticalAlignment::Top);
+
+            MUXC::ColumnDefinition leftColumn;
+            leftColumn.Width(MUX::GridLengthHelper::FromPixels(8.0));
+            titleRow.ColumnDefinitions().Append(leftColumn);
+
+            MUXC::ColumnDefinition titleColumn;
+            if ( owner->m_labelWin )
+            {
+                const int labelWidth =
+                    owner->m_labelWin->GetBestSize().x;
+                const wxStaticBox * const ownerAfterBestSize =
+                    alive.get();
+                if ( ownerAfterBestSize != owner ||
+                     !ownerAfterBestSize->m_winui ||
+                     ownerAfterBestSize->m_winui.get() != impl )
+                {
+                    return false;
+                }
+                titleGapDIP =
+                    static_cast<double>(owner->ToDIP(labelWidth)) + 8.0;
+                titleColumn.Width(
+                    MUX::GridLengthHelper::FromPixels(
+                        titleGapDIP));
+            }
+            else
+            {
+                titleColumn.Width(MUX::GridLengthHelper::Auto());
+            }
+            titleRow.ColumnDefinitions().Append(titleColumn);
+
+            MUXC::ColumnDefinition rightColumn;
+            rightColumn.Width(MUX::GridLengthHelper::FromValueAndType(
+                1.0, MUX::GridUnitType::Star));
+            titleRow.ColumnDefinitions().Append(rightColumn);
+
+            const auto makeLine = [&]()
+            {
+                MUXC::Border line = makeThemedBorder(
+                    wxWinUIThemeBrushProperty::Background);
+                if ( !line )
+                    line = MUXC::Border();
+                line.Height(1.0);
+                line.VerticalAlignment(MUX::VerticalAlignment::Top);
+                MUX::Thickness margin{};
+                margin.Top = titleLineDIP;
+                line.Margin(margin);
+                return line;
+            };
+
+            MUXC::Border leftLine = makeLine();
+            MUXC::Grid::SetColumn(leftLine, 0);
+            titleRow.Children().Append(leftLine);
+
+            if ( !owner->m_labelWin )
+            {
+                title = MUXC::TextBlock();
+                title.Text(wxWinUIToHString(stringLabel));
+                MUX::Thickness margin{};
+                margin.Left = 4.0;
+                margin.Right = 4.0;
+                title.Margin(margin);
+                wxWinUIApplyFont(
+                    title,
+                    owner->m_hasFont ? owner->GetFont() : wxNullFont);
+                wxWinUIApplyForeground(
+                    title,
+                    owner->m_hasFgCol
+                        ? owner->GetForegroundColour()
+                        : wxNullColour);
+                MUXA::AutomationProperties::SetAccessibilityView(
+                    title, MUXAP::AccessibilityView::Raw);
+                MUXC::Grid::SetColumn(title, 1);
+                titleRow.Children().Append(title);
+            }
+
+            MUXC::Border rightLine = makeLine();
+            MUXC::Grid::SetColumn(rightLine, 2);
+            titleRow.Children().Append(rightLine);
+            layout.Children().Append(titleRow);
+        }
+
+        wxWinUIApplyBackground(
+            root,
+            owner->m_hasBgCol
+                ? owner->GetBackgroundColour()
+                : wxNullColour);
+        // Name is owned by the shared slot adapter. The component only owns
+        // its mnemonic and group-specific UIA metadata.
+        wxWinUIApplyAccessKey(
+            automationRoot, owner->GetAccessKeyLabel());
+
+        // Build the replacement entirely in locals. Only publish our model
+        // after the shared host's transactional content swap succeeded.
+        const bool contentSet = impl->host.SetContent(automationRoot);
+        wxStaticBox * const liveOwner = alive.get();
+        if ( !liveOwner || !liveOwner->m_winui ||
+             liveOwner->m_winui.get() != impl )
+        {
+            return false;
+        }
+        if ( !contentSet )
+        {
+            // A nested projection may have superseded this candidate while
+            // the initial slot was being attached. Its model revision is the
+            // proof that retrying is convergence, not an HRESULT spin.
+            if ( impl->modelRevision != revision )
+                continue;
+            return false;
+        }
+
+        // Publish exactly the tree accepted by the host before checking for a
+        // newer wx revision. This keeps peer/model identity truthful even when
+        // another pass is immediately required.
+        impl->root = root;
+        impl->automationRoot = automationRoot;
+        impl->frame = frame;
+        impl->title = title;
+        impl->frameTopDIP = frameTopDIP;
+        impl->titleGapDIP = titleGapDIP;
+        impl->usesThemeBrush = usesThemeBrush;
+        impl->host.SetAutomationNameOverride(
+            liveOwner->m_labelWin
+                ? liveOwner->GetAccessKeyLabel()
+                : wxString());
+
+        if ( impl->modelRevision == revision )
+            return true;
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("WinUI StaticBox creation", e);
+            return false;
+        }
+    }
+
+    queueRetry();
+    return true;
+}
+
+bool wxStaticBox::WinUIGetAppearanceForTesting(
+    wxWinUIAppearanceSnapshot *snapshot) const
+{
+    if ( !snapshot || !m_winui || !m_winui->root ||
+         !m_winui->automationRoot )
+        return false;
 
     try
     {
-        namespace MUX = winrt::Microsoft::UI::Xaml;
-        namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
-
-        MUXC::Grid root;
-        root.IsHitTestVisible(false);
-
-        MUXC::Border border;
-        MUX::Thickness borderThickness{};
-        borderThickness.Left = 1;
-        borderThickness.Top = 1;
-        borderThickness.Right = 1;
-        borderThickness.Bottom = 1;
-        border.BorderThickness(borderThickness);
-
-        MUX::CornerRadius radius{};
-        radius.TopLeft = 8;
-        radius.TopRight = 8;
-        radius.BottomRight = 8;
-        radius.BottomLeft = 8;
-        border.CornerRadius(radius);
-
-        const bool dark = wxWinUIIsDarkTheme();
-        border.BorderBrush(dark
-            ? wxWinUIBrush(255, 255, 255, 38)
-            : wxWinUIBrush(0, 0, 0, 38));
-
-        MUX::Thickness borderMargin{};
-        borderMargin.Top = GetLabel().empty() && !m_labelWin ? 0 : FromDIP(8);
-        border.Margin(borderMargin);
-        root.Children().Append(border);
-
-        if ( !m_labelWin )
-        {
-            const wxString label = GetLabelText(GetLabel());
-            if ( !label.empty() )
-            {
-                // Put the label in a panel with an opaque, theme-coloured
-                // background so it masks the border line running behind it
-                // (the classic "group box" look where the frame is broken by
-                // the title), instead of the line showing through the text.
-                MUXC::Border labelBg;
-                labelBg.Background(dark ? wxWinUIBrush(32, 32, 32)
-                                        : wxWinUIBrush(243, 243, 243));
-                labelBg.VerticalAlignment(MUX::VerticalAlignment::Top);
-                labelBg.HorizontalAlignment(MUX::HorizontalAlignment::Left);
-
-                MUX::Thickness labelMargin{};
-                labelMargin.Left = FromDIP(8);
-                labelBg.Margin(labelMargin);
-
-                MUX::Thickness labelPad{};
-                labelPad.Left = FromDIP(4);
-                labelPad.Right = FromDIP(4);
-                labelBg.Padding(labelPad);
-
-                MUXC::TextBlock text;
-                text.Text(wxWinUIToHString(label));
-                labelBg.Child(text);
-
-                root.Children().Append(labelBg);
-            }
-        }
-
-        m_winui->host.SetContent(root);
+        *snapshot = wxWinUICaptureAppearance(
+            m_winui->title, m_winui->root, m_winui->automationRoot);
+        return true;
     }
-    catch ( const winrt::hresult_error& e )
+    catch ( const winrt::hresult_error& )
     {
-        wxWinUILogException("WinUI StaticBox creation", e);
+        return false;
     }
+}
+
+bool wxStaticBox::WinUIGetLayoutForTesting(double *frameTopDIP,
+                                           double *titleGapDIP,
+                                           bool *usesThemeBrush) const
+{
+    if ( !m_winui || !m_winui->root || !m_winui->frame )
+        return false;
+
+    if ( frameTopDIP )
+        *frameTopDIP = m_winui->frameTopDIP;
+    if ( titleGapDIP )
+        *titleGapDIP = m_winui->titleGapDIP;
+    if ( usesThemeBrush )
+        *usesThemeBrush = m_winui->usesThemeBrush;
+    return true;
 }
 
 #endif // wxUSE_STATBOX

@@ -109,6 +109,25 @@ public:
         m_interface = nullptr;
     }
 
+    // Transfer the owned COM reference without crossing a COM boundary. This
+    // is useful when an owner must make all of its state inert before invoking
+    // a server which is allowed to re-enter and destroy that owner.
+    I* Detach()
+    {
+        I* const value = m_interface;
+        m_interface = nullptr;
+        return value;
+    }
+
+    // Publish a reference already owned by the caller without calling into
+    // COM. The destination must be empty: replacing a live interface would
+    // make this apparently harmless operation a re-entrant Release().
+    void Attach(I* value)
+    {
+        wxASSERT_MSG(!m_interface, "attaching over a live COM interface");
+        m_interface = value;
+    }
+
     HRESULT QueryInterface(REFIID riid, IUnknown *pUnk)
     {
         Free();
@@ -165,6 +184,10 @@ protected:
     friend class FrameSite;
     friend class wxActiveXEvents;
 
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
+                                     WXWPARAM wParam,
+                                     WXLPARAM lParam) override;
+
     FrameSite *m_frameSite;
     wxAutoIDispatch            m_Dispatch;
     wxAutoIOleClientSite      m_clientSite;
@@ -179,7 +202,12 @@ protected:
     DWORD m_docAdviseCookie;
     wxWindow* m_realparent;
 
+    // Keep this long-standing protected entry point ABI-compatible. The
+    // transactional implementation reports success through the distinct
+    // helper below, while existing callers may continue to ignore it.
     void CreateActiveX(REFIID, IUnknown*);
+    bool TryCreateActiveX(REFIID, IUnknown*);
+    void TearDownActiveX();
 };
 
 ///\brief Store native event parameters.

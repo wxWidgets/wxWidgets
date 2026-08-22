@@ -51,6 +51,7 @@ public:
 #endif // wxUSE_TOOLTIPS
 
 protected:
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
     void DoEnable(bool enable) override;
     wxSize DoGetBestClientSize() const override;
     void DoSet3StateValue(wxCheckBoxState value) override;
@@ -58,12 +59,10 @@ protected:
 
 private:
     void SendCheckBoxEvent();
-    void UpdateWinUIContent();
-    void UpdateWinUIAppearance();
-    void ApplyToolTip();
-
+    bool UpdateWinUIContent(bool forceRender = true);
+    bool UpdateWinUIAppearance(bool forceRender = true);
     std::unique_ptr<wxWinUICheckBoxImpl> m_winui;
-    wxCheckBoxState m_state;
+    wxCheckBoxState m_state = wxCHK_UNCHECKED;
 #if wxUSE_TOOLTIPS
     wxString m_tooltipText;
 #endif // wxUSE_TOOLTIPS

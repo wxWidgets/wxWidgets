@@ -20,6 +20,13 @@ public:
                     const wxPoint& WXUNUSED(pos) = wxDefaultPosition)
         : wxMessageDialogBase(parent, message, caption, style)
     {
+        // Keep the same wxWindow lifetime contract as the other WinUI
+        // common dialogs. The visible surface is provided by the presenter,
+        // but its nested loop must still receive wxEVT_DESTROY if the
+        // wxMessageDialog object is destroyed while it is open.
+        wxDialog::Create(m_parent, wxID_ANY, caption,
+                         wxDefaultPosition, wxDefaultSize,
+                         wxDEFAULT_DIALOG_STYLE);
     }
 
     int ShowModal() override;

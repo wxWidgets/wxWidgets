@@ -117,6 +117,13 @@ protected:
         Dismiss();
         OnDismiss();
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Keep WinUI lifetime/session bookkeeping outside this exported class.
+    // The friend owns no public contract and, in particular, does not alter
+    // the historical DismissAndNotify() signature or the vtable/layout.
+    friend class wxWinUIPopupSidecarAccess;
+#endif
 };
 
 #ifdef __WXMSW__
@@ -144,6 +151,11 @@ public:
 
 private:
     void DismissOnDeactivate();
+    void DismissFromOutside();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    friend class wxWinUIPopupSidecarAccess;
+#endif
 
     wxDECLARE_DYNAMIC_CLASS(wxPopupTransientWindow);
     wxDECLARE_NO_COPY_CLASS(wxPopupTransientWindow);

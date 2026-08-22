@@ -25,6 +25,9 @@
 #include "wx/evtloop.h"
 #include "wx/modalhook.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/msgdlg.h"
+#include "wx/scopeguard.h"
+#include "wx/winui/private/dialogcontracts.h"
 
 #include <winrt/Windows.Foundation.h>
 
@@ -33,67 +36,44 @@ wxIMPLEMENT_CLASS(wxMessageDialog, wxDialog);
 namespace
 {
 
-struct wxWinUIMessageDialogButton
-{
-    wxString label;
-    int id = wxID_NONE;
-};
-
-struct wxWinUIMessageDialogButtons
-{
-    wxWinUIMessageDialogButton primary;
-    wxWinUIMessageDialogButton secondary;
-    wxWinUIMessageDialogButton close;
-    winrt::Microsoft::UI::Xaml::Controls::ContentDialogButton defaultButton =
-        winrt::Microsoft::UI::Xaml::Controls::ContentDialogButton::Primary;
-};
-
-bool wxWinUIBuildMessageDialogButtons(const wxMessageDialog& dlg,
-                                      wxWinUIMessageDialogButtons& buttons)
-{
-    const long style = dlg.GetMessageDialogStyle();
-
-    if ( (style & wxYES_NO) && (style & wxCANCEL) && (style & wxHELP) )
-        return false;
-
-    if ( style & wxYES_NO )
-    {
-        buttons.primary = { dlg.GetYesLabel(), wxID_YES };
-        buttons.secondary = { dlg.GetNoLabel(), wxID_NO };
-
-        if ( style & wxCANCEL )
-            buttons.close = { dlg.GetCancelLabel(), wxID_CANCEL };
-        else if ( style & wxHELP )
-            buttons.close = { dlg.GetHelpLabel(), wxID_HELP };
-
-        if ( style & wxNO_DEFAULT )
-            buttons.defaultButton =
-                winrt::Microsoft::UI::Xaml::Controls::ContentDialogButton::Secondary;
-        else if ( style & wxCANCEL_DEFAULT )
-            buttons.defaultButton =
-                winrt::Microsoft::UI::Xaml::Controls::ContentDialogButton::Close;
-    }
-    else
-    {
-        buttons.primary = { dlg.GetOKLabel(), wxID_OK };
-
-        if ( style & wxHELP )
-            buttons.secondary = { dlg.GetHelpLabel(), wxID_HELP };
-
-        if ( style & wxCANCEL )
-            buttons.close = { dlg.GetCancelLabel(), wxID_CANCEL };
-
-        if ( style & wxCANCEL_DEFAULT )
-            buttons.defaultButton =
-                winrt::Microsoft::UI::Xaml::Controls::ContentDialogButton::Close;
-    }
-
-    return true;
-}
-
-int wxWinUIFallbackMessageBox(const wxMessageDialog& dlg)
+int wxWinUIFallbackMessageBox(wxMessageDialog& dlg)
 {
     const long wxStyle = dlg.GetMessageDialogStyle();
+    wxWindow * const parent = dlg.GetParentForModalDialog();
+
+    // Native TaskDialog/MessageBox only disable their HWND owner. wx modal
+    // dialogs are application-modal, so also disable unrelated TLWs for the
+    // exact duration of the fallback, matching the established MSW port.
+    wxWindowDisabler disableOthers(&dlg, parent);
+
+    // Preserve the complete wx button/label contract whenever comctl32 v6 is
+    // available. In particular MessageBox cannot represent four buttons or
+    // any Set*Label() customization, while the shared MSW task-dialog helper
+    // supports both.
+    if ( wxMSWMessageDialog::TaskDialogIndirect_t taskDialogIndirect =
+             wxMSWMessageDialog::GetTaskDialogIndirectFunc() )
+    {
+        WinStruct<TASKDIALOGCONFIG> config;
+        wxMSWMessageDialog::wxMSWTaskDialogConfig wxConfig(dlg);
+        wxConfig.MSWCommonTaskDialogInit(config);
+
+        int nativeResult = IDCANCEL;
+        const HRESULT hr =
+            taskDialogIndirect(&config, &nativeResult, nullptr, nullptr);
+        if ( SUCCEEDED(hr) )
+        {
+            if ( nativeResult == IDCANCEL &&
+                 !(wxStyle & (wxYES_NO | wxCANCEL)) )
+            {
+                nativeResult = IDOK;
+            }
+            return wxMSWMessageDialog::MSWTranslateReturnCode(
+                nativeResult);
+        }
+
+        wxLogApiError("TaskDialogIndirect", hr);
+    }
+
     unsigned msStyle = 0;
 
     if ( wxStyle & wxYES_NO )
@@ -135,7 +115,6 @@ int wxWinUIFallbackMessageBox(const wxMessageDialog& dlg)
     if ( wxStyle & wxSTAY_ON_TOP )
         msStyle |= MB_TOPMOST;
 
-    wxWindow* const parent = dlg.GetParentForModalDialog();
     HWND hwndParent = parent ? GetHwndOf(parent) : nullptr;
 
     wxString fullMessage = dlg.GetMessage();
@@ -157,6 +136,8 @@ int wxWinUIFallbackMessageBox(const wxMessageDialog& dlg)
             return wxID_YES;
         case IDNO:
             return wxID_NO;
+        case IDHELP:
+            return wxID_HELP;
     }
 
     return wxID_CANCEL;
@@ -164,14 +145,62 @@ int wxWinUIFallbackMessageBox(const wxMessageDialog& dlg)
 
 } // anonymous namespace
 
+bool wxWinUIBuildMessageDialogButtons(
+    const wxMessageDialog& dlg,
+    wxWinUIMessageDialogButtons& buttons)
+{
+    buttons.layout =
+        wxWinUIBuildMessageDialogLayout(dlg.GetMessageDialogStyle());
+    if ( buttons.layout.requiresNativeFallback )
+        return false;
+
+    auto buttonForId = [&dlg](int id) -> wxWinUIMessageDialogButton
+    {
+        switch ( id )
+        {
+            case wxID_YES:
+                return { dlg.GetYesLabel(), id };
+            case wxID_NO:
+                return { dlg.GetNoLabel(), id };
+            case wxID_OK:
+                return { dlg.GetOKLabel(), id };
+            case wxID_CANCEL:
+                return { dlg.GetCancelLabel(), id };
+            case wxID_HELP:
+                return { dlg.GetHelpLabel(), id };
+        }
+
+        return {};
+    };
+
+    for ( std::size_t i = 0; i < buttons.layout.buttonCount; ++i )
+        buttons.values[i] = buttonForId(buttons.layout.buttonIds[i]);
+
+    return true;
+}
+
 int wxMessageDialog::ShowModal()
 {
+    const wxWeakRef<wxDialog> externalLifetimeSelf(this);
+    WinUIBeginExternalModalLifetime();
+    wxScopeGuard externalLifetime = wxMakeGuard(
+        [externalLifetimeSelf]()
+        {
+            if ( wxDialog * const live = externalLifetimeSelf.get() )
+                live->WinUIEndExternalModalLifetime();
+        });
+    wxUnusedVar(externalLifetime);
+
     WX_HOOK_MODAL_DIALOG();
+    WinUIArmExternalModalLifetime();
+    if ( IsBeingDeleted() )
+        return wxID_CANCEL;
+
+    const wxWeakRef<wxWindow> weakSelf(this);
 
     wxWindow* const parent = GetParentForModalDialog();
-    HWND hwndParent = parent ? GetHwndOf(parent) : nullptr;
 
-    if ( !hwndParent || !wxWinUI3Initialize() )
+    if ( !wxWinUI3Initialize() )
         return wxWinUIFallbackMessageBox(*this);
 
     wxWinUIMessageDialogButtons buttons;
@@ -185,6 +214,7 @@ int wxMessageDialog::ShowModal()
         wxWinUIDialogPresenter presenter;
         if ( !presenter.Create(parent, GetCaption()) )
             return wxWinUIFallbackMessageBox(*this);
+        presenter.SetLifetimeOwner(this);
 
         wxString message = GetMessage();
         wxString extended = GetExtendedMessage();
@@ -214,6 +244,8 @@ int wxMessageDialog::ShowModal()
         }
 
         presenter.SetContent(content);
+        presenter.SetExternalDismissAllowed(
+            buttons.layout.canDismissExternally);
 
         // Wrap the message at a comfortable width and give the dialog enough
         // room for it: the XAML text can't be measured before it is realised.
@@ -230,45 +262,33 @@ int wxMessageDialog::ShowModal()
             wxSize(textWidth, wxMax(48, lines * 22)));
 
         const int defaultId =
-            buttons.defaultButton == ContentDialogButton::Secondary
-                ? buttons.secondary.id
-                : buttons.defaultButton == ContentDialogButton::Close
-                    ? buttons.close.id
-                    : buttons.primary.id;
+            buttons.layout.buttonIds[buttons.layout.defaultIndex];
 
-        if ( buttons.primary.id != wxID_NONE )
+        for ( std::size_t i = 0;
+              i < buttons.layout.buttonCount;
+              ++i )
         {
-            presenter.AddButton(buttons.primary.id, buttons.primary.label,
-                                buttons.primary.id == defaultId);
-        }
-        if ( buttons.secondary.id != wxID_NONE )
-        {
-            presenter.AddButton(buttons.secondary.id, buttons.secondary.label,
-                                buttons.secondary.id == defaultId);
-        }
-        if ( buttons.close.id != wxID_NONE )
-        {
-            presenter.AddButton(buttons.close.id, buttons.close.label,
-                                buttons.close.id == defaultId);
+            const wxWinUIMessageDialogButton& button =
+                buttons.values[i];
+            presenter.AddButton(
+                button.id, button.label, button.id == defaultId);
         }
 
-        const int result = presenter.ShowModal();
-        if ( result != wxID_CANCEL )
-            return result;
-
-        // Cancelled: report the dismissal the way the caller expects.
-        if ( buttons.close.id != wxID_NONE )
-            return buttons.close.id;
-        if ( !(GetMessageDialogStyle() & (wxYES_NO | wxCANCEL)) )
-            return wxID_OK;
-        return wxID_CANCEL;
+        return wxWinUIResolveMessageDialogDismissal(
+            buttons.layout, presenter.ShowModal());
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("ContentDialog", e);
     }
 
-    return wxWinUIFallbackMessageBox(*this);
+    // A queued Destroy() is allowed to cancel the presenter while its nested
+    // loop is active. Never dereference the dialog after that cancellation.
+    wxMessageDialog * const live =
+        static_cast<wxMessageDialog *>(weakSelf.get());
+    return live && !live->IsBeingDeleted()
+        ? wxWinUIFallbackMessageBox(*live)
+        : wxID_CANCEL;
 }
 
 wxFont wxMessageDialog::GetMessageFont()

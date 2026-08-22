@@ -23,6 +23,7 @@
 
 #include "wx/filepicker.h"
 #include "wx/filename.h"
+#include "wx/weakref.h"
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -151,12 +152,20 @@ void wxFileDirPickerCtrlBase::UpdateTextCtrlFromPicker()
 
 void wxFileDirPickerCtrlBase::OnFileDirChange(wxFileDirPickerEvent &ev)
 {
+    const wxWeakRef<wxFileDirPickerCtrlBase> weakThis(this);
     UpdateTextCtrlFromPicker();
+    wxFileDirPickerCtrlBase * const live = weakThis.get();
+    if ( !live )
+        return;
 
-    // the wxFilePickerWidget sent us a colour-change notification.
+    // The implementation picker sent us a path-change notification.
     // forward this event to our parent
-    wxFileDirPickerEvent event(GetEventType(), this, GetId(), ev.GetPath());
-    GetEventHandler()->ProcessEvent(event);
+    wxFileDirPickerEvent event(
+        live->GetEventType(), live, live->GetId(), ev.GetPath());
+
+    // Application handlers may synchronously destroy the picker, so this
+    // notification must remain the final operation in this method.
+    live->GetEventHandler()->ProcessEvent(event);
 }
 
 #endif  // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL

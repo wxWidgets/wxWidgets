@@ -17,6 +17,12 @@
 - **Dépend de** : 001–006, 007a–007c, 008a–008f selon la matrice, puis 009
 - **Catégorie** : release, tests, docs, git
 - **Planifié à** : `20207bdbbb`, 2026-07-21
+- **État courant** : `IN PROGRESS` — la campagne RC4 du 2026-08-22 a prouvé que
+  le broker produit TLW-only manque la surface XAML normale. Le broker possède
+  désormais une identité COM enregistrée atomiquement sur le bridge et le TLW;
+  ses gates shared/static sont vertes. Le gel et la campagne physique RC7 ainsi
+  que la checklist 009/010 restent ouverts; aucune promotion bêta ni mutation
+  Git n'est autorisée sans les validations correspondantes.
 
 ## Pourquoi
 
@@ -86,7 +92,8 @@ non-gate consigné sans prétendre au support. Pour les pages concernées :
 - focus, Tab/Shift-Tab, mnemonics, accelerators ;
 - tooltips/cursors/busy/custom ;
 - scroll, splitter, notebook, z overlaps ;
-- D&D texte/fichier ;
+- D&D texte/fichier : broker OLE produit sur surface XAML normale et dans un
+  trou natif du bridge, puis `WM_DROPFILES` séparé sur le bridge ;
 - dialogs Window/Overlay selon promesse, owner/nested/minimize/Alt-Tab ;
 - Light/Dark/High Contrast à chaud ;
 - DPI inter-écrans 100/150/200 et RTL ;
@@ -121,7 +128,8 @@ Sans staging, montrer `git diff --stat` et patch par slice :
 7. dialogs/frame-class/owner/refit ;
 8. Z-order/scroll/splitter (007c) ;
 9. refactor de session OLE sans changement wxMSW ;
-10. broker D&D du bridge + tests `DragAcceptFiles` ;
+10. broker D&D enregistré sur le TLW, routage logique par le bridge, trous
+    natifs + tests `DragAcceptFiles`/`WM_DROPFILES` séparés ;
 11. component fixes, une famille verte par commit ;
 12. adapters/gate final UIA/DPI/RTL ;
 13. tests/docs/release matrix ;
@@ -137,15 +145,15 @@ message style historique `wxWinUI: ...`. Ne pas push/PR sans instruction.
 
 ## Done alpha
 
-- [ ] matrice support/excluded publiée ;
-- [ ] matrice OS/architecture/config/linkage/identity publiée ;
-- [ ] build clean complet ;
+- [x] matrice support/excluded publiée ;
+- [x] matrice OS/architecture/config/linkage/identity publiée ;
+- [x] build clean complet ;
 - [ ] tests alpha et checklist manuelle verts ;
 - [ ] aucun crash/freeze/ressource manquante ;
 - [ ] lifetime/crash TextCtrl stable sur 100 runs ;
 - [ ] D&D/menus/dialogues core verts ;
-- [ ] instrumentation off par défaut ;
-- [ ] docs reflètent limites ;
+- [x] instrumentation off par défaut ;
+- [x] docs reflètent limites ;
 - [ ] découpe approuvée avant commits.
 
 ## Done beta
@@ -155,6 +163,8 @@ message style historique `wxWinUI: ...`. Ne pas push/PR sans instruction.
 - [ ] UIA/Narrator, DPI/RTL/theme, multi-TLW ;
 - [ ] perf/soak budgets ;
 - [ ] fallbacks génériques qualifiés ;
+- [ ] broker OLE produit qualifié physiquement sur surface normale et trou
+  natif, en shared/static et dans l'artefact RC7 ;
 - [ ] release notes et artefacts clean-room reproductibles.
 
 ## STOP

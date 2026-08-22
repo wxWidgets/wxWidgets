@@ -58,6 +58,16 @@ if(WIN32_MSVC_NAMING)
     endif()
 endif()
 
+set(_wx_winui_config
+    "${CMAKE_CURRENT_LIST_DIR}${wxPLATFORM_LIB_DIR}/wxWinUIConfig.cmake")
+if(EXISTS "${_wx_winui_config}")
+    # Defines the installed runtime deployment helper and, for a static
+    # package, the relocatable Windows App SDK import-library targets needed
+    # by wxWidgetsTargets.cmake.
+    include("${_wx_winui_config}")
+endif()
+unset(_wx_winui_config)
+
 include("${CMAKE_CURRENT_LIST_DIR}${wxPLATFORM_LIB_DIR}/@PROJECT_NAME@Targets.cmake")
 
 macro(wx_inherit_property source dest name)

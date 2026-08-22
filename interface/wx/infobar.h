@@ -15,7 +15,7 @@ enum
 {
     /// Include support for showing a customizable checkbox()
     /// at the bottom of a wxInfoBar.
-    wxINFOBAR_CHECKBOX = 0x0080
+    wxINFOBAR_CHECKBOX = 0x0010
 };
 
 /**
@@ -236,9 +236,10 @@ public:
     virtual bool HasButtonId(wxWindowID btnid) const;
 
     /**
-        @name Generic version customization methods.
+        @name Generic and wxWinUI version customization methods.
 
-        All these methods exist in the generic version of the class only.
+        All these methods exist in the generic and wxWinUI versions of the
+        class only.
 
         The generic version uses wxWindow::ShowWithEffect() function to
         progressively show it on the platforms which support it (currently only
@@ -280,6 +281,9 @@ public:
 
         @param duration
             Duration of the animation, in milliseconds.
+
+        @note In wxWinUI, values below zero are normalized to zero and values
+            above 10000 are clamped to 10000.
      */
     void SetEffectDuration(int duration);
 
@@ -320,7 +324,7 @@ public:
         text message part. By default a larger and bold version of the standard
         font is used.
 
-        This method is generic-only.
+        This method is available in the generic and wxWinUI versions.
      */
     virtual bool SetFont(const wxFont& font);
 

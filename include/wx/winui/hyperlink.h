@@ -12,7 +12,15 @@
 
 #include <memory>
 
+// Keep the documented generic implementation available independently of the
+// native WinUI peer. In particular, code explicitly selecting the generic
+// control retains its label-only hit testing and painting semantics.
+#include "wx/generic/hyperlink.h"
+
 class wxWinUIHyperlinkImpl;
+struct wxWinUIAppearanceSnapshot;
+
+using wxWinUIHyperlinkPeerWriteHookForTesting = void (*)(void *);
 
 class WXDLLIMPEXP_CORE wxHyperlinkCtrl : public wxHyperlinkCtrlBase
 {
@@ -38,29 +46,55 @@ public:
                 const wxString& name = wxASCII_STR(wxHyperlinkCtrlNameStr));
 
     wxColour GetHoverColour() const override { return m_hoverColour; }
-    void SetHoverColour(const wxColour& colour) override { m_hoverColour = colour; }
+    void SetHoverColour(const wxColour& colour) override;
 
-    wxColour GetNormalColour() const override { return m_normalColour; }
-    void SetNormalColour(const wxColour& colour) override
-        { m_normalColour = colour; UpdateWinUIContent(); }
+    wxColour GetNormalColour() const override;
+    void SetNormalColour(const wxColour& colour) override;
 
     wxColour GetVisitedColour() const override { return m_visitedColour; }
-    void SetVisitedColour(const wxColour& colour) override
-        { m_visitedColour = colour; UpdateWinUIContent(); }
+    void SetVisitedColour(const wxColour& colour) override;
 
     wxString GetURL() const override { return m_url; }
-    void SetURL(const wxString& url) override { m_url = url; }
+    void SetURL(const wxString& url) override;
 
-    void SetVisited(bool visited = true) override
-        { m_visited = visited; UpdateWinUIContent(); }
+    void SetVisited(bool visited = true) override;
     bool GetVisited() const override { return m_visited; }
 
     void SetLabel(const wxString& label) override;
+    bool SetFont(const wxFont& font) override;
+    bool SetForegroundColour(const wxColour& colour) override;
+    bool SetBackgroundColour(const wxColour& colour) override;
+
+    wxVisualAttributes GetDefaultAttributes() const override;
+    static wxVisualAttributes
+    GetClassDefaultAttributes(
+        wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
+    bool WinUIInvokeForTesting();
+    bool WinUIGetInteractiveRectForTesting(wxRect *rect) const;
+    bool WinUIHitTestForTesting(const wxPoint& point) const;
+    bool WinUIInvokeAtForTesting(const wxPoint& point);
+    void WinUISetPointerOverForTesting(bool pointerOver);
+    bool WinUIGetStateForTesting(bool *pointerOver,
+                                 int *horizontalAlignment,
+                                 bool *contextMenuEnabled,
+                                 wxColour *effectiveColour,
+                                 wxWinUIAppearanceSnapshot *appearance,
+                                 bool *peerEnabled = nullptr) const;
+    bool WinUICopyURLForTesting();
+    // One-shot deterministic seam invoked after the next peer write.
+    void WinUISetNextPeerWriteHookForTesting(
+        wxWinUIHyperlinkPeerWriteHookForTesting hook,
+        void *context);
+    bool WinUIHasDeferredPeerWriteForTesting() const;
+    bool WinUIIsPeerProjectionQuarantinedForTesting() const;
+    unsigned long long WinUIGetModelRevisionForTesting() const;
+    static unsigned WinUIGetLiveCallbackStateCountForTesting();
 
 protected:
     wxSize DoGetBestSize() const override;
 
-    void UpdateWinUIContent();
+    bool UpdateWinUIContent();
 
     std::unique_ptr<wxWinUIHyperlinkImpl> m_winui;
     wxString m_url;
@@ -68,14 +102,21 @@ protected:
     wxColour m_hoverColour;
     wxColour m_normalColour;
     wxColour m_visitedColour;
+    bool m_hasCustomHoverColour = false;
+    bool m_hasCustomNormalColour = false;
+    bool m_hasCustomVisitedColour = false;
+    bool m_pointerOver = false;
 
 private:
+    void BumpWinUIModelRevision();
+    void HandleClick();
+    void HandleContextRequested();
+    void HandleThemeChanged();
+    void SetPointerOver(bool pointerOver);
+    bool CopyURLToClipboard();
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxHyperlinkCtrl);
 };
-
-// Some code (e.g. the widgets sample) refers to wxGenericHyperlinkCtrl
-// explicitly; under the WinUI toolkit there is no separate generic class, so
-// make it an alias of the WinUI control for source compatibility.
-typedef wxHyperlinkCtrl wxGenericHyperlinkCtrl;
 
 #endif // _WX_WINUI_HYPERLINK_H_

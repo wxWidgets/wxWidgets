@@ -20,20 +20,13 @@
 
 #include "wx/winui/winui.h"
 
-#include "wx/msw/wrapwin.h"
+// The content is hosted as one slot of the shared per-TLW island: this class
+// no longer owns a DesktopWindowXamlSource of its own, so there is exactly
+// one source per top-level window however many hosts and native controls it
+// mixes -- and the content gets the island-wide input routing, focus
+// arbitration and geometry sync for free.
+#include "wx/winui/private/tlwhost.h"
 
-#ifdef GetCurrentTime
-    #undef GetCurrentTime
-#endif
-
-#include <winrt/base.h>
-#include <winrt/Windows.Foundation.h>
-#include <winrt/Windows.Graphics.h>
-#include <winrt/Microsoft.UI.h>
-#include <winrt/Microsoft.UI.Content.h>
-#include <winrt/Microsoft.UI.Interop.h>
-#include <winrt/Microsoft.UI.Xaml.h>
-#include <winrt/Microsoft.UI.Xaml.Hosting.h>
 #include <winrt/Microsoft.UI.Xaml.Markup.h>
 
 #include <string>
@@ -54,7 +47,6 @@ void wxWinUILogException(const char *what, const winrt::hresult_error& e)
 class wxWinUIXamlHostImpl
 {
 public:
-    winrt::Microsoft::UI::Xaml::Hosting::DesktopWindowXamlSource source{ nullptr };
     winrt::Microsoft::UI::Xaml::UIElement content{ nullptr };
 };
 
@@ -76,19 +68,12 @@ wxWinUIXamlHost::wxWinUIXamlHost(wxWindow *parent,
 
 wxWinUIXamlHost::~wxWinUIXamlHost()
 {
-    ClearContent();
-
-    if ( m_impl && m_impl->source )
-    {
-        try
-        {
-            m_impl->source.Close();
-        }
-        catch ( const winrt::hresult_error& e )
-        {
-            wxWinUILogException("DesktopWindowXamlSource::Close", e);
-        }
-    }
+    // The shared host unregisters the slot on our wxEVT_DESTROY anyway; do
+    // it explicitly too so the teardown does not depend on handler order.
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::FindSlotOwner(this);
+    if ( host )
+        host->UnregisterSlot(this);
 }
 
 bool wxWinUIXamlHost::Create(wxWindow *parent,
@@ -101,6 +86,12 @@ bool wxWinUIXamlHost::Create(wxWindow *parent,
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
+    // wxWindow's generic MSW creation uses its resource name as the initial
+    // HWND title. For an arbitrary XAML host this is not visible UI text and
+    // must not become its accessible name. Preserve GetName() but start with
+    // an empty label; applications can opt in explicitly with SetLabel().
+    wxWindow::SetLabel(wxString());
+
     m_impl.reset(new wxWinUIXamlHostImpl);
     if ( !InitializeXamlSource() )
         return false;
@@ -111,56 +102,15 @@ bool wxWinUIXamlHost::Create(wxWindow *parent,
 
 bool wxWinUIXamlHost::InitializeXamlSource()
 {
-    if ( m_impl && m_impl->source )
-        return true;
-
     if ( !wxWinUI3Initialize() )
         return false;
 
     if ( !m_impl )
         m_impl.reset(new wxWinUIXamlHostImpl);
 
-    try
-    {
-        using namespace winrt::Microsoft::UI::Content;
-        using namespace winrt::Microsoft::UI::Xaml::Hosting;
-
-        m_impl->source = DesktopWindowXamlSource();
-
-        HWND hwnd = static_cast<HWND>(GetHWND());
-        ::SetWindowLongPtr
-        (
-            hwnd,
-            GWL_STYLE,
-            ::GetWindowLongPtr(hwnd, GWL_STYLE) |
-                WS_CLIPCHILDREN | WS_CLIPSIBLINGS
-        );
-
-        const auto windowId = winrt::Microsoft::UI::GetWindowIdFromWindow(hwnd);
-
-        m_impl->source.Initialize(windowId);
-        m_impl->source.SiteBridge().ResizePolicy(ContentSizePolicy::None);
-
-        HWND bridgeHwnd = winrt::Microsoft::UI::GetWindowFromWindowId(
-            m_impl->source.SiteBridge().WindowId());
-        ::SetWindowLongPtr
-        (
-            bridgeHwnd,
-            GWL_STYLE,
-            ::GetWindowLongPtr(bridgeHwnd, GWL_STYLE) |
-                WS_CHILD | WS_VISIBLE | WS_TABSTOP
-        );
-
-        MoveAndResizeXamlSource();
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("DesktopWindowXamlSource initialization", e);
-        m_impl->source = nullptr;
-        return false;
-    }
-
-    return true;
+    // "The source" is the top-level window's shared island: just make sure
+    // it exists (created on first use).
+    return wxWinUITopLevelHost::ForWindow(this, true) != nullptr;
 }
 
 bool wxWinUIXamlHost::SetContentFromXaml(const wxString& xaml)
@@ -168,6 +118,9 @@ bool wxWinUIXamlHost::SetContentFromXaml(const wxString& xaml)
     if ( !InitializeXamlSource() )
         return false;
 
+    // Load into a local first: the previous content is only replaced once
+    // the whole load + slot installation succeeded.
+    winrt::Microsoft::UI::Xaml::UIElement newContent{ nullptr };
     try
     {
         using namespace winrt::Microsoft::UI::Xaml;
@@ -175,8 +128,7 @@ bool wxWinUIXamlHost::SetContentFromXaml(const wxString& xaml)
 
         const std::wstring xamlText = xaml.ToStdWstring();
         const auto loaded = XamlReader::Load(winrt::hstring(xamlText));
-        m_impl->content = loaded.as<UIElement>();
-        m_impl->source.Content(m_impl->content);
+        newContent = loaded.as<UIElement>();
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -184,43 +136,58 @@ bool wxWinUIXamlHost::SetContentFromXaml(const wxString& xaml)
         return false;
     }
 
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::ReconcileSlotOwner(this, true);
+    if ( !host || !host->RegisterSlot(this, newContent) )
+        return false;
+
+    m_impl->content = newContent;
     return true;
 }
 
 void wxWinUIXamlHost::ClearContent()
 {
-    if ( !m_impl || !m_impl->source )
-        return;
+    // Empty the slot first (keeping it: the API stays usable for the next
+    // SetContentFromXaml); only forget our own reference once that
+    // actually succeeded, so a failed detach leaves a truthful state.
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::FindSlotOwner(this);
+    if ( host )
+    {
+        if ( wxWinUISlot * const slot = host->FindSlot(this) )
+        {
+            if ( !slot->SetContent(nullptr) )
+                return;
+        }
+    }
 
-    try
-    {
-        m_impl->source.Content(winrt::Microsoft::UI::Xaml::UIElement{ nullptr });
+    if ( m_impl )
         m_impl->content = nullptr;
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("DesktopWindowXamlSource::Content", e);
-    }
+}
+
+void wxWinUIXamlHost::SetLabel(const wxString& label)
+{
+    wxWindow::SetLabel(label);
+
+    // Unlike a native control, this generic host has no component-specific
+    // label setter to nudge the shared state adapter. Make the public wx label
+    // transaction observable so it updates AutomationProperties.Name and, if
+    // application XAML silently acquired an implicit Name style, performs the
+    // conservative ownership check before publishing a local wx value.
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::FindSlotOwner(this);
+    if ( host )
+        host->MarkDirty(this);
 }
 
 void wxWinUIXamlHost::MoveAndResizeXamlSource()
 {
-    if ( !m_impl || !m_impl->source )
-        return;
-
-    const wxSize size = GetClientSize();
-    if ( size.x <= 0 || size.y <= 0 )
-        return;
-
-    try
-    {
-        m_impl->source.SiteBridge().MoveAndResize({ 0, 0, size.x, size.y });
-        m_impl->source.SiteBridge().Show();
-    }
-    catch ( const winrt::hresult_error& e )
-    {
-        wxWinUILogException("DesktopWindowXamlSource::MoveAndResize", e);
-    }
+    // Geometry follows the HWND through the shared host's coalesced sync;
+    // just nudge it.
+    wxWinUITopLevelHost * const host =
+        wxWinUITopLevelHost::FindSlotOwner(this);
+    if ( host )
+        host->MarkDirty(this);
 }
 
 void wxWinUIXamlHost::OnSize(wxSizeEvent& event)

@@ -43,6 +43,9 @@
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h" // GetHwndOf()
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/msw/private/timer.h"
+#endif
 #endif
 #ifdef __WXGTK__
     #include <gdk/gdk.h>
@@ -62,10 +65,45 @@ public:
         m_swx->TickFor(m_reason);
     }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxUIntPtr GetNativeIdForTesting() const
+    {
+        const wxMSWTimerImpl* const impl =
+            static_cast<const wxMSWTimerImpl*>(m_impl);
+        return impl
+                   ? static_cast<wxUIntPtr>(impl->GetNativeIdForTesting())
+                   : 0;
+    }
+#endif
+
 private:
     ScintillaWX* m_swx;
     ScintillaWX::TickReason m_reason;
 };
+
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+class wxSTCTopLevelReconcileGuard final
+{
+public:
+    explicit wxSTCTopLevelReconcileGuard(
+        const std::shared_ptr<bool>& reconciling)
+        : m_reconciling(reconciling)
+    {
+        *m_reconciling = true;
+    }
+
+    ~wxSTCTopLevelReconcileGuard()
+    {
+        // The state is deliberately shared: cancelling a popup can destroy
+        // ScintillaWX re-entrantly, but the terminal guard must remain valid.
+        *m_reconciling = false;
+    }
+
+private:
+    const std::shared_ptr<bool> m_reconciling;
+};
+#endif
 
 
 #if wxUSE_DRAG_AND_DROP
@@ -206,7 +244,11 @@ static wxTextFileType wxConvertEOLMode(int scintillaMode)
 // Constructor/Destructor
 
 
-ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
+ScintillaWX::ScintillaWX(wxStyledTextCtrl* win)
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    : m_isReconcilingTopLevelParent(std::make_shared<bool>(false))
+#endif
+{
     capturedMouse = false;
     focusEvent = false;
     wMain = win;
@@ -237,6 +279,9 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     timers[tickDwell] = new wxSTCTimer(this,tickDwell);
 
     m_surfaceData = nullptr;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_topLevelParent = wxGetTopLevelParent(stc);
+#endif
 }
 
 
@@ -1234,6 +1279,78 @@ void ScintillaWX::DoOnIdle(wxIdleEvent& evt) {
     else
         SetIdle(false);
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+wxUIntPtr ScintillaWX::GetCaretTimerIdForTesting() const
+{
+    const TimersHash::const_iterator caretTimer = timers.find(tickCaret);
+    return caretTimer == timers.end()
+               ? 0
+               : caretTimer->second->GetNativeIdForTesting();
+}
+
+WXDLLIMPEXP_STC wxUIntPtr
+wxSTCGetCaretTimerIdForTesting(wxStyledTextCtrl* control)
+{
+    if ( !control || control->IsBeingDeleted() )
+        return 0;
+
+    ScintillaWX* const scintilla = reinterpret_cast<ScintillaWX*>(
+        control->GetDirectPointer());
+    return scintilla ? scintilla->GetCaretTimerIdForTesting() : 0;
+}
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+void ScintillaWX::DoReconcileTopLevelParent()
+{
+    wxStyledTextCtrl* const expectedSTC = stc;
+    const wxWeakRef<wxStyledTextCtrl> stcLifetime(expectedSTC);
+    wxWindow* const topLevelParent = wxGetTopLevelParent(expectedSTC);
+    if ( topLevelParent == m_topLevelParent.get() )
+        return;
+
+    // Publish the destination before entering popup retirement. Show(false)
+    // can cancel nested transients whose callbacks perform another Reparent().
+    // A recursive reconciliation can then publish its newer destination but
+    // must not try to retire the same Scintilla Window::wid a second time.
+    m_topLevelParent = topLevelParent;
+    const std::shared_ptr<bool> reconciling =
+        m_isReconcilingTopLevelParent;
+    if ( *reconciling )
+        return;
+
+    wxSTCTopLevelReconcileGuard reconcileGuard(reconciling);
+    const auto isCurrent = [expectedSTC, stcLifetime, this]()
+    {
+        wxStyledTextCtrl* const live = stcLifetime.get();
+        return live == expectedSTC && !live->IsBeingDeleted() &&
+               reinterpret_cast<ScintillaWX*>(
+                   live->GetDirectPointer()) == this;
+    };
+
+    // A popup visibility generation belongs to exactly one transient owner.
+    // USER32 reparents the Scintilla HWND only after wx has published its new
+    // logical parent, so retire any old-TLW editor surfaces at this boundary.
+    // SetParent() is already a re-entrancy boundary and no stale autocomplete
+    // callback may escape it. AutoComplete::Cancel() emits no SCN notification,
+    // unlike the editor's AutoCompleteCancel() wrapper, but its popup terminal
+    // path is still allowed to run nested transient callbacks.
+    // Retire it first because its popup owns the interactive child control;
+    // CallTipCancel() is likewise notification-free.
+    ac.Cancel();
+    if ( !isCurrent() )
+        return;
+
+    ct.CallTipCancel();
+    if ( !isCurrent() )
+        return;
+
+    // A nested boundary may have moved the live control again. Preserve the
+    // latest published owner even if no additional popup remained to cancel.
+    m_topLevelParent = wxGetTopLevelParent(expectedSTC);
+}
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 //----------------------------------------------------------------------
 

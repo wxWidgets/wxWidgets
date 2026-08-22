@@ -47,6 +47,26 @@ bool AreFilesContentsEqual(const wxString &filename, const wxString &refFilename
             filename1, filename2),\
         AreFilesContentsEqual(filename1, filename2))
 
+inline bool IsImageFullyOpaque(const wxImage& image)
+{
+    if (!image.HasAlpha())
+        return true;
+
+    const unsigned char* const alpha = image.GetAlpha();
+    if (!alpha)
+        return false;
+
+    const size_t pixelsCount =
+        static_cast<size_t>(image.GetWidth()) * image.GetHeight();
+    for (size_t n = 0; n < pixelsCount; ++n)
+    {
+        if (alpha[n] != wxALPHA_OPAQUE)
+            return false;
+    }
+
+    return true;
+}
+
 bool AreImagesFilesContentsEqual(const wxString &filename,
                                  const wxString &refFilename)
 {
@@ -60,8 +80,6 @@ bool AreImagesFilesContentsEqual(const wxString &filename,
         return false;
     if (input.GetSize() != refInput.GetSize())
         return false;
-    if (input.HasAlpha() != refInput.HasAlpha())
-        return false;
     if (input.HasMask() != refInput.HasMask())
         return false;
 
@@ -71,12 +89,21 @@ bool AreImagesFilesContentsEqual(const wxString &filename,
     if (memcmp (data, refData, pixelsCount*3) != 0)
         return false;
 
-    if (input.HasAlpha())
+    if (input.HasAlpha() && refInput.HasAlpha())
     {
         const unsigned char *alpha = input.GetAlpha();
         const unsigned char *refAlpha = refInput.GetAlpha();
         if (memcmp (alpha, refAlpha, pixelsCount) != 0)
             return false;
+    }
+    else if (input.HasAlpha() != refInput.HasAlpha() &&
+             (!IsImageFullyOpaque(input) || !IsImageFullyOpaque(refInput)))
+    {
+        // An RGB image and an RGBA image with a completely opaque alpha
+        // channel represent the same pixels. This is common when a renderer
+        // writes into an alpha-capable wxImage but an older reference PNG was
+        // saved without an alpha channel.
+        return false;
     }
 
     if (input.HasMask() &&

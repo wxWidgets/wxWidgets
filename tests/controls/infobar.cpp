@@ -11,6 +11,7 @@
 // ----------------------------------------------------------------------------
 
 #include "testprec.h"
+#include "waitfor.h"
 
 #if wxUSE_INFOBAR
 
@@ -22,14 +23,82 @@
 #endif // WX_PRECOMP
 
 #include "wx/infobar.h"
+#include "wx/log.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
 #endif
 
+#ifdef __WXWINUI__
+    #include "wx/winui/private/tlwhost.h"
+#endif
+
 #include <memory>
 
-TEST_CASE("wxInfoBar::Buttons", "[wxInfoBar]")
+#ifdef __WXWINUI__
+
+namespace
+{
+
+struct InfoBarProjectionStormContext
+{
+    wxInfoBar *bar = nullptr;
+    int calls = 0;
+    int targetCalls = 0;
+    wxWindowID firstId = wxID_NONE;
+};
+
+class YieldingInfoBarLogTarget final : public wxLog
+{
+public:
+    YieldingInfoBarLogTarget()
+        : m_previous(wxLog::SetActiveTarget(this))
+    {
+    }
+
+    ~YieldingInfoBarLogTarget() override
+    {
+        wxLog::SetActiveTarget(m_previous);
+    }
+
+    bool DidYield() const { return m_didYield; }
+
+protected:
+    void DoLogText(const wxString&) override
+    {
+        if ( m_didYield )
+            return;
+
+        m_didYield = true;
+        wxYield();
+    }
+
+private:
+    wxLog* m_previous;
+    bool m_didYield = false;
+};
+
+void ContinueInfoBarProjectionStorm(void *opaque)
+{
+    auto * const context =
+        static_cast<InfoBarProjectionStormContext *>(opaque);
+    ++context->calls;
+    if ( context->calls < context->targetCalls )
+    {
+        context->bar->WinUISetNextContentWriteHookForTesting(
+            &ContinueInfoBarProjectionStorm, context);
+    }
+
+    context->bar->AddButton(
+        context->firstId + context->calls,
+        wxString::Format("nested %d", context->calls));
+}
+
+} // namespace
+
+#endif // __WXWINUI__
+
+TEST_CASE("wxInfoBar::Buttons", "[wxInfoBar][winui-v0-supported]")
 {
     const std::unique_ptr<wxInfoBar>
         info(new wxInfoBar(wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX));
@@ -47,7 +116,7 @@ TEST_CASE("wxInfoBar::Buttons", "[wxInfoBar]")
     CHECK(info->GetButtonCount() == 0);
 }
 
-TEST_CASE("wxInfoBar::Checkbox", "[wxInfoBar]")
+TEST_CASE("wxInfoBar::Checkbox", "[wxInfoBar][winui-v0-supported]")
 {
     const std::unique_ptr<wxInfoBar>
         info(new wxInfoBar(wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX));
@@ -75,7 +144,7 @@ TEST_CASE("wxInfoBar::Checkbox", "[wxInfoBar]")
     CHECK(info->GetButtonCount() == 1);
 }
 
-TEST_CASE("wxInfoBar::Effects", "[wxInfoBar]")
+TEST_CASE("wxInfoBar::Effects", "[wxInfoBar][winui-v0-supported]")
 {
     const std::unique_ptr<wxInfoBar>
         info(new wxInfoBar(wxTheApp->GetTopWindow()));
@@ -109,7 +178,7 @@ TEST_CASE("wxInfoBar::Effects", "[wxInfoBar]")
     CHECK(info->GetHideEffect() == wxSHOW_EFFECT_NONE);
 }
 
-TEST_CASE("wxInfoBar::RemoveLastAdded", "[wxInfoBar]")
+TEST_CASE("wxInfoBar::RemoveLastAdded", "[wxInfoBar][winui-v0-supported]")
 {
     const std::unique_ptr<wxInfoBar>
         info(new wxInfoBar(wxTheApp->GetTopWindow()));
@@ -128,7 +197,7 @@ TEST_CASE("wxInfoBar::RemoveLastAdded", "[wxInfoBar]")
     CHECK(info->GetButtonId(1) == idB);
 }
 
-TEST_CASE("wxInfoBar::Appearance", "[wxInfoBar]")
+TEST_CASE("wxInfoBar::Appearance", "[wxInfoBar][winui-v0-supported]")
 {
     // setting the appearance before creation must be preserved by Create()
     std::unique_ptr<wxInfoBar> info(new wxInfoBar());
@@ -156,7 +225,7 @@ TEST_CASE("wxInfoBar::Appearance", "[wxInfoBar]")
     CHECK(info->GetFont().GetStyle() != wxFONTSTYLE_ITALIC);
 }
 
-TEST_CASE("wxInfoBar::EffectShowHide", "[wxInfoBar]")
+TEST_CASE("wxInfoBar::EffectShowHide", "[wxInfoBar][winui-v0-supported]")
 {
     // exercise the real show/hide path with effects enabled: the bar lives
     // in a sizer (so the automatic placement resolves) inside a fixed-width
@@ -200,17 +269,151 @@ TEST_CASE("wxInfoBar::EffectShowHide", "[wxInfoBar]")
 
 #ifdef __WXWINUI__
 
+TEST_CASE("wxInfoBar::WinUIContentProjectionIsLastWriterWins",
+          "[wxInfoBar][reentrancy][winui-v0-supported]")
+{
+    wxInfoBar info(
+        wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX);
+    const wxWindowID outerId = wxID_HIGHEST + 1100;
+    const wxWindowID nestedId = outerId + 1;
+    InfoBarProjectionStormContext context;
+    context.bar = &info;
+    context.targetCalls = 1;
+    context.firstId = outerId;
+    info.WinUISetNextContentWriteHookForTesting(
+        &ContinueInfoBarProjectionStorm, &context);
+
+    info.AddButton(outerId, "outer");
+
+    CHECK(context.calls == 1);
+    CHECK(info.GetButtonCount() == 2);
+    CHECK_FALSE(info.WinUIHasDeferredContentProjectionForTesting());
+    CHECK_FALSE(info.WinUIIsContentProjectionQuarantinedForTesting());
+
+    int nestedEvents = 0;
+    info.Bind(
+        wxEVT_BUTTON,
+        [&](wxCommandEvent&) { ++nestedEvents; },
+        nestedId);
+    REQUIRE(info.WinUIClickButtonForTesting(nestedId));
+    CHECK(nestedEvents == 1);
+}
+
+TEST_CASE("wxInfoBar::WinUIContentProjectionStormIsBoundedAndRearmable",
+          "[wxInfoBar][reentrancy][quarantine][winui-v0-supported]")
+{
+    wxInfoBar info(
+        wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX);
+    const wxWindowID firstId = wxID_HIGHEST + 1120;
+    InfoBarProjectionStormContext context;
+    context.bar = &info;
+    context.targetCalls = 1000000;
+    context.firstId = firstId;
+    info.WinUISetNextContentWriteHookForTesting(
+        &ContinueInfoBarProjectionStorm, &context);
+
+    // A log target is application code and may pump the loop. The deferred
+    // replay must not be consumable until the active projection has ended.
+    YieldingInfoBarLogTarget yieldingLog;
+    info.AddButton(firstId, "begin");
+
+    CHECK(yieldingLog.DidYield());
+    CHECK(context.calls == 8);
+    CHECK(info.WinUIHasDeferredContentProjectionForTesting());
+    REQUIRE(WaitFor("bounded InfoBar content quarantine", [&]()
+    {
+        return context.calls == 16 &&
+               !info.WinUIHasDeferredContentProjectionForTesting() &&
+               info.WinUIIsContentProjectionQuarantinedForTesting();
+    }));
+
+    const int callsAtQuarantine = context.calls;
+    wxYield();
+    wxYield();
+    CHECK(context.calls == callsAtQuarantine);
+
+    info.WinUISetNextContentWriteHookForTesting(nullptr, nullptr);
+    const wxWindowID recoveryId = firstId + 100;
+    info.AddButton(recoveryId, "recovered");
+    CHECK_FALSE(info.WinUIHasDeferredContentProjectionForTesting());
+    CHECK_FALSE(info.WinUIIsContentProjectionQuarantinedForTesting());
+
+    int recoveryEvents = 0;
+    info.Bind(
+        wxEVT_BUTTON,
+        [&](wxCommandEvent&) { ++recoveryEvents; },
+        recoveryId);
+    REQUIRE(info.WinUIClickButtonForTesting(recoveryId));
+    CHECK(recoveryEvents == 1);
+}
+
+TEST_CASE("wxInfoBar::WinUIContentWriteAndFlushMayDestroyOwner",
+          "[wxInfoBar][reentrancy][lifetime][winui-v0-supported]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+
+    SECTION("content write")
+    {
+        std::unique_ptr<wxInfoBar> info(
+            new wxInfoBar(parent, wxID_ANY, wxINFOBAR_CHECKBOX));
+        wxInfoBar * const invoking = info.get();
+        bool hookCalled = false;
+        struct DeleteContext
+        {
+            std::unique_ptr<wxInfoBar> *owned;
+            bool *called;
+        } context{ &info, &hookCalled };
+        invoking->WinUISetNextContentWriteHookForTesting(
+            [](void *opaque)
+            {
+                auto * const current =
+                    static_cast<DeleteContext *>(opaque);
+                *current->called = true;
+                current->owned->reset();
+            },
+            &context);
+
+        invoking->AddButton(wxID_HIGHEST + 1150, "delete");
+        CHECK(hookCalled);
+        CHECK_FALSE(info);
+    }
+
+    SECTION("host flush")
+    {
+        std::unique_ptr<wxInfoBar> info(new wxInfoBar(parent));
+        wxInfoBar * const invoking = info.get();
+        invoking->SetSize(parent->FromDIP(wxSize(287, 57)));
+        bool hookCalled = false;
+        wxWinUITopLevelHost::TestOnNextSlotSynced(
+            [&](wxWindow *window)
+            {
+                if ( window != invoking )
+                    return;
+                hookCalled = true;
+                info.reset();
+            });
+
+        invoking->ShowMessage("delete while flushing");
+        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        CHECK(hookCalled);
+        CHECK_FALSE(info);
+    }
+}
+
 // Drive the real native close-button path (XAML CloseButtonClick -> Closing
 // -> wxEVT_BUTTON/wxID_CLOSE routing) deterministically, without the mouse,
 // and check that the XAML peer state stays in sync with the wx one in every
 // outcome of the event.
-TEST_CASE("wxInfoBar::WinUICloseButton", "[wxInfoBar]")
+TEST_CASE("wxInfoBar::WinUICloseButton",
+          "[wxInfoBar][winui-v0-supported]")
 {
     const std::unique_ptr<wxInfoBar>
         info(new wxInfoBar(wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX));
 
     // 0 = skip (unhandled), 1 = handled without dismissing, 2 = handled and
-    // dismissing from the handler (the official sample's pattern)
+    // dismissing from the handler (the official sample's pattern), 3/4 =
+    // opposite reentrant orders proving that the last public operation wins.
     int mode = 0;
     int closeEvents = 0;
     info->Bind(wxEVT_BUTTON,
@@ -225,6 +428,14 @@ TEST_CASE("wxInfoBar::WinUICloseButton", "[wxInfoBar]")
                 case 1:
                     break;
                 case 2:
+                    bar->Dismiss();
+                    break;
+                case 3:
+                    bar->Dismiss();
+                    bar->ShowMessage("shown after dismiss");
+                    break;
+                case 4:
+                    bar->ShowMessage("dismissed after show");
                     bar->Dismiss();
                     break;
             }
@@ -278,15 +489,89 @@ TEST_CASE("wxInfoBar::WinUICloseButton", "[wxInfoBar]")
     CHECK_FALSE(info->WinUIIsPeerOpen());
     CHECK_FALSE(info->IsShown());
 
+    // Reentrant close intent is ordered: the last public operation wins.
+    info->ShowMessage("reentrant open wins");
+    mode = 3;
+    closeEvents = 0;
+    REQUIRE(info->WinUIClickCloseButton());
+    wxYield();
+    CHECK(closeEvents == 1);
+    CHECK(info->WinUIIsPeerOpen());
+    CHECK(info->IsShown());
+
+    mode = 4;
+    closeEvents = 0;
+    REQUIRE(info->WinUIClickCloseButton());
+    wxYield();
+    CHECK(closeEvents == 1);
+    CHECK_FALSE(info->WinUIIsPeerOpen());
+    CHECK_FALSE(info->IsShown());
+
     // and the cycle still works: the bar can be shown again afterwards
     info->ShowMessage("alive again");
     CHECK(info->WinUIIsPeerOpen());
     CHECK(info->IsShown());
+
+    // Leave neither a closing animation nor a Loaded/layout callback queued
+    // for the next test sharing this TLW. The public cycle was proved above;
+    // this final close is test isolation, not another behavioural assertion.
+    info->Dismiss();
+    wxYield();
+    CHECK_FALSE(info->WinUIIsPeerOpen());
+}
+
+TEST_CASE("wxInfoBar::WinUICallbacksMayDestroyOwner",
+          "[wxInfoBar][lifetime][winui-v0-supported]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent != nullptr);
+
+    SECTION("native close button")
+    {
+        std::unique_ptr<wxInfoBar> info(new wxInfoBar(parent));
+        wxInfoBar * const raw = info.get();
+        raw->Bind(
+            wxEVT_BUTTON,
+            [&info](wxCommandEvent&) { info.reset(); },
+            wxID_CLOSE);
+        raw->ShowMessage("destroy from native close");
+
+        bool clicked = false;
+        for ( int i = 0;
+              i < 300 && info &&
+                  !(clicked = raw->WinUIClickCloseButton());
+              ++i )
+        {
+            wxYield();
+            wxMilliSleep(10);
+        }
+        REQUIRE(clicked);
+        CHECK(info == nullptr);
+        wxYield();
+    }
+
+    SECTION("custom button")
+    {
+        const wxWindowID buttonId = wxID_HIGHEST + 1012;
+        std::unique_ptr<wxInfoBar> info(new wxInfoBar(parent));
+        wxInfoBar * const raw = info.get();
+        raw->AddButton(buttonId, "Destroy");
+        raw->Bind(
+            wxEVT_BUTTON,
+            [&info](wxCommandEvent&) { info.reset(); },
+            buttonId);
+        raw->ShowMessage("destroy from custom button");
+
+        REQUIRE(raw->WinUIClickButtonForTesting(buttonId));
+        CHECK(info == nullptr);
+        wxYield();
+    }
 }
 
 #endif // __WXWINUI__
 
-TEST_CASE("wxInfoBar::BestSizeInvalidation", "[wxInfoBar]")
+TEST_CASE("wxInfoBar::BestSizeInvalidation",
+          "[wxInfoBar][winui-v0-supported]")
 {
     const std::unique_ptr<wxInfoBar>
         info(new wxInfoBar(wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX));

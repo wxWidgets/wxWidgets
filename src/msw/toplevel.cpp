@@ -36,10 +36,17 @@
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
 #include "wx/tooltip.h"
+#include "wx/weakref.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/dialogcontracts.h"
+    #include "wx/winui/private/dialogsession.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+#endif
 
 #include "wx/msw/winundef.h"
 #include "wx/msw/missing.h"
@@ -623,6 +630,13 @@ void wxTopLevelWindowMSW::ShowWithoutActivating()
     // better than activating it and is compatible with the historical
     // behaviour of this function.
     DoShowWindow(m_showCmd == SW_MINIMIZE ? SW_SHOWMINNOACTIVE : SW_SHOWNA);
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // A XAML control can already have crossed its first Loaded boundary while
+    // its top-level window was hidden. Queue one coalesced post-show layout
+    // pass so generic-dialog hints can observe the realized template.
+    wxWinUIScheduleDialogRefitAfterShow(this);
+#endif
 }
 
 bool wxTopLevelWindowMSW::Show(bool show)
@@ -707,6 +721,17 @@ bool wxTopLevelWindowMSW::Show(bool show)
         event.SetEventObject(this);
         AddPendingEvent(event);
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( show )
+    {
+        // Complement the content-Loaded relayout: if the content was already
+        // loaded while hidden, showing the TLW provides one bounded deferred
+        // pass at which a cropped generic dialog can be grown. The scheduler
+        // is weak, coalesced with Loaded, and a no-op for non-dialog TLWs.
+        wxWinUIScheduleDialogRefitAfterShow(this);
+    }
+#endif
 
     return true;
 }
@@ -834,6 +859,19 @@ void wxTopLevelWindowMSW::Restore()
 
 bool wxTopLevelWindowMSW::Destroy()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Destroy() is the logical owner-retirement boundary even when the HWND
+    // and wx object must remain alive until a retained WinUI callback unwinds.
+    // Withdraw transient generations now; waiting for wxEVT_DESTROY would
+    // keep popups/dialogs alive against a destroy-scheduled owner.
+    wxWinUINotifyTransientOwnerDestroyScheduled(this);
+
+    // A nested wxYield() from a XAML callback must not let wxPendingDelete
+    // tear down the island HWND while WinUI focus/input still owns its stack.
+    if ( wxWinUITLWHostDeferTopLevelDestroy(this) )
+        return true;
+#endif
+
     if ( !wxTopLevelWindowBase::Destroy() )
         return false;
 
@@ -848,13 +886,107 @@ bool wxTopLevelWindowMSW::Destroy()
     return true;
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+bool wxWinUIMSWCompleteDeferredTopLevelDestroy(
+    wxWindow *window,
+    bool hideBeforePending,
+    bool destroyEventAlreadySent)
+{
+    if ( !window || !window->IsTopLevel() )
+        return false;
+    wxTopLevelWindowMSW *tlw =
+        static_cast<wxTopLevelWindowMSW *>(window);
+
+    // A second Destroy() may have completed the ordinary scheduling while the
+    // weak request was waiting. Never repeat its virtual Show(false) path.
+    if ( wxPendingDelete.Member(tlw) )
+    {
+        wxWakeUpIdle();
+        return true;
+    }
+
+    if ( tlw->IsBeingDeleted() && !destroyEventAlreadySent )
+        return true;
+
+    const auto destroyImmediately = [](wxTopLevelWindowMSW *target)
+    {
+        const bool destroyed = target->wxNonOwnedWindow::Destroy();
+        if ( destroyed )
+            wxWakeUpIdle();
+        return destroyed;
+    };
+    const auto requiresImmediateDestroy = [](wxTopLevelWindowMSW *target)
+    {
+        wxWindow * const parent = target->GetParent();
+        return (parent && parent->IsBeingDeleted()) || !target->GetHandle();
+    };
+
+    if ( requiresImmediateDestroy(tlw) )
+        return destroyImmediately(tlw);
+
+    const wxWeakRef<wxWindow> weakWindow(tlw);
+    if ( hideBeforePending )
+    {
+        // Preserve wxTopLevelWindowBase::Destroy()'s exact policy and its one
+        // virtual Hide() call, but cross application code before placing the
+        // object in wxPendingDelete. A nested wxYield() is therefore harmless.
+        for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+                                         end = wxTopLevelWindows.end();
+              i != end;
+              ++i )
+        {
+            wxTopLevelWindow * const other =
+                static_cast<wxTopLevelWindow *>(*i);
+            if ( other != tlw && other->IsShown() )
+            {
+                tlw->Hide();
+                break;
+            }
+        }
+    }
+
+    window = weakWindow.get();
+    if ( !window )
+        return true;
+    if ( !window->IsTopLevel() )
+        return false;
+    tlw = static_cast<wxTopLevelWindowMSW *>(window);
+
+    // Hide() is arbitrary application code. It may have requested destruction
+    // itself or changed the parent/native lifetime; re-evaluate every branch.
+    if ( wxPendingDelete.Member(tlw) )
+    {
+        wxWakeUpIdle();
+        return true;
+    }
+    if ( tlw->IsBeingDeleted() && !destroyEventAlreadySent )
+        return true;
+    if ( requiresImmediateDestroy(tlw) )
+        return destroyImmediately(tlw);
+
+    wxPendingDelete.Append(tlw);
+    wxWakeUpIdle();
+    return true;
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The common WinUI transaction preserves Default/LTR/RTL provenance and
+    // resolves Default dynamically from the current owner/application. Do
+    // not collapse Default here or this TLW would become an explicit child
+    // after the first call and stop following hot owner changes.
+    wxTopLevelWindowBase::SetLayoutDirection(dir);
+#else
     if ( dir == wxLayout_Default )
         dir = wxApp::MSWGetDefaultLayout(m_parent);
 
     if ( dir != wxLayout_Default )
         wxTopLevelWindowBase::SetLayoutDirection(dir);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1365,7 +1497,6 @@ void wxTopLevelWindowMSW::DoThaw()
     // flush.  It must be sent from this TLW override: wxWindowBase::Thaw()
     // ends a freeze by calling DoThaw() here, and a TLW may thaw without
     // any child window running wxWindowMSW::DoThaw().
-    extern void wxWinUITLWHostNotifyThaw(wxWindow *window);
     wxWinUITLWHostNotifyThaw(this);
 #endif // __WXWINUI__ && wxUSE_WINUI3
 }

@@ -2794,6 +2794,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_vlistbox.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
+    src/xrc/xmlrespriv.h
     src/xrc/xmlrsall.cpp
     src/xrc/xh_bookctrlbase.cpp
 </set>

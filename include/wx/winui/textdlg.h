@@ -17,6 +17,10 @@
 #include "wx/dialog.h"
 #include "wx/textctrl.h"
 
+#include <memory>
+
+class wxWinUITextEntryPeerState;
+
 #if wxUSE_VALIDATORS
     #include "wx/valtext.h"
 #endif
@@ -62,6 +66,12 @@ public:
 
     void ForceUpper();
 
+    // Implementation-only deterministic seam for the WinUI peer contract.
+    // It is used by tests to exercise a ForceUpper() call made while the
+    // modal surface is already open, without physical input.
+    bool WinUISetPeerValueForTesting(const wxString& value);
+    wxString WinUIGetPeerValueForTesting() const;
+
 #if wxUSE_VALIDATORS
     void SetTextValidator(const wxTextValidator& validator);
     void SetTextValidator(wxTextValidatorStyle style = wxFILTER_NONE);
@@ -91,6 +101,7 @@ protected:
     unsigned long m_maxLength = 0;
     bool m_forceUpper = false;
     bool m_isPassword = false;
+    std::shared_ptr<wxWinUITextEntryPeerState> m_peerState;
 
 #if wxUSE_VALIDATORS
     wxTextValidator* m_validator = nullptr;

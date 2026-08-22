@@ -27,6 +27,9 @@
 #include "wx/propgrid/propgridpagestate.h"
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/private.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/scopeguard.h"
+#include "wx/weakref.h"
 
 #include <numeric>
 
@@ -271,7 +274,9 @@ void wxPropertyGridPageState::DoClear()
 
     // If handling wxPG event then every property item must be
     // deleted individually (and with deferral).
-    if ( m_pPropGrid && m_pPropGrid->m_processedEvent )
+    if ( m_pPropGrid &&
+         (m_pPropGrid->m_processedEvent ||
+          wxPGGetPropertyGridTransientState(m_pPropGrid).propertyCallbackDepth) )
     {
         for (unsigned int i = 0; i < m_regularArray.GetChildCount(); i++)
         {
@@ -328,6 +333,30 @@ void wxPropertyGridPageState::CalculateFontAndBitmapStuff( int WXUNUSED(vspacing
 
 // -----------------------------------------------------------------------
 
+void wxPropertyGridPageState::ScaleForDPI(const wxDPIChangedEvent& event)
+{
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    for ( size_t i = 0; i < m_colWidths.size(); ++i )
+    {
+        m_colWidths[i] =
+            wxMax(GetColumnMinWidth(static_cast<int>(i)),
+                  event.ScaleX(m_colWidths[i]));
+    }
+
+    if ( m_fSplitterX >= 0.0 )
+    {
+        m_fSplitterX =
+            event.ScaleX(static_cast<int>(m_fSplitterX));
+    }
+
+    m_width = wxMax(1, event.ScaleX(m_width));
+#else
+    wxUnusedVar(event);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGridPageState::SetVirtualWidth( int width )
 {
     // Sometimes width less than 0 is offered. Let's make things easy for
@@ -348,6 +377,8 @@ void wxPropertyGridPageState::SetVirtualWidth( int width )
 void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange, bool fromOnResize )
 {
     wxPropertyGrid* pg = GetGrid();
+    const wxWeakRef<wxWindow> weakGrid(pg);
+    const bool wasDisplayed = IsDisplayed();
 
     if ( pg->HasVirtualWidth() )
     {
@@ -355,6 +386,12 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             SetVirtualWidth( newWidth );
 
         CheckColumnWidths(widthChange);
+        if ( wasDisplayed &&
+             (!wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+              pg->m_pState != this) )
+        {
+            return;
+        }
     }
     else
     {
@@ -365,12 +402,24 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
         if ( !fromOnResize )
             widthChange = 0;
         CheckColumnWidths(widthChange);
+        if ( wasDisplayed &&
+             (!wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+              pg->m_pState != this) )
+        {
+            return;
+        }
 
         if ( !m_isSplitterPreSet )
         {
             if ( m_dontCenterSplitter )
             {
                 SetSplitterLeft( false );
+                if ( wasDisplayed &&
+                     (!wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+                      pg->m_pState != this) )
+                {
+                    return;
+                }
                 m_isSplitterPreSet = false;
             }
             else
@@ -380,7 +429,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
         }
     }
 
-    if ( IsDisplayed() )
+    if ( wasDisplayed )
     {
         pg->SendEvent(wxEVT_PG_COLS_RESIZED, wxNullProperty);
     }
@@ -689,6 +738,16 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
                                            bool subProps) const
 {
     wxPropertyGrid* pg = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(pg);
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    ++wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
+    const wxScopeGuard leaveFit =
+        wxMakeGuard([weakGrid, pg]()
+        {
+            if ( weakGrid.get() == pg )
+                --wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
+        });
+    wxUnusedVar(leaveFit);
     int maxW = 0;
     int w;
 
@@ -699,13 +758,23 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
         {
             wxString text;
             p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)nullptr);
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+                 pg->IsPropertyPendingRemoval(p) )
+            {
+                return 0;
+            }
             dc.GetTextExtent(text, &w, nullptr);
             if ( col == 0 )
                 w += ( (p->GetDepth()-1) * pg->m_subgroup_extramargin );
 
             // account for the bitmap
             if ( col == 1 )
-                w += p->GetImageOffset(pg->GetImageRect(p, -1).GetWidth());
+            {
+                wxSize imageSize;
+                if ( !pg->TryGetImageSize(p, -1, &imageSize) )
+                    return 0;
+                w += p->GetImageOffset(imageSize.x);
+            }
 
 
             w += (wxPG_XBEFORETEXT*2);
@@ -718,6 +787,12 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
              ( subProps || p->IsCategory() ) )
         {
             w = GetColumnFitWidth(p, col, subProps );
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+                 pg->IsPropertyPendingRemoval(pwc) ||
+                 pg->IsPropertyPendingRemoval(p) )
+            {
+                return 0;
+            }
 
             if ( w > maxW )
                 maxW = w;
@@ -730,7 +805,17 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
 
 int wxPropertyGridPageState::GetColumnFitWidth(const wxPGProperty* p, unsigned int col, bool subProps) const
 {
-    const wxPropertyGrid* pg = GetGrid();
+    wxPropertyGrid* const pg = GetGrid();
+    const wxWeakRef<wxWindow> weakGrid(pg);
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    ++wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
+    const wxScopeGuard leaveFit =
+        wxMakeGuard([weakGrid, pg]()
+        {
+            if ( weakGrid.get() == pg )
+                --wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
+        });
+    wxUnusedVar(leaveFit);
     int maxW = 0;
 
     for ( unsigned int i = 0; i < p->GetChildCount(); i++ )
@@ -741,13 +826,25 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxPGProperty* p, unsigned i
         {
             wxString text;
             pc->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)nullptr);
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+                 pg->IsPropertyPendingRemoval(
+                     const_cast<wxPGProperty*>(p)) ||
+                 pg->IsPropertyPendingRemoval(pc) )
+            {
+                return 0;
+            }
             pg->GetTextExtent(text, &w, nullptr);
             if ( col == 0 )
                 w += ((pc->GetDepth() - 1) * pg->m_subgroup_extramargin);
 
             // account for the bitmap
             if ( col == 1 )
-                w += pc->GetImageOffset(pg->GetImageRect(pc, -1).GetWidth());
+            {
+                wxSize imageSize;
+                if ( !pg->TryGetImageSize(pc, -1, &imageSize) )
+                    return 0;
+                w += pc->GetImageOffset(imageSize.x);
+            }
 
             w += (wxPG_XBEFORETEXT * 2);
 
@@ -758,6 +855,13 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxPGProperty* p, unsigned i
         if ( pc->HasAnyChild() && (subProps || pc->IsCategory()) )
         {
             w = GetColumnFitWidth(pc, col, subProps);
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+                 pg->IsPropertyPendingRemoval(
+                     const_cast<wxPGProperty*>(p)) ||
+                 pg->IsPropertyPendingRemoval(pc) )
+            {
+                return 0;
+            }
 
             if ( w > maxW )
                 maxW = w;
@@ -773,8 +877,25 @@ int wxPropertyGridPageState::GetColumnFullWidth(const wxDC& dc, wxPGProperty* p,
     if ( p->IsCategory() )
         return 0;
 
+    wxPropertyGrid* const pg = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(pg);
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    ++wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
+    const wxScopeGuard leaveFit =
+        wxMakeGuard([weakGrid, pg]()
+        {
+            if ( weakGrid.get() == pg )
+                --wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
+        });
+    wxUnusedVar(leaveFit);
+
     wxString text;
     p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)nullptr);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+         pg->IsPropertyPendingRemoval(p) )
+    {
+        return 0;
+    }
     int w = dc.GetTextExtent(text).x;
 
     if ( col == 0 )
@@ -782,7 +903,12 @@ int wxPropertyGridPageState::GetColumnFullWidth(const wxDC& dc, wxPGProperty* p,
 
     // account for the bitmap
     if ( col == 1 )
-        w += p->GetImageOffset(m_pPropGrid->GetImageRect(p, -1).GetWidth());
+    {
+        wxSize imageSize;
+        if ( !pg->TryGetImageSize(p, -1, &imageSize) )
+            return 0;
+        w += p->GetImageOffset(imageSize.x);
+    }
 
     w += (wxPG_XBEFORETEXT*2);
     return w;
@@ -794,16 +920,38 @@ int wxPropertyGridPageState::GetColumnFullWidth(wxPGProperty* p, unsigned int co
     if ( p->IsCategory() )
         return 0;
 
+    wxPropertyGrid* const pg = GetGrid();
+    const wxWeakRef<wxWindow> weakGrid(pg);
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    ++wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
+    const wxScopeGuard leaveFit =
+        wxMakeGuard([weakGrid, pg]()
+        {
+            if ( weakGrid.get() == pg )
+                --wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
+        });
+    wxUnusedVar(leaveFit);
+
     wxString text;
     p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)nullptr);
-    int w = GetGrid()->GetTextExtent(text).x;
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+         pg->IsPropertyPendingRemoval(p) )
+    {
+        return 0;
+    }
+    int w = pg->GetTextExtent(text).x;
 
     if ( col == 0 )
-        w += p->GetDepth() * GetGrid()->m_subgroup_extramargin;
+        w += p->GetDepth() * pg->m_subgroup_extramargin;
 
     // account for the bitmap
     if ( col == 1 )
-        w += p->GetImageOffset(GetGrid()->GetImageRect(p, -1).GetWidth());
+    {
+        wxSize imageSize;
+        if ( !pg->TryGetImageSize(p, -1, &imageSize) )
+            return 0;
+        w += p->GetImageOffset(imageSize.x);
+    }
 
     w += (wxPG_XBEFORETEXT * 2);
     return w;
@@ -898,13 +1046,23 @@ void wxPropertyGridPageState::DoSetSplitter(int newXPos, int splitterColumn,
 void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
 {
     wxPropertyGrid* pg = GetGrid();
+    const wxWeakRef<wxWindow> weakGrid(pg);
+    const bool wasDisplayed = IsDisplayed();
 
     int maxW = GetColumnFitWidth(m_properties, 0, subProps);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+         (wasDisplayed && pg->m_pState != this) )
+        return;
 
     if ( maxW > 0 )
     {
         maxW += pg->GetMarginWidth();
         DoSetSplitter( maxW );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+             (wasDisplayed && pg->m_pState != this) )
+        {
+            return;
+        }
     }
 
     m_dontCenterSplitter = true;
@@ -913,6 +1071,7 @@ void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
 wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
 {
     wxPropertyGrid* pg = GetGrid();
+    const wxWeakRef<wxWindow> weakGrid(pg);
 
     int marginWidth = pg->GetMarginWidth();
     int accWid = marginWidth;
@@ -921,6 +1080,8 @@ wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
     for ( unsigned int col=0; col < GetColumnCount(); col++ )
     {
         int fitWid = GetColumnFitWidth(m_properties, col, true);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) )
+            return wxSize();
         int colMinWidth = GetColumnMinWidth(col);
         if ( fitWid < colMinWidth )
             fitWid = colMinWidth;
@@ -945,7 +1106,11 @@ wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
     if ( IsDisplayed() )
     {
         pg->SetSplitterPosition(firstSplitterX, false);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) )
+            return wxSize();
         pg->Refresh();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) )
+            return wxSize();
     }
 
     int x, y;
@@ -960,6 +1125,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
         return;
 
     wxPropertyGrid* pg = GetGrid();
+    const wxWeakRef<wxWindow> weakGrid(pg);
+    const bool wasDisplayed = IsDisplayed();
+    bool recalculateVirtualSize = false;
 
     int clientWidth = pg->GetClientSize().x;
 
@@ -1018,9 +1186,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             m_colWidths.back() += (m_width-colsWidth);
         }
 
-        // If width changed, recalculate virtual size
-        if ( IsDisplayed() )
-            pg->RecalculateVirtualSize();
+        // SetVirtualSize() may synchronously dispatch application code. Delay
+        // it until all column and splitter state has been finalized below.
+        recalculateVirtualSize = wasDisplayed;
     }
 
     for (size_t i=0; i<m_colWidths.size(); i++)
@@ -1088,11 +1256,32 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             //
             ResetColumnSizes(wxPGSplitterPositionFlags::FromAutoCenter);
         }
+
+        if ( wasDisplayed &&
+             (!wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) ||
+              pg->m_pState != this) )
+        {
+            return;
+        }
     }
+
+    if ( recalculateVirtualSize )
+        pg->RecalculateVirtualSize();
 }
 
 void wxPropertyGridPageState::ResetColumnSizes(wxPGSplitterPositionFlags setSplitterFlags)
 {
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    const bool wasDisplayed = IsDisplayed();
+    if ( grid->m_dragStatus && wxPGGetPropertyGridTransientState(grid).draggedState == this )
+    {
+        grid->FinishSplitterDrag(true);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             (wasDisplayed && grid->m_pState != this) )
+            return;
+    }
+
     // Calculate sum of proportions
     int psum = std::accumulate(m_columnProportions.begin(), m_columnProportions.end(), 0);
     int puwid = (m_pPropGrid->m_width*256) / psum;
@@ -1104,18 +1293,38 @@ void wxPropertyGridPageState::ResetColumnSizes(wxPGSplitterPositionFlags setSpli
         int cwid = (puwid*m_columnProportions[i]) / 256;
         cpos += cwid;
         DoSetSplitter(cpos, (int)i, setSplitterFlags);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             (wasDisplayed && grid->m_pState != this) )
+        {
+            return;
+        }
     }
 }
 
 void wxPropertyGridPageState::SetColumnCount( int colCount )
 {
     wxASSERT( colCount >= 2 );
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    if ( grid->m_dragStatus && wxPGGetPropertyGridTransientState(grid).draggedState == this )
+    {
+        grid->FinishSplitterDrag(true);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             grid->m_pState != this )
+            return;
+    }
+
     m_colWidths.resize(colCount, m_pPropGrid->FromDIP(wxPG_DRAG_MARGIN));
     m_columnProportions.resize(colCount, 1);
 
     CheckColumnWidths();
-    if ( IsDisplayed() )
-        m_pPropGrid->RecalculateVirtualSize();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+         grid->m_pState != this )
+    {
+        return;
+    }
+
+    grid->RecalculateVirtualSize();
 }
 
 void wxPropertyGridPageState::DoSetColumnProportion( unsigned int column,
@@ -1134,8 +1343,20 @@ void wxPropertyGridPageState::DoSetColumnProportion( unsigned int column,
 }
 
 // Returns column index, -1 for margin
+int wxPropertyGridPageState::GetColumnLogicalX( int x ) const
+{
+    // MSW mirrors client coordinates itself, while ports using the common
+    // implementation need an explicit inverse. Let the window backend decide
+    // instead of applying a second mirror here.
+    return GetGrid()->AdjustForLayoutDirection(x, 0, m_width);
+}
+
+// -----------------------------------------------------------------------
+
 int wxPropertyGridPageState::HitTestH( int x, int* pSplitterHit, int* pSplitterHitOffset ) const
 {
+    x = GetColumnLogicalX(x);
+
     int cx = GetGrid()->GetMarginWidth();
     int col = -1;
     int prevSplitter = -1;
@@ -1156,7 +1377,8 @@ int wxPropertyGridPageState::HitTestH( int x, int* pSplitterHit, int* pSplitterH
     if ( col >= 1 )
     {
         int diff = x - prevSplitter;
-        if ( abs(diff) < wxPG_SPLITTERX_DETECTMARGIN1 )
+        if ( abs(diff) <
+             GetGrid()->FromDIP(wxPG_SPLITTERX_DETECTMARGIN1) )
         {
             *pSplitterHit = col - 1;
             *pSplitterHitOffset = diff;
@@ -1169,7 +1391,8 @@ int wxPropertyGridPageState::HitTestH( int x, int* pSplitterHit, int* pSplitterH
     if ( col < (int)(m_colWidths.size()-1) )
     {
         int diff = x - nextSplitter;
-        if ( abs(diff) < wxPG_SPLITTERX_DETECTMARGIN1 )
+        if ( abs(diff) <
+             GetGrid()->FromDIP(wxPG_SPLITTERX_DETECTMARGIN1) )
         {
             *pSplitterHit = col;
             *pSplitterHitOffset = diff;
@@ -1899,6 +2122,15 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 
     wxPropertyGrid* pg = GetGrid();
 
+    // Hover is a non-owning pointer. Clear it before any deferred deletion so
+    // mouse-drag transactions and tooltip code cannot carry a property that
+    // will be reclaimed at idle.
+    if ( pg && pg->m_propHover &&
+         (pg->m_propHover == item || pg->m_propHover->IsSomeParent(item)) )
+    {
+        pg->m_propHover = nullptr;
+    }
+
     // Try to unselect property and its sub-properties.
     if ( DoIsPropertySelected(item) )
     {
@@ -1930,7 +2162,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     }
 
     // Must defer deletion? Yes, if handling a wxPG event.
-    if ( pg && pg->m_processedEvent )
+    if ( pg && (pg->m_processedEvent || wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth) )
     {
         // Prevent adding duplicates to the lists.
         if ( doDelete )

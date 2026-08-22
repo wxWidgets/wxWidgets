@@ -25,6 +25,9 @@
 #include "wx/propgrid/editors.h"
 #include "wx/propgrid/props.h"
 #include "wx/propgrid/private.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/scopeguard.h"
+#include "wx/weakref.h"
 
 #if wxPG_USE_RENDERER_NATIVE
     #include "wx/renderer.h"
@@ -109,6 +112,77 @@
 // to trigger a double-click.
 #define DOUBLE_CLICK_CONVERSION_TRESHOLD        500
 
+namespace
+{
+
+// Guard the result of application-overridable property callbacks before an
+// editor implementation touches either the grid or its control again. The
+// surrounding PropertyGrid operation keeps the property itself deferred; this
+// object additionally proves that the grid, page, selection and control still
+// have the identities captured at callback entry.
+class wxPGEditorCallbackTransaction final
+{
+public:
+    wxPGEditorCallbackTransaction(wxPropertyGrid* grid,
+                                  wxPGProperty* property,
+                                  wxWindow* control)
+        : m_grid(grid),
+          m_property(property),
+          m_control(control),
+          m_weakGrid(grid),
+          m_weakControl(control),
+          m_state(grid ? grid->GetState() : nullptr)
+    {
+    }
+
+    bool IsValid() const
+    {
+        return m_grid &&
+               wxWeakWindowIsAvailableForCallbacks(m_weakGrid, m_grid) &&
+               m_state &&
+               m_grid->GetState() == m_state &&
+               m_grid->GetSelection() == m_property &&
+               !m_grid->IsPropertyPendingRemoval(m_property) &&
+               (!m_control ||
+                wxWeakWindowIsAvailableForCallbacks(m_weakControl,
+                                                    m_control));
+    }
+
+private:
+    wxPropertyGrid* const m_grid;
+    wxPGProperty* const m_property;
+    wxWindow* const m_control;
+    wxWeakRef<wxWindow> m_weakGrid;
+    wxWeakRef<wxWindow> m_weakControl;
+    wxPropertyGridPageState* const m_state;
+};
+
+// A successfully created control must be returned when a callback invalidates
+// the selection so DoSelectProperty() can adopt it as an abandoned editor. A
+// genuine native Create() failure in an otherwise intact transaction has no
+// such owner, so dispose of that wrapper here instead of returning an invalid
+// editor or leaving an untracked child behind.
+wxWindow* wxPGResolveFailedEditorCreation(
+    wxWindow* editor,
+    const wxWeakRef<wxWindow>& weakEditor,
+    bool transactionIsValid)
+{
+    wxWindow* const liveEditor = weakEditor.get();
+    if ( !liveEditor )
+        return nullptr;
+
+    if ( transactionIsValid )
+    {
+        wxASSERT(liveEditor == editor);
+        delete liveEditor;
+        return nullptr;
+    }
+
+    return liveEditor;
+}
+
+} // anonymous namespace
+
 // -----------------------------------------------------------------------
 // wxPGEditor
 // -----------------------------------------------------------------------
@@ -179,6 +253,29 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
         }
     }
 
+    const wxWeakRef<wxWindow> weakGrid(pg);
+    const wxWeakRef<wxWindow> weakCtrl(ctrl);
+    const wxWeakRef<wxWindow> weakTextCtrl(tc);
+    const wxWeakRef<wxWindow> weakCombo(cb);
+    wxPropertyGridPageState* const state = pg->GetState();
+    const auto transactionIsValid =
+        [weakGrid, weakCtrl, weakTextCtrl, weakCombo, pg, property,
+         ctrl, tc, cb, state]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) &&
+                   pg->GetState() == state &&
+                   pg->GetSelection() == property &&
+                   property->GetParentState() == state &&
+                   !property->HasFlag(wxPGFlags::BeingDeleted) &&
+                   wxWeakWindowIsAvailableForCallbacks(weakCtrl, ctrl) &&
+                   pg->GetEditorControl() == ctrl &&
+                   (!tc || (wxWeakWindowIsAvailableForCallbacks(weakTextCtrl, tc))) &&
+                   (!cb || (wxWeakWindowIsAvailableForCallbacks(weakCombo, cb)));
+        };
+
+    if ( !transactionIsValid() )
+        return;
+
     if ( tc || cb )
     {
         wxString tcText;
@@ -198,6 +295,8 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
             tcText = property->GetValueAsString(
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
                 property->HasFlag(wxPGFlags::ReadOnly)?wxPGPropValFormatFlags::Null:wxPGPropValFormatFlags::EditableValue);
+            if ( !transactionIsValid() )
+                return;
             changeText = true;
         }
 
@@ -207,11 +306,17 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
             if ( tc )
             {
                 pg->SetupTextCtrlValue(tcText);
+                if ( !transactionIsValid() )
+                    return;
                 tc->SetValue(tcText);
+                if ( !transactionIsValid() )
+                    return;
             }
             else
             {
                 cb->SetText(tcText);
+                if ( !transactionIsValid() )
+                    return;
             }
         }
     }
@@ -220,16 +325,22 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
     // here. It is static, while GetDefaultAttributes() is virtual
     // and the correct one to use.
     wxVisualAttributes vattrs = ctrl->GetDefaultAttributes();
+    if ( !transactionIsValid() )
+        return;
 
     // Foreground colour
     const wxColour& fgCol = cell.GetFgCol();
     if ( fgCol.IsOk() )
     {
         ctrl->SetForegroundColour(fgCol);
+        if ( !transactionIsValid() )
+            return;
     }
     else if ( oCell.GetFgCol().IsOk() )
     {
         ctrl->SetForegroundColour(vattrs.colFg);
+        if ( !transactionIsValid() )
+            return;
     }
 
     // Background colour
@@ -237,10 +348,14 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
     if ( bgCol.IsOk() )
     {
         ctrl->SetBackgroundColour(bgCol);
+        if ( !transactionIsValid() )
+            return;
     }
     else if ( oCell.GetBgCol().IsOk() )
     {
         ctrl->SetBackgroundColour(vattrs.colBg);
+        if ( !transactionIsValid() )
+            return;
     }
 
     // Font
@@ -248,15 +363,23 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
     if ( font.IsOk() )
     {
         ctrl->SetFont(font);
+        if ( !transactionIsValid() )
+            return;
     }
     else if ( oCell.GetFont().IsOk() )
     {
         ctrl->SetFont(vattrs.font);
+        if ( !transactionIsValid() )
+            return;
     }
 
     // Also call the old SetValueToUnspecified()
     if ( unspecified )
+    {
+        if ( !transactionIsValid() )
+            return;
         SetValueToUnspecified(property, ctrl);
+    }
 }
 
 void wxPGEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property),
@@ -281,6 +404,18 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
                                                    const wxPoint& pos,
                                                    const wxSize& sz ) const
 {
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakGrid(propGrid);
+    wxPropertyGridPageState* const state = propGrid->GetState();
+    const auto transactionIsValid =
+        [weakGrid, propGrid, property, state]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakGrid, propGrid) &&
+                   propGrid->GetState() == state &&
+                   propGrid->GetSelection() == property &&
+                   !propGrid->IsPropertyPendingRemoval(property);
+        };
+
     wxString text;
 
     //
@@ -299,6 +434,8 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
 #else
     text = property->GetValueAsString(fmtFlags);
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
+    if ( !transactionIsValid() )
+        return nullptr;
 
     int flags = 0;
     if ( property->HasFlag(wxPGPropertyFlags_Password) &&
@@ -337,6 +474,12 @@ void wxPGTextCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl )
     wxTextCtrl* tc = wxDynamicCast(ctrl, wxTextCtrl);
     if (!tc) return;
 
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    wxPropertyGrid* const pg = property->GetGrid();
+    const wxPGEditorCallbackTransaction transaction(pg, property, tc);
+    if ( !transaction.IsValid() )
+        return;
+
     wxString s;
 
     if ( tc->HasFlag(wxTE_PASSWORD) )
@@ -349,10 +492,13 @@ void wxPGTextCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl )
     else
         s = property->GetDisplayedString();
 
-    wxPropertyGrid* pg = property->GetGrid();
+    if ( !transaction.IsValid() )
+        return;
 
     pg->SetupTextCtrlValue(s);
     tc->SetValue(s);
+    if ( !transaction.IsValid() )
+        return;
 
     //
     // Fix indentation, just in case (change in font boldness is one good
@@ -453,6 +599,15 @@ static
 void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
                                  wxTextCtrl* tc )
 {
+    if ( !tc )
+        return;
+
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    wxPropertyGrid* const pg = property->GetGrid();
+    const wxPGEditorCallbackTransaction transaction(pg, property, tc);
+    if ( !transaction.IsValid() )
+        return;
+
     // Make sure there is correct text (instead of unspecified value
     // indicator or hint text)
     wxPGPropValFormatFlags fmtFlags = property->HasFlag(wxPGFlags::ReadOnly) ?
@@ -464,10 +619,15 @@ void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
     wxString correctText = property->GetValueAsString(fmtFlags);
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 
+    if ( !transaction.IsValid() )
+        return;
+
     if ( tc->GetValue() != correctText )
     {
-        property->GetGrid()->SetupTextCtrlValue(correctText);
+        pg->SetupTextCtrlValue(correctText);
         tc->SetValue(correctText);
+        if ( !transaction.IsValid() )
+            return;
     }
 
     tc->SelectAll();
@@ -503,10 +663,13 @@ class wxPGDoubleClickProcessor : public wxEvtHandler
 {
 public:
 
-    wxPGDoubleClickProcessor( wxOwnerDrawnComboBox* combo, wxBoolProperty* property )
+    wxPGDoubleClickProcessor( wxPropertyGrid* grid,
+                              wxOwnerDrawnComboBox* combo,
+                              wxBoolProperty* property )
         : wxEvtHandler()
         , m_timeLastMouseUp(0)
         , m_combo(combo)
+        , m_grid(grid)
         , m_property(property)
         , m_downReceived(false)
     {
@@ -516,15 +679,33 @@ protected:
 
     void OnMouseEvent( wxMouseEvent& event )
     {
+        wxPropertyGrid* const grid =
+            wxDynamicCast(m_grid.get(), wxPropertyGrid);
+        wxOwnerDrawnComboBox* const combo =
+            wxDynamicCast(m_combo.get(), wxOwnerDrawnComboBox);
+
+        // On non-MSW ports editor destruction is intentionally delayed and a
+        // queued mouse event can outlive the selected property. Validate the
+        // weak owner and selection before dereferencing the raw property
+        // identity retained for double-click cycling.
+        if ( !grid || !combo || !m_property || wxWindowIsUnavailableForCallbacks(grid) ||
+             grid->GetSelection() != m_property ||
+             grid->GetEditorControl() != combo ||
+             grid->IsPropertyPendingRemoval(m_property) )
+        {
+            event.Skip();
+            return;
+        }
+
         wxMilliClock_t t = ::wxGetLocalTimeMillis();
         wxEventType evtType = event.GetEventType();
 
         if ( m_property->HasFlag(wxPGPropertyFlags_UseDCC) &&
-             !m_combo->IsPopupShown() )
+             !combo->IsPopupShown() )
         {
             // Just check that it is in the text area
             wxPoint pt = event.GetPosition();
-            if ( m_combo->GetTextRect().Contains(pt) )
+            if ( combo->GetTextRect().Contains(pt) )
             {
                 if ( evtType == wxEVT_LEFT_DOWN )
                 {
@@ -568,7 +749,8 @@ protected:
 
 private:
     wxMilliClock_t              m_timeLastMouseUp;
-    wxOwnerDrawnComboBox*       m_combo;
+    wxWindowRef                 m_combo;
+    wxWindowRef                 m_grid;
     wxBoolProperty*             m_property;  // Selected property
     bool                        m_downReceived;
 
@@ -590,6 +772,7 @@ public:
         : wxOwnerDrawnComboBox()
         , m_dclickProcessor(nullptr)
         , m_selProp(nullptr)
+        , m_grid(nullptr)
     {
     }
 
@@ -597,7 +780,11 @@ public:
     {
         if ( m_dclickProcessor )
         {
-            RemoveEventHandler(m_dclickProcessor);
+            // PropertyGrid teardown deliberately unlinks every pushed
+            // handler before parking the editor HWND. In that case this
+            // control-owned handler is already detached, but remains ours.
+            if ( !m_dclickProcessor->IsUnlinked() )
+                RemoveEventHandler(m_dclickProcessor);
             delete m_dclickProcessor;
         }
     }
@@ -612,25 +799,37 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxS("wxOwnerDrawnComboBox"))
     {
-        if ( !wxOwnerDrawnComboBox::Create( parent,
-                                            id,
-                                            value,
-                                            pos,
-                                            size,
-                                            choices,
-                                            style,
-                                            validator,
-                                            name ) )
+        m_grid = wxWindowRef(parent);
+        const wxWeakRef<wxWindow> weakThis(this);
+        const bool created =
+            wxOwnerDrawnComboBox::Create(parent,
+                                         id,
+                                         value,
+                                         pos,
+                                         size,
+                                         choices,
+                                         style,
+                                         validator,
+                                         name);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !created )
+            return false;
+
+        wxPropertyGrid* const grid = GetGrid();
+        if ( !grid )
             return false;
 
         // Enabling double-click processor makes sense
         // only for wxBoolProperty.
-        m_selProp = GetGrid()->GetSelection();
-        wxASSERT(m_selProp);
+        m_selProp = grid->GetSelection();
+        if ( !m_selProp )
+            return false;
+
         wxBoolProperty* boolProp = wxDynamicCast(m_selProp, wxBoolProperty);
         if ( boolProp )
         {
-            m_dclickProcessor = new wxPGDoubleClickProcessor(this, boolProp);
+            m_dclickProcessor =
+                new wxPGDoubleClickProcessor(grid, this, boolProp);
             PushEventHandler(m_dclickProcessor);
         }
 
@@ -643,6 +842,8 @@ public:
                              int flags ) const override
     {
         wxPropertyGrid* pg = GetGrid();
+        if ( !pg )
+            return;
 
         // Handle hint text via super class
         if ( (flags & wxODCB_PAINTING_CONTROL) &&
@@ -660,6 +861,8 @@ public:
     virtual wxCoord OnMeasureItem( size_t item ) const override
     {
         wxPropertyGrid* pg = GetGrid();
+        if ( !pg )
+            return 0;
         wxRect rect;
         rect.x = -1;
         rect.width = 0;
@@ -669,15 +872,18 @@ public:
 
     wxPropertyGrid* GetGrid() const
     {
-        wxPropertyGrid* pg = wxDynamicCast(GetParent(),
-                                           wxPropertyGrid);
-        wxASSERT(pg);
+        wxPropertyGrid* pg =
+            wxDynamicCast(m_grid.get(), wxPropertyGrid);
+        if ( pg && wxWindowIsUnavailableForCallbacks(pg) )
+            return nullptr;
         return pg;
     }
 
     virtual wxCoord OnMeasureItemWidth( size_t item ) const override
     {
         wxPropertyGrid* pg = GetGrid();
+        if ( !pg )
+            return 0;
         wxRect rect;
         rect.x = -1;
         rect.width = -1;
@@ -717,6 +923,7 @@ public:
 private:
     wxPGDoubleClickProcessor*   m_dclickProcessor;
     wxPGProperty*               m_selProp;
+    wxWindowRef                 m_grid;
 };
 
 
@@ -726,11 +933,50 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                                        wxRect& rect,
                                        int flags )
 {
+    wxCHECK_RET( pCb, wxS("Invalid property-grid combo box") );
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    const wxWeakRef<wxWindow> weakCombo(
+        const_cast<wxPGComboBox*>(pCb));
+    wxPropertyGridPageState* const state = m_pState;
     wxPGProperty* p = pCb->GetProperty();
+    if ( !state || !p || GetSelection() != p ||
+         IsPropertyPendingRemoval(p) )
+    {
+        return;
+    }
+
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
+    const wxScopeGuard leaveComboPaint = wxMakeGuard(
+        [weakThis, this]()
+        {
+            if ( weakThis.get() == this )
+                --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
+        });
+    wxUnusedVar(leaveComboPaint);
+
+    // Application-defined properties and renderers can synchronously remove
+    // the selected property or destroy/recreate its editor. Keep the property
+    // itself deferred by m_propertyCallbackDepth and validate both windows and
+    // all identity-bearing state before using any callback result.
+    const auto transactionIsValid =
+        [weakThis, weakCombo, this, pCb, state, p]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                   wxWeakWindowIsAvailableForCallbacks(weakCombo, pCb) &&
+                   m_pState == state &&
+                   GetSelection() == p &&
+                   !IsPropertyPendingRemoval(p) &&
+                   pCb->GetProperty() == p;
+        };
 
     wxString text;
 
-    const wxPGChoices& choices = p->GetChoices();
+    // Keep a COW snapshot: GetValueAsString()/GetString() below are virtual
+    // callback boundaries and may mutate this property's live choices without
+    // deleting either the property or the grid.
+    const wxPGChoices choices = p->GetChoices();
     int comValIndex = -1;
 
     const int choiceCount = choices.IsOk()? choices.GetCount(): 0;
@@ -759,14 +1005,33 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
         }
     }
+    if ( !transactionIsValid() )
+        return;
 
     if ( item < 0 )
         return;
 
     wxBitmap itemBitmap;
+    wxPGChoiceEntry choiceEntry;
+    bool hasChoiceEntry = false;
 
-    if ( comValIndex == -1 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() )
-        itemBitmap = choices.Item(item).GetBitmap().GetBitmapFor(this);
+    if ( comValIndex == -1 && choices.IsOk() && item < choiceCount )
+    {
+        // Keep the entry, and especially its bitmap bundle, independent of the
+        // property's choices before invoking application-provided bundle code.
+        // GetBitmapFor() may synchronously mutate the choices or destroy the
+        // grid/combo, so never retain a pointer into choices across it.
+        choiceEntry = choices.Item(item);
+        hasChoiceEntry = true;
+
+        const wxBitmapBundle itemBundle = choiceEntry.GetBitmap();
+        if ( itemBundle.IsOk() )
+        {
+            itemBitmap = itemBundle.GetBitmapFor(this);
+            if ( !transactionIsValid() )
+                return;
+        }
+    }
 
     //
     // Decide what custom image size to use
@@ -778,7 +1043,10 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     }
     else
     {
-        cis = GetImageSize(p, item);
+        if ( !TryGetImageSize(p, item, &cis) )
+            return;
+        if ( !transactionIsValid() )
+            return;
     }
 
     if ( rect.x + rect.width < 0 )
@@ -847,7 +1115,11 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     // If not drawing a selected popup item, then give property's
     // value image a chance.
-    if ( p->GetValueImage() && item != pCb->GetSelection() )
+    const bool hasValueImage = p->GetValueImage() != nullptr;
+    if ( !transactionIsValid() )
+        return;
+
+    if ( hasValueImage && item != pCb->GetSelection() )
         useCustomPaintProcedure = false;
     // If current choice had a bitmap set by the application, then
     // use it instead of any custom paint procedure
@@ -880,6 +1152,8 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         else
         {
             p->OnCustomPaint( dc, r, paintdata );
+            if ( !transactionIsValid() )
+                return;
         }
 
         pt.x += paintdata.m_drawnWidth + wxCC_CUSTOM_IMAGE_MARGIN2 - 1;
@@ -891,7 +1165,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         //       sure if it is needed, but seems to not cause any harm.
         pt.x -= 1;
 
-        if ( choices.IsOk() && comValIndex < 0 )
+        if ( hasChoiceEntry && comValIndex < 0 )
         {
             // This aligns bitmap horizontally so that it is
             // on the same position as bitmap drawn for static content
@@ -899,10 +1173,12 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
             wxRect r(rect);
             r.x -= 1;
 
-            cell = &choices.Item(item);
+            cell = &choiceEntry;
             renderer = wxPGGlobalVars->m_defaultRenderer;
             int imageOffset = renderer->PreDrawCell(dc, r, this, *cell,
                                                     renderFlags );
+            if ( !transactionIsValid() )
+                return;
             if ( imageOffset )
                 imageOffset += wxCC_CUSTOM_IMAGE_MARGIN1 +
                                 wxCC_CUSTOM_IMAGE_MARGIN2;
@@ -929,6 +1205,8 @@ bool wxPGChoiceEditor_SetCustomPaintWidth( wxPropertyGrid* propGrid, wxPGComboBo
 {
     wxPGProperty* property = propGrid->GetSelectedProperty();
     wxASSERT( property );
+    const wxWeakRef<wxWindow> weakGrid(propGrid);
+    const wxWeakRef<wxWindow> weakCombo(cb);
 
     wxSize imageSize;
     bool res;
@@ -954,6 +1232,13 @@ bool wxPGChoiceEditor_SetCustomPaintWidth( wxPropertyGrid* propGrid, wxPGComboBo
         res = true;
     }
 
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, propGrid) ||
+         !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+         propGrid->GetSelectedProperty() != property )
+    {
+        return false;
+    }
+
     if ( imageSize.x )
         imageSize.x += ODCB_CUST_PAINT_MARGIN;
     cb->SetCustomPaintWidth( imageSize.x );
@@ -968,15 +1253,31 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
                                                 const wxSize& sz,
                                                 long extraStyle ) const
 {
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakGrid(propGrid);
+    wxPropertyGridPageState* const state = propGrid->GetState();
+    const auto gridTransactionIsValid =
+        [weakGrid, propGrid, property, state]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakGrid, propGrid) &&
+                   propGrid->GetState() == state &&
+                   propGrid->GetSelection() == property &&
+                   !propGrid->IsPropertyPendingRemoval(property);
+        };
+
     // Since it is not possible (yet) to create a read-only combo box in
     // the same sense that wxTextCtrl is read-only, simply do not create
     // the control in this case.
     if ( property->HasFlag(wxPGFlags::ReadOnly) )
         return nullptr;
 
-    const wxPGChoices& choices = property->GetChoices();
+    // Keep the labels alive independently of a property callback removing
+    // this property while its editor is being created.
+    wxPGChoices choices = property->GetChoices();
     wxString defString;
     int index = property->GetChoiceSelection();
+    if ( !gridTransactionIsValid() )
+        return nullptr;
 
     wxPGPropValFormatFlags fmtFlags = wxPGPropValFormatFlags::Null;
     if ( !property->HasFlag(wxPGFlags::ReadOnly) &&
@@ -988,6 +1289,8 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 #else
     defString = property->GetValueAsString(fmtFlags);
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
+    if ( !gridTransactionIsValid() )
+        return nullptr;
 
     wxArrayString labels = choices.GetLabels();
 
@@ -1023,52 +1326,107 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
         for ( unsigned int i = 0; i < cmnVals; i++ )
             labels.Add(propGrid->GetCommonValueLabel(i));
     }
+    if ( !gridTransactionIsValid() )
+        return nullptr;
 
     wxPGComboBox* cb = new wxPGComboBox();
+    const wxWeakRef<wxWindow> weakCombo(cb);
 #ifdef __WXMSW__
     cb->Hide();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+         !gridTransactionIsValid() )
+        return weakCombo.get();
 #endif
-    cb->Create(ctrlParent,
-               wxID_ANY,
-               wxString(),
-               po,
-               si,
-               labels,
-               odcbFlags);
+    const bool created = cb->Create(ctrlParent,
+                                    wxID_ANY,
+                                    wxString(),
+                                    po,
+                                    si,
+                                    labels,
+                                    odcbFlags);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) )
+        return nullptr;
+    if ( !created )
+    {
+        return wxPGResolveFailedEditorCreation(
+            cb, weakCombo, gridTransactionIsValid());
+    }
+    if ( !gridTransactionIsValid() )
+        return weakCombo.get();
 
     // Under OSX default button seems to look fine
     // so there is no need to change it.
 #ifndef __WXOSX__
     cb->SetButtonPosition(si.y,0,wxRIGHT);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+         !gridTransactionIsValid() )
+        return weakCombo.get();
 #endif // !__WXOSX__
     cb->SetMargins(wxPG_XBEFORETEXT-1);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+         !gridTransactionIsValid() )
+        return weakCombo.get();
 
     cb->SetBackgroundColour(propGrid->GetCellBackgroundColour());
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+         !gridTransactionIsValid() )
+        return weakCombo.get();
 
     // Set hint text
-    cb->SetHint(property->GetHintText());
+    const wxString hint = property->GetHintText();
+    if ( !gridTransactionIsValid() )
+        return weakCombo.get();
+    cb->SetHint(hint);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+         !gridTransactionIsValid() )
+        return weakCombo.get();
 
-    wxPGChoiceEditor_SetCustomPaintWidth( propGrid, cb,
-                                          property->GetCommonValue() );
+    const int commonValue = property->GetCommonValue();
+    if ( !gridTransactionIsValid() )
+        return weakCombo.get();
+    wxPGChoiceEditor_SetCustomPaintWidth(propGrid, cb, commonValue);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+         !gridTransactionIsValid() )
+        return weakCombo.get();
 
     if ( index >= 0 && index < (int)cb->GetCount() )
     {
         cb->SetSelection( index );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+             !gridTransactionIsValid() )
+            return weakCombo.get();
         if ( !defString.empty() )
+        {
             cb->SetText( defString );
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+                 !gridTransactionIsValid() )
+                return weakCombo.get();
+        }
     }
     else if ( !(extraStyle & wxCB_READONLY) && !defString.empty() )
     {
         propGrid->SetupTextCtrlValue(defString);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+             !gridTransactionIsValid() )
+            return weakCombo.get();
         cb->SetValue( defString );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+             !gridTransactionIsValid() )
+            return weakCombo.get();
     }
     else
     {
         cb->SetSelection( -1 );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+             !gridTransactionIsValid() )
+            return weakCombo.get();
     }
 
 #ifdef __WXMSW__
     cb->Show();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCombo, cb) ||
+         !gridTransactionIsValid() )
+        return weakCombo.get();
 #endif
 
     return (wxWindow*) cb;
@@ -1080,7 +1438,16 @@ void wxPGChoiceEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) c
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
     wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
-    int ind = property->GetChoiceSelection();
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    wxPropertyGrid* const pg = property->GetGrid();
+    const wxPGEditorCallbackTransaction transaction(pg, property, cb);
+    if ( !transaction.IsValid() )
+        return;
+
+    const int ind = property->GetChoiceSelection();
+    if ( !transaction.IsValid() )
+        return;
+
     cb->SetSelection(ind);
 }
 
@@ -1238,15 +1605,33 @@ WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(ComboBox,
 void wxPGComboBoxEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
+
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    wxPropertyGrid* const pg = property->GetGrid();
+    const wxPGEditorCallbackTransaction transaction(pg, property, cb);
+    if ( !transaction.IsValid() )
+        return;
+
     const int index = property->GetChoiceSelection();
+    if ( !transaction.IsValid() )
+        return;
 #if WXWIN_COMPATIBILITY_3_2
     // Special implementation with check if user-overriden obsolete function is still in use
     wxString s = property->GetValueAsStringWithCheck(wxPGPropValFormatFlags::EditableValue);
 #else
     wxString s = property->GetValueAsString(wxPGPropValFormatFlags::EditableValue);
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
+    if ( !transaction.IsValid() )
+        return;
+
     cb->SetSelection(index);
-    property->GetGrid()->SetupTextCtrlValue(s);
+    if ( !transaction.IsValid() )
+        return;
+
+    pg->SetupTextCtrlValue(s);
+    if ( !transaction.IsValid() )
+        return;
+
     cb->SetValue(s);
 }
 
@@ -1337,6 +1722,18 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
                                                           const wxPoint& pos,
                                                           const wxSize& sz ) const
 {
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakGrid(propGrid);
+    wxPropertyGridPageState* const state = propGrid->GetState();
+    const auto gridTransactionIsValid =
+        [weakGrid, propGrid, property, state]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakGrid, propGrid) &&
+                   propGrid->GetState() == state &&
+                   propGrid->GetSelection() == property &&
+                   !propGrid->IsPropertyPendingRemoval(property);
+        };
+
     // Use one two units smaller to match size of the combo's dropbutton.
     // (normally a bigger button is used because it looks better)
     int bt_wid = sz.y;
@@ -1352,6 +1749,15 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
 #endif
 
     wxWindow* bt = propGrid->GenerateEditorButton( bt_pos, bt_sz );
+    const wxWeakRef<wxWindow> weakButton(bt);
+    const auto completeTransactionIsValid =
+        [&weakButton, bt, &gridTransactionIsValid]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakButton, bt) &&
+                   gridTransactionIsValid();
+        };
+    if ( !completeTransactionIsValid() )
+        return wxPGWindowList(nullptr, weakButton.get());
 
     // Size of choice.
     wxSize ch_sz(sz.x-bt->GetSize().x,sz.y);
@@ -1362,12 +1768,21 @@ wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGr
 
     wxWindow* ch = wxPGChoiceEditor::CreateControls(propGrid,property,
         pos,ch_sz).GetPrimary();
+    const wxWeakRef<wxWindow> weakChoice(ch);
+    if ( !completeTransactionIsValid() )
+        return wxPGWindowList(weakChoice.get(), weakButton.get());
 
 #ifdef __WXMSW__
-    bt->Show();
+    wxWindow* const liveButton = weakButton.get();
+    if ( liveButton != bt )
+        return wxPGWindowList(weakChoice.get(), liveButton);
+
+    liveButton->Show();
+    if ( !completeTransactionIsValid() )
+        return wxPGWindowList(weakChoice.get(), weakButton.get());
 #endif
 
-    return wxPGWindowList(ch, bt);
+    return wxPGWindowList(weakChoice.get(), weakButton.get());
 }
 
 
@@ -1552,18 +1967,60 @@ public:
 
     void SetValue( int value );
 
-    wxSimpleCheckBox( wxWindow* parent,
-                      wxWindowID id,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize )
-        : wxControl(parent,id,pos,size,wxBORDER_NONE|wxWANTS_CHARS)
+    wxSimpleCheckBox()
+        : wxControl()
         , m_state(wxSimpleCheckBoxStates::Unchecked)
+        , m_boxHeight(12)
+        , m_grid(nullptr)
+        , m_property(nullptr)
     {
+    }
+
+    bool Create( wxPropertyGrid* grid,
+                 wxPGProperty* property,
+                 wxWindowID id,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize )
+    {
+        wxCHECK_MSG(grid && property, false,
+                    "Invalid PropertyGrid checkbox owner");
+
+        m_grid = grid;
+        m_property = property;
+
+        const wxWeakRef<wxWindow> weakGrid(grid);
+        const wxWeakRef<wxWindow> weakThis(this);
+        wxPropertyGridPageState* const state = grid->GetState();
+        const auto transactionIsValid =
+            [weakGrid, grid, property, state]()
+            {
+                return wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) &&
+                       state &&
+                       grid->GetState() == state &&
+                       grid->GetSelection() == property &&
+                       !grid->IsPropertyPendingRemoval(property);
+            };
+
+        if ( !transactionIsValid() )
+            return false;
+
+        const bool created =
+            wxControl::Create(grid->GetPanel(), id, pos, size,
+                              wxBORDER_NONE | wxWANTS_CHARS);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !created || !transactionIsValid() )
+            return false;
+
         // Due to SetOwnFont stuff necessary for GTK+ 1.2, we need to have this
-        wxControl::SetFont( parent->GetFont() );
+        wxControl::SetFont( grid->GetFont() );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !transactionIsValid() )
+            return false;
 
         SetBoxHeight(12);
         wxControl::SetBackgroundStyle( wxBG_STYLE_PAINT );
+        return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+               transactionIsValid();
     }
 
     virtual ~wxSimpleCheckBox() = default;
@@ -1596,6 +2053,8 @@ private:
 
     int m_boxHeight;
     wxRect m_boxRect;
+    wxWindowRef m_grid;
+    wxPGProperty* m_property;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -1647,6 +2106,17 @@ void wxSimpleCheckBox::OnKeyDown( wxKeyEvent& event )
 
 void wxSimpleCheckBox::SetValue( int value )
 {
+    wxPropertyGrid* const propGrid =
+        wxDynamicCast(m_grid.get(), wxPropertyGrid);
+    if ( !propGrid || !m_property || wxWindowIsUnavailableForCallbacks(propGrid) ||
+         propGrid->GetSelection() != m_property ||
+         propGrid->GetEditorControl() != this ||
+         propGrid->IsPropertyPendingRemoval(m_property) )
+    {
+        return;
+    }
+
+    const wxWeakRef<wxWindow> weakGrid(propGrid);
     if ( value == wxSCB_SETVALUE_CYCLE )
     {
         m_state ^= wxSimpleCheckBoxStates::Checked;
@@ -1656,11 +2126,15 @@ void wxSimpleCheckBox::SetValue( int value )
         m_state = value == 0 ? wxSimpleCheckBoxStates::Unchecked : wxSimpleCheckBoxStates::Checked;
     }
     Refresh();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, propGrid) ||
+         propGrid->GetSelection() != m_property ||
+         propGrid->GetEditorControl() != this ||
+         propGrid->IsPropertyPendingRemoval(m_property) )
+    {
+        return;
+    }
 
-    wxCommandEvent evt(wxEVT_CHECKBOX,GetParent()->GetId());
-
-    wxPropertyGrid* propGrid = (wxPropertyGrid*) GetParent();
-    wxASSERT( wxDynamicCast(propGrid, wxPropertyGrid) );
+    wxCommandEvent evt(wxEVT_CHECKBOX, propGrid->GetId());
     propGrid->HandleCustomEditorEvent(evt);
 }
 
@@ -1678,6 +2152,18 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
                                                    const wxPoint& pos,
                                                    const wxSize& size ) const
 {
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakGrid(propGrid);
+    wxPropertyGridPageState* const state = propGrid->GetState();
+    const auto gridTransactionIsValid =
+        [weakGrid, propGrid, property, state]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakGrid, propGrid) &&
+                   propGrid->GetState() == state &&
+                   propGrid->GetSelection() == property &&
+                   !propGrid->IsPropertyPendingRemoval(property);
+        };
+
     if ( property->HasFlag(wxPGFlags::ReadOnly) )
         return nullptr;
 
@@ -1686,12 +2172,28 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
     wxSize sz = size;
     sz.x = propGrid->GetFontHeight() + (wxPG_XBEFOREWIDGET*2) + 4;
 
-    wxSimpleCheckBox* cb = new wxSimpleCheckBox(propGrid->GetPanel(),
-                                                wxID_ANY, pt, sz);
+    wxSimpleCheckBox* cb = new wxSimpleCheckBox();
+    const wxWeakRef<wxWindow> weakCheckBox(cb);
+    const bool created = cb->Create(propGrid, property, wxID_ANY, pt, sz);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) )
+        return nullptr;
+    if ( !created )
+    {
+        return wxPGResolveFailedEditorCreation(
+            cb, weakCheckBox, gridTransactionIsValid());
+    }
+    if ( !gridTransactionIsValid() )
+        return weakCheckBox.get();
 
     cb->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) ||
+         !gridTransactionIsValid() )
+        return weakCheckBox.get();
 
     UpdateControl(property, cb);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) ||
+         !gridTransactionIsValid() )
+        return weakCheckBox.get();
 
     if ( !property->IsValueUnspecified() )
     {
@@ -1704,6 +2206,9 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
             evt->SetInt(point.x);
             evt->SetExtraLong(point.y);
             wxQueueEvent(cb, evt);
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakCheckBox, cb) ||
+                 !gridTransactionIsValid() )
+                return weakCheckBox.get();
         }
     }
 
@@ -1740,14 +2245,34 @@ void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
     wxSimpleCheckBox* cb = wxDynamicCast(ctrl, wxSimpleCheckBox);
     wxCHECK_RET(cb, "Only wxSimpleCheckBox editor can be updated");
 
-    if ( !property->IsValueUnspecified() )
-        cb->m_state = property->GetChoiceSelection() == 0
-                        ? wxSimpleCheckBoxStates::Unchecked : wxSimpleCheckBoxStates::Checked;
-    else
-        cb->m_state = wxSimpleCheckBoxStates::Unspecified;
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    wxPropertyGrid* const propGrid = property->GetGrid();
+    const wxPGEditorCallbackTransaction transaction(propGrid, property, cb);
+    if ( !transaction.IsValid() )
+        return;
 
-    wxPropertyGrid* propGrid = property->GetGrid();
+    wxSimpleCheckBoxStates state;
+    if ( !property->IsValueUnspecified() )
+    {
+        const int selection = property->GetChoiceSelection();
+        if ( !transaction.IsValid() )
+            return;
+
+        state = selection == 0 ? wxSimpleCheckBoxStates::Unchecked
+                               : wxSimpleCheckBoxStates::Checked;
+    }
+    else
+    {
+        state = wxSimpleCheckBoxStates::Unspecified;
+    }
+
+    cb->m_state = state;
+    if ( !transaction.IsValid() )
+        return;
+
     cb->SetBoxHeight(propGrid->GetFontHeight());
+    if ( !transaction.IsValid() )
+        return;
 
     cb->Refresh();
 }
@@ -1818,73 +2343,193 @@ wxWindow* wxPropertyGrid::GetEditorControl() const
 
 void wxPropertyGrid::CorrectEditorWidgetSizeX()
 {
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakThis(this);
+    ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
+    const wxScopeGuard leaveEditorResize = wxMakeGuard([weakThis, this]()
+    {
+        if ( weakThis.get() == this )
+            --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
+    });
+    wxUnusedVar(leaveEditorResize);
+
+    wxPropertyGridPageState* const state = m_pState;
+    wxWindow* const primary = m_wndEditor;
+    wxWindow* const secondary = m_wndEditor2;
+    const wxWeakRef<wxWindow> weakPrimary(primary);
+    const wxWeakRef<wxWindow> weakSecondary(secondary);
+    const auto transactionIsValid =
+        [this, state, primary, secondary,
+         &weakThis, &weakPrimary, &weakSecondary]()
+        {
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                 m_pState != state )
+                return false;
+            if ( primary &&
+                 !wxWeakWindowIsAvailableForCallbacks(weakPrimary, primary) )
+            {
+                if ( m_wndEditor == primary )
+                    m_wndEditor = nullptr;
+                return false;
+            }
+            if ( secondary &&
+                 !wxWeakWindowIsAvailableForCallbacks(weakSecondary,
+                                                      secondary) )
+            {
+                if ( m_wndEditor2 == secondary )
+                    m_wndEditor2 = nullptr;
+                return false;
+            }
+            return m_wndEditor == primary && m_wndEditor2 == secondary;
+        };
+
+    if ( !state )
+        return;
+
     int secWid = 0;
 
     // Use fixed selColumn 1 for main editor widgets
     int newSplitterx;
-    CalcScrolledPosition(m_pState->DoGetSplitterPosition(0), 0, &newSplitterx, nullptr);
-    int newWidth = newSplitterx + m_pState->GetColumnWidth(1);
+    CalcScrolledPosition(state->DoGetSplitterPosition(0), 0, &newSplitterx, nullptr);
+    int newWidth = newSplitterx + state->GetColumnWidth(1);
 
-    if ( m_wndEditor2 )
+    if ( secondary )
     {
         // if width change occurred, move secondary wnd by that amount
-        wxRect r = m_wndEditor2->GetRect();
+        wxRect r = secondary->GetRect();
         secWid = r.width;
         r.x = newWidth - secWid;
 
-        m_wndEditor2->SetSize( r );
+        secondary->SetSize( r );
+        if ( !transactionIsValid() )
+            return;
 
         // if primary is textctrl, then we have to add some extra space
 #ifdef __WXMAC__
-        if ( m_wndEditor )
+        if ( primary )
 #else
-        if ( wxDynamicCast(m_wndEditor, wxTextCtrl) )
+        if ( wxDynamicCast(primary, wxTextCtrl) )
 #endif
             secWid += wxPG_TEXTCTRL_AND_BUTTON_SPACING;
     }
 
-    if ( m_wndEditor )
+    if ( primary )
     {
-        wxRect r = m_wndEditor->GetRect();
+        wxRect r = primary->GetRect();
 
         r.x = newSplitterx+m_ctrlXAdjust;
 
         if ( !(m_iFlags & wxPG_FL_FIXED_WIDTH_EDITOR) )
             r.width = newWidth - r.x - secWid;
 
-        m_wndEditor->SetSize(r);
+        primary->SetSize(r);
+        if ( !transactionIsValid() )
+            return;
     }
 
-    if ( m_wndEditor2 )
-        m_wndEditor2->Refresh();
+    if ( secondary )
+    {
+        secondary->Refresh();
+        if ( !transactionIsValid() )
+            return;
+    }
 }
 
 // -----------------------------------------------------------------------
 
 void wxPropertyGrid::CorrectEditorWidgetPosY()
 {
-    wxPGProperty* selected = GetSelection();
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakThis(this);
+    ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
+    const wxScopeGuard leaveEditorMove = wxMakeGuard([weakThis, this]()
+    {
+        if ( weakThis.get() == this )
+            --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
+    });
+    wxUnusedVar(leaveEditorMove);
+
+    wxPropertyGridPageState* const state = m_pState;
+    wxPGProperty* const selected = GetSelection();
+    wxWindow* const label = m_labelEditor;
+    wxWindow* const primary = m_wndEditor;
+    wxWindow* const secondary = m_wndEditor2;
+    const wxWeakRef<wxWindow> weakLabel(label);
+    const wxWeakRef<wxWindow> weakPrimary(primary);
+    const wxWeakRef<wxWindow> weakSecondary(secondary);
+    const auto transactionIsValid =
+        [this, state, selected, label, primary, secondary,
+         &weakThis, &weakLabel, &weakPrimary, &weakSecondary]()
+        {
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                 m_pState != state ||
+                 GetSelection() != selected ||
+                 (selected && IsPropertyPendingRemoval(selected)) )
+            {
+                return false;
+            }
+            if ( label &&
+                 !wxWeakWindowIsAvailableForCallbacks(weakLabel, label) )
+            {
+                if ( m_labelEditor == label )
+                {
+                    m_labelEditor = nullptr;
+                    m_labelEditorProperty = nullptr;
+                }
+                return false;
+            }
+            if ( primary &&
+                 !wxWeakWindowIsAvailableForCallbacks(weakPrimary, primary) )
+            {
+                if ( m_wndEditor == primary )
+                    m_wndEditor = nullptr;
+                return false;
+            }
+            if ( secondary &&
+                 !wxWeakWindowIsAvailableForCallbacks(weakSecondary,
+                                                      secondary) )
+            {
+                if ( m_wndEditor2 == secondary )
+                    m_wndEditor2 = nullptr;
+                return false;
+            }
+            return m_labelEditor == label &&
+                   m_wndEditor == primary &&
+                   m_wndEditor2 == secondary;
+        };
 
     if ( selected )
     {
-        if ( m_labelEditor )
+        if ( label )
         {
-            wxRect r = GetEditorWidgetRect(selected, m_selColumn);
-            m_labelEditor->Move(r.GetPosition() + m_labelEditorPosRel);
+            wxRect r;
+            if ( !TryGetEditorWidgetRect(selected, m_selColumn, &r) ||
+                 !transactionIsValid() )
+                return;
+            label->Move(r.GetPosition() + m_labelEditorPosRel);
+            if ( !transactionIsValid() )
+                return;
         }
 
-        if ( m_wndEditor || m_wndEditor2 )
+        if ( primary || secondary )
         {
-            wxRect r = GetEditorWidgetRect(selected, 1);
+            wxRect r;
+            if ( !TryGetEditorWidgetRect(selected, 1, &r) ||
+                 !transactionIsValid() )
+                return;
 
-            if ( m_wndEditor )
+            if ( primary )
             {
-                m_wndEditor->Move(r.GetPosition() + m_wndEditorPosRel);
+                primary->Move(r.GetPosition() + m_wndEditorPosRel);
+                if ( !transactionIsValid() )
+                    return;
             }
 
-            if ( m_wndEditor2 )
+            if ( secondary )
             {
-                m_wndEditor2->Move(r.GetPosition() + m_wndEditor2PosRel);
+                secondary->Move(r.GetPosition() + m_wndEditor2PosRel);
+                if ( !transactionIsValid() )
+                    return;
             }
         }
     }
@@ -1950,8 +2595,25 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
                                                   int maxLen,
                                                   unsigned int forColumn )
 {
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGridPageState* const state = m_pState;
     wxPGProperty* prop = GetSelection();
-    wxASSERT(prop);
+    if ( !state || !prop )
+        return nullptr;
+
+    const wxWeakRef<wxWindow> weakSecondary(secondary);
+    const auto gridTransactionIsValid =
+        [weakThis, this, state, prop, secondary, &weakSecondary]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                   m_pState == state &&
+                   GetSelection() == prop &&
+                   !IsPropertyPendingRemoval(prop) &&
+                   (!secondary ||
+                    wxWeakWindowIsAvailableForCallbacks(weakSecondary,
+                                                        secondary));
+        };
 
     int tcFlags = wxTE_PROCESS_ENTER | extraStyle;
 
@@ -1986,12 +2648,23 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
         tcFlags |= wxBORDER_NONE;
 
     wxTextCtrl* tc = new wxTextCtrl();
+    const wxWeakRef<wxWindow> weakText(tc);
 
 #if defined(__WXMSW__)
     tc->Hide();
 #endif
     SetupTextCtrlValue(value);
-    tc->Create(ctrlParent,wxID_ANY,value, p, s,tcFlags);
+    const bool created =
+        tc->Create(ctrlParent,wxID_ANY,value, p, s,tcFlags);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) )
+        return nullptr;
+    if ( !created )
+    {
+        return wxPGResolveFailedEditorCreation(
+            tc, weakText, gridTransactionIsValid());
+    }
+    if ( !gridTransactionIsValid() )
+        return weakText.get();
 
 #if defined(__WXMSW__)
     // On Windows, we need to override read-only text ctrl's background
@@ -2002,6 +2675,9 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     {
         wxVisualAttributes vattrs = tc->GetDefaultAttributes();
         tc->SetBackgroundColour(vattrs.colBg);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+             !gridTransactionIsValid() )
+            return weakText.get();
     }
 #endif
 
@@ -2010,37 +2686,77 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( forColumn == 1 &&
          prop->HasFlag(wxPGFlags::Modified) &&
          HasFlag(wxPG_BOLD_MODIFIED) )
+    {
          tc->SetFont( m_captionFont );
+         if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+              !gridTransactionIsValid() )
+             return weakText.get();
+    }
 
     // Center the control vertically
     if ( !hasSpecialSize )
+    {
         FixPosForTextCtrl(tc, forColumn);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+             !gridTransactionIsValid() )
+            return weakText.get();
+    }
 
     if ( forColumn != 1 )
     {
         tc->SetBackgroundColour(m_colSelBack);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+             !gridTransactionIsValid() )
+            return weakText.get();
         tc->SetForegroundColour(m_colSelFore);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+             !gridTransactionIsValid() )
+            return weakText.get();
     }
 
 #ifdef __WXMSW__
     tc->Show();
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+         !gridTransactionIsValid() )
+        return weakText.get();
     if ( secondary )
+    {
         secondary->Show();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+             !gridTransactionIsValid() )
+            return weakText.get();
+    }
 #endif
 
     // Set maximum length
     if ( maxLen > 0 )
+    {
         tc->SetMaxLength( maxLen );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+             !gridTransactionIsValid() )
+            return weakText.get();
+    }
 
     wxVariant attrVal = prop->GetAttribute(wxPG_ATTR_AUTOCOMPLETE);
+    if ( !gridTransactionIsValid() )
+        return weakText.get();
     if ( !attrVal.IsNull() )
     {
         wxASSERT(attrVal.IsType(wxPG_VARIANT_TYPE_ARRSTRING));
         tc->AutoComplete(attrVal.GetArrayString());
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+             !gridTransactionIsValid() )
+            return weakText.get();
     }
 
     // Set hint text
-    tc->SetHint(prop->GetHintText());
+    const wxString hint = prop->GetHintText();
+    if ( !gridTransactionIsValid() )
+        return weakText.get();
+    tc->SetHint(hint);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakText, tc) ||
+         !gridTransactionIsValid() )
+        return weakText.get();
 
     return tc;
 }
@@ -2049,8 +2765,21 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
 wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize& sz )
 {
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGridPageState* const state = m_pState;
     wxPGProperty* selected = GetSelection();
-    wxASSERT(selected);
+    if ( !state || !selected )
+        return nullptr;
+
+    const auto gridTransactionIsValid =
+        [weakThis, this, state, selected]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                   m_pState == state &&
+                   GetSelection() == selected &&
+                   !IsPropertyPendingRemoval(selected);
+        };
 
     const wxString label(L"\u2026"); // "Horizontal ellipsis" character
 
@@ -2060,23 +2789,51 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     wxSize s(wxDefaultCoord, dim);
 
     wxButton* but = new wxButton();
+    const wxWeakRef<wxWindow> weakButton(but);
   #ifdef __WXMSW__
     but->Hide();
   #endif
-    but->Create(GetPanel(),wxID_ANY,label,p,s,wxWANTS_CHARS|wxBU_EXACTFIT);
+    const bool created =
+        but->Create(GetPanel(), wxID_ANY, label, p, s,
+                    wxWANTS_CHARS | wxBU_EXACTFIT);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakButton, but) )
+        return nullptr;
+    if ( !created )
+    {
+        return wxPGResolveFailedEditorCreation(
+            but, weakButton, gridTransactionIsValid());
+    }
+    if ( !gridTransactionIsValid() )
+        return weakButton.get();
+
     but->SetFont(GetFont().GetBaseFont().Smaller());
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakButton, but) ||
+         !gridTransactionIsValid() )
+        return weakButton.get();
+
     // If button is narrow make it a square and move it to the correct position
     s = but->GetSize();
     if ( s.x < s.y )
     {
         s.x = s.y;
         but->SetSize(s);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakButton, but) ||
+             !gridTransactionIsValid() )
+            return weakButton.get();
     }
     p.x = pos.x + sz.x - s.x;
     but->Move(p);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakButton, but) ||
+         !gridTransactionIsValid() )
+        return weakButton.get();
 
     if ( selected->HasFlag(wxPGFlags::ReadOnly) && !selected->HasFlag(wxPGPropertyFlags_ActiveButton) )
+    {
         but->Disable();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakButton, but) ||
+             !gridTransactionIsValid() )
+            return weakButton.get();
+    }
 
     return but;
 }
@@ -2089,14 +2846,49 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrlAndButton( const wxPoint& pos,
                                                            int limitedEditing,
                                                            wxPGProperty* property )
 {
-    wxButton* but = (wxButton*)GenerateEditorButton(pos,sz);
-    *psecondary = (wxWindow*)but;
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGridPageState* const state = m_pState;
+    *psecondary = nullptr;
+    if ( !state || !property || GetSelection() != property )
+        return nullptr;
+
+    const auto gridTransactionIsValid =
+        [weakThis, this, state, property]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                   m_pState == state &&
+                   GetSelection() == property &&
+                   !IsPropertyPendingRemoval(property);
+        };
+
+    wxButton* but = static_cast<wxButton*>(GenerateEditorButton(pos, sz));
+    const wxWeakRef<wxWindow> weakButton(but);
+    *psecondary = weakButton.get();
+    const auto completeTransactionIsValid =
+        [&weakButton, but, &gridTransactionIsValid]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakButton, but) &&
+                   gridTransactionIsValid();
+        };
+    if ( !completeTransactionIsValid() )
+        return nullptr;
 
     if ( limitedEditing )
     {
     #ifdef __WXMSW__
         // There is button Show in GenerateEditorTextCtrl as well
-        but->Show();
+        wxWindow* const liveButton = weakButton.get();
+        if ( liveButton != but )
+        {
+            *psecondary = liveButton;
+            return nullptr;
+        }
+
+        liveButton->Show();
+        *psecondary = weakButton.get();
+        if ( !completeTransactionIsValid() )
+            return nullptr;
     #endif
         return nullptr;
     }
@@ -2111,7 +2903,18 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrlAndButton( const wxPoint& pos,
         text = property->GetValueAsString(property->HasFlag(wxPGFlags::ReadOnly) ? wxPGPropValFormatFlags::Null : wxPGPropValFormatFlags::EditableValue);
 #endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 
-    return GenerateEditorTextCtrl(pos, sz, text, but, 0, property->GetMaxLength());
+    *psecondary = weakButton.get();
+    if ( !completeTransactionIsValid() )
+        return nullptr;
+
+    const int maxLength = property->GetMaxLength();
+    if ( !completeTransactionIsValid() )
+        return nullptr;
+
+    wxWindow* const primary =
+        GenerateEditorTextCtrl(pos, sz, text, weakButton.get(), 0, maxLength);
+    *psecondary = weakButton.get();
+    return primary;
 }
 
 // -----------------------------------------------------------------------
@@ -2126,14 +2929,48 @@ void wxPropertyGrid::SetEditorAppearance( const wxPGCell& cell,
     if ( !ctrl )
         return;
 
-    property->GetEditorClass()->SetControlAppearance( this,
-                                                      property,
-                                                      ctrl,
-                                                      cell,
-                                                      m_editorAppearance,
-                                                      unspecified );
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakGrid(this);
+    const wxWeakRef<wxWindow> weakCtrl(ctrl);
+    wxPropertyGridPageState* const state = m_pState;
+    ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
+    const wxScopeGuard leaveAppearanceCallback = wxMakeGuard(
+        [weakGrid, this]()
+        {
+            if ( weakGrid.get() == this )
+                --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
+        });
+    wxUnusedVar(leaveAppearanceCallback);
 
-    m_editorAppearance = cell;
+    const auto transactionIsValid =
+        [weakGrid, weakCtrl, this, ctrl, state, property]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakGrid, this) &&
+                   wxWeakWindowIsAvailableForCallbacks(weakCtrl, ctrl) &&
+                   m_pState == state &&
+                   GetSelection() == property &&
+                   !IsPropertyPendingRemoval(property) &&
+                   GetEditorControl() == ctrl;
+        };
+
+    // Both cells can alias grid-owned storage. Keep their values stable across
+    // the application-provided editor callbacks below.
+    const wxPGCell appearance = cell;
+    const wxPGCell oldAppearance = m_editorAppearance;
+    const wxPGEditor* const editor = property->GetEditorClass();
+    if ( !transactionIsValid() || !editor )
+        return;
+
+    editor->SetControlAppearance(this,
+                                 property,
+                                 ctrl,
+                                 appearance,
+                                 oldAppearance,
+                                 unspecified);
+    if ( !transactionIsValid() )
+        return;
+
+    m_editorAppearance = appearance;
 }
 
 // -----------------------------------------------------------------------
@@ -2174,10 +3011,38 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxPGEditorDialogAdapter, wxObject);
 
 bool wxPGEditorDialogAdapter::ShowDialog( wxPropertyGrid* propGrid, wxPGProperty* property )
 {
+    wxCHECK_MSG( propGrid && property, false,
+                 "invalid property grid dialog transaction" );
+
+    wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
+    const wxWeakRef<wxWindow> weakGrid(propGrid);
+    ++wxPGGetPropertyGridTransientState(propGrid).propertyCallbackDepth;
+    const wxScopeGuard leaveDialogCallback = wxMakeGuard(
+        [propGrid, weakGrid]()
+        {
+            if ( weakGrid.get() == propGrid )
+                --wxPGGetPropertyGridTransientState(propGrid).propertyCallbackDepth;
+        });
+    wxUnusedVar(leaveDialogCallback);
+
+    wxPropertyGridPageState* const state = propGrid->GetState();
+    const auto transactionIsValid =
+        [propGrid, property, state, &weakGrid]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakGrid, propGrid) &&
+                   propGrid->GetState() == state &&
+                   propGrid->GetSelection() == property &&
+                   !propGrid->IsPropertyPendingRemoval(property);
+        };
+
     if ( !propGrid->EditorValidate() )
+        return false;
+    if ( !transactionIsValid() )
         return false;
 
     bool res = DoShowDialog( propGrid, property );
+    if ( !transactionIsValid() )
+        return false;
 
     if ( res )
     {

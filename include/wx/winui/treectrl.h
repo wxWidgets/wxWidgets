@@ -15,7 +15,10 @@
 #include "wx/treebase.h"
 #include "wx/textctrl.h"
 
+#include <cstddef>
+#include <cstdint>
 #include <memory>
+#include <vector>
 
 class wxWinUITreeItem;
 class wxWinUITreeCtrlImpl;
@@ -23,6 +26,41 @@ class wxWinUITreeCtrlImpl;
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
 public:
+    enum class WinUIPeerMutationForTesting
+    {
+        InsertItem,
+        InsertRollbackAfterCommit,
+        RemoveItem,
+        RemoveItemAfterCommit,
+        SetExpandedAfterCommit,
+        ClearItems
+    };
+
+    enum class WinUIDragCompletionForTesting
+    {
+        Drop,
+        Cancel
+    };
+
+    struct WinUIModelStats
+    {
+        size_t itemCount = 0;
+        size_t expandableItemCount = 0;
+        size_t nodeLookupCount = 0;
+        size_t peerUpdateCount = 0;
+        size_t fullRefreshCount = 0;
+        size_t modelGrowthCount = 0;
+    };
+
+    struct WinUIMeasuredItemParts
+    {
+        wxRect item;
+        wxRect expander;
+        wxRect stateImage;
+        wxRect image;
+        wxRect label;
+    };
+
     wxTreeCtrl();
     wxTreeCtrl(wxWindow *parent,
                wxWindowID id = wxID_ANY,
@@ -40,6 +78,9 @@ public:
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxTreeCtrlNameStr));
+
+    void SetWindowStyleFlag(long style) override;
+    bool Reparent(wxWindowBase *newParent) override;
 
     unsigned int GetCount() const override;
 
@@ -142,7 +183,86 @@ public:
 
     bool CanApplyThemeBorder() const override { return false; }
 
+    // Implementation-only deterministic seams. They exercise the real WinUI
+    // callback, transaction and internal-drag paths without SendInput.
+    void WinUIFailNextPeerMutationForTesting(
+        WinUIPeerMutationForTesting mutation);
+    void WinUIFailPeerMutationsForTesting(
+        WinUIPeerMutationForTesting mutation,
+        unsigned count);
+    bool WinUISelectPeerItemForTesting(
+        const wxTreeItemId& item,
+        bool addToSelection = false);
+    bool WinUIFocusPeerItemForTesting(const wxTreeItemId& item);
+    bool WinUISetPeerExpandedForTesting(const wxTreeItemId& item,
+                                        bool expanded);
+    bool WinUIIsPeerExpandedForTesting(
+        const wxTreeItemId& item) const;
+    bool WinUIKeyDownForTesting(int keyCode,
+                                bool controlDown = false,
+                                bool shiftDown = false,
+                                bool altDown = false);
+    bool WinUIBeginInternalDragForTesting(const wxTreeItemId& item);
+    bool WinUICompleteInternalDragForTesting(
+        const wxTreeItemId& target,
+        WinUIDragCompletionForTesting completion);
+    bool WinUICompletePeerDragForTesting(
+        const wxTreeItemId& target,
+        bool dropResultNone);
+    bool WinUIScheduleLabelEditForTesting(
+        const wxTreeItemId& item);
+    bool WinUIFireLabelEditDelayForTesting();
+    bool WinUIClickStateImageForTesting(
+        const wxTreeItemId& item);
+    bool WinUIDoubleClickItemForTesting(
+        const wxTreeItemId& item);
+    bool WinUIRightClickItemForTesting(
+        const wxTreeItemId& item);
+    bool WinUIInvokeItemForTesting(
+        const wxTreeItemId& item);
+    void WinUIPointerPressedForTesting(const wxPoint& point);
+    void WinUIPointerMovedForTesting(const wxPoint& point);
+    void WinUIPointerReleasedForTesting(const wxPoint& point);
+    bool WinUIQueueSelectionCorrectionForTesting();
+    bool WinUIIsPeerSelectionChangeForTesting() const;
+    bool WinUIIsPeerStructureRepairPendingForTesting() const;
+    std::uintptr_t
+    WinUIGetItemPeerIdentityForTesting(const wxTreeItemId& item) const;
+    bool WinUIIsItemAttachedToPeerForTesting(
+        const wxTreeItemId& item) const;
+    size_t WinUIGetPeerChildCountForTesting(
+        const wxTreeItemId& parent = wxTreeItemId()) const;
+    bool WinUIGetMeasuredItemPartsForTesting(
+        const wxTreeItemId& item,
+        WinUIMeasuredItemParts *parts) const;
+    bool WinUIGetPeerIndentForTesting(
+        const wxTreeItemId& item,
+        double *leading,
+        double *trailing) const;
+    bool WinUIIsPeerDropHighlightedForTesting(
+        const wxTreeItemId& item) const;
+    wxString WinUIGetPeerAutomationNameForTesting(
+        const wxTreeItemId& item) const;
+    wxString WinUIGetPeerItemTextForTesting(
+        const wxTreeItemId& item) const;
+    std::uintptr_t WinUIGetPeerItemImageIdentityForTesting(
+        const wxTreeItemId& item) const;
+    bool WinUIRefreshForScaleForTesting(double scale);
+    bool WinUIGetPeerItemImageProjectionForTesting(
+        const wxTreeItemId& item,
+        wxSize *imagePixelSize,
+        wxSize *stateImagePixelSize,
+        std::uint64_t *generation,
+        wxSize *imageDIPSize = nullptr,
+        wxSize *stateImageDIPSize = nullptr) const;
+    WinUIModelStats WinUIGetModelStatsForTesting() const;
+    void WinUIResetModelStatsForTesting();
+    void WinUIClosePeerForTesting();
+    static size_t WinUIGetLiveCallbackStateCountForTesting();
+
 protected:
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
+    void DoThaw() override;
     int DoGetItemState(const wxTreeItemId& item) const override;
     void DoSetItemState(const wxTreeItemId& item, int state) override;
 
@@ -164,61 +284,137 @@ protected:
     void OnImagesChanged() override;
 
 private:
+    enum class SelectionPreflightResult
+    {
+        Allowed,
+        Vetoed,
+        Superseded
+    };
+
+    enum class PeerProjectionResult
+    {
+        Done,
+        Stale,
+        Failed
+    };
+
+    enum class PeerExpansionMode
+    {
+        Immediate,
+        PeerAlreadyUpdated,
+        Deferred
+    };
+
+    enum class AncestorExpansionResult
+    {
+        Done,
+        Stale,
+        PeerDeferred
+    };
+
     wxWinUITreeItem *GetItem(const wxTreeItemId& item) const;
     wxTreeItemId MakeId(wxWinUITreeItem *item) const;
+    wxWinUITreeItem *ResolveItem(std::uint64_t itemId) const;
 
-    bool IsSelectionChangeAllowed(wxWinUITreeItem *item, wxWinUITreeItem *oldItem);
     void SendTreeEvent(wxEventType type,
                        wxWinUITreeItem *item,
                        wxWinUITreeItem *oldItem = nullptr);
-    bool ChangeSelection(wxWinUITreeItem *item, bool sendEvent, bool updatePeer);
-    void ApplySelectionToPeer();
+    bool EnsureVisibleItem(std::uint64_t itemId,
+                           std::uint64_t operation,
+                           bool scroll);
+    bool SetExpanded(wxWinUITreeItem *item,
+                     bool expanded,
+                     bool sendEvent,
+                     PeerExpansionMode peerMode,
+                     std::uint64_t operation = 0);
+    AncestorExpansionResult ExpandAncestorPath(
+        std::uint64_t itemId,
+        std::uint64_t operation,
+        std::vector<std::uint64_t> *projectionIds);
+    SelectionPreflightResult PreflightSelectionChange(
+        wxWinUITreeItem *item,
+        std::uint64_t *oldItemId);
+    void CommitSelectionForDeletion(wxWinUITreeItem *replacement,
+                                    wxWinUITreeItem *doomedSubtree);
+    bool ChangeSelection(wxWinUITreeItem *item,
+                         bool sendEvent,
+                         bool updatePeer,
+                         std::uint64_t *operationOut = nullptr);
+    bool ApplySelectionToPeer();
+    // Rebuild only the peer hierarchy from the authoritative wx model. This
+    // is the bounded recovery path when a best-effort WinRT rollback itself
+    // fails part-way through.
+    bool ReconcilePeerStructureFromModel();
     // Push the current selection back to the WinUI TreeView, but deferred to
     // the dispatcher queue.  This is required when a selection change is
     // rejected (e.g. a wxTreebook category page that has no associated page):
     // the TreeView ignores a SelectedNode write made synchronously from inside
     // its own SelectionChanged callback, so the correction has to run once the
     // control's selection transaction has completed.
-    void SchedulePeerSelectionCorrection();
-    void UpdatePeerItem(wxWinUITreeItem *item);
-    void RefreshPeerItems();
+    void SchedulePeerSelectionCorrection(bool newRequest = true);
+    PeerProjectionResult UpdatePeerItem(wxWinUITreeItem *item);
+    PeerProjectionResult UpdatePeerItems(
+        const std::vector<std::uint64_t>& itemIds);
+    PeerProjectionResult RefreshProjectedItems();
+    PeerProjectionResult RequestPeerProjection(
+        const std::vector<std::uint64_t>& itemIds,
+        bool allItems);
+    PeerProjectionResult SyncPeerProjection();
+    PeerProjectionResult ProjectPeerItemPass(
+        std::uint64_t itemId,
+        std::uint64_t revision,
+        wxWinUITreeCtrlImpl *impl);
     // Retrieve the on-screen rectangle of the item's realized container, in
     // client coordinates.  Fails if the container is not realized (yet).
-    bool GetItemPeerRect(wxWinUITreeItem *item, wxRect& rect) const;
+    bool GetItemPeerRect(wxWinUITreeItem *item,
+                         wxRect& rect,
+                         bool textOnly = false) const;
     // True if any item in the tree has (or claims to have) children, i.e. if
     // the expander column is ever going to be used.
     bool HasExpandableItem() const;
     void OnPeerRightTapped(const wxPoint& pt);
+    void OnPeerPointerPressed(const wxPoint& pt);
+    void OnPeerPointerMoved(const wxPoint& pt);
+    void OnPeerPointerReleased(const wxPoint& pt);
+    void OnPeerDoubleTapped(const wxPoint& pt);
+    bool SendRightClickEvents(wxWinUITreeItem *item,
+                              const wxPoint& point);
+    void OnPeerItemInvoked(wxWinUITreeItem *item);
     void OnPeerSelectionChanged();
     void OnPeerNodeExpanded(wxWinUITreeItem *item);
     void OnPeerNodeCollapsed(wxWinUITreeItem *item);
+    bool OnPeerKeyDown(int keyCode,
+                       wchar_t unicode = 0,
+                       bool controlDown = false,
+                       bool shiftDown = false,
+                       bool altDown = false,
+                       bool modifiersProvided = false);
+    bool BeginInternalDrag(wxWinUITreeItem *item, const wxPoint& point);
+    bool HandlePeerDragStarting(wxWinUITreeItem *item,
+                                const wxPoint& point);
+    void HandlePeerDragCompleted(wxWinUITreeItem *target,
+                                 const wxPoint& point,
+                                 bool dropResultNone);
+    void CompleteInternalDrag(wxWinUITreeItem *target,
+                              const wxPoint& point,
+                              bool cancelled);
+    bool ScheduleDelayedLabelEdit(wxWinUITreeItem *item);
+    bool CompleteDelayedLabelEdit(std::uint64_t ticket);
+    void CancelDelayedLabelEdit();
+    void SendStateImageClick(wxWinUITreeItem *item,
+                             const wxPoint& point);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     std::unique_ptr<wxWinUITreeCtrlImpl> m_winui;
+    // wxTreeCtrl supports two-step construction. Keep bundle state in the
+    // control independently of the peer implementation so SetStateImages()
+    // made before Create() can seed the first projection. m_imagesState remains
+    // the wxTreeCtrlBase-authoritative public/image-list storage.
+    wxVector<wxBitmapBundle> m_winuiStateImageBundles;
     unsigned int m_indent = 16;
-    bool m_updatingPeer = false;
-
-    // Set while we are handling a SelectionChanged notification coming from the
-    // WinUI TreeView: in this state a peer-selection write must be deferred (see
-    // SchedulePeerSelectionCorrection).
-    bool m_inPeerSelectionChange = false;
-    // True while a deferred selection correction is queued: incoming peer
-    // selection changes are ignored until it runs, to avoid an event storm.
-    bool m_peerCorrectionPending = false;
-    // The item whose selection the application refused; if the control keeps
-    // trying to select it we just push the real selection back without
-    // re-dispatching the (rejected) selection event.
-    wxWinUITreeItem *m_peerRejectedItem = nullptr;
 
     // In-place label editing state.
     wxTextCtrl *m_editControl = nullptr;
-    wxWinUITreeItem *m_editItem = nullptr;
-
-    // The item being dragged, if the application allowed the drag.
-    wxWinUITreeItem *m_dragItem = nullptr;
-
-    // Last known value of HasExpandableItem(), to detect when the expander
-    // column becomes (ir)relevant and the item margins must be refreshed.
-    bool m_hadExpandableItem = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);

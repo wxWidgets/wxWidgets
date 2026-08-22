@@ -18,6 +18,7 @@
 
 #include "itemcontainertest.h"
 #include "testableframe.h"
+#include "waitfor.h"
 #include "wx/uiaction.h"
 
 class ListBoxTestCase : public ItemContainerTestCase, public CppUnit::TestCase
@@ -36,8 +37,12 @@ private:
         wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( MultipleSelect );
+#ifndef __WXWINUI__
+        // These use OS-level mouse injection. WinUI peer, focus and event
+        // routing is covered deterministically in winuilistmodel.cpp.
         WXUISIM_TEST( ClickEvents );
         WXUISIM_TEST( ClickNotOnItem );
+#endif
         CPPUNIT_TEST( HitTest );
         //We also run all tests as an ownerdrawn list box.  We do not need to
         //run the wxITEM_CONTAINER_TESTS as they are tested with wxCheckListBox
@@ -45,8 +50,12 @@ private:
         CPPUNIT_TEST( PseudoTest_OwnerDrawn );
         CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( MultipleSelect );
+#ifndef __WXWINUI__
+        // WinUI owner-draw coverage in winuilistmodel.cpp is deterministic
+        // and exercises the real XAML projection without physical input.
         WXUISIM_TEST( ClickEvents );
         WXUISIM_TEST( ClickNotOnItem );
+#endif
         CPPUNIT_TEST( HitTest );
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -95,9 +104,14 @@ void ListBoxTestCase::Sort()
 {
 #ifndef __WXOSX__
     wxDELETE(m_list);
+    long style = wxLB_SORT;
+#ifdef __WXMSW__
+    if ( ms_ownerdrawn )
+        style |= wxLB_OWNERDRAW;
+#endif
     m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
                             wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                            wxLB_SORT);
+                            style);
 
     wxArrayString testitems;
     testitems.Add("aaa");
@@ -135,9 +149,14 @@ void ListBoxTestCase::Sort()
 void ListBoxTestCase::MultipleSelect()
 {
     wxDELETE(m_list);
+    long style = wxLB_MULTIPLE;
+#ifdef __WXMSW__
+    if ( ms_ownerdrawn )
+        style |= wxLB_OWNERDRAW;
+#endif
     m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
                             wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                            wxLB_MULTIPLE);
+                            style);
 
     wxArrayString testitems;
     testitems.Add("item 0");
@@ -284,6 +303,17 @@ void ListBoxTestCase::HitTest()
         p = wxPoint(10, 10);
     }
 #endif
+
+#ifdef __WXWINUI__
+    // Appending to a XAML ItemsControl updates the item model immediately,
+    // but its visual containers are realized on the dispatcher. This is the
+    // same realization boundary handled above for wxGTK: wait for the public
+    // hit-test result instead of making HitTest() pump a nested event loop.
+    WaitFor("wxListBox item realization", [this, p]() {
+        return m_list->HitTest(p) == 0;
+    }, 1000);
+#endif
+
     CPPUNIT_ASSERT_EQUAL( 0, m_list->HitTest(p) );
 
     CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->HitTest(290, 190) );

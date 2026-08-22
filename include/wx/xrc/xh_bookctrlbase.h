@@ -32,6 +32,17 @@ protected:
     // the derived class to deal with the contents of the book control node.
     void DoCreatePages(wxBookCtrlBase* book);
 
+    // Transaction-aware variant used by in-tree handlers. It returns false
+    // only when the book was destroyed or a coherent rollback couldn't be
+    // completed. A malformed page that is safely rolled back remains a
+    // recoverable XRC compatibility error and returns true.
+    bool DoCreatePagesSafely(wxBookCtrlBase* book);
+
+    // Explicitly invalidate the innermost page-creation transaction for this
+    // handler/book pair. Property-sheet handlers use this when their external
+    // dialog/book context changes while a page resource is being created.
+    void MarkCurrentPageCreationFailed(wxBookCtrlBase* book);
+
     // Create a new page using the contents of the current node.
     //
     // This should be called to handle the book control page node.

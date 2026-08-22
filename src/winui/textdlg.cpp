@@ -25,31 +25,194 @@
 #include "wx/evtloop.h"
 #include "wx/modalhook.h"
 #include "wx/msw/private.h"
+#include "wx/scopeguard.h"
 #include "wx/stockitem.h"
+#include "wx/weakref.h"
+#include "wx/winui/private/dialogcontracts.h"
 
-#include <climits>
+#include <algorithm>
+#include <memory>
 #include <winrt/Windows.Foundation.h>
+
+namespace MUX = winrt::Microsoft::UI::Xaml;
+namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+
+class wxWinUITextEntryPeerState final
+    : public std::enable_shared_from_this<wxWinUITextEntryPeerState>
+{
+public:
+    ~wxWinUITextEntryPeerState()
+    {
+        Disconnect();
+    }
+
+    void Attach(const MUXC::TextBox& textBox,
+                const MUXC::PasswordBox& passwordBox,
+                bool forceUpper)
+    {
+        m_textBox = textBox;
+        m_passwordBox = passwordBox;
+
+        const std::weak_ptr<wxWinUITextEntryPeerState> weakState =
+            shared_from_this();
+        if ( m_textBox )
+        {
+            m_textToken = m_textBox.TextChanged(
+                [weakState](
+                    const winrt::Windows::Foundation::IInspectable&,
+                    const MUXC::TextChangedEventArgs&)
+                {
+                    if ( const auto state = weakState.lock() )
+                        state->ApplyUppercase();
+                });
+        }
+        else if ( m_passwordBox )
+        {
+            m_passwordToken = m_passwordBox.PasswordChanged(
+                [weakState](
+                    const winrt::Windows::Foundation::IInspectable&,
+                    const MUX::RoutedEventArgs&)
+                {
+                    if ( const auto state = weakState.lock() )
+                        state->ApplyUppercase();
+                });
+        }
+
+        if ( forceUpper )
+            EnableForceUpper();
+    }
+
+    void Disconnect()
+    {
+        if ( !m_active )
+            return;
+        m_active = false;
+
+        try
+        {
+            if ( m_textBox && m_textToken.value )
+                m_textBox.TextChanged(m_textToken);
+            if ( m_passwordBox && m_passwordToken.value )
+                m_passwordBox.PasswordChanged(m_passwordToken);
+        }
+        catch ( const winrt::hresult_error& )
+        {
+        }
+
+        m_textToken = {};
+        m_passwordToken = {};
+        m_textBox = nullptr;
+        m_passwordBox = nullptr;
+    }
+
+    void EnableForceUpper()
+    {
+        m_forceUpper = true;
+        ApplyUppercase();
+    }
+
+    bool SetValue(const wxString& value)
+    {
+        if ( !m_active )
+            return false;
+
+        try
+        {
+            if ( m_textBox )
+                m_textBox.Text(wxWinUIToHString(value));
+            else if ( m_passwordBox )
+                m_passwordBox.Password(wxWinUIToHString(value));
+            else
+                return false;
+
+            ApplyUppercase();
+            return true;
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("TextEntryDialog test value", e);
+            return false;
+        }
+    }
+
+    wxString GetValue() const
+    {
+        if ( !m_active )
+            return {};
+
+        try
+        {
+            if ( m_textBox )
+                return wxWinUIFromHString(m_textBox.Text());
+            if ( m_passwordBox )
+                return wxWinUIFromHString(m_passwordBox.Password());
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("TextEntryDialog peer value", e);
+        }
+
+        return {};
+    }
+
+private:
+    void ApplyUppercase()
+    {
+        if ( !m_active || !m_forceUpper || m_updating )
+            return;
+
+        try
+        {
+            wxString value = GetValue();
+            wxString upper = value;
+            upper.MakeUpper();
+            if ( upper == value )
+                return;
+
+            m_updating = true;
+            wxScopeGuard clear = wxMakeGuard(
+                [this]()
+                {
+                    m_updating = false;
+                });
+            wxUnusedVar(clear);
+
+            if ( m_textBox )
+            {
+                const int oldStart = m_textBox.SelectionStart();
+                const int oldLength = m_textBox.SelectionLength();
+                m_textBox.Text(wxWinUIToHString(upper));
+                const int length = static_cast<int>(upper.length());
+                const int start = (std::min)(oldStart, length);
+                m_textBox.Select(
+                    start,
+                    (std::min)(oldLength, length - start));
+            }
+            else if ( m_passwordBox )
+            {
+                m_passwordBox.Password(wxWinUIToHString(upper));
+            }
+        }
+        catch ( const winrt::hresult_error& e )
+        {
+            wxWinUILogException("TextEntryDialog ForceUpper", e);
+        }
+    }
+
+    MUXC::TextBox m_textBox{ nullptr };
+    MUXC::PasswordBox m_passwordBox{ nullptr };
+    winrt::event_token m_textToken{};
+    winrt::event_token m_passwordToken{};
+    bool m_active = true;
+    bool m_forceUpper = false;
+    bool m_updating = false;
+};
 
 const char wxGetTextFromUserPromptStr[] = "Input Text";
 const char wxGetPasswordFromUserPromptStr[] = "Enter Password";
 
 wxIMPLEMENT_CLASS(wxTextEntryDialog, wxDialog);
 wxIMPLEMENT_CLASS(wxPasswordEntryDialog, wxTextEntryDialog);
-
-namespace
-{
-
-int wxWinUIContentDialogMaxLength(unsigned long len)
-{
-    if ( len == 0 )
-        return 0;
-
-    return len > static_cast<unsigned long>(INT_MAX)
-        ? INT_MAX
-        : static_cast<int>(len);
-}
-
-} // anonymous namespace
 
 // All the members carry default initializers in the class declaration, so
 // both constructors start from the same clean state.
@@ -70,7 +233,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
                                const wxPoint& pos,
                                const wxSize sz)
 {
-    m_winuiParent = GetParentForModalDialog(parent, 0);
+    m_winuiParent = GetParentForModalDialog(parent, style);
     m_message = message;
     m_caption = caption;
     m_value = value;
@@ -83,20 +246,40 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     // normal wxDialog for the application (valid GetHandle(), event routing,
     // parent relationship); the UI actually shown by ShowModal() is a WinUI
     // ContentDialog over the parent, this window is never made visible.
-    return wxDialog::Create(parent, wxID_ANY, caption, pos, sz,
-                            wxDEFAULT_DIALOG_STYLE);
+    return wxDialog::Create(
+        m_winuiParent,
+        wxID_ANY,
+        caption,
+        pos,
+        sz,
+        wxDEFAULT_DIALOG_STYLE | (style & wxDIALOG_NO_PARENT));
 }
 
 int wxTextEntryDialog::ShowModal()
 {
+    const wxWeakRef<wxDialog> externalLifetimeSelf(this);
+    WinUIBeginExternalModalLifetime();
+    wxScopeGuard externalLifetime = wxMakeGuard(
+        [externalLifetimeSelf]()
+        {
+            if ( wxDialog * const live = externalLifetimeSelf.get() )
+                live->WinUIEndExternalModalLifetime();
+        });
+    wxUnusedVar(externalLifetime);
+
     WX_HOOK_MODAL_DIALOG();
+    WinUIArmExternalModalLifetime();
+    if ( IsBeingDeleted() )
+        return wxID_CANCEL;
 
     wxWindow* const parent = m_winuiParent
         ? m_winuiParent
         : GetParentForModalDialog(nullptr, 0);
-    HWND hwndParent = parent ? GetHwndOf(parent) : nullptr;
 
-    if ( !hwndParent || !wxWinUI3Initialize() )
+    // Parentless common dialogs are part of the public API. The Window
+    // presenter supports them directly; Overlay degrades to Window when no
+    // owner island exists.
+    if ( !wxWinUI3Initialize() )
         return wxID_CANCEL;
 
     try
@@ -107,6 +290,7 @@ int wxTextEntryDialog::ShowModal()
         wxWinUIDialogPresenter presenter;
         if ( !presenter.Create(parent, m_caption) )
             return wxID_CANCEL;
+        presenter.SetLifetimeOwner(this);
 
         StackPanel content;
         content.Spacing(8);
@@ -126,7 +310,7 @@ int wxTextEntryDialog::ShowModal()
             if ( !m_hint.empty() )
                 passwordBox.PlaceholderText(wxWinUIToHString(m_hint));
 
-            const int maxLength = wxWinUIContentDialogMaxLength(m_maxLength);
+            const int maxLength = wxWinUITextEntryMaxLength(m_maxLength);
             if ( maxLength > 0 )
                 passwordBox.MaxLength(maxLength);
 
@@ -144,12 +328,29 @@ int wxTextEntryDialog::ShowModal()
             if ( !m_hint.empty() )
                 textBox.PlaceholderText(wxWinUIToHString(m_hint));
 
-            const int maxLength = wxWinUIContentDialogMaxLength(m_maxLength);
+            const int maxLength = wxWinUITextEntryMaxLength(m_maxLength);
             if ( maxLength > 0 )
                 textBox.MaxLength(maxLength);
 
             content.Children().Append(textBox);
         }
+
+        auto peerState =
+            std::make_shared<wxWinUITextEntryPeerState>();
+        peerState->Attach(textBox, passwordBox, m_forceUpper);
+        m_peerState = peerState;
+        const wxWeakRef<wxTextEntryDialog> peerOwner(this);
+        wxScopeGuard releasePeerState = wxMakeGuard(
+            [&]()
+            {
+                peerState->Disconnect();
+                if ( wxTextEntryDialog * const live = peerOwner.get();
+                     live && live->m_peerState == peerState )
+                {
+                    live->m_peerState.reset();
+                }
+            });
+        wxUnusedVar(releasePeerState);
 
         TextBlock errorText;
         errorText.Visibility(Visibility::Collapsed);
@@ -161,26 +362,35 @@ int wxTextEntryDialog::ShowModal()
 
         bool accepted = false;
         wxString acceptedValue;
+        const wxWeakRef<wxTextEntryDialog> weakSelf(this);
 
         // Validate on OK; returning false keeps the dialog open with the error
         // message shown under the entry field.
         presenter.SetAcceptHandler(
-            [&](int id) -> bool
+            [weakSelf, peerState, errorText,
+             &accepted, &acceptedValue](int id) -> bool
             {
+                wxTextEntryDialog *live = weakSelf.get();
+                if ( !live )
+                    return false;
+
                 if ( id != wxID_OK )
                     return true;
 
-                wxString value = m_isPassword
-                    ? wxWinUIFromHString(passwordBox.Password())
-                    : wxWinUIFromHString(textBox.Text());
+                wxString value = peerState->GetValue();
 
-                if ( m_forceUpper )
+                if ( live->m_forceUpper )
                     value.MakeUpper();
 
 #if wxUSE_VALIDATORS
-                if ( m_validator )
+                if ( live->m_validator )
                 {
-                    const wxString error = m_validator->IsValid(value);
+                    const wxString error =
+                        live->m_validator->IsValid(value);
+                    live = weakSelf.get();
+                    if ( !live )
+                        return false;
+
                     if ( !error.empty() )
                     {
                         errorText.Text(wxWinUIToHString(error));
@@ -189,6 +399,9 @@ int wxTextEntryDialog::ShowModal()
                     }
                 }
 #endif
+
+                if ( !weakSelf )
+                    return false;
 
                 acceptedValue = value;
                 accepted = true;
@@ -203,9 +416,14 @@ int wxTextEntryDialog::ShowModal()
                                 wxGetStockLabel(wxID_CANCEL, wxSTOCK_FOR_BUTTON));
         }
 
-        if ( presenter.ShowModal() == wxID_OK && accepted )
+        const int result = presenter.ShowModal();
+        wxTextEntryDialog * const live = weakSelf.get();
+        if ( !live || live->IsBeingDeleted() )
+            return wxID_CANCEL;
+
+        if ( result == wxID_OK && accepted )
         {
-            m_value = acceptedValue;
+            live->m_value = acceptedValue;
             return wxID_OK;
         }
 
@@ -222,6 +440,10 @@ int wxTextEntryDialog::ShowModal()
 void wxTextEntryDialog::SetValue(const wxString& val)
 {
     m_value = val;
+    if ( m_forceUpper )
+        m_value.MakeUpper();
+    if ( m_peerState )
+        m_peerState->SetValue(m_value);
 }
 
 void wxTextEntryDialog::SetHint(const wxString& hint)
@@ -237,6 +459,19 @@ void wxTextEntryDialog::SetMaxLength(unsigned long len)
 void wxTextEntryDialog::ForceUpper()
 {
     m_forceUpper = true;
+    m_value.MakeUpper();
+    if ( m_peerState )
+        m_peerState->EnableForceUpper();
+}
+
+bool wxTextEntryDialog::WinUISetPeerValueForTesting(const wxString& value)
+{
+    return m_peerState && m_peerState->SetValue(value);
+}
+
+wxString wxTextEntryDialog::WinUIGetPeerValueForTesting() const
+{
+    return m_peerState ? m_peerState->GetValue() : wxString();
 }
 
 #if wxUSE_VALIDATORS

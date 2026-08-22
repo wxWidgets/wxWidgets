@@ -204,13 +204,13 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
                 win = winParent;
                 winParent = win->GetParent();
 
-                // Yes, this can happen, though in a totally pathological case.
-                // like when detaching a menubar from a frame with a child
-                // which has pushed itself as an event handler for the menubar.
-                // (under wxGTK)
-
-                wxASSERT_MSG( winParent,
-                              wxT("Setting last focus for a window that is not our child?") );
+                // An earlier wxEVT_CHILD_FOCUS handler is allowed to reparent
+                // the focused window before this container sees the skipped
+                // event. In that case the parent chain no longer reaches us:
+                // keep the previous last-focus identity instead of asserting
+                // and then walking through a null parent.
+                if ( !winParent )
+                    return;
             }
         }
 

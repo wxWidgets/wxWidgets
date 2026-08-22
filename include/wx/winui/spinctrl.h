@@ -53,16 +53,40 @@ public:
 
     wxString GetTextValue() const override;
     bool GetSnapToTicks() const override { return m_snapToTicks; }
-    void SetSnapToTicks(bool snap) override { m_snapToTicks = snap; }
+    void SetSnapToTicks(bool snap) override;
     int GetBase() const override { return m_numBase; }
     bool SetBase(int base) override;
     void SetSelection(long from, long to) override;
 
+    // Implementation-only deterministic seams. Peer mutations traverse the
+    // real NumberBox callbacks but don't require SendInput.
+    bool WinUISetPeerValueForTesting(double value);
+    bool WinUISetPeerTextForTesting(const wxString& text);
+    bool WinUIGetPeerStateForTesting(double *minimum,
+                                     double *maximum,
+                                     double *increment,
+                                     bool *wrap,
+                                     wxString *text,
+                                     double *value = nullptr) const;
+    bool WinUIGetPeerSelectionForTesting(long *from, long *to);
+    bool WinUIRetemplateForTesting();
+    bool WinUIEnterForTesting();
+    bool WinUIStepForTesting(int direction);
+
 protected:
     wxSize DoGetBestSize() const override;
 
-    void ApplyToPeer();
+    bool ApplyToPeer();
+    void ApplyProgrammaticChange(bool selectAll);
+    void ResolveTextPart(bool updateLayout = true);
+    void ApplySelectionToPeer();
+    void OnPeerTextChanged(const wxString& text);
     void OnPeerValueChanged(double newValue);
+    void OnPeerEnter();
+    bool ParseText(const wxString& text, int *value) const;
+    wxString FormatValue(int value) const;
+    int AdjustValue(int value, bool wrap = false) const;
+    int ValueAfterStep(int direction) const;
 
     std::unique_ptr<wxWinUINumberBoxImpl> m_winui;
     int m_value = 0;
@@ -71,9 +95,13 @@ protected:
     int m_increment = 1;
     int m_numBase = 10;
     bool m_snapToTicks = false;
-    bool m_updating = false;
+    wxString m_textValue;
+    long m_selectionFrom = 0;
+    long m_selectionTo = 0;
+    bool m_hasPendingSelection = false;
 
 private:
+    friend class wxWinUINumberBoxImpl;
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinCtrl);
 };
 
@@ -120,16 +148,39 @@ public:
 
     wxString GetTextValue() const override;
     bool GetSnapToTicks() const override { return m_snapToTicks; }
-    void SetSnapToTicks(bool snap) override { m_snapToTicks = snap; }
+    void SetSnapToTicks(bool snap) override;
     int GetBase() const override { return 10; }
     bool SetBase(int base) override { return base == 10; }
     void SetSelection(long from, long to) override;
 
+    bool WinUISetPeerValueForTesting(double value);
+    bool WinUISetPeerTextForTesting(const wxString& text);
+    bool WinUIGetPeerStateForTesting(double *minimum,
+                                     double *maximum,
+                                     double *increment,
+                                     bool *wrap,
+                                     wxString *text,
+                                     double *value = nullptr) const;
+    bool WinUIGetPeerSelectionForTesting(long *from, long *to);
+    bool WinUIRetemplateForTesting();
+    bool WinUIEnterForTesting();
+    bool WinUIStepForTesting(int direction);
+
 protected:
     wxSize DoGetBestSize() const override;
 
-    void ApplyToPeer();
+    bool ApplyToPeer();
+    void ApplyProgrammaticChange(bool selectAll);
+    void ResolveTextPart(bool updateLayout = true);
+    void ApplySelectionToPeer();
+    void OnPeerTextChanged(const wxString& text);
     void OnPeerValueChanged(double newValue);
+    void OnPeerEnter();
+    bool ParseText(const wxString& text, double *value) const;
+    wxString FormatValue(double value) const;
+    double AdjustValue(double value, bool wrap = false) const;
+    double CanonicalizeValue(double value, bool wrap = false) const;
+    double ValueAfterStep(int direction) const;
 
     std::unique_ptr<wxWinUINumberBoxImpl> m_winui;
     double m_value = 0;
@@ -138,9 +189,13 @@ protected:
     double m_increment = 1;
     unsigned m_digits = 0;
     bool m_snapToTicks = false;
-    bool m_updating = false;
+    wxString m_textValue;
+    long m_selectionFrom = 0;
+    long m_selectionTo = 0;
+    bool m_hasPendingSelection = false;
 
 private:
+    friend class wxWinUINumberBoxImpl;
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinCtrlDouble);
 };
 

@@ -14,6 +14,7 @@
 
 #include "wx/richmsgdlg.h"
 #include "wx/modalhook.h"
+#include "wx/weakref.h"
 
 #ifndef WX_PRECOMP
     #include "wx/msw/private.h"
@@ -28,12 +29,15 @@
 
 int wxRichMessageDialog::ShowModal()
 {
-    WX_HOOK_MODAL_DIALOG();
-
     using namespace wxMSWMessageDialog;
+
+    // Install exactly one hook for the public operation, including when a
+    // failed native attempt continues through the generic fallback.
+    WX_HOOK_MODAL_DIALOG();
 
     if ( HasNativeTaskDialog() )
     {
+        const wxWeakRef<wxWindow> requestedParent(GetParent());
         wxWindowDisabler disableOthers(this, GetParentForModalDialog());
 
         // create a task dialog
@@ -75,37 +79,41 @@ int wxRichMessageDialog::ShowModal()
             }
         }
 
-        TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
-        if ( !taskDialogIndirect )
-            return wxID_CANCEL;
-
         // create the task dialog, process the answer and return it.
-        BOOL checkBoxChecked;
-        int msAns;
-        HRESULT hr = taskDialogIndirect( &tdc, &msAns, nullptr, &checkBoxChecked );
+        BOOL checkBoxChecked = FALSE;
+        int msAns = IDCANCEL;
+        const HRESULT hr = InvokeTaskDialogIndirect(
+            &tdc, &msAns, nullptr, &checkBoxChecked);
         if ( FAILED(hr) )
         {
             wxLogApiError( "TaskDialogIndirect", hr );
-            return wxID_CANCEL;
+            if ( m_parent && !requestedParent.get() )
+                m_parent = nullptr;
         }
-        m_checkBoxValue = checkBoxChecked != FALSE;
-
-        // In case only an "OK" button was specified we actually created a
-        // "Cancel" button (see comment in MSWCommonTaskDialogInit). This
-        // results in msAns being IDCANCEL while we want IDOK (just like
-        // how the native MessageBox function does with only an "OK" button).
-        if ( (msAns == IDCANCEL)
-            && !(GetMessageDialogStyle() & (wxYES_NO|wxCANCEL)) )
+        else
         {
-            msAns = IDOK;
-        }
+            m_checkBoxValue = checkBoxChecked != FALSE;
 
-        return MSWTranslateReturnCode( msAns );
+            // In case only an "OK" button was specified we actually created
+            // a "Cancel" button (see MSWCommonTaskDialogInit). Translate its
+            // Escape/close result back to the public OK-only contract.
+            if ( (msAns == IDCANCEL) &&
+                    !(GetMessageDialogStyle() & (wxYES_NO | wxCANCEL)) )
+            {
+                msAns = IDOK;
+            }
+
+            if ( m_parent && !requestedParent.get() )
+                m_parent = nullptr;
+
+            return MSWTranslateReturnCode(msAns);
+        }
     }
 
-    // use the generic version when task dialog is't available at either
-    // compile or run-time.
-    return wxGenericRichMessageDialog::ShowModal();
+    // Use the generic version when the task dialog isn't available or when
+    // its invocation failed. A native setup failure must not silently change
+    // the public operation into Cancel.
+    return DoShowModal();
 }
 
 #endif // wxUSE_RICHMSGDLG

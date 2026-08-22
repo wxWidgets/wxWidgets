@@ -103,8 +103,10 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl file types
 // ----------------------------------------------------------------------------
 
-// wxOSX and wxMSW support RTF in wxTextCtrl.
-#if defined(__WXOSX__) || (defined(__WXMSW__) && !defined(__WXWINUI__) && wxUSE_RICHEDIT)
+// WinUI uses RichEditBox/TOM and supports RTF independently of the legacy
+// wxMSW RichEdit switch.
+#if defined(__WXOSX__) || defined(__WXWINUI__) || \
+        (defined(__WXMSW__) && wxUSE_RICHEDIT)
     #define wxHAS_TEXTCTRL_RTF
 #endif
 

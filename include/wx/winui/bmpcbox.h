@@ -12,11 +12,14 @@
 
 #include "wx/combobox.h"
 
+class wxDPIChangedEvent;
+
 class WXDLLIMPEXP_CORE wxBitmapComboBox : public wxComboBox,
                                           public wxBitmapComboBoxBase
 {
 public:
     wxBitmapComboBox() = default;
+    ~wxBitmapComboBox() override;
 
     wxBitmapComboBox(wxWindow *parent,
                      wxWindowID id = wxID_ANY,
@@ -81,12 +84,20 @@ protected:
     wxItemContainer* GetItemContainer() override { return this; }
     wxWindow* GetControl() override { return this; }
 
-    wxBitmap WinUIGetItemBitmap(unsigned int n) const override;
+    wxBitmap WinUIGetItemBitmap(unsigned int n,
+                                double requestedScale = 0.0) const override;
+    wxSize DoGetBestSize() const override;
 
-    void DoClear() override;
-    void DoDeleteOneItem(unsigned int n) override;
+    void OnDPIChanged(wxDPIChangedEvent& event);
+    void WinUIOnItemInserted(unsigned int n) override;
+    void WinUIOnItemErased(unsigned int n) override;
+    void WinUIOnItemMoved(unsigned int oldIndex,
+                          unsigned int newIndex) override;
+    void WinUIOnItemsCleared() override;
 
 private:
+    std::shared_ptr<wxBitmapBundle> m_pendingBitmap;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapComboBox);
 };
 

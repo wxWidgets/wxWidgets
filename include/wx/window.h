@@ -1857,6 +1857,11 @@ protected:
     // Layout() window automatically when its size changes?
     bool                 m_autoLayout:1;
 
+    // Let the private lifetime predicate distinguish this flag from the
+    // ancestor-propagating public IsBeingDeleted() result.
+    friend bool wxWindowItselfIsUnavailableForCallbacks(
+        const wxWindow* window);
+
     // window state
     bool                 m_isShown:1;
     bool                 m_isEnabled:1;

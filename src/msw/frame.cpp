@@ -45,6 +45,9 @@
 
 #ifdef __WXWINUI__
     #include "wx/winui/winui.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+
+    #include <map>
 #endif
 
 #ifdef __WXUNIVERSAL__
@@ -54,6 +57,9 @@
 
 #if wxUSE_TASKBARBUTTON
     #include "wx/msw/taskbarbutton.h"
+    #include "wx/msw/private/taskbarbutton.h"
+    #include "wx/private/windowlifetime.h"
+    #include "wx/weakref.h"
     #include "wx/dynlib.h"
 
     WXUINT wxMsgTaskbarButtonCreated = 0;
@@ -69,6 +75,92 @@
 #if wxUSE_MENUS || wxUSE_MENUS_NATIVE
     extern wxMenu *wxCurrentPopupMenu;
 #endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
+
+#if wxUSE_MENUS && defined(__WXWINUI__)
+
+namespace
+{
+
+enum class wxWinUIFullScreenMenuPhase
+{
+    Normal,
+    Entering,
+    Active,
+    Exiting
+};
+
+struct wxWinUIFullScreenMenuState
+{
+    wxWinUIFullScreenMenuPhase phase =
+        wxWinUIFullScreenMenuPhase::Normal;
+    bool suppress = false;
+    unsigned long long restoreGeneration = 0;
+    unsigned long long transactionGeneration = 0;
+};
+
+using wxWinUIFullScreenMenuStates =
+    std::map<wxFrame *, wxWinUIFullScreenMenuState>;
+
+wxWinUIFullScreenMenuStates gs_winuiFullScreenMenuStates;
+
+wxWinUIFullScreenMenuState *wxWinUIFindFullScreenMenuState(wxFrame *frame)
+{
+    const auto found = gs_winuiFullScreenMenuStates.find(frame);
+    return found == gs_winuiFullScreenMenuStates.end()
+        ? nullptr
+        : &found->second;
+}
+
+wxWinUIFullScreenMenuState&
+wxWinUIEnsureFullScreenMenuState(wxFrame *frame)
+{
+    return gs_winuiFullScreenMenuStates[frame];
+}
+
+void wxWinUIRetireFullScreenMenuState(wxFrame *frame)
+{
+    gs_winuiFullScreenMenuStates.erase(frame);
+}
+
+void wxWinUIBeginMenuBarReplacement(wxFrame *frame)
+{
+    wxWinUIFullScreenMenuState * const state =
+        wxWinUIFindFullScreenMenuState(frame);
+    if ( !state )
+        return;
+
+    // The previous generation can no longer be restored. A replacement
+    // created while suppression is active earns its own restore token only
+    // if it was physically visible before we hide it.
+    state->restoreGeneration = 0;
+    if ( ++state->transactionGeneration == 0 )
+        ++state->transactionGeneration;
+}
+
+bool wxWinUIShouldSuppressMenuBar(wxFrame *frame)
+{
+    const wxWinUIFullScreenMenuState * const state =
+        wxWinUIFindFullScreenMenuState(frame);
+    return state && state->suppress;
+}
+
+void wxWinUINoteSuppressedMenuBar(wxFrame *frame,
+                                  unsigned long long generation,
+                                  bool restore)
+{
+    wxWinUIFullScreenMenuState * const state =
+        wxWinUIFindFullScreenMenuState(frame);
+    if ( !state || !state->suppress )
+        return;
+
+    state->restoreGeneration = restore ? generation : 0;
+    if ( ++state->transactionGeneration == 0 )
+        ++state->transactionGeneration;
+}
+
+} // anonymous namespace
+
+#endif // wxUSE_MENUS && __WXWINUI__
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -113,6 +205,8 @@ void wxFrame::Init()
 
 #if wxUSE_TASKBARBUTTON
     m_taskBarButton = nullptr;
+    m_taskBarButtonCreationInProgress = false;
+    m_taskBarButtonRevision = 0;
 #endif
 }
 
@@ -157,8 +251,22 @@ bool wxFrame::Create(wxWindow *parent,
 
 wxFrame::~wxFrame()
 {
+#if wxUSE_MENUS && defined(__WXWINUI__)
+    // Retire the raw map key before any member teardown can cross a menu
+    // visibility callback.
+    wxWinUIRetireFullScreenMenuState(this);
+#endif
+
 #if wxUSE_TASKBARBUTTON
-    delete m_taskBarButton;
+    // Unpublish the owner before releasing COM: Release() is an arbitrary
+    // callback boundary and a nested MSWGetTaskBarButton() must observe that
+    // this frame is already tearing down, never the object being destroyed.
+    wxTaskBarButton* const taskBarButton = m_taskBarButton;
+    m_taskBarButton = nullptr;
+    m_taskBarButtonCreationInProgress = true;
+    if ( ++m_taskBarButtonRevision == 0 )
+        ++m_taskBarButtonRevision;
+    delete taskBarButton;
 #endif
 }
 
@@ -419,9 +527,78 @@ void wxFrame::InternalSetMenuBar()
 {
 #ifdef __WXWINUI__
     // Replace the native menu bar by a WinUI MenuBar hosted at the top of the
-    // frame; the client area is reduced for it in GetClientAreaOrigin().
-    m_winuiMenuBarWin = wxWinUIAttachFrameMenuBar(this, GetMenuBar(),
-                                                  m_winuiMenuBarWin);
+    // frame. CLOSE handlers are allowed to call SetMenuBar() recursively, so
+    // detach ownership before sending any CLOSE and publish only if this is
+    // still the newest replacement generation afterwards.
+    if ( ++m_winuiMenuBarGeneration == 0 )
+        ++m_winuiMenuBarGeneration;
+    const unsigned long long generation = m_winuiMenuBarGeneration;
+    wxWinUIBeginMenuBarReplacement(this);
+    wxMenuBar * const requestedMenuBar = GetMenuBar();
+    wxWindow * const previous = m_winuiMenuBarWin;
+    m_winuiMenuBarWin = nullptr;
+
+    const wxWeakRef<wxWindow> stillAlive(this);
+    wxWinUIAttachFrameMenuBar(this, nullptr, previous);
+    if ( !stillAlive || IsBeingDeleted() ||
+            generation != m_winuiMenuBarGeneration ||
+            GetMenuBar() != requestedMenuBar )
+    {
+        return;
+    }
+
+    wxWindow * const replacement =
+        wxWinUIAttachFrameMenuBar(this, requestedMenuBar, nullptr);
+    const wxWeakRef<wxWindow> replacementLifetime(replacement);
+    if ( !stillAlive )
+    {
+        wxWinUIAttachFrameMenuBar(nullptr, nullptr, replacement);
+        return;
+    }
+
+    if ( IsBeingDeleted() ||
+            generation != m_winuiMenuBarGeneration ||
+            GetMenuBar() != requestedMenuBar )
+    {
+        // A reentrant replacement won. Retire this unpublished candidate and
+        // leave the newer generation stored by the inner call untouched.
+        wxWinUIAttachFrameMenuBar(nullptr, nullptr, replacement);
+        return;
+    }
+
+    // Entering/active/exiting full screen all publish suppression before any
+    // Show() callback. A re-entrant replacement is therefore hidden under
+    // its own generation and is the only generation eligible for restoration.
+    if ( replacement && wxWinUIShouldSuppressMenuBar(this) )
+    {
+        const bool restore = replacement->IsShown();
+        wxWinUINoteSuppressedMenuBar(this, generation, restore);
+        for ( unsigned attempt = 0;
+              attempt < 32 && replacement->IsShown();
+              ++attempt )
+        {
+            replacement->Show(false);
+            if ( !stillAlive || !replacementLifetime || IsBeingDeleted() ||
+                 wxWinUITLWHostIsDestroyScheduled(this) ||
+                 generation != m_winuiMenuBarGeneration ||
+                 GetMenuBar() != requestedMenuBar )
+            {
+                if ( wxWindow * const survivor = replacementLifetime.get() )
+                    wxWinUIAttachFrameMenuBar(nullptr, nullptr, survivor);
+                return;
+            }
+        }
+
+        if ( replacement->IsShown() )
+        {
+            wxLogWarning("wxWinUI: a replacement MenuBar refused full-screen "
+                         "suppression; retiring this generation");
+            wxWinUIAttachFrameMenuBar(nullptr, nullptr, replacement);
+            return;
+        }
+    }
+
+    m_winuiMenuBarWin = replacement;
 #else
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
     {
@@ -488,10 +665,77 @@ wxMenu* wxFrame::MSWFindMenuFromHMENU(WXHMENU hMenu)
 #if wxUSE_TASKBARBUTTON
 wxTaskBarButton* wxFrame::MSWGetTaskBarButton()
 {
-    if ( !m_taskBarButton )
-        m_taskBarButton = wxTaskBarButton::New(this);
+    if ( wxWindowIsUnavailableForCallbacks(this) )
+        return nullptr;
 
-    return m_taskBarButton;
+    if ( m_taskBarButton )
+    {
+        wxTaskBarButton* const taskBarButton = m_taskBarButton;
+        wxTaskBarButtonImpl* const impl =
+            static_cast<wxTaskBarButtonImpl*>(taskBarButton);
+        if ( impl->IsAvailable() )
+            return taskBarButton;
+
+        // The public contract keeps this pointer stable until frame teardown.
+        // Rebind the sidecar to the current native life instead of replacing
+        // the wrapper and all of its desired progress/thumb/overlay state.
+        const wxWeakRef<wxFrame> frameLifetime(this);
+        impl->Rebind();
+        wxFrame* const liveFrame = frameLifetime.get();
+        if ( liveFrame != this ||
+             wxWindowIsUnavailableForCallbacks(liveFrame) )
+        {
+            return nullptr;
+        }
+
+        return liveFrame->m_taskBarButton;
+    }
+
+    // Construction crosses both the injectable factory and Initialize(). A
+    // nested call cannot own a competing candidate; returning nullptr here is
+    // transient and leaves the outer transaction solely responsible for
+    // publishing (or destroying) its candidate.
+    if ( m_taskBarButtonCreationInProgress )
+        return nullptr;
+
+    const wxWeakRef<wxFrame> frameLifetime(this);
+    m_taskBarButtonCreationInProgress = true;
+    if ( ++m_taskBarButtonRevision == 0 )
+        ++m_taskBarButtonRevision;
+    const unsigned long long revision = m_taskBarButtonRevision;
+
+    wxTaskBarButton* const candidate = wxTaskBarButton::New(this);
+    wxFrame* liveFrame = frameLifetime.get();
+    if ( liveFrame != this )
+    {
+        delete candidate;
+        return nullptr;
+    }
+
+    if ( liveFrame->m_taskBarButtonRevision != revision ||
+         !liveFrame->m_taskBarButtonCreationInProgress ||
+         liveFrame->m_taskBarButton ||
+         wxWindowIsUnavailableForCallbacks(liveFrame) ||
+         !candidate )
+    {
+        // Keep the guard published while destroying a rejected candidate: its
+        // backend Release() may itself call this method.
+        delete candidate;
+        liveFrame = frameLifetime.get();
+        if ( liveFrame == this &&
+             liveFrame->m_taskBarButtonRevision == revision )
+        {
+            liveFrame->m_taskBarButtonCreationInProgress = false;
+        }
+        return liveFrame == this ? liveFrame->m_taskBarButton : nullptr;
+    }
+
+    liveFrame->m_taskBarButton = candidate;
+    liveFrame->m_taskBarButtonCreationInProgress = false;
+    if ( ++liveFrame->m_taskBarButtonRevision == 0 )
+        ++liveFrame->m_taskBarButtonRevision;
+
+    return candidate;
 }
 #endif // wxUSE_TASKBARBUTTON
 
@@ -511,8 +755,180 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 // Pass true to show full screen, false to restore.
 bool wxFrame::ShowFullScreen(bool show, long style)
 {
+#if wxUSE_MENUS && defined(__WXWINUI__)
+    if ( const wxWinUIFullScreenMenuState * const current =
+             wxWinUIFindFullScreenMenuState(this) )
+    {
+        if ( current->phase == wxWinUIFullScreenMenuPhase::Entering ||
+             current->phase == wxWinUIFullScreenMenuPhase::Exiting )
+        {
+            return false;
+        }
+    }
+#endif
+
     if ( IsFullScreen() == show )
         return false;
+
+#if wxUSE_MENUS && defined(__WXWINUI__)
+    // Publish the transition before *any* toolbar/status/menu Show() below:
+    // all of them are application-visible and may replace/remove the MenuBar
+    // or recursively request another full-screen transition.
+    const wxWeakRef<wxWindow> fullScreenLifetime(this);
+    {
+        wxWinUIFullScreenMenuState& state =
+            wxWinUIEnsureFullScreenMenuState(this);
+        state.phase = show
+            ? wxWinUIFullScreenMenuPhase::Entering
+            : wxWinUIFullScreenMenuPhase::Exiting;
+        state.suppress = show
+            ? (style & wxFULLSCREEN_NOMENUBAR) != 0
+            : (m_fsStyle & wxFULLSCREEN_NOMENUBAR) != 0;
+        if ( show || !state.suppress )
+            state.restoreGeneration = 0;
+        if ( ++state.transactionGeneration == 0 )
+            ++state.transactionGeneration;
+    }
+
+    const auto frameIsCurrent = [this, &fullScreenLifetime]()
+    {
+        return fullScreenLifetime && !IsBeingDeleted() &&
+               !wxWinUITLWHostIsDestroyScheduled(this);
+    };
+
+    const auto hideCurrentMenuGeneration =
+        [this, &frameIsCurrent]()
+        {
+            for ( unsigned attempt = 0; attempt < 32; ++attempt )
+            {
+                if ( !frameIsCurrent() )
+                    return false;
+
+                wxWinUIFullScreenMenuState *state =
+                    wxWinUIFindFullScreenMenuState(this);
+                if ( !state || !state->suppress )
+                    return true;
+
+                const unsigned long long generation =
+                    m_winuiMenuBarGeneration;
+                wxWindow * const menuBarWindow = m_winuiMenuBarWin;
+                if ( !menuBarWindow )
+                {
+                    state->restoreGeneration = 0;
+                    return true;
+                }
+
+                const wxWeakRef<wxWindow> menuLifetime(menuBarWindow);
+                if ( !menuBarWindow->IsShown() )
+                    return true;
+
+                // Eligibility is committed before Show(false): a SHOW handler
+                // can replace or remove this exact generation synchronously.
+                wxWinUINoteSuppressedMenuBar(this, generation, true);
+                menuBarWindow->Show(false);
+                if ( !frameIsCurrent() )
+                    return false;
+
+                state = wxWinUIFindFullScreenMenuState(this);
+                if ( !state || !state->suppress )
+                    return false;
+                if ( generation != m_winuiMenuBarGeneration ||
+                     m_winuiMenuBarWin != menuBarWindow || !menuLifetime )
+                {
+                    continue;
+                }
+                if ( !menuBarWindow->IsShown() )
+                    return true;
+            }
+
+            return false;
+        };
+
+    const auto restoreEligibleMenuGeneration =
+        [this, &frameIsCurrent]()
+        {
+            for ( unsigned attempt = 0; attempt < 32; ++attempt )
+            {
+                if ( !frameIsCurrent() )
+                    return false;
+
+                wxWinUIFullScreenMenuState *state =
+                    wxWinUIFindFullScreenMenuState(this);
+                if ( !state || !state->suppress )
+                    return true;
+
+                const unsigned long long generation =
+                    m_winuiMenuBarGeneration;
+                if ( !state->restoreGeneration ||
+                     state->restoreGeneration != generation )
+                {
+                    // A removed/replaced generation cannot donate restoration
+                    // eligibility to an unrelated current bar.
+                    state->restoreGeneration = 0;
+                    return true;
+                }
+
+                wxWindow * const menuBarWindow = m_winuiMenuBarWin;
+                if ( !menuBarWindow )
+                {
+                    state->restoreGeneration = 0;
+                    return true;
+                }
+
+                const wxWeakRef<wxWindow> menuLifetime(menuBarWindow);
+                if ( menuBarWindow->IsShown() )
+                {
+                    state->restoreGeneration = 0;
+                    return true;
+                }
+
+                // Keep suppression published across Show(true). If its SHOW
+                // handler installs another visible generation, InternalSet-
+                // MenuBar hides and tokens that generation; this loop then
+                // converges on the newest winner before leaving Exiting.
+                menuBarWindow->Show(true);
+                if ( !frameIsCurrent() )
+                    return false;
+
+                state = wxWinUIFindFullScreenMenuState(this);
+                if ( !state || !state->suppress )
+                    return false;
+                if ( generation != m_winuiMenuBarGeneration ||
+                     m_winuiMenuBarWin != menuBarWindow || !menuLifetime )
+                {
+                    continue;
+                }
+                if ( menuBarWindow->IsShown() )
+                {
+                    state->restoreGeneration = 0;
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+    const auto finishMenuTransition =
+        [this, &frameIsCurrent](wxWinUIFullScreenMenuPhase phase)
+        {
+            if ( !frameIsCurrent() )
+                return;
+
+            wxWinUIFullScreenMenuState * const state =
+                wxWinUIFindFullScreenMenuState(this);
+            if ( !state )
+                return;
+
+            state->phase = phase;
+            if ( phase == wxWinUIFullScreenMenuPhase::Normal )
+            {
+                state->suppress = false;
+                state->restoreGeneration = 0;
+            }
+            if ( ++state->transactionGeneration == 0 )
+                ++state->transactionGeneration;
+        };
+#endif // wxUSE_MENUS && __WXWINUI__
 
     if (show)
     {
@@ -534,8 +950,28 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         }
 #endif // wxUSE_TOOLBAR
 
+#if wxUSE_MENUS && defined(__WXWINUI__)
+        if ( !frameIsCurrent() )
+            return false;
+#endif
+
         if (style & wxFULLSCREEN_NOMENUBAR)
+        {
+#if wxUSE_MENUS && defined(__WXWINUI__)
+            if ( !hideCurrentMenuGeneration() )
+            {
+                if ( frameIsCurrent() )
+                {
+                    restoreEligibleMenuGeneration();
+                    finishMenuTransition(
+                        wxWinUIFullScreenMenuPhase::Normal);
+                }
+                return false;
+            }
+#else
             SetMenu((HWND)GetHWND(), (HMENU) nullptr);
+#endif
+        }
 
 #if wxUSE_STATUSBAR
         wxStatusBar *theStatusBar = GetStatusBar();
@@ -549,6 +985,11 @@ bool wxFrame::ShowFullScreen(bool show, long style)
                 style &= ~wxFULLSCREEN_NOSTATUSBAR;
         }
 #endif // wxUSE_STATUSBAR
+
+#if wxUSE_MENUS && defined(__WXWINUI__)
+        if ( !frameIsCurrent() )
+            return false;
+#endif
     }
     else // restore to normal
     {
@@ -562,12 +1003,24 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         }
 #endif // wxUSE_TOOLBAR
 
+#if wxUSE_MENUS && defined(__WXWINUI__)
+        if ( !frameIsCurrent() )
+            return false;
+#endif
+
 #if wxUSE_MENUS
         if (m_fsStyle & wxFULLSCREEN_NOMENUBAR)
         {
+#ifdef __WXWINUI__
+            // Restoration is intentionally deferred until after the base
+            // transition has published normal mode. Suppression remains
+            // active meanwhile, so replacements from toolbar/status/base
+            // callbacks stay hidden and generation-tokened.
+#else
             const WXHMENU hmenu = MSWGetActiveMenu();
             if ( hmenu )
                 ::SetMenu(GetHwnd(), (HMENU)hmenu);
+#endif
         }
 #endif // wxUSE_MENUS
 
@@ -580,9 +1033,62 @@ bool wxFrame::ShowFullScreen(bool show, long style)
             PositionStatusBar();
         }
 #endif // wxUSE_STATUSBAR
+
+#if wxUSE_MENUS && defined(__WXWINUI__)
+        if ( !frameIsCurrent() )
+            return false;
+#endif
     }
 
-    return wxFrameBase::ShowFullScreen(show, style);
+    const bool changed = wxFrameBase::ShowFullScreen(show, style);
+
+#if wxUSE_MENUS && defined(__WXWINUI__)
+    if ( !fullScreenLifetime )
+        return changed;
+
+    if ( show )
+    {
+        if ( !changed )
+        {
+            if ( frameIsCurrent() )
+            {
+                restoreEligibleMenuGeneration();
+                finishMenuTransition(wxWinUIFullScreenMenuPhase::Normal);
+            }
+            return false;
+        }
+
+        finishMenuTransition(wxWinUIFullScreenMenuPhase::Active);
+        if ( wxWinUIShouldSuppressMenuBar(this) &&
+             !hideCurrentMenuGeneration() && frameIsCurrent() )
+        {
+            wxLogWarning("wxWinUI: MenuBar generations did not converge "
+                         "while entering full screen; leaving the newest "
+                         "generation hidden");
+        }
+    }
+    else
+    {
+        if ( !changed )
+        {
+            finishMenuTransition(wxWinUIFullScreenMenuPhase::Active);
+            if ( wxWinUIShouldSuppressMenuBar(this) )
+                hideCurrentMenuGeneration();
+            return false;
+        }
+
+        if ( wxWinUIShouldSuppressMenuBar(this) &&
+             !restoreEligibleMenuGeneration() && frameIsCurrent() )
+        {
+            wxLogWarning("wxWinUI: MenuBar generations did not converge "
+                         "while leaving full screen; no unrelated "
+                         "generation was restored");
+        }
+        finishMenuTransition(wxWinUIFullScreenMenuPhase::Normal);
+    }
+#endif // wxUSE_MENUS && __WXWINUI__
+
+    return changed;
 }
 
 // ----------------------------------------------------------------------------
@@ -859,10 +1365,16 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     if ( cmd == wxTHBN_CLICKED && m_taskBarButton )
     {
         wxTaskBarButtonImpl * const
-            tbButton = reinterpret_cast<wxTaskBarButtonImpl*>(m_taskBarButton);
-        // we use the index as id when adding thumbnail toolbar button.
+            tbButton = static_cast<wxTaskBarButtonImpl*>(m_taskBarButton);
+        // The low word is one of the seven immutable visual slot tokens.
+        // Explorer provides no generation bits, so a delayed command after
+        // slot reuse is indistinguishable from a click on its new occupant.
+        // Malformed, empty and out-of-range slots still resolve to nullptr.
         wxThumbBarButton * const
             thumbBarButton = tbButton->GetThumbBarButtonByIndex(id);
+        if ( !thumbBarButton )
+            return false;
+
         wxCommandEvent event(wxEVT_BUTTON, thumbBarButton->GetID());
         event.SetEventObject(thumbBarButton);
         return ProcessEvent(event);
@@ -1007,10 +1519,72 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 #if wxUSE_TASKBARBUTTON
     if ( message == wxMsgTaskbarButtonCreated )
     {
+        // Every native call below is a destruction/reentrance boundary. Return
+        // directly from this branch so no member or base window proc is used
+        // after a callback has destroyed the frame.
+        const wxWeakRef<wxFrame> frameLifetime(this);
         if ( m_taskBarButton )
-            m_taskBarButton->Realize();
+        {
+            const bool needsExplorerReplay =
+                static_cast<wxTaskBarButtonImpl*>(
+                    m_taskBarButton)->IsAvailable();
+            wxTaskBarButton* const taskbar = MSWGetTaskBarButton();
+            wxFrame* liveFrame = frameLifetime.get();
+            if ( liveFrame != this ||
+                 wxWindowIsUnavailableForCallbacks(liveFrame) ||
+                 !taskbar || liveFrame->m_taskBarButton != taskbar )
+            {
+                return 0;
+            }
 
-        processed = true;
+            wxTaskBarButtonImpl* const impl =
+                static_cast<wxTaskBarButtonImpl*>(taskbar);
+            WXHWND replayHwnd = nullptr;
+            unsigned long long replayGeneration = 0;
+            if ( !impl->GetExactIdentity(
+                     &replayHwnd, &replayGeneration) )
+            {
+                return 0;
+            }
+
+            // MSWGetTaskBarButton() already performed the complete replay when
+            // it had to rebind an unavailable generation. Only an already
+            // exact controller still needs the Explorer-restart replay here.
+            if ( needsExplorerReplay )
+            {
+                taskbar->Realize();
+                liveFrame = frameLifetime.get();
+                if ( liveFrame != this ||
+                     wxWindowIsUnavailableForCallbacks(liveFrame) ||
+                     liveFrame->m_taskBarButton != taskbar )
+                {
+                    return 0;
+                }
+            }
+
+            WXHWND afterHwnd = nullptr;
+            unsigned long long afterGeneration = 0;
+            if ( !impl->GetExactIdentity(&afterHwnd, &afterGeneration) ||
+                 afterHwnd != replayHwnd ||
+                 afterGeneration != replayGeneration ||
+                 liveFrame->GetHWND() != afterHwnd )
+            {
+                // A stale TaskbarButtonCreated notification must not replay
+                // AppProgress into a newer HWND generation.
+                return 0;
+            }
+        }
+
+        // wxAppProgressIndicator owns independent weak controllers instead of
+        // borrowing m_taskBarButton. Replay them for this exact native life as
+        // part of the same Explorer-restart notification.
+        wxFrame* const liveFrame = frameLifetime.get();
+        if ( liveFrame == this &&
+             !wxWindowIsUnavailableForCallbacks(liveFrame) )
+        {
+            wxMSWAppProgressNotifyTaskbarCreated(liveFrame);
+        }
+        return 0;
     }
 #endif
 

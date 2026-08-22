@@ -11,6 +11,7 @@
 #if wxUSE_STC
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/math.h"
     #include "wx/menu.h"
     #include "wx/dcmemory.h"
@@ -32,6 +33,13 @@
 #include "wx/renderer.h"
 #include "wx/dcclient.h"
 #include "wx/wupdlock.h"
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/winui/private/tlwhostmsw.h"
+    #if wxUSE_POPUPWIN
+        #include "wx/winui/private/transient.h"
+    #endif
+#endif
 
 #ifdef wxHAS_RAW_BITMAP
 #include "wx/rawbmp.h"
@@ -1967,10 +1975,27 @@ Window::~Window() {
 
 void Window::Destroy() {
     if (wid) {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // Commit the platform Window to its terminal state before calling
+        // Show(false): the common popup retirement path may synchronously run
+        // nested transient callbacks which cancel this same Scintilla surface
+        // again, reparent its editor or destroy it.
+        wxWindow* const window = GETWIN(wid);
+        const wxWeakRef<wxWindow> windowLifetime(window);
+        wid = nullptr;
+
+        window->Show(false);
+        if ( wxWindow* const live = windowLifetime.get() )
+        {
+            if ( !wxWinUITLWHostIsDestroyScheduled(live) )
+                live->Destroy();
+        }
+#else
         Show(false);
         GETWIN(wid)->Destroy();
+        wid = nullptr;
+#endif
     }
-    wid = nullptr;
 }
 
 
@@ -2208,6 +2233,39 @@ PRectangle Window::GetMonitorRect(Point pt) {
         // Do not activate the window when it is shown.
         bool wxSTCPopupBase::Show(bool show)
         {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_POPUPWIN
+            if ( show )
+            {
+                // wxPopupWindow::Show() owns the WinUI transient registration,
+                // native-owner publication and retirement transaction. Keep
+                // the STC popup non-activating without bypassing that common
+                // path as the historical implementation below does.
+                const HWND hwnd = reinterpret_cast<HWND>(GetHandle());
+                if ( hwnd )
+                {
+                    ::SetWindowLongPtr(
+                        hwnd,
+                        GWL_EXSTYLE,
+                        ::GetWindowLongPtr(hwnd, GWL_EXSTYLE) |
+                            WS_EX_NOACTIVATE);
+                }
+            }
+
+            const bool changingVisibility = wxPopupWindow::Show(show);
+            if ( changingVisibility && show )
+            {
+                const HWND hwnd = reinterpret_cast<HWND>(GetHandle());
+                if ( hwnd )
+                {
+                    ::SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0,
+                                   SWP_NOMOVE | SWP_NOSIZE |
+                                       SWP_NOACTIVATE |
+                                       SWP_NOOWNERZORDER);
+                }
+            }
+
+            return changingVisibility;
+#else
             if ( show )
             {
                 // Check if the window is changing from hidden to shown.
@@ -2229,6 +2287,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
             }
             else
                 return wxPopupWindow::Show(false);
+#endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_POPUPWIN
         }
 
         // Do not activate in response to mouse clicks on this window.
@@ -2321,34 +2380,112 @@ wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent)
     : wxSTCPopupBase(parent)
     , m_relPos(wxDefaultPosition)
     , m_absPos(wxDefaultPosition)
+    , m_tlw()
 {
     #if !wxSTC_POPUP_IS_CUSTOM
         Bind(wxEVT_SET_FOCUS, &wxSTCPopupWindow::OnFocus, this);
     #endif
 
-    m_tlw = wxDynamicCast(wxGetTopLevelParent(parent), wxTopLevelWindow);
-    if ( m_tlw )
+    RebindTopLevelWindow();
+}
+
+void wxSTCPopupWindow::RebindTopLevelWindow()
+{
+    wxWindow* const tlw =
+        wxDynamicCast(wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
+    wxWindow* const boundTLW = m_tlw.get();
+    if ( tlw == boundTLW )
+        return;
+
+    if ( boundTLW )
     {
-        m_tlw->Bind(wxEVT_MOVE, &wxSTCPopupWindow::OnParentMove, this);
+        boundTLW->Unbind(wxEVT_MOVE,
+                         &wxSTCPopupWindow::OnParentMove, this);
     #if defined(__WXOSX_COCOA__) || (defined(__WXGTK__)&&!wxSTC_POPUP_IS_FRAME)
-        m_tlw->Bind(wxEVT_ICONIZE, &wxSTCPopupWindow::OnIconize, this);
+        boundTLW->Unbind(wxEVT_ICONIZE,
+                         &wxSTCPopupWindow::OnIconize, this);
+    #endif
+    }
+
+    m_tlw = tlw;
+    if ( tlw )
+    {
+        tlw->Bind(wxEVT_MOVE, &wxSTCPopupWindow::OnParentMove, this);
+    #if defined(__WXOSX_COCOA__) || (defined(__WXGTK__)&&!wxSTC_POPUP_IS_FRAME)
+        tlw->Bind(wxEVT_ICONIZE, &wxSTCPopupWindow::OnIconize, this);
     #endif
     }
 }
 
+bool wxSTCPopupWindow::Show(bool show)
+{
+    // The list box is persistent and can outlive a cross-TLW reparent of its
+    // STC parent. Refresh the move/iconize subscriptions before every new
+    // visibility generation instead of retaining the constructor-time TLW.
+    RebindTopLevelWindow();
+    return wxSTCPopupBase::Show(show);
+}
+
 wxSTCPopupWindow::~wxSTCPopupWindow()
 {
-    if ( m_tlw )
+    if ( wxWindow* const tlw = m_tlw.get() )
     {
-        m_tlw->Unbind(wxEVT_MOVE, &wxSTCPopupWindow::OnParentMove, this);
+        tlw->Unbind(wxEVT_MOVE, &wxSTCPopupWindow::OnParentMove, this);
     #if defined(__WXOSX_COCOA__) || (defined(__WXGTK__)&&!wxSTC_POPUP_IS_FRAME)
-        m_tlw->Unbind(wxEVT_ICONIZE, &wxSTCPopupWindow::OnIconize, this);
+        tlw->Unbind(wxEVT_ICONIZE,
+                    &wxSTCPopupWindow::OnIconize, this);
     #endif
     }
 }
 
 bool wxSTCPopupWindow::Destroy()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_POPUPWIN
+    // Keep Scintilla's delayed-delete contract, but first enter the common
+    // popup terminal transaction. A repeated request is intentionally
+    // idempotent here: AutoComplete::Cancel() can converge on a popup already
+    // retired by its TLW without turning the normal STC teardown into an
+    // assertion.
+    if ( wxWinUITLWHostIsDestroyScheduled(this) )
+        return true;
+
+    if ( !wxWinUIPopupPrepareForDestroy(this) )
+        return true;
+
+    const auto mustDestroyImmediately = [this]()
+    {
+        wxWindow* const parent = GetParent();
+        wxWindow* const owner = parent ? wxGetTopLevelParent(parent) : nullptr;
+        return !GetHandle() ||
+               (parent &&
+                (parent->IsBeingDeleted() ||
+                 wxWinUITLWHostIsDestroyScheduled(parent))) ||
+               (owner &&
+                (owner->IsBeingDeleted() ||
+                 wxWinUITLWHostIsDestroyScheduled(owner)));
+    };
+
+    const wxWinUIPopupDestroySemantics semantics =
+        mustDestroyImmediately()
+            ? wxWinUIPopupDestroySemantics::Immediate
+            : wxWinUIPopupDestroySemantics::PendingDelete;
+    const wxWinUIDestroyDeferralResult deferred =
+        wxWinUITLWHostDeferPopupDestroy(this, semantics);
+    if ( deferred != wxWinUIDestroyDeferralResult::NotDeferred )
+        return true;
+
+    // Re-read after preparation and host hand-off: owner teardown must not
+    // leave this child in the process-wide pending-delete list.
+    if ( mustDestroyImmediately() )
+        return wxNonOwnedWindow::Destroy();
+
+    if ( !wxPendingDelete.Member(this) )
+    {
+        wxPendingDelete.Append(this);
+        wxWakeUpIdle();
+    }
+    return true;
+#else
     #if defined(__WXMAC__) && wxSTC_POPUP_IS_FRAME && !wxSTC_POPUP_IS_CUSTOM
         // The bottom edge of this window is not getting properly
         // refreshed upon deletion, so help it out...
@@ -2362,6 +2499,7 @@ bool wxSTCPopupWindow::Destroy()
         wxPendingDelete.Append(this);
 
     return true;
+#endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_POPUPWIN
 }
 
 bool wxSTCPopupWindow::AcceptsFocus() const

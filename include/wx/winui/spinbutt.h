@@ -39,12 +39,26 @@ public:
     void SetIncrement(int value) override;
     int GetIncrement() const override;
 
+    // Implementation-only deterministic seams. They exercise the same action
+    // transaction as the XAML Click/keyboard callbacks without SendInput.
+    bool WinUIStepForTesting(int direction);
+    bool WinUIGetPeerLayoutForTesting(bool *vertical,
+                                      unsigned *rows,
+                                      unsigned *columns) const;
+    bool WinUIGetAutomationForTesting(int *rootControlType,
+                                      wxString *rootClassName,
+                                      wxString *incrementId,
+                                      wxString *decrementId,
+                                      wxString *incrementName,
+                                      wxString *decrementName) const;
+    bool WinUIInvokeArrowForTesting(int direction);
+
 protected:
     wxSize DoGetBestSize() const override;
 
     // Increment (+1) or decrement (-1) the value by one step, honoring the
     // range and wxSP_WRAP, and raise the spin events.
-    void Step(int direction);
+    bool Step(int direction);
 
     std::unique_ptr<wxWinUISpinButtonImpl> m_winui;
     int m_value = 0;

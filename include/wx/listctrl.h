@@ -65,8 +65,10 @@ public:
     // focus and show the given item
     void Focus(long index)
     {
-        SetItemState(index, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-        EnsureVisible(index);
+        // SetItemState() can synchronously dispatch an event which destroys
+        // the control. Don't continue with EnsureVisible() in that case.
+        if ( SetItemState(index, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED) )
+            EnsureVisible(index);
     }
 
     // get the currently focused item or -1 if none

@@ -17,6 +17,22 @@ class wxWinUIScrollBarImpl;
 class WXDLLIMPEXP_CORE wxScrollBar : public wxScrollBarBase
 {
 public:
+    // Implementation-only semantic equivalent of WinUI ScrollEventType.
+    // Keeping this named prevents the numeric-enum coupling that used to
+    // make the event bridge depend on undocumented projection values.
+    enum class WinUIPeerAction
+    {
+        SmallDecrement,
+        SmallIncrement,
+        LargeDecrement,
+        LargeIncrement,
+        ThumbPosition,
+        ThumbTrack,
+        First,
+        Last,
+        EndScroll
+    };
+
     wxScrollBar();
     wxScrollBar(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -43,20 +59,31 @@ public:
                       int range, int pageSize,
                       bool refresh = true) override;
 
+    // Implementation-only deterministic seams.
+    bool WinUIApplyPeerActionForTesting(WinUIPeerAction action, int value);
+    bool WinUIGetPeerStateForTesting(double *minimum,
+                                     double *maximum,
+                                     double *value,
+                                     double *viewport,
+                                     double *smallChange = nullptr,
+                                     double *largeChange = nullptr,
+                                     bool *vertical = nullptr) const;
+
 protected:
     wxSize DoGetBestSize() const override;
 
+private:
+    int GetMaxPosition() const;
+    int ClampPosition(int position) const;
     void ApplyToPeer();
-    void OnPeerScroll(int newValue, int eventType);
+    void OnPeerScroll(int newValue, WinUIPeerAction action);
 
     std::unique_ptr<wxWinUIScrollBarImpl> m_winui;
     int m_position = 0;
     int m_thumbSize = 1;
     int m_range = 0;
     int m_pageSize = 1;
-    bool m_updating = false;
 
-private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxScrollBar);
 };
 

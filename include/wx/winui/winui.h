@@ -16,8 +16,16 @@
 
 WXDLLIMPEXP_CORE bool wxWinUI3Initialize();
 WXDLLIMPEXP_CORE void wxWinUI3Uninitialize();
+// Diagnostic seam: false means the wx event-loop fallback must pre-translate
+// messages; native nested loops remain partially degraded without the hook.
+WXDLLIMPEXP_CORE bool wxWinUI3IsGetMessageHookActive();
 WXDLLIMPEXP_CORE bool wxWinUI3PreTranslateMessage(WXMSG *msg);
 WXDLLIMPEXP_CORE bool wxWinUI3ProcessTabNavigation(WXMSG *msg);
+WXDLLIMPEXP_CORE bool
+wxWinUI3ProcessTabNavigationWithModifiers(WXMSG *msg,
+                                          bool shiftDown,
+                                          bool controlDown,
+                                          bool altDown);
 
 // When a WinUI island has the keyboard focus, dispatch keyboard messages
 // directly to it, bypassing wxWidgets' dialog navigation which would otherwise
@@ -39,9 +47,10 @@ enum class wxWinUIAppTheme
 WXDLLIMPEXP_CORE void wxWinUISetAppTheme(wxWinUIAppTheme theme);
 WXDLLIMPEXP_CORE wxWinUIAppTheme wxWinUIGetAppTheme();
 
-// Crash-safe debug logging for the WinUI port. Appends to
-// %TEMP%\wxwinui-tooltip.log and flushes each line.  Compiled out (no-op)
-// unless wxUSE_WINUI3_DEBUG_LOG is defined as 1 when building the library.
+// Crash-safe debug logging for the WinUI port. Always sends each line to the
+// debugger and, when WX_WINUI_DIAGNOSTICS_DIR is explicitly set, also appends
+// it to <directory>\winui-debug.txt and flushes it. Compiled out (no-op) unless
+// wxUSE_WINUI3_DEBUG_LOG is defined as 1 when building the library.
 #ifndef wxUSE_WINUI3_DEBUG_LOG
     #define wxUSE_WINUI3_DEBUG_LOG 0
 #endif
@@ -61,6 +70,16 @@ WXDLLIMPEXP_CORE bool wxWinUIIsHostWindow(wxWindow *win);
 class WXDLLIMPEXP_FWD_CORE wxCursor;
 WXDLLIMPEXP_CORE void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor);
 
+// Notify the shared islands after application-wide cursor policy changes
+// (busy cursor nesting or wxSetCursor()). This is intentionally projection
+// free so the ordinary MSW cursor implementation can call it.
+WXDLLIMPEXP_CORE void wxWinUINotifyGlobalCursorChanged();
+
+// Re-apply cursor policy when a wxDialog enters or leaves its modal loop.
+// Unlike an application cursor mutation, this transition must not synthesize
+// wxEVT_SET_CURSOR while ShowModal() is still on a re-entrant stack.
+WXDLLIMPEXP_CORE void wxWinUINotifyModalCursorChanged();
+
 // How the WinUI-drawn common dialogs (wxMessageDialog, wxTextEntryDialog,
 // wxColourDialog, ...) are presented.
 enum class wxWinUIDialogPresentation
@@ -77,8 +96,10 @@ enum class wxWinUIDialogPresentation
     Overlay
 };
 
-// Set/get the presentation used by the WinUI common dialogs.  This is a global
-// application setting; set it before showing a dialog.
+// Set/get the presentation used by the WinUI common dialogs. This is a global
+// application setting; set it before showing a dialog. An explicit setting
+// takes precedence over WX_WINUI_DIALOG_OVERLAY=1, which opts in to Overlay
+// when the application has not selected a mode. Window is the default.
 WXDLLIMPEXP_CORE void
 wxWinUISetDialogPresentation(wxWinUIDialogPresentation presentation);
 WXDLLIMPEXP_CORE wxWinUIDialogPresentation wxWinUIGetDialogPresentation();
@@ -90,10 +111,10 @@ WXDLLIMPEXP_CORE void wxWinUISetRadioBoxBorder(bool useBorder);
 WXDLLIMPEXP_CORE bool wxWinUIGetRadioBoxBorder();
 
 // The DWM Mica backdrop surface only initialises after the window is actually
-// resized on a given monitor; until then it can render as an opaque rectangle
-// (notably on SDR monitors).  This nudges the window size once per monitor to
-// prime the backdrop without requiring a manual resize.  No-op after a monitor
-// has already been primed.
+// resized; until then it can render as an opaque rectangle (notably on SDR
+// monitors). This transactionally nudges this exact native window identity by
+// one pixel and restores it on the next event-loop turn. Repeated requests
+// coalesce, and an already primed window is a no-op until DWM rebuilds it.
 WXDLLIMPEXP_CORE void wxWinUIPrimeBackdrop(WXHWND hwnd);
 
 // Build (or rebuild) a WinUI MenuBar hosted across the top of a frame from the

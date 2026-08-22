@@ -23,6 +23,16 @@ public:
     // overridden base class method showing the native task dialog if possible
     virtual int ShowModal() override;
 
+    virtual long GetEffectiveIcon() const override
+    {
+        // Unlike the generic message-dialog icon resolver, TaskDialog
+        // supports the authentication shield directly.
+        if ( GetMessageDialogStyle() & wxICON_AUTH_NEEDED )
+            return wxICON_AUTH_NEEDED;
+
+        return wxGenericRichMessageDialog::GetEffectiveIcon();
+    }
+
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxRichMessageDialog);
 };

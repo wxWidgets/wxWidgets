@@ -1,5 +1,23 @@
 # Audit de reprise wxWinUI 3 — verdict V0
 
+> **Archive de baseline (22 juillet 2026).** Ce document conserve le verdict
+> initial et ne décrit plus l’état courant du chantier : plusieurs bloqueurs
+> et niveaux ci-dessous ont depuis été fermés. La source de vérité actuelle
+> est [le tableau des plans](../README.md), avec les preuves chronologiques
+> dans [verification.md](verification.md). Ne pas utiliser les statuts de cet
+> audit pour décider de réimplémenter une phase.
+
+> **Mise à jour de clôture (22 août 2026).** Le bloqueur historique « D&D OLE
+> absent » ci-dessous est fermé au niveau déterministe : le produit possède un
+> broker et une identité COM uniques, enregistrés atomiquement sur le bridge et
+> le TLW exact et coordonnés avec wxMSW par un registre global fail-closed. RC4
+> a invalidé le broker TLW-only sur la surface normale; les gates duales
+> shared/static sont vertes. Le statut courant reste **candidat bêta Supported
+> V0**, et non bêta production-ready, tant que la gate physique produit du RC7
+> gelé, l'accessibilité/DPI/thèmes/HC/RTL
+> manuels et le soak signé de 60 minutes ne sont pas terminés. Cela ne vaut pas
+> parité wxMSW globale.
+
 ## Verdict court
 
 Le port possède une base architecturale prometteuse et de nombreux contrôles
@@ -55,7 +73,7 @@ omet notamment :
 | 2 | API `wxInfoBar` incomplète | XRC et `test_gui` ne compilent pas | `include/wx/winui/infobar.h:19-56` |
 | 3 | Durée de vie et invariants des slots | Fuites/UAF, contrôles désactivés encore actifs | `src/winui/tlwhost.cpp:878-1115`, `2030-2069` |
 | 4 | Accélérateurs neutralisés par XAML | Raccourcis de menu cassés | `src/winui/winui.cpp:336-361` |
-| 5 | D&D OLE absent | Tous les `wxDropTarget` sous le bridge sont morts | aucune occurrence dans `src/winui` |
+| 5 | D&D OLE absent — **constat historique fermé déterministement le 2026-08-22** | Le broker produit acquiert atomiquement le bridge et le TLW ; sa gate physique RC7 gelée reste ouverte | [ADR 0002](../../docs/winui/adr/0002-ole-drop-integration.md) et [preuves chronologiques](verification.md) |
 | 6 | Dialogues/transitoires non contractualisés | Focus, Enter/Escape, owner, stacking et cropping | `src/msw/toplevel.cpp:470-502`, `src/winui/dlgpresenter.cpp` |
 | 7 | Parité API de composants | Tests upstream en échec, dont TextCtrl instable | `plans/winui3-v0/verification.md` |
 

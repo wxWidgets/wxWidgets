@@ -72,8 +72,8 @@ public:
                             const wxString& text,
                             bool bSelect = false,
                             int imageId = NO_IMAGE) override;
-    virtual int SetSelection(size_t n) override { return DoSetSelection(n, SetSelection_SendEvent); }
-    virtual int ChangeSelection(size_t n) override { return DoSetSelection(n); }
+    virtual int SetSelection(size_t n) override;
+    virtual int ChangeSelection(size_t n) override;
 
     virtual bool DeleteAllPages() override;
     virtual int HitTest(const wxPoint& pt, long *flags = nullptr) const override;

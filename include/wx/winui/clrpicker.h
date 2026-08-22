@@ -40,6 +40,16 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxColourPickerWidgetNameStr));
 
+    // Implementation-only deterministic seams. The setter crosses the real
+    // WinRT Color property boundary, so its ColorChanged callback and public
+    // event routing are exercised without synthesizing mouse input.
+    bool WinUISetPeerColourForTesting(const wxColour& colour);
+    bool WinUIGetPeerStateForTesting(wxColour *colour,
+                                     bool *alphaEnabled,
+                                     wxString *label) const;
+    bool WinUIDeliverClosedForTesting();
+    static unsigned WinUIGetLiveCallbackStateCountForTesting();
+
 protected:
     void UpdateColour() override;
     wxSize DoGetBestSize() const override;

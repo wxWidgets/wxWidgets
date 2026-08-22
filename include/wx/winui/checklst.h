@@ -10,6 +10,10 @@
 #ifndef _WX_WINUI_CHECKLST_H_
 #define _WX_WINUI_CHECKLST_H_
 
+#if !wxUSE_OWNER_DRAWN
+    #error "wxCheckListBox class requires owner-drawn functionality."
+#endif
+
 class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
 public:
@@ -45,7 +49,7 @@ public:
                 const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         return wxListBox::Create(parent, id, pos, size, n, choices,
-                                 style, validator, name);
+                                 style | wxLB_OWNERDRAW, validator, name);
     }
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos,
@@ -56,7 +60,7 @@ public:
                 const wxString& name = wxASCII_STR(wxListBoxNameStr))
     {
         return wxListBox::Create(parent, id, pos, size, choices,
-                                 style, validator, name);
+                                 style | wxLB_OWNERDRAW, validator, name);
     }
 
     // items may be checked
@@ -64,9 +68,11 @@ public:
     void Check(unsigned int item, bool check = true) override;
     void Toggle(unsigned int item);
 
+    wxOwnerDrawn *CreateLboxItem(size_t n) override;
+
 protected:
     bool WinUIIsCheckable() const override { return true; }
-    void WinUIOnItemToggled(unsigned int n, bool check) override;
+    void WinUIOnItemToggled(wxWinUIItemModel::Id id, bool check) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);

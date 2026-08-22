@@ -170,13 +170,21 @@ protected:
     void FreeAllItemsData();
 
     wxString      m_dirName;
-    bool          m_showHidden;
+    bool          m_showHidden = false;
     wxString      m_wild;
 
-    bool m_sort_forward;
-    wxFileData::fileListFieldType m_sort_field;
+    bool m_sort_forward = true;
+    wxFileData::fileListFieldType m_sort_field = wxFileData::FileList_Name;
 
 private:
+    bool DoUpdateFiles();
+
+    // Filesystem refresh can publish raw list events while replacing rows.
+    // Bound re-entrancy and let the latest requested state win without
+    // recursively rebuilding the control.
+    bool m_updatingFiles = false;
+    bool m_updateFilesPending = false;
+
     wxDECLARE_DYNAMIC_CLASS(wxFileListCtrl);
     wxDECLARE_EVENT_TABLE();
 };
@@ -186,9 +194,7 @@ class WXDLLIMPEXP_CORE wxGenericFileCtrl : public wxNavigationEnabled<wxControl>
 {
 public:
     wxGenericFileCtrl()
-    {
-        m_ignoreChanges = false;
-    }
+    = default;
 
     wxGenericFileCtrl ( wxWindow *parent,
                         wxWindowID id,
@@ -200,7 +206,6 @@ public:
                         const wxSize& size = wxDefaultSize,
                         const wxString& name = wxASCII_STR(wxFileCtrlNameStr) )
     {
-        m_ignoreChanges = false;
         Create(parent, id, defaultDirectory, defaultFilename, wildCard,
                style, pos, size, name );
     }
@@ -241,16 +246,15 @@ public:
     virtual int GetFilterIndex() const override { return m_filterIndex; }
 
     virtual bool HasMultipleFileSelection() const override
-        { return HasFlag(wxFC_MULTIPLE); }
+        { return (m_style & wxFC_MULTIPLE) != 0; }
     virtual void ShowHidden(bool show) override { m_list->ShowHidden( show ); }
 
     void GoToParentDir();
     void GoToHomeDir();
 
-    // get the directory currently shown in the control: this can be different
-    // from GetDirectory() if the user entered a full path (with a path other
-    // than the one currently shown in the control) in the text control
-    // manually
+    // Generic implementation helper retained for source compatibility.
+    // GetDirectory() has the same public contract and also returns the
+    // directory currently shown by the list.
     wxString GetShownDirectory() const { return m_list->GetDir(); }
 
     wxFileListCtrl *GetFileList() { return m_list; }
@@ -276,23 +280,24 @@ private:
     wxFileName DoGetFileName() const;
     void DoGetFilenames( wxArrayString& filenames, bool fullPath ) const;
 
-    int m_style;
+    int m_style = 0;
 
     wxString         m_filterExtension;
-    wxChoice        *m_choice;
-    wxTextCtrl      *m_text;
-    wxFileListCtrl  *m_list;
-    wxCheckBox      *m_check;
-    wxStaticText    *m_static;
+    wxChoice        *m_choice = nullptr;
+    wxTextCtrl      *m_text = nullptr;
+    wxFileListCtrl  *m_list = nullptr;
+    wxCheckBox      *m_check = nullptr;
+    wxStaticText    *m_static = nullptr;
 
     wxString        m_dir;
     wxString        m_fileName;
     wxString        m_wildCard; // wild card in one string as we got it
 
-    int     m_filterIndex;
-    bool    m_inSelected;
-    bool    m_ignoreChanges;
-    bool    m_noSelChgEvent; // suppress selection changed events.
+    int     m_filterIndex = 0;
+    unsigned long m_filterChangeGeneration = 0;
+    bool    m_inSelected = false;
+    bool    m_ignoreChanges = false;
+    bool    m_noSelChgEvent = false; // suppress selection changed events.
 
     wxDECLARE_DYNAMIC_CLASS(wxGenericFileCtrl);
     wxDECLARE_EVENT_TABLE();

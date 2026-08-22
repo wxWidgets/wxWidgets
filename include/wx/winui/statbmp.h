@@ -15,6 +15,7 @@
 #include <memory>
 
 class wxWinUIStaticBitmapImpl;
+class wxDPIChangedEvent;
 
 class WXDLLIMPEXP_CORE wxStaticBitmap : public wxStaticBitmapBase
 {
@@ -59,6 +60,13 @@ public:
     void SetScaleMode(ScaleMode scaleMode) override;
     ScaleMode GetScaleMode() const override { return m_scaleMode; }
 
+    bool WinUIRefreshForScaleForTesting(double scale);
+    bool WinUIGetPeerImageStateForTesting(wxSize *pixelSize,
+                                          wxSize *dipSize,
+                                          int *stretch,
+                                          unsigned *generation,
+                                          bool *hasSource) const;
+
 protected:
     wxSize DoGetBestSize() const override;
 
@@ -69,7 +77,9 @@ protected:
                   long style,
                   const wxString& name);
 
-    void UpdateWinUIImage();
+    bool UpdateWinUIImage(double requestedScale = 0.0);
+    bool ApplyWinUIScaleMode(bool forceRender = true);
+    void OnDPIChanged(wxDPIChangedEvent& event);
     wxSize GetImageSize() const;
 
     std::unique_ptr<wxWinUIStaticBitmapImpl> m_winui;

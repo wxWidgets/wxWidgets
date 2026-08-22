@@ -73,6 +73,8 @@ public:
     void MSWUpdateDragImageOnLeave();
 
 private:
+    friend class wxMSWOleDropTargetAccess;
+
     // helper used by IsAcceptedData() and GetData()
     wxDataFormat MSWGetSupportedFormat(IDataObject *pIDataSource) const;
 

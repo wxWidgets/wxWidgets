@@ -26,7 +26,6 @@
 #include "wx/private/localeset.h"
 
 #ifdef __WINDOWS__
-    #include "wx/msw/registry.h"
     #include "wx/msw/wrapshl.h"
     #include "wx/msw/ole/oleutils.h"
     #include "wx/msw/private/comptr.h"
@@ -367,27 +366,22 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
     CHECK( wxFileName(pathWithEnvVar).GetAbsolutePath()
             == wxFileName(wxGetCwd() + "/" + pathWithEnvVar).GetFullPath() );
 
-    // MSW-only test for wxPATH_NORM_LONG: notice that we only run it if short
-    // names generation is not disabled for this system as otherwise the file
-    // MKINST~1 doesn't exist at all and normalizing it fails (it's possible
-    // that we're on a FAT partition in which case the test would still succeed
-    // and also that the registry key was changed recently and didn't take
-    // effect yet but these are marginal cases which we consciously choose to
-    // ignore for now)
+    // MSW-only test for wxPATH_NORM_LONG. 8.3 name creation is configurable
+    // per volume, so use the short name actually returned for the test file
+    // instead of consulting the system-wide registry setting.
 #ifdef __WINDOWS__
-    long shortNamesDisabled;
-    if ( wxRegKey
-         (
-            wxRegKey::HKLM,
-            "SYSTEM\\CurrentControlSet\\Control\\FileSystem"
-         ).QueryValue("NtfsDisable8dot3NameCreation", &shortNamesDisabled) &&
-            shortNamesDisabled != 1 && !IsAutomaticTest() )
+    if ( !IsAutomaticTest() )
     {
-        wxFileName fn("TESTDA~1.CON");
-        CHECK( fn.Normalize(wxPATH_NORM_LONG, cwd) );
-        CHECK( fn.GetFullPath() == "testdata.conf" );
+        const wxFileName longName("testdata.conf");
+        const wxString shortPath = longName.GetShortPath();
+
+        if ( shortPath != longName.GetFullPath() )
+        {
+            wxFileName fn(shortPath);
+            CHECK( fn.Normalize(wxPATH_NORM_LONG, cwd) );
+            CHECK( fn.GetFullPath() == longName.GetFullPath() );
+        }
     }
-    //else: when in doubt, don't run the test
 #endif // __WINDOWS__
 }
 

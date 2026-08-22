@@ -19,7 +19,179 @@
 
 #include "private.h"
 
+#include <atomic>
+#include <cmath>
+#include <cstdint>
+
+namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace MUXCP = winrt::Microsoft::UI::Xaml::Controls::Primitives;
+
+namespace
+{
+
+class wxWinUIScrollBarCallbackState
+{
+public:
+    explicit wxWinUIScrollBarCallbackState(wxScrollBar *owner)
+        : m_owner(owner)
+    {
+    }
+
+    std::uint64_t Generation() const
+    {
+        return m_generation.load(std::memory_order_acquire);
+    }
+
+    wxScrollBar *GetOwner(std::uint64_t generation) const
+    {
+        if ( generation != m_generation.load(std::memory_order_acquire) )
+            return nullptr;
+
+        return m_owner.load(std::memory_order_acquire);
+    }
+
+    void Invalidate()
+    {
+        m_owner.store(nullptr, std::memory_order_release);
+        m_generation.fetch_add(1, std::memory_order_acq_rel);
+    }
+
+    void BeginPeerMutation()
+    {
+        m_peerMutationDepth.fetch_add(1, std::memory_order_acq_rel);
+    }
+
+    void EndPeerMutation()
+    {
+        m_peerMutationDepth.fetch_sub(1, std::memory_order_acq_rel);
+    }
+
+    bool IsPeerMutationInProgress() const
+    {
+        return m_peerMutationDepth.load(std::memory_order_acquire) != 0;
+    }
+
+private:
+    std::atomic<wxScrollBar *> m_owner;
+    std::atomic<std::uint64_t> m_generation{1};
+    std::atomic<unsigned> m_peerMutationDepth{0};
+};
+
+class wxWinUIScrollBarPeerMutationGuard
+{
+public:
+    explicit wxWinUIScrollBarPeerMutationGuard(
+        const std::shared_ptr<wxWinUIScrollBarCallbackState>& state)
+        : m_state(state)
+    {
+        if ( m_state )
+            m_state->BeginPeerMutation();
+    }
+
+    ~wxWinUIScrollBarPeerMutationGuard()
+    {
+        if ( m_state )
+            m_state->EndPeerMutation();
+    }
+
+private:
+    std::shared_ptr<wxWinUIScrollBarCallbackState> m_state;
+};
+
+wxScrollBar::WinUIPeerAction wxWinUIGetScrollBarAction(
+    MUXCP::ScrollEventType action)
+{
+    switch ( action )
+    {
+        case MUXCP::ScrollEventType::SmallDecrement:
+            return wxScrollBar::WinUIPeerAction::SmallDecrement;
+
+        case MUXCP::ScrollEventType::SmallIncrement:
+            return wxScrollBar::WinUIPeerAction::SmallIncrement;
+
+        case MUXCP::ScrollEventType::LargeDecrement:
+            return wxScrollBar::WinUIPeerAction::LargeDecrement;
+
+        case MUXCP::ScrollEventType::LargeIncrement:
+            return wxScrollBar::WinUIPeerAction::LargeIncrement;
+
+        case MUXCP::ScrollEventType::ThumbPosition:
+            return wxScrollBar::WinUIPeerAction::ThumbPosition;
+
+        case MUXCP::ScrollEventType::ThumbTrack:
+            return wxScrollBar::WinUIPeerAction::ThumbTrack;
+
+        case MUXCP::ScrollEventType::First:
+            return wxScrollBar::WinUIPeerAction::First;
+
+        case MUXCP::ScrollEventType::Last:
+            return wxScrollBar::WinUIPeerAction::Last;
+
+        case MUXCP::ScrollEventType::EndScroll:
+            return wxScrollBar::WinUIPeerAction::EndScroll;
+    }
+
+    wxFAIL_MSG("unhandled WinUI ScrollEventType");
+    return wxScrollBar::WinUIPeerAction::EndScroll;
+}
+
+wxEventType wxWinUIGetScrollBarEventType(
+    wxScrollBar::WinUIPeerAction action)
+{
+    switch ( action )
+    {
+        case wxScrollBar::WinUIPeerAction::SmallDecrement:
+            return wxEVT_SCROLL_LINEUP;
+
+        case wxScrollBar::WinUIPeerAction::SmallIncrement:
+            return wxEVT_SCROLL_LINEDOWN;
+
+        case wxScrollBar::WinUIPeerAction::LargeDecrement:
+            return wxEVT_SCROLL_PAGEUP;
+
+        case wxScrollBar::WinUIPeerAction::LargeIncrement:
+            return wxEVT_SCROLL_PAGEDOWN;
+
+        case wxScrollBar::WinUIPeerAction::ThumbPosition:
+            return wxEVT_SCROLL_THUMBRELEASE;
+
+        case wxScrollBar::WinUIPeerAction::ThumbTrack:
+            return wxEVT_SCROLL_THUMBTRACK;
+
+        case wxScrollBar::WinUIPeerAction::First:
+            return wxEVT_SCROLL_TOP;
+
+        case wxScrollBar::WinUIPeerAction::Last:
+            return wxEVT_SCROLL_BOTTOM;
+
+        case wxScrollBar::WinUIPeerAction::EndScroll:
+            return wxEVT_SCROLL_CHANGED;
+    }
+
+    wxFAIL_MSG("unhandled WinUI scrollbar action");
+    return wxEVT_SCROLL_CHANGED;
+}
+
+void wxWinUIEmitScrollBarEvent(
+    const std::shared_ptr<wxWinUIScrollBarCallbackState>& state,
+    std::uint64_t generation,
+    wxEventType type,
+    int position)
+{
+    wxScrollBar * const owner = state->GetOwner(generation);
+    if ( !owner )
+        return;
+
+    wxScrollEvent event(
+        type,
+        owner->GetId(),
+        position,
+        owner->IsVertical() ? wxVERTICAL : wxHORIZONTAL);
+    event.SetEventObject(owner);
+    owner->HandleWindowEvent(event);
+}
+
+} // anonymous namespace
 
 // wxScrollBar RTTI and the wxEVT_SCROLL_* events are provided by the common
 // code (src/common/scrolbarcmn.cpp and src/common/event.cpp).
@@ -27,151 +199,334 @@ namespace MUXCP = winrt::Microsoft::UI::Xaml::Controls::Primitives;
 class wxWinUIScrollBarImpl
 {
 public:
+    ~wxWinUIScrollBarImpl()
+    {
+        Close();
+    }
+
+    void Close()
+    {
+        // Invalidate before revoking the delegate or detaching the peer:
+        // either operation can drain a queued Scroll notification.
+        if ( callbackState )
+            callbackState->Invalidate();
+
+        if ( bar && scrollToken.value )
+        {
+            try
+            {
+                bar.Scroll(scrollToken);
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                wxWinUILogException(
+                    "WinUI ScrollBar Scroll removal", e);
+            }
+        }
+        scrollToken = {};
+
+        host.Close();
+        bar = nullptr;
+        callbackState.reset();
+    }
+
     wxWinUIControlHost host;
+    std::shared_ptr<wxWinUIScrollBarCallbackState> callbackState;
     MUXCP::ScrollBar bar{ nullptr };
     winrt::event_token scrollToken{};
 };
 
-wxScrollBar::wxScrollBar()
-{
-}
+wxScrollBar::wxScrollBar() = default;
 
 wxScrollBar::wxScrollBar(wxWindow *parent, wxWindowID id, const wxPoint& pos,
                          const wxSize& size, long style,
                          const wxValidator& validator, const wxString& name)
+    : wxScrollBar()
 {
     Create(parent, id, pos, size, style, validator, name);
 }
 
-wxScrollBar::~wxScrollBar() = default;
+wxScrollBar::~wxScrollBar()
+{
+    if ( m_winui )
+    {
+        m_winui->Close();
+        m_winui.reset();
+    }
+}
 
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
                          const wxSize& size, long style,
                          const wxValidator& validator, const wxString& name)
 {
     style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+    if ( !(style & (wxSB_HORIZONTAL | wxSB_VERTICAL)) )
+        style |= wxSB_HORIZONTAL;
 
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_winui.reset(new wxWinUIScrollBarImpl);
+    m_winui = std::make_unique<wxWinUIScrollBarImpl>();
+    m_winui->callbackState =
+        std::make_shared<wxWinUIScrollBarCallbackState>(this);
+    wxWinUIScrollBarImpl * const createImpl = m_winui.get();
+    const std::shared_ptr<wxWinUIScrollBarCallbackState> createState =
+        m_winui->callbackState;
+    const std::uint64_t createGeneration =
+        createState->Generation();
     if ( !m_winui->host.Initialize(this) )
+    {
+        m_winui->Close();
         return false;
+    }
 
+    MUXCP::ScrollBar createPeer{ nullptr };
     try
     {
         m_winui->bar = MUXCP::ScrollBar();
-        m_winui->bar.Orientation((style & wxSB_VERTICAL)
-            ? winrt::Microsoft::UI::Xaml::Controls::Orientation::Vertical
-            : winrt::Microsoft::UI::Xaml::Controls::Orientation::Horizontal);
+        createPeer = m_winui->bar;
+        m_winui->bar.Orientation(
+            IsVertical() ? MUXC::Orientation::Vertical
+                         : MUXC::Orientation::Horizontal);
 
+        const std::shared_ptr<wxWinUIScrollBarCallbackState> callbackState =
+            m_winui->callbackState;
+        const std::uint64_t generation = callbackState->Generation();
         m_winui->scrollToken = m_winui->bar.Scroll(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUXCP::ScrollEventArgs const& args)
+            [callbackState, generation](
+                winrt::Windows::Foundation::IInspectable const&,
+                MUXCP::ScrollEventArgs const& event)
             {
-                if ( !m_winui || m_updating )
+                wxScrollBar * const owner =
+                    callbackState->GetOwner(generation);
+                if ( !owner ||
+                     callbackState->IsPeerMutationInProgress() )
+                {
                     return;
-                OnPeerScroll(static_cast<int>(args.NewValue()),
-                             static_cast<int>(args.ScrollEventType()));
+                }
+
+                owner->OnPeerScroll(
+                    static_cast<int>(std::lround(event.NewValue())),
+                    wxWinUIGetScrollBarAction(event.ScrollEventType()));
             });
 
         ApplyToPeer();
-        m_winui->host.SetContent(m_winui->bar);
+        const bool contentSet =
+            createImpl->host.SetContent(createPeer);
+        wxScrollBar * const liveOwner =
+            createState->GetOwner(createGeneration);
+        if ( !liveOwner || !liveOwner->m_winui ||
+             liveOwner->m_winui.get() != createImpl ||
+             liveOwner->m_winui->callbackState != createState ||
+             liveOwner->m_winui->bar != createPeer )
+        {
+            return false;
+        }
+
+        if ( !contentSet )
+        {
+            liveOwner->m_winui->Close();
+            return false;
+        }
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI ScrollBar creation", e);
+        wxScrollBar * const liveOwner =
+            createState->GetOwner(createGeneration);
+        if ( liveOwner && liveOwner->m_winui &&
+             liveOwner->m_winui.get() == createImpl &&
+             liveOwner->m_winui->callbackState == createState )
+        {
+            liveOwner->m_winui->Close();
+        }
         return false;
     }
 
-    SetInitialSize(size);
-    return true;
+    wxScrollBar *liveOwner =
+        createState->GetOwner(createGeneration);
+    if ( !liveOwner || !liveOwner->m_winui ||
+         liveOwner->m_winui.get() != createImpl ||
+         liveOwner->m_winui->callbackState != createState ||
+         liveOwner->m_winui->bar != createPeer )
+    {
+        return false;
+    }
+
+    liveOwner->SetInitialSize(size);
+    liveOwner = createState->GetOwner(createGeneration);
+    return liveOwner && liveOwner->m_winui &&
+           liveOwner->m_winui.get() == createImpl &&
+           liveOwner->m_winui->callbackState == createState &&
+           liveOwner->m_winui->bar == createPeer;
+}
+
+int wxScrollBar::GetMaxPosition() const
+{
+    return wxMax(0, m_range - m_thumbSize);
+}
+
+int wxScrollBar::ClampPosition(int position) const
+{
+    return wxClip(position, 0, GetMaxPosition());
 }
 
 void wxScrollBar::SetThumbPosition(int viewStart)
 {
-    m_position = viewStart;
+    m_position = ClampPosition(viewStart);
     ApplyToPeer();
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range,
                                int pageSize, bool WXUNUSED(refresh))
 {
-    m_position = position;
-    m_thumbSize = thumbSize;
-    m_range = range;
-    m_pageSize = pageSize;
+    m_thumbSize = wxMax(0, thumbSize);
+    m_range = wxMax(0, range);
+    m_pageSize = wxMax(1, pageSize);
+    m_position = ClampPosition(position);
     ApplyToPeer();
 }
 
 void wxScrollBar::ApplyToPeer()
 {
-    if ( !m_winui || !m_winui->bar )
+    if ( !m_winui || !m_winui->bar || !m_winui->callbackState )
         return;
 
-    m_updating = true;
     try
     {
-        // The WinUI ScrollBar value range is [Minimum, Maximum]; the thumb
-        // occupies ViewportSize, so the maximum reachable value is
-        // range - thumbSize.
-        const int maxValue = wxMax(0, m_range - m_thumbSize);
+        wxWinUIScrollBarPeerMutationGuard guard(m_winui->callbackState);
         m_winui->bar.Minimum(0);
-        m_winui->bar.Maximum(maxValue);
+        m_winui->bar.Maximum(GetMaxPosition());
         m_winui->bar.ViewportSize(m_thumbSize);
         m_winui->bar.SmallChange(1);
-        m_winui->bar.LargeChange(wxMax(1, m_pageSize));
-        m_winui->bar.Value(wxClip(m_position, 0, maxValue));
+        m_winui->bar.LargeChange(m_pageSize);
+        m_winui->bar.Value(m_position);
     }
-    catch ( const winrt::hresult_error& )
+    catch ( const winrt::hresult_error& e )
     {
+        wxWinUILogException("WinUI ScrollBar peer update", e);
+        return;
     }
-    m_updating = false;
+
     m_winui->host.ForceRender();
 }
 
-void wxScrollBar::OnPeerScroll(int newValue, int eventType)
+void wxScrollBar::OnPeerScroll(int newValue, WinUIPeerAction action)
 {
-    m_position = newValue;
+    if ( !m_winui || !m_winui->callbackState )
+        return;
 
-    const int orient = (GetWindowStyle() & wxSB_VERTICAL) ? wxVERTICAL
-                                                          : wxHORIZONTAL;
+    const std::shared_ptr<wxWinUIScrollBarCallbackState> callbackState =
+        m_winui->callbackState;
+    const std::uint64_t generation = callbackState->Generation();
 
-    // Map the WinUI ScrollEventType to the corresponding wx scroll event.
-    // (Values per Microsoft.UI.Xaml.Controls.Primitives.ScrollEventType.)
-    wxEventType type;
-    switch ( eventType )
+    if ( !IsEnabled() )
     {
-        case 0:  type = wxEVT_SCROLL_LINEUP;       break; // SmallDecrement
-        case 1:  type = wxEVT_SCROLL_LINEDOWN;     break; // SmallIncrement
-        case 2:  type = wxEVT_SCROLL_PAGEUP;       break; // LargeDecrement
-        case 3:  type = wxEVT_SCROLL_PAGEDOWN;     break; // LargeIncrement
-        case 4:  type = wxEVT_SCROLL_THUMBRELEASE; break; // ThumbPosition
-        case 5:  type = wxEVT_SCROLL_THUMBTRACK;   break; // ThumbTrack
-        case 6:  type = wxEVT_SCROLL_TOP;          break; // First
-        case 7:  type = wxEVT_SCROLL_BOTTOM;       break; // Last
-        default: type = wxEVT_SCROLL_CHANGED;      break; // EndScroll
+        ApplyToPeer();
+        return;
     }
 
-    wxScrollEvent event(type, GetId(), m_position, orient);
-    event.SetEventObject(this);
-    HandleWindowEvent(event);
+    const int canonicalPosition = ClampPosition(newValue);
+    const bool moved = canonicalPosition != m_position;
 
-    // Always follow up with a CHANGED event so handlers that only watch for it
-    // (the common case) are notified.
-    if ( type != wxEVT_SCROLL_CHANGED )
+    // Like the native MSW control, no-op movement notifications are
+    // suppressed, while thumb release and EndScroll remain meaningful even
+    // when their final position equals the previous one.
+    if ( !moved &&
+         action != WinUIPeerAction::ThumbPosition &&
+         action != WinUIPeerAction::EndScroll )
     {
-        wxScrollEvent changed(wxEVT_SCROLL_CHANGED, GetId(), m_position, orient);
-        changed.SetEventObject(this);
-        HandleWindowEvent(changed);
+        if ( canonicalPosition != newValue )
+            ApplyToPeer();
+        return;
     }
+
+    m_position = canonicalPosition;
+    if ( canonicalPosition != newValue )
+        ApplyToPeer();
+
+    // Exactly one wx event corresponds to one XAML Scroll notification.
+    // In particular CHANGED is reserved for EndScroll and is never appended
+    // to line/page/track notifications.
+    wxWinUIEmitScrollBarEvent(
+        callbackState,
+        generation,
+        wxWinUIGetScrollBarEventType(action),
+        canonicalPosition);
 }
 
 wxSize wxScrollBar::DoGetBestSize() const
 {
-    const bool vertical = (GetWindowStyle() & wxSB_VERTICAL) != 0;
-    return wxWindow::FromDIP(vertical ? wxSize(16, 140) : wxSize(140, 16),
-                            const_cast<wxScrollBar*>(this));
+    return wxWindow::FromDIP(
+        IsVertical() ? wxSize(16, 140) : wxSize(140, 16),
+        const_cast<wxScrollBar *>(this));
+}
+
+bool wxScrollBar::WinUIApplyPeerActionForTesting(WinUIPeerAction action,
+                                                 int value)
+{
+    if ( !m_winui || !m_winui->bar || !m_winui->callbackState )
+        return false;
+
+    // Put the peer in the state a real Scroll notification would already
+    // have established, without manufacturing a second Scroll callback.
+    try
+    {
+        wxWinUIScrollBarPeerMutationGuard guard(m_winui->callbackState);
+        m_winui->bar.Value(ClampPosition(value));
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI ScrollBar test input", e);
+        return false;
+    }
+
+    // This is the adapter called by the real XAML Scroll delegate. Keeping
+    // the seam here exercises its clamp, disabled and event mapping rules
+    // without synthesizing machine-wide pointer or keyboard input.
+    OnPeerScroll(value, action);
+    return true;
+}
+
+bool wxScrollBar::WinUIGetPeerStateForTesting(double *minimum,
+                                              double *maximum,
+                                              double *value,
+                                              double *viewport,
+                                              double *smallChange,
+                                              double *largeChange,
+                                              bool *vertical) const
+{
+    if ( !m_winui || !m_winui->bar )
+        return false;
+
+    try
+    {
+        if ( minimum )
+            *minimum = m_winui->bar.Minimum();
+        if ( maximum )
+            *maximum = m_winui->bar.Maximum();
+        if ( value )
+            *value = m_winui->bar.Value();
+        if ( viewport )
+            *viewport = m_winui->bar.ViewportSize();
+        if ( smallChange )
+            *smallChange = m_winui->bar.SmallChange();
+        if ( largeChange )
+            *largeChange = m_winui->bar.LargeChange();
+        if ( vertical )
+        {
+            *vertical =
+                m_winui->bar.Orientation() ==
+                MUXC::Orientation::Vertical;
+        }
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI ScrollBar test peer query", e);
+        return false;
+    }
+
+    return true;
 }
 
 #endif // wxUSE_SCROLLBAR

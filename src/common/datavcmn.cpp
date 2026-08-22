@@ -35,6 +35,12 @@
 #endif // wxUSE_ACCESSIBILITY
 
 #include "wx/private/safecall.h"
+#include "wx/private/dataview.h"
+#include "wx/scopeguard.h"
+
+#include <algorithm>
+#include <unordered_map>
+#include <vector>
 
 // Uncomment this line to, for custom renderers, visually show the extent
 // of both a cell and its item.
@@ -44,6 +50,126 @@ const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
 namespace
 {
+
+struct DataViewEditState
+{
+    wxDataViewRendererBase* renderer = nullptr;
+    wxPrivate::DataViewEditGeneration generation = 0;
+};
+
+std::unordered_map<wxDataViewCtrl*, DataViewEditState>
+    gs_dataViewEditStates;
+wxPrivate::DataViewEditGeneration gs_nextDataViewEditGeneration = 0;
+
+using DataViewNotifierGeneration = unsigned long long;
+std::unordered_map<wxDataViewModelNotifier*, DataViewNotifierGeneration>
+    gs_dataViewNotifierGenerations;
+DataViewNotifierGeneration gs_nextDataViewNotifierGeneration = 0;
+
+struct DataViewNotifierDispatchState
+{
+    unsigned int depth = 0;
+    bool deletePending = false;
+};
+
+std::unordered_map<wxDataViewModelNotifier*, DataViewNotifierDispatchState>
+    gs_dataViewNotifierDispatchStates;
+
+bool IsDataViewNotifierGenerationCurrent(
+    wxDataViewModelNotifier* notifier,
+    DataViewNotifierGeneration generation)
+{
+    const auto current = gs_dataViewNotifierGenerations.find(notifier);
+    return current != gs_dataViewNotifierGenerations.end() &&
+           current->second == generation;
+}
+
+void DeleteDataViewNotifierWhenIdle(wxDataViewModelNotifier* notifier)
+{
+    const auto state = gs_dataViewNotifierDispatchStates.find(notifier);
+    if ( state == gs_dataViewNotifierDispatchStates.end() )
+    {
+        delete notifier;
+        return;
+    }
+
+    if ( state->second.depth )
+    {
+        state->second.deletePending = true;
+        return;
+    }
+
+    gs_dataViewNotifierDispatchStates.erase(state);
+    delete notifier;
+}
+
+template <typename NotifierContainer, typename Callback>
+bool DispatchDataViewModelNotification(
+    wxDataViewModel* model,
+    const NotifierContainer& notifiers,
+    Callback&& callback)
+{
+    model->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    {
+        model->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+
+    using SnapshotEntry =
+        std::pair<wxDataViewModelNotifier*, DataViewNotifierGeneration>;
+    std::vector<SnapshotEntry> snapshot;
+    snapshot.reserve(notifiers.size());
+    for ( wxDataViewModelNotifier* const notifier : notifiers )
+    {
+        const auto generation = gs_dataViewNotifierGenerations.find(notifier);
+        if ( generation != gs_dataViewNotifierGenerations.end() )
+            snapshot.emplace_back(notifier, generation->second);
+    }
+
+    bool result = true;
+    for ( const SnapshotEntry& entry : snapshot )
+    {
+        const auto generation =
+            gs_dataViewNotifierGenerations.find(entry.first);
+        if ( generation == gs_dataViewNotifierGenerations.end() ||
+                generation->second != entry.second ||
+                std::find(notifiers.begin(), notifiers.end(), entry.first) ==
+                    notifiers.end() )
+        {
+            continue;
+        }
+
+        DataViewNotifierDispatchState& dispatchState =
+            gs_dataViewNotifierDispatchStates[entry.first];
+        ++dispatchState.depth;
+        bool callbackResult = false;
+        {
+            const wxScopeGuard leaveNotifier = wxMakeGuard([notifier = entry.first]()
+            {
+                const auto state =
+                    gs_dataViewNotifierDispatchStates.find(notifier);
+                wxASSERT(state != gs_dataViewNotifierDispatchStates.end());
+                wxASSERT(state->second.depth != 0);
+
+                if ( --state->second.depth == 0 &&
+                        state->second.deletePending )
+                {
+                    gs_dataViewNotifierDispatchStates.erase(state);
+                    delete notifier;
+                }
+            });
+            wxUnusedVar(leaveNotifier);
+
+            callbackResult = callback(entry.first);
+        }
+
+        if ( !callbackResult )
+            result = false;
+    }
+
+    return result;
+}
 
 // Custom handler pushed on top of the edit control used by wxDataViewCtrl to
 // forward some events to the main control itself.
@@ -82,6 +208,71 @@ private:
 
 } // anonymous namespace
 
+namespace wxPrivate
+{
+
+DataViewEditGeneration
+BeginDataViewEdit(wxDataViewCtrl* ctrl, wxDataViewRendererBase* renderer)
+{
+    if ( !ctrl || !renderer ||
+            gs_dataViewEditStates.find(ctrl) != gs_dataViewEditStates.end() )
+    {
+        return 0;
+    }
+
+    // Zero is reserved for "not entered". Skipping it on wrap keeps that
+    // invariant without imposing a practical lifetime limit.
+    if ( ++gs_nextDataViewEditGeneration == 0 )
+        ++gs_nextDataViewEditGeneration;
+
+    const DataViewEditGeneration generation =
+        gs_nextDataViewEditGeneration;
+    gs_dataViewEditStates.emplace(
+        ctrl, DataViewEditState{ renderer, generation });
+    return generation;
+}
+
+bool IsCurrentDataViewEdit(wxDataViewCtrl* ctrl,
+                           wxDataViewRendererBase* renderer,
+                           DataViewEditGeneration generation)
+{
+    const auto it = gs_dataViewEditStates.find(ctrl);
+    return it != gs_dataViewEditStates.end() &&
+           it->second.renderer == renderer &&
+           it->second.generation == generation;
+}
+
+DataViewEditGeneration
+GetCurrentDataViewEditGeneration(wxDataViewCtrl* ctrl,
+                                 wxDataViewRendererBase* renderer)
+{
+    const auto it = gs_dataViewEditStates.find(ctrl);
+    if ( it == gs_dataViewEditStates.end() ||
+            it->second.renderer != renderer )
+    {
+        return 0;
+    }
+
+    return it->second.generation;
+}
+
+void EndDataViewEdit(wxDataViewCtrl* ctrl,
+                     wxDataViewRendererBase* renderer,
+                     DataViewEditGeneration generation)
+{
+    if ( IsCurrentDataViewEdit(ctrl, renderer, generation) )
+        gs_dataViewEditStates.erase(ctrl);
+}
+
+void ReleaseDataViewEditForDone(wxDataViewCtrl* ctrl,
+                                wxDataViewRendererBase* renderer,
+                                DataViewEditGeneration generation)
+{
+    EndDataViewEdit(ctrl, renderer, generation);
+}
+
+} // namespace wxPrivate
+
 // ---------------------------------------------------------
 // wxDataViewItemAttr
 // ---------------------------------------------------------
@@ -108,30 +299,72 @@ wxFont wxDataViewItemAttr::GetEffectiveFont(const wxFont& font) const
 
 bool wxDataViewModelNotifier::ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items )
 {
-    size_t count = items.GetCount();
-    size_t i;
-    for (i = 0; i < count; i++)
-        if (!ItemAdded( parent, items[i] )) return false;
+    const auto registered = gs_dataViewNotifierGenerations.find(this);
+    const bool trackRegistration =
+        registered != gs_dataViewNotifierGenerations.end();
+    const DataViewNotifierGeneration generation =
+        trackRegistration ? registered->second : 0;
+
+    const size_t count = items.GetCount();
+    for ( size_t i = 0; i < count; ++i )
+    {
+        if ( trackRegistration &&
+                !IsDataViewNotifierGenerationCurrent(this, generation) )
+        {
+            break;
+        }
+
+        if ( !ItemAdded(parent, items[i]) )
+            return false;
+    }
 
     return true;
 }
 
 bool wxDataViewModelNotifier::ItemsDeleted( const wxDataViewItem &parent, const wxDataViewItemArray &items )
 {
-    size_t count = items.GetCount();
-    size_t i;
-    for (i = 0; i < count; i++)
-        if (!ItemDeleted( parent, items[i] )) return false;
+    const auto registered = gs_dataViewNotifierGenerations.find(this);
+    const bool trackRegistration =
+        registered != gs_dataViewNotifierGenerations.end();
+    const DataViewNotifierGeneration generation =
+        trackRegistration ? registered->second : 0;
+
+    const size_t count = items.GetCount();
+    for ( size_t i = 0; i < count; ++i )
+    {
+        if ( trackRegistration &&
+                !IsDataViewNotifierGenerationCurrent(this, generation) )
+        {
+            break;
+        }
+
+        if ( !ItemDeleted(parent, items[i]) )
+            return false;
+    }
 
     return true;
 }
 
 bool wxDataViewModelNotifier::ItemsChanged( const wxDataViewItemArray &items )
 {
-    size_t count = items.GetCount();
-    size_t i;
-    for (i = 0; i < count; i++)
-        if (!ItemChanged( items[i] )) return false;
+    const auto registered = gs_dataViewNotifierGenerations.find(this);
+    const bool trackRegistration =
+        registered != gs_dataViewNotifierGenerations.end();
+    const DataViewNotifierGeneration generation =
+        trackRegistration ? registered->second : 0;
+
+    const size_t count = items.GetCount();
+    for ( size_t i = 0; i < count; ++i )
+    {
+        if ( trackRegistration &&
+                !IsDataViewNotifierGenerationCurrent(this, generation) )
+        {
+            break;
+        }
+
+        if ( !ItemChanged(items[i]) )
+            return false;
+    }
 
     return true;
 }
@@ -146,175 +379,122 @@ wxDataViewModel::wxDataViewModel()
 
 wxDataViewModel::~wxDataViewModel()
 {
-    wxDataViewModelNotifiers::const_iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    for ( wxDataViewModelNotifier* const notifier : m_notifiers )
     {
-        delete *iter;
+        gs_dataViewNotifierGenerations.erase(notifier);
+        notifier->SetOwner(nullptr);
+        DeleteDataViewNotifierWhenIdle(notifier);
     }
 }
 
 bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->ItemAdded( parent, item ))
-            ret = false;
-    }
-
-    return ret;
+        return notifier->ItemAdded(parent, item);
+    });
 }
 
 bool wxDataViewModel::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->ItemDeleted( parent, item ))
-            ret = false;
-    }
-
-    return ret;
+        return notifier->ItemDeleted(parent, item);
+    });
 }
 
 bool wxDataViewModel::ItemChanged( const wxDataViewItem &item )
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->ItemChanged( item ))
-            ret = false;
-    }
-
-    return ret;
+        return notifier->ItemChanged(item);
+    });
 }
 
 bool wxDataViewModel::ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items )
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->ItemsAdded( parent, items ))
-            ret = false;
-    }
-
-    return ret;
+        return notifier->ItemsAdded(parent, items);
+    });
 }
 
 bool wxDataViewModel::ItemsDeleted( const wxDataViewItem &parent, const wxDataViewItemArray &items )
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->ItemsDeleted( parent, items ))
-            ret = false;
-    }
-
-    return ret;
+        return notifier->ItemsDeleted(parent, items);
+    });
 }
 
 bool wxDataViewModel::ItemsChanged( const wxDataViewItemArray &items )
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->ItemsChanged( items ))
-            ret = false;
-    }
-
-    return ret;
+        return notifier->ItemsChanged(items);
+    });
 }
 
 bool wxDataViewModel::ValueChanged( const wxDataViewItem &item, unsigned int col )
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [&](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->ValueChanged( item, col ))
-            ret = false;
-    }
-
-    return ret;
+        return notifier->ValueChanged(item, col);
+    });
 }
 
 bool wxDataViewModel::Cleared()
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->Cleared())
-            ret = false;
-    }
-
-    return ret;
+        return notifier->Cleared();
+    });
 }
 
 bool wxDataViewModel::BeforeReset()
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->BeforeReset())
-            ret = false;
-    }
-
-    return ret;
+        return notifier->BeforeReset();
+    });
 }
 
 bool wxDataViewModel::AfterReset()
 {
-    bool ret = true;
-
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    return DispatchDataViewModelNotification(
+        this, m_notifiers, [](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
-        if (!notifier->AfterReset())
-            ret = false;
-    }
-
-    return ret;
+        return notifier->AfterReset();
+    });
 }
 
 void wxDataViewModel::Resort()
 {
-    wxDataViewModelNotifiers::iterator iter;
-    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    DispatchDataViewModelNotification(
+        this, m_notifiers, [](wxDataViewModelNotifier* notifier)
     {
-        wxDataViewModelNotifier* notifier = *iter;
         notifier->Resort();
-    }
+        return true;
+    });
 }
 
 void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier )
 {
+    if ( ++gs_nextDataViewNotifierGeneration == 0 )
+        ++gs_nextDataViewNotifierGeneration;
+    gs_dataViewNotifierGenerations[notifier] =
+        gs_nextDataViewNotifierGeneration;
+    gs_dataViewNotifierDispatchStates.try_emplace(notifier);
+
     m_notifiers.push_back( notifier );
     notifier->SetOwner( this );
 }
@@ -326,8 +506,10 @@ void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
     {
         if ( *iter == notifier )
         {
-            delete notifier;
+            gs_dataViewNotifierGenerations.erase(notifier);
             m_notifiers.erase(iter);
+            notifier->SetOwner(nullptr);
+            DeleteDataViewNotifierWhenIdle(notifier);
 
             // Skip the assert below.
             return;
@@ -690,6 +872,27 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 // wxDataViewRendererBase
 // ---------------------------------------------------------
 
+namespace
+{
+
+bool IsDataViewRendererOwned(wxDataViewCtrl* ctrl,
+                             wxDataViewColumn* column,
+                             const wxDataViewRendererBase* renderer)
+{
+    if ( !ctrl || !column )
+        return false;
+
+    for ( unsigned int n = 0; n < ctrl->GetColumnCount(); ++n )
+    {
+        if ( ctrl->GetColumn(n) == column )
+            return column->GetRenderer() == renderer;
+    }
+
+    return false;
+}
+
+} // anonymous namespace
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewRendererBase, wxObject);
 
 wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype,
@@ -716,21 +919,60 @@ wxDataViewCtrl* wxDataViewRendererBase::GetView() const
 bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect labelRect )
 {
     wxDataViewColumn* const column = GetOwner();
-    wxDataViewCtrl* const dv_ctrl = column->GetOwner();
+    wxDataViewCtrl* const dv_ctrl = column ? column->GetOwner() : nullptr;
+    if ( !dv_ctrl )
+        return false;
+
+    const wxWeakRef<wxDataViewCtrl> weakCtrl(dv_ctrl);
 
     // Before doing anything we send an event asking if editing of this item is really wanted.
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_START_EDITING, dv_ctrl, column, item);
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
-    if( !event.IsAllowed() )
+    if ( !event.IsAllowed() ||
+            weakCtrl.get() != dv_ctrl ||
+            !IsDataViewRendererOwned(dv_ctrl, column, this) )
+    {
         return false;
+    }
 
     // Remember the item being edited for use in FinishEditing() later.
     m_item = item;
 
-    unsigned int col = GetOwner()->GetModelColumn();
-    const wxVariant& value = CheckedGetValue(dv_ctrl->GetModel(), item, col);
+    const unsigned int col = column->GetModelColumn();
+    wxDataViewModel* const model = dv_ctrl->GetModel();
+    if ( model )
+        model->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    {
+        if ( model )
+            model->DecRef();
+    });
+    wxUnusedVar(releaseModel);
 
-    m_editorCtrl = CreateEditorCtrl( dv_ctrl->GetMainWindow(), labelRect, value );
+    const wxVariant value = CheckedGetValue(model, item, col);
+    if ( weakCtrl.get() != dv_ctrl ||
+            dv_ctrl->GetModel() != model ||
+            !IsDataViewRendererOwned(dv_ctrl, column, this) )
+    {
+        return false;
+    }
+
+    wxWindow* const editor =
+        CreateEditorCtrl(dv_ctrl->GetMainWindow(), labelRect, value);
+    if ( weakCtrl.get() != dv_ctrl ||
+            !IsDataViewRendererOwned(dv_ctrl, column, this) )
+    {
+        return false;
+    }
+    if ( dv_ctrl->GetModel() != model ||
+            column->GetModelColumn() != col )
+    {
+        if ( editor )
+            editor->Destroy();
+        m_item = wxDataViewItem();
+        return false;
+    }
+    m_editorCtrl = editor;
 
     // there might be no editor control for the given item
     if(!m_editorCtrl)
@@ -750,7 +992,21 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     m_editorCtrl->SetFocus();
 #endif
 
-    return true;
+    // SetFocus() is another application callback boundary.
+    if ( weakCtrl.get() == dv_ctrl &&
+            IsDataViewRendererOwned(dv_ctrl, column, this) )
+    {
+        if ( dv_ctrl->GetModel() == model &&
+                column->GetModelColumn() == col )
+        {
+            return true;
+        }
+
+        m_item = wxDataViewItem();
+        DestroyEditControl();
+    }
+
+    return false;
 }
 
 void wxDataViewRendererBase::NotifyEditingStarted(const wxDataViewItem& item)
@@ -764,26 +1020,53 @@ void wxDataViewRendererBase::NotifyEditingStarted(const wxDataViewItem& item)
 
 void wxDataViewRendererBase::DestroyEditControl()
 {
+    wxWindow* const editor = m_editorCtrl.get();
+
+    // Stop publishing the editor before hiding it: Hide() moves focus and can
+    // run arbitrary application handlers, including ones deleting this
+    // renderer or the whole data view.
+    m_editorCtrl.Release();
+    const wxWeakRef<wxWindow> weakEditor(editor);
+
     // Remove our event handler first to prevent it from (recursively) calling
     // us again as it would do via a call to FinishEditing() when the editor
     // loses focus when we hide it below.
-    wxEvtHandler * const handler = m_editorCtrl->PopEventHandler();
+    wxEvtHandler * const handler = editor->PopEventHandler();
 
     // Hide the control immediately but don't delete it yet as there could be
     // some pending messages for it.
-    m_editorCtrl->Hide();
+    editor->Hide();
 
     wxPendingDelete.Append(handler);
-    wxPendingDelete.Append(m_editorCtrl);
-
-    // Ensure that DestroyEditControl() is not called again for this control.
-    m_editorCtrl.Release();
+    if ( weakEditor.get() == editor )
+        wxPendingDelete.Append(editor);
 }
 
 void wxDataViewRendererBase::CancelEditing()
 {
+    wxDataViewColumn* const column = GetOwner();
+    wxDataViewCtrl* const dv_ctrl = column ? column->GetOwner() : nullptr;
+    const wxWeakRef<wxDataViewCtrl> weakCtrl(dv_ctrl);
+    wxDataViewModel* const model = dv_ctrl ? dv_ctrl->GetModel() : nullptr;
+    if ( model )
+        model->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    {
+        if ( model )
+            model->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+
     if ( m_editorCtrl )
         DestroyEditControl();
+
+    if ( weakCtrl.get() != dv_ctrl ||
+            !dv_ctrl ||
+            dv_ctrl->GetModel() != model ||
+            !IsDataViewRendererOwned(dv_ctrl, column, this) )
+    {
+        return;
+    }
 
     DoHandleEditingDone(nullptr);
 }
@@ -793,10 +1076,28 @@ bool wxDataViewRendererBase::FinishEditing()
     if (!m_editorCtrl)
         return true;
 
+    wxDataViewColumn* const column = GetOwner();
+    wxDataViewCtrl* const dv_ctrl = column ? column->GetOwner() : nullptr;
+    if ( !dv_ctrl )
+        return false;
+
+    const wxWeakRef<wxDataViewCtrl> weakCtrl(dv_ctrl);
+    wxDataViewModel* const model = dv_ctrl->GetModel();
+    if ( model )
+        model->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    {
+        if ( model )
+            model->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+
     bool gotValue = false;
 
+    wxWindow* const editor = m_editorCtrl.get();
+    const wxWeakRef<wxWindow> weakEditor(editor);
     wxVariant value;
-    if ( GetValueFromEditorCtrl(m_editorCtrl, value) )
+    if ( GetValueFromEditorCtrl(editor, value) )
     {
         // This is the normal case and we will use this value below (if it
         // passes validation).
@@ -805,9 +1106,31 @@ bool wxDataViewRendererBase::FinishEditing()
     //else: Not really supposed to happen, but still proceed with
     //      destroying the edit control if it does.
 
+    if ( weakCtrl.get() != dv_ctrl ||
+            dv_ctrl->GetModel() != model ||
+            !IsDataViewRendererOwned(dv_ctrl, column, this) ||
+            weakEditor.get() != editor ||
+            m_editorCtrl.get() != editor )
+    {
+        return false;
+    }
+
     DestroyEditControl();
 
-    GetView()->GetMainWindow()->SetFocus();
+    if ( weakCtrl.get() != dv_ctrl ||
+            dv_ctrl->GetModel() != model ||
+            !IsDataViewRendererOwned(dv_ctrl, column, this) )
+    {
+        return false;
+    }
+
+    dv_ctrl->GetMainWindow()->SetFocus();
+    if ( weakCtrl.get() != dv_ctrl ||
+            dv_ctrl->GetModel() != model ||
+            !IsDataViewRendererOwned(dv_ctrl, column, this) )
+    {
+        return false;
+    }
 
     return DoHandleEditingDone(gotValue ? &value : nullptr);
 }
@@ -815,6 +1138,34 @@ bool wxDataViewRendererBase::FinishEditing()
 bool
 wxDataViewRendererBase::DoHandleEditingDone(wxVariant* value)
 {
+    wxDataViewColumn* const column = GetOwner();
+    wxDataViewCtrl* const dv_ctrl = column ? column->GetOwner() : nullptr;
+    if ( !dv_ctrl )
+    {
+        m_item = wxDataViewItem();
+        return false;
+    }
+
+    const wxDataViewItem item = m_item;
+    wxDataViewModel* const model = dv_ctrl->GetModel();
+    const wxWeakRef<wxDataViewCtrl> weakCtrl(dv_ctrl);
+    const wxPrivate::DataViewEditGeneration generation =
+        wxPrivate::GetCurrentDataViewEditGeneration(dv_ctrl, this);
+
+    // From this point on no member of the renderer may be used after invoking
+    // user code. Keep the model alive independently of the control and clear
+    // the editing item before either Validate() or the public event can
+    // re-enter the renderer.
+    m_item = wxDataViewItem();
+    if ( model )
+        model->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    {
+        if ( model )
+            model->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+
     if ( value )
     {
         if ( !Validate(*value) )
@@ -825,12 +1176,33 @@ wxDataViewRendererBase::DoHandleEditingDone(wxVariant* value)
         }
     }
 
-    wxDataViewColumn* const column = GetOwner();
-    wxDataViewCtrl* const dv_ctrl = column->GetOwner();
-    unsigned int col = column->GetModelColumn();
+    if ( weakCtrl.get() != dv_ctrl || dv_ctrl->GetModel() != model ||
+            (generation &&
+             !wxPrivate::IsCurrentDataViewEdit(
+                 dv_ctrl, this, generation)) )
+    {
+        return false;
+    }
+
+    bool columnStillOwned = false;
+    for ( unsigned int n = 0; n < dv_ctrl->GetColumnCount(); ++n )
+    {
+        if ( dv_ctrl->GetColumn(n) == column )
+        {
+            columnStillOwned = true;
+            break;
+        }
+    }
+    if ( !columnStillOwned )
+        return false;
+
+    // Validation and value extraction belong to the old transaction and must
+    // not be interleaved with another editor. The public editing-done event,
+    // however, is the documented point where starting a new editor is legal.
+    wxPrivate::ReleaseDataViewEditForDone(dv_ctrl, this, generation);
 
     // Now we should send Editing Done event
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl, column, m_item);
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl, column, item);
     if ( value )
         event.SetValue(*value);
     else
@@ -839,13 +1211,28 @@ wxDataViewRendererBase::DoHandleEditingDone(wxVariant* value)
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
     bool accepted = false;
-    if ( value && event.IsAllowed() )
+    if ( value &&
+            event.IsAllowed() &&
+            weakCtrl.get() == dv_ctrl &&
+            dv_ctrl->GetModel() == model &&
+            model )
     {
-        dv_ctrl->GetModel()->ChangeValue(*value, m_item, col);
-        accepted = true;
+        // The editing-done handler may have inserted or removed columns.
+        // Re-find the same column identity and use its current model mapping;
+        // never apply the value to a stale positional index.
+        for ( unsigned int n = 0; n < dv_ctrl->GetColumnCount(); ++n )
+        {
+            if ( dv_ctrl->GetColumn(n) == column )
+            {
+                model->ChangeValue(
+                    *value,
+                    item,
+                    column->GetModelColumn());
+                accepted = true;
+                break;
+            }
+        }
     }
-
-    m_item = wxDataViewItem();
 
     return accepted;
 }
@@ -855,17 +1242,56 @@ wxDataViewRendererBase::CheckedGetValue(const wxDataViewModel* model,
                                         const wxDataViewItem& item,
                                         unsigned column) const
 {
+    if ( !model )
+        return wxVariant();
+
+    wxDataViewColumn* const ownerColumn =
+        const_cast<wxDataViewRendererBase*>(this)->GetOwner();
+    wxDataViewCtrl* const ownerCtrl =
+        ownerColumn ? ownerColumn->GetOwner() : nullptr;
+    const wxWeakRef<wxDataViewCtrl> weakCtrl(ownerCtrl);
+    const wxString rendererVariantType = GetVariantType();
+
+    wxDataViewModel* const modelRef =
+        const_cast<wxDataViewModel*>(model);
+    modelRef->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([modelRef]()
+    {
+        modelRef->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+
+    const auto rendererStillOwned = [&]()
+    {
+        return !ownerCtrl ||
+                (weakCtrl.get() == ownerCtrl &&
+                 ownerCtrl->GetModel() == model &&
+                 IsDataViewRendererOwned(ownerCtrl, ownerColumn, this) &&
+                 ownerColumn->GetModelColumn() == column);
+    };
+
     wxVariant value;
     // Avoid calling GetValue() if the model isn't supposed to have any values
     // in this cell (e.g. a non-first column of a container item), this could
     // be unexpected.
     if ( model->HasValue(item, column) )
+    {
+        if ( !rendererStillOwned() )
+            return wxVariant();
+
         model->GetValue(value, item, column);
+        if ( !rendererStillOwned() )
+            return wxVariant();
+    }
 
     // We always allow the cell to be null, regardless of the renderer type.
     if ( !value.IsNull() )
     {
-        if ( !IsCompatibleVariantType(value.GetType()) )
+        const bool isCompatible = IsCompatibleVariantType(value.GetType());
+        if ( !rendererStillOwned() )
+            return wxVariant();
+
+        if ( !isCompatible )
         {
             // If you're seeing this message, this indicates that either your
             // renderer is using the wrong type, or your model returns values
@@ -873,7 +1299,7 @@ wxDataViewRendererBase::CheckedGetValue(const wxDataViewModel* model,
             wxLogDebug("Wrong type returned from the model for column %u: "
                        "%s required but actual type is %s",
                        column,
-                       GetVariantType(),
+                       rendererVariantType,
                        value.GetType());
 
             // Don't return data of mismatching type, this could be unexpected.
@@ -889,6 +1315,36 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
                                        const wxDataViewItem& item,
                                        unsigned column)
 {
+    if ( !model )
+        return false;
+
+    wxDataViewColumn* const ownerColumn = GetOwner();
+    wxDataViewCtrl* const ownerCtrl =
+        ownerColumn ? ownerColumn->GetOwner() : nullptr;
+    const wxWeakRef<wxDataViewCtrl> weakCtrl(ownerCtrl);
+
+    wxDataViewModel* const modelRef =
+        const_cast<wxDataViewModel*>(model);
+    modelRef->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([modelRef]()
+    {
+        modelRef->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+
+    // All methods called below can be implemented by application code. In
+    // particular, they can delete a column, replace the model or destroy the
+    // control, so never touch the renderer again unless it is still owned by
+    // the same cell.
+    const auto rendererStillOwned = [&]()
+    {
+        return !ownerCtrl ||
+               (weakCtrl.get() == ownerCtrl &&
+                ownerCtrl->GetModel() == model &&
+                IsDataViewRendererOwned(ownerCtrl, ownerColumn, this) &&
+                ownerColumn->GetModelColumn() == column);
+    };
+
     // This method is called by the native control, so we shouldn't allow
     // exceptions to escape from it.
     return wxSafeCall<bool>([&, this]()
@@ -896,27 +1352,56 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
 
     // Now check if we have a value and remember it if we do.
     wxVariant value = CheckedGetValue(model, item, column);
+    if ( !rendererStillOwned() )
+        return false;
 
     if ( !value.IsNull() )
     {
         if ( m_valueAdjuster )
         {
-            if ( IsHighlighted() )
-                value = m_valueAdjuster->MakeHighlighted(value);
+            const bool highlighted = IsHighlighted();
+            if ( !rendererStillOwned() )
+                return false;
+
+            if ( highlighted )
+            {
+                // IsHighlighted() is virtual and may replace the adjuster
+                // while keeping this renderer installed. Never retain the old
+                // adjuster pointer across it.
+                if ( m_valueAdjuster )
+                {
+                    value = m_valueAdjuster->MakeHighlighted(value);
+                    if ( !rendererStillOwned() )
+                        return false;
+                }
+            }
         }
 
         SetValue(value);
+        if ( !rendererStillOwned() )
+            return false;
     }
 
     // Also set up the attributes: note that we need to do this even for the
     // empty cells because background colour is still relevant for them.
     wxDataViewItemAttr attr;
     model->GetAttr(item, column, attr);
+    if ( !rendererStillOwned() )
+        return false;
+
     SetAttr(attr);
+    if ( !rendererStillOwned() )
+        return false;
 
     // Finally determine the enabled/disabled state and apply it, even to the
     // empty cells.
-    SetEnabled(model->IsEnabled(item, column));
+    const bool enabled = model->IsEnabled(item, column);
+    if ( !rendererStillOwned() )
+        return false;
+
+    SetEnabled(enabled);
+    if ( !rendererStillOwned() )
+        return false;
 
     return !value.IsNull();
     }, []()
@@ -1274,39 +1759,91 @@ const wxDataViewModel* wxDataViewCtrlBase::GetModel() const
 
 void wxDataViewCtrlBase::Expand(const wxDataViewItem& item)
 {
+    wxDataViewModel* const model = m_model;
+    if ( !model )
+        return;
+
+    model->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    {
+        model->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+    const wxWeakRef<wxWindow> weakThis(this);
+
     ExpandAncestors(item);
+    if ( weakThis.get() != this || m_model != model )
+        return;
 
     DoExpand(item, false);
 }
 
 void wxDataViewCtrlBase::ExpandChildren(const wxDataViewItem& item)
 {
+    wxDataViewModel* const model = m_model;
+    if ( !model )
+        return;
+
+    model->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    {
+        model->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+    const wxWeakRef<wxWindow> weakThis(this);
+
     ExpandAncestors(item);
+    if ( weakThis.get() != this || m_model != model )
+        return;
 
     DoExpand(item, true);
 }
 
 void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
 {
-    if (!m_model) return;
+    wxDataViewModel* const model = m_model;
+    if ( !model )
+        return;
 
     if (!item.IsOk()) return;
+
+    model->IncRef();
+    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    {
+        model->DecRef();
+    });
+    wxUnusedVar(releaseModel);
+    const wxWeakRef<wxWindow> weakThis(this);
 
     wxVector<wxDataViewItem> parentChain;
 
     // at first we get all the parents of the selected item
-    wxDataViewItem parent = m_model->GetParent(item);
+    wxDataViewItem parent = model->GetParent(item);
+    if ( weakThis.get() != this || m_model != model )
+        return;
+
     while (parent.IsOk())
     {
+        if ( std::find(parentChain.begin(), parentChain.end(), parent) !=
+                parentChain.end() )
+        {
+            return;
+        }
+
         parentChain.push_back(parent);
-        parent = m_model->GetParent(parent);
+        parent = model->GetParent(parent);
+        if ( weakThis.get() != this || m_model != model )
+            return;
     }
 
     // then we expand the parents, starting at the root
     while (!parentChain.empty())
     {
-         DoExpand(parentChain.back(), false);
-         parentChain.pop_back();
+        DoExpand(parentChain.back(), false);
+        if ( weakThis.get() != this || m_model != model )
+            return;
+
+        parentChain.pop_back();
     }
 }
 
@@ -2338,17 +2875,38 @@ wxDataViewListStore::~wxDataViewListStore()
 
 void wxDataViewListStore::PrependColumn( const wxString &varianttype )
 {
-    m_cols.Insert( varianttype, 0 );
+    InsertColumn(0, varianttype);
 }
 
 void wxDataViewListStore::InsertColumn( unsigned int pos, const wxString &varianttype )
 {
+    wxCHECK_RET( pos <= m_cols.size(), "invalid list store column position" );
+
     m_cols.Insert( varianttype, pos );
+    for ( wxVector<wxDataViewListStoreLine*>::iterator it = m_data.begin();
+          it != m_data.end();
+          ++it )
+    {
+        (*it)->m_values.insert((*it)->m_values.begin() + pos, wxVariant());
+    }
 }
 
 void wxDataViewListStore::AppendColumn( const wxString &varianttype )
 {
-    m_cols.Add( varianttype );
+    InsertColumn(m_cols.size(), varianttype);
+}
+
+void wxDataViewListStore::DeleteColumn( unsigned int pos )
+{
+    wxCHECK_RET( pos < m_cols.size(), "invalid list store column position" );
+
+    m_cols.RemoveAt(pos);
+    for ( wxVector<wxDataViewListStoreLine*>::iterator it = m_data.begin();
+          it != m_data.end();
+          ++it )
+    {
+        (*it)->m_values.erase((*it)->m_values.begin() + pos);
+    }
 }
 
 unsigned int wxDataViewListStore::GetItemCount() const
@@ -2419,6 +2977,12 @@ void wxDataViewListStore::DeleteAllItems()
 void wxDataViewListStore::ClearColumns()
 {
     m_cols.clear();
+    for ( wxVector<wxDataViewListStoreLine*>::iterator it = m_data.begin();
+          it != m_data.end();
+          ++it )
+    {
+        (*it)->m_values.clear();
+    }
 }
 
 void wxDataViewListStore::SetItemData( const wxDataViewItem& item, wxUIntPtr data )
@@ -2489,20 +3053,72 @@ bool wxDataViewListCtrl::Create( wxWindow *parent, wxWindowID id,
 
 bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *column, const wxString &varianttype )
 {
-    GetStore()->AppendColumn( varianttype );
-    return wxDataViewCtrl::AppendColumn( column );
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    // Append position is defined after finishing the editor because its
+    // editing-done callback is allowed to change the column topology.
+    if ( !PrepareForColumnMutation() )
+        return false;
+#endif
+
+    return InsertColumn(GetColumnCount(), column, varianttype);
 }
 
 bool wxDataViewListCtrl::PrependColumn( wxDataViewColumn *column, const wxString &varianttype )
 {
-    GetStore()->PrependColumn( varianttype );
-    return wxDataViewCtrl::PrependColumn( column );
+    return InsertColumn(0, column, varianttype);
 }
 
 bool wxDataViewListCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype )
 {
-    GetStore()->InsertColumn( pos, varianttype );
-    return wxDataViewCtrl::InsertColumn( pos, column );
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    if ( !PrepareForColumnMutation() )
+        return false;
+#endif
+
+    const unsigned int count = GetColumnCount();
+    wxCHECK_MSG( pos <= count, false, "invalid list control column position" );
+
+    wxDataViewListStore* const store = GetStore();
+    store->IncRef();
+    wxObjectDataPtr<wxDataViewListStore> pinnedStore(store);
+
+    // wxDataViewListStore uses positional model columns. Shift the existing
+    // view-to-model mapping before publishing the new topology so that any
+    // synchronous refresh observes a coherent schema.
+    for ( unsigned int i = 0; i < count; ++i )
+    {
+        wxDataViewColumn* const existing = GetColumn(i);
+        if ( existing->GetModelColumn() >= pos )
+        {
+            existing->WXSetModelColumn(
+                existing->GetModelColumn() + 1);
+        }
+    }
+    column->WXSetModelColumn(pos);
+
+    pinnedStore->InsertColumn(pos, varianttype);
+    const wxWeakRef<wxWindow> weakThis(this);
+    if ( wxDataViewCtrl::InsertColumn(pos, column) )
+        return true;
+
+    // A synchronous header callback can destroy the view while an external
+    // owner still keeps the store alive. Its schema must be rolled back
+    // independently of the view mapping.
+    pinnedStore->DeleteColumn(pos);
+    if ( weakThis.get() == this )
+    {
+        for ( unsigned int i = 0; i < count; ++i )
+        {
+            wxDataViewColumn* const existing = GetColumn(i);
+            if ( existing->GetModelColumn() > pos )
+            {
+                existing->WXSetModelColumn(
+                    existing->GetModelColumn() - 1);
+            }
+        }
+    }
+
+    return false;
 }
 
 bool wxDataViewListCtrl::PrependColumn( wxDataViewColumn *col )
@@ -2520,60 +3136,180 @@ bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *col )
     return AppendColumn( col, col->GetRenderer()->GetVariantType() );
 }
 
+bool wxDataViewListCtrl::DeleteColumn( wxDataViewColumn *col )
+{
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    if ( !PrepareForColumnMutation() )
+        return false;
+#endif
+
+    // PrepareForColumnMutation() runs public editing-done handlers. The
+    // original pointer is only an identity until it has been found again in
+    // the current control; dereferencing it before then would be a UAF if the
+    // handler removed it.
+    wxDataViewColumn* currentColumn = nullptr;
+    for ( unsigned int n = 0; n < GetColumnCount(); ++n )
+    {
+        if ( GetColumn(n) == col )
+        {
+            currentColumn = GetColumn(n);
+            break;
+        }
+    }
+    if ( !currentColumn )
+        return false;
+
+    const unsigned int pos = currentColumn->GetModelColumn();
+    const unsigned int count = GetColumnCount();
+    if ( pos >= count )
+        return false;
+
+    wxDataViewListStore* const store = GetStore();
+    store->IncRef();
+    wxObjectDataPtr<wxDataViewListStore> pinnedStore(store);
+    const wxString variantType = pinnedStore->m_cols[pos];
+    wxVector<wxVariant> removedValues;
+    removedValues.reserve(pinnedStore->m_data.size());
+    for ( wxVector<wxDataViewListStoreLine*>::const_iterator
+              it = pinnedStore->m_data.begin();
+          it != pinnedStore->m_data.end();
+          ++it )
+    {
+        removedValues.push_back((*it)->m_values[pos]);
+    }
+
+    pinnedStore->DeleteColumn(pos);
+    for ( unsigned int i = 0; i < count; ++i )
+    {
+        wxDataViewColumn* const existing = GetColumn(i);
+        if ( existing != currentColumn && existing->GetModelColumn() > pos )
+        {
+            existing->WXSetModelColumn(
+                existing->GetModelColumn() - 1);
+        }
+    }
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    if ( wxDataViewCtrl::DeleteColumn(currentColumn) )
+        return true;
+
+    // ResetColumnsOrder() can synchronously cancel an active header gesture.
+    // Its cancellation handler is allowed to destroy this control. In that
+    // case the view columns have already been consumed by destruction, while
+    // the pinned store intentionally keeps the reduced schema alive. Restoring
+    // the positional snapshot would both contradict the completed lifetime
+    // transition and index rows that the callback may already have changed.
+    if ( weakThis.get() != this )
+        return true;
+
+    pinnedStore->InsertColumn(pos, variantType);
+    for ( size_t row = 0; row < removedValues.size(); ++row )
+        pinnedStore->m_data[row]->m_values[pos] = removedValues[row];
+
+    if ( weakThis.get() == this )
+    {
+        for ( unsigned int i = 0; i < count; ++i )
+        {
+            wxDataViewColumn* const existing = GetColumn(i);
+            if ( existing != currentColumn && existing->GetModelColumn() >= pos )
+            {
+                existing->WXSetModelColumn(
+                    existing->GetModelColumn() + 1);
+            }
+        }
+    }
+
+    return false;
+}
+
 bool wxDataViewListCtrl::ClearColumns()
 {
-    GetStore()->ClearColumns();
-    return wxDataViewCtrl::ClearColumns();
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    // Finish the editor before choosing the store to mutate. Its DONE handler
+    // may legally associate another list store; capturing the old one first
+    // would clear the new view but the old schema.
+    if ( !PrepareForColumnMutation() )
+        return false;
+#endif
+
+    wxDataViewListStore* const store = GetStore();
+    store->IncRef();
+    wxObjectDataPtr<wxDataViewListStore> pinnedStore(store);
+
+    // Clear the backend first. If it rejects the operation, the list-store
+    // schema and every row remain untouched and no rollback is necessary.
+    if ( !wxDataViewCtrl::ClearColumns() )
+        return false;
+
+    pinnedStore->ClearColumns();
+    return true;
 }
 
 wxDataViewColumn *wxDataViewListCtrl::AppendTextColumn( const wxString &label,
           wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
-    GetStore()->AppendColumn( wxT("string") );
-
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewTextRenderer( wxT("string"), mode ),
         GetColumnCount(), width, align, flags );
 
-    wxDataViewCtrl::AppendColumn( ret );
+    if ( AppendColumn(ret, wxT("string")) )
+        return ret;
 
-    return ret;
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    // The generic implementation has not taken ownership when it reports
+    // failure. Some native ports do take (and destroy) the column on failure,
+    // so this cleanup must remain generic-only.
+    delete ret;
+#endif
+    return nullptr;
 }
 
 wxDataViewColumn *wxDataViewListCtrl::AppendToggleColumn( const wxString &label,
           wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
-    GetStore()->AppendColumn( wxT("bool") );
-
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewToggleRenderer( wxT("bool"), mode ),
         GetColumnCount(), width, align, flags );
 
-    return wxDataViewCtrl::AppendColumn( ret ) ? ret : nullptr;
+    if ( AppendColumn(ret, wxT("bool")) )
+        return ret;
+
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    delete ret;
+#endif
+    return nullptr;
 }
 
 wxDataViewColumn *wxDataViewListCtrl::AppendProgressColumn( const wxString &label,
           wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
-    GetStore()->AppendColumn( wxT("long") );
-
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode ),
         GetColumnCount(), width, align, flags );
 
-    return wxDataViewCtrl::AppendColumn( ret ) ? ret : nullptr;
+    if ( AppendColumn(ret, wxT("long")) )
+        return ret;
+
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    delete ret;
+#endif
+    return nullptr;
 }
 
 wxDataViewColumn *wxDataViewListCtrl::AppendIconTextColumn( const wxString &label,
           wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
-    GetStore()->AppendColumn( wxT("wxDataViewIconText") );
-
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode ),
         GetColumnCount(), width, align, flags );
 
-    return wxDataViewCtrl::AppendColumn( ret ) ? ret : nullptr;
+    if ( AppendColumn(ret, wxT("wxDataViewIconText")) )
+        return ret;
+
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    delete ret;
+#endif
+    return nullptr;
 }
 
 //-----------------------------------------------------------------------------

@@ -29,6 +29,7 @@
 
 #include "wx/html/htmlcell.h"
 #include "wx/html/winpars.h"
+#include "wx/weakref.h"
 
 // this hack forces the linker to always link in m_* files
 #include "wx/html/forcelnk.h"
@@ -62,18 +63,19 @@ private:
     {
         m_items[n] = (size_t)-1;
         wxDELETE(m_cells[n]);
+        ++m_revision;
     }
 
 public:
     wxHtmlListBoxCache()
+        : m_next(0),
+          m_revision(0)
     {
         for ( size_t n = 0; n < SIZE; n++ )
         {
             m_items[n] = (size_t)-1;
             m_cells[n] = nullptr;
         }
-
-        m_next = 0;
     }
 
     ~wxHtmlListBoxCache()
@@ -108,12 +110,15 @@ public:
     // returns true if we already have this item cached
     bool Has(size_t item) const { return Get(item) != nullptr; }
 
+    unsigned long long GetRevision() const { return m_revision; }
+
     // ensure that the item is cached
     void Store(size_t item, wxHtmlCell *cell)
     {
         delete m_cells[m_next];
         m_cells[m_next] = cell;
         m_items[m_next] = item;
+        ++m_revision;
 
         // advance to the next item wrapping around if there are no more
         if ( ++m_next == SIZE )
@@ -138,6 +143,9 @@ private:
 
     // the index of the LRU (oldest) cell
     size_t m_next;
+
+    // Incremented whenever a cached cell can have changed identity.
+    unsigned long long m_revision;
 
     // the parsed representation of the cached item or nullptr
     wxHtmlCell *m_cells[SIZE];
@@ -295,6 +303,13 @@ wxString wxHtmlListBox::OnGetItemMarkup(size_t n) const
 
 wxHtmlCell* wxHtmlListBox::CreateCellForItem(size_t n) const
 {
+    const size_t itemCount = GetItemCount();
+    if ( n >= itemCount )
+        return nullptr;
+
+    const wxWeakRef<wxWindow> weakThis(
+        const_cast<wxHtmlListBox *>(this));
+
     if ( !m_htmlParser )
     {
         wxHtmlListBox *self = wxConstCast(this, wxHtmlListBox);
@@ -306,8 +321,18 @@ wxHtmlCell* wxHtmlListBox::CreateCellForItem(size_t n) const
         m_htmlParser->SetStandardFonts();
     }
 
-    wxHtmlContainerCell *cell = (wxHtmlContainerCell *)m_htmlParser->
-            Parse(OnGetItemMarkup(n));
+    const wxString markup = OnGetItemMarkup(n);
+    if ( !weakThis || GetItemCount() != itemCount )
+        return nullptr;
+
+    wxHtmlContainerCell *cell =
+        static_cast<wxHtmlContainerCell *>(m_htmlParser->Parse(markup));
+    if ( !weakThis || GetItemCount() != itemCount )
+    {
+        delete cell;
+        return nullptr;
+    }
+
     wxCHECK_MSG( cell, nullptr, wxT("wxHtmlParser::Parse() returned nullptr?") );
 
     // set the cell's ID to item's index so that CellCoordsToPhysical()
@@ -321,13 +346,45 @@ wxHtmlCell* wxHtmlListBox::CreateCellForItem(size_t n) const
 
 void wxHtmlListBox::CacheItem(size_t n) const
 {
-    if ( !m_cache->Has(n) )
-        m_cache->Store(n, CreateCellForItem(n));
+    const size_t itemCount = GetItemCount();
+    if ( n >= itemCount || m_cache->Has(n) )
+        return;
+
+    const wxWeakRef<wxWindow> weakThis(
+        const_cast<wxHtmlListBox *>(this));
+    wxHtmlCell * const cell = CreateCellForItem(n);
+    if ( !weakThis )
+    {
+        delete cell;
+        return;
+    }
+
+    if ( !cell || GetItemCount() != itemCount || n >= GetItemCount() )
+    {
+        delete cell;
+        return;
+    }
+
+    // A reentrant markup callback may have populated this cache entry.
+    if ( m_cache->Has(n) )
+        delete cell;
+    else
+    {
+        // Store() evicts another entry and may invalidate the hover helper's
+        // raw pointers into it.
+        wxHtmlListBox * const self =
+            const_cast<wxHtmlListBox *>(this);
+        self->m_tmpLastCell = nullptr;
+        self->m_tmpLastLink = nullptr;
+        m_cache->Store(n, cell);
+    }
 }
 
 void wxHtmlListBox::OnSize(wxSizeEvent& event)
 {
     // we need to relayout all the cached cells
+    m_tmpLastCell = nullptr;
+    m_tmpLastLink = nullptr;
     m_cache->Clear();
 
     event.Skip();
@@ -335,6 +392,8 @@ void wxHtmlListBox::OnSize(wxSizeEvent& event)
 
 void wxHtmlListBox::RefreshRow(size_t line)
 {
+    m_tmpLastCell = nullptr;
+    m_tmpLastLink = nullptr;
     m_cache->InvalidateRange(line, line);
 
     wxVListBox::RefreshRow(line);
@@ -342,6 +401,8 @@ void wxHtmlListBox::RefreshRow(size_t line)
 
 void wxHtmlListBox::RefreshRows(size_t from, size_t to)
 {
+    m_tmpLastCell = nullptr;
+    m_tmpLastLink = nullptr;
     m_cache->InvalidateRange(from, to);
 
     wxVListBox::RefreshRows(from, to);
@@ -349,6 +410,8 @@ void wxHtmlListBox::RefreshRows(size_t from, size_t to)
 
 void wxHtmlListBox::RefreshAll()
 {
+    m_tmpLastCell = nullptr;
+    m_tmpLastLink = nullptr;
     m_cache->Clear();
 
     wxVListBox::RefreshAll();
@@ -357,6 +420,8 @@ void wxHtmlListBox::RefreshAll()
 void wxHtmlListBox::SetItemCount(size_t count)
 {
     // the items are going to change, forget the old ones
+    m_tmpLastCell = nullptr;
+    m_tmpLastLink = nullptr;
     m_cache->Clear();
 
     wxVListBox::SetItemCount(count);
@@ -389,7 +454,13 @@ wxHtmlListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 
 void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
 {
+    const size_t itemCount = GetItemCount();
+    const wxWeakRef<wxWindow> weakThis(
+        const_cast<wxHtmlListBox *>(this));
+
     CacheItem(n);
+    if ( !weakThis || GetItemCount() != itemCount )
+        return;
 
     wxHtmlCell *cell = m_cache->Get(n);
     wxCHECK_RET( cell, wxT("this cell should be cached!") );
@@ -426,7 +497,15 @@ wxCoord wxHtmlListBox::OnMeasureItem(size_t n) const
     // some code updating an existing cell which could be displaced from the
     // cache if we called CacheItem() and destroyed -- resulting in a crash
     // when we return to its method from here, see #16651.
+    const wxWeakRef<wxWindow> weakThis(
+        const_cast<wxHtmlListBox *>(this));
     wxHtmlCell * const cell = CreateCellForItem(n);
+    if ( !weakThis )
+    {
+        delete cell;
+        return 0;
+    }
+
     if ( !cell )
         return 0;
 
@@ -455,6 +534,57 @@ void wxHtmlListBox::OnLinkClicked(size_t WXUNUSED(n),
 {
     wxHtmlLinkEvent event(GetId(), link);
     GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxHtmlListBox::OnCellClicked(wxHtmlCell *cell,
+                                  wxCoord x, wxCoord y,
+                                  const wxMouseEvent& event)
+{
+    wxCHECK_MSG( cell, false, wxT("can't be called with null cell") );
+
+    wxHtmlCell * const rootCell = cell->GetRootCell();
+    wxCHECK_MSG( rootCell, false, wxT("HTML cell has no root") );
+
+    const size_t item = GetItemForCell(rootCell);
+    const bool wasCached =
+        item < GetItemCount() && m_cache->Get(item) == rootCell;
+    const unsigned long long cacheRevision = m_cache->GetRevision();
+
+    wxHtmlCellEvent cellEvent(wxEVT_HTML_CELL_CLICKED,
+                              GetId(),
+                              cell,
+                              wxPoint(x, y),
+                              event);
+
+    const wxWeakRef<wxWindow> weakThis(this);
+    const bool handled = GetEventHandler()->ProcessEvent(cellEvent);
+
+    // Destruction is a complete handling decision: neither the cached cell nor
+    // the listbox fallback may be touched after it.
+    if ( !weakThis )
+        return true;
+
+    if ( handled )
+        return cellEvent.GetLinkClicked();
+
+    // A skipped handler may have cleared/replaced the model, deleting cell.
+    // Only apply the HTML default action when the exact root is still cached.
+    if ( !wasCached ||
+         m_cache->GetRevision() != cacheRevision ||
+         item >= GetItemCount() ||
+         m_cache->Get(item) != rootCell )
+    {
+        return cellEvent.GetLinkClicked();
+    }
+
+    if ( cell->ProcessMouseClick(this,
+                                 cellEvent.GetPoint(),
+                                 cellEvent.GetMouseEvent()) )
+    {
+        return true;
+    }
+
+    return cellEvent.GetLinkClicked();
 }
 
 wxHtmlOpeningStatus
@@ -517,17 +647,32 @@ wxPoint wxHtmlListBox::GetRootCellCoords(size_t n) const
 
 bool wxHtmlListBox::PhysicalCoordsToCell(wxPoint& pos, wxHtmlCell*& cell) const
 {
+    cell = nullptr;
+
+    const size_t itemCount = GetItemCount();
+    const wxWeakRef<wxWindow> weakThis(
+        const_cast<wxHtmlListBox *>(this));
+
     int n = VirtualHitTest(pos.y);
-    if ( n == wxNOT_FOUND )
+    if ( !weakThis ||
+         GetItemCount() != itemCount ||
+         n == wxNOT_FOUND ||
+         n < 0 ||
+         static_cast<size_t>(n) >= itemCount )
         return false;
 
     // convert mouse coordinates to coords relative to item's wxHtmlCell:
     pos -= GetRootCellCoords(n);
+    if ( !weakThis || GetItemCount() != itemCount )
+        return false;
 
     CacheItem(n);
+    if ( !weakThis || GetItemCount() != itemCount )
+        return false;
+
     cell = m_cache->Get(n);
 
-    return true;
+    return cell != nullptr;
 }
 
 size_t wxHtmlListBox::GetItemForCell(const wxHtmlCell *cell) const
@@ -557,7 +702,10 @@ wxHtmlListBox::CellCoordsToPhysical(const wxPoint& pos, wxHtmlCell *cell) const
 
 void wxHtmlListBox::OnInternalIdle()
 {
+    const wxWeakRef<wxWindow> weakThis(this);
     wxVListBox::OnInternalIdle();
+    if ( !weakThis )
+        return;
 
     if ( wxHtmlWindowMouseHelper::DidMouseMove() )
     {
@@ -579,6 +727,7 @@ void wxHtmlListBox::OnMouseMove(wxMouseEvent& event)
 
 void wxHtmlListBox::OnLeftDown(wxMouseEvent& event)
 {
+    const wxWeakRef<wxWindow> weakThis(this);
     wxPoint pos = event.GetPosition();
     wxHtmlCell *cell;
 
@@ -588,7 +737,12 @@ void wxHtmlListBox::OnLeftDown(wxMouseEvent& event)
         return;
     }
 
-    if ( !wxHtmlWindowMouseHelper::HandleMouseClick(cell, pos, event) )
+    const bool handled =
+        wxHtmlWindowMouseHelper::HandleMouseClick(cell, pos, event);
+    if ( !weakThis )
+        return;
+
+    if ( !handled )
     {
         // no link was clicked, so let the listbox code handle the click (e.g.
         // by selecting another item in the list):
@@ -661,7 +815,9 @@ void wxSimpleHtmlListBox::DoClear()
 
 void wxSimpleHtmlListBox::Clear()
 {
-    DoClear();
+    // Let wxItemContainer release owned client objects and reset its client
+    // data mode before delegating back to DoClear().
+    wxItemContainer::Clear();
 }
 
 void wxSimpleHtmlListBox::DoDeleteOneItem(unsigned int n)

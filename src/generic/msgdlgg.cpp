@@ -283,13 +283,25 @@ int wxGenericMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
+    return DoShowModal();
+}
+
+int wxGenericMessageDialog::DoShowModal()
+{
     if ( !m_created )
     {
         m_created = true;
         DoCreateMsgdialog();
     }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // The public message-dialog operation already installed its modal hook.
+    // Use the existing WinUI shell seam to avoid exposing the private generic
+    // fallback loop as a second modal operation.
+    return WinUIShowModalWithoutHook();
+#else
     return wxMessageDialogBase::ShowModal();
+#endif
 }
 
 #endif // wxUSE_MSGDLG

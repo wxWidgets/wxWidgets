@@ -490,7 +490,29 @@ function(wx_set_target_properties target_name)
             target_link_directories(${target_name} PUBLIC ${wxTOOLKIT_LIBRARY_DIRS})
         endif()
         if(wxTOOLKIT_LIBRARIES)
-            target_link_libraries(${target_name} PUBLIC ${wxTOOLKIT_LIBRARIES})
+            # wxWinUI's two Windows App SDK import libraries are
+            # implementation details of a shared wxWidgets DLL. Keeping them
+            # in its public interface leaks the build-tree NuGet cache into
+            # the installed export and makes consumers link libraries they
+            # don't use. Keep the other toolkit libraries public: in
+            # particular, generated C++/WinRT code and UI Automation helpers
+            # used by clients need runtimeobject/uiautomationcore
+            # transitively. Static archives need every dependency public;
+            # winui.cmake represents the two packaged imports as relocatable
+            # targets in that installed package.
+            if(WXWINUI AND wxUSE_WINUI3 AND wxBUILD_SHARED)
+                set(wx_winui_private_libraries
+                    wx::winui3_bootstrap
+                    wx::winui3_dispatching)
+                set(wx_winui_public_libraries ${wxTOOLKIT_LIBRARIES})
+                list(REMOVE_ITEM wx_winui_public_libraries
+                    ${wx_winui_private_libraries})
+                target_link_libraries(${target_name}
+                    PRIVATE ${wx_winui_private_libraries}
+                    PUBLIC ${wx_winui_public_libraries})
+            else()
+                target_link_libraries(${target_name} PUBLIC ${wxTOOLKIT_LIBRARIES})
+            endif()
         endif()
         if(wxTOOLKIT_DEFINITIONS)
             target_compile_definitions(${target_name} PUBLIC ${wxTOOLKIT_DEFINITIONS})
@@ -1124,9 +1146,23 @@ function(wx_add name group)
     endif()
 
     if(group STREQUAL Tests)
-        add_test(NAME ${target_name}
-            COMMAND ${target_name}
-            WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        if(WXWINUI AND wxUSE_WINUI3 AND NOT APP_CONSOLE AND
+                TARGET wx_winui_desktop_test_runner)
+            add_dependencies(
+                ${target_name} wx_winui_desktop_test_runner)
+            add_test(NAME ${target_name}
+                COMMAND
+                    $<TARGET_FILE:wx_winui_desktop_test_runner>
+                    --
+                    $<TARGET_FILE:${target_name}>
+                WORKING_DIRECTORY
+                    "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        else()
+            add_test(NAME ${target_name}
+                COMMAND ${target_name}
+                WORKING_DIRECTORY
+                    "${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}")
+        endif()
     endif()
 endfunction()
 

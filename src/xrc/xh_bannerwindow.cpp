@@ -71,6 +71,8 @@ wxObject *wxBannerWindowXmlHandler::DoCreateResource()
         banner->SetBitmap(bitmap);
     }
 
+    // Keep the historical order: in particular, the empty text fields of a
+    // bitmap-only XRC resource must not clear the bitmap just installed.
     banner->SetText(GetText(wxS("title")), GetText(wxS("message")));
 
     return banner;

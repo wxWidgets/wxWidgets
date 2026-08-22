@@ -25,9 +25,139 @@
 
 #include "wx/propgrid/manager.h"
 #include "wx/propgrid/private.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/scopeguard.h"
+#include "wx/weakref.h"
+
+#include <unordered_map>
 
 
 #define wxPG_MAN_ALTERNATE_BASE_ID          11249 // Needed for wxID_ANY madness
+
+wxPGPropertyGridManagerTransientState::
+wxPGPropertyGridManagerTransientState(wxPropertyGridManager* manager)
+    : identity(manager)
+{
+}
+
+namespace
+{
+
+using wxPGPropertyGridManagerTransientStates =
+    std::unordered_map<wxPropertyGridManager*,
+                       wxPGPropertyGridManagerTransientState>;
+
+wxPGPropertyGridManagerTransientStates&
+wxPGGetPropertyGridManagerTransientStates()
+{
+    static wxPGPropertyGridManagerTransientStates* const states =
+        new wxPGPropertyGridManagerTransientStates;
+    return *states;
+}
+
+#if wxUSE_TOOLBAR
+struct wxPGToolbarRemovalFailureState
+{
+    unsigned int ordinal = 0;
+    unsigned int calls = 0;
+};
+
+wxPGToolbarRemovalFailureState& wxPGGetToolbarRemovalFailureState()
+{
+    static wxPGToolbarRemovalFailureState state;
+    return state;
+}
+
+wxToolBarToolBase* wxPGDetachToolbarToolByPos(wxToolBar* toolbar,
+                                              size_t position)
+{
+    wxPGToolbarRemovalFailureState& failure =
+        wxPGGetToolbarRemovalFailureState();
+    if ( failure.ordinal && ++failure.calls == failure.ordinal )
+    {
+        failure.ordinal = 0;
+        return nullptr;
+    }
+
+    if ( position >= toolbar->GetToolsCount() )
+        return nullptr;
+
+    wxToolBarToolBase* const expected = toolbar->GetToolByPos(position);
+    if ( !expected )
+        return nullptr;
+
+    wxToolBarToolBase* const detached = toolbar->RemoveTool(expected->GetId());
+    if ( detached != expected )
+    {
+        // This can only happen for a duplicated ID. Restore the accidentally
+        // detached item before reporting failure; manager-owned page tools
+        // have unique IDs and the mode separator is the first separator.
+        if ( detached )
+        {
+            if ( !toolbar->InsertTool(position, detached) )
+                delete detached;
+        }
+        return nullptr;
+    }
+
+    return detached;
+}
+#endif
+
+} // anonymous namespace
+
+#if wxUSE_TOOLBAR
+void wxPGManagerFailToolbarRemovalForTesting(unsigned int ordinal)
+{
+    wxASSERT_MSG(ordinal > 0, "toolbar failure ordinal must be positive");
+    wxPGToolbarRemovalFailureState& state =
+        wxPGGetToolbarRemovalFailureState();
+    state.ordinal = ordinal;
+    state.calls = 0;
+}
+
+void wxPGManagerResetToolbarRemovalFailuresForTesting()
+{
+    wxPGGetToolbarRemovalFailureState() = wxPGToolbarRemovalFailureState();
+}
+#endif
+
+wxPGPropertyGridManagerTransientState&
+wxPGGetPropertyGridManagerTransientState(wxPropertyGridManager* manager)
+{
+    wxASSERT_MSG(manager, "null PropertyGridManager sidecar owner");
+
+    wxPGPropertyGridManagerTransientStates& states =
+        wxPGGetPropertyGridManagerTransientStates();
+    auto it = states.find(manager);
+    if ( it != states.end() && it->second.identity.get() == manager )
+        return it->second;
+
+    if ( it != states.end() )
+        states.erase(it);
+    return states.emplace(
+        manager, wxPGPropertyGridManagerTransientState(manager)).first->second;
+}
+
+void wxPGResetPropertyGridManagerTransientState(
+    wxPropertyGridManager* manager)
+{
+    wxPGPropertyGridManagerTransientStates& states =
+        wxPGGetPropertyGridManagerTransientStates();
+    states.erase(manager);
+    states.emplace(
+        manager, wxPGPropertyGridManagerTransientState(manager));
+}
+
+void wxPGErasePropertyGridManagerTransientState(
+    wxPropertyGridManager* manager)
+{
+    wxPGPropertyGridManagerTransientStates& states =
+        wxPGGetPropertyGridManagerTransientStates();
+    const auto it = states.find(manager);
+    if ( it != states.end() && it->second.identity.get() == manager )
+        states.erase(it);
+}
 
 
 // -----------------------------------------------------------------------
@@ -382,11 +512,20 @@ void wxPropertyGridPage::DoSetSplitter(int pos, int splitterColumn, wxPGSplitter
 
 class wxPGHeaderCtrl : public wxHeaderCtrl
 {
+    friend class wxPGHeaderTestBridge;
+
 public:
     wxPGHeaderCtrl(wxPropertyGridManager* manager, wxWindowID id, const wxPoint& pos,
                    const wxSize& size, long style)
         : wxHeaderCtrl(manager, id, pos, size, style)
         , m_manager(manager)
+        , m_page(nullptr)
+        , m_resizePage(nullptr)
+        , m_resizeColumnCount(0)
+        , m_resizeColumn(-1)
+        , m_resizeAccepted(false)
+        , m_resizeBeginDispatching(false)
+        , m_resizeInvalidated(false)
     {
         EnsureColumnCount(2);
 
@@ -409,20 +548,53 @@ public:
 
     virtual void OnColumnCountChanging(unsigned int count) override
     {
+        const wxWeakRef<wxWindow> weakThis(this);
+        const wxPropertyGridPage* const pageBefore = m_page;
+        if ( m_resizeAccepted )
+        {
+            if ( m_resizeBeginDispatching )
+                m_resizeInvalidated = true;
+            else
+                FinishResizeTransaction();
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return;
+            if ( m_page != pageBefore ||
+                 m_manager->GetCurrentPage() != pageBefore )
+            {
+                return;
+            }
+        }
         EnsureColumnCount(count);
     }
 
     void OnPageChanged(const wxPropertyGridPage* page)
     {
+        const wxWeakRef<wxWindow> weakThis(this);
+        if ( m_resizeAccepted )
+        {
+            if ( m_resizeBeginDispatching )
+                m_resizeInvalidated = true;
+            else
+                FinishResizeTransaction();
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return;
+            if ( m_manager->GetCurrentPage() != page )
+                return;
+        }
         m_page = page;
         SetColumnCount(m_page->GetColumnCount());
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+            return;
         DetermineAllColumnWidths();
         UpdateAllColumns();
     }
 
     void OnColumWidthsChanged()
     {
+        const wxWeakRef<wxWindow> weakThis(this);
         DetermineAllColumnWidths();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+            return;
         UpdateAllColumns();
     }
 
@@ -438,12 +610,62 @@ public:
     }
 
 private:
+    bool IsResizeTargetCurrent() const
+    {
+        return m_resizeAccepted &&
+               !m_resizeInvalidated &&
+               m_resizePage &&
+               m_resizeColumn >= 0 &&
+               m_manager->GetCurrentPage() == m_resizePage &&
+               m_resizePage->GetColumnCount() == m_resizeColumnCount &&
+               static_cast<unsigned int>(m_resizeColumn + 1) <
+                   m_resizeColumnCount;
+    }
+
+    void ClearResizeTransaction()
+    {
+        m_resizePage = nullptr;
+        m_resizeColumnCount = 0;
+        m_resizeColumn = -1;
+        m_resizeAccepted = false;
+        m_resizeBeginDispatching = false;
+        m_resizeInvalidated = false;
+    }
+
+    void FinishResizeTransaction()
+    {
+        if ( !m_resizeAccepted )
+        {
+            ClearResizeTransaction();
+            return;
+        }
+
+        const int col = m_resizeColumn;
+        wxPropertyGrid* const pg = m_manager->GetGrid();
+
+        // Retire the transaction before publishing END so a nested resize
+        // cannot accidentally reuse the old page/column snapshot.
+        ClearResizeTransaction();
+
+        if ( pg )
+        {
+            pg->SendEvent(wxEVT_PG_COL_END_DRAG,
+                          nullptr,
+                          nullptr,
+                          wxPGSelectPropertyFlags::Null,
+                          static_cast<unsigned int>(col));
+        }
+    }
+
     void UpdateAllColumns()
     {
+        const wxWeakRef<wxWindow> weakThis(this);
         unsigned int colCount = GetColumnCount();
         for ( unsigned int i = 0; i < colCount; i++ )
         {
             UpdateColumn(i);
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return;
         }
     }
 
@@ -492,9 +714,19 @@ private:
         }
     }
 
-    void OnSetColumnWidth(int col, int colWidth)
+    bool OnSetColumnWidth(int col, int colWidth)
     {
+        if ( !IsResizeTargetCurrent() ||
+             static_cast<size_t>(col) >= m_columns.size() )
+        {
+            return false;
+        }
+
+        const wxWeakRef<wxWindow> weakThis(this);
+        wxPropertyGridManager* const manager = m_manager;
+        const wxWeakRef<wxWindow> weakManager(manager);
         wxPropertyGrid* pg = m_manager->GetGrid();
+        const wxWeakRef<wxWindow> weakGrid(pg);
 
         // Internal border width
         int borderWidth = pg->GetWindowBorderSize().x / 2;
@@ -510,15 +742,41 @@ private:
         pg->DoSetSplitter(x, col,
                           wxPGSplitterPositionFlags::Refresh |
                           wxPGSplitterPositionFlags::FromEvent);
+        return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+               wxWeakWindowIsAvailableForCallbacks(weakManager, manager) &&
+               wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) &&
+               m_manager == manager &&
+               manager->GetGrid() == pg &&
+               IsResizeTargetCurrent();
     }
 
     void OnResizing(wxHeaderCtrlEvent& evt)
     {
-        int col = evt.GetColumn();
-        int colWidth = evt.GetWidth();
+        const wxWeakRef<wxWindow> weakThis(this);
+        if ( !IsResizeTargetCurrent() ||
+             evt.GetColumn() != m_resizeColumn )
+        {
+            FinishResizeTransaction();
+            if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                evt.Veto();
+            return;
+        }
 
-        OnSetColumnWidth(col, colWidth);
+        const int col = m_resizeColumn;
+        if ( !OnSetColumnWidth(col, evt.GetWidth()) )
+        {
+            if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+            {
+                FinishResizeTransaction();
+                if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                    evt.Veto();
+            }
+            return;
+        }
+
         OnColumWidthsChanged();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) || !IsResizeTargetCurrent() )
+            return;
 
         wxPropertyGrid* pg = m_manager->GetGrid();
         pg->SendEvent(wxEVT_PG_COL_DRAGGING, nullptr, nullptr, wxPGSelectPropertyFlags::Null,
@@ -527,36 +785,121 @@ private:
 
     void OnBeginResize(wxHeaderCtrlEvent& evt)
     {
-        int col = evt.GetColumn();
-        wxPropertyGrid* pg = m_manager->GetGrid();
+        const wxWeakRef<wxWindow> weakThis(this);
+        if ( m_resizeBeginDispatching )
+        {
+            // A native/header callback cannot start a second public resize
+            // while BEGIN for the first one is still deciding its verdict.
+            evt.Veto();
+            return;
+        }
+        if ( m_resizeAccepted )
+        {
+            FinishResizeTransaction();
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return;
+        }
+
+        const int col = evt.GetColumn();
+        wxPropertyGrid* const pg = m_manager->GetGrid();
+        const wxWeakRef<wxWindow> weakGrid(pg);
+        const wxPropertyGridPage* const page = m_page;
+        const unsigned int columnCount = page ? page->GetColumnCount() : 0;
 
         // Don't allow resizing the rightmost column
         // (like it's not allowed for the rightmost wxPropertyGrid splitter)
-        if ( col == (int)m_page->GetColumnCount() - 1 )
+        if ( !page || col < 0 ||
+             static_cast<unsigned int>(col + 1) >= columnCount )
             evt.Veto();
         // Never allow column resize if layout is static
         else if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
             evt.Veto();
-        // Allow application to veto dragging
-        else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
-                                nullptr, nullptr, wxPGSelectPropertyFlags::Null,
-                                (unsigned int)col) )
-            evt.Veto();
+        else
+        {
+            // Arm before BEGIN: once accepted, every exit path must publish a
+            // matching END using this exact page/column identity.
+            m_resizePage = page;
+            m_resizeColumnCount = columnCount;
+            m_resizeColumn = col;
+            m_resizeAccepted = true;
+            m_resizeBeginDispatching = true;
+            m_resizeInvalidated = false;
+
+            const bool vetoed =
+                pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
+                              nullptr,
+                              nullptr,
+                              wxPGSelectPropertyFlags::Null,
+                              static_cast<unsigned int>(col));
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                 !wxWeakWindowIsAvailableForCallbacks(weakGrid, pg) )
+                return;
+            m_resizeBeginDispatching = false;
+
+            if ( vetoed )
+            {
+                ClearResizeTransaction();
+                evt.Veto();
+            }
+            else if ( !IsResizeTargetCurrent() )
+            {
+                // BEGIN was accepted but its topology was invalidated by the
+                // callback. Balance it immediately and prevent the native
+                // header from applying the stale width.
+                FinishResizeTransaction();
+                if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                    evt.Veto();
+            }
+        }
     }
 
-    void OnEndResize(wxHeaderCtrlEvent& evt)
+    void OnEndResize(wxHeaderCtrlEvent& WXUNUSED(evt))
     {
-        int col = evt.GetColumn();
-        wxPropertyGrid* pg = m_manager->GetGrid();
-        pg->SendEvent(wxEVT_PG_COL_END_DRAG,
-                      nullptr, nullptr, wxPGSelectPropertyFlags::Null,
-                      (unsigned int)col);
+        FinishResizeTransaction();
     }
 
     wxPropertyGridManager*          m_manager;
     const wxPropertyGridPage*       m_page;
     std::vector<wxHeaderColumnSimple*> m_columns;
+    const wxPropertyGridPage*       m_resizePage;
+    unsigned int                    m_resizeColumnCount;
+    int                             m_resizeColumn;
+    bool                            m_resizeAccepted;
+    bool                            m_resizeBeginDispatching;
+    bool                            m_resizeInvalidated;
 };
+
+class wxPGHeaderTestBridge
+{
+public:
+    static bool Dispatch(wxPropertyGridManager* manager,
+                         wxHeaderCtrlEvent& event)
+    {
+        if ( !manager || !manager->m_pHeaderCtrl )
+            return false;
+
+        wxPGHeaderCtrl* const pgHeader = manager->m_pHeaderCtrl;
+        event.SetId(pgHeader->GetId());
+        event.SetEventObject(pgHeader);
+
+        if ( event.GetEventType() == wxEVT_HEADER_BEGIN_RESIZE )
+            pgHeader->OnBeginResize(event);
+        else if ( event.GetEventType() == wxEVT_HEADER_RESIZING )
+            pgHeader->OnResizing(event);
+        else if ( event.GetEventType() == wxEVT_HEADER_END_RESIZE )
+            pgHeader->OnEndResize(event);
+        else
+            return false;
+
+        return true;
+    }
+};
+
+bool wxPGProcessHeaderResizeEventForTesting(wxPropertyGridManager* manager,
+                                            wxHeaderCtrlEvent& event)
+{
+    return wxPGHeaderTestBridge::Dispatch(manager, event);
+}
 
 #endif // wxUSE_HEADERCTRL
 
@@ -649,6 +992,7 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
 //
 void wxPropertyGridManager::Init1()
 {
+    wxPGResetPropertyGridManagerTransientState(this);
 
     m_pPropGrid = nullptr;
 
@@ -786,6 +1130,7 @@ wxPropertyGridManager::~wxPropertyGridManager()
     }
 
     delete m_emptyPage;
+    wxPGErasePropertyGridManagerTransientState(this);
 }
 
 // -----------------------------------------------------------------------
@@ -819,16 +1164,45 @@ wxSize wxPropertyGridManager::DoGetBestSize() const
 
 bool wxPropertyGridManager::SetFont( const wxFont& font )
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    wxPropertyGridPageState* const state = grid->GetState();
+
+    // Set the grid first: clearing its active editor can publish a selection
+    // event and synchronously switch pages. In that case wxPropertyGrid aborts
+    // its own font transaction, and the manager must remain unchanged too.
+    grid->SetFont(font);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+         !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) || m_pPropGrid != grid ||
+         grid->GetState() != state )
+    {
+        return false;
+    }
+
     bool res = wxWindow::SetFont(font);
-    m_pPropGrid->SetFont(font);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+         !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) || m_pPropGrid != grid ||
+         grid->GetState() != state )
+    {
+        return false;
+    }
 
     // TODO: Need to do caption recalculations for other pages as well.
     for ( unsigned int i = 0; i < m_arrPages.size(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
 
-        if ( page != m_pPropGrid->GetState() )
+        if ( page != state )
+        {
             page->CalculateFontAndBitmapStuff(-1);
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                 !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) || m_pPropGrid != grid ||
+                 grid->GetState() != state )
+            {
+                return false;
+            }
+        }
     }
 
     return res;
@@ -903,13 +1277,56 @@ bool wxPropertyGridManager::DoSelectPage( int index )
                  false,
                  wxS("invalid page index") );
 
+    // OnShow() and other page-switch callbacks may request another page.
+    // Coalesce only a request for the exact target already in flight; a
+    // different nested target is allowed to complete and makes the outer
+    // transaction abort through the state/revision checks below.
+    wxPGPropertyGridManagerTransientState& selectionState =
+        wxPGGetPropertyGridManagerTransientState(this);
+    if ( selectionState.pageSelectionInProgress &&
+         selectionState.pageSelectionTarget == index )
+        return true;
+
     if ( m_selPage == index )
         return true;
 
-    if ( m_pPropGrid->GetSelection() )
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    const int selectedPageBefore = m_selPage;
+    wxPropertyGridPageState* const stateBefore = grid->m_pState;
+    const bool previousSelectionInProgress =
+        selectionState.pageSelectionInProgress;
+    const int previousSelectionTarget = selectionState.pageSelectionTarget;
+    selectionState.pageSelectionInProgress = true;
+    selectionState.pageSelectionTarget = index;
+    const wxScopeGuard leavePageSelection =
+        wxMakeGuard([weakThis, this,
+                     previousSelectionInProgress,
+                     previousSelectionTarget]()
+        {
+            if ( weakThis.get() == this )
+            {
+                wxPGPropertyGridManagerTransientState& state =
+                    wxPGGetPropertyGridManagerTransientState(this);
+                state.pageSelectionInProgress = previousSelectionInProgress;
+                state.pageSelectionTarget = previousSelectionTarget;
+            }
+        });
+    wxUnusedVar(leavePageSelection);
+
+    if ( grid->GetSelection() )
     {
-        if ( !m_pPropGrid->ClearSelection() )
+        if ( !grid->ClearSelection() )
             return false;
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             m_pPropGrid != grid ||
+             m_selPage != selectedPageBefore ||
+             grid->m_pState != stateBefore )
+        {
+            return false;
+        }
     }
 
 #if wxUSE_TOOLBAR
@@ -928,6 +1345,16 @@ bool wxPropertyGridManager::DoSelectPage( int index )
         nextPage = m_arrPages[index];
 
         nextPage->OnShow();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             m_pPropGrid != grid ||
+             m_selPage != selectedPageBefore ||
+             grid->m_pState != stateBefore ||
+             index >= static_cast<int>(GetPageCount()) ||
+             m_arrPages[index] != nextPage )
+        {
+            return false;
+        }
     }
     else
     {
@@ -940,27 +1367,68 @@ bool wxPropertyGridManager::DoSelectPage( int index )
         nextPage = m_emptyPage;
     }
 
+    wxPropertyGridPageState* const nextState = nextPage->GetStatePtr();
+    const auto nextPageIsStillOwned =
+        [this, index, nextPage]()
+        {
+            if ( index < 0 )
+                return m_emptyPage == nextPage;
+
+            return index < static_cast<int>(GetPageCount()) &&
+                   m_arrPages[index] == nextPage;
+        };
+
     m_iFlags |= wxPG_MAN_FL_DESC_REFRESH_REQUIRED;
 
-    m_pPropGrid->SwitchState( nextPage->GetStatePtr() );
+    grid->SwitchState( nextState );
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+         !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+         m_pPropGrid != grid ||
+         m_selPage != selectedPageBefore ||
+         !nextPageIsStillOwned() ||
+         grid->m_pState != nextState )
+    {
+        return false;
+    }
 
-    m_pState = m_pPropGrid->m_pState;
+    m_pState = grid->m_pState;
 
     m_selPage = index;
 
 #if wxUSE_TOOLBAR
     if ( m_pToolbar )
     {
+        wxToolBar* const toolbar = m_pToolbar;
+        const wxWeakRef<wxWindow> weakToolbar(toolbar);
         if ( index >= 0 )
-            m_pToolbar->ToggleTool( nextPage->GetToolId(), true );
+            toolbar->ToggleTool( nextPage->GetToolId(), true );
         else
-            m_pToolbar->ToggleTool( prevPage->GetToolId(), false );
+            toolbar->ToggleTool( prevPage->GetToolId(), false );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) ||
+             m_pPropGrid != grid || m_pToolbar != toolbar ||
+             m_selPage != index ||
+             !nextPageIsStillOwned() ||
+             grid->m_pState != nextState )
+        {
+            return false;
+        }
     }
 #endif
 
 #if wxUSE_HEADERCTRL
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
+    {
         m_pHeaderCtrl->OnPageChanged(nextPage);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             m_pPropGrid != grid ||
+             m_selPage != index ||
+             !nextPageIsStillOwned() ||
+             grid->m_pState != nextState )
+            return false;
+    }
 #endif
 
     return true;
@@ -1335,12 +1803,205 @@ bool wxPropertyGridManager::RemovePage( int page )
                  false,
                  wxS("invalid page index") );
 
-    wxPropertyGridPage* pd = m_arrPages[page];
+    wxPropertyGridPage* const pd = m_arrPages[page];
+    wxPropertyGridPageState* const removedState = pd->GetStatePtr();
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakThis(this);
+    const wxWeakRef<wxWindow> weakGrid(grid);
+
+    // A page owns all of its properties. Removing it while one of their
+    // virtuals or public wxPropertyGrid events is on the stack would free the
+    // active object underneath that callback. Unlike individual properties,
+    // pages have no idle-deletion queue, so fail this reentrant request
+    // explicitly instead of reporting success for an unsafe operation.
+    wxPGPropertyGridManagerTransientState& removalState =
+        wxPGGetPropertyGridManagerTransientState(this);
+    if ( removalState.pageSelectionInProgress ||
+         removalState.eventDispatchDepth ||
+         (m_pPropGrid &&
+          (m_pPropGrid->m_processedEvent ||
+           wxPGGetPropertyGridTransientState(m_pPropGrid).propertyCallbackDepth)) )
+    {
+        return false;
+    }
+
+    // Keep RemovePage() itself non-reentrant too. DoSelectPage() deliberately
+    // permits a different nested selection target, so use wxNOT_FOUND here:
+    // the replacement transition remains allowed while recursive removals are
+    // rejected by the guard above.
+    const bool previousSelectionInProgress =
+        removalState.pageSelectionInProgress;
+    const int previousSelectionTarget = removalState.pageSelectionTarget;
+    removalState.pageSelectionInProgress = true;
+    removalState.pageSelectionTarget = wxNOT_FOUND;
+    const wxScopeGuard leavePageRemoval =
+        wxMakeGuard([weakThis, this,
+                     previousSelectionInProgress,
+                     previousSelectionTarget]()
+        {
+            if ( weakThis.get() == this )
+            {
+                wxPGPropertyGridManagerTransientState& state =
+                    wxPGGetPropertyGridManagerTransientState(this);
+                state.pageSelectionInProgress = previousSelectionInProgress;
+                state.pageSelectionTarget = previousSelectionTarget;
+            }
+        });
+    wxUnusedVar(leavePageRemoval);
+
+    const auto pageIsStillOwned =
+        [this, page, pd]()
+        {
+            return page >= 0 &&
+                   page < static_cast<int>(m_arrPages.size()) &&
+                   m_arrPages[page] == pd;
+        };
+
+#if wxUSE_TOOLBAR
+    // Detach (but don't destroy) all toolbar items before changing the page
+    // model. RemoveTool() is fallible, while an already detached wrapper can
+    // be inserted back at its exact position. This gives both toolbar calls
+    // and the subsequent replacement-page transition a real rollback path.
+    struct DetachedToolbarTool
+    {
+        wxToolBarToolBase* tool;
+        size_t position;
+    };
+
+    wxToolBar* const toolbar = HasFlag(wxPG_TOOLBAR) ? m_pToolbar : nullptr;
+    if ( HasFlag(wxPG_TOOLBAR) && !toolbar )
+        return false;
+    const wxWeakRef<wxWindow> weakToolbar(toolbar);
+    std::vector<DetachedToolbarTool> detachedTools;
+    bool toolbarRemovalCommitted = false;
+    const wxScopeGuard rollbackToolbarRemoval =
+        wxMakeGuard([&]()
+        {
+            if ( toolbarRemovalCommitted )
+                return;
+
+            for ( auto it = detachedTools.rbegin();
+                  it != detachedTools.rend();
+                  ++it )
+            {
+                bool restored = false;
+                if ( wxWeakWindowIsAvailableForCallbacks(weakToolbar,
+                                                          toolbar) &&
+                     it->position <= toolbar->GetToolsCount() )
+                {
+                    restored =
+                        toolbar->InsertTool(it->position, it->tool) == it->tool;
+                }
+
+                if ( !restored )
+                    delete it->tool;
+            }
+
+            // A replacement-page transition can fail after changing the
+            // current page (for example because a header callback requested
+            // another page). Reconcile every page toggle with the surviving
+            // model instead of assuming the pre-transaction selection won.
+            if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                 wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) &&
+                 wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) &&
+                 m_pPropGrid == grid && m_pToolbar == toolbar )
+            {
+                for ( size_t i = 0; i < m_arrPages.size(); ++i )
+                {
+                    toolbar->ToggleTool(
+                        m_arrPages[i]->GetToolId(),
+                        static_cast<int>(i) == m_selPage);
+                    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis,
+                                                              this) ||
+                         !wxWeakWindowIsAvailableForCallbacks(weakGrid,
+                                                              grid) ||
+                         !wxWeakWindowIsAvailableForCallbacks(weakToolbar,
+                                                              toolbar) )
+                    {
+                        break;
+                    }
+                }
+            }
+        });
+    wxUnusedVar(rollbackToolbarRemoval);
+
+    const auto detachToolbarTool =
+        [&](size_t position)
+        {
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                 !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+                 !wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) ||
+                 m_pPropGrid != grid || m_pToolbar != toolbar ||
+                 !pageIsStillOwned() )
+            {
+                return false;
+            }
+
+            wxToolBarToolBase* const tool =
+                wxPGDetachToolbarToolByPos(toolbar, position);
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                 !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+                 !wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) ||
+                 m_pPropGrid != grid || m_pToolbar != toolbar ||
+                 !pageIsStillOwned() )
+            {
+                // Once detached, the wrapper belongs to this transaction even
+                // if its windows became unavailable during the native call.
+                if ( tool )
+                    delete tool;
+                return false;
+            }
+
+            if ( !tool )
+                return false;
+
+            detachedTools.push_back({tool, position});
+            return true;
+        };
+
+    const auto commitToolbarRemoval = [&]()
+        {
+            toolbarRemovalCommitted = true;
+            rollbackToolbarRemoval.Dismiss();
+            for ( const DetachedToolbarTool& detached : detachedTools )
+                delete detached.tool;
+            detachedTools.clear();
+        };
+
+    if ( toolbar )
+    {
+        const size_t pageToolPosition =
+            (HasExtraStyle(wxPG_EX_MODE_BUTTONS) ? 3u : 0u) +
+            static_cast<size_t>(page);
+
+        // Remove the page tool first. For the final page the separator is
+        // immediately before it, so deleting it first would shift the page
+        // position and make the second removal address the wrong item.
+        if ( !detachToolbarTool(pageToolPosition) )
+            return false;
+
+        if ( HasExtraStyle(wxPG_EX_MODE_BUTTONS) &&
+             GetPageCount() == 1 &&
+             !detachToolbarTool(2) )
+        {
+            return false;
+        }
+    }
+#else
+    const auto commitToolbarRemoval = []() {};
+#endif
 
     if ( m_arrPages.size() == 1 )
     {
         // Last page: do not remove page entry
-        m_pPropGrid->Clear();
+        grid->Clear();
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             m_pPropGrid != grid ||
+             !pageIsStillOwned() )
+        {
+            return false;
+        }
         m_selPage = -1;
         m_iFlags &= ~wxPG_MAN_FL_PAGE_INSERTED;
         pd->m_label.clear();
@@ -1349,45 +2010,43 @@ bool wxPropertyGridManager::RemovePage( int page )
     // Change selection if current is page
     else if ( page == m_selPage )
     {
-        if ( !m_pPropGrid->ClearSelection() )
-                return false;
-
         // Substitute page to select
         int substitute = page - 1;
         if ( substitute < 0 )
             substitute = page + 1;
 
-        SelectPage(substitute);
+        if ( !DoSelectPage(substitute) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             m_pPropGrid != grid ||
+             !pageIsStillOwned() ||
+             m_selPage != substitute ||
+             grid->GetState() == removedState )
+        {
+            return false;
+        }
     }
-
-    // Remove toolbar icon
-#if wxUSE_TOOLBAR
-    if ( HasFlag(wxPG_TOOLBAR) )
-    {
-        wxASSERT( m_pToolbar );
-
-        int toolPos = HasExtraStyle(wxPG_EX_MODE_BUTTONS) ? 3 : 0;
-        toolPos += page;
-
-        // Delete separator as well, for consistency
-        if ( HasExtraStyle(wxPG_EX_MODE_BUTTONS) &&
-             GetPageCount() == 1 )
-            m_pToolbar->DeleteToolByPos(2);
-
-        m_pToolbar->DeleteToolByPos(toolPos);
-    }
-#endif
 
     if ( m_arrPages.size() > 1 )
     {
         m_arrPages.erase(m_arrPages.begin() + page);
+
+        // Adjust indexes before destroying the page: custom property
+        // destructors must not leave a stale selected-page index if they
+        // synchronously tear down the manager.
+        if ( m_selPage > page )
+            m_selPage--;
+
+        commitToolbarRemoval();
         delete pd;
+        return true;
     }
 
     // Adjust indexes that were above removed
     if ( m_selPage > page )
         m_selPage--;
 
+    commitToolbarRemoval();
     return true;
 }
 
@@ -1396,19 +2055,57 @@ bool wxPropertyGridManager::RemovePage( int page )
 bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
 {
     const wxEventType evtType = event.GetEventType();
+    const bool isPropertyGridEvent =
+        evtType >= wxPG_BASE_EVT_TYPE && evtType < wxPG_MAX_EVT_TYPE;
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    const auto managerIsAvailable =
+        [this, grid, &weakThis, &weakGrid]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                   wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) &&
+                   m_pPropGrid == grid;
+        };
+
+    wxPGPropertyGridManagerTransientState& transient =
+        wxPGGetPropertyGridManagerTransientState(this);
+    if ( isPropertyGridEvent )
+        ++transient.eventDispatchDepth;
+    const wxScopeGuard leavePropertyGridDispatch =
+        wxMakeGuard([weakThis, this, isPropertyGridEvent]()
+        {
+            // This is cleanup, not continuation: unwind the sidecar even when
+            // Destroy() has merely scheduled the still-live manager.
+            if ( isPropertyGridEvent && weakThis.get() == this )
+            {
+                wxPGPropertyGridManagerTransientState& state =
+                    wxPGGetPropertyGridManagerTransientState(this);
+                wxASSERT(state.eventDispatchDepth != 0);
+                --state.eventDispatchDepth;
+            }
+        });
+    wxUnusedVar(leavePropertyGridDispatch);
 
     // NB: For some reason, under wxPython, Connect in Init doesn't work properly,
     //     so we'll need to call OnPropertyGridSelect manually. Multiple calls
     //     don't really matter.
     if ( evtType == wxEVT_PG_SELECTED )
+    {
         OnPropertyGridSelect((wxPropertyGridEvent&)event);
+        if ( !managerIsAvailable() )
+            return true;
+    }
 
     // Property grid events get special attention
-    if ( evtType >= wxPG_BASE_EVT_TYPE &&
-         evtType < (wxPG_MAX_EVT_TYPE) &&
+    if ( isPropertyGridEvent &&
          m_selPage >= 0 )
     {
-        wxPropertyGridPage* page = GetPage(m_selPage);
+        const int selectedPage = m_selPage;
+        if ( selectedPage >= static_cast<int>(m_arrPages.size()) )
+            return false;
+
+        wxPropertyGridPage* const page = m_arrPages[selectedPage];
         wxPropertyGridEvent* pgEvent = wxDynamicCast(&event, wxPropertyGridEvent);
 
         // Add property grid events to appropriate custom pages
@@ -1419,7 +2116,22 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
             /*if ( pgEvent->IsPending() )
                 page->AddPendingEvent(event);
             else*/
-                page->ProcessEvent(event);
+            const bool pageHandled = page->ProcessEvent(event);
+
+            // A retained WinUI manager/grid can remain weak-live after its
+            // TLW was scheduled for destruction. Likewise, a nested page
+            // operation may change the selected-page topology. In either case
+            // the page pointer and the panel handler chain are no longer part
+            // of this transaction.
+            if ( !managerIsAvailable() )
+                return true;
+
+            if ( m_selPage != selectedPage ||
+                 selectedPage >= static_cast<int>(m_arrPages.size()) ||
+                 m_arrPages[selectedPage] != page )
+            {
+                return pageHandled;
+            }
 
             if ( page->IsHandlingAllEvents() )
                 event.StopPropagation();
@@ -1455,12 +2167,15 @@ void wxPropertyGridManager::RepaintDescBoxDecorations( wxDC& dc,
 
 void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_width, int new_height )
 {
+    const wxWeakRef<wxWindow> weakThis(this);
     int use_hei = wxMax(1, new_height - 1);
     int use_width = wxMax(1, new_width - 6);
 
     // Fix help control positions.
     int cap_y = new_splittery+m_splitterHeight+5;
     m_pTxtHelpCaption->SetSize(3, cap_y, use_width, wxDefaultCoord, wxSIZE_AUTO_HEIGHT);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+        return;
     int cap_hei = m_pTxtHelpCaption->GetSize().GetHeight();
     int cnt_y = cap_y+cap_hei+3;
     int sub_cap_hei = cap_y+cap_hei-use_hei;
@@ -1473,24 +2188,38 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
     if ( cap_hei <= 2 )
     {
         m_pTxtHelpCaption->Show( false );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+            return;
         m_pTxtHelpContent->Show( false );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+            return;
     }
     else
     {
         m_pTxtHelpCaption->Show( true );
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+            return;
         if ( cnt_hei <= 2 )
         {
             m_pTxtHelpContent->Show( false );
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return;
         }
         else
         {
             m_pTxtHelpContent->SetSize(3,cnt_y,use_width,cnt_hei);
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return;
             m_pTxtHelpContent->Show( true );
+            if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+                return;
         }
     }
 
     wxRect r(0, new_splittery, new_width, new_height-new_splittery);
     RefreshRect(r);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+        return;
 
     m_splitterY = new_splittery;
 
@@ -1501,6 +2230,20 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
 
 void wxPropertyGridManager::RecalculatePositions( int width, int height )
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    const auto transactionIsValid =
+        [this, grid, &weakThis, &weakGrid]()
+        {
+            return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
+                   wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) &&
+                   m_pPropGrid == grid;
+        };
+
+    if ( !grid )
+        return;
+
     int propgridY = 0;
     int propgridBottomY = height;
 
@@ -1508,8 +2251,16 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
 #if wxUSE_TOOLBAR
     if ( m_pToolbar )
     {
-        m_pToolbar->SetSize(0, 0, width, wxDefaultCoord);
-        propgridY += m_pToolbar->GetSize().y;
+        wxToolBar* const toolbar = m_pToolbar;
+        const wxWeakRef<wxWindow> weakToolbar(toolbar);
+        toolbar->SetSize(0, 0, width, wxDefaultCoord);
+        if ( !transactionIsValid() ||
+             !wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) ||
+             m_pToolbar != toolbar )
+        {
+            return;
+        }
+        propgridY += toolbar->GetSize().y;
 
         if ( HasExtraStyle(wxPG_EX_TOOLBAR_SEPARATOR) )
             propgridY += 1;
@@ -1520,12 +2271,26 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
 #if wxUSE_HEADERCTRL
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
     {
-        m_pHeaderCtrl->SetSize(0, propgridY, width, wxDefaultCoord);
+        wxPGHeaderCtrl* const header = m_pHeaderCtrl;
+        const wxWeakRef<wxWindow> weakHeader(header);
+        header->SetSize(0, propgridY, width, wxDefaultCoord);
+        if ( !transactionIsValid() ||
+             !wxWeakWindowIsAvailableForCallbacks(weakHeader, header) ||
+             m_pHeaderCtrl != header )
+        {
+            return;
+        }
         // Sync horizontal scroll position with grid
         int x;
-        m_pPropGrid->CalcScrolledPosition(0, 0, &x, nullptr);
-        m_pHeaderCtrl->ScrollWindow(x, 0);
-        propgridY += m_pHeaderCtrl->GetSize().y;
+        grid->CalcScrolledPosition(0, 0, &x, nullptr);
+        header->ScrollWindow(x, 0);
+        if ( !transactionIsValid() ||
+             !wxWeakWindowIsAvailableForCallbacks(weakHeader, header) ||
+             m_pHeaderCtrl != header )
+        {
+            return;
+        }
+        propgridY += header->GetSize().y;
     }
 #endif
 
@@ -1559,6 +2324,8 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
         propgridBottomY = new_splittery;
 
         UpdateDescriptionBox( new_splittery, width, height );
+        if ( !transactionIsValid() )
+            return;
     }
 
     if ( m_iFlags & wxPG_MAN_FL_INITIALIZED )
@@ -1566,7 +2333,11 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
         int pgh = propgridBottomY - propgridY;
         if ( pgh < 0 )
             pgh = 0;
-        m_pPropGrid->SetSize( 0, propgridY, width, pgh );
+        grid->SetSize( 0, propgridY, width, pgh );
+        if ( !transactionIsValid() )
+        {
+            return;
+        }
 
         m_extraHeight = height - pgh;
 
@@ -2146,26 +2917,45 @@ void wxPropertyGridManager::OnColWidthsChanged(wxPropertyGridEvent& WXUNUSED(evt
 
 void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
 {
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
     int width, height;
 
     GetClientSize(&width, &height);
 
     RecalculatePositions(width, height);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) )
+        return;
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+         m_pPropGrid != grid )
+    {
+        if ( m_pPropGrid == grid )
+            m_pPropGrid = nullptr;
+        return;
+    }
 
-    if ( m_pPropGrid && m_pPropGrid->GetParent() )
+    if ( grid && grid->GetParent() )
     {
         int pgWidth, pgHeight;
-        m_pPropGrid->GetClientSize(&pgWidth, &pgHeight);
+        grid->GetClientSize(&pgWidth, &pgHeight);
 
         // Regenerate splitter positions for non-current pages
-        for ( unsigned int i=0; i<GetPageCount(); i++ )
+        const unsigned int pageCount = GetPageCount();
+        for ( unsigned int i=0; i<pageCount; i++ )
         {
             wxPropertyGridPage* page = GetPage(i);
-            if ( page != m_pPropGrid->GetState() )
+            if ( page != grid->GetState() )
             {
                 page->OnClientWidthChange(pgWidth,
                                           pgWidth - page->GetVirtualWidth(),
                                           true);
+                if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+                     !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+                     m_pPropGrid != grid || GetPageCount() != pageCount )
+                {
+                    return;
+                }
             }
         }
     }
@@ -2325,8 +3115,31 @@ void wxPropertyGridManager::SetPageSplitterPosition( int page,
                                                      int pos,
                                                      int column )
 {
-    GetPage(page)->DoSetSplitter( pos, column,
-                                  wxPGSplitterPositionFlags::Refresh );
+    const wxWeakRef<wxWindow> weakThis(this);
+    wxPropertyGrid* const grid = m_pPropGrid;
+    const wxWeakRef<wxWindow> weakGrid(grid);
+    wxPropertyGridPage* const targetPage = GetPage(page);
+    if ( grid->m_dragStatus &&
+         wxPGGetPropertyGridTransientState(grid).draggedState == targetPage->GetStatePtr() )
+    {
+        grid->FinishSplitterDrag(true);
+        if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+             m_pPropGrid != grid )
+        {
+            return;
+        }
+    }
+
+    targetPage->DoSetSplitter(pos,
+                              column,
+                              wxPGSplitterPositionFlags::Refresh);
+    if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
+         !wxWeakWindowIsAvailableForCallbacks(weakGrid, grid) ||
+         m_pPropGrid != grid )
+    {
+        return;
+    }
 
 #if wxUSE_HEADERCTRL
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )

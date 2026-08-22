@@ -23,6 +23,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxDataViewMainWindow;
 class WXDLLIMPEXP_FWD_CORE wxDataViewHeaderWindow;
+class WXDLLIMPEXP_FWD_CORE wxTreeListCtrl;
 #if wxUSE_ACCESSIBILITY
 class WXDLLIMPEXP_FWD_CORE wxDataViewCtrlAccessible;
 #endif // wxUSE_ACCESSIBILITY
@@ -146,11 +147,31 @@ public:
     // user interactively.
     void WXOnResize(int width);
 
+    // Copy all presentation and sorting state, but neither the renderer,
+    // owner nor model-column mapping. Used when wxTreeListCtrl promotes a
+    // regular column to its renderer-special primary column.
+    void WXCopyStateFrom(const wxDataViewColumn& other)
+    {
+        m_title = other.m_title;
+        m_bitmap = other.m_bitmap;
+        m_width = other.m_width;
+        m_manuallySetWidth = other.m_manuallySetWidth;
+        m_minWidth = other.m_minWidth;
+        m_align = other.m_align;
+        m_flags = other.m_flags;
+        m_sort = other.m_sort;
+        m_sortAscending = other.m_sortAscending;
+    }
+
     virtual int WXGetSpecifiedWidth() const override;
 
 private:
     // common part of all ctors
     void Init(int width, wxAlignment align, int flags);
+
+    // Change the sort state without acquiring the source-side transaction.
+    // wxDataViewCtrl uses this while resetting a snapshotted set of keys.
+    void DoUnsetAsSortKey();
 
     // These methods forward to wxDataViewCtrl::OnColumnChange() and
     // OnColumnWidthChange() respectively, i.e. the latter is stronger than the
@@ -175,6 +196,7 @@ private:
     friend class wxDataViewHeaderWindowBase;
     friend class wxDataViewHeaderWindow;
     friend class wxDataViewHeaderWindowMSW;
+    friend class wxDataViewCtrl;
 };
 
 // ---------------------------------------------------------
@@ -190,6 +212,7 @@ class WXDLLIMPEXP_CORE wxDataViewCtrl
     friend class wxDataViewHeaderWindow;
     friend class wxDataViewHeaderWindowMSW;
     friend class wxDataViewColumn;
+    friend class wxDataViewCallbackContext;
 #if wxUSE_ACCESSIBILITY
     friend class wxDataViewCtrlAccessible;
 #endif // wxUSE_ACCESSIBILITY
@@ -305,6 +328,11 @@ public:
     wxHeaderCtrl* GenericGetHeader() const;
 
 protected:
+    // Finish any active in-place editor before changing the column model.
+    // This is exposed to wxDataViewListCtrl so that its companion list store
+    // can be kept in lock-step with the generic control.
+    bool PrepareForColumnMutation();
+
     void EnsureVisibleRowCol( int row, int column );
 
     // Notice that row here may be invalid (i.e. >= GetRowCount()), this is not
@@ -330,6 +358,7 @@ public:     // utility functions not part of the API
 
     // returns the "best" width for the idx-th column
     unsigned int GetBestColumnWidth(int idx) const;
+    bool TryGetBestColumnWidth(int idx, unsigned int* width) const;
 
     // called by header window after reorder
     void ColumnMoved( wxDataViewColumn* col, unsigned int new_pos );
@@ -367,6 +396,8 @@ public:     // utility functions not part of the API
 #endif // wxUSE_ACCESSIBILITY
 
 private:
+    friend class wxTreeListCtrl;
+
     // Implement pure virtual method inherited from wxCompositeWindow.
     virtual wxWindowList GetCompositeWindowParts() const override;
 
@@ -379,6 +410,20 @@ private:
     void InvalidateColBestWidth(int idx);
     void UpdateColWidths();
 
+    // Publish the new count and, if specified, its display order before the
+    // client area is notified. Kept separate from the historical exported
+    // OnColumnsCountChanged() symbol to preserve binary compatibility.
+    bool PublishColumnsAfterMutation(const wxArrayInt* order);
+    bool DoInsertColumn(unsigned int pos, wxDataViewColumn* col);
+    bool DoDeleteColumn(wxDataViewColumn* column,
+                        wxDataViewColumn* promoted,
+                        wxDataViewColumn* replacement);
+    bool DeleteColumnForTreeList(wxDataViewColumn* column,
+                                 wxDataViewColumn* promoted,
+                                 wxDataViewColumn* replacement)
+    {
+        return DoDeleteColumn(column, promoted, replacement);
+    }
     void DoClearColumns();
 
     wxVector<wxDataViewColumn*> m_cols;

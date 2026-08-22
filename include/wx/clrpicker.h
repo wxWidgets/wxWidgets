@@ -144,7 +144,8 @@ public:        // internal functions
     // update the text control to match the button's colour
     void UpdateTextCtrlFromPicker() override;
 
-    // event handler for our picker
+    // Event handler for the implementation picker. It normalizes every child
+    // notification to the public control identity before propagation.
     void OnColourChange(wxColourPickerEvent &);
 
 protected:

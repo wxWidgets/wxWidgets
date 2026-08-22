@@ -72,6 +72,8 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( font.IsOk() )
     {
+        dc.SetFont(font);
+        dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(_("ABCDEFGabcdefg12345"),
                      10, (size.y - dc.GetTextExtent(wxT("X")).y)/2);
@@ -83,94 +85,98 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
 // helper functions
 //-----------------------------------------------------------------------------
 
-static const wxChar *wxFontWeightIntToString(int weight)
+static int wxFontWeightToSelection(wxFontWeight weight)
 {
     switch (weight)
     {
         case wxFONTWEIGHT_LIGHT:
-            return wxT("Light");
+            return 1;
         case wxFONTWEIGHT_BOLD:
-            return wxT("Bold");
+            return 2;
         case wxFONTWEIGHT_NORMAL:
         default:
-            return wxT("Normal");
+            return 0;
     }
 }
 
-static const wxChar *wxFontStyleIntToString(int style)
+static wxFontWeight wxFontWeightFromSelection(int selection)
+{
+    switch ( selection )
+    {
+        case 1:
+            return wxFONTWEIGHT_LIGHT;
+        case 2:
+            return wxFONTWEIGHT_BOLD;
+        default:
+            return wxFONTWEIGHT_NORMAL;
+    }
+}
+
+static int wxFontStyleToSelection(wxFontStyle style)
 {
     switch (style)
     {
         case wxFONTSTYLE_ITALIC:
-            return wxT("Italic");
+            return 1;
         case wxFONTSTYLE_SLANT:
-            return wxT("Slant");
+            return 2;
         case wxFONTSTYLE_NORMAL:
-            default:
-            return wxT("Normal");
+        default:
+            return 0;
     }
 }
 
-static const wxChar *wxFontFamilyIntToString(int family)
+static wxFontStyle wxFontStyleFromSelection(int selection)
+{
+    switch ( selection )
+    {
+        case 1:
+            return wxFONTSTYLE_ITALIC;
+        case 2:
+            return wxFONTSTYLE_SLANT;
+        default:
+            return wxFONTSTYLE_NORMAL;
+    }
+}
+
+static int wxFontFamilyToSelection(wxFontFamily family)
 {
     switch (family)
     {
         case wxFONTFAMILY_ROMAN:
-            return wxT("Roman");
+            return 0;
         case wxFONTFAMILY_DECORATIVE:
-            return wxT("Decorative");
+            return 1;
         case wxFONTFAMILY_MODERN:
-            return wxT("Modern");
+            return 2;
         case wxFONTFAMILY_SCRIPT:
-            return wxT("Script");
-        case wxFONTFAMILY_TELETYPE:
-            return wxT("Teletype");
+            return 3;
         case wxFONTFAMILY_SWISS:
+            return 4;
+        case wxFONTFAMILY_TELETYPE:
+            return 5;
         default:
-            return wxT("Swiss");
+            return 4;
     }
 }
 
-static wxFontFamily wxFontFamilyStringToInt(const wxString& family)
+static wxFontFamily wxFontFamilyFromSelection(int selection)
 {
-    if (family.empty())
-        return wxFONTFAMILY_SWISS;
-
-    if (wxStrcmp(family, wxT("Roman")) == 0)
-        return wxFONTFAMILY_ROMAN;
-    else if (wxStrcmp(family, wxT("Decorative")) == 0)
-        return wxFONTFAMILY_DECORATIVE;
-    else if (wxStrcmp(family, wxT("Modern")) == 0)
-        return wxFONTFAMILY_MODERN;
-    else if (wxStrcmp(family, wxT("Script")) == 0)
-        return wxFONTFAMILY_SCRIPT;
-    else if (wxStrcmp(family, wxT("Teletype")) == 0)
-        return wxFONTFAMILY_TELETYPE;
-    else return wxFONTFAMILY_SWISS;
-}
-
-static wxFontStyle wxFontStyleStringToInt(const wxString& style)
-{
-    if (style.empty())
-        return wxFONTSTYLE_NORMAL;
-    if (wxStrcmp(style, wxT("Italic")) == 0)
-        return wxFONTSTYLE_ITALIC;
-    else if (wxStrcmp(style, wxT("Slant")) == 0)
-        return wxFONTSTYLE_SLANT;
-    else
-        return wxFONTSTYLE_NORMAL;
-}
-
-static wxFontWeight wxFontWeightStringToInt(const wxString& weight)
-{
-    if (weight.empty())
-        return wxFONTWEIGHT_NORMAL;
-    if (wxStrcmp(weight, wxT("Bold")) == 0)
-        return wxFONTWEIGHT_BOLD;
-    else if (wxStrcmp(weight, wxT("Light")) == 0)
-        return wxFONTWEIGHT_LIGHT;
-    else
-        return wxFONTWEIGHT_NORMAL;
+    switch ( selection )
+    {
+        case 0:
+            return wxFONTFAMILY_ROMAN;
+        case 1:
+            return wxFONTFAMILY_DECORATIVE;
+        case 2:
+            return wxFONTFAMILY_MODERN;
+        case 3:
+            return wxFONTFAMILY_SCRIPT;
+        case 5:
+            return wxFONTFAMILY_TELETYPE;
+        default:
+            return wxFONTFAMILY_SWISS;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -259,7 +265,17 @@ void wxGenericFontDialog::Init()
 {
     m_useEvents = false;
     m_previewer = nullptr;
-    Create( m_parent ) ;
+    m_familyChoice = nullptr;
+    m_styleChoice = nullptr;
+    m_weightChoice = nullptr;
+    m_colourChoice = nullptr;
+    m_underLineCheckBox = nullptr;
+#if USE_SPINCTRL_FOR_POINT_SIZE
+    m_pointSizeSpin = nullptr;
+#else
+    m_pointSizeChoice = nullptr;
+#endif
+    m_dialogColour = wxNullColour;
 }
 
 wxGenericFontDialog::~wxGenericFontDialog()
@@ -275,7 +291,7 @@ bool wxGenericFontDialog::DoCreate(wxWindow *parent)
 {
     parent = GetParentForModalDialog(parent, 0);
 
-    if ( !wxDialog::Create( parent , wxID_ANY , wxT("Choose Font") ,
+    if ( !wxDialog::Create( parent , wxID_ANY , _("Choose Font") ,
                             wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE,
         wxT("fontdialog") ) )
     {
@@ -296,12 +312,18 @@ int wxGenericFontDialog::ShowModal()
 {
     int ret = wxDialog::ShowModal();
 
-    if (ret != wxID_CANCEL)
+    // Parent destruction and other framework-driven shutdown paths can unwind
+    // the generic dialog without a button ID. A font dialog only has the two
+    // public outcomes, and only an explicit OK may commit its working state.
+    if ( ret != wxID_OK )
     {
-        m_fontData.m_chosenFont = m_dialogFont;
+        SetReturnCode(wxID_CANCEL);
+        return wxID_CANCEL;
     }
 
-    return ret;
+    m_fontData.m_chosenFont = m_dialogFont;
+    m_fontData.m_fontColour = m_dialogColour;
+    return wxID_OK;
 }
 
 // This should be application-settable
@@ -363,7 +385,7 @@ void wxGenericFontDialog::CreateWidgets()
     wxStaticText* itemStaticText6 = new wxStaticText( this, wxID_STATIC, _("&Font family:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    m_familyChoice = new wxChoice( this, wxID_FONT_FAMILY, wxDefaultPosition, wxDefaultSize, 5, families, 0 );
+    m_familyChoice = new wxChoice( this, wxID_FONT_FAMILY, wxDefaultPosition, wxDefaultSize, 6, families, 0 );
     m_familyChoice->SetHelpText(_("The font family."));
     if (ShowToolTips())
         m_familyChoice->SetToolTip(_("The font family."));
@@ -484,9 +506,12 @@ void wxGenericFontDialog::CreateWidgets()
     itemBoxSizer25->Add(itemButton28, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 #endif
 
-    m_familyChoice->SetStringSelection( wxFontFamilyIntToString(m_dialogFont.GetFamily()) );
-    m_styleChoice->SetStringSelection(wxFontStyleIntToString(m_dialogFont.GetStyle()));
-    m_weightChoice->SetStringSelection(wxFontWeightIntToString(m_dialogFont.GetWeight()));
+    m_familyChoice->SetSelection(
+        wxFontFamilyToSelection(m_dialogFont.GetFamily()));
+    m_styleChoice->SetSelection(
+        wxFontStyleToSelection(m_dialogFont.GetStyle()));
+    m_weightChoice->SetSelection(
+        wxFontWeightToSelection(m_dialogFont.GetWeight()));
 
     if (m_colourChoice)
     {
@@ -505,7 +530,16 @@ void wxGenericFontDialog::CreateWidgets()
 #if USE_SPINCTRL_FOR_POINT_SIZE
     m_pointSizeSpin->SetValue(m_dialogFont.GetPointSize());
 #else
-    m_pointSizeChoice->SetSelection(m_dialogFont.GetPointSize()-1);
+    const int pointSize = m_dialogFont.GetPointSize();
+    if ( pointSize >= 1 && pointSize <= 40 )
+    {
+        m_pointSizeChoice->SetSelection(pointSize - 1);
+    }
+    else
+    {
+        m_pointSizeChoice->Append(wxString::Format("%d", pointSize));
+        m_pointSizeChoice->SetSelection(m_pointSizeChoice->GetCount() - 1);
+    }
 #endif
 
     GetSizer()->SetItemMinSize(m_previewer, is_pda ? 100 : 430, is_pda ? 40 : 100);
@@ -539,11 +573,14 @@ void wxGenericFontDialog::InitializeFont()
         fontWeight = m_fontData.m_initialFont.GetWeight();
         fontStyle = m_fontData.m_initialFont.GetStyle();
         fontSize = m_fontData.m_initialFont.GetPointSize();
+        if ( fontSize <= 0 )
+            fontSize = 12;
         fontUnderline = m_fontData.m_initialFont.GetUnderlined();
     }
 
     m_dialogFont = wxFont(fontSize, fontFamily, fontStyle,
                           fontWeight, fontUnderline);
+    m_dialogColour = m_fontData.m_fontColour;
 
     if (m_previewer)
         m_previewer->SetFont(m_dialogFont);
@@ -558,13 +595,18 @@ void wxGenericFontDialog::DoChangeFont()
 {
     if (!m_useEvents) return;
 
-    wxFontFamily fontFamily = wxFontFamilyStringToInt(m_familyChoice->GetStringSelection());
-    wxFontWeight fontWeight = wxFontWeightStringToInt(m_weightChoice->GetStringSelection());
-    wxFontStyle fontStyle = wxFontStyleStringToInt(m_styleChoice->GetStringSelection());
+    wxFontFamily fontFamily =
+        wxFontFamilyFromSelection(m_familyChoice->GetSelection());
+    wxFontWeight fontWeight =
+        wxFontWeightFromSelection(m_weightChoice->GetSelection());
+    wxFontStyle fontStyle =
+        wxFontStyleFromSelection(m_styleChoice->GetSelection());
 #if USE_SPINCTRL_FOR_POINT_SIZE
     int fontSize = m_pointSizeSpin->GetValue();
 #else
     int fontSize = wxAtoi(m_pointSizeChoice->GetStringSelection());
+    if ( fontSize <= 0 )
+        fontSize = m_dialogFont.GetPointSize();
 #endif
 
     // Start with previous underline setting, we want to retain it even if we can't edit it
@@ -586,14 +628,14 @@ void wxGenericFontDialog::DoChangeFont()
             wxColour col = wxTheColourDatabase->Find(m_colourChoice->GetStringSelection());
             if (col.IsOk())
             {
-                m_fontData.m_fontColour = col;
+                m_dialogColour = col;
             }
         }
     }
     // Update color here so that we can also use the color originally passed in
     // (EnableEffects may be false)
-    if (m_fontData.m_fontColour.IsOk())
-        m_previewer->SetForegroundColour(m_fontData.m_fontColour);
+    if (m_dialogColour.IsOk())
+        m_previewer->SetForegroundColour(m_dialogColour);
 
     m_previewer->Refresh();
 }

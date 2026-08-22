@@ -34,13 +34,20 @@
 #ifdef __UNIX__
     #define COMMAND "echo hi"
     #define COMMAND_STDERR "cat nonexistentfile"
+    #define COMMAND_STDERR_FRAGMENT "file"
     #define ASYNC_COMMAND "sleep 86400"
     #define SHELL_COMMAND "echo hi from shell>/dev/null"
     #define COMMAND_NO_OUTPUT "echo -n"
 #elif defined(__WINDOWS__)
     #define COMMAND "cmd.exe /c \"echo hi\""
-    #define COMMAND_STDERR "cmd.exe /c \"type nonexistentfile\""
-    #define ASYNC_COMMAND "mspaint"
+    // Don't rely on the localized error message produced by cmd.exe.
+    #define COMMAND_STDERR \
+        "cmd.exe /d /c \"echo wxExecute-stderr-marker 1>&2 & exit /b 1\""
+    #define COMMAND_STDERR_FRAGMENT "wxExecute-stderr-marker"
+    // mspaint.exe is only an app launcher on recent Windows versions and can
+    // exit before we get a chance to terminate it. ping.exe is a real,
+    // long-lived process whose lifetime is deterministic for this test.
+    #define ASYNC_COMMAND "ping.exe -t 127.0.0.1"
     #define SHELL_COMMAND "echo hi > nul:"
     #define COMMAND_NO_OUTPUT COMMAND " > nul:"
 #else
@@ -178,12 +185,18 @@ TEST_CASE_METHOD(ExecTestCase, "wxExecute", "[exec]")
     // Give the system some time to launch the child.
     wxMilliSleep(200);
 
+    // SIGTERM requires a top-level window under Windows, which our
+    // deterministic console helper deliberately doesn't create.
+#ifdef __WINDOWS__
+    CHECK( wxKill(pid, wxSIGKILL) == 0 );
+#else
     // Try to terminate it gently first, but fall back to killing it
     // unconditionally if this fails.
     const int rc = wxKill(pid, wxSIGTERM);
     CHECK( rc == 0 );
     if ( rc != 0 )
         CHECK( wxKill(pid, wxSIGKILL) == 0 );
+#endif
 
     int useNoeventsFlag;
 
@@ -216,14 +229,9 @@ TEST_CASE_METHOD(ExecTestCase, "wxExecute", "[exec]")
         stdout_arr.Empty();
         CHECK( wxExecute(COMMAND_STDERR, stdout_arr, stderr_arr, execFlags) != 0 );
 
-        // Check that there is something on stderr.
-        // In Unix systems, the 'cat' command has the name of the file it could not
-        // find in the error output.
-        // In Windows, the 'type' command outputs the following when it can't find
-        // a file:
-        // "The system cannot find the file specified"
-        // In both cases, we expect the word 'file' to be in the stderr.
-        CHECK( stderr_arr[0].Contains("file") );
+        // Check that the deterministic marker is present on stderr.
+        REQUIRE( !stderr_arr.empty() );
+        CHECK( stderr_arr[0].Contains(COMMAND_STDERR_FRAGMENT) );
     }
 }
 
@@ -254,10 +262,14 @@ TEST_CASE_METHOD(ExecTestCase, "wxProcess", "[exec]")
     // we're not going to process the wxEVT_END_PROCESS event,
     // so the proc instance will auto-delete itself after we kill
     // the asynch process:
+#ifdef __WINDOWS__
+    CHECK( wxKill(pid, wxSIGKILL) == 0 );
+#else
     const int rc = wxKill(pid, wxSIGTERM);
     CHECK( rc == 0 );
     if ( rc != 0 )
         CHECK( wxKill(pid, wxSIGKILL) == 0 );
+#endif
 
 
     // test wxExecute with wxProcess and REDIRECTION
@@ -369,7 +381,8 @@ TEST_CASE_METHOD(ExecTestCase, "wxExecute::AsyncRedirect", "[exec]")
     DoTestAsyncRedirect(COMMAND, Check_Stdout, "hi");
 
     // Test redirection with reading from the error stream after process termination.
-    DoTestAsyncRedirect(COMMAND_STDERR, Check_Stderr, "file");
+    DoTestAsyncRedirect(COMMAND_STDERR, Check_Stderr,
+                        COMMAND_STDERR_FRAGMENT);
 }
 
 // static

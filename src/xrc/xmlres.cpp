@@ -41,6 +41,10 @@
 #include "wx/xml/xml.h"
 #include "wx/config.h"
 #include "wx/platinfo.h"
+#include "wx/private/windowlifetime.h"
+#include "wx/scopeguard.h"
+
+#include "xmlrespriv.h"
 
 #include <limits.h>
 #include <locale.h>
@@ -51,6 +55,38 @@
 
 namespace
 {
+
+struct XRCInstanceOwnershipContext
+{
+    const wxXmlResourceHandler* handler;
+    bool factoryOwned;
+};
+
+thread_local std::vector<XRCInstanceOwnershipContext>
+    gs_xrcInstanceOwnershipStack;
+
+class XRCInstanceOwnershipScope final
+{
+public:
+    XRCInstanceOwnershipScope(const wxXmlResourceHandler* handler,
+                              bool factoryOwned)
+        : m_handler(handler)
+    {
+        gs_xrcInstanceOwnershipStack.push_back({handler, factoryOwned});
+    }
+
+    ~XRCInstanceOwnershipScope()
+    {
+        wxASSERT(!gs_xrcInstanceOwnershipStack.empty());
+        wxASSERT(gs_xrcInstanceOwnershipStack.back().handler == m_handler);
+        gs_xrcInstanceOwnershipStack.pop_back();
+    }
+
+private:
+    const wxXmlResourceHandler* const m_handler;
+
+    wxDECLARE_NO_COPY_CLASS(XRCInstanceOwnershipScope);
+};
 
 // Helper function to get modification time of either a wxFileSystem URI or
 // just a normal file name, depending on the build.
@@ -71,6 +107,19 @@ wxDateTime GetXRCFileModTime(const wxString& filename)
 #endif // wxUSE_DATETIME
 
 } // anonymous namespace
+
+bool wxXRCIsCurrentInstanceFactoryOwned(
+    const wxXmlResourceHandler* handler)
+{
+    for ( auto it = gs_xrcInstanceOwnershipStack.rbegin();
+          it != gs_xrcInstanceOwnershipStack.rend(); ++it )
+    {
+        if ( it->handler == handler )
+            return it->factoryOwned;
+    }
+
+    return false;
+}
 
 // Assign the given value to the specified entry or add a new value with this
 // name.
@@ -1479,8 +1528,8 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
     wxString myClass = m_handler->m_class;
     wxObject *myParent = m_handler->m_parent, *myInstance = m_handler->m_instance;
     wxWindow *myParentAW = m_handler->m_parentAsWindow;
-
     m_handler->m_instance = instance;
+    bool instanceCreatedByResource = false;
     if (!m_handler->m_instance && node->HasAttribute(wxT("subclass")) &&
         !(m_handler->m_resource->GetFlags() & wxXRC_NO_SUBCLASSING))
     {
@@ -1491,7 +1540,10 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
             {
                 m_handler->m_instance = factory->Create(subclass);
                 if (m_handler->m_instance)
+                {
+                    instanceCreatedByResource = true;
                     break;
+                }
             }
 
             if (!m_handler->m_instance)
@@ -1515,7 +1567,12 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
     m_handler->m_parent = parent;
     m_handler->m_parentAsWindow = wxDynamicCast(m_handler->m_parent, wxWindow);
 
-    wxObject *returned = GetHandler()->DoCreateResource();
+    wxObject *returned;
+    {
+        const XRCInstanceOwnershipScope ownershipScope(
+            m_handler, instanceCreatedByResource);
+        returned = GetHandler()->DoCreateResource();
+    }
 
     m_handler->m_node = myNode;
     m_handler->m_class = myClass;
@@ -2521,7 +2578,20 @@ static wxFont GetSystemFont(const wxString& name)
 
 wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent)
 {
+    const wxWeakRef<wxWindow> weakParent(parent);
+    const auto parentIsAvailable = [&]() -> bool
+    {
+        return !parent ||
+               wxWeakWindowIsAvailableForCallbacks(weakParent, parent);
+    };
+
+    if ( !parentIsAvailable() )
+        return wxNullFont;
+
     wxXmlNode *font_node = GetParamNode(param);
+    if ( !parentIsAvailable() )
+        return wxNullFont;
+
     if (font_node == nullptr)
     {
         ReportError(
@@ -2531,6 +2601,9 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
 
     wxXmlNode *oldnode = m_handler->m_node;
     m_handler->m_node = font_node;
+    const wxScopeGuard restoreNode = wxMakeGuard(
+        [this, oldnode]() { m_handler->m_node = oldnode; });
+    wxUnusedVar(restoreNode);
 
     // font attributes:
 
@@ -2539,6 +2612,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     bool hasSize = HasParam(wxT("size"));
     if (hasSize)
         pointSize = GetFloat(wxT("size"), -1.0f);
+    if ( !parentIsAvailable() )
+        return wxNullFont;
 
     // style
     wxFontStyle istyle = wxFONTSTYLE_NORMAL;
@@ -2546,6 +2621,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     if (hasStyle)
     {
         wxString style = GetParamValue(wxT("style"));
+        if ( !parentIsAvailable() )
+            return wxNullFont;
         if (style == wxT("italic"))
             istyle = wxFONTSTYLE_ITALIC;
         else if (style == wxT("slant"))
@@ -2557,6 +2634,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
                 param,
                 wxString::Format("unknown font style \"%s\"", style)
             );
+            if ( !parentIsAvailable() )
+                return wxNullFont;
         }
     }
 
@@ -2566,6 +2645,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     if (hasWeight)
     {
         wxString weight = GetParamValue(wxT("weight"));
+        if ( !parentIsAvailable() )
+            return wxNullFont;
         if (weight.ToLong(&iweight))
         {
             if (iweight <= wxFONTWEIGHT_INVALID || iweight > wxFONTWEIGHT_MAX)
@@ -2575,6 +2656,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
                     param,
                     wxString::Format("invalid font weight value \"%d\"", iweight)
                 );
+                if ( !parentIsAvailable() )
+                    return wxNullFont;
             }
         }
         else if (weight == wxT("thin"))
@@ -2602,16 +2685,22 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
                 param,
                 wxString::Format("unknown font weight \"%s\"", weight)
             );
+            if ( !parentIsAvailable() )
+                return wxNullFont;
         }
     }
 
     // underline
     bool hasUnderlined = HasParam(wxT("underlined"));
     bool underlined = hasUnderlined ? GetBool(wxT("underlined"), false) : false;
+    if ( !parentIsAvailable() )
+        return wxNullFont;
 
     // strikethrough
     bool hasStrikethrough = HasParam(wxT("strikethrough"));
     bool strikethrough = hasStrikethrough ? GetBool(wxT("strikethrough"), false) : false;
+    if ( !parentIsAvailable() )
+        return wxNullFont;
 
     // family and facename
     wxFontFamily ifamily = wxFONTFAMILY_DEFAULT;
@@ -2619,6 +2708,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     if (hasFamily)
     {
         wxString family = GetParamValue(wxT("family"));
+        if ( !parentIsAvailable() )
+            return wxNullFont;
         if (family == wxT("default")) ifamily = wxFONTFAMILY_DEFAULT;
         else if (family == wxT("decorative")) ifamily = wxFONTFAMILY_DECORATIVE;
         else if (family == wxT("roman")) ifamily = wxFONTFAMILY_ROMAN;
@@ -2633,6 +2724,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
                 param,
                 wxString::Format("unknown font family \"%s\"", family)
             );
+            if ( !parentIsAvailable() )
+                return wxNullFont;
         }
     }
 
@@ -2642,9 +2735,13 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     if (hasFacename)
     {
         wxString faces = GetParamValue(wxT("face"));
+        if ( !parentIsAvailable() )
+            return wxNullFont;
         wxStringTokenizer tk(faces, wxT(","));
 #if wxUSE_FONTENUM
         wxArrayString facenames(wxFontEnumerator::GetFacenames());
+        if ( !parentIsAvailable() )
+            return wxNullFont;
         while (tk.HasMoreTokens())
         {
             int index = facenames.Index(tk.GetNextToken(), false);
@@ -2668,6 +2765,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     if (hasEncoding)
     {
         wxString encoding = GetParamValue(wxT("encoding"));
+        if ( !parentIsAvailable() )
+            return wxNullFont;
         wxFontMapper mapper;
         if (!encoding.empty())
             enc = mapper.CharsetToEncoding(encoding);
@@ -2681,7 +2780,14 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     // is this font based on a system font?
     if (HasParam(wxT("sysfont")))
     {
-        font = GetSystemFont(GetParamValue(wxT("sysfont")));
+        const wxString systemFont = GetParamValue(wxT("sysfont"));
+        if ( !parentIsAvailable() )
+            return wxNullFont;
+
+        font = GetSystemFont(systemFont);
+        if ( !parentIsAvailable() )
+            return wxNullFont;
+
         if (HasParam(wxT("inherit")))
         {
             ReportParamError
@@ -2689,20 +2795,42 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
                 param,
                 "double specification of \"sysfont\" and \"inherit\""
             );
+            if ( !parentIsAvailable() )
+                return wxNullFont;
         }
     }
     // or should the font of the widget be used?
-    else if (GetBool(wxT("inherit"), false))
+    else
     {
-        if (parent)
-            font = parent->GetFont();
-        else
+        const bool inherit = GetBool(wxT("inherit"), false);
+        if ( !parentIsAvailable() )
+            return wxNullFont;
+
+        if ( inherit )
         {
-            ReportParamError
-            (
-                param,
-                "no parent window specified to derive the font from"
-            );
+            if (parent)
+            {
+                // GetBool(), log targets and font providers are all
+                // application-code boundaries. Never reuse the raw parent
+                // merely because its C++ object is still weak-live: Destroy()
+                // and the retained WinUI TLW queue are terminal too.
+                if ( !parentIsAvailable() )
+                    return wxNullFont;
+
+                font = parent->GetFont();
+                if ( !parentIsAvailable() )
+                    return wxNullFont;
+            }
+            else
+            {
+                ReportParamError
+                (
+                    param,
+                    "no parent window specified to derive the font from"
+                );
+                if ( !parentIsAvailable() )
+                    return wxNullFont;
+            }
         }
     }
 
@@ -2718,11 +2846,17 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
                     param,
                     "double specification of \"size\" and \"relativesize\""
                 );
+                if ( !parentIsAvailable() )
+                    return wxNullFont;
             }
         }
         else if (HasParam(wxT("relativesize")))
-            font.SetPointSize(int(font.GetPointSize() *
-                                     GetFloat(wxT("relativesize"))));
+        {
+            const float relativeSize = GetFloat(wxT("relativesize"));
+            if ( !parentIsAvailable() )
+                return wxNullFont;
+            font.SetPointSize(int(font.GetPointSize() * relativeSize));
+        }
 
         if (hasStyle)
             font.SetStyle(istyle);
@@ -2752,13 +2886,21 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
                 ;
     }
 
-    m_handler->m_node = oldnode;
     return font;
 }
 
 
 void wxXmlResourceHandlerImpl::SetupWindow(wxWindow *wnd)
 {
+    const wxWeakRef<wxWindow> windowLifetime(wnd);
+    const auto windowIsAvailable = [&windowLifetime, wnd]()
+    {
+        return wxWeakWindowIsAvailableForCallbacks(windowLifetime, wnd);
+    };
+
+    if ( !windowIsAvailable() )
+        return;
+
     // This is called immediately after creating a window, so it's a convenient
     // place to check that it was created successfully without duplicating this
     // check in all handlers.
@@ -2769,9 +2911,15 @@ void wxXmlResourceHandlerImpl::SetupWindow(wxWindow *wnd)
         return;
     }
 
+    if ( !windowIsAvailable() )
+        return;
+
     //FIXME : add cursor
 
     const wxString variant = GetParamValue(wxS("variant"));
+    if ( !windowIsAvailable() )
+        return;
+
     if (!variant.empty())
     {
         if (variant == wxS("normal"))
@@ -2795,34 +2943,130 @@ void wxXmlResourceHandlerImpl::SetupWindow(wxWindow *wnd)
                 )
             );
         }
+
+        if ( !windowIsAvailable() )
+            return;
     }
     if (HasParam(wxT("exstyle")))
+    {
         // Have to OR it with existing style, since
         // some implementations (e.g. wxGTK) use the extra style
         // during creation
-        wnd->SetExtraStyle(wnd->GetExtraStyle() | GetStyle(wxT("exstyle")));
+        const long extraStyle = GetStyle(wxT("exstyle"));
+        if ( !windowIsAvailable() )
+            return;
+
+        const long currentExtraStyle = wnd->GetExtraStyle();
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetExtraStyle(currentExtraStyle | extraStyle);
+        if ( !windowIsAvailable() )
+            return;
+    }
     if (HasParam(wxT("bg")))
-        wnd->SetBackgroundColour(GetColour(wxT("bg")));
+    {
+        const wxColour colour = GetColour(wxT("bg"));
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetBackgroundColour(colour);
+        if ( !windowIsAvailable() )
+            return;
+    }
     if (HasParam(wxT("ownbg")))
-        wnd->SetOwnBackgroundColour(GetColour(wxT("ownbg")));
+    {
+        const wxColour colour = GetColour(wxT("ownbg"));
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetOwnBackgroundColour(colour);
+        if ( !windowIsAvailable() )
+            return;
+    }
     if (HasParam(wxT("fg")))
-        wnd->SetForegroundColour(GetColour(wxT("fg")));
+    {
+        const wxColour colour = GetColour(wxT("fg"));
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetForegroundColour(colour);
+        if ( !windowIsAvailable() )
+            return;
+    }
     if (HasParam(wxT("ownfg")))
-        wnd->SetOwnForegroundColour(GetColour(wxT("ownfg")));
-    if (GetBool(wxT("enabled"), 1) == 0)
+    {
+        const wxColour colour = GetColour(wxT("ownfg"));
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetOwnForegroundColour(colour);
+        if ( !windowIsAvailable() )
+            return;
+    }
+
+    const bool enabled = GetBool(wxT("enabled"), true);
+    if ( !windowIsAvailable() )
+        return;
+    if ( !enabled )
+    {
         wnd->Enable(false);
-    if (GetBool(wxT("focused"), 0) == 1)
+        if ( !windowIsAvailable() )
+            return;
+    }
+
+    const bool focused = GetBool(wxT("focused"), false);
+    if ( !windowIsAvailable() )
+        return;
+    if ( focused )
+    {
         wnd->SetFocus();
+        if ( !windowIsAvailable() )
+            return;
+    }
 #if wxUSE_TOOLTIPS
     if (HasParam(wxT("tooltip")))
-        wnd->SetToolTip(GetNodeText(GetParamNode(wxT("tooltip"))));
+    {
+        const wxString tooltip =
+            GetNodeText(GetParamNode(wxT("tooltip")));
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetToolTip(tooltip);
+        if ( !windowIsAvailable() )
+            return;
+    }
 #endif
     if (HasParam(wxT("font")))
-        wnd->SetFont(GetFont(wxT("font"), wnd));
+    {
+        const wxFont font = GetFont(wxT("font"), wnd);
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetFont(font);
+        if ( !windowIsAvailable() )
+            return;
+    }
     if (HasParam(wxT("ownfont")))
-        wnd->SetOwnFont(GetFont(wxT("ownfont"), wnd));
+    {
+        const wxFont font = GetFont(wxT("ownfont"), wnd);
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetOwnFont(font);
+        if ( !windowIsAvailable() )
+            return;
+    }
     if (HasParam(wxT("help")))
-        wnd->SetHelpText(GetNodeText(GetParamNode(wxT("help"))));
+    {
+        const wxString help = GetNodeText(GetParamNode(wxT("help")));
+        if ( !windowIsAvailable() )
+            return;
+
+        wnd->SetHelpText(help);
+        if ( !windowIsAvailable() )
+            return;
+    }
 }
 
 

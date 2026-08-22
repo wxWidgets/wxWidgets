@@ -10,9 +10,9 @@
 #ifndef _WX_MSW_APPPROG_H_
 #define _WX_MSW_APPPROG_H_
 
-#include "wx/vector.h"
+#include <memory>
 
-class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
+struct wxMSWAppProgressState;
 
 class WXDLLIMPEXP_CORE wxAppProgressIndicator
     : public wxAppProgressIndicatorBase
@@ -29,9 +29,14 @@ public:
     virtual void Reset() override;
 
 private:
-    int m_maxValue;
-
-    wxVector<wxTaskBarButton*> m_taskBarButtons;
+    // The implementation owns weak TLW identities and one exact-generation
+    // taskbar controller per target. Keeping this out of the public header also
+    // prevents a raw wxWindow/HWND from becoming accidental persistent state.
+    // shared_ptr is intentional: a native taskbar seam can synchronously call
+    // application code which destroys this wrapper. The operation already on
+    // the stack must retain the detached sidecar long enough to observe its
+    // retired generation without touching the deleted wrapper.
+    mutable std::shared_ptr<wxMSWAppProgressState> m_state;
 
     wxDECLARE_NO_COPY_CLASS(wxAppProgressIndicator);
 };

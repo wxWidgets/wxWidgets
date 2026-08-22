@@ -13,6 +13,7 @@
 #include <memory>
 
 class wxWinUIStaticTextImpl;
+struct wxWinUIAppearanceSnapshot;
 
 class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
 {
@@ -37,17 +38,33 @@ public:
 
     void SetLabel(const wxString& label) override;
     bool SetFont(const wxFont& font) override;
+    bool SetForegroundColour(const wxColour& colour) override;
+    bool SetBackgroundColour(const wxColour& colour) override;
+
+    // Deterministic observations of the projected XAML peer.  They expose no
+    // mutation path and are intentionally kept WinUI-specific.
+    bool WinUIGetAppearanceForTesting(
+        wxWinUIAppearanceSnapshot *snapshot) const;
+    wxString WinUIGetVisibleLabelForTesting() const;
+    wxString WinUIGetRenderedTextForTesting() const;
+    int WinUIGetTextTrimmingForTesting() const;
+    bool WinUIHasLocalBoldInlineForTesting() const;
+    bool WinUIHasLocalUnderlineInlineForTesting() const;
 
 protected:
 #if wxUSE_MARKUP
     bool DoSetLabelMarkup(const wxString& markup) override;
 #endif
     wxSize DoGetBestClientSize() const override;
+    void DoSetSize(int x, int y, int width, int height,
+                   int sizeFlags) override;
     wxString WXGetVisibleLabel() const override;
     void WXSetVisibleLabel(const wxString& str) override;
 
 private:
-    void UpdateWinUIContent();
+    bool UsesManualEllipsization() const;
+    bool ApplyWinUIAppearance();
+    bool UpdateWinUIContent();
 
     std::unique_ptr<wxWinUIStaticTextImpl> m_winui;
     wxString m_visibleLabel;

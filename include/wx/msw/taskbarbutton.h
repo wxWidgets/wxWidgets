@@ -14,10 +14,15 @@
 
 #if wxUSE_TASKBARBUTTON
 
-#include "wx/vector.h"
 #include "wx/taskbarbutton.h"
 
-class WXDLLIMPEXP_FWD_CORE wxITaskbarList3;
+#include <memory>
+#include <vector>
+
+class WXDLLIMPEXP_FWD_CORE wxMSWTaskBarButtonNativeBackend;
+struct wxMSWTaskBarButtonSnapshot;
+struct wxMSWTaskBarThumbButtonNative;
+struct wxTaskBarButtonStateData;
 
 class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton
 {
@@ -42,30 +47,36 @@ public:
     virtual wxThumbBarButton* RemoveThumbBarButton(
         wxThumbBarButton *button) override;
     virtual wxThumbBarButton* RemoveThumbBarButton(int id) override;
+    // The native command id identifies one of the seven immutable shell slots.
+    // It resolves to the button currently occupying that visual slot.
     wxThumbBarButton* GetThumbBarButtonByIndex(size_t index);
     bool InitOrUpdateThumbBarButtons();
     virtual void Realize() override;
 
+    bool IsAvailable() const;
+    bool GetSnapshotForTesting(wxMSWTaskBarButtonSnapshot* snapshot) const;
+
 private:
     // This ctor is only used by wxTaskBarButton::New()
-    wxTaskBarButtonImpl(wxITaskbarList3* taskbarList, wxWindow* parent);
+    wxTaskBarButtonImpl(
+        const std::shared_ptr<wxMSWTaskBarButtonNativeBackend>& backend,
+        wxWindow* parent,
+        WXHWND hwnd,
+        unsigned long long hwndGeneration);
 
-    wxWindow* m_parent;
-    wxITaskbarList3 *m_taskbarList;
+    std::vector<wxMSWTaskBarThumbButtonNative>
+        BuildNativeThumbButtons() const;
+    bool Rebind();
+    bool GetExactIdentity(WXHWND* hwnd,
+                          unsigned long long* hwndGeneration) const;
 
-    typedef wxVector<wxThumbBarButton*> wxThumbBarButtons;
+    typedef std::vector<wxThumbBarButton*> wxThumbBarButtons;
     wxThumbBarButtons m_thumbBarButtons;
 
-    int m_progressRange;
-    int m_progressValue;
-    wxTaskBarButtonState m_progressState;
-    wxString m_thumbnailTooltip;
-    wxIcon m_overlayIcon;
-    wxString m_overlayIconDescription;
-    wxRect m_thumbnailClipRect;
-    bool m_hasInitThumbnailToolbar;
+    std::shared_ptr<wxTaskBarButtonStateData> m_state;
 
     friend wxTaskBarButton* wxTaskBarButton::New(wxWindow*);
+    friend class wxFrame;
 
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButtonImpl);
 };

@@ -27,6 +27,7 @@
 #include "wx/vscroll.h"
 
 #include "wx/utils.h"   // For wxMin/wxMax().
+#include "wx/weakref.h"
 
 // ============================================================================
 // wxVarScrollHelperEvtHandler declaration
@@ -40,15 +41,18 @@
 class WXDLLEXPORT wxVarScrollHelperEvtHandler : public wxEvtHandler
 {
 public:
-    wxVarScrollHelperEvtHandler(wxVarScrollHelperBase *scrollHelper)
+    wxVarScrollHelperEvtHandler(wxVarScrollHelperBase *scrollHelper,
+                                wxWindow *window)
+        : m_scrollHelper(scrollHelper),
+          m_window(window)
     {
-        m_scrollHelper = scrollHelper;
     }
 
     virtual bool ProcessEvent(wxEvent& event) override;
 
 private:
     wxVarScrollHelperBase *m_scrollHelper;
+    wxWeakRef<wxWindow> m_window;
 
     wxDECLARE_NO_COPY_CLASS(wxVarScrollHelperEvtHandler);
 };
@@ -62,7 +66,14 @@ private:
 //        common parts in wxAnyScrollHelperBase.
 bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
-    wxEventType evType = event.GetEventType();
+    const wxEventType evType = event.GetEventType();
+
+    // The window is allowed to destroy itself from any of its handlers. Keep
+    // everything needed after the call below in locals, as destroying the
+    // window also removes and deletes this pushed event handler.
+    wxEvtHandler * const nextHandler = m_nextHandler;
+    wxVarScrollHelperBase * const scrollHelper = m_scrollHelper;
+    const wxWeakRef<wxWindow> weakWindow(m_window);
 
     // Pass it on to the real handler: notice that we must not call
     // ProcessEvent() on this object itself as it wouldn't pass it to the next
@@ -70,7 +81,13 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // (as indicated by "process here only" flag being set) and we do want to
     // execute the handler defined in the window we're associated with right
     // now, without waiting until TryAfter() is called from wxEvtHandler.
-    bool processed = m_nextHandler->ProcessEvent(event);
+    bool processed = nextHandler->ProcessEvent(event);
+
+    if ( !weakWindow )
+    {
+        event.DidntHonourProcessOnlyIn();
+        return processed;
+    }
 
     // always process the size events ourselves, even if the user code handles
     // them as well, as we need to AdjustScrollbars()
@@ -81,7 +98,7 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     //     after this one
     if ( evType == wxEVT_SIZE )
     {
-        m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
+        scrollHelper->HandleOnSize((wxSizeEvent &)event);
         return true;
     }
 
@@ -99,7 +116,7 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 #endif // !__WXUNIVERSAL__
             evType == wxEVT_PAINT )
     {
-        m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
+        scrollHelper->HandleOnPaint((wxPaintEvent &)event);
         return true;
     }
 
@@ -123,7 +140,7 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
          evType == wxEVT_SCROLLWIN_THUMBTRACK ||
          evType == wxEVT_SCROLLWIN_THUMBRELEASE )
     {
-        m_scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
+        scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
         if ( !event.GetSkipped() )
         {
             // it makes sense to indicate that we processed the message as we
@@ -139,15 +156,15 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 #ifndef __WXGTK__
     else if ( evType == wxEVT_MOUSEWHEEL )
     {
-        m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
+        scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
         return true;
     }
 #endif
 #endif // wxUSE_MOUSEWHEEL
     else if ( evType == wxEVT_CHAR &&
-                (m_scrollHelper->GetOrientation() == wxVERTICAL) )
+                (scrollHelper->GetOrientation() == wxVERTICAL) )
     {
-        m_scrollHelper->HandleOnChar((wxKeyEvent &)event);
+        scrollHelper->HandleOnChar((wxKeyEvent &)event);
         if ( !event.GetSkipped() )
         {
             processed = true;
@@ -242,27 +259,39 @@ wxCoord wxVarScrollHelperBase::DoEstimateTotalSize() const
     // some in the end and some in the middle
     static const size_t NUM_UNITS_TO_SAMPLE = 10;
 
+    const size_t unitCount = m_unitMax;
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+
     wxCoord sizeTotal;
-    if ( m_unitMax < 3*NUM_UNITS_TO_SAMPLE )
+    if ( unitCount < 3*NUM_UNITS_TO_SAMPLE )
     {
         // in this case, full calculations are faster and more correct than
         // guessing
-        sizeTotal = GetUnitsSize(0, m_unitMax);
+        sizeTotal = GetUnitsSize(0, unitCount);
     }
     else // too many units to calculate exactly
     {
         // look at some units in the beginning/middle/end
-        sizeTotal =
-            GetUnitsSize(0, NUM_UNITS_TO_SAMPLE) +
-                GetUnitsSize(m_unitMax - NUM_UNITS_TO_SAMPLE,
-                             m_unitMax) +
-                    GetUnitsSize(m_unitMax/2 - NUM_UNITS_TO_SAMPLE/2,
-                                 m_unitMax/2 + NUM_UNITS_TO_SAMPLE/2);
+        sizeTotal = GetUnitsSize(0, NUM_UNITS_TO_SAMPLE);
+        if ( !weakWindow || m_unitMax != unitCount )
+            return 0;
+
+        sizeTotal += GetUnitsSize(unitCount - NUM_UNITS_TO_SAMPLE,
+                                 unitCount);
+        if ( !weakWindow || m_unitMax != unitCount )
+            return 0;
+
+        sizeTotal +=
+            GetUnitsSize(unitCount/2 - NUM_UNITS_TO_SAMPLE/2,
+                         unitCount/2 + NUM_UNITS_TO_SAMPLE/2);
 
         // use the height of the units we looked as the average
         sizeTotal = (wxCoord)
-                (((float)sizeTotal / (3*NUM_UNITS_TO_SAMPLE)) * m_unitMax);
+                (((float)sizeTotal / (3*NUM_UNITS_TO_SAMPLE)) * unitCount);
     }
+
+    if ( !weakWindow || m_unitMax != unitCount )
+        return 0;
 
     return sizeTotal;
 }
@@ -275,14 +304,28 @@ wxCoord wxVarScrollHelperBase::GetUnitsSize(size_t unitMin, size_t unitMax) cons
         return -GetUnitsSize(unitMax, unitMin);
     //else: unitMin < unitMax
 
+    const size_t unitCount = m_unitMax;
+    if ( unitMin >= unitCount )
+        return 0;
+
+    unitMax = wxMin(unitMax, unitCount);
+
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+
     // let the user code know that we're going to need all these units
     OnGetUnitsSizeHint(unitMin, unitMax);
+    if ( !weakWindow || m_unitMax != unitCount )
+        return 0;
 
     // sum up their sizes
     wxCoord size = 0;
     for ( size_t unit = unitMin; unit < unitMax; ++unit )
     {
-        size += OnGetUnitSize(unit);
+        const wxCoord unitSize = OnGetUnitSize(unit);
+        if ( !weakWindow || m_unitMax != unitCount )
+            return 0;
+
+        size += unitSize;
     }
 
     return size;
@@ -290,6 +333,13 @@ wxCoord wxVarScrollHelperBase::GetUnitsSize(size_t unitMin, size_t unitMax) cons
 
 size_t wxVarScrollHelperBase::FindFirstVisibleFromLast(size_t unitLast, bool full) const
 {
+    const size_t unitCount = m_unitMax;
+    if ( !unitCount )
+        return 0;
+
+    unitLast = wxMin(unitLast, unitCount - 1);
+
+    const wxWeakRef<wxWindow> weakWindow(m_win);
     const wxCoord sWindow = GetOrientationTargetSize();
 
     // go upwards until we arrive at a unit such that unitLast is not visible
@@ -298,7 +348,11 @@ size_t wxVarScrollHelperBase::FindFirstVisibleFromLast(size_t unitLast, bool ful
     wxCoord s = 0;
     for ( ;; )
     {
-        s += OnGetUnitSize(unitFirst);
+        const wxCoord unitSize = OnGetUnitSize(unitFirst);
+        if ( !weakWindow || m_unitMax != unitCount )
+            return 0;
+
+        s += unitSize;
 
         if ( s > sWindow )
         {
@@ -324,6 +378,9 @@ size_t wxVarScrollHelperBase::FindFirstVisibleFromLast(size_t unitLast, bool ful
 
 size_t wxVarScrollHelperBase::GetNewScrollPosition(wxScrollWinEvent& event) const
 {
+    if ( !m_unitMax )
+        return 0;
+
     wxEventType evtType = event.GetEventType();
 
     if ( evtType == wxEVT_SCROLLWIN_TOP )
@@ -345,8 +402,17 @@ size_t wxVarScrollHelperBase::GetNewScrollPosition(wxScrollWinEvent& event) cons
     else if ( evtType == wxEVT_SCROLLWIN_PAGEUP )
     {
         // Page up should do at least as much as line up.
-        return wxMin(FindFirstVisibleFromLast(m_unitFirst),
-                    m_unitFirst ? m_unitFirst - 1 : 0);
+        const size_t unitCount = m_unitMax;
+        const size_t unitFirst = m_unitFirst;
+        const wxWeakRef<wxWindow> weakWindow(m_win);
+        const size_t pageFirst = FindFirstVisibleFromLast(unitFirst);
+        if ( !weakWindow || m_unitMax != unitCount ||
+             m_unitFirst != unitFirst )
+        {
+            return 0;
+        }
+
+        return wxMin(pageFirst, unitFirst ? unitFirst - 1 : 0);
     }
     else if ( evtType == wxEVT_SCROLLWIN_PAGEDOWN )
     {
@@ -379,18 +445,25 @@ void wxVarScrollHelperBase::UpdateScrollbar()
         return;
     }
 
+    const size_t unitCount = m_unitMax;
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+
     // see how many units can we fit on screen
     const wxCoord sWindow = GetOrientationTargetSize();
 
     // do vertical calculations
     wxCoord s = 0;
     size_t unit;
-    for ( unit = m_unitFirst; unit < m_unitMax; ++unit )
+    for ( unit = m_unitFirst; unit < unitCount; ++unit )
     {
         if ( s > sWindow )
             break;
 
-        s += OnGetUnitSize(unit);
+        const wxCoord unitSize = OnGetUnitSize(unit);
+        if ( !weakWindow || m_unitMax != unitCount )
+            return;
+
+        s += unitSize;
     }
 
     m_nUnitsVisible = unit - m_unitFirst;
@@ -405,7 +478,7 @@ void wxVarScrollHelperBase::UpdateScrollbar()
     }
 
     // set the scrollbar parameters to reflect this
-    m_win->SetScrollbar(GetOrientation(), m_unitFirst, unitsPageSize, m_unitMax);
+    m_win->SetScrollbar(GetOrientation(), m_unitFirst, unitsPageSize, unitCount);
 }
 
 void wxVarScrollHelperBase::RemoveScrollbar()
@@ -446,7 +519,7 @@ void wxVarScrollHelperBase::DoSetTargetWindow(wxWindow *target)
         // if we already have a handler, delete it first
         DeleteEvtHandler();
 
-        m_handler = new wxVarScrollHelperEvtHandler(this);
+        m_handler = new wxVarScrollHelperEvtHandler(this, m_win);
         m_targetWindow->PushEventHandler(m_handler);
     }
 }
@@ -470,13 +543,22 @@ void wxVarScrollHelperBase::SetUnitCount(size_t count)
     // save the number of units
     m_unitMax = count;
 
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+
     // and our estimate for their total height
-    m_sizeTotal = EstimateTotalSize();
+    const wxCoord sizeTotal = EstimateTotalSize();
+    if ( !weakWindow || m_unitMax != count )
+        return;
+
+    m_sizeTotal = sizeTotal;
 
     // ScrollToUnit() will update the scrollbar itself if it changes the unit
     // we pass to it because it's out of [new] range
     size_t oldScrollPos = m_unitFirst;
     DoScrollToUnit(m_unitFirst);
+    if ( !weakWindow || m_unitMax != count )
+        return;
+
     if ( oldScrollPos == m_unitFirst )
     {
         // but if it didn't do it, we still need to update the scrollbar to
@@ -487,21 +569,37 @@ void wxVarScrollHelperBase::SetUnitCount(size_t count)
 
 void wxVarScrollHelperBase::RefreshUnit(size_t unit)
 {
+    const size_t unitCount = m_unitMax;
+
     // is this unit visible?
-    if ( !IsVisible(unit) )
+    if ( unit >= unitCount || !IsVisible(unit) )
     {
         // no, it is useless to do anything
         return;
     }
 
     // calculate the rect occupied by this unit on screen
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+    const wxWeakRef<wxWindow> weakTarget(m_targetWindow);
     wxRect rect;
+    const wxCoord unitSize = OnGetUnitSize(unit);
+    if ( !weakWindow || !weakTarget ||
+         weakTarget.get() != m_targetWindow ||
+         m_unitMax != unitCount )
+        return;
+
     AssignOrient(rect.width, rect.height,
-                 GetNonOrientationTargetSize(), OnGetUnitSize(unit));
+                 GetNonOrientationTargetSize(), unitSize);
 
     for ( size_t n = GetVisibleBegin(); n < unit; ++n )
     {
-        IncOrient(rect.x, rect.y, OnGetUnitSize(n));
+        const wxCoord size = OnGetUnitSize(n);
+        if ( !weakWindow || !weakTarget ||
+             weakTarget.get() != m_targetWindow ||
+             m_unitMax != unitCount )
+            return;
+
+        IncOrient(rect.x, rect.y, size);
     }
 
     // do refresh it
@@ -511,14 +609,25 @@ void wxVarScrollHelperBase::RefreshUnit(size_t unit)
 void wxVarScrollHelperBase::RefreshUnits(size_t from, size_t to)
 {
     wxASSERT_MSG( from <= to, wxT("RefreshUnits(): empty range") );
+    if ( from > to )
+        return;
 
-    // clump the range to just the visible units -- it is useless to refresh
-    // the other ones
-    if ( from < GetVisibleBegin() )
-        from = GetVisibleBegin();
+    const size_t unitCount = m_unitMax;
+    if ( !unitCount || from >= unitCount )
+        return;
 
-    if ( to > GetVisibleEnd() )
-        to = GetVisibleEnd();
+    const size_t visibleBegin = GetVisibleBegin();
+    const size_t visibleEnd = wxMin(GetVisibleEnd(), unitCount);
+
+    // Clamp the inclusive input range to the half-open visible range.
+    if ( visibleBegin >= visibleEnd || to < visibleBegin || from >= visibleEnd )
+        return;
+
+    from = wxMax(from, visibleBegin);
+    to = wxMin(to, visibleEnd - 1);
+
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+    const wxWeakRef<wxWindow> weakTarget(m_targetWindow);
 
     // calculate the rect occupied by these units on screen
     int orient_size = 0,
@@ -526,16 +635,28 @@ void wxVarScrollHelperBase::RefreshUnits(size_t from, size_t to)
 
     int nonorient_size = GetNonOrientationTargetSize();
 
-    for ( size_t nBefore = GetVisibleBegin();
+    for ( size_t nBefore = visibleBegin;
           nBefore < from;
           nBefore++ )
     {
-        orient_pos += OnGetUnitSize(nBefore);
+        const wxCoord size = OnGetUnitSize(nBefore);
+        if ( !weakWindow || !weakTarget ||
+             weakTarget.get() != m_targetWindow ||
+             m_unitMax != unitCount )
+            return;
+
+        orient_pos += size;
     }
 
     for ( size_t nBetween = from; nBetween <= to; nBetween++ )
     {
-        orient_size += OnGetUnitSize(nBetween);
+        const wxCoord size = OnGetUnitSize(nBetween);
+        if ( !weakWindow || !weakTarget ||
+             weakTarget.get() != m_targetWindow ||
+             m_unitMax != unitCount )
+            return;
+
+        orient_size += size;
     }
 
     wxRect rect;
@@ -548,7 +669,15 @@ void wxVarScrollHelperBase::RefreshUnits(size_t from, size_t to)
 
 void wxVarScrollHelperBase::RefreshAll()
 {
+    const size_t unitCount = m_unitMax;
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+    const wxWeakRef<wxWindow> weakTarget(m_targetWindow);
+
     UpdateScrollbar();
+    if ( !weakWindow || !weakTarget ||
+         weakTarget.get() != m_targetWindow ||
+         m_unitMax != unitCount )
+        return;
 
     m_targetWindow->Refresh();
 }
@@ -576,12 +705,22 @@ bool wxVarScrollHelperBase::ScrollLayout()
 
 int wxVarScrollHelperBase::VirtualHitTest(wxCoord coord) const
 {
-    const size_t unitMax = GetVisibleEnd();
+    if ( coord < 0 )
+        return wxNOT_FOUND;
+
+    const size_t unitCount = m_unitMax;
+    const size_t unitMax = wxMin(GetVisibleEnd(), unitCount);
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+
     for ( size_t unit = GetVisibleBegin(); unit < unitMax; ++unit )
     {
-        coord -= OnGetUnitSize(unit);
+        const wxCoord unitSize = OnGetUnitSize(unit);
+        if ( !weakWindow || m_unitMax != unitCount )
+            return wxNOT_FOUND;
+
+        coord -= unitSize;
         if ( coord < 0 )
-            return unit;
+            return static_cast<int>(unit);
     }
 
     return wxNOT_FOUND;
@@ -599,9 +738,18 @@ bool wxVarScrollHelperBase::DoScrollToUnit(size_t unit)
         return false;
     }
 
+    const size_t unitCount = m_unitMax;
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+    const wxWeakRef<wxWindow> weakTarget(m_targetWindow);
+
     // determine the real first unit to scroll to: we shouldn't scroll beyond
     // the end
-    size_t unitFirstLast = FindFirstVisibleFromLast(m_unitMax - 1, true);
+    size_t unitFirstLast = FindFirstVisibleFromLast(unitCount - 1, true);
+    if ( !weakWindow || !weakTarget ||
+         weakTarget.get() != m_targetWindow ||
+         m_unitMax != unitCount )
+        return false;
+
     if ( unit > unitFirstLast )
         unit = unitFirstLast;
 
@@ -622,6 +770,10 @@ bool wxVarScrollHelperBase::DoScrollToUnit(size_t unit)
 
     // the size of scrollbar thumb could have changed
     UpdateScrollbar();
+    if ( !weakWindow || !weakTarget ||
+         weakTarget.get() != m_targetWindow ||
+         m_unitMax != unitCount )
+        return false;
 
     // finally refresh the display -- but only redraw as few units as possible
     // to avoid flicker.  We can't do this if we have children because they
@@ -644,6 +796,10 @@ bool wxVarScrollHelperBase::DoScrollToUnit(size_t unit)
         {
             wxCoord dx = 0,
                     dy = GetUnitsSize(GetVisibleBegin(), unitFirstOld);
+            if ( !weakWindow || !weakTarget ||
+                 weakTarget.get() != m_targetWindow ||
+                 m_unitMax != unitCount )
+                return false;
 
             if ( GetOrientation() == wxHORIZONTAL )
             {
@@ -678,11 +834,17 @@ bool wxVarScrollHelperBase::DoScrollUnits(int units)
 
 bool wxVarScrollHelperBase::DoScrollPages(int pages)
 {
+    if ( !m_unitMax || !pages )
+        return false;
+
+    const size_t unitCount = m_unitMax;
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+
     bool didSomething = false;
 
     while ( pages )
     {
-        int unit;
+        size_t unit;
         if ( pages > 0 )
         {
             unit = GetVisibleEnd();
@@ -693,10 +855,15 @@ bool wxVarScrollHelperBase::DoScrollPages(int pages)
         else // pages < 0
         {
             unit = FindFirstVisibleFromLast(GetVisibleEnd());
+            if ( !weakWindow || m_unitMax != unitCount )
+                return didSomething;
+
             ++pages;
         }
 
         didSomething = DoScrollToUnit(unit);
+        if ( !weakWindow || m_unitMax != unitCount )
+            return didSomething;
     }
 
     return didSomething;
@@ -708,7 +875,10 @@ bool wxVarScrollHelperBase::DoScrollPages(int pages)
 
 void wxVarScrollHelperBase::HandleOnSize(wxSizeEvent& event)
 {
-    if ( m_unitMax )
+    const size_t unitCount = m_unitMax;
+    const wxWeakRef<wxWindow> weakWindow(m_win);
+
+    if ( unitCount )
     {
         // sometimes change in varscrollable window's size can result in
         // unused empty space after the last item. Fix it by decrementing
@@ -718,12 +888,19 @@ void wxVarScrollHelperBase::HandleOnSize(wxSizeEvent& event)
         const wxCoord sWindow = GetOrientationTargetSize();
         wxCoord s = 0;
         size_t unit;
-        for ( unit = m_unitFirst; unit < m_unitMax; ++unit )
+        for ( unit = m_unitFirst; unit < unitCount; ++unit )
         {
             if ( s > sWindow )
                 break;
 
-            s += OnGetUnitSize(unit);
+            const wxCoord unitSize = OnGetUnitSize(unit);
+            if ( !weakWindow || m_unitMax != unitCount )
+            {
+                event.Skip();
+                return;
+            }
+
+            s += unitSize;
         }
         wxCoord freeSpace = sWindow - s;
 
@@ -733,7 +910,13 @@ void wxVarScrollHelperBase::HandleOnSize(wxSizeEvent& event)
               idealUnitFirst > 0;
               idealUnitFirst-- )
         {
-            wxCoord us = OnGetUnitSize(idealUnitFirst-1);
+            const wxCoord us = OnGetUnitSize(idealUnitFirst-1);
+            if ( !weakWindow || m_unitMax != unitCount )
+            {
+                event.Skip();
+                return;
+            }
+
             if ( freeSpace < us )
                 break;
             freeSpace -= us;

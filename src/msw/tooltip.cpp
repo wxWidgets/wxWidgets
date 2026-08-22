@@ -37,6 +37,8 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/winui.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+    #include <atomic>
     #define wxMSWWinUITooltipLog(...) wxWinUIDebugLog(__VA_ARGS__)
 #else
     #define wxMSWWinUITooltipLog(...) ((void)0)
@@ -67,8 +69,32 @@
 // the tooltip parent window
 WXHWND wxToolTip::ms_hwndTT = nullptr;
 
-// new tooltip maximum width, default value is set on first call to wxToolTip::Add()
+// Requested width for new logical tooltips. Keep zero as the public/system
+// default sentinel: native TTM sizing computes its effective value locally.
 int wxToolTip::ms_maxWidth = 0;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+namespace
+{
+
+std::atomic<unsigned long long> gs_nextWinUIToolTipIdentity{0};
+
+unsigned long long wxNextWinUIToolTipIdentity()
+{
+    unsigned long long identity =
+        gs_nextWinUIToolTipIdentity.fetch_add(
+            1, std::memory_order_relaxed) + 1;
+    if ( identity == 0 )
+    {
+        identity =
+            gs_nextWinUIToolTipIdentity.fetch_add(
+                1, std::memory_order_relaxed) + 1;
+    }
+    return identity;
+}
+
+} // anonymous namespace
+#endif
 
 #if wxUSE_TTM_WINDOWFROMPOINT
 
@@ -252,14 +278,38 @@ LRESULT APIENTRY wxToolTipWndProc(HWND hwndTT,
 
 void wxToolTip::Enable(bool flag)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // XAML dependency-property writes are re-entrant. If an application
+    // callback issued a newer Enable() transaction, that nested call already
+    // published the native state too and this stale outer call must stop.
+    if ( !wxWinUISetToolTipsEnabled(flag) )
+        return;
+#endif
+
     // Make sure the tooltip has been created
     (void) GetToolTipCtrl();
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Creating the native tooltip control can also dispatch window messages.
+    // Preserve last-writer-wins if one of them toggled the global policy.
+    if ( wxWinUIAreToolTipsEnabled() != flag )
+        return;
+#endif
 
     SendTooltipMessageToAll(ms_hwndTT, TTM_ACTIVATE, flag, 0);
 }
 
 void wxToolTip::SetDelay(long milliseconds)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Do not partially emulate this for XAML slots. ToolTip::Opened fires
+    // after presentation, so closing there and reopening from a timer causes
+    // visible/UIA flicker. Replacing ToolTipService activation with pointer
+    // handlers would also lose focus and long-press triggers and could not
+    // preserve reshow semantics. Keep all three settings native-only until
+    // WinUI exposes a cancellable opening/timing surface.
+#endif
+
     // Make sure the tooltip has been created
     (void) GetToolTipCtrl();
 
@@ -284,6 +334,9 @@ void wxToolTip::SetMaxWidth(int width)
     wxASSERT_MSG( width == -1 || width >= 0, wxT("invalid width value") );
 
     ms_maxWidth = width;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWinUISetToolTipMaxWidth(width);
+#endif
 }
 
 void wxToolTip::DeleteToolTipCtrl()
@@ -388,6 +441,10 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject);
 wxToolTip::wxToolTip(const wxString &tip)
          : m_text(tip)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_winuiMaxWidthAtCreation = ms_maxWidth;
+    m_winuiIdentity = wxNextWinUIToolTipIdentity();
+#endif
     wxMSWWinUITooltipLog("wxToolTip::ctor text this=%p tipLen=%lu",
                          static_cast<void *>(this),
                          static_cast<unsigned long>(tip.length()));
@@ -405,6 +462,10 @@ wxToolTip::wxToolTip(const wxString &tip)
 wxToolTip::wxToolTip(wxWindow* win, unsigned int id, const wxString &tip, const wxRect& rc)
          : m_text(tip), m_rect(rc), m_id(id)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_winuiMaxWidthAtCreation = ms_maxWidth;
+    m_winuiIdentity = wxNextWinUIToolTipIdentity();
+#endif
     wxMSWWinUITooltipLog("wxToolTip::ctor window this=%p win=%p hwnd=%p id=%u tipLen=%lu",
                          static_cast<void *>(this),
                          static_cast<void *>(win),
@@ -459,6 +520,10 @@ void wxToolTip::DoRemove(WXHWND hWnd)
 
 void wxToolTip::Remove()
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_isWinUIHost )
+        return;
+#endif
     DoForAllWindows(&wxToolTip::DoRemove);
 }
 
@@ -540,6 +605,19 @@ void wxToolTip::SetWindow(wxWindow *win)
                          static_cast<void *>(this));
 
     m_window = win;
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    m_isWinUIHost = false;
+
+    if ( m_window && wxWinUIIsHostWindow(m_window) )
+    {
+        // Keep GetWindow()/GetToolTip() coherent, but let the shared island
+        // state adapter own the visual tooltip.  Registering the covered HWND
+        // with the native tooltip control would create a duplicate.
+        m_isWinUIHost = true;
+        wxWinUITLWHostNotifySlotState(m_window);
+        return;
+    }
+#endif
 
     // add the window itself
     if ( m_window )
@@ -584,6 +662,11 @@ void wxToolTip::SetRect(const wxRect& rc)
 {
     m_rect = rc;
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_isWinUIHost )
+        return;
+#endif
+
     if ( m_window )
     {
         wxToolInfo ti(GetHwndOf(m_window), m_id, m_rect);
@@ -598,6 +681,16 @@ void wxToolTip::SetTip(const wxString& tip)
                          static_cast<unsigned long>(tip.length()),
                          static_cast<void *>(m_window));
     m_text = tip;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    if ( m_isWinUIHost )
+    {
+        // SetTip() is public and bypasses wxWindow::SetToolTip(); explicitly
+        // dirty the slot so this canonical object's new text reaches XAML.
+        wxWinUITLWHostNotifySlotState(m_window);
+        return;
+    }
+#endif
 
 #ifdef TTM_SETMAXTIPWIDTH
     if ( !AdjustMaxWidth() )
@@ -669,31 +762,36 @@ bool wxToolTip::AdjustMaxWidth()
     {
         const wxString token = tokenizer.GetNextToken();
 
-        SIZE sz;
+        SIZE sz{};
         if ( !::GetTextExtentPoint32(hdc, token.t_str(),
                                      token.length(), &sz) )
         {
             wxLogLastError(wxT("GetTextExtentPoint32"));
+            continue;
         }
 
         if ( sz.cx > maxWidth )
             maxWidth = sz.cx;
     }
 
-    // limit size to ms_maxWidth, if set
-    if ( ms_maxWidth == 0 )
+    // Limit size to the configured policy, if set. Keep the public sentinel
+    // itself unchanged: WinUI tooltips snapshot SetMaxWidth() at construction,
+    // and a native tooltip must not silently turn policy 0 into an explicit
+    // 400px XAML limit for every later object.
+    int effectiveMaxWidth = ms_maxWidth;
+    if ( effectiveMaxWidth == 0 )
     {
         // this is more or less arbitrary but seems to work well
         static const int DEFAULT_MAX_WIDTH = 400;
 
-        ms_maxWidth = wxGetClientDisplayRect().width / 2;
+        effectiveMaxWidth = wxGetClientDisplayRect().width / 2;
 
-        if ( ms_maxWidth > DEFAULT_MAX_WIDTH )
-            ms_maxWidth = DEFAULT_MAX_WIDTH;
+        if ( effectiveMaxWidth > DEFAULT_MAX_WIDTH )
+            effectiveMaxWidth = DEFAULT_MAX_WIDTH;
     }
 
-    if ( ms_maxWidth != -1 && maxWidth > ms_maxWidth )
-        maxWidth = ms_maxWidth;
+    if ( effectiveMaxWidth != -1 && maxWidth > effectiveMaxWidth )
+        maxWidth = effectiveMaxWidth;
 
     // only set a new width if it is bigger than the current setting:
     // otherwise adding a tooltip with shorter line(s) than a previous

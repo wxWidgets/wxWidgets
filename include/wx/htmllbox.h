@@ -120,6 +120,13 @@ protected:
     // listbox (by default, clicks on links are simply ignored)
     virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
 
+    // Keep the default cell-click routing safe if an event handler mutates
+    // the list and invalidates the HTML cache before requesting default
+    // processing with event.Skip().
+    virtual bool OnCellClicked(wxHtmlCell *cell,
+                               wxCoord x, wxCoord y,
+                               const wxMouseEvent& event) override;
+
     // event handlers
     void OnSize(wxSizeEvent& event);
     void OnMouseMove(wxMouseEvent& event);

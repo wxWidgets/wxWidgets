@@ -28,14 +28,19 @@
     #include "wx/app.h"     // for GetComCtl32Version()
 #endif
 
+#include "wx/weakref.h"
 #include "wx/msw/private/filedialog.h"
 
 #if wxUSE_IFILEOPENDIALOG
 
 #include <initguid.h>
+#include <atomic>
 
 #include "wx/msw/private/cotaskmemptr.h"
 #include "wx/msw/private/gethwnd.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/msw/wrapcctl.h"
+#endif
 
 #include "wx/dynlib.h"
 
@@ -142,6 +147,7 @@ int wxDirDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
+    const wxWeakRef<wxWindow> requestedParent(m_parent);
     wxWindow* const parent = GetParentForModalDialog();
     const WXHWND hWndParent = wxGetHWND(parent);
 
@@ -168,6 +174,9 @@ int wxDirDialog::ShowModal()
     // change current working directory if asked so
     if ( rc == wxID_OK && HasFlag(wxDD_CHANGE_DIR) )
         wxSetWorkingDirectory(m_path);
+
+    if ( m_parent && !requestedParent.get() )
+        m_parent = nullptr;
 
     return rc;
 }
@@ -275,6 +284,93 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
 namespace wxMSWImpl
 {
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+namespace
+{
+
+wxIFileDialogShowHookForTesting gs_showHookForTesting;
+std::atomic<unsigned long> gs_ownerCloseCountForTesting{0};
+
+} // anonymous namespace
+
+void SetIFileDialogShowHookForTesting(
+    const wxIFileDialogShowHookForTesting& hook)
+{
+    gs_showHookForTesting = hook;
+}
+
+void ResetIFileDialogShowHookForTesting()
+{
+    gs_showHookForTesting = wxIFileDialogShowHookForTesting();
+    gs_ownerCloseCountForTesting.store(0, std::memory_order_relaxed);
+}
+
+unsigned long GetIFileDialogOwnerCloseCountForTesting()
+{
+    return gs_ownerCloseCountForTesting.load(std::memory_order_relaxed);
+}
+
+class IFileDialogOwnerDestroyGuard
+{
+public:
+    IFileDialogOwnerDestroyGuard(HWND owner, IFileDialog *dialog)
+        : m_owner(owner),
+          m_dialog(dialog),
+          m_id(reinterpret_cast<UINT_PTR>(this))
+    {
+        if ( m_owner &&
+             !::SetWindowSubclass(m_owner, &SubclassProc, m_id,
+                                  reinterpret_cast<DWORD_PTR>(this)) )
+        {
+            wxLogLastError(wxS("SetWindowSubclass(IFileDialog owner)"));
+            m_owner = nullptr;
+        }
+    }
+
+    ~IFileDialogOwnerDestroyGuard()
+    {
+        if ( m_owner )
+        {
+            (void)::RemoveWindowSubclass(
+                m_owner, &SubclassProc, m_id);
+        }
+    }
+
+private:
+    static LRESULT CALLBACK SubclassProc(
+        HWND hwnd,
+        UINT message,
+        WPARAM wParam,
+        LPARAM lParam,
+        UINT_PTR id,
+        DWORD_PTR data)
+    {
+        IFileDialogOwnerDestroyGuard * const self =
+            reinterpret_cast<IFileDialogOwnerDestroyGuard *>(data);
+
+        if ( message == WM_NCDESTROY && self && self->m_owner == hwnd )
+        {
+            // Remove our callback before asking the shell to close: Close()
+            // may pump messages while unwinding IFileDialog::Show().
+            self->m_owner = nullptr;
+            (void)::RemoveWindowSubclass(hwnd, &SubclassProc, id);
+            gs_ownerCloseCountForTesting.fetch_add(
+                1, std::memory_order_relaxed);
+            (void)self->m_dialog->Close(
+                HRESULT_FROM_WIN32(ERROR_CANCELLED));
+        }
+
+        return ::DefSubclassProc(hwnd, message, wParam, lParam);
+    }
+
+    HWND m_owner;
+    IFileDialog * const m_dialog;
+    const UINT_PTR m_id;
+};
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 /* static */
 bool wxIFileDialog::CanBeUsedWithAnOwner()
 {
@@ -332,8 +428,44 @@ int wxIFileDialog::Show(HWND owner, int options,
     if ( FAILED(hr) )
     {
         wxLogApiError(wxS("IFileDialog::SetOptions"), hr);
-        return false;
+        return wxID_NONE;
     }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    IFileDialogOwnerDestroyGuard ownerGuard(owner, m_fileDialog.Get());
+
+    if ( gs_showHookForTesting.show )
+    {
+        wxArrayString selectedPaths;
+        wxString selectedPath;
+        const int rc = gs_showHookForTesting.show(
+            gs_showHookForTesting.context,
+            owner,
+            options,
+            &selectedPaths,
+            &selectedPath);
+
+        if ( rc != wxID_OK )
+            return rc;
+
+        if ( options & FOS_ALLOWMULTISELECT )
+        {
+            if ( selectedPaths.empty() || !pathsOut )
+                return wxID_CANCEL;
+
+            *pathsOut = selectedPaths;
+        }
+        else
+        {
+            if ( selectedPath.empty() || !pathOut )
+                return wxID_CANCEL;
+
+            *pathOut = selectedPath;
+        }
+
+        return wxID_OK;
+    }
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
     hr = m_fileDialog->Show(owner);
     if ( FAILED(hr) )

@@ -18,6 +18,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/intl.h"
+#include "wx/filename.h"
 #include "wx/translation.h"
 #include "wx/uilocale.h"
 #include "wx/scopeguard.h"
@@ -25,6 +26,59 @@
 #include "wx/private/glibc.h"
 
 #if wxUSE_INTL
+
+namespace
+{
+
+// Samples and tests share an output directory in some build configurations.
+// Restrict these tests to their own catalogs so that catalogs copied by the
+// internationalization sample can't affect their results.
+class TestTranslationsLoader final : public wxFileTranslationsLoader
+{
+public:
+    wxMsgCatalog* LoadCatalog(const wxString& domain,
+                              const wxString& lang) override
+    {
+        const wxFileName fn(GetLanguageDir(lang), domain, "mo");
+        if ( !fn.FileExists() )
+            return nullptr;
+
+        return wxMsgCatalog::CreateFromFile(fn.GetFullPath(), domain);
+    }
+
+    wxArrayString GetAvailableTranslations(const wxString& domain) const override
+    {
+        wxArrayString isolated;
+        const wxArrayString available =
+            wxFileTranslationsLoader::GetAvailableTranslations(domain);
+
+        for ( const wxString& lang : available )
+        {
+            if ( isolated.Index(lang) == wxNOT_FOUND &&
+                    wxFileName(GetLanguageDir(lang), domain, "mo").FileExists() )
+            {
+                isolated.Add(lang);
+            }
+        }
+
+        return isolated;
+    }
+
+private:
+    static wxString GetLanguageDir(const wxString& lang)
+    {
+        return wxString(".") + wxFILE_SEP_PATH + "intl" +
+               wxFILE_SEP_PATH + lang;
+    }
+};
+
+void UseTestTranslationsLoader(wxTranslations& trans)
+{
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+    trans.SetLoader(new TestTranslationsLoader);
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // test class
@@ -246,11 +300,10 @@ TEST_CASE("wxTranslations::AddCatalog", "[translations]")
     // We currently have translations for British English, French and Japanese
     // in this test directory, check that loading those succeeds but loading
     // others doesn't.
-    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
-
     const wxString domain("internat");
 
     wxTranslations trans;
+    UseTestTranslationsLoader(trans);
 
     SECTION("All")
     {
@@ -334,11 +387,10 @@ TEST_CASE("wxTranslations::CorruptCatalog", "[translations]")
 
 TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
 {
-    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
-
     const wxString domain("internat");
 
     wxTranslations trans;
+    UseTestTranslationsLoader(trans);
     wxON_BLOCK_EXIT1( wxUnsetEnv, "WXLANGUAGE" );
 
     SECTION("ChooseLanguage")

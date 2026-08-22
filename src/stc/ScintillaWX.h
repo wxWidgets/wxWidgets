@@ -16,6 +16,7 @@
 #ifndef __ScintillaWX_h__
 #define __ScintillaWX_h__
 #include "wx/defs.h"
+#include "wx/weakref.h"
 
 //----------------------------------------------------------------------
 
@@ -83,6 +84,7 @@ using namespace Scintilla;
 
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;           // forward
 class ScintillaWX;
 class wxSTCTimer;
@@ -172,6 +174,11 @@ public:
     int  DoKeyDown(const wxKeyEvent& event, bool* consumed);
     void DoOnIdle(wxIdleEvent& evt);
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    void DoReconcileTopLevelParent();
+    wxUIntPtr GetCaretTimerIdForTesting() const;
+#endif
+
 #if wxUSE_DRAG_AND_DROP
     bool DoDropText(long x, long y, const wxString& data);
     wxDragResult DoDragEnter(wxCoord x, wxCoord y, wxDragResult def);
@@ -214,6 +221,11 @@ private:
     int                 wheelVRotation;
     int                 wheelHRotation;
     SurfaceData*        m_surfaceData;
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    wxWeakRef<wxWindow> m_topLevelParent;
+    std::shared_ptr<bool> m_isReconcilingTopLevelParent;
+#endif
 
     // For use in creating a system caret
     bool HasCaretSizeChanged();

@@ -30,6 +30,7 @@
 #include "wx/dataview.h"
 #include "wx/renderer.h"
 #include "wx/scopedarray.h"
+#include "wx/weakref.h"
 
 #include <memory>
 
@@ -132,62 +133,91 @@ public:
 
     void OnInsertColumn(unsigned col, unsigned numColumns)
     {
-        wxASSERT_MSG( col, "Shouldn't be called for the first column" );
+        wxASSERT_MSG( numColumns > 1 && col < numColumns,
+                      "Invalid inserted column" );
 
-        // Nothing to do if we don't have any text.
-        if ( !m_columnsTexts )
+        // If all auxiliary values are empty, inserting another non-primary
+        // column keeps them all empty without allocating storage.
+        if ( col != 0 && !m_columnsTexts )
             return;
 
         wxScopedArray<wxString> oldTexts(m_columnsTexts);
         m_columnsTexts = new wxString[numColumns - 1];
 
-        // In the loop below n is the index in the new column texts array and m
-        // is the index in the old one.
-        for ( unsigned n = 1, m = 1; n < numColumns - 1; n++, m++ )
+        if ( col == 0 )
         {
-            if ( n == col )
-            {
-                // Leave the new array text initially empty and just adjust the
-                // index (to compensate for "m++" done by the loop anyhow).
-                m--;
-            }
-            else // Not the newly inserted column.
-            {
-                // Copy the old text value.
-                m_columnsTexts[n - 1] = oldTexts[m - 1];
-            }
+            // The old primary text moves to logical column 1.
+            m_columnsTexts[0] = m_text;
+            m_text.clear();
+
+            // There are no auxiliary values to copy when their lazily
+            // allocated array didn't exist before this insertion.
+            if ( !oldTexts )
+                return;
+        }
+
+        const unsigned int oldNumColumns = numColumns - 1;
+        for ( unsigned int oldCol = 1;
+              oldCol < oldNumColumns;
+              ++oldCol )
+        {
+            const unsigned int newCol =
+                oldCol >= col ? oldCol + 1 : oldCol;
+            m_columnsTexts[newCol - 1] = oldTexts[oldCol - 1];
         }
     }
 
     void OnDeleteColumn(unsigned col, unsigned numColumns)
     {
-        wxASSERT_MSG( col, "Shouldn't be called for the first column" );
+        wxASSERT_MSG( col < numColumns, "Invalid deleted column" );
+
+        if ( col == 0 )
+        {
+            // The first column is stored separately in m_text. Deleting it
+            // promotes the old second column to become the new first one and
+            // shifts all remaining auxiliary texts down.
+            if ( !m_columnsTexts )
+            {
+                m_text.clear();
+                return;
+            }
+
+            wxScopedArray<wxString> oldTexts(m_columnsTexts);
+            m_text = oldTexts[0];
+
+            const unsigned int numExtraNew =
+                numColumns > 2 ? numColumns - 2 : 0;
+            m_columnsTexts =
+                numExtraNew ? new wxString[numExtraNew] : nullptr;
+            for ( unsigned int n = 0; n < numExtraNew; ++n )
+                m_columnsTexts[n] = oldTexts[n + 1];
+            return;
+        }
 
         if ( !m_columnsTexts )
             return;
 
         wxScopedArray<wxString> oldTexts(m_columnsTexts);
-        m_columnsTexts = new wxString[numColumns - 2];
+        const unsigned int numExtraNew =
+            numColumns > 2 ? numColumns - 2 : 0;
+        m_columnsTexts =
+            numExtraNew ? new wxString[numExtraNew] : nullptr;
 
-        // As above, n is the index in the new column texts array and m is the
-        // index in the old one.
-        for ( unsigned n = 1, m = 1; n < numColumns - 1; n++, m++ )
+        const unsigned int newNumColumns = numColumns - 1;
+        for ( unsigned int newCol = 1;
+              newCol < newNumColumns;
+              ++newCol )
         {
-            if ( m == col )
-            {
-                // Skip copying the deleted column and keep the new index the
-                // same (so compensate for "n++" done in the loop).
-                n--;
-            }
-            else // Not the deleted column.
-            {
-                m_columnsTexts[n - 1] = oldTexts[m - 1];
-            }
+            const unsigned int oldCol =
+                newCol >= col ? newCol + 1 : newCol;
+            m_columnsTexts[newCol - 1] = oldTexts[oldCol - 1];
         }
     }
 
     void OnClearColumns()
     {
+        m_text.clear();
+
         if ( m_columnsTexts )
         {
             delete [] m_columnsTexts;
@@ -343,6 +373,10 @@ public:
     void InsertColumn(unsigned col);
     void DeleteColumn(unsigned col);
     void ClearColumns();
+    void RollbackInsertedColumn(unsigned col);
+    wxVector<wxString> SaveColumn(unsigned col) const;
+    void RestoreDeletedColumn(unsigned col,
+                              const wxVector<wxString>& values);
 
     Node* InsertItem(Node* parent,
                      Node* previous,
@@ -438,16 +472,59 @@ void wxTreeListModel::DeleteColumn(unsigned col)
 {
     wxCHECK_RET( col < m_numColumns, "Invalid column index" );
 
-    // Update all the items to remove the text for the non first columns.
-    if ( col > 0 )
+    // Update all items. Deleting the first column is special because the old
+    // second column must be promoted to the separately stored primary text.
+    for ( Node* node = m_root->GetChild(); node; node = node->NextInTree() )
     {
-        for ( Node* node = m_root->GetChild(); node; node = node->NextInTree() )
-        {
-            node->OnDeleteColumn(col, m_numColumns);
-        }
+        node->OnDeleteColumn(col, m_numColumns);
     }
 
     m_numColumns--;
+}
+
+void wxTreeListModel::RollbackInsertedColumn(unsigned col)
+{
+    wxCHECK_RET( col < m_numColumns, "Invalid inserted column index" );
+
+    // Inserting the very first view column doesn't move the primary item
+    // text, so rolling it back must not clear that text either.
+    if ( m_numColumns == 1 )
+    {
+        m_numColumns = 0;
+        return;
+    }
+
+    DeleteColumn(col);
+}
+
+wxVector<wxString> wxTreeListModel::SaveColumn(unsigned col) const
+{
+    wxVector<wxString> values;
+    for ( Node* node = m_root->GetChild(); node; node = node->NextInTree() )
+        values.push_back(GetItemText(node, col));
+    return values;
+}
+
+void
+wxTreeListModel::RestoreDeletedColumn(
+    unsigned col,
+    const wxVector<wxString>& values)
+{
+    InsertColumn(col);
+
+    size_t n = 0;
+    for ( Node* node = m_root->GetChild(); node; node = node->NextInTree() )
+    {
+        wxASSERT( n < values.size() );
+        // This is rollback inside a temporarily inconsistent column
+        // transaction: restore storage directly instead of publishing
+        // ValueChanged() notifications against the half-restored mapping.
+        if ( col == 0 )
+            node->m_text = values[n++];
+        else
+            node->SetColumnText(values[n++], col, m_numColumns);
+    }
+    wxASSERT( n == values.size() );
 }
 
 void wxTreeListModel::ClearColumns()
@@ -870,6 +947,24 @@ wxWindowList wxTreeListCtrl::GetCompositeWindowParts() const
 // Columns
 // ----------------------------------------------------------------------------
 
+wxDataViewRenderer*
+wxTreeListCtrl::CreateColumnRenderer(unsigned int pos) const
+{
+    if ( pos != 0 )
+        return new wxDataViewTextRenderer;
+
+    if ( HasFlag(wxTL_CHECKBOX) )
+    {
+        wxDataViewCheckIconTextRenderer* const renderer =
+            new wxDataViewCheckIconTextRenderer;
+        if ( HasFlag(wxTL_USER_3STATE) )
+            renderer->Allow3rdStateForUser();
+        return renderer;
+    }
+
+    return new wxDataViewIconTextRenderer;
+}
+
 int
 wxTreeListCtrl::DoInsertColumn(const wxString& title,
                                int pos,
@@ -879,12 +974,22 @@ wxTreeListCtrl::DoInsertColumn(const wxString& title,
 {
     wxCHECK_MSG( m_view, wxNOT_FOUND, "Must Create() first" );
 
+    // Finishing an editor is a public callback boundary and can change the
+    // topology or destroy this composite control. Choose the insertion
+    // position only after it has completed.
+    const wxWeakRef<wxTreeListCtrl> weakThis(this);
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    if ( !m_view->PrepareForColumnMutation() )
+        return wxNOT_FOUND;
+    if ( weakThis.get() != this )
+        return wxNOT_FOUND;
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
+
     const unsigned oldNumColumns = m_view->GetColumnCount();
 
     if ( pos == wxNOT_FOUND )
         pos = oldNumColumns;
 
-    wxDataViewRenderer* renderer;
     if ( pos == 0 )
     {
         // Inserting the first column which is special as it uses a different
@@ -893,34 +998,49 @@ wxTreeListCtrl::DoInsertColumn(const wxString& title,
         // Also, currently it can be done only once.
         wxCHECK_MSG( !oldNumColumns, wxNOT_FOUND,
                      "Inserting column at position 0 currently not supported" );
-
-        if ( HasFlag(wxTL_CHECKBOX) )
-        {
-            // Use our custom renderer to show the checkbox.
-            wxDataViewCheckIconTextRenderer* const
-                rendererCheckIconText = new wxDataViewCheckIconTextRenderer;
-            if ( HasFlag(wxTL_USER_3STATE) )
-                rendererCheckIconText->Allow3rdStateForUser();
-
-            renderer = rendererCheckIconText;
-        }
-        else // We still need a special renderer to show the icons.
-        {
-            renderer = new wxDataViewIconTextRenderer;
-        }
-    }
-    else // Not the first column.
-    {
-        // All the other ones use a simple text renderer.
-        renderer = new wxDataViewTextRenderer;
     }
 
+    wxDataViewRenderer* const renderer = CreateColumnRenderer(pos);
     wxDataViewColumn*
         column = new wxDataViewColumn(title, renderer, pos, width, align, flags);
 
-    m_model->InsertColumn(pos);
+    m_model->IncRef();
+    wxObjectDataPtr<wxTreeListModel> model(m_model);
 
-    m_view->InsertColumn(pos, column);
+    for ( unsigned int n = 0; n < oldNumColumns; ++n )
+    {
+        wxDataViewColumn* const existing = m_view->GetColumn(n);
+        if ( existing->GetModelColumn() >= static_cast<unsigned int>(pos) )
+        {
+            existing->WXSetModelColumn(
+                existing->GetModelColumn() + 1);
+        }
+    }
+
+    model->InsertColumn(pos);
+
+    if ( !m_view->InsertColumn(pos, column) )
+    {
+        // Header cancellation is a synchronous callback boundary. Restore the
+        // externally owned model even if it destroyed this composite; only
+        // view mappings require the composite to remain alive.
+        model->RollbackInsertedColumn(pos);
+        if ( weakThis.get() == this )
+        {
+            for ( unsigned int n = 0; n < oldNumColumns; ++n )
+            {
+                wxDataViewColumn* const existing = m_view->GetColumn(n);
+                if ( existing->GetModelColumn() >
+                        static_cast<unsigned int>(pos) )
+                {
+                    existing->WXSetModelColumn(
+                        existing->GetModelColumn() - 1);
+                }
+            }
+        }
+        delete column;
+        return wxNOT_FOUND;
+    }
 
     return pos;
 }
@@ -932,12 +1052,124 @@ unsigned wxTreeListCtrl::GetColumnCount() const
 
 bool wxTreeListCtrl::DeleteColumn(unsigned col)
 {
-    wxCHECK_MSG( col < GetColumnCount(), false, "Invalid column index" );
+    wxCHECK_MSG( m_view, false, "Must Create() first" );
 
-    if ( !m_view->DeleteColumn(m_view->GetColumn(col)) )
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    const wxWeakRef<wxTreeListCtrl> weakThis(this);
+    wxDataViewCtrl* const view = m_view;
+    const wxWeakRef<wxDataViewCtrl> weakView(view);
+    if ( !view->PrepareForColumnMutation() )
+        return false;
+    if ( weakThis.get() != this ||
+            weakView.get() != view ||
+            m_view != view )
+    {
+        return false;
+    }
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
+
+    const unsigned int count = GetColumnCount();
+    wxCHECK_MSG( col < count, false, "Invalid column index" );
+
+    wxDataViewColumn* const removed = m_view->GetColumn(col);
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    wxDataViewColumn* promoted = nullptr;
+    wxDataViewColumn* replacement = nullptr;
+    if ( col == 0 && count > 1 )
+    {
+        promoted = view->GetColumn(1);
+        replacement = new wxDataViewColumn(
+            promoted->GetTitle(),
+            CreateColumnRenderer(0),
+            0,
+            promoted->WXGetSpecifiedWidth(),
+            promoted->GetAlignment(),
+            promoted->GetFlags());
+        replacement->WXCopyStateFrom(*promoted);
+        replacement->WXSetModelColumn(0);
+    }
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
+
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    m_model->IncRef();
+    wxObjectDataPtr<wxTreeListModel> model(m_model);
+    const wxVector<wxString> removedValues = model->SaveColumn(col);
+    for ( unsigned int n = 0; n < count; ++n )
+    {
+        wxDataViewColumn* const existing = view->GetColumn(n);
+        if ( existing != removed && existing->GetModelColumn() > col )
+        {
+            existing->WXSetModelColumn(
+                existing->GetModelColumn() - 1);
+        }
+    }
+
+    model->DeleteColumn(col);
+    const bool deleted =
+        replacement
+            ? view->DeleteColumnForTreeList(
+                  removed, promoted, replacement)
+            : view->DeleteColumn(removed);
+    if ( !deleted )
+    {
+        // A header-cancellation callback may destroy either the composite
+        // TreeListCtrl or its publicly exposed internal DataViewCtrl. The
+        // model already has the reduced schema in this branch and the old view
+        // columns have been consumed by destruction, so a positional rollback
+        // would be both stale and inconsistent. The replacement wasn't
+        // adopted before the backend's early failure and remains ours.
+        if ( weakThis.get() != this ||
+                weakView.get() != view ||
+                m_view != view )
+        {
+            delete replacement;
+            return true;
+        }
+
+        model->RestoreDeletedColumn(col, removedValues);
+        if ( weakThis.get() == this )
+        {
+            for ( unsigned int n = 0; n < count; ++n )
+            {
+                wxDataViewColumn* const existing = view->GetColumn(n);
+                if ( existing != removed &&
+                        existing->GetModelColumn() >= col )
+                {
+                    existing->WXSetModelColumn(
+                        existing->GetModelColumn() + 1);
+                }
+            }
+        }
+        delete replacement;
+        return false;
+    }
+#else
+    // Keep the existing native backend contract: mutate the view first, so a
+    // rejected deletion leaves both the model schema and column mappings
+    // untouched. The richer primary-renderer replacement transaction above
+    // is generic-backend-specific and must not leak into GTK/macOS headers.
+    m_model->IncRef();
+    wxObjectDataPtr<wxTreeListModel> model(m_model);
+    const wxWeakRef<wxTreeListCtrl> weakThis(this);
+    if ( !m_view->DeleteColumn(removed) )
         return false;
 
-    m_model->DeleteColumn(col);
+    if ( weakThis.get() == this )
+    {
+        const unsigned int remaining = m_view->GetColumnCount();
+        for ( unsigned int n = 0; n < remaining; ++n )
+        {
+            wxDataViewColumn* const existing = m_view->GetColumn(n);
+            if ( existing->GetModelColumn() > col )
+            {
+                existing->WXSetModelColumn(
+                    existing->GetModelColumn() - 1);
+            }
+        }
+    }
+
+    model->DeleteColumn(col);
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
 
     return true;
 }
@@ -949,9 +1181,21 @@ void wxTreeListCtrl::ClearColumns()
     if ( !m_model )
         return;
 
-    m_view->ClearColumns();
+    // Pin the model because clearing the view may run backend callbacks which
+    // destroy this composite and release its reference.
+    m_model->IncRef();
+    wxObjectDataPtr<wxTreeListModel> model(m_model);
+    const wxWeakRef<wxTreeListCtrl> weakThis(this);
 
-    m_model->ClearColumns();
+    if ( !m_view->ClearColumns() )
+        return;
+
+    // The view owns no model values after a successful clear. It is safe to
+    // complete the model side even if a callback destroyed the control.
+    model->ClearColumns();
+
+    if ( weakThis.get() != this )
+        return;
 }
 
 void wxTreeListCtrl::SetColumnWidth(unsigned col, int width)

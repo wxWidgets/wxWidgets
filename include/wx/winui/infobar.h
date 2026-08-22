@@ -27,6 +27,7 @@ enum
 #endif // !_WX_GENERIC_INFOBAR_H_
 
 class wxWinUIInfoBarImpl;
+using wxWinUIInfoBarContentWriteHookForTesting = void (*)(void *);
 
 class WXDLLIMPEXP_CORE wxInfoBar : public wxInfoBarBase
 {
@@ -116,6 +117,19 @@ public:
     // template has not been realized yet.  Used by the unit tests.
     bool WinUIClickCloseButton();
 
+    // Invoke a custom content button through its real XAML automation peer.
+    // This is an implementation-only lifetime seam used to prove that a wx
+    // handler may destroy the InfoBar while the native callback unwinds.
+    bool WinUIClickButtonForTesting(wxWindowID btnid);
+
+    // One-shot seam immediately after the candidate XAML Content write and
+    // before its callback generation is published.
+    void WinUISetNextContentWriteHookForTesting(
+        wxWinUIInfoBarContentWriteHookForTesting hook,
+        void *context);
+    bool WinUIHasDeferredContentProjectionForTesting() const;
+    bool WinUIIsContentProjectionQuarantinedForTesting() const;
+
 protected:
     // info bar shouldn't have any border by default, the colour difference
     // between it and the main window separates it well enough
@@ -124,7 +138,7 @@ protected:
     wxSize DoGetBestSize() const override;
 
     // rebuild the XAML content of the bar (custom buttons and checkbox)
-    void RebuildContent();
+    void RebuildContent(bool externalMutation = true);
     void UpdateParent();
     void OnButtonClick(wxWindowID btnid);
 
@@ -134,7 +148,7 @@ protected:
 
     struct ButtonInfo
     {
-        wxWindowID id;
+        wxWindowID id = wxID_NONE;
         wxString label;
     };
 

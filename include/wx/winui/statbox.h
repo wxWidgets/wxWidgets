@@ -15,6 +15,7 @@
 #include <memory>
 
 class wxWinUIStaticBoxImpl;
+struct wxWinUIAppearanceSnapshot;
 
 class WXDLLIMPEXP_CORE wxStaticBox
     : public wxCompositeWindowSettersOnly<wxStaticBoxBase>
@@ -62,12 +63,19 @@ public:
     bool SetFont(const wxFont& font) override;
     void GetBordersForSizer(int *borderTop, int *borderOther) const override;
 
+    bool WinUIGetAppearanceForTesting(
+        wxWinUIAppearanceSnapshot *snapshot) const;
+    bool WinUIGetLayoutForTesting(double *frameTopDIP,
+                                  double *titleGapDIP,
+                                  bool *usesThemeBrush) const;
+
 protected:
     wxSize DoGetBestSize() const override;
     wxWindowList GetCompositeWindowParts() const override;
 
 private:
-    void UpdateWinUIContent();
+    wxString GetAccessKeyLabel() const;
+    bool UpdateWinUIContent();
     void PositionLabelWindow();
 
     std::unique_ptr<wxWinUIStaticBoxImpl> m_winui;

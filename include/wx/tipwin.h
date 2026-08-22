@@ -72,7 +72,10 @@ public:
                 wxCoord maxLength = 100,
                 wxTipWindow** windowPtr = nullptr,
                 wxRect *rectBound = nullptr)
-    { (void)Create(parent, text, maxLength, windowPtr, rectBound); }
+        : wxTipWindow()
+    {
+        (void)Create(parent, text, maxLength, windowPtr, rectBound);
+    }
 
     // the mandatory parameters are: the parent window and the text to
     // show

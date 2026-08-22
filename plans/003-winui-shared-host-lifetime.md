@@ -22,6 +22,10 @@
 - **Dépend de** : 001, 002
 - **Catégorie** : architecture, bug, memory, tests
 - **Planifié à** : `20207bdbbb`, 2026-07-21
+- **État d'exécution (2026-07-30)** : **DONE** — l’ancien blocage
+  `CodexSandboxOffline` est supersédé. Runtime/self-tests 6/6, HostState,
+  HostLifecycle, transactions shell, focus et reparent sont verts dans le
+  runner desktop isolé.
 
 ## Pourquoi
 
@@ -72,6 +76,11 @@ spécifiques d’un composant.
    Thaw, pas CallAfter infini.
 8. **Extraction prudente.** Une fois tests verts, extraire Lifetime/SlotState de
    `tlwhost.cpp`; aucune modification fonctionnelle simultanée.
+   (Décision utilisateur/reviewer du 2026-07-22 — étape satisfaite : Lifetime
+   et SlotState résident déjà dans le header privé `tlwhost.h`; les points
+   d'entrée MSW sans projection WinRT sont isolés dans `tlwhostmsw.h`. Une
+   extraction supplémentaire n'apporterait pas de frontière architecturale et
+   augmenterait le churn.)
 
 ## Vérification
 
@@ -81,20 +90,31 @@ build-winui-clean\lib\vc_x64_dll\test_gui.exe "[window]" --reporter compact
 build-winui-clean\lib\vc_x64_dll\test_gui.exe "Button::Click" --reporter compact
 ```
 
+Exécuter `Button::Click` comme témoin de non-régression. Jusqu'au plan 007a,
+le résultat attendu est l'échec connu `clicked.GetCount() == 0`, sans crash
+et sans nouvelle assertion. Tout autre échec est une régression du plan 003.
+(Décision utilisateur/reviewer du 2026-07-22 : la remise au vert appartient
+au plan 007a, propriétaire du pipeline pointer/hit-test/SendInput.)
+
 Ajouter `HostLifecycle` et exécuter 100 fois. Attendu : zéro crash, zéro weak
 vivant, bounded flush et une source/TLW.
 
 ## Done
 
-- [ ] tous handlers révoqués avant slot free ;
-- [ ] no callback post-generation ;
-- [ ] enabled parent/child bloque pointer/keyboard/UIA ;
-- [ ] tooltips communs et GetToolTip cohérents ;
-- [ ] preferred focus target couvre RadioBox ;
-- [ ] `wxWinUIXamlHost` partage la source ;
-- [ ] hook/API failures déterministes ;
-- [ ] freeze n’occupe pas la boucle ;
-- [ ] tests lifecycle/Window/Button verts.
+- [x] tous handlers révoqués avant slot free ;
+- [x] no callback post-generation ;
+- [x] enabled parent/child bloque pointer/keyboard/UIA ;
+- [x] tooltips communs et GetToolTip cohérents ;
+- [x] preferred focus target couvre RadioBox ;
+- [x] `wxWinUIXamlHost` partage la source ;
+- [x] hook/API failures déterministes ;
+- [x] freeze n’occupe pas la boucle ;
+- [ ] tests HostLifecycle, HostState et Window rejoués après la dernière
+  passe ; signature connue de
+  `Button::Click` inchangée (`clicked.GetCount() == 0`, sans crash) et
+  propriété explicitement transférée au plan 007a. Les 41 cas
+  HostLifecycle/HostState compilent, mais l'environnement Codex courant
+  échoue au bootstrap WinAppSDK avant la création du premier host.
 
 ## STOP
 

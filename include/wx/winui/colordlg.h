@@ -30,7 +30,8 @@ public:
 
     wxColourData& GetColourData() { return m_colourData; }
 
-    // The dialog has no real window: store the title ourselves.
+    // The WinUI picker is presented asynchronously; keep the requested title
+    // independently from the hidden wxDialog owner used for wx lifecycle.
     void SetTitle(const wxString& title) override;
     wxString GetTitle() const override;
 

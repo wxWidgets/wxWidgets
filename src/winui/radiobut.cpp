@@ -19,16 +19,16 @@
 #endif
 
 #include "private.h"
+#include "wx/winui/private/appearance.h"
+#include "wx/weakref.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif
 
-#include <winrt/Microsoft.UI.Text.h>
-#include <winrt/Windows.UI.Text.h>
-
-#include <cmath>
-#include <limits>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
@@ -36,34 +36,90 @@ namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace
 {
 
-// Apply a wxFont (family/size/weight/style) to a WinUI Control; no-op for an
-// invalid font so default controls keep the native WinUI font.
-void wxWinUIApplyControlFont(const MUXC::Control& control, const wxFont& font)
+wxRadioButton *wxWinUIFindRadioGroupLeader(wxWindow *parent,
+                                           wxRadioButton *needle)
 {
-    if ( !control || !font.IsOk() )
-        return;
+    if ( !parent || !needle )
+        return nullptr;
 
-    const wxString face = font.GetFaceName();
-    if ( !face.empty() )
-        control.FontFamily(
-            winrt::Microsoft::UI::Xaml::Media::FontFamily(wxWinUIToHString(face)));
+    wxRadioButton *leader = nullptr;
+    for ( wxWindow * const child : parent->GetChildren() )
+    {
+        wxRadioButton * const button =
+            wxDynamicCast(child, wxRadioButton);
+        if ( !button )
+            continue;
 
-    const double pt = font.GetFractionalPointSize();
-    control.FontSize(pt > 0.0 ? pt * 96.0 / 72.0 : 14.0);
-    control.FontWeight(font.GetNumericWeight() >= wxFONTWEIGHT_BOLD
-        ? winrt::Microsoft::UI::Text::FontWeights::Bold()
-        : winrt::Microsoft::UI::Text::FontWeights::Normal());
-    control.FontStyle(font.GetStyle() == wxFONTSTYLE_NORMAL
-        ? winrt::Windows::UI::Text::FontStyle::Normal
-        : winrt::Windows::UI::Text::FontStyle::Italic);
+        if ( button->HasFlag(wxRB_SINGLE) )
+        {
+            if ( button == needle )
+                return button;
+            leader = nullptr;
+            continue;
+        }
+
+        if ( !leader || button->HasFlag(wxRB_GROUP) )
+            leader = button;
+        if ( button == needle )
+            return leader;
+    }
+
+    return nullptr;
 }
 
-} // namespace
+} // anonymous namespace
+
+class wxWinUIRadioButtonCallbackState final
+{
+public:
+    explicit wxWinUIRadioButtonCallbackState(wxRadioButton *owner)
+        : m_owner(owner)
+    {
+    }
+
+    wxRadioButton *GetOwner() const { return m_owner; }
+    void Invalidate() { m_owner = nullptr; }
+
+private:
+    wxRadioButton *m_owner;
+};
 
 class wxWinUIRadioButtonImpl
 {
 public:
+    ~wxWinUIRadioButtonImpl()
+    {
+        Close();
+    }
+
+    void Close()
+    {
+        // An AutomationPeer may retain the XAML peer beyond the wx control.
+        // Invalidate first so a failed revocation can never leave a live raw
+        // owner pointer behind.
+        if ( callbackState )
+            callbackState->Invalidate();
+
+        if ( radioButton && checkedToken.value )
+        {
+            try
+            {
+                radioButton.Checked(checkedToken);
+            }
+            catch ( const winrt::hresult_error& e )
+            {
+                wxWinUILogException("WinUI RadioButton Checked removal", e);
+            }
+            checkedToken = {};
+        }
+
+        host.Close();
+        radioButton = nullptr;
+        callbackState.reset();
+    }
+
     wxWinUIControlHost host;
+    std::shared_ptr<wxWinUIRadioButtonCallbackState> callbackState;
     MUXC::RadioButton radioButton{ nullptr };
     winrt::event_token checkedToken{};
     bool updating = false;
@@ -87,7 +143,12 @@ wxRadioButton::wxRadioButton(wxWindow *parent,
     Create(parent, id, label, pos, size, style, validator, name);
 }
 
-wxRadioButton::~wxRadioButton() = default;
+wxRadioButton::~wxRadioButton()
+{
+    // Invalidate retained XAML callbacks at destructor entry.
+    m_winui.reset();
+    UpdateGroupNames(GetParent(), this);
+}
 
 bool wxRadioButton::Create(wxWindow *parent,
                            wxWindowID id,
@@ -104,39 +165,127 @@ bool wxRadioButton::Create(wxWindow *parent,
     wxControl::SetLabel(label);
 
     m_winui.reset(new wxWinUIRadioButtonImpl);
+    m_winui->callbackState =
+        std::make_shared<wxWinUIRadioButtonCallbackState>(this);
+    wxWinUIRadioButtonImpl * const createImpl = m_winui.get();
+    const std::shared_ptr<wxWinUIRadioButtonCallbackState> callbackState =
+        createImpl->callbackState;
     if ( !m_winui->host.Initialize(this) )
+    {
+        m_winui.reset();
         return false;
+    }
 
     try
     {
         m_winui->radioButton = MUXC::RadioButton();
         m_winui->checkedToken = m_winui->radioButton.Checked(
-            [this](winrt::Windows::Foundation::IInspectable const&,
-                   MUX::RoutedEventArgs const&)
+            [callbackState](
+                winrt::Windows::Foundation::IInspectable const&,
+                MUX::RoutedEventArgs const&)
             {
-                if ( !m_winui || m_winui->updating )
+                wxRadioButton *owner = callbackState->GetOwner();
+                if ( !owner || !owner->m_winui ||
+                     owner->m_winui->callbackState != callbackState ||
+                     owner->m_winui->updating )
+                {
                     return;
+                }
 
-                m_isChecked = true;
-                ClearRadioGroup();
-                SendRadioEvent();
+                owner->m_isChecked = true;
+                owner->ClearRadioGroup();
+
+                // Clearing the group can call overridden sibling code.
+                // Re-check the lifetime before dispatching the command event,
+                // which itself may destroy owner (so nothing follows it).
+                owner = callbackState->GetOwner();
+                if ( owner && owner->m_winui &&
+                     owner->m_winui->callbackState == callbackState )
+                {
+                    owner->SendRadioEvent();
+                }
             });
 
-        UpdateWinUIContent();
-        UpdateWinUIAppearance();
-        ApplyToolTip();
-        m_winui->host.SetContent(m_winui->radioButton);
+        if ( !UpdateWinUIContent(false) ||
+             !UpdateWinUIAppearance(false) )
+        {
+            wxRadioButton * const owner = callbackState->GetOwner();
+            if ( owner && owner->m_winui &&
+                 owner->m_winui.get() == createImpl )
+            {
+                owner->m_winui.reset();
+            }
+            return false;
+        }
+
+        wxRadioButton *owner = callbackState->GetOwner();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != createImpl )
+        {
+            return false;
+        }
+
+        const MUXC::RadioButton peer = createImpl->radioButton;
+        const bool contentSet =
+            createImpl->host.SetContent(peer);
+        owner = callbackState->GetOwner();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != createImpl )
+        {
+            return false;
+        }
+        if ( !contentSet )
+        {
+            owner->m_winui.reset();
+            return false;
+        }
+
+        owner->UpdateGroupNames(parent);
+        owner = callbackState->GetOwner();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != createImpl )
+        {
+            return false;
+        }
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI RadioButton creation", e);
+        wxRadioButton * const owner = callbackState->GetOwner();
+        if ( owner && owner->m_winui &&
+             owner->m_winui.get() == createImpl )
+        {
+            owner->m_winui.reset();
+        }
         return false;
     }
 
-    SetInitialSize(size);
+    wxRadioButton *owner = callbackState->GetOwner();
+    if ( !owner || !owner->m_winui ||
+         owner->m_winui.get() != createImpl )
+    {
+        return false;
+    }
 
-    if ( HasFlag(wxRB_GROUP) )
-        SetValue(true);
+    owner->SetInitialSize(size);
+    owner = callbackState->GetOwner();
+    if ( !owner || !owner->m_winui ||
+         owner->m_winui.get() != createImpl )
+    {
+        return false;
+    }
+
+    if ( owner->HasFlag(wxRB_GROUP) )
+    {
+        owner->SetValue(true);
+        owner = callbackState->GetOwner();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != createImpl ||
+             owner->m_winui->callbackState != callbackState )
+        {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -150,7 +299,8 @@ void wxRadioButton::SetValue(bool value)
     }
 
     m_isChecked = value;
-    UpdateWinUIContent();
+    if ( !UpdateWinUIContent() )
+        return;
 
     if ( value && !HasFlag(wxRB_SINGLE) )
         ClearRadioGroup();
@@ -165,7 +315,8 @@ void wxRadioButton::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
     InvalidateBestSize();
-    UpdateWinUIContent();
+    if ( !UpdateWinUIContent() )
+        return;
 
     if ( GetParent() && GetParent()->GetSizer() )
         GetParent()->Layout();
@@ -175,7 +326,25 @@ void wxRadioButton::SetLabel(const wxString& label)
 
 void wxRadioButton::Command(wxCommandEvent& event)
 {
+    wxWinUIRadioButtonImpl * const impl = m_winui.get();
+    const std::shared_ptr<wxWinUIRadioButtonCallbackState> callbackState =
+        impl ? impl->callbackState : nullptr;
+
     SetValue(event.IsChecked());
+
+    if ( callbackState )
+    {
+        wxRadioButton * const owner = callbackState->GetOwner();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != impl ||
+             owner->m_winui->callbackState != callbackState )
+        {
+            return;
+        }
+        owner->ProcessCommand(event);
+        return;
+    }
+
     ProcessCommand(event);
 }
 
@@ -201,30 +370,60 @@ bool wxRadioButton::SetBackgroundColour(const wxColour& colour)
     return rc;
 }
 
+bool wxRadioButton::MSWOnEffectiveLayoutDirectionChanged()
+{
+    return UpdateWinUIContent();
+}
+
+bool wxRadioButton::Reparent(wxWindowBase *newParent)
+{
+    const wxWeakRef<wxRadioButton> self(this);
+    const wxWeakRef<wxWindow> oldParent(GetParent());
+    const wxWeakRef<wxWindow> requestedParent(
+        static_cast<wxWindow *>(newParent));
+    if ( !wxControl::Reparent(newParent) )
+        return false;
+
+    // Group identity is defined by sibling order and wxRB_GROUP/SINGLE, not
+    // by the XAML visual tree. A cross-parent move must therefore republish
+    // the native GroupName for every affected sibling list. The common
+    // reparent transaction ends with inherited RTL projection and can
+    // synchronously delete or redirect this radio, so retain only weak
+    // parents and never dereference this after the base call.
+    const wxWeakRef<wxWindow> finalParent(
+        self ? self->GetParent() : nullptr);
+    if ( wxWindow * const parent = oldParent.get() )
+        UpdateGroupNames(parent);
+    if ( wxWindow * const parent = requestedParent.get();
+         parent && parent != oldParent.get() )
+    {
+        UpdateGroupNames(parent);
+    }
+    if ( wxWindow * const parent = finalParent.get();
+         parent && parent != oldParent.get() &&
+         parent != requestedParent.get() )
+    {
+        UpdateGroupNames(parent);
+    }
+    return true;
+}
+
 #if wxUSE_TOOLTIPS
 void wxRadioButton::DoSetToolTipText(const wxString& tip)
 {
-    m_tooltipText = tip;
-    ApplyToolTip();
+    wxControl::DoSetToolTipText(tip);
 }
 
 void wxRadioButton::DoSetToolTip(wxToolTip *tip)
 {
-    m_tooltipText = tip ? tip->GetTip() : wxString();
-    delete tip;
-    ApplyToolTip();
+    wxControl::DoSetToolTip(tip);
 }
 #endif // wxUSE_TOOLTIPS
 
 void wxRadioButton::DoEnable(bool enable)
 {
     wxControl::DoEnable(enable);
-
-    if ( m_winui && m_winui->radioButton )
-    {
-        m_winui->radioButton.IsEnabled(enable);
-        m_winui->host.ForceRender();
-    }
+    UpdateWinUIAppearance();
 }
 
 wxSize wxRadioButton::DoGetBestSize() const
@@ -247,126 +446,270 @@ wxSize wxRadioButton::DoGetBestSize() const
     return best;
 }
 
-void wxRadioButton::UpdateWinUIContent()
+bool wxRadioButton::UpdateWinUIContent(bool forceRender)
 {
     if ( !m_winui || !m_winui->radioButton )
-        return;
+        return true;
 
-    m_winui->updating = true;
+    wxWinUIRadioButtonImpl * const impl = m_winui.get();
+    const std::shared_ptr<wxWinUIRadioButtonCallbackState> callbackState =
+        impl->callbackState;
+    const MUXC::RadioButton peer = impl->radioButton;
+    const auto getCurrentOwner = [callbackState, impl]() -> wxRadioButton *
+    {
+        wxRadioButton * const owner = callbackState
+                                         ? callbackState->GetOwner()
+                                         : nullptr;
+        return owner && owner->m_winui &&
+                       owner->m_winui.get() == impl &&
+                       owner->m_winui->callbackState == callbackState
+                   ? owner
+                   : nullptr;
+    };
+
+    const wxString label = GetLabel();
+    const wxString visibleLabel = wxControl::GetLabelText(label);
+    const bool isRTL = GetLayoutDirection() == wxLayout_RightToLeft;
+    const bool alignRight = HasFlag(wxALIGN_RIGHT);
+    const bool checked = m_isChecked;
+
+    impl->updating = true;
 
     try
     {
         MUXC::TextBlock textBlock;
-        textBlock.Text(wxWinUIToHString(wxControl::GetLabelText(GetLabel())));
+        textBlock.Text(wxWinUIToHString(visibleLabel));
 
-        if ( HasFlag(wxALIGN_RIGHT) )
-        {
-            m_winui->radioButton.FlowDirection(MUX::FlowDirection::RightToLeft);
-            textBlock.FlowDirection(MUX::FlowDirection::LeftToRight);
-        }
-        else
-        {
-            m_winui->radioButton.FlowDirection(MUX::FlowDirection::LeftToRight);
-        }
+        peer.FlowDirection(
+            isRTL || alignRight
+                ? MUX::FlowDirection::RightToLeft
+                : MUX::FlowDirection::LeftToRight);
+        textBlock.FlowDirection(
+            isRTL ? MUX::FlowDirection::RightToLeft
+                  : MUX::FlowDirection::LeftToRight);
 
-        m_winui->radioButton.Content(textBlock);
-        m_winui->radioButton.IsChecked(m_isChecked);
+        peer.Content(textBlock);
+        wxWinUIApplyAccessKey(peer, label);
+        peer.IsChecked(checked);
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI RadioButton content", e);
+        if ( wxRadioButton * const owner = getCurrentOwner() )
+            owner->m_winui->updating = false;
+        return false;
     }
 
-    m_winui->updating = false;
-    m_winui->host.ForceRender();
+    wxRadioButton * const owner = getCurrentOwner();
+    if ( !owner )
+        return false;
+    owner->m_winui->updating = false;
+    if ( !forceRender )
+        return true;
+
+    owner->m_winui->host.ForceRender();
+    return getCurrentOwner() != nullptr;
 }
 
-void wxRadioButton::UpdateWinUIAppearance()
+bool wxRadioButton::UpdateWinUIAppearance(bool forceRender)
 {
     if ( !m_winui || !m_winui->radioButton )
-        return;
+        return true;
+
+    wxWinUIRadioButtonImpl * const impl = m_winui.get();
+    const std::shared_ptr<wxWinUIRadioButtonCallbackState> callbackState =
+        impl->callbackState;
+    const MUXC::RadioButton peer = impl->radioButton;
+    const auto getCurrentOwner = [callbackState, impl]() -> wxRadioButton *
+    {
+        wxRadioButton * const owner = callbackState
+                                         ? callbackState->GetOwner()
+                                         : nullptr;
+        return owner && owner->m_winui &&
+                       owner->m_winui.get() == impl &&
+                       owner->m_winui->callbackState == callbackState
+                   ? owner
+                   : nullptr;
+    };
+
+    const wxFont font = m_hasFont ? GetFont() : wxNullFont;
+    const wxColour foreground =
+        UseForegroundColour() ? GetForegroundColour() : wxNullColour;
+    const wxColour background =
+        UseBackgroundColour() ? GetBackgroundColour() : wxNullColour;
+    const bool enabled = IsEnabled();
 
     try
     {
-        if ( m_hasFont )
-            wxWinUIApplyControlFont(m_winui->radioButton, GetFont());
-        else
-            m_winui->radioButton.ClearValue(MUXC::Control::FontSizeProperty());
-
-        if ( UseForegroundColour() )
-        {
-            const wxColour& c = GetForegroundColour();
-            m_winui->radioButton.Foreground(
-                wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
-        }
-        else
-        {
-            m_winui->radioButton.ClearValue(MUXC::Control::ForegroundProperty());
-        }
-
-        if ( UseBackgroundColour() )
-        {
-            const wxColour& c = GetBackgroundColour();
-            m_winui->radioButton.Background(
-                wxWinUIBrush(c.Red(), c.Green(), c.Blue(), c.Alpha()));
-        }
-        else
-        {
-            m_winui->radioButton.ClearValue(MUXC::Control::BackgroundProperty());
-        }
+        wxWinUIApplyFont(peer, font);
+        wxWinUIApplyForeground(peer, foreground);
+        wxWinUIApplyBackground(peer, background);
+        peer.IsEnabled(enabled);
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI RadioButton appearance", e);
+        return false;
     }
 
-    m_winui->host.ForceRender();
+    wxRadioButton * const owner = getCurrentOwner();
+    if ( !owner )
+        return false;
+    if ( !forceRender )
+        return true;
+
+    owner->m_winui->host.ForceRender();
+    return getCurrentOwner() != nullptr;
 }
 
-void wxRadioButton::ApplyToolTip()
+bool wxRadioButton::UpdateWinUIGroupName(wxRadioButton *groupLeader)
 {
-#if wxUSE_TOOLTIPS
-    if ( m_winui && m_winui->radioButton )
-        wxWinUISetToolTip(m_winui->radioButton, m_tooltipText);
-#endif // wxUSE_TOOLTIPS
+    if ( !m_winui || !m_winui->radioButton || !groupLeader )
+        return true;
+
+    wxWinUIRadioButtonImpl * const impl = m_winui.get();
+    const std::shared_ptr<wxWinUIRadioButtonCallbackState> callbackState =
+        impl->callbackState;
+    const MUXC::RadioButton peer = impl->radioButton;
+    const wxString groupName = wxString::Format(
+        "wxRadioGroup_%p", static_cast<void *>(groupLeader));
+
+    try
+    {
+        peer.GroupName(wxWinUIToHString(groupName));
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI RadioButton group update", e);
+        return false;
+    }
+
+    wxRadioButton * const owner = callbackState
+                                     ? callbackState->GetOwner()
+                                     : nullptr;
+    return owner && owner->m_winui &&
+           owner->m_winui.get() == impl &&
+           owner->m_winui->callbackState == callbackState;
+}
+
+void wxRadioButton::UpdateGroupNames(wxWindowBase *parent,
+                                     const wxRadioButton *ignored)
+{
+    if ( !parent )
+        return;
+
+    struct GroupEntry
+    {
+        wxWeakRef<wxRadioButton> button;
+        wxWeakRef<wxRadioButton> leader;
+    };
+    std::vector<GroupEntry> entries;
+    entries.reserve(parent->GetChildren().size());
+
+    wxRadioButton *groupLeader = nullptr;
+    for ( wxWindowList::compatibility_iterator node =
+              parent->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxRadioButton * const button =
+            wxDynamicCast(node->GetData(), wxRadioButton);
+        if ( !button || button == ignored )
+            continue;
+
+        if ( button->HasFlag(wxRB_SINGLE) )
+        {
+            entries.push_back({ button, button });
+            // The radio after a SINGLE starts a new implicit group.
+            groupLeader = nullptr;
+            continue;
+        }
+
+        if ( !groupLeader || button->HasFlag(wxRB_GROUP) )
+            groupLeader = button;
+
+        entries.push_back({ button, groupLeader });
+    }
+
+    // GroupName is a XAML setter and may re-enter application code. Never
+    // retain a wxWindowList iterator or raw sibling across that boundary.
+    for ( const GroupEntry& entry : entries )
+    {
+        wxRadioButton * const button = entry.button.get();
+        wxRadioButton * const leader = entry.leader.get();
+        if ( button && leader )
+            button->UpdateWinUIGroupName(leader);
+    }
 }
 
 void wxRadioButton::ClearRadioGroup()
 {
-    if ( !GetParent() || HasFlag(wxRB_SINGLE) )
+    wxWindow * const parent = GetParent();
+    if ( !parent || HasFlag(wxRB_SINGLE) || !m_winui )
         return;
 
-    const wxWindowList& siblings = GetParent()->GetChildren();
-    wxWindowList::compatibility_iterator nodeThis = siblings.Find(this);
-    if ( !nodeThis )
-        return;
+    wxWinUIRadioButtonImpl * const impl = m_winui.get();
+    const std::shared_ptr<wxWinUIRadioButtonCallbackState> callbackState =
+        impl->callbackState;
+    const wxWeakRef<wxWindow> weakParent(parent);
+    const wxWeakRef<wxRadioButton> weakSelf(this);
 
-    for ( wxWindowList::compatibility_iterator node = nodeThis->GetPrevious();
-          node;
-          node = node->GetPrevious() )
+    // Snapshot weak candidates before the first SetValue(). ForceRender()
+    // inside it can destroy/reparent/reorder any sibling and invalidates every
+    // live wxWindowList iterator.
+    std::vector<wxWeakRef<wxRadioButton>> candidates;
+    candidates.reserve(parent->GetChildren().size());
+    for ( wxWindow * const child : parent->GetChildren() )
     {
-        wxRadioButton *btn = wxDynamicCast(node->GetData(), wxRadioButton);
-        if ( !btn )
-            continue;
-        if ( btn->HasFlag(wxRB_SINGLE) )
-            break;
-
-        btn->SetValue(false);
-        if ( btn->HasFlag(wxRB_GROUP) )
-            break;
+        wxRadioButton * const button =
+            wxDynamicCast(child, wxRadioButton);
+        if ( button && button != this )
+            candidates.emplace_back(button);
     }
 
-    for ( wxWindowList::compatibility_iterator node = nodeThis->GetNext();
-          node;
-          node = node->GetNext() )
-    {
-        wxRadioButton *btn = wxDynamicCast(node->GetData(), wxRadioButton);
-        if ( !btn )
-            continue;
-        if ( btn->HasFlag(wxRB_GROUP | wxRB_SINGLE) )
-            break;
+    const auto getCurrentOwner =
+        [callbackState, impl, weakSelf]() -> wxRadioButton *
+        {
+            wxRadioButton * const owner = callbackState
+                                             ? callbackState->GetOwner()
+                                             : nullptr;
+            return owner && owner == weakSelf.get() &&
+                           owner->m_winui &&
+                           owner->m_winui.get() == impl &&
+                           owner->m_winui->callbackState == callbackState
+                       ? owner
+                       : nullptr;
+        };
 
-        btn->SetValue(false);
+    for ( const wxWeakRef<wxRadioButton>& weakCandidate : candidates )
+    {
+        wxRadioButton * const owner = getCurrentOwner();
+        wxWindow * const liveParent = weakParent.get();
+        wxRadioButton * const candidate = weakCandidate.get();
+        if ( !owner || !liveParent )
+            return;
+        if ( !candidate || candidate->GetParent() != liveParent ||
+             owner->GetParent() != liveParent )
+        {
+            continue;
+        }
+
+        // Re-evaluate group identity after each preceding callback: a sibling
+        // moved across a wxRB_GROUP boundary must not be cleared by a stale
+        // pre-callback snapshot.
+        wxRadioButton * const ownerLeader =
+            wxWinUIFindRadioGroupLeader(liveParent, owner);
+        wxRadioButton * const candidateLeader =
+            wxWinUIFindRadioGroupLeader(liveParent, candidate);
+        if ( !ownerLeader || ownerLeader != candidateLeader )
+            continue;
+
+        candidate->SetValue(false);
+
+        // SetValue() ends in ForceRender(). Do not touch this, the parent or
+        // the next candidate until the exact owner+impl has been revalidated.
+        if ( !getCurrentOwner() )
+            return;
     }
 }
 

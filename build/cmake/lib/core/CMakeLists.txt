@@ -25,11 +25,12 @@ if(WXMSW)
         wx_list_add_prefix(CORE_SRC "${wxSOURCE_DIR}/" "src/generic/dirdlgg.cpp")
     endif()
     if(WXWINUI AND wxUSE_WINUI3)
+        # Keep generic/hyperlinkg.cpp: wxGenericHyperlinkCtrl remains an
+        # independently selectable public control alongside the native peer.
         list(REMOVE_ITEM CORE_SRC
             "${wxSOURCE_DIR}/src/generic/activityindicator.cpp"
             "${wxSOURCE_DIR}/src/generic/bmpcboxg.cpp"
             "${wxSOURCE_DIR}/src/generic/clrpickerg.cpp"
-            "${wxSOURCE_DIR}/src/generic/hyperlinkg.cpp"
             "${wxSOURCE_DIR}/src/generic/infobar.cpp"
             "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
             "${wxSOURCE_DIR}/src/generic/srchctlg.cpp"
@@ -76,7 +77,12 @@ if(WXMSW)
             src/generic/fontdlgg.cpp
             src/generic/listctrl.cpp
             src/winui/winui.cpp
+            src/winui/appearance.cpp
             src/winui/ctrlhost.cpp
+            src/winui/dropbroker.cpp
+            src/winui/inputrouter.cpp
+            src/winui/inputstate.cpp
+            src/winui/titlebar.cpp
             src/winui/tlwhost.cpp
             src/winui/xamlhost.cpp
             src/winui/activityindicator.cpp
@@ -115,6 +121,7 @@ if(WXMSW)
             src/winui/toolbar.cpp
             src/winui/stattext.cpp
             src/winui/textctrl.cpp
+            src/winui/textpeer.cpp
             src/winui/textdlg.cpp
             src/winui/tglbtn.cpp
             src/winui/treectrl.cpp

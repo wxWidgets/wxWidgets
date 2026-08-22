@@ -12,13 +12,18 @@
 #if wxUSE_STATTEXT
 
 #include "wx/stattext.h"
+#include "wx/weakref.h"
 
 #include "private.h"
+#include "wx/winui/private/appearance.h"
+#include "wx/winui/private/tlwhostmsw.h"
 
 #if wxUSE_MARKUP
     #include "wx/private/markupparser.h"
 #endif
 
+#include <winrt/Microsoft.UI.Xaml.Automation.h>
+#include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Documents.h>
 #include <winrt/Microsoft.UI.Text.h>
 #include <winrt/Windows.UI.Text.h>
@@ -29,7 +34,22 @@ namespace MUXD = winrt::Microsoft::UI::Xaml::Documents;
 class wxWinUIStaticTextImpl
 {
 public:
+    ~wxWinUIStaticTextImpl()
+    {
+        Close();
+    }
+
+    void Close()
+    {
+        // Detach from the shared island while every projected object is still
+        // alive. There are no element callbacks, so teardown is idempotent.
+        host.Close();
+        textBlock = nullptr;
+        root = nullptr;
+    }
+
     wxWinUIControlHost host;
+    MUX::Controls::Border root{ nullptr };
     MUX::Controls::TextBlock textBlock{ nullptr };
 };
 
@@ -69,8 +89,7 @@ void wxWinUIAppendStyledText(InlineCollection const& inlines,
             if ( underline )
                 run.TextDecorations(winrt::Windows::UI::Text::TextDecorations::Underline);
             if ( fg.IsOk() )
-                run.Foreground(wxWinUIBrush(fg.Red(), fg.Green(), fg.Blue(),
-                                            fg.Alpha()));
+                run.Foreground(wxWinUICreateColourBrush(fg));
             inlines.Append(run);
         }
 
@@ -80,9 +99,13 @@ void wxWinUIAppendStyledText(InlineCollection const& inlines,
     }
 }
 
-// Append a plain label, underlining the mnemanic character (the one following
-// a single '&') as classic wxStaticText does.
-void wxWinUIAppendLabel(InlineCollection const& inlines, const wxString& label)
+// Append a label using the current markup style while interpreting wx's
+// mnemonic markers.  This is shared by plain and markup labels: markup only
+// changes the style of a run, it must not make '&' or '&&' visible.
+void wxWinUIAppendStyledLabel(InlineCollection const& inlines,
+                              const wxString& label,
+                              bool bold, bool italic, bool underline,
+                              const wxColour& fg)
 {
     wxString chunk;
     for ( size_t i = 0; i < label.length(); ++i )
@@ -99,9 +122,11 @@ void wxWinUIAppendLabel(InlineCollection const& inlines, const wxString& label)
             }
 
             // Flush the normal text, then emit the underlined mnemonic char.
-            wxWinUIAppendStyledText(inlines, chunk, false, false, false, wxColour());
+            wxWinUIAppendStyledText(
+                inlines, chunk, bold, italic, underline, fg);
             chunk.clear();
-            wxWinUIAppendStyledText(inlines, wxString(next), false, false, true, wxColour());
+            wxWinUIAppendStyledText(
+                inlines, wxString(next), bold, italic, true, fg);
             ++i;
             continue;
         }
@@ -109,7 +134,16 @@ void wxWinUIAppendLabel(InlineCollection const& inlines, const wxString& label)
         chunk += ch;
     }
 
-    wxWinUIAppendStyledText(inlines, chunk, false, false, false, wxColour());
+    wxWinUIAppendStyledText(
+        inlines, chunk, bold, italic, underline, fg);
+}
+
+// Append a plain label, underlining the mnemonic character (the one following
+// a single '&') as classic wxStaticText does.
+void wxWinUIAppendLabel(InlineCollection const& inlines, const wxString& label)
+{
+    wxWinUIAppendStyledLabel(
+        inlines, label, false, false, false, wxColour());
 }
 
 #if wxUSE_MARKUP
@@ -122,8 +156,9 @@ public:
 
     void OnText(const wxString& text) override
     {
-        wxWinUIAppendStyledText(m_inlines, text,
-                                m_bold > 0, m_italic > 0, m_underline > 0, m_fg);
+        wxWinUIAppendStyledLabel(
+            m_inlines, text,
+            m_bold > 0, m_italic > 0, m_underline > 0, m_fg);
     }
 
     void OnBoldStart() override { ++m_bold; }
@@ -184,7 +219,11 @@ wxStaticText::wxStaticText(wxWindow *parent,
     Create(parent, id, label, pos, size, style, name);
 }
 
-wxStaticText::~wxStaticText() = default;
+wxStaticText::~wxStaticText()
+{
+    if ( m_winui )
+        m_winui->Close();
+}
 
 bool wxStaticText::Create(wxWindow *parent,
                           wxWindowID id,
@@ -203,32 +242,97 @@ bool wxStaticText::Create(wxWindow *parent,
     m_winui.reset(new wxWinUIStaticTextImpl);
     if ( !m_winui->host.Initialize(this) )
         return false;
+    wxWinUIStaticTextImpl * const createImpl = m_winui.get();
+    const wxWeakRef<wxStaticText> lifetime(this);
 
     try
     {
-        m_winui->textBlock = MUX::Controls::TextBlock();
+        createImpl->textBlock = MUX::Controls::TextBlock();
+        createImpl->root = MUX::Controls::Border();
+        createImpl->root.IsHitTestVisible(false);
+
         // Multi-line labels (embedded newlines) are rendered via explicit line
-        // breaks in BuildInlines(), so disable wrapping.
-        m_winui->textBlock.TextWrapping(MUX::TextWrapping::NoWrap);
-        m_winui->textBlock.VerticalAlignment(MUX::VerticalAlignment::Top);
+        // breaks in BuildInlines(). wxST_WRAP, unlike Wrap(), asks the native
+        // peer to wrap dynamically with its current width.
+        createImpl->textBlock.TextWrapping(
+            style & wxST_WRAP ? MUX::TextWrapping::Wrap
+                              : MUX::TextWrapping::NoWrap);
+        createImpl->textBlock.VerticalAlignment(
+            MUX::VerticalAlignment::Top);
 
         MUX::TextAlignment align = MUX::TextAlignment::Left;
         if ( style & wxALIGN_RIGHT )
             align = MUX::TextAlignment::Right;
         else if ( style & wxALIGN_CENTRE_HORIZONTAL )
             align = MUX::TextAlignment::Center;
-        m_winui->textBlock.TextAlignment(align);
+        createImpl->textBlock.TextAlignment(align);
 
-        if ( style & (wxST_ELLIPSIZE_START | wxST_ELLIPSIZE_MIDDLE |
-                      wxST_ELLIPSIZE_END) )
-            m_winui->textBlock.TextTrimming(MUX::TextTrimming::CharacterEllipsis);
+        // WinUI only implements trailing trimming. START/MIDDLE are projected
+        // through wxStaticTextBase::Ellipsize() and must not be trimmed a
+        // second time by XAML.
+        if ( (style & wxST_ELLIPSIZE_END) &&
+             !(style & (wxST_ELLIPSIZE_START | wxST_ELLIPSIZE_MIDDLE)) )
+        {
+            createImpl->textBlock.TextTrimming(
+                MUX::TextTrimming::CharacterEllipsis);
+        }
+        else
+        {
+            createImpl->textBlock.TextTrimming(
+                MUX::TextTrimming::None);
+        }
 
-        UpdateWinUIContent();
-        m_winui->host.SetContent(m_winui->textBlock);
+        createImpl->root.Child(createImpl->textBlock);
+        if ( !UpdateWinUIContent() )
+        {
+            wxStaticText * const owner = lifetime.get();
+            if ( owner && owner->m_winui.get() == createImpl )
+                owner->m_winui.reset();
+            return false;
+        }
+        const bool contentSet =
+            createImpl->host.SetContent(
+                createImpl->root, createImpl->textBlock);
+        wxStaticText *owner = lifetime.get();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != createImpl )
+        {
+            return false;
+        }
+        if ( !contentSet )
+        {
+            owner->m_winui.reset();
+            return false;
+        }
+
+        if ( owner->UsesManualEllipsization() )
+        {
+            owner->UpdateLabel();
+            owner = lifetime.get();
+            if ( !owner || !owner->m_winui ||
+                 owner->m_winui.get() != createImpl )
+            {
+                return false;
+            }
+        }
+
+        owner->SetInitialSize(size);
+        owner = lifetime.get();
+        if ( !owner || !owner->m_winui ||
+             owner->m_winui.get() != createImpl )
+        {
+            return false;
+        }
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI TextBlock creation", e);
+        wxStaticText * const owner = lifetime.get();
+        if ( owner && owner->m_winui &&
+             owner->m_winui.get() == createImpl )
+        {
+            owner->m_winui.reset();
+        }
         return false;
     }
 
@@ -237,41 +341,117 @@ bool wxStaticText::Create(wxWindow *parent,
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    wxWinUIStaticTextImpl * const impl = m_winui.get();
+    const wxWeakRef<wxStaticText> alive(this);
+    const bool wasMarkup = !m_markup.empty();
     m_markup.clear();
 
-    if ( !UpdateLabelOrig(label) )
+    // DoSetLabelMarkup() stores the stripped text in m_labelOrig. Switching
+    // back to the same plain text is still a real peer mutation: the old
+    // styled runs must be discarded even though the wx label is unchanged.
+    if ( !UpdateLabelOrig(label) && !wasMarkup )
         return;
 
-    InvalidateBestSize();
-    WXSetVisibleLabel(label);
-    if ( GetContainingSizer() )
-        Refresh();
+    if ( !HasFlag(wxST_NO_AUTORESIZE) )
+        InvalidateBestSize();
+    WXSetVisibleLabel(UsesManualEllipsization() ? GetEllipsizedLabel()
+                                               : label);
+    wxStaticText * const owner = alive.get();
+    if ( !owner || owner->m_winui.get() != impl )
+        return;
+
+    // The TextBlock is now the slot's semantic target while the Border stays
+    // the visual root. Updating the visible runs does not necessarily resize
+    // the HWND (fixed-size labels are common), so explicitly invalidate the
+    // shared state adapter to refresh AutomationProperties::Name.
+    wxWinUITLWHostNotifySlotState(owner);
+
+    if ( owner->GetContainingSizer() )
+        owner->Refresh();
     else
-        AutoResizeIfNecessary();
+        owner->AutoResizeIfNecessary();
 }
 
 bool wxStaticText::SetFont(const wxFont& font)
 {
+    wxWinUIStaticTextImpl * const impl = m_winui.get();
+    const wxWeakRef<wxStaticText> alive(this);
     const bool rc = wxControl::SetFont(font);
-    UpdateWinUIContent();
-    AutoResizeIfNecessary();
+    wxStaticText *owner = alive.get();
+    if ( !owner || owner->m_winui.get() != impl ||
+         !owner->ApplyWinUIAppearance() )
+    {
+        return rc;
+    }
+
+    owner = alive.get();
+    if ( !owner || owner->m_winui.get() != impl )
+        return rc;
+    if ( owner->UsesManualEllipsization() )
+    {
+        owner->UpdateLabel();
+        owner = alive.get();
+        if ( !owner || owner->m_winui.get() != impl )
+            return rc;
+    }
+    if ( rc )
+        owner->AutoResizeIfNecessary();
+    return rc;
+}
+
+bool wxStaticText::SetForegroundColour(const wxColour& colour)
+{
+    wxWinUIStaticTextImpl * const impl = m_winui.get();
+    const wxWeakRef<wxStaticText> alive(this);
+    const bool rc = wxControl::SetForegroundColour(colour);
+    wxStaticText * const owner = alive.get();
+    if ( owner && owner->m_winui.get() == impl )
+        owner->ApplyWinUIAppearance();
+    return rc;
+}
+
+bool wxStaticText::SetBackgroundColour(const wxColour& colour)
+{
+    wxWinUIStaticTextImpl * const impl = m_winui.get();
+    const wxWeakRef<wxStaticText> alive(this);
+    const bool rc = wxControl::SetBackgroundColour(colour);
+    wxStaticText * const owner = alive.get();
+    if ( owner && owner->m_winui.get() == impl )
+        owner->ApplyWinUIAppearance();
     return rc;
 }
 
 #if wxUSE_MARKUP
 bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 {
+    wxWinUIStaticTextImpl * const beforeImpl = m_winui.get();
+    const wxWeakRef<wxStaticText> beforeAlive(this);
     if ( !wxControlBase::DoSetLabelMarkup(markup) )
         return false;
+    wxStaticText * const afterBase = beforeAlive.get();
+    if ( !afterBase || afterBase->m_winui.get() != beforeImpl )
+        return true;
 
     // Keep the original markup so we can rebuild the rich runs, and remember
     // the stripped text for measuring.
-    m_markup = markup;
-    m_visibleLabel = GetLabel();
+    afterBase->m_markup = markup;
+    afterBase->m_visibleLabel = afterBase->GetLabel();
 
-    InvalidateBestSize();
-    UpdateWinUIContent();
-    AutoResizeIfNecessary();
+    if ( !afterBase->HasFlag(wxST_NO_AUTORESIZE) )
+        afterBase->InvalidateBestSize();
+    if ( afterBase->UsesManualEllipsization() )
+    {
+        // START/MIDDLE ellipsization cannot preserve arbitrary nested markup.
+        // Prefer a correctly clipped accessible label; setting a new markup
+        // value or enlarging the control rebuilds from the original source.
+        afterBase->m_visibleLabel = afterBase->GetEllipsizedLabel();
+    }
+    wxWinUIStaticTextImpl * const impl = afterBase->m_winui.get();
+    if ( !afterBase->UpdateWinUIContent() )
+        return true;
+    wxStaticText * const owner = beforeAlive.get();
+    if ( owner && owner->m_winui.get() == impl )
+        owner->AutoResizeIfNecessary();
     return true;
 }
 #endif // wxUSE_MARKUP
@@ -315,6 +495,18 @@ wxSize wxStaticText::DoGetBestClientSize() const
     return best;
 }
 
+void wxStaticText::DoSetSize(int x, int y, int width, int height,
+                             int sizeFlags)
+{
+    const wxWeakRef<wxStaticText> alive(this);
+    wxStaticTextBase::DoSetSize(x, y, width, height, sizeFlags);
+    if ( wxStaticText * const owner = alive.get() )
+    {
+        if ( owner->UsesManualEllipsization() )
+            owner->UpdateLabel();
+    }
+}
+
 wxString wxStaticText::WXGetVisibleLabel() const
 {
     return m_visibleLabel;
@@ -326,37 +518,227 @@ void wxStaticText::WXSetVisibleLabel(const wxString& str)
     UpdateWinUIContent();
 }
 
-void wxStaticText::UpdateWinUIContent()
+bool wxStaticText::UsesManualEllipsization() const
 {
-    if ( !m_winui || !m_winui->textBlock )
-        return;
+    return HasFlag(wxST_ELLIPSIZE_START) ||
+           HasFlag(wxST_ELLIPSIZE_MIDDLE);
+}
+
+bool wxStaticText::ApplyWinUIAppearance()
+{
+    if ( !m_winui || !m_winui->root || !m_winui->textBlock )
+        return false;
+
+    wxWinUIStaticTextImpl * const impl = m_winui.get();
+    const wxWeakRef<wxStaticText> alive(this);
+    const MUX::Controls::Border root = impl->root;
+    const MUX::Controls::TextBlock textBlock = impl->textBlock;
+    const wxFont font = m_hasFont ? GetFont() : wxNullFont;
+    const wxColour foreground =
+        m_hasFgCol ? GetForegroundColour() : wxNullColour;
+    const wxColour background =
+        m_hasBgCol ? GetBackgroundColour() : wxNullColour;
+    const wxString label = GetLabel();
 
     try
     {
-        auto inlines = m_winui->textBlock.Inlines();
+        wxWinUIApplyFont(textBlock, font);
+        wxWinUIApplyForeground(textBlock, foreground);
+        wxWinUIApplyBackground(root, background);
+
+        // Border has no useful automation peer. Keep it Raw and expose the
+        // TextBlock peer, whose text is the native accessible value. The
+        // shared slot adapter remains the only writer of the semantic
+        // TextBlock's AutomationProperties.Name.
+        wxWinUIApplyAccessKey(textBlock, label);
+        MUX::Automation::AutomationProperties::SetAccessibilityView(
+            root,
+            MUX::Automation::Peers::AccessibilityView::Raw);
+        MUX::Automation::AutomationProperties::SetAccessibilityView(
+            textBlock,
+            MUX::Automation::Peers::AccessibilityView::Control);
+    }
+    catch ( const winrt::hresult_error& e )
+    {
+        wxWinUILogException("WinUI StaticText appearance", e);
+    }
+
+    return alive && alive->m_winui.get() == impl;
+}
+
+bool wxStaticText::UpdateWinUIContent()
+{
+    if ( !m_winui || !m_winui->textBlock )
+        return false;
+
+    wxWinUIStaticTextImpl * const impl = m_winui.get();
+    const wxWeakRef<wxStaticText> alive(this);
+    const MUX::Controls::TextBlock textBlock = impl->textBlock;
+#if wxUSE_MARKUP
+    const wxString markup = m_markup;
+#endif
+    const wxString visibleLabel = m_visibleLabel;
+    const bool manualEllipsization = UsesManualEllipsization();
+
+    try
+    {
+        auto inlines = textBlock.Inlines();
         inlines.Clear();
 
 #if wxUSE_MARKUP
-        if ( !m_markup.empty() )
+        if ( !markup.empty() && !manualEllipsization )
         {
             wxWinUIMarkupToInlines output(inlines);
             wxMarkupParser parser(output);
-            parser.Parse(m_markup);
+            parser.Parse(markup);
         }
         else
 #endif // wxUSE_MARKUP
         {
-            wxWinUIAppendLabel(inlines, m_visibleLabel);
+            wxWinUIAppendLabel(inlines, visibleLabel);
         }
 
-        m_winui->textBlock.UpdateLayout();
+        if ( !alive || alive->m_winui.get() != impl ||
+             !alive->ApplyWinUIAppearance() )
+        {
+            return false;
+        }
+        textBlock.UpdateLayout();
     }
     catch ( const winrt::hresult_error& e )
     {
         wxWinUILogException("WinUI TextBlock content", e);
     }
 
-    m_winui->host.ForceRender();
+    wxStaticText * const owner = alive.get();
+    if ( !owner || owner->m_winui.get() != impl )
+        return false;
+
+    // The host flush may destroy owner. It is the final implementation access;
+    // only the weak reference is consulted afterwards.
+    impl->host.ForceRender();
+    return alive && alive->m_winui.get() == impl;
+}
+
+bool wxStaticText::WinUIGetAppearanceForTesting(
+    wxWinUIAppearanceSnapshot *snapshot) const
+{
+    if ( !snapshot || !m_winui || !m_winui->root || !m_winui->textBlock )
+        return false;
+
+    try
+    {
+        *snapshot = wxWinUICaptureAppearance(
+            m_winui->textBlock, m_winui->root, m_winui->textBlock);
+        return true;
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        return false;
+    }
+}
+
+wxString wxStaticText::WinUIGetVisibleLabelForTesting() const
+{
+    return m_visibleLabel;
+}
+
+wxString wxStaticText::WinUIGetRenderedTextForTesting() const
+{
+    if ( !m_winui || !m_winui->textBlock )
+        return wxString();
+
+    wxString rendered;
+    try
+    {
+        const auto inlines = m_winui->textBlock.Inlines();
+        for ( std::uint32_t i = 0; i < inlines.Size(); ++i )
+        {
+            if ( const auto run = inlines.GetAt(i).try_as<MUXD::Run>() )
+                rendered += wxString(run.Text().c_str());
+            else if ( inlines.GetAt(i).try_as<MUXD::LineBreak>() )
+                rendered += '\n';
+        }
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        return wxString();
+    }
+
+    return rendered;
+}
+
+int wxStaticText::WinUIGetTextTrimmingForTesting() const
+{
+    if ( !m_winui || !m_winui->textBlock )
+        return -1;
+
+    try
+    {
+        return static_cast<int>(m_winui->textBlock.TextTrimming());
+    }
+    catch ( const winrt::hresult_error& )
+    {
+        return -1;
+    }
+}
+
+bool wxStaticText::WinUIHasLocalBoldInlineForTesting() const
+{
+    if ( !m_winui || !m_winui->textBlock )
+        return false;
+
+    try
+    {
+        const auto inlines = m_winui->textBlock.Inlines();
+        for ( std::uint32_t i = 0; i < inlines.Size(); ++i )
+        {
+            const auto run = inlines.GetAt(i).try_as<MUXD::Run>();
+            if ( run &&
+                 run.ReadLocalValue(
+                     MUXD::TextElement::FontWeightProperty()) !=
+                     MUX::DependencyProperty::UnsetValue() &&
+                 run.FontWeight().Weight >=
+                     winrt::Microsoft::UI::Text::FontWeights::Bold().Weight )
+            {
+                return true;
+            }
+        }
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+
+    return false;
+}
+
+bool wxStaticText::WinUIHasLocalUnderlineInlineForTesting() const
+{
+    if ( !m_winui || !m_winui->textBlock )
+        return false;
+
+    try
+    {
+        const auto inlines = m_winui->textBlock.Inlines();
+        for ( std::uint32_t i = 0; i < inlines.Size(); ++i )
+        {
+            const auto run = inlines.GetAt(i).try_as<MUXD::Run>();
+            if ( run &&
+                 run.ReadLocalValue(
+                     MUXD::TextElement::TextDecorationsProperty()) !=
+                     MUX::DependencyProperty::UnsetValue() &&
+                 run.TextDecorations() ==
+                     winrt::Windows::UI::Text::TextDecorations::Underline )
+            {
+                return true;
+            }
+        }
+    }
+    catch ( const winrt::hresult_error& )
+    {
+    }
+
+    return false;
 }
 
 #endif // wxUSE_STATTEXT

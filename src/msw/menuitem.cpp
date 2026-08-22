@@ -496,6 +496,17 @@ void wxMenuItem::Enable(bool enable)
     }
 
     wxMenuItemBase::Enable(enable);
+
+#if wxUSE_ACCEL && wxUSE_MENUBAR && defined(__WXWINUI__)
+    // With a XAML menu bar, TranslateAccelerator() can't infer disabled state
+    // from an attached native menu. Rebuild so this item, or all descendants
+    // when it is a submenu, are removed from/restored to the accelerator table.
+    if ( m_parentMenu )
+    {
+        if ( wxMenuBar* const menuBar = m_parentMenu->GetMenuBar() )
+            menuBar->RebuildAccelTable();
+    }
+#endif
 }
 
 void wxMenuItem::Check(bool check)

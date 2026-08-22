@@ -21,6 +21,10 @@
 - **Dépend de** : 003
 - **Catégorie** : bug, input, compatibility
 - **Planifié à** : `20207bdbbb`, 2026-07-21
+- **État** : `IN REVIEW` — implémentation, build et revues terminés ; le
+  blocage `CodexSandboxOffline`/`MddBootstrapInitialize2()` documenté en juillet
+  est levé. La signature release reste liée au rejeu de la campagne physique
+  clavier/menu sur le candidat RC3 gelé et aux gates humaines transversales.
 
 ## Pourquoi
 
@@ -79,13 +83,20 @@ command event ou un seul caractère, jamais les deux/double.
 
 ## Done
 
-- [ ] Ctrl-T et tous accélérateurs passent depuis chaque focus ;
-- [ ] printable/AltGr/dead-key sans double frappe ;
-- [ ] Tab mixte stable ;
-- [ ] OPEN mutation visible et handlers menu→menubar→frame corrects ;
-- [ ] disabled menu/accelerator inactifs ;
-- [ ] popup shutdown/destroy sans freeze ;
-- [ ] boucle native et fallback hook couverts.
+- [ ] Ctrl-T et tous accélérateurs passent depuis chaque focus — matrice
+  TextBox/ComboBox/Button/Grid compilée, gate physique finale à rejouer sur le
+  candidat RC3 gelé ;
+- [ ] printable/AltGr/dead-key sans double frappe — seams déterministes verts,
+  saisie TextBox physique finale à rejouer sur le candidat RC3 gelé ;
+- [ ] Tab mixte stable — frontière minimale couverte ici, parcours approfondi
+  explicitement propriétaire du plan 007b et gate runtime à rejouer ;
+- [ ] OPEN mutation visible et handlers menu→menubar→frame corrects — code et
+  tests relus, gate AutomationPeer à signer sur le candidat RC3 gelé ;
+- [ ] disabled menu/accelerator inactifs — HACCEL structurel vert, projection
+  XAML à rejouer hors sandbox ;
+- [ ] popup shutdown/destroy sans freeze — boucles bornées et tests compilés,
+  exécution WinUI finale à rejouer sur le candidat RC3 gelé ;
+- [x] boucle native et fallback hook couverts par les seams de production.
 
 ## STOP
 

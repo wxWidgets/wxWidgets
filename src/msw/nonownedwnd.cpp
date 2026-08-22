@@ -37,6 +37,12 @@
 #include "wx/dynlib.h"
 #include "wx/msw/missing.h"
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "wx/weakref.h"
+    #include "wx/winui/private/tlwhostmsw.h"
+    #include "wx/winui/private/transient.h"
+#endif
+
 #include <memory>
 
 // ============================================================================
@@ -58,21 +64,52 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 {
     // Windows takes ownership of the region, so
     // we'll have to make a copy of the region to give to it.
-    DWORD noBytes = ::GetRegionData(GetHrgnOf(region), 0, nullptr);
-    RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
-    ::GetRegionData(GetHrgnOf(region), noBytes, rgnData);
-    HRGN hrgn = ::ExtCreateRegion(nullptr, noBytes, rgnData);
-    delete[] (char*) rgnData;
+    const DWORD noBytes =
+        ::GetRegionData(GetHrgnOf(region), 0, nullptr);
+    if ( !noBytes )
+    {
+        wxLogLastError(wxT("GetRegionData(size)"));
+        return false;
+    }
+
+    std::unique_ptr<unsigned char[]> rgnData(
+        new unsigned char[noBytes]);
+    if ( ::GetRegionData(
+             GetHrgnOf(region),
+             noBytes,
+             reinterpret_cast<RGNDATA *>(rgnData.get())) != noBytes )
+    {
+        wxLogLastError(wxT("GetRegionData"));
+        return false;
+    }
+
+    HRGN hrgn = ::ExtCreateRegion(
+        nullptr,
+        noBytes,
+        reinterpret_cast<RGNDATA *>(rgnData.get()));
+    if ( !hrgn )
+    {
+        wxLogLastError(wxT("ExtCreateRegion"));
+        return false;
+    }
 
     // SetWindowRgn expects the region to be in coordinates
     // relative to the window, not the client area.
     const wxPoint clientOrigin = GetClientAreaOrigin();
-    ::OffsetRgn(hrgn, -clientOrigin.x, -clientOrigin.y);
+    if ( ::OffsetRgn(
+             hrgn, -clientOrigin.x, -clientOrigin.y) == ERROR )
+    {
+        wxLogLastError(wxT("OffsetRgn"));
+        ::DeleteObject(hrgn);
+        return false;
+    }
 
     // Now call the shape API with the new region.
     if (::SetWindowRgn(GetHwnd(), hrgn, TRUE) == 0)
     {
         wxLogLastError(wxT("SetWindowRgn"));
+        // USER32 assumes ownership only after success.
+        ::DeleteObject(hrgn);
         return false;
     }
     return true;
@@ -156,6 +193,44 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+namespace
+{
+bool gs_winuiFailNextOwnerWriteForTest = false;
+wxWinUINonOwnedOwnerPublishHookForTesting
+    gs_winuiNonOwnedOwnerPublishHookForTesting = nullptr;
+wxWinUINonOwnedLayoutRefreshHookForTesting
+    gs_winuiNonOwnedLayoutRefreshHookForTesting = nullptr;
+}
+
+void wxWinUIMSWFailNextOwnerWriteForTest()
+{
+    gs_winuiFailNextOwnerWriteForTest = true;
+}
+
+void wxWinUISetNonOwnedOwnerPublishHookForTesting(
+    wxWinUINonOwnedOwnerPublishHookForTesting hook)
+{
+    gs_winuiNonOwnedOwnerPublishHookForTesting = hook;
+}
+
+void wxWinUIResetNonOwnedOwnerPublishHookForTesting()
+{
+    gs_winuiNonOwnedOwnerPublishHookForTesting = nullptr;
+}
+
+void wxWinUISetNonOwnedLayoutRefreshHookForTesting(
+    wxWinUINonOwnedLayoutRefreshHookForTesting hook)
+{
+    gs_winuiNonOwnedLayoutRefreshHookForTesting = hook;
+}
+
+void wxWinUIResetNonOwnedLayoutRefreshHookForTesting()
+{
+    gs_winuiNonOwnedLayoutRefreshHookForTesting = nullptr;
+}
+#endif
+
 bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
 {
     // ::SetParent() can't be used for non-owned windows, as they don't have
@@ -164,14 +239,208 @@ bool wxNonOwnedWindow::Reparent(wxWindowBase* newParent)
     // and so uses the same GWLP_HWNDPARENT offset.
 
     // Do not call the base class function here to skip wxWindow reparenting.
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const wxWeakRef<wxWindow> alive(this);
+    const wxWeakRef<wxWindow> oldParentIdentity(GetParent());
+    const WXHWND hwnd = GetHWND();
+    const unsigned long long hwndGeneration =
+        wxWinUIMSWGetHwndGeneration(this, hwnd);
+    const HWND oldNativeOwner =
+        hwnd ? ::GetWindow(reinterpret_cast<HWND>(hwnd), GW_OWNER)
+             : nullptr;
+#endif
     if ( !wxWindowBase::Reparent(newParent) )
+    {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The seam describes the next native publication, not an unrelated
+        // later Reparent() after this logical transaction already failed.
+        gs_winuiFailNextOwnerWriteForTest = false;
+#endif
         return false;
+    }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    const auto getCurrentWindow =
+        [alive, this, hwnd, hwndGeneration]() -> wxWindow *
+        {
+             wxWindow * const live = alive.get();
+             return live == this &&
+                            !live->IsBeingDeleted() &&
+                            !wxWinUITLWHostIsDestroyScheduled(live) &&
+                            live->GetHWND() == hwnd &&
+                           hwndGeneration &&
+                           wxWinUIMSWGetHwndGeneration(
+                               live, hwnd) == hwndGeneration
+                       ? live
+                       : nullptr;
+        };
+    const auto reconcileLogicalParentToNative =
+        [&]() -> bool
+        {
+            wxWindow * const live = getCurrentWindow();
+            if ( !live )
+                return false;
+
+            const HWND nativeOwner =
+                ::GetWindow(reinterpret_cast<HWND>(hwnd), GW_OWNER);
+            wxWindow *nativeOwnerWindow =
+                nativeOwner ? wxFindWinFromHandle(nativeOwner) : nullptr;
+            if ( nativeOwner && !nativeOwnerWindow )
+            {
+                // The only non-wx owner we can identify safely is the exact
+                // original association captured before the logical mutation.
+                wxWindow * const oldParent = oldParentIdentity.get();
+                if ( nativeOwner != oldNativeOwner || !oldParent ||
+                     oldParent->GetHWND() !=
+                         reinterpret_cast<WXHWND>(nativeOwner) ||
+                     !wxWinUIMSWGetHwndGeneration(
+                         oldParent, oldParent->GetHWND()) )
+                {
+                    return false;
+                }
+                nativeOwnerWindow = oldParent;
+            }
+
+            if ( live->GetParent() != nativeOwnerWindow &&
+                 !live->wxWindowBase::Reparent(nativeOwnerWindow) )
+            {
+                return false;
+            }
+
+            wxWindow * const afterLogical = getCurrentWindow();
+            return afterLogical &&
+                   afterLogical->GetParent() == nativeOwnerWindow &&
+                   ::GetWindow(
+                       reinterpret_cast<HWND>(hwnd), GW_OWNER) ==
+                       nativeOwner;
+        };
+    const auto failAndReconcile =
+        [&]() -> bool
+        {
+            if ( !reconcileLogicalParentToNative() && alive )
+            {
+                wxLogWarning(
+                    "wxWinUI: failed to reconcile a non-owned window's "
+                    "logical parent with its verified native owner");
+            }
+            return false;
+        };
+
+    // SetWindowLongPtr is a synchronous owner/style boundary. Converge on the
+    // current logical owner if application code redirects this TLW while the
+    // outer request is still on the stack. The inherited-layout projection is
+    // part of the same bounded transaction: it may dispatch into a local peer,
+    // so both logical and native owner identities are checked again afterwards.
+    constexpr unsigned MaxOwnerProjectionPasses = 16;
+    for ( unsigned pass = 0;
+          pass < MaxOwnerProjectionPasses;
+          ++pass )
+    {
+        wxWindow * const live = getCurrentWindow();
+        if ( !live )
+            return false;
+
+        wxWindow * const owner = live->GetParent();
+        const wxWeakRef<wxWindow> ownerIdentity(owner);
+        const WXHWND ownerHwnd = owner ? owner->GetHWND() : nullptr;
+        const unsigned long long ownerGeneration =
+            owner ? wxWinUIMSWGetHwndGeneration(owner, ownerHwnd) : 0;
+        if ( owner &&
+             (owner->IsBeingDeleted() ||
+              wxWinUITLWHostIsDestroyScheduled(owner) ||
+              !ownerHwnd || !ownerGeneration) )
+        {
+            return failAndReconcile();
+        }
+
+        const auto ownerProjectionIsExact =
+            [&, owner, ownerIdentity, ownerHwnd, ownerGeneration](
+                wxWindow *candidate)
+            {
+                if ( !candidate || candidate->GetParent() != owner ||
+                     ::GetWindow(
+                         reinterpret_cast<HWND>(hwnd), GW_OWNER) !=
+                         reinterpret_cast<HWND>(ownerHwnd) )
+                {
+                    return false;
+                }
+
+                return !owner ||
+                       (ownerIdentity.get() == owner &&
+                        !owner->IsBeingDeleted() &&
+                        !wxWinUITLWHostIsDestroyScheduled(owner) &&
+                        owner->GetHWND() == ownerHwnd &&
+                        wxWinUIMSWGetHwndGeneration(
+                            owner, ownerHwnd) == ownerGeneration);
+            };
+
+        ::SetLastError(ERROR_SUCCESS);
+        LONG_PTR previous = 0;
+        DWORD error = ERROR_SUCCESS;
+        if ( gs_winuiFailNextOwnerWriteForTest )
+        {
+            gs_winuiFailNextOwnerWriteForTest = false;
+            error = ERROR_ACCESS_DENIED;
+        }
+        else
+        {
+            previous = ::SetWindowLongPtr(
+                reinterpret_cast<HWND>(hwnd),
+                GWLP_HWNDPARENT,
+                reinterpret_cast<LONG_PTR>(ownerHwnd));
+            error = ::GetLastError();
+        }
+        if ( !previous && error != ERROR_SUCCESS )
+            return failAndReconcile();
+
+        wxWindow * const afterWrite = getCurrentWindow();
+        if ( !afterWrite )
+            return false;
+        if ( !ownerProjectionIsExact(afterWrite) )
+            continue;
+
+        if ( gs_winuiNonOwnedOwnerPublishHookForTesting )
+            gs_winuiNonOwnedOwnerPublishHookForTesting(afterWrite);
+
+        wxWindow * const afterNative = getCurrentWindow();
+        if ( !afterNative )
+        {
+            // Deletion/destroy scheduling invalidates the requested commit.
+            // Never report success for a transaction which did not reach the
+            // checked owner+layout postcondition.
+            return false;
+        }
+        if ( !ownerProjectionIsExact(afterNative) )
+            continue;
+
+        // Changing an owner does not refresh WS_EX_LAYOUTRTL on an existing
+        // non-owned HWND. This projection can enter a local peer hook; never
+        // report success until its exact owner generation is still current.
+        afterNative->MSWRefreshInheritedLayoutDirection();
+        wxWindow * const afterLayout = getCurrentWindow();
+        if ( !afterLayout )
+            return false;
+        if ( !ownerProjectionIsExact(afterLayout) )
+            continue;
+
+        if ( gs_winuiNonOwnedLayoutRefreshHookForTesting )
+            gs_winuiNonOwnedLayoutRefreshHookForTesting(afterLayout);
+
+        wxWindow * const afterLayoutHook = getCurrentWindow();
+        if ( !afterLayoutHook )
+            return false;
+        if ( ownerProjectionIsExact(afterLayoutHook) )
+            return true;
+    }
+
+    return failAndReconcile();
+#else
     const HWND hwndOwner = GetParent() ? GetHwndOf(GetParent()) : 0;
 
     ::SetWindowLongPtr(GetHwnd(), GWLP_HWNDPARENT, (LONG_PTR)hwndOwner);
 
     return true;
+#endif
 }
 
 namespace

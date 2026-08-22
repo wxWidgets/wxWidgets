@@ -92,7 +92,7 @@ wx_add_sample(menu DEPENDS wxUSE_MENUS wxUSE_MENUBAR)
 wx_add_sample(minimal IMPORTANT)
 wx_add_sample(notebook notebook.cpp notebook.h LIBRARIES wxaui DEPENDS wxUSE_NOTEBOOK)
 wx_add_sample(winui IMPORTANT DEPENDS wxUSE_WINUI3)
-# Throwaway validation harness for the one-island-per-TLW re-architecture: it
+# Maintained validation harness for the one-island-per-TLW architecture. It
 # uses the C++/WinRT projection directly, which samples do not get by default.
 wx_add_sample(winuispike IMPORTANT DEPENDS wxUSE_WINUI3)
 if(TARGET winuispike)

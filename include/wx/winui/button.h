@@ -12,9 +12,11 @@
 
 #include "wx/bmpbndl.h"
 
+#include <cstdint>
 #include <memory>
 
 class wxWinUIButtonImpl;
+class wxDPIChangedEvent;
 
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
@@ -46,9 +48,21 @@ public:
     bool SetBackgroundColour(const wxColour& colour) override;
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetFont(const wxFont& font) override;
-    void SetLayoutDirection(wxLayoutDirection dir) override;
+    // Implementation-only deterministic lifetime and bitmap-projection
+    // seams. The projection seam rebuilds the real XAML Content tree without
+    // synthesizing pointer/focus input.
+    bool WinUIQueueClickForTesting();
+    static unsigned WinUIGetLiveCallbackStateCountForTesting();
+    static unsigned WinUIGetPeerInvokeAttemptCountForTesting();
+    bool WinUIProjectBitmapStateForTesting(State state, double scale);
+    bool WinUIGetPeerBitmapProjectionForTesting(
+        wxSize *bitmapPixelSize,
+        wxSize *authPixelSize,
+        State *state,
+        std::uint64_t *generation) const;
 
 protected:
+    bool MSWOnEffectiveLayoutDirectionChanged() override;
     bool SendClickEvent();
     void DoEnable(bool enable) override;
     wxSize DoGetBestSize() const override;
@@ -68,24 +82,31 @@ protected:
 #endif // wxUSE_TOOLTIPS
 
 private:
-    void UpdateWinUIContent();
-    void UpdateWinUIAppearance();
-    void ApplyToolTip();
+    // Return false when a synchronous XAML/host boundary retired this exact
+    // owner+implementation transaction.
+    bool UpdateWinUIContent(bool forceRender = true,
+                            State forcedState = State_Max,
+                            double requestedScale = 0.0);
+    bool UpdateWinUIAppearance(bool forceRender = true);
     // Apply or clear the WinUI "Accent" button style used for the default button.
-    void ApplyDefaultStyle(bool on);
+    bool ApplyDefaultStyle(bool on);
     // Lazily attach the pointer/focus handlers needed to swap per-state bitmaps;
     // only done when an interactive-state bitmap (current/pressed/focused) is set.
     void EnsureStateHandlers();
     bool HasInteractiveStateBitmap() const;
-    wxBitmap GetBitmapForState(State which) const;
+    wxBitmap GetBitmapForState(State which,
+                               double requestedScale = 0.0) const;
     State GetCurrentBitmapState() const;
-    wxBitmap GetAuthBitmap() const;
+    wxBitmap GetAuthBitmap(double requestedScale = 0.0) const;
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     std::unique_ptr<wxWinUIButtonImpl> m_winui;
+    std::uint64_t m_bitmapRevision = 0;
+    bool m_bitmapDestroying = false;
     wxBitmapBundle m_bitmaps[State_Max];
-    wxSize m_bitmapMargins;
-    wxDirection m_bitmapPosition;
-    bool m_authNeeded;
+    wxSize m_bitmapMargins{ 0, 0 };
+    wxDirection m_bitmapPosition = wxLEFT;
+    bool m_authNeeded = false;
     bool m_isDefault = false;
 #if wxUSE_MARKUP
     wxString m_markup;
