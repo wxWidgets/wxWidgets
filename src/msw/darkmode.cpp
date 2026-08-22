@@ -887,7 +887,7 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
             if ( ::SendMessage(hwnd, BM_GETCHECK, 0, 0) == BST_CHECKED )
             {
                 // Draw a Unicode check mark character.
-                ::DrawTextW(hdc, L"\x2713", -1, &rcBox, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+                ::DrawTextW(hdc, L"\x2714", -1, &rcBox, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             }
 
             // Draw the text.
