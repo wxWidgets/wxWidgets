@@ -709,6 +709,20 @@ static void ShowTestInformation()
          << std::endl;
 }
 
+static bool IsCatchListCommandLine(const wxCmdLineArgsArray& argv)
+{
+    const wxArrayString& args = argv.GetArguments();
+
+    for ( size_t n = 1; n < args.GetCount(); ++n )
+    {
+        if ( args[n] == "--list-test-names-only" ||
+             args[n] == "--list-reporters" )
+            return true;
+    }
+
+    return false;
+}
+
 // Init
 //
 bool TestApp::OnInit()
@@ -724,8 +738,9 @@ bool TestApp::OnInit()
     // Hack: don't call TestAppBase::OnInit() to let CATCH handle command line.
 
     // Output some important information about the test environment unless
-    // we're running as a helper IPC server process.
-    if ( !ShouldRunTestIPCServer() )
+    // we're running as a helper IPC server process or producing machine-readable
+    // Catch discovery output.
+    if ( !ShouldRunTestIPCServer() && !IsCatchListCommandLine(argv) )
         ShowTestInformation();
 
     // Optionally allow executing the tests in the locale specified by the
