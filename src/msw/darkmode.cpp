@@ -864,13 +864,17 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
             AutoHBRUSH hBgBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel());
             ::FillRect(hdc, &rcClient, hBgBrush);
 
+            // Get foreground colour
+            auto fgIdx = ::IsWindowEnabled(hwnd) ? wxSYS_COLOUR_BTNTEXT : wxSYS_COLOUR_GRAYTEXT;
+            auto fgCol = wxSystemSettings::GetColour(fgIdx).GetPixel();
+
             // Draw the box.
             const LONG boxSize = 13;
             RECT rcBox = { };
             rcBox.top = (rcClient.bottom - boxSize) / 2;
             rcBox.right = boxSize;
             rcBox.bottom = rcBox.top + boxSize;
-            AutoHBRUSH hFgBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT).GetPixel());
+            AutoHBRUSH hFgBrush(fgCol);
             ::FrameRect(hdc, &rcBox, hFgBrush);
 
             // Set the font.
@@ -879,7 +883,7 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
 
             // Draw check mark, if checked.
             ::SetBkMode(hdc, TRANSPARENT);
-            ::SetTextColor(hdc, wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT).GetPixel());
+            ::SetTextColor(hdc, fgCol);
             if ( ::SendMessage(hwnd, BM_GETCHECK, 0, 0) == BST_CHECKED )
             {
                 // Draw a Unicode check mark character.
