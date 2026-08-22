@@ -28,6 +28,7 @@
 #endif
 
 #include "wx/fdrepdlg.h"
+#include "wx/msw/private/darkmode.h"
 
 // Use functions from src/msw/window.cpp
 extern void wxRemoveHandleAssociation(wxWindowMSW *win);
@@ -268,7 +269,7 @@ wxFindReplaceDialogImpl::FindMessageHandler(wxWindow * WXUNUSED(win),
 UINT_PTR CALLBACK
 wxFindReplaceDialogHookProc(HWND hwnd,
                             UINT uiMsg,
-                            WPARAM WXUNUSED(wParam),
+                            WPARAM wParam,
                             LPARAM lParam)
 {
     if ( uiMsg == WM_INITDIALOG )
@@ -278,11 +279,13 @@ wxFindReplaceDialogHookProc(HWND hwnd,
 
         ::SetWindowText(hwnd, dialog->GetTitle().t_str());
 
+        wxMSWDarkMode::CommonDialogHookProc(hwnd, uiMsg, wParam, lParam);
+
         // don't return FALSE from here or the dialog won't be shown
         return TRUE;
     }
 
-    return 0;
+    return wxMSWDarkMode::CommonDialogHookProc(hwnd, uiMsg, wParam, lParam);
 }
 
 // ============================================================================

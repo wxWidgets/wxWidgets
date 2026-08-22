@@ -34,6 +34,7 @@
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
 #include "wx/msw/dcprint.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/paper.h"
 #include "wx/modalhook.h"
 
@@ -1192,7 +1193,7 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
         native_data->SetDevNames(nullptr);
     }
 
-    pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
+    pd->Flags = PSD_MARGINS | PSD_MINMARGINS | PSD_ENABLEPAGESETUPHOOK;
 
     if ( data.GetDefaultMinMargins() )
         pd->Flags |= PSD_DEFAULTMINMARGINS;
@@ -1237,7 +1238,7 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
         wxPageToNative(data.GetMarginBottomRight().y, pageSetupUnits);
 
     pd->lCustData = 0;
-    pd->lpfnPageSetupHook = nullptr;
+    pd->lpfnPageSetupHook = wxMSWDarkMode::CommonDialogHookProc;
     pd->lpfnPagePaintHook = nullptr;
     pd->hPageSetupTemplate = nullptr;
     pd->lpPageSetupTemplateName = nullptr;
