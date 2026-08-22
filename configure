@@ -1049,6 +1049,8 @@ X_CFLAGS
 XMKMF
 DIRECTFB_LIBS
 DIRECTFB_CFLAGS
+APPINDICATOR_LIBS
+APPINDICATOR_CFLAGS
 WAYLAND_CLIENT_LIBS
 WAYLAND_CLIENT_CFLAGS
 GTHREAD_LIBS
@@ -1177,6 +1179,7 @@ with_gtkprint
 with_wayland
 with_gnomevfs
 with_libnotify
+with_appindicator
 with_opengl
 with_xtest
 with_nanosvg
@@ -1480,6 +1483,8 @@ GTHREAD_CFLAGS
 GTHREAD_LIBS
 WAYLAND_CLIENT_CFLAGS
 WAYLAND_CLIENT_LIBS
+APPINDICATOR_CFLAGS
+APPINDICATOR_LIBS
 DIRECTFB_CFLAGS
 DIRECTFB_LIBS
 XMKMF
@@ -2458,6 +2463,7 @@ Optional Packages:
   --without-wayland       don't use Wayland-specific code
   --with-gnomevfs         use GNOME VFS for associating MIME types
   --with-libnotify        use libnotify for notifications
+  --with-appindicator     use AppIndicator (required for wxTaskBarIcon under Wayland)
   --with-opengl           use OpenGL (or Mesa)
   --with-xtest            use XTest extension
   --with-nanosvg          use NanoSVG for rasterizing SVG
@@ -2520,6 +2526,10 @@ Some influential environment variables:
               C compiler flags for WAYLAND_CLIENT, overriding pkg-config
   WAYLAND_CLIENT_LIBS
               linker flags for WAYLAND_CLIENT, overriding pkg-config
+  APPINDICATOR_CFLAGS
+              C compiler flags for APPINDICATOR, overriding pkg-config
+  APPINDICATOR_LIBS
+              linker flags for APPINDICATOR, overriding pkg-config
   DIRECTFB_CFLAGS
               C compiler flags for DIRECTFB, overriding pkg-config
   DIRECTFB_LIBS
@@ -5176,6 +5186,35 @@ fi
 
 
           eval "$wx_cv_use_libnotify"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-appindicator was given.
+if test "${with_appindicator+set}" = set; then :
+  withval=$with_appindicator;
+                        if test "$withval" = yes; then
+                          wx_cv_use_appindicator='wxUSE_APPINDICATOR=yes'
+                        else
+                          wx_cv_use_appindicator='wxUSE_APPINDICATOR=no'
+                        fi
+
+else
+
+                        wx_cv_use_appindicator='wxUSE_APPINDICATOR=${'DEFAULT_wxUSE_APPINDICATOR":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_appindicator"
 
 
           withstring=
@@ -28469,6 +28508,98 @@ $as_echo "$wx_cv_wayland_protocols_dir" >&6; }
             else
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Wayland-specific code will be disabled" >&5
 $as_echo "$as_me: WARNING: Wayland-specific code will be disabled" >&2;}
+            fi
+        fi
+
+        if test "$wxUSE_TASKBARICON" = "yes"; then
+            if test "$wxUSE_APPINDICATOR" = "yes"; then
+                if test "$WXGTK3" = 1; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ayatana-appindicator3-0.1" >&5
+$as_echo_n "checking for ayatana-appindicator3-0.1... " >&6; }
+
+if test -n "$APPINDICATOR_CFLAGS"; then
+    pkg_cv_APPINDICATOR_CFLAGS="$APPINDICATOR_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ayatana-appindicator3-0.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "ayatana-appindicator3-0.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_APPINDICATOR_CFLAGS=`$PKG_CONFIG --cflags "ayatana-appindicator3-0.1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$APPINDICATOR_LIBS"; then
+    pkg_cv_APPINDICATOR_LIBS="$APPINDICATOR_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ayatana-appindicator3-0.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "ayatana-appindicator3-0.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_APPINDICATOR_LIBS=`$PKG_CONFIG --libs "ayatana-appindicator3-0.1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+            APPINDICATOR_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "ayatana-appindicator3-0.1" 2>&1`
+        else
+            APPINDICATOR_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "ayatana-appindicator3-0.1" 2>&1`
+        fi
+    # Put the nasty error message in config.log where it belongs
+    echo "$APPINDICATOR_PKG_ERRORS" >&5
+
+
+                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libayatana-appindicator not found; wxTaskBarIcon won't work under Wayland" >&5
+$as_echo "$as_me: WARNING: libayatana-appindicator not found; wxTaskBarIcon won't work under Wayland" >&2;}
+
+elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libayatana-appindicator not found; wxTaskBarIcon won't work under Wayland" >&5
+$as_echo "$as_me: WARNING: libayatana-appindicator not found; wxTaskBarIcon won't work under Wayland" >&2;}
+
+else
+    APPINDICATOR_CFLAGS=$pkg_cv_APPINDICATOR_CFLAGS
+    APPINDICATOR_LIBS=$pkg_cv_APPINDICATOR_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $APPINDICATOR_LIBS"
+                            CFLAGS="$APPINDICATOR_CFLAGS $CFLAGS"
+                            CXXFLAGS="$APPINDICATOR_CFLAGS $CXXFLAGS"
+                            $as_echo "#define wxUSE_APPINDICATOR 1" >>confdefs.h
+
+
+fi
+                else
+                                                            wxUSE_APPINDICATOR=no
+                fi
             fi
         fi
     fi

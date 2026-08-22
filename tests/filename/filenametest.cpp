@@ -776,6 +776,107 @@ TEST_CASE("wxFileName::Mkdir", "[filename]")
     //else: creating the directory may fail because of permissions
 }
 
+TEST_CASE("wxFileName::RmdirParents", "[filename]")
+{
+    TempDir tempdir("wxrmdirparents");
+    REQUIRE( tempdir.IsOk() );
+
+    // Basic case: removing a directory also removes its now-empty parents,
+    // stopping as soon as a non-empty ancestor is reached.
+    SECTION("wxPATH_RMDIR_PARENTS")
+    {
+        // Create "a/b/c" under the temporary directory and put a file in
+        // "a", so that removing "c" and then "b" should succeed, as they're
+        // empty, but removing "a" should fail because of the file still in
+        // it, stopping the upwards removal there.
+        wxFileName dirA(wxFileName::DirName(tempdir.GetName()));
+        dirA.AppendDir("a");
+        REQUIRE( dirA.Mkdir() );
+
+        wxFileName dirB(dirA);
+        dirB.AppendDir("b");
+        REQUIRE( dirB.Mkdir() );
+
+        wxFileName dirC(dirB);
+        dirC.AppendDir("c");
+        REQUIRE( dirC.Mkdir() );
+
+        wxFileName fileInA(dirA.GetPath(), "file");
+        {
+            wxFile file(fileInA.GetFullPath(), wxFile::write);
+            REQUIRE( file.IsOpened() );
+        }
+
+        CHECK( dirC.Rmdir(wxPATH_RMDIR_PARENTS) );
+
+        CHECK( !dirC.DirExists() );
+        CHECK( !dirB.DirExists() );
+        CHECK( dirA.DirExists() );
+        CHECK( fileInA.FileExists() );
+    }
+
+    // wxPATH_RMDIR_PARENTS can be combined with wxPATH_RMDIR_FULL: the
+    // target directory is removed even if it contains empty subdirectories,
+    // while its ancestors are still only removed if they turn out empty.
+    SECTION("wxPATH_RMDIR_PARENTS | wxPATH_RMDIR_FULL")
+    {
+        // Create "a/f/g", with a sibling file directly in the temporary
+        // directory to stop the upwards removal once "a" is gone, so that
+        // the temporary directory itself is left alone for TempDir to clean
+        // up as usual.
+        wxFileName dirA(wxFileName::DirName(tempdir.GetName()));
+        dirA.AppendDir("a");
+        REQUIRE( dirA.Mkdir() );
+
+        wxFileName dirF(dirA);
+        dirF.AppendDir("f");
+        REQUIRE( dirF.Mkdir() );
+
+        wxFileName dirG(dirF);
+        dirG.AppendDir("g");
+        REQUIRE( dirG.Mkdir() );
+
+        wxFileName keepFile(tempdir.GetName(), "keep");
+        {
+            wxFile file(keepFile.GetFullPath(), wxFile::write);
+            REQUIRE( file.IsOpened() );
+        }
+
+        CHECK( dirF.Rmdir(wxPATH_RMDIR_FULL | wxPATH_RMDIR_PARENTS) );
+
+        CHECK( !dirG.DirExists() );
+        CHECK( !dirF.DirExists() );
+        CHECK( !dirA.DirExists() );
+        CHECK( wxFileName::DirExists(tempdir.GetName()) );
+        CHECK( keepFile.FileExists() );
+    }
+
+    // On the other hand, wxPATH_RMDIR_PARENTS can't be combined with
+    // wxPATH_RMDIR_RECURSIVE, as doing this could silently remove more than
+    // what was explicitly asked for.
+    SECTION("wxPATH_RMDIR_PARENTS | wxPATH_RMDIR_RECURSIVE")
+    {
+        wxFileName dirX(wxFileName::DirName(tempdir.GetName()));
+        dirX.AppendDir("x");
+        REQUIRE( dirX.Mkdir() );
+
+        wxFileName fileInX(dirX.GetPath(), "file");
+        {
+            wxFile file(fileInX.GetFullPath(), wxFile::write);
+            REQUIRE( file.IsOpened() );
+        }
+
+        WX_ASSERT_FAILS_WITH_ASSERT(
+            wxFileName::Rmdir(dirX.GetPath(),
+                wxPATH_RMDIR_RECURSIVE | wxPATH_RMDIR_PARENTS)
+        );
+
+        // Nothing should have been removed.
+        CHECK( dirX.DirExists() );
+        CHECK( fileInX.FileExists() );
+    }
+}
+
 TEST_CASE("wxFileName::SameAs", "[filename]")
 {
     wxFileName fn1( wxFileName::CreateTempFileName( "filenametest1" ) );
