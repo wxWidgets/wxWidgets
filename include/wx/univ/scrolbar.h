@@ -149,7 +149,7 @@ protected:
     wxRect GetScrollbarRect(wxScrollBar::Element elem, int thumbPos = -1) const;
 
     // returns the size of the scrollbar shaft excluding the arrows
-    wxCoord GetScrollbarSize() const;
+    wxCoord GetScrollbarBodySize() const;
 
     // translate the scrollbar position (in logical units) into physical
     // coordinate (in pixels) and the other way round
