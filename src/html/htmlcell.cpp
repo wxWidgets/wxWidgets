@@ -1177,10 +1177,13 @@ wxHtmlLinkInfo *wxHtmlContainerCell::GetLink(int x, int y) const
 {
     wxHtmlCell *cell = FindCellByPos(x, y);
 
-    // VZ: I don't know if we should pass absolute or relative coords to
-    //     wxHtmlCell::GetLink()? As the base class version just ignores them
-    //     anyhow, it hardly matters right now but should still be clarified
-    return cell ? cell->GetLink(x, y) : NULL;
+    if ( !cell )
+        return NULL;
+
+    wxPoint relpos(x, y);
+    relpos -= cell->GetAbsPos(this);
+
+    return cell->GetLink(relpos.x, relpos.y);
 }
 
 
@@ -1353,7 +1356,11 @@ bool wxHtmlContainerCell::ProcessMouseClick(wxHtmlWindowInterface *window,
     bool retval = false;
     wxHtmlCell *cell = FindCellByPos(pos.x, pos.y);
     if ( cell )
-        retval = cell->ProcessMouseClick(window, pos, event);
+    {
+        wxPoint relpos(pos);
+        relpos -= cell->GetAbsPos(this);
+        retval = cell->ProcessMouseClick(window, relpos, event);
+    }
 
     return retval;
 }

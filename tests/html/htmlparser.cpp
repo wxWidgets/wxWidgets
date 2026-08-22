@@ -41,6 +41,15 @@ TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
     delete p.Parse("<!---");
 }
 
+#if wxUSE_UNICODE
+TEST_CASE("wxHtmlEntitiesParser::StrokedD", "[html][parser][entity]")
+{
+    wxHtmlEntitiesParser p;
+
+    CHECK( p.Parse("&Dstrok;&dstrok;") == L"\u0110\u0111" );
+}
+#endif // wxUSE_UNICODE
+
 TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
 {
     wxMemoryDC dc;

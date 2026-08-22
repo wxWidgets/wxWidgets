@@ -3,6 +3,7 @@
 // Purpose:     wxHtmlWindow class for parsing & displaying HTML (implementation)
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+// Copyright:   (c) 2026 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -189,49 +190,46 @@ void wxHtmlWindowMouseHelper::HandleIdle(wxHtmlCell *rootCell,
                                          const wxPoint& pos)
 {
     wxHtmlCell *cell = rootCell ? rootCell->FindCellByPos(pos.x, pos.y) : NULL;
+    wxHtmlLinkInfo *lnk = NULL;
+    wxPoint relpos;
 
-    if (cell != m_tmpLastCell)
+    if ( cell )
     {
-        wxHtmlLinkInfo *lnk = NULL;
-        if (cell)
-        {
-            // adjust the coordinates to be relative to this cell:
-            wxPoint relpos = pos - cell->GetAbsPos(rootCell);
-            lnk = cell->GetLink(relpos.x, relpos.y);
-        }
-
-        wxCursor cur;
-        if (cell)
-            cur = cell->GetMouseCursorAt(m_interface, pos);
-        else
-            cur = m_interface->GetHTMLCursor(
-                        wxHtmlWindowInterface::HTMLCursor_Default);
-
-        m_interface->GetHTMLWindow()->SetCursor(cur);
-
-        if (lnk != m_tmpLastLink)
-        {
-            if (lnk)
-                m_interface->SetHTMLStatusText(lnk->GetHref());
-            else
-                m_interface->SetHTMLStatusText(wxEmptyString);
-
-            m_tmpLastLink = lnk;
-        }
-
-        m_tmpLastCell = cell;
+        relpos = pos - cell->GetAbsPos(rootCell);
+        lnk = cell->GetLink(relpos.x, relpos.y);
     }
-    else // mouse moved but stayed in the same cell
+
+    wxCursor cur;
+    if ( cell )
+    {
+        cur = cell->GetMouseCursorAt(m_interface, relpos);
+    }
+    else
+    {
+        cur = m_interface->GetHTMLCursor(
+                    wxHtmlWindowInterface::HTMLCursor_Default);
+    }
+
+    m_interface->GetHTMLWindow()->SetCursor(cur);
+
+    if ( lnk != m_tmpLastLink )
+    {
+        if ( lnk )
+            m_interface->SetHTMLStatusText(lnk->GetHref());
+        else
+            m_interface->SetHTMLStatusText(wxEmptyString);
+
+        m_tmpLastLink = lnk;
+    }
+
+    if ( cell == m_tmpLastCell )
     {
         if ( cell )
-        {
-            // A single cell can have different cursors for different positions,
-            // so update cursor for this case as well.
-            wxCursor cur = cell->GetMouseCursorAt(m_interface, pos);
-            m_interface->GetHTMLWindow()->SetCursor(cur);
-
-            OnCellMouseHover(cell, pos.x, pos.y);
-        }
+            OnCellMouseHover(cell, relpos.x, relpos.y);
+    }
+    else
+    {
+        m_tmpLastCell = cell;
     }
 
     m_tmpMouseMoved = false;
@@ -1531,13 +1529,7 @@ void wxHtmlWindow::OnInternalIdle()
 
         // handle cursor and status bar text changes:
 
-        // NB: because we're passing in 'cell' and not 'm_Cell' (so that the
-        //     leaf cell lookup isn't done twice), we need to adjust the
-        //     position for the new root:
-        wxPoint posInCell(x, y);
-        if (cell)
-            posInCell -= cell->GetAbsPos();
-        wxHtmlWindowMouseHelper::HandleIdle(cell, posInCell);
+        wxHtmlWindowMouseHelper::HandleIdle(m_Cell, wxPoint(x, y));
     }
 }
 

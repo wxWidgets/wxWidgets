@@ -264,12 +264,23 @@ All (GUI):
 - Handle mouse capture loss when using wxContextHelp (Richard Thomson, #21534).
 - Always recognize common file types in wxHTML (Richard Thomson, #20967).
 - Respect background colour when printing in wxHTML (Richard Thomson, #20652).
+- Fix handling of image map coordinates in wxHTML (Richard Thomson, #3163).
+- Don't show modal HTML help window for not found topic (Richard Thomson, #3219).
+- Recognize "Dstrok" as an entity in wxHTML (Richard Thomson, #3996).
+- Fix XRC unknown-control size hints after attaching (Richard Thomson, #2726).
 - Fix handling TGA files with invalid size (MarkLee131, #26760).
 - Fix buffer overflow with invalid cached help books (MarkLee131, #26765).
+
+wxGTK
+
+- Fix using SetBitmap() on wxMenuItem created without a bitmap (ykne, #26771).
+- Fix memory leak with using custom handlers in wxWebView (Blake-Madden, #26784).
+- Use string passed to wxApp::SetClassName() as Wayland app-id (#24668).
 
 wxMSW:
 
 - Fix wrong refresh in wxStaticBitmap::SetBitmap() (Steve Murphree, #26730).
+- Fix drawing of 1x1 rectangles (Richard Thomson, #3096).
 
 wxOSX:
 

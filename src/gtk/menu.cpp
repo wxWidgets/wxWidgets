@@ -1023,7 +1023,17 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
                     // that it never hurts to follow GTK+ conventions more closely
                     menuItem = gtk_image_menu_item_new_from_stock(stockid, NULL);
                 else
-                    menuItem = gtk_menu_item_new_with_label("");
+                    // Even though no bitmap is set yet, still create an
+                    // image-capable item: SetBitmap() is commonly called
+                    // after Append() returns (Append() returns the new
+                    // wxMenuItem* precisely to support this), and
+                    // SetupBitmaps() later calls
+                    // gtk_image_menu_item_set_image(), which requires the
+                    // underlying widget to already be a GtkImageMenuItem.
+                    // A GtkImageMenuItem with no image behaves the same as
+                    // a plain GtkMenuItem, so this is harmless when no
+                    // bitmap is ever set.
+                    menuItem = gtk_image_menu_item_new_with_label("");
             }
             wxGCC_WARNING_RESTORE()
 #endif
