@@ -15,6 +15,7 @@
 #endif
 #include "wx/msw/private/comptr.h"
 
+#include <memory>
 #include <unordered_map>
 
 #include <WebView2.h>
@@ -76,6 +77,9 @@ public:
 
     wxWebViewEdge* m_ctrl;
     wxWebViewConfiguration m_config;
+
+    // set false in dtor, checked by pending creation callbacks, see #26491
+    std::shared_ptr<bool> m_alive{ std::make_shared<bool>(true) };
 
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxCOMPtr<ICoreWebView2_2> m_webView;
