@@ -32,7 +32,7 @@
 #include "wx/msw/private/webview_edge.h"
 #include "wx/msw/private/comstream.h"
 
-#include <utility>
+#include <algorithm>
 
 #ifdef __VISUALC__
 #include <wrl/event.h>
@@ -317,7 +317,7 @@ public:
     {
         if (!m_webViewEnvironment)
         {
-            m_webViewsWaitingForEnvironment.push_back({ impl->m_alive, impl });
+            m_webViewsWaitingForEnvironment.push_back(impl);
 
             // keep us alive until the completion handler below runs, see #26491
             wxWebViewConfiguration keepAlive = impl->m_config;
@@ -346,21 +346,37 @@ public:
         }
     }
 
+    // Called from wxWebViewEdgeImpl dtor to ensure that we don't try to use a
+    // WebView which had been destroyed while waiting for the environment
+    // creation to complete, see #26491.
+    void RemoveWaitingForEnvironment(wxWebViewEdgeImpl* impl)
+    {
+        m_webViewsWaitingForEnvironment.erase(
+            std::remove(
+                m_webViewsWaitingForEnvironment.begin(),
+                m_webViewsWaitingForEnvironment.end(),
+                impl
+            ),
+            m_webViewsWaitingForEnvironment.end()
+        );
+    }
+
     HRESULT OnEnvironmentCreated(HRESULT WXUNUSED(result), ICoreWebView2Environment* environment)
     {
         m_webViewEnvironment = environment;
-        for (auto& waiting : m_webViewsWaitingForEnvironment)
-        {
-            if (*waiting.first) // still alive?
-                waiting.second->EnvironmentAvailable(m_webViewEnvironment);
-        }
+
+        // Note that EnvironmentAvailable() doesn't run any user code and so
+        // can't destroy any of the WebViews here, i.e. it can't modify the
+        // vector we're iterating over.
+        for (auto impl : m_webViewsWaitingForEnvironment)
+            impl->EnvironmentAvailable(m_webViewEnvironment);
+
         m_webViewsWaitingForEnvironment.clear();
         return S_OK;
     }
 
     static wxString ms_browserExecutableDir;
-    std::vector<std::pair<std::shared_ptr<bool>, wxWebViewEdgeImpl*>>
-        m_webViewsWaitingForEnvironment;
+    std::vector<wxWebViewEdgeImpl*> m_webViewsWaitingForEnvironment;
     wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxString m_dataPath;
@@ -474,6 +490,13 @@ wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview) :
 wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
 {
     *m_alive = false;
+
+    // If we're still waiting for the environment creation to complete, we must
+    // not be notified about it any more.
+    auto* const config =
+        static_cast<wxWebViewConfigurationImplEdge*>(m_config.GetImpl());
+    if (config)
+        config->RemoveWaitingForEnvironment(this);
 
     if (m_webView)
     {
