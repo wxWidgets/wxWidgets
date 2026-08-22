@@ -90,6 +90,24 @@ static const char* const panel_extension_xpm[] = {
   "x   xxx",
   "   xxxx"};
 
+void wxRibbonMSWArtProvider::GetDefaultColourScheme(wxColour& primary,
+                                                    wxColour& secondary,
+                                                    wxColour& tertiary)
+{
+    if ( wxSystemSettings::GetAppearance().IsDark() )
+    {
+        primary = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+        secondary = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+        tertiary = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    }
+    else
+    {
+        primary = wxColour(194, 216, 241);
+        secondary = wxColour(255, 223, 114);
+        tertiary = wxColour(0, 0, 0);
+    }
+}
+
 wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
 #if defined( __WXOSX__ )
     : m_tab_label_font(*wxSMALL_FONT)
@@ -101,8 +119,12 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
     m_button_bar_label_font = m_tab_label_font;
     m_panel_label_font = m_tab_label_font;
 
-    if(set_colour_scheme)
-        UpdateColoursFromSystem();
+    if ( set_colour_scheme )
+    {
+        wxColour primary, secondary, tertiary;
+        GetDefaultColourScheme(primary, secondary, tertiary);
+        wxRibbonMSWArtProvider::SetColourScheme(primary, secondary, tertiary);
+    }
 
     m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
     m_tab_separation_size = 3;
@@ -127,20 +149,9 @@ wxRibbonMSWArtProvider::~wxRibbonMSWArtProvider()
 
 void wxRibbonMSWArtProvider::UpdateColoursFromSystem()
 {
-    if (wxSystemSettings::GetAppearance().IsDark())
-    {
-        SetColourScheme(
-            wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE),
-            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
-            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-    }
-    else
-    {
-        SetColourScheme(
-            wxColour(194, 216, 241),
-            wxColour(255, 223, 114),
-            wxColour(0, 0, 0));
-    }
+    wxColour primary, secondary, tertiary;
+    GetDefaultColourScheme(primary, secondary, tertiary);
+    SetColourScheme(primary, secondary, tertiary);
 }
 
 void wxRibbonMSWArtProvider::GetColourScheme(

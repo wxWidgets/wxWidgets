@@ -1096,6 +1096,16 @@ public:
 class wxRibbonMSWArtProvider : public wxRibbonArtProvider
 {
 public:
+    /**
+        Constructor.
+
+        @param set_colour_scheme
+            If @true, the default colour scheme is set from the system colours.
+            Derived classes overriding SetColourScheme() should pass @false and
+            set their own colour scheme in their constructor, as the scheme set
+            from this constructor can't use the overridden version of
+            SetColourScheme().
+    */
     wxRibbonMSWArtProvider(bool set_colour_scheme = true);
 };
 

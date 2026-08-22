@@ -597,6 +597,15 @@ void wxRibbonGallery::Clear()
     m_selected_item = nullptr;
     m_hovered_item = nullptr;
     m_active_item = nullptr;
+
+    // This points either to one of the button rectangles, which are still
+    // valid, or to the rectangle of one of the items deleted above.
+    if( m_mouse_active_rect != &m_scroll_up_button_rect &&
+        m_mouse_active_rect != &m_scroll_down_button_rect &&
+        m_mouse_active_rect != &m_extension_button_rect )
+    {
+        m_mouse_active_rect = nullptr;
+    }
 }
 
 bool wxRibbonGallery::IsSizingContinuous() const
