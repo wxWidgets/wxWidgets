@@ -80,7 +80,7 @@ wxIMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog);
 // gcc 16 gives a bogus warning about "'<unknown>' may be used uninitialized"
 // (sic) for GetParentForModalDialog() call below, this is almost certainly a
 // compiler bug, so disable it for this version only for now.
-#if wxCHECK_GCC_VERSION(16, 0) && !wxCHECK_GCC_VERSION(16, 2)
+#if wxCHECK_GCC_VERSION(16, 0) && !wxCHECK_GCC_VERSION(16, 3)
 #define wxGCC_WARNING_SUPPRESS_MAYBE_UNINITIALIZED
 wxGCC_WARNING_SUPPRESS(maybe-uninitialized)
 #endif
