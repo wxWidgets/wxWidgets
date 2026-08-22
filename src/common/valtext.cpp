@@ -39,7 +39,7 @@
 
 static bool wxIsNumeric(const wxString& val)
 {
-    for ( const auto& c : val )
+    for ( const auto c : val )
     {
         // Allow for "," (French) as well as "." -- in future we should
         // use wxSystemSettings or other to do better localisation
@@ -324,7 +324,7 @@ void wxTextValidator::OnPaste(wxClipboardTextEvent& event)
     bool hasInvalid = false;
 
     // Examine all characters one by one.
-    for ( const auto& ch : text )
+    for ( const auto ch : text )
     {
         if ( IsValidChar(ch) )
         {
@@ -401,7 +401,7 @@ bool wxTextValidator::IsValidChar(const wxUniChar& c) const
 // kept for compatibility reasons.
 bool wxTextValidator::ContainsOnlyIncludedCharacters(const wxString& str) const
 {
-    for ( const auto& ch : str )
+    for ( const auto ch : str )
     {
         if ( !IsCharIncluded(ch) )
             return false;
@@ -413,7 +413,7 @@ bool wxTextValidator::ContainsOnlyIncludedCharacters(const wxString& str) const
 // kept for compatibility reasons.
 bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
 {
-    for ( const auto& ch : str )
+    for ( const auto ch : str )
     {
         if (IsCharExcluded(ch))
             return true;

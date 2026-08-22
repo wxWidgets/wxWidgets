@@ -1507,7 +1507,7 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
         return false;
 
     bool processed = false;
-    for ( const auto& ch : data )
+    for ( const auto ch : data )
     {
         event.m_uniChar = ch;
 

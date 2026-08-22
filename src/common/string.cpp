@@ -1000,7 +1000,7 @@ const wxScopedCharBuffer wxString::ToAscii(char replaceWith) const
     wxCharBuffer buffer(length());
     char *dest = buffer.data();
 
-    for ( const auto& c : *this )
+    for ( const auto c : *this )
     {
         // FIXME-UTF8: unify substituted char ('_') with wxUniChar ('?')
         *dest++ = c.IsAscii() ? (char)c : replaceWith;
@@ -1280,7 +1280,7 @@ size_t wxString::Replace(const wxString& strOld,
 
 bool wxString::IsAscii() const
 {
-    for ( const auto& c : *this )
+    for ( const auto c : *this )
     {
         if ( !c.IsAscii() )
             return false;
@@ -1291,7 +1291,7 @@ bool wxString::IsAscii() const
 
 bool wxString::IsWord() const
 {
-    for ( const auto& c : *this )
+    for ( const auto c : *this )
     {
         if ( !wxIsalpha(c) )
             return false;
@@ -2244,7 +2244,7 @@ match:
 int wxString::Freq(wxUniChar ch) const
 {
     int count = 0;
-    for ( const auto& c : *this )
+    for ( const auto c : *this )
     {
         if ( c == ch )
             count ++;

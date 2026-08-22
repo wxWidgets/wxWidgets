@@ -598,7 +598,7 @@ void wxXmlDocument::AppendToProlog(wxXmlNode *node)
 // returns true if the given string contains only whitespaces
 bool wxIsWhiteOnly(const wxString& buf)
 {
-    for ( const auto& c : buf )
+    for ( const auto c : buf )
     {
         if ( c != wxS(' ') && c != wxS('\t') && c != wxS('\n') && c != wxS('\r'))
             return false;
@@ -946,7 +946,7 @@ bool OutputEscapedString(wxOutputStream& stream,
     wxString escaped;
     escaped.reserve(str.length());
 
-    for ( const auto& c : str )
+    for ( const auto c : str )
     {
         switch ( c.GetValue() )
         {

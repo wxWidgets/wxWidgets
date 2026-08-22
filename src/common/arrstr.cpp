@@ -563,7 +563,7 @@ wxString wxJoin(const wxArrayString& arr, const wxChar sep, const wxChar escape)
                 str += sep;
             }
 
-            for ( const auto& ch : arr[n] )
+            for ( const auto ch : arr[n] )
             {
                 if ( ch == sep )
                     str += escape;      // escape this separator
