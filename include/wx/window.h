@@ -1443,6 +1443,11 @@ public:
         return false;
     }
 
+        // return the space taken by the scrollbar of the given orientation
+        // when it is shown in this window: this is 0 for the windows using
+        // overlay scrollbars, which don't take any space at all
+    virtual int GetScrollbarSize(int orient) const;
+
     // context-sensitive help
     // ----------------------
 

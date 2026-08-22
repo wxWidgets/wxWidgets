@@ -814,6 +814,31 @@ public:
     bool HasScrollbar(int orient) const;
 
     /**
+        Returns the space taken by the scrollbar of the given orientation when
+        it is shown in this window.
+
+        For a vertical scrollbar this is its width and for a horizontal one its
+        height, i.e. the amount by which showing the scrollbar reduces the
+        client size of the window in the corresponding direction.
+
+        This is normally the same as the value of the ::wxSYS_VSCROLL_X or
+        ::wxSYS_HSCROLL_Y system metric, but it is 0 for the windows using
+        overlay scrollbars, which are drawn on top of the window contents and
+        hence don't reduce its client area at all. Because of this, prefer
+        using this function rather than the system metrics directly when
+        computing the size required by a scrollable window.
+
+        Note that the returned value doesn't depend on whether the scrollbar is
+        currently shown, use HasScrollbar() to check for this.
+
+        @param orient
+            Orientation of the scrollbar, either wxHORIZONTAL or wxVERTICAL.
+
+        @since 3.3.4
+    */
+    virtual int GetScrollbarSize(int orient) const;
+
+    /**
         Return whether a scrollbar is always shown.
 
         @param orient

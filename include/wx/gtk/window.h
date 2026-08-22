@@ -106,6 +106,7 @@ public:
     virtual int GetScrollPos( int orient ) const override;
     virtual int GetScrollThumb( int orient ) const override;
     virtual int GetScrollRange( int orient ) const override;
+    virtual int GetScrollbarSize( int orient ) const override;
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = nullptr ) override;
     virtual bool ScrollLines(int lines) override;

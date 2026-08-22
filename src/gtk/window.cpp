@@ -6962,6 +6962,18 @@ int wxWindowGTK::GetScrollRange( int orient ) const
     return wxRound(gtk_adjustment_get_upper(gtk_range_get_adjustment(sb)));
 }
 
+int wxWindowGTK::GetScrollbarSize( int orient ) const
+{
+#ifdef __WXGTK3__
+    // Overlay scrollbars are drawn on top of the window contents and so don't
+    // take any space in it.
+    if ( GTK_IS_SCROLLED_WINDOW(m_widget) && wxUsesOverlayScrollbars(m_widget) )
+        return 0;
+#endif // __WXGTK3__
+
+    return wxWindowBase::GetScrollbarSize(orient);
+}
+
 // Determine if increment is the same as +/-x, allowing for some small
 //   difference due to possible inexactness in floating point arithmetic
 static inline bool IsScrollIncrement(double increment, double x)

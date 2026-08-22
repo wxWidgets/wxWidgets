@@ -1131,6 +1131,13 @@ bool wxWindowBase::HasScrollbar(int orient) const
                                   : sizeVirt.y > sizeClient.y;
 }
 
+int wxWindowBase::GetScrollbarSize(int orient) const
+{
+    return wxSystemSettings::GetMetric(orient == wxHORIZONTAL ? wxSYS_HSCROLL_Y
+                                                              : wxSYS_VSCROLL_X,
+                                       AsWindow());
+}
+
 // ----------------------------------------------------------------------------
 // show/hide/enable/disable the window
 // ----------------------------------------------------------------------------
