@@ -26,6 +26,7 @@
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/private/fileback.h"
+#include "wx/private/filesys.h"
 #include "wx/private/make_unique.h"
 #include "wx/utils.h"
 
@@ -184,23 +185,8 @@ wxString wxFileSystemHandler::GetLeftLocation(const wxString& location)
 /* static */
 wxString wxFileSystemHandler::GetRightLocation(const wxString& location)
 {
-    int i, len = location.length();
-    for (i = len-1; i >= 0; i--)
-    {
-        if (location[i] == wxT('#'))
-            len = i;
-        if (location[i] != wxT(':'))
-            continue;
-
-        // C: on Windows
-        if (i == 1)
-            continue;
-        if (i >= 2 && wxIsalpha(location[i-1]) && location[i-2] == wxT('/'))
-            continue;
-
-        // Could be the protocol
-        break;
-    }
+    int len;
+    int i = wxFindFileSystemRightLocationStart(location, &len) - 1;
     if (i == 0) return wxEmptyString;
 
     const static wxString protocol(wxT("file:"));

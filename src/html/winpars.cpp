@@ -26,6 +26,7 @@
 #include "wx/fontmap.h"
 #include "wx/uri.h"
 
+#include "wx/private/filesys.h"
 #include "wx/private/hyperlink.h"
 
 //-----------------------------------------------------------------------------
@@ -258,46 +259,57 @@ wxObject* wxHtmlWinParser::GetProduct()
     return top;
 }
 
+static wxString wxResolveHtmlURL(const wxFileSystem *fs, const wxString& url)
+{
+    wxURI current(url);
+    wxString fullurl = current.BuildUnescapedURI();
+
+    if ( !current.IsRelative() || !fs )
+        return fullurl;
+
+    wxString basepath = fs->GetPath();
+    if ( basepath.empty() )
+        return fullurl;
+
+    if ( current.GetPath().StartsWith(wxT("/")) &&
+         basepath.Find(wxT('#')) != wxNOT_FOUND )
+    {
+        return basepath.Left(wxFindFileSystemRightLocationStart(basepath)) +
+               fullurl;
+    }
+
+    wxURI base(basepath);
+
+    if ( !base.IsReference() )
+    {
+        wxURI path(fullurl);
+        path.Resolve(base);
+        return path.BuildUnescapedURI();
+    }
+
+    // ... or force such addition if not included already
+    if ( !current.GetPath().Contains(base.GetPath()) )
+    {
+        basepath += fullurl;
+        wxURI connected(basepath);
+        fullurl = connected.BuildUnescapedURI();
+    }
+
+    return fullurl;
+}
+
 wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
                                    const wxString& url) const
 {
-    if ( !m_windowInterface )
-        return wxHtmlParser::OpenURL(type, url);
-
     wxString myurl(url);
-    wxHtmlOpeningStatus status;
+    wxString myfullurl;
+    wxHtmlOpeningStatus status = wxHTML_OPEN;
     for (;;)
     {
-        wxString myfullurl(myurl);
+        myfullurl = wxResolveHtmlURL(GetFS(), myurl);
 
-        // consider url as absolute path first
-        wxURI current(myurl);
-        myfullurl = current.BuildUnescapedURI();
-
-        // if not absolute then ...
-        if( current.IsRelative() )
-        {
-            wxString basepath = GetFS()->GetPath();
-            wxURI base(basepath);
-
-            // ... try to apply base path if valid ...
-            if( !base.IsReference() )
-            {
-                wxURI path(myfullurl);
-                path.Resolve( base );
-                myfullurl = path.BuildUnescapedURI();
-            }
-            else
-            {
-                // ... or force such addition if not included already
-                if( !current.GetPath().Contains(base.GetPath()) )
-                {
-                    basepath += myurl;
-                    wxURI connected( basepath );
-                    myfullurl = connected.BuildUnescapedURI();
-                }
-            }
-        }
+        if ( !m_windowInterface )
+            break;
 
         wxString redirect;
         status = m_windowInterface->OnHTMLOpeningURL(type, myfullurl, &redirect);
@@ -310,12 +322,10 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     if ( status == wxHTML_BLOCK )
         return nullptr;
 
-    int flags = wxFS_READ;
-    if (type == wxHTML_URL_IMAGE)
-        flags |= wxFS_SEEKABLE;
-
-    return GetFS()->OpenFile(myurl, flags);
+    return wxHtmlParser::OpenURL(type, myfullurl);
 }
+
+static constexpr wxChar CUR_NBSP_VALUE = L'\xA0';
 
 void wxHtmlWinParser::AddText(const wxString& txt)
 {
@@ -361,6 +371,7 @@ void wxHtmlWinParser::AddText(const wxString& txt)
             if (x)
             {
                 m_tmpStrBuf.append(' ');
+                m_tmpStrBuf.Replace(CUR_NBSP_VALUE, ' ');
                 AddWord(m_tmpStrBuf);
                 m_tmpStrBuf.clear();
 
@@ -392,7 +403,18 @@ void wxHtmlWinParser::AddText(const wxString& txt)
     }
     else // m_whitespaceMode == Whitespace_Pre
     {
-        AddPreBlock(txt);
+        if ( txt.find(CUR_NBSP_VALUE) != wxString::npos )
+        {
+            // we need to substitute spaces for &nbsp; here just like we
+            // did in the Whitespace_Normal branch above
+            wxString txt2(txt);
+            txt2.Replace(CUR_NBSP_VALUE, ' ');
+            AddPreBlock(txt2);
+        }
+        else
+        {
+            AddPreBlock(txt);
+        }
 
         // don't eat any whitespace in <pre> block
         m_tmpLastWasSpace = false;
