@@ -44,10 +44,8 @@ TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
 TEST_CASE("wxHtmlEntitiesParser::StrokedD", "[html][parser][entity]")
 {
     wxHtmlEntitiesParser p;
-    wxString expected;
-    expected << wxUniChar(0x0110) << wxUniChar(0x0111);
 
-    CHECK( p.Parse("&Dstrok;&dstrok;") == expected );
+    CHECK( p.Parse("&Dstrok;&dstrok;") == L"\u0110\u0111" );
 }
 
 TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
