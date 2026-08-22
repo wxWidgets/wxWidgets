@@ -27,6 +27,10 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/power.h"
 
+#ifdef __WXQT__
+    #include <QWidget>
+#endif
+
 // ----------------------------------------------------------------------------
 // wxPowerResource
 // ----------------------------------------------------------------------------
@@ -143,7 +147,12 @@ bool wxMSWUpdateShutdownBlockReason()
 {
     for ( wxWindow* win : wxTopLevelWindows )
     {
+#ifdef __WXQT__
+        auto hwnd = reinterpret_cast<HWND>(win->GetHandle()->winId());
+#else
         HWND hwnd = GetHwndOf(win);
+#endif
+
         if ( g_powerResourceSystemRefCount > 0 )
         {
             ::ShutdownBlockReasonCreate(hwnd,
