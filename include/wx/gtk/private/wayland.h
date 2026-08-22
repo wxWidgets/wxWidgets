@@ -32,7 +32,9 @@
 #include "wx/protocols/pointer-warp-v1-client-protocol.h"
 
 #ifdef wxHAVE_WAYLAND_SESSION_MANAGEMENT
+wxGCC_WARNING_SUPPRESS(cast-qual)
 #include "wx/protocols/xdg-session-management-v1-client-protocol.h"
+wxGCC_WARNING_RESTORE()
 #endif // wxHAVE_WAYLAND_SESSION_MANAGEMENT
 
 namespace wxWayland

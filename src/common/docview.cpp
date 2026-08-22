@@ -1462,7 +1462,7 @@ wxDocTemplateVector GetVisibleTemplates(const wxList& allTemplates)
     {
         templates.reserve(totalNumTemplates);
 
-        for ( const auto* item : allTemplates )
+        for ( auto* item : allTemplates )
         {
             wxDocTemplate * const temp = (wxDocTemplate *)item;
             if ( temp->IsVisible() )

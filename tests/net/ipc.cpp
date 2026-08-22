@@ -632,7 +632,7 @@ TEST_CASE_METHOD(IPCFixture,
 
     const wxString s("ping");
     size_t size = 0;
-    const char* data = (char*) conn.Request( s, &size, wxIPC_PRIVATE);
+    const char* data = (const char*) conn.Request( s, &size, wxIPC_PRIVATE);
 
     // Guard against a null return before constructing a wxString from it:
     // a failed Request() must report cleanly instead of dereferencing null
@@ -667,14 +667,14 @@ TEST_CASE_METHOD(IPCFixture,
     size_t size = 0;
     const wxString lastExecuteQuery("last_execute");
 
-    char* data = (char*) conn.Request(lastExecuteQuery, &size, wxIPC_PRIVATE);
+    const char* data = (const char*) conn.Request(lastExecuteQuery, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == s );
 
 
     s = "another execution command!";
     CHECK( conn.Execute(s.mb_str(), s.length() + 1) );
 
-    data = (char*) conn.Request(lastExecuteQuery, &size, wxIPC_PRIVATE);
+    data = (const char*) conn.Request(lastExecuteQuery, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == s );
 }
 
@@ -703,12 +703,12 @@ TEST_CASE_METHOD(IPCFixture,
     size_t size = 0;
     wxString query("get_thread1_request_counter");
 
-    char* data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    const char* data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == MESSAGE_ITERATIONS_STRING );
 
     size = 0;
     query = "get_error_string";
-    data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
 
     INFO( wxString(data) );
     CHECK( wxString(data).empty() );
@@ -755,24 +755,24 @@ TEST_CASE_METHOD(IPCFixture,
     size_t size = 0;
     wxString query = "get_thread1_request_counter";
 
-    char* data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    const char* data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == MESSAGE_ITERATIONS_STRING );
 
     size = 0;
     query = "get_thread2_request_counter";
 
-    data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == MESSAGE_ITERATIONS_STRING );
 
     size = 0;
     query = "get_thread3_request_counter";
 
-    data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == MESSAGE_ITERATIONS_STRING );
 
     size = 0;
     query = "get_error_string";
-    data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
 
     INFO( wxString(data) );
     CHECK( wxString(data).empty() );
@@ -811,7 +811,7 @@ TEST_CASE_METHOD(IPCFixture,
     wxString query = "get_error_string";
     size_t size = 0;
 
-    char* data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    const char* data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
 
     INFO( wxString(data) );
     CHECK( wxString(data).empty() );
@@ -855,7 +855,7 @@ TEST_CASE_METHOD(IPCFixture,
     wxString query = "get_error_string";
     size_t size = 0;
 
-    char* data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    const char* data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
 
     INFO( wxString(data) );
     CHECK( wxString(data).empty() );
@@ -906,7 +906,7 @@ TEST_CASE_METHOD(IPCFixture,
     wxString query = "get_error_string";
     size_t size = 0;
 
-    char* data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    const char* data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
 
     INFO( wxString(data) );
     CHECK( wxString(data).empty() );
@@ -985,24 +985,24 @@ TEST_CASE_METHOD(IPCFixture,
     size_t size = 0;
     wxString query = "get_thread1_request_counter";
 
-    char* data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    const char* data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == MESSAGE_ITERATIONS_STRING );
 
     size = 0;
     query = "get_thread2_request_counter";
 
-    data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == MESSAGE_ITERATIONS_STRING );
 
     size = 0;
     query = "get_thread3_request_counter";
 
-    data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
     CHECK( wxString(data) == MESSAGE_ITERATIONS_STRING );
 
     size = 0;
     query = "get_error_string";
-    data = (char*) conn.Request(query, &size, wxIPC_PRIVATE);
+    data = (const char*) conn.Request(query, &size, wxIPC_PRIVATE);
 
     INFO( wxString(data) );
     CHECK( wxString(data).empty() );
