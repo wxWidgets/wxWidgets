@@ -71,10 +71,6 @@ public:
     // calls g_log_set_writer_func() itself.
     static void GTKAllowDiagnosticsControl();
 
-    // Indicate that GTK+ already has been intialized by an
-    // external library and skip this in wxApp::Initialize()
-    static void GTKAlreadyInitialized();
-
     // implementation only from now on
     // -------------------------------
 

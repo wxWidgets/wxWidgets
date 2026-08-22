@@ -1306,16 +1306,6 @@ public:
      */
     static void GTKAllowDiagnosticsControl();
 
-    /**
-        Indicate that GTK+ already has been intialized by an
-        external library and skip this in wxApp::Initialize()
-
-        @onlyfor{wxgtk}
-
-        @since 3.3.4
-    */
-    static void GTKAlreadyInitialized();
-
     ///@}
 
     /**

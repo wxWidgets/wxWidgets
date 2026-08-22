@@ -441,12 +441,6 @@ bool wxApp::OnInitGui()
     return true;
 }
 
-static bool gs_gtkAlreadyInitialized = false;
-void wxApp::GTKAlreadyInitialized()
-{
-    gs_gtkAlreadyInitialized = true;
-}
-
 // use unusual names for the parameters to avoid conflict with wxApp::arg[cv]
 bool wxApp::Initialize(int& argc_, wxChar **argv_)
 {
@@ -527,10 +521,9 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         );
     }
 
-    if (!gs_gtkAlreadyInitialized)
+    // Test if GTK+ has already been initalized
+    if (!g_type_class_peek(GTK_TYPE_WIDGET))
     {
-        gs_gtkAlreadyInitialized = true;
-
         bool init_result;
 
         // Prevent gtk_init_check() from changing the locale automatically for
