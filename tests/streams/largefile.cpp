@@ -13,10 +13,10 @@
 //
 // The tests can be run with:
 //
-//  test --verbose largeFile
+//  test [largefile]
 //
-// On systems supporting sparse files they will also be registered in the
-// Streams subsuite so that they run by default.
+// They are skipped on the systems not supporting sparse files as they would
+// require too much disk space there.
 //
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -54,28 +54,39 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Helpers
 
+namespace
+{
+
 bool IsFAT(const wxString& path);
 void MakeSparse(const wxString& path, int fd);
+
+// Return true if the file system supports sparse files: the tests here would
+// require too much disk space without them.
+bool HasSparseFiles();
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Base class for the test cases - common code
 
-class LargeFileTest : public CppUnit::TestCase
+class LargeFileTest
 {
 public:
-    LargeFileTest(std::string name) : CppUnit::TestCase(name) { }
-    virtual ~LargeFileTest() { }
+    explicit LargeFileTest(const wxString& name) : m_name(name) { }
+    virtual ~LargeFileTest() = default;
+
+    void Run();
 
 protected:
-    void runTest() override;
-
     virtual wxInputStream *MakeInStream(const wxString& name) const = 0;
     virtual wxOutputStream *MakeOutStream(const wxString& name) const = 0;
     virtual bool HasLFS() const = 0;
+
+    const wxString m_name;
+
+    wxDECLARE_NO_COPY_CLASS(LargeFileTest);
 };
 
-void LargeFileTest::runTest()
+void LargeFileTest::Run()
 {
     // self deleting temp file
     struct TmpFile {
@@ -84,20 +95,18 @@ void LargeFileTest::runTest()
         wxString m_name;
     } tmpfile;
 
-    CPPUNIT_ASSERT(!tmpfile.m_name.empty());
+    CHECK(!tmpfile.m_name.empty());
 
     bool haveLFS = true;
     bool fourGigLimit = false;
 
     if (!HasLFS()) {
         haveLFS = false;
-        wxString n(getName().c_str(), *wxConvCurrent);
-        wxLogInfo(n + wxT(": No large file support, testing up to 2GB only"));
+        WARN(m_name << ": No large file support, testing up to 2GB only");
     }
     else if (IsFAT(tmpfile.m_name)) {
         fourGigLimit = true;
-        wxString n(getName().c_str(), *wxConvCurrent);
-        wxLogInfo(n + wxT(": FAT volumes are limited to 4GB files"));
+        WARN(m_name << ": FAT volumes are limited to 4GB files");
     }
 
     // size of the test blocks
@@ -121,32 +130,32 @@ void LargeFileTest::runTest()
 
         // write 'A's at [ 0x7fffffbf, 0x7fffffff [
         pos = 0x7fffffff - size;
-        CPPUNIT_ASSERT(out->SeekO(pos) == pos);
-        CPPUNIT_ASSERT(out->Write(upto2Gig, size).LastWrite() == size);
+        CHECK(out->SeekO(pos) == pos);
+        CHECK(out->Write(upto2Gig, size).LastWrite() == size);
         pos += size;
 
         if (haveLFS) {
             // write 'B's at [ 0x7fffffff, 0x8000003f [
-            CPPUNIT_ASSERT(out->Write(past2Gig, size).LastWrite() == size);
+            CHECK(out->Write(past2Gig, size).LastWrite() == size);
             pos += size;
-            CPPUNIT_ASSERT(out->TellO() == pos);
+            CHECK(out->TellO() == pos);
 
             // write 'X's at [ 0xffffffbf, 0xffffffff [
             pos = 0xffffffff - size;
-            CPPUNIT_ASSERT(out->SeekO(pos) == pos);
-            CPPUNIT_ASSERT(out->Write(upto4Gig, size).LastWrite() == size);
+            CHECK(out->SeekO(pos) == pos);
+            CHECK(out->Write(upto4Gig, size).LastWrite() == size);
             pos += size;
 
             if (!fourGigLimit) {
                 // write 'Y's at [ 0xffffffff, 0x10000003f [
-                CPPUNIT_ASSERT(out->Write(past4Gig, size).LastWrite() == size);
+                CHECK(out->Write(past4Gig, size).LastWrite() == size);
                 pos += size;
             }
         }
 
         // check the file seems to be the right length
-        CPPUNIT_ASSERT(out->TellO() == pos);
-        CPPUNIT_ASSERT(out->GetLength() == pos);
+        CHECK(out->TellO() == pos);
+        CHECK(out->GetLength() == pos);
     }
 
     // read the large file back
@@ -155,46 +164,46 @@ void LargeFileTest::runTest()
         char buf[size];
 
         if (haveLFS) {
-            CPPUNIT_ASSERT(in->GetLength() == pos);
+            CHECK(in->GetLength() == pos);
             pos = 0xffffffff;
 
             if (!fourGigLimit) {
-                CPPUNIT_ASSERT(in->GetLength() > pos);
+                CHECK(in->GetLength() > pos);
 
                 // read back the 'Y's at [ 0xffffffff, 0x10000003f [
-                CPPUNIT_ASSERT(in->SeekI(pos) == pos);
-                CPPUNIT_ASSERT(in->Read(buf, size).LastRead() == size);
-                CPPUNIT_ASSERT(memcmp(buf, past4Gig, size) == 0);
+                CHECK(in->SeekI(pos) == pos);
+                CHECK(in->Read(buf, size).LastRead() == size);
+                CHECK(memcmp(buf, past4Gig, size) == 0);
 
-                CPPUNIT_ASSERT(in->TellI() == in->GetLength());
+                CHECK(in->TellI() == in->GetLength());
             }
 
             // read back the 'X's at [ 0xffffffbf, 0xffffffff [
             pos -= size;
-            CPPUNIT_ASSERT(in->SeekI(pos) == pos);
-            CPPUNIT_ASSERT(in->Read(buf, size).LastRead() == size);
-            CPPUNIT_ASSERT(memcmp(buf, upto4Gig, size) == 0);
+            CHECK(in->SeekI(pos) == pos);
+            CHECK(in->Read(buf, size).LastRead() == size);
+            CHECK(memcmp(buf, upto4Gig, size) == 0);
             pos += size;
-            CPPUNIT_ASSERT(in->TellI() == pos);
+            CHECK(in->TellI() == pos);
 
             // read back the 'B's at [ 0x7fffffff, 0x8000003f [
             pos = 0x7fffffff;
-            CPPUNIT_ASSERT(in->SeekI(pos) == pos);
-            CPPUNIT_ASSERT(in->Read(buf, size).LastRead() == size);
-            CPPUNIT_ASSERT(memcmp(buf, past2Gig, size) == 0);
+            CHECK(in->SeekI(pos) == pos);
+            CHECK(in->Read(buf, size).LastRead() == size);
+            CHECK(memcmp(buf, past2Gig, size) == 0);
         }
         else {
-            CPPUNIT_ASSERT(in->GetLength() == 0x7fffffff);
+            CHECK(in->GetLength() == 0x7fffffff);
             pos = 0x7fffffff;
         }
 
         // read back the 'A's at [ 0x7fffffbf, 0x7fffffff [
         pos -= size;
-        CPPUNIT_ASSERT(in->SeekI(pos) == pos);
-        CPPUNIT_ASSERT(in->Read(buf, size).LastRead() == size);
-        CPPUNIT_ASSERT(memcmp(buf, upto2Gig, size) == 0);
+        CHECK(in->SeekI(pos) == pos);
+        CHECK(in->Read(buf, size).LastRead() == size);
+        CHECK(memcmp(buf, upto2Gig, size) == 0);
         pos += size;
-        CPPUNIT_ASSERT(in->TellI() == pos);
+        CHECK(in->TellI() == pos);
     }
 }
 
@@ -205,7 +214,7 @@ void LargeFileTest::runTest()
 class LargeFileTest_wxFile : public LargeFileTest
 {
 public:
-    LargeFileTest_wxFile() : LargeFileTest("wxFile streams") { }
+    LargeFileTest_wxFile() : LargeFileTest(wxASCII_STR("wxFile streams")) { }
 
 protected:
     wxInputStream *MakeInStream(const wxString& name) const override;
@@ -216,14 +225,14 @@ protected:
 wxInputStream *LargeFileTest_wxFile::MakeInStream(const wxString& name) const
 {
     std::unique_ptr<wxFileInputStream> in(new wxFileInputStream(name));
-    CPPUNIT_ASSERT(in->IsOk());
+    CHECK(in->IsOk());
     return in.release();
 }
 
 wxOutputStream *LargeFileTest_wxFile::MakeOutStream(const wxString& name) const
 {
     wxFile file(name, wxFile::write);
-    CPPUNIT_ASSERT(file.IsOpened());
+    CHECK(file.IsOpened());
     int fd = file.fd();
     file.Detach();
     MakeSparse(name, fd);
@@ -237,7 +246,7 @@ wxOutputStream *LargeFileTest_wxFile::MakeOutStream(const wxString& name) const
 class LargeFileTest_wxFFile : public LargeFileTest
 {
 public:
-    LargeFileTest_wxFFile() : LargeFileTest("wxFFile streams") { }
+    LargeFileTest_wxFFile() : LargeFileTest(wxASCII_STR("wxFFile streams")) { }
 
 protected:
     wxInputStream *MakeInStream(const wxString& name) const override;
@@ -248,14 +257,14 @@ protected:
 wxInputStream *LargeFileTest_wxFFile::MakeInStream(const wxString& name) const
 {
     std::unique_ptr<wxFFileInputStream> in(new wxFFileInputStream(name));
-    CPPUNIT_ASSERT(in->IsOk());
+    CHECK(in->IsOk());
     return in.release();
 }
 
 wxOutputStream *LargeFileTest_wxFFile::MakeOutStream(const wxString& name) const
 {
     wxFFile file(name, wxT("w"));
-    CPPUNIT_ASSERT(file.IsOpened());
+    CHECK(file.IsOpened());
     FILE *fp = file.fp();
     file.Detach();
     MakeSparse(name, fileno(fp));
@@ -273,33 +282,11 @@ bool LargeFileTest_wxFFile::HasLFS() const
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// The suite
-
-class largeFile : public CppUnit::TestSuite
-{
-public:
-    largeFile() : CppUnit::TestSuite("largeFile") { }
-
-    static CppUnit::Test *suite();
-};
-
-CppUnit::Test *largeFile::suite()
-{
-    largeFile *suite = new largeFile;
-
-    suite->addTest(new LargeFileTest_wxFile);
-    suite->addTest(new LargeFileTest_wxFFile);
-
-    return suite;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
 // Implement the helpers
 //
-// Ideally these tests will be part of the default suite so that regressions
-// are picked up. However this is only possible when sparse files are
-// supported otherwise the tests require too much disk space.
+// Ideally these tests will be run by default so that regressions are picked
+// up. However this is only possible when sparse files are supported otherwise
+// the tests require too much disk space.
 
 #ifdef __WINDOWS__
 
@@ -376,9 +363,7 @@ void MakeSparse(const wxString& path, int fd)
             volumeFlags &= ~FILE_SUPPORTS_SPARSE_FILES;
 }
 
-// return the suite if sparse files are supported, otherwise return nullptr
-//
-CppUnit::Test* GetlargeFileSuite()
+bool HasSparseFiles()
 {
     if (!volumeInfoInit) {
         wxString path;
@@ -390,10 +375,7 @@ CppUnit::Test* GetlargeFileSuite()
         wxRemoveFile(path);
     }
 
-    if ((volumeFlags & FILE_SUPPORTS_SPARSE_FILES) != 0)
-        return largeFile::suite();
-    else
-        return nullptr;
+    return (volumeFlags & FILE_SUPPORTS_SPARSE_FILES) != 0;
 }
 
 #else // __WINDOWS__
@@ -401,9 +383,7 @@ CppUnit::Test* GetlargeFileSuite()
 bool IsFAT(const wxString& WXUNUSED(path)) { return false; }
 void MakeSparse(const wxString& WXUNUSED(path), int WXUNUSED(fd)) { }
 
-// return the suite if sparse files are supported, otherwise return nullptr
-//
-CppUnit::Test* GetlargeFileSuite()
+bool HasSparseFiles()
 {
     wxString path;
     struct stat st1, st2;
@@ -426,12 +406,35 @@ CppUnit::Test* GetlargeFileSuite()
 
     wxRemoveFile(path);
 
-    if (st1.st_blocks != st2.st_blocks)
-        return largeFile::suite();
-    else
-        return nullptr;
+    return st1.st_blocks != st2.st_blocks;
 }
 
 #endif // __WINDOWS__
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(largeFile, "Streams.largeFile");
+} // anonymous namespace
+
+
+///////////////////////////////////////////////////////////////////////////////
+// The tests
+
+TEST_CASE("largeFile::wxFile", "[largefile][stream]")
+{
+    if ( !HasSparseFiles() )
+    {
+        WARN("Skipping large file test as sparse files are not supported.");
+        return;
+    }
+
+    LargeFileTest_wxFile().Run();
+}
+
+TEST_CASE("largeFile::wxFFile", "[largefile][stream]")
+{
+    if ( !HasSparseFiles() )
+    {
+        WARN("Skipping large file test as sparse files are not supported.");
+        return;
+    }
+
+    LargeFileTest_wxFFile().Run();
+}

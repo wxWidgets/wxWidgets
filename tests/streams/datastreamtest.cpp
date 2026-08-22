@@ -12,7 +12,6 @@
 
 #include "testprec.h"
 
-
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif // WX_PRECOMP
@@ -27,92 +26,22 @@
 #include "testfile.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// tests
 // ----------------------------------------------------------------------------
 
-class DataStreamTestCase : public CppUnit::TestCase
-{
-public:
-    DataStreamTestCase();
-
-private:
-    CPPUNIT_TEST_SUITE( DataStreamTestCase );
-        CPPUNIT_TEST( FloatRW );
-        CPPUNIT_TEST( DoubleRW );
-        CPPUNIT_TEST( StringRW );
-        CPPUNIT_TEST( ReadTruncatedString );
-        CPPUNIT_TEST( ReadTruncatedValue );
-        CPPUNIT_TEST( LongLongRW );
-        CPPUNIT_TEST( Int64RW );
-        CPPUNIT_TEST( NaNRW );
-        CPPUNIT_TEST( PseudoTest_UseBigEndian );
-        CPPUNIT_TEST( FloatRW );
-        CPPUNIT_TEST( DoubleRW );
-        // Only test standard IEEE 754 formats if we're using IEEE extended
-        // format by default, otherwise the tests above already covered them.
-#if wxUSE_APPLE_IEEE
-        CPPUNIT_TEST( PseudoTest_UseIEEE754 );
-        CPPUNIT_TEST( FloatRW );
-        CPPUNIT_TEST( DoubleRW );
-        // Also retest little endian version with standard formats.
-        CPPUNIT_TEST( PseudoTest_UseLittleEndian );
-        CPPUNIT_TEST( FloatRW );
-        CPPUNIT_TEST( DoubleRW );
-#endif // wxUSE_APPLE_IEEE
-    CPPUNIT_TEST_SUITE_END();
-
-    wxFloat64 TestFloatRW(wxFloat64 fValue);
-
-    void FloatRW();
-    void DoubleRW();
-    void StringRW();
-    void ReadTruncatedString();
-    void ReadTruncatedValue();
-    void LongLongRW();
-    void Int64RW();
-    void NaNRW();
-
-    void PseudoTest_UseBigEndian() { ms_useBigEndianFormat = true; }
-    void PseudoTest_UseLittleEndian() { ms_useBigEndianFormat = false; }
-#if wxUSE_APPLE_IEEE
-    void PseudoTest_UseIEEE754() { ms_useIEEE754 = true; }
-#endif // wxUSE_APPLE_IEEE
-
-    static bool ms_useBigEndianFormat;
-#if wxUSE_APPLE_IEEE
-    static bool ms_useIEEE754;
-#endif // wxUSE_APPLE_IEEE
-
-    wxDECLARE_NO_COPY_CLASS(DataStreamTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( DataStreamTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DataStreamTestCase, "DataStreamTestCase" );
-
-bool DataStreamTestCase::ms_useBigEndianFormat = false;
-#if wxUSE_APPLE_IEEE
-bool DataStreamTestCase::ms_useIEEE754 = false;
-#endif // wxUSE_APPLE_IEEE
-
-DataStreamTestCase::DataStreamTestCase()
-{
-}
-
-wxFloat64 DataStreamTestCase::TestFloatRW(wxFloat64 fValue)
+// Write the given value to a stream using the given format and read it back.
+static wxFloat64 TestFloatRW(wxFloat64 fValue, bool bigEndian, bool ieee754)
 {
     TempFile f("mytext.dat");
 
     {
         wxFileOutputStream pFileOutput( f.GetName() );
         wxDataOutputStream pDataOutput( pFileOutput );
-        if ( ms_useBigEndianFormat )
+        if ( bigEndian )
             pDataOutput.BigEndianOrdered(true);
 
 #if wxUSE_APPLE_IEEE
-        if ( ms_useIEEE754 )
+        if ( ieee754 )
             pDataOutput.UseBasicPrecisions();
 #endif // wxUSE_APPLE_IEEE
 
@@ -121,13 +50,15 @@ wxFloat64 DataStreamTestCase::TestFloatRW(wxFloat64 fValue)
 
     wxFileInputStream pFileInput( f.GetName() );
     wxDataInputStream pDataInput( pFileInput );
-    if ( ms_useBigEndianFormat )
+    if ( bigEndian )
         pDataInput.BigEndianOrdered(true);
 
 #if wxUSE_APPLE_IEEE
-    if ( ms_useIEEE754 )
+    if ( ieee754 )
         pDataInput.UseBasicPrecisions();
-#endif // wxUSE_APPLE_IEEE
+#else // !wxUSE_APPLE_IEEE
+    wxUnusedVar(ieee754);
+#endif // wxUSE_APPLE_IEEE/!wxUSE_APPLE_IEEE
 
     wxFloat64 fInFloat;
 
@@ -179,7 +110,6 @@ private:
         }
     }
 
-
 public:
     TestMultiRW(const T *Values,
                 size_t Size,
@@ -226,34 +156,57 @@ T TestRW(const T &Value)
     return InValue;
 }
 
-void DataStreamTestCase::FloatRW()
+TEST_CASE("DataStream::FloatRW", "[datastream][stream]")
 {
-    CPPUNIT_ASSERT( TestFloatRW(5.5) == 5.5 );
-    CPPUNIT_ASSERT( TestFloatRW(5) == 5 );
-    CPPUNIT_ASSERT( TestFloatRW(5.55) == 5.55 );
-    CPPUNIT_ASSERT( TestFloatRW(55555.555555) == 55555.555555 );
+    // Run the test for all the combinations of the possible formats.
+    const bool bigEndian = GENERATE(false, true);
+#if wxUSE_APPLE_IEEE
+    // The standard IEEE 754 formats are only worth testing separately if the
+    // extended precision format is used by default.
+    const bool ieee754 = GENERATE(false, true);
+#else // !wxUSE_APPLE_IEEE
+    const bool ieee754 = false;
+#endif // wxUSE_APPLE_IEEE/!wxUSE_APPLE_IEEE
+    CAPTURE(bigEndian, ieee754);
+
+    CHECK( TestFloatRW(5.5, bigEndian, ieee754) == 5.5 );
+    CHECK( TestFloatRW(5, bigEndian, ieee754) == 5 );
+    CHECK( TestFloatRW(5.55, bigEndian, ieee754) == 5.55 );
+    CHECK( TestFloatRW(55555.555555, bigEndian, ieee754) == 55555.555555 );
 }
 
-void DataStreamTestCase::DoubleRW()
+TEST_CASE("DataStream::DoubleRW", "[datastream][stream]")
 {
-    CPPUNIT_ASSERT( TestFloatRW(2132131.1232132) == 2132131.1232132 );
-    CPPUNIT_ASSERT( TestFloatRW(21321343431.1232143432) == 21321343431.1232143432 );
+    // Run the test for all the combinations of the possible formats.
+    const bool bigEndian = GENERATE(false, true);
+#if wxUSE_APPLE_IEEE
+    // The standard IEEE 754 formats are only worth testing separately if the
+    // extended precision format is used by default.
+    const bool ieee754 = GENERATE(false, true);
+#else // !wxUSE_APPLE_IEEE
+    const bool ieee754 = false;
+#endif // wxUSE_APPLE_IEEE/!wxUSE_APPLE_IEEE
+    CAPTURE(bigEndian, ieee754);
+
+    CHECK( TestFloatRW(2132131.1232132, bigEndian, ieee754) == 2132131.1232132 );
+    CHECK( TestFloatRW(21321343431.1232143432, bigEndian, ieee754)
+            == 21321343431.1232143432 );
 }
 
-void DataStreamTestCase::StringRW()
+TEST_CASE("DataStream::StringRW", "[datastream][stream]")
 {
     wxString s(wxT("Test1"));
-    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
+    CHECK( s == TestRW(s) );
 
     s.append(2, wxT('\0'));
     s.append(wxT("Test2"));
-    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
+    CHECK( s == TestRW(s) );
 
     s = wxString::FromUTF8("ü");
-    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
+    CHECK( s == TestRW(s) );
 }
 
-void DataStreamTestCase::ReadTruncatedString()
+TEST_CASE("DataStream::ReadTruncatedString", "[datastream][stream]")
 {
     // A string is stored as a 32 bit length followed by that many bytes. If the
     // length is larger than the number of bytes actually present (a corrupt or
@@ -269,11 +222,11 @@ void DataStreamTestCase::ReadTruncatedString()
     wxMemoryInputStream input(data, sizeof(data));
     wxDataInputStream dis(input);
 
-    CPPUNIT_ASSERT_EQUAL( wxString(), dis.ReadString() );
-    CPPUNIT_ASSERT( !dis.IsOk() );
+    CHECK( dis.ReadString() == wxString() );
+    CHECK( !dis.IsOk() );
 }
 
-void DataStreamTestCase::ReadTruncatedValue()
+TEST_CASE("DataStream::ReadTruncatedValue", "[datastream][stream]")
 {
     // Reading a fixed size value from a truncated stream must also fail instead
     // of returning a value built from uninitialised memory.
@@ -282,11 +235,11 @@ void DataStreamTestCase::ReadTruncatedValue()
     wxMemoryInputStream input(data, sizeof(data));
     wxDataInputStream dis(input);
 
-    CPPUNIT_ASSERT_EQUAL( 0u, dis.Read32() );
-    CPPUNIT_ASSERT( !dis.IsOk() );
+    CHECK( dis.Read32() == 0u );
+    CHECK( !dis.IsOk() );
 }
 
-void DataStreamTestCase::LongLongRW()
+TEST_CASE("DataStream::LongLongRW", "[datastream][stream]")
 {
     TestMultiRW<wxLongLong>::ValueArray ValuesLL;
     TestMultiRW<wxULongLong>::ValueArray ValuesULL;
@@ -302,13 +255,13 @@ void DataStreamTestCase::LongLongRW()
     ValuesULL.push_back(wxULongLong(0x12345678l));
     ValuesULL.push_back(wxULongLong(0x12345678l, 0xabcdef01l));
 
-    CPPUNIT_ASSERT( TestRW(wxLongLong(0x12345678l)) == wxLongLong(0x12345678l) );
-    CPPUNIT_ASSERT( TestRW(wxLongLong(0x12345678l, 0xabcdef01l)) == wxLongLong(0x12345678l, 0xabcdef01l) );
-    CPPUNIT_ASSERT( TestMultiRW<wxLongLong>(ValuesLL, &wxDataOutputStream::WriteLL, &wxDataInputStream::ReadLL).IsOk() );
-    CPPUNIT_ASSERT( TestMultiRW<wxULongLong>(ValuesULL, &wxDataOutputStream::WriteLL, &wxDataInputStream::ReadLL).IsOk() );
+    CHECK( TestRW(wxLongLong(0x12345678l)) == wxLongLong(0x12345678l) );
+    CHECK( TestRW(wxLongLong(0x12345678l, 0xabcdef01l)) == wxLongLong(0x12345678l, 0xabcdef01l) );
+    CHECK( TestMultiRW<wxLongLong>(ValuesLL, &wxDataOutputStream::WriteLL, &wxDataInputStream::ReadLL).IsOk() );
+    CHECK( TestMultiRW<wxULongLong>(ValuesULL, &wxDataOutputStream::WriteLL, &wxDataInputStream::ReadLL).IsOk() );
 }
 
-void DataStreamTestCase::Int64RW()
+TEST_CASE("DataStream::Int64RW", "[datastream][stream]")
 {
     TestMultiRW<wxInt64>::ValueArray ValuesI64;
     TestMultiRW<wxUint64>::ValueArray ValuesUI64;
@@ -324,15 +277,14 @@ void DataStreamTestCase::Int64RW()
     ValuesUI64.push_back(wxUint64(0x12345678l));
     ValuesUI64.push_back((wxUint64(0x12345678l) << 32) + wxUint64(0xabcdef01l));
 
-    CPPUNIT_ASSERT( TestRW(wxUint64(0x12345678l)) == wxUint64(0x12345678l) );
-    CPPUNIT_ASSERT( TestRW((wxUint64(0x12345678l) << 32) + wxUint64(0xabcdef01l)) == (wxUint64(0x12345678l) << 32) + wxUint64(0xabcdef01l) );
-    CPPUNIT_ASSERT( TestMultiRW<wxInt64>(ValuesI64, &wxDataOutputStream::Write64, &wxDataInputStream::Read64).IsOk() );
-    CPPUNIT_ASSERT( TestMultiRW<wxUint64>(ValuesUI64, &wxDataOutputStream::Write64, &wxDataInputStream::Read64).IsOk() );
+    CHECK( TestRW(wxUint64(0x12345678l)) == wxUint64(0x12345678l) );
+    CHECK( TestRW((wxUint64(0x12345678l) << 32) + wxUint64(0xabcdef01l)) == (wxUint64(0x12345678l) << 32) + wxUint64(0xabcdef01l) );
+    CHECK( TestMultiRW<wxInt64>(ValuesI64, &wxDataOutputStream::Write64, &wxDataInputStream::Read64).IsOk() );
+    CHECK( TestMultiRW<wxUint64>(ValuesUI64, &wxDataOutputStream::Write64, &wxDataInputStream::Read64).IsOk() );
 }
 
-void DataStreamTestCase::NaNRW()
+TEST_CASE("DataStream::NaNRW", "[datastream][stream]")
 {
     //TODO?
 }
-
 

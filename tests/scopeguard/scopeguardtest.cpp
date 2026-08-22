@@ -45,49 +45,22 @@ private:
     int m_count;
 };
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class ScopeGuardTestCase : public CppUnit::TestCase
+// Fixture used by the tests of the macros operating on "this" below.
+class CounterFixture
 {
 public:
-    CPPUNIT_TEST_SUITE(ScopeGuardTestCase);
-        CPPUNIT_TEST(Normal);
-        CPPUNIT_TEST(Dismiss);
-        CPPUNIT_TEST(BlockExit);
-        CPPUNIT_TEST(BlockExitObj);
-        CPPUNIT_TEST(BlockExitThis);
-        CPPUNIT_TEST(BlockExitSetVar);
-    CPPUNIT_TEST_SUITE_END();
-
-    void Normal();
-    void Dismiss();
-    void BlockExit();
-    void BlockExitObj();
-    void BlockExitThis();
-    void BlockExitSetVar();
-
-private:
     void Zero() { m_count = 0; }
     void Set(int n) { m_count = n; }
     void Sum(int n, int m) { m_count = n + m; }
 
-    int m_count;
+    int m_count = 0;
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION(ScopeGuardTestCase);
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ScopeGuardTestCase,
-                                      "ScopeGuardTestCase");
-
 // ============================================================================
-// ScopeGuardTestCase implementation
+// tests
 // ============================================================================
 
-void ScopeGuardTestCase::Normal()
+TEST_CASE("ScopeGuard::Normal", "[scopeguard]")
 {
     int n = 1,
         m = 2;
@@ -102,17 +75,17 @@ void ScopeGuardTestCase::Normal()
         wxUnusedVar(incN);
         wxUnusedVar(incMby15);
 
-        CPPUNIT_ASSERT_EQUAL( 1, gs_count );
-        CPPUNIT_ASSERT_EQUAL( 1, n );
-        CPPUNIT_ASSERT_EQUAL( 2, m );
+        CHECK( gs_count == 1 );
+        CHECK( n == 1 );
+        CHECK( m == 2 );
     }
 
-    CPPUNIT_ASSERT_EQUAL( 2, gs_count );
-    CPPUNIT_ASSERT_EQUAL( 2, n );
-    CPPUNIT_ASSERT_EQUAL( 17, m );
+    CHECK( gs_count == 2 );
+    CHECK( n == 2 );
+    CHECK( m == 17 );
 }
 
-void ScopeGuardTestCase::Dismiss()
+TEST_CASE("ScopeGuard::Dismiss", "[scopeguard]")
 {
     int n = 1,
         m = 2;
@@ -127,17 +100,17 @@ void ScopeGuardTestCase::Dismiss()
         incN.Dismiss();
         incMby15.Dismiss();
 
-        CPPUNIT_ASSERT_EQUAL( 1, gs_count );
-        CPPUNIT_ASSERT_EQUAL( 1, n );
-        CPPUNIT_ASSERT_EQUAL( 2, m );
+        CHECK( gs_count == 1 );
+        CHECK( n == 1 );
+        CHECK( m == 2 );
     }
 
-    CPPUNIT_ASSERT_EQUAL( 1, gs_count );
-    CPPUNIT_ASSERT_EQUAL( 1, n );
-    CPPUNIT_ASSERT_EQUAL( 2, m );
+    CHECK( gs_count == 1 );
+    CHECK( n == 1 );
+    CHECK( m == 2 );
 }
 
-void ScopeGuardTestCase::BlockExit()
+TEST_CASE("ScopeGuard::BlockExit", "[scopeguard]")
 {
     int n = 1,
         m = 2;
@@ -149,17 +122,17 @@ void ScopeGuardTestCase::BlockExit()
         wxON_BLOCK_EXIT1(Inc, &n);
         wxON_BLOCK_EXIT2(IncBy, &m, 15);
 
-        CPPUNIT_ASSERT_EQUAL( 1, gs_count );
-        CPPUNIT_ASSERT_EQUAL( 1, n );
-        CPPUNIT_ASSERT_EQUAL( 2, m );
+        CHECK( gs_count == 1 );
+        CHECK( n == 1 );
+        CHECK( m == 2 );
     }
 
-    CPPUNIT_ASSERT_EQUAL( 2, gs_count );
-    CPPUNIT_ASSERT_EQUAL( 2, n );
-    CPPUNIT_ASSERT_EQUAL( 17, m );
+    CHECK( gs_count == 2 );
+    CHECK( n == 2 );
+    CHECK( m == 17 );
 }
 
-void ScopeGuardTestCase::BlockExitObj()
+TEST_CASE("ScopeGuard::BlockExitObj", "[scopeguard]")
 {
     Counter count0(1),
             count1(2),
@@ -170,74 +143,74 @@ void ScopeGuardTestCase::BlockExitObj()
         wxON_BLOCK_EXIT_OBJ1(count1, Counter::Set, 17);
         wxON_BLOCK_EXIT_OBJ2(count2, Counter::Sum, 2, 3);
 
-        CPPUNIT_ASSERT_EQUAL( 1, count0.GetCount() );
-        CPPUNIT_ASSERT_EQUAL( 2, count1.GetCount() );
-        CPPUNIT_ASSERT_EQUAL( 3, count2.GetCount() );
+        CHECK( count0.GetCount() == 1 );
+        CHECK( count1.GetCount() == 2 );
+        CHECK( count2.GetCount() == 3 );
     }
 
-    CPPUNIT_ASSERT_EQUAL( 0, count0.GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 17, count1.GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 5, count2.GetCount() );
+    CHECK( count0.GetCount() == 0 );
+    CHECK( count1.GetCount() == 17 );
+    CHECK( count2.GetCount() == 5 );
 }
 
-void ScopeGuardTestCase::BlockExitThis()
+TEST_CASE_METHOD(CounterFixture, "ScopeGuard::BlockExitThis", "[scopeguard]")
 {
     m_count = 1;
 
     {
-        wxON_BLOCK_EXIT_THIS0(ScopeGuardTestCase::Zero);
+        wxON_BLOCK_EXIT_THIS0(CounterFixture::Zero);
 
-        CPPUNIT_ASSERT_EQUAL( 1, m_count );
+        CHECK( m_count == 1 );
     }
-    CPPUNIT_ASSERT_EQUAL( 0, m_count );
+    CHECK( m_count == 0 );
 
     {
-        wxON_BLOCK_EXIT_THIS1(ScopeGuardTestCase::Set, 17);
+        wxON_BLOCK_EXIT_THIS1(CounterFixture::Set, 17);
 
-        CPPUNIT_ASSERT_EQUAL( 0, m_count );
+        CHECK( m_count == 0 );
     }
-    CPPUNIT_ASSERT_EQUAL( 17, m_count );
+    CHECK( m_count == 17 );
 
     {
-        wxON_BLOCK_EXIT_THIS2(ScopeGuardTestCase::Sum, 2, 3);
-        CPPUNIT_ASSERT_EQUAL( 17, m_count );
+        wxON_BLOCK_EXIT_THIS2(CounterFixture::Sum, 2, 3);
+        CHECK( m_count == 17 );
     }
-    CPPUNIT_ASSERT_EQUAL( 5, m_count );
+    CHECK( m_count == 5 );
 }
 
-void ScopeGuardTestCase::BlockExitSetVar()
+TEST_CASE_METHOD(CounterFixture, "ScopeGuard::BlockExitSetVar", "[scopeguard]")
 {
     m_count = 1;
     {
         wxON_BLOCK_EXIT_SET(m_count, 17);
 
-        CPPUNIT_ASSERT_EQUAL( 1, m_count );
+        CHECK( m_count == 1 );
     }
-    CPPUNIT_ASSERT_EQUAL( 17, m_count );
+    CHECK( m_count == 17 );
 
 
     int count = 1;
     {
         wxON_BLOCK_EXIT_SET(count, 17);
 
-        CPPUNIT_ASSERT_EQUAL( 1, count );
+        CHECK( count == 1 );
     }
-    CPPUNIT_ASSERT_EQUAL( 17, count );
+    CHECK( count == 17 );
 
 
     wxString s("hi");
     {
         wxON_BLOCK_EXIT_SET(s, "bye");
 
-        CPPUNIT_ASSERT_EQUAL( "hi", s );
+        CHECK( s == "hi" );
     }
-    CPPUNIT_ASSERT_EQUAL( "bye", s );
+    CHECK( s == "bye" );
 
-    ScopeGuardTestCase *p = this;
+    CounterFixture *p = this;
     {
         wxON_BLOCK_EXIT_NULL(p);
 
-        CPPUNIT_ASSERT( p );
+        CHECK( p );
     }
-    CPPUNIT_ASSERT( !p );
+    CHECK( !p );
 }

@@ -302,9 +302,9 @@ private:
 ArchiveTempDir::ArchiveTempDir()
     : m_tmp(wxT("arctest-"))
 {
-    CPPUNIT_ASSERT(m_tmp.IsOk());
+    CHECK(m_tmp.IsOk());
     m_original = wxGetCwd();
-    CPPUNIT_ASSERT(wxSetWorkingDirectory(m_tmp.GetName()));
+    CHECK(wxSetWorkingDirectory(m_tmp.GetName()));
 }
 
 ArchiveTempDir::~ArchiveTempDir()
@@ -366,8 +366,7 @@ ArchiveTestCase<ClassFactoryT>::ArchiveTestCase(
     int options,
     const wxString& archiver,
     const wxString& unarchiver)
-  :
-    CppUnit::TestCase(TestId::MakeId() + name),
+  : ArchiveTest(name),
     m_factory(factory),
     m_options(options),
     m_timeStamp(1, wxDateTime::Mar, 2004, 12, 0),
@@ -387,7 +386,7 @@ ArchiveTestCase<ClassFactoryT>::~ArchiveTestCase()
 }
 
 template <class ClassFactoryT>
-void ArchiveTestCase<ClassFactoryT>::runTest()
+void ArchiveTestCase<ClassFactoryT>::RunTest()
 {
     TestOutputStream out(m_options);
 
@@ -400,12 +399,12 @@ void ArchiveTestCase<ClassFactoryT>::runTest()
 #ifndef __WXDARWIN_IPHONE__
         CreateArchive(out, m_archiver);
 #else
-        CPPUNIT_FAIL("using external archivers is not supported on iOS");
+        FAIL("using external archivers is not supported on iOS");
 #endif
     }
 
     // check archive could be created
-    CPPUNIT_ASSERT(out.GetLength() > 0);
+    CHECK(out.GetLength() > 0);
 
     TestInputStream in(out, m_id % ((m_options & PipeIn) ? 4 : 3));
 
@@ -433,12 +432,12 @@ void ArchiveTestCase<ClassFactoryT>::runTest()
 #ifndef __WXDARWIN_IPHONE__
         ExtractArchive(in, m_unarchiver);
 #else
-        CPPUNIT_FAIL("using external archivers is not supported on iOS");
+        FAIL("using external archivers is not supported on iOS");
 #endif
     }
 
     // check that all the test entries were found in the archive
-    CPPUNIT_ASSERT(m_testEntries.empty());
+    CHECK(m_testEntries.empty());
 }
 
 template <class ClassFactoryT>
@@ -518,8 +517,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out)
 
         // provide some context for the error message so that we know which
         // iteration of the loop we were on
-        string error_entry((wxT(" '") + name + wxT("'")).mb_str());
-        string error_context(" failed for entry" + error_entry);
+        INFO("For entry '" << name << "'");
 
         if ((choices & 2) || testEntry.IsText()) {
             // try PutNextEntry(EntryT *pEntry)
@@ -530,38 +528,33 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out)
             entry->SetDateTime(testEntry.GetDateTime());
             entry->SetSize(testEntry.GetLength());
             OnCreateEntry(*arc, testEntry, entry.get());
-            CPPUNIT_ASSERT_MESSAGE("PutNextEntry" + error_context,
-                                   arc->PutNextEntry(entry.release()));
+            REQUIRE(arc->PutNextEntry(entry.release()));
         }
         else {
             // try the convenience methods
             OnCreateEntry(*arc, testEntry);
             if (setIsDir)
-                CPPUNIT_ASSERT_MESSAGE("PutNextDirEntry" + error_context,
-                    arc->PutNextDirEntry(name, testEntry.GetDateTime()));
+                REQUIRE(arc->PutNextDirEntry(name, testEntry.GetDateTime()));
             else
-                CPPUNIT_ASSERT_MESSAGE("PutNextEntry" + error_context,
-                    arc->PutNextEntry(name, testEntry.GetDateTime(),
-                                      testEntry.GetLength()));
+                REQUIRE(arc->PutNextEntry(name, testEntry.GetDateTime(),
+                                          testEntry.GetLength()));
         }
 
         if (it->first.Last() != wxT('/')) {
             // for non-dirs write the data
             arc->Write(testEntry.GetData(), testEntry.GetSize());
-            CPPUNIT_ASSERT_MESSAGE("LastWrite check" + error_context,
-                arc->LastWrite() == testEntry.GetSize());
+            REQUIRE(arc->LastWrite() == testEntry.GetSize());
             // should work with or without explicit CloseEntry
             if (choices & 3)
-                CPPUNIT_ASSERT_MESSAGE("CloseEntry" + error_context,
-                    arc->CloseEntry());
+                REQUIRE(arc->CloseEntry());
         }
 
-        CPPUNIT_ASSERT_MESSAGE("IsOk" + error_context, arc->IsOk());
+        REQUIRE(arc->IsOk());
     }
 
     // should work with or without explicit Close
     if (m_id % 2)
-        CPPUNIT_ASSERT(arc->Close());
+        CHECK(arc->Close());
 }
 
 // Create an archive using an external archive program
@@ -658,14 +651,11 @@ void ArchiveTestCase<ClassFactoryT>::ModifyArchive(wxInputStream& in,
 
         // provide some context for the error message so that we know which
         // iteration of the loop we were on
-        string error_entry((wxT(" '") + name + wxT("'")).mb_str());
-        string error_context(" failed for entry" + error_entry);
+        INFO("For entry '" << name << "'");
 
         if (name == deleteName) {
             TestEntries::iterator it = m_testEntries.find(name);
-            CPPUNIT_ASSERT_MESSAGE(
-                "deletion failed (already deleted?) for" + error_entry,
-                it != m_testEntries.end());
+            REQUIRE(it != m_testEntries.end());
             TestEntry *p = it->second;
             m_testEntries.erase(it);
             delete p;
@@ -674,26 +664,23 @@ void ArchiveTestCase<ClassFactoryT>::ModifyArchive(wxInputStream& in,
             if (name == renameFrom) {
                 entry->SetName(renameTo);
                 TestEntries::iterator it = m_testEntries.find(renameFrom);
-                CPPUNIT_ASSERT_MESSAGE(
-                    "rename failed (already renamed?) for" + error_entry,
-                    it != m_testEntries.end());
+                REQUIRE(it != m_testEntries.end());
                 TestEntry *p = it->second;
                 m_testEntries.erase(it);
                 m_testEntries[renameTo] = p;
             }
 
-            CPPUNIT_ASSERT_MESSAGE("CopyEntry" + error_context,
-                arcOut->CopyEntry(entry.release(), *arcIn));
+            REQUIRE(arcOut->CopyEntry(entry.release(), *arcIn));
         }
     }
 
     // check that the deletion and rename were done
-    CPPUNIT_ASSERT(m_testEntries.count(deleteName) == 0);
-    CPPUNIT_ASSERT(m_testEntries.count(renameFrom) == 0);
-    CPPUNIT_ASSERT(m_testEntries.count(renameTo) == 1);
+    CHECK(m_testEntries.count(deleteName) == 0);
+    CHECK(m_testEntries.count(renameFrom) == 0);
+    CHECK(m_testEntries.count(renameTo) == 1);
 
     // check that the end of the input archive was reached without error
-    CPPUNIT_ASSERT(arcIn->Eof());
+    CHECK(arcIn->Eof());
 
     // try adding a new entry
     TestEntry& testEntry = Add(newName.mb_str(), newData);
@@ -703,12 +690,12 @@ void ArchiveTestCase<ClassFactoryT>::ModifyArchive(wxInputStream& in,
     newentry->SetSize(testEntry.GetLength());
     OnCreateEntry(*arcOut, testEntry, newentry.get());
     OnSetNotifier(*newentry);
-    CPPUNIT_ASSERT(arcOut->PutNextEntry(newentry.release()));
-    CPPUNIT_ASSERT(arcOut->Write(newData, strlen(newData)).IsOk());
+    CHECK(arcOut->PutNextEntry(newentry.release()));
+    CHECK(arcOut->Write(newData, strlen(newData)).IsOk());
 
     // should work with or without explicit Close
     if (m_id % 2)
-        CPPUNIT_ASSERT(arcOut->Close());
+        CHECK(arcOut->Close());
 }
 
 // Extract an archive using the wx archive classes
@@ -734,13 +721,10 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
 
         // provide some context for the error message so that we know which
         // iteration of the loop we were on
-        string error_entry((wxT(" '") + name + wxT("'")).mb_str());
-        string error_context(" failed for entry" + error_entry);
+        INFO("For entry '" << name << "'");
 
         TestEntries::iterator it = m_testEntries.find(name);
-        CPPUNIT_ASSERT_MESSAGE(
-            "archive contains an entry that shouldn't be there" + error_entry,
-            it != m_testEntries.end());
+        REQUIRE(it != m_testEntries.end());
 
         const TestEntry& testEntry = *it->second;
 
@@ -749,41 +733,30 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
         // other don't, so disable the test for now.
         wxDateTime dt = testEntry.GetDateTime();
         if (dt.IsValid())
-            CPPUNIT_ASSERT_MESSAGE("timestamp check" + error_context,
-                                   dt == entry->GetDateTime());
+            REQUIRE(dt == entry->GetDateTime());
 #endif
 
         // non-seekable entries are allowed to have GetSize == wxInvalidOffset
         // until the end of the entry's data has been read past
-        CPPUNIT_ASSERT_MESSAGE("entry size check" + error_context,
-            (testEntry.GetLength() == entry->GetSize() ||
+        REQUIRE((testEntry.GetLength() == entry->GetSize() ||
             ((m_options & PipeIn) != 0 && entry->GetSize() == wxInvalidOffset)));
-        CPPUNIT_ASSERT_MESSAGE(
-            "arc->GetLength() == entry->GetSize()" + error_context,
-            arc->GetLength() == entry->GetSize());
+        REQUIRE(arc->GetLength() == entry->GetSize());
 
         if (name.Last() != wxT('/'))
         {
-            CPPUNIT_ASSERT_MESSAGE("!IsDir" + error_context,
-                !entry->IsDir());
+            REQUIRE(!entry->IsDir());
             wxCharBuffer buf(testEntry.GetSize() + 1);
-            CPPUNIT_ASSERT_MESSAGE("Read until Eof" + error_context,
-                arc->Read(buf.data(), testEntry.GetSize() + 1).Eof());
-            CPPUNIT_ASSERT_MESSAGE("LastRead check" + error_context,
-                arc->LastRead() == testEntry.GetSize());
-            CPPUNIT_ASSERT_MESSAGE("data compare" + error_context,
-                !memcmp(buf.data(), testEntry.GetData(), testEntry.GetSize()));
+            REQUIRE(arc->Read(buf.data(), testEntry.GetSize() + 1).Eof());
+            REQUIRE(arc->LastRead() == testEntry.GetSize());
+            REQUIRE(!memcmp(buf.data(), testEntry.GetData(), testEntry.GetSize()));
         } else {
-            CPPUNIT_ASSERT_MESSAGE("IsDir" + error_context, entry->IsDir());
+            REQUIRE(entry->IsDir());
         }
 
         // GetSize() must return the right result in all cases after all the
         // data has been read
-        CPPUNIT_ASSERT_MESSAGE("entry size check" + error_context,
-            testEntry.GetLength() == entry->GetSize());
-        CPPUNIT_ASSERT_MESSAGE(
-            "arc->GetLength() == entry->GetSize()" + error_context,
-            arc->GetLength() == entry->GetSize());
+        REQUIRE(testEntry.GetLength() == entry->GetSize());
+        REQUIRE(arc->GetLength() == entry->GetSize());
 
         if ((m_options & PipeIn) == 0) {
             OnEntryExtracted(*entry, testEntry, arc.get());
@@ -795,7 +768,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
     }
 
     // check that the end of the input archive was reached without error
-    CPPUNIT_ASSERT(arc->Eof());
+    CHECK(arc->Eof());
 
     // for non-seekable streams these data are only guaranteed to be
     // available once the end of the archive has been reached
@@ -883,35 +856,26 @@ void ArchiveTestCase<ClassFactoryT>::VerifyDir(wxString& path,
 
             // provide some context for the error message so that we know which
             // iteration of the loop we were on
-            string error_entry((wxT(" '") + name + wxT("'")).mb_str());
-            string error_context(" failed for entry" + error_entry);
+            INFO("For entry '" << name << "'");
 
             TestEntries::iterator it = m_testEntries.find(name);
-            CPPUNIT_ASSERT_MESSAGE(
-                "archive contains an entry that shouldn't be there"
-                    + error_entry,
-                it != m_testEntries.end());
+            REQUIRE(it != m_testEntries.end());
 
             const TestEntry& testEntry = *it->second;
 
 #if 0 //ndef __WINDOWS__
-            CPPUNIT_ASSERT_MESSAGE("timestamp check" + error_context,
-                                   testEntry.GetDateTime() ==
+            REQUIRE(testEntry.GetDateTime() ==
                                    wxFileName(path).GetModificationTime());
 #endif
             if (!isDir) {
                 wxFFileInputStream in(path);
-                CPPUNIT_ASSERT_MESSAGE(
-                    "entry not found in archive" + error_entry, in.IsOk());
+                REQUIRE(in.IsOk());
 
                 size_t size = (size_t)in.GetLength();
                 wxCharBuffer buf(size);
-                CPPUNIT_ASSERT_MESSAGE("Read" + error_context,
-                    in.Read(buf.data(), size).LastRead() == size);
-                CPPUNIT_ASSERT_MESSAGE("size check" + error_context,
-                    testEntry.GetSize() == size);
-                CPPUNIT_ASSERT_MESSAGE("data compare" + error_context,
-                    memcmp(buf.data(), testEntry.GetData(), size) == 0);
+                REQUIRE(in.Read(buf.data(), size).LastRead() == size);
+                REQUIRE(testEntry.GetSize() == size);
+                REQUIRE(memcmp(buf.data(), testEntry.GetData(), size) == 0);
             }
             else {
                 VerifyDir(path, rootlen);
@@ -942,8 +906,8 @@ void ArchiveTestCase<ClassFactoryT>::TestIterator(wxInputStream& in)
         count += m_testEntries.count(entry->GetName(wxPATH_UNIX));
     }
 
-    CPPUNIT_ASSERT(m_testEntries.size() == cat.size());
-    CPPUNIT_ASSERT(count == cat.size());
+    CHECK(m_testEntries.size() == cat.size());
+    CHECK(count == cat.size());
 }
 
 // test the pair iterators that can be used to load a std::map or wxHashMap
@@ -965,8 +929,8 @@ void ArchiveTestCase<ClassFactoryT>::TestPairIterator(wxInputStream& in)
         count += m_testEntries.count(entry->GetName(wxPATH_UNIX));
     }
 
-    CPPUNIT_ASSERT(m_testEntries.size() == cat.size());
-    CPPUNIT_ASSERT(count == cat.size());
+    CHECK(m_testEntries.size() == cat.size());
+    CHECK(count == cat.size());
 }
 
 // simple iterators using smart pointers, no need to worry about ownership
@@ -982,15 +946,15 @@ void ArchiveTestCase<ClassFactoryT>::TestSmartIterator(wxInputStream& in)
 
     ArchiveCatalog cat((Iter)*arc, Iter());
 
-    CPPUNIT_ASSERT(m_testEntries.size() == cat.size());
+    CHECK(m_testEntries.size() == cat.size());
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it)
-        CPPUNIT_ASSERT(m_testEntries.count((*it)->GetName(wxPATH_UNIX)));
+        CHECK(m_testEntries.count((*it)->GetName(wxPATH_UNIX)));
 
     Iter a, b;
     // test assignment
     a = b;
-    CPPUNIT_ASSERT(a == b);
+    CHECK(a == b);
 }
 
 // pair iterator using smart pointers
@@ -1007,10 +971,10 @@ void ArchiveTestCase<ClassFactoryT>::TestSmartPairIterator(wxInputStream& in)
 
     ArchiveCatalog cat((PairIter)*arc, PairIter());
 
-    CPPUNIT_ASSERT(m_testEntries.size() == cat.size());
+    CHECK(m_testEntries.size() == cat.size());
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it)
-        CPPUNIT_ASSERT(m_testEntries.count(it->second->GetName(wxPATH_UNIX)));
+        CHECK(m_testEntries.count(it->second->GetName(wxPATH_UNIX)));
 }
 
 // try reading two entries at the same time
@@ -1036,16 +1000,16 @@ void ArchiveTestCase<ClassFactoryT>::ReadSimultaneous(TestInputStream& in)
 
     // open them
     typename ArchiveCatalog::iterator j;
-    CPPUNIT_ASSERT((j = cat.find(name)) != cat.end());
-    CPPUNIT_ASSERT(arc->OpenEntry(*j->second));
-    CPPUNIT_ASSERT((j = cat.find(name2)) != cat.end());
-    CPPUNIT_ASSERT(arc2->OpenEntry(*j->second));
+    CHECK((j = cat.find(name)) != cat.end());
+    CHECK(arc->OpenEntry(*j->second));
+    CHECK((j = cat.find(name2)) != cat.end());
+    CHECK(arc2->OpenEntry(*j->second));
 
     // get pointers to the expected data
     TestEntries::iterator k;
-    CPPUNIT_ASSERT((k = m_testEntries.find(name)) != m_testEntries.end());
+    CHECK((k = m_testEntries.find(name)) != m_testEntries.end());
     TestEntry *entry = k->second;
-    CPPUNIT_ASSERT((k = m_testEntries.find(name2)) != m_testEntries.end());
+    CHECK((k = m_testEntries.find(name2)) != m_testEntries.end());
     TestEntry *entry2 = k->second;
 
     size_t count = 0, count2 = 0;
@@ -1056,20 +1020,20 @@ void ArchiveTestCase<ClassFactoryT>::ReadSimultaneous(TestInputStream& in)
     while (arc->IsOk() || arc2->IsOk()) {
         char ch = arc->GetC();
         if (arc->LastRead() == 1) {
-            CPPUNIT_ASSERT(count < size);
-            CPPUNIT_ASSERT(ch == data[count++]);
+            CHECK(count < size);
+            CHECK(ch == data[count++]);
         }
         char ch2 = arc2->GetC();
         if (arc2->LastRead() == 1) {
-            CPPUNIT_ASSERT(count2 < size2);
-            CPPUNIT_ASSERT(ch2 == data2[count2++]);
+            CHECK(count2 < size2);
+            CHECK(ch2 == data2[count2++]);
         }
     }
 
-    CPPUNIT_ASSERT(arc->Eof());
-    CPPUNIT_ASSERT(arc2->Eof());
-    CPPUNIT_ASSERT(count == size);
-    CPPUNIT_ASSERT(count2 == size2);
+    CHECK(arc->Eof());
+    CHECK(arc2->Eof());
+    CHECK(count == size);
+    CHECK(count2 == size2);
 }
 
 // Nothing useful can be done with a generic notifier yet, so just test one
@@ -1093,19 +1057,18 @@ void ArchiveTestCase<ClassFactoryT>::OnSetNotifier(EntryT& entry)
 ///////////////////////////////////////////////////////////////////////////////
 // An additional case to check that reading corrupt archives doesn't crash
 
-class CorruptionTestCase : public CppUnit::TestCase
+class CorruptionTestCase : public ArchiveTest
 {
 public:
     CorruptionTestCase(std::string name,
                        wxArchiveClassFactory *factory,
                        int options)
-      : CppUnit::TestCase(TestId::MakeId() + name),
+      : ArchiveTest(name),
         m_factory(factory),
         m_options(options)
     { }
 
-    // the entry point for the test
-    void runTest() override;
+    void RunTest() override;
 
 protected:
     void CreateArchive(wxOutputStream& out);
@@ -1115,7 +1078,7 @@ protected:
     int m_options;                              // test options
 };
 
-void CorruptionTestCase::runTest()
+void CorruptionTestCase::RunTest()
 {
     TestOutputStream out(m_options);
     CreateArchive(out);
@@ -1191,13 +1154,24 @@ string TestId::MakeId()
 // Suite base
 
 ArchiveTestSuite::ArchiveTestSuite(string name)
-  : CppUnit::TestSuite("archive/" + name),
-    m_name(name.c_str(), *wxConvCurrent)
+  : m_name(name.c_str(), *wxConvCurrent)
 {
     m_name = wxT("wx") + m_name.Left(1).Upper() + m_name.Mid(1).Lower();
-    m_path.AddEnvList(wxT("PATH"));
     m_archivers.push_back(wxT(""));
     m_unarchivers.push_back(wxT(""));
+}
+
+bool IsInPath(const wxString& cmd)
+{
+    static wxPathList s_path;
+    if ( s_path.empty() )
+        s_path.AddEnvList(wxT("PATH"));
+
+    wxString c = cmd.BeforeFirst(wxT(' '));
+#ifdef __WINDOWS__
+    c += wxT(".exe");
+#endif
+    return !s_path.FindValidPath(c).empty();
 }
 
 // add the command for an external archiver to the list, testing for it in
@@ -1209,18 +1183,9 @@ void ArchiveTestSuite::AddCmd(wxArrayString& cmdlist, const wxString& cmd)
         cmdlist.push_back(cmd);
 }
 
-bool ArchiveTestSuite::IsInPath(const wxString& cmd)
-{
-    wxString c = cmd.BeforeFirst(wxT(' '));
-#ifdef __WINDOWS__
-    c += wxT(".exe");
-#endif
-    return !m_path.FindValidPath(c).empty();
-}
-
 // run all the tests in the test suite
 //
-void ArchiveTestSuite::DoRunTest()
+void ArchiveTestSuite::RunAll()
 {
     typedef wxArrayString::iterator Iter;
 
@@ -1239,13 +1204,14 @@ void ArchiveTestSuite::DoRunTest()
                     string descr = Description(m_name, options,
                                                generic != 0, *j, *i);
 
-                    CppUnit::Test *test = makeTest(descr, options,
-                                                   generic != 0, *j, *i);
+                    std::unique_ptr<ArchiveTest> test(
+                        makeTest(descr, options, generic != 0, *j, *i));
 
                     if (test)
                     {
-                        test->runTest();
-                        delete test;
+                        INFO("Running " << test->GetName());
+
+                        test->RunTest();
                     }
                 }
 
@@ -1263,12 +1229,15 @@ void ArchiveTestSuite::DoRunTest()
                 descr += " (PipeIn)";
 
             CorruptionTestCase test(descr, factory, options);
-            test.runTest();
+
+            INFO("Running " << test.GetName());
+
+            test.RunTest();
         }
     }
 }
 
-CppUnit::Test *ArchiveTestSuite::makeTest(
+ArchiveTest *ArchiveTestSuite::makeTest(
     string WXUNUSED(descr),
     int WXUNUSED(options),
     bool WXUNUSED(genericInterface),

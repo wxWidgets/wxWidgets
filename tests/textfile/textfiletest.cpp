@@ -26,10 +26,13 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// test class
+// test fixture
 // ----------------------------------------------------------------------------
 
-class TextFileTestCase : public CppUnit::TestCase
+namespace
+{
+
+class TextFileTestCase
 {
 public:
     TextFileTestCase()
@@ -37,39 +40,9 @@ public:
         srand((unsigned)time(nullptr));
     }
 
-    virtual void tearDown() override { unlink(GetTestFileName()); }
+    ~TextFileTestCase() { unlink(GetTestFileName()); }
 
-private:
-    CPPUNIT_TEST_SUITE( TextFileTestCase );
-        CPPUNIT_TEST( ReadEmpty );
-        CPPUNIT_TEST( ReadDOS );
-        CPPUNIT_TEST( ReadDOSLast );
-        CPPUNIT_TEST( ReadUnix );
-        CPPUNIT_TEST( ReadUnixLast );
-        CPPUNIT_TEST( ReadMac );
-        CPPUNIT_TEST( ReadMacLast );
-        CPPUNIT_TEST( ReadMixed );
-        CPPUNIT_TEST( ReadMixedWithFuzzing );
-        CPPUNIT_TEST( ReadCRCRLF );
-        CPPUNIT_TEST( ReadUTF8 );
-        CPPUNIT_TEST( ReadUTF16 );
-        CPPUNIT_TEST( ReadBig );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ReadEmpty();
-    void ReadDOS();
-    void ReadDOSLast();
-    void ReadUnix();
-    void ReadUnixLast();
-    void ReadMac();
-    void ReadMacLast();
-    void ReadMixed();
-    void ReadMixedWithFuzzing();
-    void ReadCRCRLF();
-    void ReadUTF8();
-    void ReadUTF16();
-    void ReadBig();
-
+protected:
     // return the name of the test file we use
     static const char *GetTestFileName() { return "textfiletest.txt"; }
 
@@ -81,139 +54,136 @@ private:
 
     // create the test file with the given contents (version must be used if
     // contents contains NULs)
-    static void CreateTestFile(size_t len, const char *contents);
+    static void CreateTestFile(size_t len, const char *contents)
+    {
+        FILE *f = fopen(GetTestFileName(), "wb");
+        REQUIRE( f );
 
+        CHECK( fwrite(contents, 1, len, f) == len );
+        CHECK( fclose(f) == 0 );
+    }
 
     wxDECLARE_NO_COPY_CLASS(TextFileTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( TextFileTestCase );
+} // anonymous namespace
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TextFileTestCase, "TextFileTestCase" );
+// ----------------------------------------------------------------------------
+// tests
+// ----------------------------------------------------------------------------
 
-void TextFileTestCase::CreateTestFile(size_t len, const char *contents)
-{
-    FILE *f = fopen(GetTestFileName(), "wb");
-    CPPUNIT_ASSERT( f );
-
-    CPPUNIT_ASSERT_EQUAL( len, fwrite(contents, 1, len, f) );
-    CPPUNIT_ASSERT_EQUAL( 0, fclose(f) );
-}
-
-void TextFileTestCase::ReadEmpty()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadEmpty", "[textfile]")
 {
     CreateTestFile("");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, f.GetLineCount() );
-    CPPUNIT_ASSERT( f.Eof() );
-    CPPUNIT_ASSERT_EQUAL( "", f.GetFirstLine() );
-    CPPUNIT_ASSERT_EQUAL( "", f.GetLastLine() );
+    CHECK( f.GetLineCount() == (size_t)0 );
+    CHECK( f.Eof() );
+    CHECK( f.GetFirstLine() == "" );
+    CHECK( f.GetLastLine() == "" );
 }
 
-void TextFileTestCase::ReadDOS()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadDOS", "[textfile]")
 {
     CreateTestFile("foo\r\nbar\r\nbaz");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
+    CHECK( f.GetLineCount() == (size_t)3 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Dos );
+    CHECK( f.GetLineType(2) == wxTextFileType_None );
+    CHECK( f.GetLine(1) == wxString(wxT("bar")) );
+    CHECK( f.GetLastLine() == wxString(wxT("baz")) );
 }
 
-void TextFileTestCase::ReadDOSLast()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadDOSLast", "[textfile]")
 {
     CreateTestFile("foo\r\n");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(GetTestFileName()) );
+    CHECK( f.Open(GetTestFileName()) );
 
-    CPPUNIT_ASSERT_EQUAL( 1, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( "foo", f.GetFirstLine() );
+    CHECK( f.GetLineCount() == 1 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Dos );
+    CHECK( f.GetFirstLine() == "foo" );
 }
 
-void TextFileTestCase::ReadUnix()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadUnix", "[textfile]")
 {
     CreateTestFile("foo\nbar\nbaz");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
+    CHECK( f.GetLineCount() == (size_t)3 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Unix );
+    CHECK( f.GetLineType(2) == wxTextFileType_None );
+    CHECK( f.GetLine(1) == wxString(wxT("bar")) );
+    CHECK( f.GetLastLine() == wxString(wxT("baz")) );
 }
 
-void TextFileTestCase::ReadUnixLast()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadUnixLast", "[textfile]")
 {
     CreateTestFile("foo\n");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(GetTestFileName()) );
+    CHECK( f.Open(GetTestFileName()) );
 
-    CPPUNIT_ASSERT_EQUAL( 1, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( "foo", f.GetFirstLine() );
+    CHECK( f.GetLineCount() == 1 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Unix );
+    CHECK( f.GetFirstLine() == "foo" );
 }
 
-void TextFileTestCase::ReadMac()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadMac", "[textfile]")
 {
     CreateTestFile("foo\rbar\r\rbaz");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)4, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(1) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(2) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(3) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("foo")), f.GetLine(0) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("")), f.GetLine(2) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
+    CHECK( f.GetLineCount() == (size_t)4 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Mac );
+    CHECK( f.GetLineType(1) == wxTextFileType_Mac );
+    CHECK( f.GetLineType(2) == wxTextFileType_Mac );
+    CHECK( f.GetLineType(3) == wxTextFileType_None );
+    CHECK( f.GetLine(0) == wxString(wxT("foo")) );
+    CHECK( f.GetLine(1) == wxString(wxT("bar")) );
+    CHECK( f.GetLine(2) == wxString(wxT("")) );
+    CHECK( f.GetLastLine() == wxString(wxT("baz")) );
 }
 
-void TextFileTestCase::ReadMacLast()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadMacLast", "[textfile]")
 {
     CreateTestFile("foo\r");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(GetTestFileName()) );
+    CHECK( f.Open(GetTestFileName()) );
 
-    CPPUNIT_ASSERT_EQUAL( 1, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( "foo", f.GetFirstLine() );
+    CHECK( f.GetLineCount() == 1 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Mac );
+    CHECK( f.GetFirstLine() == "foo" );
 }
 
-void TextFileTestCase::ReadMixed()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadMixed", "[textfile]")
 {
     CreateTestFile("foo\rbar\r\nbaz\n");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(1) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(2) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("foo")), f.GetFirstLine() );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
-    CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
+    CHECK( f.GetLineCount() == (size_t)3 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Mac );
+    CHECK( f.GetLineType(1) == wxTextFileType_Dos );
+    CHECK( f.GetLineType(2) == wxTextFileType_Unix );
+    CHECK( f.GetFirstLine() == wxString(wxT("foo")) );
+    CHECK( f.GetLine(1) == wxString(wxT("bar")) );
+    CHECK( f.GetLastLine() == wxString(wxT("baz")) );
 }
 
-void TextFileTestCase::ReadMixedWithFuzzing()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadMixedWithFuzzing", "[textfile]")
 {
     for ( int iteration = 0; iteration < 100; iteration++)
     {
@@ -240,12 +210,12 @@ void TextFileTestCase::ReadMixedWithFuzzing()
         CreateTestFile(data);
 
         wxTextFile f;
-        CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
-        CPPUNIT_ASSERT_EQUAL( (size_t)linesCnt, f.GetLineCount() );
+        CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
+        CHECK( f.GetLineCount() == (size_t)linesCnt );
     }
 }
 
-void TextFileTestCase::ReadCRCRLF()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadCRCRLF", "[textfile]")
 {
     // Notepad may create files with CRCRLF line endings (see
     // https://stackoverflow.com/questions/6998506/text-file-with-0d-0d-0a-line-breaks).
@@ -256,36 +226,35 @@ void TextFileTestCase::ReadCRCRLF()
     CreateTestFile("foo\r\r\nbar\r\r\r\nbaz\r\r\n");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
 
     wxString all;
     for ( wxString str = f.GetFirstLine(); !f.Eof(); str = f.GetNextLine() )
         all += str;
 
-    CPPUNIT_ASSERT_EQUAL( "foobarbaz", all );
+    CHECK( all == "foobarbaz" );
 }
 
-void TextFileTestCase::ReadUTF8()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadUTF8", "[textfile]")
 {
     CreateTestFile("П\nривет");
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName()), wxConvUTF8) );
+    CHECK( f.Open(wxString::FromAscii(GetTestFileName()), wxConvUTF8) );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)2, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(1) );
+    CHECK( f.GetLineCount() == (size_t)2 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Unix );
+    CHECK( f.GetLineType(1) == wxTextFileType_None );
 #ifdef wxMUST_USE_U_ESCAPE
-    CPPUNIT_ASSERT_EQUAL( wxString(L"\u041f"), f.GetFirstLine() );
-    CPPUNIT_ASSERT_EQUAL( wxString(L"\u0440\u0438\u0432\u0435\u0442"),
-                          f.GetLastLine() );
+    CHECK( f.GetFirstLine() == wxString(L"\u041f") );
+    CHECK( f.GetLastLine() == wxString(L"\u0440\u0438\u0432\u0435\u0442") );
 #else
-    CPPUNIT_ASSERT_EQUAL( wxString(L"П"), f.GetFirstLine() );
-    CPPUNIT_ASSERT_EQUAL( wxString(L"ривет"), f.GetLastLine() );
+    CHECK( f.GetFirstLine() == wxString(L"П") );
+    CHECK( f.GetLastLine() == wxString(L"ривет") );
 #endif
 }
 
-void TextFileTestCase::ReadUTF16()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadUTF16", "[textfile]")
 {
     CreateTestFile(16,
                    "\x1f\x04\x0d\x00\x0a\x00"
@@ -293,23 +262,22 @@ void TextFileTestCase::ReadUTF16()
 
     wxTextFile f;
     wxMBConvUTF16LE conv;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName()), conv) );
+    CHECK( f.Open(wxString::FromAscii(GetTestFileName()), conv) );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)2, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(1) );
+    CHECK( f.GetLineCount() == (size_t)2 );
+    CHECK( f.GetLineType(0) == wxTextFileType_Dos );
+    CHECK( f.GetLineType(1) == wxTextFileType_None );
 
 #ifdef wxMUST_USE_U_ESCAPE
-    CPPUNIT_ASSERT_EQUAL( wxString(L"\u041f"), f.GetFirstLine() );
-    CPPUNIT_ASSERT_EQUAL( wxString(L"\u0440\u0438\u0432\u0435\u0442"),
-                          f.GetLastLine() );
+    CHECK( f.GetFirstLine() == wxString(L"\u041f") );
+    CHECK( f.GetLastLine() == wxString(L"\u0440\u0438\u0432\u0435\u0442") );
 #else
-    CPPUNIT_ASSERT_EQUAL( wxString(L"П"), f.GetFirstLine() );
-    CPPUNIT_ASSERT_EQUAL( wxString(L"ривет"), f.GetLastLine() );
+    CHECK( f.GetFirstLine() == wxString(L"П") );
+    CHECK( f.GetLastLine() == wxString(L"ривет") );
 #endif
 }
 
-void TextFileTestCase::ReadBig()
+TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadBig", "[textfile]")
 {
     static const size_t NUM_LINES = 10000;
 
@@ -322,14 +290,13 @@ void TextFileTestCase::ReadBig()
     }
 
     wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(GetTestFileName()) );
+    CHECK( f.Open(GetTestFileName()) );
 
-    CPPUNIT_ASSERT_EQUAL( NUM_LINES, f.GetLineCount() );
-    CPPUNIT_ASSERT_EQUAL( wxString("Line 1"), f[0] );
-    CPPUNIT_ASSERT_EQUAL( wxString("Line 999"), f[998] );
-    CPPUNIT_ASSERT_EQUAL( wxString("Line 1000"), f[999] );
-    CPPUNIT_ASSERT_EQUAL( wxString::Format("Line %lu", (unsigned long)NUM_LINES),
-                          f[NUM_LINES - 1] );
+    CHECK( f.GetLineCount() == NUM_LINES );
+    CHECK( f[0] == wxString("Line 1") );
+    CHECK( f[998] == wxString("Line 999") );
+    CHECK( f[999] == wxString("Line 1000") );
+    CHECK( f[NUM_LINES - 1] == wxString::Format("Line %lu", (unsigned long)NUM_LINES) );
 }
 
 TEST_CASE("wxTextBuffer::Translate", "[textbuffer]")
