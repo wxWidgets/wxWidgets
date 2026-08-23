@@ -344,7 +344,7 @@ void ButtonWidgetsPage::CreateContent()
     sizerLeft->AddSpacer(5);
 
     wxButton *btn = new wxButton(sizerLeftBox, ButtonPage_Reset, "&Reset");
-    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder(wxALL));
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
 
     // middle pane
     wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Operations");
@@ -377,7 +377,7 @@ void ButtonWidgetsPage::CreateContent()
     sizerTop->Add(sizerLeft,
                   wxSizerFlags(0).Expand().DoubleBorder(wxALL & ~wxLEFT));
     sizerTop->Add(sizerMiddle,
-                  wxSizerFlags(1).Expand().DoubleBorder(wxALL));
+                  wxSizerFlags(1).Expand().DoubleBorder());
     sizerTop->Add(m_sizerButton,
                   wxSizerFlags(1).Expand().DoubleBorder((wxALL & ~wxRIGHT)));
 

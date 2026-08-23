@@ -340,6 +340,10 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
 
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
+    EVT_MENU( ID_SET_CELL_HL_COLOUR, GridFrame::SetCellHighlightColour)
+    EVT_MENU( ID_SET_SELECTION_FG_COLOUR, GridFrame::SetSelectionFgColour)
+    EVT_MENU( ID_SET_SELECTION_BG_COLOUR, GridFrame::SetSelectionBgColour)
+    EVT_MENU( ID_SET_FROZEN_BORDER, GridFrame::SetFrozenBorderColour)
 
     EVT_MENU( wxID_ABOUT, GridFrame::OnAbout )
     EVT_MENU( wxID_CLEAR, GridFrame::OnClear )
@@ -531,6 +535,10 @@ GridFrame::GridFrame()
     colMenu->Append( ID_GRIDLINECOLOUR, "&Grid line colour..." );
     colMenu->Append( ID_SET_CELL_FG_COLOUR, "Set cell &foreground colour..." );
     colMenu->Append( ID_SET_CELL_BG_COLOUR, "Set cell &background colour..." );
+    colMenu->Append( ID_SET_CELL_HL_COLOUR, "Set cell &highlight colour..." );
+    colMenu->Append( ID_SET_SELECTION_FG_COLOUR, "Set selection f&oreground colour..." );
+    colMenu->Append( ID_SET_SELECTION_BG_COLOUR, "Set selection b&ackground colour..." );
+    colMenu->Append( ID_SET_FROZEN_BORDER, "Set f&rozen border colour..." );
 
     wxMenu *editMenu = new wxMenu;
     editMenu->Append( ID_INSERTROW, "Insert &rows\tCtrl+I" );
@@ -1628,6 +1636,46 @@ void GridFrame::SetCellBgColour( wxCommandEvent& WXUNUSED(ev) )
         wxRect r(pt, grid->GetSize());
         grid->SetDefaultCellBackgroundColour(col);
         grid->Refresh(true, &r);
+    }
+}
+
+void GridFrame::SetCellHighlightColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this);
+    if ( col.IsOk() )
+    {
+        grid->SetCellHighlightColour(col);
+        grid->Refresh();
+    }
+}
+
+void GridFrame::SetSelectionBgColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this);
+    if ( col.IsOk() )
+    {
+        grid->SetSelectionBackground(col);
+        grid->Refresh();
+    }
+}
+
+void GridFrame::SetSelectionFgColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this);
+    if ( col.IsOk() )
+    {
+        grid->SetSelectionForeground(col);
+        grid->Refresh();
+    }
+}
+
+void GridFrame::SetFrozenBorderColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this);
+    if ( col.IsOk() )
+    {
+        grid->SetGridFrozenBorderColour(col);
+        grid->Refresh();
     }
 }
 

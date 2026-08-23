@@ -39,9 +39,9 @@ public:
     bool operator==(const wxColourImpl& col) const;
     bool operator!=(const wxColourImpl& col) const { return !(*this == col); }
 
-    unsigned char Red() const;
-    unsigned char Green() const;
-    unsigned char Blue() const;
+    unsigned char Red() const override;
+    unsigned char Green() const override;
+    unsigned char Blue() const override;
 
     // Implementation part
 
@@ -50,13 +50,13 @@ public:
     WXColor *GetColor() const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
     virtual void
-    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
 
-    virtual bool FromString(const wxString& str);
+    virtual bool FromString(const wxString& str) override;
 };
 
 #endif // _WX_COLOUR_H_

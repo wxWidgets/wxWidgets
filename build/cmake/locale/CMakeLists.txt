@@ -20,17 +20,29 @@ endif()
 
 # list and process the po files
 file(GLOB _po_files "${wxSOURCE_DIR}/locale/*.po")
+set(_gmo_files)
 foreach(_po_file ${_po_files})
     get_filename_component(name "${_po_file}" NAME)
     string(REGEX REPLACE "\\.[^.]*$" "" lang ${name})
+    set(_gmo_file "${CMAKE_CURRENT_BINARY_DIR}/${lang}.gmo")
 
-    gettext_process_po_files(${lang} ALL PO_FILES "${_po_file}")
+    add_custom_command(OUTPUT "${_gmo_file}"
+        COMMAND ${CMAKE_COMMAND}
+                -DMSGFMT=${GETTEXT_MSGFMT_EXECUTABLE}
+                -DPO=${_po_file} -DGMO=${_gmo_file}
+                -P ${wxSOURCE_DIR}/build/cmake/modules/msgfmt.cmake
+        DEPENDS "${_po_file}"
+        COMMENT "Generating ${lang}.gmo"
+        VERBATIM)
+    list(APPEND _gmo_files "${_gmo_file}")
 
-    wx_install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/${lang}.gmo"
+    wx_install(FILES       "${_gmo_file}"
                DESTINATION "share/locale/${lang}/LC_MESSAGES"
                RENAME      "wxstd-${wxMAJOR_VERSION}.${wxMINOR_VERSION}.mo"
     )
 endforeach()
+
+add_custom_target(wxstd_translations ALL DEPENDS ${_gmo_files})
 
 # put all pofiles targets in a group to not clutter visual studio
 set(base_name "pofiles")

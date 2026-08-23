@@ -460,8 +460,7 @@ void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     InitColours();
 
-    // Propagate the event to the non-top-level children
-    wxWindow::OnSysColourChanged(event);
+    event.Skip();
 }
 
 #ifdef __WXGTK__

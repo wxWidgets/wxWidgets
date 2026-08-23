@@ -153,7 +153,6 @@ public:
           m_eventType(eventType),
           m_bmp(bmp)
     {
-        SetBackgroundColour(search->GetBackgroundColour());
     }
 
     void SetBitmapLabel(const wxBitmap& label)
@@ -233,6 +232,7 @@ wxBEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
     EVT_SEARCH_CANCEL(wxID_ANY, wxSearchCtrl::OnCancelButton)
     EVT_SIZE(wxSearchCtrl::OnSize)
     EVT_DPI_CHANGED(wxSearchCtrl::OnDPIChanged)
+    EVT_SYS_COLOUR_CHANGED(wxSearchCtrl::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase);
@@ -302,10 +302,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
                                         wxEVT_SEARCH,
                                         m_searchBitmap);
 
-    m_text->SetBackgroundColour(wxColour());
-    SetBackgroundColour( m_text->GetBackgroundColour() );
-
-    RecalcBitmaps();
+    UpdateColours();
 
     SetInitialSize(size);
     Move(pos);
@@ -406,7 +403,7 @@ void wxSearchCtrl::ShowCancelButton( bool show )
         m_cancelButton = new wxSearchButton(this,
                                             wxEVT_SEARCH_CANCEL,
                                             m_cancelBitmap);
-        RecalcBitmaps();
+        UpdateColours();
     }
 
     m_cancelButton->Show(show);
@@ -1061,16 +1058,10 @@ void wxSearchCtrl::RecalcBitmaps()
 
     if ( !m_searchBitmapUser )
     {
-        if (
-            !m_searchBitmap.IsOk() ||
-            m_searchBitmap.GetSize() != bitmapSize
-            )
+        m_searchBitmap = RenderBitmap(bitmapSize, BitmapType::Search);
+        if ( !HasMenu() )
         {
-            m_searchBitmap = RenderBitmap(bitmapSize, BitmapType::Search);
-            if ( !HasMenu() )
-            {
-                m_searchButton->SetBitmapLabel(m_searchBitmap);
-            }
+            m_searchButton->SetBitmapLabel(m_searchBitmap);
         }
         // else this bitmap was set by user, don't alter
     }
@@ -1078,16 +1069,10 @@ void wxSearchCtrl::RecalcBitmaps()
 #if wxUSE_MENUS
     if ( !m_searchMenuBitmapUser )
     {
-        if (
-            !m_searchMenuBitmap.IsOk() ||
-            m_searchMenuBitmap.GetSize() != bitmapSize
-            )
+        m_searchMenuBitmap = RenderBitmap(bitmapSize, BitmapType::Menu);
+        if ( m_menu )
         {
-            m_searchMenuBitmap = RenderBitmap(bitmapSize, BitmapType::Menu);
-            if ( m_menu )
-            {
-                m_searchButton->SetBitmapLabel(m_searchMenuBitmap);
-            }
+            m_searchButton->SetBitmapLabel(m_searchMenuBitmap);
         }
         // else this bitmap was set by user, don't alter
     }
@@ -1108,16 +1093,30 @@ void wxSearchCtrl::RecalcBitmaps()
 
     if ( m_cancelButton && !m_cancelBitmapUser )
     {
-        if (
-            !m_cancelBitmap.IsOk() ||
-            m_cancelBitmap.GetSize() != bitmapSize
-            )
-        {
-            m_cancelBitmap = RenderBitmap(bitmapSize, BitmapType::Cancel);
-            m_cancelButton->SetBitmapLabel(m_cancelBitmap);
-        }
+        m_cancelBitmap = RenderBitmap(bitmapSize, BitmapType::Cancel);
+        m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         // else this bitmap was set by user, don't alter
     }
+}
+
+void wxSearchCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    UpdateColours();
+    event.Skip();
+}
+
+void wxSearchCtrl::UpdateColours()
+{
+    if ( !m_hasBgCol )
+    {
+        m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+        m_text->SetBackgroundColour(m_backgroundColour);
+        m_searchButton->SetBackgroundColour(m_backgroundColour);
+        if ( m_cancelButton )
+            m_cancelButton->SetBackgroundColour(m_backgroundColour);
+    }
+
+    RecalcBitmaps();
 }
 
 void wxSearchCtrl::OnCancelButton( wxCommandEvent& event )

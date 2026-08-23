@@ -43,6 +43,8 @@ public:
     // usually overridden base class virtuals
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
+    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticLine);
 };
 

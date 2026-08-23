@@ -365,16 +365,16 @@ protected:
     wxButton* B;
 
 private:
-    void InitWidgetsFromXRC()
+    void InitWidgetsFromXRC(wxWindow* parent)
     {
-        wxXmlResource::Get()->LoadObject(this, nullptr, "TestWnd", "wxFrame");
+        wxXmlResource::Get()->LoadObject(this, parent, "TestWnd_Base", "wxFrame");
         A = XRCCTRL(*this, "A", wxTextCtrl);
         B = XRCCTRL(*this, "B", wxButton);
     }
 public:
-    TestWnd::TestWnd()
+    TestWnd_Base(wxWindow* parent = nullptr)
     {
-        InitWidgetsFromXRC();
+        InitWidgetsFromXRC(parent);
     }
 };
 @endcode

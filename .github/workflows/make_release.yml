@@ -13,12 +13,12 @@ permissions:
 
 jobs:
   add_release_sources:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-26.04
     name: Create Release with Source Archives
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           submodules: 'recursive'
 
@@ -36,10 +36,10 @@ jobs:
         working-directory: distrib/release/${{ inputs.version }}
         run: |
             printf '\n# THESE CHECKSUMS MUST BE MOVED ABOVE!\n\n````\n' >> ../../../docs/release.md
-            sha1sum * | tee -a ../../../docs/release.md
+            sha256sum * | tee -a ../../../docs/release.md
 
       - name: Create Draft Release
-        uses: softprops/action-gh-release@v2.2.2
+        uses: softprops/action-gh-release@v3
         id: create_release
         with:
           name: wxWidgets ${{ inputs.version }}
@@ -58,7 +58,7 @@ jobs:
       # because it can't be downloaded from a draft release without
       # impersonating the same user and I don't know how to do it.
       - name: Upload Release Archive
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wxWidgets-${{ inputs.version }}-source-archive
           path: distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}.zip
@@ -71,17 +71,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download Release Archive
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: wxWidgets-${{ inputs.version }}-source-archive
 
       - name: Install Prerequisites
         run: |
             choco install -y --no-progress graphviz html-help-workshop
-            choco install -y doxygen.install --version=1.9.1
+            choco install -y doxygen.install --version=1.15.0
 
       - name: Create MSW Installer and Help File
         shell: cmd
@@ -102,11 +102,11 @@ jobs:
         working-directory: distrib/release/${{ inputs.version }}
         shell: cmd
         run: |
-            sha1sum * > ..\..\..\checksums
+            sha256sum * > ..\..\..\checksums
             type ..\..\..\checksums
 
       - name: Add Files to the Release
-        uses: softprops/action-gh-release@v2.2.2
+        uses: softprops/action-gh-release@v3
         with:
           name: wxWidgets ${{ inputs.version }}
           body_path: checksums

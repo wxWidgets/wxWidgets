@@ -185,6 +185,7 @@ protected:
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
     void OnDPIChanged(wxDPIChangedEvent& evt);
+    void OnSysColourChanged(wxSysColourChangedEvent& evt);
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
                                       wxSize relative_to) const override;

@@ -64,6 +64,12 @@ public:
     to override wxTaskBarIcon::CreatePopupMenu() or wxTaskBarIcon::GetPopupMenu()
     if all that the application does is that it shows a popup menu in reaction to
     mouse click.
+
+    In particular, under Linux when using AppIndicator library only
+    @c wxEVT_TASKBAR_LEFT_DCLICK may be sent as the other mouse events are
+    handled by the system itself to show the menu and even this event is only
+    sent if the system AppIndicator library version is 0.6.0 or later.
+
     @event{EVT_TASKBAR_MOVE(func)}
         Process a @c wxEVT_TASKBAR_MOVE event.
     @event{EVT_TASKBAR_LEFT_DOWN(func)}
@@ -194,6 +200,13 @@ protected:
         Otherwise the menu returned by GetPopupMenu() is shown and, contrary to
         CreatePopupMenu(), not destroyed when the user dismisses it, allowing
         to reuse the same menu pointer multiple times.
+
+        @note When using AppIndicator-based implementation in wxGTK, this
+            method (or CreatePopupMenu() if it's not overridden) is also called
+            whenever the icon is shown or updated, not just when the user
+            requests the popup menu. Overriding GetPopupMenu() rather than
+            CreatePopupMenu() is especially recommended when using this
+            backend, to avoid recreating the menu on every icon update.
 
         @since 3.1.5
     */

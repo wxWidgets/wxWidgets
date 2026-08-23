@@ -76,29 +76,29 @@ public:
     // create the wxBitmap using a _copy_ of the pixmap
     bool Create(WXPixmap pixmap);
 
-    int GetHeight() const;
-    int GetWidth() const;
-    int GetDepth() const;
+    int GetHeight() const override;
+    int GetWidth() const override;
+    int GetDepth() const override;
 
 #if wxUSE_IMAGE
     wxBitmap( const wxImage& image, int depth = -1, double WXUNUSED(scale) = 1.0 ) { (void)CreateFromImage(image, depth); }
     wxBitmap( const wxImage& image, const wxDC& WXUNUSED(dc) ) { (void)CreateFromImage(image); }
-    wxImage ConvertToImage() const;
+    wxImage ConvertToImage() const override;
     bool CreateFromImage(const wxImage& image, int depth = -1);
 #endif // wxUSE_IMAGE
 
-    wxMask *GetMask() const;
-    void SetMask( wxMask *mask );
+    wxMask *GetMask() const override;
+    void SetMask( wxMask *mask ) override;
 
-    wxBitmap GetSubBitmap( const wxRect& rect ) const;
+    wxBitmap GetSubBitmap( const wxRect& rect ) const override;
 
-    bool SaveFile( const wxString &name, wxBitmapType type, const wxPalette *palette = nullptr ) const;
-    bool LoadFile( const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
+    bool SaveFile( const wxString &name, wxBitmapType type, const wxPalette *palette = nullptr ) const override;
+    bool LoadFile( const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE ) override;
 
-    wxPalette *GetPalette() const;
+    wxPalette *GetPalette() const override;
     wxPalette *GetColourMap() const
         { return GetPalette(); }
-    virtual void SetPalette(const wxPalette& palette);
+    virtual void SetPalette(const wxPalette& palette) override;
 
     // implementation
     // --------------
@@ -120,11 +120,11 @@ public:
 
     // This is provided only for compatibility with the other ports, there is
     // no alpha support in X11 bitmaps.
-    bool HasAlpha() const { return false; }
+    bool HasAlpha() const override { return false; }
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBitmap);

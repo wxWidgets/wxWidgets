@@ -544,8 +544,7 @@ public:
                            wxShowEffect effect,
                            unsigned timeout);
 
-    // Responds to colour changes: passes event on to children.
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    virtual void SendSysColourChangedEvents() override;
 
     // initialize various fields of wxMouseEvent (common part of MSWOnMouseXXX)
     void InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags);
@@ -645,9 +644,46 @@ protected:
     virtual bool MSWOnEffectiveLayoutDirectionChanged() { return true; }
 #endif
 
+    // Struct used for MSWGetDarkModeSupport() below.
+    // This specifies the arguments to the SetWindowTheme API for dark mode.
+    struct MSWDarkModeSupport
+    {
+        // The name of the theme to use (also called "app name").
+        const wchar_t* themeName = nullptr;
+
+        // The theme IDs to use. If neither this field nor the theme name is
+        // set, no theme is applied to the window.
+        const wchar_t* themeId = nullptr;
+
+        // True if we should apply theme L"Explorer" when switching to light
+        // mode. Otherwise, nullptr is used.
+        bool isLightModeThemed = true;
+    };
+
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const;
+
+    // The reason for calling MSWSetDarkOrLightMode below.
+    enum class SetMode
+    {
+        // Set dark mode for a newly created window.
+        Initial,
+
+        // Set dark mode or light mode for an existing window.
+        Change
+    };
+
+    // Configure a window for dark mode settings immediately after creation or
+    // upon switching into or out of dark mode. This function is not called
+    // unless dark mode was enabled, or is being enabled.
+    virtual void MSWSetDarkOrLightMode(SetMode setmode);
+
     // Translate wxBORDER_THEME to a standard border style or return it as is
     // if themed border should be used, depending on CanApplyThemeBorder().
     wxBorder DoTranslateBorder(wxBorder border) const;
+
+    // Returns true if the window does not draw a good dark mode themed
+    // border and therefore we should explicitly draw it.
+    virtual bool MSWShouldDrawDarkThemeBorder() const { return true; }
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;
@@ -811,6 +847,8 @@ private:
     bool MSWSafeIsDialogMessage(WXMSG* msg);
 #endif // __WXUNIVERSAL__
 
+    int MSWGetBorderThickness() const;
+
     static inline bool MSWIsPositionDirectlySupported(int x, int y)
     {
         // The supported coordinate intervals for various functions are:
@@ -830,6 +868,8 @@ protected:
 
     void MSWMoveWindowToAnyPosition(WXHWND hwnd, int x, int y,
                                     int width, int height, bool bRepaint);
+
+    virtual void MSWDrawThemeBorder(WXHDC hdc);
 
 #if wxUSE_DEFERRED_SIZING
     // this function is called after the window was resized to its new size
@@ -852,7 +892,6 @@ protected:
 private:
     wxDECLARE_DYNAMIC_CLASS(wxWindowMSW);
     wxDECLARE_NO_COPY_CLASS(wxWindowMSW);
-    wxDECLARE_EVENT_TABLE();
 };
 
 // window creation helper class: before creating a new HWND, instantiate an

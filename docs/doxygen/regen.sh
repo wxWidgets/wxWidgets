@@ -128,11 +128,6 @@ esac
 #
 $DOXYGEN Doxyfile
 
-if [[ "$1" = "php" ]]; then
-    # Work around a bug in Doxygen < 1.8.19 PHP search function.
-    cp custom_search_functions.php $WX_HTML_OUTPUT_DIR/search_functions.php
-fi
-
 if [[ "$1" = "qch" ]]; then
     # we need to add missing files to the .qhp
     cd $WX_HTML_OUTPUT_DIR

@@ -946,7 +946,8 @@ void wxWindowMac::MacInvalidateBorders()
     wxRect topupdate( tx-outerBorder, ty-outerBorder, tw + 2 * outerBorder, outerBorder );
     wxRect bottomupdate( tx-outerBorder, ty + th, tw + 2 * outerBorder, outerBorder );
 
-    if (GetParent()) {
+    if (GetParent())
+    {
         GetParent()->GetPeer()->SetNeedsDisplay(&leftupdate);
         GetParent()->GetPeer()->SetNeedsDisplay(&rightupdate);
         GetParent()->GetPeer()->SetNeedsDisplay(&topupdate);
@@ -1537,6 +1538,17 @@ wxWindowMac::AlwaysShowScrollbars(bool hflag, bool vflag)
         DoUpdateScrollbarVisibility();
 }
 
+/* static */ wxVisualAttributes
+wxWindowMac::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    // it is important to return valid values for all attributes from here,
+    // GetXXX() below rely on this
+    wxVisualAttributes attrs = wxWindowBase::GetClassDefaultAttributes(variant);
+    attrs.colBg = wxTransparentColour;
+
+    return attrs;
+}
+
 //
 // we draw borders and grow boxes, are already set up and clipped in the current port / cgContextRef
 // our own window origin is at leftOrigin/rightOrigin
@@ -2001,9 +2013,10 @@ bool wxWindowMac::MacDoRedraw( long time )
                     eevent.SetEventObject( this );
                     if ( ProcessWindowEvent( eevent ) )
                         break;
-
+#ifdef __WXOSX_IPHONE__
                     if (!UseBgCol())
                         dc.Clear();
+#endif
                 }
 
                 if ( UseBgCol() )
@@ -2328,20 +2341,30 @@ wxMacBorderSize wxWindowMac::MacGetBorderSize() const
     return border;
 }
 
-long wxWindowMac::MacGetLeftBorderSize() const {
+long wxWindowMac::MacGetLeftBorderSize() const
+{
     return MacGetBorderSize().left;
 }
 
-long wxWindowMac::MacGetRightBorderSize() const {
+long wxWindowMac::MacGetRightBorderSize() const
+{
     return MacGetBorderSize().right;
 }
 
-long wxWindowMac::MacGetTopBorderSize() const {
+long wxWindowMac::MacGetTopBorderSize() const
+{
     return MacGetBorderSize().top;
 }
 
-long wxWindowMac::MacGetBottomBorderSize() const {
+long wxWindowMac::MacGetBottomBorderSize() const
+{
     return MacGetBorderSize().bottom;
+}
+
+void wxWindowMac::MacInvalidateInsetCache() const
+{
+    if ( GetPeer() )
+        GetPeer()->InvalidateLayoutInset();
 }
 
 long wxWindowMac::MacRemoveBordersFromStyle( long style )

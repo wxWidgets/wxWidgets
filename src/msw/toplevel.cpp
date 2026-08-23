@@ -571,7 +571,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // focus rectangles) work under Win2k+
     MSWUpdateUIState(UIS_INITIALIZE);
 
-    wxMSWDarkMode::ConfigureTLW(GetHwnd());
+    if ( wxMSWDarkMode::IsActive() )
+        MSWSetDarkOrLightMode(SetMode::Initial);
 
     return true;
 }

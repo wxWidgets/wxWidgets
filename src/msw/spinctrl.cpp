@@ -280,9 +280,23 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // set style for the base class
     style |= wxSP_VERTICAL;
 
-    // the border is only used for the text control part
-    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
-        style |= DoTranslateBorder(wxBORDER_THEME);
+    // Any of border styles except for wxBORDER_SIMPLE look ugly with the spin
+    // button, so always use simple border which seamlessly transitions into
+    // the button -- except when we shouldn't have any border at all.
+    switch ( style & wxBORDER_MASK )
+    {
+        case wxBORDER_NONE:
+            break;
+
+        case wxBORDER_SIMPLE:
+            // Keep it.
+            break;
+
+        default:
+            // Replace anything else with wxBORDER_SIMPLE.
+            style &= ~wxBORDER_MASK;
+            style |= wxBORDER_SIMPLE;
+    }
 
     SetWindowStyle(style);
 

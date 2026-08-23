@@ -195,6 +195,23 @@ struct WinStruct : public T
     }
 };
 
+// Life wouldn't be fun if Windows didn't call the size member differently in
+// different structs, so define the equivalent of the above for the ones where
+// it's called dwSize.
+//
+// When we can require C++17 or preferably C++20 we could merge this with
+// WinStruct by detecting the presence of cbSize/dwSize member using SFINAE,
+// but for now just define it separately to keep things simple.
+template <class T>
+struct WinStructWordSize : public T
+{
+    WinStructWordSize()
+    {
+        wxZeroMemory(*this);
+
+        this->dwSize = sizeof(T);
+    }
+};
 
 // Macros for converting wxString to the type expected by API functions.
 //
@@ -313,6 +330,12 @@ extern HICON wxBitmapToHICON(const wxBitmap& bmp);
 extern
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
 
+// Return DPI for the given window.
+//
+// Implemented in src/msw/window.cpp.
+wxSize wxGetWindowDPI(HWND hwnd);
+
+// Also implemented in src/msw/window.cpp.
 extern int wxGetSystemMetrics(int nIndex, const wxWindow* win);
 
 extern bool wxSystemParametersInfo(UINT uiAction, UINT uiParam,
@@ -1163,6 +1186,21 @@ inline wxLayoutDirection wxGetEditLayoutDirection(WXHWND hWnd)
 
     return style & WS_EX_RTLREADING ? wxLayout_RightToLeft
                                     : wxLayout_LeftToRight;
+}
+
+// Check if WM_SETTINGCHANGE notifies about the system colours change.
+inline bool wxIsSystemColourChange(LPARAM lParam)
+{
+    // Note that "ImmersiveColorSet" is set both when switching between
+    // light and dark themes and also when changing high contrast mode,
+    // for which an additional message with "WindowsThemeElement" is
+    // also sent, but we don't need to check for it as handling this
+    // one is enough
+    if ( !lParam )
+       return false;
+
+    auto* const what = reinterpret_cast<const TCHAR*>(lParam);
+    return wxStrcmp(what, wxT("ImmersiveColorSet")) == 0;
 }
 
 // ----------------------------------------------------------------------------

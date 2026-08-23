@@ -39,6 +39,7 @@
 #include "wx/stdpaths.h"
 #if wxUSE_SVG
 #include "wx/dcsvg.h"
+#include "wx/svggc.h"
 #endif
 #if wxUSE_POSTSCRIPT
 #include "wx/dcps.h"
@@ -991,7 +992,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.DrawLine(dc.FromDIP(400), dc.FromDIP(170), dc.FromDIP(400), dc.FromDIP(210));
     dc.DrawLine(dc.FromDIP(300), dc.FromDIP(200), dc.FromDIP(410), dc.FromDIP(200));
 
-    // a few more tests of this kind
+    // Draw tiny rectangles, including MSW GDI edge cases.
     dc.SetPen(*wxRED_PEN);
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawRectangle(dc.FromDIP(300), dc.FromDIP(220), dc.FromDIP(1), dc.FromDIP(1));
@@ -1144,6 +1145,18 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.SetFont(wxFontInfo(12).Family(wxFONTFAMILY_TELETYPE));
     dc.SetTextForeground(wxColour(150, 75, 0));
     dc.DrawText("And some text with tab characters:\n123456789012345678901234567890\n\taa\tbbb\tcccc", dc.FromDIP(10), y);
+
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+#ifdef __WXMSW__
+    dc.SetFont(wxFontInfo(12).FaceName("Segoe UI Emoji"));
+#else
+    dc.SetFont(*wxSWISS_FONT);
+#endif
+    dc.DrawText(wxString::FromUTF8("Smile in colour"
+#ifdef __WXMSW__
+                                   " (only when using Direct2D)"
+#endif
+                                   ": \xF0\x9F\x98\x8A"), dc.FromDIP(400), y);
 }
 
 static const struct
@@ -2160,6 +2173,12 @@ void MyCanvas::Draw(wxDC& pdc)
             context = m_renderer->CreateContext(*metadc);
         }
 #endif
+#if wxUSE_SVG
+        else if ( wxSVGFileDC *svgdc = wxDynamicCast(&pdc, wxSVGFileDC) )
+        {
+            context = wxSVGGraphicsContext::Create(*svgdc);
+        }
+#endif
         else
         {
             wxFAIL_MSG( "Unknown wxDC kind" );
@@ -2339,8 +2358,10 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         m_currentpoint = wxPoint( xx , yy ) ;
         wxRect newrect ( m_anchorpoint , m_currentpoint ) ;
 
+#if wxUSE_GRAPHICS_CONTEXT
         // This is required with wxMSW to allow per-pixel transparency.
         m_overlay.SetOpacity(-1);
+#endif
 
         wxOverlayDC dc(m_overlay, this);
         PrepareDC(dc);
@@ -2348,12 +2369,21 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         // Note: this must be called on the overlay DC, not wxGCDC.
         dc.Clear();
 
+#if wxUSE_GRAPHICS_CONTEXT
         // Use wxGCDC to ensure that brush transparency is taken into account
         // even under wxMSW where plain wxDC doesn't support it.
         wxGCDC gdc(dc);
         gdc.SetPen( *wxGREY_PEN );
         gdc.SetBrush( wxColour( 192,192,192,64 ) );
         gdc.DrawRectangle( newrect );
+#else
+        // Set the overlay opacity instead of brush transparency.
+        m_overlay.SetOpacity(64);
+
+        dc.SetPen( *wxGREY_PEN );
+        dc.SetBrush( wxColour( 192,192,192 ) );
+        dc.DrawRectangle( newrect );
+#endif
     }
 #else
     wxUnusedVar(event);
@@ -2840,15 +2870,6 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_SVG
         if (ext == "svg")
         {
-#if wxUSE_GRAPHICS_CONTEXT
-            // Graphics screen can only be drawn using GraphicsContext
-            if (m_canvas->GetPage() == File_ShowGraphics) {
-                wxLogMessage("Graphics screen can not be saved as SVG.");
-                return;
-            }
-            wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
-            m_canvas->UseGraphicRenderer(nullptr);
-#endif
             wxSize svgSize;
             wxSVGFileDC tempSvgDC(svgSize);
             m_canvas->Draw(tempSvgDC);
@@ -2859,9 +2880,6 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             wxSVGFileDC svgDC(svgSize, dlg.GetPath(), "Drawing sample");
             svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
             m_canvas->Draw(svgDC);
-#if wxUSE_GRAPHICS_CONTEXT
-            m_canvas->UseGraphicRenderer(tempRenderer);
-#endif
         }
         else
 #endif

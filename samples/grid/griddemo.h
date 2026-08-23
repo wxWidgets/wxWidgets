@@ -67,6 +67,10 @@ class GridFrame : public wxFrame
 
     void SetCellFgColour(wxCommandEvent &);
     void SetCellBgColour(wxCommandEvent &);
+    void SetCellHighlightColour(wxCommandEvent& event);
+    void SetSelectionBgColour(wxCommandEvent& event);
+    void SetSelectionFgColour(wxCommandEvent& event);
+    void SetFrozenBorderColour(wxCommandEvent& event);
 
     void InsertRow( wxCommandEvent& );
     void InsertCol( wxCommandEvent& );
@@ -210,6 +214,10 @@ public:
         ID_SELNONE,
         ID_SET_CELL_FG_COLOUR,
         ID_SET_CELL_BG_COLOUR,
+        ID_SET_CELL_HL_COLOUR,
+        ID_SET_SELECTION_FG_COLOUR,
+        ID_SET_SELECTION_BG_COLOUR,
+        ID_SET_FROZEN_BORDER,
         ID_VTABLE,
         ID_BUGS_TABLE,
         ID_TABULAR_TABLE,

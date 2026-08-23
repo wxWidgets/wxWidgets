@@ -77,6 +77,7 @@ protected:
     void OnPaint(wxPaintEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnDPIChanged(wxDPIChangedEvent& evt);
+    void OnSysColourChanged(wxSysColourChangedEvent& evt);
 
     bool ExpandPanels(wxOrientation direction, int maximum_amount);
     bool CollapsePanels(wxOrientation direction, int minimum_amount);

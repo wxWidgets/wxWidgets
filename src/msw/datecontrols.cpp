@@ -51,8 +51,7 @@ bool wxMSWDateControls::CheckInitialization()
         // it's enough to give the error only once
         s_initResult = false;
 
-        INITCOMMONCONTROLSEX icex;
-        icex.dwSize = sizeof(icex);
+        WinStructWordSize<INITCOMMONCONTROLSEX> icex;
         icex.dwICC = ICC_DATE_CLASSES;
 
         // see comment in wxApp::GetComCtl32Version() explaining the

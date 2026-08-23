@@ -60,6 +60,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, wxWebViewEvent);
+wxDEFINE_EVENT( wxEVT_WEBVIEW_PDF_SAVED, wxWebViewEvent);
 
 // wxWebViewConfiguration
 wxWebViewConfiguration::wxWebViewConfiguration(const wxString& backend, wxWebViewConfigurationImpl* impl):
@@ -487,6 +488,24 @@ wxWebView::GetBackendVersionInfo(const wxString& backend,
         return iter->second->GetVersionInfo(context);
     else
         return wxVersionInfo();
+}
+
+// static
+bool wxWebViewConfiguration::DisableGPUAcceleration()
+{
+#if defined(__WXGTK__)
+    return wxSetEnv("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+#elif defined(__WXMSW__)
+    // Append to the existing arguments if any.
+    wxString args;
+    if ( wxGetEnv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", &args) )
+        args += ' ';
+
+    args += "--disable-gpu";
+    return wxSetEnv("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", args);
+#else
+    return false;
+#endif
 }
 
 wxWebViewConfiguration wxWebView::NewConfiguration(const wxString& backend)

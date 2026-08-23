@@ -1480,6 +1480,13 @@ void wxMDIChildFrame::OnIdle(wxIdleEvent& event)
     event.Skip();
 }
 
+wxVisualAttributes wxMDIChildFrame::GetDefaultAttributes() const
+{
+    auto attrs = wxMDIChildFrameBase::GetDefaultAttributes();
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    return attrs;
+}
+
 // ---------------------------------------------------------------------------
 // private helper functions
 // ---------------------------------------------------------------------------

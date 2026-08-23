@@ -7,6 +7,12 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+# wxNet should be built if either wxUSE_SOCKETS or wxUSE_WEBREQUEST is on.
+if(NOT wxUSE_SOCKETS AND NOT wxUSE_WEBREQUEST)
+    wx_append_install_headers(NET_CMN_HDR)
+    return()
+endif()
+
 wx_append_sources(NET_FILES NET_CMN)
 
 if(WIN32)

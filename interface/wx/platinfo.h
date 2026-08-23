@@ -131,6 +131,18 @@ struct wxLinuxDistributionInfo
     wxString Release;           //!< The version of the distribution; e.g. "9.04"
     wxString CodeName;          //!< The code name of the distribution; e.g. "jaunty"
     wxString Description;       //!< The description of the distribution; e.g. "Ubuntu 9.04"
+    /**
+        The parent distribution name; e.g. "ubuntu debian".
+
+        @since 3.3.3
+    */
+    wxString ParentName;
+    /**
+        The upstream release codename; e.g. "noble".
+
+        @since 3.3.3
+    */
+    wxString ParentCodeName;
 
     bool operator==(const wxLinuxDistributionInfo& ldi) const;
     bool operator!=(const wxLinuxDistributionInfo& ldi) const;

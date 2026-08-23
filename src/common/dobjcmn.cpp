@@ -185,7 +185,7 @@ size_t wxDataObjectComposite::GetDataSize(const wxDataFormat& format) const
     wxCHECK_MSG( dataObj, 0,
                  wxT("unsupported format in wxDataObjectComposite"));
 
-    return dataObj->GetDataSize();
+    return dataObj->GetDataSize(format);
 }
 
 bool wxDataObjectComposite::GetDataHere(const wxDataFormat& format,
@@ -196,7 +196,7 @@ bool wxDataObjectComposite::GetDataHere(const wxDataFormat& format,
     wxCHECK_MSG( dataObj, false,
                  wxT("unsupported format in wxDataObjectComposite"));
 
-    return dataObj->GetDataHere( buf );
+    return dataObj->GetDataHere(format, buf);
 }
 
 bool wxDataObjectComposite::SetData(const wxDataFormat& format,
@@ -345,7 +345,11 @@ inline wxMBConv& GetConv(const wxDataFormat& format)
     static wxMBConvUTF16 s_UTF16Converter;
 
     return format == wxDF_UNICODETEXT ? static_cast<wxMBConv&>(s_UTF16Converter)
+#ifdef __WXOSX__
+                                      : static_cast<wxMBConv&>(wxConvUTF8);
+#else
                                       : static_cast<wxMBConv&>(wxConvLocal);
+#endif
 }
 
 } // anonymous namespace

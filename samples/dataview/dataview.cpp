@@ -643,6 +643,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
     wxLogMessage( "This is the log window" );
 
+    const wxSizerFlags doubleBorder = wxSizerFlags().DoubleBorder();
 
     // first page of the notebook
     // --------------------------
@@ -673,7 +674,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
     m_ctrl[Page_Music]->SetMinSize(wxSize(-1, 200));
-    firstPanelSz->Add(m_ctrl[Page_Music], 1, wxGROW|wxALL, 5);
+    firstPanelSz->Add(m_ctrl[Page_Music], wxSizerFlags(1).Expand().Border());
     firstPanelSz->Add(button_sizer);
     firstPanelSz->Add(sizerCurrent);
     firstPanel->SetSizerAndFit(firstPanelSz);
@@ -687,12 +688,12 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     BuildDataViewCtrl(secondPanel, Page_List);
 
     wxBoxSizer *button_sizer2 = new wxBoxSizer( wxHORIZONTAL );
-    button_sizer2->Add( new wxButton( secondPanel, ID_PREPEND_LIST,"Prepend"),                0, wxALL, 10 );
-    button_sizer2->Add( new wxButton( secondPanel, ID_DELETE_LIST, "Delete selected"),        0, wxALL, 10 );
-    button_sizer2->Add( new wxButton( secondPanel, ID_GOTO,        "Goto 50"),                0, wxALL, 10 );
-    button_sizer2->Add( new wxButton( secondPanel, ID_ADD_MANY,    "Add 1000"),               0, wxALL, 10 );
-    button_sizer2->Add( new wxButton( secondPanel, ID_HIDE_ATTRIBUTES,    "Hide attributes"), 0, wxALL, 10 );
-    button_sizer2->Add( new wxButton( secondPanel, ID_SHOW_ATTRIBUTES,    "Show attributes"), 0, wxALL, 10 );
+    button_sizer2->Add( new wxButton( secondPanel, ID_PREPEND_LIST,"Prepend"),                doubleBorder );
+    button_sizer2->Add( new wxButton( secondPanel, ID_DELETE_LIST, "Delete selected"),        doubleBorder );
+    button_sizer2->Add( new wxButton( secondPanel, ID_GOTO,        "Goto 50"),                doubleBorder );
+    button_sizer2->Add( new wxButton( secondPanel, ID_ADD_MANY,    "Add 1000"),               doubleBorder );
+    button_sizer2->Add( new wxButton( secondPanel, ID_HIDE_ATTRIBUTES,    "Hide attributes"), doubleBorder );
+    button_sizer2->Add( new wxButton( secondPanel, ID_SHOW_ATTRIBUTES,    "Show attributes"), doubleBorder );
 
     wxBoxSizer *sortSizer = new wxBoxSizer(wxHORIZONTAL);
     sortSizer->Add(new wxCheckBox(secondPanel, ID_SORT_BY_FIRST_COLUMN, "Sort by first column"),
@@ -701,7 +702,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                    wxSizerFlags().Centre().DoubleBorder());
 
     wxSizer *secondPanelSz = new wxBoxSizer( wxVERTICAL );
-    secondPanelSz->Add(m_ctrl[Page_List], 1, wxGROW|wxALL, 5);
+    secondPanelSz->Add(m_ctrl[Page_List], wxSizerFlags(1).Expand().Border());
     secondPanelSz->Add(button_sizer2);
     secondPanelSz->Add(sortSizer);
     secondPanel->SetSizerAndFit(secondPanelSz);
@@ -715,7 +716,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     BuildDataViewCtrl(thirdPanel, Page_ListStore);
 
     wxSizer *thirdPanelSz = new wxBoxSizer( wxVERTICAL );
-    thirdPanelSz->Add(m_ctrl[Page_ListStore], 1, wxGROW|wxALL, 5);
+    thirdPanelSz->Add(m_ctrl[Page_ListStore], wxSizerFlags(1).Expand().Border());
     thirdPanel->SetSizerAndFit(thirdPanelSz);
 
 
@@ -727,13 +728,13 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     BuildDataViewCtrl(fourthPanel, Page_TreeStore);
     // Buttons
     wxBoxSizer *button_sizer4 = new wxBoxSizer( wxHORIZONTAL );
-    button_sizer4->Add( new wxButton( fourthPanel, ID_DELETE_TREE_ITEM, "Delete Selected"), 0, wxALL, 10 );
-    button_sizer4->Add( new wxButton( fourthPanel, ID_DELETE_ALL_TREE_ITEMS, "Delete All"), 0, wxALL, 10 );
-    button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_ITEM, "Add Item"), 0, wxALL, 10 );
-    button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_CONTAINER_ITEM, "Add Container"), 0, wxALL, 10 );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_DELETE_TREE_ITEM, "Delete Selected"), doubleBorder );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_DELETE_ALL_TREE_ITEMS, "Delete All"), doubleBorder );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_ITEM, "Add Item"), doubleBorder );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_CONTAINER_ITEM, "Add Container"), doubleBorder );
 
     wxSizer *fourthPanelSz = new wxBoxSizer( wxVERTICAL );
-    fourthPanelSz->Add(m_ctrl[Page_TreeStore], 1, wxGROW|wxALL, 5);
+    fourthPanelSz->Add(m_ctrl[Page_TreeStore], wxSizerFlags(1).Expand().Border());
     fourthPanelSz->Add(button_sizer4);
     fourthPanel->SetSizerAndFit(fourthPanelSz);
 
@@ -751,7 +752,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
         wxSizerFlags().DoubleBorder());
 
     wxSizer *fifthPanelSz = new wxBoxSizer(wxVERTICAL);
-    fifthPanelSz->Add(m_ctrl[Page_VarHeight], 1, wxGROW | wxALL, 5);
+    fifthPanelSz->Add(m_ctrl[Page_VarHeight], wxSizerFlags(1).Expand().Border());
     fifthPanelSz->Add(button_sizer5);
     fifthPanel->SetSizerAndFit(fifthPanelSz);
 
@@ -783,7 +784,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     BuildDataViewCtrl(seventhPanel, Page_HasValue);
 
     wxSizer *seventhPanelSz = new wxBoxSizer( wxVERTICAL );
-    seventhPanelSz->Add(m_ctrl[Page_HasValue], 1, wxGROW|wxALL, 5);
+    seventhPanelSz->Add(m_ctrl[Page_HasValue], wxSizerFlags(1).Expand().Border());
     seventhPanel->SetSizerAndFit(seventhPanelSz);
 
     // complete GUI
@@ -799,8 +800,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    mainSizer->Add( m_notebook, 1, wxGROW );
-    mainSizer->Add( m_log, 0, wxGROW );
+    mainSizer->Add( m_notebook, wxSizerFlags(1).Expand());
+    mainSizer->Add( m_log, wxSizerFlags().Expand());
 
     SetSizerAndFit(mainSizer);
 
@@ -1406,7 +1407,7 @@ void MyFrame::OnStyleChange( wxCommandEvent& WXUNUSED(event) )
     BuildDataViewCtrl((wxPanel*)m_notebook->GetPage(nPanel),
         nPanel, style, flags);
 
-    sz->Prepend(m_ctrl[nPanel], 1, wxGROW|wxALL, 5);
+    sz->Prepend(m_ctrl[nPanel], wxSizerFlags(1).Expand().Border());
     sz->Layout();
 }
 

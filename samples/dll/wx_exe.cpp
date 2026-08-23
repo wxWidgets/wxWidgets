@@ -93,13 +93,13 @@ MainFrame::MainFrame()
                            wxThread::GetCurrentId()
                        )
                    ),
-               wxSizerFlags(1).Expand().DoubleBorder(wxALL)
+               wxSizerFlags(1).Expand().DoubleBorder()
            );
 
     sizer->Add
            (
                new wxButton(p, ID_RUN_DLL, "Run GUI from DLL"),
-               wxSizerFlags(0).Right().DoubleBorder(wxALL)
+               wxSizerFlags(0).Right().DoubleBorder()
            );
 
     p->SetSizerAndFit(sizer);

@@ -13,7 +13,8 @@
 
 std::ostream& operator<<(std::ostream& os, const wxColour& c)
 {
-    os << c.GetAsString(wxC2S_HTML_SYNTAX);
+    os << (c.IsOk() ? c.GetAsString(wxC2S_HTML_SYNTAX)
+                    : wxString::FromAscii("invalid"));
 
     return os;
 }

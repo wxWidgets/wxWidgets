@@ -2086,9 +2086,9 @@ wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
                 wxSizerItem* ctrl_m_sizerItem;
 
                 wxBoxSizer* vert_sizer = new wxBoxSizer(wxVERTICAL);
-                vert_sizer->AddStretchSpacer(1);
+                vert_sizer->AddStretchSpacer();
                 ctrl_m_sizerItem = vert_sizer->Add(item.m_window, 0, wxEXPAND);
-                vert_sizer->AddStretchSpacer(1);
+                vert_sizer->AddStretchSpacer();
                 if ( (m_windowStyle & wxAUI_TB_TEXT) &&
                      m_toolTextOrientation == wxAUI_TBTOOL_TEXT_BOTTOM &&
                      !item.GetLabel().empty() )
@@ -2477,6 +2477,25 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
 
 void wxAuiToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
+    for ( auto& item : m_items )
+    {
+        switch ( item.m_kind )
+        {
+            case wxITEM_NORMAL:
+            case wxITEM_CHECK:
+            case wxITEM_RADIO:
+            case wxITEM_SEPARATOR:
+            case wxITEM_LABEL:
+                break;
+
+            case wxITEM_CONTROL:
+                // Take into account the new minimum control size when
+                // performing layout in Realize() called below.
+                item.m_minSize = item.m_window->GetEffectiveMinSize();
+                break;
+        }
+    }
+
     Realize();
 
     event.Skip();

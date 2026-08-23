@@ -624,13 +624,27 @@ void wxDocument::OnChangedViewList()
 
 void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
 {
-    wxList::compatibility_iterator node = m_documentViews.GetFirst();
-    while (node)
+    // wxView::OnUpdate() may remove the view it's called on (relatively common)
+    // or, potentially, even another view from the document, so make a
+    // copy of the existing view container before starting to iterate
+    // over it.
+    const wxViewVector initialState = GetViewsVector();
+    for (wxView * const view : initialState)
     {
-        wxView *view = (wxView *)node->GetData();
         if (view != sender)
-            view->OnUpdate(sender, hint);
-        node = node->GetNext();
+        {
+            wxList::compatibility_iterator node = m_documentViews.GetFirst();
+            while (node)
+            {
+                wxView * const present = (wxView *)node->GetData();
+                if (present == view)
+                {
+                    view->OnUpdate(sender, hint);
+                    break;
+                }
+                node = node->GetNext();
+            }
+        }
     }
 }
 
@@ -1448,12 +1462,9 @@ wxDocTemplateVector GetVisibleTemplates(const wxList& allTemplates)
     {
         templates.reserve(totalNumTemplates);
 
-        for ( wxList::const_iterator i = allTemplates.begin(),
-                                   end = allTemplates.end();
-              i != end;
-              ++i )
+        for ( const auto* item : allTemplates )
         {
-            wxDocTemplate * const temp = (wxDocTemplate *)*i;
+            wxDocTemplate * const temp = (wxDocTemplate *)item;
             if ( temp->IsVisible() )
                 templates.push_back(temp);
         }
@@ -1478,9 +1489,9 @@ void wxDocument::Activate()
 wxDocument* wxDocManager::FindDocumentByPath(const wxString& path) const
 {
     const wxFileName fileName(path);
-    for ( wxList::const_iterator i = m_docs.begin(); i != m_docs.end(); ++i )
+    for ( const auto* item : m_docs )
     {
-        wxDocument * const doc = wxStaticCast(*i, wxDocument);
+        wxDocument * const doc = wxStaticCast(item, wxDocument);
 
         if ( fileName == wxFileName(doc->GetFilename()) )
             return doc;

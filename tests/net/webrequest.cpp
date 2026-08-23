@@ -27,6 +27,7 @@
 #include "wx/private/make_unique.h"
 
 #include <memory>
+#include <string>
 #include <unordered_map>
 
 // This test uses httpbin service and by default uses the mirror at the
@@ -66,8 +67,6 @@ protected:
     {
         if ( wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
         {
-            usingDefaultPublicURL = false;
-
             if ( baseURL == "0" )
                 return false;
 
@@ -81,24 +80,10 @@ protected:
         else
         {
             baseURL = WX_TEST_WEBREQUEST_URL_DEFAULT;
-            usingDefaultPublicURL = true;
         }
 
         REQUIRE( GetSession().SetBaseURL(baseURL) );
 
-        return true;
-    }
-
-    // The default nghttp2.org mirror currently returns a malformed Digest
-    // qop value and rejects valid credentials. Keep testing Digest auth for
-    // explicitly configured services, including local httpbin instances.
-    bool ShouldSkipDigestAuth() const
-    {
-        if ( !usingDefaultPublicURL )
-            return false;
-
-        WARN("Skipping Digest authentication against the unstable default "
-             "public httpbin mirror");
         return true;
     }
 
@@ -206,21 +191,6 @@ protected:
         REQUIRE( actualValue == value );
     }
 
-    // httpbin implementations use either "authenticated" or "authorized"
-    // and differ in whether they put whitespace after the colon.
-    void CheckAuthorizedJSON(const wxString& response)
-    {
-        if ( response.Contains("\"authenticated\"") )
-        {
-            CheckExpectedJSON(response, "authenticated", "true");
-        }
-        else
-        {
-            REQUIRE( response.Contains("\"authorized\"") );
-            CheckExpectedJSON(response, "authorized", "true");
-        }
-    }
-
     // Special helper for "manual" tests taking the URL from the environment.
     void InitManualRequest()
     {
@@ -307,9 +277,29 @@ protected:
         }
     }
 
+    wxString GetRedirectTarget(const wxString& relURL) const
+    {
+        // The default httpbin service is mounted below /httpbin, but the
+        // redirect target is host-root-relative, so preserve the base path.
+        wxURI baseURI(baseURL);
+        wxString target = baseURI.GetPath();
+        if ( !target.EndsWith('/') )
+            target += '/';
+        target += relURL;
+        target.Replace("/", "%2F");
+        return target;
+    }
+
+    bool ShouldSkipDigestAuth()
+    {
+        // Digest auth works with the local go-httpbin used by CI, but WinHTTP
+        // doesn't authenticate successfully with the default public mirror.
+        return baseURL == WX_TEST_WEBREQUEST_URL_DEFAULT &&
+               GetSession().GetLibraryVersionInfo().GetName() == "WinHTTP";
+    }
+
 private:
     wxString baseURL;
-    bool usingDefaultPublicURL{false};
 };
 
 class RequestFixture : public wxTimer, public BaseRequestFixture
@@ -446,6 +436,35 @@ public:
 // default buffer size works correctly.
 constexpr int DOWNLOAD_BYTES = 99999;
 
+// httpbin-compatible servers don't use identical JSON formatting, so check
+// simple values without depending on whitespace after the colon.
+static bool HasJsonValue(const wxString& response,
+                         const char* name,
+                         const char* value)
+{
+    std::string withSpace;
+    withSpace += '"';
+    withSpace += name;
+    withSpace += "\": ";
+    withSpace += value;
+
+    std::string withoutSpace;
+    withoutSpace += '"';
+    withoutSpace += name;
+    withoutSpace += "\":";
+    withoutSpace += value;
+
+    const std::string text(response.utf8_string());
+    return text.find(withSpace) != std::string::npos ||
+           text.find(withoutSpace) != std::string::npos;
+}
+
+static bool HasSuccessfulAuth(const wxString& response)
+{
+    return HasJsonValue(response, "authenticated", "true") ||
+           HasJsonValue(response, "authorized", "true");
+}
+
 TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::Bytes", "[net][webrequest][get]")
 {
@@ -476,10 +495,10 @@ TEST_CASE_METHOD(RequestFixture,
 
     Create("status/200");
     CHECK( request.IsOk() );
-    CHECK( session.GetNativeHandle() );
 
     // Note that the request must be started to have a valid native handle.
     request.Start();
+    CHECK( session.GetNativeHandle() );
     CHECK( request.GetNativeHandle() );
     RunLoopWithTimeout();
     CHECK( request.GetState() == wxWebRequest::State_Completed );
@@ -696,7 +715,7 @@ TEST_CASE_METHOD(RequestFixture,
     Run();
 
     const wxString& response = request.GetResponse().AsString();
-    CheckExpectedJSON(response, "bloordyblop", "17");
+    CHECK( HasJsonValue(response, "bloordyblop", "17") );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -717,7 +736,7 @@ TEST_CASE_METHOD(RequestFixture,
 
         const auto& response = request.GetResponse();
         CHECK( response.GetStatus() == 200 );
-        CheckAuthorizedJSON(response.AsString());
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Bad password")
@@ -741,7 +760,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     Run();
 
-    CheckAuthorizedJSON(request.GetResponse().AsString());
+    CHECK( HasSuccessfulAuth(request.GetResponse().AsString()) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -762,7 +781,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     const auto& response = request.GetResponse();
     CHECK( response.GetStatus() == 200 );
-    CheckAuthorizedJSON(response.AsString());
+    CHECK( HasSuccessfulAuth(response.AsString()) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -771,22 +790,25 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
+    if ( ShouldSkipDigestAuth() )
+    {
+        WARN("Skipping Digest auth test with default URL and WinHTTP backend");
+        return;
+    }
+
     Create("digest-auth/auth/wxtest/wxwidgets");
     Run(wxWebRequest::State_Unauthorized, 401);
     REQUIRE( request.GetAuthChallenge().IsOk() );
 
     SECTION("Good password")
     {
-        if ( ShouldSkipDigestAuth() )
-            return;
-
         UseCredentials("wxtest", "wxwidgets");
         RunLoopWithTimeout();
         CHECK( request.GetState() == wxWebRequest::State_Completed );
 
         const auto& response = request.GetResponse();
         CHECK( response.GetStatus() == 200 );
-        CheckAuthorizedJSON(response.AsString());
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Bad password")
@@ -811,7 +833,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     const auto& response = request.GetResponse();
     CHECK( response.GetStatus() == 200 );
-    CheckAuthorizedJSON(response.AsString());
+    CHECK( HasSuccessfulAuth(response.AsString()) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -821,7 +843,10 @@ TEST_CASE_METHOD(RequestFixture,
         return;
 
     if ( ShouldSkipDigestAuth() )
+    {
+        WARN("Skipping Digest auth test with default URL and WinHTTP backend");
         return;
+    }
 
     CreateWithAuth("digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
     Run();
@@ -830,7 +855,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     const auto& response = request.GetResponse();
     CHECK( response.GetStatus() == 200 );
-    CheckAuthorizedJSON(response.AsString());
+    CHECK( HasSuccessfulAuth(response.AsString()) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -1175,7 +1200,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         return;
     }
 
-    Create("redirect-to?url=post&status_code=307");
+    Create("redirect-to?url=/post&status_code=307");
     request.SetData("app=WebRequestRedirect&version=1", "application/x-www-form-urlencoded");
     REQUIRE( Execute() );
     CHECK( response.GetStatus() == 200 );
@@ -1209,7 +1234,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     REQUIRE( Execute() );
 
     CHECK( response.GetStatus() == 200 );
-    CheckExpectedJSON(response.AsString(), "bloordyblop", "17");
+    CHECK( HasJsonValue(response.AsString(), "bloordyblop", "17") );
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
@@ -1233,7 +1258,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CheckAuthorizedJSON(response.AsString());
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Explicit basic auth")
@@ -1245,19 +1270,20 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CheckAuthorizedJSON(response.AsString());
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Password after redirect")
     {
-        Create("redirect-to?url=basic-auth/wxtest/wxwidgets");
+        Create("redirect-to?url=" +
+               GetRedirectTarget("basic-auth/wxtest/wxwidgets"));
         request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
 
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CheckAuthorizedJSON(response.AsString());
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Bad password")
@@ -1291,7 +1317,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CheckAuthorizedJSON(response.AsString());
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 }
 
@@ -1300,6 +1326,12 @@ TEST_CASE_METHOD(SyncRequestFixture,
 {
     if ( !InitBaseURL() )
         return;
+
+    if ( ShouldSkipDigestAuth() )
+    {
+        WARN("Skipping Digest auth test with default URL and WinHTTP backend");
+        return;
+    }
 
     const auto& versionInfo = wxWebSession::GetDefault().GetLibraryVersionInfo();
     if ( versionInfo.GetName() == "libcurl" && !versionInfo.AtLeast(7, 60) )
@@ -1322,15 +1354,12 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Good password")
     {
-        if ( ShouldSkipDigestAuth() )
-            return;
-
         CreateWithAuth("digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
 
-        CheckAuthorizedJSON(response.AsString());
+        CHECK( HasSuccessfulAuth(response.AsString()) );
     }
 
     SECTION("Bad password")

@@ -21,6 +21,7 @@
 #include "wx/fileconf.h"
 #include "wx/sstream.h"
 #include "wx/log.h"
+#include "wx/wfstream.h"
 
 #include "testlog.h"
 
@@ -658,6 +659,30 @@ TEST_CASE_METHOD(LogTestCase, "wxFileConfig::Error", "[fileconfig][error]")
 
     // Check that it's the second quote which is unexpected, not the first one.
     checkWarning(R"(foo="x"y)", R"(unexpected " at position 3)");
+
+    // Check that a duplicate group is detected as an error.
+    checkWarning(R"([foo]
+bar=1
+[foo]
+baz=2
+)", "duplicate group 'foo'");
+}
+
+// This test is disabled by default as it requires the environment variable
+// below to be defined to point to a XML file to load.
+TEST_CASE("wxFileConfig::Load", "[.]")
+{
+    wxString file;
+    REQUIRE( wxGetEnv("WX_TEST_FILECONFIG", &file) );
+
+    wxFileInputStream fis(file);
+    REQUIRE( fis.IsOk() );
+
+    std::unique_ptr<wxFileConfig> fc;
+
+    REQUIRE_NOTHROW( fc.reset(new wxFileConfig(fis)) );
+
+    WARN("Dump of " << file << ":\n" << Dump(*fc));
 }
 
 #endif // wxUSE_FILECONFIG

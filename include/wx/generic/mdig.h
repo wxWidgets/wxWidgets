@@ -68,13 +68,13 @@ public:
     // implement base class pure virtuals
     static bool IsTDI() { return true; }
 
-    virtual void ActivateNext() { AdvanceActive(true); }
-    virtual void ActivatePrevious() { AdvanceActive(false); }
+    virtual void ActivateNext() override { AdvanceActive(true); }
+    virtual void ActivatePrevious() override { AdvanceActive(false); }
 
 #if wxUSE_MENUS
-    virtual void SetWindowMenu(wxMenu* pMenu);
+    virtual void SetWindowMenu(wxMenu* pMenu) override;
 
-    virtual void SetMenuBar(wxMenuBar *pMenuBar);
+    virtual void SetMenuBar(wxMenuBar *pMenuBar) override;
 #endif // wxUSE_MENUS
 
     virtual wxGenericMDIClientWindow *OnCreateGenericClient();
@@ -109,7 +109,7 @@ private:
     void OnWindowMenu(wxCommandEvent& event);
 #endif // wxUSE_MENUS
 
-    virtual bool ProcessEvent(wxEvent& event);
+    virtual bool ProcessEvent(wxEvent& event) override;
 
     void OnClose(wxCloseEvent& event);
 
@@ -160,18 +160,18 @@ public:
     virtual ~wxGenericMDIChildFrame();
 
     // implement MDI operations
-    virtual void Activate();
+    virtual void Activate() override;
 
 
 #if wxUSE_MENUS
-    virtual void SetMenuBar( wxMenuBar *menu_bar );
-    virtual wxMenuBar *GetMenuBar() const;
+    virtual void SetMenuBar( wxMenuBar *menu_bar ) override;
+    virtual wxMenuBar *GetMenuBar() const override;
 #endif // wxUSE_MENUS
 
-    virtual wxString GetTitle() const { return m_title; }
-    virtual void SetTitle(const wxString& title);
+    virtual wxString GetTitle() const override { return m_title; }
+    virtual void SetTitle(const wxString& title) override;
 
-    virtual bool TryAfter(wxEvent& event);
+    virtual bool TryAfter(wxEvent& event) override;
 
     // implementation only from now on
 
@@ -226,7 +226,7 @@ public:
     // window creation by overriding it in the derived classes)
     virtual bool CreateGenericClient(wxWindow *parent);
     virtual bool CreateClient(wxMDIParentFrame *parent,
-                              long WXUNUSED(style) = wxVSCROLL | wxHSCROLL)
+                              long WXUNUSED(style) = wxVSCROLL | wxHSCROLL) override
     {
         return CreateGenericClient(parent);
     }

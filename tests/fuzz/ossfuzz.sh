@@ -8,5 +8,15 @@ make -j$(nproc)
 $CXX $CXXFLAGS -o $OUT/zip tests/fuzz/zip.cpp \
     $LIB_FUZZING_ENGINE `./wx-config --cxxflags --libs base`
 
+$CXX $CXXFLAGS -o $OUT/tar tests/fuzz/tar.cpp \
+    $LIB_FUZZING_ENGINE `./wx-config --cxxflags --libs base`
+cp tests/fuzz/tar.options $OUT/
+
+$CXX $CXXFLAGS -o $OUT/fileconf tests/fuzz/fileconf.cpp \
+    $LIB_FUZZING_ENGINE `./wx-config --cxxflags --libs base`
+cp tests/fuzz/fileconf.options $OUT/
+
 # and copy their corpora
 zip -j $OUT/zip_seed_corpus.zip tests/fuzz/corpus/zip/*
+zip -j $OUT/tar_seed_corpus.zip tests/fuzz/corpus/tar/*
+zip -j $OUT/fileconf_seed_corpus.zip tests/fuzz/corpus/fileconf/*

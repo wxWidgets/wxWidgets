@@ -44,44 +44,45 @@ public:
         long style = 0,
         const wxString& name = wxASCII_STR(wxPanelNameStr));
 
-    virtual void Raise();
-    virtual void Lower();
+    virtual void Raise() override;
+    virtual void Lower() override;
 
     // SetLabel(), which does nothing in wxWindow
     virtual void SetLabel(const wxString& label) override { m_Label = label; }
     virtual wxString GetLabel() const override            { return m_Label; }
 
-    virtual bool Show( bool show = true );
-    virtual bool Enable( bool enable = true );
+    virtual bool Show( bool show = true ) override;
+    virtual bool Enable( bool enable = true ) override;
 
-    virtual void SetFocus();
+    virtual void SetFocus() override;
 
-    virtual void WarpPointer(int x, int y);
+    virtual void WarpPointer(int x, int y) override;
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = nullptr );
-    virtual void Update();
+                          const wxRect *rect = nullptr ) override;
+    virtual void Update() override;
 
-    virtual bool SetBackgroundColour( const wxColour &colour );
-    virtual bool SetForegroundColour( const wxColour &colour );
+    virtual bool SetBackgroundColour( const wxColour &colour ) override;
+    virtual bool SetForegroundColour( const wxColour &colour ) override;
 
-    virtual bool SetCursor( const wxCursor &cursor );
-    virtual bool SetFont( const wxFont &font );
+    virtual bool SetCursor( const wxCursor &cursor ) override;
+    virtual bool SetFont( const wxFont &font ) override;
 
-    virtual int GetCharHeight() const;
-    virtual int GetCharWidth() const;
+    virtual int GetCharHeight() const override;
+    virtual int GetCharWidth() const override;
 
-    virtual void ScrollWindow( int dx, int dy, const wxRect* rect = nullptr );
+    virtual void ScrollWindow( int dx, int dy,
+                               const wxRect* rect = nullptr ) override;
 
 #if wxUSE_DRAG_AND_DROP
-    virtual void SetDropTarget( wxDropTarget *dropTarget );
-#endif // wxUSE_DRAG_AND_DROP
+    virtual void SetDropTarget( wxDropTarget *dropTarget ) override;
 
     // Accept files for dragging
-    virtual void DragAcceptFiles(bool accept);
+    virtual void DragAcceptFiles(bool accept) override;
+#endif // wxUSE_DRAG_AND_DROP
 
     // Get the unique identifier of a window
-    virtual WXWindow GetHandle() const { return X11GetMainWindow(); }
+    virtual WXWindow GetHandle() const override { return X11GetMainWindow(); }
 
     // implementation from now on
     // --------------------------
@@ -135,7 +136,7 @@ public:
     // I don't want users to override what's done in idle so everything that
     // has to be done in idle time in order for wxX11 to work is done in
     // OnInternalIdle
-    virtual void OnInternalIdle();
+    virtual void OnInternalIdle() override;
 
 protected:
     // Responds to colour changes: passes event on to children.
@@ -161,23 +162,22 @@ protected:
                                  int *x, int *y,
                                  int *descent = nullptr,
                                  int *externalLeading = nullptr,
-                                 const wxFont *font = nullptr) const;
-    virtual void DoClientToScreen( int *x, int *y ) const;
-    virtual void DoScreenToClient( int *x, int *y ) const;
-    virtual void DoGetPosition( int *x, int *y ) const;
-    virtual void DoGetSize( int *width, int *height ) const;
-    virtual void DoGetClientSize( int *width, int *height ) const;
+                                 const wxFont *font = nullptr) const override;
+    virtual void DoClientToScreen( int *x, int *y ) const override;
+    virtual void DoScreenToClient( int *x, int *y ) const override;
+    virtual void DoGetPosition( int *x, int *y ) const override;
+    virtual void DoGetSize( int *width, int *height ) const override;
+    virtual void DoGetClientSize( int *width, int *height ) const override;
     virtual void DoSetSize(int x, int y,
         int width, int height,
-        int sizeFlags = wxSIZE_AUTO);
-    virtual void DoSetClientSize(int width, int height);
-    virtual void DoMoveWindow(int x, int y, int width, int height);
+        int sizeFlags = wxSIZE_AUTO) override;
+    virtual void DoSetClientSize(int width, int height) override;
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
     virtual void DoSetSizeHints(int minW, int minH,
         int maxW, int maxH,
-        int incW, int incH);
-    virtual void DoCaptureMouse();
-    virtual void DoReleaseMouse();
-    virtual void KillFocus();
+        int incW, int incH) override;
+    virtual void DoCaptureMouse() override;
+    virtual void DoReleaseMouse() override;
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
@@ -186,6 +186,8 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    void KillFocus();
 
     wxString m_Label;
 

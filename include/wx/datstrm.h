@@ -112,6 +112,14 @@ public:
 protected:
     wxInputStream *m_input;
 
+private:
+    // Try to read exactly the given number of bytes into the provided buffer.
+    //
+    // Return true if all of them could be read or mark the input stream as
+    // being in error and return false if fewer bytes than requested are
+    // available, as this means the data is truncated and can't be used.
+    bool ReadBytes(void *buffer, size_t size);
+
     wxDECLARE_NO_COPY_CLASS(wxDataInputStream);
 };
 

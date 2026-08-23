@@ -1994,7 +1994,7 @@ public:
 
         @since 3.3.0
      */
-    bool IsFullySpecified() const
+    bool IsFullySpecified() const;
 
     /**
         Assignment operator for coordinate types.
@@ -6181,6 +6181,28 @@ public:
         @since 3.1.3
      */
     wxWindow* GetFrozenColGridWindow() const;
+
+    /**
+        Return the row labels window containing frozen cells.
+
+        This window is shown only when there are frozen rows.
+        This window is not shown if the rows labels were hidden using
+        HideRowLabels().
+
+        @since 3.3.3
+     */
+    wxWindow* GetFrozenRowLabelWindow() const;
+
+    /**
+        Return the column labels window containing frozen cells.
+
+        This window is shown only when there are frozen columns.
+        This window is not shown if the columns labels were hidden using
+        HideColLabels().
+
+        @since 3.3.3
+     */
+    wxWindow* GetFrozenColLabelWindow() const;
 
     /**
         Return the row labels window.

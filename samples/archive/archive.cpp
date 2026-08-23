@@ -351,4 +351,4 @@ int ArchiveApp::OnRun()
     return result;
 }
 
-wxIMPLEMENT_APP(ArchiveApp);
+wxIMPLEMENT_APP_CONSOLE(ArchiveApp);

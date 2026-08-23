@@ -801,9 +801,11 @@ wxRendererGeneric::DrawCollapseButton(wxWindow *win,
     dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
 }
 
-wxSize wxRendererGeneric::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxReadOnlyDC& WXUNUSED(dc))
+wxSize wxRendererGeneric::GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& WXUNUSED(dc))
 {
-    return wxSize(18, 18);
+    wxCHECK_MSG(win, wxSize(0, 0), "Must have a valid window");
+
+    return win->FromDIP(wxSize(18, 18));
 }
 
 void

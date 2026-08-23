@@ -20,6 +20,8 @@
     #include "wx/math.h"
 #endif //WX_PRECOMP
 
+#include <vector>
+
 namespace
 {
 
@@ -78,9 +80,21 @@ wxDataInputStream::wxDataInputStream(wxInputStream& s, const wxMBConv& conv)
 {
 }
 
+bool wxDataInputStream::ReadBytes(void *buffer, size_t size)
+{
+    if ( m_input->Read(buffer, size).LastRead() == size )
+        return true;
+
+    // We didn't get as many bytes as requested, so the stream is truncated and
+    // we can't return any meaningful data: mark it as being in error to let
+    // the caller know about it instead of silently returning wrong values.
+    m_input->Reset(wxSTREAM_READ_ERROR);
+    return false;
+}
+
 wxUint64 wxDataInputStream::Read64()
 {
-  wxUint64 tmp;
+  wxUint64 tmp = 0;
   Read64(&tmp, 1);
   return tmp;
 }
@@ -89,7 +103,8 @@ wxUint32 wxDataInputStream::Read32()
 {
   wxUint32 i32;
 
-  m_input->Read(&i32, 4);
+  if ( !ReadBytes(&i32, 4) )
+    return 0;
 
   if (m_be_order)
     return wxUINT32_SWAP_ON_LE(i32);
@@ -101,7 +116,8 @@ wxUint16 wxDataInputStream::Read16()
 {
   wxUint16 i16;
 
-  m_input->Read(&i16, 2);
+  if ( !ReadBytes(&i16, 2) )
+    return 0;
 
   if (m_be_order)
     return wxUINT16_SWAP_ON_LE(i16);
@@ -113,7 +129,9 @@ wxUint8 wxDataInputStream::Read8()
 {
   wxUint8 buf;
 
-  m_input->Read(&buf, 1);
+  if ( !ReadBytes(&buf, 1) )
+    return 0;
+
   return (wxUint8)buf;
 }
 
@@ -124,7 +142,9 @@ double wxDataInputStream::ReadDouble()
     {
         char buf[10];
 
-        m_input->Read(buf, 10);
+        if ( !ReadBytes(buf, 10) )
+            return 0.0;
+
         return wxConvertFromIeeeExtended((const wxInt8 *)buf);
     }
     else
@@ -174,8 +194,11 @@ wxString wxDataInputStream::ReadString()
         wxCharBuffer tmp(len);
         if ( tmp )
         {
-            m_input->Read(tmp.data(), len);
-            ret = m_conv->cMB2WC(tmp.data(), len, nullptr);
+            // Only decode the string if we could read all of its bytes: a
+            // shorter read means the stream is truncated and the rest of the
+            // buffer is uninitialised, so don't let it leak into the result.
+            if ( ReadBytes(tmp.data(), len) )
+                ret = m_conv->cMB2WC(tmp.data(), len, nullptr);
         }
     }
 
@@ -187,9 +210,14 @@ static
 void DoReadLL(T *buffer, size_t size, wxInputStream *input, bool be_order)
 {
     typedef T DataType;
-    unsigned char *pchBuffer = new unsigned char[size * 8];
+    std::vector<unsigned char> pchBuffer(size * 8);
     // TODO: Check for overflow when size is of type uint and is > than 512m
-    input->Read(pchBuffer, size * 8);
+    if ( input->Read(pchBuffer.data(), size * 8).LastRead() != size * 8 )
+    {
+        // Stream is truncated, don't use the partially read data.
+        input->Reset(wxSTREAM_READ_ERROR);
+        return;
+    }
     size_t idx_base = 0;
     if ( be_order )
     {
@@ -219,14 +247,13 @@ void DoReadLL(T *buffer, size_t size, wxInputStream *input, bool be_order)
             idx_base += 8;
         }
     }
-    delete[] pchBuffer;
 }
 
 template <class T>
 static void DoWriteLL(const T *buffer, size_t size, wxOutputStream *output, bool be_order)
 {
     typedef T DataType;
-    unsigned char *pchBuffer = new unsigned char[size * 8];
+    std::vector<unsigned char> pchBuffer(size * 8);
     size_t idx_base = 0;
     if ( be_order )
     {
@@ -260,8 +287,7 @@ static void DoWriteLL(const T *buffer, size_t size, wxOutputStream *output, bool
     }
 
     // TODO: Check for overflow when size is of type uint and is > than 512m
-    output->Write(pchBuffer, size * 8);
-    delete[] pchBuffer;
+    output->Write(pchBuffer.data(), size * 8);
 }
 
 template <class T>
@@ -271,7 +297,12 @@ void DoReadI64(T *buffer, size_t size, wxInputStream *input, bool be_order)
     typedef T DataType;
     unsigned char *pchBuffer = (unsigned char*) buffer;
     // TODO: Check for overflow when size is of type uint and is > than 512m
-    input->Read(pchBuffer, size * 8);
+    if ( input->Read(pchBuffer, size * 8).LastRead() != size * 8 )
+    {
+        // Stream is truncated, don't use the partially read data.
+        input->Reset(wxSTREAM_READ_ERROR);
+        return;
+    }
     if ( be_order )
     {
         for ( wxUint32 i = 0; i < size; i++ )
@@ -348,14 +379,15 @@ void wxDataInputStream::ReadLL(wxLongLong *buffer, size_t size)
 
 wxLongLong wxDataInputStream::ReadLL(void)
 {
-    wxLongLong ll;
+    wxLongLong ll = 0;
     DoReadLL(&ll, (size_t)1, m_input, m_be_order);
     return ll;
 }
 
 void wxDataInputStream::Read32(wxUint32 *buffer, size_t size)
 {
-    m_input->Read(buffer, size * 4);
+    if ( !ReadBytes(buffer, size * 4) )
+        return;
 
     if (m_be_order)
     {
@@ -377,7 +409,8 @@ void wxDataInputStream::Read32(wxUint32 *buffer, size_t size)
 
 void wxDataInputStream::Read16(wxUint16 *buffer, size_t size)
 {
-  m_input->Read(buffer, size * 2);
+  if ( !ReadBytes(buffer, size * 2) )
+    return;
 
   if (m_be_order)
   {
@@ -399,7 +432,7 @@ void wxDataInputStream::Read16(wxUint16 *buffer, size_t size)
 
 void wxDataInputStream::Read8(wxUint8 *buffer, size_t size)
 {
-  m_input->Read(buffer, size);
+  ReadBytes(buffer, size);
 }
 
 void wxDataInputStream::ReadDouble(double *buffer, size_t size)

@@ -238,13 +238,11 @@ void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
     event.Skip();
 }
 
-// Responds to colour changes, and passes event on to children.
 void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     // TODO
 
-    // Propagate the event to the non-top-level children
-    wxFrame::OnSysColourChanged(event);
+    event.Skip();
 }
 
 bool wxMDIParentFrame::ShouldBeVisible() const

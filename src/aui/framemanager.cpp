@@ -534,11 +534,26 @@ static int PaneSortFunc(wxAuiPaneInfo** p1, wxAuiPaneInfo** p2)
 
 bool wxAuiPaneInfo::IsValid() const
 {
+    if ( dock_direction == wxAUI_DOCK_CENTRE &&
+        !(dock_layer == 0 && dock_row == 0 && dock_pos == 0) )
+    {
+        wxFAIL_MSG("Center pane must have dock layer, row and pos set to 0");
+
+        return false;
+    }
+
     // Should this RTTI and function call be rewritten as
     // sending a new event type to allow other window types
     // to check the pane settings?
     wxAuiToolBar* toolbar = wxDynamicCast(window, wxAuiToolBar);
-    return !toolbar || toolbar->IsPaneValid(*this);
+    if ( toolbar && !toolbar->IsPaneValid(*this) )
+    {
+        wxFAIL_MSG("toolbar style and pane docking flags are incompatible");
+
+        return false;
+    }
+
+    return true;
 }
 
 // -- wxAuiManager class implementation --
@@ -617,6 +632,44 @@ void wxAuiManager::OnSysColourChanged(wxSysColourChangedEvent& event)
     m_frame->Refresh();
     event.Skip(true);
 }
+
+// We don't need to scale the positions and sizes on DPI change if they use
+// DPI-independent pixels.
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+
+void wxAuiManager::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    event.Skip();
+
+    for( wxAuiPaneInfo& pinfo : GetAllPanes() )
+    {
+        pinfo.min_size = event.Scale(pinfo.min_size);
+        pinfo.best_size = event.Scale(pinfo.best_size);
+
+        switch ( pinfo.dock_direction )
+        {
+            case wxAUI_DOCK_LEFT:
+            case wxAUI_DOCK_RIGHT:
+            case wxAUI_DOCK_CENTER:
+                pinfo.dock_pos = event.ScaleY(pinfo.dock_pos);
+                pinfo.dock_size = event.ScaleY(pinfo.dock_size);
+                break;
+
+            case wxAUI_DOCK_TOP:
+            case wxAUI_DOCK_BOTTOM:
+                pinfo.dock_pos = event.ScaleX(pinfo.dock_pos);
+                pinfo.dock_size = event.ScaleX(pinfo.dock_size);
+                break;
+        }
+    }
+
+    // Force recreating the docks after updating the panes.
+    m_docks.clear();
+
+    Update();
+}
+
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
 // creates a floating frame for the windows
 wxAuiFloatingFrame* wxAuiManager::CreateFloatingFrame(wxWindow* parent,
@@ -775,6 +828,9 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
     m_frame->Bind(wxEVT_CHILD_FOCUS, &wxAuiManager::OnChildFocus, this);
     m_frame->Bind(wxEVT_AUI_FIND_MANAGER, &wxAuiManager::OnFindManager, this);
     m_frame->Bind(wxEVT_SYS_COLOUR_CHANGED, &wxAuiManager::OnSysColourChanged, this);
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    m_frame->Bind(wxEVT_DPI_CHANGED, &wxAuiManager::OnDPIChanged, this);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
 #if wxUSE_MDI
     // if the owner is going to manage an MDI parent frame,
@@ -830,6 +886,9 @@ void wxAuiManager::UnInit()
         m_frame->Unbind(wxEVT_CHILD_FOCUS, &wxAuiManager::OnChildFocus, this);
         m_frame->Unbind(wxEVT_AUI_FIND_MANAGER, &wxAuiManager::OnFindManager, this);
         m_frame->Unbind(wxEVT_SYS_COLOUR_CHANGED, &wxAuiManager::OnSysColourChanged, this);
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+        m_frame->Unbind(wxEVT_DPI_CHANGED, &wxAuiManager::OnDPIChanged, this);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
         m_frame = nullptr;
     }
 }
@@ -996,8 +1055,8 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
         {
             // see whether non-default docking flags are valid
             test.window = window;
-            wxCHECK_MSG(test.IsValid(), false,
-                        "toolbar style and pane docking flags are incompatible");
+            if (!test.IsValid())
+                return false;
         }
     }
 
@@ -2596,8 +2655,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     // We need to reset any previous set min size to allow decreasing the pane
     // size by dragging the sash between it and other panes, so always set it
     // to something, even if it's not specified.
-    if (min_size == wxDefaultSize)
-        min_size = wxSize(1, 1);
+    min_size.IncTo(wxSize(1, 1));
 
     sizer_item->SetMinSize(min_size);
 

@@ -1337,6 +1337,15 @@
 #            define wxUSE_PROTOCOL 1
 #        endif
 #   endif
+
+#   if !wxUSE_SOCKETS
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_URL requires wxUSE_SOCKETS"
+#        else
+#           undef wxUSE_SOCKETS
+#           define wxUSE_SOCKETS 1
+#       endif
+#   endif
 #endif /* wxUSE_URL */
 
 #if wxUSE_PROTOCOL

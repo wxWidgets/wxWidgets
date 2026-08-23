@@ -36,6 +36,7 @@
 #include <windowsx.h> // needed by GET_X_LPARAM and GET_Y_LPARAM macros
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/winundef.h"
 #include "wx/msw/private/winstyle.h"
 
@@ -807,8 +808,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wxString{}, pos, size) )
         return false;
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
+    UpdateNativeColours();
 
     wxSetCCUnicodeFormat(GetHwnd());
 
@@ -824,6 +824,8 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 
     // And ensure we adjust it again if the DPI changes in the future.
     Bind(wxEVT_DPI_CHANGED, &wxTreeCtrl::OnDPIChanged, this);
+
+    Bind(wxEVT_SYS_COLOUR_CHANGED, &wxTreeCtrl::OnSysColourChanged, this);
 
     return true;
 }
@@ -1033,6 +1035,12 @@ bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
     ::SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
 
     return true;
+}
+
+void wxTreeCtrl::UpdateNativeColours()
+{
+    ::SendMessage(m_hWnd, TVM_SETBKCOLOR, 0, GetBackgroundColour().GetPixel());
+    ::SendMessage(m_hWnd, TVM_SETTEXTCOLOR, 0, GetForegroundColour().GetPixel());
 }
 
 // ----------------------------------------------------------------------------
@@ -2346,6 +2354,12 @@ void wxTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
     event.Skip();
 }
 
+void wxTreeCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    UpdateNativeColours();
+    event.Skip();
+}
+
 bool wxTreeCtrl::MSWIsOnItem(unsigned flags) const
 {
     unsigned mask = TVHT_ONITEM;
@@ -2773,6 +2787,15 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     bool processed = false;
     WXLRESULT rc = 0;
     bool isMultiple = HasFlag(wxTR_MULTIPLE);
+
+    if ( nMsg == WM_NCPAINT && wxMSWDarkMode::IsActive() )
+    {
+        // As with wxListCtrl, we need to draw the corner between two
+        // scrollbars ourselves in dark mode to give it correct colour.
+        rc = wxTreeCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+        wxMSWImpl::PaintScrollBarCorner(GetHwnd());
+        return rc;
+    }
 
     if ( nMsg == WM_CONTEXTMENU )
     {

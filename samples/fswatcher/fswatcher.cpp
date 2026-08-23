@@ -203,7 +203,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // label
     wxStaticText* label = new wxStaticText(panel, wxID_ANY, "Watched paths");
-    leftSizer->Add(label, wxSizerFlags().Center().Border(wxALL));
+    leftSizer->Add(label, wxSizerFlags().Center().Border());
 
     // list of files
     m_filesList = new wxListView(panel, wxID_ANY, wxPoint(-1,-1),
@@ -216,10 +216,10 @@ MyFrame::MyFrame(const wxString& title)
     wxButton* buttonRemove = new wxButton(panel, BTN_ID_REMOVE, "&Remove");
     wxButton* buttonRemoveAll = new wxButton(panel, BTN_ID_REMOVE_ALL, "Remove a&ll");
     wxSizer *btnSizer = new wxGridSizer(2);
-    btnSizer->Add(buttonAdd, wxSizerFlags().Center().Border(wxALL));
-    btnSizer->Add(buttonAddTree, wxSizerFlags().Center().Border(wxALL));
-    btnSizer->Add(buttonRemove, wxSizerFlags().Center().Border(wxALL));
-    btnSizer->Add(buttonRemoveAll, wxSizerFlags().Center().Border(wxALL));
+    btnSizer->Add(buttonAdd, wxSizerFlags().Center().Border());
+    btnSizer->Add(buttonAddTree, wxSizerFlags().Center().Border());
+    btnSizer->Add(buttonRemove, wxSizerFlags().Center().Border());
+    btnSizer->Add(buttonRemoveAll, wxSizerFlags().Center().Border());
 
     // and put it all together
     leftSizer->Add(btnSizer, wxSizerFlags(0).Expand());

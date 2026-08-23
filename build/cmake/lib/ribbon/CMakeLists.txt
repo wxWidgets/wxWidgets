@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_RIBBON)
+    wx_append_install_headers(RIBBON_HDR)
+    return()
+endif()
+
 wx_append_sources(RIBBON_FILES RIBBON)
 
 wx_add_library(wxribbon ${RIBBON_FILES})

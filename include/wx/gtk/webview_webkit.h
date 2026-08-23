@@ -82,6 +82,12 @@ public:
     using wxWebView::Print;
 #endif
 #endif
+#if wxUSE_WEBVIEW_WEBKIT2
+    virtual bool PrintToPDF(const wxString& filePath) override;
+#if wxUSE_PRINTING_ARCHITECTURE
+    virtual bool PrintToPDF(const wxString& filePath, const wxPrintData& printData) override;
+#endif
+#endif
     virtual bool IsBusy() const override;
 #if wxUSE_WEBVIEW_WEBKIT2
     virtual void EnableAccessToDevTools(bool enable = true) override;

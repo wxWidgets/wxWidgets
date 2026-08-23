@@ -13,7 +13,12 @@
 #include "testprec.h"
 
 
+#include "wx/app.h"
+#include "wx/apptrait.h"
+#include "wx/evtloop.h"
 #include "wx/timer.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -48,6 +53,28 @@ CPPUNIT_TEST_SUITE_REGISTRATION( EvtloopTestCase );
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( EvtloopTestCase, "EvtloopTestCase" );
 
+
+// Check that the application traits create an event loop of the appropriate
+// kind: this notably would not be the case for console applications using a
+// monolithic build of the library before the fix for #24909.
+#if wxUSE_GUI || wxUSE_CONSOLE_EVENTLOOP
+
+TEST_CASE("EventLoop::CreateFromTraits", "[evtloop]")
+{
+    wxAppTraits* const traits = wxTheApp->GetTraits();
+    REQUIRE( traits );
+
+    std::unique_ptr<wxEventLoopBase> loop(traits->CreateEventLoop());
+    REQUIRE( loop );
+
+#if wxUSE_GUI
+    CHECK( dynamic_cast<wxGUIEventLoop*>(loop.get()) );
+#else // console application
+    CHECK( dynamic_cast<wxConsoleEventLoop*>(loop.get()) );
+#endif
+}
+
+#endif // wxUSE_GUI || wxUSE_CONSOLE_EVENTLOOP
 
 // Helper class to schedule exit of the given event loop after the specified
 // delay.

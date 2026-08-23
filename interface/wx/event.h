@@ -5176,9 +5176,7 @@ public:
     A wxStylusEvent is generated from wxWindow when the graphical pen (stylus) is used.
 
     Application can handle this event to process stylus actions based on
-    the current of the pen, pressure and other parameters.
-    processing based on the current position of the pen, pressure and other
-    parameters.
+    the current position of the pen, pressure and other parameters.
 
     @beginEventTable{wxStylusEvent}
     @event{EVT_STYLUS_DOWN(func)}

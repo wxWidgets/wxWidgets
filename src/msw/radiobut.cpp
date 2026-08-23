@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/private/window.h"
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
@@ -74,19 +75,6 @@ bool wxRadioButton::Create(wxWindow *parent,
     // do it)
     if ( HasFlag(wxRB_GROUP) )
         SetValue(true);
-
-    return true;
-}
-
-bool wxRadioButton::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
-{
-    // Weirdly enough, even though radio buttons support dark theme (they
-    // notably change the way they draw the focus rectangle if we set it), they
-    // still use the default black foreground colour in it, making their text
-    // unreadable, so we need to change it manually.
-    wxRadioButtonBase::MSWGetDarkModeSupport(support);
-
-    support.setForeground = true;
 
     return true;
 }
@@ -349,6 +337,14 @@ int wxRadioButton::MSWGetButtonCheckedFlag() const
 void wxRadioButton::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
 {
     wxRendererNative::Get().DrawRadioBitmap(this, dc, rect, flags);
+}
+
+void wxRadioButton::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxRadioButtonBase::MSWSetDarkOrLightMode(setmode);
+
+    // Use owner-draw mode if needed for dark mode or custom text colour
+    MSWMakeOwnerDrawn(wxMSWDarkMode::IsActive() || m_hasFgCol);
 }
 
 #if wxUSE_ACCESSIBILITY

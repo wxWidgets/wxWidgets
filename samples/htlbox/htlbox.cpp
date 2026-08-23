@@ -306,8 +306,8 @@ MyFrame::MyFrame()
 
     // and lay them out
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(m_hlbox, 2, wxGROW);
-    sizer->Add(text, 3, wxGROW);
+    sizer->Add(m_hlbox, wxSizerFlags(2).Expand());
+    sizer->Add(text, wxSizerFlags(3).Expand());
 
     SetSizer(sizer);
 }

@@ -26,11 +26,8 @@
 
 wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
 {
-    // Theme colours don't work in dark theme, so don't use them in this case.
-    if ( wxUxThemeIsActive() && !wxMSWDarkMode::IsActive() )
+    if ( wxUxThemeIsActive() )
     {
-        m_themed = true;
-
         // Determine sizes from theme
         wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
         wxUxThemeHandle hTheme(window, L"Rebar");
@@ -51,8 +48,8 @@ wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
 
         m_buttonSize = hThemeToolbar.GetTrueSize(TP_BUTTON);
     }
-    else
-        m_themed = false;
+
+    UpdateColoursFromSystem();
 }
 
 wxAuiToolBarArt* wxAuiMSWToolBarArt::Clone()
@@ -430,6 +427,14 @@ int wxAuiMSWToolBarArt::ShowDropDown(wxWindow* wnd,
     const wxAuiToolBarItemArray& items)
 {
     return wxAuiGenericToolBarArt::ShowDropDown(wnd, items);
+}
+
+void wxAuiMSWToolBarArt::UpdateColoursFromSystem()
+{
+    wxAuiGenericToolBarArt::UpdateColoursFromSystem();
+
+    // Theme colours do not work in dark mode.
+    m_themed = wxUxThemeIsActive() && !wxMSWDarkMode::IsActive();
 }
 
 #endif // wxUSE_AUI

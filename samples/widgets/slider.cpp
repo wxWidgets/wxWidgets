@@ -310,7 +310,7 @@ void SliderWidgetsPage::CreateContent()
     sizerLeft->AddSpacer(5);
 
     wxButton *btn = new wxButton(sizerLeftBox, SliderPage_Reset, "&Reset");
-    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, FromDIP(15)));
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
 
     // middle pane
     wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change slider value");
@@ -405,7 +405,7 @@ void SliderWidgetsPage::CreateContent()
     sizerTop->Add(sizerLeft,
                   wxSizerFlags(0).Expand().DoubleBorder((wxALL & ~wxLEFT)));
     sizerTop->Add(sizerMiddle,
-                  wxSizerFlags(1).Expand().DoubleBorder(wxALL));
+                  wxSizerFlags(1).Expand().DoubleBorder());
     sizerTop->Add(sizerRight,
                   wxSizerFlags(1).Expand().DoubleBorder((wxALL & ~wxRIGHT)));
 
@@ -521,9 +521,9 @@ void SliderWidgetsPage::CreateSlider()
 
     if ( m_slider->HasFlag(wxSL_VERTICAL) )
     {
-        m_sizerSlider->AddStretchSpacer(1);
+        m_sizerSlider->AddStretchSpacer();
         m_sizerSlider->Add(m_slider, wxSizerFlags(0).Expand().Border());
-        m_sizerSlider->AddStretchSpacer(1);
+        m_sizerSlider->AddStretchSpacer();
     }
     else
     {

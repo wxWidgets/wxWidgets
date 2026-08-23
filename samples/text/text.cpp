@@ -1310,30 +1310,30 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     // lay out the controls
     wxBoxSizer *column1 = new wxBoxSizer(wxVERTICAL);
-    column1->Add( m_text, 0, wxALL | wxEXPAND, 10 );
-    column1->Add( m_password, 0, wxALL | wxEXPAND, 10 );
-    column1->Add( m_readonly, 0, wxALL, 10 );
-    column1->Add( m_limited, 0, wxALL, 10 );
-    column1->Add( m_limitedMultiline, 0, wxALL, 10 );
-    column1->Add( upperOnly, 0, wxALL, 10 );
-    column1->Add( m_horizontal, 1, wxALL | wxEXPAND, 10 );
+    column1->Add( m_text, wxSizerFlags().Expand().DoubleBorder() );
+    column1->Add( m_password, wxSizerFlags().Expand().DoubleBorder() );
+    column1->Add( m_readonly, wxSizerFlags().DoubleBorder() );
+    column1->Add( m_limited, wxSizerFlags().DoubleBorder() );
+    column1->Add( m_limitedMultiline, wxSizerFlags().DoubleBorder() );
+    column1->Add( upperOnly, wxSizerFlags().DoubleBorder() );
+    column1->Add( m_horizontal, wxSizerFlags(1).Expand().DoubleBorder() );
 
     wxBoxSizer *column2 = new wxBoxSizer(wxVERTICAL);
-    column2->Add( m_multitext, 1, wxALL | wxEXPAND, 10 );
-    column2->Add( m_tab, 0, wxALL | wxEXPAND, 10 );
-    column2->Add( m_enter, 1, wxALL | wxEXPAND, 10 );
+    column2->Add( m_multitext, wxSizerFlags(1).Expand().DoubleBorder() );
+    column2->Add( m_tab, wxSizerFlags().Expand().DoubleBorder() );
+    column2->Add( m_enter, wxSizerFlags(1).Expand().DoubleBorder() );
 
     auto* const row1 = new wxGridSizer(3, FromDIP(wxSize(10, 10)));
-    row1->Add( column1, 0, wxALL | wxEXPAND, 10 );
-    row1->Add( column2, 1, wxALL | wxEXPAND, 10 );
-    row1->Add( m_textrich, 1, wxALL | wxEXPAND, 10 );
+    row1->Add( column1, wxSizerFlags().Expand().DoubleBorder() );
+    row1->Add( column2, wxSizerFlags(1).Expand().DoubleBorder() );
+    row1->Add( m_textrich, wxSizerFlags(1).Expand().DoubleBorder() );
     row1->SetItemMinSize( m_textrich, FromDIP(wxSize(300, 200)) );
 
     wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
-    topSizer->Add( row1, 2, wxALL | wxEXPAND, 10 );
+    topSizer->Add( row1, wxSizerFlags(2).Expand().DoubleBorder() );
 
 #if wxUSE_LOG
-    topSizer->Add( m_log, 1, wxALL | wxEXPAND, 10 );
+    topSizer->Add( m_log, wxSizerFlags(1).Expand().DoubleBorder() );
 #endif
 
     SetSizer(topSizer);

@@ -65,7 +65,7 @@ public:
 protected:
     virtual wxSize DoGetBestClientSize() const override;
 
-    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
 
     virtual void DoSet3StateValue(wxCheckBoxState value) override;
     virtual wxCheckBoxState DoGet3StateValue() const override;

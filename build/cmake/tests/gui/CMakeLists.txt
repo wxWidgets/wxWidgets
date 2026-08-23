@@ -133,6 +133,7 @@ set(TEST_GUI_SRC
     controls/winuiprinting.cpp
     controls/winuidialogsession.cpp
     controls/winuirichtooltip.cpp
+    docview/updateallviews.cpp
     events/clone.cpp
     events/enterleave.cpp
     # Duplicate this file here to test GUI event loops too.
@@ -147,6 +148,7 @@ set(TEST_GUI_SRC
     image/image.cpp
     image/imagwebp.cpp
     image/rawbmp.cpp
+    html/helpdata.cpp
     html/htmlparser.cpp
     html/htmlwindow.cpp
     html/htmprint.cpp

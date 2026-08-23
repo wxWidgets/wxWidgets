@@ -510,7 +510,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString info = "This is the wxWidgets OpenGL Cube sample.\n\n";
 
-#ifdef wxHAS_GLX
+#if (defined(__WXGTK__) || defined(__WXX11__)) && defined(wxHAS_GLX)
     const int glxVersion = wxGLCanvasUnix::GetGLXVersion();
     if ( glxVersion == 0 )
     {

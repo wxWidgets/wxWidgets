@@ -167,22 +167,74 @@ class wxWindowsArtProvider : public wxArtProvider
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
                                   const wxSize& size) override;
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                              const wxArtClient& client,
+                                              const wxSize& size) override;
+
+private:
+    static wxSize GetActualSize(const wxArtClient& client, wxSize size)
+    {
+        // We don't have any window here, so use the primary monitor DPI scale
+        // factor, which is consistent with what the native functions do.
+        if ( !size.IsFullySpecified() )
+        {
+            size = GetNativeSizeHint(client);
+
+            if ( !size.IsFullySpecified() )
+            {
+                // We must have some valid size.
+                size = wxSize(16, 16);
+            }
+        }
+
+        return size;
+    }
+
+    // Return true and fill in the provided parameters with the information
+    // corresponding to the stock icon for the given art id if it is supported,
+    // return false otherwise.
+    static bool GetStockIconInfo(const wxArtID& id, wxString& path, int& icon);
 };
 
-wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
-                                            const wxArtClient& client,
-                                            const wxSize& size)
+namespace
 {
-    wxBitmap bitmap;
 
-    // We don't have any window here, so if we call GetNativeSizeHint(), it
-    // will use the primary monitor DPI scale factor, which is consistent with
-    // what MSWGetBitmapFromIconLocation() does.
-    const wxSize
-        sizeNeeded = size.IsFullySpecified()
-                        ? size
-                        : wxArtProvider::GetNativeSizeHint(client);
+class wxWindowsStockIconImpl : public wxBitmapBundleImpl
+{
+public:
+    wxWindowsStockIconImpl(const wxString& path, int icon, const wxSize& size)
+        : m_path(path), m_icon(icon), m_size(size)
+    {
+    }
 
+    virtual wxSize GetDefaultSize() const override
+    {
+        return m_size;
+    }
+
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override
+    {
+        return m_size*scale;
+    }
+
+    virtual wxBitmap GetBitmap(const wxSize& size) override
+    {
+        return MSWGetBitmapFromIconLocation(m_path.t_str(), m_icon, size);
+    }
+
+private:
+    const wxString m_path;
+    const int m_icon;
+    const wxSize m_size;
+};
+
+} // anonymous namespace
+
+bool
+wxWindowsArtProvider::GetStockIconInfo(const wxArtID& id,
+                                       wxString& path,
+                                       int& icon)
+{
 #ifdef wxHAS_SHGetStockIconInfo
     SHSTOCKICONID stockIconId = MSWGetStockIconIdForArtProviderId( id );
     if ( stockIconId != SIID_INVALID )
@@ -194,14 +246,34 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
         HRESULT res = ::SHGetStockIconInfo(stockIconId, uFlags, &sii);
         if ( res == S_OK )
         {
-            bitmap = MSWGetBitmapFromIconLocation(sii.szPath, sii.iIcon,
-                                                  sizeNeeded);
-            if ( bitmap.IsOk() )
-                return bitmap;
+            path = sii.szPath;
+            icon = sii.iIcon;
+
+            return true;
         }
     }
 #endif // wxHAS_SHGetStockIconInfo
 
+    return false;
+}
+
+wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
+                                            const wxArtClient& client,
+                                            const wxSize& size)
+{
+    wxBitmap bitmap;
+
+    const wxSize sizeNeeded = GetActualSize(client, size);
+
+    wxString path;
+    int icon = 0;
+    if ( GetStockIconInfo(id, path, icon) )
+    {
+        bitmap = MSWGetBitmapFromIconLocation(path.t_str(), icon, sizeNeeded);
+
+        if ( bitmap.IsOk() )
+            return bitmap;
+    }
 
 #if wxUSE_FSVOLUME
     // now try SHGetFileInfo
@@ -247,6 +319,25 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
 
     // for anything else, fall back to generic provider:
     return bitmap;
+}
+
+wxBitmapBundle
+wxWindowsArtProvider::CreateBitmapBundle(const wxArtID& id,
+                                         const wxArtClient& client,
+                                         const wxSize& size)
+{
+    wxString path;
+    int icon = 0;
+    if ( GetStockIconInfo(id, path, icon) )
+    {
+        const wxSize sizeNeeded = GetActualSize(client, size);
+
+        return wxBitmapBundle::FromImpl(
+                new wxWindowsStockIconImpl(path, icon, sizeNeeded)
+            );
+    }
+
+    return {};
 }
 
 // ----------------------------------------------------------------------------

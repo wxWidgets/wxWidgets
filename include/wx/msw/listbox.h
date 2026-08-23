@@ -134,7 +134,7 @@ public:
     // Windows callbacks
     bool MSWCommand(WXUINT param, WXWORD id) override;
     WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
-    bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
 
     // under XP when using "transition effect for menus and tooltips" if we
     // return true for WM_PRINTCLIENT here then it causes noticeable slowdown

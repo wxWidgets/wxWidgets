@@ -284,9 +284,6 @@ private:
     // handle the standard buttons
     void OnButton(wxCommandEvent& event);
 
-    // update the background colour
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
 
     wxDECLARE_NO_COPY_CLASS(wxDialogBase);
     wxDECLARE_EVENT_TABLE();

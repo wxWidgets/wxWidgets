@@ -564,15 +564,6 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
             return gs_regClassesInfo[n].GetRequestedName(flags);
     }
 
-    // In dark mode, use the dark background brush instead of specified colour
-    // which would result in light background.
-    HBRUSH hbrBackground;
-    if ( wxMSWDarkMode::IsActive() )
-        hbrBackground = wxMSWDarkMode::GetBackgroundBrush();
-    else
-        hbrBackground = (HBRUSH)wxUIntToPtr(bgBrushCol + 1);
-
-
     // we need to register this class
     WNDCLASS wndclass;
     wxZeroMemory(wndclass);
@@ -580,7 +571,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
     wndclass.hInstance     = wxGetInstance();
     wndclass.hCursor       = ::LoadCursor(nullptr, IDC_ARROW);
-    wndclass.hbrBackground = hbrBackground;
+    wndclass.hbrBackground = (HBRUSH)wxUIntToPtr(bgBrushCol + 1);
     wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | extraStyles;
 
 

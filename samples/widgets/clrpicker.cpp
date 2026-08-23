@@ -148,10 +148,10 @@ void ColourPickerWidgetsPage::CreateContent()
     m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(styleSizer, "With textctrl", wxID_ANY, styleSizerBox);
     m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(styleSizer, "With label", wxID_ANY, styleSizerBox);
     m_chkColourShowAlpha = CreateCheckBoxAndAddToSizer(styleSizer, "With opacity", wxID_ANY, styleSizerBox);
-    boxleft->Add(styleSizer, 0, wxALL|wxGROW, 5);
+    boxleft->Add(styleSizer, wxSizerFlags().Expand().Border());
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
-                 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+                 wxSizerFlags().CentreHorizontal().TripleBorder());
 
     Reset();    // set checkboxes state
 
@@ -161,14 +161,14 @@ void ColourPickerWidgetsPage::CreateContent()
 
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
-    m_sizer->Add(m_clrPicker, 0, wxALIGN_CENTER|wxALL, 5);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
+    m_sizer->AddStretchSpacer();
+    m_sizer->Add(m_clrPicker, wxSizerFlags().Centre().Border());
+    m_sizer->AddStretchSpacer();
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(boxleft, 0, wxGROW|wxALL, 5);
-    sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
+    sz->Add(boxleft, wxSizerFlags().Expand().Border());
+    sz->Add(m_sizer, wxSizerFlags(1).Expand().Border());
 
     SetSizer(sz);
 }
@@ -199,7 +199,7 @@ void ColourPickerWidgetsPage::RecreatePicker()
 {
     m_sizer->Remove(1);
     CreatePicker();
-    m_sizer->Insert(1, m_clrPicker, 0, wxALIGN_CENTER|wxALL, 5);
+    m_sizer->Insert(1, m_clrPicker, wxSizerFlags().Centre().Border());
 
     m_sizer->Layout();
 }

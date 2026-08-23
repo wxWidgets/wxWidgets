@@ -36,30 +36,14 @@
 #endif
 
 #include "wx/private/aui.h"
+#include "wx/private/colour.h"
 
 // -- GUI helper classes and functions --
 
 // these functions live in dockart.cpp -- they'll eventually
 // be moved to a new utility cpp file
 
-float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2);
-
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
-
-// Check if the given colour has sufficient contrast ratio (4.5 recommended)
-// with the background and replace it with either white or black if it doesn't.
-// (based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html)
-static void
-wxAuiEnsureSufficientContrast(wxColour* fg, const wxColour& bg)
-{
-    // No need to change the colour if it has sufficient contrast.
-    if ( wxAuiGetColourContrast(*fg, bg) >= 4.5f )
-        return;
-
-    // Otherwise pick the colour that provides better contrast.
-    *fg = wxAuiGetColourContrast(*wxWHITE, bg)
-          > wxAuiGetColourContrast(*wxBLACK, bg) ? *wxWHITE : *wxBLACK;
-}
 
 // Create a "disabled" version of the given colour by adjusting its lightness
 // in the direction depending on the theme.
@@ -1263,7 +1247,7 @@ int wxAuiGenericTabArt::DrawPageTab(
     // draw tab text
     wxColor font_color = wxSystemSettings::GetColour(
         page.active ? wxSYS_COLOUR_CAPTIONTEXT : wxSYS_COLOUR_INACTIVECAPTIONTEXT);
-    wxAuiEnsureSufficientContrast(&font_color, back_color);
+    wxEnsureSufficientContrast(&font_color, back_color);
     dc.SetTextForeground(font_color);
     dc.DrawText(draw_text,
                 text_offset,
@@ -1617,7 +1601,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     wxColor back_color = dc.GetBrush().GetColour();
     wxColor font_color = wxSystemSettings::GetColour(
         page.active ? wxSYS_COLOUR_CAPTIONTEXT : wxSYS_COLOUR_INACTIVECAPTIONTEXT);
-    wxAuiEnsureSufficientContrast(&font_color, back_color);
+    wxEnsureSufficientContrast(&font_color, back_color);
     dc.SetTextForeground(font_color);
 
     const auto textY = tab_y + (tab_height - texty) / 2 + 1;

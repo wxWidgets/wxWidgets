@@ -867,7 +867,7 @@ void wxGenericAnimationCtrl::DisplayStaticImage()
         return;
     }
 
-    if (m_bmpStaticReal.IsOk())
+    if (m_bmpStaticReal.IsOk() && m_backingStore.IsOk())
     {
         // Retain the selected bundle member across all extension callbacks.
         // In particular, never keep a DC selected into a member bitmap while

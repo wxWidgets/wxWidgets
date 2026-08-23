@@ -134,6 +134,8 @@ private:
 
     BarPlacement GetBarPlacement() const;
 
+    void UpdateColours();
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // different controls making up the bar
     wxStaticBitmap *m_icon = nullptr;

@@ -618,7 +618,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         desiredHeight = 0;
     }
 
-    bool iconMayBeScaled = false;
+    double scale = 1.0;
 
     // try to load the icon from this program first to allow overriding the
     // standard icons (although why one would want to do it considering that
@@ -643,9 +643,10 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
                 wxLogLastError(wxString::Format("LoadIcon(%s)", entry.name));
             }
 
-            // LoadIcon() may scale the icon in high DPI, so get its actual
-            // size below.
-            iconMayBeScaled = true;
+            // LoadIcon() may scale the icon in high DPI, ensure we use correct
+            // scale factor for it.
+            if ( const wxWindow* win = wxApp::GetMainTopWindow() )
+                scale = win->GetDPIScaleFactor();
         }
     }
 
@@ -653,19 +654,14 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         return false;
 
     wxSize size;
-    double scale = 1.0;
     if ( hasSize )
     {
         size.x = desiredWidth;
         size.y = desiredHeight;
     }
-    else if ( iconMayBeScaled )
+    else
     {
-        // LoadIcon() returns icons of scaled size, so we must use the correct
-        // scaling factor of them.
         size = wxGetHiconSize(hicon);
-        if ( const wxWindow* win = wxApp::GetMainTopWindow() )
-            scale = win->GetDPIScaleFactor();
     }
 
     return icon->InitFromHICON((WXHICON)hicon, size.x, size.y, scale);

@@ -171,7 +171,7 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
         suffix = wxPlatformInfo::Get().GetPortIdShortName();
     }
     suffix << wxT('u');
-#ifdef __WXDEBUG__
+#if defined(__WINDOWS__) && !defined(__CYGWIN__) && !defined(NDEBUG)
     suffix << wxT('d');
 #endif
 
@@ -200,7 +200,9 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
 
 #ifdef __WINDOWS__
     // Add compiler identification:
-    #if defined(__GNUG__)
+    #if defined(__clang__)
+        suffix << wxT("_clang");
+    #elif defined(__GNUG__)
         suffix << wxT("_gcc");
     #elif defined(__VISUALC__)
         suffix << wxT("_vc");

@@ -403,7 +403,7 @@ protected:
     void OnChar(wxKeyEvent& event);
     void OnCaptureLost(wxMouseCaptureLostEvent& evt);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    void OnDpiChanged(wxDPIChangedEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
 protected:
 
@@ -669,7 +669,7 @@ protected:
     void OnSize(wxSizeEvent& evt);
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    void OnDpiChanged(wxDPIChangedEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // The functions below are called by wxAuiTabCtrl via wxAuiTabEventSource.
     //

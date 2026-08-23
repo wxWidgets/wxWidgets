@@ -8950,68 +8950,80 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
             if (wxTheClipboard->IsSupported(wxDataFormat(wxRichTextBufferDataObject::GetRichTextBufferFormatId())))
             {
                 wxRichTextBufferDataObject data;
-                wxTheClipboard->GetData(data);
-                wxRichTextBuffer* richTextBuffer = data.GetRichTextBuffer();
-                if (richTextBuffer)
+                if (wxTheClipboard->GetData(data))
                 {
-                    container->InsertParagraphsWithUndo(this, position+1, *richTextBuffer, GetRichTextCtrl(), 0);
-                    if (GetRichTextCtrl())
-                        GetRichTextCtrl()->ShowPosition(position + richTextBuffer->GetOwnRange().GetEnd());
-                    if (richTextBuffer->GetStyleSheet())
+                    wxRichTextBuffer* richTextBuffer = data.GetRichTextBuffer();
+                    if (richTextBuffer)
                     {
-                        delete richTextBuffer->GetStyleSheet();
-                        richTextBuffer->SetStyleSheet(nullptr);
+                        container->InsertParagraphsWithUndo(this, position+1, *richTextBuffer, GetRichTextCtrl(), 0);
+                        if (GetRichTextCtrl())
+                            GetRichTextCtrl()->ShowPosition(position + richTextBuffer->GetOwnRange().GetEnd());
+                        if (richTextBuffer->GetStyleSheet())
+                        {
+                            delete richTextBuffer->GetStyleSheet();
+                            richTextBuffer->SetStyleSheet(nullptr);
+                        }
+                        delete richTextBuffer;
+
+                        success = true;
                     }
-                    delete richTextBuffer;
                 }
             }
-            else if (wxTheClipboard->IsSupported(wxDF_TEXT)
+
+            // Fall back if advertised rich text couldn't be read.
+            if (!success && (wxTheClipboard->IsSupported(wxDF_TEXT)
                      || wxTheClipboard->IsSupported(wxDF_UNICODETEXT)
                     )
+               )
             {
                 wxTextDataObject data;
-                wxTheClipboard->GetData(data);
-                wxString text(data.GetText());
-#ifdef __WXMSW__
-                wxString text2;
-                text2.Alloc(text.length()+1);
-                for ( wxUniChar ch : text )
+                if (wxTheClipboard->GetData(data))
                 {
-                    if (ch != wxT('\r'))
-                        text2 += ch;
-                }
+                    wxString text(data.GetText());
+#ifdef __WXMSW__
+                    wxString text2;
+                    text2.Alloc(text.length()+1);
+                    for ( wxUniChar ch : text )
+                    {
+                        if (ch != wxT('\r'))
+                            text2 += ch;
+                    }
 #else
-                wxString text2 = text;
+                    wxString text2 = text;
 #endif
-                container->InsertTextWithUndo(this, position+1, text2, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+                    container->InsertTextWithUndo(this, position+1, text2, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
-                if (GetRichTextCtrl())
-                    GetRichTextCtrl()->ShowPosition(position + text2.length());
+                    if (GetRichTextCtrl())
+                        GetRichTextCtrl()->ShowPosition(position + text2.length());
 
-                success = true;
+                    success = true;
+                }
             }
-            else if (wxTheClipboard->IsSupported(wxDF_BITMAP))
+
+            if (!success && wxTheClipboard->IsSupported(wxDF_BITMAP))
             {
                 wxBitmapDataObject data;
-                wxTheClipboard->GetData(data);
-                wxBitmap bitmap(data.GetBitmap());
-                wxImage image(bitmap.ConvertToImage());
+                if (wxTheClipboard->GetData(data))
+                {
+                    wxBitmap bitmap(data.GetBitmap());
+                    wxImage image(bitmap.ConvertToImage());
 
-                wxRichTextAction* action = new wxRichTextAction(nullptr, _("Insert Image"), wxRICHTEXT_INSERT, this, container, GetRichTextCtrl(), false);
+                    wxRichTextAction* action = new wxRichTextAction(nullptr, _("Insert Image"), wxRICHTEXT_INSERT, this, container, GetRichTextCtrl(), false);
 
-                action->GetNewParagraphs().AddImage(image);
+                    action->GetNewParagraphs().AddImage(image);
 
-                if (action->GetNewParagraphs().GetChildCount() == 1)
-                    action->GetNewParagraphs().SetPartialParagraph(true);
+                    if (action->GetNewParagraphs().GetChildCount() == 1)
+                        action->GetNewParagraphs().SetPartialParagraph(true);
 
-                action->SetPosition(position+1);
+                    action->SetPosition(position+1);
 
-                // Set the range we'll need to delete in Undo
-                action->SetRange(wxRichTextRange(position+1, position+1));
+                    // Set the range we'll need to delete in Undo
+                    action->SetRange(wxRichTextRange(position+1, position+1));
 
-                SubmitAction(action);
+                    SubmitAction(action);
 
-                success = true;
+                    success = true;
+                }
             }
             wxTheClipboard->Close();
         }

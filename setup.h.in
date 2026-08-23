@@ -625,9 +625,16 @@
 
     This is needed by any Wayland-specific code in wxGTK implementation.
 
-    Recommended setting: 1, only set to 0 if wayland-client is not available.
+    Define if wayland-client is available.
  */
 #undef wxHAVE_WAYLAND_CLIENT
+
+/*
+    Use Wayland session-management protocol.
+
+    This is defined if GTK is new enough to support it.
+ */
+#undef wxHAVE_WAYLAND_SESSION_MANAGEMENT
 
 /*
    Use XTest extension to implement wxUIActionSimulator?
@@ -735,6 +742,11 @@
 #define wxUSE_LIBSDL 0
 
 /*
+ * Use SDL 3.x (rather than SDL 2.x or 1.x) for the SDL audio backend
+ */
+#define wxUSE_LIBSDL3 0
+
+/*
  * Compile sound backends as plugins
  */
 #define wxUSE_PLUGINS 0
@@ -747,6 +759,10 @@
  * Use GNOME VFS for MIME types
  */
 #define wxUSE_LIBGNOMEVFS 0
+/*
+ * Use AppIndicator for wxTaskBarIcon (required for Wayland).
+ */
+#define wxUSE_APPINDICATOR 0
 /*
  * Use libnotify library.
  */

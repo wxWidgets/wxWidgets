@@ -29,58 +29,34 @@ foreach(LIB IN LISTS LIBS_THIRDPARTY)
     include(${LIB}.cmake)
 endforeach()
 
-# add_opt_lib()
-# Add library which may have been disabled by wxUSE_...
-macro(add_opt_lib name)
-    set(add_lib ON)
-    foreach(var_name ${ARGN})
-        if(NOT ${var_name})
-            set(add_lib OFF)
-        endif()
-    endforeach()
-    if(add_lib)
-        list(APPEND LIBS ${name})
-    endif()
-endmacro()
-
 # Define base libraries
-set(LIBS base)
-
-# wxNet should be built if either wxUSE_SOCKETS or wxUSE_WEBREQUEST is on.
-if(wxUSE_SOCKETS OR wxUSE_WEBREQUEST)
-    set(wxUSE_NET ON)
-else()
-    set(wxUSE_NET OFF)
-endif()
-add_opt_lib(net wxUSE_NET)
+set(LIBS base net)
 
 # Define UI libraries
 if(wxUSE_GUI)
-    list(APPEND LIBS core adv)
-    foreach(lib
+    list(APPEND LIBS
+        core
+        adv
         aui
+        gl
         html
+        media
         propgrid
+        qa
         ribbon
         richtext
-        webview
         stc
+        webview
+        webview_chromium
         xrc
-        )
-        string(TOUPPER ${lib} _name_upper)
-        add_opt_lib(${lib} wxUSE_${_name_upper})
-    endforeach()
-    add_opt_lib(media wxUSE_MEDIACTRL)
-    add_opt_lib(gl wxUSE_OPENGL)
-    add_opt_lib(qa wxUSE_DEBUGREPORT)
-    add_opt_lib(webview_chromium wxUSE_WEBVIEW wxUSE_WEBVIEW_CHROMIUM)
+    )
 endif() # wxUSE_GUI
 
 # Include XML library last
 # In the monolithic build, where all target properties (include dirs) from different targets are concatenated,
 # wxml might include system expat, which might use Mono, which has it's own copy of png.
 # Thus to ensure wx's core library includes the right png class, core must be processed first before xml
-add_opt_lib(xml wxUSE_XML)
+list(APPEND LIBS xml)
 
 # Include cmake file for every library
 foreach(LIB ${LIBS})

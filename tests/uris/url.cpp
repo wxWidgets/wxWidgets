@@ -13,6 +13,8 @@
 #include "testprec.h"
 
 
+#if wxUSE_URL
+
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif // WX_PRECOMP
@@ -108,3 +110,5 @@ TEST_CASE("wxURL::CopyAndAssignment", "[url]")
     puri = new wxURL();
     delete puri;
 }
+
+#endif // wxUSE_URL

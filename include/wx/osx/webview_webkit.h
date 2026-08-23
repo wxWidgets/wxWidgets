@@ -56,6 +56,11 @@ public:
     using wxWebView::Print;
 #endif
 
+    virtual bool PrintToPDF(const wxString& filePath) override;
+#if wxUSE_PRINTING_ARCHITECTURE
+    virtual bool PrintToPDF(const wxString& filePath, const wxPrintData& printData) override;
+#endif
+
     virtual void LoadURL(const wxString& url) override;
     virtual wxString GetCurrentURL() const override;
     virtual wxString GetCurrentTitle() const override;

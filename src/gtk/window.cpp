@@ -1507,9 +1507,9 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
         return false;
 
     bool processed = false;
-    for( wxString::const_iterator pstr = data.begin(); pstr != data.end(); ++pstr )
+    for ( const auto& ch : data )
     {
-        event.m_uniChar = *pstr;
+        event.m_uniChar = ch;
 
         // Set key code to the Unicode value for ASCII characters.
         if ( event.m_uniChar < WXK_DELETE )
@@ -2678,9 +2678,14 @@ static void frame_clock_layout_after(GdkFrameClock*, wxWindowGTK* win)
 
             wxWindowGTK* w = static_cast<wxWindowGTK*>(p->data);
             g_object_remove_weak_pointer(G_OBJECT(w->m_widget), &p->data);
-            GtkAllocation a;
-            gtk_widget_get_allocation(w->m_widget, &a);
-            gtk_widget_set_size_request(w->m_widget, a.width, a.height);
+            if (WX_IS_PIZZA(gtk_widget_get_parent(w->m_widget)))
+                gtk_widget_queue_resize(w->m_widget);
+            else
+            {
+                GtkAllocation a;
+                gtk_widget_get_allocation(w->m_widget, &a);
+                gtk_widget_set_size_request(w->m_widget, a.width, a.height);
+            }
         }
         g_slist_free(gs_setSizeRequestList);
         gs_setSizeRequestList = nullptr;
@@ -4280,17 +4285,7 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
     {
         pizza = WX_PIZZA(parent);
         pizza->move(m_widget, x, y, width, height);
-        if (
-#ifdef __WXGTK3__
-            !g_inSizeAllocate &&
-#endif
-            gtk_widget_get_visible(m_widget))
-        {
-            // in case only the position is changing
-            gtk_widget_queue_resize(m_widget);
-        }
     }
-
 
 #ifdef __WXGTK3__
     // With GTK3, gtk_widget_queue_resize() is ignored while a size-allocate
@@ -4298,7 +4293,7 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
     // size-allocate can generate wxSizeEvent and size event handlers often
     // call SetSize(), directly or indirectly. It should be fine to call
     // gtk_widget_size_allocate() immediately in this case.
-    if (g_inSizeAllocate && gtk_widget_get_visible(m_widget) && width > 0 && height > 0)
+    if (g_inSizeAllocate)
     {
         // obligatory size request before size allocate to avoid GTK3 warnings
         GtkRequisition req;
@@ -4318,18 +4313,16 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
             // causes GTK's sizing state to become inconsistent
             gs_setSizeRequestList = g_slist_prepend(gs_setSizeRequestList, this);
             g_object_add_weak_pointer(G_OBJECT(m_widget), &gs_setSizeRequestList->data);
+            return;
         }
-        else
 #endif
-        {
-            gtk_widget_set_size_request(m_widget, width, height);
-        }
     }
-    else
 #endif // __WXGTK3__
-    {
+
+    if (pizza)
+        gtk_widget_queue_resize(m_widget);
+    else
         gtk_widget_set_size_request(m_widget, width, height);
-    }
 }
 
 void wxWindowGTK::ConstrainSize()
@@ -5924,7 +5917,7 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
             else if (m_backgroundColour.IsOk() && gtk_check_version(3,20,0) == nullptr)
             {
                 cairo_save(cr);
-                gdk_cairo_set_source_rgba(cr, m_backgroundColour);
+                gdk_cairo_set_source_rgba(cr, m_backgroundColour.GTKGetRGBA());
                 cairo_paint(cr);
                 cairo_restore(cr);
             }
@@ -6183,12 +6176,12 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
         if (isFg)
         {
             g_string_append_printf(css, "color:%s;",
-                wxGtkString(gdk_rgba_to_string(fg)).c_str());
+                wxGtkString(gdk_rgba_to_string(fg.GTKGetRGBA())).c_str());
         }
         if (isBg)
         {
             g_string_append_printf(css, "background:%s;",
-                wxGtkString(gdk_rgba_to_string(bg)).c_str());
+                wxGtkString(gdk_rgba_to_string(bg.GTKGetRGBA())).c_str());
         }
         if (isFont)
         {
@@ -6285,8 +6278,8 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
             // controls, and seems to do no harm to apply to all.
             const wxColour fg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
             const wxColour bg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-            wxGtkString fg_sel_string(gdk_rgba_to_string(fg_sel));
-            wxGtkString bg_sel_string(gdk_rgba_to_string(bg_sel));
+            wxGtkString fg_sel_string(gdk_rgba_to_string(fg_sel.GTKGetRGBA()));
+            wxGtkString bg_sel_string(gdk_rgba_to_string(bg_sel.GTKGetRGBA()));
             g_string_append_printf(css,
                 "selection{color:%s;background:%s}"
                 "*:selected{color:%s;background:%s}",
@@ -6296,7 +6289,7 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
             if (isFg && wx_is_at_least_gtk3(20))
             {
                 g_string_append_printf(css, "*{caret-color:%s}",
-                    wxGtkString(gdk_rgba_to_string(fg)).c_str());
+                    wxGtkString(gdk_rgba_to_string(fg.GTKGetRGBA())).c_str());
             }
             if (isBg)
             {

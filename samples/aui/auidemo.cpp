@@ -337,38 +337,38 @@ public:
     {
         //wxBoxSizer* vert = new wxBoxSizer(wxVERTICAL);
 
-        //vert->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        //vert->AddStretchSpacer();
 
         wxSize const elementSize = FromDIP(wxSize(180, 20));
 
         wxBoxSizer* s1 = new wxBoxSizer(wxHORIZONTAL);
         m_borderSize = new wxSpinCtrl(this, ID_PaneBorderSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
-        s1->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s1->AddStretchSpacer();
         s1->Add(new wxStaticText(this, wxID_ANY, "Pane Border Size:"));
         s1->Add(m_borderSize);
-        s1->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s1->AddStretchSpacer();
         s1->SetItemMinSize((size_t)1, elementSize);
         //vert->Add(s1, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
         wxBoxSizer* s2 = new wxBoxSizer(wxHORIZONTAL);
         m_sashSize = new wxSpinCtrl(this, ID_SashSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
-        s2->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s2->AddStretchSpacer();
         s2->Add(new wxStaticText(this, wxID_ANY, "Sash Size:"));
         s2->Add(m_sashSize);
-        s2->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s2->AddStretchSpacer();
         s2->SetItemMinSize((size_t)1, elementSize);
         //vert->Add(s2, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
         wxBoxSizer* s3 = new wxBoxSizer(wxHORIZONTAL);
         m_captionSize = new wxSpinCtrl(this, ID_CaptionSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
-        s3->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s3->AddStretchSpacer();
         s3->Add(new wxStaticText(this, wxID_ANY, "Caption Size:"));
         s3->Add(m_captionSize);
-        s3->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s3->AddStretchSpacer();
         s3->SetItemMinSize((size_t)1, elementSize);
         //vert->Add(s3, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
-        //vert->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        //vert->AddStretchSpacer();
 
 
         wxBitmapBundle const b = CreateColorBitmap(*wxBLACK);
@@ -376,82 +376,82 @@ public:
 
         wxBoxSizer* s4 = new wxBoxSizer(wxHORIZONTAL);
         m_backgroundColor = new wxBitmapButton(this, ID_BackgroundColor, b, wxDefaultPosition, bitmapSize);
-        s4->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s4->AddStretchSpacer();
         s4->Add(new wxStaticText(this, wxID_ANY, "Background Color:"));
         s4->Add(m_backgroundColor);
-        s4->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s4->AddStretchSpacer();
         s4->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s5 = new wxBoxSizer(wxHORIZONTAL);
         m_sashColor = new wxBitmapButton(this, ID_SashColor, b, wxDefaultPosition, bitmapSize);
-        s5->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s5->AddStretchSpacer();
         s5->Add(new wxStaticText(this, wxID_ANY, "Sash Color:"));
         s5->Add(m_sashColor);
-        s5->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s5->AddStretchSpacer();
         s5->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s6 = new wxBoxSizer(wxHORIZONTAL);
         m_inactiveCaptionColor = new wxBitmapButton(this, ID_InactiveCaptionColor, b, wxDefaultPosition, bitmapSize);
-        s6->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s6->AddStretchSpacer();
         s6->Add(new wxStaticText(this, wxID_ANY, "Normal Caption:"));
         s6->Add(m_inactiveCaptionColor);
-        s6->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s6->AddStretchSpacer();
         s6->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s7 = new wxBoxSizer(wxHORIZONTAL);
         m_inactiveCaptionGradientColor = new wxBitmapButton(this, ID_InactiveCaptionGradientColor, b, wxDefaultPosition, bitmapSize);
-        s7->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s7->AddStretchSpacer();
         s7->Add(new wxStaticText(this, wxID_ANY, "Normal Caption Gradient:"));
         s7->Add(m_inactiveCaptionGradientColor);
-        s7->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s7->AddStretchSpacer();
         s7->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s8 = new wxBoxSizer(wxHORIZONTAL);
         m_inactiveCaptionTextColor = new wxBitmapButton(this, ID_InactiveCaptionTextColor, b, wxDefaultPosition, bitmapSize);
-        s8->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s8->AddStretchSpacer();
         s8->Add(new wxStaticText(this, wxID_ANY, "Normal Caption Text:"));
         s8->Add(m_inactiveCaptionTextColor);
-        s8->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s8->AddStretchSpacer();
         s8->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s9 = new wxBoxSizer(wxHORIZONTAL);
         m_activeCaptionColor = new wxBitmapButton(this, ID_ActiveCaptionColor, b, wxDefaultPosition, bitmapSize);
-        s9->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s9->AddStretchSpacer();
         s9->Add(new wxStaticText(this, wxID_ANY, "Active Caption:"));
         s9->Add(m_activeCaptionColor);
-        s9->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s9->AddStretchSpacer();
         s9->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s10 = new wxBoxSizer(wxHORIZONTAL);
         m_activeCaptionGradientColor = new wxBitmapButton(this, ID_ActiveCaptionGradientColor, b, wxDefaultPosition, bitmapSize);
-        s10->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s10->AddStretchSpacer();
         s10->Add(new wxStaticText(this, wxID_ANY, "Active Caption Gradient:"));
         s10->Add(m_activeCaptionGradientColor);
-        s10->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s10->AddStretchSpacer();
         s10->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s11 = new wxBoxSizer(wxHORIZONTAL);
         m_activeCaptionTextColor = new wxBitmapButton(this, ID_ActiveCaptionTextColor, b, wxDefaultPosition, bitmapSize);
-        s11->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s11->AddStretchSpacer();
         s11->Add(new wxStaticText(this, wxID_ANY, "Active Caption Text:"));
         s11->Add(m_activeCaptionTextColor);
-        s11->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s11->AddStretchSpacer();
         s11->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s12 = new wxBoxSizer(wxHORIZONTAL);
         m_borderColor = new wxBitmapButton(this, ID_BorderColor, b, wxDefaultPosition, bitmapSize);
-        s12->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s12->AddStretchSpacer();
         s12->Add(new wxStaticText(this, wxID_ANY, "Border Color:"));
         s12->Add(m_borderColor);
-        s12->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s12->AddStretchSpacer();
         s12->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s13 = new wxBoxSizer(wxHORIZONTAL);
         m_gripperColor = new wxBitmapButton(this, ID_GripperColor, b, wxDefaultPosition, bitmapSize);
-        s13->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s13->AddStretchSpacer();
         s13->Add(new wxStaticText(this, wxID_ANY, "Gripper Color:"));
         s13->Add(m_gripperColor);
-        s13->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s13->AddStretchSpacer();
         s13->SetItemMinSize((size_t)1, elementSize);
 
         wxGridSizer* gridSizer = new wxGridSizer(2);
@@ -465,7 +465,7 @@ public:
         gridSizer->Add(s8);  gridSizer->Add(s11);
 
         wxBoxSizer* contSizer = new wxBoxSizer(wxVERTICAL);
-        contSizer->Add(gridSizer, 1, wxEXPAND | wxALL, FromDIP(5));
+        contSizer->Add(gridSizer, wxSizerFlags(1).Expand().Border());
         SetSizer(contSizer);
         GetSizer()->SetSizeHints(this);
 
@@ -1009,47 +1009,47 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // add a bunch of panes
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test1").Caption("Pane Caption").
+                  Name("top").Caption("Pane Caption").
                   Top());
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test2").Caption("Client Size Reporter").
+                  Name("with_close").Caption("Client Size Reporter").
                   Bottom().Position(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test3").Caption("Client Size Reporter").
+                  Name("with_close_and_maximize").Caption("Client Size Reporter").
                   Bottom().
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test4").Caption("Pane Caption").
+                  Name("left").Caption("Pane Caption").
                   Left());
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test5").Caption("No Close Button").
+                  Name("right").Caption("No Close Button").
                   Right().CloseButton(false));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test6").Caption("Client Size Reporter").
+                  Name("row_1").Caption("Client Size Reporter").
                   Right().Row(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test7").Caption("Float Client Size 111x222").
+                  Name("layer_1").Caption("Float Client Size 111x222").
                   MinSize(FromDIP(wxSize(11,22))).
                   FloatingClientSize(wxSize(111, 222)).
                   Left().Layer(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-                  Name("test8").Caption("Tree Pane").
+                  Name("tree").Caption("Tree Pane").
                   Left().Layer(1).Position(1).
                   CloseButton(true).MaximizeButton(true).MinimizeButton().
                   IconMin(wxArtProvider::GetBitmapBundle(wxART_CUT, wxART_MENU)));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test9").Caption("Min Size 200x100").
+                  Name("minsize_200x100").Caption("Min Size 200x100").
                   BestSize(FromDIP(wxSize(200,100))).MinSize(FromDIP(wxSize(200,100))).
                   Bottom().Layer(1).
                   CloseButton(true).MaximizeButton(true));
@@ -1063,7 +1063,7 @@ MyFrame::MyFrame(wxWindow* parent,
     iconSize &= ~1;
 
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
-                  Name("test10").Caption("Text Pane with Hide Prompt").
+                  Name("text").Caption("Text Pane with Hide Prompt").
                   Bottom().Layer(1).Position(1).
                   MaximizeButton().MinimizeButton().
                   Icon(wxArtProvider::GetBitmapBundle(wxART_WARNING,
@@ -1072,7 +1072,7 @@ MyFrame::MyFrame(wxWindow* parent,
                   IconMin(wxArtProvider::GetBitmapBundle(wxART_PASTE, wxART_MENU)));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test11").Caption("Fixed Pane").
+                  Name("fixed").Caption("Fixed Pane").
                   Bottom().Layer(1).Position(2).Fixed());
 
 
@@ -1102,28 +1102,28 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // add the toolbars to the manager
     m_mgr.AddPane(tb1, wxAuiPaneInfo().
-                  Name("tb1").Caption("Big Toolbar").
+                  Name("horz_tb").Caption("Big Toolbar").
                   ToolbarPane().Top());
 
     m_mgr.AddPane(tb2, wxAuiPaneInfo().
-                  Name("tb2").Caption("Toolbar 2 (Horizontal)").
+                  Name("question_icon_tb").Caption("Toolbar 2 (Horizontal)").
                   ToolbarPane().Top().Row(1));
 
     m_mgr.AddPane(tb3, wxAuiPaneInfo().
-                  Name("tb3").Caption("Toolbar 3").
+                  Name("folder_icon_tb").Caption("Toolbar 3").
                   ToolbarPane().Top().Row(1).Position(1));
 
     m_mgr.AddPane(tb4, wxAuiPaneInfo().
-                  Name("tb4").Caption("Sample Bookmark Toolbar").
+                  Name("bookmark_tb").Caption("Sample Bookmark Toolbar").
                   ToolbarPane().Top().Row(2));
 
     m_mgr.AddPane(tb5, wxAuiPaneInfo().
-                  Name("tb5").Caption("Sample Vertical Toolbar").
+                  Name("vert_tb").Caption("Sample Vertical Toolbar").
                   ToolbarPane().Left().
                   GripperTop());
 
     m_mgr.AddPane(new wxButton(this, wxID_ANY, _("Test Button")),
-                  wxAuiPaneInfo().Name("tb6").
+                  wxAuiPaneInfo().Name("button_tb").
                   ToolbarPane().Top().Row(2).Position(1).
                   LeftDockable(false).RightDockable(false));
 
@@ -1136,10 +1136,10 @@ MyFrame::MyFrame(wxWindow* parent,
         if (!pane.IsToolbar())
             pane.Hide();
     }
-    m_mgr.GetPane("tb1").Hide();
-    m_mgr.GetPane("tb6").Hide();
-    m_mgr.GetPane("test8").Show().Left().Layer(0).Row(0).Position(0);
-    m_mgr.GetPane("test10").Show().Bottom().Layer(0).Row(0).Position(0);
+    m_mgr.GetPane("horz_tb").Hide();
+    m_mgr.GetPane("button_tb").Hide();
+    m_mgr.GetPane("tree").Show().Left().Layer(0).Row(0).Position(0);
+    m_mgr.GetPane("text").Show().Bottom().Layer(0).Row(0).Position(0);
     m_mgr.GetPane("notebook_content").Show();
     wxString perspectiveDefault = m_mgr.SavePerspective();
 
@@ -1650,7 +1650,7 @@ void MyFrame::OnNotebookDeleteTab(wxCommandEvent& WXUNUSED(evt))
 
 void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
 {
-    if (evt.pane->name == "test10")
+    if (evt.pane->name == "text")
     {
         int res = wxMessageBox("Are you sure you want to close/hide this pane?",
                                "wxAUI",
@@ -2624,12 +2624,12 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    flex->AddGrowableRow( 3 );
    flex->AddGrowableCol( 1 );
    flex->Add( FromDIP(5), FromDIP(5) );   flex->Add( FromDIP(5), FromDIP(5) );
-   flex->Add( new wxStaticText( panel, -1, "wxTextCtrl:" ), 0, wxALL|wxALIGN_CENTRE, FromDIP(5) );
+   flex->Add( new wxStaticText( panel, -1, "wxTextCtrl:" ), wxSizerFlags().Centre().Border() );
    flex->Add( new wxTextCtrl( panel, -1, "", wxDefaultPosition, FromDIP(wxSize(100,-1))),
-                1, wxALL|wxALIGN_CENTRE, FromDIP(5) );
-   flex->Add( new wxStaticText( panel, -1, "wxSpinCtrl:" ), 0, wxALL|wxALIGN_CENTRE, FromDIP(5) );
+                wxSizerFlags(1).Centre().Border() );
+   flex->Add( new wxStaticText( panel, -1, "wxSpinCtrl:" ), wxSizerFlags().Centre().Border() );
    flex->Add( new wxSpinCtrl( panel, -1, "5", wxDefaultPosition, wxDefaultSize,
-                wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, FromDIP(5) );
+                wxSP_ARROW_KEYS, 5, 50, 5 ), wxSizerFlags().Centre().Border() );
    flex->Add( FromDIP(5), FromDIP(5) );   flex->Add( FromDIP(5), FromDIP(5) );
    panel->SetSizer( flex );
    ctrl->AddPage( panel, "wxPanel", false, pageBmp );

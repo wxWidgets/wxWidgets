@@ -99,8 +99,8 @@ wxPanel *CreateRadioButtonsPage(wxBookCtrlBase *parent)
         4, computers, 0, wxRA_SPECIFY_COLS);
 
     wxBoxSizer *sizerPanel = new wxBoxSizer(wxVERTICAL);
-    sizerPanel->Add(radiobox1, 2, wxEXPAND);
-    sizerPanel->Add(radiobox2, 1, wxEXPAND);
+    sizerPanel->Add(radiobox1, wxSizerFlags(2).Expand());
+    sizerPanel->Add(radiobox2, wxSizerFlags(1).Expand());
     panel->SetSizer(sizerPanel);
 
     return panel;
@@ -419,7 +419,7 @@ MyFrame::MyFrame()
     m_sizerFrame = new wxBoxSizer(wxVERTICAL);
 
 #if USE_LOG
-    m_sizerFrame->Add(m_text, 1, wxEXPAND);
+    m_sizerFrame->Add(m_text, wxSizerFlags(1).Expand());
 #endif // USE_LOG
 
     RecreateBook();

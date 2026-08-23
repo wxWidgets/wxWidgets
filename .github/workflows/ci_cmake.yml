@@ -101,7 +101,7 @@ jobs:
             cmake_tests: CONSOLE_ONLY
             cmake_build_toolkit: msw
           - name: MSW/MSVC wxQt 5.15
-            runner: windows-latest
+            runner: windows-2022
             no_sudo: 1
             cmake_generator: 'Visual Studio 17 2022'
             cmake_defines: -DCMAKE_BUILD_TYPE=Debug -DwxBUILD_SHARED=ON
@@ -145,7 +145,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: 'recursive'
 
@@ -218,7 +218,7 @@ jobs:
       # MSYS2, or we'd end up using MSVC clang instead of its own.
       - name: Setup MSVC Environment
         if: ${{ runner.os == 'Windows' && matrix.cmake_generator != 'MinGW Makefiles' }}
-        uses: wxWidgets/gha-setup-vsdevenv@wx
+        uses: step-security/gha-setup-vsdevenv@v6
 
       - name: Configuring
         run: |
@@ -243,7 +243,7 @@ jobs:
 
       - name: Setup Go
         if: matrix.cmake_tests != 'OFF'
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1'
           cache: false

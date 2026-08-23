@@ -29,13 +29,13 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
-    virtual bool Show( bool show = TRUE );
+    virtual bool Show( bool show = TRUE ) override;
 
 protected:
-    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+                           int sizeFlags = wxSIZE_AUTO) override;
 
 private:
     wxDECLARE_EVENT_TABLE();

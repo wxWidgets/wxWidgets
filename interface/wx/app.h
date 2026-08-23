@@ -1148,7 +1148,7 @@ public:
     {
         Failure,     ///< Changing the appearance failed.
         Ok,          ///< Appearance was successfully changed.
-        CannotChange ///< Appearance can't be changed any more.
+        CannotChange ///< Appearance can't be changed any more (currently not used).
     };
 
     /**
@@ -1163,27 +1163,24 @@ public:
         AppearanceResult::Ok, and affects all the existing windows as well
         as any windows created after this call.
 
-        Under MSW, the default appearance is always light and the applications
-        that want to follow the system appearance need to explicitly call this
-        function with Appearance::System parameter in order to do it. Please
-        note using dark appearance under MSW requires using non-documented
-        system functions and has several known limitations, please see
-        MSWEnableDarkMode() for more details. Also, on this platform the
-        appearance can be only set before any windows are created and calling
-        this function too late will return AppearanceResult::CannotChange.
+        Please note that using dark appearance under MSW requires using
+        undocumented system functions and has several known limitations.
+        Therefore, the system dark theme is not followed automatically by
+        default there. See MSWEnableDarkMode() for more details.
 
         Note that to query the current appearance, you can use
         wxSystemAppearance, see wxSystemSettings::GetAppearance().
 
         @return AppearanceResult::Ok if the appearance was successfully
-            changed or had been already set to the requested value,
-            AppearanceResult::CannotChange if the appearance can't be changed
-            any more because it's too late to do it but could be changed if
-            done immediately on next program launch (only returned by wxMSW
-            currently) or AppearanceResult::Failure if changing the appearance
+            changed or had been already set to the requested value;
+            or AppearanceResult::Failure if changing the appearance
             failed for some other reason, e.g. because `GTK_THEME` is defined
-            when using wxGTK of this function is not implemented at all for
-            the current platform.
+            when using wxGTK or if this function is not implemented at all for
+            the current platform. Note that AppearanceResult::CannotChange is
+            currently never returned, but reserved for the future in case the
+            appearance can't be changed any more, e.g. because it can only be
+            done before creating the first window and the application has
+            already done so.
 
         @since 3.3.0
     */
@@ -1416,15 +1413,26 @@ public:
     //@{
 
     /**
-        Enable experimental dark mode support for MSW applications.
+        Possible flags for MSWEnableDarkMode().
+
+        @onlyfor{wxmsw}
+
+        @since 3.3.4
+    */
+    enum DarkMode
+    {
+        DarkMode_Auto   = 0, ///< Use dark mode if the system is using it.
+        DarkMode_Always = 1, ///< Force using dark mode.
+        DarkMode_Never  = 2, ///< Force using light mode.
+    };
+
+    /**
+        Enable unofficial dark mode support for MSW applications.
 
         This function uses @e undocumented, and unsupported by Microsoft,
         functions to enable dark mode support for the desktop applications
         under Windows 10 versions later than v1809 (which includes Windows 10
-        LTSC 2019) and all Windows 11 versions. Please note that dark mode
-        testing under versions of Windows earlier than 20H1 (i.e. v2004) has
-        been limited, make sure to test your application especially carefully
-        if you target these versions and want to enable dark mode support.
+        LTSC 2019) and all Windows 11 versions.
 
         Note that dark mode can also be enabled by setting the "msw.dark-mode"
         @ref wxSystemOptions "system option" via an environment variable from
@@ -1433,24 +1441,17 @@ public:
 
         Known limitations of dark mode support include:
 
-        - Anything based on `TaskDialog()` Win32 API doesn't support dark mode:
-          wxMessageBox(), wxMessageDialog, wxRichMessageDialog, wxProgressDialog
-          and simple (i.e., without hyperlink or licence) wxAboutBox(). Consider
-          using generic versions (e.g. wxGenericMessageDialog or wxGenericProgressDialog)
-          if dark mode support is more important than using the native dialog.
         - The following dialogs wrapping common windows dialogs don't support
           dark mode: wxColourDialog, wxFindReplaceDialog, wxFontDialog,
           wxPageSetupDialog, wxPrintDialog.
         - wxTimePickerCtrl, wxDatePickerCtrl and wxCalendarCtrl don't support dark mode
           and use the same (light) background as by default in it.
-        - Toolbar items for which wxToolBar::SetDropdownMenu() was called
-          don't draw the menu drop-down correctly, making it almost
-          invisible.
 
-        @param flags Can include @c wxApp::DarkMode_Always to force enabling
-            dark mode for the application, even if the system doesn't use the
-            dark mode by default. Otherwise dark mode is only used if it is the
-            default mode for the applications on the current system.
+        @param flags Can be @c wxApp::DarkMode_Always to force dark mode
+            regardless of the system mode, @c wxApp::DarkMode_Never to likewise
+            force light mode, or @c wxApp::DarkMode_Auto to follow the system
+            mode. The constant @c wxApp::DarkMode_Never is available since
+            wxWidgets 3.3.4.
         @param settings If specified, allows to customize dark mode appearance.
             Please see wxDarkModeSettings documentation for more information.
 
@@ -1462,7 +1463,7 @@ public:
         @since 3.3.0
      */
     bool
-    MSWEnableDarkMode(int flags = 0, wxDarkModeSettings* settings = nullptr);
+    MSWEnableDarkMode(DarkMode flags = 0, wxDarkModeSettings* settings = nullptr);
 
     //@}
 };

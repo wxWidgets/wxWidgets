@@ -556,33 +556,33 @@ public:
         Operators for implicit conversion, using appropriate getter member
         function.
     */
-    double operator double() const;
-    long operator long() const;
-    wxLongLong operator wxLongLong() const;
-    wxULongLong operator wxULongLong() const;
+    operator double() const;
+    operator long() const;
+    operator wxLongLong() const;
+    operator wxULongLong() const;
     ///@}
 
     /**
         Operator for implicit conversion to a pointer to a void, using
         GetVoidPtr().
     */
-    void* operator void*() const;
+    operator void*() const;
 
     /**
         Operator for implicit conversion to a wxChar, using GetChar().
     */
-    char operator wxChar() const;
+    operator wxChar() const;
 
     /**
         Operator for implicit conversion to a pointer to a wxDateTime, using
         GetDateTime().
     */
-    void* operator wxDateTime() const;
+    operator wxDateTime*() const;
 
     /**
         Operator for implicit conversion to a string, using MakeString().
     */
-    wxString operator wxString() const;
+    operator wxString() const;
 };
 
 

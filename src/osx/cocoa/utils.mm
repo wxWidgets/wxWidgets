@@ -238,6 +238,17 @@ void wxBell()
 - (void)applicationWillTerminate:(NSNotification *)application {
     wxUnusedVar(application);
     wxTheApp->OSXOnWillTerminate();
+
+    // Cocoa will `exit(0)` soon after returning from
+    // `applicationWillTerminate:`, without another opportunity for cleanup, so
+    // do it here.
+
+    // Ignore the return code. It's probably better to let Cocoa do the rest of
+    // its cleanup like normal rather than calling `exit()` here, and the
+    // return code doesn't mean much, if anything, for macOS usually.
+    (void)wxTheApp->CallOnExit();
+
+    wxEntryCleanup();
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender

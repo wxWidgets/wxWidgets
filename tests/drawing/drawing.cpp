@@ -44,10 +44,6 @@
 //  wxGraphicsContext and a way to create, dispose of and save it so that it is
 //  possible to compare it with a reference file
 
-// A plugin system is implemented to let developers of contributed libraries
-// test their library without the need to impact the test system and its
-// dependencies. See RunPluginsDrawingCase.
-
 // The crossing of drawing case and life cycles is implemented by
 // RunIndividualDrawingCase
 
@@ -79,10 +75,6 @@
 //      Once this is done duplicate all the CPP UNIT test functions
 //      and entries "DrawToImage_YYY" to your new GC "DrawTo<newGc>_YYYY"
 //
-// - if it is not built-in (contributed library/wxCode...), make a plugin for it
-//      test.bkl contains a sample "test_drawingplugin" target, you can use
-//      drawingplgsample.cpp as a start, see RunPluginsDrawingCase declaration
-//      for information about how to run the tests
 
 wxString GraphicsContextDrawingTestCase::ms_referenceDirectory;
 bool GraphicsContextDrawingTestCase::ms_buildReference;
@@ -256,6 +248,13 @@ void GraphicsContextDrawingTestCase::RunIndividualDrawingCase (
     }
     else
     {
+        if (!refFileName.FileExists())
+        {
+            WARN("Skipping comparison with missing reference file \""
+                 << refFileName.GetFullPath() << "\"");
+            return;
+        }
+
         WX_ASSERT_SAME_AS_FILE(fileName.GetFullPath(),
                                refFileName.GetFullPath());
     }
@@ -381,14 +380,29 @@ wxString GraphicsContextDrawingTestCase::GetTestsReferenceDirectory() const
                         &ms_referenceDirectory) )
         {
             refDir = wxFileName(wxStandardPaths::Get().GetExecutablePath());
-            refDir.RemoveLastDir();
+            refDir.SetFullName(wxString());
+            refDir.AppendDir("drawing");
+            refDir.AppendDir("references");
+
+            if (!refDir.DirExists())
+            {
+                refDir = wxFileName(wxStandardPaths::Get().GetExecutablePath());
+                refDir.RemoveLastDir();
+            }
         }
         else
         {
             refDir = wxFileName(ms_referenceDirectory, wxT(""));
         }
-        refDir.AppendDir ("drawing");
-        refDir.AppendDir ("references");
+
+        // The full path can end with a separator, so check the path component.
+        if (refDir.GetDirs().empty() ||
+            refDir.GetDirs().Last().CmpNoCase("references") != 0)
+        {
+            refDir.AppendDir("drawing");
+            refDir.AppendDir("references");
+        }
+
         ms_referenceDirectory = refDir.GetPath();
     }
     return ms_referenceDirectory;

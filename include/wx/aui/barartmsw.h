@@ -79,6 +79,8 @@ public:
     virtual int ShowDropDown(wxWindow* wnd,
         const wxAuiToolBarItemArray& items) override;
 
+    virtual void UpdateColoursFromSystem() override;
+
 private:
     bool m_themed;
     wxSize m_buttonSize;

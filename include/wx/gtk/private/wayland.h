@@ -31,6 +31,10 @@
 
 #include "wx/protocols/pointer-warp-v1-client-protocol.h"
 
+#ifdef wxHAVE_WAYLAND_SESSION_MANAGEMENT
+#include "wx/protocols/xdg-session-management-v1-client-protocol.h"
+#endif // wxHAVE_WAYLAND_SESSION_MANAGEMENT
+
 namespace wxWayland
 {
 
@@ -51,6 +55,11 @@ wxDEFINE_WL_DELETER(wl_pointer, wl_pointer_release);
 wxDEFINE_WL_DELETER(wl_registry, wl_registry_destroy);
 wxDEFINE_WL_DELETER(wl_seat, wl_seat_release);
 wxDEFINE_WL_DELETER(wp_pointer_warp_v1, wp_pointer_warp_v1_destroy);
+#ifdef wxHAVE_WAYLAND_SESSION_MANAGEMENT
+wxDEFINE_WL_DELETER(xdg_session_manager_v1, xdg_session_manager_v1_destroy);
+wxDEFINE_WL_DELETER(xdg_session_v1, xdg_session_v1_destroy);
+wxDEFINE_WL_DELETER(xdg_toplevel_session_v1, xdg_toplevel_session_v1_destroy);
+#endif // wxHAVE_WAYLAND_SESSION_MANAGEMENT
 
 template <typename T>
 using wl_unique_ptr = std::unique_ptr<T, wl_deleter<T>>;
@@ -115,6 +124,11 @@ struct Globals
 
     // Optional pointer to the global pointer warp protocol object.
     wl_unique_ptr<wp_pointer_warp_v1> pointer_warp;
+
+#ifdef wxHAVE_WAYLAND_SESSION_MANAGEMENT
+    // Optional pointer to the global session manager protocol object.
+    wl_unique_ptr<xdg_session_manager_v1> session_manager;
+#endif // wxHAVE_WAYLAND_SESSION_MANAGEMENT
 };
 
 extern Globals WLGlobals;

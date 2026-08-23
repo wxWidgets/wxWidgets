@@ -44,20 +44,20 @@ public:
     virtual ~wxTopLevelWindowX11();
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = true);
-    virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = true);
-    virtual bool IsIconized() const;
-    virtual void SetIcons(const wxIconBundle& icons);
-    virtual void Restore();
+    virtual void Maximize(bool maximize = true) override;
+    virtual bool IsMaximized() const override;
+    virtual void Iconize(bool iconize = true) override;
+    virtual bool IsIconized() const override;
+    virtual void SetIcons(const wxIconBundle& icons) override;
+    virtual void Restore() override;
 
-    virtual bool Show( bool show = true );
+    virtual bool Show( bool show = true ) override;
 
-    virtual bool ShowFullScreen( bool show, long style = wxFULLSCREEN_ALL );
-    virtual bool IsFullScreen() const { return m_fsIsShowing; }
+    virtual bool ShowFullScreen( bool show, long style = wxFULLSCREEN_ALL ) override;
+    virtual bool IsFullScreen() const override { return m_fsIsShowing; }
 
-    virtual void SetTitle( const wxString& title);
-    virtual wxString GetTitle() const;
+    virtual void SetTitle( const wxString& title) override;
+    virtual wxString GetTitle() const override;
 
     // implementation
     void SetNeedResizeInIdle( bool set = true )
@@ -69,9 +69,9 @@ public:
 
     // For implementation purposes - sometimes decorations make the
     // client area smaller
-    virtual wxPoint GetClientAreaOrigin() const;
+    virtual wxPoint GetClientAreaOrigin() const override;
 
-    virtual void OnInternalIdle();
+    virtual void OnInternalIdle() override;
 
 protected:
     // common part of all ctors
@@ -83,13 +83,13 @@ protected:
     // For implementation of delayed resize events
     bool m_needResizeInIdle;
 
-    virtual void DoGetClientSize( int *width, int *height ) const;
-    virtual void DoGetSize( int *width, int *height ) const;
-    virtual void DoSetClientSize(int width, int height);
+    virtual void DoGetClientSize( int *width, int *height ) const override;
+    virtual void DoGetSize( int *width, int *height ) const override;
+    virtual void DoSetClientSize(int width, int height) override;
     virtual void DoSetSize(int x, int y,
         int width, int height,
-        int sizeFlags = wxSIZE_AUTO);
-    virtual void DoGetPosition( int *x, int *y ) const;
+        int sizeFlags = wxSIZE_AUTO) override;
+    virtual void DoGetPosition( int *x, int *y ) const override;
 
     // Is the frame currently iconized?
     bool m_iconized;

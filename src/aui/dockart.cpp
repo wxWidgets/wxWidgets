@@ -48,8 +48,7 @@
 #endif
 
 #include "wx/private/aui.h"
-
-#include <math.h>
+#include "wx/private/colour.h"
 
 wxColor wxAuiLightContrastColour(const wxColour& c)
 {
@@ -61,27 +60,6 @@ wxColor wxAuiLightContrastColour(const wxColour& c)
         amount = 160;
 
     return c.ChangeLightness(amount);
-}
-
-inline float wxAuiGetSRGB(float r) {
-    return r <= 0.03928f ? r / 12.92f : std::pow((r + 0.055f) / 1.055f, 2.4f);
-}
-
-float wxAuiGetRelativeLuminance(const wxColour& c)
-{
-    // based on https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
-    return
-        0.2126f * wxAuiGetSRGB(c.Red()   / 255.0f) +
-        0.7152f * wxAuiGetSRGB(c.Green() / 255.0f) +
-        0.0722f * wxAuiGetSRGB(c.Blue()  / 255.0f);
-}
-
-float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2)
-{
-    // based on https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast7.html
-    float L1 = wxAuiGetRelativeLuminance(c1);
-    float L2 = wxAuiGetRelativeLuminance(c2);
-    return L1 > L2 ? (L1 + 0.05f) / (L2 + 0.05f) : (L2 + 0.05f) / (L1 + 0.05f);
 }
 
 #ifdef wxHAS_SVG

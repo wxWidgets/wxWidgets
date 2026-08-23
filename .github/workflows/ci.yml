@@ -78,27 +78,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Ubuntu 18.04 wxGTK 2
-            runner: ubuntu-latest
-            container: ubuntu:18.04
+          - name: Ubuntu 26.04 wxGTK 2
+            runner: ubuntu-26.04
             gtk_version: 2
             use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK UTF-8
-            runner: ubuntu-latest
-            container: ubuntu:18.04
+          - name: Ubuntu 26.04 wxGTK UTF-8
+            runner: ubuntu-26.04
             configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
             use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 static with gcc 4.8
-            runner: ubuntu-latest
-            compiler: g++-4.8
-            container: ubuntu:18.04
-            configure_flags: --disable-shared
-            allow_extra_warnings: true
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 compatible 3.0
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --enable-compat30 --enable-pch
+          - name: Ubuntu 20.04 wxGTK gcc 7 static compatible 3.0
+            runner: ubuntu-26.04
+            container: ubuntu:20.04
+            compiler: g++-7
+            configure_flags: --enable-compat30 --enable-pch --disable-shared
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
             runner: ubuntu-latest
@@ -127,20 +119,18 @@ jobs:
             use_ubsan: true
             use_xvfb: true
             build_out_of_tree_samples: true
-          - name: Ubuntu 18.04 wxX11
-            runner: ubuntu-latest
-            container: ubuntu:18.04
+          - name: Ubuntu 26.04 wxX11
+            runner: ubuntu-26.04
             configure_flags: --with-x11 --disable-stc
             skip_samples: true
-          - name: Ubuntu 18.04 wxDFB
-            runner: ubuntu-latest
-            container: ubuntu:18.04
+          - name: Ubuntu 24.04 wxDFB
+            # This is the latest Ubuntu version that still has DirectFB in its repositories.
+            runner: ubuntu-24.04
             configure_flags: --with-directfb --disable-stc
             skip_samples: true
             allow_warnings: true
-          - name: Ubuntu 18.04 wxQt
-            runner: ubuntu-latest
-            container: ubuntu:18.04
+          - name: Ubuntu 26.04 wxQt
+            runner: ubuntu-26.04
             configure_flags: --with-qt --without-opengl
             skip_samples: true
             use_xvfb: true
@@ -158,16 +148,6 @@ jobs:
           case '${{ matrix.container }}' in
             ubuntu:*)
               export DEBIAN_FRONTEND=noninteractive
-
-              if [ '${{ matrix.container }}' = 'ubuntu:18.04' ]; then
-                # First get the package containing /usr/bin/apt-add-repository.
-                apt-get update -qq
-                apt-get install -qq software-properties-common
-
-                # Git 2.17 in the official repository is too old to checkout
-                # submodules using it, so get a newer version.
-                apt-add-repository ppa:git-core/ppa
-              fi
 
               compiler=${{ matrix.compiler }}
               case "$compiler" in
@@ -189,27 +169,30 @@ jobs:
                   exit 1
               esac
 
+              # Ubuntu servers sometimes fail because of transient network
+              # issues, so retry apt-get commands a few times before giving up.
+              retry_apt()
+              {
+                attempts=5
+                delay=30
+                attempt=1
+
+                while ! "$@"; do
+                  if [[ $attempt -ge $attempts ]]; then
+                    return 1
+                  fi
+
+                  echo "Command failed, retrying in ${delay}s (attempt $((attempt + 1))/$attempts): $*"
+                  attempt=$((attempt + 1))
+                  sleep $delay
+                done
+              }
+              retry_apt apt-get update -qq
+
               # Explanation for installing some less obvious packages:
               #   - coreutils contains nproc used in proc_count.sh called below.
               #   - xvfb is used for running the GUI tests.
-              apt-get update -qq
-              apt-get install -qq coreutils ${compiler_packages} git make pkg-config sudo xvfb
-
-              # Checkout action doesn't work under Ubuntu 18.04 any more, so
-              # run checkout manually.
-              git config --global --add safe.directory $GITHUB_WORKSPACE
-              git config --global gc.auto 0
-              git init $GITHUB_WORKSPACE
-              cd $GITHUB_WORKSPACE
-              git remote add origin $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
-              git fetch --depth=1 origin $GITHUB_REF
-              git checkout FETCH_HEAD
-              git submodule update --init --depth=1 --recursive
-              git log -1 --format='%H'
-
-              # We can't easily install Go either, so skip the tests requiring
-              # httpbin.
-              echo WX_TEST_WEBREQUEST_URL=0 >> $GITHUB_ENV
+              retry_apt apt-get install -qq coreutils ${compiler_packages} git make pkg-config sudo xvfb
               ;;
 
             '')
@@ -221,14 +204,12 @@ jobs:
           esac
 
       - name: Checkout
-        if: matrix.container != 'ubuntu:18.04'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: 'recursive'
 
       - name: Install CCache
-        if: matrix.container != 'ubuntu:18.04'
-        uses: hendrikmuhs/ccache-action@v1.2.12
+        uses: hendrikmuhs/ccache-action@v1.2.23
         with:
           key: ${{ matrix.name }}
 
@@ -370,8 +351,7 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_tests }}
 
       - name: Setup Go
-        if: matrix.container != 'ubuntu:18.04'
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1'
           cache: false

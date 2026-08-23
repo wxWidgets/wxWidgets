@@ -104,8 +104,8 @@ void LogTraceArray(const char *prefix, const wxVector<wxString>& arr)
 void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 {
     wxLogTrace(TRACE_I18N, "%s:", prefix);
-    for ( wxArrayString::const_iterator i = arr.begin(); i != arr.end(); ++i )
-        wxLogTrace(TRACE_I18N, "    %s", *i);
+    for ( const auto& str : arr )
+        wxLogTrace(TRACE_I18N, "    %s", str);
 }
 
 #else // !wxUSE_LOG_TRACE
@@ -1472,8 +1472,14 @@ using UntranslatedStrings = std::unordered_set<wxString>;
     in global variables outside of this class and only relying on the dtor to
     be executed when any thread (not necessarily created by wxWidgets) exits to
     ensure that we always perform the required cleanup.
+
+    thread_local seems to work correctly in MSYS2 MinGW as of May 2026,
+    see https://www.msys2.org/news/#2026-05-11-native-thread-local-storage-tls-with-gcc-16
+    Around that same time the major version was incremented to 15, so use that
+    to check if thread_local can be used.
  */
-#ifdef __MINGW32__
+#if defined(__MINGW32__) && \
+    (!defined(__MINGW64_VERSION_MAJOR) || __MINGW64_VERSION_MAJOR < 15)
 
 class UntranslatedStringHolder
 {
@@ -1761,11 +1767,9 @@ wxString GetFullSearchPath(const wxString& lang)
 
     const wxArrayString prefixes = GetSearchPrefixes();
 
-    for ( wxArrayString::const_iterator i = prefixes.begin();
-          i != prefixes.end();
-          ++i )
+    for ( const auto& prefix : prefixes )
     {
-        const wxString p = GetMsgCatalogSubdirs(*i, lang);
+        const wxString p = GetMsgCatalogSubdirs(prefix, lang);
 
         if ( !searchPath.empty() )
             searchPath += wxPATH_SEP;
@@ -1824,14 +1828,12 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
         prefixes
     );
 
-    for ( wxArrayString::const_iterator i = prefixes.begin();
-          i != prefixes.end();
-          ++i )
+    for ( const auto& prefix : prefixes )
     {
-        if ( i->empty() )
+        if ( prefix.empty() )
             continue;
         wxDir dir;
-        if ( !dir.Open(*i) )
+        if ( !dir.Open(prefix) )
             continue;
 
         wxString lang;
@@ -1839,7 +1841,7 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
               ok;
               ok = dir.GetNext(&lang) )
         {
-            const wxString langdir = *i + wxFILE_SEP_PATH + lang;
+            const wxString langdir = prefix + wxFILE_SEP_PATH + lang;
             if ( HasMsgCatalogInDir(langdir, domain) )
             {
 #ifdef __WXOSX__

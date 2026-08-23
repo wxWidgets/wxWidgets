@@ -97,6 +97,7 @@ TEST_OBJECTS =  \
 	test_typeinfotest.obj
 
 TEST_OBJECTS1=test_ipc.obj,\
+	test_ipc_test_server.obj,\
 	test_socket.obj,\
 	test_regextest.obj,\
 	test_wxregextest.obj,\
@@ -374,10 +375,13 @@ test_pathlist.obj : [.misc]pathlist.cpp
 test_typeinfotest.obj : [.misc]typeinfotest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.misc]typeinfotest.cpp
 
-test_ipc.obj : [.net]ipc.cpp 
+test_ipc.obj : [.net]ipc.cpp
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.net]ipc.cpp
 
-test_socket.obj : [.net]socket.cpp 
+test_ipc_test_server.obj : [.net]ipc_test_server.cpp
+	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.net]ipc_test_server.cpp
+
+test_socket.obj : [.net]socket.cpp
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS)/warn=(disable=REFTEMPORARY)\
 	[.net]socket.cpp
 

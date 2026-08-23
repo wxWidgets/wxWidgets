@@ -938,7 +938,19 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
         y2dev++;
     }
 
-    (void)Rectangle(GetHdc(), x1dev, y1dev, x2dev, y2dev);
+    const wxCoord widthDev = x2dev - x1dev;
+    const wxCoord heightDev = y2dev - y1dev;
+    if ( m_pen.IsNonTransparent() && (widthDev == 1 || widthDev == -1) &&
+         (heightDev == 1 || heightDev == -1) )
+    {
+        // GDI Rectangle() doesn't draw this degenerate outline at all.
+        SetPixel(GetHdc(), widthDev > 0 ? x1dev : x2dev,
+                 heightDev > 0 ? y1dev : y2dev, m_pen.GetColour().GetPixel());
+    }
+    else
+    {
+        (void)Rectangle(GetHdc(), x1dev, y1dev, x2dev, y2dev);
+    }
 
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(x, y, x2, y2);

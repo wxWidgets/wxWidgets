@@ -129,7 +129,8 @@ protected:
                            int sizeFlags = wxSIZE_AUTO) override;
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
 
-    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    virtual void MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    virtual void MSWSetDarkOrLightMode(SetMode setmode) override;
 
     // Show or hide the popup part of the control.
     void MSWDoPopupOrDismiss(bool show);

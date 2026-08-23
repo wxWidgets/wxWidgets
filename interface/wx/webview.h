@@ -410,6 +410,27 @@ public:
         @since 3.3.0
      */
     bool EnablePersistentStorage(bool enable);
+
+    /**
+        Disables GPU hardware acceleration for all subsequently created web
+        views.
+
+        This can be useful when diagnosing rendering issues or when targeting
+        machines with older or unsupported video cards.
+
+        This must be called @b before creating any wxWebView instance. Once
+        called, GPU acceleration will remain disabled for the lifetime of the
+        application.
+
+        @return @true if the setting was applied successfully, @false if it is
+            not supported by the currently used backend.
+
+        @note This is currently only implemented for the Edge (MSW) and
+            WebKit2GTK (GTK) backends.
+
+        @since 3.3.3
+    */
+    static bool DisableGPUAcceleration();
 };
 
 
@@ -710,7 +731,9 @@ public:
     wxWebViewHandler(const wxString& scheme);
 
     /**
-        @return A pointer to the file represented by @c uri.
+        @return A pointer to the file represented by @c uri, or @NULL. The
+        caller takes ownership of the returned pointer and is responsible for
+        deleting it.
     */
     virtual wxFSFile* GetFile(const wxString &uri);
 
@@ -821,7 +844,7 @@ public:
     @section backend_descriptions Backend Descriptions
 
     This class supports using multiple backends, corresponding to different
-    implementations of the same functionality. wxWebViewChrome is available
+    implementations of the same functionality. wxWebViewChromium is available
     on all three major platforms and each platform also has its own default
     native backend. Backends are identified by their names, documented in
     the backend descriptions below.
@@ -918,12 +941,10 @@ public:
     The predefined @c wxWebViewBackendWebKit constant contains the name of this
     backend.
 
-    @note WebKitGTK 2.42+ may fail to render content due to
-    DMA-BUF hardware acceleration issues. This can be resolved by calling
-    @code
-    wxSetEnv("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
-    @endcode
-    before creating a @c wxWebView instance.
+    @note WebKitGTK 2.42+ may fail to render content due to DMA-BUF hardware
+    acceleration issues. This can be resolved by calling
+    wxWebViewConfiguration::DisableGPUAcceleration() before creating a
+    @c wxWebView instance.
 
     @subsection wxWEBVIEW_WEBKIT_MACOS wxWEBVIEW_WEBKIT (macOS)
 
@@ -939,7 +960,7 @@ public:
     connections (this includes HTTP and unverified HTTPS). You have to include
     additional fields in your Info.plist to enable such connections.
     For further details see the documentation on NSAppTransportSecurity
-    <a target=_new href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
+    <a target="_blank" href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity">here</a>
 
     The predefined @c wxWebViewBackendWebKit constant contains the name of this
     backend.
@@ -1040,6 +1061,12 @@ public:
         Process a @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event
         only available in wxWidgets 3.3.0 or later. For usage details see
         ClearBrowsingData().
+    @event{EVT_WEBVIEW_PDF_SAVED(id, func)}
+        Process a @c wxEVT_WEBVIEW_PDF_SAVED event, generated when a
+        PrintToPDF() operation completes. Use wxWebViewEvent::GetURL() to
+        retrieve the output file path and wxWebViewEvent::IsError() to check
+        whether the save succeeded.
+        Only available in wxWidgets 3.3.3 or later.
     @endEventTable
 
     @since 2.9.3
@@ -1307,6 +1334,54 @@ public:
     */
     virtual void Print(const wxPrintData& printData,
                        int flags = wxWEBVIEW_PRINT_HIDE_HEADER_FOOTER);
+
+    /**
+        Saves the currently displayed page as a PDF file to @a filePath.
+
+        This operation is asynchronous. When it completes, a
+        @c wxEVT_WEBVIEW_PDF_SAVED event is generated. Use
+        wxWebViewEvent::GetURL() to retrieve the output file path and
+        wxWebViewEvent::IsError() to check whether the operation succeeded.
+
+        @return @true if the export was started successfully, @false if the
+            backend does not support PDF export or if an error prevented the
+            operation from starting.
+
+        @note Currently implemented on the Edge (MSW), WebKit (macOS 11.0+),
+            and WebKit2GTK (GTK) backends. Returns @false on all other
+            backends.
+
+        @see PrintToPDF(const wxString&, const wxPrintData&)
+
+        @since 3.3.3
+    */
+    virtual bool PrintToPDF(const wxString& filePath);
+
+    /**
+        Saves the currently displayed page as a PDF file using the given print
+        settings.
+
+        This overload allows specifying paper size and orientation via
+        @a printData. Backend support for these settings varies:
+
+        - Edge (MSW): paper size (derived from the wxPrintData paper ID) and
+          orientation are both applied to the output PDF.
+        - macOS: @a printData is not used; this behaves identically to
+          PrintToPDF(const wxString&).
+        - GTK (WebKit2GTK): paper size, orientation, copies, and collation
+          are all applied to the output PDF.
+
+        This overload is only available when @c wxUSE_PRINTING_ARCHITECTURE is
+        set to 1.
+
+        @return @true if the export was started successfully, @false if the
+            backend does not support PDF export.
+
+        @see PrintToPDF(const wxString&)
+
+        @since 3.3.3
+    */
+    virtual bool PrintToPDF(const wxString& filePath, const wxPrintData& printData);
 
     /**
         Registers a custom scheme handler.
@@ -2153,7 +2228,8 @@ public:
     /**
         Returns @true if the operation failed.
         Only valid for events of type
-        @c wxEVT_WEBVIEW_SCRIPT_RESULT and @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED
+        @c wxEVT_WEBVIEW_SCRIPT_RESULT, @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED
+        and @c wxEVT_WEBVIEW_PDF_SAVED
 
         @since 3.1.6
     */
@@ -2184,3 +2260,4 @@ wxEventType wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED;
 wxEventType wxEVT_WEBVIEW_SCRIPT_RESULT;
 wxEventType wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED;
 wxEventType wxEVT_WEBVIEW_BROWSING_DATA_CLEARED;
+wxEventType wxEVT_WEBVIEW_PDF_SAVED;

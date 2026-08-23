@@ -1158,6 +1158,13 @@ int wxRegExImpl::Replace(wxString *text,
                         index = (size_t)wxStrtoul(p, &end, 10);
                         p = end - 1; // -1 to compensate for p++ in the loop
                     }
+                    else if ( !*p )
+                    {
+                        // trailing backslash: keep it verbatim and stop here so
+                        // the loop's p++ doesn't read past the terminating NUL
+                        textNew += wxT('\\');
+                        break;
+                    }
                     //else: backslash used as escape character
                 }
                 else if ( *p == wxT('&') )
@@ -1313,14 +1320,14 @@ wxString wxRegEx::QuoteMeta(const wxString& str)
     // character were escaped.
     strEscaped.reserve(str.length() * 2);
 
-    for ( wxString::const_iterator it = str.begin(); it != str.end(); ++it )
+    for ( const auto& c : str )
     {
-        if ( s_strMetaChars.find(*it) != wxString::npos )
+        if ( s_strMetaChars.find(c) != wxString::npos )
         {
             strEscaped += wxS('\\');
         }
 
-        strEscaped += *it;
+        strEscaped += c;
     }
 
     strEscaped.shrink_to_fit();

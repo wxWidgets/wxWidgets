@@ -133,6 +133,14 @@ public:
 
 #endif
 
+    virtual wxVisualAttributes GetDefaultAttributes() const override
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     // implementation from now on
     // --------------------------
 
@@ -203,6 +211,10 @@ public:
     virtual long            MacGetRightBorderSize() const;
     virtual long            MacGetTopBorderSize() const;
     virtual long            MacGetBottomBorderSize() const;
+
+    // Must be called whenever window style changes result in changes to layout
+    // insets (`-[NSView alignmentRectInsets:]`, used for MacGetBorderSize())
+    virtual void        MacInvalidateInsetCache() const;
 
     virtual void        MacSuperChangedPosition() ;
 

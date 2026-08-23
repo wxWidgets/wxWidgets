@@ -188,6 +188,9 @@ private:
 
     void RecalcBitmaps();
 
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void UpdateColours();
+
     enum class BitmapType
     {
         Search,

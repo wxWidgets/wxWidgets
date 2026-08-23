@@ -152,7 +152,7 @@ enum wxRibbonScrollButtonStyle
 
     wxRIBBON_SCROLL_BTN_DIRECTION_MASK = 3,
 
-    wxRIBBON_SCROLL_BTN_NORMAL = 0,
+    wxRIBBON_SCROLL_BTN_NORMAL = 0, // This must have value 0
     wxRIBBON_SCROLL_BTN_HOVERED = 4,
     wxRIBBON_SCROLL_BTN_ACTIVE = 8,
 
@@ -231,6 +231,10 @@ public:
     virtual void SetColourScheme(const wxColour& primary,
                         const wxColour& secondary,
                         const wxColour& tertiary) = 0;
+
+    // Called when the system colours change; override to recalculate colours
+    // from system settings.
+    virtual void UpdateColoursFromSystem() {}
 
     virtual void DrawTabCtrlBackground(
                         wxDC& dc,
@@ -441,6 +445,8 @@ public:
                          const wxColour& secondary,
                          const wxColour& tertiary) override;
 
+    void UpdateColoursFromSystem() override;
+
     int GetTabCtrlHeight(
                         wxReadOnlyDC& dc,
                         wxWindow* wnd,
@@ -638,6 +644,9 @@ protected:
     void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
     void DrawGalleryBackgroundCommon(wxDC& dc, wxRibbonGallery* wnd,
                         const wxRect& rect);
+    // Picks the button bar label colour appropriate for the given
+    // wxRIBBON_BUTTONBAR_BUTTON_* state flags.
+    wxColour GetButtonBarLabelColour(long state) const;
     virtual void DrawGalleryButton(wxDC& dc, wxRect rect,
         wxRibbonGalleryButtonState state, wxBitmapBundle* bundles, wxWindow* wnd);
     void DrawButtonBarButtonForeground(
@@ -661,10 +670,6 @@ protected:
     wxBitmapBundle m_gallery_extension_bundle[4];
     wxBitmapBundle m_toolbar_drop_bundle;
     wxBitmapBundle m_panel_extension_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_up_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_down_bundle[2];
-    wxBitmapBundle m_ribbon_toggle_pin_bundle[2];
-    wxBitmapBundle m_ribbon_bar_help_button_bundle[2];
 
     wxColour m_primary_scheme_colour;
     wxColour m_secondary_scheme_colour;
@@ -672,6 +677,7 @@ protected:
 
     wxColour m_button_bar_label_colour;
     wxColour m_button_bar_label_disabled_colour;
+    wxColour m_button_bar_active_label_colour;
     wxColour m_tab_label_colour;
     wxColour m_tab_active_label_colour;
     wxColour m_tab_hover_label_colour;

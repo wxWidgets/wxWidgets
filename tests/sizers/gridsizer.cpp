@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/sizers/gridsizer.cpp
-// Purpose:     Unit tests for wxGridSizer and wxFlexGridSizer.
+// Purpose:     Unit tests for wxGridSizer, wxFlexGridSizer and wxGridBagSizer.
 // Author:      Vadim Zeitlin
 // Created:     2015-04-03
 // Copyright:   (c) 2015 Vadim Zeitlin <vadim@wxwidgets.org>
@@ -18,6 +18,8 @@
     #include "wx/sizer.h"
     #include "wx/vector.h"
 #endif // WX_PRECOMP
+
+#include "wx/gbsizer.h"
 
 #include "asserthelper.h"
 
@@ -251,4 +253,21 @@ TEST_CASE_METHOD(FlexGridSizerTestCase,
     CHECK( children[1]->GetSize() == wxSize(80, 50) );
     CHECK( children[2]->GetSize() == wxSize(20, 50) );
     CHECK( children[3]->GetSize() == wxSize(80, 50) );
+}
+
+TEST_CASE("wxGridBagSizer::EmptyCellSize", "[grid-bag-sizer][sizer]")
+{
+    wxGridBagSizer sizer;
+
+    sizer.Add(2, 1, wxGBPosition(0, 0), wxGBSpan(1, 2));
+    CHECK( sizer.CalcMin() == wxSize(2, 1) );
+
+    sizer.Add(1, 1, wxGBPosition(0, 3));
+    CHECK( sizer.CalcMin() == wxSize(13, 1) );
+
+    sizer.Add(1, 1, wxGBPosition(2, 0));
+    CHECK( sizer.CalcMin() == wxSize(13, 22) );
+
+    sizer.SetEmptyCellSize(wxSize(0, 0));
+    CHECK( sizer.CalcMin() == wxSize(3, 2) );
 }

@@ -13,7 +13,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.3.3], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.3.4], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -39,7 +39,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=3
-wx_release_number=3
+wx_release_number=4
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -153,6 +153,11 @@ case "${host}" in
     dnl many standard declarations in HP-UX headers are only included if either
     dnl _HPUX_SOURCE is defined, see stdsyms(5)
     CPPFLAGS="-D_HPUX_SOURCE $CPPFLAGS"
+  ;;
+  *-*-android* )
+    USE_LINUX=1
+    AC_DEFINE(__LINUX__)
+    LIBS="-llog $LIBS"
   ;;
   *-*-linux* )
     USE_LINUX=1
@@ -539,6 +544,7 @@ WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing sup
 WX_ARG_WITHOUT(wayland,    [  --without-wayland       don't use Wayland-specific code], wxUSE_WAYLAND)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
+WX_ARG_WITH(appindicator,  [  --with-appindicator     use AppIndicator (required for wxTaskBarIcon under Wayland)], wxUSE_APPINDICATOR)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 WX_ARG_WITH(nanosvg,       [  --with-nanosvg          use NanoSVG for rasterizing SVG], wxUSE_NANOSVG)
@@ -1309,15 +1315,20 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" = "xno"; then
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
     if test "x$wxUSE_MACOSX_SDK" != "x"; then
         AC_MSG_CHECKING([SDK deployment version])
-dnl We need to quote the next line where we don't need macros and do need [] in the regex
-[
-        MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" buildSettings | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
-]
-        # If that failed, try again with the new key
+        defaultProperties=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties`
+
+        dnl Take the first (earliest, because they are sorted) supported
+        dnl deployment target from the SDKSettings.plist file and remove
+        dnl leading spaces, quotes and trailing comma from it.
+        MACOSX_SDK_PLIST_VERSION_MIN=`echo "$defaultProperties" | sed -n -e '1,/DEPLOYMENT_TARGET_SUGGESTED_VALUES/d; s/^ *//; s/"//g; s/,//p; q'`
+
+        dnl If DEPLOYMENT_TARGET_SUGGESTED_VALUES doesn't exist, as it was in
+        dnl 10.11..10.13 SDKs, try MACOSX_DEPLOYMENT_TARGET instead.
         if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
-[
-            MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
-]
+            dnl We need to quote the next line where we don't need macros and do need [] in the regex
+            [
+                MACOSX_SDK_PLIST_VERSION_MIN=`echo "$defaultProperties" | sed -n -e 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/p'`
+            ]
         fi
 
         if test "x$MACOSX_SDK_PLIST_VERSION_MIN" != "x"; then
@@ -3090,19 +3101,97 @@ installed, where VER is 2, 3 or 4.
             fi
 
             if test -n "$WAYLAND_SCANNER" ; then
+                dnl Check if we can use the session management protocol which
+                dnl normally requires GTK >= 3.24.53 but allow using it with
+                dnl the versions of 3.24.52 that already have the support
+                dnl required for it, at least until 3.24.53 is released.
+                AC_CACHE_CHECK([for support of the Wayland session management protocol],
+                    wx_cv_gtk_wayland_sm,
+                    [
+                        GTK_VERSION=`$PKG_CONFIG --modversion gtk+-3.0`
+                        AS_VERSION_COMPARE([$GTK_VERSION], [3.24.52],
+                            wx_cv_gtk_wayland_sm=no,
+                            wx_cv_gtk_wayland_sm=maybe,
+                            wx_cv_gtk_wayland_sm=yes
+                        )
+
+                        if test "$wx_cv_gtk_wayland_sm" = "maybe"; then
+                            save_CFLAGS=$CFLAGS
+                            save_LIBS=$LIBS
+                            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+                            LIBS="$LIBS $GUI_TK_LIBRARY"
+                            AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <gdk/gdkwayland.h>],
+                                [
+                                    gdk_wayland_window_get_xdg_toplevel(0)
+                                ])],
+                                wx_cv_gtk_wayland_sm=yes,
+                                wx_cv_gtk_wayland_sm=no
+                            )
+                            LIBS=$save_LIBS
+                            CFLAGS=$save_CFLAGS
+                        fi
+                    ]
+                )
+
+                if test "$wx_cv_gtk_wayland_sm" = "yes"; then
+                    dnl We don't check for wayland-protocols being installed as
+                    dnl it's a dependency of libgtk-3-dev or similar, and so
+                    dnl should be available.
+                    AC_CACHE_CHECK([for wayland-protocols data directory],
+                        wx_cv_wayland_protocols_dir,
+                        [
+                            wx_cv_wayland_protocols_dir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols`
+                        ]
+                    )
+                    WAYLAND_PROTOCOLS_DIR=$wx_cv_wayland_protocols_dir
+
+                    AC_DEFINE(wxHAVE_WAYLAND_SESSION_MANAGEMENT)
+                else
+                    dnl Don't bother running wayland-scanner for this protocol.
+                    WAYLAND_SM_SUPPORT=':'
+                fi
+
                 AC_DEFINE(wxHAVE_WAYLAND_CLIENT)
                 AC_CONFIG_COMMANDS([wayland-protocols],
                     [
                         mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
                         $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
                         $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
+                        $WAYLAND_SM_SUPPORT $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/xdg-session-management-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-session-management-v1-client-protocol.h
+                        $WAYLAND_SM_SUPPORT $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/xdg-session-management-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-session-management-v1-client-protocol.c
+                        $WAYLAND_SM_SUPPORT $WAYLAND_SCANNER client-header $WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-shell-client-protocol.h
+                        $WAYLAND_SM_SUPPORT $WAYLAND_SCANNER private-code $WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/xdg-shell-client-protocol.c
                     ],
                     [
                         WAYLAND_SCANNER=$WAYLAND_SCANNER
+                        WAYLAND_SM_SUPPORT=$WAYLAND_SM_SUPPORT
+                        WAYLAND_PROTOCOLS_DIR=$WAYLAND_PROTOCOLS_DIR
                     ]
                 )
             else
                 AC_MSG_WARN([Wayland-specific code will be disabled])
+            fi
+        fi
+
+        if test "$wxUSE_TASKBARICON" = "yes"; then
+            if test "$wxUSE_APPINDICATOR" = "yes"; then
+                if test "$WXGTK3" = 1; then
+                    PKG_CHECK_MODULES(APPINDICATOR,
+                        [ayatana-appindicator3-0.1],
+                        [
+                            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $APPINDICATOR_LIBS"
+                            CFLAGS="$APPINDICATOR_CFLAGS $CFLAGS"
+                            CXXFLAGS="$APPINDICATOR_CFLAGS $CXXFLAGS"
+                            AC_DEFINE(wxUSE_APPINDICATOR)
+                        ],
+                        [
+                            AC_MSG_WARN([libayatana-appindicator not found; wxTaskBarIcon won't work under Wayland])
+                        ])
+                else
+                    dnl In principle, we could look for ayatana-appindicator-0.1
+                    dnl when using GTK2, but for now we don't support it there.
+                    wxUSE_APPINDICATOR=no
+                fi
             fi
         fi
     fi
@@ -5310,23 +5399,34 @@ WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
   if test "$USE_UNIX" = 1 -a "$USE_MAC" != 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
-      PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
+      PKG_CHECK_MODULES([SDL], [sdl3 >= 3.0.0],
                   [
                     EXTRALIBS_SDL="$SDL_LIBS"
                     CFLAGS="$SDL_CFLAGS $CFLAGS"
                     CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                     AC_DEFINE(wxUSE_LIBSDL)
+                    AC_DEFINE(wxUSE_LIBSDL3)
                   ],
                   [
-                    AC_MSG_NOTICE([SDL 2.0 not available. Falling back to 1.2.])
-                    AM_PATH_SDL([1.2.0],
+                    AC_MSG_NOTICE([SDL 3.0 not available. Falling back to SDL 2.0.])
+                    PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
                                 [
                                   EXTRALIBS_SDL="$SDL_LIBS"
                                   CFLAGS="$SDL_CFLAGS $CFLAGS"
                                   CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                                   AC_DEFINE(wxUSE_LIBSDL)
                                 ],
-                                [wxUSE_LIBSDL="no"])
+                                [
+                                  AC_MSG_NOTICE([SDL 2.0 not available. Falling back to 1.2.])
+                                  AM_PATH_SDL([1.2.0],
+                                              [
+                                                EXTRALIBS_SDL="$SDL_LIBS"
+                                                CFLAGS="$SDL_CFLAGS $CFLAGS"
+                                                CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
+                                                AC_DEFINE(wxUSE_LIBSDL)
+                                              ],
+                                              [wxUSE_LIBSDL="no"])
+                                ])
                   ])
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1

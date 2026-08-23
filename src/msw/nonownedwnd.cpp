@@ -36,6 +36,7 @@
 
 #include "wx/dynlib.h"
 #include "wx/msw/missing.h"
+#include "wx/msw/private/darkmode.h"
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/weakref.h"
@@ -497,6 +498,14 @@ bool wxNonOwnedWindow::IsThisEnabled() const
                   : m_isEnabled;
 }
 
+void wxNonOwnedWindow::MSWSetDarkOrLightMode(SetMode setmode)
+{
+    wxNonOwnedWindowBase::MSWSetDarkOrLightMode(setmode);
+
+    // Update non-client area
+    wxMSWDarkMode::ConfigureTLW(GetHwnd());
+}
+
 WXLRESULT wxNonOwnedWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
@@ -578,16 +587,26 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         wxRect actualNewRect = newRect;
         if ( wxSizer* sizer = GetSizer() )
         {
-            const wxSize minSize = ClientToWindowSize(sizer->GetMinSize());
+            const wxSize minSize = sizer->ComputeFittingWindowSize(this);
             wxSize diff = minSize - newRect.GetSize();
-            diff.IncTo(wxSize(0, 0));
+
+            // We don't want to shrink the window as if the user had increased
+            // it beyond its minimum size, we should not make it smaller again
+            // just because the DPI has changed, but if the window is not
+            // resizeable, then we do want to make it exactly of its minimum
+            // size because the user couldn't resize it and making it bigger
+            // than needed would just show unnecessary extra empty space.
+            if ( HasFlag(wxRESIZE_BORDER) )
+            {
+                diff.IncTo(wxSize(0, 0));
+            }
 
             // Use wxRect::Inflate() to ensure that the center of the bigger
             // rectangle is at the same position as the center of the proposed
             // one, to prevent moving the window back to the old display from
             // which it might have been just moved to this one, as doing this
             // would result in an infinite stream of WM_DPICHANGED messages.
-            actualNewRect.Inflate(diff);
+            actualNewRect.Inflate(diff / 2);
         }
 
         SetSize(actualNewRect);

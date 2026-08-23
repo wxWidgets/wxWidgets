@@ -54,9 +54,28 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorMSWImpl);
 };
 
+int PhysicalButtonForLogicalButton(int button)
+{
+    if ( ::GetSystemMetrics(SM_SWAPBUTTON) )
+    {
+        switch ( button )
+        {
+            case wxMOUSE_BTN_LEFT:
+                return wxMOUSE_BTN_RIGHT;
+
+            case wxMOUSE_BTN_RIGHT:
+                return wxMOUSE_BTN_LEFT;
+        }
+    }
+
+    return button;
+}
+
 DWORD EventTypeForMouseButton(int button, bool isDown)
 {
-    switch (button)
+    // wxUIActionSimulator uses logical left/right buttons. mouse_event() needs
+    // the physical MSW button producing them when the user swaps buttons.
+    switch ( PhysicalButtonForLogicalButton(button) )
     {
         case wxMOUSE_BTN_LEFT:
             return isDown ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;

@@ -43,14 +43,16 @@ public:
     Returns a scope guard object which will call the specified function with
     the given parameters on scope exit.
 
-    This function is overloaded to take several parameters up to some
-    implementation-defined (but relatively low) limit.
+    This function is internally implemented as a family of overloaded functions
+    taking a number of parameters from 1 up to some implementation-defined
+    limit (which is currently 3 but could be increased in the future).
 
     The @a func should be a functor taking parameters of the types P1, ..., PN,
     i.e. the expression @c func(p1, ..., pN) should be valid.
  */
-template <typename F, typename P1, ..., typename PN>
-wxScopeGuard wxMakeGuard(F func, P1 p1, ..., PN pN);
+
+template <typename F, typename... P>
+wxScopeGuard wxMakeGuard(F fun, P... p);
 
 ///@}
 

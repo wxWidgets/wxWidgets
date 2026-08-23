@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_RICHTEXT)
+    wx_append_install_headers(RICHTEXT_HDR)
+    return()
+endif()
+
 wx_append_sources(RICHTEXT_FILES RICHTEXT)
 
 wx_add_library(wxrichtext ${RICHTEXT_FILES})

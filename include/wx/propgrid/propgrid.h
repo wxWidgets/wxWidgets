@@ -1881,6 +1881,8 @@ private:
 
     bool ButtonTriggerKeyTest(wxPGKeyboardAction action, wxKeyEvent& event);
 
+    void ReallocDoubleBufferIfNeeded();
+
     wxDECLARE_EVENT_TABLE();
 };
 

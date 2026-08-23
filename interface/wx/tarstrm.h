@@ -91,6 +91,25 @@ public:
         seekable stream.
     */
     bool OpenEntry(wxTarEntry& entry);
+
+    /**
+        Returns the maximum allowed size of a tar extended header.
+
+        @see SetMaxExtendedHeaderSize()
+
+        @since 3.3.3
+    */
+    static size_t GetMaxExtendedHeaderSize();
+
+    /**
+        Sets the maximum allowed size of a tar extended header.
+
+        Extended headers larger than this are rejected to avoid excessive
+        memory allocation. The default is 10 MiB.
+
+        @since 3.3.3
+    */
+    static void SetMaxExtendedHeaderSize(size_t size);
 };
 
 

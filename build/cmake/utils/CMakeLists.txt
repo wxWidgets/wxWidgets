@@ -38,7 +38,7 @@ if(wxUSE_XRC)
             set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
         endif()
 
-        set(WXRC_DIR "\\\$ENV{DESTDIR}\\\${CMAKE_INSTALL_PREFIX}")
+        set(WXRC_DIR "\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}")
         set(WXRC_SRC "${WXRC_DIR}/${runtime_dir}/${wxrc_output_name}${EXE_SUFFIX}")
         set(WXRC_DST "${WXRC_DIR}/${runtime_dir}/wxrc${EXE_SUFFIX}")
         wx_install_symlink(${WXRC_SRC} ${WXRC_DST})

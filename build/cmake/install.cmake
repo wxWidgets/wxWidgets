@@ -67,7 +67,7 @@ else()
 
     wx_get_install_platform_dir(runtime)
     install(DIRECTORY DESTINATION "${runtime_dir}")
-    set(CONFIG_DIR "\\\$ENV{DESTDIR}\\\${CMAKE_INSTALL_PREFIX}")
+    set(CONFIG_DIR "\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}")
     set(CONFIG_SRC "${CONFIG_DIR}/${library_dir}/wx/config/${wxBUILD_FILE_ID}")
     set(CONFIG_DST "${CONFIG_DIR}/${runtime_dir}/wx-config")
     wx_install_symlink(${CONFIG_SRC} ${CONFIG_DST})

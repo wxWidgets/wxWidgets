@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/dc.h"
 
 #include <windowsx.h>
@@ -173,12 +174,14 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-bool wxListBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+void wxListBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    support.themeName = L"Explorer";
-    support.themeId = L"ScrollBar";
-
-    return true;
+    // The default theme does not look good on starting with Windows 11
+    // build 26300.8553. DarkMode_DarkTheme looks OK.
+    if ( wxMSWDarkMode::HasDarkTheme() )
+        support.themeName = L"DarkMode_DarkTheme";
+    else
+        wxListBoxBase::MSWGetDarkModeSupport(support);
 }
 
 void wxListBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)

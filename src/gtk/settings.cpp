@@ -328,9 +328,7 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
 
     for (auto* win: wxTopLevelWindows)
     {
-        wxSysColourChangedEvent event;
-        event.SetEventObject(win);
-        win->HandleWindowEvent(event);
+        win->SendSysColourChangedEvents();
     }
 }
 

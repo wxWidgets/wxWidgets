@@ -622,6 +622,9 @@ void wxTarEntry::SetMode(int mode)
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
+// Default cap of 10 MiB; can be changed with SetMaxExtendedHeaderSize().
+size_t wxTarInputStream::sm_maxExtendedHeaderSize = 10 * 1024 * 1024;
+
 wxTarInputStream::wxTarInputStream(wxInputStream& stream,
                                    wxMBConv& conv /*=wxConvLocal*/)
  :  wxArchiveInputStream(stream, conv)
@@ -909,8 +912,16 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
     if (!recs)
         recs = new wxTarHeaderRecords;
 
-    // round length up to a whole number of blocks
     size_t len = m_hdr->GetOctal(TAR_SIZE);
+
+    // reject an unreasonably large extended header to avoid excessive allocation
+    if (len > GetMaxExtendedHeaderSize())
+    {
+        wxLogError(_("Extended tar header size %zu is greater than maximum allowed."), len);
+        return false;
+    }
+
+    // round length up to a whole number of blocks
     size_t size = RoundUpSize(len);
 
     // read in the whole header since it should be small

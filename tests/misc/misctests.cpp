@@ -5,6 +5,7 @@
 // Created:     2008-07-10
 // Copyright:   (c) 2008 Peter Most
 //              (c) 2009 Vadim Zeitlin
+//              (c) 2026 wxWidgets development team
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -16,6 +17,7 @@
 
 #include "wx/defs.h"
 
+#include "wx/iconloc.h"
 #include "wx/math.h"
 #include "wx/mimetype.h"
 #include "wx/versioninfo.h"
@@ -26,6 +28,8 @@
 // just some classes using wxRTTI for wxStaticCast() test
 #include "wx/tarstrm.h"
 #include "wx/zipstrm.h"
+
+#include <memory>
 
 #ifdef __WINDOWS__
     // Needed for wxMulDivInt32().
@@ -273,6 +277,22 @@ TEST_CASE("wxFileType::ExpandCommand", "[mime]")
     // string; check that the trailing '%' is just copied verbatim instead.
     CHECK( wxFileType::ExpandCommand("show %s %", params) == "show file.txt %" );
 }
+
+#ifdef __WINDOWS__
+TEST_CASE("wxFileType::ExecutableIcon", "[mime][msw]")
+{
+    std::unique_ptr<wxFileType> fileType(
+        wxTheMimeTypesManager->GetFileTypeFromExtension("exe"));
+    REQUIRE( fileType );
+
+    wxIconLocation iconLoc;
+    REQUIRE( fileType->GetIcon(&iconLoc) );
+
+    CHECK( iconLoc.IsOk() );
+    CHECK( iconLoc.GetFileName() != "%1" );
+    CHECK( iconLoc.GetFileName() != "%L" );
+}
+#endif // __WINDOWS__
 #endif // wxUSE_MIMETYPE
 
 TEST_CASE("wxVersionInfo", "[version]")

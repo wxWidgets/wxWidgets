@@ -1514,8 +1514,15 @@ void wxFileConfigGroup::SetLine(wxFileConfigLineList *pLine)
 {
     // for a normal (i.e. not root) group this method shouldn't be called twice
     // unless we are resetting the line
-    wxASSERT_MSG( !m_pParent || !m_pLine || !pLine,
-                   wxT("changing line for a non-root group?") );
+    if ( m_pParent )
+    {
+        if ( m_pLine && pLine )
+        {
+            // It would be nice to give the line numbers but we don't have them
+            // here easily.
+            wxLogWarning(_("duplicate group '%s'"), Name());
+        }
+    }
 
     m_pLine = pLine;
 }

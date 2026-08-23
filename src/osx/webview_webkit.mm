@@ -546,6 +546,41 @@ void wxWebViewWebKit::Print(const wxPrintData& printData, int WXUNUSED(flags))
 }
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
+bool wxWebViewWebKit::PrintToPDF(const wxString& filePath)
+{
+    if (!m_webView)
+        return false;
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_11_0
+    if (WX_IS_MACOS_AVAILABLE(11, 0))
+    {
+        const wxString filePathCopy = filePath;
+        [m_webView createPDFWithConfiguration:nil
+                            completionHandler:^(NSData* pdfData, NSError* error)
+        {
+            bool success = (error == nil && pdfData != nil);
+            if (success)
+                success = [pdfData writeToFile:wxCFStringRef(filePathCopy).AsNSString()
+                                    atomically:YES];
+            wxWebViewEvent event(wxEVT_WEBVIEW_PDF_SAVED, GetId(), filePathCopy, wxString());
+            event.SetInt(success ? 1 : 0);
+            event.SetEventObject(this);
+            ProcessWindowEvent(event);
+        }];
+        return true;
+    }
+#endif // macOS 11.0+
+    return false;
+}
+
+#if wxUSE_PRINTING_ARCHITECTURE
+bool wxWebViewWebKit::PrintToPDF(const wxString& filePath, const wxPrintData& WXUNUSED(printData))
+{
+    // WKWebView's PDF export doesn't expose paper size or orientation settings.
+    return PrintToPDF(filePath);
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
+
 void wxWebViewWebKit::SetEditable(bool WXUNUSED(enable))
 {
 }

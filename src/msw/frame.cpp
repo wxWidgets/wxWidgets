@@ -162,14 +162,6 @@ void wxWinUINoteSuppressedMenuBar(wxFrame *frame,
 
 #endif // wxUSE_MENUS && __WXWINUI__
 
-// ----------------------------------------------------------------------------
-// event tables
-// ----------------------------------------------------------------------------
-
-wxBEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
-    EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
-wxEND_EVENT_TABLE()
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -739,7 +731,7 @@ wxTaskBarButton* wxFrame::MSWGetTaskBarButton()
 }
 #endif // wxUSE_TASKBARBUTTON
 
-void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxFrame::SendSysColourChangedEvents()
 {
 #if wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
     if ( wxMenuBar* const menuBar = GetMenuBar() )
@@ -748,8 +740,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 #endif // wxUSE_MENUS && wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
 
-    // Let children react to this event too.
-    event.Skip();
+    BaseType::SendSysColourChangedEvents();
 }
 
 // Pass true to show full screen, false to restore.

@@ -158,6 +158,26 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 
     return copy;
 }
+
+-(NSString*) description
+{
+    // wxCustomCell's -stringValue (inherited, unmodified, from
+    // NSTextFieldCell) falls back to "-[objectValue description]" whenever
+    // the cell's objectValue -- one of these -- isn't itself a string. Both
+    // VoiceOver and the ordinary tooltip mechanism read a cell's text this
+    // way, and NSObject's default -description produces exactly the debug
+    // representation ("<wxCustomRendererObject: 0x...>") both were seen to
+    // leak. Overriding it here, on this private wx-internal value holder,
+    // gets every one of those callers a real answer for free.
+    if ( customRenderer )
+    {
+        const wxString text = customRenderer->GetAccessibleDescription();
+        if ( !text.empty() )
+            return [[wxCFStringRef(text).AsNSString() retain] autorelease];
+    }
+
+    return [super description];
+}
 @end
 
 // ----------------------------------------------------------------------------

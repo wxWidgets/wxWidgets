@@ -27,7 +27,7 @@ public:
         m_placement.length = sizeof(m_placement);
     }
 
-    virtual bool Save(const Serializer& ser) const override
+    virtual bool Save(Store& store) const override
     {
         // For compatibility with the existing saved positions/sizes, use the
         // same keys as the generic version (which was previously used under
@@ -35,26 +35,26 @@ public:
 
         // Normal position and size.
         const RECT& rc = m_placement.rcNormalPosition;
-        if ( !ser.SaveField(wxPERSIST_TLW_X, rc.left) ||
-             !ser.SaveField(wxPERSIST_TLW_Y, rc.top) )
+        if ( !store.SaveValue(wxPERSIST_TLW_X, rc.left) ||
+             !store.SaveValue(wxPERSIST_TLW_Y, rc.top) )
             return false;
 
-        if ( !ser.SaveField(wxPERSIST_TLW_W, rc.right - rc.left) ||
-             !ser.SaveField(wxPERSIST_TLW_H, rc.bottom - rc.top) )
+        if ( !store.SaveValue(wxPERSIST_TLW_W, rc.right - rc.left) ||
+             !store.SaveValue(wxPERSIST_TLW_H, rc.bottom - rc.top) )
             return false;
 
         // Maximized/minimized state.
         UINT show = m_placement.showCmd;
-        if ( !ser.SaveField(wxPERSIST_TLW_MAXIMIZED, show == SW_SHOWMAXIMIZED) )
+        if ( !store.SaveValue(wxPERSIST_TLW_MAXIMIZED, show == SW_SHOWMAXIMIZED) )
             return false;
 
-        if ( !ser.SaveField(wxPERSIST_TLW_ICONIZED, show == SW_SHOWMINIMIZED) )
+        if ( !store.SaveValue(wxPERSIST_TLW_ICONIZED, show == SW_SHOWMINIMIZED) )
             return false;
 
         // Maximized window position.
         const POINT pt = m_placement.ptMaxPosition;
-        if ( !ser.SaveField(wxPERSIST_TLW_MAX_X, pt.x) ||
-             !ser.SaveField(wxPERSIST_TLW_MAX_Y, pt.y) )
+        if ( !store.SaveValue(wxPERSIST_TLW_MAX_X, pt.x) ||
+             !store.SaveValue(wxPERSIST_TLW_MAX_Y, pt.y) )
             return false;
 
         // We don't currently save the minimized window position, it doesn't
@@ -65,14 +65,14 @@ public:
         return true;
     }
 
-    virtual bool Restore(Serializer& ser) override
+    virtual bool Restore(const Store& store) override
     {
         // Normal position and size.
         wxRect r;
-        if ( !ser.RestoreField(wxPERSIST_TLW_X, &r.x) ||
-             !ser.RestoreField(wxPERSIST_TLW_Y, &r.y) ||
-             !ser.RestoreField(wxPERSIST_TLW_W, &r.width) ||
-             !ser.RestoreField(wxPERSIST_TLW_H, &r.height) )
+        if ( !store.RestoreValue(wxPERSIST_TLW_X, &r.x) ||
+             !store.RestoreValue(wxPERSIST_TLW_Y, &r.y) ||
+             !store.RestoreValue(wxPERSIST_TLW_W, &r.width) ||
+             !store.RestoreValue(wxPERSIST_TLW_H, &r.height) )
             return false;
         wxCopyRectToRECT(r, m_placement.rcNormalPosition);
 
@@ -87,16 +87,16 @@ public:
         // the same thing as SW_SHOWMAXIMIZED.
         int tmp;
         UINT& show = m_placement.showCmd;
-        if ( ser.RestoreField(wxPERSIST_TLW_MAXIMIZED, &tmp) && tmp )
+        if ( store.RestoreValue(wxPERSIST_TLW_MAXIMIZED, &tmp) && tmp )
             show = SW_MAXIMIZE;
-        else if ( ser.RestoreField(wxPERSIST_TLW_ICONIZED, &tmp) && tmp )
+        else if ( store.RestoreValue(wxPERSIST_TLW_ICONIZED, &tmp) && tmp )
             show = SW_MINIMIZE;
         else
             show = SW_SHOWNORMAL;
 
         // Maximized window position.
-        if ( ser.RestoreField(wxPERSIST_TLW_MAX_X, &r.x) &&
-             ser.RestoreField(wxPERSIST_TLW_MAX_Y, &r.y) )
+        if ( store.RestoreValue(wxPERSIST_TLW_MAX_X, &r.x) &&
+             store.RestoreValue(wxPERSIST_TLW_MAX_Y, &r.y) )
         {
             m_placement.ptMaxPosition.x = r.x;
             m_placement.ptMaxPosition.y = r.y;

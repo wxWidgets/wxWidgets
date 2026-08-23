@@ -166,6 +166,10 @@ public:
     wxFileOffset GetLength() const override      { return m_size; }
     bool IsSeekable() const override { return m_parent_i_stream->IsSeekable(); }
 
+    // Limit on the extended header size, to avoid excessive allocation.
+    static size_t GetMaxExtendedHeaderSize() { return sm_maxExtendedHeaderSize; }
+    static void SetMaxExtendedHeaderSize(size_t size) { sm_maxExtendedHeaderSize = size; }
+
 protected:
     size_t OnSysRead(void *buffer, size_t size) override;
     wxFileOffset OnSysTell() const override      { return m_pos; }
@@ -198,6 +202,8 @@ private:
     class wxTarHeaderBlock *m_hdr;
     wxTarHeaderRecords *m_HeaderRecs;
     wxTarHeaderRecords *m_GlobalHeaderRecs;
+
+    static size_t sm_maxExtendedHeaderSize;
 
     wxDECLARE_NO_COPY_CLASS(wxTarInputStream);
 };

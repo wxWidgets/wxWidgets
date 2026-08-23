@@ -318,9 +318,9 @@ void MyFrame::OnEnumISPs(wxCommandEvent& WXUNUSED(event))
     else
     {
         wxString msg = "Known ISPs:\n";
-        for ( size_t n = 0; n < nCount; n++ )
+        for ( const auto& name : names )
         {
-            msg << names[n] << '\n';
+            msg << name << '\n';
         }
 
         wxLogMessage(msg);

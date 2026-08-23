@@ -1623,6 +1623,11 @@ VirtualProtocol::VirtualProtocol(wxSharedPtr<wxWebViewHandler> handler)
     m_handler = handler;
 }
 
+VirtualProtocol::~VirtualProtocol()
+{
+    wxDELETE(m_file);
+}
+
 COM_DECLSPEC_NOTHROW
 STDMETHODIMP VirtualProtocol::QueryInterface(REFIID riid, void **ppv)
 {
@@ -1711,7 +1716,7 @@ HRESULT STDMETHODCALLTYPE VirtualProtocol::Start(LPCWSTR szUrl, wxIInternetProto
 
 HRESULT STDMETHODCALLTYPE VirtualProtocol::Read(void *pv, ULONG cb, ULONG *pcbRead)
 {
-    //If the file is null we return false to indicte it is finished
+    //If the file is null we return false to indicate it is finished
     if(!m_file)
         return S_FALSE;
 

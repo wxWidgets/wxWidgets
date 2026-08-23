@@ -46,8 +46,8 @@ public:
     virtual void Click() override;
 
     // Get/set the value
-    void SetValue(bool state);
-    bool GetValue() const { return m_value; }
+    void SetValue(bool state) override;
+    bool GetValue() const override { return m_value; }
 
 protected:
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }

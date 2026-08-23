@@ -20,8 +20,21 @@ namespace wxMSWDarkMode
 WXDLLIMPEXP_CORE
 bool IsActive();
 
+// Return true if the system has switched between dark and light modes.
+// Some controls need to take extra actions to switch from light mode to dark
+// mode compared with just creating the window in dark mode. This function
+// helps us do only what is needed, to avoid overwriting user settings such as
+// background and foreground colours.
+WXDLLIMPEXP_CORE
+bool HasChanged();
+
 // Enable or disable dark mode for the given TLW if appropriate.
 void ConfigureTLW(HWND hwnd);
+
+// Helper function: call SetWindowTheme() and log a debug error if it fails.
+void SetTheme(HWND hwnd,
+              const wchar_t* themeName,
+              const wchar_t* themeId = nullptr);
 
 // Set dark theme for the given (child) window if appropriate.
 //
@@ -65,6 +78,12 @@ HandleMenuMessage(WXLRESULT* result,
                   WXWPARAM wParam,
                   WXLPARAM lParam);
 
+void NotifySysColorChange();
+
+// Return true if the DarkMode_DarkTheme theme is available. This theme was
+// added in Windows 11 25H2 (build 26200).
+bool HasDarkTheme();
+
 } // namespace wxMSWDarkMode
 
 namespace wxMSWImpl
@@ -73,6 +92,10 @@ namespace wxMSWImpl
 // This function is not dark mode specific but reuses the code in darkmode.cpp,
 // so it's implemented there as well.
 void EnableRoundCorners(HWND hwnd);
+
+// This function draws over the section where the scroll bars meet
+// to maintain a consistent theme
+void PaintScrollBarCorner(HWND hwnd);
 
 } // namespace wxMSWImpl
 

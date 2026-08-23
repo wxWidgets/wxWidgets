@@ -29,6 +29,22 @@
 
 class WXDLLIMPEXP_FWD_CORE wxDataViewCustomRenderer;
 
+// wxUSE_ACCESSIBILITY (generic wxAccessible support) is unconditionally 0 on
+// wxOSX, which has no wxAccessible-based accessibility of its own -- but a
+// custom-rendered dataview cell still needs some way to describe itself to
+// screen readers there, since it is the only port where nothing else does it
+// for the cell. wxDataViewCustomRendererBase::GetAccessibleDescription()
+// below is compiled in on wxOSX under this symbol even though
+// wxUSE_ACCESSIBILITY itself stays 0 -- it does not override
+// wxDataViewRendererBase's (still wxUSE_ACCESSIBILITY-gated) pure virtual of
+// the same name there, it is simply the only accessibility entry point
+// wxOSX's custom renderers have.
+#if wxUSE_ACCESSIBILITY || defined(__WXOSX__)
+    #define wxUSE_DATAVIEW_A11Y 1
+#else
+    #define wxUSE_DATAVIEW_A11Y 0
+#endif
+
 // ----------------------------------------------------------------------------
 // wxDataViewIconText: helper class used by wxDataViewIconTextRenderer
 // ----------------------------------------------------------------------------
@@ -383,6 +399,36 @@ public:
     // Render() via GetEnabled() if needed.
     virtual void SetEnabled(bool enabled) override;
     bool GetEnabled() const { return m_enabled; }
+
+#if wxUSE_DATAVIEW_A11Y
+    // A plain text representation of the value currently rendered by this
+    // cell, e.g. for use by screen readers. Declared unconditionally on
+    // wxUSE_DATAVIEW_A11Y (see above) rather than plain wxUSE_ACCESSIBILITY,
+    // since wxOSX's native dataview implementation calls this directly on a
+    // custom renderer with no wxAccessible involved at all -- it is not
+    // reachable through wxDataViewRendererBase's own (still
+    // wxUSE_ACCESSIBILITY-only) virtual of the same name there, just a
+    // same-named method that happens to double as its override wherever
+    // wxUSE_ACCESSIBILITY is genuinely 1 too.
+    //
+    // The default implementation stringifies the value returned by
+    // GetValue(), the same as wxDataViewCustomRenderer::
+    // GetAccessibleDescription() does for the generic implementation;
+    // override it if the renderer draws something a bare
+    // wxVariant::MakeString() can't usefully describe (e.g. a progress bar).
+    //
+    // `override` is only added where wxUSE_ACCESSIBILITY is genuinely 1: on
+    // wxOSX (wxUSE_DATAVIEW_A11Y but not wxUSE_ACCESSIBILITY), the base
+    // class's own virtual of this name isn't even compiled in, so there is
+    // nothing to override yet -Winconsistent-missing-override would still
+    // flag its absence there once wxUSE_ACCESSIBILITY is 1 elsewhere in the
+    // same build (that's the whole point of the split below).
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const override;
+#else
+    virtual wxString GetAccessibleDescription() const;
+#endif
+#endif // wxUSE_DATAVIEW_A11Y
 
 
     // Implementation only from now on

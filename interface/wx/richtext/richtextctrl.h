@@ -1254,12 +1254,12 @@ public:
     bool EndSymbolBullet();
 
     /**
-        Begins applying a symbol bullet.
+        Begins applying a standard bullet.
     */
     bool BeginStandardBullet(const wxString& bulletName, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_STANDARD);
 
     /**
-        Begins applying a standard bullet.
+        Ends applying a standard bullet.
     */
     bool EndStandardBullet();
 

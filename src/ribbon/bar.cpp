@@ -55,6 +55,7 @@ wxBEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
   EVT_SIZE(wxRibbonBar::OnSize)
   EVT_KILL_FOCUS(wxRibbonBar::OnKillFocus)
   EVT_DPI_CHANGED(wxRibbonBar::OnDPIChanged)
+  EVT_SYS_COLOUR_CHANGED(wxRibbonBar::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 void wxRibbonBar::AddPage(wxRibbonPage *page)
@@ -388,6 +389,19 @@ void wxRibbonBar::DeletePage(size_t n)
         {
             m_current_page--;
         }
+
+        // If the current hovered page is the one getting deleted, then we
+        // don't have a hovered page anymore.
+        if ( m_current_hovered_page == static_cast<int>(n) )
+        {
+            m_current_hovered_page = wxNOT_FOUND;
+        }
+        // ...otherwise, the pages after it shifted down by one,
+        // so adjust the index to keep referring to the same (still hovered) page.
+        else if ( m_current_hovered_page > static_cast<int>(n) )
+        {
+            m_current_hovered_page--;
+        }
     }
 }
 
@@ -409,6 +423,7 @@ void wxRibbonBar::ClearPages()
     m_pages.Empty();
     Realize();
     m_current_page = wxNOT_FOUND;
+    m_current_hovered_page = wxNOT_FOUND;
     Refresh();
 }
 
@@ -715,24 +730,7 @@ void wxRibbonBar::RecalculateTabSizes()
     }
 }
 
-wxRibbonBar::wxRibbonBar()
-{
-    m_flags = 0;
-    m_tabs_total_width_ideal = 0;
-    m_tabs_total_width_minimum = 0;
-    m_tab_margin_left = 0;
-    m_tab_margin_right = 0;
-    m_tab_height = 0;
-    m_tab_scroll_amount = 0;
-    m_current_page = wxNOT_FOUND;
-    m_current_hovered_page = wxNOT_FOUND;
-    m_tab_scroll_left_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
-    m_tab_scroll_right_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
-    m_tab_scroll_buttons_shown = false;
-    m_arePanelsShown = true;
-    m_help_button_hovered = false;
-
-}
+wxRibbonBar::wxRibbonBar() = default;
 
 wxRibbonBar::wxRibbonBar(wxWindow* parent,
                          wxWindowID id,
@@ -748,9 +746,9 @@ wxRibbonBar::~wxRibbonBar()
 {
     SetArtProvider(nullptr);
 
-    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    for ( auto* list : m_image_lists )
     {
-        delete m_image_lists[n];
+        delete list;
     }
 }
 
@@ -773,8 +771,6 @@ void wxRibbonBar::CommonInit(long style)
     SetName("wxRibbonBar");
 
     m_flags = style;
-    m_tabs_total_width_ideal = 0;
-    m_tabs_total_width_minimum = 0;
     m_tab_margin_left = 50;
     m_tab_margin_right = 20;
     if ( m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON )
@@ -782,32 +778,20 @@ void wxRibbonBar::CommonInit(long style)
     if ( m_flags & wxRIBBON_BAR_SHOW_HELP_BUTTON )
         m_tab_margin_right += 20;
     m_tab_height = 20; // initial guess
-    m_tab_scroll_amount = 0;
-    m_current_page = wxNOT_FOUND;
-    m_current_hovered_page = wxNOT_FOUND;
-    m_tab_scroll_left_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
-    m_tab_scroll_right_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
-    m_tab_scroll_buttons_shown = false;
-    m_arePanelsShown = true;
 
     if(m_art == nullptr)
     {
         SetArtProvider(new wxRibbonDefaultArtProvider);
     }
     SetBackgroundStyle(wxBG_STYLE_PAINT);
-
-    m_toggle_button_hovered = false;
-    m_bar_hovered = false;
-
-    m_ribbon_state = wxRIBBON_BAR_PINNED;
 }
 
 wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
 {
-    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    for ( auto* list : m_image_lists )
     {
-        if ( m_image_lists[n]->GetSize() == size )
-            return m_image_lists[n];
+        if ( list->GetSize() == size )
+            return list;
     }
 
     wxImageList* const
@@ -819,6 +803,9 @@ wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
 {
+    if ( art == m_art )
+        return;
+
     wxRibbonArtProvider *old = m_art;
     m_art = art;
 
@@ -985,6 +972,13 @@ void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
 
     Refresh();
     event.Skip();
+}
+
+void wxRibbonBar::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+    if ( m_art )
+        m_art->UpdateColoursFromSystem();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)

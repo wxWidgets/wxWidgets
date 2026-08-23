@@ -120,10 +120,8 @@ static void UpdateSubMenuItemLabels(wxMenuItem* itemMenu)
     wxCHECK_RET( menu, "should only be called for sub menus" );
 
     const wxMenuItemList& items = menu->GetMenuItems();
-    for ( wxMenuItemList::const_iterator
-            it = items.begin(); it != items.end(); ++it )
+    for ( auto* item : items )
     {
-        wxMenuItem* const item = *it;
         if ( !item->IsSeparator() )
         {
             item->SetGtkLabel();
@@ -1011,7 +1009,17 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
                     // that it never hurts to follow GTK+ conventions more closely
                     menuItem = gtk_image_menu_item_new_from_stock(stockid, nullptr);
                 else
-                    menuItem = gtk_menu_item_new_with_label("");
+                    // Even though no bitmap is set yet, still create an
+                    // image-capable item: SetBitmap() is commonly called
+                    // after Append() returns (Append() returns the new
+                    // wxMenuItem* precisely to support this), and
+                    // SetupBitmaps() later calls
+                    // gtk_image_menu_item_set_image(), which requires the
+                    // underlying widget to already be a GtkImageMenuItem.
+                    // A GtkImageMenuItem with no image behaves the same as
+                    // a plain GtkMenuItem, so this is harmless when no
+                    // bitmap is ever set.
+                    menuItem = gtk_image_menu_item_new_with_label("");
             }
             wxGCC_WARNING_RESTORE()
 #endif

@@ -63,6 +63,8 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
     // and handle user clicks on it
     Bind(wxEVT_BUTTON, &wxGenericFontButton::OnButtonClick, this, GetId());
 
+    Bind(wxEVT_SYS_COLOUR_CHANGED, &wxGenericFontButton::OnSysColourChanged, this);
+
     InitFontData();
 
     m_selectedFont = initial.IsOk() ? initial : *wxNORMAL_FONT;
@@ -82,6 +84,9 @@ void wxGenericFontButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 {
     // update the wxFontData to be shown in the dialog
     m_data.SetInitialFont(m_selectedFont);
+
+    // Save the text colour to compare later.
+    const wxColour savedColour = m_data.GetColour();
 
     // create the font dialog and display it
     const wxWeakRef<wxGenericFontButton> weakThis(this);
@@ -123,6 +128,8 @@ void wxGenericFontButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
         return;
 
     live->m_data = acceptedData;
+    if ( live->m_data.GetColour() != savedColour )
+        live->m_useUserColour = true;
     live->SetSelectedFont(live->m_data.GetChosenFont());
 
     // Updating the realized WinUI label can relayout application sizers.
@@ -135,6 +142,18 @@ void wxGenericFontButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 
     // The notification can delete the control and must be the last operation.
     live->GetEventHandler()->ProcessEvent(event);
+}
+
+void wxGenericFontButton::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    if ( !m_useUserColour )
+    {
+        const wxColour defaultColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
+        m_data.SetColour(defaultColour);
+        SetForegroundColour(defaultColour);
+    }
+
+    event.Skip();
 }
 
 void wxGenericFontButton::UpdateFont()

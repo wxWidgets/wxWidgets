@@ -21,6 +21,7 @@
     #include "wx/panel.h"
     #include "wx/frame.h"
     #include "wx/dialog.h"
+    #include "wx/sizer.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
@@ -424,9 +425,9 @@ bool wxXmlResource::LoadAllFiles(const wxString& dirname)
 
     wxDir::GetAllFiles(dirname, &files, "*.xrc");
 
-    for ( wxArrayString::const_iterator i = files.begin(); i != files.end(); ++i )
+    for ( const auto& file : files )
     {
-        if ( !LoadFile(*i) )
+        if ( !LoadFile(file) )
             ok = false;
     }
 
@@ -665,6 +666,29 @@ wxXmlResource::DoLoadObject(wxObject *instance,
 }
 
 
+namespace
+{
+
+void UpdateSizeHintsForAttachedUnknownControl(wxWindow *container,
+                                              wxWindow *control)
+{
+    if ( auto* const window = wxGetTopLevelParent(container) )
+    {
+        wxSizer * const sizer = window->GetSizer();
+        if ( sizer )
+        {
+            sizer->SetSizeHints(window);
+            // SetSizeHints() can resize the TLW without immediately laying out
+            // its children, as happens in wxQt, so force the attached control
+            // to take the expanded placeholder size now.
+            window->Layout();
+            control->SetSize(wxRect(container->GetClientSize()));
+        }
+    }
+}
+
+} // anonymous namespace
+
 bool wxXmlResource::AttachUnknownControl(const wxString& name,
                                          wxWindow *control, wxWindow *parent)
 {
@@ -676,7 +700,12 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
         wxLogError("Cannot find container for unknown control '%s'.", name);
         return false;
     }
-    return control->Reparent(container);
+
+    const bool attached = control->Reparent(container);
+    if ( attached )
+        UpdateSizeHintsForAttachedUnknownControl(container, control);
+
+    return attached;
 }
 
 // Small helper returning true if any of the tokens in the given string
@@ -2134,9 +2163,9 @@ wxXmlResourceHandlerImpl::GetBitmapBundle(const wxXmlNode* node,
         // it is a bundle from bitmaps
         wxVector<wxBitmap> bitmaps;
         wxArrayString paths = wxSplit(paramValue, ';', '\0');
-        for ( wxArrayString::const_iterator i = paths.begin(); i != paths.end(); ++i )
+        for ( const auto& path : paths )
         {
-            wxBitmap bmpNext = LoadBitmapFromFS(this, *i, size, node->GetName());
+            wxBitmap bmpNext = LoadBitmapFromFS(this, path, size, node->GetName());
             if ( !bmpNext.IsOk() )
             {
                 // error in loading wxBitmap, return invalid wxBitmapBundle
@@ -3423,9 +3452,9 @@ int wxXmlResource::DoGetXRCID(const char *str_id, int value_if_not_found)
 /* static */
 wxString wxXmlResource::FindXRCIDById(int numId)
 {
-    for ( int i = 0; i < XRCID_TABLE_SIZE; i++ )
+    for ( const auto* record : XRCID_Records )
     {
-        for ( XRCID_record *rec = XRCID_Records[i]; rec; rec = rec->next )
+        for ( const auto* rec = record; rec; rec = rec->next )
         {
             if ( rec->id == numId )
                 return wxString(rec->key);
@@ -3448,10 +3477,10 @@ static void CleanXRCID_Record(XRCID_record *rec)
 
 static void CleanXRCID_Records()
 {
-    for (int i = 0; i < XRCID_TABLE_SIZE; i++)
+    for ( auto*& record : XRCID_Records )
     {
-        CleanXRCID_Record(XRCID_Records[i]);
-        XRCID_Records[i] = nullptr;
+        CleanXRCID_Record(record);
+        record = nullptr;
     }
 
     gs_stdIDsAdded = false;

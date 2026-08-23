@@ -80,7 +80,7 @@ bool wxColourButton::Create( wxWindow *parent, wxWindowID id,
 
     m_colour = col;
 #ifdef __WXGTK3__
-    m_widget = gtk_color_button_new_with_rgba(m_colour);
+    m_widget = gtk_color_button_new_with_rgba(m_colour.GTKGetRGBA());
 #else
     m_widget = gtk_color_button_new_with_color( m_colour.GetColor() );
 #endif
@@ -112,7 +112,7 @@ void wxColourButton::UpdateColour()
     gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(m_widget), m_colour);
 #elif defined(__WXGTK3__)
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    gtk_color_button_set_rgba(GTK_COLOR_BUTTON(m_widget), m_colour);
+    gtk_color_button_set_rgba(GTK_COLOR_BUTTON(m_widget), m_colour.GTKGetRGBA());
     wxGCC_WARNING_RESTORE()
 #else
     gtk_color_button_set_color(GTK_COLOR_BUTTON(m_widget), m_colour.GetColor());

@@ -1620,16 +1620,6 @@ void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     closing.DeleteObject(this);
 }
 
-void wxDialogBase::OnSysColourChanged(wxSysColourChangedEvent& event)
-{
-#ifndef __WXGTK__
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-    Refresh();
-#endif
-
-    event.Skip();
-}
-
 /// Do the adaptation
 bool wxDialogBase::DoLayoutAdaptation()
 {

@@ -26,7 +26,9 @@
 // ----------------------------------------------------------------------------
 
 #define TEST_SNGLINST
-#define TEST_FTP
+#if wxUSE_PROTOCOL_FTP
+    #define TEST_FTP
+#endif
 #define TEST_INFO_FUNCTIONS
 #if wxUSE_REGEX
     #define TEST_REGEX

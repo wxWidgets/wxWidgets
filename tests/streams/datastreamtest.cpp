@@ -21,6 +21,7 @@
 
 #include "wx/datstrm.h"
 #include "wx/wfstream.h"
+#include "wx/mstream.h"
 #include "wx/math.h"
 
 #include "testfile.h"
@@ -39,6 +40,8 @@ private:
         CPPUNIT_TEST( FloatRW );
         CPPUNIT_TEST( DoubleRW );
         CPPUNIT_TEST( StringRW );
+        CPPUNIT_TEST( ReadTruncatedString );
+        CPPUNIT_TEST( ReadTruncatedValue );
         CPPUNIT_TEST( LongLongRW );
         CPPUNIT_TEST( Int64RW );
         CPPUNIT_TEST( NaNRW );
@@ -63,6 +66,8 @@ private:
     void FloatRW();
     void DoubleRW();
     void StringRW();
+    void ReadTruncatedString();
+    void ReadTruncatedValue();
     void LongLongRW();
     void Int64RW();
     void NaNRW();
@@ -246,6 +251,39 @@ void DataStreamTestCase::StringRW()
 
     s = wxString::FromUTF8("ü");
     CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
+}
+
+void DataStreamTestCase::ReadTruncatedString()
+{
+    // A string is stored as a 32 bit length followed by that many bytes. If the
+    // length is larger than the number of bytes actually present (a corrupt or
+    // malicious stream), ReadString() must not decode the uninitialised tail of
+    // its temporary buffer but return an empty string and put the stream into
+    // an error state.
+    const unsigned char data[] =
+    {
+        0x04, 0x00, 0x00, 0x00,     // little endian length: claims 4 bytes
+        'H', 'i'                    // but only 2 bytes follow
+    };
+
+    wxMemoryInputStream input(data, sizeof(data));
+    wxDataInputStream dis(input);
+
+    CPPUNIT_ASSERT_EQUAL( wxString(), dis.ReadString() );
+    CPPUNIT_ASSERT( !dis.IsOk() );
+}
+
+void DataStreamTestCase::ReadTruncatedValue()
+{
+    // Reading a fixed size value from a truncated stream must also fail instead
+    // of returning a value built from uninitialised memory.
+    const unsigned char data[] = { 0x12, 0x34 };  // only 2 of the 4 bytes
+
+    wxMemoryInputStream input(data, sizeof(data));
+    wxDataInputStream dis(input);
+
+    CPPUNIT_ASSERT_EQUAL( 0u, dis.Read32() );
+    CPPUNIT_ASSERT( !dis.IsOk() );
 }
 
 void DataStreamTestCase::LongLongRW()

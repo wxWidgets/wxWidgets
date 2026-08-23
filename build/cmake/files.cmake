@@ -1641,6 +1641,7 @@ set(MSW_LOWLEVEL_SRC
     src/msw/appprogress.cpp
     src/msw/taskbarbutton.cpp
     src/msw/power.cpp
+    src/msw/taskdlg.cpp
 )
 
 set(MSW_LOWLEVEL_HDR

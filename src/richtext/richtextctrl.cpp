@@ -3656,11 +3656,13 @@ void wxRichTextCtrl::Cut()
     if (CanCut())
     {
         wxRichTextRange range = GetInternalSelectionRange();
-        GetBuffer().CopyToClipboard(range);
-
-        DeleteSelectedContent();
-        LayoutContent();
-        Refresh(false);
+        // Keep the selection if it couldn't be put on the clipboard.
+        if ( GetBuffer().CopyToClipboard(range) )
+        {
+            DeleteSelectedContent();
+            LayoutContent();
+            Refresh(false);
+        }
     }
 }
 
@@ -5003,7 +5005,7 @@ void wxRichTextCtrl::ClearAvailableFontNames()
     sm_availableFontNames.Clear();
 }
 
-void wxRichTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+void wxRichTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     //wxLogDebug(wxT("wxRichTextCtrl::OnSysColourChanged"));
 
@@ -5012,7 +5014,7 @@ void wxRichTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event)
     SetBasicStyle(basicStyle);
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
-    Refresh();
+    event.Skip();
 }
 
 // Refresh the area affected by a selection change

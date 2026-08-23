@@ -66,8 +66,8 @@ public:
     virtual int GetColoursCount() const override;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 };
 
 #endif // _WX_PALETTE_H_

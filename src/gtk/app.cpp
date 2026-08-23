@@ -521,49 +521,46 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         );
     }
 
-    bool init_result;
+    const GType widgetType = GTK_TYPE_WIDGET;
+    // Check for possibility that GTK is already initialized
+    bool init_result = g_type_class_peek(widgetType) != nullptr;
 
-    // Prevent gtk_init_check() from changing the locale automatically for
-    // consistency with the other ports that don't do it. If necessary,
-    // wxApp::SetCLocale() may be explicitly called.
-    //
-    // Note that this function generates a warning if it's called more than
-    // once, so avoid them.
-    static bool s_gtkLocalDisabled = false;
-    if ( !s_gtkLocalDisabled )
+    if (!init_result)
     {
-        s_gtkLocalDisabled = true;
+        // Prevent gtk_init_check() from changing the locale automatically for
+        // consistency with the other ports that don't do it. If necessary,
+        // wxApp::SetCLocale() may be explicitly called.
         gtk_disable_setlocale();
-    }
 
 #if defined(__WXGTK4__)
-    init_result = gtk_init_check() != 0;
+        init_result = gtk_init_check() != 0;
 #else
-    auto argvA = wxInitData::Get().argvA;
+        auto argvA = wxInitData::Get().argvA;
 
-    int argcGTK = argc_;
-    init_result = gtk_init_check( &argcGTK, &argvA ) != 0;
+        int argcGTK = argc_;
+        init_result = gtk_init_check( &argcGTK, &argvA ) != 0;
 
-    if ( argcGTK != argc_ )
-    {
-        // we have to drop the parameters which were consumed by GTK+
-        for ( int i = 0; i < argcGTK; i++ )
+        if ( argcGTK != argc_ )
         {
-            while ( strcmp(wxConvUTF8.cWX2MB(argv_[i]), argvA[i]) != 0 )
+            // we have to drop the parameters which were consumed by GTK+
+            for ( int i = 0; i < argcGTK; i++ )
             {
-                free(argv_[i]);
-                memmove(argv_ + i, argv_ + i + 1, (argc_ - i)*sizeof(*argv_));
+                while ( strcmp(wxConvUTF8.cWX2MB(argv_[i]), argvA[i]) != 0 )
+                {
+                    free(argv_[i]);
+                    memmove(argv_ + i, argv_ + i + 1, (argc_ - i)*sizeof(*argv_));
+                }
             }
+
+            argc_ = argcGTK;
+            argv_[argc_] = nullptr;
+
+            this->argc = argc_;
+            this->argv.Init(argc_, argv_);
         }
-
-        argc_ = argcGTK;
-        argv_[argc_] = nullptr;
-
-        this->argc = argc_;
-        this->argv.Init(argc_, argv_);
-    }
-    //else: gtk_init() didn't modify our parameters
+        //else: gtk_init() didn't modify our parameters
 #endif
+    }
 
     if ( !init_result )
     {
@@ -583,7 +580,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 #endif
 
     // make sure GtkWidget type is loaded, signal emission hooks need it
-    const GType widgetType = GTK_TYPE_WIDGET;
     g_type_class_ref(widgetType);
 
     // focus in/out hooks used for generating wxEVT_ACTIVATE_APP

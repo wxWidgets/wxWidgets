@@ -241,7 +241,7 @@ public:
 
 protected:
     // notify the combo here
-    virtual void OnDismiss();
+    virtual void OnDismiss() override;
 
     // forward the key presses to the combobox
     void OnKeyDown(wxKeyEvent& event);

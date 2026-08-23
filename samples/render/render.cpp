@@ -208,6 +208,7 @@ private:
         if ( m_renderer )
         {
             wxGraphicsContext* ctx = m_renderer->CreateContext(pdc);
+            gdc.SetTextForeground(GetForegroundColour());
             gdc.SetBackground(GetBackgroundColour());
             gdc.SetGraphicsContext(ctx);
         }
@@ -655,7 +656,7 @@ MyFrame::MyFrame()
 
     m_panel = new MyPanel(this);
 
-    SetClientSize(600, 600);
+    SetClientSize(FromDIP(wxSize(600, 620)));
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)

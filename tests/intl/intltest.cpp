@@ -25,60 +25,9 @@
 
 #include "wx/private/glibc.h"
 
+#include "testfile.h"
+
 #if wxUSE_INTL
-
-namespace
-{
-
-// Samples and tests share an output directory in some build configurations.
-// Restrict these tests to their own catalogs so that catalogs copied by the
-// internationalization sample can't affect their results.
-class TestTranslationsLoader final : public wxFileTranslationsLoader
-{
-public:
-    wxMsgCatalog* LoadCatalog(const wxString& domain,
-                              const wxString& lang) override
-    {
-        const wxFileName fn(GetLanguageDir(lang), domain, "mo");
-        if ( !fn.FileExists() )
-            return nullptr;
-
-        return wxMsgCatalog::CreateFromFile(fn.GetFullPath(), domain);
-    }
-
-    wxArrayString GetAvailableTranslations(const wxString& domain) const override
-    {
-        wxArrayString isolated;
-        const wxArrayString available =
-            wxFileTranslationsLoader::GetAvailableTranslations(domain);
-
-        for ( const wxString& lang : available )
-        {
-            if ( isolated.Index(lang) == wxNOT_FOUND &&
-                    wxFileName(GetLanguageDir(lang), domain, "mo").FileExists() )
-            {
-                isolated.Add(lang);
-            }
-        }
-
-        return isolated;
-    }
-
-private:
-    static wxString GetLanguageDir(const wxString& lang)
-    {
-        return wxString(".") + wxFILE_SEP_PATH + "intl" +
-               wxFILE_SEP_PATH + lang;
-    }
-};
-
-void UseTestTranslationsLoader(wxTranslations& trans)
-{
-    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
-    trans.SetLoader(new TestTranslationsLoader);
-}
-
-} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // test class
@@ -295,15 +244,64 @@ void IntlTestCase::IsAvailable()
     CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, nullptr) );
 }
 
+namespace
+{
+
+const wxString& GetTranslationsTestDomain()
+{
+    // Use a test-only domain so these tests don't accidentally find the sample
+    // internat catalogs when wxBUILD_SAMPLES=ALL copies them into the test
+    // lookup tree.
+    static const wxString s_domain("wx_test_internat");
+    return s_domain;
+}
+
+class TranslationsTestCatalogs
+{
+public:
+    TranslationsTestCatalogs()
+        : m_prefix("wxintltest-")
+    {
+        REQUIRE(m_prefix.IsOk());
+
+        CopyCatalog("en_GB");
+        CopyCatalog("fr");
+        CopyCatalog("ja");
+        CopyCatalog("xart-dothraki");
+
+        wxFileTranslationsLoader::AddCatalogLookupPathPrefix(
+            m_prefix.GetName());
+    }
+
+private:
+    void CopyCatalog(const wxString& lang)
+    {
+        wxFileName dir(m_prefix.GetName(), wxString());
+        dir.AppendDir(lang);
+        REQUIRE( wxMkdir(dir.GetPath()) );
+
+        wxFileName src("intl", "internat", "mo");
+        src.AppendDir(lang);
+
+        wxFileName dst(dir.GetPath(), GetTranslationsTestDomain(), "mo");
+        REQUIRE( wxCopyFile(src.GetFullPath(), dst.GetFullPath()) );
+    }
+
+    TempDir m_prefix;
+};
+
+} // anonymous namespace
+
 TEST_CASE("wxTranslations::AddCatalog", "[translations]")
 {
     // We currently have translations for British English, French and Japanese
     // in this test directory, check that loading those succeeds but loading
     // others doesn't.
-    const wxString domain("internat");
+    TranslationsTestCatalogs catalogs;
+
+    const wxString domain(GetTranslationsTestDomain());
 
     wxTranslations trans;
-    UseTestTranslationsLoader(trans);
 
     SECTION("All")
     {
@@ -387,10 +385,11 @@ TEST_CASE("wxTranslations::CorruptCatalog", "[translations]")
 
 TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
 {
-    const wxString domain("internat");
+    TranslationsTestCatalogs catalogs;
+
+    const wxString domain(GetTranslationsTestDomain());
 
     wxTranslations trans;
-    UseTestTranslationsLoader(trans);
     wxON_BLOCK_EXIT1( wxUnsetEnv, "WXLANGUAGE" );
 
     SECTION("ChooseLanguage")

@@ -633,7 +633,7 @@ public:
         @c wxEVT_SPLITTER_SASH_POS_CHANGED events.
         @since 3.1.6
     */
-    int GetOldSize() const
+    int GetOldSize() const;
 
 
     /**

@@ -1612,7 +1612,6 @@ public:
     static inline const wxWindow* AsWindow(const wxWindowBase* win);
 
         // event handlers
-    void OnSysColourChanged( wxSysColourChangedEvent& event );
     void OnInitDialog( wxInitDialogEvent &event );
     void OnMiddleClick( wxMouseEvent& event );
 #if wxUSE_HELP
@@ -1626,6 +1625,8 @@ public:
     // Send idle event to window and all subwindows
     // Returns true if more idle time is requested.
     virtual bool SendIdleEvents(wxIdleEvent& event);
+
+    virtual void SendSysColourChangedEvents();
 
     // Send wxContextMenuEvent and return true if it was processed.
     //

@@ -226,7 +226,7 @@ msgstr "Slet"
 #: ../src/common/accelcmn.cpp:48
 msgctxt "keyboard key"
 msgid "Del"
-msgstr "Slet"
+msgstr "Del"
 
 #: ../src/common/accelcmn.cpp:49
 msgctxt "keyboard key"

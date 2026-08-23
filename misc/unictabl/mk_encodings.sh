@@ -19,26 +19,13 @@ echo "
  *
  *  Parts of this file are based on tables published by Unicode, Inc.
  *  Original tables are freely available at
- *      ftp://ftp.unicode.org/Public/MAPPINGS
+ *      https://www.unicode.org/Public/MAPPINGS
  *
  *  Original copyright info as present in mapping tables follows:
  *
  *
- *  Copyright (c) 1991-1999 Unicode, Inc.  All Rights reserved.
- *
- *  This file is provided as-is by Unicode, Inc. (The Unicode Consortium).
- *  No claims are made as to fitness for any particular purpose.  No
- *  warranties of any kind are expressed or implied.  The recipient
- *  agrees to determine applicability of information provided.  If this
- *  file has been provided on optical media by Unicode, Inc., the sole
- *  remedy for any claim will be exchange of defective media within 90
- *  days of receipt.
- *
- *  Unicode, Inc. hereby grants the right to freely use the information
- *  supplied in this file in the creation of products supporting the
- *  Unicode Standard, and to make copies of this file in any form for
- *  internal or external distribution as long as this notice remains
- *  attached.
+ * © 2015 Unicode®, Inc.
+ * For terms of use, see http://www.unicode.org/terms_of_use.html
  */
 
 " > unictabl.inc
@@ -48,7 +35,7 @@ echo "  * creating C tables..."
 
 all_encodings=""
 
-for i in mappings/*.TXT ; do
+for i in $(printf '%s\n' mappings/*.TXT | LC_ALL=C sort); do
 
     enc=`echo $i | cut -c10- | tr - _ | sed 's/\.TXT//g' |\
 sed 's/8859_\(.*\)/ISO8859_\1/g
@@ -116,5 +103,5 @@ for i in $all_encodings ; do
     echo "    { wxFONTENCODING_$i, encoding_table__$i}," >> unictabl.inc
 done
 
-echo "    {wxFONTENCODING_MAX /*anything*/, NULL}" >> unictabl.inc
+echo "    {wxFONTENCODING_MAX /*anything*/, nullptr}" >> unictabl.inc
 echo " };" >> unictabl.inc

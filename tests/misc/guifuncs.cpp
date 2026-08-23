@@ -31,10 +31,10 @@
 
 #include <memory>
 
-// gcc 16.0 gives many bogus warnings about array subscripts being out of
+// gcc 16.x gives many bogus warnings about array subscripts being out of
 // bounds in basic_string.h, so disable them for this particular version as it
 // looks like a compiler bug.
-#if wxCHECK_GCC_VERSION(16, 0) && !wxCHECK_GCC_VERSION(16, 2)
+#if wxCHECK_GCC_VERSION(16, 0) && !wxCHECK_GCC_VERSION(16, 3)
 wxGCC_WARNING_SUPPRESS(array-bounds)
 #endif
 

@@ -7,6 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_MEDIACTRL)
+    wx_append_install_headers(MEDIA_CMN_HDR)
+    return()
+endif()
+
 wx_append_sources(MEDIA_FILES MEDIA_CMN)
 
 if(WXMSW)
