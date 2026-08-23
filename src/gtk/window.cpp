@@ -1401,7 +1401,8 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
         wxKeyEvent eventChar(wxEVT_CHAR, event);
 
-        if ( long keyCode = wxTranslateKeySymToWXKey(keysym, true /* isChar */) )
+        long keyCode = wxTranslateKeySymToWXKey(keysym, true /* isChar */);
+        if ( keyCode )
         {
             // Set Unicode value to the key code if possible, this is useful
             // for keys such as BACKSPACE or ENTER.
@@ -1418,7 +1419,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             {
                 // We should already have the corresponding key in US layout,
                 // translated from GTK using XKB, in the event.
-                long keyCode = event.m_keyCode;
+                keyCode = event.m_keyCode;
 
                 if ( (keyCode >= 'A' && keyCode <= 'Z') ||
                         keyCode == '[' ||
