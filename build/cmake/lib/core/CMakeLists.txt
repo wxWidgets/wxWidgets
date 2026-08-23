@@ -27,11 +27,14 @@ if(WXMSW)
     if(WXWINUI AND wxUSE_WINUI3)
         # Keep generic/hyperlinkg.cpp: wxGenericHyperlinkCtrl remains an
         # independently selectable public control alongside the native peer.
+        # Same for generic/infobar.cpp: wxInfoBarGeneric is a public class in
+        # the other ports (wxGTK's native wxInfoBar even derives from it) and
+        # applications do use it directly, so it must remain available here as
+        # well -- see wx/winui/infobar.h.
         list(REMOVE_ITEM CORE_SRC
             "${wxSOURCE_DIR}/src/generic/activityindicator.cpp"
             "${wxSOURCE_DIR}/src/generic/bmpcboxg.cpp"
             "${wxSOURCE_DIR}/src/generic/clrpickerg.cpp"
-            "${wxSOURCE_DIR}/src/generic/infobar.cpp"
             "${wxSOURCE_DIR}/src/generic/spinctlg.cpp"
             "${wxSOURCE_DIR}/src/generic/srchctlg.cpp"
             "${wxSOURCE_DIR}/src/generic/textdlgg.cpp"

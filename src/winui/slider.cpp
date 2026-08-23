@@ -44,6 +44,10 @@ namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
 namespace
 {
 
+// Gap between an endpoint label and the track, in DIPs: the same value wxMSW
+// leaves between them (VGAP there).
+constexpr double wxWinUISliderLabelGap = 4.0;
+
 void wxWinUIMarkSliderDecorationRaw(const MUX::UIElement& element)
 {
     if ( element )
@@ -2274,23 +2278,20 @@ void wxSlider::UpdateVisualState()
         double primaryEndReserve = 0.0;
         if ( showMinMax )
         {
-            // Keep endpoint centres exact while making their complete realized
-            // rectangles fit in the slot. The native endpoint already owns
-            // half of the realized Thumb; reserve the absolute missing
-            // half-label extent. Unlike feeding the transformed axis and old
-            // Margin back into one another, this value is idempotent across
-            // LayoutUpdated and RTL coordinate-boundary passes.
+            // wxMSW puts the endpoint labels beside the slider, at the very
+            // start and end of the control, and shortens the slider itself by
+            // their extent plus a small gap (VGAP there). Reserve exactly that
+            // so the labels are never drawn over the track. The value is a
+            // function of the observed label sizes only, so it stays
+            // idempotent across LayoutUpdated and RTL coordinate passes.
             const double startLabelExtent = vertical
                 ? (axisReversed ? maxSize.Height : minSize.Height)
                 : (axisReversed ? maxSize.Width : minSize.Width);
             const double endLabelExtent = vertical
                 ? (axisReversed ? minSize.Height : maxSize.Height)
                 : (axisReversed ? minSize.Width : maxSize.Width);
-            const double nativeEndpointInset = thumbPrimaryExtent / 2.0;
-            primaryStartReserve = wxMax(
-                0.0, startLabelExtent / 2.0 - nativeEndpointInset);
-            primaryEndReserve = wxMax(
-                0.0, endLabelExtent / 2.0 - nativeEndpointInset);
+            primaryStartReserve = startLabelExtent + wxWinUISliderLabelGap;
+            primaryEndReserve = endLabelExtent + wxWinUISliderLabelGap;
         }
 
         // Side bands are overlay coordinates, not native Slider margins.
@@ -2463,10 +2464,15 @@ void wxSlider::UpdateVisualState()
             }
         }
 
+        // Like wxMSW: each endpoint label goes to the extremity of the control
+        // on its own side of the axis -- the track is inset by the reserve
+        // computed above -- and is centred on the track band. Centring it on
+        // the endpoint instead would draw it over the track, which is exactly
+        // what that reserve exists to avoid.
         const auto placeEndpointLabel =
-            [vertical, width, height, axisCross, &axisPosition](
+            [vertical, width, height, axisCross](
                 const MUXC::TextBlock& label,
-                int value,
+                bool atAxisStart,
                 bool visible)
             {
                 if ( !visible )
@@ -2478,15 +2484,17 @@ void wxSlider::UpdateVisualState()
                         axisCross - desired.Width / 2.0,
                         0.0,
                         wxMax(0.0, width - desired.Width));
-                    const double top =
-                        axisPosition(value) - desired.Height / 2.0;
+                    const double top = atAxisStart
+                        ? 0.0
+                        : wxMax(0.0, height - desired.Height);
                     MUXC::Canvas::SetLeft(label, left);
                     MUXC::Canvas::SetTop(label, top);
                 }
                 else
                 {
-                    const double left =
-                        axisPosition(value) - desired.Width / 2.0;
+                    const double left = atAxisStart
+                        ? 0.0
+                        : wxMax(0.0, width - desired.Width);
                     const double top = wxClip(
                         axisCross - desired.Height / 2.0,
                         0.0,
@@ -2496,9 +2504,9 @@ void wxSlider::UpdateVisualState()
                 }
             };
         placeEndpointLabel(
-            m_winui->minimumLabel, m_rangeMin, showMinMax);
+            m_winui->minimumLabel, !axisReversed, showMinMax);
         placeEndpointLabel(
-            m_winui->maximumLabel, m_rangeMax, showMinMax);
+            m_winui->maximumLabel, axisReversed, showMinMax);
 
         if ( showValue )
         {

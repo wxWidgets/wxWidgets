@@ -695,6 +695,177 @@ bool wxWinUINativeTarget::Matches(
            m_tlwGeneration == other.m_tlwGeneration;
 }
 
+namespace
+{
+
+// Is any window above `below` inside `parent` covering the point? Siblings are
+// enumerated from the top of the z-order down to `below`, so only the ones
+// that would win over it are examined.
+bool wxWinUIAnySiblingAboveCovers(HWND parent,
+                                  HWND below,
+                                  const POINT& screenPoint,
+                                  HWND bridge,
+                                  HWND inner)
+{
+    for ( HWND sibling = ::GetWindow(parent, GW_CHILD);
+          sibling && sibling != below;
+          sibling = ::GetWindow(sibling, GW_HWNDNEXT) )
+    {
+        if ( sibling == bridge || sibling == inner )
+            continue;
+        if ( !::IsWindowVisible(sibling) || !::IsWindowEnabled(sibling) )
+            continue;
+        if ( wxWinUIPointInRect(sibling, screenPoint) )
+            return true;
+    }
+    return false;
+}
+
+// Does any visible child of `parent` cover the point? Such a child would be
+// the real target, not its parent.
+bool wxWinUIAnyChildCovers(HWND parent,
+                           const POINT& screenPoint,
+                           HWND bridge,
+                           HWND inner)
+{
+    for ( HWND child = ::GetWindow(parent, GW_CHILD);
+          child;
+          child = ::GetWindow(child, GW_HWNDNEXT) )
+    {
+        if ( child == bridge || child == inner )
+            continue;
+        if ( !::IsWindowVisible(child) )
+            continue;
+        if ( wxWinUIPointInRect(child, screenPoint) )
+            return true;
+    }
+    return false;
+}
+
+} // anonymous namespace
+
+wxWinUIHitResolution
+wxWinUIResolveNativeHitReusing(wxWindow *tlw,
+                               const POINT& screenPoint,
+                               WXHWND bridge,
+                               WXHWND inner,
+                               const wxWinUINativeHit& previous,
+                               bool layoutUnchanged,
+                               wxWinUINativeHit *hit)
+{
+    const HWND bridgeHwnd = reinterpret_cast<HWND>(bridge);
+    const HWND innerHwnd = reinterpret_cast<HWND>(inner);
+
+    // Everything below is an attempt; anything unexpected falls back to the
+    // full resolution rather than guessing.
+    for ( ;; )
+    {
+        if ( !layoutUnchanged || !tlw || !hit || !previous.IsValid() )
+            break;
+        if ( previous.GetBridgeExclusionHwnd() != bridge ||
+             previous.GetInnerExclusionHwnd() != inner )
+        {
+            break;
+        }
+        if ( (bridge &&
+              wxWinUIMSWGetNativeHwndGeneration(bridge) !=
+                previous.GetBridgeExclusionGeneration()) ||
+             (inner &&
+              wxWinUIMSWGetNativeHwndGeneration(inner) !=
+                previous.GetInnerExclusionGeneration()) )
+        {
+            break;
+        }
+
+        const HWND hwndTLW = GetHwndOf(tlw);
+        if ( !hwndTLW || !::IsWindow(hwndTLW) || !::IsWindowVisible(hwndTLW) ||
+             !::IsWindowEnabled(hwndTLW) ||
+             !wxWinUIPointInRect(hwndTLW, screenPoint) )
+        {
+            break;
+        }
+        if ( ::GetWindowThreadProcessId(hwndTLW, nullptr) !=
+                ::GetCurrentThreadId() )
+        {
+            break;
+        }
+
+        const HWND leaf =
+            reinterpret_cast<HWND>(previous.GetTarget().GetLeafHwnd());
+        if ( !leaf || !::IsWindow(leaf) || !::IsWindowVisible(leaf) ||
+             !::IsWindowEnabled(leaf) ||
+             !wxWinUIPointInRect(leaf, screenPoint) )
+        {
+            break;
+        }
+
+        // The point may have moved onto something of the target's own, or
+        // under a sibling that was already there: both change the answer even
+        // though nothing moved.
+        if ( leaf != hwndTLW &&
+             wxWinUIAnyChildCovers(leaf, screenPoint, bridgeHwnd, innerHwnd) )
+        {
+            break;
+        }
+        bool covered = false;
+        for ( HWND current = leaf; current && current != hwndTLW; )
+        {
+            const HWND parent = ::GetParent(current);
+            if ( !parent )
+            {
+                covered = true;   // unexpected shape: fall back
+                break;
+            }
+            if ( wxWinUIAnySiblingAboveCovers(parent, current, screenPoint,
+                                              bridgeHwnd, innerHwnd) )
+            {
+                covered = true;
+                break;
+            }
+            current = parent;
+        }
+        if ( covered )
+            break;
+
+        // The zone is position-dependent, so it is always asked again.
+        const LRESULT ht = ::SendMessage(
+            leaf, WM_NCHITTEST, 0,
+            MAKELPARAM(static_cast<short>(screenPoint.x),
+                       static_cast<short>(screenPoint.y)));
+        if ( ht == HTTRANSPARENT || ht == HTNOWHERE )
+            break;
+
+        // The message ran application code: prove the identity again.
+        wxWinUINativeTarget target;
+        if ( !wxWinUIGetNativeTarget(tlw, reinterpret_cast<WXHWND>(leaf),
+                                     &target) ||
+             !target.Matches(previous.GetTarget()) )
+        {
+            break;
+        }
+
+        wxWinUINativeHit resolved = previous;
+        resolved.m_target = target;
+        resolved.m_hitTest = ht;
+        resolved.m_area = ht == HTCLIENT
+            ? wxWinUINativeArea::Client
+            : wxWinUINativeArea::NonClient;
+        resolved.m_screen = screenPoint;
+        resolved.m_client = screenPoint;
+        ::SetLastError(ERROR_SUCCESS);
+        if ( !::MapWindowPoints(HWND_DESKTOP, leaf, &resolved.m_client, 1) &&
+             ::GetLastError() != ERROR_SUCCESS )
+        {
+            break;
+        }
+
+        *hit = resolved;
+        return wxWinUIHitResolution::Hit;
+    }
+
+    return wxWinUIResolveNativeHit(tlw, screenPoint, bridge, inner, hit);
+}
+
 wxWinUIHitResolution
 wxWinUIResolveNativeHit(wxWindow *tlw,
                         const POINT& screenPoint,
@@ -733,7 +904,8 @@ bool wxWinUIRefreshNativeHit(wxWindow *tlw,
                              const wxWinUINativeHit& expected,
                              WXHWND bridge,
                              WXHWND inner,
-                             wxWinUINativeHit *refreshed)
+                             wxWinUINativeHit *refreshed,
+                             bool layoutUnchanged)
 {
     if ( !refreshed )
         return false;
@@ -748,6 +920,31 @@ bool wxWinUIRefreshNativeHit(wxWindow *tlw,
           wxWinUIMSWGetNativeHwndGeneration(inner) !=
             expected.GetInnerExclusionGeneration()) )
     {
+        return false;
+    }
+
+    // Fast path: nothing moved, so the only way the verdict could have
+    // changed is the target itself going away or losing the point.  Both
+    // are answered by a handful of queries on that one window instead of
+    // a full walk of the window tree.
+    if ( layoutUnchanged )
+    {
+        const HWND leaf =
+            reinterpret_cast<HWND>(expected.GetTarget().GetLeafHwnd());
+        wxWinUINativeTarget current;
+        if ( leaf &&
+             ::IsWindow(leaf) &&
+             ::IsWindowVisible(leaf) &&
+             ::IsWindowEnabled(leaf) &&
+             wxWinUIPointInRect(leaf, expected.GetScreenPoint()) &&
+             (expected.GetArea() != wxWinUINativeArea::Client ||
+              wxWinUIPointInClient(leaf, expected.GetScreenPoint())) &&
+             wxWinUINativeResolverImpl::BuildTarget(leaf, tlw, current) &&
+             current.Matches(expected.GetTarget()) )
+        {
+            *refreshed = expected;
+            return true;
+        }
         return false;
     }
 

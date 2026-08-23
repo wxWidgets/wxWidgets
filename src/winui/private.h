@@ -776,6 +776,23 @@ bool wxWinUIIsManagedToolTipCurrent(
 HWND wxWinUIFindNextKeyboardFocusable(HWND hwndTLW, HWND hwndCurrent,
                                       bool previous);
 
+// Erase the background of a XAML island window (the bridge covering the whole
+// client area of a top-level window, or its input site) with the same surface
+// as the wx windows below it: black under a DWM material, so that Windows
+// substitutes Mica for it, and the top-level window's own background colour
+// when no material is active. Returns false, without painting anything, if
+// there is nothing to erase.
+bool wxWinUIEraseIslandBackground(HWND island, HDC hdc);
+
+// Diagnostics: how many deep content relayouts have been scheduled.
+// One per hosted control load is expected; a stream of them while the
+// mouse moves means the window is laying itself out for every sample.
+unsigned wxWinUIGetContentRelayoutCount();
+
+// True when this optimisation was taken out by WX_WINUI_DISABLE; see
+// the definition for the names it understands.
+bool wxWinUIOptimisationDisabled(const char *name);
+
 inline winrt::Microsoft::UI::Xaml::Media::SolidColorBrush
 wxWinUIBrush(unsigned char red,
              unsigned char green,

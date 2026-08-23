@@ -2037,6 +2037,13 @@ bool wxWinUIShutdownOwnedDispatcherQueue(
 
 bool wxWinUIEnsureXamlManager()
 {
+    // From here on the XAML runtime is part of this process, and it formats the
+    // numbers of its own markup (the geometries in its control templates, for
+    // instance) using the C locale: with a decimal comma it produces text it
+    // cannot parse back, and terminates the process from inside its own layout
+    // pass. Ask wxSetlocale() to keep LC_NUMERIC as "C" from now on.
+    wxKeepCNumericLocale(true);
+
     try
     {
         using namespace winrt::Microsoft::UI::Xaml::Hosting;

@@ -68,6 +68,7 @@
 #include <limits>
 #include <set>
 #include <utility>
+#include <string>
 #include <vector>
 
 void wxWinUILogException(const char *what, const winrt::hresult_error& e);
@@ -150,6 +151,168 @@ void wxWinUIInputLog(const char *fmt, ...)
 }
 
 bool wxWinUIInputLogEnabled() { return wxWinUIInputLogFile() != nullptr; }
+// ----------------------------------------------------------------------------
+// Pointer routing profile: set WX_WINUI_INPUT_PROFILE=<file> to get the
+// per-phase cost of routing one pointer sample.  Moving the mouse is the most
+// frequent input an application receives -- a mouse reports hundreds of times
+// per second -- so a few hundred microseconds spent per sample is felt by the
+// user as a window that stops following the pointer.  Unlike the input log
+// above this writes one aggregated line every kProfileBatch samples, so
+// measuring does not change what is measured.  No-op when the variable is
+// unset.
+// ----------------------------------------------------------------------------
+
+FILE *wxWinUIInputProfileFile()
+{
+    static FILE *s_file = []() -> FILE *
+    {
+        const DWORD required =
+            ::GetEnvironmentVariableW(
+                L"WX_WINUI_INPUT_PROFILE", nullptr, 0);
+        if ( !required )
+            return nullptr;
+
+        std::vector<wchar_t> path(required);
+        const DWORD copied =
+            ::GetEnvironmentVariableW(
+                L"WX_WINUI_INPUT_PROFILE", path.data(), required);
+        if ( !copied || copied >= required || !path[0] )
+            return nullptr;
+
+        FILE * const f = _wfopen(path.data(), L"a");
+        if ( f )
+        {
+            fprintf(f, "\n==== profile pid=%lu (us per pointer sample) ====\n",
+                    ::GetCurrentProcessId());
+            fflush(f);
+        }
+        return f;
+    }();
+
+    return s_file;
+}
+
+bool wxWinUIInputProfileEnabled()
+{
+    static const bool s_enabled = wxWinUIInputProfileFile() != nullptr;
+    return s_enabled;
+}
+
+// The phases of one pointer sample, in the order they run.
+enum class wxWinUIProfilePhase
+{
+    Total,
+    Point,        // args.GetCurrentPoint() and the properties it exposes
+    XamlHit,      // VisualTreeHelper hit test against the island content
+    NativeHit,    // resolving the child window under the pointer
+    Dispatch,     // the state machine and the SendMessage it ends with
+    Mirror,       // mirroring the native cursor for the hit target
+    MirrorSend,   // the WM_SETCURSOR the target runs
+    MirrorCheck,  // re-proving the target still owns the point
+    MirrorApply,  // converting and applying the island cursor
+    Refresh,      // re-proving the native hit before delivery
+    Send,         // the WM_MOUSEMOVE the target finally receives
+    Cursor,       // observing and re-applying the XAML pointer cursor
+    Max
+};
+
+long long gs_profileTicks[static_cast<size_t>(wxWinUIProfilePhase::Max)] = {};
+
+// Host-wide invalidations seen while routing pointer input: one of these
+// per pointer move means every hosted control is re-synchronised for
+// every movement of the mouse.
+unsigned gs_profileCursorPolicy = 0;
+unsigned gs_profileLayoutNotify = 0;
+unsigned gs_profileLayoutSuppressed = 0;
+unsigned gs_profileMarkAllDirty = 0;
+unsigned gs_profileMarkDirty = 0;
+unsigned gs_profileFlushRuns = 0;
+unsigned gs_profileSamples = 0;
+
+long long wxWinUIProfileNow()
+{
+    LARGE_INTEGER now;
+    ::QueryPerformanceCounter(&now);
+    return now.QuadPart;
+}
+
+void wxWinUIProfileAdd(wxWinUIProfilePhase phase, long long started)
+{
+    gs_profileTicks[static_cast<size_t>(phase)] +=
+        wxWinUIProfileNow() - started;
+}
+
+// Times one phase for as long as it is in scope.
+class wxWinUIProfileScope
+{
+public:
+    explicit wxWinUIProfileScope(wxWinUIProfilePhase phase)
+        : m_phase(phase),
+          m_started(wxWinUIInputProfileEnabled() ? wxWinUIProfileNow() : 0)
+    {
+    }
+
+    ~wxWinUIProfileScope()
+    {
+        if ( m_started )
+            wxWinUIProfileAdd(m_phase, m_started);
+    }
+
+private:
+    const wxWinUIProfilePhase m_phase;
+    const long long m_started;
+
+    wxDECLARE_NO_COPY_CLASS(wxWinUIProfileScope);
+};
+
+// Called once per routed pointer sample; writes an average line per batch.
+void wxWinUIProfileSample()
+{
+    FILE * const f = wxWinUIInputProfileFile();
+    if ( !f )
+        return;
+
+    constexpr unsigned kProfileBatch = 20;
+    if ( ++gs_profileSamples < kProfileBatch )
+        return;
+
+    LARGE_INTEGER frequency;
+    ::QueryPerformanceFrequency(&frequency);
+    const double perSample =
+        1000000.0 / (double(frequency.QuadPart) * gs_profileSamples);
+
+    const auto us = [perSample](wxWinUIProfilePhase phase)
+    {
+        return gs_profileTicks[static_cast<size_t>(phase)] * perSample;
+    };
+
+    fprintf(f,
+            "samples=%u total=%.0f point=%.0f xamlhit=%.0f nativehit=%.0f "
+            "dispatch=%.0f mirror=%.0f (send=%.0f check=%.0f apply=%.0f) refresh=%.0f send=%.0f policy=%u flush=%u cursor=%.0f\n",
+            gs_profileSamples,
+            us(wxWinUIProfilePhase::Total),
+            us(wxWinUIProfilePhase::Point),
+            us(wxWinUIProfilePhase::XamlHit),
+            us(wxWinUIProfilePhase::NativeHit),
+            us(wxWinUIProfilePhase::Dispatch),
+            us(wxWinUIProfilePhase::Mirror),
+            us(wxWinUIProfilePhase::MirrorSend),
+            us(wxWinUIProfilePhase::MirrorCheck),
+            us(wxWinUIProfilePhase::MirrorApply),
+            us(wxWinUIProfilePhase::Refresh),
+            us(wxWinUIProfilePhase::Send),
+            us(wxWinUIProfilePhase::Cursor),
+            gs_profileCursorPolicy,
+            gs_profileFlushRuns);
+    fflush(f);
+
+    gs_profileSamples = 0;
+    gs_profileCursorPolicy = 0;
+    gs_profileFlushRuns = 0;
+    for ( auto& ticks : gs_profileTicks )
+        ticks = 0;
+}
+
 
 void wxWinUIInputLogTLWMoveStart(wxMoveEvent& event)
 {
@@ -439,6 +602,10 @@ unsigned gs_slotCursorSets = 0;
 // transitions and wxSetCursor() can never be hidden by an unchanged window
 // identity or HCURSOR value.
 unsigned long long gs_cursorPolicyGeneration = 1;
+
+// See wxWinUINotifySetCursorEventHandled(): counts the wxEVT_SET_CURSOR
+// events application code actually answered.
+unsigned long long gs_setCursorEventGeneration = 1;
 unsigned gs_failInputPointerSourceSetAt = 0;
 
 // Registration-rollback fault injection (see TestFailHandlerAdd): countdown
@@ -1589,6 +1756,41 @@ bool wxWinUIShouldEmitSetCursor(wxWinUIInputKind kind)
 }
 
 } // anonymous namespace
+
+// ----------------------------------------------------------------------------
+// Optimisation kill switch: set WX_WINUI_DISABLE to a comma separated list of
+// "paint", "coalesce", "hittest", "cursor" to take the matching pointer-path
+// optimisation out of the picture at startup.  Each of them trades an
+// invariant of the naive implementation for speed, so when a rendering or
+// input problem appears this is how the responsible one is identified without
+// rebuilding.  Unset -- the normal case -- everything is enabled.
+// ----------------------------------------------------------------------------
+
+bool wxWinUIOptimisationDisabled(const char *name)
+{
+    static const std::string s_disabled = []() -> std::string
+    {
+        const DWORD required =
+            ::GetEnvironmentVariableA("WX_WINUI_DISABLE", nullptr, 0);
+        if ( !required )
+            return std::string();
+
+        std::vector<char> value(required);
+        const DWORD copied =
+            ::GetEnvironmentVariableA("WX_WINUI_DISABLE",
+                                      value.data(), required);
+        if ( !copied || copied >= required )
+            return std::string();
+
+        return std::string(value.data());
+    }();
+
+    if ( s_disabled.empty() )
+        return false;
+
+    return s_disabled.find(name) != std::string::npos;
+}
+
 
 // ============================================================================
 // wxWinUISlot
@@ -10035,10 +10237,46 @@ bool wxWinUITopLevelHost::MirrorNativeCursor(
         return true;
     }
 
+    // The same verdict, at a different position: only worth re-establishing
+    // when the target's cursor actually depends on the position.  It does when
+    // application code answers wxEVT_SET_CURSOR; when nobody does, the cursor
+    // follows the window and the wx cursor policy alone, and re-sending
+    // WM_SETCURSOR -- which DefWindowProc walks up the whole parent chain --
+    // for every movement of the mouse is pure cost.
+    if ( !m_cursorPositionSensitive &&
+         !wxWinUIOptimisationDisabled("cursor") &&
+         m_cursorMirrored &&
+         m_islandPointerCursorApplied &&
+         m_inputPointerSourceAuthoritative &&
+         m_activeCursorSurface == ActiveCursorSurface::Native &&
+         m_activeCursorPolicyGeneration == cursorPolicyGeneration &&
+         m_cursorSetCursorGeneration == wxWinUIGetSetCursorEventGeneration() &&
+         targetIdentity.Matches(m_cursorTarget) &&
+         hitTest == m_cursorHit &&
+         verdictClientSize == m_nativeCursorVerdictClientSize &&
+         verdictChain == m_nativeCursorVerdictChain )
+    {
+        m_nativeCursorVerdictPoint = verdictPoint;
+        m_nativeCursorVerdictClientPoint = verdictClientPoint;
+        return true;
+    }
+
     // Let the target run its WM_SETCURSOR protocol (wx windows call
     // ::SetCursor from it), then mirror whatever cursor it installed.
-    ::SendMessage(target, WM_SETCURSOR, reinterpret_cast<WPARAM>(target),
-                  MAKELPARAM(hitTest, WM_MOUSEMOVE));
+    const unsigned long long setCursorGenerationBefore =
+        wxWinUIGetSetCursorEventGeneration();
+    {
+        const wxWinUIProfileScope profileSetCursor(
+            wxWinUIProfilePhase::MirrorSend);
+        ::SendMessage(target, WM_SETCURSOR,
+                      reinterpret_cast<WPARAM>(target),
+                      MAKELPARAM(hitTest, WM_MOUSEMOVE));
+    }
+    // Anyone answering wxEVT_SET_CURSOR in the chain makes this target's
+    // cursor position-dependent, and it must then be asked every time.
+    m_cursorPositionSensitive =
+        wxWinUIGetSetCursorEventGeneration() != setCursorGenerationBefore;
+    m_cursorSetCursorGeneration = wxWinUIGetSetCursorEventGeneration();
     nativeCursorVerdict = ::GetCursor();
     nativeCursorVerdictPolicyGeneration = gs_cursorPolicyGeneration;
     nativeCursorVerdictValid = true;
@@ -10050,9 +10288,37 @@ bool wxWinUITopLevelHost::MirrorNativeCursor(
         return false;
     }
 
+    // Nothing to mirror when the target left the cursor untouched: the
+    // island already shows exactly this handle.  Re-proving the
+    // geometry and building a new InputCursor would answer a question
+    // nobody asked -- and this is the common case, because a pointer
+    // moving inside one window keeps the same cursor for hundreds of
+    // consecutive samples.  Every check above still applies: a policy
+    // change, a new epoch or a different target falls through to the
+    // full mirror below.
+    if ( nativeCursorVerdict &&
+         m_cursorMirrored &&
+         m_islandPointerCursorApplied &&
+         m_inputPointerSourceAuthoritative &&
+         m_activeCursorSurface == ActiveCursorSurface::Native &&
+         m_activeCursorPolicyGeneration == cursorPolicyGeneration &&
+         m_lastIslandPointerHandle ==
+             reinterpret_cast<WXHCURSOR>(nativeCursorVerdict) &&
+         targetIdentity.Matches(m_cursorTarget) &&
+         hitTest == m_cursorHit )
+    {
+        m_nativeCursorVerdictPoint = verdictPoint;
+        m_nativeCursorVerdictClientPoint = verdictClientPoint;
+        m_nativeCursorVerdictClientSize = verdictClientSize;
+        m_nativeCursorVerdictChain = verdictChain;
+        return true;
+    }
+
     wxPoint currentClientPoint;
     wxSize currentClientSize;
     std::vector<WXHWND> currentChain;
+    const wxWinUIProfileScope profileCheck(
+        wxWinUIProfilePhase::MirrorCheck);
     if ( wxPoint(m_lastPointerScreen.x, m_lastPointerScreen.y) !=
                 verdictPoint ||
          !captureGeometry(&currentClientPoint,
@@ -10078,6 +10344,8 @@ bool wxWinUITopLevelHost::MirrorNativeCursor(
         selectionGeneration + 1;
     if ( !expectedSelectionGeneration )
         ++expectedSelectionGeneration;
+    const wxWinUIProfileScope profileApply(
+        wxWinUIProfilePhase::MirrorApply);
     if ( !wxWinUICursorFromHCURSOR(nativeCursor, cursor) ||
          !SetIslandPointerCursor(
              cursor, reinterpret_cast<WXHCURSOR>(nativeCursor)) ||
@@ -11350,6 +11618,39 @@ void wxWinUITopLevelHost::ExecuteEmergencyInputCleanup(
     // established by the nested gesture.
 }
 
+// Windows delivers WM_PAINT only when nothing else is waiting in the queue,
+// which is what lets a window that invalidates itself on every mouse movement
+// still appear to follow the pointer: the moves coalesce in the queue and the
+// paint gets its turn. Routed pointer input is *sent*, not posted, so it never
+// takes that turn and the paint can wait indefinitely -- measured at 300 ms of
+// waiting for 1.7 ms of painting, i.e. a canvas frozen for as long as the hand
+// keeps moving. Give the target its turn explicitly instead, bounded so that
+// painting cannot starve the input either.
+void wxWinUITopLevelHost::LetPointerTargetPaint(WXHWND targetHandle)
+{
+    const HWND target = reinterpret_cast<HWND>(targetHandle);
+    if ( !target || !::IsWindow(target) || m_shuttingDown )
+        return;
+
+    if ( wxWinUIOptimisationDisabled("paint") )
+        return;
+
+    // ~120 Hz: fast enough that no display shows the difference, rare enough
+    // that a slow paint cannot consume the whole event loop.
+    constexpr unsigned long kMinPaintIntervalMs = 8;
+    const unsigned long now = ::GetTickCount();
+    if ( now - m_lastPointerPaintTick < kMinPaintIntervalMs )
+        return;
+
+    RECT update;
+    if ( !::GetUpdateRect(target, &update, FALSE) )
+        return;
+
+    m_lastPointerPaintTick = now;
+    ::RedrawWindow(target, nullptr, nullptr,
+                   RDW_UPDATENOW | RDW_ALLCHILDREN);
+}
+
 bool wxWinUITopLevelHost::ExecuteInputAction(
     const wxWinUIInputAction& action,
     const wxWinUINativeHit *currentHit,
@@ -11573,14 +11874,20 @@ bool wxWinUITopLevelHost::ExecuteInputAction(
         // boundaries. Prove the same geometric hit again before delivery.
         if ( action.kind == wxWinUIInputKind::Move )
         {
-            if ( !MirrorNativeCursor(
-                     targetIdentity, action.zone, expectedEpoch) ||
-                 m_shuttingDown )
+            const long long mirrorStarted = wxWinUIProfileNow();
+            const bool mirrored = MirrorNativeCursor(
+                     targetIdentity, action.zone, expectedEpoch);
+            wxWinUIProfileAdd(wxWinUIProfilePhase::Mirror,
+                              mirrorStarted);
+            if ( !mirrored || m_shuttingDown )
                 return failUndeliverableRelease();
         }
 
+        const long long refreshStarted = wxWinUIProfileNow();
         const bool refreshed = wxWinUIRefreshNativeHit(
-            m_tlw, *currentHit, m_bridge, m_inner, &refreshedHit);
+            m_tlw, *currentHit, m_bridge, m_inner, &refreshedHit,
+            m_hitLayoutGeneration == m_structureGeneration);
+        wxWinUIProfileAdd(wxWinUIProfilePhase::Refresh, refreshStarted);
         if ( m_inputTransitionEpoch != expectedEpoch )
             return failUndeliverableRelease();
         if ( !refreshed )
@@ -11628,8 +11935,11 @@ bool wxWinUITopLevelHost::ExecuteInputAction(
         MarkNativeHoverDispatchStarted(action);
         if ( action.area == wxWinUIInputArea::Client )
         {
+            const wxWinUIProfileScope profileSend(
+                wxWinUIProfilePhase::Send);
             const wxWinUISyntheticMouseDispatch syntheticDispatch;
             ::SendMessage(target, WM_MOUSEMOVE, keys, lpClient);
+            LetPointerTargetPaint(target);
         }
         else
         {
@@ -11981,8 +12291,10 @@ bool wxWinUITopLevelHost::ClassifyRootPointer(
         return true;
     }
 
+    const long long xamlStarted = wxWinUIProfileNow();
     const XamlHitResolution xamlHit =
         PointOverXamlContent(pointClientPx, exactRootDips);
+    wxWinUIProfileAdd(wxWinUIProfilePhase::XamlHit, xamlStarted);
     if ( m_shuttingDown )
         return false;
 
@@ -11997,9 +12309,25 @@ bool wxWinUITopLevelHost::ClassifyRootPointer(
         return true;
     }
 
+    const long long nativeStarted = wxWinUIProfileNow();
     const wxWinUIHitResolution nativeResolution =
-        wxWinUIResolveNativeHit(
-            m_tlw, pointScreen, m_bridge, m_inner, nativeHit);
+        wxWinUIResolveNativeHitReusing(
+            m_tlw, pointScreen, m_bridge, m_inner,
+            m_lastResolvedHit,
+            m_lastResolvedLayoutGeneration == m_structureGeneration &&
+                !wxWinUIOptimisationDisabled("hittest"),
+            nativeHit);
+    wxWinUIProfileAdd(wxWinUIProfilePhase::NativeHit, nativeStarted);
+    m_hitLayoutGeneration = m_structureGeneration;
+    if ( nativeResolution == wxWinUIHitResolution::Hit )
+    {
+        m_lastResolvedHit = *nativeHit;
+        m_lastResolvedLayoutGeneration = m_structureGeneration;
+    }
+    else
+    {
+        m_lastResolvedHit = wxWinUINativeHit();
+    }
     if ( nativeResolution == wxWinUIHitResolution::Unstable )
     {
         observation->surface = wxWinUIInputSurface::Indeterminate;
@@ -15393,31 +15721,52 @@ void wxWinUITopLevelHost::ReleaseAncestorRef(wxWindow *ancestor)
     ancestor->Unbind(wxEVT_DESTROY, &wxWinUITopLevelHost::OnAncestorDestroy, this);
 }
 
+bool wxWinUITopLevelHost::MarkSlotsUnderAncestor(wxWindow *ancestor)
+{
+    if ( !ancestor )
+        return false;
+
+    bool marked = false;
+    for ( const auto& entry : m_slots )
+    {
+        wxWinUISlot * const slot = entry.second;
+        if ( !slot )
+            continue;
+        if ( entry.first != ancestor &&
+             std::find(slot->m_ancestors.begin(),
+                       slot->m_ancestors.end(),
+                       ancestor) == slot->m_ancestors.end() )
+        {
+            continue;
+        }
+
+        if ( ++slot->m_cursorTopologyGeneration == 0 )
+            ++slot->m_cursorTopologyGeneration;
+        MarkDirty(entry.first);
+        marked = true;
+    }
+    return marked;
+}
+
 void wxWinUITopLevelHost::OnAncestorGeometry(wxEvent& event)
 {
     event.Skip();
 
     wxWindow * const ancestor =
         wxDynamicCast(event.GetEventObject(), wxWindow);
-    if ( ancestor )
+    InvalidateStructure();
+    if ( !ancestor )
     {
-        for ( const auto& entry : m_slots )
-        {
-            wxWinUISlot * const slot = entry.second;
-            if ( slot &&
-                 std::find(slot->m_ancestors.begin(),
-                           slot->m_ancestors.end(),
-                           ancestor) != slot->m_ancestors.end() )
-            {
-                if ( ++slot->m_cursorTopologyGeneration == 0 )
-                    ++slot->m_cursorTopologyGeneration;
-            }
-        }
+        // Without the window that moved there is nothing to narrow
+        // down: resync everything.
+        MarkAllDirty();
+        return;
     }
 
-    // Anything under it may have moved on screen or changed visibility: the
-    // flush is coalesced, so just resync everything.
-    InvalidateStructure();
+    // Anything under it may have moved on screen or changed visibility, and
+    // an ancestor is rarely the only thing which moved: the flush is
+    // coalesced, so resync everything rather than guess.
+    MarkSlotsUnderAncestor(ancestor);
     MarkAllDirty();
 }
 
@@ -16854,8 +17203,11 @@ void wxWinUITopLevelHost::OnRootPointer(
 
     try
     {
+        const wxWinUIProfileScope profileTotal(wxWinUIProfilePhase::Total);
+        const long long pointStarted = wxWinUIProfileNow();
         const auto point = args.GetCurrentPoint(m_root);
         const auto props = point.Properties();
+        wxWinUIProfileAdd(wxWinUIProfilePhase::Point, pointStarted);
         bool sourceOwnedByXaml = true;
         try
         {
@@ -16870,7 +17222,11 @@ void wxWinUITopLevelHost::OnRootPointer(
         const bool sourceAlreadyHandled =
             args.Handled() || sourceOwnedByXaml;
         if ( sourceOwnedByXaml && message == WM_MOUSEMOVE )
+        {
+            const wxWinUIProfileScope profileObserve(
+                wxWinUIProfilePhase::Cursor);
             ObserveXamlPointerCursor();
+        }
 
         WORD modifiers = 0;
         WORD buttonMask = 0;
@@ -16956,6 +17312,26 @@ void wxWinUITopLevelHost::OnRootPointer(
             }
         }
 
+        // Coalesce moves the way the queue would: keep the newest position
+        // and give the application back the time it needs to draw. Every
+        // other kind of input is routed unconditionally -- a dropped press
+        // or wheel is a bug, a dropped intermediate position is what USER32
+        // does itself.
+        if ( sample.kind == wxWinUIInputKind::Move &&
+             !wxWinUIOptimisationDisabled("coalesce") )
+        {
+            // ~125 Hz: finer than any display can show, coarse enough to
+            // leave the event loop room to breathe.
+            constexpr unsigned long long kMoveIntervalMs = 8;
+            const unsigned long long moveNow = ::GetTickCount64();
+            if ( m_lastRoutedMoveTimestamp &&
+                 moveNow - m_lastRoutedMoveTimestamp < kMoveIntervalMs )
+            {
+                return;
+            }
+            m_lastRoutedMoveTimestamp = moveNow;
+        }
+
         if ( sample.kind == wxWinUIInputKind::Press )
             buttonMask |= wxWinUIGetWParamButtonMask(sample.button);
         else if ( sample.kind == wxWinUIInputKind::Release )
@@ -16976,6 +17352,8 @@ void wxWinUITopLevelHost::OnRootPointer(
             // wxEVT_SET_CURSOR verdict; Press/Release/Wheel only re-assert
             // that generation-bound verdict, because XAML/capture can reset
             // InputPointerSource while the pointer has not moved.
+            const wxWinUIProfileScope profileCursor(
+                wxWinUIProfilePhase::Cursor);
             ApplyXamlPointerCursor(
                 args,
                 wxWinUIShouldEmitSetCursor(sample.kind),
@@ -16987,6 +17365,8 @@ void wxWinUITopLevelHost::OnRootPointer(
     catch ( const winrt::hresult_error& )
     {
     }
+
+    wxWinUIProfileSample();
 }
 
 wxWinUIRootPointerOutcome
@@ -17237,10 +17617,13 @@ wxWinUITopLevelHost::RouteRootPointerSampleAtEpoch(
     }
 
     bool transitionSuperseded = false;
-    if ( !ExecuteInputTransition(
+    const long long dispatchStarted = wxWinUIProfileNow();
+    const bool executed = ExecuteInputTransition(
              transition,
              hasNativeHit ? &nativeHit : nullptr,
-             &transitionSuperseded) )
+             &transitionSuperseded);
+    wxWinUIProfileAdd(wxWinUIProfilePhase::Dispatch, dispatchStarted);
+    if ( !executed )
     {
         outcome.status = transitionSuperseded
             ? wxWinUIRootPointerStatus::Superseded
@@ -18338,9 +18721,9 @@ wxWinUITLWHostNotifyNativeLayout(wxWindow *window,
         wxWinUITopLevelHost::FindForTLW(wxGetTopLevelParent(window));
 
     if ( slotHost )
-        slotHost->NotifyNativeLayoutMutation(zOrderMayHaveChanged);
+        slotHost->NotifyNativeLayoutMutation(zOrderMayHaveChanged, window);
     if ( tlwHost && tlwHost != slotHost )
-        tlwHost->NotifyNativeLayoutMutation(zOrderMayHaveChanged);
+        tlwHost->NotifyNativeLayoutMutation(zOrderMayHaveChanged, window);
 }
 
 WXDLLIMPEXP_CORE void
@@ -18643,6 +19026,7 @@ void wxWinUITopLevelHost::MarkDirty(wxWindow *window)
     if ( m_shuttingDown )
         return;
 
+    ++gs_profileMarkDirty;
     m_dirty.insert(window);
     ScheduleFlush();
 }
@@ -18661,25 +19045,34 @@ void wxWinUITopLevelHost::MarkAllDirty()
     if ( m_shuttingDown )
         return;
 
+    ++gs_profileMarkAllDirty;
+
     m_allDirty = true;
     ScheduleFlush();
 }
 
 void wxWinUITopLevelHost::NotifyNativeLayoutMutation(
-    bool zOrderMayHaveChanged)
+    bool zOrderMayHaveChanged,
+    wxWindow *mutated)
 {
     if ( m_shuttingDown )
         return;
+
+    ++gs_profileLayoutNotify;
 
     // The same pass also diagnoses overlaps that the one composition band
     // cannot represent. Geometry/visibility changes can create or remove
     // such an overlap even when USER32's sibling order itself is unchanged.
     InvalidateStructure();
     wxUnusedVar(zOrderMayHaveChanged);
+    wxUnusedVar(mutated);
 
     // Native scrollbars alter the bridge region and a native ancestor move
     // changes every descendant slot. The common coalesced pass is both
-    // cheaper and safer than trying to infer the affected descendants here.
+    // cheaper and safer than trying to infer the affected descendants here:
+    // narrowing it to the slots under the window which moved left the others
+    // holding stale geometry, i.e. tool bars which stopped drawing and
+    // stopped taking clicks until the next full pass.
     MarkAllDirty();
 }
 
@@ -19328,6 +19721,7 @@ void wxWinUITopLevelHost::SynchronizeSlotToolTipPolicy(wxWinUISlot& slot)
 void wxWinUITopLevelHost::NotifyCursorPolicyChanged(
     bool emitSetCursorEvents)
 {
+    ++gs_profileCursorPolicy;
     if ( ++gs_cursorPolicyGeneration == 0 )
         ++gs_cursorPolicyGeneration;
 
@@ -19365,6 +19759,17 @@ void wxWinUITopLevelHost::NotifyCursorPolicyChanged(
         }
         host->RefreshActivePointerCursor(emitSetCursorEvents);
     }
+}
+
+WXDLLIMPEXP_CORE void wxWinUINotifySetCursorEventHandled()
+{
+    if ( ++gs_setCursorEventGeneration == 0 )
+        ++gs_setCursorEventGeneration;
+}
+
+WXDLLIMPEXP_CORE unsigned long long wxWinUIGetSetCursorEventGeneration()
+{
+    return gs_setCursorEventGeneration;
 }
 
 WXDLLIMPEXP_CORE void wxWinUINotifyGlobalCursorChanged()
@@ -19436,6 +19841,44 @@ void wxWinUITopLevelHost::FlushSync()
     }
 
     ++gs_flushRuns;
+    ++gs_profileFlushRuns;
+
+    // A flush re-synchronises every slot of this window. One per input
+    // event is a storm, and the profile has to show it: the pointer
+    // samples it happens between are far rarer than the flushes.
+    if ( wxWinUIInputProfileEnabled() )
+    {
+        static unsigned s_runs = 0;
+        static long s_since = 0;
+        const long now = static_cast<long>(::GetTickCount());
+        if ( !s_since )
+            s_since = now;
+        if ( ++s_runs == 50 )
+        {
+            if ( FILE * const f = wxWinUIInputProfileFile() )
+            {
+                fprintf(f, "flush: 50 full slot syncs in %ld ms, "
+                           "%u slots, layoutnotify=%u (suppressed %u) "
+                           "markall=%u markone=%u policy=%u relayout=%u\n",
+                        now - s_since,
+                        static_cast<unsigned>(m_slots.size()),
+                        gs_profileLayoutNotify,
+                        gs_profileLayoutSuppressed,
+                        gs_profileMarkAllDirty,
+                        gs_profileMarkDirty,
+                        gs_profileCursorPolicy,
+                        wxWinUIGetContentRelayoutCount());
+                gs_profileLayoutNotify = 0;
+                gs_profileLayoutSuppressed = 0;
+                gs_profileMarkAllDirty = 0;
+                gs_profileMarkDirty = 0;
+                gs_profileCursorPolicy = 0;
+                fflush(f);
+            }
+            s_runs = 0;
+            s_since = now;
+        }
+    }
     ++m_flushRunsForTest;
 
     EnsureInnerSubclass();
@@ -22180,6 +22623,23 @@ wxWinUITopLevelHost::BridgeSubclassProc(HWND hwnd, UINT msg,
         context && context->active ? context->host.lock() : nullptr;
     wxWinUITopLevelHost * const host =
         hostState ? hostState->GetHost() : nullptr;
+
+    if ( msg == WM_ERASEBKGND )
+    {
+        // The bridge covers the entire client area of its top-level window,
+        // which is WS_CLIPCHILDREN, so the wx window below never paints the
+        // pixels the XAML content leaves untouched -- and the XAML root is
+        // deliberately transparent. Without this, those pixels keep the
+        // initial (white) content of the redirection surface, which is what
+        // shows through around the controls of any window whose children do
+        // not cover it completely.
+        //
+        // Erase exactly like the wx windows below: black under a DWM
+        // material, so that it is substituted by Mica, and the window's own
+        // background colour otherwise.
+        if ( wxWinUIEraseIslandBackground(hwnd, reinterpret_cast<HDC>(wParam)) )
+            return TRUE;
+    }
 
     const UINT internalCancelMessage = wxWinUIInternalCancelMessage();
     if ( internalCancelMessage && msg == internalCancelMessage )

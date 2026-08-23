@@ -35,7 +35,9 @@
 
 #include "wx/app.h"
 #include "wx/evtloop.h"
+#include "wx/module.h"
 #include "wx/settings.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/panel.h"
 #include "wx/dialog.h"
 #include "wx/sizer.h"
@@ -57,6 +59,7 @@
 #include <functional>
 #include <limits>
 #include <cstdarg>
+#include <clocale>
 #include <cstring>
 #include <map>
 #include <memory>
@@ -151,6 +154,40 @@ wxWinUIShellThemePolicy wxWinUIGetShellThemePolicy()
         gs_winuiAppTheme,
         wxWinUISystemUsesDarkMode(),
         wxWinUIIsHighContrastActive());
+}
+
+// Applications paint the surfaces they own themselves using the colours
+// returned by wxSystemSettings, and so does all the wxMSW code reused by this
+// port. Those colours come from the classic dark mode support, which this port
+// doesn't otherwise use, so it has to be told which appearance is really being
+// shown -- without this, a dark WinUI window is filled with light colours by
+// everything that doesn't go through a XAML peer.
+//
+// High Contrast resolves to a non-dark policy on purpose: the classic light
+// path then returns the accessibility palette from the system, which is what
+// High Contrast requires.
+void wxWinUISyncClassicAppearance()
+{
+    wxMSWDarkMode::SyncWithWinUITheme(wxWinUIGetShellThemePolicy().dark);
+}
+
+// Once the WinUI runtime is in use, wxSetlocale() keeps LC_NUMERIC as "C"
+// because the runtime formats the numbers of its own XAML markup with it (and
+// terminates the process when the result doesn't parse back). An application
+// calling the CRT setlocale() directly bypasses wxSetlocale(), so re-assert it
+// wherever the port is about to hand work to XAML.
+void wxWinUIEnsureCNumericLocale()
+{
+    const char * const current = ::setlocale(LC_NUMERIC, nullptr);
+    if ( current && strcmp(current, "C") != 0 )
+    {
+        wxLogTrace("winui",
+                   "LC_NUMERIC was \"%s\": resetting it to \"C\", the WinUI "
+                   "runtime cannot parse its own XAML with a decimal comma",
+                   current);
+    }
+
+    wxKeepCNumericLocale(true);
 }
 
 // WinUI-like solid background colours used only when the DWM Mica backdrop is
@@ -2586,6 +2623,29 @@ void wxWinUIControlHost::ApplyWxCursor(const wxCursor& cursor)
     wxUnusedVar(cursor);
 }
 
+bool wxWinUIWindowUsesBackdrop(const wxWindow *win)
+{
+    if ( !win )
+        return false;
+
+    // The mark is put on the top-level window when the backdrop is applied
+    // and inherited downwards by the first background erase of each child,
+    // so a window created later may not carry it yet: walk up, exactly like
+    // that erase does, and stop at the first non-child window (::GetParent()
+    // returns the OWNER of an owned top-level window, whose backdrop is not
+    // this window's).
+    for ( HWND hwnd = reinterpret_cast<HWND>(win->GetHandle()); hwnd; )
+    {
+        if ( ::GetPropW(hwnd, wxWinUIBackdropTransparentProp) )
+            return true;
+        if ( !(::GetWindowLongPtr(hwnd, GWL_STYLE) & WS_CHILD) )
+            break;
+        hwnd = ::GetParent(hwnd);
+    }
+
+    return false;
+}
+
 void wxWinUISetWindowCursor(wxWindow *win, const wxCursor& cursor)
 {
     if ( !win )
@@ -2774,8 +2834,11 @@ bool wxWinUIRefitDialogGrowOnly(wxWindow *top)
 namespace
 {
 
+unsigned gs_contentRelayouts = 0;
+
 void wxWinUIScheduleContentRelayout(wxWindow *top)
 {
+    ++gs_contentRelayouts;
     for ( const auto& weak : gs_winuiRelayoutTops )
     {
         if ( weak.get() == top )
@@ -2894,6 +2957,11 @@ void wxWinUIScheduleContentRelayout(wxWindow *top)
 
 } // anonymous namespace
 
+unsigned wxWinUIGetContentRelayoutCount()
+{
+    return gs_contentRelayouts;
+}
+
 void wxWinUIScheduleDialogRefitAfterShow(wxWindow *top)
 {
     wxDialog * const dialog = wxDynamicCast(top, wxDialog);
@@ -2929,13 +2997,25 @@ void wxWinUIControlHost::OnContentLoaded()
 
         // Clearing the cached best size is safe from inside the XAML callback;
         // the actual relayout is deferred (and coalesced globally).
+        //
+        // Only a size that really changed is worth one, though. Loaded fires
+        // again whenever an element re-enters the visual tree, which the
+        // coalesced slot pass does routinely, and relaying out the whole
+        // window resizes its children, which reports geometry mutations,
+        // which schedules the next pass: a loop that measured four full
+        // window layouts per second for as long as the mouse kept moving,
+        // and left a CAD canvas painting once every five seconds.
+        const wxSize sizeBeforeLoad = window->GetEffectiveMinSize();
         window->InvalidateBestSize();
-
-        wxWindow * const top = wxGetTopLevelParent(window);
-        if ( top )
-            wxWinUIScheduleContentRelayout(top);
-        else if ( wxWindow * const parent = window->GetParent() )
-            wxWinUIScheduleContentRelayout(parent);
+        if ( window->GetEffectiveMinSize() != sizeBeforeLoad ||
+             wxWinUIOptimisationDisabled("relayout") )
+        {
+            wxWindow * const top = wxGetTopLevelParent(window);
+            if ( top )
+                wxWinUIScheduleContentRelayout(top);
+            else if ( wxWindow * const parent = window->GetParent() )
+                wxWinUIScheduleContentRelayout(parent);
+        }
     }
 
     // The retained focus request can synchronously deliver application focus
@@ -3491,10 +3571,55 @@ static void wxWinUIApplyWindowBackdropPass(wxWindow *tlw)
     }
 }
 
+bool wxWinUIEraseIslandBackground(HWND island, HDC hdc)
+{
+    if ( !island || !hdc )
+        return false;
+
+    RECT rc;
+    if ( !::GetClientRect(island, &rc) ||
+         rc.right <= rc.left || rc.bottom <= rc.top )
+    {
+        return false;
+    }
+
+    HWND const tlwHwnd = ::GetAncestor(island, GA_ROOT);
+
+    // Under a DWM material the wx windows fill black and let Windows
+    // substitute the material for it: the island must do exactly the same or
+    // its (transparent) content shows the uninitialized redirection surface.
+    if ( tlwHwnd && ::GetPropW(tlwHwnd, wxWinUIBackdropTransparentProp) )
+    {
+        ::FillRect(hdc, &rc, (HBRUSH)::GetStockObject(BLACK_BRUSH));
+        return true;
+    }
+
+    wxWindow * const tlw =
+        tlwHwnd ? wxFindWinFromHandle((WXHWND)tlwHwnd) : nullptr;
+    wxColour colour = tlw ? tlw->GetBackgroundColour() : wxColour();
+    if ( !colour.IsOk() )
+        colour = wxWinUIBackgroundColour(wxWinUIGetShellThemePolicy());
+
+    const HBRUSH brush = ::CreateSolidBrush(
+        RGB(colour.Red(), colour.Green(), colour.Blue()));
+    if ( !brush )
+        return false;
+
+    ::FillRect(hdc, &rc, brush);
+    ::DeleteObject(brush);
+    return true;
+}
+
 void wxWinUIApplyWindowBackdrop(wxWindow *tlw)
 {
     wxCHECK_RET(wxIsMainThread(),
                 "WinUI shell appearance must be applied on the UI thread");
+
+    // Applying the policy to a window is also when a system theme change
+    // reaches us, so this is the natural place to keep wxSystemSettings in
+    // sync with what is about to be shown.
+    wxWinUISyncClassicAppearance();
+    wxWinUIEnsureCNumericLocale();
 
     if ( !tlw || wxPendingDelete.Member(tlw) )
         return;
@@ -4481,6 +4606,11 @@ void wxWinUISetAppTheme(wxWinUIAppTheme theme)
             break;
     }
 
+    // Publish the new appearance to wxSystemSettings before any window is
+    // updated: this also covers an application changing the theme while it has
+    // no top-level window yet.
+    wxWinUISyncClassicAppearance();
+
     wxWinUITopLevelHost::ApplyThemeToAll(gs_winuiElementTheme);
 
     // Refresh the backdrop/title-bar of all top-level windows. Every native
@@ -4512,5 +4642,24 @@ wxWinUIAppTheme wxWinUIGetAppTheme()
     return gs_winuiAppTheme;
 }
 
+// An application may well ask wxSystemSettings for the colours to use before
+// creating any window at all, so the appearance can't only be published when
+// the first top-level window applies the shell policy.
+class wxWinUIAppearanceModule : public wxModule
+{
+public:
+    bool OnInit() override
+    {
+        wxWinUISyncClassicAppearance();
+        return true;
+    }
+
+    void OnExit() override { }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxWinUIAppearanceModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxWinUIAppearanceModule, wxModule);
 
 #endif // wxUSE_WINUI3

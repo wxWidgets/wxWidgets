@@ -138,6 +138,41 @@ Runtime switches:
     the requested duration is clamped to `[0, 10000]` ms, and a duration of
     0 means the platform default (200 ms).
 
+## Application-visible behaviour
+
+- **wxAuiToolBar** is drawn by `wxAuiWinUIToolBarArt`, not by the uxtheme
+  `wxAuiMSWToolBarArt`. `wxAuiToolBar` has no native counterpart on any
+  platform: what it looks like is entirely decided by its art provider, and
+  the MSW one draws the Rebar/Toolbar theme parts, i.e. Windows 7 chrome
+  inside a WinUI window. The Fluent provider draws nothing in the rest state,
+  a rounded subtle layer on hover and press, an accent indicator (rather than
+  an accent fill, which would swallow the application's own icon colours) for
+  a toggled tool, hairline separators and a 32 DIP minimum touch target. All
+  its colours come from `wxSystemSettings` and are refreshed by
+  `UpdateColoursFromSystem()`. An application which installs its own art
+  provider keeps full control, and one which derives from
+  `wxAuiDefaultToolBarArt` inherits this one; `wxAuiMSWToolBarArt` remains
+  available by name for an application which explicitly wants the old look.
+
+- **System colours follow the WinUI theme.** The appearance is driven by the
+  WinUI element theme (`wxApp::SetAppearance()`, or the system setting), and
+  `wxSystemSettings::GetColour()` and `wxSystemAppearance::IsDark()` answer for
+  that theme. This matters for every application which paints surfaces of its
+  own from the system colours: without it, a dark window is filled with the
+  light system palette. The classic wxMSW dark mode support is kept in sync by
+  the port, so the wxMSW code it reuses (generic controls, wxAUI art, native
+  scrollbars...) is themed consistently as well. High Contrast keeps using the
+  system palette.
+- **`LC_NUMERIC` is kept as `"C"`** once the WinUI runtime is initialized. The
+  runtime formats the numbers of its own XAML markup (the geometries in its
+  control templates, for example) with the C locale of the process; with a
+  decimal comma the text it produces cannot be parsed back and the failure,
+  raised inside XAML's own layout pass, terminates the process. This is the
+  same constraint GTK+ has, and applies to `wxLocale`/`wxUILocale` as well as
+  to a direct `setlocale()` call. Locale-aware number *formatting* remains
+  available through `wxNumberFormatter` and `wxUILocale`, which do not depend
+  on `LC_NUMERIC`.
+
 ## Runtime deployment
 
 The executables produced by this build are **framework-dependent and

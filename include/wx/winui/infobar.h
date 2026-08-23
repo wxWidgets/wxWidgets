@@ -10,21 +10,15 @@
 #ifndef _WX_WINUI_INFOBAR_H_
 #define _WX_WINUI_INFOBAR_H_
 
+// wxInfoBarGeneric is built by this port too and stays visible to anything
+// including <wx/infobar.h>, exactly like under wxGTK: applications using the
+// generic class explicitly (deriving from it, typically) then build the same
+// way with every port. This is also where wxINFOBAR_CHECKBOX comes from.
+#include "wx/generic/infobar.h"
+
 #include "wx/vector.h"
 
 #include <memory>
-
-// Unlike wxGTK, this port does not build wxInfoBarGeneric (the generic
-// implementation is deliberately excluded from the build, as for the other
-// natively implemented controls), so the common style flag is defined here
-// with the same value as in the generic header instead of including it; the
-// guard keeps a single definition if both headers ever end up in one TU.
-#ifndef _WX_GENERIC_INFOBAR_H_
-enum
-{
-    wxINFOBAR_CHECKBOX = 0x0010
-};
-#endif // !_WX_GENERIC_INFOBAR_H_
 
 class wxWinUIInfoBarImpl;
 using wxWinUIInfoBarContentWriteHookForTesting = void (*)(void *);

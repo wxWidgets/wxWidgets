@@ -27,6 +27,21 @@ bool IsActive();
 // background and foreground colours.
 WXDLLIMPEXP_CORE
 bool HasChanged();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+// The appearance of the WinUI port is driven by the WinUI element theme and not
+// by wxApp::MSWEnableDarkMode(). Applications still use wxSystemSettings to
+// paint the surfaces they draw themselves, and the wxMSW code reused by the
+// port uses it too, so the classic dark mode support has to follow the theme
+// which is actually on screen: otherwise a dark window ends up filled with
+// light system colours.
+//
+// This is called by the port whenever it resolves its shell theme policy and
+// does nothing if the requested mode is already in effect.
+WXDLLIMPEXP_CORE
+bool SyncWithWinUITheme(bool dark);
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 // Enable or disable dark mode for the given TLW if appropriate.
 void ConfigureTLW(HWND hwnd);

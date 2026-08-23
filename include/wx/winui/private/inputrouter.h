@@ -62,6 +62,13 @@ enum class wxWinUINativeArea
     NonClient
 };
 
+enum class wxWinUIHitResolution
+{
+    Miss,
+    Hit,
+    Unstable
+};
+
 class WXDLLIMPEXP_CORE wxWinUINativeHit
 {
 public:
@@ -87,6 +94,15 @@ public:
 
 private:
     friend class wxWinUINativeResolverImpl;
+    // Fills a hit reused from a previous resolution; see the function.
+    friend WXDLLIMPEXP_CORE wxWinUIHitResolution
+    wxWinUIResolveNativeHitReusing(wxWindow *tlw,
+                                   const POINT& screenPoint,
+                                   WXHWND bridge,
+                                   WXHWND inner,
+                                   const wxWinUINativeHit& previous,
+                                   bool layoutUnchanged,
+                                   wxWinUINativeHit *hit);
 
     wxWinUINativeTarget m_target;
     LRESULT m_hitTest = HTNOWHERE;
@@ -99,12 +115,6 @@ private:
     unsigned long long m_innerGeneration = 0;
 };
 
-enum class wxWinUIHitResolution
-{
-    Miss,
-    Hit,
-    Unstable
-};
 
 struct WXDLLIMPEXP_CORE wxWinUIInputRouterCounters
 {
@@ -150,12 +160,36 @@ wxWinUIGetNativeTarget(wxWindow *tlw,
 // the exact generation-safe target, client/non-client area and HT* zone to be
 // unchanged. This is the only safe way to continue dispatch after application
 // code such as WM_SETCURSOR/WM_MOUSELEAVE, and is reusable by the DropBroker.
+// Resolves the window under the pointer, reusing a previous resolution when
+// the caller can guarantee that no native geometry mutation was reported since
+// it was made.  Reuse still proves everything that could differ at the new
+// position -- the target still owns the point, nothing of its own is above it,
+// and its WM_NCHITTEST zone -- but it does so with a handful of queries on the
+// windows concerned instead of walking and fingerprinting the whole tree,
+// which is what a full resolution costs on every single mouse movement.
+WXDLLIMPEXP_CORE wxWinUIHitResolution
+wxWinUIResolveNativeHitReusing(wxWindow *tlw,
+                               const POINT& screenPoint,
+                               WXHWND bridge,
+                               WXHWND inner,
+                               const wxWinUINativeHit& previous,
+                               bool layoutUnchanged,
+                               wxWinUINativeHit *hit);
+
+// layoutUnchanged tells this function that no native geometry mutation was
+// reported between the original resolution and this call.  A pointer moves
+// hundreds of times per second and each move needs this proof, so with that
+// guarantee the expensive tree walk is replaced by re-checking the exact
+// target: its generations, its visibility and that the point is still
+// inside it.  Callers that cannot make the guarantee pass false and get
+// the full re-resolution.
 WXDLLIMPEXP_CORE bool
 wxWinUIRefreshNativeHit(wxWindow *tlw,
                         const wxWinUINativeHit& expected,
                         WXHWND bridge,
                         WXHWND inner,
-                        wxWinUINativeHit *refreshed);
+                        wxWinUINativeHit *refreshed,
+                        bool layoutUnchanged = false);
 
 WXDLLIMPEXP_CORE wxWinUIInputRouterCounters
 wxWinUIGetInputRouterCounters();

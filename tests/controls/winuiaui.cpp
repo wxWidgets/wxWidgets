@@ -23,6 +23,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/aui/auibar.h"
+#include "wx/aui/barartwinui.h"
 #include "wx/aui/auibook.h"
 #include "wx/aui/floatpane.h"
 #include "wx/aui/framemanager.h"
@@ -30,6 +31,7 @@
     #include "wx/aui/tabmdi.h"
 #endif
 #include "wx/dcclient.h"
+#include "wx/dcmemory.h"
 #if wxUSE_MENUS
     #include "wx/menu.h"
     #include "wx/menuitem.h"
@@ -1861,5 +1863,90 @@ TEST_CASE("WinUI AUI MDI exercises the stable GDI model lifecycle",
     before.CheckRestored(false);
 }
 #endif // wxUSE_MDI
+
+// ----------------------------------------------------------------------------
+// The Fluent tool bar art provider
+// ----------------------------------------------------------------------------
+
+TEST_CASE("WinUI AUI toolbar uses the Fluent art provider",
+          "[aui][winui][toolbar][art][WinUIAUI]")
+{
+    REQUIRE(DrainToQuiescence());
+    const RuntimeSnapshot before = RuntimeSnapshot::Capture();
+
+    ToolBarFixture fixture;
+    REQUIRE(fixture.Create(420));
+    wxAuiToolBar * const toolbar = fixture.GetToolBar();
+    REQUIRE(toolbar);
+
+    // A tool bar under this port must not fall back to the uxtheme drawing of
+    // wxAuiMSWToolBarArt: that is Windows 7 chrome inside a WinUI window.
+    wxAuiToolBarArt * const art = toolbar->GetArtProvider();
+    REQUIRE(art);
+    CHECK(dynamic_cast<wxAuiWinUIToolBarArt *>(art) != nullptr);
+
+    // Cloning is how a tool bar hands its art to a floating pane, so the clone
+    // has to stay Fluent too.
+    std::unique_ptr<wxAuiToolBarArt> clone(art->Clone());
+    REQUIRE(clone);
+    CHECK(dynamic_cast<wxAuiWinUIToolBarArt *>(clone.get()) != nullptr);
+
+    SECTION("a tool is at least a touch target")
+    {
+        wxAuiToolBarItem item;
+        item.SetKind(wxITEM_NORMAL);
+        item.SetLabel("Tool");
+
+        wxClientDC dc(toolbar);
+        const wxSize size = art->GetToolSize(dc, toolbar, item);
+        const wxSize minimum = toolbar->FromDIP(wxSize(32, 32));
+        CHECK(size.x >= minimum.x);
+        CHECK(size.y >= minimum.y);
+    }
+
+    SECTION("the rest state paints nothing over the bar")
+    {
+        // The defining property of a command bar: a tool which is neither
+        // hovered nor pressed nor checked leaves the bar showing through,
+        // while a hovered one does not.
+        const wxSize size(60, 40);
+        wxBitmap canvas(size);
+        wxMemoryDC dc(canvas);
+        dc.SetBackground(*wxRED);
+        dc.Clear();
+
+        wxAuiToolBarItem item;
+        item.SetKind(wxITEM_NORMAL);
+
+        const wxRect rect(0, 0, size.x, size.y);
+
+        // Read back through a device context rather than raw access: the
+        // bitmap depth here is whatever the display uses, which the raw
+        // accessors are picky about, and one pixel is all this needs.
+        const auto sampleLeftEdge = [&size](wxBitmap& bitmap)
+        {
+            wxMemoryDC reader(bitmap);
+            wxColour sampled;
+            reader.GetPixel(3, size.y / 2, &sampled);
+            reader.SelectObject(wxNullBitmap);
+            return sampled;
+        };
+
+        art->DrawButton(dc, toolbar, item, rect);
+        dc.SelectObject(wxNullBitmap);
+        CHECK(sampleLeftEdge(canvas) == *wxRED);
+
+        {
+            wxMemoryDC hoverDC(canvas);
+            item.SetState(wxAUI_BUTTON_STATE_HOVER);
+            art->DrawButton(hoverDC, toolbar, item, rect);
+            hoverDC.SelectObject(wxNullBitmap);
+        }
+        CHECK(sampleLeftEdge(canvas) != *wxRED);
+    }
+
+    REQUIRE(fixture.DestroyAndWait(before));
+    before.CheckRestored(false);
+}
 
 #endif // __WXWINUI__ && wxUSE_WINUI3 && wxUSE_AUI

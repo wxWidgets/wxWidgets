@@ -115,12 +115,49 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 #endif
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+namespace
+{
+
+// See wxKeepCNumericLocale() below.
+bool gs_keepCNumericLocale = false;
+
+} // anonymous namespace
+
+void wxKeepCNumericLocale(bool keep)
+{
+    gs_keepCNumericLocale = keep;
+    if ( keep )
+        setlocale(LC_NUMERIC, "C");
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 char* wxSetlocale(int category, const char *locale)
 {
     char *rv = setlocale(category, locale);
     if ( locale != nullptr /* setting locale, not querying */ &&
          rv /* call was successful */ )
     {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // The WinUI runtime builds XAML markup fragments (the path data of the
+        // geometries in its own control templates, for example) by formatting
+        // numbers with the C locale of the process. With a decimal comma the
+        // resulting text doesn't parse, and because this happens inside XAML's
+        // own layout pass the failure is fatal: the process is terminated with
+        // a stowed exception before anything can catch it.
+        //
+        // So once the WinUI runtime is in use LC_NUMERIC has to stay "C", in
+        // the same way GTK+ requires it and wxGTK prevents GTK+ from changing
+        // it. Applications not using the runtime are not affected.
+        if ( gs_keepCNumericLocale &&
+             (category == LC_ALL || category == LC_NUMERIC) )
+        {
+            setlocale(LC_NUMERIC, "C");
+        }
+#endif // __WXWINUI__
+
         wxUpdateLocaleIsUtf8();
     }
     return rv;

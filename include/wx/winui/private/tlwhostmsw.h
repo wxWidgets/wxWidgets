@@ -297,6 +297,16 @@ WXDLLIMPEXP_CORE void
 wxWinUITLWHostNotifyNativeLayout(wxWindow *window,
                                  bool zOrderMayHaveChanged);
 
+// Bumped whenever application code actually answers wxEVT_SET_CURSOR.  The
+// port mirrors the native cursor by sending WM_SETCURSOR to the window under
+// the pointer on every single movement, and that message walks the whole
+// parent chain.  When nothing in that chain answers the event, the cursor is a
+// function of the window and of the wx cursor policy only -- not of the
+// position -- so the mirror can be reused instead of re-sent.  A window that
+// does answer the event keeps getting it for every movement.
+WXDLLIMPEXP_CORE void wxWinUINotifySetCursorEventHandled();
+WXDLLIMPEXP_CORE unsigned long long wxWinUIGetSetCursorEventGeneration();
+
 // Slot-state mutation with no geometry event of its own (tooltip set,
 // WM_SETTEXT feeding the UIA name): re-sync that one window's slot.
 WXDLLIMPEXP_CORE void wxWinUITLWHostNotifySlotState(wxWindow *window);

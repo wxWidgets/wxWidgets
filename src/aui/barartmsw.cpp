@@ -18,6 +18,11 @@
     #include "wx/dc.h"
 #endif
 
+// Its own header, not just wx/aui/auibar.h: the latter only pulls this
+// class in for the builds where it is the default tool bar art, and the
+// class is built and usable by name in the others too.
+#include "wx/aui/barartmsw.h"
+
 #include "wx/aui/auibar.h"
 #include "wx/aui/framemanager.h"
 #include "wx/msw/uxtheme.h"

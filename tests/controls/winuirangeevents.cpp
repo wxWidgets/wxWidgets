@@ -140,16 +140,31 @@ void CheckWideSliderPrimaryLayout(
     checkInsideRoot(visual.minimumLabel);
     checkInsideRoot(visual.maximumLabel);
 
-    const double minimumCentre = visual.vertical
-        ? visual.minimumLabel.y + visual.minimumLabel.height / 2.0
-        : visual.minimumLabel.x + visual.minimumLabel.width / 2.0;
-    const double maximumCentre = visual.vertical
-        ? visual.maximumLabel.y + visual.maximumLabel.height / 2.0
-        : visual.maximumLabel.x + visual.maximumLabel.width / 2.0;
-    CHECK(minimumCentre ==
-          Approx(SliderAxisPosition(visual, 0.0)).margin(1.0));
-    CHECK(maximumCentre ==
-          Approx(SliderAxisPosition(visual, 1.0)).margin(1.0));
+    // As on wxMSW, the endpoint labels are laid out at the extremities of the
+    // control -- each on its own side of the axis -- and the slider itself is
+    // shortened by their extent, so that they are never drawn over the track.
+    const double minimumStart = visual.vertical
+        ? visual.minimumLabel.y : visual.minimumLabel.x;
+    const double minimumExtent = visual.vertical
+        ? visual.minimumLabel.height : visual.minimumLabel.width;
+    const double maximumStart = visual.vertical
+        ? visual.maximumLabel.y : visual.maximumLabel.x;
+    const double maximumExtent = visual.vertical
+        ? visual.maximumLabel.height : visual.maximumLabel.width;
+    const double rootExtent = visual.vertical
+        ? visual.rootHeight : visual.rootWidth;
+
+    const double startLabelEnd = visual.axisReversed
+        ? maximumStart + maximumExtent : minimumStart + minimumExtent;
+    const double endLabelStart = visual.axisReversed
+        ? minimumStart : maximumStart;
+    CHECK((visual.axisReversed ? maximumStart : minimumStart) ==
+          Approx(0.0).margin(1.0));
+    CHECK((visual.axisReversed ? minimumStart + minimumExtent
+                               : maximumStart + maximumExtent) ==
+          Approx(rootExtent).margin(1.0));
+    CHECK(visual.axisStart >= startLabelEnd - 0.25);
+    CHECK(visual.axisEnd <= endLabelStart + 0.25);
     CHECK(visual.renderedTickAxisMinimum ==
           Approx(visual.axisStart).margin(1.0));
     CHECK(visual.renderedTickAxisMaximum ==
@@ -424,9 +439,10 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
           Approx(SliderAxisPosition(visual, 0.2)).margin(1.0));
     CHECK(visual.selection.x + visual.selection.width ==
           Approx(SliderAxisPosition(visual, 0.8)).margin(1.0));
-    // Min/max labels straddle the primary-axis endpoints as on wxMSW,
-    // while the current value is on the side opposite the default
-    // BOTTOM/RIGHT tick preference (top for a horizontal slider).
+    // Min/max labels are laid out at the extremities of the control and
+    // centred on the track band as on wxMSW, while the current value is on
+    // the side opposite the default BOTTOM/RIGHT tick preference (top for a
+    // horizontal slider).
     CHECK(visual.minimumLabel.y + visual.minimumLabel.height / 2.0 ==
           Approx(visual.axisCross).margin(1.0));
     CHECK(visual.maximumLabel.y + visual.maximumLabel.height / 2.0 ==
@@ -437,10 +453,12 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
           visual.rootHeight + 0.25);
     CHECK(visual.maximumLabel.y + visual.maximumLabel.height <=
           visual.rootHeight + 0.25);
-    CHECK(visual.minimumLabel.x + visual.minimumLabel.width / 2.0 ==
-          Approx(visual.axisStart).margin(1.0));
-    CHECK(visual.maximumLabel.x + visual.maximumLabel.width / 2.0 ==
-          Approx(visual.axisEnd).margin(1.0));
+    CHECK(visual.minimumLabel.x == Approx(0.0).margin(1.0));
+    CHECK(visual.maximumLabel.x + visual.maximumLabel.width ==
+          Approx(visual.rootWidth).margin(1.0));
+    CHECK(visual.axisStart >=
+          visual.minimumLabel.x + visual.minimumLabel.width - 0.25);
+    CHECK(visual.axisEnd <= visual.maximumLabel.x + 0.25);
     // All three rectangles are observations transformed from the realized
     // XAML subtree into the root, not cached Canvas coordinates. The native
     // peer is cross-centred without authoring a cross-axis Margin, and the
@@ -478,10 +496,11 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CHECK(visual.axisReversed);
     CHECK(visual.minimumLabel.x > visual.maximumLabel.x);
-    CHECK(visual.minimumLabel.x + visual.minimumLabel.width / 2.0 ==
-          Approx(SliderAxisPosition(visual, 0.0)).margin(1.0));
-    CHECK(visual.maximumLabel.x + visual.maximumLabel.width / 2.0 ==
-          Approx(SliderAxisPosition(visual, 1.0)).margin(1.0));
+    // Right to left: the axis starts on the right, so the minimum label is the
+    // one flush with the right edge and the maximum one with the left edge.
+    CHECK(visual.maximumLabel.x == Approx(0.0).margin(1.0));
+    CHECK(visual.minimumLabel.x + visual.minimumLabel.width ==
+          Approx(visual.rootWidth).margin(1.0));
 
     // The RTL midpoint used to feed transformed Track coordinates back into
     // Slider.Margin and alternate forever inside LayoutUpdated. Prove that a
@@ -598,10 +617,11 @@ TEST_CASE("wxWinUI Slider labels oppose ticks and track endpoint direction",
     REQUIRE(WaitForSliderVisualState(horizontal, &visual));
     CHECK(visual.axisReversed);
     CHECK(visual.minimumLabel.x > visual.maximumLabel.x);
-    CHECK(visual.minimumLabel.x + visual.minimumLabel.width / 2.0 ==
-          Approx(SliderAxisPosition(visual, 0.0)).margin(1.0));
-    CHECK(visual.maximumLabel.x + visual.maximumLabel.width / 2.0 ==
-          Approx(SliderAxisPosition(visual, 1.0)).margin(1.0));
+    // Right to left: the axis starts on the right, so the minimum label is the
+    // one flush with the right edge and the maximum one with the left edge.
+    CHECK(visual.maximumLabel.x == Approx(0.0).margin(1.0));
+    CHECK(visual.minimumLabel.x + visual.minimumLabel.width ==
+          Approx(visual.rootWidth).margin(1.0));
     CHECK(visual.nativeThumbAxis ==
           Approx(SliderAxisPosition(visual, 0.4)).margin(1.0));
 

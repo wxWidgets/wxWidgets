@@ -995,7 +995,15 @@ public:
     // Projection-free MSW notifications enter here after a native geometry,
     // scrollbar or sibling-order mutation. This never creates a host; the
     // caller has already resolved an existing one.
-    void NotifyNativeLayoutMutation(bool zOrderMayHaveChanged);
+    void NotifyNativeLayoutMutation(bool zOrderMayHaveChanged,
+                                    wxWindow *mutated = nullptr);
+    // Marks every slot living under this window, and returns false when
+    // the window is not an ancestor (nor the owner) of any slot, so the
+    // caller can fall back to a full pass.
+    bool MarkSlotsUnderAncestor(wxWindow *ancestor);
+    // Lets the window under the pointer paint what the routed move
+    // invalidated; see the implementation.
+    void LetPointerTargetPaint(WXHWND target);
 
     // End-of-freeze notification (via wxWinUITLWHostNotifyThaw): run the
     // single catch-up flush the freeze held back; no-op unless one is owed.
@@ -1834,6 +1842,42 @@ private:
     // callback is still on the stack. Only a complete pass for the exact
     // snapshotted generation advances m_structureAppliedGeneration.
     unsigned long long m_structureGeneration = 1;
+    // The structure generation the pointer sample being routed resolved
+    // its native hit at. Equal generations mean no native geometry
+    // mutation was reported since, which lets the pre-delivery proof
+    // re-check the one target instead of walking the tree again.
+    unsigned long long m_hitLayoutGeneration = 0;
+    // The last native hit resolved for a pointer sample, kept so that the
+    // next sample can reuse it when nothing moved in between: a pointer
+    // reports hundreds of times per second and almost always stays over
+    // the window it was already over.
+    wxWinUINativeHit m_lastResolvedHit;
+    unsigned long long m_lastResolvedLayoutGeneration = 0;
+
+    // Whether the cursor of the mirrored target depends on where the pointer
+    // is, i.e. whether application code answered wxEVT_SET_CURSOR while it was
+    // established, and the wxEVT_SET_CURSOR generation it was established at.
+    // A target that does not answer keeps the same cursor for every position,
+    // so the WM_SETCURSOR round trip -- which walks the whole parent chain on
+    // every single mouse movement -- can be skipped entirely.
+    bool m_cursorPositionSensitive = true;
+    unsigned long long m_cursorSetCursorGeneration = 0;
+
+    // A synthetic WM_MOUSEMOVE is sent, not posted, so it bypasses the queue
+    // arbitration that normally lets WM_PAINT through once input stops. A
+    // window that invalidates itself on every movement would then never be
+    // painted while the pointer keeps moving. This is the last moment a
+    // forced update ran, used to bound how often one is performed.
+    unsigned long m_lastPointerPaintTick = 0;
+
+    // USER32 coalesces WM_MOUSEMOVE in the queue: an application slower than
+    // the mouse simply sees fewer, newer positions, and keeps the time it
+    // needs to paint, run its timers and go idle. Routed pointer input is
+    // delivered synchronously and bypasses that, so an application is forced
+    // to process every single sample and never becomes idle while the hand
+    // moves. This is when the last move was routed, used to reproduce the
+    // coalescing the port took away.
+    unsigned long long m_lastRoutedMoveTimestamp = 0;
     unsigned long long m_structureAppliedGeneration = 0;
     bool m_flushScheduled = false;
     // Per-host companion to the process-wide diagnostic counter above.

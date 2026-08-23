@@ -107,6 +107,11 @@ public:
         return *ms_settings;
     }
 
+    static bool HasSettings()
+    {
+        return ms_settings != nullptr;
+    }
+
     static DwmSetWindowAttribute_t GetDwmSetWindowAttribute()
     {
         if ( ms_pfnDwmSetWindowAttribute == (DwmSetWindowAttribute_t)-1 )
@@ -536,6 +541,35 @@ bool HasChanged()
     return gs_hasChanged;
 }
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+bool SyncWithWinUITheme(bool dark)
+{
+    // The mode is forced in both directions: the WinUI theme, and not the
+    // system-wide setting, is what the windows on screen actually use, and an
+    // application using an explicitly light theme under a dark system must not
+    // be given dark colours (nor vice versa).
+    const PreferredAppMode mode = dark ? AppMode_ForceDark : AppMode_ForceLight;
+    if ( mode == gs_appMode && wxDarkModeModule::HasSettings() )
+        return true;
+
+    if ( !wxMSWImpl::InitDarkMode() )
+        return false;
+
+    wxMSWImpl::SetPreferredAppMode(mode);
+    gs_appMode = mode;
+
+    // The settings are used by GetColour() and friends as soon as the mode is
+    // active, so they must exist before returning. Any settings previously
+    // installed by the application are preserved.
+    if ( !wxDarkModeModule::HasSettings() )
+        wxDarkModeModule::SetSettings(new wxDarkModeSettings());
+
+    return true;
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
+
 void ConfigureTLW(HWND hwnd)
 {
     BOOL useDarkMode = wxMSWImpl::ShouldUseDarkMode();
@@ -954,6 +988,15 @@ bool HasChanged()
 {
     return false;
 }
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+
+bool SyncWithWinUITheme(bool WXUNUSED(dark))
+{
+    return false;
+}
+
+#endif // __WXWINUI__ && wxUSE_WINUI3
 
 void ConfigureTLW(HWND WXUNUSED(hwnd))
 {

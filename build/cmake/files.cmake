@@ -968,9 +968,11 @@ set(GUI_CMN_HDR
     wx/generic/dcpsg.h
     wx/generic/dirctrlg.h
     wx/generic/dragimgg.h
+    wx/generic/fdrepdlg.h
     wx/generic/filectrlg.h
     wx/generic/headerctrlg.h
     wx/generic/infobar.h
+    wx/generic/listctrl.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
     wx/generic/numdlgg.h
@@ -1042,6 +1044,7 @@ set(GUI_CMN_HDR
     wx/window.h
     wx/windowid.h
     wx/windowptr.h
+    wx/private/windowlifetime.h
     wx/withimages.h
     wx/wrapsizer.h
     wx/wupdlock.h
@@ -1842,6 +1845,8 @@ set(MSW_HDR
     wx/winui/hyperlink.h
     wx/winui/infobar.h
     wx/winui/listbox.h
+    wx/winui/private/itemmodel.h
+    wx/winui/private/tlwhostmsw.h
     wx/winui/msgdlg.h
     wx/winui/notebook.h
     wx/winui/radiobox.h
@@ -2825,6 +2830,18 @@ set(AUI_MSW_SRC
 set(AUI_MSW_HDR
     wx/aui/tabartmsw.h
     wx/aui/barartmsw.h
+)
+
+set(AUI_WINUI_SRC
+    src/aui/tabartmsw.cpp
+    src/aui/barartmsw.cpp
+    src/aui/barartwinui.cpp
+)
+
+set(AUI_WINUI_HDR
+    wx/aui/tabartmsw.h
+    wx/aui/barartmsw.h
+    wx/aui/barartwinui.h
 )
 
 set(AUI_GTK_SRC

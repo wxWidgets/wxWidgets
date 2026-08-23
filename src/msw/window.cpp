@@ -1480,6 +1480,11 @@ void wxWindowMSW::SetScrollbar(int orient,
     // no dependable wx geometry event for SetScrollInfo(), so nudge an
     // existing host explicitly (the lookup is projection-free and never
     // creates one).
+    //
+    // This is deliberately unconditional: comparing the SCROLLINFO before and
+    // after only sees the range, page and position, and a call which changes
+    // none of them can still make the bar appear or disappear -- and with it
+    // the region through which the island is visible at all.
     wxWinUITLWHostNotifyNativeLayout(
         static_cast<wxWindow *>(this), false);
 #endif
@@ -7768,6 +7773,12 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
         event.SetEventObject(this);
 
         bool processedEvtSetCursor = HandleWindowEvent(event);
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+        // Tell the port that the cursor for this window depends on where the
+        // pointer is, so that it keeps asking for every movement.
+        if ( processedEvtSetCursor )
+            wxWinUINotifySetCursorEventHandled();
+#endif
         if ( processedEvtSetCursor && event.HasCursor() )
         {
             hcursor = GetHcursorOf(event.GetCursor());

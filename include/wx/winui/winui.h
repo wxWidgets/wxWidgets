@@ -117,6 +117,13 @@ WXDLLIMPEXP_CORE bool wxWinUIGetRadioBoxBorder();
 // coalesce, and an already primed window is a no-op until DWM rebuilds it.
 WXDLLIMPEXP_CORE void wxWinUIPrimeBackdrop(WXHWND hwnd);
 
+// True when this window is composed with the DWM system backdrop, i.e.
+// when its background has to be painted black for the Mica material to
+// show through instead of being covered by an opaque surface. Anything
+// drawing a background of its own -- a tool bar art provider, a custom
+// panel -- has to ask this before filling.
+WXDLLIMPEXP_CORE bool wxWinUIWindowUsesBackdrop(const wxWindow *win);
+
 // Build (or rebuild) a WinUI MenuBar hosted across the top of a frame from the
 // given wxMenuBar, replacing the native HMENU.  Pass the previously returned
 // window as "existing" to replace it; returns the new menu-bar window (or null

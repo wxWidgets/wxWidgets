@@ -3148,9 +3148,18 @@ void wxChoice::DoClear()
         m_winui->peerItemsValid = false;
         try
         {
+            // Drop the selection first: removing the item a ComboBox or a
+            // ListBox is currently showing makes the control reselect during
+            // the mutation, and that reselection fails with E_INVALIDARG once
+            // the collection no longer holds the index it computed. Clearing
+            // the whole collection at once then has nothing left to fight
+            // with -- and this is a clear, so the peer selection is going away
+            // in any case.
+            if ( wxWinUIChoiceGetPeerSelection(m_winui.get()) != wxNOT_FOUND )
+                wxWinUIChoiceSetPeerSelection(m_winui.get(), wxNOT_FOUND);
+
             const auto items = wxWinUIChoiceGetPeerItems(m_winui.get());
-            while ( items.Size() )
-                items.RemoveAtEnd();
+            items.Clear();
             m_winui->peerItemIds.clear();
             m_winui->peerItemsValid = true;
         }
