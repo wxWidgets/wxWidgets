@@ -60,6 +60,17 @@ endif()
 
 if(WXWINUI)
     set(wxTOOLKIT_DEFINITIONS __WXWINUI__ __WXMSW__)
+
+    # C++/WinRT reaches <experimental/coroutine> for its coroutine support,
+    # which the MSVC standard library of Visual Studio 2026 refuses to compile
+    # without this: it is a static assertion, not a warning, so the build stops
+    # in the generated projection headers before any of our code is seen.
+    # C++/WinRT is a build requirement of this port, so the port carries the
+    # acknowledgement rather than asking everyone who builds it to pass a flag.
+    if(MSVC)
+        list(APPEND wxTOOLKIT_DEFINITIONS
+             _SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+    endif()
 else()
     set(wxTOOLKIT_DEFINITIONS __WX${wxBUILD_TOOLKIT_UPPER}__)
 endif()
