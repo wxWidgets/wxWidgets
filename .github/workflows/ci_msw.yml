@@ -182,3 +182,80 @@ jobs:
         working-directory: tests
         run: |
             .\vc*msw*\test_gui.exe
+
+  winui-cmake:
+    runs-on: windows-2022
+    name: wxWinUI CMake Release x64 ${{ matrix.linkage }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Compile all tests in the primary shared configuration. The static
+          # configuration still links the important samples, which exercises
+          # the static library interfaces without compiling the test suite a
+          # second time.
+          - linkage: shared
+            shared: 'ON'
+            tests: ALL
+          - linkage: static
+            shared: 'OFF'
+            tests: 'OFF'
+
+    env:
+      WXWINUI_NUGET_CACHE: ${{ github.workspace }}\.wxwinui-nuget
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: 'recursive'
+
+      # Cache just the validated archives. CMake verifies their pinned hashes
+      # and recreates the extracted package trees transactionally on each run.
+      - name: Cache Windows App SDK packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.WXWINUI_NUGET_CACHE }}\*.nupkg
+          key: wxwinui-nupkg-v1-${{ runner.os }}-x64-${{ hashFiles('build/cmake/winui.cmake') }}
+          restore-keys: |
+            wxwinui-nupkg-v1-${{ runner.os }}-x64-
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Configure wxWinUI
+        run: |
+          cmake -S . -B build-winui-${{ matrix.linkage }} `
+            -G "Visual Studio 17 2022" -A x64 `
+            -DwxBUILD_TOOLKIT=winui `
+            -DwxUSE_WINUI3=ON `
+            -DwxBUILD_SHARED=${{ matrix.shared }} `
+            -DwxBUILD_TESTS=${{ matrix.tests }} `
+            -DwxBUILD_SAMPLES=SOME `
+            "-DwxWINUI3_PACKAGE_ROOT=$env:WXWINUI_NUGET_CACHE"
+
+      - name: Build wxWinUI
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          cmake --build $buildDir --config Release --parallel 4 -- `
+            /noLogo /nr:false /fl `
+            "/flp:logfile=$buildDir\build.log;verbosity=normal" `
+            "/bl:$buildDir\build.binlog"
+
+      # Hosted runners don't guarantee that the matching Windows App Runtime
+      # framework package is registered, so this job compiles the runtime and
+      # GUI probes but deliberately doesn't execute them.
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wxwinui-${{ matrix.linkage }}-diagnostics
+          path: |
+            build-winui-${{ matrix.linkage }}/CMakeCache.txt
+            build-winui-${{ matrix.linkage }}/CMakeFiles/CMakeConfigureLog.yaml
+            build-winui-${{ matrix.linkage }}/CMakeFiles/CMakeError.log
+            build-winui-${{ matrix.linkage }}/build.log
+            build-winui-${{ matrix.linkage }}/build.binlog
+          if-no-files-found: ignore
+          retention-days: 7
