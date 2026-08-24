@@ -28,6 +28,7 @@
 #include <memory>
 
 // These are all Scintilla headers
+wxGCC_WARNING_SUPPRESS(double-promotion)
 #define INCLUDE_DEPRECATED_FEATURES
 #include "Platform.h"
 
@@ -64,6 +65,7 @@
 
 #include "AutoComplete.h"
 #include "ScintillaBase.h"
+wxGCC_WARNING_RESTORE(double-promotion)
 
 #include "wx/dnd.h"
 #include "wx/event.h"

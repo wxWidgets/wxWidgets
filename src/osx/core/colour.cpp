@@ -263,5 +263,5 @@ void wxColourImpl::InitRGBA(ChannelType r, ChannelType g, ChannelType b, Channel
 void wxColourImpl::InitRGBA(float r, float g, float b, float a)
 {
     UnRef();
-    m_refData = new wxCGColorRefData(r,g,b,a);
+    m_refData = new wxCGColorRefData(CGFloat(r), CGFloat(g), CGFloat(b), CGFloat(a));
 }

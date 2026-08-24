@@ -2139,8 +2139,10 @@ wxAffineMatrix2D wxMSWDCImpl::GetTransformMatrix() const
         return transform;
     }
 
-    wxMatrix2D m(xform.eM11, xform.eM12, xform.eM21, xform.eM22);
-    wxPoint2DDouble p(xform.eDx, xform.eDy);
+    wxMatrix2D m(
+        double(xform.eM11), double(xform.eM12),
+        double(xform.eM21), double(xform.eM22));
+    wxPoint2DDouble p(double(xform.eDx), double(xform.eDy));
     transform.Set(m, p);
 
     return transform;
