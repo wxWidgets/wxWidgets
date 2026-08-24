@@ -129,7 +129,7 @@ class WXDLLIMPEXP_AUI wxAuiToolBarItem
 
 public:
     wxAuiToolBarItem() = default;
-
+    wxAuiToolBarItem(const wxAuiToolBarItem&) = default;
     wxAuiToolBarItem& operator=(const wxAuiToolBarItem& c) = default;
 
     void Assign(const wxAuiToolBarItem& c)
