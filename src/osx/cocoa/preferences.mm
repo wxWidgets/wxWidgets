@@ -91,6 +91,7 @@ public:
         m_toolbar->Bind(wxEVT_TOOL,
                         &wxCocoaPrefsWindow::OnPageChanged, this);
         Bind(wxEVT_CLOSE_WINDOW, &wxCocoaPrefsWindow::OnClose, this);
+        Bind(wxEVT_ACTIVATE, &wxCocoaPrefsWindow::OnActivate, this);
     }
 
     void AddPage(wxPreferencesPage *page)
@@ -122,6 +123,13 @@ public:
             wxCHECK_MSG( first, false, "no preferences panels" );
             OnSelectPageForTool(first);
             m_toolbar->OSXSelectTool(first->GetId());
+        }
+        else if ( show && m_visiblePage )
+        {
+            // The window is being shown again after having been hidden: the
+            // settings may have been changed elsewhere in the application in
+            // the meantime, so refresh the visible page (see #22165).
+            RefreshVisiblePage();
         }
 
         return wxFrame::Show(show);
@@ -228,6 +236,29 @@ private:
         //
         //       We'll need to add wxPreferencesPage::IsResizable() virtual
         //       method to implement this.
+    }
+
+    // Re-fill the currently visible page with the (possibly updated) data
+    // and adapt its, and hence our, size to the updated contents.
+    void RefreshVisiblePage()
+    {
+        m_visiblePage->InitDialog();
+        FitPageWindow(m_visiblePage);
+        SetClientSize(m_visiblePage->GetSize());
+        m_visiblePage->Refresh();
+    }
+
+    void OnActivate(wxActivateEvent& event)
+    {
+        event.Skip();
+
+        // Refresh the page when the already shown window comes back to the
+        // foreground: the settings may have been changed from the other
+        // application windows while it was in the background (see #22165).
+        // Note that this also covers the window being re-shown, as showing
+        // it activates it.
+        if ( event.GetActive() && m_visiblePage && IsShownOnScreen() )
+            RefreshVisiblePage();
     }
 
     void OnPageChanged(wxCommandEvent& event)
