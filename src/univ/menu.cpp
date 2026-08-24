@@ -928,7 +928,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
                 break;
             }
 
-            // fall through
+            wxFALLTHROUGH;
 
         case WXK_ESCAPE:
             // close just this menu

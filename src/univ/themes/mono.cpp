@@ -609,7 +609,7 @@ wxColour wxMonoColourScheme::Get(wxMonoColourScheme::StdColour col) const
         case MAX:
         default:
             wxFAIL_MSG(wxT("invalid standard colour"));
-            // fall through
+            wxFALLTHROUGH;
 
         case SHADOW_DARK:
         case SHADOW_HIGHLIGHT:

@@ -1149,7 +1149,7 @@ void wxNotebook::PositionSpinBtn()
     {
         default:
             wxFAIL_MSG(wxT("unknown tab orientation"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxTOP:
             x = rectTabs.GetRight() - wBtn;

@@ -467,7 +467,7 @@ wxRect wxStdRenderer::GetBorderDimensions(wxBorder border) const
 #endif
         default:
             wxFAIL_MSG(wxT("unknown border type"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxBORDER_DEFAULT:
         case wxBORDER_NONE:

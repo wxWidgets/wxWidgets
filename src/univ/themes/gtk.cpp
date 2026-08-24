@@ -1291,18 +1291,18 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
         {
             default:
                 wxFAIL_MSG(wxT("invaild notebook tab orientation"));
-                // fall through
+                wxFALLTHROUGH;
 
             case wxTOP:
                 rect.y -= indent.y;
-                // fall through
+                wxFALLTHROUGH;
             case wxBOTTOM:
                 rect.height += indent.y;
                 break;
 
             case wxLEFT:
                 rect.x -= indent.x;
-                // fall through
+                wxFALLTHROUGH;
             case wxRIGHT:
                 rect.width += indent.x;
                 break;
