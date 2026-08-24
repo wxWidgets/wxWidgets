@@ -49,6 +49,16 @@ protected:
     wxDECLARE_NO_COPY_CLASS(StdStreamTestCase);
 };
 
+// MSVS 2015 can't compile CHECK()s in this file without this disambiguation.
+#ifdef __VISUALC__
+    #if __VISUALC__ < 1910
+        inline bool operator==(const std::fpos<_Mbstatet> lhs, const int rhs)
+        {
+            return static_cast<int>(lhs) == rhs;
+        }
+    #endif // MSVS 2015
+#endif // __VISUALC__
+
 } // anonymous namespace
 
 // ==========================================================================
