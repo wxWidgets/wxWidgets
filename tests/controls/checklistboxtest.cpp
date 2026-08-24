@@ -19,17 +19,20 @@
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
+#include <memory>
+
 class CheckListBoxTestCase : public ItemContainerTestCase
 {
 public:
     CheckListBoxTestCase();
-    ~CheckListBoxTestCase();
 
 protected:
-    virtual wxItemContainer *GetContainer() const override { return m_check; }
-    virtual wxWindow *GetContainerWindow() const override { return m_check; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_check.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_check.get(); }
 
-    wxCheckListBox* m_check;
+    std::unique_ptr<wxCheckListBox> m_check;
 
     wxDECLARE_NO_COPY_CLASS(CheckListBoxTestCase);
 };
@@ -39,17 +42,13 @@ wxITEM_CONTAINER_TESTS(CheckListBoxTestCase, "CheckListBox",
 
 CheckListBoxTestCase::CheckListBoxTestCase()
 {
-    m_check = new wxCheckListBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_check = make_unique<wxCheckListBox>(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
-CheckListBoxTestCase::~CheckListBoxTestCase()
-{
-    wxDELETE(m_check);
-}
 
 TEST_CASE_METHOD(CheckListBoxTestCase, "CheckListBox::Check", "[checklistbox]")
 {
-    EventCounter toggled(m_check, wxEVT_CHECKLISTBOX);
+    EventCounter toggled(m_check.get(), wxEVT_CHECKLISTBOX);
 
     wxArrayInt checkedItems;
     wxArrayString testitems;

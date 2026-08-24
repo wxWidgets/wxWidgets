@@ -19,6 +19,8 @@
 
 #include "wx/headerctrl.h"
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -27,10 +29,9 @@ class HeaderCtrlTestCase
 {
 public:
     HeaderCtrlTestCase();
-    ~HeaderCtrlTestCase();
 
 protected:
-    wxHeaderCtrlSimple *m_header;
+    std::unique_ptr<wxHeaderCtrlSimple> m_header;
 
     wxDECLARE_NO_COPY_CLASS(HeaderCtrlTestCase);
 };
@@ -41,14 +42,9 @@ protected:
 
 HeaderCtrlTestCase::HeaderCtrlTestCase()
 {
-    m_header = new wxHeaderCtrlSimple(wxTheApp->GetTopWindow());
+    m_header = make_unique<wxHeaderCtrlSimple>(wxTheApp->GetTopWindow());
 }
 
-HeaderCtrlTestCase::~HeaderCtrlTestCase()
-{
-    delete m_header;
-    m_header = nullptr;
-}
 
 // ----------------------------------------------------------------------------
 // the tests themselves

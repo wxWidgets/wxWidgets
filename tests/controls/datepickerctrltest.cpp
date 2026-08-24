@@ -21,29 +21,24 @@
 
 #include "testableframe.h"
 
+#include <memory>
+
 class DatePickerCtrlTestCase
 {
 public:
     DatePickerCtrlTestCase();
-    ~DatePickerCtrlTestCase();
 
 protected:
-    wxDatePickerCtrl* m_datepicker;
-    wxButton* m_button;
+    std::unique_ptr<wxDatePickerCtrl> m_datepicker;
+    std::unique_ptr<wxButton> m_button;
 
     wxDECLARE_NO_COPY_CLASS(DatePickerCtrlTestCase);
 };
 
 DatePickerCtrlTestCase::DatePickerCtrlTestCase()
 {
-    m_datepicker = new wxDatePickerCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
-    m_button = nullptr;
-}
-
-DatePickerCtrlTestCase::~DatePickerCtrlTestCase()
-{
-    delete m_button;
-    delete m_datepicker;
+    m_datepicker = make_unique<wxDatePickerCtrl>(wxTheApp->GetTopWindow(),
+                                                 wxID_ANY);
 }
 
 TEST_CASE_METHOD(DatePickerCtrlTestCase, "DatePickerCtrl::Value", "[datepicker]")
@@ -118,15 +113,15 @@ TEST_CASE_METHOD(DatePickerCtrlTestCase, "DatePickerCtrl::Focus", "[datepicker]"
         return;
 
     // Create another control just to give focus to it initially.
-    m_button = new wxButton(wxTheApp->GetTopWindow(), wxID_OK);
+    m_button = make_unique<wxButton>(wxTheApp->GetTopWindow(), wxID_OK);
     m_button->Move(0, m_datepicker->GetSize().y * 3);
     m_button->SetFocus();
     wxYield();
 
     CHECK( !m_datepicker->HasFocus() );
 
-    EventCounter setFocus(m_datepicker, wxEVT_SET_FOCUS);
-    EventCounter killFocus(m_datepicker, wxEVT_KILL_FOCUS);
+    EventCounter setFocus(m_datepicker.get(), wxEVT_SET_FOCUS);
+    EventCounter killFocus(m_datepicker.get(), wxEVT_KILL_FOCUS);
 
     wxUIActionSimulator sim;
 

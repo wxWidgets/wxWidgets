@@ -18,17 +18,20 @@
 #include "wx/htmllbox.h"
 #include "itemcontainertest.h"
 
+#include <memory>
+
 class HtmlListBoxTestCase : public ItemContainerTestCase
 {
 public:
     HtmlListBoxTestCase();
-    ~HtmlListBoxTestCase();
 
 protected:
-    virtual wxItemContainer *GetContainer() const override { return m_htmllbox; }
-    virtual wxWindow *GetContainerWindow() const override { return m_htmllbox; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_htmllbox.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_htmllbox.get(); }
 
-    wxSimpleHtmlListBox* m_htmllbox;
+    std::unique_ptr<wxSimpleHtmlListBox> m_htmllbox;
 
     wxDECLARE_NO_COPY_CLASS(HtmlListBoxTestCase);
 };
@@ -38,12 +41,9 @@ wxITEM_CONTAINER_TESTS(HtmlListBoxTestCase, "HtmlListBox",
 
 HtmlListBoxTestCase::HtmlListBoxTestCase()
 {
-    m_htmllbox = new wxSimpleHtmlListBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_htmllbox = make_unique<wxSimpleHtmlListBox>(wxTheApp->GetTopWindow(),
+                                                  wxID_ANY);
 }
 
-HtmlListBoxTestCase::~HtmlListBoxTestCase()
-{
-    wxDELETE(m_htmllbox);
-}
 
 #endif //wxUSE_HTML

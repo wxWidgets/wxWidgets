@@ -28,12 +28,12 @@ class NotebookTestCase : public BookCtrlBaseTestCase
 {
 public:
     NotebookTestCase();
-    ~NotebookTestCase();
 
     void OnPageChanged(wxNotebookEvent&) { m_numPageChanges++; }
 
 protected:
-    virtual wxBookCtrlBase *GetBase() const override { return m_notebook; }
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_notebook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
     { return wxEVT_NOTEBOOK_PAGE_CHANGED; }
@@ -41,7 +41,7 @@ protected:
     virtual wxEventType GetChangingEvent() const override
     { return wxEVT_NOTEBOOK_PAGE_CHANGING; }
 
-    wxNotebook *m_notebook = nullptr;
+    std::unique_ptr<wxNotebook> m_notebook;
 
     int m_numPageChanges = 0;
 
@@ -57,29 +57,24 @@ wxBOOK_CTRL_BASE_TEST_CASE(NotebookTestCase, "Notebook", Image,
 
 NotebookTestCase::NotebookTestCase()
 {
-    m_notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                wxDefaultPosition, wxSize(400, 200));
+    m_notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxDefaultPosition, wxSize(400, 200));
     AddPanels();
 }
 
-NotebookTestCase::~NotebookTestCase()
-{
-    wxDELETE(m_notebook);
-}
 
 TEST_CASE_METHOD(NotebookTestCase, "Notebook::RowCount", "[notebook]")
 {
     CHECK(m_notebook->GetRowCount() == 1);
 
 #ifdef __WXMSW__
-    wxDELETE(m_notebook);
-    m_notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                wxDefaultPosition, wxSize(400, 200),
-                                wxNB_MULTILINE);
+    m_notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxDefaultPosition, wxSize(400, 200),
+                                         wxNB_MULTILINE);
 
     for( unsigned int i = 0; i < 10; i++ )
     {
-        m_notebook->AddPage(new wxPanel(m_notebook), "Panel", false, 0);
+        m_notebook->AddPage(new wxPanel(m_notebook.get()), "Panel", false, 0);
     }
 
     CHECK( m_notebook->GetRowCount() != 1 );
@@ -104,8 +99,7 @@ TEST_CASE_METHOD(NotebookTestCase, "Notebook::NoEventsOnDestruction",
     // used to do under GTK+ 3 when a page different from the first one was
     // selected.
     m_notebook->ChangeSelection(1);
-    m_notebook->Destroy();
-    m_notebook = nullptr;
+    m_notebook.release()->Destroy();
     CHECK( m_numPageChanges == 1 );
 }
 
@@ -223,9 +217,9 @@ TEST_CASE_METHOD(NotebookTestCase, "Notebook::HitTestFlags", "[notebook]")
     if ( isVertical && wxIsRunningUnderWine() )
         return;
 
-    notebook.reset(new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                  wxPoint(0, 0), wxSize(400, 200),
-                                  style));
+    notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                       wxPoint(0, 0), wxSize(400, 200),
+                                       style);
 
     // Simulate an icon of standard size, its contents doesn't matter.
     const wxSize imageSize(16, 16);
@@ -278,8 +272,8 @@ TEST_CASE_METHOD(NotebookTestCase, "Notebook::HitTestFlags", "[notebook]")
     CHECK(onLabel);
     CHECK(onItem);
 #else // !(__WXMSW__ || __WXUNIVERSAL__)
-    notebook.reset(new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                  wxDefaultPosition, wxSize(400, 200)));
+    notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                       wxDefaultPosition, wxSize(400, 200));
     notebook->AddPage(new wxPanel(notebook.get()), "First Page");
 
     WX_ASSERT_FAILS_WITH_ASSERT(notebook->GetTabRect(0));

@@ -24,7 +24,6 @@
 #include "wx/uri.h"
 #include "wx/wfstream.h"
 
-#include "wx/private/make_unique.h"
 
 #include <memory>
 #include <string>
@@ -269,7 +268,7 @@ protected:
             };
 
             if ( debug == "1" )
-                GetSession().SetDebugLogger(std::make_unique<DebugLogger>());
+                GetSession().SetDebugLogger(make_unique<DebugLogger>());
             else
                 WARN("Unknown WX_TEST_WEBREQUEST_DEBUG value: " << debug);
         }

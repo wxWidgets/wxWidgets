@@ -20,27 +20,28 @@
 #include "testableframe.h"
 #include "wx/uiaction.h"
 
+#include <memory>
+
 class ListBoxTestCase : public ItemContainerTestCase
 {
 public:
     ListBoxTestCase();
-    ~ListBoxTestCase();
 
 protected:
-    virtual wxItemContainer *GetContainer() const override { return m_list; }
-    virtual wxWindow *GetContainerWindow() const override { return m_list; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_list.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_list.get(); }
 
     // Recreate the list box as an owner-drawn one, only used under MSW.
     void MakeOwnerDrawn()
     {
-        wxDELETE(m_list);
-
-        m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
-                               wxDefaultPosition, wxSize(300, 200), 0, nullptr,
-                               wxLB_OWNERDRAW);
+        m_list = make_unique<wxListBox>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                        wxDefaultPosition, wxSize(300, 200),
+                                        0, nullptr, wxLB_OWNERDRAW);
     }
 
-    wxListBox* m_list;
+    std::unique_ptr<wxListBox> m_list;
 
     wxDECLARE_NO_COPY_CLASS(ListBoxTestCase);
 };
@@ -63,24 +64,19 @@ wxITEM_CONTAINER_TESTS(ListBoxTestCase, "ListBox",
 
 ListBoxTestCase::ListBoxTestCase()
 {
-    m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
-                           wxDefaultPosition, wxSize(300, 200));
+    m_list = make_unique<wxListBox>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                    wxDefaultPosition, wxSize(300, 200));
 }
 
-ListBoxTestCase::~ListBoxTestCase()
-{
-    wxDELETE(m_list);
-}
 
 TEST_CASE_METHOD(ListBoxTestCase, "ListBox::Sort", "[listbox]")
 {
     wxLISTBOX_TEST_OWNERDRAWN();
 
 #ifndef __WXOSX__
-    wxDELETE(m_list);
-    m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                            wxLB_SORT);
+    m_list = make_unique<wxListBox>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                    wxDefaultPosition, wxDefaultSize, 0,
+                                    nullptr, wxLB_SORT);
 
     wxArrayString testitems;
     testitems.Add("aaa");
@@ -119,10 +115,9 @@ TEST_CASE_METHOD(ListBoxTestCase, "ListBox::MultipleSelect", "[listbox]")
 {
     wxLISTBOX_TEST_OWNERDRAWN();
 
-    wxDELETE(m_list);
-    m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                            wxLB_MULTIPLE);
+    m_list = make_unique<wxListBox>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                    wxDefaultPosition, wxDefaultSize, 0,
+                                    nullptr, wxLB_MULTIPLE);
 
     wxArrayString testitems;
     testitems.Add("item 0");

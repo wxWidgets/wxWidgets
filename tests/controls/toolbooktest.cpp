@@ -20,14 +20,16 @@
 #include "wx/toolbar.h"
 #include "bookctrlbasetest.h"
 
+#include <memory>
+
 class ToolbookTestCase : public BookCtrlBaseTestCase
 {
 public:
     ToolbookTestCase();
-    ~ToolbookTestCase();
 
 protected:
-    virtual wxBookCtrlBase *GetBase() const override { return m_toolbook; }
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_toolbook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
     { return wxEVT_TOOLBOOK_PAGE_CHANGED; }
@@ -37,7 +39,7 @@ protected:
 
     virtual void Realize() override { m_toolbook->GetToolBar()->Realize(); }
 
-    wxToolbook *m_toolbook;
+    std::unique_ptr<wxToolbook> m_toolbook;
 
     wxDECLARE_NO_COPY_CLASS(ToolbookTestCase);
 };
@@ -47,14 +49,11 @@ wxBOOK_CTRL_BASE_TESTS(ToolbookTestCase, "Toolbook",
 
 ToolbookTestCase::ToolbookTestCase()
 {
-    m_toolbook = new wxToolbook(wxTheApp->GetTopWindow(), wxID_ANY, wxDefaultPosition, wxSize(400, 200));
+    m_toolbook = make_unique<wxToolbook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxDefaultPosition, wxSize(400, 200));
     AddPanels();
 }
 
-ToolbookTestCase::~ToolbookTestCase()
-{
-    wxDELETE(m_toolbook);
-}
 
 TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::ToolBar", "[toolbook]")
 {

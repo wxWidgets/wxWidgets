@@ -19,22 +19,24 @@
 #include "wx/simplebook.h"
 #include "bookctrlbasetest.h"
 
+#include <memory>
+
 class SimplebookTestCase : public BookCtrlBaseTestCase
 {
 public:
     SimplebookTestCase();
-    ~SimplebookTestCase();
 
 protected:
-    virtual wxBookCtrlBase *GetBase() const override { return m_simplebook; }
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_simplebook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
-        { return wxEVT_BOOKCTRL_PAGE_CHANGED; }
+    { return wxEVT_BOOKCTRL_PAGE_CHANGED; }
 
     virtual wxEventType GetChangingEvent() const override
-        { return wxEVT_BOOKCTRL_PAGE_CHANGING; }
+    { return wxEVT_BOOKCTRL_PAGE_CHANGING; }
 
-    wxSimplebook *m_simplebook;
+    std::unique_ptr<wxSimplebook> m_simplebook;
 
     wxDECLARE_NO_COPY_CLASS(SimplebookTestCase);
 };
@@ -44,14 +46,11 @@ wxBOOK_CTRL_BASE_TESTS(SimplebookTestCase, "Simplebook",
 
 SimplebookTestCase::SimplebookTestCase()
 {
-    m_simplebook = new wxSimplebook(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_simplebook = make_unique<wxSimplebook>(
+        wxTheApp->GetTopWindow(), wxID_ANY);
     AddPanels();
 }
 
-SimplebookTestCase::~SimplebookTestCase()
-{
-    wxDELETE(m_simplebook);
-}
 
 #endif // wxUSE_BOOKCTRL
 

@@ -25,6 +25,8 @@
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -34,14 +36,16 @@ class OwnerDrawnComboBoxTestCase : public TextEntryTestCase,
 {
 public:
     OwnerDrawnComboBoxTestCase();
-    ~OwnerDrawnComboBoxTestCase();
 
 protected:
-    virtual wxTextEntry *GetTestEntry() const override { return m_combo; }
-    virtual wxWindow *GetTestWindow() const override { return m_combo; }
+    virtual wxTextEntry *GetTestEntry() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetTestWindow() const override { return m_combo.get(); }
 
-    virtual wxItemContainer *GetContainer() const override { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const override { return m_combo; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_combo.get(); }
 
     virtual void CheckStringSelection(const char * WXUNUSED(sel)) override
     {
@@ -50,7 +54,7 @@ protected:
         // is no way to return the selection contents directly
     }
 
-    wxOwnerDrawnComboBox *m_combo;
+    std::unique_ptr<wxOwnerDrawnComboBox> m_combo;
 
     wxDECLARE_NO_COPY_CLASS(OwnerDrawnComboBoxTestCase);
 };
@@ -67,14 +71,10 @@ wxITEM_CONTAINER_TESTS(OwnerDrawnComboBoxTestCase, "OwnerDrawnComboBox",
 
 OwnerDrawnComboBoxTestCase::OwnerDrawnComboBoxTestCase()
 {
-    m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_combo = make_unique<wxOwnerDrawnComboBox>(wxTheApp->GetTopWindow(),
+                                                wxID_ANY);
 }
 
-OwnerDrawnComboBoxTestCase::~OwnerDrawnComboBoxTestCase()
-{
-    delete m_combo;
-    m_combo = nullptr;
-}
 
 // ----------------------------------------------------------------------------
 // tests themselves
@@ -109,8 +109,8 @@ TEST_CASE_METHOD(OwnerDrawnComboBoxTestCase, "OwnerDrawnComboBox::Size",
 TEST_CASE_METHOD(OwnerDrawnComboBoxTestCase, "OwnerDrawnComboBox::PopDismiss",
                  "[ownerdrawncombobox]")
 {
-    EventCounter drop(m_combo, wxEVT_COMBOBOX_DROPDOWN);
-    EventCounter close(m_combo, wxEVT_COMBOBOX_CLOSEUP);
+    EventCounter drop(m_combo.get(), wxEVT_COMBOBOX_DROPDOWN);
+    EventCounter close(m_combo.get(), wxEVT_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
     m_combo->Dismiss();
@@ -122,12 +122,11 @@ TEST_CASE_METHOD(OwnerDrawnComboBoxTestCase, "OwnerDrawnComboBox::PopDismiss",
 TEST_CASE_METHOD(OwnerDrawnComboBoxTestCase, "OwnerDrawnComboBox::Sort",
                  "[ownerdrawncombobox]")
 {
-    delete m_combo;
-    m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(),
-                                       wxID_ANY, "",
-                                       wxDefaultPosition, wxDefaultSize,
-                                       0, nullptr,
-                                       wxCB_SORT);
+    m_combo = make_unique<wxOwnerDrawnComboBox>(wxTheApp->GetTopWindow(),
+                                                wxID_ANY, "",
+                                                wxDefaultPosition,
+                                                wxDefaultSize, 0, nullptr,
+                                                wxCB_SORT);
 
     m_combo->Append("aaa");
     m_combo->Append("Aaa");
@@ -155,11 +154,11 @@ TEST_CASE_METHOD(OwnerDrawnComboBoxTestCase, "OwnerDrawnComboBox::ReadOnly",
     testitems.Add("item 1");
     testitems.Add("item 2");
 
-    delete m_combo;
-    m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                                       wxDefaultPosition, wxDefaultSize,
-                                       testitems,
-                                       wxCB_READONLY);
+    m_combo = make_unique<wxOwnerDrawnComboBox>(wxTheApp->GetTopWindow(),
+                                                wxID_ANY, "",
+                                                wxDefaultPosition,
+                                                wxDefaultSize, testitems,
+                                                wxCB_READONLY);
 
     m_combo->SetValue("item 1");
 

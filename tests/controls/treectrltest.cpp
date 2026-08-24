@@ -13,6 +13,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_TREECTRL
 
 
@@ -36,11 +38,9 @@ class TreeCtrlTestCase
 public:
     explicit TreeCtrlTestCase(int exStyle = 0)
     {
-        m_tree = new wxTreeCtrl(wxTheApp->GetTopWindow(),
-                                wxID_ANY,
-                                wxDefaultPosition,
-                                wxSize(400, 200),
-                                wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS | exStyle);
+        m_tree = make_unique<wxTreeCtrl>(
+            wxTheApp->GetTopWindow(), wxID_ANY, wxDefaultPosition, wxSize(400,
+            200), wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS | exStyle);
 
         m_root = m_tree->AddRoot("root");
         m_child1 = m_tree->AppendItem(m_root, "child1");
@@ -53,15 +53,11 @@ public:
         m_tree->Update();
     }
 
-    ~TreeCtrlTestCase()
-    {
-        delete m_tree;
-    }
 
 protected:
 
     // the tree control itself
-    wxTreeCtrl *m_tree = nullptr;
+    std::unique_ptr<wxTreeCtrl> m_tree;
 
     // and some of its items
     wxTreeItemId m_root,
@@ -176,7 +172,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMulti", "[treectrl]")
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem", "[treectrl]")
 {
-    EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
+    EventCounter deleteitem(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
     m_tree->AppendItem(todelete, "deleteme2");
@@ -187,7 +183,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem", "[treectrl]")
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteChildren", "[treectrl]")
 {
-    EventCounter deletechildren(m_tree, wxEVT_TREE_DELETE_ITEM);
+    EventCounter deletechildren(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
     m_tree->AppendItem(m_child1, "another grandchild");
     m_tree->DeleteChildren(m_child1);
@@ -197,7 +193,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteChildren", "[treectrl]")
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems", "[treectrl]")
 {
-    EventCounter deleteall(m_tree, wxEVT_TREE_DELETE_ITEM);
+    EventCounter deleteall(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
     m_tree->DeleteAllItems();
 
@@ -208,8 +204,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems", "[treectrl]")
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick", "[treectrl]")
 {
-    EventCounter activated(m_tree, wxEVT_TREE_ITEM_ACTIVATED);
-    EventCounter rclick(m_tree, wxEVT_TREE_ITEM_RIGHT_CLICK);
+    EventCounter activated(m_tree.get(), wxEVT_TREE_ITEM_ACTIVATED);
+    EventCounter rclick(m_tree.get(), wxEVT_TREE_ITEM_RIGHT_CLICK);
 
     wxUIActionSimulator sim;
 
@@ -234,8 +230,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick", "[treectrl]")
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit", "[treectrl]")
 {
-    EventCounter beginedit(m_tree, wxEVT_TREE_BEGIN_LABEL_EDIT);
-    EventCounter endedit(m_tree, wxEVT_TREE_END_LABEL_EDIT);
+    EventCounter beginedit(m_tree.get(), wxEVT_TREE_BEGIN_LABEL_EDIT);
+    EventCounter endedit(m_tree.get(), wxEVT_TREE_END_LABEL_EDIT);
 
     wxUIActionSimulator sim;
 
@@ -260,7 +256,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit", "[treectrl]")
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyDown", "[treectrl]")
 {
-    EventCounter keydown(m_tree, wxEVT_TREE_KEY_DOWN);
+    EventCounter keydown(m_tree.get(), wxEVT_TREE_KEY_DOWN);
 
     wxUIActionSimulator sim;
 
@@ -282,10 +278,10 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents", "[treectr
 
     m_tree->CollapseAll();
 
-    EventCounter collapsed(m_tree, wxEVT_TREE_ITEM_COLLAPSED);
-    EventCounter collapsing(m_tree, wxEVT_TREE_ITEM_COLLAPSING);
-    EventCounter expanded(m_tree, wxEVT_TREE_ITEM_EXPANDED);
-    EventCounter expanding(m_tree, wxEVT_TREE_ITEM_EXPANDING);
+    EventCounter collapsed(m_tree.get(), wxEVT_TREE_ITEM_COLLAPSED);
+    EventCounter collapsing(m_tree.get(), wxEVT_TREE_ITEM_COLLAPSING);
+    EventCounter expanded(m_tree.get(), wxEVT_TREE_ITEM_EXPANDED);
+    EventCounter expanding(m_tree.get(), wxEVT_TREE_ITEM_EXPANDING);
 
     wxUIActionSimulator sim;
 
@@ -424,7 +420,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
     // problem in the test.
     m_tree->SetFocus();
 
-    EventCounter beginedit(m_tree, wxEVT_TREE_BEGIN_LABEL_EDIT);
+    EventCounter beginedit(m_tree.get(), wxEVT_TREE_BEGIN_LABEL_EDIT);
 
     wxUIActionSimulator sim;
 
@@ -479,7 +475,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu", "[treectrl]")
 {
-    EventCounter menu(m_tree, wxEVT_TREE_ITEM_MENU);
+    EventCounter menu(m_tree.get(), wxEVT_TREE_ITEM_MENU);
     wxUIActionSimulator sim;
 
     wxRect pos;

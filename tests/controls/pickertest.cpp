@@ -24,18 +24,19 @@
 #include "pickerbasetest.h"
 #include "asserthelper.h"
 
+#include <memory>
+
 #if wxUSE_COLOURPICKERCTRL
 
 class ColourPickerCtrlTestCase : public PickerBaseTestCase
 {
 public:
     ColourPickerCtrlTestCase();
-    ~ColourPickerCtrlTestCase();
 
 protected:
-    virtual wxPickerBase *GetBase() const override { return m_colour; }
+    virtual wxPickerBase *GetBase() const override { return m_colour.get(); }
 
-    wxColourPickerCtrl *m_colour;
+    std::unique_ptr<wxColourPickerCtrl> m_colour;
 
     wxDECLARE_NO_COPY_CLASS(ColourPickerCtrlTestCase);
 };
@@ -45,15 +46,13 @@ wxPICKER_BASE_TESTS(ColourPickerCtrlTestCase, "ColourPickerCtrl",
 
 ColourPickerCtrlTestCase::ColourPickerCtrlTestCase()
 {
-    m_colour = new wxColourPickerCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
-                                     *wxBLACK, wxDefaultPosition,
-                                      wxDefaultSize, wxCLRP_USE_TEXTCTRL);
+    m_colour = make_unique<wxColourPickerCtrl>(wxTheApp->GetTopWindow(),
+                                               wxID_ANY, *wxBLACK,
+                                               wxDefaultPosition,
+                                               wxDefaultSize,
+                                               wxCLRP_USE_TEXTCTRL);
 }
 
-ColourPickerCtrlTestCase::~ColourPickerCtrlTestCase()
-{
-    wxDELETE(m_colour);
-}
 
 #endif //wxUSE_COLOURPICKERCTRL
 
@@ -63,12 +62,11 @@ class DirPickerCtrlTestCase : public PickerBaseTestCase
 {
 public:
     DirPickerCtrlTestCase();
-    ~DirPickerCtrlTestCase();
 
 protected:
-    virtual wxPickerBase *GetBase() const override { return m_dir; }
+    virtual wxPickerBase *GetBase() const override { return m_dir.get(); }
 
-    wxDirPickerCtrl *m_dir;
+    std::unique_ptr<wxDirPickerCtrl> m_dir;
 
     wxDECLARE_NO_COPY_CLASS(DirPickerCtrlTestCase);
 };
@@ -78,16 +76,12 @@ wxPICKER_BASE_TESTS(DirPickerCtrlTestCase, "DirPickerCtrl",
 
 DirPickerCtrlTestCase::DirPickerCtrlTestCase()
 {
-    m_dir = new wxDirPickerCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
-                                wxEmptyString, wxDirSelectorPromptStr,
-                                wxDefaultPosition, wxDefaultSize,
-                                wxDIRP_USE_TEXTCTRL);
+    m_dir = make_unique<wxDirPickerCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxEmptyString, wxDirSelectorPromptStr,
+                                         wxDefaultPosition, wxDefaultSize,
+                                         wxDIRP_USE_TEXTCTRL);
 }
 
-DirPickerCtrlTestCase::~DirPickerCtrlTestCase()
-{
-    wxDELETE(m_dir);
-}
 
 #endif //wxUSE_DIRPICKERCTRL
 
@@ -97,12 +91,11 @@ class FilePickerCtrlTestCase : public PickerBaseTestCase
 {
 public:
     FilePickerCtrlTestCase();
-    ~FilePickerCtrlTestCase();
 
 protected:
-    virtual wxPickerBase *GetBase() const override { return m_file; }
+    virtual wxPickerBase *GetBase() const override { return m_file.get(); }
 
-    wxFilePickerCtrl *m_file;
+    std::unique_ptr<wxFilePickerCtrl> m_file;
 
     wxDECLARE_NO_COPY_CLASS(FilePickerCtrlTestCase);
 };
@@ -112,17 +105,14 @@ wxPICKER_BASE_TESTS(FilePickerCtrlTestCase, "FilePickerCtrl",
 
 FilePickerCtrlTestCase::FilePickerCtrlTestCase()
 {
-    m_file = new wxFilePickerCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
-                                  wxEmptyString, wxFileSelectorPromptStr,
-                                  wxFileSelectorDefaultWildcardStr,
-                                  wxDefaultPosition, wxDefaultSize,
-                                  wxFLP_USE_TEXTCTRL);
+    m_file = make_unique<wxFilePickerCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                           wxEmptyString,
+                                           wxFileSelectorPromptStr,
+                                           wxFileSelectorDefaultWildcardStr,
+                                           wxDefaultPosition, wxDefaultSize,
+                                           wxFLP_USE_TEXTCTRL);
 }
 
-FilePickerCtrlTestCase::~FilePickerCtrlTestCase()
-{
-    wxDELETE(m_file);
-}
 
 #endif //wxUSE_FILEPICKERCTRL
 
@@ -132,12 +122,11 @@ class FontPickerCtrlTestCase : public PickerBaseTestCase
 {
 public:
     FontPickerCtrlTestCase();
-    ~FontPickerCtrlTestCase();
 
 protected:
-    virtual wxPickerBase *GetBase() const override { return m_font; }
+    virtual wxPickerBase *GetBase() const override { return m_font.get(); }
 
-    wxFontPickerCtrl *m_font;
+    std::unique_ptr<wxFontPickerCtrl> m_font;
 
     wxDECLARE_NO_COPY_CLASS(FontPickerCtrlTestCase);
 };
@@ -147,15 +136,12 @@ wxPICKER_BASE_TESTS(FontPickerCtrlTestCase, "FontPickerCtrl",
 
 FontPickerCtrlTestCase::FontPickerCtrlTestCase()
 {
-    m_font = new wxFontPickerCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
-                                  wxNullFont, wxDefaultPosition, wxDefaultSize,
-                                  wxFNTP_USE_TEXTCTRL);
+    m_font = make_unique<wxFontPickerCtrl>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                           wxNullFont,
+                                           wxDefaultPosition, wxDefaultSize,
+                                           wxFNTP_USE_TEXTCTRL);
 }
 
-FontPickerCtrlTestCase::~FontPickerCtrlTestCase()
-{
-    wxDELETE(m_font);
-}
 
 TEST_CASE_METHOD(FontPickerCtrlTestCase, "FontPickerCtrl::ColourSelection",
                  "[fontpicker]")

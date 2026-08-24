@@ -12,6 +12,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_DATAVIEWCTRL
 
 
@@ -34,13 +36,12 @@ class DataViewCtrlTestCase
 {
 public:
     explicit DataViewCtrlTestCase(long style);
-    ~DataViewCtrlTestCase();
 
 protected:
     void TestSelectionFor0and1();
 
     // the dataview control itself
-    wxDataViewTreeCtrl *m_dvc;
+    std::unique_ptr<wxDataViewTreeCtrl> m_dvc;
 
     // and some of its items
     wxDataViewItem m_root,
@@ -73,11 +74,10 @@ class MultiColumnsDataViewCtrlTestCase
 {
 public:
     MultiColumnsDataViewCtrlTestCase();
-    ~MultiColumnsDataViewCtrlTestCase();
 
 protected:
     // the dataview control itself
-    wxDataViewListCtrl *m_dvc;
+    std::unique_ptr<wxDataViewListCtrl> m_dvc;
 
     // constants
     const wxSize m_size;
@@ -349,7 +349,6 @@ class DataViewCtrlWithCustomModelTestCase
 {
 public:
     DataViewCtrlWithCustomModelTestCase();
-    ~DataViewCtrlWithCustomModelTestCase();
 
 protected:
     enum wxItemExistence
@@ -390,7 +389,7 @@ protected:
     }
 
     // The dataview control.
-    wxDataViewCtrl *m_dvc;
+    std::unique_ptr<wxDataViewCtrl> m_dvc;
 
     // The dataview model.
     DataViewCtrlTestModel *m_model;
@@ -412,11 +411,11 @@ protected:
 
 DataViewCtrlTestCase::DataViewCtrlTestCase(long style)
 {
-    m_dvc = new wxDataViewTreeCtrl(wxTheApp->GetTopWindow(),
-                                   wxID_ANY,
-                                   wxDefaultPosition,
-                                   wxSize(400, 200),
-                                   style);
+    m_dvc = make_unique<wxDataViewTreeCtrl>(wxTheApp->GetTopWindow(),
+                                            wxID_ANY,
+                                            wxDefaultPosition,
+                                            wxSize(400, 200),
+                                            style);
 
     m_root = m_dvc->AppendContainer(wxDataViewItem(), "The root");
       m_child1 = m_dvc->AppendContainer(m_root, "child1");
@@ -429,16 +428,13 @@ DataViewCtrlTestCase::DataViewCtrlTestCase(long style)
     m_dvc->Update();
 }
 
-DataViewCtrlTestCase::~DataViewCtrlTestCase()
-{
-    delete m_dvc;
-}
 
 MultiColumnsDataViewCtrlTestCase::MultiColumnsDataViewCtrlTestCase()
     : m_size(200, 100),
       m_firstColumnWidth(50)
 {
-    m_dvc = new wxDataViewListCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_dvc = make_unique<wxDataViewListCtrl>(wxTheApp->GetTopWindow(),
+                                            wxID_ANY);
 
     m_firstColumn =
         m_dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT, m_firstColumnWidth);
@@ -452,18 +448,14 @@ MultiColumnsDataViewCtrlTestCase::MultiColumnsDataViewCtrlTestCase()
     m_dvc->Update();
 }
 
-MultiColumnsDataViewCtrlTestCase::~MultiColumnsDataViewCtrlTestCase()
-{
-    delete m_dvc;
-}
 
 DataViewCtrlWithCustomModelTestCase::DataViewCtrlWithCustomModelTestCase()
 {
-    m_dvc = new wxDataViewCtrl(wxTheApp->GetTopWindow(),
-                               wxID_ANY,
-                               wxDefaultPosition,
-                               wxSize(400, 200),
-                               wxDV_SINGLE);
+    m_dvc = make_unique<wxDataViewCtrl>(wxTheApp->GetTopWindow(),
+                                        wxID_ANY,
+                                        wxDefaultPosition,
+                                        wxSize(400, 200),
+                                        wxDV_SINGLE);
 
     m_model = new DataViewCtrlTestModel();
     m_dvc->AssociateModel(m_model);
@@ -495,10 +487,6 @@ DataViewCtrlWithCustomModelTestCase::DataViewCtrlWithCustomModelTestCase()
     m_dvc->Update();
 }
 
-DataViewCtrlWithCustomModelTestCase::~DataViewCtrlWithCustomModelTestCase()
-{
-    delete m_dvc;
-}
 
 // ----------------------------------------------------------------------------
 // the tests themselves
@@ -870,7 +858,7 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     if ( !EnableUITests() )
         return;
 
-    EventCounter keyEvents(m_dvc, wxEVT_KEY_DOWN);
+    EventCounter keyEvents(m_dvc.get(), wxEVT_KEY_DOWN);
 
     m_dvc->SetFocus();
     wxYield();

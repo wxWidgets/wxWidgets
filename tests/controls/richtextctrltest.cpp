@@ -28,14 +28,15 @@
 #include "asserthelper.h"
 #include "waitfor.h"
 
+#include <memory>
+
 class RichTextCtrlTestCase
 {
 public:
     RichTextCtrlTestCase();
-    ~RichTextCtrlTestCase();
 
 protected:
-    wxRichTextCtrl* m_rich;
+    std::unique_ptr<wxRichTextCtrl> m_rich;
 
     wxDECLARE_NO_COPY_CLASS(RichTextCtrlTestCase);
 };
@@ -73,14 +74,11 @@ bool ClipboardContainsText(const wxString &text)
 
 RichTextCtrlTestCase::RichTextCtrlTestCase()
 {
-    m_rich = new wxRichTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                                wxDefaultPosition, wxSize(400, 200), wxWANTS_CHARS);
+    m_rich = make_unique<wxRichTextCtrl>(
+        wxTheApp->GetTopWindow(), wxID_ANY, "", wxDefaultPosition, wxSize(400,
+        200), wxWANTS_CHARS);
 }
 
-RichTextCtrlTestCase::~RichTextCtrlTestCase()
-{
-    wxDELETE(m_rich);
-}
 
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::IsModified",
                  "[richtextctrl]")
@@ -98,8 +96,8 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::CharacterEvent",
         return;
 
 
-    EventCounter character(m_rich, wxEVT_RICHTEXT_CHARACTER);
-    EventCounter content(m_rich, wxEVT_RICHTEXT_CONTENT_INSERTED);
+    EventCounter character(m_rich.get(), wxEVT_RICHTEXT_CHARACTER);
+    EventCounter content(m_rich.get(), wxEVT_RICHTEXT_CONTENT_INSERTED);
 
     m_rich->SetFocus();
 
@@ -131,8 +129,8 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::DeleteEvent",
         return;
 
 
-    EventCounter deleteevent(m_rich, wxEVT_RICHTEXT_DELETE);
-    EventCounter contentdelete(m_rich, wxEVT_RICHTEXT_CONTENT_DELETED);
+    EventCounter deleteevent(m_rich.get(), wxEVT_RICHTEXT_DELETE);
+    EventCounter contentdelete(m_rich.get(), wxEVT_RICHTEXT_CONTENT_DELETED);
 
     m_rich->SetFocus();
 
@@ -156,7 +154,7 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::ReturnEvent",
         return;
 
 
-    EventCounter returnevent(m_rich, wxEVT_RICHTEXT_RETURN);
+    EventCounter returnevent(m_rich.get(), wxEVT_RICHTEXT_RETURN);
 
     m_rich->SetFocus();
 
@@ -171,7 +169,7 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::ReturnEvent",
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::StyleEvent",
                  "[richtextctrl]")
 {
-    EventCounter stylechanged(m_rich, wxEVT_RICHTEXT_STYLE_CHANGED);
+    EventCounter stylechanged(m_rich.get(), wxEVT_RICHTEXT_STYLE_CHANGED);
 
     m_rich->SetValue("Sometext");
     m_rich->SetStyle(0, 8, wxTextAttr(*wxRED, *wxWHITE));
@@ -182,7 +180,7 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::StyleEvent",
 TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::BufferResetEvent",
                  "[richtextctrl]")
 {
-    EventCounter reset(m_rich, wxEVT_RICHTEXT_BUFFER_RESET);
+    EventCounter reset(m_rich.get(), wxEVT_RICHTEXT_BUFFER_RESET);
 
     m_rich->AppendText("more text!");
     m_rich->SetValue("");
@@ -210,7 +208,7 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::UrlEvent",
         return;
 
 
-    EventCounter url(m_rich, wxEVT_TEXT_URL);
+    EventCounter url(m_rich.get(), wxEVT_TEXT_URL);
 
     m_rich->BeginURL("http://www.wxwidgets.org");
     m_rich->WriteText("http://www.wxwidgets.org");
@@ -234,7 +232,7 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TextEvent",
     if ( !EnableUITests() )
         return;
 
-    EventCounter updated(m_rich, wxEVT_TEXT);
+    EventCounter updated(m_rich.get(), wxEVT_TEXT);
 
     m_rich->SetFocus();
 
@@ -429,7 +427,7 @@ TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Editable",
     if ( !EnableUITests() )
         return;
 
-    EventCounter updated(m_rich, wxEVT_TEXT);
+    EventCounter updated(m_rich.get(), wxEVT_TEXT);
 
     m_rich->SetFocus();
 

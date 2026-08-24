@@ -9,6 +9,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_STC
 
 #ifndef WX_PRECOMP
@@ -37,10 +39,6 @@ public:
                     &StcPopupWindowsTestCase::OnCallTipClick, this);
     }
 
-    ~StcPopupWindowsTestCase()
-    {
-        delete m_stc;
-    }
 
     void OnKillSTCFocus(wxFocusEvent& WXUNUSED(event))
     {
@@ -53,7 +51,7 @@ public:
     }
 
 protected:
-    wxStyledTextCtrl* const m_stc;
+    const std::unique_ptr<wxStyledTextCtrl> m_stc;
     bool m_focusAlwaysRetained;
     bool m_calltipClickReceived;
 };
@@ -95,7 +93,7 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
     if ( m_stc->AutoCompActive() )
         m_stc->AutoCompCancel();
 
-    CHECK_FOCUS_IS( m_stc );
+    CHECK_FOCUS_IS( m_stc.get() );
 
     // Unfortunately under GTK we do get focus loss events, at least sometimes
     // (and actually more often than not, especially with GTK2, but this
@@ -149,7 +147,7 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
     // Unfortunately this test fails for unknown reasons under Xvfb (but only
     // there).
     if ( !IsRunningUnderXVFB() )
-        CHECK_FOCUS_IS( m_stc );
+        CHECK_FOCUS_IS( m_stc.get() );
 
     // With wxGTK there is the same problem here as in the test above.
 #ifndef __WXGTK__

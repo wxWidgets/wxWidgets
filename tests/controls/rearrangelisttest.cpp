@@ -19,17 +19,20 @@
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
+#include <memory>
+
 class RearrangeListTestCase : public ItemContainerTestCase
 {
 public:
     RearrangeListTestCase();
-    ~RearrangeListTestCase();
 
 protected:
-    virtual wxItemContainer *GetContainer() const override { return m_rearrange; }
-    virtual wxWindow *GetContainerWindow() const override { return m_rearrange; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_rearrange.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_rearrange.get(); }
 
-    wxRearrangeList* m_rearrange;
+    std::unique_ptr<wxRearrangeList> m_rearrange;
 
     wxDECLARE_NO_COPY_CLASS(RearrangeListTestCase);
 };
@@ -43,15 +46,11 @@ RearrangeListTestCase::RearrangeListTestCase()
     wxArrayInt order;
     wxArrayString items;
 
-    m_rearrange = new wxRearrangeList(wxTheApp->GetTopWindow(), wxID_ANY,
-                                      wxDefaultPosition, wxDefaultSize, order,
-                                      items);
+    m_rearrange = make_unique<wxRearrangeList>(wxTheApp->GetTopWindow(),
+                                               wxID_ANY, wxDefaultPosition,
+                                               wxDefaultSize, order, items);
 }
 
-RearrangeListTestCase::~RearrangeListTestCase()
-{
-    wxDELETE(m_rearrange);
-}
 
 TEST_CASE_METHOD(RearrangeListTestCase, "RearrangeList::Move",
                  "[rearrangelist]")
@@ -66,11 +65,9 @@ TEST_CASE_METHOD(RearrangeListTestCase, "RearrangeList::Move",
     items.push_back("second");
     items.push_back("third");
 
-    wxDELETE(m_rearrange);
-
-    m_rearrange = new wxRearrangeList(wxTheApp->GetTopWindow(), wxID_ANY,
-                                      wxDefaultPosition, wxDefaultSize, order,
-                                      items);
+    m_rearrange = make_unique<wxRearrangeList>(wxTheApp->GetTopWindow(),
+                                               wxID_ANY, wxDefaultPosition,
+                                               wxDefaultSize, order, items);
 
     //Confusingly setselection sets the physical item rather than the
     //item specified in the constructor
@@ -121,11 +118,9 @@ TEST_CASE_METHOD(RearrangeListTestCase, "RearrangeList::MoveClientData",
     wxClientData* item1data = new wxStringClientData("item1data");
     wxClientData* item2data = new wxStringClientData("item2data");
 
-    wxDELETE(m_rearrange);
-
-    m_rearrange = new wxRearrangeList(wxTheApp->GetTopWindow(), wxID_ANY,
-                                      wxDefaultPosition, wxDefaultSize, order,
-                                      items);
+    m_rearrange = make_unique<wxRearrangeList>(wxTheApp->GetTopWindow(),
+                                               wxID_ANY, wxDefaultPosition,
+                                               wxDefaultSize, order, items);
 
     m_rearrange->SetClientObject(0, item0data);
     m_rearrange->SetClientObject(1, item1data);

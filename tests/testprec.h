@@ -4,6 +4,13 @@
 #include "wx/wxprec.h"
 #include "wx/evtloop.h"
 
+// This provides std::make_unique() even when using C++11 compilers.
+#include "wx/private/make_unique.h"
+
+// It is used often enough in the tests to make it worth avoiding the need to
+// qualify it with "std::" every time.
+using std::make_unique;
+
 // This header must be included before catch.hpp to be taken into account.
 #include "asserthelper.h"
 

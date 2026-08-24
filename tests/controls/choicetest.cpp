@@ -18,17 +18,20 @@
 
 #include "itemcontainertest.h"
 
+#include <memory>
+
 class ChoiceTestCase : public ItemContainerTestCase
 {
 public:
     ChoiceTestCase();
-    ~ChoiceTestCase();
 
 protected:
-    virtual wxItemContainer *GetContainer() const override { return m_choice; }
-    virtual wxWindow *GetContainerWindow() const override { return m_choice; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_choice.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_choice.get(); }
 
-    wxChoice* m_choice;
+    std::unique_ptr<wxChoice> m_choice;
 
     wxDECLARE_NO_COPY_CLASS(ChoiceTestCase);
 };
@@ -38,21 +41,16 @@ wxITEM_CONTAINER_TESTS(ChoiceTestCase, "Choice",
 
 ChoiceTestCase::ChoiceTestCase()
 {
-    m_choice = new wxChoice(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_choice = make_unique<wxChoice>(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
-ChoiceTestCase::~ChoiceTestCase()
-{
-    wxDELETE(m_choice);
-}
 
 TEST_CASE_METHOD(ChoiceTestCase, "Choice::Sort", "[choice]")
 {
 #if !defined(__WXOSX__)
-    wxDELETE(m_choice);
-    m_choice = new wxChoice(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                            wxCB_SORT);
+    m_choice = make_unique<wxChoice>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                     wxDefaultPosition, wxDefaultSize, 0,
+                                     nullptr, wxCB_SORT);
 
     wxArrayString testitems;
     testitems.Add("aaa");

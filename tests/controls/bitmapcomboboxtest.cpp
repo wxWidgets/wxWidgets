@@ -21,19 +21,23 @@
 #include "itemcontainertest.h"
 #include "asserthelper.h"
 
+#include <memory>
+
 class BitmapComboBoxTestCase : public TextEntryTestCase,
                                public ItemContainerTestCase
 {
 public:
     BitmapComboBoxTestCase();
-    ~BitmapComboBoxTestCase();
 
 protected:
-    virtual wxTextEntry *GetTestEntry() const override { return m_combo; }
-    virtual wxWindow *GetTestWindow() const override { return m_combo; }
+    virtual wxTextEntry *GetTestEntry() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetTestWindow() const override { return m_combo.get(); }
 
-    virtual wxItemContainer *GetContainer() const override { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const override { return m_combo; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_combo.get(); }
 
     virtual void CheckStringSelection(const char * WXUNUSED(sel)) override
     {
@@ -42,7 +46,7 @@ protected:
         // is no way to return the selection contents directly
     }
 
-    wxBitmapComboBox *m_combo;
+    std::unique_ptr<wxBitmapComboBox> m_combo;
 
     wxDECLARE_NO_COPY_CLASS(BitmapComboBoxTestCase);
 };
@@ -55,13 +59,10 @@ wxITEM_CONTAINER_TESTS(BitmapComboBoxTestCase, "BitmapComboBox",
 
 BitmapComboBoxTestCase::BitmapComboBoxTestCase()
 {
-    m_combo = new wxBitmapComboBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_combo = make_unique<wxBitmapComboBox>(wxTheApp->GetTopWindow(),
+                                            wxID_ANY);
 }
 
-BitmapComboBoxTestCase::~BitmapComboBoxTestCase()
-{
-    wxDELETE(m_combo);
-}
 
 TEST_CASE_METHOD(BitmapComboBoxTestCase, "BitmapComboBox::Bitmap",
                  "[bitmapcombobox]")

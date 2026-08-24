@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_SPINCTRL
 
 
@@ -28,13 +30,9 @@ public:
     {
     }
 
-    ~SpinCtrlTestCase1()
-    {
-        delete m_spin;
-    }
 
 protected:
-    wxSpinCtrl* m_spin;
+    std::unique_ptr<wxSpinCtrl> m_spin;
 };
 
 class SpinCtrlTestCase2
@@ -45,13 +43,9 @@ public:
     {
     }
 
-    ~SpinCtrlTestCase2()
-    {
-        delete m_spin;
-    }
 
 protected:
-    wxSpinCtrl* m_spin;
+    std::unique_ptr<wxSpinCtrl> m_spin;
 };
 
 class SpinCtrlTestCase3
@@ -63,10 +57,6 @@ public:
         m_spin->Bind(wxEVT_SPINCTRL, &SpinCtrlTestCase3::OnSpinSetValue, this);
     }
 
-    ~SpinCtrlTestCase3()
-    {
-        delete m_spin;
-    }
 
 private:
     void OnSpinSetValue(wxSpinEvent &e)
@@ -81,7 +71,7 @@ private:
     }
 
 protected:
-    wxSpinCtrl* m_spin;
+    std::unique_ptr<wxSpinCtrl> m_spin;
 };
 
 
@@ -139,8 +129,8 @@ TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::NoEventsInCtor", "[spinctrl]")
 {
     // Verify that creating the control does not generate any events. This is
     // unexpected and shouldn't happen.
-    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
-    EventCounter updatedText(m_spin, wxEVT_TEXT);
+    EventCounter updatedSpin(m_spin.get(), wxEVT_SPINCTRL);
+    EventCounter updatedText(m_spin.get(), wxEVT_TEXT);
 
     m_spin->Create(wxTheApp->GetTopWindow(), wxID_ANY, "",
                    wxDefaultPosition, wxDefaultSize, 0,
@@ -153,7 +143,7 @@ TEST_CASE_METHOD(SpinCtrlTestCase1, "SpinCtrl::NoEventsInCtor", "[spinctrl]")
 TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Arrows", "[spinctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter updated(m_spin, wxEVT_SPINCTRL);
+    EventCounter updated(m_spin.get(), wxEVT_SPINCTRL);
 
     wxUIActionSimulator sim;
 
@@ -213,8 +203,8 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Range", "[spinctrl]")
     // that this doesn't result in any events (as this is not something done by
     // the user).
     {
-        EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
-        EventCounter updatedText(m_spin, wxEVT_TEXT);
+        EventCounter updatedSpin(m_spin.get(), wxEVT_SPINCTRL);
+        EventCounter updatedText(m_spin.get(), wxEVT_TEXT);
 
         m_spin->SetRange(1, 10);
         CHECK(m_spin->GetValue() == 1);
@@ -264,8 +254,8 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Range", "[spinctrl]")
 
 TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Value", "[spinctrl]")
 {
-    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
-    EventCounter updatedText(m_spin, wxEVT_TEXT);
+    EventCounter updatedSpin(m_spin.get(), wxEVT_SPINCTRL);
+    EventCounter updatedText(m_spin.get(), wxEVT_TEXT);
 
     CHECK(m_spin->GetValue() == 0);
 

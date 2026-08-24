@@ -23,24 +23,24 @@
 #include "wx/uiaction.h"
 #include "testableframe.h"
 
+#include <memory>
+
 class SliderTestCase
 {
 public:
     SliderTestCase() { Create(wxSL_HORIZONTAL); }
-    ~SliderTestCase() { wxDELETE(m_slider); }
 
 protected:
     // Recreate the slider using the given style instead of the default one.
     void Create(long style)
     {
-        wxDELETE(m_slider);
-
-        m_slider = new wxSlider(wxTheApp->GetTopWindow(), wxID_ANY, 50, 0, 100,
-                                wxDefaultPosition, wxDefaultSize,
-                                style);
+        m_slider = make_unique<wxSlider>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         50, 0, 100,
+                                         wxDefaultPosition, wxDefaultSize,
+                                         style);
     }
 
-    wxSlider* m_slider = nullptr;
+    std::unique_ptr<wxSlider> m_slider;
 
     wxDECLARE_NO_COPY_CLASS(SliderTestCase);
 };
@@ -54,8 +54,8 @@ TEST_CASE_METHOD(SliderTestCase, "Slider::PageUpDown", "[slider]")
     if ( !EnableUITests() )
         return;
 
-    EventCounter pageup(m_slider, wxEVT_SCROLL_PAGEUP);
-    EventCounter pagedown(m_slider, wxEVT_SCROLL_PAGEDOWN);
+    EventCounter pageup(m_slider.get(), wxEVT_SCROLL_PAGEUP);
+    EventCounter pagedown(m_slider.get(), wxEVT_SCROLL_PAGEDOWN);
 
     wxUIActionSimulator sim;
 
@@ -78,8 +78,8 @@ TEST_CASE_METHOD(SliderTestCase, "Slider::LineUpDown", "[slider]")
     if ( !EnableUITests() )
         return;
 
-    EventCounter lineup(m_slider, wxEVT_SCROLL_LINEUP);
-    EventCounter linedown(m_slider, wxEVT_SCROLL_LINEDOWN);
+    EventCounter lineup(m_slider.get(), wxEVT_SCROLL_LINEUP);
+    EventCounter linedown(m_slider.get(), wxEVT_SCROLL_LINEDOWN);
 
     wxUIActionSimulator sim;
 
@@ -102,7 +102,7 @@ TEST_CASE_METHOD(SliderTestCase, "Slider::EvtSlider", "[slider]")
     if ( !EnableUITests() )
         return;
 
-    EventCounter slider(m_slider, wxEVT_SLIDER);
+    EventCounter slider(m_slider.get(), wxEVT_SLIDER);
 
     wxUIActionSimulator sim;
 
@@ -203,9 +203,9 @@ TEST_CASE_METHOD(SliderTestCase, "Slider::Thumb", "[slider]")
     if ( !EnableUITests() )
         return;
 
-    EventCounter track(m_slider, wxEVT_SCROLL_THUMBTRACK);
-    EventCounter release(m_slider, wxEVT_SCROLL_THUMBRELEASE);
-    EventCounter changed(m_slider, wxEVT_SCROLL_CHANGED);
+    EventCounter track(m_slider.get(), wxEVT_SCROLL_THUMBTRACK);
+    EventCounter release(m_slider.get(), wxEVT_SCROLL_THUMBRELEASE);
+    EventCounter changed(m_slider.get(), wxEVT_SCROLL_CHANGED);
 
     wxUIActionSimulator sim;
 

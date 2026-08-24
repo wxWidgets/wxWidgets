@@ -19,6 +19,8 @@
 
 #include "wx/app.h"
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -27,7 +29,6 @@ class TreeListCtrlTestCase
 {
 public:
     TreeListCtrlTestCase();
-    ~TreeListCtrlTestCase();
 
 protected:
     // Create the control with the given style.
@@ -43,7 +44,7 @@ protected:
     // Tests:
 
     // The control itself.
-    wxTreeListCtrl *m_treelist;
+    std::unique_ptr<wxTreeListCtrl> m_treelist;
 
     // And some of its items.
     wxTreeListItem m_code,
@@ -80,11 +81,11 @@ TreeListCtrlTestCase::AddItem(const char *label,
 
 void TreeListCtrlTestCase::Create(long style)
 {
-    m_treelist = new wxTreeListCtrl(wxTheApp->GetTopWindow(),
-                                    wxID_ANY,
-                                    wxDefaultPosition,
-                                    wxSize(400, 200),
-                                    style);
+    m_treelist = make_unique<wxTreeListCtrl>(wxTheApp->GetTopWindow(),
+                                             wxID_ANY,
+                                             wxDefaultPosition,
+                                             wxSize(400, 200),
+                                             style);
 
     m_treelist->AppendColumn("Component");
     m_treelist->AppendColumn("# Files");
@@ -118,11 +119,6 @@ TreeListCtrlTestCase::TreeListCtrlTestCase()
     Create(wxTL_MULTIPLE | wxTL_3STATE);
 }
 
-TreeListCtrlTestCase::~TreeListCtrlTestCase()
-{
-    delete m_treelist;
-    m_treelist = nullptr;
-}
 
 // ----------------------------------------------------------------------------
 // the tests themselves

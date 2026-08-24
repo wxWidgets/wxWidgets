@@ -18,45 +18,44 @@
 
 #include "testableframe.h"
 
+#include <memory>
+
 class CheckBoxTestCase
 {
 public:
     CheckBoxTestCase();
-    ~CheckBoxTestCase();
 
 protected:
-    // Initialize m_check with a new checkbox with the specified style
+    // Initialize m_check.get() with a new checkbox with the specified style
     //
     // This function always returns false just to make it more convenient to
     // use inside WX_ASSERT_FAILS_WITH_ASSERT(), its return value doesn't have
     // any meaning otherwise.
     bool CreateCheckBox(long style)
     {
-        wxDELETE( m_check );
-        m_check = new wxCheckBox(wxTheApp->GetTopWindow(), wxID_ANY, "Check box",
-                                 wxDefaultPosition, wxDefaultSize, style);
+        m_check = make_unique<wxCheckBox>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                          "Check box",
+                                          wxDefaultPosition, wxDefaultSize,
+                                          style);
         return false;
     }
 
 
-    wxCheckBox* m_check;
+    std::unique_ptr<wxCheckBox> m_check;
 
     wxDECLARE_NO_COPY_CLASS(CheckBoxTestCase);
 };
 
 CheckBoxTestCase::CheckBoxTestCase()
 {
-    m_check = new wxCheckBox(wxTheApp->GetTopWindow(), wxID_ANY, "Check box");
+    m_check = make_unique<wxCheckBox>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                      "Check box");
 }
 
-CheckBoxTestCase::~CheckBoxTestCase()
-{
-    delete m_check;
-}
 
 TEST_CASE_METHOD(CheckBoxTestCase, "CheckBox::Check", "[checkbox]")
 {
-    EventCounter clicked(m_check, wxEVT_CHECKBOX);
+    EventCounter clicked(m_check.get(), wxEVT_CHECKBOX);
 
     //We should be unchecked by default
     CHECK(!m_check->IsChecked());

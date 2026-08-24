@@ -19,22 +19,24 @@
 #include "wx/treebook.h"
 #include "bookctrlbasetest.h"
 
+#include <memory>
+
 class TreebookTestCase : public BookCtrlBaseTestCase
 {
 public:
     TreebookTestCase();
-    ~TreebookTestCase();
 
 protected:
-    virtual wxBookCtrlBase *GetBase() const override { return m_treebook; }
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_treebook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
-        { return wxEVT_TREEBOOK_PAGE_CHANGED; }
+    { return wxEVT_TREEBOOK_PAGE_CHANGED; }
 
     virtual wxEventType GetChangingEvent() const override
-        { return wxEVT_TREEBOOK_PAGE_CHANGING; }
+    { return wxEVT_TREEBOOK_PAGE_CHANGING; }
 
-    wxTreebook *m_treebook;
+    std::unique_ptr<wxTreebook> m_treebook;
 
     wxDECLARE_NO_COPY_CLASS(TreebookTestCase);
 };
@@ -48,20 +50,16 @@ wxBOOK_CTRL_BASE_TEST_CASE(TreebookTestCase, "Treebook", Image,
 
 TreebookTestCase::TreebookTestCase()
 {
-    m_treebook = new wxTreebook(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_treebook = make_unique<wxTreebook>(wxTheApp->GetTopWindow(), wxID_ANY);
     AddPanels();
 }
 
-TreebookTestCase::~TreebookTestCase()
-{
-    wxDELETE(m_treebook);
-}
 
 TEST_CASE_METHOD(TreebookTestCase, "Treebook::SubPages", "[treebook]")
 {
-    wxPanel* subpanel1 = new wxPanel(m_treebook);
-    wxPanel* subpanel2 = new wxPanel(m_treebook);
-    wxPanel* subpanel3 = new wxPanel(m_treebook);
+    wxPanel* subpanel1 = new wxPanel(m_treebook.get());
+    wxPanel* subpanel2 = new wxPanel(m_treebook.get());
+    wxPanel* subpanel3 = new wxPanel(m_treebook.get());
 
     m_treebook->AddSubPage(subpanel1, "Subpanel 1", false, 0);
 
@@ -86,15 +84,15 @@ TEST_CASE_METHOD(TreebookTestCase, "Treebook::ContainerPage", "[treebook]")
     REQUIRE_NOTHROW( m_treebook->AddPage(nullptr, "Container page") );
     CHECK( m_treebook->GetPageParent(0) == -1 );
 
-    m_treebook->AddSubPage(new wxPanel(m_treebook), "Child page");
+    m_treebook->AddSubPage(new wxPanel(m_treebook.get()), "Child page");
     CHECK( m_treebook->GetPageParent(1) == 0 );
 }
 
 TEST_CASE_METHOD(TreebookTestCase, "Treebook::Expand", "[treebook]")
 {
-    wxPanel* subpanel1 = new wxPanel(m_treebook);
-    wxPanel* subpanel2 = new wxPanel(m_treebook);
-    wxPanel* subpanel3 = new wxPanel(m_treebook);
+    wxPanel* subpanel1 = new wxPanel(m_treebook.get());
+    wxPanel* subpanel2 = new wxPanel(m_treebook.get());
+    wxPanel* subpanel3 = new wxPanel(m_treebook.get());
 
     m_treebook->AddSubPage(subpanel1, "Subpanel 1", false, 0);
     m_treebook->InsertSubPage(1, subpanel2, "Subpanel 2", false, 1);
@@ -118,9 +116,9 @@ TEST_CASE_METHOD(TreebookTestCase, "Treebook::Expand", "[treebook]")
 
 TEST_CASE_METHOD(TreebookTestCase, "Treebook::Delete", "[treebook]")
 {
-    wxPanel* subpanel1 = new wxPanel(m_treebook);
-    wxPanel* subpanel2 = new wxPanel(m_treebook);
-    wxPanel* subpanel3 = new wxPanel(m_treebook);
+    wxPanel* subpanel1 = new wxPanel(m_treebook.get());
+    wxPanel* subpanel2 = new wxPanel(m_treebook.get());
+    wxPanel* subpanel3 = new wxPanel(m_treebook.get());
 
     m_treebook->AddSubPage(subpanel1, "Subpanel 1", false, 0);
     m_treebook->InsertSubPage(1, subpanel2, "Subpanel 2", false, 1);

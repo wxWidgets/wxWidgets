@@ -19,14 +19,16 @@
 #include "wx/choicebk.h"
 #include "bookctrlbasetest.h"
 
+#include <memory>
+
 class ChoicebookTestCase : public BookCtrlBaseTestCase
 {
 public:
     ChoicebookTestCase();
-    ~ChoicebookTestCase();
 
 protected:
-    virtual wxBookCtrlBase *GetBase() const override { return m_choicebook; }
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_choicebook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
     { return wxEVT_CHOICEBOOK_PAGE_CHANGED; }
@@ -36,7 +38,7 @@ protected:
 
     virtual bool HasBrokenMnemonics() const override { return true; }
 
-    wxChoicebook *m_choicebook;
+    std::unique_ptr<wxChoicebook> m_choicebook;
 
     wxDECLARE_NO_COPY_CLASS(ChoicebookTestCase);
 };
@@ -46,14 +48,11 @@ wxBOOK_CTRL_BASE_TESTS(ChoicebookTestCase, "Choicebook",
 
 ChoicebookTestCase::ChoicebookTestCase()
 {
-    m_choicebook = new wxChoicebook(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_choicebook = make_unique<wxChoicebook>(
+        wxTheApp->GetTopWindow(), wxID_ANY);
     AddPanels();
 }
 
-ChoicebookTestCase::~ChoicebookTestCase()
-{
-    wxDELETE(m_choicebook);
-}
 
 TEST_CASE_METHOD(ChoicebookTestCase, "Choicebook::Choice", "[choicebook]")
 {

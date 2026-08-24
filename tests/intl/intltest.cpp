@@ -24,7 +24,6 @@
 #include "wx/filename.h"
 
 #include "wx/private/glibc.h"
-#include "wx/private/make_unique.h"
 
 #include <memory>
 
@@ -55,7 +54,7 @@ public:
 
         wxLocale::AddCatalogLookupPathPrefix("./intl");
 
-        auto locale = std::make_unique<wxLocale>();
+        auto locale = make_unique<wxLocale>();
 
         // don't load default catalog, it may be unavailable:
         REQUIRE( locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );

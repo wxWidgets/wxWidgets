@@ -19,27 +19,25 @@
 #include "wx/uiaction.h"
 #include "wx/tglbtn.h"
 
+#include <memory>
+
 class ToggleButtonTestCase
 {
 public:
     ToggleButtonTestCase();
-    ~ToggleButtonTestCase();
 
 protected:
-    wxToggleButton* m_button;
+    std::unique_ptr<wxToggleButton> m_button;
 
     wxDECLARE_NO_COPY_CLASS(ToggleButtonTestCase);
 };
 
 ToggleButtonTestCase::ToggleButtonTestCase()
 {
-    m_button = new wxToggleButton(wxTheApp->GetTopWindow(), wxID_ANY, "wxToggleButton");
+    m_button = make_unique<wxToggleButton>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                           "wxToggleButton");
 }
 
-ToggleButtonTestCase::~ToggleButtonTestCase()
-{
-    wxDELETE(m_button);
-}
 
 TEST_CASE_METHOD(ToggleButtonTestCase, "ToggleButton::Click", "[togglebutton]")
 {
@@ -47,7 +45,7 @@ TEST_CASE_METHOD(ToggleButtonTestCase, "ToggleButton::Click", "[togglebutton]")
     if ( !EnableUITests() )
         return;
 
-    EventCounter clicked(m_button, wxEVT_TOGGLEBUTTON);
+    EventCounter clicked(m_button.get(), wxEVT_TOGGLEBUTTON);
 
     wxUIActionSimulator sim;
 
@@ -72,7 +70,7 @@ TEST_CASE_METHOD(ToggleButtonTestCase, "ToggleButton::Click", "[togglebutton]")
 
 TEST_CASE_METHOD(ToggleButtonTestCase, "ToggleButton::Value", "[togglebutton]")
 {
-    EventCounter clicked(m_button, wxEVT_BUTTON);
+    EventCounter clicked(m_button.get(), wxEVT_BUTTON);
 
     m_button->SetValue(true);
 

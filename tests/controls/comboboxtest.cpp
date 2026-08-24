@@ -24,6 +24,8 @@
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -32,14 +34,16 @@ class ComboBoxTestCase : public TextEntryTestCase, public ItemContainerTestCase
 {
 public:
     ComboBoxTestCase();
-    ~ComboBoxTestCase();
 
 protected:
-    virtual wxTextEntry *GetTestEntry() const override { return m_combo; }
-    virtual wxWindow *GetTestWindow() const override { return m_combo; }
+    virtual wxTextEntry *GetTestEntry() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetTestWindow() const override { return m_combo.get(); }
 
-    virtual wxItemContainer *GetContainer() const override { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const override { return m_combo; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_combo.get(); }
 
     virtual void CheckStringSelection(const char * WXUNUSED(sel)) override
     {
@@ -48,7 +52,7 @@ protected:
         // is no way to return the selection contents directly
     }
 
-    wxComboBox *m_combo;
+    std::unique_ptr<wxComboBox> m_combo;
 
     wxDECLARE_NO_COPY_CLASS(ComboBoxTestCase);
 };
@@ -88,14 +92,9 @@ wxTEXT_ENTRY_TESTS(ComboBoxTestCase, "ComboBox",
 
 ComboBoxTestCase::ComboBoxTestCase()
 {
-    m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_combo = make_unique<wxComboBox>(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
-ComboBoxTestCase::~ComboBoxTestCase()
-{
-    delete m_combo;
-    m_combo = nullptr;
-}
 
 // ----------------------------------------------------------------------------
 // tests themselves
@@ -129,8 +128,8 @@ TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::Size", "[combobox]")
 TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::PopDismiss", "[combobox]")
 {
 #if defined(__WXMSW__) || defined(__WXGTK210__) || defined(__WXQT__)
-    EventCounter drop(m_combo, wxEVT_COMBOBOX_DROPDOWN);
-    EventCounter close(m_combo, wxEVT_COMBOBOX_CLOSEUP);
+    EventCounter drop(m_combo.get(), wxEVT_COMBOBOX_DROPDOWN);
+    EventCounter close(m_combo.get(), wxEVT_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
     CHECK(drop.GetCount() == 1);
@@ -150,10 +149,9 @@ TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::PopDismiss", "[combobox]")
 TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::Sort", "[combobox]")
 {
 #if !defined(__WXOSX__)
-    delete m_combo;
-    m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                             wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                             wxCB_SORT);
+    m_combo = make_unique<wxComboBox>(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                                      wxDefaultPosition, wxDefaultSize, 0,
+                                      nullptr, wxCB_SORT);
 
     m_combo->Append("aaa");
     m_combo->Append("Aaa");
@@ -181,10 +179,9 @@ TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::ReadOnly", "[combobox]")
     testitems.Add("item 1");
     testitems.Add("item 2");
 
-    delete m_combo;
-    m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                             wxDefaultPosition, wxDefaultSize, testitems,
-                             wxCB_READONLY);
+    m_combo = make_unique<wxComboBox>(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                                      wxDefaultPosition, wxDefaultSize,
+                                      testitems, wxCB_READONLY);
 
     m_combo->SetValue("item 1");
 
@@ -230,7 +227,7 @@ TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::SetStringSelection",
     m_combo->Append("bar");
     m_combo->Append("baz");
 
-    EventCounter events(m_combo, wxEVT_COMBOBOX);
+    EventCounter events(m_combo.get(), wxEVT_COMBOBOX);
     m_combo->SetStringSelection("bar");
     CHECK( events.GetCount() == 0 );
 

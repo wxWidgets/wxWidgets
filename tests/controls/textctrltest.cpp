@@ -35,7 +35,6 @@
 #endif
 
 #include "wx/private/localeset.h"
-#include "wx/private/make_unique.h"
 
 #include "textentrytest.h"
 #include "testableframe.h"
@@ -67,14 +66,10 @@ public:
         CreateText(0);
     }
 
-    ~TextCtrlTestCase()
-    {
-        wxDELETE(m_text);
-    }
 
 protected:
-    virtual wxTextEntry *GetTestEntry() const override { return m_text; }
-    virtual wxWindow *GetTestWindow() const override { return m_text; }
+    virtual wxTextEntry *GetTestEntry() const override { return m_text.get(); }
+    virtual wxWindow *GetTestWindow() const override { return m_text.get(); }
 
     // These tests are run for both single and multi-line controls.
     void ReadOnly();
@@ -121,7 +116,7 @@ protected:
     // Return a string pattern of length _len_ used as text lines in multi-line control
     static wxString MakeLinePattern(int len = 100);
 
-    wxTextCtrl *m_text;
+    std::unique_ptr<wxTextCtrl> m_text;
 
     const long m_style;
 
@@ -202,9 +197,9 @@ void TextCtrlTestCase::CreateText(long extraStyles)
 {
     const long style = m_style | extraStyles;
     const int h = (style & wxTE_MULTILINE) ? TEXT_HEIGHT : -1;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, wxSize(400, h),
-                            style);
+    m_text = make_unique<wxTextCtrl>(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                                     wxDefaultPosition, wxSize(400, h),
+                                     style);
 }
 
 wxString TextCtrlTestCase::MakeLinePattern(int len)
@@ -245,10 +240,9 @@ void TextCtrlTestCase::ReadOnly()
         return;
 
     // we need a read only control for this test so recreate it
-    delete m_text;
     CreateText(wxTE_READONLY);
 
-    EventCounter updated(m_text, wxEVT_TEXT);
+    EventCounter updated(m_text.get(), wxEVT_TEXT);
 
     m_text->SetFocus();
 
@@ -290,9 +284,8 @@ void TextCtrlTestCase::MaxLength()
     if ( m_style == wxTE_MULTILINE )
     {
 #if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXQT__)
-        delete m_text;
         CreateText(wxTE_DONTWRAP);
-        EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
+        EventCounter maxlen(m_text.get(), wxEVT_TEXT_MAXLEN);
 
         m_text->SetMaxLength(250);
         m_text->SetFocus();
@@ -374,8 +367,8 @@ void TextCtrlTestCase::MaxLength()
     #endif
 #endif
 
-        EventCounter updated(m_text, wxEVT_TEXT);
-        EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
+        EventCounter updated(m_text.get(), wxEVT_TEXT);
+        EventCounter maxlen(m_text.get(), wxEVT_TEXT_MAXLEN);
 
         m_text->SetMaxLength(10);
         m_text->SetFocus();
@@ -422,7 +415,7 @@ void TextCtrlTestCase::StreamInput()
         // Ensure we use decimal point and not a comma.
         wxCLocaleSetter setCLocale;
 
-        *m_text << "stringinput"
+        *m_text.get() << "stringinput"
                 << 10
                 << 1000L
                 << 3.14f
@@ -437,7 +430,7 @@ void TextCtrlTestCase::StreamInput()
 
 #if wxHAS_TEXT_WINDOW_STREAM
 
-    std::ostream stream(m_text);
+    std::ostream stream(m_text.get());
 
     // We don't test a wide character as this is not a wide stream
     stream << "stringinput"
@@ -459,7 +452,7 @@ void TextCtrlTestCase::Redirector()
 {
 #if wxHAS_TEXT_WINDOW_STREAM
 
-    wxStreamToTextRedirector redirect(m_text);
+    wxStreamToTextRedirector redirect(m_text.get());
 
     std::cout << "stringinput"
               << 10
@@ -555,7 +548,7 @@ void TextCtrlTestCase::ProcessEnter()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    EventCounter count(m_text, wxEVT_TEXT_ENTER);
+    EventCounter count(m_text.get(), wxEVT_TEXT_ENTER);
 
     m_text->SetFocus();
 
@@ -566,7 +559,6 @@ void TextCtrlTestCase::ProcessEnter()
     CHECK(frame->GetEventCount(wxEVT_TEXT_ENTER) == 0);
 
     // we need a text control with wxTE_PROCESS_ENTER for this test
-    delete m_text;
     CreateText(wxTE_PROCESS_ENTER);
 
     m_text->SetFocus();
@@ -590,7 +582,6 @@ void TextCtrlTestCase::Url()
     if ( IsAutomaticTest() )
         return;
 
-    delete m_text;
     CreateText(wxTE_RICH | wxTE_AUTO_URL);
 
     m_text->AppendText("http://www.wxwidgets.org");
@@ -598,7 +589,7 @@ void TextCtrlTestCase::Url()
     wxUIActionSimulator sim;
     sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5)));
 
-    EventCounter url(m_text, wxEVT_TEXT_URL);
+    EventCounter url(m_text.get(), wxEVT_TEXT_URL);
 
     sim.MouseClick();
     wxYield();
@@ -610,7 +601,6 @@ void TextCtrlTestCase::Url()
 void TextCtrlTestCase::Style()
 {
 #if !defined(__WXOSX__) && !defined(__WXQT__)
-    delete m_text;
     // We need wxTE_RICH under windows for style support
     CreateText(wxTE_MULTILINE|wxTE_RICH);
 
@@ -667,7 +657,6 @@ void TextCtrlTestCase::FontStyle()
 {
     // We need wxTE_RICH under MSW and wxTE_MULTILINE under GTK for style
     // support so recreate the control with these styles.
-    delete m_text;
     CreateText(wxTE_RICH);
 
     // Check that we get back the same font from GetStyle() after setting it
@@ -757,7 +746,7 @@ void TextCtrlTestCase::LogTextCtrl()
 {
     CHECK(m_text->IsEmpty());
 
-    wxLogTextCtrl* logtext = new wxLogTextCtrl(m_text);
+    wxLogTextCtrl* logtext = new wxLogTextCtrl(m_text.get());
 
     wxLog* old = wxLog::SetActiveTarget(logtext);
 
@@ -771,7 +760,6 @@ void TextCtrlTestCase::LogTextCtrl()
 
 void TextCtrlTestCase::LongText()
 {
-    delete m_text;
     CreateText(wxTE_MULTILINE|wxTE_DONTWRAP);
 
     const int numLines = 1000;
@@ -815,7 +803,6 @@ void TextCtrlTestCase::PositionToCoordsRich2()
 
 void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
 {
-    delete m_text;
     CreateText(style|wxTE_MULTILINE);
 
     // Asking for invalid index should fail.
@@ -915,7 +902,6 @@ void TextCtrlTestCase::PositionToXYMultiLineRich2()
 
 void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
 {
-    delete m_text;
     CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
 
 #if wxHAS_2CHAR_NEWLINES
@@ -1137,7 +1123,6 @@ void TextCtrlTestCase::XYToPositionMultiLineRich2()
 
 void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
 {
-    delete m_text;
     CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
 
 #if wxHAS_2CHAR_NEWLINES
@@ -1294,7 +1279,6 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
 
 void TextCtrlTestCase::PositionToXYSingleLine()
 {
-    delete m_text;
     CreateText(wxTE_DONTWRAP);
 
     bool ok;
@@ -1349,7 +1333,6 @@ void TextCtrlTestCase::PositionToXYSingleLine()
 
 void TextCtrlTestCase::XYToPositionSingleLine()
 {
-    delete m_text;
     CreateText(wxTE_DONTWRAP);
 
     wxString text;
@@ -1419,9 +1402,7 @@ TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
         }
 
         virtual TextLikeControlCreator* CloneAsMultiLine() const override
-        {
-            return new TextCtrlCreator(wxTE_MULTILINE);
-        }
+        { return new TextCtrlCreator(wxTE_MULTILINE); }
 
     private:
         int m_styleToAdd;
@@ -1811,7 +1792,7 @@ TEST_CASE("wxTextCtrl::RichWithHint", "[wxTextCtrl][hint][rich]")
         richStyle = wxTE_RICH2;
     }
 
-    auto text = std::make_unique<wxTextCtrl>
+    auto text = make_unique<wxTextCtrl>
                 (
                     wxTheApp->GetTopWindow(), wxID_ANY, "",
                     wxDefaultPosition, wxSize(400, 200),

@@ -23,6 +23,8 @@
 #include "testableframe.h"
 #include "wx/uiaction.h"
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -31,10 +33,9 @@ class VirtListCtrlTestCase
 {
 public:
     VirtListCtrlTestCase();
-    ~VirtListCtrlTestCase();
 
 protected:
-    wxListCtrl *m_list;
+    std::unique_ptr<wxListCtrl> m_list;
 
     wxDECLARE_NO_COPY_CLASS(VirtListCtrlTestCase);
 };
@@ -59,20 +60,13 @@ VirtListCtrlTestCase::VirtListCtrlTestCase()
 
     protected:
         virtual wxString OnGetItemText(long item, long column) const override
-        {
-            return wxString::Format("Row %ld, col %ld", item, column);
-        }
+        { return wxString::Format("Row %ld, col %ld", item, column); }
     };
 
-    m_list = new VirtListCtrl;
+    m_list = make_unique<VirtListCtrl>();
     m_list->AppendColumn("Col0");
 }
 
-VirtListCtrlTestCase::~VirtListCtrlTestCase()
-{
-    delete m_list;
-    m_list = nullptr;
-}
 
 TEST_CASE_METHOD(VirtListCtrlTestCase, "VirtListCtrl::UpdateSelection", "[listctrl][virtual]")
 {
@@ -103,7 +97,7 @@ TEST_CASE_METHOD(VirtListCtrlTestCase, "VirtListCtrl::DeselectedEvent", "[listct
         return;
 
     m_list->SetItemCount(1);
-    wxListCtrl* const list = m_list;
+    wxListCtrl* const list = m_list.get();
 
     EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
     EventCounter deselected(list, wxEVT_LIST_ITEM_DESELECTED);

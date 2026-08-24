@@ -16,26 +16,22 @@
     #include "wx/gauge.h"
 #endif // WX_PRECOMP
 
+#include <memory>
+
 class GaugeTestCase
 {
 public:
     GaugeTestCase();
-    ~GaugeTestCase();
 
 protected:
-    wxGauge* m_gauge;
+    std::unique_ptr<wxGauge> m_gauge;
 
     wxDECLARE_NO_COPY_CLASS(GaugeTestCase);
 };
 
 GaugeTestCase::GaugeTestCase()
 {
-    m_gauge = new wxGauge(wxTheApp->GetTopWindow(), wxID_ANY, 100);
-}
-
-GaugeTestCase::~GaugeTestCase()
-{
-    wxTheApp->GetTopWindow()->DestroyChildren();
+    m_gauge = make_unique<wxGauge>(wxTheApp->GetTopWindow(), wxID_ANY, 100);
 }
 
 TEST_CASE_METHOD(GaugeTestCase, "Gauge::Direction", "[gauge]")
@@ -43,15 +39,15 @@ TEST_CASE_METHOD(GaugeTestCase, "Gauge::Direction", "[gauge]")
     //We should default to a horizontal gauge
     CHECK(!m_gauge->IsVertical());
 
-    wxDELETE(m_gauge);
-    m_gauge = new wxGauge(wxTheApp->GetTopWindow(), wxID_ANY, 100,
-                          wxDefaultPosition, wxDefaultSize, wxGA_VERTICAL);
+    m_gauge = make_unique<wxGauge>(wxTheApp->GetTopWindow(), wxID_ANY, 100,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxGA_VERTICAL);
 
     CHECK(m_gauge->IsVertical());
 
-    wxDELETE(m_gauge);
-    m_gauge = new wxGauge(wxTheApp->GetTopWindow(), wxID_ANY, 100,
-                          wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL);
+    m_gauge = make_unique<wxGauge>(wxTheApp->GetTopWindow(), wxID_ANY, 100,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxGA_HORIZONTAL);
 
     CHECK(!m_gauge->IsVertical());
 }

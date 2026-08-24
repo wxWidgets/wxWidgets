@@ -20,14 +20,16 @@
 #include "wx/listctrl.h"
 #include "bookctrlbasetest.h"
 
+#include <memory>
+
 class ListbookTestCase : public BookCtrlBaseTestCase
 {
 public:
     ListbookTestCase();
-    ~ListbookTestCase();
 
 protected:
-    virtual wxBookCtrlBase *GetBase() const override { return m_listbook; }
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_listbook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
     { return wxEVT_LISTBOOK_PAGE_CHANGED; }
@@ -37,7 +39,7 @@ protected:
 
     virtual bool HasBrokenMnemonics() const override { return true; }
 
-    wxListbook *m_listbook;
+    std::unique_ptr<wxListbook> m_listbook;
 
     wxDECLARE_NO_COPY_CLASS(ListbookTestCase);
 };
@@ -47,15 +49,11 @@ wxBOOK_CTRL_BASE_TESTS(ListbookTestCase, "Listbook",
 
 ListbookTestCase::ListbookTestCase()
 {
-    m_listbook = new wxListbook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                wxDefaultPosition, wxSize(400, 300));
+    m_listbook = make_unique<wxListbook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxDefaultPosition, wxSize(400, 300));
     AddPanels();
 }
 
-ListbookTestCase::~ListbookTestCase()
-{
-    wxDELETE(m_listbook);
-}
 
 TEST_CASE_METHOD(ListbookTestCase, "Listbook::ListView", "[listbook]")
 {

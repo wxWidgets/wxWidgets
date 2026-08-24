@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_HYPERLINKCTRL
 
 
@@ -25,17 +27,14 @@ class HyperlinkCtrlTestCase
 public:
     HyperlinkCtrlTestCase()
     {
-        m_hyperlink = new wxHyperlinkCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
-                                         "wxWidgets", "http://wxwidgets.org");
+        m_hyperlink = make_unique<wxHyperlinkCtrl>(wxTheApp->GetTopWindow(),
+                                                   wxID_ANY, "wxWidgets",
+                                                   "http://wxwidgets.org");
     }
 
-    ~HyperlinkCtrlTestCase()
-    {
-        delete m_hyperlink;
-    }
 
 protected:
-    wxHyperlinkCtrl* m_hyperlink;
+    std::unique_ptr<wxHyperlinkCtrl> m_hyperlink;
 
     wxDECLARE_NO_COPY_CLASS(HyperlinkCtrlTestCase);
 };
@@ -86,7 +85,7 @@ TEST_CASE_METHOD(HyperlinkCtrlTestCase, "wxHyperlinkCtrl::Click",
     if ( !EnableUITests() )
         return;
 
-    EventCounter hyperlink(m_hyperlink, wxEVT_HYPERLINK);
+    EventCounter hyperlink(m_hyperlink.get(), wxEVT_HYPERLINK);
 
     wxUIActionSimulator sim;
 
