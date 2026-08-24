@@ -75,18 +75,19 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
 {
     gs_blinkTime = milliseconds;
 
-#ifdef _WXGTK__
-    GtkSettings *settings = gtk_settings_get_default();
-    if (millseconds == 0)
-    {
-        gtk_settings_set_long_property(settings, "gtk-cursor-blink", gtk_false, nullptr);
-    }
-    else
-    {
-        gtk_settings_set_long_property(settings, "gtk-cursor-blink", gtk_true, nullptr);
-        gtk_settings_set_long_property(settings, "gtk-cursor-time", milliseconds, nullptr);
-    }
-#endif
+    // This used to be followed by a block passing the blink time on to
+    // GtkSettings, so that GTK's own text cursors would blink in step with
+    // wxCaret. It never ran: its guard was misspelled "_WXGTK__" with a single
+    // leading underscore, which nothing defines, and it could not have
+    // compiled if it had -- it misspelt its own parameter, and it passed
+    // gtk_false to gtk_settings_set_long_property(), which wants a glong.
+    // Removing it cannot change behaviour, for the same reason.
+    //
+    // Doing it for real is possible -- g_object_set() on "gtk-cursor-blink"
+    // and "gtk-cursor-blink-time" -- but it would reach past wxCaret into
+    // every native widget in the process, and GtkSettings is per display, so
+    // it is a decision about what this function is allowed to affect rather
+    // than a repair.
 }
 
 // ----------------------------------------------------------------------------
