@@ -49,6 +49,8 @@ protected:
     wxDECLARE_NO_COPY_CLASS(StdStreamTestCase);
 };
 
+} // anonymous namespace
+
 // MSVS 2015 can't compile CHECK()s in this file without this disambiguation.
 #ifdef __VISUALC__
     #if __VISUALC__ < 1910
@@ -58,8 +60,6 @@ protected:
         }
     #endif // MSVS 2015
 #endif // __VISUALC__
-
-} // anonymous namespace
 
 // ==========================================================================
 // Tests
