@@ -104,11 +104,47 @@ wxEpollDispatcher::~wxEpollDispatcher()
     }
 }
 
+wxFDIOHandler *wxEpollDispatcher::FindHandler(int fd) const
+{
+#if wxUSE_THREADS
+    wxCriticalSectionLocker lock(m_handlersCS);
+#endif
+
+    const wxFDIOHandlerMap::const_iterator it = m_handlers.find(fd);
+
+    return it == m_handlers.end() ? nullptr : it->second.handler;
+}
+
+void wxEpollDispatcher::StoreHandler(int fd, wxFDIOHandler *handler)
+{
+#if wxUSE_THREADS
+    wxCriticalSectionLocker lock(m_handlersCS);
+#endif
+
+    // Deliberately an unconditional assignment and not an insertion that
+    // complains about an existing entry: wxFDIOManagerUnix decides between
+    // RegisterFD() and ModifyFD() from the mask it keeps on the handler, not
+    // from what this dispatcher knows, so the two can legitimately disagree
+    // about whether a descriptor is already registered.
+    m_handlers[fd] = wxFDIOHandlerEntry(handler, 0);
+}
+
+void wxEpollDispatcher::ForgetHandler(int fd)
+{
+#if wxUSE_THREADS
+    wxCriticalSectionLocker lock(m_handlersCS);
+#endif
+
+    m_handlers.erase(fd);
+}
+
 bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 {
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
-    ev.data.ptr = handler;
+
+    // The descriptor and not the handler: see Dispatch() for why.
+    ev.data.fd = fd;
 
     const int ret = epoll_ctl(m_epollDescriptor, EPOLL_CTL_ADD, fd, &ev);
     if ( ret != 0 )
@@ -118,6 +154,8 @@ bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 
         return false;
     }
+
+    StoreHandler(fd, handler);
     wxLogTrace(wxEpollDispatcher_Trace,
                wxT("Added fd %d (handler %p) to epoll %d"), fd, handler, m_epollDescriptor);
 
@@ -128,7 +166,7 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
 {
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
-    ev.data.ptr = handler;
+    ev.data.fd = fd;
 
     const int ret = epoll_ctl(m_epollDescriptor, EPOLL_CTL_MOD, fd, &ev);
     if ( ret != 0 )
@@ -138,6 +176,8 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
 
         return false;
     }
+
+    StoreHandler(fd, handler);
 
     wxLogTrace(wxEpollDispatcher_Trace,
                 wxT("Modified fd %d (handler: %p) on epoll %d"), fd, handler, m_epollDescriptor);
@@ -155,6 +195,11 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
         wxLogSysError(_("Failed to unregister descriptor %d from epoll descriptor %d"),
                       fd, m_epollDescriptor);
     }
+    // Drop the handler even if epoll_ctl() above failed: the caller is done
+    // with it either way, and a stale entry here is exactly what Dispatch()
+    // must not find.
+    ForgetHandler(fd);
+
     wxLogTrace(wxEpollDispatcher_Trace,
                 wxT("removed fd %d from %d"), fd, m_epollDescriptor);
     return true;
@@ -218,12 +263,18 @@ int wxEpollDispatcher::Dispatch(int timeout)
     int numEvents = 0;
     for ( epoll_event *p = events; p < events + rc; p++ )
     {
-        wxFDIOHandler * const handler = (wxFDIOHandler *)(p->data.ptr);
+        // Look the handler up now instead of using a pointer recorded when
+        // the descriptor was registered: dispatching an earlier event of this
+        // batch may have unregistered -- and, in the code that owns it,
+        // destroyed -- the handler for a later one, and epoll_wait() filled
+        // this array in before any of that happened. Using the recorded
+        // pointer would then call a virtual function on a destroyed object.
+        //
+        // A descriptor that is no longer registered is therefore expected here
+        // rather than an error, and is simply skipped.
+        wxFDIOHandler * const handler = FindHandler(p->data.fd);
         if ( !handler )
-        {
-            wxFAIL_MSG( wxT("null handler in epoll_event?") );
             continue;
-        }
 
         // note that for compatibility with wxSelectDispatcher we call
         // OnReadWaiting() on EPOLLHUP as this is what epoll_wait() returns
