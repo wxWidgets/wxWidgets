@@ -408,9 +408,10 @@ wxObject *wxPropertySheetDialogXmlHandler::DoCreateResource()
             m_dialog = dlg;
 
             gs_propertySheetXrcContexts.push_back(&context);
-            const wxScopeGuard restoreContext = wxMakeGuard(
+            wxScopeGuard restoreContext = wxMakeGuard(
                 [this, old_par, oldDialogLifetime, &context]()
                 {
+                    wxUnusedVar(context);
                     wxASSERT( !gs_propertySheetXrcContexts.empty() &&
                               gs_propertySheetXrcContexts.back() == &context );
                     gs_propertySheetXrcContexts.pop_back();

@@ -483,6 +483,17 @@ TEST_CASE("wxWinUI StatusBar size grip is an exact localized overlay action",
 
     REQUIRE(status.WinUIInvokeSizeGripForTesting(
         true, true, true, actionPoint));
+    // The native modal loop must be entered only after the XAML routed-event
+    // callback unwinds. A duplicate notification while that hand-off is
+    // pending must not start a second sizing transaction.
+    CHECK(actionContext.calls == 0);
+    REQUIRE(status.WinUIInvokeSizeGripForTesting(
+        true, true, true, actionPoint));
+    CHECK(actionContext.calls == 0);
+    REQUIRE(WaitFor("deferred status-bar size grip action", [&]()
+    {
+        return actionContext.calls == 1;
+    }));
     CHECK(actionContext.calls == 1);
     CHECK(actionContext.nativeHitTest == HTBOTTOMRIGHT);
     CHECK(actionContext.screenX == actionPoint.x);
@@ -537,13 +548,33 @@ TEST_CASE("wxWinUI StatusBar size grip is an exact localized overlay action",
 
     REQUIRE(status.WinUIInvokeSizeGripForTesting(
         true, true, true, actionPoint));
+    CHECK(actionContext.calls == 1);
+    REQUIRE(WaitFor("deferred RTL status-bar size grip action", [&]()
+    {
+        return actionContext.calls == 2;
+    }));
     CHECK(actionContext.calls == 2);
     CHECK(actionContext.nativeHitTest == HTBOTTOMLEFT);
 
     actionContext.accept = false;
-    CHECK_FALSE(status.WinUIInvokeSizeGripForTesting(
+    REQUIRE(status.WinUIInvokeSizeGripForTesting(
         true, true, true, actionPoint));
+    CHECK(actionContext.calls == 2);
+    REQUIRE(WaitFor("rejected deferred status-bar size grip action", [&]()
+    {
+        return actionContext.calls == 3;
+    }));
     CHECK(actionContext.calls == 3);
+
+    // A peer replacement before the deferred hand-off must retire the old
+    // action instead of beginning a resize against a hidden/stale grip.
+    actionContext.accept = true;
+    REQUIRE(status.WinUIInvokeSizeGripForTesting(
+        true, true, true, actionPoint));
+    status.WinUISetTopLevelMaximizedForTesting(true);
+    YieldForAWhile();
+    CHECK(actionContext.calls == 3);
+    status.WinUISetTopLevelMaximizedForTesting(false);
 
     wxFrame fixedFrame(
         nullptr, wxID_ANY, "status-grip-fixed-owner",

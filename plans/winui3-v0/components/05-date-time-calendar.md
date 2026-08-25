@@ -66,4 +66,3 @@ Narrator, 100/150/200 % et hot theme.
 Alpha : DatePicker vert et Calendar nominal sans faux événement/crash si exposé.
 Beta : toutes API de navigation/mark annoncées, secondes TimePicker décidées,
 UIA/locales/DPI/theme validés.
-

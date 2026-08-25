@@ -1062,7 +1062,7 @@ public:
     static void ApplyThemeToAll(winrt::Microsoft::UI::Xaml::ElementTheme theme);
 
     // Conservatively invalidate every live host. This is used for inherited
-    // wx state (enabled/cursor): the window that changed need not itself own
+    // enabled state: the window that changed need not itself own
     // a slot, and a failed cross-TLW migration can truthfully leave a
     // descendant's slot in the old host until the next retry.
     static void MarkAllHostsDirty();
@@ -1854,15 +1854,6 @@ private:
     wxWinUINativeHit m_lastResolvedHit;
     unsigned long long m_lastResolvedLayoutGeneration = 0;
 
-    // Whether the cursor of the mirrored target depends on where the pointer
-    // is, i.e. whether application code answered wxEVT_SET_CURSOR while it was
-    // established, and the wxEVT_SET_CURSOR generation it was established at.
-    // A target that does not answer keeps the same cursor for every position,
-    // so the WM_SETCURSOR round trip -- which walks the whole parent chain on
-    // every single mouse movement -- can be skipped entirely.
-    bool m_cursorPositionSensitive = true;
-    unsigned long long m_cursorSetCursorGeneration = 0;
-
     // A synthetic WM_MOUSEMOVE is sent, not posted, so it bypasses the queue
     // arbitration that normally lets WM_PAINT through once input stops. A
     // window that invalidates itself on every movement would then never be
@@ -1870,14 +1861,6 @@ private:
     // forced update ran, used to bound how often one is performed.
     unsigned long m_lastPointerPaintTick = 0;
 
-    // USER32 coalesces WM_MOUSEMOVE in the queue: an application slower than
-    // the mouse simply sees fewer, newer positions, and keeps the time it
-    // needs to paint, run its timers and go idle. Routed pointer input is
-    // delivered synchronously and bypasses that, so an application is forced
-    // to process every single sample and never becomes idle while the hand
-    // moves. This is when the last move was routed, used to reproduce the
-    // coalescing the port took away.
-    unsigned long long m_lastRoutedMoveTimestamp = 0;
     unsigned long long m_structureAppliedGeneration = 0;
     bool m_flushScheduled = false;
     // Per-host companion to the process-wide diagnostic counter above.
@@ -2057,7 +2040,7 @@ private:
     // Exact committed modal DOWNs whose system loops returned before their
     // physical contacts ended. Mouse buttons are independent and inputstate
     // supports five concurrent presses, so this must never be a single
-    // overwriteable slot. Primary touch/pen add at most one identity each in
+    // overwritable slot. Primary touch/pen add at most one identity each in
     // the V0 policy; the same conservative bound as slot owners is ample.
     static constexpr std::size_t ModalAwaitingReleaseCapacity = 15;
     std::array<wxWinUIInputAction,

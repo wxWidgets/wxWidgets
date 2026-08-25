@@ -179,10 +179,10 @@ wxWinUIResolveNativeHitReusing(wxWindow *tlw,
 // layoutUnchanged tells this function that no native geometry mutation was
 // reported between the original resolution and this call.  A pointer moves
 // hundreds of times per second and each move needs this proof, so with that
-// guarantee the expensive tree walk is replaced by re-checking the exact
-// target: its generations, its visibility and that the point is still
-// inside it.  Callers that cannot make the guarantee pass false and get
-// the full re-resolution.
+// guarantee the expensive fingerprinting walk is replaced by revalidating
+// the previous target, its hit-test zone and the siblings/children which can
+// cover it. Callers that cannot make the guarantee pass false and get the
+// full re-resolution.
 WXDLLIMPEXP_CORE bool
 wxWinUIRefreshNativeHit(wxWindow *tlw,
                         const wxWinUINativeHit& expected,

@@ -1664,7 +1664,7 @@ TEST_CASE("wxAuiNotebook split-pane insertion stops on sibling tabs loss",
     state->victim = victimTabs;
     state->armed = true;
 
-    wxPanel* const candidate = new wxPanel(top);
+    wxPanel* const candidate = new wxPanel(book);
     const wxWeakRef<wxWindow> candidateLifetime(candidate);
     candidate->Hide();
     REQUIRE_FALSE(candidate->IsShown());
@@ -1673,7 +1673,7 @@ TEST_CASE("wxAuiNotebook split-pane insertion stops on sibling tabs loss",
     CHECK(state->calls == 1);
     CHECK_FALSE(victimLifetime);
     REQUIRE(candidateLifetime);
-    CHECK(candidate->GetParent() == top);
+    CHECK(candidate->GetParent() == book);
     CHECK_FALSE(candidate->IsShown());
     REQUIRE(book->GetPageCount() == 3);
     CHECK(book->GetPage(0) == victimPage);
@@ -1684,7 +1684,6 @@ TEST_CASE("wxAuiNotebook split-pane insertion stops on sibling tabs loss",
     CHECK_FALSE(second->IsShown());
 
     delete book;
-    delete candidate;
     CHECK_FALSE(candidateLifetime);
 }
 
@@ -1709,7 +1708,7 @@ TEST_CASE("wxAuiNotebook insertion locally restores physical visibility",
     REQUIRE(victimTabs);
     const wxWeakRef<wxAuiTabCtrl> victimTabsLifetime(victimTabs);
 
-    wxPanel* const candidate = new wxPanel(top);
+    wxPanel* const candidate = new wxPanel(book);
     candidate->Hide();
     const wxWeakRef<wxWindow> candidateLifetime(candidate);
     unsigned int callbacks = 0;
@@ -1743,7 +1742,7 @@ TEST_CASE("wxAuiNotebook insertion locally restores physical visibility",
     CHECK(callbacks == 1);
     CHECK_FALSE(victimTabsLifetime);
     REQUIRE(candidateLifetime);
-    CHECK(candidate->GetParent() == top);
+    CHECK(candidate->GetParent() == book);
     CHECK_FALSE(candidate->IsShown());
     REQUIRE(book->GetPageCount() == 3);
     CHECK(book->GetPage(0) == victim);
@@ -1765,7 +1764,6 @@ TEST_CASE("wxAuiNotebook insertion locally restores physical visibility",
           selectedPosition.tabIdx);
 
     delete book;
-    delete candidate;
     CHECK_FALSE(candidateLifetime);
 }
 

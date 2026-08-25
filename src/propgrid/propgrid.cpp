@@ -1564,6 +1564,7 @@ void DeferPropertyGridEditorObjects(
                   IsAwaitingNativeDestructionAfterAncestor(gridHwnd) )
         {
             const HWND root = work.snapshot->GetRootHwnd();
+            wxUnusedVar(root);
             wxFAIL_MSG(wxString::Format(
                 wxS("Unsafe property-grid editor HWND identity ")
                 wxS("(root=%p live=%d valid=%d match=%d parent=%p ")
@@ -2034,7 +2035,7 @@ void wxPropertyGrid::SetLayoutDirection( wxLayoutDirection dir )
     const wxWeakRef<wxWindow> weakThis(this);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveLayoutDirection = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveLayoutDirection = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -2440,6 +2441,7 @@ wxPropertyGrid::~wxPropertyGrid()
                          gridHwnd) )
             {
                 const HWND root = work.snapshot->GetRootHwnd();
+                wxUnusedVar(root);
                 wxFAIL_MSG(wxString::Format(
                     wxS("Unsafe property-grid editor HWND identity ")
                     wxS("(root=%p live=%d valid=%d match=%d parent=%p ")
@@ -2706,7 +2708,7 @@ bool wxPropertyGrid::DoAddToSelection( wxPGProperty* prop, wxPGSelectPropertyFla
 
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -2773,7 +2775,7 @@ bool wxPropertyGrid::DoRemoveFromSelection( wxPGProperty* prop, wxPGSelectProper
 
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -2818,7 +2820,7 @@ bool wxPropertyGrid::DoSelectAndEdit( wxPGProperty* prop,
 
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -2903,7 +2905,7 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
 
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -3054,7 +3056,7 @@ void wxPropertyGrid::DoSetSelection( const wxArrayPGProperty& newSelection,
 
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveSelectionCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -3157,7 +3159,7 @@ void wxPropertyGrid::DoBeginLabelEdit( unsigned int colIndex,
                    !selected->HasFlag(wxPGFlags::BeingDeleted);
         };
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -3165,7 +3167,7 @@ void wxPropertyGrid::DoBeginLabelEdit( unsigned int colIndex,
     wxUnusedVar(leaveCallback);
 
     wxPGGetPropertyGridTransientState(this).beginLabelEditGuard = 1;
-    const wxScopeGuard leaveBeginLabelEdit = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveBeginLabelEdit = wxMakeGuard([weakThis, this]()
     {
         // A BEGIN handler is allowed to destroy the grid synchronously.
         if ( weakThis.get() == this )
@@ -3317,7 +3319,7 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, wxPGSelectPropertyFlags selFla
         };
     bool propertyStillCurrent = propertyTransactionIsValid();
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -3326,7 +3328,7 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, wxPGSelectPropertyFlags selFla
 
     const bool wasEndingLabelEdit = wxPGGetPropertyGridTransientState(this).endingLabelEdit;
     wxPGGetPropertyGridTransientState(this).endingLabelEdit = true;
-    const wxScopeGuard leaveEndLabelEdit = wxMakeGuard(
+    wxScopeGuard leaveEndLabelEdit = wxMakeGuard(
         [weakThis, this, wasEndingLabelEdit]()
         {
             if ( weakThis.get() == this )
@@ -3822,7 +3824,7 @@ void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &event)
     dpiState->m_dontCenterSplitter = true;
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveDPIChange = wxMakeGuard(
+    wxScopeGuard leaveDPIChange = wxMakeGuard(
         [weakThis, weakManager, this, manager,
          dpiState, restoreDontCenter]()
         {
@@ -4251,7 +4253,7 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
     const wxWeakRef<wxWindow> weakSecondary(secondary);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveEnsureVisible = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveEnsureVisible = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -4745,7 +4747,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     const size_t initialColumnWidthsCount = initialState->m_colWidths.size();
 
     ++wxPGGetPropertyGridTransientState(self).propertyCallbackDepth;
-    const wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, self]()
+    wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, self]()
     {
         if ( weakThis.get() == self )
             --wxPGGetPropertyGridTransientState(self).propertyCallbackDepth;
@@ -5306,7 +5308,7 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
     const wxWeakRef<wxWindow> weakThis(this);
     wxPropertyGridPageState* const state = m_pState;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -5361,7 +5363,7 @@ void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
     const wxWeakRef<wxWindow> weakThis(this);
     wxPropertyGridPageState* const state = m_pState;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveRefresh = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveRefresh = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -5404,7 +5406,7 @@ void wxPropertyGrid::DrawItemAndValueRelated( wxPGProperty* p )
     const wxWeakRef<wxWindow> weakThis(this);
     wxPropertyGridPageState* const state = m_pState;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -5450,7 +5452,7 @@ void wxPropertyGrid::DrawItemAndChildren( wxPGProperty* p )
     const wxWeakRef<wxWindow> weakThis(this);
     wxPropertyGridPageState* const state = m_pState;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -5983,7 +5985,7 @@ bool wxPropertyGrid::CommitChangesFromEditor(wxPGSelectPropertyFlags flags)
             };
         const auto transactionIsValid =
             [weakThis, weakEditorControl, weakSecondaryControl,
-             this, initialState, selected, editorControl,
+             this, editorControl,
               secondaryControl, propertyTransactionIsValid]()
             {
                 if ( !propertyTransactionIsValid() )
@@ -6022,7 +6024,7 @@ bool wxPropertyGrid::CommitChangesFromEditor(wxPGSelectPropertyFlags flags)
         wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
         ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
         m_inCommitChangesFromEditor = true;
-        const wxScopeGuard leaveCommit = wxMakeGuard([weakThis, this]()
+        wxScopeGuard leaveCommit = wxMakeGuard([weakThis, this]()
         {
             if ( weakThis.get() == this )
             {
@@ -6158,7 +6160,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     wxPGGetPropertyGridTransientState(this).inPerformValidation = true;
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leavePerformValidation = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leavePerformValidation = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
         {
@@ -6434,7 +6436,7 @@ bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
     m_inOnValidationFailure = true;
-    const wxScopeGuard leaveValidationFailure = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveValidationFailure = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
         {
@@ -6564,7 +6566,7 @@ void wxPropertyGrid::OnValidationFailureReset( wxPGProperty* property )
         };
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveValidationReset = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveValidationReset = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -6801,7 +6803,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, wxPGSelectPropertyFlags
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
     m_inDoPropertyChanged = true;
-    const wxScopeGuard leavePropertyChanged = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leavePropertyChanged = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
         {
@@ -7051,7 +7053,7 @@ bool wxPropertyGrid::DoEditorValidate()
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
     m_validatingEditor = 1;
-    const wxScopeGuard leaveValidation = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveValidation = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
         {
@@ -7272,7 +7274,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     SetInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveCustomEditorEvent = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveCustomEditorEvent = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
         {
@@ -7482,7 +7484,7 @@ bool wxPropertyGrid::TryGetEditorWidgetRect( wxPGProperty* p,
             // not touch either the property or the page after invalidation.
             wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
             ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-            const wxScopeGuard leaveMeasureImage =
+            wxScopeGuard leaveMeasureImage =
                 wxMakeGuard([weakThis, this]()
                 {
                     if ( weakThis.get() == this )
@@ -7557,7 +7559,7 @@ bool wxPropertyGrid::TryGetImageSize( wxPGProperty* p,
     wxPropertyGridPageState* const state = m_pState;
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(self).propertyCallbackDepth;
-    const wxScopeGuard leaveMeasureImage =
+    wxScopeGuard leaveMeasureImage =
         wxMakeGuard([weakThis, self]()
         {
             if ( weakThis.get() == self )
@@ -8012,7 +8014,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, wxPGSelectPropertyFlags 
     m_inDoSelectProperty = true;
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveSelectProperty = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveSelectProperty = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
         {
@@ -8776,7 +8778,7 @@ void wxPropertyGrid::RefreshEditor()
     wxPropertyGridPageState* const state = m_pState;
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveRefreshEditor = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveRefreshEditor = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -8995,7 +8997,7 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     );
 
     m_iFlags |= wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
-    const wxScopeGuard leaveRecalculate = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveRecalculate = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             m_iFlags &= ~wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
@@ -9171,7 +9173,7 @@ void wxPropertyGrid::SetFocusOnCanvas()
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     const wxWeakRef<wxWindow> weakThis(this);
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveFocusChange = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveFocusChange = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -9363,7 +9365,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                 }
                 bool selectionSucceeded;
                 {
-                    const wxScopeGuard clearActivationByClick =
+                    wxScopeGuard clearActivationByClick =
                         wxMakeGuard([weakThis, this, activationByClick]()
                         {
                             if ( activationByClick && weakThis.get() == this )
@@ -9775,7 +9777,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
     const wxWeakRef<wxWindow> weakThis(this);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveMouseMoveCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveMouseMoveCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -10191,7 +10193,7 @@ bool wxPropertyGrid::MoveSplitterFromKeyboard( int splitter, int delta )
     const wxWeakRef<wxWindow> weakThis(this);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveKeyboardSplitter = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveKeyboardSplitter = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -10515,7 +10517,7 @@ void wxPropertyGrid::FinishSplitterDrag( bool cancel )
         };
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveSplitterCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveSplitterCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -11417,7 +11419,7 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
     wxPropertyGridPageState* const state = m_pState;
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveFocusCallback = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveFocusCallback = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;

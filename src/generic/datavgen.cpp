@@ -669,7 +669,7 @@ private:
         if ( model )
         {
             model->IncRef();
-            const wxScopeGuard releaseModel = wxMakeGuard([model]()
+            wxScopeGuard releaseModel = wxMakeGuard([model]()
             {
                 model->DecRef();
             });
@@ -2673,7 +2673,7 @@ bool wxDataViewTreeNode::InsertChild(wxDataViewMainWindow* window,
         return false;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -2861,7 +2861,7 @@ bool wxDataViewTreeNode::Resort(wxDataViewMainWindow* window)
         return false;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -2925,7 +2925,7 @@ wxDataViewTreeNode::PutChildInSortOrder(wxDataViewMainWindow* window,
         return false;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -2973,7 +2973,7 @@ void wxDataViewMainWindow::Resort()
         return;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -4029,7 +4029,7 @@ wxDataViewMainWindow::StartEditing(const wxDataViewItem& item,
     wxDataViewModel* const model = owner->GetModel();
     if ( model )
         model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         if ( model )
             model->DecRef();
@@ -4301,7 +4301,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         return false;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -4488,7 +4488,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         return false;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -4663,7 +4663,7 @@ bool wxDataViewMainWindow::DoItemChanged(const wxDataViewItem & item, int view_c
         return false;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -4785,7 +4785,7 @@ bool wxDataViewMainWindow::Cleared()
     wxDataViewModel* const model = owner->GetModel();
     if ( model )
         model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         if ( model )
             model->DecRef();
@@ -5041,7 +5041,7 @@ unsigned int wxDataViewMainWindow::GetRowCount() const
             return 0;
 
         model->IncRef();
-        const wxScopeGuard releaseModel = wxMakeGuard([model]()
+        wxScopeGuard releaseModel = wxMakeGuard([model]()
         {
             model->DecRef();
         });
@@ -5318,7 +5318,7 @@ int wxDataViewMainWindow::QueryAndCacheLineHeight(unsigned int row, wxDataViewIt
         return wxNOT_FOUND;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -5555,7 +5555,7 @@ wxDataViewMainWindow::DoExpand(wxDataViewTreeNode* node,
         return;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -5683,7 +5683,7 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
             return;
 
         model->IncRef();
-        const wxScopeGuard releaseModel = wxMakeGuard([model]()
+        wxScopeGuard releaseModel = wxMakeGuard([model]()
         {
             model->DecRef();
         });
@@ -5775,7 +5775,7 @@ wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
         return result;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -6048,7 +6048,7 @@ wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item,
             return -1;
 
         model->IncRef();
-        const wxScopeGuard releaseModel = wxMakeGuard([model]()
+        wxScopeGuard releaseModel = wxMakeGuard([model]()
         {
             model->DecRef();
         });
@@ -6216,7 +6216,7 @@ bool wxDataViewMainWindow::BuildTree(wxDataViewModel* model)
     const wxWeakRef<wxDataViewMainWindow> weakThis(this);
     ++m_treeBuildDepth;
     m_treeBuildModels.push_back(model);
-    const wxScopeGuard leaveBuild = wxMakeGuard([weakThis, this, model]()
+    wxScopeGuard leaveBuild = wxMakeGuard([weakThis, this, model]()
     {
         if ( weakThis.get() == this )
         {
@@ -6229,7 +6229,7 @@ bool wxDataViewMainWindow::BuildTree(wxDataViewModel* model)
     wxUnusedVar(leaveBuild);
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -6275,7 +6275,7 @@ bool wxDataViewMainWindow::BuildTree(wxDataViewModel* model)
 
         wxDataViewTreeNode* candidateRoot =
             wxDataViewTreeNode::CreateRootNode();
-        const wxScopeGuard deleteCandidate = wxMakeGuard([&candidateRoot]()
+        wxScopeGuard deleteCandidate = wxMakeGuard([&candidateRoot]()
         {
             delete candidateRoot;
         });
@@ -7935,7 +7935,7 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
     // this function is still publishing the association.
     if ( oldModel )
         oldModel->IncRef();
-    const wxScopeGuard releaseOldModel = wxMakeGuard([oldModel]()
+    wxScopeGuard releaseOldModel = wxMakeGuard([oldModel]()
     {
         if ( oldModel )
             oldModel->DecRef();
@@ -7944,7 +7944,7 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 
     if ( model )
         model->IncRef();
-    const wxScopeGuard releaseNewModel = wxMakeGuard([model]()
+    wxScopeGuard releaseNewModel = wxMakeGuard([model]()
     {
         if ( model )
             model->DecRef();
@@ -8402,7 +8402,7 @@ bool wxDataViewCtrl::TryGetBestColumnWidth(
         return true;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -8646,7 +8646,7 @@ bool wxDataViewCtrl::DoDeleteColumn(wxDataViewColumn* column,
     wxDataViewModel* const model = removedSortKey ? GetModel() : nullptr;
     if ( model )
         model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         if ( model )
             model->DecRef();
@@ -9150,7 +9150,7 @@ bool wxDataViewCtrl::AllowMultiColumnSort(bool allow)
         wxDataViewModel* const model = GetModel();
         if ( model )
             model->IncRef();
-        const wxScopeGuard releaseModel = wxMakeGuard([model]()
+        wxScopeGuard releaseModel = wxMakeGuard([model]()
         {
             if ( model )
                 model->DecRef();

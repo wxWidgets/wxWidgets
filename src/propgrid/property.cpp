@@ -268,7 +268,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     const wxWeakRef<wxWindow> weakGrid(grid);
     wxPropertyGridPageState* const state = grid->m_pState;
     ++wxPGGetPropertyGridTransientState(grid).propertyCallbackDepth;
-    const wxScopeGuard leaveRendering = wxMakeGuard([weakGrid, grid]()
+    wxScopeGuard leaveRendering = wxMakeGuard([weakGrid, grid]()
     {
         if ( weakGrid.get() == grid )
             --wxPGGetPropertyGridTransientState(grid).propertyCallbackDepth;

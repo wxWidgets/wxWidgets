@@ -421,6 +421,7 @@ public:
     void *nextReentryContext = nullptr;
     wxWinUIStatusBarResizeActionHookForTesting resizeActionHook = nullptr;
     void *resizeActionContext = nullptr;
+    bool resizeDispatchScheduled = false;
     bool closed = false;
 };
 
@@ -1374,31 +1375,116 @@ bool wxStatusBar::RebuildContent()
                             return false;
                         }
 
-                        const auto resizeHook =
-                            owner->m_winui->resizeActionHook;
-                        void * const resizeContext =
-                            owner->m_winui->resizeActionContext;
-                        if ( resizeHook )
-                        {
-                            return resizeHook(
-                                owner,
-                                reinterpret_cast<void *>(hwnd),
-                                action->nativeHitTest,
-                                point.x,
-                                point.y,
-                                resizeContext);
-                        }
+                        if ( !wxTheApp )
+                            return false;
 
-                        // Match the native MSW status bar: the TLW enters its
-                        // modal resize loop before this routed callback
-                        // returns. Posting this message would leave a stale
-                        // HWND/generation ticket that could fire after
-                        // reparenting or destruction.
-                        (void)::SendMessageW(
-                            hwnd,
-                            WM_NCLBUTTONDOWN,
-                            action->nativeHitTest,
-                            MAKELPARAM(point.x, point.y));
+                        // DefWindowProc handles this message by entering a
+                        // system-modal sizing loop. Running that loop inside
+                        // PointerPressed keeps the XAML routed-event dispatch
+                        // open for the whole drag, so the island doesn't
+                        // present its intermediate layouts and appears to
+                        // resize only when the button is released. Defer the
+                        // native DOWN until this callback has unwound, while
+                        // retaining the exact action identity so a rebuild,
+                        // reparent or destruction makes the ticket inert.
+                        if ( owner->m_winui->resizeDispatchScheduled )
+                            return true;
+
+                        owner->m_winui->resizeDispatchScheduled = true;
+                        wxTheApp->CallAfter(
+                            [action, point]()
+                            {
+                                const std::shared_ptr<
+                                    wxWinUIStatusBarCallbackState> state =
+                                        action->callbackState.lock();
+                                if ( !state )
+                                    return;
+
+                                wxStatusBar * const owner =
+                                    state->GetOwner(
+                                        action->lifetimeGeneration);
+                                if ( !owner || !owner->m_winui ||
+                                     owner->m_winui->callbackState != state )
+                                {
+                                    return;
+                                }
+                                owner->m_winui->resizeDispatchScheduled = false;
+                                if ( !owner->m_winui->hasSizeGrip ||
+                                     !owner->HasFlag(wxSTB_SIZEGRIP) )
+                                {
+                                    return;
+                                }
+
+                                // A harmless layout rebuild may replace the
+                                // XAML peer while this callback is queued. It
+                                // must not swallow the physical press when the
+                                // replacement still describes the same exact
+                                // native resize action.
+                                const std::shared_ptr<
+                                    wxWinUIStatusBarGripAction> currentAction =
+                                        owner->m_winui->sizeGripAction;
+                                if ( !currentAction ||
+                                     currentAction->hwnd != action->hwnd ||
+                                     currentAction->nativeHitTest !=
+                                         action->nativeHitTest ||
+                                     currentAction->topLevel.get() !=
+                                         action->topLevel.get() )
+                                {
+                                    return;
+                                }
+
+                                wxWindow * const topLevel =
+                                    action->topLevel.get();
+                                if ( !topLevel ||
+                                     wxGetTopLevelParent(owner) != topLevel ||
+                                     !topLevel->HasFlag(wxRESIZE_BORDER) )
+                                {
+                                    return;
+                                }
+
+                                const HWND hwnd = GetHwndOf(topLevel);
+                                if ( !hwnd || hwnd != action->hwnd ||
+                                     !::IsWindow(hwnd) ||
+                                     owner->GetSizeGripReservedWidth() == 0 )
+                                {
+                                    return;
+                                }
+
+                                const auto resizeHook =
+                                    owner->m_winui->resizeActionHook;
+                                void * const resizeContext =
+                                    owner->m_winui->resizeActionContext;
+                                if ( resizeHook )
+                                {
+                                    (void)resizeHook(
+                                        owner,
+                                        reinterpret_cast<void *>(hwnd),
+                                        action->nativeHitTest,
+                                        point.x,
+                                        point.y,
+                                        resizeContext);
+                                    return;
+                                }
+
+                                // Don't start a modal loop after a very short
+                                // click has already ended while the callback
+                                // was queued.
+                                if ( !(::GetAsyncKeyState(VK_LBUTTON) &
+                                       0x8000) )
+                                {
+                                    return;
+                                }
+
+                                // This is now outside the XAML routed-event
+                                // callback. SendMessage is safe here: every
+                                // owner/HWND/generation predicate above was
+                                // revalidated immediately before it.
+                                (void)::SendMessageW(
+                                    hwnd,
+                                    WM_NCLBUTTONDOWN,
+                                    action->nativeHitTest,
+                                    MAKELPARAM(point.x, point.y));
+                            });
                         return true;
                     };
 

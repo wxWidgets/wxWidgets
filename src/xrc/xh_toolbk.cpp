@@ -125,7 +125,7 @@ wxObject *wxToolbookXmlHandler::DoCreateResource()
         wxToolbook *old_par = m_toolbook;
         const wxWeakRef<wxWindow> weakOld(old_par);
         m_toolbook = nb;
-        const wxScopeGuard restoreBook = wxMakeGuard(
+        wxScopeGuard restoreBook = wxMakeGuard(
             [this, old_par, weakOld]()
             {
                 m_toolbook = nullptr;

@@ -741,7 +741,7 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
     const wxWeakRef<wxWindow> weakGrid(pg);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
-    const wxScopeGuard leaveFit =
+    wxScopeGuard leaveFit =
         wxMakeGuard([weakGrid, pg]()
         {
             if ( weakGrid.get() == pg )
@@ -809,7 +809,7 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxPGProperty* p, unsigned i
     const wxWeakRef<wxWindow> weakGrid(pg);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
-    const wxScopeGuard leaveFit =
+    wxScopeGuard leaveFit =
         wxMakeGuard([weakGrid, pg]()
         {
             if ( weakGrid.get() == pg )
@@ -881,7 +881,7 @@ int wxPropertyGridPageState::GetColumnFullWidth(const wxDC& dc, wxPGProperty* p,
     const wxWeakRef<wxWindow> weakGrid(pg);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
-    const wxScopeGuard leaveFit =
+    wxScopeGuard leaveFit =
         wxMakeGuard([weakGrid, pg]()
         {
             if ( weakGrid.get() == pg )
@@ -924,7 +924,7 @@ int wxPropertyGridPageState::GetColumnFullWidth(wxPGProperty* p, unsigned int co
     const wxWeakRef<wxWindow> weakGrid(pg);
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(pg).propertyCallbackDepth;
-    const wxScopeGuard leaveFit =
+    wxScopeGuard leaveFit =
         wxMakeGuard([weakGrid, pg]()
         {
             if ( weakGrid.get() == pg )

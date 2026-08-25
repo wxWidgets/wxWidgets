@@ -56,12 +56,14 @@ HeaderRevisions& GetHeaderRevisions()
 void RegisterHeader(const wxHeaderCtrl* header)
 {
     const bool inserted = GetHeaderRevisions().emplace(header, 0).second;
+    wxUnusedVar(inserted);
     wxASSERT_MSG( inserted, "header registered twice" );
 }
 
 void UnregisterHeader(const wxHeaderCtrl* header)
 {
     const size_t erased = GetHeaderRevisions().erase(header);
+    wxUnusedVar(erased);
     wxASSERT_MSG( erased == 1, "unregistered header" );
 }
 

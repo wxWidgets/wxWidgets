@@ -1146,7 +1146,7 @@ wxBitmap wxButton::DoGetBitmap(State which) const
             return wxBitmap();
     }
     gs_buttonBitmapGetterStack.push_back(this);
-    const wxScopeGuard getterGuard =
+    wxScopeGuard getterGuard =
         wxMakeGuard(
             []()
             {

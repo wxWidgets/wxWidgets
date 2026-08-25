@@ -30,6 +30,7 @@
 #include "wx/ribbon/toolbar.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "wx/winui/winui.h"
 
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
@@ -1945,6 +1946,89 @@ private:
 };
 
 } // anonymous namespace
+
+TEST_CASE("WinUIRibbon::GenericFallbackPublicSmoke",
+          "[winui-v0-supported][winui-ribbon][winui-ribbon-fallback]")
+{
+    // This qualifies the public generic wxRibbon fallback hosted by wxWinUI;
+    // it is deliberately not a claim that Ribbon has a native WinUI peer.
+    struct ThemeRestorer
+    {
+        wxWinUIAppTheme saved = wxWinUIGetAppTheme();
+        bool active = true;
+
+        ~ThemeRestorer()
+        {
+            if ( active )
+                wxWinUISetAppTheme(saved);
+        }
+
+        void Restore()
+        {
+            wxWinUISetAppTheme(saved);
+            active = false;
+        }
+    } restoreTheme;
+
+    wxWinUISetAppTheme(wxWinUIAppTheme::Light);
+    REQUIRE(DrainToQuiescence());
+    const HostSnapshot before = HostSnapshot::Capture();
+
+    RibbonFixture fixture;
+    REQUIRE(fixture.Create(false, 58));
+    CheckStablePublicModel(fixture);
+
+    wxRibbonBar * const bar = fixture.GetBar();
+    wxRibbonArtProvider * const provider = bar->GetArtProvider();
+    REQUIRE(provider);
+    CHECK(bar->GetPage(0) == fixture.GetHome());
+    CHECK(fixture.GetHome()->GetPanel(0) == fixture.GetButtonPanel());
+    CHECK(fixture.GetButtonBar()->GetButtonCount() == 4);
+    CHECK(fixture.GetToolBar()->GetToolCount() == 5);
+    CHECK(fixture.GetGallery()->GetCount() == 3);
+    CHECK(fixture.HasSingleOwner(fixture.GetFrameA()));
+
+    const auto getScheme = [](wxRibbonArtProvider *art)
+    {
+        std::array<wxColour, 3> scheme;
+        art->GetColourScheme(&scheme[0], &scheme[1], &scheme[2]);
+        return scheme;
+    };
+
+    const std::array<wxColour, 3> lightScheme = getScheme(provider);
+    provider->SetColourScheme(wxColour(1, 2, 3),
+                              wxColour(4, 5, 6),
+                              wxColour(7, 8, 9));
+    CHECK(getScheme(provider) != lightScheme);
+
+    int systemColourNotifications = 0;
+    bar->Bind(wxEVT_SYS_COLOUR_CHANGED,
+              [&systemColourNotifications](wxSysColourChangedEvent& event)
+              {
+                  ++systemColourNotifications;
+                  event.Skip();
+              });
+    ::SendMessage(static_cast<HWND>(fixture.GetFrameA()->GetHWND()),
+                  WM_SYSCOLORCHANGE, 0, 0);
+    CHECK(systemColourNotifications > 0);
+    CHECK(getScheme(provider) == lightScheme);
+
+    const int lightNotifications = systemColourNotifications;
+    wxWinUISetAppTheme(wxWinUIAppTheme::Dark);
+    CHECK(systemColourNotifications > lightNotifications);
+    const std::array<wxColour, 3> darkScheme = getScheme(provider);
+    CHECK(darkScheme != lightScheme);
+
+    const int darkNotifications = systemColourNotifications;
+    wxWinUISetAppTheme(wxWinUIAppTheme::Light);
+    CHECK(systemColourNotifications > darkNotifications);
+    CHECK(getScheme(provider) == lightScheme);
+
+    REQUIRE(fixture.DestroyAndWait(before));
+    before.CheckRestored();
+    restoreTheme.Restore();
+    REQUIRE(DrainToQuiescence());
+}
 
 TEST_CASE("WinUIRibbon::DirectAndDefaultCreate",
           "[winui-advanced][winui-ribbon]")

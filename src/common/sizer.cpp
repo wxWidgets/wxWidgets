@@ -3498,7 +3498,7 @@ void wxStdDialogButtonSizer::Realize()
     };
 
     bool realizeCommitted = false;
-    const wxScopeGuard finishRealize = wxMakeGuard([&]()
+    wxScopeGuard finishRealize = wxMakeGuard([&]()
     {
         if ( !realizeCommitted )
             restoreOriginalChildOrder();

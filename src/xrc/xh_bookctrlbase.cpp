@@ -185,9 +185,10 @@ bool wxBookCtrlXmlHandlerBase::DoCreatePagesSafely(wxBookCtrlBase* book)
 
     BookPageCreationContext creationContext(this, book);
     gs_bookPageCreationContexts.push_back(&creationContext);
-    const wxScopeGuard restoreCreationContext = wxMakeGuard(
+    wxScopeGuard restoreCreationContext = wxMakeGuard(
         [&creationContext]()
         {
+            wxUnusedVar(creationContext);
             wxASSERT( !gs_bookPageCreationContexts.empty() &&
                       gs_bookPageCreationContexts.back() ==
                           &creationContext );
@@ -201,7 +202,7 @@ bool wxBookCtrlXmlHandlerBase::DoCreatePagesSafely(wxBookCtrlBase* book)
     wxVector<wxBitmapBundle> imagesSave;
     m_bookImages.swap(imagesSave);
 
-    const wxScopeGuard restoreHandlerState = wxMakeGuard(
+    wxScopeGuard restoreHandlerState = wxMakeGuard(
         [this, old_ins, &pagesSave, &imagesSave]()
         {
             m_bookImages.swap(imagesSave);
@@ -523,7 +524,7 @@ bool wxBookCtrlXmlHandlerBase::DoCreatePagesSafely(wxBookCtrlBase* book)
                book->wxBookCtrlBase::GetSelection() == initialSelection;
     };
 
-    const wxScopeGuard rollbackOnFailure = wxMakeGuard(
+    wxScopeGuard rollbackOnFailure = wxMakeGuard(
         [&]()
         {
             if ( !committed )
@@ -693,7 +694,7 @@ wxBookCtrlXmlHandlerBase::DoCreatePage(wxBookCtrlBase* book)
         return nullptr;
 
     bool pagePublished = false;
-    const wxScopeGuard markFailed = wxMakeGuard(
+    wxScopeGuard markFailed = wxMakeGuard(
         [this, book, &pagePublished]()
         {
             if ( !pagePublished )
@@ -710,7 +711,7 @@ wxBookCtrlXmlHandlerBase::DoCreatePage(wxBookCtrlBase* book)
     {
         const bool old_ins = m_isInside;
         m_isInside = false;
-        const wxScopeGuard restoreInside = wxMakeGuard(
+        wxScopeGuard restoreInside = wxMakeGuard(
             [this, old_ins]() { m_isInside = old_ins; });
         wxUnusedVar(restoreInside);
 

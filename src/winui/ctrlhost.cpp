@@ -4613,10 +4613,11 @@ void wxWinUISetAppTheme(wxWinUIAppTheme theme)
 
     wxWinUITopLevelHost::ApplyThemeToAll(gs_winuiElementTheme);
 
-    // Refresh the backdrop/title-bar of all top-level windows. Every native
-    // operation below is a re-entrancy boundary (SetWindowTheme can deliver
-    // WM_THEMECHANGED, and test/native hooks may run arbitrary code), so never
-    // retain a wxTopLevelWindows iterator across one application.
+    // Notify all classic/generic surfaces as well as native controls. The
+    // normal WM_SYSCOLORCHANGE path recursively updates children and refreshes
+    // the WinUI backdrop/title bar of the TLW after application handlers have
+    // observed the new palette. Every SendMessage() is a re-entrancy boundary,
+    // so never retain a wxTopLevelWindows iterator across one notification.
     std::vector<wxWeakRef<wxWindow>> topLevels;
     topLevels.reserve(wxTopLevelWindows.size());
     for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin();
@@ -4632,7 +4633,9 @@ void wxWinUISetAppTheme(wxWinUIAppTheme theme)
              !topLevel->IsBeingDeleted() &&
              !wxPendingDelete.Member(topLevel) )
         {
-            wxWinUIApplyWindowBackdrop(topLevel);
+            const WXHWND hwnd = GetHwndOf(topLevel);
+            if ( hwnd )
+                ::SendMessage(hwnd, WM_SYSCOLORCHANGE, 0, 0);
         }
     }
 }

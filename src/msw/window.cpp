@@ -1863,7 +1863,7 @@ wxWindowMSW::AdjustForLayoutDirection(wxCoord x,
 void wxWindowMSW::SubclassWin(WXHWND hWnd)
 {
     wxWindowMSW * const identity = this;
-    const wxWeakRef<wxWindow> lifetime(identity);
+    const wxWeakRef<wxWindowMSW> lifetime(identity);
     const HWND hwnd = (HWND)hWnd;
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     const unsigned long long nativeGeneration =
@@ -1871,7 +1871,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 #endif
     const auto getCurrentNativeWindow = [&]() -> wxWindowMSW *
     {
-        wxWindow * const live = lifetime.get();
+        wxWindowMSW * const live = lifetime.get();
         if ( live != identity ||
              wxWindowIsUnavailableForCallbacks(live) ||
              !hwnd || !::IsWindow(hwnd) )
@@ -1978,7 +1978,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
     live = getCurrentAssociatedWindow();
     if ( !live )
         return;
-    wxWindowCreateEvent event(live);
+    wxWindowCreateEvent event(live->AsWindow());
     (void)live->HandleWindowEvent(event);
     // A dynamically-bound handler or global filter may destroy an adopted
     // window from wxEVT_CREATE. Nothing below is allowed to read its members
@@ -2000,7 +2000,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
             : wxMSWOleDropTargetLease();
     if ( dropTarget && dropTargetLifetime.IsCurrent() )
     {
-        wxMSWOleBindDropTarget(live, dropTarget, hwnd);
+        wxMSWOleBindDropTarget(live->AsWindow(), dropTarget, hwnd);
         live = getCurrentAssociatedWindow();
         if ( !live || live->m_dropTarget != dropTarget ||
              !dropTargetLifetime.IsCurrent() )
@@ -2039,7 +2039,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
 void wxWindowMSW::UnsubclassWin()
 {
-    const wxWeakRef<wxWindow> lifetime(this);
+    const wxWeakRef<wxWindowMSW> lifetime(this);
     const HWND hwnd = GetHwnd();
     const WXWNDPROC oldWndProc = m_oldWndProc;
 
@@ -2069,7 +2069,7 @@ void wxWindowMSW::UnsubclassWin()
 WXHWND wxWindowMSW::DoDetachHWND()
 {
     wxWindowMSW * const identity = this;
-    const wxWeakRef<wxWindow> lifetime(identity);
+    const wxWeakRef<wxWindowMSW> lifetime(identity);
     const HWND hwnd = GetHwnd();
 
 #if wxUSE_DRAG_AND_DROP && wxUSE_OLE
@@ -2091,7 +2091,7 @@ WXHWND wxWindowMSW::DoDetachHWND()
         // Depublish the logical binding before any external callback. The
         // target itself stays owned exactly as before and can be rebound by a
         // later AssociateHandle() when both lifetimes survive.
-        wxMSWOleUnbindDropTarget(identity, dropTarget);
+        wxMSWOleUnbindDropTarget(identity->AsWindow(), dropTarget);
     }
 #endif
 
@@ -2129,10 +2129,10 @@ WXHWND wxWindowMSW::DoDetachHWND()
             wxMSWOleCaptureShellHwndIdentity(reboundHwnd);
         wxMSWOleDropTargetBinding binding;
         if ( reboundHwnd && reboundIdentity.generation &&
-             wxMSWOleLookupDropTarget(identity, &binding) ==
+             wxMSWOleLookupDropTarget(identity->AsWindow(), &binding) ==
                  wxMSWOleDropTargetLookup::Found &&
              binding.GetTargetIfCurrent() == dropTarget &&
-             binding.GetOwnerIfCurrent() == identity &&
+             binding.GetOwnerIfCurrent() == identity->AsWindow() &&
              binding.GetOwnerHwndIfCurrent() == reboundHwnd )
         {
 #if defined(__WXWINUI__) && wxUSE_WINUI3
@@ -2162,7 +2162,9 @@ WXHWND wxWindowMSW::DoDetachHWND()
 #endif
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
-    wxWindow * const liveAfterDropRevoke = lifetime.get();
+    wxWindow * const liveAfterDropRevoke = lifetime.get()
+        ? lifetime.get()->AsWindow()
+        : nullptr;
     if ( wxWeakWindowIsAvailableForCallbacks(lifetime, identity) &&
          gs_winuiAfterMSWHandleDepublishedForTest )
     {
@@ -3289,7 +3291,7 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
         return;
 
     wxMSWDropTargetSlotTransaction transaction(this, false);
-    const wxWeakRef<wxWindow> windowLifetime(this);
+    const wxWeakRef<wxWindowMSW> windowLifetime(this);
 
 #if wxUSE_OLE
     // RevokeDragDrop() can pump a nested SetDropTarget(). Its RegisterDragDrop()
@@ -3301,7 +3303,7 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
         if ( !transaction.OwnsTailReconciliation() )
             return;
 
-        wxWindow* const liveWindow = windowLifetime.get();
+        wxWindowMSW* const liveWindow = windowLifetime.get();
         if ( liveWindow != this || liveWindow->IsBeingDeleted() )
             return;
 
@@ -3325,7 +3327,9 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 
         const auto isExactLatestWriter = [&]()
         {
-            wxWindow* const live = windowLifetime.get();
+            wxWindow* const live = windowLifetime.get()
+                ? windowLifetime.get()->AsWindow()
+                : nullptr;
             if ( live != this || live->IsBeingDeleted() ||
                  transaction.IsTerminalObserved() ||
                  m_dropTarget != latestTarget || m_hWnd != latestHwnd ||
@@ -3396,7 +3400,7 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 #if wxUSE_OLE
             const wxMSWOleDropTargetLease lifetime =
                 wxMSWOleAcquireDropTarget(pDropTarget);
-            wxMSWOleUnbindDropTarget(this, pDropTarget);
+            wxMSWOleUnbindDropTarget(AsWindow(), pDropTarget);
             if ( lifetime.GetIfCurrent() == pDropTarget &&
                  wxMSWOleIsShellDropTargetRegistered(
                      pDropTarget, rejectedHwnd) )
@@ -3449,7 +3453,7 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
     {
         wxMSWDropTargetRetirement retirement(oldTarget);
 #if wxUSE_OLE
-        wxMSWOleUnbindDropTarget(this, oldTarget);
+        wxMSWOleUnbindDropTarget(AsWindow(), oldTarget);
         if ( oldLifetime.GetIfCurrent() == oldTarget &&
              wxMSWOleIsShellDropTargetRegistered(oldTarget, oldHwnd) )
         {
@@ -3481,7 +3485,7 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
             if ( candidateLifetime.GetIfCurrent() == pDropTarget )
             {
                 if ( windowIsCurrent )
-                    wxMSWOleUnbindDropTarget(this, pDropTarget);
+                    wxMSWOleUnbindDropTarget(AsWindow(), pDropTarget);
                 if ( wxMSWOleIsShellDropTargetRegistered(
                          pDropTarget, oldHwnd) )
                 {
@@ -3511,7 +3515,7 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
         return;
 
 #if wxUSE_OLE
-    wxMSWOleBindDropTarget(this, pDropTarget, m_hWnd);
+    wxMSWOleBindDropTarget(AsWindow(), pDropTarget, m_hWnd);
     if ( windowLifetime.get() != this || transaction.IsSuperseded() ||
          m_dropTarget != pDropTarget )
         return;
@@ -5701,17 +5705,20 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 const bool isWinUIShell = false;
 #endif
 
-                bool hasWxAccessible = false;
 #if wxUSE_ACCESSIBILITY
                 // Call the virtual factory before suppressing anything:
                 // controls with a lazily-created custom wxAccessible remain
                 // authoritative even when their visual peer is slotted.
                 wxAccessible *accessible =
                     isWinUIShell ? GetOrCreateAccessible() : nullptr;
-                hasWxAccessible = accessible != nullptr;
 #endif
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#if wxUSE_ACCESSIBILITY
+                const bool hasWxAccessible = accessible != nullptr;
+#else
+                const bool hasWxAccessible = false;
+#endif
                 if ( isWinUIShell &&
                      wxWinUITLWHostHandleShellGetObject(
                          this, wParam, lParam,
@@ -7309,7 +7316,7 @@ bool wxWindowMSW::HandleDestroy()
     {
         wxMSWDropTargetRetirement retirement(oldTarget);
 #if wxUSE_OLE
-        wxMSWOleUnbindDropTarget(this, oldTarget);
+        wxMSWOleUnbindDropTarget(AsWindow(), oldTarget);
         if ( oldLifetime.GetIfCurrent() == oldTarget &&
              wxMSWOleIsShellDropTargetRegistered(oldTarget, oldHwnd) )
         {
@@ -7642,7 +7649,7 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
-    return wxMSWDispatchDropFiles(this, wParam);
+    return wxMSWDispatchDropFiles(AsWindow(), wParam);
 }
 
 bool wxMSWDispatchDropFiles(wxWindow* target,
@@ -7773,12 +7780,6 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
         event.SetEventObject(this);
 
         bool processedEvtSetCursor = HandleWindowEvent(event);
-#if defined(__WXWINUI__) && wxUSE_WINUI3
-        // Tell the port that the cursor for this window depends on where the
-        // pointer is, so that it keeps asking for every movement.
-        if ( processedEvtSetCursor )
-            wxWinUINotifySetCursorEventHandled();
-#endif
         if ( processedEvtSetCursor && event.HasCursor() )
         {
             hcursor = GetHcursorOf(event.GetCursor());

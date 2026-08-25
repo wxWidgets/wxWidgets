@@ -95,4 +95,3 @@ drag/capture/floating/reparentage.
 Alpha : Notebook/Tree suites alpha vertes, callback lifetime sûr, Tab pages
 mixte, aucune orientation silencieusement fausse. Beta : tous books génériques
 qualifiés, Tree hit-test/UIA/DPI/D&D et performance 10k validés.
-

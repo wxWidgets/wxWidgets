@@ -1551,7 +1551,7 @@ TEST_CASE("WinUIRichText::DialogsHandlersOwnerDefaultCancelAndCallbackDestroy",
     const bool savedRestoreLastPage =
         wxRichTextFormattingDialog::GetRestoreLastPage();
     const int savedLastPage = wxRichTextFormattingDialog::GetLastPage();
-    const wxScopeGuard restoreFormattingDialogStatics = wxMakeGuard(
+    wxScopeGuard restoreFormattingDialogStatics = wxMakeGuard(
         [savedRestoreLastPage, savedLastPage]()
         {
             wxRichTextFormattingDialog::SetRestoreLastPage(

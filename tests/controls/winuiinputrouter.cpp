@@ -976,13 +976,13 @@ TEST_CASE_METHOD(WinUIInputRouterFixture,
     PutOnTop(lower);
     wxWinUINativeHit refreshed;
     CHECK_FALSE(wxWinUIRefreshNativeHit(
-        m_frame, expected, nullptr, nullptr, &refreshed));
+        m_frame, expected, nullptr, nullptr, &refreshed, true));
 
     PutOnTop(upper);
     REQUIRE(Resolve(expected) == wxWinUIHitResolution::Hit);
     upper->SetHitTest(HTVSCROLL);
     CHECK_FALSE(wxWinUIRefreshNativeHit(
-        m_frame, expected, nullptr, nullptr, &refreshed));
+        m_frame, expected, nullptr, nullptr, &refreshed, true));
 }
 
 TEST_CASE_METHOD(WinUIInputRouterFixture,

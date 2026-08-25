@@ -118,4 +118,3 @@ spécifique n’est recommandé pour V0.
 - insert/delete/sort ne désassocie aucune donnée ;
 - sélection multiple, scroll et focus survivent aux mutations ;
 - aucune reconstruction destructive pendant un simple Check/SetString.
-

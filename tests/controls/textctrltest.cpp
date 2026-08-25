@@ -1503,6 +1503,16 @@ TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
     CHECK( sizeVeryLong.y == sizeLong.y );
 }
 
+#ifdef __WXWINUI__
+TEST_CASE("wxTextCtrl single-line best size honours the WinUI template",
+          "[wxTextCtrl][best-size][winui]")
+{
+    wxTextCtrl text(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    CHECK(text.GetBestSize().y >= text.FromDIP(32));
+}
+#endif
+
 #if wxUSE_CLIPBOARD
 
 TEST_CASE("wxTextCtrl::LongPaste", "[wxTextCtrl][clipboard][paste]")

@@ -923,35 +923,15 @@ bool wxWinUIRefreshNativeHit(wxWindow *tlw,
         return false;
     }
 
-    // Fast path: nothing moved, so the only way the verdict could have
-    // changed is the target itself going away or losing the point.  Both
-    // are answered by a handful of queries on that one window instead of
-    // a full walk of the window tree.
-    if ( layoutUnchanged )
-    {
-        const HWND leaf =
-            reinterpret_cast<HWND>(expected.GetTarget().GetLeafHwnd());
-        wxWinUINativeTarget current;
-        if ( leaf &&
-             ::IsWindow(leaf) &&
-             ::IsWindowVisible(leaf) &&
-             ::IsWindowEnabled(leaf) &&
-             wxWinUIPointInRect(leaf, expected.GetScreenPoint()) &&
-             (expected.GetArea() != wxWinUINativeArea::Client ||
-              wxWinUIPointInClient(leaf, expected.GetScreenPoint())) &&
-             wxWinUINativeResolverImpl::BuildTarget(leaf, tlw, current) &&
-             current.Matches(expected.GetTarget()) )
-        {
-            *refreshed = expected;
-            return true;
-        }
-        return false;
-    }
-
     wxWinUINativeHit current;
-    if ( wxWinUIResolveNativeHit(tlw, expected.GetScreenPoint(),
-                                 bridge, inner, &current) !=
-            wxWinUIHitResolution::Hit ||
+    const wxWinUIHitResolution resolution = layoutUnchanged
+        ? wxWinUIResolveNativeHitReusing(
+              tlw, expected.GetScreenPoint(), bridge, inner,
+              expected, true, &current)
+        : wxWinUIResolveNativeHit(
+              tlw, expected.GetScreenPoint(), bridge, inner, &current);
+    if ( resolution !=
+             wxWinUIHitResolution::Hit ||
          !current.GetTarget().Matches(expected.GetTarget()) ||
          current.GetArea() != expected.GetArea() ||
          current.GetHitTest() != expected.GetHitTest() ||

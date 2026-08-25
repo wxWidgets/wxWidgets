@@ -31,6 +31,16 @@ namespace
 
 struct SimplebookPageCreationContext
 {
+    SimplebookPageCreationContext(
+        wxSimplebookXmlHandler* handlerArg,
+        wxSimplebook* bookArg,
+        const wxWeakRef<wxWindow>& bookLifetimeArg)
+        : handler(handlerArg),
+          book(bookArg),
+          bookLifetime(bookLifetimeArg)
+    {
+    }
+
     wxSimplebookXmlHandler* const handler;
     wxSimplebook* const book;
     const wxWeakRef<wxWindow> bookLifetime;
@@ -117,7 +127,7 @@ wxObject *wxSimplebookXmlHandler::DoCreateResource()
         }
 
         bool committed = false;
-        const wxScopeGuard markFailed = wxMakeGuard(
+        wxScopeGuard markFailed = wxMakeGuard(
             [context, &committed]()
             {
                 if ( !committed )
@@ -140,7 +150,7 @@ wxObject *wxSimplebookXmlHandler::DoCreateResource()
         {
             const bool old_ins = m_isInside;
             m_isInside = false;
-            const wxScopeGuard restoreInside = wxMakeGuard(
+            wxScopeGuard restoreInside = wxMakeGuard(
                 [this, old_ins]() { m_isInside = old_ins; });
             wxUnusedVar(restoreInside);
 
@@ -336,7 +346,7 @@ wxObject *wxSimplebookXmlHandler::DoCreateResource()
         const bool old_ins = m_isInside;
         m_isInside = true;
 
-        const wxScopeGuard restoreHandlerState = wxMakeGuard(
+        wxScopeGuard restoreHandlerState = wxMakeGuard(
             [this, old_par, weakOld, old_ins]()
             {
                 m_simplebook = nullptr;
@@ -350,12 +360,12 @@ wxObject *wxSimplebookXmlHandler::DoCreateResource()
             });
         wxUnusedVar(restoreHandlerState);
 
-        SimplebookPageCreationContext creationContext
-            { this, sb, weakBook };
+        SimplebookPageCreationContext creationContext(this, sb, weakBook);
         gs_simplebookCreationContexts.push_back(&creationContext);
-        const wxScopeGuard restoreCreationContext = wxMakeGuard(
+        wxScopeGuard restoreCreationContext = wxMakeGuard(
             [&creationContext]()
             {
+                wxUnusedVar(creationContext);
                 wxASSERT( !gs_simplebookCreationContexts.empty() &&
                           gs_simplebookCreationContexts.back() ==
                               &creationContext );

@@ -583,7 +583,7 @@ public:
             enableEpoch = NextNonZero(m_enableEpoch);
             m_enableInProgress = true;
         }
-        const wxScopeGuard finishEnable = wxMakeGuard(
+        wxScopeGuard finishEnable = wxMakeGuard(
             [this, enableEpoch]()
             {
                 std::lock_guard<std::mutex> lock(m_mutex);
@@ -723,7 +723,7 @@ public:
         }
 
         ++gs_appNotificationNativeShowLeaseDepth;
-        const wxScopeGuard releaseShowLease = wxMakeGuard(
+        wxScopeGuard releaseShowLease = wxMakeGuard(
             [this, state]()
             {
                 ReleaseNativeShowLease(state);
@@ -1010,7 +1010,7 @@ public:
         {
             return false;
         }
-        const wxScopeGuard finishReplacement = wxMakeGuard(
+        wxScopeGuard finishReplacement = wxMakeGuard(
             [this]()
             {
                 m_nativeReplacementRequested.store(
@@ -1220,7 +1220,7 @@ private:
         const std::shared_ptr<wxWinUIAppNotificationNative>& native)
     {
         ++gs_appNotificationShutdownCompletionDepth;
-        const wxScopeGuard leaveCompletion = wxMakeGuard(
+        wxScopeGuard leaveCompletion = wxMakeGuard(
             []()
             {
                 wxASSERT(gs_appNotificationShutdownCompletionDepth != 0);
@@ -1608,7 +1608,7 @@ private:
         }
 
         ++gs_appNotificationDispatchLeaseDepth;
-        const wxScopeGuard releaseDispatchLease = wxMakeGuard(
+        wxScopeGuard releaseDispatchLease = wxMakeGuard(
             [this]() { ReleaseDispatchLease(); });
         wxUnusedVar(releaseDispatchLease);
 

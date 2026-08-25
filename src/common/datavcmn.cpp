@@ -53,6 +53,15 @@ namespace
 
 struct DataViewEditState
 {
+    DataViewEditState() = default;
+
+    DataViewEditState(wxDataViewRendererBase* rendererArg,
+                      wxPrivate::DataViewEditGeneration generationArg)
+        : renderer(rendererArg),
+          generation(generationArg)
+    {
+    }
+
     wxDataViewRendererBase* renderer = nullptr;
     wxPrivate::DataViewEditGeneration generation = 0;
 };
@@ -110,7 +119,7 @@ bool DispatchDataViewModelNotification(
     Callback&& callback)
 {
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -145,7 +154,8 @@ bool DispatchDataViewModelNotification(
         ++dispatchState.depth;
         bool callbackResult = false;
         {
-            const wxScopeGuard leaveNotifier = wxMakeGuard([notifier = entry.first]()
+            wxDataViewModelNotifier* const notifier = entry.first;
+            wxScopeGuard leaveNotifier = wxMakeGuard([notifier]()
             {
                 const auto state =
                     gs_dataViewNotifierDispatchStates.find(notifier);
@@ -493,7 +503,8 @@ void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier )
         ++gs_nextDataViewNotifierGeneration;
     gs_dataViewNotifierGenerations[notifier] =
         gs_nextDataViewNotifierGeneration;
-    gs_dataViewNotifierDispatchStates.try_emplace(notifier);
+    gs_dataViewNotifierDispatchStates.emplace(
+        notifier, DataViewNotifierDispatchState());
 
     m_notifiers.push_back( notifier );
     notifier->SetOwner( this );
@@ -942,7 +953,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     wxDataViewModel* const model = dv_ctrl->GetModel();
     if ( model )
         model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         if ( model )
             model->DecRef();
@@ -1050,7 +1061,7 @@ void wxDataViewRendererBase::CancelEditing()
     wxDataViewModel* const model = dv_ctrl ? dv_ctrl->GetModel() : nullptr;
     if ( model )
         model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         if ( model )
             model->DecRef();
@@ -1085,7 +1096,7 @@ bool wxDataViewRendererBase::FinishEditing()
     wxDataViewModel* const model = dv_ctrl->GetModel();
     if ( model )
         model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         if ( model )
             model->DecRef();
@@ -1159,7 +1170,7 @@ wxDataViewRendererBase::DoHandleEditingDone(wxVariant* value)
     m_item = wxDataViewItem();
     if ( model )
         model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         if ( model )
             model->DecRef();
@@ -1251,11 +1262,12 @@ wxDataViewRendererBase::CheckedGetValue(const wxDataViewModel* model,
         ownerColumn ? ownerColumn->GetOwner() : nullptr;
     const wxWeakRef<wxDataViewCtrl> weakCtrl(ownerCtrl);
     const wxString rendererVariantType = GetVariantType();
+    wxUnusedVar(rendererVariantType);
 
     wxDataViewModel* const modelRef =
         const_cast<wxDataViewModel*>(model);
     modelRef->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([modelRef]()
+    wxScopeGuard releaseModel = wxMakeGuard([modelRef]()
     {
         modelRef->DecRef();
     });
@@ -1326,7 +1338,7 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
     wxDataViewModel* const modelRef =
         const_cast<wxDataViewModel*>(model);
     modelRef->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([modelRef]()
+    wxScopeGuard releaseModel = wxMakeGuard([modelRef]()
     {
         modelRef->DecRef();
     });
@@ -1793,7 +1805,7 @@ void wxDataViewCtrlBase::Expand(const wxDataViewItem& item)
         return;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -1814,7 +1826,7 @@ void wxDataViewCtrlBase::ExpandChildren(const wxDataViewItem& item)
         return;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });
@@ -1837,7 +1849,7 @@ void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
     if (!item.IsOk()) return;
 
     model->IncRef();
-    const wxScopeGuard releaseModel = wxMakeGuard([model]()
+    wxScopeGuard releaseModel = wxMakeGuard([model]()
     {
         model->DecRef();
     });

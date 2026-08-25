@@ -128,6 +128,7 @@ public:
 
         std::vector<const wxHeaderCtrlSimple*>& active =
             GetActiveSimpleHeaderMutations();
+        wxUnusedVar(m_header);
         wxASSERT_MSG( !active.empty() && active.back() == m_header,
                       "unbalanced header mutation guard" );
         active.pop_back();

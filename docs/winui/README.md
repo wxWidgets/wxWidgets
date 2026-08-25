@@ -168,10 +168,14 @@ Runtime switches:
   control templates, for example) with the C locale of the process; with a
   decimal comma the text it produces cannot be parsed back and the failure,
   raised inside XAML's own layout pass, terminates the process. This is the
-  same constraint GTK+ has, and applies to `wxLocale`/`wxUILocale` as well as
-  to a direct `setlocale()` call. Locale-aware number *formatting* remains
-  available through `wxNumberFormatter` and `wxUILocale`, which do not depend
-  on `LC_NUMERIC`.
+  same constraint GTK+ has. Consequently the CRT-dependent
+  `wxString::ToDouble()`, `wxString::FromDouble()` and floating-point
+  `wxString::Format()` overloads use a decimal point even after initializing
+  `wxLocale`; locale-aware formatting and parsing remain available through
+  `wxNumberFormatter` and `wxUILocale`, which do not depend on `LC_NUMERIC`.
+  Applications using this port must change locales through wxWidgets and must
+  not call the CRT `setlocale()` directly, as a direct call bypasses this
+  invariant.
 
 ## Runtime deployment
 

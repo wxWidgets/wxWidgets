@@ -72,4 +72,3 @@ ADR; déclarer GL incompatible avec slots superposés pour la V0.
 - DPI/theme/RTL et client geometry stables ;
 - drawing générique visible et interactif sous le bridge ;
 - MDI/GL/Media/WebView clairement exclus s’ils ne sont pas qualifiés.
-

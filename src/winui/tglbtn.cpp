@@ -682,7 +682,7 @@ bool wxToggleButton::UpdateWinUIContent(bool forceRender)
         return true;
 
     impl->contentProjectionInProgress = true;
-    const wxScopeGuard projectionGuard =
+    wxScopeGuard projectionGuard =
         wxMakeGuard(
             [callbackState, impl]()
             {
@@ -937,7 +937,7 @@ bool wxToggleButton::UpdateWinUIAppearance(bool forceRender)
         return true;
 
     impl->appearanceProjectionInProgress = true;
-    const wxScopeGuard projectionGuard =
+    wxScopeGuard projectionGuard =
         wxMakeGuard(
             [callbackState, impl]()
             {
@@ -1443,7 +1443,7 @@ wxBitmap wxBitmapToggleButton::GetBitmapForState(
             return wxBitmap();
     }
     gs_bitmapToggleGetterStack.push_back(this);
-    const wxScopeGuard getterGuard =
+    wxScopeGuard getterGuard =
         wxMakeGuard(
             []()
             {
@@ -1667,7 +1667,7 @@ bool wxBitmapToggleButton::UpdateWinUIBitmapContent(
         return true;
 
     impl->contentProjectionInProgress = true;
-    const wxScopeGuard projectionGuard =
+    wxScopeGuard projectionGuard =
         wxMakeGuard(
             [callbackState, impl]()
             {

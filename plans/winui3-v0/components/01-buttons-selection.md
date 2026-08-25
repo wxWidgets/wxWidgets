@@ -126,4 +126,3 @@ est requis en beta.
 - navigation clavier et groupes conformes ;
 - Enter/Escape/default dans dialogues validés ;
 - limitations beta documentées, jamais des no-op silencieux non listés.
-

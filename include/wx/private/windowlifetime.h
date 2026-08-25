@@ -23,12 +23,13 @@
 // ancestor. Destruction observers sometimes need to inspect or close a still
 // live child while its owner is already dispatching wxEVT_DESTROY. Ordinary
 // callback transactions should use wxWindowIsUnavailableForCallbacks() below.
-inline bool wxWindowItselfIsUnavailableForCallbacks(const wxWindow* window)
+inline bool wxWindowItselfIsUnavailableForCallbacks(
+    const wxWindowBase* window)
 {
     if ( !window )
         return true;
 
-    wxWindow* const mutableWindow = const_cast<wxWindow*>(window);
+    wxWindowBase* const mutableWindow = const_cast<wxWindowBase*>(window);
     if ( mutableWindow->m_isBeingDeleted ||
          (wxTheApp &&
           wxTheApp->IsScheduledForDestruction(mutableWindow)) )
@@ -40,7 +41,7 @@ inline bool wxWindowItselfIsUnavailableForCallbacks(const wxWindow* window)
     // The ordinary host predicate also consults IsBeingDeleted(), whose
     // result is ancestor-propagating for child windows. Use the exact private
     // queue predicate here so this function keeps its own-object contract.
-    if ( wxWinUITLWHostHasDeferredDestroyExact(mutableWindow) )
+    if ( wxWinUITLWHostHasDeferredDestroyExact(mutableWindow->AsWindow()) )
         return true;
 #endif
 
@@ -53,12 +54,12 @@ inline bool wxWindowItselfIsUnavailableForCallbacks(const wxWindow* window)
 // unavailable when any ancestor is in one of these states: WinUI schedules the
 // TLW first while all of its controls remain weak-live. Callers must stop at
 // every such state, even while weak references and HWNDs still exist.
-inline bool wxWindowIsUnavailableForCallbacks(const wxWindow* window)
+inline bool wxWindowIsUnavailableForCallbacks(const wxWindowBase* window)
 {
     if ( !window )
         return true;
 
-    for ( wxWindow* current = const_cast<wxWindow*>(window);
+    for ( wxWindowBase* current = const_cast<wxWindowBase*>(window);
           current;
           current = current->GetParent() )
     {

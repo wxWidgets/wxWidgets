@@ -1298,7 +1298,7 @@ void wxAuiTabContainer::SetArtProvider(wxAuiTabArt* art)
             wxAuiAdoptTabArt(art, this);
             wxAuiBumpTabContainerRevision(this);
             const unsigned int flags = m_flags;
-            const wxScopeGuard validatePublishedArt = wxMakeGuard(
+            wxScopeGuard validatePublishedArt = wxMakeGuard(
                 [this, art, lifetime]()
                 {
                     wxAuiTabContainerLifetimeState current;
@@ -1345,14 +1345,14 @@ void wxAuiTabContainer::SetArtProvider(wxAuiTabArt* art)
     // instead. Its adoption token also makes stale A -> B -> A retirements
     // harmless.
     bool retainOldArt = false;
-    const wxScopeGuard retireOldArt = wxMakeGuard(
+    wxScopeGuard retireOldArt = wxMakeGuard(
         [oldArt, oldAdoption, &retainOldArt]()
         {
             if ( !retainOldArt )
                 wxAuiRetireTabArt(oldArt, oldAdoption);
         });
     wxUnusedVar(retireOldArt);
-    const wxScopeGuard validatePublishedArt = wxMakeGuard(
+    wxScopeGuard validatePublishedArt = wxMakeGuard(
         [this, art, oldArt, oldAdoption, lifetime, &retainOldArt]()
         {
             wxAuiTabContainerLifetimeState current;
@@ -3453,20 +3453,22 @@ void wxAuiTabCtrl::DoApplyRect(const wxRect& rect, int tabCtrlHeight)
             return;
     }
 
+    // Publish the art-provider geometry before resizing the native window.
+    // SetRect() is a virtual-callback boundary and can destroy this tab
+    // control; doing it from a synchronous wxQt resize event would make Qt
+    // resume dispatch on an already deleted QWidget.
+    SetRect(wxRect(0, 0, rect.width, tabCtrlHeight));
+    if ( !hasExactProjection() )
+        return;
+
     if (IsFlagSet(wxAUI_NB_BOTTOM))
     {
         SetSize(rect.x, rect.y + rect.height - tabCtrlHeight,
                 rect.width, tabCtrlHeight);
-        if ( !hasExactProjection() )
-            return;
-        SetRect(wxRect(0, 0, rect.width, tabCtrlHeight));
     }
     else //TODO: if (IsFlagSet(wxAUI_NB_TOP))
     {
         SetSize(rect.x, rect.y, rect.width, tabCtrlHeight);
-        if ( !hasExactProjection() )
-            return;
-        SetRect(wxRect(0, 0, rect.width, tabCtrlHeight));
     }
     // TODO: else if (IsFlagSet(wxAUI_NB_LEFT)){}
     // TODO: else if (IsFlagSet(wxAUI_NB_RIGHT)){}
@@ -3500,7 +3502,8 @@ void wxAuiTabCtrl::OnSysColourChanged(wxSysColourChangedEvent &event)
     if ( art )
     {
         const wxAuiTabContainerSnapshot revision(
-            this, m_art, m_rect, m_tabOffset, m_flags, m_tabRowHeight,
+            this, m_art, wxAuiTabContainer::m_rect, m_tabOffset, m_flags,
+            m_tabRowHeight,
             m_pages, m_buttons, this);
         wxAuiInvokeTabArt(art, [](wxAuiTabArt* const leasedArt)
         {
@@ -3518,7 +3521,8 @@ void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)
 {
     wxSize s = evt.GetSize();
     wxRect r(0, 0, s.GetWidth(), s.GetHeight());
-    SetRect(r);
+    if ( r != wxAuiTabContainer::m_rect )
+        SetRect(r);
 }
 
 void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
@@ -3843,7 +3847,8 @@ void wxAuiTabCtrl::OnButton(int tabIdx, int button)
         if ( !art )
             return;
         const wxAuiTabContainerSnapshot revision(
-            this, m_art, m_rect, m_tabOffset, m_flags, m_tabRowHeight,
+            this, m_art, wxAuiTabContainer::m_rect, m_tabOffset, m_flags,
+            m_tabRowHeight,
             m_pages, m_buttons, this);
         wxAuiPageWindowProjection pageProjection;
         if ( !pageProjection.Capture(m_pages) )
@@ -3863,7 +3868,8 @@ void wxAuiTabCtrl::OnButton(int tabIdx, int button)
                 wxWindowIsUnavailableForCallbacks(this) ||
                 !pageProjection.MatchesAll(m_pages) ||
                 !revision.Matches(
-                    m_art, m_rect, m_tabOffset, m_flags, m_tabRowHeight,
+                    m_art, wxAuiTabContainer::m_rect, m_tabOffset, m_flags,
+                    m_tabRowHeight,
                     m_pages, m_buttons) )
         {
             return;
@@ -4366,10 +4372,11 @@ void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
             tabs,
             wxWeakRef<wxAuiTabCtrl>(tabs),
             tabs->m_art,
-            std::make_unique<wxAuiTabContainerSnapshot>(
-                tabs, tabs->m_art, tabs->m_rect, tabs->m_tabOffset,
-                tabs->m_flags, tabs->m_tabRowHeight, tabs->m_pages,
-                tabs->m_buttons, tabs)
+            std::unique_ptr<wxAuiTabContainerSnapshot>(
+                new wxAuiTabContainerSnapshot(
+                    tabs, tabs->m_art, tabs->m_rect, tabs->m_tabOffset,
+                    tabs->m_flags, tabs->m_tabRowHeight, tabs->m_pages,
+                    tabs->m_buttons, tabs))
         });
     }
     const size_t paneCount = m_mgr.GetAllPanes().GetCount();
@@ -4617,7 +4624,7 @@ wxAuiTabFrame* wxAuiNotebook::CreateTabFrame(wxSize size)
 
 wxAuiNotebook::~wxAuiNotebook()
 {
-    const wxScopeGuard forgetMutationEpochs = wxMakeGuard([this]()
+    wxScopeGuard forgetMutationEpochs = wxMakeGuard([this]()
     {
         wxAuiForgetNotebookMutationEpochs(this);
     });
@@ -5405,7 +5412,7 @@ void wxAuiNotebook::SetWindowStyleFlag(long style)
         wxWeakRef<wxAuiTabCtrl> tabsLifetime;
         wxAuiPageProjection pages;
         unsigned int originalFlags;
-        bool flagsPublished = false;
+        bool flagsPublished;
     };
 
     std::vector<FrameRevision> frames;
@@ -7495,7 +7502,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
             delete new_tabs;
         }
     };
-    const wxScopeGuard uncommittedFrameGuard =
+    wxScopeGuard uncommittedFrameGuard =
         wxMakeGuard(rollbackUncommittedFrame);
 
     wxAuiNotebook* book = hasOriginalTopology();
@@ -8330,7 +8337,8 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiTabCtrl* src_tabs, int src_idx)
                 std::vector<wxWindow*> movedPages = sourcePages;
                 std::vector<wxWeakRef<wxWindow>> movedLifetimes =
                     sourceLifetimes;
-                const auto moveExpected = [src_idx, dest_idx](auto& pages)
+                const auto moveExpectedPages =
+                    [src_idx, dest_idx](std::vector<wxWindow*>& pages)
                 {
                     const auto begin = pages.begin();
                     if ( src_idx < dest_idx )
@@ -8344,8 +8352,24 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiTabCtrl* src_tabs, int src_idx)
                                     begin + src_idx + 1);
                     }
                 };
-                moveExpected(movedPages);
-                moveExpected(movedLifetimes);
+                const auto moveExpectedLifetimes =
+                    [src_idx, dest_idx](
+                        std::vector<wxWeakRef<wxWindow>>& pages)
+                {
+                    const auto begin = pages.begin();
+                    if ( src_idx < dest_idx )
+                    {
+                        std::rotate(begin + src_idx, begin + src_idx + 1,
+                                    begin + dest_idx + 1);
+                    }
+                    else
+                    {
+                        std::rotate(begin + dest_idx, begin + src_idx,
+                                    begin + src_idx + 1);
+                    }
+                };
+                moveExpectedPages(movedPages);
+                moveExpectedLifetimes(movedLifetimes);
 
                 const auto hasMovedTopology = [&]() -> wxAuiNotebook*
                 {
@@ -8519,7 +8543,7 @@ void wxAuiNotebook::OnTabEndDragForTesting(wxAuiTabCtrl* const srcTabs,
     const wxAuiNotebookEndDragOverride override =
         {this, srcTabs, destination, destinationIndex, createNewPane};
     gs_auiNotebookEndDragOverride = &override;
-    const wxScopeGuard resetOverride = wxMakeGuard([]()
+    wxScopeGuard resetOverride = wxMakeGuard([]()
     {
         gs_auiNotebookEndDragOverride = nullptr;
     });
@@ -9316,7 +9340,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
                     rollbackTabs->DoUpdateActive();
                     (void)hasLocalOriginalSourceProjection();
                 };
-                const wxScopeGuard detachedSourceGuard =
+                wxScopeGuard detachedSourceGuard =
                     wxMakeGuard(restoreDetachedSource);
 
                 source = hasDetachedSourceTopology();
@@ -9451,7 +9475,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
         wxAuiTabFrame* provisionalFrame = nullptr;
         wxAuiTabCtrl* provisionalTabs = nullptr;
         bool rollbackProvisionalFrame = false;
-        const wxScopeGuard provisionalFrameGuard = wxMakeGuard([&]()
+        wxScopeGuard provisionalFrameGuard = wxMakeGuard([&]()
         {
             if ( !rollbackProvisionalFrame )
                 return;

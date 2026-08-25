@@ -125,4 +125,3 @@ caret au milieu après WriteText/Remove, style simple, re-template et destructio
 - suites TextCtrl/Search/Combo ciblées vertes pour capacités alpha ;
 - AZERTY/AltGr/dead keys et accélérateurs restent verts ;
 - aucun no-op silencieux dans clipboard/selection/readonly alpha.
-

@@ -1300,7 +1300,7 @@ bool wxPropertyGridManager::DoSelectPage( int index )
     const int previousSelectionTarget = selectionState.pageSelectionTarget;
     selectionState.pageSelectionInProgress = true;
     selectionState.pageSelectionTarget = index;
-    const wxScopeGuard leavePageSelection =
+    wxScopeGuard leavePageSelection =
         wxMakeGuard([weakThis, this,
                      previousSelectionInProgress,
                      previousSelectionTarget]()
@@ -1834,7 +1834,7 @@ bool wxPropertyGridManager::RemovePage( int page )
     const int previousSelectionTarget = removalState.pageSelectionTarget;
     removalState.pageSelectionInProgress = true;
     removalState.pageSelectionTarget = wxNOT_FOUND;
-    const wxScopeGuard leavePageRemoval =
+    wxScopeGuard leavePageRemoval =
         wxMakeGuard([weakThis, this,
                      previousSelectionInProgress,
                      previousSelectionTarget]()
@@ -1874,7 +1874,7 @@ bool wxPropertyGridManager::RemovePage( int page )
     const wxWeakRef<wxWindow> weakToolbar(toolbar);
     std::vector<DetachedToolbarTool> detachedTools;
     bool toolbarRemovalCommitted = false;
-    const wxScopeGuard rollbackToolbarRemoval =
+    wxScopeGuard rollbackToolbarRemoval =
         wxMakeGuard([&]()
         {
             if ( toolbarRemovalCommitted )
@@ -2072,7 +2072,7 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
         wxPGGetPropertyGridManagerTransientState(this);
     if ( isPropertyGridEvent )
         ++transient.eventDispatchDepth;
-    const wxScopeGuard leavePropertyGridDispatch =
+    wxScopeGuard leavePropertyGridDispatch =
         wxMakeGuard([weakThis, this, isPropertyGridEvent]()
         {
             // This is cleanup, not continuation: unwind the sidecar even when

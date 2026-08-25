@@ -453,7 +453,7 @@ void wxSplashScreen::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
     const wxWeakRef<wxWindow> weakThis(this);
     runtime.closing = true;
-    const wxScopeGuard leaveClose = wxMakeGuard(
+    wxScopeGuard leaveClose = wxMakeGuard(
         [this, weakThis]()
         {
             if ( weakThis.get() == this )

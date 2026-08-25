@@ -589,7 +589,7 @@ int wxDialog::ShowModal()
     // WinUIShowModalWithoutHook() (modalData, focus, cursor) have unwound.
     const wxWeakRef<wxDialog> externalLifetimeSelf(this);
     WinUIBeginExternalModalLifetime();
-    const wxScopeGuard externalLifetime = wxMakeGuard(
+    wxScopeGuard externalLifetime = wxMakeGuard(
         [externalLifetimeSelf]()
         {
             if ( wxDialog* const live = externalLifetimeSelf.get() )

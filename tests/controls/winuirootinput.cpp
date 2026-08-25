@@ -13,6 +13,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/cursor.h"
     #include "wx/frame.h"
     #include "wx/window.h"
     #include "wx/utils.h"
@@ -331,6 +332,38 @@ TEST_CASE_METHOD(
     CHECK(recovered.preparedActionCount == 2);
     CHECK(m_window->GetMoveCount() == 1);
     CHECK(m_window->GetLeaveCount() == 0);
+}
+
+TEST_CASE_METHOD(
+    WinUIRootInputFixture,
+    "WinUIRootInput::DynamicSetCursorHandlerInvalidatesNegativeVerdict",
+    "[winui-root-input]")
+{
+    wxWinUIPointerSample sample = Sample();
+    const wxWinUIRootPointerOutcome initial =
+        m_host->TestRouteRootPointerSample(sample);
+    REQUIRE(initial.status == wxWinUIRootPointerStatus::Completed);
+
+    const unsigned setCursorBefore = m_window->GetSetCursorCount();
+    const unsigned movesBefore = m_window->GetMoveCount();
+    bool handlerCalled = false;
+    m_window->Bind(
+        wxEVT_SET_CURSOR,
+        [&handlerCalled](wxSetCursorEvent& event)
+        {
+            handlerCalled = true;
+            event.SetCursor(wxCursor(wxCURSOR_HAND));
+        });
+
+    ++sample.screenX;
+    ++sample.timestamp;
+    const wxWinUIRootPointerOutcome afterBind =
+        m_host->TestRouteRootPointerSample(sample);
+
+    CHECK(afterBind.status == wxWinUIRootPointerStatus::Completed);
+    CHECK(handlerCalled);
+    CHECK(m_window->GetSetCursorCount() == setCursorBefore + 1);
+    CHECK(m_window->GetMoveCount() == movesBefore + 1);
 }
 
 TEST_CASE_METHOD(

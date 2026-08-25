@@ -100,4 +100,3 @@ tooltip, hot theme et UIA.
 - 100/150/200 %, long localized text, hot theme ;
 - Narrator sans shell duplicate ;
 - aucun freeze, callback tardif ou re-prime sur HWND réutilisé.
-

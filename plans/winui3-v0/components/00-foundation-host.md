@@ -110,4 +110,3 @@ Ajouter un harnais `HostLifecycle` couvrant :
 - Ne pas refactorer les 2 458 lignes avant tests de caractérisation.
 - Arrêter si la conversion de `wxWinUIXamlHost` exige de casser son ABI public;
   proposer alors une transition documentée séparée.
-

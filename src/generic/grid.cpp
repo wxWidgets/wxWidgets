@@ -3234,7 +3234,7 @@ wxGrid::SetTable(wxGridTableBase *table,
 
     initialState.tableSwapActive = true;
     const wxWeakRef<wxWindow> weakThis(this);
-    const wxScopeGuard finishTableSwap = wxMakeGuard([this, weakThis]()
+    wxScopeGuard finishTableSwap = wxMakeGuard([this, weakThis]()
     {
         if ( weakThis.get() == this )
             GetGridMutationState(this).tableSwapActive = false;
@@ -3243,7 +3243,7 @@ wxGrid::SetTable(wxGridTableBase *table,
 
     bool candidateCommitted = table == nullptr;
     bool candidateViewAttached = false;
-    const wxScopeGuard releaseCandidate = wxMakeGuard(
+    wxScopeGuard releaseCandidate = wxMakeGuard(
         [this, weakThis, table, takeOwnership,
          &candidateCommitted, &candidateViewAttached]()
         {
@@ -3847,7 +3847,7 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
 
     state.redimensionActive = true;
     const wxWeakRef<wxWindow> weakThis(this);
-    const wxScopeGuard finishTransaction = wxMakeGuard([this, weakThis]()
+    wxScopeGuard finishTransaction = wxMakeGuard([this, weakThis]()
     {
         if ( weakThis.get() == this )
         {
@@ -11727,7 +11727,7 @@ bool wxGrid::SetNativeHeaderColCount()
     wxHeaderCtrl* const header = GetGridColHeader();
     const wxWeakRef<wxWindow> weakThis(this);
     const wxWeakRef<wxWindow> weakHeader(header);
-    const wxScopeGuard finishNativeHeaderSync =
+    wxScopeGuard finishNativeHeaderSync =
         wxMakeGuard([this, weakThis]()
         {
             if ( weakThis.get() == this )
@@ -12256,7 +12256,7 @@ void wxGrid::AutoSizeColumns(bool setAsMin)
         GetColumnMutationRevision();
     const unsigned long long rowRevision = GetRowMutationRevision();
     BeginBatch();
-    const wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
+    wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
     {
         if ( weakThis.get() == this )
             EndBatch();
@@ -12285,7 +12285,7 @@ void wxGrid::AutoSizeRows(bool setAsMin)
         GetColumnMutationRevision();
     const unsigned long long rowRevision = GetRowMutationRevision();
     BeginBatch();
-    const wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
+    wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
     {
         if ( weakThis.get() == this )
             EndBatch();
@@ -12314,7 +12314,7 @@ void wxGrid::AutoSize()
         GetColumnMutationRevision();
     const unsigned long long rowRevision = GetRowMutationRevision();
     BeginBatch();
-    const wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
+    wxScopeGuard endBatch = wxMakeGuard([this, weakThis]()
     {
         if ( weakThis.get() == this )
             EndBatch();

@@ -448,7 +448,7 @@ bool wxTipWindow::Create(wxWindow *parent,
     const bool ownsPublishedExternalValue =
         IsExpectedTipRefStorage(this, windowPtr);
     bool creationCommitted = false;
-    const wxScopeGuard rollbackPublishedPointer = wxMakeGuard(
+    wxScopeGuard rollbackPublishedPointer = wxMakeGuard(
         [this, windowPtr, weakThis, ownsPublishedExternalValue,
          &creationCommitted]()
         {
@@ -682,9 +682,10 @@ void wxTipWindow::Close()
 #endif
     ActiveTipClose activeClose = { this, weakThis, gs_activeTipClose };
     gs_activeTipClose = &activeClose;
-    const wxScopeGuard leaveClose = wxMakeGuard(
+    wxScopeGuard leaveClose = wxMakeGuard(
         [this, &activeClose]()
         {
+            wxUnusedVar(this);
             wxASSERT( gs_activeTipClose == &activeClose &&
                       activeClose.tip == this );
             gs_activeTipClose = activeClose.previous;

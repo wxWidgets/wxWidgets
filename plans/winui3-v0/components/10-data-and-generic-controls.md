@@ -98,4 +98,3 @@ risques Tree/List, filesystem refresh, D&D files et dialogs owner.
 - aucun cisaillement visible au budget défini ;
 - UIA sans fragment bridge parasite ;
 - aucune réécriture native nécessaire pour la V0.
-

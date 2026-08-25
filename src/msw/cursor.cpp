@@ -384,10 +384,12 @@ const wxCursor *wxGetGlobalCursor()
 void wxSetCursor(const wxCursorBundle& cursors)
 {
     const wxCursor& cursor = cursors.GetCursorForMainWindow();
+#if defined(__WXWINUI__) && wxUSE_WINUI3
     const bool changed =
         cursor.IsOk() != gs_globalCursor.IsOk() ||
         (cursor.IsOk() &&
          GetHcursorOf(cursor) != GetHcursorOf(gs_globalCursor));
+#endif
 
     if ( cursor.IsOk() )
         ::SetCursor(GetHcursorOf(cursor));

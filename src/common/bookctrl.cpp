@@ -1342,7 +1342,7 @@ bool wxBookCtrlBase::DeleteAllPages()
         }
 
         transaction.BeginPageRemoval();
-        const wxScopeGuard endRemoval = wxMakeGuard(
+        wxScopeGuard endRemoval = wxMakeGuard(
             [&transaction]()
             {
                 transaction.EndPageRemoval();
@@ -1359,7 +1359,7 @@ bool wxBookCtrlBase::DeleteAllPages()
         // On the normal path removedBatch deletes the page first and the weak
         // identity makes this guard a no-op. A callback may also transfer the
         // detached page to another parent, in which case that new owner wins.
-        const wxScopeGuard deleteCommittedRoot = wxMakeGuard(
+        wxScopeGuard deleteCommittedRoot = wxMakeGuard(
             [&, removedPage]()
             {
                 wxBookCtrlBase* const currentBook = weakThis.get();

@@ -153,7 +153,7 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
         wxVector<int> parentsSave;
         m_pageParents.swap(parentsSave);
 
-        const wxScopeGuard restoreBookContext = wxMakeGuard(
+        wxScopeGuard restoreBookContext = wxMakeGuard(
             [this, old_par, weakOld, &old_treeContext, &parentsSave]()
             {
                 m_pageParents.swap(parentsSave);

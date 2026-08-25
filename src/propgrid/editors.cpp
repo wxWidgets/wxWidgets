@@ -167,6 +167,7 @@ wxWindow* wxPGResolveFailedEditorCreation(
     const wxWeakRef<wxWindow>& weakEditor,
     bool transactionIsValid)
 {
+    wxUnusedVar(editor);
     wxWindow* const liveEditor = weakEditor.get();
     if ( !liveEditor )
         return nullptr;
@@ -948,7 +949,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveComboPaint = wxMakeGuard(
+    wxScopeGuard leaveComboPaint = wxMakeGuard(
         [weakThis, this]()
         {
             if ( weakThis.get() == this )
@@ -2346,7 +2347,7 @@ void wxPropertyGrid::CorrectEditorWidgetSizeX()
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     const wxWeakRef<wxWindow> weakThis(this);
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveEditorResize = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveEditorResize = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -2442,7 +2443,7 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     const wxWeakRef<wxWindow> weakThis(this);
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveEditorMove = wxMakeGuard([weakThis, this]()
+    wxScopeGuard leaveEditorMove = wxMakeGuard([weakThis, this]()
     {
         if ( weakThis.get() == this )
             --wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -2934,7 +2935,7 @@ void wxPropertyGrid::SetEditorAppearance( const wxPGCell& cell,
     const wxWeakRef<wxWindow> weakCtrl(ctrl);
     wxPropertyGridPageState* const state = m_pState;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
-    const wxScopeGuard leaveAppearanceCallback = wxMakeGuard(
+    wxScopeGuard leaveAppearanceCallback = wxMakeGuard(
         [weakGrid, this]()
         {
             if ( weakGrid.get() == this )
@@ -3017,7 +3018,7 @@ bool wxPGEditorDialogAdapter::ShowDialog( wxPropertyGrid* propGrid, wxPGProperty
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     const wxWeakRef<wxWindow> weakGrid(propGrid);
     ++wxPGGetPropertyGridTransientState(propGrid).propertyCallbackDepth;
-    const wxScopeGuard leaveDialogCallback = wxMakeGuard(
+    wxScopeGuard leaveDialogCallback = wxMakeGuard(
         [propGrid, weakGrid]()
         {
             if ( weakGrid.get() == propGrid )

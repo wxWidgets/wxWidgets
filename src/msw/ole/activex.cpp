@@ -1483,6 +1483,8 @@ namespace
 
 void LogActiveXRequiredCallFailure(HRESULT hr, const char *operation)
 {
+    wxUnusedVar(hr);
+    wxUnusedVar(operation);
     wxLogDebug("wxActiveXContainer: %s failed with HRESULT 0x%08lX",
                wxString::FromAscii(operation),
                static_cast<unsigned long>(hr));

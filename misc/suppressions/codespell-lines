@@ -33,3 +33,21 @@ expressions</em> (BRE). EREs are roughly those of the traditional @e egrep,
     bool AtLeast(int major, int minor = 0, int micro = 0) const;
         return AtLeast(0) || !m_name.empty() || !m_description.empty();
     bool useES = false;
+   Cette fenêtre ne reste pas physiquement exposée dans la topologie observée.
+   Le bridge reçoit la surface XAML normale mais pas les points situés dans ses
+   Le TLW enveloppe la surface normale et les trous natifs, tandis que le
+inscriptions wxMSW normales. Le premier `FlushSync()` qui observe le TLW et le
+bridge visibles, non iconifiés et dotés d'une géométrie non vide détache ces
+registration fixe wxMSW, une acquisition externe par le broker et une
+Le bridge est le récepteur physique de la surface XAML normale et reste
+livraisons wx. Chaque callback valide les deux identités HWND avant tout routage.
+Si une registration fixe est momentanément en cours, le broker publie un état
+`DoDragDrop()` bornés sur la surface normale puis dans un trou exposant un
+- le bridge et le TLW ont reçu séparément la surface normale ;
+- le TLW a reçu la surface normale et le trou ;
+- les armements combinés ont sélectionné le bridge en surface normale et le
+normale avec zéro callback COM. Dans le même artefact, l'armement combiné brut a
+livré exclusivement au bridge en surface normale et exclusivement au TLW dans
+polling. Un changement de présentation réentrant avant commit invalide l'epoch,
+le broker produit, sur une surface XAML normale et dans un trou natif, avec
+    DoubleClick,

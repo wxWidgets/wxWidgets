@@ -185,7 +185,7 @@ void wxAuiWinUIToolBarArt::DrawToolLayer(wxDC& dc,
     // A toggled tool gets the accent indicator of an AppBarToggleButton, not
     // an accent-filled background: the tools of a real application carry
     // colour of their own and would be unreadable over the accent colour.
-    const bool vertical = rect.height > rect.width;
+    const bool vertical = (m_flags & wxAUI_TB_VERTICAL) != 0;
     const int thickness = wxMax(wnd->FromDIP(3), 2);
     const int length = wxMax(
         static_cast<int>((vertical ? rect.height : rect.width) *

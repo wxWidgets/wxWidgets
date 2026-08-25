@@ -98,6 +98,8 @@ void wxSystemSettingsModule::OnExit()
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
+    const wxSystemColour requestedIndex = index;
+
     // As GetSysColor() doesn't support dark mode, check for it before using it.
     if ( wxMSWDarkMode::IsActive() )
     {
@@ -124,7 +126,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     else if ( index == wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT)
     {
         // there is no standard colour with this index, map to another one
-        index = wxSYS_COLOUR_LISTBOXTEXT;
+        index = wxSYS_COLOUR_HIGHLIGHTTEXT;
     }
     else if ( index == wxSYS_COLOUR_LISTBOX )
     {
@@ -149,6 +151,42 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
     wxColour ret = wxRGBToColour(colSys);
     wxASSERT(ret.IsOk());
+
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    // Opaque GDI children hosted above Mica use exact black as their
+    // composition colour key. Avoid returning that key for the standard text
+    // roles in the light theme, otherwise generic controls can paint text that
+    // is subsequently made transparent by DWM. High contrast remains entirely
+    // controlled by the system palette.
+    bool isTextColour = false;
+    switch ( requestedIndex )
+    {
+        case wxSYS_COLOUR_WINDOWTEXT:
+        case wxSYS_COLOUR_LISTBOXTEXT:
+        case wxSYS_COLOUR_BTNTEXT:
+        case wxSYS_COLOUR_CAPTIONTEXT:
+        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+        case wxSYS_COLOUR_MENUTEXT:
+        case wxSYS_COLOUR_INFOTEXT:
+        case wxSYS_COLOUR_GRAYTEXT:
+        case wxSYS_COLOUR_HIGHLIGHTTEXT:
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
+            isTextColour = true;
+            break;
+
+        default:
+            break;
+    }
+
+    if ( isTextColour && !wxMSWImpl::IsHighContrast() &&
+         ret.Red() == 0 && ret.Green() == 0 && ret.Blue() == 0 )
+    {
+        // Fluent TextFillColorPrimary in the light theme, kept opaque and
+        // intentionally distinct from the backdrop colour key.
+        ret = wxColour(27, 27, 27);
+    }
+#endif
+
     return ret;
 }
 

@@ -761,7 +761,7 @@ TEST_CASE("WinUIAuxiliaryWindows::SplashLifecycle",
     {
 #if wxUSE_EXCEPTIONS
         wxWinUISetSplashHookForTesting(&ThrowAfterSplashFilter);
-        const wxScopeGuard resetHook = wxMakeGuard(
+        wxScopeGuard resetHook = wxMakeGuard(
             []() { wxWinUIResetSplashHookForTesting(); });
         wxUnusedVar(resetHook);
 
@@ -1042,7 +1042,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         gs_reentrantCloseAttempts = 0;
         wxWinUISetPopupCaptureReleaseHookForTesting(
             &ReenterSameTipCloseDuringCaptureRelease);
-        const wxScopeGuard resetHook = wxMakeGuard(
+        wxScopeGuard resetHook = wxMakeGuard(
             []()
             {
                 wxWinUIResetPopupCaptureReleaseHookForTesting();
@@ -1105,7 +1105,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         gs_hostileTipCapturePasses = 0;
         wxWinUISetPopupCaptureReleaseHookForTesting(
             &RecaptureTipViewNatively);
-        const wxScopeGuard resetCaptureHook = wxMakeGuard(
+        wxScopeGuard resetCaptureHook = wxMakeGuard(
             []()
             {
                 wxWinUIResetPopupCaptureReleaseHookForTesting();
@@ -1138,7 +1138,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
                 // New() must not let its provisional unique_ptr delete twice.
                 delete creatingTip;
             });
-        const wxScopeGuard resetHook = wxMakeGuard(
+        wxScopeGuard resetHook = wxMakeGuard(
             []() { wxWinUIResetTipCreateHookForTesting(); });
         wxUnusedVar(resetHook);
 
@@ -1193,7 +1193,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
     SECTION("pointer_publication_is_a_bidirectional_commit")
     {
         wxWinUISetTipHookForTesting(&DetachTipBacklinkAfterPublication);
-        const wxScopeGuard resetHook = wxMakeGuard(
+        wxScopeGuard resetHook = wxMakeGuard(
             []() { wxWinUIResetTipHookForTesting(); });
         wxUnusedVar(resetHook);
 
@@ -1326,7 +1326,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         REQUIRE(hwnd != nullptr);
         PersistentTipNativeReshowState persistentReshow;
         REQUIRE(InstallPersistentTipNativeReshow(hwnd, &persistentReshow));
-        const wxScopeGuard removePersistentReshowSubclass = wxMakeGuard(
+        wxScopeGuard removePersistentReshowSubclass = wxMakeGuard(
             [hwnd, &persistentReshow]()
             {
                 persistentReshow.enabled = false;
@@ -1363,7 +1363,7 @@ TEST_CASE("WinUIAuxiliaryWindows::TipWindowLifecycle",
         PersistentTipNativeReshowState missingNativeReshow;
         REQUIRE(InstallPersistentTipNativeReshow(
             missingNativeHwnd, &missingNativeReshow));
-        const wxScopeGuard removeMissingNativeReshowSubclass = wxMakeGuard(
+        wxScopeGuard removeMissingNativeReshowSubclass = wxMakeGuard(
             [missingNativeHwnd, &missingNativeReshow]()
             {
                 missingNativeReshow.enabled = false;

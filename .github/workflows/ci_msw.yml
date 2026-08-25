@@ -191,16 +191,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Compile all tests in the primary shared configuration. The static
-          # configuration still links the important samples, which exercises
-          # the static library interfaces without compiling the test suite a
-          # second time.
+          # Compile and execute the narrow Supported V0 gate in both linkages.
+          # Its filter excludes physical probes and stress/native spikes.
           - linkage: shared
             shared: 'ON'
             tests: ALL
           - linkage: static
             shared: 'OFF'
-            tests: 'OFF'
+            tests: ALL
 
     env:
       WXWINUI_NUGET_CACHE: ${{ github.workspace }}\.wxwinui-nuget
@@ -243,9 +241,35 @@ jobs:
             "/flp:logfile=$buildDir\build.log;verbosity=normal" `
             "/bl:$buildDir\build.binlog"
 
-      # Hosted runners don't guarantee that the matching Windows App Runtime
-      # framework package is registered, so this job compiles the runtime and
-      # GUI probes but deliberately doesn't execute them.
+      - name: Register pinned Windows App Runtime
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          $versionMatch = Select-String "$buildDir\CMakeCache.txt" `
+            -Pattern '^wxWINUI3_WINDOWSAPPSDK_VERSION:STRING=(.+)$'
+          if (-not $versionMatch) {
+            throw 'Configured Windows App Runtime version not found'
+          }
+          $runtimeVersion = $versionMatch.Matches[0].Groups[1].Value
+          $runtimeRoot = Get-ChildItem $env:WXWINUI_NUGET_CACHE -Directory `
+            -Filter "Microsoft.WindowsAppSDK.Runtime.$runtimeVersion-*"
+          if (@($runtimeRoot).Count -ne 1) {
+            throw "Expected one extracted runtime $runtimeVersion, found $(@($runtimeRoot).Count)"
+          }
+          $runtime = Get-ChildItem `
+            "$($runtimeRoot.FullName)\tools\MSIX\win10-x64" -File `
+            -Filter 'Microsoft.WindowsAppRuntime.*.msix' | Where-Object {
+              $_.Name -notmatch '\.(DDLM|Main|Singleton)\.'
+            }
+          if (-not $runtime) {
+            throw 'Pinned x64 Windows App Runtime framework MSIX not found'
+          }
+          Add-AppxPackage -Path $runtime.FullName -ForceApplicationShutdown
+
+      - name: Run wxWinUI Supported V0 gate
+        run: |
+          ctest --test-dir build-winui-${{ matrix.linkage }} -C Release `
+            -R '^wx_winui_supported_beta$' --output-on-failure
+
       - name: Upload failure diagnostics
         if: failure()
         uses: actions/upload-artifact@v4

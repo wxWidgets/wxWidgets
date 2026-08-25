@@ -10284,6 +10284,13 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 
     int width = wxMax(0, xlen) + wxMax(minimumChrome, chromeWidth);
     int height = charHeight + chromeHeight;
+    if ( !multiline )
+    {
+        // The RichEditBox template has a 32 DIP natural minimum on its inner
+        // border. Sizing the peer below it clips the text viewport and can make
+        // its internal vertical scrollbar appear in a single-line control.
+        height = wxMax(height, FromDIP(32));
+    }
     if ( multiline )
     {
         // Match native wxMSW: an implicit multiline height tracks its current

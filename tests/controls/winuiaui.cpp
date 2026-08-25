@@ -1945,6 +1945,41 @@ TEST_CASE("WinUI AUI toolbar uses the Fluent art provider",
         CHECK(sampleLeftEdge(canvas) != *wxRED);
     }
 
+    SECTION("a square checked tool follows the toolbar orientation")
+    {
+        std::unique_ptr<wxAuiToolBarArt> verticalArt(art->Clone());
+        REQUIRE(verticalArt);
+        verticalArt->SetFlags(wxAUI_TB_VERTICAL);
+
+        const wxSize size(40, 40);
+        wxBitmap canvas(size);
+        wxMemoryDC dc(canvas);
+        dc.SetBackground(*wxRED);
+        dc.Clear();
+
+        wxAuiToolBarItem item;
+        item.SetKind(wxITEM_CHECK);
+        item.SetState(wxAUI_BUTTON_STATE_CHECKED);
+        verticalArt->DrawButton(
+            dc, toolbar, item, wxRect(0, 0, size.x, size.y));
+        dc.SelectObject(wxNullBitmap);
+
+        wxMemoryDC reader(canvas);
+        wxColour leadingIndicator;
+        wxColour bottomLayer;
+        REQUIRE(reader.GetPixel(toolbar->FromDIP(2), size.y / 2,
+                                &leadingIndicator));
+        REQUIRE(reader.GetPixel(size.x / 2,
+                                size.y - toolbar->FromDIP(2),
+                                &bottomLayer));
+        reader.SelectObject(wxNullBitmap);
+
+        const wxColour accent =
+            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+        CHECK(leadingIndicator == accent);
+        CHECK(bottomLayer != accent);
+    }
+
     REQUIRE(fixture.DestroyAndWait(before));
     before.CheckRestored(false);
 }

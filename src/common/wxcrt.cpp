@@ -137,6 +137,7 @@ void wxKeepCNumericLocale(bool keep)
 char* wxSetlocale(int category, const char *locale)
 {
     char *rv = setlocale(category, locale);
+    bool queryEffectiveLocale = false;
     if ( locale != nullptr /* setting locale, not querying */ &&
          rv /* call was successful */ )
     {
@@ -154,11 +155,21 @@ char* wxSetlocale(int category, const char *locale)
         if ( gs_keepCNumericLocale &&
              (category == LC_ALL || category == LC_NUMERIC) )
         {
-            setlocale(LC_NUMERIC, "C");
+            // setlocale() returns an internal buffer which a subsequent call
+            // may overwrite. Return the effective locale after restoring the
+            // invariant, not the requested value nor a stale pointer to it.
+            rv = setlocale(LC_NUMERIC, "C");
+            queryEffectiveLocale = rv != nullptr;
         }
 #endif // __WXWINUI__
 
         wxUpdateLocaleIsUtf8();
+
+        // wxUpdateLocaleIsUtf8() can itself query the CRT locale. Make this
+        // the final setlocale() call so the returned pointer remains valid
+        // according to the CRT contract until the application's next call.
+        if ( queryEffectiveLocale )
+            rv = setlocale(category, nullptr);
     }
     return rv;
 }

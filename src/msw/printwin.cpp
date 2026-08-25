@@ -132,13 +132,13 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     }
 
     sm_printJobActive = true;
-    const wxScopeGuard clearActiveJob =
+    wxScopeGuard clearActiveJob =
         wxMakeGuard([]() { sm_printJobActive = false; });
     wxUnusedVar(clearActiveJob);
 
     gs_printOwner = parentLifetime;
     gs_printJobHadOwner = hadParent;
-    const wxScopeGuard clearPrintOwner =
+    wxScopeGuard clearPrintOwner =
         wxMakeGuard(
             []()
             {
@@ -269,7 +269,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
-    const wxScopeGuard clearPrintoutDC =
+    wxScopeGuard clearPrintoutDC =
         wxMakeGuard([printout]() { printout->SetDC(nullptr); });
     wxUnusedVar(clearPrintoutDC);
     wxPrinterDCImpl* const printerDCImpl =
@@ -402,7 +402,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
             }
 
             {
-                const wxScopeGuard endDocument =
+                wxScopeGuard endDocument =
                     wxMakeGuard(
                         [printout]() { printout->OnEndDocument(); });
                 wxUnusedVar(endDocument);
@@ -468,7 +468,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
                             }
 
                             wxDC* const pageDC = dc.get();
-                            const wxScopeGuard endPage =
+                            wxScopeGuard endPage =
                                 wxMakeGuard(
                                     [pageDC]()
                                     {

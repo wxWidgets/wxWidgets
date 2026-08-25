@@ -290,7 +290,7 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
         const unsigned long oldPageOperationGeneration =
             WizardXmlState(this).pageOperationGeneration;
 
-        const wxScopeGuard restoreContext = wxMakeGuard(
+        wxScopeGuard restoreContext = wxMakeGuard(
             [this, oldWizard, oldWizardLifetime,
              oldLastSimplePage, oldLastSimplePageLifetime,
              oldContextGeneration, oldPageOperationGeneration]()

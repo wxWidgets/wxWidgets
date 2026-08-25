@@ -515,7 +515,7 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
     SetBookCtrl(bookCtrl);
     const wxWeakRef<wxWindow> weakBook(bookCtrl);
     bool bookCommitted = false;
-    const wxScopeGuard rollbackBook = wxMakeGuard([&]()
+    wxScopeGuard rollbackBook = wxMakeGuard([&]()
     {
         if ( bookCommitted || !hasExactDialogLayout() )
             return;
@@ -735,7 +735,7 @@ void wxPropertySheetDialog::CreateButtons(int flags)
     // first. If an application override throws while focus is being restored,
     // wxScopeGuard may swallow that exception but this independent guard still
     // removes every item, button and the returned sizer.
-    const wxScopeGuard rollbackButtonStructure = wxMakeGuard([&]()
+    wxScopeGuard rollbackButtonStructure = wxMakeGuard([&]()
     {
         if ( committed )
             return;
@@ -852,7 +852,7 @@ void wxPropertySheetDialog::CreateButtons(int flags)
     });
     wxUnusedVar(rollbackButtonStructure);
 
-    const wxScopeGuard rollbackButtonState = wxMakeGuard([&]()
+    wxScopeGuard rollbackButtonState = wxMakeGuard([&]()
     {
         if ( committed )
             return;

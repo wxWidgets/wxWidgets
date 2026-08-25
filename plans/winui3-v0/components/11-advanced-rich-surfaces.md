@@ -80,4 +80,3 @@ playing et device loss.
 Si une surface possède sa propre composition/swapchain qui ne peut pas être
 intercalée sous le bridge unique, ne pas ajouter un second bridge ad hoc. Arrêter
 et rédiger une ADR de surface/Z-order avec options et limitation V0.
-

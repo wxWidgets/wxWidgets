@@ -140,7 +140,7 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         wxNotebook *old_par = m_notebook;
         const wxWeakRef<wxWindow> weakOld(old_par);
         m_notebook = nb;
-        const wxScopeGuard restoreBook = wxMakeGuard(
+        wxScopeGuard restoreBook = wxMakeGuard(
             [this, old_par, weakOld]()
             {
                 m_notebook = nullptr;

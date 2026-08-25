@@ -78,6 +78,7 @@ public:
 
     ~XRCInstanceOwnershipScope()
     {
+        wxUnusedVar(m_handler);
         wxASSERT(!gs_xrcInstanceOwnershipStack.empty());
         wxASSERT(gs_xrcInstanceOwnershipStack.back().handler == m_handler);
         gs_xrcInstanceOwnershipStack.pop_back();
@@ -2630,7 +2631,7 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
 
     wxXmlNode *oldnode = m_handler->m_node;
     m_handler->m_node = font_node;
-    const wxScopeGuard restoreNode = wxMakeGuard(
+    wxScopeGuard restoreNode = wxMakeGuard(
         [this, oldnode]() { m_handler->m_node = oldnode; });
     wxUnusedVar(restoreNode);
 

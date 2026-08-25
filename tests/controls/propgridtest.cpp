@@ -20,6 +20,9 @@
 #if wxUSE_DATEPICKCTRL
 #include "wx/datectrl.h"
 #endif
+#if wxUSE_TOOLBAR
+#include "wx/toolbar.h"
+#endif
 
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/manager.h"
@@ -1053,6 +1056,8 @@ private:
 class DestroyingValueStringProperty final : public wxStringProperty
 {
 public:
+    using wxStringProperty::GetValueAsString;
+
     explicit DestroyingValueStringProperty(bool* called)
         : wxStringProperty("Destroying value", wxPG_LABEL, "value")
         , m_called(called)
@@ -5486,6 +5491,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         wxTheApp->ProcessIdle();
     }
 
+#if wxUSE_TOOLTIPS
     SECTION("Tooltip_value_callback_may_destroy_grid")
     {
         bool callbackCalled = false;
@@ -5572,6 +5578,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( pg->GetToolTipText() == "sentinel" );
         wxTheApp->ProcessIdle();
     }
+#endif // wxUSE_TOOLTIPS
 
 #ifdef __WXMSW__
     SECTION("Buffered_paint_renderer_may_resize_grid")

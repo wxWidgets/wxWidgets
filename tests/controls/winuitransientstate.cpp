@@ -1613,4 +1613,39 @@ TEST_CASE("WinUITransient::AppThemeSnapshotSurvivesTLWDestruction",
     wxYield();
 }
 
+TEST_CASE("WinUITransient::AppThemeNotifiesClassicChildren",
+          "[WinUITransient][shell-theme][winui][sys-colour]")
+{
+    wxFrame frame(nullptr, wxID_ANY, "theme-notification");
+    wxButton child(&frame, wxID_ANY, "child");
+    int frameNotifications = 0;
+    int childNotifications = 0;
+    frame.Bind(wxEVT_SYS_COLOUR_CHANGED,
+               [&frameNotifications](wxSysColourChangedEvent& event)
+               {
+                   ++frameNotifications;
+                   event.Skip();
+               });
+    child.Bind(wxEVT_SYS_COLOUR_CHANGED,
+               [&childNotifications](wxSysColourChangedEvent& event)
+               {
+                   ++childNotifications;
+                   event.Skip();
+               });
+
+    const wxWinUIAppTheme previousTheme = wxWinUIGetAppTheme();
+    const wxWinUIAppTheme otherTheme =
+        previousTheme == wxWinUIAppTheme::Dark
+            ? wxWinUIAppTheme::Light
+            : wxWinUIAppTheme::Dark;
+
+    wxWinUISetAppTheme(otherTheme);
+    CHECK(frameNotifications == 1);
+    CHECK(childNotifications == 1);
+
+    wxWinUISetAppTheme(previousTheme);
+    CHECK(frameNotifications == 2);
+    CHECK(childNotifications == 2);
+}
+
 #endif // __WXWINUI__ && wxUSE_WINUI3

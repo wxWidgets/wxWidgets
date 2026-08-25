@@ -126,7 +126,7 @@ wxObject *wxListbookXmlHandler::DoCreateResource()
         wxListbook *old_par = m_listbook;
         const wxWeakRef<wxWindow> weakOld(old_par);
         m_listbook = nb;
-        const wxScopeGuard restoreBook = wxMakeGuard(
+        wxScopeGuard restoreBook = wxMakeGuard(
             [this, old_par, weakOld]()
             {
                 m_listbook = nullptr;

@@ -126,7 +126,7 @@ wxObject *wxChoicebookXmlHandler::DoCreateResource()
         wxChoicebook *old_par = m_choicebook;
         const wxWeakRef<wxWindow> weakOld(old_par);
         m_choicebook = nb;
-        const wxScopeGuard restoreBook = wxMakeGuard(
+        wxScopeGuard restoreBook = wxMakeGuard(
             [this, old_par, weakOld]()
             {
                 m_choicebook = nullptr;

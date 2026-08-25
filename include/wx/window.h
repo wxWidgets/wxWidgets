@@ -1861,7 +1861,7 @@ protected:
     // Let the private lifetime predicate distinguish this flag from the
     // ancestor-propagating public IsBeingDeleted() result.
     friend bool wxWindowItselfIsUnavailableForCallbacks(
-        const wxWindow* window);
+        const wxWindowBase* window);
 
     // window state
     bool                 m_isShown:1;

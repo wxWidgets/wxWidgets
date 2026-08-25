@@ -504,7 +504,7 @@ protected:
 
         wxGenericPrefsDialog * const dlg = new wxGenericPrefsDialog;
         const wxWeakRef<wxGenericPrefsDialog> dialogLifetime(dlg);
-        const wxScopeGuard rollbackDialog = wxMakeGuard(
+        wxScopeGuard rollbackDialog = wxMakeGuard(
             [&activeDialog, dialogLifetime, dlg, parent]()
             {
                 if ( activeDialog.get() == dlg )
@@ -709,7 +709,7 @@ public:
             return;
 
         const wxWeakRef<wxGenericPrefsDialog> dialogLifetime(dlg);
-        const wxScopeGuard rollbackDialog = wxMakeGuard(
+        wxScopeGuard rollbackDialog = wxMakeGuard(
             [this, dialogLifetime, dlg, parent]()
             {
                 if ( m_win.get() == dlg )
@@ -818,7 +818,7 @@ public:
 
         m_dlg.Release();
         m_state = SessionState::Creating;
-        const wxScopeGuard resetSession = wxMakeGuard(
+        wxScopeGuard resetSession = wxMakeGuard(
             [this]()
             {
                 m_preShowDismissScheduled = false;
@@ -831,7 +831,7 @@ public:
             return;
 
         const wxWeakRef<wxGenericPrefsDialog> dialogLifetime(dlg);
-        const wxScopeGuard releaseDialog = wxMakeGuard(
+        wxScopeGuard releaseDialog = wxMakeGuard(
             [this, dialogLifetime, dlg, parent]()
             {
                 if ( m_dlg.get() == dlg )

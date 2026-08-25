@@ -110,4 +110,3 @@ disabled, DPI et destroy pendant édition.
 
 Alpha : aucune suite rouge; setters programmatiques silencieux; un event wx par
 action logique; disabled effectif; valeurs modèle et peer toujours identiques.
-

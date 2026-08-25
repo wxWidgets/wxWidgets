@@ -909,7 +909,7 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
     // provisional buttons/sizer can complete a pending WinUI host transition
     // and otherwise leave physical focus on the aborted factory even though
     // all dialog default identities have already been restored.
-    const wxScopeGuard rollbackFinalFocus = wxMakeGuard([&]()
+    wxScopeGuard rollbackFinalFocus = wxMakeGuard([&]()
     {
         if ( committed || !finalFocusRollbackRequired || !originalFocus ||
              !wxWeakWindowIsAvailableForCallbacks(dialogLifetime, this) ||
@@ -954,7 +954,7 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
     // state guard below runs before it. wxScopeGuard deliberately swallows an
     // escaping exception; independent guards ensure that even an unexpected
     // state-restore failure can never strand buttons or their sizer.
-    const wxScopeGuard rollbackStructure = wxMakeGuard([&]()
+    wxScopeGuard rollbackStructure = wxMakeGuard([&]()
     {
         if ( committed )
             return;
@@ -1007,7 +1007,7 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
     });
     wxUnusedVar(rollbackStructure);
 
-    const wxScopeGuard rollbackState = wxMakeGuard([&]()
+    wxScopeGuard rollbackState = wxMakeGuard([&]()
     {
         if ( committed )
             return;
@@ -2661,7 +2661,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
         std::vector<wxAdaptedDialogPage> adaptedPages;
         bool geometryMayHaveChanged = false;
         bool adaptationCommitted = false;
-        const wxScopeGuard rollbackAdaptation = wxMakeGuard(
+        wxScopeGuard rollbackAdaptation = wxMakeGuard(
             [&]()
             {
                 if ( adaptationCommitted )
@@ -2908,7 +2908,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
     bool structurePublished = false;
     bool geometryMayHaveChanged = false;
     bool adaptationCommitted = false;
-    const wxScopeGuard rollbackAdaptation = wxMakeGuard(
+    wxScopeGuard rollbackAdaptation = wxMakeGuard(
         [&]()
         {
             if ( adaptationCommitted )

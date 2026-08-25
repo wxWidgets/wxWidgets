@@ -2025,7 +2025,7 @@ bool wxPrintPreviewBase::RenderPageIntoDC(wxDC& dc, int pageNum)
         return false;
 
     printout->SetDC(&dc);
-    const wxScopeGuard clearDC =
+    wxScopeGuard clearDC =
         wxMakeGuard([printout]() { printout->SetDC(nullptr); });
     wxUnusedVar(clearDC);
 
@@ -2064,7 +2064,7 @@ bool wxPrintPreviewBase::RenderPageIntoDC(wxDC& dc, int pageNum)
         return false;
     }
 
-    const wxScopeGuard endDocument =
+    wxScopeGuard endDocument =
         wxMakeGuard([printout]() { printout->OnEndDocument(); });
     wxUnusedVar(endDocument);
 

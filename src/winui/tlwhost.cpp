@@ -288,7 +288,8 @@ void wxWinUIProfileSample()
 
     fprintf(f,
             "samples=%u total=%.0f point=%.0f xamlhit=%.0f nativehit=%.0f "
-            "dispatch=%.0f mirror=%.0f (send=%.0f check=%.0f apply=%.0f) refresh=%.0f send=%.0f policy=%u flush=%u cursor=%.0f\n",
+            "dispatch=%.0f mirror=%.0f (send=%.0f check=%.0f apply=%.0f) "
+            "refresh=%.0f send=%.0f cursor=%.0f policy=%u flush=%u\n",
             gs_profileSamples,
             us(wxWinUIProfilePhase::Total),
             us(wxWinUIProfilePhase::Point),
@@ -603,9 +604,6 @@ unsigned gs_slotCursorSets = 0;
 // identity or HCURSOR value.
 unsigned long long gs_cursorPolicyGeneration = 1;
 
-// See wxWinUINotifySetCursorEventHandled(): counts the wxEVT_SET_CURSOR
-// events application code actually answered.
-unsigned long long gs_setCursorEventGeneration = 1;
 unsigned gs_failInputPointerSourceSetAt = 0;
 
 // Registration-rollback fault injection (see TestFailHandlerAdd): countdown
@@ -10237,34 +10235,8 @@ bool wxWinUITopLevelHost::MirrorNativeCursor(
         return true;
     }
 
-    // The same verdict, at a different position: only worth re-establishing
-    // when the target's cursor actually depends on the position.  It does when
-    // application code answers wxEVT_SET_CURSOR; when nobody does, the cursor
-    // follows the window and the wx cursor policy alone, and re-sending
-    // WM_SETCURSOR -- which DefWindowProc walks up the whole parent chain --
-    // for every movement of the mouse is pure cost.
-    if ( !m_cursorPositionSensitive &&
-         !wxWinUIOptimisationDisabled("cursor") &&
-         m_cursorMirrored &&
-         m_islandPointerCursorApplied &&
-         m_inputPointerSourceAuthoritative &&
-         m_activeCursorSurface == ActiveCursorSurface::Native &&
-         m_activeCursorPolicyGeneration == cursorPolicyGeneration &&
-         m_cursorSetCursorGeneration == wxWinUIGetSetCursorEventGeneration() &&
-         targetIdentity.Matches(m_cursorTarget) &&
-         hitTest == m_cursorHit &&
-         verdictClientSize == m_nativeCursorVerdictClientSize &&
-         verdictChain == m_nativeCursorVerdictChain )
-    {
-        m_nativeCursorVerdictPoint = verdictPoint;
-        m_nativeCursorVerdictClientPoint = verdictClientPoint;
-        return true;
-    }
-
     // Let the target run its WM_SETCURSOR protocol (wx windows call
     // ::SetCursor from it), then mirror whatever cursor it installed.
-    const unsigned long long setCursorGenerationBefore =
-        wxWinUIGetSetCursorEventGeneration();
     {
         const wxWinUIProfileScope profileSetCursor(
             wxWinUIProfilePhase::MirrorSend);
@@ -10272,11 +10244,6 @@ bool wxWinUITopLevelHost::MirrorNativeCursor(
                       reinterpret_cast<WPARAM>(target),
                       MAKELPARAM(hitTest, WM_MOUSEMOVE));
     }
-    // Anyone answering wxEVT_SET_CURSOR in the chain makes this target's
-    // cursor position-dependent, and it must then be asked every time.
-    m_cursorPositionSensitive =
-        wxWinUIGetSetCursorEventGeneration() != setCursorGenerationBefore;
-    m_cursorSetCursorGeneration = wxWinUIGetSetCursorEventGeneration();
     nativeCursorVerdict = ::GetCursor();
     nativeCursorVerdictPolicyGeneration = gs_cursorPolicyGeneration;
     nativeCursorVerdictValid = true;
@@ -17312,26 +17279,6 @@ void wxWinUITopLevelHost::OnRootPointer(
             }
         }
 
-        // Coalesce moves the way the queue would: keep the newest position
-        // and give the application back the time it needs to draw. Every
-        // other kind of input is routed unconditionally -- a dropped press
-        // or wheel is a bug, a dropped intermediate position is what USER32
-        // does itself.
-        if ( sample.kind == wxWinUIInputKind::Move &&
-             !wxWinUIOptimisationDisabled("coalesce") )
-        {
-            // ~125 Hz: finer than any display can show, coarse enough to
-            // leave the event loop room to breathe.
-            constexpr unsigned long long kMoveIntervalMs = 8;
-            const unsigned long long moveNow = ::GetTickCount64();
-            if ( m_lastRoutedMoveTimestamp &&
-                 moveNow - m_lastRoutedMoveTimestamp < kMoveIntervalMs )
-            {
-                return;
-            }
-            m_lastRoutedMoveTimestamp = moveNow;
-        }
-
         if ( sample.kind == wxWinUIInputKind::Press )
             buttonMask |= wxWinUIGetWParamButtonMask(sample.button);
         else if ( sample.kind == wxWinUIInputKind::Release )
@@ -19094,7 +19041,13 @@ void wxWinUITopLevelHost::MarkAllHostsDirty()
         if ( state )
         {
             if ( wxWinUITopLevelHost * const host = state->GetHost() )
+            {
+                // Effective enabled state is part of native hit testing. A
+                // parent WM_ENABLE changes every descendant even though they
+                // receive no native layout notification of their own.
+                host->InvalidateStructure();
                 host->MarkAllDirty();
+            }
         }
     }
 }
@@ -19759,17 +19712,6 @@ void wxWinUITopLevelHost::NotifyCursorPolicyChanged(
         }
         host->RefreshActivePointerCursor(emitSetCursorEvents);
     }
-}
-
-WXDLLIMPEXP_CORE void wxWinUINotifySetCursorEventHandled()
-{
-    if ( ++gs_setCursorEventGeneration == 0 )
-        ++gs_setCursorEventGeneration;
-}
-
-WXDLLIMPEXP_CORE unsigned long long wxWinUIGetSetCursorEventGeneration()
-{
-    return gs_setCursorEventGeneration;
 }
 
 WXDLLIMPEXP_CORE void wxWinUINotifyGlobalCursorChanged()

@@ -1116,7 +1116,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     const unsigned long previousNavigationGeneration = WizardNavigationGeneration(this);
     const unsigned long navigationGeneration = ++WizardNavigationGeneration(this);
     bool transitionCommitted = false;
-    const wxScopeGuard restoreNavigationGeneration = wxMakeGuard(
+    wxScopeGuard restoreNavigationGeneration = wxMakeGuard(
         [this, &weakThis, previousNavigationGeneration,
          navigationGeneration, &transitionCommitted]()
         {
@@ -1245,7 +1245,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     const wxSize oldPageSize = oldPage ? oldPage->GetSize() : wxDefaultSize;
     bool oldPageWasHidden = false;
 
-    const wxScopeGuard rollbackTransition = wxMakeGuard(
+    wxScopeGuard rollbackTransition = wxMakeGuard(
         [this, page, oldPage, &weakOldPage, navigationGeneration,
          usingSizerAtEntry, oldPrevEnabled, oldNextLabel, oldPageSize,
          &oldPageWasHidden, &transitionCommitted, &bmpPrev,
@@ -2427,7 +2427,7 @@ bool wxWizard::DoLayoutAdaptation()
     if ( !gs_wizardsAdaptingLayout.insert(this).second )
         return false;
 
-    const wxScopeGuard leaveLayoutAdaptation = wxMakeGuard(
+    wxScopeGuard leaveLayoutAdaptation = wxMakeGuard(
         [this]() { gs_wizardsAdaptingLayout.erase(this); });
     wxUnusedVar(leaveLayoutAdaptation);
 
@@ -2484,7 +2484,7 @@ bool wxWizard::DoLayoutAdaptation()
 
     std::vector<AdaptedPage> adaptedPages;
     bool adaptationCommitted = false;
-    const wxScopeGuard rollbackAdaptation = wxMakeGuard(
+    wxScopeGuard rollbackAdaptation = wxMakeGuard(
         [&adaptedPages, &adaptationCommitted]()
         {
             if ( adaptationCommitted )
@@ -2623,7 +2623,7 @@ bool wxWizard::DoLayoutAdaptation()
                 bool controlsMayHaveMoved = false;
                 bool newSizerNeedsDelete = true;
                 bool pageAdaptationCommitted = false;
-                const wxScopeGuard rollbackPageAdaptation = wxMakeGuard(
+                wxScopeGuard rollbackPageAdaptation = wxMakeGuard(
                     [this, page, &weakPage, scrolledWindow,
                      &weakScrolledWindow, oldSizer, newSizer,
                      &controlsMayHaveMoved, &newSizerNeedsDelete,

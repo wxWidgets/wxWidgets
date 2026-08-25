@@ -99,4 +99,3 @@ destroy, exception path et shutdown.
 Alpha : accélérateurs et event order verts, aucun popup freeze, toolbar core et
 tooltips communs stables. Beta : styles/bitmaps/DPI/UIA complets pour chrome et
 RichToolTip public honoré ou fallback explicite.
-

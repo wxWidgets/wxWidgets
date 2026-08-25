@@ -975,7 +975,7 @@ int wxWindowsPrintDialog::ShowModal()
         return wxID_CANCEL;
     }
 
-    const wxScopeGuard resetNativeState =
+    wxScopeGuard resetNativeState =
         wxMakeGuard([this]() { ResetNativeState(); });
     wxUnusedVar(resetNativeState);
 
@@ -1314,7 +1314,7 @@ int wxWindowsPageSetupDialog::ShowModal()
         return wxID_CANCEL;
     }
 
-    const wxScopeGuard resetNativeState =
+    wxScopeGuard resetNativeState =
         wxMakeGuard([this]() { ResetNativeState(); });
     wxUnusedVar(resetNativeState);
 

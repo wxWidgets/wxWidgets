@@ -913,7 +913,7 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
     wxComboBox *queued =
         new wxComboBox(parent, wxID_ANY, "abcd");
     wxWeakRef<wxWindow> queuedRef(queued);
-    const wxScopeGuard queuedCleanup = wxMakeGuard([&]()
+    wxScopeGuard queuedCleanup = wxMakeGuard([&]()
     {
         if ( queuedRef )
             delete queued;

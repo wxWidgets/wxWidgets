@@ -250,9 +250,11 @@ public:
 // Install the Fluent renderer; called once from wxWinUI3Initialize().
 void wxWinUIInstallRenderer()
 {
-    // wxRendererNative takes ownership of the pointer and deletes it during
-    // the library cleanup, so it must be heap-allocated.
-    wxRendererNative::Set(new wxRendererWinUI);
+    // Set() transfers ownership of the new renderer but returns the previous
+    // one to its caller. Runtime qualification deliberately initializes and
+    // shuts WinUI down repeatedly in one process, so release that displaced
+    // renderer instead of leaking one object per initialization epoch.
+    delete wxRendererNative::Set(new wxRendererWinUI);
 }
 
 #endif // wxUSE_WINUI3
