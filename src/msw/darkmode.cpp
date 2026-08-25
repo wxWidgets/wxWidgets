@@ -905,6 +905,15 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
             textRect.left = boxSize.cx;
             ::DrawTextW(hdc, text.wc_str(), -1, &textRect, DT_SINGLELINE | DT_VCENTER);
 
+            // Draw focus rectangle
+            if ( ::GetFocus() == hwnd )
+            {
+                ::SetBkColor(hdc, 0);
+                ::SetTextColor(hdc, 0xffffff);
+                textRect.left++;
+                ::DrawFocusRect(hdc, &textRect);
+            }
+
             ::SelectObject(hdc, hOldFont);
             ::EndPaint(hwnd, &ps);
             return 0;
