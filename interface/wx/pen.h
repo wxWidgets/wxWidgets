@@ -689,10 +689,10 @@ wxPen* wxLIGHT_GREY_PEN;
 
     There are two mechanisms in recent versions of wxWidgets which make the
     pen list less useful than it once was. Under Windows, scarce resources
-    are cleaned up internally if they are not being used. Also, a referencing
+    are cleaned up internally if they are not being used. Also, a reference
     counting mechanism applied to all GDI objects means that some sharing
     of underlying resources is possible. You don't have to keep track of pointers,
-    working out when it is safe delete a pen, because the referencing counting does
+    working out when it is safe delete a pen, because the reference counting does
     it for you. For example, you can set a pen in a device context and then
     immediately delete the pen you passed because the pen is 'copied'.
 

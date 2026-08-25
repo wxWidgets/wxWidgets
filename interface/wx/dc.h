@@ -1366,7 +1366,7 @@ public:
     void DrawText(const wxString& text, const wxPoint& pt);
 
     /**
-        Fill the area specified by rect with a radial gradient, starting from
+        Fill the area specified by @a rect with a radial gradient, starting from
         @a initialColour at the centre of the circle and fading to
         @a destColour on the circle outside.
 
@@ -1380,7 +1380,7 @@ public:
                                 const wxColour& destColour);
 
     /**
-        Fill the area specified by rect with a radial gradient, starting from
+        Fill the area specified by @a rect with a radial gradient, starting from
         @a initialColour at the centre of the circle and fading to
         @a destColour on the circle outside.
 

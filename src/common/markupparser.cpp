@@ -402,7 +402,7 @@ wxString wxMarkupParser::Quote(const wxString& text)
     wxString quoted;
     quoted.reserve(text.length());
 
-    for ( const auto& c : text )
+    for ( const auto c : text )
     {
         unsigned n;
         for ( n = 0; n < WXSIZEOF(xmlEntities); n++ )
