@@ -868,12 +868,21 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
             auto fgIdx = ::IsWindowEnabled(hwnd) ? wxSYS_COLOUR_BTNTEXT : wxSYS_COLOUR_GRAYTEXT;
             auto fgCol = wxSystemSettings::GetColour(fgIdx).GetPixel();
 
+            // Get the box size
+            SIZE boxSize = { 13, 13 };
+            HTHEME hTheme = ::OpenThemeData(hwnd, L"BUTTON");
+            if ( hTheme )
+            {
+                ::GetThemePartSize(hTheme, hdc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL,
+                    nullptr, TS_TRUE, &boxSize);
+                ::CloseThemeData(hTheme);
+            }
+
             // Draw the box.
-            const LONG boxSize = 13;
             RECT rcBox = { };
-            rcBox.top = (rcClient.bottom - boxSize) / 2;
-            rcBox.right = boxSize;
-            rcBox.bottom = rcBox.top + boxSize;
+            rcBox.top = (rcClient.bottom - boxSize.cy) / 2;
+            rcBox.right = boxSize.cx;
+            rcBox.bottom = rcBox.top + boxSize.cy;
             AutoHBRUSH hFgBrush(fgCol);
             ::FrameRect(hdc, &rcBox, hFgBrush);
 
@@ -891,9 +900,9 @@ static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
             }
 
             // Draw the text.
-            const auto text = wxGetWindowText(hwnd);
+            const auto text = L" " + wxGetWindowText(hwnd);
             RECT textRect = rcClient;
-            textRect.left = boxSize + 3;
+            textRect.left = boxSize.cx;
             ::DrawTextW(hdc, text.wc_str(), -1, &textRect, DT_SINGLELINE | DT_VCENTER);
 
             ::SelectObject(hdc, hOldFont);
@@ -1015,8 +1024,7 @@ static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
         // Disable theme rendering and instead rely on the colors set by
         // handling WM_CTLCOLORSTATIC.
         auto bs = style & BS_TYPEMASK;
-        if ( bs == BS_AUTOCHECKBOX || bs == BS_AUTORADIOBUTTON ||
-            bs == BS_GROUPBOX || bs == BS_RADIOBUTTON )
+        if ( bs == BS_AUTORADIOBUTTON || bs == BS_GROUPBOX || bs == BS_RADIOBUTTON )
         {
             ::SetWindowTheme(hwnd, L"", L"");
         }
