@@ -142,7 +142,6 @@ static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id, con
             defSize = wxSize(32, 32);
     }
 
-
     ART_BITMAP(wxART_ERROR,         "xmark.circle" )
     ART_BITMAP(wxART_INFORMATION,   "info.circle" )
     ART_BITMAP(wxART_WARNING,       "exclamationmark.triangle" )

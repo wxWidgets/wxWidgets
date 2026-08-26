@@ -192,17 +192,67 @@ public:
 
     virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override
     {
-        return m_defaultSize * scale;
+        return wxSize(wxRound(m_defaultSize.x * scale),
+                      wxRound(m_defaultSize.y * scale));
     }
 
     virtual wxBitmap GetBitmap(const wxSize& size) override
     {
         const wxSize sz = (size == wxDefaultSize) ? m_defaultSize : size;
+
+        if ( m_cachedBitmap.IsOk() && m_cachedBitmap.GetSize() == sz )
+            return m_cachedBitmap;
+
+        // The requested size is in pixels, while NSImage sizes are in
+        // points, so we can't simply wrap an NSImage of this size in
+        // wxBitmap: it would be rasterized using the main screen scale
+        // factor and end up e.g. twice as big as requested on a Retina
+        // display. Instead, rasterize the symbol ourselves at exactly the
+        // requested pixel size, just as the SVG-based bundle implementation
+        // does, and let wxBitmapBundle::GetBitmap() adjust the scale factor
+        // of the returned bitmap if needed.
+        wxBitmap bmp;
         WXImage image = CreateSymbolImage(sz);
         if ( image )
-            return wxBitmap(image);
-        return wxNullBitmap;
+        {
+            CGContextRef context = CGBitmapContextCreate(
+                nullptr, sz.x, sz.y, 8, 0,
+                wxMacGetGenericRGBColorSpace(),
+                kCGImageAlphaPremultipliedFirst);
+            if ( context )
+            {
+                CGContextClearRect(context, CGRectMake(0, 0, sz.x, sz.y));
+
+                NSGraphicsContext* const previous = NSGraphicsContext.currentContext;
+                NSGraphicsContext.currentContext =
+                    [NSGraphicsContext graphicsContextWithCGContext:context
+                                                            flipped:NO];
+                [image drawInRect:NSMakeRect(0, 0, sz.x, sz.y)
+                         fromRect:NSZeroRect
+                        operation:NSCompositingOperationSourceOver
+                         fraction:1.0];
+                NSGraphicsContext.currentContext = previous;
+
+                CGImageRef cgImage = CGBitmapContextCreateImage(context);
+                if ( cgImage )
+                {
+                    bmp = wxBitmap(cgImage, 1.0);
+                    CGImageRelease(cgImage);
+                }
+                CGContextRelease(context);
+            }
+        }
+
+        // Cache only the last used bitmap, as the SVG implementation does,
+        // to avoid unbounded growth while still helping the common case of
+        // the same size being requested repeatedly.
+        m_cachedBitmap = bmp;
+
+        return bmp;
     }
+
+    // Return true if the symbol name resolved to an actual SF symbol.
+    bool IsOk() const { return wxOSXGetImageFromBundleImpl(this) != nullptr; }
 
 private:
     WXImage CreateSymbolImage(const wxSize& size) const
@@ -217,8 +267,9 @@ private:
             if ( symbol )
             {
                 // Configure the symbol at a point size matching the
-                // requested dimension so the stroke weight is appropriate
-                // for the rendered size.
+                // requested height (symbols are laid out relative to the cap
+                // height, so the height, and not the width, determines the
+                // appropriate stroke weight for the rendered size).
                 NSImageSymbolConfiguration* config =
                     [NSImageSymbolConfiguration
                         configurationWithPointSize:size.GetHeight()
@@ -243,6 +294,9 @@ private:
 
     const wxString m_symbolName;
     const wxSize   m_defaultSize;
+
+    // Last returned bitmap, see GetBitmap().
+    wxBitmap       m_cachedBitmap;
 };
 
 } // anonymous namespace
@@ -255,18 +309,19 @@ wxBitmapBundle wxOSXMakeBundleForSystemSymbol(const wxString& name, const wxSize
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
     if ( WX_IS_MACOS_AVAILABLE(11, 0) )
     {
-        wxCFStringRef cfname(name);
-        NSImage* probe =
-            [NSImage imageWithSystemSymbolName:cfname.AsNSString()
-                      accessibilityDescription:nil];
-        if ( probe )
-        {
-            wxSize sz = defaultSize;
-            if ( sz == wxDefaultSize )
-                sz = wxSize(32, 32);
-            return wxBitmapBundle::FromImpl(
-                new wxOSXSFSymbolBundleImpl(name, sz));
-        }
+        wxSize sz = defaultSize;
+        if ( sz == wxDefaultSize )
+            sz = wxSize(32, 32);
+
+        // The ctor tries to create the symbol image to pre-populate the
+        // native image cache, so it also serves as the existence check for
+        // the symbol name, without requiring a separate lookup here.
+        wxOSXSFSymbolBundleImpl* const impl =
+            new wxOSXSFSymbolBundleImpl(name, sz);
+        if ( impl->IsOk() )
+            return wxBitmapBundle::FromImpl(impl);
+
+        impl->DecRef();
     }
 #endif
 #else
