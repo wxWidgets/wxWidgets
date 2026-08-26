@@ -327,6 +327,12 @@ public:
                         wxRibbonBar* wnd,
                         const wxRect& rect) = 0;
 
+    virtual void DrawKeyTip(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        const wxString& keytip) = 0;
+
     virtual void GetBarTabWidth(
                         wxReadOnlyDC& dc,
                         wxWindow* wnd,
@@ -545,6 +551,12 @@ public:
     void DrawHelpButton(wxDC& dc,
                         wxRibbonBar* wnd,
                         const wxRect& rect) override;
+
+    void DrawKeyTip(
+                    wxDC& dc,
+                    wxWindow* wnd,
+                    const wxRect& rect,
+                    const wxString& keytip) override;
 
     void GetBarTabWidth(
                         wxReadOnlyDC& dc,

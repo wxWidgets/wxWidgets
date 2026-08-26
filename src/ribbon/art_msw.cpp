@@ -2767,6 +2767,54 @@ void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
                 rect.GetY() + (20 - sz.GetHeight()) / 2);
 }
 
+void wxRibbonMSWArtProvider::DrawKeyTip(wxDC& dc,
+                                       wxWindow* wnd,
+                                       const wxRect& rect,
+                                       const wxString& keytip)
+{
+    if ( keytip.empty() )
+        return;
+
+    dc.SetFont(m_tab_label_font);
+    wxSize text_size = dc.GetTextExtent(keytip);
+
+    const int padding_x = 3;
+    const int padding_y = 2;
+    wxSize badge_size(text_size.GetWidth() + 2 * padding_x,
+                       text_size.GetHeight() + 2 * padding_y);
+
+    // Anchor inside the rect's bottom center if it fits.
+    // Otherwise (e.g., a panel's small ext button) drop the
+    // badge below the rect instead.
+    wxPoint pos;
+    if ( badge_size.GetHeight() <= rect.GetHeight() )
+    {
+        pos.x = rect.GetX() + (rect.GetWidth() - badge_size.GetWidth()) / 2;
+        pos.y = rect.GetBottom() - badge_size.GetHeight();
+    }
+    else
+    {
+        pos.x = rect.GetX() + (rect.GetWidth() - badge_size.GetWidth()) / 2;
+        pos.y = rect.GetBottom() + 2;
+    }
+
+    if ( wnd != nullptr )
+    {
+        wxSize client = wnd->GetClientSize();
+        pos.x = wxMax(0, wxMin(pos.x, client.GetWidth() - badge_size.GetWidth()));
+        pos.y = wxMax(0, wxMin(pos.y, client.GetHeight() - badge_size.GetHeight()));
+    }
+
+    wxRect badge_rect(pos, badge_size);
+
+    dc.SetPen(wxPen(*wxBLACK));
+    dc.SetBrush(wxBrush(wxColour(255, 255, 225)));
+    dc.DrawRectangle(badge_rect);
+
+    dc.SetTextForeground(*wxBLACK);
+    dc.DrawText(keytip, badge_rect.GetX() + padding_x, badge_rect.GetY() + padding_y);
+}
+
 void wxRibbonMSWArtProvider::GetBarTabWidth(
                         wxReadOnlyDC& dc,
                         wxWindow* WXUNUSED(wnd),

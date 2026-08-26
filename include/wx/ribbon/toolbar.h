@@ -17,6 +17,8 @@
 #include "wx/ribbon/art.h"
 #include "wx/bmpbndl.h"
 
+#include <map>
+
 class wxRibbonToolBarToolBase;
 class wxRibbonToolBarToolGroup;
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxRibbonToolBarToolGroup*, wxArrayRibbonToolBarToolGroup, class WXDLLIMPEXP_RIBBON);
@@ -143,6 +145,7 @@ public:
     virtual wxRibbonButtonKind GetToolKind(int tool_id)const;
     virtual int GetToolPos(int tool_id)const;
     virtual wxRect GetToolRect(int tool_id)const;
+    virtual wxRect GetToolDropdownRect(int tool_id)const;
     virtual bool GetToolState(int tool_id)const;
 
     virtual bool Realize() override;
@@ -160,6 +163,19 @@ public:
 
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const override;
+
+    // KeyTips (Office-style keyboard access mode).
+    void SetKeyTip(wxWindowID tool_id, const wxString& keytip);
+    wxString GetKeyTip(wxWindowID tool_id) const;
+
+    // Assigns a keytip to a hybrid tool's dropdown arrow, separate
+    // from its main click area.
+    void SetDropdownKeyTip(wxWindowID tool_id, const wxString& keytip);
+    wxString GetDropdownKeyTip(wxWindowID tool_id) const;
+
+    // Implementation only: fires a tool's click event for keytip
+    // activation. If dropdown is true, fires the dropdown-clicked event.
+    void ActivateTool(wxRibbonToolBarToolBase* tool, bool dropdown = false);
 
 protected:
     friend class wxRibbonToolBarEvent;
@@ -195,6 +211,8 @@ protected:
     wxSize* m_sizes = nullptr;
     int m_nrows_min = 0;
     int m_nrows_max = 0;
+    std::map<wxWindowID, wxString> m_keyTips;
+    std::map<wxWindowID, wxString> m_dropdownKeyTips;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonToolBar);

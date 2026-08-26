@@ -14,6 +14,7 @@
 
 #include "wx/ribbon/panel.h"
 #include "wx/ribbon/buttonbar.h"
+#include "wx/ribbon/bar.h"
 #include "wx/ribbon/art.h"
 #include "wx/dcbuffer.h"
 #include "wx/imaglist.h"
@@ -563,6 +564,8 @@ void wxRibbonButtonBar::ClearButtons()
         delete button;
     }
     m_buttons.Clear();
+    m_keyTips.clear();
+    m_dropdownKeyTips.clear();
     m_hovered_button = nullptr;
     m_active_button = nullptr;
     Realize();
@@ -584,12 +587,95 @@ bool wxRibbonButtonBar::DeleteButton(int button_id)
             if (m_active_button  && m_active_button->base  == button)
                 m_active_button = nullptr;
             delete button;
+            m_keyTips.erase(button_id);
+            m_dropdownKeyTips.erase(button_id);
             Realize();
             Refresh();
             return true;
         }
     }
     return false;
+}
+
+void wxRibbonButtonBar::SetKeyTip(wxWindowID button_id, const wxString& keytip)
+{
+    if ( keytip.empty() )
+        m_keyTips.erase(button_id);
+    else
+        m_keyTips[button_id] = keytip.Upper();
+}
+
+wxString wxRibbonButtonBar::GetKeyTip(wxWindowID button_id) const
+{
+    auto it = m_keyTips.find(button_id);
+    return it == m_keyTips.end() ? wxString() : it->second;
+}
+
+void wxRibbonButtonBar::SetDropdownKeyTip(wxWindowID button_id, const wxString& keytip)
+{
+    if ( keytip.empty() )
+        m_dropdownKeyTips.erase(button_id);
+    else
+        m_dropdownKeyTips[button_id] = keytip.Upper();
+}
+
+wxString wxRibbonButtonBar::GetDropdownKeyTip(wxWindowID button_id) const
+{
+    auto it = m_dropdownKeyTips.find(button_id);
+    return it == m_dropdownKeyTips.end() ? wxString() : it->second;
+}
+
+void wxRibbonButtonBar::ActivateButton(wxRibbonButtonBarButtonBase* button, bool dropdown)
+{
+    wxCHECK_RET(button, wxT("invalid button"));
+    if ( button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED )
+        return;
+
+    wxEventType event_type = (dropdown || button->kind == wxRIBBON_BUTTON_DROPDOWN)
+        ? wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED
+        : wxEVT_RIBBONBUTTONBAR_CLICKED;
+
+    wxRibbonButtonBarEvent notification(event_type, button->id);
+    if ( !dropdown && button->kind == wxRIBBON_BUTTON_TOGGLE )
+    {
+        button->state ^= wxRIBBON_BUTTONBAR_BUTTON_TOGGLED;
+        notification.SetInt(button->state & wxRIBBON_BUTTONBAR_BUTTON_TOGGLED);
+    }
+    notification.SetEventObject(this);
+    notification.SetBar(this);
+    notification.SetButton(button);
+
+    // PopupMenu() positions the menu relative to m_active_button, so set
+    // it here too, otherwise a keytip-opened menu appears at the cursor.
+    wxRibbonButtonBarButtonInstance* const old_active = m_active_button;
+    if ( m_active_button == nullptr || m_active_button->base != button )
+    {
+        wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
+        for ( auto& instance : layout->buttons )
+        {
+            if ( instance.base == button )
+            {
+                m_active_button = &instance;
+                break;
+            }
+        }
+    }
+
+    // Keep OnMouseMove() from mutating the active state while a handler runs
+    // a nested event loop, e.g. for a popup menu.
+    m_lock_active_state = true;
+    ProcessWindowEvent(notification);
+    m_lock_active_state = false;
+
+    // The handler may have reset m_active_button, e.g. by deleting the button.
+    if ( m_active_button != nullptr )
+        m_active_button = old_active;
+
+    wxRibbonPanel* panel = wxDynamicCast(GetParent(), wxRibbonPanel);
+    if ( panel != nullptr )
+        panel->HideIfExpanded();
+
+    Refresh(false);
 }
 
 void wxRibbonButtonBar::EnableButton(int button_id, bool enable)
@@ -620,6 +706,18 @@ void wxRibbonButtonBar::EnableButton(int button_id, bool enable)
             return;
         }
     }
+}
+
+bool wxRibbonButtonBar::GetButtonEnabled(int button_id) const
+{
+    size_t count = m_buttons.GetCount();
+    for ( size_t i = 0; i < count; ++i )
+    {
+        wxRibbonButtonBarButtonBase* button = m_buttons.Item(i);
+        if ( button->id == button_id )
+            return (button->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) == 0;
+    }
+    return false;
 }
 
 void wxRibbonButtonBar::ToggleButton(int button_id, bool checked)
@@ -1012,6 +1110,15 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         m_art->DrawButtonBarButton(dc, this, rect, base->kind,
             base->state | button.size, base->label, bitmap, bitmap_small);
      }
+
+    wxRibbonBar* bar = GetAncestorRibbonBar();
+    if ( bar != nullptr )
+    {
+        std::vector<wxRibbonBar::KeyTipBadge> badges;
+        bar->GetKeyTipTargetsFor(this, &badges);
+        for ( const auto& badge : badges )
+            m_art->DrawKeyTip(dc, this, badge.rect, badge.text);
+    }
 }
 
 wxBitmap wxRibbonButtonBar::GetButtonBitmap(int imageIndex, bool large) const
@@ -1043,7 +1150,10 @@ void wxRibbonButtonBar::OnSize(wxSizeEvent& evt)
             break;
         }
     }
+    // Both point into the previous layout's instances, so remap them or they
+    // keep a stale position and size.
     m_hovered_button = m_layouts.Item(m_current_layout)->FindSimilarInstance(m_hovered_button);
+    m_active_button = m_layouts.Item(m_current_layout)->FindSimilarInstance(m_active_button);
     Refresh();
 }
 
@@ -1430,6 +1540,8 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
 
 void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
 {
+    DismissKeyTips();
+
     wxPoint cursor(evt.GetPosition());
     m_active_button = nullptr;
 
@@ -1477,34 +1589,12 @@ void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
         btn_rect.SetSize(size.size);
         if(btn_rect.Contains(cursor))
         {
-            int id = m_active_button->base->id;
             cursor -= btn_rect.GetTopLeft();
-            wxEventType event_type;
-            do
-            {
-                if(size.normal_region.Contains(cursor))
-                    event_type = wxEVT_RIBBONBUTTONBAR_CLICKED;
-                else if(size.dropdown_region.Contains(cursor))
-                    event_type = wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED;
-                else
-                    break;
-                wxRibbonButtonBarEvent notification(event_type, id);
-                if(m_active_button->base->kind == wxRIBBON_BUTTON_TOGGLE)
-                {
-                    m_active_button->base->state ^=
-                        wxRIBBON_BUTTONBAR_BUTTON_TOGGLED;
-                    notification.SetInt(m_active_button->base->state &
-                        wxRIBBON_BUTTONBAR_BUTTON_TOGGLED);
-                }
-                notification.SetEventObject(this);
-                notification.SetBar(this);
-                notification.SetButton(m_active_button->base);
-                m_lock_active_state = true;
-                ProcessWindowEvent(notification);
-                m_lock_active_state = false;
+            if(size.normal_region.Contains(cursor))
+                ActivateButton(m_active_button->base, false);
+            else if(size.dropdown_region.Contains(cursor))
+                ActivateButton(m_active_button->base, true);
 
-                wxStaticCast(m_parent, wxRibbonPanel)->HideIfExpanded();
-            } while(false);
             if(m_active_button) // may have been NULLed by event handler
             {
                 m_active_button->base->state &= ~wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;
@@ -1595,6 +1685,27 @@ wxRect wxRibbonButtonBar::GetItemRect(int button_id)const
             btn_rect.SetSize(size.size);
 
             return btn_rect;
+        }
+    }
+    return wxRect();
+}
+
+wxRect wxRibbonButtonBar::GetItemDropdownRect(int button_id) const
+{
+    wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
+    for ( auto& instance : layout->buttons )
+    {
+        wxRibbonButtonBarButtonBase* button = instance.base;
+
+        if ( button->id == button_id )
+        {
+            wxRibbonButtonBarButtonSizeInfo& size = button->sizes[instance.size];
+            if ( size.dropdown_region.IsEmpty() )
+                return wxRect();
+
+            wxRect dropdown_rect = size.dropdown_region;
+            dropdown_rect.Offset(m_layout_offset + instance.position);
+            return dropdown_rect;
         }
     }
     return wxRect();

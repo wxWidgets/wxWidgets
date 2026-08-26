@@ -56,6 +56,9 @@ public:
 
     virtual wxRibbonBar* GetAncestorRibbonBar()const;
 
+    // Leaves the ancestor bar's keytip mode, if it is in it.
+    void DismissKeyTips();
+
     // Finds the best width and height given the parent's width and height
     virtual wxSize GetBestSizeForParentSize(const wxSize& WXUNUSED(parentSize)) const { return GetBestSize(); }
 

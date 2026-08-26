@@ -341,6 +341,8 @@ void wxRibbonToolBar::ClearTools()
 
     m_hover_tool = nullptr;
     m_active_tool = nullptr;
+    m_keyTips.clear();
+    m_dropdownKeyTips.clear();
 
     // at least one group should be available
     AppendGroup();
@@ -365,11 +367,76 @@ bool wxRibbonToolBar::DeleteTool(int tool_id)
                 if ( tool == m_active_tool )
                     m_active_tool = nullptr;
                 delete tool;
+                m_keyTips.erase(tool_id);
+                m_dropdownKeyTips.erase(tool_id);
                 return true;
             }
         }
     }
     return false;
+}
+
+void wxRibbonToolBar::SetKeyTip(wxWindowID tool_id, const wxString& keytip)
+{
+    if ( keytip.empty() )
+        m_keyTips.erase(tool_id);
+    else
+        m_keyTips[tool_id] = keytip.Upper();
+}
+
+wxString wxRibbonToolBar::GetKeyTip(wxWindowID tool_id) const
+{
+    auto it = m_keyTips.find(tool_id);
+    return it == m_keyTips.end() ? wxString() : it->second;
+}
+
+void wxRibbonToolBar::SetDropdownKeyTip(wxWindowID tool_id, const wxString& keytip)
+{
+    if ( keytip.empty() )
+        m_dropdownKeyTips.erase(tool_id);
+    else
+        m_dropdownKeyTips[tool_id] = keytip.Upper();
+}
+
+wxString wxRibbonToolBar::GetDropdownKeyTip(wxWindowID tool_id) const
+{
+    auto it = m_dropdownKeyTips.find(tool_id);
+    return it == m_dropdownKeyTips.end() ? wxString() : it->second;
+}
+
+void wxRibbonToolBar::ActivateTool(wxRibbonToolBarToolBase* tool, bool dropdown)
+{
+    wxCHECK_RET(tool, wxT("invalid tool"));
+    if ( tool->state & wxRIBBON_TOOLBAR_TOOL_DISABLED )
+        return;
+
+    wxEventType evt_type = (dropdown || tool->kind == wxRIBBON_BUTTON_DROPDOWN)
+        ? wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED
+        : wxEVT_RIBBONTOOLBAR_CLICKED;
+
+    wxRibbonToolBarEvent notification(evt_type, tool->id);
+    if ( !dropdown && tool->kind == wxRIBBON_BUTTON_TOGGLE )
+    {
+        tool->state ^= wxRIBBON_TOOLBAR_TOOL_TOGGLED;
+        notification.SetInt(tool->state & wxRIBBON_TOOLBAR_TOOL_TOGGLED);
+    }
+    notification.SetEventObject(this);
+    notification.SetBar(this);
+
+    // PopupMenu() positions the menu relative to m_active_tool, so set
+    // it here too, otherwise a keytip-opened menu appears at the cursor.
+    wxRibbonToolBarToolBase* const old_active = m_active_tool;
+    m_active_tool = tool;
+    ProcessEvent(notification);
+    // The handler may have reset m_active_tool, e.g. by deleting the tool.
+    if ( m_active_tool == tool )
+        m_active_tool = old_active;
+
+    wxRibbonPanel* panel = wxDynamicCast(GetParent(), wxRibbonPanel);
+    if ( panel != nullptr )
+        panel->HideIfExpanded();
+
+    Refresh(false);
 }
 
 bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
@@ -389,6 +456,8 @@ bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
                 m_hover_tool = nullptr;
             if ( tool == m_active_tool )
                 m_active_tool = nullptr;
+            m_keyTips.erase(tool->id);
+            m_dropdownKeyTips.erase(tool->id);
             delete tool;
             return true;
         }
@@ -563,6 +632,32 @@ wxRect wxRibbonToolBar::GetToolRect(int tool_id)const
             if (tool->id == tool_id)
             {
                 return wxRect(group->position + tool->position, tool->size);
+            }
+        }
+    }
+    return wxRect();
+}
+
+wxRect wxRibbonToolBar::GetToolDropdownRect(int tool_id)const
+{
+    size_t group_count = m_groups.GetCount();
+    size_t g, t;
+
+    for ( g = 0; g < group_count; ++g )
+    {
+        wxRibbonToolBarToolGroup* group = m_groups.Item(g);
+        size_t tool_count = group->tools.GetCount();
+        for ( t = 0; t < tool_count; ++t )
+        {
+            wxRibbonToolBarToolBase* tool = group->tools.Item(t);
+            if ( tool->id == tool_id )
+            {
+                if ( tool->dropdown.IsEmpty() )
+                    return wxRect();
+
+                wxRect dropdown_rect = tool->dropdown;
+                dropdown_rect.Offset(group->position + tool->position);
+                return dropdown_rect;
             }
         }
     }
@@ -1083,6 +1178,15 @@ void wxRibbonToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             }
         }
     }
+
+    wxRibbonBar* bar = GetAncestorRibbonBar();
+    if ( bar != nullptr )
+    {
+        std::vector<wxRibbonBar::KeyTipBadge> badges;
+        bar->GetKeyTipTargetsFor(this, &badges);
+        for ( const auto& badge : badges )
+            m_art->DrawKeyTip(dc, this, badge.rect, badge.text);
+    }
 }
 
 void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
@@ -1178,6 +1282,8 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
 
 void wxRibbonToolBar::OnMouseDown(wxMouseEvent& evt)
 {
+    DismissKeyTips();
+
     OnMouseMove(evt);
     if(m_hover_tool)
     {
@@ -1205,23 +1311,8 @@ void wxRibbonToolBar::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
     {
         if(m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK)
         {
-            wxEventType evt_type = wxEVT_RIBBONTOOLBAR_CLICKED;
-            if(m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE)
-                evt_type = wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED;
-            wxRibbonToolBarEvent notification(evt_type, m_active_tool->id);
-            if(m_active_tool->kind == wxRIBBON_BUTTON_TOGGLE)
-            {
-                m_active_tool->state ^=
-                    wxRIBBON_TOOLBAR_TOOL_TOGGLED;
-                notification.SetInt(m_active_tool->state &
-                    wxRIBBON_TOOLBAR_TOOL_TOGGLED);
-            }
-            notification.SetEventObject(this);
-            notification.SetBar(this);
-            ProcessEvent(notification);
-
-            if (auto* const panel = wxCheckedStaticCast<wxRibbonPanel>(GetParent()))
-                panel->HideIfExpanded();
+            ActivateTool(m_active_tool,
+                (m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE) != 0);
         }
 
         // Notice that m_active_tool could have been reset by the event handler

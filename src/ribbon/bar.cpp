@@ -14,9 +14,16 @@
 
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/art.h"
+#include "wx/ribbon/panel.h"
+#include "wx/ribbon/buttonbar.h"
+#include "wx/ribbon/toolbar.h"
+#include "wx/ribbon/gallery.h"
 #include "wx/dcbuffer.h"
 #include "wx/app.h"
 #include "wx/vector.h"
+
+#include <algorithm>
+#include <vector>
 
 #ifndef WX_PRECOMP
 #endif
@@ -748,6 +755,13 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
 
 wxRibbonBar::~wxRibbonBar()
 {
+    if ( m_keyTipsTopLevelParent != nullptr )
+    {
+        m_keyTipsTopLevelParent->Unbind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
+        m_keyTipsTopLevelParent->Unbind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
+        m_keyTipsTopLevelParent->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+    }
+
     SetArtProvider(nullptr);
 
     for ( auto* list : m_image_lists )
@@ -788,6 +802,20 @@ void wxRibbonBar::CommonInit(long style)
         SetArtProvider(new wxRibbonDefaultArtProvider);
     }
     SetBackgroundStyle(wxBG_STYLE_PAINT);
+
+    if ( m_keyTipsTriggerKeys.empty() )
+        m_keyTipsTriggerKeys.push_back({ WXK_F10, wxMOD_NONE });
+
+    if ( m_keyTipsTopLevelParent == nullptr )
+    {
+        m_keyTipsTopLevelParent = wxGetTopLevelParent(this);
+        if ( m_keyTipsTopLevelParent != nullptr )
+        {
+            m_keyTipsTopLevelParent->Bind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
+            m_keyTipsTopLevelParent->Bind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
+            m_keyTipsTopLevelParent->Bind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+    }
 }
 
 wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
@@ -930,6 +958,15 @@ void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
     if ( m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON  )
         m_art->DrawToggleButton(dc, this, m_toggle_button_rect, m_ribbon_state);
 
+    if ( m_keyTipsActive )
+    {
+        // The toggle and help buttons leave a clipping region set.
+        dc.DestroyClippingRegion();
+        std::vector<KeyTipBadge> badges;
+        GetKeyTipTargetsFor(this, &badges);
+        for ( const auto& badge : badges )
+            m_art->DrawKeyTip(dc, this, badge.rect, badge.text);
+    }
 }
 
 void wxRibbonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -946,6 +983,9 @@ void wxRibbonBar::DoEraseBackground(wxDC& dc)
 
 void wxRibbonBar::OnSize(wxSizeEvent& evt)
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
     RecalculateTabSizes();
     if(m_current_page != wxNOT_FOUND)
     {
@@ -1028,6 +1068,9 @@ wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
 
 void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
     wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
     SetFocus();
     if ( tab )
@@ -1194,6 +1237,9 @@ void wxRibbonBar::RefreshTabBar()
 
 void wxRibbonBar::OnMouseMiddleDown(wxMouseEvent& evt)
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
     DoMouseButtonCommon(evt, wxEVT_RIBBONBAR_TAB_MIDDLE_DOWN);
 }
 
@@ -1204,6 +1250,9 @@ void wxRibbonBar::OnMouseMiddleUp(wxMouseEvent& evt)
 
 void wxRibbonBar::OnMouseRightDown(wxMouseEvent& evt)
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
     DoMouseButtonCommon(evt, wxEVT_RIBBONBAR_TAB_RIGHT_DOWN);
 }
 
@@ -1326,7 +1375,521 @@ void wxRibbonBar::HideIfExpanded()
 
 void wxRibbonBar::OnKillFocus(wxFocusEvent& WXUNUSED(evt))
 {
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
     HideIfExpanded();
+}
+
+// ----------------------------------------------------------------------------
+// KeyTips (Office-style keyboard access mode)
+// ----------------------------------------------------------------------------
+
+void wxRibbonBar::SetPageKeyTip(size_t page, const wxString& keytip)
+{
+    if ( page >= m_pages.GetCount() )
+        return;
+    m_pages.Item(page).keytip = keytip.Upper();
+}
+
+void wxRibbonBar::SetPageKeyTip(wxRibbonPage* page, const wxString& keytip)
+{
+    int n = GetPageNumber(page);
+    if ( n != wxNOT_FOUND )
+        SetPageKeyTip((size_t)n, keytip);
+}
+
+void wxRibbonBar::SetToggleButtonKeyTip(const wxString& keytip)
+{
+    m_toggleButtonKeyTip = keytip.Upper();
+}
+
+void wxRibbonBar::SetHelpButtonKeyTip(const wxString& keytip)
+{
+    m_helpButtonKeyTip = keytip.Upper();
+}
+
+void wxRibbonBar::SetKeyTipsTriggerKey(int keyCode, int modifiers)
+{
+    m_keyTipsTriggerKeys.clear();
+    m_keyTipsTriggerKeys.push_back({ keyCode, modifiers });
+}
+
+void wxRibbonBar::AddKeyTipsTriggerKey(int keyCode, int modifiers)
+{
+    m_keyTipsTriggerKeys.push_back({ keyCode, modifiers });
+}
+
+void wxRibbonBar::ClearKeyTipsTriggerKeys()
+{
+    m_keyTipsTriggerKeys.clear();
+}
+
+void wxRibbonBar::RefreshKeyTipTargetWindows()
+{
+    // Refresh each window directly. Refreshing only an ancestor doesn't
+    // reliably repaint child windows.
+    for ( wxWindow* w : m_keyTipsWindows )
+        w->Refresh();
+}
+
+bool wxRibbonBar::ShowKeyTips()
+{
+    if ( m_keyTipsActive )
+        return true;
+
+    if ( !IsShownOnScreen() )
+        return false;
+
+    DoBuildKeyTipTargets();
+    if ( m_keyTipsTargets.empty() )
+        return false;
+
+    m_keyTipsActive = true;
+    m_keyTipsTypedPrefix.clear();
+    RefreshKeyTipTargetWindows();
+    return true;
+}
+
+void wxRibbonBar::HideKeyTips()
+{
+    if ( !m_keyTipsActive )
+        return;
+
+    // Refresh before clearing state, so each window still knows to repaint.
+    RefreshKeyTipTargetWindows();
+    m_keyTipsActive = false;
+    m_keyTipsTypedPrefix.clear();
+    m_keyTipsTargets.clear();
+    m_keyTipsWindows.clear();
+}
+
+void wxRibbonBar::DoBuildKeyTipTargets()
+{
+    m_keyTipsTargets.clear();
+
+    size_t numtabs = m_pages.GetCount();
+    for ( size_t i = 0; i < numtabs; ++i )
+    {
+        wxRibbonPageTabInfo& tab = m_pages.Item(i);
+        if ( !tab.shown || tab.keytip.empty() )
+            continue;
+
+        wxRibbonKeyTipInfo info;
+        info.fullKeyTip = tab.keytip;
+        info.rect = tab.rect;
+        info.window = this;
+        info.kind = wxRibbonKeyTipInfo::KeyTip_PageTab;
+        info.pageIndex = i;
+        m_keyTipsTargets.push_back(info);
+    }
+
+    if ( (m_flags & wxRIBBON_BAR_SHOW_TOGGLE_BUTTON) && !m_toggleButtonKeyTip.empty() )
+    {
+        wxRibbonKeyTipInfo info;
+        info.fullKeyTip = m_toggleButtonKeyTip;
+        info.rect = m_toggle_button_rect;
+        info.window = this;
+        info.kind = wxRibbonKeyTipInfo::KeyTip_ToggleButton;
+        m_keyTipsTargets.push_back(info);
+    }
+
+    if ( (m_flags & wxRIBBON_BAR_SHOW_HELP_BUTTON) && !m_helpButtonKeyTip.empty() )
+    {
+        wxRibbonKeyTipInfo info;
+        info.fullKeyTip = m_helpButtonKeyTip;
+        info.rect = m_help_button_rect;
+        info.window = this;
+        info.kind = wxRibbonKeyTipInfo::KeyTip_HelpButton;
+        m_keyTipsTargets.push_back(info);
+    }
+
+    if ( m_current_page != wxNOT_FOUND && m_arePanelsShown )
+    {
+        wxRibbonPage* page = m_pages.Item(m_current_page).page;
+        for ( wxWindowList::compatibility_iterator node = page->GetChildren().GetFirst();
+              node; node = node->GetNext() )
+        {
+            wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+            if ( panel == nullptr || !panel->IsShown() )
+                continue;
+
+            if ( panel->IsMinimised() )
+            {
+                wxString keytip = panel->GetKeyTip();
+                if ( !keytip.empty() )
+                {
+                    wxRibbonKeyTipInfo info;
+                    info.fullKeyTip = keytip;
+                    info.rect = wxRect(wxPoint(0, 0), panel->GetSize());
+                    info.window = panel;
+                    info.kind = wxRibbonKeyTipInfo::KeyTip_MinimisedPanel;
+                    info.panel = panel;
+                    m_keyTipsTargets.push_back(info);
+                }
+                continue;
+            }
+
+            if ( panel->HasExtButton() )
+            {
+                wxString keytip = panel->GetExtButtonKeyTip();
+                if ( !keytip.empty() )
+                {
+                    wxRibbonKeyTipInfo info;
+                    info.fullKeyTip = keytip;
+                    info.rect = panel->GetExtButtonRect();
+                    info.window = panel;
+                    info.kind = wxRibbonKeyTipInfo::KeyTip_ExtButton;
+                    info.panel = panel;
+                    m_keyTipsTargets.push_back(info);
+                }
+            }
+
+            for ( wxWindowList::compatibility_iterator pnode = panel->GetChildren().GetFirst();
+                  pnode; pnode = pnode->GetNext() )
+            {
+                wxWindow* child = pnode->GetData();
+                if ( !child->IsShown() )
+                    continue;
+
+                wxRibbonButtonBar* bb = wxDynamicCast(child, wxRibbonButtonBar);
+                wxRibbonToolBar* tb = wxDynamicCast(child, wxRibbonToolBar);
+                wxRibbonGallery* gallery = wxDynamicCast(child, wxRibbonGallery);
+                if ( bb != nullptr )
+                {
+                    size_t count = bb->GetButtonCount();
+                    for ( size_t b = 0; b < count; ++b )
+                    {
+                        wxRibbonButtonBarButtonBase* button = bb->GetItem(b);
+                        int id = bb->GetItemId(button);
+                        if ( !bb->GetButtonEnabled(id) )
+                            continue;
+                        wxString keytip = bb->GetKeyTip(id);
+                        if ( keytip.empty() )
+                            continue;
+
+                        // Empty if the button isn't in the current layout.
+                        wxRect rect = bb->GetItemRect(id);
+                        if ( rect.IsEmpty() )
+                            continue;
+
+                        wxRibbonKeyTipInfo info;
+                        info.fullKeyTip = keytip;
+                        info.rect = rect;
+                        info.window = bb;
+                        info.kind = wxRibbonKeyTipInfo::KeyTip_ButtonBarItem;
+                        info.buttonBar = bb;
+                        info.buttonBarItemId = id;
+                        m_keyTipsTargets.push_back(info);
+
+                        wxString dropdownKeytip = bb->GetDropdownKeyTip(id);
+                        wxRect dropdownRect = bb->GetItemDropdownRect(id);
+                        if ( !dropdownKeytip.empty() && !dropdownRect.IsEmpty() )
+                        {
+                            wxRibbonKeyTipInfo dropdownInfo;
+                            dropdownInfo.fullKeyTip = dropdownKeytip;
+                            dropdownInfo.rect = dropdownRect;
+                            dropdownInfo.window = bb;
+                            dropdownInfo.kind = wxRibbonKeyTipInfo::KeyTip_ButtonBarItem;
+                            dropdownInfo.buttonBar = bb;
+                            dropdownInfo.buttonBarItemId = id;
+                            dropdownInfo.dropdown = true;
+                            m_keyTipsTargets.push_back(dropdownInfo);
+                        }
+                    }
+                }
+                else if ( tb != nullptr )
+                {
+                    size_t count = tb->GetToolCount();
+                    for ( size_t t = 0; t < count; ++t )
+                    {
+                        wxRibbonToolBarToolBase* tool = tb->GetToolByPos(t);
+                        if ( tool == nullptr )
+                            continue; // separator
+                        int id = tb->GetToolId(tool);
+                        if ( !tb->GetToolEnabled(id) )
+                            continue;
+                        wxString keytip = tb->GetKeyTip(id);
+                        if ( keytip.empty() )
+                            continue;
+
+                        wxRect rect = tb->GetToolRect(id);
+                        if ( rect.IsEmpty() )
+                            continue;
+
+                        wxRibbonKeyTipInfo info;
+                        info.fullKeyTip = keytip;
+                        info.rect = rect;
+                        info.window = tb;
+                        info.kind = wxRibbonKeyTipInfo::KeyTip_ToolBarItem;
+                        info.toolBar = tb;
+                        info.toolBarItemId = id;
+                        m_keyTipsTargets.push_back(info);
+
+                        wxString dropdownKeytip = tb->GetDropdownKeyTip(id);
+                        wxRect dropdownRect = tb->GetToolDropdownRect(id);
+                        if ( !dropdownKeytip.empty() && !dropdownRect.IsEmpty() )
+                        {
+                            wxRibbonKeyTipInfo dropdownInfo;
+                            dropdownInfo.fullKeyTip = dropdownKeytip;
+                            dropdownInfo.rect = dropdownRect;
+                            dropdownInfo.window = tb;
+                            dropdownInfo.kind = wxRibbonKeyTipInfo::KeyTip_ToolBarItem;
+                            dropdownInfo.toolBar = tb;
+                            dropdownInfo.toolBarItemId = id;
+                            dropdownInfo.dropdown = true;
+                            m_keyTipsTargets.push_back(dropdownInfo);
+                        }
+                    }
+                }
+                else if ( gallery != nullptr )
+                {
+                    wxString keytip = gallery->GetKeyTip();
+                    if ( !keytip.empty() )
+                    {
+                        wxRibbonKeyTipInfo info;
+                        info.fullKeyTip = keytip;
+                        info.rect = wxRect(wxPoint(0, 0), gallery->GetSize());
+                        info.window = gallery;
+                        info.kind = wxRibbonKeyTipInfo::KeyTip_Gallery;
+                        m_keyTipsTargets.push_back(info);
+                    }
+                }
+            }
+        }
+    }
+
+    for ( auto& target : m_keyTipsTargets )
+        target.remaining = target.fullKeyTip;
+
+    m_keyTipsWindows.clear();
+    m_keyTipsWindows.push_back(this);
+    for ( const auto& target : m_keyTipsTargets )
+    {
+        if ( std::find(m_keyTipsWindows.begin(), m_keyTipsWindows.end(), target.window) ==
+             m_keyTipsWindows.end() )
+        {
+            m_keyTipsWindows.push_back(target.window);
+        }
+    }
+}
+
+void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
+{
+    switch ( target.kind )
+    {
+        case wxRibbonKeyTipInfo::KeyTip_PageTab:
+        {
+            wxRibbonPageTabInfo& tab = m_pages.Item(target.pageIndex);
+            if ( m_ribbon_state == wxRIBBON_BAR_MINIMIZED )
+                ShowPanels(wxRIBBON_BAR_EXPANDED);
+            if ( (int)target.pageIndex != m_current_page )
+            {
+                wxRibbonBarEvent query(wxEVT_RIBBONBAR_PAGE_CHANGING, GetId(), tab.page);
+                query.SetEventObject(this);
+                ProcessWindowEvent(query);
+                if ( query.IsAllowed() )
+                {
+                    SetActivePage(query.GetPage());
+
+                    wxRibbonBarEvent notification(wxEVT_RIBBONBAR_PAGE_CHANGED, GetId(),
+                        m_pages.Item(m_current_page).page);
+                    notification.SetEventObject(this);
+                    ProcessWindowEvent(notification);
+                }
+            }
+            // Switching pages isn't a command, so stay in keytip mode and
+            // show the keytips of the page we just moved to.
+            ShowKeyTips();
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::KeyTip_ToggleButton:
+        {
+            ShowPanels(ArePanelsShown() ? wxRIBBON_BAR_MINIMIZED : wxRIBBON_BAR_PINNED);
+            wxRibbonBarEvent event(wxEVT_RIBBONBAR_TOGGLED, GetId());
+            event.SetEventObject(this);
+            ProcessWindowEvent(event);
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::KeyTip_HelpButton:
+        {
+            wxRibbonBarEvent event(wxEVT_RIBBONBAR_HELP_CLICK, GetId());
+            event.SetEventObject(this);
+            ProcessWindowEvent(event);
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::KeyTip_ExtButton:
+        {
+            wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, target.panel->GetId());
+            notification.SetEventObject(target.panel);
+            notification.SetPanel(target.panel);
+            target.panel->ProcessWindowEvent(notification);
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::KeyTip_MinimisedPanel:
+            target.panel->ShowExpanded();
+            break;
+
+        case wxRibbonKeyTipInfo::KeyTip_ButtonBarItem:
+        {
+            wxRibbonButtonBarButtonBase* button = target.buttonBar->GetItemById(target.buttonBarItemId);
+            if ( button != nullptr )
+                target.buttonBar->ActivateButton(button, target.dropdown);
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::KeyTip_ToolBarItem:
+        {
+            wxRibbonToolBarToolBase* tool = target.toolBar->FindById(target.toolBarItemId);
+            if ( tool != nullptr )
+                target.toolBar->ActivateTool(tool, target.dropdown);
+            break;
+        }
+
+        case wxRibbonKeyTipInfo::KeyTip_Gallery:
+            target.window->SetFocus();
+            break;
+    }
+}
+
+void wxRibbonBar::GetKeyTipTargetsFor(wxWindow* window, std::vector<KeyTipBadge>* badges) const
+{
+    badges->clear();
+    if ( !m_keyTipsActive )
+        return;
+
+    for ( const auto& target : m_keyTipsTargets )
+    {
+        if ( target.window == window )
+        {
+            KeyTipBadge badge;
+            badge.rect = target.rect;
+            badge.text = target.remaining;
+            badges->push_back(badge);
+        }
+    }
+}
+
+void wxRibbonBar::OnKeyTipsWindowDestroy(wxWindowDestroyEvent& event)
+{
+    event.Skip();
+    if ( !m_keyTipsActive )
+        return;
+
+    // Drop the stale target pointers, but don't refresh the dying window.
+    wxWindow* window = event.GetWindow();
+    m_keyTipsWindows.erase(
+        std::remove(m_keyTipsWindows.begin(), m_keyTipsWindows.end(), window),
+        m_keyTipsWindows.end());
+
+    HideKeyTips();
+}
+
+void wxRibbonBar::OnKeyTipsActivate(wxActivateEvent& event)
+{
+    event.Skip();
+    if ( m_keyTipsActive && !event.GetActive() )
+        HideKeyTips();
+}
+
+bool wxRibbonBar::IsKeyTipsTriggerKey(int keyCode, int modifiers) const
+{
+    for ( const auto& trigger : m_keyTipsTriggerKeys )
+    {
+        if ( keyCode == trigger.keyCode && modifiers == trigger.modifiers )
+            return true;
+    }
+    return false;
+}
+
+void wxRibbonBar::OnKeyTipsCharHook(wxKeyEvent& event)
+{
+    if ( !m_keyTipsActive )
+    {
+        // Only steal the trigger key if there's something to show, so
+        // ribbon bars with no keytips configured stay backward compatible.
+        if ( IsKeyTipsTriggerKey(event.GetKeyCode(), event.GetModifiers()) &&
+             ShowKeyTips() )
+        {
+            return;
+        }
+        event.Skip();
+        return;
+    }
+
+    // KeyTips mode is active.
+    int keycode = event.GetKeyCode();
+
+    if ( keycode == WXK_ESCAPE )
+    {
+        if ( !m_keyTipsTypedPrefix.empty() )
+        {
+            m_keyTipsTypedPrefix.clear();
+            DoBuildKeyTipTargets();
+            RefreshKeyTipTargetWindows();
+        }
+        else
+        {
+            HideKeyTips();
+        }
+        return;
+    }
+
+    if ( IsKeyTipsTriggerKey(keycode, event.GetModifiers()) )
+    {
+        HideKeyTips();
+        return;
+    }
+
+    // Accelerators aren't keytips: leave the mode and let the key through,
+    // otherwise Ctrl+S would fire the "S" keytip and Alt+F4 would be eaten.
+    if ( event.GetModifiers() & ~wxMOD_SHIFT )
+    {
+        HideKeyTips();
+        event.Skip();
+        return;
+    }
+
+    if ( keycode > WXK_SPACE && keycode <= 255 && wxIsalnum((wxChar)keycode) )
+    {
+        wxUniChar ch = wxToupper((wxChar)keycode);
+
+        std::vector<wxRibbonKeyTipInfo> matches;
+        for ( const auto& target : m_keyTipsTargets )
+        {
+            if ( !target.remaining.empty() && target.remaining[0] == ch )
+                matches.push_back(target);
+        }
+
+        if ( matches.empty() )
+        {
+            // No match: consume the key, but otherwise do nothing.
+            return;
+        }
+
+        for ( auto& target : matches )
+            target.remaining = target.remaining.Mid(1);
+
+        if ( matches.size() == 1 && matches[0].remaining.empty() )
+        {
+            wxRibbonKeyTipInfo activated = matches[0];
+            HideKeyTips();
+            DoActivateKeyTipTarget(activated);
+        }
+        else
+        {
+            m_keyTipsTargets = matches;
+            m_keyTipsTypedPrefix += ch;
+            RefreshKeyTipTargetWindows();
+        }
+        return;
+    }
+
+    // Any other key: swallow it while keytips are active.
 }
 
 #endif // wxUSE_RIBBON

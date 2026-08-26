@@ -18,6 +18,8 @@
 #include "wx/dynarray.h"
 #include "wx/bmpbndl.h"
 
+#include <map>
+
 class wxRibbonButtonBar;
 class wxRibbonButtonBarButtonBase;
 class wxRibbonButtonBarLayout;
@@ -133,12 +135,14 @@ public:
     virtual wxRibbonButtonBarButtonBase *GetItemById(int id) const;
     virtual int GetItemId(wxRibbonButtonBarButtonBase *button) const;
     virtual wxRect GetItemRect(int button_id) const;
+    virtual wxRect GetItemDropdownRect(int button_id) const;
 
 
     virtual bool Realize() override;
     virtual void ClearButtons();
     virtual bool DeleteButton(int button_id);
     virtual void EnableButton(int button_id, bool enable = true);
+    virtual bool GetButtonEnabled(int button_id) const;
     virtual void ToggleButton(int button_id, bool checked);
 
     virtual void SetButtonIcon(
@@ -170,6 +174,19 @@ public:
 
     // Get bitmap for button (DPI-aware resolution)
     wxBitmap GetButtonBitmap(int imageIndex, bool large) const;
+
+    // KeyTips (Office-style keyboard access mode).
+    void SetKeyTip(wxWindowID button_id, const wxString& keytip);
+    wxString GetKeyTip(wxWindowID button_id) const;
+
+    // Assigns a keytip to a hybrid button's dropdown arrow, separate
+    // from its main click area.
+    void SetDropdownKeyTip(wxWindowID button_id, const wxString& keytip);
+    wxString GetDropdownKeyTip(wxWindowID button_id) const;
+
+    // Implementation only: fires a button's click event for keytip
+    // activation. If dropdown is true, fires the dropdown-clicked event.
+    void ActivateButton(wxRibbonButtonBarButtonBase* button, bool dropdown = false);
 
 protected:
     friend class wxRibbonButtonBarEvent;
@@ -221,6 +238,8 @@ protected:
 
 private:
     wxRibbonBar* m_ribbonBar = nullptr;
+    std::map<wxWindowID, wxString> m_keyTips;
+    std::map<wxWindowID, wxString> m_dropdownKeyTips;
 
 
 #ifndef SWIG

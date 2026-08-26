@@ -117,4 +117,10 @@ wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
     return nullptr;
 }
 
+void wxRibbonControl::DismissKeyTips()
+{
+    if ( wxRibbonBar* bar = GetAncestorRibbonBar() )
+        bar->HideKeyTips();
+}
+
 #endif // wxUSE_RIBBON

@@ -255,6 +255,8 @@ void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 
 void wxRibbonGallery::OnMouseDown(wxMouseEvent& evt)
 {
+    DismissKeyTips();
+
     wxPoint pos = evt.GetPosition();
     m_mouse_active_rect = nullptr;
     if(m_client_rect.Contains(pos))
@@ -526,6 +528,17 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
         if (bmp.IsOk())
             dc.DrawBitmap(bmp, offset_pos.GetLeft() + padding_left,
                 offset_pos.GetTop() + padding_top);
+    }
+
+    dc.DestroyClippingRegion();
+
+    wxRibbonBar* bar = GetAncestorRibbonBar();
+    if ( bar != nullptr )
+    {
+        std::vector<wxRibbonBar::KeyTipBadge> badges;
+        bar->GetKeyTipTargetsFor(this, &badges);
+        for ( const auto& badge : badges )
+            m_art->DrawKeyTip(dc, this, badge.rect, badge.text);
     }
 }
 
