@@ -389,7 +389,9 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long fla
                     ok = wxSafeArray<VT_I4>::ConvertToVariant(oleVariant.parray, variant);
                     break;
                 case VT_R4:
+                    wxGCC_WARNING_SUPPRESS(double-promotion)
                     ok = wxSafeArray<VT_R4>::ConvertToVariant(oleVariant.parray, variant);
+                    wxGCC_WARNING_RESTORE(double-promotion)
                     break;
                 case VT_R8:
                     ok = wxSafeArray<VT_R8>::ConvertToVariant(oleVariant.parray, variant);
@@ -490,7 +492,7 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long fla
                 break;
 
             case VT_R4:
-                variant = oleVariant.fltVal;
+                variant = double(oleVariant.fltVal);
                 break;
 
             case VT_R8:

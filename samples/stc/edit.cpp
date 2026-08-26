@@ -1049,10 +1049,8 @@ bool EditPrint::PrintScaling (wxDC *dc){
     GetPageSizePixels (&pageSize.x, &pageSize.y);
 
     // set user scale
-    float scale_x = (float)(ppiPrt.x * dcSize.x) /
-                    (float)(ppiScr.x * pageSize.x);
-    float scale_y = (float)(ppiPrt.y * dcSize.y) /
-                    (float)(ppiScr.y * pageSize.y);
+    double scale_x = double(ppiPrt.x * dcSize.x) / (ppiScr.x * pageSize.x);
+    double scale_y = double(ppiPrt.y * dcSize.y) / (ppiScr.y * pageSize.y);
     dc->SetUserScale (scale_x, scale_y);
 
     return true;

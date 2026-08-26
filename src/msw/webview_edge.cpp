@@ -1576,7 +1576,7 @@ float wxWebViewEdge::GetZoomFactor() const
 void wxWebViewEdge::SetZoomFactor(float zoom)
 {
     if ( m_impl->m_webViewController )
-        m_impl->m_webViewController->put_ZoomFactor(zoom);
+        m_impl->m_webViewController->put_ZoomFactor(double(zoom));
 }
 
 bool wxWebViewEdge::CanUndo() const

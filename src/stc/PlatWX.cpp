@@ -561,8 +561,10 @@ void SurfaceImpl::GradientRectangle(PRectangle rc,
 
     wxGCDC dc(wxGraphicsContext::CreateFromUnknownDC(*hdc));
     wxGraphicsContext* gc = dc.GetGraphicsContext();
-    gc->SetBrush(gc->CreateLinearGradientBrush(rc.left, rc.top, ep.x, ep.y, gradientStops));
-    gc->DrawRectangle(rc.left, rc.top, rc.Width(), rc.Height());
+    gc->SetBrush(gc->CreateLinearGradientBrush(
+        double(rc.left), double(rc.top), ep.x, ep.y, gradientStops));
+    gc->DrawRectangle(
+        double(rc.left), double(rc.top), double(rc.Width()), double(rc.Height()));
 #else
     // limited implementation that only uses the first and last stop
     wxDirection dir;
