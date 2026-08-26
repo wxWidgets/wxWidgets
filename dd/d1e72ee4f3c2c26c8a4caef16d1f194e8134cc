@@ -1,0 +1,1 @@
+wxAll: Fix crash when unregistering wxFDIOHandler while dispatching (got3nks, #26924).
