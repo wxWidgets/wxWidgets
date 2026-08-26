@@ -20,6 +20,7 @@
     #include "wx/thread.h"
 #endif
 
+#include <memory>
 #include <vector>
 
 struct epoll_event;
@@ -59,9 +60,9 @@ private:
     // registration is gone.
     struct Entry
     {
-        explicit Entry(wxFDIOHandler *handler_) : handler(handler_) { }
+        Entry() = default;
 
-        wxFDIOHandler *handler;
+        wxFDIOHandler* handler = nullptr;
     };
 
     // Return the entry for this descriptor, creating one if necessary.
@@ -90,7 +91,7 @@ private:
     // the same cross-thread case as a handler destroyed by another thread
     // while the loop is between finding it and calling it, which is racy here
     // as it was before.
-    std::vector<Entry *> m_entries;
+    std::vector<std::unique_ptr<Entry>> m_entries;
 #if wxUSE_THREADS
     wxCriticalSection m_entriesCS;
 #endif // wxUSE_THREADS

@@ -98,8 +98,7 @@ wxEpollDispatcher::wxEpollDispatcher(int epollDescriptor)
 
 wxEpollDispatcher::~wxEpollDispatcher()
 {
-    for ( size_t n = 0; n < m_entries.size(); ++n )
-        delete m_entries[n];
+    m_entries.clear();
 
     if ( close(m_epollDescriptor) != 0 )
     {
@@ -115,14 +114,14 @@ wxEpollDispatcher::Entry *wxEpollDispatcher::GetEntry(int fd)
 
     if ( fd >= wxSsize(m_entries) )
     {
-        m_entries.resize(fd + 1, nullptr);
+        m_entries.resize(fd + 1);
     }
 
-    Entry *&entry = m_entries[fd];
+    auto& entry = m_entries[fd];
     if ( !entry )
-        entry = new Entry(nullptr);
+        entry = std::make_unique<Entry>();
 
-    return entry;
+    return entry.get();
 }
 
 void wxEpollDispatcher::ForgetEntry(int fd)
