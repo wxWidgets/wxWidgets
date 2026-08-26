@@ -113,7 +113,7 @@ wxEpollDispatcher::Entry *wxEpollDispatcher::GetEntry(int fd)
     wxCriticalSectionLocker lock(m_entriesCS);
 #endif
 
-    if ( m_entries.size() <= static_cast<size_t>(fd) )
+    if ( fd >= wxSsize(m_entries) )
     {
         m_entries.resize(fd + 1, nullptr);
     }
@@ -135,7 +135,7 @@ void wxEpollDispatcher::ForgetEntry(int fd)
     // FD seen so far.
     wxCHECK_RET
     (
-        fd < static_cast<int>(m_entries.size()),
+        fd < wxSsize(m_entries),
         wxString::Format("Unregistering FD %d but max seen FD is %d",
                          fd, m_entries.size() - 1)
     );
