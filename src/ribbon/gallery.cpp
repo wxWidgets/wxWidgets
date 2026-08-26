@@ -255,6 +255,8 @@ void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 
 void wxRibbonGallery::OnMouseDown(wxMouseEvent& evt)
 {
+    DismissKeyTips();
+
     wxPoint pos = evt.GetPosition();
     m_mouse_active_rect = nullptr;
     if(m_client_rect.Contains(pos))
@@ -527,6 +529,12 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
             dc.DrawBitmap(bmp, offset_pos.GetLeft() + padding_left,
                 offset_pos.GetTop() + padding_top);
     }
+
+    dc.DestroyClippingRegion();
+
+    wxRibbonBar* bar = GetAncestorRibbonBar();
+    if ( bar != nullptr )
+        bar->DrawKeyTipsFor(dc, this, m_art);
 }
 
 void wxRibbonGallery::OnSize(wxSizeEvent& WXUNUSED(evt))

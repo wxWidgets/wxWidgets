@@ -84,6 +84,15 @@ public:
 
     void HideIfExpanded();
 
+    // KeyTips (keyboard access mode).
+    void SetExtButtonKeyTip(const wxString& keytip) { m_extButtonKeyTip = keytip.Upper(); }
+    wxString GetExtButtonKeyTip() const { return m_extButtonKeyTip; }
+    wxRect GetExtButtonRect() const { return m_ext_button_rect; }
+
+    // Used when the panel is minimised.
+    void SetKeyTip(const wxString& keytip) { m_keyTip = keytip.Upper(); }
+    wxString GetKeyTip() const { return m_keyTip; }
+
 protected:
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize GetPanelSizerBestSize() const;
@@ -133,6 +142,11 @@ protected:
     bool m_hovered = false;
     bool m_ext_button_hovered = false;
     wxRect m_ext_button_rect;
+
+    // Both are always stored in upper case, to allow case-insensitive
+    // matching.
+    wxString m_extButtonKeyTip;
+    wxString m_keyTip;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonPanel);

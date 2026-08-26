@@ -339,6 +339,10 @@ void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
         {
             m_art->DrawPanelBackground(dc, this, GetSize());
         }
+
+        wxRibbonBar* bar = GetAncestorRibbonBar();
+        if ( bar != nullptr )
+            bar->DrawKeyTipsFor(dc, this, m_art);
     }
 }
 
@@ -783,6 +787,8 @@ bool wxRibbonPanel::Layout()
 
 void wxRibbonPanel::OnMouseClick(wxMouseEvent& WXUNUSED(evt))
 {
+    DismissKeyTips();
+
     if(IsMinimised())
     {
         if(m_expanded_panel != nullptr)
@@ -844,6 +850,8 @@ bool wxRibbonPanel::ShowExpanded()
 
     m_expanded_panel->SetArtProvider(m_art);
     m_expanded_panel->m_expanded_dummy = this;
+    m_expanded_panel->m_extButtonKeyTip = m_extButtonKeyTip;
+    m_expanded_panel->m_keyTip = m_keyTip;
 
     // Move all children to the new panel.
     // Conceptually it might be simpler to reparent this entire panel to the
@@ -976,6 +984,10 @@ bool wxRibbonPanel::HideExpanded()
             return false;
         }
     }
+
+    // Keep any keytips set while the panel was expanded.
+    m_expanded_dummy->m_extButtonKeyTip = m_extButtonKeyTip;
+    m_expanded_dummy->m_keyTip = m_keyTip;
 
     // Move children back to original panel
     // NB: Children iterators not used as behaviour is not well defined

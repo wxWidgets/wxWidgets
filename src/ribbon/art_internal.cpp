@@ -116,6 +116,65 @@ wxBitmap wxRibbonLoadPixmap(const char* const* bits, wxColour fore)
     return wxBitmap(xpm);
 }
 
+void wxRibbonDrawKeyTip(wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        const wxString& keytip,
+                        const wxFont& font)
+{
+    if ( keytip.empty() )
+        return;
+
+    dc.SetFont(font);
+    wxSize text_size = dc.GetTextExtent(keytip);
+
+    const int padding_x = 3;
+    const int padding_y = 2;
+    wxSize badge_size(text_size.GetWidth() + 2 * padding_x,
+                       text_size.GetHeight() + 2 * padding_y);
+
+    // Anchor inside the rect's bottom center if it fits.
+    // Otherwise (e.g., a panel's small ext button) drop the
+    // badge below the rect instead.
+    wxPoint pos;
+    if ( badge_size.GetHeight() <= rect.GetHeight() )
+    {
+        pos.x = rect.GetX() + (rect.GetWidth() - badge_size.GetWidth()) / 2;
+        pos.y = rect.GetBottom() - badge_size.GetHeight();
+    }
+    else
+    {
+        pos.x = rect.GetX() + (rect.GetWidth() - badge_size.GetWidth()) / 2;
+        pos.y = rect.GetBottom() + 2;
+    }
+
+    if ( wnd != nullptr )
+    {
+        wxSize client = wnd->GetClientSize();
+        pos.x = wxMax(0, wxMin(pos.x, client.GetWidth() - badge_size.GetWidth()));
+        pos.y = wxMax(0, wxMin(pos.y, client.GetHeight() - badge_size.GetHeight()));
+    }
+
+    wxRect badge_rect(pos, badge_size);
+
+    // These colours match the ones used by other established ribbon
+    // implementations, and no system colour would give the same appearance.
+    const wxColour badge_bg_light(97, 97, 97);
+    const wxColour badge_bg_dark(255, 214, 51);
+
+    const wxColour badge_bg =
+        wxSystemSettings::SelectLightDark(badge_bg_light, badge_bg_dark);
+    const wxColour badge_fg =
+        wxSystemSettings::SelectLightDark(*wxWHITE, *wxBLACK);
+
+    dc.SetPen(wxPen(badge_bg));
+    dc.SetBrush(wxBrush(badge_bg));
+    dc.DrawRectangle(badge_rect);
+
+    dc.SetTextForeground(badge_fg);
+    dc.DrawText(keytip, badge_rect.GetX() + padding_x, badge_rect.GetY() + padding_y);
+}
+
 wxRibbonHSLColour::wxRibbonHSLColour(const wxColour& col)
 {
     float red = col.Red() / 255.0f;

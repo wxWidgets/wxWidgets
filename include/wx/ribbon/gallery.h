@@ -71,6 +71,10 @@ public:
     bool ScrollPixels(int pixels);
     void EnsureVisible(const wxRibbonGalleryItem* item);
 
+    // KeyTips (keyboard access mode).
+    void SetKeyTip(const wxString& keytip) { m_keyTip = keytip.Upper(); }
+    wxString GetKeyTip() const { return m_keyTip; }
+
 protected:
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     void CommonInit(long style);
@@ -117,6 +121,9 @@ protected:
     wxRibbonGalleryButtonState m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     wxRibbonGalleryButtonState m_extension_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     bool m_hovered = false;
+
+    // Always stored in upper case, to allow case-insensitive matching.
+    wxString m_keyTip;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonGallery);

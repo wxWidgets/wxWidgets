@@ -327,6 +327,16 @@ public:
                         wxRibbonBar* wnd,
                         const wxRect& rect) = 0;
 
+    // This one is not pure virtual for compatibility with the existing art
+    // providers: it returns false if it is not implemented, in which case a
+    // default key tip badge is drawn by the caller.
+    virtual bool DrawKeyTip(
+                        wxDC& WXUNUSED(dc),
+                        wxWindow* WXUNUSED(wnd),
+                        const wxRect& WXUNUSED(rect),
+                        const wxString& WXUNUSED(keytip))
+                        { return false; }
+
     virtual void GetBarTabWidth(
                         wxReadOnlyDC& dc,
                         wxWindow* wnd,
@@ -545,6 +555,12 @@ public:
     void DrawHelpButton(wxDC& dc,
                         wxRibbonBar* wnd,
                         const wxRect& rect) override;
+
+    bool DrawKeyTip(
+                    wxDC& dc,
+                    wxWindow* wnd,
+                    const wxRect& rect,
+                    const wxString& keytip) override;
 
     void GetBarTabWidth(
                         wxReadOnlyDC& dc,

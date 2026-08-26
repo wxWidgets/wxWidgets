@@ -43,6 +43,16 @@ WXDLLIMPEXP_RIBBON wxBitmap wxRibbonLoadPixmap(
                                 const char* const* bits,
                                 wxColour fore);
 
+// Draw a key tip badge in the default style, used both by the standard art
+// providers and as a fallback for the providers not implementing
+// wxRibbonArtProvider::DrawKeyTip().
+WXDLLIMPEXP_RIBBON void wxRibbonDrawKeyTip(
+                                wxDC& dc,
+                                wxWindow* wnd,
+                                const wxRect& rect,
+                                const wxString& keytip,
+                                const wxFont& font);
+
 /*
    HSL colour class, using interface as discussed in wx-dev. Provided mainly
    for art providers to perform colour scheme calculations in the HSL colour

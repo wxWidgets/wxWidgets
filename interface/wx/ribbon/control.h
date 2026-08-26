@@ -161,6 +161,19 @@ public:
         Used to implement the wxRIBBON_PANEL_FLEXIBLE panel style.
     */
     virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const;
+
+    /**
+        Leaves the ancestor ribbon bar's keyboard access mode (if it is in it).
+
+        Custom ribbon controls should call this when clicked, so that visible
+        KeyTips don't survive a mouse interaction.
+
+        @see wxRibbonBar::HideKeyTips()
+
+        @since 3.3.4
+    */
+    void DismissKeyTips();
+
 protected:
     /**
         Implementation of GetNextSmallerSize().

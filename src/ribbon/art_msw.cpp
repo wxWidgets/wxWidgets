@@ -2767,6 +2767,16 @@ void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
                 rect.GetY() + (20 - sz.GetHeight()) / 2);
 }
 
+bool wxRibbonMSWArtProvider::DrawKeyTip(wxDC& dc,
+                                       wxWindow* wnd,
+                                       const wxRect& rect,
+                                       const wxString& keytip)
+{
+    wxRibbonDrawKeyTip(dc, wnd, rect, keytip, m_tab_label_font);
+
+    return true;
+}
+
 void wxRibbonMSWArtProvider::GetBarTabWidth(
                         wxReadOnlyDC& dc,
                         wxWindow* WXUNUSED(wnd),

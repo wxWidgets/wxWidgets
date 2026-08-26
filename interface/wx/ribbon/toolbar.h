@@ -524,6 +524,42 @@ public:
         @since 2.9.4
     */
     virtual void ToggleTool(int tool_id, bool checked);
+
+    /**
+        Assigns the KeyTip used to click the given tool.
+
+        Pass an empty string to remove it. The KeyTip is stored uppercased.
+        Disabled tools don't show a KeyTip.
+
+        @see wxRibbonBar::ShowKeyTips()
+
+        @since 3.3.4
+    */
+    void SetKeyTip(wxWindowID tool_id, const wxString& keytip);
+
+    /**
+        Returns the KeyTip of the given tool, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetKeyTip(wxWindowID tool_id) const;
+
+    /**
+        Assigns the KeyTip used to open a hybrid tool's dropdown menu.
+
+        This is separate from the KeyTip of the tool's main click area, set by
+        SetKeyTip(), and has no effect on non-hybrid tools.
+
+        @since 3.3.4
+    */
+    void SetDropdownKeyTip(wxWindowID tool_id, const wxString& keytip);
+
+    /**
+        Returns the dropdown KeyTip of the given tool, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetDropdownKeyTip(wxWindowID tool_id) const;
 };
 
 
