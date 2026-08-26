@@ -8,8 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#include <memory>
-
 #if wxUSE_FS_ARCHIVE
 
 #include "wx/fs_arc.h"
@@ -34,8 +32,13 @@
 // version.
 //---------------------------------------------------------------------------
 
+// The hash is only a lookup index into the linked list below: the list nodes
+// own the wxArchiveEntry objects (see AddToCache() and the destructor). This
+// matters because an archive may contain several entries with the same
+// normalised name and the hash can only hold one pointer per name, so it must
+// not own them or it would free an entry still aliased by a list node.
 using wxArchiveFSEntryHash =
-    std::unordered_map<wxString, std::unique_ptr<wxArchiveEntry>>;
+    std::unordered_map<wxString, wxArchiveEntry*>;
 
 struct wxArchiveFSEntry
 {
@@ -107,6 +110,7 @@ wxArchiveFSCacheDataImpl::~wxArchiveFSCacheDataImpl()
     while (entry)
     {
         wxArchiveFSEntry *next = entry->next;
+        delete entry->entry;
         delete entry;
         entry = next;
     }
@@ -116,12 +120,17 @@ wxArchiveFSCacheDataImpl::~wxArchiveFSCacheDataImpl()
 
 wxArchiveFSEntry *wxArchiveFSCacheDataImpl::AddToCache(wxArchiveEntry *entry)
 {
-    m_hash[entry->GetName(wxPATH_UNIX)] = std::unique_ptr<wxArchiveEntry>(entry);
     wxArchiveFSEntry *fse = new wxArchiveFSEntry;
     *m_endptr = fse;
     (*m_endptr)->entry = entry;
     (*m_endptr)->next = nullptr;
     m_endptr = &(*m_endptr)->next;
+
+    // The list node created above owns "entry"; the hash only indexes it. If
+    // the archive contains a duplicate normalised name this just re-points the
+    // index at the newer entry without freeing the older one, which is still
+    // referenced by its own list node.
+    m_hash[entry->GetName(wxPATH_UNIX)] = entry;
     return fse;
 }
 
@@ -136,7 +145,7 @@ wxArchiveEntry *wxArchiveFSCacheDataImpl::Get(const wxString& name)
     const auto it = m_hash.find(name);
 
     if (it != m_hash.end())
-        return it->second.get();
+        return it->second;
 
     if (!m_archive)
         return nullptr;
