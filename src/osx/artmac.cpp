@@ -160,6 +160,9 @@ static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id, con
 
     ART_BITMAP(wxART_DELETE,         "minus.circle")
 
+    ART_BITMAP(wxART_TICK_MARK,      "checkmark")
+    ART_BITMAP(wxART_CROSS_MARK,     "xmark")
+
     ART_BITMAP(wxART_GO_BACK,        "arrow.backward.circle")
     ART_BITMAP(wxART_GO_FORWARD,     "arrow.forward.circle")
     ART_BITMAP(wxART_GO_UP,          "arrow.up.circle")
