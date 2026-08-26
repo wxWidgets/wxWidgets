@@ -1,0 +1,1 @@
+wxGTK: Fix client size computation when using overlay scrollbars (#26889).

@@ -1,0 +1,1 @@
+wxAll: Make wxDateTime::GetAsDOS() work for dates after 2038 (Richard Thomson, #4393).
