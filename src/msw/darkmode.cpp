@@ -737,7 +737,7 @@ HandleMenuMessage(WXLRESULT* result,
             // which is one pixel too small), so we have to draw over it here
             // to get rid of it.
             {
-                *result = w->MSWDefWindowProc(nMsg, wParam, lParam);
+                *result = w->wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 
                 HWND hwnd = GetHwndOf(w);
                 WindowHDC hdc(hwnd);
