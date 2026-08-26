@@ -362,6 +362,7 @@ void wxUITextViewControl::SetRTFValue(const wxString& /*str*/)
 wxTextSearchResult wxUITextViewControl::SearchText(const wxTextSearch& /*search*/) const
 {
     wxFAIL_MSG("SearchText() should only be used with multiline controls.");
+    return wxTextSearchResult();
 }
 
 void wxUITextViewControl::Copy()
@@ -585,6 +586,7 @@ void wxUITextFieldControl::SetRTFValue(const wxString& /*str*/)
 wxTextSearchResult wxUITextFieldControl::SearchText(const wxTextSearch& /*search*/) const
 {
     wxFAIL_MSG("SearchText() should only be used with multiline controls.");
+    return wxTextSearchResult();
 }
 
 
