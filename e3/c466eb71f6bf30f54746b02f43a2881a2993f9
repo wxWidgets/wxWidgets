@@ -1,0 +1,1 @@
+wxOSX: Support custom controls in wxFileDialog in sandboxed apps (Daniel Kulp, #26908).
