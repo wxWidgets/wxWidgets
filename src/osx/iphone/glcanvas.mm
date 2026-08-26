@@ -20,6 +20,9 @@
 
 #if wxUSE_GLCANVAS
 
+// OpenGLES is deprecated
+#define GLES_SILENCE_DEPRECATION
+
 #include "wx/glcanvas.h"
 
 #ifndef WX_PRECOMP

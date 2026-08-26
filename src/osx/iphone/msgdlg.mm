@@ -65,7 +65,9 @@ int wxMessageDialog::ShowModal()
     wxCFStringRef cfTitle( msgtitle );
     wxCFStringRef cfText( msgtext );
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:cfTitle.AsNSString() message:cfText.AsNSString() delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     int buttonId[3] = { 0, 0, 0 };
     int buttonCount = 0;

@@ -121,8 +121,10 @@ void wxBell()
 
 bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wxCFStringRef(params.url).AsNSString()]]
         == YES;
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 
 // TODO : reorganize

@@ -141,7 +141,11 @@ wxToolBarToolBase(
         if ( id == wxID_OK )
             style = UIBarButtonItemStyleDone;
         else
+        {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             style = UIBarButtonItemStyleBordered;
+            wxGCC_WARNING_RESTORE(deprecated-declarations)
+        }
 
         bui = [bui initWithTitle:wxCFStringRef(label).AsNSString() style:style target:toolbar
                       action:@selector(clickedAction:)];
@@ -258,10 +262,13 @@ bool wxToolBar::Create(
 
     switch ( [[UIApplication sharedApplication] statusBarStyle] )
     {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         case UIStatusBarStyleBlackOpaque:
             toolbar.barStyle = UIBarStyleBlack;
             break;
+
         case UIStatusBarStyleBlackTranslucent:
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
             toolbar.barStyle = UIBarStyleBlack;
             toolbar.translucent = YES;
             break;

@@ -189,8 +189,10 @@ static inline int wx_gdk_screen_get_primary_monitor(GdkScreen* screen)
 {
     int monitor = 0;
 #if GTK_CHECK_VERSION(2,20,0)
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if (wx_is_at_least_gtk2(20))
         monitor = gdk_screen_get_primary_monitor(screen);
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 #endif
     return monitor;
 }
