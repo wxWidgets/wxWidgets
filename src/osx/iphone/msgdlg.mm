@@ -37,8 +37,6 @@ int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    int resultbutton = wxID_CANCEL;
-
     const long style = GetMessageDialogStyle();
 
     // work out what to display
@@ -108,6 +106,7 @@ int wxMessageDialog::ShowModal()
     }
 
 
+/*
     wxNonOwnedWindow* parentWindow = nullptr;
     int button = -1;
 
@@ -116,7 +115,6 @@ int wxMessageDialog::ShowModal()
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
     }
 
-/*
     if (parentWindow)
     {
         NSWindow* nativeParent = parentWindow->GetWXWindow();

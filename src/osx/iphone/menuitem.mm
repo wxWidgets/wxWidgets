@@ -251,9 +251,9 @@ wxMenuItemIPhoneImpl::~wxMenuItemIPhoneImpl()
 bool wxMenuItemIPhoneImpl::DoDefault()
 {
     bool handled=false;
+#if 0 //  TODO wxIOS
     int menuid = m_peer->GetId();
 
-#if 0 //  TODO wxIOS
     NSApplication *theNSApplication = [NSApplication sharedApplication];
     if (menuid == wxID_OSX_HIDE)
     {

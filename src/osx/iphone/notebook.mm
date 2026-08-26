@@ -54,7 +54,6 @@
 -(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController;
 {
     UITabBarController* controller = tabBarController;
-    UIViewController *subController = viewController;
 
     wxWidgetIPhoneImpl* viewimpl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( controller.view );
     if ( viewimpl )
@@ -141,8 +140,6 @@ public:
             [m_segmented removeAllSegments];
             for (int i = 0; i < notebook.GetPageCount(); i++)
             {
-                wxNotebookPage* page = notebook.GetPage(i);
-
                 wxCFStringRef text( wxControl::RemoveMnemonics(notebook.GetPageText(i)) );
                 [m_segmented insertSegmentWithTitle:text.AsNSString() atIndex:i animated:NO];
 

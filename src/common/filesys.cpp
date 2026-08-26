@@ -74,7 +74,7 @@ static wxString GetMimeTypeFromExtFallback(const wxString& ext)
 /* static */
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
-    wxString ext, mime;
+    wxString ext;
     wxString loc = GetRightLocation(location);
     int l = loc.length(), l2;
 
@@ -141,6 +141,7 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
         std::unique_ptr<wxFileType>
             ft(wxTheMimeTypesManager->GetFileTypeFromExtension(ext));
+        wxString mime;
         if ( ft && ft->GetMimeType(&mime) && !mime.empty() )
             return mime;
     }
