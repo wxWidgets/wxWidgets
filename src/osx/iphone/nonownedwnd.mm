@@ -104,8 +104,8 @@ void wxNonOwnedWindowIPhoneImpl::WillBeDestroyed()
 {
 }
 
-void wxNonOwnedWindowIPhoneImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
-long style, long extraStyle, const wxString& name )
+void wxNonOwnedWindowIPhoneImpl::Create( wxWindow* /*parent*/, const wxPoint& /*pos*/, const wxSize& size,
+long style, long /*extraStyle*/, const wxString& /*name*/ )
 {
     m_macWindow = [UIWindow alloc];
 
@@ -181,7 +181,7 @@ bool wxNonOwnedWindowIPhoneImpl::Show(bool show)
     return true;
 }
 
-bool wxNonOwnedWindowIPhoneImpl::ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout)
+bool wxNonOwnedWindowIPhoneImpl::ShowWithEffect(bool show, wxShowEffect /*effect*/, unsigned /*timeout*/)
 {
     return Show(show);
 }
@@ -197,17 +197,17 @@ bool wxNonOwnedWindowIPhoneImpl::SetTransparent(wxByte alpha)
     return true;
 }
 
-bool wxNonOwnedWindowIPhoneImpl::SetBackgroundColour(const wxColour& col )
+bool wxNonOwnedWindowIPhoneImpl::SetBackgroundColour(const wxColour& /*col*/ )
 {
     return true;
 }
 
-void wxNonOwnedWindowIPhoneImpl::SetExtraStyle( long exStyle )
+void wxNonOwnedWindowIPhoneImpl::SetExtraStyle( long /*exStyle*/ )
 {
     // no special styles supported
 }
 
-bool wxNonOwnedWindowIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style)
+bool wxNonOwnedWindowIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle /*style*/)
 {
     return true;
 }
@@ -255,12 +255,12 @@ void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width
     top = r.origin.y;
 }
 
-bool wxNonOwnedWindowIPhoneImpl::SetShape(const wxRegion& region)
+bool wxNonOwnedWindowIPhoneImpl::SetShape(const wxRegion& /*region*/)
 {
     return false;
 }
 
-void wxNonOwnedWindowIPhoneImpl::SetTitle( const wxString& title )
+void wxNonOwnedWindowIPhoneImpl::SetTitle( const wxString& /*title*/ )
 {
 // TODO change title of app ?
 }
@@ -275,7 +275,7 @@ bool wxNonOwnedWindowIPhoneImpl::IsIconized() const
     return false;
 }
 
-void wxNonOwnedWindowIPhoneImpl::Iconize( bool iconize )
+void wxNonOwnedWindowIPhoneImpl::Iconize( bool /*iconize*/ )
 {
 }
 
@@ -298,7 +298,7 @@ bool wxNonOwnedWindowIPhoneImpl::EnableFullScreenView(bool WXUNUSED(enable), lon
     return true;
 }
 
-bool wxNonOwnedWindowIPhoneImpl::ShowFullScreen(bool show, long style)
+bool wxNonOwnedWindowIPhoneImpl::ShowFullScreen(bool /*show*/, long /*style*/)
 {
     return true;
 }

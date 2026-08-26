@@ -93,6 +93,8 @@ void wxApp::MacOpenFile(const wxString & fileName )
     wxDocManager* dm = wxDocManager::GetDocumentManager() ;
     if ( dm )
         dm->CreateDocument(fileName , wxDOC_SILENT ) ;
+#else
+    wxUnusedVar(fileName);
 #endif
 }
 
@@ -112,9 +114,7 @@ void wxApp::MacPrintFiles(const wxArrayString & fileNames )
 
 void wxApp::MacPrintFile(const wxString & fileName )
 {
-#if wxUSE_DOC_VIEW_ARCHITECTURE
-
-#if wxUSE_PRINTING_ARCHITECTURE
+#if wxUSE_DOC_VIEW_ARCHITECTURE && wxUSE_PRINTING_ARCHITECTURE
     wxDocManager* dm = wxDocManager::GetDocumentManager() ;
     if ( dm )
     {
@@ -140,9 +140,9 @@ void wxApp::MacPrintFile(const wxString & fileName )
             }
         }
     }
-#endif //print
-
-#endif //docview
+#else
+    wxUnusedVar(fileName);
+#endif
 }
 
 

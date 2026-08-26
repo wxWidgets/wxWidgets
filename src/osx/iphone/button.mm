@@ -69,7 +69,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     return c;
 }
 
-void wxWidgetIPhoneImpl::SetDefaultButton( bool isDefault )
+void wxWidgetIPhoneImpl::SetDefaultButton( bool /*isDefault*/ )
 {
 }
 

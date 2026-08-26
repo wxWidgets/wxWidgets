@@ -345,12 +345,12 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
     }
 }
 
-wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord /*x*/, wxCoord /*y*/) const
 {
     return nullptr;
 }
 
-void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
+void wxToolBar::DoEnableTool(wxToolBarToolBase* /*t*/, bool /*enable*/)
 {
     /*
     if ( t != nullptr )
@@ -358,7 +358,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
      */
 }
 
-void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
+void wxToolBar::DoToggleTool(wxToolBarToolBase* /*t*/, bool /*toggle*/)
 {
     /*
     wxToolBarTool *tool = (wxToolBarTool *)t;
@@ -401,7 +401,7 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
     wxFAIL_MSG( wxT("not implemented") );
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolbase)
+bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase* /*toolbase*/)
 {
     [(wxUIToolbar*)m_macToolbar removeTool:pos];
 

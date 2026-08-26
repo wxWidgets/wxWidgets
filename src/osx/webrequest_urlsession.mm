@@ -549,6 +549,7 @@ bool wxWebSessionURLSession::SetProxy(const wxWebProxy& proxy)
 {
 #ifndef __WXDARWIN_OSX__
     // Setting the proxy doesn't seem to be supported under iOS.
+    wxUnusedVar(proxy);
     return false;
 #else // !__WXDARWIN_OSX__
     wxCHECK_MSG( !m_session, false,

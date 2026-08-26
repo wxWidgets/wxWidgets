@@ -562,6 +562,8 @@ void wxAVMediaBackend::DoShowPlayerControls(wxMediaCtrlPlayerControls flags)
         else
             playerView.controlsStyle = AVPlayerViewControlsStyleDefault;
     }
+#else
+    wxUnusedVar(flags);
 #endif
 }
 

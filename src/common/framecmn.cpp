@@ -337,6 +337,7 @@ bool wxFrameBase::ProcessCommand(int id)
 
     return ProcessCommand(item);
 #else
+    wxUnusedVar(id);
     return false;
 #endif
 }

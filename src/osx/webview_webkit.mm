@@ -569,6 +569,8 @@ bool wxWebViewWebKit::PrintToPDF(const wxString& filePath)
         }];
         return true;
     }
+#else
+    wxUnusedVar(filePath);
 #endif // macOS 11.0+
     return false;
 }

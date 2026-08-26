@@ -1147,7 +1147,7 @@ long wxOSXTranslateKey( UIPress* press, int eventType )
     }
     return retval;
 }
-void wxWidgetIPhoneImpl::SetupKeyEvent(wxKeyEvent &wxevent , UIEvent* nsEvent, UIPress* press, NSString* charString)
+void wxWidgetIPhoneImpl::SetupKeyEvent(wxKeyEvent &wxevent , UIEvent* /*nsEvent*/, UIPress* press, NSString* /*charString*/)
 {
     UIPressPhase pressPhase = press.phase;
 

@@ -86,7 +86,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
                                     wxInt32 maximum,
                                     const wxPoint& pos,
                                     const wxSize& size,
-                                    long style,
+                                    long /*style*/,
                                     long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;

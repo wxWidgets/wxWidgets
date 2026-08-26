@@ -231,7 +231,7 @@ bool wxIsBusy()
     return (gs_wxBusyCursorCount > 0);
 }
 
-bool wxGetKeyState (wxKeyCode key)
+bool wxGetKeyState (wxKeyCode /*key*/)
 {
     return false;
 }
