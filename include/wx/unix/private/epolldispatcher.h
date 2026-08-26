@@ -20,6 +20,8 @@
     #include "wx/thread.h"
 #endif
 
+#include <vector>
+
 struct epoll_event;
 
 class WXDLLIMPEXP_BASE wxEpollDispatcher : public wxFDIODispatcher
@@ -48,32 +50,47 @@ private:
     // given timeout
     int DoPoll(epoll_event *events, int numEvents, int timeout) const;
 
-    // Look up the handler currently registered for the given descriptor, or
-    // nullptr if there is none (any more).
-    wxFDIOHandler *FindHandler(int fd) const;
+    // What epoll_event::data.ptr points at, instead of the handler itself.
+    //
+    // epoll_wait() copies data.ptr into the batch it returns before any
+    // handler runs, and dispatching one event of that batch can unregister,
+    // and in the code owning it destroy, the handler for a later one.
+    // Unregistering clears the handler here, which is how Dispatch() knows a
+    // registration is gone.
+    struct Entry
+    {
+        explicit Entry(wxFDIOHandler *handler_) : handler(handler_) { }
 
-    // Record, replace or forget the handler for a descriptor. Kept separate
-    // from the epoll_ctl() calls so that the map is only updated once the
-    // kernel has accepted the change.
-    void StoreHandler(int fd, wxFDIOHandler *handler);
-    void ForgetHandler(int fd);
+        wxFDIOHandler *handler;
+    };
+
+    // Return the entry for this descriptor, creating one with no handler yet
+    // if it does not have any, or nullptr if it has none and none is wanted.
+    Entry *GetEntry(int fd, bool create);
 
 
     int m_epollDescriptor;
 
-    // Maps the descriptors we have registered to their handlers. Dispatch()
-    // needs this because epoll_event::data is a union: it holds the descriptor
-    // so that a handler unregistered while the batch is being processed can be
-    // detected, which means the handler pointer has to be found elsewhere.
+    // Indexed by descriptor, and only ever grown, never shrunk: an entry
+    // cannot be freed when its descriptor is unregistered because a batch
+    // being dispatched may still point at it, so they live as long as the
+    // dispatcher does.
     //
-    // Guarded because descriptors are registered and unregistered from worker
-    // threads -- wxSocketImpl does it from the thread performing the socket
-    // operation -- while Dispatch() reads the map from the thread running the
-    // event loop. epoll_ctl() itself is thread-safe, so nothing but this map
-    // needs the protection, and the lock is never held across a handler call.
-    wxFDIOHandlerMap m_handlers;
+    // The lock guards this vector alone. Descriptors are registered and
+    // unregistered from worker threads -- wxSocketImpl does it from the thread
+    // performing the socket operation -- while Dispatch() runs on the thread
+    // with the event loop. Dispatch() never looks at the vector, reaching an
+    // entry through the pointer epoll_wait() gave back, so it takes no lock,
+    // and no lock is held across a call into a handler.
+    //
+    // Entry::handler itself is an ordinary pointer, written by whichever
+    // thread registers the descriptor and read by the dispatching one. That is
+    // the same cross-thread case as a handler destroyed by another thread
+    // while the loop is between finding it and calling it, which is racy here
+    // as it was before.
+    std::vector<Entry *> m_entries;
 #if wxUSE_THREADS
-    mutable wxCriticalSection m_handlersCS;
+    wxCriticalSection m_entriesCS;
 #endif // wxUSE_THREADS
 };
 
