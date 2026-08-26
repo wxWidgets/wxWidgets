@@ -107,7 +107,7 @@ wxEpollDispatcher::~wxEpollDispatcher()
     }
 }
 
-wxEpollDispatcher::Entry *wxEpollDispatcher::GetEntry(int fd, bool create)
+wxEpollDispatcher::Entry *wxEpollDispatcher::GetEntry(int fd)
 {
 #if wxUSE_THREADS
     wxCriticalSectionLocker lock(m_entriesCS);
@@ -115,17 +115,32 @@ wxEpollDispatcher::Entry *wxEpollDispatcher::GetEntry(int fd, bool create)
 
     if ( m_entries.size() <= static_cast<size_t>(fd) )
     {
-        if ( !create )
-            return nullptr;
-
         m_entries.resize(fd + 1, nullptr);
     }
 
     Entry *&entry = m_entries[fd];
-    if ( !entry && create )
+    if ( !entry )
         entry = new Entry(nullptr);
 
     return entry;
+}
+
+void wxEpollDispatcher::ForgetEntry(int fd)
+{
+#if wxUSE_THREADS
+    wxCriticalSectionLocker lock(m_entriesCS);
+#endif
+
+    // This shouldn't happen because we always extend m_entries to the maximum
+    // FD seen so far.
+    wxCHECK_RET
+    (
+        fd < static_cast<int>(m_entries.size()),
+        wxString::Format("Unregistering FD %d but max seen FD is %d",
+                         fd, m_entries.size() - 1)
+    );
+
+    m_entries[fd]->handler = nullptr;
 }
 
 bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
@@ -134,7 +149,7 @@ bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
     ev.events = GetEpollMask(flags, fd);
 
     // The entry and not the handler: see Entry.
-    Entry * const entry = GetEntry(fd, true);
+    Entry * const entry = GetEntry(fd);
     ev.data.ptr = entry;
 
     const int ret = epoll_ctl(m_epollDescriptor, EPOLL_CTL_ADD, fd, &ev);
@@ -158,7 +173,7 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
 
-    Entry * const entry = GetEntry(fd, true);
+    Entry * const entry = GetEntry(fd);
     ev.data.ptr = entry;
 
     const int ret = epoll_ctl(m_epollDescriptor, EPOLL_CTL_MOD, fd, &ev);
@@ -188,11 +203,11 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
         wxLogSysError(_("Failed to unregister descriptor %d from epoll descriptor %d"),
                       fd, m_epollDescriptor);
     }
+
     // Drop the handler even if epoll_ctl() above failed: the caller is done
     // with it either way, and a stale handler here is exactly what Dispatch()
-    // must not find. The entry itself stays, see Entry.
-    if ( Entry * const entry = GetEntry(fd, false) )
-        entry->handler = nullptr;
+    // must not find. The entry itself stays valid, see comment for Entry.
+    ForgetEntry(fd);
 
     wxLogTrace(wxEpollDispatcher_Trace,
                 wxT("removed fd %d from %d"), fd, m_epollDescriptor);

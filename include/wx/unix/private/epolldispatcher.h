@@ -64,9 +64,11 @@ private:
         wxFDIOHandler *handler;
     };
 
-    // Return the entry for this descriptor, creating one with no handler yet
-    // if it does not have any, or nullptr if it has none and none is wanted.
-    Entry *GetEntry(int fd, bool create);
+    // Return the entry for this descriptor, creating one if necessary.
+    Entry *GetEntry(int fd);
+
+    // Forget the handler corresponding to the given given descriptor, if any.
+    void ForgetEntry(int fd);
 
 
     int m_epollDescriptor;
