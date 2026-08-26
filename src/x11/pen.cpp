@@ -114,7 +114,7 @@ wxGDIRefData *wxPen::CreateGDIRefData() const
 
 wxGDIRefData *wxPen::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxPenRefData(*(wxPenRefData *)data);
+    return new wxPenRefData(*(const wxPenRefData *)data);
 }
 
 bool wxPen::operator == ( const wxPen& pen ) const
@@ -138,7 +138,7 @@ void wxPen::SetDashes( int number_of_dashes, const wxDash *dash )
     AllocExclusive();
 
     M_PENDATA->m_countDashes = number_of_dashes;
-    M_PENDATA->m_dash = (wxX11Dash *)dash; // TODO
+    M_PENDATA->m_dash = (wxX11Dash *)const_cast<wxDash*>(dash); // TODO
 }
 
 void wxPen::SetColour( unsigned char red, unsigned char green, unsigned char blue )

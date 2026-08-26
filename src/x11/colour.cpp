@@ -162,7 +162,7 @@ wxGDIRefData *wxColourImpl::CreateGDIRefData() const
 
 wxGDIRefData *wxColourImpl::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxColourRefData(*(wxColourRefData *)data);
+    return new wxColourRefData(*(const wxColourRefData *)data);
 }
 
 void wxColourImpl::InitRGBA(unsigned char red, unsigned char green, unsigned char blue,

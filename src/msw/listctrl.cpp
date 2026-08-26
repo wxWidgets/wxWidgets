@@ -911,7 +911,7 @@ bool wxListCtrl::SetColumnsOrder(const wxArrayInt& orders)
     wxCHECK_MSG( orders.size() == (size_t)numCols, false,
                     wxT("wrong number of elements in column orders array") );
 
-    return ListView_SetColumnOrderArray(GetHwnd(), numCols, &orders[0]) != 0;
+    return ListView_SetColumnOrderArray(GetHwnd(), numCols, const_cast<int*>(&orders[0])) != 0;
 }
 
 

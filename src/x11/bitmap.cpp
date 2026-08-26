@@ -1590,7 +1590,7 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, const void* bits,
     M_BMPHANDLERDATA->m_mask = nullptr;
     M_BMPHANDLERDATA->m_bitmap =
         XCreateBitmapFromData(xdisplay, xroot,
-                              (char *) bits, width, height );
+                              (const char *) bits, width, height );
     M_BMPHANDLERDATA->m_width = width;
     M_BMPHANDLERDATA->m_height = height;
     M_BMPHANDLERDATA->m_bpp = 1;
