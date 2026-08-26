@@ -196,10 +196,12 @@ static inline int wx_gdk_screen_get_primary_monitor(GdkScreen* screen)
 }
 #define gdk_screen_get_primary_monitor wx_gdk_screen_get_primary_monitor
 
+#ifdef GDK_WINDOWING_X11
 static inline bool wxIsX11GDKScreen(GdkScreen* WXUNUSED(screen))
 {
     return true;
 }
+#endif
 
 #endif // __WXGTK3__/!__WXGTK3__
 
