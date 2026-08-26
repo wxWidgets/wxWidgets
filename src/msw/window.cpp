@@ -3991,6 +3991,10 @@ void wxWindowMSW::MSWDarkPaintScrollBarCorner()
     RECT rectToPaint;
 
     rectToPaint.left = sbiV.rcScrollBar.left - windowRect.left;
+    if ( ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL )
+        rectToPaint.left = windowRect.right - sbiV.rcScrollBar.right;
+    else
+        rectToPaint.left = sbiV.rcScrollBar.left - windowRect.left;
     rectToPaint.top = sbiH.rcScrollBar.top - windowRect.top;
     rectToPaint.right = rectToPaint.left + wxGetSystemMetrics(SM_CXVSCROLL, this);
     rectToPaint.bottom = rectToPaint.top + wxGetSystemMetrics(SM_CYHSCROLL, this);
