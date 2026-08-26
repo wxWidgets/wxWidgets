@@ -98,17 +98,66 @@ wxEpollDispatcher::wxEpollDispatcher(int epollDescriptor)
 
 wxEpollDispatcher::~wxEpollDispatcher()
 {
+    for ( size_t n = 0; n < m_entries.size(); ++n )
+        delete m_entries[n];
+
     if ( close(m_epollDescriptor) != 0 )
     {
         wxLogSysError(_("Error closing epoll descriptor"));
     }
 }
 
+wxEpollDispatcher::Entry *wxEpollDispatcher::GetEntry(int fd)
+{
+#if wxUSE_THREADS
+    wxCriticalSectionLocker lock(m_entriesCS);
+#endif
+
+    if ( static_cast<size_t>(fd) >= m_entries.size() )
+    {
+        m_entries.resize(fd + 1, NULL);
+    }
+
+    Entry *&entry = m_entries[fd];
+    if ( !entry )
+        entry = new Entry();
+
+    return entry;
+}
+
+void wxEpollDispatcher::ForgetEntry(int fd)
+{
+#if wxUSE_THREADS
+    wxCriticalSectionLocker lock(m_entriesCS);
+#endif
+
+    // This shouldn't happen because we always extend m_entries to the maximum
+    // FD seen so far.
+    wxCHECK_RET
+    (
+        static_cast<size_t>(fd) < m_entries.size(),
+        wxString::Format("Unregistering FD %d but max seen FD is %d",
+                         fd, static_cast<int>(m_entries.size()) - 1)
+    );
+
+    Entry * const entry = m_entries[fd];
+    wxCHECK_RET
+    (
+        entry,
+        wxString::Format("Unregistering not registered FD %d", fd)
+    );
+
+    entry->handler = NULL;
+}
+
 bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 {
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
-    ev.data.ptr = handler;
+
+    // The entry and not the handler: see Entry.
+    Entry * const entry = GetEntry(fd);
+    ev.data.ptr = entry;
 
     const int ret = epoll_ctl(m_epollDescriptor, EPOLL_CTL_ADD, fd, &ev);
     if ( ret != 0 )
@@ -118,6 +167,8 @@ bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 
         return false;
     }
+
+    entry->handler = handler;
     wxLogTrace(wxEpollDispatcher_Trace,
                wxT("Added fd %d (handler %p) to epoll %d"), fd, handler, m_epollDescriptor);
 
@@ -128,7 +179,9 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
 {
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
-    ev.data.ptr = handler;
+
+    Entry * const entry = GetEntry(fd);
+    ev.data.ptr = entry;
 
     const int ret = epoll_ctl(m_epollDescriptor, EPOLL_CTL_MOD, fd, &ev);
     if ( ret != 0 )
@@ -138,6 +191,8 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
 
         return false;
     }
+
+    entry->handler = handler;
 
     wxLogTrace(wxEpollDispatcher_Trace,
                 wxT("Modified fd %d (handler: %p) on epoll %d"), fd, handler, m_epollDescriptor);
@@ -155,6 +210,12 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
         wxLogSysError(_("Failed to unregister descriptor %d from epoll descriptor %d"),
                       fd, m_epollDescriptor);
     }
+
+    // Drop the handler even if epoll_ctl() above failed: the caller is done
+    // with it either way, and a stale handler here is exactly what Dispatch()
+    // must not find. The entry itself stays valid, see comment for Entry.
+    ForgetEntry(fd);
+
     wxLogTrace(wxEpollDispatcher_Trace,
                 wxT("removed fd %d from %d"), fd, m_epollDescriptor);
     return true;
@@ -218,12 +279,19 @@ int wxEpollDispatcher::Dispatch(int timeout)
     int numEvents = 0;
     for ( epoll_event *p = events; p < events + rc; p++ )
     {
-        wxFDIOHandler * const handler = (wxFDIOHandler *)(p->data.ptr);
+        // Go through the entry instead of using a handler pointer recorded
+        // when the descriptor was registered: dispatching an earlier event of
+        // this batch may have unregistered, and in the code that owns it
+        // destroyed, the handler for a later one, and epoll_wait() filled this
+        // array in before any of that happened. Using the recorded pointer
+        // would then call a virtual function on a destroyed object.
+        //
+        // A cleared handler is therefore expected here rather than an error,
+        // and is simply skipped.
+        const Entry * const entry = static_cast<const Entry *>(p->data.ptr);
+        wxFDIOHandler * const handler = entry ? entry->handler : NULL;
         if ( !handler )
-        {
-            wxFAIL_MSG( wxT("NULL handler in epoll_event?") );
             continue;
-        }
 
         // note that for compatibility with wxSelectDispatcher we call
         // OnReadWaiting() on EPOLLHUP as this is what epoll_wait() returns
