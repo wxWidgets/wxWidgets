@@ -1,0 +1,1 @@
+wxAll (GUI): Fix crashes when wxPreviewCanvas was not in wxPreviewFrame (Richard Thomson, #9822).
