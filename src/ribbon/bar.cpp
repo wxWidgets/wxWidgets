@@ -160,6 +160,8 @@ long wxRibbonBar::GetWindowStyleFlag() const
 
 bool wxRibbonBar::Realize()
 {
+    HideKeyTips();
+
     bool status = true;
 
     wxInfoDC dcTemp(this);
@@ -352,6 +354,7 @@ void wxRibbonBar::ShowPage(size_t page, bool show)
     if(page >= m_pages.GetCount())
         return;
     m_pages.Item(page).shown = show;
+    HideKeyTips();
 }
 
 bool wxRibbonBar::IsPageHighlighted(size_t page) const
@@ -372,6 +375,8 @@ void wxRibbonBar::DeletePage(size_t n)
 {
     if(n < m_pages.GetCount())
     {
+        HideKeyTips();
+
         wxRibbonPage *page = m_pages.Item(n).page;
 
         // Schedule page object for destruction and not destroying directly
@@ -1861,8 +1866,14 @@ void wxRibbonBar::OnKeyTipsCharHook(wxKeyEvent& event)
         std::vector<wxRibbonKeyTipInfo> matches;
         for ( const auto& target : m_keyTipsTargets )
         {
-            if ( !target.remaining.empty() && target.remaining[0] == ch )
-                matches.push_back(target);
+            if ( target.remaining.empty() || target.remaining[0] != ch )
+                continue;
+
+            // The window may have been hidden since the targets were built.
+            if ( !target.window->IsShownOnScreen() )
+                continue;
+
+            matches.push_back(target);
         }
 
         if ( matches.empty() )
