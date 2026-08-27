@@ -308,4 +308,43 @@ public:
         @see GetExpandedDummy()
     */
     wxRibbonPanel* GetExpandedPanel();
+
+    /**
+        Assigns the keytip used to click this panel's extension button.
+
+        Pass an empty string to remove it. The keytip is stored uppercased.
+        Only has an effect if the panel uses @c wxRIBBON_PANEL_EXT_BUTTON.
+
+        @see wxRibbonBar::ShowKeyTips()
+
+        @since 3.3.4
+    */
+    void SetExtButtonKeyTip(const wxString& keytip);
+
+    /**
+        Returns the extension button's keytip, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetExtButtonKeyTip() const;
+
+    /**
+        Assigns the keytip used to expand this panel while it is minimised.
+
+        A minimised panel is a single button, so its children can't be reached
+        by keytip until it is expanded. Activating this one expands the panel
+        and leaves keyboard access mode.
+
+        Pass an empty string to remove it. The keytip is stored upper-cased.
+
+        @since 3.3.4
+    */
+    void SetKeyTip(const wxString& keytip);
+
+    /**
+        Returns the panel's own keytip, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetKeyTip() const;
 };

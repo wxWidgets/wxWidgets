@@ -725,6 +725,34 @@ public:
                                 const wxRect& rect) = 0;
 
     /**
+        Draw a keytip badge over a ribbon element in keyboard access mode.
+
+        This should draw a small labelled badge which stands out against the
+        element beneath it, similar to the ones Office uses.
+
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto, which is the window owning
+            the element the badge belongs to.
+        @param rect
+            The rectangle of the element the badge is for. The badge itself is
+            usually smaller and positioned relative to it, rather than filling
+            it.
+        @param keytip
+            The characters to draw, which are the ones still to be typed, rather
+            than the whole keytip if the user has already typed a prefix.
+
+        @see wxRibbonBar::ShowKeyTips()
+
+        @since 3.3.4
+    */
+    virtual void DrawKeyTip(wxDC& dc,
+                            wxWindow* wnd,
+                            const wxRect& rect,
+                            const wxString& keytip) = 0;
+
+    /**
         Calculate the ideal and minimum width (in pixels) of a tab in a ribbon
         bar.
 

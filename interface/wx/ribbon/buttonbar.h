@@ -658,6 +658,41 @@ public:
     */
     bool GetShowToolTipsForDisabled() const;
 
+    /**
+        Assigns the keytip used to click the given button.
+
+        Pass an empty string to remove it. The keytip is stored upper-cased.
+        Disabled buttons don't show a keytip.
+
+        @see wxRibbonBar::ShowKeyTips()
+
+        @since 3.3.4
+    */
+    void SetKeyTip(wxWindowID button_id, const wxString& keytip);
+
+    /**
+        Returns the keytip of the given button, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetKeyTip(wxWindowID button_id) const;
+
+    /**
+        Assigns the keytip used to open a hybrid button's dropdown menu.
+
+        This is separate from the keytip of the button's main click area, set
+        by SetKeyTip(), and has no effect on non-hybrid buttons.
+
+        @since 3.3.4
+    */
+    void SetDropdownKeyTip(wxWindowID button_id, const wxString& keytip);
+
+    /**
+        Returns the dropdown keytip of the given button, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetDropdownKeyTip(wxWindowID button_id) const;
 };
 
 /**

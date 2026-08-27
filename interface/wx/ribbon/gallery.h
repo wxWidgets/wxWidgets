@@ -255,6 +255,28 @@ public:
         Scroll the gallery to ensure that the given item is visible.
     */
     void EnsureVisible(const wxRibbonGalleryItem* item);
+
+    /**
+        Assigns the keytip used to reach this gallery.
+
+        The gallery is one keytip target as a whole, its items don't get their
+        own. Activating it gives the gallery focus, so that the arrow keys and
+        Enter can then be used to pick an item.
+
+        Pass an empty string to remove it. The keytip is stored upper-cased.
+
+        @see wxRibbonBar::ShowKeyTips()
+
+        @since 3.3.4
+    */
+    void SetKeyTip(const wxString& keytip);
+
+    /**
+        Returns the keytip of this gallery, or an empty string.
+
+        @since 3.3.4
+    */
+    wxString GetKeyTip() const;
 };
 
 /**

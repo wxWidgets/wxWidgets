@@ -109,6 +109,15 @@ public:
     bool hovered;
     bool highlight;
     bool shown;
+
+    /**
+        The keytip assigned to this tab, or an empty string.
+
+        Use wxRibbonBar::SetPageKeyTip() to set it.
+
+        @since 3.3.4
+    */
+    wxString keytip;
 };
 
 /**
@@ -141,6 +150,31 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
 
     After all pages have been created, and all controls and panels placed on
     those pages, Realize() must be called.
+
+    @section ribbonbar_keytips KeyTips
+
+    Since wxWidgets 3.3.4 pressing @c WXK_F10 shows Office-style "keytips":
+    a badge over every element which has one, listing the letters to type to
+    activate it. Unlike mnemonics, keytips are not derived from labels: an
+    element only takes part if it was assigned one explicitly. See
+    SetPageKeyTip(), wxRibbonButtonBar::SetKeyTip() and the other
+    @c SetKeyTip() overloads.
+
+    Multi-character keytips are supported: typing the first character narrows
+    the badges down to the elements sharing it. A keytip must therefore not be
+    a strict prefix of another visible at the same time, or it could never
+    fire. This is not validated at run time.
+
+    @c WXK_ESCAPE backs out one character, or leaves the mode if nothing was
+    typed. Pressing the trigger key again, clicking the ribbon, or the frame
+    being deactivated also leave it. CTRL and ALT combinations are treated as
+    accelerators: the mode is left and the key passed on, so @c CTRL-S is not
+    consumed by a button with keytip @c "S". Activating a page tab is the one
+    case which stays in the mode, showing the new page's keytips.
+
+    The trigger key is configurable, see SetKeyTipsTriggerKey(). It is only
+    consumed if there is something to show, so applications using no keytips
+    keep their existing @c WXK_F10 handling.
 
     @see wxRibbonPage
     @see wxRibbonPanel
@@ -498,4 +532,116 @@ public:
         Also calls wxRibbonPage::Realize() on each child page.
     */
     virtual bool Realize();
+
+    /**
+        Assigns the keytip used to switch to the given page.
+
+        Pass an empty string to remove it. The keytip is stored uppercased.
+
+        @see @ref ribbonbar_keytips
+
+        @since 3.3.4
+    */
+    void SetPageKeyTip(size_t page, const wxString& keytip);
+
+    /**
+        @overload
+
+        @since 3.3.4
+    */
+    void SetPageKeyTip(wxRibbonPage* page, const wxString& keytip);
+
+    /**
+        Assigns the keytip used to activate the panel toggle button.
+
+        Only has an effect if the bar uses @c wxRIBBON_BAR_SHOW_TOGGLE_BUTTON.
+
+        @since 3.3.4
+    */
+    void SetToggleButtonKeyTip(const wxString& keytip);
+
+    /**
+        Assigns the keytip used to activate the help button.
+
+        Only has an effect if the bar uses @c wxRIBBON_BAR_SHOW_HELP_BUTTON.
+
+        @since 3.3.4
+    */
+    void SetHelpButtonKeyTip(const wxString& keytip);
+
+    /**
+        Enters keyboard access mode and shows the keytip badges.
+
+        @return @true if the mode was entered, @false if the bar isn't shown on
+            screen or no keytips are currently assigned to anything visible.
+
+        @see @ref ribbonbar_keytips
+
+        @since 3.3.4
+    */
+    bool ShowKeyTips();
+
+    /**
+        Leaves keyboard access mode and hides the keytip badges.
+
+        Does nothing if the mode isn't active.
+
+        @since 3.3.4
+    */
+    void HideKeyTips();
+
+    /**
+        Returns @true if keyboard access mode is currently active.
+
+        @since 3.3.4
+    */
+    bool IsKeyTipsShown() const;
+
+    /**
+        A key combination which shows the keytips.
+
+        @since 3.3.4
+    */
+    struct TriggerKey
+    {
+        /// The key code (e.g., @c WXK_F10).
+        int keyCode;
+
+        /// The modifiers (e.g., @c wxMOD_NONE or @c wxMOD_CONTROL).
+        int modifiers;
+    };
+
+    /**
+        Makes @a keyCode with @a modifiers the only key which shows keytips.
+
+        Replaces the default of @c WXK_F10 with no modifiers.
+
+        @see AddKeyTipsTriggerKey()
+
+        @since 3.3.4
+    */
+    void SetKeyTipsTriggerKey(int keyCode, int modifiers = wxMOD_NONE);
+
+    /**
+        Adds another key which shows keytips, keeping the existing ones.
+
+        @since 3.3.4
+    */
+    void AddKeyTipsTriggerKey(int keyCode, int modifiers = wxMOD_NONE);
+
+    /**
+        Removes all trigger keys, disabling keyboard access mode.
+
+        It can still be entered programmatically with ShowKeyTips().
+
+        @since 3.3.4
+    */
+    void ClearKeyTipsTriggerKeys();
+
+    /**
+        Returns the keys which show keytips.
+
+        @since 3.3.4
+    */
+    const std::vector<TriggerKey>& GetKeyTipsTriggerKeys() const;
 };
