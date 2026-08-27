@@ -760,12 +760,16 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
 
 wxRibbonBar::~wxRibbonBar()
 {
-    if ( m_keyTipsTopLevelParent != nullptr )
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
+    if ( m_keyTipsTopLevelParent != nullptr && !m_keyTipsTopLevelParent->IsBeingDeleted() )
     {
         m_keyTipsTopLevelParent->Unbind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
         m_keyTipsTopLevelParent->Unbind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
         m_keyTipsTopLevelParent->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
     }
+    m_keyTipsTopLevelParent = nullptr;
 
     SetArtProvider(nullptr);
 
@@ -1448,7 +1452,16 @@ bool wxRibbonBar::ShowKeyTips()
 
     DoBuildKeyTipTargets();
     if ( m_keyTipsTargets.empty() )
+    {
+        m_keyTipsWindows.clear();
         return false;
+    }
+
+    for ( wxWindow* w : m_keyTipsWindows )
+    {
+        if ( w != this )
+            w->Bind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+    }
 
     m_keyTipsActive = true;
     m_keyTipsTypedPrefix.clear();
@@ -1465,6 +1478,11 @@ void wxRibbonBar::HideKeyTips()
     RefreshKeyTipTargetWindows();
     m_keyTipsActive = false;
     m_keyTipsTypedPrefix.clear();
+    for ( wxWindow* w : m_keyTipsWindows )
+    {
+        if ( w != this && w != nullptr && !w->IsBeingDeleted() )
+            w->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+    }
     m_keyTipsTargets.clear();
     m_keyTipsWindows.clear();
 }
@@ -1667,16 +1685,33 @@ void wxRibbonBar::DoBuildKeyTipTargets()
     for ( auto& target : m_keyTipsTargets )
         target.remaining = target.fullKeyTip;
 
-    m_keyTipsWindows.clear();
-    m_keyTipsWindows.push_back(this);
+    std::vector<wxWindow*> oldWindows;
+    if ( m_keyTipsActive )
+        oldWindows = m_keyTipsWindows;
+
+    std::vector<wxWindow*> newWindows;
+    newWindows.push_back(this);
     for ( const auto& target : m_keyTipsTargets )
     {
-        if ( std::find(m_keyTipsWindows.begin(), m_keyTipsWindows.end(), target.window) ==
-             m_keyTipsWindows.end() )
+        if ( std::find(newWindows.begin(), newWindows.end(), target.window) == newWindows.end() )
+            newWindows.push_back(target.window);
+    }
+
+    if ( m_keyTipsActive )
+    {
+        for ( wxWindow* w : oldWindows )
         {
-            m_keyTipsWindows.push_back(target.window);
+            if ( w != this && std::find(newWindows.begin(), newWindows.end(), w) == newWindows.end()
+                 && w != nullptr && !w->IsBeingDeleted() )
+                w->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+        for ( wxWindow* w : newWindows )
+        {
+            if ( w != this && std::find(oldWindows.begin(), oldWindows.end(), w) == oldWindows.end() )
+                w->Bind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
         }
     }
+    m_keyTipsWindows = std::move(newWindows);
 }
 
 void wxRibbonBar::DoActivateKeyTipTarget(const wxRibbonKeyTipInfo& target)
@@ -1782,16 +1817,52 @@ void wxRibbonBar::GetKeyTipTargetsFor(wxWindow* window, std::vector<KeyTipBadge>
 void wxRibbonBar::OnKeyTipsWindowDestroy(wxWindowDestroyEvent& event)
 {
     event.Skip();
+    wxWindow* window = event.GetWindow();
+
+    if ( window == m_keyTipsTopLevelParent )
+    {
+        m_keyTipsTopLevelParent = nullptr;
+        if ( m_keyTipsActive )
+            HideKeyTips();
+        return;
+    }
+
     if ( !m_keyTipsActive )
         return;
 
-    // Drop the stale target pointers, but don't refresh the dying window.
-    wxWindow* window = event.GetWindow();
-    m_keyTipsWindows.erase(
-        std::remove(m_keyTipsWindows.begin(), m_keyTipsWindows.end(), window),
-        m_keyTipsWindows.end());
+    auto it = std::find(m_keyTipsWindows.begin(), m_keyTipsWindows.end(), window);
+    if ( it != m_keyTipsWindows.end() )
+    {
+        m_keyTipsWindows.erase(it);
+        HideKeyTips();
+    }
+}
 
-    HideKeyTips();
+bool wxRibbonBar::Reparent(wxWindowBase* newParent)
+{
+    if ( m_keyTipsActive )
+        HideKeyTips();
+
+    wxWindow* oldTLW = m_keyTipsTopLevelParent;
+    bool res = wxRibbonControl::Reparent(newParent);
+    wxWindow* newTLW = wxGetTopLevelParent(this);
+    if ( newTLW != oldTLW )
+    {
+        if ( oldTLW != nullptr && !oldTLW->IsBeingDeleted() )
+        {
+            oldTLW->Unbind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
+            oldTLW->Unbind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
+            oldTLW->Unbind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+        m_keyTipsTopLevelParent = newTLW;
+        if ( m_keyTipsTopLevelParent != nullptr )
+        {
+            m_keyTipsTopLevelParent->Bind(wxEVT_CHAR_HOOK, &wxRibbonBar::OnKeyTipsCharHook, this);
+            m_keyTipsTopLevelParent->Bind(wxEVT_ACTIVATE, &wxRibbonBar::OnKeyTipsActivate, this);
+            m_keyTipsTopLevelParent->Bind(wxEVT_DESTROY, &wxRibbonBar::OnKeyTipsWindowDestroy, this);
+        }
+    }
+    return res;
 }
 
 void wxRibbonBar::OnKeyTipsActivate(wxActivateEvent& event)
@@ -1869,6 +1940,8 @@ void wxRibbonBar::OnKeyTipsCharHook(wxKeyEvent& event)
             if ( target.remaining.empty() || target.remaining[0] != ch )
                 continue;
 
+            if ( target.window == nullptr || target.window->IsBeingDeleted() )
+                continue;
             // The window may have been hidden since the targets were built.
             if ( !target.window->IsShownOnScreen() )
                 continue;

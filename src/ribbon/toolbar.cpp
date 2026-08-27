@@ -425,12 +425,12 @@ void wxRibbonToolBar::ActivateTool(wxRibbonToolBarToolBase* tool, bool dropdown)
 
     // PopupMenu() positions the menu relative to m_active_tool, so set
     // it here too, otherwise a keytip-opened menu appears at the cursor.
-    wxRibbonToolBarToolBase* const old_active = m_active_tool;
+    const int old_active_id = m_active_tool ? m_active_tool->id : wxID_ANY;
     m_active_tool = tool;
     ProcessEvent(notification);
-    // The handler may have reset m_active_tool, e.g. by deleting the tool.
-    if ( m_active_tool == tool )
-        m_active_tool = old_active;
+    m_active_tool = nullptr;
+    if ( old_active_id != wxID_ANY )
+        m_active_tool = FindById(old_active_id);
 
     wxRibbonPanel* panel = wxDynamicCast(GetParent(), wxRibbonPanel);
     if ( panel != nullptr )

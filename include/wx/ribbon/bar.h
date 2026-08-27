@@ -162,6 +162,7 @@ public:
     void SetWindowStyleFlag(long style) override;
     long GetWindowStyleFlag() const override;
     virtual bool Realize() override;
+    bool Reparent(wxWindowBase* newParent) override;
 
     // Implementation only.
     bool IsToggleButtonHovered() const { return m_toggle_button_hovered; }
