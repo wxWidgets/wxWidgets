@@ -21,9 +21,7 @@
 #include "wx/ffile.h"
 #include "wx/textfile.h"
 
-#ifdef __VISUALC__
-    #define unlink _unlink
-#endif
+#include "testfile.h"
 
 // ----------------------------------------------------------------------------
 // test fixture
@@ -37,31 +35,36 @@ class TextFileTestCase
 public:
     TextFileTestCase()
     {
+        REQUIRE( !m_file.GetName().empty() );
         srand((unsigned)time(nullptr));
     }
-
-    ~TextFileTestCase() { unlink(GetTestFileName()); }
-
 protected:
     // return the name of the test file we use
-    static const char *GetTestFileName() { return "textfiletest.txt"; }
+    wxString GetTestFileName() const
+    {
+        return m_file.GetName();
+    }
 
     // create the test file with the given contents
-    static void CreateTestFile(const char *contents)
+    void CreateTestFile(const char *contents)
     {
         CreateTestFile(strlen(contents), contents);
     }
 
     // create the test file with the given contents (version must be used if
     // contents contains NULs)
-    static void CreateTestFile(size_t len, const char *contents)
+    void CreateTestFile(size_t len, const char *contents)
     {
-        FILE *f = fopen(GetTestFileName(), "wb");
-        REQUIRE( f );
+        wxFFile f(GetTestFileName(), "wb");
+        REQUIRE( f.IsOpened() );
 
-        CHECK( fwrite(contents, 1, len, f) == len );
-        CHECK( fclose(f) == 0 );
+        CHECK( f.Write(contents, len) == len );
+        CHECK( f.Close() );
     }
+
+    // Keep each CTest-discovered TextFile case on its own file so parallel
+    // runs can't overwrite each other's data.
+    TestFile m_file;
 
     wxDECLARE_NO_COPY_CLASS(TextFileTestCase);
 };
@@ -77,7 +80,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadEmpty", "[textfile]")
     CreateTestFile("");
 
     wxTextFile f;
-    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(GetTestFileName()) );
 
     CHECK( f.GetLineCount() == (size_t)0 );
     CHECK( f.Eof() );
@@ -90,7 +93,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadDOS", "[textfile]")
     CreateTestFile("foo\r\nbar\r\nbaz");
 
     wxTextFile f;
-    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(GetTestFileName()) );
 
     CHECK( f.GetLineCount() == (size_t)3 );
     CHECK( f.GetLineType(0) == wxTextFileType_Dos );
@@ -116,7 +119,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadUnix", "[textfile]")
     CreateTestFile("foo\nbar\nbaz");
 
     wxTextFile f;
-    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(GetTestFileName()) );
 
     CHECK( f.GetLineCount() == (size_t)3 );
     CHECK( f.GetLineType(0) == wxTextFileType_Unix );
@@ -142,7 +145,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadMac", "[textfile]")
     CreateTestFile("foo\rbar\r\rbaz");
 
     wxTextFile f;
-    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(GetTestFileName()) );
 
     CHECK( f.GetLineCount() == (size_t)4 );
     CHECK( f.GetLineType(0) == wxTextFileType_Mac );
@@ -172,7 +175,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadMixed", "[textfile]")
     CreateTestFile("foo\rbar\r\nbaz\n");
 
     wxTextFile f;
-    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(GetTestFileName()) );
 
     CHECK( f.GetLineCount() == (size_t)3 );
     CHECK( f.GetLineType(0) == wxTextFileType_Mac );
@@ -210,7 +213,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadMixedWithFuzzing", "[textfile]
         CreateTestFile(data);
 
         wxTextFile f;
-        CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
+        CHECK( f.Open(GetTestFileName()) );
         CHECK( f.GetLineCount() == (size_t)linesCnt );
     }
 }
@@ -226,7 +229,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadCRCRLF", "[textfile]")
     CreateTestFile("foo\r\r\nbar\r\r\r\nbaz\r\r\n");
 
     wxTextFile f;
-    CHECK( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CHECK( f.Open(GetTestFileName()) );
 
     wxString all;
     for ( wxString str = f.GetFirstLine(); !f.Eof(); str = f.GetNextLine() )
@@ -240,7 +243,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadUTF8", "[textfile]")
     CreateTestFile("П\nривет");
 
     wxTextFile f;
-    CHECK( f.Open(wxString::FromAscii(GetTestFileName()), wxConvUTF8) );
+    CHECK( f.Open(GetTestFileName(), wxConvUTF8) );
 
     CHECK( f.GetLineCount() == (size_t)2 );
     CHECK( f.GetLineType(0) == wxTextFileType_Unix );
@@ -262,7 +265,7 @@ TEST_CASE_METHOD(TextFileTestCase, "TextFile::ReadUTF16", "[textfile]")
 
     wxTextFile f;
     wxMBConvUTF16LE conv;
-    CHECK( f.Open(wxString::FromAscii(GetTestFileName()), conv) );
+    CHECK( f.Open(GetTestFileName(), conv) );
 
     CHECK( f.GetLineCount() == (size_t)2 );
     CHECK( f.GetLineType(0) == wxTextFileType_Dos );
