@@ -249,6 +249,33 @@ TEST_CASE("wxComboBox::ProcessEnter", "[wxComboBox][enter]")
                                   WXSIZEOF(choices), choices,
                                   style);
         }
+
+        virtual void SimulateEnter(wxControl* control) const override
+        {
+#ifdef __WXMSW__
+            wxComboBox* const combo = wxDynamicCast(control, wxComboBox);
+            REQUIRE( combo );
+
+            if ( combo->HasFlag(wxTE_PROCESS_ENTER) )
+            {
+                // Exercise the same path used by the subclassed edit window:
+                // UIActionSimulator can send Return to the combo wrapper
+                // instead of the edit control on MSW.
+                REQUIRE( combo->MSWProcessEditMsg(WM_CHAR, VK_RETURN, 0) );
+                return;
+            }
+
+            wxControl* const button = wxDynamicCast(
+                combo->GetParent()->FindWindow(wxID_OK), wxControl);
+            REQUIRE( button );
+
+            wxCommandEvent event(wxEVT_BUTTON, wxID_OK);
+            event.SetEventObject(button);
+            button->Command(event);
+#else // !__WXMSW__
+            TextLikeControlCreator::SimulateEnter(control);
+#endif // __WXMSW__/!__WXMSW__
+        }
     };
 
     TestProcessEnter(ComboBoxCreator());

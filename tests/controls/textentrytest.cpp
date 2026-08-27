@@ -369,6 +369,28 @@ void TextEntryTestCase::UndoRedo()
 
 #if wxUSE_UIACTIONSIMULATOR
 
+void TextLikeControlCreator::SimulateEnter(wxControl* control) const
+{
+    wxUIActionSimulator sim;
+
+    // Calling SetFocus() is somehow not enough to give the focus to this
+    // window when running this test with wxGTK, apparently because the
+    // dialog itself needs to be raised to the front first, so simulate a
+    // click doing this.
+    sim.MouseMove(control->ClientToScreen(
+                      wxPoint(5, control->GetClientSize().y / 2)));
+    wxYield();
+    sim.MouseClick();
+    wxYield();
+
+    // Note that clicking it is still not enough to give it focus with
+    // wxGTK either, so we still need to call SetFocus() nevertheless: but
+    // now it works.
+    control->SetFocus();
+
+    sim.Char(WXK_RETURN);
+}
+
 namespace
 {
 
@@ -385,6 +407,7 @@ public:
     explicit TestDialog(const TextLikeControlCreator& controlCreator,
                         ProcessEnter processEnter)
         : wxDialog(wxTheApp->GetTopWindow(), wxID_ANY, "Test dialog"),
+          m_controlCreator(controlCreator),
           m_control
           (
               controlCreator.Create
@@ -458,26 +481,10 @@ private:
 
     void SimulateEnter()
     {
-        wxUIActionSimulator sim;
-
-        // Calling SetFocus() is somehow not enough to give the focus to this
-        // window when running this test with wxGTK, apparently because the
-        // dialog itself needs to be raised to the front first, so simulate a
-        // click doing this.
-        sim.MouseMove(m_control->ClientToScreen(
-                          wxPoint(5, m_control->GetClientSize().y / 2)));
-        wxYield();
-        sim.MouseClick();
-        wxYield();
-
-        // Note that clicking it is still not enough to give it focus with
-        // wxGTK either, so we still need to call SetFocus() nevertheless: but
-        // now it works.
-        m_control->SetFocus();
-
-        sim.Char(WXK_RETURN);
+        m_controlCreator.SimulateEnter(m_control);
     }
 
+    const TextLikeControlCreator& m_controlCreator;
     wxControl* const m_control;
     const ProcessEnter m_processEnter;
     wxTimer m_timer;
@@ -564,6 +571,10 @@ void TestProcessEnter(const TextLikeControlCreator& controlCreator)
 }
 
 #else // !wxUSE_UIACTIONSIMULATOR
+
+void TextLikeControlCreator::SimulateEnter(wxControl* WXUNUSED(control)) const
+{
+}
 
 void TestProcessEnter(const TextLikeControlCreator& WXUNUSED(controlCreator))
 {

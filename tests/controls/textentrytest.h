@@ -100,6 +100,9 @@ public:
     // Create the control of the right type using the given parent and style.
     virtual wxControl* Create(wxWindow* parent, int style) const = 0;
 
+    // Simulate pressing Enter in the control.
+    virtual void SimulateEnter(wxControl* control) const;
+
     // Return another creator similar to this one, but creating multiline
     // version of the control. If the returned pointer is non-null, it must be
     // deleted by the caller.
