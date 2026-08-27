@@ -29,10 +29,17 @@
 // tests
 // ----------------------------------------------------------------------------
 
+static wxString GetDataStreamTestFileName(const TempDir &dir)
+{
+    return wxFileName(dir.GetName(), "mytext.dat").GetFullPath();
+}
+
 // Write the given value to a stream using the given format and read it back.
 static wxFloat64 TestFloatRW(wxFloat64 fValue, bool bigEndian, bool ieee754)
 {
-    TempFile f("mytext.dat");
+    TempDir dir;
+    REQUIRE( dir.IsOk() );
+    TempFile f(GetDataStreamTestFileName(dir));
 
     {
         wxFileOutputStream pFileOutput( f.GetName() );
@@ -85,7 +92,9 @@ private:
     {
         ValueArray InValues(Size);
 
-        TempFile f("mytext.dat");
+        TempDir dir;
+        REQUIRE( dir.IsOk() );
+        TempFile f(GetDataStreamTestFileName(dir));
 
         {
             wxFileOutputStream FileOutput( f.GetName() );
@@ -137,7 +146,9 @@ T TestRW(const T &Value)
 {
     T InValue;
 
-    TempFile f("mytext.dat");
+    TempDir dir;
+    REQUIRE( dir.IsOk() );
+    TempFile f(GetDataStreamTestFileName(dir));
 
     {
         wxFileOutputStream FileOutput( f.GetName() );
