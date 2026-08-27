@@ -725,7 +725,7 @@ public:
                                 const wxRect& rect) = 0;
 
     /**
-        Draw a keytip badge over a ribbon element in keyboard access mode.
+        Draw a KeyTip badge over a ribbon element in keyboard access mode.
 
         This should draw a small labelled badge which stands out against the
         element beneath it, similar to the ones Office uses.
@@ -741,7 +741,7 @@ public:
             it.
         @param keytip
             The characters to draw, which are the ones still to be typed, rather
-            than the whole keytip if the user has already typed a prefix.
+            than the whole KeyTip if the user has already typed a prefix.
 
         @see wxRibbonBar::ShowKeyTips()
 

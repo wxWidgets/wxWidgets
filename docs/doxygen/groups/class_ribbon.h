@@ -16,8 +16,10 @@ toolbar. At a more functional level, it is similar to the user interface
 present in recent versions of Microsoft Office.
 
 Since wxWidgets 3.3.4, the ribbon can also be driven from the keyboard using
-Office-style keytips. Pressing @c WXK_F10 badges every element which was
-assigned one, and typing its letters activates that element. See
+Office-style KeyTips, improving accessibility for users who cannot rely on a
+mouse. Pressing @c WXK_F10 (customizable, see
+wxRibbonBar::SetKeyTipsTriggerKey()) badges every element which was assigned
+one, and typing its letters activates that element. See
 wxRibbonBar::ShowKeyTips() and wxRibbonBar::SetPageKeyTip().
 
 */

@@ -111,7 +111,7 @@ public:
     bool shown;
 
     /**
-        The keytip assigned to this tab, or an empty string.
+        The KeyTip assigned to this tab, or an empty string.
 
         Use wxRibbonBar::SetPageKeyTip() to set it.
 
@@ -153,15 +153,15 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
 
     @section ribbonbar_keytips KeyTips
 
-    Since wxWidgets 3.3.4 pressing @c WXK_F10 shows Office-style "keytips":
+    Since wxWidgets 3.3.4, pressing @c WXK_F10 shows Office-style "KeyTips":
     a badge over every element which has one, listing the letters to type to
-    activate it. Unlike mnemonics, keytips are not derived from labels: an
+    activate it. Unlike mnemonics, KeyTips are not derived from labels; an
     element only takes part if it was assigned one explicitly. See
     SetPageKeyTip(), wxRibbonButtonBar::SetKeyTip() and the other
     @c SetKeyTip() overloads.
 
-    Multi-character keytips are supported: typing the first character narrows
-    the badges down to the elements sharing it. A keytip must therefore not be
+    Multi-character KeyTips are supported; typing the first character narrows
+    the badges down to the elements sharing it. A KeyTip must therefore not be
     a strict prefix of another visible at the same time, or it could never
     fire. This is not validated at run time.
 
@@ -169,11 +169,11 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
     typed. Pressing the trigger key again, clicking the ribbon, or the frame
     being deactivated also leave it. CTRL and ALT combinations are treated as
     accelerators: the mode is left and the key passed on, so @c CTRL-S is not
-    consumed by a button with keytip @c "S". Activating a page tab is the one
-    case which stays in the mode, showing the new page's keytips.
+    consumed by a button with KeyTip @c "S". Activating a page tab is the one
+    case which stays in the mode, showing the new page's KeyTips.
 
     The trigger key is configurable, see SetKeyTipsTriggerKey(). It is only
-    consumed if there is something to show, so applications using no keytips
+    consumed if there is something to show, so applications using no KeyTips
     keep their existing @c WXK_F10 handling.
 
     @see wxRibbonPage
@@ -181,13 +181,13 @@ class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
 
     @beginStyleTable
     @style{wxRIBBON_BAR_DEFAULT_STYLE}
-        Defined as wxRIBBON_BAR_FLOW_HORIZONTAL |
+        Defined as `wxRIBBON_BAR_FLOW_HORIZONTAL |
         wxRIBBON_BAR_SHOW_PAGE_LABELS | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
-        wxRIBBON_BAR_SHOW_TOGGLE_BUTTON | wxRIBBON_BAR_SHOW_HELP_BUTTON.
+        wxRIBBON_BAR_SHOW_TOGGLE_BUTTON | wxRIBBON_BAR_SHOW_HELP_BUTTON`.
     @style{wxRIBBON_BAR_FOLDBAR_STYLE}
-        Defined as wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
+        Defined as `wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
         | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
-        wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS
+        wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS`.
     @style{wxRIBBON_BAR_SHOW_PAGE_LABELS}
         Causes labels to be shown on the tabs in the ribbon bar.
     @style{wxRIBBON_BAR_SHOW_PAGE_ICONS}
@@ -534,9 +534,9 @@ public:
     virtual bool Realize();
 
     /**
-        Assigns the keytip used to switch to the given page.
+        Assigns the KeyTip used to switch to the given page.
 
-        Pass an empty string to remove it. The keytip is stored uppercased.
+        Pass an empty string to remove it. The KeyTip is stored uppercased.
 
         @see @ref ribbonbar_keytips
 
@@ -552,7 +552,7 @@ public:
     void SetPageKeyTip(wxRibbonPage* page, const wxString& keytip);
 
     /**
-        Assigns the keytip used to activate the panel toggle button.
+        Assigns the KeyTip used to activate the panel toggle button.
 
         Only has an effect if the bar uses @c wxRIBBON_BAR_SHOW_TOGGLE_BUTTON.
 
@@ -561,7 +561,7 @@ public:
     void SetToggleButtonKeyTip(const wxString& keytip);
 
     /**
-        Assigns the keytip used to activate the help button.
+        Assigns the KeyTip used to activate the help button.
 
         Only has an effect if the bar uses @c wxRIBBON_BAR_SHOW_HELP_BUTTON.
 
@@ -570,10 +570,10 @@ public:
     void SetHelpButtonKeyTip(const wxString& keytip);
 
     /**
-        Enters keyboard access mode and shows the keytip badges.
+        Enters keyboard access mode and shows the KeyTip badges.
 
         @return @true if the mode was entered, @false if the bar isn't shown on
-            screen or no keytips are currently assigned to anything visible.
+            screen or no KeyTips are currently assigned to anything visible.
 
         @see @ref ribbonbar_keytips
 
@@ -582,7 +582,7 @@ public:
     bool ShowKeyTips();
 
     /**
-        Leaves keyboard access mode and hides the keytip badges.
+        Leaves keyboard access mode and hides the KeyTip badges.
 
         Does nothing if the mode isn't active.
 
@@ -598,7 +598,7 @@ public:
     bool IsKeyTipsShown() const;
 
     /**
-        A key combination which shows the keytips.
+        A key combination which shows the KeyTips.
 
         @since 3.3.4
     */
@@ -612,7 +612,7 @@ public:
     };
 
     /**
-        Makes @a keyCode with @a modifiers the only key which shows keytips.
+        Makes @a keyCode with @a modifiers the only key which shows KeyTips.
 
         Replaces the default of @c WXK_F10 with no modifiers.
 
@@ -623,7 +623,7 @@ public:
     void SetKeyTipsTriggerKey(int keyCode, int modifiers = wxMOD_NONE);
 
     /**
-        Adds another key which shows keytips, keeping the existing ones.
+        Adds another key which shows KeyTips, keeping the existing ones.
 
         @since 3.3.4
     */
@@ -639,7 +639,7 @@ public:
     void ClearKeyTipsTriggerKeys();
 
     /**
-        Returns the keys which show keytips.
+        Returns the keys which show KeyTips.
 
         @since 3.3.4
     */

@@ -166,7 +166,7 @@ public:
         Leaves the ancestor ribbon bar's keyboard access mode (if it is in it).
 
         Custom ribbon controls should call this when clicked, so that visible
-        keytips don't survive a mouse interaction.
+        KeyTips don't survive a mouse interaction.
 
         @see wxRibbonBar::HideKeyTips()
 
