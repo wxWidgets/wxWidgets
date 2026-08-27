@@ -708,6 +708,8 @@ MyFrame::MyFrame()
         bar->AddButton(ID_REMOVE_PANEL, "Remove Panel", wxArtProvider::GetBitmap(wxART_DELETE, wxART_OTHER, wxSize(24, 24)));
         bar->AddButton(ID_HIDE_PAGES, "Hide Pages", ribbon_large);
         bar->AddButton(ID_SHOW_PAGES, "Show Pages", ribbon_large);
+        bar->SetKeyTip(ID_REMOVE_PAGE, "R");
+        bar->SetKeyTip(ID_REMOVE_PANEL, "P");
 
         panel = new wxRibbonPanel(page, wxID_ANY, "Button bar manipulation",
             ribbon_small);
