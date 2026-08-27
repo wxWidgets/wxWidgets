@@ -46,12 +46,12 @@ public :
     {
     }
 
-    void controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent)
+    void controlAction(wxUint32 controlEvent) override
     {
         if ( controlEvent == UIControlEventValueChanged )
             GetWXPeer()->TriggerScrollEvent(wxEVT_SCROLL_THUMBTRACK);
         else
-            wxWidgetIPhoneImpl::controlAction(sender,controlEvent,rawEvent);
+            wxWidgetIPhoneImpl::controlAction(controlEvent);
     }
 
     void SetMaximum(wxInt32 m)

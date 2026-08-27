@@ -685,8 +685,7 @@ void wxUITextFieldControl::WriteText(const wxString& str)
 #endif
 }
 
-void wxUITextFieldControl::controlAction(WXWidget WXUNUSED(slf),
-    void* WXUNUSED(_cmd), void *WXUNUSED(sender))
+void wxUITextFieldControl::controlAction(wxUint32 /*controlEvent*/)
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) )

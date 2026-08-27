@@ -128,7 +128,7 @@ public :
 
     // action
 
-    virtual void        controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent);
+    virtual void        controlAction(wxUint32 controlEvent);
     virtual void         controlTextDidChange();
 
     void*               GetController() { return m_controller; }

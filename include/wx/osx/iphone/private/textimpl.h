@@ -41,7 +41,7 @@ public :
 
     virtual bool SetHint(const wxString& hint);
 
-    virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void controlAction(wxUint32 controlEvent) override;
 protected :
     UITextField* m_textField;
     NSObject<UITextFieldDelegate>* m_delegate;
