@@ -26,13 +26,8 @@
 namespace
 {
 
-const int TEST_PORT_READ = 0x7778;  // arbitrary, chosen because == "wx"
-const int TEST_PORT_WRITE = 0x7779; // well, "wy"
-
-// these cond and mutex are used to minimize the risk of the main thread
-// Connect()-ing before this thread starts Accept()-ing connections but
-// unfortunately we can't make this truly safe, see comment in
-// SocketServerThread::Entry()
+// These cond and mutex are used to publish the port assigned to each server
+// socket before the main thread tries to connect to it.
 wxMutex gs_mutex;
 wxCondition gs_cond(gs_mutex);
 } // anonymous namespace
@@ -47,35 +42,50 @@ static inline wxIPV4address LocalAddress(int port)
     return addr;
 }
 
-// A thread which creates a listening socket on the specified port and executes
+// A thread which creates a listening socket on a free port and executes
 // the given function with each socket which connects to it
 class SocketServerThread : public wxThread
 {
 public:
-    // port is the port to listen on and function will be called on each
-    // accepted socket
-    SocketServerThread(int port, void (*accept)(wxSocketBase&))
+    // function will be called on each accepted socket
+    SocketServerThread(void (*accept)(wxSocketBase&))
         : wxThread(wxTHREAD_JOINABLE),
-          m_port(port),
           m_accept(accept)
     {
         Create();
         Run();
     }
 
+    unsigned short GetPort() const
+    {
+        return m_port;
+    }
+
 protected:
     virtual void *Entry() override
     {
-        wxSocketServer srv(LocalAddress(m_port), wxSOCKET_REUSEADDR);
-        CHECK( srv.IsOk() );
+        wxSocketServer srv(LocalAddress(0), wxSOCKET_REUSEADDR);
+        bool ok = srv.IsOk();
+        CHECK( ok );
 
-        // FIXME: this is still not atomic, of course and the main thread could
-        //        call Connect() before we have time to Accept() but there is
-        //        no way to fix it with current API
         {
             wxMutexLocker lock(gs_mutex);
+
+            if ( ok )
+            {
+                wxIPV4address addr;
+                ok = srv.GetLocal(addr);
+                CHECK( ok );
+
+                if ( ok )
+                    m_port = addr.Service();
+            }
+
             gs_cond.Signal();
         }
+
+        if ( !ok )
+            return nullptr;
 
         wxSocketBase *socket = srv.Accept();
         if ( socket )
@@ -87,7 +97,7 @@ protected:
         return nullptr;
     }
 
-    int m_port;
+    unsigned short m_port = 0;
     void (*m_accept)(wxSocketBase&);
 
     wxDECLARE_NO_COPY_CLASS(SocketServerThread);
@@ -122,26 +132,30 @@ public:
     // WX_SOCKET_STREAM_TEST_CASE() below.
     void Init(wxSocketFlags flags)
     {
-        // create the socket threads and wait until they are ready to accept
-        // connections (if we called Connect() before this happens, it would
-        // fail)
+        unsigned short portRead = 0;
+        unsigned short portWrite = 0;
+
+        // Create the socket threads and wait until each one has published the
+        // port assigned to its server socket.
         {
             wxMutexLocker lock(gs_mutex);
 
-            m_writeThread =
-                new SocketServerThread(TEST_PORT_READ, &socketStream::WriteSocket);
+            m_writeThread = new SocketServerThread(&socketStream::WriteSocket);
             REQUIRE( gs_cond.Wait() == wxCOND_NO_ERROR );
+            portRead = m_writeThread->GetPort();
+            REQUIRE( portRead != 0 );
 
-            m_readThread =
-                new SocketServerThread(TEST_PORT_WRITE, &socketStream::ReadSocket);
+            m_readThread = new SocketServerThread(&socketStream::ReadSocket);
             REQUIRE( gs_cond.Wait() == wxCOND_NO_ERROR );
+            portWrite = m_readThread->GetPort();
+            REQUIRE( portWrite != 0 );
         }
 
         m_readSocket = new wxSocketClient(flags);
-        REQUIRE( m_readSocket->Connect(LocalAddress(TEST_PORT_READ)) );
+        REQUIRE( m_readSocket->Connect(LocalAddress(portRead)) );
 
         m_writeSocket = new wxSocketClient(flags);
-        REQUIRE( m_writeSocket->Connect(LocalAddress(TEST_PORT_WRITE)) );
+        REQUIRE( m_writeSocket->Connect(LocalAddress(portWrite)) );
     }
 
 private:
@@ -165,8 +179,8 @@ private:
 
     wxSocketClient *m_readSocket = nullptr,
                    *m_writeSocket = nullptr;
-    wxThread *m_writeThread = nullptr,
-             *m_readThread = nullptr;
+    SocketServerThread *m_writeThread = nullptr,
+                       *m_readThread = nullptr;
 
     wxSocketInitializer m_socketInit;
 
