@@ -2807,11 +2807,15 @@ void wxRibbonMSWArtProvider::DrawKeyTip(wxDC& dc,
 
     wxRect badge_rect(pos, badge_size);
 
-    dc.SetPen(wxPen(*wxBLACK));
-    dc.SetBrush(wxBrush(wxColour(255, 255, 225)));
+    const bool dark = wxSystemSettings::GetAppearance().IsDark();
+    const wxColour badge_bg = dark ? *wxWHITE : *wxBLACK;
+    const wxColour badge_fg = dark ? *wxBLACK : *wxWHITE;
+
+    dc.SetPen(wxPen(badge_bg));
+    dc.SetBrush(wxBrush(badge_bg));
     dc.DrawRectangle(badge_rect);
 
-    dc.SetTextForeground(*wxBLACK);
+    dc.SetTextForeground(badge_fg);
     dc.DrawText(keytip, badge_rect.GetX() + padding_x, badge_rect.GetY() + padding_y);
 }
 
