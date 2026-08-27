@@ -858,16 +858,35 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     if ( !EnableUITests() )
         return;
 
-    EventCounter keyEvents(m_dvc.get(), wxEVT_KEY_DOWN);
+    wxUIActionSimulator sim;
+
+#ifdef __WXGTK__
+    wxRect rect;
+    // The native GTK control may not know row cell areas until its pending
+    // layout has run, so wait before using the item rectangle as click target.
+    REQUIRE( WaitFor("wxDataViewCtrl item to be realized", [this, &rect]() {
+        rect = m_dvc->GetItemRect(m_child1);
+        return !rect.IsEmpty();
+    }) );
+#else // !__WXGTK__
+    const wxRect rect = m_dvc->GetItemRect(m_child1);
+    REQUIRE( !rect.IsEmpty() );
+#endif // __WXGTK__/!__WXGTK__
+
+    // Click inside the control first: this mirrors real use and makes the
+    // following simulated key press reach the data view's main window.
+    sim.MouseMove(m_dvc->ClientToScreen(rect.GetPosition() + wxPoint(5, 5)));
+    wxYield();
+    sim.MouseClick();
+    wxYield();
 
     m_dvc->SetFocus();
     wxYield();
 
-    wxUIActionSimulator sim;
-    sim.Char(WXK_DOWN);
-    wxYield();
+    EventCounter keyEvents(m_dvc->GetMainWindow(), wxEVT_KEY_DOWN);
+    REQUIRE( sim.Char(WXK_DOWN) );
 
-    CHECK( keyEvents.GetCount() == 1 );
+    CHECK( keyEvents.WaitEvent() );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
