@@ -198,9 +198,21 @@ public:
         {
             return nullptr;
         }
+        return FindInstanceForBase(inst->base);
+    }
+
+    // Takes the stable button object directly, rather than an instance
+    // pointer, which may be dangling.
+    wxRibbonButtonBarButtonInstance* FindInstanceForBase(
+        wxRibbonButtonBarButtonBase* base)
+    {
+        if(base == nullptr)
+        {
+            return nullptr;
+        }
         for ( auto& instance : buttons )
         {
-            if(instance.base == inst->base)
+            if ( instance.base == base )
             {
                 return &instance;
             }
@@ -647,19 +659,12 @@ void wxRibbonButtonBar::ActivateButton(wxRibbonButtonBarButtonBase* button, bool
 
     // PopupMenu() positions the menu relative to m_active_button, so set
     // it here too, otherwise a keytip-opened menu appears at the cursor.
-    wxRibbonButtonBarButtonInstance* const old_active = m_active_button;
     if ( m_active_button == nullptr || m_active_button->base != button )
-    {
-        wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
-        for ( auto& instance : layout->buttons )
-        {
-            if ( instance.base == button )
-            {
-                m_active_button = &instance;
-                break;
-            }
-        }
-    }
+        m_active_button = m_layouts.Item(m_current_layout)->FindInstanceForBase(button);
+
+    // Track the id, not the instance pointer, since Realize() may rebuild
+    // the layout mid-handler and invalidate it.
+    const int old_active_id = m_active_button != nullptr ? m_active_button->base->id : wxID_ANY;
 
     // Keep OnMouseMove() from mutating the active state while a handler runs
     // a nested event loop, e.g. for a popup menu.
@@ -667,9 +672,17 @@ void wxRibbonButtonBar::ActivateButton(wxRibbonButtonBarButtonBase* button, bool
     ProcessWindowEvent(notification);
     m_lock_active_state = false;
 
-    // The handler may have reset m_active_button, e.g. by deleting the button.
-    if ( m_active_button != nullptr )
-        m_active_button = old_active;
+    // Re-resolve from the id instead of trusting m_active_button.
+    m_active_button = nullptr;
+    if ( old_active_id != wxID_ANY )
+    {
+        wxRibbonButtonBarButtonBase* old_active_base = GetItemById(old_active_id);
+        if ( old_active_base != nullptr )
+        {
+            m_active_button =
+                m_layouts.Item(m_current_layout)->FindInstanceForBase(old_active_base);
+        }
+    }
 
     wxRibbonPanel* panel = wxDynamicCast(GetParent(), wxRibbonPanel);
     if ( panel != nullptr )
