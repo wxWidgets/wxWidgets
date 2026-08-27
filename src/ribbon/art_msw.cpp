@@ -2808,7 +2808,7 @@ void wxRibbonMSWArtProvider::DrawKeyTip(wxDC& dc,
     wxRect badge_rect(pos, badge_size);
 
     const bool dark = wxSystemSettings::GetAppearance().IsDark();
-    const wxColour badge_bg = dark ? wxColour{ 235, 235, 235 } : wxColour{ 97, 97, 97 };
+    const wxColour badge_bg = dark ? wxColour{ 255, 214, 51 } : wxColour{ 97, 97, 97 };
     const wxColour badge_fg = dark ? *wxBLACK : *wxWHITE;
 
     dc.SetPen(wxPen(badge_bg));
