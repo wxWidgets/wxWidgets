@@ -607,7 +607,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     m_lboxLog = new wxListBox(sizerDownBox, wxID_ANY);
     sizerDown->Add(m_lboxLog, wxSizerFlags(1).Expand().Border());
-    sizerDown->SetMinSize(100, 150);
+    sizerDown->SetMinSize(FromDIP(wxSize(100, 150)));
 #else
     wxSizer *sizerDown = new wxBoxSizer(wxVERTICAL);
 #endif // USE_LOG
@@ -617,7 +617,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #if USE_LOG
     btn = new wxButton(sizerDownBox, Widgets_ClearLog, "Clear &log");
     sizerBtns->Add(btn);
-    sizerBtns->AddSpacer(10);
+    sizerBtns->AddSpacer(FromDIP(10));
 #endif // USE_LOG
     btn = new wxButton(sizerDownBox, Widgets_Quit, "E&xit");
     sizerBtns->Add(btn);
@@ -625,8 +625,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     // put everything together
     sizerTop->Add(m_book, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~(wxTOP | wxBOTTOM)));
-    sizerTop->AddSpacer(5);
-    sizerTop->Add(sizerDown, wxSizerFlags(0).Expand().DoubleBorder(wxALL & ~wxTOP));
+    sizerTop->AddSpacer(FromDIP(5));
+    sizerTop->Add(sizerDown, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxTOP));
 
     m_panel->SetSizer(sizerTop);
 
@@ -1514,7 +1514,7 @@ wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,
     wxTextCtrl *text = new wxTextCtrl(control->GetParent(), id, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 
-    sizerRow->Add(control, wxSizerFlags(0).Border(wxRIGHT).CentreVertical());
+    sizerRow->Add(control, wxSizerFlags().Border(wxRIGHT).CentreVertical());
     sizerRow->Add(text, wxSizerFlags(1).Border(wxLEFT).CentreVertical());
 
     if ( ppText )
@@ -1550,7 +1550,7 @@ wxCheckBox *WidgetsPage::CreateCheckBoxAndAddToSizer(wxSizer *sizer,
 {
     wxCheckBox *checkbox = new wxCheckBox(statBoxParent ? statBoxParent: this, id, label);
     sizer->Add(checkbox, wxSizerFlags().HorzBorder());
-    sizer->AddSpacer(2);
+    sizer->AddSpacer(FromDIP(2));
 
     return checkbox;
 }

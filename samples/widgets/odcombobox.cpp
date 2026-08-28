@@ -336,7 +336,7 @@ void ODComboboxWidgetsPage::CreateContent()
     m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerStyle, "&Read only", wxID_ANY, sizerStyleBox);
     m_chkDclickcycles = CreateCheckBoxAndAddToSizer(sizerStyle, "&Double-click Cycles", wxID_ANY, sizerStyleBox);
 
-    sizerStyle->AddSpacer(4);
+    sizerStyle->AddSpacer(FromDIP(4));
 
     m_chkBitmapbutton = CreateCheckBoxAndAddToSizer(sizerStyle, "&Bitmap button", wxID_ANY, sizerStyleBox);
     m_chkStdbutton = CreateCheckBoxAndAddToSizer(sizerStyle, "B&lank button background", wxID_ANY, sizerStyleBox);
@@ -468,7 +468,7 @@ void ODComboboxWidgetsPage::CreateContent()
                        0, nullptr,
                        0);
     sizerRight->Add(m_combobox, wxSizerFlags().Expand().Border());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerCombo = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

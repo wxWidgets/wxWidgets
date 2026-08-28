@@ -298,7 +298,7 @@ void ComboboxWidgetsPage::CreateContent()
 
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
     sizerLeft->Add(sizerLeftTop);
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(FromDIP(10));
     sizerLeft->Add(sizerLeftBottom, wxSizerFlags().Expand());
 
     // middle pane
@@ -393,11 +393,11 @@ void ComboboxWidgetsPage::CreateContent()
     m_combobox1 = new wxComboBox( this, ComboPage_Dynamic );
     m_combobox1->Append( "Dynamic ComboBox Test - Click me!" );
     m_combobox1->SetSelection( 0 );
-    sizerRight->Add( 20, 20, wxSizerFlags().Expand() );
+    sizerRight->AddSpacer(FromDIP(20));
     sizerRight->Add( m_combobox1, wxSizerFlags().Expand().Border());
     m_combobox1->Bind( wxEVT_COMBOBOX_DROPDOWN, &ComboboxWidgetsPage::OnPopup, this );
     m_combobox1->Bind( wxEVT_COMBOBOX_CLOSEUP, &ComboboxWidgetsPage::OnDismiss, this );
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerCombo = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

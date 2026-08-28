@@ -353,7 +353,7 @@ void StaticWidgetsPage::CreateContent()
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerStatic = sizerRight;
 
     CreateStatic();

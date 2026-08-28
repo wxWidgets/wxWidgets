@@ -188,7 +188,7 @@ void FilePickerWidgetsPage::CreateContent()
                     &m_textInitialDir
                  ), wxSizerFlags().Expand().Border());
 
-    leftSizer->AddSpacer(10);
+    leftSizer->AddSpacer(FromDIP(10));
 
     leftSizer->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  wxSizerFlags().CentreHorizontal().TripleBorder());

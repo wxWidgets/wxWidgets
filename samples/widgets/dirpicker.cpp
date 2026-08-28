@@ -163,7 +163,7 @@ void DirPickerWidgetsPage::CreateContent()
                     &m_textInitialDir
                  ), wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(FromDIP(10));
 
     sizerLeft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  wxSizerFlags().CentreHorizontal().TripleBorder());

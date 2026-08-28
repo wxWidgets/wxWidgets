@@ -273,7 +273,7 @@ wxSizer *BitmapComboBoxWidgetsPage::CreateSizerWithSmallTextAndLabel(const wxStr
     wxControl* control = new wxStaticText(parent ? parent : this, wxID_ANY, label);
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
     wxTextCtrl *text = new wxTextCtrl(parent ? parent : this, id, wxEmptyString,
-        wxDefaultPosition, wxSize(50,wxDefaultCoord), wxTE_PROCESS_ENTER);
+        wxDefaultPosition, wxSize(FromDIP(50), wxDefaultCoord), wxTE_PROCESS_ENTER);
 
     sizerRow->Add(control, wxSizerFlags().CentreVertical().Border(wxRIGHT));
     sizerRow->Add(text, wxSizerFlags(1).FixedMinSize().CentreVertical().Border(wxLEFT));
@@ -333,7 +333,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
                                                 BitmapComboBoxPage_ChangeHeight,
                                                 &m_textChangeHeight,
                                                 sizerOptions->GetStaticBox());
-    m_textChangeHeight->SetSize(20, wxDefaultCoord);
+    m_textChangeHeight->SetSize(FromDIP(20), wxDefaultCoord);
     sizerOptions->Add(sizerRow, wxSizerFlags().FixedMinSize().Border());
 
     sizerLeft->Add( sizerOptions, wxSizerFlags().Expand().Border(wxTOP, FromDIP(2)));
@@ -397,7 +397,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
 #endif
 
     sizerRight->Add(m_combobox, wxSizerFlags().Expand().Border());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerCombo = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

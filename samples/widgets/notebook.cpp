@@ -396,7 +396,7 @@ void BookWidgetsPage::RecreateBook()
     }
 
     m_sizerBook->Add(m_book, wxSizerFlags(1).Expand().Border());
-    m_sizerBook->SetMinSize(150, 0);
+    m_sizerBook->SetMinSize(FromDIP(150), 0);
     m_sizerBook->Layout();
 }
 

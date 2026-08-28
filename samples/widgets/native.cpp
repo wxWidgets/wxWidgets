@@ -87,7 +87,7 @@ public:
         // When creating the native window, we must specify the valid parent
         // and while we don't have to specify any position if it's going to be
         // laid out by sizers, we do need the size.
-        const wxSize size = FromDIP(wxSize(140, 30));
+        const wxSize size = FromDIP(FromDIP(wxSize(140, 30)));
 
         HWND hwnd = ::CreateWindow
                       (

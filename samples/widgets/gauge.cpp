@@ -250,7 +250,7 @@ void GaugeWidgetsPage::CreateContent()
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
     m_gauge = new wxGauge(this, GaugePage_Gauge, m_range);
     sizerRight->Add(m_gauge, wxSizerFlags(1).Centre().Border());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerGauge = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

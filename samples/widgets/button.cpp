@@ -266,7 +266,7 @@ void ButtonWidgetsPage::CreateContent()
         "Use wxBitmapButton", wxID_ANY, sizerLeftBox);
     m_chkUseBitmapClass->SetValue(true);
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(FromDIP(5));
 
     wxStaticBoxSizer *sizerUseLabels =
         new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox,
@@ -283,7 +283,7 @@ void ButtonWidgetsPage::CreateContent()
         "&Disabled (broken image icon)", wxID_ANY, sizerUseLabelsBox);
     sizerLeft->Add(sizerUseLabels, wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(FromDIP(10));
 
     static const wxString dirs[] =
     {
@@ -314,7 +314,7 @@ void ButtonWidgetsPage::CreateContent()
     sizerImageMargins->Add(sizerImageMarginsRow, wxSizerFlags().Border().Centre());
     sizerLeft->Add(sizerImageMargins, wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(15);
+    sizerLeft->AddSpacer(FromDIP(15));
 
     // should be in sync with enums Button[HV]Align!
     static const wxString halign[] =
@@ -341,7 +341,7 @@ void ButtonWidgetsPage::CreateContent()
     sizerLeft->Add(m_radioHAlign, wxSizerFlags().Expand().Border());
     sizerLeft->Add(m_radioVAlign, wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(FromDIP(5));
 
     wxButton *btn = new wxButton(sizerLeftBox, ButtonPage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
@@ -375,7 +375,7 @@ void ButtonWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft,
-                  wxSizerFlags(0).Expand().DoubleBorder(wxALL & ~wxLEFT));
+                  wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxLEFT));
     sizerTop->Add(sizerMiddle,
                   wxSizerFlags(1).Expand().DoubleBorder());
     sizerTop->Add(m_sizerButton,

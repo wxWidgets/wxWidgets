@@ -333,7 +333,7 @@ void SpinBtnWidgetsPage::CreateContent()
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerSpin = sizerRight; // save it to modify it later
 
     Reset();

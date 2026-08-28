@@ -213,12 +213,12 @@ void HyperlinkWidgetsPage::CreateContent()
 
     m_fun = new wxStaticText(this, wxID_ANY, " for fun!");
 
-    szHyperlink->Add(0, 0, wxSizerFlags(1).Centre());
+    szHyperlink->AddStretchSpacer();
     szHyperlink->Add(m_visit, wxSizerFlags().Centre());
     szHyperlink->Add(m_hyperlink, wxSizerFlags().Centre());
     szHyperlink->Add(m_fun, wxSizerFlags().Centre());
-    szHyperlink->Add(0, 0, wxSizerFlags(1).Centre());
-    szHyperlink->SetMinSize(150, 0);
+    szHyperlink->AddStretchSpacer();
+    szHyperlink->SetMinSize(FromDIP(150), 0);
 
     if (m_checkGeneric->IsChecked())
     {
@@ -235,11 +235,11 @@ void HyperlinkWidgetsPage::CreateContent()
                                               "www.wxwidgets.org");
     }
 
-    szHyperlinkLong->Add(0, 0, wxSizerFlags(1).Centre());
-    szHyperlinkLong->Add(szHyperlink, wxSizerFlags().Centre().Expand());
-    szHyperlinkLong->Add(0, 0, wxSizerFlags(1).Centre());
+    szHyperlinkLong->AddStretchSpacer();
+    szHyperlinkLong->Add(szHyperlink, wxSizerFlags().Centre());
+    szHyperlinkLong->AddStretchSpacer();
     szHyperlinkLong->Add(m_hyperlinkLong, wxSizerFlags().Expand());
-    szHyperlinkLong->Add(0, 0, wxSizerFlags(1).Centre());
+    szHyperlinkLong->AddStretchSpacer();
 
 
     // the 3 panes panes compose the window

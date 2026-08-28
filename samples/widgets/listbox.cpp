@@ -394,7 +394,7 @@ void ListboxWidgetsPage::CreateContent()
                            0, nullptr,
                            wxLB_HSCROLL);
     sizerRight->Add(m_lbox, wxSizerFlags(1).Expand().Border());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerLbox = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window

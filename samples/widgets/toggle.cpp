@@ -241,7 +241,7 @@ void ToggleWidgetsPage::CreateContent()
     m_chkUseBitmapClass->SetValue(true);
 
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(FromDIP(5));
 
     wxStaticBoxSizer *sizerUseLabels =
         new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox,
@@ -258,7 +258,7 @@ void ToggleWidgetsPage::CreateContent()
         "&Disabled (broken image icon)", wxID_ANY, sizerUseLabelsBox);
     sizerLeft->Add(sizerUseLabels, wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(FromDIP(10));
 
     static const wxString dirs[] =
     {
@@ -268,7 +268,7 @@ void ToggleWidgetsPage::CreateContent()
                                      wxDefaultPosition, wxDefaultSize,
                                      WXSIZEOF(dirs), dirs);
     sizerLeft->Add(m_radioImagePos, wxSizerFlags().Expand().Border());
-    sizerLeft->AddSpacer(15);
+    sizerLeft->AddSpacer(FromDIP(15));
 
     // should be in sync with enums Toggle[HV]Align!
     static const wxString halign[] =
@@ -296,7 +296,7 @@ void ToggleWidgetsPage::CreateContent()
     sizerLeft->Add(m_radioVAlign, wxSizerFlags().Expand().Border());
 #endif // wxHAS_BITMAPTOGGLEBUTTON
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(FromDIP(5));
 
     wxButton *btn = new wxButton(sizerLeftBox, TogglePage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder());
@@ -319,7 +319,7 @@ void ToggleWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft,
-                  wxSizerFlags(0).Expand().DoubleBorder((wxALL & ~wxLEFT)));
+                  wxSizerFlags().Expand().DoubleBorder((wxALL & ~wxLEFT)));
     sizerTop->Add(sizerMiddle,
                   wxSizerFlags(1).Expand().DoubleBorder());
     sizerTop->Add(m_sizerToggle,
@@ -510,7 +510,7 @@ void ToggleWidgetsPage::AddButtonToSizer()
     if ( m_chkFit->GetValue() )
     {
         m_sizerToggle->AddStretchSpacer();
-        m_sizerToggle->Add(m_toggle, wxSizerFlags(0).Centre().Border());
+        m_sizerToggle->Add(m_toggle, wxSizerFlags().Centre().Border());
         m_sizerToggle->AddStretchSpacer();
     }
     else // take up the entire space

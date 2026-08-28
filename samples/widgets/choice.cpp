@@ -255,7 +255,7 @@ void ChoiceWidgetsPage::CreateContent()
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
     m_choice = new wxChoice(this, ChoicePage_Choice);
     sizerRight->Add(m_choice, wxSizerFlags().Border().Expand());
-    sizerRight->SetMinSize(150, 0);
+    sizerRight->SetMinSize(FromDIP(150), 0);
     m_sizerChoice = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
