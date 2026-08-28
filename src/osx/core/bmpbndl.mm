@@ -200,7 +200,9 @@ public:
     {
         const wxSize sz = (size == wxDefaultSize) ? m_defaultSize : size;
 
-        if ( m_cachedBitmap.IsOk() && m_cachedBitmap.GetSize() == sz )
+        const bool darkTint = IsDarkDrawingAppearance();
+        if ( m_cachedBitmap.IsOk() && m_cachedBitmap.GetSize() == sz &&
+                m_cachedForDark == darkTint )
             return m_cachedBitmap;
 
         // The requested size is in pixels, while NSImage sizes are in
@@ -231,12 +233,27 @@ public:
                          fromRect:NSZeroRect
                         operation:NSCompositingOperationSourceOver
                          fraction:1.0];
+
+                // When AppKit draws a symbol image, it renders it using the
+                // label color of the current appearance (e.g. light in dark
+                // mode). The rasterized bitmap loses that machinery, so
+                // bake the label color in here, keeping the alpha channel as
+                // the symbol shape.
+                CGContextSetBlendMode(context, kCGBlendModeSourceIn);
+                CGContextSetFillColorWithColor(context,
+                                               NSColor.labelColor.CGColor);
+                CGContextFillRect(context, CGRectMake(0, 0, sz.x, sz.y));
+
                 NSGraphicsContext.currentContext = previous;
 
                 CGImageRef cgImage = CGBitmapContextCreateImage(context);
                 if ( cgImage )
                 {
-                    bmp = wxBitmap(cgImage, 1.0);
+                    // Mark the bitmap as a template so that, when it is
+                    // drawn, it is tinted for the current (light or dark)
+                    // appearance just as the SF symbol NSImage itself
+                    // would be.
+                    bmp = wxBitmap(cgImage, 1.0, true /* template */);
                     CGImageRelease(cgImage);
                 }
                 CGContextRelease(context);
@@ -247,12 +264,30 @@ public:
         // to avoid unbounded growth while still helping the common case of
         // the same size being requested repeatedly.
         m_cachedBitmap = bmp;
+        m_cachedForDark = darkTint;
 
         return bmp;
     }
 
     // Return true if the symbol name resolved to an actual SF symbol.
     bool IsOk() const { return wxOSXGetImageFromBundleImpl(this) != nullptr; }
+
+    // Return true if the current drawing appearance is a dark one, i.e. if
+    // the label color used for tinting resolves to a light color.
+    static bool IsDarkDrawingAppearance()
+    {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+        if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+        {
+            NSAppearance* const appearance =
+                NSAppearance.currentDrawingAppearance;
+            return [appearance bestMatchFromAppearancesWithNames:
+                        @[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]]
+                    == NSAppearanceNameDarkAqua;
+        }
+#endif
+        return false;
+    }
 
 private:
     WXImage CreateSymbolImage(const wxSize& size) const
@@ -295,8 +330,10 @@ private:
     const wxString m_symbolName;
     const wxSize   m_defaultSize;
 
-    // Last returned bitmap, see GetBitmap().
+    // Last returned bitmap and the appearance it was tinted for, see
+    // GetBitmap().
     wxBitmap       m_cachedBitmap;
+    bool           m_cachedForDark = false;
 };
 
 } // anonymous namespace
