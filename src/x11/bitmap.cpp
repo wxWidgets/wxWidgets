@@ -1531,7 +1531,7 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, const void* bits,
     }
 #else // !wxHAVE_LIB_XPM
     wxXPMDecoder decoder;
-    wxImage image(decoder.ReadData((const char **)bits));
+    wxImage image(decoder.ReadData((const char* const*)bits));
     return image.IsOk() && bitmap->CreateFromImage(image);
 #endif // wxHAVE_LIB_XPM/!wxHAVE_LIB_XPM
 }
