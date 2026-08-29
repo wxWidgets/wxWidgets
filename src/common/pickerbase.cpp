@@ -65,6 +65,9 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
 
     if (HasFlag(wxPB_USE_TEXTCTRL))
     {
+#ifdef __WXOSX__
+        MacClipsToBounds(false);
+#endif
         // NOTE: the style of this class (wxPickerBase) and the style of the
         //       attached text control are different: GetTextCtrlStyle() extracts
         //       the styles related to the textctrl from the styles passed here
