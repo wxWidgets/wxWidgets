@@ -186,11 +186,11 @@ TEST_CASE_METHOD(TreebookTestCase, "Treebook::ControllerVetoRestoresSelection",
     public:
         void OnChanging(wxBookCtrlEvent& event)
         {
-            seen = true;
+            ++changingCount;
             event.Veto();
         }
 
-        bool seen{false};
+        unsigned changingCount{0};
     } observer;
 
     REQUIRE(m_treebook->SetSelection(0) == 0);
@@ -213,9 +213,15 @@ TEST_CASE_METHOD(TreebookTestCase, "Treebook::ControllerVetoRestoresSelection",
         &VetoObserver::OnChanging,
         &observer);
 
-    REQUIRE(observer.seen);
+    REQUIRE(observer.changingCount == 1);
     REQUIRE(m_treebook->GetSelection() == 0);
     REQUIRE(tree->GetSelection() == first);
+
+    // The synchronous rollback must leave the controller ready for the next
+    // selection, once the veto handler has been removed.
+    tree->SelectItem(second);
+    REQUIRE(m_treebook->GetSelection() == 1);
+    REQUIRE(tree->GetSelection() == second);
 }
 
 TEST_CASE_METHOD(TreebookTestCase, "Treebook::DeleteAllPublishesEmptyTopology",
