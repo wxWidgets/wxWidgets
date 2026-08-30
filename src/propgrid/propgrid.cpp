@@ -2535,7 +2535,7 @@ wxPropertyGrid::~wxPropertyGrid()
             if ( editor->GetPeer() )
                 editor->GetPeer()->RemoveFromParent();
 #elif defined(__WXGTK__)
-            if ( GtkWidget* const widget = editor->GetHandle() )
+            if ( GtkWidget* widget = editor->GetHandle() )
             {
                 if ( GtkWidget* const parent = gtk_widget_get_parent(widget) )
                 {

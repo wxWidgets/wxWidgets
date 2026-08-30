@@ -45,6 +45,7 @@
 #include "waitfor.h"
 
 #include <functional>
+#include <limits>
 #include <random>
 #include <vector>
 
@@ -3754,11 +3755,15 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         {
             CAPTURE(failureOrdinal);
             const size_t toolCount = toolbar->GetToolsCount();
+            // GetToolByPos() takes int, including on 32-bit targets where a
+            // larger size_t index would become a negative iterator distance.
+            REQUIRE( toolCount <=
+                     static_cast<size_t>((std::numeric_limits<int>::max)()) );
+            const int toolCountInt = static_cast<int>(toolCount);
             std::vector<wxToolBarToolBase*> toolsBefore;
-            for ( size_t i = 0; i < toolCount; ++i )
+            for ( int i = 0; i < toolCountInt; ++i )
             {
-                toolsBefore.push_back(
-                    toolbar->GetToolByPos(static_cast<int>(i)));
+                toolsBefore.push_back(toolbar->GetToolByPos(i));
             }
 
             wxPGManagerFailToolbarRemovalForTesting(failureOrdinal);
@@ -3769,10 +3774,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             CHECK( manager->GetSelectedPage() == 0 );
             CHECK( manager->GetProperty("Retained property") != nullptr );
             REQUIRE( toolbar->GetToolsCount() == toolCount );
-            for ( size_t i = 0; i < toolCount; ++i )
+            for ( int i = 0; i < toolCountInt; ++i )
             {
-                CHECK( toolbar->GetToolByPos(static_cast<int>(i)) ==
-                       toolsBefore[i] );
+                CHECK( toolbar->GetToolByPos(i) == toolsBefore[i] );
             }
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
             // Restoring only the wrappers leaves MSW's native toolbar missing
