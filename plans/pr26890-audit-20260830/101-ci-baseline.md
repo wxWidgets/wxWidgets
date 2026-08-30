@@ -3,7 +3,7 @@
 - Status: PARTIAL LOCAL PASS / OPEN
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
-- Effort: S/M
+- Effort: L (expanded by reproduced cross-port regressions)
 - Implementation risk: MED
 - Depends on: none
 
@@ -74,6 +74,30 @@ If installation reaches a different package/dependency error, retain the evidenc
 - DataView's new drag fixture sends a wx mouse event to a composite native header on MSW; it needs the real native notification boundary instead. DirCtrl's new mutation test reproduces a crash when a delete-item callback rebuilds the tree during native deletion. Both remain OPEN until corrected and tested.
 - Existing DatePicker/Grid failures are not automatically blamed on the PR.
 - origin/master advanced from b2502d42b2 to 6155567922. All 19 conflicts are resolved in normal merge commit 3278026ea0 on `codex/pr26890-master-refresh`, including conversion of added CppUnit cases to upstream Catch2 without removing coverage. Integration/build of this merge remains pending at this entry. GitHub reports no Actions runs for a76e0689bf; conflicting merge state, AppVeyor failure and CircleCI pending are not green qualification.
+
+## Post-merge local evidence
+
+- Integrated master 6155567922 by normal merges 3278026ea0 and b83c4d1db6. No conflict markers or CppUnit references remain in the migrated test sources; published history is preserved.
+- MSW Debug `test_gui` rebuilt with `/warnaserror`; WinUI shared/static Release `test_gui`, `minimal` and runtime smoke rebuilt. All exit 0. Final fixture builds: `audit101-fixture-final-build.log` in each build tree.
+- MSW focused Header/HTML-list/VList/book-base/AUI/TreeList/DataView regressions: exit 0, 323062 assertions / 117 registered cases, `audit101-master-regressions-final.log`. This is the non-input profile (`WX_UI_TESTS=0`); inherited simulator cases do not qualify physical input.
+- DataView/TreeList debugging proved a fixture use-after-free after deleting the callback's owner: `audit101-dataview-cdb.log`. Four callbacks now publish their outputs before terminal deletion. Native headers are entered through `HDN_BEGINDRAG` notifications, not a wx mouse event sent to the composite parent. Generic-header assertions are preserved.
+- HTML image fixture now uses a self-contained BMP, whose standard handler is available even when the test runs alone; no dependency on a previously executed image test or installed PNG support.
+- DirCtrl's exact crashing mutation case: exit 0, 32 assertions / 1 case, including repeated rebuild requests during deletion and long Unicode paths. A 30-second aggregate timeout was not a pass; the diagnostic 60-second run completed successfully.
+- Both WinUI smoke and Supported V0 CTests pass after the merge: 1160 assertions / 90 cases per linkage. The count changed from 55 to 90 because upstream Catch2 migration exposes individual cases; the assertion count is unchanged. JUnit/log: `audit101-master-gates.*`.
+- Full PropertyGrid run remains FAIL: the forwarder-owner fix does not resolve the separate editor-validation and callback-removal assertions at 2945-2949, 3066-3067, 3125 and 3157-3158. These macOS-reported failures are now reproduced on local MSW; focused diagnosis continues before this lot can close.
+- Additional book-control run: 55 / 58 cases pass; Listbook `SetItemTopologyReentry`, Toolbook `BitmapLookupReentryIsPrePublication` and native Treebook `ControllerVetoRestoresSelection` remain FAIL (`audit101-master-books.log`). They extend this same CI regression lot.
+
+### Subsequent focused results
+
+- All six book-control families now pass on MSW Debug: 471 assertions / 58 cases (`audit101-master-books-fixed.log`). Native tree selection guarding ends before the application CHANGED callback, permitting the Treebook veto rollback. Listbook checks each implementation's consumed-state return contract; Toolbook realizes native buttons before its destructive callback is armed.
+- Native tree programmatic single/multiple selection passes 22 assertions / 2 cases. The interactive `SelectionChange` test is not qualified on an isolated desktop; its missing `EnableUITests()` opt-out was corrected, and it is excluded from non-input evidence.
+- The four initial PropertyGrid callback-removal sections now pass in MSW Debug and WinUI shared/static: 38 assertions / 1 selected case in each environment (`audit101-propgrid-removal-fixed.log`). Effective removal at idle is checked, not just disappearance from name lookup.
+- Full PropertyGrid execution then reaches further failures in composed change, toolbar rollback, splitter notification counting and an event-value destruction fixture. The full run still fails; these newly reachable failures remain within this lot until corrected and retested.
+- WinUI shared/static native resize + owner-forwarder + DirCtrl group passes 313 assertions / 8 cases after master integration (`audit101-postmerge-native.log`).
+- Full MSW Debug PropertyGrid now passes: 1137 assertions / 2 cases, `audit101-propgrid-complete.log`; `/warnaserror` rebuild also exits 0. The four newly corrected sections pass 55 assertions per WinUI linkage (`audit101-propgrid-final-sections.log`).
+- Composed changes now track the owning page independently from the displayed page. Toolbar rollback realizes restored native buttons, with native button-count assertions. Two fixtures distinguish legitimate destination-page resize notifications and avoid reading a lambda capture after deleting its owner. The final-page count assertion now follows the existing public zero-page contract, retaining the internal page-identity check.
+- Full WinUI PropertyGrid is still FAIL in both linkages: `Retained_page_dispatch_stops_at_each_destroy_boundary`, target 0, SIGSEGV after 413 successful assertions. This separate failure is being isolated; the passing MSW suite and focused WinUI sections do not qualify the full WinUI suite.
+- Non-input execution explicitly sets `WX_UI_TESTS=0`, including the WinUI CI job. An inherited tree-selection test which ignored that opt-out now respects it on its system-input branch.
 
 ## Maintenance
 
