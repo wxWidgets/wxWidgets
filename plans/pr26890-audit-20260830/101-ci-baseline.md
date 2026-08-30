@@ -192,6 +192,11 @@ If installation reaches a different package/dependency error, retain the evidenc
 - Job metadata and full log are saved in `F:\wxwinui-pr26890-audit101-ci-c0f1d55a06\ubuntu-qt-job.{json,log}`. At this snapshot the new WinUI jobs and several other platforms remain unfinished; this single job is not a global CI pass and does not qualify later local Notebook/Toolbar changes.
 - Subsequent completion at the same SHA: WinUI shared **99301804575** and static **99301804518**, run **33328131191**, both succeed. Each executes the header-dispatch self-test, toolkit installed-consumer test, runtime installed-consumer test, runtime smoke and Supported V0 gate; none is inferred from compilation alone. Full logs are saved as `winui-{shared,static}-job.log` beside the Qt evidence. The later snapshot has **42 successful checks**, with Windows Qt 5.15/6.10 and AppVeyor still unfinished. This is not yet global CI completion or validation of later local changes.
 
+### Windows Qt stalled GUI execution at c0f1d55a06
+
+- The user's live tails identify CTest **869, `test_gui.exe`**, after successful IPC concurrent-request tests in both Windows Qt jobs. Its computed timeout is **10000000 seconds**. Qt 6.10's last visible Grid warning is followed by `return` in the source; successful Catch cases are silent, so this does not identify the blocked case. The job and run log APIs still return 404 while these jobs are active. Evidence: `F:\wxwinui-pr26890-audit101-ci-c0f1d55a06\qt-user-live-progress.md` and the saved API snapshots.
+- The workflow schedules the GUI executable twice. The local containment patch keeps the complete GUI suite in its dedicated step, excludes only that duplicate from the earlier CTest invocation, bounds both steps to 20 minutes and sets a 300-second default CTest timeout without overriding existing explicit test timeouts. GUI case durations make completed cases visible. This is containment and diagnostics, **not yet a correction or qualification of the underlying GUI hang**; private-desktop diagnosis remains in progress.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
