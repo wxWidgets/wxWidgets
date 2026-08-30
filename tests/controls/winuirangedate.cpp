@@ -12,6 +12,8 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "range-test-access.h"
+#include "date-time-test-access.h"
+#include "calendar-test-access.h"
 
 #include "testableframe.h"
 #include "waitfor.h"
@@ -90,28 +92,28 @@ public:
         const wxString value(language.c_str());
 #if wxUSE_DATEPICKCTRL
         m_previousDate =
-            wxDatePickerCtrl::WinUISetLanguageForTesting(value);
+            wxWinUIDatePickerTestAccess::SetLanguage(value);
 #endif
 #if wxUSE_TIMEPICKCTRL
         m_previousTime =
-            wxTimePickerCtrl::WinUISetLanguageForTesting(value);
+            wxWinUITimePickerTestAccess::SetLanguage(value);
 #endif
 #if wxUSE_CALENDARCTRL
         m_previousCalendar =
-            wxCalendarCtrl::WinUISetLanguageForTesting(value);
+            wxWinUICalendarTestAccess::SetLanguage(value);
 #endif
     }
 
     ~wxWinUITestLanguageOverride()
     {
 #if wxUSE_CALENDARCTRL
-        wxCalendarCtrl::WinUISetLanguageForTesting(m_previousCalendar);
+        wxWinUICalendarTestAccess::SetLanguage(m_previousCalendar);
 #endif
 #if wxUSE_TIMEPICKCTRL
-        wxTimePickerCtrl::WinUISetLanguageForTesting(m_previousTime);
+        wxWinUITimePickerTestAccess::SetLanguage(m_previousTime);
 #endif
 #if wxUSE_DATEPICKCTRL
-        wxDatePickerCtrl::WinUISetLanguageForTesting(m_previousDate);
+        wxWinUIDatePickerTestAccess::SetLanguage(m_previousDate);
 #endif
     }
 
@@ -448,7 +450,7 @@ wxWinUITimeSpinParts wxWinUIGetTimeSpinParts(
 
     int hourColumn = -1;
     int periodColumn = -1;
-    if ( !picker->WinUIGetTimeFieldOrderForTesting(
+    if ( !wxWinUITimePickerTestAccess::GetTimeFieldOrder(*picker,
              &hourColumn, nullptr, nullptr, &periodColumn) )
     {
         return result;
@@ -669,8 +671,8 @@ bool wxWinUIWaitCalendarDispatcherBarrier(
 }
 
 bool wxWinUISameCalendarLayoutTicket(
-    const wxCalendarCtrl::WinUILayoutTicketForTesting& lhs,
-    const wxCalendarCtrl::WinUILayoutTicketForTesting& rhs)
+    const wxWinUICalendarTestAccess::LayoutTicket& lhs,
+    const wxWinUICalendarTestAccess::LayoutTicket& rhs)
 {
     return lhs.layoutRevision == rhs.layoutRevision &&
            lhs.realizedDaysRevision == rhs.realizedDaysRevision &&
@@ -682,7 +684,7 @@ bool wxWinUISameCalendarLayoutTicket(
 
 wxWinUICalendarNavigationButtons wxWinUIGetBoundCalendarNavigationButtons(
     wxCalendarCtrl *calendar,
-    const wxCalendarCtrl::WinUILayoutTicketForTesting& ticket)
+    const wxWinUICalendarTestAccess::LayoutTicket& ticket)
 {
     wxWinUICalendarNavigationButtons result;
     const MUX::UIElement content =
@@ -705,13 +707,13 @@ bool wxWinUIWaitForStableCalendarLayout(
     wxCalendarCtrl *calendar,
     const MUXC::CalendarView& calendarPeer,
     const char *description,
-    wxCalendarCtrl::WinUILayoutTicketForTesting *stableTicket,
+    wxWinUICalendarTestAccess::LayoutTicket *stableTicket,
     wxWinUICalendarNavigationButtons *stableButtons)
 {
     if ( !calendar || !calendarPeer || !stableTicket || !stableButtons )
         return false;
 
-    wxCalendarCtrl::WinUILayoutTicketForTesting candidate;
+    wxWinUICalendarTestAccess::LayoutTicket candidate;
     bool haveCandidate = false;
     unsigned stableEdges = 0;
     bool barrierQueued = false;
@@ -726,8 +728,8 @@ bool wxWinUIWaitForStableCalendarLayout(
         }
 
         calendarPeer.UpdateLayout();
-        wxCalendarCtrl::WinUILayoutTicketForTesting current;
-        if ( !calendar->WinUIGetStableLayoutTicketForTesting(&current) )
+        wxWinUICalendarTestAccess::LayoutTicket current;
+        if ( !wxWinUICalendarTestAccess::GetStableLayoutTicket(*calendar, &current) )
         {
             haveCandidate = false;
             stableEdges = 0;
@@ -874,15 +876,15 @@ class wxWinUITestTimeLoadedHookScope
 {
 public:
     wxWinUITestTimeLoadedHookScope(
-        wxTimePickerCtrl::WinUIHourLoadedHookForTesting hook,
+        wxWinUITimePickerTestAccess::HourLoadedHook hook,
         void *data)
     {
-        wxTimePickerCtrl::WinUISetHourLoadedHookForTesting(hook, data);
+        wxWinUITimePickerTestAccess::SetHourLoadedHook(hook, data);
     }
 
     ~wxWinUITestTimeLoadedHookScope()
     {
-        wxTimePickerCtrl::WinUISetHourLoadedHookForTesting(nullptr);
+        wxWinUITimePickerTestAccess::SetHourLoadedHook(nullptr);
     }
 };
 
@@ -1077,11 +1079,11 @@ TEST_CASE("wxWinUI DatePicker has a canonical transactional range",
 
     wxDateTime defaultPeerMinimum;
     wxDateTime defaultPeerMaximum;
-    REQUIRE(picker.WinUIGetDefaultPeerRangeForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetDefaultPeerRange(picker,
         &defaultPeerMinimum, &defaultPeerMaximum));
     wxDateTime civilPeerMinimum;
     wxDateTime civilPeerMaximum;
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         nullptr, &civilPeerMinimum, &civilPeerMaximum));
     CHECK(defaultPeerMinimum >= civilPeerMinimum);
     CHECK(defaultPeerMaximum <= civilPeerMaximum);
@@ -1125,7 +1127,7 @@ TEST_CASE("wxWinUI DatePicker has a canonical transactional range",
     wxDateTime peerValue;
     wxDateTime peerMinimum;
     wxDateTime peerMaximum;
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         &peerValue, &peerMinimum, &peerMaximum));
     CHECK(peerValue == tightenedMaximum);
     CHECK(peerMinimum == minimum);
@@ -1137,7 +1139,7 @@ TEST_CASE("wxWinUI DatePicker has a canonical transactional range",
     REQUIRE(picker.GetRange(&actualMinimum, &actualMaximum));
     CHECK_FALSE(actualMinimum.IsValid());
     CHECK(actualMaximum == tightenedMaximum);
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum == civilPeerMinimum);
     CHECK(peerMaximum == tightenedMaximum);
@@ -1146,14 +1148,14 @@ TEST_CASE("wxWinUI DatePicker has a canonical transactional range",
     REQUIRE(picker.GetRange(&actualMinimum, &actualMaximum));
     CHECK(actualMinimum == minimum);
     CHECK_FALSE(actualMaximum.IsValid());
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum == minimum);
     CHECK(peerMaximum == civilPeerMaximum);
 
     picker.SetRange(wxDefaultDateTime, wxDefaultDateTime);
     CHECK_FALSE(picker.GetRange(&actualMinimum, &actualMaximum));
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum == civilPeerMinimum);
     CHECK(peerMaximum == civilPeerMaximum);
@@ -1165,7 +1167,7 @@ TEST_CASE("wxWinUI DatePicker has a canonical transactional range",
             defaultPeerMaximum + wxDateSpan::Day();
         picker.SetRange(future, wxDefaultDateTime);
         CHECK(picker.GetValue() == future);
-        REQUIRE(picker.WinUIGetPeerStateForTesting(
+        REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
             &peerValue, &peerMinimum, &peerMaximum));
         CHECK(peerValue == future);
         CHECK(peerMinimum == future);
@@ -1188,7 +1190,7 @@ TEST_CASE("wxWinUI DatePicker preserves pre-FILETIME Gregorian dates",
     CHECK(picker.GetValue() == historical);
 
     wxDateTime peerDate;
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         &peerDate, nullptr, nullptr));
     CHECK(peerDate == historical);
 
@@ -1296,40 +1298,40 @@ TEST_CASE("wxWinUI DatePicker maps century and dropdown styles",
         wxDefaultPosition, wxDefaultSize,
         wxDP_DROPDOWN | wxDP_SHOWCENTURY);
     const wxString fullFormat =
-        full.WinUIGetPeerDateFormatForTesting();
+        wxWinUIDatePickerTestAccess::GetPeerDateFormat(full);
     CHECK(fullFormat.Contains("day"));
     CHECK(fullFormat.Contains("month"));
     CHECK(fullFormat.Contains("year.full"));
-    CHECK(full.WinUIUsesDropdownForTesting());
+    CHECK(wxWinUIDatePickerTestAccess::UsesDropdown(full));
 
     wxDatePickerCtrl abbreviated(
         parent, wxID_ANY, wxDefaultDateTime,
         wxDefaultPosition, wxDefaultSize,
         wxDP_SPIN);
     const wxString abbreviatedFormat =
-        abbreviated.WinUIGetPeerDateFormatForTesting();
+        wxWinUIDatePickerTestAccess::GetPeerDateFormat(abbreviated);
     CHECK(abbreviatedFormat.Contains("day"));
     CHECK(abbreviatedFormat.Contains("month"));
     CHECK(abbreviatedFormat.Contains("year.abbreviated"));
-    CHECK_FALSE(abbreviated.WinUIUsesDropdownForTesting());
+    CHECK_FALSE(wxWinUIDatePickerTestAccess::UsesDropdown(abbreviated));
     CHECK(abbreviatedFormat ==
-          abbreviated.WinUIGetLocaleDatePatternForTesting());
+          wxWinUIDatePickerTestAccess::GetLocaleDatePattern(abbreviated));
 
     int year = 0;
     int month = 0;
     int day = 0;
-    REQUIRE(abbreviated.WinUIGetSpinFieldsForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinFields(abbreviated,
         &year, &month, &day));
     const wxDateTime spinValue = abbreviated.GetValue();
     CHECK(year == spinValue.GetYear());
     CHECK(month == static_cast<int>(spinValue.GetMonth()) + 1);
     CHECK(day == spinValue.GetDay());
     wxWinUICheckCompositeKeyboardAndAutomation(&abbreviated);
-    CHECK(abbreviated.WinUIGetSpinYearTextForTesting().length() == 2);
+    CHECK(wxWinUIDatePickerTestAccess::GetSpinYearText(abbreviated).length() == 2);
 
     // wxDP_DEFAULT follows wxMSW and selects the inline spinner too.
     wxDatePickerCtrl platformDefault(parent, wxID_ANY);
-    CHECK_FALSE(platformDefault.WinUIUsesDropdownForTesting());
+    CHECK_FALSE(wxWinUIDatePickerTestAccess::UsesDropdown(platformDefault));
     CHECK(platformDefault.HasFlag(wxDP_SPIN));
 }
 
@@ -1349,11 +1351,11 @@ TEST_CASE("wxWinUI DatePicker user events and ALLOWNONE are exact",
         wxDP_DEFAULT | wxDP_SHOWCENTURY | wxDP_ALLOWNONE);
     CHECK_FALSE(picker.GetValue().IsValid());
     picker.SetNullText("No civil date");
-    CHECK(picker.WinUIGetPeerNullTextForTesting() ==
+    CHECK(wxWinUIDatePickerTestAccess::GetPeerNullText(picker) ==
           "No civil date");
 
     wxDateTime peerValue;
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         &peerValue, nullptr, nullptr));
     CHECK_FALSE(peerValue.IsValid());
 
@@ -1361,7 +1363,7 @@ TEST_CASE("wxWinUI DatePicker user events and ALLOWNONE are exact",
     picker.SetValue(today);
     CHECK(events.GetCount() == 0);
 
-    REQUIRE(picker.WinUIClearPeerDateForTesting());
+    REQUIRE(wxWinUIDatePickerTestAccess::ClearPeerDate(picker));
     CHECK_FALSE(picker.GetValue().IsValid());
     CHECK(events.GetCount() == 1);
 
@@ -1369,35 +1371,35 @@ TEST_CASE("wxWinUI DatePicker user events and ALLOWNONE are exact",
     // edits stay in the peer and do not fabricate a wx date or event.
     int partValue = -1;
     bool blank = false;
-    REQUIRE(picker.WinUISetSpinPartForTesting(0, 2024));
-    REQUIRE(picker.WinUIGetSpinPartForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::SetSpinPart(picker, 0, 2024));
+    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinPart(picker,
         0, &partValue, &blank));
     CHECK_FALSE(blank);
     CHECK(partValue == 2024);
-    REQUIRE(picker.WinUIGetSpinPartForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinPart(picker,
         1, nullptr, &blank));
     CHECK(blank);
     CHECK_FALSE(picker.GetValue().IsValid());
     CHECK(events.GetCount() == 1);
 
-    REQUIRE(picker.WinUISetSpinPartForTesting(1, 2));
-    REQUIRE(picker.WinUIGetSpinPartForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::SetSpinPart(picker, 1, 2));
+    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinPart(picker,
         1, &partValue, &blank));
     CHECK_FALSE(blank);
     CHECK(partValue == 2);
     CHECK_FALSE(picker.GetValue().IsValid());
     CHECK(events.GetCount() == 1);
 
-    REQUIRE(picker.WinUISetSpinPartForTesting(2, 29));
+    REQUIRE(wxWinUIDatePickerTestAccess::SetSpinPart(picker, 2, 29));
     CHECK(picker.GetValue() ==
           wxDateTime(29, wxDateTime::Feb, 2024));
     CHECK(events.GetCount() == 2);
 
-    REQUIRE(picker.WinUIClearPeerDateForTesting());
+    REQUIRE(wxWinUIDatePickerTestAccess::ClearPeerDate(picker));
     CHECK_FALSE(picker.GetValue().IsValid());
     CHECK(events.GetCount() == 3);
 
-    REQUIRE(picker.WinUISetPeerDateForTesting(tomorrow));
+    REQUIRE(wxWinUIDatePickerTestAccess::SetPeerDate(picker, tomorrow));
     CHECK(picker.GetValue() == tomorrow);
     CHECK(events.GetCount() == 4);
 
@@ -1410,9 +1412,9 @@ TEST_CASE("wxWinUI DatePicker user events and ALLOWNONE are exact",
     wxDatePickerCtrl required(parent, wxID_ANY, today);
     EventCounter requiredEvents(&required, wxEVT_DATE_CHANGED);
     requiredEvents.Clear();
-    REQUIRE(required.WinUIClearPeerDateForTesting());
+    REQUIRE(wxWinUIDatePickerTestAccess::ClearPeerDate(required));
     CHECK(required.GetValue() == today);
-    REQUIRE(required.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(required,
         &peerValue, nullptr, nullptr));
     CHECK(peerValue == today);
     CHECK(requiredEvents.GetCount() == 0);
@@ -1439,7 +1441,7 @@ TEST_CASE("wxWinUI DatePicker civil dates survive DST boundaries",
         CHECK(picker.GetValue() == date);
 
         wxDateTime peerValue;
-        REQUIRE(picker.WinUIGetPeerStateForTesting(
+        REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
             &peerValue, nullptr, nullptr));
         CHECK(peerValue == date);
     }
@@ -1467,7 +1469,7 @@ TEST_CASE("wxWinUI DatePicker callback teardown is destruction-safe",
     });
 
     wxDatePickerCtrl * const invoking = picker;
-    REQUIRE(invoking->WinUISetPeerDateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::SetPeerDate(*invoking,
         today + wxDateSpan::Day()));
     CHECK(picker == nullptr);
     CHECK(events == 1);
@@ -1518,7 +1520,7 @@ TEST_CASE("wxWinUI DatePicker nested range setter is last writer",
     wxDateTime peerValue;
     wxDateTime peerMinimum;
     wxDateTime peerMaximum;
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         &peerValue, &peerMinimum, &peerMaximum));
     CHECK(peerValue == initial);
     CHECK(peerMinimum == nestedMinimum);
@@ -1556,7 +1558,7 @@ TEST_CASE("wxWinUI DatePicker nested value setter is last writer",
     CHECK(slotSynced);
     CHECK(picker.GetValue() == nested);
     wxDateTime peer;
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         &peer, nullptr, nullptr));
     CHECK(peer == nested);
 }
@@ -1585,17 +1587,17 @@ TEST_CASE("wxWinUI TimePicker preserves its second-precision contract",
     CHECK(second == 59);
 
     wxDateTime peerValue;
-    REQUIRE(picker.WinUIGetPeerTimeForTesting(&peerValue));
+    REQUIRE(wxWinUITimePickerTestAccess::GetPeerTime(picker, &peerValue));
     CHECK(peerValue == picker.GetValue());
 
     const wxString localePattern =
-        picker.WinUIGetLocaleTimePatternForTesting();
+        wxWinUITimePickerTestAccess::GetLocaleTimePattern(picker);
     CHECK_FALSE(localePattern.empty());
     int hourOrder = -1;
     int minuteOrder = -1;
     int secondOrder = -1;
     int periodOrder = -1;
-    REQUIRE(picker.WinUIGetTimeFieldOrderForTesting(
+    REQUIRE(wxWinUITimePickerTestAccess::GetTimeFieldOrder(picker,
         &hourOrder, &minuteOrder, &secondOrder, &periodOrder));
     CHECK(hourOrder >= 0);
     CHECK(minuteOrder >= 0);
@@ -1659,7 +1661,7 @@ TEST_CASE("wxWinUI TimePicker preserves its second-precision contract",
     CHECK(picker.GetValue().GetDay() == 1);
     CHECK(picker.GetValue().GetMonth() == wxDateTime::Jan);
     CHECK(picker.GetValue().GetYear() == 2012);
-    REQUIRE(picker.WinUIGetPeerTimeForTesting(&peerValue));
+    REQUIRE(wxWinUITimePickerTestAccess::GetPeerTime(picker, &peerValue));
     CHECK(peerValue == picker.GetValue());
     CHECK(events.GetCount() == 0);
 }
@@ -1908,7 +1910,7 @@ TEST_CASE("wxWinUI TimePicker rebinds real hour template spin peers",
     std::uintptr_t boundIncrement = 0;
     std::uintptr_t boundDecrement = 0;
     std::uint64_t bindingGeneration = 0;
-    REQUIRE(picker.WinUIGetHourSpinBindingForTesting(
+    REQUIRE(wxWinUITimePickerTestAccess::GetHourSpinBinding(picker,
         &boundIncrement, &boundDecrement, &bindingGeneration));
     CHECK(boundIncrement == reinterpret_cast<std::uintptr_t>(
         winrt::get_abi(spin.increment)));
@@ -1930,7 +1932,7 @@ TEST_CASE("wxWinUI TimePicker rebinds real hour template spin peers",
     {
         boundIncrement = 1;
         boundDecrement = 1;
-        const bool bound = picker.WinUIGetHourSpinBindingForTesting(
+        const bool bound = wxWinUITimePickerTestAccess::GetHourSpinBinding(picker,
             &boundIncrement, &boundDecrement, &bindingGeneration);
         return !bound && boundIncrement == 0 && boundDecrement == 0 &&
                bindingGeneration != originalGeneration;
@@ -1964,7 +1966,7 @@ TEST_CASE("wxWinUI TimePicker rebinds real hour template spin peers",
     {
         spin = wxWinUIGetTimeSpinParts(&picker);
         return spin.increment && spin.decrement &&
-               picker.WinUIGetHourSpinBindingForTesting(
+               wxWinUITimePickerTestAccess::GetHourSpinBinding(picker,
                    &boundIncrement, &boundDecrement,
                    &bindingGeneration);
     }, 1000));
@@ -2128,7 +2130,7 @@ TEST_CASE("wxWinUI TimePicker peer events are exact and lifetime-safe",
     wxTimePickerCtrl picker(parent, wxID_ANY, initial);
     EventCounter events(&picker, wxEVT_TIME_CHANGED);
 
-    REQUIRE(picker.WinUISetPeerTimeForTesting(
+    REQUIRE(wxWinUITimePickerTestAccess::SetPeerTime(picker,
         wxDateTime(9, wxDateTime::Sep, 2040, 9, 25, 58)));
     int hour = -1;
     int minute = -1;
@@ -2141,7 +2143,7 @@ TEST_CASE("wxWinUI TimePicker peer events are exact and lifetime-safe",
 
     // The locale-ordered peer includes a real seconds spinner, so a change
     // within the same hidden native minute is observable as one wx event.
-    REQUIRE(picker.WinUISetPeerTimeForTesting(
+    REQUIRE(wxWinUITimePickerTestAccess::SetPeerTime(picker,
         wxDateTime(3, wxDateTime::Mar, 2030, 9, 25, 17)));
     CHECK(events.GetCount() == 2);
     REQUIRE(picker.GetTime(&hour, &minute, &second));
@@ -2150,7 +2152,7 @@ TEST_CASE("wxWinUI TimePicker peer events are exact and lifetime-safe",
     CHECK(second == 17);
 
     // Only a complete hour/minute/second duplicate is coalesced.
-    REQUIRE(picker.WinUISetPeerTimeForTesting(
+    REQUIRE(wxWinUITimePickerTestAccess::SetPeerTime(picker,
         wxDateTime(12, wxDateTime::Oct, 2050, 9, 25, 17)));
     CHECK(events.GetCount() == 2);
 
@@ -2166,7 +2168,7 @@ TEST_CASE("wxWinUI TimePicker peer events are exact and lifetime-safe",
     });
 
     wxTimePickerCtrl * const invoking = doomed;
-    REQUIRE(invoking->WinUISetPeerTimeForTesting(
+    REQUIRE(wxWinUITimePickerTestAccess::SetPeerTime(*invoking,
         wxDateTime(1, wxDateTime::Jan, 2012, 10, 30, 0)));
     CHECK(doomed == nullptr);
     CHECK(destructionEvents == 1);
@@ -2276,7 +2278,7 @@ TEST_CASE("wxWinUI TimePicker nested setter is last writer",
     CHECK(slotSynced);
     CHECK(picker.GetValue() == nested);
     wxDateTime peer;
-    REQUIRE(picker.WinUIGetPeerTimeForTesting(&peer));
+    REQUIRE(wxWinUITimePickerTestAccess::GetPeerTime(picker, &peer));
     CHECK(peer == nested);
 }
 
@@ -2298,11 +2300,11 @@ TEST_CASE("wxWinUI Calendar has a canonical transactional range",
 
     wxDateTime defaultMinimum;
     wxDateTime defaultMaximum;
-    REQUIRE(calendar.WinUIGetDefaultPeerRangeForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetDefaultPeerRange(calendar,
         &defaultMinimum, &defaultMaximum));
     wxDateTime civilMinimum;
     wxDateTime civilMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &civilMinimum, &civilMaximum));
     CHECK(defaultMinimum >= civilMinimum);
     CHECK(defaultMaximum <= civilMaximum);
@@ -2335,7 +2337,7 @@ TEST_CASE("wxWinUI Calendar has a canonical transactional range",
     wxDateTime peerDate;
     wxDateTime peerMinimum;
     wxDateTime peerMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         &peerDate, &peerMinimum, &peerMaximum));
     CHECK(peerDate == previous);
     CHECK(peerMinimum == minimum);
@@ -2346,7 +2348,7 @@ TEST_CASE("wxWinUI Calendar has a canonical transactional range",
         maximum - wxDateSpan::Day();
     REQUIRE(calendar.SetDateRange(minimum, tightenedMaximum));
     CHECK(calendar.GetDate() == tightenedMaximum);
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         &peerDate, &peerMinimum, &peerMaximum));
     CHECK(peerDate == tightenedMaximum);
     CHECK(peerMinimum == minimum);
@@ -2364,7 +2366,7 @@ TEST_CASE("wxWinUI Calendar has a canonical transactional range",
             &actualMinimum, &actualMaximum));
         CHECK(actualMinimum == distantMinimum);
         CHECK_FALSE(actualMaximum.IsValid());
-        REQUIRE(calendar.WinUIGetPeerStateForTesting(
+        REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
             &peerDate, &peerMinimum, &peerMaximum));
         CHECK(peerDate == distantMinimum);
         CHECK(peerMinimum == distantMinimum);
@@ -2375,14 +2377,14 @@ TEST_CASE("wxWinUI Calendar has a canonical transactional range",
 
     REQUIRE(calendar.SetDateRange(
         wxDefaultDateTime, tightenedMaximum));
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum == civilMinimum);
     CHECK(peerMaximum == tightenedMaximum);
 
     REQUIRE(calendar.SetDateRange(
         minimum, wxDefaultDateTime));
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum == minimum);
     CHECK(peerMaximum == civilMaximum);
@@ -2392,7 +2394,7 @@ TEST_CASE("wxWinUI Calendar has a canonical transactional range",
         wxDefaultDateTime, wxDefaultDateTime));
     CHECK_FALSE(calendar.GetDateRange(
         &actualMinimum, &actualMaximum));
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum == civilMinimum);
     CHECK(peerMaximum == civilMaximum);
@@ -2405,7 +2407,7 @@ TEST_CASE("wxWinUI Calendar has a canonical transactional range",
     for ( const wxDateTime& transition : transitionDates )
     {
         REQUIRE(calendar.SetDate(transition));
-        REQUIRE(calendar.WinUIGetPeerStateForTesting(
+        REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
             &peerDate, nullptr, nullptr));
         CHECK(peerDate == transition);
     }
@@ -2426,7 +2428,7 @@ TEST_CASE("wxWinUI Calendar month lock is an effective native range",
 
     wxDateTime peerMinimum;
     wxDateTime peerMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum == wxDateTime(1, wxDateTime::May, 2024));
     CHECK(peerMaximum == wxDateTime(31, wxDateTime::May, 2024));
@@ -2442,7 +2444,7 @@ TEST_CASE("wxWinUI Calendar month lock is an effective native range",
     REQUIRE(calendar.EnableMonthChange(true));
     CHECK(calendar.AllowMonthChange());
 
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum < calendar.GetDate());
     CHECK(peerMaximum > calendar.GetDate());
@@ -2451,7 +2453,7 @@ TEST_CASE("wxWinUI Calendar month lock is an effective native range",
         wxDateTime(10, wxDateTime::May, 2024),
         wxDateTime(25, wxDateTime::Jun, 2024)));
     REQUIRE(calendar.EnableMonthChange(false));
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum == wxDateTime(10, wxDateTime::May, 2024));
     CHECK(peerMaximum == wxDateTime(31, wxDateTime::May, 2024));
@@ -2469,7 +2471,7 @@ TEST_CASE("wxWinUI Calendar preserves pre-FILETIME Gregorian dates",
     CHECK(calendar.GetDate() == historical);
 
     wxDateTime peerDate;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         &peerDate, nullptr, nullptr));
     CHECK(peerDate == historical);
 
@@ -2523,7 +2525,7 @@ TEST_CASE("wxWinUI alternate calendar drives ranges fields and holidays",
 
     wxDateTime peerMinimum;
     wxDateTime peerMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
     CHECK(peerMinimum <= today);
     CHECK(peerMaximum >= today);
@@ -2532,7 +2534,7 @@ TEST_CASE("wxWinUI alternate calendar drives ranges fields and holidays",
     unsigned holidayColourCount = 0;
     REQUIRE(WaitFor("alternate-calendar absolute holiday emphasis", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    today.GetDay(), nullptr,
                    &holidayColourCount) &&
                holidayColourCount == 1;
@@ -2560,7 +2562,7 @@ TEST_CASE("wxWinUI alternate calendar drives ranges fields and holidays",
     int year = 0;
     int month = 0;
     int day = 0;
-    REQUIRE(picker.WinUIGetSpinFieldsForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetSpinFields(picker,
         &year, &month, &day));
     CHECK(year == expectedYear);
     CHECK(month == expectedMonth);
@@ -2615,7 +2617,7 @@ TEST_CASE("wxWinUI alternate-calendar navigation keeps wxMSW civil events",
 
     wxDateTime peerMinimum;
     wxDateTime peerMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
 
     wxDateTime scanStart(
@@ -2690,7 +2692,7 @@ TEST_CASE("wxWinUI alternate-calendar navigation keeps wxMSW civil events",
         {
             REQUIRE(calendar.SetDate(dates[0]));
             events.clear();
-            REQUIRE(calendar.WinUISetPeerDateForTesting(dates[1]));
+            REQUIRE(wxWinUICalendarTestAccess::SetPeerDate(calendar, dates[1]));
             CHECK(calendar.GetDate() == dates[1]);
             REQUIRE(events.size() == expected.size());
             std::size_t n = 0;
@@ -2743,7 +2745,7 @@ TEST_CASE("wxWinUI Japanese calendar preserves era transitions and bounds",
 
     wxDateTime peerMinimum;
     wxDateTime peerMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &peerMinimum, &peerMaximum));
     // Windows.Globalization documents Meiji 1 as beginning on this civil
     // date. This independent public contract catches a regression back to a
@@ -2764,7 +2766,7 @@ TEST_CASE("wxWinUI Japanese calendar preserves era transitions and bounds",
     CHECK(pickerRoot.Language() == L"ja-JP-u-ca-japanese");
     wxDateTime pickerMinimum;
     wxDateTime pickerMaximum;
-    REQUIRE(picker.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIDatePickerTestAccess::GetPeerState(picker,
         nullptr, &pickerMinimum, &pickerMaximum));
     CHECK(pickerMinimum == peerMinimum);
     CHECK(pickerMaximum == peerMaximum);
@@ -2797,7 +2799,7 @@ TEST_CASE("wxWinUI Japanese calendar preserves era transitions and bounds",
         int year = 0;
         int month = 0;
         int day = 0;
-        REQUIRE(picker.WinUIGetSpinFieldsForTesting(
+        REQUIRE(wxWinUIDatePickerTestAccess::GetSpinFields(picker,
             &year, &month, &day));
         CHECK(year == model.Year());
         CHECK(month == model.Month());
@@ -2886,7 +2888,7 @@ TEST_CASE("wxWinUI holiday authority reentrance converges on live state",
         REQUIRE(WaitFor("holiday refresh after reentrant SetDate", [&]()
         {
             unsigned colourCount = 0;
-            return calendar.WinUIGetAppliedDensityColourForTesting(
+            return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                        target.GetDay(), nullptr, &colourCount) &&
                    colourCount == 1;
         }, 1000));
@@ -2922,7 +2924,7 @@ TEST_CASE("wxWinUI holiday authority reentrance converges on live state",
         REQUIRE(WaitFor("holiday refresh after reentrant SetDateRange", [&]()
         {
             unsigned colourCount = 0;
-            return calendar.WinUIGetAppliedDensityColourForTesting(
+            return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                        rangeHoliday.GetDay(), nullptr, &colourCount) &&
                    colourCount == 1;
         }, 1000));
@@ -2948,7 +2950,7 @@ TEST_CASE("wxWinUI holiday authority reentrance converges on live state",
         REQUIRE(WaitFor("holiday refresh after reentrant style toggle", [&]()
         {
             unsigned colourCount = 0;
-            return calendar.WinUIGetAppliedDensityColourForTesting(
+            return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                        initial.GetDay(), nullptr, &colourCount) &&
                    colourCount == 1;
         }, 1000));
@@ -3007,7 +3009,7 @@ TEST_CASE("wxWinUI holiday authority reentrance converges on live state",
         REQUIRE(WaitFor("holiday refresh after authority reparent", [&]()
         {
             unsigned colourCount = 0;
-            return calendar.WinUIGetAppliedDensityColourForTesting(
+            return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                        initial.GetDay(), nullptr, &colourCount) &&
                    colourCount == 1;
         }, 1000));
@@ -3040,14 +3042,14 @@ TEST_CASE("wxWinUI Calendar events, marks and day hit testing are exact",
     calendar.Bind(wxEVT_CALENDAR_MONTH_CHANGED, record);
     calendar.Bind(wxEVT_CALENDAR_YEAR_CHANGED, record);
 
-    REQUIRE(calendar.WinUISetPeerDateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::SetPeerDate(calendar,
         wxDateTime(16, wxDateTime::May, 2024)));
     REQUIRE(events.size() == 2);
     CHECK(events[0] == wxEVT_CALENDAR_SEL_CHANGED);
     CHECK(events[1] == wxEVT_CALENDAR_DAY_CHANGED);
 
     events.clear();
-    REQUIRE(calendar.WinUISetPeerDateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::SetPeerDate(calendar,
         wxDateTime(3, wxDateTime::Jun, 2024)));
     REQUIRE(events.size() == 3);
     CHECK(events[0] == wxEVT_CALENDAR_SEL_CHANGED);
@@ -3055,7 +3057,7 @@ TEST_CASE("wxWinUI Calendar events, marks and day hit testing are exact",
     CHECK(events[2] == wxEVT_CALENDAR_MONTH_CHANGED);
 
     events.clear();
-    REQUIRE(calendar.WinUISetPeerDateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::SetPeerDate(calendar,
         wxDateTime(4, wxDateTime::Jun, 2025)));
     REQUIRE(events.size() == 3);
     CHECK(events[0] == wxEVT_CALENDAR_SEL_CHANGED);
@@ -3063,24 +3065,24 @@ TEST_CASE("wxWinUI Calendar events, marks and day hit testing are exact",
     CHECK(events[2] == wxEVT_CALENDAR_YEAR_CHANGED);
 
     calendar.Mark(4, true);
-    CHECK(calendar.WinUIIsMarkedForTesting(4));
+    CHECK(wxWinUICalendarTestAccess::IsMarked(calendar, 4));
     calendar.Mark(4, false);
-    CHECK_FALSE(calendar.WinUIIsMarkedForTesting(4));
+    CHECK_FALSE(wxWinUICalendarTestAccess::IsMarked(calendar, 4));
 
     calendar.SetHoliday(17);
-    CHECK(calendar.WinUIIsHolidayForTesting(17));
+    CHECK(wxWinUICalendarTestAccess::IsHoliday(calendar, 17));
     unsigned holidayColourCount = 0;
     REQUIRE(WaitFor("holiday CalendarView day realization", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    17, nullptr, &holidayColourCount) &&
                holidayColourCount == 1;
     }, 1000));
     calendar.EnableHolidayDisplay(false);
-    CHECK_FALSE(calendar.WinUIIsHolidayForTesting(17));
+    CHECK_FALSE(wxWinUICalendarTestAccess::IsHoliday(calendar, 17));
     REQUIRE(WaitFor("holiday CalendarView emphasis removal", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    17, nullptr, &holidayColourCount) &&
                holidayColourCount == 0;
     }, 1000));
@@ -3099,7 +3101,7 @@ TEST_CASE("wxWinUI Calendar events, marks and day hit testing are exact",
         selectedDate + wxDateSpan::Day();
     REQUIRE(WaitFor("adjacent CalendarView day realization", [&]()
     {
-        return calendar.WinUIDoubleTapDateForTesting(adjacentDay);
+        return wxWinUICalendarTestAccess::DoubleTapDate(calendar, adjacentDay);
     }, 1000));
     CHECK(doubleClicks == 1);
     CHECK(calendar.GetDate() == selectedDate);
@@ -3212,7 +3214,7 @@ TEST_CASE("wxWinUI Calendar events, marks and day hit testing are exact",
     std::vector<MUXC::CalendarView> calendarPeers;
     wxWinUICollectDateElements(calendarContent, &calendarPeers);
     REQUIRE(calendarPeers.size() == 1);
-    wxCalendarCtrl::WinUILayoutTicketForTesting navigationTicket;
+    wxWinUICalendarTestAccess::LayoutTicket navigationTicket;
     wxWinUICalendarNavigationButtons boundNavigationButtons;
     REQUIRE(wxWinUIWaitForStableCalendarLayout(
         &calendar, calendarPeers.front(),
@@ -3258,7 +3260,7 @@ TEST_CASE("wxWinUI Calendar events, marks and day hit testing are exact",
     CHECK(untouchedWeekday == wxDateTime::Fri);
 
     // Header/background double taps must not fabricate a day event.
-    CHECK_FALSE(calendar.WinUIDoubleTapNonDayForTesting());
+    CHECK_FALSE(wxWinUICalendarTestAccess::DoubleTapNonDay(calendar));
     CHECK(doubleClicks == 1);
 }
 
@@ -3339,7 +3341,7 @@ TEST_CASE("wxWinUI Calendar presentation styles reach the real peer",
     bool mondayFirst = true;
     bool surroundingWeeks = true;
     bool weekNumbers = true;
-    REQUIRE(calendar.WinUIGetPeerCalendarStyleForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerCalendarStyle(calendar,
         &mondayFirst, &surroundingWeeks, &weekNumbers));
     CHECK_FALSE(mondayFirst);
     CHECK_FALSE(surroundingWeeks);
@@ -3351,7 +3353,7 @@ TEST_CASE("wxWinUI Calendar presentation styles reach the real peer",
              wxCAL_SHOW_SURROUNDING_WEEKS |
              wxCAL_SHOW_WEEK_NUMBERS;
     calendar.SetWindowStyleFlag(style);
-    REQUIRE(calendar.WinUIGetPeerCalendarStyleForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerCalendarStyle(calendar,
         &mondayFirst, &surroundingWeeks, &weekNumbers));
     CHECK(mondayFirst);
     CHECK(surroundingWeeks);
@@ -3362,7 +3364,7 @@ TEST_CASE("wxWinUI Calendar presentation styles reach the real peer",
                wxCAL_SHOW_WEEK_NUMBERS);
     style |= wxCAL_SUNDAY_FIRST;
     calendar.SetWindowStyleFlag(style);
-    REQUIRE(calendar.WinUIGetPeerCalendarStyleForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerCalendarStyle(calendar,
         &mondayFirst, &surroundingWeeks, &weekNumbers));
     CHECK_FALSE(mondayFirst);
     CHECK_FALSE(surroundingWeeks);
@@ -3373,7 +3375,7 @@ TEST_CASE("wxWinUI Calendar presentation styles reach the real peer",
     CHECK_FALSE(calendar.AllowMonthChange());
     wxDateTime lockedMinimum;
     wxDateTime lockedMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &lockedMinimum, &lockedMaximum));
     CHECK(lockedMinimum <= calendar.GetDate());
     CHECK(lockedMaximum >= calendar.GetDate());
@@ -3384,7 +3386,7 @@ TEST_CASE("wxWinUI Calendar presentation styles reach the real peer",
     CHECK(calendar.AllowMonthChange());
     wxDateTime unlockedMinimum;
     wxDateTime unlockedMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         nullptr, &unlockedMinimum, &unlockedMaximum));
     CHECK(unlockedMinimum < lockedMinimum);
     CHECK(unlockedMaximum > lockedMaximum);
@@ -3406,7 +3408,7 @@ TEST_CASE("wxWinUI Calendar week numbers cross years in both conventions",
             int number = 0;
             REQUIRE(WaitFor("CalendarView boundary week realization", [&]()
             {
-                return calendar.WinUIGetWeekNumberForTesting(
+                return wxWinUICalendarTestAccess::GetWeekNumber(calendar,
                            date, &start, &number) &&
                        start == expectedStart &&
                        number == expectedNumber;
@@ -3476,7 +3478,7 @@ TEST_CASE("wxWinUI Calendar language reaches real week-number overlay",
     int weekNumber = 0;
     REQUIRE(WaitFor("localized CalendarView week realization", [&]()
     {
-        return calendar.WinUIGetWeekNumberForTesting(
+        return wxWinUICalendarTestAccess::GetWeekNumber(calendar,
             selected, &weekStart, &weekNumber);
     }, 1000));
 
@@ -3534,7 +3536,7 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     int weekNumber = 0;
     REQUIRE(WaitFor("initial coalesced week layout", [&]()
     {
-        return calendar.WinUIGetWeekNumberForTesting(
+        return wxWinUICalendarTestAccess::GetWeekNumber(calendar,
             initial, &weekStart, &weekNumber);
     }, 1000));
     wxYield();
@@ -3551,15 +3553,15 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     // layout edge after ordinary FIFO work queued by a preceding control.
     // Wait for the production projection revisions and the production-bound
     // navigation peers to remain identical across two low-priority edges.
-    wxCalendarCtrl::WinUILayoutTicketForTesting stableTicket;
+    wxWinUICalendarTestAccess::LayoutTicket stableTicket;
     wxWinUICalendarNavigationButtons buttons;
     const bool initialLayoutStable = wxWinUIWaitForStableCalendarLayout(
         &calendar, calendarPeer, "initial stable CalendarView layout",
         &stableTicket, &buttons);
     if ( !initialLayoutStable )
     {
-        wxCalendarCtrl::WinUIWeekRefreshRecoveryForTesting diagnostic;
-        REQUIRE(calendar.WinUIGetWeekRefreshRecoveryForTesting(&diagnostic));
+        wxWinUICalendarTestAccess::WeekRefreshRecovery diagnostic;
+        REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &diagnostic));
         INFO("week recovery: generation=" << diagnostic.generation
              << " request=" << diagnostic.requestRevision
              << " completed=" << diagnostic.completedRevision
@@ -3595,16 +3597,16 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     REQUIRE(initialLayoutStable);
 
     const unsigned long long beforeBatch =
-        calendar.WinUIGetWeekRefreshRunCountForTesting();
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
     for ( int n = 0; n != 32; ++n )
-        REQUIRE(calendar.WinUIRequestWeekRefreshForTesting());
+        REQUIRE(wxWinUICalendarTestAccess::RequestWeekRefresh(calendar));
     // TryEnqueue is the real dispatcher boundary: no caller can turn this
     // same-wave burst into synchronous O(realized-days) work.
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() ==
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
           beforeBatch);
     REQUIRE(wxWinUIWaitCalendarDispatcherBarrier(
         calendarPeer, "first CalendarView dispatcher FIFO barrier"));
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() ==
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
           beforeBatch + 1);
 
     // A refresh callback runs before the first FIFO barrier and would queue
@@ -3612,8 +3614,8 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     // tail and proves the consumed pending bit cannot create a phantom wave.
     REQUIRE(wxWinUIWaitCalendarDispatcherBarrier(
         calendarPeer, "second CalendarView dispatcher FIFO barrier"));
-    wxCalendarCtrl::WinUIWeekRefreshRecoveryForTesting batchDiagnostic;
-    REQUIRE(calendar.WinUIGetWeekRefreshRecoveryForTesting(
+    wxWinUICalendarTestAccess::WeekRefreshRecovery batchDiagnostic;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar,
         &batchDiagnostic));
     INFO("coalesced batch: dayIdentity="
          << batchDiagnostic.dayItemIdentityChanges
@@ -3627,7 +3629,7 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
          << batchDiagnostic.dayLayoutValidationScheduled
          << " request=" << batchDiagnostic.requestRevision
          << " completed=" << batchDiagnostic.completedRevision);
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() ==
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
           beforeBatch + 1);
 
     calendar.Mark(15, true);
@@ -3635,9 +3637,9 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     unsigned holidayColours = 0;
     REQUIRE(WaitFor("marked and holiday days before recycle", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    15, nullptr, &markColours) &&
-               calendar.WinUIGetAppliedDensityColourForTesting(
+               wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    16, nullptr, &holidayColours) &&
                markColours == 1 && holidayColours == 1;
     }, 1000));
@@ -3646,7 +3648,7 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
         &stableTicket, &buttons));
 
     const unsigned long long beforeNavigation =
-        calendar.WinUIGetWeekRefreshRunCountForTesting();
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
     const MUXAPR::IInvokeProvider incrementProvider =
         wxWinUIGetInvokeProvider(buttons.increment);
     REQUIRE(incrementProvider);
@@ -3654,7 +3656,7 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     REQUIRE(WaitFor("week rows after forward navigation", [&]()
     {
         return calendar.GetDate().GetMonth() != initial.GetMonth() &&
-               calendar.WinUIGetWeekRefreshRunCountForTesting() >
+               wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) >
                    beforeNavigation;
     }, 1000));
     REQUIRE(wxWinUIWaitForStableCalendarLayout(
@@ -3667,7 +3669,7 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     REQUIRE(WaitFor("week rows after reverse navigation", [&]()
     {
         return calendar.GetDate() == initial &&
-               calendar.WinUIGetWeekNumberForTesting(
+               wxWinUICalendarTestAccess::GetWeekNumber(calendar,
                    initial, &weekStart, &weekNumber);
     }, 1000));
     REQUIRE(wxWinUIWaitForStableCalendarLayout(
@@ -3675,9 +3677,9 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
         &stableTicket, &buttons));
     REQUIRE(WaitFor("marks and holidays survive day recycling", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    15, nullptr, &markColours) &&
-               calendar.WinUIGetAppliedDensityColourForTesting(
+               wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    16, nullptr, &holidayColours) &&
                markColours == 1 && holidayColours == 1;
     }, 1000));
@@ -3687,16 +3689,16 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     // Two genuine navigation/layout waves may each need one follow-up after
     // CalendarView recycles its realized containers, but never one refresh
     // per day item or per mark/holiday write.
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() <=
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) <=
           beforeNavigation + 6);
 }
 
 TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
           "[winui-range-date][calendar][hit-test][topology]")
 {
-    using Day = wxCalendarCtrl::WinUIMonthTopologyDayForTesting;
+    using Day = wxWinUICalendarTestAccess::MonthTopologyDay;
     using Result =
-        wxCalendarCtrl::WinUIMonthTopologyResultForTesting;
+        wxWinUICalendarTestAccess::MonthTopologyResult;
 
     const auto appendSpan = [](
         std::vector<Day> *days,
@@ -3740,7 +3742,7 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
 
     Result result;
     std::vector<Day> may = makeMay();
-    REQUIRE(wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
         may, &result));
     CHECK(result.month == 5);
     CHECK(result.dayCount == 31);
@@ -3749,7 +3751,7 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
     CHECK(result.firstDayTop == 80.0);
 
     std::vector<Day> rtlScale2 = makeMay(true, 2.0);
-    REQUIRE(wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
         rtlScale2, &result));
     CHECK(result.month == 5);
     CHECK(result.dayCount == 31);
@@ -3760,7 +3762,7 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
     std::vector<Day> recycled = makeMay();
     recycled.push_back(
         Day{5, 1, 31, 40.0, 14.0, 18.0, 16.0, 9001, false});
-    REQUIRE(wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
         recycled, &result));
     CHECK(result.firstDayTop == 80.0);
 
@@ -3770,7 +3772,7 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
     fallbackConflict.push_back(
         Day{5, 1, 31, 40.0, 14.0, 18.0, 16.0, 9002, false});
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             fallbackConflict, &result));
 
     std::vector<Day> june;
@@ -3779,27 +3781,27 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
     std::vector<Day> dual = makeMay();
     dual.insert(dual.end(), june.begin(), june.end());
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             dual, &result));
     std::rotate(dual.begin(), dual.begin() + may.size(), dual.end());
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             dual, &result));
 
     std::vector<Day> twoThirtyDayPages = june;
     appendSpan(&twoThirtyDayPages, 9, 30, 1, 30, 3, 1.0,
                false, 340.0, true);
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             twoThirtyDayPages, &result));
 
     std::vector<Day> partialSeven;
     appendSpan(&partialSeven, 6, 30, 1, 7, 0, 1.0,
                false, 80.0, true);
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             partialSeven, &result));
-    REQUIRE(wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
         partialSeven, &result, 6, 1, 7));
     CHECK(result.month == 6);
     CHECK(result.dayCount == 7);
@@ -3813,7 +3815,7 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
         oldFullWithTruncated.end(),
         partialSeven.begin(), partialSeven.end());
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             oldFullWithTruncated, &result, 6, 1, 7));
 
     std::vector<Day> missingDay = makeMay();
@@ -3826,7 +3828,7 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
             }),
         missingDay.end());
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             missingDay, &result));
 
     std::vector<Day> wrongSlot = makeMay();
@@ -3839,7 +3841,7 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
     REQUIRE(day17 != wrongSlot.end());
     day17->x += 20.0;
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             wrongSlot, &result));
 
     std::vector<Day> sixColumns = makeMay();
@@ -3849,7 +3851,7 @@ TEST_CASE("wxWinUI Calendar active month topology is unambiguous",
             day.x = ((day.calendarDay - 1) % 6) * 20.0;
     }
     CHECK_FALSE(
-        wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
+        wxWinUICalendarTestAccess::ResolveActiveMonthTopology(
             sixColumns, &result));
 }
 
@@ -3873,15 +3875,15 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     REQUIRE(calendarPeers.size() == 1);
     const MUXC::CalendarView calendarPeer = calendarPeers.front();
 
-    wxCalendarCtrl::WinUILayoutTicketForTesting stableTicket;
+    wxWinUICalendarTestAccess::LayoutTicket stableTicket;
     wxWinUICalendarNavigationButtons buttons;
     const bool recoveryLayoutStable = wxWinUIWaitForStableCalendarLayout(
         &calendar, calendarPeer, "week recovery initial stable layout",
         &stableTicket, &buttons);
     if ( !recoveryLayoutStable )
     {
-        wxCalendarCtrl::WinUIWeekRefreshRecoveryForTesting diagnostic;
-        REQUIRE(calendar.WinUIGetWeekRefreshRecoveryForTesting(&diagnostic));
+        wxWinUICalendarTestAccess::WeekRefreshRecovery diagnostic;
+        REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &diagnostic));
         INFO("week recovery: generation=" << diagnostic.generation
              << " request=" << diagnostic.requestRevision
              << " completed=" << diagnostic.completedRevision
@@ -3916,8 +3918,8 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     }
     REQUIRE(recoveryLayoutStable);
 
-    wxCalendarCtrl::WinUIWeekRefreshRecoveryForTesting recovery;
-    REQUIRE(calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery));
+    wxWinUICalendarTestAccess::WeekRefreshRecovery recovery;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery));
     // The projection signature is sourced only from the uniquely dominant
     // current month. May 2024 supplies all 31 civil dates and exactly seven
     // physical weekday columns; transient surrounding/recycle peers are not
@@ -3926,23 +3928,23 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     CHECK(recovery.projectedWeekdayColumns == 7);
     const std::uint64_t initialGeneration = recovery.generation;
     const unsigned long long beforeFailure =
-        calendar.WinUIGetWeekRefreshRunCountForTesting();
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
 
     // Inject at the real dispatcher worker boundary. The initial attempt plus
     // exactly three automatic retries fail; no test calls the recovery helper
     // directly and no artificial dispatcher completion is synthesized.
-    REQUIRE(calendar.WinUISetWeekRefreshFailuresForTesting(4));
-    REQUIRE(calendar.WinUIRequestWeekRefreshForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::SetWeekRefreshFailures(calendar, 4));
+    REQUIRE(wxWinUICalendarTestAccess::RequestWeekRefresh(calendar));
     REQUIRE(WaitFor("bounded week refresh recovery exhaustion", [&]()
     {
-        return calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery) &&
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery) &&
                recovery.generation != initialGeneration &&
                recovery.degraded && !recovery.scheduled &&
                recovery.automaticRetriesRemaining == 0 &&
                recovery.injectedFailuresRemaining == 0;
     }, 1000));
     const unsigned long long stoppedAt =
-        calendar.WinUIGetWeekRefreshRunCountForTesting();
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
     CHECK(stoppedAt == beforeFailure + 4);
     CHECK(recovery.completedRevision != recovery.requestRevision);
 
@@ -3952,8 +3954,8 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     REQUIRE(wxWinUIWaitCalendarDispatcherBarrier(
         calendarPeer, "degraded week recovery follow-up barrier",
         MUXD::DispatcherQueuePriority::Low));
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() == stoppedAt);
-    REQUIRE(calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery));
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) == stoppedAt);
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery));
     REQUIRE(recovery.degraded);
     REQUIRE_FALSE(recovery.dayLayoutValidationPending);
     REQUIRE_FALSE(recovery.dayLayoutValidationScheduled);
@@ -3967,10 +3969,10 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     const std::uint64_t incompleteCompleted = recovery.completedRevision;
     const std::uint64_t beforeIncompleteEchoes =
         recovery.weekLayoutEchoAbsorptions;
-    REQUIRE(calendar.WinUIRequestDayLayoutValidationForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::RequestDayLayoutValidation(calendar));
     REQUIRE(WaitFor("incomplete identical day-layout validation", [&]()
     {
-        return calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery) &&
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery) &&
                !recovery.dayLayoutValidationPending &&
                !recovery.dayLayoutValidationScheduled &&
                !recovery.scheduled;
@@ -3983,9 +3985,9 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     CHECK(recovery.automaticRetriesRemaining == 0);
     CHECK(recovery.weekLayoutEchoAbsorptions ==
           beforeIncompleteEchoes + 1);
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() == stoppedAt);
-    wxCalendarCtrl::WinUILayoutTicketForTesting incompleteTicket;
-    CHECK_FALSE(calendar.WinUIGetStableLayoutTicketForTesting(
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) == stoppedAt);
+    wxWinUICalendarTestAccess::LayoutTicket incompleteTicket;
+    CHECK_FALSE(wxWinUICalendarTestAccess::GetStableLayoutTicket(calendar,
         &incompleteTicket));
 
     // A new genuine request owns a new recovery generation and is the only
@@ -3999,11 +4001,11 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
         recovery.dayItemRepeatNotifications;
     const std::uint64_t beforeRearmLayoutEchoes =
         recovery.weekLayoutEchoAbsorptions;
-    REQUIRE(calendar.WinUIRequestWeekRefreshForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::RequestWeekRefresh(calendar));
     REQUIRE(wxWinUIWaitForStableCalendarLayout(
         &calendar, calendarPeer, "week recovery rearmed stable layout",
         &stableTicket, &buttons));
-    REQUIRE(calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery));
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery));
     CHECK(recovery.generation != degradedGeneration);
     CHECK(recovery.generation == degradedGeneration + 1);
     CHECK(recovery.requestRevision == degradedRequestRevision + 1);
@@ -4014,7 +4016,7 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     CHECK(recovery.automaticRetriesRemaining == 3);
     CHECK(recovery.completedRevision == recovery.requestRevision);
     CAPTURE(stoppedAt,
-            calendar.WinUIGetWeekRefreshRunCountForTesting(),
+            wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar),
             degradedGeneration,
             recovery.generation,
             degradedRequestRevision,
@@ -4027,7 +4029,7 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
             recovery.weekLayoutEchoAbsorptions,
             recovery.boundedPendingRetries,
             recovery.invalidTicketDeferrals);
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() == stoppedAt + 1);
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) == stoppedAt + 1);
 
     // A peer mutation is a benign deferral, not failed convergence. Exercise
     // the actual PeerMutation guard branch twice and prove mutation-ended
@@ -4040,13 +4042,13 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     const std::uint64_t beforeBoundedPending =
         recovery.boundedPendingRetries;
     const unsigned long long beforeMutation =
-        calendar.WinUIGetWeekRefreshRunCountForTesting();
-    REQUIRE(calendar.WinUISetWeekRefreshPeerMutationPassesForTesting(2));
-    REQUIRE(calendar.WinUIRequestWeekRefreshForTesting());
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
+    REQUIRE(wxWinUICalendarTestAccess::SetWeekRefreshPeerMutationPasses(calendar, 2));
+    REQUIRE(wxWinUICalendarTestAccess::RequestWeekRefresh(calendar));
     REQUIRE(wxWinUIWaitForStableCalendarLayout(
         &calendar, calendarPeer, "peer mutation week recovery stable layout",
         &stableTicket, &buttons));
-    REQUIRE(calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery));
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery));
     CHECK(recovery.generation != beforeMutationGeneration);
     CHECK(recovery.generation == beforeMutationGeneration + 1);
     CHECK(recovery.requestRevision ==
@@ -4063,14 +4065,14 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     CHECK(recovery.projectedMonthDays == 31);
     CHECK(recovery.projectedWeekdayColumns == 7);
     CAPTURE(beforeMutation,
-            calendar.WinUIGetWeekRefreshRunCountForTesting(),
+            wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar),
             beforeMutationGeneration,
             recovery.generation,
             beforeMutationRequestRevision,
             recovery.requestRevision,
             recovery.dayItemRepeatNotifications,
             recovery.weekLayoutEchoAbsorptions);
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() ==
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
           beforeMutation + 3);
 
     // Exercise the distinct same-generation invalid-ticket pending path. It
@@ -4082,19 +4084,19 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     const std::uint64_t beforePendingRetries =
         recovery.boundedPendingRetries;
     const unsigned long long beforePending =
-        calendar.WinUIGetWeekRefreshRunCountForTesting();
-    REQUIRE(calendar.WinUISetWeekRefreshPendingPassesForTesting(4));
-    REQUIRE(calendar.WinUIRequestWeekRefreshForTesting());
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
+    REQUIRE(wxWinUICalendarTestAccess::SetWeekRefreshPendingPasses(calendar, 4));
+    REQUIRE(wxWinUICalendarTestAccess::RequestWeekRefresh(calendar));
     REQUIRE(WaitFor("bounded pending week refresh exhaustion", [&]()
     {
-        return calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery) &&
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery) &&
                recovery.generation != beforePendingGeneration &&
                recovery.degraded && !recovery.scheduled &&
                recovery.automaticRetriesRemaining == 0 &&
                recovery.injectedPendingPassesRemaining == 0;
     }, 1000));
     const unsigned long long pendingStoppedAt =
-        calendar.WinUIGetWeekRefreshRunCountForTesting();
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
     CHECK(pendingStoppedAt == beforePending + 4);
     CHECK(recovery.completedRevision != recovery.requestRevision);
     CHECK(recovery.invalidTicketDeferrals == beforeInvalidTickets + 4);
@@ -4106,20 +4108,20 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     REQUIRE(wxWinUIWaitCalendarDispatcherBarrier(
         calendarPeer, "degraded pending recovery follow-up barrier",
         MUXD::DispatcherQueuePriority::Low));
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() ==
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
           pendingStoppedAt);
 
     const std::uint64_t pendingDegradedGeneration = recovery.generation;
-    REQUIRE(calendar.WinUIRequestWeekRefreshForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::RequestWeekRefresh(calendar));
     REQUIRE(wxWinUIWaitForStableCalendarLayout(
         &calendar, calendarPeer, "pending recovery rearmed stable layout",
         &stableTicket, &buttons));
-    REQUIRE(calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery));
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery));
     CHECK(recovery.generation != pendingDegradedGeneration);
     CHECK_FALSE(recovery.degraded);
     CHECK_FALSE(recovery.scheduled);
     CHECK(recovery.completedRevision == recovery.requestRevision);
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() ==
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
           pendingStoppedAt + 1);
 
     // Throw inside the actual queued day-layout callback. The exception must
@@ -4131,10 +4133,10 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
         recovery.dayLayoutFailureRecoveries;
     const std::uint64_t beforeValidationRetries =
         recovery.boundedPendingRetries;
-    REQUIRE(calendar.WinUIRequestDayLayoutValidationFailureForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::RequestDayLayoutValidationFailure(calendar));
     REQUIRE(WaitFor("day-layout callback exception recovery", [&]()
     {
-        return calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery) &&
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery) &&
                recovery.injectedDayLayoutFailuresRemaining == 0 &&
                !recovery.dayLayoutValidationPending &&
                !recovery.dayLayoutValidationScheduled;
@@ -4151,12 +4153,12 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     std::uint64_t validationRecoveries =
         recovery.dayLayoutFailureRecoveries;
     std::uint64_t validationRetries = recovery.boundedPendingRetries;
-    REQUIRE(calendar.WinUIRequestDayLayoutValidationFailureForTesting(
-        wxCalendarCtrl::WinUIDayLayoutValidationFailureForTesting::
+    REQUIRE(wxWinUICalendarTestAccess::RequestDayLayoutValidationFailure(calendar,
+        wxWinUICalendarTestAccess::DayLayoutValidationFailure::
             TransientRead));
     REQUIRE(WaitFor("day-layout transient-read recovery", [&]()
     {
-        return calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery) &&
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery) &&
                recovery.injectedDayLayoutFailuresRemaining == 0 &&
                !recovery.dayLayoutValidationPending &&
                !recovery.dayLayoutValidationScheduled;
@@ -4171,12 +4173,12 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
 
     validationRecoveries = recovery.dayLayoutFailureRecoveries;
     validationRetries = recovery.boundedPendingRetries;
-    REQUIRE(calendar.WinUIRequestDayLayoutValidationFailureForTesting(
-        wxCalendarCtrl::WinUIDayLayoutValidationFailureForTesting::
+    REQUIRE(wxWinUICalendarTestAccess::RequestDayLayoutValidationFailure(calendar,
+        wxWinUICalendarTestAccess::DayLayoutValidationFailure::
             QueueRefusal));
     REQUIRE(WaitFor("day-layout queue-refusal recovery", [&]()
     {
-        return calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery) &&
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery) &&
                recovery.injectedDayLayoutFailuresRemaining == 0 &&
                !recovery.dayLayoutValidationPending &&
                !recovery.dayLayoutValidationScheduled;
@@ -4199,13 +4201,13 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     const std::uint64_t beforeExhaustedValidationRecoveries =
         recovery.dayLayoutFailureRecoveries;
     const unsigned long long beforeExhaustedValidationRuns =
-        calendar.WinUIGetWeekRefreshRunCountForTesting();
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
     REQUIRE(completedRevision == completedRequest);
     REQUIRE(recovery.automaticRetriesRemaining == 0);
-    REQUIRE(calendar.WinUIRequestDayLayoutValidationFailureForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::RequestDayLayoutValidationFailure(calendar));
     REQUIRE(WaitFor("completed day-layout validation exhaustion", [&]()
     {
-        return calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery) &&
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery) &&
                recovery.injectedDayLayoutFailuresRemaining == 0 &&
                !recovery.dayLayoutValidationPending &&
                !recovery.dayLayoutValidationScheduled &&
@@ -4217,35 +4219,35 @@ TEST_CASE("wxWinUI Calendar bounds automatic week refresh recovery",
     CHECK(recovery.automaticRetriesRemaining == 0);
     CHECK(recovery.dayLayoutFailureRecoveries ==
           beforeExhaustedValidationRecoveries + 1);
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() ==
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
           beforeExhaustedValidationRuns);
 
     const std::uint64_t beforeHealingEchoes =
         recovery.weekLayoutEchoAbsorptions;
-    REQUIRE(calendar.WinUIRequestDayLayoutValidationForTesting());
-    wxCalendarCtrl::WinUILayoutTicketForTesting healedTicket;
+    REQUIRE(wxWinUICalendarTestAccess::RequestDayLayoutValidation(calendar));
+    wxWinUICalendarTestAccess::LayoutTicket healedTicket;
     REQUIRE(WaitFor("completed identical day-layout validation healing", [&]()
     {
-        return calendar.WinUIGetWeekRefreshRecoveryForTesting(&recovery) &&
+        return wxWinUICalendarTestAccess::GetWeekRefreshRecovery(calendar, &recovery) &&
                !recovery.dayLayoutValidationPending &&
                !recovery.dayLayoutValidationScheduled &&
                !recovery.scheduled && !recovery.degraded &&
                recovery.completedRevision == recovery.requestRevision &&
-               calendar.WinUIGetStableLayoutTicketForTesting(&healedTicket);
+               wxWinUICalendarTestAccess::GetStableLayoutTicket(calendar, &healedTicket);
     }, 1000));
     CHECK(recovery.generation == completedGeneration);
     CHECK(recovery.requestRevision == completedRequest);
     CHECK(recovery.completedRevision == completedRevision);
     CHECK(recovery.automaticRetriesRemaining == 0);
     CHECK(recovery.weekLayoutEchoAbsorptions == beforeHealingEchoes + 1);
-    CHECK(calendar.WinUIGetWeekRefreshRunCountForTesting() ==
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
           beforeExhaustedValidationRuns);
 
     REQUIRE(wxWinUIWaitCalendarDispatcherBarrier(
         calendarPeer, "healed day-layout validation barrier",
         MUXD::DispatcherQueuePriority::Low));
-    wxCalendarCtrl::WinUILayoutTicketForTesting confirmedTicket;
-    REQUIRE(calendar.WinUIGetStableLayoutTicketForTesting(&confirmedTicket));
+    wxWinUICalendarTestAccess::LayoutTicket confirmedTicket;
+    REQUIRE(wxWinUICalendarTestAccess::GetStableLayoutTicket(calendar, &confirmedTicket));
     CHECK(confirmedTicket.layoutRevision == healedTicket.layoutRevision);
     CHECK(confirmedTicket.realizedDaysRevision ==
           healedTicket.realizedDaysRevision);
@@ -4266,7 +4268,7 @@ TEST_CASE("wxWinUI Calendar marks follow hot theme and system colours",
     wxCalendarCtrl calendar(
         parent, wxID_ANY,
         wxDateTime(15, wxDateTime::May, 2024));
-    REQUIRE(calendar.WinUIHasThemeChangedHandlerForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::HasThemeChangedHandler(calendar));
     calendar.Mark(15, true);
 
     wxColour applied;
@@ -4274,19 +4276,19 @@ TEST_CASE("wxWinUI Calendar marks follow hot theme and system colours",
     unsigned long long revision = 0;
     REQUIRE(WaitFor("marked CalendarView day realization", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    15, &applied, &count, &revision) &&
                count == 1;
     }, 1000));
     const unsigned long long initialRevision = revision;
 
     const wxColour lightThemeMark(17, 83, 149);
-    REQUIRE(calendar.WinUISetTodayForegroundForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::SetTodayForeground(calendar,
         lightThemeMark));
-    REQUIRE(calendar.WinUIDeliverThemeChangedForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::DeliverThemeChanged(calendar));
     REQUIRE(WaitFor("light CalendarView ActualThemeChanged refresh", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    15, &applied, &count, &revision) &&
                revision > initialRevision;
     }, 1000));
@@ -4295,12 +4297,12 @@ TEST_CASE("wxWinUI Calendar marks follow hot theme and system colours",
     const unsigned long long lightRevision = revision;
 
     const wxColour darkThemeMark(241, 196, 15);
-    REQUIRE(calendar.WinUISetTodayForegroundForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::SetTodayForeground(calendar,
         darkThemeMark));
-    REQUIRE(calendar.WinUIDeliverThemeChangedForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::DeliverThemeChanged(calendar));
     REQUIRE(WaitFor("dark CalendarView ActualThemeChanged refresh", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    15, &applied, &count, &revision) &&
                revision > lightRevision;
     }, 1000));
@@ -4308,11 +4310,11 @@ TEST_CASE("wxWinUI Calendar marks follow hot theme and system colours",
     CHECK(applied == darkThemeMark);
     const unsigned long long darkRevision = revision;
 
-    REQUIRE(calendar.WinUIUseSystemMarkColourFallbackForTesting());
-    REQUIRE(calendar.WinUIDeliverThemeChangedForTesting());
+    REQUIRE(wxWinUICalendarTestAccess::UseSystemMarkColourFallback(calendar));
+    REQUIRE(wxWinUICalendarTestAccess::DeliverThemeChanged(calendar));
     REQUIRE(WaitFor("fallback CalendarView ActualThemeChanged refresh", [&]()
     {
-        return calendar.WinUIGetAppliedDensityColourForTesting(
+        return wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
                    15, &applied, &count, &revision) &&
                revision > darkRevision;
     }, 1000));
@@ -4330,14 +4332,14 @@ TEST_CASE("wxWinUI Calendar marks follow hot theme and system colours",
     coloursChanged.SetEventObject(&calendar);
     coloursChanged.SetId(calendar.GetId());
     calendar.ProcessWindowEvent(coloursChanged);
-    REQUIRE(calendar.WinUIGetAppliedDensityColourForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
         15, &applied, &count, &revision));
     CHECK(count == 1);
     CHECK(applied == systemHighlight);
     CHECK(revision > fallbackRevision);
 
     calendar.Mark(15, false);
-    REQUIRE(calendar.WinUIGetAppliedDensityColourForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetAppliedDensityColour(calendar,
         15, &applied, &count, &revision));
     CHECK(count == 0);
     CHECK_FALSE(applied.IsOk());
@@ -4371,10 +4373,10 @@ TEST_CASE("wxWinUI Calendar hit testing stays coherent through LTR RTL LTR",
     wxPoint firstLTR;
     REQUIRE(WaitFor("LTR CalendarView date geometry", [&]()
     {
-        return calendar.WinUIGetPeerRightToLeftForTesting(
+        return wxWinUICalendarTestAccess::GetPeerRightToLeft(calendar,
                    &rightToLeft) &&
                !rightToLeft &&
-               calendar.WinUIGetDateClientPointForTesting(
+               wxWinUICalendarTestAccess::GetDateClientPoint(calendar,
                    selected, &firstLTR);
     }, 1000));
     checkDateAtPoint(firstLTR);
@@ -4383,10 +4385,10 @@ TEST_CASE("wxWinUI Calendar hit testing stays coherent through LTR RTL LTR",
     wxPoint rtl;
     REQUIRE(WaitFor("RTL CalendarView date geometry", [&]()
     {
-        return calendar.WinUIGetPeerRightToLeftForTesting(
+        return wxWinUICalendarTestAccess::GetPeerRightToLeft(calendar,
                    &rightToLeft) &&
                rightToLeft &&
-               calendar.WinUIGetDateClientPointForTesting(
+               wxWinUICalendarTestAccess::GetDateClientPoint(calendar,
                    selected, &rtl);
     }, 1000));
     checkDateAtPoint(rtl);
@@ -4396,10 +4398,10 @@ TEST_CASE("wxWinUI Calendar hit testing stays coherent through LTR RTL LTR",
     wxPoint secondLTR;
     REQUIRE(WaitFor("restored LTR CalendarView date geometry", [&]()
     {
-        return calendar.WinUIGetPeerRightToLeftForTesting(
+        return wxWinUICalendarTestAccess::GetPeerRightToLeft(calendar,
                    &rightToLeft) &&
                !rightToLeft &&
-               calendar.WinUIGetDateClientPointForTesting(
+               wxWinUICalendarTestAccess::GetDateClientPoint(calendar,
                    selected, &secondLTR);
     }, 1000));
     checkDateAtPoint(secondLTR);
@@ -4429,7 +4431,7 @@ TEST_CASE("wxWinUI Calendar callback teardown is destruction-safe",
         });
 
     wxCalendarCtrl * const invoking = calendar;
-    REQUIRE(invoking->WinUISetPeerDateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::SetPeerDate(*invoking,
         wxDateTime(16, wxDateTime::May, 2024)));
     CHECK(calendar == nullptr);
     CHECK(events == 1);
@@ -4584,7 +4586,7 @@ TEST_CASE("wxWinUI Calendar nested setter is last writer",
     CHECK(nestedResult);
     CHECK(calendar.GetDate() == nested);
     wxDateTime peer;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         &peer, nullptr, nullptr));
     CHECK(peer == nested);
 }
@@ -4630,7 +4632,7 @@ TEST_CASE("wxWinUI Calendar nested range setter is last writer",
     wxDateTime peer;
     wxDateTime peerMinimum;
     wxDateTime peerMaximum;
-    REQUIRE(calendar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUICalendarTestAccess::GetPeerState(calendar,
         &peer, &peerMinimum, &peerMaximum));
     CHECK(peer == initial);
     CHECK(peerMinimum == nestedMinimum);

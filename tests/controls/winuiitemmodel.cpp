@@ -17,8 +17,10 @@
 #include "wx/app.h"
 #include "wx/button.h"
 #include "wx/choice.h"
+#include "choice-test-access.h"
 #if wxUSE_COMBOBOX
     #include "wx/combobox.h"
+    #include "combobox-test-access.h"
     #include "wx/filefn.h"
     #include "wx/filename.h"
     #include "wx/textcompleter.h"
@@ -311,8 +313,8 @@ bool wxWinUIDispatchComboKey(WXHWND hwnd,
 
 std::string wxWinUIComboDiagnostics(const wxComboBox& combo)
 {
-    wxComboBox::WinUIDiagnosticSnapshot d;
-    if ( !combo.WinUIGetDiagnosticSnapshotForTesting(&d) )
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot d;
+    if ( !wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo, &d) )
         return "combo diagnostics unavailable";
 
     std::ostringstream s;
@@ -359,13 +361,13 @@ std::string wxWinUIComboDiagnostics(const wxComboBox& combo)
 
 void RequireWinUIComboTemplate(wxComboBox& combo)
 {
-    wxComboBox::WinUITemplatePeerSnapshot snapshot;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot snapshot;
     bool captured = false;
     const bool realized = WaitFor("WinUI ComboBox template realization", [&]()
     {
-        captured = combo.WinUIGetTemplatePeerSnapshotForTesting(&snapshot);
+        captured = wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &snapshot);
         return captured &&
-               snapshot.state == wxComboBox::WinUITemplate_Complete;
+               snapshot.state == wxWinUIComboBoxTestAccess::WinUITemplate_Complete;
     }, 1000);
     INFO("template captured=" << captured <<
          " state=" << snapshot.state <<
@@ -392,27 +394,27 @@ void RequireWinUIComboTemplate(wxComboBox& combo)
              snapshot.nativeFocusInHost << "/" << snapshot.editFocused);
     REQUIRE(captured);
     REQUIRE(realized);
-    REQUIRE(snapshot.state == wxComboBox::WinUITemplate_Complete);
+    REQUIRE(snapshot.state == wxWinUIComboBoxTestAccess::WinUITemplate_Complete);
 }
 
 bool WaitForSettledWinUIComboTemplateGeneration(
     wxComboBox& combo,
     std::uint64_t previousGeneration,
-    wxComboBox::WinUITemplatePeerSnapshot *snapshot,
-    wxComboBox::WinUIDiagnosticSnapshot *diagnostic)
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot *snapshot,
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot *diagnostic)
 {
     constexpr unsigned inFlightPhases =
-        wxComboBox::WinUITemplatePhase_Resolving |
-        wxComboBox::WinUITemplatePhase_PendingResolve |
-        wxComboBox::WinUITemplatePhase_Transition |
-        wxComboBox::WinUITemplatePhase_PeerMutation |
-        wxComboBox::WinUITemplatePhase_QueuedResolve;
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_Resolving |
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingResolve |
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_Transition |
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_PeerMutation |
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_QueuedResolve;
 
     return WaitFor("WinUI ComboBox deferred template generation", [&]()
     {
-        return combo.WinUIGetTemplatePeerSnapshotForTesting(snapshot) &&
-               combo.WinUIGetDiagnosticSnapshotForTesting(diagnostic) &&
-               (snapshot->state & wxComboBox::WinUITemplate_HasEdit) != 0 &&
+        return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, snapshot) &&
+               wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo, diagnostic) &&
+               (snapshot->state & wxWinUIComboBoxTestAccess::WinUITemplate_HasEdit) != 0 &&
                snapshot->editGeneration > previousGeneration &&
                (snapshot->phase & inFlightPhases) == 0 &&
                !diagnostic->templateReplayPending;
@@ -422,19 +424,19 @@ bool WaitForSettledWinUIComboTemplateGeneration(
 void RequireWinUIReadOnlyComboPopupPeer(wxComboBox& combo)
 {
     constexpr unsigned requiredState =
-        wxComboBox::WinUITemplate_HasCombo |
-        wxComboBox::WinUITemplate_HasXamlRoot |
-        wxComboBox::WinUITemplate_HasTemplate |
-        wxComboBox::WinUITemplate_HasVisualChild |
-        wxComboBox::WinUITemplate_IsArranged |
-        wxComboBox::WinUITemplate_HasDesiredSize;
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasCombo |
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasXamlRoot |
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasTemplate |
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasVisualChild |
+        wxWinUIComboBoxTestAccess::WinUITemplate_IsArranged |
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasDesiredSize;
 
-    wxComboBox::WinUITemplatePeerSnapshot snapshot;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot snapshot;
     bool captured = false;
     const bool ready = WaitFor("WinUI read-only ComboBox popup peer readiness",
                                [&]()
     {
-        captured = combo.WinUIGetTemplatePeerSnapshotForTesting(&snapshot);
+        captured = wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &snapshot);
         return captured &&
                (snapshot.state & requiredState) == requiredState;
     }, 1000);
@@ -460,14 +462,14 @@ bool wxWinUIComboHasExactEditorFocus(wxComboBox& combo)
 {
     if ( combo.HasFlag(wxCB_SIMPLE) )
     {
-        wxComboBox::WinUISimplePeerSnapshot snapshot;
-        return combo.WinUIGetSimplePeerSnapshotForTesting(&snapshot) &&
+        wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot snapshot;
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &snapshot) &&
                snapshot.logicalFocus && snapshot.nativeFocusInHost &&
                snapshot.editFocused;
     }
 
-    wxComboBox::WinUITemplatePeerSnapshot snapshot;
-    return combo.WinUIGetTemplatePeerSnapshotForTesting(&snapshot) &&
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot snapshot;
+    return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &snapshot) &&
            snapshot.logicalFocus && snapshot.nativeFocusInHost &&
            snapshot.editFocused;
 }
@@ -478,20 +480,20 @@ bool wxWinUIComboHasExactPeerRange(wxComboBox& combo,
 {
     if ( combo.HasFlag(wxCB_SIMPLE) )
     {
-        wxComboBox::WinUISimplePeerSnapshot snapshot;
-        return combo.WinUIGetSimplePeerSnapshotForTesting(&snapshot) &&
+        wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot snapshot;
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &snapshot) &&
                snapshot.peerTextSelectionStart == from &&
                snapshot.peerTextSelectionLength == to - from;
     }
 
-    wxComboBox::WinUITemplatePeerSnapshot snapshot;
-    return combo.WinUIGetTemplatePeerSnapshotForTesting(&snapshot) &&
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot snapshot;
+    return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &snapshot) &&
            snapshot.peerSelectionStart == from &&
            snapshot.peerSelectionLength == to - from;
 }
 
 bool wxWinUISimpleExtentIsExact(
-    const wxComboBox::WinUISimplePeerSnapshot& snapshot)
+    const wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot& snapshot)
 {
     constexpr double tolerance = 0.5;
     return snapshot.sourceWidthPixels > 0 &&
@@ -795,38 +797,38 @@ TEST_CASE("wxWinUI Choice applies item deltas",
     REQUIRE(choice.Append("two") == 1);
     REQUIRE(choice.Append("three") == 2);
 
-    const std::uint64_t oneId = choice.WinUIGetItemIdForTesting(0);
-    const std::uint64_t twoId = choice.WinUIGetItemIdForTesting(1);
-    const std::uint64_t threeId = choice.WinUIGetItemIdForTesting(2);
+    const std::uint64_t oneId = wxWinUIChoiceTestAccess::GetItemId(&choice, 0);
+    const std::uint64_t twoId = wxWinUIChoiceTestAccess::GetItemId(&choice, 1);
+    const std::uint64_t threeId = wxWinUIChoiceTestAccess::GetItemId(&choice, 2);
     const std::uintptr_t onePeer =
-        choice.WinUIGetItemPeerIdentityForTesting(0);
+        wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 0);
     const std::uintptr_t twoPeer =
-        choice.WinUIGetItemPeerIdentityForTesting(1);
+        wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 1);
     const std::uintptr_t threePeer =
-        choice.WinUIGetItemPeerIdentityForTesting(2);
+        wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 2);
     REQUIRE(onePeer != 0);
     REQUIRE(twoPeer != 0);
     REQUIRE(threePeer != 0);
 
     REQUIRE(choice.Insert("middle", 1) == 1);
-    CHECK(choice.WinUIGetItemIdForTesting(0) == oneId);
-    CHECK(choice.WinUIGetItemIdForTesting(2) == twoId);
-    CHECK(choice.WinUIGetItemIdForTesting(3) == threeId);
-    CHECK(choice.WinUIGetItemPeerIdentityForTesting(0) == onePeer);
-    CHECK(choice.WinUIGetItemPeerIdentityForTesting(2) == twoPeer);
-    CHECK(choice.WinUIGetItemPeerIdentityForTesting(3) == threePeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, 0) == oneId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, 2) == twoId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, 3) == threeId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 0) == onePeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 2) == twoPeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 3) == threePeer);
 
     choice.SetString(2, "two renamed");
-    CHECK(choice.WinUIGetItemIdForTesting(2) == twoId);
-    CHECK(choice.WinUIGetItemPeerIdentityForTesting(2) == twoPeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, 2) == twoId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 2) == twoPeer);
 
     choice.Delete(1);
-    CHECK(choice.WinUIGetItemIdForTesting(0) == oneId);
-    CHECK(choice.WinUIGetItemIdForTesting(1) == twoId);
-    CHECK(choice.WinUIGetItemIdForTesting(2) == threeId);
-    CHECK(choice.WinUIGetItemPeerIdentityForTesting(0) == onePeer);
-    CHECK(choice.WinUIGetItemPeerIdentityForTesting(1) == twoPeer);
-    CHECK(choice.WinUIGetItemPeerIdentityForTesting(2) == threePeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, 0) == oneId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, 1) == twoId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, 2) == threeId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 0) == onePeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 1) == twoPeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 2) == threePeer);
 
     const wxSize beforeLongText = choice.GetBestSize();
     choice.Append(wxString(120, 'W'));
@@ -852,7 +854,7 @@ TEST_CASE("wxWinUI Choice distinguishes accepted and popup selection",
     {
         return wxWindow::FindFocus() == &choice && ::GetFocus();
     }));
-    REQUIRE(choice.WinUISetDropDownForTesting(true));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, true));
     CHECK(choice.GetSelection() == 0);
     CHECK(choice.GetCurrentSelection() == 0);
 
@@ -876,40 +878,40 @@ TEST_CASE("wxWinUI Choice distinguishes accepted and popup selection",
     CHECK(choice.GetCurrentSelection() == 1);
     CHECK(selectionEvents.GetCount() == 0);
 
-    REQUIRE(choice.WinUISetDropDownForTesting(false));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, false));
     CHECK(choice.GetSelection() == 1);
     CHECK(choice.GetCurrentSelection() == 1);
     CHECK(selectionEvents.GetCount() == 1);
 
-    REQUIRE(choice.WinUISetDropDownForTesting(true));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, true));
     REQUIRE(WaitFor("wxChoice causal popup reopen", [&choice]()
     {
-        return choice.WinUIIsPeerDropDownOpenForTesting();
+        return wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&choice);
     }));
-    REQUIRE(choice.WinUISelectPeerItemForTesting(1));
-    REQUIRE(choice.WinUISelectPeerItemForTesting(0));
+    REQUIRE(wxWinUIChoiceTestAccess::SelectPeerItem(&choice, 1));
+    REQUIRE(wxWinUIChoiceTestAccess::SelectPeerItem(&choice, 0));
     CHECK(choice.GetSelection() == 1);
     CHECK(choice.GetCurrentSelection() == 0);
-    REQUIRE(choice.WinUISetDropDownForTesting(false));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, false));
     CHECK(choice.GetSelection() == 0);
     CHECK(selectionEvents.GetCount() == 2);
 
     // A programmatic selection made while the popup is open is authoritative:
     // closing it must not resurrect an older highlighted item or emit an
     // event for the silent programmatic change.
-    REQUIRE(choice.WinUISetDropDownForTesting(true));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, true));
     REQUIRE(WaitFor("wxChoice authoritative popup reopen", [&choice]()
     {
-        return choice.WinUIIsPeerDropDownOpenForTesting();
+        return wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&choice);
     }));
-    REQUIRE(choice.WinUISelectPeerItemForTesting(2));
+    REQUIRE(wxWinUIChoiceTestAccess::SelectPeerItem(&choice, 2));
     CHECK(choice.GetSelection() == 0);
     CHECK(choice.GetCurrentSelection() == 2);
     choice.SetSelection(1);
     CHECK(choice.GetSelection() == 1);
     CHECK(choice.GetCurrentSelection() == 1);
     CHECK(selectionEvents.GetCount() == 2);
-    REQUIRE(choice.WinUISetDropDownForTesting(false));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, false));
     CHECK(choice.GetSelection() == 1);
     CHECK(choice.GetCurrentSelection() == 1);
     CHECK(selectionEvents.GetCount() == 2);
@@ -918,8 +920,8 @@ TEST_CASE("wxWinUI Choice distinguishes accepted and popup selection",
 TEST_CASE("wxWinUI popup retirement core keeps detached correlation identity",
           "[winui-itemmodel][popup][retirement][seam]")
 {
-    const wxWinUIPopupRetirementCoreProbeForTesting probe =
-        wxChoice::WinUIProbePopupRetirementCoreForTesting();
+    const wxWinUIChoiceTestAccess::PopupRetirementCoreProbe probe =
+        wxWinUIChoiceTestAccess::ProbePopupRetirementCore();
     CHECK(probe.detachedCorrelationRetired);
     CHECK(probe.reopenRejected);
     CHECK(probe.reopenDegraded);
@@ -981,11 +983,11 @@ TEST_CASE("wxWinUI ComboBox immediate popup operations are idempotent",
              popupDiagnostic.failCloseCount);
     combo.Popup();
     CHECK(dropDowns.GetCount() == 1);
-    CHECK(combo.WinUIIsPeerDropDownOpenForTesting());
+    CHECK(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
     combo.Dismiss();
     combo.Dismiss();
     CHECK(closeups.GetCount() == 1);
-    CHECK_FALSE(combo.WinUIIsPeerDropDownOpenForTesting());
+    CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
     CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
 }
 
@@ -1016,7 +1018,7 @@ TEST_CASE("wxWinUI ComboBox coalesces synchronous close-handler reopen",
     CHECK(dropDowns.GetCount() == 1);
     REQUIRE(WaitFor("initial ComboBox popup", [&combo]()
     {
-        return combo.WinUIIsPeerDropDownOpenForTesting();
+        return wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo);
     }));
 
     unsigned closeups = 0;
@@ -1035,14 +1037,14 @@ TEST_CASE("wxWinUI ComboBox coalesces synchronous close-handler reopen",
     std::uint64_t generation = 0;
     unsigned schedules = 0;
     unsigned runs = 0;
-    REQUIRE(combo.WinUIGetPopupReopenSnapshotForTesting(
+    REQUIRE(wxWinUIChoiceTestAccess::GetPopupReopenSnapshot(&combo,
         &pending, &generation, &schedules, &runs));
     CHECK(closeups == 1);
     CHECK(pending);
     CHECK(generation != 0);
     CHECK(schedules == 1);
     CHECK(runs == 0);
-    CHECK_FALSE(combo.WinUIIsPeerDropDownOpenForTesting());
+    CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
     CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
 
     // WaitFor only services the real dispatcher. The replay is admitted by
@@ -1054,14 +1056,14 @@ TEST_CASE("wxWinUI ComboBox coalesces synchronous close-handler reopen",
         std::uint64_t replayGeneration = 0;
         unsigned replaySchedules = 0;
         unsigned replayRuns = 0;
-        return combo.WinUIGetPopupReopenSnapshotForTesting(
+        return wxWinUIChoiceTestAccess::GetPopupReopenSnapshot(&combo,
                    &replayPending, &replayGeneration,
                    &replaySchedules, &replayRuns) &&
                !replayPending && replaySchedules == 1 &&
                replayRuns == 1 &&
-               combo.WinUIIsPeerDropDownOpenForTesting();
+               wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo);
     }));
-    REQUIRE(combo.WinUIGetPopupReopenSnapshotForTesting(
+    REQUIRE(wxWinUIChoiceTestAccess::GetPopupReopenSnapshot(&combo,
         &pending, &generation, &schedules, &runs));
     CHECK_FALSE(pending);
     CHECK(schedules == 1);
@@ -1094,7 +1096,7 @@ TEST_CASE("wxWinUI ComboBox observes final cancelled LosingFocus",
     combo.Popup();
     REQUIRE(WaitFor("cancel focus popup", [&combo]()
     {
-        return combo.WinUIIsPeerDropDownOpenForTesting();
+        return wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo);
     }));
 
     // Resolve the peer from this wx control's authoritative host slot, then
@@ -1235,7 +1237,7 @@ TEST_CASE("wxWinUI ComboBox observes final cancelled LosingFocus",
     combo.Popup();
     REQUIRE(WaitFor("cancelled correlation causal replay", [&combo]()
     {
-        return combo.WinUIIsPeerDropDownOpenForTesting();
+        return wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo);
     }));
     CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
     combo.Dismiss();
@@ -1261,7 +1263,7 @@ TEST_CASE("wxWinUI ComboBox poison preflight blocks live peer publication",
     wxWinUIPoisonPhysicalDisconnectPublicationForTesting();
     REQUIRE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
     combo.Popup();
-    CHECK_FALSE(combo.WinUIIsPeerDropDownOpenForTesting());
+    CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
 }
 
 TEST_CASE("wxWinUI ComboBox shutdown seal permanently rejects Popup",
@@ -1286,7 +1288,7 @@ TEST_CASE("wxWinUI ComboBox shutdown seal permanently rejects Popup",
     host->ShutdownForTest();
 
     combo.Popup();
-    CHECK_FALSE(combo.WinUIIsPeerDropDownOpenForTesting());
+    CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
     CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
 }
 
@@ -1305,7 +1307,7 @@ TEST_CASE("wxWinUI Choice popup highlight follows its stable item ID",
     {
         for ( unsigned n = 0; n < choice.GetCount(); ++n )
         {
-            if ( choice.WinUIGetItemIdForTesting(n) == id )
+            if ( wxWinUIChoiceTestAccess::GetItemId(&choice, n) == id )
                 return static_cast<int>(n);
         }
         return wxNOT_FOUND;
@@ -1313,12 +1315,12 @@ TEST_CASE("wxWinUI Choice popup highlight follows its stable item ID",
 
     choice.SetSelection(choice.FindString("alpha"));
     EventCounter selectionEvents(&choice, wxEVT_CHOICE);
-    REQUIRE(choice.WinUISetDropDownForTesting(true));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, true));
     const int mike = choice.FindString("mike");
     REQUIRE(mike != wxNOT_FOUND);
     const std::uint64_t pendingId =
-        choice.WinUIGetItemIdForTesting(mike);
-    REQUIRE(choice.WinUISelectPeerItemForTesting(mike));
+        wxWinUIChoiceTestAccess::GetItemId(&choice, mike);
+    REQUIRE(wxWinUIChoiceTestAccess::SelectPeerItem(&choice, mike));
 
     // Insert, sorted rename/move and unrelated deletion all keep the pending
     // highlight attached to the same logical item, without committing it.
@@ -1338,24 +1340,24 @@ TEST_CASE("wxWinUI Choice popup highlight follows its stable item ID",
     CHECK(choice.GetCurrentSelection() == pendingIndex);
     CHECK(selectionEvents.GetCount() == 0);
 
-    REQUIRE(choice.WinUISetDropDownForTesting(false));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, false));
     CHECK(choice.GetSelection() == indexOfId(pendingId));
     CHECK(selectionEvents.GetCount() == 1);
 
     // Only deletion of the highlighted ID invalidates it. The peer falls back
     // to the accepted item and close cannot commit a stale numeric index.
-    REQUIRE(choice.WinUISetDropDownForTesting(true));
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, true));
     REQUIRE(WaitFor("sorted wxChoice causal popup reopen", [&choice]()
     {
-        return choice.WinUIIsPeerDropDownOpenForTesting();
+        return wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&choice);
     }));
     const int alpha = choice.FindString("alpha");
     REQUIRE(alpha != wxNOT_FOUND);
-    REQUIRE(choice.WinUISelectPeerItemForTesting(alpha));
+    REQUIRE(wxWinUIChoiceTestAccess::SelectPeerItem(&choice, alpha));
     choice.Delete(alpha);
     CHECK(choice.GetCurrentSelection() == choice.GetSelection());
-    REQUIRE(choice.WinUISetDropDownForTesting(false));
-    CHECK(choice.WinUIGetItemIdForTesting(choice.GetSelection()) ==
+    REQUIRE(wxWinUIChoiceTestAccess::SetDropDown(&choice, false));
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, choice.GetSelection()) ==
           pendingId);
     CHECK(selectionEvents.GetCount() == 1);
 }
@@ -1387,16 +1389,16 @@ TEST_CASE("wxWinUI Choice preserves sorted ownership and selection",
         choice.SetClientObject(
             2, new wxWinUICountedClientData(&destroyed));
         const std::uint64_t selectedId =
-            choice.WinUIGetItemIdForTesting(2);
+            wxWinUIChoiceTestAccess::GetItemId(&choice, 2);
         const std::uintptr_t selectedPeer =
-            choice.WinUIGetItemPeerIdentityForTesting(2);
+            wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 2);
         choice.SetSelection(2);
         CHECK(selectionEvents == 0);
 
         choice.SetString(2, "AA");
         CHECK(choice.GetSelection() == 0);
-        CHECK(choice.WinUIGetItemIdForTesting(0) == selectedId);
-        CHECK(choice.WinUIGetItemPeerIdentityForTesting(0) ==
+        CHECK(wxWinUIChoiceTestAccess::GetItemId(&choice, 0) == selectedId);
+        CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&choice, 0) ==
               selectedPeer);
         CHECK(choice.GetClientObject(0) != nullptr);
         CHECK(selectionEvents == 0);
@@ -1430,7 +1432,7 @@ TEST_CASE("wxWinUI Choice peer selection is destruction-safe",
     };
     choice->Bind(wxEVT_CHOICE, observeSelection);
 
-    REQUIRE(choice->WinUISelectPeerItemForTesting(1));
+    REQUIRE(wxWinUIChoiceTestAccess::SelectPeerItem(choice, 1));
     CHECK(events == 1);
     CHECK(eventData == &clientSentinel);
     CHECK(choice->GetSelection() == 1);
@@ -1442,7 +1444,7 @@ TEST_CASE("wxWinUI Choice peer selection is destruction-safe",
         choice = nullptr;
         delete doomed;
     });
-    REQUIRE(choice->WinUISelectPeerItemForTesting(0));
+    REQUIRE(wxWinUIChoiceTestAccess::SelectPeerItem(choice, 0));
     CHECK(choice == nullptr);
 }
 
@@ -1467,7 +1469,7 @@ TEST_CASE("wxWinUI ComboBox popup keeps accepted selection authoritative",
 
     combo.Popup();
     CHECK(dropDownEvents.GetCount() == 1);
-    REQUIRE(combo.WinUISelectPeerItemForTesting(2));
+    REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 2));
     CHECK(combo.GetSelection() == 0);
     CHECK(combo.GetCurrentSelection() == 2);
     CHECK(selectionEvents.GetCount() == 0);
@@ -1492,9 +1494,9 @@ TEST_CASE("wxWinUI ComboBox popup keeps accepted selection authoritative",
     REQUIRE(WaitFor("ComboBox causal Escape popup reopen", [&]()
     {
         return dropDownEvents.GetCount() == 2 &&
-               combo.WinUIIsPeerDropDownOpenForTesting();
+               wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo);
     }));
-    REQUIRE(combo.WinUISelectPeerItemForTesting(2));
+    REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 2));
     CHECK(combo.GetSelection() == 1);
     CHECK(combo.GetCurrentSelection() == 2);
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_ESCAPE));
@@ -1544,20 +1546,20 @@ TEST_CASE("wxWinUI ComboBox selection events retain the wxMSW snapshot",
             textValue = event.GetString();
             textData = event.GetClientData();
         });
-        REQUIRE(combo.WinUISelectPeerItemForTesting(1));
+        REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 1));
         REQUIRE(WaitFor("ComboBox selection snapshot projection drain", [&]()
         {
             if ( style == wxCB_SIMPLE )
             {
-                wxComboBox::WinUISimplePeerSnapshot snapshot;
-                return combo.WinUIGetSimplePeerSnapshotForTesting(&snapshot) &&
+                wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot snapshot;
+                return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &snapshot) &&
                        !(snapshot.phase &
-                         wxComboBox::WinUITemplatePhase_PendingText);
+                         wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingText);
             }
-            wxComboBox::WinUITemplatePeerSnapshot snapshot;
-            return combo.WinUIGetTemplatePeerSnapshotForTesting(&snapshot) &&
+            wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot snapshot;
+            return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &snapshot) &&
                    !(snapshot.phase &
-                     wxComboBox::WinUITemplatePhase_PendingText);
+                     wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingText);
         }));
         INFO(wxWinUIComboDiagnostics(combo));
         CHECK(textEventCount == 1);
@@ -1580,7 +1582,7 @@ TEST_CASE("wxWinUI ComboBox selection events retain the wxMSW snapshot",
             textValue = event.GetString();
             textData = event.GetClientData();
         });
-        REQUIRE(combo.WinUISelectPeerItemForTesting(1));
+        REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 1));
         CHECK(textValue == "one");
         CHECK(textData == nullptr);
     }
@@ -1613,7 +1615,7 @@ TEST_CASE("wxWinUI ComboBox popup teardown leaves the next template focus clean"
 
         combo.Popup();
         CHECK(dropDownEvents.GetCount() == 1);
-        REQUIRE(combo.WinUISelectPeerItemForTesting(2));
+        REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 2));
         CHECK(combo.GetSelection() == 0);
         CHECK(combo.GetCurrentSelection() == 2);
         CHECK(selectionEvents.GetCount() == 0);
@@ -1638,9 +1640,9 @@ TEST_CASE("wxWinUI ComboBox popup teardown leaves the next template focus clean"
         REQUIRE(WaitFor("paired ComboBox causal Escape popup reopen", [&]()
         {
             return dropDownEvents.GetCount() == 2 &&
-                   combo.WinUIIsPeerDropDownOpenForTesting();
+                   wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo);
         }));
-        REQUIRE(combo.WinUISelectPeerItemForTesting(2));
+        REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 2));
         CHECK(combo.GetSelection() == 1);
         CHECK(combo.GetCurrentSelection() == 2);
         REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_ESCAPE));
@@ -1713,13 +1715,13 @@ TEST_CASE("wxWinUI sorted ComboBox resolves snapshot client data by ID",
         textValue = event.GetString();
         textData = event.GetClientData();
     });
-    REQUIRE(combo.WinUISelectPeerItemForTesting(bravo));
+    REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, bravo));
     REQUIRE(WaitFor("sorted ComboBox snapshot projection drain", [&]()
     {
-        wxComboBox::WinUITemplatePeerSnapshot snapshot;
-        return combo.WinUIGetTemplatePeerSnapshotForTesting(&snapshot) &&
+        wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot snapshot;
+        return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &snapshot) &&
                !(snapshot.phase &
-                 wxComboBox::WinUITemplatePhase_PendingText);
+                 wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingText);
     }));
     INFO(wxWinUIComboDiagnostics(combo));
     CHECK(textEventCount == 1);
@@ -1758,7 +1760,7 @@ TEST_CASE("wxWinUI ComboBox text-entry policies target the XAML editor",
     unsigned long peerMaxLength = 0;
     bool peerForceUpper = false;
     wxPoint peerMargins(-1, -1);
-    REQUIRE(combo.WinUIGetTextEntryPeerStateForTesting(
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTextEntryPeerState(&combo,
         &peerMaxLength, &peerForceUpper, &peerMargins));
     // Native MaxLength stays disabled so programmatic wxMSW-compatible writes
     // may exceed the limit; peer-originated proposals are constrained by the
@@ -1806,7 +1808,7 @@ TEST_CASE("wxWinUI ComboBox text-entry policies target the XAML editor",
         lengthMaxValue = event.GetString();
         event.Skip();
     });
-    REQUIRE(combo.WinUISetPeerTextForTesting("PRXGRAMMATIC"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "PRXGRAMMATIC"));
     CHECK(combo.GetValue() == "PRGRAMMATIC");
     CHECK(textEvents.GetCount() == 1);
     CHECK(maxLengthEvents.GetCount() == 1);
@@ -1821,7 +1823,7 @@ TEST_CASE("wxWinUI ComboBox text-entry policies target the XAML editor",
     textEvents.Clear();
     maxLengthEvents.Clear();
     lengthEventOrder.clear();
-    REQUIRE(combo.WinUISetPeerTextForTesting("PRGRAMMATIC"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "PRGRAMMATIC"));
     CHECK(combo.GetValue() == "PRGRAMMATIC");
     CHECK(textEvents.GetCount() == 1);
     CHECK(maxLengthEvents.GetCount() == 0);
@@ -1832,7 +1834,7 @@ TEST_CASE("wxWinUI ComboBox text-entry policies target the XAML editor",
     textEvents.Clear();
     maxLengthEvents.Clear();
     lengthEventOrder.clear();
-    REQUIRE(combo.WinUISetPeerTextForTesting("abcdef"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "abcdef"));
     CHECK(combo.GetValue() == "ABCD");
     CHECK(textEvents.GetCount() == 1);
     CHECK(maxLengthEvents.GetCount() == 1);
@@ -1844,7 +1846,7 @@ TEST_CASE("wxWinUI ComboBox text-entry policies target the XAML editor",
     maxLengthEvents.Clear();
     const wxString unicodeProposal =
         wxString::FromUTF8("A\xf0\x9f\x98\x80Z");
-    REQUIRE(combo.WinUISetPeerTextForTesting(unicodeProposal));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, unicodeProposal));
     CHECK(combo.GetValue() == "A");
     CHECK(textEvents.GetCount() == 1);
     CHECK(maxLengthEvents.GetCount() == 1);
@@ -1873,17 +1875,17 @@ TEST_CASE("wxWinUI ComboBox constrains autocomplete as user input",
         return wxWinUIComboHasExactEditorFocus(combo);
     }));
     combo.SetMaxLength(4);
-    REQUIRE(combo.WinUISetPeerTextForTesting("al"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "al"));
     wxArrayString values;
     values.Add("alphabet");
     REQUIRE(combo.AutoComplete(values));
     REQUIRE(WaitFor("max-length autocomplete flyout", [&]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 1;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 1;
     }));
     EventCounter textEvents(&combo, wxEVT_TEXT);
     EventCounter maxLengthEvents(&combo, wxEVT_TEXT_MAXLEN);
-    REQUIRE(combo.WinUIInvokeAutoCompleteSuggestionForTesting(0));
+    REQUIRE(wxWinUIComboBoxTestAccess::InvokeAutoCompleteSuggestion(&combo, 0));
     CHECK(combo.GetValue() == "alph");
     CHECK(textEvents.GetCount() == 1);
     CHECK(maxLengthEvents.GetCount() == 1);
@@ -1948,19 +1950,19 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
     };
     prepareRoutedClipboard("ComboBox exact clipboard editor focus (copy)");
     const bool invokedCopy =
-        combo.WinUIInvokeClipboardCommandForTesting(wxEVT_TEXT_COPY);
+        wxWinUIComboBoxTestAccess::InvokeClipboardCommand(&combo, wxEVT_TEXT_COPY);
     INFO(wxWinUIComboDiagnostics(combo));
     REQUIRE(invokedCopy);
     CHECK(copyEvents == 2);
     prepareRoutedClipboard("ComboBox exact clipboard editor focus (cut)");
     const bool invokedCut =
-        combo.WinUIInvokeClipboardCommandForTesting(wxEVT_TEXT_CUT);
+        wxWinUIComboBoxTestAccess::InvokeClipboardCommand(&combo, wxEVT_TEXT_CUT);
     INFO(wxWinUIComboDiagnostics(combo));
     REQUIRE(invokedCut);
     CHECK(cutEvents == 2);
     prepareRoutedClipboard("ComboBox exact clipboard editor focus (paste)");
     const bool invokedPaste =
-        combo.WinUIInvokeClipboardCommandForTesting(wxEVT_TEXT_PASTE);
+        wxWinUIComboBoxTestAccess::InvokeClipboardCommand(&combo, wxEVT_TEXT_PASTE);
     INFO(wxWinUIComboDiagnostics(combo));
     REQUIRE(invokedPaste);
     CHECK(pasteEvents == 2);
@@ -1972,11 +1974,11 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
     // character message; the UIActionSimulator coverage below retains the
     // physical shortcut oracle.
     prepareRoutedClipboard("ComboBox clipboard focus (copy replay)");
-    REQUIRE(combo.WinUIInvokeClipboardCommandForTesting(wxEVT_TEXT_COPY));
+    REQUIRE(wxWinUIComboBoxTestAccess::InvokeClipboardCommand(&combo, wxEVT_TEXT_COPY));
     prepareRoutedClipboard("ComboBox clipboard focus (cut replay)");
-    REQUIRE(combo.WinUIInvokeClipboardCommandForTesting(wxEVT_TEXT_CUT));
+    REQUIRE(wxWinUIComboBoxTestAccess::InvokeClipboardCommand(&combo, wxEVT_TEXT_CUT));
     prepareRoutedClipboard("ComboBox clipboard focus (paste replay)");
-    REQUIRE(combo.WinUIInvokeClipboardCommandForTesting(wxEVT_TEXT_PASTE));
+    REQUIRE(wxWinUIComboBoxTestAccess::InvokeClipboardCommand(&combo, wxEVT_TEXT_PASTE));
     INFO(wxWinUIComboDiagnostics(combo));
     CHECK(copyEvents == 3);
     CHECK(cutEvents == 3);
@@ -2000,11 +2002,11 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
         REQUIRE(wxWinUIComboHasExactPeerRange(retemplated, 1, 4));
         std::uintptr_t originalEditIdentity = 0;
         std::uint64_t originalEditGeneration = 0;
-        wxComboBox::WinUIDiagnosticSnapshot beforeClipboardRetemplate;
-        REQUIRE(retemplated.WinUIGetTextEntryPeerStateForTesting(
+        wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeClipboardRetemplate;
+        REQUIRE(wxWinUIComboBoxTestAccess::GetTextEntryPeerState(&retemplated,
             nullptr, nullptr, nullptr,
             &originalEditIdentity, &originalEditGeneration));
-        REQUIRE(retemplated.WinUIGetDiagnosticSnapshotForTesting(
+        REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&retemplated,
             &beforeClipboardRetemplate));
         REQUIRE(originalEditIdentity != 0);
         REQUIRE(originalEditGeneration != 0);
@@ -2015,16 +2017,16 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
             {
                 ++reentrantCutEvents;
                 didRetemplate =
-                    retemplated.WinUIRetemplateForTesting();
+                    wxWinUIComboBoxTestAccess::Retemplate(&retemplated);
                 event.Skip();
             });
-        REQUIRE(retemplated.WinUIInvokeClipboardCommandForTesting(
+        REQUIRE(wxWinUIComboBoxTestAccess::InvokeClipboardCommand(&retemplated,
             wxEVT_TEXT_CUT));
         CHECK(reentrantCutEvents == 1);
         CHECK(didRetemplate);
         CHECK(retemplated.GetValue() == "abcdef");
-        wxComboBox::WinUIDiagnosticSnapshot acceptedClipboardRetemplate;
-        REQUIRE(retemplated.WinUIGetDiagnosticSnapshotForTesting(
+        wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot acceptedClipboardRetemplate;
+        REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&retemplated,
             &acceptedClipboardRetemplate));
         CHECK(acceptedClipboardRetemplate.comboLayoutRealizations ==
               beforeClipboardRetemplate.comboLayoutRealizations);
@@ -2033,8 +2035,8 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
               beforeClipboardRetemplate.
                   comboLayoutSynchronousRealizations);
 
-        wxComboBox::WinUITemplatePeerSnapshot replacementPeer;
-        wxComboBox::WinUIDiagnosticSnapshot replacementDiagnostic;
+        wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot replacementPeer;
+        wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot replacementDiagnostic;
         REQUIRE(WaitForSettledWinUIComboTemplateGeneration(
             retemplated, originalEditGeneration,
             &replacementPeer, &replacementDiagnostic));
@@ -2054,7 +2056,7 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
         CHECK(currentTo == 4);
         if ( replacementEditIdentity != originalEditIdentity )
         {
-            REQUIRE(retemplated.WinUISetEditSelectionForTesting(
+            REQUIRE(wxWinUIComboBoxTestAccess::SetEditSelection(&retemplated,
                 0, 1, true));
         }
         else
@@ -2063,10 +2065,10 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
             // the current sender and must not be mutated. Generation advancement
             // and unchanged callback/ticket diagnostics prove the old delegate
             // tokens were retired at the wx veto boundary.
-            wxComboBox::WinUIDiagnosticSnapshot aliasedSenderDiagnostic;
-            REQUIRE(retemplated.WinUIGetDiagnosticSnapshotForTesting(
+            wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot aliasedSenderDiagnostic;
+            REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&retemplated,
                 &aliasedSenderDiagnostic));
-            CHECK((retemplated.WinUIGetTemplateStateForTesting() & 0x7) ==
+            CHECK((wxWinUIComboBoxTestAccess::GetTemplateState(&retemplated) & 0x7) ==
                   0x7);
             CHECK(aliasedSenderDiagnostic.peerTextCallbacks ==
                   replacementDiagnostic.peerTextCallbacks);
@@ -2104,7 +2106,7 @@ TEST_CASE("wxWinUI ComboBox clipboard commands use the real XAML editor",
             delete deleting;
         });
     const bool invoked =
-        doomed->WinUIInvokeClipboardCommandForTesting(wxEVT_TEXT_COPY);
+        wxWinUIComboBoxTestAccess::InvokeClipboardCommand(doomed, wxEVT_TEXT_COPY);
     CHECK(invoked);
     CHECK(doomed == nullptr);
 
@@ -2236,7 +2238,7 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     {
         return wxWindow::FindFocus() == &combo && ::GetFocus();
     }));
-    REQUIRE(combo.WinUISetPeerTextForTesting("al"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "al"));
 
     wxArrayString fixed;
     fixed.Add("alpha");
@@ -2245,42 +2247,42 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     REQUIRE(combo.AutoComplete(fixed));
     REQUIRE(WaitFor("ComboBox fixed completion flyout", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
     }));
-    CHECK(combo.WinUIGetAutoCompleteSuggestionForTesting(0) == "alpha");
-    CHECK(combo.WinUIGetAutoCompleteSuggestionForTesting(1) == "alpine");
-    CHECK(combo.WinUIGetAutoCompleteActiveSuggestionForTesting() ==
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestion(&combo, 0) == "alpha");
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestion(&combo, 1) == "alpine");
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(&combo) ==
           wxNOT_FOUND);
 
     combo.SetEditable(false);
     REQUIRE(WaitFor("disabled ComboBox closes completion", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 0;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0;
     }));
-    CHECK(!combo.WinUIInvokeAutoCompleteSuggestionForTesting(0));
-    REQUIRE(combo.WinUISetPeerTextForTesting("blocked"));
+    CHECK(!wxWinUIComboBoxTestAccess::InvokeAutoCompleteSuggestion(&combo, 0));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "blocked"));
     CHECK(combo.GetValue() == "al");
-    CHECK(combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 0);
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0);
     combo.SetEditable(true);
-    REQUIRE(combo.WinUISetPeerTextForTesting("a"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "a"));
     REQUIRE(WaitFor("re-enabled ComboBox completion", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
     }));
 
     EventCounter textEvents(&combo, wxEVT_TEXT);
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_DOWN));
     const int activeAfterFirstDown =
-        combo.WinUIGetAutoCompleteActiveSuggestionForTesting();
+        wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(&combo);
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_DOWN));
     const int activeAfterSecondDown =
-        combo.WinUIGetAutoCompleteActiveSuggestionForTesting();
+        wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(&combo);
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_UP));
     const int activeAfterUp =
-        combo.WinUIGetAutoCompleteActiveSuggestionForTesting();
+        wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(&combo);
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_DOWN));
     const int activeAfterFinalDown =
-        combo.WinUIGetAutoCompleteActiveSuggestionForTesting();
+        wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(&combo);
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_RETURN));
     INFO(wxWinUIComboDiagnostics(combo));
     CHECK(activeAfterFirstDown == 0);
@@ -2290,24 +2292,24 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     CHECK(combo.GetValue() == "alpine");
     CHECK(combo.GetInsertionPoint() == combo.GetLastPosition());
     CHECK(textEvents.GetCount() == 1);
-    CHECK(combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 0);
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0);
 
     // Keep the real MenuFlyoutItem automation route covered as a complement
     // to (not a substitute for) the focused-editor keyboard pipeline above.
-    REQUIRE(combo.WinUISetPeerTextForTesting("al"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "al"));
     const bool fixedCompletionReopened =
         WaitFor("ComboBox fixed completion reopen", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
     });
     INFO(wxWinUIComboDiagnostics(combo));
     REQUIRE(fixedCompletionReopened);
     textEvents.Clear();
-    REQUIRE(combo.WinUIInvokeAutoCompleteSuggestionForTesting(0));
+    REQUIRE(wxWinUIComboBoxTestAccess::InvokeAutoCompleteSuggestion(&combo, 0));
     CHECK(combo.GetValue() == "alpha");
     CHECK(combo.GetInsertionPoint() == combo.GetLastPosition());
     CHECK(textEvents.GetCount() == 1);
-    CHECK(combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 0);
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0);
 
     wxTextCompleterFixed * const custom = new wxTextCompleterFixed;
     wxArrayString customValues;
@@ -2315,30 +2317,30 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     customValues.Add("garden");
     customValues.Add("omega");
     custom->SetCompletions(customValues);
-    REQUIRE(combo.WinUISetPeerTextForTesting("ga"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "ga"));
     REQUIRE(combo.AutoComplete(custom));
     REQUIRE(WaitFor("ComboBox custom completion flyout", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
     }));
 
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_DOWN));
-    CHECK(combo.WinUIGetAutoCompleteActiveSuggestionForTesting() == 0);
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(&combo) == 0);
     const wxString beforeEscape = combo.GetValue();
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_ESCAPE));
     REQUIRE(WaitFor("ComboBox Escape closes completion", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 0;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0;
     }));
     CHECK(combo.GetValue() == beforeEscape);
 
     // A subsequent real edit must open a fresh generation after Escape.
-    REQUIRE(combo.WinUISetPeerTextForTesting("g"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "g"));
     REQUIRE(WaitFor("ComboBox completion reopens after Escape", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
     }));
-    CHECK(combo.WinUIGetAutoCompleteActiveSuggestionForTesting() ==
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(&combo) ==
           wxNOT_FOUND);
 
     CHECK(wxWindow::FindFocus() == &combo);
@@ -2353,7 +2355,7 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     }));
     REQUIRE(WaitFor("ComboBox completion Tab closes flyout", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 0;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0;
     }));
 
     // Reopen the same generation and exercise the reverse traversal through
@@ -2365,10 +2367,10 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     {
         return wxWindow::FindFocus() == &combo && ::GetFocus();
     }));
-    REQUIRE(combo.WinUISetPeerTextForTesting("ga"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "ga"));
     REQUIRE(WaitFor("ComboBox reverse completion flyout", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
     }));
     {
         wxWinUIKeyboardModifiers modifiers{};
@@ -2383,7 +2385,7 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     }));
     REQUIRE(WaitFor("ComboBox completion Shift-Tab closes flyout", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 0;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0;
     }));
 
     combo.SetFocus();
@@ -2393,10 +2395,10 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     }));
     // Refocus alone is not a text edit. Change the real peer document so the
     // completer is refreshed by the production TextProperty path.
-    REQUIRE(combo.WinUISetPeerTextForTesting("g"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "g"));
     REQUIRE(WaitFor("ComboBox refocused completion flyout", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
     }));
 
     // Keep the same real TextBox and completer across a top-level host move;
@@ -2407,16 +2409,16 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     {
         return wxWindow::FindFocus() == &combo && ::GetFocus();
     }));
-    REQUIRE(combo.WinUISetPeerTextForTesting("ga"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "ga"));
     REQUIRE(WaitFor("reparented ComboBox completion flyout", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 2;
     }));
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_DOWN));
-    CHECK(combo.WinUIGetAutoCompleteActiveSuggestionForTesting() == 0);
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(&combo) == 0);
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_RETURN));
     CHECK(combo.GetValue() == "gamma");
-    CHECK(combo.WinUIGetAutoCompleteSuggestionCountForTesting() == 0);
+    CHECK(wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) == 0);
 
     struct PathCleanup
     {
@@ -2435,17 +2437,17 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     REQUIRE(!cleanup.file.empty());
     const wxString filePrefix = cleanup.file.Left(
         cleanup.file.length() - 1);
-    REQUIRE(combo.WinUISetPeerTextForTesting(filePrefix));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, filePrefix));
     REQUIRE(combo.AutoCompleteFileNames());
     REQUIRE(WaitFor("ComboBox filename completion", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() != 0;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) != 0;
     }));
     bool foundFile = false;
     for ( unsigned n = 0;
-          n < combo.WinUIGetAutoCompleteSuggestionCountForTesting(); ++n )
+          n < wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo); ++n )
     {
-        if ( combo.WinUIGetAutoCompleteSuggestionForTesting(n).
+        if ( wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestion(&combo, n).
                  IsSameAs(cleanup.file, false) )
         {
             foundFile = true;
@@ -2463,20 +2465,20 @@ TEST_CASE("wxWinUI ComboBox auto-completion uses its real XAML editor",
     REQUIRE(wxMkdir(cleanup.directory));
     const wxString directoryPrefix = cleanup.directory.Left(
         cleanup.directory.length() - 1);
-    REQUIRE(combo.WinUISetPeerTextForTesting(directoryPrefix));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, directoryPrefix));
     REQUIRE(combo.AutoCompleteDirectories());
     REQUIRE(WaitFor("ComboBox directory completion", [&combo]()
     {
-        return combo.WinUIGetAutoCompleteSuggestionCountForTesting() != 0;
+        return wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo) != 0;
     }));
     bool foundDirectory = false;
     const wxString expectedDirectory =
         cleanup.directory + wxFileName::GetPathSeparator();
     for ( unsigned n = 0;
-          n < combo.WinUIGetAutoCompleteSuggestionCountForTesting(); ++n )
+          n < wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(&combo); ++n )
     {
         const wxString suggestion =
-            combo.WinUIGetAutoCompleteSuggestionForTesting(n);
+            wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestion(&combo, n);
         if ( suggestion.IsSameAs(expectedDirectory, false) )
         {
             foundDirectory = true;
@@ -2500,7 +2502,7 @@ TEST_CASE("wxWinUI ComboBox completer callbacks may destroy their owner",
     {
         return combo && wxWindow::FindFocus() == combo && ::GetFocus();
     }));
-    REQUIRE(combo->WinUISetPeerTextForTesting("al"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(combo, "al"));
     const bool startResult = combo->AutoComplete(
         new wxWinUIDeleteComboOnStartCompleter(&combo));
     CHECK(startResult);
@@ -2529,14 +2531,14 @@ TEST_CASE("wxWinUI ComboBox completer callbacks may destroy their owner",
     {
         return combo && wxWindow::FindFocus() == combo && ::GetFocus();
     }));
-    REQUIRE(combo->WinUISetPeerTextForTesting("al"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(combo, "al"));
     wxArrayString acceptedValues;
     acceptedValues.Add("alpha");
     REQUIRE(combo->AutoComplete(acceptedValues));
     REQUIRE(WaitFor("accepting completer flyout", [&combo]()
     {
         return combo &&
-               combo->WinUIGetAutoCompleteSuggestionCountForTesting() == 1;
+               wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(combo) == 1;
     }));
     REQUIRE(wxWinUIDispatchComboKey(::GetFocus(), VK_DOWN));
     combo->Bind(wxEVT_TEXT, [&combo](wxCommandEvent&)
@@ -2565,14 +2567,14 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
     sourcePanel.SetSize(source.GetClientSize());
     source.Show();
 
-    wxComboBox::WinUISimplePeerSnapshot surface;
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot surface;
     const double persistentRequestedHeight =
         static_cast<double>(combo.ToDIP(combo.GetSize()).y);
     const bool persistentLayout =
         WaitFor("simple ComboBox persistent list layout", [&]()
     {
-        return combo.WinUIGetSimplePeerSnapshotForTesting(&surface) &&
-               surface.state == wxComboBox::WinUISimple_Complete &&
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &surface) &&
+               surface.state == wxWinUIComboBoxTestAccess::WinUISimple_Complete &&
                std::abs(surface.rootHeight -
                         persistentRequestedHeight) <= 0.5 &&
                std::abs(surface.listY -
@@ -2646,7 +2648,7 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
         textData = event.GetClientData();
     });
 
-    REQUIRE(combo.WinUISelectPeerItemForTesting(2));
+    REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 2));
     REQUIRE(order.size() == 2);
     CHECK(order[0] == wxEVT_COMBOBOX);
     CHECK(order[1] == wxEVT_TEXT);
@@ -2655,30 +2657,30 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
     CHECK(combo.GetSelection() == 2);
     CHECK(combo.GetCurrentSelection() == 2);
     CHECK(combo.GetValue() == "two");
-    wxComboBox::WinUISimplePeerSnapshot selectedSurface;
-    REQUIRE(combo.WinUIGetSimplePeerSnapshotForTesting(&selectedSurface));
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot selectedSurface;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &selectedSurface));
     INFO("selected peerSelection=" << selectedSurface.peerSelection <<
          " peerItemsValid=" << selectedSurface.peerItemsValid);
     CHECK(selectedSurface.peerSelection == 2);
     CHECK(selectedSurface.peerItemsValid);
 
     const std::uint64_t selectedId =
-        combo.WinUIGetItemIdForTesting(2);
+        wxWinUIChoiceTestAccess::GetItemId(&combo, 2);
     const std::uintptr_t selectedPeer =
-        combo.WinUIGetItemPeerIdentityForTesting(2);
+        wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 2);
     REQUIRE(selectedPeer != 0);
     order.clear();
     REQUIRE(combo.Insert("before", 0) == 0);
     CHECK(combo.GetSelection() == 3);
-    wxComboBox::WinUISimplePeerSnapshot insertedSurface;
-    REQUIRE(combo.WinUIGetSimplePeerSnapshotForTesting(&insertedSurface));
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot insertedSurface;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &insertedSurface));
     INFO("inserted peerSelection=" << insertedSurface.peerSelection <<
          " peerItemsValid=" << insertedSurface.peerItemsValid);
     CHECK(insertedSurface.peerSelection == 3);
     CHECK(insertedSurface.peerItemsValid);
     CHECK(combo.GetCurrentSelection() == 3);
-    CHECK(combo.WinUIGetItemIdForTesting(3) == selectedId);
-    CHECK(combo.WinUIGetItemPeerIdentityForTesting(3) == selectedPeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&combo, 3) == selectedId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 3) == selectedPeer);
     CHECK(order.empty());
 
     combo.SetString(3, "renamed");
@@ -2686,7 +2688,7 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
     CHECK(combo.GetSelection() == 3);
     CHECK(order.empty());
 
-    REQUIRE(combo.WinUISetPeerTextForTesting("typed value"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "typed value"));
     REQUIRE(order.size() == 1);
     CHECK(order[0] == wxEVT_TEXT);
     CHECK(combo.GetValue() == "typed value");
@@ -2721,13 +2723,13 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
     CHECK(order[0] == wxEVT_COMBOBOX);
     CHECK(order[1] == wxEVT_TEXT);
 
-    wxComboBox::WinUISimplePeerSnapshot expandedSurface;
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot expandedSurface;
     const wxSize expandedWxSize = combo.GetSize();
     const double expandedRequestedHeight =
         static_cast<double>(combo.ToDIP(expandedWxSize).y);
     REQUIRE(WaitFor("simple ComboBox initial viewport decomposition", [&]()
     {
-        return combo.WinUIGetSimplePeerSnapshotForTesting(
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo,
                    &expandedSurface) &&
                expandedSurface.viewportHeight > 0.0 &&
                std::abs(expandedSurface.rootHeight -
@@ -2740,7 +2742,7 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
                         expandedSurface.rootHeight) <= 0.5 &&
                wxWinUISimpleExtentIsExact(expandedSurface);
     }));
-    const int expandedPage = combo.WinUIGetSimplePageSizeForTesting();
+    const int expandedPage = wxWinUIComboBoxTestAccess::GetSimplePageSize(&combo);
     REQUIRE(expandedPage >= 1);
     CHECK(expandedPage <= static_cast<int>(combo.GetCount()));
     REQUIRE(expandedSurface.viewportHeight > 0.0);
@@ -2751,14 +2753,14 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
     combo.SetSize(wxSize(240, 90));
     const double compactRequestedHeight =
         static_cast<double>(combo.ToDIP(combo.GetSize()).y);
-    wxComboBox::WinUISimplePeerSnapshot compactSurface;
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot compactSurface;
     REQUIRE(WaitFor("simple ComboBox compact viewport page", [&combo,
                                                                expandedPage,
                                                                &compactSurface,
                                                                &expandedSurface,
                                                                compactRequestedHeight]()
     {
-        return combo.WinUIGetSimplePeerSnapshotForTesting(&compactSurface) &&
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &compactSurface) &&
                compactSurface.viewportHeight > 0.0 &&
                std::abs(compactSurface.rootHeight -
                         compactRequestedHeight) <= 0.5 &&
@@ -2771,12 +2773,12 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
                wxWinUISimpleExtentIsExact(compactSurface) &&
                compactSurface.viewportHeight <
                    expandedSurface.viewportHeight &&
-               combo.WinUIGetSimplePageSizeForTesting() < expandedPage;
+               wxWinUIComboBoxTestAccess::GetSimplePageSize(&combo) < expandedPage;
     }));
     CHECK(compactSurface.listHeight < expandedSurface.listHeight);
-    const int compactPage = combo.WinUIGetSimplePageSizeForTesting();
+    const int compactPage = wxWinUIComboBoxTestAccess::GetSimplePageSize(&combo);
     combo.SetSize(expandedWxSize);
-    wxComboBox::WinUISimplePeerSnapshot restoredSurface;
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot restoredSurface;
     int restoredPage = -1;
     const bool restoredViewport =
         WaitFor("simple ComboBox restored viewport", [&combo,
@@ -2785,9 +2787,9 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
                                                         &expandedSurface,
                                                         expandedPage]()
     {
-        if ( !combo.WinUIGetSimplePeerSnapshotForTesting(&restoredSurface) )
+        if ( !wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &restoredSurface) )
             return false;
-        restoredPage = combo.WinUIGetSimplePageSizeForTesting();
+        restoredPage = wxWinUIComboBoxTestAccess::GetSimplePageSize(&combo);
         return std::abs(restoredSurface.viewportHeight -
                         expandedSurface.viewportHeight) <= 0.5 &&
                std::abs(restoredSurface.listY -
@@ -2848,12 +2850,12 @@ TEST_CASE("wxWinUI simple ComboBox is a persistent edit and list surface",
     }
 
     expectedSelection = static_cast<int>(combo.GetCount()) - 1;
-    REQUIRE(combo.WinUINavigateSimpleListForTesting(99));
+    REQUIRE(wxWinUIComboBoxTestAccess::NavigateSimpleList(&combo, 99));
     CHECK(combo.GetSelection() ==
           static_cast<int>(combo.GetCount()) - 1);
     REQUIRE(order.size() == 2);
     order.clear();
-    REQUIRE(combo.WinUINavigateSimpleListForTesting(1));
+    REQUIRE(wxWinUIComboBoxTestAccess::NavigateSimpleList(&combo, 1));
     CHECK(order.empty());
 }
 
@@ -2881,46 +2883,46 @@ TEST_CASE("wxWinUI editable ComboBox pins and retires its effective theme",
 
     std::uintptr_t oldEditIdentity = 0;
     std::uint64_t oldEditGeneration = 0;
-    int oldRootTheme = wxComboBox::WinUITheme_Unknown;
-    int oldRootRequestedTheme = wxComboBox::WinUITheme_Unknown;
-    int oldEditTheme = wxComboBox::WinUITheme_Unknown;
+    int oldRootTheme = wxWinUIComboBoxTestAccess::WinUITheme_Unknown;
+    int oldRootRequestedTheme = wxWinUIComboBoxTestAccess::WinUITheme_Unknown;
+    int oldEditTheme = wxWinUIComboBoxTestAccess::WinUITheme_Unknown;
     REQUIRE(WaitFor("editable ComboBox initial pinned generation", [&]()
     {
-        return combo.WinUIGetTextEntryPeerStateForTesting(
+        return wxWinUIComboBoxTestAccess::GetTextEntryPeerState(&combo,
             nullptr, nullptr, nullptr,
             &oldEditIdentity, &oldEditGeneration,
             &oldRootTheme, &oldRootRequestedTheme, &oldEditTheme,
             false) &&
                oldEditIdentity != 0 &&
                oldEditGeneration != 0 &&
-               (oldRootTheme == wxComboBox::WinUITheme_Light ||
-                oldRootTheme == wxComboBox::WinUITheme_Dark) &&
+               (oldRootTheme == wxWinUIComboBoxTestAccess::WinUITheme_Light ||
+                oldRootTheme == wxWinUIComboBoxTestAccess::WinUITheme_Dark) &&
                oldRootRequestedTheme == oldRootTheme &&
                oldEditTheme == oldRootTheme;
     }));
     REQUIRE(oldEditIdentity != 0);
     REQUIRE(oldEditGeneration != 0);
-    REQUIRE((oldRootTheme == wxComboBox::WinUITheme_Light ||
-             oldRootTheme == wxComboBox::WinUITheme_Dark));
+    REQUIRE((oldRootTheme == wxWinUIComboBoxTestAccess::WinUITheme_Light ||
+             oldRootTheme == wxWinUIComboBoxTestAccess::WinUITheme_Dark));
     REQUIRE(oldRootRequestedTheme == oldRootTheme);
     REQUIRE(oldEditTheme == oldRootTheme);
 
     const wxWinUIAppTheme newPolicy =
-        oldRootTheme == wxComboBox::WinUITheme_Light
+        oldRootTheme == wxWinUIComboBoxTestAccess::WinUITheme_Light
             ? wxWinUIAppTheme::Dark
             : wxWinUIAppTheme::Light;
     const int newEffectiveTheme =
-        oldRootTheme == wxComboBox::WinUITheme_Light
-            ? wxComboBox::WinUITheme_Dark
-            : wxComboBox::WinUITheme_Light;
+        oldRootTheme == wxWinUIComboBoxTestAccess::WinUITheme_Light
+            ? wxWinUIComboBoxTestAccess::WinUITheme_Dark
+            : wxWinUIComboBoxTestAccess::WinUITheme_Light;
 
     EventCounter textEvents(&combo, wxEVT_TEXT);
-    wxComboBox::WinUIDiagnosticSnapshot beforeThemeTransition;
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeThemeTransition;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
         &beforeThemeTransition));
     wxWinUISetAppTheme(newPolicy);
-    wxComboBox::WinUIDiagnosticSnapshot acceptedThemeTransition;
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot acceptedThemeTransition;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
         &acceptedThemeTransition));
     CHECK(acceptedThemeTransition.comboLayoutRealizations ==
           beforeThemeTransition.comboLayoutRealizations);
@@ -2929,15 +2931,15 @@ TEST_CASE("wxWinUI editable ComboBox pins and retires its effective theme",
 
     std::uintptr_t newEditIdentity = 0;
     std::uint64_t newEditGeneration = 0;
-    int newRootTheme = wxComboBox::WinUITheme_Unknown;
-    int newRootRequestedTheme = wxComboBox::WinUITheme_Unknown;
-    int newEditTheme = wxComboBox::WinUITheme_Unknown;
-    wxComboBox::WinUITemplatePeerSnapshot settledThemePeer;
-    wxComboBox::WinUIDiagnosticSnapshot settledThemeDiagnostic;
+    int newRootTheme = wxWinUIComboBoxTestAccess::WinUITheme_Unknown;
+    int newRootRequestedTheme = wxWinUIComboBoxTestAccess::WinUITheme_Unknown;
+    int newEditTheme = wxWinUIComboBoxTestAccess::WinUITheme_Unknown;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot settledThemePeer;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot settledThemeDiagnostic;
     const bool themeGenerationCommitted =
         WaitFor("editable ComboBox theme editor generation", [&]()
     {
-        return combo.WinUIGetTextEntryPeerStateForTesting(
+        return wxWinUIComboBoxTestAccess::GetTextEntryPeerState(&combo,
                    nullptr, nullptr, nullptr,
                    &newEditIdentity, &newEditGeneration,
                    &newRootTheme, &newRootRequestedTheme,
@@ -2947,17 +2949,17 @@ TEST_CASE("wxWinUI editable ComboBox pins and retires its effective theme",
                 newRootTheme == newEffectiveTheme &&
                 newRootRequestedTheme == newEffectiveTheme &&
                 newEditTheme == newEffectiveTheme &&
-                combo.WinUIGetTemplatePeerSnapshotForTesting(
+                wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo,
                     &settledThemePeer) &&
-                combo.WinUIGetDiagnosticSnapshotForTesting(
+                wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
                     &settledThemeDiagnostic) &&
                 !(settledThemePeer.phase &
-                  (wxComboBox::WinUITemplatePhase_Resolving |
-                   wxComboBox::WinUITemplatePhase_PendingResolve |
-                   wxComboBox::WinUITemplatePhase_Transition |
-                   wxComboBox::WinUITemplatePhase_PeerMutation |
-                   wxComboBox::WinUITemplatePhase_PendingRange |
-                   wxComboBox::WinUITemplatePhase_QueuedResolve)) &&
+                  (wxWinUIComboBoxTestAccess::WinUITemplatePhase_Resolving |
+                   wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingResolve |
+                   wxWinUIComboBoxTestAccess::WinUITemplatePhase_Transition |
+                   wxWinUIComboBoxTestAccess::WinUITemplatePhase_PeerMutation |
+                   wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingRange |
+                   wxWinUIComboBoxTestAccess::WinUITemplatePhase_QueuedResolve)) &&
                 !settledThemeDiagnostic.templateReplayPending &&
                 settledThemePeer.peerSelectionStart == 1 &&
                 settledThemePeer.peerSelectionLength == 3 &&
@@ -2975,7 +2977,7 @@ TEST_CASE("wxWinUI editable ComboBox pins and retires its effective theme",
          " rootRequested=" << oldRootRequestedTheme << "->" <<
              newRootRequestedTheme <<
          " editActual=" << oldEditTheme << "->" << newEditTheme <<
-         " state=" << combo.WinUIGetTemplateStateForTesting());
+         " state=" << wxWinUIComboBoxTestAccess::GetTemplateState(&combo));
     INFO(wxWinUIComboDiagnostics(combo));
     REQUIRE(themeGenerationCommitted);
     REQUIRE(newEditIdentity != 0);
@@ -3037,12 +3039,12 @@ TEST_CASE("wxWinUI simple ComboBox survives host, DPI and theme transitions",
     source.Show();
     destination.Show();
 
-    wxComboBox::WinUISimplePeerSnapshot sourceSurface;
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot sourceSurface;
     const bool sourceLayout =
         WaitFor("simple ComboBox source-host layout", [&]()
     {
-        return combo.WinUIGetSimplePeerSnapshotForTesting(&sourceSurface) &&
-               sourceSurface.state == wxComboBox::WinUISimple_Complete;
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &sourceSurface) &&
+               sourceSurface.state == wxWinUIComboBoxTestAccess::WinUISimple_Complete;
     });
     INFO("source simple state=" << sourceSurface.state <<
          " edit=" << sourceSurface.editIdentity <<
@@ -3059,18 +3061,18 @@ TEST_CASE("wxWinUI simple ComboBox survives host, DPI and theme transitions",
     REQUIRE(sourceLayout);
     REQUIRE(sourceSurface.xamlRootIdentity != 0);
     const std::uintptr_t itemIdentity =
-        combo.WinUIGetItemPeerIdentityForTesting(1);
+        wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 1);
     REQUIRE(itemIdentity != 0);
 
     REQUIRE(combo.Reparent(&destinationPanel));
-    wxComboBox::WinUISimplePeerSnapshot destinationSurface;
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot destinationSurface;
     const bool destinationLayout =
         WaitFor("simple ComboBox destination-host layout", [&]()
     {
-        return combo.WinUIGetSimplePeerSnapshotForTesting(
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo,
                    &destinationSurface) &&
                destinationSurface.state ==
-                   wxComboBox::WinUISimple_Complete &&
+                   wxWinUIComboBoxTestAccess::WinUISimple_Complete &&
                destinationSurface.xamlRootIdentity !=
                    sourceSurface.xamlRootIdentity;
     });
@@ -3092,7 +3094,7 @@ TEST_CASE("wxWinUI simple ComboBox survives host, DPI and theme transitions",
     REQUIRE(destinationLayout);
     CHECK(destinationSurface.editIdentity == sourceSurface.editIdentity);
     CHECK(destinationSurface.listIdentity == sourceSurface.listIdentity);
-    CHECK(combo.WinUIGetItemPeerIdentityForTesting(1) == itemIdentity);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 1) == itemIdentity);
 
     // Observe the real host mapper: the XamlRoot scale and wx DPI must describe
     // the same destination top-level, without synthesizing wxDPIChangedEvent.
@@ -3101,20 +3103,20 @@ TEST_CASE("wxWinUI simple ComboBox survives host, DPI and theme transitions",
                    static_cast<double>(dpi.x)) <= 1.5);
 
     wxWinUISetAppTheme(wxWinUIAppTheme::Light);
-    wxComboBox::WinUISimplePeerSnapshot lightSurface;
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot lightSurface;
     REQUIRE(WaitFor("simple ComboBox observed light theme", [&]()
     {
-        return combo.WinUIGetSimplePeerSnapshotForTesting(&lightSurface) &&
-               lightSurface.state == wxComboBox::WinUISimple_Complete &&
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &lightSurface) &&
+               lightSurface.state == wxWinUIComboBoxTestAccess::WinUISimple_Complete &&
                lightSurface.actualTheme ==
                    static_cast<int>(wxWinUIAppTheme::Light);
     }));
     wxWinUISetAppTheme(wxWinUIAppTheme::Dark);
-    wxComboBox::WinUISimplePeerSnapshot darkSurface;
+    wxWinUIComboBoxTestAccess::WinUISimplePeerSnapshot darkSurface;
     REQUIRE(WaitFor("simple ComboBox observed dark theme", [&]()
     {
-        return combo.WinUIGetSimplePeerSnapshotForTesting(&darkSurface) &&
-               darkSurface.state == wxComboBox::WinUISimple_Complete &&
+        return wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(&combo, &darkSurface) &&
+               darkSurface.state == wxWinUIComboBoxTestAccess::WinUISimple_Complete &&
                darkSurface.actualTheme ==
                    static_cast<int>(wxWinUIAppTheme::Dark);
     }));
@@ -3136,7 +3138,7 @@ TEST_CASE("wxWinUI simple ComboBox survives host, DPI and theme transitions",
         delete deleting;
     });
     wxComboBox * const invoking = doomed;
-    REQUIRE(invoking->WinUISelectPeerItemForTesting(1));
+    REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(invoking, 1));
     CHECK(doomed == nullptr);
     wxYield();
     CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() == baseline);
@@ -3175,16 +3177,16 @@ TEST_CASE("wxWinUI BitmapCombo keeps bitmap identity through sorting",
     CHECK(wxWinUIGetBitmapColour(combo.GetItemBitmap(2)) == red);
 
     const std::uint64_t zuluId =
-        combo.WinUIGetItemIdForTesting(2);
+        wxWinUIChoiceTestAccess::GetItemId(&combo, 2);
     const std::uintptr_t zuluPeer =
-        combo.WinUIGetItemPeerIdentityForTesting(2);
+        wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 2);
     REQUIRE(zuluPeer != 0);
 
     combo.SetSelection(2);
     combo.SetString(2, "beta");
     REQUIRE(combo.GetSelection() == 1);
-    CHECK(combo.WinUIGetItemIdForTesting(1) == zuluId);
-    CHECK(combo.WinUIGetItemPeerIdentityForTesting(1) == zuluPeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemId(&combo, 1) == zuluId);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 1) == zuluPeer);
     CHECK(wxWinUIGetBitmapColour(combo.GetItemBitmap(1)) == red);
     CHECK(wxWinUIGetBitmapColour(combo.GetItemBitmap(2)) == blue);
 
@@ -3192,7 +3194,7 @@ TEST_CASE("wxWinUI BitmapCombo keeps bitmap identity through sorting",
     REQUIRE(combo.GetCount() == 2);
     CHECK(combo.GetString(0) == "beta");
     CHECK(wxWinUIGetBitmapColour(combo.GetItemBitmap(0)) == red);
-    CHECK(combo.WinUIGetItemPeerIdentityForTesting(0) == zuluPeer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 0) == zuluPeer);
 
     wxBitmapComboBox sizing(&frame, wxID_ANY);
     const wxSize beforeLargeBitmap = sizing.GetBestSize();

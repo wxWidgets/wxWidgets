@@ -49,6 +49,16 @@ All criteria are required before DONE. An implementation can be LOCAL PASS / REM
 
 No claim of native Ribbon, native titlebar or fully supported advanced surface based only on successful generic compilation. Hardware-dependent claims remain pending their gate. If a confirmed defect requires an out-of-scope change, extend the plan explicitly with its reason before editing; do not start another general review. Preserve diagnostics from failing checks.
 
+## Concrete failures captured during plan 106
+
+The unchanged pre-migration shared/static binaries expose six failing cases. Preserve them while moving test accessors; do not call baseline equivalence component qualification.
+
+- Two owner-drawn CheckListBox activation/focus cases reject `ActivatePeerCheck()` before `SetFocus()`. `GetItemRect()` only establishes the outer ListViewItem, not the CheckBox's arranged/hit-testable area. Inspect actual CheckBox geometry: the pinned theme's minimum dimensions exceed the compact margin requested by the projection. This is a hypothesis to measure, not yet a confirmed fix.
+- TreeCtrl selection/expansion and two DatePicker/composite focus cases fail in their larger suites but pass in an isolated shared run. Diagnose order/lifetime effects; do not attribute them automatically to the private desktop.
+- TextCtrl's read-only peer mutation case reads a RichEditBox immediately after a real TOM write, before the asynchronous TextChanged callback restores the model value. Check the same bounded native-event wait used by adjacent tests, retaining model/peer/event assertions. No production repair is yet demonstrated.
+
+Baseline logs and exact counts are recorded in plan 106. The isolated focus run is `audit106-family5-focus-isolated.log` with its passive input trace in the shared build tree. All use `WX_UI_TESTS=0`; none supplies physical input evidence.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

@@ -13,6 +13,10 @@
 
 #include "wx/choice.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+#include "choice-test-access.h"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/validate.h"
@@ -185,9 +189,10 @@ class wxWinUIExactPopupRetirementGate final :
 public:
     using OwnerClosedProbe = std::function<bool ()>;
 
-    static wxWinUIPopupRetirementCoreProbeForTesting ProbeForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+    static wxWinUIChoiceTestAccess::PopupRetirementCoreProbe ProbeForTesting()
     {
-        wxWinUIPopupRetirementCoreProbeForTesting result;
+        wxWinUIChoiceTestAccess::PopupRetirementCoreProbe result;
         const bool poisonWasAlreadySet =
             wxWinUIIsPhysicalDisconnectPublicationPoisoned();
 
@@ -217,6 +222,7 @@ public:
             wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
         return result;
     }
+#endif
 
     bool BeginResolvedSession(
         const MUX::XamlRoot& xamlRoot,
@@ -3685,20 +3691,22 @@ void wxChoice::WinUIUpdatePeerItem(unsigned int n,
     }
 }
 
-std::uint64_t wxChoice::WinUIGetItemIdForTesting(unsigned int n) const
+#ifdef WXWINUI_TEST_SUPPORT
+std::uint64_t wxWinUIChoiceTestAccess::GetItemId(const wxChoice* control,
+    unsigned int n)
 {
-    return n < m_itemModel.GetCount() ? m_itemModel.At(n).id : 0;
+    return n < control->m_itemModel.GetCount() ? control->m_itemModel.At(n).id : 0;
 }
 
-std::uintptr_t
-wxChoice::WinUIGetItemPeerIdentityForTesting(unsigned int n) const
+std::uintptr_t wxWinUIChoiceTestAccess::GetItemPeerIdentity(const wxChoice* control,
+    unsigned int n)
 {
-    if ( !wxWinUIChoiceHasItemPeer(m_winui.get()) )
+    if ( !wxWinUIChoiceHasItemPeer(control->m_winui.get()) )
         return 0;
 
     try
     {
-        const auto items = wxWinUIChoiceGetPeerItems(m_winui.get());
+        const auto items = wxWinUIChoiceGetPeerItems(control->m_winui.get());
         if ( n >= items.Size() )
             return 0;
         return reinterpret_cast<std::uintptr_t>(
@@ -3711,14 +3719,14 @@ wxChoice::WinUIGetItemPeerIdentityForTesting(unsigned int n) const
     }
 }
 
-bool wxChoice::WinUIGetItemPeerBitmapStateForTesting(
+bool wxWinUIChoiceTestAccess::GetItemPeerBitmapState(const wxChoice* control,
     unsigned int n,
     wxSize *pixelSize,
-    wxSize *dipSize) const
+    wxSize *dipSize)
 {
-    if ( !wxWinUIChoiceHasItemPeer(m_winui.get()) ||
-            !m_winui->peerItemsValid ||
-            n >= m_winui->peerItemIds.size() )
+    if ( !wxWinUIChoiceHasItemPeer(control->m_winui.get()) ||
+            !control->m_winui->peerItemsValid ||
+            n >= control->m_winui->peerItemIds.size() )
     {
         return false;
     }
@@ -3729,7 +3737,7 @@ bool wxChoice::WinUIGetItemPeerBitmapStateForTesting(
         namespace MUXMI =
             winrt::Microsoft::UI::Xaml::Media::Imaging;
 
-        const auto items = wxWinUIChoiceGetPeerItems(m_winui.get());
+        const auto items = wxWinUIChoiceGetPeerItems(control->m_winui.get());
         if ( n >= items.Size() )
             return false;
 
@@ -3774,18 +3782,19 @@ bool wxChoice::WinUIGetItemPeerBitmapStateForTesting(
     return false;
 }
 
-bool wxChoice::WinUISelectPeerItemForTesting(int selection)
+bool wxWinUIChoiceTestAccess::SelectPeerItem(wxChoice* control,
+    int selection)
 {
-    if ( !wxWinUIChoiceHasItemPeer(m_winui.get()) )
+    if ( !wxWinUIChoiceHasItemPeer(control->m_winui.get()) )
         return false;
 
-    if ( !WinUIEnsurePeerConsistent() ||
-         !m_winui || !m_winui->peerItemsValid )
+    if ( !control->WinUIEnsurePeerConsistent() ||
+         !control->m_winui || !control->m_winui->peerItemsValid )
         return false;
 
     try
     {
-        wxWinUIChoiceSetPeerSelection(m_winui.get(), selection);
+        wxWinUIChoiceSetPeerSelection(control->m_winui.get(), selection);
         return true;
     }
     catch ( const winrt::hresult_error& e )
@@ -3796,27 +3805,28 @@ bool wxChoice::WinUISelectPeerItemForTesting(int selection)
     }
 }
 
-bool wxChoice::WinUISetDropDownForTesting(bool open)
+bool wxWinUIChoiceTestAccess::SetDropDown(wxChoice* control,
+    bool open)
 {
-    if ( !m_winui || !m_winui->comboBox )
+    if ( !control->m_winui || !control->m_winui->comboBox )
         return false;
 
-    if ( open && WinUICoalescePopupReopen(
+    if ( open && control->WinUICoalescePopupReopen(
              [](wxChoice *owner)
              {
-                 owner->WinUISetDropDownForTesting(true);
+                 wxWinUIChoiceTestAccess::SetDropDown(owner, true);
              }) )
     {
         return true;
     }
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUIChoiceCallbackState> state =
         impl->callbackState;
     const MUXC::ComboBox combo = impl->comboBox;
     const std::shared_ptr<wxWinUIComboPopupRetirementState>
         popupRetirementState = impl->popupRetirementState;
-    const wxWeakRef<wxWindow> self(this);
+    const wxWeakRef<wxWindow> self(control);
     const auto getLiveOwner = [&]() -> wxChoice *
     {
         wxChoice * const owner = wxDynamicCast(self.get(), wxChoice);
@@ -3861,7 +3871,7 @@ bool wxChoice::WinUISetDropDownForTesting(bool open)
             if ( live->WinUICoalescePopupReopen(
                      [](wxChoice *owner)
                      {
-                         owner->WinUISetDropDownForTesting(true);
+                         wxWinUIChoiceTestAccess::SetDropDown(owner, true);
                      }) )
             {
                 wxWinUICancelPreparedComboPopupOpen(popupRetirementState);
@@ -3914,13 +3924,13 @@ bool wxChoice::WinUISetDropDownForTesting(bool open)
     }
 }
 
-bool wxChoice::WinUIIsPeerDropDownOpenForTesting() const
+bool wxWinUIChoiceTestAccess::IsPeerDropDownOpen(const wxChoice* control)
 {
-    if ( !m_winui || !m_winui->comboBox )
+    if ( !control->m_winui || !control->m_winui->comboBox )
         return false;
     try
     {
-        return m_winui->comboBox.IsDropDownOpen();
+        return control->m_winui->comboBox.IsDropDownOpen();
     }
     catch ( ... )
     {
@@ -3928,25 +3938,24 @@ bool wxChoice::WinUIIsPeerDropDownOpenForTesting() const
     }
 }
 
-bool wxChoice::WinUIGetPopupReopenSnapshotForTesting(
+bool wxWinUIChoiceTestAccess::GetPopupReopenSnapshot(const wxChoice* control,
     bool *pending,
     std::uint64_t *generation,
     unsigned *schedules,
-    unsigned *runs) const
+    unsigned *runs)
 {
-    if ( !m_winui || !pending || !generation || !schedules || !runs )
+    if ( !control->m_winui || !pending || !generation || !schedules || !runs )
         return false;
-    *pending = m_winui->popupReopenPending;
-    *generation = m_winui->popupReopenGeneration;
-    *schedules = m_winui->popupReopenSchedulesForTesting;
-    *runs = m_winui->popupReopenRunsForTesting;
+    *pending = control->m_winui->popupReopenPending;
+    *generation = control->m_winui->popupReopenGeneration;
+    *schedules = control->m_winui->popupReopenSchedulesForTesting;
+    *runs = control->m_winui->popupReopenRunsForTesting;
     return true;
 }
 
-wxWinUIPopupRetirementCoreProbeForTesting
-wxChoice::WinUIProbePopupRetirementCoreForTesting()
+wxWinUIChoiceTestAccess::PopupRetirementCoreProbe wxWinUIChoiceTestAccess::ProbePopupRetirementCore()
 {
-    wxWinUIPopupRetirementCoreProbeForTesting result =
+    PopupRetirementCoreProbe result =
         wxWinUIExactPopupRetirementGate::ProbeForTesting();
     const bool poisonWasAlreadySet =
         wxWinUIIsPhysicalDisconnectPublicationPoisoned();
@@ -3986,5 +3995,6 @@ wxChoice::WinUIProbePopupRetirementCoreForTesting()
         wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
     return result;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_CHOICE

@@ -18,20 +18,6 @@ class wxWinUITextCtrlImpl;
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
-    using WinUICreateLoadedHookForTesting =
-        void (*)(wxTextCtrl *owner, void *context);
-    using WinUITemporarySelectionHookForTesting =
-        void (*)(wxTextCtrl *owner, void *context);
-    using WinUIPasswordTextChangingHookForTesting =
-        void (*)(wxTextCtrl *owner, void *context);
-    enum class WinUIScrollBarVisibilityForTesting
-    {
-        Disabled,
-        Auto,
-        Hidden,
-        Visible
-    };
-
     wxTextCtrl();
     wxTextCtrl(wxWindow *parent,
                wxWindowID id,
@@ -137,76 +123,6 @@ public:
     wxTextProofOptions GetProofCheckOptions() const override;
 #endif // wxUSE_SPELLCHECK
 
-    // Implementation-only deterministic seams. The Enter/Tab seams run the
-    // same operation as the XAML KeyDown delegate. The password seam injects
-    // a complete content-change proposal into the shared processing
-    // transaction; it deliberately does not synthesize or claim to raise
-    // PasswordChanging.
-    bool WinUIProcessEnterForTesting();
-    bool WinUIProcessTabForTesting();
-    void WinUIPasteTextForTesting(const wxString& text);
-    bool WinUIInjectPasswordContentChangeForTesting(
-        const wxString& proposed);
-    bool WinUISetTextBoxPeerTextForTesting(const wxString& text);
-    bool WinUIGetPeerTextForTesting(wxString *text) const;
-    bool WinUIReplacePeerSelectionForTesting(const wxString& text);
-    bool WinUIHasLocalFontOverridesForTesting() const;
-    bool WinUIRichClipboardUsesAllFormatsForTesting() const;
-    bool WinUIGetNativeCaretShownForTesting(bool *shown) const;
-    bool WinUIHasNoHideSelectionProjectionForTesting() const;
-    bool WinUIGetPasswordPeerSecurityForTesting(
-        bool *isPassword,
-        bool *hasValuePattern,
-        bool *hasTextPattern,
-        wxString *documentText,
-        bool *textPredictionEnabled) const;
-    void WinUIForceNextPasswordScrubFailureForTesting(long hresult);
-    void WinUIForceNextPasswordScrubPartialWriteForTesting();
-    bool WinUIGetPasswordFailClosedForTesting(
-        long *hresult,
-        bool *documentWasEmpty) const;
-    unsigned WinUIGetPasswordClipboardExportAttemptCountForTesting() const;
-    unsigned WinUIGetAutoUrlRangeCountForTesting() const;
-    bool WinUIGetAutoUrlRangeForTesting(unsigned n,
-                                        long *from,
-                                        long *to,
-                                        wxString *target) const;
-    unsigned WinUIGetAutoCompleteSuggestionCountForTesting() const;
-    wxString WinUIGetAutoCompleteSuggestionForTesting(unsigned n) const;
-    bool WinUIInvokeAutoCompleteSuggestionForTesting(unsigned n);
-    bool WinUIGetPeerSelectionForTesting(long *from, long *to) const;
-    bool WinUIGetScrollStateForTesting(double *horizontalOffset,
-                                       double *verticalOffset,
-                                       double *viewportWidth,
-                                       double *viewportHeight,
-                                       double *rasterizationScale,
-                                       int *stage = nullptr,
-                                       double *scrollableWidth = nullptr,
-                                       double *scrollableHeight = nullptr,
-                                       double *viewOriginX = nullptr,
-                                       double *viewOriginY = nullptr,
-                                       double *viewUnitXScale = nullptr,
-                                       double *viewUnitYScale = nullptr) const;
-    bool WinUIGetVerticalScrollBarVisibilityForTesting(
-        WinUIScrollBarVisibilityForTesting *visibility) const;
-    bool WinUIGetPositionVisibilityStateForTesting(
-        bool *pending,
-        unsigned *queuedRetries,
-        bool *hasRetainedPeerReferences = nullptr,
-        unsigned *richTrace = nullptr,
-        unsigned *richPassCount = nullptr) const;
-    void WinUIUseTextBoxPeerForTesting();
-    void WinUIForceNextPositionVisibilityRetryForTesting();
-    void WinUISetNextTemporarySelectionHookForTesting(
-        WinUITemporarySelectionHookForTesting hook,
-        void *context);
-    void WinUISetNextPasswordTextChangingHookForTesting(
-        WinUIPasswordTextChangingHookForTesting hook,
-        void *context);
-    void WinUISetNextCreateLoadedHookForTesting(
-        WinUICreateLoadedHookForTesting hook,
-        void *context);
-
     long XYToPosition(long x, long y) const override;
     bool PositionToXY(long pos, long *x, long *y) const override;
     void ShowPosition(long pos) override;
@@ -236,6 +152,11 @@ protected:
     bool DoAutoCompleteCustom(wxTextCompleter *completer) override;
 
 private:
+    friend class wxWinUITextCtrlTestAccess;
+    using WinUICallbackHook = void (*)(wxTextCtrl*, void*);
+
+    bool ProcessEnter();
+    bool ProcessTab();
     void WriteTextWithPolicy(const wxString& text, bool enforceMaxLength);
     void ApplyValueToPeer();
     void ReadSelectionFromPeer();
@@ -286,22 +207,23 @@ private:
     bool m_updatingPeer = false;
     bool m_forceUpper = false;
     bool m_isNativeCaretShown = true;
-    bool m_useTextBoxPeerForTesting = false;
+    // Private seam storage remains unconditional to preserve class layout.
+    bool m_useTextBoxPeer = false;
 #if wxUSE_TOOLTIPS
     wxString m_tooltipText;
 #endif // wxUSE_TOOLTIPS
-    WinUICreateLoadedHookForTesting m_nextCreateLoadedHookForTesting = nullptr;
-    void *m_nextCreateLoadedContextForTesting = nullptr;
-    WinUITemporarySelectionHookForTesting
-        m_nextTemporarySelectionHookForTesting = nullptr;
-    void *m_nextTemporarySelectionContextForTesting = nullptr;
-    WinUIPasswordTextChangingHookForTesting
-        m_nextPasswordTextChangingHookForTesting = nullptr;
-    void *m_nextPasswordTextChangingContextForTesting = nullptr;
-    long m_nextPasswordScrubFailureForTesting = 0;
-    bool m_nextPasswordScrubPartialWriteForTesting = false;
-    long m_passwordPeerFailClosedHresultForTesting = 0;
-    bool m_passwordPeerWasEmptyOnFailClosedForTesting = false;
+    WinUICallbackHook m_nextCreateLoadedHook = nullptr;
+    void *m_nextCreateLoadedContext = nullptr;
+    WinUICallbackHook
+        m_nextTemporarySelectionHook = nullptr;
+    void *m_nextTemporarySelectionContext = nullptr;
+    WinUICallbackHook
+        m_nextPasswordTextChangingHook = nullptr;
+    void *m_nextPasswordTextChangingContext = nullptr;
+    long m_nextPasswordScrubFailure = 0;
+    bool m_nextPasswordScrubPartialWrite = false;
+    long m_passwordPeerFailClosedHresult = 0;
+    bool m_passwordPeerWasEmptyOnFailClosed = false;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl);
 };

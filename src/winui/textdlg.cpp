@@ -9,6 +9,10 @@
 
 #include "wx/wxprec.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "textdialog-test-access.h"
+#endif
+
 #include "wx/winui/winui.h"
 
 #if wxUSE_TEXTDLG && wxUSE_WINUI3
@@ -483,15 +487,22 @@ void wxTextEntryDialog::ForceUpper()
         m_peerState->EnableForceUpper();
 }
 
-bool wxTextEntryDialog::WinUISetPeerValueForTesting(const wxString& value)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextEntryDialogTestAccess::SetPeerValue(
+    wxTextEntryDialog& dialog,
+    const wxString& value)
 {
-    return m_peerState && m_peerState->SetValue(value);
+    return dialog.m_peerState && dialog.m_peerState->SetValue(value);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-wxString wxTextEntryDialog::WinUIGetPeerValueForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+wxString wxWinUITextEntryDialogTestAccess::GetPeerValue(
+    const wxTextEntryDialog& dialog)
 {
-    return m_peerState ? m_peerState->GetValue() : wxString();
+    return dialog.m_peerState ? dialog.m_peerState->GetValue() : wxString();
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #if wxUSE_VALIDATORS
 

@@ -20,7 +20,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL / REMOTE PASS; EXTERNAL UIA IN 109 |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
-| [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | IN PROGRESS: FOURTEEN CONTROLS LOCAL PASS |
+| [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | IN PROGRESS: 26 HEADERS MIGRATED; COMPONENT FAILURES OPEN |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | TODO |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | TODO |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
@@ -77,6 +77,8 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 
 ## Evidence log
 
+- Latest integration batch: Qt editability and synchronous Treebook veto are fixed in `5d7b88f1b4`, verified on Qt 5.15.2 and MSW. The public test-surface migration now covers 26 control headers, including removal of the shipping ComboBox UIA test launcher. Shared/static shipping consumers pass; broader component runs retain five/six pre-existing failures, explicitly tracked in 108. This is not full beta or physical sign-off.
+- The later check of published `a984805c6b` confirms both WinUI shared/static CI jobs successful. Ubuntu Qt still fails on the two defects corrected above; Windows Qt jobs and AppVeyor were unfinished. This remote result does not qualify the newer local commits.
 - 2026-08-30 baseline: clean integration worktree at c5cf4677b9; dirty main checkout preserved.
 - Existing c5cf CI: MSVC C4189 requestedIndex; Clang delete-non-abstract-non-virtual-dtor; WinUI shared/static compile succeeded, Appx import failed, Supported V0 skipped. See plan 101 for precise corrective scope.
 - 2026-08-30 lot 101: MSW Debug wxcore built with /warnaserror; WinUI shared/static test_gui and runtime smoke rebuilt. Both runtime CTests passed and both Supported V0 runs passed (51 cases, 970 assertions each). These are local Windows 11 results, not remote CI or physical input qualification.

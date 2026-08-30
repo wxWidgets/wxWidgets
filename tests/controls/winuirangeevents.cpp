@@ -13,6 +13,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "range-test-access.h"
+#include "slider-test-access.h"
 
 #include "wx/app.h"
 #include "wx/frame.h"
@@ -62,7 +63,7 @@ public:
 
 bool WaitForSliderVisualState(
     wxSlider& slider,
-    wxSlider::WinUIVisualState *visual)
+    wxWinUISliderTestAccess::VisualState *visual)
 {
     return WaitFor(
         "realized WinUI Slider visual state",
@@ -70,14 +71,14 @@ bool WaitForSliderVisualState(
         {
             // The seam returns false until the shared slot, native template
             // and custom overlay belong to the same completed layout pass.
-            return slider.WinUIGetVisualStateForTesting(visual);
+            return wxWinUISliderTestAccess::GetVisualState(slider, visual);
         });
 }
 
 const char *SliderConvergenceFailureName(
-    wxSlider::WinUIConvergenceFailure failure)
+    wxWinUISliderTestAccess::ConvergenceFailure failure)
 {
-    using Failure = wxSlider::WinUIConvergenceFailure;
+    using Failure = wxWinUISliderTestAccess::ConvergenceFailure;
     switch ( failure )
     {
         case Failure::None: return "none";
@@ -97,7 +98,7 @@ const char *SliderConvergenceFailureName(
 }
 
 void CheckSliderVisualTree(
-    const wxSlider::WinUIVisualState& visual)
+    const wxWinUISliderTestAccess::VisualState& visual)
 {
     CHECK(visual.visualTreeCoherent);
     CHECK(visual.sameXamlRoot);
@@ -116,7 +117,7 @@ void CheckSliderVisualTree(
     CHECK(visual.thumbNamedForOrientation);
 }
 
-double SliderAxisPosition(const wxSlider::WinUIVisualState& visual,
+double SliderAxisPosition(const wxWinUISliderTestAccess::VisualState& visual,
                           double ratio)
 {
     if ( visual.axisReversed )
@@ -125,12 +126,12 @@ double SliderAxisPosition(const wxSlider::WinUIVisualState& visual,
 }
 
 void CheckWideSliderPrimaryLayout(
-    const wxSlider::WinUIVisualState& visual,
+    const wxWinUISliderTestAccess::VisualState& visual,
     double selectionStartRatio,
     double selectionEndRatio)
 {
     const auto checkInsideRoot = [&visual](
-        const wxSlider::WinUIVisualRect& rect)
+        const wxWinUISliderTestAccess::VisualRect& rect)
     {
         CHECK(rect.width > 0.0);
         CHECK(rect.height > 0.0);
@@ -194,8 +195,8 @@ void CheckWideSliderPrimaryLayout(
 }
 
 void CheckSliderLayoutStable(
-    const wxSlider::WinUIVisualState& expected,
-    const wxSlider::WinUIVisualState& observed)
+    const wxWinUISliderTestAccess::VisualState& expected,
+    const wxWinUISliderTestAccess::VisualState& observed)
 {
     CHECK(observed.sliderMarginLeft ==
           Approx(expected.sliderMarginLeft).margin(0.01));
@@ -215,8 +216,8 @@ void CheckSliderLayoutStable(
     CHECK(observed.trackIdentity == expected.trackIdentity);
     CHECK(observed.renderedTickCount == expected.renderedTickCount);
 
-    const auto checkRect = [](const wxSlider::WinUIVisualRect& first,
-                              const wxSlider::WinUIVisualRect& second)
+    const auto checkRect = [](const wxWinUISliderTestAccess::VisualRect& first,
+                              const wxWinUISliderTestAccess::VisualRect& second)
     {
         CHECK(second.x == Approx(first.x).margin(0.1));
         CHECK(second.y == Approx(first.y).margin(0.1));
@@ -347,7 +348,7 @@ TEST_CASE("wxWinUI Slider has a canonical silent programmatic model",
     double largeChange = 0;
     bool vertical = false;
     bool reversed = false;
-    REQUIRE(slider.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISliderTestAccess::GetPeerState(slider,
         &minimum, &maximum, &value, &smallChange, &largeChange,
         &vertical, &reversed));
     CHECK(minimum == -50.0);
@@ -359,7 +360,7 @@ TEST_CASE("wxWinUI Slider has a canonical silent programmatic model",
     CHECK(reversed);
     CHECK(slider.GetThumbLength() == 24);
 
-    wxSlider::WinUIVisualState visual;
+    wxWinUISliderTestAccess::VisualState visual;
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CheckSliderVisualTree(visual);
     CHECK(visual.thumbLengthDIPs * visual.rasterScale ==
@@ -393,9 +394,9 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
     CHECK(slider.GetTickFreq() == 20);
     CHECK(slider.GetSelStart() == 20);
     CHECK(slider.GetSelEnd() == 80);
-    CHECK(slider.WinUIHasTickForTesting(10));
-    CHECK(slider.WinUIHasTickForTesting(37));
-    CHECK(slider.WinUIHasTickForTesting(90));
+    CHECK(wxWinUISliderTestAccess::HasTick(slider, 10));
+    CHECK(wxWinUISliderTestAccess::HasTick(slider, 37));
+    CHECK(wxWinUISliderTestAccess::HasTick(slider, 90));
 
     int thumbLength = 0;
     int selectionStart = 0;
@@ -405,7 +406,7 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
     bool minMaxLabelsVisible = false;
     bool valueLabelVisible = false;
     bool rightToLeft = false;
-    REQUIRE(slider.WinUIGetDecorationsForTesting(
+    REQUIRE(wxWinUISliderTestAccess::GetDecorations(slider,
         &thumbLength, &selectionStart, &selectionEnd, &manualTickCount,
         &selectionVisible, &minMaxLabelsVisible, &valueLabelVisible,
         &rightToLeft));
@@ -418,7 +419,7 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
     CHECK(valueLabelVisible);
     CHECK_FALSE(rightToLeft);
 
-    wxSlider::WinUIVisualState visual;
+    wxWinUISliderTestAccess::VisualState visual;
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CheckSliderVisualTree(visual);
     CHECK(visual.renderedTickCount == 18);
@@ -482,14 +483,14 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
     slider.SetRange(25, 75);
     CHECK(slider.GetSelStart() == 25);
     CHECK(slider.GetSelEnd() == 75);
-    CHECK_FALSE(slider.WinUIHasTickForTesting(10));
-    CHECK(slider.WinUIHasTickForTesting(37));
-    CHECK_FALSE(slider.WinUIHasTickForTesting(90));
+    CHECK_FALSE(wxWinUISliderTestAccess::HasTick(slider, 10));
+    CHECK(wxWinUISliderTestAccess::HasTick(slider, 37));
+    CHECK_FALSE(wxWinUISliderTestAccess::HasTick(slider, 90));
 
     slider.SetLayoutDirection(wxLayout_RightToLeft);
     bool rootRightToLeft = false;
     bool sliderRightToLeft = false;
-    REQUIRE(slider.WinUIGetDecorationsForTesting(
+    REQUIRE(wxWinUISliderTestAccess::GetDecorations(slider,
         nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr, &rightToLeft,
         &rootRightToLeft, &sliderRightToLeft));
@@ -508,7 +509,7 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
     // Slider.Margin and alternate forever inside LayoutUpdated. Prove that a
     // bounded series of dispatcher/layout drains leaves both the authored
     // native margin and every primary-axis visual unchanged.
-    const wxSlider::WinUIVisualState stableRTL = visual;
+    const wxWinUISliderTestAccess::VisualState stableRTL = visual;
     for ( unsigned drain = 0; drain < 4; ++drain )
     {
         INFO("RTL stability drain " << drain);
@@ -519,15 +520,15 @@ TEST_CASE("wxWinUI Slider implements the complete Win32 decoration contract",
 
     slider.ClearTicks();
     CHECK(slider.GetTickFreq() == 20);
-    CHECK_FALSE(slider.WinUIHasTickForTesting(37));
-    REQUIRE(slider.WinUIGetDecorationsForTesting(
+    CHECK_FALSE(wxWinUISliderTestAccess::HasTick(slider, 37));
+    REQUIRE(wxWinUISliderTestAccess::GetDecorations(slider,
         nullptr, nullptr, nullptr, &manualTickCount));
     CHECK(manualTickCount == 0);
 
     slider.ClearSel();
     CHECK(slider.GetSelStart() == 25);
     CHECK(slider.GetSelEnd() == 25);
-    REQUIRE(slider.WinUIGetDecorationsForTesting(
+    REQUIRE(wxWinUISliderTestAccess::GetDecorations(slider,
         nullptr, nullptr, nullptr, nullptr, &selectionVisible));
     CHECK_FALSE(selectionVisible);
 }
@@ -542,7 +543,7 @@ TEST_CASE("wxWinUI Slider AUTOTICKS mutates the realized tick tree",
         parent, wxID_ANY, 5, 0, 10,
         wxDefaultPosition, wxSize(320, 80),
         wxSL_HORIZONTAL | wxSL_AUTOTICKS | wxSL_BOTTOM);
-    wxSlider::WinUIVisualState visual;
+    wxWinUISliderTestAccess::VisualState visual;
     CHECK(slider.GetTickFreq() == 1);
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CheckSliderVisualTree(visual);
@@ -586,7 +587,7 @@ TEST_CASE("wxWinUI Slider labels oppose ticks and track endpoint direction",
         wxSL_TOP | wxSL_AUTOTICKS | wxSL_LABELS);
     horizontal.SetTickFreq(25);
 
-    wxSlider::WinUIVisualState visual;
+    wxWinUISliderTestAccess::VisualState visual;
     REQUIRE(WaitForSliderVisualState(horizontal, &visual));
     CheckSliderVisualTree(visual);
     CHECK_FALSE(visual.vertical);
@@ -611,7 +612,7 @@ TEST_CASE("wxWinUI Slider labels oppose ticks and track endpoint direction",
     horizontal.SetLayoutDirection(wxLayout_RightToLeft);
     bool rootRightToLeft = false;
     bool sliderRightToLeft = false;
-    REQUIRE(horizontal.WinUIGetDecorationsForTesting(
+    REQUIRE(wxWinUISliderTestAccess::GetDecorations(horizontal,
         nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr, nullptr,
         &rootRightToLeft, &sliderRightToLeft));
@@ -668,7 +669,7 @@ TEST_CASE("wxWinUI Slider reserves its native track for wide endpoint labels",
     horizontal.SetTickFreq(50000);
     horizontal.SetSelection(-50000, 50000);
 
-    wxSlider::WinUIVisualState visual;
+    wxWinUISliderTestAccess::VisualState visual;
     REQUIRE(WaitForSliderVisualState(horizontal, &visual));
     CheckSliderVisualTree(visual);
     CHECK_FALSE(visual.vertical);
@@ -680,7 +681,7 @@ TEST_CASE("wxWinUI Slider reserves its native track for wide endpoint labels",
     horizontal.SetLayoutDirection(wxLayout_RightToLeft);
     bool rootRightToLeft = false;
     bool sliderRightToLeft = false;
-    REQUIRE(horizontal.WinUIGetDecorationsForTesting(
+    REQUIRE(wxWinUISliderTestAccess::GetDecorations(horizontal,
         nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr, nullptr,
         &rootRightToLeft, &sliderRightToLeft));
@@ -724,7 +725,7 @@ TEST_CASE("wxWinUI Slider thumb remains DIP-stable across XamlRoot migration",
         "source Slider XamlRoot",
         [&]()
         {
-            return slider.WinUIGetHostScaleStateForTesting(
+            return wxWinUISliderTestAccess::GetHostScaleState(slider,
                 &sourceScale, &sourceXamlRoot, &sourceContentRoot);
         }));
 
@@ -740,21 +741,21 @@ TEST_CASE("wxWinUI Slider thumb remains DIP-stable across XamlRoot migration",
         physicalSizeAtScale(sourceScale, 500, 80);
     slider.SetSize(sourceSliderSize);
     const bool refreshedAtSource =
-        slider.WinUIRefreshForScaleForTesting(sourceScale);
+        wxWinUISliderTestAccess::RefreshForScale(slider, sourceScale);
     INFO("convergence: " << SliderConvergenceFailureName(
-             slider.WinUIGetLastConvergenceFailureForTesting()));
+             wxWinUISliderTestAccess::GetLastConvergenceFailure(slider)));
     REQUIRE(refreshedAtSource);
 
     const int sourcePixels =
         static_cast<int>(std::lround(300.0 * sourceScale));
     slider.SetThumbLength(sourcePixels);
     const bool thumbConverged =
-        slider.WinUIRefreshVisualStateForTesting();
+        wxWinUISliderTestAccess::RefreshVisualState(slider);
     INFO("thumb convergence: " << SliderConvergenceFailureName(
-             slider.WinUIGetLastConvergenceFailureForTesting()));
+             wxWinUISliderTestAccess::GetLastConvergenceFailure(slider)));
     REQUIRE(thumbConverged);
 
-    wxSlider::WinUIVisualState visual;
+    wxWinUISliderTestAccess::VisualState visual;
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CheckSliderVisualTree(visual);
     CHECK(visual.rasterScale == Approx(sourceScale));
@@ -789,7 +790,7 @@ TEST_CASE("wxWinUI Slider thumb remains DIP-stable across XamlRoot migration",
         "destination Slider XamlRoot",
         [&]()
         {
-            return slider.WinUIGetHostScaleStateForTesting(
+            return wxWinUISliderTestAccess::GetHostScaleState(slider,
                        &destinationScale,
                        &destinationXamlRoot,
                        &destinationContentRoot) &&
@@ -806,7 +807,7 @@ TEST_CASE("wxWinUI Slider thumb remains DIP-stable across XamlRoot migration",
         physicalSizeAtScale(destinationScale, 700, 220));
     slider.SetSize(
         physicalSizeAtScale(destinationScale, 500, 80));
-    REQUIRE(slider.WinUIRefreshForScaleForTesting(destinationScale));
+    REQUIRE(wxWinUISliderTestAccess::RefreshForScale(slider, destinationScale));
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CHECK(visual.rasterScale == Approx(destinationScale));
     CHECK(visual.rootWidth == Approx(500.0).margin(1.0));
@@ -832,7 +833,7 @@ TEST_CASE("wxWinUI Slider thumb remains DIP-stable across XamlRoot migration",
         {
             double restoredScale = 0.0;
             std::uintptr_t restoredXamlRoot = 0;
-            return slider.WinUIGetHostScaleStateForTesting(
+            return wxWinUISliderTestAccess::GetHostScaleState(slider,
                        &restoredScale, &restoredXamlRoot) &&
                    restoredXamlRoot == sourceXamlRoot;
         }));
@@ -850,7 +851,7 @@ TEST_CASE("wxWinUI Slider reapplies the exact vertical thumb after retemplate",
         wxSL_VERTICAL | wxSL_TICKS | wxSL_LEFT);
     slider.SetThumbLength(47);
 
-    wxSlider::WinUIVisualState before;
+    wxWinUISliderTestAccess::VisualState before;
     REQUIRE(WaitForSliderVisualState(slider, &before));
     CheckSliderVisualTree(before);
     REQUIRE(before.vertical);
@@ -863,8 +864,8 @@ TEST_CASE("wxWinUI Slider reapplies the exact vertical thumb after retemplate",
     CHECK(before.renderedTickAxisMaximum ==
           Approx(before.axisEnd).margin(1.0));
 
-    REQUIRE(slider.WinUIRetemplatePeerForTesting());
-    wxSlider::WinUIVisualState after;
+    REQUIRE(wxWinUISliderTestAccess::RetemplatePeer(slider));
+    wxWinUISliderTestAccess::VisualState after;
     REQUIRE(WaitForSliderVisualState(slider, &after));
     CheckSliderVisualTree(after);
     CHECK(after.vertical);
@@ -893,15 +894,15 @@ TEST_CASE("wxWinUI Slider selection follows enabled theme and high contrast",
         wxSL_HORIZONTAL | wxSL_SELRANGE);
     slider.SetSelection(20, 80);
 
-    wxSlider::WinUIVisualState visual;
-    const bool initialRefresh = slider.WinUIRefreshVisualStateForTesting();
+    wxWinUISliderTestAccess::VisualState visual;
+    const bool initialRefresh = wxWinUISliderTestAccess::RefreshVisualState(slider);
     INFO("convergence: " << SliderConvergenceFailureName(
-             slider.WinUIGetLastConvergenceFailureForTesting()));
+             wxWinUISliderTestAccess::GetLastConvergenceFailure(slider)));
     REQUIRE(initialRefresh);
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CheckSliderVisualTree(visual);
     CHECK(visual.selectionVisual ==
-          wxSlider::WinUISelectionVisual::Normal);
+          wxWinUISliderTestAccess::SelectionVisual::Normal);
     CHECK(visual.selectionThemeBound);
     CHECK(visual.selectionVisible);
     CHECK(visual.visibleSelectionCount == 1);
@@ -909,10 +910,10 @@ TEST_CASE("wxWinUI Slider selection follows enabled theme and high contrast",
     CHECK(visual.selectionHasSolidColor);
 
     slider.Enable(false);
-    REQUIRE(slider.WinUIRefreshVisualStateForTesting());
+    REQUIRE(wxWinUISliderTestAccess::RefreshVisualState(slider));
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CHECK(visual.selectionVisual ==
-          wxSlider::WinUISelectionVisual::Disabled);
+          wxWinUISliderTestAccess::SelectionVisual::Disabled);
     CHECK(visual.selectionThemeBound);
     CHECK(visual.selectionVisible);
     CHECK(visual.visibleSelectionCount == 1);
@@ -920,10 +921,10 @@ TEST_CASE("wxWinUI Slider selection follows enabled theme and high contrast",
     CHECK(visual.selectionHasSolidColor);
 
     highContrast.Set(wxWinUIHighContrastOverrideForTesting::ForceOn);
-    REQUIRE(slider.WinUIRefreshVisualStateForTesting());
+    REQUIRE(wxWinUISliderTestAccess::RefreshVisualState(slider));
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CHECK(visual.selectionVisual ==
-          wxSlider::WinUISelectionVisual::HighContrastDisabled);
+          wxWinUISliderTestAccess::SelectionVisual::HighContrastDisabled);
     CHECK(visual.selectionThemeBound);
     CHECK(visual.selectionVisible);
     CHECK(visual.visibleSelectionCount == 1);
@@ -931,10 +932,10 @@ TEST_CASE("wxWinUI Slider selection follows enabled theme and high contrast",
     CHECK(visual.selectionHasSolidColor);
 
     slider.Enable(true);
-    REQUIRE(slider.WinUIRefreshVisualStateForTesting());
+    REQUIRE(wxWinUISliderTestAccess::RefreshVisualState(slider));
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CHECK(visual.selectionVisual ==
-          wxSlider::WinUISelectionVisual::HighContrast);
+          wxWinUISliderTestAccess::SelectionVisual::HighContrast);
     CHECK(visual.selectionThemeBound);
     CHECK(visual.selectionVisible);
     CHECK(visual.visibleSelectionCount == 1);
@@ -942,22 +943,22 @@ TEST_CASE("wxWinUI Slider selection follows enabled theme and high contrast",
     CHECK(visual.selectionHasSolidColor);
 
     highContrast.Set(wxWinUIHighContrastOverrideForTesting::ForceOff);
-    REQUIRE(slider.WinUIRefreshVisualStateForTesting());
-    wxSlider::WinUIVisualState beforeTheme;
+    REQUIRE(wxWinUISliderTestAccess::RefreshVisualState(slider));
+    wxWinUISliderTestAccess::VisualState beforeTheme;
     REQUIRE(WaitForSliderVisualState(slider, &beforeTheme));
     CheckSliderVisualTree(beforeTheme);
     REQUIRE(beforeTheme.selectionVisual ==
-            wxSlider::WinUISelectionVisual::Normal);
+            wxWinUISliderTestAccess::SelectionVisual::Normal);
     REQUIRE(beforeTheme.visibleSelectionCount == 1);
     REQUIRE(beforeTheme.selectionBrushIdentity != 0);
     REQUIRE(beforeTheme.selectionHasSolidColor);
     REQUIRE((beforeTheme.selectionColorARGB & 0xff000000U) != 0);
 
-    REQUIRE(slider.WinUIDeliverThemeChangedForTesting());
+    REQUIRE(wxWinUISliderTestAccess::DeliverThemeChanged(slider));
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CheckSliderVisualTree(visual);
     CHECK(visual.selectionVisual ==
-          wxSlider::WinUISelectionVisual::Normal);
+          wxWinUISliderTestAccess::SelectionVisual::Normal);
     CHECK(visual.selectionThemeBound);
     CHECK(visual.selectionVisible);
     CHECK(visual.visibleSelectionCount == 1);
@@ -986,7 +987,7 @@ TEST_CASE("wxWinUI Slider setters cancel deferred unclassified changes",
     std::vector<ObservedRangeEvent> events;
     BindSliderEvents(slider, events);
 
-    REQUIRE(slider.WinUISetUnclassifiedPeerValueForTesting(70));
+    REQUIRE(wxWinUISliderTestAccess::SetUnclassifiedPeerValue(slider, 70));
     CHECK(slider.GetValue() == 70);
     slider.SetValue(40);
     wxYield();
@@ -994,18 +995,18 @@ TEST_CASE("wxWinUI Slider setters cancel deferred unclassified changes",
     double minimum = -1;
     double maximum = -1;
     double peerValue = -1;
-    REQUIRE(slider.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISliderTestAccess::GetPeerState(slider,
         &minimum, &maximum, &peerValue));
     CHECK(slider.GetValue() == 40);
     CHECK(peerValue == 40.0);
     CHECK(events.empty());
 
-    REQUIRE(slider.WinUISetUnclassifiedPeerValueForTesting(80));
+    REQUIRE(wxWinUISliderTestAccess::SetUnclassifiedPeerValue(slider, 80));
     CHECK(slider.GetValue() == 80);
     slider.SetRange(10, 30);
     wxYield();
 
-    REQUIRE(slider.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISliderTestAccess::GetPeerState(slider,
         &minimum, &maximum, &peerValue));
     CHECK(slider.GetMin() == 10);
     CHECK(slider.GetMax() == 30);
@@ -1026,72 +1027,72 @@ TEST_CASE("wxWinUI Slider maps each input to one exact wx sequence",
     std::vector<ObservedRangeEvent> events;
     BindSliderEvents(slider, events);
 
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::LineDecrement, 49));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::LineDecrement, 49));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_LINEUP, 49);
     CheckEvent(events, 1, wxEVT_SLIDER, 49);
     CheckEvent(events, 2, wxEVT_SCROLL_CHANGED, 49);
 
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::LineIncrement, 50));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::LineIncrement, 50));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_LINEDOWN, 50);
     CheckEvent(events, 1, wxEVT_SLIDER, 50);
     CheckEvent(events, 2, wxEVT_SCROLL_CHANGED, 50);
 
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::PageDecrement, 30));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::PageDecrement, 30));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_PAGEUP, 30);
     CheckEvent(events, 1, wxEVT_SLIDER, 30);
     CheckEvent(events, 2, wxEVT_SCROLL_CHANGED, 30);
 
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::PageIncrement, 50));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::PageIncrement, 50));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_PAGEDOWN, 50);
     CheckEvent(events, 1, wxEVT_SLIDER, 50);
     CheckEvent(events, 2, wxEVT_SCROLL_CHANGED, 50);
 
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::Minimum, 0));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::Minimum, 0));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_TOP, 0);
     CheckEvent(events, 1, wxEVT_SLIDER, 0);
     CheckEvent(events, 2, wxEVT_SCROLL_CHANGED, 0);
 
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::Maximum, 100));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::Maximum, 100));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_BOTTOM, 100);
     CheckEvent(events, 1, wxEVT_SLIDER, 100);
     CheckEvent(events, 2, wxEVT_SCROLL_CHANGED, 100);
 
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::Wheel, 90));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::Wheel, 90));
     REQUIRE(events.size() == 2);
     CheckEvent(events, 0, wxEVT_SCROLL_CHANGED, 90);
     CheckEvent(events, 1, wxEVT_SLIDER, 90);
 
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::Automation, 80));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::Automation, 80));
     REQUIRE(events.size() == 2);
     CheckEvent(events, 0, wxEVT_SCROLL_CHANGED, 80);
     CheckEvent(events, 1, wxEVT_SLIDER, 80);
 
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::ThumbTrack, 70, false));
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::ThumbTrack, 75, true));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::ThumbTrack, 70, false));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::ThumbTrack, 75, true));
     REQUIRE(events.size() == 7);
     CheckEvent(events, 0, wxEVT_SCROLL_THUMBTRACK, 70);
     CheckEvent(events, 1, wxEVT_SLIDER, 70);
@@ -1104,17 +1105,17 @@ TEST_CASE("wxWinUI Slider maps each input to one exact wx sequence",
     // Neither a movement blocked at an endpoint nor a setter followed by a
     // release may manufacture an event.
     events.clear();
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::LineIncrement, 75));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::LineIncrement, 75));
     CHECK(events.empty());
     slider.SetValue(40);
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::ThumbRelease, 40));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::ThumbRelease, 40));
     CHECK(events.empty());
 
     slider.Enable(false);
-    REQUIRE(slider.WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::LineDecrement, 20));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(slider,
+        wxWinUISliderTestAccess::Input::LineDecrement, 20));
     CHECK(slider.GetValue() == 40);
     CHECK(events.empty());
 }
@@ -1150,7 +1151,7 @@ TEST_CASE("wxWinUI Slider distinguishes track pages from thumb drags",
 
     // Exercise the ordering where the Slider class handler changes Value
     // before our handled-routed PointerPressed observer.
-    REQUIRE(slider.WinUIApplyPointerInputForTesting(
+    REQUIRE(wxWinUISliderTestAccess::ApplyPointerInput(slider,
         false, 70, true));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_PAGEDOWN, 70);
@@ -1161,7 +1162,7 @@ TEST_CASE("wxWinUI Slider distinguishes track pages from thumb drags",
     // first ValueChanged delta resolves the page direction.
     events.clear();
     slider.SetValue(50);
-    REQUIRE(slider.WinUIApplyPointerInputForTesting(
+    REQUIRE(wxWinUISliderTestAccess::ApplyPointerInput(slider,
         false, 30, false));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_PAGEUP, 30);
@@ -1171,7 +1172,7 @@ TEST_CASE("wxWinUI Slider distinguishes track pages from thumb drags",
     // A real Thumb source retains the drag release notification.
     events.clear();
     slider.SetValue(50);
-    REQUIRE(slider.WinUIApplyPointerInputForTesting(
+    REQUIRE(wxWinUISliderTestAccess::ApplyPointerInput(slider,
         true, 75, true));
     REQUIRE(events.size() == 5);
     CheckEvent(events, 0, wxEVT_SCROLL_THUMBTRACK, 75);
@@ -1186,7 +1187,7 @@ TEST_CASE("wxWinUI Slider distinguishes track pages from thumb drags",
         wxSL_HORIZONTAL | wxSL_INVERSE);
     events.clear();
     BindSliderEvents(inverse, events);
-    REQUIRE(inverse.WinUIApplyPointerInputForTesting(
+    REQUIRE(wxWinUISliderTestAccess::ApplyPointerInput(inverse,
         false, 70, true));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_PAGEUP, 70);
@@ -1212,8 +1213,8 @@ TEST_CASE("wxWinUI Slider callbacks survive owner destruction",
     });
 
     wxSlider * const invoking = slider;
-    REQUIRE(invoking->WinUIApplyInputForTesting(
-        wxSlider::WinUIInput::LineDecrement, 49));
+    REQUIRE(wxWinUISliderTestAccess::ApplyInput(*invoking,
+        wxWinUISliderTestAccess::Input::LineDecrement, 49));
     CHECK(slider == nullptr);
     CHECK(events == 1);
 
@@ -1236,14 +1237,14 @@ TEST_CASE("wxWinUI Slider template detach cannot outlive its owner",
         wxDefaultPosition, wxSize(120, 300),
         wxSL_VERTICAL);
     slider->SetThumbLength(39);
-    wxSlider::WinUIVisualState visual;
+    wxWinUISliderTestAccess::VisualState visual;
     REQUIRE(WaitForSliderVisualState(*slider, &visual));
     CheckSliderVisualTree(visual);
 
     SliderRetemplateDestroyProbe probe;
     probe.owner = &slider;
     wxSlider * const invoking = slider;
-    CHECK_FALSE(invoking->WinUIRetemplatePeerForTesting(
+    CHECK_FALSE(wxWinUISliderTestAccess::RetemplatePeer(*invoking,
         &DestroySliderWhileTemplateDetached, &probe));
     CHECK(probe.calls == 1);
     CHECK(slider == nullptr);

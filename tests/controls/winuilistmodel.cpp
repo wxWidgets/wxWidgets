@@ -17,6 +17,7 @@
 #include "wx/event.h"
 #include "wx/frame.h"
 #include "wx/listbox.h"
+#include "listbox-test-access.h"
 #include "wx/log.h"
 #include "wx/sizer.h"
 
@@ -432,43 +433,43 @@ TEST_CASE("wxWinUI ListBox applies stable peer deltas",
     REQUIRE(list.Append("two") == 1);
     REQUIRE(list.Append("three") == 2);
 
-    const std::uint64_t oneId = list.WinUIGetItemIdForTesting(0);
-    const std::uint64_t twoId = list.WinUIGetItemIdForTesting(1);
-    const std::uint64_t threeId = list.WinUIGetItemIdForTesting(2);
+    const std::uint64_t oneId = wxWinUIListBoxTestAccess::GetItemId(list, 0);
+    const std::uint64_t twoId = wxWinUIListBoxTestAccess::GetItemId(list, 1);
+    const std::uint64_t threeId = wxWinUIListBoxTestAccess::GetItemId(list, 2);
     const std::uintptr_t onePeer =
-        list.WinUIGetItemPeerIdentityForTesting(0);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0);
     const std::uintptr_t twoPeer =
-        list.WinUIGetItemPeerIdentityForTesting(1);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 1);
     const std::uintptr_t threePeer =
-        list.WinUIGetItemPeerIdentityForTesting(2);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 2);
     REQUIRE(onePeer != 0);
     REQUIRE(twoPeer != 0);
     REQUIRE(threePeer != 0);
 
     REQUIRE(list.Insert("middle", 1) == 1);
-    CHECK(list.WinUIGetItemIdForTesting(0) == oneId);
-    CHECK(list.WinUIGetItemIdForTesting(2) == twoId);
-    CHECK(list.WinUIGetItemIdForTesting(3) == threeId);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(0) == onePeer);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(2) == twoPeer);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(3) == threePeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 0) == oneId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 2) == twoId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 3) == threeId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0) == onePeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 2) == twoPeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 3) == threePeer);
 
     list.SetString(2, "two renamed");
-    CHECK(list.WinUIGetItemIdForTesting(2) == twoId);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(2) == twoPeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 2) == twoId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 2) == twoPeer);
 
     list.Delete(1);
-    CHECK(list.WinUIGetItemIdForTesting(0) == oneId);
-    CHECK(list.WinUIGetItemIdForTesting(1) == twoId);
-    CHECK(list.WinUIGetItemIdForTesting(2) == threeId);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(0) == onePeer);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(1) == twoPeer);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(2) == threePeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 0) == oneId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 1) == twoId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 2) == threeId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0) == onePeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 1) == twoPeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 2) == threePeer);
 
-    REQUIRE(list.WinUIPoisonPeerForTesting());
-    CHECK(list.WinUIGetPeerCountForTesting() == list.GetCount() + 1);
+    REQUIRE(wxWinUIListBoxTestAccess::PoisonPeer(list));
+    CHECK(wxWinUIListBoxTestAccess::GetPeerCount(list) == list.GetCount() + 1);
     REQUIRE(list.Append("after recovery") == 3);
-    CHECK(list.WinUIGetPeerCountForTesting() == list.GetCount());
+    CHECK(wxWinUIListBoxTestAccess::GetPeerCount(list) == list.GetCount());
     CHECK(list.GetString(3) == "after recovery");
 }
 
@@ -491,11 +492,11 @@ TEST_CASE("wxWinUI ListBox preserves sorted multiple selection and ownership",
         CHECK(list.GetString(2) == "aaa");
 
         const std::uint64_t firstSelectedId =
-            list.WinUIGetItemIdForTesting(0);
+            wxWinUIListBoxTestAccess::GetItemId(list, 0);
         const std::uint64_t secondSelectedId =
-            list.WinUIGetItemIdForTesting(2);
+            wxWinUIListBoxTestAccess::GetItemId(list, 2);
         const std::uintptr_t secondSelectedPeer =
-            list.WinUIGetItemPeerIdentityForTesting(2);
+            wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 2);
 
         list.SetSelection(0);
         list.SetSelection(2);
@@ -504,16 +505,16 @@ TEST_CASE("wxWinUI ListBox preserves sorted multiple selection and ownership",
 
         list.SetString(2, "AA");
         REQUIRE(list.GetCount() == 3);
-        CHECK(list.WinUIGetItemIdForTesting(0) == secondSelectedId);
-        CHECK(list.WinUIGetItemPeerIdentityForTesting(0) ==
+        CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 0) == secondSelectedId);
+        CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0) ==
               secondSelectedPeer);
         CHECK(list.GetClientObject(0) != nullptr);
 
         wxArrayInt selections;
         REQUIRE(list.GetSelections(selections) == 2);
-        CHECK(list.WinUIGetItemIdForTesting(selections[0]) ==
+        CHECK(wxWinUIListBoxTestAccess::GetItemId(list, selections[0]) ==
               secondSelectedId);
-        CHECK(list.WinUIGetItemIdForTesting(selections[1]) ==
+        CHECK(wxWinUIListBoxTestAccess::GetItemId(list, selections[1]) ==
               firstSelectedId);
 
         list.SetClientObject(
@@ -556,16 +557,16 @@ TEST_CASE("wxWinUI ListBox peer selection maps by stable ID",
             eventClientData = event.GetClientData();
         });
 
-    REQUIRE(list.WinUISetPeerSelectionForTesting(2, true));
+    REQUIRE(wxWinUIListBoxTestAccess::SetPeerSelection(list, 2, true));
     CHECK(selectionEvents == 1);
     CHECK(lastSelection == 2);
     CHECK(eventClientData == &clientSentinel);
     CHECK(list.IsSelected(2));
 
     const std::uint64_t selectedId =
-        list.WinUIGetItemIdForTesting(2);
+        wxWinUIListBoxTestAccess::GetItemId(list, 2);
     list.Insert("inserted", 0);
-    CHECK(list.WinUIGetItemIdForTesting(3) == selectedId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 3) == selectedId);
     CHECK(list.IsSelected(3));
     CHECK(selectionEvents == 1);
 
@@ -576,7 +577,7 @@ TEST_CASE("wxWinUI ListBox peer selection maps by stable ID",
         ++doubleClicks;
         doubleClickItem = event.GetInt();
     });
-    REQUIRE(list.WinUIDoubleTapPeerForTesting(3));
+    REQUIRE(wxWinUIListBoxTestAccess::DoubleTapPeer(list, 3));
     CHECK(doubleClicks == 1);
     CHECK(doubleClickItem == 3);
 
@@ -592,7 +593,7 @@ TEST_CASE("wxWinUI ListBox peer selection maps by stable ID",
             doomed = nullptr;
         });
 
-    REQUIRE(doomed->WinUISetPeerSelectionForTesting(0, true));
+    REQUIRE(wxWinUIListBoxTestAccess::SetPeerSelection(*doomed, 0, true));
     CHECK(destroyedInCallback);
     CHECK(doomed == nullptr);
 }
@@ -614,10 +615,10 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
     double itemHeightDips = 0.0;
     double itemMinHeightDips = -1.0;
     double itemActualHeightDips = 0.0;
-    REQUIRE(list.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-        nullptr, nullptr, nullptr, nullptr,
-        &itemHeightDips, &itemMinHeightDips, &itemActualHeightDips));
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        list, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        nullptr, nullptr, nullptr, nullptr, &itemHeightDips, &itemMinHeightDips,
+        &itemActualHeightDips));
     CHECK(itemHeightDips ==
           Approx(expectedItemHeightPixels / scale).margin(0.01));
     CHECK(itemMinHeightDips == Approx(0.0));
@@ -641,10 +642,10 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
         frame.Update();
         return list.GetItemRect(0, firstRect) &&
                list.GetItemRect(2, thirdRect) &&
-               list.WinUIGetItemPresentationForTesting(
-                   0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+               wxWinUIListBoxTestAccess::GetItemPresentation(
+                   list, 0, nullptr, nullptr, nullptr, nullptr, nullptr,
                    nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-                   nullptr, &itemActualHeightDips) &&
+                   nullptr, nullptr, &itemActualHeightDips) &&
                itemActualHeightDips > 0.0;
     }));
     CAPTURE(scale,
@@ -676,23 +677,23 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
     for ( int n = 3; n < 100; ++n )
         list.Append(wxString::Format("item %02d", n));
 
-    wxListBox::WinUIScrollMetricsForTesting verticalMetrics;
+    wxWinUIListBoxTestAccess::ScrollMetrics verticalMetrics;
     double realizedLineHeightDips = 0.0;
     int countPerPage = -1;
     REQUIRE(WaitFor("WinUI ListBox authoritative vertical viewport", [&]()
     {
         frame.Update();
-        return list.WinUIGetScrollPresentationForTesting(
-                   nullptr, nullptr, nullptr, &verticalMetrics) &&
+        return wxWinUIListBoxTestAccess::GetScrollPresentation(
+                   list, nullptr, nullptr, nullptr, &verticalMetrics) &&
                verticalMetrics.hasAuthoritativeScroll &&
                verticalMetrics.scrollViewportHeight > 0.0 &&
                verticalMetrics.scrollExtentHeight >
                    verticalMetrics.scrollViewportHeight &&
                verticalMetrics.scrollScrollableHeight > 0.0 &&
-               list.WinUIGetItemPresentationForTesting(
-                   0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+               wxWinUIListBoxTestAccess::GetItemPresentation(
+                   list, 0, nullptr, nullptr, nullptr, nullptr, nullptr,
                    nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-                   nullptr, &realizedLineHeightDips) &&
+                   nullptr, nullptr, &realizedLineHeightDips) &&
                realizedLineHeightDips > 0.0 &&
                (countPerPage = list.GetCountPerPage()) > 0;
     }));
@@ -715,8 +716,8 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
         return list.GetTopItem() == 20;
     }));
     double virtualizedLineHeightDips = 0.0;
-    REQUIRE(list.WinUIGetItemPresentationForTesting(
-        20, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        list, 20, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
         &virtualizedLineHeightDips));
     REQUIRE(virtualizedLineHeightDips > 0.0);
@@ -761,20 +762,20 @@ TEST_CASE("wxWinUI ListBox hit test uses the visual coordinate mapper",
     REQUIRE(tinyList.Append("only row") == 0);
     tinyFrame.ShowWithoutActivating();
 
-    wxListBox::WinUIScrollMetricsForTesting tinyMetrics;
+    wxWinUIListBoxTestAccess::ScrollMetrics tinyMetrics;
     double tinyActualLineHeightDips = 0.0;
     const bool tinyViewportConverged = WaitFor(
         "WinUI ListBox sub-line authoritative viewport", [&]()
     {
         tinyFrame.Update();
-        return tinyList.WinUIGetScrollPresentationForTesting(
-                   nullptr, nullptr, nullptr, &tinyMetrics) &&
+        return wxWinUIListBoxTestAccess::GetScrollPresentation(
+                   tinyList, nullptr, nullptr, nullptr, &tinyMetrics) &&
                tinyMetrics.hasAuthoritativeScroll &&
                tinyMetrics.scrollViewportHeight > 0.0 &&
-               tinyList.WinUIGetItemPresentationForTesting(
-                   0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+               wxWinUIListBoxTestAccess::GetItemPresentation(
+                   tinyList, 0, nullptr, nullptr, nullptr, nullptr, nullptr,
                    nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-                   nullptr, &tinyActualLineHeightDips) &&
+                   nullptr, nullptr, &tinyActualLineHeightDips) &&
                tinyActualLineHeightDips > tinyMetrics.scrollViewportHeight;
     });
     CAPTURE(tinyLinePixels,
@@ -816,14 +817,14 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
     REQUIRE(needed.SetFont(projectedFont));
     int horizontal = -1;
     int vertical = -1;
-    REQUIRE(needed.WinUIGetScrollPresentationForTesting(
-        &horizontal, &vertical));
+    REQUIRE(wxWinUIListBoxTestAccess::GetScrollPresentation(needed, &horizontal,
+                                                            &vertical));
     CHECK(horizontal == 1); // ScrollBarVisibility::Auto
     CHECK(vertical == 1);   // ScrollBarVisibility::Auto
 
     REQUIRE(needed.Append("first\tsecond\tthird\tfourth") == 0);
     const std::uintptr_t peer =
-        needed.WinUIGetItemPeerIdentityForTesting(0);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(needed, 0);
     REQUIRE(peer != 0);
 
     const int average = wxMax(1, needed.GetCharWidth());
@@ -838,8 +839,8 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
 
     // Before LB_SETTABSTOPS, Windows repeats the system 32-DLU stops.
     wxVector<double> neverSetOffsets;
-    REQUIRE(needed.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        needed, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
         &neverSetOffsets));
     REQUIRE(neverSetOffsets.size() == 4);
     const int neverSetInterval = dluToPixels(32);
@@ -859,8 +860,8 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
     unsigned int peerFontWeight = 0;
     double peerFontSize = 0.0;
     wxString peerFontFamily;
-    REQUIRE(needed.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, &tabRuns, &tabbedWidth, nullptr, nullptr,
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        needed, 0, nullptr, nullptr, &tabRuns, &tabbedWidth, nullptr, nullptr,
         &absoluteOffsets, nullptr, &peerFontWeight, &peerFontSize,
         &peerFontFamily));
     CHECK(tabRuns == 4);
@@ -900,31 +901,31 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
     CHECK(absoluteOffsets[3] ==
           Approx(expectedAbsoluteFourth / scale).margin(0.01));
     CHECK(tabbedWidth > 0.0);
-    CHECK(needed.WinUIGetItemPeerIdentityForTesting(0) == peer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(needed, 0) == peer);
 
     wxVector<int> invalidStops;
     invalidStops.push_back(48);
     invalidStops.push_back(16);
     CHECK_FALSE(needed.MSWSetTabStops(invalidStops));
     unsigned int runsAfterInvalid = 0;
-    REQUIRE(needed.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, &runsAfterInvalid, nullptr, nullptr));
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        needed, 0, nullptr, nullptr, &runsAfterInvalid, nullptr, nullptr));
     CHECK(runsAfterInvalid == tabRuns);
 
     wxVector<int> repeatingStop;
     repeatingStop.push_back(64);
     REQUIRE(needed.MSWSetTabStops(repeatingStop));
     double repeatingWidth = 0.0;
-    REQUIRE(needed.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, nullptr, &repeatingWidth, nullptr));
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        needed, 0, nullptr, nullptr, nullptr, &repeatingWidth, nullptr));
     CHECK(repeatingWidth > tabbedWidth);
 
     const wxVector<int> defaultStops;
     REQUIRE(needed.MSWSetTabStops(defaultStops));
     double defaultWidth = 0.0;
     wxVector<double> explicitDefaultOffsets;
-    REQUIRE(needed.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, nullptr, &defaultWidth, nullptr, nullptr,
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        needed, 0, nullptr, nullptr, nullptr, &defaultWidth, nullptr, nullptr,
         &explicitDefaultOffsets));
     REQUIRE(explicitDefaultOffsets.size() == 4);
     const int explicitDefaultInterval = dluToPixels(2);
@@ -940,23 +941,23 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
     needed.SetHorizontalExtent(
         "A deliberately much wider horizontal extent than the item text");
     double enlargedWidth = 0.0;
-    REQUIRE(needed.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, nullptr, &enlargedWidth, nullptr));
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        needed, 0, nullptr, nullptr, nullptr, &enlargedWidth, nullptr));
     CHECK(enlargedWidth > defaultWidth);
 
     // This seam is a getter, not a hidden materialization trigger. Two
     // consecutive observations without an event-loop boundary must preserve
     // every production retry state and the observed tree identically.
-    wxListBox::WinUIScrollMetricsForTesting passiveBefore;
-    wxListBox::WinUIScrollMetricsForTesting passiveAfter;
+    wxWinUIListBoxTestAccess::ScrollMetrics passiveBefore;
+    wxWinUIListBoxTestAccess::ScrollMetrics passiveAfter;
     double passiveWidthBefore = -1.0;
     double passiveWidthAfter = -1.0;
     const bool passiveResultBefore =
-        needed.WinUIGetScrollPresentationForTesting(
-            nullptr, nullptr, &passiveWidthBefore, &passiveBefore);
+        wxWinUIListBoxTestAccess::GetScrollPresentation(
+            needed, nullptr, nullptr, &passiveWidthBefore, &passiveBefore);
     const bool passiveResultAfter =
-        needed.WinUIGetScrollPresentationForTesting(
-            nullptr, nullptr, &passiveWidthAfter, &passiveAfter);
+        wxWinUIListBoxTestAccess::GetScrollPresentation(
+            needed, nullptr, nullptr, &passiveWidthAfter, &passiveAfter);
     CHECK(passiveResultAfter == passiveResultBefore);
     CHECK(passiveWidthAfter == passiveWidthBefore);
     CHECK(passiveAfter.listVisualChildCount ==
@@ -983,16 +984,16 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
           passiveBefore.materializationRetriesRemaining);
 
     frame.ShowWithoutActivating();
-    wxListBox::WinUIScrollMetricsForTesting scrollMetrics;
+    wxWinUIListBoxTestAccess::ScrollMetrics scrollMetrics;
     double scrollableWidth = 0.0;
     const bool hasHorizontalRange =
         WaitFor("WinUI ListBox horizontal scroll range", [&]()
     {
         frame.Update();
-        return needed.WinUIGetScrollPresentationForTesting(
-                   nullptr, nullptr, &scrollableWidth, &scrollMetrics) &&
-               scrollableWidth > 0.0 &&
-               scrollMetrics.hasAuthoritativeScroll &&
+        return wxWinUIListBoxTestAccess::GetScrollPresentation(
+                   needed, nullptr, nullptr, &scrollableWidth,
+                   &scrollMetrics) &&
+               scrollableWidth > 0.0 && scrollMetrics.hasAuthoritativeScroll &&
                !scrollMetrics.horizontalPresentationPending &&
                !scrollMetrics.horizontalResetPending &&
                !scrollMetrics.materializationRetryQueued;
@@ -1055,10 +1056,10 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
         wxYield();
         frame.Update();
     }
-    wxListBox::WinUIScrollMetricsForTesting stableMetrics;
+    wxWinUIListBoxTestAccess::ScrollMetrics stableMetrics;
     double stableScrollableWidth = 0.0;
-    REQUIRE(needed.WinUIGetScrollPresentationForTesting(
-        nullptr, nullptr, &stableScrollableWidth, &stableMetrics));
+    REQUIRE(wxWinUIListBoxTestAccess::GetScrollPresentation(
+        needed, nullptr, nullptr, &stableScrollableWidth, &stableMetrics));
     CHECK(stableScrollableWidth > 0.0);
     CHECK(stableMetrics.materializationAttempts ==
           stableMaterializationAttempts);
@@ -1067,22 +1068,22 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
 
     needed.SetHorizontalExtent();
     double recomputedWidth = 0.0;
-    REQUIRE(needed.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, nullptr, &recomputedWidth, nullptr));
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        needed, 0, nullptr, nullptr, nullptr, &recomputedWidth, nullptr));
     CHECK(recomputedWidth < enlargedWidth);
 
     // ItemsPanelRoot survives its last item. Deleting the final item takes the
     // old==new==0 SetHorizontalExtent() path and must still remove the local
     // Width/MinWidth that supplied the former horizontal scroll range.
     needed.Delete(0);
-    wxListBox::WinUIScrollMetricsForTesting deleteResetMetrics;
+    wxWinUIListBoxTestAccess::ScrollMetrics deleteResetMetrics;
     double deleteResetWidth = -1.0;
     const bool deletedExtentReset =
         WaitFor("WinUI ListBox delete-last extent reset", [&]()
     {
         frame.Update();
-        return needed.WinUIGetScrollPresentationForTesting(
-                   nullptr, nullptr, &deleteResetWidth,
+        return wxWinUIListBoxTestAccess::GetScrollPresentation(
+                   needed, nullptr, nullptr, &deleteResetWidth,
                    &deleteResetMetrics) &&
                deleteResetWidth <= 0.01 &&
                deleteResetMetrics.hasAuthoritativeScroll &&
@@ -1122,19 +1123,19 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
     {
         frame.Update();
         double scrollableWidth = 0.0;
-        return needed.WinUIGetScrollPresentationForTesting(
-                   nullptr, nullptr, &scrollableWidth) &&
+        return wxWinUIListBoxTestAccess::GetScrollPresentation(
+                   needed, nullptr, nullptr, &scrollableWidth) &&
                scrollableWidth > 0.0;
     }, 2000));
     needed.Clear();
-    wxListBox::WinUIScrollMetricsForTesting clearResetMetrics;
+    wxWinUIListBoxTestAccess::ScrollMetrics clearResetMetrics;
     double clearResetWidth = -1.0;
     const bool clearedExtentReset =
         WaitFor("WinUI ListBox clear extent reset", [&]()
     {
         frame.Update();
-        return needed.WinUIGetScrollPresentationForTesting(
-                   nullptr, nullptr, &clearResetWidth,
+        return wxWinUIListBoxTestAccess::GetScrollPresentation(
+                   needed, nullptr, nullptr, &clearResetWidth,
                    &clearResetMetrics) &&
                clearResetWidth <= 0.01 &&
                clearResetMetrics.hasAuthoritativeScroll &&
@@ -1169,16 +1170,16 @@ TEST_CASE("wxWinUI ListBox projects Windows scrollbar and tab-stop semantics",
     wxListBox always(&frame, wxID_ANY, wxDefaultPosition,
                      wxSize(220, 120), 0, nullptr,
                      wxLB_ALWAYS_SB);
-    REQUIRE(always.WinUIGetScrollPresentationForTesting(
-        &horizontal, &vertical));
+    REQUIRE(wxWinUIListBoxTestAccess::GetScrollPresentation(always, &horizontal,
+                                                            &vertical));
     CHECK(horizontal == 0); // ScrollBarVisibility::Disabled
     CHECK(vertical == 3);   // ScrollBarVisibility::Visible
 
     wxListBox never(&frame, wxID_ANY, wxDefaultPosition,
                     wxSize(220, 120), 0, nullptr,
                     wxLB_NO_SB);
-    REQUIRE(never.WinUIGetScrollPresentationForTesting(
-        &horizontal, &vertical));
+    REQUIRE(wxWinUIListBoxTestAccess::GetScrollPresentation(never, &horizontal,
+                                                            &vertical));
     CHECK(horizontal == 0); // ScrollBarVisibility::Disabled
     CHECK(vertical == 0);   // ScrollBarVisibility::Disabled
 }
@@ -1218,14 +1219,14 @@ TEST_CASE("wxWinUI ListBox owner drawing keeps stable item identity and state",
     REQUIRE(list.SetFont(ownerFont));
     CHECK(alphaItem->GetFont() == list.GetFont());
     CHECK(betaItem->GetFont() == list.GetFont());
-    const std::uint64_t betaId = list.WinUIGetItemIdForTesting(1);
+    const std::uint64_t betaId = wxWinUIListBoxTestAccess::GetItemId(list, 1);
     const std::uintptr_t betaPeer =
-        list.WinUIGetItemPeerIdentityForTesting(1);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 1);
 
     betaItem->SetMarginWidth(list.FromDIP(12));
     list.SetString(1, "aardvark");
-    CHECK(list.WinUIGetItemIdForTesting(0) == betaId);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(0) == betaPeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 0) == betaId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0) == betaPeer);
     CHECK(list.GetItem(0) == betaItem);
     CHECK(list.GetItem(1) == alphaItem);
     CHECK(list.GetItemIndex(betaItem) == 0);
@@ -1237,8 +1238,8 @@ TEST_CASE("wxWinUI ListBox owner drawing keeps stable item identity and state",
     double ownerContainerHeightDips = 0.0;
     double ownerContainerMinHeightDips = -1.0;
     double ownerContainerActualHeightDips = 0.0;
-    REQUIRE(list.WinUIGetItemPresentationForTesting(
-        0, &hasBitmap, &bitmapPixels, nullptr, nullptr, nullptr,
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        list, 0, &hasBitmap, &bitmapPixels, nullptr, nullptr, nullptr,
         &bitmapDIPs, nullptr, nullptr, nullptr, nullptr, nullptr,
         &ownerContainerHeightDips, &ownerContainerMinHeightDips,
         &ownerContainerActualHeightDips));
@@ -1286,16 +1287,14 @@ TEST_CASE("wxWinUI ListBox owner drawing keeps stable item identity and state",
     REQUIRE(WaitFor("WinUI owner-draw ListBox item layout", [&]()
     {
         frame.Update();
-        return list.GetItemRect(0, ownerDrawRect) &&
-               ownerDrawRect.width > 0 && ownerDrawRect.height > 0 &&
-               list.WinUIGetItemPresentationForTesting(
-                   0, &hasBitmap, &bitmapPixels, nullptr, nullptr, nullptr,
-                   &bitmapDIPs,
-                   nullptr, nullptr, nullptr, nullptr, nullptr,
-                   &ownerContainerHeightDips,
+        return list.GetItemRect(0, ownerDrawRect) && ownerDrawRect.width > 0 &&
+               ownerDrawRect.height > 0 &&
+               wxWinUIListBoxTestAccess::GetItemPresentation(
+                   list, 0, &hasBitmap, &bitmapPixels, nullptr, nullptr,
+                   nullptr, &bitmapDIPs, nullptr, nullptr, nullptr, nullptr,
+                   nullptr, &ownerContainerHeightDips,
                    &ownerContainerMinHeightDips,
-                   &ownerContainerActualHeightDips,
-                   &xamlRasterizationScale) &&
+                   &ownerContainerActualHeightDips, &xamlRasterizationScale) &&
                hasBitmap && xamlRasterizationScale > 0.0 &&
                ownerContainerActualHeightDips > 0.0;
     }, 2000));
@@ -1329,7 +1328,7 @@ TEST_CASE("wxWinUI ListBox owner drawing keeps stable item identity and state",
     CHECK(state.baseSelectedFontHeight == state.ownerItemFontHeight);
     CHECK(list.RefreshItem(0));
 
-    REQUIRE(list.WinUISetPeerSelectionForTesting(0, true));
+    REQUIRE(wxWinUIListBoxTestAccess::SetPeerSelection(list, 0, true));
     CHECK(state.lastStatus & wxOwnerDrawn::wxODSelected);
 
     list.Enable(false);
@@ -1337,10 +1336,9 @@ TEST_CASE("wxWinUI ListBox owner drawing keeps stable item identity and state",
     list.Enable(true);
 
     list.SetFocus();
-    REQUIRE(WaitFor("WinUI owner-draw ListBox item focus", [&]()
-    {
-        return list.WinUIFocusPeerItemForTesting(0);
-    }, 2000));
+    REQUIRE(WaitFor(
+        "WinUI owner-draw ListBox item focus", [&]()
+        { return wxWinUIListBoxTestAccess::FocusPeerItem(list, 0); }, 2000));
     (void)list.RefreshItem(0);
     CHECK(state.lastStatus & wxOwnerDrawn::wxODHasFocus);
 
@@ -1352,44 +1350,42 @@ TEST_CASE("wxWinUI ListBox owner drawing keeps stable item identity and state",
                state.lastDirection == wxLayout_RightToLeft;
     }, 2000));
     bool peerRTL = false;
-    REQUIRE(list.WinUIGetPeerLayoutDirectionForTesting(&peerRTL));
+    REQUIRE(wxWinUIListBoxTestAccess::GetPeerLayoutDirection(list, &peerRTL));
     CHECK(peerRTL);
 
     const double controlWidthDIPs =
-        list.WinUIGetControlWidthDIPsForTesting();
+        wxWinUIListBoxTestAccess::GetControlWidthDIPs(list);
     CAPTURE(controlWidthDIPs);
     CHECK(list.GetSize() == wxSize(300, 200));
     CHECK(controlWidthDIPs == Approx(bitmapDIPs.x).margin(0.01));
 
     const int beforeTheme = state.drawCalls;
-    REQUIRE(list.WinUISetPeerThemeForTesting(true));
+    REQUIRE(wxWinUIListBoxTestAccess::SetPeerTheme(list, true));
     int darkTheme = -1;
     std::uint32_t darkForeground = 0;
     std::uint32_t darkPixel = 0;
     REQUIRE(WaitFor("WinUI owner-draw ListBox dark theme state", [&]()
     {
         frame.Update();
-        return list.WinUIGetThemePresentationForTesting(
-                   0, &darkTheme, &darkForeground, &darkPixel) &&
-               darkTheme == 2 &&
-               state.drawCalls > beforeTheme;
+        return wxWinUIListBoxTestAccess::GetThemePresentation(
+                   list, 0, &darkTheme, &darkForeground, &darkPixel) &&
+               darkTheme == 2 && state.drawCalls > beforeTheme;
     }, 2000));
     CHECK((darkForeground >> 24) != 0);
     CHECK(darkPixel == 0xffc04020u);
     CHECK(state.lastStatus & wxOwnerDrawn::wxODSelected);
 
     const int beforeLightTheme = state.drawCalls;
-    REQUIRE(list.WinUISetPeerThemeForTesting(false));
+    REQUIRE(wxWinUIListBoxTestAccess::SetPeerTheme(list, false));
     int lightTheme = -1;
     std::uint32_t lightForeground = 0;
     std::uint32_t lightPixel = 0;
     REQUIRE(WaitFor("WinUI owner-draw ListBox light theme state", [&]()
     {
         frame.Update();
-        return list.WinUIGetThemePresentationForTesting(
-                   0, &lightTheme, &lightForeground, &lightPixel) &&
-               lightTheme == 1 &&
-               state.drawCalls > beforeLightTheme;
+        return wxWinUIListBoxTestAccess::GetThemePresentation(
+                   list, 0, &lightTheme, &lightForeground, &lightPixel) &&
+               lightTheme == 1 && state.drawCalls > beforeLightTheme;
     }, 2000));
     CHECK((lightForeground >> 24) != 0);
     CHECK(lightPixel == 0xffc04020u);
@@ -1421,11 +1417,11 @@ TEST_CASE("wxWinUI ListBox owner drawing contains reentry and destruction",
     CHECK(creationExceptionObserved);
     CHECK_FALSE(throwState.throwOnCreateOnce);
     CHECK(throwOnce.GetCount() == 0);
-    CHECK(throwOnce.WinUIGetPeerCountForTesting() == 0);
+    CHECK(wxWinUIListBoxTestAccess::GetPeerCount(throwOnce) == 0);
     REQUIRE(throwOnce.Append("recovered") == 0);
     CHECK(throwOnce.GetCount() == 1);
     CHECK(throwOnce.GetItem(0) != nullptr);
-    CHECK(throwOnce.WinUIGetPeerCountForTesting() == 1);
+    CHECK(wxWinUIListBoxTestAccess::GetPeerCount(throwOnce) == 1);
 
     wxWinUIOwnerDrawProbeState destructorState;
     wxWinUIOwnerDrawProbeList *destructorDoomed =
@@ -1466,17 +1462,18 @@ TEST_CASE("wxWinUI ListBox owner drawing contains reentry and destruction",
                              wxLB_OWNERDRAW));
     REQUIRE(reentrant.Append("reentrant refresh") == 0);
     const std::uint64_t stableId =
-        reentrant.WinUIGetItemIdForTesting(0);
+        wxWinUIListBoxTestAccess::GetItemId(reentrant, 0);
     const std::uintptr_t stablePeer =
-        reentrant.WinUIGetItemPeerIdentityForTesting(0);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(reentrant, 0);
     wxOwnerDrawn * const stableItem = reentrant.GetItem(0);
     const int beforeReentry = reentryState.drawCalls;
     reentryState.refreshReentrantly = true;
     (void)reentrant.RefreshItem(0);
     CHECK(reentryState.reenteredRefresh);
     CHECK(reentryState.drawCalls == beforeReentry + 1);
-    CHECK(reentrant.WinUIGetItemIdForTesting(0) == stableId);
-    CHECK(reentrant.WinUIGetItemPeerIdentityForTesting(0) == stablePeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(reentrant, 0) == stableId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(reentrant, 0) ==
+          stablePeer);
     CHECK(reentrant.GetItem(0) == stableItem);
 
     const int beforeFailure = reentryState.drawCalls;
@@ -1487,12 +1484,12 @@ TEST_CASE("wxWinUI ListBox owner drawing contains reentry and destruction",
     }
     CHECK_FALSE(reentryState.failWithHresultOnce);
     CHECK(reentryState.drawCalls >= beforeFailure + 2);
-    CHECK(reentrant.WinUIGetItemIdForTesting(0) == stableId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(reentrant, 0) == stableId);
     CHECK(reentrant.GetItem(0) == stableItem);
-    CHECK(reentrant.WinUIGetPeerCountForTesting() == 1);
+    CHECK(wxWinUIListBoxTestAccess::GetPeerCount(reentrant) == 1);
     bool recoveredBitmap = false;
-    REQUIRE(reentrant.WinUIGetItemPresentationForTesting(
-        0, &recoveredBitmap, nullptr, nullptr, nullptr, nullptr));
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        reentrant, 0, &recoveredBitmap, nullptr, nullptr, nullptr, nullptr));
     CHECK(recoveredBitmap);
 
     wxWinUIOwnerDrawProbeState destructionState;
@@ -1531,8 +1528,8 @@ TEST_CASE("wxWinUI CheckListBox redraws owner bitmap before one toggle event",
     bool hasBitmap = false;
     bool hasCheckOverlay = false;
     wxSize bitmapPixels;
-    REQUIRE(list.WinUIGetItemPresentationForTesting(
-        0, &hasBitmap, &bitmapPixels, nullptr, nullptr,
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        list, 0, &hasBitmap, &bitmapPixels, nullptr, nullptr,
         &hasCheckOverlay));
     CHECK(hasBitmap);
     CHECK(hasCheckOverlay);
@@ -1560,22 +1557,22 @@ TEST_CASE("wxWinUI CheckListBox redraws owner bitmap before one toggle event",
 
     bool peerFocused = false;
     bool peerPointerTarget = false;
-    REQUIRE(list.WinUIActivatePeerCheckForTesting(
-        0, &peerFocused, &peerPointerTarget));
+    REQUIRE(wxWinUIListBoxTestAccess::ActivatePeerCheck(list, 0, &peerFocused,
+                                                        &peerPointerTarget));
     CHECK(peerFocused);
     CHECK(peerPointerTarget);
     CHECK(list.IsChecked(0));
     CHECK(events == 1);
     CHECK(redrawnBeforeEvent);
     bool overlayFocused = false;
-    REQUIRE(list.WinUIGetItemPresentationForTesting(
-        0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-        nullptr, &overlayFocused));
+    REQUIRE(wxWinUIListBoxTestAccess::GetItemPresentation(
+        list, 0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        &overlayFocused));
     CHECK(overlayFocused);
 
     drawsBeforeToggle = state.drawCalls;
     redrawnBeforeEvent = false;
-    REQUIRE(list.WinUITogglePeerViaAutomationForTesting(0));
+    REQUIRE(wxWinUIListBoxTestAccess::TogglePeerViaAutomation(list, 0));
     CHECK_FALSE(list.IsChecked(0));
     CHECK(events == 2);
     CHECK(redrawnBeforeEvent);
@@ -1584,7 +1581,7 @@ TEST_CASE("wxWinUI CheckListBox redraws owner bitmap before one toggle event",
     drawsBeforeToggle = state.drawCalls;
     redrawnBeforeEvent = false;
     bool handled = false;
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(32, &handled));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(list, 32, &handled));
     CHECK(handled);
     CHECK(list.IsChecked(0));
     CHECK(events == 3);
@@ -1610,9 +1607,9 @@ TEST_CASE("wxWinUI CheckListBox restores focus after owner projection rebuild",
     REQUIRE(list.Create(&frame, wxID_ANY, wxDefaultPosition,
                         wxSize(240, 140)));
     REQUIRE(list.Append("transitioning check owner item") == 0);
-    const std::uint64_t stableId = list.WinUIGetItemIdForTesting(0);
+    const std::uint64_t stableId = wxWinUIListBoxTestAccess::GetItemId(list, 0);
     const std::uintptr_t stablePeer =
-        list.WinUIGetItemPeerIdentityForTesting(0);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0);
     REQUIRE(stableId != 0);
     REQUIRE(stablePeer != 0);
 
@@ -1626,8 +1623,8 @@ TEST_CASE("wxWinUI CheckListBox restores focus after owner projection rebuild",
 
     bool peerFocused = false;
     bool peerPointerTarget = false;
-    REQUIRE(list.WinUIActivatePeerCheckForTesting(
-        0, &peerFocused, &peerPointerTarget));
+    REQUIRE(wxWinUIListBoxTestAccess::ActivatePeerCheck(list, 0, &peerFocused,
+                                                        &peerPointerTarget));
     REQUIRE(peerFocused);
     REQUIRE(peerPointerTarget);
 
@@ -1640,13 +1637,13 @@ TEST_CASE("wxWinUI CheckListBox restores focus after owner projection rebuild",
         frame.Update();
         bool hasBitmap = false;
         bool overlayFocused = false;
-        return list.WinUIGetItemPresentationForTesting(
-                   0, &hasBitmap, nullptr, nullptr, nullptr, nullptr,
+        return wxWinUIListBoxTestAccess::GetItemPresentation(
+                   list, 0, &hasBitmap, nullptr, nullptr, nullptr, nullptr,
                    nullptr, nullptr, &overlayFocused) &&
                hasBitmap && overlayFocused;
     }, 2000));
-    CHECK(list.WinUIGetItemIdForTesting(0) == stableId);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(0) == stablePeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 0) == stableId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0) == stablePeer);
 
     // Exercise the inverse transition too. The CheckBox is still focused and
     // must first leave the Grid before it can become direct Content again.
@@ -1658,13 +1655,13 @@ TEST_CASE("wxWinUI CheckListBox restores focus after owner projection rebuild",
         bool hasBitmap = true;
         bool hasCheckOverlay = false;
         bool overlayFocused = false;
-        return list.WinUIGetItemPresentationForTesting(
-                   0, &hasBitmap, nullptr, nullptr, nullptr,
+        return wxWinUIListBoxTestAccess::GetItemPresentation(
+                   list, 0, &hasBitmap, nullptr, nullptr, nullptr,
                    &hasCheckOverlay, nullptr, nullptr, &overlayFocused) &&
                !hasBitmap && hasCheckOverlay && overlayFocused;
     }, 2000));
-    CHECK(list.WinUIGetItemIdForTesting(0) == stableId);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(0) == stablePeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 0) == stableId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0) == stablePeer);
     frame.Hide();
 }
 
@@ -1680,11 +1677,11 @@ TEST_CASE("wxWinUI CheckListBox preserves check identity and client data",
     list.Append("Aaa");
     list.Append("AAA");
     const std::uintptr_t upperPeer =
-        list.WinUIGetItemPeerIdentityForTesting(0);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0);
     const std::uintptr_t titlePeer =
-        list.WinUIGetItemPeerIdentityForTesting(1);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 1);
     const std::uintptr_t lowerPeer =
-        list.WinUIGetItemPeerIdentityForTesting(2);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 2);
     REQUIRE(upperPeer != 0);
     REQUIRE(titlePeer != 0);
     REQUIRE(lowerPeer != 0);
@@ -1703,38 +1700,39 @@ TEST_CASE("wxWinUI CheckListBox preserves check identity and client data",
         });
 
     list.Check(2);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(0) == upperPeer);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(1) == titlePeer);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(2) == lowerPeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0) == upperPeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 1) == titlePeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 2) == lowerPeer);
     list.SetSelection(2);
     list.SetClientObject(
         2, new wxWinUIListCountedClientData(&destroyed));
     const std::uint64_t checkedId =
-        list.WinUIGetItemIdForTesting(2);
+        wxWinUIListBoxTestAccess::GetItemId(list, 2);
     const std::uintptr_t checkedPeer =
-        list.WinUIGetItemPeerIdentityForTesting(2);
+        wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 2);
     CHECK(checkedPeer == lowerPeer);
-    CHECK(list.WinUIGetPeerCheckForTesting(2));
+    CHECK(wxWinUIListBoxTestAccess::GetPeerCheck(list, 2));
     CHECK(toggleEvents == 0);
 
     list.SetString(2, "AA");
-    CHECK(list.WinUIGetItemIdForTesting(0) == checkedId);
-    CHECK(list.WinUIGetItemPeerIdentityForTesting(0) == checkedPeer);
+    CHECK(wxWinUIListBoxTestAccess::GetItemId(list, 0) == checkedId);
+    CHECK(wxWinUIListBoxTestAccess::GetItemPeerIdentity(list, 0) ==
+          checkedPeer);
     CHECK(list.IsChecked(0));
     CHECK(list.GetSelection() == 0);
     CHECK(list.GetClientObject(0) != nullptr);
-    CHECK(list.WinUIGetPeerCheckForTesting(0));
+    CHECK(wxWinUIListBoxTestAccess::GetPeerCheck(list, 0));
     CHECK(toggleEvents == 0);
 
-    REQUIRE(list.WinUITogglePeerViaAutomationForTesting(0));
+    REQUIRE(wxWinUIListBoxTestAccess::TogglePeerViaAutomation(list, 0));
     CHECK_FALSE(list.IsChecked(0));
     CHECK(toggleEvents == 1);
     CHECK(eventClientObject == list.GetClientObject(0));
     CHECK(eventString == "AA");
 
-    REQUIRE(list.WinUITogglePeerWithKeyboardForTesting(0));
+    REQUIRE(wxWinUIListBoxTestAccess::TogglePeerWithKeyboard(list, 0));
     CHECK(list.IsChecked(0));
-    CHECK(list.WinUIGetPeerCheckForTesting(0));
+    CHECK(wxWinUIListBoxTestAccess::GetPeerCheck(list, 0));
     CHECK(toggleEvents == 2);
 
     list.Check(0, false);
@@ -1778,13 +1776,13 @@ TEST_CASE("wxWinUI CheckListBox keyboard matches MSW selected-item semantics",
     });
 
     bool handled = true;
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        'X', &handled, false, usLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, 'X', &handled, false, usLayout.GetValue()));
     CHECK_FALSE(handled);
     CHECK(eventItems.empty());
 
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_PLUS, &handled, true, usLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, VK_OEM_PLUS, &handled, true, usLayout.GetValue()));
     CHECK(handled);
     REQUIRE(list.GetCount() == 2);
     CHECK(list.GetString(0) == "zero");
@@ -1802,66 +1800,66 @@ TEST_CASE("wxWinUI CheckListBox keyboard matches MSW selected-item semantics",
     CHECK(selections[0] == 0);
     CHECK(selections[1] == 1);
 
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_MINUS, &handled, false, usLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, VK_OEM_MINUS, &handled, false, usLayout.GetValue()));
     CHECK(handled);
     CHECK_FALSE(list.IsChecked(0));
     CHECK_FALSE(list.IsChecked(1));
 
     // Exercise the numpad VirtualKey values through the very same decoder.
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(107, &handled));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(list, 107, &handled));
     CHECK(handled);
     CHECK(list.IsChecked(0));
     CHECK(list.IsChecked(1));
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(109, &handled));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(list, 109, &handled));
     CHECK(handled);
     CHECK_FALSE(list.IsChecked(0));
     CHECK_FALSE(list.IsChecked(1));
 
     // Exercise the raw OEM keys and modifier decoder used by PreviewKeyDown.
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_PLUS, &handled, false, usLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, VK_OEM_PLUS, &handled, false, usLayout.GetValue()));
     CHECK_FALSE(handled); // '=' is not the checklist '+' command.
     CHECK_FALSE(list.IsChecked(0));
     CHECK_FALSE(list.IsChecked(1));
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_PLUS, &handled, true, usLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, VK_OEM_PLUS, &handled, true, usLayout.GetValue()));
     CHECK(handled);
     CHECK(list.IsChecked(0));
     CHECK(list.IsChecked(1));
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_MINUS, &handled, true, usLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, VK_OEM_MINUS, &handled, true, usLayout.GetValue()));
     CHECK_FALSE(handled); // '_' is not the checklist '-' command.
     CHECK(list.IsChecked(0));
     CHECK(list.IsChecked(1));
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_MINUS, &handled, false, usLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, VK_OEM_MINUS, &handled, false, usLayout.GetValue()));
     CHECK(handled);
     CHECK_FALSE(list.IsChecked(0));
     CHECK_FALSE(list.IsChecked(1));
 
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(32, &handled));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(list, 32, &handled));
     CHECK(handled);
     CHECK(list.IsChecked(0));
     CHECK(list.IsChecked(1));
 
     // On fr-FR the physical '6' key produces '-' without Shift and '6' with
     // Shift. This is the regression case that hard-coded US OEM keys miss.
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        '6', &handled, false, frLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, '6', &handled, false, frLayout.GetValue()));
     CHECK(handled);
     CHECK_FALSE(list.IsChecked(0));
     CHECK_FALSE(list.IsChecked(1));
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        '6', &handled, true, frLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, '6', &handled, true, frLayout.GetValue()));
     CHECK_FALSE(handled);
     CHECK_FALSE(list.IsChecked(0));
     CHECK_FALSE(list.IsChecked(1));
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_MINUS, &handled, false, frLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, VK_OEM_MINUS, &handled, false, frLayout.GetValue()));
     CHECK_FALSE(handled);
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_PLUS, &handled, true, frLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        list, VK_OEM_PLUS, &handled, true, frLayout.GetValue()));
     CHECK(handled);
     CHECK(list.IsChecked(0));
     CHECK(list.IsChecked(1));
@@ -1877,7 +1875,7 @@ TEST_CASE("wxWinUI CheckListBox keyboard matches MSW selected-item semantics",
 
     list.SetSelection(wxNOT_FOUND);
     const std::size_t eventsBeforeNoSelection = eventItems.size();
-    REQUIRE(list.WinUIDispatchCheckKeyForTesting(32, &handled));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(list, 32, &handled));
     CHECK(handled);
     CHECK(eventItems.size() == eventsBeforeNoSelection);
 
@@ -1892,8 +1890,8 @@ TEST_CASE("wxWinUI CheckListBox keyboard matches MSW selected-item semantics",
         ++singleEvents;
         singleEventItem = event.GetInt();
     });
-    REQUIRE(single.WinUIDispatchCheckKeyForTesting(
-        VK_OEM_PLUS, &handled, true, usLayout.GetValue()));
+    REQUIRE(wxWinUIListBoxTestAccess::DispatchCheckKey(
+        single, VK_OEM_PLUS, &handled, true, usLayout.GetValue()));
     CHECK(handled);
     CHECK_FALSE(single.IsChecked(0));
     CHECK(single.IsChecked(1));
@@ -1920,7 +1918,7 @@ TEST_CASE("wxWinUI CheckListBox toggle callback is destruction-safe",
             list = nullptr;
         });
 
-    REQUIRE(list->WinUITogglePeerWithKeyboardForTesting(0));
+    REQUIRE(wxWinUIListBoxTestAccess::TogglePeerWithKeyboard(*list, 0));
     CHECK(destroyedInCallback);
     CHECK(list == nullptr);
 }

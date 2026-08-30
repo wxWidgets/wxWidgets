@@ -77,10 +77,18 @@ using wxWinUIStatusBarSizeGripSnapshot = RemovedPublicPeerWriteHook;
 using wxWinUIStatusBarResizeActionHookForTesting = RemovedPublicPeerWriteHook;
 #endif
 
+#if wxUSE_CHOICE
+using wxWinUIPopupRetirementCoreProbeForTesting = RemovedPublicPeerWriteHook;
+#endif
+
 #if wxUSE_BUTTON || wxUSE_TOGGLEBTN || wxUSE_STATTEXT || wxUSE_STATBMP || \
     wxUSE_STATBOX || wxUSE_GAUGE || wxUSE_SCROLLBAR || wxUSE_SPINBTN || \
     wxUSE_RADIOBOX || wxUSE_ACTIVITYINDICATOR || wxUSE_HYPERLINKCTRL || \
-    wxUSE_COLOURPICKERCTRL || wxUSE_INFOBAR || wxUSE_STATUSBAR
+    wxUSE_COLOURPICKERCTRL || wxUSE_INFOBAR || wxUSE_STATUSBAR || \
+    wxUSE_LISTBOX || wxUSE_TREECTRL || wxUSE_CHOICE || wxUSE_COMBOBOX || \
+    wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL || wxUSE_CALENDARCTRL || \
+    wxUSE_SLIDER || wxUSE_SPINCTRL || wxUSE_TEXTCTRL || wxUSE_SEARCHCTRL || \
+    wxUSE_TEXTDLG
 namespace
 {
 
@@ -592,6 +600,300 @@ static_assert(!HasPublicTestOperation<StatusBarDeliverDPITestOperation,
               "wxStatusBar must not expose WinUIDeliverDPIChangedForTesting");
 
 #endif
+
+// Each removed declaration is checked independently: a missing typedef must
+// not accidentally make a still-public test method look absent.
+#define WX_ASSERT_NO_PUBLIC_TEST_METHOD(Class, Method) \
+    template<typename T> \
+    using Class##_##Method = decltype(&T::Method); \
+    static_assert(!HasPublicTestOperation<Class##_##Method, Class>::value, \
+                  #Class " must not expose " #Method)
+
+#define WX_ASSERT_NO_PUBLIC_TEST_TYPE(Class, Type) \
+    template<typename T> \
+    using Class##_##Type = typename T::Type; \
+    static_assert(!HasPublicTestOperation<Class##_##Type, Class>::value, \
+                  #Class " must not expose type " #Type)
+
+#if wxUSE_LISTBOX
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetItemIdForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetItemPeerIdentityForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetControlWidthDIPsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetPeerCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIPoisonPeerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUISetPeerSelectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIFocusPeerItemForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIDoubleTapPeerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUISetPeerCheckForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIActivatePeerCheckForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUITogglePeerViaAutomationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUITogglePeerWithKeyboardForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIDispatchCheckKeyForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetPeerCheckForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetScrollPresentationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetPeerLayoutDirectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetItemPresentationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUIGetThemePresentationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxListBox, WinUISetPeerThemeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxListBox, WinUIScrollMetricsForTesting);
+#endif
+
+#if wxUSE_TREECTRL
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIFailNextPeerMutationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIFailPeerMutationsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUISelectPeerItemForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIFocusPeerItemForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUISetPeerExpandedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIIsPeerExpandedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIKeyDownForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIBeginInternalDragForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUICompleteInternalDragForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUICompletePeerDragForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIScheduleLabelEditForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIFireLabelEditDelayForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIClickStateImageForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIDoubleClickItemForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIRightClickItemForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIInvokeItemForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIPointerPressedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIPointerMovedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIPointerReleasedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIQueueSelectionCorrectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIIsPeerSelectionChangeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIIsPeerStructureRepairPendingForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetItemPeerIdentityForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIIsItemAttachedToPeerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetPeerChildCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetMeasuredItemPartsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetPeerIndentForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIIsPeerDropHighlightedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetPeerAutomationNameForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetPeerItemTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetPeerItemImageIdentityForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIRefreshForScaleForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetPeerItemImageProjectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetModelStatsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIResetModelStatsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIClosePeerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTreeCtrl, WinUIGetLiveCallbackStateCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTreeCtrl, WinUIPeerMutationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTreeCtrl, WinUIDragCompletionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTreeCtrl, WinUIModelStats);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTreeCtrl, WinUIMeasuredItemParts);
+#endif
+
+#if wxUSE_DATEPICKCTRL
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUISetPeerDateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIClearPeerDateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIGetPeerStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIGetDefaultPeerRangeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIGetPeerDateFormatForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIUsesDropdownForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIGetSpinFieldsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUISetSpinPartForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIGetSpinPartForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIGetSpinYearTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIGetLocaleDatePatternForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUIGetPeerNullTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxDatePickerCtrl, WinUISetLanguageForTesting);
+#endif
+
+#if wxUSE_TIMEPICKCTRL
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTimePickerCtrl, WinUISetPeerTimeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTimePickerCtrl, WinUIGetPeerTimeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTimePickerCtrl, WinUIGetLocaleTimePatternForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTimePickerCtrl, WinUIGetTimeFieldOrderForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTimePickerCtrl, WinUIGetHourSpinBindingForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTimePickerCtrl, WinUISetHourLoadedHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTimePickerCtrl, WinUISetLanguageForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTimePickerCtrl, WinUIHourLoadedHookForTesting);
+#endif
+
+#if wxUSE_CALENDARCTRL
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUISetPeerDateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetPeerStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetDefaultPeerRangeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIDoubleTapDateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIDoubleTapNonDayForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIIsMarkedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIIsHolidayForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetAppliedDensityColourForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUISetTodayForegroundForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIUseSystemMarkColourFallbackForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIDeliverThemeChangedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIHasThemeChangedHandlerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetDateClientPointForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetPeerRightToLeftForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetPeerCalendarStyleForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetWeekNumberForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetWeekRefreshRunCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIRequestWeekRefreshForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUISetWeekRefreshFailuresForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUISetWeekRefreshPendingPassesForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUISetWeekRefreshPeerMutationPassesForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIRequestDayLayoutValidationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIRequestDayLayoutValidationFailureForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetWeekRefreshRecoveryForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIResolveActiveMonthTopologyForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUIGetStableLayoutTicketForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxCalendarCtrl, WinUISetLanguageForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxCalendarCtrl, WinUIWeekRefreshRecoveryForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxCalendarCtrl, WinUIDayLayoutValidationFailureForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxCalendarCtrl, WinUIMonthTopologyDayForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxCalendarCtrl, WinUIMonthTopologyResultForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxCalendarCtrl, WinUILayoutTicketForTesting);
+#endif
+
+#if wxUSE_SLIDER
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIApplyInputForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIApplyPointerInputForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUISetUnclassifiedPeerValueForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIGetPeerStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIGetDecorationsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIHasTickForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIRefreshForScaleForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIGetHostScaleStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIRefreshVisualStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIGetLastConvergenceFailureForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIDeliverThemeChangedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIRetemplatePeerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSlider, WinUIGetVisualStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSlider, WinUIInput);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSlider, WinUISelectionVisual);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSlider, WinUIActualTheme);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSlider, WinUIConvergenceFailure);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSlider, WinUIRetemplateHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSlider, WinUIVisualRect);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSlider, WinUIVisualState);
+#endif
+
+#if wxUSE_SPINCTRL
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrl, WinUISetPeerValueForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrl, WinUISetPeerTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrl, WinUIGetPeerStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrl, WinUIGetPeerSelectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrl, WinUIRetemplateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrl, WinUIEnterForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrl, WinUIStepForTesting);
+#endif
+
+#if wxUSE_SPINCTRL
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrlDouble, WinUISetPeerValueForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrlDouble, WinUISetPeerTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrlDouble, WinUIGetPeerStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrlDouble, WinUIGetPeerSelectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrlDouble, WinUIRetemplateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrlDouble, WinUIEnterForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSpinCtrlDouble, WinUIStepForTesting);
+#endif
+
+#if wxUSE_CHOICE
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxChoice, WinUIGetItemIdForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxChoice, WinUIGetItemPeerIdentityForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxChoice, WinUIGetItemPeerBitmapStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxChoice, WinUISelectPeerItemForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxChoice, WinUISetDropDownForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxChoice, WinUIIsPeerDropDownOpenForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxChoice, WinUIGetPopupReopenSnapshotForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxChoice, WinUIProbePopupRetirementCoreForTesting);
+#endif
+
+#if wxUSE_COMBOBOX
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUISetPeerTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUISetPeerTextViaAutomationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUISelectPeerItemForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIRetemplateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIRunTemplateLayoutEdgeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIQueueTemplateLayoutResolutionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUISetEditSelectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUISetRawEditSelectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIChainPendingRangeCallbacksForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUISetRawEditSelectionAndDestroyForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetTemplateStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetTemplatePeerSnapshotForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetTextEntryPeerStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetAutoCompleteSuggestionCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetAutoCompleteSuggestionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetAutoCompleteActiveSuggestionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIInvokeAutoCompleteSuggestionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIInvokeClipboardCommandForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetDiagnosticSnapshotForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetSimplePeerSnapshotForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetSimplePeerStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUINavigateSimpleListForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, WinUIGetSimplePageSizeForTesting);
+// These production continuations retain private forced-transition parameters.
+// The installed consumer must not be able to invoke them either.
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, OnPeerLayoutUpdated);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxComboBox, QueueEditPartResolutionAtLayoutEdge);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUIRangeSequenceSnapshot);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUIRangeDestructionSnapshot);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUITemplatePeerSnapshot);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUITemplatePeerState);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUITemplatePeerPhase);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUIPeerActualTheme);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUIAutomationTestStage);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUIDiagnosticSnapshot);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUISimplePeerSnapshot);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxComboBox, WinUISimplePeerState);
+#endif
+
+#if wxUSE_TEXTCTRL
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIProcessEnterForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIProcessTabForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIPasteTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIInjectPasswordContentChangeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUISetTextBoxPeerTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetPeerTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIReplacePeerSelectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIHasLocalFontOverridesForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIRichClipboardUsesAllFormatsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetNativeCaretShownForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIHasNoHideSelectionProjectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetPasswordPeerSecurityForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIForceNextPasswordScrubFailureForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIForceNextPasswordScrubPartialWriteForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetPasswordFailClosedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetPasswordClipboardExportAttemptCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetAutoUrlRangeCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetAutoUrlRangeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetAutoCompleteSuggestionCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetAutoCompleteSuggestionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIInvokeAutoCompleteSuggestionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetPeerSelectionForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetScrollStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetVerticalScrollBarVisibilityForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIGetPositionVisibilityStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIUseTextBoxPeerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUIForceNextPositionVisibilityRetryForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUISetNextTemporarySelectionHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUISetNextPasswordTextChangingHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextCtrl, WinUISetNextCreateLoadedHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTextCtrl, WinUICreateLoadedHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTextCtrl, WinUITemporarySelectionHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTextCtrl, WinUIPasswordTextChangingHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxTextCtrl, WinUIScrollBarVisibilityForTesting);
+#endif
+
+#if wxUSE_SEARCHCTRL
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSearchCtrl, WinUIInvokeSearchButtonForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSearchCtrl, WinUIInvokeCancelButtonForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSearchCtrl, WinUISetPeerTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSearchCtrl, WinUIRetemplateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSearchCtrl, WinUIInvokeRetiredSearchButtonForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSearchCtrl, WinUIGetSuggestionCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSearchCtrl, WinUIGetTemplateStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxSearchCtrl, WinUISetNextCreateLoadedHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSearchCtrl, WinUICreateLoadedHookForTesting);
+#endif
+
+#if wxUSE_TEXTDLG
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextEntryDialog, WinUISetPeerValueForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextEntryDialog, WinUIGetPeerValueForTesting);
+#endif
+
+#undef WX_ASSERT_NO_PUBLIC_TEST_TYPE
+#undef WX_ASSERT_NO_PUBLIC_TEST_METHOD
 
 } // anonymous namespace
 #endif // any of the controls checked above

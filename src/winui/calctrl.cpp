@@ -12,6 +12,10 @@
 #if wxUSE_CALENDARCTRL
 
 #include "wx/calctrl.h"
+
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "calendar-test-access.h"
+#endif
 #include "wx/log.h"
 #include "wx/settings.h"
 #include "wx/weakref.h"
@@ -57,7 +61,9 @@ namespace WU = winrt::Windows::UI;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 winrt::hstring gs_winuiCalendarLanguageForTesting;
+#endif
 
 WGNF::DecimalFormatter wxWinUICreateCalendarWeekNumberFormatter(
     const winrt::hstring& language)
@@ -3007,11 +3013,13 @@ public:
             ++weekRefreshScheduleGeneration;
         weekRefreshRetriesRemaining = 0;
         weekRefreshDegraded = false;
+#ifdef WXWINUI_TEST_SUPPORT
         weekRefreshFaultsForTesting = 0;
         weekRefreshPendingPassesForTesting = 0;
         weekRefreshPeerMutationPassesForTesting = 0;
         weekDayLayoutValidationFaultsForTesting = 0;
         weekDayLayoutValidationFailureModeForTesting = 0;
+#endif
         weekRefreshWaitingForMutationEnd = false;
         weekMutationProbeScheduled = false;
         if ( ++weekMutationProbeGeneration == 0 )
@@ -3899,12 +3907,14 @@ public:
                     const std::uint64_t retryGeneration =
                         weekRefreshRetryGeneration;
                     bool refreshFailed = false;
+#ifdef WXWINUI_TEST_SUPPORT
                     if ( weekRefreshFaultsForTesting != 0 )
                     {
                         --weekRefreshFaultsForTesting;
                         refreshFailed = true;
                     }
                     else
+#endif
                     {
                         try
                         {
@@ -4407,19 +4417,21 @@ public:
             weekRefreshRetryGeneration;
         weekDayLayoutValidationScheduled = true;
         bool queued = false;
+#ifdef WXWINUI_TEST_SUPPORT
         const bool injectQueueRefusal =
             weekDayLayoutValidationFaultsForTesting != 0 &&
             weekDayLayoutValidationFailureModeForTesting ==
                 static_cast<unsigned>(
-                    wxCalendarCtrl::
-                        WinUIDayLayoutValidationFailureForTesting::
+                    wxWinUICalendarTestAccess::DayLayoutValidationFailure::
                             QueueRefusal);
         if ( injectQueueRefusal )
         {
             --weekDayLayoutValidationFaultsForTesting;
             weekDayLayoutValidationFailureModeForTesting = 0;
         }
-        else try
+        else
+#endif
+        try
         {
             queued = calendar.DispatcherQueue().TryEnqueue(
                 [state, generation, implementation = this, calendar,
@@ -4450,6 +4462,7 @@ public:
                         implementation->weekRefreshRetryGeneration;
                     try
                     {
+#ifdef WXWINUI_TEST_SUPPORT
                         bool injectTransientRead = false;
                         if ( implementation->
                                  weekDayLayoutValidationFaultsForTesting !=
@@ -4464,8 +4477,7 @@ public:
                                     0;
                             if ( failureMode ==
                                  static_cast<unsigned>(
-                                     wxCalendarCtrl::
-                                         WinUIDayLayoutValidationFailureForTesting::
+                                     wxWinUICalendarTestAccess::DayLayoutValidationFailure::
                                              Exception) )
                             {
                                 throw winrt::hresult_error(E_FAIL);
@@ -4473,11 +4485,11 @@ public:
                             injectTransientRead =
                                 failureMode ==
                                 static_cast<unsigned>(
-                                    wxCalendarCtrl::
-                                        WinUIDayLayoutValidationFailureForTesting::
+                                    wxWinUICalendarTestAccess::DayLayoutValidationFailure::
                                             TransientRead);
                         }
                         if ( !injectTransientRead )
+#endif
                         {
                             implementation->
                                 RefreshWeekNumbersFromLayout(owner);
@@ -4731,6 +4743,7 @@ public:
             return;
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         std::unique_ptr<wxWinUICalendarPeerMutationGuard>
             injectedMutation;
         if ( weekRefreshPeerMutationPassesForTesting != 0 )
@@ -4739,6 +4752,7 @@ public:
             injectedMutation =
                 std::make_unique<wxWinUICalendarPeerMutationGuard>(state);
         }
+#endif
         if ( state->IsPeerMutationInProgress() )
         {
             refreshWeeksPending = true;
@@ -4762,11 +4776,13 @@ public:
             refreshWeeksPending = false;
             weekRefreshPendingCause = WeekRefreshPendingCause::None;
             const HitTestTicket ticket = CaptureHitTestTicket();
+#ifdef WXWINUI_TEST_SUPPORT
             if ( weekRefreshPendingPassesForTesting != 0 )
             {
                 --weekRefreshPendingPassesForTesting;
                 NoteRealizedDaysChanged();
             }
+#endif
             PublicHitSnapshot snapshot;
             if ( !CapturePublicHitSnapshot(ticket, &snapshot) )
             {
@@ -5334,11 +5350,13 @@ public:
     std::uint64_t weekRefreshScheduleGeneration = 1;
     std::uint64_t weekRefreshRetryGeneration = 1;
     unsigned weekRefreshRetriesRemaining = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     unsigned weekRefreshFaultsForTesting = 0;
     unsigned weekRefreshPendingPassesForTesting = 0;
     unsigned weekRefreshPeerMutationPassesForTesting = 0;
     unsigned weekDayLayoutValidationFaultsForTesting = 0;
     unsigned weekDayLayoutValidationFailureModeForTesting = 0;
+#endif
     bool weekRefreshDegraded = false;
     bool weekRefreshWaitingForMutationEnd = false;
     bool weekMutationProbeScheduled = false;
@@ -5394,14 +5412,15 @@ wxCalendarCtrl::wxCalendarCtrl()
 {
 }
 
-wxString wxCalendarCtrl::WinUISetLanguageForTesting(
-    const wxString& language)
+#ifdef WXWINUI_TEST_SUPPORT
+wxString wxWinUICalendarTestAccess::SetLanguage(const wxString& language)
 {
     const wxString previous =
         wxWinUIFromHString(gs_winuiCalendarLanguageForTesting);
     gs_winuiCalendarLanguageForTesting = wxWinUIToHString(language);
     return previous;
 }
+#endif
 
 wxCalendarCtrl::wxCalendarCtrl(wxWindow *parent, wxWindowID id,
                                const wxDateTime& date,
@@ -5464,8 +5483,10 @@ bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id,
     {
         m_winui->cal = MUXC::CalendarView();
         createPeer = m_winui->cal;
-        const winrt::hstring language =
-            gs_winuiCalendarLanguageForTesting;
+        winrt::hstring language;
+#ifdef WXWINUI_TEST_SUPPORT
+        language = gs_winuiCalendarLanguageForTesting;
+#endif
         if ( !language.empty() )
         {
             m_winui->cal.Language(language);
@@ -6906,22 +6927,24 @@ void wxCalendarCtrl::OnPeerSelectionChanged()
     // RefreshWeekNumbers() crosses XAML. Do not access any member afterwards.
 }
 
-bool wxCalendarCtrl::WinUISetPeerDateForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUICalendarTestAccess::SetPeerDate(
+    wxCalendarCtrl& control,
     const wxDateTime& date)
 {
-    if ( !m_winui || !m_winui->cal ||
-         !m_winui->callbackState || !date.IsValid() )
+    if ( !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState || !date.IsValid() )
         return false;
 
     WF::DateTime peerDate{};
     if ( !wxWinUIToDateTime(date, &peerDate) )
         return false;
 
-    wxWinUICalendarImpl * const updateImpl = m_winui.get();
+    wxWinUICalendarImpl * const updateImpl = control.m_winui.get();
     const std::shared_ptr<wxWinUICalendarCallbackState> state =
-        m_winui->callbackState;
+        control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     try
     {
         // Keep the deterministic peer seam faithful to a real selectable day:
@@ -6958,17 +6981,18 @@ bool wxCalendarCtrl::WinUISetPeerDateForTesting(
     }
 }
 
-bool wxCalendarCtrl::WinUIGetPeerStateForTesting(
+bool wxWinUICalendarTestAccess::GetPeerState(
+    const wxCalendarCtrl& control,
     wxDateTime *date,
     wxDateTime *minimum,
-    wxDateTime *maximum) const
+    wxDateTime *maximum)
 {
-    if ( !m_winui || !m_winui->cal )
+    if ( !control.m_winui || !control.m_winui->cal )
         return false;
 
     try
     {
-        const MUXC::CalendarView calendar = m_winui->cal;
+        const MUXC::CalendarView calendar = control.m_winui->cal;
         if ( date &&
              !wxWinUIReadSelectedDate(calendar, date) )
         {
@@ -6998,42 +7022,44 @@ bool wxCalendarCtrl::WinUIGetPeerStateForTesting(
     }
 }
 
-bool wxCalendarCtrl::WinUIGetDefaultPeerRangeForTesting(
+bool wxWinUICalendarTestAccess::GetDefaultPeerRange(
+    const wxCalendarCtrl& control,
     wxDateTime *minimum,
-    wxDateTime *maximum) const
+    wxDateTime *maximum)
 {
-    if ( !m_winui || !m_winui->defaultsCaptured )
+    if ( !control.m_winui || !control.m_winui->defaultsCaptured )
         return false;
 
     if ( minimum )
     {
         *minimum =
-            wxWinUIFromDateTime(m_winui->defaultMinimum);
+            wxWinUIFromDateTime(control.m_winui->defaultMinimum);
         if ( !minimum->IsValid() )
             return false;
     }
     if ( maximum )
     {
         *maximum =
-            wxWinUIFromDateTime(m_winui->defaultMaximum);
+            wxWinUIFromDateTime(control.m_winui->defaultMaximum);
         if ( !maximum->IsValid() )
             return false;
     }
     return true;
 }
 
-bool wxCalendarCtrl::WinUIDoubleTapDateForTesting(
+bool wxWinUICalendarTestAccess::DoubleTapDate(
+    wxCalendarCtrl& control,
     const wxDateTime& date)
 {
-    if ( !m_winui || !m_winui->cal ||
-         !m_winui->callbackState || !date.IsValid() )
+    if ( !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState || !date.IsValid() )
         return false;
 
-    wxWinUICalendarImpl * const updateImpl = m_winui.get();
+    wxWinUICalendarImpl * const updateImpl = control.m_winui.get();
     const std::shared_ptr<wxWinUICalendarCallbackState> state =
-        m_winui->callbackState;
+        control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     updateImpl->host.ForceRender();
     wxCalendarCtrl * const liveOwner =
         state->GetOwner(generation);
@@ -7071,17 +7097,17 @@ bool wxCalendarCtrl::WinUIDoubleTapDateForTesting(
     }
 }
 
-bool wxCalendarCtrl::WinUIDoubleTapNonDayForTesting()
+bool wxWinUICalendarTestAccess::DoubleTapNonDay(wxCalendarCtrl& control)
 {
-    if ( !m_winui || !m_winui->cal ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState )
         return false;
 
-    wxWinUICalendarImpl * const updateImpl = m_winui.get();
+    wxWinUICalendarImpl * const updateImpl = control.m_winui.get();
     const std::shared_ptr<wxWinUICalendarCallbackState> state =
-        m_winui->callbackState;
+        control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     try
     {
         // Resolve a point in the realized header/navigation band and prove it
@@ -7170,44 +7196,49 @@ bool wxCalendarCtrl::WinUIDoubleTapNonDayForTesting()
     }
 }
 
-bool wxCalendarCtrl::WinUIIsMarkedForTesting(size_t day) const
+bool wxWinUICalendarTestAccess::IsMarked(
+    const wxCalendarCtrl& control,
+    size_t day)
 {
     if ( day == 0 || day > 31 )
         return false;
 
-    return (m_marks &
+    return (control.m_marks &
             (1u << static_cast<unsigned>(day - 1))) != 0;
 }
 
-bool wxCalendarCtrl::WinUIIsHolidayForTesting(size_t day) const
+bool wxWinUICalendarTestAccess::IsHoliday(
+    const wxCalendarCtrl& control,
+    size_t day)
 {
     if ( day == 0 || day > 31 )
         return false;
 
-    return (m_holidays &
+    return (control.m_holidays &
             (1u << static_cast<unsigned>(day - 1))) != 0;
 }
 
-bool wxCalendarCtrl::WinUIGetAppliedDensityColourForTesting(
+bool wxWinUICalendarTestAccess::GetAppliedDensityColour(
+    wxCalendarCtrl& control,
     size_t day,
     wxColour *colour,
     unsigned *colourCount,
     unsigned long long *writeRevision)
 {
-    if ( !m_winui || !m_winui->cal ||
-         !m_winui->callbackState || day == 0 || day > 31 ||
-         !m_date.IsValid() ||
+    if ( !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState || day == 0 || day > 31 ||
+         !control.m_date.IsValid() ||
          day > static_cast<size_t>(
              wxDateTime::GetNumberOfDays(
-                 m_date.GetMonth(), m_date.GetYear())) )
+                 control.m_date.GetMonth(), control.m_date.GetYear())) )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     implementation->host.ForceRender();
 
     wxCalendarCtrl *owner = state->GetOwner(generation);
@@ -7268,19 +7299,20 @@ bool wxCalendarCtrl::WinUIGetAppliedDensityColourForTesting(
     return true;
 }
 
-bool wxCalendarCtrl::WinUISetTodayForegroundForTesting(
+bool wxWinUICalendarTestAccess::SetTodayForeground(
+    wxCalendarCtrl& control,
     const wxColour& colour)
 {
-    if ( !colour.IsOk() || !m_winui || !m_winui->cal ||
-         !m_winui->callbackState )
+    if ( !colour.IsOk() || !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     try
     {
         calendar.TodayForeground(wxWinUIBrush(
@@ -7301,18 +7333,18 @@ bool wxCalendarCtrl::WinUISetTodayForegroundForTesting(
            owner->m_winui->cal == calendar;
 }
 
-bool wxCalendarCtrl::WinUIUseSystemMarkColourFallbackForTesting()
+bool wxWinUICalendarTestAccess::UseSystemMarkColourFallback(wxCalendarCtrl& control)
 {
-    if ( !m_winui || !m_winui->cal ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     try
     {
         // A non-solid authored brush exercises the same production fallback
@@ -7333,19 +7365,19 @@ bool wxCalendarCtrl::WinUIUseSystemMarkColourFallbackForTesting()
            owner->m_winui->cal == calendar;
 }
 
-bool wxCalendarCtrl::WinUIDeliverThemeChangedForTesting()
+bool wxWinUICalendarTestAccess::DeliverThemeChanged(wxCalendarCtrl& control)
 {
-    if ( !m_winui || !m_winui->cal ||
-         !m_winui->callbackState ||
-         !m_winui->actualThemeChangedToken.value )
+    if ( !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState ||
+         !control.m_winui->actualThemeChangedToken.value )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     try
     {
         // Drive the real FrameworkElement theme pipeline. In particular, do
@@ -7371,28 +7403,29 @@ bool wxCalendarCtrl::WinUIDeliverThemeChangedForTesting()
            owner->m_winui->cal == calendar;
 }
 
-bool wxCalendarCtrl::WinUIHasThemeChangedHandlerForTesting() const
+bool wxWinUICalendarTestAccess::HasThemeChangedHandler(const wxCalendarCtrl& control)
 {
-    return m_winui && m_winui->cal &&
-           m_winui->callbackState &&
-           m_winui->actualThemeChangedToken.value != 0;
+    return control.m_winui && control.m_winui->cal &&
+           control.m_winui->callbackState &&
+           control.m_winui->actualThemeChangedToken.value != 0;
 }
 
-bool wxCalendarCtrl::WinUIGetDateClientPointForTesting(
+bool wxWinUICalendarTestAccess::GetDateClientPoint(
+    wxCalendarCtrl& control,
     const wxDateTime& date,
     wxPoint *point)
 {
     if ( !point || !date.IsValid() ||
-         !m_winui || !m_winui->cal ||
-         !m_winui->callbackState )
+         !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     implementation->host.ForceRender();
 
     wxCalendarCtrl *owner = state->GetOwner(generation);
@@ -7465,16 +7498,17 @@ bool wxCalendarCtrl::WinUIGetDateClientPointForTesting(
     return true;
 }
 
-bool wxCalendarCtrl::WinUIGetPeerRightToLeftForTesting(
-    bool *rightToLeft) const
+bool wxWinUICalendarTestAccess::GetPeerRightToLeft(
+    const wxCalendarCtrl& control,
+    bool *rightToLeft)
 {
-    if ( !rightToLeft || !m_winui || !m_winui->cal )
+    if ( !rightToLeft || !control.m_winui || !control.m_winui->cal )
         return false;
 
     try
     {
         *rightToLeft =
-            m_winui->cal.FlowDirection() ==
+            control.m_winui->cal.FlowDirection() ==
                 MUX::FlowDirection::RightToLeft;
         return true;
     }
@@ -7486,13 +7520,14 @@ bool wxCalendarCtrl::WinUIGetPeerRightToLeftForTesting(
     }
 }
 
-bool wxCalendarCtrl::WinUIGetPeerCalendarStyleForTesting(
+bool wxWinUICalendarTestAccess::GetPeerCalendarStyle(
+    const wxCalendarCtrl& control,
     bool *mondayFirst,
     bool *surroundingWeeks,
-    bool *weekNumbers) const
+    bool *weekNumbers)
 {
-    if ( !m_winui || !m_winui->cal || !m_winui->weekCanvas ||
-         !m_winui->weekColumn )
+    if ( !control.m_winui || !control.m_winui->cal || !control.m_winui->weekCanvas ||
+         !control.m_winui->weekColumn )
     {
         return false;
     }
@@ -7502,16 +7537,16 @@ bool wxCalendarCtrl::WinUIGetPeerCalendarStyleForTesting(
         if ( mondayFirst )
         {
             *mondayFirst =
-                m_winui->cal.FirstDayOfWeek() ==
+                control.m_winui->cal.FirstDayOfWeek() ==
                     winrt::Windows::Globalization::DayOfWeek::Monday;
         }
         if ( surroundingWeeks )
-            *surroundingWeeks = m_winui->cal.IsOutOfScopeEnabled();
+            *surroundingWeeks = control.m_winui->cal.IsOutOfScopeEnabled();
         if ( weekNumbers )
         {
-            const MUX::GridLength width = m_winui->weekColumn.Width();
+            const MUX::GridLength width = control.m_winui->weekColumn.Width();
             *weekNumbers =
-                m_winui->weekCanvas.Visibility() ==
+                control.m_winui->weekCanvas.Visibility() ==
                     MUX::Visibility::Visible &&
                 width.GridUnitType == MUX::GridUnitType::Pixel &&
                 width.Value > 0.0;
@@ -7526,22 +7561,23 @@ bool wxCalendarCtrl::WinUIGetPeerCalendarStyleForTesting(
     }
 }
 
-bool wxCalendarCtrl::WinUIGetWeekNumberForTesting(
+bool wxWinUICalendarTestAccess::GetWeekNumber(
+    wxCalendarCtrl& control,
     const wxDateTime& date,
     wxDateTime *weekStart,
     int *weekNumber)
 {
-    if ( !date.IsValid() || !m_winui || !m_winui->cal ||
-         !m_winui->callbackState ||
-         !HasFlag(wxCAL_SHOW_WEEK_NUMBERS) )
+    if ( !date.IsValid() || !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState ||
+         !control.HasFlag(wxCAL_SHOW_WEEK_NUMBERS) )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::CalendarView calendar = m_winui->cal;
+    const MUXC::CalendarView calendar = control.m_winui->cal;
     implementation->host.ForceRender();
 
     wxCalendarCtrl *owner = state->GetOwner(generation);
@@ -7589,106 +7625,110 @@ bool wxCalendarCtrl::WinUIGetWeekNumberForTesting(
     return false;
 }
 
-unsigned long long
-wxCalendarCtrl::WinUIGetWeekRefreshRunCountForTesting() const
+unsigned long long wxWinUICalendarTestAccess::GetWeekRefreshRunCount(const wxCalendarCtrl& control)
 {
-    return m_winui ? m_winui->weekRefreshRunCount : 0;
+    return control.m_winui ? control.m_winui->weekRefreshRunCount : 0;
 }
 
-bool wxCalendarCtrl::WinUIRequestWeekRefreshForTesting()
+bool wxWinUICalendarTestAccess::RequestWeekRefresh(wxCalendarCtrl& control)
 {
-    if ( !m_winui || !m_winui->cal || !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->cal || !control.m_winui->callbackState )
         return false;
 
-    wxWinUICalendarImpl * const impl = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const impl = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    impl->RefreshWeekNumbers(this);
+    impl->RefreshWeekNumbers(&control);
     wxCalendarCtrl * const owner = state->GetOwner(generation);
-    return owner == this && owner->m_winui &&
+    return owner == &control && owner->m_winui &&
            owner->m_winui.get() == impl &&
            owner->m_winui->callbackState == state;
 }
 
-bool wxCalendarCtrl::WinUISetWeekRefreshFailuresForTesting(unsigned count)
+bool wxWinUICalendarTestAccess::SetWeekRefreshFailures(
+    wxCalendarCtrl& control,
+    unsigned count)
 {
     if ( count >
              wxWinUICalendarImpl::MaxWeekRefreshAutomaticRetries + 1 ||
-         !m_winui || !m_winui->cal || !m_winui->callbackState )
+         !control.m_winui || !control.m_winui->cal || !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const impl = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const impl = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    if ( state->GetOwner(generation) != this )
+    if ( state->GetOwner(generation) != &control )
         return false;
     impl->weekRefreshFaultsForTesting = count;
-    return state->GetOwner(generation) == this && m_winui &&
-           m_winui.get() == impl && m_winui->callbackState == state;
+    return state->GetOwner(generation) == &control && control.m_winui &&
+           control.m_winui.get() == impl && control.m_winui->callbackState == state;
 }
 
-bool wxCalendarCtrl::WinUISetWeekRefreshPendingPassesForTesting(
+bool wxWinUICalendarTestAccess::SetWeekRefreshPendingPasses(
+    wxCalendarCtrl& control,
     unsigned count)
 {
     if ( count >
              wxWinUICalendarImpl::MaxWeekRefreshAutomaticRetries + 1 ||
-         !m_winui || !m_winui->cal || !m_winui->callbackState )
+         !control.m_winui || !control.m_winui->cal || !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const impl = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const impl = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    if ( state->GetOwner(generation) != this )
+    if ( state->GetOwner(generation) != &control )
         return false;
     impl->weekRefreshPendingPassesForTesting = count;
-    return state->GetOwner(generation) == this && m_winui &&
-           m_winui.get() == impl && m_winui->callbackState == state;
+    return state->GetOwner(generation) == &control && control.m_winui &&
+           control.m_winui.get() == impl && control.m_winui->callbackState == state;
 }
 
-bool wxCalendarCtrl::WinUISetWeekRefreshPeerMutationPassesForTesting(
+bool wxWinUICalendarTestAccess::SetWeekRefreshPeerMutationPasses(
+    wxCalendarCtrl& control,
     unsigned count)
 {
     if ( count >
              wxWinUICalendarImpl::MaxWeekRefreshAutomaticRetries + 1 ||
-         !m_winui || !m_winui->cal || !m_winui->callbackState )
+         !control.m_winui || !control.m_winui->cal || !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const impl = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const impl = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    if ( state->GetOwner(generation) != this )
+    if ( state->GetOwner(generation) != &control )
         return false;
     impl->weekRefreshPeerMutationPassesForTesting = count;
-    return state->GetOwner(generation) == this && m_winui &&
-           m_winui.get() == impl && m_winui->callbackState == state;
+    return state->GetOwner(generation) == &control && control.m_winui &&
+           control.m_winui.get() == impl && control.m_winui->callbackState == state;
 }
 
-bool wxCalendarCtrl::WinUIRequestDayLayoutValidationFailureForTesting(
-    WinUIDayLayoutValidationFailureForTesting failure)
+bool wxWinUICalendarTestAccess::RequestDayLayoutValidationFailure(
+    wxCalendarCtrl& control,
+    DayLayoutValidationFailure failure)
 {
     const unsigned failureMode = static_cast<unsigned>(failure);
     if ( failureMode <
              static_cast<unsigned>(
-                 WinUIDayLayoutValidationFailureForTesting::Exception) ||
+                 DayLayoutValidationFailure::Exception) ||
          failureMode >
              static_cast<unsigned>(
-                 WinUIDayLayoutValidationFailureForTesting::QueueRefusal) )
+                 DayLayoutValidationFailure::QueueRefusal) )
     {
         return false;
     }
-    if ( !m_winui || !m_winui->cal || !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->cal || !control.m_winui->callbackState )
         return false;
 
-    wxWinUICalendarImpl * const impl = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const impl = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    if ( state->GetOwner(generation) != this ||
+    if ( state->GetOwner(generation) != &control ||
          impl->weekDayLayoutValidationPending ||
          impl->weekDayLayoutValidationScheduled )
     {
@@ -7698,23 +7738,23 @@ bool wxCalendarCtrl::WinUIRequestDayLayoutValidationFailureForTesting(
     impl->weekDayLayoutValidationFaultsForTesting = 1;
     impl->weekDayLayoutValidationFailureModeForTesting = failureMode;
     impl->weekDayLayoutValidationPending = true;
-    impl->QueueWeekDayLayoutValidation(this);
+    impl->QueueWeekDayLayoutValidation(&control);
 
     wxCalendarCtrl * const owner = state->GetOwner(generation);
-    return owner == this && owner->m_winui &&
+    return owner == &control && owner->m_winui &&
            owner->m_winui.get() == impl &&
            owner->m_winui->callbackState == state;
 }
 
-bool wxCalendarCtrl::WinUIRequestDayLayoutValidationForTesting()
+bool wxWinUICalendarTestAccess::RequestDayLayoutValidation(wxCalendarCtrl& control)
 {
-    if ( !m_winui || !m_winui->cal || !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->cal || !control.m_winui->callbackState )
         return false;
 
-    wxWinUICalendarImpl * const impl = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const impl = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    if ( state->GetOwner(generation) != this ||
+    if ( state->GetOwner(generation) != &control ||
          impl->weekDayLayoutValidationPending ||
          impl->weekDayLayoutValidationScheduled )
     {
@@ -7722,17 +7762,16 @@ bool wxCalendarCtrl::WinUIRequestDayLayoutValidationForTesting()
     }
 
     impl->weekDayLayoutValidationPending = true;
-    impl->QueueWeekDayLayoutValidation(this);
+    impl->QueueWeekDayLayoutValidation(&control);
 
     wxCalendarCtrl * const owner = state->GetOwner(generation);
-    return owner == this && owner->m_winui &&
+    return owner == &control && owner->m_winui &&
            owner->m_winui.get() == impl &&
            owner->m_winui->callbackState == state;
 }
 
-bool wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
-    const std::vector<WinUIMonthTopologyDayForTesting>& days,
-    WinUIMonthTopologyResultForTesting *resolved,
+bool wxWinUICalendarTestAccess::ResolveActiveMonthTopology(const std::vector<MonthTopologyDay>& days,
+    MonthTopologyResult *resolved,
     int truncatedMonth,
     int truncatedFirstDay,
     int truncatedLastDay)
@@ -7745,7 +7784,7 @@ bool wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
     inputs.reserve(days.size());
     for ( std::size_t n = 0; n != days.size(); ++n )
     {
-        const WinUIMonthTopologyDayForTesting& day = days[n];
+        const MonthTopologyDay& day = days[n];
         inputs.push_back(
             wxWinUICalendarImpl::MonthTopologyInput{
                 wxWinUICalendarMonthKey{
@@ -7770,7 +7809,7 @@ bool wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
         const auto found = std::find_if(
             days.begin(), days.end(),
             [truncatedMonth](
-                const WinUIMonthTopologyDayForTesting& day)
+                const MonthTopologyDay& day)
             {
                 return day.month == truncatedMonth;
             });
@@ -7805,19 +7844,20 @@ bool wxCalendarCtrl::WinUIResolveActiveMonthTopologyForTesting(
     return true;
 }
 
-bool wxCalendarCtrl::WinUIGetWeekRefreshRecoveryForTesting(
-    WinUIWeekRefreshRecoveryForTesting *recovery) const
+bool wxWinUICalendarTestAccess::GetWeekRefreshRecovery(
+    const wxCalendarCtrl& control,
+    WeekRefreshRecovery *recovery)
 {
     if ( !recovery )
         return false;
     *recovery = {};
-    if ( !m_winui || !m_winui->cal || !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->cal || !control.m_winui->callbackState )
         return false;
 
-    const wxWinUICalendarImpl * const impl = m_winui.get();
-    const auto state = m_winui->callbackState;
+    const wxWinUICalendarImpl * const impl = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t callbackGeneration = state->Generation();
-    if ( state->GetOwner(callbackGeneration) != this )
+    if ( state->GetOwner(callbackGeneration) != &control )
         return false;
 
     recovery->generation = impl->weekRefreshRetryGeneration;
@@ -7881,28 +7921,29 @@ bool wxCalendarCtrl::WinUIGetWeekRefreshRecoveryForTesting(
         impl->weekDayLayoutValidationPending;
     recovery->dayLayoutValidationScheduled =
         impl->weekDayLayoutValidationScheduled;
-    return state->GetOwner(callbackGeneration) == this && m_winui &&
-           m_winui.get() == impl && m_winui->callbackState == state;
+    return state->GetOwner(callbackGeneration) == &control && control.m_winui &&
+           control.m_winui.get() == impl && control.m_winui->callbackState == state;
 }
 
-bool wxCalendarCtrl::WinUIGetStableLayoutTicketForTesting(
-    WinUILayoutTicketForTesting *ticket) const
+bool wxWinUICalendarTestAccess::GetStableLayoutTicket(
+    const wxCalendarCtrl& control,
+    LayoutTicket *ticket)
 {
     if ( !ticket )
         return false;
     *ticket = {};
 
-    if ( !m_winui || !m_winui->cal || !m_winui->layoutRoot ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->cal || !control.m_winui->layoutRoot ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUICalendarImpl * const impl = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUICalendarImpl * const impl = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     wxCalendarCtrl * const owner = state->GetOwner(generation);
-    if ( owner != this || !owner->m_winui ||
+    if ( owner != &control || !owner->m_winui ||
          owner->m_winui.get() != impl ||
          owner->m_winui->callbackState != state ||
          state->IsPeerMutationInProgress() ||
@@ -7972,7 +8013,7 @@ bool wxCalendarCtrl::WinUIGetStableLayoutTicketForTesting(
         }
 
         wxCalendarCtrl *liveOwner = state->GetOwner(generation);
-        if ( liveOwner != this || !liveOwner->m_winui ||
+        if ( liveOwner != &control || !liveOwner->m_winui ||
              liveOwner->m_winui.get() != impl ||
              liveOwner->m_winui->callbackState != state ||
              liveOwner->m_winui->cal != calendar )
@@ -8007,7 +8048,7 @@ bool wxCalendarCtrl::WinUIGetStableLayoutTicketForTesting(
             return false;
 
         liveOwner = state->GetOwner(generation);
-        if ( liveOwner != this || !liveOwner->m_winui ||
+        if ( liveOwner != &control || !liveOwner->m_winui ||
              liveOwner->m_winui.get() != impl ||
              liveOwner->m_winui->callbackState != state ||
              liveOwner->m_winui->cal != calendar ||
@@ -8051,5 +8092,6 @@ bool wxCalendarCtrl::WinUIGetStableLayoutTicketForTesting(
         return false;
     }
 }
+#endif
 
 #endif // wxUSE_CALENDARCTRL

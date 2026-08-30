@@ -17,6 +17,8 @@
 #include "wx/font.h"
 #include "wx/frame.h"
 #include "wx/textctrl.h"
+#include "textctrl-test-access.h"
+#include "searchctrl-test-access.h"
 #include "wx/textcompleter.h"
 #include "wx/uiaction.h"
 #include "wx/weakref.h"
@@ -93,7 +95,7 @@ void QueryPasswordUIADuringTextChanging(wxTextCtrl *owner, void *context)
     probe->invoked = true;
 
     bool predictionEnabled = true;
-    probe->querySucceeded = owner->WinUIGetPasswordPeerSecurityForTesting(
+    probe->querySucceeded = wxWinUITextCtrlTestAccess::GetPasswordPeerSecurity(*owner,
         &probe->isPassword,
         &probe->hasValuePattern,
         &probe->hasTextPattern,
@@ -312,14 +314,14 @@ void SupersedeDuringTemporarySelection(wxTextCtrl *owner, void *context)
         static_cast<TemporarySelectionSupersessionProbe *>(context);
     probe->invoked = true;
     owner->GetSelection(&probe->publicFrom, &probe->publicTo);
-    probe->peerSelectionRead = owner->WinUIGetPeerSelectionForTesting(
+    probe->peerSelectionRead = wxWinUITextCtrlTestAccess::GetPeerSelection(*owner,
         &probe->peerFrom, &probe->peerTo);
 
     // The newer generation is deliberately queued so the older lexical
     // selection guard must restore the peer before its continuation runs.
-    owner->WinUIForceNextPositionVisibilityRetryForTesting();
+    wxWinUITextCtrlTestAccess::ForceNextPositionVisibilityRetry(*owner);
     owner->ShowPosition(0);
-    owner->WinUIGetPositionVisibilityStateForTesting(
+    wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*owner,
         &probe->supersessionPending,
         &probe->supersessionRetries);
 }
@@ -474,7 +476,7 @@ TEST_CASE("wxWinUI text Create survives destruction from Loaded",
         wxWeakRef<wxWindow> lifetime(text);
         CreateLoadedDestructionProbe<wxTextCtrl> probe;
         probe.ownerSlot = &text;
-        text->WinUISetNextCreateLoadedHookForTesting(
+        wxWinUITextCtrlTestAccess::SetNextCreateLoadedHook(*text,
             &DestroyTextCtrlDuringCreateLoaded, &probe);
 
         wxTextCtrl * const invoking = text;
@@ -498,7 +500,7 @@ TEST_CASE("wxWinUI text Create survives destruction from Loaded",
         wxWeakRef<wxWindow> lifetime(search);
         CreateLoadedDestructionProbe<wxSearchCtrl> probe;
         probe.ownerSlot = &search;
-        search->WinUISetNextCreateLoadedHookForTesting(
+        wxWinUISearchCtrlTestAccess::SetNextCreateLoadedHook(*search,
             &DestroySearchCtrlDuringCreateLoaded, &probe);
 
         wxSearchCtrl * const invoking = search;
@@ -537,7 +539,7 @@ TEST_CASE("wxWinUI text Create reacquires after SetInitialSize",
         wxWeakRef<wxWindow> lifetime(text);
         InitialSizeDestructionProbe<wxTextCtrl> probe;
         probe.ownerSlot = &text;
-        text->WinUISetNextCreateLoadedHookForTesting(
+        wxWinUITextCtrlTestAccess::SetNextCreateLoadedHook(*text,
             &ArmTextCtrlInitialSizeDestruction, &probe);
 
         CHECK_FALSE(allocated->Create(
@@ -566,7 +568,7 @@ TEST_CASE("wxWinUI text Create reacquires after SetInitialSize",
         wxWeakRef<wxWindow> lifetime(search);
         InitialSizeDestructionProbe<wxSearchCtrl> probe;
         probe.ownerSlot = &search;
-        search->WinUISetNextCreateLoadedHookForTesting(
+        wxWinUISearchCtrlTestAccess::SetNextCreateLoadedHook(*search,
             &ArmSearchCtrlInitialSizeDestruction, &probe);
 
         CHECK_FALSE(allocated->Create(
@@ -600,12 +602,11 @@ TEST_CASE("wxWinUI TextCtrl applies wxTE_NO_VSCROLL to ContentElement",
         wxDefaultPosition, wxSize(240, 90),
         wxTE_MULTILINE | wxTE_NO_VSCROLL);
     using Visibility =
-        wxTextCtrl::WinUIScrollBarVisibilityForTesting;
+        wxWinUITextCtrlTestAccess::ScrollBarVisibility;
     Visibility visibility = Visibility::Disabled;
     REQUIRE(WaitFor("wxTE_NO_VSCROLL ContentElement policy", [&]()
     {
-        return noVerticalScroll.
-                   WinUIGetVerticalScrollBarVisibilityForTesting(
+        return wxWinUITextCtrlTestAccess::GetVerticalScrollBarVisibility(noVerticalScroll,
                        &visibility) &&
                visibility == Visibility::Hidden;
     }));
@@ -618,8 +619,7 @@ TEST_CASE("wxWinUI TextCtrl applies wxTE_NO_VSCROLL to ContentElement",
     visibility = Visibility::Disabled;
     REQUIRE(WaitFor("default TextBox ContentElement policy", [&]()
     {
-        return defaultScroll.
-            WinUIGetVerticalScrollBarVisibilityForTesting(&visibility);
+        return wxWinUITextCtrlTestAccess::GetVerticalScrollBarVisibility(defaultScroll, &visibility);
     }));
     CHECK(visibility == Visibility::Auto);
 }
@@ -653,7 +653,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
     double primedScrollableHeight = 0.0;
     REQUIRE(WaitFor("narrow RichEditBox wrapped extent", [&]()
     {
-        return text->WinUIGetScrollStateForTesting(
+        return wxWinUITextCtrlTestAccess::GetScrollState(*text,
                    nullptr,
                    nullptr,
                    nullptr,
@@ -694,7 +694,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
     double viewUnitYScale = 0.0;
     int scrollStage = 0;
     bool hasScrollState = false;
-    hasScrollState = text->WinUIGetScrollStateForTesting(
+    hasScrollState = wxWinUITextCtrlTestAccess::GetScrollState(*text,
         &horizontalOffset,
         &verticalOffset,
         &viewportWidth,
@@ -708,7 +708,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
         &viewUnitXScale,
         &viewUnitYScale);
     end = text->PositionToCoords(text->GetLastPosition());
-    REQUIRE(text->WinUIGetPositionVisibilityStateForTesting(
+    REQUIRE(wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*text,
         &pending,
         &retries,
         &retainedPeerReferences,
@@ -730,7 +730,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
     const bool richCompletionVisible =
         WaitFor("deferred RichEditBox wrapped visibility", [&]()
     {
-        hasScrollState = text->WinUIGetScrollStateForTesting(
+        hasScrollState = wxWinUITextCtrlTestAccess::GetScrollState(*text,
             &horizontalOffset,
             &verticalOffset,
             &viewportWidth,
@@ -744,7 +744,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
             &viewUnitXScale,
             &viewUnitYScale);
         end = text->PositionToCoords(text->GetLastPosition());
-        return text->WinUIGetPositionVisibilityStateForTesting(
+        return wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*text,
                    &pending,
                    &retries,
                    &retainedPeerReferences,
@@ -808,7 +808,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
     // native TOM ScrollIntoView request, and a bounded pass must prove exact
     // visibility before the generation-bound transaction completes.
     text->ShowPosition(0);
-    text->WinUIForceNextPositionVisibilityRetryForTesting();
+    wxWinUITextCtrlTestAccess::ForceNextPositionVisibilityRetry(*text);
     text->ShowPosition(text->GetLastPosition());
     richTrace = 0;
     richPassCount = 0;
@@ -819,7 +819,7 @@ TEST_CASE("wxWinUI TextCtrl TOM visibility is bounded and lifetime-bound",
         WaitFor("deferred unavailable RichEditBox visibility", [&]()
     {
         end = text->PositionToCoords(text->GetLastPosition());
-        return text->WinUIGetPositionVisibilityStateForTesting(
+        return wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*text,
                    &pending,
                    &retries,
                    nullptr,
@@ -876,7 +876,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         const std::size_t statesBefore =
             wxWinUITextCallbackState::GetLiveCountForTesting();
         wxTextCtrl *text = new wxTextCtrl;
-        text->WinUIUseTextBoxPeerForTesting();
+        wxWinUITextCtrlTestAccess::UseTextBoxPeer(*text);
         REQUIRE(text->Create(
             &frame, wxID_ANY, wxString(600, 'W'),
             wxPoint(10, 10), wxSize(160, 90), wxTE_MULTILINE));
@@ -884,17 +884,17 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         double viewportHeight = 0.0;
         REQUIRE(WaitFor("TextBox retry peer realization", [&]()
         {
-            return text->WinUIGetScrollStateForTesting(
+            return wxWinUITextCtrlTestAccess::GetScrollState(*text,
                        nullptr, nullptr, nullptr, &viewportHeight,
                        nullptr) &&
                    viewportHeight > 0.0;
         }));
 
-        text->WinUIForceNextPositionVisibilityRetryForTesting();
+        wxWinUITextCtrlTestAccess::ForceNextPositionVisibilityRetry(*text);
         text->ShowPosition(text->GetLastPosition());
         bool pending = false;
         unsigned retries = 0;
-        REQUIRE(text->WinUIGetPositionVisibilityStateForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*text,
             &pending, &retries));
         CHECK(pending);
         CHECK(retries == 1);
@@ -912,7 +912,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
     {
         const wxString value(600, 'W');
         wxTextCtrl text;
-        text.WinUIUseTextBoxPeerForTesting();
+        wxWinUITextCtrlTestAccess::UseTextBoxPeer(text);
         REQUIRE(text.Create(
             &frame, wxID_ANY, value,
             wxPoint(10, 10), wxSize(160, 90), wxTE_MULTILINE));
@@ -920,7 +920,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         double viewportHeight = 0.0;
         REQUIRE(WaitFor("TextBox selection peer realization", [&]()
         {
-            return text.WinUIGetScrollStateForTesting(
+            return wxWinUITextCtrlTestAccess::GetScrollState(text,
                        nullptr, nullptr, nullptr, &viewportHeight,
                        nullptr) &&
                    viewportHeight > 0.0;
@@ -928,7 +928,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
 
         text.SetSelection(7, 11);
         TemporarySelectionSupersessionProbe probe;
-        text.WinUISetNextTemporarySelectionHookForTesting(
+        wxWinUITextCtrlTestAccess::SetNextTemporarySelectionHook(text,
             &SupersedeDuringTemporarySelection, &probe);
         text.ShowPosition(text.GetLastPosition());
 
@@ -946,7 +946,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         text.GetSelection(&from, &to);
         CHECK(from == 7);
         CHECK(to == 11);
-        REQUIRE(text.WinUIGetPeerSelectionForTesting(&from, &to));
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPeerSelection(text, &from, &to));
         CHECK(from == 7);
         CHECK(to == 11);
 
@@ -956,7 +956,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         REQUIRE(WaitFor("superseding TextBox continuation", [&]()
         {
             start = text.PositionToCoords(0);
-            return text.WinUIGetPositionVisibilityStateForTesting(
+            return wxWinUITextCtrlTestAccess::GetPositionVisibilityState(text,
                        &pending, &retries) &&
                    !pending && retries >= 1 && retries <= 3 &&
                    start != wxDefaultPosition &&
@@ -969,7 +969,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         text.GetSelection(&from, &to);
         CHECK(from == 7);
         CHECK(to == 11);
-        REQUIRE(text.WinUIGetPeerSelectionForTesting(&from, &to));
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPeerSelection(text, &from, &to));
         CHECK(from == 7);
         CHECK(to == 11);
     }
@@ -980,7 +980,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
             wxWinUITextCallbackState::GetLiveCountForTesting();
         const wxString value(600, 'W');
         wxTextCtrl *text = new wxTextCtrl;
-        text->WinUIUseTextBoxPeerForTesting();
+        wxWinUITextCtrlTestAccess::UseTextBoxPeer(*text);
         REQUIRE(text->Create(
             &frame, wxID_ANY, value,
             wxPoint(10, 10), wxSize(160, 90), wxTE_MULTILINE));
@@ -988,18 +988,18 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         double viewportHeight = 0.0;
         REQUIRE(WaitFor("TextBox Replace peer realization", [&]()
         {
-            return text->WinUIGetScrollStateForTesting(
+            return wxWinUITextCtrlTestAccess::GetScrollState(*text,
                        nullptr, nullptr, nullptr, &viewportHeight,
                        nullptr) &&
                    viewportHeight > 0.0;
         }));
 
-        text->WinUIForceNextPositionVisibilityRetryForTesting();
+        wxWinUITextCtrlTestAccess::ForceNextPositionVisibilityRetry(*text);
         text->ShowPosition(text->GetLastPosition());
         bool pending = false;
         unsigned retries = 0;
         bool retainedPeerReferences = false;
-        REQUIRE(text->WinUIGetPositionVisibilityStateForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*text,
             &pending, &retries, &retainedPeerReferences));
         REQUIRE(pending);
         REQUIRE(retries == 1);
@@ -1010,7 +1010,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         pending = true;
         retries = 99;
         retainedPeerReferences = true;
-        REQUIRE(text->WinUIGetPositionVisibilityStateForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*text,
             &pending, &retries, &retainedPeerReferences));
         CHECK_FALSE(pending);
         CHECK(retries == 0);
@@ -1034,7 +1034,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
             wxWinUITextCallbackState::GetLiveCountForTesting();
         const wxString value(600, 'W');
         wxTextCtrl *text = new wxTextCtrl;
-        text->WinUIUseTextBoxPeerForTesting();
+        wxWinUITextCtrlTestAccess::UseTextBoxPeer(*text);
         REQUIRE(text->Create(
             &frame, wxID_ANY, value,
             wxPoint(10, 10), wxSize(160, 90), wxTE_MULTILINE));
@@ -1042,18 +1042,18 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         double viewportHeight = 0.0;
         REQUIRE(WaitFor("TextBox Remove peer realization", [&]()
         {
-            return text->WinUIGetScrollStateForTesting(
+            return wxWinUITextCtrlTestAccess::GetScrollState(*text,
                        nullptr, nullptr, nullptr, &viewportHeight,
                        nullptr) &&
                    viewportHeight > 0.0;
         }));
 
-        text->WinUIForceNextPositionVisibilityRetryForTesting();
+        wxWinUITextCtrlTestAccess::ForceNextPositionVisibilityRetry(*text);
         text->ShowPosition(text->GetLastPosition());
         bool pending = false;
         unsigned retries = 0;
         bool retainedPeerReferences = false;
-        REQUIRE(text->WinUIGetPositionVisibilityStateForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*text,
             &pending, &retries, &retainedPeerReferences));
         REQUIRE(pending);
         REQUIRE(retries == 1);
@@ -1064,7 +1064,7 @@ TEST_CASE("wxWinUI TextBox visibility continuations are lifetime-bound",
         pending = true;
         retries = 99;
         retainedPeerReferences = true;
-        REQUIRE(text->WinUIGetPositionVisibilityStateForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPositionVisibilityState(*text,
             &pending, &retries, &retainedPeerReferences));
         CHECK_FALSE(pending);
         CHECK(retries == 0);
@@ -1126,7 +1126,7 @@ TEST_CASE("wxWinUI text events may destroy their control",
             delete doomed;
         });
         REQUIRE(
-            password->WinUIInjectPasswordContentChangeForTesting("new"));
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(*password, "new"));
         CHECK(password == nullptr);
     }
 
@@ -1143,7 +1143,7 @@ TEST_CASE("wxWinUI text events may destroy their control",
             delete doomed;
         });
         REQUIRE(
-            password->WinUIInjectPasswordContentChangeForTesting("abXY"));
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(*password, "abXY"));
         CHECK(password == nullptr);
     }
 
@@ -1178,7 +1178,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         EventCounter maxEvents(&text, wxEVT_TEXT_MAXLEN);
 
         text.SetMaxLength(3);
-        text.WinUIPasteTextForTesting("abcdef");
+        wxWinUITextCtrlTestAccess::PasteText(text, "abcdef");
         CHECK(text.GetValue() == "abc");
         CHECK(textEvents.GetCount() == 1);
         CHECK(maxEvents.GetCount() == 1);
@@ -1213,7 +1213,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
 
         password.SetMaxLength(3);
         REQUIRE(
-            password.WinUIInjectPasswordContentChangeForTesting("WXYZ"));
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(password, "WXYZ"));
         CHECK(password.GetValue() == "WXY");
         CHECK(textEvents == 1);
         CHECK(maxEvents == 1);
@@ -1225,7 +1225,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         maxEvents = 0;
         eventOrder.clear();
         REQUIRE(
-            password.WinUIInjectPasswordContentChangeForTesting("ok"));
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(password, "ok"));
         CHECK(password.GetValue() == "ok");
         CHECK(textEvents == 1);
         CHECK(maxEvents == 0);
@@ -1247,7 +1247,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         // proposal the real PasswordChanged callback consumes. It does not
         // pretend that assigning Password raises PasswordChanging.
         REQUIRE(
-            password.WinUIInjectPasswordContentChangeForTesting("abXY"));
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(password, "abXY"));
         CHECK(password.GetValue() == "abX");
         CHECK(textEvents.GetCount() == 1);
         CHECK(maxEvents.GetCount() == 1);
@@ -1256,7 +1256,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         textEvents.Clear();
         maxEvents.Clear();
         REQUIRE(
-            password.WinUIInjectPasswordContentChangeForTesting(
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(password,
                 wxS("ab\u00e9")));
         CHECK(password.GetValue() == wxS("ab\u00e9"));
         CHECK(textEvents.GetCount() == 1);
@@ -1265,7 +1265,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         // A composed/dead-key character attempted at the limit is rejected
         // through the content-change path, not guessed from virtual keys.
         REQUIRE(
-            password.WinUIInjectPasswordContentChangeForTesting(
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(password,
                 wxS("ab\u00e9\u00df")));
         CHECK(password.GetValue() == wxS("ab\u00e9"));
         CHECK(textEvents.GetCount() == 1);
@@ -1276,7 +1276,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         textEvents.Clear();
         maxEvents.Clear();
         REQUIRE(
-            password.WinUIInjectPasswordContentChangeForTesting("abXYcd"));
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(password, "abXYcd"));
         CHECK(password.GetValue() == "abXcd");
         CHECK(textEvents.GetCount() == 1);
         CHECK(maxEvents.GetCount() == 1);
@@ -1286,7 +1286,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         textEvents.Clear();
         maxEvents.Clear();
         REQUIRE(
-            password.WinUIInjectPasswordContentChangeForTesting("abcde"));
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(password, "abcde"));
         CHECK(password.GetValue() == "abcde");
         CHECK(textEvents.GetCount() == 1);
         CHECK(maxEvents.GetCount() == 0);
@@ -1299,7 +1299,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         EventCounter maxEvents(&text, wxEVT_TEXT_MAXLEN);
 
         text.SetMaxLength(3);
-        REQUIRE(text.WinUISetTextBoxPeerTextForTesting("abcd"));
+        REQUIRE(wxWinUITextCtrlTestAccess::SetTextBoxPeerText(text, "abcd"));
         REQUIRE(WaitFor("RichEditBox fitting overflow prefix", [&]()
         {
             return text.GetValue() == "abc" &&
@@ -1317,13 +1317,13 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         EventCounter maxEvents(&text, wxEVT_TEXT_MAXLEN);
 
         text.SetMaxLength(3);
-        REQUIRE(text.WinUISetTextBoxPeerTextForTesting("a\nX"));
+        REQUIRE(wxWinUITextCtrlTestAccess::SetTextBoxPeerText(text, "a\nX"));
         wxString peerValue;
         REQUIRE(WaitFor("RichEditBox public CRLF max length", [&]()
         {
             return text.GetValue() == "a\n" &&
                    text.GetLastPosition() == 3 &&
-                   text.WinUIGetPeerTextForTesting(&peerValue) &&
+                   wxWinUITextCtrlTestAccess::GetPeerText(text, &peerValue) &&
                    peerValue == "a\n" &&
                    textEvents.GetCount() == 1 &&
                    maxEvents.GetCount() == 1;
@@ -1342,13 +1342,13 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         EventCounter maxEvents(&text, wxEVT_TEXT_MAXLEN);
 
         text.SetMaxLength(1);
-        REQUIRE(text.WinUISetTextBoxPeerTextForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::SetTextBoxPeerText(text,
             wxS("\U0001f600")));
         wxString peerValue = "not yet corrected";
         REQUIRE(WaitFor("RichEditBox surrogate-safe max length", [&]()
         {
             return text.GetValue().empty() &&
-                   text.WinUIGetPeerTextForTesting(&peerValue) &&
+                   wxWinUITextCtrlTestAccess::GetPeerText(text, &peerValue) &&
                    peerValue.empty() &&
                    textEvents.GetCount() == 0 &&
                    maxEvents.GetCount() == 1;
@@ -1370,7 +1370,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         // These are public CRLF coordinates: [3, 5) selects XY.
         text.SetMaxLength(8);
         text.SetSelection(3, 5);
-        REQUIRE(text.WinUIReplacePeerSelectionForTesting("123456"));
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(text, "123456"));
 
         wxString peerValue;
         long selectionFrom = -1;
@@ -1383,9 +1383,9 @@ TEST_CASE("wxWinUI TextCtrl value policies",
             return text.GetValue() == "a\n123cd" &&
                    text.GetInsertionPoint() == 3 &&
                    selectionFrom == 3 && selectionTo == 6 &&
-                   text.WinUIGetPeerTextForTesting(&peerValue) &&
+                   wxWinUITextCtrlTestAccess::GetPeerText(text, &peerValue) &&
                    peerValue == "a\n123cd" &&
-                   text.WinUIGetPeerSelectionForTesting(
+                   wxWinUITextCtrlTestAccess::GetPeerSelection(text,
                        &peerSelectionFrom, &peerSelectionTo) &&
                    peerSelectionFrom == 3 && peerSelectionTo == 6 &&
                    textEvents.GetCount() == 1 &&
@@ -1401,7 +1401,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
 
         text.SetMaxLength(5);
         text.SetSelection(1, 3);
-        REQUIRE(text.WinUIReplacePeerSelectionForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(text,
             wxS("XX\U00010400")));
 
         wxString peerValue;
@@ -1415,9 +1415,9 @@ TEST_CASE("wxWinUI TextCtrl value policies",
             return text.GetValue() == "AXXZ" &&
                    text.GetInsertionPoint() == 1 &&
                    selectionFrom == 1 && selectionTo == 3 &&
-                   text.WinUIGetPeerTextForTesting(&peerValue) &&
+                   wxWinUITextCtrlTestAccess::GetPeerText(text, &peerValue) &&
                    peerValue == "AXXZ" &&
-                   text.WinUIGetPeerSelectionForTesting(
+                   wxWinUITextCtrlTestAccess::GetPeerSelection(text,
                        &peerSelectionFrom, &peerSelectionTo) &&
                    peerSelectionFrom == 1 && peerSelectionTo == 3 &&
                    textEvents.GetCount() == 1 &&
@@ -1433,7 +1433,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
 
         text.SetMaxLength(5);
         text.SetSelection(1, 3);
-        REQUIRE(text.WinUIReplacePeerSelectionForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(text,
             wxS("XXb\u0301")));
 
         wxString peerValue;
@@ -1447,9 +1447,9 @@ TEST_CASE("wxWinUI TextCtrl value policies",
             return text.GetValue() == "AXXZ" &&
                    text.GetInsertionPoint() == 1 &&
                    selectionFrom == 1 && selectionTo == 3 &&
-                   text.WinUIGetPeerTextForTesting(&peerValue) &&
+                   wxWinUITextCtrlTestAccess::GetPeerText(text, &peerValue) &&
                    peerValue == "AXXZ" &&
-                   text.WinUIGetPeerSelectionForTesting(
+                   wxWinUITextCtrlTestAccess::GetPeerSelection(text,
                        &peerSelectionFrom, &peerSelectionTo) &&
                    peerSelectionFrom == 1 && peerSelectionTo == 3 &&
                    textEvents.GetCount() == 1 &&
@@ -1494,7 +1494,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
                          wxTE_READONLY);
 
         wxString plainPeerValue;
-        REQUIRE(plain.WinUIGetPeerTextForTesting(&plainPeerValue));
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPeerText(plain, &plainPeerValue));
         CHECK(plainPeerValue == "model");
 
         // wxTE_READONLY protects against user/native peer edits, not public
@@ -1502,12 +1502,12 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         // unlocked by the production projection and immediately restored.
         plain.ChangeValue("programmatic");
         CHECK(plain.GetValue() == "programmatic");
-        REQUIRE(plain.WinUIGetPeerTextForTesting(&plainPeerValue));
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPeerText(plain, &plainPeerValue));
         CHECK(plainPeerValue == "programmatic");
 
-        REQUIRE(plain.WinUISetTextBoxPeerTextForTesting("peer"));
+        REQUIRE(wxWinUITextCtrlTestAccess::SetTextBoxPeerText(plain, "peer"));
         CHECK(plain.GetValue() == "programmatic");
-        REQUIRE(plain.WinUIGetPeerTextForTesting(&plainPeerValue));
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPeerText(plain, &plainPeerValue));
         CHECK(plainPeerValue == "programmatic");
 
         wxTextCtrl password(parent, wxID_ANY, "secret",
@@ -1517,7 +1517,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         EventCounter passwordMaxEvents(&password, wxEVT_TEXT_MAXLEN);
         password.SetMaxLength(3);
         REQUIRE(
-            password.WinUIInjectPasswordContentChangeForTesting("peer"));
+            wxWinUITextCtrlTestAccess::InjectPasswordContentChange(password, "peer"));
         CHECK(password.GetValue() == "secret");
         CHECK(passwordTextEvents.GetCount() == 0);
         CHECK(passwordMaxEvents.GetCount() == 0);
@@ -1528,9 +1528,9 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         // complete mask through the shared scrubber before returning.
         password.SelectAll();
         PasswordTextChangingUIAProbe readOnlyUIA;
-        password.WinUISetNextPasswordTextChangingHookForTesting(
+        wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(password,
             QueryPasswordUIADuringTextChanging, &readOnlyUIA);
-        REQUIRE(password.WinUIReplacePeerSelectionForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password,
             "transient-read-only-clear"));
         CHECK(readOnlyUIA.invoked);
         REQUIRE(readOnlyUIA.querySucceeded);
@@ -1546,7 +1546,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         bool hasTextPattern = true;
         bool predictionEnabled = true;
         wxString peerDocument;
-        REQUIRE(password.WinUIGetPasswordPeerSecurityForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPasswordPeerSecurity(password,
             &isPassword,
             &hasValuePattern,
             &hasTextPattern,
@@ -1556,7 +1556,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         for ( std::size_t n = 0; n != password.GetValue().length(); ++n )
             expectedMask += static_cast<wxChar>(0x25cf);
         CHECK(peerDocument == expectedMask);
-        CHECK_FALSE(password.WinUIGetPasswordFailClosedForTesting(
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::GetPasswordFailClosed(password,
             nullptr, nullptr));
 
         // Also model a successful but partial SetText implementation. Exact
@@ -1566,18 +1566,18 @@ TEST_CASE("wxWinUI TextCtrl value policies",
                            wxTE_PASSWORD | wxTE_READONLY);
         EventCounter partialTextEvents(&partial, wxEVT_TEXT);
         partial.SelectAll();
-        partial.WinUIForceNextPasswordScrubPartialWriteForTesting();
-        CHECK_FALSE(partial.WinUIReplacePeerSelectionForTesting(
+        wxWinUITextCtrlTestAccess::ForceNextPasswordScrubPartialWrite(partial);
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(partial,
             "transient-partial-clear"));
         long scrubFailure = 0;
         bool documentWasEmpty = false;
-        REQUIRE(partial.WinUIGetPasswordFailClosedForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPasswordFailClosed(partial,
             &scrubFailure, &documentWasEmpty));
         CHECK(scrubFailure == static_cast<long>(E_UNEXPECTED));
         CHECK(documentWasEmpty);
         CHECK(partialTextEvents.GetCount() == 0);
         CHECK(partial.GetValue() == "read-only-secret");
-        CHECK_FALSE(partial.WinUIGetPasswordPeerSecurityForTesting(
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::GetPasswordPeerSecurity(partial,
             &isPassword,
             &hasValuePattern,
             &hasTextPattern,
@@ -1588,7 +1588,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         wxSearchCtrl search(parent, wxID_ANY, "query",
                             wxDefaultPosition, wxDefaultSize,
                             wxTE_READONLY);
-        REQUIRE(search.WinUISetPeerTextForTesting("peer"));
+        REQUIRE(wxWinUISearchCtrlTestAccess::SetPeerText(search, "peer"));
         CHECK(search.GetValue() == "query");
 #endif // wxUSE_SEARCHCTRL
     }
@@ -1611,7 +1611,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
     SECTION("null font clears every native font override")
     {
         wxTextCtrl text(parent, wxID_ANY);
-        CHECK_FALSE(text.WinUIHasLocalFontOverridesForTesting());
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::HasLocalFontOverrides(text));
 
         wxFont custom = text.GetFont();
         custom.SetFaceName("Courier New");
@@ -1620,10 +1620,10 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         custom.SetStyle(wxFONTSTYLE_ITALIC);
         REQUIRE(custom.IsOk());
         text.SetFont(custom);
-        CHECK(text.WinUIHasLocalFontOverridesForTesting());
+        CHECK(wxWinUITextCtrlTestAccess::HasLocalFontOverrides(text));
 
         text.SetFont(wxNullFont);
-        CHECK_FALSE(text.WinUIHasLocalFontOverridesForTesting());
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::HasLocalFontOverrides(text));
     }
 }
 
@@ -1667,22 +1667,22 @@ TEST_CASE("wxWinUI TextCtrl projects inherited text-entry contracts",
     CHECK(textEvents.GetCount() == 1);
 
     bool caretShown = false;
-    REQUIRE(text.WinUIGetNativeCaretShownForTesting(&caretShown));
+    REQUIRE(wxWinUITextCtrlTestAccess::GetNativeCaretShown(text, &caretShown));
     CHECK(caretShown);
     REQUIRE(text.HideNativeCaret());
-    REQUIRE(text.WinUIGetNativeCaretShownForTesting(&caretShown));
+    REQUIRE(wxWinUITextCtrlTestAccess::GetNativeCaretShown(text, &caretShown));
     CHECK_FALSE(caretShown);
     REQUIRE(text.ShowNativeCaret());
-    REQUIRE(text.WinUIGetNativeCaretShownForTesting(&caretShown));
+    REQUIRE(wxWinUITextCtrlTestAccess::GetNativeCaretShown(text, &caretShown));
     CHECK(caretShown);
 
-    CHECK_FALSE(text.WinUIHasNoHideSelectionProjectionForTesting());
+    CHECK_FALSE(wxWinUITextCtrlTestAccess::HasNoHideSelectionProjection(text));
     text.SetWindowStyleFlag(
         text.GetWindowStyleFlag() | wxTE_NOHIDESEL);
-    CHECK(text.WinUIHasNoHideSelectionProjectionForTesting());
+    CHECK(wxWinUITextCtrlTestAccess::HasNoHideSelectionProjection(text));
     text.SetWindowStyleFlag(
         text.GetWindowStyleFlag() & ~wxTE_NOHIDESEL);
-    CHECK_FALSE(text.WinUIHasNoHideSelectionProjectionForTesting());
+    CHECK_FALSE(wxWinUITextCtrlTestAccess::HasNoHideSelectionProjection(text));
 }
 
 TEST_CASE("wxWinUI password peer is masked, selectable and UIA-protected",
@@ -1700,7 +1700,7 @@ TEST_CASE("wxWinUI password peer is masked, selectable and UIA-protected",
     password.GetSelection(&from, &to);
     CHECK(from == 1);
     CHECK(to == 4);
-    REQUIRE(password.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUITextCtrlTestAccess::GetPeerSelection(password, &from, &to));
     CHECK(from == 1);
     CHECK(to == 4);
 
@@ -1708,24 +1708,24 @@ TEST_CASE("wxWinUI password peer is masked, selectable and UIA-protected",
     CHECK_FALSE(password.CanCut());
 
     bool caretShown = false;
-    REQUIRE(password.WinUIGetNativeCaretShownForTesting(&caretShown));
+    REQUIRE(wxWinUITextCtrlTestAccess::GetNativeCaretShown(password, &caretShown));
     CHECK(caretShown);
     REQUIRE(password.HideNativeCaret());
-    REQUIRE(password.WinUIGetNativeCaretShownForTesting(&caretShown));
+    REQUIRE(wxWinUITextCtrlTestAccess::GetNativeCaretShown(password, &caretShown));
     CHECK_FALSE(caretShown);
     REQUIRE(password.ShowNativeCaret());
 
-    CHECK_FALSE(password.WinUIHasNoHideSelectionProjectionForTesting());
+    CHECK_FALSE(wxWinUITextCtrlTestAccess::HasNoHideSelectionProjection(password));
     password.SetWindowStyleFlag(
         password.GetWindowStyleFlag() | wxTE_NOHIDESEL);
-    CHECK(password.WinUIHasNoHideSelectionProjectionForTesting());
+    CHECK(wxWinUITextCtrlTestAccess::HasNoHideSelectionProjection(password));
 
     bool isPassword = false;
     bool hasValuePattern = true;
     bool hasTextPattern = true;
     bool predictionEnabled = true;
     wxString peerDocument;
-    REQUIRE(password.WinUIGetPasswordPeerSecurityForTesting(
+    REQUIRE(wxWinUITextCtrlTestAccess::GetPasswordPeerSecurity(password,
         &isPassword,
         &hasValuePattern,
         &hasTextPattern,
@@ -1765,17 +1765,16 @@ TEST_CASE("wxWinUI password peer is masked, selectable and UIA-protected",
     CHECK(cutEvents == 1);
     CHECK(pasteEvents == 1);
     CHECK(password.GetValue() == "s3cret");
-    CHECK(password.
-              WinUIGetPasswordClipboardExportAttemptCountForTesting() == 0);
+    CHECK(wxWinUITextCtrlTestAccess::GetPasswordClipboardExportAttemptCount(password) == 0);
 
     // Exercise the real TOM edit transaction: clear text exists only during
     // synchronous TextChanging and is replaced with mask glyphs pre-render.
     // The provider-facing peer is queried from inside that callback, which is
     // also the security window used by every IME composition update.
     PasswordTextChangingUIAProbe transientUIA;
-    password.WinUISetNextPasswordTextChangingHookForTesting(
+    wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(password,
         QueryPasswordUIADuringTextChanging, &transientUIA);
-    REQUIRE(password.WinUIReplacePeerSelectionForTesting("XY"));
+    REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password, "XY"));
     CHECK(transientUIA.invoked);
     REQUIRE(transientUIA.querySucceeded);
     CHECK(transientUIA.isPassword);
@@ -1796,9 +1795,9 @@ TEST_CASE("wxWinUI password peer is masked, selectable and UIA-protected",
     literalMask += static_cast<wxChar>(0x25cf);
     password.SetSelection(1, 2);
     PasswordTextChangingUIAProbe literalMaskUIA;
-    password.WinUISetNextPasswordTextChangingHookForTesting(
+    wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(password,
         QueryPasswordUIADuringTextChanging, &literalMaskUIA);
-    REQUIRE(password.WinUIReplacePeerSelectionForTesting(literalMask));
+    REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password, literalMask));
     CHECK(literalMaskUIA.invoked);
     REQUIRE(literalMaskUIA.querySucceeded);
     CHECK(literalMaskUIA.isPassword);
@@ -1813,12 +1812,12 @@ TEST_CASE("wxWinUI password peer is masked, selectable and UIA-protected",
     EventCounter maxLengthEvents(&password, wxEVT_TEXT_MAXLEN);
     password.SetMaxLength(6);
     password.SetInsertionPointEnd();
-    REQUIRE(password.WinUIReplacePeerSelectionForTesting(
+    REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password,
         wxS("\U0001f600")));
     CHECK(password.GetValue() == expectedValue);
     CHECK(maxLengthEvents.GetCount() == 1);
 
-    REQUIRE(password.WinUIGetPasswordPeerSecurityForTesting(
+    REQUIRE(wxWinUITextCtrlTestAccess::GetPasswordPeerSecurity(password,
         &isPassword,
         &hasValuePattern,
         &hasTextPattern,
@@ -1841,15 +1840,15 @@ TEST_CASE("wxWinUI password scrub failure is terminal and leak-free",
     EventCounter textEvents(&password, wxEVT_TEXT);
 
     PasswordTextChangingUIAProbe transientUIA;
-    password.WinUISetNextPasswordTextChangingHookForTesting(
+    wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(password,
         QueryPasswordUIADuringTextChanging, &transientUIA);
-    password.WinUIForceNextPasswordScrubFailureForTesting(
+    wxWinUITextCtrlTestAccess::ForceNextPasswordScrubFailure(password,
         static_cast<long>(E_FAIL));
 
     // The test seam fails both ways of writing the mask while clear text is
     // present in the real TOM edit transaction. The independent empty-story
     // fallback must be proved before the peer is retired.
-    CHECK_FALSE(password.WinUIReplacePeerSelectionForTesting(
+    CHECK_FALSE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password,
         "transient-clear-text"));
     CHECK(transientUIA.invoked);
     REQUIRE(transientUIA.querySucceeded);
@@ -1859,7 +1858,7 @@ TEST_CASE("wxWinUI password scrub failure is terminal and leak-free",
 
     long failure = 0;
     bool documentWasEmpty = false;
-    REQUIRE(password.WinUIGetPasswordFailClosedForTesting(
+    REQUIRE(wxWinUITextCtrlTestAccess::GetPasswordFailClosed(password,
         &failure, &documentWasEmpty));
     CHECK(failure == static_cast<long>(E_FAIL));
     CHECK(documentWasEmpty);
@@ -1870,13 +1869,13 @@ TEST_CASE("wxWinUI password scrub failure is terminal and leak-free",
     bool hasValuePattern = true;
     bool hasTextPattern = true;
     bool predictionEnabled = true;
-    CHECK_FALSE(password.WinUIGetPasswordPeerSecurityForTesting(
+    CHECK_FALSE(wxWinUITextCtrlTestAccess::GetPasswordPeerSecurity(password,
         &isPassword,
         &hasValuePattern,
         &hasTextPattern,
         nullptr,
         &predictionEnabled));
-    CHECK_FALSE(password.WinUIReplacePeerSelectionForTesting("again"));
+    CHECK_FALSE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password, "again"));
     CHECK(textEvents.GetCount() == 0);
 }
 
@@ -1891,7 +1890,7 @@ TEST_CASE("wxWinUI TextCtrl AUTO_URL is RichEdit-compatible and hot",
         "(https://example.test/path).";
     wxTextCtrl text(parent, wxID_ANY, value);
     CHECK_FALSE(text.IsRich());
-    CHECK(text.WinUIGetAutoUrlRangeCountForTesting() == 0);
+    CHECK(wxWinUITextCtrlTestAccess::GetAutoUrlRangeCount(text) == 0);
 
     text.SetWindowStyleFlag(
         text.GetWindowStyleFlag() | wxTE_AUTO_URL);
@@ -1901,7 +1900,7 @@ TEST_CASE("wxWinUI TextCtrl AUTO_URL is RichEdit-compatible and hot",
 #if wxUSE_RICHEDIT
     CHECK(text.GetRichVersion() == 4);
 #endif
-    REQUIRE(text.WinUIGetAutoUrlRangeCountForTesting() == 3);
+    REQUIRE(wxWinUITextCtrlTestAccess::GetAutoUrlRangeCount(text) == 3);
 
     const wxString expectedText[] =
     {
@@ -1920,7 +1919,7 @@ TEST_CASE("wxWinUI TextCtrl AUTO_URL is RichEdit-compatible and hot",
         long from = -1;
         long to = -1;
         wxString target;
-        REQUIRE(text.WinUIGetAutoUrlRangeForTesting(
+        REQUIRE(wxWinUITextCtrlTestAccess::GetAutoUrlRange(text,
             n, &from, &to, &target));
         CHECK(text.GetRange(from, to) == expectedText[n]);
         CHECK(target == expectedTarget[n]);
@@ -1928,7 +1927,7 @@ TEST_CASE("wxWinUI TextCtrl AUTO_URL is RichEdit-compatible and hot",
 
     text.SetWindowStyleFlag(
         text.GetWindowStyleFlag() & ~wxTE_AUTO_URL);
-    CHECK(text.WinUIGetAutoUrlRangeCountForTesting() == 0);
+    CHECK(wxWinUITextCtrlTestAccess::GetAutoUrlRangeCount(text) == 0);
     // Once promoted, this matches wxMSW's non-downgradable native peer.
     CHECK(text.IsRich());
 
@@ -1938,7 +1937,7 @@ TEST_CASE("wxWinUI TextCtrl AUTO_URL is RichEdit-compatible and hot",
     CHECK(createdWithUrl.IsRich());
     CHECK(createdWithUrl.HasFlag(wxTE_RICH));
     CHECK(createdWithUrl.HasFlag(wxTE_RICH2));
-    CHECK(createdWithUrl.WinUIGetAutoUrlRangeCountForTesting() == 1);
+    CHECK(wxWinUITextCtrlTestAccess::GetAutoUrlRangeCount(createdWithUrl) == 1);
 }
 
 TEST_CASE("wxWinUI TextCtrl owns an actionable autocomplete flyout",
@@ -1954,7 +1953,7 @@ TEST_CASE("wxWinUI TextCtrl owns an actionable autocomplete flyout",
     frame.ShowWithoutActivating();
     REQUIRE(WaitFor("TextCtrl completion XamlRoot", [&text]()
     {
-        return text.WinUIGetScrollStateForTesting(
+        return wxWinUITextCtrlTestAccess::GetScrollState(text,
             nullptr, nullptr, nullptr, nullptr, nullptr);
     }, 1000));
 
@@ -1967,17 +1966,17 @@ TEST_CASE("wxWinUI TextCtrl owns an actionable autocomplete flyout",
     REQUIRE(text.AutoComplete(completions));
     REQUIRE(WaitFor("TextCtrl completion flyout", [&text]()
     {
-        return text.WinUIGetAutoCompleteSuggestionCountForTesting() == 2;
+        return wxWinUITextCtrlTestAccess::GetAutoCompleteSuggestionCount(text) == 2;
     }, 1000));
-    CHECK(text.WinUIGetAutoCompleteSuggestionForTesting(0) == "alpha");
-    CHECK(text.WinUIGetAutoCompleteSuggestionForTesting(1) == "alpine");
+    CHECK(wxWinUITextCtrlTestAccess::GetAutoCompleteSuggestion(text, 0) == "alpha");
+    CHECK(wxWinUITextCtrlTestAccess::GetAutoCompleteSuggestion(text, 1) == "alpine");
 
     EventCounter textEvents(&text, wxEVT_TEXT);
-    REQUIRE(text.WinUIInvokeAutoCompleteSuggestionForTesting(1));
+    REQUIRE(wxWinUITextCtrlTestAccess::InvokeAutoCompleteSuggestion(text, 1));
     CHECK(text.GetValue() == "alpine");
     CHECK(text.GetInsertionPoint() == text.GetLastPosition());
     CHECK(textEvents.GetCount() == 1);
-    CHECK(text.WinUIGetAutoCompleteSuggestionCountForTesting() == 0);
+    CHECK(wxWinUITextCtrlTestAccess::GetAutoCompleteSuggestionCount(text) == 0);
 
     frame.Hide();
 }
@@ -2044,7 +2043,7 @@ TEST_CASE("wxTextCtrl::EmptyUndoBuffer native peer contract",
         wxTextCtrl text(parent, wxID_ANY, "abcdef");
         EventCounter textEvents(&text, wxEVT_TEXT);
         text.SetSelection(1, 4);
-        REQUIRE(text.WinUIReplacePeerSelectionForTesting("XYZ"));
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(text, "XYZ"));
         REQUIRE(WaitFor("TextBox undo history", [&]()
         {
             return text.GetValue() == "aXYZef" &&
@@ -2060,7 +2059,7 @@ TEST_CASE("wxTextCtrl::EmptyUndoBuffer native peer contract",
         wxTextCtrl text(parent, wxID_ANY, "abcdef");
         EventCounter textEvents(&text, wxEVT_TEXT);
         text.SetSelection(1, 4);
-        REQUIRE(text.WinUIReplacePeerSelectionForTesting("XYZ"));
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(text, "XYZ"));
         REQUIRE(WaitFor("TextBox undo history", [&]()
         {
             return text.GetValue() == "aXYZef" &&
@@ -2101,7 +2100,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
     double scale = 0.0;
     REQUIRE(WaitFor("initial WinUI TextBox template", [&]()
     {
-        return text.WinUIGetScrollStateForTesting(
+        return wxWinUITextCtrlTestAccess::GetScrollState(text,
                    &horizontal,
                    &vertical,
                    &viewportWidth,
@@ -2133,7 +2132,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
     const bool projected =
         WaitFor("vertical TextBox viewport projection", [&]()
     {
-        if ( !text.WinUIGetScrollStateForTesting(
+        if ( !wxWinUITextCtrlTestAccess::GetScrollState(text,
                   nullptr,
                   &scrolledVertical,
                   nullptr,
@@ -2170,7 +2169,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
     CHECK(selectionToAfter == selectionTo);
     long peerSelectionFrom = -1;
     long peerSelectionTo = -1;
-    REQUIRE(text.WinUIGetPeerSelectionForTesting(
+    REQUIRE(wxWinUITextCtrlTestAccess::GetPeerSelection(text,
         &peerSelectionFrom, &peerSelectionTo));
     CHECK(peerSelectionFrom == selectionFrom);
     CHECK(peerSelectionTo == selectionTo);
@@ -2287,7 +2286,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
     const bool wrappedEndVisible =
         WaitFor("last wrapped TextBox line", [&]()
     {
-        text.WinUIGetScrollStateForTesting(
+        wxWinUITextCtrlTestAccess::GetScrollState(text,
             nullptr,
             &wrappedVerticalOffset,
             nullptr,
@@ -2296,7 +2295,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
             &wrappedScrollStage,
             &wrappedScrollableWidth,
             &wrappedScrollableHeight);
-        text.WinUIGetPositionVisibilityStateForTesting(
+        wxWinUITextCtrlTestAccess::GetPositionVisibilityState(text,
             &wrappedRequestPending, &wrappedRequestRetries);
         wrappedEnd =
             text.PositionToCoords(text.GetLastPosition());
@@ -2386,7 +2385,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
     text.GetSelection(&selectionFromAfter, &selectionToAfter);
     CHECK(selectionFromAfter == selectionBeforeArbitraryFrom);
     CHECK(selectionToAfter == selectionBeforeArbitraryTo);
-    REQUIRE(text.WinUIGetPeerSelectionForTesting(
+    REQUIRE(wxWinUITextCtrlTestAccess::GetPeerSelection(text,
         &peerSelectionFrom, &peerSelectionTo));
     CHECK(peerSelectionFrom == selectionBeforeArbitraryFrom);
     CHECK(peerSelectionTo == selectionBeforeArbitraryTo);
@@ -2439,7 +2438,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
     REQUIRE(WaitFor("sequential TOM visibility requests", [&]()
     {
         const wxPoint start = text.PositionToCoords(0);
-        return text.WinUIGetPositionVisibilityStateForTesting(
+        return wxWinUITextCtrlTestAccess::GetPositionVisibilityState(text,
                    &visibilityPending, &visibilityRetries) &&
                !visibilityPending &&
                visibilityRetries == 0 &&
@@ -2455,7 +2454,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
 
     text.ShowPosition(text.GetLastPosition());
     text.ChangeValue("short");
-    REQUIRE(text.WinUIGetPositionVisibilityStateForTesting(
+    REQUIRE(wxWinUITextCtrlTestAccess::GetPositionVisibilityState(text,
         &visibilityPending, &visibilityRetries));
     CHECK_FALSE(visibilityPending);
 
@@ -2471,7 +2470,7 @@ TEST_CASE("wxWinUI text controls synchronize layout contracts",
     double singleHorizontal = 0.0;
     REQUIRE(WaitFor("late single-line TextBox viewport", [&]()
     {
-        return single.WinUIGetScrollStateForTesting(
+        return wxWinUITextCtrlTestAccess::GetScrollState(single,
                    &singleHorizontal,
                    nullptr,
                    nullptr,
@@ -2534,26 +2533,26 @@ TEST_CASE("wxWinUI SearchCtrl template actions",
     // Install two detached template generations. This does not depend on a
     // visible/activated XamlRoot: both generations go through the exact
     // transactional token installation used for production template parts.
-    REQUIRE(search.WinUIRetemplateForTesting());
+    REQUIRE(wxWinUISearchCtrlTestAccess::Retemplate(search));
     search.ChangeValue("needle");
-    REQUIRE(search.WinUIInvokeSearchButtonForTesting());
+    REQUIRE(wxWinUISearchCtrlTestAccess::InvokeSearchButton(search));
     CHECK(searchEvents == 1);
     CHECK(submitted == "needle");
 
-    REQUIRE(search.WinUIRetemplateForTesting());
+    REQUIRE(wxWinUISearchCtrlTestAccess::Retemplate(search));
     INFO("template state = 0x" << std::hex
-         << search.WinUIGetTemplateStateForTesting());
-    CHECK((search.WinUIGetTemplateStateForTesting() & 0xe) == 0xe);
+         << wxWinUISearchCtrlTestAccess::GetTemplateState(search));
+    CHECK((wxWinUISearchCtrlTestAccess::GetTemplateState(search) & 0xe) == 0xe);
 
     // The retired part remains alive, but its token has been revoked and its
     // generation invalidated. Only the replacement may route the event.
-    REQUIRE(search.WinUIInvokeRetiredSearchButtonForTesting());
+    REQUIRE(wxWinUISearchCtrlTestAccess::InvokeRetiredSearchButton(search));
     CHECK(searchEvents == 1);
-    REQUIRE(search.WinUIInvokeSearchButtonForTesting());
+    REQUIRE(wxWinUISearchCtrlTestAccess::InvokeSearchButton(search));
     CHECK(searchEvents == 2);
 
     search.ShowCancelButton(true);
-    REQUIRE(search.WinUIInvokeCancelButtonForTesting());
+    REQUIRE(wxWinUISearchCtrlTestAccess::InvokeCancelButton(search));
     CHECK(cancelEvents == 1);
 
     wxArrayString choices;
@@ -2562,7 +2561,7 @@ TEST_CASE("wxWinUI SearchCtrl template actions",
     choices.Add("alpine");
     search.ChangeValue("al");
     REQUIRE(search.AutoComplete(choices));
-    CHECK(search.WinUIGetSuggestionCountForTesting() == 2);
+    CHECK(wxWinUISearchCtrlTestAccess::GetSuggestionCount(search) == 2);
 
     // CanUndo/CanRedo must resolve and validate the current edit generation,
     // not query a stale TextBox retained from the previous template.
@@ -2580,7 +2579,7 @@ TEST_CASE("wxWinUI SearchCtrl survives destruction from query Click",
 
     wxSearchCtrl *search =
         new wxSearchCtrl(parent, wxID_ANY, "destroy");
-    REQUIRE(search->WinUIRetemplateForTesting());
+    REQUIRE(wxWinUISearchCtrlTestAccess::Retemplate(*search));
 
     unsigned searchEvents = 0;
     search->Bind(wxEVT_SEARCH, [&](wxCommandEvent&)
@@ -2592,7 +2591,7 @@ TEST_CASE("wxWinUI SearchCtrl survives destruction from query Click",
     });
 
     wxSearchCtrl * const invoking = search;
-    REQUIRE(invoking->WinUIInvokeSearchButtonForTesting());
+    REQUIRE(wxWinUISearchCtrlTestAccess::InvokeSearchButton(*invoking));
     CHECK(search == nullptr);
     CHECK(searchEvents == 1);
     wxYield();
@@ -2647,7 +2646,7 @@ TEST_CASE("wxWinUI TextCtrl owns wxTE_PROCESS_TAB",
                     wxSize(180, 70),
                     wxTE_MULTILINE | wxTE_PROCESS_TAB);
     text.SetInsertionPointEnd();
-    REQUIRE(text.WinUIProcessTabForTesting());
+    REQUIRE(wxWinUITextCtrlTestAccess::ProcessTab(text));
     CHECK(text.GetValue() == "a\t");
 
     // The mixed HWND/XAML Tab arbiter runs before the XAML KeyDown event. It
@@ -2667,7 +2666,7 @@ TEST_CASE("wxWinUI TextCtrl owns wxTE_PROCESS_TAB",
     text.SetMaxLength(2);
     EventCounter maxEvents(&text, wxEVT_TEXT_MAXLEN);
     text.SetInsertionPointEnd();
-    REQUIRE(text.WinUIProcessTabForTesting());
+    REQUIRE(wxWinUITextCtrlTestAccess::ProcessTab(text));
     CHECK(text.GetValue() == "a\t");
     CHECK(maxEvents.GetCount() == 1);
 
@@ -2677,7 +2676,7 @@ TEST_CASE("wxWinUI TextCtrl owns wxTE_PROCESS_TAB",
                         wxDefaultPosition,
                         wxDefaultSize,
                         wxTE_PROCESS_TAB | wxTE_READONLY);
-    CHECK_FALSE(readOnly.WinUIProcessTabForTesting());
+    CHECK_FALSE(wxWinUITextCtrlTestAccess::ProcessTab(readOnly));
     CHECK(readOnly.GetValue() == "locked");
 
     wxTextCtrl rich(parent,
@@ -2687,7 +2686,7 @@ TEST_CASE("wxWinUI TextCtrl owns wxTE_PROCESS_TAB",
                     wxSize(180, 70),
                     wxTE_MULTILINE | wxTE_RICH2 | wxTE_PROCESS_TAB);
     rich.SetInsertionPointEnd();
-    REQUIRE(rich.WinUIProcessTabForTesting());
+    REQUIRE(wxWinUITextCtrlTestAccess::ProcessTab(rich));
     CHECK(rich.GetValue() == "rich\t");
 }
 
@@ -2711,7 +2710,7 @@ TEST_CASE("wxWinUI TextCtrl clipboard commands honour wx veto events",
                     wxDefaultSize,
                     style);
     if ( text.IsRich() )
-        REQUIRE(text.WinUIRichClipboardUsesAllFormatsForTesting());
+        REQUIRE(wxWinUITextCtrlTestAccess::RichClipboardUsesAllFormats(text));
 
     int copyEvents = 0;
     int cutEvents = 0;
@@ -2821,7 +2820,7 @@ TEST_CASE("wxWinUI RichEditBox AllFormats clipboard round trip (manual)",
     wxTextAttr bold;
     bold.SetFontWeight(wxFONTWEIGHT_BOLD);
     REQUIRE(source.SetStyle(0, 4, bold));
-    REQUIRE(source.WinUIRichClipboardUsesAllFormatsForTesting());
+    REQUIRE(wxWinUITextCtrlTestAccess::RichClipboardUsesAllFormats(source));
     source.SelectAll();
     source.Copy();
 
@@ -3088,7 +3087,7 @@ TEST_CASE("wxWinUI RichEditBox exposes TOM geometry",
     double viewUnitXScale = 0.0;
     double viewUnitYScale = 0.0;
     int scrollStage = 0;
-    const bool hasScrollState = rich.WinUIGetScrollStateForTesting(
+    const bool hasScrollState = wxWinUITextCtrlTestAccess::GetScrollState(rich,
         &horizontalOffset,
         &verticalOffset,
         &viewportWidth,

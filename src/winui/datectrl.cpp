@@ -12,6 +12,10 @@
 #if wxUSE_DATEPICKCTRL
 
 #include "wx/datectrl.h"
+
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "date-time-test-access.h"
+#endif
 #include "wx/dateevt.h"
 
 #include "private.h"
@@ -43,7 +47,9 @@ namespace WS = winrt::Windows::System;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 winrt::hstring gs_winuiDateLanguageForTesting;
+#endif
 
 WGNF::DecimalFormatter wxWinUICreateDateDecimalFormatter(
     const winrt::hstring& language)
@@ -1472,14 +1478,15 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl);
 
-wxString wxDatePickerCtrl::WinUISetLanguageForTesting(
-    const wxString& language)
+#ifdef WXWINUI_TEST_SUPPORT
+wxString wxWinUIDatePickerTestAccess::SetLanguage(const wxString& language)
 {
     const wxString previous =
         wxWinUIFromHString(gs_winuiDateLanguageForTesting);
     gs_winuiDateLanguageForTesting = wxWinUIToHString(language);
     return previous;
 }
+#endif
 
 wxDatePickerCtrl::wxDatePickerCtrl()
 {
@@ -1698,8 +1705,10 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
     {
         m_winui->picker = MUXC::CalendarDatePicker();
         createPeer = m_winui->picker;
-        const winrt::hstring language =
-            gs_winuiDateLanguageForTesting;
+        winrt::hstring language;
+#ifdef WXWINUI_TEST_SUPPORT
+        language = gs_winuiDateLanguageForTesting;
+#endif
         if ( !language.empty() )
         {
             m_winui->picker.Language(language);
@@ -2648,21 +2657,23 @@ void wxDatePickerCtrl::OnPeerDateChanged()
     owner->HandleWindowEvent(event);
 }
 
-bool wxDatePickerCtrl::WinUISetPeerDateForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIDatePickerTestAccess::SetPeerDate(
+    wxDatePickerCtrl& control,
     const wxDateTime& dt)
 {
-    if ( !m_winui || !m_winui->picker ||
-         !m_winui->callbackState || !dt.IsValid() )
+    if ( !control.m_winui || !control.m_winui->picker ||
+         !control.m_winui->callbackState || !dt.IsValid() )
         return false;
 
-    if ( m_winui->spinStyle )
+    if ( control.m_winui->spinStyle )
     {
         const std::shared_ptr<wxWinUIDateCallbackState> state =
-            m_winui->callbackState;
+            control.m_winui->callbackState;
         const std::uint64_t generation = state->Generation();
-        if ( !ApplyStateToPeer(
+        if ( !control.ApplyStateToPeer(
                  wxWinUINormalizeCivilDate(dt),
-                 m_rangeMin, m_rangeMax) )
+                 control.m_rangeMin, control.m_rangeMax) )
         {
             return false;
         }
@@ -2686,7 +2697,7 @@ bool wxDatePickerCtrl::WinUISetPeerDateForTesting(
         return false;
     }
 
-    const MUXC::CalendarDatePicker picker = m_winui->picker;
+    const MUXC::CalendarDatePicker picker = control.m_winui->picker;
     try
     {
         picker.Date(reference);
@@ -2699,6 +2710,7 @@ bool wxDatePickerCtrl::WinUISetPeerDateForTesting(
         return false;
     }
 }
+#endif
 
 bool wxDatePickerCtrl::ClearPeerDateAndNotify()
 {
@@ -2743,43 +2755,45 @@ bool wxDatePickerCtrl::ClearPeerDateAndNotify()
     }
 }
 
-bool wxDatePickerCtrl::WinUIClearPeerDateForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIDatePickerTestAccess::ClearPeerDate(wxDatePickerCtrl& control)
 {
-    return ClearPeerDateAndNotify();
+    return control.ClearPeerDateAndNotify();
 }
 
-bool wxDatePickerCtrl::WinUIGetPeerStateForTesting(
+bool wxWinUIDatePickerTestAccess::GetPeerState(
+    const wxDatePickerCtrl& control,
     wxDateTime *value,
     wxDateTime *minimum,
-    wxDateTime *maximum) const
+    wxDateTime *maximum)
 {
-    if ( !m_winui || !m_winui->picker )
+    if ( !control.m_winui || !control.m_winui->picker )
         return false;
 
     try
     {
-        const MUXC::CalendarDatePicker picker = m_winui->picker;
+        const MUXC::CalendarDatePicker picker = control.m_winui->picker;
         if ( value )
         {
-            if ( m_winui->spinStyle )
+            if ( control.m_winui->spinStyle )
             {
                 const wxDateTime effectiveMinimum =
-                    m_rangeMin.IsValid()
-                        ? m_rangeMin
+                    control.m_rangeMin.IsValid()
+                        ? control.m_rangeMin
                         : wxWinUIFromDateTime(
-                              m_winui->civilMinimum);
+                              control.m_winui->civilMinimum);
                 const wxDateTime effectiveMaximum =
-                    m_rangeMax.IsValid()
-                        ? m_rangeMax
+                    control.m_rangeMax.IsValid()
+                        ? control.m_rangeMax
                         : wxWinUIFromDateTime(
-                              m_winui->civilMaximum);
+                              control.m_winui->civilMaximum);
                 if ( wxWinUIReadDateParts(
-                         m_winui->era,
-                         m_winui->year, m_winui->month,
-                         m_winui->day,
-                         m_winui->firstEra,
-                         m_winui->calendarIdentifier,
-                         HasFlag(wxDP_ALLOWNONE),
+                         control.m_winui->era,
+                         control.m_winui->year, control.m_winui->month,
+                         control.m_winui->day,
+                         control.m_winui->firstEra,
+                         control.m_winui->calendarIdentifier,
+                         control.HasFlag(wxDP_ALLOWNONE),
                          effectiveMinimum, effectiveMaximum,
                          value) !=
                      wxWinUIDatePartsState::Complete )
@@ -2814,38 +2828,39 @@ bool wxDatePickerCtrl::WinUIGetPeerStateForTesting(
     }
 }
 
-bool wxDatePickerCtrl::WinUIGetDefaultPeerRangeForTesting(
+bool wxWinUIDatePickerTestAccess::GetDefaultPeerRange(
+    const wxDatePickerCtrl& control,
     wxDateTime *minimum,
-    wxDateTime *maximum) const
+    wxDateTime *maximum)
 {
-    if ( !m_winui || !m_winui->defaultsCaptured )
+    if ( !control.m_winui || !control.m_winui->defaultsCaptured )
         return false;
 
     if ( minimum )
     {
         *minimum =
-            wxWinUIFromDateTime(m_winui->defaultMinimum);
+            wxWinUIFromDateTime(control.m_winui->defaultMinimum);
         if ( !minimum->IsValid() )
             return false;
     }
     if ( maximum )
     {
         *maximum =
-            wxWinUIFromDateTime(m_winui->defaultMaximum);
+            wxWinUIFromDateTime(control.m_winui->defaultMaximum);
         if ( !maximum->IsValid() )
             return false;
     }
     return true;
 }
 
-wxString wxDatePickerCtrl::WinUIGetPeerDateFormatForTesting() const
+wxString wxWinUIDatePickerTestAccess::GetPeerDateFormat(const wxDatePickerCtrl& control)
 {
-    if ( !m_winui || !m_winui->picker )
+    if ( !control.m_winui || !control.m_winui->picker )
         return wxString();
 
     try
     {
-        return wxString(m_winui->picker.DateFormat().c_str());
+        return wxString(control.m_winui->picker.DateFormat().c_str());
     }
     catch ( const winrt::hresult_error& )
     {
@@ -2853,23 +2868,24 @@ wxString wxDatePickerCtrl::WinUIGetPeerDateFormatForTesting() const
     }
 }
 
-bool wxDatePickerCtrl::WinUIUsesDropdownForTesting() const
+bool wxWinUIDatePickerTestAccess::UsesDropdown(const wxDatePickerCtrl& control)
 {
-    return m_winui && !m_winui->spinStyle;
+    return control.m_winui && !control.m_winui->spinStyle;
 }
 
-bool wxDatePickerCtrl::WinUIGetSpinFieldsForTesting(
-    int *year, int *month, int *day) const
+bool wxWinUIDatePickerTestAccess::GetSpinFields(
+    const wxDatePickerCtrl& control,
+    int *year, int *month, int *day)
 {
-    if ( !m_winui || !m_winui->spinStyle )
+    if ( !control.m_winui || !control.m_winui->spinStyle )
         return false;
 
     int actualYear = 0;
     int actualMonth = 0;
     int actualDay = 0;
-    if ( !wxWinUIReadIntegralPart(m_winui->year, &actualYear) ||
-         !wxWinUIReadIntegralPart(m_winui->month, &actualMonth) ||
-         !wxWinUIReadIntegralPart(m_winui->day, &actualDay) )
+    if ( !wxWinUIReadIntegralPart(control.m_winui->year, &actualYear) ||
+         !wxWinUIReadIntegralPart(control.m_winui->month, &actualMonth) ||
+         !wxWinUIReadIntegralPart(control.m_winui->day, &actualDay) )
     {
         return false;
     }
@@ -2883,19 +2899,20 @@ bool wxDatePickerCtrl::WinUIGetSpinFieldsForTesting(
     return true;
 }
 
-bool wxDatePickerCtrl::WinUISetSpinPartForTesting(
+bool wxWinUIDatePickerTestAccess::SetSpinPart(
+    wxDatePickerCtrl& control,
     unsigned part, int value)
 {
-    if ( !m_winui || !m_winui->spinStyle ||
-         !m_winui->callbackState || part >= 3 )
+    if ( !control.m_winui || !control.m_winui->spinStyle ||
+         !control.m_winui->callbackState || part >= 3 )
     {
         return false;
     }
 
     const auto parts = wxWinUIDateParts(
-        m_winui->year, m_winui->month, m_winui->day);
+        control.m_winui->year, control.m_winui->month, control.m_winui->day);
     const MUXC::NumberBox peerPart = parts[part];
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     try
     {
@@ -2922,16 +2939,17 @@ bool wxDatePickerCtrl::WinUISetSpinPartForTesting(
     }
 }
 
-bool wxDatePickerCtrl::WinUIGetSpinPartForTesting(
-    unsigned part, int *value, bool *blank) const
+bool wxWinUIDatePickerTestAccess::GetSpinPart(
+    const wxDatePickerCtrl& control,
+    unsigned part, int *value, bool *blank)
 {
-    if ( !m_winui || !m_winui->spinStyle || part >= 3 )
+    if ( !control.m_winui || !control.m_winui->spinStyle || part >= 3 )
         return false;
 
     try
     {
         const auto parts = wxWinUIDateParts(
-            m_winui->year, m_winui->month, m_winui->day);
+            control.m_winui->year, control.m_winui->month, control.m_winui->day);
         const double peerValue = parts[part].Value();
         const bool isBlank = !std::isfinite(peerValue);
         if ( blank )
@@ -2952,14 +2970,14 @@ bool wxDatePickerCtrl::WinUIGetSpinPartForTesting(
     }
 }
 
-wxString wxDatePickerCtrl::WinUIGetSpinYearTextForTesting() const
+wxString wxWinUIDatePickerTestAccess::GetSpinYearText(const wxDatePickerCtrl& control)
 {
-    if ( !m_winui || !m_winui->spinStyle || !m_winui->year )
+    if ( !control.m_winui || !control.m_winui->spinStyle || !control.m_winui->year )
         return wxString();
 
     try
     {
-        return wxWinUIFromHString(m_winui->year.Text());
+        return wxWinUIFromHString(control.m_winui->year.Text());
     }
     catch ( const winrt::hresult_error& )
     {
@@ -2967,22 +2985,22 @@ wxString wxDatePickerCtrl::WinUIGetSpinYearTextForTesting() const
     }
 }
 
-wxString wxDatePickerCtrl::WinUIGetLocaleDatePatternForTesting() const
+wxString wxWinUIDatePickerTestAccess::GetLocaleDatePattern(const wxDatePickerCtrl& control)
 {
-    return m_winui ? m_winui->localePattern : wxString();
+    return control.m_winui ? control.m_winui->localePattern : wxString();
 }
 
-wxString wxDatePickerCtrl::WinUIGetPeerNullTextForTesting() const
+wxString wxWinUIDatePickerTestAccess::GetPeerNullText(const wxDatePickerCtrl& control)
 {
-    if ( !m_winui || !m_winui->picker )
+    if ( !control.m_winui || !control.m_winui->picker )
         return wxString();
 
     try
     {
         const wxString pickerText =
-            wxWinUIFromHString(m_winui->picker.PlaceholderText());
-        if ( m_winui->nullPlaceholder &&
-             wxWinUIFromHString(m_winui->nullPlaceholder.Text()) !=
+            wxWinUIFromHString(control.m_winui->picker.PlaceholderText());
+        if ( control.m_winui->nullPlaceholder &&
+             wxWinUIFromHString(control.m_winui->nullPlaceholder.Text()) !=
                  pickerText )
         {
             return wxString();
@@ -2994,5 +3012,6 @@ wxString wxDatePickerCtrl::WinUIGetPeerNullTextForTesting() const
         return wxString();
     }
 }
+#endif
 
 #endif // wxUSE_DATEPICKCTRL

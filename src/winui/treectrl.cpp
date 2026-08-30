@@ -13,6 +13,10 @@
 
 #include "wx/treectrl.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+#include "treectrl-test-access.h"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/settings.h"
@@ -60,7 +64,9 @@ namespace WFC = winrt::Windows::Foundation::Collections;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<std::size_t> gs_liveTreeCallbackStates{0};
+#endif
 std::atomic<std::uint64_t> gs_nextTreeCallbackGeneration{0};
 
 // XAML callbacks and dispatcher work retain only a weak reference to this
@@ -75,13 +81,17 @@ public:
               gs_nextTreeCallbackGeneration.fetch_add(
                   1, std::memory_order_relaxed) + 1)
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveTreeCallbackStates.fetch_add(1, std::memory_order_relaxed);
+#endif
     }
 
     ~wxWinUITreeCallbackState()
     {
         Invalidate();
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveTreeCallbackStates.fetch_sub(1, std::memory_order_relaxed);
+#endif
     }
 
     std::uint64_t Generation() const
@@ -477,13 +487,15 @@ public:
                     (*item)->node.Children();
                 if ( children.Size() == 0 )
                     continue;
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( ShouldFail(
-                         wxTreeCtrl::WinUIPeerMutationForTesting::ClearItems) )
+                         wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems) )
                 {
                     throw winrt::hresult_error(
                         E_FAIL,
                         L"Injected TreeView teardown edge failure");
                 }
+#endif
                 children.Clear();
             }
             catch ( const winrt::hresult_error& e )
@@ -555,7 +567,9 @@ public:
         peerCorrectionDriverActive = false;
         peerCorrectionQuarantined = false;
         peerCorrectionAttempts = 0;
+#ifdef WXWINUI_TEST_SUPPORT
         failMutationCount = 0;
+#endif
         projectionItemIds.clear();
         stateImageBundles.clear();
         projectionAllRequested = false;
@@ -570,7 +584,8 @@ public:
         callbackState.reset();
     }
 
-    bool ShouldFail(wxTreeCtrl::WinUIPeerMutationForTesting mutation)
+#ifdef WXWINUI_TEST_SUPPORT
+    bool ShouldFail(wxWinUITreeCtrlTestAccess::PeerMutation mutation)
     {
         if ( failMutationCount == 0 || failedMutation != mutation )
             return false;
@@ -578,6 +593,7 @@ public:
         --failMutationCount;
         return true;
     }
+#endif
 
     std::uint64_t BumpModelRevision()
     {
@@ -653,20 +669,26 @@ public:
     bool projectionReplayScheduled = false;
     bool projectionWarningIssued = false;
     unsigned projectionDeferredAttempts = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     double projectionScaleOverrideForTesting = 0.0;
+#endif
     bool realizedMetadataDirty = false;
     bool peerStructureRepairPending = false;
 
     size_t itemCount = 0;
     size_t expandableItemCount = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     size_t nodeLookupCount = 0;
     size_t peerUpdateCount = 0;
     size_t fullRefreshCount = 0;
     size_t modelGrowthCount = 0;
+#endif
 
-    wxTreeCtrl::WinUIPeerMutationForTesting failedMutation =
-        wxTreeCtrl::WinUIPeerMutationForTesting::InsertItem;
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUITreeCtrlTestAccess::PeerMutation failedMutation =
+        wxWinUITreeCtrlTestAccess::PeerMutation::InsertItem;
     unsigned failMutationCount = 0;
+#endif
     bool inPeerSelectionChange = false;
     bool peerCorrectionPending = false;
     bool peerCorrectionDriverActive = false;
@@ -897,7 +919,9 @@ wxWinUIFindItemByNode(wxWinUITreeCtrlImpl *impl,
     if ( !impl || !node )
         return nullptr;
 
+#ifdef WXWINUI_TEST_SUPPORT
     ++impl->nodeLookupCount;
+#endif
     const auto found = impl->itemsByNode.find(wxWinUITreeNodeIdentity(node));
     return found == impl->itemsByNode.end() ? nullptr : found->second;
 }
@@ -2408,35 +2432,43 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     return true;
 }
 
-void wxTreeCtrl::WinUIFailNextPeerMutationForTesting(
-    WinUIPeerMutationForTesting mutation)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITreeCtrlTestAccess::FailNextPeerMutation(wxTreeCtrl &control,
+                                                     PeerMutation mutation)
 {
-    WinUIFailPeerMutationsForTesting(mutation, 1);
+    wxTreeCtrl *const self = &control;
+    FailPeerMutations(*self, mutation, 1);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTreeCtrl::WinUIFailPeerMutationsForTesting(
-    WinUIPeerMutationForTesting mutation,
-    unsigned count)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITreeCtrlTestAccess::FailPeerMutations(wxTreeCtrl &control,
+                                                  PeerMutation mutation,
+                                                  unsigned count)
 {
-    wxCHECK_RET( m_winui && !m_winui->closed,
-                 "uninitialized wxTreeCtrl test seam" );
-    m_winui->failedMutation = mutation;
-    m_winui->failMutationCount = count;
+    wxTreeCtrl *const self = &control;
+    wxCHECK_RET(self->m_winui && !self->m_winui->closed,
+                "uninitialized wxTreeCtrl test seam");
+    self->m_winui->failedMutation = mutation;
+    self->m_winui->failMutationCount = count;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUISelectPeerItemForTesting(
-    const wxTreeItemId& item,
-    bool addToSelection)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::SelectPeerItem(wxTreeCtrl &control,
+                                               const wxTreeItemId &item,
+                                               bool addToSelection)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
-    if ( !m_winui || !m_winui->treeView ||
+    wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
+    if ( !self->m_winui || !self->m_winui->treeView ||
          (item.IsOk() && !treeItem) )
     {
         return false;
     }
 
     const std::shared_ptr<wxWinUITreeCallbackState> state =
-        m_winui->callbackState;
+        self->m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     try
     {
@@ -2445,11 +2477,10 @@ bool wxTreeCtrl::WinUISelectPeerItemForTesting(
             // the requested peer state. Invoke the wx path exactly once
             // below, avoiding the duplicate dispatch that a synchronous
             // XAML SelectionChanged notification would otherwise cause.
-            wxWinUITreePeerMutationGuard mutation(
-                m_winui->callbackState);
-            if ( HasFlag(wxTR_MULTIPLE) )
+            wxWinUITreePeerMutationGuard mutation(self->m_winui->callbackState);
+            if ( self->HasFlag(wxTR_MULTIPLE) )
             {
-                auto selected = m_winui->treeView.SelectedNodes();
+                auto selected = self->m_winui->treeView.SelectedNodes();
                 if ( !addToSelection )
                     selected.Clear();
                 if ( treeItem )
@@ -2474,38 +2505,40 @@ bool wxTreeCtrl::WinUISelectPeerItemForTesting(
             }
             else
             {
-                m_winui->treeView.SelectedNode(
-                    treeItem ? treeItem->node
-                             : MUXC::TreeViewNode{ nullptr });
+                self->m_winui->treeView.SelectedNode(
+                    treeItem ? treeItem->node : MUXC::TreeViewNode{nullptr});
             }
         }
-        if ( state->GetOwner(generation) != this )
+        if ( state->GetOwner(generation) != self )
             return false;
-        OnPeerSelectionChanged();
-        return state->GetOwner(generation) == this;
+        self->OnPeerSelectionChanged();
+        return state->GetOwner(generation) == self;
     }
     catch ( const winrt::hresult_error& )
     {
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIFocusPeerItemForTesting(
-    const wxTreeItemId& item)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::FocusPeerItem(wxTreeCtrl &control,
+                                              const wxTreeItemId &item)
 {
-    wxWinUITreeItem *treeItem = GetItem(item);
-    if ( !treeItem || !m_winui || !m_winui->treeView )
+    wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *treeItem = self->GetItem(item);
+    if ( !treeItem || !self->m_winui || !self->m_winui->treeView )
         return false;
 
     const std::shared_ptr<wxWinUITreeCallbackState> state =
-        m_winui->callbackState;
+        self->m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     const std::uint64_t itemId = treeItem->id;
     try
     {
-        EnsureVisible(item);
+        self->EnsureVisible(item);
         wxTreeCtrl *owner = state->GetOwner(generation);
-        treeItem = owner == this ? owner->ResolveItem(itemId) : nullptr;
+        treeItem = owner == self ? owner->ResolveItem(itemId) : nullptr;
         if ( !treeItem || !owner->m_winui )
             return false;
 
@@ -2514,14 +2547,14 @@ bool wxTreeCtrl::WinUIFocusPeerItemForTesting(
         if ( owner->m_winui->treeList )
             owner->m_winui->treeList.ScrollIntoView(treeItem->node);
         owner = state->GetOwner(generation);
-        treeItem = owner == this ? owner->ResolveItem(itemId) : nullptr;
+        treeItem = owner == self ? owner->ResolveItem(itemId) : nullptr;
         if ( !treeItem || !owner->m_winui )
             return false;
         owner->m_winui->treeView.UpdateLayout();
         owner->m_winui->host.ForceRender();
 
         owner = state->GetOwner(generation);
-        treeItem = owner == this ? owner->ResolveItem(itemId) : nullptr;
+        treeItem = owner == self ? owner->ResolveItem(itemId) : nullptr;
         if ( !treeItem || !owner->m_winui )
             return false;
         const auto container =
@@ -2536,7 +2569,7 @@ bool wxTreeCtrl::WinUIFocusPeerItemForTesting(
         (void)container.Focus(MUX::FocusState::Programmatic);
 
         owner = state->GetOwner(generation);
-        if ( owner != this || !owner->m_winui )
+        if ( owner != self || !owner->m_winui )
             return false;
         wxWinUITreeItem * const focused =
             wxWinUIFindFocusedItem(owner->m_winui.get());
@@ -2546,7 +2579,7 @@ bool wxTreeCtrl::WinUIFocusPeerItemForTesting(
             return false;
         }
         owner->m_winui->focusedId = focused->id;
-        return owner == this && owner->m_winui &&
+        return owner == self && owner->m_winui &&
                owner->m_winui->focusedId == itemId;
     }
     catch ( const winrt::hresult_error& )
@@ -2554,38 +2587,41 @@ bool wxTreeCtrl::WinUIFocusPeerItemForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUISetPeerExpandedForTesting(
-    const wxTreeItemId& item, bool expanded)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::SetPeerExpanded(wxTreeCtrl &control,
+                                                const wxTreeItemId &item,
+                                                bool expanded)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     if ( !treeItem || !treeItem->node )
         return false;
 
     const std::uint64_t itemId = treeItem->id;
     const std::shared_ptr<wxWinUITreeCallbackState> state =
-        m_winui->callbackState;
+        self->m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     try
     {
         {
             // As for the selection seam above, suppress the synchronous XAML
             // notification and exercise the wx callback path exactly once.
-            wxWinUITreePeerMutationGuard mutation(
-                m_winui->callbackState);
+            wxWinUITreePeerMutationGuard mutation(self->m_winui->callbackState);
             treeItem->node.IsExpanded(expanded);
         }
-        if ( state->GetOwner(generation) != this )
+        if ( state->GetOwner(generation) != self )
             return false;
 
         if ( expanded )
-            OnPeerNodeExpanded(treeItem);
+            self->OnPeerNodeExpanded(treeItem);
         else
-            OnPeerNodeCollapsed(treeItem);
+            self->OnPeerNodeCollapsed(treeItem);
 
-        if ( state->GetOwner(generation) != this )
+        if ( state->GetOwner(generation) != self )
             return false;
-        wxWinUITreeItem * const liveItem = ResolveItem(itemId);
+        wxWinUITreeItem *const liveItem = self->ResolveItem(itemId);
         return liveItem && liveItem->expanded == expanded;
     }
     catch ( const winrt::hresult_error& )
@@ -2593,11 +2629,14 @@ bool wxTreeCtrl::WinUISetPeerExpandedForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIIsPeerExpandedForTesting(
-    const wxTreeItemId& item) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::IsPeerExpanded(const wxTreeCtrl &control,
+                                               const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    const wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     if ( !treeItem || !treeItem->node )
         return false;
     try
@@ -2609,169 +2648,222 @@ bool wxTreeCtrl::WinUIIsPeerExpandedForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIKeyDownForTesting(int keyCode,
-                                        bool controlDown,
-                                        bool shiftDown,
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::KeyDown(wxTreeCtrl &control, int keyCode,
+                                        bool controlDown, bool shiftDown,
                                         bool altDown)
 {
-    return OnPeerKeyDown(
-        keyCode, 0, controlDown, shiftDown, altDown, true);
+    wxTreeCtrl *const self = &control;
+    return self->OnPeerKeyDown(keyCode, 0, controlDown, shiftDown, altDown,
+                               true);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIBeginInternalDragForTesting(
-    const wxTreeItemId& item)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::BeginInternalDrag(wxTreeCtrl &control,
+                                                  const wxTreeItemId &item)
 {
-    return HandlePeerDragStarting(GetItem(item), wxPoint());
+    wxTreeCtrl *const self = &control;
+    return self->HandlePeerDragStarting(self->GetItem(item), wxPoint());
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUICompleteInternalDragForTesting(
-    const wxTreeItemId& target,
-    WinUIDragCompletionForTesting completion)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::CompleteInternalDrag(wxTreeCtrl &control,
+                                                     const wxTreeItemId &target,
+                                                     DragCompletion completion)
 {
-    if ( !m_winui || !m_winui->dragItemId )
+    wxTreeCtrl *const self = &control;
+    if ( !self->m_winui || !self->m_winui->dragItemId )
         return false;
 
-    CompleteInternalDrag(
-        GetItem(target), wxPoint(),
-        completion == WinUIDragCompletionForTesting::Cancel);
+    self->CompleteInternalDrag(self->GetItem(target), wxPoint(),
+                               completion == DragCompletion::Cancel);
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUICompletePeerDragForTesting(
-    const wxTreeItemId& target,
-    bool dropResultNone)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::CompletePeerDrag(wxTreeCtrl &control,
+                                                 const wxTreeItemId &target,
+                                                 bool dropResultNone)
 {
-    if ( !m_winui || !m_winui->dragItemId )
+    wxTreeCtrl *const self = &control;
+    if ( !self->m_winui || !self->m_winui->dragItemId )
         return false;
 
-    HandlePeerDragCompleted(
-        GetItem(target), wxPoint(), dropResultNone);
+    self->HandlePeerDragCompleted(self->GetItem(target), wxPoint(),
+                                  dropResultNone);
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIScheduleLabelEditForTesting(
-    const wxTreeItemId& item)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::ScheduleLabelEdit(wxTreeCtrl &control,
+                                                  const wxTreeItemId &item)
 {
-    return ScheduleDelayedLabelEdit(GetItem(item));
+    wxTreeCtrl *const self = &control;
+    return self->ScheduleDelayedLabelEdit(self->GetItem(item));
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIFireLabelEditDelayForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::FireLabelEditDelay(wxTreeCtrl &control)
 {
-    return m_winui && m_winui->pendingLabelEditId &&
-           CompleteDelayedLabelEdit(
-               m_winui->labelEditDelayTicket);
+    wxTreeCtrl *const self = &control;
+    return self->m_winui && self->m_winui->pendingLabelEditId &&
+           self->CompleteDelayedLabelEdit(self->m_winui->labelEditDelayTicket);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIClickStateImageForTesting(
-    const wxTreeItemId& item)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::ClickStateImage(wxTreeCtrl &control,
+                                                const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     if ( !treeItem )
         return false;
 
     const std::shared_ptr<wxWinUITreeCallbackState> state =
-        m_winui->callbackState;
+        self->m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     const std::uint64_t itemId = treeItem->id;
-    SendStateImageClick(treeItem, wxPoint());
-    return state->GetOwner(generation) == this &&
-           ResolveItem(itemId) != nullptr;
+    self->SendStateImageClick(treeItem, wxPoint());
+    return state->GetOwner(generation) == self &&
+           self->ResolveItem(itemId) != nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIDoubleClickItemForTesting(
-    const wxTreeItemId& item)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::DoubleClickItem(wxTreeCtrl &control,
+                                                const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     if ( !treeItem )
         return false;
 
     const std::shared_ptr<wxWinUITreeCallbackState> state =
-        m_winui->callbackState;
+        self->m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     const std::uint64_t itemId = treeItem->id;
-    CancelDelayedLabelEdit();
-    wxWinUITreeItem * const liveItem = ResolveItem(itemId);
+    self->CancelDelayedLabelEdit();
+    wxWinUITreeItem *const liveItem = self->ResolveItem(itemId);
     if ( !liveItem )
         return false;
-    SendTreeEvent(wxEVT_TREE_ITEM_ACTIVATED, liveItem);
-    return state->GetOwner(generation) == this;
+    self->SendTreeEvent(wxEVT_TREE_ITEM_ACTIVATED, liveItem);
+    return state->GetOwner(generation) == self;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIRightClickItemForTesting(
-    const wxTreeItemId& item)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::RightClickItem(wxTreeCtrl &control,
+                                               const wxTreeItemId &item)
 {
-    return SendRightClickEvents(GetItem(item), wxPoint());
+    wxTreeCtrl *const self = &control;
+    return self->SendRightClickEvents(self->GetItem(item), wxPoint());
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIInvokeItemForTesting(
-    const wxTreeItemId& item)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::InvokeItem(wxTreeCtrl &control,
+                                           const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     if ( !treeItem )
         return false;
-    OnPeerItemInvoked(treeItem);
+    self->OnPeerItemInvoked(treeItem);
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTreeCtrl::WinUIPointerPressedForTesting(
-    const wxPoint& point)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITreeCtrlTestAccess::PointerPressed(wxTreeCtrl &control,
+                                               const wxPoint &point)
 {
-    OnPeerPointerPressed(point);
+    wxTreeCtrl *const self = &control;
+    self->OnPeerPointerPressed(point);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTreeCtrl::WinUIPointerMovedForTesting(
-    const wxPoint& point)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITreeCtrlTestAccess::PointerMoved(wxTreeCtrl &control,
+                                             const wxPoint &point)
 {
-    OnPeerPointerMoved(point);
+    wxTreeCtrl *const self = &control;
+    self->OnPeerPointerMoved(point);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTreeCtrl::WinUIPointerReleasedForTesting(
-    const wxPoint& point)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITreeCtrlTestAccess::PointerReleased(wxTreeCtrl &control,
+                                                const wxPoint &point)
 {
-    OnPeerPointerReleased(point);
+    wxTreeCtrl *const self = &control;
+    self->OnPeerPointerReleased(point);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIQueueSelectionCorrectionForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::QueueSelectionCorrection(wxTreeCtrl &control)
 {
-    if ( !m_winui || !m_winui->treeView )
+    wxTreeCtrl *const self = &control;
+    if ( !self->m_winui || !self->m_winui->treeView )
         return false;
 
-    SchedulePeerSelectionCorrection();
-    return m_winui && m_winui->peerCorrectionPending;
+    self->SchedulePeerSelectionCorrection();
+    return self->m_winui && self->m_winui->peerCorrectionPending;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIIsPeerSelectionChangeForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::IsPeerSelectionChange(const wxTreeCtrl &control)
 {
-    return m_winui && m_winui->inPeerSelectionChange;
+    const wxTreeCtrl *const self = &control;
+    return self->m_winui && self->m_winui->inPeerSelectionChange;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIIsPeerStructureRepairPendingForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::IsPeerStructureRepairPending(
+    const wxTreeCtrl &control)
 {
-    return m_winui && m_winui->peerStructureRepairPending;
+    const wxTreeCtrl *const self = &control;
+    return self->m_winui && self->m_winui->peerStructureRepairPending;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-std::uintptr_t wxTreeCtrl::WinUIGetItemPeerIdentityForTesting(
-    const wxTreeItemId& item) const
+#ifdef WXWINUI_TEST_SUPPORT
+std::uintptr_t
+wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(const wxTreeCtrl &control,
+                                               const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    const wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     return treeItem
         ? wxWinUITreeNodeIdentity(treeItem->node)
         : 0;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIIsItemAttachedToPeerForTesting(
-    const wxTreeItemId& item) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(const wxTreeCtrl &control,
+                                                     const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
-    if ( !m_winui || !m_winui->treeView || !treeItem ||
-         (treeItem == m_winui->root.get() &&
-          HasFlag(wxTR_HIDE_ROOT)) )
+    const wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
+    if ( !self->m_winui || !self->m_winui->treeView || !treeItem ||
+         (treeItem == self->m_winui->root.get() &&
+          self->HasFlag(wxTR_HIDE_ROOT)) )
     {
         return false;
     }
 
-    wxWinUITreeCtrlImpl * const impl = m_winui.get();
+    wxWinUITreeCtrlImpl *const impl = self->m_winui.get();
     const std::shared_ptr<wxWinUITreeCallbackState> state =
         impl->callbackState;
     const std::uint64_t generation = state->Generation();
@@ -2783,9 +2875,7 @@ bool wxTreeCtrl::WinUIIsItemAttachedToPeerForTesting(
         : 0;
     try
     {
-        const auto nodes =
-            wxWinUIGetPeerChildren(
-                this, impl, treeItem->parent);
+        const auto nodes = wxWinUIGetPeerChildren(self, impl, treeItem->parent);
         unsigned matches = 0;
         uint32_t actualIndex = 0;
         for ( uint32_t i = 0; i < nodes.Size(); ++i )
@@ -2797,10 +2887,9 @@ bool wxTreeCtrl::WinUIIsItemAttachedToPeerForTesting(
             }
         }
 
-        const wxTreeCtrl * const owner =
-            state->GetOwner(generation);
-        const wxWinUITreeItem * const liveItem =
-            owner == this ? owner->ResolveItem(itemId) : nullptr;
+        const wxTreeCtrl *const owner = state->GetOwner(generation);
+        const wxWinUITreeItem *const liveItem =
+            owner == self ? owner->ResolveItem(itemId) : nullptr;
         return liveItem &&
                wxWinUITreeNodeIdentity(liveItem->node) == identity &&
                matches == 1 && actualIndex == expectedIndex;
@@ -2810,89 +2899,102 @@ bool wxTreeCtrl::WinUIIsItemAttachedToPeerForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-size_t wxTreeCtrl::WinUIGetPeerChildCountForTesting(
-    const wxTreeItemId& parent) const
+#ifdef WXWINUI_TEST_SUPPORT
+size_t wxWinUITreeCtrlTestAccess::GetPeerChildCount(const wxTreeCtrl &control,
+                                                    const wxTreeItemId &parent)
 {
-    if ( !m_winui || !m_winui->treeView )
+    const wxTreeCtrl *const self = &control;
+    if ( !self->m_winui || !self->m_winui->treeView )
         return 0;
-    wxWinUITreeItem * const parentItem = parent.IsOk()
-        ? GetItem(parent)
-        : nullptr;
+    wxWinUITreeItem *const parentItem =
+        parent.IsOk() ? self->GetItem(parent) : nullptr;
     if ( parent.IsOk() && !parentItem )
         return 0;
     try
     {
-        return wxWinUIGetPeerChildren(
-            this, m_winui.get(), parentItem).Size();
+        return wxWinUIGetPeerChildren(self, self->m_winui.get(), parentItem)
+            .Size();
     }
     catch ( const winrt::hresult_error& )
     {
         return 0;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-wxTreeCtrl::WinUIModelStats
-wxTreeCtrl::WinUIGetModelStatsForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUITreeCtrlTestAccess::ModelStats
+wxWinUITreeCtrlTestAccess::GetModelStats(const wxTreeCtrl &control)
 {
-    WinUIModelStats stats;
-    if ( m_winui )
+    const wxTreeCtrl *const self = &control;
+    ModelStats stats;
+    if ( self->m_winui )
     {
-        stats.itemCount = m_winui->itemCount;
-        stats.expandableItemCount =
-            m_winui->expandableItemCount;
-        stats.nodeLookupCount = m_winui->nodeLookupCount;
-        stats.peerUpdateCount = m_winui->peerUpdateCount;
-        stats.fullRefreshCount = m_winui->fullRefreshCount;
-        stats.modelGrowthCount = m_winui->modelGrowthCount;
+        stats.itemCount = self->m_winui->itemCount;
+        stats.expandableItemCount = self->m_winui->expandableItemCount;
+        stats.nodeLookupCount = self->m_winui->nodeLookupCount;
+        stats.peerUpdateCount = self->m_winui->peerUpdateCount;
+        stats.fullRefreshCount = self->m_winui->fullRefreshCount;
+        stats.modelGrowthCount = self->m_winui->modelGrowthCount;
     }
     return stats;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTreeCtrl::WinUIResetModelStatsForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITreeCtrlTestAccess::ResetModelStats(wxTreeCtrl &control)
 {
-    if ( m_winui )
+    wxTreeCtrl *const self = &control;
+    if ( self->m_winui )
     {
-        m_winui->nodeLookupCount = 0;
-        m_winui->peerUpdateCount = 0;
-        m_winui->fullRefreshCount = 0;
-        m_winui->modelGrowthCount = 0;
+        self->m_winui->nodeLookupCount = 0;
+        self->m_winui->peerUpdateCount = 0;
+        self->m_winui->fullRefreshCount = 0;
+        self->m_winui->modelGrowthCount = 0;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTreeCtrl::WinUIClosePeerForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITreeCtrlTestAccess::ClosePeer(wxTreeCtrl &control)
 {
+    wxTreeCtrl *const self = &control;
     const std::shared_ptr<wxWinUITreeCallbackState> state =
-        m_winui ? m_winui->callbackState : nullptr;
+        self->m_winui ? self->m_winui->callbackState : nullptr;
     const std::uint64_t generation =
         state ? state->Generation() : 0;
-    if ( m_editControl )
+    if ( self->m_editControl )
     {
         // Hide() can synchronously transfer focus and dispatch the editor's
         // KILL_FOCUS handler. Retire the logical edit session first so that
         // neither this callback nor an already queued TEXT_ENTER can publish
         // a late END_LABEL_EDIT while peer teardown is in progress.
-        wxTextCtrl * const editor = m_editControl;
-        m_editControl = nullptr;
-        if ( m_winui )
+        wxTextCtrl *const editor = self->m_editControl;
+        self->m_editControl = nullptr;
+        if ( self->m_winui )
         {
-            m_winui->editItemId = 0;
-            ++m_winui->editSession;
+            self->m_winui->editItemId = 0;
+            ++self->m_winui->editSession;
         }
 
         editor->Hide();
-        if ( !state || state->GetOwner(generation) != this )
+        if ( !state || state->GetOwner(generation) != self )
             return;
     }
-    if ( m_winui )
-        m_winui->Close();
+    if ( self->m_winui )
+        self->m_winui->Close();
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-size_t wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+size_t wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount()
 {
     return gs_liveTreeCallbackStates.load(
         std::memory_order_relaxed);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxTreeCtrl::SetWindowStyleFlag(long style)
 {
@@ -3870,12 +3972,11 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
             }
         }
 
-        const bool injectRollbackFailure =
-            impl->ShouldFail(
-                WinUIPeerMutationForTesting::
-                    InsertRollbackAfterCommit);
+#ifdef WXWINUI_TEST_SUPPORT
+        const bool injectRollbackFailure = impl->ShouldFail(
+            wxWinUITreeCtrlTestAccess::PeerMutation::InsertRollbackAfterCommit);
         if ( impl->ShouldFail(
-                 WinUIPeerMutationForTesting::InsertItem) ||
+                 wxWinUITreeCtrlTestAccess::PeerMutation::InsertItem) ||
              injectRollbackFailure )
         {
             // Always inspect/remove by node identity. A WinRT ABI call may
@@ -3888,6 +3989,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
             // A peer that cannot be removed has committed the insertion.
             // Keep the exact model/data ownership and return its valid id.
         }
+#endif
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -4044,8 +4146,9 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
         // The root is shallow now: RemoveAt cannot recursively walk its
         // descendants.
         peerSiblings.RemoveAt(peerIndex);
+#ifdef WXWINUI_TEST_SUPPORT
         if ( m_winui->ShouldFail(
-                 WinUIPeerMutationForTesting::RemoveItem) )
+                 wxWinUITreeCtrlTestAccess::PeerMutation::RemoveItem) )
         {
             wxWinUIRestoreDetachedPeerSubtree(
                 peerSiblings, peerIndex, removedPeerSubtree);
@@ -4053,13 +4156,16 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
                 (void)ApplySelectionToPeer();
             return;
         }
-        if ( m_winui->ShouldFail(
-                 WinUIPeerMutationForTesting::RemoveItemAfterCommit) )
+#endif
+#ifdef WXWINUI_TEST_SUPPORT
+        if ( m_winui->ShouldFail(wxWinUITreeCtrlTestAccess::PeerMutation::
+                                     RemoveItemAfterCommit) )
         {
             throw winrt::hresult_error(
                 E_FAIL,
                 L"Injected failure after TreeViewNode removal");
         }
+#endif
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -4335,8 +4441,9 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
         wxWinUIDetachPeerForest(removedPeerForest);
         peerChildren.Clear();
         parentPeerNode.IsExpanded(keepExpanded);
+#ifdef WXWINUI_TEST_SUPPORT
         if ( m_winui->ShouldFail(
-                 WinUIPeerMutationForTesting::ClearItems) )
+                 wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems) )
         {
             wxWinUIRestoreDetachedPeerForest(
                 peerChildren, removedPeerForest);
@@ -4345,6 +4452,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
                 (void)ApplySelectionToPeer();
             return;
         }
+#endif
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -4617,14 +4725,17 @@ void wxTreeCtrl::DeleteAllItems()
         }
         roots.Clear();
         mutationSuperseded = !isCurrent();
-        if ( !mutationSuperseded && impl->ShouldFail(
-                 WinUIPeerMutationForTesting::ClearItems) )
+#ifdef WXWINUI_TEST_SUPPORT
+        if ( !mutationSuperseded &&
+             impl->ShouldFail(
+                 wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems) )
         {
             restorePeerStructure();
             if ( isCurrent() )
                 (void)ApplySelectionToPeer();
             return;
         }
+#endif
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -5576,8 +5687,9 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
         wxWinUIApplyPeerForest(
             peerChildren, oldPeerForest, newPeerForest);
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( m_winui->ShouldFail(
-                 WinUIPeerMutationForTesting::ClearItems) )
+                 wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems) )
         {
             wxWinUIApplyPeerForest(
                 peerChildren, newPeerForest, oldPeerForest);
@@ -5585,6 +5697,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
                 (void)ApplySelectionToPeer();
             return;
         }
+#endif
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -5836,18 +5949,20 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
     return GetItemPeerRect(treeItem, rect, textOnly);
 }
 
-bool wxTreeCtrl::WinUIGetMeasuredItemPartsForTesting(
-    const wxTreeItemId& item,
-    WinUIMeasuredItemParts *parts) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::GetMeasuredItemParts(const wxTreeCtrl &control,
+                                                     const wxTreeItemId &item,
+                                                     MeasuredItemParts *parts)
 {
+    const wxTreeCtrl *const self = &control;
     wxCHECK_MSG( parts, false, "null TreeView measurement output" );
     *parts = {};
 
-    wxWinUITreeItem * const treeItem = GetItem(item);
-    if ( !m_winui || !m_winui->treeView || !treeItem )
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
+    if ( !self->m_winui || !self->m_winui->treeView || !treeItem )
         return false;
 
-    wxWinUITreeCtrlImpl * const impl = m_winui.get();
+    wxWinUITreeCtrlImpl *const impl = self->m_winui.get();
     const std::shared_ptr<wxWinUITreeCallbackState> state =
         impl->callbackState;
     const std::uint64_t generation = state->Generation();
@@ -5855,24 +5970,20 @@ bool wxTreeCtrl::WinUIGetMeasuredItemPartsForTesting(
     const MUXC::TreeViewNode node = treeItem->node;
     const MUXC::TreeView treeView = impl->treeView;
     const auto isCurrent =
-        [state, generation, impl, this, itemId, node, treeView]()
+        [state, generation, impl, self, itemId, node, treeView]()
+    {
+        const wxTreeCtrl *const owner = state->GetOwner(generation);
+        if ( owner != self || !owner->m_winui || owner->m_winui.get() != impl ||
+             owner->m_winui->callbackState != state ||
+             winrt::get_abi(owner->m_winui->treeView) !=
+                 winrt::get_abi(treeView) )
         {
-            const wxTreeCtrl * const owner =
-                state->GetOwner(generation);
-            if ( owner != this || !owner->m_winui ||
-                 owner->m_winui.get() != impl ||
-                 owner->m_winui->callbackState != state ||
-                 winrt::get_abi(owner->m_winui->treeView) !=
-                     winrt::get_abi(treeView) )
-            {
-                return false;
-            }
-            wxWinUITreeItem * const liveItem =
-                owner->ResolveItem(itemId);
-            return liveItem &&
-                   winrt::get_abi(liveItem->node) ==
-                       winrt::get_abi(node);
-        };
+            return false;
+        }
+        wxWinUITreeItem *const liveItem = owner->ResolveItem(itemId);
+        return liveItem &&
+               winrt::get_abi(liveItem->node) == winrt::get_abi(node);
+    };
 
     try
     {
@@ -5886,20 +5997,14 @@ bool wxTreeCtrl::WinUIGetMeasuredItemPartsForTesting(
             wxWinUIFindNamedElement(container, L"wxTreeLabel");
         if ( !isCurrent() )
             return false;
-        if ( !wxWinUIGetElementRect(
-                 const_cast<wxTreeCtrl *>(this),
-                 itemElement,
-                 parts->item,
-                 isCurrent) ||
+        if ( !wxWinUIGetElementRect(const_cast<wxTreeCtrl *>(self), itemElement,
+                                    parts->item, isCurrent) ||
              !isCurrent() )
         {
             return false;
         }
-        if ( !wxWinUIGetElementRect(
-                 const_cast<wxTreeCtrl *>(this),
-                 label,
-                 parts->label,
-                 isCurrent) ||
+        if ( !wxWinUIGetElementRect(const_cast<wxTreeCtrl *>(self), label,
+                                    parts->label, isCurrent) ||
              !isCurrent() )
         {
             return false;
@@ -5908,11 +6013,8 @@ bool wxTreeCtrl::WinUIGetMeasuredItemPartsForTesting(
         if ( const auto expander =
                  wxWinUIFindExpanderElement(container) )
         {
-            wxWinUIGetElementRect(
-                const_cast<wxTreeCtrl *>(this),
-                expander,
-                parts->expander,
-                isCurrent);
+            wxWinUIGetElementRect(const_cast<wxTreeCtrl *>(self), expander,
+                                  parts->expander, isCurrent);
             if ( !isCurrent() )
                 return false;
         }
@@ -5926,11 +6028,8 @@ bool wxTreeCtrl::WinUIGetMeasuredItemPartsForTesting(
                 return false;
             if ( visible )
             {
-                wxWinUIGetElementRect(
-                    const_cast<wxTreeCtrl *>(this),
-                    stateImage,
-                    parts->stateImage,
-                    isCurrent);
+                wxWinUIGetElementRect(const_cast<wxTreeCtrl *>(self),
+                                      stateImage, parts->stateImage, isCurrent);
                 if ( !isCurrent() )
                     return false;
             }
@@ -5944,11 +6043,8 @@ bool wxTreeCtrl::WinUIGetMeasuredItemPartsForTesting(
                 return false;
             if ( visible )
             {
-                wxWinUIGetElementRect(
-                    const_cast<wxTreeCtrl *>(this),
-                    image,
-                    parts->image,
-                    isCurrent);
+                wxWinUIGetElementRect(const_cast<wxTreeCtrl *>(self), image,
+                                      parts->image, isCurrent);
                 if ( !isCurrent() )
                     return false;
             }
@@ -5960,25 +6056,27 @@ bool wxTreeCtrl::WinUIGetMeasuredItemPartsForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIGetPeerIndentForTesting(
-    const wxTreeItemId& item,
-    double *leading,
-    double *trailing) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::GetPeerIndent(const wxTreeCtrl &control,
+                                              const wxTreeItemId &item,
+                                              double *leading, double *trailing)
 {
+    const wxTreeCtrl *const self = &control;
     wxCHECK_MSG( leading && trailing, false,
                  "null TreeView indentation output" );
     *leading = 0.0;
     *trailing = 0.0;
 
-    wxWinUITreeItem * const treeItem = GetItem(item);
-    if ( !m_winui || !m_winui->treeView || !treeItem ||
-         !m_winui->callbackState )
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
+    if ( !self->m_winui || !self->m_winui->treeView || !treeItem ||
+         !self->m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUITreeCtrlImpl * const impl = m_winui.get();
+    wxWinUITreeCtrlImpl *const impl = self->m_winui.get();
     const std::shared_ptr<wxWinUITreeCallbackState> state =
         impl->callbackState;
     const std::uint64_t generation = state->Generation();
@@ -5989,20 +6087,18 @@ bool wxTreeCtrl::WinUIGetPeerIndentForTesting(
         const auto container =
             impl->treeView.ContainerFromNode(node)
                 .try_as<MUXC::TreeViewItem>();
-        wxTreeCtrl * const owner = state->GetOwner(generation);
-        if ( owner != this || !owner->m_winui ||
-             owner->m_winui.get() != impl ||
-             owner->ResolveItem(itemId) != treeItem ||
-             !container )
+        wxTreeCtrl *const owner = state->GetOwner(generation);
+        if ( owner != self || !owner->m_winui || owner->m_winui.get() != impl ||
+             owner->ResolveItem(itemId) != treeItem || !container )
         {
             return false;
         }
 
         const MUX::Thickness indentation =
             container.TreeViewItemTemplateSettings().Indentation();
-        if ( state->GetOwner(generation) != this || !m_winui ||
-             m_winui.get() != impl ||
-             ResolveItem(itemId) != treeItem )
+        if ( state->GetOwner(generation) != self || !self->m_winui ||
+             self->m_winui.get() != impl ||
+             self->ResolveItem(itemId) != treeItem )
         {
             return false;
         }
@@ -6020,18 +6116,21 @@ bool wxTreeCtrl::WinUIGetPeerIndentForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIIsPeerDropHighlightedForTesting(
-    const wxTreeItemId& item) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::IsPeerDropHighlighted(const wxTreeCtrl &control,
+                                                      const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
-    if ( !m_winui || !m_winui->treeView || !treeItem )
+    const wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
+    if ( !self->m_winui || !self->m_winui->treeView || !treeItem )
         return false;
 
     try
     {
         const auto container =
-            m_winui->treeView.ContainerFromNode(treeItem->node);
+            self->m_winui->treeView.ContainerFromNode(treeItem->node);
         const auto border = wxWinUIFindNamedElement(
             container, L"wxTreeContentBorder");
         const auto borderControl =
@@ -6057,18 +6156,22 @@ bool wxTreeCtrl::WinUIIsPeerDropHighlightedForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-wxString wxTreeCtrl::WinUIGetPeerAutomationNameForTesting(
-    const wxTreeItemId& item) const
+#ifdef WXWINUI_TEST_SUPPORT
+wxString
+wxWinUITreeCtrlTestAccess::GetPeerAutomationName(const wxTreeCtrl &control,
+                                                 const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
-    if ( !m_winui || !m_winui->treeView || !treeItem )
+    const wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
+    if ( !self->m_winui || !self->m_winui->treeView || !treeItem )
         return wxString();
 
     try
     {
         const auto container =
-            m_winui->treeView.ContainerFromNode(treeItem->node);
+            self->m_winui->treeView.ContainerFromNode(treeItem->node);
         return container
             ? wxString(
                   MUX::Automation::AutomationProperties::GetName(
@@ -6080,11 +6183,14 @@ wxString wxTreeCtrl::WinUIGetPeerAutomationNameForTesting(
         return wxString();
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-wxString wxTreeCtrl::WinUIGetPeerItemTextForTesting(
-    const wxTreeItemId& item) const
+#ifdef WXWINUI_TEST_SUPPORT
+wxString wxWinUITreeCtrlTestAccess::GetPeerItemText(const wxTreeCtrl &control,
+                                                    const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    const wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     if ( !treeItem || !treeItem->content )
         return wxString();
 
@@ -6101,11 +6207,15 @@ wxString wxTreeCtrl::WinUIGetPeerItemTextForTesting(
         return wxString();
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-std::uintptr_t wxTreeCtrl::WinUIGetPeerItemImageIdentityForTesting(
-    const wxTreeItemId& item) const
+#ifdef WXWINUI_TEST_SUPPORT
+std::uintptr_t
+wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(const wxTreeCtrl &control,
+                                                    const wxTreeItemId &item)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    const wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     if ( !treeItem || !treeItem->content )
         return 0;
 
@@ -6121,40 +6231,42 @@ std::uintptr_t wxTreeCtrl::WinUIGetPeerItemImageIdentityForTesting(
         return 0;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIRefreshForScaleForTesting(double scale)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::RefreshForScale(wxTreeCtrl &control,
+                                                double scale)
 {
-    if ( !std::isfinite(scale) || scale <= 0.0 ||
-         !m_winui || !m_winui->callbackState || m_winui->closed )
+    wxTreeCtrl *const self = &control;
+    if ( !std::isfinite(scale) || scale <= 0.0 || !self->m_winui ||
+         !self->m_winui->callbackState || self->m_winui->closed )
     {
         return false;
     }
 
-    wxWinUITreeCtrlImpl * const impl = m_winui.get();
+    wxWinUITreeCtrlImpl *const impl = self->m_winui.get();
     const auto state = impl->callbackState;
     const std::uint64_t callbackGeneration = state->Generation();
     impl->projectionScaleOverrideForTesting = scale;
-    const PeerProjectionResult result = RefreshProjectedItems();
+    const wxTreeCtrl::PeerProjectionResult result =
+        self->RefreshProjectedItems();
 
-    const wxTreeCtrl * const owner =
-        state->GetOwner(callbackGeneration);
-    return result == PeerProjectionResult::Done &&
-           owner == this && owner->m_winui &&
-           owner->m_winui.get() == impl &&
+    const wxTreeCtrl *const owner = state->GetOwner(callbackGeneration);
+    return result == wxTreeCtrl::PeerProjectionResult::Done && owner == self &&
+           owner->m_winui && owner->m_winui.get() == impl &&
            owner->m_winui->callbackState == state &&
-           !impl->projectionInProgress &&
-           !impl->projectionReplayScheduled;
+           !impl->projectionInProgress && !impl->projectionReplayScheduled;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTreeCtrl::WinUIGetPeerItemImageProjectionForTesting(
-    const wxTreeItemId& item,
-    wxSize *imagePixelSize,
-    wxSize *stateImagePixelSize,
-    std::uint64_t *generation,
-    wxSize *imageDIPSize,
-    wxSize *stateImageDIPSize) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+    const wxTreeCtrl &control, const wxTreeItemId &item, wxSize *imagePixelSize,
+    wxSize *stateImagePixelSize, std::uint64_t *generation,
+    wxSize *imageDIPSize, wxSize *stateImageDIPSize)
 {
-    wxWinUITreeItem * const treeItem = GetItem(item);
+    const wxTreeCtrl *const self = &control;
+    wxWinUITreeItem *const treeItem = self->GetItem(item);
     if ( !treeItem || !treeItem->content ||
          !treeItem->contentAttached )
     {
@@ -6224,6 +6336,7 @@ bool wxTreeCtrl::WinUIGetPeerItemImageProjectionForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 wxVisualAttributes
 wxTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
@@ -6321,7 +6434,9 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
         if ( newCapacity < requiredCapacity )
             newCapacity = requiredCapacity;
         parentItem->children.reserve(newCapacity);
+#ifdef WXWINUI_TEST_SUPPORT
         ++impl->modelGrowthCount;
+#endif
     }
 
     auto newItem = std::make_unique<wxWinUITreeItem>(parentItem);
@@ -6468,12 +6583,11 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
             return wxTreeItemId();
         }
 
-        const bool injectRollbackFailure =
-            impl->ShouldFail(
-                WinUIPeerMutationForTesting::
-                    InsertRollbackAfterCommit);
+#ifdef WXWINUI_TEST_SUPPORT
+        const bool injectRollbackFailure = impl->ShouldFail(
+            wxWinUITreeCtrlTestAccess::PeerMutation::InsertRollbackAfterCommit);
         if ( impl->ShouldFail(
-                 WinUIPeerMutationForTesting::InsertItem) ||
+                 wxWinUITreeCtrlTestAccess::PeerMutation::InsertItem) ||
              injectRollbackFailure )
         {
             if ( rollbackPeer(injectRollbackFailure) )
@@ -6482,6 +6596,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
                 return wxTreeItemId();
             }
         }
+#endif
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -6951,7 +7066,9 @@ void wxTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
     if ( m_winui && m_winui->callbackState && !m_winui->closed )
     {
         wxWinUITreeCtrlImpl * const impl = m_winui.get();
+#ifdef WXWINUI_TEST_SUPPORT
         impl->projectionScaleOverrideForTesting = 0.0;
+#endif
         const std::shared_ptr<wxWinUITreeCallbackState> state =
             impl->callbackState;
         const std::uint64_t generation = state->Generation();
@@ -7079,8 +7196,9 @@ bool wxTreeCtrl::SetExpanded(wxWinUITreeItem *item,
                     wxWinUITreePeerMutationGuard mutation(
                         m_winui->callbackState);
                     item->node.IsExpanded(item->expanded);
+#ifdef WXWINUI_TEST_SUPPORT
                     if ( m_winui->ShouldFail(
-                             WinUIPeerMutationForTesting::
+                             wxWinUITreeCtrlTestAccess::PeerMutation::
                                  SetExpandedAfterCommit) )
                     {
                         throw winrt::hresult_error(
@@ -7088,6 +7206,7 @@ bool wxTreeCtrl::SetExpanded(wxWinUITreeItem *item,
                             L"Injected failure after TreeViewNode "
                             L"expansion restoration");
                     }
+#endif
                 }
                 catch ( const winrt::hresult_error& e )
                 {
@@ -7133,14 +7252,15 @@ bool wxTreeCtrl::SetExpanded(wxWinUITreeItem *item,
             wxWinUITreePeerMutationGuard mutation(
                 m_winui->callbackState);
             item->node.IsExpanded(expanded);
-            if ( m_winui->ShouldFail(
-                     WinUIPeerMutationForTesting::
-                         SetExpandedAfterCommit) )
+#ifdef WXWINUI_TEST_SUPPORT
+            if ( m_winui->ShouldFail(wxWinUITreeCtrlTestAccess::PeerMutation::
+                                         SetExpandedAfterCommit) )
             {
                 throw winrt::hresult_error(
                     E_FAIL,
                     L"Injected failure after TreeViewNode expansion");
             }
+#endif
         }
         catch ( const winrt::hresult_error& e )
         {
@@ -7313,8 +7433,9 @@ wxTreeCtrl::ExpandAncestorPath(
                     {
                         return PeerSyncResult::Stale;
                     }
+#ifdef WXWINUI_TEST_SUPPORT
                     if ( impl->ShouldFail(
-                             WinUIPeerMutationForTesting::
+                             wxWinUITreeCtrlTestAccess::PeerMutation::
                                  SetExpandedAfterCommit) )
                     {
                         throw winrt::hresult_error(
@@ -7322,6 +7443,7 @@ wxTreeCtrl::ExpandAncestorPath(
                             L"Injected failure after deferred "
                             L"TreeViewNode expansion");
                     }
+#endif
                 }
             }
             catch ( const winrt::hresult_error& e )
@@ -7891,15 +8013,16 @@ bool wxTreeCtrl::ReconcilePeerStructureFromModel()
                     peerRoots, modelPeerNodes);
             wxWinUIApplyPeerForest(
                 peerRoots, current, desired);
-            if ( impl->ShouldFail(
-                     WinUIPeerMutationForTesting::
-                         SetExpandedAfterCommit) )
+#ifdef WXWINUI_TEST_SUPPORT
+            if ( impl->ShouldFail(wxWinUITreeCtrlTestAccess::PeerMutation::
+                                      SetExpandedAfterCommit) )
             {
                 throw winrt::hresult_error(
                     E_FAIL,
                     L"Injected TreeView structural reconciliation "
                     L"failure");
             }
+#endif
         }
         catch ( const winrt::hresult_error& e )
         {
@@ -8146,7 +8269,10 @@ wxTreeCtrl::ProjectPeerItemPass(std::uint64_t itemId,
     owner = getLiveOwner();
     if ( !owner )
         return PeerProjectionResult::Failed;
-    double scale = impl->projectionScaleOverrideForTesting;
+    double scale = 0.0;
+#ifdef WXWINUI_TEST_SUPPORT
+    scale = impl->projectionScaleOverrideForTesting;
+#endif
     if ( !std::isfinite(scale) || scale <= 0.0 )
     {
         scale = owner->GetDPIScaleFactor();
@@ -8227,7 +8353,9 @@ wxTreeCtrl::ProjectPeerItemPass(std::uint64_t itemId,
 
     try
     {
+#ifdef WXWINUI_TEST_SUPPORT
         ++impl->peerUpdateCount;
+#endif
         if ( !content )
             content = WFC::PropertySet();
 
@@ -8816,7 +8944,9 @@ wxTreeCtrl::RequestPeerProjection(
         impl->BumpModelRevision();
     if ( allItems )
     {
+#ifdef WXWINUI_TEST_SUPPORT
         ++impl->fullRefreshCount;
+#endif
         impl->projectionAllRequested = true;
         // A complete refresh subsumes every item-specific request accumulated
         // earlier in the same frozen transaction.

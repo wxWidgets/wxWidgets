@@ -66,12 +66,6 @@ public:
 
     void ForceUpper();
 
-    // Implementation-only deterministic seam for the WinUI peer contract.
-    // It is used by tests to exercise a ForceUpper() call made while the
-    // modal surface is already open, without physical input.
-    bool WinUISetPeerValueForTesting(const wxString& value);
-    wxString WinUIGetPeerValueForTesting() const;
-
 #if wxUSE_VALIDATORS
     void SetTextValidator(const wxTextValidator& validator);
     void SetTextValidator(wxTextValidatorStyle style = wxFILTER_NONE);
@@ -108,6 +102,8 @@ protected:
 #endif
 
 private:
+    friend class wxWinUITextEntryDialogTestAccess;
+
     wxDECLARE_DYNAMIC_CLASS(wxTextEntryDialog);
     wxDECLARE_NO_COPY_CLASS(wxTextEntryDialog);
 };

@@ -21,6 +21,10 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "range-test-access.h"
+    #include "calendar-test-access.h"
+    #include "slider-test-access.h"
+    #include "spinctrl-test-access.h"
+    #include "treectrl-test-access.h"
 #endif
 
 #include "wx/fs_inet.h"
@@ -964,7 +968,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI 008c range and date controls",
         CHECK_FALSE( calendar->AllowMonthChange() );
         wxDateTime calendarMinimum;
         wxDateTime calendarMaximum;
-        REQUIRE( calendar->WinUIGetPeerStateForTesting(
+        REQUIRE( wxWinUICalendarTestAccess::GetPeerState(*calendar,
             nullptr, &calendarMinimum, &calendarMaximum) );
         wxDateTime monthMinimum(calendar->GetDate());
         monthMinimum.SetDay(1);
@@ -987,7 +991,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI 008c range and date controls",
         double sliderLarge = 0;
         bool sliderVertical = false;
         bool sliderReversed = false;
-        REQUIRE( slider->WinUIGetPeerStateForTesting(
+        REQUIRE( wxWinUISliderTestAccess::GetPeerState(*slider,
             &sliderMinimum, &sliderMaximum, &sliderValue,
             &sliderSmall, &sliderLarge,
             &sliderVertical, &sliderReversed) );
@@ -1043,7 +1047,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI 008c range and date controls",
         double spinIncrement = 0;
         bool spinWrap = false;
         wxString spinText;
-        REQUIRE( spinCtrl->WinUIGetPeerStateForTesting(
+        REQUIRE( wxWinUISpinCtrlTestAccess::GetPeerState(*spinCtrl,
             &spinMinimum, &spinMaximum, &spinIncrement,
             &spinWrap, &spinText) );
         CHECK( spinMinimum == 0.0 );
@@ -1058,7 +1062,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI 008c range and date controls",
         CHECK( spinDouble->GetIncrement() == 0.25 );
         CHECK( spinDouble->GetDigits() == 2 );
         wxString spinDoubleText;
-        REQUIRE( spinDouble->WinUIGetPeerStateForTesting(
+        REQUIRE( wxWinUISpinCtrlTestAccess::GetPeerState(*spinDouble,
             &spinMinimum, &spinMaximum, &spinIncrement,
             &spinWrap, &spinDoubleText) );
         CHECK( spinMinimum == -2.5 );
@@ -1454,7 +1458,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
             wxNotebook::WinUIGetPendingPeerRetirementCountForTesting(),
             wxNotebook::WinUIGetLiveCallbackStateCountForTesting(),
             wxNotebook::WinUIGetFrameworkRetirementCountForTesting(),
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting()
+            wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount()
         };
     };
 
@@ -2167,7 +2171,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
             wxNotebook::WinUIGetPendingPeerRetirementCountForTesting(),
             wxNotebook::WinUIGetLiveCallbackStateCountForTesting(),
             wxNotebook::WinUIGetFrameworkRetirementCountForTesting(),
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting(),
+            wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount(),
             wxToolBar::WinUIGetLiveCallbackStateCountForTesting()
         };
     };

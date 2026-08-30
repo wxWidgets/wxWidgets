@@ -13,6 +13,13 @@
 
 #include "wx/combobox.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+#include "combobox-test-access.h"
+#include "choice-test-access.h"
+#include "combobox-uia-helper.h"
+#include <UIAutomation.h>
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
 #endif
@@ -33,409 +40,27 @@
 #include <cmath>
 #include <exception>
 #include <limits>
-#include <thread>
 #include <vector>
 
 #include <winrt/Microsoft.UI.Text.h>
+#ifdef WXWINUI_TEST_SUPPORT
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
-
-#include <UIAutomation.h>
+#endif
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
-namespace MUXA = winrt::Microsoft::UI::Xaml::Automation;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace MUXT = winrt::Microsoft::UI::Text;
-namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
 namespace MUXCP = winrt::Microsoft::UI::Xaml::Controls::Primitives;
 namespace MUXD = winrt::Microsoft::UI::Dispatching;
+#ifdef WXWINUI_TEST_SUPPORT
+namespace MUXA = winrt::Microsoft::UI::Xaml::Automation;
+namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
+#endif
 
 namespace
 {
-
-constexpr std::uint32_t wxWinUIUiaResultMagic = 0x57495541;
-constexpr std::uint32_t wxWinUIUiaResultVersion = 1;
-constexpr DWORD wxWinUIUiaHelperTimeoutMs = 1500;
-
-struct wxWinUIUiaSetValueResult
-{
-    std::uint32_t magic;
-    std::uint32_t version;
-    std::int32_t stage;
-    std::int32_t hresult;
-};
-static_assert(sizeof(wxWinUIUiaSetValueResult) == 16,
-              "UIA helper protocol must remain fixed-width");
-
-std::wstring wxWinUIQuoteCommandLineArgument(const std::wstring& argument)
-{
-    if ( argument.empty() ||
-         argument.find_first_of(L" \t\n\v\"") != std::wstring::npos )
-    {
-        std::wstring quoted(1, L'"');
-        std::size_t backslashes = 0;
-        for ( const wchar_t ch : argument )
-        {
-            if ( ch == L'\\' )
-            {
-                ++backslashes;
-                continue;
-            }
-            if ( ch == L'"' )
-            {
-                quoted.append(backslashes * 2 + 1, L'\\');
-                quoted.push_back(L'"');
-            }
-            else
-            {
-                quoted.append(backslashes, L'\\');
-                quoted.push_back(ch);
-            }
-            backslashes = 0;
-        }
-        quoted.append(backslashes * 2, L'\\');
-        quoted.push_back(L'"');
-        return quoted;
-    }
-    return argument;
-}
-
-class wxWinUIComboUniqueHandle
-{
-public:
-    wxWinUIComboUniqueHandle() = default;
-    explicit wxWinUIComboUniqueHandle(HANDLE handle) : m_handle(handle) {}
-    wxWinUIComboUniqueHandle(const wxWinUIComboUniqueHandle&) = delete;
-    wxWinUIComboUniqueHandle& operator=(
-        const wxWinUIComboUniqueHandle&) = delete;
-    ~wxWinUIComboUniqueHandle()
-    {
-        Reset();
-    }
-
-    HANDLE Get() const { return m_handle; }
-    explicit operator bool() const
-    {
-        return m_handle && m_handle != INVALID_HANDLE_VALUE;
-    }
-    HANDLE Release()
-    {
-        const HANDLE handle = m_handle;
-        m_handle = nullptr;
-        return handle;
-    }
-    void Reset(HANDLE handle = nullptr)
-    {
-        if ( *this )
-            ::CloseHandle(m_handle);
-        m_handle = handle;
-    }
-
-private:
-    HANDLE m_handle{nullptr};
-};
-
-struct wxWinUIUiaHelperWatchContext
-{
-    wxWinUIComboUniqueHandle process;
-    wxWinUIComboUniqueHandle resultRead;
-};
-
-struct wxWinUIUiaHelperLaunchResult
-{
-    bool scheduled{false};
-    HRESULT hresult{E_FAIL};
-};
-
-wxWinUIUiaHelperLaunchResult wxWinUILaunchUiaSetValueHelper(
-    const std::shared_ptr<wxWinUIComboAutomationTestState>& operation,
-    HWND bridge,
-    const std::wstring& outerAutomationId,
-    const std::wstring& editAutomationId,
-    const std::wstring& requestedValue)
-{
-    wxWinUIUiaHelperLaunchResult launch;
-    DWORD bridgePid = 0;
-    if ( !bridge || !::IsWindow(bridge) ||
-         !::GetWindowThreadProcessId(bridge, &bridgePid) ||
-         bridgePid != ::GetCurrentProcessId() )
-    {
-        launch.hresult = UIA_E_ELEMENTNOTAVAILABLE;
-        return launch;
-    }
-
-    const DWORD helperLength = ::GetEnvironmentVariableW(
-        L"WX_WINUI_UIA_HELPER", nullptr, 0);
-    if ( !helperLength )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(::GetLastError());
-        return launch;
-    }
-    std::vector<wchar_t> helperBuffer(helperLength, L'\0');
-    const DWORD copied = ::GetEnvironmentVariableW(
-        L"WX_WINUI_UIA_HELPER", helperBuffer.data(), helperLength);
-    if ( !copied || copied >= helperLength )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(::GetLastError());
-        return launch;
-    }
-    const std::wstring helperPath(helperBuffer.data(), copied);
-
-    SECURITY_ATTRIBUTES inheritable{};
-    inheritable.nLength = sizeof(inheritable);
-    inheritable.bInheritHandle = TRUE;
-    HANDLE readRaw = nullptr;
-    HANDLE writeRaw = nullptr;
-    if ( !::CreatePipe(&readRaw, &writeRaw, &inheritable, 0) )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(::GetLastError());
-        return launch;
-    }
-    wxWinUIComboUniqueHandle readPipe(readRaw);
-    wxWinUIComboUniqueHandle writePipe(writeRaw);
-    if ( !::SetHandleInformation(readPipe.Get(), HANDLE_FLAG_INHERIT, 0) )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(::GetLastError());
-        return launch;
-    }
-
-    STARTUPINFOEXW startup{};
-    startup.StartupInfo.cb = sizeof(startup);
-    SIZE_T attributeBytes = 0;
-    (void)::InitializeProcThreadAttributeList(
-        nullptr, 1, 0, &attributeBytes);
-    if ( !attributeBytes )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(::GetLastError());
-        return launch;
-    }
-    std::vector<unsigned char> attributeStorage(attributeBytes);
-    startup.lpAttributeList =
-        reinterpret_cast<LPPROC_THREAD_ATTRIBUTE_LIST>(
-            attributeStorage.data());
-    if ( !::InitializeProcThreadAttributeList(
-            startup.lpAttributeList, 1, 0, &attributeBytes) )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(::GetLastError());
-        return launch;
-    }
-    wxScopeGuard attributeGuard = wxMakeGuard([&startup]()
-    {
-        ::DeleteProcThreadAttributeList(startup.lpAttributeList);
-    });
-    wxUnusedVar(attributeGuard);
-
-    HANDLE inheritedHandle = writePipe.Get();
-    if ( !::UpdateProcThreadAttribute(
-            startup.lpAttributeList, 0,
-            PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
-            &inheritedHandle, sizeof(inheritedHandle), nullptr, nullptr) )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(::GetLastError());
-        return launch;
-    }
-
-    const std::wstring commandLine =
-        wxWinUIQuoteCommandLineArgument(helperPath) +
-        L" --uia-set-value " +
-        std::to_wstring(reinterpret_cast<std::uintptr_t>(writePipe.Get())) +
-        L" " +
-        std::to_wstring(reinterpret_cast<std::uintptr_t>(bridge)) +
-        L" " + std::to_wstring(static_cast<unsigned long>(bridgePid)) +
-        L" " + wxWinUIQuoteCommandLineArgument(outerAutomationId) +
-        L" " + wxWinUIQuoteCommandLineArgument(editAutomationId) +
-        L" " + wxWinUIQuoteCommandLineArgument(requestedValue);
-    std::vector<wchar_t> mutableCommand(
-        commandLine.begin(), commandLine.end());
-    mutableCommand.push_back(L'\0');
-
-    // Allocate all potentially throwing ownership state before the external
-    // process exists. After CreateProcess succeeds, every handle is either in
-    // this context or synchronously terminated/waited in the guarded paths.
-    const auto watchContext =
-        std::make_shared<wxWinUIUiaHelperWatchContext>();
-    PROCESS_INFORMATION processInfo{};
-    if ( !::CreateProcessW(
-            helperPath.c_str(), mutableCommand.data(), nullptr, nullptr,
-            TRUE, CREATE_NO_WINDOW | EXTENDED_STARTUPINFO_PRESENT,
-            nullptr, nullptr, &startup.StartupInfo, &processInfo) )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(::GetLastError());
-        return launch;
-    }
-    wxWinUIComboUniqueHandle helperProcess(processInfo.hProcess);
-    wxWinUIComboUniqueHandle helperThread(processInfo.hThread);
-
-    // The parent must never retain the writer: after helper exit ReadFile is
-    // guaranteed to finish and a malformed/short protocol record is visible.
-    writePipe.Reset();
-    helperThread.Reset();
-    watchContext->process.Reset(helperProcess.Release());
-    watchContext->resultRead.Reset(readPipe.Release());
-
-    try
-    {
-        std::thread watcher(
-            [operation, watchContext]()
-            {
-                const HANDLE processHandle = watchContext->process.Get();
-                const HANDLE readHandle = watchContext->resultRead.Get();
-
-                const auto publishResult = [&]()
-                {
-                    wxWinUIUiaSetValueResult result{};
-                    DWORD bytesRead = 0;
-                    const bool complete = ::ReadFile(
-                        readHandle, &result, sizeof(result), &bytesRead,
-                        nullptr) && bytesRead == sizeof(result);
-                    const bool valid = complete &&
-                        result.magic == wxWinUIUiaResultMagic &&
-                        result.version == wxWinUIUiaResultVersion &&
-                        (result.stage ==
-                             wxComboBox::WinUIAutomation_Succeeded ||
-                         result.stage < 0);
-                    if ( valid )
-                    {
-                        operation->hresult.store(
-                            static_cast<long>(result.hresult),
-                            std::memory_order_relaxed);
-                        operation->stage.store(
-                            result.stage, std::memory_order_release);
-                    }
-                    else
-                    {
-                        operation->hresult.store(
-                            static_cast<long>(E_INVALIDARG),
-                            std::memory_order_relaxed);
-                        operation->stage.store(-23,
-                                               std::memory_order_release);
-                    }
-                };
-
-                DWORD waitResult = ::WaitForSingleObject(
-                    processHandle, wxWinUIUiaHelperTimeoutMs);
-                if ( waitResult == WAIT_TIMEOUT )
-                {
-                    // Close the boundary race where the helper exits between
-                    // the timed wait and TerminateProcess().
-                    const DWORD finalProbe =
-                        ::WaitForSingleObject(processHandle, 0);
-                    if ( finalProbe == WAIT_OBJECT_0 )
-                        waitResult = WAIT_OBJECT_0;
-                }
-                if ( waitResult == WAIT_OBJECT_0 )
-                {
-                    publishResult();
-                    return;
-                }
-
-                const HRESULT waitHr = waitResult == WAIT_TIMEOUT
-                    ? HRESULT_FROM_WIN32(WAIT_TIMEOUT)
-                    : HRESULT_FROM_WIN32(::GetLastError());
-                operation->hresult.store(static_cast<long>(waitHr),
-                                         std::memory_order_relaxed);
-
-                // Publish a replaceable failure only after proving the old
-                // helper is dead. If termination/wait itself fails, retain a
-                // positive stage so single-flight blocks any overlapping
-                // helper which could still complete SetValue later.
-                const bool terminated =
-                    ::TerminateProcess(processHandle, 124) != FALSE;
-                const DWORD terminatedWait =
-                    ::WaitForSingleObject(processHandle, 5000);
-                if ( terminatedWait == WAIT_OBJECT_0 && !terminated )
-                {
-                    // TerminateProcess commonly reports access denied when
-                    // natural exit won the race. Its exact record remains
-                    // authoritative in that case.
-                    publishResult();
-                }
-                else
-                {
-                    operation->stage.store(
-                        terminatedWait == WAIT_OBJECT_0 ? -23 : 23,
-                        std::memory_order_release);
-                }
-            });
-        try
-        {
-            watcher.detach();
-        }
-        catch ( const std::system_error& e )
-        {
-            launch.hresult = HRESULT_FROM_WIN32(
-                static_cast<unsigned long>(e.code().value()));
-            (void)::TerminateProcess(watchContext->process.Get(), 125);
-            const DWORD terminatedWait = ::WaitForSingleObject(
-                watchContext->process.Get(), 5000);
-            if ( watcher.joinable() )
-                watcher.join();
-            if ( terminatedWait != WAIT_OBJECT_0 )
-            {
-                operation->hresult.store(
-                    static_cast<long>(launch.hresult),
-                    std::memory_order_relaxed);
-                operation->stage.store(23,
-                                       std::memory_order_release);
-            }
-            // The watcher ran and is now joined, so its final protocol/fail
-            // state remains authoritative even though detach itself failed.
-            launch.scheduled = true;
-            return launch;
-        }
-    }
-    catch ( const std::system_error& e )
-    {
-        launch.hresult = HRESULT_FROM_WIN32(
-            static_cast<unsigned long>(e.code().value()));
-        const bool terminated =
-            ::TerminateProcess(watchContext->process.Get(), 125) != FALSE;
-        wxUnusedVar(terminated);
-        const DWORD terminatedWait =
-            ::WaitForSingleObject(watchContext->process.Get(), 5000);
-        if ( !terminated && terminatedWait == WAIT_OBJECT_0 )
-        {
-            wxWinUIUiaSetValueResult result{};
-            DWORD bytesRead = 0;
-            const bool complete = ::ReadFile(
-                watchContext->resultRead.Get(), &result, sizeof(result),
-                &bytesRead, nullptr) && bytesRead == sizeof(result);
-            const bool valid = complete &&
-                result.magic == wxWinUIUiaResultMagic &&
-                result.version == wxWinUIUiaResultVersion &&
-                (result.stage ==
-                     wxComboBox::WinUIAutomation_Succeeded ||
-                 result.stage < 0);
-            if ( valid )
-            {
-                operation->hresult.store(
-                    static_cast<long>(result.hresult),
-                    std::memory_order_relaxed);
-                operation->stage.store(result.stage,
-                                       std::memory_order_release);
-                launch.scheduled = true;
-                launch.hresult = S_OK;
-                return launch;
-            }
-            launch.hresult = E_INVALIDARG;
-        }
-        if ( terminatedWait != WAIT_OBJECT_0 )
-        {
-            // The helper still owns the pipe and may still write. Keep the
-            // operation in-flight and let the test report the shielded state.
-            operation->hresult.store(static_cast<long>(launch.hresult),
-                                     std::memory_order_relaxed);
-            operation->stage.store(23, std::memory_order_release);
-            launch.scheduled = true;
-        }
-        return launch;
-    }
-
-    launch.scheduled = true;
-    launch.hresult = S_OK;
-    return launch;
-}
 
 template <typename T>
 winrt::Windows::Foundation::IUnknown
@@ -494,20 +119,22 @@ std::size_t wxWinUIComboFitUTF16Prefix(const wxString& value,
     return offset;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 int wxWinUIComboThemeForTesting(MUX::ElementTheme theme)
 {
     switch ( theme )
     {
         case MUX::ElementTheme::Default:
-            return wxComboBox::WinUITheme_Default;
+            return wxWinUIComboBoxTestAccess::WinUITheme_Default;
         case MUX::ElementTheme::Light:
-            return wxComboBox::WinUITheme_Light;
+            return wxWinUIComboBoxTestAccess::WinUITheme_Light;
         case MUX::ElementTheme::Dark:
-            return wxComboBox::WinUITheme_Dark;
+            return wxWinUIComboBoxTestAccess::WinUITheme_Dark;
     }
 
-    return wxComboBox::WinUITheme_Unknown;
+    return wxWinUIComboBoxTestAccess::WinUITheme_Unknown;
 }
+#endif
 
 struct wxWinUIComboConstrainedEdit
 {
@@ -977,10 +604,11 @@ void wxComboBox::ClearPendingTextSelection()
     impl->independentRangeObservationHookForTesting = nullptr;
 }
 
-void wxComboBox::RunIndependentRangeObservationHookForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIComboBoxTestAccess::RunIndependentRangeObservationHook(wxComboBox* control)
 {
-    if ( !m_winui ||
-         !m_winui->independentRangeObservationHookForTesting )
+    if ( !control->m_winui ||
+         !control->m_winui->independentRangeObservationHookForTesting )
     {
         return;
     }
@@ -989,9 +617,10 @@ void wxComboBox::RunIndependentRangeObservationHookForTesting()
     // The hook may delete the owner, so move it out and make invocation the
     // final owner operation in the native delegate.
     std::function<void(wxComboBox *)> hook =
-        std::move(m_winui->independentRangeObservationHookForTesting);
-    hook(this);
+        std::move(control->m_winui->independentRangeObservationHookForTesting);
+    hook(control);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 bool wxComboBox::SuppressPendingTextSelectionChange()
 {
@@ -2237,7 +1866,10 @@ bool wxComboBox::CreateSimplePeer()
                      owner->m_winui->textCallbackState == textState &&
                      owner->m_winui->editGeneration == editGeneration )
                 {
-                    owner->RunIndependentRangeObservationHookForTesting();
+#ifdef WXWINUI_TEST_SUPPORT
+                    wxWinUIComboBoxTestAccess::
+                        RunIndependentRangeObservationHook(owner);
+#endif
                 }
             });
 
@@ -7511,8 +7143,11 @@ void wxComboBox::ResolveEditPartOnce(bool updateLayout)
                                  observedOwner->m_winui->editGeneration ==
                                      generation )
                             {
-                                observedOwner->
-                                    RunIndependentRangeObservationHookForTesting();
+#ifdef WXWINUI_TEST_SUPPORT
+                                wxWinUIComboBoxTestAccess::
+                                    RunIndependentRangeObservationHook(
+                                        observedOwner);
+#endif
                             }
                         });
 
@@ -7578,11 +7213,13 @@ void wxComboBox::ResolveEditPartOnce(bool updateLayout)
     }
 }
 
-bool wxComboBox::WinUISetPeerTextForTesting(const wxString& text)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIComboBoxTestAccess::SetPeerText(wxComboBox* control,
+    const wxString& text)
 {
-    if ( !m_winui ||
-         (!m_winui->comboBox &&
-          !(m_winui->simpleListBox && m_winui->editBox)) )
+    if ( !control->m_winui ||
+         (!control->m_winui->comboBox &&
+          !(control->m_winui->simpleListBox && control->m_winui->editBox)) )
     {
         return false;
     }
@@ -7590,10 +7227,10 @@ bool wxComboBox::WinUISetPeerTextForTesting(const wxString& text)
     // A peer edit is a focused-user transaction. Establish the public wx
     // focus intent before capturing an edit generation: SetFocus() can finish
     // a host migration or a theme/template replacement synchronously.
-    if ( m_editable || m_winui->editBox )
+    if ( control->m_editable || control->m_winui->editBox )
     {
-        const wxWeakRef<wxWindow> self(this);
-        SetFocus();
+        const wxWeakRef<wxWindow> self(control);
+        control->SetFocus();
         wxComboBox * const owner =
             wxDynamicCast(self.get(), wxComboBox);
         if ( !owner || !owner->m_winui || !owner->ResolveEditPart() ||
@@ -7603,14 +7240,14 @@ bool wxComboBox::WinUISetPeerTextForTesting(const wxString& text)
         }
     }
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->textCallbackState;
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
         impl->callbackState;
     const std::uint64_t editGeneration = impl->editGeneration;
     const MUXC::TextBox editBox = impl->editBox;
-    wxComboBox * const expectedOwner = this;
+    wxComboBox * const expectedOwner = control;
 
     const auto getExactOwner = [&]() -> wxComboBox *
     {
@@ -7635,7 +7272,7 @@ bool wxComboBox::WinUISetPeerTextForTesting(const wxString& text)
         // peer. CharacterCasing is applied by TextBox to typed input but not
         // to programmatic Text property writes, so mirror that native input
         // transformation before assigning the dependency property.
-        if ( m_forceUpper )
+        if ( control->m_forceUpper )
             peerValue.MakeUpper();
         const winrt::hstring peerText = wxWinUIToHString(peerValue);
         if ( editBox )
@@ -7704,8 +7341,8 @@ bool wxComboBox::WinUISetPeerTextForTesting(const wxString& text)
         }
         else
         {
-            ClearPendingTextValue();
-            ClearPendingTextSelection();
+            control->ClearPendingTextValue();
+            control->ClearPendingTextSelection();
             impl->comboBox.Text(peerText);
         }
         return true;
@@ -7718,10 +7355,10 @@ bool wxComboBox::WinUISetPeerTextForTesting(const wxString& text)
     }
 }
 
-bool wxComboBox::WinUISetPeerTextViaAutomationForTesting(
+bool wxWinUIComboBoxTestAccess::SetPeerTextViaAutomation(wxComboBox* control,
     const wxString& text)
 {
-    if ( !m_winui )
+    if ( !control->m_winui )
         return false;
 
     // Keep a single UIAutomation client operation in flight. In particular,
@@ -7729,19 +7366,19 @@ bool wxComboBox::WinUISetPeerTextViaAutomationForTesting(
     // worker-side pattern call is still pending: the worker is deliberately
     // independent of the UI object and can't be cancelled without racing its
     // final SetValue(). Failed and completed operations may be replaced.
-    if ( const auto active = m_winui->diagnosticAutomationOperation )
+    if ( const auto active = control->m_winui->diagnosticAutomationOperation )
     {
         const int stage = active->stage.load(std::memory_order_acquire);
         if ( stage > 0 && stage != WinUIAutomation_Succeeded )
             return false;
     }
 
-    wxComboBox * const expectedOwner = this;
-    const wxWeakRef<wxWindow> ownerRef(this);
+    wxComboBox * const expectedOwner = control;
+    const wxWeakRef<wxWindow> ownerRef(control);
     const std::shared_ptr<wxWinUIComboAutomationTestState> operation =
         std::make_shared<wxWinUIComboAutomationTestState>();
-    m_winui->diagnosticAutomationOperation = operation;
-    m_winui->diagnosticAutomationStage = 1;
+    control->m_winui->diagnosticAutomationOperation = operation;
+    control->m_winui->diagnosticAutomationStage = 1;
     operation->stage.store(1, std::memory_order_release);
     const auto failOnUIThread =
         [operation, ownerRef, expectedOwner](int stage, HRESULT hr) -> bool
@@ -7759,9 +7396,9 @@ bool wxComboBox::WinUISetPeerTextViaAutomationForTesting(
         return false;
     };
 
-    if ( !m_editable )
+    if ( !control->m_editable )
         return failOnUIThread(-2, UIA_E_NOTSUPPORTED);
-    const bool resolved = ResolveEditPart();
+    const bool resolved = control->ResolveEditPart();
     wxComboBox *liveOwner = wxDynamicCast(ownerRef.get(), wxComboBox);
     if ( !resolved || liveOwner != expectedOwner || !liveOwner->m_winui ||
          liveOwner->m_winui->diagnosticAutomationOperation != operation )
@@ -7858,15 +7495,16 @@ bool wxComboBox::WinUISetPeerTextViaAutomationForTesting(
 
 }
 
-bool wxComboBox::WinUISelectPeerItemForTesting(int selection)
+bool wxWinUIComboBoxTestAccess::SelectPeerItem(wxComboBox* control,
+    int selection)
 {
-    if ( !m_winui || (!m_winui->comboBox && !m_winui->simpleListBox) )
+    if ( !control->m_winui || (!control->m_winui->comboBox && !control->m_winui->simpleListBox) )
         return false;
 
     const std::shared_ptr<wxWinUIChoiceCallbackState> callbackState =
-        m_winui->callbackState;
-    wxWinUIChoiceImpl * const impl = m_winui.get();
-    wxComboBox * const expectedOwner = this;
+        control->m_winui->callbackState;
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
+    wxComboBox * const expectedOwner = control;
 
     try
     {
@@ -7901,6 +7539,7 @@ bool wxComboBox::WinUISelectPeerItemForTesting(int selection)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 bool wxComboBox::NavigateSimpleList(int delta)
 {
@@ -8019,26 +7658,28 @@ int wxComboBox::GetSimpleListPageSize() const
     }
 }
 
-bool wxComboBox::WinUINavigateSimpleListForTesting(int delta)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIComboBoxTestAccess::NavigateSimpleList(wxComboBox* control,
+    int delta)
 {
-    return NavigateSimpleList(delta);
+    return control->NavigateSimpleList(delta);
 }
 
-int wxComboBox::WinUIGetSimplePageSizeForTesting() const
+int wxWinUIComboBoxTestAccess::GetSimplePageSize(const wxComboBox* control)
 {
-    return GetSimpleListPageSize();
+    return control->GetSimpleListPageSize();
 }
 
-unsigned wxComboBox::WinUIGetSimplePeerStateForTesting(
+unsigned wxWinUIComboBoxTestAccess::GetSimplePeerState(const wxComboBox* control,
     std::uintptr_t *editIdentity,
-    std::uintptr_t *listIdentity) const
+    std::uintptr_t *listIdentity)
 {
     if ( editIdentity )
         *editIdentity = 0;
     if ( listIdentity )
         *listIdentity = 0;
     WinUISimplePeerSnapshot snapshot;
-    if ( !WinUIGetSimplePeerSnapshotForTesting(&snapshot) )
+    if ( !wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(control, &snapshot) )
         return 0;
     if ( editIdentity )
         *editIdentity = snapshot.editIdentity;
@@ -8047,8 +7688,8 @@ unsigned wxComboBox::WinUIGetSimplePeerStateForTesting(
     return snapshot.state;
 }
 
-bool wxComboBox::WinUIGetSimplePeerSnapshotForTesting(
-    WinUISimplePeerSnapshot *snapshot) const
+bool wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(const wxComboBox* control,
+    WinUISimplePeerSnapshot *snapshot)
 {
     if ( !snapshot )
         return false;
@@ -8056,15 +7697,15 @@ bool wxComboBox::WinUIGetSimplePeerSnapshotForTesting(
     // This is deliberately passive. Creation and DoSetSize() own realization;
     // a polling diagnostic must never resolve, focus or arrange the surface it
     // is measuring.
-    if ( !m_winui || !m_winui->simpleRoot || !m_winui->editBox ||
-         !m_winui->simpleListBox )
+    if ( !control->m_winui || !control->m_winui->simpleRoot || !control->m_winui->editBox ||
+         !control->m_winui->simpleListBox )
     {
         return false;
     }
 
     wxComboBox * const expectedOwner =
-        const_cast<wxComboBox *>(this);
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+        const_cast<wxComboBox *>(control);
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
         impl->callbackState;
     const std::shared_ptr<wxWinUITextCallbackState> textState =
@@ -8073,7 +7714,7 @@ bool wxComboBox::WinUIGetSimplePeerSnapshotForTesting(
     const MUXC::Grid root = impl->simpleRoot;
     const MUXC::TextBox edit = impl->editBox;
     const MUXC::ListBox list = impl->simpleListBox;
-    const unsigned itemCount = GetCount();
+    const unsigned itemCount = control->GetCount();
     const auto getLiveOwner = [&]() -> wxComboBox *
     {
         wxChoice * const choiceOwner =
@@ -8111,7 +7752,7 @@ bool wxComboBox::WinUIGetSimplePeerSnapshotForTesting(
     result.layoutAppliedEpoch = impl->simpleLayoutAppliedEpoch;
     result.layoutQueued = impl->simpleLayoutQueued;
     result.layoutInProgress = impl->simpleLayoutInProgress;
-    result.logicalFocus = wxWindow::FindFocus() == this;
+    result.logicalFocus = wxWindow::FindFocus() == control;
     result.nativeFocusInHost = impl->host.ContainsFocus(::GetFocus());
     result.editIdentity = reinterpret_cast<std::uintptr_t>(
         winrt::get_abi(wxWinUIComboObjectIdentity(edit)));
@@ -8252,8 +7893,8 @@ bool wxComboBox::WinUIGetSimplePeerSnapshotForTesting(
     return true;
 }
 
-bool wxComboBox::WinUIGetTemplatePeerSnapshotForTesting(
-    WinUITemplatePeerSnapshot *snapshot) const
+bool wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(const wxComboBox* control,
+    WinUITemplatePeerSnapshot *snapshot)
 {
     if ( !snapshot )
         return false;
@@ -8263,14 +7904,14 @@ bool wxComboBox::WinUIGetTemplatePeerSnapshotForTesting(
     // belong to Loaded/LayoutUpdated and explicit production operations; a
     // polling diagnostic must not call ResolveEditPart() and thereby change
     // the very transition phase it is reporting.
-    if ( !m_winui || m_winui->simpleRoot || !m_winui->comboBox ||
-         !m_winui->callbackState || !m_winui->textCallbackState )
+    if ( !control->m_winui || control->m_winui->simpleRoot || !control->m_winui->comboBox ||
+         !control->m_winui->callbackState || !control->m_winui->textCallbackState )
     {
         return false;
     }
 
-    wxComboBox * const expectedOwner = const_cast<wxComboBox *>(this);
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxComboBox * const expectedOwner = const_cast<wxComboBox *>(control);
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
         impl->callbackState;
     const std::shared_ptr<wxWinUITextCallbackState> textState =
@@ -8316,7 +7957,7 @@ bool wxComboBox::WinUIGetTemplatePeerSnapshotForTesting(
         result.phase |= WinUITemplatePhase_PendingText;
     if ( impl->hasPendingTextSelection )
         result.phase |= WinUITemplatePhase_PendingRange;
-    result.logicalFocus = wxWindow::FindFocus() == this;
+    result.logicalFocus = wxWindow::FindFocus() == control;
     result.nativeFocusInHost = impl->host.ContainsFocus(::GetFocus());
     result.hostContentIdentity = reinterpret_cast<std::uintptr_t>(
         winrt::get_abi(wxWinUIComboObjectIdentity(
@@ -8432,7 +8073,7 @@ bool wxComboBox::WinUIGetTemplatePeerSnapshotForTesting(
             }
         }
 
-        const HWND hwnd = static_cast<HWND>(GetHWND());
+        const HWND hwnd = static_cast<HWND>(control->GetHWND());
         const HWND bridge = impl->host.GetBridgeHWND();
         RECT rect{};
         if ( hwnd && ::GetWindowRect(hwnd, &rect) )
@@ -8446,7 +8087,7 @@ bool wxComboBox::WinUIGetTemplatePeerSnapshotForTesting(
             result.bridgeHeight = rect.bottom - rect.top;
         }
         result.windowVisible = hwnd && ::IsWindowVisible(hwnd);
-        result.windowShownOnScreen = IsShownOnScreen();
+        result.windowShownOnScreen = control->IsShownOnScreen();
         result.bridgeVisible = bridge && ::IsWindowVisible(bridge);
     }
     catch ( const winrt::hresult_error& e )
@@ -8462,14 +8103,14 @@ bool wxComboBox::WinUIGetTemplatePeerSnapshotForTesting(
     return true;
 }
 
-bool wxComboBox::WinUIRetemplateForTesting()
+bool wxWinUIComboBoxTestAccess::Retemplate(wxComboBox* control)
 {
-    if ( !m_winui || !m_winui->callbackState ||
-         !m_winui->textCallbackState || m_winui->simpleRoot ||
-         !m_winui->comboBox || !m_winui->editBox )
+    if ( !control->m_winui || !control->m_winui->callbackState ||
+         !control->m_winui->textCallbackState || control->m_winui->simpleRoot ||
+         !control->m_winui->comboBox || !control->m_winui->editBox )
         return false;
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
         impl->callbackState;
     const std::shared_ptr<wxWinUITextCallbackState> textState =
@@ -8478,7 +8119,7 @@ bool wxComboBox::WinUIRetemplateForTesting()
     if ( !choiceState )
         return false;
 
-    wxComboBox * const expectedOwner = this;
+    wxComboBox * const expectedOwner = control;
     const auto getLiveOwner = [&]() -> wxComboBox *
     {
         wxChoice * const choiceOwner =
@@ -8530,10 +8171,10 @@ bool wxComboBox::WinUIRetemplateForTesting()
         owner->m_winui->retiredEditBoxForTesting = editBeforeBoundary;
         return true;
     };
-    if ( !EnsureThemeTransitionBoundary() )
+    if ( !control->EnsureThemeTransitionBoundary() )
         return acceptBoundaryTransition();
 
-    if ( !ResolveEditPart() )
+    if ( !control->ResolveEditPart() )
         return acceptBoundaryTransition();
 
     wxComboBox *owner = getLiveOwner();
@@ -8560,24 +8201,24 @@ bool wxComboBox::WinUIRetemplateForTesting()
     return transitionAcceptedSince(oldGeneration);
 }
 
-bool wxComboBox::WinUIRunTemplateLayoutEdgeForTesting(
+bool wxWinUIComboBoxTestAccess::RunTemplateLayoutEdge(wxComboBox* control,
     bool forceTransition)
 {
-    if ( !m_winui || !m_winui->callbackState ||
-         !m_winui->textCallbackState || m_winui->simpleRoot ||
-         !m_winui->comboBox || !m_winui->editBox )
+    if ( !control->m_winui || !control->m_winui->callbackState ||
+         !control->m_winui->textCallbackState || control->m_winui->simpleRoot ||
+         !control->m_winui->comboBox || !control->m_winui->editBox )
     {
         return false;
     }
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
         impl->callbackState;
     const std::shared_ptr<wxWinUITextCallbackState> textState =
         impl->textCallbackState;
     const MUXC::TextBox oldEdit = impl->editBox;
     const std::uint64_t oldGeneration = impl->editGeneration;
-    wxComboBox * const expectedOwner = this;
+    wxComboBox * const expectedOwner = control;
     const auto getExactOwner = [&]() -> wxComboBox *
     {
         wxChoice * const choiceOwner = choiceState->GetOwner();
@@ -8597,11 +8238,11 @@ bool wxComboBox::WinUIRunTemplateLayoutEdgeForTesting(
     if ( forceTransition )
     {
         impl->retiredEditBoxForTesting = oldEdit;
-        OnPeerTemplateTransition(true);
+        control->OnPeerTemplateTransition(true);
     }
     else
     {
-        OnPeerLayoutUpdated();
+        control->OnPeerLayoutUpdated();
     }
 
     wxComboBox * const owner = getExactOwner();
@@ -8622,17 +8263,17 @@ bool wxComboBox::WinUIRunTemplateLayoutEdgeForTesting(
            (replayAccepted || replayCompleted);
 }
 
-bool wxComboBox::WinUIQueueTemplateLayoutResolutionForTesting()
+bool wxWinUIComboBoxTestAccess::QueueTemplateLayoutResolution(wxComboBox* control)
 {
-    if ( !m_winui || !m_winui->callbackState ||
-         !m_winui->textCallbackState || m_winui->simpleRoot ||
-         !m_winui->editableRoot || !m_winui->comboBox ||
-         !m_winui->editBox || m_winui->comboLayoutResolveQueued )
+    if ( !control->m_winui || !control->m_winui->callbackState ||
+         !control->m_winui->textCallbackState || control->m_winui->simpleRoot ||
+         !control->m_winui->editableRoot || !control->m_winui->comboBox ||
+         !control->m_winui->editBox || control->m_winui->comboLayoutResolveQueued )
     {
         return false;
     }
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState =
         impl->callbackState;
     const std::shared_ptr<wxWinUITextCallbackState> textState =
@@ -8653,7 +8294,7 @@ bool wxComboBox::WinUIQueueTemplateLayoutResolutionForTesting()
         impl->diagnosticComboLayoutCoalescedEdges;
     const std::uint64_t synchronousBefore =
         impl->diagnosticComboLayoutSynchronousRealizations;
-    wxComboBox * const expectedOwner = this;
+    wxComboBox * const expectedOwner = control;
     const auto getExactOwner = [&]() -> wxComboBox *
     {
         wxChoice * const choiceOwner = choiceState->GetOwner();
@@ -8685,8 +8326,8 @@ bool wxComboBox::WinUIQueueTemplateLayoutResolutionForTesting()
     // return the old editor must still be authoritative, the second edge must
     // have coalesced into the first ticket, and no forced realization may have
     // run synchronously inside either LayoutUpdated callback.
-    OnPeerLayoutUpdated(true);
-    OnPeerLayoutUpdated(true);
+    control->OnPeerLayoutUpdated(true);
+    control->OnPeerLayoutUpdated(true);
 
     wxComboBox * const owner = getExactOwner();
     return owner && owner->m_winui->comboLayoutResolveQueued &&
@@ -8703,22 +8344,22 @@ bool wxComboBox::WinUIQueueTemplateLayoutResolutionForTesting()
                synchronousBefore;
 }
 
-bool wxComboBox::WinUISetEditSelectionForTesting(
+bool wxWinUIComboBoxTestAccess::SetEditSelection(wxComboBox* control,
     long from,
     long to,
     bool retiredPart)
 {
-    if ( (!retiredPart && !ResolveEditPart()) || !m_winui )
+    if ( (!retiredPart && !control->ResolveEditPart()) || !control->m_winui )
         return false;
 
     const MUXC::TextBox editBox =
-        retiredPart ? m_winui->retiredEditBoxForTesting
-                    : m_winui->editBox;
+        retiredPart ? control->m_winui->retiredEditBoxForTesting
+                    : control->m_winui->editBox;
     if ( !editBox )
         return false;
 
     const long len =
-        wxWinUITextPositionMap(m_value, false, false).
+        wxWinUITextPositionMap(control->m_value, false, false).
             GetLastPosition();
     from = wxWinUIClampComboTextPos(from, len);
     to = to < 0 ? len : wxWinUIClampComboTextPos(to, len);
@@ -8729,7 +8370,7 @@ bool wxComboBox::WinUISetEditSelectionForTesting(
     // native range supersedes its template-transition correction ticket;
     // mutating the retained retired editor must remain completely passive.
     if ( !retiredPart )
-        ClearPendingTextSelection();
+        control->ClearPendingTextSelection();
 
     try
     {
@@ -8746,13 +8387,14 @@ bool wxComboBox::WinUISetEditSelectionForTesting(
     }
 }
 
-bool wxComboBox::WinUISetRawEditSelectionForTesting(long from, long to)
+bool wxWinUIComboBoxTestAccess::SetRawEditSelection(wxComboBox* control,
+    long from, long to)
 {
-    if ( !ResolveEditPart() || !m_winui || !m_winui->editBox )
+    if ( !control->ResolveEditPart() || !control->m_winui || !control->m_winui->editBox )
         return false;
 
     const long len =
-        wxWinUITextPositionMap(m_value, false, false).
+        wxWinUITextPositionMap(control->m_value, false, false).
             GetLastPosition();
     from = wxWinUIClampComboTextPos(from, len);
     to = to < 0 ? len : wxWinUIClampComboTextPos(to, len);
@@ -8764,7 +8406,7 @@ bool wxComboBox::WinUISetRawEditSelectionForTesting(long from, long to)
         // Deliberately do not clear the transition ticket here. The real
         // TextBox.SelectionChanged callback must classify this raw peer edge
         // as either the template's SelectAll or an independent writer.
-        m_winui->editBox.Select(
+        control->m_winui->editBox.Select(
             static_cast<int32_t>(from),
             static_cast<int32_t>(to - from));
         return true;
@@ -8777,7 +8419,7 @@ bool wxComboBox::WinUISetRawEditSelectionForTesting(long from, long to)
     }
 }
 
-bool wxComboBox::WinUIChainPendingRangeCallbacksForTesting(
+bool wxWinUIComboBoxTestAccess::ChainPendingRangeCallbacks(wxComboBox* control,
     long independentFrom,
     long independentTo,
     const std::shared_ptr<WinUIRangeSequenceSnapshot>& snapshot)
@@ -8790,16 +8432,16 @@ bool wxComboBox::WinUIChainPendingRangeCallbacksForTesting(
     // exact editor and its ticket, and its deferred SelectionChanged may
     // already be queued. Crossing another layout boundary would change the
     // event whose ordering this seam is intended to prove.
-    if ( !m_winui || !m_winui->editBox || !m_winui->callbackState ||
-         !m_winui->textCallbackState ||
-         !m_winui->hasPendingTextSelection ||
-         m_winui->pendingRangeProjectionHookForTesting )
+    if ( !control->m_winui || !control->m_winui->editBox || !control->m_winui->callbackState ||
+         !control->m_winui->textCallbackState ||
+         !control->m_winui->hasPendingTextSelection ||
+         control->m_winui->pendingRangeProjectionHookForTesting )
     {
         return false;
     }
 
     const long peerLast =
-        wxWinUITextPositionMap(m_value, false, false).GetLastPosition();
+        wxWinUITextPositionMap(control->m_value, false, false).GetLastPosition();
     independentFrom = wxWinUIClampComboTextPos(independentFrom, peerLast);
     independentTo = independentTo < 0
                         ? peerLast
@@ -8807,7 +8449,7 @@ bool wxComboBox::WinUIChainPendingRangeCallbacksForTesting(
     if ( independentTo < independentFrom )
         wxSwap(independentFrom, independentTo);
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const long expectedFrom = wxMin(impl->pendingTextSelectionStart,
                                     impl->pendingTextSelectionEnd);
     const long expectedTo = wxMax(impl->pendingTextSelectionStart,
@@ -8828,7 +8470,7 @@ bool wxComboBox::WinUIChainPendingRangeCallbacksForTesting(
     const std::uint64_t epoch = impl->pendingTextSelectionEpoch;
     const std::uintptr_t editIdentity =
         impl->pendingTextSelectionEditIdentity;
-    wxComboBox * const expectedOwner = this;
+    wxComboBox * const expectedOwner = control;
     const auto getLiveOwner =
         [choiceState, textState, impl, editBox, generation,
          expectedOwner]() -> wxComboBox *
@@ -9259,7 +8901,7 @@ bool wxComboBox::WinUIChainPendingRangeCallbacksForTesting(
     }
 }
 
-bool wxComboBox::WinUISetRawEditSelectionAndDestroyForTesting(
+bool wxWinUIComboBoxTestAccess::SetRawEditSelectionAndDestroy(wxComboBox* control,
     long from,
     long to,
     const std::shared_ptr<WinUIRangeDestructionSnapshot>& snapshot)
@@ -9271,15 +8913,15 @@ bool wxComboBox::WinUISetRawEditSelectionAndDestroyForTesting(
     // This oracle must not force a template/layout edge: the exact current
     // editor and its armed ticket were established by the preceding passive
     // snapshots, and the deferred SelectionChanged is the event under test.
-    if ( !m_winui || !m_winui->editBox ||
-         !m_winui->textCallbackState ||
-         !m_winui->hasPendingTextSelection )
+    if ( !control->m_winui || !control->m_winui->editBox ||
+         !control->m_winui->textCallbackState ||
+         !control->m_winui->hasPendingTextSelection )
     {
         return false;
     }
 
     const long len =
-        wxWinUITextPositionMap(m_value, false, false).GetLastPosition();
+        wxWinUITextPositionMap(control->m_value, false, false).GetLastPosition();
     from = wxWinUIClampComboTextPos(from, len);
     to = to < 0 ? len : wxWinUIClampComboTextPos(to, len);
     if ( to < from )
@@ -9291,7 +8933,7 @@ bool wxComboBox::WinUISetRawEditSelectionAndDestroyForTesting(
     if ( from != 0 || to != len )
         return false;
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const MUXC::TextBox editBox = impl->editBox;
     const std::shared_ptr<wxWinUITextCallbackState> textState =
         impl->textCallbackState;
@@ -9379,22 +9021,22 @@ bool wxComboBox::WinUISetRawEditSelectionAndDestroyForTesting(
     }
 }
 
-unsigned wxComboBox::WinUIGetTemplateStateForTesting() const
+unsigned wxWinUIComboBoxTestAccess::GetTemplateState(const wxComboBox* control)
 {
-    if ( !m_winui )
+    if ( !control->m_winui )
         return 0;
 
     unsigned state = 0;
-    if ( m_winui->editBox )
+    if ( control->m_winui->editBox )
         state |= 0x1;
-    if ( m_winui->retiredEditBoxForTesting )
+    if ( control->m_winui->retiredEditBoxForTesting )
         state |= 0x2;
-    if ( m_winui->editSelectionChangedToken.value )
+    if ( control->m_winui->editSelectionChangedToken.value )
         state |= 0x4;
     return state;
 }
 
-bool wxComboBox::WinUIGetTextEntryPeerStateForTesting(
+bool wxWinUIComboBoxTestAccess::GetTextEntryPeerState(wxComboBox* control,
     unsigned long *maxLength,
     bool *forceUpper,
     wxPoint *margins,
@@ -9415,13 +9057,13 @@ bool wxComboBox::WinUIGetTextEntryPeerStateForTesting(
         *editableRootRequestedTheme = WinUITheme_Unknown;
     if ( editActualTheme )
         *editActualTheme = WinUITheme_Unknown;
-    if ( realize && !ResolveEditPart() )
+    if ( realize && !control->ResolveEditPart() )
         return false;
-    if ( !m_winui || !m_winui->editBox )
+    if ( !control->m_winui || !control->m_winui->editBox )
         return false;
 
-    wxComboBox * const expectedOwner = this;
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxComboBox * const expectedOwner = control;
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->textCallbackState;
     const MUXC::TextBox editBox = impl->editBox;
@@ -9490,12 +9132,12 @@ bool wxComboBox::WinUIGetTextEntryPeerStateForTesting(
     }
 }
 
-unsigned wxComboBox::WinUIGetAutoCompleteSuggestionCountForTesting() const
+unsigned wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestionCount(const wxComboBox* control)
 {
-    if ( !m_winui || !m_winui->autoCompleteFlyout )
+    if ( !control->m_winui || !control->m_winui->autoCompleteFlyout )
         return 0;
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->textCallbackState;
     const MUXC::MenuFlyout flyout = impl->autoCompleteFlyout;
@@ -9505,7 +9147,7 @@ unsigned wxComboBox::WinUIGetAutoCompleteSuggestionCountForTesting() const
         const wxComboBox * const owner = callbackState
             ? callbackState->GetOwner<wxComboBox>()
             : nullptr;
-        return owner == this && owner->m_winui &&
+        return owner == control && owner->m_winui &&
                        owner->m_winui.get() == impl &&
                        owner->m_winui->textCallbackState == callbackState &&
                        owner->m_winui->autoCompleteFlyout == flyout
@@ -9518,13 +9160,13 @@ unsigned wxComboBox::WinUIGetAutoCompleteSuggestionCountForTesting() const
     }
 }
 
-wxString wxComboBox::WinUIGetAutoCompleteSuggestionForTesting(
-    unsigned n) const
+wxString wxWinUIComboBoxTestAccess::GetAutoCompleteSuggestion(const wxComboBox* control,
+    unsigned n)
 {
-    if ( !m_winui || !m_winui->autoCompleteFlyout )
+    if ( !control->m_winui || !control->m_winui->autoCompleteFlyout )
         return wxString();
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->textCallbackState;
     const MUXC::MenuFlyout flyout = impl->autoCompleteFlyout;
@@ -9540,7 +9182,7 @@ wxString wxComboBox::WinUIGetAutoCompleteSuggestionForTesting(
         const wxComboBox * const owner = callbackState
             ? callbackState->GetOwner<wxComboBox>()
             : nullptr;
-        return owner == this && owner->m_winui &&
+        return owner == control && owner->m_winui &&
                        owner->m_winui.get() == impl &&
                        owner->m_winui->textCallbackState == callbackState &&
                        owner->m_winui->autoCompleteFlyout == flyout
@@ -9553,15 +9195,15 @@ wxString wxComboBox::WinUIGetAutoCompleteSuggestionForTesting(
     }
 }
 
-int wxComboBox::WinUIGetAutoCompleteActiveSuggestionForTesting() const
+int wxWinUIComboBoxTestAccess::GetAutoCompleteActiveSuggestion(const wxComboBox* control)
 {
-    if ( !m_winui || !m_winui->autoCompleteFlyout ||
-         !m_winui->textCallbackState )
+    if ( !control->m_winui || !control->m_winui->autoCompleteFlyout ||
+         !control->m_winui->textCallbackState )
     {
         return wxNOT_FOUND;
     }
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->textCallbackState;
     const MUXC::MenuFlyout flyout = impl->autoCompleteFlyout;
@@ -9586,7 +9228,7 @@ int wxComboBox::WinUIGetAutoCompleteActiveSuggestionForTesting() const
 
         const wxComboBox * const owner =
             callbackState->GetOwner<wxComboBox>();
-        return owner == this && owner->m_winui &&
+        return owner == control && owner->m_winui &&
                        owner->m_winui.get() == impl &&
                        owner->m_winui->textCallbackState == callbackState &&
                        owner->m_winui->autoCompleteFlyout == flyout &&
@@ -9601,14 +9243,15 @@ int wxComboBox::WinUIGetAutoCompleteActiveSuggestionForTesting() const
     }
 }
 
-bool wxComboBox::WinUIInvokeAutoCompleteSuggestionForTesting(unsigned n)
+bool wxWinUIComboBoxTestAccess::InvokeAutoCompleteSuggestion(wxComboBox* control,
+    unsigned n)
 {
-    if ( !m_editable || !m_winui || !m_winui->autoCompleteFlyout )
+    if ( !control->m_editable || !control->m_winui || !control->m_winui->autoCompleteFlyout )
         return false;
 
     try
     {
-        const auto items = m_winui->autoCompleteFlyout.Items();
+        const auto items = control->m_winui->autoCompleteFlyout.Items();
         if ( n >= items.Size() )
             return false;
         const MUXC::MenuFlyoutItem item =
@@ -9629,23 +9272,24 @@ bool wxComboBox::WinUIInvokeAutoCompleteSuggestionForTesting(unsigned n)
     }
 }
 
-bool wxComboBox::WinUIInvokeClipboardCommandForTesting(wxEventType type)
+bool wxWinUIComboBoxTestAccess::InvokeClipboardCommand(wxComboBox* control,
+    wxEventType type)
 {
-    if ( !m_winui || !m_winui->editBox ||
-         !m_winui->textCallbackState ||
-         wxWindow::FindFocus() != this )
+    if ( !control->m_winui || !control->m_winui->editBox ||
+         !control->m_winui->textCallbackState ||
+         wxWindow::FindFocus() != control )
         return false;
 
     // The seam only injects input into an already focused editor. Focus and
     // layout are established by production SetFocus() and observed passively
     // by the caller; declaring success while XAML focus is still pending made
     // a dispatched HWND message look like a routed clipboard command.
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->textCallbackState;
     const std::uint64_t editGeneration = impl->editGeneration;
     const MUXC::TextBox editBox = impl->editBox;
-    wxComboBox * const expectedOwner = this;
+    wxComboBox * const expectedOwner = control;
     const auto getExactOwner = [&]() -> wxComboBox *
     {
         wxComboBox * const owner = callbackState
@@ -9765,23 +9409,23 @@ bool wxComboBox::WinUIInvokeClipboardCommandForTesting(wxEventType type)
     }
 }
 
-bool wxComboBox::WinUIGetDiagnosticSnapshotForTesting(
-    WinUIDiagnosticSnapshot *snapshot) const
+bool wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(const wxComboBox* control,
+    WinUIDiagnosticSnapshot *snapshot)
 {
     if ( !snapshot )
         return false;
     *snapshot = WinUIDiagnosticSnapshot();
-    if ( !m_winui || !m_winui->callbackState ||
-         !m_winui->textCallbackState )
+    if ( !control->m_winui || !control->m_winui->callbackState ||
+         !control->m_winui->textCallbackState )
     {
         return false;
     }
 
-    wxWinUIChoiceImpl * const impl = m_winui.get();
+    wxWinUIChoiceImpl * const impl = control->m_winui.get();
     wxChoice * const choiceOwner = impl->callbackState->GetOwner();
     wxComboBox * const textOwner =
         impl->textCallbackState->GetOwner<wxComboBox>();
-    if ( choiceOwner != this || textOwner != this || !textOwner->m_winui ||
+    if ( choiceOwner != control || textOwner != control || !textOwner->m_winui ||
          textOwner->m_winui.get() != impl )
     {
         return false;
@@ -9873,6 +9517,7 @@ bool wxComboBox::WinUIGetDiagnosticSnapshotForTesting(
     *snapshot = result;
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxComboBox::SendSelectionEvent()
 {

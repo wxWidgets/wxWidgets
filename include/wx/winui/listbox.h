@@ -93,91 +93,6 @@ public:
         const wxString& s = wxEmptyString);
     virtual bool MSWSetTabStops(const wxVector<int>& tabStops);
 
-    // Implementation-only seams used by deterministic WinUI tests.
-    std::uint64_t WinUIGetItemIdForTesting(unsigned int n) const;
-    std::uintptr_t WinUIGetItemPeerIdentityForTesting(unsigned int n) const;
-    double WinUIGetControlWidthDIPsForTesting() const
-        { return m_controlWidthDIPs; }
-    struct WinUIScrollMetricsForTesting
-    {
-        bool hasItemsPanelRoot = false;
-        bool hasAuthoritativeScroll = false;
-        bool hasScrollContentPresenter = false;
-        bool contentPresenterCanHorizontallyScroll = false;
-        bool contentPresenterSizesContentToTemplatedParent = true;
-        bool hasItemsStackPanel = false;
-        bool hasVirtualizingStackPanel = false;
-        bool hasOrientedPanel = false;
-        bool panelCanHorizontallyScroll = false;
-        bool panelScrollOwnerResolvedFromAncestor = false;
-        bool panelScrollOwnerMatches = false;
-        bool horizontalPresentationPending = false;
-        bool horizontalResetPending = false;
-        bool materializationRetryQueued = false;
-        unsigned int materializationAttempts = 0;
-        unsigned int materializationRetriesRemaining = 0;
-        int listVisualChildCount = 0;
-        double scrollExtentWidth = 0.0;
-        double scrollViewportWidth = 0.0;
-        double scrollExtentHeight = 0.0;
-        double scrollViewportHeight = 0.0;
-        double scrollScrollableHeight = 0.0;
-        double contentPresenterExtentWidth = 0.0;
-        double contentPresenterViewportWidth = 0.0;
-        double contentActualWidth = 0.0;
-        double contentDesiredWidth = 0.0;
-        double panelActualWidth = 0.0;
-        double panelDesiredWidth = 0.0;
-        double itemActualWidth = 0.0;
-        double itemDesiredWidth = 0.0;
-        double itemExplicitWidth = 0.0;
-    };
-    unsigned int WinUIGetPeerCountForTesting() const;
-    bool WinUIPoisonPeerForTesting();
-    bool WinUISetPeerSelectionForTesting(unsigned int n, bool select);
-    bool WinUIFocusPeerItemForTesting(unsigned int n);
-    bool WinUIDoubleTapPeerForTesting(unsigned int n);
-    bool WinUISetPeerCheckForTesting(unsigned int n, bool check);
-    bool WinUIActivatePeerCheckForTesting(unsigned int n,
-                                          bool *focused = nullptr,
-                                          bool *pointerTarget = nullptr);
-    bool WinUITogglePeerViaAutomationForTesting(unsigned int n);
-    bool WinUITogglePeerWithKeyboardForTesting(unsigned int n);
-    bool WinUIDispatchCheckKeyForTesting(int virtualKey,
-                                         bool *handled,
-                                         bool shiftDown = false,
-                                         std::uintptr_t keyboardLayout = 0);
-    bool WinUIGetPeerCheckForTesting(unsigned int n) const;
-    bool WinUIGetScrollPresentationForTesting(
-        int *horizontalVisibility,
-        int *verticalVisibility,
-        double *horizontalScrollableWidth = nullptr,
-        WinUIScrollMetricsForTesting *metrics = nullptr) const;
-    bool WinUIGetPeerLayoutDirectionForTesting(
-        bool *rightToLeft) const;
-    bool WinUIGetItemPresentationForTesting(
-        unsigned int n,
-        bool *ownerDrawBitmap,
-        wxSize *bitmapPixelSize,
-        unsigned int *tabRunCount,
-        double *contentWidthDips,
-        bool *checkOverlay,
-        wxRealPoint *bitmapDIPSize = nullptr,
-        wxVector<double> *tabRunOffsetsDips = nullptr,
-        bool *checkOverlayFocused = nullptr,
-        unsigned int *contentFontWeight = nullptr,
-        double *contentFontSizeDips = nullptr,
-        wxString *contentFontFamily = nullptr,
-        double *containerHeightDips = nullptr,
-        double *containerMinHeightDips = nullptr,
-        double *containerActualHeightDips = nullptr,
-        double *xamlRasterizationScale = nullptr) const;
-    bool WinUIGetThemePresentationForTesting(
-        unsigned int n,
-        int *actualTheme,
-        std::uint32_t *foregroundARGB,
-        std::uint32_t *bitmapARGB) const;
-    bool WinUISetPeerThemeForTesting(bool dark);
 
 protected:
     void DoSetFirstItem(int n) override;
@@ -245,6 +160,8 @@ protected:
 #endif
 
 private:
+    friend class wxWinUIListBoxTestAccess;
+
     bool WinUIHandleCheckKey(int virtualKey,
                              bool shiftDown,
                              std::uintptr_t keyboardLayout,

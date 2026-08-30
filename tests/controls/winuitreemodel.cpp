@@ -19,6 +19,7 @@
 #include "wx/log.h"
 #include "wx/textctrl.h"
 #include "wx/treectrl.h"
+#include "treectrl-test-access.h"
 #include "wx/utils.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
@@ -136,7 +137,7 @@ DeepTreeChain AppendDeepTreeChain(wxTreeCtrl& tree,
             data.release();
 
         const std::uintptr_t peerIdentity =
-            tree.WinUIGetItemPeerIdentityForTesting(item);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, item);
         REQUIRE(peerIdentity != 0);
         chain.items.push_back(item);
         chain.peerIdentities.push_back(peerIdentity);
@@ -161,12 +162,12 @@ void CheckDeepTreeChainIntegrity(wxTreeCtrl& tree,
         const wxTreeItemId item = chain.items[i];
 
         CHECK(tree.GetItemParent(item) == expectedParent);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(item) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, item) ==
               chain.peerIdentities[i]);
         // This seam also checks the exact sibling index in the peer
         // collection selected from the model parent. Walking it once per
         // node therefore validates the entire deep peer topology in O(n).
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(item));
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, item));
 
         expectedParent = item;
     }
@@ -174,17 +175,17 @@ void CheckDeepTreeChainIntegrity(wxTreeCtrl& tree,
     const size_t middle = chain.items.size() / 2;
     CHECK(tree.GetChildrenCount(chain.items.front(), false) ==
           (chain.items.size() == 1 ? 0u : 1u));
-    CHECK(tree.WinUIGetPeerChildCountForTesting(
-              chain.items.front()) ==
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree,
+                                                       chain.items.front()) ==
           (chain.items.size() == 1 ? 0u : 1u));
     CHECK(tree.GetChildrenCount(chain.items[middle], false) ==
           (middle + 1 < chain.items.size() ? 1u : 0u));
-    CHECK(tree.WinUIGetPeerChildCountForTesting(
-              chain.items[middle]) ==
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree,
+                                                       chain.items[middle]) ==
           (middle + 1 < chain.items.size() ? 1u : 0u));
     CHECK(tree.GetChildrenCount(chain.items.back(), false) == 0);
-    CHECK(tree.WinUIGetPeerChildCountForTesting(
-              chain.items.back()) == 0);
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(
+              tree, chain.items.back()) == 0);
 }
 
 enum class TreeBundleCallbackPoint
@@ -544,25 +545,25 @@ TEST_CASE("wxWinUI TreeCtrl model transactions are atomic",
     REQUIRE(second.IsOk());
 
     const std::uintptr_t rootPeer =
-        tree.WinUIGetItemPeerIdentityForTesting(root);
+        wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root);
     const std::uintptr_t firstPeer =
-        tree.WinUIGetItemPeerIdentityForTesting(first);
+        wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, first);
     const std::uintptr_t secondPeer =
-        tree.WinUIGetItemPeerIdentityForTesting(second);
+        wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, second);
     REQUIRE(rootPeer != 0);
     REQUIRE(firstPeer != 0);
     REQUIRE(secondPeer != 0);
-    REQUIRE(tree.WinUIIsItemAttachedToPeerForTesting(root));
-    REQUIRE(tree.WinUIIsItemAttachedToPeerForTesting(first));
-    REQUIRE(tree.WinUIIsItemAttachedToPeerForTesting(second));
-    REQUIRE(tree.WinUIGetPeerChildCountForTesting() == 1);
-    REQUIRE(tree.WinUIGetPeerChildCountForTesting(root) == 2);
+    REQUIRE(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+    REQUIRE(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, first));
+    REQUIRE(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, second));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree) == 1);
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
 
     int rejectedDataDestroyed = 0;
     CountedTreeData * const rejectedData =
         new CountedTreeData(&rejectedDataDestroyed);
-    tree.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::InsertItem);
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        tree, wxWinUITreeCtrlTestAccess::PeerMutation::InsertItem);
     const wxTreeItemId rejected =
         tree.InsertItem(root, size_t{1}, "rejected", -1, -1, rejectedData);
     CHECK_FALSE(rejected.IsOk());
@@ -571,20 +572,22 @@ TEST_CASE("wxWinUI TreeCtrl model transactions are atomic",
     CHECK(tree.GetCount() == 3);
     wxTreeItemIdValue cookie = nullptr;
     CHECK(tree.GetFirstChild(root, cookie) == first);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(first) == firstPeer);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(second) == secondPeer);
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(first));
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(second));
-    CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 2);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, first) ==
+          firstPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, second) ==
+          secondPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, first));
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, second));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
     delete rejectedData;
     CHECK(rejectedDataDestroyed == 1);
 
     int postCommitDataDestroyed = 0;
     CountedTreeData * const postCommitData =
         new CountedTreeData(&postCommitDataDestroyed);
-    tree.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::
-            InsertRollbackAfterCommit);
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        tree,
+        wxWinUITreeCtrlTestAccess::PeerMutation::InsertRollbackAfterCommit);
     const wxTreeItemId postCommitRejected =
         tree.InsertItem(
             root, size_t{1}, "post-commit rejected",
@@ -593,72 +596,78 @@ TEST_CASE("wxWinUI TreeCtrl model transactions are atomic",
     CHECK(tree.GetCount() == 3);
     CHECK(postCommitDataDestroyed == 0);
     CHECK_FALSE(postCommitData->GetId().IsOk());
-    CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 2);
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(first));
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(second));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, first));
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, second));
     delete postCommitData;
     CHECK(postCommitDataDestroyed == 1);
 
-    tree.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::RemoveItem);
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        tree, wxWinUITreeCtrlTestAccess::PeerMutation::RemoveItem);
     tree.Delete(first);
     CHECK(tree.GetCount() == 3);
     CHECK(tree.GetItemText(first) == "first");
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(first) == firstPeer);
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(first));
-    CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 2);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, first) ==
+          firstPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, first));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
 
-    tree.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::RemoveItemAfterCommit);
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        tree, wxWinUITreeCtrlTestAccess::PeerMutation::RemoveItemAfterCommit);
     tree.Delete(first);
     CHECK(tree.GetCount() == 3);
     CHECK(tree.GetItemText(first) == "first");
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(first) == firstPeer);
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(first));
-    CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 2);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, first) ==
+          firstPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, first));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
 
     tree.Expand(root);
     REQUIRE(tree.IsExpanded(root));
     tree.SelectItem(second);
     REQUIRE(tree.GetSelection() == second);
-    tree.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::ClearItems);
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        tree, wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems);
     tree.DeleteChildren(root);
     CHECK(tree.GetCount() == 3);
     CHECK(tree.GetChildrenCount(root, false) == 2);
     CHECK(tree.IsExpanded(root));
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(first) == firstPeer);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(second) == secondPeer);
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(first));
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(second));
-    CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 2);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, first) ==
+          firstPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, second) ==
+          secondPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, first));
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, second));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
     CHECK(tree.GetSelection() == second);
 
     // Failure injection is one-shot and peer identity survives every rollback.
     tree.Delete(first);
     CHECK(tree.GetCount() == 2);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(first) == 0);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(second) == secondPeer);
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(second));
-    CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 1);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, first) == 0);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, second) ==
+          secondPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, second));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 1);
 
-    tree.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::ClearItems);
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        tree, wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems);
     tree.DeleteAllItems();
     CHECK(tree.GetCount() == 2);
     CHECK(tree.GetRootItem() == root);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) == rootPeer);
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(root));
-    CHECK(tree.WinUIIsItemAttachedToPeerForTesting(second));
-    CHECK(tree.WinUIGetPeerChildCountForTesting() == 1);
-    CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 1);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
+          rootPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, second));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree) == 1);
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 1);
     CHECK(tree.GetSelection() == second);
 
     const wxTreeItemId replacement =
         tree.AppendItem(root, "replacement");
     REQUIRE(replacement.IsOk());
     CHECK(replacement != first);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(first) == 0);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, first) == 0);
 
     tree.DeleteAllItems();
     CHECK(tree.GetCount() == 0);
@@ -691,25 +700,25 @@ TEST_CASE("wxWinUI TreeCtrl model transactions are atomic",
     int rootDataDestroyed = 0;
     CountedTreeData * const rootData =
         new CountedTreeData(&rootDataDestroyed);
-    rootRollback.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::
-            InsertRollbackAfterCommit);
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        rootRollback,
+        wxWinUITreeCtrlTestAccess::PeerMutation::InsertRollbackAfterCommit);
     const wxTreeItemId rejectedRoot =
         rootRollback.AddRoot("rejected root", -1, -1, rootData);
     CHECK_FALSE(rejectedRoot.IsOk());
     CHECK(rootRollback.GetCount() == 0);
-    CHECK(rootRollback.WinUIGetPeerChildCountForTesting() == 0);
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(rootRollback) == 0);
     CHECK(rootDataDestroyed == 0);
     CHECK_FALSE(rootData->GetId().IsOk());
     delete rootData;
     const wxTreeItemId acceptedRoot =
         rootRollback.AddRoot("accepted root");
     REQUIRE(acceptedRoot.IsOk());
-    CHECK(rootRollback.WinUIGetItemPeerIdentityForTesting(
-              acceptedRoot) != 0);
-    CHECK(rootRollback.WinUIIsItemAttachedToPeerForTesting(
-        acceptedRoot));
-    CHECK(rootRollback.WinUIGetPeerChildCountForTesting() == 1);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(rootRollback,
+                                                         acceptedRoot) != 0);
+    CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(rootRollback,
+                                                          acceptedRoot));
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(rootRollback) == 1);
 }
 
 TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
@@ -749,12 +758,12 @@ TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
             ++changed;
         });
 
-    REQUIRE(tree.WinUISelectPeerItemForTesting(first));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(tree, first));
     CHECK(tree.GetSelection() == first);
     CHECK(changing == 1);
     CHECK(changed == 1);
 
-    CHECK(tree.WinUISelectPeerItemForTesting(second));
+    CHECK(wxWinUITreeCtrlTestAccess::SelectPeerItem(tree, second));
     DrainTreeDispatch();
     CHECK(tree.GetSelection() == first);
     CHECK(changing == 2);
@@ -762,7 +771,7 @@ TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
 
     vetoSecond = false;
     reenterToThird = true;
-    REQUIRE(tree.WinUISelectPeerItemForTesting(second));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(tree, second));
     DrainTreeDispatch();
     CHECK(tree.GetSelection() == third);
     CHECK(tree.IsSelected(third));
@@ -793,31 +802,29 @@ TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
             ++expanded;
         });
 
-    tree.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::
-            SetExpandedAfterCommit);
-    CHECK_FALSE(tree.WinUISetPeerExpandedForTesting(root, true));
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        tree, wxWinUITreeCtrlTestAccess::PeerMutation::SetExpandedAfterCommit);
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(tree, root, true));
     CHECK_FALSE(tree.IsExpanded(root));
-    CHECK_FALSE(tree.WinUIIsPeerExpandedForTesting(root));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
     CHECK(expanding == 1);
     CHECK(expanded == 0);
 
     vetoExpand = false;
-    REQUIRE(tree.WinUISetPeerExpandedForTesting(root, true));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(tree, root, true));
     CHECK(tree.IsExpanded(root));
-    CHECK(tree.WinUIIsPeerExpandedForTesting(root));
+    CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
     CHECK(expanding == 2);
     CHECK(expanded == 1);
 
     tree.Collapse(root);
     REQUIRE_FALSE(tree.IsExpanded(root));
-    REQUIRE_FALSE(tree.WinUIIsPeerExpandedForTesting(root));
-    tree.WinUIFailNextPeerMutationForTesting(
-        wxTreeCtrl::WinUIPeerMutationForTesting::
-            SetExpandedAfterCommit);
+    REQUIRE_FALSE(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
+    wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+        tree, wxWinUITreeCtrlTestAccess::PeerMutation::SetExpandedAfterCommit);
     tree.Expand(root);
     CHECK_FALSE(tree.IsExpanded(root));
-    CHECK_FALSE(tree.WinUIIsPeerExpandedForTesting(root));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
     CHECK(expanding == 3);
     CHECK(expanded == 1);
 
@@ -831,10 +838,10 @@ TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
             if ( !handleKey )
                 event.Skip();
         });
-    CHECK(tree.WinUIKeyDownForTesting('A'));
+    CHECK(wxWinUITreeCtrlTestAccess::KeyDown(tree, 'A'));
     CHECK(keys == 1);
     handleKey = false;
-    CHECK_FALSE(tree.WinUIKeyDownForTesting('B'));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(tree, 'B'));
     CHECK(keys == 2);
 
     wxTreeCtrl multi(
@@ -903,11 +910,11 @@ TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
     DrainTreeDispatch(6);
     wxArrayTreeItemIds focusedSelections;
     REQUIRE(multi.GetSelections(focusedSelections) == 2);
-    REQUIRE(multi.WinUIFocusPeerItemForTesting(multiFirst));
+    REQUIRE(wxWinUITreeCtrlTestAccess::FocusPeerItem(multi, multiFirst));
     CHECK(multi.GetFocusedItem() == multiFirst);
-    REQUIRE(multi.WinUIFocusPeerItemForTesting(multiSecond));
+    REQUIRE(wxWinUITreeCtrlTestAccess::FocusPeerItem(multi, multiSecond));
     CHECK(multi.GetFocusedItem() == multiSecond);
-    REQUIRE(multi.WinUIFocusPeerItemForTesting(multiFirst));
+    REQUIRE(wxWinUITreeCtrlTestAccess::FocusPeerItem(multi, multiFirst));
     CHECK(multi.GetFocusedItem() == multiFirst);
     CHECK(multi.GetSelections(focusedSelections) == 2);
     CHECK(multi.IsSelected(multiFirst));
@@ -930,11 +937,11 @@ TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
             CHECK(event.GetItem() == multiFirst);
             CHECK(event.GetPoint() != wxDefaultPosition);
         });
-    REQUIRE(multi.WinUIKeyDownForTesting(WXK_SPACE));
-    REQUIRE(multi.WinUIKeyDownForTesting(WXK_RETURN));
-    CHECK_FALSE(multi.WinUIKeyDownForTesting(
-        WXK_RETURN, true /* control */));
-    REQUIRE(multi.WinUIKeyDownForTesting(WXK_MENU));
+    REQUIRE(wxWinUITreeCtrlTestAccess::KeyDown(multi, WXK_SPACE));
+    REQUIRE(wxWinUITreeCtrlTestAccess::KeyDown(multi, WXK_RETURN));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(multi, WXK_RETURN,
+                                                   true /* control */));
+    REQUIRE(wxWinUITreeCtrlTestAccess::KeyDown(multi, WXK_MENU));
     CHECK(activated == 2);
     CHECK(menus == 1);
 
@@ -946,7 +953,7 @@ TEST_CASE("wxWinUI TreeCtrl selection expansion and key contracts",
             ++beginEdits;
             CHECK(event.GetItem() == multiFirst);
         });
-    REQUIRE(multi.WinUIKeyDownForTesting(WXK_F2));
+    REQUIRE(wxWinUITreeCtrlTestAccess::KeyDown(multi, WXK_F2));
     REQUIRE(multi.GetEditControl());
     CHECK(beginEdits == 1);
     multi.EndEditLabel(multiFirst, true);
@@ -1021,7 +1028,7 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         const wxTreeItemId leaf = tree.AppendItem(branch, "leaf");
 
         const std::uintptr_t collapsedImage =
-            tree.WinUIGetPeerItemImageIdentityForTesting(root);
+            wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root);
         REQUIRE(collapsedImage != 0);
 
         int expanding = 0;
@@ -1040,11 +1047,12 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
                     tree.SetItemImage(
                         root, 1, wxTreeItemIcon_Expanded);
                     callbackImage =
-                        tree.WinUIGetPeerItemImageIdentityForTesting(root);
+                        wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(
+                            tree, root);
                 }
             });
 
-        tree.WinUIResetModelStatsForTesting();
+        wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
         tree.SelectItem(leaf);
         REQUIRE(tree.GetSelection() == leaf);
         CHECK(expanding == 1);
@@ -1054,7 +1062,7 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         // alias even if the COM allocator later recycles an old address.
         CHECK(callbackImage != collapsedImage);
         const std::uintptr_t expandedImage =
-            tree.WinUIGetPeerItemImageIdentityForTesting(root);
+            wxWinUITreeCtrlTestAccess::GetPeerItemImageIdentity(tree, root);
         REQUIRE(expandedImage != 0);
         // The post-commit source is allocated before replacing the still-live
         // callback source. This proves that expansion caused a second
@@ -1063,8 +1071,8 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         CHECK(tree.IsExpanded(root));
         CHECK(tree.GetItemImage(root, wxTreeItemIcon_Expanded) == 1);
 
-        const wxTreeCtrl::WinUIModelStats stats =
-            tree.WinUIGetModelStatsForTesting();
+        const wxWinUITreeCtrlTestAccess::ModelStats stats =
+            wxWinUITreeCtrlTestAccess::GetModelStats(tree);
         // One callback-time collapsed projection, one post-commit expanded
         // projection, and the new selection. The image-less branch is never
         // sent through the content projector.
@@ -1105,9 +1113,8 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         CHECK(tree.GetSelection() == sibling);
         CHECK(tree.IsExpanded(root));
         CHECK_FALSE(tree.IsExpanded(branch));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
-        CHECK_FALSE(
-            tree.WinUIIsPeerExpandedForTesting(branch));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
+        CHECK_FALSE(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, branch));
     }
 
     SECTION("a nested selection from EXPANDED repairs deferred peers")
@@ -1138,8 +1145,8 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         CHECK(tree.GetSelection() == sibling);
         CHECK(tree.IsExpanded(root));
         CHECK(tree.IsExpanded(branch));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(branch));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, branch));
     }
 
     SECTION("a deferred peer failure reconciles before selection commits")
@@ -1160,9 +1167,9 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         tree.Bind(
             wxEVT_TREE_ITEM_EXPANDED,
             [&](wxTreeEvent&) { ++expanded; });
-        tree.WinUIFailNextPeerMutationForTesting(
-            wxTreeCtrl::WinUIPeerMutationForTesting::
-                SetExpandedAfterCommit);
+        wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+            tree,
+            wxWinUITreeCtrlTestAccess::PeerMutation::SetExpandedAfterCommit);
 
         tree.SelectItem(leaf);
         CHECK(tree.GetSelection() == leaf);
@@ -1170,8 +1177,8 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         CHECK(expanded == 2);
         CHECK(tree.IsExpanded(root));
         CHECK(tree.IsExpanded(branch));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(branch));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, branch));
     }
 
     SECTION("selection waits when both projection and reconciliation fail")
@@ -1188,10 +1195,9 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         // exhaust the bounded structural reconciliation attempts. The wx
         // model still commits, but peer selection must wait for the queued
         // full repair instead of targeting a partial hierarchy.
-        tree.WinUIFailPeerMutationsForTesting(
-            wxTreeCtrl::WinUIPeerMutationForTesting::
-                SetExpandedAfterCommit,
-            3);
+        wxWinUITreeCtrlTestAccess::FailPeerMutations(
+            tree,
+            wxWinUITreeCtrlTestAccess::PeerMutation::SetExpandedAfterCommit, 3);
         {
             wxLogNull suppressExpectedInjectedFailures;
             tree.SelectItem(leaf);
@@ -1199,13 +1205,13 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         CHECK(tree.GetSelection() == leaf);
         CHECK(tree.IsExpanded(root));
         CHECK(tree.IsExpanded(branch));
-        CHECK(tree.WinUIIsPeerStructureRepairPendingForTesting());
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerStructureRepairPending(tree));
 
         DrainTreeDispatch(8);
         CHECK_FALSE(
-            tree.WinUIIsPeerStructureRepairPendingForTesting());
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(branch));
+            wxWinUITreeCtrlTestAccess::IsPeerStructureRepairPending(tree));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, branch));
         CHECK(tree.GetSelection() == leaf);
     }
 
@@ -1275,9 +1281,8 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         CHECK_FALSE(reenterToSibling);
         CHECK(tree.IsExpanded(root));
         CHECK_FALSE(tree.IsExpanded(branch));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
-        CHECK_FALSE(
-            tree.WinUIIsPeerExpandedForTesting(branch));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
+        CHECK_FALSE(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, branch));
 
         tree.Collapse(root);
         events.clear();
@@ -1321,7 +1326,7 @@ TEST_CASE("wxWinUI TreeCtrl ancestor expansion and scrolling contracts",
         tree.Expand(root);
         tree.Show();
         DrainTreeDispatch(6);
-        REQUIRE(tree.WinUIFocusPeerItemForTesting(sibling));
+        REQUIRE(wxWinUITreeCtrlTestAccess::FocusPeerItem(tree, sibling));
         REQUIRE(tree.GetFocusedItem() == sibling);
 
         bool reenter = true;
@@ -1397,7 +1402,8 @@ TEST_CASE("wxWinUI TreeCtrl deletion selection is transactional",
         CHECK(tree.GetSelection() == third);
         CHECK(tree.IsSelected(third));
         CHECK(tree.GetItemText(first) == "first");
-        CHECK_FALSE(tree.WinUIGetItemPeerIdentityForTesting(second));
+        CHECK_FALSE(
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, second));
         CHECK(changing == 1);
         CHECK(changed == 1);
         CHECK(deleted == 1);
@@ -1429,7 +1435,8 @@ TEST_CASE("wxWinUI TreeCtrl deletion selection is transactional",
         tree.Delete(selected);
         CHECK_FALSE(tree.GetSelection().IsOk());
         CHECK(tree.GetCount() == 2);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(selected) == 0);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, selected) ==
+              0);
         CHECK(changing == 1);
         CHECK(changed == 0);
     }
@@ -1493,9 +1500,11 @@ TEST_CASE("wxWinUI TreeCtrl deletion selection is transactional",
         CHECK(tree.GetCount() == 4);
         CHECK(tree.GetItemText(first) == "first");
         CHECK(tree.GetSelection() == first);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(first) != 0);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(second) != 0);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(nested) != 0);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, first) != 0);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, second) !=
+              0);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, nested) !=
+              0);
     }
 }
 
@@ -1506,7 +1515,7 @@ TEST_CASE("wxWinUI TreeCtrl callbacks and items retire safely",
     REQUIRE(parent);
 
     const size_t baseline =
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
     for ( int i = 0; i < 100; ++i )
     {
         std::unique_ptr<wxTreeCtrl> tree(
@@ -1514,18 +1523,15 @@ TEST_CASE("wxWinUI TreeCtrl callbacks and items retire safely",
                 parent, wxID_ANY, wxDefaultPosition, wxSize(220, 120)));
         const wxTreeItemId root = tree->AddRoot("root");
         tree->AppendItem(root, "child");
-        REQUIRE(tree->WinUIQueueSelectionCorrectionForTesting());
-        tree->WinUIClosePeerForTesting();
-        tree->WinUIClosePeerForTesting();
+        REQUIRE(wxWinUITreeCtrlTestAccess::QueueSelectionCorrection(*tree));
+        wxWinUITreeCtrlTestAccess::ClosePeer(*tree);
+        wxWinUITreeCtrlTestAccess::ClosePeer(*tree);
         tree.reset();
-        CHECK(
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-            baseline);
+        CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() ==
+              baseline);
     }
     DrainTreeDispatch(8);
-    CHECK(
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-        baseline);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
 
     int retainedDataDestroyed = 0;
     int rejectedDataDestroyed = 0;
@@ -1543,9 +1549,9 @@ TEST_CASE("wxWinUI TreeCtrl callbacks and items retire safely",
         tree.SelectItem(retainedChild);
 
         const std::uintptr_t rootPeer =
-            tree.WinUIGetItemPeerIdentityForTesting(retainedRoot);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, retainedRoot);
         const std::uintptr_t childPeer =
-            tree.WinUIGetItemPeerIdentityForTesting(retainedChild);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, retainedChild);
         int deleteEvents = 0;
         tree.Bind(
             wxEVT_TREE_DELETE_ITEM,
@@ -1565,10 +1571,10 @@ TEST_CASE("wxWinUI TreeCtrl callbacks and items retire safely",
         CHECK(tree.GetItemText(retainedChild) == "old child");
         CHECK(tree.IsExpanded(retainedRoot));
         CHECK(tree.GetSelection() == retainedChild);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(retainedRoot) ==
-              rootPeer);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(retainedChild) ==
-              childPeer);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(
+                  tree, retainedRoot) == rootPeer);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(
+                  tree, retainedChild) == childPeer);
         CHECK(deleteEvents == 0);
         CHECK(retainedDataDestroyed == 0);
         CHECK(rejectedDataDestroyed == 0);
@@ -1577,9 +1583,7 @@ TEST_CASE("wxWinUI TreeCtrl callbacks and items retire safely",
         CHECK(rejectedDataDestroyed == 1);
     }
     CHECK(retainedDataDestroyed == 1);
-    CHECK(
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-        baseline);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
 
     wxTreeCtrl *doomed = new wxTreeCtrl(
         parent, wxID_ANY, wxDefaultPosition, wxSize(220, 120));
@@ -1594,11 +1598,9 @@ TEST_CASE("wxWinUI TreeCtrl callbacks and items retire safely",
             delete doomed;
         });
     CHECK_FALSE(
-        doomed->WinUISelectPeerItemForTesting(doomedChild));
+        wxWinUITreeCtrlTestAccess::SelectPeerItem(*doomed, doomedChild));
     CHECK(doomedLifetime.get() == nullptr);
-    CHECK(
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-        baseline);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
 
     wxTreeCtrl *deleteDoomed = new wxTreeCtrl(
         parent, wxID_ANY, wxDefaultPosition, wxSize(220, 120));
@@ -1614,9 +1616,7 @@ TEST_CASE("wxWinUI TreeCtrl callbacks and items retire safely",
         });
     deleteDoomed->Delete(deleteChild);
     CHECK(deleteLifetime.get() == nullptr);
-    CHECK(
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-        baseline);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 TEST_CASE("wxWinUI TreeCtrl sort preserves selected node identities",
@@ -1745,7 +1745,7 @@ TEST_CASE("wxWinUI TreeCtrl after-events survive stale projection",
             }
         });
 
-    REQUIRE(multi.WinUISelectPeerItemForTesting(multiSecond));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(multi, multiSecond));
     DrainTreeDispatch(6);
     CHECK(multi.IsSelected(multiFirst));
     CHECK_FALSE(multi.IsSelected(multiSecond));
@@ -1759,7 +1759,7 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
     REQUIRE(parent);
 
     const size_t baseline =
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
 
     SECTION("AddRoot does not form an id after destruction")
     {
@@ -1872,9 +1872,7 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
         delete tree;
     }
 
-    CHECK(
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-        baseline);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 TEST_CASE("wxWinUI TreeCtrl insertion survives harmless nested writers",
@@ -1904,7 +1902,8 @@ TEST_CASE("wxWinUI TreeCtrl insertion survives harmless nested writers",
             CHECK(tree.GetRootItem() == root);
             CHECK(tree.GetCount() == 1);
             CHECK(tree.GetItemData(root) != nullptr);
-            CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) != 0);
+            CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) !=
+                  0);
             CHECK(destroyed == 0);
         }
         CHECK(destroyed == 1);
@@ -1933,7 +1932,8 @@ TEST_CASE("wxWinUI TreeCtrl insertion survives harmless nested writers",
             CHECK(tree.GetItemParent(child) == root);
             CHECK(tree.GetCount() == 2);
             CHECK(tree.GetItemData(child) != nullptr);
-            CHECK(tree.WinUIGetItemPeerIdentityForTesting(child) != 0);
+            CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, child) !=
+                  0);
             CHECK(destroyed == 0);
         }
         CHECK(destroyed == 1);
@@ -1966,7 +1966,7 @@ TEST_CASE("wxWinUI TreeCtrl projection is revision checked",
 
         CHECK(callbacks == 1);
         CHECK(tree.GetItemText(root) == "nested newest");
-        CHECK(tree.WinUIGetPeerItemTextForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, root) ==
               "nested newest");
     }
 
@@ -1979,8 +1979,8 @@ TEST_CASE("wxWinUI TreeCtrl projection is revision checked",
         tree.Show();
         tree.Update();
         DrainTreeDispatch(4);
-        REQUIRE(
-            tree.WinUIGetPeerAutomationNameForTesting(root) == "seed");
+        REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerAutomationName(tree, root) ==
+                "seed");
 
         TreeProjectionStorm probe;
         probe.tree = &tree;
@@ -2011,16 +2011,16 @@ TEST_CASE("wxWinUI TreeCtrl projection is revision checked",
         DrainTreeDispatch(8);
         CHECK(probe.remaining == 0);
         CHECK(tree.GetItemText(root) == probe.newest);
-        CHECK(tree.WinUIGetPeerItemTextForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, root) ==
               probe.newest);
-        CHECK(tree.WinUIGetPeerAutomationNameForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerAutomationName(tree, root) ==
               probe.newest);
     }
 
     SECTION("a queued replay owns only a weak lifetime ticket")
     {
         const size_t baseline =
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
         wxTreeCtrl *tree = new wxTreeCtrl(
             parent, wxID_ANY, wxDefaultPosition, wxSize(240, 130));
         const wxTreeItemId root = tree->AddRoot("seed");
@@ -2046,13 +2046,11 @@ TEST_CASE("wxWinUI TreeCtrl projection is revision checked",
         delete tree;
         tree = nullptr;
         probe.tree = nullptr;
-        CHECK(
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-            baseline);
+        CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() ==
+              baseline);
         DrainTreeDispatch(8);
-        CHECK(
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-            baseline);
+        CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() ==
+              baseline);
     }
 
     SECTION("image-list virtual calls revalidate the owner")
@@ -2224,8 +2222,8 @@ TEST_CASE("wxWinUI TreeCtrl projection is revision checked",
             };
         callback->armed = true;
 
-        REQUIRE(tree.WinUISelectPeerItemForTesting(second));
-        CHECK_FALSE(tree.WinUIIsPeerSelectionChangeForTesting());
+        REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(tree, second));
+        CHECK_FALSE(wxWinUITreeCtrlTestAccess::IsPeerSelectionChange(tree));
         CHECK(tree.GetItemText(root) == "nested newest");
     }
 
@@ -2251,11 +2249,12 @@ TEST_CASE("wxWinUI TreeCtrl projection is revision checked",
 
         CHECK(callbacks == 1);
         REQUIRE(replacement.IsOk());
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(oldRoot) == 0);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, oldRoot) ==
+              0);
         CHECK(tree.GetRootItem() == replacement);
         CHECK(tree.GetCount() == 1);
         CHECK(tree.GetItemText(replacement) == "replacement");
-        CHECK(tree.WinUIGetPeerItemTextForTesting(replacement) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, replacement) ==
               "replacement");
     }
 
@@ -2266,7 +2265,7 @@ TEST_CASE("wxWinUI TreeCtrl projection is revision checked",
                      TreeBundleCallbackPoint::Bitmap);
         CAPTURE(callbackPoint);
         const size_t baseline =
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
         wxTreeCtrl *tree = new wxTreeCtrl(
             parent, wxID_ANY, wxDefaultPosition, wxSize(240, 130));
         wxTreeCtrl * const invoking = tree;
@@ -2295,9 +2294,8 @@ TEST_CASE("wxWinUI TreeCtrl projection is revision checked",
                    ? 1u
                    : 0u));
         CHECK(lifetime.get() == nullptr);
-        CHECK(
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-            baseline);
+        CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() ==
+              baseline);
         delete tree;
     }
 }
@@ -2309,7 +2307,7 @@ TEST_CASE("wxWinUI TreeCtrl consensus stops at a dead owner",
     REQUIRE(parent);
 
     const size_t baseline =
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
     wxTreeCtrl *tree = new wxTreeCtrl(
         parent, wxID_ANY, wxDefaultPosition, wxSize(240, 130));
     wxTreeCtrl * const invoking = tree;
@@ -2337,8 +2335,7 @@ TEST_CASE("wxWinUI TreeCtrl consensus stops at a dead owner",
     CHECK(firstCalls == 1);
     CHECK(secondCalls == 0);
     CHECK(lifetime.get() == nullptr);
-    CHECK(wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-          baseline);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
     delete tree;
 }
 
@@ -2377,9 +2374,9 @@ TEST_CASE("wxWinUI TreeCtrl consensus stops at a stale revision",
     wxSize imageDIPs;
     wxSize stateDIPs;
     std::uint64_t generation = 0;
-    REQUIRE(tree.WinUIGetPeerItemImageProjectionForTesting(
-        root, &imagePixels, &statePixels, &generation,
-        &imageDIPs, &stateDIPs));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+        tree, root, &imagePixels, &statePixels, &generation, &imageDIPs,
+        &stateDIPs));
     CHECK(firstCalls == 1);
     CHECK(secondCalls == 0);
     CHECK(imagePixels ==
@@ -2410,9 +2407,9 @@ TEST_CASE("wxWinUI TreeCtrl consensus tie uses the larger raster",
     wxSize imageDIPs;
     wxSize stateDIPs;
     std::uint64_t generation = 0;
-    REQUIRE(tree.WinUIGetPeerItemImageProjectionForTesting(
-        root, &imagePixels, &statePixels, &generation,
-        &imageDIPs, &stateDIPs));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+        tree, root, &imagePixels, &statePixels, &generation, &imageDIPs,
+        &stateDIPs));
     CHECK(imagePixels ==
           images[1].GetPreferredBitmapSizeAtScale(
               tree.GetDPIScaleFactor()));
@@ -2446,14 +2443,14 @@ TEST_CASE("wxWinUI TreeCtrl invalid bundle sizes remove the image",
     wxSize imageDIPs;
     wxSize stateDIPs;
     std::uint64_t generation = 0;
-    REQUIRE(tree.WinUIGetPeerItemImageProjectionForTesting(
-        root, &imagePixels, &statePixels, &generation,
-        &imageDIPs, &stateDIPs));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+        tree, root, &imagePixels, &statePixels, &generation, &imageDIPs,
+        &stateDIPs));
     CHECK(bitmapCalls == 0);
     CHECK(imagePixels == wxSize());
     CHECK(imageDIPs == wxSize());
     CHECK(tree.GetItemText(root) == "invalid");
-    CHECK(tree.WinUIGetPeerItemTextForTesting(root) == "invalid");
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, root) == "invalid");
     CHECK(generation != 0);
 }
 
@@ -2465,7 +2462,7 @@ TEST_CASE("wxWinUI TreeCtrl coalesces projection until outer Thaw",
 
     wxTreeCtrl tree(
         parent, wxID_ANY, wxDefaultPosition, wxSize(240, 120));
-    tree.WinUIResetModelStatsForTesting();
+    wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
 
     tree.Freeze();
     tree.Freeze();
@@ -2481,25 +2478,26 @@ TEST_CASE("wxWinUI TreeCtrl coalesces projection until outer Thaw",
         tree.SetItemHasChildren(child, true);
     }
 
-    wxTreeCtrl::WinUIModelStats frozen =
-        tree.WinUIGetModelStatsForTesting();
+    wxWinUITreeCtrlTestAccess::ModelStats frozen =
+        wxWinUITreeCtrlTestAccess::GetModelStats(tree);
     CHECK(tree.GetCount() == 65);
     CHECK(frozen.peerUpdateCount == 0);
-    CHECK(tree.WinUIGetPeerItemTextForTesting(child).empty());
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, child).empty());
 
     tree.Thaw();
     CHECK(tree.IsFrozen());
-    frozen = tree.WinUIGetModelStatsForTesting();
+    frozen = wxWinUITreeCtrlTestAccess::GetModelStats(tree);
     CHECK(frozen.peerUpdateCount == 0);
-    CHECK(tree.WinUIGetPeerItemTextForTesting(child).empty());
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, child).empty());
 
     tree.Thaw();
     CHECK_FALSE(tree.IsFrozen());
-    const wxTreeCtrl::WinUIModelStats published =
-        tree.WinUIGetModelStatsForTesting();
+    const wxWinUITreeCtrlTestAccess::ModelStats published =
+        wxWinUITreeCtrlTestAccess::GetModelStats(tree);
     CHECK(published.peerUpdateCount <= 65);
-    CHECK(tree.WinUIGetPeerItemTextForTesting(root) == "root");
-    CHECK(tree.WinUIGetPeerItemTextForTesting(child) == "updated 63");
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, root) == "root");
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerItemText(tree, child) ==
+          "updated 63");
 }
 
 TEST_CASE("wxWinUI TreeCtrl destroys a frozen pending projection",
@@ -2509,7 +2507,7 @@ TEST_CASE("wxWinUI TreeCtrl destroys a frozen pending projection",
     REQUIRE(parent);
 
     const size_t baseline =
-        wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
     int destroyedData = 0;
     wxTreeCtrl * const tree = new wxTreeCtrl(
         parent, wxID_ANY, wxDefaultPosition, wxSize(240, 120));
@@ -2522,15 +2520,13 @@ TEST_CASE("wxWinUI TreeCtrl destroys a frozen pending projection",
         REQUIRE(tree->AppendItem(
             root, wxString::Format("pending %d", i)).IsOk());
     }
-    CHECK(tree->WinUIGetModelStatsForTesting().peerUpdateCount == 0);
+    CHECK(wxWinUITreeCtrlTestAccess::GetModelStats(*tree).peerUpdateCount == 0);
 
     delete tree;
     CHECK(destroyedData == 1);
-    CHECK(wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-          baseline);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
     DrainTreeDispatch(4);
-    CHECK(wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-          baseline);
+    CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() == baseline);
 }
 
 TEST_CASE("wxWinUI TreeCtrl model deltas stay linear at 10k",
@@ -2542,7 +2538,7 @@ TEST_CASE("wxWinUI TreeCtrl model deltas stay linear at 10k",
     wxTreeCtrl tree(
         parent, wxID_ANY, wxDefaultPosition, wxSize(240, 120));
     const wxTreeItemId root = tree.AddRoot("root");
-    tree.WinUIResetModelStatsForTesting();
+    wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
 
     constexpr int ItemCount = 10000;
     wxTreeItemId last;
@@ -2559,8 +2555,8 @@ TEST_CASE("wxWinUI TreeCtrl model deltas stay linear at 10k",
     INFO("10k insertion time: " << elapsed.count() << " ms");
     CHECK(elapsed < std::chrono::seconds(120));
 
-    const wxTreeCtrl::WinUIModelStats inserted =
-        tree.WinUIGetModelStatsForTesting();
+    const wxWinUITreeCtrlTestAccess::ModelStats inserted =
+        wxWinUITreeCtrlTestAccess::GetModelStats(tree);
     CHECK(tree.GetCount() == ItemCount + 1);
     CHECK(inserted.itemCount == ItemCount + 1);
     CHECK(inserted.expandableItemCount == 1);
@@ -2586,21 +2582,22 @@ TEST_CASE("wxWinUI TreeCtrl model deltas stay linear at 10k",
     CHECK(iterationElapsed < std::chrono::seconds(5));
     CHECK(siblingCount == ItemCount);
 
-    tree.WinUIResetModelStatsForTesting();
+    wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
     const std::uintptr_t lastPeer =
-        tree.WinUIGetItemPeerIdentityForTesting(last);
+        wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, last);
     tree.SetItemText(last, "last renamed");
-    const wxTreeCtrl::WinUIModelStats renamed =
-        tree.WinUIGetModelStatsForTesting();
+    const wxWinUITreeCtrlTestAccess::ModelStats renamed =
+        wxWinUITreeCtrlTestAccess::GetModelStats(tree);
     CHECK(renamed.peerUpdateCount == 1);
     CHECK(renamed.fullRefreshCount == 0);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(last) == lastPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, last) ==
+          lastPeer);
 
     tree.Delete(last);
     CHECK(tree.GetCount() == ItemCount);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(last) == 0);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, last) == 0);
 
-    tree.WinUIResetModelStatsForTesting();
+    wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
     const auto subtreeStarted = std::chrono::steady_clock::now();
     tree.DeleteChildren(root);
     const auto subtreeElapsed = std::chrono::duration_cast<
@@ -2609,8 +2606,8 @@ TEST_CASE("wxWinUI TreeCtrl model deltas stay linear at 10k",
     INFO("10k subtree deletion time: "
          << subtreeElapsed.count() << " ms");
     CHECK(subtreeElapsed < std::chrono::seconds(30));
-    const wxTreeCtrl::WinUIModelStats subtree =
-        tree.WinUIGetModelStatsForTesting();
+    const wxWinUITreeCtrlTestAccess::ModelStats subtree =
+        wxWinUITreeCtrlTestAccess::GetModelStats(tree);
     CHECK(tree.GetCount() == 1);
     CHECK(subtree.itemCount == 1);
     CHECK(subtree.expandableItemCount == 0);
@@ -2645,8 +2642,9 @@ TEST_CASE("wxWinUI TreeCtrl uses realized geometry and image parts",
     CHECK(tree.IsVisible(root));
     CHECK(tree.IsVisible(child));
 
-    wxTreeCtrl::WinUIMeasuredItemParts parts;
-    REQUIRE(tree.WinUIGetMeasuredItemPartsForTesting(root, &parts));
+    wxWinUITreeCtrlTestAccess::MeasuredItemParts parts;
+    REQUIRE(
+        wxWinUITreeCtrlTestAccess::GetMeasuredItemParts(tree, root, &parts));
     CHECK_FALSE(parts.item.IsEmpty());
     CHECK_FALSE(parts.expander.IsEmpty());
     CHECK_FALSE(parts.stateImage.IsEmpty());
@@ -2679,15 +2677,14 @@ TEST_CASE("wxWinUI TreeCtrl uses realized geometry and image parts",
             CHECK(event.GetItem() == root);
         });
     const wxPoint statePoint = RectCentre(parts.stateImage);
-    tree.WinUIPointerPressedForTesting(statePoint);
-    tree.WinUIPointerMovedForTesting(
-        statePoint +
-        wxPoint(::GetSystemMetrics(SM_CXDRAG) + 2,
-                ::GetSystemMetrics(SM_CYDRAG) + 2));
-    tree.WinUIPointerReleasedForTesting(statePoint);
+    wxWinUITreeCtrlTestAccess::PointerPressed(tree, statePoint);
+    wxWinUITreeCtrlTestAccess::PointerMoved(
+        tree, statePoint + wxPoint(::GetSystemMetrics(SM_CXDRAG) + 2,
+                                   ::GetSystemMetrics(SM_CYDRAG) + 2));
+    wxWinUITreeCtrlTestAccess::PointerReleased(tree, statePoint);
     CHECK(stateImageClicks == 0);
-    tree.WinUIPointerPressedForTesting(statePoint);
-    tree.WinUIPointerReleasedForTesting(statePoint);
+    wxWinUITreeCtrlTestAccess::PointerPressed(tree, statePoint);
+    wxWinUITreeCtrlTestAccess::PointerReleased(tree, statePoint);
     CHECK(stateImageClicks == 1);
 
     if ( parts.item.GetRight() > parts.label.GetRight() + 2 )
@@ -2701,22 +2698,21 @@ TEST_CASE("wxWinUI TreeCtrl uses realized geometry and image parts",
 
     tree.SetItemDropHighlight(root, true);
     DrainTreeDispatch();
-    CHECK(tree.WinUIIsPeerDropHighlightedForTesting(root));
+    CHECK(wxWinUITreeCtrlTestAccess::IsPeerDropHighlighted(tree, root));
     tree.SetItemDropHighlight(root, false);
     DrainTreeDispatch();
-    CHECK_FALSE(tree.WinUIIsPeerDropHighlightedForTesting(root));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::IsPeerDropHighlighted(tree, root));
 
     tree.SetItemText(root, "renamed for UIA");
     DrainTreeDispatch();
-    CHECK(
-        tree.WinUIGetPeerAutomationNameForTesting(root) ==
-        "renamed for UIA");
+    CHECK(wxWinUITreeCtrlTestAccess::GetPeerAutomationName(tree, root) ==
+          "renamed for UIA");
 
     const std::uintptr_t rootPeer =
-        tree.WinUIGetItemPeerIdentityForTesting(root);
+        wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root);
     REQUIRE(child.IsOk());
     const std::uintptr_t childPeer =
-        tree.WinUIGetItemPeerIdentityForTesting(child);
+        wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, child);
     REQUIRE(childPeer != 0);
 
     tree.SetIndent(28);
@@ -2725,10 +2721,10 @@ TEST_CASE("wxWinUI TreeCtrl uses realized geometry and image parts",
     double rootTrailing = -1.0;
     double childLeading = -1.0;
     double childTrailing = -1.0;
-    REQUIRE(tree.WinUIGetPeerIndentForTesting(
-        root, &rootLeading, &rootTrailing));
-    REQUIRE(tree.WinUIGetPeerIndentForTesting(
-        child, &childLeading, &childTrailing));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerIndent(tree, root, &rootLeading,
+                                                     &rootTrailing));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerIndent(tree, child, &childLeading,
+                                                     &childTrailing));
     CHECK(rootLeading == Approx(0.0));
     CHECK(rootTrailing == Approx(0.0));
     CHECK(childLeading == Approx(28.0));
@@ -2736,12 +2732,13 @@ TEST_CASE("wxWinUI TreeCtrl uses realized geometry and image parts",
 
     tree.SetLayoutDirection(wxLayout_RightToLeft);
     DrainTreeDispatch(4);
-    REQUIRE(tree.WinUIGetPeerIndentForTesting(
-        child, &childLeading, &childTrailing));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerIndent(tree, child, &childLeading,
+                                                     &childTrailing));
     CHECK(childLeading == Approx(28.0));
     CHECK(childTrailing == Approx(0.0));
-    wxTreeCtrl::WinUIMeasuredItemParts rtlParts;
-    REQUIRE(tree.WinUIGetMeasuredItemPartsForTesting(child, &rtlParts));
+    wxWinUITreeCtrlTestAccess::MeasuredItemParts rtlParts;
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetMeasuredItemParts(tree, child,
+                                                            &rtlParts));
     REQUIRE(rtlParts.item.x + 1 < rtlParts.label.x);
     REQUIRE(rtlParts.item.GetRight() >
             rtlParts.label.GetRight() + 1);
@@ -2761,33 +2758,36 @@ TEST_CASE("wxWinUI TreeCtrl uses realized geometry and image parts",
     DrainTreeDispatch(4);
     CHECK(tree.GetCount() >= 1);
     CHECK_FALSE(tree.IsVisible(root));
-    REQUIRE(tree.WinUIGetPeerIndentForTesting(
-        child, &childLeading, &childTrailing));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerIndent(tree, child, &childLeading,
+                                                     &childTrailing));
     CHECK(childLeading == Approx(0.0));
     tree.SetWindowStyleFlag(visibleRootStyle);
     DrainTreeDispatch(4);
     CHECK(tree.IsExpanded(root));
-    REQUIRE(tree.WinUIGetPeerIndentForTesting(
-        child, &childLeading, &childTrailing));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerIndent(tree, child, &childLeading,
+                                                     &childTrailing));
     CHECK(childLeading == Approx(28.0));
 
     tree.SelectItem(root);
-    tree.WinUIResetModelStatsForTesting();
+    wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
     wxDPIChangedEvent dpiEvent(wxSize(96, 96), wxSize(144, 144));
     dpiEvent.SetEventObject(&tree);
     dpiEvent.SetId(tree.GetId());
     tree.ProcessWindowEvent(dpiEvent);
     DrainTreeDispatch();
-    const wxTreeCtrl::WinUIModelStats dpiRefresh =
-        tree.WinUIGetModelStatsForTesting();
+    const wxWinUITreeCtrlTestAccess::ModelStats dpiRefresh =
+        wxWinUITreeCtrlTestAccess::GetModelStats(tree);
     CHECK(dpiRefresh.peerUpdateCount == tree.GetCount());
     CHECK(dpiRefresh.fullRefreshCount == 1);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) == rootPeer);
-    CHECK(tree.WinUIGetItemPeerIdentityForTesting(child) == childPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
+          rootPeer);
+    CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, child) ==
+          childPeer);
     CHECK(tree.IsExpanded(root));
     CHECK(tree.IsSelected(root));
-    wxTreeCtrl::WinUIMeasuredItemParts dpiParts;
-    REQUIRE(tree.WinUIGetMeasuredItemPartsForTesting(root, &dpiParts));
+    wxWinUITreeCtrlTestAccess::MeasuredItemParts dpiParts;
+    REQUIRE(
+        wxWinUITreeCtrlTestAccess::GetMeasuredItemParts(tree, root, &dpiParts));
     CHECK_FALSE(dpiParts.stateImage.IsEmpty());
     CHECK_FALSE(dpiParts.image.IsEmpty());
 
@@ -2834,9 +2834,9 @@ TEST_CASE("wxWinUI TreeCtrl image PropertySets follow a full DPI cycle",
     REQUIRE(tree.IsExpanded(root));
 
     const std::uintptr_t rootIdentity =
-        tree.WinUIGetItemPeerIdentityForTesting(root);
+        wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root);
     const std::uintptr_t childIdentity =
-        tree.WinUIGetItemPeerIdentityForTesting(child);
+        wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, child);
     REQUIRE(rootIdentity != 0);
     REQUIRE(childIdentity != 0);
 
@@ -2847,16 +2847,16 @@ TEST_CASE("wxWinUI TreeCtrl image PropertySets follow a full DPI cycle",
     for ( const double scale : Scales )
     {
         CAPTURE(scale);
-        REQUIRE(tree.WinUIRefreshForScaleForTesting(scale));
+        REQUIRE(wxWinUITreeCtrlTestAccess::RefreshForScale(tree, scale));
 
         wxSize imagePixels;
         wxSize statePixels;
         wxSize imageDIPs;
         wxSize stateDIPs;
         std::uint64_t generation = 0;
-        REQUIRE(tree.WinUIGetPeerItemImageProjectionForTesting(
-            root, &imagePixels, &statePixels, &generation,
-            &imageDIPs, &stateDIPs));
+        REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+            tree, root, &imagePixels, &statePixels, &generation, &imageDIPs,
+            &stateDIPs));
         CHECK(imagePixels ==
               normal.GetPreferredBitmapSizeAtScale(scale));
         CHECK(statePixels ==
@@ -2868,16 +2868,16 @@ TEST_CASE("wxWinUI TreeCtrl image PropertySets follow a full DPI cycle",
         wxSize childImagePixels;
         wxSize childStatePixels;
         std::uint64_t childGeneration = 0;
-        REQUIRE(tree.WinUIGetPeerItemImageProjectionForTesting(
-            child, &childImagePixels, &childStatePixels,
+        REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+            tree, child, &childImagePixels, &childStatePixels,
             &childGeneration));
         CHECK(childImagePixels == imagePixels);
         CHECK(childStatePixels == statePixels);
         CHECK(childGeneration == generation);
 
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
               rootIdentity);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(child) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, child) ==
               childIdentity);
         CHECK(tree.GetSelection() == child);
         CHECK(tree.IsSelected(child));
@@ -2903,16 +2903,16 @@ TEST_CASE("wxWinUI TreeCtrl keeps state images set before Create",
     const wxTreeItemId root = tree.AddRoot("root");
     REQUIRE(root.IsOk());
     tree.SetItemState(root, 0);
-    REQUIRE(tree.WinUIRefreshForScaleForTesting(1.5));
+    REQUIRE(wxWinUITreeCtrlTestAccess::RefreshForScale(tree, 1.5));
 
     wxSize imagePixels;
     wxSize statePixels;
     wxSize imageDIPs;
     wxSize stateDIPs;
     std::uint64_t generation = 0;
-    REQUIRE(tree.WinUIGetPeerItemImageProjectionForTesting(
-        root, &imagePixels, &statePixels, &generation,
-        &imageDIPs, &stateDIPs));
+    REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerItemImageProjection(
+        tree, root, &imagePixels, &statePixels, &generation, &imageDIPs,
+        &stateDIPs));
     CHECK(imagePixels == wxSize());
     CHECK(statePixels ==
           state.GetPreferredBitmapSizeAtScale(1.5));
@@ -2964,25 +2964,28 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         selectionEvents = 0;
 
         const std::uintptr_t rootPeer =
-            tree.WinUIGetItemPeerIdentityForTesting(root);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root);
         const std::uintptr_t middlePeer =
-            tree.WinUIGetItemPeerIdentityForTesting(middle);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, middle);
         const std::uintptr_t leafPeer =
-            tree.WinUIGetItemPeerIdentityForTesting(current);
-        tree.WinUIFailNextPeerMutationForTesting(
-            wxTreeCtrl::WinUIPeerMutationForTesting::ClearItems);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, current);
+        wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+            tree, wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems);
         tree.DeleteAllItems();
         CHECK(tree.GetCount() == Depth);
         CHECK(tree.GetRootItem() == root);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) == rootPeer);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(middle) == middlePeer);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(current) == leafPeer);
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(root));
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(middle));
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(current));
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 1);
-        CHECK(tree.WinUIGetPeerChildCountForTesting(middle) == 1);
-        CHECK(tree.WinUIGetPeerChildCountForTesting(current) == 0);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
+              rootPeer);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, middle) ==
+              middlePeer);
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, current) ==
+              leafPeer);
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, middle));
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, current));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, middle) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, current) == 0);
         CHECK(tree.GetSelection() == root);
         CHECK(deleteEvents == 0);
         CHECK(selectionEvents == 0);
@@ -3013,7 +3016,7 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         REQUIRE(tree.GetCount() == Depth + 1);
 
         const std::uintptr_t rootPeer =
-            tree.WinUIGetItemPeerIdentityForTesting(root);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root);
         REQUIRE(rootPeer != 0);
         // The transaction only needs a selection inside the doomed subtree.
         // Keep the independent deep-selection/layout stress bounded below.
@@ -3030,18 +3033,18 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         // This injection occurs after the top peer node was removed. The
         // rollback must therefore rebuild every severed edge shallow-first
         // without ever recursively releasing the 10k-node COM graph.
-        tree.WinUIFailNextPeerMutationForTesting(
-            wxTreeCtrl::WinUIPeerMutationForTesting::
-                RemoveItemAfterCommit);
+        wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+            tree,
+            wxWinUITreeCtrlTestAccess::PeerMutation::RemoveItemAfterCommit);
         tree.Delete(chain.items.front());
 
         CHECK(tree.GetCount() == Depth + 1);
         CHECK(tree.GetRootItem() == root);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
               rootPeer);
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(root));
-        CHECK(tree.WinUIGetPeerChildCountForTesting() == 1);
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 1);
         CHECK(tree.GetSelection() == chain.items.front());
         CHECK(destroyed == 0);
         CHECK(deleteEvents == 0);
@@ -3051,11 +3054,11 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         tree.Delete(chain.items.front());
         CHECK(tree.GetCount() == 1);
         CHECK(tree.GetRootItem() == root);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
               rootPeer);
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(root));
-        CHECK(tree.WinUIGetPeerChildCountForTesting() == 1);
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 0);
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 0);
         CHECK(tree.GetSelection() == root);
         CHECK(destroyed == Depth);
         CHECK(deleteEvents == Depth);
@@ -3063,8 +3066,8 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         for ( size_t i = 0; i < chain.items.size(); ++i )
         {
             CAPTURE(i);
-            CHECK(tree.WinUIGetItemPeerIdentityForTesting(
-                      chain.items[i]) == 0);
+            CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(
+                      tree, chain.items[i]) == 0);
         }
     }
 
@@ -3132,7 +3135,7 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
                 ++expanded;
             });
 
-        tree.WinUIResetModelStatsForTesting();
+        wxWinUITreeCtrlTestAccess::ResetModelStats(tree);
         const auto started = std::chrono::steady_clock::now();
         tree.SelectItem(chain.items.back());
         const auto elapsed = std::chrono::duration_cast<
@@ -3150,12 +3153,12 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         CHECK(oldSelectionIsStable);
         CHECK(tree.IsExpanded(root));
         CHECK(tree.IsExpanded(chain.items[Depth - 2]));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(
-            chain.items[Depth - 2]));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(
+            tree, chain.items[Depth - 2]));
 
-        const wxTreeCtrl::WinUIModelStats stats =
-            tree.WinUIGetModelStatsForTesting();
+        const wxWinUITreeCtrlTestAccess::ModelStats stats =
+            wxWinUITreeCtrlTestAccess::GetModelStats(tree);
         CHECK(stats.nodeLookupCount == 0);
         CHECK(stats.peerUpdateCount <= 3);
         CHECK(stats.fullRefreshCount == 0);
@@ -3177,7 +3180,7 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         REQUIRE(tree.GetCount() == Depth + 1);
 
         const std::uintptr_t rootPeer =
-            tree.WinUIGetItemPeerIdentityForTesting(root);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root);
         REQUIRE(rootPeer != 0);
         tree.SelectItem(chain.items.front());
         REQUIRE(tree.GetSelection() == chain.items.front());
@@ -3189,17 +3192,17 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
             wxEVT_TREE_SEL_CHANGED,
             [&](wxTreeEvent&) { ++selectionEvents; });
 
-        tree.WinUIFailNextPeerMutationForTesting(
-            wxTreeCtrl::WinUIPeerMutationForTesting::ClearItems);
+        wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+            tree, wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems);
         tree.DeleteChildren(root);
 
         CHECK(tree.GetCount() == Depth + 1);
         CHECK(tree.GetRootItem() == root);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
               rootPeer);
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(root));
-        CHECK(tree.WinUIGetPeerChildCountForTesting() == 1);
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 1);
         CHECK(tree.GetSelection() == chain.items.front());
         CHECK(destroyed == 0);
         CHECK(deleteEvents == 0);
@@ -3209,11 +3212,11 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         tree.DeleteChildren(root);
         CHECK(tree.GetCount() == 1);
         CHECK(tree.GetRootItem() == root);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
               rootPeer);
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(root));
-        CHECK(tree.WinUIGetPeerChildCountForTesting() == 1);
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 0);
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 0);
         CHECK(tree.GetSelection() == root);
         CHECK(destroyed == Depth);
         CHECK(deleteEvents == Depth);
@@ -3221,8 +3224,8 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         for ( size_t i = 0; i < chain.items.size(); ++i )
         {
             CAPTURE(i);
-            CHECK(tree.WinUIGetItemPeerIdentityForTesting(
-                      chain.items[i]) == 0);
+            CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(
+                      tree, chain.items[i]) == 0);
         }
     }
 
@@ -3239,11 +3242,11 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
             tree.AppendItem(root, "a-shallow");
         REQUIRE(shallow.IsOk());
         const std::uintptr_t shallowPeer =
-            tree.WinUIGetItemPeerIdentityForTesting(shallow);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, shallow);
         REQUIRE(shallowPeer != 0);
         REQUIRE(tree.GetCount() == Depth + 2);
-        REQUIRE(tree.WinUIGetPeerChildCountForTesting(root) == 2);
-        REQUIRE(tree.WinUIIsItemAttachedToPeerForTesting(shallow));
+        REQUIRE(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
+        REQUIRE(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, shallow));
 
         tree.SelectItem(deep.items.front());
         REQUIRE(tree.GetSelection() == deep.items.front());
@@ -3251,8 +3254,8 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         // ClearItems is injected after the sorted peer order was installed.
         // Recovery must restore both sibling order and every edge below the
         // deep branch while keeping all TreeViewNode identities stable.
-        tree.WinUIFailNextPeerMutationForTesting(
-            wxTreeCtrl::WinUIPeerMutationForTesting::ClearItems);
+        wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+            tree, wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems);
         tree.SortChildren(root);
 
         wxTreeItemIdValue cookie = nullptr;
@@ -3260,10 +3263,10 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
               deep.items.front());
         CHECK(tree.GetNextSibling(deep.items.front()) == shallow);
         CHECK_FALSE(tree.GetNextSibling(shallow).IsOk());
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(shallow) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, shallow) ==
               shallowPeer);
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(shallow));
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 2);
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, shallow));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
         CHECK(tree.GetSelection() == deep.items.front());
         CheckDeepTreeChainIntegrity(tree, root, deep);
 
@@ -3273,10 +3276,10 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         CHECK(tree.GetNextSibling(shallow) == deep.items.front());
         CHECK_FALSE(
             tree.GetNextSibling(deep.items.front()).IsOk());
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(shallow) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, shallow) ==
               shallowPeer);
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(shallow));
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 2);
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, shallow));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 2);
         CHECK(tree.GetSelection() == deep.items.front());
         CheckDeepTreeChainIntegrity(tree, root, deep);
     }
@@ -3293,11 +3296,11 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         REQUIRE(tree.GetCount() == Depth + 1);
 
         const std::uintptr_t rootPeer =
-            tree.WinUIGetItemPeerIdentityForTesting(root);
+            wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root);
         REQUIRE(rootPeer != 0);
         tree.Expand(root);
         REQUIRE(tree.IsExpanded(root));
-        REQUIRE(tree.WinUIIsPeerExpandedForTesting(root));
+        REQUIRE(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
         tree.SelectItem(chain.items.front());
         REQUIRE(tree.GetSelection() == chain.items.front());
 
@@ -3309,14 +3312,14 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         // item reported by the public count.
         CHECK(tree.GetCount() == Depth);
         CHECK(tree.GetRootItem() == root);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
               rootPeer);
         CHECK_FALSE(
-            tree.WinUIIsItemAttachedToPeerForTesting(root));
-        CHECK(tree.WinUIGetPeerChildCountForTesting() == 1);
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 1);
+            wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 1);
         CHECK(tree.IsExpanded(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
         CHECK(tree.GetSelection() == chain.items.front());
         CheckDeepTreeChainIntegrity(tree, root, chain);
 
@@ -3324,13 +3327,13 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         CHECK((tree.GetWindowStyleFlag() & wxTR_HIDE_ROOT) == 0);
         CHECK(tree.GetCount() == Depth + 1);
         CHECK(tree.GetRootItem() == root);
-        CHECK(tree.WinUIGetItemPeerIdentityForTesting(root) ==
+        CHECK(wxWinUITreeCtrlTestAccess::GetItemPeerIdentity(tree, root) ==
               rootPeer);
-        CHECK(tree.WinUIIsItemAttachedToPeerForTesting(root));
-        CHECK(tree.WinUIGetPeerChildCountForTesting() == 1);
-        CHECK(tree.WinUIGetPeerChildCountForTesting(root) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(tree, root));
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree) == 1);
+        CHECK(wxWinUITreeCtrlTestAccess::GetPeerChildCount(tree, root) == 1);
         CHECK(tree.IsExpanded(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
         CHECK(tree.GetSelection() == chain.items.front());
         CheckDeepTreeChainIntegrity(tree, root, chain);
     }
@@ -3344,7 +3347,7 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         REQUIRE(root.IsOk());
         CHECK(tree.GetCount() == 0);
         CHECK(tree.IsExpanded(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
 
         const wxTreeItemId child = tree.AppendItem(root, "child");
         REQUIRE(child.IsOk());
@@ -3352,19 +3355,19 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
         tree.Delete(child);
         CHECK(tree.GetCount() == 0);
         CHECK(tree.IsExpanded(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
 
         REQUIRE(tree.AppendItem(root, "replacement").IsOk());
         tree.DeleteChildren(root);
         CHECK(tree.GetCount() == 0);
         CHECK(tree.IsExpanded(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
 
         tree.SetWindowStyleFlag(
             tree.GetWindowStyleFlag() & ~wxTR_HIDE_ROOT);
         CHECK(tree.GetCount() == 1);
         CHECK(tree.IsExpanded(root));
-        CHECK(tree.WinUIIsPeerExpandedForTesting(root));
+        CHECK(wxWinUITreeCtrlTestAccess::IsPeerExpanded(tree, root));
     }
 
     SECTION("A virtualized teardown cannot poison a deep successor")
@@ -3409,7 +3412,7 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
     SECTION("Close and destructor")
     {
         const size_t baseline =
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
         wxTreeCtrl *tree = new wxTreeCtrl(
             parent, wxID_ANY, wxDefaultPosition, wxSize(220, 120));
         wxTreeItemId current = tree->AddRoot("0");
@@ -3420,17 +3423,16 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
                 current, wxString::Format("%d", i));
             REQUIRE(current.IsOk());
         }
-        tree->WinUIClosePeerForTesting();
+        wxWinUITreeCtrlTestAccess::ClosePeer(*tree);
         delete tree;
-        CHECK(
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-            baseline);
+        CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() ==
+              baseline);
     }
 
     SECTION("Close remains iterative when a peer edge cannot be cleared")
     {
         const size_t baseline =
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount();
         wxTreeCtrl *tree = new wxTreeCtrl(
             parent, wxID_ANY, wxDefaultPosition, wxSize(220, 120));
         wxTreeItemId current = tree->AddRoot("0");
@@ -3441,13 +3443,12 @@ TEST_CASE("wxWinUI TreeCtrl deep chains tear down iteratively",
                 current, wxString::Format("%d", i));
             REQUIRE(current.IsOk());
         }
-        tree->WinUIFailNextPeerMutationForTesting(
-            wxTreeCtrl::WinUIPeerMutationForTesting::ClearItems);
-        tree->WinUIClosePeerForTesting();
+        wxWinUITreeCtrlTestAccess::FailNextPeerMutation(
+            *tree, wxWinUITreeCtrlTestAccess::PeerMutation::ClearItems);
+        wxWinUITreeCtrlTestAccess::ClosePeer(*tree);
         delete tree;
-        CHECK(
-            wxTreeCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
-            baseline);
+        CHECK(wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount() ==
+              baseline);
     }
 }
 
@@ -3495,7 +3496,7 @@ TEST_CASE("wxWinUI TreeCtrl edit sessions are transactional",
     CHECK(tree.EditLabel(root) == nullptr);
     CHECK(beginEvents == 1);
     tree.SelectItem(root);
-    CHECK_FALSE(tree.WinUIKeyDownForTesting(WXK_F2));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(tree, WXK_F2));
     CHECK(beginEvents == 2);
     vetoBegin = false;
 
@@ -3507,20 +3508,20 @@ TEST_CASE("wxWinUI TreeCtrl edit sessions are transactional",
             ++activated;
             CHECK(event.GetItem() == root);
         });
-    REQUIRE(tree.WinUIInvokeItemForTesting(root));
+    REQUIRE(wxWinUITreeCtrlTestAccess::InvokeItem(tree, root));
     CHECK(activated == 0);
-    REQUIRE(tree.WinUIDoubleClickItemForTesting(root));
+    REQUIRE(wxWinUITreeCtrlTestAccess::DoubleClickItem(tree, root));
     CHECK(activated == 1);
-    REQUIRE(tree.WinUIKeyDownForTesting(WXK_RETURN));
+    REQUIRE(wxWinUITreeCtrlTestAccess::KeyDown(tree, WXK_RETURN));
     CHECK(activated == 2);
 
-    REQUIRE(tree.WinUIScheduleLabelEditForTesting(root));
-    REQUIRE(tree.WinUIFireLabelEditDelayForTesting());
+    REQUIRE(wxWinUITreeCtrlTestAccess::ScheduleLabelEdit(tree, root));
+    REQUIRE(wxWinUITreeCtrlTestAccess::FireLabelEditDelay(tree));
     REQUIRE(tree.GetEditControl());
     tree.EndEditLabel(root, true);
     DrainTreeDispatch();
 
-    REQUIRE(tree.WinUIKeyDownForTesting(WXK_F2));
+    REQUIRE(wxWinUITreeCtrlTestAccess::KeyDown(tree, WXK_F2));
     REQUIRE(tree.GetEditControl());
     tree.EndEditLabel(root, true);
     DrainTreeDispatch();
@@ -3580,7 +3581,7 @@ TEST_CASE("wxWinUI TreeCtrl edit sessions are transactional",
         new wxCommandEvent(wxEVT_TEXT_ENTER, queuedEditor->GetId());
     enter->SetEventObject(queuedEditor);
     wxQueueEvent(queuedEditor, enter);
-    queued.WinUIClosePeerForTesting();
+    wxWinUITreeCtrlTestAccess::ClosePeer(queued);
     DrainTreeDispatch();
     CHECK(lateEndEvents == 0);
     CHECK(queued.GetCount() == 0);
@@ -3651,14 +3652,13 @@ TEST_CASE("wxWinUI TreeCtrl internal drag is isolated from OLE",
     DrainTreeDispatch(4);
 #endif
 
-    REQUIRE(first.WinUIBeginInternalDragForTesting(firstChild));
-    REQUIRE(first.WinUICompleteInternalDragForTesting(
-        firstChild,
-        wxTreeCtrl::WinUIDragCompletionForTesting::Cancel));
+    REQUIRE(wxWinUITreeCtrlTestAccess::BeginInternalDrag(first, firstChild));
+    REQUIRE(wxWinUITreeCtrlTestAccess::CompleteInternalDrag(
+        first, firstChild, wxWinUITreeCtrlTestAccess::DragCompletion::Cancel));
     CHECK(firstBegin == 1);
     CHECK(firstEnd == 0);
 
-    REQUIRE(first.WinUIBeginInternalDragForTesting(firstChild));
+    REQUIRE(wxWinUITreeCtrlTestAccess::BeginInternalDrag(first, firstChild));
     REQUIRE(first.Reparent(&secondOwner));
 #if wxUSE_DRAG_AND_DROP
     DrainTreeDispatch(4);
@@ -3677,28 +3677,28 @@ TEST_CASE("wxWinUI TreeCtrl internal drag is isolated from OLE",
         migratedBroker->GetSnapshotForTest();
     CHECK(brokerBefore.active);
 #endif
-    REQUIRE(first.WinUICompleteInternalDragForTesting(
-        firstChild,
-        wxTreeCtrl::WinUIDragCompletionForTesting::Drop));
+    REQUIRE(wxWinUITreeCtrlTestAccess::CompleteInternalDrag(
+        first, firstChild, wxWinUITreeCtrlTestAccess::DragCompletion::Drop));
     CHECK(firstBegin == 2);
     CHECK(firstEnd == 1);
 
     // This drives the same DropResult mapping as the XAML completion
     // callback. With native reordering disabled, None over an exact target is
     // still a completed wx drag, while None without a target is cancellation.
-    REQUIRE(first.WinUIBeginInternalDragForTesting(firstChild));
-    REQUIRE(first.WinUICompletePeerDragForTesting(firstChild, true));
+    REQUIRE(wxWinUITreeCtrlTestAccess::BeginInternalDrag(first, firstChild));
+    REQUIRE(
+        wxWinUITreeCtrlTestAccess::CompletePeerDrag(first, firstChild, true));
     CHECK(firstBegin == 3);
     CHECK(firstEnd == 2);
-    REQUIRE(first.WinUIBeginInternalDragForTesting(firstChild));
-    REQUIRE(first.WinUICompletePeerDragForTesting(wxTreeItemId(), true));
+    REQUIRE(wxWinUITreeCtrlTestAccess::BeginInternalDrag(first, firstChild));
+    REQUIRE(wxWinUITreeCtrlTestAccess::CompletePeerDrag(first, wxTreeItemId(),
+                                                        true));
     CHECK(firstBegin == 4);
     CHECK(firstEnd == 2);
 
-    REQUIRE(second.WinUIBeginInternalDragForTesting(secondChild));
-    REQUIRE(second.WinUICompleteInternalDragForTesting(
-        secondRoot,
-        wxTreeCtrl::WinUIDragCompletionForTesting::Drop));
+    REQUIRE(wxWinUITreeCtrlTestAccess::BeginInternalDrag(second, secondChild));
+    REQUIRE(wxWinUITreeCtrlTestAccess::CompleteInternalDrag(
+        second, secondRoot, wxWinUITreeCtrlTestAccess::DragCompletion::Drop));
     CHECK(secondBegin == 1);
     CHECK(secondEnd == 1);
     CHECK(firstBegin == 4);
@@ -3740,10 +3740,9 @@ TEST_CASE("wxWinUI TreeCtrl internal drag is isolated from OLE",
     CHECK(brokerAfter.revokeCalls == brokerBefore.revokeCalls);
     CHECK(brokerAfter.lockCalls == brokerBefore.lockCalls);
 
-    REQUIRE(first.WinUIBeginInternalDragForTesting(firstChild));
-    REQUIRE(first.WinUICompleteInternalDragForTesting(
-        firstChild,
-        wxTreeCtrl::WinUIDragCompletionForTesting::Drop));
+    REQUIRE(wxWinUITreeCtrlTestAccess::BeginInternalDrag(first, firstChild));
+    REQUIRE(wxWinUITreeCtrlTestAccess::CompleteInternalDrag(
+        first, firstChild, wxWinUITreeCtrlTestAccess::DragCompletion::Drop));
     CHECK(firstBegin == beginBeforeOle + 1);
     CHECK(firstEnd == endBeforeOle + 1);
     CHECK(oleDrops == 1);

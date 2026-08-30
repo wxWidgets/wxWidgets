@@ -12,6 +12,10 @@
 #if wxUSE_TIMEPICKCTRL
 
 #include "wx/timectrl.h"
+
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "date-time-test-access.h"
+#endif
 #include "wx/dateevt.h"
 #include "wx/scopeguard.h"
 
@@ -53,10 +57,12 @@ namespace WS = winrt::Windows::System;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 winrt::hstring gs_winuiTimeLanguageForTesting;
-wxTimePickerCtrl::WinUIHourLoadedHookForTesting
+wxWinUITimePickerTestAccess::HourLoadedHook
     gs_winuiTimeHourLoadedHookForTesting = nullptr;
 void *gs_winuiTimeHourLoadedHookDataForTesting = nullptr;
+#endif
 
 WGNF::DecimalFormatter wxWinUICreateTimeDecimalFormatter(
     const winrt::hstring& language)
@@ -219,11 +225,15 @@ wxWinUIParseTimePattern(const wxString& pattern, bool *complete)
 
 wxString wxWinUIGetLocaleTimePattern(winrt::hstring *clock)
 {
+    winrt::hstring language;
+#ifdef WXWINUI_TEST_SUPPORT
+    language = gs_winuiTimeLanguageForTesting;
+#endif
     wxString pattern;
     try
     {
         const WGDT::DateTimeFormatter formatter =
-            gs_winuiTimeLanguageForTesting.empty()
+            language.empty()
                 ? WGDT::DateTimeFormatter(
                       WGDT::HourFormat::Default,
                       WGDT::MinuteFormat::Default,
@@ -237,7 +247,7 @@ wxString wxWinUIGetLocaleTimePattern(winrt::hstring *clock)
                       WGDT::MinuteFormat::Default,
                       WGDT::SecondFormat::Default,
                       std::vector<winrt::hstring>{
-                          gs_winuiTimeLanguageForTesting});
+                          language});
         if ( clock )
             *clock = formatter.Clock();
         const auto patterns = formatter.Patterns();
@@ -255,13 +265,17 @@ bool wxWinUIGetPeriodLabels(
     const winrt::hstring& clock,
     std::array<winrt::hstring, 2> *labels)
 {
+    winrt::hstring language;
+#ifdef WXWINUI_TEST_SUPPORT
+    language = gs_winuiTimeLanguageForTesting;
+#endif
     if ( clock.empty() || !labels )
         return false;
 
     try
     {
         WG::Calendar calendar{ nullptr };
-        if ( gs_winuiTimeLanguageForTesting.empty() )
+        if ( language.empty() )
         {
             calendar = WG::Calendar();
         }
@@ -269,7 +283,7 @@ bool wxWinUIGetPeriodLabels(
         {
             calendar = WG::Calendar(
                 std::vector<winrt::hstring>{
-                    gs_winuiTimeLanguageForTesting});
+                    language});
         }
         calendar.ChangeClock(clock);
         calendar.SetToNow();
@@ -885,14 +899,15 @@ void wxTimePickerCtrl::ResolveHourSpinButtons(bool updateLayout)
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTimePickerCtrl, wxControl);
 
-wxString wxTimePickerCtrl::WinUISetLanguageForTesting(
-    const wxString& language)
+#ifdef WXWINUI_TEST_SUPPORT
+wxString wxWinUITimePickerTestAccess::SetLanguage(const wxString& language)
 {
     const wxString previous =
         wxWinUIFromHString(gs_winuiTimeLanguageForTesting);
     gs_winuiTimeLanguageForTesting = wxWinUIToHString(language);
     return previous;
 }
+#endif
 
 wxTimePickerCtrl::wxTimePickerCtrl()
 {
@@ -1094,8 +1109,10 @@ bool wxTimePickerCtrl::Create(wxWindow *parent,
     {
         m_winui->picker = MUXC::TimePicker();
         createPeer = m_winui->picker;
-        const winrt::hstring language =
-            gs_winuiTimeLanguageForTesting;
+        winrt::hstring language;
+#ifdef WXWINUI_TEST_SUPPORT
+        language = gs_winuiTimeLanguageForTesting;
+#endif
         if ( !language.empty() )
             m_winui->picker.Language(language);
         winrt::hstring clock;
@@ -1189,6 +1206,7 @@ bool wxTimePickerCtrl::Create(wxWindow *parent,
                     return;
                 }
 
+#ifdef WXWINUI_TEST_SUPPORT
                 // The hook is one-shot and runs only inside the actual
                 // NumberBox Loaded delegate. It exists to prove that every
                 // subsequent template projection is destruction-safe.
@@ -1200,6 +1218,7 @@ bool wxTimePickerCtrl::Create(wxWindow *parent,
                 gs_winuiTimeHourLoadedHookDataForTesting = nullptr;
                 if ( hook )
                     hook(owner, hookData);
+#endif
 
                 owner = callbackState->GetOwner(generation);
                 if ( !owner || !owner->m_winui ||
@@ -2067,25 +2086,27 @@ bool wxTimePickerCtrl::OnPeerTimeChanged()
     return state->GetOwner(generation) != nullptr;
 }
 
-bool wxTimePickerCtrl::WinUISetPeerTimeForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITimePickerTestAccess::SetPeerTime(
+    wxTimePickerCtrl& control,
     const wxDateTime& dt)
 {
-    if ( !m_winui || !m_winui->picker || !m_winui->hour ||
-         !m_winui->minute || !m_winui->seconds ||
-         !m_winui->callbackState || !dt.IsValid() )
+    if ( !control.m_winui || !control.m_winui->picker || !control.m_winui->hour ||
+         !control.m_winui->minute || !control.m_winui->seconds ||
+         !control.m_winui->callbackState || !dt.IsValid() )
         return false;
 
     WF::TimeSpan peerValue{};
     if ( !wxWinUIToTimeSpan(dt, &peerValue) )
         return false;
 
-    const MUXC::TimePicker picker = m_winui->picker;
-    const MUXC::NumberBox hour = m_winui->hour;
-    const MUXC::NumberBox minute = m_winui->minute;
-    const MUXC::NumberBox seconds = m_winui->seconds;
-    const MUXC::ComboBox period = m_winui->period;
+    const MUXC::TimePicker picker = control.m_winui->picker;
+    const MUXC::NumberBox hour = control.m_winui->hour;
+    const MUXC::NumberBox minute = control.m_winui->minute;
+    const MUXC::NumberBox seconds = control.m_winui->seconds;
+    const MUXC::ComboBox period = control.m_winui->period;
     const std::shared_ptr<wxWinUITimeCallbackState> state =
-        m_winui->callbackState;
+        control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     try
     {
@@ -2095,7 +2116,7 @@ bool wxTimePickerCtrl::WinUISetPeerTimeForTesting(
             const wxDateTime::Tm tm = normalized.GetTm();
             int displayedHour = tm.hour;
             int displayedPeriod = -1;
-            if ( m_winui->twelveHour )
+            if ( control.m_winui->twelveHour )
             {
                 displayedPeriod = displayedHour >= 12 ? 1 : 0;
                 displayedHour %= 12;
@@ -2133,11 +2154,12 @@ bool wxTimePickerCtrl::WinUISetPeerTimeForTesting(
     }
 }
 
-bool wxTimePickerCtrl::WinUIGetPeerTimeForTesting(
-    wxDateTime *value) const
+bool wxWinUITimePickerTestAccess::GetPeerTime(
+    const wxTimePickerCtrl& control,
+    wxDateTime *value)
 {
-    if ( !m_winui || !m_winui->picker || !m_winui->hour ||
-         !m_winui->minute || !m_winui->seconds || !value )
+    if ( !control.m_winui || !control.m_winui->picker || !control.m_winui->hour ||
+         !control.m_winui->minute || !control.m_winui->seconds || !value )
         return false;
 
     try
@@ -2145,16 +2167,16 @@ bool wxTimePickerCtrl::WinUIGetPeerTimeForTesting(
         int hour = 0;
         int minute = 0;
         int second = 0;
-        if ( !wxWinUIReadTimePart(m_winui->hour, &hour) ||
-             !wxWinUIReadTimePart(m_winui->minute, &minute) ||
-             !wxWinUIReadTimePart(m_winui->seconds, &second) )
+        if ( !wxWinUIReadTimePart(control.m_winui->hour, &hour) ||
+             !wxWinUIReadTimePart(control.m_winui->minute, &minute) ||
+             !wxWinUIReadTimePart(control.m_winui->seconds, &second) )
         {
             return false;
         }
         *value = wxWinUIFromDisplayedTime(
-            hour, minute, second, m_winui->twelveHour,
-            m_winui->period
-                ? m_winui->period.SelectedIndex()
+            hour, minute, second, control.m_winui->twelveHour,
+            control.m_winui->period
+                ? control.m_winui->period.SelectedIndex()
                 : -1);
         return value->IsValid();
     }
@@ -2166,56 +2188,58 @@ bool wxTimePickerCtrl::WinUIGetPeerTimeForTesting(
     }
 }
 
-wxString wxTimePickerCtrl::WinUIGetLocaleTimePatternForTesting() const
+wxString wxWinUITimePickerTestAccess::GetLocaleTimePattern(const wxTimePickerCtrl& control)
 {
-    return m_winui ? m_winui->localePattern : wxString();
+    return control.m_winui ? control.m_winui->localePattern : wxString();
 }
 
-bool wxTimePickerCtrl::WinUIGetTimeFieldOrderForTesting(
-    int *hour, int *minute, int *second, int *period) const
+bool wxWinUITimePickerTestAccess::GetTimeFieldOrder(
+    const wxTimePickerCtrl& control,
+    int *hour, int *minute, int *second, int *period)
 {
-    if ( !m_winui || !m_winui->hour || !m_winui->minute ||
-         !m_winui->seconds )
+    if ( !control.m_winui || !control.m_winui->hour || !control.m_winui->minute ||
+         !control.m_winui->seconds )
     {
         return false;
     }
     if ( hour )
-        *hour = m_winui->fieldOrder[0];
+        *hour = control.m_winui->fieldOrder[0];
     if ( minute )
-        *minute = m_winui->fieldOrder[1];
+        *minute = control.m_winui->fieldOrder[1];
     if ( second )
-        *second = m_winui->fieldOrder[2];
+        *second = control.m_winui->fieldOrder[2];
     if ( period )
-        *period = m_winui->fieldOrder[3];
-    return m_winui->fieldOrder[0] >= 0 &&
-           m_winui->fieldOrder[1] >= 0 &&
-           m_winui->fieldOrder[2] >= 0;
+        *period = control.m_winui->fieldOrder[3];
+    return control.m_winui->fieldOrder[0] >= 0 &&
+           control.m_winui->fieldOrder[1] >= 0 &&
+           control.m_winui->fieldOrder[2] >= 0;
 }
 
-bool wxTimePickerCtrl::WinUIGetHourSpinBindingForTesting(
+bool wxWinUITimePickerTestAccess::GetHourSpinBinding(
+    const wxTimePickerCtrl& control,
     std::uintptr_t *incrementIdentity,
     std::uintptr_t *decrementIdentity,
-    std::uint64_t *generation) const
+    std::uint64_t *generation)
 {
-    if ( !m_winui || !incrementIdentity || !decrementIdentity )
+    if ( !control.m_winui || !incrementIdentity || !decrementIdentity )
         return false;
 
     *incrementIdentity = reinterpret_cast<std::uintptr_t>(
-        winrt::get_abi(m_winui->hourIncrement));
+        winrt::get_abi(control.m_winui->hourIncrement));
     *decrementIdentity = reinterpret_cast<std::uintptr_t>(
-        winrt::get_abi(m_winui->hourDecrement));
+        winrt::get_abi(control.m_winui->hourDecrement));
     if ( generation )
-        *generation = m_winui->hourSpinButtonGeneration;
-    return m_winui->hourIncrement && m_winui->hourDecrement &&
-           m_winui->hourIncrementToken.value &&
-           m_winui->hourDecrementToken.value;
+        *generation = control.m_winui->hourSpinButtonGeneration;
+    return control.m_winui->hourIncrement && control.m_winui->hourDecrement &&
+           control.m_winui->hourIncrementToken.value &&
+           control.m_winui->hourDecrementToken.value;
 }
 
-void wxTimePickerCtrl::WinUISetHourLoadedHookForTesting(
-    WinUIHourLoadedHookForTesting hook, void *data)
+void wxWinUITimePickerTestAccess::SetHourLoadedHook(HourLoadedHook hook, void *data)
 {
     gs_winuiTimeHourLoadedHookForTesting = hook;
     gs_winuiTimeHourLoadedHookDataForTesting = hook ? data : nullptr;
 }
+#endif
 
 #endif // wxUSE_TIMEPICKCTRL

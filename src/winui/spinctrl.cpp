@@ -13,6 +13,10 @@
 
 #include "wx/spinctrl.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "spinctrl-test-access.h"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
 #endif
@@ -1460,19 +1464,22 @@ void wxSpinCtrl::OnPeerEnter()
     owner->HandleWindowEvent(event);
 }
 
-bool wxSpinCtrl::WinUISetPeerValueForTesting(double value)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUISpinCtrlTestAccess::SetPeerValue(
+    wxSpinCtrl& control,
+    double value)
 {
-    if ( !m_winui || !m_winui->box ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->box ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     try
     {
-        m_winui->box.Value(value);
+        control.m_winui->box.Value(value);
     }
     catch ( const winrt::hresult_error& )
     {
@@ -1481,21 +1488,23 @@ bool wxSpinCtrl::WinUISetPeerValueForTesting(double value)
     return state->GetOwner<wxSpinCtrl>(generation) != nullptr;
 }
 
-bool wxSpinCtrl::WinUISetPeerTextForTesting(const wxString& text)
+bool wxWinUISpinCtrlTestAccess::SetPeerText(
+    wxSpinCtrl& control,
+    const wxString& text)
 {
-    ResolveTextPart();
-    if ( !m_winui || !m_winui->callbackState )
+    control.ResolveTextPart();
+    if ( !control.m_winui || !control.m_winui->callbackState )
         return false;
 
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const wxString oldText = m_textValue;
+    const wxString oldText = control.m_textValue;
     try
     {
-        if ( m_winui->textBox )
-            m_winui->textBox.Text(wxWinUIToHString(text));
+        if ( control.m_winui->textBox )
+            control.m_winui->textBox.Text(wxWinUIToHString(text));
         else
-            m_winui->box.Text(wxWinUIToHString(text));
+            control.m_winui->box.Text(wxWinUIToHString(text));
     }
     catch ( const winrt::hresult_error& )
     {
@@ -1513,36 +1522,37 @@ bool wxSpinCtrl::WinUISetPeerTextForTesting(const wxString& text)
     return state->GetOwner<wxSpinCtrl>(generation) != nullptr;
 }
 
-bool wxSpinCtrl::WinUIGetPeerStateForTesting(
+bool wxWinUISpinCtrlTestAccess::GetPeerState(
+    const wxSpinCtrl& control,
     double *minimum,
     double *maximum,
     double *increment,
     bool *wrap,
     wxString *text,
-    double *value) const
+    double *value)
 {
-    if ( !m_winui || !m_winui->box )
+    if ( !control.m_winui || !control.m_winui->box )
         return false;
 
     try
     {
         if ( minimum )
-            *minimum = m_winui->box.Minimum();
+            *minimum = control.m_winui->box.Minimum();
         if ( maximum )
-            *maximum = m_winui->box.Maximum();
+            *maximum = control.m_winui->box.Maximum();
         if ( increment )
-            *increment = m_winui->box.SmallChange();
+            *increment = control.m_winui->box.SmallChange();
         if ( wrap )
-            *wrap = m_winui->box.IsWrapEnabled();
+            *wrap = control.m_winui->box.IsWrapEnabled();
         if ( text )
         {
             *text = wxWinUIFromHString(
-                m_winui->textBox
-                    ? m_winui->textBox.Text()
-                    : m_winui->box.Text());
+                control.m_winui->textBox
+                    ? control.m_winui->textBox.Text()
+                    : control.m_winui->box.Text());
         }
         if ( value )
-            *value = m_winui->box.Value();
+            *value = control.m_winui->box.Value();
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -1551,20 +1561,22 @@ bool wxSpinCtrl::WinUIGetPeerStateForTesting(
     }
 }
 
-bool wxSpinCtrl::WinUIGetPeerSelectionForTesting(long *from, long *to)
+bool wxWinUISpinCtrlTestAccess::GetPeerSelection(
+    wxSpinCtrl& control,
+    long *from, long *to)
 {
-    ResolveTextPart();
-    if ( !m_winui || !m_winui->textBox )
+    control.ResolveTextPart();
+    if ( !control.m_winui || !control.m_winui->textBox )
         return false;
 
     try
     {
         if ( from )
-            *from = m_winui->textBox.SelectionStart();
+            *from = control.m_winui->textBox.SelectionStart();
         if ( to )
         {
-            *to = m_winui->textBox.SelectionStart() +
-                  m_winui->textBox.SelectionLength();
+            *to = control.m_winui->textBox.SelectionStart() +
+                  control.m_winui->textBox.SelectionLength();
         }
         return true;
     }
@@ -1574,42 +1586,44 @@ bool wxSpinCtrl::WinUIGetPeerSelectionForTesting(long *from, long *to)
     }
 }
 
-bool wxSpinCtrl::WinUIRetemplateForTesting()
+bool wxWinUISpinCtrlTestAccess::Retemplate(wxSpinCtrl& control)
 {
-    ResolveTextPart();
-    if ( !m_winui || !m_winui->textBox )
+    control.ResolveTextPart();
+    if ( !control.m_winui || !control.m_winui->textBox )
         return false;
 
     // Exercise the same revocation, generation and selection-restoration path
     // used when XAML replaces the NumberBox template part.
-    m_winui->DetachTextPart();
-    ResolveTextPart();
-    return m_winui && m_winui->textBox;
+    control.m_winui->DetachTextPart();
+    control.ResolveTextPart();
+    return control.m_winui && control.m_winui->textBox;
 }
 
-bool wxSpinCtrl::WinUIEnterForTesting()
+bool wxWinUISpinCtrlTestAccess::Enter(wxSpinCtrl& control)
 {
-    if ( !m_winui || !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->callbackState )
         return false;
 
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    OnPeerEnter();
+    control.OnPeerEnter();
     return state->GetOwner<wxSpinCtrl>(generation) != nullptr;
 }
 
-bool wxSpinCtrl::WinUIStepForTesting(int direction)
+bool wxWinUISpinCtrlTestAccess::Step(
+    wxSpinCtrl& control,
+    int direction)
 {
-    if ( direction == 0 || !IsEnabled() || !m_winui ||
-         !m_winui->callbackState )
+    if ( direction == 0 || !control.IsEnabled() || !control.m_winui ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const int oldValue = m_value;
-    OnPeerValueChanged(ValueAfterStep(direction));
+    const int oldValue = control.m_value;
+    control.OnPeerValueChanged(control.ValueAfterStep(direction));
     if ( wxSpinCtrl * const owner =
              state->GetOwner<wxSpinCtrl>(generation) )
     {
@@ -1617,6 +1631,7 @@ bool wxSpinCtrl::WinUIStepForTesting(int direction)
     }
     return false;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // wxSpinCtrlDouble
@@ -2209,19 +2224,22 @@ void wxSpinCtrlDouble::OnPeerEnter()
     owner->HandleWindowEvent(event);
 }
 
-bool wxSpinCtrlDouble::WinUISetPeerValueForTesting(double value)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUISpinCtrlTestAccess::SetPeerValue(
+    wxSpinCtrlDouble& control,
+    double value)
 {
-    if ( !m_winui || !m_winui->box ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->box ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     try
     {
-        m_winui->box.Value(value);
+        control.m_winui->box.Value(value);
     }
     catch ( const winrt::hresult_error& )
     {
@@ -2230,22 +2248,23 @@ bool wxSpinCtrlDouble::WinUISetPeerValueForTesting(double value)
     return state->GetOwner<wxSpinCtrlDouble>(generation) != nullptr;
 }
 
-bool wxSpinCtrlDouble::WinUISetPeerTextForTesting(
+bool wxWinUISpinCtrlTestAccess::SetPeerText(
+    wxSpinCtrlDouble& control,
     const wxString& text)
 {
-    ResolveTextPart();
-    if ( !m_winui || !m_winui->callbackState )
+    control.ResolveTextPart();
+    if ( !control.m_winui || !control.m_winui->callbackState )
         return false;
 
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const wxString oldText = m_textValue;
+    const wxString oldText = control.m_textValue;
     try
     {
-        if ( m_winui->textBox )
-            m_winui->textBox.Text(wxWinUIToHString(text));
+        if ( control.m_winui->textBox )
+            control.m_winui->textBox.Text(wxWinUIToHString(text));
         else
-            m_winui->box.Text(wxWinUIToHString(text));
+            control.m_winui->box.Text(wxWinUIToHString(text));
     }
     catch ( const winrt::hresult_error& )
     {
@@ -2260,36 +2279,37 @@ bool wxSpinCtrlDouble::WinUISetPeerTextForTesting(
     return state->GetOwner<wxSpinCtrlDouble>(generation) != nullptr;
 }
 
-bool wxSpinCtrlDouble::WinUIGetPeerStateForTesting(
+bool wxWinUISpinCtrlTestAccess::GetPeerState(
+    const wxSpinCtrlDouble& control,
     double *minimum,
     double *maximum,
     double *increment,
     bool *wrap,
     wxString *text,
-    double *value) const
+    double *value)
 {
-    if ( !m_winui || !m_winui->box )
+    if ( !control.m_winui || !control.m_winui->box )
         return false;
 
     try
     {
         if ( minimum )
-            *minimum = m_winui->box.Minimum();
+            *minimum = control.m_winui->box.Minimum();
         if ( maximum )
-            *maximum = m_winui->box.Maximum();
+            *maximum = control.m_winui->box.Maximum();
         if ( increment )
-            *increment = m_winui->box.SmallChange();
+            *increment = control.m_winui->box.SmallChange();
         if ( wrap )
-            *wrap = m_winui->box.IsWrapEnabled();
+            *wrap = control.m_winui->box.IsWrapEnabled();
         if ( text )
         {
             *text = wxWinUIFromHString(
-                m_winui->textBox
-                    ? m_winui->textBox.Text()
-                    : m_winui->box.Text());
+                control.m_winui->textBox
+                    ? control.m_winui->textBox.Text()
+                    : control.m_winui->box.Text());
         }
         if ( value )
-            *value = m_winui->box.Value();
+            *value = control.m_winui->box.Value();
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -2298,22 +2318,23 @@ bool wxSpinCtrlDouble::WinUIGetPeerStateForTesting(
     }
 }
 
-bool wxSpinCtrlDouble::WinUIGetPeerSelectionForTesting(
+bool wxWinUISpinCtrlTestAccess::GetPeerSelection(
+    wxSpinCtrlDouble& control,
     long *from,
     long *to)
 {
-    ResolveTextPart();
-    if ( !m_winui || !m_winui->textBox )
+    control.ResolveTextPart();
+    if ( !control.m_winui || !control.m_winui->textBox )
         return false;
 
     try
     {
         if ( from )
-            *from = m_winui->textBox.SelectionStart();
+            *from = control.m_winui->textBox.SelectionStart();
         if ( to )
         {
-            *to = m_winui->textBox.SelectionStart() +
-                  m_winui->textBox.SelectionLength();
+            *to = control.m_winui->textBox.SelectionStart() +
+                  control.m_winui->textBox.SelectionLength();
         }
         return true;
     }
@@ -2323,40 +2344,42 @@ bool wxSpinCtrlDouble::WinUIGetPeerSelectionForTesting(
     }
 }
 
-bool wxSpinCtrlDouble::WinUIRetemplateForTesting()
+bool wxWinUISpinCtrlTestAccess::Retemplate(wxSpinCtrlDouble& control)
 {
-    ResolveTextPart();
-    if ( !m_winui || !m_winui->textBox )
+    control.ResolveTextPart();
+    if ( !control.m_winui || !control.m_winui->textBox )
         return false;
 
-    m_winui->DetachTextPart();
-    ResolveTextPart();
-    return m_winui && m_winui->textBox;
+    control.m_winui->DetachTextPart();
+    control.ResolveTextPart();
+    return control.m_winui && control.m_winui->textBox;
 }
 
-bool wxSpinCtrlDouble::WinUIEnterForTesting()
+bool wxWinUISpinCtrlTestAccess::Enter(wxSpinCtrlDouble& control)
 {
-    if ( !m_winui || !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->callbackState )
         return false;
 
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    OnPeerEnter();
+    control.OnPeerEnter();
     return state->GetOwner<wxSpinCtrlDouble>(generation) != nullptr;
 }
 
-bool wxSpinCtrlDouble::WinUIStepForTesting(int direction)
+bool wxWinUISpinCtrlTestAccess::Step(
+    wxSpinCtrlDouble& control,
+    int direction)
 {
-    if ( direction == 0 || !IsEnabled() || !m_winui ||
-         !m_winui->callbackState )
+    if ( direction == 0 || !control.IsEnabled() || !control.m_winui ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    const auto state = m_winui->callbackState;
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const double oldValue = m_value;
-    OnPeerValueChanged(ValueAfterStep(direction));
+    const double oldValue = control.m_value;
+    control.OnPeerValueChanged(control.ValueAfterStep(direction));
     if ( wxSpinCtrlDouble * const owner =
              state->GetOwner<wxSpinCtrlDouble>(generation) )
     {
@@ -2364,5 +2387,6 @@ bool wxSpinCtrlDouble::WinUIStepForTesting(int direction)
     }
     return false;
 }
+#endif
 
 #endif // wxUSE_SPINCTRL

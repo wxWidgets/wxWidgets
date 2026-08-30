@@ -12,6 +12,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "range-test-access.h"
+#include "spinctrl-test-access.h"
 
 #include "testableframe.h"
 
@@ -244,7 +245,7 @@ TEST_CASE("wxWinUI integer NumberBox has a silent canonical model",
     double increment = 0;
     bool wrap = false;
     wxString peerText;
-    REQUIRE(spin.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerState(spin,
         &minimum, &maximum, &increment, &wrap, &peerText));
     CHECK(minimum == 10);
     CHECK(maximum == 20);
@@ -255,7 +256,7 @@ TEST_CASE("wxWinUI integer NumberBox has a silent canonical model",
     spin.SetSnapToTicks(false);
     spin.SetRange(200, 300);
     spin.SetValue(250);
-    REQUIRE(spin.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerState(spin,
         &minimum, &maximum, nullptr, nullptr, nullptr));
     CHECK(minimum == 200);
     CHECK(maximum == 300);
@@ -271,8 +272,8 @@ TEST_CASE("wxWinUI integer NumberBox has a silent canonical model",
     textEvents.Clear();
     spinEvents.Clear();
     enterEvents.Clear();
-    REQUIRE(spin.WinUISetPeerTextForTesting("0x2b"));
-    REQUIRE(spin.WinUIEnterForTesting());
+    REQUIRE(wxWinUISpinCtrlTestAccess::SetPeerText(spin, "0x2b"));
+    REQUIRE(wxWinUISpinCtrlTestAccess::Enter(spin));
     CHECK(spin.GetValue() == 43);
     CHECK(spin.GetTextValue().Lower().Contains("2b"));
     CHECK(textEvents.GetCount() >= 1);
@@ -298,11 +299,11 @@ TEST_CASE("wxWinUI integer NumberBox has a silent canonical model",
     wxYield();
     long from = -1;
     long to = -1;
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(from == 0);
     CHECK(to == 3);
 
-    REQUIRE(spin.WinUIEnterForTesting());
+    REQUIRE(wxWinUISpinCtrlTestAccess::Enter(spin));
     CHECK(enterEvents.GetCount() == 1);
 
     wxSpinCtrl negative(
@@ -319,7 +320,7 @@ TEST_CASE("wxWinUI integer NumberBox has a silent canonical model",
         wxDefaultPosition, wxDefaultSize,
         wxSP_ARROW_KEYS, INT_MIN, INT_MAX, INT_MAX);
     overflow.SetIncrement(INT_MAX);
-    CHECK_FALSE(overflow.WinUIStepForTesting(+1));
+    CHECK_FALSE(wxWinUISpinCtrlTestAccess::Step(overflow, +1));
     CHECK(overflow.GetValue() == INT_MAX);
 }
 
@@ -340,13 +341,13 @@ TEST_CASE("wxWinUI integer NumberBox selects changed programmatic text",
     long to = -1;
     spin.SetSelection(1, 1);
     spin.SetValue(42);
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(from == 0);
     CHECK(to == 2);
 
     double peerValue = -1;
     wxString peerText;
-    REQUIRE(spin.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerState(spin,
         nullptr, nullptr, nullptr, nullptr, &peerText, &peerValue));
     CHECK(spin.GetValue() == 42);
     CHECK(spin.GetTextValue() == "42");
@@ -357,12 +358,12 @@ TEST_CASE("wxWinUI integer NumberBox selects changed programmatic text",
     // current caret instead of selecting the text again.
     spin.SetSelection(1, 1);
     spin.SetValue(42);
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(from == 1);
     CHECK(to == 1);
 
     spin.SetRange(50, 100);
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(spin.GetValue() == 50);
     CHECK(spin.GetTextValue() == "50");
     CHECK(from == 0);
@@ -370,9 +371,9 @@ TEST_CASE("wxWinUI integer NumberBox selects changed programmatic text",
 
     const wxString invalid = "not-a-number";
     spin.SetValue(invalid);
-    REQUIRE(spin.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerState(spin,
         nullptr, nullptr, nullptr, nullptr, &peerText, &peerValue));
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(spin.GetValue() == 50);
     CHECK(spin.GetTextValue() == invalid);
     CHECK(peerValue == 50.0);
@@ -380,8 +381,8 @@ TEST_CASE("wxWinUI integer NumberBox selects changed programmatic text",
     CHECK(from == 0);
     CHECK(to == static_cast<long>(invalid.length()));
 
-    REQUIRE(spin.WinUIRetemplateForTesting());
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::Retemplate(spin));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(from == 0);
     CHECK(to == static_cast<long>(invalid.length()));
     CHECK(textEvents.GetCount() == 0);
@@ -415,7 +416,7 @@ TEST_CASE("wxWinUI integer NumberBox emits text then spin once",
              event.GetString()});
     });
 
-    REQUIRE(spin.WinUIStepForTesting(+1));
+    REQUIRE(wxWinUISpinCtrlTestAccess::Step(spin, +1));
     CHECK(spin.GetValue() == 10);
     REQUIRE(events.size() == 2);
     CHECK(events[0].type == wxEVT_TEXT);
@@ -424,7 +425,7 @@ TEST_CASE("wxWinUI integer NumberBox emits text then spin once",
     CHECK(events[1].value == 10);
 
     events.clear();
-    REQUIRE(spin.WinUIStepForTesting(+1));
+    REQUIRE(wxWinUISpinCtrlTestAccess::Step(spin, +1));
     CHECK(spin.GetValue() == 0);
     REQUIRE(events.size() == 2);
     CHECK(events[0].type == wxEVT_TEXT);
@@ -435,8 +436,8 @@ TEST_CASE("wxWinUI integer NumberBox emits text then spin once",
     CHECK(events.empty());
 
     spin.Enable(false);
-    CHECK_FALSE(spin.WinUIStepForTesting(+1));
-    REQUIRE(spin.WinUISetPeerValueForTesting(7));
+    CHECK_FALSE(wxWinUISpinCtrlTestAccess::Step(spin, +1));
+    REQUIRE(wxWinUISpinCtrlTestAccess::SetPeerValue(spin, 7));
     CHECK(spin.GetValue() == 5);
     CHECK(events.empty());
 }
@@ -460,7 +461,7 @@ TEST_CASE("wxWinUI NumberBox survives destruction from text callback",
     });
 
     wxSpinCtrl * const original = spin;
-    CHECK_FALSE(original->WinUIStepForTesting(+1));
+    CHECK_FALSE(wxWinUISpinCtrlTestAccess::Step(*original, +1));
     CHECK(spin == nullptr);
     CHECK(spinEvents == 0);
 }
@@ -504,7 +505,7 @@ TEST_CASE("wxWinUI double NumberBox derives precision and snaps",
 
     textEvents.Clear();
     spinEvents.Clear();
-    REQUIRE(spin.WinUIStepForTesting(+1));
+    REQUIRE(wxWinUISpinCtrlTestAccess::Step(spin, +1));
     CHECK(spin.GetValue() == 1.5);
     CHECK(textEvents.GetCount() == 1);
     CHECK(spinEvents.GetCount() == 1);
@@ -526,8 +527,8 @@ TEST_CASE("wxWinUI double NumberBox derives precision and snaps",
     textEvents.Clear();
     spinEvents.Clear();
     spin.Enable(false);
-    CHECK_FALSE(spin.WinUIStepForTesting(+1));
-    REQUIRE(spin.WinUISetPeerValueForTesting(4.0));
+    CHECK_FALSE(wxWinUISpinCtrlTestAccess::Step(spin, +1));
+    REQUIRE(wxWinUISpinCtrlTestAccess::SetPeerValue(spin, 4.0));
     CHECK(spin.GetValue() == 0.0);
     CHECK(textEvents.GetCount() == 0);
     CHECK(spinEvents.GetCount() == 0);
@@ -552,10 +553,10 @@ TEST_CASE("wxWinUI double NumberBox recanonicalizes and selects setters",
     // versions. Resolve that initial template before testing synchronous
     // setter updates; later retemplate coverage remains explicitly deferred.
     wxYield();
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     spin.SetSelection(2, 2);
     spin.SetValue(7.6543);
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(spin.GetValue() == 7.6543);
     CHECK(spin.GetTextValue() == "7.6543");
     CHECK(from == 0);
@@ -563,7 +564,7 @@ TEST_CASE("wxWinUI double NumberBox recanonicalizes and selects setters",
 
     spin.SetSelection(2, 2);
     spin.SetDigits(2);
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(spin.GetDigits() == 2);
     CHECK(spin.GetValue() == 7.65);
     CHECK(spin.GetTextValue() == "7.65");
@@ -572,14 +573,14 @@ TEST_CASE("wxWinUI double NumberBox recanonicalizes and selects setters",
 
     double peerValue = -1;
     wxString peerText;
-    REQUIRE(spin.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerState(spin,
         nullptr, nullptr, nullptr, nullptr, &peerText, &peerValue));
     CHECK(peerValue == spin.GetValue());
     CHECK(peerText == spin.GetTextValue());
 
     spin.SetSelection(1, 1);
     spin.SetRange(8.0, 9.0);
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(spin.GetValue() == 8.0);
     CHECK(spin.GetTextValue() == "8.00");
     CHECK(from == 0);
@@ -587,9 +588,9 @@ TEST_CASE("wxWinUI double NumberBox recanonicalizes and selects setters",
 
     const wxString invalid = "bad.double";
     spin.SetValue(invalid);
-    REQUIRE(spin.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerState(spin,
         nullptr, nullptr, nullptr, nullptr, &peerText, &peerValue));
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(spin.GetValue() == 8.0);
     CHECK(spin.GetTextValue() == invalid);
     CHECK(peerValue == 8.0);
@@ -597,8 +598,8 @@ TEST_CASE("wxWinUI double NumberBox recanonicalizes and selects setters",
     CHECK(from == 0);
     CHECK(to == static_cast<long>(invalid.length()));
 
-    REQUIRE(spin.WinUIRetemplateForTesting());
-    REQUIRE(spin.WinUIGetPeerSelectionForTesting(&from, &to));
+    REQUIRE(wxWinUISpinCtrlTestAccess::Retemplate(spin));
+    REQUIRE(wxWinUISpinCtrlTestAccess::GetPeerSelection(spin, &from, &to));
     CHECK(from == 0);
     CHECK(to == static_cast<long>(invalid.length()));
     CHECK(textEvents.GetCount() == 0);
@@ -627,7 +628,7 @@ TEST_CASE("wxWinUI double NumberBox survives destruction from text callback",
         });
 
     wxSpinCtrlDouble * const invoking = spin;
-    CHECK_FALSE(invoking->WinUIStepForTesting(+1));
+    CHECK_FALSE(wxWinUISpinCtrlTestAccess::Step(*invoking, +1));
     CHECK(spin == nullptr);
     CHECK(spinEvents == 0);
 

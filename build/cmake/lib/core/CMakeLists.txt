@@ -165,6 +165,11 @@ elseif(WXX11)
     wx_append_sources(CORE_SRC X11_LOWLEVEL)
 endif()
 
+if(WXWINUI AND wxUSE_WINUI3 AND wxUSE_GUI AND wxBUILD_TESTS STREQUAL "ALL")
+    list(APPEND CORE_SRC
+        "${wxSOURCE_DIR}/tests/winui/test-support/combobox-uia-helper.cpp")
+endif()
+
 wx_add_library(wxcore ${CORE_SRC})
 if(WXWINUI AND wxUSE_WINUI3)
     wx_winui3_configure_target(wxcore)
@@ -197,7 +202,20 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/hyperlink.cpp"
             "${wxSOURCE_DIR}/src/winui/clrpicker.cpp"
             "${wxSOURCE_DIR}/src/winui/infobar.cpp"
-            "${wxSOURCE_DIR}/src/winui/statbar.cpp")
+            "${wxSOURCE_DIR}/src/winui/statbar.cpp"
+            "${wxSOURCE_DIR}/src/winui/listbox.cpp"
+            "${wxSOURCE_DIR}/src/winui/treectrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/choice.cpp"
+            "${wxSOURCE_DIR}/src/winui/combobox.cpp"
+            "${wxSOURCE_DIR}/src/winui/datectrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/timectrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/calctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/slider.cpp"
+            "${wxSOURCE_DIR}/src/winui/spinctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/textctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/srchctrl.cpp"
+            "${wxSOURCE_DIR}/src/winui/textdlg.cpp"
+            "${wxSOURCE_DIR}/tests/winui/test-support/combobox-uia-helper.cpp")
         # Source properties must be visible where the owning target is
         # created: core here, or the parent directory in monolithic builds.
         # Keeping them per-source avoids instrumenting all wxWidgets TUs.

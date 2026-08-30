@@ -9,6 +9,10 @@
 
 #include "wx/wxprec.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "textctrl-test-access.h"
+#endif
+
 #if wxUSE_TEXTCTRL
 
 #include "wx/textctrl.h"
@@ -1292,8 +1296,10 @@ bool wxWinUIChangeTextViewToTarget(
 wxWinUIKeyboardModifiers wxWinUITextCtrlGetModifiers(WXMSG *msg)
 {
     wxWinUIKeyboardModifiers modifiers = {};
+#ifdef WXWINUI_TEST_SUPPORT
     if ( wxWinUI3GetKeyboardModifiersOverrideForTesting(&modifiers) )
         return modifiers;
+#endif
 
     modifiers.shiftDown = wxIsShiftDown();
     modifiers.controlDown = wxIsCtrlDown();
@@ -4508,8 +4514,10 @@ public:
         securePasswordCompositionHasSnapshot = false;
         securePasswordDeleteDirection = 0;
         securePasswordEditSelectionArmed = false;
+#ifdef WXWINUI_TEST_SUPPORT
         securePasswordExplicitInsertionArmedForTesting = false;
         securePasswordExplicitInsertionForTesting.clear();
+#endif
         ++securePasswordEditSelectionGeneration;
         securePasswordUndo.clear();
         securePasswordRedo.clear();
@@ -4576,8 +4584,10 @@ public:
     bool securePasswordEditSelectionArmed = false;
     long securePasswordEditSelectionStart = 0;
     long securePasswordEditSelectionEnd = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     bool securePasswordExplicitInsertionArmedForTesting = false;
     wxString securePasswordExplicitInsertionForTesting;
+#endif
     std::uint64_t securePasswordEditSelectionGeneration = 0;
     std::vector<wxWinUISecurePasswordSnapshot> securePasswordUndo;
     std::vector<wxWinUISecurePasswordSnapshot> securePasswordRedo;
@@ -4596,9 +4606,11 @@ public:
     unsigned richPositionVisibilityTrace = 0;
     unsigned richPositionVisibilityPassCount = 0;
     bool richPositionVisibilityNeedsWrapRestore = false;
+#ifdef WXWINUI_TEST_SUPPORT
     bool forceNextRichPositionUnavailableForTesting = false;
     bool forceNextPositionVisibilityRetryForTesting = false;
     bool forceTemporarySelectionForTesting = false;
+#endif
 
     MUXC::Control control() const
     {
@@ -4790,8 +4802,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
         return false;
 
     m_value = wxWinUITextPositionMap::NormalizeNewlines(value);
-    m_passwordPeerFailClosedHresultForTesting = 0;
-    m_passwordPeerWasEmptyOnFailClosedForTesting = false;
+    m_passwordPeerFailClosedHresult = 0;
+    m_passwordPeerWasEmptyOnFailClosed = false;
     m_insertionPoint =
         wxWinUIMakeTextPositionMap(*this, m_value).GetLastPosition();
     m_selectionStart = m_selectionEnd = m_insertionPoint;
@@ -4842,12 +4854,13 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( !liveOwner )
         return false;
 
-    const WinUICreateLoadedHookForTesting loadedHook =
-        liveOwner->m_nextCreateLoadedHookForTesting;
+#ifdef WXWINUI_TEST_SUPPORT
+    const auto loadedHook =
+        liveOwner->m_nextCreateLoadedHook;
     void * const loadedHookContext =
-        liveOwner->m_nextCreateLoadedContextForTesting;
-    liveOwner->m_nextCreateLoadedHookForTesting = nullptr;
-    liveOwner->m_nextCreateLoadedContextForTesting = nullptr;
+        liveOwner->m_nextCreateLoadedContext;
+    liveOwner->m_nextCreateLoadedHook = nullptr;
+    liveOwner->m_nextCreateLoadedContext = nullptr;
     if ( loadedHook )
     {
         createImpl->host.SetNextContentLoadedHookForTesting(
@@ -4868,6 +4881,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
                 loadedHook(owner, loadedHookContext);
             });
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     const bool password = (style & wxTE_PASSWORD) != 0;
     const bool multiline = (style & wxTE_MULTILINE) != 0;
@@ -4875,7 +4889,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
     // Production non-password controls always use RichEditBox. Retain a
     // pre-Create deterministic seam for exercising the bounded legacy
     // TextBox continuation while it remains as a defensive fallback.
-    const bool useRichPeer = !password && !m_useTextBoxPeerForTesting;
+    const bool useRichPeer = !password
+#ifdef WXWINUI_TEST_SUPPORT
+        && !m_useTextBoxPeer
+#endif
+        ;
 
     try
     {
@@ -5559,7 +5577,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
                              winrt::Windows::System::VirtualKey::Tab )
                     {
                         if ( owner->HasFlag(wxTE_PROCESS_TAB) &&
-                             owner->WinUIProcessTabForTesting() )
+                             owner->ProcessTab() )
                         {
                             args.Handled(true);
                         }
@@ -5568,7 +5586,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
                     if ( args.Key() ==
                              winrt::Windows::System::VirtualKey::Enter &&
-                         owner->WinUIProcessEnterForTesting() )
+                         owner->ProcessEnter() )
                     {
                         args.Handled(true);
                     }
@@ -5803,6 +5821,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( !liveOwner )
         return false;
 
+#ifdef WXWINUI_TEST_SUPPORT
     if ( loadedHook )
     {
         // The production Loaded path remains naturally asynchronous. The
@@ -5820,6 +5839,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         if ( !liveOwner )
             return false;
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     liveOwner->SetInitialSize(size);
 
@@ -5847,7 +5867,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     return getLiveOwner() != nullptr;
 }
 
-bool wxTextCtrl::WinUIProcessEnterForTesting()
+bool wxTextCtrl::ProcessEnter()
 {
     if ( !HasFlag(wxTE_PROCESS_ENTER) )
         return false;
@@ -5878,7 +5898,14 @@ bool wxTextCtrl::WinUIProcessEnterForTesting()
     return dialog->WinUIActivateDefaultButton();
 }
 
-bool wxTextCtrl::WinUIProcessTabForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::ProcessEnter(wxTextCtrl& textCtrl)
+{
+    return textCtrl.ProcessEnter();
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+bool wxTextCtrl::ProcessTab()
 {
     if ( !HasFlag(wxTE_PROCESS_TAB) || !IsEditable() )
         return false;
@@ -5886,6 +5913,13 @@ bool wxTextCtrl::WinUIProcessTabForTesting()
     WriteTextWithPolicy(wxS("\t"), true);
     return true;
 }
+
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::ProcessTab(wxTextCtrl& textCtrl)
+{
+    return textCtrl.ProcessTab();
+}
+#endif // WXWINUI_TEST_SUPPORT
 
 wxString wxTextCtrl::GetRange(long from, long to) const
 {
@@ -6454,25 +6488,31 @@ void wxTextCtrl::WriteTextWithPolicy(const wxString& text,
     }
 }
 
-void wxTextCtrl::WinUIPasteTextForTesting(const wxString& text)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITextCtrlTestAccess::PasteText(
+    wxTextCtrl& textCtrl,
+    const wxString& text)
 {
-    WriteTextWithPolicy(text, true);
+    textCtrl.WriteTextWithPolicy(text, true);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIInjectPasswordContentChangeForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::InjectPasswordContentChange(
+    wxTextCtrl& textCtrl,
     const wxString& proposed)
 {
-    if ( !m_winui )
+    if ( !textCtrl.m_winui )
         return false;
 
-    if ( m_winui->securePasswordPeer && m_winui->richEditBox )
+    if ( textCtrl.m_winui->securePasswordPeer && textCtrl.m_winui->richEditBox )
     {
-        ProcessPasswordPeerChange(
+        textCtrl.ProcessPasswordPeerChange(
             wxWinUITextPositionMap::NormalizeNewlines(proposed), true);
         return true;
     }
 
-    if ( !m_winui->passwordBox )
+    if ( !textCtrl.m_winui->passwordBox )
         return false;
 
     // Setting Password is not a deterministic surrogate for user input:
@@ -6483,11 +6523,11 @@ bool wxTextCtrl::WinUIInjectPasswordContentChangeForTesting(
     // the model and peer have the same post-edit starting point.
     const wxString normalized =
         wxWinUITextPositionMap::NormalizeNewlines(proposed);
-    const MUXC::PasswordBox passwordBox = m_winui->passwordBox;
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    const MUXC::PasswordBox passwordBox = textCtrl.m_winui->passwordBox;
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
-    const wxWeakRef<wxWindow> self(this);
+    const wxWeakRef<wxWindow> self(&textCtrl);
     const auto getExactOwner = [&]() -> wxTextCtrl *
     {
         wxTextCtrl * const live =
@@ -6499,11 +6539,11 @@ bool wxTextCtrl::WinUIInjectPasswordContentChangeForTesting(
                  ? live
                  : nullptr;
     };
-    const bool wasUpdatingPeer = m_updatingPeer;
+    const bool wasUpdatingPeer = textCtrl.m_updatingPeer;
     try
     {
         {
-            m_updatingPeer = true;
+            textCtrl.m_updatingPeer = true;
             wxScopeGuard updatingGuard = wxMakeGuard(
                 [getExactOwner, wasUpdatingPeer]()
             {
@@ -6527,20 +6567,23 @@ bool wxTextCtrl::WinUIInjectPasswordContentChangeForTesting(
     live->ProcessPasswordPeerChange(normalized, true);
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUISetTextBoxPeerTextForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::SetTextBoxPeerText(
+    wxTextCtrl& textCtrl,
     const wxString& text)
 {
-    if ( !m_winui ||
-         (!m_winui->textBox && !m_winui->richEditBox) )
+    if ( !textCtrl.m_winui ||
+         (!textCtrl.m_winui->textBox && !textCtrl.m_winui->richEditBox) )
         return false;
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const MUXC::TextBox textBox = impl->textBox;
     const MUXC::RichEditBox richEditBox = impl->richEditBox;
-    const bool unlockReadOnly = !m_editable;
+    const bool unlockReadOnly = !textCtrl.m_editable;
     const auto getExactOwner = [&]() -> wxTextCtrl *
     {
         wxTextCtrl * const owner =
@@ -6600,17 +6643,21 @@ bool wxTextCtrl::WinUISetTextBoxPeerTextForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIGetPeerTextForTesting(wxString *text) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetPeerText(
+    const wxTextCtrl& textCtrl,
+    wxString *text)
 {
-    if ( !text || !m_winui ||
-         (!m_winui->textBox && !m_winui->richEditBox &&
-          !m_winui->passwordBox) )
+    if ( !text || !textCtrl.m_winui ||
+         (!textCtrl.m_winui->textBox && !textCtrl.m_winui->richEditBox &&
+          !textCtrl.m_winui->passwordBox) )
     {
         return false;
     }
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t callbackGeneration =
@@ -6619,7 +6666,7 @@ bool wxTextCtrl::WinUIGetPeerTextForTesting(wxString *text) const
     const MUXC::RichEditBox richEditBox = impl->richEditBox;
     const MUXC::PasswordBox passwordBox = impl->passwordBox;
     const wxWeakRef<wxWindow> self(
-        const_cast<wxTextCtrl *>(this));
+        const_cast<wxTextCtrl *>(&textCtrl));
     const auto isCurrent = [&]()
     {
         if ( callbackState->GetGeneration() != callbackGeneration )
@@ -6655,22 +6702,25 @@ bool wxTextCtrl::WinUIGetPeerTextForTesting(wxString *text) const
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIReplacePeerSelectionForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::ReplacePeerSelection(
+    wxTextCtrl& textCtrl,
     const wxString& text)
 {
-    if ( !m_winui ||
-         (!m_winui->textBox && !m_winui->richEditBox) )
+    if ( !textCtrl.m_winui ||
+         (!textCtrl.m_winui->textBox && !textCtrl.m_winui->richEditBox) )
         return false;
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const bool securePasswordPeer = impl->securePasswordPeer;
     const bool unlockReadOnlyPasswordPeer =
-        securePasswordPeer && !m_editable;
+        securePasswordPeer && !textCtrl.m_editable;
     const MUXC::RichEditBox richEditBox = impl->richEditBox;
-    const wxWeakRef<wxWindow> self(this);
+    const wxWeakRef<wxWindow> self(&textCtrl);
     try
     {
         wxScopeGuard readOnlyGuard = wxMakeGuard(
@@ -6700,7 +6750,7 @@ bool wxTextCtrl::WinUIReplacePeerSelectionForTesting(
             richEditBox.IsReadOnly(false);
 
         // SelectedText goes through RichEdit's real edit/undo transaction and
-        // the production TextChanged callback. Unlike assigning Text, this
+        // the production TextChanged callback. Unlike assigning Text, &textCtrl
         // therefore provides a deterministic, non-input test seam for the
         // native undo history.
         const wxString normalized =
@@ -6773,7 +6823,7 @@ bool wxTextCtrl::WinUIReplacePeerSelectionForTesting(
             wxTextCtrl * const finalOwner =
                 wxDynamicCast(self.get(), wxTextCtrl);
             if ( !finalOwner ||
-                 finalOwner->m_passwordPeerFailClosedHresultForTesting ||
+                 finalOwner->m_passwordPeerFailClosedHresult ||
                  (explicitInsertionArmed && finalOwner->m_winui &&
                   finalOwner->m_winui.get() == impl &&
                   finalOwner->m_winui->
@@ -6791,6 +6841,7 @@ bool wxTextCtrl::WinUIReplacePeerSelectionForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxTextCtrl::AppendText(const wxString& text)
 {
@@ -9144,7 +9195,7 @@ bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& event)
             if ( live->IsMultiLine() && live->IsEditable() )
                 live->WriteTextWithPolicy(wxS("\n"), true);
             else if ( live->HasFlag(wxTE_PROCESS_ENTER) )
-                live->WinUIProcessEnterForTesting();
+                live->ProcessEnter();
             return changedLength();
 
         case WXK_TAB:
@@ -10941,14 +10992,16 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     return rc;
 }
 
-bool wxTextCtrl::WinUIHasLocalFontOverridesForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::HasLocalFontOverrides(
+    const wxTextCtrl& textCtrl)
 {
-    if ( !m_winui || !m_winui->control() )
+    if ( !textCtrl.m_winui || !textCtrl.m_winui->control() )
         return false;
 
     try
     {
-        const MUXC::Control control = m_winui->control();
+        const MUXC::Control control = textCtrl.m_winui->control();
         const auto unset = MUX::DependencyProperty::UnsetValue();
         return control.ReadLocalValue(
                    MUXC::Control::FontFamilyProperty()) != unset ||
@@ -10965,15 +11018,18 @@ bool wxTextCtrl::WinUIHasLocalFontOverridesForTesting() const
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIRichClipboardUsesAllFormatsForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::RichClipboardUsesAllFormats(
+    const wxTextCtrl& textCtrl)
 {
-    if ( !m_winui || !m_winui->richEditBox )
+    if ( !textCtrl.m_winui || !textCtrl.m_winui->richEditBox )
         return false;
 
     try
     {
-        return m_winui->richEditBox.ClipboardCopyFormat() ==
+        return textCtrl.m_winui->richEditBox.ClipboardCopyFormat() ==
                MUXC::RichEditClipboardFormat::AllFormats;
     }
     catch ( const winrt::hresult_error& )
@@ -10981,6 +11037,7 @@ bool wxTextCtrl::WinUIRichClipboardUsesAllFormatsForTesting() const
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
 {
@@ -11142,18 +11199,23 @@ void wxTextCtrl::ProcessSecurePasswordTextChanging()
         impl->securePasswordEditSelectionArmed
             ? impl->securePasswordEditSelectionEnd
             : modelSelectionEnd;
+#ifdef WXWINUI_TEST_SUPPORT
     const HRESULT forcedPasswordScrubFailure =
-        static_cast<HRESULT>(m_nextPasswordScrubFailureForTesting);
-    m_nextPasswordScrubFailureForTesting = 0;
+        static_cast<HRESULT>(m_nextPasswordScrubFailure);
+    m_nextPasswordScrubFailure = 0;
     const bool forcePartialPasswordScrub =
-        m_nextPasswordScrubPartialWriteForTesting;
-    m_nextPasswordScrubPartialWriteForTesting = false;
+        m_nextPasswordScrubPartialWrite;
+    m_nextPasswordScrubPartialWrite = false;
     const bool hasExplicitInsertionForTesting =
         impl->securePasswordExplicitInsertionArmedForTesting;
     wxString explicitInsertionForTesting =
         std::move(impl->securePasswordExplicitInsertionForTesting);
     impl->securePasswordExplicitInsertionArmedForTesting = false;
     impl->securePasswordExplicitInsertionForTesting.clear();
+#else
+    const HRESULT forcedPasswordScrubFailure = S_OK;
+    const bool forcePartialPasswordScrub = false;
+#endif
     impl->securePasswordEditSelectionArmed = false;
     ++impl->securePasswordEditSelectionGeneration;
     const wxWeakRef<wxWindow> self(this);
@@ -11263,9 +11325,9 @@ void wxTextCtrl::ProcessSecurePasswordTextChanging()
                 const HRESULT failure = FAILED(scrub.failure)
                                             ? scrub.failure
                                             : E_UNEXPECTED;
-                current->m_passwordPeerFailClosedHresultForTesting =
+                current->m_passwordPeerFailClosedHresult =
                     static_cast<long>(failure);
-                current->m_passwordPeerWasEmptyOnFailClosedForTesting =
+                current->m_passwordPeerWasEmptyOnFailClosed =
                     scrub.isEmpty;
                 impl->securePasswordFailClosed = true;
                 const std::uint64_t failClosedGeneration =
@@ -11367,20 +11429,22 @@ void wxTextCtrl::ProcessSecurePasswordTextChanging()
         if ( !live )
             return;
 
-        if ( live->m_nextPasswordTextChangingHookForTesting )
+#ifdef WXWINUI_TEST_SUPPORT
+        if ( live->m_nextPasswordTextChangingHook )
         {
-            const WinUIPasswordTextChangingHookForTesting hook =
-                live->m_nextPasswordTextChangingHookForTesting;
+            const auto hook =
+                live->m_nextPasswordTextChangingHook;
             void * const hookContext =
-                live->m_nextPasswordTextChangingContextForTesting;
-            live->m_nextPasswordTextChangingHookForTesting = nullptr;
-            live->m_nextPasswordTextChangingContextForTesting = nullptr;
+                live->m_nextPasswordTextChangingContext;
+            live->m_nextPasswordTextChangingHook = nullptr;
+            live->m_nextPasswordTextChangingContext = nullptr;
             hook(live, hookContext);
 
             live = getExactOwner();
             if ( !live )
                 return;
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         if ( FAILED(forcedPasswordScrubFailure) ||
              forcePartialPasswordScrub )
@@ -11414,6 +11478,7 @@ void wxTextCtrl::ProcessSecurePasswordTextChanging()
             return;
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( hasExplicitInsertionForTesting )
         {
             // The deterministic test seam writes a same-length, non-secret
@@ -11423,6 +11488,7 @@ void wxTextCtrl::ProcessSecurePasswordTextChanging()
                 return;
             inserted = std::move(explicitInsertionForTesting);
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         wxString acceptedInsertion =
             m_forceUpper ? inserted.Upper() : inserted;
@@ -11674,9 +11740,9 @@ void wxTextCtrl::DispatchSecurePasswordChange()
         live = getLiveOwner();
         if ( live )
         {
-            live->m_passwordPeerFailClosedHresultForTesting =
+            live->m_passwordPeerFailClosedHresult =
                 static_cast<long>(e.code());
-            live->m_passwordPeerWasEmptyOnFailClosedForTesting = false;
+            live->m_passwordPeerWasEmptyOnFailClosed = false;
             std::unique_ptr<wxWinUITextCtrlImpl> failedPeer =
                 std::move(live->m_winui);
             failedPeer->Close();
@@ -12278,11 +12344,15 @@ void wxTextCtrl::EnsurePositionVisible(long pos)
                 wxTextCtrl *live = getLiveOwner();
                 if ( !live )
                     return;
+#ifdef WXWINUI_TEST_SUPPORT
                 const bool forceUnavailable =
                     live->m_winui->
                         forceNextRichPositionUnavailableForTesting;
                 live->m_winui->
                     forceNextRichPositionUnavailableForTesting = false;
+#else
+                const bool forceUnavailable = false;
+#endif
                 const wxWinUITextViewportState targetState = forceUnavailable
                     ? wxWinUITextViewportState::Unavailable
                     : getTargetViewportState(&point);
@@ -12504,6 +12574,7 @@ void wxTextCtrl::EnsurePositionVisible(long pos)
     };
 
     bool forceDeferredCompletion = false;
+#ifdef WXWINUI_TEST_SUPPORT
     if ( wxTextCtrl * const live = getLiveOwner() )
     {
         if ( live->m_winui->forceNextPositionVisibilityRetryForTesting )
@@ -12512,6 +12583,7 @@ void wxTextCtrl::EnsurePositionVisible(long pos)
             forceDeferredCompletion = true;
         }
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     try
     {
@@ -12559,6 +12631,7 @@ void wxTextCtrl::EnsurePositionVisible(long pos)
             return;
         }
         bool forceTemporarySelection = false;
+#ifdef WXWINUI_TEST_SUPPORT
         if ( wxTextCtrl * const live = getLiveOwner() )
         {
             if ( live->m_winui->forceTemporarySelectionForTesting )
@@ -12568,6 +12641,7 @@ void wxTextCtrl::EnsurePositionVisible(long pos)
                 haveUsableEdge = false;
             }
         }
+#endif // WXWINUI_TEST_SUPPORT
         bool needsDeferredCompletion = forceDeferredCompletion;
 
         if ( !haveUsableEdge )
@@ -12907,18 +12981,20 @@ void wxTextCtrl::EnsurePositionVisible(long pos)
             live = getLiveOwner();
             if ( !live )
                 return;
-            if ( live->m_nextTemporarySelectionHookForTesting )
+#ifdef WXWINUI_TEST_SUPPORT
+            if ( live->m_nextTemporarySelectionHook )
             {
-                const WinUITemporarySelectionHookForTesting hook =
-                    live->m_nextTemporarySelectionHookForTesting;
+                const auto hook =
+                    live->m_nextTemporarySelectionHook;
                 void * const context =
-                    live->m_nextTemporarySelectionContextForTesting;
-                live->m_nextTemporarySelectionHookForTesting = nullptr;
-                live->m_nextTemporarySelectionContextForTesting = nullptr;
+                    live->m_nextTemporarySelectionContext;
+                live->m_nextTemporarySelectionHook = nullptr;
+                live->m_nextTemporarySelectionContext = nullptr;
                 hook(live, context);
                 if ( !getExactOwner() )
                     return;
             }
+#endif // WXWINUI_TEST_SUPPORT
 
             // Select() can enqueue both range realization and an implicit
             // caret scroll even though it doesn't take focus. The original
@@ -13741,18 +13817,21 @@ void wxTextCtrl::FinishPositionVisibility(std::uint64_t generation,
     }
 }
 
-bool wxTextCtrl::WinUIGetNativeCaretShownForTesting(bool *shown) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetNativeCaretShown(
+    const wxTextCtrl& textCtrl,
+    bool *shown)
 {
-    if ( !shown || !m_winui || !m_winui->richEditBox )
+    if ( !shown || !textCtrl.m_winui || !textCtrl.m_winui->richEditBox )
         return false;
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const MUXC::RichEditBox richEditBox = impl->richEditBox;
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t generation = callbackState->GetGeneration();
     const wxWeakRef<wxWindow> self(
-        const_cast<wxTextCtrl *>(this));
+        const_cast<wxTextCtrl *>(&textCtrl));
     const auto isCurrent = [&]()
     {
         if ( callbackState->GetGeneration() != generation )
@@ -13781,20 +13860,23 @@ bool wxTextCtrl::WinUIGetNativeCaretShownForTesting(bool *shown) const
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIHasNoHideSelectionProjectionForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::HasNoHideSelectionProjection(
+    const wxTextCtrl& textCtrl)
 {
-    if ( !m_winui )
+    if ( !textCtrl.m_winui )
         return false;
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const MUXC::TextBox textBox = impl->textBox;
     const MUXC::RichEditBox richEditBox = impl->richEditBox;
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t generation = callbackState->GetGeneration();
     const wxWeakRef<wxWindow> self(
-        const_cast<wxTextCtrl *>(this));
+        const_cast<wxTextCtrl *>(&textCtrl));
     const auto isCurrent = [&]()
     {
         if ( callbackState->GetGeneration() != generation )
@@ -13835,29 +13917,32 @@ bool wxTextCtrl::WinUIHasNoHideSelectionProjectionForTesting() const
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIGetPasswordPeerSecurityForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetPasswordPeerSecurity(
+    const wxTextCtrl& textCtrl,
     bool *isPassword,
     bool *hasValuePattern,
     bool *hasTextPattern,
     wxString *documentText,
-    bool *textPredictionEnabled) const
+    bool *textPredictionEnabled)
 {
     if ( !isPassword || !hasValuePattern || !hasTextPattern ||
          !textPredictionEnabled ||
-         !m_winui || !m_winui->securePasswordPeer ||
-         !m_winui->richEditBox )
+         !textCtrl.m_winui || !textCtrl.m_winui->securePasswordPeer ||
+         !textCtrl.m_winui->richEditBox )
     {
         return false;
     }
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const MUXC::RichEditBox richEditBox = impl->richEditBox;
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t generation = callbackState->GetGeneration();
     const wxWeakRef<wxWindow> self(
-        const_cast<wxTextCtrl *>(this));
+        const_cast<wxTextCtrl *>(&textCtrl));
     const auto isCurrent = [&]()
     {
         if ( callbackState->GetGeneration() != generation )
@@ -13916,65 +14001,84 @@ bool wxTextCtrl::WinUIGetPasswordPeerSecurityForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTextCtrl::WinUIForceNextPasswordScrubFailureForTesting(long hresult)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITextCtrlTestAccess::ForceNextPasswordScrubFailure(
+    wxTextCtrl& textCtrl,
+    long hresult)
 {
     const HRESULT failure = static_cast<HRESULT>(hresult);
-    m_nextPasswordScrubFailureForTesting =
+    textCtrl.m_nextPasswordScrubFailure =
         static_cast<long>(FAILED(failure) ? failure : E_FAIL);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTextCtrl::WinUIForceNextPasswordScrubPartialWriteForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITextCtrlTestAccess::ForceNextPasswordScrubPartialWrite(
+    wxTextCtrl& textCtrl)
 {
-    m_nextPasswordScrubPartialWriteForTesting = true;
+    textCtrl.m_nextPasswordScrubPartialWrite = true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIGetPasswordFailClosedForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetPasswordFailClosed(
+    const wxTextCtrl& textCtrl,
     long *hresult,
-    bool *documentWasEmpty) const
+    bool *documentWasEmpty)
 {
-    if ( !m_passwordPeerFailClosedHresultForTesting )
+    if ( !textCtrl.m_passwordPeerFailClosedHresult )
         return false;
 
     if ( hresult )
-        *hresult = m_passwordPeerFailClosedHresultForTesting;
+        *hresult = textCtrl.m_passwordPeerFailClosedHresult;
     if ( documentWasEmpty )
     {
         *documentWasEmpty =
-            m_passwordPeerWasEmptyOnFailClosedForTesting;
+            textCtrl.m_passwordPeerWasEmptyOnFailClosed;
     }
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-unsigned
-wxTextCtrl::WinUIGetPasswordClipboardExportAttemptCountForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUITextCtrlTestAccess::GetPasswordClipboardExportAttemptCount(
+    const wxTextCtrl& textCtrl)
 {
-    return m_winui && m_winui->securePasswordPeer
-               ? m_winui->passwordClipboardExportAttemptCount
+    return textCtrl.m_winui && textCtrl.m_winui->securePasswordPeer
+               ? textCtrl.m_winui->passwordClipboardExportAttemptCount
                : 0;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-unsigned wxTextCtrl::WinUIGetAutoUrlRangeCountForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUITextCtrlTestAccess::GetAutoUrlRangeCount(
+    const wxTextCtrl& textCtrl)
 {
-    return m_winui && HasFlag(wxTE_AUTO_URL)
-             ? static_cast<unsigned>(m_winui->autoUrlRanges.size())
+    return textCtrl.m_winui && textCtrl.HasFlag(wxTE_AUTO_URL)
+             ? static_cast<unsigned>(textCtrl.m_winui->autoUrlRanges.size())
              : 0;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIGetAutoUrlRangeForTesting(unsigned n,
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetAutoUrlRange(
+    const wxTextCtrl& textCtrl,
+    unsigned n,
                                                 long *from,
                                                 long *to,
-                                                wxString *target) const
+                                                wxString *target)
 {
-    if ( !m_winui || !HasFlag(wxTE_AUTO_URL) ||
-         n >= m_winui->autoUrlRanges.size() )
+    if ( !textCtrl.m_winui || !textCtrl.HasFlag(wxTE_AUTO_URL) ||
+         n >= textCtrl.m_winui->autoUrlRanges.size() )
     {
         return false;
     }
 
-    const wxWinUIAutoUrlRange range = m_winui->autoUrlRanges[n];
+    const wxWinUIAutoUrlRange range = textCtrl.m_winui->autoUrlRanges[n];
     const wxWinUITextPositionMap map =
-        wxWinUIMakeTextPositionMap(*this, m_value);
+        wxWinUIMakeTextPositionMap(textCtrl, textCtrl.m_value);
     if ( from )
         *from = map.LogicalToPublic(range.start);
     if ( to )
@@ -13983,14 +14087,16 @@ bool wxTextCtrl::WinUIGetAutoUrlRangeForTesting(unsigned n,
         *target = range.target;
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-unsigned
-wxTextCtrl::WinUIGetAutoCompleteSuggestionCountForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUITextCtrlTestAccess::GetAutoCompleteSuggestionCount(
+    const wxTextCtrl& textCtrl)
 {
-    if ( !m_winui || !m_winui->autoCompleteFlyout )
+    if ( !textCtrl.m_winui || !textCtrl.m_winui->autoCompleteFlyout )
         return 0;
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t generation = callbackState->GetGeneration();
@@ -14001,7 +14107,7 @@ wxTextCtrl::WinUIGetAutoCompleteSuggestionCountForTesting() const
         const wxTextCtrl * const owner =
             callbackState->GetOwner<wxTextCtrl>();
         return callbackState->GetGeneration() == generation &&
-                       owner == this && owner->m_winui &&
+                       owner == &textCtrl && owner->m_winui &&
                        owner->m_winui.get() == impl &&
                        owner->m_winui->callbackState == callbackState &&
                        owner->m_winui->autoCompleteFlyout == flyout
@@ -14013,14 +14119,17 @@ wxTextCtrl::WinUIGetAutoCompleteSuggestionCountForTesting() const
         return 0;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-wxString wxTextCtrl::WinUIGetAutoCompleteSuggestionForTesting(
-    unsigned n) const
+#ifdef WXWINUI_TEST_SUPPORT
+wxString wxWinUITextCtrlTestAccess::GetAutoCompleteSuggestion(
+    const wxTextCtrl& textCtrl,
+    unsigned n)
 {
-    if ( !m_winui || !m_winui->autoCompleteFlyout )
+    if ( !textCtrl.m_winui || !textCtrl.m_winui->autoCompleteFlyout )
         return wxString();
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t generation = callbackState->GetGeneration();
@@ -14037,7 +14146,7 @@ wxString wxTextCtrl::WinUIGetAutoCompleteSuggestionForTesting(
         const wxTextCtrl * const owner =
             callbackState->GetOwner<wxTextCtrl>();
         return callbackState->GetGeneration() == generation &&
-                       owner == this && owner->m_winui &&
+                       owner == &textCtrl && owner->m_winui &&
                        owner->m_winui.get() == impl &&
                        owner->m_winui->callbackState == callbackState &&
                        owner->m_winui->autoCompleteFlyout == flyout
@@ -14049,13 +14158,17 @@ wxString wxTextCtrl::WinUIGetAutoCompleteSuggestionForTesting(
         return wxString();
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIInvokeAutoCompleteSuggestionForTesting(unsigned n)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::InvokeAutoCompleteSuggestion(
+    wxTextCtrl& textCtrl,
+    unsigned n)
 {
-    if ( !m_winui || !m_winui->autoCompleteFlyout )
+    if ( !textCtrl.m_winui || !textCtrl.m_winui->autoCompleteFlyout )
         return false;
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t generation = callbackState->GetGeneration();
@@ -14071,7 +14184,7 @@ bool wxTextCtrl::WinUIInvokeAutoCompleteSuggestionForTesting(unsigned n)
         const MUXC::MenuFlyoutItem item =
             items.GetAt(n).try_as<MUXC::MenuFlyoutItem>();
         wxTextCtrl * const owner = callbackState->GetOwner<wxTextCtrl>();
-        if ( !item || owner != this || !owner->m_winui ||
+        if ( !item || owner != &textCtrl || !owner->m_winui ||
              owner->m_winui.get() != impl ||
              owner->m_winui->callbackState != callbackState ||
              owner->m_winui->autoCompleteFlyout != flyout )
@@ -14079,7 +14192,7 @@ bool wxTextCtrl::WinUIInvokeAutoCompleteSuggestionForTesting(unsigned n)
             return false;
         }
 
-        // Invoke the real automation provider so this exercises the actual
+        // Invoke the real automation provider so &textCtrl exercises the actual
         // MenuFlyoutItem Click delegate and all of its lifetime guards.
         MUXAP::MenuFlyoutItemAutomationPeer(item).Invoke();
         return true;
@@ -14091,14 +14204,18 @@ bool wxTextCtrl::WinUIInvokeAutoCompleteSuggestionForTesting(unsigned n)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIGetPeerSelectionForTesting(long *from, long *to) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetPeerSelection(
+    const wxTextCtrl& textCtrl,
+    long *from, long *to)
 {
-    if ( !m_winui ||
-         (!m_winui->textBox && !m_winui->richEditBox) )
+    if ( !textCtrl.m_winui ||
+         (!textCtrl.m_winui->textBox && !textCtrl.m_winui->richEditBox) )
         return false;
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const MUXC::TextBox textBox = impl->textBox;
     const MUXC::RichEditBox richEditBox = impl->richEditBox;
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
@@ -14107,9 +14224,9 @@ bool wxTextCtrl::WinUIGetPeerSelectionForTesting(long *from, long *to) const
         callbackState->GetGeneration();
     const std::uint64_t contentGeneration =
         impl->textContentGeneration;
-    const wxString value = m_value;
+    const wxString value = textCtrl.m_value;
     const wxWeakRef<wxWindow> self(
-        const_cast<wxTextCtrl *>(this));
+        const_cast<wxTextCtrl *>(&textCtrl));
     const auto getLiveOwner = [&]() -> wxTextCtrl *
     {
         if ( callbackState->GetGeneration() != callbackGeneration )
@@ -14182,8 +14299,11 @@ bool wxTextCtrl::WinUIGetPeerSelectionForTesting(long *from, long *to) const
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIGetScrollStateForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetScrollState(
+    const wxTextCtrl& textCtrl,
     double *horizontalOffset,
     double *verticalOffset,
     double *viewportWidth,
@@ -14195,19 +14315,19 @@ bool wxTextCtrl::WinUIGetScrollStateForTesting(
     double *viewOriginX,
     double *viewOriginY,
     double *viewUnitXScale,
-    double *viewUnitYScale) const
+    double *viewUnitYScale)
 {
     if ( stage )
         *stage = 0;
-    if ( !m_winui ||
-         (!m_winui->textBox && !m_winui->richEditBox) )
+    if ( !textCtrl.m_winui ||
+         (!textCtrl.m_winui->textBox && !textCtrl.m_winui->richEditBox) )
     {
         if ( stage )
             *stage = 1;
         return false;
     }
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t generation =
@@ -14215,7 +14335,7 @@ bool wxTextCtrl::WinUIGetScrollStateForTesting(
     const MUXC::TextBox textBox = impl->textBox;
     const MUXC::RichEditBox richEditBox = impl->richEditBox;
     const wxWeakRef<wxWindow> self(
-        const_cast<wxTextCtrl *>(this));
+        const_cast<wxTextCtrl *>(&textCtrl));
     const auto getLiveOwner = [&]() -> wxTextCtrl *
     {
         if ( callbackState->GetGeneration() != generation )
@@ -14234,8 +14354,8 @@ bool wxTextCtrl::WinUIGetScrollStateForTesting(
     try
     {
         const MUXC::ScrollViewer scroll = textBox
-            ? wxWinUIResolveTextScrollViewer(*this, textBox)
-            : wxWinUIResolveTextScrollViewer(*this, richEditBox);
+            ? wxWinUIResolveTextScrollViewer(textCtrl, textBox)
+            : wxWinUIResolveTextScrollViewer(textCtrl, richEditBox);
         wxTextCtrl *live = getLiveOwner();
         if ( !scroll || !live )
         {
@@ -14351,15 +14471,18 @@ bool wxTextCtrl::WinUIGetScrollStateForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIGetVerticalScrollBarVisibilityForTesting(
-    WinUIScrollBarVisibilityForTesting *visibility) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetVerticalScrollBarVisibility(
+    const wxTextCtrl& textCtrl,
+    ScrollBarVisibility *visibility)
 {
-    if ( !visibility || !m_winui ||
-         (!m_winui->textBox && !m_winui->richEditBox) )
+    if ( !visibility || !textCtrl.m_winui ||
+         (!textCtrl.m_winui->textBox && !textCtrl.m_winui->richEditBox) )
         return false;
 
-    wxWinUITextCtrlImpl * const impl = m_winui.get();
+    wxWinUITextCtrlImpl * const impl = textCtrl.m_winui.get();
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t generation =
@@ -14370,15 +14493,15 @@ bool wxTextCtrl::WinUIGetVerticalScrollBarVisibilityForTesting(
     try
     {
         const MUXC::ScrollViewer scroll = textBox
-            ? wxWinUIResolveTextScrollViewer(*this, textBox)
-            : wxWinUIResolveTextScrollViewer(*this, richEditBox);
+            ? wxWinUIResolveTextScrollViewer(textCtrl, textBox)
+            : wxWinUIResolveTextScrollViewer(textCtrl, richEditBox);
 
         if ( callbackState->GetGeneration() != generation )
             return false;
 
         wxTextCtrl * const owner =
             callbackState->GetOwner<wxTextCtrl>();
-        if ( !owner || owner != this || !owner->m_winui ||
+        if ( !owner || owner != &textCtrl || !owner->m_winui ||
               owner->m_winui.get() != impl ||
               owner->m_winui->callbackState != callbackState ||
               owner->m_winui->textBox != textBox ||
@@ -14403,19 +14526,19 @@ bool wxTextCtrl::WinUIGetVerticalScrollBarVisibilityForTesting(
         {
             case MUXC::ScrollBarVisibility::Disabled:
                 *visibility =
-                    WinUIScrollBarVisibilityForTesting::Disabled;
+                    ScrollBarVisibility::Disabled;
                 break;
 
             case MUXC::ScrollBarVisibility::Auto:
-                *visibility = WinUIScrollBarVisibilityForTesting::Auto;
+                *visibility = ScrollBarVisibility::Auto;
                 break;
 
             case MUXC::ScrollBarVisibility::Hidden:
-                *visibility = WinUIScrollBarVisibilityForTesting::Hidden;
+                *visibility = ScrollBarVisibility::Hidden;
                 break;
 
             case MUXC::ScrollBarVisibility::Visible:
-                *visibility = WinUIScrollBarVisibilityForTesting::Visible;
+                *visibility = ScrollBarVisibility::Visible;
                 break;
 
             default:
@@ -14430,85 +14553,104 @@ bool wxTextCtrl::WinUIGetVerticalScrollBarVisibilityForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxTextCtrl::WinUIGetPositionVisibilityStateForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUITextCtrlTestAccess::GetPositionVisibilityState(
+    const wxTextCtrl& textCtrl,
     bool *pending,
     unsigned *queuedRetries,
     bool *hasRetainedPeerReferences,
     unsigned *richTrace,
-    unsigned *richPassCount) const
+    unsigned *richPassCount)
 {
-    if ( !m_winui )
+    if ( !textCtrl.m_winui )
         return false;
 
     if ( pending )
-        *pending = m_winui->positionVisibilityPending;
+        *pending = textCtrl.m_winui->positionVisibilityPending;
     if ( queuedRetries )
-        *queuedRetries = m_winui->positionVisibilityRetryCount;
+        *queuedRetries = textCtrl.m_winui->positionVisibilityRetryCount;
     if ( hasRetainedPeerReferences )
     {
         *hasRetainedPeerReferences =
-            static_cast<bool>(m_winui->positionVisibilityScroll) ||
-            static_cast<bool>(m_winui->positionVisibilityView);
+            static_cast<bool>(textCtrl.m_winui->positionVisibilityScroll) ||
+            static_cast<bool>(textCtrl.m_winui->positionVisibilityView);
     }
     if ( richTrace )
-        *richTrace = m_winui->richPositionVisibilityTrace;
+        *richTrace = textCtrl.m_winui->richPositionVisibilityTrace;
     if ( richPassCount )
-        *richPassCount = m_winui->richPositionVisibilityPassCount;
+        *richPassCount = textCtrl.m_winui->richPositionVisibilityPassCount;
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTextCtrl::WinUIUseTextBoxPeerForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITextCtrlTestAccess::UseTextBoxPeer(
+    wxTextCtrl& textCtrl)
 {
     // Peer kind is a creation-time decision. Ignore a late request rather
     // than replacing a live native peer behind callbacks that own its identity.
-    if ( !m_winui )
-        m_useTextBoxPeerForTesting = true;
+    if ( !textCtrl.m_winui )
+        textCtrl.m_useTextBoxPeer = true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTextCtrl::WinUIForceNextPositionVisibilityRetryForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITextCtrlTestAccess::ForceNextPositionVisibilityRetry(
+    wxTextCtrl& textCtrl)
 {
-    if ( m_winui )
+    if ( textCtrl.m_winui )
     {
-        if ( m_winui->richEditBox && !m_winui->securePasswordPeer )
+        if ( textCtrl.m_winui->richEditBox && !textCtrl.m_winui->securePasswordPeer )
         {
             // Force the Rich path's first-pass S_FALSE state so its bounded
             // coarse-realization transaction (synchronous or deferred) can be
             // tested deterministically.
-            m_winui->forceNextRichPositionUnavailableForTesting = true;
+            textCtrl.m_winui->forceNextRichPositionUnavailableForTesting = true;
         }
         else
         {
-            m_winui->forceNextPositionVisibilityRetryForTesting = true;
+            textCtrl.m_winui->forceNextPositionVisibilityRetryForTesting = true;
         }
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTextCtrl::WinUISetNextTemporarySelectionHookForTesting(
-    WinUITemporarySelectionHookForTesting hook,
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITextCtrlTestAccess::SetNextTemporarySelectionHook(
+    wxTextCtrl& textCtrl,
+    CallbackHook hook,
     void *context)
 {
-    m_nextTemporarySelectionHookForTesting = hook;
-    m_nextTemporarySelectionContextForTesting = hook ? context : nullptr;
-    if ( m_winui )
-        m_winui->forceTemporarySelectionForTesting = hook != nullptr;
+    textCtrl.m_nextTemporarySelectionHook = hook;
+    textCtrl.m_nextTemporarySelectionContext = hook ? context : nullptr;
+    if ( textCtrl.m_winui )
+        textCtrl.m_winui->forceTemporarySelectionForTesting = hook != nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTextCtrl::WinUISetNextPasswordTextChangingHookForTesting(
-    WinUIPasswordTextChangingHookForTesting hook,
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(
+    wxTextCtrl& textCtrl,
+    CallbackHook hook,
     void *context)
 {
-    m_nextPasswordTextChangingHookForTesting = hook;
-    m_nextPasswordTextChangingContextForTesting = hook ? context : nullptr;
+    textCtrl.m_nextPasswordTextChangingHook = hook;
+    textCtrl.m_nextPasswordTextChangingContext = hook ? context : nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxTextCtrl::WinUISetNextCreateLoadedHookForTesting(
-    WinUICreateLoadedHookForTesting hook,
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUITextCtrlTestAccess::SetNextCreateLoadedHook(
+    wxTextCtrl& textCtrl,
+    CallbackHook hook,
     void *context)
 {
-    m_nextCreateLoadedHookForTesting = hook;
-    m_nextCreateLoadedContextForTesting = hook ? context : nullptr;
+    textCtrl.m_nextCreateLoadedHook = hook;
+    textCtrl.m_nextCreateLoadedContext = hook ? context : nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 wxArrayString wxTextCtrl::GetLines() const
 {

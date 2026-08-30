@@ -12,6 +12,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "button-test-access.h"
+#include "textdialog-test-access.h"
 
 #include "wx/winui/private/dialogcontracts.h"
 
@@ -1156,9 +1157,9 @@ TEST_CASE("WinUIDialogContracts::TextAndPasswordWindowPresenters",
                 {
                     callbackRan = true;
                     valueSet =
-                        live->WinUISetPeerValueForTesting("mixed Value");
+                        wxWinUITextEntryDialogTestAccess::SetPeerValue(*live, "mixed Value");
                     live->ForceUpper();
-                    observed = live->WinUIGetPeerValueForTesting();
+                    observed = wxWinUITextEntryDialogTestAccess::GetPeerValue(*live);
                     live->Destroy();
                 }
             });
@@ -1317,7 +1318,7 @@ TEST_CASE("WinUIDialogContracts::PublicWindowButtonValidation",
                 if ( observation->invokes == 0 )
                 {
                     observation->rejectedValueSet =
-                        live->WinUISetPeerValueForTesting("rejected");
+                        wxWinUITextEntryDialogTestAccess::SetPeerValue(*live, "rejected");
                 }
                 else
                 {
@@ -1327,7 +1328,7 @@ TEST_CASE("WinUIDialogContracts::PublicWindowButtonValidation",
                         ::IsWindowVisible(originalHwnd) != FALSE;
                     observation->vetoDidNotCommit = live->GetValue() == "Initial";
                     observation->acceptedValueSet =
-                        live->WinUISetPeerValueForTesting("accepted");
+                        wxWinUITextEntryDialogTestAccess::SetPeerValue(*live, "accepted");
                 }
 
                 ++observation->invokes;
@@ -2633,10 +2634,10 @@ TEST_CASE("WinUIDialogContracts::ForceUpperWhileOpen",
                 {
                     textCallbackRan = true;
                     textSetSucceeded =
-                        live->WinUISetPeerValueForTesting("mixed Text");
+                        wxWinUITextEntryDialogTestAccess::SetPeerValue(*live, "mixed Text");
                     live->ForceUpper();
                     textObserved =
-                        live->WinUIGetPeerValueForTesting();
+                        wxWinUITextEntryDialogTestAccess::GetPeerValue(*live);
                     live->Destroy();
                 }
             });
@@ -2661,10 +2662,10 @@ TEST_CASE("WinUIDialogContracts::ForceUpperWhileOpen",
                 {
                     passwordCallbackRan = true;
                     passwordSetSucceeded =
-                        live->WinUISetPeerValueForTesting("mixed Secret");
+                        wxWinUITextEntryDialogTestAccess::SetPeerValue(*live, "mixed Secret");
                     live->ForceUpper();
                     passwordObserved =
-                        live->WinUIGetPeerValueForTesting();
+                        wxWinUITextEntryDialogTestAccess::GetPeerValue(*live);
                     live->Destroy();
                 }
             });

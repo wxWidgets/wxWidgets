@@ -18,17 +18,6 @@
 
 class wxWinUIChoiceImpl;
 
-struct wxWinUIPopupRetirementCoreProbeForTesting
-{
-    bool detachedCorrelationRetired = false;
-    bool reopenRejected = false;
-    bool reopenDegraded = false;
-    bool compositeReentrantCompletion = false;
-    bool sealRemainsClosed = false;
-    bool sealedAddRejectedWithoutPoison = false;
-    bool sealedNativeOpenFailsClosed = false;
-};
-
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
@@ -80,22 +69,8 @@ public:
     wxString GetString(unsigned int n) const override;
     void SetString(unsigned int n, const wxString& s) override;
 
-    // Implementation-only seams used by deterministic WinUI tests.
-    std::uint64_t WinUIGetItemIdForTesting(unsigned int n) const;
-    std::uintptr_t WinUIGetItemPeerIdentityForTesting(unsigned int n) const;
-    bool WinUIGetItemPeerBitmapStateForTesting(unsigned int n,
-                                                wxSize *pixelSize,
-                                                wxSize *dipSize) const;
-    bool WinUISelectPeerItemForTesting(int selection);
-    bool WinUISetDropDownForTesting(bool open);
-    bool WinUIIsPeerDropDownOpenForTesting() const;
-    bool WinUIGetPopupReopenSnapshotForTesting(
-        bool *pending,
-        std::uint64_t *generation,
-        unsigned *schedules,
-        unsigned *runs) const;
-    static wxWinUIPopupRetirementCoreProbeForTesting
-        WinUIProbePopupRetirementCoreForTesting();
+private:
+    friend class wxWinUIChoiceTestAccess;
 
 protected:
     void DoDeleteOneItem(unsigned int n) override;

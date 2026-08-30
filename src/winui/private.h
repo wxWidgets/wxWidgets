@@ -72,11 +72,7 @@ class wxTextCompleter;
 // A self-UI Automation client must run away from the XAML UI thread. Keep
 // only lock-free completion telemetry in the control implementation: the MTA
 // worker owns no wx/WinRT object and may outlive a control teardown safely.
-struct wxWinUIComboAutomationTestState
-{
-    std::atomic<int> stage{0};
-    std::atomic<long> hresult{0};
-};
+struct wxWinUIComboAutomationTestState;
 
 // Keep callback-bearing XAML peer graphs alive until either their normal
 // dispatcher retirement barrier or the XAML framework shutdown boundary

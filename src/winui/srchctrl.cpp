@@ -9,6 +9,10 @@
 
 #include "wx/wxprec.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "searchctrl-test-access.h"
+#endif
+
 #if wxUSE_SEARCHCTRL
 
 #include "wx/srchctrl.h"
@@ -261,11 +265,13 @@ public:
         layoutUpdatedToken = {};
 
         host.Close();
+#ifdef WXWINUI_TEST_SUPPORT
         retiredQueryButtonForTesting = nullptr;
         injectedQueryButtonForTesting = nullptr;
         injectedDeleteButtonForTesting = nullptr;
         injectedEditBoxForTesting = nullptr;
         useInjectedPartsForTesting = false;
+#endif
         queryButton = nullptr;
         deleteButton = nullptr;
         editBox = nullptr;
@@ -298,11 +304,13 @@ public:
     std::uint64_t deleteGeneration = 0;
     std::uint64_t queryGeneration = 0;
     unsigned suggestionCount = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     MUXC::TextBox injectedEditBoxForTesting{ nullptr };
     MUXC::Button injectedDeleteButtonForTesting{ nullptr };
     MUXC::Button injectedQueryButtonForTesting{ nullptr };
     MUXC::Button retiredQueryButtonForTesting{ nullptr };
     bool useInjectedPartsForTesting = false;
+#endif
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase);
@@ -411,12 +419,13 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
     if ( !liveOwner )
         return false;
 
-    const WinUICreateLoadedHookForTesting loadedHook =
-        liveOwner->m_nextCreateLoadedHookForTesting;
+#ifdef WXWINUI_TEST_SUPPORT
+    const auto loadedHook =
+        liveOwner->m_nextCreateLoadedHook;
     void * const loadedHookContext =
-        liveOwner->m_nextCreateLoadedContextForTesting;
-    liveOwner->m_nextCreateLoadedHookForTesting = nullptr;
-    liveOwner->m_nextCreateLoadedContextForTesting = nullptr;
+        liveOwner->m_nextCreateLoadedContext;
+    liveOwner->m_nextCreateLoadedHook = nullptr;
+    liveOwner->m_nextCreateLoadedContext = nullptr;
     if ( loadedHook )
     {
         createImpl->host.SetNextContentLoadedHookForTesting(
@@ -437,6 +446,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
                 loadedHook(owner, loadedHookContext);
             });
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     try
     {
@@ -593,6 +603,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
     if ( !liveOwner )
         return false;
 
+#ifdef WXWINUI_TEST_SUPPORT
     if ( loadedHook )
     {
         // Force only the implementation-only seam through the real Loaded
@@ -609,6 +620,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
         if ( !liveOwner )
             return false;
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     liveOwner->SetInitialSize(size);
 
@@ -1020,28 +1032,30 @@ void wxSearchCtrl::SetEditable(bool editable)
     }
 }
 
-bool wxSearchCtrl::WinUIInvokeSearchButtonForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUISearchCtrlTestAccess::InvokeSearchButton(
+    wxSearchCtrl& searchCtrl)
 {
-    if ( !m_winui )
+    if ( !searchCtrl.m_winui )
         return false;
 
-    const wxWeakRef<wxWindow> self(this);
-    m_winui->host.SynchronizeForFocus();
+    const wxWeakRef<wxWindow> self(&searchCtrl);
+    searchCtrl.m_winui->host.SynchronizeForFocus();
     if ( !self )
         return false;
 
-    m_winui->host.ForceRender();
+    searchCtrl.m_winui->host.ForceRender();
     if ( !self )
         return false;
 
-    ResolvePeerParts();
-    if ( !self || !m_winui || !m_winui->queryButton )
+    searchCtrl.ResolvePeerParts();
+    if ( !self || !searchCtrl.m_winui || !searchCtrl.m_winui->queryButton )
         return false;
 
     try
     {
         winrt::Microsoft::UI::Xaml::Automation::Peers::
-            ButtonAutomationPeer peer(m_winui->queryButton);
+            ButtonAutomationPeer peer(searchCtrl.m_winui->queryButton);
         peer.Invoke();
         return true;
     }
@@ -1052,29 +1066,32 @@ bool wxSearchCtrl::WinUIInvokeSearchButtonForTesting()
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxSearchCtrl::WinUIInvokeCancelButtonForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUISearchCtrlTestAccess::InvokeCancelButton(
+    wxSearchCtrl& searchCtrl)
 {
-    if ( !m_winui )
+    if ( !searchCtrl.m_winui )
         return false;
 
-    const wxWeakRef<wxWindow> self(this);
-    m_winui->host.SynchronizeForFocus();
+    const wxWeakRef<wxWindow> self(&searchCtrl);
+    searchCtrl.m_winui->host.SynchronizeForFocus();
     if ( !self )
         return false;
 
-    m_winui->host.ForceRender();
+    searchCtrl.m_winui->host.ForceRender();
     if ( !self )
         return false;
 
-    ResolvePeerParts();
-    if ( !self || !m_winui || !m_winui->deleteButton )
+    searchCtrl.ResolvePeerParts();
+    if ( !self || !searchCtrl.m_winui || !searchCtrl.m_winui->deleteButton )
         return false;
 
     try
     {
         winrt::Microsoft::UI::Xaml::Automation::Peers::
-            ButtonAutomationPeer peer(m_winui->deleteButton);
+            ButtonAutomationPeer peer(searchCtrl.m_winui->deleteButton);
         peer.Invoke();
         return true;
     }
@@ -1085,17 +1102,21 @@ bool wxSearchCtrl::WinUIInvokeCancelButtonForTesting()
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxSearchCtrl::WinUISetPeerTextForTesting(const wxString& text)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUISearchCtrlTestAccess::SetPeerText(
+    wxSearchCtrl& searchCtrl,
+    const wxString& text)
 {
-    if ( !m_winui || !m_winui->box )
+    if ( !searchCtrl.m_winui || !searchCtrl.m_winui->box )
         return false;
 
-    m_winui->hasPendingPeerValue = false;
-    m_winui->pendingPeerValue.clear();
+    searchCtrl.m_winui->hasPendingPeerValue = false;
+    searchCtrl.m_winui->pendingPeerValue.clear();
     try
     {
-        m_winui->box.Text(wxWinUIToHString(
+        searchCtrl.m_winui->box.Text(wxWinUIToHString(
             wxWinUITextPositionMap::NormalizeNewlines(text)));
         return true;
     }
@@ -1106,32 +1127,36 @@ bool wxSearchCtrl::WinUISetPeerTextForTesting(const wxString& text)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxSearchCtrl::WinUIRetemplateForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUISearchCtrlTestAccess::Retemplate(
+    wxSearchCtrl& searchCtrl)
 {
-    if ( !m_winui )
+    if ( !searchCtrl.m_winui )
         return false;
 
-    const wxWeakRef<wxWindow> self(this);
+    const wxWeakRef<wxWindow> self(&searchCtrl);
     try
     {
         // Keep the previous query button alive after the transactional swap:
         // invoking it is the deterministic proof that its old Click token was
         // revoked (and, independently, invalidated by its generation).
-        m_winui->retiredQueryButtonForTesting = m_winui->queryButton;
-        m_winui->injectedEditBoxForTesting = MUXC::TextBox();
-        m_winui->injectedDeleteButtonForTesting = MUXC::Button();
-        m_winui->injectedQueryButtonForTesting = MUXC::Button();
-        m_winui->useInjectedPartsForTesting = true;
-        ResolvePeerParts(false);
+        searchCtrl.m_winui->retiredQueryButtonForTesting =
+            searchCtrl.m_winui->queryButton;
+        searchCtrl.m_winui->injectedEditBoxForTesting = MUXC::TextBox();
+        searchCtrl.m_winui->injectedDeleteButtonForTesting = MUXC::Button();
+        searchCtrl.m_winui->injectedQueryButtonForTesting = MUXC::Button();
+        searchCtrl.m_winui->useInjectedPartsForTesting = true;
+        searchCtrl.ResolvePeerParts(false);
 
-        return self && m_winui &&
-               m_winui->editBox ==
-                   m_winui->injectedEditBoxForTesting &&
-               m_winui->deleteButton ==
-                   m_winui->injectedDeleteButtonForTesting &&
-               m_winui->queryButton ==
-                   m_winui->injectedQueryButtonForTesting;
+        return self && searchCtrl.m_winui &&
+               searchCtrl.m_winui->editBox ==
+                   searchCtrl.m_winui->injectedEditBoxForTesting &&
+               searchCtrl.m_winui->deleteButton ==
+                   searchCtrl.m_winui->injectedDeleteButtonForTesting &&
+               searchCtrl.m_winui->queryButton ==
+                   searchCtrl.m_winui->injectedQueryButtonForTesting;
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -1140,17 +1165,20 @@ bool wxSearchCtrl::WinUIRetemplateForTesting()
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxSearchCtrl::WinUIInvokeRetiredSearchButtonForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUISearchCtrlTestAccess::InvokeRetiredSearchButton(
+    wxSearchCtrl& searchCtrl)
 {
-    if ( !m_winui || !m_winui->retiredQueryButtonForTesting )
+    if ( !searchCtrl.m_winui || !searchCtrl.m_winui->retiredQueryButtonForTesting )
         return false;
 
     try
     {
         winrt::Microsoft::UI::Xaml::Automation::Peers::
             ButtonAutomationPeer peer(
-                m_winui->retiredQueryButtonForTesting);
+                searchCtrl.m_winui->retiredQueryButtonForTesting);
         peer.Invoke();
         return true;
     }
@@ -1161,42 +1189,52 @@ bool wxSearchCtrl::WinUIInvokeRetiredSearchButtonForTesting()
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-unsigned wxSearchCtrl::WinUIGetSuggestionCountForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUISearchCtrlTestAccess::GetSuggestionCount(
+    const wxSearchCtrl& searchCtrl)
 {
-    return m_winui ? m_winui->suggestionCount : 0;
+    return searchCtrl.m_winui ? searchCtrl.m_winui->suggestionCount : 0;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-unsigned wxSearchCtrl::WinUIGetTemplateStateForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUISearchCtrlTestAccess::GetTemplateState(
+    const wxSearchCtrl& searchCtrl)
 {
-    if ( !m_winui )
+    if ( !searchCtrl.m_winui )
         return 0;
 
     unsigned state = 0;
     try
     {
-        if ( m_winui->box && m_winui->box.XamlRoot() )
+        if ( searchCtrl.m_winui->box && searchCtrl.m_winui->box.XamlRoot() )
             state |= 0x1;
     }
     catch ( const winrt::hresult_error& )
     {
     }
-    if ( m_winui->editBox )
+    if ( searchCtrl.m_winui->editBox )
         state |= 0x2;
-    if ( m_winui->deleteButton )
+    if ( searchCtrl.m_winui->deleteButton )
         state |= 0x4;
-    if ( m_winui->queryButton )
+    if ( searchCtrl.m_winui->queryButton )
         state |= 0x8;
     return state;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxSearchCtrl::WinUISetNextCreateLoadedHookForTesting(
-    WinUICreateLoadedHookForTesting hook,
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUISearchCtrlTestAccess::SetNextCreateLoadedHook(
+    wxSearchCtrl& searchCtrl,
+    CallbackHook hook,
     void *context)
 {
-    m_nextCreateLoadedHookForTesting = hook;
-    m_nextCreateLoadedContextForTesting = hook ? context : nullptr;
+    searchCtrl.m_nextCreateLoadedHook = hook;
+    searchCtrl.m_nextCreateLoadedContext = hook ? context : nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 // ----------------------------------------------------------------------------
 // internals
@@ -1424,8 +1462,12 @@ void wxSearchCtrl::ResolvePeerPartsOnce(bool updateLayout)
     const std::shared_ptr<wxWinUITextCallbackState> callbackState =
         impl->callbackState;
     const MUXC::AutoSuggestBox box = impl->box;
+#ifdef WXWINUI_TEST_SUPPORT
     const bool useInjectedParts =
         impl->useInjectedPartsForTesting;
+#else
+    const bool useInjectedParts = false;
+#endif
     const auto getLiveOwner =
         [callbackState, impl, box]() -> wxSearchCtrl *
         {
@@ -1458,9 +1500,12 @@ void wxSearchCtrl::ResolvePeerPartsOnce(bool updateLayout)
             return;
 
         const MUXC::TextBox editBox =
+#ifdef WXWINUI_TEST_SUPPORT
             useInjectedParts
                 ? impl->injectedEditBoxForTesting
-                : wxWinUIFindSearchTextBox(box);
+                :
+#endif
+                  wxWinUIFindSearchTextBox(box);
         if ( editBox != impl->editBox )
         {
             // Invalidate and detach the old generation before attempting its
@@ -1571,11 +1616,14 @@ void wxSearchCtrl::ResolvePeerPartsOnce(bool updateLayout)
 
         MUXC::Button deleteButton{ nullptr };
         MUXC::IControlProtected editTemplate{ nullptr };
+#ifdef WXWINUI_TEST_SUPPORT
         if ( useInjectedParts )
         {
             deleteButton = impl->injectedDeleteButtonForTesting;
         }
-        else if ( impl->editBox )
+        else
+#endif
+        if ( impl->editBox )
         {
             editTemplate =
                 impl->editBox.try_as<MUXC::IControlProtected>();
@@ -1679,11 +1727,14 @@ void wxSearchCtrl::ResolvePeerPartsOnce(bool updateLayout)
         }
 
         MUXC::Button queryButton{ nullptr };
+#ifdef WXWINUI_TEST_SUPPORT
         if ( useInjectedParts )
         {
             queryButton = impl->injectedQueryButtonForTesting;
         }
-        else if ( editTemplate )
+        else
+#endif
+        if ( editTemplate )
         {
             queryButton = editTemplate.
                 GetTemplateChild(L"QueryButton").
@@ -1721,16 +1772,21 @@ void wxSearchCtrl::ResolvePeerPartsOnce(bool updateLayout)
 
             const std::uint64_t generation =
                 impl->queryGeneration;
+#ifdef WXWINUI_TEST_SUPPORT
             const bool submitFromClickForTesting =
                 useInjectedParts;
+#endif
             winrt::event_token queryToken{};
             if ( queryButton )
             {
                 try
                 {
                     queryToken = queryButton.Click(
-                        [callbackState, generation,
-                         submitFromClickForTesting](
+                        [callbackState, generation
+#ifdef WXWINUI_TEST_SUPPORT
+                         , submitFromClickForTesting
+#endif
+                        ](
                             winrt::Windows::Foundation::IInspectable const&,
                             MUX::RoutedEventArgs const&)
                         {
@@ -1745,6 +1801,7 @@ void wxSearchCtrl::ResolvePeerPartsOnce(bool updateLayout)
                                 return;
                             }
 
+#ifdef WXWINUI_TEST_SUPPORT
                             // A detached synthetic part has no
                             // AutoSuggestBox machinery to raise
                             // QuerySubmitted. The implementation-only seam
@@ -1769,6 +1826,7 @@ void wxSearchCtrl::ResolvePeerPartsOnce(bool updateLayout)
                                     return;
                                 }
                             }
+#endif // WXWINUI_TEST_SUPPORT
 
 #if wxUSE_MENUS
                             if ( !owner->m_menu || !wxTheApp )
@@ -1864,6 +1922,7 @@ void wxSearchCtrl::ApplySuggestions(const wxArrayString& choices)
     {
         if ( !m_winui->box.XamlRoot() )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             if ( m_winui->useInjectedPartsForTesting )
             {
                 unsigned count = 0;
@@ -1877,6 +1936,7 @@ void wxSearchCtrl::ApplySuggestions(const wxArrayString& choices)
                 }
                 m_winui->suggestionCount = count;
             }
+#endif // WXWINUI_TEST_SUPPORT
             return;
         }
 

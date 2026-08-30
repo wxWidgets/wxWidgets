@@ -20,9 +20,6 @@ class wxWinUISearchCtrlImpl;
 class WXDLLIMPEXP_CORE wxSearchCtrl : public wxSearchCtrlBase
 {
 public:
-    using WinUICreateLoadedHookForTesting =
-        void (*)(wxSearchCtrl *owner, void *context);
-
     wxSearchCtrl();
     wxSearchCtrl(wxWindow *parent,
                  wxWindowID id,
@@ -76,18 +73,6 @@ public:
     bool IsEditable() const override;
     void SetEditable(bool editable) override;
 
-    // Implementation-only deterministic seams. They exercise the realized
-    // WinUI template and are intentionally not part of wxSearchCtrlBase.
-    bool WinUIInvokeSearchButtonForTesting();
-    bool WinUIInvokeCancelButtonForTesting();
-    bool WinUISetPeerTextForTesting(const wxString& text);
-    bool WinUIRetemplateForTesting();
-    bool WinUIInvokeRetiredSearchButtonForTesting();
-    unsigned WinUIGetSuggestionCountForTesting() const;
-    unsigned WinUIGetTemplateStateForTesting() const;
-    void WinUISetNextCreateLoadedHookForTesting(
-        WinUICreateLoadedHookForTesting hook,
-        void *context);
 
 protected:
     wxSize DoGetBestSize() const override;
@@ -122,10 +107,13 @@ protected:
     bool m_searchButtonVisible = true;
     bool m_cancelButtonVisible = false;
     bool m_updatingPeer = false;
-    WinUICreateLoadedHookForTesting m_nextCreateLoadedHookForTesting = nullptr;
-    void *m_nextCreateLoadedContextForTesting = nullptr;
+    // Private seam storage remains unconditional to preserve class layout.
+    void (*m_nextCreateLoadedHook)(wxSearchCtrl*, void*) = nullptr;
+    void *m_nextCreateLoadedContext = nullptr;
 
 private:
+    friend class wxWinUISearchCtrlTestAccess;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSearchCtrl);
 };
 

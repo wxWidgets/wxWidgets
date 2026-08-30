@@ -20,6 +20,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/msw/wrapwin.h"
+#include "textctrl-test-access.h"
 #include "wx/timer.h"
 #include "wx/winui/private/inputtest.h"
 #include "wx/winui/winui.h"
@@ -242,7 +243,7 @@ TEST_CASE("WinUIFrameDialog::ProcessEnterFallback",
             });
 
         ShowAndFlush(dialog);
-        CHECK(editor->WinUIProcessEnterForTesting());
+        CHECK(wxWinUITextCtrlTestAccess::ProcessEnter(*editor));
         CHECK(textEvents == 1);
         CHECK_FALSE(dialog.IsShown());
     }
@@ -261,7 +262,7 @@ TEST_CASE("WinUIFrameDialog::ProcessEnterFallback",
         editor->Bind(wxEVT_TEXT_ENTER, [](wxCommandEvent&) {});
 
         ShowAndFlush(dialog);
-        CHECK(editor->WinUIProcessEnterForTesting());
+        CHECK(wxWinUITextCtrlTestAccess::ProcessEnter(*editor));
         CHECK(dialog.IsShown());
     }
 
@@ -281,7 +282,7 @@ TEST_CASE("WinUIFrameDialog::ProcessEnterFallback",
             [](wxCommandEvent& event) { event.Skip(); });
 
         ShowAndFlush(dialog);
-        CHECK_FALSE(editor->WinUIProcessEnterForTesting());
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::ProcessEnter(*editor));
         CHECK(dialog.IsShown());
     }
 }

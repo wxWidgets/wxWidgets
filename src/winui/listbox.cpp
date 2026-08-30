@@ -13,6 +13,10 @@
 
 #include "wx/listbox.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+#include "listbox-test-access.h"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/arrstr.h"
@@ -74,6 +78,7 @@ WF::IUnknown wxWinUIListObjectIdentity(const T& object) noexcept
     return object ? object.template try_as<WF::IUnknown>() : nullptr;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 // COM interface giving direct access to an IBuffer's bytes. This is used only
 // by the deterministic presentation seam below to inspect the bitmap that is
 // actually attached to the XAML Image.
@@ -82,6 +87,8 @@ wxWinUIListBufferByteAccess : ::IUnknown
 {
     virtual HRESULT __stdcall Buffer(std::uint8_t** value) = 0;
 };
+
+#endif
 
 class wxWinUIPeerMutationGuard final
 {
@@ -4821,20 +4828,34 @@ void wxListBox::SendSelectionEvent()
     CalcAndSendEvent();
 }
 
-std::uint64_t wxListBox::WinUIGetItemIdForTesting(unsigned int n) const
+#ifdef WXWINUI_TEST_SUPPORT
+double wxWinUIListBoxTestAccess::GetControlWidthDIPs(const wxListBox &control)
 {
-    return n < m_itemModel.GetCount() ? m_itemModel.At(n).id : 0;
+    return control.m_controlWidthDIPs;
 }
+#endif
 
-std::uintptr_t
-wxListBox::WinUIGetItemPeerIdentityForTesting(unsigned int n) const
+#ifdef WXWINUI_TEST_SUPPORT
+std::uint64_t wxWinUIListBoxTestAccess::GetItemId(const wxListBox &control,
+                                                  unsigned int n)
 {
-    if ( !m_winui || !m_winui->listView )
+    const wxListBox *const self = &control;
+    return n < self->m_itemModel.GetCount() ? self->m_itemModel.At(n).id : 0;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+std::uintptr_t
+wxWinUIListBoxTestAccess::GetItemPeerIdentity(const wxListBox &control,
+                                              unsigned int n)
+{
+    const wxListBox *const self = &control;
+    if ( !self->m_winui || !self->m_winui->listView )
         return 0;
 
     try
     {
-        const auto items = m_winui->listView.Items();
+        const auto items = self->m_winui->listView.Items();
         if ( n >= items.Size() )
             return 0;
         return reinterpret_cast<std::uintptr_t>(
@@ -4845,25 +4866,31 @@ wxListBox::WinUIGetItemPeerIdentityForTesting(unsigned int n) const
         return 0;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-unsigned int wxListBox::WinUIGetPeerCountForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned int wxWinUIListBoxTestAccess::GetPeerCount(const wxListBox &control)
 {
-    if ( !m_winui || !m_winui->listView )
+    const wxListBox *const self = &control;
+    if ( !self->m_winui || !self->m_winui->listView )
         return 0;
 
     try
     {
-        return m_winui->listView.Items().Size();
+        return self->m_winui->listView.Items().Size();
     }
     catch ( const winrt::hresult_error& )
     {
         return 0;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIPoisonPeerForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::PoisonPeer(wxListBox &control)
 {
-    if ( !m_winui || !m_winui->listView )
+    wxListBox *const self = &control;
+    if ( !self->m_winui || !self->m_winui->listView )
         return false;
 
     try
@@ -4872,7 +4899,7 @@ bool wxListBox::WinUIPoisonPeerForTesting()
         // stable-ID vector remains unchanged and still claims validity. The
         // next public mutation must detect all three counts disagreeing and
         // rebuild before applying its delta.
-        m_winui->listView.Items().Append(MUXC::ListViewItem());
+        self->m_winui->listView.Items().Append(MUXC::ListViewItem());
         return true;
     }
     catch ( const winrt::hresult_error& e )
@@ -4881,19 +4908,23 @@ bool wxListBox::WinUIPoisonPeerForTesting()
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUISetPeerSelectionForTesting(unsigned int n, bool select)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::SetPeerSelection(wxListBox &control,
+                                                unsigned int n, bool select)
 {
-    if ( !m_winui || !m_winui->listView )
+    wxListBox *const self = &control;
+    if ( !self->m_winui || !self->m_winui->listView )
         return false;
 
-    WinUIEnsurePeerConsistent();
-    if ( !m_winui || !m_winui->peerItemsValid )
+    self->WinUIEnsurePeerConsistent();
+    if ( !self->m_winui || !self->m_winui->peerItemsValid )
         return false;
 
     try
     {
-        const MUXC::ListView listView = m_winui->listView;
+        const MUXC::ListView listView = self->m_winui->listView;
         const auto items = listView.Items();
         if ( n >= items.Size() )
             return false;
@@ -4903,7 +4934,7 @@ bool wxListBox::WinUISetPeerSelectionForTesting(unsigned int n, bool select)
         // detached ListViewItem.IsSelected changes don't raise the parent's
         // SelectionChanged event. This is the same collection/property path
         // used by pointer, keyboard and UIA selection.
-        if ( HasMultipleSelection() )
+        if ( self->HasMultipleSelection() )
         {
             const auto selected = listView.SelectedItems();
             uint32_t found = selected.Size();
@@ -4936,16 +4967,19 @@ bool wxListBox::WinUISetPeerSelectionForTesting(unsigned int n, bool select)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIFocusPeerItemForTesting(unsigned int n)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::FocusPeerItem(wxListBox &control, unsigned int n)
 {
-    if ( !m_winui || !m_winui->listView ||
-         !m_winui->callbackState )
+    wxListBox *const self = &control;
+    if ( !self->m_winui || !self->m_winui->listView ||
+         !self->m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUIListBoxImpl * const implementation = m_winui.get();
+    wxWinUIListBoxImpl *const implementation = self->m_winui.get();
     const std::shared_ptr<wxWinUIListBoxCallbackState> callbackState =
         implementation->callbackState;
     try
@@ -4960,8 +4994,8 @@ bool wxListBox::WinUIFocusPeerItemForTesting(unsigned int n)
             return false;
 
         const bool focused = item.Focus(MUX::FocusState::Programmatic);
-        wxListBox * const owner = callbackState->GetOwner();
-        return focused && owner && owner == this && owner->m_winui &&
+        wxListBox *const owner = callbackState->GetOwner();
+        return focused && owner && owner == self && owner->m_winui &&
                owner->m_winui.get() == implementation &&
                owner->m_winui->callbackState == callbackState;
     }
@@ -4971,25 +5005,32 @@ bool wxListBox::WinUIFocusPeerItemForTesting(unsigned int n)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIDoubleTapPeerForTesting(unsigned int n)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::DoubleTapPeer(wxListBox &control, unsigned int n)
 {
-    if ( n >= m_itemModel.GetCount() )
+    wxListBox *const self = &control;
+    if ( n >= self->m_itemModel.GetCount() )
         return false;
 
-    const wxWinUIItemModel::Id id = m_itemModel.At(n).id;
-    WinUISendDoubleClick(id);
+    const wxWinUIItemModel::Id id = self->m_itemModel.At(n).id;
+    self->WinUISendDoubleClick(id);
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUISetPeerCheckForTesting(unsigned int n, bool check)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::SetPeerCheck(wxListBox &control, unsigned int n,
+                                            bool check)
 {
-    if ( !m_winui || n >= m_itemModel.GetCount() )
+    wxListBox *const self = &control;
+    if ( !self->m_winui || n >= self->m_itemModel.GetCount() )
         return false;
 
-    const wxWinUIItemModel::Id id = m_itemModel.At(n).id;
-    const auto it = m_winui->checkBindings.find(id);
-    if ( it == m_winui->checkBindings.end() || !it->second.checkBox )
+    const wxWinUIItemModel::Id id = self->m_itemModel.At(n).id;
+    const auto it = self->m_winui->checkBindings.find(id);
+    if ( it == self->m_winui->checkBindings.end() || !it->second.checkBox )
         return false;
 
     try
@@ -5006,26 +5047,29 @@ bool wxListBox::WinUISetPeerCheckForTesting(unsigned int n, bool check)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIActivatePeerCheckForTesting(unsigned int n,
-                                                  bool *focused,
-                                                  bool *pointerTarget)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::ActivatePeerCheck(wxListBox &control,
+                                                 unsigned int n, bool *focused,
+                                                 bool *pointerTarget)
 {
+    wxListBox *const self = &control;
     if ( focused )
         *focused = false;
     if ( pointerTarget )
         *pointerTarget = false;
-    if ( !m_winui || !m_winui->callbackState ||
-         n >= m_itemModel.GetCount() )
+    if ( !self->m_winui || !self->m_winui->callbackState ||
+         n >= self->m_itemModel.GetCount() )
     {
         return false;
     }
 
-    wxWinUIListBoxImpl * const implementation = m_winui.get();
+    wxWinUIListBoxImpl *const implementation = self->m_winui.get();
     const std::shared_ptr<wxWinUIListBoxCallbackState> callbackState =
         implementation->callbackState;
     const auto it =
-        implementation->checkBindings.find(m_itemModel.At(n).id);
+        implementation->checkBindings.find(self->m_itemModel.At(n).id);
     if ( it == implementation->checkBindings.end() ||
          !it->second.checkBox )
     {
@@ -5090,7 +5134,7 @@ bool wxListBox::WinUIActivatePeerCheckForTesting(unsigned int n,
         // focusing a child in a non-activated slot directly is rejected by
         // XAML even though it is a valid hit target.
         wxListBox *owner = callbackState->GetOwner();
-        if ( !owner || owner != this || !owner->m_winui ||
+        if ( !owner || owner != self || !owner->m_winui ||
              owner->m_winui.get() != implementation ||
              owner->m_winui->callbackState != callbackState )
         {
@@ -5098,7 +5142,7 @@ bool wxListBox::WinUIActivatePeerCheckForTesting(unsigned int n,
         }
         owner->SetFocus();
         owner = callbackState->GetOwner();
-        if ( !owner || owner != this || !owner->m_winui ||
+        if ( !owner || owner != self || !owner->m_winui ||
              owner->m_winui.get() != implementation ||
              owner->m_winui->callbackState != callbackState )
         {
@@ -5106,7 +5150,7 @@ bool wxListBox::WinUIActivatePeerCheckForTesting(unsigned int n,
         }
         owner->m_winui->host.SynchronizeForFocus();
         owner = callbackState->GetOwner();
-        if ( !owner || owner != this || !owner->m_winui ||
+        if ( !owner || owner != self || !owner->m_winui ||
              owner->m_winui.get() != implementation ||
              owner->m_winui->callbackState != callbackState )
         {
@@ -5120,7 +5164,7 @@ bool wxListBox::WinUIActivatePeerCheckForTesting(unsigned int n,
             *focused = gotFocus;
 
         owner = callbackState->GetOwner();
-        if ( !owner || owner != this || !owner->m_winui ||
+        if ( !owner || owner != self || !owner->m_winui ||
              owner->m_winui.get() != implementation ||
              owner->m_winui->callbackState != callbackState )
         {
@@ -5138,15 +5182,19 @@ bool wxListBox::WinUIActivatePeerCheckForTesting(unsigned int n,
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUITogglePeerViaAutomationForTesting(unsigned int n)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::TogglePeerViaAutomation(wxListBox &control,
+                                                       unsigned int n)
 {
-    if ( !m_winui || n >= m_itemModel.GetCount() )
+    wxListBox *const self = &control;
+    if ( !self->m_winui || n >= self->m_itemModel.GetCount() )
         return false;
 
     const auto it =
-        m_winui->checkBindings.find(m_itemModel.At(n).id);
-    if ( it == m_winui->checkBindings.end() || !it->second.checkBox )
+        self->m_winui->checkBindings.find(self->m_itemModel.At(n).id);
+    if ( it == self->m_winui->checkBindings.end() || !it->second.checkBox )
         return false;
 
     try
@@ -5164,47 +5212,60 @@ bool wxListBox::WinUITogglePeerViaAutomationForTesting(unsigned int n)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUITogglePeerWithKeyboardForTesting(unsigned int n)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::TogglePeerWithKeyboard(wxListBox &control,
+                                                      unsigned int n)
 {
-    if ( n >= m_itemModel.GetCount() || !m_itemModel.At(n).selected )
+    wxListBox *const self = &control;
+    if ( n >= self->m_itemModel.GetCount() ||
+         !self->m_itemModel.At(n).selected )
         return false;
 
     bool handled = false;
-    return WinUIDispatchCheckKeyForTesting(
-               static_cast<int>(
-                   winrt::Windows::System::VirtualKey::Space),
+    return DispatchCheckKey(
+               *self,
+               static_cast<int>(winrt::Windows::System::VirtualKey::Space),
                &handled) &&
            handled;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIDispatchCheckKeyForTesting(int virtualKey,
-                                                 bool *handled,
-                                                 bool shiftDown,
-                                                 std::uintptr_t keyboardLayout)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::DispatchCheckKey(wxListBox &control,
+                                                int virtualKey, bool *handled,
+                                                bool shiftDown,
+                                                std::uintptr_t keyboardLayout)
 {
+    wxListBox *const self = &control;
     if ( handled )
         *handled = false;
-    if ( !m_winui || !m_winui->callbackState || !WinUIIsCheckable() )
+    if ( !self->m_winui || !self->m_winui->callbackState ||
+         !self->WinUIIsCheckable() )
         return false;
 
     // This is the same decoder and dispatcher used by PreviewKeyDown. The
     // callback may destroy this object, so only caller-owned output follows.
-    const bool wasHandled = WinUIHandleCheckKey(
-        virtualKey, shiftDown, keyboardLayout, false);
+    const bool wasHandled =
+        self->WinUIHandleCheckKey(virtualKey, shiftDown, keyboardLayout, false);
     if ( handled )
         *handled = wasHandled;
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIGetPeerCheckForTesting(unsigned int n) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::GetPeerCheck(const wxListBox &control,
+                                            unsigned int n)
 {
-    if ( !m_winui || n >= m_itemModel.GetCount() )
+    const wxListBox *const self = &control;
+    if ( !self->m_winui || n >= self->m_itemModel.GetCount() )
         return false;
 
     const auto it =
-        m_winui->checkBindings.find(m_itemModel.At(n).id);
-    if ( it == m_winui->checkBindings.end() || !it->second.checkBox )
+        self->m_winui->checkBindings.find(self->m_itemModel.At(n).id);
+    if ( it == self->m_winui->checkBindings.end() || !it->second.checkBox )
         return false;
 
     try
@@ -5217,22 +5278,24 @@ bool wxListBox::WinUIGetPeerCheckForTesting(unsigned int n) const
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIGetScrollPresentationForTesting(
-    int *horizontalVisibility,
-    int *verticalVisibility,
-    double *horizontalScrollableWidth,
-    WinUIScrollMetricsForTesting *metrics) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::GetScrollPresentation(
+    const wxListBox &control, int *horizontalVisibility,
+    int *verticalVisibility, double *horizontalScrollableWidth,
+    ScrollMetrics *metrics)
 {
+    const wxListBox *const self = &control;
     if ( horizontalScrollableWidth )
         *horizontalScrollableWidth = 0.0;
     if ( metrics )
-        *metrics = WinUIScrollMetricsForTesting{};
+        *metrics = ScrollMetrics{};
 
-    if ( !m_winui || !m_winui->listView )
+    if ( !self->m_winui || !self->m_winui->listView )
         return false;
 
-    wxWinUIListBoxImpl * const implementation = m_winui.get();
+    wxWinUIListBoxImpl *const implementation = self->m_winui.get();
     const MUXC::ListView listView = implementation->listView;
 
     try
@@ -5396,22 +5459,24 @@ bool wxListBox::WinUIGetScrollPresentationForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIGetPeerLayoutDirectionForTesting(
-    bool *rightToLeft) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::GetPeerLayoutDirection(const wxListBox &control,
+                                                      bool *rightToLeft)
 {
+    const wxListBox *const self = &control;
     if ( rightToLeft )
         *rightToLeft = false;
-    if ( !m_winui || !m_winui->listView )
+    if ( !self->m_winui || !self->m_winui->listView )
         return false;
 
     try
     {
         if ( rightToLeft )
         {
-            *rightToLeft =
-                m_winui->listView.FlowDirection() ==
-                    MUX::FlowDirection::RightToLeft;
+            *rightToLeft = self->m_winui->listView.FlowDirection() ==
+                           MUX::FlowDirection::RightToLeft;
         }
         return true;
     }
@@ -5420,25 +5485,20 @@ bool wxListBox::WinUIGetPeerLayoutDirectionForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIGetItemPresentationForTesting(
-    unsigned int n,
-    bool *ownerDrawBitmap,
-    wxSize *bitmapPixelSize,
-    unsigned int *tabRunCount,
-    double *contentWidthDips,
-    bool *checkOverlay,
-    wxRealPoint *bitmapDIPSize,
-    wxVector<double> *tabRunOffsetsDips,
-    bool *checkOverlayFocused,
-    unsigned int *contentFontWeight,
-    double *contentFontSizeDips,
-    wxString *contentFontFamily,
-    double *containerHeightDips,
-    double *containerMinHeightDips,
-    double *containerActualHeightDips,
-    double *xamlRasterizationScale) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::GetItemPresentation(
+    const wxListBox &control, unsigned int n, bool *ownerDrawBitmap,
+    wxSize *bitmapPixelSize, unsigned int *tabRunCount,
+    double *contentWidthDips, bool *checkOverlay, wxRealPoint *bitmapDIPSize,
+    wxVector<double> *tabRunOffsetsDips, bool *checkOverlayFocused,
+    unsigned int *contentFontWeight, double *contentFontSizeDips,
+    wxString *contentFontFamily, double *containerHeightDips,
+    double *containerMinHeightDips, double *containerActualHeightDips,
+    double *xamlRasterizationScale)
 {
+    const wxListBox *const self = &control;
     if ( ownerDrawBitmap )
         *ownerDrawBitmap = false;
     if ( bitmapPixelSize )
@@ -5470,32 +5530,31 @@ bool wxListBox::WinUIGetItemPresentationForTesting(
     if ( xamlRasterizationScale )
         *xamlRasterizationScale = 0.0;
 
-    if ( !m_winui || !m_winui->listView )
+    if ( !self->m_winui || !self->m_winui->listView )
         return false;
 
     try
     {
         if ( xamlRasterizationScale )
         {
-            const MUX::XamlRoot xamlRoot = m_winui->listView.XamlRoot();
+            const MUX::XamlRoot xamlRoot = self->m_winui->listView.XamlRoot();
             if ( xamlRoot )
                 *xamlRasterizationScale = xamlRoot.RasterizationScale();
         }
 
         if ( contentFontWeight )
         {
-            *contentFontWeight =
-                m_winui->listView.FontWeight().Weight;
+            *contentFontWeight = self->m_winui->listView.FontWeight().Weight;
         }
         if ( contentFontSizeDips )
-            *contentFontSizeDips = m_winui->listView.FontSize();
-        if ( contentFontFamily && m_winui->listView.FontFamily() )
+            *contentFontSizeDips = self->m_winui->listView.FontSize();
+        if ( contentFontFamily && self->m_winui->listView.FontFamily() )
         {
             *contentFontFamily = wxWinUIFromHString(
-                m_winui->listView.FontFamily().Source());
+                self->m_winui->listView.FontFamily().Source());
         }
 
-        const auto items = m_winui->listView.Items();
+        const auto items = self->m_winui->listView.Items();
         if ( n >= items.Size() )
             return false;
         const MUXC::ListViewItem item =
@@ -5627,20 +5686,21 @@ bool wxListBox::WinUIGetItemPresentationForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUIGetThemePresentationForTesting(
-    unsigned int n,
-    int *actualTheme,
-    std::uint32_t *foregroundARGB,
-    std::uint32_t *bitmapARGB) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::GetThemePresentation(
+    const wxListBox &control, unsigned int n, int *actualTheme,
+    std::uint32_t *foregroundARGB, std::uint32_t *bitmapARGB)
 {
+    const wxListBox *const self = &control;
     if ( actualTheme )
         *actualTheme = -1;
     if ( foregroundARGB )
         *foregroundARGB = 0;
     if ( bitmapARGB )
         *bitmapARGB = 0;
-    if ( !m_winui || !m_winui->listView )
+    if ( !self->m_winui || !self->m_winui->listView )
         return false;
 
     const auto packColour = [](const auto& colour)
@@ -5655,16 +5715,15 @@ bool wxListBox::WinUIGetThemePresentationForTesting(
     {
         if ( actualTheme )
         {
-            *actualTheme = static_cast<int>(
-                m_winui->listView.ActualTheme());
+            *actualTheme =
+                static_cast<int>(self->m_winui->listView.ActualTheme());
         }
 
-        MUXM::SolidColorBrush foreground =
-            m_winui->listView.Foreground()
-                .try_as<MUXM::SolidColorBrush>();
+        MUXM::SolidColorBrush foreground = self->m_winui->listView.Foreground()
+                                               .try_as<MUXM::SolidColorBrush>();
         if ( !foreground )
         {
-            const auto items = m_winui->listView.Items();
+            const auto items = self->m_winui->listView.Items();
             if ( n < items.Size() )
             {
                 if ( const auto item =
@@ -5675,11 +5734,11 @@ bool wxListBox::WinUIGetThemePresentationForTesting(
                 }
             }
         }
-        if ( !foreground && n < m_itemModel.GetCount() )
+        if ( !foreground && n < self->m_itemModel.GetCount() )
         {
-            const auto binding = m_winui->checkBindings.find(
-                m_itemModel.At(n).id);
-            if ( binding != m_winui->checkBindings.end() &&
+            const auto binding =
+                self->m_winui->checkBindings.find(self->m_itemModel.At(n).id);
+            if ( binding != self->m_winui->checkBindings.end() &&
                  binding->second.checkBox )
             {
                 foreground = binding->second.checkBox.Foreground()
@@ -5691,7 +5750,7 @@ bool wxListBox::WinUIGetThemePresentationForTesting(
 
         if ( bitmapARGB )
         {
-            const auto items = m_winui->listView.Items();
+            const auto items = self->m_winui->listView.Items();
             if ( n >= items.Size() )
                 return false;
             const MUXC::ListViewItem item =
@@ -5748,19 +5807,23 @@ bool wxListBox::WinUIGetThemePresentationForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxListBox::WinUISetPeerThemeForTesting(bool dark)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIListBoxTestAccess::SetPeerTheme(wxListBox &control, bool dark)
 {
-    if ( !m_winui || !m_winui->listView || !m_winui->callbackState )
+    wxListBox *const self = &control;
+    if ( !self->m_winui || !self->m_winui->listView ||
+         !self->m_winui->callbackState )
         return false;
 
-    wxWinUIListBoxImpl * const implementation = m_winui.get();
+    wxWinUIListBoxImpl *const implementation = self->m_winui.get();
     const std::shared_ptr<wxWinUIListBoxCallbackState> callbackState =
         implementation->callbackState;
     const auto getCurrentOwner = [&]() -> wxListBox *
     {
-        wxListBox * const owner = callbackState->GetOwner();
-        return owner && owner == this && owner->m_winui &&
+        wxListBox *const owner = callbackState->GetOwner();
+        return owner && owner == self && owner->m_winui &&
                        owner->m_winui.get() == implementation &&
                        owner->m_winui->callbackState == callbackState
                    ? owner
@@ -5804,5 +5867,6 @@ bool wxListBox::WinUISetPeerThemeForTesting(bool dark)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_LISTBOX

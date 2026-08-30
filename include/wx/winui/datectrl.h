@@ -46,33 +46,6 @@ public:
     void SetNullText(const wxString& text) override;
     void SetMinSize(const wxSize& minSize) override;
 
-    // Deterministic seams exercising the real CalendarDatePicker property and
-    // DateChanged delegate without synthesizing mouse or keyboard input.
-    bool WinUISetPeerDateForTesting(const wxDateTime& dt);
-    bool WinUIClearPeerDateForTesting();
-    bool WinUIGetPeerStateForTesting(wxDateTime *value,
-                                     wxDateTime *minimum,
-                                     wxDateTime *maximum) const;
-    bool WinUIGetDefaultPeerRangeForTesting(wxDateTime *minimum,
-                                            wxDateTime *maximum) const;
-    wxString WinUIGetPeerDateFormatForTesting() const;
-    bool WinUIUsesDropdownForTesting() const;
-    bool WinUIGetSpinFieldsForTesting(int *year,
-                                      int *month,
-                                      int *day) const;
-    // part is 0 for year, 1 for month and 2 for day.
-    bool WinUISetSpinPartForTesting(unsigned part, int value);
-    bool WinUIGetSpinPartForTesting(unsigned part,
-                                    int *value,
-                                    bool *blank) const;
-    wxString WinUIGetSpinYearTextForTesting() const;
-    wxString WinUIGetLocaleDatePatternForTesting() const;
-    wxString WinUIGetPeerNullTextForTesting() const;
-    // Returns the previous explicit language. This keeps locale-sensitive
-    // peer creation deterministic in unpackaged desktop test hosts where
-    // ApplicationLanguages::PrimaryLanguageOverride is unavailable.
-    static wxString WinUISetLanguageForTesting(const wxString& language);
-
 protected:
     wxSize DoGetBestSize() const override;
     void DoSetSize(int x, int y, int width, int height,
@@ -94,6 +67,7 @@ protected:
     wxDateTime m_rangeMax;
 
 private:
+    friend class wxWinUIDatePickerTestAccess;
     friend class wxWinUIDatePickerImpl;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl);

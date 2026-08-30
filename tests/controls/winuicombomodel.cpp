@@ -20,7 +20,9 @@
     #include "wx/bmpbndl.h"
 #endif
 #include "wx/combobox.h"
+#include "combobox-test-access.h"
 #include "wx/event.h"
+#include "choice-test-access.h"
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
 #if wxUSE_TOOLTIPS
@@ -53,8 +55,8 @@ private:
 
 std::string wxWinUIComboDiagnostics(const wxComboBox& combo)
 {
-    wxComboBox::WinUIDiagnosticSnapshot d;
-    if ( !combo.WinUIGetDiagnosticSnapshotForTesting(&d) )
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot d;
+    if ( !wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo, &d) )
         return "combo diagnostics unavailable";
 
     std::ostringstream s;
@@ -84,13 +86,13 @@ std::string wxWinUIComboDiagnostics(const wxComboBox& combo)
 
 void RequireRealizedComboTemplate(wxComboBox& combo)
 {
-    wxComboBox::WinUITemplatePeerSnapshot peer;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot peer;
     bool captured = false;
     const bool realized = WaitFor("WinUI ComboBox template realization", [&]()
     {
-        captured = combo.WinUIGetTemplatePeerSnapshotForTesting(&peer);
+        captured = wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &peer);
         return captured &&
-               peer.state == wxComboBox::WinUITemplate_Complete;
+               peer.state == wxWinUIComboBoxTestAccess::WinUITemplate_Complete;
     }, 1000);
     INFO("template snapshot captured=" << captured <<
          " state=" << peer.state <<
@@ -122,27 +124,27 @@ void RequireRealizedComboTemplate(wxComboBox& combo)
              peer.nativeFocusInHost << "/" << peer.editFocused);
     REQUIRE(captured);
     REQUIRE(realized);
-    REQUIRE(peer.state == wxComboBox::WinUITemplate_Complete);
+    REQUIRE(peer.state == wxWinUIComboBoxTestAccess::WinUITemplate_Complete);
 }
 
 bool WaitForSettledComboTemplateGeneration(
     wxComboBox& combo,
     std::uint64_t previousGeneration,
-    wxComboBox::WinUITemplatePeerSnapshot *peer,
-    wxComboBox::WinUIDiagnosticSnapshot *diagnostic)
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot *peer,
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot *diagnostic)
 {
     constexpr unsigned inFlightPhases =
-        wxComboBox::WinUITemplatePhase_Resolving |
-        wxComboBox::WinUITemplatePhase_PendingResolve |
-        wxComboBox::WinUITemplatePhase_Transition |
-        wxComboBox::WinUITemplatePhase_PeerMutation |
-        wxComboBox::WinUITemplatePhase_QueuedResolve;
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_Resolving |
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingResolve |
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_Transition |
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_PeerMutation |
+        wxWinUIComboBoxTestAccess::WinUITemplatePhase_QueuedResolve;
 
     return WaitFor("WinUI ComboBox deferred template generation", [&]()
     {
-        return combo.WinUIGetTemplatePeerSnapshotForTesting(peer) &&
-               combo.WinUIGetDiagnosticSnapshotForTesting(diagnostic) &&
-               (peer->state & wxComboBox::WinUITemplate_HasEdit) != 0 &&
+        return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, peer) &&
+               wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo, diagnostic) &&
+               (peer->state & wxWinUIComboBoxTestAccess::WinUITemplate_HasEdit) != 0 &&
                peer->editGeneration > previousGeneration &&
                (peer->phase & inFlightPhases) == 0 &&
                !diagnostic->templateReplayPending;
@@ -152,19 +154,19 @@ bool WaitForSettledComboTemplateGeneration(
 void RequireReadOnlyComboPopupPeer(wxComboBox& combo)
 {
     constexpr unsigned requiredState =
-        wxComboBox::WinUITemplate_HasCombo |
-        wxComboBox::WinUITemplate_HasXamlRoot |
-        wxComboBox::WinUITemplate_HasTemplate |
-        wxComboBox::WinUITemplate_HasVisualChild |
-        wxComboBox::WinUITemplate_IsArranged |
-        wxComboBox::WinUITemplate_HasDesiredSize;
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasCombo |
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasXamlRoot |
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasTemplate |
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasVisualChild |
+        wxWinUIComboBoxTestAccess::WinUITemplate_IsArranged |
+        wxWinUIComboBoxTestAccess::WinUITemplate_HasDesiredSize;
 
-    wxComboBox::WinUITemplatePeerSnapshot peer;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot peer;
     bool captured = false;
     const bool ready = WaitFor("WinUI read-only ComboBox popup peer readiness",
                                [&]()
     {
-        captured = combo.WinUIGetTemplatePeerSnapshotForTesting(&peer);
+        captured = wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &peer);
         return captured &&
                (peer.state & requiredState) == requiredState;
     }, 1000);
@@ -194,25 +196,25 @@ TEST_CASE("wxWinUI ComboBox LayoutUpdated realization is deferred",
     wxComboBox combo(parent, wxID_ANY, "deferred");
     RequireRealizedComboTemplate(combo);
 
-    wxComboBox::WinUITemplatePeerSnapshot beforePeer;
-    wxComboBox::WinUIDiagnosticSnapshot beforeDiagnostic;
-    REQUIRE(combo.WinUIGetTemplatePeerSnapshotForTesting(&beforePeer));
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(&beforeDiagnostic));
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot beforePeer;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeDiagnostic;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &beforePeer));
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo, &beforeDiagnostic));
     REQUIRE(beforePeer.editIdentity != 0);
 
     // This invokes two genuine outer LayoutUpdated bodies and asks their one
     // coalesced Low continuation to retire and naturally rebind the editor
     // generation. The synchronous return is the anti-recursion oracle: the old
     // edit is untouched and no realization has entered from either callback.
-    REQUIRE(combo.WinUIQueueTemplateLayoutResolutionForTesting());
-    wxComboBox::WinUITemplatePeerSnapshot queuedPeer;
-    wxComboBox::WinUIDiagnosticSnapshot queuedDiagnostic;
-    REQUIRE(combo.WinUIGetTemplatePeerSnapshotForTesting(&queuedPeer));
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(&queuedDiagnostic));
+    REQUIRE(wxWinUIComboBoxTestAccess::QueueTemplateLayoutResolution(&combo));
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot queuedPeer;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot queuedDiagnostic;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo, &queuedPeer));
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo, &queuedDiagnostic));
     CHECK(queuedPeer.editIdentity == beforePeer.editIdentity);
     CHECK(queuedPeer.editGeneration == beforePeer.editGeneration);
     CHECK((queuedPeer.phase &
-           wxComboBox::WinUITemplatePhase_QueuedResolve) != 0);
+           wxWinUIComboBoxTestAccess::WinUITemplatePhase_QueuedResolve) != 0);
     CHECK(queuedDiagnostic.comboLayoutEdges ==
           beforeDiagnostic.comboLayoutEdges + 2);
     CHECK(queuedDiagnostic.comboLayoutResolveRequests ==
@@ -224,23 +226,23 @@ TEST_CASE("wxWinUI ComboBox LayoutUpdated realization is deferred",
     CHECK(queuedDiagnostic.comboLayoutSynchronousRealizations ==
           beforeDiagnostic.comboLayoutSynchronousRealizations);
 
-    wxComboBox::WinUITemplatePeerSnapshot settledPeer;
-    wxComboBox::WinUIDiagnosticSnapshot settledDiagnostic;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot settledPeer;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot settledDiagnostic;
     const bool settled = WaitFor(
         "WinUI ComboBox deferred template resolution", [&]()
         {
-            return combo.WinUIGetTemplatePeerSnapshotForTesting(
+            return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo,
                        &settledPeer) &&
-                   combo.WinUIGetDiagnosticSnapshotForTesting(
+                   wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
                    &settledDiagnostic) &&
-                    settledPeer.state == wxComboBox::WinUITemplate_Complete &&
+                    settledPeer.state == wxWinUIComboBoxTestAccess::WinUITemplate_Complete &&
                     settledPeer.editGeneration > beforePeer.editGeneration &&
                     !(settledPeer.phase &
-                      (wxComboBox::WinUITemplatePhase_Resolving |
-                       wxComboBox::WinUITemplatePhase_PendingResolve |
-                       wxComboBox::WinUITemplatePhase_Transition |
-                       wxComboBox::WinUITemplatePhase_PeerMutation |
-                       wxComboBox::WinUITemplatePhase_QueuedResolve)) &&
+                      (wxWinUIComboBoxTestAccess::WinUITemplatePhase_Resolving |
+                       wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingResolve |
+                       wxWinUIComboBoxTestAccess::WinUITemplatePhase_Transition |
+                       wxWinUIComboBoxTestAccess::WinUITemplatePhase_PeerMutation |
+                       wxWinUIComboBoxTestAccess::WinUITemplatePhase_QueuedResolve)) &&
                     !settledDiagnostic.templateReplayPending &&
                     settledDiagnostic.comboLayoutResolveRuns ==
                         settledDiagnostic.comboLayoutResolveRequests &&
@@ -274,24 +276,24 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     RequireRealizedComboTemplate(combo);
     std::uintptr_t firstEditBefore = 0;
     std::uint64_t firstGenerationBefore = 0;
-    wxComboBox::WinUIDiagnosticSnapshot beforeFirstRetemplate;
-    REQUIRE(combo.WinUIGetTextEntryPeerStateForTesting(
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeFirstRetemplate;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTextEntryPeerState(&combo,
         nullptr, nullptr, nullptr,
         &firstEditBefore, &firstGenerationBefore,
         nullptr, nullptr, nullptr, false));
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
         &beforeFirstRetemplate));
-    const bool firstRetemplate = combo.WinUIRetemplateForTesting();
-    wxComboBox::WinUIDiagnosticSnapshot acceptedFirstRetemplate;
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+    const bool firstRetemplate = wxWinUIComboBoxTestAccess::Retemplate(&combo);
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot acceptedFirstRetemplate;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
         &acceptedFirstRetemplate));
     CHECK(acceptedFirstRetemplate.comboLayoutRealizations ==
           beforeFirstRetemplate.comboLayoutRealizations);
     CHECK(acceptedFirstRetemplate.comboLayoutSynchronousRealizations ==
           beforeFirstRetemplate.comboLayoutSynchronousRealizations);
 
-    wxComboBox::WinUITemplatePeerSnapshot firstPeerAfter;
-    wxComboBox::WinUIDiagnosticSnapshot firstDiagnosticAfter;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot firstPeerAfter;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot firstDiagnosticAfter;
     const bool firstEditCommitted = firstRetemplate &&
         WaitForSettledComboTemplateGeneration(
             combo, firstGenerationBefore,
@@ -304,7 +306,7 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
          " edit=" << firstEditBefore << "->" << firstEditAfter <<
          " generation=" << firstGenerationBefore << "->" <<
              firstGenerationAfter <<
-         " state=" << combo.WinUIGetTemplateStateForTesting());
+         " state=" << wxWinUIComboBoxTestAccess::GetTemplateState(&combo));
     REQUIRE(firstRetemplate);
     REQUIRE(firstEditCommitted);
     REQUIRE(firstEditAfter != 0);
@@ -315,7 +317,7 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
           beforeFirstRetemplate.comboLayoutRealizations);
     CHECK(firstDiagnosticAfter.comboLayoutSynchronousRealizations ==
           beforeFirstRetemplate.comboLayoutSynchronousRealizations);
-    CHECK((combo.WinUIGetTemplateStateForTesting() & 0x5) == 0x5);
+    CHECK((wxWinUIComboBoxTestAccess::GetTemplateState(&combo) & 0x5) == 0x5);
 
     combo.SetSelection(2, 4);
     long from = -1;
@@ -345,7 +347,7 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     CHECK(textEvents.GetCount() == 3);
 
     textEvents.Clear();
-    REQUIRE(combo.WinUISetPeerTextForTesting("peer"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "peer"));
     CHECK(combo.GetValue() == "peer");
     CHECK(textEvents.GetCount() == 1);
 
@@ -354,13 +356,13 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     // the exact editor's next real layout edge before a later accessibility
     // writer.
     combo.SetValue("writer");
-    wxComboBox::WinUITemplatePeerSnapshot textMarkerSnapshot;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot textMarkerSnapshot;
     REQUIRE(WaitFor("ComboBox programmatic text marker drain", [&]()
     {
-        return combo.WinUIGetTemplatePeerSnapshotForTesting(
+        return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo,
                    &textMarkerSnapshot) &&
                !(textMarkerSnapshot.phase &
-                 wxComboBox::WinUITemplatePhase_PendingText);
+                 wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingText);
     }));
 
     // ValuePattern::SetValue first asks UIAutomationCore to focus an
@@ -368,10 +370,10 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     // accessibility client has, and prove all three focus authorities
     // passively before the external MTA client process starts.
     combo.SetFocus();
-    wxComboBox::WinUITemplatePeerSnapshot automationFocus;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot automationFocus;
     REQUIRE(WaitFor("ComboBox exact UIA editor focus", [&]()
     {
-        return combo.WinUIGetTemplatePeerSnapshotForTesting(
+        return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo,
                    &automationFocus) &&
                wxWindow::FindFocus() == &combo &&
                automationFocus.logicalFocus &&
@@ -385,16 +387,16 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     // SetValue there; no second peer or direct Text mutation is permitted.
     textEvents.Clear();
     const bool automationSet =
-        combo.WinUISetPeerTextViaAutomationForTesting("uia value");
+        wxWinUIComboBoxTestAccess::SetPeerTextViaAutomation(&combo, "uia value");
     REQUIRE(automationSet);
-    wxComboBox::WinUIDiagnosticSnapshot automationResult;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot automationResult;
     const bool automationCompleted =
         WaitFor("ComboBox external-process MTA UIA client", [&]()
     {
-        return combo.WinUIGetDiagnosticSnapshotForTesting(
+        return wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
                    &automationResult) &&
                (automationResult.automationStage ==
-                    wxComboBox::WinUIAutomation_Succeeded ||
+                    wxWinUIComboBoxTestAccess::WinUIAutomation_Succeeded ||
                 automationResult.automationStage < 0);
     }, 2000);
     INFO(wxWinUIComboDiagnostics(combo));
@@ -405,7 +407,7 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
          " lastPeerText=" << automationResult.lastPeerText);
     REQUIRE(automationCompleted);
     REQUIRE(automationResult.automationStage ==
-            wxComboBox::WinUIAutomation_Succeeded);
+            wxWinUIComboBoxTestAccess::WinUIAutomation_Succeeded);
     REQUIRE(automationResult.automationHResult == 0);
     REQUIRE(WaitFor("ComboBox UIA value writer", [&]()
     {
@@ -414,20 +416,20 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     }, 1000));
     CHECK(textEvents.GetCount() == 1);
 
-    REQUIRE(combo.WinUISetEditSelectionForTesting(1, 3));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetEditSelection(&combo, 1, 3));
     combo.GetSelection(&from, &to);
     CHECK(from == 1);
     CHECK(to == 3);
 
-    wxComboBox::WinUIDiagnosticSnapshot beforeProjection;
-    wxComboBox::WinUITemplatePeerSnapshot beforeProjectionPeer;
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeProjection;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot beforeProjectionPeer;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
         &beforeProjection));
-    REQUIRE(combo.WinUIGetTemplatePeerSnapshotForTesting(
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo,
         &beforeProjectionPeer));
-    REQUIRE(combo.WinUIRunTemplateLayoutEdgeForTesting(true));
-    wxComboBox::WinUIDiagnosticSnapshot acceptedProjection;
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+    REQUIRE(wxWinUIComboBoxTestAccess::RunTemplateLayoutEdge(&combo, true));
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot acceptedProjection;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
         &acceptedProjection));
     CHECK(acceptedProjection.comboLayoutRealizations ==
           beforeProjection.comboLayoutRealizations);
@@ -438,12 +440,12 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     // state replay are committed only from the natural layout continuation.
     // WinUI may reuse the same TextBox ABI identity, so generation advancement
     // and a drained replay/resolve queue are the authoritative boundary.
-    wxComboBox::WinUITemplatePeerSnapshot creatorEdge;
-    wxComboBox::WinUIDiagnosticSnapshot creatorProjection;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot creatorEdge;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot creatorProjection;
     REQUIRE(WaitForSettledComboTemplateGeneration(
         combo, beforeProjectionPeer.editGeneration,
         &creatorEdge, &creatorProjection));
-    CHECK((combo.WinUIGetTemplateStateForTesting() & 0x5) == 0x5);
+    CHECK((wxWinUIComboBoxTestAccess::GetTemplateState(&combo) & 0x5) == 0x5);
     CHECK(creatorProjection.comboLayoutRealizations ==
           beforeProjection.comboLayoutRealizations);
     CHECK(creatorProjection.comboLayoutSynchronousRealizations ==
@@ -457,7 +459,7 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
         creatorEdge.peerSelectionLength == peerLast;
     const bool creatorHasRangeTicket =
         (creatorEdge.phase &
-         wxComboBox::WinUITemplatePhase_PendingRange) != 0;
+         wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingRange) != 0;
     std::uint64_t finalizedBeforeDrain =
         creatorProjection.rangeFinalizations;
 
@@ -486,18 +488,18 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
         combo.GetSelection(&from, &to);
         CHECK(from == 1);
         CHECK(to == 3);
-        wxComboBox::WinUITemplatePeerSnapshot afterPendingGetter;
-        REQUIRE(combo.WinUIGetTemplatePeerSnapshotForTesting(
+        wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot afterPendingGetter;
+        REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo,
             &afterPendingGetter));
         CHECK((afterPendingGetter.phase &
-               wxComboBox::WinUITemplatePhase_PendingRange) != 0);
+               wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingRange) != 0);
 
         // Chain the next writers only from genuine callbacks. This retains the
         // strong revision/finalization oracle for templates which really do
         // diverge, without manufacturing a ticket for a reused exact editor.
         const auto rangeSequence = std::make_shared<
-            wxComboBox::WinUIRangeSequenceSnapshot>();
-        REQUIRE(combo.WinUIChainPendingRangeCallbacksForTesting(
+            wxWinUIComboBoxTestAccess::WinUIRangeSequenceSnapshot>();
+        REQUIRE(wxWinUIComboBoxTestAccess::ChainPendingRangeCallbacks(&combo,
             2, 4, rangeSequence));
         REQUIRE(WaitFor("ComboBox staged range callbacks", [&]()
         {
@@ -573,19 +575,19 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
             CHECK(creatorProjection.rangeFinalizations ==
                   beforeProjection.rangeFinalizations);
         }
-        REQUIRE(combo.WinUISetEditSelectionForTesting(2, 4));
+        REQUIRE(wxWinUIComboBoxTestAccess::SetEditSelection(&combo, 2, 4));
     }
 
     combo.GetSelection(&from, &to);
     CHECK(from == 2);
     CHECK(to == 4);
-    wxComboBox::WinUITemplatePeerSnapshot nativeSelection;
-    REQUIRE(combo.WinUIGetTemplatePeerSnapshotForTesting(
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot nativeSelection;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo,
         &nativeSelection));
     CHECK((nativeSelection.phase &
-           wxComboBox::WinUITemplatePhase_PendingRange) == 0);
-    wxComboBox::WinUIDiagnosticSnapshot beforeStaleContinuations;
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+           wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingRange) == 0);
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeStaleContinuations;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
         &beforeStaleContinuations));
     CHECK(beforeStaleContinuations.rangeFinalizations ==
           finalizedBeforeDrain);
@@ -595,16 +597,16 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     // authoritative; if the corrected range has no revision yet, inject one
     // raw SelectAll. An already-visible SelectAll is never written again: its
     // genuine deferred event is the only permitted producer.
-    REQUIRE(combo.WinUIRunTemplateLayoutEdgeForTesting(true));
-    wxComboBox::WinUIDiagnosticSnapshot acceptedDrainTransition;
-    REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+    REQUIRE(wxWinUIComboBoxTestAccess::RunTemplateLayoutEdge(&combo, true));
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot acceptedDrainTransition;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
         &acceptedDrainTransition));
     CHECK(acceptedDrainTransition.comboLayoutRealizations ==
           beforeStaleContinuations.comboLayoutRealizations);
     CHECK(acceptedDrainTransition.comboLayoutSynchronousRealizations ==
           beforeStaleContinuations.comboLayoutSynchronousRealizations);
-    wxComboBox::WinUITemplatePeerSnapshot drainCreatorEdge;
-    wxComboBox::WinUIDiagnosticSnapshot drainCreatorProjection;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot drainCreatorEdge;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot drainCreatorProjection;
     REQUIRE(WaitForSettledComboTemplateGeneration(
         combo, nativeSelection.editGeneration,
         &drainCreatorEdge, &drainCreatorProjection));
@@ -618,11 +620,11 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     const bool drainCreatorIsSelectAll =
         drainCreatorEdge.peerSelectionStart == 0 &&
         drainCreatorEdge.peerSelectionLength == peerLast;
-    wxComboBox::WinUITemplatePeerSnapshot settledTemplate;
-    wxComboBox::WinUIDiagnosticSnapshot settledDiagnostic;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot settledTemplate;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot settledDiagnostic;
     const bool drainHasRangeTicket =
         (drainCreatorEdge.phase &
-         wxComboBox::WinUITemplatePhase_PendingRange) != 0;
+         wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingRange) != 0;
     if ( drainHasRangeTicket )
     {
         REQUIRE(drainCreatorIsExpected != drainCreatorIsSelectAll);
@@ -631,7 +633,7 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
         const bool drainNeedsCallback =
             drainCreatorProjection.pendingRangeRevision == 0;
         if ( drainNeedsCallback && drainCreatorIsExpected )
-            REQUIRE(combo.WinUISetRawEditSelectionForTesting(0, -1));
+            REQUIRE(wxWinUIComboBoxTestAccess::SetRawEditSelection(&combo, 0, -1));
         else if ( !drainNeedsCallback )
             REQUIRE(drainCreatorIsExpected);
 
@@ -641,12 +643,12 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
         const bool rangeDrained =
             WaitFor("ComboBox causal transition range drain", [&]()
         {
-            return combo.WinUIGetTemplatePeerSnapshotForTesting(
+            return wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(&combo,
                        &settledTemplate) &&
-                   combo.WinUIGetDiagnosticSnapshotForTesting(
+                   wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
                        &settledDiagnostic) &&
                    !(settledTemplate.phase &
-                     wxComboBox::WinUITemplatePhase_PendingRange) &&
+                     wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingRange) &&
                    settledTemplate.peerSelectionStart == 2 &&
                    settledTemplate.peerSelectionLength == 2 &&
                    settledDiagnostic.rangeProjectionMismatches >=
@@ -704,14 +706,14 @@ TEST_CASE("wxWinUI ComboBox text model and template generations",
     REQUIRE(settledTemplate.editGeneration > nativeSelection.editGeneration);
     if ( settledTemplate.editIdentity != nativeSelection.editIdentity )
     {
-        REQUIRE(combo.WinUISetEditSelectionForTesting(0, 1, true));
+        REQUIRE(wxWinUIComboBoxTestAccess::SetEditSelection(&combo, 0, 1, true));
     }
     else
     {
-        wxComboBox::WinUIDiagnosticSnapshot afterAliasedRetirement;
-        REQUIRE(combo.WinUIGetDiagnosticSnapshotForTesting(
+        wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot afterAliasedRetirement;
+        REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(&combo,
             &afterAliasedRetirement));
-        CHECK((combo.WinUIGetTemplateStateForTesting() & 0x7) == 0x7);
+        CHECK((wxWinUIComboBoxTestAccess::GetTemplateState(&combo) & 0x7) == 0x7);
         CHECK(afterAliasedRetirement.peerTextCallbacks ==
               settledDiagnostic.peerTextCallbacks);
         CHECK(afterAliasedRetirement.rangeProjectionMismatches ==
@@ -760,7 +762,7 @@ TEST_CASE("wxWinUI ComboBox readonly and dropdown contracts",
     CHECK(from == -1);
     CHECK(to == -1);
 
-    REQUIRE(combo.WinUISetPeerTextForTesting("external"));
+    REQUIRE(wxWinUIComboBoxTestAccess::SetPeerText(&combo, "external"));
     CHECK(combo.GetValue() == "item 2");
     CHECK(textEvents.GetCount() == 0);
 
@@ -814,7 +816,7 @@ TEST_CASE("wxWinUI ComboBox peer selection preserves event contract",
             text = event.GetString();
         });
 
-        REQUIRE(combo.WinUISelectPeerItemForTesting(1));
+        REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 1));
         REQUIRE(order.size() == 2);
         CHECK(order[0] == wxEVT_COMBOBOX);
         CHECK(order[1] == wxEVT_TEXT);
@@ -851,23 +853,23 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
     RequireRealizedComboTemplate(*combo);
     std::uintptr_t lifetimeEditBefore = 0;
     std::uint64_t lifetimeGenerationBefore = 0;
-    wxComboBox::WinUIDiagnosticSnapshot beforeLifetimeRetemplate;
-    REQUIRE(combo->WinUIGetTextEntryPeerStateForTesting(
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeLifetimeRetemplate;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTextEntryPeerState(combo,
         nullptr, nullptr, nullptr,
         &lifetimeEditBefore, &lifetimeGenerationBefore,
         nullptr, nullptr, nullptr, false));
-    REQUIRE(combo->WinUIGetDiagnosticSnapshotForTesting(
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(combo,
         &beforeLifetimeRetemplate));
-    const bool lifetimeRetemplate = combo->WinUIRetemplateForTesting();
-    wxComboBox::WinUIDiagnosticSnapshot acceptedLifetimeRetemplate;
-    REQUIRE(combo->WinUIGetDiagnosticSnapshotForTesting(
+    const bool lifetimeRetemplate = wxWinUIComboBoxTestAccess::Retemplate(combo);
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot acceptedLifetimeRetemplate;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(combo,
         &acceptedLifetimeRetemplate));
     CHECK(acceptedLifetimeRetemplate.comboLayoutRealizations ==
           beforeLifetimeRetemplate.comboLayoutRealizations);
     CHECK(acceptedLifetimeRetemplate.comboLayoutSynchronousRealizations ==
           beforeLifetimeRetemplate.comboLayoutSynchronousRealizations);
-    wxComboBox::WinUITemplatePeerSnapshot lifetimePeerAfter;
-    wxComboBox::WinUIDiagnosticSnapshot lifetimeDiagnosticAfter;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot lifetimePeerAfter;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot lifetimeDiagnosticAfter;
     const bool lifetimeEditCommitted = lifetimeRetemplate &&
         WaitForSettledComboTemplateGeneration(
             *combo, lifetimeGenerationBefore,
@@ -881,7 +883,7 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
          " edit=" << lifetimeEditBefore << "->" << lifetimeEditAfter <<
          " generation=" << lifetimeGenerationBefore << "->" <<
              lifetimeGenerationAfter <<
-         " state=" << combo->WinUIGetTemplateStateForTesting());
+         " state=" << wxWinUIComboBoxTestAccess::GetTemplateState(combo));
     REQUIRE(lifetimeRetemplate);
     REQUIRE(lifetimeEditCommitted);
     REQUIRE(lifetimeEditAfter != 0);
@@ -901,7 +903,7 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
     });
 
     wxComboBox * const invoking = combo;
-    REQUIRE(invoking->WinUISelectPeerItemForTesting(1));
+    REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(invoking, 1));
     CHECK(combo == nullptr);
     CHECK(selectionEvents == 1);
 
@@ -922,18 +924,18 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
     wxUnusedVar(queuedCleanup);
     RequireRealizedComboTemplate(*queued);
     queued->SetSelection(1, 3);
-    wxComboBox::WinUITemplatePeerSnapshot beforeQueuedTransition;
-    wxComboBox::WinUIDiagnosticSnapshot beforeQueuedTransitionDiagnostic;
-    REQUIRE(queued->WinUIGetTemplatePeerSnapshotForTesting(
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot beforeQueuedTransition;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeQueuedTransitionDiagnostic;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(queued,
         &beforeQueuedTransition));
-    REQUIRE(queued->WinUIGetDiagnosticSnapshotForTesting(
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(queued,
         &beforeQueuedTransitionDiagnostic));
-    REQUIRE(queued->WinUIRunTemplateLayoutEdgeForTesting(true));
-    wxComboBox::WinUITemplatePeerSnapshot queuedTicket;
-    REQUIRE(queued->WinUIGetTemplatePeerSnapshotForTesting(
+    REQUIRE(wxWinUIComboBoxTestAccess::RunTemplateLayoutEdge(queued, true));
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot queuedTicket;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(queued,
         &queuedTicket));
-    wxComboBox::WinUIDiagnosticSnapshot beforeQueuedProjection;
-    REQUIRE(queued->WinUIGetDiagnosticSnapshotForTesting(
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeQueuedProjection;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(queued,
         &beforeQueuedProjection));
     REQUIRE(queuedTicket.editGeneration >
             beforeQueuedTransition.editGeneration);
@@ -945,16 +947,16 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
 
     const bool queuedHasRangeTicket =
         (queuedTicket.phase &
-         wxComboBox::WinUITemplatePhase_PendingRange) != 0;
+         wxWinUIComboBoxTestAccess::WinUITemplatePhase_PendingRange) != 0;
     if ( queuedHasRangeTicket )
     {
         REQUIRE((queuedTicket.state &
-                 wxComboBox::WinUITemplate_HasEdit) != 0);
+                 wxWinUIComboBoxTestAccess::WinUITemplate_HasEdit) != 0);
         REQUIRE(queuedTicket.peerSelectionStart == 1);
         REQUIRE(queuedTicket.peerSelectionLength == 2);
         const auto destructionSnapshot = std::make_shared<
-            wxComboBox::WinUIRangeDestructionSnapshot>();
-        REQUIRE(queued->WinUISetRawEditSelectionAndDestroyForTesting(
+            wxWinUIComboBoxTestAccess::WinUIRangeDestructionSnapshot>();
+        REQUIRE(wxWinUIComboBoxTestAccess::SetRawEditSelectionAndDestroy(queued,
             0, -1, destructionSnapshot));
         REQUIRE(WaitFor("ComboBox causal range destruction hook", [&]()
         {
@@ -977,7 +979,7 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
     {
         CHECK((beforeQueuedProjection.templateReplayPending ||
                (queuedTicket.state &
-                wxComboBox::WinUITemplate_HasEdit) != 0));
+                wxWinUIComboBoxTestAccess::WinUITemplate_HasEdit) != 0));
         wxComboBox * const deleting = queued;
         queued = nullptr;
         delete deleting;
@@ -992,12 +994,12 @@ TEST_CASE("wxWinUI ComboBox callbacks are destruction-safe",
         wxComboBox * const transient =
             new wxComboBox(parent, wxID_ANY);
         RequireRealizedComboTemplate(*transient);
-        wxComboBox::WinUIDiagnosticSnapshot beforeTransientTransition;
-        REQUIRE(transient->WinUIGetDiagnosticSnapshotForTesting(
+        wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot beforeTransientTransition;
+        REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(transient,
             &beforeTransientTransition));
-        REQUIRE(transient->WinUIRetemplateForTesting());
-        wxComboBox::WinUIDiagnosticSnapshot acceptedTransientTransition;
-        REQUIRE(transient->WinUIGetDiagnosticSnapshotForTesting(
+        REQUIRE(wxWinUIComboBoxTestAccess::Retemplate(transient));
+        wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot acceptedTransientTransition;
+        REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(transient,
             &acceptedTransientTransition));
         CHECK(acceptedTransientTransition.comboLayoutRealizations ==
               beforeTransientTransition.comboLayoutRealizations);
@@ -1052,7 +1054,7 @@ TEST_CASE("wxWinUI BitmapComboBox reprojects bundles at destination DPI",
     wxBitmapComboBox combo(parent, wxID_ANY);
     REQUIRE(combo.Append("same item", bundle) != wxNOT_FOUND);
     const std::uintptr_t peer =
-        combo.WinUIGetItemPeerIdentityForTesting(0);
+        wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 0);
     REQUIRE(peer != 0);
 
     wxDPIChangedEvent dpi200(wxSize(96, 96), wxSize(192, 192));
@@ -1062,22 +1064,22 @@ TEST_CASE("wxWinUI BitmapComboBox reprojects bundles at destination DPI",
 
     wxSize pixels;
     wxSize dips;
-    REQUIRE(combo.WinUIGetItemPeerBitmapStateForTesting(
+    REQUIRE(wxWinUIChoiceTestAccess::GetItemPeerBitmapState(&combo,
         0, &pixels, &dips));
     CHECK(pixels == wxSize(32, 32));
     CHECK(dips == wxSize(16, 16));
-    CHECK(combo.WinUIGetItemPeerIdentityForTesting(0) == peer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 0) == peer);
 
     wxDPIChangedEvent dpi100(wxSize(192, 192), wxSize(96, 96));
     dpi100.SetEventObject(&combo);
     dpi100.SetId(combo.GetId());
     combo.ProcessWindowEvent(dpi100);
 
-    REQUIRE(combo.WinUIGetItemPeerBitmapStateForTesting(
+    REQUIRE(wxWinUIChoiceTestAccess::GetItemPeerBitmapState(&combo,
         0, &pixels, &dips));
     CHECK(pixels == wxSize(16, 16));
     CHECK(dips == wxSize(16, 16));
-    CHECK(combo.WinUIGetItemPeerIdentityForTesting(0) == peer);
+    CHECK(wxWinUIChoiceTestAccess::GetItemPeerIdentity(&combo, 0) == peer);
 
     wxBitmapComboBox plain(parent, wxID_ANY);
     REQUIRE(plain.Append("same item") != wxNOT_FOUND);
@@ -1117,7 +1119,7 @@ TEST_CASE("wxWinUI ComboBox selection survives reentrant item deletion",
         textClientData = event.GetClientObject();
     });
 
-    REQUIRE(combo.WinUISelectPeerItemForTesting(1));
+    REQUIRE(wxWinUIComboBoxTestAccess::SelectPeerItem(&combo, 1));
     CHECK(destructions == 1);
     CHECK(combo.GetCount() == 2);
     CHECK(textEvents == 1);

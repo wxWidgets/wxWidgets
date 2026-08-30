@@ -33,6 +33,8 @@
 #include "wx/winui/private/inputtest.h"
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/xamlhost.h"
+#include "choice-test-access.h"
+#include "combobox-test-access.h"
 
 #include <array>
 #include <vector>
@@ -823,20 +825,20 @@ TEST_CASE("WinUIKeyboard::ComboLocalKeysBeatParentAccelerators",
     // dropdown. In particular, the read-only six-bit popup readiness mask is
     // insufficient here: this style also requires the current edit part and
     // its shared-root/visual-root topology.
-    wxComboBox::WinUITemplatePeerSnapshot popupPeer;
-    wxComboBox::WinUIDiagnosticSnapshot popupPeerDiagnostic;
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot popupPeer;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot popupPeerDiagnostic;
     bool popupPeerCaptured = false;
     bool popupPeerDiagnosticCaptured = false;
     const bool popupPeerReady =
         WaitFor("WinUI keyboard ComboBox popup peer readiness", [&]()
     {
         popupPeerCaptured =
-            combo->WinUIGetTemplatePeerSnapshotForTesting(&popupPeer);
+            wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(combo, &popupPeer);
         popupPeerDiagnosticCaptured =
-            combo->WinUIGetDiagnosticSnapshotForTesting(
+            wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(combo,
                 &popupPeerDiagnostic);
         return popupPeerCaptured && popupPeerDiagnosticCaptured &&
-               popupPeer.state == wxComboBox::WinUITemplate_Complete &&
+               popupPeer.state == wxWinUIComboBoxTestAccess::WinUITemplate_Complete &&
                !popupPeerDiagnostic.templateReplayPending;
     }, 1000);
     INFO("popup peer captured=" << popupPeerCaptured << "/" <<
@@ -901,7 +903,7 @@ TEST_CASE("WinUIKeyboard::ComboLocalKeysBeatParentAccelerators",
              " hooks/open/openList/duplicate=" << popup.hooksArmed << "/" <<
                  popup.popupIsOpen << "/" << popup.exactOpenList << "/" <<
                  popup.duplicateOpenList);
-        REQUIRE(combo->WinUIIsPeerDropDownOpenForTesting());
+        REQUIRE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(combo));
         for ( const WPARAM key : { VK_ESCAPE, VK_RETURN } )
         {
             MSG local = KeyMessage(WM_KEYDOWN, key);

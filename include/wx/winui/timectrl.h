@@ -42,26 +42,6 @@ public:
     wxDateTime GetValue() const override;
     void SetMinSize(const wxSize& minSize) override;
 
-    // Deterministic seams exercising the real TimePicker property and
-    // SelectedTimeChanged delegate without synthesizing input.
-    bool WinUISetPeerTimeForTesting(const wxDateTime& dt);
-    bool WinUIGetPeerTimeForTesting(wxDateTime *value) const;
-    wxString WinUIGetLocaleTimePatternForTesting() const;
-    bool WinUIGetTimeFieldOrderForTesting(int *hour,
-                                          int *minute,
-                                          int *second,
-                                          int *period) const;
-    bool WinUIGetHourSpinBindingForTesting(
-        std::uintptr_t *incrementIdentity,
-        std::uintptr_t *decrementIdentity,
-        std::uint64_t *generation = nullptr) const;
-    using WinUIHourLoadedHookForTesting =
-        void (*)(wxTimePickerCtrl *, void *);
-    static void WinUISetHourLoadedHookForTesting(
-        WinUIHourLoadedHookForTesting hook,
-        void *data = nullptr);
-    static wxString WinUISetLanguageForTesting(const wxString& language);
-
 protected:
     wxSize DoGetBestSize() const override;
     void DoSetSize(int x, int y, int width, int height,
@@ -82,6 +62,7 @@ protected:
     wxDateTime m_value;
 
 private:
+    friend class wxWinUITimePickerTestAccess;
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTimePickerCtrl);
 };
 

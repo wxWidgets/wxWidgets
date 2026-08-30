@@ -58,21 +58,6 @@ public:
     bool SetBase(int base) override;
     void SetSelection(long from, long to) override;
 
-    // Implementation-only deterministic seams. Peer mutations traverse the
-    // real NumberBox callbacks but don't require SendInput.
-    bool WinUISetPeerValueForTesting(double value);
-    bool WinUISetPeerTextForTesting(const wxString& text);
-    bool WinUIGetPeerStateForTesting(double *minimum,
-                                     double *maximum,
-                                     double *increment,
-                                     bool *wrap,
-                                     wxString *text,
-                                     double *value = nullptr) const;
-    bool WinUIGetPeerSelectionForTesting(long *from, long *to);
-    bool WinUIRetemplateForTesting();
-    bool WinUIEnterForTesting();
-    bool WinUIStepForTesting(int direction);
-
 protected:
     wxSize DoGetBestSize() const override;
 
@@ -101,6 +86,7 @@ protected:
     bool m_hasPendingSelection = false;
 
 private:
+    friend class wxWinUISpinCtrlTestAccess;
     friend class wxWinUINumberBoxImpl;
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinCtrl);
 };
@@ -153,19 +139,6 @@ public:
     bool SetBase(int base) override { return base == 10; }
     void SetSelection(long from, long to) override;
 
-    bool WinUISetPeerValueForTesting(double value);
-    bool WinUISetPeerTextForTesting(const wxString& text);
-    bool WinUIGetPeerStateForTesting(double *minimum,
-                                     double *maximum,
-                                     double *increment,
-                                     bool *wrap,
-                                     wxString *text,
-                                     double *value = nullptr) const;
-    bool WinUIGetPeerSelectionForTesting(long *from, long *to);
-    bool WinUIRetemplateForTesting();
-    bool WinUIEnterForTesting();
-    bool WinUIStepForTesting(int direction);
-
 protected:
     wxSize DoGetBestSize() const override;
 
@@ -195,6 +168,7 @@ protected:
     bool m_hasPendingSelection = false;
 
 private:
+    friend class wxWinUISpinCtrlTestAccess;
     friend class wxWinUINumberBoxImpl;
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinCtrlDouble);
 };

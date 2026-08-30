@@ -30,6 +30,8 @@
 #include "waitfor.h"
 
 #ifdef __WXWINUI__
+    #include "treectrl-test-access.h"
+
 namespace
 {
 
@@ -245,8 +247,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick",
 #ifdef __WXWINUI__
     // Exercise the same routed callbacks deterministically. SendInput cannot
     // target the isolated, non-interactive desktop used by the WinUI gate.
-    REQUIRE(m_tree->WinUIDoubleClickItemForTesting(m_child1));
-    REQUIRE(m_tree->WinUIRightClickItemForTesting(m_child1));
+    REQUIRE(wxWinUITreeCtrlTestAccess::DoubleClickItem(*m_tree, m_child1));
+    REQUIRE(wxWinUITreeCtrlTestAccess::RightClickItem(*m_tree, m_child1));
 #else
     wxUIActionSimulator sim;
 
@@ -320,12 +322,12 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyDown",
 #ifdef __WXWINUI__
     // wxUIActionSimulator generates two Shift key-downs for the upper-case
     // characters in "aAbB", in addition to the four letter key-downs.
-    (void)m_tree->WinUIKeyDownForTesting('A');
-    (void)m_tree->WinUIKeyDownForTesting(WXK_SHIFT, false, true);
-    (void)m_tree->WinUIKeyDownForTesting('A', false, true);
-    (void)m_tree->WinUIKeyDownForTesting('B');
-    (void)m_tree->WinUIKeyDownForTesting(WXK_SHIFT, false, true);
-    (void)m_tree->WinUIKeyDownForTesting('B', false, true);
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, 'A');
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_SHIFT, false, true);
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, 'A', false, true);
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, 'B');
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_SHIFT, false, true);
+    (void)wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, 'B', false, true);
 #else
     wxUIActionSimulator sim;
 
@@ -355,7 +357,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents",
     EventCounter expanding(m_tree.get(), wxEVT_TREE_ITEM_EXPANDING);
 
 #ifdef __WXWINUI__
-    REQUIRE(m_tree->WinUISetPeerExpandedForTesting(m_root, true));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, true));
 #else
     wxUIActionSimulator sim;
 
@@ -382,7 +384,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents",
 #endif
 
 #ifdef __WXWINUI__
-    REQUIRE(m_tree->WinUISetPeerExpandedForTesting(m_root, false));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, false));
 #else
     sim.MouseDblClick();
     wxYield();
@@ -417,8 +419,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange",
         "wxTreeCtrl peer items to be attached",
         [this]()
         {
-            return m_tree->WinUIIsItemAttachedToPeerForTesting(m_child1) &&
-                   m_tree->WinUIIsItemAttachedToPeerForTesting(m_child2);
+            return wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(*m_tree, m_child1) &&
+                   wxWinUITreeCtrlTestAccess::IsItemAttachedToPeer(*m_tree, m_child2);
         },
         2000));
 #endif
@@ -468,7 +470,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange",
 #endif
 
 #ifdef __WXWINUI__
-    REQUIRE(m_tree->WinUISelectPeerItemForTesting(m_child1));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child1));
 #else
     sim.MouseMove(point1);
     wxYield();
@@ -481,7 +483,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange",
     CHECK(changing == 1);
 
 #ifdef __WXWINUI__
-    REQUIRE(m_tree->WinUISelectPeerItemForTesting(m_child2));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child2));
 #else
     sim.MouseMove(point2);
     wxYield();
@@ -543,8 +545,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive",
 #endif
 
 #ifdef __WXWINUI__
-    REQUIRE(m_tree->WinUISelectPeerItemForTesting(m_child1));
-    REQUIRE(m_tree->WinUISelectPeerItemForTesting(
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child1));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree,
         m_child2, true /* addToSelection */));
 #else
     sim.MouseMove(point1);
@@ -570,7 +572,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive",
 #ifdef __WXWINUI__
     // A plain peer selection replaces the Ctrl-extended selection and must
     // not start editing as a side effect.
-    REQUIRE(m_tree->WinUISelectPeerItemForTesting(m_child2));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child2));
 #else
     // Time needed (in ms) for the editor to display. The test will not pass
     // if the value is less than 400, 510, 800 under wxQt, wxGTK, wxMSW resp.
@@ -588,8 +590,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive",
 #ifdef __WXWINUI__
     m_tree->Show();
     DrainWinUITreeDispatch();
-    REQUIRE(m_tree->WinUIScheduleLabelEditForTesting(m_child2));
-    REQUIRE(m_tree->WinUIFireLabelEditDelayForTesting());
+    REQUIRE(wxWinUITreeCtrlTestAccess::ScheduleLabelEdit(*m_tree, m_child2));
+    REQUIRE(wxWinUITreeCtrlTestAccess::FireLabelEditDelay(*m_tree));
 #else
     sim.MouseClick();
     YieldForAWhile(BEGIN_EDIT_TIMEOUT);
@@ -610,7 +612,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu",
 {
     EventCounter menu(m_tree.get(), wxEVT_TREE_ITEM_MENU);
 #ifdef __WXWINUI__
-    REQUIRE(m_tree->WinUIRightClickItemForTesting(m_child1));
+    REQUIRE(wxWinUITreeCtrlTestAccess::RightClickItem(*m_tree, m_child1));
 #else
     wxUIActionSimulator sim;
 
@@ -647,8 +649,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation",
     // The routed key callback deliberately leaves navigation keys unhandled
     // so TreeView can apply its native default. Reproduce that native result
     // through the peer callback seam without SendInput.
-    CHECK_FALSE(m_tree->WinUIKeyDownForTesting(WXK_RIGHT));
-    REQUIRE(m_tree->WinUISetPeerExpandedForTesting(m_root, true));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_RIGHT));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, true));
 #else
     sim.Char(WXK_RIGHT);
     wxYield();
@@ -657,8 +659,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation",
     CHECK(m_tree->IsExpanded(m_root));
 
 #ifdef __WXWINUI__
-    CHECK_FALSE(m_tree->WinUIKeyDownForTesting(WXK_LEFT));
-    REQUIRE(m_tree->WinUISetPeerExpandedForTesting(m_root, false));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_LEFT));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, false));
 #else
 #ifdef wxHAS_GENERIC_TREECTRL
     sim.Char('-');
@@ -674,10 +676,10 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation",
     wxYield();
 
 #ifdef __WXWINUI__
-    CHECK_FALSE(m_tree->WinUIKeyDownForTesting(WXK_RIGHT));
-    REQUIRE(m_tree->WinUISetPeerExpandedForTesting(m_root, true));
-    CHECK_FALSE(m_tree->WinUIKeyDownForTesting(WXK_DOWN));
-    REQUIRE(m_tree->WinUISelectPeerItemForTesting(m_child1));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_RIGHT));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SetPeerExpanded(*m_tree, m_root, true));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_DOWN));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child1));
 #else
     sim.Char(WXK_RIGHT);
     sim.Char(WXK_DOWN);
@@ -687,8 +689,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation",
     CHECK(m_tree->GetSelection() == m_child1);
 
 #ifdef __WXWINUI__
-    CHECK_FALSE(m_tree->WinUIKeyDownForTesting(WXK_DOWN));
-    REQUIRE(m_tree->WinUISelectPeerItemForTesting(m_child2));
+    CHECK_FALSE(wxWinUITreeCtrlTestAccess::KeyDown(*m_tree, WXK_DOWN));
+    REQUIRE(wxWinUITreeCtrlTestAccess::SelectPeerItem(*m_tree, m_child2));
 #else
     sim.Char(WXK_DOWN);
     wxYield();

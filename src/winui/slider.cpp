@@ -12,6 +12,10 @@
 #if wxUSE_SLIDER
 
 #include "wx/slider.h"
+
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "slider-test-access.h"
+#endif
 #include "wx/stopwatch.h"
 #include "wx/winui/private/appearance.h"
 
@@ -372,51 +376,6 @@ bool wxWinUIHasSliderXamlRoot(
            wxWinUISameSliderObject(element.XamlRoot(), expectedRoot);
 }
 
-bool wxWinUIGetRealizedSliderRect(
-    const MUX::FrameworkElement& element,
-    const MUX::UIElement& reference,
-    wxSlider::WinUIVisualRect *rect)
-{
-    if ( !element || !reference || !rect ||
-         element.Visibility() != MUX::Visibility::Visible )
-    {
-        return false;
-    }
-
-    const double width = element.ActualWidth();
-    const double height = element.ActualHeight();
-    if ( width <= 0.0 || height <= 0.0 ||
-         !std::isfinite(width) || !std::isfinite(height) )
-    {
-        return false;
-    }
-
-    const auto transform = element.TransformToVisual(reference);
-    if ( !transform )
-        return false;
-
-    const winrt::Windows::Foundation::Rect bounds =
-        transform.TransformBounds(
-            winrt::Windows::Foundation::Rect{
-                0.0f,
-                0.0f,
-                static_cast<float>(width),
-                static_cast<float>(height)});
-    if ( !std::isfinite(bounds.X) || !std::isfinite(bounds.Y) ||
-         !std::isfinite(bounds.Width) ||
-         !std::isfinite(bounds.Height) || bounds.Width <= 0.0f ||
-         bounds.Height <= 0.0f )
-    {
-        return false;
-    }
-
-    rect->x = bounds.X;
-    rect->y = bounds.Y;
-    rect->width = bounds.Width;
-    rect->height = bounds.Height;
-    return true;
-}
-
 std::uintptr_t wxWinUISliderObjectIdentity(
     const winrt::Windows::Foundation::IInspectable& object)
 {
@@ -424,6 +383,7 @@ std::uintptr_t wxWinUISliderObjectIdentity(
     return reinterpret_cast<std::uintptr_t>(winrt::get_abi(identity));
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 std::uint32_t wxWinUIPackSliderColor(
     const winrt::Windows::UI::Color& color)
 {
@@ -433,23 +393,24 @@ std::uint32_t wxWinUIPackSliderColor(
            static_cast<std::uint32_t>(color.B);
 }
 
-wxSlider::WinUIActualTheme wxWinUIGetObservedSliderTheme(
+wxWinUISliderTestAccess::ActualTheme wxWinUIGetObservedSliderTheme(
     MUX::ElementTheme theme)
 {
     switch ( theme )
     {
         case MUX::ElementTheme::Light:
-            return wxSlider::WinUIActualTheme::Light;
+            return wxWinUISliderTestAccess::ActualTheme::Light;
 
         case MUX::ElementTheme::Dark:
-            return wxSlider::WinUIActualTheme::Dark;
+            return wxWinUISliderTestAccess::ActualTheme::Dark;
 
         case MUX::ElementTheme::Default:
-            return wxSlider::WinUIActualTheme::Default;
+            return wxWinUISliderTestAccess::ActualTheme::Default;
     }
 
-    return wxSlider::WinUIActualTheme::Default;
+    return wxWinUISliderTestAccess::ActualTheme::Default;
 }
+#endif
 
 double wxWinUIGetSliderRasterScale(const MUXC::Slider& slider,
                                    double fallbackScale)
@@ -538,86 +499,131 @@ bool wxWinUIEmitSliderScrollAndCommand(
     return wxWinUIEmitSliderCommand(state, generation, value);
 }
 
-bool wxWinUIGetSliderKeyInput(
-    winrt::Windows::System::VirtualKey key,
-    wxSlider::WinUIInput *input)
-{
-    using winrt::Windows::System::VirtualKey;
-
-    switch ( key )
-    {
-        case VirtualKey::Left:
-        case VirtualKey::Up:
-            *input = wxSlider::WinUIInput::LineDecrement;
-            return true;
-
-        case VirtualKey::Right:
-        case VirtualKey::Down:
-            *input = wxSlider::WinUIInput::LineIncrement;
-            return true;
-
-        case VirtualKey::PageUp:
-            *input = wxSlider::WinUIInput::PageDecrement;
-            return true;
-
-        case VirtualKey::PageDown:
-            *input = wxSlider::WinUIInput::PageIncrement;
-            return true;
-
-        case VirtualKey::Home:
-            *input = wxSlider::WinUIInput::Minimum;
-            return true;
-
-        case VirtualKey::End:
-            *input = wxSlider::WinUIInput::Maximum;
-            return true;
-
-        default:
-            return false;
-    }
-}
-
-wxEventType wxWinUIGetSliderScrollEvent(
-    wxSlider::WinUIInput input)
-{
-    switch ( input )
-    {
-        case wxSlider::WinUIInput::LineDecrement:
-            return wxEVT_SCROLL_LINEUP;
-
-        case wxSlider::WinUIInput::LineIncrement:
-            return wxEVT_SCROLL_LINEDOWN;
-
-        case wxSlider::WinUIInput::PageDecrement:
-            return wxEVT_SCROLL_PAGEUP;
-
-        case wxSlider::WinUIInput::PageIncrement:
-            return wxEVT_SCROLL_PAGEDOWN;
-
-        case wxSlider::WinUIInput::Minimum:
-            return wxEVT_SCROLL_TOP;
-
-        case wxSlider::WinUIInput::Maximum:
-            return wxEVT_SCROLL_BOTTOM;
-
-        case wxSlider::WinUIInput::ThumbTrack:
-        case wxSlider::WinUIInput::ThumbRelease:
-            return wxEVT_SCROLL_THUMBTRACK;
-
-        case wxSlider::WinUIInput::Wheel:
-        case wxSlider::WinUIInput::Automation:
-            return wxEVT_SCROLL_CHANGED;
-    }
-
-    wxFAIL_MSG("unhandled WinUI slider input source");
-    return wxEVT_SCROLL_CHANGED;
-}
-
 } // anonymous namespace
 
 class wxWinUISliderImpl
 {
 public:
+    static bool GetRealizedRect(
+        const MUX::FrameworkElement& element,
+        const MUX::UIElement& reference,
+        wxSlider::WinUIVisualRect *rect)
+    {
+        if ( !element || !reference || !rect ||
+             element.Visibility() != MUX::Visibility::Visible )
+        {
+            return false;
+        }
+
+        const double width = element.ActualWidth();
+        const double height = element.ActualHeight();
+        if ( width <= 0.0 || height <= 0.0 ||
+             !std::isfinite(width) || !std::isfinite(height) )
+        {
+            return false;
+        }
+
+        const auto transform = element.TransformToVisual(reference);
+        if ( !transform )
+            return false;
+
+        const winrt::Windows::Foundation::Rect bounds =
+            transform.TransformBounds(
+                winrt::Windows::Foundation::Rect{
+                    0.0f,
+                    0.0f,
+                    static_cast<float>(width),
+                    static_cast<float>(height)});
+        if ( !std::isfinite(bounds.X) || !std::isfinite(bounds.Y) ||
+             !std::isfinite(bounds.Width) ||
+             !std::isfinite(bounds.Height) || bounds.Width <= 0.0f ||
+             bounds.Height <= 0.0f )
+        {
+            return false;
+        }
+
+        rect->x = bounds.X;
+        rect->y = bounds.Y;
+        rect->width = bounds.Width;
+        rect->height = bounds.Height;
+        return true;
+    }
+
+    static bool GetKeyInput(
+        winrt::Windows::System::VirtualKey key,
+        wxSlider::WinUIInput *input)
+    {
+        using winrt::Windows::System::VirtualKey;
+
+        switch ( key )
+        {
+            case VirtualKey::Left:
+            case VirtualKey::Up:
+                *input = wxSlider::WinUIInput::LineDecrement;
+                return true;
+
+            case VirtualKey::Right:
+            case VirtualKey::Down:
+                *input = wxSlider::WinUIInput::LineIncrement;
+                return true;
+
+            case VirtualKey::PageUp:
+                *input = wxSlider::WinUIInput::PageDecrement;
+                return true;
+
+            case VirtualKey::PageDown:
+                *input = wxSlider::WinUIInput::PageIncrement;
+                return true;
+
+            case VirtualKey::Home:
+                *input = wxSlider::WinUIInput::Minimum;
+                return true;
+
+            case VirtualKey::End:
+                *input = wxSlider::WinUIInput::Maximum;
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    static wxEventType GetScrollEvent(
+        wxSlider::WinUIInput input)
+    {
+        switch ( input )
+        {
+            case wxSlider::WinUIInput::LineDecrement:
+                return wxEVT_SCROLL_LINEUP;
+
+            case wxSlider::WinUIInput::LineIncrement:
+                return wxEVT_SCROLL_LINEDOWN;
+
+            case wxSlider::WinUIInput::PageDecrement:
+                return wxEVT_SCROLL_PAGEUP;
+
+            case wxSlider::WinUIInput::PageIncrement:
+                return wxEVT_SCROLL_PAGEDOWN;
+
+            case wxSlider::WinUIInput::Minimum:
+                return wxEVT_SCROLL_TOP;
+
+            case wxSlider::WinUIInput::Maximum:
+                return wxEVT_SCROLL_BOTTOM;
+
+            case wxSlider::WinUIInput::ThumbTrack:
+            case wxSlider::WinUIInput::ThumbRelease:
+                return wxEVT_SCROLL_THUMBTRACK;
+
+            case wxSlider::WinUIInput::Wheel:
+            case wxSlider::WinUIInput::Automation:
+                return wxEVT_SCROLL_CHANGED;
+        }
+
+        wxFAIL_MSG("unhandled WinUI slider input source");
+        return wxEVT_SCROLL_CHANGED;
+    }
+
     enum class PointerInteraction
     {
         None,
@@ -870,8 +876,10 @@ public:
     MUX::ElementTheme visualActualTheme = MUX::ElementTheme::Default;
     std::size_t visualTickHash = 0;
     MUXM::Brush visualBrush{ nullptr };
-    wxSlider::WinUIConvergenceFailure lastConvergenceFailure =
-        wxSlider::WinUIConvergenceFailure::None;
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUISliderTestAccess::ConvergenceFailure lastConvergenceFailure =
+        wxWinUISliderTestAccess::ConvergenceFailure::None;
+#endif
 
     MUXI::PointerEventHandler pointerPressedHandler{ nullptr };
     MUXI::PointerEventHandler pointerReleasedHandler{ nullptr };
@@ -1249,7 +1257,7 @@ bool wxSlider::Create(wxWindow *parent,
                 MUXI::KeyRoutedEventArgs const& event)
             {
                 wxSlider::WinUIInput input;
-                if ( !wxWinUIGetSliderKeyInput(event.Key(), &input) )
+                if ( !wxWinUISliderImpl::GetKeyInput(event.Key(), &input) )
                     return;
 
                 wxSlider *owner = callbackState->GetOwner(generation);
@@ -1333,7 +1341,7 @@ bool wxSlider::Create(wxWindow *parent,
                 MUXI::KeyRoutedEventArgs const& event)
             {
                 wxSlider::WinUIInput input;
-                if ( !wxWinUIGetSliderKeyInput(event.Key(), &input) )
+                if ( !wxWinUISliderImpl::GetKeyInput(event.Key(), &input) )
                     return;
 
                 if ( wxSlider * const owner =
@@ -2105,11 +2113,11 @@ void wxSlider::UpdateVisualState()
         WinUIVisualRect realizedThumbRect;
         WinUIVisualRect realizedTrackRect;
         if ( !realizedThumb || !realizedTrack ||
-             !wxWinUIGetRealizedSliderRect(
+             !wxWinUISliderImpl::GetRealizedRect(
                  realizedThumb,
                  m_winui->decorationCanvas,
                  &realizedThumbRect) ||
-             !wxWinUIGetRealizedSliderRect(
+             !wxWinUISliderImpl::GetRealizedRect(
                  realizedTrack,
                  m_winui->decorationCanvas,
                  &realizedTrackRect) )
@@ -2737,7 +2745,7 @@ void wxSlider::OnPeerValueChanged(int value)
     wxWinUIEmitSliderScrollAndCommand(
         callbackState,
         generation,
-        wxWinUIGetSliderScrollEvent(input),
+        wxWinUISliderImpl::GetScrollEvent(input),
         newValue);
 }
 
@@ -2800,7 +2808,7 @@ void wxSlider::FlushPendingInput(WinUIInput input)
             if ( !wxWinUIEmitSliderScrollAndCommand(
                     callbackState,
                     generation,
-                    wxWinUIGetSliderScrollEvent(input),
+                    wxWinUISliderImpl::GetScrollEvent(input),
                     change.newValue) )
             {
                 return;
@@ -2845,26 +2853,29 @@ void wxSlider::EndInput(bool pointerInput)
         callbackState, generation, wxEVT_SCROLL_CHANGED, value);
 }
 
-bool wxSlider::WinUIApplyInputForTesting(WinUIInput input,
-                                         int value,
-                                         bool finishInteraction)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUISliderTestAccess::ApplyInput(
+    wxSlider& control,
+    Input input,
+    int value,
+    bool finishInteraction)
 {
-    if ( !m_winui || !m_winui->slider || !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->slider || !control.m_winui->callbackState )
         return false;
 
     const std::shared_ptr<wxWinUISliderCallbackState> callbackState =
-        m_winui->callbackState;
+        control.m_winui->callbackState;
     const std::uint64_t generation = callbackState->Generation();
-    const MUXC::Slider peer = m_winui->slider;
+    const MUXC::Slider peer = control.m_winui->slider;
 
     const bool pointerInput =
-        input == WinUIInput::ThumbTrack ||
-        input == WinUIInput::ThumbRelease;
-    BeginInput(pointerInput ? WinUIInput::ThumbTrack : input);
+        input == Input::ThumbTrack ||
+        input == Input::ThumbRelease;
+    control.BeginInput(pointerInput ? Input::ThumbTrack : input);
 
     try
     {
-        peer.Value(ClampValue(value));
+        peer.Value(control.ClampValue(value));
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -2876,10 +2887,10 @@ bool wxSlider::WinUIApplyInputForTesting(WinUIInput input,
     if ( !owner )
         return true;
 
-    if ( input == WinUIInput::ThumbRelease ||
+    if ( input == Input::ThumbRelease ||
          (finishInteraction &&
-          input != WinUIInput::Wheel &&
-          input != WinUIInput::Automation) )
+          input != Input::Wheel &&
+          input != Input::Automation) )
     {
         owner->EndInput(pointerInput);
     }
@@ -2887,26 +2898,27 @@ bool wxSlider::WinUIApplyInputForTesting(WinUIInput input,
     return true;
 }
 
-bool wxSlider::WinUIApplyPointerInputForTesting(
+bool wxWinUISliderTestAccess::ApplyPointerInput(
+    wxSlider& control,
     bool thumb,
     int value,
     bool valueBeforePress)
 {
-    if ( !m_winui || !m_winui->slider ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->slider ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
     const std::shared_ptr<wxWinUISliderCallbackState> state =
-        m_winui->callbackState;
+        control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::Slider peer = m_winui->slider;
+    const MUXC::Slider peer = control.m_winui->slider;
 
     try
     {
         if ( valueBeforePress )
-            peer.Value(ClampValue(value));
+            peer.Value(control.ClampValue(value));
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -2980,22 +2992,24 @@ bool wxSlider::WinUIApplyPointerInputForTesting(
     return true;
 }
 
-bool wxSlider::WinUISetUnclassifiedPeerValueForTesting(int value)
+bool wxWinUISliderTestAccess::SetUnclassifiedPeerValue(
+    wxSlider& control,
+    int value)
 {
-    if ( !m_winui || !m_winui->slider ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->slider ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
     const std::shared_ptr<wxWinUISliderCallbackState> state =
-        m_winui->callbackState;
+        control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
     try
     {
         // Deliberately omit BeginInput(): this is the exact ValueChanged-first
         // ordering whose classification is deferred through CallAfter.
-        m_winui->slider.Value(ClampValue(value));
+        control.m_winui->slider.Value(control.ClampValue(value));
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -3007,37 +3021,39 @@ bool wxSlider::WinUISetUnclassifiedPeerValueForTesting(int value)
     return state->GetOwner(generation) != nullptr;
 }
 
-bool wxSlider::WinUIGetPeerStateForTesting(double *minimum,
-                                           double *maximum,
-                                           double *value,
-                                           double *smallChange,
-                                           double *largeChange,
-                                           bool *vertical,
-                                           bool *reversed) const
+bool wxWinUISliderTestAccess::GetPeerState(
+    const wxSlider& control,
+    double *minimum,
+    double *maximum,
+    double *value,
+    double *smallChange,
+    double *largeChange,
+    bool *vertical,
+    bool *reversed)
 {
-    if ( !m_winui || !m_winui->slider )
+    if ( !control.m_winui || !control.m_winui->slider )
         return false;
 
     try
     {
         if ( minimum )
-            *minimum = m_winui->slider.Minimum();
+            *minimum = control.m_winui->slider.Minimum();
         if ( maximum )
-            *maximum = m_winui->slider.Maximum();
+            *maximum = control.m_winui->slider.Maximum();
         if ( value )
-            *value = m_winui->slider.Value();
+            *value = control.m_winui->slider.Value();
         if ( smallChange )
-            *smallChange = m_winui->slider.SmallChange();
+            *smallChange = control.m_winui->slider.SmallChange();
         if ( largeChange )
-            *largeChange = m_winui->slider.LargeChange();
+            *largeChange = control.m_winui->slider.LargeChange();
         if ( vertical )
         {
             *vertical =
-                m_winui->slider.Orientation() ==
+                control.m_winui->slider.Orientation() ==
                 MUXC::Orientation::Vertical;
         }
         if ( reversed )
-            *reversed = m_winui->slider.IsDirectionReversed();
+            *reversed = control.m_winui->slider.IsDirectionReversed();
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -3048,7 +3064,8 @@ bool wxSlider::WinUIGetPeerStateForTesting(double *minimum,
     return true;
 }
 
-bool wxSlider::WinUIGetDecorationsForTesting(
+bool wxWinUISliderTestAccess::GetDecorations(
+    const wxSlider& control,
     int *thumbLength,
     int *selectionStart,
     int *selectionEnd,
@@ -3058,14 +3075,14 @@ bool wxSlider::WinUIGetDecorationsForTesting(
     bool *valueLabelVisible,
     bool *rightToLeft,
     bool *rootRightToLeft,
-    bool *sliderRightToLeft) const
+    bool *sliderRightToLeft)
 {
-    if ( !m_winui || !m_winui->root || !m_winui->selectionNormal ||
-         !m_winui->selectionDisabled ||
-         !m_winui->selectionHighContrast ||
-         !m_winui->selectionHighContrastDisabled ||
-         !m_winui->minimumLabel || !m_winui->maximumLabel ||
-         !m_winui->valueLabel )
+    if ( !control.m_winui || !control.m_winui->root || !control.m_winui->selectionNormal ||
+         !control.m_winui->selectionDisabled ||
+         !control.m_winui->selectionHighContrast ||
+         !control.m_winui->selectionHighContrastDisabled ||
+         !control.m_winui->minimumLabel || !control.m_winui->maximumLabel ||
+         !control.m_winui->valueLabel )
     {
         return false;
     }
@@ -3073,45 +3090,45 @@ bool wxSlider::WinUIGetDecorationsForTesting(
     try
     {
         if ( thumbLength )
-            *thumbLength = GetThumbLength();
+            *thumbLength = control.GetThumbLength();
         if ( selectionStart )
-            *selectionStart = m_selStart;
+            *selectionStart = control.m_selStart;
         if ( selectionEnd )
-            *selectionEnd = m_selEnd;
+            *selectionEnd = control.m_selEnd;
         if ( manualTickCount )
         {
             *manualTickCount = static_cast<unsigned>(wxMin<std::size_t>(
-                m_manualTicks.size(),
+                control.m_manualTicks.size(),
                 std::numeric_limits<unsigned>::max()));
         }
         if ( selectionVisible )
         {
             *selectionVisible =
-                m_winui->selectionNormal.Visibility() ==
+                control.m_winui->selectionNormal.Visibility() ==
                     MUX::Visibility::Visible ||
-                m_winui->selectionDisabled.Visibility() ==
+                control.m_winui->selectionDisabled.Visibility() ==
                     MUX::Visibility::Visible ||
-                m_winui->selectionHighContrast.Visibility() ==
+                control.m_winui->selectionHighContrast.Visibility() ==
                     MUX::Visibility::Visible ||
-                m_winui->selectionHighContrastDisabled.Visibility() ==
+                control.m_winui->selectionHighContrastDisabled.Visibility() ==
                     MUX::Visibility::Visible;
         }
         if ( minMaxLabelsVisible )
         {
             *minMaxLabelsVisible =
-                m_winui->minimumLabel.Visibility() == MUX::Visibility::Visible &&
-                m_winui->maximumLabel.Visibility() == MUX::Visibility::Visible;
+                control.m_winui->minimumLabel.Visibility() == MUX::Visibility::Visible &&
+                control.m_winui->maximumLabel.Visibility() == MUX::Visibility::Visible;
         }
         if ( valueLabelVisible )
         {
             *valueLabelVisible =
-                m_winui->valueLabel.Visibility() == MUX::Visibility::Visible;
+                control.m_winui->valueLabel.Visibility() == MUX::Visibility::Visible;
         }
         const bool rootRTL =
-            m_winui->root.FlowDirection() ==
+            control.m_winui->root.FlowDirection() ==
                 MUX::FlowDirection::RightToLeft;
         const bool sliderRTL =
-            m_winui->slider.FlowDirection() ==
+            control.m_winui->slider.FlowDirection() ==
                 MUX::FlowDirection::RightToLeft;
         if ( rightToLeft )
             *rightToLeft = rootRTL && sliderRTL;
@@ -3129,32 +3146,34 @@ bool wxSlider::WinUIGetDecorationsForTesting(
     return true;
 }
 
-bool wxSlider::WinUIHasTickForTesting(int tickPos) const
+bool wxWinUISliderTestAccess::HasTick(
+    const wxSlider& control,
+    int tickPos)
 {
     return std::binary_search(
-        m_manualTicks.begin(), m_manualTicks.end(), tickPos);
+        control.m_manualTicks.begin(), control.m_manualTicks.end(), tickPos);
 }
 
-bool wxSlider::ConvergeVisualStateForTesting()
+bool wxWinUISliderTestAccess::ConvergeVisualState(wxSlider& control)
 {
-    if ( !m_winui || !m_winui->root || !m_winui->slider ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->root || !control.m_winui->slider ||
+         !control.m_winui->callbackState )
     {
-        if ( m_winui )
+        if ( control.m_winui )
         {
-            m_winui->lastConvergenceFailure =
-                WinUIConvergenceFailure::MissingPeer;
+            control.m_winui->lastConvergenceFailure =
+                ConvergenceFailure::MissingPeer;
         }
         return false;
     }
 
-    m_winui->lastConvergenceFailure = WinUIConvergenceFailure::None;
+    control.m_winui->lastConvergenceFailure = ConvergenceFailure::None;
 
-    wxWinUISliderImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUISliderImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::Grid root = m_winui->root;
-    const MUXC::Slider slider = m_winui->slider;
+    const MUXC::Grid root = control.m_winui->root;
+    const MUXC::Slider slider = control.m_winui->slider;
     const auto getCurrentOwner = [&]() -> wxSlider *
     {
         wxSlider * const owner = state->GetOwner(generation);
@@ -3192,14 +3211,14 @@ bool wxSlider::ConvergeVisualStateForTesting()
         if ( !owner )
             return false;
 
-        WinUIVisualState observed;
-        if ( owner->WinUIGetVisualStateForTesting(&observed) )
+        VisualState observed;
+        if ( GetVisualState(*owner, &observed) )
         {
             owner = getCurrentOwner();
             if ( !owner )
                 return false;
             owner->m_winui->lastConvergenceFailure =
-                WinUIConvergenceFailure::None;
+                ConvergenceFailure::None;
             return true;
         }
 
@@ -3222,55 +3241,55 @@ bool wxSlider::ConvergeVisualStateForTesting()
                 if ( !root.IsLoaded() || !slider.IsLoaded() )
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::NotLoaded;
+                        ConvergenceFailure::NotLoaded;
                 }
                 else if ( rootWidth <= 0.0 || rootHeight <= 0.0 ||
                           sliderWidth <= 0.0 || sliderHeight <= 0.0 )
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::EmptyGeometry;
+                        ConvergenceFailure::EmptyGeometry;
                 }
                 else if ( !thumb )
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::MissingThumb;
+                        ConvergenceFailure::MissingThumb;
                 }
                 else if ( !track )
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::MissingTrack;
+                        ConvergenceFailure::MissingTrack;
                 }
                 else if ( owner->m_thumbLengthDIP >= 0.0 &&
                           !(owner->m_winui->visualLayoutReady) )
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::ThumbNotArranged;
+                        ConvergenceFailure::ThumbNotArranged;
                 }
                 else if ( owner->m_winui->visualStateDirty )
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::VisualStateDirty;
+                        ConvergenceFailure::VisualStateDirty;
                 }
                 else if ( !owner->m_winui->visualCacheValid )
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::CacheInvalid;
+                        ConvergenceFailure::CacheInvalid;
                 }
                 else if ( !owner->m_winui->visualLayoutReady )
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::LayoutNotReady;
+                        ConvergenceFailure::LayoutNotReady;
                 }
                 else
                 {
                     owner->m_winui->lastConvergenceFailure =
-                        WinUIConvergenceFailure::SnapshotRejected;
+                        ConvergenceFailure::SnapshotRejected;
                 }
             }
             catch ( const winrt::hresult_error& )
             {
                 owner->m_winui->lastConvergenceFailure =
-                    WinUIConvergenceFailure::SnapshotRejected;
+                    ConvergenceFailure::SnapshotRejected;
             }
             return false;
         }
@@ -3281,9 +3300,11 @@ bool wxSlider::ConvergeVisualStateForTesting()
     }
 }
 
-bool wxSlider::WinUIRefreshForScaleForTesting(double scale)
+bool wxWinUISliderTestAccess::RefreshForScale(
+    wxSlider& control,
+    double scale)
 {
-    if ( !m_winui || !m_winui->slider || !m_winui->callbackState ||
+    if ( !control.m_winui || !control.m_winui->slider || !control.m_winui->callbackState ||
          scale <= 0.0 || !std::isfinite(scale) )
     {
         return false;
@@ -3292,34 +3313,35 @@ bool wxSlider::WinUIRefreshForScaleForTesting(double scale)
     // This seam no longer fabricates a raster scale. The caller must provide
     // the value observed from this control's current real XamlRoot; a host/slot
     // migration is therefore part of the tested production path.
-    if ( std::abs(GetEffectiveRasterScale() - scale) >= 0.001 )
+    if ( std::abs(control.GetEffectiveRasterScale() - scale) >= 0.001 )
         return false;
-    m_winui->visualCacheValid = false;
-    m_winui->visualStateDirty = true;
-    m_winui->visualLayoutReady = false;
-    return ConvergeVisualStateForTesting();
+    control.m_winui->visualCacheValid = false;
+    control.m_winui->visualStateDirty = true;
+    control.m_winui->visualLayoutReady = false;
+    return ConvergeVisualState(control);
 }
 
-bool wxSlider::WinUIGetHostScaleStateForTesting(
+bool wxWinUISliderTestAccess::GetHostScaleState(
+    const wxSlider& control,
     double *scale,
     std::uintptr_t *xamlRootIdentity,
-    std::uintptr_t *contentRootIdentity) const
+    std::uintptr_t *contentRootIdentity)
 {
-    if ( !scale || !xamlRootIdentity || !m_winui || !m_winui->root ||
-         !m_winui->slider || !m_winui->callbackState )
+    if ( !scale || !xamlRootIdentity || !control.m_winui || !control.m_winui->root ||
+         !control.m_winui->slider || !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUISliderImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUISliderImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::Grid root = m_winui->root;
-    const MUXC::Slider slider = m_winui->slider;
+    const MUXC::Grid root = control.m_winui->root;
+    const MUXC::Slider slider = control.m_winui->slider;
     implementation->host.ForceRender();
 
     wxSlider * const owner = state->GetOwner(generation);
-    if ( owner != this || !owner->m_winui ||
+    if ( owner != &control || !owner->m_winui ||
          owner->m_winui.get() != implementation ||
          owner->m_winui->callbackState != state ||
          !wxWinUISameSliderObject(owner->m_winui->root, root) ||
@@ -3358,37 +3380,36 @@ bool wxSlider::WinUIGetHostScaleStateForTesting(
     return true;
 }
 
-bool wxSlider::WinUIRefreshVisualStateForTesting()
+bool wxWinUISliderTestAccess::RefreshVisualState(wxSlider& control)
 {
-    if ( !m_winui || !m_winui->slider || !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->slider || !control.m_winui->callbackState )
         return false;
 
-    m_winui->visualCacheValid = false;
-    m_winui->visualStateDirty = true;
-    m_winui->visualLayoutReady = false;
-    return ConvergeVisualStateForTesting();
+    control.m_winui->visualCacheValid = false;
+    control.m_winui->visualStateDirty = true;
+    control.m_winui->visualLayoutReady = false;
+    return ConvergeVisualState(control);
 }
 
-wxSlider::WinUIConvergenceFailure
-wxSlider::WinUIGetLastConvergenceFailureForTesting() const
+wxWinUISliderTestAccess::ConvergenceFailure wxWinUISliderTestAccess::GetLastConvergenceFailure(const wxSlider& control)
 {
-    return m_winui
-        ? m_winui->lastConvergenceFailure
-        : WinUIConvergenceFailure::MissingPeer;
+    return control.m_winui
+        ? control.m_winui->lastConvergenceFailure
+        : ConvergenceFailure::MissingPeer;
 }
 
-bool wxSlider::WinUIDeliverThemeChangedForTesting()
+bool wxWinUISliderTestAccess::DeliverThemeChanged(wxSlider& control)
 {
-    if ( !m_winui || !m_winui->slider || !m_winui->callbackState ||
-         !m_winui->actualThemeChangedToken.value )
+    if ( !control.m_winui || !control.m_winui->slider || !control.m_winui->callbackState ||
+         !control.m_winui->actualThemeChangedToken.value )
     {
         return false;
     }
 
-    wxWinUISliderImpl * const implementation = m_winui.get();
-    const auto state = m_winui->callbackState;
+    wxWinUISliderImpl * const implementation = control.m_winui.get();
+    const auto state = control.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    const MUXC::Slider slider = m_winui->slider;
+    const MUXC::Slider slider = control.m_winui->slider;
     try
     {
         const MUX::ElementTheme actual = slider.ActualTheme();
@@ -3410,21 +3431,22 @@ bool wxSlider::WinUIDeliverThemeChangedForTesting()
            wxWinUISameSliderObject(owner->m_winui->slider, slider);
 }
 
-bool wxSlider::WinUIRetemplatePeerForTesting(
-    WinUIRetemplateHookForTesting hook,
+bool wxWinUISliderTestAccess::RetemplatePeer(
+    wxSlider& control,
+    RetemplateHook hook,
     void *context)
 {
-    if ( !m_winui || !m_winui->root || !m_winui->slider ||
-         !m_winui->callbackState )
+    if ( !control.m_winui || !control.m_winui->root || !control.m_winui->slider ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUISliderImpl * const implementation = m_winui.get();
-    const auto callbackState = m_winui->callbackState;
+    wxWinUISliderImpl * const implementation = control.m_winui.get();
+    const auto callbackState = control.m_winui->callbackState;
     const std::uint64_t generation = callbackState->Generation();
-    const MUXC::Grid root = m_winui->root;
-    const MUXC::Slider slider = m_winui->slider;
+    const MUXC::Grid root = control.m_winui->root;
+    const MUXC::Slider slider = control.m_winui->slider;
     const auto getCurrentOwner = [&]() -> wxSlider *
     {
         wxSlider * const owner = callbackState->GetOwner(generation);
@@ -3524,29 +3546,30 @@ bool wxSlider::WinUIRetemplatePeerForTesting(
                replacementThumb, retiredThumb);
 }
 
-bool wxSlider::WinUIGetVisualStateForTesting(
-    WinUIVisualState *state) const
+bool wxWinUISliderTestAccess::GetVisualState(
+    const wxSlider& control,
+    VisualState *state)
 {
-    if ( !state || !m_winui || !m_winui->root ||
-         !m_winui->slider || !m_winui->tickCanvas ||
-         !m_winui->callbackState )
+    if ( !state || !control.m_winui || !control.m_winui->root ||
+         !control.m_winui->slider || !control.m_winui->tickCanvas ||
+         !control.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUISliderImpl * const implementation = m_winui.get();
-    const auto callbackState = m_winui->callbackState;
+    wxWinUISliderImpl * const implementation = control.m_winui.get();
+    const auto callbackState = control.m_winui->callbackState;
     const std::uint64_t generation = callbackState->Generation();
-    const MUXC::Grid root = m_winui->root;
-    const MUXC::Slider slider = m_winui->slider;
-    const MUXC::Canvas tickCanvas = m_winui->tickCanvas;
+    const MUXC::Grid root = control.m_winui->root;
+    const MUXC::Slider slider = control.m_winui->slider;
+    const MUXC::Canvas tickCanvas = control.m_winui->tickCanvas;
 
     // This seam observes production state: it does not invalidate or rebuild
     // the overlay itself. The synchronous host layout drives the same
     // Loaded/SizeChanged/LayoutUpdated callbacks used outside tests.
     implementation->host.ForceRender();
     wxSlider * const liveOwner = callbackState->GetOwner(generation);
-    if ( !liveOwner || liveOwner != this || !liveOwner->m_winui ||
+    if ( !liveOwner || liveOwner != &control || !liveOwner->m_winui ||
          liveOwner->m_winui.get() != implementation ||
          liveOwner->m_winui->callbackState != callbackState ||
          !wxWinUISameSliderObject(liveOwner->m_winui->root, root) ||
@@ -3643,11 +3666,11 @@ bool wxSlider::WinUIGetVisualStateForTesting(
                 return false;
         }
 
-        WinUIVisualRect sliderRect;
-        WinUIVisualRect decorationRect;
-        if ( !wxWinUIGetRealizedSliderRect(
+        VisualRect sliderRect;
+        VisualRect decorationRect;
+        if ( !wxWinUISliderImpl::GetRealizedRect(
                  slider, root, &sliderRect) ||
-             !wxWinUIGetRealizedSliderRect(
+             !wxWinUISliderImpl::GetRealizedRect(
                  decorationCanvas, root, &decorationRect) )
         {
             return false;
@@ -3660,7 +3683,7 @@ bool wxSlider::WinUIGetVisualStateForTesting(
             return false;
         }
 
-        WinUIVisualState snapshot;
+        VisualState snapshot;
         snapshot.rasterScale = liveOwner->GetEffectiveRasterScale();
         snapshot.rootWidth = width;
         snapshot.rootHeight = height;
@@ -3696,15 +3719,15 @@ bool wxSlider::WinUIGetVisualStateForTesting(
             return false;
         }
 
-        WinUIVisualRect thumbRect;
-        WinUIVisualRect trackRect;
-        WinUIVisualRect thumbOverlayRect;
-        WinUIVisualRect trackOverlayRect;
-        if ( !wxWinUIGetRealizedSliderRect(thumb, root, &thumbRect) ||
-             !wxWinUIGetRealizedSliderRect(track, root, &trackRect) ||
-             !wxWinUIGetRealizedSliderRect(
+        VisualRect thumbRect;
+        VisualRect trackRect;
+        VisualRect thumbOverlayRect;
+        VisualRect trackOverlayRect;
+        if ( !wxWinUISliderImpl::GetRealizedRect(thumb, root, &thumbRect) ||
+             !wxWinUISliderImpl::GetRealizedRect(track, root, &trackRect) ||
+             !wxWinUISliderImpl::GetRealizedRect(
                  thumb, decorationCanvas, &thumbOverlayRect) ||
-             !wxWinUIGetRealizedSliderRect(
+             !wxWinUISliderImpl::GetRealizedRect(
                  track, decorationCanvas, &trackOverlayRect) )
         {
             return false;
@@ -3826,8 +3849,8 @@ bool wxSlider::WinUIGetVisualStateForTesting(
                 return false;
             }
 
-            WinUIVisualRect markRect;
-            if ( !wxWinUIGetRealizedSliderRect(
+            VisualRect markRect;
+            if ( !wxWinUISliderImpl::GetRealizedRect(
                      mark, root, &markRect) )
             {
                 return false;
@@ -3853,14 +3876,14 @@ bool wxSlider::WinUIGetVisualStateForTesting(
 
         const auto getTextRect =
             [&root](const MUXC::TextBlock& label,
-                    WinUIVisualRect *rect)
+                    VisualRect *rect)
         {
             if ( label.Visibility() != MUX::Visibility::Visible )
             {
-                *rect = WinUIVisualRect{};
+                *rect = VisualRect{};
                 return true;
             }
-            return wxWinUIGetRealizedSliderRect(label, root, rect);
+            return wxWinUISliderImpl::GetRealizedRect(label, root, rect);
         };
         if ( !getTextRect(labels[0], &snapshot.minimumLabel) ||
              !getTextRect(labels[1], &snapshot.maximumLabel) ||
@@ -3885,7 +3908,7 @@ bool wxSlider::WinUIGetVisualStateForTesting(
             snapshot.visibleSelectionCount == 1;
         if ( visibleSelection )
         {
-            if ( !wxWinUIGetRealizedSliderRect(
+            if ( !wxWinUISliderImpl::GetRealizedRect(
                      visibleSelection, root, &snapshot.selection) )
             {
                 return false;
@@ -3895,7 +3918,7 @@ bool wxSlider::WinUIGetVisualStateForTesting(
                      visibleSelection,
                      implementation->selectionNormal) )
             {
-                snapshot.selectionVisual = WinUISelectionVisual::Normal;
+                snapshot.selectionVisual = SelectionVisual::Normal;
                 snapshot.selectionThemeBound =
                     implementation->selectionNormalThemeBound;
             }
@@ -3903,7 +3926,7 @@ bool wxSlider::WinUIGetVisualStateForTesting(
                           visibleSelection,
                           implementation->selectionDisabled) )
             {
-                snapshot.selectionVisual = WinUISelectionVisual::Disabled;
+                snapshot.selectionVisual = SelectionVisual::Disabled;
                 snapshot.selectionThemeBound =
                     implementation->selectionDisabledThemeBound;
             }
@@ -3912,7 +3935,7 @@ bool wxSlider::WinUIGetVisualStateForTesting(
                           implementation->selectionHighContrast) )
             {
                 snapshot.selectionVisual =
-                    WinUISelectionVisual::HighContrast;
+                    SelectionVisual::HighContrast;
                 snapshot.selectionThemeBound =
                     implementation->selectionHighContrastThemeBound;
             }
@@ -3921,7 +3944,7 @@ bool wxSlider::WinUIGetVisualStateForTesting(
                           implementation->selectionHighContrastDisabled) )
             {
                 snapshot.selectionVisual =
-                    WinUISelectionVisual::HighContrastDisabled;
+                    SelectionVisual::HighContrastDisabled;
                 snapshot.selectionThemeBound =
                     implementation->selectionHighContrastDisabledThemeBound;
             }
@@ -3946,7 +3969,7 @@ bool wxSlider::WinUIGetVisualStateForTesting(
 
         wxSlider * const currentOwner =
             callbackState->GetOwner(generation);
-        if ( currentOwner != this || !currentOwner->m_winui ||
+        if ( currentOwner != &control || !currentOwner->m_winui ||
              currentOwner->m_winui.get() != implementation ||
              !wxWinUISameSliderObject(
                  currentOwner->m_winui->root, root) ||
@@ -3973,5 +3996,6 @@ bool wxSlider::WinUIGetVisualStateForTesting(
 
     return true;
 }
+#endif
 
 #endif // wxUSE_SLIDER

@@ -26,41 +26,6 @@ class wxWinUITreeCtrlImpl;
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
 public:
-    enum class WinUIPeerMutationForTesting
-    {
-        InsertItem,
-        InsertRollbackAfterCommit,
-        RemoveItem,
-        RemoveItemAfterCommit,
-        SetExpandedAfterCommit,
-        ClearItems
-    };
-
-    enum class WinUIDragCompletionForTesting
-    {
-        Drop,
-        Cancel
-    };
-
-    struct WinUIModelStats
-    {
-        size_t itemCount = 0;
-        size_t expandableItemCount = 0;
-        size_t nodeLookupCount = 0;
-        size_t peerUpdateCount = 0;
-        size_t fullRefreshCount = 0;
-        size_t modelGrowthCount = 0;
-    };
-
-    struct WinUIMeasuredItemParts
-    {
-        wxRect item;
-        wxRect expander;
-        wxRect stateImage;
-        wxRect image;
-        wxRect label;
-    };
-
     wxTreeCtrl();
     wxTreeCtrl(wxWindow *parent,
                wxWindowID id = wxID_ANY,
@@ -183,82 +148,6 @@ public:
 
     bool CanApplyThemeBorder() const override { return false; }
 
-    // Implementation-only deterministic seams. They exercise the real WinUI
-    // callback, transaction and internal-drag paths without SendInput.
-    void WinUIFailNextPeerMutationForTesting(
-        WinUIPeerMutationForTesting mutation);
-    void WinUIFailPeerMutationsForTesting(
-        WinUIPeerMutationForTesting mutation,
-        unsigned count);
-    bool WinUISelectPeerItemForTesting(
-        const wxTreeItemId& item,
-        bool addToSelection = false);
-    bool WinUIFocusPeerItemForTesting(const wxTreeItemId& item);
-    bool WinUISetPeerExpandedForTesting(const wxTreeItemId& item,
-                                        bool expanded);
-    bool WinUIIsPeerExpandedForTesting(
-        const wxTreeItemId& item) const;
-    bool WinUIKeyDownForTesting(int keyCode,
-                                bool controlDown = false,
-                                bool shiftDown = false,
-                                bool altDown = false);
-    bool WinUIBeginInternalDragForTesting(const wxTreeItemId& item);
-    bool WinUICompleteInternalDragForTesting(
-        const wxTreeItemId& target,
-        WinUIDragCompletionForTesting completion);
-    bool WinUICompletePeerDragForTesting(
-        const wxTreeItemId& target,
-        bool dropResultNone);
-    bool WinUIScheduleLabelEditForTesting(
-        const wxTreeItemId& item);
-    bool WinUIFireLabelEditDelayForTesting();
-    bool WinUIClickStateImageForTesting(
-        const wxTreeItemId& item);
-    bool WinUIDoubleClickItemForTesting(
-        const wxTreeItemId& item);
-    bool WinUIRightClickItemForTesting(
-        const wxTreeItemId& item);
-    bool WinUIInvokeItemForTesting(
-        const wxTreeItemId& item);
-    void WinUIPointerPressedForTesting(const wxPoint& point);
-    void WinUIPointerMovedForTesting(const wxPoint& point);
-    void WinUIPointerReleasedForTesting(const wxPoint& point);
-    bool WinUIQueueSelectionCorrectionForTesting();
-    bool WinUIIsPeerSelectionChangeForTesting() const;
-    bool WinUIIsPeerStructureRepairPendingForTesting() const;
-    std::uintptr_t
-    WinUIGetItemPeerIdentityForTesting(const wxTreeItemId& item) const;
-    bool WinUIIsItemAttachedToPeerForTesting(
-        const wxTreeItemId& item) const;
-    size_t WinUIGetPeerChildCountForTesting(
-        const wxTreeItemId& parent = wxTreeItemId()) const;
-    bool WinUIGetMeasuredItemPartsForTesting(
-        const wxTreeItemId& item,
-        WinUIMeasuredItemParts *parts) const;
-    bool WinUIGetPeerIndentForTesting(
-        const wxTreeItemId& item,
-        double *leading,
-        double *trailing) const;
-    bool WinUIIsPeerDropHighlightedForTesting(
-        const wxTreeItemId& item) const;
-    wxString WinUIGetPeerAutomationNameForTesting(
-        const wxTreeItemId& item) const;
-    wxString WinUIGetPeerItemTextForTesting(
-        const wxTreeItemId& item) const;
-    std::uintptr_t WinUIGetPeerItemImageIdentityForTesting(
-        const wxTreeItemId& item) const;
-    bool WinUIRefreshForScaleForTesting(double scale);
-    bool WinUIGetPeerItemImageProjectionForTesting(
-        const wxTreeItemId& item,
-        wxSize *imagePixelSize,
-        wxSize *stateImagePixelSize,
-        std::uint64_t *generation,
-        wxSize *imageDIPSize = nullptr,
-        wxSize *stateImageDIPSize = nullptr) const;
-    WinUIModelStats WinUIGetModelStatsForTesting() const;
-    void WinUIResetModelStatsForTesting();
-    void WinUIClosePeerForTesting();
-    static size_t WinUIGetLiveCallbackStateCountForTesting();
 
 protected:
     bool MSWOnEffectiveLayoutDirectionChanged() override;
@@ -284,6 +173,8 @@ protected:
     void OnImagesChanged() override;
 
 private:
+    friend class wxWinUITreeCtrlTestAccess;
+
     enum class SelectionPreflightResult
     {
         Allowed,
