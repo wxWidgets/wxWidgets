@@ -224,7 +224,10 @@ TEST_CASE_METHOD(HtmlListBoxTestCase, "HtmlListBox::LocalImageAndClientDataLifet
     TestFile imageFile;
     wxImage image(8, 8);
     image.SetRGB(wxRect(0, 0, 8, 8), 0, 80, 160);
-    REQUIRE( image.SaveFile(imageFile.GetName(), wxBITMAP_TYPE_PNG) );
+    // BMP is a standard handler, even when this case runs alone or optional
+    // PNG support is disabled. Don't depend on a prior image test to install
+    // handlers (or on an image next to the executable).
+    REQUIRE( image.SaveFile(imageFile.GetName(), wxBITMAP_TYPE_BMP) );
 
     const wxString imageUrl = wxFileSystem::FileNameToURL(
         wxFileName(imageFile.GetName()));

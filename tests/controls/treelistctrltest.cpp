@@ -22,6 +22,12 @@
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     #include "wx/headerctrl.h"
     #include "wx/weakref.h"
+
+    #ifndef wxHAS_GENERIC_HEADERCTRL
+        #include "wx/msw/private.h"
+        #include "wx/msw/wrapcctl.h"
+        #include "testableframe.h"
+    #endif
 #endif
 
 #include <memory>
@@ -271,8 +277,7 @@ TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::ClearColumnsResetsValues",
 TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::DestructiveColumnCancellation", "[treelistctrl]")
 {
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
-    delete m_treelist;
-    m_treelist = nullptr;
+    m_treelist.reset();
 
     const auto createTreeList =
         []()
@@ -298,12 +303,45 @@ TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::DestructiveColumnCancellat
             REQUIRE( header );
             header->SetSize(0, 0, 320, 40);
 
+#ifdef wxHAS_GENERIC_HEADERCTRL
             wxMouseEvent down(wxEVT_LEFT_DOWN);
             down.SetId(header->GetId());
             down.SetEventObject(header);
             down.SetPosition(wxPoint(90, 1));
             header->ProcessWindowEvent(down);
             REQUIRE( header->HasCapture() );
+#else // native wxMSW header inside the generic data view
+            const HWND hwndNative =
+                ::FindWindowEx(GetHwndOf(header), nullptr, WC_HEADER, nullptr);
+            REQUIRE( hwndNative );
+
+            HDHITTESTINFO hit = {};
+            hit.pt.x = 90;
+            hit.pt.y = 1;
+            const int item = static_cast<int>(::SendMessage(
+                hwndNative, HDM_HITTEST, 0,
+                reinterpret_cast<LPARAM>(&hit)));
+            REQUIRE( item >= 0 );
+
+            // The composite parent doesn't handle native mouse input. Start
+            // the logical gesture with a native notification, not physical
+            // input: no native capture is acquired by this test. Verify the
+            // begin event and acceptance before testing destructive mutation.
+            EventCounter begins(header, wxEVT_HEADER_BEGIN_REORDER);
+            NMHEADER notification = {};
+            notification.hdr.hwndFrom = hwndNative;
+            notification.hdr.idFrom =
+                static_cast<UINT_PTR>(
+                    ::GetWindowLongPtr(hwndNative, GWLP_ID));
+            notification.hdr.code = HDN_BEGINDRAG;
+            notification.iItem = item;
+
+            const LRESULT result = ::SendMessage(
+                ::GetParent(hwndNative), WM_NOTIFY, notification.hdr.idFrom,
+                reinterpret_cast<LPARAM>(&notification));
+            REQUIRE( result == FALSE );
+            REQUIRE( begins.GetCount() == 1 );
+#endif // wxHAS_GENERIC_HEADERCTRL
         };
 
     // Destroying the composite consumes the internal columns. The already
@@ -321,8 +359,11 @@ TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::DestructiveColumnCancellat
         [&](wxHeaderCtrlEvent&)
         {
             ++cancellations;
-            delete wrapper;
+            // The header owns this functor, so all capture access must precede
+            // destruction of the composite and its header.
+            auto* const dying = wrapper;
             wrapper = nullptr;
+            delete dying;
         });
 
     REQUIRE( wrapper->DeleteColumn(0) );
@@ -345,8 +386,9 @@ TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::DestructiveColumnCancellat
         [&](wxHeaderCtrlEvent&)
         {
             ++cancellations;
-            delete view;
+            auto* const dying = view;
             view = nullptr;
+            delete dying;
         });
 
     REQUIRE( wrapper->DeleteColumn(0) );

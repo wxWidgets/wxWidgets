@@ -87,7 +87,7 @@ TEST_CASE_METHOD(HyperlinkCtrlTestCase, "wxHyperlinkCtrl::Click",
     // Invoke the real HyperlinkButtonAutomationPeer instead: this traverses
     // the production Click callback and emits the same wx event without
     // moving or stealing the user's pointer.
-    EventCounter hyperlink(m_hyperlink, wxEVT_HYPERLINK);
+    EventCounter hyperlink(m_hyperlink.get(), wxEVT_HYPERLINK);
     REQUIRE(m_hyperlink->WinUIInvokeForTesting());
     wxYield();
     CHECK(hyperlink.GetCount() == 1);

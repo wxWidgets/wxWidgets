@@ -25,6 +25,11 @@
     #include "wx/headerctrl.h"
     #include "wx/textctrl.h"
     #include "wx/weakref.h"
+
+    #ifndef wxHAS_GENERIC_HEADERCTRL
+        #include "wx/msw/private.h"
+        #include "wx/msw/wrapcctl.h"
+    #endif
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
 
 #if wxUSE_ACCESSIBILITY
@@ -720,6 +725,7 @@ void BeginDataViewHeaderDrag(wxHeaderCtrl* header, int x)
     REQUIRE( header );
     header->SetSize(0, 0, 320, 40);
 
+#ifdef wxHAS_GENERIC_HEADERCTRL
     wxMouseEvent down(wxEVT_LEFT_DOWN);
     down.SetId(header->GetId());
     down.SetEventObject(header);
@@ -727,6 +733,37 @@ void BeginDataViewHeaderDrag(wxHeaderCtrl* header, int x)
     header->ProcessWindowEvent(down);
 
     REQUIRE( header->HasCapture() );
+#else // native wxMSW header inside the generic data view
+    const HWND hwndNative =
+        ::FindWindowEx(GetHwndOf(header), nullptr, WC_HEADER, nullptr);
+    REQUIRE( hwndNative );
+
+    HDHITTESTINFO hit = {};
+    hit.pt.x = x;
+    hit.pt.y = 1;
+    const int item = static_cast<int>(::SendMessage(
+        hwndNative, HDM_HITTEST, 0, reinterpret_cast<LPARAM>(&hit)));
+    REQUIRE( item >= 0 );
+
+    // A wxMouseEvent sent to the composite parent doesn't enter the native
+    // child's mouse handling. Start the logical gesture at its notification
+    // boundary instead: this is not physical input and doesn't acquire native
+    // capture. Acceptance and the begin event verify the state needed by the
+    // cancellation/lifetime assertions below.
+    EventCounter begins(header, wxEVT_HEADER_BEGIN_REORDER);
+    NMHEADER notification = {};
+    notification.hdr.hwndFrom = hwndNative;
+    notification.hdr.idFrom =
+        static_cast<UINT_PTR>(::GetWindowLongPtr(hwndNative, GWLP_ID));
+    notification.hdr.code = HDN_BEGINDRAG;
+    notification.iItem = item;
+
+    const LRESULT result = ::SendMessage(
+        ::GetParent(hwndNative), WM_NOTIFY, notification.hdr.idFrom,
+        reinterpret_cast<LPARAM>(&notification));
+    REQUIRE( result == FALSE );
+    REQUIRE( begins.GetCount() == 1 );
+#endif // wxHAS_GENERIC_HEADERCTRL
 }
 
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
@@ -1655,8 +1692,11 @@ TEST_CASE("wxDVC::GenericSortCancellationIsLifetimeSafe",
             [&](wxHeaderCtrlEvent&)
             {
                 ++cancellations;
-                delete dvc;
+                // Deleting the header also deletes this bound functor: update
+                // its captured outputs before the terminal destruction.
+                auto* const dying = dvc;
                 dvc = nullptr;
+                delete dying;
             });
 
         // Resetting the old key updates its header item, synchronously
@@ -1848,8 +1888,9 @@ TEST_CASE("wxDVC::GenericListColumnDeletionSurvivesDestructiveCancellation",
         [&](wxHeaderCtrlEvent&)
         {
             ++cancellations;
-            delete dvc;
+            auto* const dying = dvc;
             dvc = nullptr;
+            delete dying;
         });
 
     const bool deleted = dvc->DeleteColumn(first);
