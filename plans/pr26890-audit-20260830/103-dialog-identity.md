@@ -1,6 +1,6 @@
 # Plan 103: Preserve public dialog identity and geometry in Window presentation
 
-- Status: TODO
+- Status: IN PROGRESS
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: L (split into independently verified commits)
@@ -50,5 +50,13 @@ If preserving the existing destruction contract requires replacing public object
 
 ## Maintenance
 
-Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
+## Implementation decisions (2026-08-30)
 
+- Window presentation borrows the public dialog's existing HWND through a private presenter entry point. It never swaps HWND pointers or destroys a borrowed public dialog during presenter cleanup.
+- Text/password/colour establish default geometry once during Create; subsequent application Move/SetSize calls remain authoritative. A weak wx identity plus native HWND generation protects callback and presentation boundaries.
+- MessageDialog retains its separately owned presenter shell/native fallback contract. Overlay remains opt-in and may fall back to Window on the same public dialog when applicable.
+- Native non-input tests observe actual visibility, geometry, modal identity and XAML content. They are not a physical-input or external UIA sign-off.
+
+## Maintenance
+
+Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

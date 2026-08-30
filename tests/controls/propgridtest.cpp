@@ -3846,10 +3846,14 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                        [=, &pageCallbacks](wxPropertyGridEvent&)
                        {
                            ++pageCallbacks;
+                           // Child Destroy() is synchronous, unlike TLW
+                           // Destroy(). Explicitly retain these targets so
+                           // this exercises scheduled, still-live objects
+                           // without deleting the manager-owned grid first.
                            if ( target == DestroyTarget::Grid )
-                               grid->Destroy();
+                               wxTheApp->ScheduleForDestruction(grid);
                            else if ( target == DestroyTarget::Manager )
-                               manager->Destroy();
+                               wxTheApp->ScheduleForDestruction(manager);
                            else
                                frame->Destroy();
                        });
@@ -3867,6 +3871,13 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
             CHECK( pageCallbacks == 1 );
             CHECK( managerCallbacks == 0 );
+            CHECK( weakGrid );
+            CHECK( weakManager );
+            CHECK( weakFrame );
+            if ( target == DestroyTarget::Grid )
+                CHECK( wxTheApp->IsScheduledForDestruction(grid) );
+            else if ( target == DestroyTarget::Manager )
+                CHECK( wxTheApp->IsScheduledForDestruction(manager) );
 
             // For the isolated grid case, retire its manager before draining:
             // the manager owns the internal grid pointer by contract.

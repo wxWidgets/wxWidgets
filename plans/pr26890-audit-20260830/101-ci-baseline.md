@@ -1,6 +1,6 @@
 # Plan 101: Restore existing-port builds and execute the WinUI runtime CI
 
-- Status: PARTIAL LOCAL PASS / OPEN
+- Status: LOCAL PASS / REMOTE PENDING
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: L (expanded by reproduced cross-port regressions)
@@ -98,6 +98,9 @@ If installation reaches a different package/dependency error, retain the evidenc
 - Composed changes now track the owning page independently from the displayed page. Toolbar rollback realizes restored native buttons, with native button-count assertions. Two fixtures distinguish legitimate destination-page resize notifications and avoid reading a lambda capture after deleting its owner. The final-page count assertion now follows the existing public zero-page contract, retaining the internal page-identity check.
 - Full WinUI PropertyGrid is still FAIL in both linkages: `Retained_page_dispatch_stops_at_each_destroy_boundary`, target 0, SIGSEGV after 413 successful assertions. This separate failure is being isolated; the passing MSW suite and focused WinUI sections do not qualify the full WinUI suite.
 - Non-input execution explicitly sets `WX_UI_TESTS=0`, including the WinUI CI job. An inherited tree-selection test which ignored that opt-out now respects it on its system-input branch.
+- The retained-page test was calling synchronous child `Destroy()`, leaving its manager with a freed internal grid. It now explicitly schedules the child/manager and asserts that they remain live and scheduled during dispatch; top-level destruction still uses `Destroy()`. Dispatch suppression and eventual destruction assertions remain unchanged. No production change was needed for this fixture.
+- Full WinUI PropertyGrid now passes in both linkages: shared 1175 assertions / 2 cases, static 1179 / 2, `audit101-propgrid-all-pass.log`. Rebuilds exit 0 (`audit101-pg-retained-build.log`). All tested local regressions in this lot are now passing; remote platform coverage is still pending.
+- Published normal merge/fixes through 0080db6c16. GitHub now reports MERGEABLE and has started Actions, including both WinUI jobs (MSW builds run 33314769703). No history rewrite. Local final smoke + Supported V0 gates pass 1162 assertions / 90 cases per linkage (`audit101-final-gates.log` and `.xml`).
 
 ## Maintenance
 
