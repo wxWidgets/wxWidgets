@@ -1617,6 +1617,11 @@ WX_DECLARE_HASH_MAP(wxPropertyGrid*, wxArrayPGObject*,
 DeletedObjects gs_deletedEditorObjects;
 #endif
 
+// Invalidate the owner before its derived state or any editor is destroyed.
+// Unlike detachment, this must also cover forwarders on nested/custom children
+// which may outlive the wxPropertyGrid destructor on every platform.
+void DisconnectPropertyGridEditorForwarders(wxPropertyGrid* grid);
+
 #ifdef __WXMSW__
 // Defined after wxPropertyGridEditorEventForwarder itself. This helper only
 // removes forwarders installed by SetupChildEventHandling(), never an
@@ -2268,6 +2273,7 @@ void wxPropertyGrid::Init2()
 
 wxPropertyGrid::~wxPropertyGrid()
 {
+    DisconnectPropertyGridEditorForwarders(this);
     SendDestroyEvent();
 
 #if wxUSE_THREADS
@@ -7670,7 +7676,8 @@ class wxPropertyGridEditorEventForwarder : public wxEvtHandler
 public:
     wxPropertyGridEditorEventForwarder( wxPropertyGrid* propGrid )
         : wxEvtHandler(),
-          m_propGrid(propGrid),
+          m_propGrid(propGrid->IsBeingDeleted() ? nullptr : propGrid),
+          m_gridIdentity(propGrid),
           m_registryNext(ms_firstForwarder)
     {
         ms_firstForwarder = this;
@@ -7693,10 +7700,22 @@ public:
               forwarder = forwarder->m_registryNext )
         {
             if ( forwarder == handler )
-                return forwarder->m_propGrid == grid;
+                return forwarder->m_gridIdentity == grid;
         }
 
         return false;
+    }
+
+    static void DisconnectFromGrid(wxPropertyGrid* grid)
+    {
+        for ( wxPropertyGridEditorEventForwarder* forwarder =
+                  ms_firstForwarder;
+              forwarder;
+              forwarder = forwarder->m_registryNext )
+        {
+            if ( forwarder->m_propGrid == grid )
+                forwarder->m_propGrid = nullptr;
+        }
     }
 
 private:
@@ -7706,6 +7725,9 @@ private:
         event.Skip();
 
         wxPropertyGrid* const propGrid = m_propGrid;
+        if ( !propGrid )
+            return wxEvtHandler::ProcessEvent(event);
+
         const wxWeakRef<wxWindow> weakGrid(propGrid);
 
         // Keep editor objects alive for the entire forwarding transaction, not
@@ -7747,6 +7769,9 @@ private:
     }
 
     wxPropertyGrid* m_propGrid;
+    // Opaque identity retained only for the existing deferred-detachment
+    // bookkeeping. It must never be dereferenced after DisconnectFromGrid().
+    const wxPropertyGrid* const m_gridIdentity;
     wxPropertyGridEditorEventForwarder* m_registryNext;
     static wxPropertyGridEditorEventForwarder* ms_firstForwarder;
 };
@@ -7756,6 +7781,11 @@ wxPropertyGridEditorEventForwarder*
 
 namespace
 {
+
+void DisconnectPropertyGridEditorForwarders(wxPropertyGrid* grid)
+{
+    wxPropertyGridEditorEventForwarder::DisconnectFromGrid(grid);
+}
 
 #ifdef __WXMSW__
 void

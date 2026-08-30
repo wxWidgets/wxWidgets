@@ -6786,4 +6786,134 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         SUCCEED();
     }
 }
+
+TEST_CASE("PropertyGrid::EditorForwarderOwnerLifetime",
+          "[propgrid][propgrid-editor-lifetime]")
+{
+    class TestGrid final : public wxPropertyGrid
+    {
+    public:
+        using wxPropertyGrid::wxPropertyGrid;
+        using wxPropertyGrid::SetupChildEventHandling;
+    };
+
+    class ForwardedChild final : public wxWindow
+    {
+    public:
+        using wxWindow::wxWindow;
+
+        ~ForwardedChild() override
+        {
+            // Exercise the real child-destruction event while the parent's
+            // wxPropertyGrid subobject has already been destroyed. The child
+            // owns the handlers it pushes, just as an editor control does.
+            SendDestroyEvent();
+            while ( GetEventHandler() != this )
+                delete PopEventHandler(false);
+        }
+    };
+
+    class ButtonProperty final : public wxStringProperty
+    {
+    public:
+        explicit ButtonProperty(int& buttonEvents)
+            : wxStringProperty("Editable", wxPG_LABEL, "before"),
+              m_buttonEvents(buttonEvents)
+        {
+        }
+
+        bool OnEvent(wxPropertyGrid* grid,
+                     wxWindow* WXUNUSED(control),
+                     wxEvent& event) override
+        {
+            if ( grid->IsMainButtonEvent(event) )
+                ++m_buttonEvents;
+            return false;
+        }
+
+    private:
+        int& m_buttonEvents;
+    };
+
+    int buttonEvents = 0;
+    int childEvents = 0;
+    int childDestroyEvents = 0;
+    bool ownerDestroyEvent = false;
+    bool childDestroyedAfterGridSubobject = false;
+    std::unique_ptr<TestGrid> grid(
+        new TestGrid(wxTheApp->GetTopWindow(), wxID_ANY,
+                     wxDefaultPosition, wxSize(360, 220)));
+    wxPGProperty* const property = grid->Append(new ButtonProperty(buttonEvents));
+    grid->SetPropertyEditor(property, wxPGEditor_TextCtrlAndButton);
+    REQUIRE( grid->SelectProperty(property) );
+    wxTextCtrl* const text = grid->GetEditorTextCtrl();
+    wxWindow* const button = grid->GetEditorControlSecondary();
+    REQUIRE( text );
+    REQUIRE( button );
+
+    // Keep both live forwarding contracts: Enter commits the text value and
+    // the secondary button reaches the property exactly once.
+    text->ChangeValue("after");
+    grid->EditorsValueWasModified();
+    wxCommandEvent enter(wxEVT_TEXT_ENTER, text->GetId());
+    enter.SetEventObject(text);
+    CHECK( text->GetEventHandler()->ProcessEvent(enter) );
+    CHECK( property->GetValue().GetString() == "after" );
+    wxCommandEvent click(wxEVT_BUTTON, button->GetId());
+    click.SetEventObject(button);
+    CHECK( button->GetEventHandler()->ProcessEvent(click) );
+    CHECK( buttonEvents == 1 );
+
+    // A custom child need not be one of the two currently tracked editor
+    // roots. It remains a child until the base window destroys its children.
+    ForwardedChild* const child =
+        new ForwardedChild(grid.get(), wxID_ANY);
+    grid->SetupChildEventHandling(child);
+    const wxWeakRef<wxWindow> weakChild(child);
+    child->Bind(wxEVT_BUTTON,
+                [&childEvents](wxCommandEvent&)
+                {
+                    ++childEvents;
+                });
+    child->Bind(wxEVT_DESTROY,
+                [&](wxWindowDestroyEvent& event)
+                {
+                    if ( event.GetEventObject() == child )
+                    {
+                        ++childDestroyEvents;
+                        childDestroyedAfterGridSubobject =
+                            !wxDynamicCast(child->GetParent(), wxPropertyGrid);
+                    }
+                    event.Skip();
+                });
+    const auto sendChildEvent = [child]()
+    {
+        wxCommandEvent event(wxEVT_BUTTON, child->GetId());
+        event.SetEventObject(child);
+        return child->GetEventHandler()->ProcessEvent(event);
+    };
+    CHECK( sendChildEvent() );
+    CHECK( childEvents == 1 );
+    TestGrid* const owner = grid.get();
+    grid->Bind(wxEVT_DESTROY,
+               [&](wxWindowDestroyEvent& event)
+               {
+                   if ( event.GetEventObject() == owner )
+                   {
+                       ownerDestroyEvent = true;
+                       CHECK( sendChildEvent() );
+                       CHECK( childEvents == 2 );
+                   }
+                   event.Skip();
+               });
+
+    grid.reset();
+    CHECK( ownerDestroyEvent );
+    CHECK( childEvents == 2 );
+    CHECK( childDestroyEvents == 1 );
+    CHECK( childDestroyedAfterGridSubobject );
+    CHECK_FALSE( weakChild );
+    CHECK( buttonEvents == 1 );
+}
+
 #endif // wxUSE_PROPGRID
