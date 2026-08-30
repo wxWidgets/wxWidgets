@@ -337,11 +337,26 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     return true;
 }
 
-bool wxToolBar::DoDeleteTool(size_t /* pos */, wxToolBarToolBase *toolBase)
+bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
+    const auto actions = GetQToolBar()->actions();
+    wxCHECK_MSG( pos < static_cast<size_t>(actions.size()), false,
+                 "invalid Qt toolbar action position" );
+
+    // Removing just the widget leaves its action in QWidget::actions(), but
+    // not in the toolbar layout. Reinserting at that position then gives Qt
+    // an invalid 'before' action, so remove both representations together.
+    QAction* const action = actions.at(static_cast<int>(pos));
+    GetQToolBar()->removeAction(action);
     delete tool->m_qtToolButton;
     tool->m_qtToolButton = nullptr;
+
+    // A control tool's QWidgetAction also owns its native widget. Leave this
+    // action owned by the toolbar: the wx wrapper must destroy the control,
+    // not just its native widget, when the tool itself is deleted.
+    if ( !tool->IsControl() )
+        delete action;
 
     InvalidateBestSize();
     return true;

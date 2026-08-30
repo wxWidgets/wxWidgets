@@ -113,6 +113,18 @@ If installation reaches a different package/dependency error, retain the evidenc
 - The remaining Qt FileCtrl crash was reproduced: selectionChanged dispatched an application callback that deleted the native view, then continued in QTreeView; SetItem likewise continued through a deleted model. The fix invokes the Qt base before application notification and checks QPointer lifetime after each callback/selection boundary. The unchanged crashing fixture passes 28 assertions with only the fixed production DLL; the strengthened fixture passes 31.
 - Final Qt `[filesystemctrl]`: 215 assertions / 6 cases, exit 0, approximately 68 seconds. No input injection; `WX_UI_TESTS=0`, private desktop, explicit Qt bin/plugin paths. Logs: audit101-qt-filesystem-final.log and audit101-qt-filesystem-crash-stack.log. Qt 6.10 remains a remote coverage requirement.
 
+### CI on 1cd4017b5a
+
+- GitHub Actions run 33316310653: both `wxWinUI CMake Release x64 shared` (job 99270302085) and `wxWinUI CMake Release x64 static` (job 99270301994) finished SUCCESS. Build, pinned runtime registration, runtime smoke and Supported V0 each executed successfully; neither runtime gate was skipped.
+- This confirms the Windows Server DDLM registration fix on the published SHA. It does not qualify the later local 104-106 changes or their new installed-consumer steps, which were not present at that SHA.
+- Existing-port runtime failures remain OPEN. Local Qt/PropertyGrid corrections and the GTK compilation check continue before publishing the next bounded batch.
+
 ## Maintenance
+
+### Cross-platform callback follow-up
+
+- Qt toolbar removal left an action in the widget action list after removing its layout widget. Reinsertion during PropertyGrid rollback then crashed inside Qt. Removing the action and widget coherently fixes the unchanged rollback case (16 assertions); embedded control ownership remains with its wx wrapper. Log: `F:\wxwinui-pr26890-qt-audit-build\audit101-propgrid-toolbar-rollback-full.log`.
+- GTK3 Debug/shared now compiles and links the full `test_gui` target (GCC 11.4, GTK 3.24.33, Ubuntu 22.04 WSL). The filesystem regression fixture needed its explicit generic FileCtrl header. Log: `F:\wxwinui-pr26890-gtk-audit-build\audit101-build-test_gui-retry.log`, exit 0. This is compile-only evidence; no GTK display/runtime test was executed. Two unused WinUI-only fixture helpers are being corrected separately.
+
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

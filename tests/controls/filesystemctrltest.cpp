@@ -20,6 +20,7 @@
 #include "wx/file.h"
 #include "wx/filectrl.h"
 #include "wx/filename.h"
+#include "wx/generic/filectrlg.h"
 #include "wx/listctrl.h"
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
