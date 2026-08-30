@@ -9,7 +9,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/toplevel.h"
+#include "wx/scopeguard.h"
+#include "wx/weakref.h"
 #include "wx/qt/private/converter.h"
+#include <QtCore/QPointer>
 #include <QtGui/QIcon>
 #include <QtWidgets/QWidget>
 
@@ -48,13 +51,40 @@ bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
 
 bool wxTopLevelWindowQt::Show(bool show)
 {
+    const wxWeakRef<wxTopLevelWindowQt> self(this);
+    const QPointer<QWidget> widget(GetHandle());
     if ( !wxTopLevelWindowBase::Show(show) )
         return false;
 
-    if ( show && !m_qtWindow->isActiveWindow() )
-        m_qtWindow->activateWindow();
+    // Showing the native window can dispatch events and destroy its wx owner.
+    if ( show && self && widget &&
+         !widget->testAttribute(Qt::WA_ShowWithoutActivating) &&
+         !widget->isActiveWindow() )
+    {
+        widget->activateWindow();
+    }
 
     return true;
+}
+
+void wxTopLevelWindowQt::ShowWithoutActivating()
+{
+    const QPointer<QWidget> widget(GetHandle());
+    wxCHECK_RET( widget, "Cannot show an uncreated top-level window" );
+
+    const bool wasWithoutActivating =
+        widget->testAttribute(Qt::WA_ShowWithoutActivating);
+    wxON_BLOCK_EXIT0(([widget, wasWithoutActivating]()
+    {
+        if ( widget )
+            widget->setAttribute(Qt::WA_ShowWithoutActivating,
+                                 wasWithoutActivating);
+    }));
+
+    // Keep the normal wx show path (including derived dialog initialization),
+    // but suppress both Qt's implicit activation and our explicit activation.
+    widget->setAttribute(Qt::WA_ShowWithoutActivating);
+    Show(true);
 }
 
 void wxTopLevelWindowQt::Maximize(bool maximize)

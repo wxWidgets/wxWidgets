@@ -122,7 +122,10 @@ void wxToolBarTool::SetDropdownMenu(wxMenu* menu)
 
 void wxToolBarTool::SetIcon()
 {
-    m_qtToolButton->setIcon( QIcon( *GetNormalBitmap().GetHandle() ));
+    // Text-only tools, including Toolbook pages without an image list, have
+    // no native pixmap. An empty bitmap also clears an existing tool icon.
+    const wxBitmap bitmap = GetNormalBitmap();
+    m_qtToolButton->setIcon(bitmap.IsOk() ? QIcon(*bitmap.GetHandle()) : QIcon());
 }
 
 void wxToolBarTool::ClearToolTip()

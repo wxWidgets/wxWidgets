@@ -22,6 +22,11 @@
 #include "wx/imaglist.h"
 #include "bookctrlbasetest.h"
 
+#ifdef __WXQT__
+    #include <QtWidgets/QToolBar>
+    #include <QtWidgets/QToolButton>
+#endif
+
 #include <functional>
 #include <memory>
 #include <utility>
@@ -164,6 +169,45 @@ TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::ToolBar", "[toolbook][ToolbookTest
     CHECK(toolbar);
     CHECK(toolbar->GetToolsCount() == 3);
 }
+
+#ifdef __WXQT__
+TEST_CASE("Toolbook::TextOnlyPageAndClearedIcon", "[toolbook][toolbar][qt]")
+{
+    wxToolbook book(wxTheApp->GetTopWindow(), wxID_ANY,
+                    wxDefaultPosition, wxSize(400, 200));
+    wxPanel* const page = new wxPanel(&book);
+    REQUIRE(book.AddPage(page, "Text-only page", true));
+    book.Realize();
+
+    wxToolBar* const toolbar = static_cast<wxToolBar*>(book.GetToolBar());
+    REQUIRE(toolbar);
+    REQUIRE(toolbar->GetToolsCount() == 1);
+    wxToolBarToolBase* const tool = toolbar->GetToolByPos(0);
+    REQUIRE(tool);
+    CHECK_FALSE(tool->GetNormalBitmapBundle().IsOk());
+    CHECK(book.GetSelection() == 0);
+
+    QToolBar* const nativeToolbar = toolbar->GetQToolBar();
+    REQUIRE(nativeToolbar);
+    REQUIRE(nativeToolbar->actions().size() == 1);
+    QToolButton* const nativeButton = qobject_cast<QToolButton*>(
+        nativeToolbar->widgetForAction(nativeToolbar->actions().front()));
+    REQUIRE(nativeButton);
+    CHECK(nativeButton->icon().isNull());
+
+    const wxBitmap bitmap(16, 16);
+    REQUIRE(bitmap.IsOk());
+    toolbar->SetToolNormalBitmap(page->GetId(), bitmap);
+    CHECK(tool->GetNormalBitmapBundle().IsOk());
+    CHECK_FALSE(nativeButton->icon().isNull());
+
+    toolbar->SetToolNormalBitmap(page->GetId(), wxBitmapBundle());
+    CHECK_FALSE(tool->GetNormalBitmapBundle().IsOk());
+    CHECK(nativeButton->icon().isNull());
+    CHECK(book.GetPageCount() == 1);
+    CHECK(book.GetSelection() == 0);
+}
+#endif // __WXQT__
 
 TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::VetoRestoresToolById",
                  "[toolbook][ToolbookTestCase]")

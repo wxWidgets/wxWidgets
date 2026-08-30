@@ -23,6 +23,11 @@
 
 #include "testableframe.h"
 
+#ifdef __WXQT__
+    #include <QtWidgets/QApplication>
+    #include <QtWidgets/QWidget>
+#endif
+
 class DestroyOnScopeExit
 {
 public:
@@ -115,3 +120,54 @@ TEST_CASE("wxTopLevel::ShowEvent", "[tlw][show][event]")
 
     CHECK( countShow.WaitEvent() );
 }
+
+#ifdef __WXQT__
+TEST_CASE("wxTopLevel::ShowWithoutActivating", "[tlw][show][qt]")
+{
+    wxFrame* const active = new wxFrame(nullptr, wxID_ANY, "Active frame");
+    DestroyOnScopeExit destroyActive(active);
+    REQUIRE(active->Show());
+    wxYield();
+
+    // Establish a real Qt active-window baseline, without physical input or
+    // assuming that the window manager activated a newly shown window.
+    QApplication::setActiveWindow(active->GetHandle());
+    REQUIRE(QApplication::activeWindow() == active->GetHandle());
+
+    wxFrame* const frame = new wxFrame(nullptr, wxID_ANY, "Inactive frame");
+    DestroyOnScopeExit destroy(frame);
+    QWidget* const widget = frame->GetHandle();
+    REQUIRE_FALSE(widget->testAttribute(Qt::WA_ShowWithoutActivating));
+
+    frame->ShowWithoutActivating();
+    wxYield();
+    CHECK(frame->IsShown());
+    CHECK(widget->isVisible());
+    CHECK(QApplication::activeWindow() == active->GetHandle());
+    CHECK_FALSE(widget->isActiveWindow());
+    CHECK_FALSE(widget->testAttribute(Qt::WA_ShowWithoutActivating));
+
+    // Calling it on an already visible window must not activate it either.
+    frame->ShowWithoutActivating();
+    wxYield();
+    CHECK(QApplication::activeWindow() == active->GetHandle());
+    CHECK_FALSE(widget->testAttribute(Qt::WA_ShowWithoutActivating));
+
+    REQUIRE(frame->Hide());
+    widget->setAttribute(Qt::WA_ShowWithoutActivating);
+    frame->ShowWithoutActivating();
+    wxYield();
+    CHECK(frame->IsShown());
+    CHECK(widget->testAttribute(Qt::WA_ShowWithoutActivating));
+    CHECK(QApplication::activeWindow() == active->GetHandle());
+
+    REQUIRE(frame->Hide());
+    widget->setAttribute(Qt::WA_ShowWithoutActivating, false);
+    EventCounter countActivate(frame, wxEVT_ACTIVATE);
+    REQUIRE(frame->Show());
+    CHECK(countActivate.WaitEvent());
+    CHECK(frame->IsShown());
+    CHECK(QApplication::activeWindow() == widget);
+    CHECK_FALSE(widget->testAttribute(Qt::WA_ShowWithoutActivating));
+}
+#endif // __WXQT__
