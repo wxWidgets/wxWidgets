@@ -80,31 +80,6 @@ struct wxWinUIComboAutomationTestState;
 // completion is frozen: only XamlShutdownCompletedOnThread, while holding its
 // DispatcherQueue deferral, may release a retained graph.
 using wxWinUIFrameworkRetirementId = std::uint64_t;
-using wxWinUIFrameworkRetirementPhaseHookForTesting = void (*)(void *);
-
-struct wxWinUIFrameworkRetirementSnapshotForTesting
-{
-    std::size_t entries = 0;
-    std::size_t unboundEntries = 0;
-    std::size_t queueStates = 0;
-    std::size_t shutdownStartingHooks = 0;
-    std::size_t frameworkStartingHooks = 0;
-    std::size_t frameworkHooks = 0;
-    std::size_t shutdownHooks = 0;
-    std::size_t activeStates = 0;
-    std::size_t shutdownStartingStates = 0;
-    std::size_t frameworkStartingStates = 0;
-    std::size_t xamlCompletedStates = 0;
-    std::size_t frameworkDoneStates = 0;
-    std::size_t shutdownDoneStates = 0;
-    bool xamlShutdownHookInstalled = false;
-    bool rundown = false;
-    bool xamlTerminal = false;
-    bool xamlCompletionActive = false;
-    bool runtimeTerminal = false;
-    bool phaseOrderValid = true;
-};
-
 wxWinUIFrameworkRetirementId wxWinUIRegisterFrameworkRetirement(
     const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue,
     std::function<void ()> complete) noexcept;
@@ -117,33 +92,6 @@ void wxWinUICompleteFrameworkRetirement(
 // bootstrap code.
 bool wxWinUIBeginFrameworkRetirementRuntime(
     const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue) noexcept;
-
-// Deterministic internal seams publish the same five shutdown facts without
-// shutting down the suite's process-wide dispatcher. Only the XAML seam
-// consumes retained entries.
-void wxWinUISimulateShutdownStartingForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-    void *context = nullptr) noexcept;
-void wxWinUISimulateFrameworkShutdownStartingForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-    void *context = nullptr) noexcept;
-void wxWinUISimulateFrameworkShutdownCompletedForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-    void *context = nullptr) noexcept;
-void wxWinUISimulateShutdownCompletedForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-    void *context = nullptr) noexcept;
-void wxWinUISimulateXamlShutdownCompletedForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-    void *context = nullptr) noexcept;
-void wxWinUIResetFrameworkRetirementRuntimeForTesting(
-    const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue) noexcept;
-void wxWinUISetFrameworkRetirementHookFaultForTesting(
-    unsigned faultMask) noexcept;
-unsigned wxWinUIGetFrameworkRetirementHookFaultForTesting() noexcept;
-wxWinUIFrameworkRetirementSnapshotForTesting
-wxWinUIGetFrameworkRetirementSnapshotForTesting() noexcept;
-std::size_t wxWinUIGetFrameworkRetirementCountForTesting() noexcept;
 
 // Some WinUI controls own callback-bearing popup/template graphs outside the
 // shared island's normal visual tree. Physical detachment of their slot is

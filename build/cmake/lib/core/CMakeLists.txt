@@ -217,6 +217,7 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/textdlg.cpp"
             "${wxSOURCE_DIR}/src/winui/notebook.cpp"
             "${wxSOURCE_DIR}/src/winui/toolbar.cpp"
+            "${wxSOURCE_DIR}/src/winui/winui.cpp"
             "${wxSOURCE_DIR}/tests/winui/test-support/combobox-uia-helper.cpp")
         # Source properties must be visible where the owning target is
         # created: core here, or the parent directory in monolithic builds.

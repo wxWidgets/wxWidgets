@@ -14,6 +14,9 @@
 #if wxUSE_WINUI3
 
 #include "private.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "runtime-test-access.h"
+#endif
 #include "wx/winui/private/inputtest.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
@@ -82,7 +85,9 @@ winrt::Microsoft::UI::Xaml::Hosting::WindowsXamlManager
 winrt::Microsoft::UI::Xaml::Application gs_winuiApplication{ nullptr };
 winrt::event_token gs_winuiXamlShutdownRetirementToken{};
 bool gs_winuiXamlShutdownRetirementHookInstalled = false;
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<unsigned> gs_winuiFrameworkRetirementHookFaultForTesting{0};
+#endif
 
 // A quarantined XAML epoch must outlive both CRT static destruction and a
 // possible shared-library unload. The holder itself is allocated only on the
@@ -142,8 +147,10 @@ bool wxWinUIPinOwnerModuleForQuarantine() noexcept
     return true;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 constexpr unsigned wxWinUIRejectFrameworkRetirementHook = 1u;
 constexpr unsigned wxWinUIRejectShutdownRetirementHook = 2u;
+#endif
 
 // These faults are intentionally unreachable unless a dedicated subprocess
 // supplies both exact environment variables. Consume and erase the guard at
@@ -887,8 +894,10 @@ public:
     }
 
     void CompleteAtXamlBoundary(
-        wxWinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
+#ifdef WXWINUI_TEST_SUPPORT
+        wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook = nullptr,
         void *context = nullptr,
+#endif
         bool releaseApplication = false) noexcept
     {
         if ( m_quarantined || m_xamlTerminal )
@@ -909,7 +918,9 @@ public:
         // re-enter registration. Every release below is protected by the
         // XamlShutdownCompletedOnThread DispatcherQueue deferral owned by the
         // caller.
+#ifdef WXWINUI_TEST_SUPPORT
         InvokeHook(hook, context);
+#endif
         CompleteAllEntries();
 
         // Application::Current() is itself a XAML root. Release it only after
@@ -976,8 +987,9 @@ public:
                m_entries.empty();
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     void SimulateShutdownStartingForTesting(
-        wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+        wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
         void *context) noexcept
     {
         SimulatePhaseForTesting(
@@ -985,7 +997,7 @@ public:
     }
 
     void SimulateFrameworkShutdownStartingForTesting(
-        wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+        wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
         void *context) noexcept
     {
         SimulatePhaseForTesting(
@@ -993,7 +1005,7 @@ public:
     }
 
     void SimulateFrameworkShutdownCompletedForTesting(
-        wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+        wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
         void *context) noexcept
     {
         SimulatePhaseForTesting(
@@ -1001,7 +1013,7 @@ public:
     }
 
     void SimulateShutdownCompletedForTesting(
-        wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+        wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
         void *context) noexcept
     {
         SimulatePhaseForTesting(
@@ -1041,10 +1053,10 @@ public:
         return m_entries.size();
     }
 
-    wxWinUIFrameworkRetirementSnapshotForTesting
+    wxWinUIRuntimeTestAccess::FrameworkRetirementSnapshot
     GetSnapshotForTesting() const noexcept
     {
-        wxWinUIFrameworkRetirementSnapshotForTesting snapshot;
+        wxWinUIRuntimeTestAccess::FrameworkRetirementSnapshot snapshot;
         snapshot.entries = m_entries.size();
         snapshot.queueStates = m_queues.size();
         snapshot.rundown = m_rundown;
@@ -1085,6 +1097,7 @@ public:
 
         return snapshot;
     }
+#endif
 
 private:
     enum class QueuePhase
@@ -1153,9 +1166,11 @@ private:
             state.generation = ++m_nextGeneration;
 
         const std::uint64_t generation = state.generation;
+#ifdef WXWINUI_TEST_SUPPORT
         const unsigned hookFault =
             gs_winuiFrameworkRetirementHookFaultForTesting.load(
                 std::memory_order_acquire);
+#endif
 
         try
         {
@@ -1167,10 +1182,13 @@ private:
                 {
                     wxWinUIFrameworkRetirementRuntime::Get().ObservePhase(
                         generation,
-                        QueuePhase::ShutdownStarting,
-                        false,
+                        QueuePhase::ShutdownStarting
+#ifdef WXWINUI_TEST_SUPPORT
+                        , false,
                         nullptr,
-                        nullptr);
+                        nullptr
+#endif
+                        );
                 });
             state.shutdownStartingHookInstalled = true;
         }
@@ -1190,10 +1208,13 @@ private:
                 {
                     wxWinUIFrameworkRetirementRuntime::Get().ObservePhase(
                         generation,
-                        QueuePhase::FrameworkStarting,
-                        false,
+                        QueuePhase::FrameworkStarting
+#ifdef WXWINUI_TEST_SUPPORT
+                        , false,
                         nullptr,
-                        nullptr);
+                        nullptr
+#endif
+                        );
                 });
             state.frameworkStartingHookInstalled = true;
         }
@@ -1204,7 +1225,9 @@ private:
         }
 
         const bool rejectFrameworkHook =
+#ifdef WXWINUI_TEST_SUPPORT
             (hookFault & wxWinUIRejectFrameworkRetirementHook) != 0 ||
+#endif
             runtimeFault ==
                 wxWinUIRuntimeFaultForTesting::RejectRequiredQueueHook;
         const bool suppressFrameworkCompleted =
@@ -1227,10 +1250,13 @@ private:
                         wxWinUIFrameworkRetirementRuntime::Get()
                             .ObservePhase(
                                 generation,
-                                QueuePhase::FrameworkCompleted,
-                                false,
+                                QueuePhase::FrameworkCompleted
+#ifdef WXWINUI_TEST_SUPPORT
+                                , false,
                                 nullptr,
-                                nullptr);
+                                nullptr
+#endif
+                                );
                     });
                 state.frameworkHookInstalled = true;
             }
@@ -1241,7 +1267,9 @@ private:
             }
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( !(hookFault & wxWinUIRejectShutdownRetirementHook) )
+#endif
         {
             try
             {
@@ -1255,10 +1283,13 @@ private:
                         wxWinUIFrameworkRetirementRuntime::Get()
                             .ObservePhase(
                                 generation,
-                                QueuePhase::ShutdownCompleted,
-                                false,
+                                QueuePhase::ShutdownCompleted
+#ifdef WXWINUI_TEST_SUPPORT
+                                , false,
                                 nullptr,
-                                nullptr);
+                                nullptr
+#endif
+                                );
                     });
                 state.shutdownHookInstalled = true;
             }
@@ -1314,10 +1345,13 @@ private:
 
     void ObservePhase(
         std::uint64_t generation,
-        QueuePhase phase,
-        bool synthetic,
-        wxWinUIFrameworkRetirementPhaseHookForTesting hook,
-        void *context) noexcept
+        QueuePhase phase
+#ifdef WXWINUI_TEST_SUPPORT
+        , bool synthetic,
+        wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
+        void *context
+#endif
+        ) noexcept
     {
         auto stateIt = std::find_if(
             m_queues.begin(), m_queues.end(),
@@ -1336,9 +1370,11 @@ private:
                     return;
                 stateIt->shutdownStartingSeen = true;
                 m_rundown = true;
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( synthetic )
                     RevokeShutdownStartingHook(*stateIt);
                 else
+#endif
                 {
                     stateIt->shutdownStartingHookInstalled = false;
                     stateIt->shutdownStartingToken = {};
@@ -1352,9 +1388,11 @@ private:
                 stateIt->frameworkStartingSeen = true;
                 if ( !stateIt->shutdownStartingSeen )
                     m_phaseOrderValid = false;
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( synthetic )
                     RevokeFrameworkStartingHook(*stateIt);
                 else
+#endif
                 {
                     stateIt->frameworkStartingHookInstalled = false;
                     stateIt->frameworkStartingToken = {};
@@ -1372,9 +1410,11 @@ private:
                 {
                     m_phaseOrderValid = false;
                 }
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( synthetic )
                     RevokeFrameworkHook(*stateIt);
                 else
+#endif
                 {
                     stateIt->frameworkHookInstalled = false;
                     stateIt->frameworkToken = {};
@@ -1388,9 +1428,11 @@ private:
                 stateIt->shutdownCompletedSeen = true;
                 if ( !stateIt->frameworkCompletedSeen )
                     m_phaseOrderValid = false;
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( synthetic )
                     RevokeShutdownHook(*stateIt);
                 else
+#endif
                 {
                     stateIt->shutdownHookInstalled = false;
                     stateIt->shutdownToken = {};
@@ -1400,7 +1442,9 @@ private:
 
         // Queue phases publish facts only. In particular, neither completion
         // event destroys callback-bearing XAML graphs.
+#ifdef WXWINUI_TEST_SUPPORT
         InvokeHook(hook, context);
+#endif
     }
 
     void RemoveQueueGenerationIfIdle(std::uint64_t generation) noexcept
@@ -1435,9 +1479,10 @@ private:
         m_queues.erase(it);
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     void SimulatePhaseForTesting(
         QueuePhase phase,
-        wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+        wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
         void *context) noexcept
     {
         try
@@ -1489,6 +1534,7 @@ private:
         }
     }
 
+#endif
     void RevokeAndClearQueues() noexcept
     {
         for ( auto& state : m_queues )
@@ -1625,8 +1671,9 @@ private:
         }
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     static void InvokeHook(
-        wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+        wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
         void *context) noexcept
     {
         if ( !hook )
@@ -1641,6 +1688,7 @@ private:
         }
     }
 
+#endif
     std::vector<QueueGeneration> m_queues;
     std::vector<RetirementEntry> m_entries;
     wxWinUIFrameworkRetirementId m_nextId = 0;
@@ -1764,7 +1812,10 @@ bool wxWinUIEnsureXamlShutdownRetirementHook(
                         }
                         wxWinUIFrameworkRetirementRuntime::Get()
                             .CompleteAtXamlBoundary(
-                                nullptr, nullptr, true);
+#ifdef WXWINUI_TEST_SUPPORT
+                                nullptr, nullptr,
+#endif
+                                true);
                         deferral.Complete();
                     }
                     catch ( const winrt::hresult_error& e )
@@ -2455,69 +2506,70 @@ bool wxWinUIBeginFrameworkRetirementRuntime(
     return wxWinUIFrameworkRetirementRuntime::Get().BeginRuntime(queue);
 }
 
-void wxWinUISimulateShutdownStartingForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIRuntimeTestAccess::SimulateShutdownStarting(
+    wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
     void *context) noexcept
 {
     wxWinUIFrameworkRetirementRuntime::Get()
         .SimulateShutdownStartingForTesting(hook, context);
 }
 
-void wxWinUISimulateFrameworkShutdownStartingForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+void wxWinUIRuntimeTestAccess::SimulateFrameworkShutdownStarting(
+    wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
     void *context) noexcept
 {
     wxWinUIFrameworkRetirementRuntime::Get()
         .SimulateFrameworkShutdownStartingForTesting(hook, context);
 }
 
-void wxWinUISimulateFrameworkShutdownCompletedForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+void wxWinUIRuntimeTestAccess::SimulateFrameworkShutdownCompleted(
+    wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
     void *context) noexcept
 {
     wxWinUIFrameworkRetirementRuntime::Get()
         .SimulateFrameworkShutdownCompletedForTesting(hook, context);
 }
 
-void wxWinUISimulateShutdownCompletedForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+void wxWinUIRuntimeTestAccess::SimulateShutdownCompleted(
+    wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
     void *context) noexcept
 {
     wxWinUIFrameworkRetirementRuntime::Get()
         .SimulateShutdownCompletedForTesting(hook, context);
 }
 
-void wxWinUISimulateXamlShutdownCompletedForTesting(
-    wxWinUIFrameworkRetirementPhaseHookForTesting hook,
+void wxWinUIRuntimeTestAccess::SimulateXamlShutdownCompleted(
+    wxWinUIRuntimeTestAccess::FrameworkRetirementPhaseHook hook,
     void *context) noexcept
 {
     wxWinUIFrameworkRetirementRuntime::Get()
         .CompleteAtXamlBoundary(hook, context);
 }
 
-void wxWinUIResetFrameworkRetirementRuntimeForTesting(
+void wxWinUIRuntimeTestAccess::ResetFrameworkRetirementRuntime(
     const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue) noexcept
 {
     wxWinUIFrameworkRetirementRuntime::Get().ResetForTesting(queue);
 }
 
-void wxWinUISetFrameworkRetirementHookFaultForTesting(
+void wxWinUIRuntimeTestAccess::SetFrameworkRetirementHookFault(
     unsigned faultMask) noexcept
 {
     gs_winuiFrameworkRetirementHookFaultForTesting.store(
         faultMask, std::memory_order_release);
 }
 
-unsigned wxWinUIGetFrameworkRetirementHookFaultForTesting() noexcept
+unsigned wxWinUIRuntimeTestAccess::GetFrameworkRetirementHookFault() noexcept
 {
     return gs_winuiFrameworkRetirementHookFaultForTesting.load(
         std::memory_order_acquire);
 }
 
-wxWinUIFrameworkRetirementSnapshotForTesting
-wxWinUIGetFrameworkRetirementSnapshotForTesting() noexcept
+wxWinUIRuntimeTestAccess::FrameworkRetirementSnapshot
+wxWinUIRuntimeTestAccess::GetFrameworkRetirementSnapshot() noexcept
 {
-    wxWinUIFrameworkRetirementSnapshotForTesting snapshot =
+    wxWinUIRuntimeTestAccess::FrameworkRetirementSnapshot snapshot =
         wxWinUIFrameworkRetirementRuntime::Get()
             .GetSnapshotForTesting();
     snapshot.xamlShutdownHookInstalled =
@@ -2525,12 +2577,13 @@ wxWinUIGetFrameworkRetirementSnapshotForTesting() noexcept
     return snapshot;
 }
 
-std::size_t wxWinUIGetFrameworkRetirementCountForTesting() noexcept
+std::size_t wxWinUIRuntimeTestAccess::GetFrameworkRetirementCount() noexcept
 {
     return wxWinUIFrameworkRetirementRuntime::Get()
         .GetPendingCountForTesting();
 }
 
+#endif
 wxWinUIKeyboardPipelineResult wxWinUI3RunKeyboardPipelineForTesting(
     WXMSG *msg,
     wxWindow *logicalOwner,

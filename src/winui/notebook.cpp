@@ -22,6 +22,7 @@
 #include "private.h"
 #ifdef WXWINUI_TEST_SUPPORT
     #include "notebook-test-access.h"
+    #include "runtime-test-access.h"
 #endif
 #include "wx/imaglist.h"
 #include "wx/private/windowlifetime.h"
@@ -1802,7 +1803,7 @@ wxWinUINotebookTestAccess::GetPendingPeerRetirementCount()
 size_t
 wxWinUINotebookTestAccess::GetFrameworkRetirementCount()
 {
-    return wxWinUIGetFrameworkRetirementCountForTesting();
+    return wxWinUIRuntimeTestAccess::GetFrameworkRetirementCount();
 }
 
 void
@@ -1824,7 +1825,7 @@ void
 wxWinUINotebookTestAccess::SetFrameworkRetirementHookFault(
     wxWinUINotebookTestAccess::FrameworkRetirementHookFault fault)
 {
-    wxWinUISetFrameworkRetirementHookFaultForTesting(
+    wxWinUIRuntimeTestAccess::SetFrameworkRetirementHookFault(
         static_cast<unsigned>(fault));
 }
 
@@ -1832,14 +1833,14 @@ wxWinUINotebookTestAccess::FrameworkRetirementHookFault
 wxWinUINotebookTestAccess::GetFrameworkRetirementHookFault()
 {
     return static_cast<wxWinUINotebookTestAccess::FrameworkRetirementHookFault>(
-        wxWinUIGetFrameworkRetirementHookFaultForTesting());
+        wxWinUIRuntimeTestAccess::GetFrameworkRetirementHookFault());
 }
 
 wxWinUINotebookTestAccess::FrameworkRetirementSnapshot
 wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot()
 {
-    const wxWinUIFrameworkRetirementSnapshotForTesting source =
-        wxWinUIGetFrameworkRetirementSnapshotForTesting();
+    const wxWinUIRuntimeTestAccess::FrameworkRetirementSnapshot source =
+        wxWinUIRuntimeTestAccess::GetFrameworkRetirementSnapshot();
     wxWinUINotebookTestAccess::FrameworkRetirementSnapshot snapshot;
     snapshot.entries = source.entries;
     snapshot.unboundEntries = source.unboundEntries;
@@ -1890,7 +1891,7 @@ wxWinUINotebookTestAccess::SimulateShutdownStarting(
     wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
-    wxWinUISimulateShutdownStartingForTesting(hook, context);
+    wxWinUIRuntimeTestAccess::SimulateShutdownStarting(hook, context);
 }
 
 void
@@ -1898,7 +1899,7 @@ wxWinUINotebookTestAccess::SimulateFrameworkShutdownStarting(
     wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
-    wxWinUISimulateFrameworkShutdownStartingForTesting(hook, context);
+    wxWinUIRuntimeTestAccess::SimulateFrameworkShutdownStarting(hook, context);
 }
 
 void
@@ -1906,7 +1907,7 @@ wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted(
     wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
-    wxWinUISimulateFrameworkShutdownCompletedForTesting(hook, context);
+    wxWinUIRuntimeTestAccess::SimulateFrameworkShutdownCompleted(hook, context);
 }
 
 void
@@ -1914,7 +1915,7 @@ wxWinUINotebookTestAccess::SimulateShutdownCompleted(
     wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
-    wxWinUISimulateShutdownCompletedForTesting(hook, context);
+    wxWinUIRuntimeTestAccess::SimulateShutdownCompleted(hook, context);
 }
 
 void
@@ -1922,7 +1923,7 @@ wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted(
     wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
-    wxWinUISimulateXamlShutdownCompletedForTesting(hook, context);
+    wxWinUIRuntimeTestAccess::SimulateXamlShutdownCompleted(hook, context);
 }
 
 void
@@ -1936,7 +1937,7 @@ wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime()
     catch ( const winrt::hresult_error& )
     {
     }
-    wxWinUIResetFrameworkRetirementRuntimeForTesting(queue);
+    wxWinUIRuntimeTestAccess::ResetFrameworkRetirementRuntime(queue);
 }
 
 wxRect
