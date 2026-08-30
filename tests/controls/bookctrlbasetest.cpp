@@ -831,8 +831,15 @@ TEST_CASE("wxBookCtrlBase::InsertPageTransaction",
     REQUIRE(book);
     REQUIRE(book->IsControllerSynchronized());
 
-    wxPanel* const candidate = new wxPanel(book);
-    candidate->SetSize(1, 1);
+    // Establish the initial size before installing the transaction callback.
+    // Doing this in the constructor also avoids GCC 16 speculatively inlining
+    // the unrelated SizeCallbackPanel::DoSetSize() on this plain wxPanel.
+    wxPanel* const candidate =
+        new wxPanel(book, wxID_ANY, wxDefaultPosition, wxSize(1, 1));
+    // CreateBase() uses an explicit initial size as the minimum size too.
+    // Restore the unconstrained minimum of a default-created panel.
+    candidate->SetMinSize(wxDefaultSize);
+    CHECK(candidate->GetMinSize() == wxDefaultSize);
 
     bool mutated = false;
     candidate->Bind(
@@ -863,8 +870,10 @@ TEST_CASE("wxBookCtrlBase::InsertPageControllerReplacement",
     REQUIRE(book);
     REQUIRE(book->IsControllerSynchronized());
 
-    wxPanel* const candidate = new wxPanel(book);
-    candidate->SetSize(1, 1);
+    wxPanel* const candidate =
+        new wxPanel(book, wxID_ANY, wxDefaultPosition, wxSize(1, 1));
+    candidate->SetMinSize(wxDefaultSize);
+    CHECK(candidate->GetMinSize() == wxDefaultSize);
 
     bool replaced = false;
     candidate->Bind(
@@ -894,8 +903,10 @@ TEST_CASE("wxBookCtrlBase::NestedInsertionConsumesCandidate",
     BookLifetimeHarness* const book = CreateLifetimeBook();
     REQUIRE(book);
 
-    wxPanel* const candidate = new wxPanel(book);
-    candidate->SetSize(1, 1);
+    wxPanel* const candidate =
+        new wxPanel(book, wxID_ANY, wxDefaultPosition, wxSize(1, 1));
+    candidate->SetMinSize(wxDefaultSize);
+    CHECK(candidate->GetMinSize() == wxDefaultSize);
     bool nested = false;
     candidate->Bind(
         wxEVT_SIZE,
