@@ -20,39 +20,6 @@ class wxWinUIToolBarTool;
 class wxDPIChangedEvent;
 class wxToolBar;
 
-using wxWinUIToolBarRebuildHookForTesting =
-    void (*)(wxToolBar *toolbar, void *context);
-
-// Deterministic, implementation-only snapshot used by the WinUI contract
-// tests.  Keeping this independent of C++/WinRT prevents projection types
-// from leaking through the public port header.
-struct wxWinUIToolPeerSnapshot
-{
-    bool enabled = false;
-    bool toggled = false;
-    bool overflowed = false;
-    bool overflowEligible = false;
-    bool hasIcon = false;
-    bool usesDisabledBitmap = false;
-    bool showsText = false;
-    bool horizontalText = false;
-    bool stretchable = false;
-    bool control = false;
-    wxSize selectedPixelSize;
-    wxRect bounds;
-    wxString toolTip;
-    wxString peerToolTip;
-    wxString helpText;
-    wxString automationName;
-    wxString automationLocalizedControlType;
-    unsigned long long peerIdentity = 0;
-    int automationControlType = 0;
-    bool radioAutomationRole = false;
-    bool supportsInvokePattern = false;
-    bool supportsTogglePattern = false;
-    bool supportsSelectionItemPattern = false;
-};
-
 class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
 public:
@@ -95,49 +62,6 @@ public:
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const override;
 
     bool CanApplyThemeBorder() const override { return false; }
-
-    // Implementation-only deterministic seams. They invoke the same
-    // generation-checked dispatch used by XAML and never synthesize input.
-    bool WinUIInvokeToolForTesting(int toolid, bool dropdownPart = false);
-    bool WinUIQueueToolClickForTesting(int toolid);
-    bool WinUIIsRootLoadedForTesting() const;
-    bool WinUIIsOverflowChevronReadyForTesting() const;
-    bool WinUIRequestOpenOverflowForTesting();
-    bool WinUIIsOverflowToolLoadedForTesting(
-        int toolid,
-        bool dropdownPart = false) const;
-    bool WinUIInvokeOverflowToolForTesting(int toolid,
-                                           bool dropdownPart = false);
-    bool WinUIHoverToolForTesting(int toolid, bool entered);
-    bool WinUIRightClickToolForTesting(int toolid);
-    bool WinUIGetToolPeerStateForTesting(
-        int toolid,
-        wxWinUIToolPeerSnapshot *snapshot) const;
-    size_t WinUIGetPeerToolCountForTesting() const;
-    size_t WinUIGetOverflowedToolCountForTesting() const;
-    bool WinUIApplyOverflowExtentForTesting(wxCoord extent);
-    bool WinUIIsOverflowChevronVisibleForTesting() const;
-    wxRect WinUIGetOverflowChevronBoundsForTesting() const;
-    wxString WinUIGetOverflowChevronNameForTesting() const;
-    bool WinUIRefreshForScaleForTesting(double scale);
-    void WinUISetNextRebuildLoadedHookForTesting(
-        wxWinUIToolBarRebuildHookForTesting hook,
-        void *context);
-    void WinUISetNextShortHelpSetterHookForTesting(
-        wxWinUIToolBarRebuildHookForTesting hook,
-        void *context);
-    void WinUISetNextEnableSetterHookForTesting(
-        wxWinUIToolBarRebuildHookForTesting hook,
-        void *context);
-    void WinUISetNextOverflowMutationHookForTesting(
-        wxWinUIToolBarRebuildHookForTesting hook,
-        void *context);
-    void WinUIFailNextOverflowMutationForTesting(unsigned boundary);
-    void WinUIFailNextShortHelpSettersForTesting(int toolid,
-                                                 unsigned count);
-    void WinUIFailNextRebuildForTesting();
-    void WinUIClosePeerForTesting();
-    static size_t WinUIGetLiveCallbackStateCountForTesting();
 
 protected:
     bool MSWOnEffectiveLayoutDirectionChanged() override;
@@ -209,6 +133,7 @@ private:
     std::unique_ptr<wxWinUIToolBarImpl> m_winui;
 
     friend class wxWinUIToolBarTool;
+    friend class wxWinUIToolBarTestAccess;
 
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
     wxDECLARE_NO_COPY_CLASS(wxToolBar);

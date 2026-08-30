@@ -17,6 +17,7 @@
 #include "wx/imaglist.h"
 #include "wx/log.h"
 #include "wx/notebook.h"
+#include "notebook-test-access.h"
 #include "wx/panel.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
@@ -218,12 +219,11 @@ bool wxWinUIWaitForNotebookRetirements(
         [retirementBaseline, callbackBaseline, frameworkBaseline]()
         {
             return
-                wxNotebook::
-                    WinUIGetPendingPeerRetirementCountForTesting() ==
+                wxWinUINotebookTestAccess::GetPendingPeerRetirementCount() ==
                     retirementBaseline &&
-                wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+                wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
                     callbackBaseline &&
-                wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+                wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
                     frameworkBaseline;
         },
         2000);
@@ -232,11 +232,11 @@ bool wxWinUIWaitForNotebookRetirements(
 void wxWinUIDrainNotebookCallbacks()
 {
     const size_t retirements =
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount();
     const size_t callbacks =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     const size_t framework =
-        wxNotebook::WinUIGetFrameworkRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementCount();
 
     REQUIRE(callbacks >= retirements);
     REQUIRE(framework >= retirements);
@@ -249,12 +249,11 @@ class wxWinUINotebookRetirementTestGuard final
 public:
     ~wxWinUINotebookRetirementTestGuard()
     {
-        wxNotebook::WinUISetPeerRetirementQueueFaultForTesting(
-            wxNotebook::WinUIPeerRetirementQueueFaultForTesting::None);
-        wxNotebook::WinUISetFrameworkRetirementHookFaultForTesting(
-            wxNotebook::
-                WinUIFrameworkRetirementHookFaultForTesting::None);
-        wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
+        wxWinUINotebookTestAccess::SetPeerRetirementQueueFault(
+            wxWinUINotebookTestAccess::PeerRetirementQueueFault::None);
+        wxWinUINotebookTestAccess::SetFrameworkRetirementHookFault(
+            wxWinUINotebookTestAccess::FrameworkRetirementHookFault::None);
+        wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
     }
 };
 
@@ -267,7 +266,7 @@ struct ReentrantNotebookRetirementContext
     bool usedExtendedSurface = false;
     size_t peerRetirementsAfterClose = 0;
     size_t frameworkEntriesAfterClose = 0;
-    wxNotebook::WinUIFrameworkRetirementSnapshotForTesting phaseSnapshot;
+    wxWinUINotebookTestAccess::FrameworkRetirementSnapshot phaseSnapshot;
 };
 
 void ReenterNotebookRetirementPhase(void *rawContext)
@@ -279,7 +278,7 @@ void ReenterNotebookRetirementPhase(void *rawContext)
 
     ++context->calls;
     context->phaseSnapshot =
-        wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     {
         wxNotebook notebook;
         context->created = notebook.Create(
@@ -296,13 +295,13 @@ void ReenterNotebookRetirementPhase(void *rawContext)
             if ( !context->pageAdded )
                 page->Destroy();
             context->usedExtendedSurface =
-                notebook.WinUIIsUsingExtendedSurfaceForTesting();
+                wxWinUINotebookTestAccess::IsUsingExtendedSurface(notebook);
         }
     }
     context->peerRetirementsAfterClose =
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount();
     context->frameworkEntriesAfterClose =
-        wxNotebook::WinUIGetFrameworkRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementCount();
 }
 
 struct ReentrantLedgerRetirementContext
@@ -310,7 +309,7 @@ struct ReentrantLedgerRetirementContext
     int calls = 0;
     int nestedCompletions = 0;
     std::uint64_t nestedId = 0;
-    wxNotebook::WinUIFrameworkRetirementSnapshotForTesting phaseSnapshot;
+    wxWinUINotebookTestAccess::FrameworkRetirementSnapshot phaseSnapshot;
 };
 
 void IncrementLedgerRetirement(void *rawContext)
@@ -327,9 +326,9 @@ void ReenterLedgerRetirementAtXaml(void *rawContext)
 
     ++context->calls;
     context->phaseSnapshot =
-        wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     context->nestedId =
-        wxNotebook::WinUIRegisterUnboundFrameworkRetirementForTesting(
+        wxWinUINotebookTestAccess::RegisterUnboundFrameworkRetirement(
             &IncrementLedgerRetirement, &context->nestedCompletions);
 }
 
@@ -527,8 +526,7 @@ void ContinueNotebookProjectionStorm(wxNotebook *notebook, void *context)
     probe->newest = wxString::Format("newest-%d", probe->mutation);
     if ( probe->remaining > 0 )
     {
-        notebook->WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::LabelText,
+        wxWinUINotebookTestAccess::SetNextProjectionHook(*notebook, wxWinUINotebookTestAccess::ProjectionPoint::LabelText,
             &ContinueNotebookProjectionStorm,
             probe);
     }
@@ -678,7 +676,7 @@ TEST_CASE("wxWinUI Notebook supports every wxMSW presentation style",
             style));
         CHECK((notebook.GetWindowStyleFlag() & wxBK_ALIGN_MASK) ==
               (style & wxBK_ALIGN_MASK));
-        CHECK(notebook.WinUIIsUsingExtendedSurfaceForTesting() ==
+        CHECK(wxWinUINotebookTestAccess::IsUsingExtendedSurface(notebook) ==
               ((style & wxBK_ALIGN_MASK) != wxNB_TOP ||
                (style & (wxNB_MULTILINE | wxNB_NOPAGETHEME)) != 0));
     }
@@ -706,11 +704,11 @@ TEST_CASE("wxWinUI Notebook wraps and hot-mutates every tab side",
     // next notebook before the dispatcher gets a chance to release it.
     wxWinUIDrainNotebookCallbacks();
     const size_t retirementBaseline =
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount();
     const size_t callbackBaseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     const size_t frameworkBaseline =
-        wxNotebook::WinUIGetFrameworkRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementCount();
     wxPanel sourceParent(
         parent, wxID_ANY, wxPoint(0, 0), wxSize(210, 170));
     wxPanel destinationParent(
@@ -719,7 +717,7 @@ TEST_CASE("wxWinUI Notebook wraps and hot-mutates every tab side",
         wxNotebook predecessor(
             &sourceParent, wxID_ANY, wxDefaultPosition, wxSize(190, 130),
             wxNB_RIGHT | wxNB_MULTILINE | wxNB_NOPAGETHEME);
-        REQUIRE(predecessor.WinUIIsUsingExtendedSurfaceForTesting());
+        REQUIRE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(predecessor));
         REQUIRE(predecessor.AddPage(
             new wxPanel(&predecessor), "migrating page", true));
         predecessor.SetWindowStyleFlag(wxNB_TOP | wxNB_FIXEDWIDTH);
@@ -727,13 +725,13 @@ TEST_CASE("wxWinUI Notebook wraps and hot-mutates every tab side",
         CHECK(predecessor.GetParent() == &destinationParent);
         predecessor.SetWindowStyleFlag(
             wxNB_BOTTOM | wxNB_MULTILINE | wxNB_FIXEDWIDTH);
-        REQUIRE(predecessor.WinUIIsUsingExtendedSurfaceForTesting());
+        REQUIRE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(predecessor));
     }
     REQUIRE(
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting() ==
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount() ==
         retirementBaseline + 1);
     REQUIRE(
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
         callbackBaseline + 1);
 
     {
@@ -774,22 +772,22 @@ TEST_CASE("wxWinUI Notebook wraps and hot-mutates every tab side",
         CHECK(notebook.GetTabRect(0).x > 0);
 
         notebook.SetWindowStyleFlag(wxNB_TOP | wxNB_FIXEDWIDTH);
-        CHECK_FALSE(notebook.WinUIIsUsingExtendedSurfaceForTesting());
+        CHECK_FALSE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(notebook));
         CHECK(notebook.GetRowCount() == 1);
     }
 
     REQUIRE(
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting() ==
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount() ==
         retirementBaseline + 2);
     REQUIRE(wxWinUIWaitForNotebookRetirements(
         retirementBaseline, callbackBaseline, frameworkBaseline));
     CHECK(
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting() ==
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount() ==
         retirementBaseline);
     CHECK(
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
         callbackBaseline);
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           frameworkBaseline);
 }
 
@@ -802,13 +800,13 @@ TEST_CASE("wxWinUI Notebook enqueue rejection waits for XAML shutdown",
     wxWinUIDrainNotebookCallbacks();
     wxWinUINotebookRetirementTestGuard cleanup;
     const size_t retirementBaseline =
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount();
     const size_t callbackBaseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     const size_t frameworkBaseline =
-        wxNotebook::WinUIGetFrameworkRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementCount();
     const auto runtimeBaseline =
-        wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     REQUIRE(runtimeBaseline.xamlShutdownHookInstalled);
     REQUIRE(runtimeBaseline.activeStates >= 1);
     REQUIRE(runtimeBaseline.shutdownStartingHooks >= 1);
@@ -822,44 +820,41 @@ TEST_CASE("wxWinUI Notebook enqueue rejection waits for XAML shutdown",
          callbackBaseline,
          frameworkBaseline,
          runtimeBaseline](
-            wxNotebook::WinUIPeerRetirementQueueFaultForTesting fault)
+            wxWinUINotebookTestAccess::PeerRetirementQueueFault fault)
         {
             CAPTURE(static_cast<int>(fault));
-            wxNotebook::WinUISetPeerRetirementQueueFaultForTesting(fault);
+            wxWinUINotebookTestAccess::SetPeerRetirementQueueFault(fault);
             {
                 wxNotebook notebook(
                     parent, wxID_ANY, wxDefaultPosition, wxSize(220, 140),
                     wxNB_BOTTOM | wxNB_MULTILINE | wxNB_NOPAGETHEME);
                 REQUIRE(notebook.AddPage(
                     new wxPanel(&notebook), "retired page", true));
-                REQUIRE(notebook.WinUIIsUsingExtendedSurfaceForTesting());
+                REQUIRE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(notebook));
             }
 
             REQUIRE(WaitFor(
                 "WinUI notebook rejected retirement turn",
                 []()
                 {
-                    return wxNotebook::
-                               WinUIGetPeerRetirementQueueFaultForTesting() ==
-                           wxNotebook::
-                               WinUIPeerRetirementQueueFaultForTesting::None;
+                    return wxWinUINotebookTestAccess::GetPeerRetirementQueueFault() ==
+                           wxWinUINotebookTestAccess::PeerRetirementQueueFault::None;
                 },
                 2000));
             CHECK(
-                wxNotebook::
-                    WinUIGetPendingPeerRetirementCountForTesting() ==
+                wxWinUINotebookTestAccess::GetPendingPeerRetirementCount() ==
                 retirementBaseline + 1);
-            CHECK(wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+            CHECK(wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
                   callbackBaseline + 1);
-            CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+            CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
                   frameworkBaseline + 1);
 
             // Neither rejected enqueue nor any DispatcherQueue phase is a
             // release barrier once rundown starts.
-            wxNotebook::WinUISimulateShutdownStartingForTesting();
-            wxNotebook::WinUISimulateFrameworkShutdownStartingForTesting();
+            wxWinUINotebookTestAccess::SimulateShutdownStarting();
+            wxWinUINotebookTestAccess::SimulateFrameworkShutdownStarting();
             const auto starting =
-                wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+                wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
             CHECK(starting.rundown);
             CHECK(starting.shutdownStartingStates ==
                   runtimeBaseline.shutdownStartingStates +
@@ -868,28 +863,27 @@ TEST_CASE("wxWinUI Notebook enqueue rejection waits for XAML shutdown",
                   runtimeBaseline.frameworkStartingStates +
                       runtimeBaseline.activeStates);
             CHECK(
-                wxNotebook::
-                    WinUIGetPendingPeerRetirementCountForTesting() ==
+                wxWinUINotebookTestAccess::GetPendingPeerRetirementCount() ==
                 retirementBaseline + 1);
-            CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+            CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
                   frameworkBaseline + 1);
 
             // XamlShutdownCompletedOnThread is the only terminal consumer.
-            wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
+            wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
             REQUIRE(wxWinUIWaitForNotebookRetirements(
                 retirementBaseline, callbackBaseline, frameworkBaseline));
             const auto xamlDone =
-                wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+                wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
             CHECK(xamlDone.xamlTerminal);
             CHECK(xamlDone.xamlCompletedStates ==
                   runtimeBaseline.xamlCompletedStates +
                       runtimeBaseline.queueStates);
             CHECK(xamlDone.entries == frameworkBaseline);
 
-            wxNotebook::WinUISimulateFrameworkShutdownCompletedForTesting();
-            wxNotebook::WinUISimulateShutdownCompletedForTesting();
+            wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted();
+            wxWinUINotebookTestAccess::SimulateShutdownCompleted();
             const auto completed =
-                wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+                wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
             CHECK(completed.frameworkDoneStates ==
                   runtimeBaseline.frameworkDoneStates +
                       runtimeBaseline.queueStates);
@@ -900,14 +894,14 @@ TEST_CASE("wxWinUI Notebook enqueue rejection waits for XAML shutdown",
 
             // Repeated terminal notifications are exact-once no-ops.
             const auto entriesAfterXaml = completed.entries;
-            wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
-            wxNotebook::WinUISimulateFrameworkShutdownCompletedForTesting();
-            wxNotebook::WinUISimulateShutdownCompletedForTesting();
-            CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+            wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
+            wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted();
+            wxWinUINotebookTestAccess::SimulateShutdownCompleted();
+            CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
                   entriesAfterXaml);
-            wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
+            wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
             const auto reset =
-                wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+                wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
             CHECK(reset.entries == runtimeBaseline.entries);
             CHECK(reset.queueStates == runtimeBaseline.queueStates);
             CHECK(reset.activeStates == runtimeBaseline.activeStates);
@@ -920,10 +914,10 @@ TEST_CASE("wxWinUI Notebook enqueue rejection waits for XAML shutdown",
         };
 
     exerciseRejectedTurn(
-        wxNotebook::WinUIPeerRetirementQueueFaultForTesting::
+        wxWinUINotebookTestAccess::PeerRetirementQueueFault::
             RejectFirstTurn);
     exerciseRejectedTurn(
-        wxNotebook::WinUIPeerRetirementQueueFaultForTesting::
+        wxWinUINotebookTestAccess::PeerRetirementQueueFault::
             RejectSecondTurn);
 }
 
@@ -931,47 +925,47 @@ TEST_CASE("wxWinUI unbound retirement freezes at rundown until XAML",
           "[winui-notebook][lifetime][dispatcher][shutdown][ledger]")
 {
     wxWinUINotebookRetirementTestGuard cleanup;
-    wxNotebook::WinUISetFrameworkRetirementHookFaultForTesting(
-        wxNotebook::WinUIFrameworkRetirementHookFaultForTesting::None);
-    wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
+    wxWinUINotebookTestAccess::SetFrameworkRetirementHookFault(
+        wxWinUINotebookTestAccess::FrameworkRetirementHookFault::None);
+    wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
 
     const auto baseline =
-        wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     int completions = 0;
     const auto increment = [](void *context)
     {
         ++*static_cast<int *>(context);
     };
     const std::uint64_t id =
-        wxNotebook::WinUIRegisterUnboundFrameworkRetirementForTesting(
+        wxWinUINotebookTestAccess::RegisterUnboundFrameworkRetirement(
             increment, &completions);
     REQUIRE(id != 0);
 
     auto snapshot =
-        wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     REQUIRE(snapshot.entries == baseline.entries + 1);
     REQUIRE(snapshot.unboundEntries == baseline.unboundEntries + 1);
 
-    wxNotebook::WinUISimulateShutdownStartingForTesting();
-    wxNotebook::WinUISimulateFrameworkShutdownStartingForTesting();
-    wxNotebook::WinUICompleteFrameworkRetirementForTesting(id);
+    wxWinUINotebookTestAccess::SimulateShutdownStarting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownStarting();
+    wxWinUINotebookTestAccess::CompleteFrameworkRetirement(id);
     CHECK(completions == 0);
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           baseline.entries + 1);
 
-    wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
+    wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
     CHECK(completions == 1);
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     CHECK(snapshot.entries == baseline.entries);
     CHECK(snapshot.unboundEntries == baseline.unboundEntries);
     CHECK(snapshot.xamlTerminal);
 
-    wxNotebook::WinUICompleteFrameworkRetirementForTesting(id);
-    wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
+    wxWinUINotebookTestAccess::CompleteFrameworkRetirement(id);
+    wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
     CHECK(completions == 1);
-    wxNotebook::WinUISimulateFrameworkShutdownCompletedForTesting();
-    wxNotebook::WinUISimulateShutdownCompletedForTesting();
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted();
+    wxWinUINotebookTestAccess::SimulateShutdownCompleted();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     CHECK(snapshot.phaseOrderValid);
 
     // The safe XAML deferral window has ended. A later registration is kept
@@ -979,19 +973,19 @@ TEST_CASE("wxWinUI unbound retirement freezes at rundown until XAML",
     // notification may run it after queue-terminal destruction.
     int quarantinedCompletions = 0;
     const std::uint64_t quarantinedId =
-        wxNotebook::WinUIRegisterUnboundFrameworkRetirementForTesting(
+        wxWinUINotebookTestAccess::RegisterUnboundFrameworkRetirement(
             increment, &quarantinedCompletions);
     REQUIRE(quarantinedId != 0);
-    wxNotebook::WinUICompleteFrameworkRetirementForTesting(quarantinedId);
-    wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
+    wxWinUINotebookTestAccess::CompleteFrameworkRetirement(quarantinedId);
+    wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
     CHECK(quarantinedCompletions == 0);
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     CHECK(snapshot.entries == baseline.entries + 1);
     CHECK(snapshot.unboundEntries == baseline.unboundEntries + 1);
 
     // Test-only reset models an explicit safe teardown and runs before the
     // stack-backed counter leaves scope.
-    wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
+    wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
     CHECK(quarantinedCompletions == 1);
 }
 
@@ -1003,26 +997,26 @@ TEST_CASE("wxWinUI Notebook retirement releases only at the XAML terminal",
 
     wxWinUIDrainNotebookCallbacks();
     wxWinUINotebookRetirementTestGuard cleanup;
-    wxNotebook::WinUISetFrameworkRetirementHookFaultForTesting(
-        wxNotebook::WinUIFrameworkRetirementHookFaultForTesting::None);
-    wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
+    wxWinUINotebookTestAccess::SetFrameworkRetirementHookFault(
+        wxWinUINotebookTestAccess::FrameworkRetirementHookFault::None);
+    wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
 
     const size_t retirementBaseline =
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount();
     const size_t callbackBaseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     const size_t frameworkBaseline =
-        wxNotebook::WinUIGetFrameworkRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementCount();
     const auto active =
-        wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     REQUIRE(active.activeStates == 1);
     REQUIRE(active.shutdownStartingHooks == 1);
     REQUIRE(active.frameworkStartingHooks == 1);
     REQUIRE(active.frameworkHooks == 1);
     REQUIRE(active.shutdownHooks == 1);
 
-    wxNotebook::WinUISetPeerRetirementQueueFaultForTesting(
-        wxNotebook::WinUIPeerRetirementQueueFaultForTesting::
+    wxWinUINotebookTestAccess::SetPeerRetirementQueueFault(
+        wxWinUINotebookTestAccess::PeerRetirementQueueFault::
             RejectFirstTurn);
     {
         wxNotebook notebook(
@@ -1031,16 +1025,16 @@ TEST_CASE("wxWinUI Notebook retirement releases only at the XAML terminal",
         REQUIRE(notebook.AddPage(
             new wxPanel(&notebook), "framework predecessor", true));
     }
-    REQUIRE(wxNotebook::WinUIGetPendingPeerRetirementCountForTesting() ==
+    REQUIRE(wxWinUINotebookTestAccess::GetPendingPeerRetirementCount() ==
             retirementBaseline + 1);
-    REQUIRE(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    REQUIRE(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
             frameworkBaseline + 1);
 
     // Reentrant graph creation from the first rundown notification is also
     // frozen. It cannot use a normal completion turn to release either graph.
     ReentrantNotebookRetirementContext startingContext;
     startingContext.parent = parent;
-    wxNotebook::WinUISimulateShutdownStartingForTesting(
+    wxWinUINotebookTestAccess::SimulateShutdownStarting(
         &ReenterNotebookRetirementPhase, &startingContext);
     CHECK(startingContext.calls == 1);
     CHECK(startingContext.created);
@@ -1053,9 +1047,9 @@ TEST_CASE("wxWinUI Notebook retirement releases only at the XAML terminal",
     CHECK(startingContext.frameworkEntriesAfterClose ==
           frameworkBaseline + 2);
 
-    CHECK(wxNotebook::WinUIGetPendingPeerRetirementCountForTesting() ==
+    CHECK(wxWinUINotebookTestAccess::GetPendingPeerRetirementCount() ==
           retirementBaseline + 2);
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           frameworkBaseline + 2);
 
     // Terminal publication precedes the hook. Re-registration is exercised
@@ -1064,7 +1058,7 @@ TEST_CASE("wxWinUI Notebook retirement releases only at the XAML terminal",
     // is consumed immediately inside the modeled deferral; both pre-existing
     // Notebook graphs are then swept exactly once.
     ReentrantLedgerRetirementContext xamlContext;
-    wxNotebook::WinUISimulateXamlShutdownCompletedForTesting(
+    wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted(
         &ReenterLedgerRetirementAtXaml, &xamlContext);
     CHECK(xamlContext.calls == 1);
     CHECK(xamlContext.nestedId != 0);
@@ -1078,11 +1072,11 @@ TEST_CASE("wxWinUI Notebook retirement releases only at the XAML terminal",
     // The XAML notification and our FrameworkShutdownStarting handler are
     // subscribed to the same framework event, so their relative order is not
     // contractual. Publishing FrameworkStarting afterwards remains valid.
-    wxNotebook::WinUISimulateFrameworkShutdownStartingForTesting();
-    wxNotebook::WinUISimulateFrameworkShutdownCompletedForTesting();
-    wxNotebook::WinUISimulateShutdownCompletedForTesting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownStarting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted();
+    wxWinUINotebookTestAccess::SimulateShutdownCompleted();
     const auto terminal =
-        wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     CHECK(terminal.queueStates == 1);
     CHECK(terminal.activeStates == 0);
     CHECK(terminal.shutdownStartingStates == 1);
@@ -1094,13 +1088,13 @@ TEST_CASE("wxWinUI Notebook retirement releases only at the XAML terminal",
     CHECK(terminal.phaseOrderValid);
 
     // A second XAML terminal signal cannot consume anything again.
-    wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
-    wxNotebook::WinUICompleteFrameworkRetirementForTesting(
+    wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
+    wxWinUINotebookTestAccess::CompleteFrameworkRetirement(
         xamlContext.nestedId);
     CHECK(xamlContext.nestedCompletions == 1);
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           frameworkBaseline);
-    wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
+    wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
 }
 
 TEST_CASE("wxWinUI Notebook shutdown hook gaps retain until XAML completion",
@@ -1112,16 +1106,16 @@ TEST_CASE("wxWinUI Notebook shutdown hook gaps retain until XAML completion",
     wxWinUIDrainNotebookCallbacks();
     wxWinUINotebookRetirementTestGuard cleanup;
     const size_t retirementBaseline =
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount();
     const size_t callbackBaseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     const size_t frameworkBaseline =
-        wxNotebook::WinUIGetFrameworkRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementCount();
 
     const auto retireWithRejectedBarrier = [parent]()
     {
-        wxNotebook::WinUISetPeerRetirementQueueFaultForTesting(
-            wxNotebook::WinUIPeerRetirementQueueFaultForTesting::
+        wxWinUINotebookTestAccess::SetPeerRetirementQueueFault(
+            wxWinUINotebookTestAccess::PeerRetirementQueueFault::
                 RejectFirstTurn);
         {
             wxNotebook notebook(
@@ -1131,72 +1125,72 @@ TEST_CASE("wxWinUI Notebook shutdown hook gaps retain until XAML completion",
                 new wxPanel(&notebook), "hook fallback", true));
         }
         REQUIRE(
-            wxNotebook::WinUIGetPeerRetirementQueueFaultForTesting() ==
-            wxNotebook::WinUIPeerRetirementQueueFaultForTesting::None);
+            wxWinUINotebookTestAccess::GetPeerRetirementQueueFault() ==
+            wxWinUINotebookTestAccess::PeerRetirementQueueFault::None);
     };
 
-    wxNotebook::WinUISetFrameworkRetirementHookFaultForTesting(
-        wxNotebook::WinUIFrameworkRetirementHookFaultForTesting::
+    wxWinUINotebookTestAccess::SetFrameworkRetirementHookFault(
+        wxWinUINotebookTestAccess::FrameworkRetirementHookFault::
             RejectFrameworkHook);
-    wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
+    wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
     auto snapshot =
-        wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     REQUIRE(snapshot.queueStates == 1);
     REQUIRE(snapshot.shutdownStartingHooks == 1);
     REQUIRE(snapshot.frameworkStartingHooks == 1);
     REQUIRE(snapshot.frameworkHooks == 0);
     REQUIRE(snapshot.shutdownHooks == 1);
     retireWithRejectedBarrier();
-    REQUIRE(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    REQUIRE(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
             frameworkBaseline + 1);
-    wxNotebook::WinUISimulateShutdownStartingForTesting();
-    wxNotebook::WinUISimulateFrameworkShutdownStartingForTesting();
-    wxNotebook::WinUISimulateFrameworkShutdownCompletedForTesting();
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    wxWinUINotebookTestAccess::SimulateShutdownStarting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownStarting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted();
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           frameworkBaseline + 1);
-    wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
+    wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
     REQUIRE(wxWinUIWaitForNotebookRetirements(
         retirementBaseline, callbackBaseline, frameworkBaseline));
-    wxNotebook::WinUISimulateShutdownCompletedForTesting();
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    wxWinUINotebookTestAccess::SimulateShutdownCompleted();
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           frameworkBaseline);
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     CHECK(snapshot.shutdownDoneStates == 1);
     CHECK(snapshot.frameworkHooks == 0);
     CHECK(snapshot.shutdownHooks == 0);
 
-    wxNotebook::WinUISetFrameworkRetirementHookFaultForTesting(
-        wxNotebook::WinUIFrameworkRetirementHookFaultForTesting::
+    wxWinUINotebookTestAccess::SetFrameworkRetirementHookFault(
+        wxWinUINotebookTestAccess::FrameworkRetirementHookFault::
             RejectShutdownHook);
-    wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     REQUIRE(snapshot.queueStates == 1);
     REQUIRE(snapshot.frameworkHooks == 1);
     REQUIRE(snapshot.shutdownHooks == 0);
     retireWithRejectedBarrier();
-    wxNotebook::WinUISimulateShutdownStartingForTesting();
-    wxNotebook::WinUISimulateFrameworkShutdownStartingForTesting();
-    wxNotebook::WinUISimulateShutdownCompletedForTesting();
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    wxWinUINotebookTestAccess::SimulateShutdownStarting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownStarting();
+    wxWinUINotebookTestAccess::SimulateShutdownCompleted();
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           frameworkBaseline + 1);
-    wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
+    wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
     REQUIRE(wxWinUIWaitForNotebookRetirements(
         retirementBaseline, callbackBaseline, frameworkBaseline));
-    wxNotebook::WinUISimulateFrameworkShutdownCompletedForTesting();
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted();
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           frameworkBaseline);
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     CHECK(snapshot.frameworkDoneStates == 1);
     CHECK(snapshot.frameworkHooks == 0);
     CHECK(snapshot.shutdownHooks == 0);
 
     // Even if both completion hooks are rejected, the starting hooks still
     // establish rundown and XAML remains the only graph consumer.
-    wxNotebook::WinUISetFrameworkRetirementHookFaultForTesting(
-        wxNotebook::WinUIFrameworkRetirementHookFaultForTesting::
+    wxWinUINotebookTestAccess::SetFrameworkRetirementHookFault(
+        wxWinUINotebookTestAccess::FrameworkRetirementHookFault::
             RejectBothHooks);
-    wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting();
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     REQUIRE(snapshot.xamlShutdownHookInstalled);
     REQUIRE(snapshot.queueStates == 1);
     REQUIRE(snapshot.shutdownStartingHooks == 1);
@@ -1204,19 +1198,19 @@ TEST_CASE("wxWinUI Notebook shutdown hook gaps retain until XAML completion",
     REQUIRE(snapshot.frameworkHooks == 0);
     REQUIRE(snapshot.shutdownHooks == 0);
     retireWithRejectedBarrier();
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     REQUIRE(snapshot.entries == frameworkBaseline + 1);
     REQUIRE(snapshot.unboundEntries == 0);
-    wxNotebook::WinUISimulateShutdownStartingForTesting();
-    wxNotebook::WinUISimulateFrameworkShutdownStartingForTesting();
-    wxNotebook::WinUISimulateFrameworkShutdownCompletedForTesting();
-    wxNotebook::WinUISimulateShutdownCompletedForTesting();
-    CHECK(wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+    wxWinUINotebookTestAccess::SimulateShutdownStarting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownStarting();
+    wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted();
+    wxWinUINotebookTestAccess::SimulateShutdownCompleted();
+    CHECK(wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
           frameworkBaseline + 1);
-    wxNotebook::WinUISimulateXamlShutdownCompletedForTesting();
+    wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted();
     REQUIRE(wxWinUIWaitForNotebookRetirements(
         retirementBaseline, callbackBaseline, frameworkBaseline));
-    snapshot = wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting();
+    snapshot = wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot();
     CHECK(snapshot.unboundEntries == 0);
     CHECK(snapshot.xamlTerminal);
 }
@@ -1254,8 +1248,8 @@ TEST_CASE("wxWinUI Notebook extended RTL geometry uses wx client coordinates",
         }
 
         wxWinUIDrainNotebookCallbacks();
-        REQUIRE(notebook.WinUIIsUsingExtendedSurfaceForTesting());
-        REQUIRE(notebook.WinUIIsPeerRTLForTesting());
+        REQUIRE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(notebook));
+        REQUIRE(wxWinUINotebookTestAccess::IsPeerRTL(notebook));
         REQUIRE(notebook.GetRowCount() == 2);
         wxRect previous;
         for ( size_t page = 0; page != PageCount; ++page )
@@ -1268,7 +1262,7 @@ TEST_CASE("wxWinUI Notebook extended RTL geometry uses wx client coordinates",
                 [&notebook, page, &actual]()
                 {
                     actual =
-                        notebook.WinUIGetActualTabRectForTesting(page);
+                        wxWinUINotebookTestAccess::GetActualTabRect(notebook, page);
                     return !actual.IsEmpty();
                 },
                 2000));
@@ -1285,7 +1279,7 @@ TEST_CASE("wxWinUI Notebook extended RTL geometry uses wx client coordinates",
                 // logical fallback seam: the first connected bottom/RTL item
                 // must remain arranged after the bounded realization wait.
                 const wxRect repeatedActual =
-                    notebook.WinUIGetActualTabRectForTesting(page);
+                    wxWinUINotebookTestAccess::GetActualTabRect(notebook, page);
                 REQUIRE(!repeatedActual.IsEmpty());
                 CHECK(repeatedActual == actual);
             }
@@ -1330,13 +1324,13 @@ TEST_CASE("wxWinUI Notebook extended RTL overflow stays logical and invokable",
     }
 
     wxWinUIDrainNotebookCallbacks();
-    REQUIRE(notebook.WinUIIsUsingExtendedSurfaceForTesting());
-    REQUIRE(notebook.WinUIIsPeerRTLForTesting());
+    REQUIRE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(notebook));
+    REQUIRE(wxWinUINotebookTestAccess::IsPeerRTL(notebook));
 
     const auto getPassiveActualAfterNaturalPublication =
         [&notebook](size_t page)
         {
-            wxNotebook::WinUIExtendedLabelMetricSnapshotForTesting ready;
+            wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot ready;
             const auto isNear = [](int first, int second)
             {
                 return std::abs(
@@ -1347,8 +1341,7 @@ TEST_CASE("wxWinUI Notebook extended RTL overflow stays logical and invokable",
                 "WinUI RTL overflow natural peer publication",
                 [&notebook, page, &ready, isNear]()
                 {
-                    ready = notebook.
-                        WinUIGetExtendedLabelMetricSnapshotForTesting(page);
+                    ready = wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, page);
                     return !ready.pending &&
                            ready.modelRevision ==
                                ready.publishedModelRevision &&
@@ -1372,15 +1365,15 @@ TEST_CASE("wxWinUI Notebook extended RTL overflow stays logical and invokable",
             // no pump between them must agree without advancing any epoch,
             // revision, or continuation counter.
             const auto before =
-                notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(page);
+                wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, page);
             const wxRect first =
-                notebook.WinUIGetActualTabRectForTesting(page);
+                wxWinUINotebookTestAccess::GetActualTabRect(notebook, page);
             const auto middle =
-                notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(page);
+                wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, page);
             const wxRect second =
-                notebook.WinUIGetActualTabRectForTesting(page);
+                wxWinUINotebookTestAccess::GetActualTabRect(notebook, page);
             const auto after =
-                notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(page);
+                wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, page);
             const auto samePassiveState = [](const auto& firstState,
                                              const auto& secondState)
             {
@@ -1433,7 +1426,7 @@ TEST_CASE("wxWinUI Notebook extended RTL overflow stays logical and invokable",
     CHECK(notebook.HitTest(wxWinUIRectCentre(first), &flags) == 0);
 
     unsigned invocations = 0;
-    while ( notebook.WinUIInvokeTabOverflowForTesting(true) )
+    while ( wxWinUINotebookTestAccess::InvokeTabOverflow(notebook, true) )
         REQUIRE(++invocations < 32);
     CHECK(invocations > 0);
 
@@ -1561,7 +1554,7 @@ TEST_CASE("wxWinUI Notebook has one extended tab stop",
         for ( size_t page = 0; page < notebook.GetPageCount(); ++page )
         {
             const bool isTabStop =
-                notebook.WinUIIsPeerTabStopForTesting(page);
+                wxWinUINotebookTestAccess::IsPeerTabStop(notebook, page);
             CHECK(isTabStop ==
                   (page == static_cast<size_t>(selection)));
             tabStops += isTabStop ? 1u : 0u;
@@ -1611,10 +1604,10 @@ TEST_CASE("wxWinUI Notebook extended overflow is mouse accessible",
             page == 0));
     }
 
-    CHECK_FALSE(notebook.WinUIInvokeTabOverflowForTesting(false));
-    REQUIRE(notebook.WinUIInvokeTabOverflowForTesting(true));
+    CHECK_FALSE(wxWinUINotebookTestAccess::InvokeTabOverflow(notebook, false));
+    REQUIRE(wxWinUINotebookTestAccess::InvokeTabOverflow(notebook, true));
     unsigned forwardInvocations = 1;
-    while ( notebook.WinUIInvokeTabOverflowForTesting(true) )
+    while ( wxWinUINotebookTestAccess::InvokeTabOverflow(notebook, true) )
     {
         REQUIRE(++forwardInvocations < 32);
     }
@@ -1631,7 +1624,7 @@ TEST_CASE("wxWinUI Notebook extended overflow is mouse accessible",
               wxWinUIRectCentre(firstOffscreen), &flags) == wxNOT_FOUND);
 
     unsigned backInvocations = 0;
-    while ( notebook.WinUIInvokeTabOverflowForTesting(false) )
+    while ( wxWinUINotebookTestAccess::InvokeTabOverflow(notebook, false) )
     {
         REQUIRE(++backInvocations < 32);
     }
@@ -1659,8 +1652,7 @@ TEST_CASE("wxWinUI Notebook hot style mutation is last-writer-wins",
     probe.newestStyle =
         wxNB_RIGHT | wxNB_MULTILINE | wxNB_FIXEDWIDTH |
         wxNB_NOPAGETHEME;
-    notebook.WinUISetNextProjectionHookForTesting(
-        wxNotebook::WinUIProjectionPointForTesting::
+    wxWinUINotebookTestAccess::SetNextProjectionHook(notebook, wxWinUINotebookTestAccess::ProjectionPoint::
             TabGeometryMeasure,
         &ReplaceNotebookStyleDuringGeometry,
         &probe);
@@ -1671,7 +1663,7 @@ TEST_CASE("wxWinUI Notebook hot style mutation is last-writer-wins",
     CHECK((notebook.GetWindowStyleFlag() &
            (wxBK_ALIGN_MASK | wxNB_MULTILINE | wxNB_FIXEDWIDTH |
             wxNB_NOPAGETHEME)) == probe.newestStyle);
-    REQUIRE(notebook.WinUIIsUsingExtendedSurfaceForTesting());
+    REQUIRE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(notebook));
     // RIGHT geometry must already be committed when the nested setter
     // returns; GetTabRect() below is a consumer, not the operation that makes
     // the last writer take effect.
@@ -1696,29 +1688,29 @@ TEST_CASE("wxWinUI Notebook naturally commits extended label metrics",
     // natural label; exact clipped behavior is covered separately below.
     REQUIRE(notebook.AddPage(
         new wxPanel(&notebook), "Initial intrinsic label", true));
-    REQUIRE(notebook.WinUIIsUsingExtendedSurfaceForTesting());
+    REQUIRE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(notebook));
 
     const auto requireNaturalConvergence = [&notebook](
-        wxNotebook::WinUIExtendedLabelMetricSnapshotForTesting& snapshot)
+        wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot& snapshot)
     {
-        REQUIRE(notebook.WinUIHasPendingExtendedLabelMetricsForTesting());
+        REQUIRE(wxWinUINotebookTestAccess::HasPendingExtendedLabelMetrics(notebook));
         const auto passiveBefore =
-            notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(0);
+            wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, 0);
         const std::uint64_t continuationsBefore =
-            notebook.WinUIGetExtendedLayoutContinuationCountForTesting();
+            wxWinUINotebookTestAccess::GetExtendedLayoutContinuationCount(notebook);
 
         // The strict actual-tree seam must not make progress for its caller.
         // Before pumping any event, two consecutive reads of a pending probe
         // both fail closed and leave every publication/callback revision and
         // counter unchanged.
         const wxRect firstStrictRead =
-            notebook.WinUIGetActualTabLabelRectForTesting(0);
+            wxWinUINotebookTestAccess::GetActualTabLabelRect(notebook, 0);
         const auto passiveMiddle =
-            notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(0);
+            wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, 0);
         const wxRect secondStrictRead =
-            notebook.WinUIGetActualTabLabelRectForTesting(0);
+            wxWinUINotebookTestAccess::GetActualTabLabelRect(notebook, 0);
         const auto passiveAfter =
-            notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(0);
+            wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, 0);
         const auto samePassiveState = [](const auto& first,
                                          const auto& second)
         {
@@ -1753,7 +1745,7 @@ TEST_CASE("wxWinUI Notebook naturally commits extended label metrics",
               passiveBefore.publishedLayoutRevision);
         CHECK(samePassiveState(passiveBefore, passiveMiddle));
         CHECK(samePassiveState(passiveMiddle, passiveAfter));
-        CHECK(notebook.WinUIGetExtendedLayoutContinuationCountForTesting() ==
+        CHECK(wxWinUINotebookTestAccess::GetExtendedLayoutContinuationCount(notebook) ==
               continuationsBefore);
 
         // These are passive state reads. In particular, do not call any tab
@@ -1764,9 +1756,9 @@ TEST_CASE("wxWinUI Notebook naturally commits extended label metrics",
             [&notebook, continuationsBefore, &snapshot]()
             {
                 snapshot =
-                    notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(0);
+                    wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, 0);
                 const std::uint64_t continuations =
-                    notebook.WinUIGetExtendedLayoutContinuationCountForTesting();
+                    wxWinUINotebookTestAccess::GetExtendedLayoutContinuationCount(notebook);
                 return continuations - continuationsBefore >= 2 &&
                        !snapshot.pending &&
                        snapshot.probeEpoch != snapshot.layoutEpoch &&
@@ -1799,18 +1791,18 @@ TEST_CASE("wxWinUI Notebook naturally commits extended label metrics",
         REQUIRE(snapshot.liveActualRect.GetSize() == snapshot.actualSize);
     };
 
-    wxNotebook::WinUIExtendedLabelMetricSnapshotForTesting initialMetric;
+    wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot initialMetric;
     requireNaturalConvergence(initialMetric);
 
     REQUIRE(notebook.SetPageText(
         0, "A substantially longer hot label for a second natural frame"));
-    wxNotebook::WinUIExtendedLabelMetricSnapshotForTesting hotMetric;
+    wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot hotMetric;
     requireNaturalConvergence(hotMetric);
 
     const wxRect logical =
-        notebook.WinUIGetTabLabelRectForTesting(0);
+        wxWinUINotebookTestAccess::GetTabLabelRect(notebook, 0);
     const wxRect actual =
-        notebook.WinUIGetActualTabLabelRectForTesting(0);
+        wxWinUINotebookTestAccess::GetActualTabLabelRect(notebook, 0);
     CAPTURE(logical, actual);
     REQUIRE(!logical.IsEmpty());
     REQUIRE(!actual.IsEmpty());
@@ -1849,8 +1841,8 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
 
         const wxSize gdiFallback = notebook.GetTextExtent("First");
         const std::uint64_t continuationsBefore =
-            notebook.WinUIGetExtendedLayoutContinuationCountForTesting();
-        wxNotebook::WinUIExtendedLabelMetricSnapshotForTesting
+            wxWinUINotebookTestAccess::GetExtendedLayoutContinuationCount(notebook);
+        wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot
             naturalSnapshot;
         const bool naturallyPublished = WaitFor(
             "WinUI exact-item label metric natural publication",
@@ -1860,11 +1852,9 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
              continuationsBefore]()
             {
                 naturalSnapshot =
-                    notebook.
-                        WinUIGetExtendedLabelMetricSnapshotForTesting(0);
+                    wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, 0);
                 const std::uint64_t continuations =
-                    notebook.
-                        WinUIGetExtendedLayoutContinuationCountForTesting();
+                    wxWinUINotebookTestAccess::GetExtendedLayoutContinuationCount(notebook);
                 return continuations - continuationsBefore >= 2 &&
                        !naturalSnapshot.pending &&
                        naturalSnapshot.labelIdentity != 0 &&
@@ -1887,8 +1877,7 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
         INFO("alignment=" << alignment
              << ", GDI fallback=" << gdiFallback
              << ", continuation delta=" <<
-                    notebook.
-                        WinUIGetExtendedLayoutContinuationCountForTesting() -
+                    wxWinUINotebookTestAccess::GetExtendedLayoutContinuationCount(notebook) -
                     continuationsBefore
              << ", probe epoch=" << naturalSnapshot.probeEpoch
              << ", layout epoch=" << naturalSnapshot.layoutEpoch
@@ -1903,14 +1892,14 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
 
         const wxRect item = notebook.GetTabRect(0);
         const wxRect icon =
-            notebook.WinUIGetTabIconRectForTesting(0);
+            wxWinUINotebookTestAccess::GetTabIconRect(notebook, 0);
         const wxRect label =
-            notebook.WinUIGetTabLabelRectForTesting(0);
+            wxWinUINotebookTestAccess::GetTabLabelRect(notebook, 0);
         REQUIRE(!item.IsEmpty());
         REQUIRE(!icon.IsEmpty());
         REQUIRE(!label.IsEmpty());
         const auto beforeActual =
-            notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(0);
+            wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, 0);
         INFO("before GetActual identity=" << beforeActual.labelIdentity
              << ", natural=" << beforeActual.naturalSize
              << ", published=" << beforeActual.publishedRect
@@ -1926,12 +1915,12 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
             [&notebook, &actualLabel]()
             {
                 actualLabel =
-                    notebook.WinUIGetActualTabLabelRectForTesting(0);
+                    wxWinUINotebookTestAccess::GetActualTabLabelRect(notebook, 0);
                 return !actualLabel.IsEmpty();
             },
             2000));
         const auto afterActual =
-            notebook.WinUIGetExtendedLabelMetricSnapshotForTesting(0);
+            wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(notebook, 0);
         INFO("after GetActual identity=" << afterActual.labelIdentity
              << ", natural=" << afterActual.naturalSize
              << ", published=" << afterActual.publishedRect
@@ -2026,21 +2015,20 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
         notebook.SetImages(images);
         REQUIRE(notebook.AddPage(
             new wxPanel(&notebook), "&Exact clipped header", true, 0));
-        REQUIRE(notebook.WinUIHasPendingExtendedLabelMetricsForTesting());
+        REQUIRE(wxWinUINotebookTestAccess::HasPendingExtendedLabelMetrics(notebook));
         REQUIRE(WaitFor(
             "WinUI exact side-tab label metric publication",
             [&notebook]()
             {
-                return !notebook.
-                    WinUIHasPendingExtendedLabelMetricsForTesting();
+                return !wxWinUINotebookTestAccess::HasPendingExtendedLabelMetrics(notebook);
             },
             2000));
 
         const wxRect item = notebook.GetTabRect(0);
         const wxRect icon =
-            notebook.WinUIGetTabIconRectForTesting(0);
+            wxWinUINotebookTestAccess::GetTabIconRect(notebook, 0);
         const wxRect label =
-            notebook.WinUIGetTabLabelRectForTesting(0);
+            wxWinUINotebookTestAccess::GetTabLabelRect(notebook, 0);
         CAPTURE(item, icon, label);
         REQUIRE(item.GetSize() == exactTabSize);
         REQUIRE(!icon.IsEmpty());
@@ -2061,9 +2049,9 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
             [&notebook, &actualIcon, &actualLabel]()
             {
                 actualIcon =
-                    notebook.WinUIGetActualTabIconRectForTesting(0);
+                    wxWinUINotebookTestAccess::GetActualTabIconRect(notebook, 0);
                 actualLabel =
-                    notebook.WinUIGetActualTabLabelRectForTesting(0);
+                    wxWinUINotebookTestAccess::GetActualTabLabelRect(notebook, 0);
                 return !actualIcon.IsEmpty() && !actualLabel.IsEmpty();
             },
             2000));
@@ -2090,15 +2078,14 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
     // UpdateLayout() or ForceRender() inside Loaded.
     wxNotebook stockNotebook(
         parent, wxID_ANY, wxDefaultPosition, wxSize(280, 190), wxNB_TOP);
-    REQUIRE_FALSE(stockNotebook.WinUIIsUsingExtendedSurfaceForTesting());
+    REQUIRE_FALSE(wxWinUINotebookTestAccess::IsUsingExtendedSurface(stockNotebook));
     REQUIRE(stockNotebook.AddPage(
         new wxPanel(&stockNotebook), "Stock successor", true));
     const size_t stockPageCount = stockNotebook.GetPageCount();
     const int stockSelection = stockNotebook.GetSelection();
     const wxString stockText = stockNotebook.GetPageText(0);
     unsigned stockGeometryRealizations = 0;
-    stockNotebook.WinUISetNextProjectionHookForTesting(
-        wxNotebook::WinUIProjectionPointForTesting::TabGeometryMeasure,
+    wxWinUINotebookTestAccess::SetNextProjectionHook(stockNotebook, wxWinUINotebookTestAccess::ProjectionPoint::TabGeometryMeasure,
         &CountNotebookGeometryRealization,
         &stockGeometryRealizations);
 
@@ -2107,9 +2094,9 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
     // hook nor change the logical snapshot; an unarranged tree simply reports
     // an empty rectangle until its ordinary Loaded/layout work completes.
     const wxRect firstStockStrictRead =
-        stockNotebook.WinUIGetActualTabLabelRectForTesting(0);
+        wxWinUINotebookTestAccess::GetActualTabLabelRect(stockNotebook, 0);
     const wxRect secondStockStrictRead =
-        stockNotebook.WinUIGetActualTabLabelRectForTesting(0);
+        wxWinUINotebookTestAccess::GetActualTabLabelRect(stockNotebook, 0);
     CHECK(firstStockStrictRead == secondStockStrictRead);
     CHECK(stockGeometryRealizations == 0);
     CHECK(stockNotebook.GetPageCount() == stockPageCount);
@@ -2122,7 +2109,7 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
         [&stockNotebook, &stockLabel]()
         {
             stockLabel =
-                stockNotebook.WinUIGetActualTabLabelRectForTesting(0);
+                wxWinUINotebookTestAccess::GetActualTabLabelRect(stockNotebook, 0);
             return !stockLabel.IsEmpty();
         },
         2000));
@@ -2131,7 +2118,7 @@ TEST_CASE("wxWinUI Notebook extended geometry has exact hit flags",
     // The cache-enabled seam still performs the real stock realization and
     // consumes the armed hook, proving that the passive checks above did not
     // merely observe an inert test double.
-    CHECK_FALSE(stockNotebook.WinUIGetTabLabelRectForTesting(0).IsEmpty());
+    CHECK_FALSE(wxWinUINotebookTestAccess::GetTabLabelRect(stockNotebook, 0).IsEmpty());
     CHECK(stockGeometryRealizations == 1);
 }
 
@@ -2143,7 +2130,7 @@ TEST_CASE("wxWinUI Notebook extended UIA SelectionItem selects wx pages",
 
     wxWinUIDrainNotebookCallbacks();
     const size_t callbackBaseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     int changing = 0;
     int changed = 0;
     std::unique_ptr<wxNotebook> notebook(new wxNotebook(
@@ -2241,7 +2228,7 @@ TEST_CASE("wxWinUI Notebook extended UIA SelectionItem selects wx pages",
     notebook.reset();
     CHECK(lifetime.get() == nullptr);
     CHECK(
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
         callbackBaseline + 1);
     try
     {
@@ -2261,7 +2248,7 @@ TEST_CASE("wxWinUI Notebook extended UIA SelectionItem selects wx pages",
     CHECK(changed == 3);
     wxWinUIDrainNotebookCallbacks();
     CHECK(
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
         callbackBaseline);
 }
 
@@ -2303,9 +2290,9 @@ TEST_CASE("wxWinUI Notebook exposes realized tab geometry",
         [&notebook, &actualFirst, &actualSecond]()
         {
             actualFirst =
-                notebook.WinUIGetActualTabRectForTesting(0);
+                wxWinUINotebookTestAccess::GetActualTabRect(notebook, 0);
             actualSecond =
-                notebook.WinUIGetActualTabRectForTesting(1);
+                wxWinUINotebookTestAccess::GetActualTabRect(notebook, 1);
             return !actualFirst.IsEmpty() &&
                    !actualSecond.IsEmpty();
         },
@@ -2325,12 +2312,12 @@ TEST_CASE("wxWinUI Notebook exposes realized tab geometry",
     CHECK(refreshedFirst == actualFirst);
     CHECK(refreshedSecond == actualSecond);
 
-    const wxRect icon = notebook.WinUIGetTabIconRectForTesting(0);
-    const wxRect label = notebook.WinUIGetTabLabelRectForTesting(0);
+    const wxRect icon = wxWinUINotebookTestAccess::GetTabIconRect(notebook, 0);
+    const wxRect label = wxWinUINotebookTestAccess::GetTabLabelRect(notebook, 0);
     const wxRect actualIcon =
-        notebook.WinUIGetActualTabIconRectForTesting(0);
+        wxWinUINotebookTestAccess::GetActualTabIconRect(notebook, 0);
     const wxRect actualLabel =
-        notebook.WinUIGetActualTabLabelRectForTesting(0);
+        wxWinUINotebookTestAccess::GetActualTabLabelRect(notebook, 0);
     INFO("icon=" << icon << ", label=" << label
          << ", actual icon=" << actualIcon
          << ", actual label=" << actualLabel);
@@ -2422,7 +2409,7 @@ TEST_CASE("wxWinUI Notebook separates logical overflow geometry from hits",
     CHECK(notebook.ChangeSelection(PageCount - 1) == 0);
     const wxRect last = notebook.GetTabRect(PageCount - 1);
     const wxRect actualLast =
-        notebook.WinUIGetActualTabRectForTesting(PageCount - 1);
+        wxWinUINotebookTestAccess::GetActualTabRect(notebook, PageCount - 1);
     INFO("first=" << first << ", realized last=" << last
          << ", actual last=" << actualLast);
     REQUIRE(!last.IsEmpty());
@@ -2502,7 +2489,7 @@ TEST_CASE("wxWinUI Notebook logical geometry mirrors in RTL",
                  static_cast<HWND>(notebook.GetHWND()),
                  GWL_EXSTYLE) &
              WS_EX_LAYOUTRTL) != 0);
-    REQUIRE(notebook.WinUIIsPeerRTLForTesting());
+    REQUIRE(wxWinUINotebookTestAccess::IsPeerRTL(notebook));
     std::vector<wxRect> rtl;
     for ( size_t page = 0; page < PageCount; ++page )
     {
@@ -2526,17 +2513,17 @@ TEST_CASE("wxWinUI Notebook logical geometry mirrors in RTL",
     CHECK(rtl.front().x < rtl.back().x);
 
     const wxRect actualRTLFirst =
-        notebook.WinUIGetActualTabRectForTesting(0);
+        wxWinUINotebookTestAccess::GetActualTabRect(notebook, 0);
     const wxRect actualRTLSecond =
-        notebook.WinUIGetActualTabRectForTesting(1);
+        wxWinUINotebookTestAccess::GetActualTabRect(notebook, 1);
     const wxRect actualRTLIcon =
-        notebook.WinUIGetActualTabIconRectForTesting(0);
+        wxWinUINotebookTestAccess::GetActualTabIconRect(notebook, 0);
     const wxRect actualRTLLabel =
-        notebook.WinUIGetActualTabLabelRectForTesting(0);
+        wxWinUINotebookTestAccess::GetActualTabLabelRect(notebook, 0);
     const wxRect logicalRTLIcon =
-        notebook.WinUIGetTabIconRectForTesting(0);
+        wxWinUINotebookTestAccess::GetTabIconRect(notebook, 0);
     const wxRect logicalRTLLabel =
-        notebook.WinUIGetTabLabelRectForTesting(0);
+        wxWinUINotebookTestAccess::GetTabLabelRect(notebook, 0);
     INFO("actual RTL first=" << actualRTLFirst
          << ", second=" << actualRTLSecond
          << ", icon=" << actualRTLIcon
@@ -2573,7 +2560,7 @@ TEST_CASE("wxWinUI Notebook logical geometry mirrors in RTL",
     wxWinUIDrainNotebookCallbacks();
     const wxRect visibleLast = notebook.GetTabRect(PageCount - 1);
     const wxRect actualVisibleLast =
-        notebook.WinUIGetActualTabRectForTesting(PageCount - 1);
+        wxWinUINotebookTestAccess::GetActualTabRect(notebook, PageCount - 1);
     REQUIRE(!visibleLast.IsEmpty());
     REQUIRE(!actualVisibleLast.IsEmpty());
     flags = 0;
@@ -2594,7 +2581,7 @@ TEST_CASE("wxWinUI Notebook logical geometry mirrors in RTL",
     notebook.SetLayoutDirection(wxLayout_LeftToRight);
     wxWinUIDrainNotebookCallbacks();
     REQUIRE(notebook.GetLayoutDirection() == wxLayout_LeftToRight);
-    REQUIRE_FALSE(notebook.WinUIIsPeerRTLForTesting());
+    REQUIRE_FALSE(wxWinUINotebookTestAccess::IsPeerRTL(notebook));
     wxRect previous;
     for ( size_t page = 0; page < PageCount; ++page )
     {
@@ -2606,7 +2593,7 @@ TEST_CASE("wxWinUI Notebook logical geometry mirrors in RTL",
     }
 
     const wxRect actualLTRLast =
-        notebook.WinUIGetActualTabRectForTesting(PageCount - 1);
+        wxWinUINotebookTestAccess::GetActualTabRect(notebook, PageCount - 1);
     REQUIRE(!actualLTRLast.IsEmpty());
     flags = 0;
     CHECK(notebook.HitTest(
@@ -2617,9 +2604,9 @@ TEST_CASE("wxWinUI Notebook logical geometry mirrors in RTL",
     // visibility cannot rely on the direction used by the previous layout.
     notebook.SetLayoutDirection(wxLayout_RightToLeft);
     wxWinUIDrainNotebookCallbacks();
-    REQUIRE(notebook.WinUIIsPeerRTLForTesting());
+    REQUIRE(wxWinUINotebookTestAccess::IsPeerRTL(notebook));
     const wxRect actualRTLLastAgain =
-        notebook.WinUIGetActualTabRectForTesting(PageCount - 1);
+        wxWinUINotebookTestAccess::GetActualTabRect(notebook, PageCount - 1);
     REQUIRE(!actualRTLLastAgain.IsEmpty());
     flags = 0;
     CHECK(notebook.HitTest(
@@ -2641,8 +2628,7 @@ TEST_CASE("wxWinUI Notebook geometry queries are reentrancy-safe",
             new wxPanel(&notebook), "original", true));
 
         NotebookGeometryInsert probe;
-        notebook.WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::
+        wxWinUINotebookTestAccess::SetNextProjectionHook(notebook, wxWinUINotebookTestAccess::ProjectionPoint::
                 TabGeometryMeasure,
             &InsertNotebookPageDuringGeometry,
             &probe);
@@ -2673,8 +2659,7 @@ TEST_CASE("wxWinUI Notebook geometry queries are reentrancy-safe",
 
         NotebookGeometryResize probe;
         probe.size = wxSize(520, 210);
-        notebook.WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::
+        wxWinUINotebookTestAccess::SetNextProjectionHook(notebook, wxWinUINotebookTestAccess::ProjectionPoint::
                 TabGeometryMeasure,
             &ResizeNotebookDuringGeometry,
             &probe);
@@ -2689,7 +2674,7 @@ TEST_CASE("wxWinUI Notebook geometry queries are reentrancy-safe",
     {
         wxWinUIDrainNotebookCallbacks();
         const size_t baseline =
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
         wxNotebook * const doomed = new wxNotebook(
             parent, wxID_ANY, wxDefaultPosition, wxSize(340, 170));
         REQUIRE(doomed->AddPage(
@@ -2697,8 +2682,7 @@ TEST_CASE("wxWinUI Notebook geometry queries are reentrancy-safe",
         wxWeakRef<wxWindow> lifetime(doomed);
 
         NotebookDestroyProjection probe;
-        doomed->WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::
+        wxWinUINotebookTestAccess::SetNextProjectionHook(*doomed, wxWinUINotebookTestAccess::ProjectionPoint::
                 TabGeometryMeasure,
             &DestroyNotebookDuringProjection,
             &probe);
@@ -2707,7 +2691,7 @@ TEST_CASE("wxWinUI Notebook geometry queries are reentrancy-safe",
         CHECK(lifetime.get() == nullptr);
         wxWinUIDrainNotebookCallbacks();
         CHECK(
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
             baseline);
     }
 }
@@ -2757,19 +2741,19 @@ TEST_CASE("wxWinUI Notebook refreshes every image generation",
     const wxSize expected16 =
         bundle16.GetPreferredBitmapSizeAtScale(
             notebook.GetDPIScaleFactor());
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) ==
           expected16);
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(1) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 1) ==
           expected16);
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 0) ==
           wxSize(16, 16));
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(1) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 1) ==
           wxSize(16, 16));
 
     const std::uint64_t oldFirst =
-        notebook.WinUIGetPeerIconGenerationForTesting(0);
+        wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0);
     const std::uint64_t oldSecond =
-        notebook.WinUIGetPeerIconGenerationForTesting(1);
+        wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 1);
     REQUIRE(oldFirst != 0);
     REQUIRE(oldSecond != 0);
 
@@ -2778,31 +2762,31 @@ TEST_CASE("wxWinUI Notebook refreshes every image generation",
     wxBookCtrlBase::Images images24{bundle24};
     notebook.SetImages(images24);
     const std::uint64_t refreshed =
-        notebook.WinUIGetPeerIconGenerationForTesting(0);
+        wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0);
     CHECK(refreshed > oldFirst);
     CHECK(refreshed > oldSecond);
-    CHECK(notebook.WinUIGetPeerIconGenerationForTesting(1) == refreshed);
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 1) == refreshed);
     const wxSize expected24 =
         bundle24.GetPreferredBitmapSizeAtScale(
             notebook.GetDPIScaleFactor());
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) ==
           expected24);
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(1) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 1) ==
           expected24);
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 0) ==
           wxSize(24, 24));
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(1) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 1) ==
           wxSize(24, 24));
 
     notebook.SetImages(wxBookCtrlBase::Images{});
     const std::uint64_t cleared =
-        notebook.WinUIGetPeerIconGenerationForTesting(0);
+        wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0);
     CHECK(cleared > refreshed);
-    CHECK(notebook.WinUIGetPeerIconGenerationForTesting(1) == cleared);
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) == wxSize());
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(1) == wxSize());
-    CHECK(notebook.WinUIGetTabIconRectForTesting(0).IsEmpty());
-    CHECK(notebook.WinUIGetTabIconRectForTesting(1).IsEmpty());
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 1) == cleared);
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) == wxSize());
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 1) == wxSize());
+    CHECK(wxWinUINotebookTestAccess::GetTabIconRect(notebook, 0).IsEmpty());
+    CHECK(wxWinUINotebookTestAccess::GetTabIconRect(notebook, 1).IsEmpty());
 }
 
 TEST_CASE("wxWinUI Notebook image projection follows a full DPI cycle",
@@ -2832,27 +2816,27 @@ TEST_CASE("wxWinUI Notebook image projection follows a full DPI cycle",
         1.0, 1.5, 2.0, 1.0
     };
     std::uint64_t lastGeneration =
-        notebook.WinUIGetPeerIconGenerationForTesting(0);
+        wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0);
     REQUIRE(lastGeneration != 0);
 
     for ( const double scale : Scales )
     {
         CAPTURE(scale);
-        REQUIRE(notebook.WinUIRefreshForScaleForTesting(scale));
+        REQUIRE(wxWinUINotebookTestAccess::RefreshForScale(notebook, scale));
 
         const wxSize expected =
             bundle.GetPreferredBitmapSizeAtScale(scale);
         const std::uint64_t generation =
-            notebook.WinUIGetPeerIconGenerationForTesting(0);
+            wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0);
         CHECK(generation > lastGeneration);
         for ( size_t page = 0; page < pages.size(); ++page )
         {
             CHECK(notebook.GetPage(page) == pages[page]);
-            CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(page) ==
+            CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, page) ==
                   expected);
-            CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(page) ==
+            CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, page) ==
                   wxSize(16, 16));
-            CHECK(notebook.WinUIGetPeerIconGenerationForTesting(page) ==
+            CHECK(wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, page) ==
                   generation);
         }
         CHECK(notebook.GetPageCount() == pages.size());
@@ -2883,7 +2867,7 @@ TEST_CASE("wxWinUI Notebook DPI event projects exactly once with or without imag
         withImages ? 0 : wxBookCtrlBase::NO_IMAGE));
 
     const std::uint64_t before =
-        notebook.WinUIGetPeerIconGenerationForTesting(0);
+        wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0);
     REQUIRE(before != 0);
     wxDPIChangedEvent dpiEvent(
         wxSize(96, 96), wxSize(144, 144));
@@ -2891,11 +2875,11 @@ TEST_CASE("wxWinUI Notebook DPI event projects exactly once with or without imag
     dpiEvent.SetId(notebook.GetId());
     notebook.ProcessWindowEvent(dpiEvent);
 
-    CHECK(notebook.WinUIGetPeerIconGenerationForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0) ==
           before + 1);
-    CHECK(notebook.WinUIGetPeerTabPaddingForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerTabPadding(notebook, 0) ==
           parent->FromDIP(wxSize(9, 5)));
-    CHECK(notebook.WinUIGetPeerTabSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerTabSize(notebook, 0) ==
           parent->FromDIP(wxSize(120, 42)));
 }
 
@@ -2914,9 +2898,9 @@ TEST_CASE("wxWinUI Notebook keeps wxImageList compatibility projection",
     REQUIRE(notebook.AddPage(
         new wxPanel(&notebook), "image-list page", true, 0));
 
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) ==
           wxSize(19, 19));
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 0) ==
           wxSize(19, 19));
     CHECK(notebook.GetSelection() == 0);
 }
@@ -2960,10 +2944,10 @@ TEST_CASE("wxWinUI Notebook bitmap callbacks are transactional",
     notebook.SetImages(initialImages);
 
     CHECK(callback->calls == 1);
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) ==
           newest.GetPreferredBitmapSizeAtScale(
               notebook.GetDPIScaleFactor()));
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 0) ==
           wxSize(23, 23));
     CHECK(notebook.GetPageCount() == 1);
     CHECK(notebook.GetSelection() == 0);
@@ -2977,7 +2961,7 @@ TEST_CASE("wxWinUI Notebook destruction inside bitmap callback is safe",
 
     wxWinUIDrainNotebookCallbacks();
     const size_t baseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     auto callback = std::make_shared<ArmedNotebookBundleCallback>();
     const NotebookBundleCallbackPoint callbackPoint =
         GENERATE(NotebookBundleCallbackPoint::DefaultSize,
@@ -3011,10 +2995,10 @@ TEST_CASE("wxWinUI Notebook destruction inside bitmap callback is safe",
                    ? 1u
                    : 0u));
     CHECK(lifetime.get() == nullptr);
-    CHECK(wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
           baseline + 1);
     wxWinUIDrainNotebookCallbacks();
-    CHECK(wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
           baseline);
 }
 
@@ -3025,7 +3009,7 @@ TEST_CASE("wxWinUI Notebook consensus stops at a dead owner",
     REQUIRE(parent);
 
     const size_t baseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     auto first = std::make_shared<ArmedNotebookBundleCallback>();
     auto second = std::make_shared<ArmedNotebookBundleCallback>();
     first->point = NotebookBundleCallbackPoint::PreferredSize;
@@ -3052,7 +3036,7 @@ TEST_CASE("wxWinUI Notebook consensus stops at a dead owner",
     CHECK(second->calls == 0);
     CHECK(lifetime.get() == nullptr);
     wxWinUIDrainNotebookCallbacks();
-    CHECK(wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
           baseline);
 }
 
@@ -3091,10 +3075,10 @@ TEST_CASE("wxWinUI Notebook consensus stops at a stale revision",
 
     CHECK(first->calls == 1);
     CHECK(second->calls == 0);
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) ==
           newest.GetPreferredBitmapSizeAtScale(
               notebook.GetDPIScaleFactor()));
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 0) ==
           wxSize(23, 23));
 }
 
@@ -3118,10 +3102,10 @@ TEST_CASE("wxWinUI Notebook consensus tie uses the larger raster",
     // Consensus is over preferred raster pixels at the current scale: the
     // literal 17x17 value is correct only at 1x, while the selected small
     // bundle deliberately keeps its own 11x11 DIP size at every scale.
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) ==
           largeRaster.GetPreferredBitmapSizeAtScale(
               notebook.GetDPIScaleFactor()));
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(0) ==
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 0) ==
           wxSize(11, 11));
 }
 
@@ -3148,8 +3132,8 @@ TEST_CASE("wxWinUI Notebook invalid bundle sizes remove the icon",
         new wxPanel(&notebook), "invalid image", true, 0));
 
     CHECK(invalid->bitmapCalls == 0);
-    CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) == wxSize());
-    CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(0) == wxSize());
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) == wxSize());
+    CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 0) == wxSize());
     CHECK(notebook.GetSelection() == 0);
 }
 
@@ -3174,9 +3158,9 @@ TEST_CASE("wxWinUI Notebook persists tab metrics across Create and insertion",
 
     for ( size_t page = 0; page < notebook.GetPageCount(); ++page )
     {
-        CHECK(notebook.WinUIGetPeerTabPaddingForTesting(page) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerTabPadding(notebook, page) ==
               initialPadding);
-        CHECK(notebook.WinUIGetPeerTabSizeForTesting(page) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerTabSize(notebook, page) ==
               initialSize);
         const wxRect rect = notebook.GetTabRect(page);
         REQUIRE(!rect.IsEmpty());
@@ -3193,9 +3177,9 @@ TEST_CASE("wxWinUI Notebook persists tab metrics across Create and insertion",
 
     for ( size_t page = 0; page < notebook.GetPageCount(); ++page )
     {
-        CHECK(notebook.WinUIGetPeerTabPaddingForTesting(page) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerTabPadding(notebook, page) ==
               changedPadding);
-        CHECK(notebook.WinUIGetPeerTabSizeForTesting(page) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerTabSize(notebook, page) ==
               changedSize);
         const wxRect rect = notebook.GetTabRect(page);
         REQUIRE(!rect.IsEmpty());
@@ -3211,7 +3195,7 @@ TEST_CASE("wxWinUI Notebook persists tab metrics across Create and insertion",
         notebook.SetSize(wxSize(470 + pass * 17, 190 + pass * 9));
         for ( size_t page = 0; page < notebook.GetPageCount(); ++page )
         {
-            CHECK(notebook.WinUIGetPeerTabSizeForTesting(page) ==
+            CHECK(wxWinUINotebookTestAccess::GetPeerTabSize(notebook, page) ==
                   changedSize);
             const wxRect rect = notebook.GetTabRect(page);
             REQUIRE(!rect.IsEmpty());
@@ -3236,17 +3220,16 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
 
         NotebookLabelReentry probe;
         probe.newest = "nested newest";
-        notebook.WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::LabelText,
+        wxWinUINotebookTestAccess::SetNextProjectionHook(notebook, wxWinUINotebookTestAccess::ProjectionPoint::LabelText,
             &ReplaceNotebookLabel,
             &probe);
 
         REQUIRE(notebook.SetPageText(0, "stale outer"));
         CHECK(probe.calls == 1);
         CHECK(notebook.GetPageText(0) == probe.newest);
-        CHECK(notebook.WinUIGetPeerPageTextForTesting(0) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 0) ==
               probe.newest);
-        CHECK(notebook.WinUIGetPeerAutomationNameForTesting(0) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerAutomationName(notebook, 0) ==
               probe.newest);
     }
 
@@ -3261,7 +3244,7 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         REQUIRE(notebook.AddPage(
             new wxPanel(&notebook), "image", true, 0));
         const std::uint64_t before =
-            notebook.WinUIGetPeerIconGenerationForTesting(0);
+            wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0);
 
         wxBookCtrlBase::Images outer;
         outer.push_back(wxBitmapBundle::FromBitmap(
@@ -3269,19 +3252,18 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         NotebookImageReentry probe;
         probe.newest.push_back(wxBitmapBundle::FromBitmap(
             wxBitmap(wxSize(28, 28), 32)));
-        notebook.WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::IconSource,
+        wxWinUINotebookTestAccess::SetNextProjectionHook(notebook, wxWinUINotebookTestAccess::ProjectionPoint::IconSource,
             &ReplaceNotebookImages,
             &probe);
 
         notebook.SetImages(outer);
         CHECK(probe.calls == 1);
-        CHECK(notebook.WinUIGetPeerIconGenerationForTesting(0) >
+        CHECK(wxWinUINotebookTestAccess::GetPeerIconGeneration(notebook, 0) >
               before);
-        CHECK(notebook.WinUIGetPeerIconPixelSizeForTesting(0) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerIconPixelSize(notebook, 0) ==
               probe.newest[0].GetPreferredBitmapSizeAtScale(
                   notebook.GetDPIScaleFactor()));
-        CHECK(notebook.WinUIGetPeerIconDIPSizeForTesting(0) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerIconDIPSize(notebook, 0) ==
               wxSize(28, 28));
     }
 
@@ -3299,8 +3281,7 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         NotebookMetricsReentry probe;
         probe.padding = parent->FromDIP(wxSize(11, 7));
         probe.size = parent->FromDIP(wxSize(146, 50));
-        notebook.WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::TabPadding,
+        wxWinUINotebookTestAccess::SetNextProjectionHook(notebook, wxWinUINotebookTestAccess::ProjectionPoint::TabPadding,
             &ReplaceNotebookMetrics,
             &probe);
 
@@ -3308,9 +3289,9 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         CHECK(probe.calls == 1);
         for ( size_t page = 0; page < notebook.GetPageCount(); ++page )
         {
-            CHECK(notebook.WinUIGetPeerTabPaddingForTesting(page) ==
+            CHECK(wxWinUINotebookTestAccess::GetPeerTabPadding(notebook, page) ==
                   probe.padding);
-            CHECK(notebook.WinUIGetPeerTabSizeForTesting(page) ==
+            CHECK(wxWinUINotebookTestAccess::GetPeerTabSize(notebook, page) ==
                   probe.size);
         }
     }
@@ -3327,8 +3308,7 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         // mutations. The remaining eight prove that nested model revisions do
         // not silently rearm the CallAfter budget.
         probe.remaining = 24;
-        notebook.WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::LabelText,
+        wxWinUINotebookTestAccess::SetNextProjectionHook(notebook, wxWinUINotebookTestAccess::ProjectionPoint::LabelText,
             &ContinueNotebookProjectionStorm,
             &probe);
 
@@ -3346,9 +3326,9 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         wxWinUIDrainNotebookCallbacks();
         CHECK(probe.remaining == 0);
         CHECK(notebook.GetPageText(0) == probe.newest);
-        CHECK(notebook.WinUIGetPeerPageTextForTesting(0) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 0) ==
               probe.newest);
-        CHECK(notebook.WinUIGetPeerAutomationNameForTesting(0) ==
+        CHECK(wxWinUINotebookTestAccess::GetPeerAutomationName(notebook, 0) ==
               probe.newest);
     }
 
@@ -3359,7 +3339,7 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         // two dispatcher retirement turns have completed.
         wxWinUIDrainNotebookCallbacks();
         const size_t baseline =
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
         wxNotebook * const doomed = new wxNotebook(
             parent, wxID_ANY, wxDefaultPosition, wxSize(360, 170));
         REQUIRE(doomed->AddPage(
@@ -3367,8 +3347,7 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         wxWeakRef<wxWindow> lifetime(doomed);
 
         NotebookDestroyProjection probe;
-        doomed->WinUISetNextProjectionHookForTesting(
-            wxNotebook::WinUIProjectionPointForTesting::AutomationName,
+        wxWinUINotebookTestAccess::SetNextProjectionHook(*doomed, wxWinUINotebookTestAccess::ProjectionPoint::AutomationName,
             &DestroyNotebookDuringProjection,
             &probe);
         CHECK(doomed->SetPageText(0, "destroy"));
@@ -3376,11 +3355,11 @@ TEST_CASE("wxWinUI Notebook header projection is last-writer-wins",
         CHECK(probe.calls == 1);
         CHECK(lifetime.get() == nullptr);
         CHECK(
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
             baseline + 1);
         wxWinUIDrainNotebookCallbacks();
         CHECK(
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
             baseline);
     }
 }
@@ -3399,44 +3378,41 @@ TEST_CASE("wxWinUI Notebook page mutations are atomic",
     REQUIRE(notebook.AddPage(second, "second", false, wxNOT_FOUND));
     REQUIRE(notebook.GetSelection() == 0);
     REQUIRE(notebook.GetPageCount() == 2);
-    REQUIRE(notebook.WinUIGetPeerPageCountForTesting() == 2);
+    REQUIRE(wxWinUINotebookTestAccess::GetPeerPageCount(notebook) == 2);
 
     wxPanel * const rejected = new wxPanel(&notebook);
-    notebook.WinUIFailNextPeerMutationForTesting(
-        wxNotebook::WinUIPeerMutationForTesting::InsertPage);
+    wxWinUINotebookTestAccess::FailNextPeerMutation(notebook, wxWinUINotebookTestAccess::PeerMutation::InsertPage);
     CHECK_FALSE(notebook.InsertPage(
         1, rejected, "rejected", false, wxNOT_FOUND));
     CHECK(notebook.GetPageCount() == 2);
-    CHECK(notebook.WinUIGetPeerPageCountForTesting() == 2);
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageCount(notebook) == 2);
     CHECK(notebook.GetPage(0) == first);
     CHECK(notebook.GetPage(1) == second);
     CHECK(notebook.GetPageText(0) == "first");
     CHECK(notebook.GetPageText(1) == "second");
-    CHECK(notebook.WinUIGetPeerPageTextForTesting(0) == "first");
-    CHECK(notebook.WinUIGetPeerPageTextForTesting(1) == "second");
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 0) == "first");
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 1) == "second");
     CHECK(notebook.GetSelection() == 0);
     delete rejected;
 
-    notebook.WinUIFailNextPeerMutationForTesting(
-        wxNotebook::WinUIPeerMutationForTesting::RemovePage);
+    wxWinUINotebookTestAccess::FailNextPeerMutation(notebook, wxWinUINotebookTestAccess::PeerMutation::RemovePage);
     CHECK_FALSE(notebook.RemovePage(0));
     CHECK(notebook.GetPageCount() == 2);
-    CHECK(notebook.WinUIGetPeerPageCountForTesting() == 2);
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageCount(notebook) == 2);
     CHECK(notebook.GetPage(0) == first);
     CHECK(notebook.GetPage(1) == second);
-    CHECK(notebook.WinUIGetPeerPageTextForTesting(0) == "first");
-    CHECK(notebook.WinUIGetPeerPageTextForTesting(1) == "second");
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 0) == "first");
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 1) == "second");
     CHECK(notebook.GetSelection() == 0);
 
-    notebook.WinUIFailNextPeerMutationForTesting(
-        wxNotebook::WinUIPeerMutationForTesting::ClearPages);
+    wxWinUINotebookTestAccess::FailNextPeerMutation(notebook, wxWinUINotebookTestAccess::PeerMutation::ClearPages);
     CHECK_FALSE(notebook.DeleteAllPages());
     CHECK(notebook.GetPageCount() == 2);
-    CHECK(notebook.WinUIGetPeerPageCountForTesting() == 2);
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageCount(notebook) == 2);
     CHECK(notebook.GetPage(0) == first);
     CHECK(notebook.GetPage(1) == second);
-    CHECK(notebook.WinUIGetPeerPageTextForTesting(0) == "first");
-    CHECK(notebook.WinUIGetPeerPageTextForTesting(1) == "second");
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 0) == "first");
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 1) == "second");
     CHECK(notebook.GetSelection() == 0);
 
     // Each injected failure is one-shot: the same operations must remain
@@ -3445,19 +3421,19 @@ TEST_CASE("wxWinUI Notebook page mutations are atomic",
     REQUIRE(notebook.InsertPage(
         0, inserted, "inserted", false, wxNOT_FOUND));
     CHECK(notebook.GetPageCount() == 3);
-    CHECK(notebook.WinUIGetPeerPageCountForTesting() == 3);
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageCount(notebook) == 3);
     CHECK(notebook.GetSelection() == 1);
     CHECK(notebook.GetCurrentPage() == first);
     REQUIRE(notebook.RemovePage(0));
     CHECK(notebook.GetPageCount() == 2);
-    CHECK(notebook.WinUIGetPeerPageCountForTesting() == 2);
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageCount(notebook) == 2);
     CHECK(notebook.GetSelection() == 0);
     CHECK(notebook.GetCurrentPage() == first);
     delete inserted;
 
     REQUIRE(notebook.DeleteAllPages());
     CHECK(notebook.GetPageCount() == 0);
-    CHECK(notebook.WinUIGetPeerPageCountForTesting() == 0);
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageCount(notebook) == 0);
     CHECK(notebook.GetSelection() == wxNOT_FOUND);
 }
 
@@ -3476,8 +3452,7 @@ TEST_CASE("wxWinUI Notebook insertion removes a page destroyed by projection",
     const wxWeakRef<wxWindow> candidateLifetime(candidate);
     NotebookDestroyInsertedPageProjection probe;
     probe.page = candidate;
-    notebook.WinUISetNextProjectionHookForTesting(
-        wxNotebook::WinUIProjectionPointForTesting::LabelText,
+    wxWinUINotebookTestAccess::SetNextProjectionHook(notebook, wxWinUINotebookTestAccess::ProjectionPoint::LabelText,
         &DestroyInsertedPageDuringProjection,
         &probe);
 
@@ -3491,8 +3466,8 @@ TEST_CASE("wxWinUI Notebook insertion removes a page destroyed by projection",
     CHECK(notebook.GetPage(0) == existing);
     CHECK(notebook.GetPageText(0) == "existing");
     CHECK(notebook.GetSelection() == 0);
-    CHECK(notebook.WinUIGetPeerPageCountForTesting() == 1);
-    CHECK(notebook.WinUIGetPeerPageTextForTesting(0) == "existing");
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageCount(notebook) == 1);
+    CHECK(wxWinUINotebookTestAccess::GetPeerPageText(notebook, 0) == "existing");
 }
 
 TEST_CASE("wxWinUI Notebook callbacks do not outlive their owner",
@@ -3506,7 +3481,7 @@ TEST_CASE("wxWinUI Notebook callbacks do not outlive their owner",
     // this test's own lifetime baseline.
     wxWinUIDrainNotebookCallbacks();
     const size_t baseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     int changed = 0;
 
     {
@@ -3525,30 +3500,30 @@ TEST_CASE("wxWinUI Notebook callbacks do not outlive their owner",
             });
 
         REQUIRE(
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
             baseline + 1);
-        REQUIRE(notebook->WinUIQueueSelectionCallbackForTesting(1));
+        REQUIRE(wxWinUINotebookTestAccess::QueueSelectionCallback(*notebook, 1));
         REQUIRE(!notebook->GetTabRect(0).IsEmpty());
 
         // Close is deliberately invoked twice before the destructor. The
         // queued callback still owns the state, but its generation is stale.
-        notebook->WinUIClosePeerForTesting();
-        notebook->WinUIClosePeerForTesting();
-        CHECK(notebook->WinUIGetPeerPageCountForTesting() == 0);
+        wxWinUINotebookTestAccess::ClosePeer(*notebook);
+        wxWinUINotebookTestAccess::ClosePeer(*notebook);
+        CHECK(wxWinUINotebookTestAccess::GetPeerPageCount(*notebook) == 0);
         CHECK(notebook->GetTabRect(0).IsEmpty());
         long flags = 0;
         CHECK(notebook->HitTest(wxPoint(1, 1), &flags) == wxNOT_FOUND);
         CHECK(flags == wxBK_HITTEST_NOWHERE);
         notebook.reset();
         CHECK(
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
             baseline + 1);
     }
 
     wxWinUIDrainNotebookCallbacks();
     CHECK(changed == 0);
     CHECK(
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
         baseline);
 
     // A wx event handler is also allowed to destroy the control synchronously.
@@ -3568,11 +3543,11 @@ TEST_CASE("wxWinUI Notebook callbacks do not outlive their owner",
     CHECK(doomed->SetSelection(1) == 0);
     CHECK(lifetime.get() == nullptr);
     CHECK(
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
         baseline + 1);
     wxWinUIDrainNotebookCallbacks();
     CHECK(
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
         baseline);
 }
 
@@ -3587,7 +3562,7 @@ TEST_CASE("wxWinUI Notebook selection revalidates virtual boundaries",
                  size_t page = wxNOT_FOUND)
         {
             const size_t baseline =
-                wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+                wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
             NotebookVirtualBoundary * const notebook =
                 new NotebookVirtualBoundary(
                     parent,
@@ -3606,7 +3581,7 @@ TEST_CASE("wxWinUI Notebook selection revalidates virtual boundaries",
 
             wxWinUIDrainNotebookCallbacks();
             CHECK(
-                wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+                wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
                 baseline);
         };
 
@@ -3643,7 +3618,7 @@ TEST_CASE("wxWinUI Notebook selection revalidates virtual boundaries",
     SECTION("insertion GetPageRect")
     {
         const size_t baseline =
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
         NotebookVirtualBoundary * const notebook =
             new NotebookVirtualBoundary(
                 parent,
@@ -3662,7 +3637,7 @@ TEST_CASE("wxWinUI Notebook selection revalidates virtual boundaries",
 
         wxWinUIDrainNotebookCallbacks();
         CHECK(
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
             baseline);
     }
 }

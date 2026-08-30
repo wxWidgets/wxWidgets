@@ -15,6 +15,7 @@
 #include "wx/bitmap.h"
 #include "wx/log.h"
 #include "wx/toolbar.h"
+#include "../winui/test-support/toolbar-test-access.h"
 #include "wx/weakref.h"
 
 #if wxUSE_BUTTON
@@ -97,7 +98,7 @@ void RequestNestedRebuild(wxToolBar *toolbar, void *context)
         static_cast<NestedRebuildProbe *>(context);
     probe->invoked = true;
     probe->nestedResult =
-        toolbar->WinUIRefreshForScaleForTesting(1.5);
+        wxWinUIToolBarTestAccess::RefreshForScale(*toolbar, 1.5);
 }
 
 struct NestedBitmapSizeProbe
@@ -194,9 +195,9 @@ void MutateCandidateDuringLoaded(wxToolBar *toolbar, void *context)
     toolbar->EnableTool(probe->toolId, false);
     toolbar->SetToolShortHelp(probe->toolId, "loaded-final");
 
-    wxWinUIToolPeerSnapshot state;
+    wxWinUIToolBarTestAccess::PeerSnapshot state;
     probe->sawCandidate =
-        toolbar->WinUIGetToolPeerStateForTesting(
+        wxWinUIToolBarTestAccess::GetToolPeerState(*toolbar,
             probe->toolId, &state) &&
         !state.enabled &&
         state.toolTip == "loaded-final" &&
@@ -262,7 +263,7 @@ void ContinueShortHelpStorm(wxToolBar *toolbar, void *context)
 
     if ( probe->remaining )
     {
-        toolbar->WinUISetNextShortHelpSetterHookForTesting(
+        wxWinUIToolBarTestAccess::SetNextShortHelpSetterHook(*toolbar,
             &ContinueShortHelpStorm, probe);
     }
     toolbar->SetToolShortHelp(
@@ -297,7 +298,7 @@ void ReenterOverflowMutation(wxToolBar *toolbar, void *context)
         static_cast<OverflowMutationProbe *>(context);
     probe->invoked = true;
     probe->nestedResult =
-        toolbar->WinUIApplyOverflowExtentForTesting(
+        wxWinUIToolBarTestAccess::ApplyOverflowExtent(*toolbar,
             probe->nestedExtent);
 }
 
@@ -333,36 +334,36 @@ TEST_CASE("wxWinUI ToolBar deletion is atomic and leaves no ghost peer",
     REQUIRE(toolbar.AddSeparator());
     REQUIRE(toolbar.AddTool(103, "three", bitmap));
     REQUIRE(toolbar.Realize());
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 4);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 4);
 
     REQUIRE(toolbar.AddTool(104, "late", bitmap));
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 5);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 5);
     REQUIRE(toolbar.DeleteTool(104));
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 4);
-    toolbar.WinUIFailNextRebuildForTesting();
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 4);
+    wxWinUIToolBarTestAccess::FailNextRebuild(toolbar);
     CHECK(toolbar.AddTool(105, "rejected", bitmap) == nullptr);
     CHECK(toolbar.FindById(105) == nullptr);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 4);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 4);
 
     // A failed candidate must leave both the common model and the old visual
     // generation intact.
-    toolbar.WinUIFailNextRebuildForTesting();
+    wxWinUIToolBarTestAccess::FailNextRebuild(toolbar);
     CHECK_FALSE(toolbar.DeleteTool(102));
     CHECK(toolbar.FindById(102) != nullptr);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 4);
-    CHECK(toolbar.WinUIInvokeToolForTesting(102));
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 4);
+    CHECK(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 102));
     CHECK(toolbar.GetToolState(102));
 
     wxToolBarToolBase * const removed = toolbar.RemoveTool(101);
     REQUIRE(removed);
     CHECK(toolbar.FindById(101) == nullptr);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 3);
-    CHECK_FALSE(toolbar.WinUIInvokeToolForTesting(101));
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 3);
+    CHECK_FALSE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 101));
     delete removed;
 
     REQUIRE(toolbar.DeleteTool(102));
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 2);
-    CHECK_FALSE(toolbar.WinUIInvokeToolForTesting(102));
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 2);
+    CHECK_FALSE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 102));
 
     int ghostClicks = 0;
     toolbar.Bind(
@@ -372,20 +373,20 @@ TEST_CASE("wxWinUI ToolBar deletion is atomic and leaves no ghost peer",
             ++ghostClicks;
         },
         103);
-    REQUIRE(toolbar.WinUIQueueToolClickForTesting(103));
+    REQUIRE(wxWinUIToolBarTestAccess::QueueToolClick(toolbar, 103));
     REQUIRE(toolbar.DeleteTool(103));
     DrainToolbarCallbacks();
     CHECK(ghostClicks == 0);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 1);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 1);
 
-    toolbar.WinUIFailNextRebuildForTesting();
+    wxWinUIToolBarTestAccess::FailNextRebuild(toolbar);
     toolbar.ClearTools();
     CHECK(toolbar.GetToolsCount() == 1);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 1);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 1);
 
     toolbar.ClearTools();
     CHECK(toolbar.GetToolsCount() == 0);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 0);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 0);
     CHECK(toolbar.FindToolForPosition(1, 1) == nullptr);
 }
 
@@ -409,43 +410,43 @@ TEST_CASE("wxWinUI ToolBar check radio dropdown and veto are exact",
     REQUIRE(toolbar.AddTool(205, "promoted", normal));
     REQUIRE(toolbar.Realize());
 
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(201));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 201));
     CHECK(toolbar.GetToolState(201));
     CHECK(toolbar.lastId == 201);
     CHECK(toolbar.lastToggle);
 
     toolbar.vetoId = 201;
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(201));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 201));
     CHECK(toolbar.GetToolState(201));
     CHECK_FALSE(toolbar.lastToggle);
 
     toolbar.vetoId = wxID_NONE;
     toolbar.ToggleTool(202, true);
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(203));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 203));
     CHECK_FALSE(toolbar.GetToolState(202));
     CHECK(toolbar.GetToolState(203));
 
     // Vetoing another radio restores the entire old group, including the
     // previously selected radio.
     toolbar.vetoId = 202;
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(202));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 202));
     CHECK_FALSE(toolbar.GetToolState(202));
     CHECK(toolbar.GetToolState(203));
 
     toolbar.EnableTool(201, false);
-    wxWinUIToolPeerSnapshot state;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(201, &state));
+    wxWinUIToolBarTestAccess::PeerSnapshot state;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 201, &state));
     CHECK_FALSE(state.enabled);
     CHECK(state.hasIcon);
     CHECK(state.usesDisabledBitmap);
-    CHECK_FALSE(toolbar.WinUIInvokeToolForTesting(201));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 201));
 
     toolbar.SetToggle(205, true);
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(205));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 205));
     CHECK(toolbar.GetToolState(205));
 
     toolbar.Enable(false);
-    CHECK_FALSE(toolbar.WinUIInvokeToolForTesting(204));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 204));
     toolbar.Enable(true);
 
     int dropdownEvents = 0;
@@ -459,10 +460,10 @@ TEST_CASE("wxWinUI ToolBar check radio dropdown and veto are exact",
         204);
     toolbar.vetoId = wxID_NONE;
     const int clicksBeforeMain = toolbar.clicks;
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(204));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 204));
     CHECK(toolbar.clicks == clicksBeforeMain + 1);
     CHECK(dropdownEvents == 0);
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(204, true));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 204, true));
     CHECK(dropdownEvents == 1);
     CHECK(toolbar.clicks == clicksBeforeMain + 1);
 }
@@ -490,8 +491,8 @@ TEST_CASE("wxWinUI ToolBar detached tools reinsert and kind rollback is exact",
         REQUIRE(detached);
         CHECK(detached->GetToolBar() == nullptr);
         REQUIRE(toolbar.AddTool(detached) == detached);
-        wxWinUIToolPeerSnapshot state;
-        REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(id, &state));
+        wxWinUIToolBarTestAccess::PeerSnapshot state;
+        REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, id, &state));
         CHECK(state.hasIcon);
         CHECK_FALSE(state.usesDisabledBitmap);
     }
@@ -503,11 +504,11 @@ TEST_CASE("wxWinUI ToolBar detached tools reinsert and kind rollback is exact",
     REQUIRE(radio->GetKind() == wxITEM_RADIO);
     REQUIRE(dropdown->GetKind() == wxITEM_DROPDOWN);
 
-    toolbar.WinUIFailNextRebuildForTesting();
+    wxWinUIToolBarTestAccess::FailNextRebuild(toolbar);
     toolbar.SetToggle(273, false);
     CHECK(radio->GetKind() == wxITEM_RADIO);
 
-    toolbar.WinUIFailNextRebuildForTesting();
+    wxWinUIToolBarTestAccess::FailNextRebuild(toolbar);
     toolbar.SetToggle(274, true);
     CHECK(dropdown->GetKind() == wxITEM_DROPDOWN);
 
@@ -519,7 +520,7 @@ TEST_CASE("wxWinUI ToolBar detached tools reinsert and kind rollback is exact",
             ++dropdownEvents;
         },
         274);
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(274, true));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 274, true));
     CHECK(dropdownEvents == 1);
 }
 
@@ -545,15 +546,15 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     REQUIRE(toolbar.Realize());
     DrainToolbarCallbacks();
 
-    wxWinUIToolPeerSnapshot first;
-    wxWinUIToolPeerSnapshot stretch;
-    wxWinUIToolPeerSnapshot second;
-    wxWinUIToolPeerSnapshot control;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(301, &first));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(
+    wxWinUIToolBarTestAccess::PeerSnapshot first;
+    wxWinUIToolBarTestAccess::PeerSnapshot stretch;
+    wxWinUIToolBarTestAccess::PeerSnapshot second;
+    wxWinUIToolBarTestAccess::PeerSnapshot control;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 301, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar,
         wxID_SEPARATOR, &stretch));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(302, &second));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(303, &control));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 302, &second));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 303, &control));
 
     CHECK(first.hasIcon);
     CHECK(first.showsText);
@@ -569,7 +570,7 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     CHECK(control.bounds.height > 0);
 
     toolbar.SetToolShortHelp(303, "embedded tip");
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(303, &control));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 303, &control));
     CHECK(control.toolTip == "embedded tip");
 #if wxUSE_TOOLTIPS
     CHECK(embedded->GetToolTipText() == "embedded tip");
@@ -584,14 +585,14 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     CHECK(embedded->GetPosition().y >= control.bounds.y - 1);
 
     toolbar.SetToolShortHelp(301, "updated tip");
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(301, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 301, &first));
     CHECK(first.toolTip == "updated tip");
     toolbar.SetToolShortHelp(301, wxString());
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(301, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 301, &first));
     CHECK(first.toolTip.empty());
 
-    REQUIRE(toolbar.WinUIRefreshForScaleForTesting(2.0));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(301, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::RefreshForScale(toolbar, 2.0));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 301, &first));
     CHECK(first.selectedPixelSize == wxSize(32, 32));
 
     wxToolBar noIcons(
@@ -599,7 +600,7 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
         wxTB_HORIZONTAL | wxTB_TEXT | wxTB_NOICONS);
     REQUIRE(noIcons.AddTool(311, "Text only", bitmap));
     REQUIRE(noIcons.Realize());
-    REQUIRE(noIcons.WinUIGetToolPeerStateForTesting(311, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(noIcons, 311, &first));
     CHECK_FALSE(first.hasIcon);
     CHECK(first.showsText);
 
@@ -609,12 +610,12 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     REQUIRE(noTips.AddTool(312, "No tip", bitmap, "suppressed"));
     noTips.SetToolLongHelp(312, "accessible long help");
     REQUIRE(noTips.Realize());
-    REQUIRE(noTips.WinUIGetToolPeerStateForTesting(312, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(noTips, 312, &first));
     CHECK(first.toolTip.empty());
     CHECK(first.peerToolTip.empty());
     CHECK(first.helpText == "accessible long help");
     noTips.SetToolLongHelp(312, wxString());
-    REQUIRE(noTips.WinUIGetToolPeerStateForTesting(312, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(noTips, 312, &first));
     CHECK(first.helpText == "suppressed");
 
     wxToolBar bitmapSized(
@@ -622,23 +623,23 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     bitmapSized.SetToolBitmapSize(wxSize(24, 24));
     REQUIRE(bitmapSized.AddTool(313, "Sized", bitmap));
     REQUIRE(bitmapSized.Realize());
-    REQUIRE(bitmapSized.WinUIGetToolPeerStateForTesting(313, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(bitmapSized, 313, &first));
     CHECK(first.selectedPixelSize ==
           bitmapSized.FromDIP(wxSize(24, 24)));
     bitmapSized.SetToolBitmapSize(wxSize(20, 20));
-    REQUIRE(bitmapSized.WinUIGetToolPeerStateForTesting(313, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(bitmapSized, 313, &first));
     CHECK(first.selectedPixelSize ==
           bitmapSized.FromDIP(wxSize(20, 20)));
 
     // A rejected native-peer publication restores both the effective size
     // and wxToolBarBase's retained DIP preference. Re-realizing exercises
     // AdjustToolBitmapSize(): the rejected 28-DIP request must not reappear.
-    bitmapSized.WinUIFailNextRebuildForTesting();
+    wxWinUIToolBarTestAccess::FailNextRebuild(bitmapSized);
     bitmapSized.SetToolBitmapSize(wxSize(28, 28));
     CHECK(bitmapSized.GetToolBitmapSize() == wxSize(20, 20));
     REQUIRE(bitmapSized.Realize());
     CHECK(bitmapSized.GetToolBitmapSize() == wxSize(20, 20));
-    REQUIRE(bitmapSized.WinUIGetToolPeerStateForTesting(313, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(bitmapSized, 313, &first));
     CHECK(first.selectedPixelSize ==
           bitmapSized.FromDIP(wxSize(20, 20)));
 
@@ -647,15 +648,15 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     // host then rejects A as well.
     NestedBitmapSizeProbe nestedBitmapSize;
     nestedBitmapSize.requestedSize = wxSize(30, 30);
-    bitmapSized.WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(bitmapSized,
         &RequestNestedBitmapSize, &nestedBitmapSize);
-    bitmapSized.WinUIFailNextRebuildForTesting();
+    wxWinUIToolBarTestAccess::FailNextRebuild(bitmapSized);
     bitmapSized.SetToolBitmapSize(wxSize(24, 24));
     CHECK(nestedBitmapSize.invoked);
     CHECK(bitmapSized.GetToolBitmapSize() == wxSize(20, 20));
     REQUIRE(bitmapSized.Realize());
     CHECK(bitmapSized.GetToolBitmapSize() == wxSize(20, 20));
-    REQUIRE(bitmapSized.WinUIGetToolPeerStateForTesting(313, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(bitmapSized, 313, &first));
     CHECK(first.selectedPixelSize ==
           bitmapSized.FromDIP(wxSize(20, 20)));
 
@@ -671,7 +672,7 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     CHECK(configuredLayout.GetToolMargins() == wxSize(9, 7));
     CHECK(configuredLayout.GetToolPacking() == 12);
     CHECK(configuredLayout.GetToolSeparation() == 28);
-    REQUIRE(configuredLayout.WinUIGetToolPeerStateForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(configuredLayout,
         wxID_SEPARATOR, &stretch));
     CHECK(stretch.bounds.width >= 27);
 
@@ -690,10 +691,10 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     REQUIRE(vertical.AddTool(322, "lower", bitmap));
     REQUIRE(vertical.Realize());
     DrainToolbarCallbacks();
-    REQUIRE(vertical.WinUIGetToolPeerStateForTesting(321, &first));
-    REQUIRE(vertical.WinUIGetToolPeerStateForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(vertical, 321, &first));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(vertical,
         wxID_SEPARATOR, &stretch));
-    REQUIRE(vertical.WinUIGetToolPeerStateForTesting(322, &second));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(vertical, 322, &second));
     CHECK(second.bounds.y > first.bounds.GetBottom());
     CHECK(stretch.bounds.width > stretch.bounds.height);
 
@@ -701,11 +702,11 @@ TEST_CASE("wxWinUI ToolBar styles bounds stretch controls and DPI are real",
     wxToolBarToolBase * const controlTool = toolbar.RemoveTool(303);
     REQUIRE(controlTool);
     CHECK_FALSE(embedded->IsShown());
-    CHECK_FALSE(toolbar.WinUIGetToolPeerStateForTesting(303, &control));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 303, &control));
     REQUIRE(toolbar.AddTool(controlTool) == controlTool);
     DrainToolbarCallbacks();
     CHECK(embedded->IsShown());
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(303, &control));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 303, &control));
     wxToolBarToolBase * const removedAgain = toolbar.RemoveTool(303);
     REQUIRE(removedAgain == controlTool);
     delete removedAgain;
@@ -744,27 +745,27 @@ TEST_CASE("wxWinUI ToolBar overflow reparents one peer without losing state",
     REQUIRE(WaitToolbarCondition(
         [&]()
         {
-            return toolbar.WinUIIsRootLoadedForTesting();
+            return wxWinUIToolBarTestAccess::IsRootLoaded(toolbar);
         }));
     DrainToolbarCallbacks();
 
     const size_t peerCount =
-        toolbar.WinUIGetPeerToolCountForTesting();
+        wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar);
     REQUIRE(peerCount == toolbar.GetToolsCount());
     const wxCoord roomyExtent = toolbar.FromDIP(1000);
     const wxCoord narrowExtent = toolbar.FromDIP(180);
-    REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(roomyExtent));
-    CHECK_FALSE(toolbar.WinUIIsOverflowChevronVisibleForTesting());
-    CHECK(toolbar.WinUIGetOverflowedToolCountForTesting() == 0);
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar, roomyExtent));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::IsOverflowChevronVisible(toolbar));
+    CHECK(wxWinUIToolBarTestAccess::GetOverflowedToolCount(toolbar) == 0);
 
-    wxWinUIToolPeerSnapshot checkBefore;
-    wxWinUIToolPeerSnapshot firstRadioBefore;
-    wxWinUIToolPeerSnapshot dropdownBefore;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(
+    wxWinUIToolBarTestAccess::PeerSnapshot checkBefore;
+    wxWinUIToolBarTestAccess::PeerSnapshot firstRadioBefore;
+    wxWinUIToolBarTestAccess::PeerSnapshot dropdownBefore;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar,
         611, &checkBefore));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar,
         612, &firstRadioBefore));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar,
         614, &dropdownBefore));
 
     int dropdownEvents = 0;
@@ -776,30 +777,30 @@ TEST_CASE("wxWinUI ToolBar overflow reparents one peer without losing state",
             CHECK(event.GetId() == 614);
         },
         614);
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(614, true));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 614, true));
     CHECK(dropdownEvents == 1);
 
     toolbar.SetSize(wxSize(narrowExtent, toolbar.GetSize().y));
     DrainToolbarCallbacks();
-    REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(narrowExtent));
-    CHECK(toolbar.WinUIIsOverflowChevronVisibleForTesting());
-    CHECK(toolbar.WinUIGetOverflowedToolCountForTesting() >= 4);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == peerCount);
-    CHECK_FALSE(toolbar.WinUIGetOverflowChevronNameForTesting().empty());
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar, narrowExtent));
+    CHECK(wxWinUIToolBarTestAccess::IsOverflowChevronVisible(toolbar));
+    CHECK(wxWinUIToolBarTestAccess::GetOverflowedToolCount(toolbar) >= 4);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == peerCount);
+    CHECK_FALSE(wxWinUIToolBarTestAccess::GetOverflowChevronName(toolbar).empty());
 
-    wxWinUIToolPeerSnapshot control;
-    wxWinUIToolPeerSnapshot stretch;
-    wxWinUIToolPeerSnapshot check;
-    wxWinUIToolPeerSnapshot firstRadio;
-    wxWinUIToolPeerSnapshot secondRadio;
-    wxWinUIToolPeerSnapshot dropdown;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(601, &control));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(
+    wxWinUIToolBarTestAccess::PeerSnapshot control;
+    wxWinUIToolBarTestAccess::PeerSnapshot stretch;
+    wxWinUIToolBarTestAccess::PeerSnapshot check;
+    wxWinUIToolBarTestAccess::PeerSnapshot firstRadio;
+    wxWinUIToolBarTestAccess::PeerSnapshot secondRadio;
+    wxWinUIToolBarTestAccess::PeerSnapshot dropdown;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 601, &control));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar,
         wxID_SEPARATOR, &stretch));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(611, &check));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(612, &firstRadio));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(613, &secondRadio));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(614, &dropdown));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 611, &check));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 612, &firstRadio));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 613, &secondRadio));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 614, &dropdown));
     CHECK(control.control);
     CHECK_FALSE(control.overflowEligible);
     CHECK_FALSE(control.overflowed);
@@ -861,21 +862,21 @@ TEST_CASE("wxWinUI ToolBar overflow reparents one peer without losing state",
         },
         611);
 
-    REQUIRE(toolbar.WinUIHoverToolForTesting(611, true));
+    REQUIRE(wxWinUIToolBarTestAccess::HoverTool(toolbar, 611, true));
     CHECK(enterEvents == 1);
     CHECK(lastEnteredTool == 611);
-    REQUIRE(toolbar.WinUIHoverToolForTesting(611, false));
+    REQUIRE(wxWinUIToolBarTestAccess::HoverTool(toolbar, 611, false));
     CHECK(enterEvents == 2);
     CHECK(lastEnteredTool == wxID_ANY);
-    REQUIRE(toolbar.WinUIRightClickToolForTesting(611));
+    REQUIRE(wxWinUIToolBarTestAccess::RightClickTool(toolbar, 611));
     CHECK(rightClickEvents == 1);
 
-    REQUIRE(toolbar.WinUIInvokeOverflowToolForTesting(611));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeOverflowTool(toolbar, 611));
     CHECK(checkEvents == 1);
     CHECK(lastCheckState);
     CHECK(toolbar.GetToolState(611));
-    REQUIRE(toolbar.WinUIInvokeOverflowToolForTesting(612));
-    REQUIRE(toolbar.WinUIInvokeOverflowToolForTesting(613));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeOverflowTool(toolbar, 612));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeOverflowTool(toolbar, 613));
     CHECK(radioEvents == 2);
     CHECK_FALSE(toolbar.GetToolState(612));
     CHECK(toolbar.GetToolState(613));
@@ -885,13 +886,13 @@ TEST_CASE("wxWinUI ToolBar overflow reparents one peer without losing state",
         [&]()
         {
             const wxRect chevron =
-                toolbar.WinUIGetOverflowChevronBoundsForTesting();
+                wxWinUIToolBarTestAccess::GetOverflowChevronBounds(toolbar);
             return !chevron.IsEmpty();
         }));
     REQUIRE(WaitToolbarCondition(
         [&]()
         {
-            return toolbar.WinUIIsOverflowChevronReadyForTesting();
+            return wxWinUIToolBarTestAccess::IsOverflowChevronReady(toolbar);
         }));
 
     // The isolated desktop runner deliberately does not activate its desktop;
@@ -903,15 +904,15 @@ TEST_CASE("wxWinUI ToolBar overflow reparents one peer without losing state",
     CHECK(dropdownEvents == 1);
 
     toolbar.EnableTool(611, false);
-    CHECK_FALSE(toolbar.WinUIInvokeOverflowToolForTesting(611));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(611, &check));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::InvokeOverflowTool(toolbar, 611));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 611, &check));
     CHECK_FALSE(check.enabled);
     CHECK(check.usesDisabledBitmap);
     toolbar.EnableTool(611, true);
 
     toolbar.Enable(false);
-    CHECK_FALSE(toolbar.WinUIInvokeOverflowToolForTesting(613));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(613, &secondRadio));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::InvokeOverflowTool(toolbar, 613));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 613, &secondRadio));
     CHECK_FALSE(secondRadio.enabled);
     toolbar.Enable(true);
 
@@ -919,12 +920,12 @@ TEST_CASE("wxWinUI ToolBar overflow reparents one peer without losing state",
     // count, model state, handler cardinality and UIA name all survive.
     toolbar.SetSize(wxSize(roomyExtent, toolbar.GetSize().y));
     DrainToolbarCallbacks();
-    REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(roomyExtent));
-    CHECK_FALSE(toolbar.WinUIIsOverflowChevronVisibleForTesting());
-    CHECK(toolbar.WinUIGetOverflowedToolCountForTesting() == 0);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == peerCount);
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(611, &check));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(613, &secondRadio));
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar, roomyExtent));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::IsOverflowChevronVisible(toolbar));
+    CHECK(wxWinUIToolBarTestAccess::GetOverflowedToolCount(toolbar) == 0);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == peerCount);
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 611, &check));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 613, &secondRadio));
     CHECK_FALSE(check.overflowed);
     CHECK_FALSE(secondRadio.overflowed);
     CHECK(toolbar.GetToolState(611));
@@ -932,8 +933,8 @@ TEST_CASE("wxWinUI ToolBar overflow reparents one peer without losing state",
     CHECK(check.automationName == "Check");
     CHECK(check.peerIdentity == checkBefore.peerIdentity);
     CHECK(secondRadio.peerIdentity != 0);
-    CHECK_FALSE(toolbar.WinUIInvokeOverflowToolForTesting(611));
-    REQUIRE(toolbar.WinUIInvokeToolForTesting(611));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::InvokeOverflowTool(toolbar, 611));
+    REQUIRE(wxWinUIToolBarTestAccess::InvokeTool(toolbar, 611));
     CHECK(checkEvents == 2);
     CHECK_FALSE(lastCheckState);
 }
@@ -951,18 +952,18 @@ TEST_CASE("wxWinUI ToolBar overflow respects logical RTL and vertical ends",
     REQUIRE(ltr.AddTool(621, "Second", bitmap));
     REQUIRE(ltr.AddTool(622, "Third", bitmap));
     REQUIRE(ltr.Realize());
-    REQUIRE(ltr.WinUIApplyOverflowExtentForTesting(ltr.FromDIP(120)));
-    wxWinUIToolPeerSnapshot ltrFirst;
-    REQUIRE(ltr.WinUIGetToolPeerStateForTesting(620, &ltrFirst));
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(ltr, ltr.FromDIP(120)));
+    wxWinUIToolBarTestAccess::PeerSnapshot ltrFirst;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(ltr, 620, &ltrFirst));
     const wxRect ltrChevron =
-        ltr.WinUIGetOverflowChevronBoundsForTesting();
+        wxWinUIToolBarTestAccess::GetOverflowChevronBounds(ltr);
     CHECK_FALSE(ltrChevron.IsEmpty());
     CHECK(ltrChevron.x > ltrFirst.bounds.x);
     ltr.SetLayoutDirection(wxLayout_RightToLeft);
-    REQUIRE(ltr.WinUIApplyOverflowExtentForTesting(ltr.FromDIP(120)));
-    REQUIRE(ltr.WinUIGetToolPeerStateForTesting(620, &ltrFirst));
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(ltr, ltr.FromDIP(120)));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(ltr, 620, &ltrFirst));
     const wxRect mirroredChevron =
-        ltr.WinUIGetOverflowChevronBoundsForTesting();
+        wxWinUIToolBarTestAccess::GetOverflowChevronBounds(ltr);
     CHECK_FALSE(mirroredChevron.IsEmpty());
     CHECK(mirroredChevron.x < ltrFirst.bounds.x);
 
@@ -973,11 +974,11 @@ TEST_CASE("wxWinUI ToolBar overflow respects logical RTL and vertical ends",
     REQUIRE(rtl.AddTool(631, "Second", bitmap));
     REQUIRE(rtl.AddTool(632, "Third", bitmap));
     REQUIRE(rtl.Realize());
-    REQUIRE(rtl.WinUIApplyOverflowExtentForTesting(rtl.FromDIP(120)));
-    wxWinUIToolPeerSnapshot rtlFirst;
-    REQUIRE(rtl.WinUIGetToolPeerStateForTesting(630, &rtlFirst));
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(rtl, rtl.FromDIP(120)));
+    wxWinUIToolBarTestAccess::PeerSnapshot rtlFirst;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(rtl, 630, &rtlFirst));
     const wxRect rtlChevron =
-        rtl.WinUIGetOverflowChevronBoundsForTesting();
+        wxWinUIToolBarTestAccess::GetOverflowChevronBounds(rtl);
     CHECK_FALSE(rtlChevron.IsEmpty());
     CHECK(rtlChevron.x < rtlFirst.bounds.x);
 
@@ -988,24 +989,24 @@ TEST_CASE("wxWinUI ToolBar overflow respects logical RTL and vertical ends",
     REQUIRE(vertical.AddTool(641, "Second", bitmap));
     REQUIRE(vertical.AddTool(642, "Third", bitmap));
     REQUIRE(vertical.Realize());
-    REQUIRE(vertical.WinUIApplyOverflowExtentForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(vertical,
         vertical.FromDIP(150)));
-    wxWinUIToolPeerSnapshot verticalFirst;
-    REQUIRE(vertical.WinUIGetToolPeerStateForTesting(
+    wxWinUIToolBarTestAccess::PeerSnapshot verticalFirst;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(vertical,
         640, &verticalFirst));
     const wxRect verticalChevron =
-        vertical.WinUIGetOverflowChevronBoundsForTesting();
+        wxWinUIToolBarTestAccess::GetOverflowChevronBounds(vertical);
     CHECK_FALSE(verticalChevron.IsEmpty());
     CHECK(verticalChevron.y > verticalFirst.bounds.y);
 
     const size_t beforeDpi =
-        vertical.WinUIGetOverflowedToolCountForTesting();
-    REQUIRE(vertical.WinUIRefreshForScaleForTesting(2.0));
-    REQUIRE(vertical.WinUIApplyOverflowExtentForTesting(
+        wxWinUIToolBarTestAccess::GetOverflowedToolCount(vertical);
+    REQUIRE(wxWinUIToolBarTestAccess::RefreshForScale(vertical, 2.0));
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(vertical,
         vertical.FromDIP(150)));
-    CHECK(vertical.WinUIGetOverflowedToolCountForTesting() == beforeDpi);
+    CHECK(wxWinUIToolBarTestAccess::GetOverflowedToolCount(vertical) == beforeDpi);
     CHECK_FALSE(
-        vertical.WinUIGetOverflowChevronNameForTesting().empty());
+        wxWinUIToolBarTestAccess::GetOverflowChevronName(vertical).empty());
 }
 
 TEST_CASE("wxWinUI ToolBar overflow mutation is bounded and destruction-safe",
@@ -1021,17 +1022,17 @@ TEST_CASE("wxWinUI ToolBar overflow mutation is bounded and destruction-safe",
     REQUIRE(toolbar.AddTool(651, "Second", bitmap));
     REQUIRE(toolbar.AddTool(652, "Third", bitmap));
     REQUIRE(toolbar.Realize());
-    REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar,
         toolbar.FromDIP(1000)));
 
-    wxWinUIToolPeerSnapshot baselineFirst;
-    wxWinUIToolPeerSnapshot baselineSecond;
-    wxWinUIToolPeerSnapshot baselineThird;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(
+    wxWinUIToolBarTestAccess::PeerSnapshot baselineFirst;
+    wxWinUIToolBarTestAccess::PeerSnapshot baselineSecond;
+    wxWinUIToolBarTestAccess::PeerSnapshot baselineThird;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar,
         650, &baselineFirst));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar,
         651, &baselineSecond));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar,
         652, &baselineThird));
 
     // Boundary 2 is exactly RemoveAt(source) -> InsertAt(destination),
@@ -1039,26 +1040,26 @@ TEST_CASE("wxWinUI ToolBar overflow mutation is bounded and destruction-safe",
     // chevron publication for this three-command topology.
     for ( const unsigned boundary : { 2u, 3u, 7u } )
     {
-        REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(
+        REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar,
             toolbar.FromDIP(1000)));
-        toolbar.WinUIFailNextOverflowMutationForTesting(boundary);
+        wxWinUIToolBarTestAccess::FailNextOverflowMutation(toolbar, boundary);
         {
             wxLogNull suppressExpectedFault;
-            CHECK_FALSE(toolbar.WinUIApplyOverflowExtentForTesting(
+            CHECK_FALSE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar,
                 toolbar.FromDIP(120)));
         }
 
-        wxWinUIToolPeerSnapshot first;
-        wxWinUIToolPeerSnapshot second;
-        wxWinUIToolPeerSnapshot third;
-        REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(650, &first));
-        REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(651, &second));
-        REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(652, &third));
+        wxWinUIToolBarTestAccess::PeerSnapshot first;
+        wxWinUIToolBarTestAccess::PeerSnapshot second;
+        wxWinUIToolBarTestAccess::PeerSnapshot third;
+        REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 650, &first));
+        REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 651, &second));
+        REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 652, &third));
         CHECK_FALSE(first.overflowed);
         CHECK_FALSE(second.overflowed);
         CHECK_FALSE(third.overflowed);
-        CHECK_FALSE(toolbar.WinUIIsOverflowChevronVisibleForTesting());
-        CHECK(toolbar.WinUIGetOverflowedToolCountForTesting() == 0);
+        CHECK_FALSE(wxWinUIToolBarTestAccess::IsOverflowChevronVisible(toolbar));
+        CHECK(wxWinUIToolBarTestAccess::GetOverflowedToolCount(toolbar) == 0);
         CHECK(first.peerIdentity == baselineFirst.peerIdentity);
         CHECK(second.peerIdentity == baselineSecond.peerIdentity);
         CHECK(third.peerIdentity == baselineThird.peerIdentity);
@@ -1066,62 +1067,62 @@ TEST_CASE("wxWinUI ToolBar overflow mutation is bounded and destruction-safe",
 
     OverflowMutationProbe nested;
     nested.nestedExtent = toolbar.FromDIP(1000);
-    toolbar.WinUISetNextOverflowMutationHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextOverflowMutationHook(toolbar,
         &ReenterOverflowMutation, &nested);
-    REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar,
         toolbar.FromDIP(120)));
     CHECK(nested.invoked);
     CHECK_FALSE(nested.nestedResult);
-    CHECK(toolbar.WinUIIsOverflowChevronVisibleForTesting());
-    CHECK(toolbar.WinUIGetOverflowedToolCountForTesting() == 2);
+    CHECK(wxWinUIToolBarTestAccess::IsOverflowChevronVisible(toolbar));
+    CHECK(wxWinUIToolBarTestAccess::GetOverflowedToolCount(toolbar) == 2);
 
-    REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar,
         toolbar.FromDIP(1000)));
     OverflowEnableMutationProbe enableMutation;
     enableMutation.toolId = 652;
-    toolbar.WinUISetNextOverflowMutationHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextOverflowMutationHook(toolbar,
         &DisableToolDuringOverflow, &enableMutation);
-    REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar,
         toolbar.FromDIP(120)));
     CHECK(enableMutation.invoked);
-    wxWinUIToolPeerSnapshot disabled;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(652, &disabled));
+    wxWinUIToolBarTestAccess::PeerSnapshot disabled;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 652, &disabled));
     CHECK_FALSE(disabled.enabled);
     CHECK(disabled.overflowed);
 
     toolbar.EnableTool(652, true);
-    REQUIRE(toolbar.WinUIApplyOverflowExtentForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar,
         toolbar.FromDIP(1000)));
     NestedRebuildProbe replacement;
-    toolbar.WinUISetNextOverflowMutationHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextOverflowMutationHook(toolbar,
         &RequestNestedRebuild, &replacement);
-    CHECK_FALSE(toolbar.WinUIApplyOverflowExtentForTesting(
+    CHECK_FALSE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(toolbar,
         toolbar.FromDIP(120)));
     CHECK(replacement.invoked);
     CHECK(replacement.nestedResult);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 3);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 3);
 
     DrainToolbarCallbacks();
     const size_t baseline =
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
     wxToolBar * const doomed = new wxToolBar(
         parent, wxID_ANY, wxDefaultPosition, wxSize(360, 72));
     REQUIRE(doomed->AddTool(660, "First", bitmap));
     REQUIRE(doomed->AddTool(661, "Second", bitmap));
     REQUIRE(doomed->AddTool(662, "Third", bitmap));
     REQUIRE(doomed->Realize());
-    REQUIRE(doomed->WinUIApplyOverflowExtentForTesting(
+    REQUIRE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(*doomed,
         doomed->FromDIP(1000)));
     wxWeakRef<wxWindow> lifetime(doomed);
     DestroyDuringLoadedProbe destruction;
-    doomed->WinUISetNextOverflowMutationHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextOverflowMutationHook(*doomed,
         &DestroyToolbarDuringLoaded, &destruction);
-    CHECK_FALSE(doomed->WinUIApplyOverflowExtentForTesting(
+    CHECK_FALSE(wxWinUIToolBarTestAccess::ApplyOverflowExtent(*doomed,
         doomed->FromDIP(120)));
     CHECK(destruction.invoked);
     CHECK(lifetime.get() == nullptr);
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         baseline);
 }
 
@@ -1132,7 +1133,7 @@ TEST_CASE("wxWinUI ToolBar rejects a control candidate destroyed in Loaded",
     REQUIRE(parent);
     DrainToolbarCallbacks();
     const size_t callbackBaseline =
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
 
     {
         wxToolBar toolbar(
@@ -1141,16 +1142,16 @@ TEST_CASE("wxWinUI ToolBar rejects a control candidate destroyed in Loaded",
             350, "stable", MakeToolbarBitmapBundle()));
         REQUIRE(toolbar.Realize());
         const size_t peerCount =
-            toolbar.WinUIGetPeerToolCountForTesting();
+            wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar);
         const size_t liveCallbackCount =
-            wxToolBar::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
 
         wxButton * const candidate =
             new wxButton(&toolbar, 351, "Candidate",
                          wxDefaultPosition, wxSize(92, 30));
         wxWeakRef<wxWindow> candidateLifetime(candidate);
         DestroyControlDuringLoadedProbe destruction{candidate};
-        toolbar.WinUISetNextRebuildLoadedHookForTesting(
+        wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
             &DestroyControlDuringLoaded, &destruction);
 
         CHECK(toolbar.AddControl(candidate, "candidate") == nullptr);
@@ -1158,14 +1159,14 @@ TEST_CASE("wxWinUI ToolBar rejects a control candidate destroyed in Loaded",
         CHECK(candidateLifetime.get() == nullptr);
         CHECK(toolbar.FindById(351) == nullptr);
         CHECK(toolbar.GetToolsCount() == 1);
-        CHECK(toolbar.WinUIGetPeerToolCountForTesting() == peerCount);
+        CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == peerCount);
         CHECK(
-            wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
             liveCallbackCount);
     }
 
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         callbackBaseline);
 }
 
@@ -1195,7 +1196,7 @@ TEST_CASE("wxWinUI ToolBar insertion has one transactional owner",
     REQUIRE(second.Realize());
 
     CrossToolbarInsertProbe probe{&second, candidate};
-    first.WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(first,
         &InsertCandidateIntoOtherToolbar, &probe);
     REQUIRE(first.AddTool(candidate) == candidate);
 
@@ -1203,9 +1204,9 @@ TEST_CASE("wxWinUI ToolBar insertion has one transactional owner",
     CHECK(probe.nestedResult == nullptr);
     CHECK(candidate->GetToolBar() == &first);
     CHECK(first.GetToolsCount() == 2);
-    CHECK(first.WinUIGetPeerToolCountForTesting() == 2);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(first) == 2);
     CHECK(second.GetToolsCount() == 1);
-    CHECK(second.WinUIGetPeerToolCountForTesting() == 1);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(second) == 1);
 
     // The same wrapper cannot be published a second time after the outer
     // insertion has committed either.
@@ -1233,7 +1234,7 @@ TEST_CASE("wxWinUI ToolBar neutralizes controls destroyed during removal",
 
     wxWeakRef<wxWindow> embeddedLifetime(embedded);
     DestroyControlDuringLoadedProbe destruction{embedded};
-    toolbar.WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
         &DestroyControlDuringLoaded, &destruction);
 
     wxToolBarToolBase * const removed = toolbar.RemoveTool(355);
@@ -1242,7 +1243,7 @@ TEST_CASE("wxWinUI ToolBar neutralizes controls destroyed during removal",
     CHECK(embeddedLifetime.get() == nullptr);
     CHECK(removed->GetControl() == nullptr);
     CHECK(toolbar.GetToolsCount() == 1);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 1);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 1);
 
     // The detached tool has already forgotten the dead control.
     delete removed;
@@ -1253,14 +1254,14 @@ TEST_CASE("wxWinUI ToolBar neutralizes controls destroyed during removal",
     REQUIRE(toolbar.AddControl(clearing, "clear-control"));
     wxWeakRef<wxWindow> clearingLifetime(clearing);
     DestroyControlDuringLoadedProbe clearDestruction{clearing};
-    toolbar.WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
         &DestroyControlDuringLoaded, &clearDestruction);
 
     toolbar.ClearTools();
     CHECK(clearDestruction.invoked);
     CHECK(clearingLifetime.get() == nullptr);
     CHECK(toolbar.GetToolsCount() == 0);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 0);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 0);
 
     wxButton * const firstCleared =
         new wxButton(&toolbar, 360, "First clear",
@@ -1289,7 +1290,7 @@ TEST_CASE("wxWinUI ToolBar neutralizes controls destroyed during removal",
     CHECK(laterReinsertedTool->GetToolBar() == &toolbar);
     CHECK(toolbar.GetToolsCount() == 1);
     CHECK(toolbar.FindById(361) == laterReinsertedTool);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 1);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 1);
 
     toolbar.ClearTools();
     CHECK(toolbar.GetToolsCount() == 0);
@@ -1321,7 +1322,7 @@ TEST_CASE("wxWinUI ToolBar neutralizes controls destroyed during removal",
     REQUIRE(nestedTransfer == roundTripTool);
     CHECK(nestedTransfer->GetToolBar() == nullptr);
     CHECK(toolbar.GetToolsCount() == 0);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 0);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 0);
     delete nestedTransfer;
 }
 
@@ -1332,7 +1333,7 @@ TEST_CASE("wxWinUI ToolBar candidate cleanup survives owner destruction",
     REQUIRE(parent);
     DrainToolbarCallbacks();
     const size_t callbackBaseline =
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
 
     wxToolBar * const doomed = new wxToolBar(
         parent, wxID_ANY, wxDefaultPosition, wxSize(360, 72));
@@ -1346,7 +1347,7 @@ TEST_CASE("wxWinUI ToolBar candidate cleanup survives owner destruction",
     wxWeakRef<wxWindow> candidateLifetime(candidate);
 
     DestroyDuringLoadedProbe destruction;
-    doomed->WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(*doomed,
         &DestroyToolbarDuringLoaded, &destruction);
     CHECK(doomed->AddControl(candidate, "candidate") == nullptr);
 
@@ -1354,7 +1355,7 @@ TEST_CASE("wxWinUI ToolBar candidate cleanup survives owner destruction",
     CHECK(toolbarLifetime.get() == nullptr);
     CHECK(candidateLifetime.get() == nullptr);
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         callbackBaseline);
 }
 
@@ -1399,7 +1400,7 @@ TEST_CASE("wxWinUI ToolBar control removal commits before Hide re-entry",
     CHECK(recursiveRemoval == nullptr);
     CHECK(toolbar.FindById(361) == nullptr);
     CHECK(toolbar.GetToolsCount() == 1);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 1);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 1);
 
     wxWeakRef<wxWindow> embeddedLifetime(embedded);
     delete removed;
@@ -1451,7 +1452,7 @@ TEST_CASE("wxWinUI ToolBar control removal commits before Hide re-entry",
     CHECK(reinsertedTool->GetToolBar() == &reinsertionToolbar);
     CHECK(reinsertionToolbar.FindById(363) == reinsertedTool);
     CHECK(reinsertionToolbar.GetToolsCount() == 1);
-    CHECK(reinsertionToolbar.WinUIGetPeerToolCountForTesting() == 1);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(reinsertionToolbar) == 1);
     DrainToolbarCallbacks();
 
     roundTrip = true;
@@ -1463,7 +1464,7 @@ TEST_CASE("wxWinUI ToolBar control removal commits before Hide re-entry",
     REQUIRE(nestedTransfer == reinsertedTool);
     CHECK(nestedTransfer->GetToolBar() == nullptr);
     CHECK(reinsertionToolbar.GetToolsCount() == 0);
-    CHECK(reinsertionToolbar.WinUIGetPeerToolCountForTesting() == 0);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(reinsertionToolbar) == 0);
     delete nestedTransfer;
 }
 
@@ -1488,7 +1489,7 @@ TEST_CASE("wxWinUI ToolBar DeleteToolByPos uses identity with duplicate IDs",
     REQUIRE(firstTool);
     REQUIRE(secondTool);
     REQUIRE(toolbar.Realize());
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 2);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 2);
 
     wxWeakRef<wxWindow> secondLifetime(second);
     REQUIRE(toolbar.DeleteToolByPos(1));
@@ -1497,9 +1498,9 @@ TEST_CASE("wxWinUI ToolBar DeleteToolByPos uses identity with duplicate IDs",
     CHECK(secondLifetime.get() == nullptr);
     CHECK(toolbar.GetToolsCount() == 1);
     CHECK(toolbar.FindById(365) == firstTool);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == 1);
-    wxWinUIToolPeerSnapshot state;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(365, &state));
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == 1);
+    wxWinUIToolBarTestAccess::PeerSnapshot state;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 365, &state));
     CHECK(state.control);
 }
 
@@ -1584,7 +1585,7 @@ TEST_CASE("wxWinUI ToolBar restores embedded control tooltip ownership exactly",
     REQUIRE(closePath.Realize());
     REQUIRE(closing->GetToolTip() == closeBaseline);
     CHECK(closeBaseline->GetTip() == "close-toolbar");
-    closePath.WinUIClosePeerForTesting();
+    wxWinUIToolBarTestAccess::ClosePeer(closePath);
     CHECK(closing->GetToolTip() == closeBaseline);
     CHECK(closeBaseline->GetTip() == "close-baseline");
 }
@@ -1663,28 +1664,28 @@ TEST_CASE("wxWinUI ToolBar rebuild is bounded under Loaded re-entry",
     REQUIRE(toolbar.AddTool(391, "stable", bitmap));
     REQUIRE(toolbar.Realize());
     const size_t peerCount =
-        toolbar.WinUIGetPeerToolCountForTesting();
+        wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar);
 
     NestedRebuildProbe nested;
-    toolbar.WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
         &RequestNestedRebuild, &nested);
-    CHECK(toolbar.WinUIRefreshForScaleForTesting(2.0));
+    CHECK(wxWinUIToolBarTestAccess::RefreshForScale(toolbar, 2.0));
     CHECK(nested.invoked);
     CHECK_FALSE(nested.nestedResult);
-    CHECK(toolbar.WinUIGetPeerToolCountForTesting() == peerCount);
+    CHECK(wxWinUIToolBarTestAccess::GetPeerToolCount(toolbar) == peerCount);
 
-    wxWinUIToolPeerSnapshot state;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(391, &state));
+    wxWinUIToolBarTestAccess::PeerSnapshot state;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 391, &state));
     CHECK(state.selectedPixelSize == wxSize(32, 32));
 
     LoadedMutationProbe mutation;
     mutation.toolId = 391;
-    toolbar.WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
         &MutateCandidateDuringLoaded, &mutation);
-    CHECK(toolbar.WinUIRefreshForScaleForTesting(1.5));
+    CHECK(wxWinUIToolBarTestAccess::RefreshForScale(toolbar, 1.5));
     CHECK(mutation.invoked);
     CHECK(mutation.sawCandidate);
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(391, &state));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 391, &state));
     CHECK_FALSE(state.enabled);
     CHECK(state.toolTip == "loaded-final");
     CHECK(state.peerToolTip == "loaded-final");
@@ -1709,14 +1710,14 @@ TEST_CASE("wxWinUI ToolBar label publication is transactional and last-writer wi
     // A failed outer candidate must retain and project the nested label writer
     // onto the restored generation, not roll it back with the unrelated peer.
     LoadedLabelProbe nested{stable, "nested-final"};
-    toolbar.WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
         &SetToolLabelDuringLoaded, &nested);
-    toolbar.WinUIFailNextRebuildForTesting();
+    wxWinUIToolBarTestAccess::FailNextRebuild(toolbar);
     stable->SetLabel("outer-obsolete");
     CHECK(nested.invoked);
     CHECK(stable->GetLabel() == "nested-final");
-    wxWinUIToolPeerSnapshot state;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(392, &state));
+    wxWinUIToolBarTestAccess::PeerSnapshot state;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 392, &state));
     CHECK(state.automationName == "nested-final");
 
     // The wrapper passed to AddTool() is still detached while DoInsertTool()
@@ -1727,12 +1728,12 @@ TEST_CASE("wxWinUI ToolBar label publication is transactional and last-writer wi
     REQUIRE(detached);
     REQUIRE(toolbar.RemoveTool(393) == detached);
     LoadedLabelProbe candidateMutation{detached, "candidate-final"};
-    toolbar.WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(toolbar,
         &SetToolLabelDuringLoaded, &candidateMutation);
     REQUIRE(toolbar.AddTool(detached) == detached);
     CHECK(candidateMutation.invoked);
     CHECK(detached->GetLabel() == "candidate-final");
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(393, &state));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 393, &state));
     CHECK(state.automationName == "candidate-final");
 }
 
@@ -1750,20 +1751,20 @@ TEST_CASE("wxWinUI ToolBar short help converges across re-entry and destroy",
 
     ReentrantShortHelpProbe nested;
     nested.toolId = 393;
-    toolbar.WinUISetNextShortHelpSetterHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextShortHelpSetterHook(toolbar,
         &ReplaceShortHelpFromSetter, &nested);
     toolbar.SetToolShortHelp(393, "outer-obsolete");
     CHECK(nested.invoked);
 
-    wxWinUIToolPeerSnapshot state;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(393, &state));
+    wxWinUIToolBarTestAccess::PeerSnapshot state;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 393, &state));
     CHECK(state.toolTip == "nested-final");
     CHECK(state.peerToolTip == "nested-final");
     CHECK(state.helpText == "nested-final");
 
     DrainToolbarCallbacks();
     const size_t baseline =
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
     wxToolBar * const doomed = new wxToolBar(
         parent, wxID_ANY, wxDefaultPosition, wxSize(240, 64));
     REQUIRE(doomed->AddTool(394, "doomed", bitmap, "initial"));
@@ -1771,13 +1772,13 @@ TEST_CASE("wxWinUI ToolBar short help converges across re-entry and destroy",
     wxWeakRef<wxWindow> lifetime(doomed);
 
     DestroyDuringShortHelpProbe destruction;
-    doomed->WinUISetNextShortHelpSetterHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextShortHelpSetterHook(*doomed,
         &DestroyToolbarDuringShortHelp, &destruction);
     doomed->SetToolShortHelp(394, "destroying");
     CHECK(destruction.invoked);
     CHECK(lifetime.get() == nullptr);
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         baseline);
 }
 
@@ -1796,9 +1797,9 @@ TEST_CASE("wxWinUI ToolBar short-help failure is quarantined per peer",
 
     OtherShortHelpProbe other;
     other.toolId = 396;
-    toolbar.WinUISetNextShortHelpSetterHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextShortHelpSetterHook(toolbar,
         &QueueOtherShortHelpFromSetter, &other);
-    toolbar.WinUIFailNextShortHelpSettersForTesting(395, 3);
+    wxWinUIToolBarTestAccess::FailNextShortHelpSetters(toolbar, 395, 3);
 
     {
         // The warning is the expected observable quarantine diagnostic.
@@ -1807,10 +1808,10 @@ TEST_CASE("wxWinUI ToolBar short-help failure is quarantined per peer",
     }
     CHECK(other.invoked);
 
-    wxWinUIToolPeerSnapshot failing;
-    wxWinUIToolPeerSnapshot healthy;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(395, &failing));
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(396, &healthy));
+    wxWinUIToolBarTestAccess::PeerSnapshot failing;
+    wxWinUIToolBarTestAccess::PeerSnapshot healthy;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 395, &failing));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 396, &healthy));
     CHECK(failing.toolTip == "failing-model");
     CHECK(failing.peerToolTip == "failing-initial");
     CHECK(failing.helpText == "failing-initial");
@@ -1820,7 +1821,7 @@ TEST_CASE("wxWinUI ToolBar short-help failure is quarantined per peer",
 
     // A later explicit write re-arms only the quarantined peer.
     toolbar.SetToolShortHelp(395, "recovered");
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(395, &failing));
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 395, &failing));
     CHECK(failing.peerToolTip == "recovered");
     CHECK(failing.helpText == "recovered");
 }
@@ -1840,7 +1841,7 @@ TEST_CASE("wxWinUI ToolBar short-help re-entry has a finite driver",
     ShortHelpStormProbe storm;
     storm.toolId = 397;
     storm.remaining = 1000;
-    toolbar.WinUISetNextShortHelpSetterHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextShortHelpSetterHook(toolbar,
         &ContinueShortHelpStorm, &storm);
 
     {
@@ -1855,12 +1856,12 @@ TEST_CASE("wxWinUI ToolBar short-help re-entry has a finite driver",
 
     // Stop the adversarial hook. A new top-level model write owns a fresh,
     // finite budget and must converge to the final value.
-    toolbar.WinUISetNextShortHelpSetterHookForTesting(nullptr, nullptr);
+    wxWinUIToolBarTestAccess::SetNextShortHelpSetterHook(toolbar, nullptr, nullptr);
     toolbar.SetToolShortHelp(397, "storm-final");
     DrainToolbarCallbacks();
 
-    wxWinUIToolPeerSnapshot state;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(397, &state));
+    wxWinUIToolBarTestAccess::PeerSnapshot state;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 397, &state));
     CHECK(state.toolTip == "storm-final");
     CHECK(state.peerToolTip == "storm-final");
     CHECK(state.helpText == "storm-final");
@@ -1882,7 +1883,7 @@ TEST_CASE("wxWinUI ToolBar enabled projection is last-writer-wins",
 
     ReentrantEnableProbe reenable;
     reenable.toolId = 398;
-    toolbar.WinUISetNextEnableSetterHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextEnableSetterHook(toolbar,
         &ReenableFromIsEnabledBoundary, &reenable);
 
     // Disabling a focused XAML button can synchronously emit LostFocus. The
@@ -1892,27 +1893,27 @@ TEST_CASE("wxWinUI ToolBar enabled projection is last-writer-wins",
     CHECK(reenable.invoked);
     CHECK(toolbar.GetToolEnabled(398));
 
-    wxWinUIToolPeerSnapshot state;
-    REQUIRE(toolbar.WinUIGetToolPeerStateForTesting(398, &state));
+    wxWinUIToolBarTestAccess::PeerSnapshot state;
+    REQUIRE(wxWinUIToolBarTestAccess::GetToolPeerState(toolbar, 398, &state));
     CHECK(state.enabled);
     CHECK_FALSE(state.usesDisabledBitmap);
 
     DrainToolbarCallbacks();
     const size_t baseline =
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
     wxToolBar * const doomed = new wxToolBar(
         parent, wxID_ANY, wxDefaultPosition, wxSize(240, 64));
     REQUIRE(doomed->AddTool(399, "doomed", normal));
     REQUIRE(doomed->Realize());
     wxWeakRef<wxWindow> lifetime(doomed);
     DestroyDuringShortHelpProbe destruction;
-    doomed->WinUISetNextEnableSetterHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextEnableSetterHook(*doomed,
         &DestroyToolbarDuringShortHelp, &destruction);
     doomed->EnableTool(399, false);
     CHECK(destruction.invoked);
     CHECK(lifetime.get() == nullptr);
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         baseline);
 }
 
@@ -1924,7 +1925,7 @@ TEST_CASE("wxWinUI ToolBar SetContent return survives Loaded destruction",
     const wxBitmapBundle bitmap = MakeToolbarBitmapBundle();
     DrainToolbarCallbacks();
     const size_t baseline =
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
 
     wxToolBar * const doomed = new wxToolBar(
         parent, wxID_ANY, wxDefaultPosition, wxSize(240, 64));
@@ -1933,13 +1934,13 @@ TEST_CASE("wxWinUI ToolBar SetContent return survives Loaded destruction",
     wxWeakRef<wxWindow> lifetime(doomed);
 
     DestroyDuringLoadedProbe destruction;
-    doomed->WinUISetNextRebuildLoadedHookForTesting(
+    wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(*doomed,
         &DestroyToolbarDuringLoaded, &destruction);
-    CHECK_FALSE(doomed->WinUIRefreshForScaleForTesting(2.0));
+    CHECK_FALSE(wxWinUIToolBarTestAccess::RefreshForScale(*doomed, 2.0));
     CHECK(destruction.invoked);
     CHECK(lifetime.get() == nullptr);
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         baseline);
 }
 
@@ -1951,7 +1952,7 @@ TEST_CASE("wxWinUI ToolBar callbacks do not outlive their owner",
     const wxBitmapBundle bitmap = MakeToolbarBitmapBundle();
     DrainToolbarCallbacks();
     const size_t baseline =
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount();
 
     for ( int i = 0; i < 100; ++i )
     {
@@ -1961,13 +1962,13 @@ TEST_CASE("wxWinUI ToolBar callbacks do not outlive their owner",
         REQUIRE(toolbar->AddTool(400 + i, "tool", bitmap));
         REQUIRE(toolbar->Realize());
         CHECK(
-            wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
             baseline + 1);
-        toolbar->WinUIClosePeerForTesting();
-        toolbar->WinUIClosePeerForTesting();
+        wxWinUIToolBarTestAccess::ClosePeer(*toolbar);
+        wxWinUIToolBarTestAccess::ClosePeer(*toolbar);
         toolbar.reset();
         CHECK(
-            wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+            wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
             baseline);
     }
 
@@ -1984,16 +1985,16 @@ TEST_CASE("wxWinUI ToolBar callbacks do not outlive their owner",
             ++lateClicks;
         },
         501);
-    REQUIRE(queued->WinUIQueueToolClickForTesting(501));
-    queued->WinUIClosePeerForTesting();
+    REQUIRE(wxWinUIToolBarTestAccess::QueueToolClick(*queued, 501));
+    wxWinUIToolBarTestAccess::ClosePeer(*queued);
     queued.reset();
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         baseline + 1);
     DrainToolbarCallbacks();
     CHECK(lateClicks == 0);
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         baseline);
 
     // Destruction from the synchronous wx event must stop dispatch before any
@@ -2010,10 +2011,10 @@ TEST_CASE("wxWinUI ToolBar callbacks do not outlive their owner",
             doomed->Destroy();
         },
         502);
-    CHECK(doomed->WinUIInvokeToolForTesting(502));
+    CHECK(wxWinUIToolBarTestAccess::InvokeTool(*doomed, 502));
     CHECK(lifetime.get() == nullptr);
     CHECK(
-        wxToolBar::WinUIGetLiveCallbackStateCountForTesting() ==
+        wxWinUIToolBarTestAccess::GetLiveCallbackStateCount() ==
         baseline);
 }
 

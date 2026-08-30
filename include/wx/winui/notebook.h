@@ -22,84 +22,6 @@ class wxDPIChangedEvent;
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {
 public:
-    enum class WinUIPeerMutationForTesting
-    {
-        InsertPage,
-        RemovePage,
-        ClearPages
-    };
-
-    enum class WinUIProjectionPointForTesting
-    {
-        LabelText,
-        AutomationName,
-        IconSource,
-        TabPadding,
-        TabSize,
-        TabGeometryMeasure
-    };
-
-    enum class WinUIPeerRetirementQueueFaultForTesting
-    {
-        None,
-        RejectFirstTurn,
-        RejectSecondTurn
-    };
-
-    enum class WinUIFrameworkRetirementHookFaultForTesting : unsigned
-    {
-        None = 0,
-        RejectFrameworkHook = 1,
-        RejectShutdownHook = 2,
-        RejectBothHooks = 3
-    };
-
-    struct WinUIFrameworkRetirementSnapshotForTesting
-    {
-        size_t entries = 0;
-        size_t unboundEntries = 0;
-        size_t queueStates = 0;
-        size_t shutdownStartingHooks = 0;
-        size_t frameworkStartingHooks = 0;
-        size_t frameworkHooks = 0;
-        size_t shutdownHooks = 0;
-        size_t activeStates = 0;
-        size_t shutdownStartingStates = 0;
-        size_t frameworkStartingStates = 0;
-        size_t xamlCompletedStates = 0;
-        size_t frameworkDoneStates = 0;
-        size_t shutdownDoneStates = 0;
-        bool xamlShutdownHookInstalled = false;
-        bool rundown = false;
-        bool xamlTerminal = false;
-        bool xamlCompletionActive = false;
-        bool runtimeTerminal = false;
-        bool phaseOrderValid = true;
-    };
-
-    struct WinUIExtendedLabelMetricSnapshotForTesting
-    {
-        wxSize naturalSize;
-        wxRect publishedRect;
-        wxSize actualSize;
-        wxRect liveActualRect;
-        std::uintptr_t labelIdentity = 0;
-        std::uint64_t probeEpoch = 0;
-        std::uint64_t layoutEpoch = 0;
-        std::uint64_t surfaceGeneration = 0;
-        std::uint64_t modelRevision = 0;
-        std::uint64_t layoutRevision = 0;
-        std::uint64_t styleRevision = 0;
-        std::uint64_t publishedModelRevision = 0;
-        std::uint64_t publishedLayoutRevision = 0;
-        std::uint64_t continuationCount = 0;
-        bool pending = true;
-    };
-
-    using WinUIProjectionHookForTesting =
-        void (*)(wxNotebook *, void *);
-    using WinUIFrameworkRetirementPhaseHookForTesting = void (*)(void *);
-
     wxNotebook();
     wxNotebook(wxWindow *parent,
                wxWindowID id,
@@ -146,73 +68,6 @@ public:
     // live on MSW and must remain live when backed by the shared WinUI tree.
     void SetWindowStyleFlag(long style) override;
 
-    // Implementation-only deterministic seams. They exercise the real
-    // lifetime and transaction boundaries without synthesizing input.
-    void WinUIFailNextPeerMutationForTesting(
-        WinUIPeerMutationForTesting mutation);
-    size_t WinUIGetPeerPageCountForTesting() const;
-    wxString WinUIGetPeerPageTextForTesting(size_t page) const;
-    wxString WinUIGetPeerAutomationNameForTesting(size_t page) const;
-    bool WinUIQueueSelectionCallbackForTesting(size_t page);
-    void WinUIClosePeerForTesting();
-    static size_t WinUIGetLiveCallbackStateCountForTesting();
-    static size_t WinUIGetPendingPeerRetirementCountForTesting();
-    static size_t WinUIGetFrameworkRetirementCountForTesting();
-    static void WinUISetPeerRetirementQueueFaultForTesting(
-        WinUIPeerRetirementQueueFaultForTesting fault);
-    static WinUIPeerRetirementQueueFaultForTesting
-        WinUIGetPeerRetirementQueueFaultForTesting();
-    static void WinUISetFrameworkRetirementHookFaultForTesting(
-        WinUIFrameworkRetirementHookFaultForTesting fault);
-    static WinUIFrameworkRetirementHookFaultForTesting
-        WinUIGetFrameworkRetirementHookFaultForTesting();
-    static WinUIFrameworkRetirementSnapshotForTesting
-        WinUIGetFrameworkRetirementSnapshotForTesting();
-    static std::uint64_t WinUIRegisterUnboundFrameworkRetirementForTesting(
-        WinUIFrameworkRetirementPhaseHookForTesting hook,
-        void *context);
-    static void WinUICompleteFrameworkRetirementForTesting(
-        std::uint64_t id);
-    static void WinUISimulateShutdownStartingForTesting(
-        WinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-        void *context = nullptr);
-    static void WinUISimulateFrameworkShutdownStartingForTesting(
-        WinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-        void *context = nullptr);
-    static void WinUISimulateFrameworkShutdownCompletedForTesting(
-        WinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-        void *context = nullptr);
-    static void WinUISimulateShutdownCompletedForTesting(
-        WinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-        void *context = nullptr);
-    static void WinUISimulateXamlShutdownCompletedForTesting(
-        WinUIFrameworkRetirementPhaseHookForTesting hook = nullptr,
-        void *context = nullptr);
-    static void WinUIResetFrameworkRetirementRuntimeForTesting();
-    wxRect WinUIGetTabIconRectForTesting(size_t page) const;
-    wxRect WinUIGetTabLabelRectForTesting(size_t page) const;
-    wxRect WinUIGetActualTabRectForTesting(size_t page) const;
-    wxRect WinUIGetActualTabIconRectForTesting(size_t page) const;
-    wxRect WinUIGetActualTabLabelRectForTesting(size_t page) const;
-    bool WinUIHasPendingExtendedLabelMetricsForTesting() const;
-    std::uint64_t WinUIGetExtendedLayoutContinuationCountForTesting() const;
-    WinUIExtendedLabelMetricSnapshotForTesting
-        WinUIGetExtendedLabelMetricSnapshotForTesting(size_t page) const;
-    wxSize WinUIGetPeerTabPaddingForTesting(size_t page) const;
-    wxSize WinUIGetPeerTabSizeForTesting(size_t page) const;
-    wxSize WinUIGetPeerIconPixelSizeForTesting(size_t page) const;
-    wxSize WinUIGetPeerIconDIPSizeForTesting(size_t page) const;
-    std::uint64_t WinUIGetPeerIconGenerationForTesting(size_t page) const;
-    bool WinUIIsPeerRTLForTesting() const;
-    bool WinUIIsUsingExtendedSurfaceForTesting() const;
-    bool WinUIIsPeerTabStopForTesting(size_t page) const;
-    bool WinUIInvokeTabOverflowForTesting(bool forward);
-    bool WinUIRefreshForScaleForTesting(double scale);
-    void WinUISetNextProjectionHookForTesting(
-        WinUIProjectionPointForTesting point,
-        WinUIProjectionHookForTesting hook,
-        void *context);
-
 protected:
     bool MSWOnEffectiveLayoutDirectionChanged() override;
     void Init();
@@ -248,6 +103,8 @@ protected:
     int m_tabStripHeightDIP = -1;
 
 private:
+    friend class wxWinUINotebookTestAccess;
+
     bool UsesExtendedPeerSurface() const;
     bool EnsureExtendedPeerSurface();
     bool InstallPeerSurfaceForCurrentStyle();
@@ -271,8 +128,6 @@ private:
         const std::shared_ptr<wxWinUINotebookCallbackState>& state,
         std::uint64_t callbackGeneration,
         wxWinUINotebookImpl *impl) const;
-    void InvokeProjectionHookForTesting(
-        WinUIProjectionPointForTesting point);
     wxNotebook *RealizeTabGeometryForQuery() const;
     wxRect GetCachedTabRect(size_t page,
                             int selection,

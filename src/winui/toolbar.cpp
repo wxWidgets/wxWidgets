@@ -30,12 +30,17 @@
 #endif
 
 #include "private.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "../../tests/winui/test-support/toolbar-test-access.h"
+#endif
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/tlwhost.h"
 
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
+#ifdef WXWINUI_TEST_SUPPORT
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
+#endif
 #include <winrt/Microsoft.UI.Xaml.Input.h>
 
 #include <algorithm>
@@ -51,7 +56,9 @@
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXA = winrt::Microsoft::UI::Xaml::Automation;
 namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
+#ifdef WXWINUI_TEST_SUPPORT
 namespace MUXAPR = winrt::Microsoft::UI::Xaml::Automation::Provider;
+#endif
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace MUXCP = winrt::Microsoft::UI::Xaml::Controls::Primitives;
 namespace MUXI = winrt::Microsoft::UI::Xaml::Input;
@@ -69,7 +76,9 @@ constexpr int wxWINUI_TOOL_DROPDOWN_WIDTH = 24;
 constexpr int wxWINUI_TOOL_OVERFLOW_WIDTH = 40;
 
 std::atomic<std::uint64_t> gs_nextToolPeerKey{0};
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<std::size_t> gs_liveToolBarCallbackStates{0};
+#endif
 
 class wxWinUIToolBarCallbackState final
 {
@@ -77,15 +86,19 @@ public:
     explicit wxWinUIToolBarCallbackState(wxToolBar *owner)
         : m_owner(owner)
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveToolBarCallbackStates.fetch_add(
             1, std::memory_order_relaxed);
+#endif
     }
 
     ~wxWinUIToolBarCallbackState()
     {
         Invalidate();
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveToolBarCallbackStates.fetch_sub(
             1, std::memory_order_relaxed);
+#endif
     }
 
     std::uint64_t PrepareGeneration()
@@ -514,7 +527,9 @@ public:
     std::uint64_t labelRevision = 0;
     unsigned shortHelpProjectionFailures = 0;
     unsigned enabledProjectionFailures = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     unsigned shortHelpSetterFaultsForTesting = 0;
+#endif
     bool shortHelpProjectionQuarantined = false;
     bool enabledProjectionQuarantined = false;
     bool controlHiddenByToolbar = false;
@@ -1142,6 +1157,7 @@ MUX::FlowDirection wxWinUIToolBarFlowDirection(wxLayoutDirection direction)
         : MUX::FlowDirection::LeftToRight;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 MUXAP::AutomationPeer wxWinUICreateToolAutomationPeer(
     const wxWinUIToolPeer& peer,
     bool dropdownPart)
@@ -1264,6 +1280,8 @@ bool wxWinUIInvokeToolAutomationPeer(const wxWinUIToolPeer& peer,
     return false;
 }
 
+#endif // WXWINUI_TEST_SUPPORT
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -1294,6 +1312,7 @@ public:
         if ( closed )
             return;
         closed = true;
+#ifdef WXWINUI_TEST_SUPPORT
         nextRebuildLoadedHookForTesting = nullptr;
         nextRebuildLoadedContextForTesting = nullptr;
         nextShortHelpSetterHookForTesting = nullptr;
@@ -1303,6 +1322,7 @@ public:
         nextOverflowMutationHookForTesting = nullptr;
         nextOverflowMutationContextForTesting = nullptr;
         failNextOverflowMutationBoundaryForTesting = 0;
+#endif
         pendingShortHelpKeys.clear();
         pendingEnabledKeys.clear();
         shortHelpFairnessCursor = 0;
@@ -1475,20 +1495,22 @@ public:
     bool enabledDriverWarningEmitted = false;
     bool realized = false;
     bool closed = false;
+#ifdef WXWINUI_TEST_SUPPORT
     bool failNextRebuildForTesting = false;
-    wxWinUIToolBarRebuildHookForTesting
+    wxWinUIToolBarTestAccess::CallbackHook
         nextRebuildLoadedHookForTesting = nullptr;
     void *nextRebuildLoadedContextForTesting = nullptr;
-    wxWinUIToolBarRebuildHookForTesting
+    wxWinUIToolBarTestAccess::CallbackHook
         nextShortHelpSetterHookForTesting = nullptr;
     void *nextShortHelpSetterContextForTesting = nullptr;
-    wxWinUIToolBarRebuildHookForTesting
+    wxWinUIToolBarTestAccess::CallbackHook
         nextEnableSetterHookForTesting = nullptr;
     void *nextEnableSetterContextForTesting = nullptr;
-    wxWinUIToolBarRebuildHookForTesting
+    wxWinUIToolBarTestAccess::CallbackHook
         nextOverflowMutationHookForTesting = nullptr;
     void *nextOverflowMutationContextForTesting = nullptr;
     unsigned failNextOverflowMutationBoundaryForTesting = 0;
+#endif
 };
 
 namespace
@@ -2481,12 +2503,14 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
     if ( insertedTool && !insertedTool->IsInsertionClaimedBy(this) )
         return false;
 
+#ifdef WXWINUI_TEST_SUPPORT
     // The deterministic failure seam is consumed now but injected only
     // after provisional publication, so it exercises the same exact rollback
     // transaction as a host SetContent() failure.
     const bool failAfterPublishForTesting =
         rebuildImpl->failNextRebuildForTesting;
     rebuildImpl->failNextRebuildForTesting = false;
+#endif
     const std::uint64_t candidateModelRevision =
         rebuildImpl->modelRevision;
     wxScopeGuard reconcileLabelsOnEarlyExit = wxMakeGuard(
@@ -2681,9 +2705,11 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
                  return;
              }
 
+#ifdef WXWINUI_TEST_SUPPORT
             // The candidate may be rejected before the normal one-shot cleanup
             // below. Never let its test callback leak into the restored root.
             rebuildImpl->host.SetNextContentLoadedHookForTesting({});
+#endif
 
             // Keep the rejected generation entirely local. Its destructor
             // revokes only local XAML handles and remains safe even if
@@ -3487,7 +3513,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
                 liveOwner->SyncControlTools(generation);
             });
 
-        const wxWinUIToolBarRebuildHookForTesting loadedHook =
+#ifdef WXWINUI_TEST_SUPPORT
+        const wxWinUIToolBarTestAccess::CallbackHook loadedHook =
             rebuildImpl->nextRebuildLoadedHookForTesting;
         void * const loadedHookContext =
             rebuildImpl->nextRebuildLoadedContextForTesting;
@@ -3525,6 +3552,7 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             rebuildImpl->host.SetNextContentLoadedHookForTesting(
                 invokeLoadedHook);
         }
+#endif
 
         // Loaded, focus and attached-property setters may synchronously call
         // the public toolbar API from SetContent(). Publish the complete
@@ -3554,6 +3582,7 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
 
         const wxWinUIToolBarPeerMutationGuard mutationGuard(callbackState);
         wxUnusedVar(mutationGuard);
+#ifdef WXWINUI_TEST_SUPPORT
         if ( failAfterPublishForTesting && loadedHook )
         {
             // The failure seam deliberately skips SetContent(), so there can
@@ -3564,8 +3593,11 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             // that the rollback path could no longer replace atomically.
             invokeLoadedHook();
         }
+#endif
         const bool contentSet =
+#ifdef WXWINUI_TEST_SUPPORT
             !failAfterPublishForTesting &&
+#endif
             rebuildImpl->host.SetContent(rebuildImpl->root);
         candidateAttached = contentSet;
 
@@ -3584,6 +3616,7 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             return false;
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         // A normal rebuild leaves layout asynchronous. The deterministic
         // Loaded seam explicitly asks us to cross that boundary now so tests
         // exercise the same callback window before this transaction publishes.
@@ -3626,6 +3659,7 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
         // The test seam is intentionally synchronous. Don't retain a stale
         // transaction callback into a later Loaded generation.
         rebuildImpl->host.SetNextContentLoadedHookForTesting({});
+#endif
         if ( !contentSet )
         {
             rollbackProvisionalCandidate();
@@ -3794,6 +3828,7 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
     {
         rollbackProvisionalCandidate();
         retirePreviousGeneration();
+#ifdef WXWINUI_TEST_SUPPORT
         wxToolBar * const liveOwner =
             callbackState->GetOwnerDuringRebuild(generation);
         if ( liveOwner && liveOwner->m_winui &&
@@ -3804,6 +3839,7 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             // was armed but before Loaded consumed it.
             rebuildImpl->host.SetNextContentLoadedHookForTesting({});
         }
+#endif
         wxWinUILogException("WinUI toolbar rebuild", e);
         return false;
     }
@@ -4432,9 +4468,10 @@ void wxToolBar::ConvergeToolEnabledUpdates()
                     return 1;
                 }
 
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( invokeEnableHook )
                 {
-                    const wxWinUIToolBarRebuildHookForTesting hook =
+                    const wxWinUIToolBarTestAccess::CallbackHook hook =
                         liveOwner->m_winui->
                             nextEnableSetterHookForTesting;
                     void * const hookContext =
@@ -4460,6 +4497,9 @@ void wxToolBar::ConvergeToolEnabledUpdates()
                         }
                     }
                 }
+#else
+                wxUnusedVar(invokeEnableHook);
+#endif
 
                 currentPeer =
                     liveOwner->m_winui->FindPeerByKey(peerKey);
@@ -4986,7 +5026,8 @@ void wxToolBar::ConvergeToolShortHelpUpdates()
                     return 1;
                 }
 
-                const wxWinUIToolBarRebuildHookForTesting hook =
+#ifdef WXWINUI_TEST_SUPPORT
+                const wxWinUIToolBarTestAccess::CallbackHook hook =
                     currentImpl->nextShortHelpSetterHookForTesting;
                 void * const hookContext =
                     currentImpl->nextShortHelpSetterContextForTesting;
@@ -5005,6 +5046,7 @@ void wxToolBar::ConvergeToolShortHelpUpdates()
                         return 0;
                     }
                 }
+#endif
 
                 currentPeer =
                     liveOwner->m_winui->FindPeerByKey(peerKey);
@@ -5016,6 +5058,7 @@ void wxToolBar::ConvergeToolShortHelpUpdates()
                 return 2;
             };
 
+#ifdef WXWINUI_TEST_SUPPORT
         // Deterministic per-key failure seam. It models a platform setter
         // rejecting this peer without poisoning unrelated peers.
         if ( peer->tool->shortHelpSetterFaultsForTesting )
@@ -5039,6 +5082,7 @@ void wxToolBar::ConvergeToolShortHelpUpdates()
             }
             continue;
         }
+#endif
 
         if ( peer->tool->IsControl() )
         {
@@ -5668,10 +5712,12 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
     bool rollbackSnapshotReady = false;
     bool forwardMutationStarted = false;
     bool superseded = false;
+#ifdef WXWINUI_TEST_SUPPORT
     unsigned mutationBoundary = 0;
     const unsigned failBoundary =
         updateImpl->failNextOverflowMutationBoundaryForTesting;
     updateImpl->failNextOverflowMutationBoundaryForTesting = 0;
+#endif
 
     const auto getLiveOwner =
         [&]() -> wxToolBar *
@@ -5691,6 +5737,7 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
     const auto beforeForwardMutation =
         [&]()
         {
+#ifdef WXWINUI_TEST_SUPPORT
             ++mutationBoundary;
             if ( failBoundary != 0 && mutationBoundary == failBoundary )
             {
@@ -5698,6 +5745,7 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     E_FAIL,
                     L"Injected WinUI toolbar overflow mutation failure");
             }
+#endif
             forwardMutationStarted = true;
         };
 
@@ -6083,22 +6131,28 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
             owner->m_winui->overflowButton.IsEnabled();
         rollbackSnapshotReady = true;
 
-        const wxWinUIToolBarRebuildHookForTesting mutationHook =
+#ifdef WXWINUI_TEST_SUPPORT
+        const wxWinUIToolBarTestAccess::CallbackHook mutationHook =
             updateImpl->nextOverflowMutationHookForTesting;
         void * const mutationHookContext =
             updateImpl->nextOverflowMutationContextForTesting;
         updateImpl->nextOverflowMutationHookForTesting = nullptr;
         updateImpl->nextOverflowMutationContextForTesting = nullptr;
         bool hookCalled = false;
+#endif
         const auto invokeMutationHook =
             [&](wxToolBar *currentOwner) -> wxToolBar *
             {
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( !hookCalled && mutationHook )
                 {
                     hookCalled = true;
                     mutationHook(
                         currentOwner, mutationHookContext);
                 }
+#else
+                wxUnusedVar(currentOwner);
+#endif
                 return getLiveOwner();
             };
         uint32_t rootPosition = 0;
@@ -6117,7 +6171,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
 
             const MUX::UIElement element =
                 peer->element.as<MUX::UIElement>();
+#ifdef WXWINUI_TEST_SUPPORT
             bool changed = false;
+#endif
 
             if ( item.overflow )
             {
@@ -6127,7 +6183,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                 {
                     beforeForwardMutation();
                     rootChildren.RemoveAt(index);
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
@@ -6159,7 +6217,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = invokeMutationHook(owner);
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
                 else if ( !overflowChildren.IndexOf(element, index) )
                 {
@@ -6169,7 +6229,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
                 ++overflowPosition;
             }
@@ -6188,7 +6250,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = invokeMutationHook(owner);
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
 
                 auto rootChildren = owner->m_winui->root.Children();
@@ -6210,7 +6274,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
                 else if ( !rootChildren.IndexOf(element, index) )
                 {
@@ -6220,7 +6286,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
                 ++rootPosition;
             }
@@ -6242,7 +6310,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
             }
             else if ( const auto toggleButton =
@@ -6256,7 +6326,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
             }
             else if ( peer->radioContent && peer->radioLabel )
@@ -6284,7 +6356,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
                 if ( content.Spacing() != spacing )
                 {
@@ -6293,7 +6367,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
                 if ( label.Visibility() != labelVisibility )
                 {
@@ -6302,7 +6378,9 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                     owner = getLiveOwner();
                     if ( !owner )
                         return false;
+#ifdef WXWINUI_TEST_SUPPORT
                     changed = true;
+#endif
                 }
             }
 
@@ -6321,13 +6399,16 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                 owner = getLiveOwner();
                 if ( !owner )
                     return false;
+#ifdef WXWINUI_TEST_SUPPORT
                 changed = true;
+#endif
             }
 
             peer = owner->m_winui->FindPeerByKey(item.peerKey);
             if ( !peer )
                 return false;
 
+#ifdef WXWINUI_TEST_SUPPORT
             // This seam is deliberately after one real parent/visibility
             // mutation. It proves that destruction or a nested resize at the
             // exact reparent boundary cannot leave a late callback alive.
@@ -6339,6 +6420,7 @@ bool wxToolBar::UpdateOverflow(double availableExtent,
                 if ( !owner )
                     return false;
             }
+#endif
         }
 
         owner = getLiveOwner();
@@ -6931,13 +7013,16 @@ wxSize wxToolBar::DoGetBestSize() const
 // Deterministic test seams
 // ----------------------------------------------------------------------------
 
-bool wxToolBar::WinUIInvokeToolForTesting(int toolid, bool dropdownPart)
+#ifdef WXWINUI_TEST_SUPPORT
+
+bool wxWinUIToolBarTestAccess::InvokeTool(
+    wxToolBar& toolbar, int toolid, bool dropdownPart)
 {
-    wxToolBarToolBase * const tool = FindById(toolid);
-    if ( !tool || !m_winui )
+    wxToolBarToolBase * const tool = toolbar.FindById(toolid);
+    if ( !tool || !toolbar.m_winui )
         return false;
-    const wxWinUIToolPeer * const peer = m_winui->FindPeerByTool(tool);
-    if ( !peer || !tool->IsEnabled() || !IsEnabled() )
+    const wxWinUIToolPeer * const peer = toolbar.m_winui->FindPeerByTool(tool);
+    if ( !peer || !tool->IsEnabled() || !toolbar.IsEnabled() )
         return false;
 
     if ( dropdownPart )
@@ -6948,33 +7033,33 @@ bool wxToolBar::WinUIInvokeToolForTesting(int toolid, bool dropdownPart)
         {
             return false;
         }
-        OnDropdownClicked(
+        toolbar.OnDropdownClicked(
             static_cast<wxWinUIToolBarTool *>(tool)->peerKey,
-            m_winui->peerGeneration);
+            toolbar.m_winui->peerGeneration);
     }
     else
     {
         if ( !tool->IsButton() || !peer->primaryButton )
             return false;
-        OnToolClicked(
+        toolbar.OnToolClicked(
             static_cast<wxWinUIToolBarTool *>(tool)->peerKey,
-            m_winui->peerGeneration);
+            toolbar.m_winui->peerGeneration);
     }
     return true;
 }
 
-bool wxToolBar::WinUIIsRootLoadedForTesting() const
+bool wxWinUIToolBarTestAccess::IsRootLoaded(const wxToolBar& toolbar)
 {
-    if ( !m_winui || !m_winui->callbackState || !m_winui->root )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState || !toolbar.m_winui->root )
         return false;
 
-    wxWinUIToolBarImpl * const expectedImpl = m_winui.get();
+    wxWinUIToolBarImpl * const expectedImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
-        m_winui->callbackState;
-    const std::uint64_t generation = m_winui->peerGeneration;
-    const MUXC::Grid root = m_winui->root;
+        toolbar.m_winui->callbackState;
+    const std::uint64_t generation = toolbar.m_winui->peerGeneration;
+    const MUXC::Grid root = toolbar.m_winui->root;
     const void * const rootIdentity = winrt::get_abi(root);
-    const wxToolBar * const toolbarIdentity = this;
+    const wxToolBar * const toolbarIdentity = &toolbar;
     const auto isCurrent =
         [callbackState,
          generation,
@@ -7003,22 +7088,22 @@ bool wxToolBar::WinUIIsRootLoadedForTesting() const
     }
 }
 
-bool wxToolBar::WinUIIsOverflowChevronReadyForTesting() const
+bool wxWinUIToolBarTestAccess::IsOverflowChevronReady(const wxToolBar& toolbar)
 {
-    if ( !m_winui || !m_winui->callbackState ||
-         !m_winui->overflowButton )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState ||
+         !toolbar.m_winui->overflowButton )
     {
         return false;
     }
 
-    wxWinUIToolBarImpl * const expectedImpl = m_winui.get();
+    wxWinUIToolBarImpl * const expectedImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
-        m_winui->callbackState;
-    const std::uint64_t generation = m_winui->peerGeneration;
-    const MUXC::Button overflowButton = m_winui->overflowButton;
+        toolbar.m_winui->callbackState;
+    const std::uint64_t generation = toolbar.m_winui->peerGeneration;
+    const MUXC::Button overflowButton = toolbar.m_winui->overflowButton;
     const void * const overflowButtonIdentity =
         winrt::get_abi(overflowButton);
-    const wxToolBar * const toolbarIdentity = this;
+    const wxToolBar * const toolbarIdentity = &toolbar;
     const auto isCurrent =
         [callbackState,
          generation,
@@ -7052,28 +7137,28 @@ bool wxToolBar::WinUIIsOverflowChevronReadyForTesting() const
     }
 }
 
-bool wxToolBar::WinUIRequestOpenOverflowForTesting()
+bool wxWinUIToolBarTestAccess::RequestOpenOverflow(wxToolBar& toolbar)
 {
-    if ( !m_winui || !m_winui->callbackState ||
-         !m_winui->overflowButton ||
-         !m_winui->overflowFlyout ||
-         !m_winui->overflowPanel ||
-         !IsEnabled() )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState ||
+         !toolbar.m_winui->overflowButton ||
+         !toolbar.m_winui->overflowFlyout ||
+         !toolbar.m_winui->overflowPanel ||
+         !toolbar.IsEnabled() )
     {
         return false;
     }
 
-    wxWinUIToolBarImpl * const invokeImpl = m_winui.get();
+    wxWinUIToolBarImpl * const invokeImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
-        m_winui->callbackState;
-    const std::uint64_t generation = m_winui->peerGeneration;
-    const MUXC::Button overflowButton = m_winui->overflowButton;
+        toolbar.m_winui->callbackState;
+    const std::uint64_t generation = toolbar.m_winui->peerGeneration;
+    const MUXC::Button overflowButton = toolbar.m_winui->overflowButton;
     const void * const overflowButtonIdentity =
         winrt::get_abi(overflowButton);
     const void * const overflowFlyoutIdentity =
-        winrt::get_abi(m_winui->overflowFlyout);
+        winrt::get_abi(toolbar.m_winui->overflowFlyout);
     const void * const overflowPanelIdentity =
-        winrt::get_abi(m_winui->overflowPanel);
+        winrt::get_abi(toolbar.m_winui->overflowPanel);
 
     try
     {
@@ -7108,7 +7193,7 @@ bool wxToolBar::WinUIRequestOpenOverflowForTesting()
         // attached overflow surface.
         wxToolBar * const owner =
             callbackState->GetOwner(generation);
-        return owner == this && owner->m_winui &&
+        return owner == &toolbar && owner->m_winui &&
                owner->m_winui.get() == invokeImpl &&
                owner->m_winui->callbackState == callbackState &&
                owner->m_winui->peerGeneration == generation &&
@@ -7127,22 +7212,22 @@ bool wxToolBar::WinUIRequestOpenOverflowForTesting()
     }
 }
 
-bool wxToolBar::WinUIIsOverflowToolLoadedForTesting(
-    int toolid,
-    bool dropdownPart) const
+bool wxWinUIToolBarTestAccess::IsOverflowToolLoaded(
+    const wxToolBar& toolbar, int toolid,
+    bool dropdownPart)
 {
     wxToolBarToolBase * const tool =
-        const_cast<wxToolBar *>(this)->FindById(toolid);
-    if ( !tool || !m_winui || !m_winui->callbackState ||
-         !m_winui->overflowButton ||
-         !m_winui->overflowFlyout ||
-         !m_winui->overflowPanel )
+        const_cast<wxToolBar *>(&toolbar)->FindById(toolid);
+    if ( !tool || !toolbar.m_winui || !toolbar.m_winui->callbackState ||
+         !toolbar.m_winui->overflowButton ||
+         !toolbar.m_winui->overflowFlyout ||
+         !toolbar.m_winui->overflowPanel )
     {
         return false;
     }
 
     const wxWinUIToolPeer * const initialPeer =
-        m_winui->FindPeerByTool(tool);
+        toolbar.m_winui->FindPeerByTool(tool);
     if ( !initialPeer || !initialPeer->inOverflow )
         return false;
 
@@ -7154,20 +7239,20 @@ bool wxToolBar::WinUIIsOverflowToolLoadedForTesting(
     if ( !element )
         return false;
 
-    wxWinUIToolBarImpl * const expectedImpl = m_winui.get();
+    wxWinUIToolBarImpl * const expectedImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
-        m_winui->callbackState;
-    const std::uint64_t generation = m_winui->peerGeneration;
+        toolbar.m_winui->callbackState;
+    const std::uint64_t generation = toolbar.m_winui->peerGeneration;
     const std::uint64_t peerKey =
         static_cast<wxWinUIToolBarTool *>(tool)->peerKey;
     const void * const elementIdentity = winrt::get_abi(element);
     const void * const overflowButtonIdentity =
-        winrt::get_abi(m_winui->overflowButton);
+        winrt::get_abi(toolbar.m_winui->overflowButton);
     const void * const overflowFlyoutIdentity =
-        winrt::get_abi(m_winui->overflowFlyout);
+        winrt::get_abi(toolbar.m_winui->overflowFlyout);
     const void * const overflowPanelIdentity =
-        winrt::get_abi(m_winui->overflowPanel);
-    const wxToolBar * const toolbarIdentity = this;
+        winrt::get_abi(toolbar.m_winui->overflowPanel);
+    const wxToolBar * const toolbarIdentity = &toolbar;
 
     const auto getCurrentPeer =
         [callbackState,
@@ -7217,7 +7302,7 @@ bool wxToolBar::WinUIIsOverflowToolLoadedForTesting(
     try
     {
         if ( !getCurrentPeer() ||
-             !m_winui->overflowFlyout.IsOpen() )
+             !toolbar.m_winui->overflowFlyout.IsOpen() )
         {
             return false;
         }
@@ -7233,20 +7318,20 @@ bool wxToolBar::WinUIIsOverflowToolLoadedForTesting(
     }
 }
 
-bool wxToolBar::WinUIInvokeOverflowToolForTesting(int toolid,
+bool wxWinUIToolBarTestAccess::InvokeOverflowTool(wxToolBar& toolbar, int toolid,
                                                   bool dropdownPart)
 {
-    wxToolBarToolBase * const tool = FindById(toolid);
-    if ( !tool || !m_winui )
+    wxToolBarToolBase * const tool = toolbar.FindById(toolid);
+    if ( !tool || !toolbar.m_winui )
         return false;
-    const wxWinUIToolPeer * const peer = m_winui->FindPeerByTool(tool);
+    const wxWinUIToolPeer * const peer = toolbar.m_winui->FindPeerByTool(tool);
     if ( !peer || !peer->inOverflow || !tool->IsEnabled() ||
-         !IsEnabled() )
+         !toolbar.IsEnabled() )
     {
         return false;
     }
 
-    wxWinUIToolBarImpl * const invokeImpl = m_winui.get();
+    wxWinUIToolBarImpl * const invokeImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
         invokeImpl->callbackState;
     const std::uint64_t generation = invokeImpl->peerGeneration;
@@ -7276,7 +7361,7 @@ bool wxToolBar::WinUIInvokeOverflowToolForTesting(int toolid,
             return false;
 
         if ( dropdownPart &&
-             !owner->WinUIIsOverflowToolLoadedForTesting(
+             !wxWinUIToolBarTestAccess::IsOverflowToolLoaded(*owner,
                  toolid, true) )
         {
             return false;
@@ -7296,51 +7381,51 @@ bool wxToolBar::WinUIInvokeOverflowToolForTesting(int toolid,
     }
 }
 
-bool wxToolBar::WinUIHoverToolForTesting(int toolid, bool entered)
+bool wxWinUIToolBarTestAccess::HoverTool(wxToolBar& toolbar, int toolid, bool entered)
 {
-    wxToolBarToolBase * const tool = FindById(toolid);
-    if ( !tool || !tool->IsButton() || !m_winui )
+    wxToolBarToolBase * const tool = toolbar.FindById(toolid);
+    if ( !tool || !tool->IsButton() || !toolbar.m_winui )
         return false;
     const wxWinUIToolPeer * const peer =
-        m_winui->FindPeerByTool(tool);
+        toolbar.m_winui->FindPeerByTool(tool);
     if ( !peer )
         return false;
 
-    OnToolHovered(
+    toolbar.OnToolHovered(
         static_cast<wxWinUIToolBarTool *>(tool)->peerKey,
-        m_winui->peerGeneration,
+        toolbar.m_winui->peerGeneration,
         entered);
     return true;
 }
 
-bool wxToolBar::WinUIRightClickToolForTesting(int toolid)
+bool wxWinUIToolBarTestAccess::RightClickTool(wxToolBar& toolbar, int toolid)
 {
-    wxToolBarToolBase * const tool = FindById(toolid);
-    if ( !tool || !tool->IsButton() || !m_winui ||
-         !m_winui->callbackState || !m_winui->root ||
-         !tool->IsEnabled() || !IsEnabled() )
+    wxToolBarToolBase * const tool = toolbar.FindById(toolid);
+    if ( !tool || !tool->IsButton() || !toolbar.m_winui ||
+         !toolbar.m_winui->callbackState || !toolbar.m_winui->root ||
+         !tool->IsEnabled() || !toolbar.IsEnabled() )
     {
         return false;
     }
     const wxWinUIToolPeer * const peer =
-        m_winui->FindPeerByTool(tool);
+        toolbar.m_winui->FindPeerByTool(tool);
     if ( !peer )
         return false;
 
-    wxWinUIToolBarImpl * const rightClickImpl = m_winui.get();
+    wxWinUIToolBarImpl * const rightClickImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
-        m_winui->callbackState;
-    const std::uint64_t generation = m_winui->peerGeneration;
+        toolbar.m_winui->callbackState;
+    const std::uint64_t generation = toolbar.m_winui->peerGeneration;
     const std::uint64_t peerKey =
         static_cast<wxWinUIToolBarTool *>(tool)->peerKey;
     const bool wasInOverflow = peer->inOverflow;
     const void * const peerIdentity = winrt::get_abi(peer->element);
-    const MUXC::Grid root = m_winui->root;
-    const MUXC::Button overflowButton = m_winui->overflowButton;
+    const MUXC::Grid root = toolbar.m_winui->root;
+    const MUXC::Button overflowButton = toolbar.m_winui->overflowButton;
     const void * const rootIdentity = winrt::get_abi(root);
     const void * const overflowButtonIdentity =
         winrt::get_abi(overflowButton);
-    wxToolBar * const toolbarIdentity = this;
+    wxToolBar * const toolbarIdentity = &toolbar;
     const auto pointIsCurrent =
         [callbackState,
          generation,
@@ -7381,7 +7466,7 @@ bool wxToolBar::WinUIRightClickToolForTesting(int toolid)
                  overflowButton,
                  *peer,
                  nullptr,
-                 this,
+                 &toolbar,
                  &point,
                  pointIsCurrent) )
         {
@@ -7410,22 +7495,22 @@ bool wxToolBar::WinUIRightClickToolForTesting(int toolid)
     return true;
 }
 
-bool wxToolBar::WinUIQueueToolClickForTesting(int toolid)
+bool wxWinUIToolBarTestAccess::QueueToolClick(wxToolBar& toolbar, int toolid)
 {
-    wxToolBarToolBase * const tool = FindById(toolid);
-    if ( !tool || !tool->IsButton() || !m_winui ||
-         !m_winui->callbackState || !wxTheApp )
+    wxToolBarToolBase * const tool = toolbar.FindById(toolid);
+    if ( !tool || !tool->IsButton() || !toolbar.m_winui ||
+         !toolbar.m_winui->callbackState || !wxTheApp )
     {
         return false;
     }
 
-    const wxWinUIToolPeer * const peer = m_winui->FindPeerByTool(tool);
+    const wxWinUIToolPeer * const peer = toolbar.m_winui->FindPeerByTool(tool);
     if ( !peer || !peer->primaryButton )
         return false;
 
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
-        m_winui->callbackState;
-    const std::uint64_t generation = m_winui->peerGeneration;
+        toolbar.m_winui->callbackState;
+    const std::uint64_t generation = toolbar.m_winui->peerGeneration;
     const std::uint64_t peerKey =
         static_cast<wxWinUIToolBarTool *>(tool)->peerKey;
     wxTheApp->CallAfter(
@@ -7444,34 +7529,33 @@ bool wxToolBar::WinUIQueueToolClickForTesting(int toolid)
     return true;
 }
 
-bool wxToolBar::WinUIGetToolPeerStateForTesting(
-    int toolid,
-    wxWinUIToolPeerSnapshot *snapshot) const
+bool wxWinUIToolBarTestAccess::GetToolPeerState(const wxToolBar& toolbar, int toolid,
+    PeerSnapshot *snapshot)
 {
-    if ( !snapshot || !m_winui || !m_winui->callbackState ||
-         !m_winui->root )
+    if ( !snapshot || !toolbar.m_winui || !toolbar.m_winui->callbackState ||
+         !toolbar.m_winui->root )
         return false;
 
-    const wxToolBarToolBase *tool = FindById(toolid);
+    const wxToolBarToolBase *tool = toolbar.FindById(toolid);
     if ( !tool )
         return false;
     const wxWinUIToolBarTool *winuiTool =
         static_cast<const wxWinUIToolBarTool *>(tool);
     const wxWinUIToolPeer *peer =
-        m_winui->FindPeerByTool(tool);
+        toolbar.m_winui->FindPeerByTool(tool);
     if ( !peer )
         return false;
 
-    wxWinUIToolBarImpl * const snapshotImpl = m_winui.get();
+    wxWinUIToolBarImpl * const snapshotImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
-        m_winui->callbackState;
-    const std::uint64_t generation = m_winui->peerGeneration;
+        toolbar.m_winui->callbackState;
+    const std::uint64_t generation = toolbar.m_winui->peerGeneration;
     const std::uint64_t peerKey = winuiTool->peerKey;
     const void * const peerIdentity =
         winrt::get_abi(peer->element);
     const void * const rootIdentity =
-        winrt::get_abi(m_winui->root);
-    const wxToolBar * const toolbarIdentity = this;
+        winrt::get_abi(toolbar.m_winui->root);
+    const wxToolBar * const toolbarIdentity = &toolbar;
     const auto getCurrentPeer =
         [callbackState,
          generation,
@@ -7516,18 +7600,18 @@ bool wxToolBar::WinUIGetToolPeerStateForTesting(
     snapshot->overflowEligible = peer->overflowEligible;
     snapshot->hasIcon = peer->hasIcon;
     snapshot->usesDisabledBitmap = peer->usesDisabledBitmap;
-    snapshot->showsText = HasFlag(wxTB_TEXT);
+    snapshot->showsText = toolbar.HasFlag(wxTB_TEXT);
     snapshot->horizontalText =
-        HasFlag(wxTB_TEXT) && HasFlag(wxTB_HORZ_LAYOUT);
+        toolbar.HasFlag(wxTB_TEXT) && toolbar.HasFlag(wxTB_HORZ_LAYOUT);
     snapshot->stretchable = tool->IsStretchable();
     snapshot->control = tool->IsControl();
     snapshot->selectedPixelSize = peer->selectedPixelSize;
     snapshot->bounds = peer->inOverflow
         ? wxRect()
         : wxWinUIGetToolBounds(
-              m_winui->root,
+              toolbar.m_winui->root,
               peer->element,
-              this,
+              &toolbar,
               [&getCurrentPeer]()
               {
                   return getCurrentPeer() != nullptr;
@@ -7539,7 +7623,7 @@ bool wxToolBar::WinUIGetToolPeerStateForTesting(
     winuiTool =
         static_cast<const wxWinUIToolBarTool *>(tool);
     snapshot->toolTip =
-        HasFlag(wxTB_NO_TOOLTIPS)
+        toolbar.HasFlag(wxTB_NO_TOOLTIPS)
             ? wxString()
             : tool->GetShortHelp();
     snapshot->peerToolTip.clear();
@@ -7645,18 +7729,18 @@ bool wxToolBar::WinUIGetToolPeerStateForTesting(
     return true;
 }
 
-size_t wxToolBar::WinUIGetPeerToolCountForTesting() const
+size_t wxWinUIToolBarTestAccess::GetPeerToolCount(const wxToolBar& toolbar)
 {
-    return m_winui ? m_winui->peers.size() : 0;
+    return toolbar.m_winui ? toolbar.m_winui->peers.size() : 0;
 }
 
-size_t wxToolBar::WinUIGetOverflowedToolCountForTesting() const
+size_t wxWinUIToolBarTestAccess::GetOverflowedToolCount(const wxToolBar& toolbar)
 {
-    if ( !m_winui )
+    if ( !toolbar.m_winui )
         return 0;
 
     return static_cast<size_t>(std::count_if(
-        m_winui->peers.begin(), m_winui->peers.end(),
+        toolbar.m_winui->peers.begin(), toolbar.m_winui->peers.end(),
         [](const wxWinUIToolPeer& peer)
         {
             return peer.tool && !peer.tool->IsSeparator() &&
@@ -7664,15 +7748,15 @@ size_t wxToolBar::WinUIGetOverflowedToolCountForTesting() const
         }));
 }
 
-bool wxToolBar::WinUIApplyOverflowExtentForTesting(wxCoord extent)
+bool wxWinUIToolBarTestAccess::ApplyOverflowExtent(wxToolBar& toolbar, wxCoord extent)
 {
-    if ( extent <= 0 || !m_winui || !m_winui->realized ||
-         !m_winui->callbackState )
+    if ( extent <= 0 || !toolbar.m_winui || !toolbar.m_winui->realized ||
+         !toolbar.m_winui->callbackState )
     {
         return false;
     }
 
-    wxWinUIToolBarImpl * const updateImpl = m_winui.get();
+    wxWinUIToolBarImpl * const updateImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
         updateImpl->callbackState;
     const std::uint64_t generation = updateImpl->peerGeneration;
@@ -7778,13 +7862,13 @@ bool wxToolBar::WinUIApplyOverflowExtentForTesting(wxCoord extent)
     return true;
 }
 
-bool wxToolBar::WinUIIsOverflowChevronVisibleForTesting() const
+bool wxWinUIToolBarTestAccess::IsOverflowChevronVisible(const wxToolBar& toolbar)
 {
-    if ( !m_winui || !m_winui->overflowButton )
+    if ( !toolbar.m_winui || !toolbar.m_winui->overflowButton )
         return false;
     try
     {
-        return m_winui->overflowButton.Visibility() ==
+        return toolbar.m_winui->overflowButton.Visibility() ==
                MUX::Visibility::Visible;
     }
     catch ( const winrt::hresult_error& )
@@ -7793,24 +7877,24 @@ bool wxToolBar::WinUIIsOverflowChevronVisibleForTesting() const
     }
 }
 
-wxRect wxToolBar::WinUIGetOverflowChevronBoundsForTesting() const
+wxRect wxWinUIToolBarTestAccess::GetOverflowChevronBounds(const wxToolBar& toolbar)
 {
-    if ( !m_winui || !m_winui->callbackState || !m_winui->root ||
-         !m_winui->overflowButton )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState || !toolbar.m_winui->root ||
+         !toolbar.m_winui->overflowButton )
     {
         return wxRect();
     }
 
-    wxWinUIToolBarImpl * const boundsImpl = m_winui.get();
+    wxWinUIToolBarImpl * const boundsImpl = toolbar.m_winui.get();
     const std::shared_ptr<wxWinUIToolBarCallbackState> callbackState =
-        m_winui->callbackState;
-    const std::uint64_t generation = m_winui->peerGeneration;
-    const MUXC::Grid root = m_winui->root;
-    const MUXC::Button overflowButton = m_winui->overflowButton;
+        toolbar.m_winui->callbackState;
+    const std::uint64_t generation = toolbar.m_winui->peerGeneration;
+    const MUXC::Grid root = toolbar.m_winui->root;
+    const MUXC::Button overflowButton = toolbar.m_winui->overflowButton;
     const void * const rootIdentity = winrt::get_abi(root);
     const void * const overflowButtonIdentity =
         winrt::get_abi(overflowButton);
-    const wxToolBar * const toolbarIdentity = this;
+    const wxToolBar * const toolbarIdentity = &toolbar;
     const auto isCurrent =
         [callbackState,
          generation,
@@ -7831,7 +7915,7 @@ wxRect wxToolBar::WinUIGetOverflowChevronBoundsForTesting() const
                        overflowButtonIdentity;
         };
     if ( !isCurrent() ||
-         !WinUIIsOverflowChevronVisibleForTesting() ||
+         !wxWinUIToolBarTestAccess::IsOverflowChevronVisible(toolbar) ||
          !isCurrent() )
     {
         return wxRect();
@@ -7840,7 +7924,7 @@ wxRect wxToolBar::WinUIGetOverflowChevronBoundsForTesting() const
     try
     {
         return wxWinUIGetToolBounds(
-            root, overflowButton, this, isCurrent);
+            root, overflowButton, &toolbar, isCurrent);
     }
     catch ( const winrt::hresult_error& )
     {
@@ -7848,15 +7932,15 @@ wxRect wxToolBar::WinUIGetOverflowChevronBoundsForTesting() const
     }
 }
 
-wxString wxToolBar::WinUIGetOverflowChevronNameForTesting() const
+wxString wxWinUIToolBarTestAccess::GetOverflowChevronName(const wxToolBar& toolbar)
 {
-    if ( !m_winui || !m_winui->overflowButton )
+    if ( !toolbar.m_winui || !toolbar.m_winui->overflowButton )
         return wxString();
     try
     {
         return wxString(
             MUXA::AutomationProperties::GetName(
-                m_winui->overflowButton).c_str());
+                toolbar.m_winui->overflowButton).c_str());
     }
     catch ( const winrt::hresult_error& )
     {
@@ -7864,95 +7948,96 @@ wxString wxToolBar::WinUIGetOverflowChevronNameForTesting() const
     }
 }
 
-bool wxToolBar::WinUIRefreshForScaleForTesting(double scale)
+bool wxWinUIToolBarTestAccess::RefreshForScale(wxToolBar& toolbar, double scale)
 {
-    return scale > 0.0 && m_winui && m_winui->realized &&
-           RebuildPeer(nullptr, static_cast<size_t>(-1), nullptr, scale);
+    return scale > 0.0 && toolbar.m_winui && toolbar.m_winui->realized &&
+           toolbar.RebuildPeer(nullptr, static_cast<size_t>(-1), nullptr, scale);
 }
 
-void wxToolBar::WinUISetNextRebuildLoadedHookForTesting(
-    wxWinUIToolBarRebuildHookForTesting hook,
+void wxWinUIToolBarTestAccess::SetNextRebuildLoadedHook(
+    wxToolBar& toolbar, CallbackHook hook,
     void *context)
 {
-    if ( !m_winui || !m_winui->callbackState || m_winui->closed )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState || toolbar.m_winui->closed )
         return;
 
-    m_winui->nextRebuildLoadedHookForTesting = hook;
-    m_winui->nextRebuildLoadedContextForTesting =
+    toolbar.m_winui->nextRebuildLoadedHookForTesting = hook;
+    toolbar.m_winui->nextRebuildLoadedContextForTesting =
         hook ? context : nullptr;
 }
 
-void wxToolBar::WinUISetNextShortHelpSetterHookForTesting(
-    wxWinUIToolBarRebuildHookForTesting hook,
+void wxWinUIToolBarTestAccess::SetNextShortHelpSetterHook(
+    wxToolBar& toolbar, CallbackHook hook,
     void *context)
 {
-    if ( !m_winui || !m_winui->callbackState || m_winui->closed )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState || toolbar.m_winui->closed )
         return;
 
-    m_winui->nextShortHelpSetterHookForTesting = hook;
-    m_winui->nextShortHelpSetterContextForTesting =
+    toolbar.m_winui->nextShortHelpSetterHookForTesting = hook;
+    toolbar.m_winui->nextShortHelpSetterContextForTesting =
         hook ? context : nullptr;
 }
 
-void wxToolBar::WinUISetNextEnableSetterHookForTesting(
-    wxWinUIToolBarRebuildHookForTesting hook,
+void wxWinUIToolBarTestAccess::SetNextEnableSetterHook(
+    wxToolBar& toolbar, CallbackHook hook,
     void *context)
 {
-    if ( !m_winui || !m_winui->callbackState || m_winui->closed )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState || toolbar.m_winui->closed )
         return;
 
-    m_winui->nextEnableSetterHookForTesting = hook;
-    m_winui->nextEnableSetterContextForTesting =
+    toolbar.m_winui->nextEnableSetterHookForTesting = hook;
+    toolbar.m_winui->nextEnableSetterContextForTesting =
         hook ? context : nullptr;
 }
 
-void wxToolBar::WinUISetNextOverflowMutationHookForTesting(
-    wxWinUIToolBarRebuildHookForTesting hook,
+void wxWinUIToolBarTestAccess::SetNextOverflowMutationHook(
+    wxToolBar& toolbar, CallbackHook hook,
     void *context)
 {
-    if ( !m_winui || !m_winui->callbackState || m_winui->closed )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState || toolbar.m_winui->closed )
         return;
 
-    m_winui->nextOverflowMutationHookForTesting = hook;
-    m_winui->nextOverflowMutationContextForTesting =
+    toolbar.m_winui->nextOverflowMutationHookForTesting = hook;
+    toolbar.m_winui->nextOverflowMutationContextForTesting =
         hook ? context : nullptr;
 }
 
-void wxToolBar::WinUIFailNextOverflowMutationForTesting(
-    unsigned boundary)
+void wxWinUIToolBarTestAccess::FailNextOverflowMutation(
+    wxToolBar& toolbar, unsigned boundary)
 {
-    if ( !m_winui || !m_winui->callbackState || m_winui->closed )
+    if ( !toolbar.m_winui || !toolbar.m_winui->callbackState || toolbar.m_winui->closed )
         return;
 
-    m_winui->failNextOverflowMutationBoundaryForTesting = boundary;
+    toolbar.m_winui->failNextOverflowMutationBoundaryForTesting = boundary;
 }
 
-void wxToolBar::WinUIFailNextShortHelpSettersForTesting(
-    int toolid,
+void wxWinUIToolBarTestAccess::FailNextShortHelpSetters(wxToolBar& toolbar, int toolid,
     unsigned count)
 {
-    wxToolBarToolBase * const tool = FindById(toolid);
+    wxToolBarToolBase * const tool = toolbar.FindById(toolid);
     if ( !tool )
         return;
     static_cast<wxWinUIToolBarTool *>(tool)->
         shortHelpSetterFaultsForTesting = count;
 }
 
-void wxToolBar::WinUIFailNextRebuildForTesting()
+void wxWinUIToolBarTestAccess::FailNextRebuild(wxToolBar& toolbar)
 {
-    if ( m_winui )
-        m_winui->failNextRebuildForTesting = true;
+    if ( toolbar.m_winui )
+        toolbar.m_winui->failNextRebuildForTesting = true;
 }
 
-void wxToolBar::WinUIClosePeerForTesting()
+void wxWinUIToolBarTestAccess::ClosePeer(wxToolBar& toolbar)
 {
-    if ( m_winui )
-        m_winui->Close();
+    if ( toolbar.m_winui )
+        toolbar.m_winui->Close();
 }
 
-size_t wxToolBar::WinUIGetLiveCallbackStateCountForTesting()
+size_t wxWinUIToolBarTestAccess::GetLiveCallbackStateCount()
 {
     return gs_liveToolBarCallbackStates.load(std::memory_order_relaxed);
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_TOOLBAR

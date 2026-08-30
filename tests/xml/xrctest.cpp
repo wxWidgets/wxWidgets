@@ -25,6 +25,8 @@
     #include "slider-test-access.h"
     #include "spinctrl-test-access.h"
     #include "treectrl-test-access.h"
+    #include "notebook-test-access.h"
+    #include "toolbar-test-access.h"
 #endif
 
 #include "wx/fs_inet.h"
@@ -1455,9 +1457,9 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
             wxWinUITopLevelHost::GetRootHandlerAddCount(),
             wxWinUITopLevelHost::GetRootHandlerRevokeCount(),
             wxWinUITopLevelHost::GetFlushCallbackAttemptCount(),
-            wxNotebook::WinUIGetPendingPeerRetirementCountForTesting(),
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting(),
-            wxNotebook::WinUIGetFrameworkRetirementCountForTesting(),
+            wxWinUINotebookTestAccess::GetPendingPeerRetirementCount(),
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount(),
+            wxWinUINotebookTestAccess::GetFrameworkRetirementCount(),
             wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount()
         };
     };
@@ -1483,11 +1485,11 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
 
     drainDispatch();
     const std::size_t pendingBeforeBaseline =
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount();
     const std::size_t callbacksBeforeBaseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     const std::size_t frameworkBeforeBaseline =
-        wxNotebook::WinUIGetFrameworkRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementCount();
     REQUIRE(callbacksBeforeBaseline >= pendingBeforeBaseline);
     REQUIRE(frameworkBeforeBaseline >= pendingBeforeBaseline);
     REQUIRE(WaitFor(
@@ -1497,11 +1499,11 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
          pendingBeforeBaseline]()
         {
             return
-                wxNotebook::
-                    WinUIGetPendingPeerRetirementCountForTesting() == 0 &&
-                wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+                wxWinUINotebookTestAccess::
+                    GetPendingPeerRetirementCount() == 0 &&
+                wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
                     callbacksBeforeBaseline - pendingBeforeBaseline &&
-                wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+                wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
                     frameworkBeforeBaseline - pendingBeforeBaseline;
         },
         2000));
@@ -1822,13 +1824,13 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
             [&baseline]()
             {
                 return
-                    wxNotebook::
-                        WinUIGetPendingPeerRetirementCountForTesting() ==
+                    wxWinUINotebookTestAccess::
+                        GetPendingPeerRetirementCount() ==
                             baseline.notebookRetirements &&
-                    wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+                    wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
                         baseline.notebookCallbacks &&
-                    wxNotebook::
-                        WinUIGetFrameworkRetirementCountForTesting() ==
+                    wxWinUINotebookTestAccess::
+                        GetFrameworkRetirementCount() ==
                             baseline.frameworkRetirements;
             },
             2000));
@@ -2168,11 +2170,11 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
             wxWinUITopLevelHost::GetRootHandlerRevokeCount(),
             wxWinUITopLevelHost::GetFlushCallbackAttemptCount(),
             wxWinUITextCallbackState::GetLiveCountForTesting(),
-            wxNotebook::WinUIGetPendingPeerRetirementCountForTesting(),
-            wxNotebook::WinUIGetLiveCallbackStateCountForTesting(),
-            wxNotebook::WinUIGetFrameworkRetirementCountForTesting(),
+            wxWinUINotebookTestAccess::GetPendingPeerRetirementCount(),
+            wxWinUINotebookTestAccess::GetLiveCallbackStateCount(),
+            wxWinUINotebookTestAccess::GetFrameworkRetirementCount(),
             wxWinUITreeCtrlTestAccess::GetLiveCallbackStateCount(),
-            wxToolBar::WinUIGetLiveCallbackStateCountForTesting()
+            wxWinUIToolBarTestAccess::GetLiveCallbackStateCount()
         };
     };
 
@@ -2197,11 +2199,11 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
 
     drainDispatch();
     const std::size_t pendingBeforeBaseline =
-        wxNotebook::WinUIGetPendingPeerRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetPendingPeerRetirementCount();
     const std::size_t callbacksBeforeBaseline =
-        wxNotebook::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUINotebookTestAccess::GetLiveCallbackStateCount();
     const std::size_t frameworkBeforeBaseline =
-        wxNotebook::WinUIGetFrameworkRetirementCountForTesting();
+        wxWinUINotebookTestAccess::GetFrameworkRetirementCount();
     REQUIRE(callbacksBeforeBaseline >= pendingBeforeBaseline);
     REQUIRE(frameworkBeforeBaseline >= pendingBeforeBaseline);
     REQUIRE(WaitFor(
@@ -2211,11 +2213,11 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
          pendingBeforeBaseline]()
         {
             return
-                wxNotebook::
-                    WinUIGetPendingPeerRetirementCountForTesting() == 0 &&
-                wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+                wxWinUINotebookTestAccess::
+                    GetPendingPeerRetirementCount() == 0 &&
+                wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
                     callbacksBeforeBaseline - pendingBeforeBaseline &&
-                wxNotebook::WinUIGetFrameworkRetirementCountForTesting() ==
+                wxWinUINotebookTestAccess::GetFrameworkRetirementCount() ==
                     frameworkBeforeBaseline - pendingBeforeBaseline;
         },
         2000));
@@ -2459,13 +2461,13 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
             [&baseline]()
             {
                 return
-                    wxNotebook::
-                        WinUIGetPendingPeerRetirementCountForTesting() ==
+                    wxWinUINotebookTestAccess::
+                        GetPendingPeerRetirementCount() ==
                             baseline.notebookRetirements &&
-                    wxNotebook::WinUIGetLiveCallbackStateCountForTesting() ==
+                    wxWinUINotebookTestAccess::GetLiveCallbackStateCount() ==
                         baseline.notebookCallbacks &&
-                    wxNotebook::
-                        WinUIGetFrameworkRetirementCountForTesting() ==
+                    wxWinUINotebookTestAccess::
+                        GetFrameworkRetirementCount() ==
                             baseline.frameworkRetirements;
             },
             2000));

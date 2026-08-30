@@ -81,6 +81,11 @@ using wxWinUIStatusBarResizeActionHookForTesting = RemovedPublicPeerWriteHook;
 using wxWinUIPopupRetirementCoreProbeForTesting = RemovedPublicPeerWriteHook;
 #endif
 
+#if wxUSE_TOOLBAR
+using wxWinUIToolPeerSnapshot = RemovedPublicPeerWriteHook;
+using wxWinUIToolBarRebuildHookForTesting = RemovedPublicPeerWriteHook;
+#endif
+
 #if wxUSE_BUTTON || wxUSE_TOGGLEBTN || wxUSE_STATTEXT || wxUSE_STATBMP || \
     wxUSE_STATBOX || wxUSE_GAUGE || wxUSE_SCROLLBAR || wxUSE_SPINBTN || \
     wxUSE_RADIOBOX || wxUSE_ACTIVITYINDICATOR || wxUSE_HYPERLINKCTRL || \
@@ -88,7 +93,7 @@ using wxWinUIPopupRetirementCoreProbeForTesting = RemovedPublicPeerWriteHook;
     wxUSE_LISTBOX || wxUSE_TREECTRL || wxUSE_CHOICE || wxUSE_COMBOBOX || \
     wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL || wxUSE_CALENDARCTRL || \
     wxUSE_SLIDER || wxUSE_SPINCTRL || wxUSE_TEXTCTRL || wxUSE_SEARCHCTRL || \
-    wxUSE_TEXTDLG
+    wxUSE_TEXTDLG || wxUSE_NOTEBOOK || wxUSE_TOOLBAR
 namespace
 {
 
@@ -890,6 +895,87 @@ WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxSearchCtrl, WinUICreateLoadedHookForTesting);
 #if wxUSE_TEXTDLG
 WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextEntryDialog, WinUISetPeerValueForTesting);
 WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxTextEntryDialog, WinUIGetPeerValueForTesting);
+#endif
+
+#if wxUSE_NOTEBOOK
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIFailNextPeerMutationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerPageCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerPageTextForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerAutomationNameForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIQueueSelectionCallbackForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIClosePeerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetLiveCallbackStateCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPendingPeerRetirementCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetFrameworkRetirementCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUISetPeerRetirementQueueFaultForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerRetirementQueueFaultForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUISetFrameworkRetirementHookFaultForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetFrameworkRetirementHookFaultForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetFrameworkRetirementSnapshotForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIRegisterUnboundFrameworkRetirementForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUICompleteFrameworkRetirementForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUISimulateShutdownStartingForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUISimulateFrameworkShutdownStartingForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUISimulateFrameworkShutdownCompletedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUISimulateShutdownCompletedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUISimulateXamlShutdownCompletedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIResetFrameworkRetirementRuntimeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetTabIconRectForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetTabLabelRectForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetActualTabRectForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetActualTabIconRectForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetActualTabLabelRectForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIHasPendingExtendedLabelMetricsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetExtendedLayoutContinuationCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetExtendedLabelMetricSnapshotForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerTabPaddingForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerTabSizeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerIconPixelSizeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerIconDIPSizeForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIGetPeerIconGenerationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIIsPeerRTLForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIIsUsingExtendedSurfaceForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIIsPeerTabStopForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIInvokeTabOverflowForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUIRefreshForScaleForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxNotebook, WinUISetNextProjectionHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxNotebook, WinUIPeerMutationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxNotebook, WinUIProjectionPointForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxNotebook, WinUIPeerRetirementQueueFaultForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxNotebook, WinUIFrameworkRetirementHookFaultForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxNotebook, WinUIFrameworkRetirementSnapshotForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxNotebook, WinUIExtendedLabelMetricSnapshotForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxNotebook, WinUIProjectionHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_TYPE(wxNotebook, WinUIFrameworkRetirementPhaseHookForTesting);
+#endif
+
+#if wxUSE_TOOLBAR
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIInvokeToolForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIQueueToolClickForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIIsRootLoadedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIIsOverflowChevronReadyForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIRequestOpenOverflowForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIIsOverflowToolLoadedForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIInvokeOverflowToolForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIHoverToolForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIRightClickToolForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIGetToolPeerStateForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIGetPeerToolCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIGetOverflowedToolCountForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIApplyOverflowExtentForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIIsOverflowChevronVisibleForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIGetOverflowChevronBoundsForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIGetOverflowChevronNameForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIRefreshForScaleForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUISetNextRebuildLoadedHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUISetNextShortHelpSetterHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUISetNextEnableSetterHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUISetNextOverflowMutationHookForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIFailNextOverflowMutationForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIFailNextShortHelpSettersForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIFailNextRebuildForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIClosePeerForTesting);
+WX_ASSERT_NO_PUBLIC_TEST_METHOD(wxToolBar, WinUIGetLiveCallbackStateCountForTesting);
 #endif
 
 #undef WX_ASSERT_NO_PUBLIC_TEST_TYPE

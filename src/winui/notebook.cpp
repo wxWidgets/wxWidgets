@@ -20,6 +20,9 @@
 #endif
 
 #include "private.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "notebook-test-access.h"
+#endif
 #include "wx/imaglist.h"
 #include "wx/private/windowlifetime.h"
 #include "wx/winui/private/appearance.h"
@@ -189,12 +192,16 @@ enum class wxWinUINotebookFocusTarget
     Page
 };
 
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<std::size_t> gs_liveNotebookCallbackStates{0};
 std::atomic<std::size_t> gs_pendingNotebookPeerRetirements{0};
+#endif
 std::atomic<std::uint64_t> gs_nextNotebookCallbackGeneration{0};
-std::atomic<wxNotebook::WinUIPeerRetirementQueueFaultForTesting>
+#ifdef WXWINUI_TEST_SUPPORT
+std::atomic<wxWinUINotebookTestAccess::PeerRetirementQueueFault>
     gs_notebookPeerRetirementQueueFault{
-        wxNotebook::WinUIPeerRetirementQueueFaultForTesting::None};
+        wxWinUINotebookTestAccess::PeerRetirementQueueFault::None};
+#endif
 
 } // anonymous namespace
 
@@ -211,15 +218,19 @@ public:
               gs_nextNotebookCallbackGeneration.fetch_add(
                   1, std::memory_order_relaxed) + 1)
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveNotebookCallbackStates.fetch_add(
             1, std::memory_order_relaxed);
+#endif
     }
 
     ~wxWinUINotebookCallbackState()
     {
         Invalidate();
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveNotebookCallbackStates.fetch_sub(
             1, std::memory_order_relaxed);
+#endif
     }
 
     std::uint64_t Generation() const
@@ -416,8 +427,10 @@ class wxWinUINotebookPeerRetirement final
 public:
     wxWinUINotebookPeerRetirement()
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_pendingNotebookPeerRetirements.fetch_add(
             1, std::memory_order_relaxed);
+#endif
     }
 
     ~wxWinUINotebookPeerRetirement()
@@ -470,8 +483,10 @@ public:
         tabView = nullptr;
         callbackState.reset();
 
+#ifdef WXWINUI_TEST_SUPPORT
         gs_pendingNotebookPeerRetirements.fetch_sub(
             1, std::memory_order_relaxed);
+#endif
     }
 
     std::shared_ptr<wxWinUINotebookCallbackState> callbackState;
@@ -498,17 +513,21 @@ private:
 template<typename Handler>
 bool wxWinUITryEnqueueNotebookPeerRetirement(
     const MUXD::DispatcherQueue& queue,
-    wxNotebook::WinUIPeerRetirementQueueFaultForTesting fault,
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUINotebookTestAccess::PeerRetirementQueueFault fault,
+#endif
     Handler&& handler) noexcept
 {
+#ifdef WXWINUI_TEST_SUPPORT
     auto expected = fault;
     if ( gs_notebookPeerRetirementQueueFault.compare_exchange_strong(
              expected,
-             wxNotebook::WinUIPeerRetirementQueueFaultForTesting::None,
+             wxWinUINotebookTestAccess::PeerRetirementQueueFault::None,
              std::memory_order_acq_rel) )
     {
         return false;
     }
+#endif
 
     try
     {
@@ -537,14 +556,18 @@ void wxWinUIQueueNotebookPeerRetirement(
 
     if ( wxWinUITryEnqueueNotebookPeerRetirement(
              queue,
-             wxNotebook::WinUIPeerRetirementQueueFaultForTesting::
+#ifdef WXWINUI_TEST_SUPPORT
+             wxWinUINotebookTestAccess::PeerRetirementQueueFault::
                  RejectFirstTurn,
+#endif
              [queue, retirementId]() noexcept
              {
                  if ( wxWinUITryEnqueueNotebookPeerRetirement(
                           queue,
-                          wxNotebook::WinUIPeerRetirementQueueFaultForTesting::
+#ifdef WXWINUI_TEST_SUPPORT
+                          wxWinUINotebookTestAccess::PeerRetirementQueueFault::
                               RejectSecondTurn,
+#endif
                           [retirementId]() noexcept
                           {
                               wxWinUICompleteFrameworkRetirement(
@@ -1027,12 +1050,16 @@ public:
         tabMetrics.clear();
         tabPrefixWidths.clear();
         geometryValid = false;
+#ifdef WXWINUI_TEST_SUPPORT
         failNextMutation = false;
+#endif
         projectionRequested = false;
         projectionInProgress = false;
         projectionReplayScheduled = false;
+#ifdef WXWINUI_TEST_SUPPORT
         nextProjectionHookForTesting = nullptr;
         nextProjectionHookContextForTesting = nullptr;
+#endif
 
         if ( retirement )
         {
@@ -1041,7 +1068,8 @@ public:
         }
     }
 
-    bool ShouldFail(wxNotebook::WinUIPeerMutationForTesting mutation)
+#ifdef WXWINUI_TEST_SUPPORT
+    bool ShouldFail(wxWinUINotebookTestAccess::PeerMutation mutation)
     {
         if ( !failNextMutation || failedMutation != mutation )
             return false;
@@ -1049,6 +1077,29 @@ public:
         failNextMutation = false;
         return true;
     }
+
+    void InvokeProjectionHook(
+        wxNotebook *owner,
+        wxWinUINotebookTestAccess::ProjectionPoint point)
+    {
+        if ( nextProjectionHookForTesting == nullptr ||
+             nextProjectionPointForTesting != point )
+        {
+            return;
+        }
+
+        const wxWinUINotebookTestAccess::ProjectionHook hook =
+            nextProjectionHookForTesting;
+        void * const context = nextProjectionHookContextForTesting;
+        nextProjectionHookForTesting = nullptr;
+        nextProjectionHookContextForTesting = nullptr;
+
+        // Deliberately last operation: the hook may synchronously destroy
+        // the notebook and this implementation. The caller resolves the
+        // owner through callbackState again.
+        hook(owner, context);
+    }
+#endif
 
     std::uint64_t BumpModelRevision()
     {
@@ -1211,18 +1262,20 @@ public:
     bool projectionWarningIssued = false;
     std::uint64_t projectionDeferredRevision = 0;
     unsigned projectionDeferredAttempts = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     double projectionScaleOverrideForTesting = 0.0;
 
-    wxNotebook::WinUIProjectionPointForTesting
+    wxWinUINotebookTestAccess::ProjectionPoint
         nextProjectionPointForTesting =
-            wxNotebook::WinUIProjectionPointForTesting::LabelText;
-    wxNotebook::WinUIProjectionHookForTesting
+            wxWinUINotebookTestAccess::ProjectionPoint::LabelText;
+    wxWinUINotebookTestAccess::ProjectionHook
         nextProjectionHookForTesting = nullptr;
     void *nextProjectionHookContextForTesting = nullptr;
 
-    wxNotebook::WinUIPeerMutationForTesting failedMutation =
-        wxNotebook::WinUIPeerMutationForTesting::InsertPage;
+    wxWinUINotebookTestAccess::PeerMutation failedMutation =
+        wxWinUINotebookTestAccess::PeerMutation::InsertPage;
     bool failNextMutation = false;
+#endif
     bool closed = false;
 };
 
@@ -1601,37 +1654,50 @@ bool wxNotebook::Create(wxWindow *parent,
     return true;
 }
 
-void wxNotebook::WinUIFailNextPeerMutationForTesting(
-    WinUIPeerMutationForTesting mutation)
+#ifdef WXWINUI_TEST_SUPPORT
+void
+wxWinUINotebookTestAccess::FailNextPeerMutation(
+    wxNotebook& control,
+    wxWinUINotebookTestAccess::PeerMutation mutation)
 {
-    wxCHECK_RET( m_winui && !m_winui->closed,
+    wxNotebook * const notebook = &control;
+
+    wxCHECK_RET( notebook->m_winui && !notebook->m_winui->closed,
                  "uninitialized wxNotebook test seam" );
 
-    m_winui->failedMutation = mutation;
-    m_winui->failNextMutation = true;
+    notebook->m_winui->failedMutation = mutation;
+    notebook->m_winui->failNextMutation = true;
 }
 
-void wxNotebook::WinUISetNextProjectionHookForTesting(
-    WinUIProjectionPointForTesting point,
-    WinUIProjectionHookForTesting hook,
+void
+wxWinUINotebookTestAccess::SetNextProjectionHook(
+    wxNotebook& control,
+    wxWinUINotebookTestAccess::ProjectionPoint point,
+    wxWinUINotebookTestAccess::ProjectionHook hook,
     void *context)
 {
-    wxCHECK_RET( m_winui && !m_winui->closed,
+    wxNotebook * const notebook = &control;
+
+    wxCHECK_RET( notebook->m_winui && !notebook->m_winui->closed,
                  "uninitialized wxNotebook projection seam" );
 
-    m_winui->nextProjectionPointForTesting = point;
-    m_winui->nextProjectionHookForTesting = hook;
-    m_winui->nextProjectionHookContextForTesting = context;
+    notebook->m_winui->nextProjectionPointForTesting = point;
+    notebook->m_winui->nextProjectionHookForTesting = hook;
+    notebook->m_winui->nextProjectionHookContextForTesting = context;
 }
 
-size_t wxNotebook::WinUIGetPeerPageCountForTesting() const
+size_t
+wxWinUINotebookTestAccess::GetPeerPageCount(
+    const wxNotebook& control)
 {
-    if ( !m_winui || !m_winui->tabView )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || !notebook->m_winui->tabView )
         return 0;
 
     try
     {
-        return m_winui->tabView.TabItems().Size();
+        return notebook->m_winui->tabView.TabItems().Size();
     }
     catch ( const winrt::hresult_error& )
     {
@@ -1639,14 +1705,19 @@ size_t wxNotebook::WinUIGetPeerPageCountForTesting() const
     }
 }
 
-wxString wxNotebook::WinUIGetPeerPageTextForTesting(size_t page) const
+wxString
+wxWinUINotebookTestAccess::GetPeerPageText(
+    const wxNotebook& control,
+    size_t page)
 {
-    if ( !m_winui || page >= m_winui->labels.size() )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || page >= notebook->m_winui->labels.size() )
         return wxString();
 
     try
     {
-        return wxWinUIFromHString(m_winui->labels[page].Text());
+        return wxWinUIFromHString(notebook->m_winui->labels[page].Text());
     }
     catch ( const winrt::hresult_error& )
     {
@@ -1654,15 +1725,20 @@ wxString wxNotebook::WinUIGetPeerPageTextForTesting(size_t page) const
     }
 }
 
-wxString wxNotebook::WinUIGetPeerAutomationNameForTesting(size_t page) const
+wxString
+wxWinUINotebookTestAccess::GetPeerAutomationName(
+    const wxNotebook& control,
+    size_t page)
 {
-    if ( !m_winui || page >= m_winui->items.size() )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || page >= notebook->m_winui->items.size() )
         return wxString();
 
     try
     {
         return wxWinUIFromHString(
-            MUXA::AutomationProperties::GetName(m_winui->items[page]));
+            MUXA::AutomationProperties::GetName(notebook->m_winui->items[page]));
     }
     catch ( const winrt::hresult_error& )
     {
@@ -1670,15 +1746,20 @@ wxString wxNotebook::WinUIGetPeerAutomationNameForTesting(size_t page) const
     }
 }
 
-bool wxNotebook::WinUIQueueSelectionCallbackForTesting(size_t page)
+bool
+wxWinUINotebookTestAccess::QueueSelectionCallback(
+    wxNotebook& control,
+    size_t page)
 {
-    if ( !m_winui || !m_winui->callbackState ||
-         page >= m_pages.size() || !wxTheApp )
+    wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || !notebook->m_winui->callbackState ||
+         page >= notebook->m_pages.size() || !wxTheApp )
     {
         return false;
     }
 
-    const auto callbackState = m_winui->callbackState;
+    const auto callbackState = notebook->m_winui->callbackState;
     const std::uint64_t callbackGeneration =
         callbackState->Generation();
     wxTheApp->CallAfter(
@@ -1694,63 +1775,72 @@ bool wxNotebook::WinUIQueueSelectionCallbackForTesting(size_t page)
     return true;
 }
 
-void wxNotebook::WinUIClosePeerForTesting()
+void
+wxWinUINotebookTestAccess::ClosePeer(
+    wxNotebook& control)
 {
-    if ( m_winui )
-        m_winui->Close();
+    wxNotebook * const notebook = &control;
+
+    if ( notebook->m_winui )
+        notebook->m_winui->Close();
 }
 
-size_t wxNotebook::WinUIGetLiveCallbackStateCountForTesting()
+size_t
+wxWinUINotebookTestAccess::GetLiveCallbackStateCount()
 {
     return gs_liveNotebookCallbackStates.load(
         std::memory_order_relaxed);
 }
 
-size_t wxNotebook::WinUIGetPendingPeerRetirementCountForTesting()
+size_t
+wxWinUINotebookTestAccess::GetPendingPeerRetirementCount()
 {
     return gs_pendingNotebookPeerRetirements.load(
         std::memory_order_relaxed);
 }
 
-size_t wxNotebook::WinUIGetFrameworkRetirementCountForTesting()
+size_t
+wxWinUINotebookTestAccess::GetFrameworkRetirementCount()
 {
     return wxWinUIGetFrameworkRetirementCountForTesting();
 }
 
-void wxNotebook::WinUISetPeerRetirementQueueFaultForTesting(
-    WinUIPeerRetirementQueueFaultForTesting fault)
+void
+wxWinUINotebookTestAccess::SetPeerRetirementQueueFault(
+    wxWinUINotebookTestAccess::PeerRetirementQueueFault fault)
 {
     gs_notebookPeerRetirementQueueFault.store(
         fault, std::memory_order_release);
 }
 
-wxNotebook::WinUIPeerRetirementQueueFaultForTesting
-wxNotebook::WinUIGetPeerRetirementQueueFaultForTesting()
+wxWinUINotebookTestAccess::PeerRetirementQueueFault
+wxWinUINotebookTestAccess::GetPeerRetirementQueueFault()
 {
     return gs_notebookPeerRetirementQueueFault.load(
         std::memory_order_acquire);
 }
 
-void wxNotebook::WinUISetFrameworkRetirementHookFaultForTesting(
-    WinUIFrameworkRetirementHookFaultForTesting fault)
+void
+wxWinUINotebookTestAccess::SetFrameworkRetirementHookFault(
+    wxWinUINotebookTestAccess::FrameworkRetirementHookFault fault)
 {
     wxWinUISetFrameworkRetirementHookFaultForTesting(
         static_cast<unsigned>(fault));
 }
 
-wxNotebook::WinUIFrameworkRetirementHookFaultForTesting
-wxNotebook::WinUIGetFrameworkRetirementHookFaultForTesting()
+wxWinUINotebookTestAccess::FrameworkRetirementHookFault
+wxWinUINotebookTestAccess::GetFrameworkRetirementHookFault()
 {
-    return static_cast<WinUIFrameworkRetirementHookFaultForTesting>(
+    return static_cast<wxWinUINotebookTestAccess::FrameworkRetirementHookFault>(
         wxWinUIGetFrameworkRetirementHookFaultForTesting());
 }
 
-wxNotebook::WinUIFrameworkRetirementSnapshotForTesting
-wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting()
+wxWinUINotebookTestAccess::FrameworkRetirementSnapshot
+wxWinUINotebookTestAccess::GetFrameworkRetirementSnapshot()
 {
     const wxWinUIFrameworkRetirementSnapshotForTesting source =
         wxWinUIGetFrameworkRetirementSnapshotForTesting();
-    WinUIFrameworkRetirementSnapshotForTesting snapshot;
+    wxWinUINotebookTestAccess::FrameworkRetirementSnapshot snapshot;
     snapshot.entries = source.entries;
     snapshot.unboundEntries = source.unboundEntries;
     snapshot.queueStates = source.queueStates;
@@ -1775,8 +1865,8 @@ wxNotebook::WinUIGetFrameworkRetirementSnapshotForTesting()
 }
 
 std::uint64_t
-wxNotebook::WinUIRegisterUnboundFrameworkRetirementForTesting(
-    WinUIFrameworkRetirementPhaseHookForTesting hook,
+wxWinUINotebookTestAccess::RegisterUnboundFrameworkRetirement(
+    wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
     return wxWinUIRegisterFrameworkRetirement(
@@ -1788,48 +1878,55 @@ wxNotebook::WinUIRegisterUnboundFrameworkRetirementForTesting(
         });
 }
 
-void wxNotebook::WinUICompleteFrameworkRetirementForTesting(
+void
+wxWinUINotebookTestAccess::CompleteFrameworkRetirement(
     std::uint64_t id)
 {
     wxWinUICompleteFrameworkRetirement(id);
 }
 
-void wxNotebook::WinUISimulateShutdownStartingForTesting(
-    WinUIFrameworkRetirementPhaseHookForTesting hook,
+void
+wxWinUINotebookTestAccess::SimulateShutdownStarting(
+    wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
     wxWinUISimulateShutdownStartingForTesting(hook, context);
 }
 
-void wxNotebook::WinUISimulateFrameworkShutdownStartingForTesting(
-    WinUIFrameworkRetirementPhaseHookForTesting hook,
+void
+wxWinUINotebookTestAccess::SimulateFrameworkShutdownStarting(
+    wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
     wxWinUISimulateFrameworkShutdownStartingForTesting(hook, context);
 }
 
-void wxNotebook::WinUISimulateFrameworkShutdownCompletedForTesting(
-    WinUIFrameworkRetirementPhaseHookForTesting hook,
+void
+wxWinUINotebookTestAccess::SimulateFrameworkShutdownCompleted(
+    wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
     wxWinUISimulateFrameworkShutdownCompletedForTesting(hook, context);
 }
 
-void wxNotebook::WinUISimulateShutdownCompletedForTesting(
-    WinUIFrameworkRetirementPhaseHookForTesting hook,
+void
+wxWinUINotebookTestAccess::SimulateShutdownCompleted(
+    wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
     wxWinUISimulateShutdownCompletedForTesting(hook, context);
 }
 
-void wxNotebook::WinUISimulateXamlShutdownCompletedForTesting(
-    WinUIFrameworkRetirementPhaseHookForTesting hook,
+void
+wxWinUINotebookTestAccess::SimulateXamlShutdownCompleted(
+    wxWinUINotebookTestAccess::FrameworkRetirementPhaseHook hook,
     void *context)
 {
     wxWinUISimulateXamlShutdownCompletedForTesting(hook, context);
 }
 
-void wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting()
+void
+wxWinUINotebookTestAccess::ResetFrameworkRetirementRuntime()
 {
     MUXD::DispatcherQueue queue{ nullptr };
     try
@@ -1842,54 +1939,81 @@ void wxNotebook::WinUIResetFrameworkRetirementRuntimeForTesting()
     wxWinUIResetFrameworkRetirementRuntimeForTesting(queue);
 }
 
-wxRect wxNotebook::WinUIGetTabIconRectForTesting(size_t page) const
+wxRect
+wxWinUINotebookTestAccess::GetTabIconRect(
+    const wxNotebook& control,
+    size_t page)
 {
-    wxCHECK_MSG( page < m_pages.size(), wxRect(),
+    const wxNotebook * const notebook = &control;
+
+    wxCHECK_MSG( page < notebook->m_pages.size(), wxRect(),
                  "invalid notebook page" );
-    return GetRealizedTabElementRect(
+    return notebook->GetRealizedTabElementRect(
         page, wxWinUINotebookTabPart_Icon, true);
 }
 
-wxRect wxNotebook::WinUIGetTabLabelRectForTesting(size_t page) const
+wxRect
+wxWinUINotebookTestAccess::GetTabLabelRect(
+    const wxNotebook& control,
+    size_t page)
 {
-    wxCHECK_MSG( page < m_pages.size(), wxRect(),
+    const wxNotebook * const notebook = &control;
+
+    wxCHECK_MSG( page < notebook->m_pages.size(), wxRect(),
                  "invalid notebook page" );
-    return GetRealizedTabElementRect(
+    return notebook->GetRealizedTabElementRect(
         page, wxWinUINotebookTabPart_Label, true);
 }
 
-wxRect wxNotebook::WinUIGetActualTabRectForTesting(size_t page) const
+wxRect
+wxWinUINotebookTestAccess::GetActualTabRect(
+    const wxNotebook& control,
+    size_t page)
 {
-    wxCHECK_MSG( page < m_pages.size(), wxRect(),
+    const wxNotebook * const notebook = &control;
+
+    wxCHECK_MSG( page < notebook->m_pages.size(), wxRect(),
                  "invalid notebook page" );
-    return GetRealizedTabElementRect(
+    return notebook->GetRealizedTabElementRect(
         page, wxWinUINotebookTabPart_Item, false);
 }
 
-wxRect wxNotebook::WinUIGetActualTabIconRectForTesting(
-    size_t page) const
+wxRect
+wxWinUINotebookTestAccess::GetActualTabIconRect(
+    const wxNotebook& control,
+    size_t page)
 {
-    wxCHECK_MSG( page < m_pages.size(), wxRect(),
+    const wxNotebook * const notebook = &control;
+
+    wxCHECK_MSG( page < notebook->m_pages.size(), wxRect(),
                  "invalid notebook page" );
-    return GetRealizedTabElementRect(
+    return notebook->GetRealizedTabElementRect(
         page, wxWinUINotebookTabPart_Icon, false);
 }
 
-wxRect wxNotebook::WinUIGetActualTabLabelRectForTesting(
-    size_t page) const
+wxRect
+wxWinUINotebookTestAccess::GetActualTabLabelRect(
+    const wxNotebook& control,
+    size_t page)
 {
-    wxCHECK_MSG( page < m_pages.size(), wxRect(),
+    const wxNotebook * const notebook = &control;
+
+    wxCHECK_MSG( page < notebook->m_pages.size(), wxRect(),
                  "invalid notebook page" );
-    return GetRealizedTabElementRect(
+    return notebook->GetRealizedTabElementRect(
         page, wxWinUINotebookTabPart_Label, false);
 }
 
-bool wxNotebook::WinUIHasPendingExtendedLabelMetricsForTesting() const
+bool
+wxWinUINotebookTestAccess::HasPendingExtendedLabelMetrics(
+    const wxNotebook& control)
 {
-    return m_winui && UsesExtendedPeerSurface() &&
+    const wxNotebook * const notebook = &control;
+
+    return notebook->m_winui && notebook->UsesExtendedPeerSurface() &&
            std::any_of(
-               m_winui->extendedLabelMetricPending.begin(),
-               m_winui->extendedLabelMetricPending.end(),
+               notebook->m_winui->extendedLabelMetricPending.begin(),
+               notebook->m_winui->extendedLabelMetricPending.end(),
                [](bool pending)
                {
                    return pending;
@@ -1897,34 +2021,40 @@ bool wxNotebook::WinUIHasPendingExtendedLabelMetricsForTesting() const
 }
 
 std::uint64_t
-wxNotebook::WinUIGetExtendedLayoutContinuationCountForTesting() const
+wxWinUINotebookTestAccess::GetExtendedLayoutContinuationCount(
+    const wxNotebook& control)
 {
-    return m_winui ? m_winui->extendedLayoutContinuationCount : 0;
+    const wxNotebook * const notebook = &control;
+
+    return notebook->m_winui ? notebook->m_winui->extendedLayoutContinuationCount : 0;
 }
 
-wxNotebook::WinUIExtendedLabelMetricSnapshotForTesting
-wxNotebook::WinUIGetExtendedLabelMetricSnapshotForTesting(
-    size_t page) const
+wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot
+wxWinUINotebookTestAccess::GetExtendedLabelMetricSnapshot(
+    const wxNotebook& control,
+    size_t page)
 {
-    WinUIExtendedLabelMetricSnapshotForTesting snapshot;
-    if ( !m_winui || !m_winui->callbackState ||
-         page >= m_winui->extendedLabelNaturalPixelSizes.size() ||
-         page >= m_winui->extendedLabelRects.size() ||
-         page >= m_winui->extendedLabelMetricPending.size() ||
-         page >= m_winui->extendedLabelMetricProbeEpochs.size() ||
-         page >= m_winui->extendedPeers.size() )
+    const wxNotebook * const notebook = &control;
+
+    wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot snapshot;
+    if ( !notebook->m_winui || !notebook->m_winui->callbackState ||
+         page >= notebook->m_winui->extendedLabelNaturalPixelSizes.size() ||
+         page >= notebook->m_winui->extendedLabelRects.size() ||
+         page >= notebook->m_winui->extendedLabelMetricPending.size() ||
+         page >= notebook->m_winui->extendedLabelMetricProbeEpochs.size() ||
+         page >= notebook->m_winui->extendedPeers.size() )
     {
         return snapshot;
     }
 
-    wxWinUINotebookImpl * const impl = m_winui.get();
+    wxWinUINotebookImpl * const impl = notebook->m_winui.get();
     const auto state = impl->callbackState;
     const std::uint64_t callbackGeneration = state->Generation();
     const std::uint64_t surfaceGeneration =
         impl->extendedSurfaceGeneration;
     const std::uint64_t observationEpoch = impl->extendedLayoutEpoch;
     const auto isCurrent =
-        [this,
+        [notebook,
          state,
          callbackGeneration,
          impl,
@@ -1934,7 +2064,7 @@ wxNotebook::WinUIGetExtendedLabelMetricSnapshotForTesting(
         {
             wxNotebook * const owner =
                 state->GetOwner(callbackGeneration);
-            return owner == this && owner->m_winui &&
+            return owner == notebook && owner->m_winui &&
                    owner->m_winui.get() == impl &&
                    owner->m_winui->callbackState == state &&
                    !owner->m_winui->closed &&
@@ -1965,12 +2095,12 @@ wxNotebook::WinUIGetExtendedLabelMetricSnapshotForTesting(
     {
         const MUXC::TextBlock label = impl->extendedPeers[page].label;
         if ( !isCurrent() )
-            return WinUIExtendedLabelMetricSnapshotForTesting();
+            return wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot();
         snapshot.labelIdentity = reinterpret_cast<std::uintptr_t>(
             winrt::get_unknown(label));
         const double width = label.ActualWidth() * scale;
         if ( !isCurrent() )
-            return WinUIExtendedLabelMetricSnapshotForTesting();
+            return wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot();
 
         const double height = label.ActualHeight() * scale;
         if ( !isCurrent() || !std::isfinite(width) ||
@@ -1991,9 +2121,9 @@ wxNotebook::WinUIGetExtendedLabelMetricSnapshotForTesting(
         }
         snapshot.liveActualRect =
             wxWinUIGetVisibleRealizedElementRectInNotebook(
-                const_cast<wxNotebook *>(this), label, isCurrent);
+                const_cast<wxNotebook *>(notebook), label, isCurrent);
         if ( !isCurrent() )
-            return WinUIExtendedLabelMetricSnapshotForTesting();
+            return wxWinUINotebookTestAccess::ExtendedLabelMetricSnapshot();
     }
     catch ( const winrt::hresult_error& )
     {
@@ -2001,16 +2131,21 @@ wxNotebook::WinUIGetExtendedLabelMetricSnapshotForTesting(
     return snapshot;
 }
 
-wxSize wxNotebook::WinUIGetPeerTabPaddingForTesting(size_t page) const
+wxSize
+wxWinUINotebookTestAccess::GetPeerTabPadding(
+    const wxNotebook& control,
+    size_t page)
 {
-    if ( !m_winui || !m_hasTabPadding ||
-         page >= m_winui->items.size() )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || !notebook->m_hasTabPadding ||
+         page >= notebook->m_winui->items.size() )
         return wxSize();
 
     try
     {
-        const MUX::Thickness padding = m_winui->items[page].Padding();
-        const double scale = GetDPIScaleFactor();
+        const MUX::Thickness padding = notebook->m_winui->items[page].Padding();
+        const double scale = notebook->GetDPIScaleFactor();
         return wxSize(
             static_cast<int>(std::lround(padding.Left * scale)),
             static_cast<int>(std::lround(padding.Top * scale)));
@@ -2021,16 +2156,21 @@ wxSize wxNotebook::WinUIGetPeerTabPaddingForTesting(size_t page) const
     }
 }
 
-wxSize wxNotebook::WinUIGetPeerTabSizeForTesting(size_t page) const
+wxSize
+wxWinUINotebookTestAccess::GetPeerTabSize(
+    const wxNotebook& control,
+    size_t page)
 {
-    if ( !m_winui || !m_hasTabSize ||
-         page >= m_winui->items.size() )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || !notebook->m_hasTabSize ||
+         page >= notebook->m_winui->items.size() )
         return wxSize();
 
     try
     {
-        const auto& item = m_winui->items[page];
-        const double scale = GetDPIScaleFactor();
+        const auto& item = notebook->m_winui->items[page];
+        const double scale = notebook->GetDPIScaleFactor();
         return wxSize(
             static_cast<int>(std::lround(item.MinWidth() * scale)),
             static_cast<int>(std::lround(item.MinHeight() * scale)));
@@ -2041,15 +2181,20 @@ wxSize wxNotebook::WinUIGetPeerTabSizeForTesting(size_t page) const
     }
 }
 
-wxSize wxNotebook::WinUIGetPeerIconPixelSizeForTesting(size_t page) const
+wxSize
+wxWinUINotebookTestAccess::GetPeerIconPixelSize(
+    const wxNotebook& control,
+    size_t page)
 {
-    if ( !m_winui || page >= m_winui->icons.size() )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || page >= notebook->m_winui->icons.size() )
         return wxSize();
 
     try
     {
         const auto source =
-            m_winui->icons[page].Source().try_as<MUXMI::WriteableBitmap>();
+            notebook->m_winui->icons[page].Source().try_as<MUXMI::WriteableBitmap>();
         return source
                    ? wxSize(source.PixelWidth(), source.PixelHeight())
                    : wxSize();
@@ -2060,14 +2205,19 @@ wxSize wxNotebook::WinUIGetPeerIconPixelSizeForTesting(size_t page) const
     }
 }
 
-wxSize wxNotebook::WinUIGetPeerIconDIPSizeForTesting(size_t page) const
+wxSize
+wxWinUINotebookTestAccess::GetPeerIconDIPSize(
+    const wxNotebook& control,
+    size_t page)
 {
-    if ( !m_winui || page >= m_winui->icons.size() )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || page >= notebook->m_winui->icons.size() )
         return wxSize();
 
     try
     {
-        const MUXC::Image& icon = m_winui->icons[page];
+        const MUXC::Image& icon = notebook->m_winui->icons[page];
         if ( !icon.Source() )
             return wxSize();
 
@@ -2082,31 +2232,40 @@ wxSize wxNotebook::WinUIGetPeerIconDIPSizeForTesting(size_t page) const
 }
 
 std::uint64_t
-wxNotebook::WinUIGetPeerIconGenerationForTesting(size_t page) const
+wxWinUINotebookTestAccess::GetPeerIconGeneration(
+    const wxNotebook& control,
+    size_t page)
 {
-    if ( !m_winui || page >= m_winui->iconGenerations.size() )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || page >= notebook->m_winui->iconGenerations.size() )
         return 0;
 
-    return m_winui->iconGenerations[page];
+    return notebook->m_winui->iconGenerations[page];
 }
 
-bool wxNotebook::WinUIRefreshForScaleForTesting(double scale)
+bool
+wxWinUINotebookTestAccess::RefreshForScale(
+    wxNotebook& control,
+    double scale)
 {
+    wxNotebook * const notebook = &control;
+
     if ( !std::isfinite(scale) || scale <= 0.0 ||
-         !m_winui || !m_winui->callbackState || m_winui->closed )
+         !notebook->m_winui || !notebook->m_winui->callbackState || notebook->m_winui->closed )
     {
         return false;
     }
 
-    wxWinUINotebookImpl * const impl = m_winui.get();
+    wxWinUINotebookImpl * const impl = notebook->m_winui.get();
     const auto state = impl->callbackState;
     const std::uint64_t callbackGeneration = state->Generation();
     impl->projectionScaleOverrideForTesting = scale;
-    OnImagesChanged();
+    notebook->OnImagesChanged();
 
     wxNotebook * const owner =
         state->GetOwner(callbackGeneration);
-    if ( owner != this || !owner->m_winui ||
+    if ( owner != notebook || !owner->m_winui ||
          owner->m_winui.get() != impl ||
          owner->m_winui->callbackState != state ||
          impl->projectionInProgress ||
@@ -2124,6 +2283,7 @@ bool wxNotebook::WinUIRefreshForScaleForTesting(double scale)
     }
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 // ----------------------------------------------------------------------------
 // page management
@@ -2261,8 +2421,12 @@ bool wxNotebook::InsertPage(size_t nPage,
     }
 
     const bool failAfterPeerMutation =
+#ifdef WXWINUI_TEST_SUPPORT
         impl->ShouldFail(
-            WinUIPeerMutationForTesting::InsertPage);
+            wxWinUINotebookTestAccess::PeerMutation::InsertPage);
+#else
+        false;
+#endif
     const std::uint64_t preMutationRevision = impl->modelRevision;
     const std::uint64_t operation = callbackState->BeginOperation();
 
@@ -2613,8 +2777,12 @@ wxWindow *wxNotebook::DoRemovePage(size_t nPage)
     }
 
     const bool failAfterPeerMutation =
+#ifdef WXWINUI_TEST_SUPPORT
         impl->ShouldFail(
-            WinUIPeerMutationForTesting::RemovePage);
+            wxWinUINotebookTestAccess::PeerMutation::RemovePage);
+#else
+        false;
+#endif
 
     try
     {
@@ -2740,13 +2908,16 @@ bool wxNotebook::DeleteAllPages()
     wxCHECK_MSG( m_winui && m_winui->tabView, false,
                  wxT("uninitialized wxNotebook in DeleteAllPages()") );
 
+#ifdef WXWINUI_TEST_SUPPORT
     // Preserve the dedicated all-pages failure seam, but fail before touching
     // either model. The common implementation now drives the existing atomic
     // DoRemovePage() transaction one page at a time, so clearing the TabView
     // and its parallel mirrors here would make the first removal observe an
     // already-empty peer.
-    if ( m_winui->ShouldFail(WinUIPeerMutationForTesting::ClearPages) )
+    if ( m_winui->ShouldFail(
+             wxWinUINotebookTestAccess::PeerMutation::ClearPages) )
         return false;
+#endif
 
     return wxNotebookBase::DeleteAllPages();
 }
@@ -3233,28 +3404,6 @@ bool wxNotebook::IsPeerProjectionCurrent(
            m_winui->modelRevision == revision;
 }
 
-void wxNotebook::InvokeProjectionHookForTesting(
-    WinUIProjectionPointForTesting point)
-{
-    if ( !m_winui ||
-         m_winui->nextProjectionHookForTesting == nullptr ||
-         m_winui->nextProjectionPointForTesting != point )
-    {
-        return;
-    }
-
-    const WinUIProjectionHookForTesting hook =
-        m_winui->nextProjectionHookForTesting;
-    void * const context =
-        m_winui->nextProjectionHookContextForTesting;
-    m_winui->nextProjectionHookForTesting = nullptr;
-    m_winui->nextProjectionHookContextForTesting = nullptr;
-
-    // Deliberately last operation: the hook may synchronously destroy this
-    // notebook. Its caller must resolve the owner through callbackState again.
-    hook(this, context);
-}
-
 bool wxNotebook::ProjectPeerModelPass(
     std::uint64_t revision,
     const std::shared_ptr<wxWinUINotebookCallbackState>& state,
@@ -3318,7 +3467,10 @@ bool wxNotebook::ProjectPeerModelPass(
             const wxSize padding = owner->m_tabPadding;
             const wxSize tabSize = owner->m_tabSize;
             wxImageList * const imageList = owner->GetImageList();
-            double scale = impl->projectionScaleOverrideForTesting;
+            double scale = 0.0;
+#ifdef WXWINUI_TEST_SUPPORT
+            scale = impl->projectionScaleOverrideForTesting;
+#endif
             if ( !std::isfinite(scale) || scale <= 0.0 )
             {
                 // GetDPIScaleFactor() is virtual application code. Invoke it
@@ -3368,8 +3520,10 @@ bool wxNotebook::ProjectPeerModelPass(
                 if ( !owner )
                     return false;
             }
-            owner->InvokeProjectionHookForTesting(
-                WinUIProjectionPointForTesting::LabelText);
+#ifdef WXWINUI_TEST_SUPPORT
+            owner->m_winui->InvokeProjectionHook(
+                owner, wxWinUINotebookTestAccess::ProjectionPoint::LabelText);
+#endif
             owner = getCurrentOwner();
             if ( !owner )
                 return false;
@@ -3407,8 +3561,10 @@ bool wxNotebook::ProjectPeerModelPass(
                 if ( !owner )
                     return false;
             }
-            owner->InvokeProjectionHookForTesting(
-                WinUIProjectionPointForTesting::AutomationName);
+#ifdef WXWINUI_TEST_SUPPORT
+            owner->m_winui->InvokeProjectionHook(
+                owner, wxWinUINotebookTestAccess::ProjectionPoint::AutomationName);
+#endif
             owner = getCurrentOwner();
             if ( !owner )
                 return false;
@@ -3557,8 +3713,10 @@ bool wxNotebook::ProjectPeerModelPass(
                     owner = getCurrentOwner();
                     if ( !owner )
                         return false;
-                    owner->InvokeProjectionHookForTesting(
-                        WinUIProjectionPointForTesting::IconSource);
+#ifdef WXWINUI_TEST_SUPPORT
+                    owner->m_winui->InvokeProjectionHook(
+                        owner, wxWinUINotebookTestAccess::ProjectionPoint::IconSource);
+#endif
                     owner = getCurrentOwner();
                     if ( !owner )
                         return false;
@@ -3581,8 +3739,10 @@ bool wxNotebook::ProjectPeerModelPass(
                     owner = getCurrentOwner();
                     if ( !owner )
                         return false;
-                    owner->InvokeProjectionHookForTesting(
-                        WinUIProjectionPointForTesting::IconSource);
+#ifdef WXWINUI_TEST_SUPPORT
+                    owner->m_winui->InvokeProjectionHook(
+                        owner, wxWinUINotebookTestAccess::ProjectionPoint::IconSource);
+#endif
                     if ( !getCurrentOwner() )
                         return false;
                     icon.Visibility(MUX::Visibility::Collapsed);
@@ -3596,8 +3756,10 @@ bool wxNotebook::ProjectPeerModelPass(
                 owner = getCurrentOwner();
                 if ( !owner )
                     return false;
-                owner->InvokeProjectionHookForTesting(
-                    WinUIProjectionPointForTesting::IconSource);
+#ifdef WXWINUI_TEST_SUPPORT
+                owner->m_winui->InvokeProjectionHook(
+                    owner, wxWinUINotebookTestAccess::ProjectionPoint::IconSource);
+#endif
                 if ( !getCurrentOwner() )
                     return false;
                 icon.Visibility(MUX::Visibility::Collapsed);
@@ -3647,8 +3809,10 @@ bool wxNotebook::ProjectPeerModelPass(
                     if ( !owner )
                         return false;
                 }
-                owner->InvokeProjectionHookForTesting(
-                    WinUIProjectionPointForTesting::TabPadding);
+#ifdef WXWINUI_TEST_SUPPORT
+                owner->m_winui->InvokeProjectionHook(
+                    owner, wxWinUINotebookTestAccess::ProjectionPoint::TabPadding);
+#endif
                 if ( !getCurrentOwner() )
                     return false;
             }
@@ -3712,8 +3876,10 @@ bool wxNotebook::ProjectPeerModelPass(
                     if ( !owner )
                         return false;
                 }
-                owner->InvokeProjectionHookForTesting(
-                    WinUIProjectionPointForTesting::TabSize);
+#ifdef WXWINUI_TEST_SUPPORT
+                owner->m_winui->InvokeProjectionHook(
+                    owner, wxWinUINotebookTestAccess::ProjectionPoint::TabSize);
+#endif
                 if ( !getCurrentOwner() )
                     return false;
             }
@@ -3862,7 +4028,9 @@ void wxNotebook::OnDPIChanged(wxDPIChangedEvent& event)
     }
 
     wxWinUINotebookImpl * const impl = m_winui.get();
+#ifdef WXWINUI_TEST_SUPPORT
     impl->projectionScaleOverrideForTesting = 0.0;
+#endif
     const auto state = impl->callbackState;
     const std::uint64_t callbackGeneration = state->Generation();
     if ( !UsesExtendedPeerSurface() )
@@ -3995,20 +4163,25 @@ bool wxNotebook::MSWOnEffectiveLayoutDirectionChanged()
     return false;
 }
 
-bool wxNotebook::WinUIIsPeerRTLForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+bool
+wxWinUINotebookTestAccess::IsPeerRTL(
+    const wxNotebook& control)
 {
-    if ( !m_winui || !m_winui->tabView )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->m_winui || !notebook->m_winui->tabView )
         return false;
 
     try
     {
-        if ( UsesExtendedPeerSurface() &&
-             !m_winui->extendedPeers.empty() )
+        if ( notebook->UsesExtendedPeerSurface() &&
+             !notebook->m_winui->extendedPeers.empty() )
         {
-            return m_winui->extendedPeers.front().item.FlowDirection() ==
+            return notebook->m_winui->extendedPeers.front().item.FlowDirection() ==
                    MUX::FlowDirection::RightToLeft;
         }
-        return m_winui->tabView.FlowDirection() ==
+        return notebook->m_winui->tabView.FlowDirection() ==
                MUX::FlowDirection::RightToLeft;
     }
     catch ( const winrt::hresult_error& )
@@ -4016,6 +4189,7 @@ bool wxNotebook::WinUIIsPeerRTLForTesting() const
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 bool wxNotebook::UsesExtendedPeerSurface() const
 {
@@ -4025,27 +4199,37 @@ bool wxNotebook::UsesExtendedPeerSurface() const
            (style & (wxNB_MULTILINE | wxNB_NOPAGETHEME)) != 0;
 }
 
-bool wxNotebook::WinUIIsUsingExtendedSurfaceForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+bool
+wxWinUINotebookTestAccess::IsUsingExtendedSurface(
+    const wxNotebook& control)
 {
-    return UsesExtendedPeerSurface();
+    const wxNotebook * const notebook = &control;
+
+    return notebook->UsesExtendedPeerSurface();
 }
 
-bool wxNotebook::WinUIIsPeerTabStopForTesting(size_t page) const
+bool
+wxWinUINotebookTestAccess::IsPeerTabStop(
+    const wxNotebook& control,
+    size_t page)
 {
-    if ( !UsesExtendedPeerSurface() )
+    const wxNotebook * const notebook = &control;
+
+    if ( !notebook->UsesExtendedPeerSurface() )
         return false;
 
-    wxNotebook * const self = const_cast<wxNotebook *>(this);
-    if ( !self->EnsureExtendedPeerSurface() || !m_winui ||
-         !m_winui->callbackState ||
-         page >= m_winui->extendedPeers.size() )
+    wxNotebook * const self = const_cast<wxNotebook *>(notebook);
+    if ( !self->EnsureExtendedPeerSurface() || !notebook->m_winui ||
+         !notebook->m_winui->callbackState ||
+         page >= notebook->m_winui->extendedPeers.size() )
     {
         return false;
     }
 
-    const auto state = m_winui->callbackState;
+    const auto state = notebook->m_winui->callbackState;
     const std::uint64_t callbackGeneration = state->Generation();
-    wxWinUINotebookImpl * const impl = m_winui.get();
+    wxWinUINotebookImpl * const impl = notebook->m_winui.get();
     const std::uint64_t surfaceGeneration =
         impl->extendedSurfaceGeneration;
     const MUXC::TabViewItem item = impl->extendedPeers[page].item;
@@ -4054,7 +4238,7 @@ bool wxNotebook::WinUIIsPeerTabStopForTesting(size_t page) const
         const bool isTabStop = item.IsTabStop();
         wxNotebook * const owner =
             state->GetOwner(callbackGeneration);
-        return owner == this && owner->m_winui &&
+        return owner == notebook && owner->m_winui &&
                        owner->m_winui.get() == impl &&
                        impl->extendedSurfaceGeneration ==
                            surfaceGeneration
@@ -4067,17 +4251,22 @@ bool wxNotebook::WinUIIsPeerTabStopForTesting(size_t page) const
     }
 }
 
-bool wxNotebook::WinUIInvokeTabOverflowForTesting(bool forward)
+bool
+wxWinUINotebookTestAccess::InvokeTabOverflow(
+    wxNotebook& control,
+    bool forward)
 {
-    if ( !UsesExtendedPeerSurface() || !LayoutExtendedPeerSurface() ||
-         !m_winui || !m_winui->callbackState )
+    wxNotebook * const notebook = &control;
+
+    if ( !notebook->UsesExtendedPeerSurface() || !notebook->LayoutExtendedPeerSurface() ||
+         !notebook->m_winui || !notebook->m_winui->callbackState )
     {
         return false;
     }
 
-    const auto state = m_winui->callbackState;
+    const auto state = notebook->m_winui->callbackState;
     const std::uint64_t callbackGeneration = state->Generation();
-    wxWinUINotebookImpl * const impl = m_winui.get();
+    wxWinUINotebookImpl * const impl = notebook->m_winui.get();
     const MUXC::Button button =
         forward ? impl->extendedForwardButton
                 : impl->extendedBackButton;
@@ -4088,7 +4277,7 @@ bool wxNotebook::WinUIInvokeTabOverflowForTesting(bool forward)
     {
         wxNotebook * const owner =
             state->GetOwner(callbackGeneration);
-        return owner == this && owner->m_winui &&
+        return owner == notebook && owner->m_winui &&
                owner->m_winui.get() == impl &&
                owner->m_winui->callbackState == state &&
                !owner->m_winui->closed;
@@ -4114,6 +4303,7 @@ bool wxNotebook::WinUIInvokeTabOverflowForTesting(bool forward)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 bool wxNotebook::EnsureExtendedPeerSurface()
 {
@@ -5125,8 +5315,10 @@ bool wxNotebook::LayoutExtendedPeerSurface()
     // boundary as the stock TabView path. A nested hot style mutation is a
     // newer writer: getOwner() below rejects this pass before it can publish
     // or roll back any of the superseded surface state.
-    owner->InvokeProjectionHookForTesting(
-        WinUIProjectionPointForTesting::TabGeometryMeasure);
+#ifdef WXWINUI_TEST_SUPPORT
+    owner->m_winui->InvokeProjectionHook(
+        owner, wxWinUINotebookTestAccess::ProjectionPoint::TabGeometryMeasure);
+#endif
     owner = getOwner();
     if ( !owner )
         return false;
@@ -6662,8 +6854,10 @@ wxNotebook *wxNotebook::RealizeTabGeometryForQuery() const
             if ( !owner )
                 return nullptr;
 
-            owner->InvokeProjectionHookForTesting(
-                WinUIProjectionPointForTesting::TabGeometryMeasure);
+#ifdef WXWINUI_TEST_SUPPORT
+            owner->m_winui->InvokeProjectionHook(
+                owner, wxWinUINotebookTestAccess::ProjectionPoint::TabGeometryMeasure);
+#endif
             owner = getCurrentOwner();
             if ( !owner )
                 return nullptr;
