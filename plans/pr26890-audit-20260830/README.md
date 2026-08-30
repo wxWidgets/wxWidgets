@@ -15,13 +15,13 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 
 | Plan | Scope | Status |
 |---|---|---|
-| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | QT MODAL FIX LOCAL PASS; REMOTE CONFIRMATION PENDING |
+| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | DONE at 2947664462: 45/45 REMOTE CHECKS PASS |
 | [102](102-native-resize.md) | Make native resizing a host-owned input transaction | NATIVE LOCAL PASS / PHYSICAL PENDING |
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL / REMOTE PASS; EXTERNAL UIA IN 109 |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | 28 CONTROLS + RETIREMENT ADAPTERS LOCALLY QUALIFIED; HOST REMAINDER OPEN |
-| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | TODO |
+| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | 107A-F SPECIFIED; IMPLEMENTATION / QUALIFICATION PENDING |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: CONCRETE FAILURES AND TEST ORACLES |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
@@ -29,6 +29,14 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [112](112-submission-series.md) | Prepare reviewable submission boundaries without rewriting the integration branch | TODO |
 
 Execute one implementation lot at a time. A remote build may run while the next independent lot is prepared, but its predecessor remains pending until the result is known. No repetitive whole-repository re-audit between lots. Each defect receives one focused verification; new failures expand the same lot rather than starting an unrelated initiative.
+
+Architecture extension (2026-08-31): 107 now specifies six bounded foundation
+sublots: host/native resize authority, minimal peer lifetime, geometry
+publication, focus/input adapters, template identity, and production/test
+observation boundaries. Their exact source anchors, filters and stop
+conditions are in 107. Existing single-island and toolkit-ABI decisions are
+preserved; changing them requires a separate design decision. These are
+planned refactors, not a claim that the host is already decomposed.
 
 ## Findings coverage
 
@@ -77,6 +85,7 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 
 ## Evidence log
 
+- 2026-08-31 final CI confirmation on `29476644627e701109cb750b083ebe0c11a6bb3c`: **45/45 SUCCESS**, including both formerly stalled Windows Qt jobs. Qt 5.15 runs 872 CTests plus 356894 GUI assertions / 1042 cases; Qt 6.10 runs 872 plus 356891 / 1042. Both WinUI linkages execute all five registered header/consumer/runtime/Supported gates successfully. Plan 101 is closed on this SHA; later local commits, physical interaction and broader parity are not covered by that result. Exact job links and archived evidence are in 101. Earlier pending entries below are historical.
 - Framework-retirement adapters now complete shared/static ON/OFF/ON qualification: unchanged 161 assertions / 4 cases, smoke/Supported V0 2/2, shipping header/symbol absence and fresh toolkit/runtime consumers, including eleven real subprocesses per linkage. Actual retirement ordering, quarantine and native shutdown subscriptions remain production code. This is a separate local commit; the already-published Qt modal fix's CI is allowed to finish before another push. Other runtime/host helpers remain open in 106.
 - Windows Qt's modal hang is reproduced and corrected: an INIT handler closed a dialog which the unconditional native modal loop then reopened. The unchanged reproduction and new closure/reuse cases pass locally; the final Qt preferences/modal/Toolbook/PropertySheet group passes 1067 assertions (one existing file-dialog early return remains unqualified), and MSW preferences pass 311 assertions. The Qt selection-restoration fixture now triggers at the actual synchronous selection boundary without relaxing its checks. The timeout/duplicate-execution workflow fix is already published; Windows Qt 5.15/6.10 remote confirmation and the other open audit lots remain required.
 - Text/Search test-only storage and ComboBox force parameters are now removed from installed control declarations. Shared/static ON/OFF/ON retain **1913 assertions / 43 safe cases**, smoke/Supported V0, fresh installed consumers and strict 28-header/symbol checks. All 16 shipping wx libraries and six samples were rebuilt for the intentional pre-release Text/Search layout reduction. Runtime/host helpers and the separate component/physical gaps remain open. Windows Qt CI is currently under diagnosis in 101: the user's live logs reach `test_gui` after IPC passes, not an IPC hang.

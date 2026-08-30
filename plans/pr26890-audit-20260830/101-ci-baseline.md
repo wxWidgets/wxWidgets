@@ -1,11 +1,29 @@
 # Plan 101: Restore existing-port builds and execute the WinUI runtime CI
 
-- Status: WINDOWS QT MODAL FIX LOCAL PASS / REMOTE PENDING
+- Status: DONE at 2947664462 — LOCAL / REMOTE PASS (45/45 checks)
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: L (expanded by reproduced cross-port regressions)
 - Implementation risk: MED
 - Depends on: none
+
+## Final remote confirmation (2026-08-31)
+
+All 45 PR checks report SUCCESS on published commit
+`29476644627e701109cb750b083ebe0c11a6bb3c`, with no pending or failing check.
+This closes the observed build/runtime blockers in this plan on that SHA;
+later implementation commits still need their own CI results.
+
+- [Windows Qt 5.15](https://github.com/wxWidgets/wxWidgets/actions/runs/33332852254/job/99314492642): CTest **872/872** and the separately executed GUI suite **356894 assertions / 1042 cases**, PASS.
+- [Windows Qt 6.10](https://github.com/wxWidgets/wxWidgets/actions/runs/33332852254/job/99314492559): CTest **872/872** and GUI **356891 assertions / 1042 cases**, PASS.
+- Both previously blocked modal/preference sections and both new Qt modal regressions complete in each job. GUI is executed once, not skipped by the CTest exclusion. Qt's installation-testing step remains explicitly skipped; no installed Qt consumer result is inferred.
+- [WinUI shared](https://github.com/wxWidgets/wxWidgets/actions/runs/33332852287/job/99314466377) and [static](https://github.com/wxWidgets/wxWidgets/actions/runs/33332852287/job/99314466505): pinned runtime registration, header dispatch, installed runtime consumer, installed toolkit consumer, runtime smoke and Supported V0 all execute successfully. Each registered CTest gate reports **1/1**, not just successful compilation.
+- Raw job logs, API snapshots and hashes: `F:\wxwinui-pr26890-audit101-ci-2947664462`; commands and precise limitations are in `verification.md` there. Existing platform WARN/early returns are not silently promoted to individual feature qualification.
+
+The entries below preserve the diagnosis and intermediate failures. Their
+historical pending statuses are superseded by this dated, SHA-specific result,
+not erased. Physical resize/input, component parity and soak remain separate
+plans and are not closed by this CI success.
 
 ## Context and workspace
 
