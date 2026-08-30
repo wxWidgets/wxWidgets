@@ -2773,8 +2773,11 @@ bool wxPropertyGrid::DoRemoveFromSelection( wxPGProperty* prop, wxPGSelectProper
     wxCHECK( prop, false );
     const wxWeakRef<wxWindow> weakThis(this);
     wxPropertyGridPageState* const state = m_pState;
+    // Deferred deletion must still be able to detach the property from the
+    // selection when it is retried at idle.
     if ( !state || wxWindowIsUnavailableForCallbacks(this) || prop->GetParentState() != state ||
-         IsPropertyPendingRemoval(prop) )
+         (IsPropertyPendingRemoval(prop) &&
+          !(selFlags & wxPGSelectPropertyFlags::Deleting)) )
     {
         return false;
     }
@@ -8046,6 +8049,24 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, wxPGSelectPropertyFlags 
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
     wxScopeGuard leaveSelectProperty = wxMakeGuard([weakThis, this]()
     {
+        if ( wxWeakWindowIsAvailableForCallbacks(weakThis, this) && m_pState )
+        {
+            wxPGProperty* const selected = GetSelection();
+            if ( selected && IsPropertyPendingRemoval(selected) )
+            {
+                // DeleteProperty() cannot recursively deselect while this
+                // transaction is active. Retire the abandoned selection and
+                // editors after its callback returns, but before releasing
+                // the callback epoch that keeps the property alive. Clear
+                // selection first: editor cleanup can itself send events.
+                m_pState->DoSetSelection(nullptr);
+                m_editorFocused = false;
+                ClearInternalFlag(wxPG_FL_ABNORMAL_EDITOR);
+                EditorsValueWasNotModified();
+                FreeEditors();
+            }
+        }
+
         if ( weakThis.get() == this )
         {
             ClearInternalFlag(wxPG_FL_IN_SELECT_PROPERTY);

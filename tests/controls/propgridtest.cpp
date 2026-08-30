@@ -2939,7 +2939,10 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         const wxWeakRef<wxWindow> weakSecondary(secondary);
         primary->ChangeValue("invalid event value");
         property->ArmValidator(secondary, false);
-        wxCommandEvent textEvent(wxEVT_TEXT, primary->GetId());
+        // A text change only marks the editor dirty. Enter requests validation
+        // and exercises the false-result cleanup in HandleCustomEditorEvent().
+        pg->EditorsValueWasModified();
+        wxCommandEvent textEvent(wxEVT_TEXT_ENTER, primary->GetId());
         textEvent.SetEventObject(primary);
 
         CHECK( pg->HandleCustomEditorEvent(textEvent) );
@@ -3066,6 +3069,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( pg->GetSelection() == nullptr );
         CHECK( pg->GetEditorControl() == nullptr );
         CHECK( selectedEvents == 0 );
+
+        wxTheApp->ProcessIdle();
+        CHECK( pg->GetRoot()->GetChildCount() == 0 );
     }
 
     SECTION("Editor_focus_callback_may_destroy_secondary_control")
@@ -3125,6 +3131,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( pg->GetSelection() == nullptr );
         CHECK( pg->GetEditorControl() == nullptr );
         CHECK( selectedEvents == 0 );
+
+        wxTheApp->ProcessIdle();
+        CHECK( pg->GetRoot()->GetChildCount() == 0 );
     }
 
     SECTION("Editor_show_callback_may_remove_property")
@@ -3159,6 +3168,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( selectedEvents == 0 );
         const wxWeakRef<wxWindow> weakPrimary(showEditor.GetCreatedControl());
         wxTheApp->ProcessIdle();
+        CHECK( pg->GetRoot()->GetChildCount() == 0 );
         REQUIRE( WaitFor("PropertyGrid abandoned shown editor destruction",
                          [&weakPrimary]() { return !weakPrimary; }) );
     }
