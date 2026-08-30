@@ -15,9 +15,9 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 
 | Plan | Scope | Status |
 |---|---|---|
-| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | LOCAL PASS / REMOTE PENDING |
+| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | OPEN: REMOTE FAILURES UNDER REPAIR |
 | [102](102-native-resize.md) | Make native resizing a host-owned input transaction | NATIVE LOCAL PASS / PHYSICAL PENDING |
-| [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | IN PROGRESS |
+| [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL PASS / REMOTE PENDING |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | TODO |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | TODO |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | TODO |
@@ -85,3 +85,5 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 - Master 6155567922 is now integrated without rewriting history. After Catch2 migration, Supported V0 retains 1160 passing assertions in 90 individually registered cases in both linkages; smoke passes too. MSW targeted non-input regressions pass 323062 assertions / 117 cases. Separate PropertyGrid and three book-controller failures remain OPEN in 101; they are not hidden by these passing subsets.
 - Subsequent fixes close those MSW failures: all six book families pass 471 assertions / 58 cases, and full PropertyGrid passes 1137 assertions / 2 cases. Full WinUI PropertyGrid still crashes in a retained-page destruction case in both linkages; 101 remains OPEN. Details and exact logs are maintained in 101.
 - The retained-page fixture is now corrected: full WinUI PropertyGrid passes 1175 assertions shared and 1179 static. Final smoke + Supported V0 pass in both linkages (1162 assertions / 90 cases). GitHub reports no merge conflicts and CI has started on 0080db6c16; remote results remain pending. Lot 103 implementation starts against this locally verified baseline.
+- Remote CI on 0080db6c16 exposes Qt compilation/selection/filesystem failures, non-MSW PropertyGrid teardown, MSW resize-notification counting, macOS callback tests and a missing Windows Server DDLM runtime registration. These remain in 101 with targeted corrections and reruns; no global green CI claim is made.
+- Lot 103 passes both local linkages: 498 identity assertions, 618 assertions including existing presenter lifetime cases, and smoke + Supported V0 (1660 assertions / 92 cases). A separately observed auxiliary NativeProgress test timeout remains OPEN in 109.

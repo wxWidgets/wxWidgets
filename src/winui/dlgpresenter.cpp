@@ -23,6 +23,7 @@
 #include "wx/evtloop.h"
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
+#include "wx/private/windowlifetime.h"
 
 #include "wx/msw/private.h"
 
@@ -56,9 +57,8 @@ namespace MUXD = winrt::Microsoft::UI::Dispatching;
 namespace
 {
 
-// Keep the conservative, separately owned top-level window as the alpha
-// default. The in-window ContentDialog path remains available explicitly while
-// its stacking, focus and lifetime contract is being qualified.
+// A real dialog window is the default. The in-window ContentDialog path
+// remains explicitly opt-in with its distinct geometry and lifetime contract.
 wxWinUIDialogPresentation gs_dialogPresentation =
     wxWinUIDialogPresentation::Window;
 bool gs_dialogPresentationSet = false;
@@ -1074,18 +1074,20 @@ private:
 
 // Callback state for the Window presentation.  The XAML delegates and the
 // deferred dismissal capture only a weak_ptr to this heap object.  In
-// particular neither the stack-local presenter nor the asynchronously
-// destroyed shell is ever captured raw.
+// particular neither the stack-local presenter nor the dialog is ever
+// captured raw by a retained delegate.
 class wxWinUIDialogWindowCallbackState final
     : public std::enable_shared_from_this<
           wxWinUIDialogWindowCallbackState>
 {
 public:
     wxWinUIDialogWindowCallbackState(
-        wxWinUIDialogShell *shell,
+        wxDialog *dialog,
         std::function<bool (int)> onAccept,
         bool canDismissExternally)
-        : m_shell(shell),
+        : m_dialog(dialog),
+          m_hwnd(dialog->GetHWND()),
+          m_hwndGeneration(wxWinUIMSWGetHwndGeneration(dialog, m_hwnd)),
           m_onAccept(std::move(onAccept)),
           m_canDismissExternally(canDismissExternally)
     {
@@ -1093,7 +1095,7 @@ public:
 
     void RequestDismiss(int id)
     {
-        if ( !m_active || m_dismissQueued || m_acceptInProgress )
+        if ( !IsCurrent(m_generation) || m_dismissQueued || m_acceptInProgress )
             return;
         if ( id == wxID_CANCEL &&
              wxWinUIShouldCancelExternalDialogDismiss(
@@ -1104,7 +1106,7 @@ public:
 
         // The validation callback is caller-owned and can run arbitrary wx
         // code, including destroying the owner.  Revalidate the generation
-        // and weak shell after it returns.
+        // and weak window identity after it returns.
         const std::uint64_t generation = m_generation;
         const auto accept = m_onAccept;
         bool accepted = true;
@@ -1117,7 +1119,7 @@ public:
         if ( !accepted ||
                 !IsCurrent(generation) ||
                 m_dismissQueued ||
-                !m_shell )
+                !GetDialog() )
         {
             return;
         }
@@ -1154,7 +1156,7 @@ public:
             ++m_generation;
         }
         m_onAccept = nullptr;
-        m_shell = nullptr;
+        m_dialog = nullptr;
     }
 
     void CancelFromLifetimeOwner()
@@ -1167,16 +1169,14 @@ public:
         m_dismissQueued = true;
         m_onAccept = nullptr;
 
-        wxWindow * const window = m_shell.get();
-        if ( !window )
+        wxDialog * const dialog = GetDialog();
+        if ( !dialog )
             return;
 
-        auto * const shell =
-            static_cast<wxWinUIDialogShell *>(window);
-        if ( shell->IsModal() )
-            shell->EndModal(wxID_CANCEL);
+        if ( dialog->IsModal() )
+            dialog->EndModal(wxID_CANCEL);
         else
-            shell->Show(false);
+            dialog->Show(false);
     }
 
     bool IsActive() const
@@ -1185,9 +1185,21 @@ public:
     }
 
 private:
+    wxDialog *GetDialog() const
+    {
+        wxWindow * const window = m_dialog.get();
+        return window && window->GetHWND() == m_hwnd &&
+               m_hwndGeneration &&
+               wxWinUIMSWGetHwndGeneration(window, m_hwnd) == m_hwndGeneration
+            ? static_cast<wxDialog *>(window)
+            : nullptr;
+    }
+
     bool IsCurrent(std::uint64_t generation) const
     {
-        return m_active && m_generation == generation;
+        wxDialog * const dialog = GetDialog();
+        return m_active && m_generation == generation && dialog &&
+               !wxWindowIsUnavailableForCallbacks(dialog);
     }
 
     void DismissNow(std::uint64_t generation, int id)
@@ -1195,19 +1207,19 @@ private:
         if ( !IsCurrent(generation) )
             return;
 
-        wxWindow * const window = m_shell.get();
-        if ( !window )
+        wxDialog * const dialog = GetDialog();
+        if ( !dialog )
             return;
 
-        auto * const shell =
-            static_cast<wxWinUIDialogShell *>(window);
-        if ( shell->IsModal() )
-            shell->EndModal(id);
+        if ( dialog->IsModal() )
+            dialog->EndModal(id);
         else
-            shell->Show(false);
+            dialog->Show(false);
     }
 
-    wxWeakRef<wxWindow> m_shell;
+    wxWeakRef<wxWindow> m_dialog;
+    WXHWND m_hwnd = nullptr;
+    unsigned long long m_hwndGeneration = 0;
     std::function<bool (int)> m_onAccept;
     std::uint64_t m_generation = 1;
     bool m_active = true;
@@ -1264,7 +1276,53 @@ bool wxWinUIDialogPresenter::Create(wxWindow *parent, const wxString& title)
 
     m_parent = parent;
     m_title = title;
+    m_window = nullptr;
+    m_windowHwnd = nullptr;
+    m_windowGeneration = 0;
+    m_usesExistingWindow = false;
     return true;
+}
+
+bool wxWinUIDialogPresenter::CreateForDialog(wxDialog *dialog)
+{
+    if ( !dialog || dialog->IsBeingDeleted() || !dialog->GetHWND() )
+        return false;
+
+    const wxWeakRef<wxWindow> weakDialog(dialog);
+    if ( !Create(dialog->GetParentForModalDialog(), dialog->GetTitle()) ||
+         !wxWeakWindowIsAvailableForCallbacks(weakDialog, dialog) )
+    {
+        return false;
+    }
+
+    m_window = dialog;
+    m_windowHwnd = dialog->GetHWND();
+    m_windowGeneration = wxWinUIMSWGetHwndGeneration(dialog, m_windowHwnd);
+    m_usesExistingWindow = true;
+    SetLifetimeOwner(dialog);
+    return GetCurrentWindow() != nullptr;
+}
+
+wxDialog *wxWinUIDialogPresenter::GetCurrentWindow() const
+{
+    wxWindow * const window = m_window.get();
+    return wxWeakWindowIsAvailableForCallbacks(m_window, window) &&
+           window->GetHWND() == m_windowHwnd && m_windowGeneration &&
+           wxWinUIMSWGetHwndGeneration(window, m_windowHwnd) == m_windowGeneration
+        ? static_cast<wxDialog *>(window)
+        : nullptr;
+}
+
+wxSize wxWinUIDialogPresenter::GetWindowClientSize(const wxSize& contentSize,
+                                                  size_t buttonCount)
+{
+    wxSize client = contentSize;
+    client.y += wxWINUI_BUTTON_HEIGHT + wxWINUI_DIALOG_MARGIN;
+    client.x = wxMax(client.x, static_cast<int>(buttonCount) *
+                        (wxWINUI_BUTTON_MIN_WIDTH + wxWINUI_BUTTON_SPACING));
+    client.x += 2 * wxWINUI_DIALOG_MARGIN;
+    client.y += 2 * wxWINUI_DIALOG_MARGIN;
+    return client;
 }
 
 void wxWinUIDialogPresenter::SetContent(MUX::UIElement const& content)
@@ -1303,27 +1361,57 @@ int wxWinUIDialogPresenter::ShowAsWindow()
     if ( !LifetimeOwnerIsAlive() )
         return wxID_CANCEL;
 
-    wxWinUIDialogShell *shell = new wxWinUIDialogShell;
-    if ( !shell->Create(m_parent, m_title) )
+    wxWinUIControlHost borrowedHost;
+    wxWinUIDialogShell * const ownedShell =
+        m_usesExistingWindow ? nullptr : new wxWinUIDialogShell;
+    wxDialog * const window = ownedShell ? ownedShell : GetCurrentWindow();
+    if ( !window )
+        return wxID_CANCEL;
+
+    const wxWeakRef<wxWindow> weakWindow(window);
+    const auto destroyOwnedShell = wxMakeGuard(
+        [weakWindow, ownedShell]()
+        {
+            if ( ownedShell && weakWindow )
+                weakWindow->Destroy();
+        });
+
+    wxWinUIControlHost * const host = ownedShell
+        ? &ownedShell->GetHost() : &borrowedHost;
+    if ( ownedShell )
     {
-        shell->Destroy();
+        if ( !ownedShell->Create(m_parent.get(), m_title) ||
+             !wxWeakWindowIsAvailableForCallbacks(weakWindow, window) )
+        {
+            return wxID_CANCEL;
+        }
+        ownedShell->SetExternalDismissAllowed(m_canDismissExternally);
+    }
+    else if ( !borrowedHost.Initialize(window) || !GetCurrentWindow() )
+    {
         return wxID_CANCEL;
     }
-    shell->SetExternalDismissAllowed(m_canDismissExternally);
+
+    const WXHWND hwnd = window->GetHWND();
+    const auto hwndGeneration = wxWinUIMSWGetHwndGeneration(window, hwnd);
+    const auto windowIsCurrent = [weakWindow, window, hwnd, hwndGeneration]()
+    {
+        return wxWeakWindowIsAvailableForCallbacks(weakWindow, window) &&
+               window->GetHWND() == hwnd && hwndGeneration &&
+               wxWinUIMSWGetHwndGeneration(window, hwnd) == hwndGeneration;
+    };
 
     int result = wxID_CANCEL;
     MUXC::Border surface{ nullptr };
     MUXC::Grid root{ nullptr };
-    const wxWeakRef<wxWindow> weakShell(shell);
     auto callbackState =
         std::make_shared<wxWinUIDialogWindowCallbackState>(
-            shell, m_onAccept, m_canDismissExternally);
+            window, m_onAccept, m_canDismissExternally);
     wxWinUIDialogLifetimeObserver lifetimeObserver;
     wxWindow * const lifetimeOwner = m_lifetimeOwner.get();
     if ( m_hasLifetimeOwner &&
             (!lifetimeOwner || lifetimeOwner->IsBeingDeleted()) )
     {
-        shell->Destroy();
         return wxID_CANCEL;
     }
     if ( lifetimeOwner )
@@ -1338,7 +1426,6 @@ int wxWinUIDialogPresenter::ShowAsWindow()
                          state->CancelFromLifetimeOwner();
                  }) )
         {
-            shell->Destroy();
             return wxID_CANCEL;
         }
     }
@@ -1378,14 +1465,13 @@ int wxWinUIDialogPresenter::ShowAsWindow()
             {
             }
 
-            wxWinUIDialogShell * const liveShell =
-                static_cast<wxWinUIDialogShell *>(weakShell.get());
             try
             {
-                // ClearContent precedes deferred Destroy(), so no island
-                // route survives into the caller.
-                if ( liveShell )
-                    liveShell->GetHost().ClearContent();
+                // A borrowed host is stack-owned even if its wx window died.
+                // Close retires its slot and routes before returning to the
+                // caller; the public dialog and its HWND are not destroyed.
+                if ( !ownedShell || weakWindow )
+                    host->Close();
             }
             catch ( const winrt::hresult_error& )
             {
@@ -1408,8 +1494,6 @@ int wxWinUIDialogPresenter::ShowAsWindow()
             }
 
             m_content = nullptr;
-            if ( liveShell )
-                liveShell->Destroy();
         });
     wxUnusedVar(cleanup);
 
@@ -1535,27 +1619,33 @@ int wxWinUIDialogPresenter::ShowAsWindow()
 
         root.Children().Append(buttons);
         surface.Child(root);
-        shell->GetHost().SetContent(surface);
+        if ( !windowIsCurrent() || !host->SetContent(surface) ||
+             !windowIsCurrent() )
+        {
+            return result;
+        }
 
-        // Size the dialog from the caller's content hint plus our chrome.
-        wxSize client = m_contentSize;
-        client.y += wxWINUI_BUTTON_HEIGHT + wxWINUI_DIALOG_MARGIN;
-        client.x = wxMax(client.x, static_cast<int>(m_buttons.size()) *
-                            (wxWINUI_BUTTON_MIN_WIDTH + wxWINUI_BUTTON_SPACING));
-        client.x += 2 * wxWINUI_DIALOG_MARGIN;
-        client.y += 2 * wxWINUI_DIALOG_MARGIN;
-
-        shell->SetClientSize(shell->FromDIP(client));
-        shell->CentreOnParent();
+        // Only a private shell needs initial sizing here. Public dialogs were
+        // sized at Create(), and later application geometry is authoritative.
+        if ( ownedShell )
+        {
+            window->SetClientSize(window->FromDIP(
+                GetWindowClientSize(m_contentSize, m_buttons.size())));
+            if ( !windowIsCurrent() )
+                return result;
+            window->CentreOnParent();
+        }
 
         // SetContent(), sizing and centring can dispatch arbitrary wx/XAML
         // callbacks. A lifetime-owner cancellation before the modal loop
         // starts must abort here; showing an inert shell would hang forever.
         if ( LifetimeOwnerIsAlive() &&
                 callbackState->IsActive() &&
-                weakShell )
+                windowIsCurrent() )
         {
-            result = shell->ShowModalWithoutHookWithExternalLifetime();
+            result = ownedShell
+                ? ownedShell->ShowModalWithoutHookWithExternalLifetime()
+                : window->WinUIShowModalWithoutHook();
         }
     }
     catch ( const winrt::hresult_error& e )
@@ -1880,14 +1970,14 @@ int wxWinUIDialogPresenter::ShowAsOverlay()
     // island band composes above them), and the island hit-test treats an
     // open popup as capturing everything, so the modality is airtight.
     wxWinUITopLevelHost * const host =
-        m_parent ? wxWinUITopLevelHost::ForWindow(m_parent, true) : nullptr;
+        m_parent ? wxWinUITopLevelHost::ForWindow(m_parent.get(), true) : nullptr;
     if ( !LifetimeOwnerIsAlive() )
         return wxID_CANCEL;
     if ( !host || !host->GetXamlRoot() )
         return ShowAsWindow();   // no island: degrade to a real window
 
     wxWindow * const tlw =
-        m_parent ? wxGetTopLevelParent(m_parent) : nullptr;
+        m_parent ? wxGetTopLevelParent(m_parent.get()) : nullptr;
     const MUXD::DispatcherQueue queue =
         host->Root().DispatcherQueue();
     if ( !tlw || !queue )

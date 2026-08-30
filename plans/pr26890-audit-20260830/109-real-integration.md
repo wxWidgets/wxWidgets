@@ -51,5 +51,8 @@ Stop physical runs immediately for unexpected foreground/capture, user activity,
 
 ## Maintenance
 
-Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
+### Open evidence from lot 103 (2026-08-30)
 
+The broader non-input `[winui-dialog-lifetime]` run completes text/password/colour, MessageDialog and RichMessage tests but times out in `WinUIDialogContracts::NativeProgressBoundaryAndLifetime` in both linkages. Reproduce this auxiliary contract independently and diagnose the task-dialog worker/fixture before claiming the whole dialog integration matrix passes. Logs: audit103-dialog-contracts.log in both build roots and audit103-native-progress.log in the static build. The six scoped Window/presenter cases pass 618 assertions and do not establish this progress-dialog result.
+
+Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

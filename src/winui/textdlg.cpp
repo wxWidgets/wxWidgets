@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/winui/textdlg.cpp
-// Purpose:     wxTextEntryDialog using WinUI ContentDialog
+// Purpose:     wxTextEntryDialog using a WinUI dialog presenter
 // Author:      wxWidgets development team
 // Created:     2026-06-03
 // Copyright:   (c) wxWidgets development team
@@ -36,6 +36,16 @@
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
+
+namespace
+{
+
+wxSize wxWinUITextEntryBodySize(long style)
+{
+    return wxSize(360, (style & wxTE_MULTILINE) ? 220 : 90);
+}
+
+} // anonymous namespace
 
 class wxWinUITextEntryPeerState final
     : public std::enable_shared_from_this<wxWinUITextEntryPeerState>
@@ -233,7 +243,9 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
                                const wxPoint& pos,
                                const wxSize sz)
 {
-    m_winuiParent = GetParentForModalDialog(parent, style);
+    // wxTE_MULTILINE and wxDIALOG_NO_PARENT have the same numeric value.
+    // As in the generic dialog, don't treat text-control flags as dialog flags.
+    m_winuiParent = GetParentForModalDialog(parent, 0);
     m_message = message;
     m_caption = caption;
     m_value = value;
@@ -242,17 +254,34 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     m_size = sz;
     m_isPassword = (style & wxTE_PASSWORD) != 0;
 
-    // Create a real (hidden) dialog window so that this object behaves like a
-    // normal wxDialog for the application (valid GetHandle(), event routing,
-    // parent relationship); the UI actually shown by ShowModal() is a WinUI
-    // ContentDialog over the parent, this window is never made visible.
-    return wxDialog::Create(
-        m_winuiParent,
-        wxID_ANY,
-        caption,
-        pos,
-        sz,
-        wxDEFAULT_DIALOG_STYLE | (style & wxDIALOG_NO_PARENT));
+    if ( !wxDialog::Create(m_winuiParent, wxID_ANY, caption, pos, sz,
+                           wxDEFAULT_DIALOG_STYLE) )
+    {
+        return false;
+    }
+
+    // Initialize only unspecified dimensions. Window presentation borrows
+    // this dialog and must not reset its later Move()/SetSize() changes.
+    const wxWeakRef<wxWindow> weakThis(this);
+    if ( sz.x == wxDefaultCoord || sz.y == wxDefaultCoord )
+    {
+        const wxSize naturalSize = FromDIP(
+            wxWinUIDialogPresenter::GetWindowClientSize(
+                wxWinUITextEntryBodySize(style), (style & wxCANCEL) ? 2 : 1));
+        wxSize clientSize = GetClientSize();
+        if ( sz.x == wxDefaultCoord )
+            clientSize.x = naturalSize.x;
+        if ( sz.y == wxDefaultCoord )
+            clientSize.y = naturalSize.y;
+        SetClientSize(clientSize);
+        if ( !weakThis || IsBeingDeleted() )
+            return false;
+    }
+
+    if ( style & wxCENTRE )
+        Centre(wxBOTH);
+
+    return weakThis && !IsBeingDeleted();
 }
 
 int wxTextEntryDialog::ShowModal()
@@ -272,13 +301,6 @@ int wxTextEntryDialog::ShowModal()
     if ( IsBeingDeleted() )
         return wxID_CANCEL;
 
-    wxWindow* const parent = m_winuiParent
-        ? m_winuiParent
-        : GetParentForModalDialog(nullptr, 0);
-
-    // Parentless common dialogs are part of the public API. The Window
-    // presenter supports them directly; Overlay degrades to Window when no
-    // owner island exists.
     if ( !wxWinUI3Initialize() )
         return wxID_CANCEL;
 
@@ -288,9 +310,8 @@ int wxTextEntryDialog::ShowModal()
         using namespace winrt::Microsoft::UI::Xaml::Controls;
 
         wxWinUIDialogPresenter presenter;
-        if ( !presenter.Create(parent, m_caption) )
+        if ( !presenter.CreateForDialog(this) )
             return wxID_CANCEL;
-        presenter.SetLifetimeOwner(this);
 
         StackPanel content;
         content.Spacing(8);
@@ -357,8 +378,7 @@ int wxTextEntryDialog::ShowModal()
         content.Children().Append(errorText);
 
         presenter.SetContent(content);
-        presenter.SetContentSize(
-            wxSize(360, (m_dialogStyle & wxTE_MULTILINE) ? 220 : 90));
+        presenter.SetContentSize(wxWinUITextEntryBodySize(m_dialogStyle));
 
         bool accepted = false;
         wxString acceptedValue;
@@ -422,16 +442,15 @@ int wxTextEntryDialog::ShowModal()
             return wxID_CANCEL;
 
         if ( result == wxID_OK && accepted )
-        {
             live->m_value = acceptedValue;
-            return wxID_OK;
-        }
 
-        return wxID_CANCEL;
+        // Direct EndModal() retains its explicit result, but doesn't perform
+        // validation or accept the in-progress value on the caller's behalf.
+        return result;
     }
     catch ( const winrt::hresult_error& e )
     {
-        wxWinUILogException("TextEntryDialog ContentDialog", e);
+        wxWinUILogException("TextEntryDialog presenter", e);
     }
 
     return wxID_CANCEL;
@@ -491,7 +510,12 @@ void wxTextEntryDialog::SetTextValidator(const wxTextValidator& validator)
 
 bool wxTextEntryDialog::TransferDataToWindow()
 {
-    return true;
+    const wxWeakRef<wxWindow> weakThis(this);
+    const auto peerState = m_peerState;
+    if ( peerState && !peerState->SetValue(m_value) )
+        return false;
+
+    return weakThis && !IsBeingDeleted() && wxDialog::TransferDataToWindow();
 }
 
 bool wxTextEntryDialog::TransferDataFromWindow()

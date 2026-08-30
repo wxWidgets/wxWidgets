@@ -639,6 +639,8 @@ public:
 // keeps every common dialog free of any presentation-specific code.
 // ----------------------------------------------------------------------------
 
+class wxDialog;
+
 class wxWinUIDialogPresenter
 {
 public:
@@ -651,6 +653,15 @@ public:
     // Prepare the dialog; false if WinUI is unavailable and the caller should
     // fall back to a native dialog.
     bool Create(wxWindow *parent, const wxString& title);
+
+    // Window mode uses this public dialog's HWND instead of creating a shell.
+    // The caller keeps its external modal lifetime guard around ShowModal().
+    bool CreateForDialog(wxDialog *dialog);
+
+    // Client size in DIPs, including the presenter margins and command row.
+    // Common dialogs use this once at Create(), before application resizing.
+    static wxSize GetWindowClientSize(const wxSize& contentSize,
+                                      size_t buttonCount);
 
     // The body of the dialog.
     void SetContent(winrt::Microsoft::UI::Xaml::UIElement const& content);
@@ -699,6 +710,7 @@ private:
 
     int ShowAsWindow();
     int ShowAsOverlay();
+    wxDialog *GetCurrentWindow() const;
     bool LifetimeOwnerIsAlive() const
     {
         if ( !m_hasLifetimeOwner )
@@ -708,7 +720,11 @@ private:
         return owner && !owner->IsBeingDeleted();
     }
 
-    wxWindow *m_parent = nullptr;
+    wxWeakRef<wxWindow> m_parent;
+    wxWeakRef<wxWindow> m_window;
+    WXHWND m_windowHwnd = nullptr;
+    unsigned long long m_windowGeneration = 0;
+    bool m_usesExistingWindow = false;
     wxString m_title;
     winrt::Microsoft::UI::Xaml::UIElement m_content{ nullptr };
     wxSize m_contentSize{ 320, 120 };

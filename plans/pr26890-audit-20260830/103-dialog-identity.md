@@ -1,6 +1,6 @@
 # Plan 103: Preserve public dialog identity and geometry in Window presentation
 
-- Status: IN PROGRESS
+- Status: LOCAL PASS / REMOTE PENDING
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: L (split into independently verified commits)
@@ -48,14 +48,22 @@ All criteria are required before DONE. An implementation can be LOCAL PASS / REM
 
 If preserving the existing destruction contract requires replacing public object identity, pause that design and record the conflict instead of swapping arbitrary HWND pointers. If a confirmed defect requires an out-of-scope change, extend the plan explicitly with its reason before editing; do not start another general review. Preserve diagnostics from failing checks.
 
-## Maintenance
-
 ## Implementation decisions (2026-08-30)
 
 - Window presentation borrows the public dialog's existing HWND through a private presenter entry point. It never swaps HWND pointers or destroys a borrowed public dialog during presenter cleanup.
 - Text/password/colour establish default geometry once during Create; subsequent application Move/SetSize calls remain authoritative. A weak wx identity plus native HWND generation protects callback and presentation boundaries.
 - MessageDialog retains its separately owned presenter shell/native fallback contract. Overlay remains opt-in and may fall back to Window on the same public dialog when applicable.
 - Native non-input tests observe actual visibility, geometry, modal identity and XAML content. They are not a physical-input or external UIA sign-off.
+
+## Verification (2026-08-30)
+
+- Source: implementation on e12f747138, committed with this record; MSVC 19.44, Windows 11 build 26340, pinned Windows App SDK 1.8.260710003. Shared/static test_gui, minimal and runtime smoke build successfully.
+- Both linkages pass 498 assertions / 2 cases for `[winui-dialog-identity]`: text/password/colour retain their public HWND, initial and changed geometry, modal/event identity, parent and result codes across three presentations; actual XAML OK-button invocation exercises validation rejection and acceptance.
+- The existing activation optimization temporarily detaches GW_OWNER. Tests require the exact saved owner, current native generation and settled transaction while detached, then require the real owner link restored and transaction removed after hiding. Logical wx parenthood is checked independently throughout.
+- Both linkages pass 618 assertions / 6 cases for `[winui-dialog-window],WinUIDialogContracts::DestroySourceCancelsPresenter,WinUIDialogContracts::ForceUpperWhileOpen`, including owned MessageDialog shells and opt-in Overlay destruction/validation paths.
+- `ctest -C Release -R '^(wx_winui_runtime_smoke|wx_winui_supported_beta)$' --output-on-failure --no-tests=error` passes both tests in both builds; Supported V0 passes 1660 assertions / 92 cases.
+- All runners use `WX_UI_TESTS=0` and private desktops, without system-input injection. Logs in each build root: audit103-owner-build.log, audit103-window-lifetime.log, audit103-gates.log and audit103-gates.xml.
+- The broader auxiliary-dialog selection exposed a timeout in the unchanged NativeProgressBoundaryAndLifetime test. This is tracked as OPEN in 109, not counted as a passing test or silently excluded from its qualification. Remote CI and external UIA observation remain pending.
 
 ## Maintenance
 

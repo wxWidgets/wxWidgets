@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/winui/colordlg.cpp
-// Purpose:     wxColourDialog using WinUI ContentDialog + ColorPicker
+// Purpose:     wxColourDialog using a WinUI dialog presenter and ColorPicker
 // Author:      wxWidgets development team
 // Created:     2026-06-03
 // Copyright:   (c) wxWidgets development team
@@ -61,6 +61,27 @@ wxColour wxWinUIFromColor(const winrt::Windows::UI::Color& colour)
     return wxColour(colour.R, colour.G, colour.B, colour.A);
 }
 
+wxSize wxWinUIColourDialogBodySize(wxWindow* context,
+                                  const wxColourData& data)
+{
+    wxSize workAreaDIP(1024, 720);
+    const HWND contextHwnd = context ? GetHwndOf(context) : nullptr;
+    const HMONITOR monitor =
+        ::MonitorFromWindow(contextHwnd, MONITOR_DEFAULTTONEAREST);
+    MONITORINFO monitorInfo = { sizeof(MONITORINFO) };
+    if ( monitor && ::GetMonitorInfo(monitor, &monitorInfo) )
+    {
+        const wxSize workAreaPx(
+            monitorInfo.rcWork.right - monitorInfo.rcWork.left,
+            monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
+        const UINT dpi = contextHwnd ? ::GetDpiForWindow(contextHwnd) : 96;
+        workAreaDIP = wxWinUIPhysicalWorkAreaToDIP(workAreaPx, dpi);
+    }
+
+    return wxWinUIComputeColourDialogBodySize(
+        data.GetChooseFull(), data.GetChooseAlpha(), workAreaDIP);
+}
+
 struct wxWinUICustomColourSlot
 {
     MUXC::Button button{ nullptr };
@@ -69,8 +90,8 @@ struct wxWinUICustomColourSlot
 };
 
 // All peer callbacks see this heap state through a weak_ptr. In particular,
-// they never retain or dereference the wxColourDialog after its hidden wx
-// window has been destroyed.
+// they never retain or dereference the wxColourDialog after its window has
+// been destroyed.
 class wxWinUIColourDialogState
 {
 public:
@@ -267,12 +288,23 @@ bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
     if ( m_title.empty() )
         m_title = _("Choose colour");
 
-    // Although the visible UI is provided by wxWinUIDialogPresenter, keeping a
-    // real hidden wxDialog gives this object the normal parent relationship,
-    // a valid handle, and the standard wx event routing/lifetime contract.
-    return wxDialog::Create(m_winuiParent, wxID_ANY, m_title,
-                            wxDefaultPosition, wxDefaultSize,
-                            wxDEFAULT_DIALOG_STYLE);
+    if ( !wxDialog::Create(m_winuiParent, wxID_ANY, m_title,
+                           wxDefaultPosition, wxDefaultSize,
+                           wxDEFAULT_DIALOG_STYLE) )
+    {
+        return false;
+    }
+
+    // Set the natural geometry once. The presenter uses this public dialog's
+    // HWND and preserves subsequent application positioning and sizing.
+    const wxWeakRef<wxWindow> weakThis(this);
+    SetClientSize(FromDIP(wxWinUIDialogPresenter::GetWindowClientSize(
+        wxWinUIColourDialogBodySize(m_winuiParent ? m_winuiParent : this,
+                                    m_colourData), 2)));
+    if ( !weakThis || IsBeingDeleted() )
+        return false;
+    CentreOnParent();
+    return weakThis && !IsBeingDeleted();
 }
 
 void wxColourDialog::SetTitle(const wxString& title)
@@ -304,23 +336,16 @@ int wxColourDialog::ShowModal()
     if ( IsBeingDeleted() )
         return wxID_CANCEL;
 
-    wxWindow* const parent = GetParentForModalDialog();
-
-    // Parentless colour dialogs are valid. Window presentation owns its own
-    // TLW; Overlay naturally falls back to it when there is no parent island.
     if ( !wxWinUI3Initialize() )
         return wxID_CANCEL;
 
     try
     {
         wxWinUIDialogPresenter presenter;
-        if ( !presenter.Create(parent,
-                               m_title.empty() ? wxString(_("Choose colour"))
-                                               : m_title) )
+        if ( !presenter.CreateForDialog(this) )
         {
             return wxID_CANCEL;
         }
-        presenter.SetLifetimeOwner(this);
 
         auto state = std::make_shared<wxWinUIColourDialogState>(
             this, m_colourData);
@@ -473,33 +498,34 @@ int wxColourDialog::ShowModal()
         scroller.VerticalScrollBarVisibility(
             MUXC::ScrollBarVisibility::Auto);
 
-        wxSize workAreaDIP(1024, 720);
-        const HWND contextHwnd =
-            parent ? GetHwndOf(parent) : GetHwndOf(this);
-        const HMONITOR monitor =
-            ::MonitorFromWindow(contextHwnd, MONITOR_DEFAULTTONEAREST);
-        MONITORINFO monitorInfo = { sizeof(MONITORINFO) };
-        if ( monitor && ::GetMonitorInfo(monitor, &monitorInfo) )
-        {
-            const wxSize workAreaPx(
-                monitorInfo.rcWork.right - monitorInfo.rcWork.left,
-                monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-            const UINT dpi = contextHwnd
-                ? ::GetDpiForWindow(contextHwnd)
-                : 96;
-            workAreaDIP =
-                wxWinUIPhysicalWorkAreaToDIP(workAreaPx, dpi);
-        }
-
         const wxSize bodySize =
-            wxWinUIComputeColourDialogBodySize(
-                chooseFull,
-                state->workingData.GetChooseAlpha(),
-                workAreaDIP);
+            wxWinUIColourDialogBodySize(this, state->workingData);
         scroller.MaxWidth(bodySize.x);
         scroller.MaxHeight(bodySize.y);
         presenter.SetContent(scroller);
         presenter.SetContentSize(bodySize);
+
+        bool accepted = false;
+        presenter.SetAcceptHandler(
+            [weakState, &accepted](int id)
+            {
+                if ( id != wxID_OK )
+                    return true;
+
+                const auto liveState = weakState.lock();
+                wxColourDialog* const liveDialog =
+                    liveState ? liveState->dialog.get() : nullptr;
+                if ( !liveState || !liveState->active || !liveDialog ||
+                     liveDialog->IsBeingDeleted() )
+                {
+                    return false;
+                }
+
+                liveState->workingData.SetColour(
+                    wxWinUIFromColor(liveState->picker.Color()));
+                accepted = true;
+                return true;
+            });
 
         presenter.AddButton(wxID_OK,
                             wxGetStockLabel(wxID_OK, wxSTOCK_FOR_BUTTON), true);
@@ -508,29 +534,21 @@ int wxColourDialog::ShowModal()
 
         const int result = presenter.ShowModal();
 
-        if ( result == wxID_OK )
-        {
-            state->workingData.SetColour(
-                wxWinUIFromColor(state->picker.Color()));
+        // The dialog may have been destroyed by a colour-changed handler.
+        // Only a still-live instance receives the atomic transaction.
+        wxColourDialog* const liveDialog = state->dialog.get();
+        if ( !liveDialog || liveDialog->IsBeingDeleted() )
+            return wxID_CANCEL;
 
-            // The dialog may have been destroyed by a colour-changed handler.
-            // Only a still-live instance receives the atomic transaction.
-            if ( wxColourDialog * const liveDialog = state->dialog.get();
-                 liveDialog && !liveDialog->IsBeingDeleted() )
-                liveDialog->GetColourData() = state->workingData;
-            else
-                return wxID_CANCEL;
-
-            state->Disconnect();
-            return wxID_OK;
-        }
+        if ( result == wxID_OK && accepted )
+            liveDialog->GetColourData() = state->workingData;
 
         state->Disconnect();
-        return wxID_CANCEL;
+        return result;
     }
     catch ( const winrt::hresult_error& e )
     {
-        wxWinUILogException("ColourDialog ContentDialog", e);
+        wxWinUILogException("ColourDialog presenter", e);
     }
 
     return wxID_CANCEL;

@@ -40,6 +40,7 @@
 #include "wx/scopeguard.h"
 #include "wx/sizer.h"
 #include "wx/stattext.h"
+#include "wx/stockitem.h"
 #include "wx/textdlg.h"
 #include "wx/textctrl.h"
 #include "wx/timer.h"
@@ -48,15 +49,22 @@
 #include "wx/msw/private/filedialog.h"
 #include "wx/msw/private/gethwnd.h"
 #include "wx/msw/private/msgdlg.h"
+#include "wx/msw/private.h"
 #include "wx/winui/winui.h"
 #include "wx/winui/private/tlwhost.h"
+#include "wx/winui/private/tlwhostmsw.h"
+#include "wx/winui/private/transient.h"
 
 #include "waitfor.h"
+
+#include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
+#include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
 
 #include <atomic>
 #include <climits>
 #include <initializer_list>
 #include <limits>
+#include <memory>
 #include <vector>
 
 namespace MUX = winrt::Microsoft::UI::Xaml;
@@ -154,6 +162,334 @@ wxWindow *FindAddedTopLevel(const std::vector<wxWindow *>& before)
 
     return nullptr;
 }
+
+class ScopedDialogWindowPresentation
+{
+public:
+    ScopedDialogWindowPresentation()
+        : m_previous(wxWinUIGetDialogPresentation())
+    {
+        wxWinUISetDialogPresentation(wxWinUIDialogPresentation::Window);
+    }
+
+    ~ScopedDialogWindowPresentation()
+    {
+        wxWinUISetDialogPresentation(m_previous);
+    }
+
+private:
+    const wxWinUIDialogPresentation m_previous;
+};
+
+wxRect NativeDialogRect(HWND hwnd)
+{
+    RECT rect{};
+    if ( !::GetWindowRect(hwnd, &rect) )
+        return wxRect();
+
+    return wxRect(rect.left, rect.top,
+                  rect.right - rect.left, rect.bottom - rect.top);
+}
+
+const wchar_t DialogOwnerMarker[] =
+    L"wxWidgets.WinUI.StashedOwner."
+    L"{32117897-FD59-4E46-88AD-C7B707EC7D2B}";
+
+bool DialogHasNativeOwner(HWND hwnd, HWND owner)
+{
+    const HWND nativeOwner = ::GetWindow(hwnd, GW_OWNER);
+    if ( nativeOwner )
+        return nativeOwner == owner;
+
+    // The WinUI activation protocol temporarily detaches the native owner
+    // of an active backdrop window. Require its exact saved owner and HWND
+    // generation, not merely a missing GW_OWNER. Hiding must restore the
+    // native link and retire this transaction (checked after ShowModal).
+    const auto snapshot = wxWinUI3GetOwnerSnapshotForTesting(hwnd);
+    return ::GetPropW(hwnd, DialogOwnerMarker) == owner &&
+           snapshot.epoch != 0 && !snapshot.inFlight &&
+           snapshot.generation == wxWinUIMSWGetNativeHwndGeneration(hwnd);
+}
+
+struct DialogWindowIdentityObservation
+{
+    bool active = true;
+    bool callbackRan = false;
+    bool watchdogFired = false;
+    int initEvents = 0;
+    bool initFromPublicDialog = true;
+    bool initWasModal = true;
+    bool visible = false;
+    bool modal = false;
+    bool sameHandle = false;
+    bool mappedToPublicDialog = false;
+    bool sameParent = false;
+    bool sameNativeOwner = false;
+    bool ownerDisabled = false;
+    bool noAddedTopLevel = false;
+    bool publicContentSlot = false;
+    bool titleMatches = false;
+    wxRect initialRect;
+    wxRect initialNativeRect;
+    wxRect movedRect;
+    wxRect movedNativeRect;
+    bool observingGeometry = false;
+    int sizeEvents = 0;
+    int moveEvents = 0;
+    bool sizeEventSourceMatches = true;
+    bool moveEventSourceMatches = true;
+    bool sizeEventGeometryMatches = true;
+};
+
+void ExercisePublicDialogWindow(wxDialog *dialog,
+                                wxWindow& owner,
+                                wxRect expectedRect)
+{
+    const wxWeakRef<wxDialog> weakDialog(dialog);
+    const wxWeakRef<wxWindow> weakOwner(&owner);
+    const HWND originalHwnd = wxGetHWND(dialog);
+    const HWND ownerHwnd = wxGetHWND(&owner);
+    REQUIRE(originalHwnd);
+    REQUIRE(NativeDialogRect(originalHwnd) == expectedRect);
+    REQUIRE(::GetWindow(originalHwnd, GW_OWNER) == ownerHwnd);
+
+    CountingModalHook hook;
+    hook.Register();
+    const int results[] = { wxID_CANCEL, wxID_HIGHEST + 103, wxID_OK };
+    for ( const int expectedResult : results )
+    {
+        INFO("EndModal result " << expectedResult);
+        wxDialog *live = weakDialog.get();
+        REQUIRE(live);
+        REQUIRE_FALSE(live->IsBeingDeleted());
+        const wxString title = wxString::Format("public identity %d", expectedResult);
+        live->SetTitle(title);
+        const auto before = SnapshotTopLevelWindows();
+        const wxRect movedRect(expectedRect.GetPosition() + wxPoint(17, 23),
+                               expectedRect.GetSize() + wxSize(31, 19));
+        const auto observation =
+            std::make_shared<DialogWindowIdentityObservation>();
+
+        live->Bind(wxEVT_INIT_DIALOG,
+            [weakDialog, originalHwnd, observation](wxInitDialogEvent& event)
+            {
+                event.Skip();
+                if ( !observation->active )
+                    return;
+                wxDialog * const current = weakDialog.get();
+                ++observation->initEvents;
+                observation->initFromPublicDialog =
+                    observation->initFromPublicDialog && current &&
+                    event.GetEventObject() == current &&
+                    wxGetHWND(current) == originalHwnd;
+                observation->initWasModal =
+                    observation->initWasModal && current && current->IsModal();
+            });
+        live->Bind(wxEVT_SIZE,
+            [weakDialog, observation](wxSizeEvent& event)
+            {
+                event.Skip();
+                if ( !observation->active || !observation->observingGeometry )
+                    return;
+                wxDialog * const current = weakDialog.get();
+                ++observation->sizeEvents;
+                observation->sizeEventSourceMatches =
+                    observation->sizeEventSourceMatches && current &&
+                    event.GetEventObject() == current;
+                observation->sizeEventGeometryMatches =
+                    observation->sizeEventGeometryMatches && current &&
+                    event.GetSize() == current->GetSize();
+            });
+        live->Bind(wxEVT_MOVE,
+            [weakDialog, observation](wxMoveEvent& event)
+            {
+                event.Skip();
+                if ( !observation->active || !observation->observingGeometry )
+                    return;
+                ++observation->moveEvents;
+                observation->moveEventSourceMatches =
+                    observation->moveEventSourceMatches && weakDialog &&
+                    event.GetEventObject() == weakDialog.get();
+            });
+
+        wxTimer watchdog;
+        watchdog.Bind(wxEVT_TIMER,
+            [weakDialog, observation](wxTimerEvent&)
+            {
+                if ( !observation->active )
+                    return;
+                observation->watchdogFired = true;
+                if ( wxDialog * const current = weakDialog.get() )
+                    current->Destroy();
+            });
+        REQUIRE(watchdog.StartOnce(5000));
+
+        // Observe only after InitDialog and native showing have completed:
+        // presenter setup itself may dispatch messages before modality starts.
+        // Weak owners also make an already queued timer event harmless after
+        // the session has returned or its watchdog has destroyed the dialog.
+        wxTimer observeTimer;
+        observeTimer.Bind(wxEVT_TIMER,
+            [weakDialog, weakOwner, originalHwnd, ownerHwnd, observation,
+             before, movedRect, title, expectedResult](wxTimerEvent&)
+            {
+                if ( !observation->active || observation->callbackRan )
+                    return;
+                wxDialog * const current = weakDialog.get();
+                if ( !current || current->IsBeingDeleted() )
+                    return;
+                if ( !current->IsModal() || !current->IsShown() ||
+                        !::IsWindowVisible(originalHwnd) )
+                    return;
+                observation->callbackRan = true;
+                observation->visible = current->IsShown() &&
+                    ::IsWindowVisible(originalHwnd) != FALSE;
+                observation->modal = current->IsModal();
+                observation->sameHandle = wxGetHWND(current) == originalHwnd;
+                observation->mappedToPublicDialog =
+                    wxFindWinFromHandle(originalHwnd) == current;
+                observation->sameParent = weakOwner &&
+                    current->GetParent() == weakOwner.get();
+                observation->sameNativeOwner =
+                    DialogHasNativeOwner(originalHwnd, ownerHwnd);
+                observation->ownerDisabled =
+                    ::IsWindowEnabled(ownerHwnd) == FALSE;
+                observation->noAddedTopLevel =
+                    FindAddedTopLevel(before) == nullptr &&
+                    CountTopLevelEntries(current) == 1;
+                wxWinUITopLevelHost * const host =
+                    wxWinUITopLevelHost::FindForTLW(current);
+                wxWinUISlot * const slot = host ? host->FindSlot(current) : nullptr;
+                observation->publicContentSlot = slot && slot->GetContent();
+                wchar_t nativeTitle[128]{};
+                ::GetWindowTextW(originalHwnd, nativeTitle,
+                                 static_cast<int>(WXSIZEOF(nativeTitle)));
+                observation->titleMatches = current->GetTitle() == title &&
+                    wxString(nativeTitle) == title;
+                observation->initialRect = current->GetRect();
+                observation->initialNativeRect = NativeDialogRect(originalHwnd);
+
+                observation->observingGeometry = true;
+                current->Move(movedRect.GetPosition());
+                if ( weakDialog.get() != current || current->IsBeingDeleted() )
+                    return;
+                current->SetSize(movedRect.GetSize());
+                if ( weakDialog.get() != current || current->IsBeingDeleted() )
+                    return;
+                observation->observingGeometry = false;
+                observation->movedRect = current->GetRect();
+                observation->movedNativeRect = NativeDialogRect(originalHwnd);
+                current->EndModal(expectedResult);
+            });
+        REQUIRE(observeTimer.Start(10));
+
+        const int entersBefore = hook.enterCount;
+        const int exitsBefore = hook.exitCount;
+        const int result = live->ShowModal();
+        observeTimer.Stop();
+        watchdog.Stop();
+        observation->active = false;
+        CHECK(result == expectedResult);
+        CHECK_FALSE(observation->watchdogFired);
+        CHECK(observation->callbackRan);
+        CHECK(observation->initEvents == 1);
+        CHECK(observation->initFromPublicDialog);
+        CHECK(observation->initWasModal);
+        CHECK(observation->visible);
+        CHECK(observation->modal);
+        CHECK(observation->sameHandle);
+        CHECK(observation->mappedToPublicDialog);
+        CHECK(observation->sameParent);
+        CHECK(observation->sameNativeOwner);
+        CHECK(observation->ownerDisabled);
+        CHECK(observation->noAddedTopLevel);
+        CHECK(observation->publicContentSlot);
+        CHECK(observation->titleMatches);
+        CHECK(observation->initialRect == expectedRect);
+        CHECK(observation->initialNativeRect == expectedRect);
+        CHECK(observation->movedRect == movedRect);
+        CHECK(observation->movedNativeRect == movedRect);
+        CHECK(observation->sizeEvents > 0);
+        CHECK(observation->moveEvents > 0);
+        CHECK(observation->sizeEventSourceMatches);
+        CHECK(observation->moveEventSourceMatches);
+        CHECK(observation->sizeEventGeometryMatches);
+        CHECK(hook.enterCount == entersBefore + 1);
+        CHECK(hook.exitCount == exitsBefore + 1);
+        CHECK(hook.lastEnter == dialog);
+        CHECK(hook.lastExit == dialog);
+        CHECK(hook.exitHadLiveDialog);
+        CHECK_FALSE(hook.exitObservedDestroy);
+        CHECK(wxModalDialogHook::GetOpenCount() == 0);
+
+        live = weakDialog.get();
+        REQUIRE(live);
+        REQUIRE_FALSE(live->IsBeingDeleted());
+        CHECK(wxGetHWND(live) == originalHwnd);
+        CHECK(::IsWindow(originalHwnd));
+        CHECK_FALSE(live->IsModal());
+        CHECK_FALSE(live->IsShown());
+        CHECK_FALSE(::IsWindowVisible(originalHwnd));
+        CHECK(live->GetReturnCode() == expectedResult);
+        CHECK(::IsWindowEnabled(ownerHwnd));
+        CHECK(::GetWindow(originalHwnd, GW_OWNER) == ownerHwnd);
+        CHECK_FALSE(::GetPropW(originalHwnd, DialogOwnerMarker));
+        CHECK(wxWinUI3GetOwnerSnapshotForTesting(originalHwnd).epoch == 0);
+        CHECK(FindAddedTopLevel(before) == nullptr);
+        expectedRect = movedRect;
+    }
+}
+
+#if wxUSE_VALIDATORS
+
+class DialogIdentityTextValidator final : public wxTextValidator
+{
+public:
+    explicit DialogIdentityTextValidator(
+        const std::shared_ptr<std::vector<wxString>>& values)
+        : m_values(values)
+    {
+    }
+
+    wxObject *Clone() const override
+    {
+        return new DialogIdentityTextValidator(*this);
+    }
+
+    wxString IsValid(const wxString& value) const override
+    {
+        m_values->push_back(value);
+        return value == "accepted" ? wxString() : "validation veto";
+    }
+
+private:
+    const std::shared_ptr<std::vector<wxString>> m_values;
+};
+
+MUXC::Button FindDialogButtonPeer(const MUX::UIElement& element,
+                                const wxString& label)
+{
+    if ( !element )
+        return nullptr;
+    if ( const MUXC::Button button = element.try_as<MUXC::Button>() )
+    {
+        const auto text = winrt::unbox_value<winrt::hstring>(button.Content());
+        return wxString(text.c_str()) == label ? button : nullptr;
+    }
+    if ( const MUXC::Border border = element.try_as<MUXC::Border>() )
+        return FindDialogButtonPeer(border.Child(), label);
+    if ( const MUXC::Panel panel = element.try_as<MUXC::Panel>() )
+    {
+        for ( const MUX::UIElement& child : panel.Children() )
+        {
+            if ( const MUXC::Button found = FindDialogButtonPeer(child, label) )
+                return found;
+        }
+    }
+    return nullptr;
+}
+
+#endif // wxUSE_VALIDATORS
 
 template <typename T>
 void CollectChildControls(wxWindow *parent, std::vector<T *>& controls)
@@ -837,6 +1173,202 @@ TEST_CASE("WinUIDialogContracts::TextAndPasswordWindowPresenters",
 
     owner.Hide();
 }
+
+TEST_CASE("WinUIDialogContracts::PublicWindowIdentity",
+          "[winui-dialog-contract][winui-dialog-window]"
+          "[winui-dialog-identity][winui-v0-supported]")
+{
+    REQUIRE(wxModalDialogHook::GetOpenCount() == 0);
+    const ScopedDialogWindowPresentation windowPresentation;
+    wxUnusedVar(windowPresentation);
+    wxFrame owner(nullptr, wxID_ANY, "public-dialog-owner",
+                  wxPoint(-32000, -32000), wxSize(360, 220));
+    owner.ShowWithoutActivating();
+    wxYield();
+
+    // Explicit placement intentionally excludes wxCENTRE. Text entry also
+    // has a constructor size; password/colour use their public pre-show API.
+    const wxPoint position(-31000, -30960);
+    const wxSize size(560, 460);
+    wxDialog *dialog = nullptr;
+    SECTION("Text")
+    {
+        dialog = new wxTextEntryDialog(&owner, "Text identity", "text",
+                                       "Initial", wxOK | wxCANCEL,
+                                       position, size);
+        CHECK(dialog->GetRect() == wxRect(position, size));
+    }
+    SECTION("Password")
+    {
+        dialog = new wxPasswordEntryDialog(&owner, "Password identity",
+                                           "password", "Initial",
+                                           wxOK | wxCANCEL, position);
+        CHECK(dialog->GetPosition() == position);
+        dialog->SetSize(size);
+    }
+#if wxUSE_COLOURDLG
+    SECTION("Colour")
+    {
+        dialog = new wxColourDialog(&owner);
+        dialog->Move(position);
+        dialog->SetSize(size);
+    }
+#endif
+    REQUIRE(dialog);
+    const wxWeakRef<wxDialog> weakDialog(dialog);
+    const auto cleanup = wxMakeGuard([weakDialog]()
+    {
+        if ( wxDialog * const live = weakDialog.get() )
+            live->Destroy();
+        wxYield();
+    });
+    wxUnusedVar(cleanup);
+
+    ExercisePublicDialogWindow(dialog, owner, wxRect(position, size));
+}
+
+#if wxUSE_VALIDATORS
+
+TEST_CASE("WinUIDialogContracts::PublicWindowButtonValidation",
+          "[winui-dialog-contract][winui-dialog-window]"
+          "[winui-dialog-identity][winui-v0-supported]")
+{
+    const ScopedDialogWindowPresentation windowPresentation;
+    wxUnusedVar(windowPresentation);
+    wxFrame owner(nullptr, wxID_ANY, "validation-owner",
+                  wxPoint(-32000, -32000), wxSize(360, 220));
+    owner.ShowWithoutActivating();
+    wxTextEntryDialog *dialog = nullptr;
+    SECTION("Text")
+    {
+        dialog = new wxTextEntryDialog(&owner, "Text validation", "text",
+                                       "Initial");
+    }
+    SECTION("Password")
+    {
+        dialog = new wxPasswordEntryDialog(&owner, "Password validation",
+                                           "password", "Initial");
+    }
+    REQUIRE(dialog);
+    const wxWeakRef<wxTextEntryDialog> weakDialog(dialog);
+    const auto cleanup = wxMakeGuard([weakDialog]()
+    {
+        if ( wxTextEntryDialog * const live = weakDialog.get() )
+            live->Destroy();
+        wxYield();
+    });
+    wxUnusedVar(cleanup);
+    const HWND originalHwnd = wxGetHWND(dialog);
+    const auto values = std::make_shared<std::vector<wxString>>();
+    dialog->SetTextValidator(DialogIdentityTextValidator(values));
+
+    struct Observation
+    {
+        bool active = true;
+        bool watchdogFired = false;
+        bool callbackFailed = false;
+        unsigned invokes = 0;
+        bool rejectedValueSet = false;
+        bool acceptedValueSet = false;
+        bool vetoKeptPublicWindowOpen = false;
+        bool vetoDidNotCommit = false;
+    };
+    const auto observation = std::make_shared<Observation>();
+    wxTimer watchdog;
+    watchdog.Bind(wxEVT_TIMER,
+        [weakDialog, observation](wxTimerEvent&)
+        {
+            if ( !observation->active )
+                return;
+            observation->watchdogFired = true;
+            if ( wxTextEntryDialog * const live = weakDialog.get() )
+                live->Destroy();
+        });
+    wxTimer invokeTimer;
+    invokeTimer.Bind(wxEVT_TIMER,
+        [weakDialog, originalHwnd, observation, values](wxTimerEvent&)
+        {
+            if ( !observation->active || observation->invokes == 2 )
+                return;
+            wxTextEntryDialog * const live = weakDialog.get();
+            if ( !live || live->IsBeingDeleted() )
+                return;
+            if ( !live->IsModal() || !::IsWindowVisible(originalHwnd) )
+                return;
+            if ( observation->invokes == 1 && values->empty() )
+                return;
+
+            try
+            {
+                wxWinUITopLevelHost * const host =
+                    wxWinUITopLevelHost::FindForTLW(live);
+                wxWinUISlot * const slot = host ? host->FindSlot(live) : nullptr;
+                const MUXC::Button button = slot
+                    ? FindDialogButtonPeer(slot->GetContent(),
+                        wxGetStockLabel(wxID_OK, wxSTOCK_WITHOUT_ELLIPSIS))
+                    : nullptr;
+                if ( !button )
+                    return;
+
+                if ( observation->invokes == 0 )
+                {
+                    observation->rejectedValueSet =
+                        live->WinUISetPeerValueForTesting("rejected");
+                }
+                else
+                {
+                    observation->vetoKeptPublicWindowOpen = live->IsModal() &&
+                        wxGetHWND(live) == originalHwnd &&
+                        wxFindWinFromHandle(originalHwnd) == live &&
+                        ::IsWindowVisible(originalHwnd) != FALSE;
+                    observation->vetoDidNotCommit = live->GetValue() == "Initial";
+                    observation->acceptedValueSet =
+                        live->WinUISetPeerValueForTesting("accepted");
+                }
+
+                ++observation->invokes;
+                // This invokes the actual XAML Button.Click delegate and the
+                // presenter's validation/dismissal path, not wx button events
+                // or an acceptance-result substitution.
+                const winrt::Microsoft::UI::Xaml::Automation::Peers::
+                    ButtonAutomationPeer peer(button);
+                peer.Invoke();
+            }
+            catch ( const winrt::hresult_error& )
+            {
+                observation->callbackFailed = true;
+                if ( wxTextEntryDialog * const current = weakDialog.get() )
+                    current->Destroy();
+            }
+        });
+    REQUIRE(watchdog.StartOnce(5000));
+    REQUIRE(invokeTimer.Start(10));
+    const int result = dialog->ShowModal();
+    invokeTimer.Stop();
+    watchdog.Stop();
+    observation->active = false;
+
+    CHECK(result == wxID_OK);
+    CHECK_FALSE(observation->watchdogFired);
+    CHECK_FALSE(observation->callbackFailed);
+    CHECK(observation->invokes == 2);
+    CHECK(observation->rejectedValueSet);
+    CHECK(observation->acceptedValueSet);
+    CHECK(observation->vetoKeptPublicWindowOpen);
+    CHECK(observation->vetoDidNotCommit);
+    REQUIRE(values->size() == 2);
+    CHECK((*values)[0] == "rejected");
+    CHECK((*values)[1] == "accepted");
+    wxTextEntryDialog * const live = weakDialog.get();
+    REQUIRE(live);
+    REQUIRE_FALSE(live->IsBeingDeleted());
+    CHECK(wxGetHWND(live) == originalHwnd);
+    CHECK(live->GetValue() == "accepted");
+    CHECK_FALSE(live->IsModal());
+    CHECK_FALSE(live->IsShown());
+}
+
+#endif // wxUSE_VALIDATORS
 
 TEST_CASE("WinUIDialogContracts::ColourBodyFitsWorkArea",
           "[winui-dialog-contract]")
