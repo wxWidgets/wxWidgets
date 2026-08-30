@@ -98,7 +98,9 @@ void wxSystemSettingsModule::OnExit()
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
+#if defined(__WXWINUI__) && wxUSE_WINUI3
     const wxSystemColour requestedIndex = index;
+#endif
 
     // As GetSysColor() doesn't support dark mode, check for it before using it.
     if ( wxMSWDarkMode::IsActive() )

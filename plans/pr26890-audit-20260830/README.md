@@ -15,8 +15,8 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 
 | Plan | Scope | Status |
 |---|---|---|
-| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | IN PROGRESS |
-| [102](102-native-resize.md) | Make native resizing a host-owned input transaction | TODO |
+| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | LOCAL PASS / REMOTE PENDING |
+| [102](102-native-resize.md) | Make native resizing a host-owned input transaction | IN PROGRESS |
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | TODO |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | TODO |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | TODO |
@@ -79,3 +79,4 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 
 - 2026-08-30 baseline: clean integration worktree at c5cf4677b9; dirty main checkout preserved.
 - Existing c5cf CI: MSVC C4189 requestedIndex; Clang delete-non-abstract-non-virtual-dtor; WinUI shared/static compile succeeded, Appx import failed, Supported V0 skipped. See plan 101 for precise corrective scope.
+- 2026-08-30 lot 101: MSW Debug wxcore built with /warnaserror; WinUI shared/static test_gui and runtime smoke rebuilt. Both runtime CTests passed and both Supported V0 runs passed (51 cases, 970 assertions each). These are local Windows 11 results, not remote CI or physical input qualification.

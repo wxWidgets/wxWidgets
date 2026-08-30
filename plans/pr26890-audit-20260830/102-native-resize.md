@@ -1,6 +1,6 @@
 # Plan 102: Make native resizing a host-owned input transaction
 
-- Status: TODO
+- Status: IN PROGRESS
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: L (split into independently verified commits)
@@ -52,4 +52,3 @@ No physical input injection or capture takeover on the user's active desktop wit
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
-

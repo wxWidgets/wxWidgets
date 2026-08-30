@@ -242,6 +242,8 @@ jobs:
             "/bl:$buildDir\build.binlog"
 
       - name: Register pinned Windows App Runtime
+        # The Appx module requires Windows PowerShell, not PowerShell Core.
+        shell: powershell
         run: |
           $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
           $versionMatch = Select-String "$buildDir\CMakeCache.txt" `
@@ -260,15 +262,39 @@ jobs:
             -Filter 'Microsoft.WindowsAppRuntime.*.msix' | Where-Object {
               $_.Name -notmatch '\.(DDLM|Main|Singleton)\.'
             }
-          if (-not $runtime) {
-            throw 'Pinned x64 Windows App Runtime framework MSIX not found'
+          if (@($runtime).Count -ne 1) {
+            throw "Expected one pinned x64 Windows App Runtime framework MSIX, found $(@($runtime).Count)"
           }
           Add-AppxPackage -Path $runtime.FullName -ForceApplicationShutdown
 
+      - name: Run wxWinUI runtime smoke
+        run: |
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          ctest --test-dir $buildDir -C Release `
+            -R '^wx_winui_runtime_smoke$' --no-tests=error --output-on-failure `
+            --output-junit "$buildDir\winui-runtime-smoke.xml" `
+            --output-log "$buildDir\winui-runtime-smoke.log"
+
       - name: Run wxWinUI Supported V0 gate
         run: |
-          ctest --test-dir build-winui-${{ matrix.linkage }} -C Release `
-            -R '^wx_winui_supported_beta$' --output-on-failure
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          ctest --test-dir $buildDir -C Release `
+            -R '^wx_winui_supported_beta$' --no-tests=error --output-on-failure `
+            --output-junit "$buildDir\winui-supported-beta.xml" `
+            --output-log "$buildDir\winui-supported-beta.log"
+
+      - name: Upload wxWinUI test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wxwinui-${{ matrix.linkage }}-test-results
+          path: |
+            build-winui-${{ matrix.linkage }}/winui-*.xml
+            build-winui-${{ matrix.linkage }}/winui-*.log
+            build-winui-${{ matrix.linkage }}/Testing/Temporary/LastTest.log
+            build-winui-${{ matrix.linkage }}/Testing/Temporary/LastTestsFailed.log
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Upload failure diagnostics
         if: failure()

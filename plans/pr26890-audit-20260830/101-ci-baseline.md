@@ -1,6 +1,6 @@
 # Plan 101: Restore existing-port builds and execute the WinUI runtime CI
 
-- Status: IN PROGRESS
+- Status: LOCAL PASS / REMOTE PENDING
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: S/M
@@ -50,5 +50,15 @@ All criteria are required before DONE. An implementation can be LOCAL PASS / REM
 If installation reaches a different package/dependency error, retain the evidence and diagnose that failure; do not silently skip runtime or loosen package identity. If a confirmed defect requires an out-of-scope change, extend the plan explicitly with its reason before editing; do not start another general review. Preserve diagnostics from failing checks.
 
 ## Maintenance
+
+## Execution evidence (2026-08-30)
+
+- Three-file implementation on the c5cf product baseline: exact conditional declaration, final concrete COM wrapper without suppression, Windows PowerShell Appx registration plus distinct smoke/integration CTests and diagnostic artifacts.
+- `git diff --check`: PASS. YAML parsing/structural checks and PowerShell syntax checks: PASS.
+- `cmake --build F:\wxwinui-pr26890-msw-audit-build --config Debug --target wxcore --parallel 8 -- /warnaserror`: exit 0. Log: `F:\wxwinui-pr26890-msw-audit-build\msw-debug-build.log`.
+- Both existing WinUI build trees: Release `test_gui` and `wx_winui_runtime_smoke` rebuilt, exit 0.
+- Both `wx_winui_runtime_smoke` CTests: exit 0. Both `wx_winui_supported_beta` CTests: exit 0, 51 cases / 970 assertions per linkage. Logs and JUnit: `audit101-runtime-smoke.*` and `audit101-supported-beta.*` in each build tree.
+- Environment: local Windows 11 Pro build 26340, MSVC 19.44.35228, x64. No physical input injection. No local Clang compiler found; remote Clang coverage remains required.
+- Remote validation and any additional failing cross-platform jobs remain OPEN. Compilation success does not qualify user-observed grip behaviour.
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

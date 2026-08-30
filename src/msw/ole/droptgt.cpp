@@ -4491,7 +4491,7 @@ private:
 // session to the one fixed wxDropTarget used outside an island host.
 // ----------------------------------------------------------------------------
 
-class wxIDropTarget : public IDropTarget
+class wxIDropTarget final : public IDropTarget
 {
 public:
     explicit wxIDropTarget(wxDropTarget* target)
@@ -4626,13 +4626,7 @@ BEGIN_IID_TABLE(wxIDropTarget)
   ADD_IID(DropTarget)
 END_IID_TABLE;
 
-// IMPLEMENT_IUNKNOWN_METHODS() deletes the concrete COM wrapper after its
-// reference count reaches zero. Its base interface intentionally has no
-// virtual destructor, which makes GCC warn even though the deletion is through
-// the concrete wxIDropTarget type here.
-wxGCC_ONLY_WARNING_SUPPRESS(delete-non-virtual-dtor)
 IMPLEMENT_IUNKNOWN_METHODS(wxIDropTarget)
-wxGCC_ONLY_WARNING_RESTORE(delete-non-virtual-dtor)
 
 // ============================================================================
 // wxDropTarget implementation
