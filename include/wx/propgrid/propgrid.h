@@ -676,6 +676,9 @@ public:
     // runtime. The actual mirroring remains owned by the window backend.
     void SetLayoutDirection( wxLayoutDirection dir ) override;
 
+    // Retire editor references when a child is destroyed or reparented.
+    void RemoveChild( wxWindowBase* child ) override;
+
     // Call when editor widget's contents is modified.
     // For example, this is called when changes text in wxTextCtrl (used in
     // wxStringProperty and wxIntProperty).

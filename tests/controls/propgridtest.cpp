@@ -651,6 +651,29 @@ public:
                    &rect);
     }
 
+    void DrawSynchronouslyOnUpdateForTest()
+    {
+        m_drawOnUpdate = true;
+    }
+
+    void Update() override
+    {
+        if ( !m_drawOnUpdate )
+        {
+            wxPropertyGrid::Update();
+            return;
+        }
+
+        // Selection reentrancy tests need the real cell renderer to run
+        // inside the Update() boundary. A native repaint can be deferred or
+        // clipped by another view, notably when Cocoa updates the whole TLW.
+        // This exercises rendering/selection, not native paint delivery.
+        wxBitmap bitmap(GetClientSize());
+        wxMemoryDC dc(bitmap);
+        DrawItemsForTest(dc, GetClientRect());
+        dc.SelectObject(wxNullBitmap);
+    }
+
     void UseSoftwareDoubleBufferForTest()
     {
         SetExtraStyle(GetExtraStyle() &
@@ -802,6 +825,7 @@ protected:
     }
 
 private:
+    bool m_drawOnUpdate = false;
 #ifndef __WXMSW__
     std::function<void()> m_afterCaptureRelease;
 #endif
@@ -1565,11 +1589,13 @@ public:
         Show
     };
 
-    void Arm(Callback callback)
+    void Arm(Callback callback,
+             std::function<void(wxWindow*)> afterDestroy = {})
     {
         m_callback = callback;
         m_called = false;
         m_secondary.Release();
+        m_afterDestroy = std::move(afterDestroy);
     }
 
     bool WasCalled() const { return m_called; }
@@ -1633,11 +1659,11 @@ public:
     {
         wxPGEditor_TextCtrlAndButton->OnFocus(property, ctrl);
         if ( m_callback == Callback::Focus )
-            DestroySecondary();
+            DestroySecondary(ctrl);
     }
 
 private:
-    void DestroySecondary() const
+    void DestroySecondary(wxWindow* primary = nullptr) const
     {
         wxWindow* const secondary = m_secondary.get();
         if ( !secondary )
@@ -1645,10 +1671,15 @@ private:
 
         m_called = true;
         m_secondary.Release();
+        const auto afterDestroy = std::move(m_afterDestroy);
+        m_afterDestroy = {};
         DestroyPropertyGridEditorControl(secondary);
+        if ( afterDestroy )
+            afterDestroy(primary);
     }
 
     mutable wxWeakRef<wxWindow> m_secondary;
+    mutable std::function<void(wxWindow*)> m_afterDestroy;
     Callback m_callback = Callback::Focus;
     mutable bool m_called = false;
 };
@@ -3204,7 +3235,10 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     SECTION("Editor_focus_callback_may_destroy_secondary_control")
     {
         static DestroyingSecondaryEditor focusEditor;
-        focusEditor.Arm(DestroyingSecondaryEditor::Callback::Focus);
+        bool observedInCallback = false;
+        bool secondaryRetiredInCallback = false;
+        bool primaryPreservedInCallback = false;
+        bool refreshedInCallback = false;
         std::unique_ptr<ReentrantPropertyGrid> grid(
             new ReentrantPropertyGrid(wxTheApp->GetTopWindow(),
                                       wxID_ANY,
@@ -3218,8 +3252,38 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         REQUIRE(property);
         property->SetEditor(&focusEditor);
 
+        const wxWeakRef<wxWindow> weakGrid(pg);
+        focusEditor.Arm(
+            DestroyingSecondaryEditor::Callback::Focus,
+            [weakGrid, pg, &observedInCallback,
+             &secondaryRetiredInCallback, &primaryPreservedInCallback,
+             &refreshedInCallback](wxWindow* primary)
+            {
+                observedInCallback = true;
+                if ( weakGrid.get() != pg )
+                    return;
+
+                secondaryRetiredInCallback =
+                    pg->GetEditorControlSecondary() == nullptr;
+                primaryPreservedInCallback =
+                    primary && pg->GetEditorControl() == primary;
+
+                // Check before returning to any outer selection/focus guard.
+                // GTK can redraw at this boundary during native SetFocus().
+                // Keep an invalid slot observable without dereferencing it.
+                if ( secondaryRetiredInCallback && primaryPreservedInCallback )
+                {
+                    pg->Refresh();
+                    refreshedInCallback = true;
+                }
+            });
+
         CHECK_FALSE( pg->SelectProperty(property, true) );
 
+        CHECK( observedInCallback );
+        CHECK( secondaryRetiredInCallback );
+        CHECK( primaryPreservedInCallback );
+        CHECK( refreshedInCallback );
         CHECK( focusEditor.WasCalled() );
         CHECK( focusEditor.GetSecondary() == nullptr );
         CHECK( pg->GetEditorControlSecondary() == nullptr );
@@ -5627,6 +5691,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         REQUIRE( pg->Append(removing) == removing );
         REQUIRE( pg->SelectProperty(first, false) );
 
+        pg->DrawSynchronouslyOnUpdateForTest();
         removing->Arm();
         CHECK_FALSE( pg->AddToSelection(removing) );
 
@@ -5656,6 +5721,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         REQUIRE( pg->SelectProperty(first, false) );
         REQUIRE( pg->AddToSelection(removing) );
 
+        pg->DrawSynchronouslyOnUpdateForTest();
         removing->Arm();
         CHECK_FALSE( pg->RemoveFromSelection(removing) );
 
@@ -6717,6 +6783,12 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         const int y = propertyRect.y + propertyRect.height / 2;
 
         pg->SetLayoutDirection(wxLayout_RightToLeft);
+#ifdef __WXOSX__
+        // wxWindow explicitly documents SetLayoutDirection() as unsupported
+        // on Mac. Check its actual no-op contract and coordinate mapping,
+        // rather than timing out waiting for an unavailable RTL projection.
+        REQUIRE( pg->GetLayoutDirection() == wxLayout_Default );
+#else
         REQUIRE( WaitFor("PropertyGrid RTL projection",
                          [&]()
                          {
@@ -6724,12 +6796,16 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                                     wxLayout_RightToLeft;
                          },
                          1000) );
+#endif
 
         const int backendX =
             pg->AdjustForLayoutDirection(logicalX, 0, virtualWidth);
         CHECK( pg->HitTest(wxPoint(backendX, y)).GetColumn() == 0 );
 
         pg->SetLayoutDirection(wxLayout_LeftToRight);
+#ifdef __WXOSX__
+        REQUIRE( pg->GetLayoutDirection() == wxLayout_Default );
+#else
         REQUIRE( WaitFor("PropertyGrid LTR restoration",
                          [&]()
                          {
@@ -6737,6 +6813,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                                     wxLayout_LeftToRight;
                          },
                          1000) );
+#endif
         CHECK( pg->HitTest(wxPoint(logicalX, y)).GetColumn() == 0 );
     }
 

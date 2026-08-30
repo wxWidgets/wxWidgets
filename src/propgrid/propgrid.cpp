@@ -2071,6 +2071,32 @@ void wxPropertyGrid::SetVerticalSpacing( int vspacing )
 
 // -----------------------------------------------------------------------
 
+void wxPropertyGrid::RemoveChild( wxWindowBase* child )
+{
+    wxCHECK_RET( child, wxS("can't remove a null child") );
+
+    // A custom editor callback may delete a control before returning to the
+    // transaction which tracks its weak identity. Native focus processing can
+    // redraw the grid in the meantime, so retire these non-owning references
+    // at the ownership boundary instead of waiting for the outer guard.
+    if ( m_wndEditor == child )
+        m_wndEditor = nullptr;
+    if ( m_wndEditor2 == child )
+        m_wndEditor2 = nullptr;
+    if ( m_labelEditor == child )
+    {
+        m_labelEditor = nullptr;
+        m_labelEditorProperty = nullptr;
+        m_selColumn = 1;
+    }
+    if ( m_curFocused == child )
+        m_curFocused = nullptr;
+
+    wxSystemThemedControl<wxScrolled<wxControl>>::RemoveChild(child);
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGrid::SetLayoutDirection( wxLayoutDirection dir )
 {
     const wxWeakRef<wxWindow> weakThis(this);
