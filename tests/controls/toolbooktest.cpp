@@ -27,6 +27,10 @@
     #include <QtWidgets/QToolButton>
 #endif
 
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
+    #include "wx/msw/wrapcctl.h"
+#endif
+
 #include <functional>
 #include <memory>
 #include <utility>
@@ -208,6 +212,95 @@ TEST_CASE("Toolbook::TextOnlyPageAndClearedIcon", "[toolbook][toolbar][qt]")
     CHECK(book.GetSelection() == 0);
 }
 #endif // __WXQT__
+
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
+TEST_CASE("Toolbook::TextOnlyAndMixedNativeImages", "[toolbook][toolbar][msw]")
+{
+    wxToolbook book(wxTheApp->GetTopWindow(), wxID_ANY,
+                    wxDefaultPosition, wxSize(400, 200));
+    wxPanel* const textPage = new wxPanel(&book);
+    REQUIRE(book.AddPage(textPage, "Text-only page", true));
+    book.Realize();
+
+    wxToolBar* const toolbar = static_cast<wxToolBar*>(book.GetToolBar());
+    REQUIRE(toolbar);
+    const HWND nativeToolbar = static_cast<HWND>(toolbar->GetHandle());
+    REQUIRE(nativeToolbar);
+    const auto getButton = [nativeToolbar](int index)
+    {
+        TBBUTTON button{};
+        REQUIRE(::SendMessage(nativeToolbar, TB_GETBUTTON, index,
+                              reinterpret_cast<LPARAM>(&button)));
+        return button;
+    };
+    const auto getDisabledImages = [nativeToolbar]()
+    {
+        return reinterpret_cast<HIMAGELIST>(::SendMessage(
+            nativeToolbar, TB_GETDISABLEDIMAGELIST, 0, 0));
+    };
+
+    // Inspect the native projection directly; no mouse or keyboard input is
+    // needed to prove that an intentionally absent image stays absent.
+    CHECK(getButton(0).iBitmap == I_IMAGENONE);
+    CHECK_FALSE(toolbar->GetToolByPos(0)->GetNormalBitmapBundle().IsOk());
+    CHECK(book.GetSelection() == 0);
+
+    const wxBitmap bitmap(16, 16);
+    REQUIRE(bitmap.IsOk());
+    toolbar->SetToolNormalBitmap(textPage->GetId(), bitmap);
+    CHECK(getButton(0).iBitmap == 0);
+    toolbar->SetToolNormalBitmap(textPage->GetId(), wxBitmapBundle());
+    CHECK(getButton(0).iBitmap == I_IMAGENONE);
+
+    book.SetImages({wxBitmapBundle::FromBitmap(bitmap),
+                    wxBitmapBundle::FromBitmap(bitmap)});
+    wxPanel* const firstImagePage = new wxPanel(&book);
+    REQUIRE(book.AddPage(firstImagePage, "First image", false, 0));
+    REQUIRE(book.AddPage(new wxPanel(&book), "Text between images"));
+    wxPanel* const secondImagePage = new wxPanel(&book);
+    REQUIRE(book.AddPage(secondImagePage, "Second image", false, 1));
+    book.Realize();
+
+    // Providing one disabled image also exercises automatic generation of the
+    // other one. Neither image list may reserve slots for text-only buttons.
+    toolbar->SetToolDisabledBitmap(firstImagePage->GetId(), bitmap);
+    REQUIRE(toolbar->GetToolsCount() == 4);
+    CHECK(getButton(0).iBitmap == I_IMAGENONE);
+    CHECK(getButton(1).iBitmap == 0);
+    CHECK(getButton(2).iBitmap == I_IMAGENONE);
+    CHECK(getButton(3).iBitmap == 1);
+    REQUIRE(getDisabledImages());
+    CHECK(ImageList_GetImageCount(getDisabledImages()) == 2);
+
+    REQUIRE(book.EnablePage(1, false));
+    REQUIRE(book.EnablePage(3, false));
+    CHECK((getButton(1).fsState & TBSTATE_ENABLED) == 0);
+    CHECK((getButton(3).fsState & TBSTATE_ENABLED) == 0);
+    CHECK(getButton(1).iBitmap == 0);
+    CHECK(getButton(3).iBitmap == 1);
+    REQUIRE(book.EnablePage(1, true));
+    REQUIRE(book.EnablePage(3, true));
+    CHECK((getButton(1).fsState & TBSTATE_ENABLED) != 0);
+    CHECK((getButton(3).fsState & TBSTATE_ENABLED) != 0);
+
+    toolbar->SetToolNormalBitmap(firstImagePage->GetId(), wxBitmapBundle());
+    CHECK(getButton(1).iBitmap == I_IMAGENONE);
+    CHECK(getButton(3).iBitmap == 0);
+    REQUIRE(getDisabledImages());
+    CHECK(ImageList_GetImageCount(getDisabledImages()) == 1);
+    toolbar->SetToolNormalBitmap(secondImagePage->GetId(), wxBitmapBundle());
+    for ( int i = 0; i < 4; ++i )
+        CHECK(getButton(i).iBitmap == I_IMAGENONE);
+
+    toolbar->SetToolNormalBitmap(firstImagePage->GetId(), bitmap);
+    CHECK(getButton(1).iBitmap == 0);
+    CHECK(getButton(3).iBitmap == I_IMAGENONE);
+    REQUIRE(getDisabledImages());
+    CHECK(ImageList_GetImageCount(getDisabledImages()) == 1);
+    CHECK(book.GetPageCount() == 4);
+    CHECK(book.GetSelection() == 0);
+}
+#endif // native wxMSW toolbar
 
 TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::VetoRestoresToolById",
                  "[toolbook][ToolbookTestCase]")
