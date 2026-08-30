@@ -371,9 +371,17 @@ void TDBuildLayoutCache(HWND hwnd, std::vector<TDLayoutElement>& out)
     while ( pChild )
     {
         TDLayoutElement info;
-        pChild->get_CurrentBoundingRectangle(&info.rect);
-        ::ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.left));
-        ::ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.right));
+
+        // Get the bounding rectangle, unless the element is off-screen in
+        // which case leave it empty to prevent drawing the element.
+        BOOL isOffScreen = false;
+        pChild->get_CurrentIsOffscreen(&isOffScreen);
+        if ( !isOffScreen )
+        {
+            pChild->get_CurrentBoundingRectangle(&info.rect);
+            ::ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.left));
+            ::ScreenToClient(hwnd, reinterpret_cast<POINT*>(&info.rect.right));
+        }
 
         info.automationId = GetCurrentAutomationId(pChild);
 
