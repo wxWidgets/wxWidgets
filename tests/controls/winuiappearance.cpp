@@ -14,6 +14,7 @@
 
 #include "button-test-access.h"
 #include "static-test-access.h"
+#include "radiobox-test-access.h"
 
 #include "wx/app.h"
 #include "wx/bitmap.h"
@@ -492,7 +493,7 @@ void ContinueRadioBoxProjectionStorm(void *opaque)
     ++context.writes;
     context.box->SetLabel(
         wxString::Format("&Storm %u", context.writes));
-    context.box->WinUISetNextPeerWriteHookForTesting(
+    wxWinUIRadioBoxTestAccess::SetNextPeerWriteHook(*context.box,
         &ContinueRadioBoxProjectionStorm, &context);
 }
 #endif // wxUSE_RADIOBOX
@@ -3121,7 +3122,7 @@ TEST_CASE("wxWinUI RadioBox appearance and title UIA are exact",
     wxWinUIAppearanceSnapshot snapshot;
     bool titleIsRaw = false;
     wxYield();
-    REQUIRE(box.WinUIGetAppearanceForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetAppearance(box,
         &snapshot, &titleIsRaw));
     CHECK(titleIsRaw);
     CHECK(snapshot.hasAutomationPeer);
@@ -3135,7 +3136,7 @@ TEST_CASE("wxWinUI RadioBox appearance and title UIA are exact",
     box.SetFont(MakeTestFont());
     box.SetForegroundColour(wxColour(21, 61, 101));
     box.SetBackgroundColour(wxColour(91, 51, 31));
-    REQUIRE(box.WinUIGetAppearanceForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetAppearance(box,
         &snapshot, &titleIsRaw));
     CheckFontLocals(snapshot, true);
     CHECK(snapshot.hasForeground);
@@ -3145,7 +3146,7 @@ TEST_CASE("wxWinUI RadioBox appearance and title UIA are exact",
     box.SetFont(wxNullFont);
     box.SetForegroundColour(wxNullColour);
     box.SetBackgroundColour(wxNullColour);
-    REQUIRE(box.WinUIGetAppearanceForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetAppearance(box,
         &snapshot, &titleIsRaw));
     CheckFontLocals(snapshot, false);
     CHECK_FALSE(snapshot.hasForeground);
@@ -3167,7 +3168,7 @@ TEST_CASE("wxWinUI RadioBox SetContent reentry is latest-writer-wins",
 
     unsigned long long addedBefore = 0;
     unsigned long long revokedBefore = 0;
-    box.WinUIGetCheckedHandlerCountsForTesting(
+    wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(box,
         &addedBefore, &revokedBefore);
 
     bool reentered = false;
@@ -3185,13 +3186,13 @@ TEST_CASE("wxWinUI RadioBox SetContent reentry is latest-writer-wins",
 
     CHECK(reentered);
     CHECK(box.GetString(0) == "&Newest");
-    CHECK_FALSE(box.WinUIHasDeferredPeerWriteForTesting());
-    CHECK_FALSE(box.WinUIIsPeerProjectionQuarantinedForTesting());
+    CHECK_FALSE(wxWinUIRadioBoxTestAccess::HasDeferredPeerWrite(box));
+    CHECK_FALSE(wxWinUIRadioBoxTestAccess::IsPeerProjectionQuarantined(box));
 
     wxArrayString peerStrings;
     int peerSelection = wxNOT_FOUND;
     unsigned long long peerGeneration = 0;
-    REQUIRE(box.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetPeerState(box,
         &peerStrings, &peerSelection, &peerGeneration));
     REQUIRE(peerStrings.GetCount() == 2);
     CHECK(peerStrings[0] == "Newest");
@@ -3201,7 +3202,7 @@ TEST_CASE("wxWinUI RadioBox SetContent reentry is latest-writer-wins",
 
     unsigned long long addedAfter = 0;
     unsigned long long revokedAfter = 0;
-    box.WinUIGetCheckedHandlerCountsForTesting(
+    wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(box,
         &addedAfter, &revokedAfter);
     CHECK(addedAfter - addedBefore ==
           revokedAfter - revokedBefore);
@@ -3288,11 +3289,11 @@ TEST_CASE("wxWinUI RadioBox projection is bounded and externally rearmed",
 
     unsigned long long addedBefore = 0;
     unsigned long long revokedBefore = 0;
-    box.WinUIGetCheckedHandlerCountsForTesting(
+    wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(box,
         &addedBefore, &revokedBefore);
 
     RadioBoxStormContext storm{ &box, 0 };
-    box.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIRadioBoxTestAccess::SetNextPeerWriteHook(box,
         &ContinueRadioBoxProjectionStorm, &storm);
     YieldingRadioBoxLogTarget yieldingLog;
     box.SetLabel("&Kick");
@@ -3301,41 +3302,41 @@ TEST_CASE("wxWinUI RadioBox projection is bounded and externally rearmed",
         "bounded WinUI RadioBox projection quarantine",
         [&]()
         {
-            return box.WinUIIsPeerProjectionQuarantinedForTesting();
+            return wxWinUIRadioBoxTestAccess::IsPeerProjectionQuarantined(box);
         });
-    box.WinUISetNextPeerWriteHookForTesting(nullptr, nullptr);
+    wxWinUIRadioBoxTestAccess::SetNextPeerWriteHook(box, nullptr, nullptr);
 
     REQUIRE(quarantined);
     CHECK(yieldingLog.DidYield());
     CHECK(storm.writes == 16);
-    CHECK_FALSE(box.WinUIHasDeferredPeerWriteForTesting());
+    CHECK_FALSE(wxWinUIRadioBoxTestAccess::HasDeferredPeerWrite(box));
 
     // A peer-originated selection is already projected by WinUI. It advances
     // the model revision but must not silently re-arm a quarantined, stale
     // structural projection.
-    REQUIRE(box.WinUISelectItemForTesting(1));
+    REQUIRE(wxWinUIRadioBoxTestAccess::SelectItem(box, 1));
     CHECK(box.GetSelection() == 1);
-    CHECK(box.WinUIIsPeerProjectionQuarantinedForTesting());
-    CHECK_FALSE(box.WinUIHasDeferredPeerWriteForTesting());
+    CHECK(wxWinUIRadioBoxTestAccess::IsPeerProjectionQuarantined(box));
+    CHECK_FALSE(wxWinUIRadioBoxTestAccess::HasDeferredPeerWrite(box));
 
     unsigned long long addedAfterStorm = 0;
     unsigned long long revokedAfterStorm = 0;
-    box.WinUIGetCheckedHandlerCountsForTesting(
+    wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(box,
         &addedAfterStorm, &revokedAfterStorm);
     CHECK(addedAfterStorm - addedBefore ==
           revokedAfterStorm - revokedBefore);
 
     const unsigned long long quarantinedRevision =
-        box.WinUIGetModelRevisionForTesting();
+        wxWinUIRadioBoxTestAccess::GetModelRevision(box);
     box.SetLabel("&Recovered");
     CHECK(box.GetLabel() == "&Recovered");
-    CHECK(box.WinUIGetModelRevisionForTesting() >
+    CHECK(wxWinUIRadioBoxTestAccess::GetModelRevision(box) >
           quarantinedRevision);
-    CHECK_FALSE(box.WinUIIsPeerProjectionQuarantinedForTesting());
-    CHECK_FALSE(box.WinUIHasDeferredPeerWriteForTesting());
+    CHECK_FALSE(wxWinUIRadioBoxTestAccess::IsPeerProjectionQuarantined(box));
+    CHECK_FALSE(wxWinUIRadioBoxTestAccess::HasDeferredPeerWrite(box));
 
     wxWinUIAppearanceSnapshot snapshot;
-    REQUIRE(box.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetAppearance(box, &snapshot));
     CHECK(snapshot.peerName == "Recovered");
 }
 
@@ -3353,7 +3354,7 @@ TEST_CASE("wxWinUI RadioBox keeps superseding model on failed replay",
 
     unsigned long long addedBefore = 0;
     unsigned long long revokedBefore = 0;
-    box.WinUIGetCheckedHandlerCountsForTesting(
+    wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(box,
         &addedBefore, &revokedBefore);
 
     bool superseded = false;
@@ -3377,14 +3378,14 @@ TEST_CASE("wxWinUI RadioBox keeps superseding model on failed replay",
     // the outer setter must not roll the newer wx model back to "Initial".
     CHECK(box.GetString(0) == "&Newest");
     wxArrayString peerStrings;
-    REQUIRE(box.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetPeerState(box,
         &peerStrings, nullptr));
     REQUIRE(peerStrings.GetCount() == 2);
     CHECK(peerStrings[0] == "Outer");
 
     unsigned long long addedAfter = 0;
     unsigned long long revokedAfter = 0;
-    box.WinUIGetCheckedHandlerCountsForTesting(
+    wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(box,
         &addedAfter, &revokedAfter);
     CHECK(addedAfter - addedBefore ==
           revokedAfter - revokedBefore);
@@ -3393,7 +3394,7 @@ TEST_CASE("wxWinUI RadioBox keeps superseding model on failed replay",
     box.SetString(0, "&Recovered");
     CHECK(box.GetString(0) == "&Recovered");
     peerStrings.Clear();
-    REQUIRE(box.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetPeerState(box,
         &peerStrings, nullptr));
     REQUIRE(peerStrings.GetCount() == 2);
     CHECK(peerStrings[0] == "Recovered");
@@ -3412,7 +3413,7 @@ TEST_CASE("wxWinUI RadioBox revokes candidates on SetContent destruction",
         WXSIZEOF(choice), choice);
     unsigned long long addedBefore = 0;
     unsigned long long revokedBefore = 0;
-    counter.WinUIGetCheckedHandlerCountsForTesting(
+    wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(counter,
         &addedBefore, &revokedBefore);
 
     wxRadioBox *box = new wxRadioBox(
@@ -3439,7 +3440,7 @@ TEST_CASE("wxWinUI RadioBox revokes candidates on SetContent destruction",
     CHECK(box == nullptr);
     unsigned long long addedAfter = 0;
     unsigned long long revokedAfter = 0;
-    counter.WinUIGetCheckedHandlerCountsForTesting(
+    wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(counter,
         &addedAfter, &revokedAfter);
     CHECK(addedAfter - addedBefore ==
           revokedAfter - revokedBefore);

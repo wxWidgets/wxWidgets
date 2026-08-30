@@ -15,6 +15,10 @@
 
 #include "private.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+#include "picker-test-access.h"
+#endif
+
 #include <atomic>
 #include <memory>
 
@@ -24,7 +28,9 @@ namespace MUXCP = winrt::Microsoft::UI::Xaml::Controls::Primitives;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<unsigned> gs_liveColourButtonCallbackStates{0};
+#endif
 
 winrt::Windows::UI::Color wxWinUIToColor(const wxColour& c)
 {
@@ -49,14 +55,18 @@ public:
     explicit wxWinUIColourButtonCallbackState(wxWinUIColourButton *owner)
         : m_owner(owner)
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveColourButtonCallbackStates.fetch_add(
             1, std::memory_order_relaxed);
+#endif
     }
 
     ~wxWinUIColourButtonCallbackState()
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveColourButtonCallbackStates.fetch_sub(
             1, std::memory_order_relaxed);
+#endif
     }
 
     wxWinUIColourButton *GetOwner() const
@@ -297,15 +307,17 @@ bool wxWinUIColourButton::Create(wxWindow *parent, wxWindowID id,
            ownerAfterSize->m_winui.get() == createImpl;
 }
 
-bool wxWinUIColourButton::WinUISetPeerColourForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIColourButtonTestAccess::SetPeerColour(
+    wxWinUIColourButton& button,
     const wxColour& colour)
 {
-    if ( !m_winui || !m_winui->picker )
+    if ( !button.m_winui || !button.m_winui->picker )
         return false;
 
     // Keep the WinRT peer alive independently of the wx owner. Color() can
     // synchronously deliver an application event which destroys this control.
-    const MUXC::ColorPicker picker = m_winui->picker;
+    const MUXC::ColorPicker picker = button.m_winui->picker;
     try
     {
         picker.Color(wxWinUIToColor(colour));
@@ -318,24 +330,25 @@ bool wxWinUIColourButton::WinUISetPeerColourForTesting(
     }
 }
 
-bool wxWinUIColourButton::WinUIGetPeerStateForTesting(
+bool wxWinUIColourButtonTestAccess::GetPeerState(
+    const wxWinUIColourButton& button,
     wxColour *colour,
     bool *alphaEnabled,
-    wxString *label) const
+    wxString *label)
 {
-    if ( !m_winui || !m_winui->picker )
+    if ( !button.m_winui || !button.m_winui->picker )
         return false;
 
     try
     {
         if ( colour )
-            *colour = wxWinUIFromColor(m_winui->picker.Color());
+            *colour = wxWinUIFromColor(button.m_winui->picker.Color());
         if ( alphaEnabled )
-            *alphaEnabled = m_winui->picker.IsAlphaEnabled();
+            *alphaEnabled = button.m_winui->picker.IsAlphaEnabled();
         if ( label )
         {
-            *label = m_winui->label
-                ? wxWinUIFromHString(m_winui->label.Text())
+            *label = button.m_winui->label
+                ? wxWinUIFromHString(button.m_winui->label.Text())
                 : wxString();
         }
         return true;
@@ -347,22 +360,24 @@ bool wxWinUIColourButton::WinUIGetPeerStateForTesting(
     }
 }
 
-bool wxWinUIColourButton::WinUIDeliverClosedForTesting()
+bool wxWinUIColourButtonTestAccess::DeliverClosed(
+    wxWinUIColourButton& button)
 {
-    if ( !m_winui )
+    if ( !button.m_winui )
         return false;
 
     // This is the exact final operation of the real Flyout::Closed callback.
     // Its event is allowed to destroy the control.
-    SendColourEvent(wxEVT_COLOURPICKER_CHANGED);
+    button.SendColourEvent(wxEVT_COLOURPICKER_CHANGED);
     return true;
 }
 
-unsigned
-wxWinUIColourButton::WinUIGetLiveCallbackStateCountForTesting()
+unsigned wxWinUIColourButtonTestAccess::GetLiveCallbackStateCount()
 {
     return gs_liveColourButtonCallbackStates.load(std::memory_order_relaxed);
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUIColourButton::UpdateColour()
 {

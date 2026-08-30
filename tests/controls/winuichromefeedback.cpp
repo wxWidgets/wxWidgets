@@ -11,6 +11,7 @@
 #include "waitfor.h"
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "feedback-test-access.h"
 
 #include "wx/app.h"
 #include "wx/frame.h"
@@ -422,7 +423,7 @@ void ContinueHyperlinkApplyStorm(void *opaque)
          (context->destroyAtCall &&
           context->calls < context->destroyAtCall) )
     {
-        context->link->WinUISetNextPeerWriteHookForTesting(
+        wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(*context->link,
             &ContinueHyperlinkApplyStorm, context);
     }
     context->link->SetLabel(context->latestLabel);
@@ -460,7 +461,7 @@ void ContinueActivityApplyStorm(void *opaque)
          (context->destroyAtCall &&
           context->calls < context->destroyAtCall) )
     {
-        context->activity->WinUISetNextPeerWriteHookForTesting(
+        wxWinUIActivityIndicatorTestAccess::SetNextPeerWriteHook(*context->activity,
             &ContinueActivityApplyStorm, context);
     }
 
@@ -1576,7 +1577,7 @@ TEST_CASE("wxWinUI Hyperlink Create revalidates host and size callbacks",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const unsigned baseline =
-        wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount();
 
     SECTION("shared-host attachment")
     {
@@ -1602,7 +1603,7 @@ TEST_CASE("wxWinUI Hyperlink Create revalidates host and size callbacks",
         CHECK(attached);
         CHECK_FALSE(created);
         CHECK(link == nullptr);
-        CHECK(wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
+        CHECK(wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount() ==
               baseline);
         delete link;
     }
@@ -1644,7 +1645,7 @@ TEST_CASE("wxWinUI Hyperlink Create revalidates host and size callbacks",
         CHECK(sized);
         CHECK_FALSE(created);
         CHECK(link == nullptr);
-        CHECK(wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
+        CHECK(wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount() ==
               baseline);
         delete link;
     }
@@ -1684,7 +1685,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     wxColour effective;
     wxWinUIAppearanceSnapshot appearance;
     wxYield();
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         &pointerOver, &alignment, &context, &effective, &appearance));
     CHECK_FALSE(pointerOver);
     CHECK(alignment ==
@@ -1703,7 +1704,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     link.Enable(false);
     REQUIRE(WaitFor("disabled hyperlink host state", [&]()
     {
-        return link.WinUIGetStateForTesting(
+        return wxWinUIHyperlinkTestAccess::GetState(link,
                    nullptr, nullptr, nullptr, nullptr, nullptr,
                    &peerEnabled) &&
                !peerEnabled;
@@ -1712,7 +1713,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     link.Enable();
     REQUIRE(WaitFor("enabled hyperlink host state", [&]()
     {
-        return link.WinUIGetStateForTesting(
+        return wxWinUIHyperlinkTestAccess::GetState(link,
                    nullptr, nullptr, nullptr, nullptr, nullptr,
                    &peerEnabled) &&
                peerEnabled;
@@ -1721,7 +1722,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
 
     link.SetLabel("Updated &link");
     wxYield();
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
     CHECK(appearance.automationName == "Updated link");
     CHECK(appearance.accessKey.CmpNoCase("l") == 0);
@@ -1729,7 +1730,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     link.SetFont(MakeChromeTestFont());
     link.SetForegroundColour(wxColour(19, 83, 149));
     link.SetBackgroundColour(wxColour(41, 47, 53));
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
     CheckChromeFontLocals(appearance, true);
     CHECK(appearance.hasForeground);
@@ -1738,7 +1739,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     link.SetFont(wxNullFont);
     link.SetForegroundColour(wxNullColour);
     link.SetBackgroundColour(wxNullColour);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, &appearance));
     CheckChromeFontLocals(appearance, false);
     CHECK(appearance.hasForeground);
@@ -1761,7 +1762,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     {
         bool called = false;
     } themeContext;
-    link.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(link,
         [](void *opaque)
         {
             static_cast<ThemeProjectionContext *>(opaque)->called = true;
@@ -1771,7 +1772,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     themeChanged.SetEventObject(&link);
     link.ProcessWindowEvent(themeChanged);
     CHECK(themeContext.called);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, &appearance));
     CHECK(appearance.hasForeground);
     CHECK(effective == link.GetNormalColour());
@@ -1780,7 +1781,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     wxColour lightDefault;
     REQUIRE(WaitFor("light hyperlink default projection", [&]()
     {
-        return link.WinUIGetStateForTesting(
+        return wxWinUIHyperlinkTestAccess::GetState(link,
                    nullptr, nullptr, nullptr, &lightDefault, nullptr) &&
                lightDefault == link.GetNormalColour();
     }));
@@ -1790,7 +1791,7 @@ TEST_CASE("wxWinUI Hyperlink owns alignment, appearance and refreshed UIA name",
     wxColour darkDefault;
     REQUIRE(WaitFor("dark hyperlink default projection", [&]()
     {
-        return link.WinUIGetStateForTesting(
+        return wxWinUIHyperlinkTestAccess::GetState(link,
                    nullptr, nullptr, nullptr, &darkDefault, nullptr) &&
                darkDefault == link.GetNormalColour();
     }));
@@ -1833,13 +1834,13 @@ TEST_CASE("wxWinUI Hyperlink native hit area follows its rendered label",
         wxRect interactive;
         REQUIRE(WaitFor("content-sized hyperlink hit area", [&]()
         {
-            return link.WinUIGetInteractiveRectForTesting(&interactive) &&
+            return wxWinUIHyperlinkTestAccess::GetInteractiveRect(link, &interactive) &&
                    interactive.width > 0 &&
                    interactive.width < link.GetClientSize().x / 2;
         }));
 
         wxWinUIAppearanceSnapshot appearance;
-        REQUIRE(link.WinUIGetStateForTesting(
+        REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
             nullptr, nullptr, nullptr, nullptr, &appearance));
         CHECK(appearance.automationName == "Link");
         CHECK(appearance.hasAutomationPeer);
@@ -1887,21 +1888,21 @@ TEST_CASE("wxWinUI Hyperlink native hit area follows its rendered label",
         if ( interactive.Contains(outside) )
             outside.x = client.x - 1;
         REQUIRE_FALSE(interactive.Contains(outside));
-        CHECK_FALSE(link.WinUIHitTestForTesting(outside));
-        CHECK_FALSE(link.WinUIInvokeAtForTesting(outside));
+        CHECK_FALSE(wxWinUIHyperlinkTestAccess::HitTest(link, outside));
+        CHECK_FALSE(wxWinUIHyperlinkTestAccess::InvokeAt(link, outside));
         CHECK(events == 0);
 
         const wxPoint inside(interactive.x + interactive.width / 2,
                              interactive.y + interactive.height / 2);
-        CHECK(link.WinUIHitTestForTesting(inside));
-        REQUIRE(link.WinUIInvokeAtForTesting(inside));
+        CHECK(wxWinUIHyperlinkTestAccess::HitTest(link, inside));
+        REQUIRE(wxWinUIHyperlinkTestAccess::InvokeAt(link, inside));
         CHECK(events == 1);
 
         const int shortWidth = interactive.width;
         link.SetLabel("A considerably longer rendered hyperlink label");
         REQUIRE(WaitFor("updated hyperlink hit area", [&]()
         {
-            return link.WinUIGetInteractiveRectForTesting(&interactive) &&
+            return wxWinUIHyperlinkTestAccess::GetInteractiveRect(link, &interactive) &&
                    interactive.width > shortWidth;
         }));
     }
@@ -1983,45 +1984,45 @@ TEST_CASE("wxWinUI Hyperlink projects hover and visited visual states",
 
     wxColour effective;
     int alignment = -1;
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, &alignment, nullptr, &effective, nullptr));
     CHECK(alignment ==
           static_cast<int>(MUX::HorizontalAlignment::Left));
     CHECK(effective == wxColour(180, 20, 30));
 
-    link.WinUISetPointerOverForTesting(true);
-    REQUIRE(link.WinUIGetStateForTesting(
+    wxWinUIHyperlinkTestAccess::SetPointerOver(link, true);
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(effective == wxColour(20, 170, 40));
 
-    link.WinUISetPointerOverForTesting(false);
+    wxWinUIHyperlinkTestAccess::SetPointerOver(link, false);
     link.SetVisited();
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(effective == wxColour(60, 40, 190));
 
-    link.WinUISetPointerOverForTesting(true);
-    REQUIRE(link.WinUIGetStateForTesting(
+    wxWinUIHyperlinkTestAccess::SetPointerOver(link, true);
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(effective == wxColour(20, 170, 40));
 
     wxGenericHyperlinkCtrl genericDefaults;
     link.SetHoverColour(wxNullColour);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(link.GetHoverColour() == genericDefaults.GetHoverColour());
     CHECK(effective == link.GetHoverColour());
 
-    link.WinUISetPointerOverForTesting(false);
+    wxWinUIHyperlinkTestAccess::SetPointerOver(link, false);
     link.SetVisitedColour(wxNullColour);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(link.GetVisitedColour() == genericDefaults.GetVisitedColour());
     CHECK(effective == link.GetVisitedColour());
 
     link.SetVisited(false);
     link.SetNormalColour(wxNullColour);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(link.GetNormalColour() ==
           wxGenericHyperlinkCtrl::GetClassDefaultAttributes().colFg);
@@ -2048,7 +2049,7 @@ TEST_CASE("wxWinUI Hyperlink relinquishes only default colours in High "
         parent, wxID_ANY, "Link", "https://example.invalid");
     wxWinUIAppearanceSnapshot appearance;
     wxColour effective;
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, &appearance));
     CHECK(appearance.hasForeground);
     CHECK(effective == link.GetNormalColour());
@@ -2066,42 +2067,42 @@ TEST_CASE("wxWinUI Hyperlink relinquishes only default colours in High "
     highContrast.Set(
         wxWinUIHighContrastOverrideForTesting::ForceOn);
     notifySystemColourChange();
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
     CHECK_FALSE(appearance.hasForeground);
 
     const wxColour customNormal(11, 73, 151);
     link.SetNormalColour(customNormal);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, &appearance));
     CHECK(appearance.hasForeground);
     CHECK(effective == customNormal);
 
     // A custom normal state must not keep a local brush alive when the active
     // hover state is still the generic default.
-    link.WinUISetPointerOverForTesting(true);
-    REQUIRE(link.WinUIGetStateForTesting(
+    wxWinUIHyperlinkTestAccess::SetPointerOver(link, true);
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
     CHECK_FALSE(appearance.hasForeground);
 
     const wxColour customHover(17, 139, 43);
     link.SetHoverColour(customHover);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, &appearance));
     CHECK(appearance.hasForeground);
     CHECK(effective == customHover);
 
     // Visited has independent provenance too.
-    link.WinUISetPointerOverForTesting(false);
+    wxWinUIHyperlinkTestAccess::SetPointerOver(link, false);
     link.SetVisitedColour(wxNullColour);
     link.SetVisited();
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
     CHECK_FALSE(appearance.hasForeground);
 
     const wxColour customVisited(103, 47, 181);
     link.SetVisitedColour(customVisited);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, &appearance));
     CHECK(appearance.hasForeground);
     CHECK(effective == customVisited);
@@ -2111,7 +2112,7 @@ TEST_CASE("wxWinUI Hyperlink relinquishes only default colours in High "
     highContrast.Set(
         wxWinUIHighContrastOverrideForTesting::ForceOff);
     link.SetVisitedColour(wxNullColour);
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, &appearance));
     CHECK(appearance.hasForeground);
     CHECK(effective == link.GetVisitedColour());
@@ -2124,12 +2125,12 @@ TEST_CASE("wxWinUI Hyperlink relinquishes only default colours in High "
     link.SetNormalColour(wxNullColour);
     wxWinUISetAppTheme(wxWinUIAppTheme::Light);
     wxYield();
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
     CHECK_FALSE(appearance.hasForeground);
     wxWinUISetAppTheme(wxWinUIAppTheme::Dark);
     wxYield();
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
     CHECK_FALSE(appearance.hasForeground);
 }
@@ -2149,14 +2150,14 @@ TEST_CASE("wxWinUI Hyperlink URL publication resets visited atomically",
     link.SetVisited();
 
     wxColour effective;
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(effective == visited);
 
     link.SetURL("https://next.invalid");
     CHECK(link.GetURL() == "https://next.invalid");
     CHECK_FALSE(link.GetVisited());
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(effective == normal);
 
@@ -2164,7 +2165,7 @@ TEST_CASE("wxWinUI Hyperlink URL publication resets visited atomically",
     link.SetVisited();
     link.SetURL("https://next.invalid");
     CHECK(link.GetVisited());
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(effective == visited);
 
@@ -2173,7 +2174,7 @@ TEST_CASE("wxWinUI Hyperlink URL publication resets visited atomically",
         wxHyperlinkCtrl *link;
         bool called = false;
     } context{ &link };
-    link.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(link,
         [](void *opaque)
         {
             auto * const current =
@@ -2188,7 +2189,7 @@ TEST_CASE("wxWinUI Hyperlink URL publication resets visited atomically",
     CHECK(context.called);
     CHECK(link.GetURL() == "https://inner.invalid");
     CHECK(link.GetVisited());
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, nullptr));
     CHECK(effective == visited);
 }
@@ -2207,7 +2208,7 @@ TEST_CASE("wxWinUI Hyperlink peer projection is reentrant last-writer-wins",
         bool called = false;
     } context{ &link };
 
-    link.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(link,
         [](void *opaque)
         {
             MutationContext * const current =
@@ -2221,7 +2222,7 @@ TEST_CASE("wxWinUI Hyperlink peer projection is reentrant last-writer-wins",
     CHECK(context.called);
     CHECK(link.GetLabel() == "Inner &N");
     wxWinUIAppearanceSnapshot appearance;
-    REQUIRE(link.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
     CHECK(appearance.automationName == "Inner N");
     CHECK(appearance.accessKey.CmpNoCase("N") == 0);
@@ -2237,32 +2238,32 @@ TEST_CASE("wxWinUI Hyperlink defers and converges after its synchronous "
     wxHyperlinkCtrl link(
         parent, wxID_ANY, "Initial", "https://example.invalid");
     const unsigned long long revisionBefore =
-        link.WinUIGetModelRevisionForTesting();
+        wxWinUIHyperlinkTestAccess::GetModelRevision(link);
     HyperlinkApplyStormContext context;
     context.link = &link;
     context.targetCalls = 12;
-    link.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(link,
         &ContinueHyperlinkApplyStorm, &context);
 
     link.SetLabel("Begin deferred projection");
 
     CHECK(context.calls == 8);
-    CHECK(link.WinUIHasDeferredPeerWriteForTesting());
-    CHECK(link.WinUIGetModelRevisionForTesting() >
+    CHECK(wxWinUIHyperlinkTestAccess::HasDeferredPeerWrite(link));
+    CHECK(wxWinUIHyperlinkTestAccess::GetModelRevision(link) >
           revisionBefore + 8);
 
     wxWinUIAppearanceSnapshot appearance;
     REQUIRE(WaitFor("deferred hyperlink projection", [&]()
     {
-        return !link.WinUIHasDeferredPeerWriteForTesting() &&
+        return !wxWinUIHyperlinkTestAccess::HasDeferredPeerWrite(link) &&
                context.calls == context.targetCalls &&
-               link.WinUIGetStateForTesting(
+               wxWinUIHyperlinkTestAccess::GetState(link,
                    nullptr, nullptr, nullptr, nullptr, &appearance) &&
                appearance.automationName == "Deferred L 12" &&
                appearance.accessKey.CmpNoCase("L") == 0;
     }));
     CHECK(link.GetLabel() == context.latestLabel);
-    CHECK(link.WinUIGetModelRevisionForTesting() >=
+    CHECK(wxWinUIHyperlinkTestAccess::GetModelRevision(link) >=
           revisionBefore + 13);
 }
 
@@ -2278,7 +2279,7 @@ TEST_CASE("wxWinUI Hyperlink quarantines an unbounded projection storm and "
     HyperlinkApplyStormContext context;
     context.link = &link;
     context.targetCalls = 1000000;
-    link.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(link,
         &ContinueHyperlinkApplyStorm, &context);
 
     YieldOnceLogTarget yieldingLog;
@@ -2286,12 +2287,12 @@ TEST_CASE("wxWinUI Hyperlink quarantines an unbounded projection storm and "
 
     CHECK(yieldingLog.DidYield());
     CHECK(context.calls == 8);
-    CHECK(link.WinUIHasDeferredPeerWriteForTesting());
+    CHECK(wxWinUIHyperlinkTestAccess::HasDeferredPeerWrite(link));
     REQUIRE(WaitFor("bounded hyperlink projection quarantine", [&]()
     {
         return context.calls == 16 &&
-               !link.WinUIHasDeferredPeerWriteForTesting() &&
-               link.WinUIIsPeerProjectionQuarantinedForTesting();
+               !wxWinUIHyperlinkTestAccess::HasDeferredPeerWrite(link) &&
+               wxWinUIHyperlinkTestAccess::IsPeerProjectionQuarantined(link);
     }));
 
     const int callsAtQuarantine = context.calls;
@@ -2302,10 +2303,10 @@ TEST_CASE("wxWinUI Hyperlink quarantines an unbounded projection storm and "
     // The storm deliberately leaves its next one-shot hook installed. Remove
     // it before proving that a genuinely new public mutation gets a fresh
     // budget and converges synchronously.
-    link.WinUISetNextPeerWriteHookForTesting(nullptr, nullptr);
+    wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(link, nullptr, nullptr);
     link.SetLabel("Recovered &R");
-    CHECK_FALSE(link.WinUIHasDeferredPeerWriteForTesting());
-    CHECK_FALSE(link.WinUIIsPeerProjectionQuarantinedForTesting());
+    CHECK_FALSE(wxWinUIHyperlinkTestAccess::HasDeferredPeerWrite(link));
+    CHECK_FALSE(wxWinUIHyperlinkTestAccess::IsPeerProjectionQuarantined(link));
 
     // The control peer converges synchronously, while the shared slot owns
     // AutomationProperties.Name and publishes it through its coalesced host
@@ -2314,7 +2315,7 @@ TEST_CASE("wxWinUI Hyperlink quarantines an unbounded projection storm and "
     wxWinUIAppearanceSnapshot appearance;
     REQUIRE(WaitFor("rearmed hyperlink automation name", [&]()
     {
-        return link.WinUIGetStateForTesting(
+        return wxWinUIHyperlinkTestAccess::GetState(link,
                    nullptr, nullptr, nullptr, nullptr, &appearance) &&
                appearance.automationName == "Recovered R" &&
                appearance.accessKey.CmpNoCase("R") == 0;
@@ -2330,7 +2331,7 @@ TEST_CASE("wxWinUI Hyperlink deferred projection may destroy its owner",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const unsigned baseline =
-        wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount();
 
     std::unique_ptr<wxHyperlinkCtrl> owned(new wxHyperlinkCtrl);
     REQUIRE(owned->Create(
@@ -2343,21 +2344,21 @@ TEST_CASE("wxWinUI Hyperlink deferred projection may destroy its owner",
     context.destroyAtCall = 9;
     context.owned = &owned;
     context.observed = &observed;
-    observed->WinUISetNextPeerWriteHookForTesting(
+    wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(*observed,
         &ContinueHyperlinkApplyStorm, &context);
 
     observed->SetLabel("Begin deferred delete");
 
     REQUIRE(observed);
     CHECK(context.calls == 8);
-    CHECK(observed->WinUIHasDeferredPeerWriteForTesting());
+    CHECK(wxWinUIHyperlinkTestAccess::HasDeferredPeerWrite(*observed));
     REQUIRE(WaitFor("deferred hyperlink destruction", [&]()
     {
         return observed == nullptr;
     }));
     CHECK(context.calls == context.destroyAtCall);
     CHECK_FALSE(owned);
-    CHECK(wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount() ==
           baseline);
 }
 
@@ -2367,7 +2368,7 @@ TEST_CASE("wxWinUI Hyperlink peer write may destroy its owner",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const unsigned baseline =
-        wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount();
 
     std::unique_ptr<wxHyperlinkCtrl> owned(new wxHyperlinkCtrl);
     REQUIRE(owned->Create(
@@ -2381,7 +2382,7 @@ TEST_CASE("wxWinUI Hyperlink peer write may destroy its owner",
         bool called = false;
     } context{ &owned, &link };
 
-    link->WinUISetNextPeerWriteHookForTesting(
+    wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(*link,
         [](void *opaque)
         {
             DestructionContext * const current =
@@ -2397,7 +2398,7 @@ TEST_CASE("wxWinUI Hyperlink peer write may destroy its owner",
     invoking->SetURL("https://outer.invalid");
     CHECK(context.called);
     CHECK(link == nullptr);
-    CHECK(wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount() ==
           baseline);
 }
 
@@ -2407,13 +2408,13 @@ TEST_CASE("wxWinUI Hyperlink click may destroy its owner safely",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const unsigned baseline =
-        wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount();
 
     std::unique_ptr<wxHyperlinkCtrl> owned(new wxHyperlinkCtrl);
     REQUIRE(owned->Create(
         parent, wxID_ANY, "Delete me", "https://example.invalid"));
     wxHyperlinkCtrl *link = owned.get();
-    CHECK(wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount() ==
           baseline + 1);
 
     bool handled = false;
@@ -2431,10 +2432,10 @@ TEST_CASE("wxWinUI Hyperlink click may destroy its owner safely",
         });
 
     wxHyperlinkCtrl * const invoking = link;
-    REQUIRE(invoking->WinUIInvokeForTesting());
+    REQUIRE(wxWinUIHyperlinkTestAccess::Invoke(*invoking));
     CHECK(handled);
     CHECK(link == nullptr);
-    CHECK(wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount() ==
           baseline);
 }
 
@@ -2528,7 +2529,7 @@ TEST_CASE("wxWinUI ActivityIndicator state and UIA remain synchronized",
     wxString idleStatus;
     wxWinUIAppearanceSnapshot appearance;
     wxYield();
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         &active, &tabStop, &idleStatus, &appearance));
     CHECK_FALSE(activity.IsRunning());
     CHECK_FALSE(active);
@@ -2551,7 +2552,7 @@ TEST_CASE("wxWinUI ActivityIndicator state and UIA remain synchronized",
 
     activity.Start();
     wxString busyStatus;
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         &active, nullptr, &busyStatus, nullptr));
     CHECK(activity.IsRunning());
     CHECK(active);
@@ -2561,7 +2562,7 @@ TEST_CASE("wxWinUI ActivityIndicator state and UIA remain synchronized",
     activity.Start();
     CHECK(activity.IsRunning());
     activity.Stop();
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         &active, nullptr, nullptr, nullptr));
     CHECK_FALSE(activity.IsRunning());
     CHECK_FALSE(active);
@@ -2569,13 +2570,13 @@ TEST_CASE("wxWinUI ActivityIndicator state and UIA remain synchronized",
 
     activity.SetForegroundColour(wxColour(21, 91, 151));
     activity.SetBackgroundColour(wxColour(42, 48, 54));
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         nullptr, nullptr, nullptr, &appearance));
     CHECK(appearance.hasForeground);
     CHECK(appearance.hasBackground);
     activity.SetForegroundColour(wxNullColour);
     activity.SetBackgroundColour(wxNullColour);
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         nullptr, nullptr, nullptr, &appearance));
     CHECK_FALSE(appearance.hasForeground);
     CHECK_FALSE(appearance.hasBackground);
@@ -2585,14 +2586,14 @@ TEST_CASE("wxWinUI ActivityIndicator state and UIA remain synchronized",
         parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0,
         "network activity"));
     wxYield();
-    REQUIRE(named.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(named,
         nullptr, nullptr, nullptr, &appearance));
     // The Create() name is a technical wx resource identifier, just as on
     // classic MSW; only a visible/semantic label feeds UIA.
     CHECK(appearance.automationName.empty());
     named.SetLabel("network activity");
     wxYield();
-    REQUIRE(named.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(named,
         nullptr, nullptr, nullptr, &appearance));
     CHECK(appearance.automationName == "network activity");
 }
@@ -2606,7 +2607,7 @@ TEST_CASE("wxWinUI ActivityIndicator peer projection is reentrant "
 
     wxActivityIndicator activity(parent);
     wxString idleStatus;
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         nullptr, nullptr, &idleStatus, nullptr));
 
     struct MutationContext
@@ -2614,7 +2615,7 @@ TEST_CASE("wxWinUI ActivityIndicator peer projection is reentrant "
         wxActivityIndicator *activity;
         bool called = false;
     } context{ &activity };
-    activity.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIActivityIndicatorTestAccess::SetNextPeerWriteHook(activity,
         [](void *opaque)
         {
             MutationContext * const current =
@@ -2629,7 +2630,7 @@ TEST_CASE("wxWinUI ActivityIndicator peer projection is reentrant "
     CHECK_FALSE(activity.IsRunning());
     bool peerActive = true;
     wxString itemStatus;
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         &peerActive, nullptr, &itemStatus, nullptr));
     CHECK_FALSE(peerActive);
     CHECK(itemStatus == idleStatus);
@@ -2645,16 +2646,16 @@ TEST_CASE("wxWinUI ActivityIndicator defers and converges after its "
     wxActivityIndicator activity(parent);
     activity.Start();
     wxString busyStatus;
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         nullptr, nullptr, &busyStatus, nullptr));
     activity.Stop();
 
     const unsigned long long revisionBefore =
-        activity.WinUIGetModelRevisionForTesting();
+        wxWinUIActivityIndicatorTestAccess::GetModelRevision(activity);
     ActivityApplyStormContext context;
     context.activity = &activity;
     context.targetCalls = 12;
-    activity.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIActivityIndicatorTestAccess::SetNextPeerWriteHook(activity,
         &ContinueActivityApplyStorm, &context);
 
     YieldOnceLogTarget yieldingLog;
@@ -2662,22 +2663,22 @@ TEST_CASE("wxWinUI ActivityIndicator defers and converges after its "
 
     CHECK(yieldingLog.DidYield());
     CHECK(context.calls == 8);
-    CHECK(activity.WinUIHasDeferredPeerWriteForTesting());
-    CHECK(activity.WinUIGetModelRevisionForTesting() >
+    CHECK(wxWinUIActivityIndicatorTestAccess::HasDeferredPeerWrite(activity));
+    CHECK(wxWinUIActivityIndicatorTestAccess::GetModelRevision(activity) >
           revisionBefore + 8);
 
     bool peerActive = false;
     wxString itemStatus;
     REQUIRE(WaitFor("deferred activity-indicator projection", [&]()
     {
-        return !activity.WinUIHasDeferredPeerWriteForTesting() &&
+        return !wxWinUIActivityIndicatorTestAccess::HasDeferredPeerWrite(activity) &&
                context.calls == context.targetCalls &&
-               activity.WinUIGetStateForTesting(
+               wxWinUIActivityIndicatorTestAccess::GetState(activity,
                    &peerActive, nullptr, &itemStatus, nullptr) &&
                peerActive && itemStatus == busyStatus;
     }));
     CHECK(activity.IsRunning());
-    CHECK(activity.WinUIGetModelRevisionForTesting() >=
+    CHECK(wxWinUIActivityIndicatorTestAccess::GetModelRevision(activity) >=
           revisionBefore + 13);
 }
 
@@ -2692,18 +2693,18 @@ TEST_CASE("wxWinUI ActivityIndicator quarantines an unbounded projection "
     ActivityApplyStormContext context;
     context.activity = &activity;
     context.targetCalls = 1000000;
-    activity.WinUISetNextPeerWriteHookForTesting(
+    wxWinUIActivityIndicatorTestAccess::SetNextPeerWriteHook(activity,
         &ContinueActivityApplyStorm, &context);
 
     activity.Start();
 
     CHECK(context.calls == 8);
-    CHECK(activity.WinUIHasDeferredPeerWriteForTesting());
+    CHECK(wxWinUIActivityIndicatorTestAccess::HasDeferredPeerWrite(activity));
     REQUIRE(WaitFor("bounded activity projection quarantine", [&]()
     {
         return context.calls == 16 &&
-               !activity.WinUIHasDeferredPeerWriteForTesting() &&
-               activity.WinUIIsPeerProjectionQuarantinedForTesting();
+               !wxWinUIActivityIndicatorTestAccess::HasDeferredPeerWrite(activity) &&
+               wxWinUIActivityIndicatorTestAccess::IsPeerProjectionQuarantined(activity);
     }));
 
     const int callsAtQuarantine = context.calls;
@@ -2711,13 +2712,13 @@ TEST_CASE("wxWinUI ActivityIndicator quarantines an unbounded projection "
     wxYield();
     CHECK(context.calls == callsAtQuarantine);
 
-    activity.WinUISetNextPeerWriteHookForTesting(nullptr, nullptr);
+    wxWinUIActivityIndicatorTestAccess::SetNextPeerWriteHook(activity, nullptr, nullptr);
     activity.Stop();
-    CHECK_FALSE(activity.WinUIHasDeferredPeerWriteForTesting());
-    CHECK_FALSE(activity.WinUIIsPeerProjectionQuarantinedForTesting());
+    CHECK_FALSE(wxWinUIActivityIndicatorTestAccess::HasDeferredPeerWrite(activity));
+    CHECK_FALSE(wxWinUIActivityIndicatorTestAccess::IsPeerProjectionQuarantined(activity));
 
     bool peerActive = true;
-    REQUIRE(activity.WinUIGetStateForTesting(
+    REQUIRE(wxWinUIActivityIndicatorTestAccess::GetState(activity,
         &peerActive, nullptr, nullptr, nullptr));
     CHECK_FALSE(activity.IsRunning());
     CHECK_FALSE(peerActive);
@@ -2741,14 +2742,14 @@ TEST_CASE("wxWinUI ActivityIndicator deferred projection may destroy "
     context.destroyAtCall = 9;
     context.owned = &owned;
     context.observed = &observed;
-    observed->WinUISetNextPeerWriteHookForTesting(
+    wxWinUIActivityIndicatorTestAccess::SetNextPeerWriteHook(*observed,
         &ContinueActivityApplyStorm, &context);
 
     observed->Start();
 
     REQUIRE(observed);
     CHECK(context.calls == 8);
-    CHECK(observed->WinUIHasDeferredPeerWriteForTesting());
+    CHECK(wxWinUIActivityIndicatorTestAccess::HasDeferredPeerWrite(*observed));
     REQUIRE(WaitFor("deferred activity-indicator destruction", [&]()
     {
         return observed == nullptr;
@@ -2774,7 +2775,7 @@ TEST_CASE("wxWinUI ActivityIndicator peer write may destroy its owner",
         bool called = false;
     } context{ &owned, &activity };
 
-    activity->WinUISetNextPeerWriteHookForTesting(
+    wxWinUIActivityIndicatorTestAccess::SetNextPeerWriteHook(*activity,
         [](void *opaque)
         {
             DestructionContext * const current =
@@ -2803,7 +2804,7 @@ TEST_CASE("wxWinUI chrome feedback controls survive repeated active teardown",
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
     const unsigned baseline =
-        wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount();
 
     for ( int i = 0; i < 100; ++i )
     {
@@ -2823,14 +2824,14 @@ TEST_CASE("wxWinUI chrome feedback controls survive repeated active teardown",
             wxDefaultPosition, wxDefaultSize,
             i % 2 ? wxHL_ALIGN_LEFT : wxHL_ALIGN_RIGHT));
         link.SetVisited(i % 3 == 0);
-        link.WinUISetPointerOverForTesting(i % 4 == 0);
+        wxWinUIHyperlinkTestAccess::SetPointerOver(link, i % 4 == 0);
 
         wxActivityIndicator activity;
         REQUIRE(activity.Create(parent));
         activity.Start();
     }
 
-    CHECK(wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount() ==
           baseline);
 }
 

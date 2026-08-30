@@ -25,6 +25,10 @@
 #include "wx/winui/winui.h"
 
 #include "private.h"
+
+#ifdef WXWINUI_TEST_SUPPORT
+#include "feedback-test-access.h"
+#endif
 #include "wx/winui/private/appearance.h"
 
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -47,7 +51,9 @@ namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<unsigned> gs_liveHyperlinkCallbackStates{ 0 };
+#endif
 
 wxColour wxWinUIGetDefaultHyperlinkColour()
 {
@@ -79,12 +85,16 @@ public:
     explicit wxWinUIHyperlinkCallbackState(wxHyperlinkCtrl *owner)
         : m_owner(owner)
     {
+#ifdef WXWINUI_TEST_SUPPORT
         ++gs_liveHyperlinkCallbackStates;
+#endif
     }
 
     ~wxWinUIHyperlinkCallbackState()
     {
+#ifdef WXWINUI_TEST_SUPPORT
         --gs_liveHyperlinkCallbackStates;
+#endif
     }
 
     std::uint64_t GetGeneration() const
@@ -303,8 +313,10 @@ public:
         if ( callbackState )
             callbackState->Invalidate();
 
+#ifdef WXWINUI_TEST_SUPPORT
         nextPeerWriteHookForTesting = nullptr;
         nextPeerWriteContextForTesting = nullptr;
+#endif
 
         if ( button )
         {
@@ -372,9 +384,11 @@ public:
     winrt::event_token contextRequestedToken{};
     winrt::event_token actualThemeChangedToken{};
     std::vector<wxEvent *> activeEvents;
-    wxWinUIHyperlinkPeerWriteHookForTesting
-        nextPeerWriteHookForTesting = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
+    using PeerWriteHook = void (*)(void *);
+    PeerWriteHook nextPeerWriteHookForTesting = nullptr;
     void *nextPeerWriteContextForTesting = nullptr;
+#endif
 };
 
 wxHyperlinkCtrl::wxHyperlinkCtrl()
@@ -912,12 +926,14 @@ bool wxHyperlinkCtrl::UpdateWinUIContent()
                     : ApplyState::Restart;
             };
 
-        const wxWinUIHyperlinkPeerWriteHookForTesting hook =
+#ifdef WXWINUI_TEST_SUPPORT
+        const wxWinUIHyperlinkImpl::PeerWriteHook hook =
             impl->nextPeerWriteHookForTesting;
         void * const hookContext =
             impl->nextPeerWriteContextForTesting;
         impl->nextPeerWriteHookForTesting = nullptr;
         impl->nextPeerWriteContextForTesting = nullptr;
+#endif
 
         try
         {
@@ -929,6 +945,7 @@ bool wxHyperlinkCtrl::UpdateWinUIContent()
             if ( state == ApplyState::Restart )
                 continue;
 
+#ifdef WXWINUI_TEST_SUPPORT
             if ( hook )
             {
                 hook(hookContext);
@@ -938,6 +955,7 @@ bool wxHyperlinkCtrl::UpdateWinUIContent()
                 if ( state == ApplyState::Restart )
                     continue;
             }
+#endif
 
             wxWinUIApplyAccessKey(button, rawLabel);
             state = checkState();
@@ -1103,12 +1121,14 @@ bool wxHyperlinkCtrl::CopyURLToClipboard()
 #endif
 }
 
-bool wxHyperlinkCtrl::WinUIInvokeForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIHyperlinkTestAccess::Invoke(
+    wxHyperlinkCtrl& link)
 {
-    if ( !m_winui || !m_winui->button )
+    if ( !link.m_winui || !link.m_winui->button )
         return false;
 
-    const auto button = m_winui->button;
+    const auto button = link.m_winui->button;
     try
     {
         winrt::Microsoft::UI::Xaml::Automation::Peers::
@@ -1124,16 +1144,18 @@ bool wxHyperlinkCtrl::WinUIInvokeForTesting()
     }
 }
 
-bool wxHyperlinkCtrl::WinUIGetInteractiveRectForTesting(wxRect *rect) const
+bool wxWinUIHyperlinkTestAccess::GetInteractiveRect(
+    const wxHyperlinkCtrl& link,
+    wxRect *rect)
 {
     if ( !rect )
         return false;
 
     *rect = wxRect();
-    if ( !m_winui || !m_winui->button || !m_winui->callbackState )
+    if ( !link.m_winui || !link.m_winui->button || !link.m_winui->callbackState )
         return false;
 
-    wxWinUIHyperlinkImpl * const impl = m_winui.get();
+    wxWinUIHyperlinkImpl * const impl = link.m_winui.get();
     const auto callbackState = impl->callbackState;
     const std::uint64_t generation = callbackState->GetGeneration();
     const auto button = impl->button;
@@ -1143,7 +1165,7 @@ bool wxHyperlinkCtrl::WinUIGetInteractiveRectForTesting(wxRect *rect) const
         impl->host.ForceRender();
         wxHyperlinkCtrl * const live =
             callbackState->GetOwner(generation);
-        if ( !live || live != this || !live->m_winui ||
+        if ( !live || live != &link || !live->m_winui ||
              live->m_winui.get() != impl ||
              live->m_winui->callbackState != callbackState ||
              live->m_winui->button != button )
@@ -1222,22 +1244,28 @@ bool wxHyperlinkCtrl::WinUIGetInteractiveRectForTesting(wxRect *rect) const
     }
 }
 
-bool wxHyperlinkCtrl::WinUIHitTestForTesting(const wxPoint& point) const
+bool wxWinUIHyperlinkTestAccess::HitTest(
+    const wxHyperlinkCtrl& link,
+    const wxPoint& point)
 {
     wxRect interactive;
-    return WinUIGetInteractiveRectForTesting(&interactive) &&
+    return GetInteractiveRect(link, &interactive) &&
            interactive.Contains(point);
 }
 
-bool wxHyperlinkCtrl::WinUIInvokeAtForTesting(const wxPoint& point)
+bool wxWinUIHyperlinkTestAccess::InvokeAt(
+    wxHyperlinkCtrl& link,
+    const wxPoint& point)
 {
-    if ( !WinUIHitTestForTesting(point) )
+    if ( !HitTest(link, point) )
         return false;
 
     // Invoke() may synchronously delete this control. Return its result
     // directly and never inspect any member after the call.
-    return WinUIInvokeForTesting();
+    return Invoke(link);
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxHyperlinkCtrl::SetPointerOver(bool pointerOver)
 {
@@ -1279,41 +1307,45 @@ void wxHyperlinkCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
         event.Skip(false);
 }
 
-void wxHyperlinkCtrl::WinUISetPointerOverForTesting(bool pointerOver)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHyperlinkTestAccess::SetPointerOver(
+    wxHyperlinkCtrl& link,
+    bool pointerOver)
 {
-    SetPointerOver(pointerOver);
+    link.SetPointerOver(pointerOver);
 }
 
-bool wxHyperlinkCtrl::WinUIGetStateForTesting(
+bool wxWinUIHyperlinkTestAccess::GetState(
+    const wxHyperlinkCtrl& link,
     bool *pointerOver,
     int *horizontalAlignment,
     bool *contextMenuEnabled,
     wxColour *effectiveColour,
     wxWinUIAppearanceSnapshot *appearance,
-    bool *peerEnabled) const
+    bool *peerEnabled)
 {
-    if ( !m_winui || !m_winui->button )
+    if ( !link.m_winui || !link.m_winui->button )
         return false;
 
     try
     {
         if ( pointerOver )
-            *pointerOver = m_pointerOver;
+            *pointerOver = link.m_pointerOver;
         if ( horizontalAlignment )
         {
             *horizontalAlignment = static_cast<int>(
-                m_winui->button.HorizontalContentAlignment());
+                link.m_winui->button.HorizontalContentAlignment());
         }
         if ( contextMenuEnabled )
         {
             *contextMenuEnabled =
-                m_winui->contextRequestedToken.value != 0;
+                link.m_winui->contextRequestedToken.value != 0;
         }
         if ( effectiveColour )
         {
             *effectiveColour = wxNullColour;
             if ( const auto brush =
-                     m_winui->button.Foreground()
+                     link.m_winui->button.Foreground()
                          .try_as<MUXM::SolidColorBrush>() )
             {
                 const auto colour = brush.Color();
@@ -1324,10 +1356,10 @@ bool wxHyperlinkCtrl::WinUIGetStateForTesting(
         if ( appearance )
         {
             *appearance = wxWinUICaptureAppearance(
-                m_winui->button, m_winui->button);
+                link.m_winui->button, link.m_winui->button);
         }
         if ( peerEnabled )
-            *peerEnabled = m_winui->button.IsEnabled();
+            *peerEnabled = link.m_winui->button.IsEnabled();
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -1336,45 +1368,47 @@ bool wxHyperlinkCtrl::WinUIGetStateForTesting(
     }
 }
 
-bool wxHyperlinkCtrl::WinUICopyURLForTesting()
-{
-    return CopyURLToClipboard();
-}
 
-void wxHyperlinkCtrl::WinUISetNextPeerWriteHookForTesting(
-    wxWinUIHyperlinkPeerWriteHookForTesting hook,
+void wxWinUIHyperlinkTestAccess::SetNextPeerWriteHook(
+    wxHyperlinkCtrl& link,
+    PeerWriteHook hook,
     void *context)
 {
-    if ( !m_winui )
+    if ( !link.m_winui )
         return;
 
-    m_winui->nextPeerWriteHookForTesting = hook;
-    m_winui->nextPeerWriteContextForTesting =
+    link.m_winui->nextPeerWriteHookForTesting = hook;
+    link.m_winui->nextPeerWriteContextForTesting =
         hook ? context : nullptr;
 }
 
-bool wxHyperlinkCtrl::WinUIHasDeferredPeerWriteForTesting() const
+bool wxWinUIHyperlinkTestAccess::HasDeferredPeerWrite(
+    const wxHyperlinkCtrl& link)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->HasDeferredApply();
+    return link.m_winui && link.m_winui->callbackState &&
+           link.m_winui->callbackState->HasDeferredApply();
 }
 
-bool wxHyperlinkCtrl::WinUIIsPeerProjectionQuarantinedForTesting() const
+bool wxWinUIHyperlinkTestAccess::IsPeerProjectionQuarantined(
+    const wxHyperlinkCtrl& link)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->IsApplyQuarantined();
+    return link.m_winui && link.m_winui->callbackState &&
+           link.m_winui->callbackState->IsApplyQuarantined();
 }
 
-unsigned long long wxHyperlinkCtrl::WinUIGetModelRevisionForTesting() const
+unsigned long long wxWinUIHyperlinkTestAccess::GetModelRevision(
+    const wxHyperlinkCtrl& link)
 {
-    return m_winui && m_winui->callbackState
-        ? m_winui->callbackState->GetModelRevision()
+    return link.m_winui && link.m_winui->callbackState
+        ? link.m_winui->callbackState->GetModelRevision()
         : 0;
 }
 
-unsigned wxHyperlinkCtrl::WinUIGetLiveCallbackStateCountForTesting()
+unsigned wxWinUIHyperlinkTestAccess::GetLiveCallbackStateCount()
 {
     return gs_liveHyperlinkCallbackStates.load(std::memory_order_acquire);
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_HYPERLINKCTRL

@@ -50,8 +50,28 @@
     #endif
 #endif
 
+namespace
+{
+struct RemovedPublicPeerWriteHook {};
+}
+
+// Global names cannot be checked by dependent-member SFINAE. Redeclaring the
+// historical hook aliases to this consumer-only sentinel must compile: an
+// installed declaration of any of these aliases would conflict with it.
+#if wxUSE_RADIOBOX
+using wxWinUIRadioBoxPeerWriteHookForTesting = RemovedPublicPeerWriteHook;
+#endif
+#if wxUSE_ACTIVITYINDICATOR
+using wxWinUIActivityPeerWriteHookForTesting = RemovedPublicPeerWriteHook;
+#endif
+#if wxUSE_HYPERLINKCTRL
+using wxWinUIHyperlinkPeerWriteHookForTesting = RemovedPublicPeerWriteHook;
+#endif
+
 #if wxUSE_BUTTON || wxUSE_TOGGLEBTN || wxUSE_STATTEXT || wxUSE_STATBMP || \
-    wxUSE_STATBOX || wxUSE_GAUGE || wxUSE_SCROLLBAR || wxUSE_SPINBTN
+    wxUSE_STATBOX || wxUSE_GAUGE || wxUSE_SCROLLBAR || wxUSE_SPINBTN || \
+    wxUSE_RADIOBOX || wxUSE_ACTIVITYINDICATOR || wxUSE_HYPERLINKCTRL || \
+    wxUSE_COLOURPICKERCTRL
 namespace
 {
 
@@ -259,6 +279,170 @@ static_assert(!HasPublicTestOperation<AutomationForTesting, wxSpinButton>::value
               "wxSpinButton must not expose the test automation inspector");
 static_assert(!HasPublicTestOperation<InvokeArrowForTesting, wxSpinButton>::value,
               "wxSpinButton must not expose the test arrow-invocation helper");
+#endif
+
+#if wxUSE_RADIOBOX || wxUSE_ACTIVITYINDICATOR || wxUSE_HYPERLINKCTRL
+// Detect the members independently of their hook argument types: removing
+// only a public alias must not conceal a still-public operation from the test.
+template<typename T>
+using NextPeerWriteHookForTesting =
+    decltype(&T::WinUISetNextPeerWriteHookForTesting);
+
+template<typename T>
+using DeferredPeerWriteForTesting =
+    decltype(&T::WinUIHasDeferredPeerWriteForTesting);
+
+template<typename T>
+using PeerProjectionQuarantineForTesting =
+    decltype(&T::WinUIIsPeerProjectionQuarantinedForTesting);
+
+template<typename T>
+using ModelRevisionForTesting = decltype(&T::WinUIGetModelRevisionForTesting);
+#endif
+
+#if wxUSE_RADIOBOX
+template<typename T>
+using RadioBoxAppearanceForTesting = decltype(&T::WinUIGetAppearanceForTesting);
+
+template<typename T>
+using RadioBoxPeerStateForTesting = decltype(&T::WinUIGetPeerStateForTesting);
+
+template<typename T>
+using SelectItemForTesting = decltype(&T::WinUISelectItemForTesting);
+
+template<typename T>
+using CheckedHandlerCountsForTesting =
+    decltype(&T::WinUIGetCheckedHandlerCountsForTesting);
+
+static_assert(!HasPublicTestOperation<RadioBoxAppearanceForTesting,
+                                     wxRadioBox>::value,
+              "wxRadioBox must not expose the test appearance inspector");
+static_assert(!HasPublicTestOperation<RadioBoxPeerStateForTesting,
+                                     wxRadioBox>::value,
+              "wxRadioBox must not expose the test peer-state inspector");
+static_assert(!HasPublicTestOperation<SelectItemForTesting, wxRadioBox>::value,
+              "wxRadioBox must not expose the test item-selection helper");
+static_assert(!HasPublicTestOperation<NextPeerWriteHookForTesting,
+                                     wxRadioBox>::value,
+              "wxRadioBox must not expose the test peer-write hook setter");
+static_assert(!HasPublicTestOperation<DeferredPeerWriteForTesting,
+                                     wxRadioBox>::value,
+              "wxRadioBox must not expose the test deferred-write inspector");
+static_assert(!HasPublicTestOperation<PeerProjectionQuarantineForTesting,
+                                     wxRadioBox>::value,
+              "wxRadioBox must not expose the test quarantine inspector");
+static_assert(!HasPublicTestOperation<ModelRevisionForTesting,
+                                     wxRadioBox>::value,
+              "wxRadioBox must not expose the test model-revision inspector");
+static_assert(!HasPublicTestOperation<CheckedHandlerCountsForTesting,
+                                     wxRadioBox>::value,
+              "wxRadioBox must not expose the test checked-handler counters");
+#endif
+
+#if wxUSE_ACTIVITYINDICATOR || wxUSE_HYPERLINKCTRL
+template<typename T>
+using ControlStateForTesting = decltype(&T::WinUIGetStateForTesting);
+#endif
+
+#if wxUSE_ACTIVITYINDICATOR
+static_assert(!HasPublicTestOperation<ControlStateForTesting,
+                                     wxActivityIndicator>::value,
+              "wxActivityIndicator must not expose the test state inspector");
+static_assert(!HasPublicTestOperation<NextPeerWriteHookForTesting,
+                                     wxActivityIndicator>::value,
+              "wxActivityIndicator must not expose the test peer-write hook setter");
+static_assert(!HasPublicTestOperation<DeferredPeerWriteForTesting,
+                                     wxActivityIndicator>::value,
+              "wxActivityIndicator must not expose the test deferred-write inspector");
+static_assert(!HasPublicTestOperation<PeerProjectionQuarantineForTesting,
+                                     wxActivityIndicator>::value,
+              "wxActivityIndicator must not expose the test quarantine inspector");
+static_assert(!HasPublicTestOperation<ModelRevisionForTesting,
+                                     wxActivityIndicator>::value,
+              "wxActivityIndicator must not expose the test model-revision inspector");
+#endif
+
+#if wxUSE_HYPERLINKCTRL || (WX_EXPECT_WINUI && wxUSE_COLOURPICKERCTRL)
+template<typename T>
+using LivePeerCallbackCountForTesting =
+    decltype(&T::WinUIGetLiveCallbackStateCountForTesting);
+#endif
+
+#if wxUSE_HYPERLINKCTRL
+template<typename T>
+using InvokeForTesting = decltype(&T::WinUIInvokeForTesting);
+
+template<typename T>
+using InteractiveRectForTesting = decltype(&T::WinUIGetInteractiveRectForTesting);
+
+template<typename T>
+using HitTestForTesting = decltype(&T::WinUIHitTestForTesting);
+
+template<typename T>
+using InvokeAtForTesting = decltype(&T::WinUIInvokeAtForTesting);
+
+template<typename T>
+using PointerOverForTesting = decltype(&T::WinUISetPointerOverForTesting);
+
+template<typename T>
+using CopyURLForTesting = decltype(&T::WinUICopyURLForTesting);
+
+static_assert(!HasPublicTestOperation<InvokeForTesting, wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test invocation helper");
+static_assert(!HasPublicTestOperation<InteractiveRectForTesting,
+                                     wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test interactive-rect inspector");
+static_assert(!HasPublicTestOperation<HitTestForTesting, wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test hit-test helper");
+static_assert(!HasPublicTestOperation<InvokeAtForTesting, wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test coordinate-invocation helper");
+static_assert(!HasPublicTestOperation<PointerOverForTesting,
+                                     wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test pointer-over helper");
+static_assert(!HasPublicTestOperation<ControlStateForTesting,
+                                     wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test state inspector");
+static_assert(!HasPublicTestOperation<CopyURLForTesting, wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the unused test CopyURL helper");
+static_assert(!HasPublicTestOperation<NextPeerWriteHookForTesting,
+                                     wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test peer-write hook setter");
+static_assert(!HasPublicTestOperation<DeferredPeerWriteForTesting,
+                                     wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test deferred-write inspector");
+static_assert(!HasPublicTestOperation<PeerProjectionQuarantineForTesting,
+                                     wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test quarantine inspector");
+static_assert(!HasPublicTestOperation<ModelRevisionForTesting,
+                                     wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test model-revision inspector");
+static_assert(!HasPublicTestOperation<LivePeerCallbackCountForTesting,
+                                     wxHyperlinkCtrl>::value,
+              "wxHyperlinkCtrl must not expose the test callback-state counter");
+#endif
+
+#if WX_EXPECT_WINUI && wxUSE_COLOURPICKERCTRL
+template<typename T>
+using PeerColourForTesting = decltype(&T::WinUISetPeerColourForTesting);
+
+template<typename T>
+using ColourButtonPeerStateForTesting = decltype(&T::WinUIGetPeerStateForTesting);
+
+template<typename T>
+using DeliverClosedForTesting = decltype(&T::WinUIDeliverClosedForTesting);
+
+static_assert(!HasPublicTestOperation<PeerColourForTesting,
+                                     wxWinUIColourButton>::value,
+              "wxWinUIColourButton must not expose the test peer-colour helper");
+static_assert(!HasPublicTestOperation<ColourButtonPeerStateForTesting,
+                                     wxWinUIColourButton>::value,
+              "wxWinUIColourButton must not expose the test peer-state inspector");
+static_assert(!HasPublicTestOperation<DeliverClosedForTesting,
+                                     wxWinUIColourButton>::value,
+              "wxWinUIColourButton must not expose the test close-delivery helper");
+static_assert(!HasPublicTestOperation<LivePeerCallbackCountForTesting,
+                                     wxWinUIColourButton>::value,
+              "wxWinUIColourButton must not expose the test callback-state counter");
 #endif
 
 } // anonymous namespace

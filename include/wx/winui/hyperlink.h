@@ -18,9 +18,6 @@
 #include "wx/generic/hyperlink.h"
 
 class wxWinUIHyperlinkImpl;
-struct wxWinUIAppearanceSnapshot;
-
-using wxWinUIHyperlinkPeerWriteHookForTesting = void (*)(void *);
 
 class WXDLLIMPEXP_CORE wxHyperlinkCtrl : public wxHyperlinkCtrlBase
 {
@@ -70,26 +67,6 @@ public:
     GetClassDefaultAttributes(
         wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    bool WinUIInvokeForTesting();
-    bool WinUIGetInteractiveRectForTesting(wxRect *rect) const;
-    bool WinUIHitTestForTesting(const wxPoint& point) const;
-    bool WinUIInvokeAtForTesting(const wxPoint& point);
-    void WinUISetPointerOverForTesting(bool pointerOver);
-    bool WinUIGetStateForTesting(bool *pointerOver,
-                                 int *horizontalAlignment,
-                                 bool *contextMenuEnabled,
-                                 wxColour *effectiveColour,
-                                 wxWinUIAppearanceSnapshot *appearance,
-                                 bool *peerEnabled = nullptr) const;
-    bool WinUICopyURLForTesting();
-    // One-shot deterministic seam invoked after the next peer write.
-    void WinUISetNextPeerWriteHookForTesting(
-        wxWinUIHyperlinkPeerWriteHookForTesting hook,
-        void *context);
-    bool WinUIHasDeferredPeerWriteForTesting() const;
-    bool WinUIIsPeerProjectionQuarantinedForTesting() const;
-    unsigned long long WinUIGetModelRevisionForTesting() const;
-    static unsigned WinUIGetLiveCallbackStateCountForTesting();
 
 protected:
     wxSize DoGetBestSize() const override;
@@ -108,6 +85,8 @@ protected:
     bool m_pointerOver = false;
 
 private:
+    friend class wxWinUIHyperlinkTestAccess;
+
     void BumpWinUIModelRevision();
     void HandleClick();
     void HandleContextRequested();

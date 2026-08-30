@@ -16,9 +16,6 @@
 #include <vector>
 
 class wxWinUIRadioBoxImpl;
-struct wxWinUIAppearanceSnapshot;
-
-using wxWinUIRadioBoxPeerWriteHookForTesting = void (*)(void *);
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl,
                                     public wxRadioBoxBase
@@ -103,24 +100,6 @@ public:
     }
 #endif // wxUSE_HELP
 
-    bool WinUIGetAppearanceForTesting(
-        wxWinUIAppearanceSnapshot *snapshot,
-        bool *titleIsRaw = nullptr) const;
-    bool WinUIGetPeerStateForTesting(
-        wxArrayString *strings,
-        int *selection,
-        unsigned long long *generation = nullptr) const;
-    bool WinUISelectItemForTesting(unsigned int item);
-    // One-shot deterministic seam invoked immediately before SetContent().
-    void WinUISetNextPeerWriteHookForTesting(
-        wxWinUIRadioBoxPeerWriteHookForTesting hook,
-        void *context);
-    bool WinUIHasDeferredPeerWriteForTesting() const;
-    bool WinUIIsPeerProjectionQuarantinedForTesting() const;
-    unsigned long long WinUIGetModelRevisionForTesting() const;
-    void WinUIGetCheckedHandlerCountsForTesting(
-        unsigned long long *added,
-        unsigned long long *revoked) const;
 
 #if wxUSE_TOOLTIPS
     void DoSetToolTipText(const wxString& tip) override;
@@ -153,6 +132,8 @@ protected:
 #endif // wxUSE_TOOLTIPS
 
 private:
+    friend class wxWinUIRadioBoxTestAccess;
+
     unsigned long long BumpWinUIModelRevision();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioBox);
 };

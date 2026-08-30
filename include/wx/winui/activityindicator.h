@@ -13,9 +13,6 @@
 #include <memory>
 
 class wxWinUIActivityIndicatorImpl;
-struct wxWinUIAppearanceSnapshot;
-
-using wxWinUIActivityPeerWriteHookForTesting = void (*)(void *);
 
 class WXDLLIMPEXP_CORE wxActivityIndicator : public wxActivityIndicatorBase
 {
@@ -44,18 +41,6 @@ public:
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
 
-    bool WinUIGetStateForTesting(
-        bool *peerActive,
-        bool *isTabStop,
-        wxString *itemStatus,
-        wxWinUIAppearanceSnapshot *appearance) const;
-    // One-shot deterministic seam invoked after the next peer write.
-    void WinUISetNextPeerWriteHookForTesting(
-        wxWinUIActivityPeerWriteHookForTesting hook,
-        void *context);
-    bool WinUIHasDeferredPeerWriteForTesting() const;
-    bool WinUIIsPeerProjectionQuarantinedForTesting() const;
-    unsigned long long WinUIGetModelRevisionForTesting() const;
 
 protected:
     wxSize DoGetBestSize() const override;
@@ -65,6 +50,8 @@ protected:
     bool m_running = false;
 
 private:
+    friend class wxWinUIActivityIndicatorTestAccess;
+
     void BumpWinUIModelRevision();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxActivityIndicator);
 };

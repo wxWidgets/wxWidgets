@@ -22,6 +22,10 @@
 #endif
 
 #include "private.h"
+
+#ifdef WXWINUI_TEST_SUPPORT
+#include "radiobox-test-access.h"
+#endif
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/tlwhost.h"
 
@@ -53,8 +57,10 @@ namespace
 {
 // Whether new radio boxes draw the Win32-style titled frame.
 bool gs_radioBoxBorder = true;
+#ifdef WXWINUI_TEST_SUPPORT
 std::atomic<std::uint64_t> gs_checkedHandlersAdded{ 0 };
 std::atomic<std::uint64_t> gs_checkedHandlersRevoked{ 0 };
+#endif
 } // namespace
 
 void wxWinUISetRadioBoxBorder(bool useBorder) { gs_radioBoxBorder = useBorder; }
@@ -284,8 +290,10 @@ public:
             try
             {
                 peers[i].Checked(tokens[i]);
+#ifdef WXWINUI_TEST_SUPPORT
                 gs_checkedHandlersRevoked.fetch_add(
                     1, std::memory_order_relaxed);
+#endif
             }
             catch ( const winrt::hresult_error& e )
             {
@@ -312,8 +320,10 @@ public:
         if ( callbackState )
             callbackState->Invalidate();
 
+#ifdef WXWINUI_TEST_SUPPORT
         nextPeerWriteHookForTesting = nullptr;
         nextPeerWriteContextForTesting = nullptr;
+#endif
         RevokeCheckedHandlers(buttons, checkedTokens);
         host.Close();
         root = nullptr;
@@ -332,9 +342,11 @@ public:
     std::vector<MUXC::RadioButton> buttons;
     std::vector<winrt::event_token> checkedTokens;
     std::uint64_t generation = 0;
-    wxWinUIRadioBoxPeerWriteHookForTesting
-        nextPeerWriteHookForTesting = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
+    using PeerWriteHook = void (*)(void *);
+    PeerWriteHook nextPeerWriteHookForTesting = nullptr;
     void *nextPeerWriteContextForTesting = nullptr;
+#endif
 };
 
 wxRadioBox::wxRadioBox()
@@ -1646,8 +1658,10 @@ bool wxRadioBox::RebuildItems()
                 // throw. Candidate's destructor owns it from this point.
                 candidate.buttons.push_back(button);
                 candidate.checkedTokens.push_back(checkedToken);
+#ifdef WXWINUI_TEST_SUPPORT
                 gs_checkedHandlersAdded.fetch_add(
                     1, std::memory_order_relaxed);
+#endif
 
 #if wxUSE_TOOLTIPS
                 if ( hasItemToolTip[i] )
@@ -1787,7 +1801,8 @@ bool wxRadioBox::RebuildItems()
             if ( state == ApplyState::Restart )
                 continue;
 
-            const wxWinUIRadioBoxPeerWriteHookForTesting hook =
+#ifdef WXWINUI_TEST_SUPPORT
+            const wxWinUIRadioBoxImpl::PeerWriteHook hook =
                 impl->nextPeerWriteHookForTesting;
             void * const hookContext =
                 impl->nextPeerWriteContextForTesting;
@@ -1802,6 +1817,7 @@ bool wxRadioBox::RebuildItems()
                 if ( state == ApplyState::Restart )
                     continue;
             }
+#endif
 
             if ( !impl->host.SetContent(candidate.root) )
                 return false;
@@ -1906,12 +1922,14 @@ bool wxRadioBox::RebuildItems()
     return deferLatestRevision();
 }
 
-bool wxRadioBox::WinUIGetAppearanceForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIRadioBoxTestAccess::GetAppearance(
+    const wxRadioBox& box,
     wxWinUIAppearanceSnapshot *snapshot,
-    bool *titleIsRaw) const
+    bool *titleIsRaw)
 {
-    if ( !snapshot || !m_winui || m_winui->buttons.empty() ||
-         !m_winui->background || !m_winui->root )
+    if ( !snapshot || !box.m_winui || box.m_winui->buttons.empty() ||
+         !box.m_winui->background || !box.m_winui->root )
     {
         return false;
     }
@@ -1919,19 +1937,19 @@ bool wxRadioBox::WinUIGetAppearanceForTesting(
     try
     {
         *snapshot = wxWinUICaptureAppearance(
-            m_winui->buttons.front(),
-            m_winui->root);
+            box.m_winui->buttons.front(),
+            box.m_winui->root);
         snapshot->hasBackground =
             wxWinUICaptureAppearance(
-                MUXC::TextBlock(), m_winui->background,
-                m_winui->root).hasBackground;
+                MUXC::TextBlock(), box.m_winui->background,
+                box.m_winui->root).hasBackground;
 
         if ( titleIsRaw )
         {
             *titleIsRaw =
-                !m_winui->titleText ||
+                !box.m_winui->titleText ||
                 MUXA::AutomationProperties::GetAccessibilityView(
-                    m_winui->titleText) ==
+                    box.m_winui->titleText) ==
                     MUXAP::AccessibilityView::Raw;
         }
         return true;
@@ -1942,12 +1960,13 @@ bool wxRadioBox::WinUIGetAppearanceForTesting(
     }
 }
 
-bool wxRadioBox::WinUIGetPeerStateForTesting(
+bool wxWinUIRadioBoxTestAccess::GetPeerState(
+    const wxRadioBox& box,
     wxArrayString *strings,
     int *selection,
-    unsigned long long *generation) const
+    unsigned long long *generation)
 {
-    if ( !m_winui )
+    if ( !box.m_winui )
         return false;
 
     try
@@ -1955,7 +1974,7 @@ bool wxRadioBox::WinUIGetPeerStateForTesting(
         if ( strings )
         {
             strings->Clear();
-            for ( const MUXC::RadioButton& button : m_winui->buttons )
+            for ( const MUXC::RadioButton& button : box.m_winui->buttons )
             {
                 const winrt::hstring content =
                     winrt::unbox_value<winrt::hstring>(button.Content());
@@ -1966,9 +1985,9 @@ bool wxRadioBox::WinUIGetPeerStateForTesting(
         if ( selection )
         {
             *selection = wxNOT_FOUND;
-            for ( size_t i = 0; i < m_winui->buttons.size(); ++i )
+            for ( size_t i = 0; i < box.m_winui->buttons.size(); ++i )
             {
-                const auto checked = m_winui->buttons[i].IsChecked();
+                const auto checked = box.m_winui->buttons[i].IsChecked();
                 if ( checked && checked.Value() )
                 {
                     *selection = static_cast<int>(i);
@@ -1978,7 +1997,7 @@ bool wxRadioBox::WinUIGetPeerStateForTesting(
         }
 
         if ( generation )
-            *generation = m_winui->generation;
+            *generation = box.m_winui->generation;
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -1987,15 +2006,17 @@ bool wxRadioBox::WinUIGetPeerStateForTesting(
     }
 }
 
-bool wxRadioBox::WinUISelectItemForTesting(unsigned int item)
+bool wxWinUIRadioBoxTestAccess::SelectItem(
+    wxRadioBox& box,
+    unsigned int item)
 {
-    if ( !m_winui || !m_winui->callbackState ||
-         item >= m_winui->buttons.size() )
+    if ( !box.m_winui || !box.m_winui->callbackState ||
+         item >= box.m_winui->buttons.size() )
     {
         return false;
     }
 
-    wxWinUIRadioBoxImpl * const impl = m_winui.get();
+    wxWinUIRadioBoxImpl * const impl = box.m_winui.get();
     const std::shared_ptr<wxWinUIRadioBoxCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t lifetimeGeneration =
@@ -2023,40 +2044,45 @@ bool wxRadioBox::WinUISelectItemForTesting(unsigned int item)
            owner->m_selection == static_cast<int>(item);
 }
 
-void wxRadioBox::WinUISetNextPeerWriteHookForTesting(
-    wxWinUIRadioBoxPeerWriteHookForTesting hook,
+void wxWinUIRadioBoxTestAccess::SetNextPeerWriteHook(
+    wxRadioBox& box,
+    PeerWriteHook hook,
     void *context)
 {
-    if ( !m_winui )
+    if ( !box.m_winui )
         return;
 
-    m_winui->nextPeerWriteHookForTesting = hook;
-    m_winui->nextPeerWriteContextForTesting =
+    box.m_winui->nextPeerWriteHookForTesting = hook;
+    box.m_winui->nextPeerWriteContextForTesting =
         hook ? context : nullptr;
 }
 
-bool wxRadioBox::WinUIHasDeferredPeerWriteForTesting() const
+bool wxWinUIRadioBoxTestAccess::HasDeferredPeerWrite(
+    const wxRadioBox& box)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->HasDeferredApply();
+    return box.m_winui && box.m_winui->callbackState &&
+           box.m_winui->callbackState->HasDeferredApply();
 }
 
-bool wxRadioBox::WinUIIsPeerProjectionQuarantinedForTesting() const
+bool wxWinUIRadioBoxTestAccess::IsPeerProjectionQuarantined(
+    const wxRadioBox& box)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->IsApplyQuarantined();
+    return box.m_winui && box.m_winui->callbackState &&
+           box.m_winui->callbackState->IsApplyQuarantined();
 }
 
-unsigned long long wxRadioBox::WinUIGetModelRevisionForTesting() const
+unsigned long long wxWinUIRadioBoxTestAccess::GetModelRevision(
+    const wxRadioBox& box)
 {
-    return m_winui && m_winui->callbackState
-        ? m_winui->callbackState->GetModelRevision()
+    return box.m_winui && box.m_winui->callbackState
+        ? box.m_winui->callbackState->GetModelRevision()
         : 0;
 }
 
-void wxRadioBox::WinUIGetCheckedHandlerCountsForTesting(
+void wxWinUIRadioBoxTestAccess::GetCheckedHandlerCounts(
+    const wxRadioBox& WXUNUSED(box),
     unsigned long long *added,
-    unsigned long long *revoked) const
+    unsigned long long *revoked)
 {
     if ( added )
     {
@@ -2069,6 +2095,8 @@ void wxRadioBox::WinUIGetCheckedHandlerCountsForTesting(
             std::memory_order_relaxed);
     }
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #if wxUSE_TOOLTIPS
 bool wxRadioBox::HasToolTips() const

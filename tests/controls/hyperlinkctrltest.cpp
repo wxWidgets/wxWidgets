@@ -18,6 +18,9 @@
 #endif // WX_PRECOMP
 
 #include "wx/hyperlink.h"
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "feedback-test-access.h"
+#endif
 #include "wx/uiaction.h"
 #include "testableframe.h"
 #include "asserthelper.h"
@@ -88,7 +91,7 @@ TEST_CASE_METHOD(HyperlinkCtrlTestCase, "wxHyperlinkCtrl::Click",
     // the production Click callback and emits the same wx event without
     // moving or stealing the user's pointer.
     EventCounter hyperlink(m_hyperlink.get(), wxEVT_HYPERLINK);
-    REQUIRE(m_hyperlink->WinUIInvokeForTesting());
+    REQUIRE(wxWinUIHyperlinkTestAccess::Invoke(*m_hyperlink));
     wxYield();
     CHECK(hyperlink.GetCount() == 1);
 #elif wxUSE_UIACTIONSIMULATOR

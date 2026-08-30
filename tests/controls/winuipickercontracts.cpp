@@ -16,6 +16,7 @@
 #include "wx/app.h"
 #include "wx/button.h"
 #include "wx/clrpicker.h"
+#include "picker-test-access.h"
 #include "wx/choice.h"
 #include "wx/dialog.h"
 #include "wx/dirdlg.h"
@@ -898,7 +899,7 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
     wxColour peerColour;
     bool alphaEnabled = false;
     wxString peerLabel;
-    REQUIRE(button->WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIColourButtonTestAccess::GetPeerState(*button,
         &peerColour, &alphaEnabled, &peerLabel));
     CHECK(peerColour == initial);
     CHECK(alphaEnabled);
@@ -930,7 +931,7 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
         pickerId);
 
     const wxColour liveColour(90, 80, 70, 60);
-    REQUIRE(button->WinUISetPeerColourForTesting(liveColour));
+    REQUIRE(wxWinUIColourButtonTestAccess::SetPeerColour(*button, liveColour));
     REQUIRE(WaitFor(
         "colour picker current event",
         [&current]()
@@ -941,12 +942,12 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
     CHECK(current.id == pickerId);
     CHECK(current.object == &picker);
     CHECK(current.colour == liveColour);
-    REQUIRE(button->WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIColourButtonTestAccess::GetPeerState(*button,
         &peerColour, &alphaEnabled, &peerLabel));
     CHECK(peerColour == liveColour);
     CHECK(peerLabel == liveColour.GetAsString(wxC2S_HTML_SYNTAX));
 
-    REQUIRE(button->WinUIDeliverClosedForTesting());
+    REQUIRE(wxWinUIColourButtonTestAccess::DeliverClosed(*button));
     CHECK(changed.count == 1);
     CHECK(changed.id == pickerId);
     CHECK(changed.object == &picker);
@@ -967,7 +968,7 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
     picker.SetColour(programmatic);
     CHECK(picker.GetColour() == programmatic);
     CHECK(current.count == 1);
-    REQUIRE(button->WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIColourButtonTestAccess::GetPeerState(*button,
         &peerColour, &alphaEnabled, &peerLabel));
     CHECK(peerColour == programmatic);
     CHECK(peerLabel == programmatic.GetAsString(wxC2S_HTML_SYNTAX));
@@ -996,7 +997,7 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
         pickerId);
     REQUIRE(picker.Reparent(&second));
     const wxColour afterReparent(44, 55, 66, 77);
-    REQUIRE(button->WinUISetPeerColourForTesting(afterReparent));
+    REQUIRE(wxWinUIColourButtonTestAccess::SetPeerColour(*button, afterReparent));
     REQUIRE(WaitFor(
         "reparented colour picker event",
         [&reparented]()
@@ -1009,8 +1010,8 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
     CHECK(reparented.colour == afterReparent);
 
     const unsigned baselineCallbacks =
-        wxWinUIColourButton::
-            WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIColourButtonTestAccess::
+            GetLiveCallbackStateCount();
     const int doomedId = wxWindow::NewControlId();
     wxColourPickerCtrl *doomed =
         new wxColourPickerCtrl(
@@ -1031,15 +1032,15 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
             event.Skip(false);
         },
         doomedId);
-    REQUIRE(doomedButton->WinUISetPeerColourForTesting(
+    REQUIRE(wxWinUIColourButtonTestAccess::SetPeerColour(*doomedButton,
         wxColour(100, 110, 120, 130)));
     CHECK_FALSE(weakDoomed);
     REQUIRE(WaitFor(
         "colour callback state teardown",
         [baselineCallbacks]()
         {
-            return wxWinUIColourButton::
-                       WinUIGetLiveCallbackStateCountForTesting() ==
+            return wxWinUIColourButtonTestAccess::
+                       GetLiveCallbackStateCount() ==
                    baselineCallbacks;
         }));
 
@@ -1051,8 +1052,8 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
     CHECK(twoStage.GetColour() == initial);
 
     const unsigned cycleBaseline =
-        wxWinUIColourButton::
-            WinUIGetLiveCallbackStateCountForTesting();
+        wxWinUIColourButtonTestAccess::
+            GetLiveCallbackStateCount();
     for ( int cycle = 0; cycle < 100; ++cycle )
     {
         wxColourPickerCtrl * const item =
@@ -1069,8 +1070,8 @@ TEST_CASE("WinUIPickerContracts::ColourPairAndComposite",
         "colour picker hundred-cycle teardown",
         [cycleBaseline]()
         {
-            return wxWinUIColourButton::
-                       WinUIGetLiveCallbackStateCountForTesting() ==
+            return wxWinUIColourButtonTestAccess::
+                       GetLiveCallbackStateCount() ==
                    cycleBaseline;
         }));
 }
@@ -1163,7 +1164,7 @@ TEST_CASE("WinUIPickerContracts::XRC",
         wxDynamicCast(colour->GetPickerCtrl(), wxWinUIColourButton);
     REQUIRE(colourButton);
     bool alphaEnabled = false;
-    REQUIRE(colourButton->WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIColourButtonTestAccess::GetPeerState(*colourButton,
         nullptr, &alphaEnabled, nullptr));
     CHECK(alphaEnabled);
 }

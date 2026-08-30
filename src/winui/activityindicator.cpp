@@ -17,6 +17,10 @@
 #include "wx/weakref.h"
 
 #include "private.h"
+
+#ifdef WXWINUI_TEST_SUPPORT
+#include "feedback-test-access.h"
+#endif
 #include "wx/winui/private/appearance.h"
 
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -247,8 +251,10 @@ public:
     {
         if ( callbackState )
             callbackState->Invalidate();
+#ifdef WXWINUI_TEST_SUPPORT
         nextPeerWriteHookForTesting = nullptr;
         nextPeerWriteContextForTesting = nullptr;
+#endif
         host.Close();
         ring = nullptr;
         callbackState.reset();
@@ -257,9 +263,11 @@ public:
     wxWinUIControlHost host;
     MUXC::ProgressRing ring{ nullptr };
     std::shared_ptr<wxWinUIActivityCallbackState> callbackState;
-    wxWinUIActivityPeerWriteHookForTesting
-        nextPeerWriteHookForTesting = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
+    using PeerWriteHook = void (*)(void *);
+    PeerWriteHook nextPeerWriteHookForTesting = nullptr;
     void *nextPeerWriteContextForTesting = nullptr;
+#endif
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxActivityIndicator, wxActivityIndicatorBase);
@@ -548,12 +556,14 @@ bool wxActivityIndicator::ApplyWinUIModel()
                     : ApplyState::Restart;
             };
 
-        const wxWinUIActivityPeerWriteHookForTesting hook =
+#ifdef WXWINUI_TEST_SUPPORT
+        const wxWinUIActivityIndicatorImpl::PeerWriteHook hook =
             impl->nextPeerWriteHookForTesting;
         void * const hookContext =
             impl->nextPeerWriteContextForTesting;
         impl->nextPeerWriteHookForTesting = nullptr;
         impl->nextPeerWriteContextForTesting = nullptr;
+#endif
 
         try
         {
@@ -566,6 +576,7 @@ bool wxActivityIndicator::ApplyWinUIModel()
             if ( state == ApplyState::Restart )
                 continue;
 
+#ifdef WXWINUI_TEST_SUPPORT
             if ( hook )
             {
                 hook(hookContext);
@@ -575,6 +586,7 @@ bool wxActivityIndicator::ApplyWinUIModel()
                 if ( state == ApplyState::Restart )
                     continue;
             }
+#endif
 
             ring.IsActive(running);
             state = checkState();
@@ -627,31 +639,33 @@ wxSize wxActivityIndicator::DoGetBestSize() const
         wxSize(40, 40), const_cast<wxActivityIndicator *>(this));
 }
 
-bool wxActivityIndicator::WinUIGetStateForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIActivityIndicatorTestAccess::GetState(
+    const wxActivityIndicator& activity,
     bool *peerActive,
     bool *isTabStop,
     wxString *itemStatus,
-    wxWinUIAppearanceSnapshot *appearance) const
+    wxWinUIAppearanceSnapshot *appearance)
 {
-    if ( !m_winui || !m_winui->ring )
+    if ( !activity.m_winui || !activity.m_winui->ring )
         return false;
 
     try
     {
         if ( peerActive )
-            *peerActive = m_winui->ring.IsActive();
+            *peerActive = activity.m_winui->ring.IsActive();
         if ( isTabStop )
-            *isTabStop = m_winui->ring.IsTabStop();
+            *isTabStop = activity.m_winui->ring.IsTabStop();
         if ( itemStatus )
         {
             *itemStatus = wxString(
                 MUXA::AutomationProperties::GetItemStatus(
-                    m_winui->ring).c_str());
+                    activity.m_winui->ring).c_str());
         }
         if ( appearance )
         {
             *appearance = wxWinUICaptureAppearance(
-                m_winui->ring, m_winui->ring);
+                activity.m_winui->ring, activity.m_winui->ring);
         }
         return true;
     }
@@ -661,36 +675,41 @@ bool wxActivityIndicator::WinUIGetStateForTesting(
     }
 }
 
-void wxActivityIndicator::WinUISetNextPeerWriteHookForTesting(
-    wxWinUIActivityPeerWriteHookForTesting hook,
+void wxWinUIActivityIndicatorTestAccess::SetNextPeerWriteHook(
+    wxActivityIndicator& activity,
+    PeerWriteHook hook,
     void *context)
 {
-    if ( !m_winui )
+    if ( !activity.m_winui )
         return;
 
-    m_winui->nextPeerWriteHookForTesting = hook;
-    m_winui->nextPeerWriteContextForTesting =
+    activity.m_winui->nextPeerWriteHookForTesting = hook;
+    activity.m_winui->nextPeerWriteContextForTesting =
         hook ? context : nullptr;
 }
 
-bool wxActivityIndicator::WinUIHasDeferredPeerWriteForTesting() const
+bool wxWinUIActivityIndicatorTestAccess::HasDeferredPeerWrite(
+    const wxActivityIndicator& activity)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->HasDeferredApply();
+    return activity.m_winui && activity.m_winui->callbackState &&
+           activity.m_winui->callbackState->HasDeferredApply();
 }
 
-bool wxActivityIndicator::WinUIIsPeerProjectionQuarantinedForTesting() const
+bool wxWinUIActivityIndicatorTestAccess::IsPeerProjectionQuarantined(
+    const wxActivityIndicator& activity)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->IsApplyQuarantined();
+    return activity.m_winui && activity.m_winui->callbackState &&
+           activity.m_winui->callbackState->IsApplyQuarantined();
 }
 
-unsigned long long
-wxActivityIndicator::WinUIGetModelRevisionForTesting() const
+unsigned long long wxWinUIActivityIndicatorTestAccess::GetModelRevision(
+    const wxActivityIndicator& activity)
 {
-    return m_winui && m_winui->callbackState
-        ? m_winui->callbackState->GetModelRevision()
+    return activity.m_winui && activity.m_winui->callbackState
+        ? activity.m_winui->callbackState->GetModelRevision()
         : 0;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_ACTIVITYINDICATOR

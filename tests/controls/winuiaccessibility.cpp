@@ -10,6 +10,7 @@
 #include "testprec.h"
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
+#include "radiobox-test-access.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -804,7 +805,7 @@ TEST_CASE("wxWinUI UIA RadioBox rejects stale content generations",
     REQUIRE(currentButtons.size() == WXSIZEOF(choices));
     CHECK(currentButtons[2] != oldButtons[2]);
     unsigned long long stateGeneration = 0;
-    REQUIRE(radio->WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetPeerState(*radio,
         nullptr, nullptr, &stateGeneration));
     const MUXAP::AutomationPeer currentPeer = GetPeer(currentButtons[2]);
     REQUIRE(currentPeer != nullptr);
@@ -826,7 +827,7 @@ TEST_CASE("wxWinUI UIA RadioBox rejects stale content generations",
     for ( size_t i = 0; i < stateButtons.size(); ++i )
         CHECK(stateButtons[i] == currentButtons[i]);
     unsigned long long generationAfterSelection = 0;
-    REQUIRE(radio->WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetPeerState(*radio,
         nullptr, nullptr, &generationAfterSelection));
     CHECK(generationAfterSelection == stateGeneration);
 
@@ -847,7 +848,7 @@ TEST_CASE("wxWinUI UIA RadioBox rejects stale content generations",
     CHECK(IsRejectedByUIA([&] { currentSelect.Select(); }));
     CHECK(counter.GetCount() == 1);
     unsigned long long generationAfterDisable = 0;
-    REQUIRE(radio->WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRadioBoxTestAccess::GetPeerState(*radio,
         nullptr, nullptr, &generationAfterDisable));
     CHECK(generationAfterDisable == stateGeneration);
     radio->Enable();
