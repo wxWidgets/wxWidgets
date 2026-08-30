@@ -507,7 +507,10 @@ TEST_CASE("wxGenericDirCtrl mutation Unicode hidden and long paths",
         wxStopWatch stopwatch;
         ctrl->SetPath(boundedCycle);
         CHECK(stopwatch.Time() < 5000);
-        CHECK(ctrl->GetPath().CmpNoCase(boundedCycle) == 0);
+        // Expand 8.3 aliases without resolving the repeated symlink
+        // components: the selected path must retain the requested depth.
+        CHECK(ctrl->GetPath().CmpNoCase(
+                  wxFileName(boundedCycle).GetLongPath()) == 0);
     }
     else
     {
@@ -584,12 +587,94 @@ TEST_CASE("wxGenericDirCtrl mutation Unicode hidden and long paths",
     CHECK(longFile.length() > 260);
     ctrl->SetPath(longFile);
     INFO("long path: " << longFile);
+    INFO("long parent length: " <<
+         wxFileName(wxFileName(longFile).GetPath()).GetLongPath().length());
     INFO("selected path: " << ctrl->GetPath());
     INFO("selected file: " << ctrl->GetFilePath());
     CHECK(SamePath(ctrl->GetFilePath(), longFile));
 
     delete ctrl;
 }
+
+#ifdef __WINDOWS__
+TEST_CASE("wxGenericDirCtrl preserves short paths across hidden rebuilds",
+          "[filesystemctrl][dirctrl][short-path]")
+{
+    ScopedFilesystemTree fs;
+    REQUIRE(fs.IsOk());
+    REQUIRE_FALSE(fs.MakeFile("visible.txt").empty());
+    const wxString hidden = fs.MakeFile("hidden.txt");
+    REQUIRE_FALSE(hidden.empty());
+    REQUIRE(fs.Hide(hidden));
+
+    const wxString shortPath = wxFileName(fs.GetPath()).GetShortPath();
+    const wxString longPath = wxFileName(fs.GetPath()).GetLongPath();
+    if ( shortPath.CmpNoCase(longPath) == 0 )
+    {
+        WARN("This filesystem does not expose an 8.3 alias; short-path "
+             "coverage requires native short-name support.");
+        return;
+    }
+    REQUIRE(SamePath(shortPath, fs.GetPath()));
+
+    auto* const ctrl = new wxGenericDirCtrl(
+        wxTheApp->GetTopWindow(), wxID_ANY, shortPath,
+        wxDefaultPosition, wxSize(480, 280));
+    const ScopedFilesystemControl cleanupCtrl(ctrl);
+    wxTreeCtrl* const tree = ctrl->GetTreeCtrl();
+    REQUIRE(tree);
+    CHECK(ctrl->GetDefaultPath() == shortPath);
+
+    for ( const bool showHidden : { false, true, false } )
+    {
+        ctrl->ShowHidden(showHidden);
+        INFO("short path: " << shortPath);
+        INFO("selected path: " << ctrl->GetPath());
+        REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
+        const wxTreeItemId selected = tree->GetSelection();
+        REQUIRE(selected.IsOk());
+        CHECK(FindTreeChild(tree, selected, "visible.txt").IsOk());
+        CHECK(FindTreeChild(tree, selected, "hidden.txt").IsOk() == showHidden);
+
+        ctrl->ReCreateTree();
+        REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
+        ctrl->SetPath(shortPath);
+        CHECK(ctrl->GetDefaultPath() == shortPath);
+        REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
+    }
+
+    // A missing suffix must still select the deepest existing ancestor,
+    // even when GetLongPathName() cannot expand the whole path at once.
+    const wxString missingPath = shortPath + wxFILE_SEP_PATH +
+                                 "missing-parent" + wxFILE_SEP_PATH +
+                                 "missing-child";
+    ctrl->SetPath(missingPath);
+    CHECK(ctrl->GetDefaultPath() == missingPath);
+    REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
+    ctrl->ReCreateTree();
+    CHECK(ctrl->GetDefaultPath() == missingPath);
+    REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
+
+    // Renaming the selected directory also makes the stored default path
+    // nonexistent. Rebuilding must retain its existing parent, not lose it
+    // because that parent's name was supplied as an 8.3 alias.
+    const wxString renamePath = fs.MakeDirectory("short-path-rename-me");
+    REQUIRE_FALSE(renamePath.empty());
+    const wxString shortRenamePath = shortPath + wxFILE_SEP_PATH +
+                                     "short-path-rename-me";
+    ctrl->SetPath(shortRenamePath);
+    REQUIRE(SamePath(ctrl->GetPath(), renamePath));
+    const wxString renamedPath = fs.GetPath() + wxFILE_SEP_PATH +
+                                 "short-path-renamed-\u00e9";
+    REQUIRE(wxRenameFile(renamePath, renamedPath));
+    ctrl->ReCreateTree();
+    CHECK(ctrl->GetDefaultPath() == shortRenamePath);
+    REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
+    const wxTreeItemId selected = tree->GetSelection();
+    REQUIRE(selected.IsOk());
+    CHECK(FindTreeChild(tree, selected, "short-path-renamed-\u00e9").IsOk());
+}
+#endif // __WINDOWS__
 
 TEST_CASE("wxDirFilterListCtrl association and callback lifetime",
           "[filesystemctrl][dirctrl][dirfilterlistctrl]")

@@ -85,6 +85,72 @@ bool wxIsDriveAvailable(const wxString& dirName);
 namespace
 {
 
+wxString wxDirCtrlGetNativePath(const wxString& path)
+{
+#ifdef __WINDOWS__
+    // Keep the tree's public paths unchanged, but leave room for a directory
+    // search suffix when crossing the legacy Win32 path-length limit.
+    if ( path.length() >= MAX_PATH - 12 &&
+         wxFileName(path).IsAbsolute() && !path.StartsWith("\\\\?\\") )
+    {
+        if ( path.StartsWith("\\\\") )
+            return "\\\\?\\UNC\\" + path.Mid(2);
+
+        return "\\\\?\\" + path;
+    }
+#endif // __WINDOWS__
+    return path;
+}
+
+#ifdef __WINDOWS__
+wxString wxDirCtrlGetLongPath(const wxString& path)
+{
+    const auto getLongPath = [](const wxString& value)
+    {
+        const wxString nativePath = wxDirCtrlGetNativePath(value);
+        wxString result = wxFileName(nativePath).GetLongPath();
+        if ( nativePath != value )
+        {
+            // Only remove a prefix introduced for this private filesystem
+            // query, never one explicitly supplied by the caller.
+            if ( result.StartsWith("\\\\?\\UNC\\") )
+                result = "\\\\" + result.Mid(8);
+            else if ( result.StartsWith("\\\\?\\") )
+                result = result.Mid(4);
+        }
+        return result;
+    };
+
+    wxFileName filename(path);
+    if ( wxFileName::Exists(wxDirCtrlGetNativePath(path)) )
+        return getLongPath(path);
+
+    // GetLongPath() leaves the entire path unchanged if its last component
+    // no longer exists, e.g. after a rename. Expand the existing prefix so
+    // that its 8.3 aliases still match enumeration, keeping the missing suffix
+    // lexical and leaving the caller's public default path untouched.
+    wxString suffix = filename.GetFullName();
+    filename.SetFullName(wxString());
+    for ( ;; )
+    {
+        const wxString prefix = filename.GetPath();
+        if ( !prefix.empty() && wxDirExists(wxDirCtrlGetNativePath(prefix)) )
+        {
+            wxString result = getLongPath(prefix);
+            if ( !wxEndsWithPathSeparator(result) )
+                result += wxFILE_SEP_PATH;
+            return result + suffix;
+        }
+
+        if ( !filename.GetDirCount() )
+            return path;
+
+        suffix = filename.GetDirs().Last() + wxFILE_SEP_PATH + suffix;
+        filename.RemoveLastDir();
+    }
+}
+#endif // __WINDOWS__
+
 bool wxDirCtrlPathsEqual(const wxString& first, const wxString& second)
 {
     const auto makeKey =
@@ -375,7 +441,7 @@ bool wxDirItemData::HasSubDirs() const
     wxDir dir;
     {
         wxLogNull nolog;
-        if ( !dir.Open(m_path) )
+        if ( !dir.Open(wxDirCtrlGetNativePath(m_path)) )
             return false;
     }
 
@@ -390,7 +456,7 @@ bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
     wxDir dir;
     {
         wxLogNull nolog;
-        if ( !dir.Open(m_path) )
+        if ( !dir.Open(wxDirCtrlGetNativePath(m_path)) )
             return false;
     }
 
@@ -941,7 +1007,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     wxString eachFilename;
 
     wxLogNull log;
-    d.Open(dirName);
+    d.Open(wxDirCtrlGetNativePath(dirName));
 
     if (d.IsOpened())
     {
@@ -973,6 +1039,11 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
         wxString targetPath(m_defaultPath);
         targetPath.Replace("/", wxString(wxFILE_SEP_PATH));
         targetPath.Replace("\\", wxString(wxFILE_SEP_PATH));
+#if defined(__WINDOWS__)
+        // Match the names returned by directory enumeration even when the
+        // caller supplied an 8.3 alias for a hidden ancestor's parent.
+        targetPath = wxDirCtrlGetLongPath(targetPath);
+#endif
 
         wxString comparableParent(parentPrefix);
         wxString comparableTarget(targetPath);
@@ -988,7 +1059,8 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
                 remainder.BeforeFirst(wxFILE_SEP_PATH);
             if ( !requiredChild.empty() &&
                  dirs.Index(requiredChild) == wxNOT_FOUND &&
-                 wxDirExists(parentPrefix + requiredChild) )
+                 wxDirExists(wxDirCtrlGetNativePath(
+                                 parentPrefix + requiredChild)) )
             {
                 dirs.Add(requiredChild);
             }
@@ -999,7 +1071,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     // Now do the filenames -- but only if we're allowed to
     if (!HasFlag(wxDIRCTRL_DIR_ONLY))
     {
-        d.Open(dirName);
+        d.Open(wxDirCtrlGetNativePath(dirName));
 
         if (d.IsOpened())
         {
@@ -1194,6 +1266,13 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     // Make sure all separators are as per the current platform
     path2.Replace(wxT("\\"), wxString(wxFILE_SEP_PATH));
     path2.Replace(wxT("/"), wxString(wxFILE_SEP_PATH));
+
+#if defined(__WINDOWS__)
+    // Enumeration uses long names. A valid short path must still identify
+    // the same item after ShowHidden() rebuilds the tree without injected
+    // default-path components.
+    path2 = wxDirCtrlGetLongPath(path2);
+#endif
 
     // Append a separator to foil bogus substring matching
     path2 += wxString(wxFILE_SEP_PATH);
