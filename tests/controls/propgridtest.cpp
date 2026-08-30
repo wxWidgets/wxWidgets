@@ -32,6 +32,9 @@
 
 #ifdef __WXMSW__
 #include "wx/msw/wrapwin.h"
+#if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
+#include "wx/msw/wrapcctl.h"
+#endif
 #endif
 
 #include "waitfor.h"
@@ -3430,13 +3433,26 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         REQUIRE( leaf );
         REQUIRE( composedParent );
 
+        SECTION("hidden owner page")
+        {
+            REQUIRE( pg->GetState() != leaf->GetParentState() );
+        }
+        SECTION("displayed owner page")
+        {
+            pgManager->SelectPage(1);
+            REQUIRE( pg->GetState() == leaf->GetParentState() );
+        }
+        const int selectedPage = pgManager->GetSelectedPage();
+
         int changedEvents = 0;
         bool removedParent = false;
+        wxVariant changedValue;
         pgManager->Bind(
             wxEVT_PG_CHANGED,
-            [&](wxPropertyGridEvent&)
+            [&](wxPropertyGridEvent& event)
             {
                 ++changedEvents;
+                changedValue = event.GetPropertyValue();
                 if ( !removedParent )
                 {
                     removedParent = true;
@@ -3447,7 +3463,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( pg->ChangePropertyValue(leaf, 301L) );
         CHECK( removedParent );
         CHECK( changedEvents == 1 );
+        CHECK( changedValue == wxVariant(301L) );
         CHECK_FALSE( pgManager->GetProperty("Car.Speeds") );
+        CHECK( pgManager->GetSelectedPage() == selectedPage );
     }
 
     SECTION("Columns_resized_handler_may_destroy_manager")
@@ -3619,6 +3637,15 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         REQUIRE( toolbar );
         REQUIRE( toolbar->GetToolsCount() >= 4 );
 
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
+        const auto nativeToolCount = [toolbar]()
+        {
+            return static_cast<size_t>(::SendMessage(
+                static_cast<HWND>(toolbar->GetHandle()), TB_BUTTONCOUNT, 0, 0));
+        };
+        REQUIRE( nativeToolCount() == toolbar->GetToolsCount() );
+#endif
+
         for ( unsigned int failureOrdinal : {1u, 2u} )
         {
             CAPTURE(failureOrdinal);
@@ -3643,15 +3670,25 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 CHECK( toolbar->GetToolByPos(static_cast<int>(i)) ==
                        toolsBefore[i] );
             }
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
+            // Restoring only the wrappers leaves MSW's native toolbar missing
+            // the page button until Realize(), breaking the next removal.
+            CHECK( nativeToolCount() == toolCount );
+#endif
         }
 
         const size_t toolCount = toolbar->GetToolsCount();
         CHECK( manager->RemovePage(0) );
-        CHECK( manager->GetPageCount() == 1 );
+        // The retained internal page is not counted as a managed page after
+        // the final removal, but its identity must still be preserved.
+        CHECK( manager->GetPageCount() == 0 );
         CHECK( manager->GetPage(0) == onlyPage );
         CHECK( manager->GetSelectedPage() == wxNOT_FOUND );
         CHECK( manager->GetProperty("Retained property") == nullptr );
         CHECK( toolbar->GetToolsCount() + 2 == toolCount );
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
+        CHECK( nativeToolCount() == toolbar->GetToolsCount() );
+#endif
     }
 #endif
 
@@ -4514,9 +4551,24 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         int resizedEvents = 0;
         int draggingEvents = 0;
         int endEvents = 0;
+        bool destinationResizesAfterEnd = true;
         pgManager->Bind(wxEVT_PG_COLS_RESIZED,
-                        [&pgManager, &resizedEvents](wxPropertyGridEvent&)
+                        [&pgManager, pg, sourcePage, &resizedEvents,
+                         &endEvents, &destinationResizesAfterEnd]
+                        (wxPropertyGridEvent&)
                         {
+                            // Switching pages can synchronously resize the
+                            // destination's columns. This is not another
+                            // notification from the cancelled source drag.
+                            if ( !sourcePage->IsDisplayed() )
+                            {
+                                destinationResizesAfterEnd =
+                                    destinationResizesAfterEnd &&
+                                    pgManager->GetPage(1)->IsDisplayed() &&
+                                    endEvents == 1 && !pg->HasCapture();
+                                return;
+                            }
+
                             ++resizedEvents;
                             pgManager->SelectPage(1);
                         });
@@ -4542,6 +4594,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK(resizedEvents == 1);
         CHECK(draggingEvents == 0);
         CHECK(endEvents == 1);
+        CHECK(destinationResizesAfterEnd);
         CHECK(pgManager->GetSelectedPage() == 1);
         CHECK(sourcePage->GetSplitterPosition() == startingPosition);
         CHECK_FALSE(pg->HasCapture());
@@ -5729,8 +5782,12 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                  {
                      handlerCalled = true;
                      beforeDeletion = event.GetPropertyValue();
+                     // Deleting the grid also destroys this bound functor.
+                     // Retain the destination on the stack before deletion,
+                     // so the test doesn't read the freed lambda capture.
+                     wxVariant* const resultAfterDeletion = &afterDeletion;
                      delete pg;
-                     afterDeletion = event.GetPropertyValue();
+                     *resultAfterDeletion = event.GetPropertyValue();
                  });
 
         const wxWeakRef<wxWindow> weakGrid(pg);

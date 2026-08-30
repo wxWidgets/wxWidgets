@@ -1880,6 +1880,7 @@ bool wxPropertyGridManager::RemovePage( int page )
             if ( toolbarRemovalCommitted )
                 return;
 
+            bool restoredAny = false;
             for ( auto it = detachedTools.rbegin();
                   it != detachedTools.rend();
                   ++it )
@@ -1893,8 +1894,20 @@ bool wxPropertyGridManager::RemovePage( int page )
                         toolbar->InsertTool(it->position, it->tool) == it->tool;
                 }
 
-                if ( !restored )
+                if ( restored )
+                    restoredAny = true;
+                else
                     delete it->tool;
+            }
+
+            // InsertTool() restores the wrappers immediately, but some ports
+            // (notably MSW) defer recreating their native buttons to Realize().
+            // Complete both halves of the rollback before reconciling toggles
+            // or allowing a subsequent removal to use these positions again.
+            if ( restoredAny &&
+                 wxWeakWindowIsAvailableForCallbacks(weakToolbar, toolbar) )
+            {
+                toolbar->Realize();
             }
 
             // A replacement-page transition can fail after changing the

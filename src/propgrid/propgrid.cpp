@@ -6808,6 +6808,9 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, wxPGSelectPropertyFlags
 
     const wxWeakRef<wxWindow> weakThis(this);
     wxPropertyGridPageState* const initialState = m_pState;
+    // ChangePropertyValue() also accepts properties from a manager page that
+    // isn't displayed. Track their owner independently from the visible page.
+    wxPropertyGridPageState* const initialPropertyState = p->GetParentState();
     const bool propertyWasSelected = GetSelection() == p;
     wxPGDeferredEditorCallbackEpoch deferredEditorCallbackEpoch;
     ++wxPGGetPropertyGridTransientState(this).propertyCallbackDepth;
@@ -6824,7 +6827,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, wxPGSelectPropertyFlags
 
     wxPGProperty* selected = GetSelection();
 
-    m_pState->m_anyModified = true;
+    initialPropertyState->m_anyModified = true;
 
     // Maybe need to update control
     wxASSERT( m_chgInfo_changedProperty != nullptr );
@@ -6833,15 +6836,15 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, wxPGSelectPropertyFlags
     wxPGProperty* changedProperty = m_chgInfo_changedProperty;
     wxVariant value = m_chgInfo_pendingValue;
     const auto propertyTransactionIsValid =
-        [this, p, changedProperty, initialState, propertyWasSelected,
-         &weakThis]()
+        [this, p, changedProperty, initialState, initialPropertyState,
+         propertyWasSelected, &weakThis]()
         {
             return wxWeakWindowIsAvailableForCallbacks(weakThis, this) &&
                    m_pState == initialState &&
                    p &&
                    changedProperty &&
-                   p->GetParentState() == initialState &&
-                   changedProperty->GetParentState() == initialState &&
+                   p->GetParentState() == initialPropertyState &&
+                   changedProperty->GetParentState() == initialPropertyState &&
                    !IsPropertyPendingRemoval(p) &&
                    !IsPropertyPendingRemoval(changedProperty) &&
                    (!propertyWasSelected || GetSelection() == p);
