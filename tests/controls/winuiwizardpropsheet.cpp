@@ -56,6 +56,9 @@
 
 #if wxUSE_PREFERENCES_EDITOR
     #include "wx/preferences.h"
+    #if defined(__WXQT__) && !defined(wxHAS_PREF_EDITOR_MODELESS)
+        #include <QtWidgets/QStackedWidget>
+    #endif
 #endif
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
@@ -6371,13 +6374,10 @@ TEST_CASE("WinUIPreferencesEditorContracts",
             nullptr,
             [&](wxWindow* page)
             {
-                page->Bind(
-                    wxEVT_SHOW,
-                    [&, page](wxShowEvent& event)
+                const auto onSelectionRestore =
+                    [&, page]()
                     {
-                        event.Skip();
-                        if ( !armRestoreCallback || !event.IsShown() ||
-                             restoreCallbackRan )
+                        if ( !armRestoreCallback || restoreCallbackRan )
                         {
                             return;
                         }
@@ -6396,7 +6396,36 @@ TEST_CASE("WinUIPreferencesEditorContracts",
                         transferredNotebook = notebook;
                         notebookReparented =
                             notebook->Reparent(&foreignParent);
-                    });
+                    };
+
+#ifdef __WXQT__
+                // A hidden Qt page receives wxEVT_SHOW only when its top-level
+                // parent is shown. Observe the stack's synchronous selection
+                // change instead, while the preferences transaction is still
+                // pre-modal. ChangeSelection() blocks the QTabWidget's signal,
+                // not this child stack's signal. The page owns the connection.
+                wxNotebook* const notebook = wxDynamicCast(
+                    page->GetParent(), wxNotebook);
+                REQUIRE(notebook);
+                QStackedWidget* const stack =
+                    notebook->GetHandle()->findChild<QStackedWidget*>();
+                REQUIRE(stack);
+                QObject::connect(stack, &QStackedWidget::currentChanged,
+                                 page->GetHandle(),
+                                 [onSelectionRestore](int index)
+                                 {
+                                     if ( index == 1 )
+                                         onSelectionRestore();
+                                 });
+#else
+                page->Bind(wxEVT_SHOW,
+                           [onSelectionRestore](wxShowEvent& event)
+                           {
+                               event.Skip();
+                               if ( event.IsShown() )
+                                   onSelectionRestore();
+                           });
+#endif
             }));
 
         wxTheApp->CallAfter([&]()

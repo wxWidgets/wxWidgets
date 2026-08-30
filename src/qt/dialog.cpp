@@ -10,9 +10,11 @@
 
 #include "wx/modalhook.h"
 #include "wx/dialog.h"
+#include "wx/weakref.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtCore/QPointer>
 #include <QtWidgets/QDialog>
 
 class wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
@@ -74,20 +76,42 @@ int wxDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( GetHandle() != nullptr, -1, "Invalid dialog" );
 
+    const wxWeakRef<wxDialog> self(this);
+    const QPointer<QDialog> qDialog(GetDialogHandle());
+
     // Release the mouse if it's currently captured as the window having it
     // will be disabled when this dialog is shown -- but will still keep the
     // capture making it impossible to do anything in the modal dialog itself
     QtReleaseMouseAndNotify();
 
-    QDialog *qDialog = GetDialogHandle();
+    if ( !self || !qDialog || self->IsBeingDeleted() )
+        return wxID_CANCEL;
+
+    // A reused dialog must not retain the previous modal invocation's result.
+    SetReturnCode(0);
     qDialog->setModal(true);
 
     Show(true);
 
-    bool ret = qDialog->exec();
-    if ( GetReturnCode() == 0 )
-        return ret ? wxID_OK : wxID_CANCEL;
-    return GetReturnCode();
+    if ( !self || !qDialog )
+        return wxID_CANCEL;
+
+    // InitDialog() can already have called EndModal(). QDialog::done() hides
+    // the native dialog without updating wx's shown flag, and exec() would
+    // show it again and wait for a second close which might never come.
+    int result = qDialog->result();
+    if ( !self->IsBeingDeleted() && qDialog->isVisible() )
+        result = qDialog->exec();
+
+    if ( !self || !qDialog )
+        return wxID_CANCEL;
+
+    const int returnCode = self->GetReturnCode();
+    qDialog->setModal(false);
+    if ( self )
+        self->wxWindowBase::Show(false);
+
+    return returnCode ? returnCode : (result ? wxID_OK : wxID_CANCEL);
 }
 
 void wxDialog::EndModal(int retCode)
@@ -116,10 +140,11 @@ bool wxDialog::Show(bool show)
     if ( show && CanDoLayoutAdaptation() )
         DoLayoutAdaptation();
 
+    const wxWeakRef<wxDialog> self(this);
     const bool ret = wxDialogBase::Show(show);
 
-    if (show)
-        InitDialog();
+    if ( show && self && !self->IsBeingDeleted() )
+        self->InitDialog();
 
     return ret;
 }

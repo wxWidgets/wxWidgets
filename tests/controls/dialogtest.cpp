@@ -16,6 +16,11 @@
 #include "wx/filedlg.h"
 #include "wx/weakref.h"
 
+#ifdef __WXQT__
+    #include <QtCore/QTimer>
+    #include <QtWidgets/QDialog>
+#endif
+
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/private/tlwhostmsw.h"
 #endif
@@ -149,6 +154,102 @@ TEST_CASE("Modal::InitDialog", "[modal]")
     dlg.ShowModal();
     CHECK( dlg.WasModal() );
 }
+
+#ifdef __WXQT__
+
+TEST_CASE("Modal::QtEndModalDuringInit", "[modal][qt]")
+{
+    wxDialog dialog(nullptr, wxID_ANY, "End modal during initialization");
+    int initCalls = 0;
+    int expectedCode = wxID_YES;
+    int watchdogCalls = 0;
+
+    // This is a fallback for the broken implementation, not the close path:
+    // an INIT handler must be able to end the modal session synchronously,
+    // without requiring an event-loop callback or any physical input.
+    QTimer watchdog;
+    watchdog.setSingleShot(true);
+    QObject::connect(&watchdog, &QTimer::timeout,
+                     [&dialog, &watchdogCalls]()
+                     {
+                         ++watchdogCalls;
+                         dialog.EndModal(wxID_ABORT);
+                     });
+    dialog.Bind(wxEVT_INIT_DIALOG,
+                [&](wxInitDialogEvent&)
+                {
+                    ++initCalls;
+                    CHECK(dialog.IsModal());
+                    dialog.EndModal(expectedCode);
+                });
+
+    for ( const int code : { wxID_YES, wxID_NO } )
+    {
+        expectedCode = code;
+        watchdog.start(1000);
+        const int result = dialog.ShowModal();
+        watchdog.stop();
+
+        CHECK(result == code);
+        CHECK(watchdogCalls == 0);
+        CHECK_FALSE(dialog.IsShown());
+        CHECK_FALSE(dialog.GetDialogHandle()->isVisible());
+        CHECK_FALSE(dialog.IsModal());
+    }
+    CHECK(initCalls == 2);
+}
+
+TEST_CASE("Modal::QtDeferredModalReuse", "[modal][qt]")
+{
+    wxDialog dialog(nullptr, wxID_ANY, "Reuse modal dialog");
+    int invocation = 0;
+    int initCalls = 0;
+    int closeCalls = 0;
+    int watchdogCalls = 0;
+    const int expectedCodes[] = { wxID_YES, wxID_NO, wxID_CANCEL, wxID_OK };
+
+    QTimer watchdog;
+    watchdog.setSingleShot(true);
+    QObject::connect(&watchdog, &QTimer::timeout,
+                     [&dialog, &watchdogCalls]()
+                     {
+                         ++watchdogCalls;
+                         dialog.EndModal(wxID_ABORT);
+                     });
+    dialog.Bind(wxEVT_INIT_DIALOG,
+                [&](wxInitDialogEvent&)
+                {
+                    ++initCalls;
+                    CHECK(dialog.IsModal());
+                    dialog.CallAfter([&]()
+                    {
+                        ++closeCalls;
+                        if ( invocation < 2 )
+                            dialog.EndModal(expectedCodes[invocation]);
+                        else if ( invocation == 2 )
+                            dialog.GetDialogHandle()->reject();
+                        else
+                            dialog.GetDialogHandle()->accept();
+                    });
+                });
+
+    for ( ; invocation != 4; ++invocation )
+    {
+        watchdog.start(1000);
+        const int result = dialog.ShowModal();
+        watchdog.stop();
+
+        CHECK(result == expectedCodes[invocation]);
+        CHECK(initCalls == invocation + 1);
+        CHECK(closeCalls == invocation + 1);
+        CHECK(watchdogCalls == 0);
+        CHECK_FALSE(dialog.IsShown());
+        CHECK_FALSE(dialog.GetDialogHandle()->isVisible());
+        CHECK_FALSE(dialog.IsModal());
+    }
+}
+
+#endif // __WXQT__
 
 namespace
 {

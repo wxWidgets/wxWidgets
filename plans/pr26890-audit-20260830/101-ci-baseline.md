@@ -1,6 +1,6 @@
 # Plan 101: Restore existing-port builds and execute the WinUI runtime CI
 
-- Status: LOCAL PASS / REMOTE PENDING
+- Status: WINDOWS QT MODAL FIX LOCAL PASS / REMOTE PENDING
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: L (expanded by reproduced cross-port regressions)
@@ -196,6 +196,15 @@ If installation reaches a different package/dependency error, retain the evidenc
 
 - The user's live tails identify CTest **869, `test_gui.exe`**, after successful IPC concurrent-request tests in both Windows Qt jobs. Its computed timeout is **10000000 seconds**. Qt 6.10's last visible Grid warning is followed by `return` in the source; successful Catch cases are silent, so this does not identify the blocked case. The job and run log APIs still return 404 while these jobs are active. Evidence: `F:\wxwinui-pr26890-audit101-ci-c0f1d55a06\qt-user-live-progress.md` and the saved API snapshots.
 - The workflow schedules the GUI executable twice. The local containment patch keeps the complete GUI suite in its dedicated step, excludes only that duplicate from the earlier CTest invocation, bounds both steps to 20 minutes and sets a 300-second default CTest timeout without overriding existing explicit test timeouts. GUI case durations make completed cases visible. This is containment and diagnostics, **not yet a correction or qualification of the underlying GUI hang**; private-desktop diagnosis remains in progress.
+
+### Reproduced Windows Qt modal hang and targeted correction
+
+- The containment change is published in `0f6879e608`. Cancellation made the previous Windows Qt job logs available; both still end inside the undifferentiated GUI suite, not IPC. Saved logs: `qt515-cancelled-job.log` and `qt610-cancelled-job.log` in the same CI evidence directory. Their cancellation is not a successful result.
+- Local Qt 5.15.2 Debug reproduces a deterministic hang in `WinUIPreferencesEditorContracts`, section `Init_nested_Show_and_preshow_Dismiss_use_one_modal_session`. The captured stack is `QDialog::exec -> wxDialog::ShowModal -> wxModalPreferencesEditorImpl::Show`. During `Show(true)`, the INIT callback already calls `EndModal()`: Qt hides the dialog, but the unconditional subsequent `exec()` shows it again and waits for another close. Evidence: `F:\wxwinui-pr26890-qt-audit-build\audit101-qt-hang-prefs-exact-cdb.log` and `.xml`. This is a concrete local reproduction of the Windows-modal path; the remote jobs did not expose an individual blocked case.
+- `src/qt/dialog.cpp` now enters `exec()` only if the native dialog is still visible after initialization, guards owner/native lifetime, resets the return code per invocation, and synchronizes wx's shown state and native modality after exit. InitDialog ordering and generic preferences production code are unchanged. Two Qt-only regression cases exercise immediate INIT closure twice and deferred closure/reuse with four return paths. Their one-second rescue timers must remain unused; they are not the successful close path.
+- The unchanged formerly hanging section now passes **7 assertions**, in approximately **0.4 seconds**. The two new cases pass **45 assertions**. A wider run then exposes three assertions in the preferences selection-restoration fixture: Qt delays a hidden page's show event until its top-level parent is visible. The Qt fixture now observes the child stack's synchronous selection signal, retaining the same nested-Show/reparent callback and every original assertion. Other ports retain the show-event trigger; no production selection contract is relaxed.
+- Final Qt `/warnaserror` build and the preferences/modal/Toolbook/PropertySheet group pass **1067 assertions / 19 registered cases**. The existing Qt/Windows `Modal::FileDialog` warning/early return remains one unqualified case, not file-dialog coverage. Logs: `audit101-qt-modal-final-group.xml` and `audit101-qt-modal-final-group-cdb.log` in the Qt build tree. The targeted debugger runs armed all five global-input breakpoints before execution; none fired, and the final XML is complete. These are private-desktop, `WX_UI_TESTS=0` results, not physical input qualification.
+- Cross-port verification: MSW Debug `/warnaserror` build and full preferences pass **311 assertions / 1 case** (`audit101-qt-modal-msw-build.log`, `audit101-qt-modal-msw-preferences.log` in the MSW build tree). A separate local broad Qt diagnostic had reported `Grid::CellEditResize` at line 745; it is not this hang, is not fixed by this modal change, and is not converted into a pass. New Windows Qt 5.15 and 6.10 CI executions remain required before closing this lot.
 
 ## Maintenance
 

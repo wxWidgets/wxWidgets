@@ -15,7 +15,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 
 | Plan | Scope | Status |
 |---|---|---|
-| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | WINDOWS QT GUI HANG UNDER DIAGNOSIS; OTHER 42 CHECKS PASS |
+| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | QT MODAL FIX LOCAL PASS; REMOTE CONFIRMATION PENDING |
 | [102](102-native-resize.md) | Make native resizing a host-owned input transaction | NATIVE LOCAL PASS / PHYSICAL PENDING |
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL / REMOTE PASS; EXTERNAL UIA IN 109 |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
@@ -77,6 +77,7 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 
 ## Evidence log
 
+- Windows Qt's modal hang is reproduced and corrected: an INIT handler closed a dialog which the unconditional native modal loop then reopened. The unchanged reproduction and new closure/reuse cases pass locally; the final Qt preferences/modal/Toolbook/PropertySheet group passes 1067 assertions (one existing file-dialog early return remains unqualified), and MSW preferences pass 311 assertions. The Qt selection-restoration fixture now triggers at the actual synchronous selection boundary without relaxing its checks. The timeout/duplicate-execution workflow fix is already published; Windows Qt 5.15/6.10 remote confirmation and the other open audit lots remain required.
 - Text/Search test-only storage and ComboBox force parameters are now removed from installed control declarations. Shared/static ON/OFF/ON retain **1913 assertions / 43 safe cases**, smoke/Supported V0, fresh installed consumers and strict 28-header/symbol checks. All 16 shipping wx libraries and six samples were rebuilt for the intentional pre-release Text/Search layout reduction. Runtime/host helpers and the separate component/physical gaps remain open. Windows Qt CI is currently under diagnosis in 101: the user's live logs reach `test_gui` after IPC passes, not an IPC hang.
 - Latest integration batch: Qt editability and synchronous Treebook veto are fixed in `5d7b88f1b4`, verified on Qt 5.15.2 and MSW. The public test-surface migration in `7af848f5f5` covers 26 control headers, including removal of the shipping ComboBox UIA test launcher. Shared/static shipping consumers pass. Broader component runs expose existing activation/focus failures and a newly observed Calendar budget failure; the precise history and subsequent test-oracle corrections are tracked in 106/108. This is not full beta or physical sign-off.
 - This batch plus TextCtrl/Calendar observation corrections is published through `c0f1d55a06`. TextCtrl passes 859/28 in each linkage; Calendar's unchanged budget passes within both range groups, whose two DatePicker focus failures remain open. Ubuntu Qt CI passes its complete 871 non-GUI and 1026 GUI cases on that SHA; both WinUI CI jobs also complete all five consumer/runtime gates successfully. Of 45 checks, 42 succeed and Windows Qt 5.15/6.10 plus AppVeyor remain unfinished.
