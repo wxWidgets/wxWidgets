@@ -15,6 +15,7 @@
 #include "wx/gauge.h"
 
 #include "private.h"
+#include "peerlifetime.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
     #include "range-test-access.h"
@@ -35,36 +36,7 @@ namespace
 // generation check makes a late notification from a retired peer harmless,
 // while invalidating the owner before token revocation covers teardown-time
 // synchronous notifications.
-class wxWinUIGaugeCallbackState
-{
-public:
-    explicit wxWinUIGaugeCallbackState(wxGauge *owner)
-        : m_owner(owner)
-    {
-    }
-
-    std::uint64_t Generation() const
-    {
-        return m_generation.load(std::memory_order_acquire);
-    }
-
-    wxGauge *GetOwner(std::uint64_t generation) const
-    {
-        if ( m_generation.load(std::memory_order_acquire) != generation )
-            return nullptr;
-        return m_owner.load(std::memory_order_acquire);
-    }
-
-    void Invalidate()
-    {
-        m_owner.store(nullptr, std::memory_order_release);
-        m_generation.fetch_add(1, std::memory_order_acq_rel);
-    }
-
-private:
-    std::atomic<wxGauge *> m_owner;
-    std::atomic<std::uint64_t> m_generation{1};
-};
+using wxWinUIGaugeCallbackState = wxWinUIPeerLifetime<wxGauge>;
 
 } // anonymous namespace
 

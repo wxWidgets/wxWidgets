@@ -21,7 +21,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | 28 CONTROLS + RETIREMENT + CONTROLHOST QUALIFIED LOCALLY; OTHER HOST HELPERS OPEN |
-| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | 107A-F SPECIFIED; IMPLEMENTATION / QUALIFICATION PENDING |
+| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | 107B LOCAL PASS; 107A/C-F SPECIFIED AND PENDING |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: CONCRETE FAILURES AND TEST ORACLES |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
@@ -35,8 +35,10 @@ sublots: host/native resize authority, minimal peer lifetime, geometry
 publication, focus/input adapters, template identity, and production/test
 observation boundaries. Their exact source anchors, filters and stop
 conditions are in 107. Existing single-island and toolkit-ABI decisions are
-preserved; changing them requires a separate design decision. These are
-planned refactors, not a claim that the host is already decomposed.
+preserved; changing them requires a separate design decision. The minimal
+Gauge/ScrollBar lifetime primitive (107B) is now implemented and locally
+qualified; the other five sublots remain planned, not a claim that the host
+is already decomposed.
 
 ## Findings coverage
 
@@ -85,6 +87,7 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 
 ## Evidence log
 
+- 107B extracts only the common Gauge/ScrollBar owner/generation protocol into a private, allocation-free helper. Shared/static ON/OFF/install/ON pass the unchanged **332 assertions / 6 control cases**, **21 / 3** new lifetime cases, smoke/Supported **2/2**, shipping header/export checks, fresh four-TU consumers and one normal 50-epoch installed runtime process each. ScrollBar mutation policy, generation ordering and old test bodies are preserved. Both build trees end at `wxBUILD_TESTS=ALL`, with `minimal` rebuilt. The other architecture sublots, new remote CI and physical qualification remain open; exact logs and shipping hashes are in 107.
 - ControlHost's nine probe operations and two Loaded adapters are isolated from shipping. The real content getter remains a production dependency under `GetContent()`. Both shared/static ON/OFF/install/ON cycles pass **1421 assertions / 33 unchanged cases**, smoke/Supported **2/2**, strict installed-header/symbol checks, fresh four-TU consumers and one normal 50-epoch installed runtime process per linkage. The initial WinRT include/macro compilation failure and its correction are recorded in 106; no test is removed. Other host/keyboard/bootstrap helpers remain open.
 - 2026-08-31 final CI confirmation on `29476644627e701109cb750b083ebe0c11a6bb3c`: **45/45 SUCCESS**, including both formerly stalled Windows Qt jobs. Qt 5.15 runs 872 CTests plus 356894 GUI assertions / 1042 cases; Qt 6.10 runs 872 plus 356891 / 1042. Both WinUI linkages execute all five registered header/consumer/runtime/Supported gates successfully. Plan 101 is closed on this SHA; later local commits, physical interaction and broader parity are not covered by that result. Exact job links and archived evidence are in 101. Earlier pending entries below are historical.
 - Framework-retirement adapters now complete shared/static ON/OFF/ON qualification: unchanged 161 assertions / 4 cases, smoke/Supported V0 2/2, shipping header/symbol absence and fresh toolkit/runtime consumers, including eleven real subprocesses per linkage. Actual retirement ordering, quarantine and native shutdown subscriptions remain production code. This is a separate local commit; the already-published Qt modal fix's CI is allowed to finish before another push. Other runtime/host helpers remain open in 106.

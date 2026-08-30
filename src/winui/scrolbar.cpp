@@ -18,6 +18,7 @@
 #endif
 
 #include "private.h"
+#include "peerlifetime.h"
 
 #ifdef WXWINUI_TEST_SUPPORT
     #include "range-test-access.h"
@@ -34,30 +35,12 @@ namespace
 {
 
 class wxWinUIScrollBarCallbackState
+    : public wxWinUIPeerLifetime<wxScrollBar>
 {
 public:
     explicit wxWinUIScrollBarCallbackState(wxScrollBar *owner)
-        : m_owner(owner)
+        : wxWinUIPeerLifetime<wxScrollBar>(owner)
     {
-    }
-
-    std::uint64_t Generation() const
-    {
-        return m_generation.load(std::memory_order_acquire);
-    }
-
-    wxScrollBar *GetOwner(std::uint64_t generation) const
-    {
-        if ( generation != m_generation.load(std::memory_order_acquire) )
-            return nullptr;
-
-        return m_owner.load(std::memory_order_acquire);
-    }
-
-    void Invalidate()
-    {
-        m_owner.store(nullptr, std::memory_order_release);
-        m_generation.fetch_add(1, std::memory_order_acq_rel);
     }
 
     void BeginPeerMutation()
@@ -76,8 +59,6 @@ public:
     }
 
 private:
-    std::atomic<wxScrollBar *> m_owner;
-    std::atomic<std::uint64_t> m_generation{1};
     std::atomic<unsigned> m_peerMutationDepth{0};
 };
 

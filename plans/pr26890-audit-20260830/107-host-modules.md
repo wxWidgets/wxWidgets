@@ -1,6 +1,6 @@
 # Plan 107: Split host responsibilities behind private ownership boundaries
 
-- Status: READY — foundation sublots 107A-F specified; extraction not yet qualified
+- Status: IN PROGRESS — 107B LOCAL PASS shared/static ON/OFF/install/ON; 107A/C-F pending
 - Planned at: f6ae07e1ade037e570b99df5369edd070b728a48, refreshed 2026-08-31
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -108,6 +108,44 @@ Baseline filter:
 `[winui-native-resize],HostLifecycle::RegisterUnregisterLoop,HostLifecycle::DestroyTLWWithSlots,HostLifecycle::ShutdownRestoresRetainedContentState`.
 
 ### 107B — Minimal peer owner/generation primitive
+
+Implementation evidence (2026-08-31): the first four-file extraction follows
+the ControlHost source set committed as `c05fa04f05`. Gauge aliases the new
+private `wxWinUIPeerLifetime<wxGauge>`; ScrollBar inherits only the matching
+owner/generation protocol and retains its own mutation depth/guard. The helper
+allocates nothing, exports no API, introduces no virtual methods, and does not
+include WinRT. Its contract explicitly does not pin the owner or permit
+cross-thread wx access.
+
+Both original six-case baselines pass **332 assertions**. Both ON builds
+then pass the same **332/6**, the three new pure tests **21/3**, and runtime
+smoke/Supported **2/2**, with `/warnaserror`. New cases cover stale generation,
+callbacks after invalidation/owner retirement, and distinct replacement state
+for the same owner address. Existing control callbacks, their invalidation
+before revocation and all old test bodies remain unchanged; this does not
+qualify concurrent wx object access or physical input.
+
+Exact four-path hashes and candidate/source verification are under
+`F:\wxwinui-pr26890-audit107-peer-lifetime`; runtime/build logs are
+`audit107b-*` in each build tree. Both shipping OFF builds and fresh installs
+pass with `/warnaserror`. The private lifetime helper is absent from installed
+headers and shared DLL exports; the preceding control/ControlHost/runtime
+test-surface absence checks still pass. Fresh four-TU installed toolkit
+consumers pass CTest **1/1** per linkage. One normal installed runtime process
+completes **50 epochs** per linkage; this does not repeat the eleven-scenario
+fault/renderer matrix from 106.
+
+Both build trees are restored to `wxBUILD_TESTS=ALL`; `test_gui` and `minimal`
+rebuild and rerun the unchanged **332/6**, new **21/3**, and smoke/Supported
+**2/2** successfully. No 107B build or test failure/retry occurred. Installed
+shipping core SHA256 values are:
+
+- shared: `6ECE1B80FF82055C96BF455AE34CA8C39334F478209CB8612E061445A0D670FF`
+- static: `8E006FC53F3250205EE4B1D057232053A8B5604654A3EC1ECA2E9FC3DCB10374`
+
+This closes only 107B's local implementation/qualification. Remote CI for
+this new source, physical input and 107A/C-F remain separate requirements;
+the host itself is not decomposed by this small extraction.
 
 Add `src/winui/peerlifetime.h` for the common owner/generation nucleus of
 Gauge and ScrollBar only. Preserve generation initialization, memory ordering

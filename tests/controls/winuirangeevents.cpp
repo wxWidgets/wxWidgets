@@ -12,6 +12,8 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+#include "../../src/winui/peerlifetime.h"
+
 #include "range-test-access.h"
 #include "slider-test-access.h"
 
@@ -24,6 +26,8 @@
 #include "wx/winui/private/tlwhost.h"
 
 #include <cmath>
+#include <functional>
+#include <memory>
 #include <limits>
 #include <vector>
 
@@ -303,6 +307,91 @@ void CheckEvent(const std::vector<ObservedRangeEvent>& events,
 }
 
 } // anonymous namespace
+
+TEST_CASE("wxWinUI peer lifetime rejects stale generations",
+          "[winui-peer-lifetime]")
+{
+    int owner = 0;
+    wxWinUIPeerLifetime<int> state(&owner);
+    const std::uint64_t generation = state.Generation();
+
+    REQUIRE(generation == 1);
+    CHECK(state.GetOwner(generation) == &owner);
+    CHECK(state.GetOwner(generation - 1) == nullptr);
+    CHECK(state.GetOwner(generation + 1) == nullptr);
+
+    state.Invalidate();
+    CHECK(state.Generation() == generation + 1);
+    CHECK(state.GetOwner(generation) == nullptr);
+    CHECK(state.GetOwner(state.Generation()) == nullptr);
+
+    state.Invalidate();
+    CHECK(state.Generation() == generation + 2);
+    CHECK(state.GetOwner(generation) == nullptr);
+}
+
+TEST_CASE("wxWinUI peer lifetime rejects callbacks after owner retirement",
+          "[winui-peer-lifetime]")
+{
+    struct Owner
+    {
+        unsigned calls = 0;
+    };
+    using State = wxWinUIPeerLifetime<Owner>;
+    std::shared_ptr<State> state;
+    std::function<bool()> callback;
+
+    {
+        Owner owner;
+        state = std::make_shared<State>(&owner);
+        const std::uint64_t generation = state->Generation();
+        callback = [state, generation]()
+        {
+            Owner * const live = state->GetOwner(generation);
+            if ( !live )
+                return false;
+            ++live->calls;
+            return true;
+        };
+
+        REQUIRE(callback());
+        CHECK(owner.calls == 1);
+        state->Invalidate();
+
+        // A token revocation can deliver a synchronous callback while the
+        // owner is still allocated, but must already see terminal state.
+        CHECK_FALSE(callback());
+        CHECK(owner.calls == 1);
+    }
+
+    CHECK_FALSE(callback());
+    CHECK(state->GetOwner(state->Generation()) == nullptr);
+    state.reset();
+    CHECK_FALSE(callback());
+}
+
+TEST_CASE("wxWinUI peer lifetime keeps recreated state identities distinct",
+          "[winui-peer-lifetime]")
+{
+    int owner = 0;
+    wxWinUIPeerLifetime<int> retired(&owner);
+    const std::uint64_t retiredGeneration = retired.Generation();
+    const auto lateCallback = [&retired, retiredGeneration]()
+    {
+        return retired.GetOwner(retiredGeneration);
+    };
+
+    REQUIRE(lateCallback() == &owner);
+    retired.Invalidate();
+
+    // A fresh peer can use the same owner address and initial generation.
+    // Its distinct state must never reactivate a retired delegate.
+    wxWinUIPeerLifetime<int> current(&owner);
+    CHECK(current.Generation() == retiredGeneration);
+    CHECK(current.GetOwner(current.Generation()) == &owner);
+    CHECK(lateCallback() == nullptr);
+    CHECK(retired.GetOwner(retired.Generation()) == nullptr);
+}
 
 #if wxUSE_SLIDER
 
