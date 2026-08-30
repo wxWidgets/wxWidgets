@@ -16,6 +16,10 @@
 
 #include "private.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "range-test-access.h"
+#endif
+
 #include <algorithm>
 
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -335,29 +339,31 @@ void wxGauge::ApplyToPeer()
     }
 }
 
-bool wxGauge::WinUIGetPeerStateForTesting(double *maximum,
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIRangeTestAccess::GetPeerState(const wxGauge& gauge,
+                                          double *maximum,
                                           double *value,
                                           bool *indeterminate,
-                                          bool *vertical) const
+                                          bool *vertical)
 {
-    if ( !m_winui || !m_winui->progressBar )
+    if ( !gauge.m_winui || !gauge.m_winui->progressBar )
         return false;
 
     try
     {
         if ( maximum )
-            *maximum = m_winui->progressBar.Maximum();
+            *maximum = gauge.m_winui->progressBar.Maximum();
         if ( value )
-            *value = m_winui->progressBar.Value();
+            *value = gauge.m_winui->progressBar.Value();
         if ( indeterminate )
-            *indeterminate = m_winui->progressBar.IsIndeterminate();
+            *indeterminate = gauge.m_winui->progressBar.IsIndeterminate();
         if ( vertical )
         {
             const auto rotate =
-                m_winui->progressBar.RenderTransform()
+                gauge.m_winui->progressBar.RenderTransform()
                     .try_as<winrt::Microsoft::UI::Xaml::Media::
                                 RotateTransform>();
-            *vertical = m_winui->panel && rotate &&
+            *vertical = gauge.m_winui->panel && rotate &&
                         rotate.Angle() == -90.0;
         }
         return true;
@@ -369,9 +375,10 @@ bool wxGauge::WinUIGetPeerStateForTesting(double *maximum,
     }
 }
 
-bool wxGauge::WinUIHasAppProgressForTesting() const
+bool wxWinUIRangeTestAccess::HasAppProgress(const wxGauge& gauge)
 {
-    return m_appProgressIndicator != nullptr;
+    return gauge.m_appProgressIndicator != nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_GAUGE

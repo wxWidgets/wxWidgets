@@ -21,6 +21,10 @@
 #include "wx/winui/private/appearance.h"
 #include "wx/weakref.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "static-test-access.h"
+#endif
+
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 
@@ -566,17 +570,18 @@ bool wxStaticBox::UpdateWinUIContent()
     return true;
 }
 
-bool wxStaticBox::WinUIGetAppearanceForTesting(
-    wxWinUIAppearanceSnapshot *snapshot) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIStaticTestAccess::GetAppearance(
+    const wxStaticBox& box, wxWinUIAppearanceSnapshot *snapshot)
 {
-    if ( !snapshot || !m_winui || !m_winui->root ||
-         !m_winui->automationRoot )
+    if ( !snapshot || !box.m_winui || !box.m_winui->root ||
+         !box.m_winui->automationRoot )
         return false;
 
     try
     {
         *snapshot = wxWinUICaptureAppearance(
-            m_winui->title, m_winui->root, m_winui->automationRoot);
+            box.m_winui->title, box.m_winui->root, box.m_winui->automationRoot);
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -585,20 +590,23 @@ bool wxStaticBox::WinUIGetAppearanceForTesting(
     }
 }
 
-bool wxStaticBox::WinUIGetLayoutForTesting(double *frameTopDIP,
-                                           double *titleGapDIP,
-                                           bool *usesThemeBrush) const
+bool wxWinUIStaticTestAccess::GetLayout(const wxStaticBox& box,
+                                       double *frameTopDIP,
+                                       double *titleGapDIP,
+                                       bool *usesThemeBrush)
 {
-    if ( !m_winui || !m_winui->root || !m_winui->frame )
+    if ( !box.m_winui || !box.m_winui->root || !box.m_winui->frame )
         return false;
 
     if ( frameTopDIP )
-        *frameTopDIP = m_winui->frameTopDIP;
+        *frameTopDIP = box.m_winui->frameTopDIP;
     if ( titleGapDIP )
-        *titleGapDIP = m_winui->titleGapDIP;
+        *titleGapDIP = box.m_winui->titleGapDIP;
     if ( usesThemeBrush )
-        *usesThemeBrush = m_winui->usesThemeBrush;
+        *usesThemeBrush = box.m_winui->usesThemeBrush;
     return true;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_STATBOX

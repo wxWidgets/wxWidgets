@@ -45,18 +45,12 @@ public:
 
     void Pulse() override;
 
-    // Deterministic WinUI peer seams. They intentionally expose observations
-    // only: production state can still be changed solely through wxGauge API.
-    bool WinUIGetPeerStateForTesting(double *maximum,
-                                     double *value,
-                                     bool *indeterminate,
-                                     bool *vertical) const;
-    bool WinUIHasAppProgressForTesting() const;
-
 protected:
     wxSize DoGetBestSize() const override;
 
 private:
+    friend class wxWinUIRangeTestAccess;
+
     void ApplyToPeer();
 
     std::unique_ptr<wxWinUIGaugeImpl> m_winui;

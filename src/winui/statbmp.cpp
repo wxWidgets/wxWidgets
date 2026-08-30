@@ -21,6 +21,10 @@
 
 #include "private.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "static-test-access.h"
+#endif
+
 #include <winrt/Microsoft.UI.Xaml.Media.Imaging.h>
 #include <winrt/Windows.Storage.Streams.h>
 
@@ -420,41 +424,44 @@ void wxStaticBitmap::OnDPIChanged(wxDPIChangedEvent& event)
     }
 }
 
-bool wxStaticBitmap::WinUIRefreshForScaleForTesting(double scale)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIStaticTestAccess::RefreshForScale(wxStaticBitmap& bitmap,
+                                             double scale)
 {
-    if ( scale <= 0.0 || !m_winui || !m_winui->image )
+    if ( scale <= 0.0 || !bitmap.m_winui || !bitmap.m_winui->image )
         return false;
 
-    wxWinUIStaticBitmapImpl * const impl = m_winui.get();
-    const wxWeakRef<wxStaticBitmap> alive(this);
-    if ( !UpdateWinUIImage(scale) )
+    wxWinUIStaticBitmapImpl * const impl = bitmap.m_winui.get();
+    const wxWeakRef<wxStaticBitmap> alive(&bitmap);
+    if ( !bitmap.UpdateWinUIImage(scale) )
         return false;
     wxStaticBitmap * const owner = alive.get();
     return owner && owner->m_winui.get() == impl && impl->hasSource;
 }
 
-bool wxStaticBitmap::WinUIGetPeerImageStateForTesting(
+bool wxWinUIStaticTestAccess::GetPeerImageState(
+    const wxStaticBitmap& bitmap,
     wxSize *pixelSize,
     wxSize *dipSize,
     int *stretch,
     unsigned *generation,
-    bool *hasSource) const
+    bool *hasSource)
 {
-    if ( !m_winui || !m_winui->image )
+    if ( !bitmap.m_winui || !bitmap.m_winui->image )
         return false;
 
     try
     {
         if ( pixelSize )
-            *pixelSize = m_winui->selectedPixelSize;
+            *pixelSize = bitmap.m_winui->selectedPixelSize;
         if ( dipSize )
-            *dipSize = m_winui->selectedDIPSize;
+            *dipSize = bitmap.m_winui->selectedDIPSize;
         if ( stretch )
-            *stretch = static_cast<int>(m_winui->image.Stretch());
+            *stretch = static_cast<int>(bitmap.m_winui->image.Stretch());
         if ( generation )
-            *generation = m_winui->generation;
+            *generation = bitmap.m_winui->generation;
         if ( hasSource )
-            *hasSource = m_winui->hasSource;
+            *hasSource = bitmap.m_winui->hasSource;
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -462,5 +469,7 @@ bool wxStaticBitmap::WinUIGetPeerImageStateForTesting(
         return false;
     }
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_STATBMP

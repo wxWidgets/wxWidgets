@@ -19,6 +19,10 @@
 
 #if wxUSE_XRC
 
+#if defined(__WXWINUI__) && wxUSE_WINUI3
+    #include "range-test-access.h"
+#endif
+
 #include "wx/fs_inet.h"
 #include "wx/imagxpm.h"
 #include "wx/log.h"
@@ -909,7 +913,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI 008c range and date controls",
         CHECK( gauge->GetValue() == 0 );
         CHECK( gauge->IsVertical() );
         CHECK( gauge->HasFlag(wxGA_PROGRESS) );
-        CHECK( gauge->WinUIHasAppProgressForTesting() );
+        CHECK( wxWinUIRangeTestAccess::HasAppProgress(*gauge) );
 
         // The public zero range is valid for wxGauge even though the taskbar
         // progress bridge requires a positive maximum. Exercise both bridge
@@ -917,11 +921,11 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI 008c range and date controls",
         gauge->SetRange(25);
         CHECK( gauge->GetRange() == 25 );
         CHECK( gauge->GetValue() == 0 );
-        CHECK( gauge->WinUIHasAppProgressForTesting() );
+        CHECK( wxWinUIRangeTestAccess::HasAppProgress(*gauge) );
         gauge->SetRange(0);
         CHECK( gauge->GetRange() == 0 );
         CHECK( gauge->GetValue() == 0 );
-        CHECK( gauge->WinUIHasAppProgressForTesting() );
+        CHECK( wxWinUIRangeTestAccess::HasAppProgress(*gauge) );
 
         CHECK( date->HasFlag(wxDP_ALLOWNONE) );
         CHECK_FALSE( date->GetValue().IsValid() );
@@ -1005,7 +1009,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI 008c range and date controls",
         double scrollViewport = -1;
         double scrollLarge = -1;
         bool scrollVertical = true;
-        REQUIRE( scroll->WinUIGetPeerStateForTesting(
+        REQUIRE( wxWinUIRangeTestAccess::GetPeerState(*scroll,
             &scrollMinimum, &scrollMaximum, &scrollValue,
             &scrollViewport, nullptr, &scrollLarge,
             &scrollVertical) );
@@ -1023,7 +1027,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI 008c range and date controls",
         bool spinVertical = true;
         unsigned spinRows = 0;
         unsigned spinColumns = 0;
-        REQUIRE( spinButton->WinUIGetPeerLayoutForTesting(
+        REQUIRE( wxWinUIRangeTestAccess::GetPeerLayout(*spinButton,
             &spinVertical, &spinRows, &spinColumns) );
         CHECK_FALSE( spinVertical );
         CHECK( spinRows == 0 );

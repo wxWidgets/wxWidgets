@@ -16,6 +16,10 @@
 #include "private.h"
 #include "wx/winui/private/appearance.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "range-test-access.h"
+#endif
+
 #include <atomic>
 #include <cstdint>
 
@@ -500,26 +504,28 @@ bool wxSpinButton::Step(int direction)
     return true;
 }
 
-bool wxSpinButton::WinUIStepForTesting(int direction)
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIRangeTestAccess::Step(wxSpinButton& spin, int direction)
 {
-    return Step(direction);
+    return spin.Step(direction);
 }
 
-bool wxSpinButton::WinUIGetPeerLayoutForTesting(bool *vertical,
-                                                unsigned *rows,
-                                                unsigned *columns) const
+bool wxWinUIRangeTestAccess::GetPeerLayout(const wxSpinButton& spin,
+                                           bool *vertical,
+                                           unsigned *rows,
+                                           unsigned *columns)
 {
-    if ( !m_winui || !m_winui->grid )
+    if ( !spin.m_winui || !spin.m_winui->grid )
         return false;
 
     try
     {
         if ( vertical )
-            *vertical = IsVertical();
+            *vertical = spin.IsVertical();
         if ( rows )
-            *rows = m_winui->grid.RowDefinitions().Size();
+            *rows = spin.m_winui->grid.RowDefinitions().Size();
         if ( columns )
-            *columns = m_winui->grid.ColumnDefinitions().Size();
+            *columns = spin.m_winui->grid.ColumnDefinitions().Size();
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -528,16 +534,17 @@ bool wxSpinButton::WinUIGetPeerLayoutForTesting(bool *vertical,
     }
 }
 
-bool wxSpinButton::WinUIGetAutomationForTesting(
+bool wxWinUIRangeTestAccess::GetAutomation(
+    const wxSpinButton& spin,
     int *rootControlType,
     wxString *rootClassName,
     wxString *incrementId,
     wxString *decrementId,
     wxString *incrementName,
-    wxString *decrementName) const
+    wxString *decrementName)
 {
-    if ( !m_winui || !m_winui->grid || !m_winui->up ||
-         !m_winui->down )
+    if ( !spin.m_winui || !spin.m_winui->grid || !spin.m_winui->up ||
+         !spin.m_winui->down )
     {
         return false;
     }
@@ -546,13 +553,13 @@ bool wxSpinButton::WinUIGetAutomationForTesting(
     {
         MUXAP::AutomationPeer peer =
             MUXAP::FrameworkElementAutomationPeer::CreatePeerForElement(
-                m_winui->grid);
+                spin.m_winui->grid);
         if ( !peer )
         {
-            m_winui->grid.UpdateLayout();
+            spin.m_winui->grid.UpdateLayout();
             peer =
                 MUXAP::FrameworkElementAutomationPeer::
-                    CreatePeerForElement(m_winui->grid);
+                    CreatePeerForElement(spin.m_winui->grid);
         }
         if ( !peer )
             return false;
@@ -568,25 +575,25 @@ bool wxSpinButton::WinUIGetAutomationForTesting(
         {
             *incrementId = wxString(
                 MUXA::AutomationProperties::GetAutomationId(
-                    m_winui->up).c_str());
+                    spin.m_winui->up).c_str());
         }
         if ( decrementId )
         {
             *decrementId = wxString(
                 MUXA::AutomationProperties::GetAutomationId(
-                    m_winui->down).c_str());
+                    spin.m_winui->down).c_str());
         }
         if ( incrementName )
         {
             *incrementName = wxString(
                 MUXA::AutomationProperties::GetName(
-                    m_winui->up).c_str());
+                    spin.m_winui->up).c_str());
         }
         if ( decrementName )
         {
             *decrementName = wxString(
                 MUXA::AutomationProperties::GetName(
-                    m_winui->down).c_str());
+                    spin.m_winui->down).c_str());
         }
         return true;
     }
@@ -596,14 +603,14 @@ bool wxSpinButton::WinUIGetAutomationForTesting(
     }
 }
 
-bool wxSpinButton::WinUIInvokeArrowForTesting(int direction)
+bool wxWinUIRangeTestAccess::InvokeArrow(wxSpinButton& spin, int direction)
 {
-    if ( !m_winui || !m_winui->callbackState || direction == 0 )
+    if ( !spin.m_winui || !spin.m_winui->callbackState || direction == 0 )
         return false;
 
-    const auto state = m_winui->callbackState;
+    const auto state = spin.m_winui->callbackState;
     const std::uint64_t generation = state->Generation();
-    wxWinUISpinButtonImpl * const impl = m_winui.get();
+    wxWinUISpinButtonImpl * const impl = spin.m_winui.get();
     const auto getCurrentOwner =
         [state, generation, impl]() -> wxSpinButton *
         {
@@ -643,7 +650,7 @@ bool wxSpinButton::WinUIInvokeArrowForTesting(int direction)
 
         peer.Invoke();
         // UIA invocation synchronously dispatches wx events and can delete the
-        // control. Never inspect this or its implementation after Invoke().
+        // control. Never inspect spin or its implementation after Invoke().
         return true;
     }
     catch ( const winrt::hresult_error& e )
@@ -662,5 +669,6 @@ bool wxSpinButton::WinUIInvokeArrowForTesting(int direction)
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_SPINBTN

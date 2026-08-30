@@ -13,7 +13,6 @@
 #include <memory>
 
 class wxWinUIStaticTextImpl;
-struct wxWinUIAppearanceSnapshot;
 
 class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
 {
@@ -41,16 +40,6 @@ public:
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
 
-    // Deterministic observations of the projected XAML peer.  They expose no
-    // mutation path and are intentionally kept WinUI-specific.
-    bool WinUIGetAppearanceForTesting(
-        wxWinUIAppearanceSnapshot *snapshot) const;
-    wxString WinUIGetVisibleLabelForTesting() const;
-    wxString WinUIGetRenderedTextForTesting() const;
-    int WinUIGetTextTrimmingForTesting() const;
-    bool WinUIHasLocalBoldInlineForTesting() const;
-    bool WinUIHasLocalUnderlineInlineForTesting() const;
-
 protected:
 #if wxUSE_MARKUP
     bool DoSetLabelMarkup(const wxString& markup) override;
@@ -62,6 +51,8 @@ protected:
     void WXSetVisibleLabel(const wxString& str) override;
 
 private:
+    friend class wxWinUIStaticTestAccess;
+
     bool UsesManualEllipsization() const;
     bool ApplyWinUIAppearance();
     bool UpdateWinUIContent();

@@ -13,6 +13,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
 #include "button-test-access.h"
+#include "static-test-access.h"
 
 #include "wx/app.h"
 #include "wx/bitmap.h"
@@ -2770,13 +2771,13 @@ TEST_CASE("wxWinUI StaticText appearance, mnemonic and reset are exact",
     CheckDefaultCreateSize(text);
 
     wxWinUIAppearanceSnapshot snapshot;
-    REQUIRE(text.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(text, &snapshot));
     CHECK(snapshot.accessKey.CmpNoCase("x") == 0);
 
     text.SetFont(MakeTestFont());
     text.SetForegroundColour(wxColour(12, 34, 56));
     text.SetBackgroundColour(wxColour(87, 65, 43));
-    REQUIRE(text.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(text, &snapshot));
     CheckFontLocals(snapshot, true);
     CHECK(snapshot.hasForeground);
     CHECK(snapshot.hasBackground);
@@ -2784,7 +2785,7 @@ TEST_CASE("wxWinUI StaticText appearance, mnemonic and reset are exact",
     text.SetFont(wxNullFont);
     text.SetForegroundColour(wxNullColour);
     text.SetBackgroundColour(wxNullColour);
-    REQUIRE(text.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(text, &snapshot));
     CheckFontLocals(snapshot, false);
     CHECK_FALSE(snapshot.hasForeground);
     CHECK_FALSE(snapshot.hasBackground);
@@ -2792,7 +2793,7 @@ TEST_CASE("wxWinUI StaticText appearance, mnemonic and reset are exact",
     const wxSize fixed = text.GetSize();
     text.SetLabel("A much longer &replacement label");
     CHECK(text.GetSize() == fixed);
-    REQUIRE(text.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(text, &snapshot));
     CHECK(snapshot.accessKey.CmpNoCase("r") == 0);
 }
 
@@ -2808,13 +2809,13 @@ TEST_CASE("wxWinUI StaticText drops stale markup for equal plain text",
         parent, wxID_ANY, "same",
         wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE);
     REQUIRE(text.SetLabelMarkup("<b>same</b>"));
-    CHECK(text.WinUIHasLocalBoldInlineForTesting());
+    CHECK(wxWinUIStaticTestAccess::HasLocalBoldInline(text));
 
     // m_labelOrig already contains "same": this still has to rebuild the peer
     // because its inline representation changes from styled to plain.
     text.SetLabel("same");
     CHECK(text.GetLabel() == "same");
-    CHECK_FALSE(text.WinUIHasLocalBoldInlineForTesting());
+    CHECK_FALSE(wxWinUIStaticTestAccess::HasLocalBoldInline(text));
 }
 
 TEST_CASE("wxWinUI StaticText markup preserves wx mnemonics",
@@ -2829,12 +2830,12 @@ TEST_CASE("wxWinUI StaticText markup preserves wx mnemonics",
     REQUIRE(text.SetLabelMarkup("<b>&markup &amp;&amp; value</b>"));
 
     CHECK(text.GetLabel() == "&markup && value");
-    CHECK(text.WinUIGetRenderedTextForTesting() == "markup & value");
-    CHECK(text.WinUIHasLocalBoldInlineForTesting());
-    CHECK(text.WinUIHasLocalUnderlineInlineForTesting());
+    CHECK(wxWinUIStaticTestAccess::GetRenderedText(text) == "markup & value");
+    CHECK(wxWinUIStaticTestAccess::HasLocalBoldInline(text));
+    CHECK(wxWinUIStaticTestAccess::HasLocalUnderlineInline(text));
 
     wxWinUIAppearanceSnapshot snapshot;
-    REQUIRE(text.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(text, &snapshot));
     CHECK(snapshot.accessKey.CmpNoCase("m") == 0);
 }
 
@@ -2854,11 +2855,11 @@ TEST_CASE("wxWinUI StaticText manually ellipsizes markup at both edges",
 
         REQUIRE(text.SetLabelMarkup(
             "<b>Alpha beta gamma delta epsilon omega</b>"));
-        const wxString visible = text.WinUIGetVisibleLabelForTesting();
+        const wxString visible = wxWinUIStaticTestAccess::GetVisibleLabel(text);
         CHECK(visible != text.GetLabel());
         CHECK(visible.length() < text.GetLabel().length());
-        CHECK_FALSE(text.WinUIHasLocalBoldInlineForTesting());
-        CHECK(text.WinUIGetTextTrimmingForTesting() ==
+        CHECK_FALSE(wxWinUIStaticTestAccess::HasLocalBoldInline(text));
+        CHECK(wxWinUIStaticTestAccess::GetTextTrimming(text) ==
               static_cast<int>(MUX::TextTrimming::None));
     }
 
@@ -2866,8 +2867,9 @@ TEST_CASE("wxWinUI StaticText manually ellipsizes markup at both edges",
         parent, wxID_ANY, "Alpha beta gamma delta epsilon omega",
         wxDefaultPosition, parent->FromDIP(wxSize(62, 28)),
         wxST_ELLIPSIZE_END | wxST_NO_AUTORESIZE);
-    CHECK(trailing.WinUIGetVisibleLabelForTesting() == trailing.GetLabel());
-    CHECK(trailing.WinUIGetTextTrimmingForTesting() ==
+    CHECK(wxWinUIStaticTestAccess::GetVisibleLabel(trailing) ==
+          trailing.GetLabel());
+    CHECK(wxWinUIStaticTestAccess::GetTextTrimming(trailing) ==
           static_cast<int>(MUX::TextTrimming::CharacterEllipsis));
 }
 
@@ -2906,7 +2908,7 @@ TEST_CASE("wxWinUI StaticBox Create is reentrancy-safe",
 
         wxWinUIAppearanceSnapshot snapshot;
         wxYield();
-        REQUIRE(box.WinUIGetAppearanceForTesting(&snapshot));
+        REQUIRE(wxWinUIStaticTestAccess::GetAppearance(box, &snapshot));
         CHECK(snapshot.automationName == "Newest");
         CHECK(snapshot.accessKey.CmpNoCase("N") == 0);
         CHECK(snapshot.peerName == "Newest");
@@ -2954,15 +2956,15 @@ TEST_CASE("wxWinUI StaticBox uses theme DIPs and resets appearance",
     double frameTop = -1.0;
     double titleGap = -1.0;
     bool themeBrush = false;
-    REQUIRE(box.WinUIGetLayoutForTesting(
-        &frameTop, &titleGap, &themeBrush));
+    REQUIRE(wxWinUIStaticTestAccess::GetLayout(
+        box, &frameTop, &titleGap, &themeBrush));
     CHECK(frameTop == 8.0);
     CHECK(titleGap == 0.0);
     CHECK(themeBrush);
 
     wxWinUIAppearanceSnapshot snapshot;
     wxYield();
-    REQUIRE(box.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(box, &snapshot));
     CHECK(snapshot.automationName == "Options");
     CHECK(snapshot.accessKey.CmpNoCase("O") == 0);
     CHECK(snapshot.localizedControlType.empty());
@@ -2976,7 +2978,7 @@ TEST_CASE("wxWinUI StaticBox uses theme DIPs and resets appearance",
     box.SetFont(MakeTestFont());
     box.SetForegroundColour(wxColour(31, 73, 127));
     box.SetBackgroundColour(wxColour(119, 83, 47));
-    REQUIRE(box.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(box, &snapshot));
     CheckFontLocals(snapshot, true);
     CHECK(snapshot.hasForeground);
     CHECK(snapshot.hasBackground);
@@ -2984,7 +2986,7 @@ TEST_CASE("wxWinUI StaticBox uses theme DIPs and resets appearance",
     box.SetFont(wxNullFont);
     box.SetForegroundColour(wxNullColour);
     box.SetBackgroundColour(wxNullColour);
-    REQUIRE(box.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(box, &snapshot));
     CheckFontLocals(snapshot, false);
     CHECK_FALSE(snapshot.hasForeground);
     CHECK_FALSE(snapshot.hasBackground);
@@ -3008,14 +3010,14 @@ TEST_CASE("wxWinUI StaticBox creates its label-window gap immediately",
 
     double frameTop = -1.0;
     double titleGap = -1.0;
-    REQUIRE(box.WinUIGetLayoutForTesting(
-        &frameTop, &titleGap, nullptr));
+    REQUIRE(wxWinUIStaticTestAccess::GetLayout(
+        box, &frameTop, &titleGap, nullptr));
     CHECK(frameTop == 8.0);
     CHECK(titleGap > 8.0);
 
     wxWinUIAppearanceSnapshot snapshot;
     wxYield();
-    REQUIRE(box.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStaticTestAccess::GetAppearance(box, &snapshot));
     CHECK(snapshot.automationName == "Controlled options");
     CHECK(snapshot.accessKey.CmpNoCase("C") == 0);
     CHECK(snapshot.localizedControlType.empty());
@@ -3495,31 +3497,31 @@ TEST_CASE("wxWinUI StaticBitmap reselects DPI bundles without double scaling",
     unsigned generation = 0;
     bool hasSource = false;
 
-    REQUIRE(bitmap.WinUIRefreshForScaleForTesting(1.0));
-    REQUIRE(bitmap.WinUIGetPeerImageStateForTesting(
-        &pixels, &dips, &stretch, &generation, &hasSource));
+    REQUIRE(wxWinUIStaticTestAccess::RefreshForScale(bitmap, 1.0));
+    REQUIRE(wxWinUIStaticTestAccess::GetPeerImageState(
+        bitmap, &pixels, &dips, &stretch, &generation, &hasSource));
     CHECK(hasSource);
     CHECK(pixels == wxSize(16, 16));
     CHECK(dips == wxSize(16, 16));
     CHECK(stretch == static_cast<int>(MUXM::Stretch::None));
     const unsigned firstGeneration = generation;
 
-    REQUIRE(bitmap.WinUIRefreshForScaleForTesting(2.0));
-    REQUIRE(bitmap.WinUIGetPeerImageStateForTesting(
-        &pixels, &dips, &stretch, &generation, &hasSource));
+    REQUIRE(wxWinUIStaticTestAccess::RefreshForScale(bitmap, 2.0));
+    REQUIRE(wxWinUIStaticTestAccess::GetPeerImageState(
+        bitmap, &pixels, &dips, &stretch, &generation, &hasSource));
     CHECK(hasSource);
     CHECK(pixels == wxSize(32, 32));
     CHECK(dips == wxSize(16, 16));
     CHECK(generation > firstGeneration);
 
     bitmap.SetScaleMode(wxStaticBitmap::Scale_AspectFit);
-    REQUIRE(bitmap.WinUIGetPeerImageStateForTesting(
-        nullptr, nullptr, &stretch, nullptr, nullptr));
+    REQUIRE(wxWinUIStaticTestAccess::GetPeerImageState(
+        bitmap, nullptr, nullptr, &stretch, nullptr, nullptr));
     CHECK(stretch == static_cast<int>(MUXM::Stretch::Uniform));
 
     bitmap.SetBitmap(wxBitmapBundle());
-    REQUIRE(bitmap.WinUIGetPeerImageStateForTesting(
-        nullptr, nullptr, nullptr, nullptr, &hasSource));
+    REQUIRE(wxWinUIStaticTestAccess::GetPeerImageState(
+        bitmap, nullptr, nullptr, nullptr, nullptr, &hasSource));
     CHECK_FALSE(hasSource);
 }
 
@@ -3621,8 +3623,8 @@ TEST_CASE("wxWinUI static appearance peers survive repeated teardown",
         box.SetBackgroundColour(wxColour(20 + i, 30, 40));
 
         wxStaticBitmap bitmap(parent, wxID_ANY, bundle);
-        REQUIRE(bitmap.WinUIRefreshForScaleForTesting(
-            i % 2 ? 2.0 : 1.0));
+        REQUIRE(wxWinUIStaticTestAccess::RefreshForScale(
+            bitmap, i % 2 ? 2.0 : 1.0));
     }
 }
 

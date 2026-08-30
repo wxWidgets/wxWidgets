@@ -1,6 +1,6 @@
 # Plan 106: Move testing facilities out of installed public control APIs
 
-- Status: IN PROGRESS (Button/BitmapToggle local pass; remaining families open)
+- Status: IN PROGRESS (eight controls local pass; remaining families open)
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -67,6 +67,22 @@ Do not delete a lifetime/retirement service used by production merely because it
 - Static shipping proof also passes: OFF configure/build/install, absent private/old test symbols in the archive, no installed support header/target, and a fresh installed consumer compiling four translation units with `/warnaserror` plus CTest 1/1. Prefix: `F:\wxwinui-pr26890-audit106-install-static`; logs `audit106-static-off-*`, `audit106-static-shipping-*` and `audit106-static-consumer-*` in the static build tree.
 - Both trees were restored to `wxBUILD_TESTS=ALL` and rebuilt. Shared and static again pass the same 5328/68 cases (`audit106-restored-button.log`, `audit106-static-restored-pilot.log`); shared smoke/Supported V0 also pass after restoration. Static full PropertyGrid passes 1208/2 in the final run (`audit106-static-restored-propgrid.log`); its earlier smoke/Supported V0 gate passed 1660/92. ON/OFF/ON archive inspection confirms that the seven explicit private static entry points return only with test support.
 - The full lot remains OPEN: the other 26 control headers and private host/helper facilities still need migration. Button coverage is not evidence that the ComboBox external helper or all public test APIs have been removed. Next bounded families: StaticText/StaticBitmap/StaticBox and Gauge/ScrollBar/SpinButton.
+
+## Next family baseline
+
+- StaticText/StaticBitmap/StaticBox keep their 12 existing appearance cases inside the already recorded 5328/68 suite.
+- Gauge/ScrollBar/SpinButton: the ten exact prefix-matched cases pass 377 assertions on shared; the related `XRC::WinUI 008c range and date controls` case passes 105 assertions. Static executes the combined filter and passes 482 assertions / 11 cases. Logs `audit106-range-baseline.log` (both trees) and `audit106-range-xrc-baseline.log` (shared).
+- Migrate only these six controls and their consumers next. The ScrollBar action enum remains an unconditional production implementation type; moving it private must preserve the two named native mapping functions without introducing duplicated numeric enums.
+
+### Six-control migration checks
+
+- Removed 18 public test operations from StaticText/StaticBitmap/StaticBox and Gauge/ScrollBar/SpinButton. Their non-installed accessors retain the existing peer operations and lifetime checks. ScrollBar's production action enum is now private and unconditional; its two native mapping functions keep their original bodies inside the private implementation.
+- Shared Release compilation of `test_gui` and `minimal` passes with `/warnaserror`. The unchanged appearance/dialog group passes 5328 assertions / 68 cases, and the range/XRC group passes 482 / 11 (`audit106-family2-on-appearance.log`, `audit106-family2-on-range.log`). Full PropertyGrid passes 1215 / 2, and smoke/Supported V0 pass 2/2 CTests. These runs set `WX_UI_TESTS=0` and do not qualify physical input.
+- Four MSVC x64 COFF probes (shared/static, test definition ON/OFF) compile with `/W4 /WX` and give identical size/alignment: StaticText 840/8, StaticBitmap 720/8, StaticBox 736/8, Gauge 720/8, ScrollBar 704/8 and SpinButton 704/8. Logs, objects and unchanged input-header hashes are in `F:\wxwinui-pr26890-audit106-layout-proof\family2`. This is a size/alignment check, not a complete ABI proof.
+- The installed consumer now rejects all 18 old operations and public access to the ScrollBar enum. Against the preceding pilot installation, it fails at exactly those 19 assertions, proving the new checks detect the old public surface. Both MSW installed-consumer builds and compile CTests still pass. Fresh WinUI shipping consumers and the full ON/OFF/ON proof remain pending at this entry.
+- Subsequent shipping checks pass in both linkages: OFF configure, `wxcore`/`minimal` build with `/warnaserror`, fresh install, and four-translation-unit installed consumer plus compile CTest 1/1. Prefixes are `F:\wxwinui-pr26890-audit106-family2-install-{shared,static}`; consumers use corresponding `family2-consumer-*` directories. No Button/Static/Range accessor or old test method from the eight migrated controls remains in the shipping DLL/archive; no private support header, target or compile definition is installed. Shared DLL SHA256: `195A1168352F0BBFC11A29A7D8DAABD5613A265C7FF7F5E53BE6586A89EF377E`; static archive: `DBBBC8C6D7B67A4A41C73E8094BAD9A20BE05018D5BB99E9464B25325E3E77E9`.
+- Both build trees are restored to `wxBUILD_TESTS=ALL`, rebuilt, and the three private accessor families reappear only in these test-enabled libraries. Shared repeats the combined **5810 assertions / 79 cases**; static repeats the same **5328/68 + 482/11**, plus full PropertyGrid **1210/2**. Restored smoke and Supported V0 CTests pass in both linkages. Logs are `audit106-family2-*` in each build tree. An initial shared verification used the wrong installed DLL directory and an initial static CTest launcher lacked an absolute executable path; both diagnostic failures are retained, and the corrected checks pass without product changes.
+- This completes the six-control sublot on top of 87841e7932, not plan 106 as a whole. Twenty other public control headers and the private host/helper facilities still need migration. The saved OFF installations remain separate from the restored in-tree test builds.
 
 ## Maintenance
 

@@ -12,6 +12,8 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+#include "range-test-access.h"
+
 #include "wx/app.h"
 #include "wx/frame.h"
 #include "wx/scrolbar.h"
@@ -1360,7 +1362,7 @@ TEST_CASE("wxWinUI ScrollBar keeps its model and peer canonically clamped",
     double smallChange = -1;
     double largeChange = -1;
     bool vertical = false;
-    REQUIRE(bar.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerState(bar,
         &minimum, &maximum, &value, &viewport,
         &smallChange, &largeChange, &vertical));
     CHECK(minimum == 0.0);
@@ -1383,57 +1385,57 @@ TEST_CASE("wxWinUI ScrollBar maps named peer actions one-for-one",
     std::vector<ObservedRangeEvent> events;
     BindScrollBarEvents(bar, events);
 
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::SmallDecrement, 9));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::EndScroll, 9));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::SmallDecrement, 9));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::EndScroll, 9));
     REQUIRE(events.size() == 2);
     CheckEvent(events, 0, wxEVT_SCROLL_LINEUP, 9);
     CheckEvent(events, 1, wxEVT_SCROLL_CHANGED, 9);
 
     events.clear();
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::SmallIncrement, 10));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::EndScroll, 10));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::SmallIncrement, 10));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::EndScroll, 10));
     REQUIRE(events.size() == 2);
     CheckEvent(events, 0, wxEVT_SCROLL_LINEDOWN, 10);
     CheckEvent(events, 1, wxEVT_SCROLL_CHANGED, 10);
 
     events.clear();
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::LargeDecrement, 0));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::EndScroll, 0));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::LargeDecrement, 0));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::EndScroll, 0));
     REQUIRE(events.size() == 2);
     CheckEvent(events, 0, wxEVT_SCROLL_PAGEUP, 0);
     CheckEvent(events, 1, wxEVT_SCROLL_CHANGED, 0);
 
     events.clear();
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::LargeIncrement, 20));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::EndScroll, 20));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::LargeIncrement, 20));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::EndScroll, 20));
     REQUIRE(events.size() == 2);
     CheckEvent(events, 0, wxEVT_SCROLL_PAGEDOWN, 20);
     CheckEvent(events, 1, wxEVT_SCROLL_CHANGED, 20);
 
     events.clear();
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::First, 0));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::EndScroll, 0));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::First, 0));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::EndScroll, 0));
     REQUIRE(events.size() == 2);
     CheckEvent(events, 0, wxEVT_SCROLL_TOP, 0);
     CheckEvent(events, 1, wxEVT_SCROLL_CHANGED, 0);
 
     events.clear();
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::ThumbTrack, 30));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::ThumbPosition, 35));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::EndScroll, 35));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::ThumbTrack, 30));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::ThumbPosition, 35));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::EndScroll, 35));
     REQUIRE(events.size() == 3);
     CheckEvent(events, 0, wxEVT_SCROLL_THUMBTRACK, 30);
     CheckEvent(events, 1, wxEVT_SCROLL_THUMBRELEASE, 35);
@@ -1442,12 +1444,12 @@ TEST_CASE("wxWinUI ScrollBar maps named peer actions one-for-one",
     // Clamp before storing or publishing. A repeated movement at the clamped
     // endpoint is suppressed, but EndScroll remains a single CHANGED.
     events.clear();
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::Last, 500));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::SmallIncrement, 500));
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::EndScroll, 500));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::Last, 500));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::SmallIncrement, 500));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::EndScroll, 500));
     CHECK(bar.GetThumbPosition() == 90);
     REQUIRE(events.size() == 2);
     CheckEvent(events, 0, wxEVT_SCROLL_BOTTOM, 90);
@@ -1457,8 +1459,8 @@ TEST_CASE("wxWinUI ScrollBar maps named peer actions one-for-one",
     bar.SetThumbPosition(10);
     CHECK(events.empty());
     bar.Enable(false);
-    REQUIRE(bar.WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::SmallIncrement, 11));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(bar,
+        wxWinUIRangeTestAccess::ScrollBarAction::SmallIncrement, 11));
     CHECK(bar.GetThumbPosition() == 10);
     CHECK(events.empty());
 }
@@ -1481,8 +1483,8 @@ TEST_CASE("wxWinUI ScrollBar callbacks survive owner destruction",
     });
 
     wxScrollBar * const invoking = bar;
-    REQUIRE(invoking->WinUIApplyPeerActionForTesting(
-        wxScrollBar::WinUIPeerAction::SmallIncrement, 6));
+    REQUIRE(wxWinUIRangeTestAccess::ApplyScrollBarAction(*invoking,
+        wxWinUIRangeTestAccess::ScrollBarAction::SmallIncrement, 6));
     CHECK(bar == nullptr);
     CHECK(events == 1);
 

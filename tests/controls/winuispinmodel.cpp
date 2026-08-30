@@ -11,6 +11,8 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+#include "range-test-access.h"
+
 #include "testableframe.h"
 
 #include "wx/app.h"
@@ -54,7 +56,7 @@ TEST_CASE("wxWinUI SpinButton preserves orientation and action transaction",
     bool isVertical = false;
     unsigned rows = 0;
     unsigned columns = 0;
-    REQUIRE(vertical.WinUIGetPeerLayoutForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerLayout(vertical,
         &isVertical, &rows, &columns));
     CHECK(isVertical);
     CHECK(rows == 2);
@@ -78,7 +80,7 @@ TEST_CASE("wxWinUI SpinButton preserves orientation and action transaction",
              static_cast<double>(event.GetPosition()), wxString()});
     });
 
-    REQUIRE(vertical.WinUIStepForTesting(+1));
+    REQUIRE(wxWinUIRangeTestAccess::Step(vertical, +1));
     CHECK(vertical.GetValue() == 0);
     REQUIRE(events.size() == 2);
     CHECK(events[0].type == wxEVT_SPIN_UP);
@@ -91,14 +93,14 @@ TEST_CASE("wxWinUI SpinButton preserves orientation and action transaction",
     CHECK(events.empty());
 
     vertical.Enable(false);
-    CHECK_FALSE(vertical.WinUIStepForTesting(+1));
+    CHECK_FALSE(wxWinUIRangeTestAccess::Step(vertical, +1));
     CHECK(vertical.GetValue() == 6);
     CHECK(events.empty());
 
     wxSpinButton horizontal(
         parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxSP_HORIZONTAL | wxSP_ARROW_KEYS);
-    REQUIRE(horizontal.WinUIGetPeerLayoutForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerLayout(horizontal,
         &isVertical, &rows, &columns));
     CHECK_FALSE(isVertical);
     CHECK(rows == 0);
@@ -118,7 +120,7 @@ TEST_CASE("wxWinUI SpinButton veto and reentrant range stay canonical",
     {
         event.Veto();
     });
-    CHECK_FALSE(vetoed.WinUIStepForTesting(+1));
+    CHECK_FALSE(wxWinUIRangeTestAccess::Step(vetoed, +1));
     CHECK(vetoed.GetValue() == 5);
 
     wxSpinButton reentrant(parent);
@@ -128,7 +130,7 @@ TEST_CASE("wxWinUI SpinButton veto and reentrant range stay canonical",
     {
         reentrant.SetRange(0, 3);
     });
-    CHECK_FALSE(reentrant.WinUIStepForTesting(+1));
+    CHECK_FALSE(wxWinUIRangeTestAccess::Step(reentrant, +1));
     CHECK(reentrant.GetValue() == 3);
 }
 
@@ -152,7 +154,7 @@ TEST_CASE("wxWinUI SpinButton callbacks are destruction-safe",
     });
 
     wxSpinButton * const invoking = spin;
-    CHECK_FALSE(invoking->WinUIStepForTesting(+1));
+    CHECK_FALSE(wxWinUIRangeTestAccess::Step(*invoking, +1));
     CHECK(spin == nullptr);
     CHECK(changedEvents == 0);
 
@@ -180,7 +182,7 @@ TEST_CASE("wxWinUI SpinButton exposes the native UIA spinner topology",
     wxString decrementId;
     wxString incrementName;
     wxString decrementName;
-    REQUIRE(spin.WinUIGetAutomationForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetAutomation(spin,
         &rootType, &rootClass,
         &incrementId, &decrementId,
         &incrementName, &decrementName));
@@ -192,9 +194,9 @@ TEST_CASE("wxWinUI SpinButton exposes the native UIA spinner topology",
     CHECK_FALSE(incrementName.empty());
     CHECK_FALSE(decrementName.empty());
 
-    REQUIRE(spin.WinUIInvokeArrowForTesting(+1));
+    REQUIRE(wxWinUIRangeTestAccess::InvokeArrow(spin, +1));
     CHECK(spin.GetValue() == 5);
-    REQUIRE(spin.WinUIInvokeArrowForTesting(-1));
+    REQUIRE(wxWinUIRangeTestAccess::InvokeArrow(spin, -1));
     CHECK(spin.GetValue() == 4);
 
     spin.Enable(false);
@@ -202,7 +204,7 @@ TEST_CASE("wxWinUI SpinButton exposes the native UIA spinner topology",
         wxWinUITopLevelHost::FindSlotOwner(&spin);
     REQUIRE(host != nullptr);
     host->FlushSync();
-    CHECK_FALSE(spin.WinUIInvokeArrowForTesting(+1));
+    CHECK_FALSE(wxWinUIRangeTestAccess::InvokeArrow(spin, +1));
     CHECK(spin.GetValue() == 4);
 }
 

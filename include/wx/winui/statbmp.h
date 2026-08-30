@@ -60,13 +60,6 @@ public:
     void SetScaleMode(ScaleMode scaleMode) override;
     ScaleMode GetScaleMode() const override { return m_scaleMode; }
 
-    bool WinUIRefreshForScaleForTesting(double scale);
-    bool WinUIGetPeerImageStateForTesting(wxSize *pixelSize,
-                                          wxSize *dipSize,
-                                          int *stretch,
-                                          unsigned *generation,
-                                          bool *hasSource) const;
-
 protected:
     wxSize DoGetBestSize() const override;
 
@@ -87,6 +80,8 @@ protected:
     ScaleMode m_scaleMode = Scale_None;
 
 private:
+    friend class wxWinUIStaticTestAccess;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBitmap);
 };
 

@@ -185,7 +185,13 @@ if(WXWINUI AND wxUSE_WINUI3)
             wx_winui_test_support INTERFACE_COMPILE_DEFINITIONS)
         set(wx_winui_test_support_sources
             "${wxSOURCE_DIR}/src/winui/button.cpp"
-            "${wxSOURCE_DIR}/src/winui/tglbtn.cpp")
+            "${wxSOURCE_DIR}/src/winui/tglbtn.cpp"
+            "${wxSOURCE_DIR}/src/winui/stattext.cpp"
+            "${wxSOURCE_DIR}/src/winui/statbmp.cpp"
+            "${wxSOURCE_DIR}/src/winui/statbox.cpp"
+            "${wxSOURCE_DIR}/src/winui/gauge.cpp"
+            "${wxSOURCE_DIR}/src/winui/scrolbar.cpp"
+            "${wxSOURCE_DIR}/src/winui/spinbutt.cpp")
         # Source properties must be visible where the owning target is
         # created: core here, or the parent directory in monolithic builds.
         # Keeping them per-source avoids instrumenting all wxWidgets TUs.

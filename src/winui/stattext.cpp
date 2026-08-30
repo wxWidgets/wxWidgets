@@ -18,6 +18,10 @@
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "static-test-access.h"
+#endif
+
 #if wxUSE_MARKUP
     #include "wx/private/markupparser.h"
 #endif
@@ -620,16 +624,19 @@ bool wxStaticText::UpdateWinUIContent()
     return alive && alive->m_winui.get() == impl;
 }
 
-bool wxStaticText::WinUIGetAppearanceForTesting(
-    wxWinUIAppearanceSnapshot *snapshot) const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIStaticTestAccess::GetAppearance(
+    const wxStaticText& text, wxWinUIAppearanceSnapshot *snapshot)
 {
-    if ( !snapshot || !m_winui || !m_winui->root || !m_winui->textBlock )
+    if ( !snapshot || !text.m_winui || !text.m_winui->root ||
+         !text.m_winui->textBlock )
         return false;
 
     try
     {
         *snapshot = wxWinUICaptureAppearance(
-            m_winui->textBlock, m_winui->root, m_winui->textBlock);
+            text.m_winui->textBlock, text.m_winui->root,
+            text.m_winui->textBlock);
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -638,20 +645,20 @@ bool wxStaticText::WinUIGetAppearanceForTesting(
     }
 }
 
-wxString wxStaticText::WinUIGetVisibleLabelForTesting() const
+wxString wxWinUIStaticTestAccess::GetVisibleLabel(const wxStaticText& text)
 {
-    return m_visibleLabel;
+    return text.m_visibleLabel;
 }
 
-wxString wxStaticText::WinUIGetRenderedTextForTesting() const
+wxString wxWinUIStaticTestAccess::GetRenderedText(const wxStaticText& text)
 {
-    if ( !m_winui || !m_winui->textBlock )
+    if ( !text.m_winui || !text.m_winui->textBlock )
         return wxString();
 
     wxString rendered;
     try
     {
-        const auto inlines = m_winui->textBlock.Inlines();
+        const auto inlines = text.m_winui->textBlock.Inlines();
         for ( std::uint32_t i = 0; i < inlines.Size(); ++i )
         {
             if ( const auto run = inlines.GetAt(i).try_as<MUXD::Run>() )
@@ -668,14 +675,14 @@ wxString wxStaticText::WinUIGetRenderedTextForTesting() const
     return rendered;
 }
 
-int wxStaticText::WinUIGetTextTrimmingForTesting() const
+int wxWinUIStaticTestAccess::GetTextTrimming(const wxStaticText& text)
 {
-    if ( !m_winui || !m_winui->textBlock )
+    if ( !text.m_winui || !text.m_winui->textBlock )
         return -1;
 
     try
     {
-        return static_cast<int>(m_winui->textBlock.TextTrimming());
+        return static_cast<int>(text.m_winui->textBlock.TextTrimming());
     }
     catch ( const winrt::hresult_error& )
     {
@@ -683,14 +690,14 @@ int wxStaticText::WinUIGetTextTrimmingForTesting() const
     }
 }
 
-bool wxStaticText::WinUIHasLocalBoldInlineForTesting() const
+bool wxWinUIStaticTestAccess::HasLocalBoldInline(const wxStaticText& text)
 {
-    if ( !m_winui || !m_winui->textBlock )
+    if ( !text.m_winui || !text.m_winui->textBlock )
         return false;
 
     try
     {
-        const auto inlines = m_winui->textBlock.Inlines();
+        const auto inlines = text.m_winui->textBlock.Inlines();
         for ( std::uint32_t i = 0; i < inlines.Size(); ++i )
         {
             const auto run = inlines.GetAt(i).try_as<MUXD::Run>();
@@ -712,14 +719,14 @@ bool wxStaticText::WinUIHasLocalBoldInlineForTesting() const
     return false;
 }
 
-bool wxStaticText::WinUIHasLocalUnderlineInlineForTesting() const
+bool wxWinUIStaticTestAccess::HasLocalUnderlineInline(const wxStaticText& text)
 {
-    if ( !m_winui || !m_winui->textBlock )
+    if ( !text.m_winui || !text.m_winui->textBlock )
         return false;
 
     try
     {
-        const auto inlines = m_winui->textBlock.Inlines();
+        const auto inlines = text.m_winui->textBlock.Inlines();
         for ( std::uint32_t i = 0; i < inlines.Size(); ++i )
         {
             const auto run = inlines.GetAt(i).try_as<MUXD::Run>();
@@ -740,5 +747,7 @@ bool wxStaticText::WinUIHasLocalUnderlineInlineForTesting() const
 
     return false;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_STATTEXT

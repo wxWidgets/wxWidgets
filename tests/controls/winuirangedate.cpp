@@ -11,6 +11,8 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+#include "range-test-access.h"
+
 #include "testableframe.h"
 #include "waitfor.h"
 
@@ -973,7 +975,7 @@ TEST_CASE("wxWinUI Gauge preserves base and peer contracts",
     double value = -1;
     bool indeterminate = true;
     bool vertical = true;
-    REQUIRE(gauge.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerState(gauge,
         &maximum, &value, &indeterminate, &vertical));
     CHECK(maximum == 1.0);
     CHECK(value == 0.0);
@@ -981,13 +983,13 @@ TEST_CASE("wxWinUI Gauge preserves base and peer contracts",
     CHECK_FALSE(vertical);
 
     gauge.Pulse();
-    REQUIRE(gauge.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerState(gauge,
         &maximum, &value, &indeterminate, nullptr));
     CHECK(indeterminate);
 
     // Either determinate setter must end native indeterminate mode.
     gauge.SetRange(50);
-    REQUIRE(gauge.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerState(gauge,
         &maximum, &value, &indeterminate, nullptr));
     CHECK(gauge.GetRange() == 50);
     CHECK(maximum == 50.0);
@@ -995,7 +997,7 @@ TEST_CASE("wxWinUI Gauge preserves base and peer contracts",
 
     gauge.Pulse();
     gauge.SetValue(25);
-    REQUIRE(gauge.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerState(gauge,
         &maximum, &value, &indeterminate, nullptr));
     CHECK(gauge.GetValue() == 25);
     CHECK(value == 25.0);
@@ -1005,7 +1007,7 @@ TEST_CASE("wxWinUI Gauge preserves base and peer contracts",
     // representation, including when the public range is zero.
     gauge.SetRange(0);
     gauge.SetValue(7);
-    REQUIRE(gauge.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerState(gauge,
         &maximum, &value, &indeterminate, nullptr));
     CHECK(gauge.GetRange() == 0);
     CHECK(gauge.GetValue() == 7);
@@ -1016,11 +1018,11 @@ TEST_CASE("wxWinUI Gauge preserves base and peer contracts",
         parent, wxID_ANY, 100,
         wxDefaultPosition, wxDefaultSize,
         wxGA_VERTICAL | wxGA_PROGRESS);
-    REQUIRE(verticalGauge.WinUIGetPeerStateForTesting(
+    REQUIRE(wxWinUIRangeTestAccess::GetPeerState(verticalGauge,
         nullptr, nullptr, nullptr, &vertical));
     CHECK(vertical);
     CHECK(verticalGauge.IsVertical());
-    CHECK(verticalGauge.WinUIHasAppProgressForTesting());
+    CHECK(wxWinUIRangeTestAccess::HasAppProgress(verticalGauge));
 }
 
 TEST_CASE("wxWinUI Gauge revokes vertical layout callbacks",
@@ -1044,7 +1046,7 @@ TEST_CASE("wxWinUI Gauge revokes vertical layout callbacks",
         gauge->SetSize(wxSize(20 + i % 5, 90 + i % 13));
 
         bool vertical = false;
-        REQUIRE(gauge->WinUIGetPeerStateForTesting(
+        REQUIRE(wxWinUIRangeTestAccess::GetPeerState(*gauge,
             nullptr, nullptr, nullptr, &vertical));
         CHECK(vertical);
         delete gauge;
