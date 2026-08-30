@@ -196,6 +196,10 @@ TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::BitmapLookupReentryIsPrePublicatio
                  "[toolbook][ToolbookTestCase]")
 {
     ToolbookForTesting* const book = m_toolbook.get();
+    // MSW creates native toolbar buttons lazily. Realize the existing pages
+    // before arming a callback that removes one, without relying on idle time.
+    book->Realize();
+
     wxWindow* const removedPage = book->GetPage(2);
     wxPanel* const candidate = new wxPanel(book);
     ReentrantImageList* const images =

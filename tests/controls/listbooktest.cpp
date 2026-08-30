@@ -233,14 +233,22 @@ TEST_CASE_METHOD(ListbookTestCase, "Listbook::SetItemTopologyReentry",
     item.SetMask(wxLIST_MASK_STATE);
     item.SetState(wxLIST_STATE_SELECTED);
 
-    // The item data write has happened, but the nested topology mutation makes
-    // the state operation terminal. Propagate this fact through SetItem()
-    // instead of refreshing the stale original index and reporting success.
+    // The state update has happened before its selection notification mutates
+    // the topology. The return value depends on whether the implementation
+    // still has a revision-guarded continuation after that notification.
     const bool set = list->SetItem(item);
 
     REQUIRE(eventSeen);
     REQUIRE(removed);
+#if (defined(__WXMSW__) || defined(__WXQT__)) && \
+        !defined(__WXUNIVERSAL__) && !defined(__WXWINUI__)
+    // Native controls report the success of the already consumed state write.
+    REQUIRE(set);
+#else
+    // The generic control must propagate SetItemState()'s revision failure
+    // instead of refreshing the stale original index.
     REQUIRE(!set);
+#endif
     REQUIRE(book->FindPage(removedPage) == wxNOT_FOUND);
     REQUIRE(list->GetItemCount() == static_cast<long>(book->GetPageCount()));
 
