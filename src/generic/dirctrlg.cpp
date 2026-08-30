@@ -131,6 +131,65 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDirTreeUpdateLocker);
 };
 
+// Native tree deletion notifications are sent before deletion has finished.
+// Rebuilding from one of them would delete the same items recursively. Keep
+// requests on the outermost operation for this control/tree pair and replay
+// them only after deletion returns. A rebuild already in progress consumes
+// these requests itself, including those from its path-refresh deletions.
+class wxDirTreeMutationScope final
+{
+public:
+    enum Kind { DeleteChildren, RebuildTree };
+
+    wxDirTreeMutationScope(wxGenericDirCtrl* owner, wxTreeCtrl* tree, Kind kind)
+        : m_owner(owner), m_tree(tree), m_kind(kind), m_previous(ms_current)
+    {
+        ms_current = this;
+    }
+
+    ~wxDirTreeMutationScope()
+    {
+        ms_current = m_previous;
+    }
+
+    static bool DeferRebuild(wxGenericDirCtrl* owner, wxTreeCtrl* tree)
+    {
+        wxDirTreeMutationScope* outermost = nullptr;
+        bool deleting = false;
+        for ( auto scope = ms_current; scope; scope = scope->m_previous )
+        {
+            if ( scope->m_owner.get() == owner && scope->m_tree.get() == tree )
+            {
+                outermost = scope;
+                deleting = deleting || scope->m_kind == DeleteChildren;
+            }
+        }
+
+        // In particular, don't defer callbacks outside deletion just because
+        // a rebuild is active: they can still request a synchronous rebuild.
+        if ( !deleting )
+            return false;
+
+        outermost->m_rebuildRequested = true;
+        return true;
+    }
+
+    bool WasRebuildRequested() const { return m_rebuildRequested; }
+
+private:
+    wxWeakRef<wxWindow> m_owner;
+    wxWeakRef<wxTreeCtrl> m_tree;
+    const Kind m_kind;
+    wxDirTreeMutationScope* const m_previous;
+    bool m_rebuildRequested = false;
+
+    static thread_local wxDirTreeMutationScope* ms_current;
+
+    wxDECLARE_NO_COPY_CLASS(wxDirTreeMutationScope);
+};
+
+thread_local wxDirTreeMutationScope* wxDirTreeMutationScope::ms_current = nullptr;
+
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -798,19 +857,28 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
 
     const wxWeakRef<wxWindow> weakThis(this);
     wxDirTreeUpdateLocker updateLocker(treeCtrl);
-    if (parentId != treeCtrl->GetRootItem())
+    bool rebuildRequested;
     {
-        treeCtrl->CollapseAndReset(parentId);
-    }
-    else
-    {
-        treeCtrl->DeleteChildren(parentId);
+        wxDirTreeMutationScope deleting(
+            this, treeCtrl, wxDirTreeMutationScope::DeleteChildren);
+        if (parentId != treeCtrl->GetRootItem())
+        {
+            treeCtrl->CollapseAndReset(parentId);
+        }
+        else
+        {
+            treeCtrl->DeleteChildren(parentId);
+        }
+        rebuildRequested = deleting.WasRebuildRequested();
     }
     if ( weakThis.get() != this || IsBeingDeleted() ||
          m_treeCtrl.get() != treeCtrl )
     {
         return;
     }
+
+    if ( rebuildRequested )
+        ReCreateTree();
 }
 
 void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
@@ -1069,6 +1137,11 @@ void wxGenericDirCtrl::ReCreateTree()
     if ( !treeCtrl || treeCtrl->IsBeingDeleted() )
         return;
 
+    if ( wxDirTreeMutationScope::DeferRebuild(this, treeCtrl) )
+        return;
+
+    wxDirTreeMutationScope rebuilding(
+        this, treeCtrl, wxDirTreeMutationScope::RebuildTree);
     const wxWeakRef<wxWindow> weakThis(this);
     wxDirTreeUpdateLocker updateLocker(treeCtrl);
     CollapseDir(treeCtrl->GetRootItem());

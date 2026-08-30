@@ -481,18 +481,32 @@ TEST_CASE("wxGenericDirCtrl mutation Unicode hidden and long paths",
     wxTreeItemId renameItem = tree->GetSelection();
     REQUIRE(renameItem.IsOk());
 
-    // Collapse publishes raw child-deletion events. Rebuild the item model
-    // from the first one while keeping the control and tree alive, proving
-    // that dirctrl never continues with the pre-callback tree ID/data.
-    bool rebuiltFromDelete = false;
+    // Repeated rebuild requests from deletion events must be coalesced until
+    // native deletion returns, including events sent by the rebuild itself.
+    // Keep the control/tree alive to also exercise stale item ID/data handling.
+    bool rebuildFromDelete = true;
+    bool inDeleteCallback = false;
+    bool recursiveDeleteCallback = false;
+    unsigned rebuildRequests = 0;
     tree->Bind(
         wxEVT_TREE_DELETE_ITEM,
-        [ctrl, &rebuiltFromDelete](wxTreeEvent& event)
+        [ctrl, &rebuildFromDelete, &inDeleteCallback,
+         &recursiveDeleteCallback, &rebuildRequests](wxTreeEvent& event)
         {
-            if ( !rebuiltFromDelete )
+            if ( rebuildFromDelete )
             {
-                rebuiltFromDelete = true;
-                ctrl->ReCreateTree();
+                if ( inDeleteCallback )
+                {
+                    recursiveDeleteCallback = true;
+                }
+                else
+                {
+                    inDeleteCallback = true;
+                    ++rebuildRequests;
+                    ctrl->ReCreateTree();
+                    ctrl->ReCreateTree();
+                    inDeleteCallback = false;
+                }
             }
             event.Skip();
         });
@@ -500,9 +514,15 @@ TEST_CASE("wxGenericDirCtrl mutation Unicode hidden and long paths",
     wxTreeEvent rename(wxEVT_TREE_END_LABEL_EDIT, tree, renameItem);
     rename.SetLabel("renamed-\u00e9");
     ctrl->OnEndEditItem(rename);
+    rebuildFromDelete = false;
     CHECK(rename.IsAllowed());
-    CHECK(rebuiltFromDelete);
+    CHECK(rebuildRequests > 0);
+    CHECK_FALSE(recursiveDeleteCallback);
     CHECK(wxDirExists(fs.GetPath() + wxFILE_SEP_PATH + "renamed-\u00e9"));
+    REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
+    selected = tree->GetSelection();
+    REQUIRE(selected.IsOk());
+    CHECK(FindTreeChild(tree, selected, "renamed-\u00e9").IsOk());
 
     wxString relativeLong;
     for ( int i = 0;
