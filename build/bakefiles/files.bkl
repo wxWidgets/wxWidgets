@@ -1136,6 +1136,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/window.h
     wx/windowid.h
     wx/windowptr.h
+    wx/private/windowlifetime.h
     wx/withimages.h
     wx/wrapsizer.h
     wx/wupdlock.h

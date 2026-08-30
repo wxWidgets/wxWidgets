@@ -3716,6 +3716,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/window.h \
 	wx/windowid.h \
 	wx/windowptr.h \
+	wx/private/windowlifetime.h \
 	wx/withimages.h \
 	wx/wrapsizer.h \
 	wx/wupdlock.h \
