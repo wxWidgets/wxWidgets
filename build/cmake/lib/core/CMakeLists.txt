@@ -168,6 +168,38 @@ endif()
 wx_add_library(wxcore ${CORE_SRC})
 if(WXWINUI AND wxUSE_WINUI3)
     wx_winui3_configure_target(wxcore)
+
+    if(wxUSE_GUI AND wxBUILD_TESTS STREQUAL "ALL")
+        # This opt-in target is for in-tree tests only: do not install it or
+        # link it to wxcore, even privately (static exports retain link-only
+        # dependencies). Public control layouts do not depend on this define.
+        add_library(wx_winui_test_support INTERFACE)
+        target_include_directories(wx_winui_test_support INTERFACE
+            "${wxSOURCE_DIR}/tests/winui/test-support")
+        target_compile_definitions(wx_winui_test_support INTERFACE
+            WXWINUI_TEST_SUPPORT=1)
+
+        get_target_property(wx_winui_test_support_includes
+            wx_winui_test_support INTERFACE_INCLUDE_DIRECTORIES)
+        get_target_property(wx_winui_test_support_definitions
+            wx_winui_test_support INTERFACE_COMPILE_DEFINITIONS)
+        set(wx_winui_test_support_sources
+            "${wxSOURCE_DIR}/src/winui/button.cpp"
+            "${wxSOURCE_DIR}/src/winui/tglbtn.cpp")
+        # Source properties must be visible where the owning target is
+        # created: core here, or the parent directory in monolithic builds.
+        # Keeping them per-source avoids instrumenting all wxWidgets TUs.
+        set_property(SOURCE ${wx_winui_test_support_sources}
+            DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                      "${wxSOURCE_DIR}/build/cmake/lib"
+            APPEND PROPERTY INCLUDE_DIRECTORIES
+                ${wx_winui_test_support_includes})
+        set_property(SOURCE ${wx_winui_test_support_sources}
+            DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                      "${wxSOURCE_DIR}/build/cmake/lib"
+            APPEND PROPERTY COMPILE_DEFINITIONS
+                ${wx_winui_test_support_definitions})
+    endif()
 endif()
 foreach(lib JPEG PNG TIFF NANOSVG WebP LUNASVG)
     if(${lib}_LIBRARIES)

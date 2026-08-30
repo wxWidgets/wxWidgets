@@ -12,6 +12,8 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+#include "button-test-access.h"
+
 #include "wx/app.h"
 #include "wx/bitmap.h"
 #include "wx/bmpbuttn.h"
@@ -614,9 +616,9 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
     SECTION("Button retained peer and stale Click")
     {
         const unsigned statesBefore =
-            wxButton::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUIButtonTestAccess::LiveCallbackStateCount();
         const unsigned invokesBefore =
-            wxButton::WinUIGetPeerInvokeAttemptCountForTesting();
+            wxWinUIButtonTestAccess::PeerInvokeAttemptCount();
 
         wxButton *button = new wxButton;
         wxButton * const invoking = button;
@@ -634,7 +636,7 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
                     return;
 
                 attached = true;
-                queued = invoking->WinUIQueueClickForTesting();
+                queued = wxWinUIButtonTestAccess::QueueClick(*invoking);
                 wxButton * const doomed = button;
                 button = nullptr;
                 delete doomed;
@@ -652,12 +654,12 @@ TEST_CASE("wxWinUI action-control Create aborts on attachment destruction",
             "retained WinUI Button peer invocation",
             [&]()
             {
-                return wxButton::
-                           WinUIGetPeerInvokeAttemptCountForTesting() >
+                return wxWinUIButtonTestAccess::
+                           PeerInvokeAttemptCount() >
                        invokesBefore;
             }));
         CHECK(clickEvents == 0);
-        CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+        CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
               statesBefore);
         delete button;
     }
@@ -1282,7 +1284,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
             REQUIRE(peer);
 
             std::uint64_t generationBefore = 0;
-            REQUIRE(button.WinUIGetPeerBitmapProjectionForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(button,
                 nullptr, nullptr, nullptr, &generationBefore));
 
             const wxBitmapBundle latestBundle = MakeDPIBundle(23);
@@ -1310,7 +1312,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
             wxSize pixels;
             wxAnyButton::State projected = wxAnyButton::State_Max;
             std::uint64_t generation = 0;
-            REQUIRE(button.WinUIGetPeerBitmapProjectionForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(button,
                 &pixels, nullptr, &projected, &generation));
             CHECK(pixels ==
                   latestBundle.GetPreferredBitmapSizeFor(&button));
@@ -1339,13 +1341,13 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
         DYNAMIC_SECTION(sectionName)
         {
             const unsigned statesBefore =
-                wxButton::WinUIGetLiveCallbackStateCountForTesting();
+                wxWinUIButtonTestAccess::LiveCallbackStateCount();
             wxBitmapButton *button =
                 new wxBitmapButton(
                     parent, wxID_ANY, MakeDPIBundle(11));
             wxBitmapButton * const invoking = button;
             REQUIRE(GetButtonPeer(button));
-            CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+            CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
                   statesBefore + 1);
 
             const auto callbackState =
@@ -1370,7 +1372,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
                        : 1u));
             CHECK(callbackState->bitmapCalls ==
                   (point == ButtonBundleCallbackPoint::Bitmap ? 1u : 0u));
-            CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+            CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
                   statesBefore);
             delete button;
         }
@@ -1379,7 +1381,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
     SECTION("Best-size uses the validated cache without bundle callbacks")
     {
         const unsigned statesBefore =
-            wxButton::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUIButtonTestAccess::LiveCallbackStateCount();
         wxBitmapButton *button =
             new wxBitmapButton(
                 parent, wxID_ANY, MakeDPIBundle(11));
@@ -1414,7 +1416,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
         CHECK(callbackState->bitmapCalls == bitmapBefore);
         delete button;
         button = nullptr;
-        CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+        CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
               statesBefore);
         delete button;
     }
@@ -1422,7 +1424,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
     SECTION("Bitmap getter stops after destructive hidden GetDefaultSize")
     {
         const unsigned statesBefore =
-            wxButton::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUIButtonTestAccess::LiveCallbackStateCount();
         wxBitmapButton *button =
             new wxBitmapButton(
                 parent, wxID_ANY, MakeDPIBundle(11));
@@ -1457,7 +1459,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
         CHECK(callbackState->defaultSizeCalls ==
               defaultBefore + 1);
         CHECK(callbackState->bitmapCalls == bitmapBefore);
-        CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+        CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
               statesBefore);
         delete button;
     }
@@ -1605,7 +1607,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
             MakeReentrantButtonBundle(callbackState, 21));
 
         std::uint64_t generationBefore = 0;
-        REQUIRE(button.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(button,
             nullptr, nullptr, nullptr, &generationBefore));
         callbackState->throwAtPoint = true;
         wxDPIChangedEvent event(
@@ -1616,7 +1618,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
 
         button.SetLabel("&Recovered");
         std::uint64_t generationAfter = 0;
-        REQUIRE(button.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(button,
             nullptr, nullptr, nullptr, &generationAfter));
         CHECK(generationAfter > generationBefore);
     }
@@ -1635,7 +1637,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
         callbackState->throwAtPoint = true;
 
         wxLogNull noLog;
-        CHECK_FALSE(button.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(button,
             wxAnyButton::State_Focused, button.GetDPIScaleFactor()));
         CHECK_FALSE(callbackState->throwAtPoint);
 
@@ -1643,7 +1645,7 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
         button.Bind(
             wxEVT_BUTTON,
             [&](wxCommandEvent&) { ++clicks; });
-        REQUIRE(button.WinUIQueueClickForTesting());
+        REQUIRE(wxWinUIButtonTestAccess::QueueClick(button));
         wxYield();
         wxYield();
         CHECK(clicks == 1);
@@ -1656,33 +1658,33 @@ TEST_CASE("wxWinUI BitmapButton bundle callbacks are transactional",
         wxSize beforePixels;
         wxAnyButton::State beforeState = wxAnyButton::State_Max;
         std::uint64_t beforeGeneration = 0;
-        REQUIRE(button.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(button,
             &beforePixels, nullptr, &beforeState, &beforeGeneration));
 
-        CHECK_FALSE(button.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(button,
             wxAnyButton::State_Normal,
             std::numeric_limits<double>::quiet_NaN()));
-        CHECK_FALSE(button.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(button,
             wxAnyButton::State_Normal,
             std::numeric_limits<double>::infinity()));
-        CHECK_FALSE(button.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(button,
             wxAnyButton::State_Normal,
             -std::numeric_limits<double>::infinity()));
-        CHECK_FALSE(button.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(button,
             wxAnyButton::State_Normal,
             std::numeric_limits<double>::denorm_min()));
-        CHECK_FALSE(button.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(button,
             wxAnyButton::State_Normal, 1.0 / 128.0));
-        CHECK_FALSE(button.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(button,
             wxAnyButton::State_Normal, 65.0));
-        CHECK_FALSE(button.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(button,
             wxAnyButton::State_Normal,
             std::numeric_limits<double>::max()));
 
         wxSize afterPixels;
         wxAnyButton::State afterState = wxAnyButton::State_Max;
         std::uint64_t afterGeneration = 0;
-        REQUIRE(button.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(button,
             &afterPixels, nullptr, &afterState, &afterGeneration));
         CHECK(afterPixels == beforePixels);
         CHECK(afterState == beforeState);
@@ -1783,7 +1785,7 @@ TEST_CASE("wxWinUI Button appearance projection is transactional",
     SECTION("Font-family destruction prevents every later font write")
     {
         const unsigned statesBefore =
-            wxButton::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUIButtonTestAccess::LiveCallbackStateCount();
         wxButton *button =
             new wxButton(parent, wxID_ANY, "&Original");
         wxButton * const invoking = button;
@@ -1817,7 +1819,7 @@ TEST_CASE("wxWinUI Button appearance projection is transactional",
                   MUXC::Control::FontWeightProperty()) == unset);
         CHECK(peer.ReadLocalValue(
                   MUXC::Control::FontStyleProperty()) == unset);
-        CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+        CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
               statesBefore);
         delete button;
     }
@@ -2040,7 +2042,7 @@ TEST_CASE("wxWinUI BitmapToggleButton bundle callbacks are transactional",
         REQUIRE(peer);
 
         std::uint64_t generationBefore = 0;
-        REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
             nullptr, nullptr, &generationBefore));
 
         const wxBitmapBundle latestBundle = MakeDPIBundle(23);
@@ -2063,7 +2065,7 @@ TEST_CASE("wxWinUI BitmapToggleButton bundle callbacks are transactional",
         wxSize pixels;
         wxAnyButton::State projected = wxAnyButton::State_Max;
         std::uint64_t generation = 0;
-        REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
             &pixels, &projected, &generation));
         CHECK(pixels == latestBundle.GetPreferredBitmapSizeFor(&toggle));
         CHECK(projected == wxAnyButton::State_Normal);
@@ -2099,7 +2101,7 @@ TEST_CASE("wxWinUI BitmapToggleButton bundle callbacks are transactional",
         CHECK(callbackState->preferredSizeCalls == 1);
         CHECK(callbackState->bitmapCalls == 1);
         wxSize pixels;
-        REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
             &pixels, nullptr, nullptr));
         CHECK(pixels == latestBundle.GetPreferredBitmapSizeFor(&toggle));
         const auto text = FindToggleText(peer.Content());
@@ -2124,7 +2126,7 @@ TEST_CASE("wxWinUI BitmapToggleButton bundle callbacks are transactional",
                 parent, wxID_ANY, MakeDPIBundle(11));
             toggle.SetLabel("&Before");
             std::uint64_t generationBefore = 0;
-            REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
                 nullptr, nullptr, &generationBefore));
 
             const auto callbackState =
@@ -2136,14 +2138,14 @@ TEST_CASE("wxWinUI BitmapToggleButton bundle callbacks are transactional",
                 ToggleBundleException);
 
             std::uint64_t generationAfterFailure = 0;
-            REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
                 nullptr, nullptr, &generationAfterFailure));
             CHECK(generationAfterFailure == generationBefore);
 
             toggle.SetLabel("&Recovered");
             wxSize pixels;
             std::uint64_t generation = 0;
-            REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
                 &pixels, nullptr, &generation));
             const int expectedPixels = wxMax(
                 1,
@@ -2178,7 +2180,7 @@ TEST_CASE("wxWinUI BitmapToggleButton bundle callbacks are transactional",
 
         toggle.SetLabel("&Recovered");
         wxSize pixels;
-        REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
             &pixels, nullptr, nullptr));
         CHECK(pixels.x > 0);
         CHECK(pixels.y > 0);
@@ -2534,29 +2536,29 @@ TEST_CASE("wxWinUI BitmapToggleButton bundle callbacks are transactional",
         wxSize beforePixels;
         wxAnyButton::State beforeState = wxAnyButton::State_Max;
         std::uint64_t beforeGeneration = 0;
-        REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
             &beforePixels, &beforeState, &beforeGeneration));
 
-        CHECK_FALSE(toggle.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(toggle,
             wxAnyButton::State_Normal,
             std::numeric_limits<double>::quiet_NaN()));
-        CHECK_FALSE(toggle.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(toggle,
             wxAnyButton::State_Normal,
             std::numeric_limits<double>::infinity()));
-        CHECK_FALSE(toggle.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(toggle,
             wxAnyButton::State_Normal,
             -std::numeric_limits<double>::infinity()));
-        CHECK_FALSE(toggle.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(toggle,
             wxAnyButton::State_Normal,
             std::numeric_limits<double>::denorm_min()));
-        CHECK_FALSE(toggle.WinUIProjectBitmapStateForTesting(
+        CHECK_FALSE(wxWinUIButtonTestAccess::ProjectBitmap(toggle,
             wxAnyButton::State_Normal,
             std::numeric_limits<double>::max()));
 
         wxSize afterPixels;
         wxAnyButton::State afterState = wxAnyButton::State_Max;
         std::uint64_t afterGeneration = 0;
-        REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+        REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
             &afterPixels, &afterState, &afterGeneration));
         CHECK(afterPixels == beforePixels);
         CHECK(afterState == beforeState);
@@ -2603,7 +2605,7 @@ TEST_CASE("wxWinUI bitmap buttons project every state at monitor scale",
         for ( size_t i = 0; i < States.size(); ++i )
         {
             CAPTURE(scale, i);
-            REQUIRE(button.WinUIProjectBitmapStateForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::ProjectBitmap(button,
                 States[i], scale));
 
             wxSize bitmapPixels;
@@ -2611,7 +2613,7 @@ TEST_CASE("wxWinUI bitmap buttons project every state at monitor scale",
             wxAnyButton::State projected =
                 wxAnyButton::State_Max;
             std::uint64_t generation = 0;
-            REQUIRE(button.WinUIGetPeerBitmapProjectionForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(button,
                 &bitmapPixels, &authPixels,
                 &projected, &generation));
             CHECK(bitmapPixels ==
@@ -2654,14 +2656,14 @@ TEST_CASE("wxWinUI bitmap buttons project every state at monitor scale",
         for ( size_t i = 0; i < States.size(); ++i )
         {
             CAPTURE(scale, i);
-            REQUIRE(toggle.WinUIProjectBitmapStateForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::ProjectBitmap(toggle,
                 States[i], scale));
 
             wxSize bitmapPixels;
             wxAnyButton::State projected =
                 wxAnyButton::State_Max;
             std::uint64_t generation = 0;
-            REQUIRE(toggle.WinUIGetPeerBitmapProjectionForTesting(
+            REQUIRE(wxWinUIButtonTestAccess::GetBitmapProjection(toggle,
                 &bitmapPixels, &projected, &generation));
             CHECK(bitmapPixels ==
                   bundles[i].GetPreferredBitmapSizeAtScale(scale));

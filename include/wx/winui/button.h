@@ -48,18 +48,6 @@ public:
     bool SetBackgroundColour(const wxColour& colour) override;
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetFont(const wxFont& font) override;
-    // Implementation-only deterministic lifetime and bitmap-projection
-    // seams. The projection seam rebuilds the real XAML Content tree without
-    // synthesizing pointer/focus input.
-    bool WinUIQueueClickForTesting();
-    static unsigned WinUIGetLiveCallbackStateCountForTesting();
-    static unsigned WinUIGetPeerInvokeAttemptCountForTesting();
-    bool WinUIProjectBitmapStateForTesting(State state, double scale);
-    bool WinUIGetPeerBitmapProjectionForTesting(
-        wxSize *bitmapPixelSize,
-        wxSize *authPixelSize,
-        State *state,
-        std::uint64_t *generation) const;
 
 protected:
     bool MSWOnEffectiveLayoutDirectionChanged() override;
@@ -82,6 +70,8 @@ protected:
 #endif // wxUSE_TOOLTIPS
 
 private:
+    friend class wxWinUIButtonTestAccess;
+
     // Return false when a synchronous XAML/host boundary retired this exact
     // owner+implementation transaction.
     bool UpdateWinUIContent(bool forceRender = true,

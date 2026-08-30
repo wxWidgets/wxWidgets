@@ -20,7 +20,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL PASS / REMOTE PENDING |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL PASS / REMOTE PENDING |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL PASS / REMOTE PENDING |
-| [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | TODO |
+| [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | IN PROGRESS: BUTTON FAMILY LOCAL PASS |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | TODO |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | TODO |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
@@ -90,3 +90,5 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 - The auxiliary NativeProgress timeout is subsequently resolved by rejecting null task-dialog handles before dark-mode UIA enumeration (d1a415743f). All dialog-lifetime cases pass 353 assertions in each WinUI linkage; real TaskDialog/physical qualification remains distinct in 109.
 - Lot 104 passes eleven installed-consumer subprocesses per linkage: required startup failure, clean COM rollback, quarantined failures and renderer ownership over fifty epochs. Runtime smoke and Supported V0 also pass both linkages. Remote results remain pending; concurrent cross-platform PropertyGrid regressions keep 101 OPEN.
 - Lot 105 records the precise Windows/toolkit/feature macro and native-control inheritance contract. Thirty-five dispatch headers, negative fixtures and four installed compile consumers (MSW and WinUI, shared/static) pass locally. New CI steps retain external runtime/compile consumer evidence; remote execution is pending.
+- Remote CI at 1cd4017b5a: both WinUI linkages successfully built, registered the pinned runtime, and executed smoke plus Supported V0 (Actions run 33316310653). Later local changes still need their own remote run; existing-port failures keep 101 OPEN.
+- Lot 106 first family: Button/BitmapToggle public test methods removed; shared/static ON/OFF/ON builds, installed consumers, private-symbol absence in shipping libraries and unchanged 5328/68 real-island tests all pass. The other control families remain open. Cross-platform fixes and lots 104/105 were published through b6dd49c629 for new remote CI; no physical readiness claim is made.

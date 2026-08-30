@@ -102,13 +102,6 @@ public:
     void SetLabel(const wxString& label) override
         { wxToggleButton::SetLabel(label); }
 
-    // Rebuild and inspect the actual XAML Image source without SendInput.
-    bool WinUIProjectBitmapStateForTesting(State state, double scale);
-    bool WinUIGetPeerBitmapProjectionForTesting(
-        wxSize *pixelSize,
-        State *state,
-        std::uint64_t *generation) const;
-
 protected:
     wxSize DoGetBestSize() const override;
     bool UpdateWinUIContent(bool forceRender = true) override;
@@ -119,6 +112,8 @@ protected:
     void DoSetBitmapPosition(wxDirection dir) override;
 
 private:
+    friend class wxWinUIButtonTestAccess;
+
     bool UpdateWinUIBitmapContent(bool forceRender,
                                   State forcedState,
                                   double requestedScale);

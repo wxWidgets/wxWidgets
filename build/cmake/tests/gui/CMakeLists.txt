@@ -285,6 +285,9 @@ wx_add_test(test_gui ${APP_TYPE} ${TEST_GUI_SRC}
     DATA ${TEST_GUI_DATA}
     RES_BUNDLE ${TEST_GUI_RES_BUNDLE}
     )
+if(TARGET test_gui AND TARGET wx_winui_test_support)
+    target_link_libraries(test_gui PRIVATE wx_winui_test_support)
+endif()
 if(WXWINUI AND wxUSE_WINUI3 AND TARGET test_gui AND
         TARGET wx_winui_desktop_test_runner)
     add_test(NAME wx_winui_supported_beta

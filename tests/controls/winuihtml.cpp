@@ -11,6 +11,8 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3 && wxUSE_HTML && wxUSE_BUTTON
 
+#include "button-test-access.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/button.h"
@@ -260,7 +262,7 @@ struct RuntimeSnapshot
         snapshot.pendingFocusMigrations =
             wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
         snapshot.buttonCallbacks =
-            wxButton::WinUIGetLiveCallbackStateCountForTesting();
+            wxWinUIButtonTestAccess::LiveCallbackStateCount();
         snapshot.slotHandlerAdds =
             wxWinUITopLevelHost::GetSlotHandlerAddCount();
         snapshot.slotHandlerRevokes =
@@ -285,7 +287,7 @@ struct RuntimeSnapshot
                wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
                wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
                    pendingFocusMigrations &&
-               wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+               wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
                    buttonCallbacks &&
                wxWinUITopLevelHost::GetSlotHandlerAddCount() -
                        slotHandlerAdds ==
@@ -310,7 +312,7 @@ struct RuntimeSnapshot
         CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
         CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
               pendingFocusMigrations);
-        CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+        CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
               buttonCallbacks);
 
         const unsigned slotAdds =
@@ -720,7 +722,7 @@ TEST_CASE("WinUIHtml::SetAppendSelectionAndURLGate",
     // Hosts are lazy: frame B has no XAML slot until the pane migrates there.
     CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts + 1);
     CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == before.slots + 1);
-    CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
           before.buttonCallbacks + 1);
     CHECK(fixture.IsOwnedOnlyBy(fixture.GetFrameA()));
 
@@ -863,7 +865,7 @@ TEST_CASE("WinUIHtml::LargeScrollAndTwoTLWStress",
 
     CHECK(wxWinUITopLevelHost::GetLiveHostCount() == before.hosts + 2);
     CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == before.slots + 1);
-    CHECK(wxButton::WinUIGetLiveCallbackStateCountForTesting() ==
+    CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
           before.buttonCallbacks + 1);
 
     REQUIRE(fixture.DestroyAndWait(before));

@@ -30,6 +30,10 @@
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "button-test-access.h"
+#endif
+
 #if wxUSE_MARKUP
     #include "wx/private/markupparser.h"
 #endif
@@ -517,6 +521,7 @@ MUXC::Grid wxWinUIMakeCommandLink(const wxString& title,
     return grid;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 MUXC::Image wxWinUIFindTaggedButtonImage(
     const winrt::Windows::Foundation::IInspectable& content,
     const wchar_t *tag)
@@ -563,6 +568,7 @@ wxSize wxWinUIGetImageSourcePixelSize(
         ? wxSize(source.PixelWidth(), source.PixelHeight())
         : wxSize();
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 } // namespace
 
@@ -570,11 +576,13 @@ wxSize wxWinUIGetImageSourcePixelSize(
 // wxWinUIButtonImpl
 // ----------------------------------------------------------------------------
 
+#ifdef WXWINUI_TEST_SUPPORT
 namespace
 {
 std::atomic<unsigned> gs_liveButtonCallbackStates{ 0 };
 std::atomic<unsigned> gs_buttonPeerInvokeAttempts{ 0 };
 } // anonymous namespace
+#endif
 
 class wxWinUIButtonCallbackState final
 {
@@ -582,12 +590,16 @@ public:
     explicit wxWinUIButtonCallbackState(wxButton *owner)
         : m_owner(owner)
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveButtonCallbackStates.fetch_add(1, std::memory_order_relaxed);
+#endif
     }
 
     ~wxWinUIButtonCallbackState()
     {
+#ifdef WXWINUI_TEST_SUPPORT
         gs_liveButtonCallbackStates.fetch_sub(1, std::memory_order_relaxed);
+#endif
     }
 
     wxButton *GetOwner() const { return m_owner; }
@@ -1027,14 +1039,16 @@ bool wxButton::SendClickEvent()
     return ProcessCommand(event);
 }
 
-bool wxButton::WinUIQueueClickForTesting()
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIButtonTestAccess::QueueClick(wxButton& button)
 {
-    if ( !m_winui || m_winui->destroying || !m_winui->button || !wxTheApp )
+    if ( !button.m_winui || button.m_winui->destroying ||
+         !button.m_winui->button || !wxTheApp )
         return false;
 
     // Retain only the native peer. This deliberately does not retain the wx
     // owner or implementation, and exercises a late invoke after Close().
-    const MUXC::Button peer = m_winui->button;
+    const MUXC::Button peer = button.m_winui->button;
     wxTheApp->CallAfter(
         [peer]()
         {
@@ -1055,25 +1069,25 @@ bool wxButton::WinUIQueueClickForTesting()
     return true;
 }
 
-unsigned wxButton::WinUIGetLiveCallbackStateCountForTesting()
+unsigned wxWinUIButtonTestAccess::LiveCallbackStateCount()
 {
     return gs_liveButtonCallbackStates.load(std::memory_order_acquire);
 }
 
-unsigned wxButton::WinUIGetPeerInvokeAttemptCountForTesting()
+unsigned wxWinUIButtonTestAccess::PeerInvokeAttemptCount()
 {
     return gs_buttonPeerInvokeAttempts.load(std::memory_order_acquire);
 }
 
-bool wxButton::WinUIProjectBitmapStateForTesting(State state,
-                                                 double scale)
+bool wxWinUIButtonTestAccess::ProjectBitmap(wxButton& button,
+                                           State state, double scale)
 {
-    if ( state < State_Normal || state >= State_Max ||
+    if ( state < wxAnyButton::State_Normal || state >= wxAnyButton::State_Max ||
          !std::isfinite(scale) ||
          scale < wxWinUIButtonMinProjectionScale ||
          scale > wxWinUIButtonMaxProjectionScale ||
-         !m_winui || m_winui->destroying ||
-         !m_winui->button )
+         !button.m_winui || button.m_winui->destroying ||
+         !button.m_winui->button )
     {
         return false;
     }
@@ -1081,22 +1095,24 @@ bool wxButton::WinUIProjectBitmapStateForTesting(State state,
     bool projected = false;
     wxWinUIButtonRunCallbackNoexcept(
         "test bitmap-state projection",
-        [&]() { projected = UpdateWinUIContent(true, state, scale); });
+        [&]() { projected = button.UpdateWinUIContent(true, state, scale); });
     return projected;
 }
 
-bool wxButton::WinUIGetPeerBitmapProjectionForTesting(
+bool wxWinUIButtonTestAccess::GetBitmapProjection(
+    const wxButton& button,
     wxSize *bitmapPixelSize,
     wxSize *authPixelSize,
     State *state,
-    std::uint64_t *generation) const
+    std::uint64_t *generation)
 {
-    if ( !m_winui || m_winui->destroying || !m_winui->button )
+    if ( !button.m_winui || button.m_winui->destroying ||
+         !button.m_winui->button )
         return false;
 
     try
     {
-        const auto content = m_winui->button.Content();
+        const auto content = button.m_winui->button.Content();
         if ( bitmapPixelSize )
         {
             *bitmapPixelSize = wxWinUIGetImageSourcePixelSize(
@@ -1110,9 +1126,9 @@ bool wxButton::WinUIGetPeerBitmapProjectionForTesting(
                     content, wxWinUIButtonAuthBitmapTag));
         }
         if ( state )
-            *state = m_winui->projectedBitmapState;
+            *state = button.m_winui->projectedBitmapState;
         if ( generation )
-            *generation = m_winui->contentGeneration;
+            *generation = button.m_winui->contentGeneration;
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -1120,6 +1136,7 @@ bool wxButton::WinUIGetPeerBitmapProjectionForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxButton::DoEnable(bool enable)
 {

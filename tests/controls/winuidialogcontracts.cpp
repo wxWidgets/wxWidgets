@@ -11,6 +11,8 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 
+#include "button-test-access.h"
+
 #include "wx/winui/private/dialogcontracts.h"
 
 #include "wx/app.h"
@@ -510,13 +512,13 @@ void InvokeButtonPeer(wxWindow& target, int id)
     REQUIRE(button);
 
     const unsigned invokeAttempts =
-        wxButton::WinUIGetPeerInvokeAttemptCountForTesting();
-    REQUIRE(button->WinUIQueueClickForTesting());
+        wxWinUIButtonTestAccess::PeerInvokeAttemptCount();
+    REQUIRE(wxWinUIButtonTestAccess::QueueClick(*button));
     WaitFor(
         "WinUI button automation peer invocation",
         [invokeAttempts]()
         {
-            return wxButton::WinUIGetPeerInvokeAttemptCountForTesting() >
+            return wxWinUIButtonTestAccess::PeerInvokeAttemptCount() >
                    invokeAttempts;
         });
 }
@@ -2855,7 +2857,7 @@ TEST_CASE("WinUIDialogContracts::RichMessageFallbackAndOwnerLifetime",
                 wxButton * const yes =
                     wxDynamicCast(live->FindWindow(wxID_YES), wxButton);
                 if ( yes )
-                    queued = yes->WinUIQueueClickForTesting();
+                    queued = wxWinUIButtonTestAccess::QueueClick(*yes);
             });
 
         const int entersBefore = modalHook.enterCount;
@@ -2956,14 +2958,14 @@ TEST_CASE("WinUIDialogContracts::GenericProgressContractAndReentrance",
         REQUIRE(skipButton);
 
         const unsigned skipAttempts =
-            wxButton::WinUIGetPeerInvokeAttemptCountForTesting();
-        REQUIRE(skipButton->WinUIQueueClickForTesting());
+            wxWinUIButtonTestAccess::PeerInvokeAttemptCount();
+        REQUIRE(wxWinUIButtonTestAccess::QueueClick(*skipButton));
         WaitFor(
             "generic progress skip automation",
             [skipAttempts]()
             {
                 return
-                    wxButton::WinUIGetPeerInvokeAttemptCountForTesting() >
+                    wxWinUIButtonTestAccess::PeerInvokeAttemptCount() >
                     skipAttempts;
             });
 
@@ -3082,7 +3084,7 @@ TEST_CASE("WinUIDialogContracts::GenericProgressContractAndReentrance",
                         live->FindWindow(wxID_CANCEL), wxButton);
                 if ( close )
                 {
-                    queued = close->WinUIQueueClickForTesting();
+                    queued = wxWinUIButtonTestAccess::QueueClick(*close);
                     if ( queued )
                         closeTimer.Stop();
                 }

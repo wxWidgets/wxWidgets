@@ -16,6 +16,10 @@
 #include "wx/scopeguard.h"
 #include "wx/weakref.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "button-test-access.h"
+#endif
+
 #include "private.h"
 #include "wx/winui/private/appearance.h"
 
@@ -36,6 +40,7 @@ namespace MUXMI = winrt::Microsoft::UI::Xaml::Media::Imaging;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 MUXC::Image wxWinUIFindToggleImage(
     const winrt::Windows::Foundation::IInspectable& content)
 {
@@ -60,6 +65,7 @@ MUXC::Image wxWinUIFindToggleImage(
 
     return nullptr;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 enum class wxWinUIToggleProjectionState
 {
@@ -2161,28 +2167,31 @@ bool wxBitmapToggleButton::UpdateWinUIBitmapContent(
     return false;
 }
 
-bool wxBitmapToggleButton::WinUIProjectBitmapStateForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIButtonTestAccess::ProjectBitmap(
+    wxBitmapToggleButton& button,
     State state,
     double scale)
 {
-    if ( state < State_Normal || state >= State_Max ||
+    if ( state < wxAnyButton::State_Normal || state >= wxAnyButton::State_Max ||
           !std::isfinite(scale) || scale <= 0.0 ||
           scale < wxWinUIToggleMinProjectionScale ||
           scale > wxWinUIToggleMaxProjectionScale ||
-          !m_winui || !m_winui->button )
+          !button.m_winui || !button.m_winui->button )
     {
         return false;
     }
 
-    return UpdateWinUIBitmapContent(true, state, scale);
+    return button.UpdateWinUIBitmapContent(true, state, scale);
 }
 
-bool wxBitmapToggleButton::WinUIGetPeerBitmapProjectionForTesting(
+bool wxWinUIButtonTestAccess::GetBitmapProjection(
+    const wxBitmapToggleButton& button,
     wxSize *pixelSize,
     State *state,
-    std::uint64_t *generation) const
+    std::uint64_t *generation)
 {
-    if ( !m_winui || !m_winui->button )
+    if ( !button.m_winui || !button.m_winui->button )
         return false;
 
     try
@@ -2191,7 +2200,7 @@ bool wxBitmapToggleButton::WinUIGetPeerBitmapProjectionForTesting(
         {
             *pixelSize = wxSize();
             const auto image =
-                wxWinUIFindToggleImage(m_winui->button.Content());
+                wxWinUIFindToggleImage(button.m_winui->button.Content());
             if ( image )
             {
                 const auto source =
@@ -2204,9 +2213,9 @@ bool wxBitmapToggleButton::WinUIGetPeerBitmapProjectionForTesting(
             }
         }
         if ( state )
-            *state = m_winui->projectedBitmapState;
+            *state = button.m_winui->projectedBitmapState;
         if ( generation )
-            *generation = m_winui->contentGeneration;
+            *generation = button.m_winui->contentGeneration;
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -2214,5 +2223,6 @@ bool wxBitmapToggleButton::WinUIGetPeerBitmapProjectionForTesting(
         return false;
     }
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_TOGGLEBTN
