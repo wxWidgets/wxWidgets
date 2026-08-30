@@ -63,7 +63,7 @@ If preserving the existing destruction contract requires replacing public object
 - Both linkages pass 618 assertions / 6 cases for `[winui-dialog-window],WinUIDialogContracts::DestroySourceCancelsPresenter,WinUIDialogContracts::ForceUpperWhileOpen`, including owned MessageDialog shells and opt-in Overlay destruction/validation paths.
 - `ctest -C Release -R '^(wx_winui_runtime_smoke|wx_winui_supported_beta)$' --output-on-failure --no-tests=error` passes both tests in both builds; Supported V0 passes 1660 assertions / 92 cases.
 - All runners use `WX_UI_TESTS=0` and private desktops, without system-input injection. Logs in each build root: audit103-owner-build.log, audit103-window-lifetime.log, audit103-gates.log and audit103-gates.xml.
-- The broader auxiliary-dialog selection exposed a timeout in the unchanged NativeProgressBoundaryAndLifetime test. This is tracked as OPEN in 109, not counted as a passing test or silently excluded from its qualification. Remote CI and external UIA observation remain pending.
+- The broader auxiliary-dialog selection exposed a timeout in the unchanged NativeProgressBoundaryAndLifetime test. It was diagnosed and locally resolved separately in 109; its task-dialog hook coverage is not counted as real native-window qualification. Remote CI and external UIA observation remain pending.
 
 ## Maintenance
 

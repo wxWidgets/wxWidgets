@@ -610,6 +610,8 @@ HRESULT WINAPI InvokeTaskDialogForTesting(
     if ( !config->pfCallback )
         return E_UNEXPECTED;
     context.progressEntered = true;
+    // This boundary has no native window. In particular, the real callback's
+    // theme helpers must not treat nullptr as a request to enumerate a desktop.
     config->pfCallback(
         nullptr, TDN_CREATED, 0, 0, config->lpCallbackData);
 

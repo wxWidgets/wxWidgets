@@ -51,8 +51,12 @@ Stop physical runs immediately for unexpected foreground/capture, user activity,
 
 ## Maintenance
 
-### Open evidence from lot 103 (2026-08-30)
+### Progress-dialog boundary regression (2026-08-30, locally resolved)
 
 The broader non-input `[winui-dialog-lifetime]` run completes text/password/colour, MessageDialog and RichMessage tests but times out in `WinUIDialogContracts::NativeProgressBoundaryAndLifetime` in both linkages. Reproduce this auxiliary contract independently and diagnose the task-dialog worker/fixture before claiming the whole dialog integration matrix passes. Logs: audit103-dialog-contracts.log in both build roots and audit103-native-progress.log in the static build. The six scoped Window/presenter cases pass 618 assertions and do not establish this progress-dialog result.
+
+Subsequent stack diagnosis proves the deadlock: the fixture supplies a null task-dialog HWND, while the upstream dark-mode helper calls EnumChildWindows(nullptr), enumerating top-level windows. The worker enters UIA while holding the progress lock and the GUI thread waits for that lock. Central null guards in AllowForTaskDialog and RemoveFromTaskDialog prevent accidental whole-desktop enumeration; the fixture still exercises the same callback sequence and assertions.
+
+Shared/static Release rebuilds pass. NativeProgressBoundaryAndLifetime passes 237 assertions / 1 case, and `[winui-dialog-lifetime]` passes 353 assertions / 4 cases in each linkage. Logs: audit109-progress-build.log, audit109-native-progress-final.log and audit109-dialog-lifetime-final.log in each build; original stack audit109-native-progress-stack.log in the static build. All runs use private desktops and WX_UI_TESTS=0. This is a task-dialog API-boundary test with a hook, not a real native TaskDialog window or physical/UIA sign-off. The other integration gates in this plan remain pending.
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
