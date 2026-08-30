@@ -67,6 +67,13 @@
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
     #include "wx/msw/private.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk/private/wrapgtk.h"
+#elif defined(__WXOSX_COCOA__)
+    #include "wx/osx/private.h"
+#elif defined(__WXQT__)
+    #include <QtCore/QPointer>
+    #include <QtWidgets/QWidget>
 #endif
 
 #include <algorithm>
@@ -112,21 +119,25 @@
 namespace
 {
 
-#ifdef __WXMSW__
-thread_local bool gs_failNextDirectEditorParkingForTesting = false;
-thread_local bool gs_failNextFallbackEditorParkingForTesting = false;
-thread_local unsigned int gs_editorParkingHostCount = 0;
-thread_local unsigned int gs_deferredEditorBatchCount = 0;
+#if wxPG_USE_EDITOR_CALLBACK_EPOCH
 thread_local unsigned int gs_deferredEditorCallbackDepth = 0;
 
 class EditorDeferredDeleteBatch;
-class EditorCreationTransaction;
-thread_local EditorCreationTransaction* gs_activeEditorCreation = nullptr;
 // Intrusive queue head: TLS must remain trivial for MinGW process teardown.
 // The batch nodes themselves are already owned pending-delete envelopes, so no
 // auxiliary allocation or intentionally leaked TLS container is needed.
 thread_local EditorDeferredDeleteBatch*
     gs_waitingDeferredEditorBatches = nullptr;
+#endif
+
+#ifdef __WXMSW__
+thread_local bool gs_failNextDirectEditorParkingForTesting = false;
+thread_local bool gs_failNextFallbackEditorParkingForTesting = false;
+thread_local unsigned int gs_editorParkingHostCount = 0;
+thread_local unsigned int gs_deferredEditorBatchCount = 0;
+
+class EditorCreationTransaction;
+thread_local EditorCreationTransaction* gs_activeEditorCreation = nullptr;
 
 const wchar_t* const EDITOR_PARKING_COOKIE =
     L"wxPropertyGrid.EditorParkingIdentity";
@@ -880,7 +891,9 @@ enum class EditorParkingOutcome
     Destroyed,
     Failed
 };
+#endif // __WXMSW__
 
+#if wxPG_USE_EDITOR_CALLBACK_EPOCH
 struct EditorDeferredObjectSlot
 {
     EditorDeferredObjectSlot(wxObject* identity_, wxEvtHandler* object_)
@@ -893,6 +906,7 @@ struct EditorDeferredObjectSlot
     wxEvtHandlerRef object;
 };
 
+#ifdef __WXMSW__
 struct EditorParkingHost
 {
     EditorParkingHost(HWND hwnd_,
@@ -910,27 +924,32 @@ struct EditorParkingHost
     std::unique_ptr<int> identity;
     bool quarantined;
 };
+#endif
 
 class EditorDeferredDeleteBatch final : public wxObject
 {
 public:
     EditorDeferredDeleteBatch()
-        : m_threadId(::GetCurrentThreadId()),
-          m_waitingNext(nullptr),
+        : m_waitingNext(nullptr),
           m_drained(false),
           m_draining(false),
           m_invariantFailure(false)
     {
+#ifdef __WXMSW__
         ++gs_deferredEditorBatchCount;
+#endif
     }
 
     ~EditorDeferredDeleteBatch() override
     {
         Drain();
+#ifdef __WXMSW__
         wxASSERT(gs_deferredEditorBatchCount != 0);
         --gs_deferredEditorBatchCount;
+#endif
     }
 
+#ifdef __WXMSW__
     EditorNativeSnapshot* AddEditorSnapshot(wxWindow* editor,
                                             HWND expectedParent)
     {
@@ -940,6 +959,7 @@ public:
         m_editorSnapshots.push_back(std::move(snapshot));
         return result;
     }
+#endif
 
     static constexpr size_t InvalidObjectIndex =
         static_cast<size_t>(-1);
@@ -1013,11 +1033,14 @@ public:
     bool HasWork() const
     {
         return !m_objects.empty() ||
+#ifdef __WXMSW__
                !m_editorSnapshots.empty() ||
                !m_hosts.empty() ||
+#endif
                m_invariantFailure;
     }
 
+#ifdef __WXMSW__
     EditorParkingOutcome ParkEditor(EditorNativeSnapshot& snapshot)
     {
         if ( !snapshot.IsValid() || !snapshot.MatchesRootIdentity() )
@@ -1105,6 +1128,7 @@ public:
 
         return EditorParkingOutcome::Destroyed;
     }
+#endif
 
     void Drain()
     {
@@ -1112,9 +1136,11 @@ public:
             return;
 
         m_draining = true;
+#ifdef __WXMSW__
         wxASSERT_MSG(
             ::GetCurrentThreadId() == m_threadId,
             wxS("Property-grid deferred editor batch changed thread"));
+#endif
 
         // Clear each slot before invoking user destructors. If one of them
         // enters a nested idle loop, this batch is no longer globally queued
@@ -1131,6 +1157,7 @@ public:
             delete current;
         }
 
+#ifdef __WXMSW__
         bool wrappersGone = true;
         bool rootsGone = true;
         bool nativeHwndsGone = true;
@@ -1165,12 +1192,14 @@ public:
             ReleaseHosts();
             m_editorSnapshots.clear();
         }
+#endif
 
         m_draining = false;
         m_drained = true;
     }
 
 private:
+#ifdef __WXMSW__
     static bool TrySetParent(EditorNativeSnapshot& snapshot,
                              HWND parent,
                              bool failForTesting,
@@ -1375,18 +1404,22 @@ private:
         for ( EditorParkingHost& host : m_hosts )
             QuarantineHost(host);
     }
+#endif
 
     std::vector<EditorDeferredObjectSlot> m_objects;
     std::unordered_set<wxObject*> m_adoptedObjects;
+#ifdef __WXMSW__
     std::vector<std::unique_ptr<EditorNativeSnapshot>> m_editorSnapshots;
     std::vector<EditorParkingHost> m_hosts;
-    const DWORD m_threadId;
+    const DWORD m_threadId = ::GetCurrentThreadId();
+#endif
     EditorDeferredDeleteBatch* m_waitingNext;
     bool m_drained;
     bool m_draining;
     bool m_invariantFailure;
 };
 
+#ifdef __WXMSW__
 // A custom editor can create one or more child controls and destroy the grid
 // before CreateControls() returns, i.e. before m_wndEditor/m_wndEditor2 can be
 // assigned. Keep a stack-local baseline discoverable through a trivial TLS
@@ -1437,6 +1470,7 @@ private:
     EditorCreationTransaction* const m_previous;
     std::unordered_set<wxWindow*> m_childrenBefore;
 };
+#endif
 
 void PublishDeferredEditorBatch(EditorDeferredDeleteBatch* batch)
 {
@@ -1489,6 +1523,7 @@ void PublishWaitingDeferredEditorBatches()
 // Atomically take ownership of a group of editor windows/forwarders, unlink
 // every native editor wrapper from the grid before the first callback-capable
 // Win32 call, then park and defer the group as one envelope.
+#ifdef __WXMSW__
 void DeferPropertyGridEditorObjects(
     wxPropertyGrid* grid,
     const std::vector<wxObject*>& objects)
@@ -1605,6 +1640,7 @@ void DeferPropertyGridEditorObjects(
 }
 
 #endif // __WXMSW__
+#endif // wxPG_USE_EDITOR_CALLBACK_EPOCH
 
 #if WXWIN_COMPATIBILITY_3_0
 // Hash containing for every active wxPG the list of editors and their event handlers
@@ -1622,16 +1658,14 @@ DeletedObjects gs_deletedEditorObjects;
 // which may outlive the wxPropertyGrid destructor on every platform.
 void DisconnectPropertyGridEditorForwarders(wxPropertyGrid* grid);
 
-#ifdef __WXMSW__
-// Defined after wxPropertyGridEditorEventForwarder itself. This helper only
-// removes forwarders installed by SetupChildEventHandling(), never an
-// application or control-specific pushed handler.
+// Defined after wxPropertyGridEditorEventForwarder itself. Detach and take
+// ownership only of forwarders installed by SetupChildEventHandling(). Other
+// handlers remain attached until the control or application removes them.
 void
 DetachPropertyGridEditorForwarders(
     wxWindow* window,
     wxPropertyGrid* grid,
     std::vector<wxEvtHandler*>& forwarders);
-#endif
 
 // Bit values for wxPropertyGrid::m_coloursCustomized.
 enum CustomColour
@@ -1719,7 +1753,7 @@ void wxPGErasePropertyGridTransientState(wxPropertyGrid* grid)
 
 // -----------------------------------------------------------------------
 
-#ifdef __WXMSW__
+#if wxPG_USE_EDITOR_CALLBACK_EPOCH
 wxPGDeferredEditorCallbackEpoch::wxPGDeferredEditorCallbackEpoch()
 {
     ++gs_deferredEditorCallbackDepth;
@@ -1731,7 +1765,9 @@ wxPGDeferredEditorCallbackEpoch::~wxPGDeferredEditorCallbackEpoch()
     if ( --gs_deferredEditorCallbackDepth == 0 )
         PublishWaitingDeferredEditorBatches();
 }
+#endif
 
+#ifdef __WXMSW__
 void wxPGMSWFailNextDirectEditorParkingForTesting()
 {
     gs_failNextDirectEditorParkingForTesting = true;
@@ -2316,17 +2352,17 @@ wxPropertyGrid::~wxPropertyGrid()
         m_processedEvent = nullptr;
     }
 
-#ifdef __WXMSW__
 #if WXWIN_COMPATIBILITY_3_0
     // Emulate member variable.
     wxArrayPGObject& m_deletedEditorObjects = *gs_deletedEditorObjects[this];
 #endif
     auto& deferredEditorObjects = m_deletedEditorObjects;
 
-    // Do not call DoSelectProperty() during MSW destruction: even with event
-    // emission disabled it performs focus and ShowWindow operations. Collect
-    // every editor callback-free before any later destructor operation can
-    // dispatch a native message or enter a nested idle loop.
+    // Do not call DoSelectProperty() during destruction: SendDestroyEvent()
+    // has already made the grid unavailable for callbacks, so selection
+    // guards would return before detaching the editors' pushed handlers.
+    // Collect every editor callback-free before any later destructor
+    // operation can dispatch a native message or enter a nested idle loop.
     const auto collectEditor =
         [this, &deferredEditorObjects](wxWindow*& member)
         {
@@ -2358,6 +2394,7 @@ wxPropertyGrid::~wxPropertyGrid()
         deferredEditorObjects.push_back(labelEditor);
     }
 
+#ifdef __WXMSW__
     // A custom CreateControls() callback may destroy the grid before its
     // wxPGWindowList is returned and before either editor member is set.
     std::vector<wxWindow*> inFlightCreatedChildren;
@@ -2372,10 +2409,14 @@ wxPropertyGrid::~wxPropertyGrid()
             deferredEditorObjects.push_back(forwarder);
         deferredEditorObjects.push_back(child);
     }
+#endif
 
+#if wxPG_USE_EDITOR_CALLBACK_EPOCH
     EditorDeferredDeleteBatch* deferredBatch =
         new EditorDeferredDeleteBatch;
+#ifdef __WXMSW__
     const HWND gridHwnd = reinterpret_cast<HWND>(GetHandle());
+#endif
     std::vector<size_t> adoptedOrder;
     while ( !m_deletedEditorObjects.empty() )
     {
@@ -2385,23 +2426,15 @@ wxPropertyGrid::~wxPropertyGrid()
         if ( index != EditorDeferredDeleteBatch::InvalidObjectIndex )
             adoptedOrder.push_back(index);
     }
-#else
-    DoSelectProperty(
-        nullptr,
-        wxPGSelectPropertyFlags::NoValidate |
-            wxPGSelectPropertyFlags::DontSendEvent);
 #endif
 
     if ( deferEditorDeletion )
     {
         // We are inside application/editor code and cannot delete anything
-        // that can still be present on its stack. On MSW one atomic envelope
-        // also owns the native parking host and isn't published to the global
-        // idle queue until the outermost property-grid callback epoch exits.
-#if WXWIN_COMPATIBILITY_3_0 && !defined(__WXMSW__)
-        // Emulate member variable.
-        wxArrayPGObject& m_deletedEditorObjects = *gs_deletedEditorObjects[this];
-#endif
+        // that can still be present on its stack. The envelope is published
+        // to the global idle queue only after the outermost callback epoch.
+        // On MSW it also owns the native parking hosts.
+#if wxPG_USE_EDITOR_CALLBACK_EPOCH
 #ifdef __WXMSW__
         struct DestructorEditorWork
         {
@@ -2409,6 +2442,9 @@ wxPropertyGrid::~wxPropertyGrid()
             EditorNativeSnapshot* snapshot;
         };
         std::vector<DestructorEditorWork> editorsToPark;
+#else
+        std::vector<size_t> editorsToDetach;
+#endif
 
         // Phase A: remove every editor wrapper from the grid's logical child
         // ownership before parking any one of them can dispatch a callback.
@@ -2420,20 +2456,27 @@ wxPropertyGrid::~wxPropertyGrid()
             if ( !editor || editor->GetParent() != this )
                 continue;
 
+#ifdef __WXMSW__
             EditorNativeSnapshot* const nativeSnapshot =
                 deferredBatch->AddEditorSnapshot(editor, gridHwnd);
+#endif
             GetChildren().DeleteObject(editor);
             if ( editor->GetParent() == this )
                 editor->SetParent(nullptr);
+#ifdef __WXMSW__
             if ( nativeSnapshot->GetRootHwnd() )
             {
                 editorsToPark.push_back(
                     {objectIndex, nativeSnapshot});
             }
+#else
+            editorsToDetach.push_back(objectIndex);
+#endif
         }
 
         // Phase B: all later editor roots are now protected from a reentrant
         // wxWindowBase destructor while each native parking transaction runs.
+#ifdef __WXMSW__
         for ( const DestructorEditorWork& work : editorsToPark )
         {
             if ( !deferredBatch->GetLiveObject(work.objectIndex) )
@@ -2475,6 +2518,46 @@ wxPropertyGrid::~wxPropertyGrid()
                 deferredBatch->MarkInvariantFailure();
             }
         }
+#else
+        for ( const size_t objectIndex : editorsToDetach )
+        {
+            wxWindow* const editor = wxDynamicCast(
+                deferredBatch->GetLiveObject(objectIndex), wxWindow);
+            if ( !editor || editor->GetParent() )
+                continue;
+
+            // Detach the native ownership too: removing only the wx child
+            // would let destruction of the native parent retire its widget
+            // while the editor's size/focus callback is still on the stack.
+            // The Cocoa peer owns its NSView and wxGTK owns a widget ref, so
+            // both controls survive removal from their native container.
+#ifdef __WXOSX_COCOA__
+            if ( editor->GetPeer() )
+                editor->GetPeer()->RemoveFromParent();
+#elif defined(__WXGTK__)
+            if ( GtkWidget* const widget = editor->GetHandle() )
+            {
+                if ( GtkWidget* const parent = gtk_widget_get_parent(widget) )
+                {
+                    // A removal callback can destroy the wx wrapper. Keep
+                    // the widget alive until the native call itself returns;
+                    // the batch's weak slot then prevents a second deletion.
+                    g_object_ref(widget);
+                    gtk_container_remove(GTK_CONTAINER(parent), widget);
+                    g_object_unref(widget);
+                }
+            }
+#elif defined(__WXQT__)
+            // GetHandle() is the owned root QWidget, including for scroll
+            // areas: it is not their borrowed viewport. Preserve its flags
+            // using the port's reparenting helper. Qt hides it and releases
+            // the parent's ownership; the deferred wx wrapper still owns it.
+            const QPointer<QWidget> widget(editor->GetHandle());
+            if ( widget && widget->parentWidget() )
+                wxWindow::QtReparent(widget.data(), nullptr);
+#endif
+        }
+#endif
 
         if ( deferredBatch->HasWork() )
             QueueDeferredEditorBatch(deferredBatch);
@@ -2492,7 +2575,7 @@ wxPropertyGrid::~wxPropertyGrid()
     }
     else
     {
-#ifndef __WXMSW__
+#if !wxPG_USE_EDITOR_CALLBACK_EPOCH
         // Delete pending editor controls
         DeletePendingObjects();
 #endif
@@ -2524,7 +2607,7 @@ wxPropertyGrid::~wxPropertyGrid()
                       wxS("Close(false).)") );
     }
 
-#ifdef __WXMSW__
+#if wxPG_USE_EDITOR_CALLBACK_EPOCH
     // On the ordinary path, editor objects were atomically adopted before any
     // callback-capable teardown, but are destroyed only after the grid has
     // been made inert and disconnected from its top-level tracking.
@@ -4674,6 +4757,13 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 
     const wxWeakRef<wxWindow> weakThis(this);
     wxPropertyGridPageState* const state = m_pState;
+    ++wxPGGetPropertyGridTransientState(this).drawingDepth;
+    wxScopeGuard leaveDrawing = wxMakeGuard([weakThis, this]()
+    {
+        if ( weakThis.get() == this )
+            --wxPGGetPropertyGridTransientState(this).drawingDepth;
+    });
+    wxUnusedVar(leaveDrawing);
 
     state->EnsureVirtualHeight();
     if ( !wxWeakWindowIsAvailableForCallbacks(weakThis, this) ||
@@ -5356,7 +5446,11 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
         RefreshRect(r);
         if ( !transactionIsValid(p1) || (p2 && !transactionIsValid(p2)) )
             return;
-        Update();
+        // A renderer can change the selection while it is being painted.
+        // Keep its invalidation queued instead of recursively painting with
+        // the same native drawing context (notably Qt's per-window QPainter).
+        if ( !wxPGGetPropertyGridTransientState(this).drawingDepth )
+            Update();
     }
 }
 
@@ -7793,7 +7887,6 @@ void DisconnectPropertyGridEditorForwarders(wxPropertyGrid* grid)
     wxPropertyGridEditorEventForwarder::DisconnectFromGrid(grid);
 }
 
-#ifdef __WXMSW__
 void
 DetachPropertyGridEditorForwarders(
     wxWindow* window,
@@ -7803,21 +7896,21 @@ DetachPropertyGridEditorForwarders(
     if ( !window )
         return;
 
-    while ( window->GetEventHandler() != window )
+    for ( wxEvtHandler* handler = window->GetEventHandler();
+          handler && handler != window; )
     {
-        wxEvtHandler* const handler =
-            window->PopEventHandler(false);
+        wxEvtHandler* const next = handler->GetNextHandler();
         if ( wxPropertyGridEditorEventForwarder::IsForGrid(
                  handler, grid) )
         {
-            forwarders.push_back(handler);
+            if ( window->RemoveEventHandler(handler) )
+                forwarders.push_back(handler);
         }
-        // Application/control-specific handlers are merely unlinked. Their
-        // ownership remains with the code that pushed them, but none can keep
-        // a next/previous link to the editor after its deferred destruction.
+        // In particular, the generic text hint handler is owned by the text
+        // entry and must still be attached when its destructor pops it.
+        handler = next;
     }
 }
-#endif
 
 } // anonymous namespace
 
@@ -11448,6 +11541,8 @@ void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
 bool wxPropertyGrid::IsEditorFocused() const
 {
     wxWindow* focus = wxWindow::FindFocus();
+    if ( !focus )
+        return false;
 
     if ( focus == m_wndEditor || focus == m_wndEditor2 ||
          focus == GetEditorControl() ||

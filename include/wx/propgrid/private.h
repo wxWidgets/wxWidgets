@@ -45,6 +45,8 @@ struct wxPGPropertyGridTransientState
     int keyboardSplitter = -1;
     bool inPerformValidation = false;
     unsigned int propertyCallbackDepth = 0;
+    // Queue invalidation instead of recursively entering the native painter.
+    unsigned int drawingDepth = 0;
     wxRecursionGuardFlag beginLabelEditGuard = 0;
     bool endingLabelEdit = false;
     std::uint64_t editorModificationRevision = 0;
@@ -95,7 +97,14 @@ wxPGProcessHeaderResizeEventForTesting(wxPropertyGridManager* manager,
                                        wxHeaderCtrlEvent& event);
 #endif
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
+    defined(__WXQT__)
+    #define wxPG_USE_EDITOR_CALLBACK_EPOCH 1
+#else
+    #define wxPG_USE_EDITOR_CALLBACK_EPOCH 0
+#endif
+
+#if wxPG_USE_EDITOR_CALLBACK_EPOCH
 // Keep deferred editor teardown outside the complete property-grid callback
 // transaction, even when application code runs a nested event/idle loop.
 //
@@ -113,7 +122,20 @@ private:
     wxPGDeferredEditorCallbackEpoch& operator=(
         const wxPGDeferredEditorCallbackEpoch&) = delete;
 };
+#else
+class wxPGDeferredEditorCallbackEpoch final
+{
+public:
+    // Keep this non-trivial even on ports where no global callback epoch is
+    // needed. The many scoped instances in the common PropertyGrid sources
+    // are intentional synchronization markers and must not trigger
+    // -Wunused-variable under non-MSW -Werror builds.
+    wxPGDeferredEditorCallbackEpoch() {}
+    ~wxPGDeferredEditorCallbackEpoch() {}
+};
+#endif
 
+#ifdef __WXMSW__
 // One-shot seam for the otherwise exceptional first SetParent(HWND_MESSAGE)
 // failure in deferred editor teardown. The fallback still invokes the real
 // Win32 APIs and is observable only through the bounded host count.
@@ -129,17 +151,6 @@ WXDLLIMPEXP_PROPGRID unsigned int
 wxPGMSWGetDeferredEditorBatchCountForTesting();
 WXDLLIMPEXP_PROPGRID bool
 wxPGMSWIsEditorParkingHostForTesting(WXWidget hwnd);
-#else
-class wxPGDeferredEditorCallbackEpoch final
-{
-public:
-    // Keep this non-trivial even on ports where no global callback epoch is
-    // needed. The many scoped instances in the common PropertyGrid sources
-    // are intentional synchronization markers and must not trigger
-    // -Wunused-variable under non-MSW -Werror builds.
-    wxPGDeferredEditorCallbackEpoch() {}
-    ~wxPGDeferredEditorCallbackEpoch() {}
-};
 #endif
 
 // -----------------------------------------------------------------------

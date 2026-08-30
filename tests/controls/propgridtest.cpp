@@ -37,8 +37,14 @@
 #endif
 #endif
 
+#ifdef __WXQT__
+#include <QtCore/QPointer>
+#include <QtWidgets/QWidget>
+#endif
+
 #include "waitfor.h"
 
+#include <functional>
 #include <random>
 #include <vector>
 
@@ -747,6 +753,13 @@ public:
         FinishSplitterDrag(cancel);
     }
 
+#ifndef __WXMSW__
+    void AfterNextCaptureReleaseForTest(std::function<void()> callback)
+    {
+        m_afterCaptureRelease = std::move(callback);
+    }
+#endif
+
     bool MoveOverPropertyForTest(wxPGProperty* property, unsigned int column)
     {
         const wxRect rect = GetPropertyRect(property, property);
@@ -764,6 +777,18 @@ public:
     }
 
 protected:
+#ifndef __WXMSW__
+    void DoReleaseMouse() override
+    {
+        // wxEVT_MOUSE_CAPTURE_CHANGED is MSW-only. On other ports exercise
+        // the same reentrant boundary after their real capture release.
+        const auto callback = std::move(m_afterCaptureRelease);
+        wxPropertyGrid::DoReleaseMouse();
+        if ( callback )
+            callback();
+    }
+#endif
+
     bool DoExpand(wxPGProperty* property, bool sendEvent = false) override
     {
         const bool result = wxPropertyGrid::DoExpand(property, sendEvent);
@@ -776,6 +801,9 @@ protected:
     }
 
 private:
+#ifndef __WXMSW__
+    std::function<void()> m_afterCaptureRelease;
+#endif
     std::unique_ptr<ReentrantPropertyGrid>* m_destroyOnExpandOwner = nullptr;
 };
 
@@ -3029,6 +3057,86 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
     SECTION("Selection_focus_callback_may_remove_property")
     {
+        class FocusCallbackTextCtrl final : public wxTextCtrl
+        {
+        public:
+            using wxTextCtrl::wxTextCtrl;
+
+            void Arm(wxPropertyGrid* grid, wxPGProperty* property, bool& called)
+            {
+                m_grid = grid;
+                m_property = property;
+                m_called = &called;
+            }
+
+            void SetFocus() override
+            {
+                if ( m_grid )
+                {
+                    wxPropertyGrid* const grid = m_grid;
+                    wxPGProperty* const property = m_property;
+                    bool* const called = m_called;
+                    m_grid = nullptr;
+                    m_property = nullptr;
+                    m_called = nullptr;
+                    *called = true;
+                    grid->DeleteProperty(property);
+                    return;
+                }
+
+                wxTextCtrl::SetFocus();
+            }
+
+        private:
+            wxPropertyGrid* m_grid = nullptr;
+            wxPGProperty* m_property = nullptr;
+            bool* m_called = nullptr;
+        };
+
+        // A local wxPGTextCtrlEditor subclass would reset the built-in editor
+        // pointer in its base destructor. Delegate without owning that editor.
+        class FocusCallbackEditor final : public wxPGEditor
+        {
+        public:
+            wxPGWindowList CreateControls(wxPropertyGrid* grid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const override
+            {
+                return wxPGWindowList(
+                    new FocusCallbackTextCtrl(grid->GetPanel(), wxID_ANY,
+                                               property->GetValueAsString(),
+                                               pos, size, wxTE_PROCESS_ENTER));
+            }
+
+            void UpdateControl(wxPGProperty* property,
+                               wxWindow* ctrl) const override
+            {
+                wxPGEditor_TextCtrl->UpdateControl(property, ctrl);
+            }
+
+            bool OnEvent(wxPropertyGrid* grid,
+                         wxPGProperty* property,
+                         wxWindow* ctrl,
+                         wxEvent& event) const override
+            {
+                return wxPGEditor_TextCtrl->OnEvent(grid, property, ctrl, event);
+            }
+
+            bool GetValueFromControl(wxVariant& value,
+                                     wxPGProperty* property,
+                                     wxWindow* ctrl) const override
+            {
+                return wxPGEditor_TextCtrl->GetValueFromControl(value,
+                                                               property, ctrl);
+            }
+
+            void OnFocus(wxPGProperty* property, wxWindow* ctrl) const override
+            {
+                wxPGEditor_TextCtrl->OnFocus(property, ctrl);
+            }
+        } focusEditor;
+
         std::unique_ptr<ReentrantPropertyGrid> grid(
             new ReentrantPropertyGrid(wxTheApp->GetTopWindow(),
                                       wxID_ANY,
@@ -3040,16 +3148,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                                             wxPG_LABEL,
                                             "value"));
         REQUIRE(property);
+        property->SetEditor(&focusEditor);
         REQUIRE( pg->SelectProperty(property, true) );
-        wxWindow* const editor = pg->GetEditorControl();
+        FocusCallbackTextCtrl* const editor =
+            static_cast<FocusCallbackTextCtrl*>(pg->GetEditorControl());
         REQUIRE(editor);
-        wxTextCtrl focusSink(wxTheApp->GetTopWindow(), wxID_ANY);
-        focusSink.SetFocus();
-        REQUIRE( WaitFor("PropertyGrid test parent focus",
-                         [&focusSink]()
-                         {
-                             return wxWindow::FindFocus() == &focusSink;
-                         }) );
         bool focusSeen = false;
         int selectedEvents = 0;
         pg->Bind(wxEVT_PG_SELECTED,
@@ -3057,13 +3160,10 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                  {
                      ++selectedEvents;
                  });
-        editor->Bind(wxEVT_SET_FOCUS,
-                     [pg, property, &focusSeen](wxFocusEvent& event)
-                     {
-                         event.Skip();
-                         focusSeen = true;
-                         pg->DeleteProperty(property);
-                     });
+        // Exercise the common guard at the virtual SetFocus() boundary. This
+        // does not qualify native focus delivery, which depends on the window
+        // manager accepting focus and is a separate integration contract.
+        editor->Arm(pg, property, focusSeen);
 
         CHECK_FALSE( pg->SelectProperty(property, true) );
 
@@ -3542,7 +3642,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         const size_t pageCount = pgManager->GetPageCount();
 
         int resizeEvents = 0;
-        bool removeResult = true;
+        bool removeResult = false;
         pgManager->Bind(
             wxEVT_PG_COLS_RESIZED,
             [&](wxPropertyGridEvent&)
@@ -3551,13 +3651,17 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                      pgManager->GetSelectedPage() == 0 )
                 {
                     ++resizeEvents;
-                    removeResult = pgManager->RemovePage(1);
+                    // Every attempt must be rejected, including any further
+                    // size notifications while the page switch is pending.
+                    removeResult = pgManager->RemovePage(1) || removeResult;
                 }
             });
 
         pgManager->SelectPage(1);
 
-        CHECK( resizeEvents == 1 );
+        // Switching state and updating its scrollbars can each resize the
+        // destination columns before the manager commits the selected page.
+        CHECK( resizeEvents >= 1 );
         CHECK_FALSE( removeResult );
         CHECK( pgManager->GetPageCount() == pageCount );
         CHECK( pgManager->GetPage(1) == targetPage );
@@ -4400,10 +4504,31 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         const wxWeakRef<wxWindow> weakEditor(editor);
         const int targetPosition =
             pg->GetSplitterPosition() + pg->FromDIP(24);
+#ifdef __WXQT__
+        const QPointer<QWidget> editorNativeWidget(editor->GetHandle());
+#endif
         int resizeEvents = 0;
         bool positionWasPublished = false;
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
+    defined(__WXQT__)
+        struct EditorLifetime
+        {
+            bool afterOwnerDeletion = false;
+            bool afterNestedIdle = false;
+            bool parentDetached = false;
+            bool nativeControlAlive = false;
+#ifdef __WXQT__
+            bool nativeParentDetached = false;
+            bool nativeHidden = false;
+#endif
+        } editorLifetime;
+#endif
         editor->Bind(wxEVT_SIZE,
                      [pg, targetPosition, &resizeEvents,
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
+    defined(__WXQT__)
+                      editor, &editorLifetime,
+#endif
                       &positionWasPublished](wxSizeEvent& event)
                      {
                          event.Skip();
@@ -4411,7 +4536,40 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                          {
                              positionWasPublished =
                                  pg->GetSplitterPosition() == targetPosition;
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
+    defined(__WXQT__)
+                             // Keep everything used after delete pg on the
+                             // stack, independently of the editor-owned
+                             // callable whose lifetime is under test.
+                             const wxWeakRef<wxWindow> survivor(editor);
+                             const WXWidget nativeControl = editor->GetHandle();
+                             EditorLifetime* const lifetime = &editorLifetime;
+#ifdef __WXQT__
+                             const QPointer<QWidget> nativeWidget(nativeControl);
+#endif
+#endif
                              delete pg;
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
+    defined(__WXQT__)
+                             lifetime->afterOwnerDeletion = !!survivor;
+                             lifetime->parentDetached =
+                                 survivor && !survivor->GetParent();
+                             wxTheApp->ProcessIdle();
+                             lifetime->afterNestedIdle = !!survivor;
+                             lifetime->nativeControlAlive =
+                                 survivor &&
+#ifdef __WXQT__
+                                 nativeWidget &&
+#endif
+                                 survivor->GetHandle() == nativeControl &&
+                                 survivor->GetSize().x >= 0;
+#ifdef __WXQT__
+                             lifetime->nativeParentDetached =
+                                 nativeWidget && !nativeWidget->parentWidget();
+                             lifetime->nativeHidden =
+                                 nativeWidget && !nativeWidget->isVisible();
+#endif
+#endif
                          }
                      });
 
@@ -4420,9 +4578,26 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK( resizeEvents == 1 );
         CHECK( positionWasPublished );
         CHECK_FALSE( weakGrid );
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX_COCOA__) || \
+    defined(__WXQT__)
+        // These ports retain the real editor/native control until the whole
+        // resize transaction returns, even across an explicitly nested idle.
+        // No corresponding ownership guarantee is assumed for other ports.
+        CHECK( editorLifetime.afterOwnerDeletion );
+        CHECK( editorLifetime.afterNestedIdle );
+        CHECK( editorLifetime.parentDetached );
+        CHECK( editorLifetime.nativeControlAlive );
+#ifdef __WXQT__
+        CHECK( editorLifetime.nativeParentDetached );
+        CHECK( editorLifetime.nativeHidden );
+#endif
+#endif
         wxTheApp->ProcessIdle();
         REQUIRE( WaitFor("PropertyGrid splitter editor destruction",
                          [&weakEditor]() { return !weakEditor; }) );
+#ifdef __WXQT__
+        CHECK( editorNativeWidget.isNull() );
+#endif
     }
 
     SECTION("Splitter_rollback_resize_callback_may_destroy_grid")
@@ -4708,6 +4883,15 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             wxPoint(startingPosition + pg->FromDIP(24), downPosition.y),
             true);
         REQUIRE(pg->HasCapture());
+#ifndef __WXMSW__
+        // This is a deterministic release callback, not a claim that the
+        // port emits the MSW-only capture-changed notification.
+        pg->AfterNextCaptureReleaseForTest([secondary, &captureEvents]()
+        {
+            ++captureEvents;
+            DestroyPropertyGridEditorControl(secondary);
+        });
+#else
         pg->Bind(wxEVT_MOUSE_CAPTURE_CHANGED,
                  [secondary, &captureEvents](wxMouseCaptureChangedEvent& event)
                  {
@@ -4715,6 +4899,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                      if ( captureEvents++ == 0 )
                          DestroyPropertyGridEditorControl(secondary);
                  });
+#endif
         pg->Bind(wxEVT_PG_COL_END_DRAG,
                  [&endEvents](wxPropertyGridEvent&)
                  {
@@ -6024,7 +6209,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         delete pg;
     }
 
-    SECTION("Existing_pending_membership_and_app_handlers_are_transferred")
+    SECTION("Existing_pending_membership_preserves_app_handler_ownership")
     {
         ReentrantPropertyGrid* const pg =
             new ReentrantPropertyGrid(wxTheApp->GetTopWindow(),
@@ -6045,18 +6230,42 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         wxEvtHandler* const secondAppHandler = new wxEvtHandler;
         control->PushEventHandler(firstAppHandler);
         control->PushEventHandler(secondAppHandler);
+        bool appHandlersDetached = false;
+        control->Bind(
+            wxEVT_DESTROY,
+            [control, firstAppHandler, secondAppHandler,
+             &appHandlersDetached](wxWindowDestroyEvent& event)
+            {
+                if ( event.GetEventObject() == control )
+                {
+                    // These handlers belong to the application, not the
+                    // grid. Unlink them here, but keep them alive until this
+                    // destruction event has finished traversing the chain.
+                    CHECK( control->GetEventHandler() == secondAppHandler );
+                    CHECK( control->RemoveEventHandler(secondAppHandler) );
+                    CHECK( control->RemoveEventHandler(firstAppHandler) );
+                    CHECK( control->GetEventHandler() == control );
+                    appHandlersDetached = true;
+                }
+                event.Skip();
+            });
         wxPendingDelete.Append(control);
         wxPendingDelete.Append(control);
 
         REQUIRE( pg->ClearSelection() );
         CHECK_FALSE( wxPendingDelete.Member(control) );
+        CHECK_FALSE( appHandlersDetached );
+        CHECK( control->GetEventHandler() == secondAppHandler );
+        CHECK( secondAppHandler->GetNextHandler() == firstAppHandler );
+        CHECK( firstAppHandler->GetNextHandler() == control );
+
+        wxTheApp->ProcessIdle();
+        CHECK_FALSE( weakControl );
+        CHECK( appHandlersDetached );
         CHECK( firstAppHandler->IsUnlinked() );
         CHECK( secondAppHandler->IsUnlinked() );
         delete firstAppHandler;
         delete secondAppHandler;
-
-        wxTheApp->ProcessIdle();
-        CHECK_FALSE( weakControl );
         delete pg;
     }
 
@@ -6929,6 +7138,29 @@ TEST_CASE("PropertyGrid::EditorForwarderOwnerLifetime",
     REQUIRE( text );
     REQUIRE( button );
 
+    bool textDestroyed = false;
+    bool buttonDestroyed = false;
+    text->Bind(wxEVT_DESTROY,
+               [text, &textDestroyed](wxWindowDestroyEvent& event)
+               {
+                   if ( event.GetEventObject() == text )
+                   {
+                       textDestroyed = true;
+                       CHECK( text->GetEventHandler() == text );
+                   }
+                   event.Skip();
+               });
+    button->Bind(wxEVT_DESTROY,
+                 [button, &buttonDestroyed](wxWindowDestroyEvent& event)
+                 {
+                     if ( event.GetEventObject() == button )
+                     {
+                         buttonDestroyed = true;
+                         CHECK( button->GetEventHandler() == button );
+                     }
+                     event.Skip();
+                 });
+
     // Keep both live forwarding contracts: Enter commits the text value and
     // the secondary button reaches the property exactly once.
     text->ChangeValue("after");
@@ -6992,6 +7224,53 @@ TEST_CASE("PropertyGrid::EditorForwarderOwnerLifetime",
     CHECK( childDestroyedAfterGridSubobject );
     CHECK_FALSE( weakChild );
     CHECK( buttonEvents == 1 );
+    CHECK( textDestroyed );
+    CHECK( buttonDestroyed );
+
+    // Cover the real combo editor whose base-window destructor requires all
+    // pushed handlers to be detached, without asking the fixture to pop them.
+    std::unique_ptr<TestGrid> choiceGrid(
+        new TestGrid(wxTheApp->GetTopWindow(), wxID_ANY,
+                     wxDefaultPosition, wxSize(360, 220)));
+    wxArrayString choices;
+    choices.Add("first");
+    choices.Add("second");
+    wxPGProperty* const choiceProperty =
+        choiceGrid->Append(new wxEnumProperty("Choice", wxPG_LABEL, choices));
+    REQUIRE( choiceGrid->SelectProperty(choiceProperty) );
+    wxWindow* const choiceEditor = choiceGrid->GetEditorControl();
+    REQUIRE( choiceEditor );
+    REQUIRE( choiceEditor->GetEventHandler() != choiceEditor );
+    bool choiceDestroyed = false;
+    choiceEditor->Bind(wxEVT_DESTROY,
+                      [choiceEditor, &choiceDestroyed](wxWindowDestroyEvent& event)
+                      {
+                          if ( event.GetEventObject() == choiceEditor )
+                          {
+                              choiceDestroyed = true;
+                              CHECK( choiceEditor->GetEventHandler() == choiceEditor );
+                          }
+                          event.Skip();
+                      });
+    choiceGrid.reset();
+    CHECK( choiceDestroyed );
+
+    // The generic hint implementation (used by wxQt) owns a pushed handler
+    // which its text-entry destructor must pop itself. Grid cleanup must
+    // remove its forwarder without unlinking the control-owned hint handler.
+    std::unique_ptr<TestGrid> hintGrid(
+        new TestGrid(wxTheApp->GetTopWindow(), wxID_ANY,
+                     wxDefaultPosition, wxSize(360, 220)));
+    wxPGProperty* const hintProperty =
+        hintGrid->Append(new wxStringProperty("Hinted", wxPG_LABEL, ""));
+    hintProperty->SetAttribute(wxPG_ATTR_HINT, "Enter a value");
+    REQUIRE( hintGrid->SelectProperty(hintProperty) );
+    wxTextCtrl* const hintEditor = hintGrid->GetEditorTextCtrl();
+    REQUIRE( hintEditor );
+    CHECK( hintEditor->GetHint() == "Enter a value" );
+    const wxWeakRef<wxWindow> weakHintEditor(hintEditor);
+    hintGrid.reset();
+    CHECK_FALSE( weakHintEditor );
 }
 
 #endif // wxUSE_PROPGRID

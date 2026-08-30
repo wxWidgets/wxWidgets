@@ -162,6 +162,8 @@ bool CommandDialogButton(wxDialog* dialog, int id)
     return true;
 }
 
+#if wxUSE_PREFERENCES_EDITOR && !defined(wxHAS_PREF_EDITOR_MODELESS)
+
 void AbortAnyModalDialog()
 {
     for ( wxWindowList::compatibility_iterator node =
@@ -177,6 +179,8 @@ void AbortAnyModalDialog()
         }
     }
 }
+
+#endif // wxUSE_PREFERENCES_EDITOR && !wxHAS_PREF_EDITOR_MODELESS
 
 #if wxUSE_WIZARDDLG
 
@@ -2192,6 +2196,8 @@ std::vector<long> GetUnavailablePropertySheetStyles()
 
 #if wxUSE_PREFERENCES_EDITOR
 
+#ifndef wxHAS_PREF_EDITOR_MODELESS
+
 size_t CountDynamicEventEntries(wxEvtHandler* handler)
 {
     size_t count = 0;
@@ -2205,6 +2211,8 @@ size_t CountDynamicEventEntries(wxEvtHandler* handler)
     }
     return count;
 }
+
+#endif // !wxHAS_PREF_EDITOR_MODELESS
 
 class TrackingPreferencesPage final : public wxPreferencesPage
 {
