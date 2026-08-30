@@ -4374,7 +4374,8 @@ void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
             tabs->m_art,
             std::unique_ptr<wxAuiTabContainerSnapshot>(
                 new wxAuiTabContainerSnapshot(
-                    tabs, tabs->m_art, tabs->m_rect, tabs->m_tabOffset,
+                    tabs, tabs->m_art, tabs->wxAuiTabContainer::m_rect,
+                    tabs->m_tabOffset,
                     tabs->m_flags, tabs->m_tabRowHeight, tabs->m_pages,
                     tabs->m_buttons, tabs))
         });
@@ -4436,7 +4437,8 @@ void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
                 return nullptr;
             }
             if ( !expected.tabsRevision->Matches(
-                    expected.tabs->m_art, expected.tabs->m_rect,
+                    expected.tabs->m_art,
+                    expected.tabs->wxAuiTabContainer::m_rect,
                     expected.tabs->m_tabOffset, expected.tabs->m_flags,
                     expected.tabs->m_tabRowHeight, expected.tabs->m_pages,
                     expected.tabs->m_buttons) )
@@ -5004,7 +5006,8 @@ void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
             book = hasExactArtRevision();
             if ( !book )
                 return;
-            const wxSize tabSize = frames[i].tabs->m_rect.GetSize();
+            const wxSize tabSize =
+                frames[i].tabs->wxAuiTabContainer::m_rect.GetSize();
             const size_t pageCount = frames[i].tabs->m_pages.GetCount();
             wxAuiInvokeTabArt(
                 clones.back().Get(),
@@ -5929,7 +5932,7 @@ void wxAuiNotebook::InsertPageAt(wxAuiNotebookPage& info,
                 getLocalFrame(*targetFrame) == tabctrl && tabctrl->m_art )
         {
             wxAuiSetTabArtSizingInfo(
-                tabctrl->m_art, tabctrl->m_rect.GetSize(),
+                tabctrl->m_art, tabctrl->wxAuiTabContainer::m_rect.GetSize(),
                 tabctrl->m_pages.GetCount(), tabctrl);
         }
 
@@ -6048,7 +6051,7 @@ void wxAuiNotebook::InsertPageAt(wxAuiNotebookPage& info,
     if ( tabctrl->m_art )
     {
         wxAuiSetTabArtSizingInfo(
-            tabctrl->m_art, tabctrl->m_rect.GetSize(),
+            tabctrl->m_art, tabctrl->wxAuiTabContainer::m_rect.GetSize(),
             tabctrl->m_pages.GetCount(), tabctrl);
     }
     if ( !isCurrent() )
@@ -6361,7 +6364,7 @@ wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
     if ( ctrl->m_art )
     {
         wxAuiSetTabArtSizingInfo(
-            ctrl->m_art, ctrl->m_rect.GetSize(),
+            ctrl->m_art, ctrl->wxAuiTabContainer::m_rect.GetSize(),
             ctrl->m_pages.GetCount(), ctrl);
     }
     book = hasCommittedProjection();
@@ -7653,7 +7656,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     if ( src_tabs->m_art )
     {
         wxAuiSetTabArtSizingInfo(
-            src_tabs->m_art, src_tabs->m_rect.GetSize(),
+            src_tabs->m_art, src_tabs->wxAuiTabContainer::m_rect.GetSize(),
             src_tabs->m_pages.GetCount(), src_tabs);
     }
     book = hasMovedTopology();
@@ -7662,7 +7665,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     if ( dest_tabs->m_art )
     {
         wxAuiSetTabArtSizingInfo(
-            dest_tabs->m_art, dest_tabs->m_rect.GetSize(),
+            dest_tabs->m_art, dest_tabs->wxAuiTabContainer::m_rect.GetSize(),
             dest_tabs->m_pages.GetCount(), dest_tabs);
     }
     book = hasMovedTopology();
@@ -7954,7 +7957,7 @@ void wxAuiNotebook::UnsplitAll()
             if ( tab->m_art )
             {
                 wxAuiSetTabArtSizingInfo(
-                    tab->m_art, tab->m_rect.GetSize(),
+                    tab->m_art, tab->wxAuiTabContainer::m_rect.GetSize(),
                     tab->m_pages.GetCount(), tab);
             }
             book = hasCommittedMove();
@@ -7963,7 +7966,8 @@ void wxAuiNotebook::UnsplitAll()
             if ( tabMain->m_art )
             {
                 wxAuiSetTabArtSizingInfo(
-                    tabMain->m_art, tabMain->m_rect.GetSize(),
+                    tabMain->m_art,
+                    tabMain->wxAuiTabContainer::m_rect.GetSize(),
                     tabMain->m_pages.GetCount(), tabMain);
             }
             book = hasCommittedMove();
@@ -9319,7 +9323,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
                     {
                         wxAuiSetTabArtSizingInfo(
                             rollbackTabs->m_art,
-                            rollbackTabs->m_rect.GetSize(),
+                            rollbackTabs->wxAuiTabContainer::m_rect.GetSize(),
                             rollbackTabs->m_pages.GetCount(), rollbackTabs);
                         rollbackSource = hasLocalOriginalSourceProjection();
                         if ( !rollbackSource )
@@ -9803,7 +9807,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
         if ( src_tabs->m_art )
         {
             wxAuiSetTabArtSizingInfo(
-                src_tabs->m_art, src_tabs->m_rect.GetSize(),
+                src_tabs->m_art, src_tabs->wxAuiTabContainer::m_rect.GetSize(),
                 src_tabs->m_pages.GetCount(), src_tabs);
         }
         source = hasMovedSourceTopology();
@@ -9812,7 +9816,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiTabCtrl* src_tabs, int src_idx)
         if ( dest_tabs->m_art )
         {
             wxAuiSetTabArtSizingInfo(
-                dest_tabs->m_art, dest_tabs->m_rect.GetSize(),
+                dest_tabs->m_art, dest_tabs->wxAuiTabContainer::m_rect.GetSize(),
                 dest_tabs->m_pages.GetCount(), dest_tabs);
         }
         source = hasMovedSourceTopology();
@@ -10425,7 +10429,8 @@ bool wxAuiNotebook::ShowWindowMenu()
     if ( !art )
         return false;
     const wxAuiTabContainerSnapshot revision(
-        tabCtrl, tabCtrl->m_art, tabCtrl->m_rect, tabCtrl->m_tabOffset,
+        tabCtrl, tabCtrl->m_art, tabCtrl->wxAuiTabContainer::m_rect,
+        tabCtrl->m_tabOffset,
         tabCtrl->m_flags, tabCtrl->m_tabRowHeight, tabCtrl->m_pages,
         tabCtrl->m_buttons, tabCtrl);
     wxAuiPageWindowProjection pageProjection;
@@ -10450,7 +10455,8 @@ bool wxAuiNotebook::ShowWindowMenu()
             !pageProjection.MatchesAll(tabCtrl->m_pages) ||
             GetActiveTabCtrl() != tabCtrl ||
             !revision.Matches(
-                tabCtrl->m_art, tabCtrl->m_rect, tabCtrl->m_tabOffset,
+                tabCtrl->m_art, tabCtrl->wxAuiTabContainer::m_rect,
+                tabCtrl->m_tabOffset,
                 tabCtrl->m_flags, tabCtrl->m_tabRowHeight,
                 tabCtrl->m_pages, tabCtrl->m_buttons) )
     {

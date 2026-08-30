@@ -433,8 +433,14 @@ bool DepublishFixedOwnerLocked(
 
 struct wxMSWOlePendingTimerCancel
 {
-    UINT_PTR id = 0;
-    DWORD threadId = 0;
+    wxMSWOlePendingTimerCancel(UINT_PTR timerId = 0,
+                               DWORD ownerThreadId = 0) noexcept
+        : id(timerId), threadId(ownerThreadId)
+    {
+    }
+
+    UINT_PTR id;
+    DWORD threadId;
 };
 
 wxMSWOlePendingTimerCancel ClearPendingExternalWakeLocked(
