@@ -52,4 +52,3 @@ No claim of native Ribbon, native titlebar or fully supported advanced surface b
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
-

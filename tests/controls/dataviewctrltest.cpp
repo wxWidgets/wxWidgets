@@ -266,13 +266,13 @@ public:
     };
 
     explicit TransactionalTreeModel(bool includeBatchItems = false)
-        : m_container{ 3, nullptr, true },
-          m_childHigh{ 32, &m_container, false },
-          m_childLow{ 31, &m_container, false },
-          m_addedChild{ 33, &m_container, false },
-          m_two{ 2, nullptr, true },
-          m_twoChild{ 21, &m_two, false },
-          m_one{ 1, nullptr, false },
+        : m_container{ 3, nullptr, true, {} },
+          m_childHigh{ 32, &m_container, false, {} },
+          m_childLow{ 31, &m_container, false, {} },
+          m_addedChild{ 33, &m_container, false, {} },
+          m_two{ 2, nullptr, true, {} },
+          m_twoChild{ 21, &m_two, false, {} },
+          m_one{ 1, nullptr, false, {} },
           m_includeBatchItems(includeBatchItems)
     {
         m_container.children.push_back(&m_childHigh);

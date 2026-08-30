@@ -248,6 +248,7 @@ jobs:
         # The Appx module requires Windows PowerShell, not PowerShell Core.
         shell: powershell
         run: |
+          $ErrorActionPreference = 'Stop'
           $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
           $versionMatch = Select-String "$buildDir\CMakeCache.txt" `
             -Pattern '^wxWINUI3_WINDOWSAPPSDK_VERSION:STRING=(.+)$'
@@ -268,7 +269,68 @@ jobs:
           if (@($runtime).Count -ne 1) {
             throw "Expected one pinned x64 Windows App Runtime framework MSIX, found $(@($runtime).Count)"
           }
-          Add-AppxPackage -Path $runtime.FullName -ForceApplicationShutdown
+
+          # Server 2022 uses the bootstrapper's DDLM path, not the Windows 11
+          # dynamic-dependency APIs. The framework alone cannot initialize it.
+          $ddlm = Get-ChildItem `
+            "$($runtimeRoot.FullName)\tools\MSIX\win10-x64" -File `
+            -Filter 'Microsoft.WindowsAppRuntime.DDLM.*.msix'
+          if (@($ddlm).Count -ne 1) {
+            throw "Expected one pinned x64 Windows App Runtime DDLM MSIX, found $(@($ddlm).Count)"
+          }
+
+          $versionHeader = "$($runtimeRoot.FullName)\include\WindowsAppSDK-VersionInfo.h"
+          $versionParts = foreach ($part in 'MAJOR', 'MINOR', 'BUILD', 'REVISION') {
+            $match = Select-String $versionHeader `
+              -Pattern "^#define\s+WINDOWSAPPSDK_RUNTIME_VERSION_$part\s+(\d+)u?\s*$"
+            if (@($match).Count -ne 1) {
+              throw "Expected one runtime version component $part in $versionHeader"
+            }
+            $match.Matches[0].Groups[1].Value
+          }
+          $minimumVersion = [version]($versionParts -join '.')
+
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $packages = foreach ($package in @($runtime, $ddlm)) {
+            $archive = [IO.Compression.ZipFile]::OpenRead($package.FullName)
+            try {
+              $reader = New-Object IO.StreamReader($archive.GetEntry('AppxManifest.xml').Open())
+              try { [xml]$manifest = $reader.ReadToEnd() } finally { $reader.Dispose() }
+              $identity = $manifest.Package.Identity
+              if ($identity.ProcessorArchitecture -ne 'x64' -or
+                  [version]$identity.Version -ne $minimumVersion) {
+                throw "Pinned MSIX identity does not match x64 runtime $minimumVersion"
+              }
+              [pscustomobject]@{
+                Path = $package.FullName
+                Name = $identity.Name
+                Publisher = $identity.Publisher
+                Architecture = $identity.ProcessorArchitecture
+                Version = $identity.Version
+              }
+            }
+            finally { $archive.Dispose() }
+          }
+          $packages | ConvertTo-Json | Tee-Object "$buildDir\winui-runtime-packages.json"
+          Start-Transcript -Path "$buildDir\winui-runtime-registration.log" -Force
+          try {
+            # Register the framework first, then its exact-version DDLM.
+            foreach ($package in $packages) {
+              Write-Host "Registering $($package.Name) $($package.Version) $($package.Architecture)"
+              Add-AppxPackage -Path $package.Path -ForceApplicationShutdown
+              $registered = @(Get-AppxPackage -Name $package.Name -PackageTypeFilter Framework, Main |
+                Where-Object {
+                  $_.Publisher -eq $package.Publisher -and
+                  $_.Architecture -eq $package.Architecture -and
+                  [version]$_.Version -ge $minimumVersion
+                })
+              if ($registered.Count -eq 0) {
+                throw "Runtime package $($package.Name) >= $minimumVersion is not registered for this user"
+              }
+              $registered | Format-List Name, PackageFullName, Architecture, Version, Status
+            }
+          }
+          finally { Stop-Transcript }
 
       - name: Run wxWinUI runtime smoke
         run: |
@@ -294,6 +356,7 @@ jobs:
           path: |
             build-winui-${{ matrix.linkage }}/winui-*.xml
             build-winui-${{ matrix.linkage }}/winui-*.log
+            build-winui-${{ matrix.linkage }}/winui-runtime-packages.json
             build-winui-${{ matrix.linkage }}/Testing/Temporary/LastTest.log
             build-winui-${{ matrix.linkage }}/Testing/Temporary/LastTestsFailed.log
           if-no-files-found: ignore

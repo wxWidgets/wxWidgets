@@ -102,6 +102,14 @@ If installation reaches a different package/dependency error, retain the evidenc
 - Full WinUI PropertyGrid now passes in both linkages: shared 1175 assertions / 2 cases, static 1179 / 2, `audit101-propgrid-all-pass.log`. Rebuilds exit 0 (`audit101-pg-retained-build.log`). All tested local regressions in this lot are now passing; remote platform coverage is still pending.
 - Published normal merge/fixes through 0080db6c16. GitHub now reports MERGEABLE and has started Actions, including both WinUI jobs (MSW builds run 33314769703). No history rewrite. Local final smoke + Supported V0 gates pass 1162 assertions / 90 cases per linkage (`audit101-final-gates.log` and `.xml`).
 
+### CI on 0080db6c16
+
+- Remote jobs exposed additional defects; this lot remains OPEN. Qt/GCC rejects seven missing children initializers in TransactionalTreeModel; explicit empty initializers now compile in local MSW/WinUI and Qt Debug builds.
+- WinUI static job 99266038086 compiled successfully, then failed bootstrap with 0x80670016 on Windows Server 2022. The pinned framework version exactly matches the runtime header (8000.921.1539.0); the job had excluded the matching DDLM package needed on this OS. Register the pinned framework and DDLM, verify architecture/version/publisher, and retain registration artifacts. Neither runtime test is skipped or relaxed.
+- Windows PowerShell 5.1 parsing and three mocked-registration scenarios pass (success, missing DDLM registration, old framework); real pinned MSIX manifests are inspected, with no local Appx installation. Evidence: F:\wxwinui-pr26890-msw-audit-build\audit101-runtime-registration-check.ps1. A new remote runner execution is still required.
+- CheckWhitespace identified extra blank EOF lines in plans 103-112; these are removed, not ignored by CI.
+- Non-MSW PropertyGrid editor-handler teardown, the macOS callback lifetime case, and Qt callback deletion remain separately tracked while their focused fixes are tested. Passing compilation does not close these runtime failures.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

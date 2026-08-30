@@ -51,4 +51,3 @@ If two consumers have materially different rollback/retirement semantics, do not
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
-

@@ -51,4 +51,3 @@ No force push, PR close/create, destructive cleanup or feature removal without e
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
-

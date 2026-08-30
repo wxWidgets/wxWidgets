@@ -51,4 +51,3 @@ Do not bypass input safety gates or invent refresh-rate/soak evidence for unavai
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
-

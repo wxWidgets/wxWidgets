@@ -51,4 +51,3 @@ Public namespace, ABI or external application compatibility redesign beyond the 
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
-
