@@ -10,6 +10,7 @@
 
 #if wxUSE_LISTCTRL
 
+#include <QtCore/QPointer>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QItemDelegate>
@@ -457,9 +458,16 @@ public:
         // event when the list control is shown for the first time.
         if ( m_view->isVisible() && info.m_mask & wxLIST_MASK_STATE )
         {
+            // A synchronous selection callback can delete the control and its
+            // model. Do not access either of them after returning in this case.
+            const QPointer<wxQtListModel> self(this);
             if ( (info.m_stateMask & wxLIST_STATE_FOCUSED) &&
                 (info.m_state & wxLIST_STATE_FOCUSED) )
+            {
                 m_view->setCurrentIndex(modelIndex);
+                if ( !self )
+                    return true;
+            }
             if ( info.m_stateMask & wxLIST_STATE_SELECTED )
             {
                 QItemSelectionModel *selection = m_view->selectionModel();
@@ -468,6 +476,8 @@ public:
                         ? QItemSelectionModel::Select
                         : QItemSelectionModel::Deselect;
                 selection->select(modelIndex,  flag|QItemSelectionModel::Rows);
+                if ( !self )
+                    return true;
             }
         }
 
@@ -1293,6 +1303,10 @@ void wxQtListTreeWidget::itemPressed(const QModelIndex &index)
 void wxQtListTreeWidget::selectionChanged(const QItemSelection& selected,
                                           const QItemSelection& deselected)
 {
+    // Finish the native update before application callbacks can destroy us.
+    QTreeView::selectionChanged(selected, deselected);
+    const QPointer<wxQtListTreeWidget> self(this);
+
     // A QItemSelection is basically a list of selection ranges, i.e. QItemSelectionRange.
 
     for ( const auto& range : deselected )
@@ -1300,6 +1314,8 @@ void wxQtListTreeWidget::selectionChanged(const QItemSelection& selected,
         for ( int row = range.top(); row <= range.bottom(); ++row )
         {
             EmitListEvent(wxEVT_LIST_ITEM_DESELECTED, model()->index(row, 0));
+            if ( !self || !GetHandler() )
+                return;
         }
     }
 
@@ -1308,10 +1324,10 @@ void wxQtListTreeWidget::selectionChanged(const QItemSelection& selected,
         for ( int row = range.top(); row <= range.bottom(); ++row )
         {
             EmitListEvent(wxEVT_LIST_ITEM_SELECTED, model()->index(row, 0));
+            if ( !self || !GetHandler() )
+                return;
         }
     }
-
-    QTreeView::selectionChanged(selected, deselected);
 }
 
 void wxQtListTreeWidget::OnKeyDown(wxKeyEvent& event)

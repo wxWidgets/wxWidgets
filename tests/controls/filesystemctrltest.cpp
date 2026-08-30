@@ -24,7 +24,9 @@
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
 
-#ifdef __WXMSW__
+#include "waitfor.h"
+
+#ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
 #endif
 
@@ -48,7 +50,7 @@ public:
 
     ~ScopedFilesystemTree()
     {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         for ( const wxString& linkPath : m_directoryLinks )
             (void)::RemoveDirectoryW(AsExtendedPath(linkPath).wc_str());
         for ( const wxString& hiddenPath : m_hiddenPaths )
@@ -92,7 +94,7 @@ public:
             return wxString();
         }
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         if ( path.length() >= MAX_PATH )
         {
             const HANDLE handle =
@@ -119,7 +121,7 @@ public:
         return path;
     }
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     bool MakeDirectoryLink(const wxString& relative,
                            const wxString& target)
     {
@@ -165,11 +167,40 @@ private:
     wxString m_tempRoot;
     wxString m_path;
     bool m_created = false;
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     wxArrayString m_directoryLinks;
     wxArrayString m_hiddenPaths;
     mutable wxArrayString m_extendedPaths;
 #endif
+};
+
+// A failed REQUIRE must not leave a parent-owned control alive with callbacks
+// referring to this test's local variables. Weak ownership also permits the
+// explicit callback-time deletion exercised by the lifetime tests below.
+class ScopedFilesystemControl
+{
+public:
+    explicit ScopedFilesystemControl(wxWindow* window) : m_window(window) { }
+
+    ~ScopedFilesystemControl()
+    {
+        if ( wxWindow* const window = m_window.get() )
+        {
+            DisableCallbacks(window);
+            delete window;
+        }
+    }
+
+private:
+    static void DisableCallbacks(wxWindow* window)
+    {
+        window->SetEvtHandlerEnabled(false);
+        for ( wxWindow* const child : window->GetChildren() )
+            DisableCallbacks(child);
+    }
+
+    wxWeakRef<wxWindow> m_window;
+    wxDECLARE_NO_COPY_CLASS(ScopedFilesystemControl);
 };
 
 bool SamePath(const wxString& lhs, const wxString& rhs)
@@ -292,6 +323,7 @@ TEST_CASE("wxGenericDirCtrl filters and refresh",
                              wxDIRCTRL_DEFAULT_STYLE |
                                  wxDIRCTRL_SHOW_FILTERS,
                              "Text and log|*.txt;*.log|Log only|*.log", 0);
+    const ScopedFilesystemControl cleanupCtrl(ctrl);
 
     wxTreeCtrl* const tree = ctrl->GetTreeCtrl();
     wxDirFilterListCtrl* const choice = ctrl->GetFilterListCtrl();
@@ -312,6 +344,9 @@ TEST_CASE("wxGenericDirCtrl filters and refresh",
     CHECK(FindTreeChild(tree, selected, "shared.log").IsOk());
     CHECK_FALSE(FindTreeChild(tree, selected, "ignored.bin").IsOk());
 
+    // wxQt publishes selection changes after its native selection model has
+    // settled. Drain construction events before observing this operation.
+    wxYield();
     int selectionEvents = 0;
     int activationEvents = 0;
     ctrl->Bind(wxEVT_DIRCTRL_SELECTIONCHANGED,
@@ -325,9 +360,14 @@ TEST_CASE("wxGenericDirCtrl filters and refresh",
                    ++activationEvents;
                });
     ctrl->SetPath(fs.GetPath() + wxFILE_SEP_PATH + "alpha.txt");
+    REQUIRE(WaitFor("directory selection change",
+                    [&selectionEvents]() { return selectionEvents != 0; }));
     CHECK(selectionEvents == 1);
     CHECK(SamePath(ctrl->GetFilePath(),
                    fs.GetPath() + wxFILE_SEP_PATH + "alpha.txt"));
+    ctrl->SetPath(fs.GetPath() + wxFILE_SEP_PATH + "alpha.txt");
+    wxYield();
+    CHECK(selectionEvents == 1);
 
     wxTreeItemId selectedFile = tree->GetSelection();
     REQUIRE(selectedFile.IsOk());
@@ -414,12 +454,12 @@ TEST_CASE("wxGenericDirCtrl mutation Unicode hidden and long paths",
     REQUIRE_FALSE(fs.MakeFile("visible.txt").empty());
     REQUIRE_FALSE(fs.MakeDirectory("rename-me").empty());
     REQUIRE_FALSE(fs.MakeFile("rename-me/child.txt").empty());
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     const bool hasDirectoryLink =
         fs.MakeDirectoryLink("cycle", fs.GetPath());
 #endif
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     const wxString hidden = fs.MakeFile("hidden.txt");
     REQUIRE_FALSE(hidden.empty());
     REQUIRE(fs.Hide(hidden));
@@ -431,6 +471,7 @@ TEST_CASE("wxGenericDirCtrl mutation Unicode hidden and long paths",
                              wxDIRCTRL_DEFAULT_STYLE |
                                  wxDIRCTRL_EDIT_LABELS,
                              "All|*.*");
+    const ScopedFilesystemControl cleanupCtrl(ctrl);
     wxTreeCtrl* const tree = ctrl->GetTreeCtrl();
     REQUIRE(tree);
     REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
@@ -438,7 +479,7 @@ TEST_CASE("wxGenericDirCtrl mutation Unicode hidden and long paths",
     wxTreeItemId selected = tree->GetSelection();
     REQUIRE(selected.IsOk());
     CHECK(FindTreeChild(tree, selected, "visible.txt").IsOk());
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     CHECK_FALSE(FindTreeChild(tree, selected, "hidden.txt").IsOk());
     ctrl->ShowHidden(true);
     REQUIRE(SamePath(ctrl->GetPath(), fs.GetPath()));
@@ -454,7 +495,7 @@ TEST_CASE("wxGenericDirCtrl mutation Unicode hidden and long paths",
     REQUIRE(selected.IsOk());
     CHECK(FindTreeChild(tree, selected, "created-after-refresh.txt").IsOk());
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     if ( hasDirectoryLink )
     {
         wxString boundedCycle =
@@ -563,13 +604,18 @@ TEST_CASE("wxDirFilterListCtrl association and callback lifetime",
                              wxDIRCTRL_DEFAULT_STYLE |
                                  wxDIRCTRL_SHOW_FILTERS,
                              "All|*.*");
+    const ScopedFilesystemControl cleanupCtrl(ctrl);
+    wxYield();
     wxWeakRef<wxWindow> weakCtrl(ctrl);
     ctrl->Bind(wxEVT_DIRCTRL_SELECTIONCHANGED,
-               [ctrl](wxTreeEvent&)
+               [weakCtrl](wxTreeEvent&)
                {
-                   delete ctrl;
+                   if ( wxWindow* const live = weakCtrl.get() )
+                       delete live;
                });
     ctrl->SetPath(child);
+    REQUIRE(WaitFor("directory callback destruction",
+                    [weakCtrl]() { return !weakCtrl; }));
     CHECK_FALSE(weakCtrl);
 
     wxGenericDirCtrl* rawEventCtrl =
@@ -578,20 +624,25 @@ TEST_CASE("wxDirFilterListCtrl association and callback lifetime",
                              wxDIRCTRL_DEFAULT_STYLE |
                                  wxDIRCTRL_SHOW_FILTERS,
                              "All|*.*");
+    const ScopedFilesystemControl cleanupRawEventCtrl(rawEventCtrl);
+    wxYield();
     wxTreeCtrl* const rawEventTree = rawEventCtrl->GetTreeCtrl();
     wxWeakRef<wxWindow> weakRawEventCtrl(rawEventCtrl);
     bool rawEventDeleted = false;
     rawEventTree->Bind(
         wxEVT_TREE_SEL_CHANGED,
-        [rawEventCtrl, &rawEventDeleted](wxTreeEvent&)
+        [weakRawEventCtrl, &rawEventDeleted](wxTreeEvent&)
         {
             if ( !rawEventDeleted )
             {
                 rawEventDeleted = true;
-                delete rawEventCtrl;
+                if ( wxWindow* const live = weakRawEventCtrl.get() )
+                    delete live;
             }
         });
     rawEventCtrl->SetPath(child);
+    REQUIRE(WaitFor("raw tree callback destruction",
+                    [weakRawEventCtrl]() { return !weakRawEventCtrl; }));
     CHECK(rawEventDeleted);
     CHECK_FALSE(weakRawEventCtrl.get());
 
@@ -686,6 +737,7 @@ TEST_CASE("wxGenericFileCtrl API filters refresh and modes",
                               wxString(),
                               "Text|*.txt|Log|*.log",
                               wxFC_OPEN);
+    const ScopedFilesystemControl cleanupCtrl(ctrl);
     wxFileListCtrl* const list = ctrl->GetFileList();
     REQUIRE(list);
     CHECK(wxDynamicCast(ctrl, wxGenericFileCtrl) != nullptr);
@@ -874,6 +926,7 @@ TEST_CASE("wxGenericFileCtrl callback destruction",
     wxGenericFileCtrl* const reentrantCtrl =
         new wxGenericFileCtrl(wxTheApp->GetTopWindow(), wxID_ANY, fs.GetPath(),
                               wxString(), "All|*.*", wxFC_OPEN);
+    const ScopedFilesystemControl cleanupReentrantCtrl(reentrantCtrl);
     wxFileListCtrl* const reentrantList = reentrantCtrl->GetFileList();
     bool reentered = false;
     reentrantList->Bind(
@@ -899,6 +952,7 @@ TEST_CASE("wxGenericFileCtrl callback destruction",
                               wxString(),
                               "All|*.*|Binary|*.bin",
                               wxFC_OPEN);
+    const ScopedFilesystemControl cleanupFilterReentrantCtrl(filterReentrantCtrl);
     wxFileListCtrl* const filterReentrantList =
         filterReentrantCtrl->GetFileList();
     bool filterReentered = false;
@@ -930,6 +984,7 @@ TEST_CASE("wxGenericFileCtrl callback destruction",
     wxGenericFileCtrl* deleteAllCtrl =
         new wxGenericFileCtrl(wxTheApp->GetTopWindow(), wxID_ANY, fs.GetPath(),
                               wxString(), "All|*.*", wxFC_OPEN);
+    const ScopedFilesystemControl cleanupDeleteAllCtrl(deleteAllCtrl);
     wxFileListCtrl* const deleteAllList = deleteAllCtrl->GetFileList();
     wxWeakRef<wxFileListCtrl> weakDeleteAllList(deleteAllList);
     bool deleteAllCallback = false;
@@ -950,6 +1005,7 @@ TEST_CASE("wxGenericFileCtrl callback destruction",
     wxGenericFileCtrl* insertCtrl =
         new wxGenericFileCtrl(wxTheApp->GetTopWindow(), wxID_ANY, fs.GetPath(),
                               wxString(), "All|*.*", wxFC_OPEN);
+    const ScopedFilesystemControl cleanupInsertCtrl(insertCtrl);
     wxFileListCtrl* const insertList = insertCtrl->GetFileList();
     wxWeakRef<wxFileListCtrl> weakInsertList(insertList);
     bool insertCallback = false;
@@ -967,6 +1023,7 @@ TEST_CASE("wxGenericFileCtrl callback destruction",
     wxGenericFileCtrl* navigationCtrl =
         new wxGenericFileCtrl(wxTheApp->GetTopWindow(), wxID_ANY, fs.GetPath(),
                               wxString(), "All|*.*", wxFC_OPEN);
+    const ScopedFilesystemControl cleanupNavigationCtrl(navigationCtrl);
     wxFileListCtrl* const navigationList = navigationCtrl->GetFileList();
     wxWeakRef<wxFileListCtrl> weakNavigationList(navigationList);
     bool navigationCallback = false;
@@ -988,22 +1045,30 @@ TEST_CASE("wxGenericFileCtrl callback destruction",
     wxGenericFileCtrl* selectedCtrl =
         new wxGenericFileCtrl(wxTheApp->GetTopWindow(), wxID_ANY, fs.GetPath(),
                               wxString(), "All|*.*", wxFC_OPEN);
+    const ScopedFilesystemControl cleanupSelectedCtrl(selectedCtrl);
     wxFileListCtrl* selectedList = selectedCtrl->GetFileList();
     const long selectedIndex = FindListItem(selectedList, "selected.txt");
     REQUIRE(selectedIndex != wxNOT_FOUND);
     wxWeakRef<wxWindow> weakSelected(selectedCtrl);
+    int selectionCallbacks = 0;
     selectedCtrl->Bind(wxEVT_FILECTRL_SELECTIONCHANGED,
-                       [selectedCtrl](wxFileCtrlEvent&)
+                       [selectedCtrl, selectedList,
+                        &selectionCallbacks](wxFileCtrlEvent& event)
                        {
+                           ++selectionCallbacks;
+                           CHECK(event.GetEventObject() == selectedCtrl);
+                           CHECK(selectedList->GetSelectedItemCount() == 1);
                            delete selectedCtrl;
                        });
     selectedList->SetItemState(
         selectedIndex, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+    CHECK(selectionCallbacks == 1);
     CHECK_FALSE(weakSelected);
 
     wxGenericFileCtrl* folderCtrl =
         new wxGenericFileCtrl(wxTheApp->GetTopWindow(), wxID_ANY, fs.GetPath(),
                               wxString(), "All|*.*", wxFC_OPEN);
+    const ScopedFilesystemControl cleanupFolderCtrl(folderCtrl);
     wxFileListCtrl* const folderList = folderCtrl->GetFileList();
     const long folderIndex = FindListItem(folderList, "folder");
     REQUIRE(folderIndex != wxNOT_FOUND);

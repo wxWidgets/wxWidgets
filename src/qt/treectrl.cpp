@@ -1363,19 +1363,25 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 
-    if ( !HasFlag(wxTR_MULTIPLE) )
-    {
-        GetQTreeWidget()->clearSelection();
-    }
+    if ( select == IsSelected(item) )
+        return;
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
 
     if ( qTreeItem )
     {
-        GetQTreeWidget()->select(qTreeItem, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
-        if ( select && GetQTreeWidget()->selectionMode() == QTreeWidget::SingleSelection )
+        if ( select && !HasFlag(wxTR_MULTIPLE) )
         {
-            GetQTreeWidget()->setCurrentItem(qTreeItem);
+            // Let the selection model check the veto before replacing the
+            // selection. Clearing and selecting separately also queued two
+            // identical wx selection-changed events for one public change.
+            GetQTreeWidget()->setCurrentItem(
+                qTreeItem, 0, QItemSelectionModel::ClearAndSelect);
+        }
+        else
+        {
+            GetQTreeWidget()->select(qTreeItem,
+                select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
         }
     }
 }

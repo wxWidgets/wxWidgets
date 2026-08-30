@@ -109,6 +109,9 @@ If installation reaches a different package/dependency error, retain the evidenc
 - Windows PowerShell 5.1 parsing and three mocked-registration scenarios pass (success, missing DDLM registration, old framework); real pinned MSIX manifests are inspected, with no local Appx installation. Evidence: F:\wxwinui-pr26890-msw-audit-build\audit101-runtime-registration-check.ps1. A new remote runner execution is still required.
 - CheckWhitespace identified extra blank EOF lines in plans 103-112; these are removed, not ignored by CI.
 - Non-MSW PropertyGrid editor-handler teardown, the macOS callback lifetime case, and Qt callback deletion remain separately tracked while their focused fixes are tested. Passing compilation does not close these runtime failures.
+- Qt 5.15.2 Debug/shared is now built locally in F:\wxwinui-pr26890-qt-audit-build using MSVC 19.44 and installed Qt MSVC64. Atomic single selection removes the intermediate clear/select notification; fixtures await Qt's deferred notification, use Windows (not wxMSW) long-path helpers, and retire controls safely on assertion failure.
+- The remaining Qt FileCtrl crash was reproduced: selectionChanged dispatched an application callback that deleted the native view, then continued in QTreeView; SetItem likewise continued through a deleted model. The fix invokes the Qt base before application notification and checks QPointer lifetime after each callback/selection boundary. The unchanged crashing fixture passes 28 assertions with only the fixed production DLL; the strengthened fixture passes 31.
+- Final Qt `[filesystemctrl]`: 215 assertions / 6 cases, exit 0, approximately 68 seconds. No input injection; `WX_UI_TESTS=0`, private desktop, explicit Qt bin/plugin paths. Logs: audit101-qt-filesystem-final.log and audit101-qt-filesystem-crash-stack.log. Qt 6.10 remains a remote coverage requirement.
 
 ## Maintenance
 
