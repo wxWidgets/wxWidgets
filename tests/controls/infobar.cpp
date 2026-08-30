@@ -33,6 +33,10 @@
     #include "wx/winui/private/tlwhost.h"
 #endif
 
+#ifdef __WXQT__
+    #include <QtWidgets/QWidget>
+#endif
+
 #include <memory>
 
 #ifdef __WXWINUI__
@@ -209,20 +213,36 @@ TEST_CASE("wxInfoBar::Appearance", "[wxInfoBar][winui-v0-supported]")
     REQUIRE(info->Create(wxTheApp->GetTopWindow()));
     CHECK(info->GetFont().GetWeight() == wxFONTWEIGHT_BOLD);
     CHECK(info->GetForegroundColour() == *wxRED);
+#ifdef __WXQT__
+    REQUIRE(info->GetHandle());
+    CHECK(info->GetHandle()->font().bold());
+    CHECK(info->GetHandle()->palette().color(
+              info->GetHandle()->foregroundRole()) == wxRED->GetQColor());
+#endif
 
     // and changing it after creation must work too
     const wxFont italicFont(wxFontInfo(10).Italic());
     CHECK(info->SetFont(italicFont));
     CHECK(info->GetFont().GetStyle() == wxFONTSTYLE_ITALIC);
+#ifdef __WXQT__
+    CHECK(info->GetHandle()->font().italic());
+#endif
 
     CHECK(info->SetForegroundColour(*wxBLUE));
     CHECK(info->GetForegroundColour() == *wxBLUE);
+#ifdef __WXQT__
+    CHECK(info->GetHandle()->palette().color(
+              info->GetHandle()->foregroundRole()) == wxBLUE->GetQColor());
+#endif
 
     // resetting the font with wxNullFont goes back to the default one (and
     // must reach the native peer too, not leave the old font behind)
     CHECK(info->SetFont(wxNullFont));
     CHECK(info->GetFont().IsOk());
     CHECK(info->GetFont().GetStyle() != wxFONTSTYLE_ITALIC);
+#ifdef __WXQT__
+    CHECK_FALSE(info->GetHandle()->font().italic());
+#endif
 }
 
 TEST_CASE("wxInfoBar::EffectShowHide", "[wxInfoBar][winui-v0-supported]")
