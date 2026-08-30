@@ -19,7 +19,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [102](102-native-resize.md) | Make native resizing a host-owned input transaction | NATIVE LOCAL PASS / PHYSICAL PENDING |
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL PASS / REMOTE PENDING |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL PASS / REMOTE PENDING |
-| [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | TODO |
+| [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL PASS / REMOTE PENDING |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | TODO |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | TODO |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | TODO |
@@ -89,3 +89,4 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 - Lot 103 passes both local linkages: 498 identity assertions, 618 assertions including existing presenter lifetime cases, and smoke + Supported V0 (1660 assertions / 92 cases). A separately observed auxiliary NativeProgress test timeout remains OPEN in 109.
 - The auxiliary NativeProgress timeout is subsequently resolved by rejecting null task-dialog handles before dark-mode UIA enumeration (d1a415743f). All dialog-lifetime cases pass 353 assertions in each WinUI linkage; real TaskDialog/physical qualification remains distinct in 109.
 - Lot 104 passes eleven installed-consumer subprocesses per linkage: required startup failure, clean COM rollback, quarantined failures and renderer ownership over fifty epochs. Runtime smoke and Supported V0 also pass both linkages. Remote results remain pending; concurrent cross-platform PropertyGrid regressions keep 101 OPEN.
+- Lot 105 records the precise Windows/toolkit/feature macro and native-control inheritance contract. Thirty-five dispatch headers, negative fixtures and four installed compile consumers (MSW and WinUI, shared/static) pass locally. New CI steps retain external runtime/compile consumer evidence; remote execution is pending.

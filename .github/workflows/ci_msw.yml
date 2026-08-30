@@ -332,6 +332,70 @@ jobs:
           }
           finally { Stop-Transcript }
 
+      - name: Verify wxWinUI installed runtime contracts
+        timeout-minutes: 30
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          $installDir = Join-Path $buildDir 'install'
+          $consumerDir = Join-Path $buildDir 'install-consumer'
+          Start-Transcript -Path "$buildDir\winui-install-consumer-setup.log" -Force
+          try {
+            ctest --test-dir $buildDir -C Release `
+              -R '^wx_winui_selftest_header_dispatch$' --no-tests=error `
+              --timeout 60 --output-on-failure `
+              --output-junit "$buildDir\winui-header-dispatch.xml" `
+              --output-log "$buildDir\winui-header-dispatch.log"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            cmake --install $buildDir --config Release --prefix $installDir
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            cmake -S tests/winui/install-consumer -B $consumerDir `
+              -G "Visual Studio 17 2022" -A x64 `
+              "-DCMAKE_PREFIX_PATH=$installDir"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            cmake --build $consumerDir --config Release --parallel 4 -- /noLogo /nr:false
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            # The harness checks each child exit code and its exact success
+            # markers, including startup failures and renderer ownership.
+            ctest --test-dir $consumerDir -C Release `
+              -R '^wx_winui_install_consumer_smoke$' --no-tests=error `
+              --timeout 1500 --output-on-failure `
+              --output-junit "$buildDir\winui-install-consumer.xml" `
+              --output-log "$buildDir\winui-install-consumer.log"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          finally { Stop-Transcript }
+
+      - name: Verify wxWinUI installed toolkit headers
+        timeout-minutes: 10
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path
+          $installDir = Join-Path $buildDir 'install'
+          $contractDir = Join-Path $buildDir 'toolkit-contract'
+          Start-Transcript -Path "$buildDir\winui-toolkit-contract-setup.log" -Force
+          try {
+            cmake -S tests/winui/toolkit-contract -B $contractDir `
+              -G "Visual Studio 17 2022" -A x64 `
+              "-DCMAKE_PREFIX_PATH=$installDir" -DWX_EXPECT_TOOLKIT=winui
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            cmake --build $contractDir --config Release --parallel 4 `
+              --target wx_toolkit_contract -- /noLogo /nr:false
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+            # This CTest contract builds only an OBJECT library: no GUI runs.
+            ctest --test-dir $contractDir -C Release `
+              -R '^wx_installed_toolkit_compile_contract$' --no-tests=error `
+              --timeout 120 --output-on-failure `
+              --output-junit "$buildDir\winui-toolkit-contract.xml" `
+              --output-log "$buildDir\winui-toolkit-contract.log"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          finally { Stop-Transcript }
+
       - name: Run wxWinUI runtime smoke
         run: |
           $buildDir = (Resolve-Path "build-winui-${{ matrix.linkage }}").Path

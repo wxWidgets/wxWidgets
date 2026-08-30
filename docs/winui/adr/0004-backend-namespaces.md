@@ -116,7 +116,9 @@ policy:
 
 ## Consequences
 
-- Existing application source, RTTI, XRC and event bindings remain compatible.
+- Portable application source, RTTI, XRC and event bindings keep their standard
+  names. Native MSW control inheritance/protected APIs are not all reproduced
+  by XAML controls; see the [source-compatibility contract](../toolkit-contract.md).
 - The V0 documentation must not promise simultaneous public backend classes.
 - Native/generic controls can still coexist with WinUI peers inside a WinUI
   window; that is an implementation mix, not two public toolkit APIs.

@@ -2,8 +2,10 @@
 
 Toolkit rendering the standard wx controls with WinUI 3, while every wx
 window keeps its real Win32 `HWND`.  The port defines both
-`__WXWINUI__` and `__WXMSW__`: it is the MSW port with a different rendering
-backend, not a separate platform.
+`__WXWINUI__` and `__WXMSW__`: it selects a distinct toolkit/ABI while reusing
+the MSW window substrate on the same Windows platform. This does not promise
+the native control inheritance or buddy-HWND APIs of ordinary MSW; see the
+[toolkit and source-compatibility contract](toolkit-contract.md).
 
 > **Current qualification status (2026-08-22).** The narrow Windows 11 x64,
 > MSVC, Release, unpackaged **Supported V0** profile is a beta candidate, not

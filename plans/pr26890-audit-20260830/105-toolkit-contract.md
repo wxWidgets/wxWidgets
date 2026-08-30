@@ -1,6 +1,6 @@
 # Plan 105: Make toolkit identity and public source compatibility explicit
 
-- Status: TODO
+- Status: LOCAL PASS / REMOTE PENDING
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -47,6 +47,18 @@ All criteria are required before DONE. An implementation can be LOCAL PASS / REM
 ## Stop conditions
 
 Public namespace, ABI or external application compatibility redesign beyond the selected toolkit model needs a recorded decision before implementation. If a confirmed defect requires an out-of-scope change, extend the plan explicitly with its reason before editing; do not start another general review. Preserve diagnostics from failing checks.
+
+## Decision and evidence (2026-08-30)
+
+- Keep the existing distinct toolkit ABIs and shared `__WXMSW__` window substrate. Use `__WINDOWS__` for OS services, `__WXWINUI__` for XAML implementation dispatch, subsystem `wxUSE_*` guards for features, and exclude WinUI explicitly when accessing ordinary MSW control internals. No global macro removal or parallel public class family.
+- Correct README's rendering-backend-only description and qualify ADR 0004's source-compatibility statement. The new `docs/winui/toolkit-contract.md` records RadioBox/SpinCtrl/SpinButton inheritance, static-box/buddy helpers, and inherited HWND/theme/background hooks. Presence of a method is not a claim of native rendering/input semantics; component behaviour remains in 108/109.
+- The dispatch self-test checks all 35 directly dispatched public headers (30 MSW alternatives, five generic/other alternatives). Reversed MSW-first and incorrectly guarded fixtures must be rejected. Registered CTest passes in the shared build (`audit105-dispatch.log`); standalone script exits 0 too.
+- New standalone installed-package consumer compiles four separate translation units, without source-tree includes or a PCH. It checks the toolkit macros, all directly dispatched headers, portable operations, intentional inheritance differences, native buddy API presence/absence and common protected hook overrides. These are explicitly compile-only OBJECT targets, not linked/running GUI applications or ABI interchangeability tests.
+- MSVC 19.44 x64 `/warnaserror` builds and compile-only CTests pass against four installed configurations: WinUI shared/static Release (`F:\wxwinui-pr26890-audit104-install-{shared,static}`), ordinary MSW shared Debug (`F:\wxwinui-pr26890-audit105-install-msw`), and ordinary MSW static Release (`F:\wxwinui-pr26890-audit105-install-msw-static`). Consumer build directories are `F:\wxwinui-pr26890-audit105-consumer-{shared,static,msw,msw-static}`. Logs: `audit105-compile-contract.log` for the first three; `audit105-msw-static-consumer-{configure,build,ctest}.log` and CTest XML for the fourth.
+- The static MSW installation is a core-focused profile: optional AUI/GL/HTML/media/PropertyGrid/Ribbon/RichText/STC/WebView/XRC/XML/network/debug-report libraries disabled, all 35 probed controls enabled. It is not full-feature static MSW runtime qualification. Configure/build/install logs are `audit105-msw-static-{configure,build,install}.log` in `F:\wxwinui-pr26890-audit105-msw-static-build`.
+- A separate consumer deliberately configured with `WX_EXPECT_TOOLKIT=msw` against the WinUI shared installation fails compilation with the exact wrong-toolkit diagnostic. Expected-failure logs are retained as `audit105-negative-{configure,build}.log` in the shared consumer directory.
+- Both WinUI CI linkages now run the dispatch self-test, install their built package, execute 104's external runtime consumer and compile this external header consumer. Every native command checks its exit status; bounded timeouts and JUnit/log artifacts are retained. YAML and rendered shared/static PowerShell syntax/control-flow checks pass locally. These new CI steps have not yet passed remotely.
+- `git diff --check`: PASS. WinUI remains documented as MSVC-supported; no local Clang execution or unsupported-compiler qualification is claimed. RTTI/XRC implementation is unchanged; these probes do not replace their existing runtime tests.
 
 ## Maintenance
 

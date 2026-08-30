@@ -1673,6 +1673,12 @@ if(NOT wxBUILD_TESTS STREQUAL "OFF")
     set_tests_properties(
         wx_winui_selftest_toolkit_requires_winui3
         PROPERTIES TIMEOUT 75)
+    add_test(NAME wx_winui_selftest_header_dispatch
+        COMMAND "${CMAKE_COMMAND}"
+            -DSOURCE_DIR=${wxSOURCE_DIR}
+            -P "${wxSOURCE_DIR}/tests/winui/selftest/header-dispatch.cmake")
+    set_tests_properties(wx_winui_selftest_header_dispatch
+        PROPERTIES TIMEOUT 15)
 
     # This test is registered from the top-level directory because samples
     # are configured before enable_testing() in build/cmake/main.cmake.
