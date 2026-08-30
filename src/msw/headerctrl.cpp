@@ -31,6 +31,7 @@
 #ifndef wxHAS_GENERIC_HEADERCTRL
 
 #include "wx/imaglist.h"
+#include "wx/weakref.h"
 
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
@@ -38,6 +39,7 @@
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
+#include <cstdint>
 #include <memory>
 
 #ifndef HDM_SETBITMAPMARGIN
@@ -135,6 +137,12 @@ private:
     // return the pointer which can be used to update it if it's non-null
     wxMSWHeaderCtrlCustomDraw* GetCustomDraw();
 
+    // Clear logical gesture state before releasing native capture, and defer
+    // the cancellation callback until the column mutation is complete.
+    int ResetDragging();
+    int AbortDraggingForColumnMutation();
+    void NotifyDraggingCancelled(int col);
+
 
     // the real wxHeaderCtrl control
     wxHeaderCtrl &m_header;
@@ -169,8 +177,17 @@ private:
     // actual column we are dragging or -1 if not dragging anything
     int m_colBeingDragged = -1;
 
-    // a column is currently being resized
-    bool m_isColBeingResized = false;
+    // Unlike m_colBeingDragged, this is false for a rejected begin gesture.
+    bool m_isColBeingReordered = false;
+
+    // actual column being resized, or -1 outside a resize gesture
+    int m_colBeingResized = -1;
+
+    // Native cancellation can report obsolete column indices synchronously.
+    bool m_isCancellingDrag = false;
+
+    // Detect column mutations from synchronous native notification handlers.
+    std::uint64_t m_columnsRevision = 0;
 
     // the custom draw helper: initially nullptr, created on demand, use
     // GetCustomDraw() to do it
@@ -344,6 +361,11 @@ int wxMSWHeaderCtrl::GetShownColumnsCount() const
 
 void wxMSWHeaderCtrl::SetCount(unsigned int count)
 {
+    const wxWeakRef<wxWindow> lifetime(this);
+    const int cancelled = AbortDraggingForColumnMutation();
+    if ( !lifetime )
+        return;
+
     unsigned n;
 
     // first delete all old columns
@@ -376,10 +398,18 @@ void wxMSWHeaderCtrl::SetCount(unsigned int count)
             m_isHidden[n] = true;
         }
     }
+
+    if ( cancelled != -1 )
+        NotifyDraggingCancelled(cancelled);
 }
 
 void wxMSWHeaderCtrl::UpdateHeader(unsigned int idx)
 {
+    const wxWeakRef<wxWindow> lifetime(this);
+    const int cancelled = AbortDraggingForColumnMutation();
+    if ( !lifetime )
+        return;
+
     // the native control does provide Header_SetItem() but it's inconvenient
     // to use it because it sends HDN_ITEMCHANGING messages and we'd have to
     // arrange not to block setting the width from there and the logic would be
@@ -415,6 +445,9 @@ void wxMSWHeaderCtrl::UpdateHeader(unsigned int idx)
 
         DoInsertItem(col, idx);
     }
+
+    if ( cancelled != -1 )
+        NotifyDraggingCancelled(cancelled);
 }
 
 void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
@@ -518,12 +551,21 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
 
 void wxMSWHeaderCtrl::SetColumnsOrder(const wxArrayInt& order)
 {
+    const wxWeakRef<wxWindow> lifetime(this);
+    const int cancelled = AbortDraggingForColumnMutation();
+    if ( !lifetime )
+        return;
+
     // This can happen if we don't have any columns at all and "order" is empty
     // anyhow in this case, so we don't have anything to do (note that we
     // already know that the input array contains m_numColumns elements, as
     // it's checked by the public SetColumnsOrder()).
     if ( !m_numColumns )
+    {
+        if ( cancelled != -1 )
+            NotifyDraggingCancelled(cancelled);
         return;
+    }
 
     wxArrayInt orderShown;
     orderShown.reserve(m_numColumns);
@@ -535,12 +577,17 @@ void wxMSWHeaderCtrl::SetColumnsOrder(const wxArrayInt& order)
             orderShown.push_back(MSWToNativeIdx(idx));
     }
 
-    if ( !Header_SetOrderArray(GetHwnd(), orderShown.size(), &orderShown[0]) )
+    // All columns may be hidden even when the logical order is non-empty.
+    if ( !orderShown.empty() &&
+            !Header_SetOrderArray(GetHwnd(), orderShown.size(), &orderShown[0]) )
     {
-        wxLogLastError(wxT("Header_GetOrderArray"));
+        wxLogLastError(wxT("Header_SetOrderArray"));
     }
 
     m_colIndices = order;
+
+    if ( cancelled != -1 )
+        NotifyDraggingCancelled(cancelled);
 }
 
 wxArrayInt wxMSWHeaderCtrl::GetColumnsOrder() const
@@ -549,6 +596,46 @@ wxArrayInt wxMSWHeaderCtrl::GetColumnsOrder() const
     // information about the hidden columns, instead we just save the columns
     // order array in DoSetColumnsOrder() and update it when they're reordered
     return m_colIndices;
+}
+
+int wxMSWHeaderCtrl::ResetDragging()
+{
+    const int col = m_colBeingResized != -1
+                        ? m_colBeingResized
+                        : m_isColBeingReordered ? m_colBeingDragged : -1;
+
+    m_colBeingDragged = -1;
+    m_colBeingResized = -1;
+    m_isColBeingReordered = false;
+    return col;
+}
+
+int wxMSWHeaderCtrl::AbortDraggingForColumnMutation()
+{
+    ++m_columnsRevision;
+    const int col = ResetDragging();
+    if ( col != -1 )
+    {
+        // This can synchronously send NM_RELEASEDCAPTURE: the logical state
+        // has already been cleared, so it must not emit a second cancellation.
+        const wxWeakRef<wxWindow> lifetime(this);
+        m_isCancellingDrag = true;
+        ::SendMessage(GetHwnd(), WM_CANCELMODE, 0, 0);
+        if ( lifetime )
+            m_isCancellingDrag = false;
+    }
+    return col;
+}
+
+void wxMSWHeaderCtrl::NotifyDraggingCancelled(int col)
+{
+    wxHeaderCtrlEvent event(wxEVT_HEADER_DRAGGING_CANCELLED, GetId());
+    event.SetEventObject(this);
+    event.SetColumn(col);
+
+    // This is deliberately the last operation of every mutation: handlers
+    // may change the columns again or destroy the header altogether.
+    m_header.GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------
@@ -739,6 +826,17 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     bool veto = false;
     const UINT code = nmhdr->hdr.code;
 
+    // The public model may already have removed the dragged column. Ignore
+    // cancellation/completion notifications before translating native indices.
+    if ( (m_isCancellingDrag && code != NM_CUSTOMDRAW) ||
+            ((code == HDN_ENDTRACKA || code == HDN_ENDTRACKW) &&
+                m_colBeingResized == -1) ||
+            (code == HDN_ENDDRAG && !m_isColBeingReordered) )
+    {
+        *result = TRUE;
+        return true;
+    }
+
     // we don't have the index for all events, e.g. not for NM_RELEASEDCAPTURE
     // so only access for header control events (and yes, the direction of
     // comparisons with FIRST/LAST is correct even if it seems inverted)
@@ -761,6 +859,7 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // We're not dragging any more.
             m_colBeingDragged = -1;
+            m_isColBeingReordered = false;
             break;
 
             // although we should get the notifications about the right clicks
@@ -805,7 +904,7 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 
-            m_isColBeingResized = true;
+            m_colBeingResized = idx;
             evtType = wxEVT_HEADER_BEGIN_RESIZE;
             wxFALLTHROUGH;
 
@@ -822,7 +921,7 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 if ( width < minWidth )
                     width = minWidth;
 
-                m_isColBeingResized = false;
+                m_colBeingResized = -1;
             }
             break;
 
@@ -867,7 +966,7 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     veto = true;
                 }
                 // width is acceptable and notification arrived before HDN_ENDTRACK
-                else if ( m_isColBeingResized )
+                else if ( m_colBeingResized != -1 )
                 {
                     // generate the resizing event from here as we don't seem
                     // to be getting HDN_TRACK events at all, at least with
@@ -908,6 +1007,7 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 
+            m_isColBeingReordered = true;
             evtType = wxEVT_HEADER_BEGIN_REORDER;
             break;
 
@@ -926,13 +1026,16 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // We (successfully) ended dragging the column.
             m_colBeingDragged = -1;
+            m_isColBeingReordered = false;
             break;
 
         case NM_RELEASEDCAPTURE:
-            evtType = wxEVT_HEADER_DRAGGING_CANCELLED;
-
-            // Dragging the column was cancelled.
-            m_colBeingDragged = -1;
+            // Capture is also released after successful completion. Only an
+            // unmatched active gesture is a cancellation, and NMHDR itself
+            // doesn't contain its column index.
+            idx = ResetDragging();
+            if ( idx != -1 )
+                evtType = wxEVT_HEADER_DRAGGING_CANCELLED;
             break;
 
         // other events
@@ -959,10 +1062,26 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         if ( order != -1 )
             event.SetNewOrder(order);
 
+        const wxWeakRef<wxWindow> lifetime(this);
+        const std::uint64_t revision = m_columnsRevision;
         const bool processed = m_header.GetEventHandler()->ProcessEvent(event);
 
+        if ( !lifetime || revision != m_columnsRevision )
+        {
+            // Never let the native control apply the old notification after
+            // the handler has replaced its column topology or destroyed it.
+            *result = TRUE;
+            return true;
+        }
+
         if ( processed && !event.IsAllowed() )
+        {
             veto = true;
+            if ( evtType == wxEVT_HEADER_BEGIN_RESIZE )
+                m_colBeingResized = -1;
+            else if ( evtType == wxEVT_HEADER_BEGIN_REORDER )
+                m_isColBeingReordered = false;
+        }
 
         if ( !veto )
         {
@@ -976,7 +1095,14 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxArrayInt colIndices = m_header.GetColumnsOrder();
                 m_header.MoveColumnInOrderArray(colIndices, idx, order);
                 if ( !processed )
-                  m_header.UpdateColumnsOrder(colIndices);
+                {
+                    m_header.UpdateColumnsOrder(colIndices);
+                    if ( !lifetime || revision != m_columnsRevision )
+                    {
+                        *result = TRUE;
+                        return true;
+                    }
+                }
 
                 // And update internally columns indices in any case.
                 m_colIndices = colIndices;
