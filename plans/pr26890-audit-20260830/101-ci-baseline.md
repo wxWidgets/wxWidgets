@@ -1,6 +1,6 @@
 # Plan 101: Restore existing-port builds and execute the WinUI runtime CI
 
-- Status: LOCAL PASS / REMOTE PENDING
+- Status: PARTIAL LOCAL PASS / OPEN
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: S/M
@@ -22,6 +22,8 @@ At c5cf4677b9, settings.cpp declares `const wxSystemColour requestedIndex = inde
 ## Scope
 
 src/msw/settings.cpp; src/msw/ole/droptgt.cpp; .github/workflows/ci_msw.yml; focused build/CI regression tests
+
+2026-08-30 evidence-driven extension: src/aui/auibook.cpp (DFB member ambiguity), src/propgrid/propgrid.cpp and its focused tests (forwarder reaching a destroyed owner), portable GUI test fixtures and newly failing lifetime/capture/font tests. Reconcile current origin/master by a normal merge preserving both upstream changes and WinUI work. No force-push. The three initial changes alone do not restore all CI.
 
 Out of scope: other worktrees, frozen beta snapshots, unrelated backend refactors, user files, new public PRs and unrequested physical input.
 
@@ -49,8 +51,6 @@ All criteria are required before DONE. An implementation can be LOCAL PASS / REM
 
 If installation reaches a different package/dependency error, retain the evidence and diagnose that failure; do not silently skip runtime or loosen package identity. If a confirmed defect requires an out-of-scope change, extend the plan explicitly with its reason before editing; do not start another general review. Preserve diagnostics from failing checks.
 
-## Maintenance
-
 ## Execution evidence (2026-08-30)
 
 - Three-file implementation on the c5cf product baseline: exact conditional declaration, final concrete COM wrapper without suppression, Windows PowerShell Appx registration plus distinct smoke/integration CTests and diagnostic artifacts.
@@ -60,5 +60,21 @@ If installation reaches a different package/dependency error, retain the evidenc
 - Both `wx_winui_runtime_smoke` CTests: exit 0. Both `wx_winui_supported_beta` CTests: exit 0, 51 cases / 970 assertions per linkage. Logs and JUnit: `audit101-runtime-smoke.*` and `audit101-supported-beta.*` in each build tree.
 - Environment: local Windows 11 Pro build 26340, MSVC 19.44.35228, x64. No physical input injection. No local Clang compiler found; remote Clang coverage remains required.
 - Remote validation and any additional failing cross-platform jobs remain OPEN. Compilation success does not qualify user-observed grip behaviour.
+
+## Additional verified CI blockers
+
+- c5cf has 25 failed and 18 successful GitHub checks, none cancelled. Eleven failures duplicate the three initial causes. Ten expose PropertyGrid/macOS failures, three Qt tests, one DFB compilation failure.
+- PropertyGrid: GTK UBSAN identifies editor forwarder callbacks into a wxPropertyGrid whose dynamic type is already wxWindow during base destruction (job 98012205198). Detach forwarders while the owner is alive; preserve editor delivery.
+- DFB: new tabs->m_rect references are ambiguous between wxAuiTabContainer and wxWindowDFB (job 98012205168). Qualify the intended rectangle.
+- AppVeyor VS2015: wxMSWOlePendingTimerCancel list initialization with default member initializers is rejected (job 7058whx65rg78tju). Use portable explicit initialization.
+- HTML-listbox fixture wrongly assumes horse.gif is next to the executable (macOS bundles / AppVeyor VS2019). Use the existing test-resource contract or a self-contained fixture.
+- Qt AUI selected-font and book-page destruction fixtures are corrected in the prepared master merge: explicit font override state and destruction at the common `DoSetSize` boundary. This does not claim to fix or qualify deletion from inside a native Qt resize callback.
+- The HeaderCtrl failures were reproduced locally on MSW Debug, then fixed without changing assertions: empty visible order, mutation cancellation, and successful completion versus capture cancellation. `HeaderCtrlTestCase` now passes 321366 assertions (legacy single fixture case); `audit101-header-fixture-fixed.log`. Rebuild with `/warnaserror`: exit 0.
+- PropertyGrid forwarder-owner lifetime regression: local MSW Debug passes 17 assertions / 1 case; WinUI shared/static also pass. GTK UBSAN and macOS remote checks are still required; their other editor assertions are not assumed fixed.
+- DataView's new drag fixture sends a wx mouse event to a composite native header on MSW; it needs the real native notification boundary instead. DirCtrl's new mutation test reproduces a crash when a delete-item callback rebuilds the tree during native deletion. Both remain OPEN until corrected and tested.
+- Existing DatePicker/Grid failures are not automatically blamed on the PR.
+- origin/master advanced from b2502d42b2 to 6155567922. All 19 conflicts are resolved in normal merge commit 3278026ea0 on `codex/pr26890-master-refresh`, including conversion of added CppUnit cases to upstream Catch2 without removing coverage. Integration/build of this merge remains pending at this entry. GitHub reports no Actions runs for a76e0689bf; conflicting merge state, AppVeyor failure and CircleCI pending are not green qualification.
+
+## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

@@ -15,8 +15,8 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 
 | Plan | Scope | Status |
 |---|---|---|
-| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | LOCAL PASS / REMOTE PENDING |
-| [102](102-native-resize.md) | Make native resizing a host-owned input transaction | IN PROGRESS |
+| [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | PARTIAL LOCAL PASS / OPEN |
+| [102](102-native-resize.md) | Make native resizing a host-owned input transaction | NATIVE LOCAL PASS / PHYSICAL PENDING |
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | TODO |
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | TODO |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | TODO |
@@ -80,3 +80,5 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 - 2026-08-30 baseline: clean integration worktree at c5cf4677b9; dirty main checkout preserved.
 - Existing c5cf CI: MSVC C4189 requestedIndex; Clang delete-non-abstract-non-virtual-dtor; WinUI shared/static compile succeeded, Appx import failed, Supported V0 skipped. See plan 101 for precise corrective scope.
 - 2026-08-30 lot 101: MSW Debug wxcore built with /warnaserror; WinUI shared/static test_gui and runtime smoke rebuilt. Both runtime CTests passed and both Supported V0 runs passed (51 cases, 970 assertions each). These are local Windows 11 results, not remote CI or physical input qualification.
+- Remaining baseline jobs expose additional PropertyGrid destruction, DFB AUI ambiguity, VS2015 initialization and cross-platform test failures. They extend 101, not a new general audit. The current upstream master also conflicts with this PR; normal merge resolution is needed before remote validation.
+- Lot 102: native USER32 resize transaction and cancellation tests pass in both linkages (190 assertions / 4 cases); Supported V0 now passes 1160 assertions / 55 cases per linkage. Physical held-drag behaviour is not signed off by these tests.
