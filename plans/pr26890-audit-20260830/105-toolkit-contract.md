@@ -1,6 +1,6 @@
 # Plan 105: Make toolkit identity and public source compatibility explicit
 
-- Status: LOCAL PASS / REMOTE PENDING
+- Status: LOCAL / REMOTE PASS
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -59,6 +59,10 @@ Public namespace, ABI or external application compatibility redesign beyond the 
 - A separate consumer deliberately configured with `WX_EXPECT_TOOLKIT=msw` against the WinUI shared installation fails compilation with the exact wrong-toolkit diagnostic. Expected-failure logs are retained as `audit105-negative-{configure,build}.log` in the shared consumer directory.
 - Both WinUI CI linkages now run the dispatch self-test, install their built package, execute 104's external runtime consumer and compile this external header consumer. Every native command checks its exit status; bounded timeouts and JUnit/log artifacts are retained. YAML and rendered shared/static PowerShell syntax/control-flow checks pass locally. These new CI steps have not yet passed remotely.
 - `git diff --check`: PASS. WinUI remains documented as MSVC-supported; no local Clang execution or unsupported-compiler qualification is claimed. RTTI/XRC implementation is unchanged; these probes do not replace their existing runtime tests.
+
+## Remote confirmation
+
+- On published SHA 445f908e8d, Actions run 33319364184 completes both WinUI jobs successfully (static 99278529900, shared 99278529911). The installed toolkit-header consumer step executes and passes in both jobs, alongside the installed runtime consumer, runtime smoke and Supported V0. Later test-access migrations need their own source-SHA evidence; the successful published consumer is not silently attributed to untested future headers.
 
 ## Maintenance
 

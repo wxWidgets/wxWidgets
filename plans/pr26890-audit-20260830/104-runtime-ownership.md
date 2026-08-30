@@ -1,6 +1,6 @@
 # Plan 104: Define runtime startup failure and ownership of process effects
 
-- Status: LOCAL PASS / REMOTE PENDING
+- Status: LOCAL / REMOTE PASS
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -66,6 +66,10 @@ Changing process-wide locale or unloading quarantined callback code requires pro
 - The initial MTA run exposed a fixture logging defect: failed wx startup destroys its log target, and the next expected warning fell back to MessageBoxW. Captured stacks prove this. The console fixture now reinstalls heap-owned stderr targets after initialization/cleanup; expected failure diagnostics remain visible. The failed/aborted logs are retained, not reported as passing runs.
 - `ctest -C Release -R '^wx_winui_runtime_smoke$'` and `-R '^wx_winui_supported_beta$' --no-tests=error` each pass in both WinUI builds on a private desktop, exit 0. Logs: `audit104-runtime-final.log` and `audit104-supported-final.log`.
 - `git diff --check`: PASS. Local Windows 11/MSVC evidence only; remote WinUI execution remains pending, and these tests do not qualify physical input or a 60-minute soak.
+
+## Remote confirmation
+
+- On published SHA 445f908e8d, Actions run 33319364184 completes both WinUI jobs successfully (static 99278529900, shared 99278529911). The pinned-runtime registration and installed runtime-contract step execute successfully in each job, followed by passing runtime smoke and Supported V0. These results cover the external-consumer startup/ownership tests added by this lot; they do not qualify physical input or soak behaviour.
 
 ## Maintenance
 

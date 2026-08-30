@@ -17,9 +17,9 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 |---|---|---|
 | [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | OPEN: REMOTE FAILURES UNDER REPAIR |
 | [102](102-native-resize.md) | Make native resizing a host-owned input transaction | NATIVE LOCAL PASS / PHYSICAL PENDING |
-| [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL PASS / REMOTE PENDING |
-| [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL PASS / REMOTE PENDING |
-| [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL PASS / REMOTE PENDING |
+| [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL / REMOTE PASS; EXTERNAL UIA IN 109 |
+| [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
+| [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | IN PROGRESS: EIGHT CONTROLS LOCAL PASS |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | TODO |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | TODO |
@@ -93,3 +93,4 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 - Remote CI at 1cd4017b5a: both WinUI linkages successfully built, registered the pinned runtime, and executed smoke plus Supported V0 (Actions run 33316310653). Later local changes still need their own remote run; existing-port failures keep 101 OPEN.
 - Lot 106 first family: Button/BitmapToggle public test methods removed; shared/static ON/OFF/ON builds, installed consumers, private-symbol absence in shipping libraries and unchanged 5328/68 real-island tests all pass. The other control families remain open. Cross-platform fixes and lots 104/105 were published through b6dd49c629 for new remote CI; no physical readiness claim is made.
 - Lot 106 next six controls (StaticText/StaticBitmap/StaticBox, Gauge/ScrollBar/SpinButton) pass shared/static ON/OFF/ON, shipping symbol/header checks and fresh installed consumers. Their unchanged combined suite passes 5810 assertions / 79 cases per linkage. The remaining twenty public control headers and host helpers are still open. CI at 445f908e8d passes style checks but reveals further Qt/Cocoa runtime failures; the GLib/GCC compilation repairs are recorded separately in 87841e7932.
+- Both WinUI jobs subsequently pass on 445f908e8d, including the installed runtime and toolkit consumers, runtime smoke and Supported V0. Lots 103-105 now have local and remote evidence; this is not a global CI pass while the Qt/Cocoa findings in 101 remain open.

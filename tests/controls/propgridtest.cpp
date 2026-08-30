@@ -1205,9 +1205,10 @@ class DestroyingFocusSink final : public wxTextCtrl
 public:
     using wxTextCtrl::wxTextCtrl;
 
-    void Arm(wxWindow* control)
+    void Arm(wxWindow* control, const std::function<void()>& afterDestroy)
     {
         m_control = control;
+        m_afterDestroy = afterDestroy;
         m_called = false;
     }
 
@@ -1221,12 +1222,14 @@ public:
         {
             m_called = true;
             DestroyPropertyGridEditorControl(control);
+            m_afterDestroy();
         }
         wxTextCtrl::SetFocus();
     }
 
 private:
     wxWindow* m_control = nullptr;
+    std::function<void()> m_afterDestroy;
     bool m_called = false;
 };
 
@@ -3040,7 +3043,26 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         REQUIRE(secondary);
         const wxWeakRef<wxWindow> weakSecondary(secondary);
         DestroyingFocusSink focusSink(wxTheApp->GetTopWindow(), wxID_ANY);
-        focusSink.Arm(secondary);
+        unsigned int reentrantFocusEvents = 0;
+        focusSink.Arm(secondary, [&]()
+        {
+            REQUIRE_FALSE( weakSecondary );
+
+            // Cocoa sends a synchronous focus loss from the surviving text
+            // editor after the button has died, before SetFocus() returns.
+            // Exercise the same forwarding boundary on every port, keeping
+            // both the real deletion above and the native SetFocus() below.
+            const wxEventType focusTypes[] =
+                { wxEVT_KILL_FOCUS, wxEVT_SET_FOCUS };
+            for ( wxEventType type : focusTypes )
+            {
+                wxFocusEvent event(type, primary->GetId());
+                event.SetEventObject(primary);
+                event.SetWindow(&focusSink);
+                primary->GetEventHandler()->ProcessEvent(event);
+                ++reentrantFocusEvents;
+            }
+        });
         pg->SetCurrentFocusedForTest(&focusSink);
         property->ArmValidationFailure(nullptr);
         primary->ChangeValue("invalid");
@@ -3049,6 +3071,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK_FALSE( pg->CommitChangesFromEditor() );
 
         CHECK( focusSink.WasCalled() );
+        CHECK( reentrantFocusEvents == 2 );
         CHECK_FALSE( property->FailureCallbackWasCalled() );
         CHECK_FALSE( weakSecondary );
         CHECK( pg->GetEditorControlSecondary() == nullptr );

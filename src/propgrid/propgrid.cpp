@@ -7254,6 +7254,18 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     if ( !m_pState )
         return false;
 
+    // Restoring focus during a commit can synchronously destroy an editor and
+    // send focus events from its surviving sibling before the commit has
+    // sanitized the editor slots. Don't construct weak refs from those slots
+    // here. Other events, notably text modifications, keep their usual path.
+    if ( m_inCommitChangesFromEditor &&
+         (event.GetEventType() == wxEVT_SET_FOCUS ||
+          event.GetEventType() == wxEVT_KILL_FOCUS) )
+    {
+        event.Skip();
+        return true;
+    }
+
     // Don't care about the event if it originated from the
     // 'label editor'. In this function we only care about the
     // property value editor.
