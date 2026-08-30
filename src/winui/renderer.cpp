@@ -247,14 +247,26 @@ public:
 
 } // anonymous namespace
 
-// Install the Fluent renderer; called once from wxWinUI3Initialize().
+// Choose the toolkit renderer once, independently of XAML runtime epochs.
 void wxWinUIInstallRenderer()
 {
-    // Set() transfers ownership of the new renderer but returns the previous
-    // one to its caller. Runtime qualification deliberately initializes and
-    // shuts WinUI down repeatedly in one process, so release that displaced
-    // renderer instead of leaking one object per initialization epoch.
-    delete wxRendererNative::Set(new wxRendererWinUI);
+    static bool configured = false;
+    if ( configured )
+        return;
+
+    // Resolve a traits-provided renderer, or one explicitly installed before
+    // initialization. An application renderer always takes precedence.
+    if ( &wxRendererNative::Get() == &wxRendererNative::GetDefault() )
+    {
+        // Get() returned the unowned default: there is no displaced renderer
+        // to delete. The global renderer holder owns the new instance, using
+        // the ordinary wxRendererNative::Set() ownership contract.
+        wxRendererNative::Set(new wxRendererWinUI);
+    }
+
+    // Even Set(nullptr) is an application choice after this point. Repeated
+    // runtime initialization must never overwrite it or a newer renderer.
+    configured = true;
 }
 
 #endif // wxUSE_WINUI3

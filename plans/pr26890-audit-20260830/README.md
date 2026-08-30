@@ -18,7 +18,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [101](101-ci-baseline.md) | Restore existing-port builds and execute the WinUI runtime CI | OPEN: REMOTE FAILURES UNDER REPAIR |
 | [102](102-native-resize.md) | Make native resizing a host-owned input transaction | NATIVE LOCAL PASS / PHYSICAL PENDING |
 | [103](103-dialog-identity.md) | Preserve public dialog identity and geometry in Window presentation | LOCAL PASS / REMOTE PENDING |
-| [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | TODO |
+| [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL PASS / REMOTE PENDING |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | TODO |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | TODO |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | TODO |
@@ -87,3 +87,5 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 - The retained-page fixture is now corrected: full WinUI PropertyGrid passes 1175 assertions shared and 1179 static. Final smoke + Supported V0 pass in both linkages (1162 assertions / 90 cases). GitHub reports no merge conflicts and CI has started on 0080db6c16; remote results remain pending. Lot 103 implementation starts against this locally verified baseline.
 - Remote CI on 0080db6c16 exposes Qt compilation/selection/filesystem failures, non-MSW PropertyGrid teardown, MSW resize-notification counting, macOS callback tests and a missing Windows Server DDLM runtime registration. These remain in 101 with targeted corrections and reruns; no global green CI claim is made.
 - Lot 103 passes both local linkages: 498 identity assertions, 618 assertions including existing presenter lifetime cases, and smoke + Supported V0 (1660 assertions / 92 cases). A separately observed auxiliary NativeProgress test timeout remains OPEN in 109.
+- The auxiliary NativeProgress timeout is subsequently resolved by rejecting null task-dialog handles before dark-mode UIA enumeration (d1a415743f). All dialog-lifetime cases pass 353 assertions in each WinUI linkage; real TaskDialog/physical qualification remains distinct in 109.
+- Lot 104 passes eleven installed-consumer subprocesses per linkage: required startup failure, clean COM rollback, quarantined failures and renderer ownership over fifty epochs. Runtime smoke and Supported V0 also pass both linkages. Remote results remain pending; concurrent cross-platform PropertyGrid regressions keep 101 OPEN.

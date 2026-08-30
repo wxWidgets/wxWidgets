@@ -179,6 +179,9 @@ Runtime switches:
 
 ## Runtime deployment
 
+See [Runtime startup and process lifetime](runtime-lifecycle.md) for required
+startup failure, renderer ownership, locale policy and retained runtime state.
+
 The executables produced by this build are **framework-dependent and
 unpackaged** in the Windows App SDK sense: they require the Windows App
 Runtime framework package to be installed on the machine, and they carry a

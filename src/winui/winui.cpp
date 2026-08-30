@@ -153,6 +153,7 @@ constexpr unsigned wxWinUIRejectShutdownRetirementHook = 2u;
 enum class wxWinUIRuntimeFaultForTesting
 {
     None,
+    BeforeBootstrap,
     AfterApplication,
     AfterXamlManager,
     RejectXamlShutdownHook,
@@ -190,6 +191,8 @@ wxWinUIRuntimeFaultForTesting wxWinUIConsumeRuntimeFaultForTesting() noexcept
         return wxWinUIRuntimeFaultForTesting::None;
     }
 
+    if ( ::lstrcmpW(fault, L"before-bootstrap") == 0 )
+        return wxWinUIRuntimeFaultForTesting::BeforeBootstrap;
     if ( ::lstrcmpW(fault, L"after-application") == 0 )
         return wxWinUIRuntimeFaultForTesting::AfterApplication;
     if ( ::lstrcmpW(fault, L"after-xaml-manager") == 0 )
@@ -2819,6 +2822,9 @@ bool wxWinUI3Initialize()
 
     try
     {
+        if ( runtimeFault == wxWinUIRuntimeFaultForTesting::BeforeBootstrap )
+            return failInitialization();
+
         PACKAGE_VERSION minVersion{};
         minVersion.Version = WINDOWSAPPSDK_RUNTIME_VERSION_UINT64;
 
@@ -2998,9 +3004,9 @@ bool wxWinUI3Initialize()
 
 void wxWinUI3Uninitialize()
 {
-    // Module cleanup always calls OnExit(), including after an
-    // initialization failure deliberately retained the epoch in terminal
-    // quarantine. Treat that state as an idempotent no-op just like Idle:
+    // Explicit cleanup can also follow a failed initialization deliberately
+    // retained in terminal quarantine. Treat it as an idempotent no-op just
+    // like Idle (a module whose OnInit failed does not receive OnExit):
     // logging from wx module teardown can fall back to a modal message box
     // after the normal log target has already been destroyed.
     const wxWinUIRuntimeState initialState =
@@ -3146,9 +3152,10 @@ class wxWinUI3Module : public wxModule
 public:
     bool OnInit() override
     {
-        // Let non-WinUI wxMSW code continue to run if the runtime is missing.
-        wxWinUI3Initialize();
-        return true;
+        // This module belongs to the WinUI toolkit, whose peers require the
+        // runtime. A missing or incomplete runtime must fail wx startup, not
+        // leave an apparently initialized toolkit with unusable controls.
+        return wxWinUI3Initialize();
     }
 
     void OnExit() override

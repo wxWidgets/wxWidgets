@@ -110,10 +110,76 @@ execute_process(
     ERROR_VARIABLE wx_winui_mta_error
     TIMEOUT 120)
 
+set(wx_winui_policy_failed false)
+set(wx_winui_policy_report "")
+set(wx_winui_mta_marker
+    "wx_winui_mta_reject: initializer_rejected=1 runtime_rejected=1 mta_preserved=1 recovered=1 com_balanced=1 result=0")
+string(FIND "${wx_winui_mta_output}"
+    "${wx_winui_mta_marker}" wx_winui_mta_marker_offset)
+if(wx_winui_mta_marker_offset EQUAL -1)
+    set(wx_winui_policy_failed true)
+endif()
+
+# A failure after acquiring COM but before bootstrapping XAML must be clean,
+# unlike the permanent quarantines below. Recovery is tested in this same
+# child only after proving the one-shot guard was consumed and COM balanced.
+execute_process(
+    COMMAND "${WX_WINUI_TEST_EXE}" --runtime-fault before-bootstrap
+    WORKING_DIRECTORY "${wx_winui_test_dir}"
+    RESULT_VARIABLE wx_winui_clean_result
+    OUTPUT_VARIABLE wx_winui_clean_output
+    ERROR_VARIABLE wx_winui_clean_error
+    TIMEOUT 120)
+set(wx_winui_clean_marker
+    "wx_winui_runtime_clean_fault: name=before-bootstrap initializer_rejected=1 env_consumed=1 com_balanced=1 recovered=1 result=0")
+string(FIND "${wx_winui_clean_output}"
+    "${wx_winui_clean_marker}" wx_winui_clean_marker_offset)
+if(NOT "${wx_winui_clean_result}" STREQUAL "0" OR
+        wx_winui_clean_marker_offset EQUAL -1)
+    set(wx_winui_policy_failed true)
+endif()
+string(APPEND wx_winui_policy_report
+    "\n[before-bootstrap] result=${wx_winui_clean_result}\n"
+    "stdout:\n${wx_winui_clean_output}\n"
+    "stderr:\n${wx_winui_clean_error}\n")
+
+# Renderer installation is process-wide, not per runtime epoch. Separate
+# children distinguish a custom renderer installed before the first Get()
+# and wxInitializer from the normal Fluent default. Both then replace the
+# live renderer, explicitly restore the native default and check ownership.
+foreach(wx_winui_renderer_mode IN ITEMS custom default)
+    execute_process(
+        COMMAND "${WX_WINUI_TEST_EXE}"
+            "--renderer-${wx_winui_renderer_mode}"
+        WORKING_DIRECTORY "${wx_winui_test_dir}"
+        RESULT_VARIABLE wx_winui_renderer_result
+        OUTPUT_VARIABLE wx_winui_renderer_output
+        ERROR_VARIABLE wx_winui_renderer_error
+        TIMEOUT 120)
+    if(wx_winui_renderer_mode STREQUAL "custom")
+        set(wx_winui_renderer_initial_destroyed 1)
+    else()
+        set(wx_winui_renderer_initial_destroyed 0)
+    endif()
+    set(wx_winui_renderer_marker
+        "wx_winui_renderer: mode=${wx_winui_renderer_mode} epochs=50 live_preserved=1 default_preserved=1 initial_destroyed=${wx_winui_renderer_initial_destroyed} replacement_destroyed=1 com_balanced=1 result=0")
+    string(FIND "${wx_winui_renderer_output}"
+        "${wx_winui_renderer_marker}" wx_winui_renderer_marker_offset)
+    if(NOT "${wx_winui_renderer_result}" STREQUAL "0" OR
+            wx_winui_renderer_marker_offset EQUAL -1)
+        set(wx_winui_policy_failed true)
+    endif()
+    string(APPEND wx_winui_policy_report
+        "\n[renderer-${wx_winui_renderer_mode}] result=${wx_winui_renderer_result}\n"
+        "stdout:\n${wx_winui_renderer_output}\n"
+        "stderr:\n${wx_winui_renderer_error}\n")
+endforeach()
+
 # Faults which intentionally retain an entire runtime epoch must never share a
 # process: Quarantined is permanent by design. Each child proves that the
-# one-shot guard was consumed, later initialization is rejected, the retained
-# apartment survives wx module teardown and the process exits without an AV.
+# required module failed startup, the one-shot guard was consumed, later
+# initialization is rejected, the retained apartment survives wx module
+# teardown and the process exits without an AV.
 set(wx_winui_runtime_faults
     after-application
     after-xaml-manager
@@ -134,7 +200,7 @@ foreach(wx_winui_runtime_fault IN LISTS wx_winui_runtime_faults)
         TIMEOUT 120)
 
     set(wx_winui_fault_marker
-        "wx_winui_runtime_fault: name=${wx_winui_runtime_fault} env_consumed=1 init_rejected=1 sta_retained=1 result=0")
+        "wx_winui_runtime_fault: name=${wx_winui_runtime_fault} initializer_rejected=1 env_consumed=1 init_rejected=1 sta_retained=1 result=0")
     string(FIND "${wx_winui_fault_output}"
         "${wx_winui_fault_marker}" wx_winui_fault_marker_offset)
     if(NOT "${wx_winui_fault_result}" STREQUAL "0" OR
@@ -178,11 +244,13 @@ if(wx_winui_new_dumps)
         "STA/cycles stderr:\n${wx_winui_test_error}\n"
         "MTA-rejection stdout:\n${wx_winui_mta_output}\n"
         "MTA-rejection stderr:\n${wx_winui_mta_error}\n"
+        "Runtime policy subprocesses:${wx_winui_policy_report}"
         "Runtime fault subprocesses:${wx_winui_fault_report}")
 endif()
 
 if(NOT "${wx_winui_test_result}" STREQUAL "0" OR
         NOT "${wx_winui_mta_result}" STREQUAL "0" OR
+        wx_winui_policy_failed OR
         wx_winui_fault_failed)
     message(FATAL_ERROR
         "Installed wxWinUI consumer failed: STA/cycles="
@@ -191,6 +259,7 @@ if(NOT "${wx_winui_test_result}" STREQUAL "0" OR
         "STA/cycles stderr:\n${wx_winui_test_error}\n"
         "MTA-rejection stdout:\n${wx_winui_mta_output}\n"
         "MTA-rejection stderr:\n${wx_winui_mta_error}\n"
+        "Runtime policy subprocesses:${wx_winui_policy_report}"
         "Runtime fault subprocesses:${wx_winui_fault_report}")
 endif()
 
@@ -201,5 +270,6 @@ if(NOT wx_winui_test_output STREQUAL "" OR
     message(STATUS
         "STA/cycles:\n${wx_winui_test_output}\n"
         "MTA rejection:\n${wx_winui_mta_output}\n"
+        "Runtime policy subprocesses:${wx_winui_policy_report}"
         "Runtime fault subprocesses:${wx_winui_fault_report}")
 endif()
