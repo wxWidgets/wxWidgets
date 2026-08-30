@@ -62,6 +62,61 @@ namespace MUXAP = winrt::Microsoft::UI::Xaml::Automation::Peers;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
+struct wxWinUIComboLayoutTestRequest;
+wxWinUIComboLayoutTestRequest *gs_comboLayoutTestRequest = nullptr;
+
+// Lexically owned by the accessor, including any early-return/destruction.
+// This leaves no test parameter or storage in an installed/shared header.
+struct wxWinUIComboLayoutTestRequest
+{
+    wxWinUIComboLayoutTestRequest(
+        wxComboBox *control,
+        wxWinUIChoiceImpl *implementation,
+        const std::shared_ptr<wxWinUIChoiceCallbackState>& choice,
+        const std::shared_ptr<wxWinUITextCallbackState>& text)
+        : owner(control), impl(implementation), choiceState(choice),
+          textState(text), previous(gs_comboLayoutTestRequest)
+    {
+        gs_comboLayoutTestRequest = this;
+    }
+
+    ~wxWinUIComboLayoutTestRequest()
+    {
+        gs_comboLayoutTestRequest = previous;
+    }
+
+    wxComboBox * const owner;
+    wxWinUIChoiceImpl * const impl;
+    const std::shared_ptr<wxWinUIChoiceCallbackState> choiceState;
+    const std::shared_ptr<wxWinUITextCallbackState> textState;
+    wxWinUIComboLayoutTestRequest * const previous;
+    bool pending = true;
+
+    wxDECLARE_NO_COPY_CLASS(wxWinUIComboLayoutTestRequest);
+};
+
+bool wxWinUITakeComboLayoutTestRequest(
+    wxComboBox *owner, wxWinUIChoiceImpl *impl)
+{
+    for ( auto *request = gs_comboLayoutTestRequest;
+          request; request = request->previous )
+    {
+        if ( request->owner == owner && request->impl == impl &&
+             request->choiceState == impl->callbackState &&
+             request->textState == impl->textCallbackState &&
+             request->choiceState->GetOwner() == owner &&
+             request->textState->GetOwner<wxComboBox>() == owner )
+        {
+            const bool pending = request->pending;
+            request->pending = false;
+            return pending;
+        }
+    }
+    return false;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
 template <typename T>
 winrt::Windows::Foundation::IUnknown
 wxWinUIComboObjectIdentity(const T& object) noexcept
@@ -6219,8 +6274,7 @@ void wxComboBox::OnPeerTemplateTransition(bool forceEditableReload)
     }
 }
 
-void wxComboBox::QueueEditPartResolutionAtLayoutEdge(
-    bool forceTransitionForTesting)
+void wxComboBox::QueueEditPartResolutionAtLayoutEdge()
 {
     if ( !m_editable || !m_winui || m_winui->simpleRoot ||
          !m_winui->editableRoot || !m_winui->comboBox ||
@@ -6242,6 +6296,11 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge(
     }
 
     wxWinUIChoiceImpl * const impl = m_winui.get();
+#ifdef WXWINUI_TEST_SUPPORT
+    // Consume before any XAML getter can re-enter a layout callback.
+    const bool forceTransitionForTesting =
+        wxWinUITakeComboLayoutTestRequest(this, impl);
+#endif
     if ( impl->comboLayoutResolveQueued )
     {
         ++impl->diagnosticComboLayoutCoalescedEdges;
@@ -6368,7 +6427,10 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge(
         const bool themeChanged =
             effectiveTheme != MUX::ElementTheme::Default &&
             requestedTheme != effectiveTheme;
-        if ( !forceTransitionForTesting &&
+        if (
+#ifdef WXWINUI_TEST_SUPPORT
+             !forceTransitionForTesting &&
+#endif
              !templateReplayPendingAtQueue &&
              !partResolutionPendingAtQueue && !partChanged &&
              !editorMissing && !boundaryChanged && !themeChanged )
@@ -6379,7 +6441,10 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge(
         // One forced x:Load retry is allowed for an unchanged edit generation.
         // A later concrete candidate identity or theme boundary can still queue
         // a passive reconciliation without reopening that force-layout budget.
-        if ( !forceTransitionForTesting &&
+        if (
+#ifdef WXWINUI_TEST_SUPPORT
+             !forceTransitionForTesting &&
+#endif
              !partResolutionPendingAtQueue && editorMissing &&
              !partChanged && !boundaryChanged && !themeChanged &&
              owner->m_winui->comboLayoutForcedRetryAttempted &&
@@ -6417,7 +6482,10 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge(
             MUXD::DispatcherQueuePriority::Low,
             [weakChoiceState, weakTextState, expectedOwner, impl,
              editGeneration, revision, editableRootIdentity, comboIdentity,
-             editIdentity, xamlRootIdentity, forceTransitionForTesting,
+             editIdentity, xamlRootIdentity,
+#ifdef WXWINUI_TEST_SUPPORT
+             forceTransitionForTesting,
+#endif
              templateReplayPendingAtQueue,
              partResolutionPendingAtQueue]()
             {
@@ -6535,11 +6603,13 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge(
                     owner->m_winui->comboLayoutResolveRunning = true;
                     ++owner->m_winui->diagnosticComboLayoutResolveRuns;
 
+#ifdef WXWINUI_TEST_SUPPORT
                     if ( forceTransitionForTesting )
                     {
                         owner->OnPeerTemplateTransition(true);
                         return;
                     }
+#endif
 
                     // Preserve the old LayoutUpdated theme responsibility, but
                     // run it only after the callback has unwound. It may itself
@@ -6673,7 +6743,7 @@ void wxComboBox::QueueEditPartResolutionAtLayoutEdge(
     }
 }
 
-void wxComboBox::OnPeerLayoutUpdated(bool forceTransitionForTesting)
+void wxComboBox::OnPeerLayoutUpdated()
 {
     if ( !m_winui || m_winui->simpleRoot || !m_winui->comboBox ||
          !m_winui->callbackState || !m_winui->textCallbackState ||
@@ -6704,7 +6774,7 @@ void wxComboBox::OnPeerLayoutUpdated(bool forceTransitionForTesting)
     // Strictly passive: this path performs only identity/theme reads and a
     // coalesced enqueue. ApplyTemplate/Measure/Arrange/UpdateLayout and theme
     // replay are forbidden until the Low-priority continuation runs.
-    QueueEditPartResolutionAtLayoutEdge(forceTransitionForTesting);
+    QueueEditPartResolutionAtLayoutEdge();
 }
 
 void wxComboBox::ResolveEditPartOnce(bool updateLayout)
@@ -8326,8 +8396,10 @@ bool wxWinUIComboBoxTestAccess::QueueTemplateLayoutResolution(wxComboBox* contro
     // return the old editor must still be authoritative, the second edge must
     // have coalesced into the first ticket, and no forced realization may have
     // run synchronously inside either LayoutUpdated callback.
-    control->OnPeerLayoutUpdated(true);
-    control->OnPeerLayoutUpdated(true);
+    wxWinUIComboLayoutTestRequest request(
+        control, impl, choiceState, textState);
+    control->OnPeerLayoutUpdated();
+    control->OnPeerLayoutUpdated();
 
     wxComboBox * const owner = getExactOwner();
     return owner && owner->m_winui->comboLayoutResolveQueued &&

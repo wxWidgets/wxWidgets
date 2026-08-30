@@ -33,12 +33,93 @@
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include <map>
+#endif
+
 namespace MUX = winrt::Microsoft::UI::Xaml;
 namespace MUXC = winrt::Microsoft::UI::Xaml::Controls;
 namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
 
 namespace
 {
+
+#ifdef WXWINUI_TEST_SUPPORT
+struct wxWinUISearchCtrlTestHook
+{
+    wxWinUISearchCtrlTestAccess::CallbackHook callback = nullptr;
+    void *context = nullptr;
+};
+
+struct wxWinUISearchCtrlTestState
+{
+    explicit wxWinUISearchCtrlTestState(wxSearchCtrl *control) : owner(control) {}
+
+    wxWeakRef<wxSearchCtrl> owner;
+    wxWinUISearchCtrlTestHook createLoaded;
+};
+
+std::map<wxSearchCtrl *, wxWinUISearchCtrlTestState> gs_searchCtrlTestStates;
+
+struct wxWinUISearchCtrlTestDestruction;
+wxWinUISearchCtrlTestDestruction *gs_searchCtrlTestDestruction = nullptr;
+
+struct wxWinUISearchCtrlTestDestruction
+{
+    explicit wxWinUISearchCtrlTestDestruction(wxSearchCtrl *control)
+        : owner(control), previous(gs_searchCtrlTestDestruction)
+    {
+        gs_searchCtrlTestDestruction = this;
+        gs_searchCtrlTestStates.erase(control);
+    }
+
+    ~wxWinUISearchCtrlTestDestruction()
+    {
+        gs_searchCtrlTestDestruction = previous;
+    }
+
+    wxSearchCtrl * const owner;
+    wxWinUISearchCtrlTestDestruction * const previous;
+
+    wxDECLARE_NO_COPY_CLASS(wxWinUISearchCtrlTestDestruction);
+};
+
+wxWinUISearchCtrlTestState *
+wxWinUIFindSearchCtrlTestState(wxSearchCtrl *owner, bool create = false)
+{
+    for ( auto *closing = gs_searchCtrlTestDestruction;
+          closing; closing = closing->previous )
+    {
+        if ( closing->owner == owner )
+            return nullptr;
+    }
+
+    auto found = gs_searchCtrlTestStates.find(owner);
+    if ( found != gs_searchCtrlTestStates.end() &&
+         found->second.owner.get() != owner )
+    {
+        gs_searchCtrlTestStates.erase(found);
+        found = gs_searchCtrlTestStates.end();
+    }
+    if ( found == gs_searchCtrlTestStates.end() && create )
+    {
+        found = gs_searchCtrlTestStates.emplace(
+            owner, wxWinUISearchCtrlTestState(owner)).first;
+    }
+    return found == gs_searchCtrlTestStates.end() ? nullptr : &found->second;
+}
+
+wxWinUISearchCtrlTestHook wxWinUITakeSearchCtrlLoadedHook(wxSearchCtrl *owner)
+{
+    auto * const state = wxWinUIFindSearchCtrlTestState(owner);
+    if ( !state )
+        return {};
+
+    const wxWinUISearchCtrlTestHook hook = state->createLoaded;
+    state->createLoaded = {};
+    return hook;
+}
+#endif // WXWINUI_TEST_SUPPORT
 
 long wxWinUIClampPos(long pos, long len)
 {
@@ -328,6 +409,9 @@ wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id, const wxString& valu
 
 wxSearchCtrl::~wxSearchCtrl()
 {
+#ifdef WXWINUI_TEST_SUPPORT
+    const wxWinUISearchCtrlTestDestruction testStateDestruction(this);
+#endif
     if ( m_winui )
     {
         m_winui->Close();
@@ -420,12 +504,9 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
         return false;
 
 #ifdef WXWINUI_TEST_SUPPORT
-    const auto loadedHook =
-        liveOwner->m_nextCreateLoadedHook;
-    void * const loadedHookContext =
-        liveOwner->m_nextCreateLoadedContext;
-    liveOwner->m_nextCreateLoadedHook = nullptr;
-    liveOwner->m_nextCreateLoadedContext = nullptr;
+    const auto loaded = wxWinUITakeSearchCtrlLoadedHook(liveOwner);
+    const auto loadedHook = loaded.callback;
+    void * const loadedHookContext = loaded.context;
     if ( loadedHook )
     {
         createImpl->host.SetNextContentLoadedHookForTesting(
@@ -1231,8 +1312,8 @@ void wxWinUISearchCtrlTestAccess::SetNextCreateLoadedHook(
     CallbackHook hook,
     void *context)
 {
-    searchCtrl.m_nextCreateLoadedHook = hook;
-    searchCtrl.m_nextCreateLoadedContext = hook ? context : nullptr;
+    if ( auto * const state = wxWinUIFindSearchCtrlTestState(&searchCtrl, true) )
+        state->createLoaded = { hook, hook ? context : nullptr };
 }
 #endif // WXWINUI_TEST_SUPPORT
 

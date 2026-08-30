@@ -107,9 +107,6 @@ protected:
     bool m_searchButtonVisible = true;
     bool m_cancelButtonVisible = false;
     bool m_updatingPeer = false;
-    // Private seam storage remains unconditional to preserve class layout.
-    void (*m_nextCreateLoadedHook)(wxSearchCtrl*, void*) = nullptr;
-    void *m_nextCreateLoadedContext = nullptr;
 
 private:
     friend class wxWinUISearchCtrlTestAccess;

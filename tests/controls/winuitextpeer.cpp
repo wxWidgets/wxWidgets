@@ -47,6 +47,7 @@
 #endif // wxUSE_VALIDATORS
 
 #include <memory>
+#include <new>
 #include <cstdlib>
 #include <vector>
 
@@ -296,6 +297,55 @@ void ArmSearchCtrlInitialSizeDestruction(
 }
 #endif // wxUSE_SEARCHCTRL
 
+void CountTextTestHook(wxTextCtrl *, void *context)
+{
+    ++*static_cast<unsigned *>(context);
+}
+
+#if wxUSE_SEARCHCTRL
+void CountSearchTestHook(wxSearchCtrl *, void *context)
+{
+    ++*static_cast<unsigned *>(context);
+}
+#endif
+
+void RearmPasswordTestHook(wxTextCtrl *owner, void *context)
+{
+    unsigned * const calls = static_cast<unsigned *>(context);
+    if ( ++*calls == 1 )
+    {
+        wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(
+            *owner, RearmPasswordTestHook, context);
+    }
+}
+
+class RearmTextHookOnDestroyCompleter final : public wxTextCompleter
+{
+public:
+    RearmTextHookOnDestroyCompleter(
+        wxTextCtrl *owner, unsigned *calls, bool *destroyed)
+        : m_owner(owner), m_calls(calls), m_destroyed(destroyed)
+    {
+    }
+
+    ~RearmTextHookOnDestroyCompleter() override
+    {
+        *m_destroyed = true;
+        // The wx object still exists, but its derived destructor has already
+        // retired test state before Close() destroys this application object.
+        wxWinUITextCtrlTestAccess::SetNextCreateLoadedHook(
+            *m_owner, CountTextTestHook, m_calls);
+    }
+
+    bool Start(const wxString&) override { return false; }
+    wxString GetNext() override { return {}; }
+
+private:
+    wxTextCtrl *m_owner;
+    unsigned *m_calls;
+    bool *m_destroyed;
+};
+
 struct TemporarySelectionSupersessionProbe
 {
     bool invoked = false;
@@ -460,6 +510,241 @@ TEST_CASE("wxWinUI text controls revoke callbacks",
 
     wxYield();
     CHECK(wxWinUITextCallbackState::GetLiveCountForTesting() == baseline);
+}
+
+TEST_CASE("wxWinUI text test state survives rejected Create",
+          "[winui-textpeer][test-state][create]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+
+    SECTION("TextCtrl keeps its pre-Create hook and peer request")
+    {
+        unsigned calls = 0;
+        wxTextCtrl text;
+        wxWinUITextCtrlTestAccess::UseTextBoxPeer(text);
+        wxWinUITextCtrlTestAccess::SetNextCreateLoadedHook(
+            text, CountTextTestHook, &calls);
+        CHECK(text.GetHandle() == nullptr);
+        CHECK(text.GetValue().empty());
+        CHECK(text.GetInsertionPoint() == 0);
+#if wxUSE_RICHEDIT
+        CHECK(text.GetRichVersion() == 0);
+#endif
+
+        // The existing native parent check rejects creation before any HWND,
+        // host or peer is allocated. No fault-injection seam is required.
+#if wxDEBUG_LEVEL
+        WX_ASSERT_FAILS_WITH_ASSERT(text.Create(nullptr, wxID_ANY));
+#else
+        CHECK_FALSE(text.Create(nullptr, wxID_ANY));
+#endif
+        CHECK(calls == 0);
+        CHECK(text.GetHandle() == nullptr);
+        REQUIRE(text.Create(parent, wxID_ANY, "retry",
+                            wxDefaultPosition, wxDefaultSize, wxTE_RICH2));
+        CHECK(calls == 1);
+        CHECK(text.GetValue() == "retry");
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::RichClipboardUsesAllFormats(text));
+        wxYield();
+        CHECK(calls == 1);
+    }
+
+#if wxUSE_SEARCHCTRL
+    SECTION("SearchCtrl keeps its pre-Create hook")
+    {
+        unsigned calls = 0;
+        wxSearchCtrl search;
+        wxWinUISearchCtrlTestAccess::SetNextCreateLoadedHook(
+            search, CountSearchTestHook, &calls);
+        CHECK(search.GetHandle() == nullptr);
+        CHECK(search.GetValue().empty());
+#if wxDEBUG_LEVEL
+        WX_ASSERT_FAILS_WITH_ASSERT(search.Create(nullptr, wxID_ANY));
+#else
+        CHECK_FALSE(search.Create(nullptr, wxID_ANY));
+#endif
+        CHECK(calls == 0);
+        CHECK(search.GetHandle() == nullptr);
+        REQUIRE(search.Create(parent, wxID_ANY, "retry"));
+        CHECK(calls == 1);
+        CHECK(search.GetValue() == "retry");
+        wxYield();
+        CHECK(calls == 1);
+    }
+#endif
+
+    SECTION("a late TextBox request leaves a live RichEditBox unchanged")
+    {
+        wxTextCtrl text(parent, wxID_ANY, "live",
+                        wxDefaultPosition, wxDefaultSize, wxTE_RICH2);
+        REQUIRE(wxWinUITextCtrlTestAccess::RichClipboardUsesAllFormats(text));
+        wxWinUITextCtrlTestAccess::UseTextBoxPeer(text);
+        CHECK(wxWinUITextCtrlTestAccess::RichClipboardUsesAllFormats(text));
+        CHECK(text.GetValue() == "live");
+    }
+
+    wxYield();
+}
+
+TEST_CASE("wxWinUI text test state does not cross owner destruction",
+          "[winui-textpeer][test-state][lifetime]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+
+    SECTION("uncreated TextCtrl and exact-address reuse")
+    {
+        unsigned calls = 0;
+        alignas(wxTextCtrl) unsigned char storage[sizeof(wxTextCtrl)];
+        const auto destroy = [](wxTextCtrl *control) { control->~wxTextCtrl(); };
+        std::unique_ptr<wxTextCtrl, decltype(destroy)> text(
+            new (storage) wxTextCtrl, destroy);
+        wxWeakRef<wxTextCtrl> previousOwner(text.get());
+        wxWinUITextCtrlTestAccess::UseTextBoxPeer(*text);
+        wxWinUITextCtrlTestAccess::SetNextCreateLoadedHook(
+            *text, CountTextTestHook, &calls);
+        wxWinUITextCtrlTestAccess::SetNextTemporarySelectionHook(
+            *text, CountTextTestHook, &calls);
+        wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(
+            *text, CountTextTestHook, &calls);
+        wxWinUITextCtrlTestAccess::ForceNextPasswordScrubFailure(
+            *text, static_cast<long>(E_FAIL));
+        wxWinUITextCtrlTestAccess::ForceNextPasswordScrubPartialWrite(*text);
+        text.reset();
+        CHECK(previousOwner.get() == nullptr);
+
+        text.reset(new (storage) wxTextCtrl);
+        REQUIRE(text->Create(parent, wxID_ANY, "fresh",
+                            wxDefaultPosition, wxDefaultSize, wxTE_RICH2));
+        CHECK(calls == 0);
+        CHECK(wxWinUITextCtrlTestAccess::RichClipboardUsesAllFormats(*text));
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::GetPasswordFailClosed(
+            *text, nullptr, nullptr));
+        text.reset();
+
+        text.reset(new (storage) wxTextCtrl);
+        REQUIRE(text->Create(parent, wxID_ANY, "secret",
+                            wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD));
+        text->SelectAll();
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(*text, "new"));
+        CHECK(text->GetValue() == "new");
+        CHECK(calls == 0);
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::GetPasswordFailClosed(
+            *text, nullptr, nullptr));
+    }
+
+#if wxUSE_SEARCHCTRL
+    SECTION("uncreated SearchCtrl and exact-address reuse")
+    {
+        unsigned calls = 0;
+        alignas(wxSearchCtrl) unsigned char storage[sizeof(wxSearchCtrl)];
+        const auto destroy = [](wxSearchCtrl *control)
+        {
+            control->~wxSearchCtrl();
+        };
+        std::unique_ptr<wxSearchCtrl, decltype(destroy)> search(
+            new (storage) wxSearchCtrl, destroy);
+        wxWeakRef<wxSearchCtrl> previousOwner(search.get());
+        wxWinUISearchCtrlTestAccess::SetNextCreateLoadedHook(
+            *search, CountSearchTestHook, &calls);
+        search.reset();
+        CHECK(previousOwner.get() == nullptr);
+        search.reset(new (storage) wxSearchCtrl);
+        REQUIRE(search->Create(parent, wxID_ANY, "fresh"));
+        CHECK(search->GetValue() == "fresh");
+        CHECK(calls == 0);
+    }
+#endif
+
+    SECTION("Close reentrancy cannot rearm a destructing TextCtrl")
+    {
+        unsigned calls = 0;
+        bool completerDestroyed = false;
+        alignas(wxTextCtrl) unsigned char storage[sizeof(wxTextCtrl)];
+        const auto destroy = [](wxTextCtrl *control) { control->~wxTextCtrl(); };
+        std::unique_ptr<wxTextCtrl, decltype(destroy)> text(
+            new (storage) wxTextCtrl, destroy);
+        REQUIRE(text->Create(parent, wxID_ANY, "complete"));
+        REQUIRE(text->AutoComplete(new RearmTextHookOnDestroyCompleter(
+            text.get(), &calls, &completerDestroyed)));
+        text.reset();
+        CHECK(completerDestroyed);
+        text.reset(new (storage) wxTextCtrl);
+        REQUIRE(text->Create(parent, wxID_ANY, "fresh"));
+        CHECK(calls == 0);
+    }
+
+    wxYield();
+}
+
+TEST_CASE("wxWinUI password test hook can rearm its next transaction",
+          "[winui-textpeer][test-state][password]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+
+    {
+        unsigned calls = 0;
+        wxTextCtrl password(parent, wxID_ANY, "secret",
+                            wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
+        wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(
+            password, RearmPasswordTestHook, &calls);
+
+        password.SelectAll();
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password, "first"));
+        CHECK(calls == 1);
+        password.SelectAll();
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password, "second"));
+        CHECK(calls == 2);
+        password.SelectAll();
+        REQUIRE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(password, "third"));
+        CHECK(calls == 2);
+        CHECK(password.GetValue() == "third");
+    }
+
+    wxYield();
+}
+
+TEST_CASE("wxWinUI password scrub faults may be armed before Create",
+          "[winui-textpeer][test-state][password]")
+{
+    wxWindow * const parent = wxTheApp->GetTopWindow();
+    REQUIRE(parent);
+
+    {
+        wxTextCtrl password;
+        long expectedFailure = 0;
+
+        SECTION("failed scrub")
+        {
+            expectedFailure = static_cast<long>(E_FAIL);
+            wxWinUITextCtrlTestAccess::ForceNextPasswordScrubFailure(
+                password, expectedFailure);
+        }
+        SECTION("partial scrub")
+        {
+            expectedFailure = static_cast<long>(E_UNEXPECTED);
+            wxWinUITextCtrlTestAccess::ForceNextPasswordScrubPartialWrite(password);
+        }
+
+        REQUIRE(password.Create(parent, wxID_ANY, "retained",
+                                wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD));
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::GetPasswordFailClosed(
+            password, nullptr, nullptr));
+        password.SelectAll();
+        CHECK_FALSE(wxWinUITextCtrlTestAccess::ReplacePeerSelection(
+            password, "transient"));
+        long failure = 0;
+        bool documentWasEmpty = false;
+        REQUIRE(wxWinUITextCtrlTestAccess::GetPasswordFailClosed(
+            password, &failure, &documentWasEmpty));
+        CHECK(failure == expectedFailure);
+        CHECK(documentWasEmpty);
+        CHECK(password.GetValue() == "retained");
+    }
+
+    wxYield();
 }
 
 TEST_CASE("wxWinUI text Create survives destruction from Loaded",

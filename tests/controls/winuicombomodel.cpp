@@ -263,6 +263,22 @@ TEST_CASE("wxWinUI ComboBox LayoutUpdated realization is deferred",
           beforeDiagnostic.comboLayoutSynchronousRealizations);
     CHECK(settledDiagnostic.comboLayoutUnlatchedRealizations ==
           beforeDiagnostic.comboLayoutUnlatchedRealizations);
+
+    // The request was scoped to the two earlier callback invocations. A later
+    // genuine passive edge must not inherit a force bit from their test helper.
+    REQUIRE(wxWinUIComboBoxTestAccess::RunTemplateLayoutEdge(&combo, false));
+    wxYield();
+    wxWinUIComboBoxTestAccess::WinUITemplatePeerSnapshot passivePeer;
+    wxWinUIComboBoxTestAccess::WinUIDiagnosticSnapshot passiveDiagnostic;
+    REQUIRE(wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(
+        &combo, &passivePeer));
+    REQUIRE(wxWinUIComboBoxTestAccess::GetDiagnosticSnapshot(
+        &combo, &passiveDiagnostic));
+    CHECK(passivePeer.editGeneration == settledPeer.editGeneration);
+    CHECK(passiveDiagnostic.templateTransitions ==
+          settledDiagnostic.templateTransitions);
+    CHECK(passiveDiagnostic.comboLayoutSynchronousRealizations ==
+          settledDiagnostic.comboLayoutSynchronousRealizations);
 }
 
 TEST_CASE("wxWinUI ComboBox text model and template generations",

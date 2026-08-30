@@ -76,6 +76,100 @@ namespace WUTF = winrt::Windows::UI::Text;
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
+struct wxWinUITextCtrlTestHook
+{
+    wxWinUITextCtrlTestAccess::CallbackHook callback = nullptr;
+    void *context = nullptr;
+};
+
+struct wxWinUITextCtrlTestState
+{
+    explicit wxWinUITextCtrlTestState(wxTextCtrl *control) : owner(control) {}
+
+    wxWeakRef<wxTextCtrl> owner;
+    bool useTextBoxPeer = false;
+    wxWinUITextCtrlTestHook createLoaded;
+    wxWinUITextCtrlTestHook temporarySelection;
+    wxWinUITextCtrlTestHook passwordTextChanging;
+    long passwordScrubFailure = 0;
+    bool passwordScrubPartialWrite = false;
+};
+
+// This state belongs to the C++ object, not a replaceable native peer. In
+// particular, arming a default-constructed control must not create its PIMPL.
+std::map<wxTextCtrl *, wxWinUITextCtrlTestState> gs_textCtrlTestStates;
+
+struct wxWinUITextCtrlTestDestruction;
+wxWinUITextCtrlTestDestruction *gs_textCtrlTestDestruction = nullptr;
+
+struct wxWinUITextCtrlTestDestruction
+{
+    explicit wxWinUITextCtrlTestDestruction(wxTextCtrl *control)
+        : owner(control), previous(gs_textCtrlTestDestruction)
+    {
+        gs_textCtrlTestDestruction = this;
+        gs_textCtrlTestStates.erase(control);
+    }
+
+    ~wxWinUITextCtrlTestDestruction()
+    {
+        gs_textCtrlTestDestruction = previous;
+    }
+
+    wxTextCtrl * const owner;
+    wxWinUITextCtrlTestDestruction * const previous;
+
+    wxDECLARE_NO_COPY_CLASS(wxWinUITextCtrlTestDestruction);
+};
+
+wxWinUITextCtrlTestState *
+wxWinUIFindTextCtrlTestState(wxTextCtrl *owner, bool create = false)
+{
+    // Close() may destroy a custom completer which calls a test setter again.
+    // The stack marker rejects that rearm without allocating during teardown.
+    for ( auto *closing = gs_textCtrlTestDestruction;
+          closing; closing = closing->previous )
+    {
+        if ( closing->owner == owner )
+            return nullptr;
+    }
+
+    auto found = gs_textCtrlTestStates.find(owner);
+    if ( found != gs_textCtrlTestStates.end() &&
+         found->second.owner.get() != owner )
+    {
+        gs_textCtrlTestStates.erase(found);
+        found = gs_textCtrlTestStates.end();
+    }
+    if ( found == gs_textCtrlTestStates.end() && create )
+    {
+        found = gs_textCtrlTestStates.emplace(
+            owner, wxWinUITextCtrlTestState(owner)).first;
+    }
+    return found == gs_textCtrlTestStates.end() ? nullptr : &found->second;
+}
+
+wxWinUITextCtrlTestHook wxWinUITakeTextCtrlTestHook(
+    wxTextCtrl *owner,
+    wxWinUITextCtrlTestHook wxWinUITextCtrlTestState::*slot)
+{
+    auto * const state = wxWinUIFindTextCtrlTestState(owner);
+    if ( !state )
+        return {};
+
+    const wxWinUITextCtrlTestHook hook = state->*slot;
+    state->*slot = {};
+    return hook;
+}
+
+bool wxWinUITextCtrlRequestedTextBox(wxTextCtrl *owner)
+{
+    const auto * const state = wxWinUIFindTextCtrlTestState(owner);
+    return state && state->useTextBoxPeer;
+}
+#endif // WXWINUI_TEST_SUPPORT
+
 class wxWinUIPasswordAutomationPeer
     : public MUXAP::RichEditBoxAutomationPeerT<
           wxWinUIPasswordAutomationPeer>
@@ -4743,6 +4837,9 @@ wxTextCtrl::wxTextCtrl(wxWindow *parent,
 
 wxTextCtrl::~wxTextCtrl()
 {
+#ifdef WXWINUI_TEST_SUPPORT
+    const wxWinUITextCtrlTestDestruction testStateDestruction(this);
+#endif
     // The impl is declared before all logical text state and would otherwise
     // be destroyed after it. Disconnect while the complete wx object is
     // still alive, then make the impl destructor a harmless second Close().
@@ -4855,12 +4952,10 @@ bool wxTextCtrl::Create(wxWindow *parent,
         return false;
 
 #ifdef WXWINUI_TEST_SUPPORT
-    const auto loadedHook =
-        liveOwner->m_nextCreateLoadedHook;
-    void * const loadedHookContext =
-        liveOwner->m_nextCreateLoadedContext;
-    liveOwner->m_nextCreateLoadedHook = nullptr;
-    liveOwner->m_nextCreateLoadedContext = nullptr;
+    const auto loaded = wxWinUITakeTextCtrlTestHook(
+        liveOwner, &wxWinUITextCtrlTestState::createLoaded);
+    const auto loadedHook = loaded.callback;
+    void * const loadedHookContext = loaded.context;
     if ( loadedHook )
     {
         createImpl->host.SetNextContentLoadedHookForTesting(
@@ -4891,7 +4986,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     // TextBox continuation while it remains as a defensive fallback.
     const bool useRichPeer = !password
 #ifdef WXWINUI_TEST_SUPPORT
-        && !m_useTextBoxPeer
+        && !wxWinUITextCtrlRequestedTextBox(this)
 #endif
         ;
 
@@ -11200,12 +11295,16 @@ void wxTextCtrl::ProcessSecurePasswordTextChanging()
             ? impl->securePasswordEditSelectionEnd
             : modelSelectionEnd;
 #ifdef WXWINUI_TEST_SUPPORT
-    const HRESULT forcedPasswordScrubFailure =
-        static_cast<HRESULT>(m_nextPasswordScrubFailure);
-    m_nextPasswordScrubFailure = 0;
-    const bool forcePartialPasswordScrub =
-        m_nextPasswordScrubPartialWrite;
-    m_nextPasswordScrubPartialWrite = false;
+    HRESULT forcedPasswordScrubFailure = S_OK;
+    bool forcePartialPasswordScrub = false;
+    if ( auto * const state = wxWinUIFindTextCtrlTestState(this) )
+    {
+        forcedPasswordScrubFailure =
+            static_cast<HRESULT>(state->passwordScrubFailure);
+        state->passwordScrubFailure = 0;
+        forcePartialPasswordScrub = state->passwordScrubPartialWrite;
+        state->passwordScrubPartialWrite = false;
+    }
     const bool hasExplicitInsertionForTesting =
         impl->securePasswordExplicitInsertionArmedForTesting;
     wxString explicitInsertionForTesting =
@@ -11430,15 +11529,11 @@ void wxTextCtrl::ProcessSecurePasswordTextChanging()
             return;
 
 #ifdef WXWINUI_TEST_SUPPORT
-        if ( live->m_nextPasswordTextChangingHook )
+        const auto hook = wxWinUITakeTextCtrlTestHook(
+            live, &wxWinUITextCtrlTestState::passwordTextChanging);
+        if ( hook.callback )
         {
-            const auto hook =
-                live->m_nextPasswordTextChangingHook;
-            void * const hookContext =
-                live->m_nextPasswordTextChangingContext;
-            live->m_nextPasswordTextChangingHook = nullptr;
-            live->m_nextPasswordTextChangingContext = nullptr;
-            hook(live, hookContext);
+            hook.callback(live, hook.context);
 
             live = getExactOwner();
             if ( !live )
@@ -12982,15 +13077,11 @@ void wxTextCtrl::EnsurePositionVisible(long pos)
             if ( !live )
                 return;
 #ifdef WXWINUI_TEST_SUPPORT
-            if ( live->m_nextTemporarySelectionHook )
+            const auto hook = wxWinUITakeTextCtrlTestHook(
+                live, &wxWinUITextCtrlTestState::temporarySelection);
+            if ( hook.callback )
             {
-                const auto hook =
-                    live->m_nextTemporarySelectionHook;
-                void * const context =
-                    live->m_nextTemporarySelectionContext;
-                live->m_nextTemporarySelectionHook = nullptr;
-                live->m_nextTemporarySelectionContext = nullptr;
-                hook(live, context);
+                hook.callback(live, hook.context);
                 if ( !getExactOwner() )
                     return;
             }
@@ -14009,8 +14100,9 @@ void wxWinUITextCtrlTestAccess::ForceNextPasswordScrubFailure(
     long hresult)
 {
     const HRESULT failure = static_cast<HRESULT>(hresult);
-    textCtrl.m_nextPasswordScrubFailure =
-        static_cast<long>(FAILED(failure) ? failure : E_FAIL);
+    if ( auto * const state = wxWinUIFindTextCtrlTestState(&textCtrl, true) )
+        state->passwordScrubFailure =
+            static_cast<long>(FAILED(failure) ? failure : E_FAIL);
 }
 #endif // WXWINUI_TEST_SUPPORT
 
@@ -14018,7 +14110,8 @@ void wxWinUITextCtrlTestAccess::ForceNextPasswordScrubFailure(
 void wxWinUITextCtrlTestAccess::ForceNextPasswordScrubPartialWrite(
     wxTextCtrl& textCtrl)
 {
-    textCtrl.m_nextPasswordScrubPartialWrite = true;
+    if ( auto * const state = wxWinUIFindTextCtrlTestState(&textCtrl, true) )
+        state->passwordScrubPartialWrite = true;
 }
 #endif // WXWINUI_TEST_SUPPORT
 
@@ -14592,7 +14685,10 @@ void wxWinUITextCtrlTestAccess::UseTextBoxPeer(
     // Peer kind is a creation-time decision. Ignore a late request rather
     // than replacing a live native peer behind callbacks that own its identity.
     if ( !textCtrl.m_winui )
-        textCtrl.m_useTextBoxPeer = true;
+    {
+        if ( auto * const state = wxWinUIFindTextCtrlTestState(&textCtrl, true) )
+            state->useTextBoxPeer = true;
+    }
 }
 #endif // WXWINUI_TEST_SUPPORT
 
@@ -14623,10 +14719,12 @@ void wxWinUITextCtrlTestAccess::SetNextTemporarySelectionHook(
     CallbackHook hook,
     void *context)
 {
-    textCtrl.m_nextTemporarySelectionHook = hook;
-    textCtrl.m_nextTemporarySelectionContext = hook ? context : nullptr;
-    if ( textCtrl.m_winui )
-        textCtrl.m_winui->forceTemporarySelectionForTesting = hook != nullptr;
+    if ( auto * const state = wxWinUIFindTextCtrlTestState(&textCtrl, true) )
+    {
+        state->temporarySelection = { hook, hook ? context : nullptr };
+        if ( textCtrl.m_winui )
+            textCtrl.m_winui->forceTemporarySelectionForTesting = hook != nullptr;
+    }
 }
 #endif // WXWINUI_TEST_SUPPORT
 
@@ -14636,8 +14734,8 @@ void wxWinUITextCtrlTestAccess::SetNextPasswordTextChangingHook(
     CallbackHook hook,
     void *context)
 {
-    textCtrl.m_nextPasswordTextChangingHook = hook;
-    textCtrl.m_nextPasswordTextChangingContext = hook ? context : nullptr;
+    if ( auto * const state = wxWinUIFindTextCtrlTestState(&textCtrl, true) )
+        state->passwordTextChanging = { hook, hook ? context : nullptr };
 }
 #endif // WXWINUI_TEST_SUPPORT
 
@@ -14647,8 +14745,8 @@ void wxWinUITextCtrlTestAccess::SetNextCreateLoadedHook(
     CallbackHook hook,
     void *context)
 {
-    textCtrl.m_nextCreateLoadedHook = hook;
-    textCtrl.m_nextCreateLoadedContext = hook ? context : nullptr;
+    if ( auto * const state = wxWinUIFindTextCtrlTestState(&textCtrl, true) )
+        state->createLoaded = { hook, hook ? context : nullptr };
 }
 #endif // WXWINUI_TEST_SUPPORT
 

@@ -153,7 +153,6 @@ protected:
 
 private:
     friend class wxWinUITextCtrlTestAccess;
-    using WinUICallbackHook = void (*)(wxTextCtrl*, void*);
 
     bool ProcessEnter();
     bool ProcessTab();
@@ -207,21 +206,9 @@ private:
     bool m_updatingPeer = false;
     bool m_forceUpper = false;
     bool m_isNativeCaretShown = true;
-    // Private seam storage remains unconditional to preserve class layout.
-    bool m_useTextBoxPeer = false;
 #if wxUSE_TOOLTIPS
     wxString m_tooltipText;
 #endif // wxUSE_TOOLTIPS
-    WinUICallbackHook m_nextCreateLoadedHook = nullptr;
-    void *m_nextCreateLoadedContext = nullptr;
-    WinUICallbackHook
-        m_nextTemporarySelectionHook = nullptr;
-    void *m_nextTemporarySelectionContext = nullptr;
-    WinUICallbackHook
-        m_nextPasswordTextChangingHook = nullptr;
-    void *m_nextPasswordTextChangingContext = nullptr;
-    long m_nextPasswordScrubFailure = 0;
-    bool m_nextPasswordScrubPartialWrite = false;
     long m_passwordPeerFailClosedHresult = 0;
     bool m_passwordPeerWasEmptyOnFailClosed = false;
 

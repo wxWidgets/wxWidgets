@@ -150,9 +150,8 @@ private:
     bool RetireEditPartForTemplateTransition();
     bool ReplayTemplateStateToEditPart();
     void OnPeerTemplateTransition(bool forceEditableReload);
-    void OnPeerLayoutUpdated(bool forceTransitionForTesting = false);
-    void QueueEditPartResolutionAtLayoutEdge(
-        bool forceTransitionForTesting = false);
+    void OnPeerLayoutUpdated();
+    void QueueEditPartResolutionAtLayoutEdge();
     // Template application/layout can invoke arbitrary application code.
     // Return false if that code destroyed this control.
     bool ResolveEditPart(bool updateLayout = true);
