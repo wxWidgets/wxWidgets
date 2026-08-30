@@ -14,6 +14,7 @@
 #include "wx/imaglist.h"
 #include "wx/settings.h"
 #include "wx/sharedptr.h"
+#include "wx/weakref.h"
 #include "wx/withimages.h"
 
 #include "wx/qt/private/compat.h"
@@ -25,6 +26,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QScrollBar>
 #include <QtGui/QPainter>
+#include <QtCore/QPointer>
 
 namespace
 {
@@ -523,12 +525,27 @@ private:
     {
         // QT doesn't update the selection until this signal has been processed.
         // Deferring this event ensures that wxTreeCtrl::GetSelections() returns
-        // the new selection in the wx event handler.
+        // the new selection in the wx event handler. A public SelectItem()
+        // consumes it synchronously after the Qt call has finished instead.
+        m_selectionChangePending = true;
         GetHandler()->CallAfter([this]()
             {
-                EmitSelectChangeEvent(wxEVT_TREE_SEL_CHANGED);
+                EmitPendingSelectionChange();
             });
     }
+
+    void EmitPendingSelectionChange()
+    {
+        if ( !m_selectionChangePending )
+            return;
+
+        // Consume before dispatch: a treebook veto can synchronously select
+        // the old item again, and either notification may destroy this peer.
+        m_selectionChangePending = false;
+        EmitSelectChangeEvent(wxEVT_TREE_SEL_CHANGED);
+    }
+
+    bool m_selectionChangePending = false;
 
     void OnItemActivated(QTreeWidgetItem *item, int WXUNUSED(column))
     {
@@ -1370,19 +1387,28 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 
     if ( qTreeItem )
     {
+        const wxWeakRef<wxTreeCtrl> weakThis(this);
+        const QPointer<wxQTreeWidget> tree = GetQTreeWidget();
         if ( select && !HasFlag(wxTR_MULTIPLE) )
         {
             // Let the selection model check the veto before replacing the
             // selection. Clearing and selecting separately also queued two
             // identical wx selection-changed events for one public change.
-            GetQTreeWidget()->setCurrentItem(
+            tree->setCurrentItem(
                 qTreeItem, 0, QItemSelectionModel::ClearAndSelect);
         }
         else
         {
-            GetQTreeWidget()->select(qTreeItem,
+            tree->select(qTreeItem,
                 select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
         }
+
+        // Qt has now published both its current item and selected items. Do
+        // not defer wx notification past this public operation: a controller
+        // such as wxTreebook must complete a veto rollback before we return.
+        // The queued fallback becomes a no-op after this terminal dispatch.
+        if ( weakThis && tree && weakThis->GetQTreeWidget() == tree.data() )
+            tree->EmitPendingSelectionChange();
     }
 }
 

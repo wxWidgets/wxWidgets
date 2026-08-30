@@ -20,6 +20,7 @@
 #include "wx/treectrl.h"
 #include "wx/weakref.h"
 #include "bookctrlbasetest.h"
+#include "testableframe.h"
 
 #include <memory>
 
@@ -193,6 +194,8 @@ TEST_CASE_METHOD(TreebookTestCase, "Treebook::ControllerVetoRestoresSelection",
         unsigned changingCount{0};
     } observer;
 
+    EventCounter pageChanged(m_treebook.get(), wxEVT_TREEBOOK_PAGE_CHANGED);
+
     REQUIRE(m_treebook->SetSelection(0) == 0);
 
     wxTreeCtrl* const tree = m_treebook->GetTreeCtrl();
@@ -216,12 +219,27 @@ TEST_CASE_METHOD(TreebookTestCase, "Treebook::ControllerVetoRestoresSelection",
     REQUIRE(observer.changingCount == 1);
     REQUIRE(m_treebook->GetSelection() == 0);
     REQUIRE(tree->GetSelection() == first);
+    CHECK(tree->IsSelected(first));
+    CHECK_FALSE(tree->IsSelected(second));
+    CHECK(pageChanged.GetCount() == 0);
+
+    // SelectItem() must finish the controller veto synchronously. Draining
+    // deferred native notifications must not commit the rejected page later.
+    wxYield();
+    CHECK(m_treebook->GetSelection() == 0);
+    CHECK(tree->GetSelection() == first);
+    CHECK(pageChanged.GetCount() == 0);
 
     // The synchronous rollback must leave the controller ready for the next
     // selection, once the veto handler has been removed.
     tree->SelectItem(second);
     REQUIRE(m_treebook->GetSelection() == 1);
     REQUIRE(tree->GetSelection() == second);
+    CHECK(tree->IsSelected(second));
+    CHECK_FALSE(tree->IsSelected(first));
+    CHECK(pageChanged.GetCount() == 1);
+    wxYield();
+    CHECK(pageChanged.GetCount() == 1);
 }
 
 TEST_CASE_METHOD(TreebookTestCase, "Treebook::DeleteAllPublishesEmptyTopology",
