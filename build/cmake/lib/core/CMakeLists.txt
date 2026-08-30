@@ -195,7 +195,9 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/radiobox.cpp"
             "${wxSOURCE_DIR}/src/winui/activityindicator.cpp"
             "${wxSOURCE_DIR}/src/winui/hyperlink.cpp"
-            "${wxSOURCE_DIR}/src/winui/clrpicker.cpp")
+            "${wxSOURCE_DIR}/src/winui/clrpicker.cpp"
+            "${wxSOURCE_DIR}/src/winui/infobar.cpp"
+            "${wxSOURCE_DIR}/src/winui/statbar.cpp")
         # Source properties must be visible where the owning target is
         # created: core here, or the parent directory in monolithic builds.
         # Keeping them per-source avoids instrumenting all wxWidgets TUs.

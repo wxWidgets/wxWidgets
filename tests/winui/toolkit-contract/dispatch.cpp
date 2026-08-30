@@ -67,11 +67,20 @@ using wxWinUIActivityPeerWriteHookForTesting = RemovedPublicPeerWriteHook;
 #if wxUSE_HYPERLINKCTRL
 using wxWinUIHyperlinkPeerWriteHookForTesting = RemovedPublicPeerWriteHook;
 #endif
+#if wxUSE_INFOBAR
+using wxWinUIInfoBarContentWriteHookForTesting = RemovedPublicPeerWriteHook;
+#endif
+#if wxUSE_STATUSBAR
+using wxWinUIStatusBarReentryPointForTesting = RemovedPublicPeerWriteHook;
+using wxWinUIStatusBarReentryHookForTesting = RemovedPublicPeerWriteHook;
+using wxWinUIStatusBarSizeGripSnapshot = RemovedPublicPeerWriteHook;
+using wxWinUIStatusBarResizeActionHookForTesting = RemovedPublicPeerWriteHook;
+#endif
 
 #if wxUSE_BUTTON || wxUSE_TOGGLEBTN || wxUSE_STATTEXT || wxUSE_STATBMP || \
     wxUSE_STATBOX || wxUSE_GAUGE || wxUSE_SCROLLBAR || wxUSE_SPINBTN || \
     wxUSE_RADIOBOX || wxUSE_ACTIVITYINDICATOR || wxUSE_HYPERLINKCTRL || \
-    wxUSE_COLOURPICKERCTRL
+    wxUSE_COLOURPICKERCTRL || wxUSE_INFOBAR || wxUSE_STATUSBAR
 namespace
 {
 
@@ -443,6 +452,145 @@ static_assert(!HasPublicTestOperation<DeliverClosedForTesting,
 static_assert(!HasPublicTestOperation<LivePeerCallbackCountForTesting,
                                      wxWinUIColourButton>::value,
               "wxWinUIColourButton must not expose the test callback-state counter");
+#endif
+
+#if wxUSE_INFOBAR
+template<typename T>
+using InfoBarPeerOpenTestOperation = decltype(&T::WinUIIsPeerOpen);
+
+static_assert(!HasPublicTestOperation<InfoBarPeerOpenTestOperation,
+                                     wxInfoBar>::value,
+              "wxInfoBar must not expose WinUIIsPeerOpen");
+
+template<typename T>
+using InfoBarCloseButtonTestOperation = decltype(&T::WinUIClickCloseButton);
+
+static_assert(!HasPublicTestOperation<InfoBarCloseButtonTestOperation,
+                                     wxInfoBar>::value,
+              "wxInfoBar must not expose WinUIClickCloseButton");
+
+template<typename T>
+using InfoBarButtonTestOperation = decltype(&T::WinUIClickButtonForTesting);
+
+static_assert(!HasPublicTestOperation<InfoBarButtonTestOperation,
+                                     wxInfoBar>::value,
+              "wxInfoBar must not expose WinUIClickButtonForTesting");
+
+template<typename T>
+using InfoBarContentWriteHookTestOperation = decltype(&T::WinUISetNextContentWriteHookForTesting);
+
+static_assert(!HasPublicTestOperation<InfoBarContentWriteHookTestOperation,
+                                     wxInfoBar>::value,
+              "wxInfoBar must not expose WinUISetNextContentWriteHookForTesting");
+
+template<typename T>
+using InfoBarDeferredProjectionTestOperation = decltype(&T::WinUIHasDeferredContentProjectionForTesting);
+
+static_assert(!HasPublicTestOperation<InfoBarDeferredProjectionTestOperation,
+                                     wxInfoBar>::value,
+              "wxInfoBar must not expose WinUIHasDeferredContentProjectionForTesting");
+
+template<typename T>
+using InfoBarProjectionQuarantineTestOperation = decltype(&T::WinUIIsContentProjectionQuarantinedForTesting);
+
+static_assert(!HasPublicTestOperation<InfoBarProjectionQuarantineTestOperation,
+                                     wxInfoBar>::value,
+              "wxInfoBar must not expose WinUIIsContentProjectionQuarantinedForTesting");
+
+#endif
+
+#if wxUSE_STATUSBAR
+template<typename T>
+using StatusBarHasSizeGripTestOperation = decltype(&T::WinUIHasSizeGripForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarHasSizeGripTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIHasSizeGripForTesting");
+
+template<typename T>
+using StatusBarSizeGripStateTestOperation = decltype(&T::WinUIGetSizeGripStateForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarSizeGripStateTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIGetSizeGripStateForTesting");
+
+template<typename T>
+using StatusBarResizeHookTestOperation = decltype(&T::WinUISetResizeActionHookForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarResizeHookTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUISetResizeActionHookForTesting");
+
+template<typename T>
+using StatusBarInvokeSizeGripTestOperation = decltype(&T::WinUIInvokeSizeGripForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarInvokeSizeGripTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIInvokeSizeGripForTesting");
+
+template<typename T>
+using StatusBarTopLevelMaximizedTestOperation = decltype(&T::WinUISetTopLevelMaximizedForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarTopLevelMaximizedTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUISetTopLevelMaximizedForTesting");
+
+template<typename T>
+using StatusBarFieldStateTestOperation = decltype(&T::WinUIGetFieldStateForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarFieldStateTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIGetFieldStateForTesting");
+
+template<typename T>
+using StatusBarAppearanceTestOperation = decltype(&T::WinUIGetAppearanceForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarAppearanceTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIGetAppearanceForTesting");
+
+template<typename T>
+using StatusBarThemeBordersTestOperation = decltype(&T::WinUIUsesThemeBordersForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarThemeBordersTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIUsesThemeBordersForTesting");
+
+template<typename T>
+using StatusBarReentryHookTestOperation = decltype(&T::WinUISetNextReentryHookForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarReentryHookTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUISetNextReentryHookForTesting");
+
+template<typename T>
+using StatusBarModelRevisionTestOperation = decltype(&T::WinUIGetModelRevisionForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarModelRevisionTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIGetModelRevisionForTesting");
+
+template<typename T>
+using StatusBarDeferredRebuildTestOperation = decltype(&T::WinUIHasDeferredRebuildForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarDeferredRebuildTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIHasDeferredRebuildForTesting");
+
+template<typename T>
+using StatusBarRebuildQuarantineTestOperation = decltype(&T::WinUIIsRebuildQuarantinedForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarRebuildQuarantineTestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIIsRebuildQuarantinedForTesting");
+
+template<typename T>
+using StatusBarDeliverDPITestOperation = decltype(&T::WinUIDeliverDPIChangedForTesting);
+
+static_assert(!HasPublicTestOperation<StatusBarDeliverDPITestOperation,
+                                     wxStatusBar>::value,
+              "wxStatusBar must not expose WinUIDeliverDPIChangedForTesting");
+
 #endif
 
 } // anonymous namespace

@@ -21,7 +21,6 @@
 #include <memory>
 
 class wxWinUIInfoBarImpl;
-using wxWinUIInfoBarContentWriteHookForTesting = void (*)(void *);
 
 class WXDLLIMPEXP_CORE wxInfoBar : public wxInfoBarBase
 {
@@ -98,32 +97,6 @@ public:
     // same thing with the colour: this affects the text colour
     bool SetForegroundColour(const wxColor& colour) override;
 
-    // implementation only from now on
-    // -------------------------------
-
-    // Whether the native InfoBar peer is currently open; lets the unit
-    // tests check that the XAML side stays in sync with the wx one.
-    bool WinUIIsPeerOpen() const;
-
-    // Invoke the native close (X) button exactly like a user click does (via
-    // its automation peer), so the real CloseButtonClick/Closing path runs
-    // deterministically without the mouse.  Returns false while the control
-    // template has not been realized yet.  Used by the unit tests.
-    bool WinUIClickCloseButton();
-
-    // Invoke a custom content button through its real XAML automation peer.
-    // This is an implementation-only lifetime seam used to prove that a wx
-    // handler may destroy the InfoBar while the native callback unwinds.
-    bool WinUIClickButtonForTesting(wxWindowID btnid);
-
-    // One-shot seam immediately after the candidate XAML Content write and
-    // before its callback generation is published.
-    void WinUISetNextContentWriteHookForTesting(
-        wxWinUIInfoBarContentWriteHookForTesting hook,
-        void *context);
-    bool WinUIHasDeferredContentProjectionForTesting() const;
-    bool WinUIIsContentProjectionQuarantinedForTesting() const;
-
 protected:
     // info bar shouldn't have any border by default, the colour difference
     // between it and the main window separates it well enough
@@ -150,6 +123,8 @@ protected:
     wxVector<ButtonInfo> m_buttons;
 
 private:
+    friend class wxWinUIInfoBarTestAccess;
+
     // determine the placement of the bar from its position in the containing
     // sizer, used to pick the default show/hide effects
     enum BarPlacement

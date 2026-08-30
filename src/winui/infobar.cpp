@@ -21,9 +21,13 @@
 
 #include "private.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "infobar-test-access.h"
+    #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
+    #include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
+#endif
+
 #include <winrt/Microsoft.UI.Text.h>
-#include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
-#include <winrt/Microsoft.UI.Xaml.Automation.Provider.h>
 #include <winrt/Microsoft.UI.Xaml.Media.h>
 #include <winrt/Windows.UI.Text.h>
 
@@ -76,6 +80,7 @@ void wxWinUIInfoBarApplyFont(const MUXC::Control& control, const wxFont& font)
                           : winrt::Windows::UI::Text::FontStyle::Italic);
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 // Depth-first search of the visual tree for a named template element.
 MUX::FrameworkElement
 wxWinUIFindElementByName(MUX::DependencyObject const& root,
@@ -95,6 +100,7 @@ wxWinUIFindElementByName(MUX::DependencyObject const& root,
     }
     return nullptr;
 }
+#endif
 
 class wxWinUIInfoBarCallbackState final
 {
@@ -437,8 +443,10 @@ public:
         if ( callbackState )
             callbackState->Invalidate();
 
+#ifdef WXWINUI_TEST_SUPPORT
         nextContentWriteHookForTesting = nullptr;
         nextContentWriteContextForTesting = nullptr;
+#endif
         RevokeContentHandlers();
 
         if ( bar && closingToken.value )
@@ -468,9 +476,11 @@ public:
     winrt::event_token checkedToken{};
     winrt::event_token uncheckedToken{};
     std::vector<wxWinUIInfoBarButtonHandler> buttonHandlers;
-    wxWinUIInfoBarContentWriteHookForTesting
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIInfoBarTestAccess::ContentWriteHook
         nextContentWriteHookForTesting = nullptr;
     void *nextContentWriteContextForTesting = nullptr;
+#endif
 };
 
 wxInfoBar::wxInfoBar()
@@ -1278,16 +1288,20 @@ void wxInfoBar::RebuildContent(bool externalMutation)
                 contentElement = content;
             }
 
-            const wxWinUIInfoBarContentWriteHookForTesting hook =
+#ifdef WXWINUI_TEST_SUPPORT
+            const wxWinUIInfoBarTestAccess::ContentWriteHook hook =
                 impl->nextContentWriteHookForTesting;
             void * const hookContext =
                 impl->nextContentWriteContextForTesting;
             impl->nextContentWriteHookForTesting = nullptr;
             impl->nextContentWriteContextForTesting = nullptr;
+#endif
 
             bar.Content(contentElement);
+#ifdef WXWINUI_TEST_SUPPORT
             if ( hook )
                 hook(hookContext);
+#endif
 
             state = stateForRevision(revision);
             if ( state == ProjectionState::Dead )
@@ -1375,14 +1389,16 @@ void wxInfoBar::UpdateParent()
         parent->Layout();
 }
 
-bool wxInfoBar::WinUIIsPeerOpen() const
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIInfoBarTestAccess::IsPeerOpen(const wxInfoBar& info)
 {
-    if ( !m_winui || !m_winui->bar )
+    const auto& impl = info.m_winui;
+    if ( !impl || !impl->bar )
         return false;
 
     try
     {
-        return m_winui->bar.IsOpen();
+        return impl->bar.IsOpen();
     }
     catch ( const winrt::hresult_error& )
     {
@@ -1390,9 +1406,10 @@ bool wxInfoBar::WinUIIsPeerOpen() const
     }
 }
 
-bool wxInfoBar::WinUIClickCloseButton()
+bool wxWinUIInfoBarTestAccess::ClickCloseButton(wxInfoBar& info)
 {
-    if ( !m_winui || !m_winui->bar )
+    const auto& impl = info.m_winui;
+    if ( !impl || !impl->bar )
         return false;
 
     try
@@ -1400,7 +1417,7 @@ bool wxInfoBar::WinUIClickCloseButton()
         // "CloseButton" is the x:Name of the close button in the official
         // InfoBar control template.
         auto closeButton =
-            wxWinUIFindElementByName(m_winui->bar, L"CloseButton")
+            wxWinUIFindElementByName(impl->bar, L"CloseButton")
                 .try_as<MUXC::Button>();
         if ( !closeButton )
             return false;
@@ -1417,15 +1434,16 @@ bool wxInfoBar::WinUIClickCloseButton()
     }
 }
 
-bool wxInfoBar::WinUIClickButtonForTesting(wxWindowID btnid)
+bool wxWinUIInfoBarTestAccess::ClickButton(wxInfoBar& info, wxWindowID btnid)
 {
-    if ( !m_winui || !m_winui->callbackState )
+    const auto& impl = info.m_winui;
+    if ( !impl || !impl->callbackState )
         return false;
 
     const std::shared_ptr<wxWinUIInfoBarCallbackState> callbackState =
-        m_winui->callbackState;
+        impl->callbackState;
     for ( const wxWinUIInfoBarButtonHandler& handler :
-              m_winui->buttonHandlers )
+              impl->buttonHandlers )
     {
         if ( handler.id != btnid || !handler.button )
             continue;
@@ -1435,7 +1453,7 @@ bool wxInfoBar::WinUIClickButtonForTesting(wxWindowID btnid)
             winrt::Microsoft::UI::Xaml::Automation::Peers::
                 ButtonAutomationPeer peer(handler.button);
             peer.Invoke();
-            // Do not touch this after Invoke(): the wx handler is allowed to
+            // Do not touch info after Invoke(): the wx handler is allowed to
             // have destroyed the InfoBar while the native callback unwound.
             wxUnusedVar(callbackState);
             return true;
@@ -1451,28 +1469,33 @@ bool wxInfoBar::WinUIClickButtonForTesting(wxWindowID btnid)
     return false;
 }
 
-void wxInfoBar::WinUISetNextContentWriteHookForTesting(
-    wxWinUIInfoBarContentWriteHookForTesting hook,
+void wxWinUIInfoBarTestAccess::SetNextContentWriteHook(
+    wxInfoBar& info,
+    ContentWriteHook hook,
     void *context)
 {
-    if ( !m_winui )
+    const auto& impl = info.m_winui;
+    if ( !impl )
         return;
 
-    m_winui->nextContentWriteHookForTesting = hook;
-    m_winui->nextContentWriteContextForTesting =
+    impl->nextContentWriteHookForTesting = hook;
+    impl->nextContentWriteContextForTesting =
         hook ? context : nullptr;
 }
 
-bool wxInfoBar::WinUIHasDeferredContentProjectionForTesting() const
+bool wxWinUIInfoBarTestAccess::HasDeferredContentProjection(const wxInfoBar& info)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->HasDeferredProjection();
+    const auto& impl = info.m_winui;
+    return impl && impl->callbackState &&
+           impl->callbackState->HasDeferredProjection();
 }
 
-bool wxInfoBar::WinUIIsContentProjectionQuarantinedForTesting() const
+bool wxWinUIInfoBarTestAccess::IsContentProjectionQuarantined(const wxInfoBar& info)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->IsProjectionQuarantined();
+    const auto& impl = info.m_winui;
+    return impl && impl->callbackState &&
+           impl->callbackState->IsProjectionQuarantined();
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_INFOBAR

@@ -31,6 +31,7 @@
 
 #ifdef __WXWINUI__
     #include "wx/winui/private/tlwhost.h"
+    #include "winui/test-support/infobar-test-access.h"
 #endif
 
 #ifdef __WXQT__
@@ -89,8 +90,8 @@ void ContinueInfoBarProjectionStorm(void *opaque)
     ++context->calls;
     if ( context->calls < context->targetCalls )
     {
-        context->bar->WinUISetNextContentWriteHookForTesting(
-            &ContinueInfoBarProjectionStorm, context);
+        wxWinUIInfoBarTestAccess::SetNextContentWriteHook(
+            *context->bar, &ContinueInfoBarProjectionStorm, context);
     }
 
     context->bar->AddButton(
@@ -300,22 +301,22 @@ TEST_CASE("wxInfoBar::WinUIContentProjectionIsLastWriterWins",
     context.bar = &info;
     context.targetCalls = 1;
     context.firstId = outerId;
-    info.WinUISetNextContentWriteHookForTesting(
-        &ContinueInfoBarProjectionStorm, &context);
+    wxWinUIInfoBarTestAccess::SetNextContentWriteHook(
+        info, &ContinueInfoBarProjectionStorm, &context);
 
     info.AddButton(outerId, "outer");
 
     CHECK(context.calls == 1);
     CHECK(info.GetButtonCount() == 2);
-    CHECK_FALSE(info.WinUIHasDeferredContentProjectionForTesting());
-    CHECK_FALSE(info.WinUIIsContentProjectionQuarantinedForTesting());
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::HasDeferredContentProjection(info));
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::IsContentProjectionQuarantined(info));
 
     int nestedEvents = 0;
     info.Bind(
         wxEVT_BUTTON,
         [&](wxCommandEvent&) { ++nestedEvents; },
         nestedId);
-    REQUIRE(info.WinUIClickButtonForTesting(nestedId));
+    REQUIRE(wxWinUIInfoBarTestAccess::ClickButton(info, nestedId));
     CHECK(nestedEvents == 1);
 }
 
@@ -329,8 +330,8 @@ TEST_CASE("wxInfoBar::WinUIContentProjectionStormIsBoundedAndRearmable",
     context.bar = &info;
     context.targetCalls = 1000000;
     context.firstId = firstId;
-    info.WinUISetNextContentWriteHookForTesting(
-        &ContinueInfoBarProjectionStorm, &context);
+    wxWinUIInfoBarTestAccess::SetNextContentWriteHook(
+        info, &ContinueInfoBarProjectionStorm, &context);
 
     // A log target is application code and may pump the loop. The deferred
     // replay must not be consumable until the active projection has ended.
@@ -339,12 +340,12 @@ TEST_CASE("wxInfoBar::WinUIContentProjectionStormIsBoundedAndRearmable",
 
     CHECK(yieldingLog.DidYield());
     CHECK(context.calls == 8);
-    CHECK(info.WinUIHasDeferredContentProjectionForTesting());
+    CHECK(wxWinUIInfoBarTestAccess::HasDeferredContentProjection(info));
     REQUIRE(WaitFor("bounded InfoBar content quarantine", [&]()
     {
         return context.calls == 16 &&
-               !info.WinUIHasDeferredContentProjectionForTesting() &&
-               info.WinUIIsContentProjectionQuarantinedForTesting();
+               !wxWinUIInfoBarTestAccess::HasDeferredContentProjection(info) &&
+               wxWinUIInfoBarTestAccess::IsContentProjectionQuarantined(info);
     }));
 
     const int callsAtQuarantine = context.calls;
@@ -352,18 +353,18 @@ TEST_CASE("wxInfoBar::WinUIContentProjectionStormIsBoundedAndRearmable",
     wxYield();
     CHECK(context.calls == callsAtQuarantine);
 
-    info.WinUISetNextContentWriteHookForTesting(nullptr, nullptr);
+    wxWinUIInfoBarTestAccess::SetNextContentWriteHook(info, nullptr, nullptr);
     const wxWindowID recoveryId = firstId + 100;
     info.AddButton(recoveryId, "recovered");
-    CHECK_FALSE(info.WinUIHasDeferredContentProjectionForTesting());
-    CHECK_FALSE(info.WinUIIsContentProjectionQuarantinedForTesting());
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::HasDeferredContentProjection(info));
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::IsContentProjectionQuarantined(info));
 
     int recoveryEvents = 0;
     info.Bind(
         wxEVT_BUTTON,
         [&](wxCommandEvent&) { ++recoveryEvents; },
         recoveryId);
-    REQUIRE(info.WinUIClickButtonForTesting(recoveryId));
+    REQUIRE(wxWinUIInfoBarTestAccess::ClickButton(info, recoveryId));
     CHECK(recoveryEvents == 1);
 }
 
@@ -384,7 +385,8 @@ TEST_CASE("wxInfoBar::WinUIContentWriteAndFlushMayDestroyOwner",
             std::unique_ptr<wxInfoBar> *owned;
             bool *called;
         } context{ &info, &hookCalled };
-        invoking->WinUISetNextContentWriteHookForTesting(
+        wxWinUIInfoBarTestAccess::SetNextContentWriteHook(
+            *invoking,
             [](void *opaque)
             {
                 auto * const current =
@@ -464,21 +466,23 @@ TEST_CASE("wxInfoBar::WinUICloseButton",
 
     // programmatic Dismiss() must close the peer without emitting wxID_CLOSE
     info->ShowMessage("winui close-button test");
-    CHECK(info->WinUIIsPeerOpen());
+    CHECK(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     info->Dismiss();
     CHECK(closeEvents == 0);
-    CHECK_FALSE(info->WinUIIsPeerOpen());
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     CHECK_FALSE(info->IsShown());
 
     // ShowMessage() must really re-open the XAML peer
     info->ShowMessage("re-opened");
-    CHECK(info->WinUIIsPeerOpen());
+    CHECK(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     CHECK(info->IsShown());
 
     // wait until the InfoBar template is realized so that the close button
     // exists, then click it: unhandled (skipped) event -> default dismiss
     bool clicked = false;
-    for ( int i = 0; i < 300 && !(clicked = info->WinUIClickCloseButton()); ++i )
+    for ( int i = 0;
+          i < 300 && !(clicked = wxWinUIInfoBarTestAccess::ClickCloseButton(*info));
+          ++i )
     {
         wxYield();
         wxMilliSleep(10);
@@ -486,50 +490,50 @@ TEST_CASE("wxInfoBar::WinUICloseButton",
     REQUIRE(clicked);
     wxYield();
     CHECK(closeEvents == 1);
-    CHECK_FALSE(info->WinUIIsPeerOpen());
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     CHECK_FALSE(info->IsShown());
 
     // handled without dismissing -> the closing is cancelled, both stay open
     info->ShowMessage("kept open");
-    CHECK(info->WinUIIsPeerOpen());
+    CHECK(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     mode = 1;
     closeEvents = 0;
-    REQUIRE(info->WinUIClickCloseButton());
+    REQUIRE(wxWinUIInfoBarTestAccess::ClickCloseButton(*info));
     wxYield();
     CHECK(closeEvents == 1);
-    CHECK(info->WinUIIsPeerOpen());
+    CHECK(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     CHECK(info->IsShown());
 
     // handled with Dismiss() in the handler -> both closed, single event
     mode = 2;
     closeEvents = 0;
-    REQUIRE(info->WinUIClickCloseButton());
+    REQUIRE(wxWinUIInfoBarTestAccess::ClickCloseButton(*info));
     wxYield();
     CHECK(closeEvents == 1);
-    CHECK_FALSE(info->WinUIIsPeerOpen());
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     CHECK_FALSE(info->IsShown());
 
     // Reentrant close intent is ordered: the last public operation wins.
     info->ShowMessage("reentrant open wins");
     mode = 3;
     closeEvents = 0;
-    REQUIRE(info->WinUIClickCloseButton());
+    REQUIRE(wxWinUIInfoBarTestAccess::ClickCloseButton(*info));
     wxYield();
     CHECK(closeEvents == 1);
-    CHECK(info->WinUIIsPeerOpen());
+    CHECK(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     CHECK(info->IsShown());
 
     mode = 4;
     closeEvents = 0;
-    REQUIRE(info->WinUIClickCloseButton());
+    REQUIRE(wxWinUIInfoBarTestAccess::ClickCloseButton(*info));
     wxYield();
     CHECK(closeEvents == 1);
-    CHECK_FALSE(info->WinUIIsPeerOpen());
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     CHECK_FALSE(info->IsShown());
 
     // and the cycle still works: the bar can be shown again afterwards
     info->ShowMessage("alive again");
-    CHECK(info->WinUIIsPeerOpen());
+    CHECK(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
     CHECK(info->IsShown());
 
     // Leave neither a closing animation nor a Loaded/layout callback queued
@@ -537,7 +541,7 @@ TEST_CASE("wxInfoBar::WinUICloseButton",
     // this final close is test isolation, not another behavioural assertion.
     info->Dismiss();
     wxYield();
-    CHECK_FALSE(info->WinUIIsPeerOpen());
+    CHECK_FALSE(wxWinUIInfoBarTestAccess::IsPeerOpen(*info));
 }
 
 TEST_CASE("wxInfoBar::WinUICallbacksMayDestroyOwner",
@@ -559,7 +563,7 @@ TEST_CASE("wxInfoBar::WinUICallbacksMayDestroyOwner",
         bool clicked = false;
         for ( int i = 0;
               i < 300 && info &&
-                  !(clicked = raw->WinUIClickCloseButton());
+                  !(clicked = wxWinUIInfoBarTestAccess::ClickCloseButton(*raw));
               ++i )
         {
             wxYield();
@@ -582,7 +586,7 @@ TEST_CASE("wxInfoBar::WinUICallbacksMayDestroyOwner",
             buttonId);
         raw->ShowMessage("destroy from custom button");
 
-        REQUIRE(raw->WinUIClickButtonForTesting(buttonId));
+        REQUIRE(wxWinUIInfoBarTestAccess::ClickButton(*raw, buttonId));
         CHECK(info == nullptr);
         wxYield();
     }

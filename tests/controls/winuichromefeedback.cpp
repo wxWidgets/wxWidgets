@@ -12,6 +12,7 @@
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 #include "feedback-test-access.h"
+#include "statusbar-test-access.h"
 
 #include "wx/app.h"
 #include "wx/frame.h"
@@ -268,7 +269,7 @@ void SetNestedStatusBarText(wxStatusBar *statusBar, void *opaque)
     if ( context->observePeer )
     {
         context->peerReadable =
-            statusBar->WinUIGetFieldStateForTesting(
+            wxWinUIStatusBarTestAccess::GetFieldState(*statusBar,
                 0, nullptr, nullptr, &context->observedStyle, nullptr,
                 nullptr, nullptr, nullptr);
     }
@@ -324,7 +325,7 @@ void DeliverNestedStatusBarDPI(wxStatusBar *statusBar, void *opaque)
     wxDPIChangedEvent nested(context->oldDPI, context->newDPI);
     nested.SetEventObject(statusBar);
     nested.SetId(statusBar->GetId());
-    statusBar->WinUIDeliverDPIChangedForTesting(nested);
+    wxWinUIStatusBarTestAccess::DeliverDPIChanged(*statusBar, nested);
 }
 
 void DestroyStatusBarDuringRebuild(wxStatusBar *statusBar, void *opaque)
@@ -368,7 +369,7 @@ void ContinueStatusBarRebuildStorm(wxStatusBar *statusBar, void *opaque)
         context->calls % 2 ? wxSB_RAISED : wxSB_SUNKEN;
     if ( context->calls < context->targetCalls )
     {
-        statusBar->WinUISetNextReentryHookForTesting(
+        wxWinUIStatusBarTestAccess::SetNextReentryHook(*statusBar,
             wxWinUIStatusBarReentryPointForTesting::RebuildLoaded,
             &ContinueStatusBarRebuildStorm,
             context);
@@ -513,7 +514,7 @@ TEST_CASE("wxWinUI StatusBar keeps pixel geometry and XAML DIPs distinct",
 
     double columnValue = 0.0;
     int columnUnit = -1;
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, nullptr, nullptr, nullptr, nullptr,
         &columnValue, &columnUnit, nullptr));
     CHECK(columnUnit == static_cast<int>(MUX::GridUnitType::Pixel));
@@ -521,20 +522,20 @@ TEST_CASE("wxWinUI StatusBar keeps pixel geometry and XAML DIPs distinct",
               columnValue -
               widths[0] / status.GetDPIScaleFactor()) < 0.01);
 
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         1, nullptr, nullptr, nullptr, nullptr,
         &columnValue, &columnUnit, nullptr));
     CHECK(columnUnit == static_cast<int>(MUX::GridUnitType::Star));
     CHECK(columnValue == 1.0);
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         2, nullptr, nullptr, nullptr, nullptr,
         &columnValue, &columnUnit, nullptr));
     CHECK(columnUnit == static_cast<int>(MUX::GridUnitType::Star));
     CHECK(columnValue == 2.0);
-    CHECK(status.WinUIHasSizeGripForTesting());
+    CHECK(wxWinUIStatusBarTestAccess::HasSizeGrip(status));
 
     wxStatusBar noGrip(parent, wxID_ANY, wxSTB_SHOW_TIPS);
-    CHECK_FALSE(noGrip.WinUIHasSizeGripForTesting());
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::HasSizeGrip(noGrip));
 }
 
 TEST_CASE("wxWinUI StatusBar size grip has localized overlay geometry",
@@ -550,7 +551,7 @@ TEST_CASE("wxWinUI StatusBar size grip has localized overlay geometry",
     status.SetFieldsCount(3, widths);
 
     wxWinUIStatusBarSizeGripSnapshot snapshot;
-    REQUIRE(status.WinUIGetSizeGripStateForTesting(&snapshot));
+    REQUIRE(wxWinUIStatusBarTestAccess::GetSizeGripState(status, &snapshot));
     CHECK(snapshot.widthDips == 18.0);
     CHECK(snapshot.heightDips == 18.0);
     CHECK(snapshot.horizontalAlignment ==
@@ -571,11 +572,11 @@ TEST_CASE("wxWinUI StatusBar size grip has localized overlay geometry",
 
     const wxPoint actionPoint(173, 281);
 
-    CHECK_FALSE(status.WinUIInvokeSizeGripForTesting(
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(status,
         false, true, true, actionPoint));
-    CHECK_FALSE(status.WinUIInvokeSizeGripForTesting(
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(status,
         true, false, true, actionPoint));
-    CHECK_FALSE(status.WinUIInvokeSizeGripForTesting(
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(status,
         true, true, false, actionPoint));
 
     wxRect restoredFirst;
@@ -583,25 +584,25 @@ TEST_CASE("wxWinUI StatusBar size grip has localized overlay geometry",
     REQUIRE(status.GetFieldRect(0, restoredFirst));
     REQUIRE(status.GetFieldRect(2, restoredLast));
     CHECK(restoredFirst.width != restoredLast.width);
-    status.WinUISetTopLevelMaximizedForTesting(true);
-    CHECK_FALSE(status.WinUIHasSizeGripForTesting());
+    wxWinUIStatusBarTestAccess::SetTopLevelMaximized(status, true);
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::HasSizeGrip(status));
     CHECK_FALSE(
-        status.WinUIGetSizeGripStateForTesting(&snapshot));
-    CHECK_FALSE(status.WinUIInvokeSizeGripForTesting(
+        wxWinUIStatusBarTestAccess::GetSizeGripState(status, &snapshot));
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(status,
         true, true, true, actionPoint));
     wxRect maximizedFirst;
     REQUIRE(status.GetFieldRect(0, maximizedFirst));
     CHECK(maximizedFirst.width > restoredFirst.width);
 
-    status.WinUISetTopLevelMaximizedForTesting(false);
-    REQUIRE(status.WinUIGetSizeGripStateForTesting(&snapshot));
+    wxWinUIStatusBarTestAccess::SetTopLevelMaximized(status, false);
+    REQUIRE(wxWinUIStatusBarTestAccess::GetSizeGripState(status, &snapshot));
     wxRect restoredAgainFirst;
     REQUIRE(status.GetFieldRect(0, restoredAgainFirst));
     CHECK(restoredAgainFirst == restoredFirst);
 
     status.SetLayoutDirection(wxLayout_RightToLeft);
     status.SendSizeEvent();
-    REQUIRE(status.WinUIGetSizeGripStateForTesting(&snapshot));
+    REQUIRE(wxWinUIStatusBarTestAccess::GetSizeGripState(status, &snapshot));
     CHECK(snapshot.horizontalAlignment ==
           static_cast<int>(MUX::HorizontalAlignment::Left));
     CHECK(snapshot.cursorShape ==
@@ -630,9 +631,9 @@ TEST_CASE("wxWinUI StatusBar size grip has localized overlay geometry",
         wxDEFAULT_FRAME_STYLE & ~wxRESIZE_BORDER);
     wxStatusBar fixedStatus;
     REQUIRE(fixedStatus.Create(&fixedFrame));
-    CHECK_FALSE(fixedStatus.WinUIHasSizeGripForTesting());
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::HasSizeGrip(fixedStatus));
     CHECK_FALSE(
-        fixedStatus.WinUIGetSizeGripStateForTesting(&snapshot));
+        wxWinUIStatusBarTestAccess::GetSizeGripState(fixedStatus, &snapshot));
 }
 
 TEST_CASE("wxWinUI grip request enters and exits the real native sizing loop once",
@@ -658,7 +659,7 @@ TEST_CASE("wxWinUI grip request enters and exits the real native sizing loop onc
 
     frame.Show();
     YieldForAWhile(30);
-    REQUIRE(status->WinUIHasSizeGripForTesting());
+    REQUIRE(wxWinUIStatusBarTestAccess::HasSizeGrip(*status));
     REQUIRE(frame.ArmWatchdog());
     REQUIRE(::GetCapture() == nullptr);
     std::unique_ptr<NativeResizeForeignCapture> islandCapture;
@@ -676,8 +677,10 @@ TEST_CASE("wxWinUI grip request enters and exits the real native sizing loop onc
         status->FromDIP(wxPoint(8, 8));
 
     frame.invoking = true;
-    REQUIRE(status->WinUIInvokeSizeGripForTesting(true, true, true, point));
-    CHECK_FALSE(status->WinUIInvokeSizeGripForTesting(true, true, true, point));
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+        *status, true, true, true, point));
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+        *status, true, true, true, point));
     wxWinUINativeResizeSnapshot pending;
     REQUIRE(wxWinUIGetNativeResizeSnapshotForTesting(&frame, &pending));
     CHECK(pending.phase == wxWinUINativeResizePhase::Pending);
@@ -722,10 +725,11 @@ TEST_CASE("wxWinUI grip cancels stale requests before native dispatch",
     NativeResizeContactOverride contact;
     frame.Show();
     YieldForAWhile(30);
-    REQUIRE(status->WinUIHasSizeGripForTesting());
+    REQUIRE(wxWinUIStatusBarTestAccess::HasSizeGrip(*status));
     const wxPoint point = status->GetScreenRect().GetBottomRight() -
         status->FromDIP(wxPoint(8, 8));
-    REQUIRE(status->WinUIInvokeSizeGripForTesting(true, true, true, point));
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+        *status, true, true, true, point));
 
     SECTION("released before the private message is processed")
     {
@@ -789,7 +793,8 @@ TEST_CASE("wxWinUI grip preserves foreign capture and rolls back post failure",
     SECTION("foreign capture acquired after request")
     {
         wxWindow foreign(&frame, wxID_ANY);
-        REQUIRE(status->WinUIInvokeSizeGripForTesting(true, true, true, point));
+        REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+            *status, true, true, true, point));
         NativeResizeForeignCapture capture(GetHwndOf(&foreign));
         REQUIRE(::GetCapture() == GetHwndOf(&foreign));
         wxWinUINativeResizeSnapshot finished;
@@ -804,7 +809,7 @@ TEST_CASE("wxWinUI grip preserves foreign capture and rolls back post failure",
     SECTION("failed post leaves no accepted transaction")
     {
         wxWinUIFailNextNativeResizePostForTesting();
-        CHECK_FALSE(status->WinUIInvokeSizeGripForTesting(
+        CHECK_FALSE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(*status,
             true, true, true, point));
         wxWinUINativeResizeSnapshot state;
         REQUIRE(wxWinUIGetNativeResizeSnapshotForTesting(&frame, &state));
@@ -828,7 +833,8 @@ TEST_CASE("wxWinUI queued grip cannot outlive its top-level window",
     YieldForAWhile(30);
     const wxPoint point = status->GetScreenRect().GetBottomRight() -
         status->FromDIP(wxPoint(8, 8));
-    REQUIRE(status->WinUIInvokeSizeGripForTesting(true, true, true, point));
+    REQUIRE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+        *status, true, true, true, point));
     frame.reset();
     YieldForAWhile(20);
     CHECK(::GetCapture() == nullptr);
@@ -878,7 +884,7 @@ TEST_CASE("wxWinUI StatusBar mirrors logical fields and controls in RTL",
 
     int gridFlow = -1;
     int textFlow = -1;
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr, nullptr, &gridFlow, &textFlow));
     CHECK(gridFlow == static_cast<int>(MUX::FlowDirection::LeftToRight));
@@ -909,7 +915,7 @@ TEST_CASE("wxWinUI StatusBar mirrors logical fields and controls in RTL",
     CHECK(rtlFirstScreen.GetSize() == ltrFirstScreen.GetSize());
     CHECK(rtlLastScreen.GetSize() == ltrLastScreen.GetSize());
 #endif
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr, nullptr, &gridFlow, &textFlow));
     CHECK(gridFlow == static_cast<int>(MUX::FlowDirection::RightToLeft));
@@ -917,7 +923,7 @@ TEST_CASE("wxWinUI StatusBar mirrors logical fields and controls in RTL",
 
     status.SetLayoutDirection(wxLayout_LeftToRight);
     status.SendSizeEvent();
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         2, nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr, nullptr, &gridFlow, &textFlow));
     CHECK(gridFlow == static_cast<int>(MUX::FlowDirection::LeftToRight));
@@ -943,13 +949,13 @@ TEST_CASE("wxWinUI StatusBar distinguishes field borders without fixed colours",
     {
         int observed = -1;
         int borderElements = -1;
-        REQUIRE(status.WinUIGetFieldStateForTesting(
+        REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
             i, nullptr, nullptr, &observed, nullptr,
             nullptr, nullptr, nullptr, &borderElements));
         CHECK(observed == styles[i]);
         CHECK(borderElements == (i == 0 ? 0 : 4));
     }
-    CHECK(status.WinUIUsesThemeBordersForTesting());
+    CHECK(wxWinUIStatusBarTestAccess::UsesThemeBorders(status));
 }
 
 TEST_CASE("wxWinUI StatusBar implements all ellipsis modes and SHOW_TIPS",
@@ -987,7 +993,7 @@ TEST_CASE("wxWinUI StatusBar implements all ellipsis modes and SHOW_TIPS",
         int trimming = -1;
         bool hasToolTip = false;
         wxString automationName;
-        REQUIRE(status.WinUIGetFieldStateForTesting(
+        REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
             0, &rendered, &trimming, nullptr, &hasToolTip,
             nullptr, nullptr, &automationName));
         CHECK(trimming == static_cast<int>(test.trimming));
@@ -1015,32 +1021,32 @@ TEST_CASE("wxWinUI StatusBar applies and clears appearance and places controls",
     status.SetStatusText("Selection details", 1);
     status.PushStatusText("Menu help", 0);
     wxString rendered;
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, &rendered, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr));
     CHECK(rendered == "Menu help");
     status.PopStatusText(0);
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, &rendered, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr));
     CHECK(rendered == "Ready");
     status.SetStatusText("R&D ready", 1);
     wxString fieldName;
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         1, nullptr, nullptr, nullptr, nullptr,
         nullptr, nullptr, &fieldName));
     CHECK(fieldName == "R&D ready");
 
     wxWinUIAppearanceSnapshot snapshot;
     wxYield();
-    REQUIRE(status.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStatusBarTestAccess::GetAppearance(status, &snapshot));
     CHECK(snapshot.automationName.empty());
     CHECK_FALSE(snapshot.localizedControlType.empty());
 
     status.SetFont(MakeChromeTestFont());
     status.SetForegroundColour(wxColour(14, 61, 117));
     status.SetBackgroundColour(wxColour(31, 37, 43));
-    REQUIRE(status.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStatusBarTestAccess::GetAppearance(status, &snapshot));
     CheckChromeFontLocals(snapshot, true);
     CHECK(snapshot.hasForeground);
     CHECK(snapshot.hasBackground);
@@ -1048,7 +1054,7 @@ TEST_CASE("wxWinUI StatusBar applies and clears appearance and places controls",
     status.SetFont(wxNullFont);
     status.SetForegroundColour(wxNullColour);
     status.SetBackgroundColour(wxNullColour);
-    REQUIRE(status.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStatusBarTestAccess::GetAppearance(status, &snapshot));
     CheckChromeFontLocals(snapshot, false);
     CHECK_FALSE(snapshot.hasForeground);
     CHECK_FALSE(snapshot.hasBackground);
@@ -1123,7 +1129,7 @@ TEST_CASE("wxWinUI StatusBar imposes minimum height immediately and safely",
 
     StatusBarMinHeightReentryContext nestedContext;
     nestedContext.height = parent->FromDIP(67);
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::MinHeightBeforeResize,
         &SetNestedStatusBarMinHeight,
         &nestedContext);
@@ -1140,7 +1146,7 @@ TEST_CASE("wxWinUI StatusBar imposes minimum height immediately and safely",
     StatusBarDestructionReentryContext destructionContext{
         &owned
     };
-    owned->WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(*owned,
         wxWinUIStatusBarReentryPointForTesting::MinHeightBeforeResize,
         &DestroyStatusBarDuringRebuild,
         &destructionContext);
@@ -1181,7 +1187,7 @@ TEST_CASE("wxWinUI StatusBar imposes minimum height immediately and safely",
     wxDPIChangedEvent dpiEvent(oldDPI, newDPI);
     dpiEvent.SetEventObject(&dpiStatus);
     dpiEvent.SetId(dpiStatus.GetId());
-    dpiStatus.WinUIDeliverDPIChangedForTesting(dpiEvent);
+    wxWinUIStatusBarTestAccess::DeliverDPIChanged(dpiStatus, dpiEvent);
     const wxDPIChangedEvent logicalScaleEvent(
         wxDisplay::GetStdPPI(), newDPI);
     const int scaledLogicalHeight =
@@ -1211,7 +1217,7 @@ TEST_CASE("wxWinUI StatusBar nested peer writes preserve the last wx mutation",
     StatusBarTextReentryContext textContext{
         "nested text wins"
     };
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::TextValue,
         &SetNestedStatusBarText,
         &textContext);
@@ -1221,7 +1227,7 @@ TEST_CASE("wxWinUI StatusBar nested peer writes preserve the last wx mutation",
 
     wxString rendered;
     wxString automationName;
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, &rendered, nullptr, nullptr, nullptr,
         nullptr, nullptr, &automationName));
     CHECK(rendered == textContext.text);
@@ -1229,7 +1235,7 @@ TEST_CASE("wxWinUI StatusBar nested peer writes preserve the last wx mutation",
 
     status.SetFont(wxNullFont);
     StatusBarAppearanceReentryContext appearanceContext;
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::AppearanceRootFont,
         &ClearNestedStatusBarFont,
         &appearanceContext);
@@ -1237,7 +1243,7 @@ TEST_CASE("wxWinUI StatusBar nested peer writes preserve the last wx mutation",
     CHECK(appearanceContext.calls == 1);
 
     wxWinUIAppearanceSnapshot snapshot;
-    REQUIRE(status.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStatusBarTestAccess::GetAppearance(status, &snapshot));
     CheckChromeFontLocals(snapshot, false);
 
     // Cross-domain convergence: an appearance transaction re-entered by a
@@ -1246,18 +1252,18 @@ TEST_CASE("wxWinUI StatusBar nested peer writes preserve the last wx mutation",
     StatusBarTextReentryContext crossTextContext{
         "nested text during appearance"
     };
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::TextValue,
         &SetNestedStatusBarText,
         &crossTextContext);
     status.SetForegroundColour(wxColour(22, 73, 141));
     CHECK(crossTextContext.calls == 1);
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, &rendered, nullptr, nullptr, nullptr,
         nullptr, nullptr, &automationName));
     CHECK(rendered == crossTextContext.text);
     CHECK(automationName == crossTextContext.text);
-    REQUIRE(status.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStatusBarTestAccess::GetAppearance(status, &snapshot));
     CHECK(snapshot.hasForeground);
 
     // And the inverse: a text transaction re-entered by an appearance
@@ -1266,19 +1272,19 @@ TEST_CASE("wxWinUI StatusBar nested peer writes preserve the last wx mutation",
     StatusBarColourReentryContext crossColourContext{
         wxColour(127, 35, 91)
     };
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::AppearanceRootFont,
         &SetNestedStatusBarForeground,
         &crossColourContext);
     const wxString crossDomainText = "text survives nested appearance";
     status.SetStatusText(crossDomainText);
     CHECK(crossColourContext.calls == 1);
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, &rendered, nullptr, nullptr, nullptr,
         nullptr, nullptr, &automationName));
     CHECK(rendered == crossDomainText);
     CHECK(automationName == crossDomainText);
-    REQUIRE(status.WinUIGetAppearanceForTesting(&snapshot));
+    REQUIRE(wxWinUIStatusBarTestAccess::GetAppearance(status, &snapshot));
     CHECK(snapshot.hasForeground);
 }
 
@@ -1291,13 +1297,13 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
     wxStatusBar status(parent);
     status.SetStatusText("initial");
     const unsigned long long revisionBefore =
-        status.WinUIGetModelRevisionForTesting();
+        wxWinUIStatusBarTestAccess::GetModelRevision(status);
     StatusBarTextReentryContext textContext{
         "text changed from Loaded",
         0,
         true
     };
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::RebuildLoaded,
         &SetNestedStatusBarText,
         &textContext);
@@ -1307,12 +1313,12 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
     CHECK(textContext.calls == 1);
     CHECK(textContext.peerReadable);
     CHECK(textContext.observedStyle == wxSB_RAISED);
-    CHECK(status.WinUIGetModelRevisionForTesting() >=
+    CHECK(wxWinUIStatusBarTestAccess::GetModelRevision(status) >=
           revisionBefore + 2);
     CHECK(status.GetStatusText() == textContext.text);
     wxString rendered;
     int observedStyle = -1;
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, &rendered, nullptr, &observedStyle, nullptr,
         nullptr, nullptr, nullptr));
     CHECK(rendered == textContext.text);
@@ -1324,7 +1330,7 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
     StatusBarDestructionReentryContext destructionContext{
         &owned
     };
-    owned->WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(*owned,
         wxWinUIStatusBarReentryPointForTesting::RebuildLoaded,
         &DestroyStatusBarDuringRebuild,
         &destructionContext);
@@ -1343,7 +1349,7 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
     StatusBarDestructionReentryContext textDestructionContext{
         &textOwned
     };
-    textOwned->WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(*textOwned,
         wxWinUIStatusBarReentryPointForTesting::TextValue,
         &DestroyStatusBarDuringRebuild,
         &textDestructionContext);
@@ -1357,12 +1363,12 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
     StatusBarTextReentryContext dpiTextContext{
         "nested text during DPI conversion"
     };
-    dpiReentrant.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(dpiReentrant,
         wxWinUIStatusBarReentryPointForTesting::DPIBorderX,
         &SetNestedStatusBarText,
         &dpiTextContext);
     const unsigned long long dpiRevisionBefore =
-        dpiReentrant.WinUIGetModelRevisionForTesting();
+        wxWinUIStatusBarTestAccess::GetModelRevision(dpiReentrant);
     wxDPIChangedEvent reentrantDpiEvent(
         wxSize(96, 96), wxSize(144, 144));
     reentrantDpiEvent.SetEventObject(&dpiReentrant);
@@ -1371,11 +1377,11 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
     CHECK(dpiTextContext.calls == 1);
     CHECK(dpiReentrant.GetStatusText() == dpiTextContext.text);
     wxString dpiRendered;
-    REQUIRE(dpiReentrant.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(dpiReentrant,
         0, &dpiRendered, nullptr, nullptr, nullptr,
         nullptr, nullptr, nullptr));
     CHECK(dpiRendered == dpiTextContext.text);
-    CHECK(dpiReentrant.WinUIGetModelRevisionForTesting() >=
+    CHECK(wxWinUIStatusBarTestAccess::GetModelRevision(dpiReentrant) >=
           dpiRevisionBefore + 2);
 
     // A nested DPI delivery is a newer writer even when the outer handler
@@ -1394,7 +1400,7 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
         currentDPI,
         wxSize(currentDPI.x * 3 / 2, currentDPI.y * 3 / 2)
     };
-    dpiLastWriter.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(dpiLastWriter,
         wxWinUIStatusBarReentryPointForTesting::DPIBorderX,
         &DeliverNestedStatusBarDPI,
         &nestedDPI);
@@ -1403,7 +1409,7 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
         wxSize(currentDPI.x * 2, currentDPI.y * 2));
     staleOuterDPI.SetEventObject(&dpiLastWriter);
     staleOuterDPI.SetId(dpiLastWriter.GetId());
-    dpiLastWriter.WinUIDeliverDPIChangedForTesting(staleOuterDPI);
+    wxWinUIStatusBarTestAccess::DeliverDPIChanged(dpiLastWriter, staleOuterDPI);
 
     const int nestedPixels = wxRound(
         static_cast<double>(requestedHeight) *
@@ -1425,7 +1431,7 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
     StatusBarDestructionReentryContext dpiDestructionContext{
         &dpiOwned
     };
-    dpiOwned->WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(*dpiOwned,
         wxWinUIStatusBarReentryPointForTesting::DPIBorderX,
         &DestroyStatusBarDuringRebuild,
         &dpiDestructionContext);
@@ -1437,7 +1443,7 @@ TEST_CASE("wxWinUI StatusBar rebuild publishes only its latest revision",
     // wxEvtHandler while ProcessWindowEvent() is traversing its dynamic table
     // is outside the event-system contract. This seam isolates the StatusBar
     // post-conversion lifetime guarantee that is under test.
-    dpiInvoking->WinUIDeliverDPIChangedForTesting(dpiEvent);
+    wxWinUIStatusBarTestAccess::DeliverDPIChanged(*dpiInvoking, dpiEvent);
     CHECK(dpiDestructionContext.calls == 1);
     CHECK(dpiDestructionContext.ownerMatched);
     CHECK(dpiOwned == nullptr);
@@ -1452,7 +1458,7 @@ TEST_CASE("wxWinUI StatusBar bounds a perpetually reentrant rebuild",
     wxStatusBar status(parent);
     StatusBarRebuildStormContext context;
     context.targetCalls = 12;
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::RebuildLoaded,
         &ContinueStatusBarRebuildStorm,
         &context);
@@ -1460,14 +1466,14 @@ TEST_CASE("wxWinUI StatusBar bounds a perpetually reentrant rebuild",
     status.SetStatusStyles(1, &initialStyle);
 
     CHECK(context.calls > 1);
-    CHECK(status.WinUIHasDeferredRebuildForTesting());
+    CHECK(wxWinUIStatusBarTestAccess::HasDeferredRebuild(status));
 
     REQUIRE(WaitFor("deferred status-bar rebuild", [&]()
     {
         int observedStyle = -1;
-        return !status.WinUIHasDeferredRebuildForTesting() &&
+        return !wxWinUIStatusBarTestAccess::HasDeferredRebuild(status) &&
                context.calls == context.targetCalls &&
-               status.WinUIGetFieldStateForTesting(
+               wxWinUIStatusBarTestAccess::GetFieldState(status,
                    0, nullptr, nullptr, &observedStyle, nullptr,
                    nullptr, nullptr, nullptr) &&
                observedStyle == context.latestStyle;
@@ -1484,7 +1490,7 @@ TEST_CASE("wxWinUI StatusBar quarantines an unbounded rebuild storm and "
     wxStatusBar status(parent);
     StatusBarRebuildStormContext context;
     context.targetCalls = 1000000;
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::RebuildLoaded,
         &ContinueStatusBarRebuildStorm,
         &context);
@@ -1495,12 +1501,12 @@ TEST_CASE("wxWinUI StatusBar quarantines an unbounded rebuild storm and "
 
     CHECK(yieldingLog.DidYield());
     CHECK(context.calls == 8);
-    CHECK(status.WinUIHasDeferredRebuildForTesting());
+    CHECK(wxWinUIStatusBarTestAccess::HasDeferredRebuild(status));
     REQUIRE(WaitFor("bounded status-bar rebuild quarantine", [&]()
     {
         return context.calls == 16 &&
-               !status.WinUIHasDeferredRebuildForTesting() &&
-               status.WinUIIsRebuildQuarantinedForTesting();
+               !wxWinUIStatusBarTestAccess::HasDeferredRebuild(status) &&
+               wxWinUIStatusBarTestAccess::IsRebuildQuarantined(status);
     }));
 
     const int callsAtQuarantine = context.calls;
@@ -1508,17 +1514,17 @@ TEST_CASE("wxWinUI StatusBar quarantines an unbounded rebuild storm and "
     wxYield();
     CHECK(context.calls == callsAtQuarantine);
 
-    status.WinUISetNextReentryHookForTesting(
+    wxWinUIStatusBarTestAccess::SetNextReentryHook(status,
         wxWinUIStatusBarReentryPointForTesting::RebuildLoaded,
         nullptr,
         nullptr);
     const int recoveredStyle = wxSB_NORMAL;
     status.SetStatusStyles(1, &recoveredStyle);
-    CHECK_FALSE(status.WinUIHasDeferredRebuildForTesting());
-    CHECK_FALSE(status.WinUIIsRebuildQuarantinedForTesting());
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::HasDeferredRebuild(status));
+    CHECK_FALSE(wxWinUIStatusBarTestAccess::IsRebuildQuarantined(status));
 
     int observedStyle = -1;
-    REQUIRE(status.WinUIGetFieldStateForTesting(
+    REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
         0, nullptr, nullptr, &observedStyle, nullptr,
         nullptr, nullptr, nullptr));
     CHECK(observedStyle == recoveredStyle);
@@ -1545,7 +1551,7 @@ TEST_CASE("wxWinUI StatusBar rebuild and teardown retire managed tooltips",
             "A deliberately long status message with a managed tooltip");
 
         bool hasToolTip = false;
-        REQUIRE(status.WinUIGetFieldStateForTesting(
+        REQUIRE(wxWinUIStatusBarTestAccess::GetFieldState(status,
             0, nullptr, nullptr, nullptr, &hasToolTip,
             nullptr, nullptr, nullptr));
         REQUIRE(hasToolTip);

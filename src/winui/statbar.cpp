@@ -13,6 +13,10 @@
 
 #include "wx/statusbr.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "statusbar-test-access.h"
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
 #endif
@@ -359,6 +363,10 @@ struct wxWinUIStatusBarFieldModel final
 class wxWinUIStatusBarImpl
 {
 public:
+#ifdef WXWINUI_TEST_SUPPORT
+    using ReentryHook = void (*)(wxStatusBar*, void*);
+#endif
+
     ~wxWinUIStatusBarImpl()
     {
         Close();
@@ -390,10 +398,10 @@ public:
         sizeGripImpl = nullptr;
         sizeGripAction.reset();
         hasSizeGrip = false;
+#ifdef WXWINUI_TEST_SUPPORT
         nextReentryHook = nullptr;
         nextReentryContext = nullptr;
-        resizeActionHook = nullptr;
-        resizeActionContext = nullptr;
+#endif
         callbackState.reset();
     }
 
@@ -413,18 +421,20 @@ public:
     std::vector<int> fieldBorderElementCounts;
     bool usesThemeBorders = false;
     bool hasSizeGrip = false;
+#ifdef WXWINUI_TEST_SUPPORT
     int topLevelMaximizedForTesting = -1;
+#endif
     unsigned long long minHeightGeneration = 0;
     unsigned long long dpiGeneration = 0;
     unsigned long long rebuildGeneration = 0;
     unsigned long long peerGeneration = 0;
     unsigned long long publishedRevision = 0;
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIStatusBarReentryPointForTesting nextReentryPoint =
         wxWinUIStatusBarReentryPointForTesting::RebuildLoaded;
-    wxWinUIStatusBarReentryHookForTesting nextReentryHook = nullptr;
+    ReentryHook nextReentryHook = nullptr;
     void *nextReentryContext = nullptr;
-    wxWinUIStatusBarResizeActionHookForTesting resizeActionHook = nullptr;
-    void *resizeActionContext = nullptr;
+#endif
     bool closed = false;
 };
 
@@ -589,9 +599,12 @@ int wxStatusBar::GetSizeGripReservedWidth() const
         return 0;
 
     const bool maximized =
+#ifdef WXWINUI_TEST_SUPPORT
         m_winui && m_winui->topLevelMaximizedForTesting >= 0
             ? m_winui->topLevelMaximizedForTesting != 0
-            : ::IsZoomed(hwnd) != FALSE;
+            :
+#endif
+                ::IsZoomed(hwnd) != FALSE;
     return maximized ? 0 : FromDIP(wxWinUIStatusBarGripSizeDips);
 }
 
@@ -1111,12 +1124,13 @@ bool wxStatusBar::RebuildContent()
                     break;
                 }
 
+#ifdef WXWINUI_TEST_SUPPORT
                 if ( i == 0 &&
                      impl->nextReentryPoint ==
                          wxWinUIStatusBarReentryPointForTesting::TextValue &&
                      impl->nextReentryHook )
                 {
-                    const wxWinUIStatusBarReentryHookForTesting hook =
+                    const wxWinUIStatusBarImpl::ReentryHook hook =
                         impl->nextReentryHook;
                     void * const hookContext = impl->nextReentryContext;
                     impl->nextReentryHook = nullptr;
@@ -1132,6 +1146,7 @@ bool wxStatusBar::RebuildContent()
                         break;
                     }
                 }
+#endif // WXWINUI_TEST_SUPPORT
 
                 // Status text is data, not a mnemonic-bearing control label:
                 // preserve literal ampersands in its accessible name.
@@ -1393,29 +1408,6 @@ bool wxStatusBar::RebuildContent()
                         if ( !owner )
                             return false;
 
-                        const auto resizeHook =
-                            owner->m_winui->resizeActionHook;
-                        void * const resizeContext =
-                            owner->m_winui->resizeActionContext;
-                        if ( resizeHook )
-                        {
-                            // Legacy action preflight may reject, but must
-                            // never substitute success for native dispatch.
-                            if ( !resizeHook(
-                                owner,
-                                reinterpret_cast<void *>(action->hwnd),
-                                action->nativeHitTest,
-                                point.x,
-                                point.y,
-                                resizeContext) )
-                            {
-                                return false;
-                            }
-                            owner = action->getCurrentOwner();
-                            if ( !owner )
-                                return false;
-                        }
-
                         wxWinUITopLevelHost * const host =
                             wxWinUITopLevelHost::FindSlotOwner(owner);
                         const auto grip = action->grip.get();
@@ -1504,12 +1496,13 @@ bool wxStatusBar::RebuildContent()
             if ( callbackState->ModelRevision() != modelRevision )
                 continue;
 
+#ifdef WXWINUI_TEST_SUPPORT
             if ( impl->nextReentryPoint ==
                      wxWinUIStatusBarReentryPointForTesting::
                          AppearanceRootFont &&
                  impl->nextReentryHook )
             {
-                const wxWinUIStatusBarReentryHookForTesting hook =
+                const wxWinUIStatusBarImpl::ReentryHook hook =
                     impl->nextReentryHook;
                 void * const hookContext = impl->nextReentryContext;
                 impl->nextReentryHook = nullptr;
@@ -1522,6 +1515,7 @@ bool wxStatusBar::RebuildContent()
                 if ( callbackState->ModelRevision() != modelRevision )
                     continue;
             }
+#endif // WXWINUI_TEST_SUPPORT
 
             wxWinUIApplyForeground(root, foreground);
             liveOwner = resolveCandidateOwner();
@@ -1553,7 +1547,8 @@ bool wxStatusBar::RebuildContent()
                 continue;
             }
 
-            const wxWinUIStatusBarReentryHookForTesting loadedHook =
+#ifdef WXWINUI_TEST_SUPPORT
+            const wxWinUIStatusBarImpl::ReentryHook loadedHook =
                 impl->nextReentryPoint ==
                         wxWinUIStatusBarReentryPointForTesting::RebuildLoaded
                     ? impl->nextReentryHook
@@ -1591,6 +1586,7 @@ bool wxStatusBar::RebuildContent()
                 impl->host.SetNextContentLoadedHookForTesting(
                     invokeLoadedHook);
             }
+#endif // WXWINUI_TEST_SUPPORT
 
             // Publish the candidate model before SetContent(): its Loaded
             // event is allowed to fire synchronously inside RegisterSlot().
@@ -1656,7 +1652,9 @@ bool wxStatusBar::RebuildContent()
             }
             if ( !contentSet )
             {
+#ifdef WXWINUI_TEST_SUPPORT
                 impl->host.SetNextContentLoadedHookForTesting({});
+#endif
                 impl->root = std::move(oldRoot);
                 impl->automationRoot =
                     std::move(oldAutomationRoot);
@@ -1712,6 +1710,7 @@ bool wxStatusBar::RebuildContent()
                 return false;
             }
 
+#ifdef WXWINUI_TEST_SUPPORT
             // The normal path remains asynchronous. A test hook explicitly asks
             // to cross the real Loaded boundary while this transaction is active.
             if ( loadedHook )
@@ -1746,6 +1745,7 @@ bool wxStatusBar::RebuildContent()
                 }
             }
             impl->host.SetNextContentLoadedHookForTesting({});
+#endif // WXWINUI_TEST_SUPPORT
 
             // Loaded/DP callbacks can mutate text, appearance or even field
             // topology. The attached candidate is already truthfully published;
@@ -1762,6 +1762,7 @@ bool wxStatusBar::RebuildContent()
         }
         catch ( const winrt::hresult_error& e )
         {
+#ifdef WXWINUI_TEST_SUPPORT
             wxStatusBar * const liveOwner =
                 callbackState->GetOwner(lifetimeGeneration);
             if ( liveOwner && liveOwner->m_winui &&
@@ -1770,6 +1771,7 @@ bool wxStatusBar::RebuildContent()
             {
                 impl->host.SetNextContentLoadedHookForTesting({});
             }
+#endif
             wxWinUILogException("WinUI StatusBar content", e);
             return false;
         }
@@ -2047,11 +2049,12 @@ void wxStatusBar::ApplyMinHeight(double heightDIPs, int heightPixels)
     if ( !liveOwner )
         return;
 
+#ifdef WXWINUI_TEST_SUPPORT
     if ( impl->nextReentryPoint ==
              wxWinUIStatusBarReentryPointForTesting::MinHeightBeforeResize &&
          impl->nextReentryHook )
     {
-        const wxWinUIStatusBarReentryHookForTesting hook =
+        const wxWinUIStatusBarImpl::ReentryHook hook =
             impl->nextReentryHook;
         void * const hookContext = impl->nextReentryContext;
         impl->nextReentryHook = nullptr;
@@ -2062,6 +2065,7 @@ void wxStatusBar::ApplyMinHeight(double heightDIPs, int heightPixels)
         if ( !liveOwner )
             return;
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     // SetSize() may synchronously dispatch wxEVT_SIZE and arbitrary user code,
     // so this call is terminal.
@@ -2131,11 +2135,12 @@ void wxStatusBar::OnDPIChanged(wxDPIChangedEvent& event)
         return;
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     if ( impl->nextReentryPoint ==
              wxWinUIStatusBarReentryPointForTesting::DPIBorderX &&
          impl->nextReentryHook )
     {
-        const wxWinUIStatusBarReentryHookForTesting hook =
+        const wxWinUIStatusBarImpl::ReentryHook hook =
             impl->nextReentryHook;
         void * const hookContext = impl->nextReentryContext;
         impl->nextReentryHook = nullptr;
@@ -2151,6 +2156,7 @@ void wxStatusBar::OnDPIChanged(wxDPIChangedEvent& event)
             return;
         }
     }
+#endif // WXWINUI_TEST_SUPPORT
 
     const int borderY = liveOwner->FromDIP(2);
     liveOwner = callbackState->GetOwner(lifetimeGeneration);
@@ -2202,18 +2208,21 @@ void wxStatusBar::OnDPIChanged(wxDPIChangedEvent& event)
     liveOwner->ApplyMinHeight(minHeightDIPs, minHeightPixels);
 }
 
-bool wxStatusBar::WinUIHasSizeGripForTesting() const
+#ifdef WXWINUI_TEST_SUPPORT
+
+bool wxWinUIStatusBarTestAccess::HasSizeGrip(const wxStatusBar& bar)
 {
-    return m_winui && m_winui->hasSizeGrip;
+    return bar.m_winui && bar.m_winui->hasSizeGrip;
 }
 
-bool wxStatusBar::WinUIGetSizeGripStateForTesting(
-    wxWinUIStatusBarSizeGripSnapshot *snapshot) const
+bool wxWinUIStatusBarTestAccess::GetSizeGripState(
+    const wxStatusBar& bar,
+    wxWinUIStatusBarSizeGripSnapshot *snapshot)
 {
-    if ( !snapshot || !m_winui || !m_winui->hasSizeGrip ||
-         !m_winui->overlay || !m_winui->grid ||
-         !m_winui->sizeGrip || !m_winui->sizeGripImpl ||
-         !m_winui->sizeGripAction )
+    if ( !snapshot || !bar.m_winui || !bar.m_winui->hasSizeGrip ||
+         !bar.m_winui->overlay || !bar.m_winui->grid ||
+         !bar.m_winui->sizeGrip || !bar.m_winui->sizeGripImpl ||
+         !bar.m_winui->sizeGripAction )
     {
         return false;
     }
@@ -2221,25 +2230,25 @@ bool wxStatusBar::WinUIGetSizeGripStateForTesting(
     try
     {
         wxWinUIStatusBarSizeGripSnapshot observed;
-        observed.widthDips = m_winui->sizeGrip.Width();
-        observed.heightDips = m_winui->sizeGrip.Height();
+        observed.widthDips = bar.m_winui->sizeGrip.Width();
+        observed.heightDips = bar.m_winui->sizeGrip.Height();
         observed.horizontalAlignment =
             static_cast<int>(
-                m_winui->sizeGrip.HorizontalAlignment());
+                bar.m_winui->sizeGrip.HorizontalAlignment());
         observed.cursorShape =
             static_cast<int>(
-                m_winui->sizeGripImpl->GetCursorShape());
+                bar.m_winui->sizeGripImpl->GetCursorShape());
         observed.nativeHitTest =
-            m_winui->sizeGripAction->nativeHitTest;
+            bar.m_winui->sizeGripAction->nativeHitTest;
         observed.automationName = wxString(
             MUXA::AutomationProperties::GetName(
-                m_winui->sizeGrip).c_str());
+                bar.m_winui->sizeGrip).c_str());
         observed.localizedControlType = wxString(
             MUXA::AutomationProperties::GetLocalizedControlType(
-                m_winui->sizeGrip).c_str());
-        const MUX::Thickness fieldMargin = m_winui->grid.Margin();
+                bar.m_winui->sizeGrip).c_str());
+        const MUX::Thickness fieldMargin = bar.m_winui->grid.Margin();
         observed.fieldReservationDips =
-            m_winui->sizeGrip.HorizontalAlignment() ==
+            bar.m_winui->sizeGrip.HorizontalAlignment() ==
                     MUX::HorizontalAlignment::Left
                 ? fieldMargin.Left
                 : fieldMargin.Right;
@@ -2250,12 +2259,12 @@ bool wxStatusBar::WinUIGetSizeGripStateForTesting(
         // hidden/unloaded shared-island slot. The overlay contract is a
         // structural one, so inspect the exact logical children instead. The
         // grid margin above means these siblings don't compete for field space.
-        const auto children = m_winui->overlay.Children();
+        const auto children = bar.m_winui->overlay.Children();
         std::uint32_t fieldsIndex = 0;
         std::uint32_t gripIndex = 0;
         observed.overlaysFields =
-            children.IndexOf(m_winui->grid, fieldsIndex) &&
-            children.IndexOf(m_winui->sizeGrip, gripIndex) &&
+            children.IndexOf(bar.m_winui->grid, fieldsIndex) &&
+            children.IndexOf(bar.m_winui->sizeGrip, gripIndex) &&
             fieldsIndex != gripIndex;
         *snapshot = std::move(observed);
         return true;
@@ -2266,43 +2275,34 @@ bool wxStatusBar::WinUIGetSizeGripStateForTesting(
     }
 }
 
-void wxStatusBar::WinUISetResizeActionHookForTesting(
-    wxWinUIStatusBarResizeActionHookForTesting hook,
-    void *context)
-{
-    if ( !m_winui || !m_winui->callbackState )
-        return;
-
-    m_winui->resizeActionHook = hook;
-    m_winui->resizeActionContext = hook ? context : nullptr;
-}
-
-bool wxStatusBar::WinUIInvokeSizeGripForTesting(
+bool wxWinUIStatusBarTestAccess::InvokeSizeGrip(
+    wxStatusBar& bar,
     bool isMouse,
     bool isPrimary,
     bool isLeftButtonPressed,
     const wxPoint& screenPoint)
 {
-    if ( !m_winui || !m_winui->hasSizeGrip ||
-         !m_winui->sizeGripAction ||
-         !m_winui->sizeGripAction->invoke )
+    if ( !bar.m_winui || !bar.m_winui->hasSizeGrip ||
+         !bar.m_winui->sizeGripAction ||
+         !bar.m_winui->sizeGripAction->invoke )
     {
         return false;
     }
 
     const std::shared_ptr<wxWinUIStatusBarGripAction> action =
-        m_winui->sizeGripAction;
+        bar.m_winui->sizeGripAction;
     const POINT point{ screenPoint.x, screenPoint.y };
     return action->invoke(
         isMouse, isPrimary, isLeftButtonPressed, point, 0, ::GetTickCount64());
 }
 
-void wxStatusBar::WinUISetTopLevelMaximizedForTesting(bool maximized)
+void wxWinUIStatusBarTestAccess::SetTopLevelMaximized(
+    wxStatusBar& bar, bool maximized)
 {
-    if ( !m_winui || !m_winui->callbackState )
+    if ( !bar.m_winui || !bar.m_winui->callbackState )
         return;
 
-    wxWinUIStatusBarImpl * const impl = m_winui.get();
+    wxWinUIStatusBarImpl * const impl = bar.m_winui.get();
     const std::shared_ptr<wxWinUIStatusBarCallbackState> callbackState =
         impl->callbackState;
     const std::uint64_t lifetimeGeneration =
@@ -2325,7 +2325,8 @@ void wxStatusBar::WinUISetTopLevelMaximizedForTesting(bool maximized)
     liveOwner->SendSizeEvent();
 }
 
-bool wxStatusBar::WinUIGetFieldStateForTesting(
+bool wxWinUIStatusBarTestAccess::GetFieldState(
+    const wxStatusBar& bar,
     int field,
     wxString *renderedText,
     int *textTrimming,
@@ -2336,28 +2337,28 @@ bool wxStatusBar::WinUIGetFieldStateForTesting(
     wxString *automationName,
     int *borderElementCount,
     int *fieldGridFlowDirection,
-    int *textFlowDirection) const
+    int *textFlowDirection)
 {
-    if ( !m_winui || !m_winui->grid || field < 0 ||
-         field >= static_cast<int>(m_winui->fields.size()) ||
-         field >= static_cast<int>(m_winui->columnValues.size()) ||
-         field >= static_cast<int>(m_winui->columnUnits.size()) ||
-         field >= static_cast<int>(m_winui->fieldStyles.size()) ||
+    if ( !bar.m_winui || !bar.m_winui->grid || field < 0 ||
+         field >= static_cast<int>(bar.m_winui->fields.size()) ||
+         field >= static_cast<int>(bar.m_winui->columnValues.size()) ||
+         field >= static_cast<int>(bar.m_winui->columnUnits.size()) ||
+         field >= static_cast<int>(bar.m_winui->fieldStyles.size()) ||
          field >= static_cast<int>(
-             m_winui->fieldBorderElementCounts.size()) )
+             bar.m_winui->fieldBorderElementCounts.size()) )
     {
         return false;
     }
 
     try
     {
-        const auto text = m_winui->fields[field];
+        const auto text = bar.m_winui->fields[field];
         if ( renderedText )
             *renderedText = wxString(text.Text().c_str());
         if ( textTrimming )
             *textTrimming = static_cast<int>(text.TextTrimming());
         if ( fieldStyle )
-            *fieldStyle = m_winui->fieldStyles[field];
+            *fieldStyle = bar.m_winui->fieldStyles[field];
         if ( hasToolTip )
         {
 #if wxUSE_TOOLTIPS
@@ -2368,9 +2369,9 @@ bool wxStatusBar::WinUIGetFieldStateForTesting(
 #endif
         }
         if ( columnValue )
-            *columnValue = m_winui->columnValues[field];
+            *columnValue = bar.m_winui->columnValues[field];
         if ( columnUnitType )
-            *columnUnitType = m_winui->columnUnits[field];
+            *columnUnitType = bar.m_winui->columnUnits[field];
         if ( automationName )
         {
             *automationName = wxString(
@@ -2379,12 +2380,12 @@ bool wxStatusBar::WinUIGetFieldStateForTesting(
         if ( borderElementCount )
         {
             *borderElementCount =
-                m_winui->fieldBorderElementCounts[field];
+                bar.m_winui->fieldBorderElementCounts[field];
         }
         if ( fieldGridFlowDirection )
         {
             *fieldGridFlowDirection =
-                static_cast<int>(m_winui->grid.FlowDirection());
+                static_cast<int>(bar.m_winui->grid.FlowDirection());
         }
         if ( textFlowDirection )
         {
@@ -2399,18 +2400,19 @@ bool wxStatusBar::WinUIGetFieldStateForTesting(
     }
 }
 
-bool wxStatusBar::WinUIGetAppearanceForTesting(
-    wxWinUIAppearanceSnapshot *snapshot) const
+bool wxWinUIStatusBarTestAccess::GetAppearance(
+    const wxStatusBar& bar,
+    wxWinUIAppearanceSnapshot *snapshot)
 {
-    if ( !snapshot || !m_winui || !m_winui->root ||
-         !m_winui->automationRoot )
+    if ( !snapshot || !bar.m_winui || !bar.m_winui->root ||
+         !bar.m_winui->automationRoot )
         return false;
 
     try
     {
         *snapshot =
             wxWinUICaptureAppearance(
-                m_winui->root, m_winui->automationRoot);
+                bar.m_winui->root, bar.m_winui->automationRoot);
         return true;
     }
     catch ( const winrt::hresult_error& )
@@ -2419,50 +2421,54 @@ bool wxStatusBar::WinUIGetAppearanceForTesting(
     }
 }
 
-bool wxStatusBar::WinUIUsesThemeBordersForTesting() const
+bool wxWinUIStatusBarTestAccess::UsesThemeBorders(const wxStatusBar& bar)
 {
-    return m_winui && m_winui->usesThemeBorders;
+    return bar.m_winui && bar.m_winui->usesThemeBorders;
 }
 
-void wxStatusBar::WinUISetNextReentryHookForTesting(
+void wxWinUIStatusBarTestAccess::SetNextReentryHook(
+    wxStatusBar& bar,
     wxWinUIStatusBarReentryPointForTesting point,
-    wxWinUIStatusBarReentryHookForTesting hook,
+    ReentryHook hook,
     void *context)
 {
-    if ( !m_winui || !m_winui->callbackState )
+    if ( !bar.m_winui || !bar.m_winui->callbackState )
         return;
 
-    m_winui->nextReentryPoint = point;
-    m_winui->nextReentryHook = hook;
-    m_winui->nextReentryContext = hook ? context : nullptr;
+    bar.m_winui->nextReentryPoint = point;
+    bar.m_winui->nextReentryHook = hook;
+    bar.m_winui->nextReentryContext = hook ? context : nullptr;
 }
 
-unsigned long long wxStatusBar::WinUIGetModelRevisionForTesting() const
+unsigned long long wxWinUIStatusBarTestAccess::GetModelRevision(
+    const wxStatusBar& bar)
 {
-    return m_winui && m_winui->callbackState
-               ? m_winui->callbackState->ModelRevision()
+    return bar.m_winui && bar.m_winui->callbackState
+               ? bar.m_winui->callbackState->ModelRevision()
                : 0;
 }
 
-bool wxStatusBar::WinUIHasDeferredRebuildForTesting() const
+bool wxWinUIStatusBarTestAccess::HasDeferredRebuild(const wxStatusBar& bar)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->HasDeferredRebuild();
+    return bar.m_winui && bar.m_winui->callbackState &&
+           bar.m_winui->callbackState->HasDeferredRebuild();
 }
 
-bool wxStatusBar::WinUIIsRebuildQuarantinedForTesting() const
+bool wxWinUIStatusBarTestAccess::IsRebuildQuarantined(const wxStatusBar& bar)
 {
-    return m_winui && m_winui->callbackState &&
-           m_winui->callbackState->IsRebuildQuarantined();
+    return bar.m_winui && bar.m_winui->callbackState &&
+           bar.m_winui->callbackState->IsRebuildQuarantined();
 }
 
-void wxStatusBar::WinUIDeliverDPIChangedForTesting(
-    wxDPIChangedEvent& event)
+void wxWinUIStatusBarTestAccess::DeliverDPIChanged(
+    wxStatusBar& bar, wxDPIChangedEvent& event)
 {
     // OnDPIChanged() is written to permit the implementation-only callback to
     // delete this object and performs no access after detecting retirement.
     // Keep this wrapper equally terminal.
-    OnDPIChanged(event);
+    bar.OnDPIChanged(event);
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_STATUSBAR

@@ -16,42 +16,6 @@
 
 class wxWinUIStatusBarImpl;
 class wxDPIChangedEvent;
-struct wxWinUIAppearanceSnapshot;
-class wxStatusBar;
-
-enum class wxWinUIStatusBarReentryPointForTesting
-{
-    RebuildLoaded,
-    TextValue,
-    AppearanceRootFont,
-    DPIBorderX,
-    MinHeightBeforeResize
-};
-
-using wxWinUIStatusBarReentryHookForTesting =
-    void (*)(wxStatusBar *statusBar, void *context);
-
-struct wxWinUIStatusBarSizeGripSnapshot
-{
-    double widthDips = 0.0;
-    double heightDips = 0.0;
-    int horizontalAlignment = 0;
-    int cursorShape = 0;
-    int nativeHitTest = 0;
-    wxString automationName;
-    wxString localizedControlType;
-    bool overlaysFields = false;
-    bool reservesFieldSpace = false;
-    double fieldReservationDips = 0.0;
-};
-
-using wxWinUIStatusBarResizeActionHookForTesting =
-    bool (*)(wxStatusBar *statusBar,
-             void *nativeWindow,
-             int nativeHitTest,
-             long screenX,
-             long screenY,
-             void *context);
 
 // A status bar projected into the shared WinUI island. Fields retain their wx
 // pixel geometry while their XAML columns, theme borders and text live in DIPs.
@@ -86,54 +50,13 @@ public:
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
 
-    // Implementation-only observation of the XAML resize affordance created
-    // for wxSTB_SIZEGRIP.
-    bool WinUIHasSizeGripForTesting() const;
-    bool WinUIGetSizeGripStateForTesting(
-        wxWinUIStatusBarSizeGripSnapshot *snapshot) const;
-    void WinUISetResizeActionHookForTesting(
-        wxWinUIStatusBarResizeActionHookForTesting hook,
-        void *context);
-    bool WinUIInvokeSizeGripForTesting(
-        bool isMouse,
-        bool isPrimary,
-        bool isLeftButtonPressed,
-        const wxPoint& screenPoint);
-    void WinUISetTopLevelMaximizedForTesting(bool maximized);
-    bool WinUIGetFieldStateForTesting(
-        int field,
-        wxString *renderedText,
-        int *textTrimming,
-        int *fieldStyle,
-        bool *hasToolTip,
-        double *columnValue,
-        int *columnUnitType,
-        wxString *automationName,
-        int *borderElementCount = nullptr,
-        int *fieldGridFlowDirection = nullptr,
-        int *textFlowDirection = nullptr) const;
-    bool WinUIGetAppearanceForTesting(
-        wxWinUIAppearanceSnapshot *snapshot) const;
-    bool WinUIUsesThemeBordersForTesting() const;
-    void WinUISetNextReentryHookForTesting(
-        wxWinUIStatusBarReentryPointForTesting point,
-        wxWinUIStatusBarReentryHookForTesting hook,
-        void *context);
-    unsigned long long WinUIGetModelRevisionForTesting() const;
-    bool WinUIHasDeferredRebuildForTesting() const;
-    bool WinUIIsRebuildQuarantinedForTesting() const;
-    // Invoke the implementation handler without the outer wxEvtHandler
-    // dispatcher. This is the only valid way for the lifetime seam to delete
-    // the status bar synchronously: deleting an event handler while
-    // ProcessWindowEvent() is still walking its tables is outside wx's event
-    // contract and would test the dispatcher rather than this implementation.
-    void WinUIDeliverDPIChangedForTesting(wxDPIChangedEvent& event);
-
 protected:
     void DoUpdateStatusText(int number) override;
     wxSize DoGetBestSize() const override;
 
 private:
+    friend class wxWinUIStatusBarTestAccess;
+
     // Project the complete status-bar model as one transaction. Text,
     // trimming, UIA, tooltips and appearance deliberately share the same
     // revision so a cross-domain re-entrant mutation can never leave a
