@@ -24,28 +24,14 @@ public:
 protected:
     // this function must be overridden by the derived classes to return the
     // text entry object we're testing, typically this is done by creating a
-    // control implementing wxTextEntry interface in setUp() virtual method and
-    // just returning it from here
+    // control implementing wxTextEntry interface in the ctor and just
+    // returning it from here
     virtual wxTextEntry *GetTestEntry() const = 0;
 
     // and this one must be overridden to return the window which implements
     // wxTextEntry interface -- usually it will return the same pointer as
     // GetTestEntry(), just as a different type
     virtual wxWindow *GetTestWindow() const = 0;
-
-    // this should be inserted in the derived class CPPUNIT_TEST_SUITE
-    // definition to run all wxTextEntry tests as part of it
-    #define wxTEXT_ENTRY_TESTS() \
-        CPPUNIT_TEST( SetValue ); \
-        CPPUNIT_TEST( TextChangeEvents ); \
-        CPPUNIT_TEST( Selection ); \
-        CPPUNIT_TEST( InsertionPoint ); \
-        CPPUNIT_TEST( Replace ); \
-        WXUISIM_TEST( Editable ); \
-        CPPUNIT_TEST( Hint ); \
-        CPPUNIT_TEST( CopyPaste ); \
-        CPPUNIT_TEST( UndoRedo ); \
-        CPPUNIT_TEST( WriteText )
 
     void SetValue();
     void TextChangeEvents();
@@ -74,6 +60,35 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(TextEntryTestCase);
 };
+
+// Use this macro in the test file of a class deriving from TextEntryTestCase
+// to define the test cases running all wxTextEntry tests for it, e.g.
+//
+//      wxTEXT_ENTRY_TESTS(ComboBoxTestCase, "ComboBox",
+//                         "[combobox][text-entry]");
+//
+#define wxTEXT_ENTRY_TEST_CASE(testclass, prefix, name, tags) \
+    wxTEST_CASE_FOR_METHOD(testclass, prefix, name, tags)
+
+#if wxUSE_UIACTIONSIMULATOR
+    #define wxTEXT_ENTRY_UISIM_TESTS(testclass, prefix, tags)     \
+        wxTEXT_ENTRY_TEST_CASE(testclass, prefix, Editable, tags)
+#else
+    #define wxTEXT_ENTRY_UISIM_TESTS(testclass, prefix, tags)
+#endif
+
+#define wxTEXT_ENTRY_TESTS(testclass, prefix, tags)                     \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, SetValue, tags)           \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, TextChangeEvents, tags)   \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, Selection, tags)          \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, InsertionPoint, tags)     \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, Replace, tags)            \
+    wxTEXT_ENTRY_UISIM_TESTS(testclass, prefix, tags)                   \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, Hint, tags)               \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, CopyPaste, tags)          \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, UndoRedo, tags)           \
+    wxTEXT_ENTRY_TEST_CASE(testclass, prefix, WriteText, tags)          \
+    struct EatNextSemicolonInTextEntryTests
 
 // Helper used for creating the control of the specific type (currently either
 // wxTextCtrl or wxComboBox) with the given flag.

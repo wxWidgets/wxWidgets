@@ -18,6 +18,7 @@
 #include "testableframe.h"
 
 #include <initializer_list>
+#include <memory>
 
 namespace
 {
@@ -67,138 +68,108 @@ private:
 
 } // anonymous namespace
 
-class VListBoxTestCase : public CppUnit::TestCase
+class VListBoxTestCase
 {
 public:
-    void setUp() override
+    VListBoxTestCase()
     {
-        m_list = new TestVListBox(wxTheApp->GetTopWindow());
+        m_list = make_unique<TestVListBox>(wxTheApp->GetTopWindow());
         m_list->SetItemCount(20);
     }
 
-    void tearDown() override
-    {
-        delete m_list;
-        m_list = nullptr;
-    }
+protected:
+    std::unique_ptr<TestVListBox> m_list;
 
-private:
-    CPPUNIT_TEST_SUITE( VListBoxTestCase );
-        CPPUNIT_TEST( GeometryAndScroll );
-        CPPUNIT_TEST( SelectionAndKeyboard );
-        CPPUNIT_TEST( MultipleSelection );
-        CPPUNIT_TEST( EmptyModelBoundaries );
-        CPPUNIT_TEST( ReentrantModelMutation );
-        CPPUNIT_TEST( DestroyDuringSizeDispatch );
-        CPPUNIT_TEST( LargeVirtualModelIsBounded );
-        CPPUNIT_TEST( DefaultCreateReparentAndLifetime );
-    CPPUNIT_TEST_SUITE_END();
-
-    void GeometryAndScroll();
-    void SelectionAndKeyboard();
-    void MultipleSelection();
-    void EmptyModelBoundaries();
-    void ReentrantModelMutation();
-    void DestroyDuringSizeDispatch();
-    void LargeVirtualModelIsBounded();
-    void DefaultCreateReparentAndLifetime();
-
-    TestVListBox* m_list{nullptr};
+    wxDECLARE_NO_COPY_CLASS(VListBoxTestCase);
 };
 
-wxREGISTER_UNIT_TEST_WITH_TAGS(
-    VListBoxTestCase,
-    "[VListBoxTestCase][winui-generic-data]");
-
-void VListBoxTestCase::GeometryAndScroll()
+TEST_CASE_METHOD(VListBoxTestCase, "VListBox::GeometryAndScroll",
+                 "[vlistbox][VListBoxTestCase][winui-generic-data]")
 {
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(20), m_list->GetItemCount() );
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0),
-                          m_list->GetVisibleRowsBegin() );
+    REQUIRE( m_list->GetItemCount() == static_cast<size_t>(20) );
+    REQUIRE( m_list->GetVisibleRowsBegin() == static_cast<size_t>(0) );
 
     const wxRect first = m_list->GetItemRect(0);
     const wxRect second = m_list->GetItemRect(1);
-    CPPUNIT_ASSERT( !first.IsEmpty() );
-    CPPUNIT_ASSERT( !second.IsEmpty() );
-    CPPUNIT_ASSERT( second.height > first.height );
-    CPPUNIT_ASSERT_EQUAL(
-        0,
-        m_list->VirtualHitTest(first.GetTop() + first.height / 2) );
-    CPPUNIT_ASSERT_EQUAL(
-        1,
-        m_list->VirtualHitTest(second.GetTop() + second.height / 2) );
+    REQUIRE_FALSE( first.IsEmpty() );
+    REQUIRE_FALSE( second.IsEmpty() );
+    REQUIRE( second.height > first.height );
+    REQUIRE( m_list->VirtualHitTest(first.GetTop() + first.height / 2) == 0 );
+    REQUIRE( m_list->VirtualHitTest(second.GetTop() + second.height / 2) == 1 );
 
-    CPPUNIT_ASSERT( m_list->ScrollToRow(15) );
-    CPPUNIT_ASSERT( m_list->IsRowVisible(15) );
-    CPPUNIT_ASSERT( m_list->GetVisibleRowsEnd() <= m_list->GetItemCount() );
+    REQUIRE( m_list->ScrollToRow(15) );
+    REQUIRE( m_list->IsRowVisible(15) );
+    REQUIRE( m_list->GetVisibleRowsEnd() <= m_list->GetItemCount() );
 }
 
-void VListBoxTestCase::SelectionAndKeyboard()
+TEST_CASE_METHOD(VListBoxTestCase, "VListBox::SelectionAndKeyboard",
+                 "[vlistbox][VListBoxTestCase][winui-generic-data]")
 {
     m_list->SetSelection(0);
-    EventCounter selected(m_list, wxEVT_LISTBOX);
+    EventCounter selected(m_list.get(), wxEVT_LISTBOX);
 
     wxKeyEvent down(wxEVT_KEY_DOWN);
     down.m_keyCode = WXK_DOWN;
     m_list->GetEventHandler()->ProcessEvent(down);
 
-    CPPUNIT_ASSERT_EQUAL( 1, m_list->GetSelection() );
-    CPPUNIT_ASSERT_EQUAL( 1, selected.GetCount() );
+    REQUIRE( m_list->GetSelection() == 1 );
+    REQUIRE( selected.GetCount() == 1 );
 
     m_list->SetItemCount(0);
-    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->GetSelection() );
-    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->GetCurrent() );
+    REQUIRE( m_list->GetSelection() == wxNOT_FOUND );
+    REQUIRE( m_list->GetCurrent() == wxNOT_FOUND );
 
     for ( const int key : { WXK_HOME, WXK_END, WXK_SPACE, WXK_DOWN } )
     {
         wxKeyEvent emptyKey(wxEVT_KEY_DOWN);
         emptyKey.m_keyCode = key;
         m_list->GetEventHandler()->ProcessEvent(emptyKey);
-        CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->GetSelection() );
-        CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->GetCurrent() );
+        REQUIRE( m_list->GetSelection() == wxNOT_FOUND );
+        REQUIRE( m_list->GetCurrent() == wxNOT_FOUND );
     }
-    CPPUNIT_ASSERT_EQUAL( 1, selected.GetCount() );
+    REQUIRE( selected.GetCount() == 1 );
 }
 
-void VListBoxTestCase::MultipleSelection()
+TEST_CASE_METHOD(VListBoxTestCase, "VListBox::MultipleSelection",
+                 "[vlistbox][VListBoxTestCase][winui-generic-data]")
 {
     TestVListBox list(wxTheApp->GetTopWindow(), wxLB_MULTIPLE);
     list.SetItemCount(10);
 
-    CPPUNIT_ASSERT( list.SelectRange(2, 5) );
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(4), list.GetSelectedCount() );
-    CPPUNIT_ASSERT( list.IsSelected(2) );
-    CPPUNIT_ASSERT( list.IsSelected(5) );
+    REQUIRE( list.SelectRange(2, 5) );
+    REQUIRE( list.GetSelectedCount() == static_cast<size_t>(4) );
+    REQUIRE( list.IsSelected(2) );
+    REQUIRE( list.IsSelected(5) );
 
     list.Toggle(3);
-    CPPUNIT_ASSERT( !list.IsSelected(3) );
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(3), list.GetSelectedCount() );
-    CPPUNIT_ASSERT( list.DeselectAll() );
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0), list.GetSelectedCount() );
+    REQUIRE_FALSE( list.IsSelected(3) );
+    REQUIRE( list.GetSelectedCount() == static_cast<size_t>(3) );
+    REQUIRE( list.DeselectAll() );
+    REQUIRE( list.GetSelectedCount() == static_cast<size_t>(0) );
 }
 
-void VListBoxTestCase::EmptyModelBoundaries()
+TEST_CASE_METHOD(VListBoxTestCase, "VListBox::EmptyModelBoundaries",
+                 "[vlistbox][VListBoxTestCase][winui-generic-data]")
 {
     m_list->SetItemCount(0);
     m_list->ResetMeasureCount();
 
-    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->VirtualHitTest(-1) );
-    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->VirtualHitTest(0) );
-    CPPUNIT_ASSERT( !m_list->ScrollRowPages(-1) );
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0),
-                          m_list->GetMeasureCount() );
-    CPPUNIT_ASSERT( !m_list->HadOutOfRangeMeasure() );
+    REQUIRE( m_list->VirtualHitTest(-1) == wxNOT_FOUND );
+    REQUIRE( m_list->VirtualHitTest(0) == wxNOT_FOUND );
+    REQUIRE_FALSE( m_list->ScrollRowPages(-1) );
+    REQUIRE( m_list->GetMeasureCount() == static_cast<size_t>(0) );
+    REQUIRE_FALSE( m_list->HadOutOfRangeMeasure() );
 }
 
-void VListBoxTestCase::ReentrantModelMutation()
+TEST_CASE_METHOD(VListBoxTestCase, "VListBox::ReentrantModelMutation",
+                 "[vlistbox][VListBoxTestCase][winui-generic-data]")
 {
-    EventCounter selected(m_list, wxEVT_LISTBOX);
+    EventCounter selected(m_list.get(), wxEVT_LISTBOX);
 
     m_list->ArmClearOnMeasure();
-    CPPUNIT_ASSERT( m_list->GetItemRect(0).IsEmpty() );
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0),
-                          m_list->GetItemCount() );
-    CPPUNIT_ASSERT( !m_list->HadOutOfRangeMeasure() );
+    REQUIRE( m_list->GetItemRect(0).IsEmpty() );
+    REQUIRE( m_list->GetItemCount() == static_cast<size_t>(0) );
+    REQUIRE_FALSE( m_list->HadOutOfRangeMeasure() );
 
     m_list->SetItemCount(20);
     m_list->ArmClearOnMeasure();
@@ -208,76 +179,72 @@ void VListBoxTestCase::ReentrantModelMutation()
     click.m_y = 2;
     m_list->GetEventHandler()->ProcessEvent(click);
 
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0),
-                          m_list->GetItemCount() );
-    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->GetCurrent() );
-    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_list->GetSelection() );
-    CPPUNIT_ASSERT_EQUAL( 0, selected.GetCount() );
-    CPPUNIT_ASSERT( !m_list->HadOutOfRangeMeasure() );
+    REQUIRE( m_list->GetItemCount() == static_cast<size_t>(0) );
+    REQUIRE( m_list->GetCurrent() == wxNOT_FOUND );
+    REQUIRE( m_list->GetSelection() == wxNOT_FOUND );
+    REQUIRE( selected.GetCount() == 0 );
+    REQUIRE_FALSE( m_list->HadOutOfRangeMeasure() );
 }
 
-void VListBoxTestCase::DestroyDuringSizeDispatch()
+TEST_CASE_METHOD(VListBoxTestCase, "VListBox::DestroyDuringSizeDispatch",
+                 "[vlistbox][VListBoxTestCase][winui-generic-data]")
 {
-    TestVListBox* list = new TestVListBox(wxTheApp->GetTopWindow());
+    auto list = make_unique<TestVListBox>(wxTheApp->GetTopWindow());
     list->SetItemCount(10);
 
-    const wxWeakRef<wxWindow> weakList(list);
+    const wxWeakRef<wxWindow> weakList(list.get());
     list->Bind(wxEVT_SIZE, [&list](wxSizeEvent&)
     {
-        TestVListBox* const doomed = list;
-        list = nullptr;
+        TestVListBox* const doomed = list.release();
         delete doomed;
     });
 
     wxSizeEvent sizeEvent(wxSize(200, 100), list->GetId());
-    sizeEvent.SetEventObject(list);
+    sizeEvent.SetEventObject(list.get());
     wxEvtHandler* const handler = list->GetEventHandler();
     handler->ProcessEvent(sizeEvent);
 
-    CPPUNIT_ASSERT( !weakList );
-    CPPUNIT_ASSERT_EQUAL( static_cast<TestVListBox *>(nullptr), list );
+    REQUIRE_FALSE( weakList );
+    REQUIRE_FALSE( list );
 }
 
-void VListBoxTestCase::LargeVirtualModelIsBounded()
+TEST_CASE_METHOD(VListBoxTestCase, "VListBox::LargeVirtualModelIsBounded",
+                 "[vlistbox][VListBoxTestCase][winui-generic-data]")
 {
     constexpr size_t ItemCount = 100000;
     m_list->SetItemCount(ItemCount);
     m_list->ResetMeasureCount();
 
-    CPPUNIT_ASSERT( m_list->ScrollToRow(ItemCount - 1) );
-    CPPUNIT_ASSERT( m_list->IsRowVisible(ItemCount - 1) );
-    CPPUNIT_ASSERT( m_list->GetVisibleRowsEnd() <= ItemCount );
+    REQUIRE( m_list->ScrollToRow(ItemCount - 1) );
+    REQUIRE( m_list->IsRowVisible(ItemCount - 1) );
+    REQUIRE( m_list->GetVisibleRowsEnd() <= ItemCount );
 
     // A virtual list must not materialize or measure its entire model merely
     // to reach its final row.
-    CPPUNIT_ASSERT( m_list->GetMeasureCount() < ItemCount / 10 );
+    REQUIRE( m_list->GetMeasureCount() < ItemCount / 10 );
 }
 
-void VListBoxTestCase::DefaultCreateReparentAndLifetime()
+TEST_CASE_METHOD(VListBoxTestCase, "VListBox::DefaultCreateReparentAndLifetime",
+                 "[vlistbox][VListBoxTestCase][winui-generic-data]")
 {
     wxWindow* const top = wxTheApp->GetTopWindow();
-    wxPanel* const parent1 = new wxPanel(top);
-    wxPanel* const parent2 = new wxPanel(top);
+    auto parent1 = make_unique<wxPanel>(top);
+    auto parent2 = make_unique<wxPanel>(top);
 
-    TestVListBox* const twoStep = new TestVListBox;
-    CPPUNIT_ASSERT( twoStep->Create(parent1, wxID_ANY,
-                                    wxDefaultPosition, wxSize(120, 70)) );
+    auto twoStep = make_unique<TestVListBox>();
+    REQUIRE( twoStep->Create(parent1.get(), wxID_ANY,
+                             wxDefaultPosition, wxSize(120, 70)) );
     twoStep->SetItemCount(3);
-    CPPUNIT_ASSERT( twoStep->Reparent(parent2) );
-    CPPUNIT_ASSERT_EQUAL( parent2,
-                          static_cast<wxWindow*>(twoStep->GetParent()) );
-    delete twoStep;
+    REQUIRE( twoStep->Reparent(parent2.get()) );
+    REQUIRE( twoStep->GetParent() == parent2.get() );
+    twoStep.reset();
 
     for ( int i = 0; i < 100; ++i )
     {
-        TestVListBox* const list = new TestVListBox(parent1);
+        auto list = make_unique<TestVListBox>(parent1.get());
         list->SetItemCount(100);
         list->ScrollToRow(50);
-        delete list;
     }
-
-    delete parent2;
-    delete parent1;
 }
 
 #endif // wxUSE_LISTBOX

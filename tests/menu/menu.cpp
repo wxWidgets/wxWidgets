@@ -61,7 +61,7 @@ void PopulateMenu(wxMenu* menu, const wxString& name,  size_t& itemcount)
 
 void RecursivelyCountMenuItems(const wxMenu* menu, size_t& count)
 {
-    CPPUNIT_ASSERT( menu );
+    CHECK( menu );
 
     count += menu->GetMenuItemCount();
     for (size_t n=0; n < menu->GetMenuItemCount(); ++n)
@@ -81,50 +81,14 @@ void RecursivelyCountMenuItems(const wxMenu* menu, size_t& count)
 // test class
 // ----------------------------------------------------------------------------
 
-class MenuTestCase : public CppUnit::TestCase
+class MenuTestCase
 {
 public:
-    MenuTestCase() {}
+    MenuTestCase() { CreateFrame(); }
+    ~MenuTestCase() { m_frame->Destroy(); }
 
-    virtual void setUp() override { CreateFrame(); }
-    virtual void tearDown() override { m_frame->Destroy(); }
-
-private:
-    CPPUNIT_TEST_SUITE( MenuTestCase );
-        CPPUNIT_TEST( FindInMenubar );
-        CPPUNIT_TEST( FindInMenu );
-        CPPUNIT_TEST( EnableTop );
-        CPPUNIT_TEST( Count );
-        CPPUNIT_TEST( Labels );
-#if wxUSE_INTL
-        CPPUNIT_TEST( TranslatedMnemonics );
-#endif // wxUSE_INTL
-        CPPUNIT_TEST( RadioItems );
-        CPPUNIT_TEST( RemoveAdd );
-        CPPUNIT_TEST( ChangeBitmap );
-#ifdef __WXWINUI__
-        CPPUNIT_TEST( DisabledAccelerators );
-#endif
-        WXUISIM_TEST( Events );
-    CPPUNIT_TEST_SUITE_END();
-
+protected:
     void CreateFrame();
-
-    void FindInMenubar();
-    void FindInMenu();
-    void EnableTop();
-    void Count();
-    void Labels();
-#if wxUSE_INTL
-    void TranslatedMnemonics();
-#endif // wxUSE_INTL
-    void RadioItems();
-    void RemoveAdd();
-    void ChangeBitmap();
-#ifdef __WXWINUI__
-    void DisabledAccelerators();
-#endif
-    void Events();
 
     wxFrame* m_frame;
 
@@ -144,12 +108,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(MenuTestCase);
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( MenuTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MenuTestCase, "MenuTestCase" );
 
 void MenuTestCase::CreateFrame()
 {
@@ -177,7 +135,7 @@ void MenuTestCase::CreateFrame()
 
     // Check GetTitle() returns the correct string _before_ appending to the bar
     fileMenu->SetTitle("&Foo\tCtrl-F");
-    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", fileMenu->GetTitle() );
+    CHECK( fileMenu->GetTitle() == "&Foo\tCtrl-F" );
 
     PopulateMenu(fileMenu, "Filemenu item ", m_itemCount);
 
@@ -233,84 +191,84 @@ void MenuTestCase::CreateFrame()
     m_frame->SetMenuBar(menuBar);
 }
 
-void MenuTestCase::FindInMenubar()
+TEST_CASE_METHOD(MenuTestCase, "Menu::FindInMenubar", "[menu]")
 {
     wxMenuBar* bar = m_frame->GetMenuBar();
 
     // Find by name:
-    CPPUNIT_ASSERT( bar->FindMenu("File") != wxNOT_FOUND );
-    CPPUNIT_ASSERT( bar->FindMenu("&File") != wxNOT_FOUND );
-    CPPUNIT_ASSERT( bar->FindMenu("&Fail") == wxNOT_FOUND );
+    CHECK( bar->FindMenu("File") != wxNOT_FOUND );
+    CHECK( bar->FindMenu("&File") != wxNOT_FOUND );
+    CHECK( bar->FindMenu("&Fail") == wxNOT_FOUND );
 
     // Find by menu name plus item name:
-    CPPUNIT_ASSERT( bar->FindMenuItem("File", "Foo") != wxNOT_FOUND );
-    CPPUNIT_ASSERT( bar->FindMenuItem("&File", "&Foo") != wxNOT_FOUND );
+    CHECK( bar->FindMenuItem("File", "Foo") != wxNOT_FOUND );
+    CHECK( bar->FindMenuItem("&File", "&Foo") != wxNOT_FOUND );
     // and using the menu label
     int index = bar->FindMenu("&File");
-    CPPUNIT_ASSERT( index != wxNOT_FOUND );
+    CHECK( index != wxNOT_FOUND );
     wxString menulabel = bar->GetMenuLabel(index);
-    CPPUNIT_ASSERT( bar->FindMenuItem(menulabel, "&Foo") != wxNOT_FOUND );
+    CHECK( bar->FindMenuItem(menulabel, "&Foo") != wxNOT_FOUND );
     // and title
     wxString menutitle = bar->GetMenu(index)->GetTitle();
-    CPPUNIT_ASSERT( bar->FindMenuItem(menutitle, "&Foo") != wxNOT_FOUND );
+    CHECK( bar->FindMenuItem(menutitle, "&Foo") != wxNOT_FOUND );
 
     // Find by position:
     for (size_t n=0; n < bar->GetMenuCount(); ++n)
     {
-        CPPUNIT_ASSERT( bar->GetMenu(n) );
+        CHECK( bar->GetMenu(n) );
     }
 
     // Find by id:
     wxMenu* menu = nullptr;
     wxMenuItem* item = nullptr;
     item = bar->FindItem(MenuTestCase_Foo, &menu);
-    CPPUNIT_ASSERT( item );
-    CPPUNIT_ASSERT( menu );
+    CHECK( item );
+    CHECK( menu );
     // Check that the correct menu was found
-    CPPUNIT_ASSERT( menu->FindChildItem(MenuTestCase_Foo) );
+    CHECK( menu->FindChildItem(MenuTestCase_Foo) );
 
     // Find submenu item:
     item = bar->FindItem(m_submenuItemId, &menu);
-    CPPUNIT_ASSERT( item );
-    CPPUNIT_ASSERT( menu );
+    CHECK( item );
+    CHECK( menu );
     // and, for completeness, a subsubmenu one:
     item = bar->FindItem(m_subsubmenuItemId, &menu);
-    CPPUNIT_ASSERT( item );
-    CPPUNIT_ASSERT( menu );
+    CHECK( item );
+    CHECK( menu );
 }
 
-void MenuTestCase::FindInMenu()
+TEST_CASE_METHOD(MenuTestCase, "Menu::FindInMenu", "[menu]")
 {
     wxMenuBar* bar = m_frame->GetMenuBar();
 
     // Find by name:
     wxMenu* menuFind = bar->GetMenu(0);
-    CPPUNIT_ASSERT( menuFind->FindItem("Foo") != wxNOT_FOUND );
-    CPPUNIT_ASSERT( menuFind->FindItem("&Foo") != wxNOT_FOUND );
+    CHECK( menuFind->FindItem("Foo") != wxNOT_FOUND );
+    CHECK( menuFind->FindItem("&Foo") != wxNOT_FOUND );
     // and for submenus
     wxMenu* menuHelp = bar->GetMenu(1);
-    CPPUNIT_ASSERT( menuHelp->FindItem("Submenu") != wxNOT_FOUND );
-    CPPUNIT_ASSERT( menuHelp->FindItem("Sub&menu") != wxNOT_FOUND );
+    CHECK( menuHelp->FindItem("Submenu") != wxNOT_FOUND );
+    CHECK( menuHelp->FindItem("Sub&menu") != wxNOT_FOUND );
 
     // Find by position:
     size_t n;
     for (n=0; n < menuHelp->GetMenuItemCount(); ++n)
     {
-        CPPUNIT_ASSERT( menuHelp->FindItemByPosition(n) );
+        CHECK( menuHelp->FindItemByPosition(n) );
     }
 
     // Find by id:
-    CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Bar) );
-    CPPUNIT_ASSERT( !menuHelp->FindItem(MenuTestCase_Foo) );
+    CHECK( menuHelp->FindItem(MenuTestCase_Bar) );
+    CHECK( !menuHelp->FindItem(MenuTestCase_Foo) );
 
     for (n=0; n < menuHelp->GetMenuItemCount(); ++n)
     {
         size_t locatedAt;
         wxMenuItem* itemByPos = menuHelp->FindItemByPosition(n);
-        CPPUNIT_ASSERT( itemByPos );
+        CHECK( itemByPos );
         wxMenuItem* itemById = menuHelp->FindChildItem(itemByPos->GetId(), &locatedAt);
-        CPPUNIT_ASSERT_EQUAL( itemByPos, itemById );
-        CPPUNIT_ASSERT_EQUAL( locatedAt, n );
+        CHECK( itemById == itemByPos );
+        CHECK( n == locatedAt );
     }
 
     // Find submenu item:
@@ -321,20 +279,20 @@ void MenuTestCase::FindInMenu()
         {
             wxMenu* submenu;
             wxMenuItem* submenuItem = menuHelp->FindItem(m_submenuItemId, &submenu);
-            CPPUNIT_ASSERT( submenuItem );
-            CPPUNIT_ASSERT( item->GetSubMenu() == submenu );
+            CHECK( submenuItem );
+            CHECK( item->GetSubMenu() == submenu );
         }
     }
 }
 
-void MenuTestCase::EnableTop()
+TEST_CASE_METHOD(MenuTestCase, "Menu::EnableTop", "[menu]")
 {
     wxMenuBar* const bar = m_frame->GetMenuBar();
-    CPPUNIT_ASSERT( bar->IsEnabledTop(0) );
+    CHECK( bar->IsEnabledTop(0) );
     bar->EnableTop( 0, false );
-    CPPUNIT_ASSERT( !bar->IsEnabledTop(0) );
+    CHECK( !bar->IsEnabledTop(0) );
     bar->EnableTop( 0, true );
-    CPPUNIT_ASSERT( bar->IsEnabledTop(0) );
+    CHECK( bar->IsEnabledTop(0) );
 }
 
 #ifdef __WXWINUI__
@@ -350,14 +308,12 @@ std::vector<ACCEL> GetNativeAccelerators(wxMenuBar* menuBar)
         return {};
 
     const int count = ::CopyAcceleratorTable(haccel, nullptr, 0);
-    CPPUNIT_ASSERT( count >= 0 );
+    REQUIRE( count >= 0 );
 
     std::vector<ACCEL> accels(static_cast<size_t>(count));
     if ( count )
     {
-        CPPUNIT_ASSERT_EQUAL(
-            count,
-            ::CopyAcceleratorTable(haccel, accels.data(), count));
+        REQUIRE( (::CopyAcceleratorTable(haccel, accels.data(), count)) == (count) );
     }
 
     return accels;
@@ -377,7 +333,7 @@ bool HasAcceleratorCommand(const std::vector<ACCEL>& accels, int id)
 
 } // anonymous namespace
 
-void MenuTestCase::DisabledAccelerators()
+TEST_CASE_METHOD(MenuTestCase, "Menu::DisabledAccelerators", "[menu]")
 {
     enum
     {
@@ -401,105 +357,104 @@ void MenuTestCase::DisabledAccelerators()
     menu->Append(AccelDirect, "Direct\tF7");
 
     const size_t topPos = bar->GetMenuCount();
-    CPPUNIT_ASSERT( bar->Append(menu, "Accelerators") );
+    REQUIRE( bar->Append(menu, "Accelerators") );
 
     std::vector<ACCEL> accels = GetNativeAccelerators(bar);
-    CPPUNIT_ASSERT_EQUAL(baseline + 1, accels.size());
-    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelInSubmenu) );
-    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+    REQUIRE( (accels.size()) == (baseline + 1) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
 
     nested->Enable(true);
     accels = GetNativeAccelerators(bar);
-    CPPUNIT_ASSERT_EQUAL(baseline + 2, accels.size());
-    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelInSubmenu) );
-    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+    REQUIRE( (accels.size()) == (baseline + 2) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
 
     // Disabling a submenu suppresses all accelerators below it.
     submenuItem->Enable(false);
     accels = GetNativeAccelerators(bar);
-    CPPUNIT_ASSERT_EQUAL(baseline + 1, accels.size());
-    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelInSubmenu) );
-    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+    REQUIRE( (accels.size()) == (baseline + 1) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
 
     submenuItem->Enable(true);
     accels = GetNativeAccelerators(bar);
-    CPPUNIT_ASSERT_EQUAL(baseline + 2, accels.size());
+    REQUIRE( (accels.size()) == (baseline + 2) );
 
     // And disabling the top-level menu suppresses its complete table slice.
     bar->EnableTop(topPos, false);
     accels = GetNativeAccelerators(bar);
-    CPPUNIT_ASSERT_EQUAL(baseline, accels.size());
-    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelInSubmenu) );
-    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelDirect) );
+    REQUIRE( (accels.size()) == (baseline) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelDirect) );
 
     bar->EnableTop(topPos, true);
     accels = GetNativeAccelerators(bar);
-    CPPUNIT_ASSERT_EQUAL(baseline + 2, accels.size());
-    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelInSubmenu) );
-    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+    REQUIRE( (accels.size()) == (baseline + 2) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
 
     nested->Enable(false);
     accels = GetNativeAccelerators(bar);
-    CPPUNIT_ASSERT_EQUAL(baseline + 1, accels.size());
-    CPPUNIT_ASSERT( !HasAcceleratorCommand(accels, AccelInSubmenu) );
-    CPPUNIT_ASSERT( HasAcceleratorCommand(accels, AccelDirect) );
+    REQUIRE( (accels.size()) == (baseline + 1) );
+    REQUIRE( !HasAcceleratorCommand(accels, AccelInSubmenu) );
+    REQUIRE( HasAcceleratorCommand(accels, AccelDirect) );
 
     nested->Enable(true);
-    CPPUNIT_ASSERT_EQUAL(baseline + 2,
-                         GetNativeAccelerators(bar).size());
+    REQUIRE( (GetNativeAccelerators(bar).size()) == (baseline + 2) );
 }
 
 #endif // __WXWINUI__
 
-void MenuTestCase::Count()
+TEST_CASE_METHOD(MenuTestCase, "Menu::Count", "[menu]")
 {
     wxMenuBar* bar = m_frame->GetMenuBar();
     // I suppose you could call this "counting menubars" :)
-    CPPUNIT_ASSERT( bar );
+    CHECK( bar );
 
-    CPPUNIT_ASSERT_EQUAL( bar->GetMenuCount(), 2 );
+    CHECK( 2 == bar->GetMenuCount() );
 
     size_t count = 0;
     for (size_t n=0; n < bar->GetMenuCount(); ++n)
     {
         RecursivelyCountMenuItems(bar->GetMenu(n), count);
     }
-    CPPUNIT_ASSERT_EQUAL( count, m_itemCount );
+    CHECK( m_itemCount == count );
 }
 
-void MenuTestCase::Labels()
+TEST_CASE_METHOD(MenuTestCase, "Menu::Labels", "[menu]")
 {
     wxMenuBar* bar = m_frame->GetMenuBar();
-    CPPUNIT_ASSERT( bar );
+    CHECK( bar );
     wxMenu* filemenu;
     wxMenuItem* itemFoo = bar->FindItem(MenuTestCase_Foo, &filemenu);
-    CPPUNIT_ASSERT( itemFoo );
-    CPPUNIT_ASSERT( filemenu );
+    CHECK( itemFoo );
+    CHECK( filemenu );
 
     // These return labels including mnemonics/accelerators:
 
     // wxMenuBar
-    CPPUNIT_ASSERT_EQUAL( "&File", bar->GetMenuLabel(0) );
-    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", bar->GetLabel(MenuTestCase_Foo) );
+    CHECK( bar->GetMenuLabel(0) == "&File" );
+    CHECK( bar->GetLabel(MenuTestCase_Foo) == "&Foo\tCtrl-F" );
 
     // wxMenu
-    CPPUNIT_ASSERT_EQUAL( "&File", filemenu->GetTitle() );
-    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", filemenu->GetLabel(MenuTestCase_Foo) );
+    CHECK( filemenu->GetTitle() == "&File" );
+    CHECK( filemenu->GetLabel(MenuTestCase_Foo) == "&Foo\tCtrl-F" );
 
     // wxMenuItem
-    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", itemFoo->GetItemLabel() );
+    CHECK( itemFoo->GetItemLabel() == "&Foo\tCtrl-F" );
 
     // These return labels stripped of mnemonics/accelerators:
 
     // wxMenuBar
-    CPPUNIT_ASSERT_EQUAL( "File", bar->GetMenuLabelText(0) );
+    CHECK( bar->GetMenuLabelText(0) == "File" );
 
     // wxMenu
-    CPPUNIT_ASSERT_EQUAL( "Foo", filemenu->GetLabelText(MenuTestCase_Foo) );
+    CHECK( filemenu->GetLabelText(MenuTestCase_Foo) == "Foo" );
 
     // wxMenuItem
-    CPPUNIT_ASSERT_EQUAL( "Foo", itemFoo->GetItemLabelText() );
-    CPPUNIT_ASSERT_EQUAL( "Foo", wxMenuItem::GetLabelText("&Foo\tCtrl-F") );
+    CHECK( itemFoo->GetItemLabelText() == "Foo" );
+    CHECK( wxMenuItem::GetLabelText("&Foo\tCtrl-F") == "Foo" );
 }
 
 #if wxUSE_INTL
@@ -511,50 +466,34 @@ GetTranslatedString(const wxTranslations& trans, const wxString& s)
     return t ? *t : s;
 }
 
-void MenuTestCase::TranslatedMnemonics()
+TEST_CASE_METHOD(MenuTestCase, "Menu::TranslatedMnemonics", "[menu]")
 {
     // Check that appended mnemonics are correctly stripped;
     // see https://github.com/wxWidgets/wxWidgets/issues/16736
     wxTranslations trans;
     trans.SetLanguage(wxLANGUAGE_JAPANESE);
     wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
-    CPPUNIT_ASSERT( trans.AddCatalog("internat") );
+    CHECK( trans.AddCatalog("internat") );
 
     // Check the translation is being used:
-    CPPUNIT_ASSERT( wxString("&File") != GetTranslatedString(trans, "&File") );
+    CHECK( wxString("&File") != GetTranslatedString(trans, "&File") );
 
     wxString filemenu = m_frame->GetMenuBar()->GetMenuLabel(0);
-    CPPUNIT_ASSERT_EQUAL
-    (
-         wxStripMenuCodes(GetTranslatedString(trans, "&File"), wxStrip_Menu),
-         wxStripMenuCodes(GetTranslatedString(trans, filemenu), wxStrip_Menu)
-    );
+    CHECK(wxStripMenuCodes(GetTranslatedString(trans, filemenu), wxStrip_Menu) == wxStripMenuCodes(GetTranslatedString(trans, "&File"), wxStrip_Menu) );
 
     // Test strings that have shortcuts. Duplicate non-mnemonic translations
     // exist for both "Edit" and "View", for ease of comparison
-    CPPUNIT_ASSERT_EQUAL
-    (
-         GetTranslatedString(trans, "Edit"),
-         wxStripMenuCodes(GetTranslatedString(trans, "E&dit\tCtrl+E"), wxStrip_Menu)
-    );
+    CHECK(wxStripMenuCodes(GetTranslatedString(trans, "E&dit\tCtrl+E"), wxStrip_Menu) == GetTranslatedString(trans, "Edit") );
 
     // "Vie&w" also has a space before the (&W)
-    CPPUNIT_ASSERT_EQUAL
-    (
-         GetTranslatedString(trans, "View"),
-         wxStripMenuCodes(GetTranslatedString(trans, "Vie&w\tCtrl+V"), wxStrip_Menu)
-    );
+    CHECK(wxStripMenuCodes(GetTranslatedString(trans, "Vie&w\tCtrl+V"), wxStrip_Menu) == GetTranslatedString(trans, "View") );
 
     // Test a 'normal' mnemonic too: the translation is "Preten&d"
-    CPPUNIT_ASSERT_EQUAL
-    (
-         "Pretend",
-         wxStripMenuCodes(GetTranslatedString(trans, "B&ogus"), wxStrip_Menu)
-    );
+    CHECK(wxStripMenuCodes(GetTranslatedString(trans, "B&ogus"), wxStrip_Menu) == "Pretend" );
 }
 #endif // wxUSE_INTL
 
-void MenuTestCase::RadioItems()
+TEST_CASE_METHOD(MenuTestCase, "Menu::RadioItems", "[menu]")
 {
     wxMenuBar * const bar = m_frame->GetMenuBar();
     wxMenu * const menu = new wxMenu;
@@ -565,15 +504,15 @@ void MenuTestCase::RadioItems()
     menu->AppendRadioItem(MenuTestCase_First + 1, "Radio 1");
 
     // First item of a radio group is checked by default.
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
+    CHECK( menu->IsChecked(MenuTestCase_First) );
 
     // Subsequent items in a group are not checked.
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
+    CHECK( !menu->IsChecked(MenuTestCase_First + 1) );
 
     // Checking the second one make the first one unchecked however.
     menu->Check(MenuTestCase_First + 1, true);
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First) );
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
+    CHECK( !menu->IsChecked(MenuTestCase_First) );
+    CHECK( menu->IsChecked(MenuTestCase_First + 1) );
     menu->Check(MenuTestCase_First, true);
 
     // Adding more radio items after a separator creates another radio group...
@@ -583,42 +522,42 @@ void MenuTestCase::RadioItems()
     menu->AppendRadioItem(MenuTestCase_First + 4, "Radio 4");
 
     // ... which is independent from the first one.
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
+    CHECK( menu->IsChecked(MenuTestCase_First) );
+    CHECK( menu->IsChecked(MenuTestCase_First + 2) );
 
     menu->Check(MenuTestCase_First + 3, true);
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 2) );
+    CHECK( menu->IsChecked(MenuTestCase_First + 3) );
+    CHECK( !menu->IsChecked(MenuTestCase_First + 2) );
 
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
+    CHECK( menu->IsChecked(MenuTestCase_First) );
     menu->Check(MenuTestCase_First + 2, true);
 
     // Insert an item in the middle of an existing radio group.
     menu->InsertRadioItem(4, MenuTestCase_First + 5, "Radio 5");
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
+    CHECK( menu->IsChecked(MenuTestCase_First + 2) );
+    CHECK( !menu->IsChecked(MenuTestCase_First + 5) );
 
     menu->Check( MenuTestCase_First + 5, true );
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 3) );
+    CHECK( !menu->IsChecked(MenuTestCase_First + 3) );
 
     menu->Check( MenuTestCase_First + 3, true );
 
     // Prepend a couple of items before the first group.
     menu->PrependRadioItem(MenuTestCase_First + 6, "Radio 6");
     menu->PrependRadioItem(MenuTestCase_First + 7, "Radio 7");
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 6) );
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 7) );
+    CHECK( !menu->IsChecked(MenuTestCase_First + 6) );
+    CHECK( !menu->IsChecked(MenuTestCase_First + 7) );
 
     menu->Check(MenuTestCase_First + 7, true);
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
+    CHECK( !menu->IsChecked(MenuTestCase_First + 1) );
 
 
     // Check that the last radio group still works as expected.
     menu->Check(MenuTestCase_First + 4, true);
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
+    CHECK( !menu->IsChecked(MenuTestCase_First + 5) );
 }
 
-void MenuTestCase::RemoveAdd()
+TEST_CASE_METHOD(MenuTestCase, "Menu::RemoveAdd", "[menu]")
 {
     wxMenuBar* bar = m_frame->GetMenuBar();
 
@@ -626,19 +565,19 @@ void MenuTestCase::RemoveAdd()
     wxMenu* menu1 = bar->GetMenu(1);
     wxMenuItem* item = new wxMenuItem(menu0, MenuTestCase_Foo + 100, "t&ext\tCtrl-E");
     menu0->Insert(0, item);
-    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) == item );
+    CHECK( menu0->FindItemByPosition(0) == item );
     menu0->Remove(item);
-    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) != item );
+    CHECK( menu0->FindItemByPosition(0) != item );
     menu1->Insert(0, item);
-    CPPUNIT_ASSERT( menu1->FindItemByPosition(0) == item );
+    CHECK( menu1->FindItemByPosition(0) == item );
     menu1->Remove(item);
-    CPPUNIT_ASSERT( menu1->FindItemByPosition(0) != item );
+    CHECK( menu1->FindItemByPosition(0) != item );
     menu0->Insert(0, item);
-    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) == item );
+    CHECK( menu0->FindItemByPosition(0) == item );
     menu0->Delete(item);
 }
 
-void MenuTestCase::ChangeBitmap()
+TEST_CASE_METHOD(MenuTestCase, "Menu::ChangeBitmap", "[menu]")
 {
     wxMenu *menu = new wxMenu;
 
@@ -721,9 +660,12 @@ private:
 
 #endif // wxUSE_UIACTIONSIMULATOR
 
-void MenuTestCase::Events()
+TEST_CASE_METHOD(MenuTestCase, "Menu::Events", "[menu]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     MenuEventHandler handler(m_frame);
 
     // Invoke the accelerator.

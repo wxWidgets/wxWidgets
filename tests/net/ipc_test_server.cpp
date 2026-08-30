@@ -10,7 +10,7 @@
 
 // Match the guard in tests/net/ipc.cpp
 
-#if wxUSE_THREADS && !defined(__WXQT__)
+#if wxUSE_THREADS
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -28,7 +28,6 @@
 #include "wx/filename.h"
 #include "wx/stdpaths.h"
 
-#include "wx/private/make_unique.h"
 
 #ifdef __UNIX__
     #include <unistd.h>
@@ -497,7 +496,7 @@ class IPCServerContext
 {
 public:
     IPCServerContext()
-        : m_server(std::make_unique<IPCServerTestServer>())
+        : m_server(make_unique<IPCServerTestServer>())
     {
     }
 
@@ -581,7 +580,7 @@ struct IPCServerLaunchState
     wxString command;
     long pid = 0;
 
-    IPCServerLaunchState() : process(std::make_unique<IPCServerProcess>()) {}
+    IPCServerLaunchState() : process(make_unique<IPCServerProcess>()) {}
 };
 
 // Pump the real event loop so async wxExecute() can deliver its process-exit
@@ -690,7 +689,7 @@ struct IPCServerThread::Private
 };
 
 IPCServerThread::IPCServerThread()
-    : m_priv(std::make_unique<Private>())
+    : m_priv(make_unique<Private>())
 {
 }
 
@@ -715,4 +714,4 @@ void IPCServerThread::WaitForExit()
     launcher.DoStop();
 }
 
-#endif // wxUSE_THREADS && !__WXQT__
+#endif // wxUSE_THREADS

@@ -16,92 +16,70 @@
     #include "wx/gauge.h"
 #endif // WX_PRECOMP
 
-class GaugeTestCase : public CppUnit::TestCase
+#include <memory>
+
+class GaugeTestCase
 {
 public:
-    GaugeTestCase() { }
+    GaugeTestCase();
 
-    void setUp() override;
-    void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( GaugeTestCase );
-        CPPUNIT_TEST( Direction );
-        CPPUNIT_TEST( Range );
-        CPPUNIT_TEST( Value );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Direction();
-    void Range();
-    void Value();
-
-    wxGauge* m_gauge;
+protected:
+    std::unique_ptr<wxGauge> m_gauge;
 
     wxDECLARE_NO_COPY_CLASS(GaugeTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( GaugeTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( GaugeTestCase, "GaugeTestCase" );
-
-void GaugeTestCase::setUp()
+GaugeTestCase::GaugeTestCase()
 {
-    m_gauge = new wxGauge(wxTheApp->GetTopWindow(), wxID_ANY, 100);
+    m_gauge = make_unique<wxGauge>(wxTheApp->GetTopWindow(), wxID_ANY, 100);
 }
 
-void GaugeTestCase::tearDown()
-{
-    wxTheApp->GetTopWindow()->DestroyChildren();
-}
-
-void GaugeTestCase::Direction()
+TEST_CASE_METHOD(GaugeTestCase, "Gauge::Direction", "[gauge]")
 {
     //We should default to a horizontal gauge
-    CPPUNIT_ASSERT(!m_gauge->IsVertical());
+    CHECK(!m_gauge->IsVertical());
 
-    wxDELETE(m_gauge);
-    m_gauge = new wxGauge(wxTheApp->GetTopWindow(), wxID_ANY, 100,
-                          wxDefaultPosition, wxDefaultSize, wxGA_VERTICAL);
+    m_gauge = make_unique<wxGauge>(wxTheApp->GetTopWindow(), wxID_ANY, 100,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxGA_VERTICAL);
 
-    CPPUNIT_ASSERT(m_gauge->IsVertical());
+    CHECK(m_gauge->IsVertical());
 
-    wxDELETE(m_gauge);
-    m_gauge = new wxGauge(wxTheApp->GetTopWindow(), wxID_ANY, 100,
-                          wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL);
+    m_gauge = make_unique<wxGauge>(wxTheApp->GetTopWindow(), wxID_ANY, 100,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxGA_HORIZONTAL);
 
-    CPPUNIT_ASSERT(!m_gauge->IsVertical());
+    CHECK(!m_gauge->IsVertical());
 }
 
-void GaugeTestCase::Range()
+TEST_CASE_METHOD(GaugeTestCase, "Gauge::Range", "[gauge]")
 {
-    CPPUNIT_ASSERT_EQUAL(100, m_gauge->GetRange());
+    CHECK(m_gauge->GetRange() == 100);
 
     m_gauge->SetRange(50);
 
-    CPPUNIT_ASSERT_EQUAL(50, m_gauge->GetRange());
+    CHECK(m_gauge->GetRange() == 50);
 
     m_gauge->SetRange(0);
 
-    CPPUNIT_ASSERT_EQUAL(0, m_gauge->GetRange());
+    CHECK(m_gauge->GetRange() == 0);
 }
 
-void GaugeTestCase::Value()
+TEST_CASE_METHOD(GaugeTestCase, "Gauge::Value", "[gauge]")
 {
-    CPPUNIT_ASSERT_EQUAL(0, m_gauge->GetValue());
+    CHECK(m_gauge->GetValue() == 0);
 
     m_gauge->SetValue(50);
 
-    CPPUNIT_ASSERT_EQUAL(50, m_gauge->GetValue());
+    CHECK(m_gauge->GetValue() == 50);
 
     m_gauge->SetValue(0);
 
-    CPPUNIT_ASSERT_EQUAL(0, m_gauge->GetValue());
+    CHECK(m_gauge->GetValue() == 0);
 
     m_gauge->SetValue(100);
 
-    CPPUNIT_ASSERT_EQUAL(100, m_gauge->GetValue());
+    CHECK(m_gauge->GetValue() == 100);
 }
 
 #endif //wxUSE_GAUGE

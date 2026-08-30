@@ -2473,7 +2473,7 @@ void wxTextCtrl::UpdateLastVisible()
             */
         default:
             wxFAIL_MSG(wxT("unexpected HitTestLine() return value"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxTE_HT_ON_TEXT:
             if ( col > 0 )
@@ -2737,7 +2737,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
             */
         default:
             wxFAIL_MSG(wxT("unexpected HitTestLine() return value"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxTE_HT_ON_TEXT:
             if ( col > 0 )

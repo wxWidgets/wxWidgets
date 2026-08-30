@@ -21,6 +21,11 @@ class WXDLLIMPEXP_FWD_CORE wxChoice;
 
 #define wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES wxT("osx.openfiledialog.always-show-types")
 
+// set this system option to 1 (or the corresponding
+// wx_osx_openfiledialog_disable_extra_controls environment variable) in order
+// to not show the extra controls and file type filter in the file dialogs
+#define wxOSX_FILEDIALOG_DISABLE_EXTRA_CONTROLS wxT("osx.openfiledialog.disable-extra-controls")
+
 class WXDLLIMPEXP_CORE wxFileDialog: public wxFileDialogBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
@@ -87,10 +92,16 @@ protected:
     virtual void OnFilterSelected(wxCommandEvent &event);
     int GetMatchingFilterExtension(const wxString& filename);
 
+    // Return the hidden in-process window owning the accessory controls,
+    // creating it on demand; see wxFileDialog::SetupExtraControls() in
+    // filedlg.mm.
+    wxWindow* GetAccessoryHost();
+
     wxArrayString m_filterExtensions;
     wxArrayString m_filterNames;
     wxChoice* m_filterChoice;
     wxWindow* m_filterPanel;
+    wxWindow* m_accessoryHost = nullptr;
     bool m_useFileTypeFilter;
     int m_firstFileTypeFilter;
     wxArrayString m_currentExtensions;

@@ -43,10 +43,6 @@ See the last subsection for more details about running the tests.
 Testing with Catch
 ------------------
 
-**WARNING**: Most of the existing tests are currently still written in the
-CppUnit style, please do _not_ follow them when writing new tests, the old
-style is too complex and unnecessary.
-
 Writing tests with Catch is almost embarrassingly simple: you need to just
 add a new test case and use Catch assertion macros inside it, e.g.
 

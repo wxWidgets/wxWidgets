@@ -31,6 +31,9 @@
 
 #include <Security/Security.h>
 
+// SecKeychain is deprecated
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
 namespace
 {
 

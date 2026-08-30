@@ -23,6 +23,7 @@
 #include "bookctrlbasetest.h"
 
 #include <functional>
+#include <memory>
 #include <utility>
 #include <vector>
 
@@ -122,16 +123,14 @@ void ChangeToolbookSelectionDuringLoaded(wxToolBar *, void *context)
 
 #endif // __WXWINUI__
 
-class ToolbookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
+class ToolbookTestCase : public BookCtrlBaseTestCase
 {
 public:
-    ToolbookTestCase() { }
+    ToolbookTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    virtual wxBookCtrlBase *GetBase() const override { return m_toolbook; }
+protected:
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_toolbook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
     { return wxEVT_TOOLBOOK_PAGE_CHANGED; }
@@ -141,75 +140,38 @@ private:
 
     virtual void Realize() override { m_toolbook->GetToolBar()->Realize(); }
 
-    CPPUNIT_TEST_SUITE( ToolbookTestCase );
-        wxBOOK_CTRL_BASE_TESTS();
-        CPPUNIT_TEST( ToolBar );
-        CPPUNIT_TEST( VetoRestoresToolById );
-        CPPUNIT_TEST( BitmapLookupReentryIsPrePublication );
-        CPPUNIT_TEST( BitmapLookupSameCandidateIsConsumed );
-        CPPUNIT_TEST( InsertHideReentryKeepsOwnership );
-        CPPUNIT_TEST( EmptyRealizeKeepsNoSelection );
-#ifdef __WXWINUI__
-        CPPUNIT_TEST( ControllerFailureIsAtomic );
-        CPPUNIT_TEST( LoadedTopologyReentryIsRejected );
-        CPPUNIT_TEST( LoadedSelectionReentryProjectsRadio );
-        CPPUNIT_TEST( PageTextProjectsImmediately );
-        CPPUNIT_TEST( DuplicatePageIdsUsePositionalController );
-#endif
-    CPPUNIT_TEST_SUITE_END();
-
-    void ToolBar();
-    void VetoRestoresToolById();
-    void BitmapLookupReentryIsPrePublication();
-    void BitmapLookupSameCandidateIsConsumed();
-    void InsertHideReentryKeepsOwnership();
-    void EmptyRealizeKeepsNoSelection();
-#ifdef __WXWINUI__
-    void ControllerFailureIsAtomic();
-    void LoadedTopologyReentryIsRejected();
-    void LoadedSelectionReentryProjectsRadio();
-    void PageTextProjectsImmediately();
-    void DuplicatePageIdsUsePositionalController();
-#endif
-
-    ToolbookForTesting *m_toolbook;
+    std::unique_ptr<ToolbookForTesting> m_toolbook;
 
     wxDECLARE_NO_COPY_CLASS(ToolbookTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ToolbookTestCase );
+wxBOOK_CTRL_BASE_TESTS(ToolbookTestCase, "Toolbook",
+                       "[toolbook][book][ToolbookTestCase]");
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ToolbookTestCase, "ToolbookTestCase" );
-
-void ToolbookTestCase::setUp()
+ToolbookTestCase::ToolbookTestCase()
 {
-    m_toolbook = new ToolbookForTesting(
+    m_toolbook = make_unique<ToolbookForTesting>(
         wxTheApp->GetTopWindow(), wxID_ANY,
         wxDefaultPosition, wxSize(400, 200));
     AddPanels();
 }
 
-void ToolbookTestCase::tearDown()
-{
-    wxDELETE(m_toolbook);
-}
 
-void ToolbookTestCase::ToolBar()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::ToolBar", "[toolbook][ToolbookTestCase]")
 {
     wxToolBar* toolbar = static_cast<wxToolBar*>(m_toolbook->GetToolBar());
 
-    CPPUNIT_ASSERT(toolbar);
-    CPPUNIT_ASSERT_EQUAL(3, toolbar->GetToolsCount());
+    CHECK(toolbar);
+    CHECK(toolbar->GetToolsCount() == 3);
 }
 
-void ToolbookTestCase::VetoRestoresToolById()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::VetoRestoresToolById",
+                 "[toolbook][ToolbookTestCase]")
 {
     wxToolBar* const toolbar =
         static_cast<wxToolBar*>(m_toolbook->GetToolBar());
-    CPPUNIT_ASSERT(toolbar);
-    CPPUNIT_ASSERT(m_panel1->GetId() != 0);
+    REQUIRE(toolbar);
+    REQUIRE(m_panel1->GetId() != 0);
 
     m_toolbook->SetSelection(0);
     toolbar->Realize();
@@ -225,14 +187,15 @@ void ToolbookTestCase::VetoRestoresToolById()
 
     m_toolbook->SelectToolForTesting(m_panel2->GetId());
 
-    CPPUNIT_ASSERT_EQUAL(0, m_toolbook->GetSelection());
-    CPPUNIT_ASSERT(toolbar->GetToolState(m_panel1->GetId()));
-    CPPUNIT_ASSERT(!toolbar->GetToolState(m_panel2->GetId()));
+    REQUIRE(m_toolbook->GetSelection() == 0);
+    REQUIRE(toolbar->GetToolState(m_panel1->GetId()));
+    REQUIRE(!toolbar->GetToolState(m_panel2->GetId()));
 }
 
-void ToolbookTestCase::BitmapLookupReentryIsPrePublication()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::BitmapLookupReentryIsPrePublication",
+                 "[toolbook][ToolbookTestCase]")
 {
-    ToolbookForTesting* const book = m_toolbook;
+    ToolbookForTesting* const book = m_toolbook.get();
     wxWindow* const removedPage = book->GetPage(2);
     wxPanel* const candidate = new wxPanel(book);
     ReentrantImageList* const images =
@@ -249,26 +212,26 @@ void ToolbookTestCase::BitmapLookupReentryIsPrePublication()
             if ( !nested )
             {
                 nested = true;
-                CPPUNIT_ASSERT(book->RemovePage(2));
+                REQUIRE(book->RemovePage(2));
             }
         });
 
     const bool inserted =
         book->InsertPage(1, candidate, "pre-publication reentry", false, 0);
 
-    CPPUNIT_ASSERT(nested);
-    CPPUNIT_ASSERT(!inserted);
-    CPPUNIT_ASSERT(book->FindPage(candidate) == wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(book->GetPageCount(),
-                         book->GetToolBar()->GetToolsCount());
+    REQUIRE(nested);
+    REQUIRE(!inserted);
+    REQUIRE(book->FindPage(candidate) == wxNOT_FOUND);
+    REQUIRE(book->GetToolBar()->GetToolsCount() == book->GetPageCount());
 
     delete removedPage;
     delete candidate;
 }
 
-void ToolbookTestCase::BitmapLookupSameCandidateIsConsumed()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::BitmapLookupSameCandidateIsConsumed",
+                 "[toolbook][ToolbookTestCase]")
 {
-    ToolbookForTesting* const book = m_toolbook;
+    ToolbookForTesting* const book = m_toolbook.get();
     wxPanel* const candidate = new wxPanel(book);
     ReentrantImageList* const images = new ReentrantImageList(32, 32);
     images->Add(wxArtProvider::GetIcon(
@@ -283,17 +246,16 @@ void ToolbookTestCase::BitmapLookupSameCandidateIsConsumed()
             if ( !nested )
             {
                 nested = true;
-                CPPUNIT_ASSERT(book->AddPage(
+                REQUIRE(book->AddPage(
                     candidate, "nested candidate", false, 0));
             }
         });
 
-    CPPUNIT_ASSERT(book->InsertPage(
+    REQUIRE(book->InsertPage(
         1, candidate, "outer candidate", false, 0));
-    CPPUNIT_ASSERT(nested);
-    CPPUNIT_ASSERT(book->FindPage(candidate) != wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(book->GetPageCount(),
-                         book->GetToolBar()->GetToolsCount());
+    REQUIRE(nested);
+    REQUIRE(book->FindPage(candidate) != wxNOT_FOUND);
+    REQUIRE(book->GetToolBar()->GetToolsCount() == book->GetPageCount());
 
     size_t occurrences = 0;
     for ( size_t i = 0; i < book->GetPageCount(); ++i )
@@ -301,12 +263,13 @@ void ToolbookTestCase::BitmapLookupSameCandidateIsConsumed()
         if ( book->GetPage(i) == candidate )
             ++occurrences;
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), occurrences);
+    REQUIRE(occurrences == static_cast<size_t>(1));
 }
 
-void ToolbookTestCase::InsertHideReentryKeepsOwnership()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::InsertHideReentryKeepsOwnership",
+                 "[toolbook][ToolbookTestCase]")
 {
-    ToolbookForTesting* const book = m_toolbook;
+    ToolbookForTesting* const book = m_toolbook.get();
     wxPanel* const candidate = new wxPanel(book);
     bool nested = false;
     book->SetShowHook(
@@ -322,34 +285,35 @@ void ToolbookTestCase::InsertHideReentryKeepsOwnership()
     const bool inserted =
         book->InsertPage(1, candidate, "reentrant insertion");
 
-    CPPUNIT_ASSERT(nested);
-    CPPUNIT_ASSERT(inserted);
-    CPPUNIT_ASSERT_EQUAL(2, book->GetSelection());
-    CPPUNIT_ASSERT(book->FindPage(candidate) == 1);
-    CPPUNIT_ASSERT(!candidate->IsShown());
-    CPPUNIT_ASSERT_EQUAL(book->GetPageCount(),
-                         book->GetToolBar()->GetToolsCount());
+    REQUIRE(nested);
+    REQUIRE(inserted);
+    REQUIRE(book->GetSelection() == 2);
+    REQUIRE(book->FindPage(candidate) == 1);
+    REQUIRE(!candidate->IsShown());
+    REQUIRE(book->GetToolBar()->GetToolsCount() == book->GetPageCount());
 }
 
-void ToolbookTestCase::EmptyRealizeKeepsNoSelection()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::EmptyRealizeKeepsNoSelection",
+                 "[toolbook][ToolbookTestCase]")
 {
     wxToolbook* const empty = new wxToolbook(
         wxTheApp->GetTopWindow(), wxID_ANY,
         wxDefaultPosition, wxSize(200, 100));
 
     empty->Realize();
-    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, empty->GetSelection());
+    REQUIRE(empty->GetSelection() == wxNOT_FOUND);
 
     delete empty;
 }
 
 #ifdef __WXWINUI__
 
-void ToolbookTestCase::ControllerFailureIsAtomic()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::ControllerFailureIsAtomic",
+                 "[toolbook][ToolbookTestCase]")
 {
     wxToolBar* const toolbar =
         static_cast<wxToolBar*>(m_toolbook->GetToolBar());
-    CPPUNIT_ASSERT(toolbar);
+    REQUIRE(toolbar);
     m_toolbook->Realize();
 
     const int selection = m_toolbook->GetSelection();
@@ -358,17 +322,17 @@ void ToolbookTestCase::ControllerFailureIsAtomic()
         pages.push_back(m_toolbook->GetPage(i));
 
     toolbar->WinUIFailNextRebuildForTesting();
-    CPPUNIT_ASSERT(!m_toolbook->RemovePage(1));
-    CPPUNIT_ASSERT_EQUAL(pages.size(), m_toolbook->GetPageCount());
-    CPPUNIT_ASSERT_EQUAL(pages.size(), toolbar->GetToolsCount());
-    CPPUNIT_ASSERT_EQUAL(selection, m_toolbook->GetSelection());
+    REQUIRE(!m_toolbook->RemovePage(1));
+    REQUIRE(m_toolbook->GetPageCount() == pages.size());
+    REQUIRE(toolbar->GetToolsCount() == pages.size());
+    REQUIRE(m_toolbook->GetSelection() == selection);
     for ( size_t i = 0; i < pages.size(); ++i )
-        CPPUNIT_ASSERT(m_toolbook->GetPage(i) == pages[i]);
+        REQUIRE(m_toolbook->GetPage(i) == pages[i]);
 
     wxWindow* const removed = pages[1];
-    CPPUNIT_ASSERT(m_toolbook->RemovePage(1));
-    CPPUNIT_ASSERT_EQUAL(pages.size() - 1, m_toolbook->GetPageCount());
-    CPPUNIT_ASSERT_EQUAL(pages.size() - 1, toolbar->GetToolsCount());
+    REQUIRE(m_toolbook->RemovePage(1));
+    REQUIRE(m_toolbook->GetPageCount() == pages.size() - 1);
+    REQUIRE(toolbar->GetToolsCount() == pages.size() - 1);
     delete removed;
 
     pages.clear();
@@ -377,51 +341,48 @@ void ToolbookTestCase::ControllerFailureIsAtomic()
     const int selectionBeforeDeleteAll = m_toolbook->GetSelection();
 
     toolbar->WinUIFailNextRebuildForTesting();
-    CPPUNIT_ASSERT(!m_toolbook->DeleteAllPages());
-    CPPUNIT_ASSERT_EQUAL(pages.size(), m_toolbook->GetPageCount());
-    CPPUNIT_ASSERT_EQUAL(pages.size(), toolbar->GetToolsCount());
-    CPPUNIT_ASSERT_EQUAL(selectionBeforeDeleteAll,
-                         m_toolbook->GetSelection());
+    REQUIRE(!m_toolbook->DeleteAllPages());
+    REQUIRE(m_toolbook->GetPageCount() == pages.size());
+    REQUIRE(toolbar->GetToolsCount() == pages.size());
+    REQUIRE(m_toolbook->GetSelection() == selectionBeforeDeleteAll);
     for ( size_t i = 0; i < pages.size(); ++i )
-        CPPUNIT_ASSERT(m_toolbook->GetPage(i) == pages[i]);
+        REQUIRE(m_toolbook->GetPage(i) == pages[i]);
 
     // A qualified base call must still dispatch through the historical
     // DoRemovePage() slot. This is the ABI-stable path which avoids adding a
     // fallible bulk-clear hook to wxBookCtrlBase's vtable.
     toolbar->WinUIFailNextRebuildForTesting();
-    CPPUNIT_ASSERT(
+    REQUIRE(
         !m_toolbook->wxBookCtrlBase::DeleteAllPages());
-    CPPUNIT_ASSERT_EQUAL(pages.size(), m_toolbook->GetPageCount());
-    CPPUNIT_ASSERT_EQUAL(pages.size(), toolbar->GetToolsCount());
-    CPPUNIT_ASSERT_EQUAL(selectionBeforeDeleteAll,
-                         m_toolbook->GetSelection());
+    REQUIRE(m_toolbook->GetPageCount() == pages.size());
+    REQUIRE(toolbar->GetToolsCount() == pages.size());
+    REQUIRE(m_toolbook->GetSelection() == selectionBeforeDeleteAll);
     for ( size_t i = 0; i < pages.size(); ++i )
-        CPPUNIT_ASSERT(m_toolbook->GetPage(i) == pages[i]);
+        REQUIRE(m_toolbook->GetPage(i) == pages[i]);
 
-    CPPUNIT_ASSERT(
+    REQUIRE(
         m_toolbook->wxBookCtrlBase::DeleteAllPages());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                         m_toolbook->GetPageCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0),
-                         toolbar->GetToolsCount());
+    REQUIRE(m_toolbook->GetPageCount() == static_cast<size_t>(0));
+    REQUIRE(toolbar->GetToolsCount() == static_cast<size_t>(0));
 }
 
-void ToolbookTestCase::LoadedSelectionReentryProjectsRadio()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::LoadedSelectionReentryProjectsRadio",
+                 "[toolbook][ToolbookTestCase]")
 {
     wxToolBar* const toolbar =
         static_cast<wxToolBar*>(m_toolbook->GetToolBar());
-    CPPUNIT_ASSERT(toolbar);
+    REQUIRE(toolbar);
     m_toolbook->Realize();
 
     ToolbookLoadedSelectionProbe probe;
-    probe.book = m_toolbook;
+    probe.book = m_toolbook.get();
     // Select the candidate itself. Its XAML peer is provisional in Loaded,
     // while wxToolBarBase publishes its wrapper only after DoInsertTool().
     probe.selection = 1;
     toolbar->WinUISetNextRebuildLoadedHookForTesting(
         &ChangeToolbookSelectionDuringLoaded, &probe);
 
-    wxPanel* const candidate = new wxPanel(m_toolbook);
+    wxPanel* const candidate = new wxPanel(m_toolbook.get());
     bool changedEventObserved = false;
     m_toolbook->Bind(
         wxEVT_TOOLBOOK_PAGE_CHANGED,
@@ -435,56 +396,52 @@ void ToolbookTestCase::LoadedSelectionReentryProjectsRadio()
             }
 
             changedEventObserved = true;
-            CPPUNIT_ASSERT_EQUAL(
-                m_toolbook->GetPageCount(),
-                toolbar->GetToolsCount());
+            REQUIRE(toolbar->GetToolsCount() == m_toolbook->GetPageCount());
             wxWinUIToolPeerSnapshot candidateSnapshot;
-            CPPUNIT_ASSERT(
+            REQUIRE(
                 toolbar->WinUIGetToolPeerStateForTesting(
                     candidate->GetId(), &candidateSnapshot));
-            CPPUNIT_ASSERT(candidateSnapshot.toggled);
+            REQUIRE(candidateSnapshot.toggled);
             event.Skip();
         });
-    CPPUNIT_ASSERT(
+    REQUIRE(
         m_toolbook->InsertPage(1, candidate, "loaded-selection"));
-    CPPUNIT_ASSERT(probe.invoked);
-    CPPUNIT_ASSERT(changedEventObserved);
-    CPPUNIT_ASSERT_EQUAL(1, m_toolbook->GetSelection());
+    REQUIRE(probe.invoked);
+    REQUIRE(changedEventObserved);
+    REQUIRE(m_toolbook->GetSelection() == 1);
 
     for ( size_t i = 0; i < m_toolbook->GetPageCount(); ++i )
     {
         wxWinUIToolPeerSnapshot snapshot;
-        CPPUNIT_ASSERT(toolbar->WinUIGetToolPeerStateForTesting(
+        REQUIRE(toolbar->WinUIGetToolPeerStateForTesting(
             m_toolbook->GetPage(i)->GetId(), &snapshot));
         const bool selected =
             i == static_cast<size_t>(m_toolbook->GetSelection());
-        CPPUNIT_ASSERT_EQUAL(selected, snapshot.toggled);
+        REQUIRE(snapshot.toggled == selected);
     }
 }
 
-void ToolbookTestCase::PageTextProjectsImmediately()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::PageTextProjectsImmediately",
+                 "[toolbook][ToolbookTestCase]")
 {
     wxToolBar* const toolbar =
         static_cast<wxToolBar*>(m_toolbook->GetToolBar());
-    CPPUNIT_ASSERT(toolbar);
+    REQUIRE(toolbar);
     m_toolbook->Realize();
 
     const int pageId = m_toolbook->GetPage(1)->GetId();
-    CPPUNIT_ASSERT(
+    REQUIRE(
         m_toolbook->SetPageText(1, "projected immediately"));
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("projected immediately"),
-        m_toolbook->GetPageText(1));
+    REQUIRE(m_toolbook->GetPageText(1) == wxString("projected immediately"));
 
     wxWinUIToolPeerSnapshot snapshot;
-    CPPUNIT_ASSERT(
+    REQUIRE(
         toolbar->WinUIGetToolPeerStateForTesting(pageId, &snapshot));
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("projected immediately"),
-        snapshot.automationName);
+    REQUIRE(snapshot.automationName == wxString("projected immediately"));
 }
 
-void ToolbookTestCase::DuplicatePageIdsUsePositionalController()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::DuplicatePageIdsUsePositionalController",
+                 "[toolbook][ToolbookTestCase]")
 {
     constexpr int duplicateId = 7341;
     ToolbookForTesting book(
@@ -495,66 +452,65 @@ void ToolbookTestCase::DuplicatePageIdsUsePositionalController()
 
     wxImageList* const images = new wxImageList(16, 16);
     wxBitmap bitmap(16, 16);
-    CPPUNIT_ASSERT(bitmap.IsOk());
-    CPPUNIT_ASSERT(images->Add(bitmap) != wxNOT_FOUND);
+    REQUIRE(bitmap.IsOk());
+    REQUIRE(images->Add(bitmap) != wxNOT_FOUND);
     book.AssignImageList(images);
 
-    CPPUNIT_ASSERT(book.AddPage(first, "first", true));
-    CPPUNIT_ASSERT(book.AddPage(second, "second"));
+    REQUIRE(book.AddPage(first, "first", true));
+    REQUIRE(book.AddPage(second, "second"));
     book.Realize();
 
     wxToolBarBase* const toolbar = book.GetToolBar();
-    CPPUNIT_ASSERT(toolbar);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2),
-                         toolbar->GetToolsCount());
+    REQUIRE(toolbar);
+    REQUIRE(toolbar->GetToolsCount() == static_cast<size_t>(2));
     wxToolBarToolBase* const firstTool = toolbar->GetToolByPos(0);
     wxToolBarToolBase* const secondTool = toolbar->GetToolByPos(1);
-    CPPUNIT_ASSERT(firstTool);
-    CPPUNIT_ASSERT(secondTool);
-    CPPUNIT_ASSERT(firstTool != secondTool);
+    REQUIRE(firstTool);
+    REQUIRE(secondTool);
+    REQUIRE(firstTool != secondTool);
 
-    CPPUNIT_ASSERT(book.SetPageText(1, "second-exact"));
-    CPPUNIT_ASSERT_EQUAL(wxString("first"), firstTool->GetLabel());
-    CPPUNIT_ASSERT_EQUAL(wxString("second-exact"), secondTool->GetLabel());
-    CPPUNIT_ASSERT_EQUAL(wxString("second-exact"), book.GetPageText(1));
+    REQUIRE(book.SetPageText(1, "second-exact"));
+    REQUIRE(firstTool->GetLabel() == wxString("first"));
+    REQUIRE(secondTool->GetLabel() == wxString("second-exact"));
+    REQUIRE(book.GetPageText(1) == wxString("second-exact"));
 
     book.ChangeSelection(1);
-    CPPUNIT_ASSERT(!firstTool->IsToggled());
-    CPPUNIT_ASSERT(secondTool->IsToggled());
+    REQUIRE(!firstTool->IsToggled());
+    REQUIRE(secondTool->IsToggled());
 
-    CPPUNIT_ASSERT(book.EnablePage(1, false));
-    CPPUNIT_ASSERT(firstTool->IsEnabled());
-    CPPUNIT_ASSERT(!secondTool->IsEnabled());
+    REQUIRE(book.EnablePage(1, false));
+    REQUIRE(firstTool->IsEnabled());
+    REQUIRE(!secondTool->IsEnabled());
 
-    CPPUNIT_ASSERT(!firstTool->GetNormalBitmapBundle().IsOk());
-    CPPUNIT_ASSERT(book.SetPageImage(1, 0));
-    CPPUNIT_ASSERT(!firstTool->GetNormalBitmapBundle().IsOk());
-    CPPUNIT_ASSERT(secondTool->GetNormalBitmapBundle().IsOk());
+    REQUIRE(!firstTool->GetNormalBitmapBundle().IsOk());
+    REQUIRE(book.SetPageImage(1, 0));
+    REQUIRE(!firstTool->GetNormalBitmapBundle().IsOk());
+    REQUIRE(secondTool->GetNormalBitmapBundle().IsOk());
 }
 
-void ToolbookTestCase::LoadedTopologyReentryIsRejected()
+TEST_CASE_METHOD(ToolbookTestCase, "Toolbook::LoadedTopologyReentryIsRejected",
+                 "[toolbook][ToolbookTestCase]")
 {
     wxToolBar* const toolbar =
         static_cast<wxToolBar*>(m_toolbook->GetToolBar());
-    CPPUNIT_ASSERT(toolbar);
+    REQUIRE(toolbar);
     m_toolbook->Realize();
 
     wxWindow* const removed = m_toolbook->GetPage(0);
-    wxPanel* const candidate = new wxPanel(m_toolbook);
+    wxPanel* const candidate = new wxPanel(m_toolbook.get());
     ToolbookLoadedTopologyProbe probe;
-    probe.book = m_toolbook;
+    probe.book = m_toolbook.get();
     probe.candidate = candidate;
     toolbar->WinUISetNextRebuildLoadedHookForTesting(
         &MutateToolbookTopologyDuringLoaded, &probe);
 
-    CPPUNIT_ASSERT(m_toolbook->RemovePage(0));
-    CPPUNIT_ASSERT(probe.invoked);
-    CPPUNIT_ASSERT(!probe.nestedRemove);
-    CPPUNIT_ASSERT(!probe.nestedAdd);
-    CPPUNIT_ASSERT(!probe.nestedDeleteAll);
-    CPPUNIT_ASSERT(m_toolbook->FindPage(candidate) == wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(m_toolbook->GetPageCount(),
-                         toolbar->GetToolsCount());
+    REQUIRE(m_toolbook->RemovePage(0));
+    REQUIRE(probe.invoked);
+    REQUIRE(!probe.nestedRemove);
+    REQUIRE(!probe.nestedAdd);
+    REQUIRE(!probe.nestedDeleteAll);
+    REQUIRE(m_toolbook->FindPage(candidate) == wxNOT_FOUND);
+    REQUIRE(toolbar->GetToolsCount() == m_toolbook->GetPageCount());
 
     delete removed;
     delete candidate;

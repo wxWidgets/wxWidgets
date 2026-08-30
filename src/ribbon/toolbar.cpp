@@ -806,6 +806,8 @@ bool wxRibbonToolBar::Realize()
             tool->size = m_art->GetToolSize(temp_dc, this,
                 tool->bitmap.GetPreferredLogicalSizeFor(this), tool->kind, t == 0,
                 t == (tool_count - 1), &tool->dropdown);
+            // reset first and last state
+            tool->state &= ~wxRIBBON_TOOLBAR_TOOL_POSITION_MASK;
             if(t == 0)
                 tool->state |= wxRIBBON_TOOLBAR_TOOL_FIRST;
             if(t == tool_count - 1)

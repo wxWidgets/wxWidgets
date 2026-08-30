@@ -55,25 +55,16 @@ struct StringConversionData
 
             if ( wcs )
             {
-                CPPUNIT_ASSERT_MESSAGE
-                (
-                    Message(n, "MB2WC failed"),
-                    wbuf.data()
-                );
+                INFO(Message(n, "MB2WC failed"));
+                CHECK(wbuf.data());
 
-                CPPUNIT_ASSERT_MESSAGE
-                (
-                    Message(n, "MB2WC", wbuf, wcs),
-                    wxStrcmp(wbuf, wcs) == 0
-                );
+                INFO(Message(n, "MB2WC", wbuf, wcs));
+                CHECK(wxStrcmp(wbuf, wcs) == 0);
             }
             else // conversion is supposed to fail
             {
-                CPPUNIT_ASSERT_MESSAGE
-                (
-                    Message(n, "MB2WC succeeded"),
-                    !wbuf.data()
-                );
+                INFO(Message(n, "MB2WC succeeded"));
+                CHECK(!wbuf.data());
             }
         }
 
@@ -83,25 +74,16 @@ struct StringConversionData
 
             if ( str )
             {
-                CPPUNIT_ASSERT_MESSAGE
-                (
-                    Message(n, "WC2MB failed"),
-                    buf.data()
-                );
+                INFO(Message(n, "WC2MB failed"));
+                CHECK(buf.data());
 
-                CPPUNIT_ASSERT_MESSAGE
-                (
-                    Message(n, "WC2MB", buf, str),
-                    strcmp(buf, str) == 0
-                );
+                INFO(Message(n, "WC2MB", buf, str));
+                CHECK(strcmp(buf, str) == 0);
             }
             else
             {
-                CPPUNIT_ASSERT_MESSAGE
-                (
-                    Message(n, "WC2MB succeeded"),
-                    !buf.data()
-                );
+                INFO(Message(n, "WC2MB succeeded"));
+                CHECK(!buf.data());
             }
         }
     }
@@ -127,67 +109,24 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// test class
+// tests
 // ----------------------------------------------------------------------------
 
-class UnicodeTestCase : public CppUnit::TestCase
-{
-public:
-    UnicodeTestCase();
-
-private:
-    CPPUNIT_TEST_SUITE( UnicodeTestCase );
-        CPPUNIT_TEST( ToFromAscii );
-        CPPUNIT_TEST( ConstructorsWithConversion );
-        CPPUNIT_TEST( ConversionFixed );
-        CPPUNIT_TEST( ConversionWithNULs );
-        CPPUNIT_TEST( ConversionUTF7 );
-        CPPUNIT_TEST( ConversionUTF8 );
-        CPPUNIT_TEST( ConversionUTF16 );
-        CPPUNIT_TEST( ConversionUTF32 );
-        CPPUNIT_TEST( IsConvOk );
-        CPPUNIT_TEST( Iteration );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ToFromAscii();
-    void ConstructorsWithConversion();
-    void ConversionFixed();
-    void ConversionWithNULs();
-    void ConversionUTF7();
-    void ConversionUTF8();
-    void ConversionUTF16();
-    void ConversionUTF32();
-    void IsConvOk();
-    void Iteration();
-
-    wxDECLARE_NO_COPY_CLASS(UnicodeTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( UnicodeTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( UnicodeTestCase, "UnicodeTestCase" );
-
-UnicodeTestCase::UnicodeTestCase()
-{
-}
-
-void UnicodeTestCase::ToFromAscii()
+TEST_CASE("Unicode::ToFromAscii", "[unicode]")
 {
 
-#define TEST_TO_FROM_ASCII(txt)                              \
-    {                                                        \
-        static const char *msg = txt;                        \
-        wxString s = wxString::FromAscii(msg);               \
-        CPPUNIT_ASSERT( strcmp( s.ToAscii() , msg ) == 0 );  \
+#define TEST_TO_FROM_ASCII(txt)                    \
+    {                                              \
+        static const char *msg = txt;              \
+        wxString s = wxString::FromAscii(msg);     \
+        CHECK( strcmp( s.ToAscii() , msg ) == 0 ); \
     }
 
     TEST_TO_FROM_ASCII( "Hello, world!" );
     TEST_TO_FROM_ASCII( "additional \" special \t test \\ component \n :-)" );
 }
 
-void UnicodeTestCase::ConstructorsWithConversion()
+TEST_CASE("Unicode::ConstructorsWithConversion", "[unicode]")
 {
     const unsigned char utf8Buf[] = "Déjà";
     const unsigned char utf8subBuf[] = "Déj";
@@ -197,73 +136,73 @@ void UnicodeTestCase::ConstructorsWithConversion()
     wxString s1(utf8, wxConvUTF8);
 
     const wchar_t wchar[] = {0x44,0xE9,0x6A,0xE0,0};
-    CPPUNIT_ASSERT_EQUAL( wchar, s1 );
+    CHECK( s1 == wchar );
 
     wxString s2(wchar);
-    CPPUNIT_ASSERT_EQUAL( wchar, s2 );
-    CPPUNIT_ASSERT_EQUAL( wxString::FromUTF8(utf8), s2 );
+    CHECK( s2 == wchar );
+    CHECK( s2 == wxString::FromUTF8(utf8) );
 
     wxString sub(utf8sub, wxConvUTF8); // "Dej" substring
     wxString s3(utf8, wxConvUTF8, 4);
-    CPPUNIT_ASSERT_EQUAL( sub, s3 );
+    CHECK( s3 == sub );
 
     wxString s4(wchar, 3);
-    CPPUNIT_ASSERT_EQUAL( sub, s4 );
+    CHECK( s4 == sub );
 
     // conversion should stop with failure at pos 35
     wxString s("\t[pl]open.format.Sformatuj dyskietk\xea=gfloppy %f", wxConvUTF8);
-    CPPUNIT_ASSERT( s.empty() );
+    CHECK( s.empty() );
 
 
     // test using Unicode strings together with char* strings (this must work
     // in ANSI mode as well, of course):
     wxString s5("ascii");
-    CPPUNIT_ASSERT_EQUAL( "ascii", s5 );
+    CHECK( s5 == "ascii" );
 
     s5 += " value";
 
-    CPPUNIT_ASSERT( strcmp(s5.mb_str(), "ascii value") == 0 );
-    CPPUNIT_ASSERT_EQUAL( "ascii value", s5 );
-    CPPUNIT_ASSERT( s5 != "SomethingElse" );
+    CHECK( strcmp(s5.mb_str(), "ascii value") == 0 );
+    CHECK( s5 == "ascii value" );
+    CHECK( s5 != "SomethingElse" );
 }
 
-void UnicodeTestCase::ConversionFixed()
+TEST_CASE("Unicode::ConversionFixed", "[unicode]")
 {
     size_t len;
 
     wxConvLibc.cWC2MB(L"", 0, &len);
 
-    CPPUNIT_ASSERT_EQUAL( 0, len );
+    CHECK( len == 0 );
 
     // check that when we convert a fixed number of characters we obtain the
     // expected return value
-    CPPUNIT_ASSERT_EQUAL( 0, wxConvLibc.ToWChar(nullptr, 0, "", 0) );
-    CPPUNIT_ASSERT_EQUAL( 1, wxConvLibc.ToWChar(nullptr, 0, "x", 1) );
-    CPPUNIT_ASSERT_EQUAL( 2, wxConvLibc.ToWChar(nullptr, 0, "x", 2) );
-    CPPUNIT_ASSERT_EQUAL( 2, wxConvLibc.ToWChar(nullptr, 0, "xy", 2) );
+    CHECK( wxConvLibc.ToWChar(nullptr, 0, "", 0) == 0 );
+    CHECK( wxConvLibc.ToWChar(nullptr, 0, "x", 1) == 1 );
+    CHECK( wxConvLibc.ToWChar(nullptr, 0, "x", 2) == 2 );
+    CHECK( wxConvLibc.ToWChar(nullptr, 0, "xy", 2) == 2 );
 }
 
-void UnicodeTestCase::ConversionWithNULs()
+TEST_CASE("Unicode::ConversionWithNULs", "[unicode]")
 {
     static const size_t lenNulString = 10;
 
     wxString szTheString(L"The\0String", lenNulString);
     wxCharBuffer theBuffer = szTheString.mb_str(wxConvLibc);
 
-    CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String",
+    CHECK( memcmp(theBuffer.data(), "The\0String",
                     lenNulString + 1) == 0 );
 
     wxString szTheString2("The\0String", wxConvLocal, lenNulString);
-    CPPUNIT_ASSERT_EQUAL( lenNulString, szTheString2.length() );
-    CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String",
+    CHECK( szTheString2.length() == lenNulString );
+    CHECK( wxTmemcmp(szTheString2.c_str(), L"The\0String",
                     lenNulString) == 0 );
 
     const char *null4buff = "\0\0\0\0";
     wxString null4str(null4buff, 4);
-    CPPUNIT_ASSERT_EQUAL( 4, null4str.length() );
+    CHECK( null4str.length() == 4 );
 }
 
-void UnicodeTestCase::ConversionUTF7()
+TEST_CASE("Unicode::ConversionUTF7", "[unicode]")
 {
     static const StringConversionData utf7data[] =
     {
@@ -306,7 +245,7 @@ void UnicodeTestCase::ConversionUTF7()
     }
 }
 
-void UnicodeTestCase::ConversionUTF8()
+TEST_CASE("Unicode::ConversionUTF8", "[unicode]")
 {
     static const StringConversionData utf8data[] =
     {
@@ -327,21 +266,21 @@ void UnicodeTestCase::ConversionUTF8()
 
     static const char* const u25a6 = "\xe2\x96\xa6";
     wxMBConvUTF8 c(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
-    CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(nullptr, 0, u25a6, wxNO_LEN) );
-    CPPUNIT_ASSERT_EQUAL( 0, c.ToWChar(nullptr, 0, u25a6, 0) );
-    CPPUNIT_ASSERT_EQUAL( 1, c.ToWChar(nullptr, 0, u25a6, 3) );
-    CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(nullptr, 0, u25a6, 4) );
+    CHECK( c.ToWChar(nullptr, 0, u25a6, wxNO_LEN) == 2 );
+    CHECK( c.ToWChar(nullptr, 0, u25a6, 0) == 0 );
+    CHECK( c.ToWChar(nullptr, 0, u25a6, 3) == 1 );
+    CHECK( c.ToWChar(nullptr, 0, u25a6, 4) == 2 );
 
     // Verify that converting a string with embedded NULs works.
-    CPPUNIT_ASSERT_EQUAL( 5, wxString::FromUTF8("abc\0\x32", 5).length() );
+    CHECK( wxString::FromUTF8("abc\0\x32", 5).length() == 5 );
 
     // Verify that converting a string containing invalid UTF-8 does not work,
     // even if it happens after an embedded NUL.
-    CPPUNIT_ASSERT( wxString::FromUTF8("abc\xff").empty() );
-    CPPUNIT_ASSERT( wxString::FromUTF8("abc\0\xff", 5).empty() );
+    CHECK( wxString::FromUTF8("abc\xff").empty() );
+    CHECK( wxString::FromUTF8("abc\0\xff", 5).empty() );
 }
 
-void UnicodeTestCase::ConversionUTF16()
+TEST_CASE("Unicode::ConversionUTF16", "[unicode]")
 {
     static const StringConversionData utf16data[] =
     {
@@ -368,7 +307,7 @@ void UnicodeTestCase::ConversionUTF16()
     // got confused in this case
     size_t len;
     conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len);
-    CPPUNIT_ASSERT_EQUAL( 3, len );
+    CHECK( len == 3 );
 
     // When using UTF-16 internally (i.e. MSW), we don't have any surrogate
     // support, so the length of the string below is 2, not 1.
@@ -376,7 +315,7 @@ void UnicodeTestCase::ConversionUTF16()
     // Another one: verify that the length of the resulting string is computed
     // correctly when there is a surrogate in the input.
     wxMBConvUTF16BE().cMB2WC("\xd8\x03\xdc\x01\0" /* OLD TURKIC LETTER YENISEI A */, wxNO_LEN, &len);
-    CPPUNIT_ASSERT_EQUAL( 1, len );
+    CHECK( len == 1 );
 #endif // UTF-32 internal representation
 
 #if SIZEOF_WCHAR_T == 2
@@ -389,11 +328,11 @@ void UnicodeTestCase::ConversionUTF16()
     wchar_t ws[2];
     ws[0] = 0xd83d;
     ws[1] = 0xdc31;
-    CPPUNIT_ASSERT_EQUAL( 4, wxMBConvUTF32BE().FromWChar(nullptr, 0, ws, 2) );
+    CHECK( wxMBConvUTF32BE().FromWChar(nullptr, 0, ws, 2) == 4 );
 #endif // UTF-16 internal representation
 }
 
-void UnicodeTestCase::ConversionUTF32()
+TEST_CASE("Unicode::ConversionUTF32", "[unicode]")
 {
     static const StringConversionData utf32data[] =
     {
@@ -417,35 +356,35 @@ void UnicodeTestCase::ConversionUTF32()
 
     size_t len;
     conv.cMB2WC("\0\0\x01\0\0\0\0B\0\0\0C" /* A macron BC */, 12, &len);
-    CPPUNIT_ASSERT_EQUAL( 3, len );
+    CHECK( len == 3 );
 }
 
-void UnicodeTestCase::IsConvOk()
+TEST_CASE("Unicode::IsConvOk", "[unicode]")
 {
-    CPPUNIT_ASSERT( wxCSConv(wxFONTENCODING_SYSTEM).IsOk() );
-    CPPUNIT_ASSERT( wxCSConv("US-ASCII").IsOk() );
-    CPPUNIT_ASSERT( wxCSConv("UTF-8").IsOk() );
-    CPPUNIT_ASSERT( !wxCSConv("NoSuchConversion").IsOk() );
+    CHECK( wxCSConv(wxFONTENCODING_SYSTEM).IsOk() );
+    CHECK( wxCSConv("US-ASCII").IsOk() );
+    CHECK( wxCSConv("UTF-8").IsOk() );
+    CHECK( !wxCSConv("NoSuchConversion").IsOk() );
 
 #ifdef __WINDOWS__
-    CPPUNIT_ASSERT( wxCSConv("WINDOWS-437").IsOk() );
+    CHECK( wxCSConv("WINDOWS-437").IsOk() );
 #endif
 }
 
-void UnicodeTestCase::Iteration()
+TEST_CASE("Unicode::Iteration", "[unicode]")
 {
     static const char *textUTF8 = "čeština";// "czech" in Czech
     static const wchar_t textUTF16[] = {0x10D, 0x65, 0x161, 0x74, 0x69, 0x6E, 0x61, 0};
 
     wxString text(wxString::FromUTF8(textUTF8));
-    CPPUNIT_ASSERT( wxStrcmp(text.wc_str(), textUTF16) == 0 );
+    CHECK( wxStrcmp(text.wc_str(), textUTF16) == 0 );
 
     // verify the string was decoded correctly:
     {
         size_t idx = 0;
         for ( auto c : text )
         {
-            CPPUNIT_ASSERT( c == textUTF16[idx++] );
+            CHECK( c == textUTF16[idx++] );
         }
     }
 
@@ -465,12 +404,12 @@ void UnicodeTestCase::Iteration()
         {
             c = textUTF16[idx++];
 
-            CPPUNIT_ASSERT( end1 == text.end() );
-            CPPUNIT_ASSERT( end2 == text.end() );
+            CHECK( end1 == text.end() );
+            CHECK( end2 == text.end() );
         }
 
-        CPPUNIT_ASSERT( end1 == text.end() );
-        CPPUNIT_ASSERT( end2 == text.end() );
+        CHECK( end1 == text.end() );
+        CHECK( end2 == text.end() );
     }
 
     // and verify it again:
@@ -478,7 +417,7 @@ void UnicodeTestCase::Iteration()
         size_t idx = 0;
         for ( auto c : text )
         {
-            CPPUNIT_ASSERT( c == textUTF16[idx++] );
+            CHECK( c == textUTF16[idx++] );
         }
     }
 }

@@ -23,43 +23,28 @@
 #include "testableframe.h"
 #include "wx/uiaction.h"
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class VirtListCtrlTestCase : public CppUnit::TestCase
+class VirtListCtrlTestCase
 {
 public:
-    VirtListCtrlTestCase() { }
+    VirtListCtrlTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( VirtListCtrlTestCase );
-        CPPUNIT_TEST( UpdateSelection );
-        WXUISIM_TEST( DeselectedEvent );
-    CPPUNIT_TEST_SUITE_END();
-
-    void UpdateSelection();
-    void DeselectedEvent();
-
-    wxListCtrl *m_list;
+protected:
+    std::unique_ptr<wxListCtrl> m_list;
 
     wxDECLARE_NO_COPY_CLASS(VirtListCtrlTestCase);
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( VirtListCtrlTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VirtListCtrlTestCase, "VirtListCtrlTestCase" );
 
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
 
-void VirtListCtrlTestCase::setUp()
+VirtListCtrlTestCase::VirtListCtrlTestCase()
 {
     // Define a class overriding OnGetItemText() which must be overridden for
     // any virtual list control.
@@ -75,48 +60,44 @@ void VirtListCtrlTestCase::setUp()
 
     protected:
         virtual wxString OnGetItemText(long item, long column) const override
-        {
-            return wxString::Format("Row %ld, col %ld", item, column);
-        }
+        { return wxString::Format("Row %ld, col %ld", item, column); }
     };
 
-    m_list = new VirtListCtrl;
+    m_list = make_unique<VirtListCtrl>();
     m_list->AppendColumn("Col0");
 }
 
-void VirtListCtrlTestCase::tearDown()
-{
-    delete m_list;
-    m_list = nullptr;
-}
 
-void VirtListCtrlTestCase::UpdateSelection()
+TEST_CASE_METHOD(VirtListCtrlTestCase, "VirtListCtrl::UpdateSelection", "[listctrl][virtual]")
 {
     m_list->SetItemCount(10);
-    CPPUNIT_ASSERT_EQUAL( 0, m_list->GetSelectedItemCount() );
+    CHECK( m_list->GetSelectedItemCount() == 0 );
 
     m_list->SetItemState(7, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-    CPPUNIT_ASSERT_EQUAL( 1, m_list->GetSelectedItemCount() );
+    CHECK( m_list->GetSelectedItemCount() == 1 );
 
     m_list->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-    CPPUNIT_ASSERT_EQUAL( 2, m_list->GetSelectedItemCount() );
+    CHECK( m_list->GetSelectedItemCount() == 2 );
 
     // The item 7 is now invalid and so shouldn't be counted as selected any
     // more. Notice that under wxQt, the selection is lost/cleared when the
     // model is reset
     m_list->SetItemCount(5);
 #ifndef __WXQT__
-    CPPUNIT_ASSERT_EQUAL( 1, m_list->GetSelectedItemCount() );
+    CHECK( m_list->GetSelectedItemCount() == 1 );
 #else
-    CPPUNIT_ASSERT_EQUAL( 0, m_list->GetSelectedItemCount() );
+    CHECK( m_list->GetSelectedItemCount() == 0 );
 #endif
 }
 
-void VirtListCtrlTestCase::DeselectedEvent()
+TEST_CASE_METHOD(VirtListCtrlTestCase, "VirtListCtrl::DeselectedEvent", "[listctrl][virtual]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     m_list->SetItemCount(1);
-    wxListCtrl* const list = m_list;
+    wxListCtrl* const list = m_list.get();
 
     EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
     EventCounter deselected(list, wxEVT_LIST_ITEM_DESELECTED);
@@ -144,8 +125,8 @@ void VirtListCtrlTestCase::DeselectedEvent()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, selected.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, deselected.GetCount());
+    CHECK(selected.GetCount() == 1);
+    CHECK(deselected.GetCount() == 1);
 #endif
 }
 

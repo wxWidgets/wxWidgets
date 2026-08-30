@@ -928,7 +928,7 @@ bool wxPopupMenuWindow::ProcessKeyDown(int key)
                 break;
             }
 
-            // fall through
+            wxFALLTHROUGH;
 
         case WXK_ESCAPE:
             // close just this menu
@@ -2282,7 +2282,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
         case WXK_ALT:
             // Alt must be processed at wxWindow level too
             event.Skip();
-            // fall through
+            wxFALLTHROUGH;
 
         case WXK_ESCAPE:
             // remove the selection and give the focus away

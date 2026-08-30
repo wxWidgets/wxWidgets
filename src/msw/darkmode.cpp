@@ -796,7 +796,7 @@ HandleMenuMessage(WXLRESULT* result,
             // which is one pixel too small), so we have to draw over it here
             // to get rid of it.
             {
-                *result = w->MSWDefWindowProc(nMsg, wParam, lParam);
+                *result = w->wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 
                 HWND hwnd = GetHwndOf(w);
                 WindowHDC hdc(hwnd);
@@ -908,6 +908,250 @@ void NotifySysColorChange()
         gs_hasChanged = true;
 }
 
+// This subclass procedure draws check box controls.
+static LRESULT CALLBACK CommonDialogCheckBoxProc(HWND hwnd, UINT uMsg,
+    WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
+    DWORD_PTR WXUNUSED(dwRefData))
+{
+    switch (uMsg)
+    {
+        case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = ::BeginPaint(hwnd, &ps);
+            RECT rcClient;
+            ::GetClientRect(hwnd, &rcClient);
+
+            // Clear background.
+            AutoHBRUSH hBgBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel());
+            ::FillRect(hdc, &rcClient, hBgBrush);
+
+            // Get foreground colour
+            auto fgIdx = ::IsWindowEnabled(hwnd) ? wxSYS_COLOUR_BTNTEXT : wxSYS_COLOUR_GRAYTEXT;
+            auto fgCol = wxSystemSettings::GetColour(fgIdx).GetPixel();
+
+            // Get the box size
+            SIZE boxSize = { 13, 13 };
+            HTHEME hTheme = ::OpenThemeData(hwnd, L"BUTTON");
+            if ( hTheme )
+            {
+                ::GetThemePartSize(hTheme, hdc, BP_CHECKBOX, CBS_UNCHECKEDNORMAL,
+                    nullptr, TS_TRUE, &boxSize);
+                ::CloseThemeData(hTheme);
+            }
+
+            // Draw the box.
+            RECT rcBox = { };
+            rcBox.top = (rcClient.bottom - boxSize.cy) / 2;
+            rcBox.right = boxSize.cx;
+            rcBox.bottom = rcBox.top + boxSize.cy;
+            AutoHBRUSH hFgBrush(fgCol);
+            ::FrameRect(hdc, &rcBox, hFgBrush);
+
+            // Set the font.
+            HFONT hFont = (HFONT)::SendMessage(hwnd, WM_GETFONT, 0, 0);
+            HFONT hOldFont = (HFONT)::SelectObject(hdc, hFont);
+
+            // Draw check mark, if checked.
+            ::SetBkMode(hdc, TRANSPARENT);
+            ::SetTextColor(hdc, fgCol);
+            if ( ::SendMessage(hwnd, BM_GETCHECK, 0, 0) == BST_CHECKED )
+            {
+                // Draw a Unicode check mark character.
+                ::DrawTextW(hdc, L"\x2714", -1, &rcBox, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+            }
+
+            // Draw the text.
+            const auto text = L" " + wxGetWindowText(hwnd);
+            RECT textRect = rcClient;
+            textRect.left = boxSize.cx;
+            ::DrawTextW(hdc, text.wc_str(), -1, &textRect, DT_SINGLELINE | DT_VCENTER);
+
+            // Draw focus rectangle
+            if ( ::GetFocus() == hwnd )
+            {
+                ::SetBkColor(hdc, 0);
+                ::SetTextColor(hdc, 0xffffff);
+                textRect.left++;
+                ::DrawFocusRect(hdc, &textRect);
+            }
+
+            ::SelectObject(hdc, hOldFont);
+            ::EndPaint(hwnd, &ps);
+            return 0;
+        }
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, CommonDialogCheckBoxProc, uIdSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+// This subclass procedure draws ComboBox controls. It handles WM_DRAWITEM in
+// both the dialog and the ComboBox. The WM_DRAWITEM for a ComboBox goes to
+// the dialog, whereas the WM_DRAWITEM for the ComboLBox goes to the ComboBox.
+static LRESULT CALLBACK CommonDialogComboBoxProc(HWND hwnd, UINT uMsg,
+    WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass,
+    DWORD_PTR WXUNUSED(dwRefData))
+{
+    switch ( uMsg )
+    {
+        // For a ComboBox (ODT_COMBOBOX), draw the selected item shown at the
+        // top. For a ComboLBox (ODT_LISTBOX), draw an item in the list.
+        case WM_DRAWITEM:
+        {
+            auto dis = (DRAWITEMSTRUCT*)lParam;
+            // If this is an empty ComboLBox, do nothing.
+            if ( dis->CtlType == ODT_LISTBOX && dis->itemID == (UINT)-1 )
+                return true;
+
+            // Determine background and text colours.
+            wxSystemColour bg = wxSYS_COLOUR_WINDOW;
+            wxSystemColour fg = wxSYS_COLOUR_WINDOWTEXT;
+            bool isSelected = (dis->itemState & ODS_SELECTED) != 0;
+            bool hasFocus = (dis->itemState & ODS_FOCUS) != 0;
+            if ( dis->CtlType == ODT_COMBOBOX )
+            {
+                if ( isSelected && hasFocus )
+                {
+                    bg = wxSYS_COLOUR_HIGHLIGHT;
+                    fg = wxSYS_COLOUR_HIGHLIGHTTEXT;
+                }
+            }
+            else
+            {
+                if ( isSelected )
+                    bg = wxSYS_COLOUR_LISTBOXHIGHLIGHT;
+                else
+                    bg = wxSYS_COLOUR_LISTBOX;
+                fg = wxSYS_COLOUR_LISTBOXTEXT;
+            }
+
+            // Paint background
+            AutoHBRUSH hBrush(wxSystemSettings::GetColour(bg).GetPixel());
+            HDC hdc = dis->hDC;
+            ::FillRect(hdc, &dis->rcItem, hBrush);
+
+            // Draw text, if any.
+            if ( dis->itemID != (UINT)-1 )
+            {
+                wchar_t itemText[256] = { 0 };
+                HWND tHwnd = dis->CtlType == ODT_COMBOBOX ? dis->hwndItem : hwnd;
+                ::SendMessageW(tHwnd, CB_GETLBTEXT, dis->itemID, (LPARAM)itemText);
+                ::SetBkMode(hdc, TRANSPARENT);
+                ::SetTextColor(hdc, wxSystemSettings::GetColour(fg).GetPixel());
+                ::DrawTextW(hdc, itemText, -1, &dis->rcItem,
+                    DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
+            }
+            return true;
+        }
+
+    case WM_NCDESTROY:
+        ::RemoveWindowSubclass(hwnd, CommonDialogComboBoxProc, uIdSubclass);
+        break;
+    }
+
+    return ::DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+
+// Enable dark mode for a common dialog child control.
+static BOOL CALLBACK CommonDialogChild(HWND hwnd, LPARAM lParam)
+{
+    // Get control info.
+    const auto className = wxGetWindowClass(hwnd);
+    auto style = ::GetWindowLongPtrW(hwnd, GWL_STYLE);
+
+    if ( className == "ComboBox" )
+    {
+        // If the control is owner-draw, subclass it to draw the ComboLBox.
+        if ( style & CBS_OWNERDRAWFIXED )
+            ::SetWindowSubclass(hwnd, CommonDialogComboBoxProc, 1, 0);
+
+        // Handle the inner ComboLBox.
+        WinStruct<COMBOBOXINFO> info;
+        ::GetComboBoxInfo(hwnd, &info);
+        CommonDialogChild(info.hwndList, lParam);
+    }
+
+    // If available, apply DarkMode_DarkTheme. It makes most controls look good.
+    if ( wxCheckOsVersion(10, 0, 26200) )
+    {
+        AllowForWindow(hwnd, L"DarkMode_DarkTheme");
+        return true;
+    }
+
+    // Special handling for controls needed for older Windows versions.
+
+    if ( className == "ComboBox" )
+        AllowForWindow(hwnd, L"CFD");
+    else
+        AllowForWindow(hwnd);
+
+    if ( className == "Button" )
+    {
+        // For the button types below, the text should be white but is black.
+        // Disable theme rendering and instead rely on the colors set by
+        // handling WM_CTLCOLORSTATIC.
+        auto bs = style & BS_TYPEMASK;
+        if ( bs == BS_AUTORADIOBUTTON || bs == BS_GROUPBOX || bs == BS_RADIOBUTTON )
+        {
+            ::SetWindowTheme(hwnd, L"", L"");
+        }
+
+        // Custom draw check boxes.
+        if ( bs == BS_AUTOCHECKBOX )
+            ::SetWindowSubclass(hwnd, CommonDialogCheckBoxProc, 1, 0);
+    }
+    else if ( className == "Edit" )
+    {
+        // The border looks bad. Change it to a simple border.
+        auto exStyle = ::GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+        exStyle &= ~WS_EX_CLIENTEDGE;
+        ::SetWindowLongPtrW(hwnd, GWL_EXSTYLE, exStyle);
+        style |= WS_BORDER;
+        ::SetWindowLongPtrW(hwnd, GWL_STYLE, style);
+        ::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
+            SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+    }
+    return true;
+}
+
+UINT_PTR CALLBACK CommonDialogHookProc(HWND hwnd, UINT uiMsg, WPARAM wParam,
+    LPARAM WXUNUSED(lParam))
+{
+    if ( !IsActive() )
+        return 0;
+
+    switch ( uiMsg )
+    {
+        case WM_INITDIALOG:
+            // Enable dark for dialog window.
+            wxMSWDarkMode::ConfigureTLW(hwnd);
+            // Enable dark mode for children.
+            ::EnumChildWindows(hwnd, CommonDialogChild, 0);
+            // Subclass the dialog.
+            ::SetWindowSubclass(hwnd, CommonDialogComboBoxProc, 1, 0);
+            break;
+
+        case WM_CTLCOLORBTN:
+        case WM_CTLCOLORDLG:
+            return (INT_PTR)GetBackgroundBrush();
+
+        case WM_CTLCOLOREDIT:
+        case WM_CTLCOLORLISTBOX:
+        case WM_CTLCOLORSTATIC:
+            ::SetBkColor((HDC)wParam,
+                wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).GetPixel());
+            ::SetTextColor((HDC)wParam,
+                wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT).GetPixel());
+            return (INT_PTR)GetBackgroundBrush();
+    }
+
+    return 0;
+}
+
 bool HasDarkTheme()
 {
     return wxCheckOsVersion(10, 0, 26200);
@@ -915,8 +1159,9 @@ bool HasDarkTheme()
 
 } // namespace wxMSWDarkMode
 
-void wxMSWImpl::PaintScrollBarCorner(HWND hwnd)
+void wxMSWImpl::PaintScrollBarCorner(wxWindow* w)
 {
+    HWND hwnd = GetHwndOf(w);
     WinStruct<SCROLLBARINFO> sbiV, sbiH;
 
     if ( !::GetScrollBarInfo(hwnd, OBJID_VSCROLL, &sbiV) ||
@@ -930,12 +1175,14 @@ void wxMSWImpl::PaintScrollBarCorner(HWND hwnd)
     const RECT windowRect = wxGetWindowRect(hwnd);
 
     RECT rectToPaint;
-    rectToPaint.left = sbiV.rcScrollBar.left - windowRect.left;
-    rectToPaint.top = sbiH.rcScrollBar.top - windowRect.top;
 
-    // Constrain outer limits by exactly -1 to snap cleanly to the visual frame edge
-    rectToPaint.right = (windowRect.right - windowRect.left) - 1;
-    rectToPaint.bottom = (windowRect.bottom - windowRect.top) - 1;
+    if ( ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL )
+        rectToPaint.left = windowRect.right - sbiV.rcScrollBar.right;
+    else
+        rectToPaint.left = sbiV.rcScrollBar.left - windowRect.left;
+    rectToPaint.top = sbiH.rcScrollBar.top - windowRect.top;
+    rectToPaint.right = rectToPaint.left + wxGetSystemMetrics(SM_CXVSCROLL, w);
+    rectToPaint.bottom = rectToPaint.top + wxGetSystemMetrics(SM_CYHSCROLL, w);
 
     WindowHDC hdcWin(hwnd);
     AutoHBRUSH hBrush(RGB(0x17, 0x17, 0x17));
@@ -945,7 +1192,7 @@ void wxMSWImpl::PaintScrollBarCorner(HWND hwnd)
 #else // !wxUSE_DARK_MODE
 
 bool
-wxApp::MSWEnableDarkMode(int WXUNUSED(flags),
+wxApp::MSWEnableDarkMode(DarkMode WXUNUSED(flags),
                          wxDarkModeSettings* WXUNUSED(settings))
 {
     return false;
@@ -1002,6 +1249,10 @@ void ConfigureTLW(HWND WXUNUSED(hwnd))
 {
 }
 
+void SetTheme(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeName), const wchar_t* WXUNUSED(themeId))
+{
+}
+
 void AllowForWindow(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeClass), const wchar_t* WXUNUSED(themeId))
 {
 }
@@ -1045,6 +1296,12 @@ void NotifySysColorChange()
 {
 }
 
+UINT_PTR CALLBACK CommonDialogHookProc(HWND WXUNUSED(hwnd),
+    UINT WXUNUSED(uiMsg), WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
+{
+    return 0;
+}
+
 bool HasDarkTheme()
 {
     return false;
@@ -1052,7 +1309,7 @@ bool HasDarkTheme()
 
 } // namespace wxMSWDarkMode
 
-void wxMSWImpl::PaintScrollBarCorner(HWND WXUNUSED(hwnd))
+void wxMSWImpl::PaintScrollBarCorner(wxWindow* WXUNUSED(w))
 {
 }
 

@@ -117,9 +117,11 @@ void wxPickerBase::PostCreation()
 
     SetSizer(m_sizer);
 
-    SetInitialSize( GetMinSize() );
-
-    Layout();
+    if ( !SetInitialSize( GetMinSize() ) )
+    {
+        // Layout if not already done by SetInitialSize() itself.
+        Layout();
+    }
 }
 
 #if wxUSE_TOOLTIPS

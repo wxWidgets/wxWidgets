@@ -94,11 +94,11 @@ protected:
     wxRibbonPageScrollButton* m_scroll_left_btn = nullptr;
     wxRibbonPageScrollButton* m_scroll_right_btn = nullptr;
     wxSize* m_size_calc_array = nullptr;
-    size_t m_size_calc_array_size;
-    int m_scroll_amount;
-    int m_scroll_amount_limit;
-    int m_size_in_major_axis_for_children;
-    bool m_scroll_buttons_visible;
+    size_t m_size_calc_array_size = 0;
+    int m_scroll_amount = 0;
+    int m_scroll_amount_limit = 0;
+    int m_size_in_major_axis_for_children = 0;
+    bool m_scroll_buttons_visible = false;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonPage);

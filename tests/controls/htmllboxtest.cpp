@@ -20,7 +20,8 @@
 #include "wx/filesys.h"
 #include "wx/htmllbox.h"
 #include "wx/html/htmlcell.h"
-#include "wx/stdpaths.h"
+#include "wx/image.h"
+#include "testfile.h"
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
@@ -83,55 +84,35 @@ private:
 
 } // anonymous namespace
 
-class HtmlListBoxTestCase : public ItemContainerTestCase,
-                            public CppUnit::TestCase
+#include <memory>
+
+class HtmlListBoxTestCase : public ItemContainerTestCase
 {
 public:
-    HtmlListBoxTestCase() { }
+    HtmlListBoxTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+protected:
+    virtual wxItemContainer *GetContainer() const override
+    { return m_htmllbox.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_htmllbox.get(); }
 
-private:
-    virtual wxItemContainer *GetContainer() const override { return m_htmllbox; }
-    virtual wxWindow *GetContainerWindow() const override { return m_htmllbox; }
-
-    CPPUNIT_TEST_SUITE( HtmlListBoxTestCase );
-        wxITEM_CONTAINER_TESTS();
-        CPPUNIT_TEST( MarkupGeometryAndMutation );
-        CPPUNIT_TEST( LinkAndSelectionRouting );
-        CPPUNIT_TEST( CellEventMutationIsSafe );
-        CPPUNIT_TEST( ReentrantMarkupMutation );
-        CPPUNIT_TEST( LocalImageAndClientDataLifetime );
-        CPPUNIT_TEST( LargeLocalModelAndLifetime );
-    CPPUNIT_TEST_SUITE_END();
-
-    void MarkupGeometryAndMutation();
-    void LinkAndSelectionRouting();
-    void CellEventMutationIsSafe();
-    void ReentrantMarkupMutation();
-    void LocalImageAndClientDataLifetime();
-    void LargeLocalModelAndLifetime();
-
-    wxSimpleHtmlListBox* m_htmllbox;
+    std::unique_ptr<wxSimpleHtmlListBox> m_htmllbox;
 
     wxDECLARE_NO_COPY_CLASS(HtmlListBoxTestCase);
 };
 
-wxREGISTER_UNIT_TEST_WITH_TAGS(HtmlListBoxTestCase,
-                               "[HtmlListBoxTestCase][item-container]");
+wxITEM_CONTAINER_TESTS(HtmlListBoxTestCase, "HtmlListBox",
+                       "[htmllistbox][item-container]");
 
-void HtmlListBoxTestCase::setUp()
+HtmlListBoxTestCase::HtmlListBoxTestCase()
 {
-    m_htmllbox = new wxSimpleHtmlListBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_htmllbox = make_unique<wxSimpleHtmlListBox>(wxTheApp->GetTopWindow(),
+                                                  wxID_ANY);
 }
 
-void HtmlListBoxTestCase::tearDown()
-{
-    wxDELETE(m_htmllbox);
-}
 
-void HtmlListBoxTestCase::MarkupGeometryAndMutation()
+TEST_CASE_METHOD(HtmlListBoxTestCase, "HtmlListBox::MarkupGeometryAndMutation", "[htmllistbox]")
 {
     m_htmllbox->SetSize(240, 120);
     m_htmllbox->Append("<b>short</b>");
@@ -139,76 +120,68 @@ void HtmlListBoxTestCase::MarkupGeometryAndMutation()
 
     const wxRect first = m_htmllbox->GetItemRect(0);
     const wxRect second = m_htmllbox->GetItemRect(1);
-    CPPUNIT_ASSERT( !first.IsEmpty() );
-    CPPUNIT_ASSERT( !second.IsEmpty() );
-    CPPUNIT_ASSERT( second.height > first.height );
-    CPPUNIT_ASSERT_EQUAL(
-        0,
-        m_htmllbox->VirtualHitTest(first.GetTop() + first.height / 2) );
-    CPPUNIT_ASSERT_EQUAL(
-        1,
-        m_htmllbox->VirtualHitTest(second.GetTop() + second.height / 2) );
+    REQUIRE( !first.IsEmpty() );
+    REQUIRE( !second.IsEmpty() );
+    REQUIRE( second.height > first.height );
+    REQUIRE( (m_htmllbox->VirtualHitTest(first.GetTop() + first.height / 2)) == (0) );
+    REQUIRE( (m_htmllbox->VirtualHitTest(second.GetTop() + second.height / 2)) == (1) );
 
     m_htmllbox->SetSelection(1);
     m_htmllbox->SetString(1, "<i>replacement</i>");
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("<i>replacement</i>"),
-        m_htmllbox->GetString(1) );
+    REQUIRE( (m_htmllbox->GetString(1)) == (wxString("<i>replacement</i>")) );
 
     m_htmllbox->Delete(0);
-    CPPUNIT_ASSERT_EQUAL( 1u, m_htmllbox->GetCount() );
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("<i>replacement</i>"),
-        m_htmllbox->GetString(0) );
+    REQUIRE( (m_htmllbox->GetCount()) == (1u) );
+    REQUIRE( (m_htmllbox->GetString(0)) == (wxString("<i>replacement</i>")) );
 }
 
-void HtmlListBoxTestCase::LinkAndSelectionRouting()
+TEST_CASE_METHOD(HtmlListBoxTestCase, "HtmlListBox::LinkAndSelectionRouting", "[htmllistbox]")
 {
     m_htmllbox->SetSize(240, 120);
     m_htmllbox->Append("<a href=\"local://target\">link</a>");
     m_htmllbox->Append("plain");
 
-    EventCounter links(m_htmllbox, wxEVT_HTML_LINK_CLICKED);
-    EventCounter selections(m_htmllbox, wxEVT_LISTBOX);
-    EventCounter contexts(m_htmllbox, wxEVT_CONTEXT_MENU);
+    EventCounter links(m_htmllbox.get(), wxEVT_HTML_LINK_CLICKED);
+    EventCounter selections(m_htmllbox.get(), wxEVT_LISTBOX);
+    EventCounter contexts(m_htmllbox.get(), wxEVT_CONTEXT_MENU);
 
     const wxRect linkRect = m_htmllbox->GetItemRect(0);
-    CPPUNIT_ASSERT( !linkRect.IsEmpty() );
+    REQUIRE( !linkRect.IsEmpty() );
     wxMouseEvent linkClick(wxEVT_LEFT_DOWN);
     linkClick.m_x = linkRect.x + 5;
     linkClick.m_y = linkRect.y + linkRect.height / 2;
     m_htmllbox->GetEventHandler()->ProcessEvent(linkClick);
 
-    CPPUNIT_ASSERT_EQUAL( 1, links.GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 0, selections.GetCount() );
-    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_htmllbox->GetSelection() );
+    REQUIRE( (links.GetCount()) == (1) );
+    REQUIRE( (selections.GetCount()) == (0) );
+    REQUIRE( (m_htmllbox->GetSelection()) == (wxNOT_FOUND) );
 
     const wxRect plainRect = m_htmllbox->GetItemRect(1);
-    CPPUNIT_ASSERT( !plainRect.IsEmpty() );
+    REQUIRE( !plainRect.IsEmpty() );
     wxMouseEvent plainClick(wxEVT_LEFT_DOWN);
     plainClick.m_x = plainRect.x + 5;
     plainClick.m_y = plainRect.y + plainRect.height / 2;
     m_htmllbox->GetEventHandler()->ProcessEvent(plainClick);
 
-    CPPUNIT_ASSERT_EQUAL( 1, links.GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 1, selections.GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 1, m_htmllbox->GetSelection() );
+    REQUIRE( (links.GetCount()) == (1) );
+    REQUIRE( (selections.GetCount()) == (1) );
+    REQUIRE( (m_htmllbox->GetSelection()) == (1) );
 
     wxContextMenuEvent context(wxEVT_CONTEXT_MENU, m_htmllbox->GetId(),
                                plainRect.GetPosition());
-    context.SetEventObject(m_htmllbox);
+    context.SetEventObject(m_htmllbox.get());
     m_htmllbox->GetEventHandler()->ProcessEvent(context);
-    CPPUNIT_ASSERT_EQUAL( 1, contexts.GetCount() );
+    REQUIRE( (contexts.GetCount()) == (1) );
 }
 
-void HtmlListBoxTestCase::CellEventMutationIsSafe()
+TEST_CASE_METHOD(HtmlListBoxTestCase, "HtmlListBox::CellEventMutationIsSafe", "[htmllistbox]")
 {
     m_htmllbox->SetSize(240, 120);
     m_htmllbox->Append("<a href=\"local://cleared\">clear me</a>");
 
     int cellEvents = 0;
-    EventCounter links(m_htmllbox, wxEVT_HTML_LINK_CLICKED);
-    EventCounter selections(m_htmllbox, wxEVT_LISTBOX);
+    EventCounter links(m_htmllbox.get(), wxEVT_HTML_LINK_CLICKED);
+    EventCounter selections(m_htmllbox.get(), wxEVT_LISTBOX);
     m_htmllbox->Bind(wxEVT_HTML_CELL_CLICKED,
                      [this, &cellEvents](wxHtmlCellEvent& event)
     {
@@ -221,49 +194,51 @@ void HtmlListBoxTestCase::CellEventMutationIsSafe()
     });
 
     const wxRect rect = m_htmllbox->GetItemRect(0);
-    CPPUNIT_ASSERT( !rect.IsEmpty() );
+    REQUIRE( !rect.IsEmpty() );
 
     wxMouseEvent click(wxEVT_LEFT_DOWN);
     click.m_x = rect.x + 5;
     click.m_y = rect.y + rect.height / 2;
     m_htmllbox->GetEventHandler()->ProcessEvent(click);
 
-    CPPUNIT_ASSERT_EQUAL( 1, cellEvents );
-    CPPUNIT_ASSERT_EQUAL( 0u, m_htmllbox->GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 0, links.GetCount() );
-    CPPUNIT_ASSERT_EQUAL( 0, selections.GetCount() );
-    CPPUNIT_ASSERT_EQUAL( wxNOT_FOUND, m_htmllbox->GetSelection() );
+    REQUIRE( (cellEvents) == (1) );
+    REQUIRE( (m_htmllbox->GetCount()) == (0u) );
+    REQUIRE( (links.GetCount()) == (0) );
+    REQUIRE( (selections.GetCount()) == (0) );
+    REQUIRE( (m_htmllbox->GetSelection()) == (wxNOT_FOUND) );
 }
 
-void HtmlListBoxTestCase::ReentrantMarkupMutation()
+TEST_CASE_METHOD(HtmlListBoxTestCase, "HtmlListBox::ReentrantMarkupMutation", "[htmllistbox]")
 {
     ReentrantHtmlListBox list(wxTheApp->GetTopWindow());
     list.SetItemCount(20);
     list.ArmClearOnMarkup();
 
-    CPPUNIT_ASSERT( list.GetItemRect(0).IsEmpty() );
-    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0), list.GetItemCount() );
-    CPPUNIT_ASSERT( !list.HadOutOfRangeMarkup() );
+    REQUIRE( list.GetItemRect(0).IsEmpty() );
+    REQUIRE( (list.GetItemCount()) == (static_cast<size_t>(0)) );
+    REQUIRE( !list.HadOutOfRangeMarkup() );
 }
 
-void HtmlListBoxTestCase::LocalImageAndClientDataLifetime()
+TEST_CASE_METHOD(HtmlListBoxTestCase, "HtmlListBox::LocalImageAndClientDataLifetime", "[htmllistbox]")
 {
-    wxFileName imageFile(wxStandardPaths::Get().GetExecutablePath());
-    imageFile.SetFullName("horse.gif");
-    CPPUNIT_ASSERT( imageFile.FileExists() );
+    TestFile imageFile;
+    wxImage image(8, 8);
+    image.SetRGB(wxRect(0, 0, 8, 8), 0, 80, 160);
+    REQUIRE( image.SaveFile(imageFile.GetName(), wxBITMAP_TYPE_PNG) );
 
-    const wxString imageUrl = wxFileSystem::FileNameToURL(imageFile);
+    const wxString imageUrl = wxFileSystem::FileNameToURL(
+        wxFileName(imageFile.GetName()));
     m_htmllbox->SetSize(240, 120);
     m_htmllbox->Append(
         wxString::Format("<img src=\"%s\"> local image", imageUrl));
 
     const wxRect imageRect = m_htmllbox->GetItemRect(0);
-    CPPUNIT_ASSERT( !imageRect.IsEmpty() );
-    CPPUNIT_ASSERT( imageRect.height > 4 );
+    REQUIRE( !imageRect.IsEmpty() );
+    REQUIRE( imageRect.height > 4 );
 
     m_htmllbox->Delete(0);
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( 0u, m_htmllbox->GetCount() );
+    REQUIRE( (m_htmllbox->GetCount()) == (0u) );
 
     int destroyed = 0;
     m_htmllbox->Append(
@@ -274,21 +249,17 @@ void HtmlListBoxTestCase::LocalImageAndClientDataLifetime()
         "two", new CountingClientData("two", destroyed));
 
     m_htmllbox->Delete(1);
-    CPPUNIT_ASSERT_EQUAL( 1, destroyed );
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("zero"),
-        static_cast<CountingClientData *>(
-            m_htmllbox->GetClientObject(0))->GetValue() );
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("two"),
-        static_cast<CountingClientData *>(
-            m_htmllbox->GetClientObject(1))->GetValue() );
+    REQUIRE( (destroyed) == (1) );
+    REQUIRE( (static_cast<CountingClientData *>(
+            m_htmllbox->GetClientObject(0))->GetValue()) == (wxString("zero")) );
+    REQUIRE( (static_cast<CountingClientData *>(
+            m_htmllbox->GetClientObject(1))->GetValue()) == (wxString("two")) );
 
     m_htmllbox->Clear();
-    CPPUNIT_ASSERT_EQUAL( 3, destroyed );
+    REQUIRE( (destroyed) == (3) );
 }
 
-void HtmlListBoxTestCase::LargeLocalModelAndLifetime()
+TEST_CASE_METHOD(HtmlListBoxTestCase, "HtmlListBox::LargeLocalModelAndLifetime", "[htmllistbox]")
 {
     wxArrayString items;
     items.Alloc(10000);
@@ -296,18 +267,18 @@ void HtmlListBoxTestCase::LargeLocalModelAndLifetime()
         items.push_back(wxString::Format("<b>row %d</b>", i));
 
     m_htmllbox->Append(items);
-    CPPUNIT_ASSERT_EQUAL( 10000u, m_htmllbox->GetCount() );
-    CPPUNIT_ASSERT( m_htmllbox->ScrollToRow(9999) );
-    CPPUNIT_ASSERT( m_htmllbox->IsRowVisible(9999) );
+    REQUIRE( (m_htmllbox->GetCount()) == (10000u) );
+    REQUIRE( m_htmllbox->ScrollToRow(9999) );
+    REQUIRE( m_htmllbox->IsRowVisible(9999) );
 
     wxWindow* const top = wxTheApp->GetTopWindow();
     wxPanel* const parent1 = new wxPanel(top);
     wxPanel* const parent2 = new wxPanel(top);
     wxSimpleHtmlListBox* const twoStep = new wxSimpleHtmlListBox;
-    CPPUNIT_ASSERT( twoStep->Create(parent1, wxID_ANY,
+    REQUIRE( twoStep->Create(parent1, wxID_ANY,
                                     wxDefaultPosition, wxSize(160, 90)) );
     twoStep->Append("local");
-    CPPUNIT_ASSERT( twoStep->Reparent(parent2) );
+    REQUIRE( twoStep->Reparent(parent2) );
     delete twoStep;
 
     for ( int i = 0; i < 100; ++i )

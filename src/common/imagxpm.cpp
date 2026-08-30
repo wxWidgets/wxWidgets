@@ -173,7 +173,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     char tmpbuf[200];
     // VS: 200b is safe upper bound for anything produced by sprintf below
     //     (<101 bytes the string, neither %i can expand into more than 10 chars)
-    sprintf(tmpbuf,
+    snprintf(tmpbuf, sizeof(tmpbuf),
                "[] = {\n"
                "/* columns rows colors chars-per-pixel */\n"
                "\"%i %i %i %i\",\n",
@@ -207,15 +207,15 @@ bool wxXPMHandler::SaveFile(wxImage * image,
         unsigned long key = entry.first;
 
         if (key == 0)
-            sprintf( tmpbuf, "\"%s c Black\",\n", sym);
+            snprintf( tmpbuf, sizeof(tmpbuf), "\"%s c Black\",\n", sym);
         else if (key == mask_key)
-            sprintf( tmpbuf, "\"%s c None\",\n", sym);
+            snprintf( tmpbuf, sizeof(tmpbuf), "\"%s c None\",\n", sym);
         else
         {
             wxByte r = wxByte(key >> 16);
             wxByte g = wxByte(key >> 8);
             wxByte b = wxByte(key);
-            sprintf(tmpbuf, "\"%s c #%02X%02X%02X\",\n", sym, r, g, b);
+            snprintf(tmpbuf, sizeof(tmpbuf), "\"%s c #%02X%02X%02X\",\n", sym, r, g, b);
         }
         stream.Write( tmpbuf, strlen(tmpbuf) );
     }

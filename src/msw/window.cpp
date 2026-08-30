@@ -6005,6 +6005,30 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                         wxWindowMSW::MSWDrawThemeBorder(hdc);
                     }
                 }
+
+                // In dark mode the corner between the two scrollbars is not
+                // drawn in the correct colour by Windows, so we need to paint
+                // it ourselves.
+                //
+                // Don't do it in wxUniv which doesn't support wxMSW dark mode.
+#ifndef __WXUNIVERSAL__
+                if ( wxMSWDarkMode::IsActive() )
+                {
+                    const long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+
+                    if ( (style & WS_HSCROLL) && (style & WS_VSCROLL) )
+                    {
+                        // MSWDefWindowProc() may have been already called above.
+                        if ( !processed )
+                        {
+                            rc.result = MSWDefWindowProc(message, wParam, lParam);
+                            processed = true;
+                        }
+
+                        wxMSWImpl::PaintScrollBarCorner(this);
+                    }
+                }
+#endif // !__WXUNIVERSAL__
             }
             break;
 

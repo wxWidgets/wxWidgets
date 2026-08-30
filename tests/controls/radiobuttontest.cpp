@@ -30,32 +30,27 @@ class RadioButtonTestCase
 {
 public:
     RadioButtonTestCase();
-    ~RadioButtonTestCase();
 
 protected:
-    wxRadioButton* m_radio;
+    std::unique_ptr<wxRadioButton> m_radio;
 
     wxDECLARE_NO_COPY_CLASS(RadioButtonTestCase);
 };
 
 RadioButtonTestCase::RadioButtonTestCase()
 {
-    m_radio = new wxRadioButton(wxTheApp->GetTopWindow(), wxID_ANY,
-                                "wxRadioButton");
+    m_radio = make_unique<wxRadioButton>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         "wxRadioButton");
     m_radio->Update();
     m_radio->Refresh();
 }
 
-RadioButtonTestCase::~RadioButtonTestCase()
-{
-    delete m_radio;
-}
 
 TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Click", "[radiobutton]")
 {
     // OS X doesn't support selecting a single radio button
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
-    EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
+    EventCounter selected(m_radio.get(), wxEVT_RADIOBUTTON);
 
     wxUIActionSimulator sim;
     wxYield();
@@ -72,7 +67,7 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Click", "[radiobutton]")
 TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Value", "[radiobutton]")
 {
 #ifndef __WXGTK__
-    EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
+    EventCounter selected(m_radio.get(), wxEVT_RADIOBUTTON);
 
     m_radio->SetValue(true);
 

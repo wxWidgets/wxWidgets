@@ -94,7 +94,7 @@ wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
                                     const wxString& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
-                                    long style,
+                                    long /*style*/,
                                     long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;

@@ -213,14 +213,14 @@ unsigned int wxListWidgetIPhoneImpl::ListGetCount() const
 }
 
 
-wxListWidgetColumn*   wxListWidgetIPhoneImpl::InsertTextColumn( unsigned pos, const wxString& title, bool editable,
-                                wxAlignment just, int defaultWidth)
+wxListWidgetColumn*   wxListWidgetIPhoneImpl::InsertTextColumn( unsigned /*pos*/, const wxString& /*title*/, bool /*editable*/,
+                                wxAlignment /*just*/, int /*defaultWidth*/)
 {
     return nullptr;
 }
 
-wxListWidgetColumn*   wxListWidgetIPhoneImpl::InsertCheckColumn( unsigned pos , const wxString& title, bool editable,
-                                wxAlignment just, int defaultWidth )
+wxListWidgetColumn*   wxListWidgetIPhoneImpl::InsertCheckColumn( unsigned /*pos*/, const wxString& /*title*/, bool /*editable*/,
+                                wxAlignment /*just*/, int /*defaultWidth*/ )
 {
     return nullptr;
 }
@@ -229,7 +229,7 @@ wxListWidgetColumn*   wxListWidgetIPhoneImpl::InsertCheckColumn( unsigned pos , 
 // inserting / removing lines
 //
 
-void wxListWidgetIPhoneImpl::ListInsert( unsigned int n )
+void wxListWidgetIPhoneImpl::ListInsert( unsigned int /*n*/ )
 {
     [m_tableView reloadData];
 }
@@ -254,7 +254,7 @@ void wxListWidgetIPhoneImpl::ListDeselectAll()
     [m_tableView selectRowAtIndexPath: nil animated:YES  scrollPosition:UITableViewScrollPositionNone];
 }
 
-void wxListWidgetIPhoneImpl::ListSetSelection( unsigned int n, bool select, bool multi )
+void wxListWidgetIPhoneImpl::ListSetSelection( unsigned int n, bool select, bool /*multi*/ )
 {
     NSIndexPath *ip = [NSIndexPath indexPathForRow:n inSection:0];
     if (select)
@@ -359,7 +359,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     return impl;
 }
 
-int wxListWidgetIPhoneImpl::DoListHitTest(const wxPoint& inpoint) const
+int wxListWidgetIPhoneImpl::DoListHitTest(const wxPoint& /*inpoint*/) const
 {
     // TODO implement
     return wxNOT_FOUND;

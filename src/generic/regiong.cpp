@@ -266,17 +266,17 @@ wxRegionGeneric::wxRegionGeneric(const wxPoint& topLeft, const wxPoint& bottomRi
     m_refData = new wxRegionRefData(topLeft, bottomRight);
 }
 
-wxRegionGeneric::wxRegionGeneric(const wxBitmap& bmp)
+wxRegionGeneric::wxRegionGeneric(const wxBitmap& /*bmp*/)
 {
     wxFAIL_MSG("NOT IMPLEMENTED: wxRegionGeneric::wxRegionGeneric(const wxBitmap& bmp)");
 }
 
-wxRegionGeneric::wxRegionGeneric(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
+wxRegionGeneric::wxRegionGeneric(size_t /*n*/, const wxPoint* /*points*/, wxPolygonFillMode /*fillStyle*/)
 {
     wxFAIL_MSG("NOT IMPLEMENTED: wxRegionGeneric::wxRegionGeneric(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)");
 }
 
-wxRegionGeneric::wxRegionGeneric(const wxBitmap& bmp, const wxColour& transp, int tolerance)
+wxRegionGeneric::wxRegionGeneric(const wxBitmap& /*bmp*/, const wxColour& /*transp*/, int /*tolerance*/)
 {
     wxFAIL_MSG("NOT IMPLEMENTED: wxRegionGeneric::wxRegionGeneric(const wxBitmap& bmp, const wxColour& transp, int tolerance)");
 }

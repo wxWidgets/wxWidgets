@@ -37,20 +37,16 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 // The test case
 
-class backStream : public CppUnit::TestCase
+class backStream
 {
 public:
-    backStream();
+    backStream()
+    {
+        for (unsigned i = 0; i < TESTSIZE; i++)
+            m_testdata[i] = i;
+    }
 
-    CPPUNIT_TEST_SUITE(backStream);
-        CPPUNIT_TEST(ReadLenSeek);
-        CPPUNIT_TEST(LenSeekRead);
-        CPPUNIT_TEST(SeekReadLen);
-        CPPUNIT_TEST(ReadAll);
-        CPPUNIT_TEST(ReadTooMuch);
-        CPPUNIT_TEST(EmptyStream);
-    CPPUNIT_TEST_SUITE_END();
-
+protected:
     void ReadLenSeek();
     void LenSeekRead();
     void SeekReadLen();
@@ -65,12 +61,6 @@ private:
 
     char m_testdata[TESTSIZE];
 };
-
-backStream::backStream()
-{
-    for (unsigned i = 0; i < TESTSIZE; i++)
-        m_testdata[i] = i;
-}
 
 void backStream::ReadLenSeek()
 {
@@ -117,9 +107,9 @@ void backStream::ReadTooMuch()
 
     char buf[TESTSIZE * 2];
 
-    CPPUNIT_ASSERT_EQUAL(TESTSIZE, in.Read(buf, TESTSIZE * 2).LastRead());
-    CPPUNIT_ASSERT(in.Eof());
-    CPPUNIT_ASSERT(memcmp(buf, m_testdata, TESTSIZE) == 0);
+    CHECK(in.Read(buf, TESTSIZE * 2).LastRead() == TESTSIZE);
+    CHECK(in.Eof());
+    CHECK(memcmp(buf, m_testdata, TESTSIZE) == 0);
 }
 
 void backStream::EmptyStream()
@@ -129,8 +119,8 @@ void backStream::EmptyStream()
 
     char buf[1];
 
-    CPPUNIT_ASSERT_EQUAL(size_t(0), in.Read(buf, 1).LastRead());
-    CPPUNIT_ASSERT(in.Eof());
+    CHECK(in.Read(buf, 1).LastRead() == size_t(0));
+    CHECK(in.Eof());
 }
 
 void backStream::Read(wxInputStream& in,
@@ -144,50 +134,53 @@ void backStream::Read(wxInputStream& in,
 
     in.SeekI(0);
 
-    CPPUNIT_ASSERT_EQUAL(size1, in.Read(buf, size1).LastRead());
-    CPPUNIT_ASSERT(in.IsOk());
-    CPPUNIT_ASSERT(memcmp(buf, testdata, size1) == 0);
+    CHECK(in.Read(buf, size1).LastRead() == size1);
+    CHECK(in.IsOk());
+    CHECK(memcmp(buf, testdata, size1) == 0);
     testdata += size1;
 
-    CPPUNIT_ASSERT_EQUAL(size2, in.Read(buf, size2).LastRead());
-    CPPUNIT_ASSERT(in.IsOk());
-    CPPUNIT_ASSERT(memcmp(buf, testdata, size2) == 0);
+    CHECK(in.Read(buf, size2).LastRead() == size2);
+    CHECK(in.IsOk());
+    CHECK(memcmp(buf, testdata, size2) == 0);
     testdata += size2;
 
-    CPPUNIT_ASSERT_EQUAL(size3, in.Read(buf, size3).LastRead());
-    CPPUNIT_ASSERT(in.IsOk());
-    CPPUNIT_ASSERT(memcmp(buf, testdata, size3) == 0);
+    CHECK(in.Read(buf, size3).LastRead() == size3);
+    CHECK(in.IsOk());
+    CHECK(memcmp(buf, testdata, size3) == 0);
     testdata += size3;
 
-    CPPUNIT_ASSERT_EQUAL(remainder, in.Read(buf, TESTSIZE).LastRead());
-    CPPUNIT_ASSERT(in.Eof());
-    CPPUNIT_ASSERT(memcmp(buf, testdata, remainder) == 0);
+    CHECK(in.Read(buf, TESTSIZE).LastRead() == remainder);
+    CHECK(in.Eof());
+    CHECK(memcmp(buf, testdata, remainder) == 0);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(0), in.Read(buf, TESTSIZE).LastRead());
-    CPPUNIT_ASSERT(in.Eof());
+    CHECK(in.Read(buf, TESTSIZE).LastRead() == size_t(0));
+    CHECK(in.Eof());
 }
 
 void backStream::Len(wxBackedInputStream& in)
 {
-    CPPUNIT_ASSERT_EQUAL(wxFileOffset(TESTSIZE), in.FindLength());
+    CHECK(in.FindLength() == wxFileOffset(TESTSIZE));
 }
 
 void backStream::Seek(wxInputStream& in)
 {
-    CPPUNIT_ASSERT_EQUAL(wxFileOffset(TESTSIZE), in.SeekI(TESTSIZE));
+    CHECK(in.SeekI(TESTSIZE) == wxFileOffset(TESTSIZE));
     in.GetC();
-    CPPUNIT_ASSERT_EQUAL(size_t(0), in.LastRead());
-    CPPUNIT_ASSERT(in.Eof());
+    CHECK(in.LastRead() == size_t(0));
+    CHECK(in.Eof());
 
     for (wxFileOffset i = TESTSIZE - 1; i >= 0; i--) {
-        CPPUNIT_ASSERT_EQUAL(i, in.SeekI(i));
-        CPPUNIT_ASSERT_EQUAL(i, in.TellI());
-        CPPUNIT_ASSERT_EQUAL(int(i), in.GetC());
-        CPPUNIT_ASSERT_EQUAL(size_t(1), in.LastRead());
-        CPPUNIT_ASSERT(in.IsOk());
+        CHECK(in.SeekI(i) == i);
+        CHECK(in.TellI() == i);
+        CHECK(in.GetC() == int(i));
+        CHECK(in.LastRead() == size_t(1));
+        CHECK(in.IsOk());
     }
 }
 
-// Register the stream sub suite, by using some stream helper macro.
-// Note: Don't forget to connect it to the base suite (See: bstream.cpp => StreamCase::suite())
-STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(backStream)
+WX_STREAM_TEST_CASE(backStream, ReadLenSeek)
+WX_STREAM_TEST_CASE(backStream, LenSeekRead)
+WX_STREAM_TEST_CASE(backStream, SeekReadLen)
+WX_STREAM_TEST_CASE(backStream, ReadAll)
+WX_STREAM_TEST_CASE(backStream, ReadTooMuch)
+WX_STREAM_TEST_CASE(backStream, EmptyStream)

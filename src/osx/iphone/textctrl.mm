@@ -354,14 +354,15 @@ wxString wxUITextViewControl::GetRTFValue() const
     return wxEmptyString;
 }
 
-void wxUITextViewControl::SetRTFValue(const wxString &str)
+void wxUITextViewControl::SetRTFValue(const wxString& /*str*/)
 {
     wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
 }
 
-wxTextSearchResult wxUITextViewControl::SearchText(const wxTextSearch &search) const
+wxTextSearchResult wxUITextViewControl::SearchText(const wxTextSearch& /*search*/) const
 {
     wxFAIL_MSG("SearchText() should only be used with multiline controls.");
+    return wxTextSearchResult();
 }
 
 void wxUITextViewControl::Copy()
@@ -444,7 +445,7 @@ void wxUITextViewControl::SetFont(const wxFont & font)
         [m_textView setFont: font.OSXGetUIFont()];
 }
 
-bool wxUITextViewControl::GetStyle(long position, wxTextAttr& style)
+bool wxUITextViewControl::GetStyle(long position, wxTextAttr& /*style*/)
 {
     if (m_textView && position >=0)
     {
@@ -488,7 +489,7 @@ bool wxUITextViewControl::GetStyle(long position, wxTextAttr& style)
 
 void wxUITextViewControl::SetStyle(long start,
                                 long end,
-                                const wxTextAttr& style)
+                                const wxTextAttr& /*style*/)
 {
     if (m_textView) {
         NSRange range = NSMakeRange(start, end-start);
@@ -577,14 +578,15 @@ wxString wxUITextFieldControl::GetRTFValue() const
     return wxEmptyString;
 }
 
-void wxUITextFieldControl::SetRTFValue(const wxString &str)
+void wxUITextFieldControl::SetRTFValue(const wxString& /*str*/)
 {
     wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
 }
 
-wxTextSearchResult wxUITextFieldControl::SearchText(const wxTextSearch &search) const
+wxTextSearchResult wxUITextFieldControl::SearchText(const wxTextSearch& /*search*/) const
 {
     wxFAIL_MSG("SearchText() should only be used with multiline controls.");
+    return wxTextSearchResult();
 }
 
 
@@ -683,8 +685,7 @@ void wxUITextFieldControl::WriteText(const wxString& str)
 #endif
 }
 
-void wxUITextFieldControl::controlAction(WXWidget WXUNUSED(slf),
-    void* WXUNUSED(_cmd), void *WXUNUSED(sender))
+void wxUITextFieldControl::controlAction(wxUint32 /*controlEvent*/)
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) )

@@ -98,7 +98,7 @@ public:
 
             default:
                 wxFAIL_MSG(wxT("unexpected shaft part in wxScrollThumbTimer"));
-                // fall through
+                wxFALLTHROUGH;
 
             case wxScrollThumb::Shaft_Below:
                 m_inc = 1;

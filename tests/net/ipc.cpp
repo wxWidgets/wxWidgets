@@ -17,18 +17,9 @@
 // here.
 //
 // This test requires wxUSE_THREADS==1 since it runs the test server concurrently
-// with the client. One build configuration is excluded: wxQt.
+// with the client.
 //
-// wxQt is excluded because of a bug in wxQt found during our testing:
-// wxIPC worker threads marshal their socket I/O to the main thread via
-// CallAfter(), but a cross-thread CallAfter() is not reliably processed by the
-// wxQt event loop. wxQtEventLoopBase::WakeUp() wakes the loop without posting a
-// Qt event, so the idle handler that runs pending events is never scheduled, and
-// server-pushed Advise() notifications stall. That is a wxQt event-loop bug, not
-// a wxIPC bug; it is fixed separately on branch
-// jpmattia/wxQT-CallAfter-wxWakeUpIdle, which will be a separate PR.
-//
-#if wxUSE_THREADS && !defined(__WXQT__)
+#if wxUSE_THREADS
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -1055,4 +1046,4 @@ TEST_CASE_METHOD(IPCFixture,
     CHECK( worker.m_error.empty() );
 }
 
-#endif // wxUSE_THREADS && !__WXQT__
+#endif // wxUSE_THREADS

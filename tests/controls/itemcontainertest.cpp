@@ -24,7 +24,7 @@ void ItemContainerTestCase::Append()
 
     container->Append("item 0");
 
-    CPPUNIT_ASSERT_EQUAL("item 0", container->GetString(0));
+    CHECK(container->GetString(0) == "item 0");
 
     wxArrayString testitems;
     testitems.Add("item 1");
@@ -32,45 +32,45 @@ void ItemContainerTestCase::Append()
 
     container->Append(testitems);
 
-    CPPUNIT_ASSERT_EQUAL("item 1", container->GetString(1));
-    CPPUNIT_ASSERT_EQUAL("item 2", container->GetString(2));
+    CHECK(container->GetString(1) == "item 1");
+    CHECK(container->GetString(2) == "item 2");
 
     wxString arritems[] = { "item 3", "item 4" };
 
     container->Append(2, arritems);
 
-    CPPUNIT_ASSERT_EQUAL("item 3", container->GetString(3));
-    CPPUNIT_ASSERT_EQUAL("item 4", container->GetString(4));
+    CHECK(container->GetString(3) == "item 3");
+    CHECK(container->GetString(4) == "item 4");
 }
 
 void ItemContainerTestCase::Insert()
 {
     wxItemContainer * const container = GetContainer();
 
-    CPPUNIT_ASSERT_EQUAL( 0, container->Insert("item 0", 0) );
-    CPPUNIT_ASSERT_EQUAL("item 0", container->GetString(0));
+    CHECK( container->Insert("item 0", 0) == 0 );
+    CHECK(container->GetString(0) == "item 0");
 
     wxArrayString testitems;
     testitems.Add("item 1");
     testitems.Add("item 2");
 
-    CPPUNIT_ASSERT_EQUAL( 1, container->Insert(testitems, 0) );
+    CHECK( container->Insert(testitems, 0) == 1 );
 
-    CPPUNIT_ASSERT_EQUAL("item 1", container->GetString(0));
-    CPPUNIT_ASSERT_EQUAL("item 2", container->GetString(1));
+    CHECK(container->GetString(0) == "item 1");
+    CHECK(container->GetString(1) == "item 2");
 
     wxString arritems[] = { "item 3", "item 4" };
 
-    CPPUNIT_ASSERT_EQUAL( 2, container->Insert(2, arritems, 1) );
-    CPPUNIT_ASSERT_EQUAL("item 3", container->GetString(1));
-    CPPUNIT_ASSERT_EQUAL("item 4", container->GetString(2));
+    CHECK( container->Insert(2, arritems, 1) == 2 );
+    CHECK(container->GetString(1) == "item 3");
+    CHECK(container->GetString(2) == "item 4");
 }
 
 void ItemContainerTestCase::Count()
 {
     wxItemContainer * const container = GetContainer();
 
-    CPPUNIT_ASSERT(container->IsEmpty());
+    CHECK(container->IsEmpty());
     WX_ASSERT_FAILS_WITH_ASSERT( container->GetString(0) );
 
     wxArrayString testitems;
@@ -81,21 +81,21 @@ void ItemContainerTestCase::Count()
 
     container->Append(testitems);
 
-    CPPUNIT_ASSERT(!container->IsEmpty());
-    CPPUNIT_ASSERT_EQUAL(4, container->GetCount());
+    CHECK(!container->IsEmpty());
+    CHECK(container->GetCount() == 4);
 
     container->Delete(0);
 
-    CPPUNIT_ASSERT_EQUAL(3, container->GetCount());
+    CHECK(container->GetCount() == 3);
 
     container->Delete(0);
     container->Delete(0);
 
-    CPPUNIT_ASSERT_EQUAL(1, container->GetCount());
+    CHECK(container->GetCount() == 1);
 
     container->Insert(testitems, 1);
 
-    CPPUNIT_ASSERT_EQUAL(5, container->GetCount());
+    CHECK(container->GetCount() == 5);
     WX_ASSERT_FAILS_WITH_ASSERT( container->GetString(10) );
 }
 
@@ -112,24 +112,24 @@ void ItemContainerTestCase::ItemSelection()
     container->Append(testitems);
 
     container->SetSelection(wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, container->GetSelection());
-    CPPUNIT_ASSERT_EQUAL("", container->GetStringSelection());
+    CHECK(container->GetSelection() == wxNOT_FOUND);
+    CHECK(container->GetStringSelection() == "");
 
     container->SetSelection(1);
-    CPPUNIT_ASSERT_EQUAL(1, container->GetSelection());
-    CPPUNIT_ASSERT_EQUAL("item 1", container->GetStringSelection());
+    CHECK(container->GetSelection() == 1);
+    CHECK(container->GetStringSelection() == "item 1");
 
-    CPPUNIT_ASSERT( container->SetStringSelection("item 2") );
-    CPPUNIT_ASSERT_EQUAL(2, container->GetSelection());
-    CPPUNIT_ASSERT_EQUAL("item 2", container->GetStringSelection());
+    CHECK( container->SetStringSelection("item 2") );
+    CHECK(container->GetSelection() == 2);
+    CHECK(container->GetStringSelection() == "item 2");
 
     // Check that selecting a non-existent item fails.
-    CPPUNIT_ASSERT( !container->SetStringSelection("bloordyblop") );
+    CHECK( !container->SetStringSelection("bloordyblop") );
 
     // Check that SetStringSelection() is case-insensitive.
-    CPPUNIT_ASSERT( container->SetStringSelection("ITEM 2") );
-    CPPUNIT_ASSERT_EQUAL(2, container->GetSelection());
-    CPPUNIT_ASSERT_EQUAL("item 2", container->GetStringSelection());
+    CHECK( container->SetStringSelection("ITEM 2") );
+    CHECK(container->GetSelection() == 2);
+    CHECK(container->GetStringSelection() == "item 2");
 }
 
 void ItemContainerTestCase::FindString()
@@ -144,9 +144,9 @@ void ItemContainerTestCase::FindString()
 
     container->Append(testitems);
 
-    CPPUNIT_ASSERT_EQUAL(1, container->FindString("item 1"));
-    CPPUNIT_ASSERT_EQUAL(1, container->FindString("ITEM 1"));
-    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, container->FindString("ITEM 1", true));
+    CHECK(container->FindString("item 1") == 1);
+    CHECK(container->FindString("ITEM 1") == 1);
+    CHECK(container->FindString("ITEM 1", true) == wxNOT_FOUND);
 }
 
 void ItemContainerTestCase::ClientData()
@@ -159,19 +159,16 @@ void ItemContainerTestCase::ClientData()
 
     container->Append("item 0", item0data);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item0data),
-                         container->GetClientObject(0));
+    CHECK(container->GetClientObject(0) == static_cast<wxClientData*>(item0data));
 
     container->Append("item 1");
     container->SetClientObject(1, item1data);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item1data),
-                         container->GetClientObject(1));
+    CHECK(container->GetClientObject(1) == static_cast<wxClientData*>(item1data));
 
     container->Insert("item 2", 2, item2data);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item2data),
-                         container->GetClientObject(2));
+    CHECK(container->GetClientObject(2) == static_cast<wxClientData*>(item2data));
 
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientObject((unsigned)-1, item0data) );
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientObject(12345, item0data) );
@@ -190,16 +187,16 @@ void ItemContainerTestCase::VoidData()
 
     container->Append("item 0", item0);
 
-    CPPUNIT_ASSERT_EQUAL(item0, container->GetClientData(0));
+    CHECK(container->GetClientData(0) == item0);
 
     container->Append("item 1");
     container->SetClientData(1, item1);
 
-    CPPUNIT_ASSERT_EQUAL(item1, container->GetClientData(1));
+    CHECK(container->GetClientData(1) == item1);
 
     container->Insert("item 2", 2, item2);
 
-    CPPUNIT_ASSERT_EQUAL(item2, container->GetClientData(2));
+    CHECK(container->GetClientData(2) == item2);
 
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, nullptr) );
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, nullptr) );
@@ -214,7 +211,7 @@ void ItemContainerTestCase::VoidData()
     ::SetLastError(ERROR_INVALID_DATA);
 #endif
 
-    CPPUNIT_ASSERT_EQUAL( minus1, wxPtrToUInt(container->GetClientData(3)) );
+    CHECK( wxPtrToUInt(container->GetClientData(3)) == minus1 );
 }
 
 void ItemContainerTestCase::Set()
@@ -235,15 +232,15 @@ void ItemContainerTestCase::Set()
 
     container->Set(newtestitems);
 
-    CPPUNIT_ASSERT_EQUAL(4, container->GetCount());
-    CPPUNIT_ASSERT_EQUAL("new item 1", container->GetString(1));
+    CHECK(container->GetCount() == 4);
+    CHECK(container->GetString(1) == "new item 1");
 
     wxString arrnewitems[] = { "even newer 0", "event newer 1" };
 
     container->Set(2, arrnewitems);
 
-    CPPUNIT_ASSERT_EQUAL(2, container->GetCount());
-    CPPUNIT_ASSERT_EQUAL("even newer 0", container->GetString(0));
+    CHECK(container->GetCount() == 2);
+    CHECK(container->GetString(0) == "even newer 0");
 }
 
 void ItemContainerTestCase::SetString()
@@ -260,15 +257,15 @@ void ItemContainerTestCase::SetString()
 
     container->SetSelection(0);
     container->SetString(0, "new item 0");
-    CPPUNIT_ASSERT_EQUAL("new item 0", container->GetString(0));
+    CHECK(container->GetString(0) == "new item 0");
 
     // Modifying the item shouldn't deselect it.
-    CPPUNIT_ASSERT_EQUAL(0, container->GetSelection());
+    CHECK(container->GetSelection() == 0);
 
     // wxOSX doesn't support having empty items in some containers.
 #ifndef __WXOSX__
     container->SetString(2, "");
-    CPPUNIT_ASSERT_EQUAL("", container->GetString(2));
+    CHECK(container->GetString(2) == "");
 #endif
 }
 
@@ -313,11 +310,8 @@ void ItemContainerTestCase::SetSelection()
     public:
         virtual bool ProcessEvent(wxEvent& event) override
         {
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "unexpected command event from SetSelection",
-                !event.IsCommandEvent()
-            );
+            INFO("unexpected command event from SetSelection");
+            CHECK( !event.IsCommandEvent() );
 
             return wxEvtHandler::ProcessEvent(event);
         }
@@ -328,16 +322,19 @@ void ItemContainerTestCase::SetSelection()
     wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
 
     container->SetSelection(0);
-    CPPUNIT_ASSERT_EQUAL( 0, container->GetSelection() );
+    CHECK( container->GetSelection() == 0 );
 
     container->SetSelection(1);
-    CPPUNIT_ASSERT_EQUAL( 1, container->GetSelection() );
+    CHECK( container->GetSelection() == 1 );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
 
 void ItemContainerTestCase::SimSelect()
 {
+    if ( !EnableUITests() )
+        return;
+
     wxItemContainer * const container = GetContainer();
 
     container->Append("first");
@@ -348,13 +345,13 @@ void ItemContainerTestCase::SimSelect()
     wxYield();
 
     wxUIActionSimulator sim;
-    CPPUNIT_ASSERT( sim.Select("third") );
-    CPPUNIT_ASSERT_EQUAL( 2, container->GetSelection() );
+    CHECK( sim.Select("third") );
+    CHECK( container->GetSelection() == 2 );
 
-    CPPUNIT_ASSERT( sim.Select("first") );
-    CPPUNIT_ASSERT_EQUAL( 0, container->GetSelection() );
+    CHECK( sim.Select("first") );
+    CHECK( container->GetSelection() == 0 );
 
-    CPPUNIT_ASSERT( !sim.Select("tenth") );
+    CHECK( !sim.Select("tenth") );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

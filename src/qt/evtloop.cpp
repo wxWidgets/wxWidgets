@@ -14,6 +14,7 @@
 #include "wx/private/eventloopsourcesmanager.h"
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QEvent>
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QTimer>
@@ -156,8 +157,27 @@ bool wxQtEventLoopBase::QtDispatch() const
 
 void wxQtEventLoopBase::WakeUp()
 {
-    QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
-    if ( instance )
+    // Post a no-op Qt event to the (main-thread) idle timer rather than only
+    // calling QAbstractEventDispatcher::wakeUp().
+    //
+    // wx pending events queued via wxEvtHandler::CallAfter() (including the
+    // cross-thread marshalling used by e.g. wxIPC worker threads) are processed
+    // by wxQtIdleTimer::idle() -> ProcessPendingEvents(), and that idle timer is
+    // (re)scheduled by the application-wide event filter, which only runs when a
+    // real Qt *event* is dispatched. Merely waking the dispatcher returns the
+    // blocked event loop from its wait but posts no event, so the filter never
+    // runs, the idle timer is never rescheduled, and the queued pending events
+    // are not processed until some unrelated Qt event happens to arrive. This
+    // stalled cross-thread CallAfter() indefinitely under wxQt.
+    //
+    // QCoreApplication::postEvent() is documented to be thread-safe; posting to
+    // the idle timer (which lives in the main thread) both wakes the loop and
+    // drives the event filter so the idle check, and thus the pending events,
+    // run promptly.
+    if ( m_qtIdleTimer )
+        QCoreApplication::postEvent(m_qtIdleTimer.get(), new QEvent(QEvent::User));
+    else if ( QAbstractEventDispatcher *instance =
+                  QAbstractEventDispatcher::instance() )
         instance->wakeUp();
 }
 

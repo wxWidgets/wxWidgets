@@ -318,7 +318,9 @@ public:
                 variant.ClearList();
                 return false;
             }
+            wxGCC_WARNING_SUPPRESS(double-promotion)
             variant.Append(element);
+            wxGCC_WARNING_RESTORE(double-promotion)
         }
         return true;
     }

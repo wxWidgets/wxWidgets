@@ -14,6 +14,7 @@
 
 #include "wx/mediactrl.h"
 
+wxGCC_WARNING_SUPPRESS(cast-qual)
 #include <gst/gst.h>                // main gstreamer header
 
 #if GST_CHECK_VERSION(1,0,0)
@@ -21,6 +22,7 @@
 #else
 #include <gst/interfaces/xoverlay.h>
 #endif
+wxGCC_WARNING_RESTORE(cast-qual)
 
 #ifndef  WX_PRECOMP
     #include "wx/log.h"             // wxLogDebug/wxLogSysError/wxLogTrace

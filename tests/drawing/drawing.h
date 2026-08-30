@@ -43,7 +43,7 @@ public:
     virtual void CleanUp (wxGraphicsContext *gc) = 0;
 };
 
-class GraphicsContextDrawingTestCase : public CppUnit::TestCase
+class GraphicsContextDrawingTestCase
 {
 public:
     GraphicsContextDrawingTestCase()
@@ -55,26 +55,10 @@ public:
         ms_referenceDirectory.clear();
     }
 
-private:
+protected:
 
-    // NB: individual test cases launchers are copied/pasted so that the CppUnit
-    //  test case selection can be used
-
-    CPPUNIT_TEST_SUITE( GraphicsContextDrawingTestCase );
-        CPPUNIT_TEST( DrawToImage_Basics );
-#if wxUSE_SVG
-//        CPPUNIT_TEST( DrawToSVG_Basics );
-#endif
-        // FIXME: Reference data files are currently not found when using Unix
-        // build system, so these tests are failing there, fix this and remove
-        // this ifdef.
-#ifdef __WINDOWS__
-        CPPUNIT_TEST( DrawToImage_Fonts );
-#if wxUSE_SVG
-//        CPPUNIT_TEST( DrawToSVG_Fonts );
-#endif
-#endif // __WINDOWS__
-   CPPUNIT_TEST_SUITE_END();
+    // NB: individual test cases launchers are copied/pasted so that a
+    //  particular test case can be run alone easily
 
     class ImageGraphicsContextLifeCycle: public DrawingTestGCFactory
     {

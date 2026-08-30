@@ -15,7 +15,6 @@
  */
 
 // For compilers that support precompilation, includes "wx/wx.h".
-// and "wx/cppunit.h"
 #include "testprec.h"
 
 
@@ -33,89 +32,40 @@ typedef std::unique_ptr<wxSocketClient> wxSocketClientPtr;
 
 static wxString gs_serverHost(wxGetenv("WX_TEST_SERVER"));
 
-class SocketTestCase : public CppUnit::TestCase
+namespace
+{
+
+// helper event loop class which sets itself as active only if we pass it
+// true in ctor
+class SocketTestEventLoop : public wxEventLoop
 {
 public:
-    SocketTestCase() { }
+    SocketTestEventLoop(bool useLoop)
+    {
+        m_useLoop = useLoop;
+        if ( useLoop )
+        {
+            m_evtLoopOld = wxEventLoopBase::GetActive();
+            SetActive(this);
+        }
+    }
 
-    // get the address to connect to, if nullptr is returned it means that the
-    // test is disabled and shouldn't run at all
-    static wxSockAddress* GetServer();
-
-    // get the socket to read HTTP reply from, returns nullptr if the test is
-    // disabled
-    static wxSocketClient* GetHTTPSocket(int flags = wxSOCKET_NONE);
+    virtual ~SocketTestEventLoop()
+    {
+        if ( m_useLoop )
+        {
+            wxEventLoopBase::SetActive(m_evtLoopOld);
+        }
+    }
 
 private:
-    // we need to repeat the tests twice as the sockets behave differently when
-    // there is an active event loop and without it
-    #define ALL_SOCKET_TESTS() \
-        CPPUNIT_TEST( BlockingConnect ); \
-        CPPUNIT_TEST( NonblockingConnect ); \
-        CPPUNIT_TEST( ReadNormal ); \
-        CPPUNIT_TEST( ReadBlock ); \
-        CPPUNIT_TEST( ReadNowait ); \
-        CPPUNIT_TEST( ReadWaitall ); \
-        CPPUNIT_TEST( ReadAnotherThread ); \
-        CPPUNIT_TEST( UrlTest )
-
-    CPPUNIT_TEST_SUITE( SocketTestCase );
-        ALL_SOCKET_TESTS();
-        CPPUNIT_TEST( PseudoTest_SetUseEventLoop );
-        ALL_SOCKET_TESTS();
-    CPPUNIT_TEST_SUITE_END();
-
-    // helper event loop class which sets itself as active only if we pass it
-    // true in ctor
-    class SocketTestEventLoop : public wxEventLoop
-    {
-    public:
-        SocketTestEventLoop(bool useLoop)
-        {
-            m_useLoop = useLoop;
-            if ( useLoop )
-            {
-                m_evtLoopOld = wxEventLoopBase::GetActive();
-                SetActive(this);
-            }
-        }
-
-        virtual ~SocketTestEventLoop()
-        {
-            if ( m_useLoop )
-            {
-                wxEventLoopBase::SetActive(m_evtLoopOld);
-            }
-        }
-
-    private:
-        bool m_useLoop;
-        wxEventLoopBase *m_evtLoopOld;
-    };
-
-    void PseudoTest_SetUseEventLoop() { ms_useLoop = true; }
-
-    void BlockingConnect();
-    void NonblockingConnect();
-    void ReadNormal();
-    void ReadBlock();
-    void ReadNowait();
-    void ReadWaitall();
-    void ReadAnotherThread();
-
-    void UrlTest();
-
-    static bool ms_useLoop;
-
-    wxDECLARE_NO_COPY_CLASS(SocketTestCase);
+    bool m_useLoop;
+    wxEventLoopBase *m_evtLoopOld;
 };
 
-bool SocketTestCase::ms_useLoop = false;
-
-CPPUNIT_TEST_SUITE_REGISTRATION( SocketTestCase );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SocketTestCase, "SocketTestCase" );
-
-wxSockAddress* SocketTestCase::GetServer()
+// get the address to connect to, if nullptr is returned it means that the
+// test is disabled and shouldn't run at all
+wxSockAddress* GetServer()
 {
     if ( gs_serverHost.empty() )
         return nullptr;
@@ -127,7 +77,9 @@ wxSockAddress* SocketTestCase::GetServer()
     return addr;
 }
 
-wxSocketClient* SocketTestCase::GetHTTPSocket(int flags)
+// get the socket to read HTTP reply from, returns nullptr if the test is
+// disabled
+wxSocketClient* GetHTTPSocket(int flags = wxSOCKET_NONE)
 {
     wxSockAddress *addr = GetServer();
     if ( !addr )
@@ -135,7 +87,7 @@ wxSocketClient* SocketTestCase::GetHTTPSocket(int flags)
 
     wxSocketClient *sock = new wxSocketClient(flags);
     sock->SetTimeout(1);
-    CPPUNIT_ASSERT( sock->Connect(*addr) );
+    REQUIRE( sock->Connect(*addr) );
 
     const wxString httpGetRoot =
         "GET / HTTP/1.1\r\n"
@@ -147,34 +99,46 @@ wxSocketClient* SocketTestCase::GetHTTPSocket(int flags)
     return sock;
 }
 
-void SocketTestCase::BlockingConnect()
+} // anonymous namespace
+
+// Note that the tests using SocketTestEventLoop below are run twice, with and
+// without an active event loop, as sockets behave differently in these two
+// cases.
+
+TEST_CASE("Socket::BlockingConnect", "[socket]")
 {
     wxSockAddressPtr addr(GetServer());
     if ( !addr.get() )
         return;
 
     wxSocketClient sock;
-    CPPUNIT_ASSERT( sock.Connect(*addr) );
+    CHECK( sock.Connect(*addr) );
 }
 
-void SocketTestCase::NonblockingConnect()
+TEST_CASE("Socket::NonblockingConnect", "[socket]")
 {
     wxSockAddressPtr addr(GetServer());
     if ( !addr.get() )
         return;
 
-    SocketTestEventLoop loop(ms_useLoop);
+    const bool useLoop = GENERATE(false, true);
+    CAPTURE(useLoop);
+
+    SocketTestEventLoop loop(useLoop);
 
     wxSocketClient sock;
     sock.Connect(*addr, false);
     sock.WaitOnConnect(10);
 
-    CPPUNIT_ASSERT( sock.IsConnected() );
+    CHECK( sock.IsConnected() );
 }
 
-void SocketTestCase::ReadNormal()
+TEST_CASE("Socket::ReadNormal", "[socket]")
 {
-    SocketTestEventLoop loop(ms_useLoop);
+    const bool useLoop = GENERATE(false, true);
+    CAPTURE(useLoop);
+
+    SocketTestEventLoop loop(useLoop);
 
     wxSocketClientPtr sock(GetHTTPSocket());
     if ( !sock.get() )
@@ -183,20 +147,20 @@ void SocketTestCase::ReadNormal()
     char bufSmall[128];
     sock->Read(bufSmall, WXSIZEOF(bufSmall));
 
-    CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastCount() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastReadCount() );
+    CHECK( sock->LastError() == wxSOCKET_NOERROR );
+    CHECK( (size_t)sock->LastCount() == WXSIZEOF(bufSmall) );
+    CHECK( (size_t)sock->LastReadCount() == WXSIZEOF(bufSmall) );
 
 
     char bufBig[102400];
     sock->Read(bufBig, WXSIZEOF(bufBig));
 
-    CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
-    CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastCount() );
-    CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastReadCount() );
+    CHECK( sock->LastError() == wxSOCKET_NOERROR );
+    CHECK( WXSIZEOF(bufBig) >= sock->LastCount() );
+    CHECK( WXSIZEOF(bufBig) >= sock->LastReadCount() );
 }
 
-void SocketTestCase::ReadBlock()
+TEST_CASE("Socket::ReadBlock", "[socket]")
 {
     wxSocketClientPtr sock(GetHTTPSocket(wxSOCKET_BLOCK));
     if ( !sock.get() )
@@ -205,20 +169,20 @@ void SocketTestCase::ReadBlock()
     char bufSmall[128];
     sock->Read(bufSmall, WXSIZEOF(bufSmall));
 
-    CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastCount() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastReadCount() );
+    CHECK( sock->LastError() == wxSOCKET_NOERROR );
+    CHECK( (size_t)sock->LastCount() == WXSIZEOF(bufSmall) );
+    CHECK( (size_t)sock->LastReadCount() == WXSIZEOF(bufSmall) );
 
 
     char bufBig[102400];
     sock->Read(bufBig, WXSIZEOF(bufBig));
 
-    CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
-    CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastCount() );
-    CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastReadCount() );
+    CHECK( sock->LastError() == wxSOCKET_NOERROR );
+    CHECK( WXSIZEOF(bufBig) >= sock->LastCount() );
+    CHECK( WXSIZEOF(bufBig) >= sock->LastReadCount() );
 }
 
-void SocketTestCase::ReadNowait()
+TEST_CASE("Socket::ReadNowait", "[socket]")
 {
     wxSocketClientPtr sock(GetHTTPSocket(wxSOCKET_NOWAIT));
     if ( !sock.get() )
@@ -228,13 +192,16 @@ void SocketTestCase::ReadNowait()
     sock->Read(buf, WXSIZEOF(buf));
     if ( sock->LastError() != wxSOCKET_WOULDBLOCK )
     {
-        CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
+        CHECK( sock->LastError() == wxSOCKET_NOERROR );
     }
 }
 
-void SocketTestCase::ReadWaitall()
+TEST_CASE("Socket::ReadWaitall", "[socket]")
 {
-    SocketTestEventLoop loop(ms_useLoop);
+    const bool useLoop = GENERATE(false, true);
+    CAPTURE(useLoop);
+
+    SocketTestEventLoop loop(useLoop);
 
     wxSocketClientPtr sock(GetHTTPSocket(wxSOCKET_WAITALL));
     if ( !sock.get() )
@@ -243,12 +210,12 @@ void SocketTestCase::ReadWaitall()
     char buf[128];
     sock->Read(buf, WXSIZEOF(buf));
 
-    CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(buf), (size_t)sock->LastCount() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(buf), (size_t)sock->LastReadCount() );
+    CHECK( sock->LastError() == wxSOCKET_NOERROR );
+    CHECK( (size_t)sock->LastCount() == WXSIZEOF(buf) );
+    CHECK( (size_t)sock->LastReadCount() == WXSIZEOF(buf) );
 }
 
-void SocketTestCase::ReadAnotherThread()
+TEST_CASE("Socket::ReadAnotherThread", "[socket]")
 {
     class SocketThread : public wxThread
     {
@@ -260,7 +227,7 @@ void SocketTestCase::ReadAnotherThread()
 
         virtual void* Entry() override
         {
-            wxSocketClientPtr sock(SocketTestCase::GetHTTPSocket(wxSOCKET_BLOCK));
+            wxSocketClientPtr sock(GetHTTPSocket(wxSOCKET_BLOCK));
             if ( !sock )
                 return nullptr;
 
@@ -279,28 +246,34 @@ void SocketTestCase::ReadAnotherThread()
 
     SocketThread thr;
 
-    SocketTestEventLoop loop(ms_useLoop);
+    const bool useLoop = GENERATE(false, true);
+    CAPTURE(useLoop);
+
+    SocketTestEventLoop loop(useLoop);
 
     thr.Run();
 
     CHECK( thr.Wait() == nullptr );
 }
 
-void SocketTestCase::UrlTest()
+TEST_CASE("Socket::Url", "[socket]")
 {
 #if wxUSE_URL
     if ( gs_serverHost.empty() )
         return;
 
-    SocketTestEventLoop loop(ms_useLoop);
+    const bool useLoop = GENERATE(false, true);
+    CAPTURE(useLoop);
+
+    SocketTestEventLoop loop(useLoop);
 
     wxURL url("http://" + gs_serverHost);
 
     const std::unique_ptr<wxInputStream> in(url.GetInputStream());
-    CPPUNIT_ASSERT( in.get() );
+    CHECK( in.get() );
 
     wxStringOutputStream out;
-    CPPUNIT_ASSERT_EQUAL( wxSTREAM_EOF, in->Read(out).GetLastError() );
+    CHECK( in->Read(out).GetLastError() == wxSTREAM_EOF );
 #endif
 }
 

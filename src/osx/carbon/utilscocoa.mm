@@ -224,6 +224,7 @@ WXImage  wxOSXGetImageFromCGImage( CGImageRef image, double scaleFactor, bool is
     [newImage autorelease];
     return( newImage );
 #else
+    wxUnusedVar(isTemplate);
     return  [UIImage imageWithCGImage:image scale:scaleFactor orientation:UIImageOrientationUp];
 #endif
 }
@@ -257,6 +258,8 @@ CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r
                                context:[NSGraphicsContext graphicsContextWithCGContext:cg flipped:YES]
                                         hints:nil];
 #else
+    wxUnusedVar(r);
+    wxUnusedVar(cg);
     return [nsimage CGImage];
 #endif
 }

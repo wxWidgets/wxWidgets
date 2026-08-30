@@ -7,9 +7,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
-// and "wx/cppunit.h"
 #include "testprec.h"
-
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -30,135 +28,76 @@
 const int TEST_SIZE = 384;
 
 // ==========================================================================
-// Test class
+// Test fixture
 // ==========================================================================
 
-class StdStreamTestCase : public CppUnit::TestCase
+namespace
+{
+
+class StdStreamTestCase
 {
 public:
-    StdStreamTestCase();
+    StdStreamTestCase()
+    {
+        for (int i = 0; i < TEST_SIZE; ++i)
+            m_testData[i] = (i & 0xFF);
+    }
 
-private:
-    CPPUNIT_TEST_SUITE( StdStreamTestCase );
-        // Input buffer management and positioning
-        CPPUNIT_TEST( InputBuffer_pubsetbuf );
-        CPPUNIT_TEST( InputBuffer_pubseekoff );
-        CPPUNIT_TEST( InputBuffer_pubseekpos );
-        CPPUNIT_TEST( InputBuffer_pubsync );
-
-        // Input functions
-        CPPUNIT_TEST( InputBuffer_in_avail );
-        CPPUNIT_TEST( InputBuffer_snextc );
-        CPPUNIT_TEST( InputBuffer_sbumpc );
-        CPPUNIT_TEST( InputBuffer_sgetc );
-        CPPUNIT_TEST( InputBuffer_sgetn );
-        CPPUNIT_TEST( InputBuffer_sputbackc );
-        CPPUNIT_TEST( InputBuffer_sungetc );
-
-        // Output buffer management and positioning
-        CPPUNIT_TEST( OutputBuffer_pubsetbuf );
-        CPPUNIT_TEST( OutputBuffer_pubseekoff );
-        CPPUNIT_TEST( OutputBuffer_pubseekpos );
-        CPPUNIT_TEST( OutputBuffer_pubsync );
-
-        // Output functions
-        CPPUNIT_TEST( OutputBuffer_sputc );
-        CPPUNIT_TEST( OutputBuffer_sputn );
-    CPPUNIT_TEST_SUITE_END();
-
-    // Input buffer management and positioning
-    void InputBuffer_pubsetbuf();
-    void InputBuffer_pubseekoff();
-    void InputBuffer_pubseekpos();
-    void InputBuffer_pubsync();
-
-    // Input functions
-    void InputBuffer_in_avail();
-    void InputBuffer_snextc();
-    void InputBuffer_sbumpc();
-    void InputBuffer_sgetc();
-    void InputBuffer_sgetn();
-    void InputBuffer_sputbackc();
-    void InputBuffer_sungetc();
-
-    // Output buffer management and positioning
-    void OutputBuffer_pubsetbuf();
-    void OutputBuffer_pubseekoff();
-    void OutputBuffer_pubseekpos();
-    void OutputBuffer_pubsync();
-
-    // Output functions
-    void OutputBuffer_sputc();
-    void OutputBuffer_sputn();
-
+protected:
     char m_testData[TEST_SIZE];
 
     wxDECLARE_NO_COPY_CLASS(StdStreamTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( StdStreamTestCase );
+} // anonymous namespace
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( StdStreamTestCase,
-                                       "StdStreamTestCase" );
+// MSVS 2015 can't compile CHECK()s in this file without this disambiguation.
+#ifdef __VISUALC__
+    #if __VISUALC__ < 1910
+        inline bool operator==(const std::fpos<_Mbstatet> lhs, const int rhs)
+        {
+            return static_cast<int>(lhs) == rhs;
+        }
+    #endif // MSVS 2015
+#endif // __VISUALC__
 
 // ==========================================================================
-// Implementation
+// Tests
 // ==========================================================================
-
-StdStreamTestCase::StdStreamTestCase()
-{
-    for (int i = 0; i < TEST_SIZE; ++i)
-        m_testData[i] = (i & 0xFF);
-}
 
 // --------------------------------------------------------------------------
 // Input buffer management and positioning
 // --------------------------------------------------------------------------
 
-void StdStreamTestCase::InputBuffer_pubsetbuf()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_pubsetbuf", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
     char testBuffer[TEST_SIZE];
 
-    CPPUNIT_ASSERT(buffer.pubsetbuf(testBuffer, TEST_SIZE) == nullptr);
+    CHECK(buffer.pubsetbuf(testBuffer, TEST_SIZE) == nullptr);
 }
 
-void StdStreamTestCase::InputBuffer_pubseekoff()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_pubseekoff", "[stdstream][stream]")
 {
     const char *testData = "0123456789";
     wxMemoryInputStream stream(testData, 10);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT_EQUAL(2,
-                         buffer.pubseekoff(2, std::ios_base::beg,
-                                           std::ios_base::in));
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(2, std::ios_base::beg,
-                                           std::ios_base::out));
+    CHECK(buffer.pubseekoff(2, std::ios_base::beg, std::ios_base::in) == 2);
+    CHECK(buffer.pubseekoff(2, std::ios_base::beg, std::ios_base::out) == -1);
 
-    CPPUNIT_ASSERT_EQUAL(4,
-                         buffer.pubseekoff(2, std::ios_base::cur));
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(2, std::ios_base::cur,
-                                           std::ios_base::out));
+    CHECK(buffer.pubseekoff(2, std::ios_base::cur) == 4);
+    CHECK(buffer.pubseekoff(2, std::ios_base::cur, std::ios_base::out) == -1);
 
-    CPPUNIT_ASSERT_EQUAL(8,
-                         buffer.pubseekoff(-2, std::ios_base::end));
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(-2, std::ios_base::end,
-                                           std::ios_base::out));
+    CHECK(buffer.pubseekoff(-2, std::ios_base::end) == 8);
+    CHECK(buffer.pubseekoff(-2, std::ios_base::end, std::ios_base::out) == -1);
 
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(3, std::ios_base::cur));
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(3, std::ios_base::cur,
-                                           std::ios_base::out));
+    CHECK(buffer.pubseekoff(3, std::ios_base::cur) == -1);
+    CHECK(buffer.pubseekoff(3, std::ios_base::cur, std::ios_base::out) == -1);
 }
 
-void StdStreamTestCase::InputBuffer_pubseekpos()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_pubseekpos", "[stdstream][stream]")
 {
     const char *testData = "0123456789";
     wxMemoryInputStream stream(testData, 10);
@@ -167,47 +106,47 @@ void StdStreamTestCase::InputBuffer_pubseekpos()
     for (int i = 9; i >= 0; --i)
     {
         if (i % 2 == 0)
-            CPPUNIT_ASSERT_EQUAL(i, buffer.pubseekpos(i));
+            CHECK(buffer.pubseekpos(i) == i);
         else
-            CPPUNIT_ASSERT_EQUAL(i, buffer.pubseekpos(i, std::ios_base::in));
+            CHECK(buffer.pubseekpos(i, std::ios_base::in) == i);
 
-        CPPUNIT_ASSERT_EQUAL('0' + i, buffer.sgetc());
+        CHECK(buffer.sgetc() == '0' + i);
     }
 }
 
-void StdStreamTestCase::InputBuffer_pubsync()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_pubsync", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.pubsync() == 0);
+    CHECK(buffer.pubsync() == 0);
 }
 
 // --------------------------------------------------------------------------
 // Input functions
 // --------------------------------------------------------------------------
 
-void StdStreamTestCase::InputBuffer_in_avail()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_in_avail", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.sgetc() != EOF);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, buffer.in_avail());
+    CHECK(buffer.sgetc() != EOF);
+    CHECK(buffer.in_avail() == TEST_SIZE);
 
     char data[TEST_SIZE / 2];
 
     buffer.sgetn(data, TEST_SIZE / 2);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE - TEST_SIZE / 2, buffer.in_avail());
+    CHECK(buffer.in_avail() == TEST_SIZE - TEST_SIZE / 2);
 }
 
-void StdStreamTestCase::InputBuffer_snextc()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_snextc", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.sgetc() != EOF);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, buffer.in_avail());
+    CHECK(buffer.sgetc() != EOF);
+    CHECK(buffer.in_avail() == TEST_SIZE);
 
     char data[TEST_SIZE];
 
@@ -216,36 +155,35 @@ void StdStreamTestCase::InputBuffer_snextc()
     for (int i = 1; i < TEST_SIZE; ++i)
         data[i] = buffer.snextc();
 
-    CPPUNIT_ASSERT(memcmp(data, m_testData, TEST_SIZE) == 0);
-    CPPUNIT_ASSERT_EQUAL((int)(unsigned char) (m_testData[TEST_SIZE - 1]),
-                         buffer.sbumpc());
-    CPPUNIT_ASSERT(buffer.sgetc() == EOF);
+    CHECK(memcmp(data, m_testData, TEST_SIZE) == 0);
+    CHECK(buffer.sbumpc() == (int)(unsigned char) (m_testData[TEST_SIZE - 1]));
+    CHECK(buffer.sgetc() == EOF);
 }
 
-void StdStreamTestCase::InputBuffer_sbumpc()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_sbumpc", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.sgetc() != EOF);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, buffer.in_avail());
+    CHECK(buffer.sgetc() != EOF);
+    CHECK(buffer.in_avail() == TEST_SIZE);
 
     char data[TEST_SIZE];
 
     for (int i = 0; i < TEST_SIZE; ++i)
         data[i] = buffer.sbumpc();
 
-    CPPUNIT_ASSERT(memcmp(data, m_testData, TEST_SIZE) == 0);
-    CPPUNIT_ASSERT(buffer.sgetc() == EOF);
+    CHECK(memcmp(data, m_testData, TEST_SIZE) == 0);
+    CHECK(buffer.sgetc() == EOF);
 }
 
-void StdStreamTestCase::InputBuffer_sgetc()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_sgetc", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.sgetc() != EOF);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, buffer.in_avail());
+    CHECK(buffer.sgetc() != EOF);
+    CHECK(buffer.in_avail() == TEST_SIZE);
 
     char data[TEST_SIZE];
 
@@ -254,116 +192,103 @@ void StdStreamTestCase::InputBuffer_sgetc()
         buffer.sbumpc();
     }
 
-    CPPUNIT_ASSERT(memcmp(data, m_testData, TEST_SIZE) == 0);
-    CPPUNIT_ASSERT(buffer.sgetc() == EOF);
+    CHECK(memcmp(data, m_testData, TEST_SIZE) == 0);
+    CHECK(buffer.sgetc() == EOF);
 }
 
-void StdStreamTestCase::InputBuffer_sgetn()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_sgetn", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.sgetc() != EOF);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, buffer.in_avail());
+    CHECK(buffer.sgetc() != EOF);
+    CHECK(buffer.in_avail() == TEST_SIZE);
 
     char data[TEST_SIZE * 2];
     std::streamsize read = buffer.sgetn(data, TEST_SIZE * 2);
 
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, read);
-    CPPUNIT_ASSERT(memcmp(data, m_testData, TEST_SIZE) == 0);
-    CPPUNIT_ASSERT(buffer.sgetc() == EOF);
+    CHECK(read == TEST_SIZE);
+    CHECK(memcmp(data, m_testData, TEST_SIZE) == 0);
+    CHECK(buffer.sgetc() == EOF);
 }
 
-void StdStreamTestCase::InputBuffer_sputbackc()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_sputbackc", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.sgetc() != EOF);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, buffer.in_avail());
+    CHECK(buffer.sgetc() != EOF);
+    CHECK(buffer.in_avail() == TEST_SIZE);
 
     char data[TEST_SIZE];
     std::streamsize read = buffer.sgetn(data, TEST_SIZE);
 
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, read);
-    CPPUNIT_ASSERT(memcmp(data, m_testData, TEST_SIZE) == 0);
-    CPPUNIT_ASSERT(buffer.sgetc() == EOF);
+    CHECK(read == TEST_SIZE);
+    CHECK(memcmp(data, m_testData, TEST_SIZE) == 0);
+    CHECK(buffer.sgetc() == EOF);
 
     char putBackChar = m_testData[TEST_SIZE - 1] + 147;
 
-    CPPUNIT_ASSERT_EQUAL((int) putBackChar, buffer.sputbackc(putBackChar));
-    CPPUNIT_ASSERT_EQUAL((int) putBackChar, buffer.sgetc());
-    CPPUNIT_ASSERT_EQUAL((int) putBackChar, buffer.sbumpc());
-    CPPUNIT_ASSERT(buffer.sgetc() == EOF);
+    CHECK(buffer.sputbackc(putBackChar) == (int) putBackChar);
+    CHECK(buffer.sgetc() == (int) putBackChar);
+    CHECK(buffer.sbumpc() == (int) putBackChar);
+    CHECK(buffer.sgetc() == EOF);
 }
 
-void StdStreamTestCase::InputBuffer_sungetc()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::InputBuffer_sungetc", "[stdstream][stream]")
 {
     wxMemoryInputStream stream(m_testData, TEST_SIZE);
     wxStdInputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.sgetc() != EOF);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, buffer.in_avail());
+    CHECK(buffer.sgetc() != EOF);
+    CHECK(buffer.in_avail() == TEST_SIZE);
 
     char data[TEST_SIZE];
     std::streamsize read = buffer.sgetn(data, TEST_SIZE);
 
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, read);
-    CPPUNIT_ASSERT(memcmp(data, m_testData, TEST_SIZE) == 0);
-    CPPUNIT_ASSERT(buffer.sgetc() == EOF);
+    CHECK(read == TEST_SIZE);
+    CHECK(memcmp(data, m_testData, TEST_SIZE) == 0);
+    CHECK(buffer.sgetc() == EOF);
 
-    CPPUNIT_ASSERT_EQUAL((int) m_testData[TEST_SIZE - 1], buffer.sungetc());
-    CPPUNIT_ASSERT_EQUAL((int) m_testData[TEST_SIZE - 1], buffer.sgetc());
-    CPPUNIT_ASSERT_EQUAL((int) m_testData[TEST_SIZE - 1], buffer.sbumpc());
-    CPPUNIT_ASSERT(buffer.sgetc() == EOF);
+    CHECK(buffer.sungetc() == (int) m_testData[TEST_SIZE - 1]);
+    CHECK(buffer.sgetc() == (int) m_testData[TEST_SIZE - 1]);
+    CHECK(buffer.sbumpc() == (int) m_testData[TEST_SIZE - 1]);
+    CHECK(buffer.sgetc() == EOF);
 }
 
 // --------------------------------------------------------------------------
 // Output buffer management and positioning
 // --------------------------------------------------------------------------
 
-void StdStreamTestCase::OutputBuffer_pubsetbuf()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::OutputBuffer_pubsetbuf", "[stdstream][stream]")
 {
     wxMemoryOutputStream stream;
     wxStdOutputStreamBuffer buffer(stream);
     char testBuffer[TEST_SIZE];
 
-    CPPUNIT_ASSERT(buffer.pubsetbuf(testBuffer, TEST_SIZE) == nullptr);
+    CHECK(buffer.pubsetbuf(testBuffer, TEST_SIZE) == nullptr);
 }
 
-void StdStreamTestCase::OutputBuffer_pubseekoff()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::OutputBuffer_pubseekoff", "[stdstream][stream]")
 {
     char testData[] = "0123456789";
     wxMemoryOutputStream stream(testData, 10);
     wxStdOutputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT_EQUAL(2,
-                         buffer.pubseekoff(2, std::ios_base::beg,
-                                           std::ios_base::out));
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(2, std::ios_base::beg,
-                                           std::ios_base::in));
+    CHECK(buffer.pubseekoff(2, std::ios_base::beg, std::ios_base::out) == 2);
+    CHECK(buffer.pubseekoff(2, std::ios_base::beg, std::ios_base::in) == -1);
 
-    CPPUNIT_ASSERT_EQUAL(4,
-                         buffer.pubseekoff(2, std::ios_base::cur));
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(2, std::ios_base::cur,
-                                           std::ios_base::in));
+    CHECK(buffer.pubseekoff(2, std::ios_base::cur) == 4);
+    CHECK(buffer.pubseekoff(2, std::ios_base::cur, std::ios_base::in) == -1);
 
-    CPPUNIT_ASSERT_EQUAL(8,
-                         buffer.pubseekoff(-2, std::ios_base::end));
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(-2, std::ios_base::end,
-                                           std::ios_base::in));
+    CHECK(buffer.pubseekoff(-2, std::ios_base::end) == 8);
+    CHECK(buffer.pubseekoff(-2, std::ios_base::end, std::ios_base::in) == -1);
 
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(3, std::ios_base::cur));
-    CPPUNIT_ASSERT_EQUAL(-1,
-                         buffer.pubseekoff(3, std::ios_base::cur,
-                                           std::ios_base::in));
+    CHECK(buffer.pubseekoff(3, std::ios_base::cur) == -1);
+    CHECK(buffer.pubseekoff(3, std::ios_base::cur, std::ios_base::in) == -1);
 }
 
-void StdStreamTestCase::OutputBuffer_pubseekpos()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::OutputBuffer_pubseekpos", "[stdstream][stream]")
 {
     char testData[] = "0123456789";
     wxMemoryOutputStream stream(testData, 10);
@@ -373,35 +298,34 @@ void StdStreamTestCase::OutputBuffer_pubseekpos()
     {
         if (i % 2 == 0)
         {
-            CPPUNIT_ASSERT_EQUAL(i, buffer.pubseekpos(i));
+            CHECK(buffer.pubseekpos(i) == i);
         }
         else
         {
-            CPPUNIT_ASSERT_EQUAL(i,
-                                 buffer.pubseekpos(i, std::ios_base::out));
+            CHECK(buffer.pubseekpos(i, std::ios_base::out) == i);
         }
 
-        CPPUNIT_ASSERT_EQUAL('0' + (9 - i), buffer.sputc('0' + (9 - i)));
+        CHECK(buffer.sputc('0' + (9 - i)) == '0' + (9 - i));
     }
 
-    CPPUNIT_ASSERT(memcmp(testData, "9876543210", 10) == 0);
+    CHECK(memcmp(testData, "9876543210", 10) == 0);
 
-    CPPUNIT_ASSERT_EQUAL(-1, buffer.pubseekpos(5, std::ios_base::in));
+    CHECK(buffer.pubseekpos(5, std::ios_base::in) == -1);
 }
 
-void StdStreamTestCase::OutputBuffer_pubsync()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::OutputBuffer_pubsync", "[stdstream][stream]")
 {
     wxMemoryOutputStream stream;
     wxStdOutputStreamBuffer buffer(stream);
 
-    CPPUNIT_ASSERT(buffer.pubsync() == 0);
+    CHECK(buffer.pubsync() == 0);
 }
 
 // --------------------------------------------------------------------------
 // Output functions
 // --------------------------------------------------------------------------
 
-void StdStreamTestCase::OutputBuffer_sputc()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::OutputBuffer_sputc", "[stdstream][stream]")
 {
     wxMemoryOutputStream stream;
     wxStdOutputStreamBuffer buffer(stream);
@@ -409,26 +333,26 @@ void StdStreamTestCase::OutputBuffer_sputc()
     for (int i = 0; i < TEST_SIZE; ++i)
         buffer.sputc(m_testData[i]);
 
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, stream.GetSize());
+    CHECK(stream.GetSize() == TEST_SIZE);
 
     char result[TEST_SIZE];
 
     stream.CopyTo(result, TEST_SIZE);
-    CPPUNIT_ASSERT(memcmp(result, m_testData, TEST_SIZE) == 0);
+    CHECK(memcmp(result, m_testData, TEST_SIZE) == 0);
 }
 
-void StdStreamTestCase::OutputBuffer_sputn()
+TEST_CASE_METHOD(StdStreamTestCase, "StdStream::OutputBuffer_sputn", "[stdstream][stream]")
 {
     wxMemoryOutputStream stream;
     wxStdOutputStreamBuffer buffer(stream);
 
     buffer.sputn(m_testData, TEST_SIZE);
-    CPPUNIT_ASSERT_EQUAL(TEST_SIZE, stream.GetSize());
+    CHECK(stream.GetSize() == TEST_SIZE);
 
     char result[TEST_SIZE];
 
     stream.CopyTo(result, TEST_SIZE);
-    CPPUNIT_ASSERT(memcmp(result, m_testData, TEST_SIZE) == 0);
+    CHECK(memcmp(result, m_testData, TEST_SIZE) == 0);
 }
 
 #endif // wxUSE_STD_IOSTREAM

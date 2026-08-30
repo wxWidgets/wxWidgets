@@ -147,7 +147,7 @@ wxGLContextAttrs& wxGLContextAttrs::ResetIsolation()
     return *this;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::ReleaseFlush(int val)
+wxGLContextAttrs& wxGLContextAttrs::ReleaseFlush(int /*val*/)
 {
     SetNeedsARB();
     return *this;
@@ -340,9 +340,9 @@ wxGLAttributes& wxGLAttributes::PlatformDefaults()
 
 wxIMPLEMENT_CLASS(wxGLContext, wxWindow);
 
-wxGLContext::wxGLContext(wxGLCanvas *win,
-                         const wxGLContext *other,
-                         const wxGLContextAttrs *ctxAttrs)
+wxGLContext::wxGLContext(wxGLCanvas* /*win*/,
+                         const wxGLContext* /*other*/,
+                         const wxGLContextAttrs* /*ctxAttrs*/)
 {
     m_isOk = true;
 }
@@ -658,7 +658,7 @@ bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
 // wxGLApp
 // ----------------------------------------------------------------------------
 
-bool wxGLApp::InitGLVisual(const int *attribList)
+bool wxGLApp::InitGLVisual(const int* /*attribList*/)
 {
     wxLogError("Missing implementation of " + wxString(__func__));
     return false;

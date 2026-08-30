@@ -15,7 +15,7 @@
 
 // Match the guard in tests/net/ipc.cpp and ipc_test_server.cpp: the IPC test is
 // excluded from wxQt, so its declarations must be too.
-#if wxUSE_THREADS && !defined(__WXQT__)
+#if wxUSE_THREADS
 
 #include <memory>
 
@@ -57,6 +57,6 @@ inline void WaitForThreadWithDispatch(wxThread& thread)
     thread.Wait();
 }
 
-#endif // wxUSE_THREADS && !__WXQT__
+#endif // wxUSE_THREADS
 
 #endif // _WX_TESTS_NET_IPC_TEST_SERVER_H_

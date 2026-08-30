@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/asserthelper.cpp
-// Purpose:     Helper functions for cppunit
+// Purpose:     Helper functions for the unit tests
 // Author:      Steven Lamerton
 // Created:     2010-07-23
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>

@@ -4491,6 +4491,52 @@ void wxWindowGTK::DoSetClientSize( int width, int height )
     SetSize(width + (size.x - clientSize.x), height + (size.y - clientSize.y));
 }
 
+#ifdef __WXGTK3__
+
+// Check whether the given scrolled window uses overlay scrollbars, i.e. the
+// scrollbars drawn on top of its contents which, unlike the normal ones, don't
+// take any space in it.
+//
+// This replicates the logic of the private GTK function
+// gtk_scrolled_window_update_use_indicators() and must be kept in sync with it.
+static bool wxUsesOverlayScrollbars(GtkWidget* widget)
+{
+    // Overlay scrollbars only exist since GTK 3.16, where they're used by
+    // default, but this can be overridden in several different ways.
+    if ( !wx_is_at_least_gtk3(16) )
+        return false;
+
+#if GTK_CHECK_VERSION(3,16,0)
+    // The application may have disabled them for this particular window: we
+    // never call the corresponding setter ourselves, but it could do it.
+    if ( !gtk_scrolled_window_get_overlay_scrolling(GTK_SCROLLED_WINDOW(widget)) )
+        return false;
+#endif // GTK+ >= 3.16
+
+    // The user may have disabled them globally using the setting below, which
+    // was added in GTK 3.24.9.
+    if ( wx_is_at_least_gtk3(24, 9) )
+    {
+        gboolean enabled = TRUE;
+        g_object_get(gtk_widget_get_settings(widget),
+            "gtk-overlay-scrolling", &enabled, nullptr);
+        if ( !enabled )
+            return false;
+    }
+
+    // Finally, this environment variable overrides everything else. Its value
+    // is not supposed to change during the program lifetime, so check it only
+    // once and cache the result, as this function is called often.
+    static const bool
+        disabledInEnv = g_strcmp0(getenv("GTK_OVERLAY_SCROLLING"), "0") == 0;
+    if ( disabledInEnv )
+        return false;
+
+    return true;
+}
+
+#endif // __WXGTK3__
+
 void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
 {
     wxCHECK_RET( (m_widget != nullptr), wxT("invalid window") );
@@ -4507,8 +4553,14 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
 
     if ( m_wxwindow )
     {
-        // if window is scrollable, account for scrollbars
-        if ( GTK_IS_SCROLLED_WINDOW(m_widget) )
+        // If the window is scrollable, account for its scrollbars -- but only
+        // if they're not the overlay ones, which are drawn on top of the
+        // window contents and so don't take any space in it.
+        if ( GTK_IS_SCROLLED_WINDOW(m_widget)
+#ifdef __WXGTK3__
+                && !wxUsesOverlayScrollbars(m_widget)
+#endif // __WXGTK3__
+           )
         {
             GtkPolicyType policy[ScrollDir_Max];
             gtk_scrolled_window_get_policy(GTK_SCROLLED_WINDOW(m_widget),
@@ -6906,6 +6958,18 @@ int wxWindowGTK::GetScrollRange( int orient ) const
     wxCHECK_MSG( sb, 0, wxT("this window is not scrollable") );
 
     return wxRound(gtk_adjustment_get_upper(gtk_range_get_adjustment(sb)));
+}
+
+int wxWindowGTK::GetScrollbarSize( int orient ) const
+{
+#ifdef __WXGTK3__
+    // Overlay scrollbars are drawn on top of the window contents and so don't
+    // take any space in it.
+    if ( GTK_IS_SCROLLED_WINDOW(m_widget) && wxUsesOverlayScrollbars(m_widget) )
+        return 0;
+#endif // __WXGTK3__
+
+    return wxWindowBase::GetScrollbarSize(orient);
 }
 
 // Determine if increment is the same as +/-x, allowing for some small

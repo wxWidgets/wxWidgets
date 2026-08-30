@@ -47,8 +47,8 @@
 // The crossing of drawing case and life cycles is implemented by
 // RunIndividualDrawingCase
 
-// The CPPUNIT test case class present a test per drawing case per life cycle
-// so that it is easy to run a particular test
+// The test case class presents a test per drawing case per life cycle so that
+// it is easy to run a particular test
 
 // The test requires reference files and must produce them when an
 // implementation changed and new good references are known to be produced.
@@ -72,8 +72,8 @@
 //      DrawingTestGCFactory derived sub-class in drawing.h header
 //      together with a declaration for it and its implementation
 //      can be placed in drawing.cpp
-//      Once this is done duplicate all the CPP UNIT test functions
-//      and entries "DrawToImage_YYY" to your new GC "DrawTo<newGc>_YYYY"
+//      Once this is done duplicate all the test functions and entries
+//      "DrawToImage_YYY" to your new GC "DrawTo<newGc>_YYYY"
 //
 
 wxString GraphicsContextDrawingTestCase::ms_referenceDirectory;
@@ -86,13 +86,6 @@ GraphicsContextDrawingTestCase::ImageGraphicsContextLifeCycle
     GraphicsContextDrawingTestCase::SvgGraphicsContextLifeCycle
         GraphicsContextDrawingTestCase::ms_svgLifeCycle;
 #endif // wxUSE_SVG
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( GraphicsContextDrawingTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( GraphicsContextDrawingTestCase,
-    "GraphicsContextDrawingTestCase" );
 
 namespace
 {
@@ -182,6 +175,24 @@ bool HasAtLeast(size_t count,
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
+
+#define wxGC_DRAWING_TEST_CASE(name) \
+    wxTEST_CASE_FOR_METHOD(GraphicsContextDrawingTestCase, \
+                           "GraphicsContextDrawing", name, "[gcdrawing]")
+
+wxGC_DRAWING_TEST_CASE(DrawToImage_Basics)
+#if wxUSE_SVG
+//wxGC_DRAWING_TEST_CASE(DrawToSVG_Basics)
+#endif
+
+// FIXME: Reference data files are currently not found when using Unix build
+// system, so these tests are failing there, fix this and remove this ifdef.
+#ifdef __WINDOWS__
+wxGC_DRAWING_TEST_CASE(DrawToImage_Fonts)
+#if wxUSE_SVG
+//wxGC_DRAWING_TEST_CASE(DrawToSVG_Fonts)
+#endif
+#endif // __WINDOWS__
 
 void GraphicsContextDrawingTestCase::RunIndividualDrawingCase (
     DrawingTestGCFactory& gcFactory,

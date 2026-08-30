@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_SEARCHCTRL
 
 
@@ -27,20 +29,16 @@ public:
     {
     }
 
-    ~SearchCtrlTestCase()
-    {
-        delete m_search;
-    }
 
     void CheckStringSelection(const char *sel)
     {
-        wxTextEntry * const entry = m_search;
+        wxTextEntry * const entry = m_search.get();
         CHECK( sel == entry->GetStringSelection() );
     }
 
     void AssertSelection(int from, int to, const char *sel)
     {
-        wxTextEntry * const entry = m_search;
+        wxTextEntry * const entry = m_search.get();
 
         CHECK( entry->HasSelection() );
 
@@ -56,7 +54,7 @@ public:
     }
 
 protected:
-    wxSearchCtrl* const m_search;
+    const std::unique_ptr<wxSearchCtrl> m_search;
 };
 
 #define SEARCH_CTRL_TEST_CASE(name, tags) \
@@ -67,7 +65,7 @@ protected:
 SEARCH_CTRL_TEST_CASE("wxSearchCtrl::Focus", "[wxSearchCtrl][focus]")
 {
     m_search->SetFocus();
-    CHECK_FOCUS_IS( m_search );
+    CHECK_FOCUS_IS( m_search.get() );
 }
 #endif // !__WXOSX__
 
@@ -105,7 +103,7 @@ SEARCH_CTRL_TEST_CASE("wxSearchCtrl::SetValue", "[wxSearchCtrl][set_value]")
 
 SEARCH_CTRL_TEST_CASE("wxSearchCtrl::Selection", "[wxSearchCtrl][selection]")
 {
-  wxTextEntry * const entry = m_search;
+  wxTextEntry * const entry = m_search.get();
 
   entry->SetValue("0123456789");
 

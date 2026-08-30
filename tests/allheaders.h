@@ -6,7 +6,6 @@
 
     #include <wx/aui/aui.h>
     #include <wx/build.h>
-    #include <wx/catch_cppunit.h>
     #include <wx/chkconf.h>
     #include <wx/dvrenderers.h>
     #include <wx/features.h>

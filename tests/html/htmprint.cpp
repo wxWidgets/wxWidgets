@@ -23,6 +23,7 @@
     #include "wx/image.h"
 #endif // WX_PRECOMP
 
+#include "wx/display.h"
 #include "wx/html/htmprint.h"
 
 namespace
@@ -73,6 +74,40 @@ TEST_CASE("wxHtmlDCRenderer::BodyBgColour", "[html][print]")
     CHECK(actual == bg);
 }
 
+TEST_CASE("wxHtmlPrintout::HeaderDoesNotEraseBody", "[html][print]")
+{
+    // Mirror the dimensions and scaling used by print preview and verify that
+    // rendering the header after the body only affects the header area.
+    const wxColour bg(0x12, 0x34, 0x56);
+    wxBitmap bmp(560, 790);
+    {
+        wxMemoryDC dc(bmp);
+        dc.SetBackground(*wxWHITE_BRUSH);
+        dc.Clear();
+
+        wxHtmlPrintout pr;
+        pr.SetHtmlText("<body bgcolor=\"#123456\"><p>Body</p></body>");
+        pr.SetHeader("Header<hr>", wxPAGE_ALL);
+        REQUIRE( pr.SetUp(dc) );
+
+        pr.SetPPIScreen(96, 96);
+        pr.SetPPIPrinter(600, 600);
+        pr.SetPageSizePixels(4960, 7016);
+        pr.SetPageSizeMM(210, 297);
+        pr.SetPaperRectPixels(wxRect(0, 0, 4960, 7016));
+
+        REQUIRE_NOTHROW( pr.OnPreparePrinting() );
+        REQUIRE( pr.HasPage(1) );
+        REQUIRE( pr.OnPrintPage(1) );
+    }
+
+    const wxImage image = bmp.ConvertToImage();
+    const wxColour actual(image.GetRed(280, 395),
+                          image.GetGreen(280, 395),
+                          image.GetBlue(280, 395));
+    CHECK( actual == bg );
+}
+
 TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
 {
     wxHtmlPrintout pr;
@@ -85,29 +120,36 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     // the DPI-dependent factor, but it doesn't seem to be worth doing it).
     pr.SetMargins(0, 0, 0, 0, 0);
 
-    // Use font size in pixels to make it DPI-independent: if we just used a
-    // normal (say 12pt) font, it would have different height in pixels on 96
-    // and 200 DPI systems, meaning that the text at the end of this test would
-    // take different number of (fixed to 1000px height) pages.
+    // Ensure that the fonts are not scaled when rendering: the scale used by
+    // wxHtmlPrintout::OnPreparePrinting() is the ratio of the printer and the
+    // screen PPI, and SetUp() below always uses wxDisplay::GetStdPPI() for the
+    // latter, so use the same value for the former to make the ratio 1.
+    //
+    // Note that this must be done before SetUp() which would otherwise use the
+    // PPI of the DC below for the printer.
+    pr.SetPPIPrinter(wxDisplay::GetStdPPI());
+
+    wxBitmap bmp(1000, 1000);
+    wxMemoryDC dc(bmp);
+    REQUIRE( pr.SetUp(dc) );
+
+    // Pagination depends on the height of the text in pixels, so the base font
+    // must have a fixed size in pixels for the results to be the same on all
+    // systems, whatever their DPI is. As SetStandardFonts() takes the size in
+    // points, convert the size we want using the PPI of the DC we're going to
+    // render on -- we can't use wxFont::GetPointSize() of a font created with
+    // the fixed pixel size for this, as the conversion performed by it doesn't
+    // necessarily use the same DPI, and doesn't under wxGTK, resulting in a
+    // different font size and hence different number of pages here.
     //
     // We could also make the page height proportional to the DPI, but this
     // would be more complicated as we also wouldn't be able to use hardcoded
     // height attribute values in the HTML snippets below then.
-    const wxFont fontFixedPixelSize(wxFontInfo(wxSize(10, 16)));
-    pr.SetStandardFonts(fontFixedPixelSize.GetPointSize(), "Helvetica");
+    const int ppi = dc.GetPPI().y;
+    REQUIRE( ppi > 0 );
 
-    // We currently have to do this with wxGTK3 which uses 72 DPI for its
-    // wxMemoryDC, resulting in 3/4 scaling (because screen DPI is hardcoded as
-    // 96 in src/html/htmprint.cpp), when rendering onto it. This makes the
-    // tests pass, but really shouldn't be necessary. Unfortunately it's not
-    // clear where and how should this be fixed.
-#ifdef __WXGTK3__
-    pr.SetPPIPrinter(wxSize(96, 96));
-#endif
-
-    wxBitmap bmp(1000, 1000);
-    wxMemoryDC dc(bmp);
-    pr.SetUp(dc);
+    const int fontSize = 16 * 72 / ppi;
+    pr.SetStandardFonts(fontSize, "Helvetica");
 
     // Empty or short HTML documents should be printed on a single page only.
     CHECK( CountPages(pr) == 1 );
@@ -157,44 +199,44 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     // Also test that forbidding page breaks inside a paragraph works: it
     // should move it entirely to the next page, resulting in one extra page
     // compared to the version without "page-break-inside: avoid".
-    static const char* const text =
-"Early in the morning on the fourteenth of the spring month of Nisan the<br>"
-"Procurator of Judea, Pontius Pilate, in a white cloak lined with blood red,<br>"
-"emerged with his shuffling cavalryman's walk into the arcade connecting the two<br>"
-"wings of the palace of Herod the Great.<br>"
-"<br>"
-"More than anything else in the world the Procurator hated the smell of attar of<br>"
-"roses.  The omens for the day were bad, as this scent had been haunting him<br>"
-"since dawn.<br>"
-"<br>"
-"It seemed to the Procurator that the very cypresses and palms in the garden<br>"
-"were exuding the smell of roses, that this damned stench of roses was even<br>"
-"mingling with the smell of leather tackle and sweat from his mounted bodyguard.<br>"
-"<br>"
-"A haze of smoke was drifting toward the arcade across the upper courtyard of<br>"
-"the garden, coming from the wing at the rear of the palace, the quarters of the<br>"
-"first cohort of the XII Legion; known as the \"Lightning,\" it had been<br>"
-"stationed in Jerusalem since the Procurator's arrival.  The same oily perfume<br>"
-"of roses was mixed with the acrid smoke that showed that the centuries' cooks<br>"
-"had started to prepare breakfast<br>"
-"<br>"
-"\"Oh, gods, what are you punishing me for?..  No, there's no doubt, I have it<br>"
-"again, this terrible incurable pain...  hemicrania, when half the head aches...<br>"
-"There's no cure for it, nothing helps...  I must try not to move my head...\"<br>"
-"<br>"
-"A chair had already been placed on the mosaic floor by the fountain; without a<br>"
-"glance around, the Procurator sat in it and stretched out his hand to one side.<br>"
-"His secretary deferentially laid a piece of parchment in his hand.  Unable to<br>"
-"restrain a grimace of agony, the Procurator gave a fleeting sideways look at<br>"
-"its contents, returned the parchment to his secretary and said painfully, \"The<br>"
-"accused comes from Galilee, does he?  Was the case sent to the tetrarch?\"<br>"
-"<br>"
-"\"Yes, Procurator,\" replied the secretary.  \"He declined to confirm the<br>"
-"finding of the court and passed the Sanhedrin's sentence of death to you for<br>"
-"confirmation.\"<br>"
-"<br>"
-"The Procurator's cheek twitched, and he said quietly, \"Bring in the accused.\"<br>"
-        ;
+    static const char* const text = R"(
+Early in the morning on the fourteenth of the spring month of Nisan the<br>
+Procurator of Judea, Pontius Pilate, in a white cloak lined with blood red,<br>
+emerged with his shuffling cavalryman's walk into the arcade connecting the two<br>
+wings of the palace of Herod the Great.<br>
+<br>
+More than anything else in the world the Procurator hated the smell of attar of<br>
+roses.  The omens for the day were bad, as this scent had been haunting him<br>
+since dawn.<br>
+<br>
+It seemed to the Procurator that the very cypresses and palms in the garden<br>
+were exuding the smell of roses, that this damned stench of roses was even<br>
+mingling with the smell of leather tackle and sweat from his mounted bodyguard.<br>
+<br>
+A haze of smoke was drifting toward the arcade across the upper courtyard of<br>
+the garden, coming from the wing at the rear of the palace, the quarters of the<br>
+first cohort of the XII Legion; known as the "Lightning," it had been<br>
+stationed in Jerusalem since the Procurator's arrival.  The same oily perfume<br>
+of roses was mixed with the acrid smoke that showed that the centuries' cooks<br>
+had started to prepare breakfast<br>
+<br>
+"Oh, gods, what are you punishing me for?..  No, there's no doubt, I have it<br>
+again, this terrible incurable pain...  hemicrania, when half the head aches...<br>
+There's no cure for it, nothing helps...  I must try not to move my head..."<br>
+<br>
+A chair had already been placed on the mosaic floor by the fountain; without a<br>
+glance around, the Procurator sat in it and stretched out his hand to one side.<br>
+His secretary deferentially laid a piece of parchment in his hand.  Unable to<br>
+restrain a grimace of agony, the Procurator gave a fleeting sideways look at<br>
+its contents, returned the parchment to his secretary and said painfully, "The<br>
+accused comes from Galilee, does he?  Was the case sent to the tetrarch?"<br>
+<br>
+"Yes, Procurator," replied the secretary.  "He declined to confirm the<br>
+finding of the court and passed the Sanhedrin's sentence of death to you for<br>
+confirmation."<br>
+<br>
+The Procurator's cheek twitched, and he said quietly, "Bring in the accused."<br>
+)";
 
     pr.SetHtmlText
        (
@@ -220,7 +262,7 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
                 text
             )
        );
-    INFO("Using base font size " << fontFixedPixelSize.GetPointSize());
+    INFO("Using base font size " << fontSize);
     CHECK( CountPages(pr) == 3 );
 }
 

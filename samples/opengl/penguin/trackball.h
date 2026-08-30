@@ -59,7 +59,7 @@ trackball(float q[4], float p1x, float p1y, float p2x, float p2y);
  * over-written with the resulting new total rotation).
  */
 void
-add_quats(float *q1, float *q2, float *dest);
+add_quats(float q1[4], float q2[4], float dest[4]);
 
 /*
  * A useful function, builds a rotation matrix in Matrix based on

@@ -41,7 +41,9 @@
 #endif
 #include "wx/mimetype.h"
 
+#include "wx/statbox.h"
 #include "wx/statline.h"
+#include "wx/textwrapper.h"
 
 #ifdef __WXMSW__
     #include "wx/evtloop.h"     // for SetCriticalWindow()
@@ -329,23 +331,30 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
     const wxSizerFlags flagsExpand(SizerFlags(1));
     const wxSizerFlags flagsExpand2(SizerFlags(2));
 
-    wxSizer *sizerPreview =
+    // Note that everything inside a wxStaticBoxSizer has to be created as a
+    // child of its wxStaticBox rather than of the dialog: using the box's own
+    // parent still works, for compatibility, but warns in a debug build.
+    wxStaticBoxSizer *sizerPreview =
         new wxStaticBoxSizer(wxVERTICAL, this, _("&Debug report preview:"));
-    sizerPreview->Add(CreateTextSizer(msg), wxSizerFlags().Centre().Border());
+    wxWindow * const boxPreview = sizerPreview->GetStaticBox();
+
+    wxTextSizerWrapper wrapperPreview(boxPreview);
+    sizerPreview->Add(CreateTextSizer(msg, wrapperPreview),
+                      wxSizerFlags().Centre().Border());
 
     // ... and the list of files in this debug report with buttons to view them
     wxSizer *sizerFileBtns = new wxBoxSizer(wxVERTICAL);
     sizerFileBtns->AddStretchSpacer();
-    sizerFileBtns->Add(new wxButton(this, wxID_VIEW_DETAILS, _("&View...")),
+    sizerFileBtns->Add(new wxButton(boxPreview, wxID_VIEW_DETAILS, _("&View...")),
                         wxSizerFlags().Border(wxBOTTOM));
-    sizerFileBtns->Add(new wxButton(this, wxID_OPEN, _("&Open...")),
+    sizerFileBtns->Add(new wxButton(boxPreview, wxID_OPEN, _("&Open...")),
                         wxSizerFlags().Border(wxTOP));
     sizerFileBtns->AddStretchSpacer();
 
 #if wxUSE_CHECKLISTBOX
-    m_checklst = new wxCheckListBox(this, wxID_ANY);
+    m_checklst = new wxCheckListBox(boxPreview, wxID_ANY);
 #else
-    m_checklst = new wxListBox(this, wxID_ANY);
+    m_checklst = new wxListBox(boxPreview, wxID_ANY);
 #endif
 
     wxSizer *sizerFiles = new wxBoxSizer(wxHORIZONTAL);
@@ -356,15 +365,18 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
 
 
     // lower part of the dialog: notes field
-    wxSizer *sizerNotes = new wxStaticBoxSizer(wxVERTICAL, this, _("&Notes:"));
+    wxStaticBoxSizer *sizerNotes =
+        new wxStaticBoxSizer(wxVERTICAL, this, _("&Notes:"));
+    wxWindow * const boxNotes = sizerNotes->GetStaticBox();
 
     msg = _("If you have any additional information pertaining to this bug\nreport, please enter it here and it will be joined to it:");
 
-    m_notes = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+    m_notes = new wxTextCtrl(boxNotes, wxID_ANY, wxEmptyString,
                              wxDefaultPosition, wxDefaultSize,
                              wxTE_MULTILINE);
 
-    sizerNotes->Add(CreateTextSizer(msg), flagsFixed);
+    wxTextSizerWrapper wrapperNotes(boxNotes);
+    sizerNotes->Add(CreateTextSizer(msg, wrapperNotes), flagsFixed);
     sizerNotes->Add(m_notes, flagsExpand);
 
 

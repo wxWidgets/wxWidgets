@@ -20,53 +20,53 @@ void PickerBaseTestCase::Margin()
 {
     wxPickerBase* const base = GetBase();
 
-    CPPUNIT_ASSERT(base->HasTextCtrl());
-    CPPUNIT_ASSERT(base->GetInternalMargin() >= 0);
+    CHECK(base->HasTextCtrl());
+    CHECK(base->GetInternalMargin() >= 0);
 
     base->SetInternalMargin(15);
 
-    CPPUNIT_ASSERT_EQUAL(15, base->GetInternalMargin());
+    CHECK(base->GetInternalMargin() == 15);
 }
 
 void PickerBaseTestCase::Proportion()
 {
     wxPickerBase* const base = GetBase();
 
-    CPPUNIT_ASSERT(base->HasTextCtrl());
+    CHECK(base->HasTextCtrl());
 
     base->SetPickerCtrlProportion(1);
     base->SetTextCtrlProportion(1);
 
-    CPPUNIT_ASSERT_EQUAL(1, base->GetPickerCtrlProportion());
-    CPPUNIT_ASSERT_EQUAL(1, base->GetTextCtrlProportion());
+    CHECK(base->GetPickerCtrlProportion() == 1);
+    CHECK(base->GetTextCtrlProportion() == 1);
 }
 
 void PickerBaseTestCase::Growable()
 {
     wxPickerBase* const base = GetBase();
 
-    CPPUNIT_ASSERT(base->HasTextCtrl());
+    CHECK(base->HasTextCtrl());
 
     base->SetPickerCtrlGrowable();
     base->SetTextCtrlGrowable();
 
-    CPPUNIT_ASSERT(base->IsPickerCtrlGrowable());
-    CPPUNIT_ASSERT(base->IsTextCtrlGrowable());
+    CHECK(base->IsPickerCtrlGrowable());
+    CHECK(base->IsTextCtrlGrowable());
 
     base->SetPickerCtrlGrowable(false);
     base->SetTextCtrlGrowable(false);
 
-    CPPUNIT_ASSERT(!base->IsPickerCtrlGrowable());
-    CPPUNIT_ASSERT(!base->IsTextCtrlGrowable());
+    CHECK(!base->IsPickerCtrlGrowable());
+    CHECK(!base->IsTextCtrlGrowable());
 }
 
 void PickerBaseTestCase::Controls()
 {
     wxPickerBase* const base = GetBase();
 
-    CPPUNIT_ASSERT(base->HasTextCtrl());
-    CPPUNIT_ASSERT(base->GetTextCtrl() != nullptr);
-    CPPUNIT_ASSERT(base->GetPickerCtrl() != nullptr);
+    CHECK(base->HasTextCtrl());
+    CHECK(base->GetTextCtrl() != nullptr);
+    CHECK(base->GetPickerCtrl() != nullptr);
 }
 
 #endif

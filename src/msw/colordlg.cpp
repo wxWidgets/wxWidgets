@@ -38,6 +38,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
@@ -119,8 +120,8 @@ struct COLORINFO
 UINT_PTR CALLBACK
 wxColourDialogHookProc(HWND hwnd,
                        UINT uiMsg,
-                       WPARAM WXUNUSED(wParam),
-                       LPARAM WXUNUSED(lParam))
+                       WPARAM wParam,
+                       LPARAM lParam)
 {
     switch ( uiMsg )
     {
@@ -146,7 +147,7 @@ wxColourDialogHookProc(HWND hwnd,
             break;
     }
 
-    return 0;
+    return wxMSWDarkMode::CommonDialogHookProc(hwnd, uiMsg, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------

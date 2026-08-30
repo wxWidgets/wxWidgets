@@ -20,6 +20,9 @@
 
 #if wxUSE_GLCANVAS
 
+// OpenGLES is deprecated
+#define GLES_SILENCE_DEPRECATION
+
 #include "wx/glcanvas.h"
 
 #ifndef WX_PRECOMP
@@ -62,7 +65,7 @@
 @end
 
 
-WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
+WXGLContext WXGLCreateContext( WXGLPixelFormat /*pixelFormat*/, WXGLContext /*shareContext*/ )
 {
     WXGLContext context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 
@@ -90,15 +93,15 @@ bool WXGLSetCurrentContext(WXGLContext context)
     return true;
 }
 
-void WXGLDestroyPixelFormat( WXGLPixelFormat pixelFormat )
+void WXGLDestroyPixelFormat( WXGLPixelFormat /*pixelFormat*/ )
 {
 }
 
 
-WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
-                                      int n1,
-                                      const int *ctxAttrs,
-                                      int n2)
+WXGLPixelFormat WXGLChoosePixelFormat(const int* /*GLAttrs*/,
+                                      int /*n1*/,
+                                      const int* /*ctxAttrs*/,
+                                      int /*n2*/)
 {
     return @"dummy";
 }

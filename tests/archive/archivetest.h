@@ -144,10 +144,52 @@ private:
 
 
 ///////////////////////////////////////////////////////////////////////////////
+// Make ids
+
+class TestId
+{
+public:
+    // make a new id and return it as a string
+    static std::string MakeId();
+    // get the current id
+    static int GetId() { return m_seed; }
+private:
+    // seed for generating the ids
+    static int m_seed;
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Common base class allowing to run all the tests polymorphically
+
+class ArchiveTest
+{
+public:
+    explicit ArchiveTest(const std::string& name)
+        : m_name(TestId::MakeId() + name)
+    {
+    }
+
+    virtual ~ArchiveTest() = default;
+
+    // the name is only used for the diagnostic messages
+    const std::string& GetName() const { return m_name; }
+
+    // the entry point for the test
+    virtual void RunTest() = 0;
+
+private:
+    const std::string m_name;
+
+    wxDECLARE_NO_COPY_CLASS(ArchiveTest);
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
 // The test case
 
 template <class ClassFactoryT>
-class ArchiveTestCase : public CppUnit::TestCase
+class ArchiveTestCase : public ArchiveTest
 {
 public:
     ArchiveTestCase(std::string name,
@@ -158,6 +200,8 @@ public:
 
     ~ArchiveTestCase();
 
+    void RunTest() override;
+
 protected:
     // the classes to test
     typedef typename ClassFactoryT::entry_type     EntryT;
@@ -166,9 +210,6 @@ protected:
     typedef typename ClassFactoryT::notifier_type  NotifierT;
     typedef typename ClassFactoryT::iter_type      IterT;
     typedef typename ClassFactoryT::pairiter_type  PairIterT;
-
-    // the entry point for the test
-    void runTest() override;
 
     // create the test data
     void CreateTestData();
@@ -227,41 +268,28 @@ protected:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Make ids
-
-class TestId
-{
-public:
-    // make a new id and return it as a string
-    static std::string MakeId();
-    // get the current id
-    static int GetId() { return m_seed; }
-private:
-    // seed for generating the ids
-    static int m_seed;
-};
-
-
-///////////////////////////////////////////////////////////////////////////////
 // Base class for the archive test suites
 
-class ArchiveTestSuite : public CppUnit::TestSuite
+class ArchiveTestSuite
 {
 public:
     ArchiveTestSuite(std::string name);
+    virtual ~ArchiveTestSuite() = default;
+
+    // run all the tests in this suite
+    void RunAll();
 
 protected:
-    void DoRunTest();
-
-    virtual CppUnit::Test *makeTest(std::string descr,
-                                    int options,
-                                    bool genericInterface,
-                                    const wxString& archiver,
-                                    const wxString& unarchiver);
+    // create the test for the given combination of the parameters or return
+    // null if this combination is not supported
+    virtual ArchiveTest *makeTest(std::string descr,
+                                  int options,
+                                  bool genericInterface,
+                                  const wxString& archiver,
+                                  const wxString& unarchiver);
 
     void AddArchiver(const wxString& cmd) { AddCmd(m_archivers, cmd); }
     void AddUnArchiver(const wxString &cmd) { AddCmd(m_unarchivers, cmd); }
-    bool IsInPath(const wxString& cmd);
 
     std::string Description(const wxString& type,
                             int options,
@@ -271,11 +299,16 @@ protected:
 
 private:
     wxString m_name;
-    wxPathList m_path;
     wxArrayString m_archivers;
     wxArrayString m_unarchivers;
 
     void AddCmd(wxArrayString& cmdlist, const wxString& cmd);
 };
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Return true if the given command can be found in PATH
+
+bool IsInPath(const wxString& cmd);
 
 #endif

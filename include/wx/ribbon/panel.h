@@ -124,14 +124,14 @@ protected:
     wxBitmap m_minimised_icon_resized;
     wxSize m_smallest_unminimised_size;
     wxSize m_minimised_size;
-    wxDirection m_preferred_expand_direction;
-    wxRibbonPanel* m_expanded_dummy;
-    wxRibbonPanel* m_expanded_panel;
-    wxWindow* m_child_with_focus;
-    long m_flags;
-    bool m_minimised;
-    bool m_hovered;
-    bool m_ext_button_hovered;
+    wxDirection m_preferred_expand_direction = wxSOUTH;
+    wxRibbonPanel* m_expanded_dummy = nullptr;
+    wxRibbonPanel* m_expanded_panel = nullptr;
+    wxWindow* m_child_with_focus = nullptr;
+    long m_flags = 0;
+    bool m_minimised = false;
+    bool m_hovered = false;
+    bool m_ext_button_hovered = false;
     wxRect m_ext_button_rect;
 
 #ifndef SWIG

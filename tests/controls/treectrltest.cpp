@@ -13,6 +13,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_TREECTRL
 
 
@@ -61,7 +63,7 @@ public:
                    wxTR_FULL_ROW_HIGHLIGHT |
                    wxTR_TWIST_BUTTONS);
 #endif
-        m_tree = new wxTreeCtrl(wxTheApp->GetTopWindow(),
+        m_tree = make_unique<wxTreeCtrl>(wxTheApp->GetTopWindow(),
                                 wxID_ANY,
                                 wxDefaultPosition,
                                 wxSize(400, 200),
@@ -78,15 +80,11 @@ public:
         m_tree->Update();
     }
 
-    ~TreeCtrlTestCase()
-    {
-        delete m_tree;
-    }
 
 protected:
 
     // the tree control itself
-    wxTreeCtrl *m_tree = nullptr;
+    std::unique_ptr<wxTreeCtrl> m_tree;
 
     // and some of its items
     wxTreeItemId m_root,
@@ -206,7 +204,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMulti",
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem",
                  "[treectrl][winui-v0-supported]")
 {
-    EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
+    EventCounter deleteitem(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
     m_tree->AppendItem(todelete, "deleteme2");
@@ -218,7 +216,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem",
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteChildren",
                  "[treectrl][winui-v0-supported]")
 {
-    EventCounter deletechildren(m_tree, wxEVT_TREE_DELETE_ITEM);
+    EventCounter deletechildren(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
     m_tree->AppendItem(m_child1, "another grandchild");
     m_tree->DeleteChildren(m_child1);
@@ -229,7 +227,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteChildren",
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems",
                  "[treectrl][winui-v0-supported]")
 {
-    EventCounter deleteall(m_tree, wxEVT_TREE_DELETE_ITEM);
+    EventCounter deleteall(m_tree.get(), wxEVT_TREE_DELETE_ITEM);
 
     m_tree->DeleteAllItems();
 
@@ -241,8 +239,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems",
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick",
                  "[treectrl][winui-v0-supported]")
 {
-    EventCounter activated(m_tree, wxEVT_TREE_ITEM_ACTIVATED);
-    EventCounter rclick(m_tree, wxEVT_TREE_ITEM_RIGHT_CLICK);
+    EventCounter activated(m_tree.get(), wxEVT_TREE_ITEM_ACTIVATED);
+    EventCounter rclick(m_tree.get(), wxEVT_TREE_ITEM_RIGHT_CLICK);
 
 #ifdef __WXWINUI__
     // Exercise the same routed callbacks deterministically. SendInput cannot
@@ -275,8 +273,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick",
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit",
                  "[treectrl][winui-v0-supported]")
 {
-    EventCounter beginedit(m_tree, wxEVT_TREE_BEGIN_LABEL_EDIT);
-    EventCounter endedit(m_tree, wxEVT_TREE_END_LABEL_EDIT);
+    EventCounter beginedit(m_tree.get(), wxEVT_TREE_BEGIN_LABEL_EDIT);
+    EventCounter endedit(m_tree.get(), wxEVT_TREE_END_LABEL_EDIT);
 
 #ifndef __WXWINUI__
     wxUIActionSimulator sim;
@@ -317,7 +315,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit",
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyDown",
                  "[treectrl][winui-v0-supported]")
 {
-    EventCounter keydown(m_tree, wxEVT_TREE_KEY_DOWN);
+    EventCounter keydown(m_tree.get(), wxEVT_TREE_KEY_DOWN);
 
 #ifdef __WXWINUI__
     // wxUIActionSimulator generates two Shift key-downs for the upper-case
@@ -351,10 +349,10 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents",
 
     m_tree->CollapseAll();
 
-    EventCounter collapsed(m_tree, wxEVT_TREE_ITEM_COLLAPSED);
-    EventCounter collapsing(m_tree, wxEVT_TREE_ITEM_COLLAPSING);
-    EventCounter expanded(m_tree, wxEVT_TREE_ITEM_EXPANDED);
-    EventCounter expanding(m_tree, wxEVT_TREE_ITEM_EXPANDING);
+    EventCounter collapsed(m_tree.get(), wxEVT_TREE_ITEM_COLLAPSED);
+    EventCounter collapsing(m_tree.get(), wxEVT_TREE_ITEM_COLLAPSING);
+    EventCounter expanded(m_tree.get(), wxEVT_TREE_ITEM_EXPANDED);
+    EventCounter expanding(m_tree.get(), wxEVT_TREE_ITEM_EXPANDING);
 
 #ifdef __WXWINUI__
     REQUIRE(m_tree->WinUISetPeerExpandedForTesting(m_root, true));
@@ -523,7 +521,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive",
     // problem in the test.
     m_tree->SetFocus();
 
-    EventCounter beginedit(m_tree, wxEVT_TREE_BEGIN_LABEL_EDIT);
+    EventCounter beginedit(m_tree.get(), wxEVT_TREE_BEGIN_LABEL_EDIT);
 
 #ifndef __WXWINUI__
     wxUIActionSimulator sim;
@@ -603,7 +601,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive",
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu",
                  "[treectrl][winui-v0-supported]")
 {
-    EventCounter menu(m_tree, wxEVT_TREE_ITEM_MENU);
+    EventCounter menu(m_tree.get(), wxEVT_TREE_ITEM_MENU);
 #ifdef __WXWINUI__
     REQUIRE(m_tree->WinUIRightClickItemForTesting(m_child1));
 #else
