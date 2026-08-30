@@ -1,6 +1,6 @@
 # Plan 102: Make native resizing a host-owned input transaction
 
-- Status: IN PROGRESS
+- Status: NATIVE LOCAL PASS / PHYSICAL PENDING
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P0
 - Effort: L (split into independently verified commits)
@@ -48,6 +48,17 @@ All criteria are required before DONE. An implementation can be LOCAL PASS / REM
 ## Stop conditions
 
 No physical input injection or capture takeover on the user's active desktop without explicit per-run consent. Do not claim physical correctness from a mocked button reader. If a confirmed defect requires an out-of-scope change, extend the plan explicitly with its reason before editing; do not start another general review. Preserve diagnostics from failing checks.
+
+## Execution evidence (2026-08-30)
+
+- The status bar now submits a typed, cancellable host-owned request. A private HWND wake and ticket replace the raw posted NC message. Nested XAML dispatch, peer/HWND generations, live style/direction, held contact and capture ownership are rechecked before entering USER32.
+- Native entry/exit are observed through the actual `WM_ENTERSIZEMOVE` / `WM_EXITSIZEMOVE` notifications; scheduling is not reported as entry. Tests never replace native dispatch with a successful callback.
+- Shared and static Release `test_gui` and `minimal` rebuilt successfully. Both isolated `[winui-native-resize],[propgrid-editor-lifetime]` runs: exit 0, 207 assertions / 5 cases (190 / 4 specifically for resize). Logs: `audit102-resize-propgrid.log` in the two build trees.
+- Both `wx_winui_supported_beta` CTests: exit 0, 1160 assertions / 55 cases. JUnit: `audit102-supported-beta.xml` in the two build trees.
+- Coverage includes LTR/RTL, host-owned capture handoff, foreign capture preservation, deduplication, post failure, contact released before dispatch, disabled/hidden/restyled/rebuilt/destroyed peers and destroyed TLW.
+- These native tests run on an isolated desktop. They replace only the contact-state reader and cancel their own native sizing loop on entry; they do not inject physical input or prove live movement while the user's button is held. That required physical gate remains OPEN.
+- Coordinates remain full-width until the native boundary; positions outside the signed 16-bit NC-message range are rejected, not truncated. Extreme-coordinate physical coverage remains OPEN.
+- Evidence is for the implementation committed with this log, before the pending current-master integration; repeat compilation and focused tests after that merge.
 
 ## Maintenance
 

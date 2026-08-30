@@ -26,6 +26,7 @@
 
 #include "private.h"
 #include "wx/winui/private/appearance.h"
+#include "wx/winui/private/tlwhost.h"
 
 #include <winrt/Microsoft.UI.Input.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -282,7 +283,10 @@ struct wxWinUIStatusBarGripAction final
     unsigned long long peerGeneration = 0;
     HWND hwnd = nullptr;
     int nativeHitTest = HTNOWHERE;
-    std::function<bool (bool, bool, bool, const POINT&)> invoke;
+    winrt::weak_ref<MUX::UIElement> grip;
+    std::function<wxStatusBar *()> getCurrentOwner;
+    std::function<bool (bool, bool, bool, const POINT&,
+                        std::uint32_t, std::uint64_t)> invoke;
 };
 
 class wxWinUIStatusBarRebuildGuard final
@@ -1315,33 +1319,25 @@ bool wxStatusBar::RebuildContent()
                 sizeGripAction->hwnd = sizeGripHwnd;
                 sizeGripAction->nativeHitTest =
                     rightToLeft ? HTBOTTOMLEFT : HTBOTTOMRIGHT;
+                sizeGripAction->grip =
+                    winrt::make_weak(sizeGrip.as<MUX::UIElement>());
 
                 const std::weak_ptr<wxWinUIStatusBarGripAction>
                     weakSizeGripAction(sizeGripAction);
-                sizeGripAction->invoke =
-                    [weakSizeGripAction](
-                        bool isMouse,
-                        bool isPrimary,
-                        bool isLeftButtonPressed,
-                        const POINT& point) -> bool
+                sizeGripAction->getCurrentOwner =
+                    [weakSizeGripAction]() -> wxStatusBar *
                     {
-                        if ( !isMouse || !isPrimary ||
-                             !isLeftButtonPressed )
-                        {
-                            return false;
-                        }
-
                         const std::shared_ptr<
                             wxWinUIStatusBarGripAction> action =
                                 weakSizeGripAction.lock();
                         if ( !action )
-                            return false;
+                            return nullptr;
 
                         const std::shared_ptr<
                             wxWinUIStatusBarCallbackState> state =
                                 action->callbackState.lock();
                         if ( !state )
-                            return false;
+                            return nullptr;
 
                         wxStatusBar * const owner =
                             state->GetOwner(
@@ -1354,7 +1350,7 @@ bool wxStatusBar::RebuildContent()
                              !owner->HasFlag(wxSTB_SIZEGRIP) ||
                              owner->m_winui->sizeGripAction != action )
                         {
-                            return false;
+                            return nullptr;
                         }
 
                         wxWindow * const topLevel =
@@ -1363,16 +1359,39 @@ bool wxStatusBar::RebuildContent()
                              wxGetTopLevelParent(owner) != topLevel ||
                              !topLevel->HasFlag(wxRESIZE_BORDER) )
                         {
-                            return false;
+                            return nullptr;
                         }
 
                         const HWND hwnd = GetHwndOf(topLevel);
                         if ( !hwnd || hwnd != action->hwnd ||
                              !::IsWindow(hwnd) ||
-                             owner->GetSizeGripReservedWidth() == 0 )
+                             owner->GetSizeGripReservedWidth() == 0 ||
+                             action->nativeHitTest !=
+                                (owner->GetLayoutDirection() ==
+                                     wxLayout_RightToLeft
+                                    ? HTBOTTOMLEFT : HTBOTTOMRIGHT) )
                         {
-                            return false;
+                            return nullptr;
                         }
+                        return owner;
+                    };
+
+                sizeGripAction->invoke =
+                    [weakSizeGripAction](
+                        bool isMouse,
+                        bool isPrimary,
+                        bool isLeftButtonPressed,
+                        const POINT& point,
+                        std::uint32_t pointerId,
+                        std::uint64_t timestamp) -> bool
+                    {
+                        if ( !isMouse || !isPrimary || !isLeftButtonPressed )
+                            return false;
+                        const auto action = weakSizeGripAction.lock();
+                        wxStatusBar *owner = action && action->getCurrentOwner
+                            ? action->getCurrentOwner() : nullptr;
+                        if ( !owner )
+                            return false;
 
                         const auto resizeHook =
                             owner->m_winui->resizeActionHook;
@@ -1380,27 +1399,44 @@ bool wxStatusBar::RebuildContent()
                             owner->m_winui->resizeActionContext;
                         if ( resizeHook )
                         {
-                            (void)resizeHook(
+                            // Legacy action preflight may reject, but must
+                            // never substitute success for native dispatch.
+                            if ( !resizeHook(
                                 owner,
-                                reinterpret_cast<void *>(hwnd),
+                                reinterpret_cast<void *>(action->hwnd),
                                 action->nativeHitTest,
                                 point.x,
                                 point.y,
-                                resizeContext);
-                            return true;
+                                resizeContext) )
+                            {
+                                return false;
+                            }
+                            owner = action->getCurrentOwner();
+                            if ( !owner )
+                                return false;
                         }
 
-                        // Queue the native non-client press directly. This
-                        // runs immediately after PointerPressed unwinds, while
-                        // the physical button is still down. CallAfter() is
-                        // too late here: under continuous pointer input it can
-                        // remain pending until MouseUp, starting a stuck resize
-                        // transaction only after the user releases the button.
-                        return ::PostMessageW(
-                                   hwnd,
-                                   WM_NCLBUTTONDOWN,
-                                   action->nativeHitTest,
-                                   MAKELPARAM(point.x, point.y)) != FALSE;
+                        wxWinUITopLevelHost * const host =
+                            wxWinUITopLevelHost::FindSlotOwner(owner);
+                        const auto grip = action->grip.get();
+                        if ( !host || !grip )
+                            return false;
+                        wxWinUIPointerSample sample;
+                        sample.kind = wxWinUIInputKind::Press;
+                        sample.button = wxWinUIInputButton::Left;
+                        sample.buttonMask = MK_LBUTTON;
+                        sample.pointerId = pointerId;
+                        sample.timestamp = timestamp;
+                        sample.screenX = point.x;
+                        sample.screenY = point.y;
+                        return host->RequestNativeResize(
+                            owner, grip, action->nativeHitTest, sample,
+                            [weakSizeGripAction]()
+                            {
+                                const auto current = weakSizeGripAction.lock();
+                                return current && current->getCurrentOwner &&
+                                       current->getCurrentOwner() != nullptr;
+                            });
                     };
 
                 sizeGrip.PointerPressed(
@@ -1432,13 +1468,10 @@ bool wxStatusBar::RebuildContent()
                             if ( !::GetCursorPos(&screenPoint) )
                                 return;
 
-                            // Do not leave the XAML island owning capture when
-                            // the native window enters its system sizing loop.
-                            element.ReleasePointerCaptures();
-
                             if ( action->invoke &&
                                  action->invoke(
-                                     true, true, true, screenPoint) )
+                                     true, true, true, screenPoint,
+                                     point.PointerId(), point.Timestamp() / 1000) )
                             {
                                 event.Handled(true);
                             }
@@ -2261,7 +2294,7 @@ bool wxStatusBar::WinUIInvokeSizeGripForTesting(
         m_winui->sizeGripAction;
     const POINT point{ screenPoint.x, screenPoint.y };
     return action->invoke(
-        isMouse, isPrimary, isLeftButtonPressed, point);
+        isMouse, isPrimary, isLeftButtonPressed, point, 0, ::GetTickCount64());
 }
 
 void wxStatusBar::WinUISetTopLevelMaximizedForTesting(bool maximized)

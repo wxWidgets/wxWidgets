@@ -23,6 +23,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/winui/private/inputrouter.h"
 #include "wx/winui/private/inputstate.h"
+#include "wx/winui/private/nativeresize.h"
 
 #include <map>
 #include <memory>
@@ -1082,6 +1083,17 @@ public:
     // projection-free tlwhostmsw bridge must reach the host implementation.
     void NotifyNativeCaptureMutation();
 
+    // A client-area XAML grip is an explicit resize affordance, not a native
+    // hit-test result. Its weak peer validator must still identify the same
+    // live grip when the private native wake is processed.
+    bool RequestNativeResize(
+        wxWindow *source,
+        const winrt::Microsoft::UI::Xaml::UIElement& grip,
+        int hitTest,
+        const wxWinUIPointerSample& sample,
+        std::function<bool ()> isCurrent);
+    static void ScheduleNativeResizeWakesAfterGlobalOperation();
+
     // ----- lifetime introspection (used by the lifecycle unit tests) -----
 
     // Number of live hosts / of registered slots across every host.
@@ -1324,6 +1336,8 @@ public:
 
 private:
     friend class wxWinUISlot;
+    friend WXDLLIMPEXP_CORE bool wxWinUIGetNativeResizeSnapshotForTesting(
+        wxWindow *window, wxWinUINativeResizeSnapshot *snapshot);
     friend class wxWinUIVisualCoordinates;
     friend class wxWinUIDropBroker;
     friend class wxWinUIDropBrokerState;
@@ -1383,6 +1397,19 @@ private:
                                                WPARAM wParam, LPARAM lParam,
                                                UINT_PTR subclassId,
                                                DWORD_PTR refData);
+
+    static LRESULT CALLBACK NativeResizeSubclassProc(
+        HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam,
+        UINT_PTR subclassId, DWORD_PTR refData);
+    struct NativeResizeRequest;
+    bool ValidateNativeResize(
+        const std::shared_ptr<NativeResizeRequest>& request);
+    bool PostNativeResizeWake();
+    void DispatchNativeResize(std::uint64_t ticket);
+    void FinishNativeResize(
+        std::shared_ptr<NativeResizeRequest> request,
+        bool cancelled);
+    void CancelNativeResize(const wxWinUIPointerSample& sample);
 
     // The inner InputSiteWindow only exists once the island content has
     // realized; subclass it as soon as it shows up (idempotent).
@@ -2024,6 +2051,11 @@ private:
         bool pointerInsideRoot = true;
     };
     std::deque<PendingNativeDispatch> m_pendingNativeInput;
+    // Shares the host's capture/InputSite cancellation authority, but keeps
+    // the grip's typed peer validation separate from native geometric hits.
+    std::shared_ptr<NativeResizeRequest> m_nativeResize;
+    wxWinUINativeResizeSnapshot m_nativeResizeSnapshot;
+    bool m_nativeResizeWakePosted = false;
     PendingNativeDispatch m_inFlightNativeInput;
     unsigned long long m_nextNativeInputSequence = 0;
     unsigned long long m_nativeInputCancellationGeneration = 0;
