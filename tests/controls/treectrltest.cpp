@@ -395,6 +395,13 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents",
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange",
                  "[treectrl][winui-v0-supported]")
 {
+#ifndef __WXWINUI__
+    // This branch uses system-wide mouse synthesis below. Respect the same
+    // opt-out as other interactive tests, including on an isolated desktop.
+    if ( !EnableUITests() )
+        return;
+#endif
+
     m_tree->ExpandAll();
 
     // This is currently needed to work around a problem under wxMSW: clicking

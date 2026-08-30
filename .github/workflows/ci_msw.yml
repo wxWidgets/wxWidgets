@@ -202,6 +202,9 @@ jobs:
 
     env:
       WXWINUI_NUGET_CACHE: ${{ github.workspace }}\.wxwinui-nuget
+      # The Supported V0 gate runs on a non-input desktop. Keep inherited
+      # UIActionSimulator cases out of this native-message/peer-only profile.
+      WX_UI_TESTS: '0'
 
     steps:
       - name: Checkout
