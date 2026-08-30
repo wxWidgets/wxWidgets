@@ -32,6 +32,7 @@
 #include "private.h"
 #ifdef WXWINUI_TEST_SUPPORT
     #include "../../tests/winui/test-support/toolbar-test-access.h"
+    #include "control-host-test-access.h"
 #endif
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/tlwhost.h"
@@ -2708,7 +2709,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
 #ifdef WXWINUI_TEST_SUPPORT
             // The candidate may be rejected before the normal one-shot cleanup
             // below. Never let its test callback leak into the restored root.
-            rebuildImpl->host.SetNextContentLoadedHookForTesting({});
+            wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+                rebuildImpl->host, {});
 #endif
 
             // Keep the rejected generation entirely local. Its destructor
@@ -3549,7 +3551,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
             // Loaded path while this rebuild transaction is still active.
             // Resolve through shared state so a preceding focus callback may
             // already have destroyed the toolbar.
-            rebuildImpl->host.SetNextContentLoadedHookForTesting(
+            wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+                rebuildImpl->host,
                 invokeLoadedHook);
         }
 #endif
@@ -3658,7 +3661,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
 
         // The test seam is intentionally synchronous. Don't retain a stale
         // transaction callback into a later Loaded generation.
-        rebuildImpl->host.SetNextContentLoadedHookForTesting({});
+        wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+            rebuildImpl->host, {});
 #endif
         if ( !contentSet )
         {
@@ -3837,7 +3841,8 @@ bool wxToolBar::RebuildPeer(wxToolBarToolBase *excluded,
         {
             // SetContent() may have failed after the one-shot test callback
             // was armed but before Loaded consumed it.
-            rebuildImpl->host.SetNextContentLoadedHookForTesting({});
+            wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+                rebuildImpl->host, {});
         }
 #endif
         wxWinUILogException("WinUI toolbar rebuild", e);

@@ -3406,7 +3406,7 @@ bool wxChoice::ApplySelectionToPeer()
         if ( shouldRender && impl->simpleRoot )
         {
             const auto simpleRoot = impl->simpleRoot;
-            const auto hostedContent = impl->host.GetContentForTesting();
+            const auto hostedContent = impl->host.GetContent();
             live = state ? state->GetOwner() : nullptr;
             if ( live != this || !live->m_winui ||
                  live->m_winui.get() != impl ||

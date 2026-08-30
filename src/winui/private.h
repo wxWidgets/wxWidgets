@@ -159,6 +159,7 @@ wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting() noexcept;
 class wxWinUIControlHost
 {
 public:
+    wxWinUIControlHost();
     ~wxWinUIControlHost();
 
     bool Initialize(wxWindow *window);
@@ -233,29 +234,16 @@ public:
     // once its template is applied and MeasureContent() is meaningful.
     bool IsContentLoaded() const { return m_contentLoaded; }
 
-    // Implementation-only snapshot used by wxWinUIControlHostProbe to prove
-    // that the proxy model and the shared slot still describe the same
-    // content after a synchronous nested SetContent().
-    winrt::Microsoft::UI::Xaml::UIElement GetContentForTesting() const
+    // Production identity snapshot of the currently committed content.
+    winrt::Microsoft::UI::Xaml::UIElement GetContent() const
         { return m_content; }
 
     // The wx control whose slot this is.
     wxWindow *HostedWindow() const { return m_window; }
 
-    // Implementation-only seam used to exercise callers which must survive
-    // synchronous application re-entry from the Loaded path of SetContent().
-    // The hook is one-shot and is invoked as the final operation of
-    // OnContentLoaded().
-    void SetNextContentLoadedHookForTesting(std::function<void()> hook)
-    {
-        m_nextContentLoadedHookForTesting = std::move(hook);
-    }
-    // Deterministically crosses the pending Loaded boundary for Create()
-    // lifetime tests. OnContentLoaded() may destroy this host, so the
-    // implementation performs no access after dispatching it.
-    void DispatchPendingContentLoadedHookForTesting();
-
 private:
+    friend class wxWinUIControlHostTestAccess;
+
     void OnContentLoaded();
     void RevokeLoadedHook();
 
@@ -263,7 +251,6 @@ private:
     winrt::Microsoft::UI::Xaml::UIElement m_content{ nullptr };
     winrt::event_token m_loadedToken{};
     std::shared_ptr<wxWinUILoadedState> m_loadedState;
-    std::function<void()> m_nextContentLoadedHookForTesting;
     std::shared_ptr<wxWinUIPhysicalDisconnectGate>
         m_physicalDisconnectGate;
     bool m_contentLoaded = false;

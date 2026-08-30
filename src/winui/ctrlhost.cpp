@@ -15,6 +15,10 @@
 
 #include "private.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+#include "control-host-test-access.h"
+#endif // WXWINUI_TEST_SUPPORT
+
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/inputtest.h"
 #include "wx/winui/private/dialogcontracts.h"
@@ -2203,8 +2207,91 @@ bool wxWinUIIsDarkTheme()
     return wxWinUIGetShellThemePolicy().dark;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
+namespace
+{
+struct wxWinUIControlHostTestState
+{
+    std::function<void()> nextContentLoadedHook;
+};
+
+using wxWinUIControlHostTestStateMap = std::map<
+    const wxWinUIControlHost *,
+    std::shared_ptr<wxWinUIControlHostTestState>>;
+
+wxWinUIControlHostTestStateMap& wxWinUIControlHostTestStates()
+{
+    static wxWinUIControlHostTestStateMap states;
+    return states;
+}
+
+std::shared_ptr<wxWinUIControlHostTestState>
+wxWinUIFindControlHostTestState(const wxWinUIControlHost *host)
+{
+    const auto& states = wxWinUIControlHostTestStates();
+    const auto found = states.find(host);
+    return found == states.end() ? nullptr : found->second;
+}
+
+std::function<void()>
+wxWinUITakeControlHostLoadedHook(const wxWinUIControlHost *host)
+{
+    std::function<void()> hook;
+    if ( const auto state = wxWinUIFindControlHostTestState(host) )
+        hook.swap(state->nextContentLoadedHook);
+    return hook;
+}
+
+void wxWinUIRetireControlHostTestState(const wxWinUIControlHost *host)
+{
+    auto& states = wxWinUIControlHostTestStates();
+    const auto found = states.find(host);
+    if ( found == states.end() )
+        return;
+
+    // Unpublish before releasing captured application state. A destructor
+    // re-entering the adapter cannot rearm this retired C++ object, and the
+    // old entry is gone before a new object can reuse its address.
+    auto retired = std::move(found->second);
+    states.erase(found);
+}
+} // anonymous namespace
+
+void wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+    wxWinUIControlHost& host, std::function<void()> hook)
+{
+    // Keep state alive across destruction of the replaced callable. That
+    // destruction may delete the host and erase its registry entry.
+    if ( const auto state = wxWinUIFindControlHostTestState(&host) )
+        hook.swap(state->nextContentLoadedHook);
+}
+
+void wxWinUIControlHostTestAccess::DispatchPendingContentLoadedHook(
+    wxWinUIControlHost& host)
+{
+    const auto state = wxWinUIFindControlHostTestState(&host);
+    if ( host.m_window && state && state->nextContentLoadedHook )
+        host.OnContentLoaded();
+    // The Loaded callback may destroy host; there is no host access here.
+}
+
+#endif // WXWINUI_TEST_SUPPORT
+
+wxWinUIControlHost::wxWinUIControlHost()
+{
+#ifdef WXWINUI_TEST_SUPPORT
+    // The C++ instance, not its hosted wxWindow or replaceable Loaded state,
+    // owns the identity. This also preserves arming before Initialize().
+    wxWinUIControlHostTestStates().emplace(
+        this, std::make_shared<wxWinUIControlHostTestState>());
+#endif // WXWINUI_TEST_SUPPORT
+}
+
 wxWinUIControlHost::~wxWinUIControlHost()
 {
+#ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIRetireControlHostTestState(this);
+#endif // WXWINUI_TEST_SUPPORT
     Close();
 }
 
@@ -2339,10 +2426,10 @@ void wxWinUIControlHost::SetPhysicalDisconnectGate(
 void wxWinUIControlHost::Close(
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate)
 {
-    // Drop a test hook before any revocation can drain a callback. Production
-    // code never arms it, but its captured owner state must obey the same
-    // lifetime rule as the real Loaded delegate.
-    m_nextContentLoadedHookForTesting = {};
+#ifdef WXWINUI_TEST_SUPPORT
+    // Destroy the detached callable before native revocation, as before.
+    wxWinUITakeControlHostLoadedHook(this);
+#endif // WXWINUI_TEST_SUPPORT
 
     if ( !m_window )
         return;
@@ -2517,6 +2604,7 @@ void wxWinUIControlHost::ClearContent()
     m_contentLoaded = false;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 // ----------------------------------------------------------------------------
 // wxWinUIControlHostProbe -- test seam for the ClearContent path
 // ----------------------------------------------------------------------------
@@ -2582,7 +2670,7 @@ bool wxWinUIControlHostProbe::SetContent(const wxString& label)
 winrt::Microsoft::UI::Xaml::UIElement
 wxWinUIControlHostProbe::GetContentForTesting() const
 {
-    return m_host ? m_host->GetContentForTesting() : nullptr;
+    return m_host ? m_host->GetContent() : nullptr;
 }
 
 void wxWinUIControlHostProbe::DestroyControlHostForTesting()
@@ -2610,6 +2698,8 @@ void wxWinUIControlHostProbe::Close()
     if ( m_host )
         m_host->Close();
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUIControlHost::ApplyWxCursor(const wxCursor& cursor)
 {
@@ -2980,12 +3070,12 @@ void wxWinUIControlHost::OnContentLoaded()
     if ( !m_window )
         return;
 
-    // Keep this callback local before any operation below can destroy the
-    // hosted wx control and, with it, this proxy. It is deliberately invoked
-    // after the real Loaded work and nothing may dereference `this` after the
-    // move.
+#ifdef WXWINUI_TEST_SUPPORT
+    // Consume before any real Loaded operation can destroy the host.
+    // The callable is self-contained and remains the final operation below.
     std::function<void()> testingHook =
-        std::move(m_nextContentLoadedHookForTesting);
+        wxWinUITakeControlHostLoadedHook(this);
+#endif // WXWINUI_TEST_SUPPORT
     wxWindow * const window = m_window;
 
     // Relayout is needed only for the first load of this content generation.
@@ -3027,15 +3117,11 @@ void wxWinUIControlHost::OnContentLoaded()
         host->NotifySlotContentLoaded(window);
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     // Final operation. The hook itself is allowed to destroy this host.
     if ( testingHook )
         testingHook();
-}
-
-void wxWinUIControlHost::DispatchPendingContentLoadedHookForTesting()
-{
-    if ( m_window && m_nextContentLoadedHookForTesting )
-        OnContentLoaded();
+#endif // WXWINUI_TEST_SUPPORT
 }
 
 void wxWinUIControlHost::ForceRender()

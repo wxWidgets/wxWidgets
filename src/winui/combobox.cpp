@@ -7856,7 +7856,7 @@ bool wxWinUIComboBoxTestAccess::GetSimplePeerSnapshot(const wxComboBox* control,
         if ( list.Items().Size() == itemCount )
             result.state |= WinUISimple_ItemsMatch;
 
-        const MUX::UIElement hosted = impl->host.GetContentForTesting();
+        const MUX::UIElement hosted = impl->host.GetContent();
         if ( hosted &&
              wxWinUIComboObjectIdentity(hosted) ==
                  wxWinUIComboObjectIdentity(root) )
@@ -8031,7 +8031,7 @@ bool wxWinUIComboBoxTestAccess::GetTemplatePeerSnapshot(const wxComboBox* contro
     result.nativeFocusInHost = impl->host.ContainsFocus(::GetFocus());
     result.hostContentIdentity = reinterpret_cast<std::uintptr_t>(
         winrt::get_abi(wxWinUIComboObjectIdentity(
-            impl->host.GetContentForTesting())));
+            impl->host.GetContent())));
     if ( visualRoot )
     {
         result.visualRootIdentity = reinterpret_cast<std::uintptr_t>(

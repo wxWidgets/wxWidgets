@@ -2139,62 +2139,6 @@ wxWinUITestGetAccessibilityShellProviderRetireCount();
 WXDLLIMPEXP_CORE unsigned
 wxWinUITestGetLiveInvisibleShellProviderCount();
 
-// ----------------------------------------------------------------------------
-// wxWinUIControlHostProbe: test-only handle onto a real wxWinUIControlHost.
-//
-// wxWinUIControlHost is an internal (non-exported) class and, since the
-// per-TLW rearchitecture, nothing in the library drives its ClearContent()
-// path.  This exported probe lets the lifecycle unit tests exercise that
-// path directly: create a host on a window, set/clear its content and close
-// it, observing the results through the shared host's introspection
-// (FindSlot / GetContent / GetLiveLoadedHookCount).
-// ----------------------------------------------------------------------------
-
-class wxWinUIControlHost;
-
-class WXDLLIMPEXP_CORE wxWinUIControlHostProbe
-{
-public:
-    // Build an initialized proxy without registering a slot yet. This is the
-    // deterministic entry point for the first-registration reentrancy tests.
-    static wxWinUIControlHostProbe *CreateEmpty(wxWindow *window);
-
-    // Build a control host on `window` and set an initial Button content.
-    // Returns null on failure.  The probe owns the control host.
-    static wxWinUIControlHostProbe *Create(wxWindow *window);
-    ~wxWinUIControlHostProbe();
-
-    // wxWinUIControlHost::SetContent() with a fresh Button (a new element).
-    // The label makes nested generations distinguishable in the real slot.
-    bool SetContent(const wxString& label = "probe");
-
-    // Snapshot of the proxy's own committed content model, independent of the
-    // shared slot. Tests compare both identities after nested publication.
-    winrt::Microsoft::UI::Xaml::UIElement GetContentForTesting() const;
-
-    // Delete the owned wxWinUIControlHost while leaving this wrapper alive.
-    // Used only to exercise destruction at the synchronous attach boundary.
-    void DestroyControlHostForTesting();
-
-    // wxWinUIControlHost::ClearContent().
-    void ClearContent();
-
-    // Drive the exact physical-pixel clip seam through the real control host.
-    // Used by migration tests whose detach callback must exercise the same
-    // FindSlotOwner()/DIP conversion path as wxNotebook.
-    void SetBridgeClipRect(const wxRect& physicalRect);
-
-    // wxWinUIControlHost::Close().
-    void Close();
-
-private:
-    wxWinUIControlHostProbe() = default;
-
-    wxWinUIControlHost *m_host = nullptr;
-
-    wxDECLARE_NO_COPY_CLASS(wxWinUIControlHostProbe);
-};
-
 #if wxUSE_TOOLTIPS
 // Internal deterministic cleanup seam; not part of the wx public API.
 WXDLLIMPEXP_CORE unsigned wxWinUIGetManagedToolTipCountForTesting();

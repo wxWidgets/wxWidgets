@@ -15,6 +15,7 @@
 
 #ifdef WXWINUI_TEST_SUPPORT
     #include "statusbar-test-access.h"
+    #include "control-host-test-access.h"
 #endif
 
 #ifndef WX_PRECOMP
@@ -1583,7 +1584,8 @@ bool wxStatusBar::RebuildContent()
             {
                 impl->nextReentryHook = nullptr;
                 impl->nextReentryContext = nullptr;
-                impl->host.SetNextContentLoadedHookForTesting(
+                wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+                    impl->host,
                     invokeLoadedHook);
             }
 #endif // WXWINUI_TEST_SUPPORT
@@ -1653,7 +1655,8 @@ bool wxStatusBar::RebuildContent()
             if ( !contentSet )
             {
 #ifdef WXWINUI_TEST_SUPPORT
-                impl->host.SetNextContentLoadedHookForTesting({});
+                wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+                    impl->host, {});
 #endif
                 impl->root = std::move(oldRoot);
                 impl->automationRoot =
@@ -1744,7 +1747,8 @@ bool wxStatusBar::RebuildContent()
                     return false;
                 }
             }
-            impl->host.SetNextContentLoadedHookForTesting({});
+            wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+                impl->host, {});
 #endif // WXWINUI_TEST_SUPPORT
 
             // Loaded/DP callbacks can mutate text, appearance or even field
@@ -1769,7 +1773,8 @@ bool wxStatusBar::RebuildContent()
                  liveOwner->m_winui.get() == impl &&
                  liveOwner->m_winui->callbackState == callbackState )
             {
-                impl->host.SetNextContentLoadedHookForTesting({});
+                wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+                    impl->host, {});
             }
 #endif
             wxWinUILogException("WinUI StatusBar content", e);

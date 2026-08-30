@@ -11,6 +11,7 @@
 
 #ifdef WXWINUI_TEST_SUPPORT
     #include "textctrl-test-access.h"
+    #include "control-host-test-access.h"
 #endif
 
 #if wxUSE_TEXTCTRL
@@ -4958,7 +4959,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
     void * const loadedHookContext = loaded.context;
     if ( loadedHook )
     {
-        createImpl->host.SetNextContentLoadedHookForTesting(
+        wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+            createImpl->host,
             [createState, createGeneration, createImpl,
              loadedHook, loadedHookContext]()
             {
@@ -5929,7 +5931,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
         // Final host access until getLiveOwner() proves that the callback did
         // not destroy or replace this exact implementation.
-        createImpl->host.DispatchPendingContentLoadedHookForTesting();
+        wxWinUIControlHostTestAccess::DispatchPendingContentLoadedHook(
+            createImpl->host);
         liveOwner = getLiveOwner();
         if ( !liveOwner )
             return false;

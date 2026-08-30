@@ -53,6 +53,7 @@
 #endif
 
 #include "wx/winui/private/tlwhost.h"
+#include "control-host-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/private/inputtest.h"
 #include "wx/winui/winui.h"

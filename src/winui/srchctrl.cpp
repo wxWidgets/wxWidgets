@@ -11,6 +11,7 @@
 
 #ifdef WXWINUI_TEST_SUPPORT
     #include "searchctrl-test-access.h"
+    #include "control-host-test-access.h"
 #endif
 
 #if wxUSE_SEARCHCTRL
@@ -509,7 +510,8 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
     void * const loadedHookContext = loaded.context;
     if ( loadedHook )
     {
-        createImpl->host.SetNextContentLoadedHookForTesting(
+        wxWinUIControlHostTestAccess::SetNextContentLoadedHook(
+            createImpl->host,
             [createState, createGeneration, createImpl,
              loadedHook, loadedHookContext]()
             {
@@ -696,7 +698,8 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id, const wxString& value
 
         // The one-shot hook is allowed to delete this control and host.
         // Reacquire through callback state before any later implementation use.
-        createImpl->host.DispatchPendingContentLoadedHookForTesting();
+        wxWinUIControlHostTestAccess::DispatchPendingContentLoadedHook(
+            createImpl->host);
         liveOwner = getLiveOwner();
         if ( !liveOwner )
             return false;

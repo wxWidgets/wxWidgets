@@ -160,6 +160,61 @@ Do not delete a lifetime/retirement service used by production merely because it
 - Static subsequently completes the same OFF/install/restore sequence with no retry: strict symbol/header checks, four-TU toolkit consumer, the unchanged real runtime consumer with **11 subprocesses**, restored `/warnaserror` build, **161/4** retirement assertions and smoke/Supported V0 **2/2**. Static shipping core SHA256: `53A0DED6F1366A0C668E8D41EB74C8679D147C68E9CF8E1BAF1F9939CB9894A6`. Both build caches are restored to ALL, and the final source proof still matches the prepared five-file change exactly. Logs: `audit106-family8-*` in each build tree; installed prefixes and consumers are fresh `audit106-family8-*` directories on F:.
 - This completes the framework-retirement adapter sublot locally, not all runtime/host instrumentation. The independent Qt modal correction is already published as `2947664462`; this qualified WinUI sublot is committed separately and is not immediately pushed, to let that CI execution finish. No physical input, external UIA or global beta-readiness claim follows from these checks.
 
+## ControlHost probe and Loaded-hook storage (2026-08-31)
+
+- Baseline at `f6ae07e1ad`: the exact 22 ControlHost/Loaded cases pass
+  **440 assertions**, and the preserved 11-case Choice/ComboBox allowlist
+  passes **981 assertions**, in both shared/static private desktops.
+  Logs: `audit106-family9-before-*` in the two existing build trees.
+- Nine probe operations move from the installed `tlwhost.h` surface to
+  `tests/winui/test-support/control-host-test-access.h`. The two intra-core
+  Loaded adapters are not DLL exports. Test-only hook storage leaves the
+  shared ControlHost class unconditionally and is owned by a test-build-only
+  C++-instance registry. Destruction unpublishes that identity before callable
+  teardown; Loaded takes its one-shot hook before the real callback boundary.
+  No conditional class layout or replacement production test storage is added.
+- The former `GetContentForTesting()` getter is a real production dependency
+  of Choice. It is renamed `GetContent()`, not removed or compiled out. Native
+  subscriptions, latching, slot publication, rollback and callback invalidation
+  remain unchanged. Other TLW/slot, MSW bridge, keyboard and bootstrap test
+  facilities are still separate unfinished work.
+- The first ON builds exposed C4002: the new adapter header loaded WinRT
+  before the existing Windows macro cleanup in Text/Search. It now forward
+  declares `UIElement`, with no premature projection include. Failed
+  `audit106-family9-on-build.log` files are retained; corrected builds use
+  distinct `audit106-family9-on-build-corrected.log` files. The corrected
+  shared/static builds pass `/warnaserror`, **1421/33** unchanged focused
+  assertions/cases and smoke/Supported V0 **2/2** per linkage.
+- Reviewed-source verification preserves the twelve-path candidate after
+  CRLF/LF normalization and the explicitly recorded header inclusion fix.
+  No existing test body/assertion changed. The shared ControlHost definition
+  remains identical with test support ON/OFF. Its private size reduction is
+  not a historical ABI-preservation claim; including translation units are
+  rebuilt. Candidate, source hashes and execution/inspection scripts are in
+  `F:\wxwinui-pr26890-audit106-layout-proof\family9` and the adjacent
+  `control-host-extraction.*` evidence.
+- Shared shipping OFF build/install passes: **28** public control headers,
+  **11** ControlHost marker checks, the already-removed runtime/control APIs,
+  and no installed test-support target/header or old UIA launcher. Fresh
+  four-TU toolkit consumer CTest passes **1/1**; the unchanged installed runtime
+  consumer's normal profile completes **50 epochs**. This repeats one normal
+  process, not family8's eleven fault/renderer subprocesses or WER-settling scan.
+  Shared shipping core SHA256:
+  `BABC36BDD467A8218B7CDA266BE70B89D2D889B36915F3D2BF6194A5E992E2F9`.
+  Static shipping and restored ALL qualification remain in progress at this
+  entry; source/test success alone does not close those gates.
+- Final shared/static OFF/install/restore qualification now passes. Static
+  shipping core SHA256:
+  `FF8E8FD194026E4F1DBD0A8EC901FC666F361AAF2DB8759C99E291BC2F2FA7CA`.
+  It passes the same 28-header/11-marker scan, fresh four-TU consumer **1/1**
+  and single normal 50-epoch runtime process. Both caches are restored to ALL;
+  both rebuilt test binaries again pass **440/22 + 981/11**, plus the two
+  smoke/Supported gates. Final normalized source checks pass. Evidence uses
+  unique `audit106-family9-*` logs, fresh `audit106-family9-install-*` prefixes
+  and consumer directories on F:. This completes this ControlHost sublot
+  locally, not the remaining host/keyboard/bootstrap facilities or physical
+  qualification. The first failed ON builds remain part of the record.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.
