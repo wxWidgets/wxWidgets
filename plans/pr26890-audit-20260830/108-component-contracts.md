@@ -1,6 +1,6 @@
 # Plan 108: Close component parity gaps and version template dependencies
 
-- Status: TODO
+- Status: IN PROGRESS: concrete component failures and test-oracle corrections
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P2
 - Effort: L (split into independently verified commits)
@@ -56,8 +56,15 @@ The unchanged pre-migration shared/static binaries expose six failing cases. Pre
 - Two owner-drawn CheckListBox activation/focus cases reject `ActivatePeerCheck()` before `SetFocus()`. `GetItemRect()` only establishes the outer ListViewItem, not the CheckBox's arranged/hit-testable area. Inspect actual CheckBox geometry: the pinned theme's minimum dimensions exceed the compact margin requested by the projection. This is a hypothesis to measure, not yet a confirmed fix.
 - TreeCtrl selection/expansion and two DatePicker/composite focus cases fail in their larger suites but pass in an isolated shared run. Diagnose order/lifetime effects; do not attribute them automatically to the private desktop.
 - TextCtrl's read-only peer mutation case reads a RichEditBox immediately after a real TOM write, before the asynchronous TextChanged callback restores the model value. Check the same bounded native-event wait used by adjacent tests, retaining model/peer/event assertions. No production repair is yet demonstrated.
+- The restored shared range run adds a Calendar recycling/coalescing budget failure: `GetWeekRefreshRunCount() <= beforeNavigation + 6` reports **11 <= 10** at `winuirangedate.cpp:3693`. This was not in the initial baseline; classify its cause before attributing it to intermittence or the API relocation. The unchanged limit remains enforced. Log: `audit106-family5-restored-range.log` in the shared build tree.
 
 Baseline logs and exact counts are recorded in plan 106. The isolated focus run is `audit106-family5-focus-isolated.log` with its passive input trace in the shared build tree. All use `WX_UI_TESTS=0`; none supplies physical input evidence.
+
+## Read-only text and Calendar observation corrections
+
+- TextCtrl's unchanged production RichEditBox rolls back a read-only peer write through its asynchronous TextChanged callback. The fixture now waits for that real callback, retaining the immediate model check and the original final peer checks. Four added assertions require bounded completion, the unchanged model value, read-only state and no wx text event. No synthetic notification or production setter substitutes for the callback.
+- Calendar's `GetWeekNumber()` was not a passive observer: it forced rendering and called `RefreshWeekNumbers()`. Calling it repeatedly inside the reverse-navigation wait manufactured the refresh requests whose count the case was measuring. A non-installed, test-only `ReadProjectedWeekNumber()` now reads already projected rows after validating the live owner/peer; the existing active getter keeps its rendering/refresh/lifetime checks and delegates only its final lookup. The measurement uses the passive getter and seven added assertions check observation purity and capture navigation diagnostics. The original `beforeNavigation + 6` limit is unchanged.
+- Shared and static Release `/warnaserror` builds pass. Each full text group passes **859 assertions / 28 cases**; each full 70-case range group passes **3007/3009 assertions, 68/70 cases**, with only the two previously recorded DatePicker focus failures. Calendar coalescing now passes within both broader groups, not only in isolation. Logs: `audit108-text-calendar-{build,text,range-runtime}.log` shared; `audit108-text-calendar-{build,text,range}.log` static. Shared smoke/Supported V0 also pass 2/2. Static confirmation of these two CTests remains pending at this entry; a passing observation fix does not close the remaining component work.
 
 ## Maintenance
 

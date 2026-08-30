@@ -143,6 +143,12 @@ public:
         const wxDateTime& date,
         wxDateTime *weekStart,
         int *weekNumber);
+    // Observe the already projected rows without rendering or queuing work.
+    static bool ReadProjectedWeekNumber(
+        const wxCalendarCtrl& control,
+        const wxDateTime& date,
+        wxDateTime *weekStart,
+        int *weekNumber);
     static unsigned long long GetWeekRefreshRunCount(const wxCalendarCtrl& control);
     static bool RequestWeekRefresh(wxCalendarCtrl& control);
     static bool SetWeekRefreshFailures(

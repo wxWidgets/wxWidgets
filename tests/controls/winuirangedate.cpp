@@ -3647,6 +3647,23 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
         &calendar, calendarPeer, "marked stable CalendarView layout",
         &stableTicket, &buttons));
 
+    // A polling observation must not manufacture the refresh waves whose
+    // coalescing is being measured below.
+    wxWinUICalendarTestAccess::WeekRefreshRecovery beforeRead;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(
+        calendar, &beforeRead));
+    const unsigned long long beforeReadRunCount =
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
+    REQUIRE(wxWinUICalendarTestAccess::ReadProjectedWeekNumber(
+        calendar, initial, &weekStart, &weekNumber));
+    wxWinUICalendarTestAccess::WeekRefreshRecovery beforeNavigationDiagnostic;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(
+        calendar, &beforeNavigationDiagnostic));
+    CHECK(beforeNavigationDiagnostic.requestRevision ==
+          beforeRead.requestRevision);
+    CHECK(wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar) ==
+          beforeReadRunCount);
+
     const unsigned long long beforeNavigation =
         wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
     const MUXAPR::IInvokeProvider incrementProvider =
@@ -3662,6 +3679,20 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     REQUIRE(wxWinUIWaitForStableCalendarLayout(
         &calendar, calendarPeer, "forward stable CalendarView layout",
         &stableTicket, &buttons));
+    wxWinUICalendarTestAccess::WeekRefreshRecovery forwardDiagnostic;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(
+        calendar, &forwardDiagnostic));
+    const unsigned long long afterForwardRunCount =
+        wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar);
+    INFO("forward navigation: runs=" << beforeNavigation << "->"
+         << afterForwardRunCount
+         << " request=" << beforeNavigationDiagnostic.requestRevision
+         << "->" << forwardDiagnostic.requestRevision
+         << " completed=" << forwardDiagnostic.completedRevision
+         << " boundedPending=" << forwardDiagnostic.boundedPendingRetries
+         << " invalidTickets=" << forwardDiagnostic.invalidTicketDeferrals
+         << " dayIdentity=" << forwardDiagnostic.dayItemIdentityChanges
+         << " layoutEchoes=" << forwardDiagnostic.weekLayoutEchoAbsorptions);
     const MUXAPR::IInvokeProvider decrementProvider =
         wxWinUIGetInvokeProvider(buttons.decrement);
     REQUIRE(decrementProvider);
@@ -3669,7 +3700,7 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     REQUIRE(WaitFor("week rows after reverse navigation", [&]()
     {
         return calendar.GetDate() == initial &&
-               wxWinUICalendarTestAccess::GetWeekNumber(calendar,
+               wxWinUICalendarTestAccess::ReadProjectedWeekNumber(calendar,
                    initial, &weekStart, &weekNumber);
     }, 1000));
     REQUIRE(wxWinUIWaitForStableCalendarLayout(
@@ -3685,6 +3716,19 @@ TEST_CASE("wxWinUI Calendar coalesces week layout waves across recycling",
     }, 1000));
     CHECK(weekStart == wxDateTime(13, wxDateTime::May, 2024));
     CHECK(weekNumber == 20);
+
+    wxWinUICalendarTestAccess::WeekRefreshRecovery reverseDiagnostic;
+    REQUIRE(wxWinUICalendarTestAccess::GetWeekRefreshRecovery(
+        calendar, &reverseDiagnostic));
+    INFO("reverse navigation: runs=" << afterForwardRunCount << "->"
+         << wxWinUICalendarTestAccess::GetWeekRefreshRunCount(calendar)
+         << " request=" << forwardDiagnostic.requestRevision << "->"
+         << reverseDiagnostic.requestRevision
+         << " completed=" << reverseDiagnostic.completedRevision
+         << " boundedPending=" << reverseDiagnostic.boundedPendingRetries
+         << " invalidTickets=" << reverseDiagnostic.invalidTicketDeferrals
+         << " dayIdentity=" << reverseDiagnostic.dayItemIdentityChanges
+         << " layoutEchoes=" << reverseDiagnostic.weekLayoutEchoAbsorptions);
 
     // Two genuine navigation/layout waves may each need one follow-up after
     // CalendarView recycles its realized containers, but never one refresh

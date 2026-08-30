@@ -1492,6 +1492,7 @@ TEST_CASE("wxWinUI TextCtrl value policies",
         wxTextCtrl plain(parent, wxID_ANY, "model",
                          wxDefaultPosition, wxDefaultSize,
                          wxTE_READONLY);
+        EventCounter plainTextEvents(&plain, wxEVT_TEXT);
 
         wxString plainPeerValue;
         REQUIRE(wxWinUITextCtrlTestAccess::GetPeerText(plain, &plainPeerValue));
@@ -1507,8 +1508,20 @@ TEST_CASE("wxWinUI TextCtrl value policies",
 
         REQUIRE(wxWinUITextCtrlTestAccess::SetTextBoxPeerText(plain, "peer"));
         CHECK(plain.GetValue() == "programmatic");
+        // The plain production peer is a RichEditBox: its TextChanged event
+        // is asynchronous, unlike the legacy TextBox seam. Wait for the real
+        // rollback callback before inspecting the peer, without simulating it.
+        REQUIRE(WaitFor("read-only RichEditBox peer rollback", [&]()
+        {
+            wxString peerValue;
+            return wxWinUITextCtrlTestAccess::GetPeerText(plain, &peerValue) &&
+                   peerValue == "programmatic";
+        }));
         REQUIRE(wxWinUITextCtrlTestAccess::GetPeerText(plain, &plainPeerValue));
         CHECK(plainPeerValue == "programmatic");
+        CHECK(plain.GetValue() == "programmatic");
+        CHECK_FALSE(plain.IsEditable());
+        CHECK(plainTextEvents.GetCount() == 0);
 
         wxTextCtrl password(parent, wxID_ANY, "secret",
                             wxDefaultPosition, wxDefaultSize,

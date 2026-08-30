@@ -7599,8 +7599,28 @@ bool wxWinUICalendarTestAccess::GetWeekNumber(
         return false;
     }
 
+    return ReadProjectedWeekNumber(*owner, date, weekStart, weekNumber);
+}
+
+bool wxWinUICalendarTestAccess::ReadProjectedWeekNumber(
+    const wxCalendarCtrl& control,
+    const wxDateTime& date,
+    wxDateTime *weekStart,
+    int *weekNumber)
+{
+    if ( !date.IsValid() || !control.m_winui || !control.m_winui->cal ||
+         !control.m_winui->callbackState ||
+         !control.HasFlag(wxCAL_SHOW_WEEK_NUMBERS) )
+    {
+        return false;
+    }
+
+    const auto state = control.m_winui->callbackState;
+    if ( state->GetOwner(state->Generation()) != &control )
+        return false;
+
     const wxDateTime::WeekDay firstWeekday =
-        owner->WeekStartsOnMonday()
+        control.WeekStartsOnMonday()
             ? wxDateTime::Mon
             : wxDateTime::Sun;
     const int daysSinceStart =
@@ -7611,7 +7631,7 @@ bool wxWinUICalendarTestAccess::GetWeekNumber(
             wxDateSpan::Days(daysSinceStart);
 
     for ( const wxWinUICalendarImpl::WeekRow& row :
-          implementation->weekRows )
+          control.m_winui->weekRows )
     {
         if ( row.visible && row.startDate == expectedStart )
         {

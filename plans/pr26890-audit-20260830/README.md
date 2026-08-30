@@ -22,7 +22,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | IN PROGRESS: 26 HEADERS MIGRATED; COMPONENT FAILURES OPEN |
 | [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | TODO |
-| [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | TODO |
+| [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: CONCRETE FAILURES AND TEST ORACLES |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
 | [111](111-capability-manifest.md) | Keep support documentation and feature evidence synchronized | TODO |
@@ -77,7 +77,7 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 
 ## Evidence log
 
-- Latest integration batch: Qt editability and synchronous Treebook veto are fixed in `5d7b88f1b4`, verified on Qt 5.15.2 and MSW. The public test-surface migration now covers 26 control headers, including removal of the shipping ComboBox UIA test launcher. Shared/static shipping consumers pass; broader component runs retain five/six pre-existing failures, explicitly tracked in 108. This is not full beta or physical sign-off.
+- Latest integration batch: Qt editability and synchronous Treebook veto are fixed in `5d7b88f1b4`, verified on Qt 5.15.2 and MSW. The public test-surface migration in `7af848f5f5` covers 26 control headers, including removal of the shipping ComboBox UIA test launcher. Shared/static shipping consumers pass. Broader component runs expose existing activation/focus failures and a newly observed Calendar budget failure; the precise history and subsequent test-oracle corrections are tracked in 106/108. This is not full beta or physical sign-off.
 - The later check of published `a984805c6b` confirms both WinUI shared/static CI jobs successful. Ubuntu Qt still fails on the two defects corrected above; Windows Qt jobs and AppVeyor were unfinished. This remote result does not qualify the newer local commits.
 - 2026-08-30 baseline: clean integration worktree at c5cf4677b9; dirty main checkout preserved.
 - Existing c5cf CI: MSVC C4189 requestedIndex; Clang delete-non-abstract-non-virtual-dtor; WinUI shared/static compile succeeded, Appx import failed, Supported V0 skipped. See plan 101 for precise corrective scope.
