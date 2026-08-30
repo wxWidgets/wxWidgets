@@ -4,27 +4,115 @@
 #include "wx/wxprec.h"
 #include "wx/evtloop.h"
 
+// This provides std::make_unique() even when using C++11 compilers.
+#include "wx/private/make_unique.h"
+
+// It is used often enough in the tests to make it worth avoiding the need to
+// qualify it with "std::" every time.
+using std::make_unique;
+
 // This header must be included before catch.hpp to be taken into account.
 #include "asserthelper.h"
 
 // This needs to be defined before including catch.hpp for PCH support.
 #define CATCH_CONFIG_ALL_PARTS
 
-#include "wx/catch_cppunit.h"
+#include "catch2/catch.hpp"
 
-// Custom test macro that is only defined when wxUIActionSimulator is available
-// this allows the tests that do not rely on it to run on platforms that don't
-// support it.
+// Define conversions to strings for some common wxWidgets types.
+namespace Catch
+{
+    template <>
+    struct StringMaker<wxUniChar>
+    {
+        static std::string convert(wxUniChar uc)
+        {
+            return wxString(uc).ToStdString(wxConvUTF8);
+        }
+    };
+
+    template <>
+    struct StringMaker<wxUniCharRef>
+    {
+        static std::string convert(wxUniCharRef ucr)
+        {
+            return wxString(ucr).ToStdString(wxConvUTF8);
+        }
+    };
+
+    // While this conversion already works due to the existence of the stream
+    // insertion operator for wxString, define a custom one making it more
+    // obvious when strings containing non-printable characters differ.
+    template <>
+    struct StringMaker<wxString>
+    {
+        static std::string convert(const wxString& wxs)
+        {
+            std::string s;
+            s.reserve(wxs.length() + 2);
+            s += '"';
+            for ( auto c : wxs )
+            {
+                if ( c >= 128 || !iswprint(c) )
+                    s += wxString::Format(wxASCII_STR("\\u%04X"), c).ToAscii();
+                else
+                    s += c;
+            }
+            s += '"';
+
+            return s;
+        }
+    };
+}
+
+// Return the name of the test being currently executed or an empty string if
+// no test is running, e.g. if we're called before or after the tests.
 //
-// Unfortunately, currently too many of the UI tests fail on non-MSW platforms,
-// so they're disabled there by default. This really, really needs to be fixed,
-// but for now having the UI tests always failing is not helpful as it prevents
-// other test failures from being noticed, so disable them there.
-#if wxUSE_UIACTIONSIMULATOR
-    #define WXUISIM_TEST(test) if ( EnableUITests() ) { CPPUNIT_TEST(test) }
-#else
-    #define WXUISIM_TEST(test)
-#endif
+// Note that we can't use Catch::getResultCapture() here because it throws if
+// there is no active test run and this function is called from the callbacks
+// which can't let exceptions escape from them.
+inline std::string wxGetCurrentTestName()
+{
+    auto* const capture = Catch::getCurrentContext().getResultCapture();
+
+    return capture ? capture->getCurrentTestName() : std::string();
+}
+
+// Convenient variant of INFO() which uses wxString::Format() internally.
+#define wxINFO_FMT_HELPER(fmt, ...) \
+    wxString::Format(fmt, __VA_ARGS__).ToStdString(wxConvUTF8)
+
+#define wxINFO_FMT(...) INFO(wxINFO_FMT_HELPER(__VA_ARGS__))
+
+// Use these macros to check the given condition with the given formatted
+// message (it should contain the format string and arguments in a separate
+// pair of parentheses).
+//
+// Note that using INFO() disallows putting more than one of these macros on
+// the same line but this can happen if they're used inside another macro, so
+// wrap it inside a scope.
+#define WX_ASSERT_MESSAGE(msg, cond)                             \
+    wxSTATEMENT_MACRO_BEGIN                                      \
+    INFO(std::string(wxString::Format msg .mb_str(wxConvLibc))); \
+    REQUIRE(cond);                                               \
+    wxSTATEMENT_MACRO_END
+
+#define WX_ASSERT_EQUAL_MESSAGE(msg, expected, actual)           \
+    wxSTATEMENT_MACRO_BEGIN                                      \
+    INFO(std::string(wxString::Format msg .mb_str(wxConvLibc))); \
+    REQUIRE((actual) == (expected));                             \
+    wxSTATEMENT_MACRO_END
+
+// Define a test case with the given name and tags simply calling the given
+// method of the given test class.
+//
+// This is useful for running the same tests for several different fixtures,
+// e.g. for testing both single and multi-line wxTextCtrl.
+#define wxTEST_CASE_FOR_METHOD(testclass, prefix, name, tags) \
+    TEST_CASE_METHOD(testclass, prefix "::" #name, tags)      \
+    {                                                         \
+        name();                                               \
+    }
 
 #if defined(__VISUALC__)
     #if _MSC_VER < 1910
@@ -173,7 +261,8 @@ class TestLogEnabler { };
 
 #if wxUSE_GUI
 
-// Return true if the UI tests are enabled, used by WXUISIM_TEST().
+// Return true if the UI tests, i.e. the ones using wxUIActionSimulator, are
+// enabled: the tests using it must check for this and return early if not.
 extern bool EnableUITests();
 
 // Helper function deleting the window without asserts (and hence exceptions
@@ -181,10 +270,5 @@ extern bool EnableUITests();
 void DeleteTestWindow(wxWindow* win);
 
 #endif // wxUSE_GUI
-
-// Convenience macro which registers a test case using just its "base" name,
-// i.e. without the common "TestCase" suffix, as its tag.
-#define wxREGISTER_UNIT_TEST(testclass) \
-    wxREGISTER_UNIT_TEST_WITH_TAGS(testclass ## TestCase, "[" #testclass "]")
 
 #endif

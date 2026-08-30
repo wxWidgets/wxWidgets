@@ -91,6 +91,7 @@ pointer_handle_axis(void* WXUNUSED(data),
 {
 }
 
+wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 const wl_pointer_listener pointer_listener = {
     pointer_handle_enter,
     pointer_handle_leave,
@@ -98,6 +99,7 @@ const wl_pointer_listener pointer_listener = {
     pointer_handle_button,
     pointer_handle_axis,
 };
+wxGCC_WARNING_RESTORE(missing-field-initializers)
 
 void
 seat_handle_capabilities(void* data,

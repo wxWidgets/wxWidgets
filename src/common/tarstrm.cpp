@@ -1439,14 +1439,14 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
         char buf[32];
         // length of "99<space><key>=<value>\n"
         unsigned long length = strlen(utf_value) + strlen(utf_key) + 5;
-        sprintf(buf, "%lu", length);
+        snprintf(buf, sizeof(buf), "%lu", length);
         // the length includes itself
         size_t lenlen = strlen(buf);
         if (lenlen != 2) {
             length += lenlen - 2;
-            sprintf(buf, "%lu", length);
+            snprintf(buf, sizeof(buf), "%lu", length);
             if (strlen(buf) > lenlen)
-                sprintf(buf, "%lu", ++length);
+                snprintf(buf, sizeof(buf), "%lu", ++length);
         }
 
         // reallocate m_extendedHdr if it's not big enough
@@ -1467,7 +1467,8 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
 
         // append the new record
         char *append = strchr(m_extendedHdr, 0);
-        sprintf(append, "%s %s=%s\012", buf,
+        snprintf(append, m_extendedSize - (append - m_extendedHdr),
+                "%s %s=%s\012", buf,
                 (const char*)utf_key, (const char*)utf_value);
     }
     else {

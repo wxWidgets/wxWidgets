@@ -19,48 +19,33 @@
 #include "wx/uiaction.h"
 #include "wx/tglbtn.h"
 
-class ToggleButtonTestCase : public CppUnit::TestCase
+#include <memory>
+
+class ToggleButtonTestCase
 {
 public:
-    ToggleButtonTestCase() { }
+    ToggleButtonTestCase();
 
-    void setUp() override;
-    void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( ToggleButtonTestCase );
-        WXUISIM_TEST( Click );
-        CPPUNIT_TEST( Value );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Click();
-    void Value();
-
-    wxToggleButton* m_button;
+protected:
+    std::unique_ptr<wxToggleButton> m_button;
 
     wxDECLARE_NO_COPY_CLASS(ToggleButtonTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ToggleButtonTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ToggleButtonTestCase, "ToggleButtonTestCase" );
-
-void ToggleButtonTestCase::setUp()
+ToggleButtonTestCase::ToggleButtonTestCase()
 {
-    m_button = new wxToggleButton(wxTheApp->GetTopWindow(), wxID_ANY, "wxToggleButton");
+    m_button = make_unique<wxToggleButton>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                           "wxToggleButton");
 }
 
-void ToggleButtonTestCase::tearDown()
-{
-    wxDELETE(m_button);
-}
 
-void ToggleButtonTestCase::Click()
+TEST_CASE_METHOD(ToggleButtonTestCase, "ToggleButton::Click", "[togglebutton]")
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter clicked(m_button, wxEVT_TOGGLEBUTTON);
+    if ( !EnableUITests() )
+        return;
+
+    EventCounter clicked(m_button.get(), wxEVT_TOGGLEBUTTON);
 
     wxUIActionSimulator sim;
 
@@ -71,31 +56,31 @@ void ToggleButtonTestCase::Click()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, clicked.GetCount());
-    CPPUNIT_ASSERT(m_button->GetValue());
+    CHECK(clicked.GetCount() == 1);
+    CHECK(m_button->GetValue());
     clicked.Clear();
 
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, clicked.GetCount());
-    CPPUNIT_ASSERT(!m_button->GetValue());
+    CHECK(clicked.GetCount() == 1);
+    CHECK(!m_button->GetValue());
 #endif
 }
 
-void ToggleButtonTestCase::Value()
+TEST_CASE_METHOD(ToggleButtonTestCase, "ToggleButton::Value", "[togglebutton]")
 {
-    EventCounter clicked(m_button, wxEVT_BUTTON);
+    EventCounter clicked(m_button.get(), wxEVT_BUTTON);
 
     m_button->SetValue(true);
 
-    CPPUNIT_ASSERT(m_button->GetValue());
+    CHECK(m_button->GetValue());
 
     m_button->SetValue(false);
 
-    CPPUNIT_ASSERT(!m_button->GetValue());
+    CHECK(!m_button->GetValue());
 
-    CPPUNIT_ASSERT_EQUAL( 0, clicked.GetCount() );
+    CHECK( clicked.GetCount() == 0 );
 }
 
 #endif //wxUSE_TOGGLEBTN

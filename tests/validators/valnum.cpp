@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -30,10 +32,9 @@ class NumValidatorTestCase
 {
 public:
     NumValidatorTestCase();
-    ~NumValidatorTestCase();
 
 protected:
-    wxTextCtrl* const m_text;
+    const std::unique_ptr<wxTextCtrl> m_text;
 
     wxDECLARE_NO_COPY_CLASS(NumValidatorTestCase);
 };
@@ -43,16 +44,12 @@ NumValidatorTestCase::NumValidatorTestCase()
 {
 }
 
-NumValidatorTestCase::~NumValidatorTestCase()
-{
-    delete m_text;
-}
 
 TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferInt", "[valnum]")
 {
     int value = 0;
     wxIntegerValidator<int> valInt(&value);
-    valInt.SetWindow(m_text);
+    valInt.SetWindow(m_text.get());
 
     CHECK( valInt.TransferToWindow() );
     CHECK( m_text->GetValue() == "0" );
@@ -80,7 +77,7 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferUnsigned", "[valnum]")
 {
     unsigned value = 0;
     wxIntegerValidator<unsigned> valUnsigned(&value);
-    valUnsigned.SetWindow(m_text);
+    valUnsigned.SetWindow(m_text.get());
 
     CHECK( valUnsigned.TransferToWindow() );
     CHECK( m_text->GetValue() == "0" );
@@ -120,7 +117,7 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferUnsignedRange", "[valnum
 {
     unsigned value = 1;
     wxIntegerValidator<unsigned> valUnsigned(&value, 1, 20);
-    valUnsigned.SetWindow(m_text);
+    valUnsigned.SetWindow(m_text.get());
 
     CHECK( valUnsigned.TransferToWindow() );
     CHECK( m_text->GetValue() == "1" );
@@ -154,7 +151,7 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferULL", "[valnum]")
 {
     unsigned long long value = 0;
     wxIntegerValidator<unsigned long long> valULL(&value);
-    valULL.SetWindow(m_text);
+    valULL.SetWindow(m_text.get());
 
     SECTION("LLONG_MAX")
     {
@@ -200,7 +197,7 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::TransferFloat", "[valnum]")
 
     float value = 0;
     wxFloatingPointValidator<float> valFloat(3, &value);
-    valFloat.SetWindow(m_text);
+    valFloat.SetWindow(m_text.get());
 
     CHECK( valFloat.TransferToWindow() );
     CHECK( m_text->GetValue() == "0.000" );

@@ -1416,34 +1416,33 @@ wxDateTime& wxDateTime::SetFromDOS(unsigned long ddt)
 
 unsigned long wxDateTime::GetAsDOS() const
 {
-    unsigned long ddt;
-    time_t ticks = GetTicks();
-    struct tm tmstruct;
-    struct tm *tm = wxLocaltime_r(&ticks, &tmstruct);
-    wxCHECK_MSG( tm, ULONG_MAX, wxT("time can't be represented in DOS format") );
+    const Tm tm = GetTm();
 
-    long year = tm->tm_year;
-    year -= 80;
+    const long yearOffset = tm.year - 1980;
+    wxCHECK_MSG( yearOffset >= 0 && yearOffset <= 127,
+                 ULONG_MAX,
+                 wxT("time can't be represented in DOS format") );
+
+    unsigned long year = static_cast<unsigned long>(yearOffset);
     year <<= 25;
 
-    long month = tm->tm_mon;
+    unsigned long month = static_cast<unsigned long>(tm.mon);
     month += 1;
     month <<= 21;
 
-    long day = tm->tm_mday;
+    unsigned long day = tm.mday;
     day <<= 16;
 
-    long hour = tm->tm_hour;
+    unsigned long hour = tm.hour;
     hour <<= 11;
 
-    long minute = tm->tm_min;
+    unsigned long minute = tm.min;
     minute <<= 5;
 
-    long second = tm->tm_sec;
+    unsigned long second = tm.sec;
     second /= 2;
 
-    ddt = year | month | day | hour | minute | second;
-    return ddt;
+    return year | month | day | hour | minute | second;
 }
 
 // ----------------------------------------------------------------------------

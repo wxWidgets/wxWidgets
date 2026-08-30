@@ -37,8 +37,6 @@ int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    int resultbutton = wxID_CANCEL;
-
     const long style = GetMessageDialogStyle();
 
     // work out what to display
@@ -67,7 +65,9 @@ int wxMessageDialog::ShowModal()
     wxCFStringRef cfTitle( msgtitle );
     wxCFStringRef cfText( msgtext );
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:cfTitle.AsNSString() message:cfText.AsNSString() delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     int buttonId[3] = { 0, 0, 0 };
     int buttonCount = 0;
@@ -108,6 +108,7 @@ int wxMessageDialog::ShowModal()
     }
 
 
+/*
     wxNonOwnedWindow* parentWindow = nullptr;
     int button = -1;
 
@@ -116,7 +117,6 @@ int wxMessageDialog::ShowModal()
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
     }
 
-/*
     if (parentWindow)
     {
         NSWindow* nativeParent = parentWindow->GetWXWindow();

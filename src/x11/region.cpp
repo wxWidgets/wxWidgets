@@ -113,7 +113,7 @@ wxGDIRefData *wxRegion::CreateGDIRefData() const
 
 wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxRegionRefData(*(wxRegionRefData *)data);
+    return new wxRegionRefData(*(const wxRegionRefData *)data);
 }
 
 // ----------------------------------------------------------------------------

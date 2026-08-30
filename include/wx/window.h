@@ -414,7 +414,9 @@ public:
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
-    void SetInitialSize(const wxSize& size=wxDefaultSize);
+        //
+        // Returns true if the size was changed.
+    bool SetInitialSize(const wxSize& size = wxDefaultSize);
 
         // the generic centre function - centers the window on parent by`
         // default or on screen if it doesn't have parent or
@@ -1442,6 +1444,11 @@ public:
     {
         return false;
     }
+
+        // return the space taken by the scrollbar of the given orientation
+        // when it is shown in this window: this is 0 for the windows using
+        // overlay scrollbars, which don't take any space at all
+    virtual int GetScrollbarSize(int orient) const;
 
     // context-sensitive help
     // ----------------------

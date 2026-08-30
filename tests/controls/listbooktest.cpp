@@ -21,6 +21,8 @@
 #include "wx/weakref.h"
 #include "bookctrlbasetest.h"
 
+#include <memory>
+
 class ListbookForTesting final : public wxListbook
 {
 public:
@@ -32,16 +34,14 @@ public:
     }
 };
 
-class ListbookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
+class ListbookTestCase : public BookCtrlBaseTestCase
 {
 public:
-    ListbookTestCase() { }
+    ListbookTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    virtual wxBookCtrlBase *GetBase() const override { return m_listbook; }
+protected:
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_listbook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
     { return wxEVT_LISTBOOK_PAGE_CHANGED; }
@@ -51,72 +51,39 @@ private:
 
     virtual bool HasBrokenMnemonics() const override { return true; }
 
-    CPPUNIT_TEST_SUITE( ListbookTestCase );
-        wxBOOK_CTRL_BASE_TESTS();
-        CPPUNIT_TEST( ListView );
-        CPPUNIT_TEST( InsertItemDestruction );
-        CPPUNIT_TEST( InsertItemTopologyReentry );
-        CPPUNIT_TEST( SelectDestruction );
-        CPPUNIT_TEST( SelectTopologyReentry );
-        CPPUNIT_TEST( SetItemTopologyReentry );
-        CPPUNIT_TEST( DeleteItemDestruction );
-        CPPUNIT_TEST( DeleteItemTopologyReentry );
-        CPPUNIT_TEST( DeleteAllItemsDestruction );
-        CPPUNIT_TEST( DeleteAllItemsTopologyReentry );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ListView();
-    void InsertItemDestruction();
-    void InsertItemTopologyReentry();
-    void SelectDestruction();
-    void SelectTopologyReentry();
-    void SetItemTopologyReentry();
-    void DeleteItemDestruction();
-    void DeleteItemTopologyReentry();
-    void DeleteAllItemsDestruction();
-    void DeleteAllItemsTopologyReentry();
-
-    ListbookForTesting *m_listbook;
+    std::unique_ptr<ListbookForTesting> m_listbook;
 
     wxDECLARE_NO_COPY_CLASS(ListbookTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ListbookTestCase );
+wxBOOK_CTRL_BASE_TESTS(ListbookTestCase, "Listbook",
+                       "[listbook][book][ListbookTestCase][winui-v0-supported]");
 
-// also include in its own registry so that these tests can be run alone
-wxREGISTER_UNIT_TEST_WITH_TAGS(
-    ListbookTestCase,
-    "[ListbookTestCase][winui-v0-supported]");
-
-void ListbookTestCase::setUp()
+ListbookTestCase::ListbookTestCase()
 {
-    m_listbook = new ListbookForTesting(
+    m_listbook = make_unique<ListbookForTesting>(
         wxTheApp->GetTopWindow(), wxID_ANY,
         wxDefaultPosition, wxSize(400, 300));
     AddPanels();
 }
 
-void ListbookTestCase::tearDown()
-{
-    wxDELETE(m_listbook);
-}
 
-void ListbookTestCase::ListView()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::ListView",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
     wxListView* listview = m_listbook->GetListView();
 
-    CPPUNIT_ASSERT(listview);
-    CPPUNIT_ASSERT_EQUAL(3, listview->GetItemCount());
-    CPPUNIT_ASSERT_EQUAL("Panel 1", listview->GetItemText(0));
+    CHECK(listview);
+    CHECK(listview->GetItemCount() == 3);
+    CHECK(listview->GetItemText(0) == "Panel 1");
 }
 
-void ListbookTestCase::InsertItemDestruction()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::InsertItemDestruction",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.release();
     wxListView* const list = book->GetListView();
     const wxWeakRef<wxWindow> lifetime(book);
-    m_listbook = nullptr;
 
     list->Bind(
         wxEVT_LIST_INSERT_ITEM,
@@ -138,13 +105,14 @@ void ListbookTestCase::InsertItemDestruction()
     // before the controller notification destroyed the book. Ownership was
     // consumed (and the page destroyed with it), so the caller must not be
     // invited to delete the candidate again.
-    CPPUNIT_ASSERT(inserted);
-    CPPUNIT_ASSERT(destroyed);
+    REQUIRE(inserted);
+    REQUIRE(destroyed);
 }
 
-void ListbookTestCase::InsertItemTopologyReentry()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::InsertItemTopologyReentry",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.get();
     wxListView* const list = book->GetListView();
     wxWindow* const removedPage = book->GetPage(0);
     wxPanel* const candidate = new wxPanel(book);
@@ -158,18 +126,17 @@ void ListbookTestCase::InsertItemTopologyReentry()
             if ( !nested )
             {
                 nested = true;
-                CPPUNIT_ASSERT(book->RemovePage(0));
+                REQUIRE(book->RemovePage(0));
             }
         });
 
     const bool inserted = book->InsertPage(
         book->GetPageCount(), candidate, "reentrant insertion");
 
-    CPPUNIT_ASSERT(nested);
-    CPPUNIT_ASSERT(inserted);
-    CPPUNIT_ASSERT(book->FindPage(candidate) != wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(book->GetPageCount()),
-                         list->GetItemCount());
+    REQUIRE(nested);
+    REQUIRE(inserted);
+    REQUIRE(book->FindPage(candidate) != wxNOT_FOUND);
+    REQUIRE(list->GetItemCount() == static_cast<long>(book->GetPageCount()));
 
     size_t shown = 0;
     for ( size_t i = 0; i < book->GetPageCount(); ++i )
@@ -177,19 +144,19 @@ void ListbookTestCase::InsertItemTopologyReentry()
         if ( book->GetPage(i)->IsShown() )
             ++shown;
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), shown);
-    CPPUNIT_ASSERT(book->GetCurrentPage());
-    CPPUNIT_ASSERT(book->GetCurrentPage()->IsShown());
+    REQUIRE(shown == static_cast<size_t>(1));
+    REQUIRE(book->GetCurrentPage());
+    REQUIRE(book->GetCurrentPage()->IsShown());
 
     delete removedPage;
 }
 
-void ListbookTestCase::SelectDestruction()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::SelectDestruction",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.release();
     wxListView* const list = book->GetListView();
     const wxWeakRef<wxWindow> lifetime(book);
-    m_listbook = nullptr;
 
     list->Bind(
         wxEVT_LIST_ITEM_SELECTED,
@@ -203,12 +170,13 @@ void ListbookTestCase::SelectDestruction()
     if ( lifetime )
         delete book;
 
-    CPPUNIT_ASSERT(destroyed);
+    REQUIRE(destroyed);
 }
 
-void ListbookTestCase::SelectTopologyReentry()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::SelectTopologyReentry",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.get();
     wxListView* const list = book->GetListView();
     wxWindow* const removedPage = book->GetPage(0);
     bool eventSeen = false;
@@ -231,18 +199,18 @@ void ListbookTestCase::SelectTopologyReentry()
     // outer SetItemState() call while leaving the control itself alive.
     book->UpdateSelectedPageForTesting(1);
 
-    CPPUNIT_ASSERT(eventSeen);
-    CPPUNIT_ASSERT(removed);
-    CPPUNIT_ASSERT(book->FindPage(removedPage) == wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(book->GetPageCount()),
-                         list->GetItemCount());
+    REQUIRE(eventSeen);
+    REQUIRE(removed);
+    REQUIRE(book->FindPage(removedPage) == wxNOT_FOUND);
+    REQUIRE(list->GetItemCount() == static_cast<long>(book->GetPageCount()));
 
     delete removedPage;
 }
 
-void ListbookTestCase::SetItemTopologyReentry()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::SetItemTopologyReentry",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.get();
     wxListView* const list = book->GetListView();
     wxWindow* const removedPage = book->GetPage(0);
     bool eventSeen = false;
@@ -270,22 +238,21 @@ void ListbookTestCase::SetItemTopologyReentry()
     // instead of refreshing the stale original index and reporting success.
     const bool set = list->SetItem(item);
 
-    CPPUNIT_ASSERT(eventSeen);
-    CPPUNIT_ASSERT(removed);
-    CPPUNIT_ASSERT(!set);
-    CPPUNIT_ASSERT(book->FindPage(removedPage) == wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(book->GetPageCount()),
-                         list->GetItemCount());
+    REQUIRE(eventSeen);
+    REQUIRE(removed);
+    REQUIRE(!set);
+    REQUIRE(book->FindPage(removedPage) == wxNOT_FOUND);
+    REQUIRE(list->GetItemCount() == static_cast<long>(book->GetPageCount()));
 
     delete removedPage;
 }
 
-void ListbookTestCase::DeleteItemDestruction()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::DeleteItemDestruction",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.release();
     wxListView* const list = book->GetListView();
     const wxWeakRef<wxWindow> lifetime(book);
-    m_listbook = nullptr;
 
     list->Bind(
         wxEVT_LIST_DELETE_ITEM,
@@ -299,12 +266,13 @@ void ListbookTestCase::DeleteItemDestruction()
     if ( lifetime )
         delete book;
 
-    CPPUNIT_ASSERT(destroyed);
+    REQUIRE(destroyed);
 }
 
-void ListbookTestCase::DeleteItemTopologyReentry()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::DeleteItemTopologyReentry",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.get();
     wxListView* const list = book->GetListView();
     wxWindow* const originalFirst = book->GetPage(0);
     wxPanel* const candidate = new wxPanel(book);
@@ -333,15 +301,14 @@ void ListbookTestCase::DeleteItemTopologyReentry()
     // original removal to complete with both models synchronized.
     const bool removed = book->RemovePage(0);
 
-    CPPUNIT_ASSERT(nested);
-    CPPUNIT_ASSERT(!inserted);
-    CPPUNIT_ASSERT(!nestedRemoved);
-    CPPUNIT_ASSERT(!nestedDeleteAll);
-    CPPUNIT_ASSERT(removed);
-    CPPUNIT_ASSERT(book->FindPage(originalFirst) == wxNOT_FOUND);
-    CPPUNIT_ASSERT(book->FindPage(candidate) == wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(book->GetPageCount()),
-                         list->GetItemCount());
+    REQUIRE(nested);
+    REQUIRE(!inserted);
+    REQUIRE(!nestedRemoved);
+    REQUIRE(!nestedDeleteAll);
+    REQUIRE(removed);
+    REQUIRE(book->FindPage(originalFirst) == wxNOT_FOUND);
+    REQUIRE(book->FindPage(candidate) == wxNOT_FOUND);
+    REQUIRE(list->GetItemCount() == static_cast<long>(book->GetPageCount()));
 
     // RemovePage() transfers ownership of the old page; the failed AddPage()
     // leaves ownership of its candidate with the caller.
@@ -349,12 +316,12 @@ void ListbookTestCase::DeleteItemTopologyReentry()
     delete candidate;
 }
 
-void ListbookTestCase::DeleteAllItemsDestruction()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::DeleteAllItemsDestruction",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.release();
     wxListView* const list = book->GetListView();
     const wxWeakRef<wxWindow> lifetime(book);
-    m_listbook = nullptr;
     bool deleting = false;
 
     list->Bind(
@@ -376,12 +343,13 @@ void ListbookTestCase::DeleteAllItemsDestruction()
     if ( lifetime )
         delete book;
 
-    CPPUNIT_ASSERT(destroyed);
+    REQUIRE(destroyed);
 }
 
-void ListbookTestCase::DeleteAllItemsTopologyReentry()
+TEST_CASE_METHOD(ListbookTestCase, "Listbook::DeleteAllItemsTopologyReentry",
+                 "[listbook][ListbookTestCase][winui-v0-supported]")
 {
-    ListbookForTesting* const book = m_listbook;
+    ListbookForTesting* const book = m_listbook.get();
     wxListView* const list = book->GetListView();
     wxPanel* const candidate = new wxPanel(book);
 
@@ -417,22 +385,22 @@ void ListbookTestCase::DeleteAllItemsTopologyReentry()
 
     const bool outerResult = book->DeleteAllPages();
 
-    CPPUNIT_ASSERT(eventSeen);
-    CPPUNIT_ASSERT(!insertResult);
-    CPPUNIT_ASSERT(!removeResult);
-    CPPUNIT_ASSERT(!nestedDeleteAllResult);
+    REQUIRE(eventSeen);
+    REQUIRE(!insertResult);
+    REQUIRE(!removeResult);
+    REQUIRE(!nestedDeleteAllResult);
     // Controller-first removal keeps the old common topology visible during
     // the first notification and commits both models together afterwards.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), modelCountDuringEvent);
+    REQUIRE(modelCountDuringEvent == static_cast<size_t>(3));
 
     // The precise count during the native delete notification is
     // platform-defined, but it is either the old count or old count - 1.
-    CPPUNIT_ASSERT((controllerCountDuringEvent == 2 ||
+    REQUIRE((controllerCountDuringEvent == 2 ||
                     controllerCountDuringEvent == 3));
-    CPPUNIT_ASSERT(outerResult);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), book->GetPageCount());
-    CPPUNIT_ASSERT_EQUAL(0L, list->GetItemCount());
-    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, book->GetSelection());
+    REQUIRE(outerResult);
+    REQUIRE(book->GetPageCount() == static_cast<size_t>(0));
+    REQUIRE(list->GetItemCount() == 0L);
+    REQUIRE(book->GetSelection() == wxNOT_FOUND);
 
     // Failed insertion leaves ownership with the caller.
     delete candidate;

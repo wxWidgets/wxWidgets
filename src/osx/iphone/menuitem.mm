@@ -191,7 +191,7 @@ public :
 
     ~wxMenuItemIPhoneImpl();
 
-    void SetBitmap( const wxBitmapBundle& bitmap ) override
+    void SetBitmap( const wxBitmapBundle& /*bitmap*/ ) override
     {
     }
 
@@ -231,7 +231,7 @@ public :
         }
     }
 
-    void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) override
+    void SetLabel( const wxString& /*text*/, wxAcceleratorEntry* /*entry*/ ) override
     {
         // recreate, it's readonly
     }
@@ -251,9 +251,9 @@ wxMenuItemIPhoneImpl::~wxMenuItemIPhoneImpl()
 bool wxMenuItemIPhoneImpl::DoDefault()
 {
     bool handled=false;
+#if 0 //  TODO wxIOS
     int menuid = m_peer->GetId();
 
-#if 0 //  TODO wxIOS
     NSApplication *theNSApplication = [NSApplication sharedApplication];
     if (menuid == wxID_OSX_HIDE)
     {
@@ -278,8 +278,8 @@ bool wxMenuItemIPhoneImpl::DoDefault()
     return handled;
 }
 
-wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
-                       int menuid,
+wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu* /*pParentMenu*/,
+                       int /*menuid*/,
                        const wxString& text,
                        wxAcceleratorEntry *entry,
                        const wxString& WXUNUSED(strHelp),

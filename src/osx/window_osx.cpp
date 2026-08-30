@@ -1419,6 +1419,9 @@ void wxWindowMac::WarpPointer(int x_pos, int y_pos)
     event.SetId(GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
+#else
+    wxUnusedVar(x_pos);
+    wxUnusedVar(y_pos);
 #endif
 }
 
@@ -1476,6 +1479,8 @@ int wxWindowMac::GetScrollRange(int orient) const
        if ( m_vScrollBar )
            return m_vScrollBar->GetRange() ;
     }
+#else
+    wxUnusedVar(orient);
 #endif
     return 0;
 }
@@ -1493,6 +1498,8 @@ int wxWindowMac::GetScrollThumb(int orient) const
        if ( m_vScrollBar )
            return m_vScrollBar->GetThumbSize() ;
     }
+#else
+    wxUnusedVar(orient);
 #endif
     return 0;
 }
@@ -1815,6 +1822,8 @@ void wxWindowMac::MacOnScroll( wxScrollEvent &event )
 
         HandleWindowEvent(wevent);
     }
+#else
+    wxUnusedVar(event);
 #endif
 }
 
@@ -2419,6 +2428,7 @@ wxInt32 wxWindowMac::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENT
 
     return eventNotHandledErr ;
 #else
+    wxUnusedVar(event);
     return 0;
 #endif
 }

@@ -21,22 +21,23 @@
 #include "itemcontainertest.h"
 #include "asserthelper.h"
 
+#include <memory>
+
 class BitmapComboBoxTestCase : public TextEntryTestCase,
-                               public ItemContainerTestCase,
-                               public CppUnit::TestCase
+                               public ItemContainerTestCase
 {
 public:
-    BitmapComboBoxTestCase() { }
+    BitmapComboBoxTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+protected:
+    virtual wxTextEntry *GetTestEntry() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetTestWindow() const override { return m_combo.get(); }
 
-private:
-    virtual wxTextEntry *GetTestEntry() const override { return m_combo; }
-    virtual wxWindow *GetTestWindow() const override { return m_combo; }
-
-    virtual wxItemContainer *GetContainer() const override { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const override { return m_combo; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_combo.get(); }
 
     virtual void CheckStringSelection(const char * WXUNUSED(sel)) override
     {
@@ -45,33 +46,26 @@ private:
         // is no way to return the selection contents directly
     }
 
-    CPPUNIT_TEST_SUITE( BitmapComboBoxTestCase );
-        wxTEXT_ENTRY_TESTS();
-        wxITEM_CONTAINER_TESTS();
-        CPPUNIT_TEST( Bitmap );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Bitmap();
-
-    wxBitmapComboBox *m_combo;
+    std::unique_ptr<wxBitmapComboBox> m_combo;
 
     wxDECLARE_NO_COPY_CLASS(BitmapComboBoxTestCase);
 };
 
-wxREGISTER_UNIT_TEST_WITH_TAGS(BitmapComboBoxTestCase,
-                               "[BitmapComboBoxTestCase][item-container]");
+wxTEXT_ENTRY_TESTS(BitmapComboBoxTestCase, "BitmapComboBox",
+                   "[bitmapcombobox][text-entry]");
 
-void BitmapComboBoxTestCase::setUp()
+wxITEM_CONTAINER_TESTS(BitmapComboBoxTestCase, "BitmapComboBox",
+                       "[bitmapcombobox][item-container]");
+
+BitmapComboBoxTestCase::BitmapComboBoxTestCase()
 {
-    m_combo = new wxBitmapComboBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_combo = make_unique<wxBitmapComboBox>(wxTheApp->GetTopWindow(),
+                                            wxID_ANY);
 }
 
-void BitmapComboBoxTestCase::tearDown()
-{
-    wxDELETE(m_combo);
-}
 
-void BitmapComboBoxTestCase::Bitmap()
+TEST_CASE_METHOD(BitmapComboBoxTestCase, "BitmapComboBox::Bitmap",
+                 "[bitmapcombobox]")
 {
     wxArrayString items;
     items.push_back("item 0");
@@ -80,28 +74,28 @@ void BitmapComboBoxTestCase::Bitmap()
     for( unsigned int i = 0; i < items.size(); ++i )
         m_combo->Append(items[i]);
 
-    CPPUNIT_ASSERT(!m_combo->GetItemBitmap(0).IsOk());
+    CHECK(!m_combo->GetItemBitmap(0).IsOk());
 
     wxBitmap bitmap = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER,
                                              m_combo->FromDIP(wxSize(16, 16)));
 
     m_combo->Append("item with bitmap", bitmap);
 
-    CPPUNIT_ASSERT(m_combo->GetItemBitmap(2).IsOk());
+    CHECK(m_combo->GetItemBitmap(2).IsOk());
 
     m_combo->Insert("item with bitmap", bitmap, 1);
 
-    CPPUNIT_ASSERT(m_combo->GetItemBitmap(1).IsOk());
+    CHECK(m_combo->GetItemBitmap(1).IsOk());
 
     m_combo->SetItemBitmap(0, bitmap);
 
-    CPPUNIT_ASSERT(m_combo->GetItemBitmap(0).IsOk());
+    CHECK(m_combo->GetItemBitmap(0).IsOk());
 
-    CPPUNIT_ASSERT_EQUAL(m_combo->FromDIP(wxSize(16, 16)), m_combo->GetBitmapSize());
+    CHECK(m_combo->GetBitmapSize() == m_combo->FromDIP(wxSize(16, 16)));
 
     m_combo->SetSelection( 1 );
 
-    CPPUNIT_ASSERT_EQUAL( m_combo->GetStringSelection(), "item with bitmap" );
+    CHECK( "item with bitmap" == m_combo->GetStringSelection() );
 }
 
 #endif //wxUSE_BITMAPCOMBOBOX

@@ -22,6 +22,7 @@
 #include "bookctrlbasetest.h"
 
 #include <functional>
+#include <memory>
 #include <utility>
 
 class FailingInsertChoice final : public wxChoice
@@ -91,16 +92,14 @@ public:
     }
 };
 
-class ChoicebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
+class ChoicebookTestCase : public BookCtrlBaseTestCase
 {
 public:
-    ChoicebookTestCase() { }
+    ChoicebookTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    virtual wxBookCtrlBase *GetBase() const override { return m_choicebook; }
+protected:
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_choicebook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
     { return wxEVT_CHOICEBOOK_PAGE_CHANGED; }
@@ -110,52 +109,34 @@ private:
 
     virtual bool HasBrokenMnemonics() const override { return true; }
 
-    CPPUNIT_TEST_SUITE( ChoicebookTestCase );
-        wxBOOK_CTRL_BASE_TESTS();
-        CPPUNIT_TEST( Choice );
-        CPPUNIT_TEST( ControllerInsertFailureRollsBackOwnership );
-        CPPUNIT_TEST( DeleteAllKeepsModelsCoherentDuringControllerRemoval );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Choice();
-    void ControllerInsertFailureRollsBackOwnership();
-    void DeleteAllKeepsModelsCoherentDuringControllerRemoval();
-
-    ChoicebookForTesting *m_choicebook;
+    std::unique_ptr<ChoicebookForTesting> m_choicebook;
 
     wxDECLARE_NO_COPY_CLASS(ChoicebookTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ChoicebookTestCase );
+wxBOOK_CTRL_BASE_TESTS(ChoicebookTestCase, "Choicebook",
+                       "[choicebook][book][ChoicebookTestCase][winui-v0-supported]");
 
-// also include in its own registry so that these tests can be run alone
-wxREGISTER_UNIT_TEST_WITH_TAGS(
-    ChoicebookTestCase,
-    "[ChoicebookTestCase][winui-v0-supported]");
-
-void ChoicebookTestCase::setUp()
+ChoicebookTestCase::ChoicebookTestCase()
 {
-    m_choicebook = new ChoicebookForTesting(
+    m_choicebook = make_unique<ChoicebookForTesting>(
         wxTheApp->GetTopWindow(), wxID_ANY);
     AddPanels();
 }
 
-void ChoicebookTestCase::tearDown()
-{
-    wxDELETE(m_choicebook);
-}
 
-void ChoicebookTestCase::Choice()
+TEST_CASE_METHOD(ChoicebookTestCase, "Choicebook::Choice",
+                 "[choicebook][ChoicebookTestCase][winui-v0-supported]")
 {
     wxChoice* choice = m_choicebook->GetChoiceCtrl();
 
-    CPPUNIT_ASSERT(choice);
-    CPPUNIT_ASSERT_EQUAL(3, choice->GetCount());
-    CPPUNIT_ASSERT_EQUAL("Panel 1", choice->GetString(0));
+    CHECK(choice);
+    CHECK(choice->GetCount() == 3);
+    CHECK(choice->GetString(0) == "Panel 1");
 }
 
-void ChoicebookTestCase::ControllerInsertFailureRollsBackOwnership()
+TEST_CASE_METHOD(ChoicebookTestCase, "Choicebook::ControllerInsertFailureRollsBackOwnership",
+                 "[choicebook][ChoicebookTestCase][winui-v0-supported]")
 {
     ChoicebookForTesting* const book = new ChoicebookForTesting(
         wxTheApp->GetTopWindow(), wxID_ANY);
@@ -165,24 +146,24 @@ void ChoicebookTestCase::ControllerInsertFailureRollsBackOwnership()
     const bool inserted =
         book->InsertPage(0, candidate, "failing insertion");
 
-    CPPUNIT_ASSERT(!inserted);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), book->GetPageCount());
-    CPPUNIT_ASSERT(book->FindPage(candidate) == wxNOT_FOUND);
-    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(0),
-                         book->GetChoiceCtrl()->GetCount());
+    REQUIRE(!inserted);
+    REQUIRE(book->GetPageCount() == static_cast<size_t>(0));
+    REQUIRE(book->FindPage(candidate) == wxNOT_FOUND);
+    REQUIRE(book->GetChoiceCtrl()->GetCount() == static_cast<unsigned int>(0));
 
     delete candidate;
     delete book;
 }
 
-void ChoicebookTestCase::DeleteAllKeepsModelsCoherentDuringControllerRemoval()
+TEST_CASE_METHOD(ChoicebookTestCase, "Choicebook::DeleteAllKeepsModelsCoherentDuringControllerRemoval",
+                 "[choicebook][ChoicebookTestCase][winui-v0-supported]")
 {
     auto* const book = new ChoicebookForTesting(
         wxTheApp->GetTopWindow(), wxID_ANY);
     ReentrantDeleteChoice* const choice =
         book->InstallReentrantDeleteController();
-    CPPUNIT_ASSERT(book->AddPage(new wxPanel(book), "One", true));
-    CPPUNIT_ASSERT(book->AddPage(new wxPanel(book), "Two"));
+    REQUIRE(book->AddPage(new wxPanel(book), "One", true));
+    REQUIRE(book->AddPage(new wxPanel(book), "Two"));
 
     wxPanel* const candidate = new wxPanel(book);
     bool callbackSeen = false;
@@ -204,19 +185,19 @@ void ChoicebookTestCase::DeleteAllKeepsModelsCoherentDuringControllerRemoval()
             nestedDeleteResult = book->DeleteAllPages();
         });
 
-    CPPUNIT_ASSERT(book->DeleteAllPages());
+    REQUIRE(book->DeleteAllPages());
     choice->SetDeleteHook({});
 
-    CPPUNIT_ASSERT(callbackSeen);
+    REQUIRE(callbackSeen);
     // The existing single-page removal slot keeps both models at the old
     // topology while the controller callback is running, then commits them
     // together. The global DeleteAll transaction still rejects all writers.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), modelCount);
-    CPPUNIT_ASSERT(!insertResult);
-    CPPUNIT_ASSERT(!removeResult);
-    CPPUNIT_ASSERT(!nestedDeleteResult);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), book->GetPageCount());
-    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(0), choice->GetCount());
+    REQUIRE(modelCount == static_cast<size_t>(2));
+    REQUIRE(!insertResult);
+    REQUIRE(!removeResult);
+    REQUIRE(!nestedDeleteResult);
+    REQUIRE(book->GetPageCount() == static_cast<size_t>(0));
+    REQUIRE(choice->GetCount() == static_cast<unsigned int>(0));
 
     delete candidate;
     delete book;

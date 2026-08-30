@@ -32,13 +32,11 @@ class tartest : public ArchiveTestSuite
 public:
     tartest();
 
-    void runTest() override { DoRunTest(); }
-
 protected:
-    CppUnit::Test *makeTest(string descr, int options,
-                            bool genericInterface,
-                            const wxString& archiver,
-                            const wxString& unarchiver) override;
+    ArchiveTest *makeTest(string descr, int options,
+                          bool genericInterface,
+                          const wxString& archiver,
+                          const wxString& unarchiver) override;
 };
 
 tartest::tartest()
@@ -48,7 +46,7 @@ tartest::tartest()
     AddUnArchiver(wxT("tar xf %s"));
 }
 
-CppUnit::Test *tartest::makeTest(
+ArchiveTest *tartest::makeTest(
     string descr,
     int   options,
     bool  genericInterface,
@@ -70,8 +68,10 @@ CppUnit::Test *tartest::makeTest(
                         options, archiver, unarchiver);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(tartest);
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(tartest, "archive/tar");
+TEST_CASE("Tar::Archive", "[tar][archive]")
+{
+    tartest().RunAll();
+}
 
 TEST_CASE("Tar::BadExtendedHeaderRecordLen", "[tar][error]")
 {

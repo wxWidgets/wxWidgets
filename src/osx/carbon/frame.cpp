@@ -29,6 +29,7 @@
 namespace
 {
 
+#if wxUSE_STATUSBAR
 int GetMacStatusbarHeight()
 {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
@@ -38,6 +39,7 @@ int GetMacStatusbarHeight()
 #endif
         return 24;
 }
+#endif // wxUSE_STATUSBAR
 
 } // anonymous namespace
 

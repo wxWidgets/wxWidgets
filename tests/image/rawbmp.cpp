@@ -16,8 +16,6 @@
 
 #ifdef wxHAS_RAW_BITMAP
 
-#ifndef WX_PRECOMP
-#endif // WX_PRECOMP
 
 #include "wx/image.h"
 #include "wx/rawbmp.h"
@@ -29,31 +27,13 @@ namespace
 }
 
 #define ASSERT_COL_EQUAL(x, y) \
-    CPPUNIT_ASSERT_EQUAL( (unsigned char)(x), (y) )
+    CHECK( (y) == (unsigned char)(x) )
 
 // ----------------------------------------------------------------------------
-// test class
+// tests
 // ----------------------------------------------------------------------------
 
-class ImageRawTestCase : public CppUnit::TestCase
-{
-public:
-    ImageRawTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( ImageRawTestCase );
-        CPPUNIT_TEST( RGBImage );
-    CPPUNIT_TEST_SUITE_END();
-
-    void RGBImage();
-
-    wxDECLARE_NO_COPY_CLASS(ImageRawTestCase);
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION( ImageRawTestCase );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ImageRawTestCase, "ImageRawTestCase" );
-
-void ImageRawTestCase::RGBImage()
+TEST_CASE("ImageRaw::RGBImage", "[image][raw]")
 {
     // create a check board image
     wxImage image(WIDTH, HEIGHT);

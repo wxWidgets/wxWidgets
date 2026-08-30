@@ -7,9 +7,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
-// and "wx/cppunit.h"
 #include "testprec.h"
-
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -40,47 +38,6 @@ class zlibStream : public BaseStreamTestCase<wxZlibInputStream, wxZlibOutputStre
 public:
     zlibStream();
     virtual ~zlibStream();
-
-    CPPUNIT_TEST_SUITE(zlibStream);
-        // Base class stream tests the zlibstream supports.
-        CPPUNIT_TEST(Input_GetSizeFail);
-        CPPUNIT_TEST(Input_GetC);
-        CPPUNIT_TEST(Input_Read);
-        CPPUNIT_TEST(Input_Eof);
-        CPPUNIT_TEST(Input_LastRead);
-        CPPUNIT_TEST(Input_CanRead);
-        CPPUNIT_TEST(Input_SeekIFail);
-        CPPUNIT_TEST(Input_TellI);
-        CPPUNIT_TEST(Input_Peek);
-        CPPUNIT_TEST(Input_Ungetch);
-
-        CPPUNIT_TEST(Output_PutC);
-        CPPUNIT_TEST(Output_Write);
-        CPPUNIT_TEST(Output_LastWrite);
-        CPPUNIT_TEST(Output_SeekOFail);
-        CPPUNIT_TEST(Output_TellO);
-
-        // Other test specific for zlib stream test case.
-        CPPUNIT_TEST(TestStream_NoHeader_Default);
-        CPPUNIT_TEST(TestStream_NoHeader_NoComp);
-        CPPUNIT_TEST(TestStream_NoHeader_SpeedComp);
-        CPPUNIT_TEST(TestStream_NoHeader_BestComp);
-        CPPUNIT_TEST(TestStream_NoHeader_Dictionary);
-        CPPUNIT_TEST(TestStream_ZLib_Default);
-        CPPUNIT_TEST(TestStream_ZLib_NoComp);
-        CPPUNIT_TEST(TestStream_ZLib_SpeedComp);
-        CPPUNIT_TEST(TestStream_ZLib_BestComp);
-        CPPUNIT_TEST(TestStream_GZip_Default);
-        CPPUNIT_TEST(TestStream_GZip_NoComp);
-        CPPUNIT_TEST(TestStream_GZip_SpeedComp);
-        CPPUNIT_TEST(TestStream_GZip_BestComp);
-        CPPUNIT_TEST(TestStream_GZip_Dictionary);
-        CPPUNIT_TEST(TestStream_ZLibGZip);
-        CPPUNIT_TEST(Decompress_BadData);
-        CPPUNIT_TEST(Decompress_wx251_zlib114_Data_NoHeader);
-        CPPUNIT_TEST(Decompress_wx251_zlib114_Data_ZLib);
-        CPPUNIT_TEST(Decompress_gzip135Data);
-    CPPUNIT_TEST_SUITE_END();
 
 protected:
     // Test different stream construct settings.
@@ -242,18 +199,18 @@ void zlibStream::Decompress_BadData()
 {
     // Setup the bad data stream and the zlib stream.
     wxMemoryInputStream memstream_in(GetDataBuffer(), DATABUFFER_SIZE);
-    CPPUNIT_ASSERT(memstream_in.IsOk());
+    CHECK(memstream_in.IsOk());
     wxZlibInputStream zstream_in(memstream_in);
-    CPPUNIT_ASSERT(zstream_in.IsOk()); // We did not yet read from the stream
+    CHECK(zstream_in.IsOk()); // We did not yet read from the stream
                                        // so it should still be OK.
     // Try to force the stream to go to bad status.
-    CPPUNIT_ASSERT(!zstream_in.Eof());
+    CHECK(!zstream_in.Eof());
     if (zstream_in.IsOk())
         zstream_in.GetC();
 
     // Because of the bad data in the input stream the zlib
     // stream should be marked as NOT OK.
-    CPPUNIT_ASSERT(!zstream_in.IsOk());
+    CHECK(!zstream_in.IsOk());
 }
 
 void zlibStream::Decompress_wx251_zlib114_Data_NoHeader()
@@ -311,7 +268,7 @@ const unsigned char *zlibStream::GetCompressedData()
         memstream_out.CopyTo(m_pCompressedData, m_SizeCompressedData);
     }
 
-    CPPUNIT_ASSERT(m_pCompressedData != nullptr);
+    CHECK(m_pCompressedData != nullptr);
     return m_pCompressedData;
 }
 
@@ -323,10 +280,11 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
 
     {   // Part one: Create a compressed file.
         wxFileOutputStream fstream_out(FILENAME_GZ);
-        CPPUNIT_ASSERT(fstream_out.IsOk());
+        CHECK(fstream_out.IsOk());
         {
             wxZlibOutputStream zstream_out(fstream_out, compress_level, output_flag);
-            CPPUNIT_ASSERT_MESSAGE("Could not create the output stream", zstream_out.IsOk());
+            INFO("Could not create the output stream");
+            CHECK(zstream_out.IsOk());
 
             if (buf)
                 zstream_out.SetDictionary(*buf);
@@ -343,9 +301,10 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
     {   // Part two: Verify that the compressed data when uncompressed
         //           matches the original data.
         wxFileInputStream fstream_in(FILENAME_GZ);
-        CPPUNIT_ASSERT(fstream_in.IsOk());
+        CHECK(fstream_in.IsOk());
         wxZlibInputStream zstream_in(fstream_in, input_flag);
-        CPPUNIT_ASSERT_MESSAGE("Could not create the input stream", zstream_in.IsOk());
+        INFO("Could not create the input stream");
+        CHECK(zstream_in.IsOk());
 
         if (buf)
             zstream_in.SetDictionary(*buf);
@@ -374,7 +333,7 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
             << wxT(" (Org_val ") << GetDataBuffer()[fail_pos]
             << wxT(" != Zlib_val ") << last_value
             << wxT("), with compression level ") << compress_level;
-        CPPUNIT_FAIL(string(msg.mb_str()));
+        FAIL(string(msg.mb_str()));
     }
 }
 
@@ -416,9 +375,9 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
 
     // Creat the needed streams.
     wxMemoryInputStream memstream_in(data, data_size);
-    CPPUNIT_ASSERT(memstream_in.IsOk());
+    CHECK(memstream_in.IsOk());
     wxZlibInputStream zstream_in(memstream_in, flag);
-    CPPUNIT_ASSERT(zstream_in.IsOk());
+    CHECK(zstream_in.IsOk());
 
     bool bValueEq = true;
     size_t i;
@@ -442,7 +401,8 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
             if (zstream_in.Eof())
                 break;
 
-            CPPUNIT_ASSERT_MESSAGE("Stream is no longer ok!", zstream_in.IsOk());
+            INFO("Stream is no longer ok!");
+            CHECK(zstream_in.IsOk());
         }
 
         // Don't go over the end of the value buffer...
@@ -463,32 +423,32 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
                 if (i > (value_size*5))
                 {
                     // Note: Please make sure Input_Eof test passed.
-                    CPPUNIT_FAIL("Infinite stream detected, breaking the infinite loop");
+                    FAIL("Infinite stream detected, breaking the infinite loop");
                     return;
                 }
             }
         }
     }
 
-    CPPUNIT_ASSERT_EQUAL( i, value_size );
-    CPPUNIT_ASSERT( bValueEq );
+    CHECK( value_size == i );
+    CHECK( bValueEq );
 }
 
 wxZlibInputStream *zlibStream::DoCreateInStream()
 {
     const unsigned char *buf = GetCompressedData();
     m_pTmpMemInStream = new wxMemoryInputStream(buf, m_SizeCompressedData);
-    CPPUNIT_ASSERT(m_pTmpMemInStream->IsOk());
+    CHECK(m_pTmpMemInStream->IsOk());
     wxZlibInputStream *pzstream_in = new wxZlibInputStream(*m_pTmpMemInStream);
-    CPPUNIT_ASSERT(pzstream_in->IsOk());
+    CHECK(pzstream_in->IsOk());
     return pzstream_in;
 }
 wxZlibOutputStream *zlibStream::DoCreateOutStream()
 {
     m_pTmpMemOutStream = new wxMemoryOutputStream();
-    CPPUNIT_ASSERT(m_pTmpMemOutStream->IsOk());
+    CHECK(m_pTmpMemOutStream->IsOk());
     wxZlibOutputStream *pzstream_out = new wxZlibOutputStream(*m_pTmpMemOutStream);
-    CPPUNIT_ASSERT(pzstream_out->IsOk());
+    CHECK(pzstream_out->IsOk());
     return pzstream_out;
 }
 void zlibStream::DoDeleteInStream()
@@ -501,7 +461,6 @@ void zlibStream::DoDeleteOutStream()
     delete m_pTmpMemOutStream;
     m_pTmpMemOutStream = nullptr;
 }
-
 
 void zlibStream::genExtTestData(wxTextOutputStream &out, const char *buf, int flag)
 {
@@ -543,8 +502,42 @@ void zlibStream::genExtTestData(wxTextOutputStream &out, const char *buf, int fl
     out << wxT("}") << wxT("\n");
 }
 
+// Base class stream tests the zlibstream supports.
+WX_STREAM_TEST_CASE(zlibStream, Input_GetSizeFail)
+WX_STREAM_TEST_CASE(zlibStream, Input_GetC)
+WX_STREAM_TEST_CASE(zlibStream, Input_Read)
+WX_STREAM_TEST_CASE(zlibStream, Input_Eof)
+WX_STREAM_TEST_CASE(zlibStream, Input_LastRead)
+WX_STREAM_TEST_CASE(zlibStream, Input_CanRead)
+WX_STREAM_TEST_CASE(zlibStream, Input_SeekIFail)
+WX_STREAM_TEST_CASE(zlibStream, Input_TellI)
+WX_STREAM_TEST_CASE(zlibStream, Input_Peek)
+WX_STREAM_TEST_CASE(zlibStream, Input_Ungetch)
 
-// Register the stream sub suite, by using some stream helper macro.
-// Note: Don't forget to connect it to the base suite (See: bstream.cpp => StreamCase::suite())
-STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(zlibStream)
+WX_STREAM_TEST_CASE(zlibStream, Output_PutC)
+WX_STREAM_TEST_CASE(zlibStream, Output_Write)
+WX_STREAM_TEST_CASE(zlibStream, Output_LastWrite)
+WX_STREAM_TEST_CASE(zlibStream, Output_SeekOFail)
+WX_STREAM_TEST_CASE(zlibStream, Output_TellO)
+
+// Other test specific for zlib stream test case.
+WX_STREAM_TEST_CASE(zlibStream, TestStream_NoHeader_Default)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_NoHeader_NoComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_NoHeader_SpeedComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_NoHeader_BestComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_NoHeader_Dictionary)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_ZLib_Default)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_ZLib_NoComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_ZLib_SpeedComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_ZLib_BestComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_GZip_Default)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_GZip_NoComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_GZip_SpeedComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_GZip_BestComp)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_GZip_Dictionary)
+WX_STREAM_TEST_CASE(zlibStream, TestStream_ZLibGZip)
+WX_STREAM_TEST_CASE(zlibStream, Decompress_BadData)
+WX_STREAM_TEST_CASE(zlibStream, Decompress_wx251_zlib114_Data_NoHeader)
+WX_STREAM_TEST_CASE(zlibStream, Decompress_wx251_zlib114_Data_ZLib)
+WX_STREAM_TEST_CASE(zlibStream, Decompress_gzip135Data)
 

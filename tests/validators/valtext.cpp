@@ -7,6 +7,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_VALIDATORS && wxUSE_UIACTIONSIMULATOR
 
 
@@ -26,13 +28,9 @@ public:
     {
     }
 
-    ~TextValidatorTestCase()
-    {
-        delete m_text;
-    }
 
 protected:
-    wxTextCtrl* const m_text;
+    const std::unique_ptr<wxTextCtrl> m_text;
 };
 
 #define TEXT_VALIDATOR_TEST_CASE(name, tags) \

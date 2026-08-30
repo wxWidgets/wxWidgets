@@ -7,7 +7,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
-// and "wx/cppunit.h"
 #include "testprec.h"
 
 
@@ -35,31 +34,6 @@ class fileStream : public BaseStreamTestCase<wxFileInputStream, wxFileOutputStre
 public:
     fileStream();
 
-    CPPUNIT_TEST_SUITE(fileStream);
-        // Base class stream tests the fileStream supports.
-        CPPUNIT_TEST(Input_GetSize);
-        CPPUNIT_TEST(Input_GetC);
-        CPPUNIT_TEST(Input_Read);
-        CPPUNIT_TEST(Input_Eof);
-        CPPUNIT_TEST(Input_LastRead);
-        CPPUNIT_TEST(Input_CanRead);
-        CPPUNIT_TEST(Input_SeekI);
-        CPPUNIT_TEST(Input_TellI);
-        CPPUNIT_TEST(Input_Peek);
-        CPPUNIT_TEST(Input_Ungetch);
-
-        CPPUNIT_TEST(Output_PutC);
-        CPPUNIT_TEST(Output_Write);
-        CPPUNIT_TEST(Output_LastWrite);
-        CPPUNIT_TEST(Output_SeekO);
-        CPPUNIT_TEST(Output_TellO);
-
-        // Other test specific for File stream test case.
-    CPPUNIT_TEST_SUITE_END();
-
-protected:
-    // Add own test here.
-
 private:
     // Implement base class functions.
     virtual wxFileInputStream  *DoCreateInStream() override;
@@ -78,13 +52,13 @@ fileStream::fileStream()
 wxFileInputStream *fileStream::DoCreateInStream()
 {
     wxFileInputStream *pFileInStream = new wxFileInputStream(GetInFileName());
-    CPPUNIT_ASSERT(pFileInStream->IsOk());
+    REQUIRE(pFileInStream->IsOk());
     return pFileInStream;
 }
 wxFileOutputStream *fileStream::DoCreateOutStream()
 {
     wxFileOutputStream *pFileOutStream = new wxFileOutputStream(FILENAME_FILEOUTSTREAM);
-    CPPUNIT_ASSERT(pFileOutStream->IsOk());
+    REQUIRE(pFileOutStream->IsOk());
     return pFileOutStream;
 }
 
@@ -141,6 +115,20 @@ wxString fileStream::GetInFileName() const
     return FILENAME_FILEINSTREAM;
 }
 
-// Register the stream sub suite, by using some stream helper macro.
-// Note: Don't forget to connect it to the base suite (See: bstream.cpp => StreamCase::suite())
-STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(fileStream)
+// Base class stream tests the fileStream supports.
+WX_STREAM_TEST_CASE(fileStream, Input_GetSize)
+WX_STREAM_TEST_CASE(fileStream, Input_GetC)
+WX_STREAM_TEST_CASE(fileStream, Input_Read)
+WX_STREAM_TEST_CASE(fileStream, Input_Eof)
+WX_STREAM_TEST_CASE(fileStream, Input_LastRead)
+WX_STREAM_TEST_CASE(fileStream, Input_CanRead)
+WX_STREAM_TEST_CASE(fileStream, Input_SeekI)
+WX_STREAM_TEST_CASE(fileStream, Input_TellI)
+WX_STREAM_TEST_CASE(fileStream, Input_Peek)
+WX_STREAM_TEST_CASE(fileStream, Input_Ungetch)
+
+WX_STREAM_TEST_CASE(fileStream, Output_PutC)
+WX_STREAM_TEST_CASE(fileStream, Output_Write)
+WX_STREAM_TEST_CASE(fileStream, Output_LastWrite)
+WX_STREAM_TEST_CASE(fileStream, Output_SeekO)
+WX_STREAM_TEST_CASE(fileStream, Output_TellO)

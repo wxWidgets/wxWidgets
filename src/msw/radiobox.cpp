@@ -264,7 +264,11 @@ bool wxRadioBox::Create(wxWindow *parent,
         m_selectedButton = 0;
 
     // Now that we have items determine what is the best size and set it.
-    SetInitialSize(size);
+    if ( !SetInitialSize(size) )
+    {
+        // If the size didn't change, buttons were not laid out yet, do it now.
+        Layout();
+    }
 
     // The base wxStaticBox class never accepts focus, but we do because giving
     // focus to a wxRadioBox actually gives it to one of its buttons, which are

@@ -1441,11 +1441,9 @@ public:
 
         Known limitations of dark mode support include:
 
-        - The following dialogs wrapping common windows dialogs don't support
-          dark mode: wxColourDialog, wxFindReplaceDialog, wxFontDialog,
-          wxPageSetupDialog, wxPrintDialog.
         - wxTimePickerCtrl, wxDatePickerCtrl and wxCalendarCtrl don't support dark mode
           and use the same (light) background as by default in it.
+        - wxPrintDialog on Windows 10 doesn't support dark mode.
 
         @param flags Can be @c wxApp::DarkMode_Always to force dark mode
             regardless of the system mode, @c wxApp::DarkMode_Never to likewise

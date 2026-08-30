@@ -11,6 +11,8 @@
 
 #if wxUSE_GRAPHICS_DIRECT2D
 
+wxGCC_WARNING_SUPPRESS(double-promotion)
+
 // Minimum supported client: Windows 8 and Platform Update for Windows 7
 #define wxD2D_DEVICE_CONTEXT_SUPPORTED 0
 

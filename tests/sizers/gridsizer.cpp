@@ -12,6 +12,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -32,13 +34,12 @@ class GridSizerTestCaseBase
 {
 protected:
     explicit GridSizerTestCaseBase(wxGridSizer* sizer);
-    ~GridSizerTestCaseBase();
     // Clear the current sizer contents and add the specified windows to it,
     // using the same flags for all of them.
     void SetChildren(const wxVector<wxWindow*>& children,
                      const wxSizerFlags& flags);
 
-    wxWindow *m_win;
+    std::unique_ptr<wxWindow> m_win;
     wxGridSizer* const m_sizerBase;
 
     wxDECLARE_NO_COPY_CLASS(GridSizerTestCaseBase);
@@ -73,16 +74,12 @@ protected:
 GridSizerTestCaseBase::GridSizerTestCaseBase(wxGridSizer* sizer)
     : m_sizerBase(sizer)
 {
-    m_win = new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_win = make_unique<wxWindow>(wxTheApp->GetTopWindow(), wxID_ANY);
     m_win->SetClientSize(127, 35);
 
     m_win->SetSizer(m_sizerBase);
 }
 
-GridSizerTestCaseBase::~GridSizerTestCaseBase()
-{
-    delete m_win;
-}
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -116,7 +113,7 @@ TEST_CASE_METHOD(GridSizerTestCase,
     wxVector<wxWindow*> children;
     for ( int n = 0; n < 3; n++ )
     {
-        children.push_back(new wxWindow(m_win, wxID_ANY));
+        children.push_back(new wxWindow(m_win.get(), wxID_ANY));
     }
 
     SetChildren(children, wxSizerFlags().Expand());
@@ -137,7 +134,8 @@ TEST_CASE_METHOD(FlexGridSizerTestCase,
     wxVector<wxWindow*> children;
     for ( int n = 0; n < 4; n++ )
     {
-        children.push_back(new wxWindow(m_win, wxID_ANY, wxDefaultPosition,
+        children.push_back(new wxWindow(m_win.get(), wxID_ANY,
+                                        wxDefaultPosition,
                                         sizeChild));
     }
 
@@ -228,7 +226,7 @@ TEST_CASE_METHOD(FlexGridSizerTestCase,
     wxVector<wxWindow*> children;
     for ( int n = 0; n < 4; n++ )
     {
-        children.push_back(new wxWindow(m_win, wxID_ANY));
+        children.push_back(new wxWindow(m_win.get(), wxID_ANY));
     }
 
     // Proportions of growable columns should be respected.

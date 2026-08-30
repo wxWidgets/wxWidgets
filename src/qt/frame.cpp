@@ -224,7 +224,7 @@ void wxFrame::SetWindowModality(wxWindowMode modality)
             qtModality = Qt::WindowModal;
             break;
 
-        case wxWindowMode::Normal:
+        default:
             qtModality = Qt::NonModal;
             break;
     }

@@ -34,6 +34,7 @@
 
 #include "wx/fontutil.h"
 #include "wx/display.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
@@ -57,7 +58,7 @@ static
 UINT_PTR CALLBACK
 wxFontDialogHookProc(HWND hwnd,
                      UINT uiMsg,
-                     WPARAM WXUNUSED(wParam),
+                     WPARAM wParam,
                      LPARAM lParam)
 {
     if ( uiMsg == WM_INITDIALOG )
@@ -65,11 +66,12 @@ wxFontDialogHookProc(HWND hwnd,
         CHOOSEFONT *pCH = (CHOOSEFONT *)lParam;
         wxFontDialog * const
             dialog = reinterpret_cast<wxFontDialog *>(pCH->lCustData);
-
-        ::SetWindowText(hwnd, dialog->GetTitle().t_str());
+        const auto& title = dialog->GetTitle();
+        if ( !title.empty() )
+            ::SetWindowText(hwnd, title.t_str());
     }
 
-    return 0;
+    return wxMSWDarkMode::CommonDialogHookProc(hwnd, uiMsg, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------
@@ -105,8 +107,7 @@ int wxFontDialog::ShowModal()
 
     wxWindowDisabler disableOthers(this, parent);
 
-    // It should be OK to always use GDI simulations
-    DWORD flags = CF_SCREENFONTS /* | CF_NOSIMULATIONS */ ;
+    DWORD flags = CF_SCREENFONTS | CF_ENABLEHOOK;
 
     LOGFONT logFont;
 
@@ -116,15 +117,8 @@ int wxFontDialog::ShowModal()
     chooseFontStruct.lStructSize = sizeof(CHOOSEFONT);
     chooseFontStruct.hwndOwner = hWndParent;
     chooseFontStruct.lpLogFont = &logFont;
-
-    // Currently we only use the hook to set the title, so only set it up if
-    // we really need to do this.
-    if ( !m_title.empty() )
-    {
-        flags |= CF_ENABLEHOOK;
-        chooseFontStruct.lCustData = (LPARAM)this;
-        chooseFontStruct.lpfnHook = wxFontDialogHookProc;
-    }
+    chooseFontStruct.lCustData = (LPARAM)this;
+    chooseFontStruct.lpfnHook = wxFontDialogHookProc;
 
     // The native font dialog does not support moving between displays with
     // different DPIs. Check if it will be shown system-dpi-aware.

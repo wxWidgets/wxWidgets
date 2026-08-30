@@ -385,7 +385,7 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
 
     // an item should have the focused rect only when the lbox has focus, so
     // make sure that we never set wxCONTROL_FOCUSED flag if it doesn't
-    int itemCurrent = wxWindow::FindFocus() == (wxWindow *)lbox // cast needed
+    int itemCurrent = wxWindow::FindFocus() == (const wxWindow *)lbox // cast needed
                         ? lbox->GetCurrentItem()
                         : -1;
     for ( size_t n = itemFirst; n < itemLast; n++ )

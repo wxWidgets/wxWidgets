@@ -19,46 +19,36 @@
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
-class CheckListBoxTestCase : public ItemContainerTestCase, public CppUnit::TestCase
+#include <memory>
+
+class CheckListBoxTestCase : public ItemContainerTestCase
 {
 public:
-    CheckListBoxTestCase() { }
+    CheckListBoxTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+protected:
+    virtual wxItemContainer *GetContainer() const override
+    { return m_check.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_check.get(); }
 
-private:
-    virtual wxItemContainer *GetContainer() const override { return m_check; }
-    virtual wxWindow *GetContainerWindow() const override { return m_check; }
-
-    CPPUNIT_TEST_SUITE( CheckListBoxTestCase );
-        wxITEM_CONTAINER_TESTS();
-        CPPUNIT_TEST( Check );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Check();
-
-    wxCheckListBox* m_check;
+    std::unique_ptr<wxCheckListBox> m_check;
 
     wxDECLARE_NO_COPY_CLASS(CheckListBoxTestCase);
 };
 
-wxREGISTER_UNIT_TEST_WITH_TAGS(CheckListBoxTestCase,
-                               "[CheckListBoxTestCase][item-container]");
+wxITEM_CONTAINER_TESTS(CheckListBoxTestCase, "CheckListBox",
+                       "[checklistbox][item-container]");
 
-void CheckListBoxTestCase::setUp()
+CheckListBoxTestCase::CheckListBoxTestCase()
 {
-    m_check = new wxCheckListBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_check = make_unique<wxCheckListBox>(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
-void CheckListBoxTestCase::tearDown()
-{
-    wxDELETE(m_check);
-}
 
-void CheckListBoxTestCase::Check()
+TEST_CASE_METHOD(CheckListBoxTestCase, "CheckListBox::Check", "[checklistbox]")
 {
-    EventCounter toggled(m_check, wxEVT_CHECKLISTBOX);
+    EventCounter toggled(m_check.get(), wxEVT_CHECKLISTBOX);
 
     wxArrayInt checkedItems;
     wxArrayString testitems;
@@ -74,17 +64,17 @@ void CheckListBoxTestCase::Check()
     m_check->Check(1, false);
 
     //We should not get any events when changing this from code
-    CPPUNIT_ASSERT_EQUAL(0, toggled.GetCount());
-    CPPUNIT_ASSERT_EQUAL(true, m_check->IsChecked(0));
-    CPPUNIT_ASSERT_EQUAL(false, m_check->IsChecked(1));
+    CHECK(toggled.GetCount() == 0);
+    CHECK(m_check->IsChecked(0) == true);
+    CHECK(m_check->IsChecked(1) == false);
 
-    CPPUNIT_ASSERT_EQUAL(1, m_check->GetCheckedItems(checkedItems));
-    CPPUNIT_ASSERT_EQUAL(0, checkedItems[0]);
+    CHECK(m_check->GetCheckedItems(checkedItems) == 1);
+    CHECK(checkedItems[0] == 0);
 
     //Make sure a double check of an items doesn't deselect it
     m_check->Check(0);
 
-    CPPUNIT_ASSERT_EQUAL(true, m_check->IsChecked(0));
+    CHECK(m_check->IsChecked(0) == true);
 }
 
 #endif // wxUSE_CHECKLISTBOX

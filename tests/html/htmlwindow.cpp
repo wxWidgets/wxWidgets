@@ -30,63 +30,29 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class HtmlWindowTestCase : public CppUnit::TestCase
+class HtmlWindowTestCase
 {
 public:
-    HtmlWindowTestCase() { }
+    HtmlWindowTestCase();
+    ~HtmlWindowTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( HtmlWindowTestCase );
-        CPPUNIT_TEST( SelectionToText );
-        CPPUNIT_TEST( Title );
-        CPPUNIT_TEST( InitialLineBreak );
-#if wxUSE_UIACTIONSIMULATOR
-        WXUISIM_TEST( CellClick );
-        WXUISIM_TEST( LinkClick );
-#endif // wxUSE_UIACTIONSIMULATOR
-#if wxUSE_WXHTML_HELP
-        CPPUNIT_TEST( DisplayMissingHelpTopic );
-#endif // wxUSE_WXHTML_HELP
-        CPPUNIT_TEST( ImageMapCoordinates );
-        CPPUNIT_TEST( AppendToPage );
-    CPPUNIT_TEST_SUITE_END();
-
-    void SelectionToText();
-    void Title();
-    void InitialLineBreak();
-    void CellClick();
-    void LinkClick();
-#if wxUSE_WXHTML_HELP
-    void DisplayMissingHelpTopic();
-#endif // wxUSE_WXHTML_HELP
-    void ImageMapCoordinates();
-    void AppendToPage();
-
+protected:
     wxHtmlWindow *m_win;
 
     wxDECLARE_NO_COPY_CLASS(HtmlWindowTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( HtmlWindowTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( HtmlWindowTestCase, "HtmlWindowTestCase" );
-
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
 
-void HtmlWindowTestCase::setUp()
+HtmlWindowTestCase::HtmlWindowTestCase()
 {
     m_win = new wxHtmlWindow(wxTheApp->GetTopWindow(), wxID_ANY,
                              wxDefaultPosition, wxSize(400, 200));
 }
 
-void HtmlWindowTestCase::tearDown()
+HtmlWindowTestCase::~HtmlWindowTestCase()
 {
     DeleteTestWindow(m_win);
     m_win = nullptr;
@@ -180,31 +146,31 @@ static wxHtmlCell *FindCellWithLink(wxHtmlCell *cell, wxPoint *pos)
     return nullptr;
 }
 
-void HtmlWindowTestCase::SelectionToText()
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::SelectionToText", "[html][htmlwindow]")
 {
 #if wxUSE_CLIPBOARD
     m_win->SetPage(TEST_MARKUP);
     m_win->SelectAll();
 
-    CPPUNIT_ASSERT_EQUAL( TEST_PLAIN_TEXT, m_win->SelectionToText() );
+    CHECK( m_win->SelectionToText() == TEST_PLAIN_TEXT );
 #endif // wxUSE_CLIPBOARD
 }
 
-void HtmlWindowTestCase::Title()
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::Title", "[html][htmlwindow]")
 {
     m_win->SetPage(TEST_MARKUP);
 
-    CPPUNIT_ASSERT_EQUAL("Page", m_win->GetOpenedPageTitle());
+    CHECK(m_win->GetOpenedPageTitle() == "Page");
 }
 
-void HtmlWindowTestCase::InitialLineBreak()
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::InitialLineBreak", "[html][htmlwindow]")
 {
     m_win->SetBorders(0);
     m_win->SetPage("<html><body>TEXT</body></html>");
 
     wxHtmlContainerCell *plainTextRoot = m_win->GetInternalRepresentation();
 
-    CPPUNIT_ASSERT(plainTextRoot);
+    CHECK(plainTextRoot);
 
     int plainTextHeight = plainTextRoot->GetHeight();
 
@@ -212,13 +178,16 @@ void HtmlWindowTestCase::InitialLineBreak()
 
     wxHtmlContainerCell *rootWithBreak = m_win->GetInternalRepresentation();
 
-    CPPUNIT_ASSERT(rootWithBreak);
-    CPPUNIT_ASSERT(rootWithBreak->GetHeight() > plainTextHeight);
+    CHECK(rootWithBreak);
+    CHECK(rootWithBreak->GetHeight() > plainTextHeight);
 }
 
 #if wxUSE_UIACTIONSIMULATOR
-void HtmlWindowTestCase::CellClick()
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::CellClick", "[html][htmlwindow]")
 {
+    if ( !EnableUITests() )
+        return;
+
     EventCounter clicked(m_win, wxEVT_HTML_CELL_CLICKED);
 
     wxUIActionSimulator sim;
@@ -233,11 +202,14 @@ void HtmlWindowTestCase::CellClick()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, clicked.GetCount());
+    CHECK(clicked.GetCount() == 1);
 }
 
-void HtmlWindowTestCase::LinkClick()
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::LinkClick", "[html][htmlwindow]")
 {
+    if ( !EnableUITests() )
+        return;
+
     EventCounter clicked(m_win, wxEVT_HTML_LINK_CLICKED);
 
     wxUIActionSimulator sim;
@@ -252,12 +224,12 @@ void HtmlWindowTestCase::LinkClick()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, clicked.GetCount());
+    CHECK(clicked.GetCount() == 1);
 }
 #endif // wxUSE_UIACTIONSIMULATOR
 
 #if wxUSE_WXHTML_HELP
-void HtmlWindowTestCase::DisplayMissingHelpTopic()
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::DisplayMissingHelpTopic", "[html][htmlwindow]")
 {
     wxHtmlHelpController controller(
         wxHF_DEFAULT_STYLE | wxHF_DIALOG | wxHF_MODAL,
@@ -266,16 +238,16 @@ void HtmlWindowTestCase::DisplayMissingHelpTopic()
 
     timer.StartOnce(50);
 
-    CPPUNIT_ASSERT(!controller.Display("missing topic"));
+    CHECK(!controller.Display("missing topic"));
 
     timer.Stop();
 
-    CPPUNIT_ASSERT(!timer.WasModalShown());
+    CHECK(!timer.WasModalShown());
     controller.Quit();
 }
 #endif // wxUSE_WXHTML_HELP
 
-void HtmlWindowTestCase::ImageMapCoordinates()
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::ImageMapCoordinates", "[html][htmlwindow]")
 {
     m_win->SetBorders(0);
     m_win->SetPage(TEST_MARKUP_IMAGEMAP);
@@ -284,24 +256,24 @@ void HtmlWindowTestCase::ImageMapCoordinates()
     wxPoint hitpos;
     wxHtmlCell *image = FindCellWithLink(root, &hitpos);
 
-    CPPUNIT_ASSERT(image);
+    CHECK(image);
 
     const wxPoint imgpos = image->GetAbsPos(root);
     wxHtmlLinkInfo *link = root->GetLink(imgpos.x + hitpos.x,
                                          imgpos.y + hitpos.y);
 
-    CPPUNIT_ASSERT(link);
-    CPPUNIT_ASSERT_EQUAL("hit", link->GetHref());
-    CPPUNIT_ASSERT(!root->GetLink(imgpos.x, imgpos.y));
+    CHECK(link);
+    CHECK(link->GetHref() == "hit");
+    CHECK(!root->GetLink(imgpos.x, imgpos.y));
 }
 
-void HtmlWindowTestCase::AppendToPage()
+TEST_CASE_METHOD(HtmlWindowTestCase, "HtmlWindow::AppendToPage", "[html][htmlwindow]")
 {
 #if wxUSE_CLIPBOARD
     m_win->SetPage(TEST_MARKUP_LINK);
     m_win->AppendToPage("A new paragraph");
 
-    CPPUNIT_ASSERT_EQUAL("link A new paragraph", m_win->ToText());
+    CHECK(m_win->ToText() == "link A new paragraph");
 #endif // wxUSE_CLIPBOARD
 }
 

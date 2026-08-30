@@ -380,14 +380,14 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl != nullptr)
-        impl->controlAction(sender, UIControlEventTouchUpInside, event);
+        impl->controlAction(UIControlEventTouchUpInside);
 }
 
 - (void) WX_valueChangedAction:(id)sender event:(UIEvent*)event
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl != nullptr)
-        impl->controlAction(sender, UIControlEventValueChanged, event);
+        impl->controlAction(UIControlEventValueChanged);
 }
 
 @end
@@ -964,7 +964,7 @@ void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf
     }
 }
 
-void wxWidgetIPhoneImpl::controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent)
+void wxWidgetIPhoneImpl::controlAction(wxUint32 controlEvent)
 {
     if ( controlEvent == UIControlEventTouchUpInside )
         GetWXPeer()->OSXHandleClicked(0);
@@ -1147,7 +1147,7 @@ long wxOSXTranslateKey( UIPress* press, int eventType )
     }
     return retval;
 }
-void wxWidgetIPhoneImpl::SetupKeyEvent(wxKeyEvent &wxevent , UIEvent* nsEvent, UIPress* press, NSString* charString)
+void wxWidgetIPhoneImpl::SetupKeyEvent(wxKeyEvent &wxevent , UIEvent* /*nsEvent*/, UIPress* press, NSString* /*charString*/)
 {
     UIPressPhase pressPhase = press.phase;
 

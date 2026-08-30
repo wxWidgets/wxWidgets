@@ -146,10 +146,11 @@
 
 /* Enable some warnings not enabled by default if requested. */
 #ifdef wxENABLE_EXTRA_WARNINGS
+/* These are treated as errors and not warnings, otherwise they override -Werror */
 #   ifdef __GNUC__
-#       pragma GCC diagnostic warning "-Wcast-qual"
-#       pragma GCC diagnostic warning "-Wdouble-promotion"
-#       pragma GCC diagnostic warning "-Wextra"
+#       pragma GCC diagnostic error "-Wcast-qual"
+#       pragma GCC diagnostic error "-Wdouble-promotion"
+#       pragma GCC diagnostic error "-Wextra"
 #   endif
 #endif
 

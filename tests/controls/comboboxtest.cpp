@@ -24,25 +24,26 @@
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class ComboBoxTestCase : public TextEntryTestCase, public ItemContainerTestCase,
-                         public CppUnit::TestCase
+class ComboBoxTestCase : public TextEntryTestCase, public ItemContainerTestCase
 {
 public:
-    ComboBoxTestCase() { }
+    ComboBoxTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+protected:
+    virtual wxTextEntry *GetTestEntry() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetTestWindow() const override { return m_combo.get(); }
 
-private:
-    virtual wxTextEntry *GetTestEntry() const override { return m_combo; }
-    virtual wxWindow *GetTestWindow() const override { return m_combo; }
-
-    virtual wxItemContainer *GetContainer() const override { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const override { return m_combo; }
+    virtual wxItemContainer *GetContainer() const override
+    { return m_combo.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_combo.get(); }
 
     virtual void CheckStringSelection(const char * WXUNUSED(sel)) override
     {
@@ -51,65 +52,55 @@ private:
         // is no way to return the selection contents directly
     }
 
-    CPPUNIT_TEST_SUITE( ComboBoxTestCase );
-#ifdef __WXOSX__
-    CPPUNIT_TEST( SetValue );
-    CPPUNIT_TEST( TextChangeEvents );
-    CPPUNIT_TEST( Selection );
-    CPPUNIT_TEST( InsertionPoint );
-    CPPUNIT_TEST( Replace );
-//  TODO on OS X only works interactively
-//   WXUISIM_TEST( Editable );
-    CPPUNIT_TEST( Hint );
-    CPPUNIT_TEST( CopyPaste );
-    CPPUNIT_TEST( UndoRedo );
-#else
-        wxTEXT_ENTRY_TESTS();
-#endif
-        wxITEM_CONTAINER_TESTS();
-        CPPUNIT_TEST( Size );
-        CPPUNIT_TEST( PopDismiss );
-        CPPUNIT_TEST( Sort );
-        CPPUNIT_TEST( ReadOnly );
-        CPPUNIT_TEST( IsEmpty );
-        CPPUNIT_TEST( SetStringSelection );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Size();
-    void PopDismiss();
-    void Sort();
-    void ReadOnly();
-    void IsEmpty();
-    void SetStringSelection();
-
-    wxComboBox *m_combo;
+    std::unique_ptr<wxComboBox> m_combo;
 
     wxDECLARE_NO_COPY_CLASS(ComboBoxTestCase);
 };
 
-wxREGISTER_UNIT_TEST_WITH_TAGS(ComboBoxTestCase,
-                               "[ComboBoxTestCase][item-container]");
+wxITEM_CONTAINER_TESTS(ComboBoxTestCase, "ComboBox",
+                       "[combobox][item-container]");
+
+#ifdef __WXOSX__
+
+// Under macOS the Editable test only works interactively and WriteText() is
+// not implemented, so run all the other wxTextEntry tests only.
+#define wxCOMBOBOX_TEXT_ENTRY_TEST(name) \
+    wxTEXT_ENTRY_TEST_CASE(ComboBoxTestCase, "ComboBox", name, \
+                           "[combobox][text-entry]")
+
+wxCOMBOBOX_TEXT_ENTRY_TEST(SetValue)
+wxCOMBOBOX_TEXT_ENTRY_TEST(TextChangeEvents)
+wxCOMBOBOX_TEXT_ENTRY_TEST(Selection)
+wxCOMBOBOX_TEXT_ENTRY_TEST(InsertionPoint)
+wxCOMBOBOX_TEXT_ENTRY_TEST(Replace)
+wxCOMBOBOX_TEXT_ENTRY_TEST(Hint)
+wxCOMBOBOX_TEXT_ENTRY_TEST(CopyPaste)
+wxCOMBOBOX_TEXT_ENTRY_TEST(UndoRedo)
+
+#undef wxCOMBOBOX_TEXT_ENTRY_TEST
+
+#else // !__WXOSX__
+
+wxTEXT_ENTRY_TESTS(ComboBoxTestCase, "ComboBox",
+                   "[combobox][text-entry]");
+
+#endif // __WXOSX__/!__WXOSX__
 
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
 
-void ComboBoxTestCase::setUp()
+ComboBoxTestCase::ComboBoxTestCase()
 {
-    m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_combo = make_unique<wxComboBox>(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
-void ComboBoxTestCase::tearDown()
-{
-    delete m_combo;
-    m_combo = nullptr;
-}
 
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
 
-void ComboBoxTestCase::Size()
+TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::Size", "[combobox]")
 {
     // under MSW changing combobox size is a non-trivial operation because of
     // confusion between the size of the control with and without dropdown, so
@@ -119,29 +110,29 @@ void ComboBoxTestCase::Size()
 
     // check that the height doesn't change if we don't touch it
     m_combo->SetSize(100, -1);
-    CPPUNIT_ASSERT_EQUAL( heightOrig, m_combo->GetSize().y );
+    CHECK( m_combo->GetSize().y == heightOrig );
 
     // check that setting both big and small (but not too small, there is a
     // limit on how small the control can become under MSW) heights works
     m_combo->SetSize(-1, 50);
-    CPPUNIT_ASSERT_EQUAL( 50, m_combo->GetSize().y );
+    CHECK( m_combo->GetSize().y == 50 );
 
     m_combo->SetSize(-1, 10);
-    CPPUNIT_ASSERT_EQUAL( 10, m_combo->GetSize().y );
+    CHECK( m_combo->GetSize().y == 10 );
 
     // and also that restoring it works (this used to be broken before 2.9.1)
     m_combo->SetSize(-1, heightOrig);
-    CPPUNIT_ASSERT_EQUAL( heightOrig, m_combo->GetSize().y );
+    CHECK( m_combo->GetSize().y == heightOrig );
 }
 
-void ComboBoxTestCase::PopDismiss()
+TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::PopDismiss", "[combobox]")
 {
 #if defined(__WXMSW__) || defined(__WXGTK210__) || defined(__WXQT__)
-    EventCounter drop(m_combo, wxEVT_COMBOBOX_DROPDOWN);
-    EventCounter close(m_combo, wxEVT_COMBOBOX_CLOSEUP);
+    EventCounter drop(m_combo.get(), wxEVT_COMBOBOX_DROPDOWN);
+    EventCounter close(m_combo.get(), wxEVT_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
-    CPPUNIT_ASSERT_EQUAL(1, drop.GetCount());
+    CHECK(drop.GetCount() == 1);
 
     m_combo->Dismiss();
 
@@ -151,17 +142,16 @@ void ComboBoxTestCase::PopDismiss()
     wxYield();
 #endif // wxGTK2
 
-    CPPUNIT_ASSERT_EQUAL(1, close.GetCount());
+    CHECK(close.GetCount() == 1);
 #endif
 }
 
-void ComboBoxTestCase::Sort()
+TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::Sort", "[combobox]")
 {
 #if !defined(__WXOSX__)
-    delete m_combo;
-    m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                             wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                             wxCB_SORT);
+    m_combo = make_unique<wxComboBox>(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                                      wxDefaultPosition, wxDefaultSize, 0,
+                                      nullptr, wxCB_SORT);
 
     m_combo->Append("aaa");
     m_combo->Append("Aaa");
@@ -170,60 +160,59 @@ void ComboBoxTestCase::Sort()
     m_combo->Append("aab");
     m_combo->Append("AAA");
 
-    CPPUNIT_ASSERT_EQUAL("AAA", m_combo->GetString(0));
-    CPPUNIT_ASSERT_EQUAL("Aaa", m_combo->GetString(1));
-    CPPUNIT_ASSERT_EQUAL("aaa", m_combo->GetString(2));
-    CPPUNIT_ASSERT_EQUAL("aaab", m_combo->GetString(3));
-    CPPUNIT_ASSERT_EQUAL("aab", m_combo->GetString(4));
-    CPPUNIT_ASSERT_EQUAL("aba", m_combo->GetString(5));
+    CHECK(m_combo->GetString(0) == "AAA");
+    CHECK(m_combo->GetString(1) == "Aaa");
+    CHECK(m_combo->GetString(2) == "aaa");
+    CHECK(m_combo->GetString(3) == "aaab");
+    CHECK(m_combo->GetString(4) == "aab");
+    CHECK(m_combo->GetString(5) == "aba");
 
     m_combo->Append("a");
 
-    CPPUNIT_ASSERT_EQUAL("a", m_combo->GetString(0));
+    CHECK(m_combo->GetString(0) == "a");
 #endif
 }
 
-void ComboBoxTestCase::ReadOnly()
+TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::ReadOnly", "[combobox]")
 {
     wxArrayString testitems;
     testitems.Add("item 1");
     testitems.Add("item 2");
 
-    delete m_combo;
-    m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                             wxDefaultPosition, wxDefaultSize, testitems,
-                             wxCB_READONLY);
+    m_combo = make_unique<wxComboBox>(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                                      wxDefaultPosition, wxDefaultSize,
+                                      testitems, wxCB_READONLY);
 
     m_combo->SetValue("item 1");
 
-    CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetValue());
+    CHECK(m_combo->GetValue() == "item 1");
 
     m_combo->SetValue("not an item");
 
-    CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetValue());
+    CHECK(m_combo->GetValue() == "item 1");
 
     // Since this uses FindString it is case insensitive
     m_combo->SetValue("ITEM 2");
 
-    CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
+    CHECK(m_combo->GetValue() == "item 2");
 }
 
-void ComboBoxTestCase::IsEmpty()
+TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::IsEmpty", "[combobox]")
 {
-    CPPUNIT_ASSERT( m_combo->IsListEmpty() );
-    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+    CHECK( m_combo->IsListEmpty() );
+    CHECK( m_combo->IsTextEmpty() );
 
     m_combo->Append("foo");
-    CPPUNIT_ASSERT( !m_combo->IsListEmpty() );
-    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+    CHECK( !m_combo->IsListEmpty() );
+    CHECK( m_combo->IsTextEmpty() );
 
     m_combo->SetValue("bar");
-    CPPUNIT_ASSERT( !m_combo->IsListEmpty() );
-    CPPUNIT_ASSERT( !m_combo->IsTextEmpty() );
+    CHECK( !m_combo->IsListEmpty() );
+    CHECK( !m_combo->IsTextEmpty() );
 
     m_combo->Clear();
-    CPPUNIT_ASSERT( m_combo->IsListEmpty() );
-    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+    CHECK( m_combo->IsListEmpty() );
+    CHECK( m_combo->IsTextEmpty() );
 
 #ifdef TEST_INVALID_COMBOBOX_ISEMPTY
     // Compiling this should fail, see failtest target definition in test.bkl.
@@ -231,18 +220,19 @@ void ComboBoxTestCase::IsEmpty()
 #endif
 }
 
-void ComboBoxTestCase::SetStringSelection()
+TEST_CASE_METHOD(ComboBoxTestCase, "ComboBox::SetStringSelection",
+                 "[combobox]")
 {
     m_combo->Append("foo");
     m_combo->Append("bar");
     m_combo->Append("baz");
 
-    EventCounter events(m_combo, wxEVT_COMBOBOX);
+    EventCounter events(m_combo.get(), wxEVT_COMBOBOX);
     m_combo->SetStringSelection("bar");
-    CPPUNIT_ASSERT_EQUAL( 0, events.GetCount() );
+    CHECK( events.GetCount() == 0 );
 
     m_combo->SetStringSelection("foo");
-    CPPUNIT_ASSERT_EQUAL( 0, events.GetCount() );
+    CHECK( events.GetCount() == 0 );
 }
 
 TEST_CASE("wxComboBox::ProcessEnter", "[wxComboBox][enter]")

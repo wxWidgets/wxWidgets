@@ -28487,7 +28487,7 @@ if ${wx_cv_wayland_protocols_dir+:} false; then :
   $as_echo_n "(cached) " >&6
 else
 
-                            wx_cv_wayland_protocols_dir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols`
+                            wx_cv_wayland_protocols_dir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols 2>/dev/null`
 
 
 fi
@@ -28495,8 +28495,15 @@ fi
 $as_echo "$wx_cv_wayland_protocols_dir" >&6; }
                     WAYLAND_PROTOCOLS_DIR=$wx_cv_wayland_protocols_dir
 
-                    $as_echo "#define wxHAVE_WAYLAND_SESSION_MANAGEMENT 1" >>confdefs.h
+                    if test -n "$WAYLAND_PROTOCOLS_DIR" -a \
+                            -f "$WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml"; then
+                        $as_echo "#define wxHAVE_WAYLAND_SESSION_MANAGEMENT 1" >>confdefs.h
 
+                    else
+                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wayland-protocols package not found, Wayland session management support will be disabled" >&5
+$as_echo "$as_me: WARNING: wayland-protocols package not found, Wayland session management support will be disabled" >&2;}
+                        WAYLAND_SM_SUPPORT=':'
+                    fi
                 else
                                         WAYLAND_SM_SUPPORT=':'
                 fi

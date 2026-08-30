@@ -103,7 +103,7 @@ public:
         [v setDataSource:v];
     }
 
-    void InsertItem( size_t pos, int itemid, const wxString& text) override
+    void InsertItem( size_t pos, int /*itemid*/, const wxString& text) override
     {
         wxCFStringRef cftext(text);
         [((wxUIPickerView*)m_osxView).rows insertObject:cftext.AsNSString() atIndex:pos];
@@ -135,7 +135,7 @@ private:
 wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    wxMenu* menu,
+                                    wxMenu* /*menu*/,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long WXUNUSED(style),

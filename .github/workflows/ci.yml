@@ -416,8 +416,8 @@ jobs:
 
             # Running all tests at once fails, apparently due to running out of
             # memory when using ASAN, work around this problem by excluding
-            # RichTextCtrlTestCase whose Table sub-test seems to be problematic.
-            wx_tests_selection='~[.] ~RichTextCtrlTestCase'
+            # the wxRichTextCtrl tests, of which Table seems to be problematic.
+            wx_tests_selection='~[.] ~RichTextCtrl::*'
           fi
 
           if [ ${{ matrix.use_ubsan }} ]; then

@@ -28,87 +28,18 @@
 #include "asserthelper.h"
 #include "waitfor.h"
 
-class RichTextCtrlTestCase : public CppUnit::TestCase
+#include <memory>
+
+class RichTextCtrlTestCase
 {
 public:
-    RichTextCtrlTestCase() { }
+    RichTextCtrlTestCase();
 
-    void setUp() override;
-    void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( RichTextCtrlTestCase );
-        CPPUNIT_TEST( IsModified );
-        WXUISIM_TEST( CharacterEvent );
-        WXUISIM_TEST( DeleteEvent );
-        WXUISIM_TEST( ReturnEvent );
-        CPPUNIT_TEST( StyleEvent );
-        CPPUNIT_TEST( BufferResetEvent );
-        WXUISIM_TEST( UrlEvent );
-        WXUISIM_TEST( TextEvent );
-        CPPUNIT_TEST( CutCopyPaste );
-        CPPUNIT_TEST( UndoRedo );
-        CPPUNIT_TEST( CaretPosition );
-        CPPUNIT_TEST( Selection );
-        WXUISIM_TEST( Editable );
-        CPPUNIT_TEST( Range );
-        CPPUNIT_TEST( Alignment );
-        CPPUNIT_TEST( Bold );
-        CPPUNIT_TEST( Italic );
-        CPPUNIT_TEST( Underline );
-        CPPUNIT_TEST( Indent );
-        CPPUNIT_TEST( LineSpacing );
-        CPPUNIT_TEST( ParagraphSpacing );
-        CPPUNIT_TEST( TextColour );
-        CPPUNIT_TEST( NumberedBullet );
-        CPPUNIT_TEST( SymbolBullet );
-        CPPUNIT_TEST( FontSize );
-        CPPUNIT_TEST( Font );
-        CPPUNIT_TEST( Delete );
-        CPPUNIT_TEST( Url );
-        CPPUNIT_TEST( Table );
-    CPPUNIT_TEST_SUITE_END();
-
-    void IsModified();
-    void CharacterEvent();
-    void DeleteEvent();
-    void ReturnEvent();
-    void StyleEvent();
-    void BufferResetEvent();
-    void UrlEvent();
-    void TextEvent();
-    void CutCopyPaste();
-    void UndoRedo();
-    void CaretPosition();
-    void Selection();
-    void Editable();
-    void Range();
-    void Alignment();
-    void Bold();
-    void Italic();
-    void Underline();
-    void Indent();
-    void LineSpacing();
-    void ParagraphSpacing();
-    void TextColour();
-    void NumberedBullet();
-    void SymbolBullet();
-    void FontSize();
-    void Font();
-    void Delete();
-    void Url();
-    void Table();
-
-    wxRichTextCtrl* m_rich;
+protected:
+    std::unique_ptr<wxRichTextCtrl> m_rich;
 
     wxDECLARE_NO_COPY_CLASS(RichTextCtrlTestCase);
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( RichTextCtrlTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RichTextCtrlTestCase, "RichTextCtrlTestCase" );
 
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
 
@@ -141,30 +72,32 @@ bool ClipboardContainsText(const wxString &text)
 
 #endif // wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
 
-void RichTextCtrlTestCase::setUp()
+RichTextCtrlTestCase::RichTextCtrlTestCase()
 {
-    m_rich = new wxRichTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                                wxDefaultPosition, wxSize(400, 200), wxWANTS_CHARS);
+    m_rich = make_unique<wxRichTextCtrl>(
+        wxTheApp->GetTopWindow(), wxID_ANY, "", wxDefaultPosition, wxSize(400,
+        200), wxWANTS_CHARS);
 }
 
-void RichTextCtrlTestCase::tearDown()
-{
-    wxDELETE(m_rich);
-}
 
-void RichTextCtrlTestCase::IsModified()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::IsModified",
+                 "[richtextctrl]")
 {
-    CPPUNIT_ASSERT_EQUAL( false, m_rich->IsModified() );
+    CHECK( m_rich->IsModified() == false );
     m_rich->WriteText("abcdef");
-    CPPUNIT_ASSERT_EQUAL( true, m_rich->IsModified() );
+    CHECK( m_rich->IsModified() == true );
 }
 
-void RichTextCtrlTestCase::CharacterEvent()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::CharacterEvent",
+                 "[richtextctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
 
-    EventCounter character(m_rich, wxEVT_RICHTEXT_CHARACTER);
-    EventCounter content(m_rich, wxEVT_RICHTEXT_CONTENT_INSERTED);
+
+    EventCounter character(m_rich.get(), wxEVT_RICHTEXT_CHARACTER);
+    EventCounter content(m_rich.get(), wxEVT_RICHTEXT_CONTENT_INSERTED);
 
     m_rich->SetFocus();
 
@@ -172,8 +105,8 @@ void RichTextCtrlTestCase::CharacterEvent()
     sim.Text("abcdef");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(6, character.GetCount());
-    CPPUNIT_ASSERT_EQUAL(6, content.GetCount());
+    CHECK(character.GetCount() == 6);
+    CHECK(content.GetCount() == 6);
 
     character.Clear();
     content.Clear();
@@ -183,17 +116,21 @@ void RichTextCtrlTestCase::CharacterEvent()
     sim.Char(WXK_SHIFT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, character.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, content.GetCount());
+    CHECK(character.GetCount() == 0);
+    CHECK(content.GetCount() == 1);
 #endif
 }
 
-void RichTextCtrlTestCase::DeleteEvent()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::DeleteEvent",
+                 "[richtextctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
 
-    EventCounter deleteevent(m_rich, wxEVT_RICHTEXT_DELETE);
-    EventCounter contentdelete(m_rich, wxEVT_RICHTEXT_CONTENT_DELETED);
+
+    EventCounter deleteevent(m_rich.get(), wxEVT_RICHTEXT_DELETE);
+    EventCounter contentdelete(m_rich.get(), wxEVT_RICHTEXT_CONTENT_DELETED);
 
     m_rich->SetFocus();
 
@@ -203,17 +140,21 @@ void RichTextCtrlTestCase::DeleteEvent()
     sim.Char(WXK_DELETE);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(2, deleteevent.GetCount());
+    CHECK(deleteevent.GetCount() == 2);
     //Only one as the delete doesn't delete anthing
-    CPPUNIT_ASSERT_EQUAL(1, contentdelete.GetCount());
+    CHECK(contentdelete.GetCount() == 1);
 #endif
 }
 
-void RichTextCtrlTestCase::ReturnEvent()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::ReturnEvent",
+                 "[richtextctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
 
-    EventCounter returnevent(m_rich, wxEVT_RICHTEXT_RETURN);
+
+    EventCounter returnevent(m_rich.get(), wxEVT_RICHTEXT_RETURN);
 
     m_rich->SetFocus();
 
@@ -221,47 +162,53 @@ void RichTextCtrlTestCase::ReturnEvent()
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, returnevent.GetCount());
+    CHECK(returnevent.GetCount() == 1);
 #endif
 }
 
-void RichTextCtrlTestCase::StyleEvent()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::StyleEvent",
+                 "[richtextctrl]")
 {
-    EventCounter stylechanged(m_rich, wxEVT_RICHTEXT_STYLE_CHANGED);
+    EventCounter stylechanged(m_rich.get(), wxEVT_RICHTEXT_STYLE_CHANGED);
 
     m_rich->SetValue("Sometext");
     m_rich->SetStyle(0, 8, wxTextAttr(*wxRED, *wxWHITE));
 
-    CPPUNIT_ASSERT_EQUAL(1, stylechanged.GetCount());
+    CHECK(stylechanged.GetCount() == 1);
 }
 
-void RichTextCtrlTestCase::BufferResetEvent()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::BufferResetEvent",
+                 "[richtextctrl]")
 {
-    EventCounter reset(m_rich, wxEVT_RICHTEXT_BUFFER_RESET);
+    EventCounter reset(m_rich.get(), wxEVT_RICHTEXT_BUFFER_RESET);
 
     m_rich->AppendText("more text!");
     m_rich->SetValue("");
 
-    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
+    CHECK(reset.GetCount() == 1);
 
     reset.Clear();
     m_rich->AppendText("more text!");
     m_rich->Clear();
 
-    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
+    CHECK(reset.GetCount() == 1);
 
     reset.Clear();
 
     //We expect a buffer reset here as setvalue clears the existing text
     m_rich->SetValue("replace");
-    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
+    CHECK(reset.GetCount() == 1);
 }
 
-void RichTextCtrlTestCase::UrlEvent()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::UrlEvent",
+                 "[richtextctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
 
-    EventCounter url(m_rich, wxEVT_TEXT_URL);
+
+    EventCounter url(m_rich.get(), wxEVT_TEXT_URL);
 
     m_rich->BeginURL("http://www.wxwidgets.org");
     m_rich->WriteText("http://www.wxwidgets.org");
@@ -274,14 +221,18 @@ void RichTextCtrlTestCase::UrlEvent()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, url.GetCount());
+    CHECK(url.GetCount() == 1);
 #endif
 }
 
-void RichTextCtrlTestCase::TextEvent()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TextEvent",
+                 "[richtextctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter updated(m_rich, wxEVT_TEXT);
+    if ( !EnableUITests() )
+        return;
+
+    EventCounter updated(m_rich.get(), wxEVT_TEXT);
 
     m_rich->SetFocus();
 
@@ -289,12 +240,13 @@ void RichTextCtrlTestCase::TextEvent()
     sim.Text("abcdef");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
+    CHECK(m_rich->GetValue() == "abcdef");
+    CHECK(updated.GetCount() == 6);
 #endif
 }
 
-void RichTextCtrlTestCase::CutCopyPaste()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::CutCopyPaste",
+                 "[richtextctrl]")
 {
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ && !defined(__WXOSX__)
     const wxString text("sometext");
@@ -328,10 +280,10 @@ void RichTextCtrlTestCase::CutCopyPaste()
                             return m_rich->IsEmpty() &&
                                    ClipboardContainsText(text);
                         }));
-        CPPUNIT_ASSERT(m_rich->IsEmpty());
+        CHECK(m_rich->IsEmpty());
 
         REQUIRE(waitForPaste());
-        CPPUNIT_ASSERT_EQUAL(text, m_rich->GetValue());
+        CHECK(m_rich->GetValue() == text);
     }
 
     m_rich->SelectAll();
@@ -348,28 +300,29 @@ void RichTextCtrlTestCase::CutCopyPaste()
                             return ClipboardContainsText(text);
                         }));
         m_rich->Clear();
-        CPPUNIT_ASSERT(m_rich->IsEmpty());
+        CHECK(m_rich->IsEmpty());
 
         REQUIRE(waitForPaste());
-        CPPUNIT_ASSERT_EQUAL(text, m_rich->GetValue());
+        CHECK(m_rich->GetValue() == text);
     }
 #endif
 }
 
-void RichTextCtrlTestCase::UndoRedo()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::UndoRedo",
+                 "[richtextctrl]")
 {
     m_rich->AppendText("sometext");
 
-    CPPUNIT_ASSERT(m_rich->CanUndo());
+    CHECK(m_rich->CanUndo());
 
     m_rich->Undo();
 
-    CPPUNIT_ASSERT(m_rich->IsEmpty());
-    CPPUNIT_ASSERT(m_rich->CanRedo());
+    CHECK(m_rich->IsEmpty());
+    CHECK(m_rich->CanRedo());
 
     m_rich->Redo();
 
-    CPPUNIT_ASSERT_EQUAL("sometext", m_rich->GetValue());
+    CHECK(m_rich->GetValue() == "sometext");
 
     m_rich->AppendText("Batch undo");
     m_rich->SelectAll();
@@ -382,93 +335,99 @@ void RichTextCtrlTestCase::UndoRedo()
 
     m_rich->EndBatchUndo();
 
-    CPPUNIT_ASSERT(m_rich->CanUndo());
+    CHECK(m_rich->CanUndo());
 
     m_rich->Undo();
 
-    CPPUNIT_ASSERT(!m_rich->IsSelectionBold());
-    CPPUNIT_ASSERT(!m_rich->IsSelectionItalics());
-    CPPUNIT_ASSERT(m_rich->CanRedo());
+    CHECK(!m_rich->IsSelectionBold());
+    CHECK(!m_rich->IsSelectionItalics());
+    CHECK(m_rich->CanRedo());
 
     m_rich->Redo();
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionBold());
-    CPPUNIT_ASSERT(m_rich->IsSelectionItalics());
+    CHECK(m_rich->IsSelectionBold());
+    CHECK(m_rich->IsSelectionItalics());
 
     //And surpressing undo
     m_rich->BeginSuppressUndo();
 
     m_rich->AppendText("Can't undo this");
 
-    CPPUNIT_ASSERT(m_rich->CanUndo());
+    CHECK(m_rich->CanUndo());
 
     m_rich->EndSuppressUndo();
 }
 
-void RichTextCtrlTestCase::CaretPosition()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::CaretPosition",
+                 "[richtextctrl]")
 {
     m_rich->AddParagraph("This is paragraph one");
     m_rich->AddParagraph("Paragraph two\n has \nlots of\n lines");
 
     m_rich->SetInsertionPoint(2);
 
-    CPPUNIT_ASSERT_EQUAL(1, m_rich->GetCaretPosition());
+    CHECK(m_rich->GetCaretPosition() == 1);
 
     m_rich->MoveToParagraphStart();
 
-    CPPUNIT_ASSERT_EQUAL(0, m_rich->GetCaretPosition());
+    CHECK(m_rich->GetCaretPosition() == 0);
 
     m_rich->MoveRight();
     m_rich->MoveRight(2);
     m_rich->MoveLeft(1);
     m_rich->MoveLeft(0);
 
-    CPPUNIT_ASSERT_EQUAL(2, m_rich->GetCaretPosition());
+    CHECK(m_rich->GetCaretPosition() == 2);
 
     m_rich->MoveToParagraphEnd();
 
-    CPPUNIT_ASSERT_EQUAL(21, m_rich->GetCaretPosition());
+    CHECK(m_rich->GetCaretPosition() == 21);
 
     m_rich->MoveToLineStart();
 
-    CPPUNIT_ASSERT_EQUAL(0, m_rich->GetCaretPosition());
+    CHECK(m_rich->GetCaretPosition() == 0);
 
     m_rich->MoveToLineEnd();
 
-    CPPUNIT_ASSERT_EQUAL(21, m_rich->GetCaretPosition());
+    CHECK(m_rich->GetCaretPosition() == 21);
 }
 
-void RichTextCtrlTestCase::Selection()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Selection",
+                 "[richtextctrl]")
 {
     m_rich->SetValue("some more text");
 
     m_rich->SelectAll();
 
-    CPPUNIT_ASSERT_EQUAL("some more text", m_rich->GetStringSelection());
+    CHECK(m_rich->GetStringSelection() == "some more text");
 
     m_rich->SelectNone();
 
-    CPPUNIT_ASSERT_EQUAL("", m_rich->GetStringSelection());
+    CHECK(m_rich->GetStringSelection() == "");
 
     m_rich->SelectWord(1);
 
-    CPPUNIT_ASSERT_EQUAL("some", m_rich->GetStringSelection());
+    CHECK(m_rich->GetStringSelection() == "some");
 
     m_rich->SetSelection(5, 14);
 
-    CPPUNIT_ASSERT_EQUAL("more text", m_rich->GetStringSelection());
+    CHECK(m_rich->GetStringSelection() == "more text");
 
     wxRichTextRange range(5, 9);
 
     m_rich->SetSelectionRange(range);
 
-    CPPUNIT_ASSERT_EQUAL("more", m_rich->GetStringSelection());
+    CHECK(m_rich->GetStringSelection() == "more");
 }
 
-void RichTextCtrlTestCase::Editable()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Editable",
+                 "[richtextctrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter updated(m_rich, wxEVT_TEXT);
+    if ( !EnableUITests() )
+        return;
+
+    EventCounter updated(m_rich.get(), wxEVT_TEXT);
 
     m_rich->SetFocus();
 
@@ -476,63 +435,64 @@ void RichTextCtrlTestCase::Editable()
     sim.Text("abcdef");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
+    CHECK(m_rich->GetValue() == "abcdef");
+    CHECK(updated.GetCount() == 6);
     updated.Clear();
 
     m_rich->SetEditable(false);
     sim.Text("gh");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
+    CHECK(m_rich->GetValue() == "abcdef");
+    CHECK(updated.GetCount() == 0);
 #endif
 }
 
-void RichTextCtrlTestCase::Range()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Range", "[richtextctrl]")
 {
     wxRichTextRange range(0, 10);
 
-    CPPUNIT_ASSERT_EQUAL(0, range.GetStart());
-    CPPUNIT_ASSERT_EQUAL(10, range.GetEnd());
-    CPPUNIT_ASSERT_EQUAL(11, range.GetLength());
-    CPPUNIT_ASSERT(range.Contains(5));
+    CHECK(range.GetStart() == 0);
+    CHECK(range.GetEnd() == 10);
+    CHECK(range.GetLength() == 11);
+    CHECK(range.Contains(5));
 
     wxRichTextRange outside(12, 14);
 
-    CPPUNIT_ASSERT(outside.IsOutside(range));
+    CHECK(outside.IsOutside(range));
 
     wxRichTextRange inside(6, 7);
 
-    CPPUNIT_ASSERT(inside.IsWithin(range));
+    CHECK(inside.IsWithin(range));
 
     range.LimitTo(inside);
 
-    CPPUNIT_ASSERT(inside == range);
-    CPPUNIT_ASSERT(inside + range == outside);
-    CPPUNIT_ASSERT(outside - range == inside);
+    CHECK(inside == range);
+    CHECK(inside + range == outside);
+    CHECK(outside - range == inside);
 
     range.SetStart(4);
     range.SetEnd(6);
 
-    CPPUNIT_ASSERT_EQUAL(4, range.GetStart());
-    CPPUNIT_ASSERT_EQUAL(6, range.GetEnd());
-    CPPUNIT_ASSERT_EQUAL(3, range.GetLength());
+    CHECK(range.GetStart() == 4);
+    CHECK(range.GetEnd() == 6);
+    CHECK(range.GetLength() == 3);
 
     inside.SetRange(6, 4);
     inside.Swap();
 
-    CPPUNIT_ASSERT(inside == range);
+    CHECK(inside == range);
 }
 
-void RichTextCtrlTestCase::Alignment()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Alignment",
+                 "[richtextctrl]")
 {
     m_rich->SetValue("text to align");
     m_rich->SelectAll();
 
     m_rich->ApplyAlignmentToSelection(wxTEXT_ALIGNMENT_RIGHT);
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionAligned(wxTEXT_ALIGNMENT_RIGHT));
+    CHECK(m_rich->IsSelectionAligned(wxTEXT_ALIGNMENT_RIGHT));
 
     m_rich->BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
     m_rich->AddParagraph("middle aligned");
@@ -540,16 +500,16 @@ void RichTextCtrlTestCase::Alignment()
 
     m_rich->SetSelection(20, 25);
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionAligned(wxTEXT_ALIGNMENT_CENTRE));
+    CHECK(m_rich->IsSelectionAligned(wxTEXT_ALIGNMENT_CENTRE));
 }
 
-void RichTextCtrlTestCase::Bold()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Bold", "[richtextctrl]")
 {
     m_rich->SetValue("text to bold");
     m_rich->SelectAll();
     m_rich->ApplyBoldToSelection();
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionBold());
+    CHECK(m_rich->IsSelectionBold());
 
     m_rich->BeginBold();
     m_rich->AddParagraph("bold paragraph");
@@ -558,20 +518,21 @@ void RichTextCtrlTestCase::Bold()
 
     m_rich->SetSelection(15, 20);
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionBold());
+    CHECK(m_rich->IsSelectionBold());
 
     m_rich->SetSelection(30, 35);
 
-    CPPUNIT_ASSERT(!m_rich->IsSelectionBold());
+    CHECK(!m_rich->IsSelectionBold());
 }
 
-void RichTextCtrlTestCase::Italic()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Italic",
+                 "[richtextctrl]")
 {
     m_rich->SetValue("text to italic");
     m_rich->SelectAll();
     m_rich->ApplyItalicToSelection();
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionItalics());
+    CHECK(m_rich->IsSelectionItalics());
 
     m_rich->BeginItalic();
     m_rich->AddParagraph("italic paragraph");
@@ -580,20 +541,21 @@ void RichTextCtrlTestCase::Italic()
 
     m_rich->SetSelection(20, 25);
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionItalics());
+    CHECK(m_rich->IsSelectionItalics());
 
     m_rich->SetSelection(35, 40);
 
-    CPPUNIT_ASSERT(!m_rich->IsSelectionItalics());
+    CHECK(!m_rich->IsSelectionItalics());
 }
 
-void RichTextCtrlTestCase::Underline()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Underline",
+                 "[richtextctrl]")
 {
     m_rich->SetValue("text to underline");
     m_rich->SelectAll();
     m_rich->ApplyUnderlineToSelection();
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionUnderlined());
+    CHECK(m_rich->IsSelectionUnderlined());
 
     m_rich->BeginUnderline();
     m_rich->AddParagraph("underline paragraph");
@@ -602,14 +564,15 @@ void RichTextCtrlTestCase::Underline()
 
     m_rich->SetSelection(20, 25);
 
-    CPPUNIT_ASSERT(m_rich->IsSelectionUnderlined());
+    CHECK(m_rich->IsSelectionUnderlined());
 
     m_rich->SetSelection(40, 45);
 
-    CPPUNIT_ASSERT(!m_rich->IsSelectionUnderlined());
+    CHECK(!m_rich->IsSelectionUnderlined());
 }
 
-void RichTextCtrlTestCase::Indent()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Indent",
+                 "[richtextctrl]")
 {
     m_rich->BeginLeftIndent(12, -5);
     m_rich->BeginRightIndent(14);
@@ -621,18 +584,19 @@ void RichTextCtrlTestCase::Indent()
     wxTextAttr indent;
     m_rich->GetStyle(5, indent);
 
-    CPPUNIT_ASSERT_EQUAL(12, indent.GetLeftIndent());
-    CPPUNIT_ASSERT_EQUAL(-5, indent.GetLeftSubIndent());
-    CPPUNIT_ASSERT_EQUAL(14, indent.GetRightIndent());
+    CHECK(indent.GetLeftIndent() == 12);
+    CHECK(indent.GetLeftSubIndent() == -5);
+    CHECK(indent.GetRightIndent() == 14);
 
     m_rich->GetStyle(35, indent);
 
-    CPPUNIT_ASSERT_EQUAL(0, indent.GetLeftIndent());
-    CPPUNIT_ASSERT_EQUAL(0, indent.GetLeftSubIndent());
-    CPPUNIT_ASSERT_EQUAL(0, indent.GetRightIndent());
+    CHECK(indent.GetLeftIndent() == 0);
+    CHECK(indent.GetLeftSubIndent() == 0);
+    CHECK(indent.GetRightIndent() == 0);
 }
 
-void RichTextCtrlTestCase::LineSpacing()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::LineSpacing",
+                 "[richtextctrl]")
 {
     m_rich->BeginLineSpacing(20);
     m_rich->AddParagraph("double spaced");
@@ -645,18 +609,19 @@ void RichTextCtrlTestCase::LineSpacing()
     wxTextAttr spacing;
     m_rich->GetStyle(5, spacing);
 
-    CPPUNIT_ASSERT_EQUAL(20, spacing.GetLineSpacing());
+    CHECK(spacing.GetLineSpacing() == 20);
 
     m_rich->GetStyle(20, spacing);
 
-    CPPUNIT_ASSERT_EQUAL(15, spacing.GetLineSpacing());
+    CHECK(spacing.GetLineSpacing() == 15);
 
     m_rich->GetStyle(30, spacing);
 
-    CPPUNIT_ASSERT_EQUAL(10, spacing.GetLineSpacing());
+    CHECK(spacing.GetLineSpacing() == 10);
 }
 
-void RichTextCtrlTestCase::ParagraphSpacing()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::ParagraphSpacing",
+                 "[richtextctrl]")
 {
     m_rich->BeginParagraphSpacing(15, 20);
     m_rich->AddParagraph("spaced paragraph");
@@ -666,19 +631,18 @@ void RichTextCtrlTestCase::ParagraphSpacing()
     wxTextAttr spacing;
     m_rich->GetStyle(5, spacing);
 
-    CPPUNIT_ASSERT_EQUAL(15, spacing.GetParagraphSpacingBefore());
-    CPPUNIT_ASSERT_EQUAL(20, spacing.GetParagraphSpacingAfter());
+    CHECK(spacing.GetParagraphSpacingBefore() == 15);
+    CHECK(spacing.GetParagraphSpacingAfter() == 20);
 
     m_rich->GetStyle(25, spacing);
 
     //Make sure we test against the defaults
-    CPPUNIT_ASSERT_EQUAL(m_rich->GetBasicStyle().GetParagraphSpacingBefore(),
-                         spacing.GetParagraphSpacingBefore());
-    CPPUNIT_ASSERT_EQUAL(m_rich->GetBasicStyle().GetParagraphSpacingAfter(),
-                         spacing.GetParagraphSpacingAfter());
+    CHECK(spacing.GetParagraphSpacingBefore() == m_rich->GetBasicStyle().GetParagraphSpacingBefore());
+    CHECK(spacing.GetParagraphSpacingAfter() == m_rich->GetBasicStyle().GetParagraphSpacingAfter());
 }
 
-void RichTextCtrlTestCase::TextColour()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::TextColour",
+                 "[richtextctrl]")
 {
     m_rich->BeginTextColour(*wxRED);
     m_rich->AddParagraph("red paragraph");
@@ -688,15 +652,15 @@ void RichTextCtrlTestCase::TextColour()
     wxTextAttr colour;
     m_rich->GetStyle(5, colour);
 
-    CPPUNIT_ASSERT_EQUAL(*wxRED, colour.GetTextColour());
+    CHECK(colour.GetTextColour() == *wxRED);
 
     m_rich->GetStyle(25, colour);
 
-    CPPUNIT_ASSERT_EQUAL(m_rich->GetBasicStyle().GetTextColour(),
-                         colour.GetTextColour());
+    CHECK(colour.GetTextColour() == m_rich->GetBasicStyle().GetTextColour());
 }
 
-void RichTextCtrlTestCase::NumberedBullet()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::NumberedBullet",
+                 "[richtextctrl]")
 {
     m_rich->BeginNumberedBullet(1, 15, 20);
     m_rich->AddParagraph("bullet one");
@@ -708,22 +672,23 @@ void RichTextCtrlTestCase::NumberedBullet()
     wxTextAttr bullet;
     m_rich->GetStyle(5, bullet);
 
-    CPPUNIT_ASSERT(bullet.HasBulletStyle());
-    CPPUNIT_ASSERT(bullet.HasBulletNumber());
-    CPPUNIT_ASSERT_EQUAL(1, bullet.GetBulletNumber());
-    CPPUNIT_ASSERT_EQUAL(15, bullet.GetLeftIndent());
-    CPPUNIT_ASSERT_EQUAL(20, bullet.GetLeftSubIndent());
+    CHECK(bullet.HasBulletStyle());
+    CHECK(bullet.HasBulletNumber());
+    CHECK(bullet.GetBulletNumber() == 1);
+    CHECK(bullet.GetLeftIndent() == 15);
+    CHECK(bullet.GetLeftSubIndent() == 20);
 
     m_rich->GetStyle(15, bullet);
 
-    CPPUNIT_ASSERT(bullet.HasBulletStyle());
-    CPPUNIT_ASSERT(bullet.HasBulletNumber());
-    CPPUNIT_ASSERT_EQUAL(2, bullet.GetBulletNumber());
-    CPPUNIT_ASSERT_EQUAL(25, bullet.GetLeftIndent());
-    CPPUNIT_ASSERT_EQUAL(-5, bullet.GetLeftSubIndent());
+    CHECK(bullet.HasBulletStyle());
+    CHECK(bullet.HasBulletNumber());
+    CHECK(bullet.GetBulletNumber() == 2);
+    CHECK(bullet.GetLeftIndent() == 25);
+    CHECK(bullet.GetLeftSubIndent() == -5);
 }
 
-void RichTextCtrlTestCase::SymbolBullet()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::SymbolBullet",
+                 "[richtextctrl]")
 {
     m_rich->BeginSymbolBullet("*", 15, 20);
     m_rich->AddParagraph("bullet one");
@@ -735,22 +700,23 @@ void RichTextCtrlTestCase::SymbolBullet()
     wxTextAttr bullet;
     m_rich->GetStyle(5, bullet);
 
-    CPPUNIT_ASSERT(bullet.HasBulletStyle());
-    CPPUNIT_ASSERT(bullet.HasBulletText());
-    CPPUNIT_ASSERT_EQUAL("*", bullet.GetBulletText());
-    CPPUNIT_ASSERT_EQUAL(15, bullet.GetLeftIndent());
-    CPPUNIT_ASSERT_EQUAL(20, bullet.GetLeftSubIndent());
+    CHECK(bullet.HasBulletStyle());
+    CHECK(bullet.HasBulletText());
+    CHECK(bullet.GetBulletText() == "*");
+    CHECK(bullet.GetLeftIndent() == 15);
+    CHECK(bullet.GetLeftSubIndent() == 20);
 
     m_rich->GetStyle(15, bullet);
 
-    CPPUNIT_ASSERT(bullet.HasBulletStyle());
-    CPPUNIT_ASSERT(bullet.HasBulletText());
-    CPPUNIT_ASSERT_EQUAL("%", bullet.GetBulletText());
-    CPPUNIT_ASSERT_EQUAL(25, bullet.GetLeftIndent());
-    CPPUNIT_ASSERT_EQUAL(-5, bullet.GetLeftSubIndent());
+    CHECK(bullet.HasBulletStyle());
+    CHECK(bullet.HasBulletText());
+    CHECK(bullet.GetBulletText() == "%");
+    CHECK(bullet.GetLeftIndent() == 25);
+    CHECK(bullet.GetLeftSubIndent() == -5);
 }
 
-void RichTextCtrlTestCase::FontSize()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::FontSize",
+                 "[richtextctrl]")
 {
     m_rich->BeginFontSize(24);
     m_rich->AddParagraph("Large text");
@@ -759,11 +725,11 @@ void RichTextCtrlTestCase::FontSize()
     wxTextAttr size;
     m_rich->GetStyle(5, size);
 
-    CPPUNIT_ASSERT(size.HasFontSize());
-    CPPUNIT_ASSERT_EQUAL(24, size.GetFontSize());
+    CHECK(size.HasFontSize());
+    CHECK(size.GetFontSize() == 24);
 }
 
-void RichTextCtrlTestCase::Font()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Font", "[richtextctrl]")
 {
     wxFont font(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
     m_rich->BeginFont(font);
@@ -773,34 +739,35 @@ void RichTextCtrlTestCase::Font()
     wxTextAttr fontstyle;
     m_rich->GetStyle(5, fontstyle);
 
-    CPPUNIT_ASSERT_EQUAL(font, fontstyle.GetFont());
+    CHECK(fontstyle.GetFont() == font);
 }
 
-void RichTextCtrlTestCase::Delete()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Delete",
+                 "[richtextctrl]")
 {
     m_rich->AddParagraph("here is a long long line in a paragraph");
     m_rich->SetSelection(0, 6);
 
-    CPPUNIT_ASSERT(m_rich->CanDeleteSelection());
+    CHECK(m_rich->CanDeleteSelection());
 
     m_rich->DeleteSelection();
 
-    CPPUNIT_ASSERT_EQUAL("is a long long line in a paragraph", m_rich->GetValue());
+    CHECK(m_rich->GetValue() == "is a long long line in a paragraph");
 
     m_rich->SetSelection(0, 5);
 
-    CPPUNIT_ASSERT(m_rich->CanDeleteSelection());
+    CHECK(m_rich->CanDeleteSelection());
 
     m_rich->DeleteSelectedContent();
 
-    CPPUNIT_ASSERT_EQUAL("long long line in a paragraph", m_rich->GetValue());
+    CHECK(m_rich->GetValue() == "long long line in a paragraph");
 
     m_rich->Delete(wxRichTextRange(14, 29));
 
-    CPPUNIT_ASSERT_EQUAL("long long line", m_rich->GetValue());
+    CHECK(m_rich->GetValue() == "long long line");
 }
 
-void RichTextCtrlTestCase::Url()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Url", "[richtextctrl]")
 {
     m_rich->BeginURL("http://www.wxwidgets.org");
     m_rich->WriteText("http://www.wxwidgets.org");
@@ -809,25 +776,25 @@ void RichTextCtrlTestCase::Url()
     wxTextAttr url;
     m_rich->GetStyle(5, url);
 
-    CPPUNIT_ASSERT(url.HasURL());
-    CPPUNIT_ASSERT_EQUAL("http://www.wxwidgets.org", url.GetURL());
+    CHECK(url.HasURL());
+    CHECK(url.GetURL() == "http://www.wxwidgets.org");
 }
 
     // Helper function for ::Table()
 wxRichTextTable* GetCurrentTableInstance(wxRichTextParagraph* para)
 {
     wxRichTextTable* table = wxDynamicCast(para->FindObjectAtPosition(0), wxRichTextTable);
-    CPPUNIT_ASSERT(table);
+    CHECK(table);
     return table;
 }
 
-void RichTextCtrlTestCase::Table()
+TEST_CASE_METHOD(RichTextCtrlTestCase, "RichTextCtrl::Table", "[richtextctrl]")
 {
     m_rich->BeginSuppressUndo();
     wxRichTextTable* table = m_rich->WriteTable(1, 1);
     m_rich->EndSuppressUndo();
-    CPPUNIT_ASSERT(table);
-    CPPUNIT_ASSERT(m_rich->CanUndo() == false);
+    CHECK(table);
+    CHECK(m_rich->CanUndo() == false);
 
     // Run the tests twice: first for the original table, then for a contained one
     for (int t = 0; t < 2; ++t)
@@ -835,10 +802,10 @@ void RichTextCtrlTestCase::Table()
         // Undo() and Redo() switch table instances, so invalidating 'table'
         // The containing paragraph isn't altered, and so can be used to find the current object
         wxRichTextParagraph* para = wxDynamicCast(table->GetParent(), wxRichTextParagraph);
-        CPPUNIT_ASSERT(para);
+        CHECK(para);
 
-        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
-        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+        CHECK(table->GetColumnCount() == 1);
+        CHECK(table->GetRowCount() == 1);
 
         // Test adding columns and rows
         for (size_t n = 0; n < 3; ++n)
@@ -850,8 +817,8 @@ void RichTextCtrlTestCase::Table()
 
             m_rich->EndBatchUndo();
         }
-        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
-        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+        CHECK(table->GetColumnCount() == 4);
+        CHECK(table->GetRowCount() == 4);
 
         // Test deleting columns and rows
         for (size_t n = 0; n < 3; ++n)
@@ -863,18 +830,18 @@ void RichTextCtrlTestCase::Table()
 
             m_rich->EndBatchUndo();
         }
-        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
-        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+        CHECK(table->GetColumnCount() == 1);
+        CHECK(table->GetRowCount() == 1);
 
         // Test undo, first of the deletions...
-        CPPUNIT_ASSERT(m_rich->CanUndo());
+        CHECK(m_rich->CanUndo());
         for (size_t n = 0; n < 3; ++n)
         {
             m_rich->Undo();
         }
         table = GetCurrentTableInstance(para);
-        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
-        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+        CHECK(table->GetColumnCount() == 4);
+        CHECK(table->GetRowCount() == 4);
 
         // ...then the additions
         for (size_t n = 0; n < 3; ++n)
@@ -882,19 +849,19 @@ void RichTextCtrlTestCase::Table()
             m_rich->Undo();
         }
         table = GetCurrentTableInstance(para);
-        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
-        CPPUNIT_ASSERT(table->GetRowCount() == 1);
-        CPPUNIT_ASSERT(m_rich->CanUndo() == false);
+        CHECK(table->GetColumnCount() == 1);
+        CHECK(table->GetRowCount() == 1);
+        CHECK(m_rich->CanUndo() == false);
 
         // Similarly test redo. Additions:
-        CPPUNIT_ASSERT(m_rich->CanRedo());
+        CHECK(m_rich->CanRedo());
         for (size_t n = 0; n < 3; ++n)
         {
             m_rich->Redo();
         }
         table = GetCurrentTableInstance(para);
-        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
-        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+        CHECK(table->GetColumnCount() == 4);
+        CHECK(table->GetRowCount() == 4);
 
         // Deletions:
         for (size_t n = 0; n < 3; ++n)
@@ -902,44 +869,44 @@ void RichTextCtrlTestCase::Table()
             m_rich->Redo();
         }
         table = GetCurrentTableInstance(para);
-        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
-        CPPUNIT_ASSERT(table->GetRowCount() == 1);
-        CPPUNIT_ASSERT(m_rich->CanRedo() == false);
+        CHECK(table->GetColumnCount() == 1);
+        CHECK(table->GetRowCount() == 1);
+        CHECK(m_rich->CanRedo() == false);
 
         // Now test multiple addition and deletion, and also suppression
         m_rich->BeginSuppressUndo();
         table->AddColumns(0, 3);
         table->AddRows(0, 3);
-        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
-        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+        CHECK(table->GetColumnCount() == 4);
+        CHECK(table->GetRowCount() == 4);
 
         // Only delete 2 of these. This makes it easy to be sure we're dealing with the child table when we loop
         table->DeleteColumns(0, 2);
         table->DeleteRows(0, 2);
-        CPPUNIT_ASSERT(table->GetColumnCount() == 2);
-        CPPUNIT_ASSERT(table->GetRowCount() == 2);
+        CHECK(table->GetColumnCount() == 2);
+        CHECK(table->GetRowCount() == 2);
         m_rich->EndSuppressUndo();
 
-        m_rich->GetCommandProcessor()->ClearCommands(); // otherwise the command-history from this loop will cause CPPUNIT_ASSERT failures in the next one
+        m_rich->GetCommandProcessor()->ClearCommands(); // otherwise the command-history from this loop will cause the checks in the next one to fail
 
         if (t == 0)
         {
             // For round 2, re-run the tests on another table inside the last cell of the first one
             wxRichTextCell* cell = table->GetCell(table->GetRowCount() - 1, table->GetColumnCount() - 1);
-            CPPUNIT_ASSERT(cell);
+            CHECK(cell);
             m_rich->SetFocusObject(cell);
             m_rich->BeginSuppressUndo();
             table = m_rich->WriteTable(1, 1);
             m_rich->EndSuppressUndo();
-            CPPUNIT_ASSERT(table);
+            CHECK(table);
         }
     }
 
     // Test ClearTable()
     table->ClearTable();
-    CPPUNIT_ASSERT_EQUAL(0, table->GetCells().GetCount());
-    CPPUNIT_ASSERT_EQUAL(0, table->GetColumnCount());
-    CPPUNIT_ASSERT_EQUAL(0, table->GetRowCount());
+    CHECK(table->GetCells().GetCount() == 0);
+    CHECK(table->GetColumnCount() == 0);
+    CHECK(table->GetRowCount() == 0);
 
     m_rich->Clear();
     m_rich->SetFocusObject(nullptr);

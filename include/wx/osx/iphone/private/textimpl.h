@@ -21,27 +21,27 @@ public :
     wxUITextFieldControl( wxTextCtrl *wxPeer, UITextField* w );
     virtual ~wxUITextFieldControl();
 
-    virtual wxTextSearchResult SearchText(const wxTextSearch &search) const;
+    virtual wxTextSearchResult SearchText(const wxTextSearch &search) const override;
 
-    virtual wxString GetStringValue() const ;
-    virtual void SetStringValue( const wxString &str) ;
-    virtual wxString GetRTFValue() const;
-    virtual void SetRTFValue(const wxString& WXUNUSED(str));
-    virtual void Copy() ;
-    virtual void Cut() ;
-    virtual void Paste() ;
-    virtual bool CanPaste() const ;
-    virtual void SetEditable(bool editable) ;
-    virtual void GetSelection( long* from, long* to) const ;
-    virtual void SetSelection( long from , long to );
-    virtual void WriteText(const wxString& str) ;
-    virtual bool HasOwnContextMenu() const { return true; }
+    virtual wxString GetStringValue() const override;
+    virtual void SetStringValue( const wxString &str) override;
+    virtual wxString GetRTFValue() const override;
+    virtual void SetRTFValue(const wxString& WXUNUSED(str)) override;
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
+    virtual bool CanPaste() const override;
+    virtual void SetEditable(bool editable) override;
+    virtual void GetSelection( long* from, long* to) const override;
+    virtual void SetSelection( long from , long to ) override;
+    virtual void WriteText(const wxString& str) override;
+    virtual bool HasOwnContextMenu() const override { return true; }
 
-    virtual wxSize GetBestSize() const;
+    virtual wxSize GetBestSize() const override;
 
-    virtual bool SetHint(const wxString& hint);
+    virtual bool SetHint(const wxString& hint) override;
 
-    virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void controlAction(wxUint32 controlEvent) override;
 protected :
     UITextField* m_textField;
     NSObject<UITextFieldDelegate>* m_delegate;

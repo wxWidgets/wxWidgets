@@ -30,19 +30,19 @@ void TextEntryTestCase::SetValue()
 {
     wxTextEntry * const entry = GetTestEntry();
 
-    CPPUNIT_ASSERT( entry->IsEmpty() );
+    CHECK( entry->IsEmpty() );
 
     entry->SetValue("foo");
-    CPPUNIT_ASSERT_EQUAL( "foo", entry->GetValue() );
+    CHECK( entry->GetValue() == "foo" );
 
     entry->SetValue("");
-    CPPUNIT_ASSERT( entry->IsEmpty() );
+    CHECK( entry->IsEmpty() );
 
     entry->SetValue("hi");
-    CPPUNIT_ASSERT_EQUAL( "hi", entry->GetValue() );
+    CHECK( entry->GetValue() == "hi" );
 
     entry->SetValue("bye");
-    CPPUNIT_ASSERT_EQUAL( "bye", entry->GetValue() );
+    CHECK( entry->GetValue() == "bye" );
 }
 
 void TextEntryTestCase::TextChangeEvents()
@@ -53,75 +53,75 @@ void TextEntryTestCase::TextChangeEvents()
 
     // notice that SetValue() generates an event even if the text didn't change
     entry->SetValue("");
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->SetValue("foo");
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->SetValue("foo");
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->SetValue("");
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->ChangeValue("bar");
-    CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
+    CHECK( updated.GetCount() == 0 );
 
     entry->AppendText("bar");
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->Replace(3, 6, "baz");
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->Remove(0, 3);
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->WriteText("foo");
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->Clear();
-    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    CHECK( updated.GetCount() == 1 );
     updated.Clear();
 
     entry->ChangeValue("");
-    CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
+    CHECK( updated.GetCount() == 0 );
     updated.Clear();
 
     entry->ChangeValue("non-empty");
-    CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
+    CHECK( updated.GetCount() == 0 );
     updated.Clear();
 
     entry->ChangeValue("");
-    CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
+    CHECK( updated.GetCount() == 0 );
     updated.Clear();
 }
 
 void TextEntryTestCase::CheckStringSelection(const char *sel)
 {
-    CPPUNIT_ASSERT_EQUAL( sel, GetTestEntry()->GetStringSelection() );
+    CHECK( GetTestEntry()->GetStringSelection() == sel );
 }
 
 void TextEntryTestCase::AssertSelection(int from, int to, const char *sel)
 {
     wxTextEntry * const entry = GetTestEntry();
 
-    CPPUNIT_ASSERT( entry->HasSelection() );
+    CHECK( entry->HasSelection() );
 
     long fromReal,
          toReal;
     entry->GetSelection(&fromReal, &toReal);
-    CPPUNIT_ASSERT_EQUAL( from, fromReal );
-    CPPUNIT_ASSERT_EQUAL( to, toReal );
+    CHECK( fromReal == from );
+    CHECK( toReal == to );
 
-    CPPUNIT_ASSERT_EQUAL( from, entry->GetInsertionPoint() );
+    CHECK( entry->GetInsertionPoint() == from );
 
     CheckStringSelection(sel);
 }
@@ -142,44 +142,44 @@ void TextEntryTestCase::Selection()
     AssertSelection(0, 10, "0123456789");
 
     entry->SetSelection(0, 0);
-    CPPUNIT_ASSERT( !entry->HasSelection() );
+    CHECK( !entry->HasSelection() );
 }
 
 void TextEntryTestCase::InsertionPoint()
 {
     wxTextEntry * const entry = GetTestEntry();
 
-    CPPUNIT_ASSERT_EQUAL( 0, entry->GetLastPosition() );
-    CPPUNIT_ASSERT_EQUAL( 0, entry->GetInsertionPoint() );
+    CHECK( entry->GetLastPosition() == 0 );
+    CHECK( entry->GetInsertionPoint() == 0 );
 
     entry->SetValue("0"); // should put the insertion point in front
-    CPPUNIT_ASSERT_EQUAL( 1, entry->GetLastPosition() );
-    CPPUNIT_ASSERT_EQUAL( 0, entry->GetInsertionPoint() );
+    CHECK( entry->GetLastPosition() == 1 );
+    CHECK( entry->GetInsertionPoint() == 0 );
 
     entry->AppendText("12"); // should update the insertion point position
-    CPPUNIT_ASSERT_EQUAL( 3, entry->GetLastPosition() );
-    CPPUNIT_ASSERT_EQUAL( 3, entry->GetInsertionPoint() );
+    CHECK( entry->GetLastPosition() == 3 );
+    CHECK( entry->GetInsertionPoint() == 3 );
 
     entry->SetInsertionPoint(1);
-    CPPUNIT_ASSERT_EQUAL( 3, entry->GetLastPosition() );
-    CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
+    CHECK( entry->GetLastPosition() == 3 );
+    CHECK( entry->GetInsertionPoint() == 1 );
 
     entry->SetValue("012"); // shouldn't change the position if no real change
-    CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
+    CHECK( entry->GetInsertionPoint() == 1 );
 
     entry->ChangeValue("012"); // same as for SetValue()
-    CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
+    CHECK( entry->GetInsertionPoint() == 1 );
 
     entry->SetInsertionPointEnd();
-    CPPUNIT_ASSERT_EQUAL( 3, entry->GetInsertionPoint() );
+    CHECK( entry->GetInsertionPoint() == 3 );
 
     entry->SetInsertionPoint(0);
     entry->WriteText("-"); // should move it after the written text
-    CPPUNIT_ASSERT_EQUAL( 4, entry->GetLastPosition() );
-    CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
+    CHECK( entry->GetLastPosition() == 4 );
+    CHECK( entry->GetInsertionPoint() == 1 );
 
     entry->SetValue("something different"); // should still reset the caret
-    CPPUNIT_ASSERT_EQUAL( 0, entry->GetInsertionPoint() );
+    CHECK( entry->GetInsertionPoint() == 0 );
 }
 
 void TextEntryTestCase::Replace()
@@ -192,18 +192,17 @@ void TextEntryTestCase::Replace()
 
     entry->Replace(6, 13, "changed");
 
-    CPPUNIT_ASSERT_EQUAL("Hello changed!"
-                         "0123456789012",
-                         entry->GetValue());
-    CPPUNIT_ASSERT_EQUAL(13, entry->GetInsertionPoint());
+    CHECK(entry->GetValue() == "Hello changed!"
+                         "0123456789012");
+    CHECK(entry->GetInsertionPoint() == 13);
 
     entry->Replace(13, -1, "");
-    CPPUNIT_ASSERT_EQUAL("Hello changed", entry->GetValue());
-    CPPUNIT_ASSERT_EQUAL(13, entry->GetInsertionPoint());
+    CHECK(entry->GetValue() == "Hello changed");
+    CHECK(entry->GetInsertionPoint() == 13);
 
     entry->Replace(0, 6, "Un");
-    CPPUNIT_ASSERT_EQUAL("Unchanged", entry->GetValue());
-    CPPUNIT_ASSERT_EQUAL(2, entry->GetInsertionPoint());
+    CHECK(entry->GetValue() == "Unchanged");
+    CHECK(entry->GetInsertionPoint() == 2);
 }
 
 void TextEntryTestCase::WriteText()
@@ -213,19 +212,19 @@ void TextEntryTestCase::WriteText()
     entry->SetValue("foo");
     entry->SetInsertionPoint(3);
     entry->WriteText("bar");
-    CPPUNIT_ASSERT_EQUAL( "foobar", entry->GetValue() );
+    CHECK( entry->GetValue() == "foobar" );
 
     entry->SetValue("foo");
     entry->SetInsertionPoint(0);
     entry->WriteText("bar");
-    CPPUNIT_ASSERT_EQUAL( "barfoo", entry->GetValue() );
+    CHECK( entry->GetValue() == "barfoo" );
 
     entry->SetValue("abxxxhi");
     entry->SetSelection(2, 5);
     entry->WriteText("cdefg");
-    CPPUNIT_ASSERT_EQUAL( "abcdefghi", entry->GetValue() );
-    CPPUNIT_ASSERT_EQUAL( 7, entry->GetInsertionPoint() );
-    CPPUNIT_ASSERT_EQUAL( false, entry->HasSelection() );
+    CHECK( entry->GetValue() == "abcdefghi" );
+    CHECK( entry->GetInsertionPoint() == 7 );
+    CHECK( entry->HasSelection() == false );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
@@ -262,6 +261,9 @@ private:
 
 void TextEntryTestCase::Editable()
 {
+    if ( !EnableUITests() )
+        return;
+
     wxTextEntry * const entry = GetTestEntry();
     wxWindow * const window = GetTestWindow();
 
@@ -282,8 +284,8 @@ void TextEntryTestCase::Editable()
     sim.Text("abcdef");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
-    CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
+    CHECK(entry->GetValue() == "abcdef");
+    CHECK(updated.GetCount() == 6);
 
     wxYield();
 
@@ -293,16 +295,16 @@ void TextEntryTestCase::Editable()
     sim.Text("g");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL("abcdefg", handler.GetLastString());
+    CHECK(handler.GetLastString() == "abcdefg");
 
     // ... even if we generate the event programmatically and whether it uses
     // the same value as the control has right now
     entry->SetValue("abcdefg");
-    CPPUNIT_ASSERT_EQUAL("abcdefg", handler.GetLastString());
+    CHECK(handler.GetLastString() == "abcdefg");
 
     // ... or not
     entry->SetValue("abcdef");
-    CPPUNIT_ASSERT_EQUAL("abcdef", handler.GetLastString());
+    CHECK(handler.GetLastString() == "abcdef");
 
     // Check that making the control not editable does indeed prevent it from
     // being edited.
@@ -312,8 +314,8 @@ void TextEntryTestCase::Editable()
     sim.Text("gh");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
-    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
+    CHECK(entry->GetValue() == "abcdef");
+    CHECK(updated.GetCount() == 0);
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
@@ -321,7 +323,7 @@ void TextEntryTestCase::Editable()
 void TextEntryTestCase::Hint()
 {
     GetTestEntry()->SetHint("This is a hint");
-    CPPUNIT_ASSERT_EQUAL("", GetTestEntry()->GetValue());
+    CHECK(GetTestEntry()->GetValue() == "");
 }
 
 void TextEntryTestCase::CopyPaste()
@@ -336,12 +338,12 @@ void TextEntryTestCase::CopyPaste()
     {
         entry->Copy();
         entry->Clear();
-        CPPUNIT_ASSERT(entry->IsEmpty());
+        CHECK(entry->IsEmpty());
 
         wxYield();
 
         entry->Paste();
-        CPPUNIT_ASSERT_EQUAL("sometext", entry->GetValue());
+        CHECK(entry->GetValue() == "sometext");
     }
 #endif
 }
@@ -355,12 +357,12 @@ void TextEntryTestCase::UndoRedo()
     if(entry->CanUndo())
     {
         entry->Undo();
-        CPPUNIT_ASSERT(entry->IsEmpty());
+        CHECK(entry->IsEmpty());
 
         if(entry->CanRedo())
         {
             entry->Redo();
-            CPPUNIT_ASSERT_EQUAL("sometext", entry->GetValue());
+            CHECK(entry->GetValue() == "sometext");
         }
     }
 }

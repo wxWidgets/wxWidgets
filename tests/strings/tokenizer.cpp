@@ -20,43 +20,6 @@
 #include "wx/tokenzr.h"
 
 // ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class TokenizerTestCase : public CppUnit::TestCase
-{
-public:
-    TokenizerTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( TokenizerTestCase );
-        CPPUNIT_TEST( GetCount );
-        CPPUNIT_TEST( GetPosition );
-        CPPUNIT_TEST( GetString );
-        CPPUNIT_TEST( LastDelimiter );
-        CPPUNIT_TEST( StrtokCompat );
-        CPPUNIT_TEST( CopyObj );
-        CPPUNIT_TEST( AssignObj );
-    CPPUNIT_TEST_SUITE_END();
-
-    void GetCount();
-    void GetPosition();
-    void GetString();
-    void LastDelimiter();
-    void StrtokCompat();
-    void CopyObj();
-    void AssignObj();
-
-    wxDECLARE_NO_COPY_CLASS(TokenizerTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( TokenizerTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TokenizerTestCase, "TokenizerTestCase" );
-
-// ----------------------------------------------------------------------------
 // test data
 // ----------------------------------------------------------------------------
 
@@ -119,26 +82,19 @@ gs_testData[] =
     { wxT("01-02/99"),           wxT("/-"),             wxTOKEN_RET_DELIMS,    3 },
 };
 
-// helper function returning the string showing the index for which the test
-// fails in the diagnostic message
-static std::string Nth(size_t n)
-{
-    return std::string(wxString::Format(wxT("for loop index %lu"),
-                                        (unsigned long)n).mb_str());
-}
-
 // ----------------------------------------------------------------------------
 // the tests
 // ----------------------------------------------------------------------------
 
-void TokenizerTestCase::GetCount()
+TEST_CASE("Tokenizer::GetCount", "[tokenizer]")
 {
     for ( size_t n = 0; n < WXSIZEOF(gs_testData); n++ )
     {
         const TokenizerTestData& ttd = gs_testData[n];
 
         wxStringTokenizer tkz(ttd.str, ttd.delims, ttd.mode);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( Nth(n), ttd.count, tkz.CountTokens() );
+        INFO( "for loop index " << n );
+        CHECK( tkz.CountTokens() == ttd.count );
 
         size_t count = 0;
         while ( tkz.HasMoreTokens() )
@@ -147,7 +103,7 @@ void TokenizerTestCase::GetCount()
             count++;
         }
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( Nth(n), ttd.count, count );
+        CHECK( count == ttd.count );
     }
 }
 
@@ -159,7 +115,7 @@ DoTestGetPosition(const wxChar *s, const wxChar *delims, int pos, ...)
 {
     wxStringTokenizer tkz(s, delims);
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)0, tkz.GetPosition() );
+    CHECK( tkz.GetPosition() == (size_t)0 );
 
     va_list ap;
     va_start(ap, pos);
@@ -168,13 +124,13 @@ DoTestGetPosition(const wxChar *s, const wxChar *delims, int pos, ...)
     {
         if ( !pos )
         {
-            CPPUNIT_ASSERT( !tkz.HasMoreTokens() );
+            CHECK( !tkz.HasMoreTokens() );
             break;
         }
 
         tkz.GetNextToken();
 
-        CPPUNIT_ASSERT_EQUAL( (size_t)pos, tkz.GetPosition() );
+        CHECK( tkz.GetPosition() == (size_t)pos );
 
         pos = va_arg(ap, int);
     }
@@ -182,7 +138,7 @@ DoTestGetPosition(const wxChar *s, const wxChar *delims, int pos, ...)
     va_end(ap);
 }
 
-void TokenizerTestCase::GetPosition()
+TEST_CASE("Tokenizer::GetPosition", "[tokenizer]")
 {
     DoTestGetPosition(wxT("foo"), wxT("_"), 3, 0);
     DoTestGetPosition(wxT("foo_bar"), wxT("_"), 4, 7, 0);
@@ -196,7 +152,7 @@ DoTestGetString(const wxChar *s, const wxChar *delims, int pos, ...)
 {
     wxStringTokenizer tkz(s, delims);
 
-    CPPUNIT_ASSERT_EQUAL( wxString(s), tkz.GetString() );
+    CHECK( tkz.GetString() == wxString(s) );
 
     va_list ap;
     va_start(ap, pos);
@@ -205,13 +161,13 @@ DoTestGetString(const wxChar *s, const wxChar *delims, int pos, ...)
     {
         if ( !pos )
         {
-            CPPUNIT_ASSERT( tkz.GetString().empty() ) ;
+            CHECK( tkz.GetString().empty() ) ;
             break;
         }
 
         tkz.GetNextToken();
 
-        CPPUNIT_ASSERT_EQUAL( wxString(s + pos), tkz.GetString() );
+        CHECK( tkz.GetString() == wxString(s + pos) );
 
         pos = va_arg(ap, int);
     }
@@ -219,31 +175,31 @@ DoTestGetString(const wxChar *s, const wxChar *delims, int pos, ...)
     va_end(ap);
 }
 
-void TokenizerTestCase::GetString()
+TEST_CASE("Tokenizer::GetString", "[tokenizer]")
 {
     DoTestGetString(wxT("foo"), wxT("_"), 3, 0);
     DoTestGetString(wxT("foo_bar"), wxT("_"), 4, 7, 0);
     DoTestGetString(wxT("foo_bar_"), wxT("_"), 4, 8, 0);
 }
 
-void TokenizerTestCase::LastDelimiter()
+TEST_CASE("Tokenizer::LastDelimiter", "[tokenizer]")
 {
     wxStringTokenizer tkz(wxT("a+-b=c"), wxT("+-="));
 
     tkz.GetNextToken();
-    CPPUNIT_ASSERT_EQUAL( wxT('+'), tkz.GetLastDelimiter() );
+    CHECK( tkz.GetLastDelimiter() == wxT('+') );
 
     tkz.GetNextToken();
-    CPPUNIT_ASSERT_EQUAL( wxT('-'), tkz.GetLastDelimiter() );
+    CHECK( tkz.GetLastDelimiter() == wxT('-') );
 
     tkz.GetNextToken();
-    CPPUNIT_ASSERT_EQUAL( wxT('='), tkz.GetLastDelimiter() );
+    CHECK( tkz.GetLastDelimiter() == wxT('=') );
 
     tkz.GetNextToken();
-    CPPUNIT_ASSERT_EQUAL( wxT('\0'), tkz.GetLastDelimiter() );
+    CHECK( tkz.GetLastDelimiter() == wxT('\0') );
 }
 
-void TokenizerTestCase::StrtokCompat()
+TEST_CASE("Tokenizer::StrtokCompat", "[tokenizer]")
 {
     for ( size_t n = 0; n < WXSIZEOF(gs_testData); n++ )
     {
@@ -259,13 +215,13 @@ void TokenizerTestCase::StrtokCompat()
         wxStringTokenizer tkz(ttd.str, ttd.delims, ttd.mode);
         while ( tkz.HasMoreTokens() )
         {
-            CPPUNIT_ASSERT_EQUAL( wxString(s), tkz.GetNextToken() );
+            CHECK( tkz.GetNextToken() == wxString(s) );
             s = wxStrtok(nullptr, ttd.delims, &last);
         }
     }
 }
 
-void TokenizerTestCase::CopyObj()
+TEST_CASE("Tokenizer::CopyObj", "[tokenizer]")
 {
     // Test copy ctor
     wxStringTokenizer tkzSrc(wxT("first:second:third:fourth"), wxT(":"));
@@ -274,19 +230,19 @@ void TokenizerTestCase::CopyObj()
         tkzSrc.GetNextToken();
         wxStringTokenizer tkz = tkzSrc;
 
-        CPPUNIT_ASSERT_EQUAL( tkzSrc.GetPosition(), tkz.GetPosition() );
-        CPPUNIT_ASSERT_EQUAL( tkzSrc.GetString(), tkz.GetString() );
+        CHECK( tkz.GetPosition() == tkzSrc.GetPosition() );
+        CHECK( tkz.GetString() == tkzSrc.GetString() );
 
         // Change the state of both objects and compare again...
         tkzSrc.GetNextToken();
         tkz.GetNextToken();
 
-        CPPUNIT_ASSERT_EQUAL( tkzSrc.GetPosition(), tkz.GetPosition() );
-        CPPUNIT_ASSERT_EQUAL( tkzSrc.GetString(), tkz.GetString() );
+        CHECK( tkz.GetPosition() == tkzSrc.GetPosition() );
+        CHECK( tkz.GetString() == tkzSrc.GetString() );
     }
 }
 
-void TokenizerTestCase::AssignObj()
+TEST_CASE("Tokenizer::AssignObj", "[tokenizer]")
 {
     // Test assignment
     wxStringTokenizer tkzSrc(wxT("first:second:third:fourth"), wxT(":"));
@@ -296,14 +252,14 @@ void TokenizerTestCase::AssignObj()
         tkzSrc.GetNextToken();
         tkz = tkzSrc;
 
-        CPPUNIT_ASSERT_EQUAL( tkzSrc.GetPosition(), tkz.GetPosition() );
-        CPPUNIT_ASSERT_EQUAL( tkzSrc.GetString(), tkz.GetString() );
+        CHECK( tkz.GetPosition() == tkzSrc.GetPosition() );
+        CHECK( tkz.GetString() == tkzSrc.GetString() );
 
         // Change the state of both objects and compare again...
         tkzSrc.GetNextToken();
         tkz.GetNextToken();
 
-        CPPUNIT_ASSERT_EQUAL( tkzSrc.GetPosition(), tkz.GetPosition() );
-        CPPUNIT_ASSERT_EQUAL( tkzSrc.GetString(), tkz.GetString() );
+        CHECK( tkz.GetPosition() == tkzSrc.GetPosition() );
+        CHECK( tkz.GetString() == tkzSrc.GetString() );
     }
 }

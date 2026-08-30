@@ -3134,18 +3134,24 @@ installed, where VER is 2, 3 or 4.
                 )
 
                 if test "$wx_cv_gtk_wayland_sm" = "yes"; then
-                    dnl We don't check for wayland-protocols being installed as
-                    dnl it's a dependency of libgtk-3-dev or similar, and so
-                    dnl should be available.
+                    dnl wayland-protocols is normally a dependency of
+                    dnl libgtk-3-dev or similar, but it's not always pulled in
+                    dnl automatically, so still check that it's really there.
                     AC_CACHE_CHECK([for wayland-protocols data directory],
                         wx_cv_wayland_protocols_dir,
                         [
-                            wx_cv_wayland_protocols_dir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols`
+                            wx_cv_wayland_protocols_dir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols 2>/dev/null`
                         ]
                     )
                     WAYLAND_PROTOCOLS_DIR=$wx_cv_wayland_protocols_dir
 
-                    AC_DEFINE(wxHAVE_WAYLAND_SESSION_MANAGEMENT)
+                    if test -n "$WAYLAND_PROTOCOLS_DIR" -a \
+                            -f "$WAYLAND_PROTOCOLS_DIR/stable/xdg-shell/xdg-shell.xml"; then
+                        AC_DEFINE(wxHAVE_WAYLAND_SESSION_MANAGEMENT)
+                    else
+                        AC_MSG_WARN([wayland-protocols package not found, Wayland session management support will be disabled])
+                        WAYLAND_SM_SUPPORT=':'
+                    fi
                 else
                     dnl Don't bother running wayland-scanner for this protocol.
                     WAYLAND_SM_SUPPORT=':'

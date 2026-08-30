@@ -15,7 +15,7 @@
 
 #include <ostream>
 
-// define stream inserter for wxFileName to use it in CPPUNIT_ASSERT_EQUAL()
+// define stream inserter for wxFileName to use it in Catch assertions
 inline std::ostream& operator<<(std::ostream& o, const wxFileName& fn)
 {
     return o << fn.GetFullPath();

@@ -754,15 +754,22 @@ void LifeCanvas::SetCellSize(int cellsize)
     Refresh(false);
 }
 
-// draw a cell
-void LifeCanvas::DrawCell(wxInt32 i, wxInt32 j, bool alive)
+// the area a cell occupies on screen
+wxRect LifeCanvas::CellRect(wxInt32 i, wxInt32 j) const
 {
-    wxClientDC dc(this);
+    return wxRect(CellToX(i), CellToY(j), m_cellsize, m_cellsize);
+}
 
-    dc.SetPen(alive? *wxBLACK_PEN : *wxWHITE_PEN);
-    dc.SetBrush(alive? *wxBLACK_BRUSH : *wxWHITE_BRUSH);
-
-    DrawCell(i, j, dc);
+// mark a cell as needing to be repainted
+//
+// Drawing on a wxClientDC outside a paint handler does not reach the screen on
+// every platform -- see wxClientDC::CanBeUsedForDrawing(), which reports false
+// under wxGTK on Wayland and on the macOS and Qt ports. Repainting from
+// OnPaint(), which already draws whatever the Life object says is alive in the
+// damaged area, works everywhere.
+void LifeCanvas::RefreshCell(wxInt32 i, wxInt32 j)
+{
+    RefreshRect(CellRect(i, j), false);
 }
 
 void LifeCanvas::DrawCell(wxInt32 i, wxInt32 j, wxDC &dc)
@@ -923,17 +930,18 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
         m_mi = i;
         m_mj = j;
         m_life->SetCell(i, j, m_status == MOUSE_DRAWING);
-        DrawCell(i, j, m_status == MOUSE_DRAWING);
+        RefreshCell(i, j);
     }
     else if ((m_mi != i) || (m_mj != j))
     {
         // no: continue ongoing action
         bool alive = (m_status == MOUSE_DRAWING);
 
-        // prepare DC and pen + brush to optimize drawing
-        wxClientDC dc(this);
-        dc.SetPen(alive? *wxBLACK_PEN : *wxWHITE_PEN);
-        dc.SetBrush(alive? *wxBLACK_BRUSH : *wxWHITE_BRUSH);
+        // Collect everything this segment touches and invalidate it in one
+        // go at the end. Repainting the whole enclosing rectangle costs a
+        // little more than the cells on the line, but the segment spans one
+        // mouse motion, and OnPaint() redraws any cell in it correctly.
+        wxRect damaged;
 
         // draw a line of cells using Bresenham's algorithm
         wxInt32 d, ii, jj, di, ai, si, dj, aj, sj;
@@ -955,7 +963,7 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
             while (ii != i)
             {
                 m_life->SetCell(ii, jj, alive);
-                DrawCell(ii, jj, dc);
+                damaged.Union(CellRect(ii, jj));
                 if (d >= 0)
                 {
                     jj += sj;
@@ -973,7 +981,7 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
             while (jj != j)
             {
                 m_life->SetCell(ii, jj, alive);
-                DrawCell(ii, jj, dc);
+                damaged.Union(CellRect(ii, jj));
                 if (d >= 0)
                 {
                     ii += si;
@@ -986,9 +994,11 @@ void LifeCanvas::OnMouse(wxMouseEvent& event)
 
         // last cell
         m_life->SetCell(ii, jj, alive);
-        DrawCell(ii, jj, dc);
+        damaged.Union(CellRect(ii, jj));
         m_mi = ii;
         m_mj = jj;
+
+        RefreshRect(damaged, false);
     }
 
     ((LifeFrame *) wxGetApp().GetTopWindow())->UpdateInfoText();

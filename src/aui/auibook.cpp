@@ -6215,6 +6215,7 @@ wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
         return nullptr;
     }
 
+    const int oldSelection = m_curPage;
     const PageSnapshot* selectedBeforeCommit = nullptr;
     if ( m_curPage >= 0 &&
             static_cast<size_t>(m_curPage) < canonicalBefore.size() )
@@ -6444,6 +6445,19 @@ wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
     book = hasCommittedProjection();
     if ( !book )
         return getTransferredPage();
+
+    if ( canonicalSurvivors.empty() && oldSelection != wxNOT_FOUND &&
+            !book->m_isBeingDeleted )
+    {
+        // Removing the last page changes selection without a replacement
+        // window. Dispatch only after revalidating the committed topology;
+        // the handler may destroy the book or the transferred page.
+        wxAuiNotebookEvent evt(wxEVT_AUINOTEBOOK_PAGE_CHANGED, book->m_windowId);
+        evt.SetSelection(wxNOT_FOUND);
+        evt.SetOldSelection(oldSelection);
+        evt.SetEventObject(book);
+        (void)book->ProcessWindowEvent(evt);
+    }
 
     return getTransferredPage();
 }

@@ -44,6 +44,8 @@
 
 #include <float.h> // for FLT_MAX, FLT_MIN
 
+wxGCC_WARNING_SUPPRESS(double-promotion)
+
 #ifdef _MSC_VER
     #pragma comment(lib, "gdiplus")
 #endif

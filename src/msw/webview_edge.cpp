@@ -32,6 +32,8 @@
 #include "wx/msw/private/webview_edge.h"
 #include "wx/msw/private/comstream.h"
 
+#include <algorithm>
+
 #ifdef __VISUALC__
 #include <wrl/event.h>
 using namespace Microsoft::WRL;
@@ -316,12 +318,19 @@ public:
         if (!m_webViewEnvironment)
         {
             m_webViewsWaitingForEnvironment.push_back(impl);
+
+            // keep us alive until the completion handler below runs, see #26491
+            wxWebViewConfiguration keepAlive = impl->m_config;
             HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
                 ms_browserExecutableDir.wc_str(),
                 GetDataPath().wc_str(),
                 m_webViewEnvironmentOptions,
-                Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
-                    &wxWebViewConfigurationImplEdge::OnEnvironmentCreated).Get());
+                Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+                    [this, keepAlive]
+                    (HRESULT result, ICoreWebView2Environment* env) -> HRESULT
+                    {
+                        return OnEnvironmentCreated(result, env);
+                    }).Get());
             if (FAILED(hr))
             {
                 wxLogApiError("CreateWebView2EnvironmentWithOptions", hr);
@@ -337,11 +346,31 @@ public:
         }
     }
 
+    // Called from wxWebViewEdgeImpl dtor to ensure that we don't try to use a
+    // WebView which had been destroyed while waiting for the environment
+    // creation to complete, see #26491.
+    void RemoveWaitingForEnvironment(wxWebViewEdgeImpl* impl)
+    {
+        m_webViewsWaitingForEnvironment.erase(
+            std::remove(
+                m_webViewsWaitingForEnvironment.begin(),
+                m_webViewsWaitingForEnvironment.end(),
+                impl
+            ),
+            m_webViewsWaitingForEnvironment.end()
+        );
+    }
+
     HRESULT OnEnvironmentCreated(HRESULT WXUNUSED(result), ICoreWebView2Environment* environment)
     {
         m_webViewEnvironment = environment;
+
+        // Note that EnvironmentAvailable() doesn't run any user code and so
+        // can't destroy any of the WebViews here, i.e. it can't modify the
+        // vector we're iterating over.
         for (auto impl : m_webViewsWaitingForEnvironment)
             impl->EnvironmentAvailable(m_webViewEnvironment);
+
         m_webViewsWaitingForEnvironment.clear();
         return S_OK;
     }
@@ -460,6 +489,15 @@ wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview) :
 
 wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
 {
+    *m_alive = false;
+
+    // If we're still waiting for the environment creation to complete, we must
+    // not be notified about it any more.
+    auto* const config =
+        static_cast<wxWebViewConfigurationImplEdge*>(m_config.GetImpl());
+    if (config)
+        config->RemoveWaitingForEnvironment(this);
+
     if (m_webView)
     {
         m_webView->remove_NavigationCompleted(m_navigationCompletedToken);
@@ -498,6 +536,18 @@ void wxWebViewEdgeImpl::EnvironmentAvailable(ICoreWebView2Environment* environme
 {
     environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
     wxCOMPtr<ICoreWebView2Environment10> environment10;
+
+    // guard against completing after we're destroyed, see #26491
+    std::shared_ptr<bool> alive = m_alive;
+    auto onWebViewCreated =
+        [this, alive]
+        (HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
+        {
+            if (!*alive)
+                return S_OK;
+            return OnWebViewCreated(result, controller);
+        };
+
     if (SUCCEEDED(m_webViewEnvironment->QueryInterface(IID_PPV_ARGS(&environment10))))
     {
         wxCOMPtr<ICoreWebView2ControllerOptions> controllerOptions;
@@ -510,14 +560,14 @@ void wxWebViewEdgeImpl::EnvironmentAvailable(ICoreWebView2Environment* environme
                 m_ctrl->GetHWND(),
                 controllerOptions.get(),
                 Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                    this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+                    onWebViewCreated).Get());
         }
     }
     else
         m_webViewEnvironment->CreateCoreWebView2Controller(
             m_ctrl->GetHWND(),
             Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+                onWebViewCreated).Get());
 }
 
 bool wxWebViewEdgeImpl::Initialize()
@@ -1576,7 +1626,7 @@ float wxWebViewEdge::GetZoomFactor() const
 void wxWebViewEdge::SetZoomFactor(float zoom)
 {
     if ( m_impl->m_webViewController )
-        m_impl->m_webViewController->put_ZoomFactor(zoom);
+        m_impl->m_webViewController->put_ZoomFactor(double(zoom));
 }
 
 bool wxWebViewEdge::CanUndo() const

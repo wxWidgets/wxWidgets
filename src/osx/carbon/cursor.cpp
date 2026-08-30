@@ -211,6 +211,8 @@ wxCursorRefData::wxCursorRefData(const wxCursorRefData& cursor) : wxGDIRefData()
 
 #if wxOSX_USE_COCOA
     m_hCursor = (WX_NSCursor) wxMacCocoaRetain(cursor.m_hCursor);
+#else
+    wxUnusedVar(cursor);
 #endif
 }
 
@@ -269,6 +271,10 @@ void wxCursor::InitFromBitmap(const wxBitmap& bmp, int hotSpotX, int hotSpotY)
         M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromCGImage( cgimage, hotSpotX, hotSpotY );
         CFRelease( cgimage );
     }
+#else
+    wxUnusedVar(bmp);
+    wxUnusedVar(hotSpotX);
+    wxUnusedVar(hotSpotY);
 #endif
 }
 
@@ -339,6 +345,8 @@ void wxCursor::InitFromStock(wxStockCursor cursor_type)
     m_refData = new wxCursorRefData;
 #if wxOSX_USE_COCOA
     M_CURSORDATA->m_hCursor = wxMacCocoaCreateStockCursor( cursor_type );
+#else
+    wxUnusedVar(cursor_type);
 #endif
 }
 

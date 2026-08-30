@@ -12,7 +12,6 @@
 
 #include "testprec.h"
 
-
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
@@ -21,37 +20,8 @@
 #include "wx/scopeguard.h"
 
 // --------------------------------------------------------------------------
-// test class
+// test helpers
 // --------------------------------------------------------------------------
-
-class CmdLineTestCase : public CppUnit::TestCase
-{
-public:
-    CmdLineTestCase() {}
-
-private:
-    CPPUNIT_TEST_SUITE( CmdLineTestCase );
-        CPPUNIT_TEST( ConvertStringTestCase );
-        CPPUNIT_TEST( ParseSwitches );
-        CPPUNIT_TEST( ArgumentsCollection );
-        CPPUNIT_TEST( Usage );
-        CPPUNIT_TEST( Found );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ConvertStringTestCase();
-    void ParseSwitches();
-    void ArgumentsCollection();
-    void Usage();
-    void Found();
-
-    wxDECLARE_NO_COPY_CLASS(CmdLineTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( CmdLineTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( CmdLineTestCase, "CmdLineTestCase" );
 
 // Use this macro to compare a wxArrayString with the pipe-separated elements
 // of the given string
@@ -62,19 +32,19 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( CmdLineTestCase, "CmdLineTestCase" );
     {                                                                         \
         wxArrayString expected(wxSplit(s, '|', '\0'));                        \
                                                                               \
-        CPPUNIT_ASSERT_EQUAL( expected.size(), a.size() );                    \
+        CHECK( a.size() == expected.size() );                    \
                                                                               \
         for ( size_t n = 0; n < a.size(); n++ )                               \
         {                                                                     \
-            CPPUNIT_ASSERT_EQUAL( expected[n], a[n] );                        \
+            CHECK( a[n] == expected[n] );                        \
         }                                                                     \
     }
 
 // ============================================================================
-// implementation
+// tests
 // ============================================================================
 
-void CmdLineTestCase::ConvertStringTestCase()
+TEST_CASE("CmdLine::ConvertString", "[cmdline]")
 {
     #define WX_ASSERT_DOS_ARGS_EQUAL(s, args)                                 \
         {                                                                     \
@@ -138,7 +108,7 @@ void CmdLineTestCase::ConvertStringTestCase()
     #undef WX_ASSERT_ARGS_EQUAL
 }
 
-void CmdLineTestCase::ParseSwitches()
+TEST_CASE("CmdLine::ParseSwitches", "[cmdline]")
 {
     // install a dummy message output object just suppress error messages from
     // wxCmdLineParser::Parse()
@@ -160,67 +130,67 @@ void CmdLineTestCase::ParseSwitches()
                 wxCMD_LINE_SWITCH_NEGATABLE);
 
     p.SetCmdLine("");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT( !p.Found("a") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK( !p.Found("a") );
 
     p.SetCmdLine("-z");
-    CPPUNIT_ASSERT( p.Parse(false) != 0 );
+    CHECK( p.Parse(false) != 0 );
 
     p.SetCmdLine("-a");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT( p.Found("a") );
-    CPPUNIT_ASSERT( !p.Found("b") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK( p.Found("a") );
+    CHECK( !p.Found("b") );
 
     p.SetCmdLine("-a -d");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT( p.Found("a") );
-    CPPUNIT_ASSERT( !p.Found("b") );
-    CPPUNIT_ASSERT( !p.Found("c") );
-    CPPUNIT_ASSERT( p.Found("d") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK( p.Found("a") );
+    CHECK( !p.Found("b") );
+    CHECK( !p.Found("c") );
+    CHECK( p.Found("d") );
 
     p.SetCmdLine("-abd");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT( p.Found("a") );
-    CPPUNIT_ASSERT( p.Found("b") );
-    CPPUNIT_ASSERT( !p.Found("c") );
-    CPPUNIT_ASSERT( p.Found("d") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK( p.Found("a") );
+    CHECK( p.Found("b") );
+    CHECK( !p.Found("c") );
+    CHECK( p.Found("d") );
 
     p.SetCmdLine("-abdz");
-    CPPUNIT_ASSERT( p.Parse(false) != 0 );
+    CHECK( p.Parse(false) != 0 );
 
     p.SetCmdLine("-ab -cd");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT( p.Found("a") );
-    CPPUNIT_ASSERT( p.Found("b") );
-    CPPUNIT_ASSERT( p.Found("c") );
-    CPPUNIT_ASSERT( p.Found("d") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK( p.Found("a") );
+    CHECK( p.Found("b") );
+    CHECK( p.Found("c") );
+    CHECK( p.Found("d") );
 
     p.SetCmdLine("-da");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT( p.Found("a") );
-    CPPUNIT_ASSERT( !p.Found("b") );
-    CPPUNIT_ASSERT( !p.Found("c") );
-    CPPUNIT_ASSERT( p.Found("d") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK( p.Found("a") );
+    CHECK( !p.Found("b") );
+    CHECK( !p.Found("c") );
+    CHECK( p.Found("d") );
 
     p.SetCmdLine("-n");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_NOT_FOUND, p.FoundSwitch("a") );
-    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_ON, p.FoundSwitch("n") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK(p.FoundSwitch("a") == wxCMD_SWITCH_NOT_FOUND );
+    CHECK(p.FoundSwitch("n") == wxCMD_SWITCH_ON );
 
     p.SetCmdLine("-n-");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_OFF, p.FoundSwitch("neg") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK(p.FoundSwitch("neg") == wxCMD_SWITCH_OFF );
 
     p.SetCmdLine("--neg");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_ON, p.FoundSwitch("neg") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK(p.FoundSwitch("neg") == wxCMD_SWITCH_ON );
 
     p.SetCmdLine("--neg-");
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
-    CPPUNIT_ASSERT_EQUAL(wxCMD_SWITCH_OFF, p.FoundSwitch("n") );
+    CHECK(p.Parse(false) == 0 );
+    CHECK(p.FoundSwitch("n") == wxCMD_SWITCH_OFF );
 }
 
-void CmdLineTestCase::ArgumentsCollection()
+TEST_CASE("CmdLine::ArgumentsCollection", "[cmdline]")
 {
     wxCmdLineParser p;
 
@@ -235,64 +205,64 @@ void CmdLineTestCase::ArgumentsCollection()
     p.SetCmdLine (wxString::Format ("--verbose param1 -l 22 -d \"%s\" -f 50.12e-1 param2 --string \"some string\"",
         wasNow.FormatISODate()));
 
-    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CHECK(p.Parse(false) == 0 );
 
     wxCmdLineArgs::const_iterator itargs = p.GetArguments().begin();
 
     // --verbose
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_SWITCH, itargs->GetKind());
-    CPPUNIT_ASSERT_EQUAL("verbose", itargs->GetLongName());
-    CPPUNIT_ASSERT_EQUAL(false, itargs->IsNegated());
+    CHECK(itargs->GetKind() == wxCMD_LINE_SWITCH);
+    CHECK(itargs->GetLongName() == "verbose");
+    CHECK(itargs->IsNegated() == false);
 
     // param1
     ++itargs; // pre incrementation test
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_PARAM, itargs->GetKind());
-    CPPUNIT_ASSERT_EQUAL("param1", itargs->GetStrVal());
+    CHECK(itargs->GetKind() == wxCMD_LINE_PARAM);
+    CHECK(itargs->GetStrVal() == "param1");
 
     // -l 22
     itargs++; // post incrementation test
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_OPTION, itargs->GetKind());
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_VAL_NUMBER, itargs->GetType());
-    CPPUNIT_ASSERT_EQUAL("l", itargs->GetShortName());
-    CPPUNIT_ASSERT_EQUAL(22, itargs->GetLongVal());
+    CHECK(itargs->GetKind() == wxCMD_LINE_OPTION);
+    CHECK(itargs->GetType() == wxCMD_LINE_VAL_NUMBER);
+    CHECK(itargs->GetShortName() == "l");
+    CHECK(itargs->GetLongVal() == 22);
 
     // -d (some date)
     ++itargs;
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_OPTION, itargs->GetKind());
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_VAL_DATE, itargs->GetType());
-    CPPUNIT_ASSERT_EQUAL("d", itargs->GetShortName());
-    CPPUNIT_ASSERT_EQUAL(wasNow, itargs->GetDateVal());
+    CHECK(itargs->GetKind() == wxCMD_LINE_OPTION);
+    CHECK(itargs->GetType() == wxCMD_LINE_VAL_DATE);
+    CHECK(itargs->GetShortName() == "d");
+    CHECK(itargs->GetDateVal() == wasNow);
 
     // -f 50.12e-1
     ++itargs;
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_OPTION, itargs->GetKind());
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_VAL_DOUBLE, itargs->GetType());
-    CPPUNIT_ASSERT_EQUAL("f", itargs->GetShortName());
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(50.12e-1, itargs->GetDoubleVal(), 0.000001);
+    CHECK(itargs->GetKind() == wxCMD_LINE_OPTION);
+    CHECK(itargs->GetType() == wxCMD_LINE_VAL_DOUBLE);
+    CHECK(itargs->GetShortName() == "f");
+    CHECK(itargs->GetDoubleVal() == Approx(50.12e-1).margin(0.000001));
 
     // param2
     ++itargs;
-    CPPUNIT_ASSERT_EQUAL (wxCMD_LINE_PARAM, itargs->GetKind());
-    CPPUNIT_ASSERT_EQUAL ("param2", itargs->GetStrVal());
+    CHECK(itargs->GetKind() == wxCMD_LINE_PARAM);
+    CHECK(itargs->GetStrVal() == "param2");
 
     // --string "some string"
     ++itargs;
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_OPTION, itargs->GetKind());
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_VAL_STRING, itargs->GetType());
-    CPPUNIT_ASSERT_EQUAL("s", itargs->GetShortName());
-    CPPUNIT_ASSERT_EQUAL("string", itargs->GetLongName());
-    CPPUNIT_ASSERT_EQUAL("some string", itargs->GetStrVal());
+    CHECK(itargs->GetKind() == wxCMD_LINE_OPTION);
+    CHECK(itargs->GetType() == wxCMD_LINE_VAL_STRING);
+    CHECK(itargs->GetShortName() == "s");
+    CHECK(itargs->GetLongName() == "string");
+    CHECK(itargs->GetStrVal() == "some string");
 
     // testing pre and post-increment
     --itargs;
     itargs--;
-    CPPUNIT_ASSERT_EQUAL(wxCMD_LINE_VAL_DOUBLE, itargs->GetType());
+    CHECK(itargs->GetType() == wxCMD_LINE_VAL_DOUBLE);
 
     ++itargs;++itargs;++itargs;
-    CPPUNIT_ASSERT(itargs == p.GetArguments().end());
+    CHECK(itargs == p.GetArguments().end());
 }
 
-void CmdLineTestCase::Usage()
+TEST_CASE("CmdLine::Usage", "[cmdline]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -338,14 +308,14 @@ void CmdLineTestCase::Usage()
         Line_Max
     };
 
-    CPPUNIT_ASSERT_EQUAL((size_t)Line_Max, usageLines.size());
-    CPPUNIT_ASSERT_EQUAL("Verbosity options", usageLines[Line_Text_Verbosity]);
-    CPPUNIT_ASSERT_EQUAL("", usageLines[Line_Text_Dummy1]);
-    CPPUNIT_ASSERT_EQUAL("Even more usage text", usageLines[Line_Text_Dummy2]);
-    CPPUNIT_ASSERT_EQUAL("", usageLines[Line_Last]);
+    CHECK(usageLines.size() == (size_t)Line_Max);
+    CHECK(usageLines[Line_Text_Verbosity] == "Verbosity options");
+    CHECK(usageLines[Line_Text_Dummy1] == "");
+    CHECK(usageLines[Line_Text_Dummy2] == "Even more usage text");
+    CHECK(usageLines[Line_Last] == "");
 }
 
-void CmdLineTestCase::Found()
+TEST_CASE("CmdLine::Found", "[cmdline]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -365,7 +335,7 @@ void CmdLineTestCase::Found()
     wxCmdLineParser p(desc);
     p.SetCmdLine ("-v --output hello -s 2 --date=2014-02-17 -f 0.2 input-file.txt");
 
-    CPPUNIT_ASSERT(p.Parse() == 0);
+    CHECK(p.Parse() == 0);
 
     wxString dummys;
     wxDateTime dummydate;
@@ -376,34 +346,34 @@ void CmdLineTestCase::Found()
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("v", &dummydate));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("v", &dummyl));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("v", &dummys));
-    CPPUNIT_ASSERT(p.FoundSwitch("v") != wxCMD_SWITCH_NOT_FOUND);
-    CPPUNIT_ASSERT(p.Found("v"));
+    CHECK(p.FoundSwitch("v") != wxCMD_SWITCH_NOT_FOUND);
+    CHECK(p.Found("v"));
 
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("o", &dummyd));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("o", &dummydate));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("o", &dummyl));
     WX_ASSERT_FAILS_WITH_ASSERT(p.FoundSwitch("o"));
-    CPPUNIT_ASSERT(p.Found("o", &dummys));
-    CPPUNIT_ASSERT(p.Found("o"));
+    CHECK(p.Found("o", &dummys));
+    CHECK(p.Found("o"));
 
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("s", &dummyd));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("s", &dummydate));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("s", &dummys));
     WX_ASSERT_FAILS_WITH_ASSERT(p.FoundSwitch("s"));
-    CPPUNIT_ASSERT(p.Found("s", &dummyl));
-    CPPUNIT_ASSERT(p.Found("s"));
+    CHECK(p.Found("s", &dummyl));
+    CHECK(p.Found("s"));
 
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("d", &dummyd));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("d", &dummyl));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("d", &dummys));
     WX_ASSERT_FAILS_WITH_ASSERT(p.FoundSwitch("d"));
-    CPPUNIT_ASSERT(p.Found("d", &dummydate));
-    CPPUNIT_ASSERT(p.Found("d"));
+    CHECK(p.Found("d", &dummydate));
+    CHECK(p.Found("d"));
 
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("f", &dummydate));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("f", &dummyl));
     WX_ASSERT_FAILS_WITH_ASSERT(p.Found("f", &dummys));
     WX_ASSERT_FAILS_WITH_ASSERT(p.FoundSwitch("f"));
-    CPPUNIT_ASSERT(p.Found("f", &dummyd));
-    CPPUNIT_ASSERT(p.Found("f"));
+    CHECK(p.Found("f", &dummyd));
+    CHECK(p.Found("f"));
 }

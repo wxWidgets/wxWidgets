@@ -926,7 +926,6 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     {
         const double rad = wxDegToRad(angle);
 
-        const QFontMetrics metrics = m_qtPainter->fontMetrics();
         const QRect rect = metrics.boundingRect(wxQtConvertString(text));
         const int w = rect.width();
         const int h = rect.height();

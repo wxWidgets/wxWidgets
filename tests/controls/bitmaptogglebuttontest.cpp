@@ -23,54 +23,37 @@
 #include "wx/uiaction.h"
 #include "wx/artprov.h"
 
-class BitmapToggleButtonTestCase : public CppUnit::TestCase
+#include <memory>
+
+class BitmapToggleButtonTestCase
 {
 public:
-    BitmapToggleButtonTestCase() { }
+    BitmapToggleButtonTestCase();
 
-    void setUp() override;
-    void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( BitmapToggleButtonTestCase );
-        WXUISIM_TEST( Click );
-        CPPUNIT_TEST( Value );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Click();
-    void Value();
-
-    wxBitmapToggleButton* m_button;
+protected:
+    std::unique_ptr<wxBitmapToggleButton> m_button;
 
     wxDECLARE_NO_COPY_CLASS(BitmapToggleButtonTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( BitmapToggleButtonTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( BitmapToggleButtonTestCase,
-                                      "BitmapToggleButtonTestCase" );
-
-void BitmapToggleButtonTestCase::setUp()
+BitmapToggleButtonTestCase::BitmapToggleButtonTestCase()
 {
-    m_button = new wxBitmapToggleButton(wxTheApp->GetTopWindow(), wxID_ANY,
-                                        wxArtProvider::GetIcon(wxART_INFORMATION,
-                                                               wxART_OTHER,
-                                                               wxSize(32, 32)));
+    m_button = make_unique<wxBitmapToggleButton>(
+        wxTheApp->GetTopWindow(), wxID_ANY,
+        wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER,
+                               wxSize(32, 32)));
     m_button->Update();
     m_button->Refresh();
 }
 
-void BitmapToggleButtonTestCase::tearDown()
-{
-    wxDELETE(m_button);
-}
 
-void BitmapToggleButtonTestCase::Click()
+TEST_CASE_METHOD(BitmapToggleButtonTestCase, "BitmapToggleButton::Click", "[bitmaptogglebutton]")
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter clicked(m_button, wxEVT_TOGGLEBUTTON);
+    if ( !EnableUITests() )
+        return;
+
+    EventCounter clicked(m_button.get(), wxEVT_TOGGLEBUTTON);
 
     wxUIActionSimulator sim;
 
@@ -83,8 +66,8 @@ void BitmapToggleButtonTestCase::Click()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, clicked.GetCount());
-    CPPUNIT_ASSERT(m_button->GetValue());
+    CHECK(clicked.GetCount() == 1);
+    CHECK(m_button->GetValue());
 
     clicked.Clear();
 
@@ -96,24 +79,24 @@ void BitmapToggleButtonTestCase::Click()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, clicked.GetCount());
-    CPPUNIT_ASSERT(!m_button->GetValue());
+    CHECK(clicked.GetCount() == 1);
+    CHECK(!m_button->GetValue());
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
-void BitmapToggleButtonTestCase::Value()
+TEST_CASE_METHOD(BitmapToggleButtonTestCase, "BitmapToggleButton::Value", "[bitmaptogglebutton]")
 {
-    EventCounter clicked(m_button, wxEVT_BUTTON);
+    EventCounter clicked(m_button.get(), wxEVT_BUTTON);
 
     m_button->SetValue(true);
 
-    CPPUNIT_ASSERT(m_button->GetValue());
+    CHECK(m_button->GetValue());
 
     m_button->SetValue(false);
 
-    CPPUNIT_ASSERT(!m_button->GetValue());
+    CHECK(!m_button->GetValue());
 
-    CPPUNIT_ASSERT_EQUAL( 0, clicked.GetCount() );
+    CHECK( clicked.GetCount() == 0 );
 }
 
 #endif // wxHAS_BITMAPTOGGLEBUTTON

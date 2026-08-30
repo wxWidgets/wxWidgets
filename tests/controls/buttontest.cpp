@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#include <memory>
+
 #if wxUSE_BUTTON
 
 
@@ -29,10 +31,9 @@ class ButtonTestCase
 {
 public:
     ButtonTestCase();
-    ~ButtonTestCase();
 
 protected:
-    wxButton* m_button;
+    std::unique_ptr<wxButton> m_button;
 
     wxDECLARE_NO_COPY_CLASS(ButtonTestCase);
 };
@@ -41,13 +42,10 @@ ButtonTestCase::ButtonTestCase()
 {
     //We use wxTheApp->GetTopWindow() as there is only a single testable frame
     //so it will always be returned
-    m_button = new wxButton(wxTheApp->GetTopWindow(), wxID_ANY, "wxButton");
+    m_button = make_unique<wxButton>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                     "wxButton");
 }
 
-ButtonTestCase::~ButtonTestCase()
-{
-    delete m_button;
-}
 
 #if wxUSE_UIACTIONSIMULATOR
 
@@ -55,7 +53,7 @@ TEST_CASE_METHOD(ButtonTestCase, "Button::Click", "[button]")
 {
     //We use the internal class EventCounter which handles connecting and
     //disconnecting the control to the wxTestableFrame
-    EventCounter clicked(m_button, wxEVT_BUTTON);
+    EventCounter clicked(m_button.get(), wxEVT_BUTTON);
 
     wxUIActionSimulator sim;
 
@@ -87,13 +85,12 @@ TEST_CASE_METHOD(ButtonTestCase, "Button::Disabled", "[button]")
 
     SECTION("Create disabled")
     {
-        delete m_button;
-        m_button = new wxButton();
+        m_button = make_unique<wxButton>();
         m_button->Disable();
         m_button->Create(wxTheApp->GetTopWindow(), wxID_ANY, "wxButton");
     }
 
-    EventCounter clicked(m_button, wxEVT_BUTTON);
+    EventCounter clicked(m_button.get(), wxEVT_BUTTON);
 
     sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
     wxYield();

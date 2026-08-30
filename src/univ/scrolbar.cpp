@@ -510,7 +510,7 @@ wxRect wxScrollBar::GetScrollbarRect(wxScrollBar::Element elem,
     return rect;
 }
 
-wxCoord wxScrollBar::GetScrollbarSize() const
+wxCoord wxScrollBar::GetScrollbarBodySize() const
 {
     const wxSize sizeArrowSB = m_renderer->GetScrollbarArrowSize();
 
@@ -546,7 +546,7 @@ wxCoord wxScrollBar::ScrollbarToPixel(int thumbPos)
     }
 
     const wxSize sizeArrow = m_renderer->GetScrollbarArrowSize();
-    return (thumbPos * GetScrollbarSize()) / range
+    return (thumbPos * GetScrollbarBodySize()) / range
              + (IsVertical() ? sizeArrow.y : sizeArrow.x);
 }
 
@@ -554,7 +554,7 @@ int wxScrollBar::PixelToScrollbar(wxCoord coord)
 {
     const wxSize sizeArrow = m_renderer->GetScrollbarArrowSize();
     return ((coord - (IsVertical() ? sizeArrow.y : sizeArrow.x)) *
-               GetRange() ) / GetScrollbarSize();
+               GetRange() ) / GetScrollbarBodySize();
 }
 
 // ----------------------------------------------------------------------------

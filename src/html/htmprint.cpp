@@ -556,12 +556,16 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     if (!m_Headers[page % 2].empty())
     {
         m_RendererHdr.SetHtmlText(TranslateHeader(m_Headers[page % 2], page));
-        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft), (int) (ppmm_v * m_MarginTop));
+        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft),
+                             (int) (ppmm_v * m_MarginTop),
+                             0, m_HeaderHeight);
     }
     if (!m_Footers[page % 2].empty())
     {
         m_RendererHdr.SetHtmlText(TranslateHeader(m_Footers[page % 2], page));
-        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft), (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight));
+        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft),
+                             (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight),
+                             0, m_FooterHeight);
     }
 }
 

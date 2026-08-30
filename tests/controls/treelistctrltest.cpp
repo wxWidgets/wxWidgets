@@ -24,28 +24,18 @@
     #include "wx/weakref.h"
 #endif
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class TreeListCtrlTestCase : public CppUnit::TestCase
+class TreeListCtrlTestCase
 {
 public:
-    TreeListCtrlTestCase() { }
+    TreeListCtrlTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( TreeListCtrlTestCase );
-        CPPUNIT_TEST( Traversal );
-        CPPUNIT_TEST( ItemText );
-        CPPUNIT_TEST( ItemCheck );
-        CPPUNIT_TEST( ColumnMutation );
-        CPPUNIT_TEST( ClearColumnsResetsValues );
-        CPPUNIT_TEST( DestructiveColumnCancellation );
-    CPPUNIT_TEST_SUITE_END();
-
+protected:
     // Create the control with the given style.
     void Create(long style);
 
@@ -57,16 +47,9 @@ private:
 
 
     // Tests:
-    void Traversal();
-    void ItemText();
-    void ItemCheck();
-    void ColumnMutation();
-    void ClearColumnsResetsValues();
-    void DestructiveColumnCancellation();
-
 
     // The control itself.
-    wxTreeListCtrl *m_treelist;
+    std::unique_ptr<wxTreeListCtrl> m_treelist;
 
     // And some of its items.
     wxTreeListItem m_code,
@@ -78,12 +61,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(TreeListCtrlTestCase);
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( TreeListCtrlTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TreeListCtrlTestCase, "TreeListCtrlTestCase" );
 
 // ----------------------------------------------------------------------------
 // test initialization
@@ -109,11 +86,11 @@ TreeListCtrlTestCase::AddItem(const char *label,
 
 void TreeListCtrlTestCase::Create(long style)
 {
-    m_treelist = new wxTreeListCtrl(wxTheApp->GetTopWindow(),
-                                    wxID_ANY,
-                                    wxDefaultPosition,
-                                    wxSize(400, 200),
-                                    style);
+    m_treelist = make_unique<wxTreeListCtrl>(wxTheApp->GetTopWindow(),
+                                             wxID_ANY,
+                                             wxDefaultPosition,
+                                             wxSize(400, 200),
+                                             style);
 
     m_treelist->AppendColumn("Component");
     m_treelist->AppendColumn("# Files");
@@ -141,46 +118,32 @@ void TreeListCtrlTestCase::Create(long style)
     m_treelist->Update();
 }
 
-void TreeListCtrlTestCase::setUp()
+TreeListCtrlTestCase::TreeListCtrlTestCase()
 {
     m_numItems = 0;
     Create(wxTL_MULTIPLE | wxTL_3STATE);
 }
 
-void TreeListCtrlTestCase::tearDown()
-{
-    delete m_treelist;
-    m_treelist = nullptr;
-}
 
 // ----------------------------------------------------------------------------
 // the tests themselves
 // ----------------------------------------------------------------------------
 
 // Test various tree traversal methods.
-void TreeListCtrlTestCase::Traversal()
+TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::Traversal", "[treelistctrl]")
 {
     // GetParent() tests:
     wxTreeListItem root = m_treelist->GetRootItem();
-    CPPUNIT_ASSERT( !m_treelist->GetItemParent(root) );
+    CHECK( !m_treelist->GetItemParent(root) );
 
-    CPPUNIT_ASSERT_EQUAL( root, m_treelist->GetItemParent(m_code) );
-    CPPUNIT_ASSERT_EQUAL( m_code, m_treelist->GetItemParent(m_code_osx) );
-
+    CHECK( m_treelist->GetItemParent(m_code) == root );
+    CHECK( m_treelist->GetItemParent(m_code_osx) == m_code );
 
     // GetFirstChild() and GetNextSibling() tests:
-    CPPUNIT_ASSERT_EQUAL( m_code, m_treelist->GetFirstChild(root) );
-    CPPUNIT_ASSERT_EQUAL
-    (
-        m_code_osx,
-        m_treelist->GetNextSibling
-        (
-            m_treelist->GetNextSibling
-            (
-                m_treelist->GetFirstChild(m_code)
-            )
-        )
-    );
+    CHECK( m_treelist->GetFirstChild(root) == m_code );
+    CHECK( m_treelist->GetNextSibling(
+               m_treelist->GetNextSibling(
+                   m_treelist->GetFirstChild(m_code))) == m_code_osx );
 
     // Get{First,Next}Item() test:
     unsigned numItems = 0;
@@ -191,60 +154,51 @@ void TreeListCtrlTestCase::Traversal()
         numItems++;
     }
 
-    CPPUNIT_ASSERT_EQUAL( m_numItems, numItems );
+    CHECK( numItems == m_numItems );
 }
 
 // Test accessing items text.
-void TreeListCtrlTestCase::ItemText()
+TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::ItemText", "[treelistctrl]")
 {
-    CPPUNIT_ASSERT_EQUAL( "Cocoa", m_treelist->GetItemText(m_code_osx_cocoa) );
-    CPPUNIT_ASSERT_EQUAL( "46", m_treelist->GetItemText(m_code_osx_cocoa, 1) );
+    CHECK( m_treelist->GetItemText(m_code_osx_cocoa) == "Cocoa" );
+    CHECK( m_treelist->GetItemText(m_code_osx_cocoa, 1) == "46" );
 
     m_treelist->SetItemText(m_code_osx_cocoa, "wxCocoa");
-    CPPUNIT_ASSERT_EQUAL( "wxCocoa", m_treelist->GetItemText(m_code_osx_cocoa) );
+    CHECK( m_treelist->GetItemText(m_code_osx_cocoa) == "wxCocoa" );
 
     m_treelist->SetItemText(m_code_osx_cocoa, 1, "47");
-    CPPUNIT_ASSERT_EQUAL( "47", m_treelist->GetItemText(m_code_osx_cocoa, 1) );
+    CHECK( m_treelist->GetItemText(m_code_osx_cocoa, 1) == "47" );
 }
 
 // Test checking and unchecking items.
-void TreeListCtrlTestCase::ItemCheck()
+TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::ItemCheck", "[treelistctrl]")
 {
-    CPPUNIT_ASSERT_EQUAL( wxCHK_UNCHECKED,
-                          m_treelist->GetCheckedState(m_code) );
+    CHECK( m_treelist->GetCheckedState(m_code) == wxCHK_UNCHECKED );
 
     m_treelist->CheckItemRecursively(m_code);
-    CPPUNIT_ASSERT_EQUAL( wxCHK_CHECKED,
-                          m_treelist->GetCheckedState(m_code) );
-    CPPUNIT_ASSERT_EQUAL( wxCHK_CHECKED,
-                          m_treelist->GetCheckedState(m_code_osx) );
-    CPPUNIT_ASSERT_EQUAL( wxCHK_CHECKED,
-                          m_treelist->GetCheckedState(m_code_osx_cocoa) );
+    CHECK( m_treelist->GetCheckedState(m_code) == wxCHK_CHECKED );
+    CHECK( m_treelist->GetCheckedState(m_code_osx) == wxCHK_CHECKED );
+    CHECK( m_treelist->GetCheckedState(m_code_osx_cocoa) == wxCHK_CHECKED );
 
     m_treelist->UncheckItem(m_code_osx_cocoa);
-    CPPUNIT_ASSERT_EQUAL( wxCHK_UNCHECKED,
-                          m_treelist->GetCheckedState(m_code_osx_cocoa) );
+    CHECK( m_treelist->GetCheckedState(m_code_osx_cocoa) == wxCHK_UNCHECKED );
 
     m_treelist->UpdateItemParentStateRecursively(m_code_osx_cocoa);
-    CPPUNIT_ASSERT_EQUAL( wxCHK_UNDETERMINED,
-                          m_treelist->GetCheckedState(m_code_osx) );
-    CPPUNIT_ASSERT_EQUAL( wxCHK_UNDETERMINED,
-                          m_treelist->GetCheckedState(m_code) );
+    CHECK( m_treelist->GetCheckedState(m_code_osx) == wxCHK_UNDETERMINED );
+    CHECK( m_treelist->GetCheckedState(m_code) == wxCHK_UNDETERMINED );
 
     m_treelist->CheckItemRecursively(m_code_osx, wxCHK_UNCHECKED);
     m_treelist->UpdateItemParentStateRecursively(m_code_osx_cocoa);
-    CPPUNIT_ASSERT_EQUAL( wxCHK_UNCHECKED,
-                          m_treelist->GetCheckedState(m_code_osx) );
-    CPPUNIT_ASSERT_EQUAL( wxCHK_UNDETERMINED,
-                          m_treelist->GetCheckedState(m_code) );
+    CHECK( m_treelist->GetCheckedState(m_code_osx) == wxCHK_UNCHECKED );
+    CHECK( m_treelist->GetCheckedState(m_code) == wxCHK_UNDETERMINED );
 }
 
-void TreeListCtrlTestCase::ColumnMutation()
+TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::ColumnMutation", "[treelistctrl]")
 {
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     wxDataViewCtrl* const view = m_treelist->GetDataView();
     wxHeaderCtrl* const header = view->GenericGetHeader();
-    CPPUNIT_ASSERT( header );
+    REQUIRE( header );
 
     wxArrayInt order;
     order.push_back(2);
@@ -254,82 +208,67 @@ void TreeListCtrlTestCase::ColumnMutation()
 
     // Removing a logical middle column after a visual reorder must preserve
     // both the remaining values and their exact display order.
-    CPPUNIT_ASSERT( m_treelist->DeleteColumn(1) );
-    CPPUNIT_ASSERT_EQUAL( 2u, m_treelist->GetColumnCount() );
-    CPPUNIT_ASSERT_EQUAL( wxString("wxOSX"),
-                          m_treelist->GetItemText(m_code_osx, 0) );
-    CPPUNIT_ASSERT_EQUAL( wxString("2.36 MiB"),
-                          m_treelist->GetItemText(m_code_osx, 1) );
-    CPPUNIT_ASSERT_EQUAL( 0u, view->GetColumn(0)->GetModelColumn() );
-    CPPUNIT_ASSERT_EQUAL( 1u, view->GetColumn(1)->GetModelColumn() );
+    REQUIRE( m_treelist->DeleteColumn(1) );
+    REQUIRE( (m_treelist->GetColumnCount()) == (2u) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 0)) == (wxString("wxOSX")) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 1)) == (wxString("2.36 MiB")) );
+    REQUIRE( (view->GetColumn(0)->GetModelColumn()) == (0u) );
+    REQUIRE( (view->GetColumn(1)->GetModelColumn()) == (1u) );
 
     const wxArrayInt orderAfterMiddleDelete = header->GetColumnsOrder();
-    CPPUNIT_ASSERT_EQUAL( 2, static_cast<int>(orderAfterMiddleDelete.size()) );
-    CPPUNIT_ASSERT_EQUAL( 1, orderAfterMiddleDelete[0] );
-    CPPUNIT_ASSERT_EQUAL( 0, orderAfterMiddleDelete[1] );
+    REQUIRE( (static_cast<int>(orderAfterMiddleDelete.size())) == (2) );
+    REQUIRE( (orderAfterMiddleDelete[0]) == (1) );
+    REQUIRE( (orderAfterMiddleDelete[1]) == (0) );
 
     // The old second column is sorted and then promoted to primary. Its
     // renderer and sort state must be promoted with it.
     view->GetColumn(1)->SetSortOrder(false);
     m_treelist->CheckItem(m_code_osx, wxCHK_CHECKED);
-    CPPUNIT_ASSERT( m_treelist->DeleteColumn(0) );
-    CPPUNIT_ASSERT_EQUAL( 1u, m_treelist->GetColumnCount() );
-    CPPUNIT_ASSERT_EQUAL( wxString("2.36 MiB"),
-                          m_treelist->GetItemText(m_code_osx, 0) );
-    CPPUNIT_ASSERT_EQUAL( wxCHK_CHECKED,
-                          m_treelist->GetCheckedState(m_code_osx) );
+    REQUIRE( m_treelist->DeleteColumn(0) );
+    REQUIRE( (m_treelist->GetColumnCount()) == (1u) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 0)) == (wxString("2.36 MiB")) );
+    REQUIRE( (m_treelist->GetCheckedState(m_code_osx)) == (wxCHK_CHECKED) );
 
     wxDataViewColumn* const primary = view->GetColumn(0);
-    CPPUNIT_ASSERT_EQUAL( 0u, primary->GetModelColumn() );
-    CPPUNIT_ASSERT( primary->IsSortKey() );
-    CPPUNIT_ASSERT( !primary->IsSortOrderAscending() );
-    CPPUNIT_ASSERT_EQUAL( primary, view->GetSortingColumn() );
-    CPPUNIT_ASSERT(
+    REQUIRE( (primary->GetModelColumn()) == (0u) );
+    REQUIRE( primary->IsSortKey() );
+    REQUIRE( !primary->IsSortOrderAscending() );
+    REQUIRE( (view->GetSortingColumn()) == (primary) );
+    REQUIRE(
         wxDynamicCast(
             primary->GetRenderer(),
             wxDataViewCheckIconTextRenderer) != nullptr );
 
     // Appending after all these mutations must keep the promoted value in
     // column zero and create a valid new positional model column.
-    CPPUNIT_ASSERT_EQUAL(
-        1,
-        m_treelist->AppendColumn("Replacement") );
+    REQUIRE( (m_treelist->AppendColumn("Replacement")) == (1) );
     m_treelist->SetItemText(m_code_osx, 1, "replacement value");
-    CPPUNIT_ASSERT_EQUAL( wxString("2.36 MiB"),
-                          m_treelist->GetItemText(m_code_osx, 0) );
-    CPPUNIT_ASSERT_EQUAL( wxString("replacement value"),
-                          m_treelist->GetItemText(m_code_osx, 1) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 0)) == (wxString("2.36 MiB")) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 1)) == (wxString("replacement value")) );
 
-    CPPUNIT_ASSERT( m_treelist->DeleteColumn(1) );
-    CPPUNIT_ASSERT( m_treelist->DeleteColumn(0) );
-    CPPUNIT_ASSERT_EQUAL( 0u, m_treelist->GetColumnCount() );
+    REQUIRE( m_treelist->DeleteColumn(1) );
+    REQUIRE( m_treelist->DeleteColumn(0) );
+    REQUIRE( (m_treelist->GetColumnCount()) == (0u) );
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
 }
 
-void TreeListCtrlTestCase::ClearColumnsResetsValues()
+TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::ClearColumnsResetsValues", "[treelistctrl]")
 {
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("wxOSX"),
-        m_treelist->GetItemText(m_code_osx, 0) );
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("2.36 MiB"),
-        m_treelist->GetItemText(m_code_osx, 2) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 0)) == (wxString("wxOSX")) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 2)) == (wxString("2.36 MiB")) );
 
     m_treelist->ClearColumns();
-    CPPUNIT_ASSERT_EQUAL( 0u, m_treelist->GetColumnCount() );
+    REQUIRE( (m_treelist->GetColumnCount()) == (0u) );
 
-    CPPUNIT_ASSERT_EQUAL( 0, m_treelist->AppendColumn("Fresh") );
-    CPPUNIT_ASSERT_EQUAL( wxString(),
-                          m_treelist->GetItemText(m_code_osx, 0) );
-    CPPUNIT_ASSERT_EQUAL( wxString(),
-                          m_treelist->GetItemText(m_code_osx_cocoa, 0) );
+    REQUIRE( (m_treelist->AppendColumn("Fresh")) == (0) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 0)) == (wxString()) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx_cocoa, 0)) == (wxString()) );
 
     m_treelist->SetItemText(m_code_osx, "new primary");
-    CPPUNIT_ASSERT_EQUAL( wxString("new primary"),
-                          m_treelist->GetItemText(m_code_osx, 0) );
+    REQUIRE( (m_treelist->GetItemText(m_code_osx, 0)) == (wxString("new primary")) );
 }
 
-void TreeListCtrlTestCase::DestructiveColumnCancellation()
+TEST_CASE_METHOD(TreeListCtrlTestCase, "TreeListCtrl::DestructiveColumnCancellation", "[treelistctrl]")
 {
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     delete m_treelist;
@@ -345,10 +284,8 @@ void TreeListCtrlTestCase::DestructiveColumnCancellation()
                 wxSize(320, 160),
                 wxTL_MULTIPLE);
             const int flags = wxCOL_RESIZABLE | wxCOL_REORDERABLE;
-            CPPUNIT_ASSERT_EQUAL(
-                0, tree->AppendColumn("first", 80, wxALIGN_LEFT, flags));
-            CPPUNIT_ASSERT_EQUAL(
-                1, tree->AppendColumn("second", 80, wxALIGN_LEFT, flags));
+            REQUIRE( (tree->AppendColumn("first", 80, wxALIGN_LEFT, flags)) == (0) );
+            REQUIRE( (tree->AppendColumn("second", 80, wxALIGN_LEFT, flags)) == (1) );
             const wxTreeListItem item =
                 tree->AppendItem(tree->GetRootItem(), "row");
             tree->SetItemText(item, 1, "survivor");
@@ -358,7 +295,7 @@ void TreeListCtrlTestCase::DestructiveColumnCancellation()
     const auto beginDrag =
         [](wxHeaderCtrl* header)
         {
-            CPPUNIT_ASSERT( header );
+            REQUIRE( header );
             header->SetSize(0, 0, 320, 40);
 
             wxMouseEvent down(wxEVT_LEFT_DOWN);
@@ -366,7 +303,7 @@ void TreeListCtrlTestCase::DestructiveColumnCancellation()
             down.SetEventObject(header);
             down.SetPosition(wxPoint(90, 1));
             header->ProcessWindowEvent(down);
-            CPPUNIT_ASSERT( header->HasCapture() );
+            REQUIRE( header->HasCapture() );
         };
 
     // Destroying the composite consumes the internal columns. The already
@@ -388,10 +325,10 @@ void TreeListCtrlTestCase::DestructiveColumnCancellation()
             wrapper = nullptr;
         });
 
-    CPPUNIT_ASSERT( wrapper->DeleteColumn(0) );
-    CPPUNIT_ASSERT_EQUAL(1, cancellations);
-    CPPUNIT_ASSERT( !weakWrapper.get() );
-    CPPUNIT_ASSERT( !weakView.get() );
+    REQUIRE( wrapper->DeleteColumn(0) );
+    REQUIRE( (cancellations) == (1) );
+    REQUIRE( !weakWrapper.get() );
+    REQUIRE( !weakView.get() );
 
     // GetDataView() is public: its lifetime must be checked independently
     // from the wrapper before any rollback or column remapping.
@@ -412,10 +349,10 @@ void TreeListCtrlTestCase::DestructiveColumnCancellation()
             view = nullptr;
         });
 
-    CPPUNIT_ASSERT( wrapper->DeleteColumn(0) );
-    CPPUNIT_ASSERT_EQUAL(1, cancellations);
-    CPPUNIT_ASSERT( weakSurvivingWrapper.get() == wrapper );
-    CPPUNIT_ASSERT( !weakDestroyedView.get() );
+    REQUIRE( wrapper->DeleteColumn(0) );
+    REQUIRE( (cancellations) == (1) );
+    REQUIRE( weakSurvivingWrapper.get() == wrapper );
+    REQUIRE( !weakDestroyedView.get() );
 
     delete wrapper;
     wrapper = nullptr;

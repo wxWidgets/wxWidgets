@@ -24,16 +24,16 @@
 
 #include <memory>
 
-class NotebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
+class NotebookTestCase : public BookCtrlBaseTestCase
 {
 public:
-    NotebookTestCase() { m_notebook = nullptr; m_numPageChanges = 0; }
+    NotebookTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    void OnPageChanged(wxNotebookEvent&) { m_numPageChanges++; }
 
-private:
-    virtual wxBookCtrlBase *GetBase() const override { return m_notebook; }
+protected:
+    virtual wxBookCtrlBase *GetBase() const override
+    { return m_notebook.get(); }
 
     virtual wxEventType GetChangedEvent() const override
     { return wxEVT_NOTEBOOK_PAGE_CHANGED; }
@@ -41,68 +41,48 @@ private:
     virtual wxEventType GetChangingEvent() const override
     { return wxEVT_NOTEBOOK_PAGE_CHANGING; }
 
+    std::unique_ptr<wxNotebook> m_notebook;
 
-    CPPUNIT_TEST_SUITE( NotebookTestCase );
-        wxBOOK_CTRL_BASE_TESTS();
-        CPPUNIT_TEST( Image );
-        CPPUNIT_TEST( RowCount );
-        CPPUNIT_TEST( NoEventsOnDestruction );
-        CPPUNIT_TEST( GetTabRect );
-        CPPUNIT_TEST( HitTestFlags );
-    CPPUNIT_TEST_SUITE_END();
-
-    void RowCount();
-    void NoEventsOnDestruction();
-    void GetTabRect();
-    void HitTestFlags();
-
-    void OnPageChanged(wxNotebookEvent&) { m_numPageChanges++; }
-
-    wxNotebook *m_notebook;
-
-    int m_numPageChanges;
+    int m_numPageChanges = 0;
 
     wxDECLARE_NO_COPY_CLASS(NotebookTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( NotebookTestCase );
+wxBOOK_CTRL_BASE_TESTS(NotebookTestCase, "Notebook",
+                       "[notebook][book][NotebookTestCase]");
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( NotebookTestCase, "NotebookTestCase" );
+// wxNotebook supports images, unlike most of the other book controls.
+wxBOOK_CTRL_BASE_TEST_CASE(NotebookTestCase, "Notebook", Image,
+                           "[notebook][book][NotebookTestCase]");
 
-void NotebookTestCase::setUp()
+NotebookTestCase::NotebookTestCase()
 {
-    m_notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                wxDefaultPosition, wxSize(400, 200));
+    m_notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxDefaultPosition, wxSize(400, 200));
     AddPanels();
 }
 
-void NotebookTestCase::tearDown()
-{
-    wxDELETE(m_notebook);
-}
 
-void NotebookTestCase::RowCount()
+TEST_CASE_METHOD(NotebookTestCase, "Notebook::RowCount", "[notebook][NotebookTestCase]")
 {
-    CPPUNIT_ASSERT_EQUAL(1, m_notebook->GetRowCount());
+    CHECK(m_notebook->GetRowCount() == 1);
 
-#if defined(__WXMSW__)
-    wxDELETE(m_notebook);
-    m_notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                wxDefaultPosition, wxSize(400, 200),
-                                wxNB_MULTILINE);
+#ifdef __WXMSW__
+    m_notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                         wxDefaultPosition, wxSize(400, 200),
+                                         wxNB_MULTILINE);
 
     for( unsigned int i = 0; i < 10; i++ )
     {
-        m_notebook->AddPage(new wxPanel(m_notebook), "Panel", false, 0);
+        m_notebook->AddPage(new wxPanel(m_notebook.get()), "Panel", false, 0);
     }
 
-    CPPUNIT_ASSERT( m_notebook->GetRowCount() != 1 );
-#endif // __WXMSW__
+    CHECK( m_notebook->GetRowCount() != 1 );
+#endif
 }
 
-void NotebookTestCase::NoEventsOnDestruction()
+TEST_CASE_METHOD(NotebookTestCase, "Notebook::NoEventsOnDestruction",
+                 "[notebook][NotebookTestCase]")
 {
     // We can't use EventCounter helper here as it doesn't deal with the window
     // it's connected to being destroyed during its life-time, so do it
@@ -119,8 +99,7 @@ void NotebookTestCase::NoEventsOnDestruction()
     // used to do under GTK+ 3 when a page different from the first one was
     // selected.
     m_notebook->ChangeSelection(1);
-    m_notebook->Destroy();
-    m_notebook = nullptr;
+    m_notebook.release()->Destroy();
     CHECK( m_numPageChanges == 1 );
 }
 
@@ -303,7 +282,7 @@ TEST_CASE("wxNotebook::RTLTabRectsUseWxClientCoordinates",
 
 #endif // __WXWINUI__ && wxUSE_WINUI3
 
-void NotebookTestCase::GetTabRect()
+TEST_CASE_METHOD(NotebookTestCase, "Notebook::GetTabRect", "[notebook][NotebookTestCase]")
 {
     wxNotebook *notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
                                           wxDefaultPosition, wxSize(400, 200));
@@ -351,7 +330,7 @@ void NotebookTestCase::GetTabRect()
 #endif // ports
 }
 
-void NotebookTestCase::HitTestFlags()
+TEST_CASE_METHOD(NotebookTestCase, "Notebook::HitTestFlags", "[notebook][NotebookTestCase]")
 {
     std::unique_ptr<wxNotebook> notebook;
 
@@ -373,9 +352,9 @@ void NotebookTestCase::HitTestFlags()
     if ( isVertical && wxIsRunningUnderWine() )
         return;
 
-    notebook.reset(new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                  wxPoint(0, 0), wxSize(400, 200),
-                                  style));
+    notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                       wxPoint(0, 0), wxSize(400, 200),
+                                       style);
 
     // Simulate an icon of standard size, its contents doesn't matter.
     const wxSize imageSize(16, 16);
@@ -428,8 +407,8 @@ void NotebookTestCase::HitTestFlags()
     CHECK(onLabel);
     CHECK(onItem);
 #else // !(__WXMSW__ || __WXUNIVERSAL__)
-    notebook.reset(new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
-                                  wxDefaultPosition, wxSize(400, 200)));
+    notebook = make_unique<wxNotebook>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                       wxDefaultPosition, wxSize(400, 200));
     notebook->AddPage(new wxPanel(notebook.get()), "First Page");
 
     WX_ASSERT_FAILS_WITH_ASSERT(notebook->GetTabRect(0));

@@ -24,24 +24,6 @@
 
 #import <Foundation/Foundation.h>
 
-
-static int wxOSXGetUserDefault(NSString* key, int defaultValue)
-{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    if (!defaults)
-    {
-        return defaultValue;
-    }
-
-    id setting = [defaults objectForKey: key];
-    if (!setting)
-    {
-        return defaultValue;
-    }
-
-    return [setting intValue];
-}
-
 // ----------------------------------------------------------------------------
 // wxSystemAppearance
 // ----------------------------------------------------------------------------

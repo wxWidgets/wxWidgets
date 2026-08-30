@@ -640,7 +640,9 @@ void wxRibbonBar::RecalculateTabSizes()
                 int delta = info.ideal_width - info.small_must_have_separator_width;
                 info.rect.x = x;
                 info.rect.y = y;
-                info.rect.width = info.small_must_have_separator_width + delta * (width - total_small_width) / total_delta;
+                info.rect.width = info.small_must_have_separator_width;
+                if ( total_delta != 0 )
+                    info.rect.width += delta * (width - total_small_width) / total_delta;
                 info.rect.height = m_tab_height;
 
                 x += info.rect.width + tabsep;
@@ -717,7 +719,9 @@ void wxRibbonBar::RecalculateTabSizes()
                     int delta = smallest_tab_width - info.minimum_width;
                     info.rect.x = x;
                     info.rect.y = y;
-                    info.rect.width = info.minimum_width + delta * (width - total_small_width) / total_delta;
+                    info.rect.width = info.minimum_width;
+                    if( total_delta != 0 )
+                        info.rect.width += delta * (width - total_small_width) / total_delta;
                     info.rect.height = m_tab_height;
 
                     x += info.rect.width + tabsep;

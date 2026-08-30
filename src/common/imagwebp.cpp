@@ -22,9 +22,11 @@
 
 #include "wx/imagwebp.h"
 
+wxGCC_WARNING_SUPPRESS(cast-qual)
 #include "webp/demux.h"
 #include "webp/decode.h"
 #include "webp/encode.h"
+wxGCC_WARNING_RESTORE(cast-qual)
 
 //-----------------------------------------------------------------------------
 // wxWEBPHandler

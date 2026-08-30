@@ -141,7 +141,11 @@ wxToolBarToolBase(
         if ( id == wxID_OK )
             style = UIBarButtonItemStyleDone;
         else
+        {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             style = UIBarButtonItemStyleBordered;
+            wxGCC_WARNING_RESTORE(deprecated-declarations)
+        }
 
         bui = [bui initWithTitle:wxCFStringRef(label).AsNSString() style:style target:toolbar
                       action:@selector(clickedAction:)];
@@ -253,17 +257,18 @@ bool wxToolBar::Create(
 
     FixupStyle();
 
-    CGRect r = CGRectMake( pos.x, pos.y, size.x, size.y) ;
-
     wxUIToolbar* toolbar = [[wxUIToolbar alloc] init];
     [toolbar sizeToFit];
 
     switch ( [[UIApplication sharedApplication] statusBarStyle] )
     {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         case UIStatusBarStyleBlackOpaque:
             toolbar.barStyle = UIBarStyleBlack;
             break;
+
         case UIStatusBarStyleBlackTranslucent:
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
             toolbar.barStyle = UIBarStyleBlack;
             toolbar.translucent = YES;
             break;
@@ -347,12 +352,12 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
     }
 }
 
-wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord /*x*/, wxCoord /*y*/) const
 {
     return nullptr;
 }
 
-void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
+void wxToolBar::DoEnableTool(wxToolBarToolBase* /*t*/, bool /*enable*/)
 {
     /*
     if ( t != nullptr )
@@ -360,7 +365,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
      */
 }
 
-void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
+void wxToolBar::DoToggleTool(wxToolBarToolBase* /*t*/, bool /*toggle*/)
 {
     /*
     wxToolBarTool *tool = (wxToolBarTool *)t;
@@ -374,8 +379,6 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     wxToolBarTool *tool = static_cast< wxToolBarTool*>(toolBase );
     if (tool == nullptr)
         return false;
-
-    wxSize toolSize = GetToolSize();
 
     switch (tool->GetStyle())
     {
@@ -405,10 +408,8 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
     wxFAIL_MSG( wxT("not implemented") );
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolbase)
+bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase* /*toolbase*/)
 {
-    wxToolBarTool* tool = static_cast< wxToolBarTool*>(toolbase );
-
     [(wxUIToolbar*)m_macToolbar removeTool:pos];
 
     return true;

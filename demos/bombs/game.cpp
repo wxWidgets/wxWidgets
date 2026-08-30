@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#define PROB 0.2
+#define PROB 0.2f
 
 #ifndef RAND_MAX
 #   define RAND_MAX INT_MAX

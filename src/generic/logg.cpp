@@ -302,6 +302,8 @@ wxLogGui::DoShowMultipleLogMessages(const wxArrayString& messages,
 
     (void)dlg.ShowModal();
 #else // !wxUSE_LOG_DIALOG
+    wxUnusedVar(severities);
+    wxUnusedVar(times);
     // start from the most recent message
     wxString message;
     const size_t nMsgCount = messages.size();

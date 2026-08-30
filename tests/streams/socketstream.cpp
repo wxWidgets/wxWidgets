@@ -7,7 +7,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
-// and "wx/cppunit.h"
 #include "testprec.h"
 
 
@@ -68,7 +67,7 @@ protected:
     virtual void *Entry() override
     {
         wxSocketServer srv(LocalAddress(m_port), wxSOCKET_REUSEADDR);
-        CPPUNIT_ASSERT( srv.IsOk() );
+        CHECK( srv.IsOk() );
 
         // FIXME: this is still not atomic, of course and the main thread could
         //        call Connect() before we have time to Accept() but there is
@@ -99,39 +98,51 @@ class socketStream :
         public BaseStreamTestCase<wxSocketInputStream, wxSocketOutputStream>
 {
 public:
-    socketStream();
+    socketStream() = default;
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    ~socketStream()
+    {
+        wxDELETE(m_readSocket);
+        wxDELETE(m_writeSocket);
 
-    // repeat all socket tests several times with different socket flags, so we
-    // define this macro which is used several times in the test suite
-    //
-    // there must be some more elegant way to do this but I didn't find it...
-#define ALL_SOCKET_TESTS()                                                    \
-        CPPUNIT_TEST(Input_GetC);                                             \
-        CPPUNIT_TEST(Input_Eof);                                              \
-        CPPUNIT_TEST(Input_Read);                                             \
-        CPPUNIT_TEST(Input_LastRead);                                         \
-        CPPUNIT_TEST(Input_CanRead);                                          \
-        CPPUNIT_TEST(Input_Peek);                                             \
-        CPPUNIT_TEST(Input_Ungetch);                                          \
-                                                                              \
-        CPPUNIT_TEST(Output_PutC);                                            \
-        CPPUNIT_TEST(Output_Write);                                           \
-        CPPUNIT_TEST(Output_LastWrite)
+        if ( m_writeThread )
+        {
+            m_writeThread->Wait();
+            wxDELETE(m_writeThread);
+        }
 
-    CPPUNIT_TEST_SUITE(socketStream);
-        ALL_SOCKET_TESTS();
-        // some tests don't pass with NOWAIT flag but this is probably not a
-        // bug (TODO: check this)
-#if 0
-        CPPUNIT_TEST( PseudoTest_SetNoWait );
-        ALL_SOCKET_TESTS();
-#endif
-        CPPUNIT_TEST( PseudoTest_SetWaitAll );
-        ALL_SOCKET_TESTS();
-    CPPUNIT_TEST_SUITE_END();
+        if ( m_readThread )
+        {
+            m_readThread->Wait();
+            wxDELETE(m_readThread);
+        }
+    }
+
+    // This must be called before running any test, see the comment before
+    // WX_SOCKET_STREAM_TEST_CASE() below.
+    void Init(wxSocketFlags flags)
+    {
+        // create the socket threads and wait until they are ready to accept
+        // connections (if we called Connect() before this happens, it would
+        // fail)
+        {
+            wxMutexLocker lock(gs_mutex);
+
+            m_writeThread =
+                new SocketServerThread(TEST_PORT_READ, &socketStream::WriteSocket);
+            REQUIRE( gs_cond.Wait() == wxCOND_NO_ERROR );
+
+            m_readThread =
+                new SocketServerThread(TEST_PORT_WRITE, &socketStream::ReadSocket);
+            REQUIRE( gs_cond.Wait() == wxCOND_NO_ERROR );
+        }
+
+        m_readSocket = new wxSocketClient(flags);
+        REQUIRE( m_readSocket->Connect(LocalAddress(TEST_PORT_READ)) );
+
+        m_writeSocket = new wxSocketClient(flags);
+        REQUIRE( m_writeSocket->Connect(LocalAddress(TEST_PORT_WRITE)) );
+    }
 
 private:
     // Implement base class functions.
@@ -152,76 +163,42 @@ private:
             ;
     }
 
-    void PseudoTest_SetNoWait() { ms_flags = wxSOCKET_NOWAIT; }
-    void PseudoTest_SetWaitAll() { ms_flags = wxSOCKET_WAITALL; }
-
-    wxSocketClient *m_readSocket,
-                   *m_writeSocket;
-    wxThread *m_writeThread,
-             *m_readThread;
+    wxSocketClient *m_readSocket = nullptr,
+                   *m_writeSocket = nullptr;
+    wxThread *m_writeThread = nullptr,
+             *m_readThread = nullptr;
 
     wxSocketInitializer m_socketInit;
 
-    static wxSocketFlags ms_flags;
+    wxDECLARE_NO_COPY_CLASS(socketStream);
 };
 
-wxSocketFlags socketStream::ms_flags = wxSOCKET_NONE;
-
-socketStream::socketStream()
-{
-    m_readSocket =
-    m_writeSocket = nullptr;
-
-    m_writeThread =
-    m_readThread = nullptr;
-}
-
-void socketStream::setUp()
-{
-    // create the socket threads and wait until they are ready to accept
-    // connections (if we called Connect() before this happens, it would fail)
-    {
-        wxMutexLocker lock(gs_mutex);
-
-        m_writeThread =
-            new SocketServerThread(TEST_PORT_READ, &socketStream::WriteSocket);
-        CPPUNIT_ASSERT_EQUAL( wxCOND_NO_ERROR, gs_cond.Wait() );
-
-        m_readThread =
-            new SocketServerThread(TEST_PORT_WRITE, &socketStream::ReadSocket);
-        CPPUNIT_ASSERT_EQUAL( wxCOND_NO_ERROR, gs_cond.Wait() );
+// All the socket stream tests are repeated with the different socket flags, so
+// use this macro instead of WX_STREAM_TEST_CASE() to define them.
+//
+// Note that some tests don't pass with wxSOCKET_NOWAIT, but this is probably
+// not a bug (TODO: check this), so this flag is not used here.
+#define WX_SOCKET_STREAM_TEST_CASE(name)                          \
+    TEST_CASE_METHOD(socketStream, "socketStream::" #name,        \
+                     "[stream][socketStream]")                    \
+    {                                                             \
+        Init(GENERATE(wxSocketFlags(wxSOCKET_NONE),               \
+                      wxSocketFlags(wxSOCKET_WAITALL)));          \
+                                                                  \
+        name();                                                   \
     }
-
-    m_readSocket = new wxSocketClient(ms_flags);
-    CPPUNIT_ASSERT( m_readSocket->Connect(LocalAddress(TEST_PORT_READ)) );
-
-    m_writeSocket = new wxSocketClient(ms_flags);
-    CPPUNIT_ASSERT( m_writeSocket->Connect(LocalAddress(TEST_PORT_WRITE)) );
-}
-
-void socketStream::tearDown()
-{
-    wxDELETE(m_readSocket);
-    wxDELETE(m_writeSocket);
-
-    m_writeThread->Wait();
-    wxDELETE(m_writeThread);
-
-    m_readThread->Wait();
-    wxDELETE(m_readThread);
-}
 
 wxSocketInputStream *socketStream::DoCreateInStream()
 {
     wxSocketInputStream *pStrInStream = new wxSocketInputStream(*m_readSocket);
-    CPPUNIT_ASSERT(pStrInStream->IsOk());
+    CHECK(pStrInStream->IsOk());
     return pStrInStream;
 }
 
 wxSocketOutputStream *socketStream::DoCreateOutStream()
 {
     wxSocketOutputStream *pStrOutStream = new wxSocketOutputStream(*m_writeSocket);
-    CPPUNIT_ASSERT(pStrOutStream->IsOk());
+    CHECK(pStrOutStream->IsOk());
     return pStrOutStream;
 }
 
@@ -240,10 +217,19 @@ void socketStream::DoCheckInputStream(wxSocketInputStream& stream_in)
         }
     }
 
-    CPPUNIT_ASSERT(stream_in.IsOk());
+    CHECK(stream_in.IsOk());
 }
 
-// Register the stream sub suite, by using some stream helper macro.
-STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(socketStream)
+WX_SOCKET_STREAM_TEST_CASE(Input_GetC)
+WX_SOCKET_STREAM_TEST_CASE(Input_Eof)
+WX_SOCKET_STREAM_TEST_CASE(Input_Read)
+WX_SOCKET_STREAM_TEST_CASE(Input_LastRead)
+WX_SOCKET_STREAM_TEST_CASE(Input_CanRead)
+WX_SOCKET_STREAM_TEST_CASE(Input_Peek)
+WX_SOCKET_STREAM_TEST_CASE(Input_Ungetch)
+
+WX_SOCKET_STREAM_TEST_CASE(Output_PutC)
+WX_SOCKET_STREAM_TEST_CASE(Output_Write)
+WX_SOCKET_STREAM_TEST_CASE(Output_LastWrite)
 
 #endif // wxUSE_SOCKETS

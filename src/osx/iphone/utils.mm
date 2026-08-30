@@ -121,8 +121,10 @@ void wxBell()
 
 bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wxCFStringRef(params.url).AsNSString()]]
         == YES;
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 
 // TODO : reorganize
@@ -231,7 +233,7 @@ bool wxIsBusy()
     return (gs_wxBusyCursorCount > 0);
 }
 
-bool wxGetKeyState (wxKeyCode key)
+bool wxGetKeyState (wxKeyCode /*key*/)
 {
     return false;
 }

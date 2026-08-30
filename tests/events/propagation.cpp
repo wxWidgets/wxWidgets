@@ -230,53 +230,14 @@ bool DoProcessEvent(wxEvent& event)
 // test class
 // --------------------------------------------------------------------------
 
-class EventPropagationTestCase : public CppUnit::TestCase
+class EventPropagationTestCase
 {
 public:
-    EventPropagationTestCase() {}
+    EventPropagationTestCase();
+    ~EventPropagationTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( EventPropagationTestCase );
-        CPPUNIT_TEST( OneHandler );
-        CPPUNIT_TEST( TwoHandlers );
-        CPPUNIT_TEST( WindowWithoutHandler );
-        CPPUNIT_TEST( WindowWithHandler );
-        CPPUNIT_TEST( ForwardEvent );
-        CPPUNIT_TEST( ScrollWindowWithoutHandler );
-        CPPUNIT_TEST( ScrollWindowWithHandler );
-// for unknown reason, this test will cause the tests segmentation failed
-// under x11, disable it for now.
-#if !defined (__WXX11__) && wxUSE_MENUS
-        CPPUNIT_TEST( MenuEvent );
-#endif
+protected:
 #if wxUSE_DOC_VIEW_ARCHITECTURE
-        CPPUNIT_TEST( DocView );
-    #if wxUSE_AUI
-        CPPUNIT_TEST( DocViewAui );
-    #endif
-#endif // wxUSE_DOC_VIEW_ARCHITECTURE
-        WXUISIM_TEST( ContextMenuEvent );
-        WXUISIM_TEST( PropagationLevel );
-    CPPUNIT_TEST_SUITE_END();
-
-    void OneHandler();
-    void TwoHandlers();
-    void WindowWithoutHandler();
-    void WindowWithHandler();
-    void ForwardEvent();
-    void ScrollWindowWithoutHandler();
-    void ScrollWindowWithHandler();
-#if wxUSE_MENUS
-    void MenuEvent();
-#endif
-#if wxUSE_DOC_VIEW_ARCHITECTURE
-    void DocView();
-    #if wxUSE_AUI
-        void DocViewAui();
-    #endif
     void DocViewCommon(wxFrame* (*newParent)(wxDocManager *manager,
                                                 wxFrame *parent,
                                                 wxWindowID id,
@@ -287,21 +248,11 @@ private:
                                                 wxWindowID id,
                                                 const wxString& title));
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
-#if wxUSE_UIACTIONSIMULATOR
-    void ContextMenuEvent();
-    void PropagationLevel();
-#endif
 
     wxDECLARE_NO_COPY_CLASS(EventPropagationTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( EventPropagationTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( EventPropagationTestCase, "EventPropagationTestCase" );
-
-void EventPropagationTestCase::setUp()
+EventPropagationTestCase::EventPropagationTestCase()
 {
     SetFilterEventFunc(DoFilterEvent);
     SetProcessEventFunc(DoProcessEvent);
@@ -309,21 +260,23 @@ void EventPropagationTestCase::setUp()
     g_str.clear();
 }
 
-void EventPropagationTestCase::tearDown()
+EventPropagationTestCase::~EventPropagationTestCase()
 {
     SetFilterEventFunc(nullptr);
     SetProcessEventFunc(nullptr);
 }
 
-void EventPropagationTestCase::OneHandler()
+TEST_CASE_METHOD(EventPropagationTestCase, "EventPropagation::OneHandler",
+                 "[event][propagation]")
 {
     wxCommandEvent event(TEST_EVT);
     TestEvtHandler h1('1');
     h1.ProcessEvent(event);
-    CPPUNIT_ASSERT_EQUAL( "oa1A", g_str );
+    CHECK( g_str == "oa1A" );
 }
 
-void EventPropagationTestCase::TwoHandlers()
+TEST_CASE_METHOD(EventPropagationTestCase, "EventPropagation::TwoHandlers",
+                 "[event][propagation]")
 {
     wxCommandEvent event(TEST_EVT);
     TestEvtHandler h1('1');
@@ -331,10 +284,12 @@ void EventPropagationTestCase::TwoHandlers()
     h1.SetNextHandler(&h2);
     h2.SetPreviousHandler(&h1);
     h1.ProcessEvent(event);
-    CPPUNIT_ASSERT_EQUAL( "oa1o2A", g_str );
+    CHECK( g_str == "oa1o2A" );
 }
 
-void EventPropagationTestCase::WindowWithoutHandler()
+TEST_CASE_METHOD(EventPropagationTestCase,
+                 "EventPropagation::WindowWithoutHandler",
+                 "[event][propagation]")
 {
     wxCommandEvent event(TEST_EVT);
     TestWindow * const parent = new TestWindow(wxTheApp->GetTopWindow(), 'p');
@@ -343,10 +298,12 @@ void EventPropagationTestCase::WindowWithoutHandler()
     TestWindow * const child = new TestWindow(parent, 'c');
 
     child->GetEventHandler()->ProcessEvent(event);
-    CPPUNIT_ASSERT_EQUAL( "acpA", g_str );
+    CHECK( g_str == "acpA" );
 }
 
-void EventPropagationTestCase::WindowWithHandler()
+TEST_CASE_METHOD(EventPropagationTestCase,
+                 "EventPropagation::WindowWithHandler",
+                 "[event][propagation]")
 {
     wxCommandEvent event(TEST_EVT);
     TestWindow * const parent = new TestWindow(wxTheApp->GetTopWindow(), 'p');
@@ -362,10 +319,11 @@ void EventPropagationTestCase::WindowWithHandler()
     wxON_BLOCK_EXIT_OBJ1( *child, wxWindow::PopEventHandler, false );
 
     child->HandleWindowEvent(event);
-    CPPUNIT_ASSERT_EQUAL( "oa2o1cpA", g_str );
+    CHECK( g_str == "oa2o1cpA" );
 }
 
-void EventPropagationTestCase::ForwardEvent()
+TEST_CASE_METHOD(EventPropagationTestCase, "EventPropagation::ForwardEvent",
+                 "[event][propagation]")
 {
     // The idea of this test is to check that the events explicitly forwarded
     // to another event handler still get pre/post-processed as usual as this
@@ -396,7 +354,7 @@ void EventPropagationTestCase::ForwardEvent()
     // First send the event directly to f.
     wxCommandEvent event1(TEST_EVT);
     f.ProcessEvent(event1);
-    CPPUNIT_ASSERT_EQUAL( "foa1wA", g_str );
+    CHECK( g_str == "foa1wA" );
     g_str.clear();
 
     // And then also test sending it to f indirectly.
@@ -404,10 +362,12 @@ void EventPropagationTestCase::ForwardEvent()
     TestEvtHandler h2('2');
     h2.SetNextHandler(&f);
     h2.ProcessEvent(event2);
-    CPPUNIT_ASSERT_EQUAL( "oa2fo1wAA", g_str );
+    CHECK( g_str == "oa2fo1wAA" );
 }
 
-void EventPropagationTestCase::ScrollWindowWithoutHandler()
+TEST_CASE_METHOD(EventPropagationTestCase,
+                 "EventPropagation::ScrollWindowWithoutHandler",
+                 "[event][propagation]")
 {
     TestWindow * const parent = new TestWindow(wxTheApp->GetTopWindow(), 'p');
     wxON_BLOCK_EXIT_OBJ0( *parent, wxWindow::Destroy );
@@ -416,16 +376,18 @@ void EventPropagationTestCase::ScrollWindowWithoutHandler()
 
 #ifdef CAN_TEST_PAINT_EVENTS
     win->GeneratePaintEvent();
-    CPPUNIT_ASSERT_EQUAL( "PD", g_str );
+    CHECK( g_str == "PD" );
 #endif
 
     g_str.clear();
     wxCommandEvent eventCmd(TEST_EVT);
     win->HandleWindowEvent(eventCmd);
-    CPPUNIT_ASSERT_EQUAL( "apA", g_str );
+    CHECK( g_str == "apA" );
 }
 
-void EventPropagationTestCase::ScrollWindowWithHandler()
+TEST_CASE_METHOD(EventPropagationTestCase,
+                 "EventPropagation::ScrollWindowWithHandler",
+                 "[event][propagation]")
 {
     TestWindow * const parent = new TestWindow(wxTheApp->GetTopWindow(), 'p');
     wxON_BLOCK_EXIT_OBJ0( *parent, wxWindow::Destroy );
@@ -438,13 +400,13 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
     wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
 
     win->GeneratePaintEvent();
-    CPPUNIT_ASSERT_EQUAL( "ohPD", g_str );
+    CHECK( g_str == "ohPD" );
 #endif
 
     g_str.clear();
     wxCommandEvent eventCmd(TEST_EVT);
     win->HandleWindowEvent(eventCmd);
-    CPPUNIT_ASSERT_EQUAL( "apA", g_str );
+    CHECK( g_str == "apA" );
 }
 
 #if wxUSE_MENUS
@@ -478,7 +440,12 @@ wxMenu* CreateTestMenu(wxFrame* frame)
 #define ASSERT_MENU_EVENT_RESULT(menu, result) \
     ASSERT_MENU_EVENT_RESULT_FOR(wxID_APPLY, menu, result)
 
-void EventPropagationTestCase::MenuEvent()
+// For unknown reason, this test causes a segmentation fault under X11, so it
+// is not compiled there.
+#ifndef __WXX11__
+
+TEST_CASE_METHOD(EventPropagationTestCase, "EventPropagation::MenuEvent",
+                 "[event][propagation]")
 {
     wxFrame* const frame = static_cast<wxFrame*>(wxTheApp->GetTopWindow());
 
@@ -528,7 +495,10 @@ void EventPropagationTestCase::MenuEvent()
 
     ASSERT_MENU_EVENT_RESULT( menu, "aomobowA" );
 }
-#endif
+
+#endif // !__WXX11__
+
+#endif // wxUSE_MENUS
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
@@ -554,7 +524,8 @@ public:
 wxIMPLEMENT_DYNAMIC_CLASS(EventTestDocument, wxDocument);
 wxIMPLEMENT_DYNAMIC_CLASS(EventTestView, wxView);
 
-void EventPropagationTestCase::DocView()
+TEST_CASE_METHOD(EventPropagationTestCase, "EventPropagation::DocView",
+                 "[event][propagation]")
 {
     DocViewCommon(
         [](wxDocManager* manager,
@@ -579,7 +550,8 @@ void EventPropagationTestCase::DocView()
 }
 
 #if wxUSE_AUI
-void EventPropagationTestCase::DocViewAui()
+TEST_CASE_METHOD(EventPropagationTestCase, "EventPropagation::DocViewAui",
+                 "[event][propagation]")
 {
     DocViewCommon(
         [](wxDocManager* manager,
@@ -713,7 +685,7 @@ void EventPropagationTestCase::DocViewCommon(wxFrame* (*newParent)(wxDocManager 
     g_str.clear();
     tb->OnLeftClick(wxID_APPLY, true /* doesn't matter */);
 
-    CPPUNIT_ASSERT_EQUAL( "advmcpA", g_str );
+    CHECK( g_str == "advmcpA" );
 #endif // wxUSE_TOOLBAR
 }
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
@@ -744,8 +716,13 @@ private:
     wxDECLARE_NO_COPY_CLASS(ContextMenuTestWindow);
 };
 
-void EventPropagationTestCase::ContextMenuEvent()
+TEST_CASE_METHOD(EventPropagationTestCase,
+                 "EventPropagation::ContextMenuEvent",
+                 "[event][propagation]")
 {
+    if ( !EnableUITests() )
+        return;
+
     ContextMenuTestWindow * const
         parent = new ContextMenuTestWindow(wxTheApp->GetTopWindow(), 'p');
     wxON_BLOCK_EXIT_OBJ0( *parent, wxWindow::Destroy );
@@ -769,7 +746,7 @@ void EventPropagationTestCase::ContextMenuEvent()
     // from the right mouse click event, we must dispatch the mouse messages.
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL( "cp", g_str );
+    CHECK( g_str == "cp" );
 
     // For some unfathomable reason the test below sporadically fails in wxGTK
     // buildbot builds, so disable it there to avoid spurious failure reports.
@@ -784,7 +761,7 @@ void EventPropagationTestCase::ContextMenuEvent()
     sim.MouseMove(origin + wxPoint(60, 60));
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "p", g_str );
+    CHECK( g_str == "p" );
 }
 
 // Helper function: get the event propagation level.
@@ -795,23 +772,28 @@ int GetPropagationLevel(wxEvent& e)
     return level;
 }
 
-void EventPropagationTestCase::PropagationLevel()
+TEST_CASE_METHOD(EventPropagationTestCase,
+                 "EventPropagation::PropagationLevel",
+                 "[event][propagation]")
 {
+    if ( !EnableUITests() )
+        return;
+
     wxSizeEvent se;
-    CPPUNIT_ASSERT_EQUAL( GetPropagationLevel(se), (int)wxEVENT_PROPAGATE_NONE );
+    CHECK( (int)wxEVENT_PROPAGATE_NONE == GetPropagationLevel(se) );
 
     wxCommandEvent ce;
-    CPPUNIT_ASSERT_EQUAL( GetPropagationLevel(ce), (int)wxEVENT_PROPAGATE_MAX );
+    CHECK( (int)wxEVENT_PROPAGATE_MAX == GetPropagationLevel(ce) );
 
     wxCommandEvent ce2(ce);
-    CPPUNIT_ASSERT_EQUAL( GetPropagationLevel(ce2), (int)wxEVENT_PROPAGATE_MAX );
+    CHECK( (int)wxEVENT_PROPAGATE_MAX == GetPropagationLevel(ce2) );
 
     wxCommandEvent ce3;
     ce3.ResumePropagation(17);
-    CPPUNIT_ASSERT_EQUAL( GetPropagationLevel(ce3), 17 );
+    CHECK( 17 == GetPropagationLevel(ce3) );
 
     wxCommandEvent ce4(ce3);
-    CPPUNIT_ASSERT_EQUAL( GetPropagationLevel(ce4), 17 );
+    CHECK( 17 == GetPropagationLevel(ce4) );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

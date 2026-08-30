@@ -11,6 +11,8 @@
 #define _WX_MSW_PRIVATE_WRL_H_
 
 #include <atomic>
+#include <type_traits>
+#include <utility>
 
 template <typename baseT, typename ...argTs>
 class CInvokable : public baseT
@@ -92,7 +94,13 @@ wxCOMPtr<baseT> Callback_impl(lambdaT&& lambda, HRESULT(LT::*)(argTs...) const)
 template <typename baseT, typename lambdaT>
 wxCOMPtr<baseT> Callback(lambdaT&& lambda)
 {
-    return Callback_impl<baseT>(std::move(lambda), &lambdaT::operator());
+    // Note that lambdaT is deduced as a reference type if an lvalue is passed
+    // to this function and we can't use it with "::" in this case, so we need
+    // to explicitly remove the reference from it here.
+    using functorT = typename std::remove_reference<lambdaT>::type;
+
+    return Callback_impl<baseT>(std::forward<lambdaT>(lambda),
+                                &functorT::operator());
 }
 
 template <typename baseT, typename contextT, typename ...argTs>

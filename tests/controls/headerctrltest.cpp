@@ -31,6 +31,8 @@
 #include <utility>
 #include <vector>
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -70,117 +72,63 @@ private:
     std::function<int(unsigned int)> m_bestWidthHook;
 };
 
-class HeaderCtrlTestCase : public CppUnit::TestCase
+class HeaderCtrlTestCase
 {
 public:
-    HeaderCtrlTestCase() { }
+    HeaderCtrlTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( HeaderCtrlTestCase );
-        CPPUNIT_TEST( AddDelete );
-        CPPUNIT_TEST( BestSize );
-        CPPUNIT_TEST( Reorder );
-        CPPUNIT_TEST( OrderMutationPrimitive );
-        CPPUNIT_TEST( ReorderMutation );
-        CPPUNIT_TEST( SortedInsertion );
-        CPPUNIT_TEST( AllHiddenOrder );
-        CPPUNIT_TEST( ReentrantBestWidthReplacement );
-#ifdef wxHAS_GENERIC_HEADERCTRL
-        CPPUNIT_TEST( GenericGeometry );
-        CPPUNIT_TEST( GenericReentrantMutation );
-        CPPUNIT_TEST( GenericActiveGestureMutation );
-        CPPUNIT_TEST( GenericSortMutationDuringCancellation );
-#endif // wxHAS_GENERIC_HEADERCTRL
-#if defined(__WXMSW__) && !defined(__WXWINUI__)
-        CPPUNIT_TEST( NativeActiveGestureMutation );
-        CPPUNIT_TEST( NativeReleaseCaptureClassification );
-#endif
-    CPPUNIT_TEST_SUITE_END();
-
-    void AddDelete();
-    void BestSize();
-    void Reorder();
-    void OrderMutationPrimitive();
-    void ReorderMutation();
-    void SortedInsertion();
-    void AllHiddenOrder();
-    void ReentrantBestWidthReplacement();
-#ifdef wxHAS_GENERIC_HEADERCTRL
-    void GenericGeometry();
-    void GenericReentrantMutation();
-    void GenericActiveGestureMutation();
-    void GenericSortMutationDuringCancellation();
-#endif // wxHAS_GENERIC_HEADERCTRL
-#if defined(__WXMSW__) && !defined(__WXWINUI__)
-    void NativeActiveGestureMutation();
-    void NativeReleaseCaptureClassification();
-#endif
-
-    TestHeaderCtrl *m_header;
+protected:
+    std::unique_ptr<TestHeaderCtrl> m_header;
 
     wxDECLARE_NO_COPY_CLASS(HeaderCtrlTestCase);
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( HeaderCtrlTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( HeaderCtrlTestCase, "HeaderCtrlTestCase" );
 
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
 
-void HeaderCtrlTestCase::setUp()
+HeaderCtrlTestCase::HeaderCtrlTestCase()
 {
-    m_header = new TestHeaderCtrl(wxTheApp->GetTopWindow());
+    m_header = make_unique<TestHeaderCtrl>(wxTheApp->GetTopWindow());
 }
 
-void HeaderCtrlTestCase::tearDown()
-{
-    delete m_header;
-    m_header = nullptr;
-}
 
 // ----------------------------------------------------------------------------
 // the tests themselves
 // ----------------------------------------------------------------------------
 
-void HeaderCtrlTestCase::AddDelete()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::AddDelete", "[headerctrl]")
 {
-    CPPUNIT_ASSERT_EQUAL( 0, m_header->GetColumnCount() );
+    CHECK( m_header->GetColumnCount() == 0 );
 
     m_header->AppendColumn(wxHeaderColumnSimple("Column 1"));
-    CPPUNIT_ASSERT_EQUAL( 1, m_header->GetColumnCount() );
+    CHECK( m_header->GetColumnCount() == 1 );
 
     m_header->AppendColumn(wxHeaderColumnSimple("Column 2"));
-    CPPUNIT_ASSERT_EQUAL( 2, m_header->GetColumnCount() );
+    CHECK( m_header->GetColumnCount() == 2 );
 
     m_header->InsertColumn(wxHeaderColumnSimple("Column 0"), 0);
-    CPPUNIT_ASSERT_EQUAL( 3, m_header->GetColumnCount() );
+    CHECK( m_header->GetColumnCount() == 3 );
 
     m_header->DeleteColumn(2);
-    CPPUNIT_ASSERT_EQUAL( 2, m_header->GetColumnCount() );
+    CHECK( m_header->GetColumnCount() == 2 );
 }
 
-void HeaderCtrlTestCase::BestSize()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::BestSize", "[headerctrl]")
 {
     const wxSize sizeEmpty = m_header->GetBestSize();
     // this fails under wxGTK where wxControl::GetBestSize() is 0 in horizontal
     // direction
-    //CPPUNIT_ASSERT( sizeEmpty.x > 0 );
-    CPPUNIT_ASSERT( sizeEmpty.y > 0 );
+    //CHECK( sizeEmpty.x > 0 );
+    CHECK( sizeEmpty.y > 0 );
 
     m_header->AppendColumn(wxHeaderColumnSimple("Foo"));
     m_header->AppendColumn(wxHeaderColumnSimple("Bar"));
     const wxSize size = m_header->GetBestSize();
-    CPPUNIT_ASSERT_EQUAL( sizeEmpty.y, size.y );
+    CHECK( size.y == sizeEmpty.y );
 }
 
-void HeaderCtrlTestCase::Reorder()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::Reorder", "[headerctrl]")
 {
     static const int COL_COUNT = 4;
 
@@ -191,36 +139,36 @@ void HeaderCtrlTestCase::Reorder()
 
     wxArrayInt order = m_header->GetColumnsOrder(); // initial order: [0 1 2 3]
     for ( n = 0; n < COL_COUNT; n++ )
-        CPPUNIT_ASSERT_EQUAL( n, order[n] );
+        CHECK( order[n] == n );
 
     wxHeaderCtrl::MoveColumnInOrderArray(order, 0, 2);
     m_header->SetColumnsOrder(order);   // change order to [1 2 0 3]
 
     order = m_header->GetColumnsOrder();
-    CPPUNIT_ASSERT_EQUAL( 1, order[0] );
-    CPPUNIT_ASSERT_EQUAL( 2, order[1] );
-    CPPUNIT_ASSERT_EQUAL( 0, order[2] );
-    CPPUNIT_ASSERT_EQUAL( 3, order[3] );
+    CHECK( order[0] == 1 );
+    CHECK( order[1] == 2 );
+    CHECK( order[2] == 0 );
+    CHECK( order[3] == 3 );
 
     order[2] = 3;
     order[3] = 0;
     m_header->SetColumnsOrder(order);   // and now [1 2 3 0]
     order = m_header->GetColumnsOrder();
-    CPPUNIT_ASSERT_EQUAL( 1, order[0] );
-    CPPUNIT_ASSERT_EQUAL( 2, order[1] );
-    CPPUNIT_ASSERT_EQUAL( 3, order[2] );
-    CPPUNIT_ASSERT_EQUAL( 0, order[3] );
+    CHECK( order[0] == 1 );
+    CHECK( order[1] == 2 );
+    CHECK( order[2] == 3 );
+    CHECK( order[3] == 0 );
 
     wxHeaderCtrl::MoveColumnInOrderArray(order, 1, 3);
     m_header->SetColumnsOrder(order);    // finally [2 3 0 1]
     order = m_header->GetColumnsOrder();
-    CPPUNIT_ASSERT_EQUAL( 2, order[0] );
-    CPPUNIT_ASSERT_EQUAL( 3, order[1] );
-    CPPUNIT_ASSERT_EQUAL( 0, order[2] );
-    CPPUNIT_ASSERT_EQUAL( 1, order[3] );
+    CHECK( order[0] == 2 );
+    CHECK( order[1] == 3 );
+    CHECK( order[2] == 0 );
+    CHECK( order[3] == 1 );
 }
 
-void HeaderCtrlTestCase::ReentrantBestWidthReplacement()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::ReentrantBestWidthReplacement", "[headerctrl]")
 {
     m_header->AppendColumn(wxHeaderColumnSimple("Original", 80));
     m_header->SetBestWidthHook(
@@ -232,18 +180,16 @@ void HeaderCtrlTestCase::ReentrantBestWidthReplacement()
         });
 
     wxHeaderCtrlEvent event(wxEVT_HEADER_SEPARATOR_DCLICK, m_header->GetId());
-    event.SetEventObject(m_header);
+    event.SetEventObject(m_header.get());
     event.SetColumn(0);
     m_header->GetEventHandler()->ProcessEvent(event);
 
-    CPPUNIT_ASSERT_EQUAL( 1, m_header->GetColumnCount() );
-    CPPUNIT_ASSERT_EQUAL(
-        wxString("Replacement"),
-        m_header->GetTestColumn(0).GetTitle() );
-    CPPUNIT_ASSERT_EQUAL( 42, m_header->GetTestColumn(0).GetWidth() );
+    REQUIRE( (m_header->GetColumnCount()) == (1) );
+    REQUIRE( (m_header->GetTestColumn(0).GetTitle()) == (wxString("Replacement")) );
+    REQUIRE( (m_header->GetTestColumn(0).GetWidth()) == (42) );
 }
 
-void HeaderCtrlTestCase::OrderMutationPrimitive()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::OrderMutationPrimitive", "[headerctrl]")
 {
     wxArrayInt order;
     std::vector<unsigned int> oracle;
@@ -266,7 +212,7 @@ void HeaderCtrlTestCase::OrderMutationPrimitive()
             const unsigned int inserted =
                 1 + nextRandom() % wxMin(3u, 64u - count);
 
-            CPPUNIT_ASSERT(
+            REQUIRE(
                 wxPrivate::ColumnOrderMutation::Insert(
                     order, count, firstId, inserted, displayPos));
 
@@ -289,7 +235,7 @@ void HeaderCtrlTestCase::OrderMutationPrimitive()
             const unsigned int erased =
                 1 + nextRandom() % wxMin(3u, count - firstId);
 
-            CPPUNIT_ASSERT(
+            REQUIRE(
                 wxPrivate::ColumnOrderMutation::Erase(
                     order, count, firstId, erased));
 
@@ -308,26 +254,24 @@ void HeaderCtrlTestCase::OrderMutationPrimitive()
             const unsigned int id = nextRandom() % count;
             const unsigned int displayPos = nextRandom() % count;
 
-            CPPUNIT_ASSERT(
+            REQUIRE(
                 wxPrivate::ColumnOrderMutation::Move(
                     order, count, id, displayPos));
 
             const auto oldPos =
                 std::find(oracle.begin(), oracle.end(), id);
-            CPPUNIT_ASSERT(oldPos != oracle.end());
+            REQUIRE(oldPos != oracle.end());
             oracle.erase(oldPos);
             oracle.insert(oracle.begin() + displayPos, id);
         }
 
-        CPPUNIT_ASSERT(
+        REQUIRE(
             wxPrivate::ColumnOrderMutation::IsValid(order, count));
-        CPPUNIT_ASSERT_EQUAL(
-            static_cast<size_t>(count), order.size());
-        CPPUNIT_ASSERT_EQUAL(oracle.size(), order.size());
+        REQUIRE( (order.size()) == (static_cast<size_t>(count)) );
+        REQUIRE( (order.size()) == (oracle.size()) );
         for ( size_t pos = 0; pos < oracle.size(); ++pos )
         {
-            CPPUNIT_ASSERT_EQUAL(
-                oracle[pos], static_cast<unsigned int>(order[pos]));
+            REQUIRE( (static_cast<unsigned int>(order[pos])) == (oracle[pos]) );
         }
     }
 
@@ -335,29 +279,29 @@ void HeaderCtrlTestCase::OrderMutationPrimitive()
     invalid.push_back(0);
     invalid.push_back(0);
     const wxArrayInt unchanged = invalid;
-    CPPUNIT_ASSERT(
+    REQUIRE(
         !wxPrivate::ColumnOrderMutation::Insert(
             invalid, 2, 1, 1, 1));
-    CPPUNIT_ASSERT(invalid == unchanged);
-    CPPUNIT_ASSERT(
+    REQUIRE(invalid == unchanged);
+    REQUIRE(
         !wxPrivate::ColumnOrderMutation::Move(invalid, 2, 2, 0));
-    CPPUNIT_ASSERT(invalid == unchanged);
-    CPPUNIT_ASSERT(
+    REQUIRE(invalid == unchanged);
+    REQUIRE(
         !wxPrivate::ColumnOrderMutation::Erase(invalid, 2, 1, 2));
-    CPPUNIT_ASSERT(invalid == unchanged);
+    REQUIRE(invalid == unchanged);
 
     wxArrayInt natural;
-    CPPUNIT_ASSERT(
+    REQUIRE(
         !wxPrivate::ColumnOrderMutation::Insert(
             natural,
             static_cast<unsigned int>(std::numeric_limits<int>::max()),
             0,
             1,
             0));
-    CPPUNIT_ASSERT(natural.empty());
+    REQUIRE(natural.empty());
 }
 
-void HeaderCtrlTestCase::ReorderMutation()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::ReorderMutation", "[headerctrl]")
 {
     for ( int n = 0; n < 4; ++n )
     {
@@ -377,40 +321,39 @@ void HeaderCtrlTestCase::ReorderMutation()
 
     const wxArrayInt insertedOrder = m_header->GetColumnsOrder();
     const int expectedInserted[] = { 3, 1, 0, 4, 2 };
-    CPPUNIT_ASSERT_EQUAL(WXSIZEOF(expectedInserted), insertedOrder.size());
+    REQUIRE( (insertedOrder.size()) == (WXSIZEOF(expectedInserted)) );
     for ( size_t pos = 0; pos < WXSIZEOF(expectedInserted); ++pos )
     {
-        CPPUNIT_ASSERT_EQUAL(expectedInserted[pos], insertedOrder[pos]);
+        REQUIRE( (insertedOrder[pos]) == (expectedInserted[pos]) );
     }
-    CPPUNIT_ASSERT(!m_header->GetTestColumn(1).IsSortKey());
-    CPPUNIT_ASSERT(m_header->GetTestColumn(2).IsSortKey());
+    REQUIRE(!m_header->GetTestColumn(1).IsSortKey());
+    REQUIRE(m_header->GetTestColumn(2).IsSortKey());
 
     m_header->DeleteColumn(1);
 
     const wxArrayInt restoredOrder = m_header->GetColumnsOrder();
     const int expectedRestored[] = { 2, 0, 3, 1 };
-    CPPUNIT_ASSERT_EQUAL(WXSIZEOF(expectedRestored), restoredOrder.size());
+    REQUIRE( (restoredOrder.size()) == (WXSIZEOF(expectedRestored)) );
     for ( size_t pos = 0; pos < WXSIZEOF(expectedRestored); ++pos )
     {
-        CPPUNIT_ASSERT_EQUAL(expectedRestored[pos], restoredOrder[pos]);
+        REQUIRE( (restoredOrder[pos]) == (expectedRestored[pos]) );
     }
-    CPPUNIT_ASSERT(m_header->GetTestColumn(1).IsSortKey());
+    REQUIRE(m_header->GetTestColumn(1).IsSortKey());
 
 #ifdef wxHAS_GENERIC_HEADERCTRL
     const int expectedBestWidth = 20 + 21 + 22 + 23;
-    CPPUNIT_ASSERT_EQUAL(expectedBestWidth, m_header->GetBestSize().x);
+    REQUIRE( (m_header->GetBestSize().x) == (expectedBestWidth) );
 
     m_header->HideColumn(2);
-    CPPUNIT_ASSERT_EQUAL(
-        expectedBestWidth - 22, m_header->GetBestSize().x);
+    REQUIRE( (m_header->GetBestSize().x) == (expectedBestWidth - 22) );
 #endif // wxHAS_GENERIC_HEADERCTRL
 
     m_header->DeleteColumn(1);
     for ( unsigned int col = 0; col < m_header->GetColumnCount(); ++col )
-        CPPUNIT_ASSERT(!m_header->GetTestColumn(col).IsSortKey());
+        REQUIRE(!m_header->GetTestColumn(col).IsSortKey());
 }
 
-void HeaderCtrlTestCase::SortedInsertion()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::SortedInsertion", "[headerctrl]")
 {
     m_header->AppendColumn(wxHeaderColumnSimple("Old sort", 20));
     m_header->ShowSortIndicator(0);
@@ -419,17 +362,17 @@ void HeaderCtrlTestCase::SortedInsertion()
     sorted.SetSortOrder(false);
     m_header->InsertColumn(sorted, 0);
 
-    CPPUNIT_ASSERT(m_header->GetTestColumn(0).IsSortKey());
-    CPPUNIT_ASSERT(
+    REQUIRE(m_header->GetTestColumn(0).IsSortKey());
+    REQUIRE(
         !m_header->GetTestColumn(0).IsSortOrderAscending());
-    CPPUNIT_ASSERT(!m_header->GetTestColumn(1).IsSortKey());
+    REQUIRE(!m_header->GetTestColumn(1).IsSortKey());
 
     m_header->RemoveSortIndicator();
     for ( unsigned int col = 0; col < m_header->GetColumnCount(); ++col )
-        CPPUNIT_ASSERT(!m_header->GetTestColumn(col).IsSortKey());
+        REQUIRE(!m_header->GetTestColumn(col).IsSortKey());
 }
 
-void HeaderCtrlTestCase::AllHiddenOrder()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::AllHiddenOrder", "[headerctrl]")
 {
     m_header->AppendColumn(wxHeaderColumnSimple("First", 20));
     m_header->AppendColumn(wxHeaderColumnSimple("Second", 30));
@@ -441,21 +384,21 @@ void HeaderCtrlTestCase::AllHiddenOrder()
     order.push_back(0);
     m_header->SetColumnsOrder(order);
 
-    CPPUNIT_ASSERT(m_header->GetColumnsOrder() == order);
-    CPPUNIT_ASSERT(m_header->GetTestColumn(0).IsHidden());
-    CPPUNIT_ASSERT(m_header->GetTestColumn(1).IsHidden());
+    REQUIRE(m_header->GetColumnsOrder() == order);
+    REQUIRE(m_header->GetTestColumn(0).IsHidden());
+    REQUIRE(m_header->GetTestColumn(1).IsHidden());
 }
 
 #ifdef wxHAS_GENERIC_HEADERCTRL
 
-void HeaderCtrlTestCase::GenericGeometry()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::GenericGeometry", "[headerctrl]")
 {
     m_header->SetSize(0, 0, 240, 40);
     m_header->AppendColumn(wxHeaderColumnSimple("Default width"));
 
     const int widthTitle = m_header->GetTestColumnTitleWidth(0);
-    CPPUNIT_ASSERT(widthTitle > 0);
-    CPPUNIT_ASSERT_EQUAL(widthTitle, m_header->GetBestSize().x);
+    REQUIRE(widthTitle > 0);
+    REQUIRE( (m_header->GetBestSize().x) == (widthTitle) );
 
     int clicked = -1;
     m_header->Bind(
@@ -467,10 +410,10 @@ void HeaderCtrlTestCase::GenericGeometry()
 
     wxMouseEvent click(wxEVT_LEFT_UP);
     click.SetId(m_header->GetId());
-    click.SetEventObject(m_header);
+    click.SetEventObject(m_header.get());
     click.SetPosition(wxPoint(widthTitle / 2, 1));
     m_header->ProcessWindowEvent(click);
-    CPPUNIT_ASSERT_EQUAL(0, clicked);
+    REQUIRE( (clicked) == (0) );
 
     m_header->DeleteAllColumns();
     m_header->AppendColumn(
@@ -479,22 +422,21 @@ void HeaderCtrlTestCase::GenericGeometry()
     m_header->AppendColumn(
         wxHeaderColumnSimple(
             "Huge 2", std::numeric_limits<int>::max()));
-    CPPUNIT_ASSERT_EQUAL(
-        std::numeric_limits<int>::max(), m_header->GetBestSize().x);
+    REQUIRE( (m_header->GetBestSize().x) == (std::numeric_limits<int>::max()) );
 
     m_header->DeleteAllColumns();
     m_header->AppendColumn(wxHeaderColumnSimple("Resizable", 20));
-    CPPUNIT_ASSERT_EQUAL(20, m_header->GetBestSize().x);
+    REQUIRE( (m_header->GetBestSize().x) == (20) );
 
     wxHeaderCtrlEvent resizing(wxEVT_HEADER_RESIZING, m_header->GetId());
-    resizing.SetEventObject(m_header);
+    resizing.SetEventObject(m_header.get());
     resizing.SetColumn(0);
     resizing.SetWidth(47);
     m_header->ProcessWindowEvent(resizing);
-    CPPUNIT_ASSERT_EQUAL(47, m_header->GetBestSize().x);
+    REQUIRE( (m_header->GetBestSize().x) == (47) );
 }
 
-void HeaderCtrlTestCase::GenericReentrantMutation()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::GenericReentrantMutation", "[headerctrl]")
 {
     m_header->SetSize(0, 0, 240, 40);
     m_header->AppendColumn(wxHeaderColumnSimple("Original", 80));
@@ -511,24 +453,24 @@ void HeaderCtrlTestCase::GenericReentrantMutation()
 
     wxMouseEvent down(wxEVT_LEFT_DOWN);
     down.SetId(m_header->GetId());
-    down.SetEventObject(m_header);
+    down.SetEventObject(m_header.get());
     down.SetPosition(wxPoint(10, 1));
     m_header->ProcessWindowEvent(down);
 
-    CPPUNIT_ASSERT_EQUAL(1, beginEvents);
-    CPPUNIT_ASSERT_EQUAL(2, m_header->GetColumnCount());
-    CPPUNIT_ASSERT(!m_header->HasCapture());
+    REQUIRE( (beginEvents) == (1) );
+    REQUIRE( (m_header->GetColumnCount()) == (2) );
+    REQUIRE(!m_header->HasCapture());
 
     // A later pointer event must not resume the gesture with its old column.
     wxMouseEvent motion(wxEVT_MOTION);
     motion.SetId(m_header->GetId());
-    motion.SetEventObject(m_header);
+    motion.SetEventObject(m_header.get());
     motion.SetPosition(wxPoint(25, 1));
     m_header->ProcessWindowEvent(motion);
-    CPPUNIT_ASSERT(!m_header->HasCapture());
+    REQUIRE(!m_header->HasCapture());
 }
 
-void HeaderCtrlTestCase::GenericActiveGestureMutation()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::GenericActiveGestureMutation", "[headerctrl]")
 {
     m_header->SetSize(0, 0, 240, 40);
     m_header->AppendColumn(wxHeaderColumnSimple("Dragged", 80));
@@ -545,27 +487,27 @@ void HeaderCtrlTestCase::GenericActiveGestureMutation()
 
     wxMouseEvent down(wxEVT_LEFT_DOWN);
     down.SetId(m_header->GetId());
-    down.SetEventObject(m_header);
+    down.SetEventObject(m_header.get());
     down.SetPosition(wxPoint(10, 1));
     m_header->ProcessWindowEvent(down);
-    CPPUNIT_ASSERT(m_header->HasCapture());
+    REQUIRE(m_header->HasCapture());
 
     // Mutate between two pointer events, while native capture is active.
     m_header->DeleteColumn(0);
-    CPPUNIT_ASSERT_EQUAL(0, m_header->GetColumnCount());
-    CPPUNIT_ASSERT(!m_header->HasCapture());
-    CPPUNIT_ASSERT_EQUAL(1, cancellations);
-    CPPUNIT_ASSERT_EQUAL(0, cancelledColumn);
+    REQUIRE( (m_header->GetColumnCount()) == (0) );
+    REQUIRE(!m_header->HasCapture());
+    REQUIRE( (cancellations) == (1) );
+    REQUIRE( (cancelledColumn) == (0) );
 
     wxMouseEvent motion(wxEVT_MOTION);
     motion.SetId(m_header->GetId());
-    motion.SetEventObject(m_header);
+    motion.SetEventObject(m_header.get());
     motion.SetPosition(wxPoint(25, 1));
     m_header->ProcessWindowEvent(motion);
-    CPPUNIT_ASSERT_EQUAL(1, cancellations);
+    REQUIRE( (cancellations) == (1) );
 }
 
-void HeaderCtrlTestCase::GenericSortMutationDuringCancellation()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::GenericSortMutationDuringCancellation", "[headerctrl]")
 {
     m_header->SetSize(0, 0, 240, 40);
     m_header->AppendColumn(wxHeaderColumnSimple("First", 80));
@@ -583,34 +525,34 @@ void HeaderCtrlTestCase::GenericSortMutationDuringCancellation()
 
     wxMouseEvent down(wxEVT_LEFT_DOWN);
     down.SetId(m_header->GetId());
-    down.SetEventObject(m_header);
+    down.SetEventObject(m_header.get());
     down.SetPosition(wxPoint(90, 1));
     m_header->ProcessWindowEvent(down);
-    CPPUNIT_ASSERT(m_header->HasCapture());
+    REQUIRE(m_header->HasCapture());
 
     // Removing the previous sort indicator updates its native/generic item,
     // which cancels the gesture. The cancellation callback is allowed to
     // replace the entire topology; the outer sort request must then stop.
     m_header->ShowSortIndicator(1);
-    CPPUNIT_ASSERT_EQUAL(1, cancellations);
-    CPPUNIT_ASSERT_EQUAL(0, m_header->GetColumnCount());
-    CPPUNIT_ASSERT(!m_header->HasCapture());
+    REQUIRE( (cancellations) == (1) );
+    REQUIRE( (m_header->GetColumnCount()) == (0) );
+    REQUIRE(!m_header->HasCapture());
 }
 
 #endif // wxHAS_GENERIC_HEADERCTRL
 
 #if defined(__WXMSW__) && !defined(__WXWINUI__)
 
-void HeaderCtrlTestCase::NativeActiveGestureMutation()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::NativeActiveGestureMutation", "[headerctrl]")
 {
     m_header->AppendColumn(wxHeaderColumnSimple("Native", 80));
 
     wxWindowList::compatibility_iterator childNode =
         m_header->GetChildren().GetFirst();
-    CPPUNIT_ASSERT(childNode);
+    REQUIRE(childNode);
     wxWindow* const native = childNode->GetData();
     const HWND hwndNative = GetHwndOf(native);
-    CPPUNIT_ASSERT(hwndNative);
+    REQUIRE(hwndNative);
 
     int beginEvents = 0;
     int cancellations = 0;
@@ -652,13 +594,13 @@ void HeaderCtrlTestCase::NativeActiveGestureMutation()
         };
 
     sendBeginDrag();
-    CPPUNIT_ASSERT_EQUAL(1, beginEvents);
+    REQUIRE( (beginEvents) == (1) );
 
     // Mutating between native notifications must cancel the remembered
     // gesture before rebuilding the common control's item array.
     m_header->DeleteColumn(0);
-    CPPUNIT_ASSERT_EQUAL(1, cancellations);
-    CPPUNIT_ASSERT_EQUAL(0, m_header->GetColumnCount());
+    REQUIRE( (cancellations) == (1) );
+    REQUIRE( (m_header->GetColumnCount()) == (0) );
 
     m_header->AppendColumn(wxHeaderColumnSimple("Native again", 80));
     mutateInBegin = true;
@@ -666,21 +608,21 @@ void HeaderCtrlTestCase::NativeActiveGestureMutation()
 
     // This second cycle mutates synchronously from the wx begin callback and
     // exercises the native revision/lifetime gate on return from ProcessEvent.
-    CPPUNIT_ASSERT_EQUAL(2, beginEvents);
-    CPPUNIT_ASSERT_EQUAL(2, cancellations);
-    CPPUNIT_ASSERT_EQUAL(2, m_header->GetColumnCount());
+    REQUIRE( (beginEvents) == (2) );
+    REQUIRE( (cancellations) == (2) );
+    REQUIRE( (m_header->GetColumnCount()) == (2) );
 }
 
-void HeaderCtrlTestCase::NativeReleaseCaptureClassification()
+TEST_CASE_METHOD(HeaderCtrlTestCase, "HeaderCtrl::NativeReleaseCaptureClassification", "[headerctrl]")
 {
     m_header->AppendColumn(wxHeaderColumnSimple("Native", 80));
 
     wxWindowList::compatibility_iterator childNode =
         m_header->GetChildren().GetFirst();
-    CPPUNIT_ASSERT(childNode);
+    REQUIRE(childNode);
     wxWindow* const native = childNode->GetData();
     const HWND hwndNative = GetHwndOf(native);
-    CPPUNIT_ASSERT(hwndNative);
+    REQUIRE(hwndNative);
 
     int beginEvents = 0;
     int endEvents = 0;
@@ -727,20 +669,19 @@ void HeaderCtrlTestCase::NativeReleaseCaptureClassification()
     notify(HDN_ENDTRACK, &item);
     notify(NM_RELEASEDCAPTURE, nullptr);
 
-    CPPUNIT_ASSERT_EQUAL(1, beginEvents);
-    CPPUNIT_ASSERT_EQUAL(1, endEvents);
-    CPPUNIT_ASSERT_EQUAL(0, cancellations);
+    REQUIRE( (beginEvents) == (1) );
+    REQUIRE( (endEvents) == (1) );
+    REQUIRE( (cancellations) == (0) );
 
     // Releasing capture without a matching end notification is a real
     // cancellation and must retain the tracked logical column identity.
     notify(HDN_BEGINTRACK, &item);
     notify(NM_RELEASEDCAPTURE, nullptr);
 
-    CPPUNIT_ASSERT_EQUAL(2, beginEvents);
-    CPPUNIT_ASSERT_EQUAL(1, endEvents);
-    CPPUNIT_ASSERT_EQUAL(1, cancellations);
-    CPPUNIT_ASSERT_EQUAL(0, cancelledColumn);
+    REQUIRE( (beginEvents) == (2) );
+    REQUIRE( (endEvents) == (1) );
+    REQUIRE( (cancellations) == (1) );
+    REQUIRE( (cancelledColumn) == (0) );
 }
 
 #endif // native wxMSW
-

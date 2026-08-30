@@ -83,6 +83,7 @@ public:
         ID_CHANGE_TEXT2,
         ID_UI_CHANGE_TEXT_UPDATED,
         ID_REMOVE_PAGE,
+        ID_REMOVE_PANEL,
         ID_HIDE_PAGES,
         ID_SHOW_PAGES,
         ID_PLUS_MINUS,
@@ -141,6 +142,7 @@ public:
     void OnPositionLeftBoth(wxCommandEvent& evt);
     void OnPositionLeftDropdown(wxRibbonToolBarEvent& evt);
     void OnRemovePage(wxRibbonButtonBarEvent& evt);
+    void OnRemovePanel(wxRibbonButtonBarEvent& evt);
     void OnHidePages(wxRibbonButtonBarEvent& evt);
     void OnShowPages(wxRibbonButtonBarEvent& evt);
     void OnPlusMinus(wxRibbonButtonBarEvent& evt);
@@ -256,6 +258,7 @@ EVT_MENU(ID_POSITION_TOP_BOTH, MyFrame::OnPositionTopBoth)
 EVT_TOGGLEBUTTON(ID_TOGGLE_PANELS, MyFrame::OnTogglePanels)
 EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED(wxID_ANY, MyFrame::OnExtButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_REMOVE_PAGE, MyFrame::OnRemovePage)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_REMOVE_PANEL, MyFrame::OnRemovePanel)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_HIDE_PAGES, MyFrame::OnHidePages)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SHOW_PAGES, MyFrame::OnShowPages)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_PLUS_MINUS, MyFrame::OnPlusMinus)
@@ -646,9 +649,11 @@ MyFrame::MyFrame()
 
         panel = new wxRibbonPanel(page, wxID_ANY, "Change text", ribbon_small);
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_CHANGE_TEXT1, "One", ribbon_large);
-        bar->AddButton(ID_CHANGE_TEXT2, "Two", ribbon_large);
-        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, "Zero", ribbon_large);
+        bar->AddButton(ID_CHANGE_TEXT1, "Set short text", ribbon_large);
+        bar->AddButton(ID_CHANGE_TEXT2, "Set long text", ribbon_large);
+        // This button is never clicked, its label is set from its
+        // wxEVT_UPDATE_UI handler by the two buttons above.
+        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, "Target", ribbon_large);
 
         //Also set the general disabled text colour:
         wxRibbonArtProvider* artProvider = m_ribbon->GetArtProvider();
@@ -663,6 +668,7 @@ MyFrame::MyFrame()
             ribbon_small);
         wxRibbonButtonBar *bar = new wxRibbonButtonBar(panel, wxID_ANY);
         bar->AddButton(ID_REMOVE_PAGE, "Remove", wxArtProvider::GetBitmap(wxART_DELETE, wxART_OTHER, wxSize(24, 24)));
+        bar->AddButton(ID_REMOVE_PANEL, "Remove Panel", wxArtProvider::GetBitmap(wxART_DELETE, wxART_OTHER, wxSize(24, 24)));
         bar->AddButton(ID_HIDE_PAGES, "Hide Pages", ribbon_large);
         bar->AddButton(ID_SHOW_PAGES, "Show Pages", ribbon_large);
 
@@ -911,12 +917,12 @@ void MyFrame::ResetGalleryArtProviders()
 
 void MyFrame::OnChangeText1(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    m_new_text = "One";
+    m_new_text = "Short";
 }
 
 void MyFrame::OnChangeText2(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    m_new_text = "Two";
+    m_new_text = "A much longer label";
 }
 
 void MyFrame::OnEnable(wxRibbonButtonBarEvent& WXUNUSED(evt))
@@ -1333,6 +1339,33 @@ void MyFrame::OnRemovePage(wxRibbonButtonBarEvent& WXUNUSED(evt))
         m_ribbon->DeletePage(n-1);
         m_ribbon->Realize();
     }
+}
+
+void MyFrame::OnRemovePanel(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    // Delete a panel of the current page and then make the page too narrow for
+    // the remaining ones, so that they have to be collapsed.
+    wxRibbonPage* page = m_ribbon->GetPage(m_ribbon->GetActivePage());
+    if(page == nullptr || page->GetPanelCount() < 2)
+    {
+        AddText("No panel to remove on the current page");
+        return;
+    }
+
+    page->Realize();
+
+    // Any panel other than the one containing this button will do.
+    wxRibbonPanel* panel = page->GetPanel(1);
+    AddText("Deleting panel \"" + panel->GetLabel() + "\"");
+    panel->Destroy();
+
+    const wxPoint pos = page->GetPosition();
+    const wxSize size = page->GetSize();
+    page->SetSizeWithScrollButtonAdjustment(pos.x, pos.y, size.x / 8, size.y);
+
+    // Not reached if the stale entry was used above.
+    m_ribbon->Realize();
+    GetSizer()->Layout();
 }
 
 void MyFrame::OnHidePages(wxRibbonButtonBarEvent& WXUNUSED(evt))

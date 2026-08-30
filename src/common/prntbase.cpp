@@ -68,6 +68,24 @@
 // at least use it here instead of hardcoding the number.
 static const int DEFAULT_MAX_PAGES = 32000;
 
+namespace
+{
+
+wxPreviewControlBar *GetPreviewControlBar(wxPrintPreviewBase *preview,
+                                          wxWindow *parent)
+{
+    wxPreviewFrame *frame = nullptr;
+    if ( preview )
+        frame = wxDynamicCast(preview->GetFrame(), wxPreviewFrame);
+
+    if ( !frame )
+        frame = wxDynamicCast(parent, wxPreviewFrame);
+
+    return frame ? frame->GetControlBar() : nullptr;
+}
+
+} // anonymous namespace
+
 //----------------------------------------------------------------------------
 // wxPrintFactory
 //----------------------------------------------------------------------------
@@ -1034,7 +1052,14 @@ void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxPreviewCanvas::OnChar(wxKeyEvent &event)
 {
-    wxPreviewControlBar* controlBar = ((wxPreviewFrame*) GetParent())->GetControlBar();
+    wxPreviewControlBar * const
+        controlBar = GetPreviewControlBar(m_printPreview, GetParent());
+    if ( !controlBar )
+    {
+        event.Skip();
+        return;
+    }
+
     switch (event.GetKeyCode())
     {
         case WXK_RETURN:
@@ -1077,10 +1102,10 @@ void wxPreviewCanvas::OnChar(wxKeyEvent &event)
 
 void wxPreviewCanvas::OnMouseWheel(wxMouseEvent& event)
 {
-    wxPreviewControlBar *
-        controlBar = wxStaticCast(GetParent(), wxPreviewFrame)->GetControlBar();
+    wxPreviewControlBar * const
+        controlBar = GetPreviewControlBar(m_printPreview, GetParent());
 
-    if ( controlBar )
+    if ( controlBar && m_printPreview )
     {
         if ( event.ControlDown() && event.GetWheelRotation() != 0 )
         {

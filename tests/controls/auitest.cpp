@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/frame.h"
 #endif // WX_PRECOMP
 
 #include "wx/panel.h"
@@ -24,6 +25,7 @@
 
 #include "wx/aui/auibar.h"
 #include "wx/aui/auibook.h"
+#include "wx/aui/framemanager.h"
 #include "wx/aui/serializer.h"
 #include "wx/weakref.h"
 
@@ -230,6 +232,10 @@ struct FontCallbackTabArtState
     std::function<void()> callback;
     wxFont getNormalResult;
     wxFont getSelectedResult;
+    // A default-constructed wxFont is valid on some ports (notably Qt), so
+    // font validity cannot indicate whether a query override was requested.
+    bool overrideNormalResult = false;
+    bool overrideSelectedResult = false;
     int heightDelta = 0;
     bool armed = false;
     unsigned int callbackCalls = 0;
@@ -281,7 +287,7 @@ public:
         const wxFont result =
             state->armed &&
                     state->boundary == FontCallbackBoundary::GetNormal &&
-                    state->getNormalResult.IsOk()
+                    state->overrideNormalResult
                 ? state->getNormalResult
                 : wxAuiDefaultTabArt::GetNormalFont();
         InvokeCallback(state, FontCallbackBoundary::GetNormal);
@@ -290,7 +296,7 @@ public:
 
     wxFont GetSelectedFont() const override
     {
-        return m_state->getSelectedResult.IsOk()
+        return m_state->overrideSelectedResult
             ? m_state->getSelectedResult
             : wxAuiDefaultTabArt::GetSelectedFont();
     }
@@ -963,22 +969,85 @@ public:
     {
     }
 
-    ~AuiNotebookTestCase()
+
+protected:
+    const std::unique_ptr<wxAuiNotebook> nb;
+};
+
+class AuiManagerTestCase
+{
+public:
+    AuiManagerTestCase()
+        : frame(new wxFrame(nullptr, wxID_ANY, "wxAuiManager test"))
+        , manager(frame.get())
     {
-        delete nb;
+        frame->SetClientSize(800, 600);
+    }
+
+    ~AuiManagerTestCase()
+    {
+        manager.UnInit();
     }
 
 protected:
-    wxAuiNotebook* const nb;
+    std::unique_ptr<wxFrame> frame;
+    wxAuiManager manager;
+};
+
+class TestAuiNotebook : public wxAuiNotebook
+{
+public:
+    TestAuiNotebook()
+        : wxAuiNotebook(wxTheApp->GetTopWindow())
+    {
+    }
+
+    using wxAuiNotebook::OnTabMiddleDown;
+    using wxAuiNotebook::OnTabMiddleUp;
+    using wxAuiNotebook::OnTabRightDown;
+    using wxAuiNotebook::OnTabRightUp;
 };
 
 // ----------------------------------------------------------------------------
 // the tests themselves
 // ----------------------------------------------------------------------------
 
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::AddPaneBestSize", "[aui]")
+{
+    wxWindow* const pane = new wxPanel(frame.get());
+    wxWindow* const center = new wxPanel(frame.get());
+
+    wxAuiPaneInfo paneInfo;
+    paneInfo.BestSize(320, 200).Left().CaptionVisible(false).PaneBorder(false);
+
+    REQUIRE( manager.AddPane(pane, paneInfo) );
+    REQUIRE( manager.AddPane(center, wxAuiPaneInfo().CenterPane()) );
+
+    manager.Update();
+
+    CHECK( pane->GetSize().x == 320 );
+}
+
+TEST_CASE_METHOD(AuiManagerTestCase, "wxAuiManager::AddPaneDockSize", "[aui]")
+{
+    wxWindow* const pane = new wxPanel(frame.get());
+    wxWindow* const center = new wxPanel(frame.get());
+
+    wxAuiPaneInfo paneInfo;
+    paneInfo.BestSize(320, 200).Left().CaptionVisible(false).PaneBorder(false);
+    paneInfo.dock_size = 180;
+
+    REQUIRE( manager.AddPane(pane, paneInfo) );
+    REQUIRE( manager.AddPane(center, wxAuiPaneInfo().CenterPane()) );
+
+    manager.Update();
+
+    CHECK( pane->GetSize().x == 180 );
+}
+
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
 {
-    wxPanel *p = new wxPanel(nb);
+    wxPanel *p = new wxPanel(nb.get());
     p->SetMinSize(wxSize(100, 100));
     REQUIRE( nb->AddPage(p, "Center Pane") );
 
@@ -986,11 +1055,11 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
 
     SECTION( "Single pane with multiple tabs" )
     {
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(300, 100));
         nb->AddPage(p, "Center Tab 2");
 
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(100, 200));
         nb->AddPage(p, "Center Tab 3");
 
@@ -999,21 +1068,21 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
 
     SECTION( "Horizontal split" )
     {
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(25, 0));
         nb->AddPage(p, "Left Pane");
         nb->Split(nb->GetPageCount()-1, wxLEFT);
 
         CHECK( nb->GetBestSize() == wxSize(125, 100 + tabHeight) );
 
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(50, 0));
         nb->AddPage(p, "Right Pane 1");
         nb->Split(nb->GetPageCount()-1, wxRIGHT);
 
         CHECK( nb->GetBestSize() == wxSize(175, 100 + tabHeight) );
 
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(100, 0));
         nb->AddPage(p, "Right Pane 2");
         nb->Split(nb->GetPageCount()-1, wxRIGHT);
@@ -1023,19 +1092,19 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
 
     SECTION( "Vertical split" )
     {
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(0, 100));
         nb->AddPage(p, "Top Pane 1");
         nb->Split(nb->GetPageCount()-1, wxTOP);
 
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(0, 50));
         nb->AddPage(p, "Top Pane 2");
         nb->Split(nb->GetPageCount()-1, wxTOP);
 
         CHECK( nb->GetBestSize() == wxSize(100, 250 + 3*tabHeight) );
 
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(0, 25));
         nb->AddPage(p, "Bottom Pane");
         nb->Split(nb->GetPageCount()-1, wxBOTTOM);
@@ -1045,22 +1114,22 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
 
     SECTION( "Surrounding panes" )
     {
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(50, 25));
         nb->AddPage(p, "Bottom Pane");
         nb->Split(nb->GetPageCount()-1, wxBOTTOM);
 
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(50, 120));
         nb->AddPage(p, "Right Pane");
         nb->Split(nb->GetPageCount()-1, wxRIGHT);
 
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(225, 50));
         nb->AddPage(p, "Top Pane");
         nb->Split(nb->GetPageCount()-1, wxTOP);
 
-        p = new wxPanel(nb);
+        p = new wxPanel(nb.get());
         p->SetMinSize(wxSize(25, 105));
         nb->AddPage(p, "Left Pane");
         nb->Split(nb->GetPageCount()-1, wxLEFT);
@@ -1071,17 +1140,17 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::RTTI", "[aui][rtti]")
 {
-    wxBookCtrlBase* const book = nb;
-    CHECK( wxDynamicCast(book, wxAuiNotebook) == nb );
+    wxBookCtrlBase* const book = nb.get();
+    CHECK( wxDynamicCast(book, wxAuiNotebook) == nb.get() );
 
-    CHECK( wxDynamicCast(nb, wxBookCtrlBase) == book );
+    CHECK( wxDynamicCast(nb.get(), wxBookCtrlBase) == book );
 }
 
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::FindPage", "[aui]")
 {
-    wxPanel *p1 = new wxPanel(nb);
-    wxPanel *p2 = new wxPanel(nb);
-    wxPanel *p3 = new wxPanel(nb);
+    wxPanel *p1 = new wxPanel(nb.get());
+    wxPanel *p2 = new wxPanel(nb.get());
+    wxPanel *p3 = new wxPanel(nb.get());
     REQUIRE( nb->AddPage(p1, "Page 1") );
     REQUIRE( nb->AddPage(p2, "Page 2") );
 
@@ -1095,11 +1164,11 @@ TEST_CASE_METHOD(AuiNotebookTestCase,
                  "wxAuiNotebook uses the polymorphic book model",
                  "[aui][bookctrl][lifetime][transaction]")
 {
-    wxBookCtrlBase* const book = nb;
+    wxBookCtrlBase* const book = nb.get();
 
-    wxPanel* const first = new wxPanel(nb);
-    wxPanel* const second = new wxPanel(nb);
-    wxPanel* const third = new wxPanel(nb);
+    wxPanel* const first = new wxPanel(nb.get());
+    wxPanel* const second = new wxPanel(nb.get());
+    wxPanel* const third = new wxPanel(nb.get());
     REQUIRE(book->wxBookCtrlBase::AddPage(first, "first", true));
     REQUIRE(book->wxBookCtrlBase::AddPage(second, "second"));
     REQUIRE(book->wxBookCtrlBase::AddPage(third, "third"));
@@ -3114,6 +3183,8 @@ TEST_CASE("wxAuiNotebook art font query preserves a nested font writer",
     state->boundary = FontCallbackBoundary::GetNormal;
     state->getNormalResult = staleFont;
     state->getSelectedResult = selectedFont;
+    state->overrideNormalResult = true;
+    state->overrideSelectedResult = true;
     state->callback = [book, latestFont]
     {
         book->SetNormalFont(latestFont);
@@ -3370,11 +3441,112 @@ TEST_CASE("wxAuiNotebook layout stops when orphan callback destroys the book",
         delete book;
 }
 
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::RemoveLastPageEvent", "[aui]")
+{
+    wxPanel *p = new wxPanel(nb.get());
+    REQUIRE( nb->AddPage(p, "Page 1") );
+    CHECK( nb->GetSelection() == 0 );
+
+    int numChanged = 0;
+    int oldSelection = wxNOT_FOUND;
+    int selection = wxNOT_FOUND;
+
+    nb->Bind(wxEVT_AUINOTEBOOK_PAGE_CHANGED,
+             [&](wxAuiNotebookEvent& event)
+             {
+                 numChanged++;
+                 oldSelection = event.GetOldSelection();
+                 selection = event.GetSelection();
+             });
+
+    SECTION( "DeletePage" )
+    {
+        REQUIRE( nb->DeletePage(0) );
+    }
+
+    SECTION( "RemovePage" )
+    {
+        REQUIRE( nb->RemovePage(0) );
+    }
+
+    CHECK( nb->GetSelection() == wxNOT_FOUND );
+    CHECK( numChanged == 1 );
+    CHECK( oldSelection == 0 );
+    CHECK( selection == wxNOT_FOUND );
+}
+
+TEST_CASE("wxAuiNotebook::SplitTabEventSelections", "[aui]")
+{
+    TestAuiNotebook nb;
+    wxPanel *p1 = new wxPanel(&nb);
+    wxPanel *p2 = new wxPanel(&nb);
+    REQUIRE( nb.AddPage(p1, "Page 1") );
+    REQUIRE( nb.AddPage(p2, "Page 2") );
+
+    nb.Split(1, wxRIGHT);
+
+    wxAuiTabCtrl *tabCtrl = nullptr;
+    int tabIdx = wxNOT_FOUND;
+    REQUIRE( nb.FindTab(p2, &tabCtrl, &tabIdx) );
+    REQUIRE( tabCtrl );
+    CHECK( tabIdx == 0 );
+
+    std::vector<int> selections;
+
+    SECTION( "Middle down" )
+    {
+        nb.Bind(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN,
+                [&](wxAuiNotebookEvent& event)
+                {
+                    selections.push_back(event.GetSelection());
+                });
+
+        nb.OnTabMiddleDown(tabCtrl, tabIdx);
+    }
+
+    SECTION( "Middle up" )
+    {
+        nb.Bind(wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP,
+                [&](wxAuiNotebookEvent& event)
+                {
+                    selections.push_back(event.GetSelection());
+                });
+
+        nb.OnTabMiddleUp(tabCtrl, tabIdx);
+    }
+
+    SECTION( "Right down" )
+    {
+        nb.Bind(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN,
+                [&](wxAuiNotebookEvent& event)
+                {
+                    selections.push_back(event.GetSelection());
+                });
+
+        nb.OnTabRightDown(tabCtrl, tabIdx);
+    }
+
+    SECTION( "Right up" )
+    {
+        nb.Bind(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP,
+                [&](wxAuiNotebookEvent& event)
+                {
+                    selections.push_back(event.GetSelection());
+                });
+
+        nb.OnTabRightUp(tabCtrl, tabIdx);
+    }
+
+    REQUIRE( selections.size() == 1 );
+    CHECK( selections[0] == 1 );
+}
+
 TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::Layout", "[aui]")
 {
     const auto addPage = [this](int n)
     {
-        return nb->AddPage(new wxPanel(nb), wxString::Format("Page %d", n + 1));
+        return nb->AddPage(new wxPanel(nb.get()),
+                           wxString::Format("Page %d", n + 1));
     };
 
     for ( int n = 0; n < 5; n++ )

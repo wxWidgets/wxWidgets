@@ -130,8 +130,7 @@ TEST_CASE_METHOD(LogTestCase, "wxLog::Trace", "[log]")
 
     wxLog::AddTraceMask(TEST_MASK);
     TraceTest("Shown");
-    CPPUNIT_ASSERT_EQUAL( wxString::Format("(%s) Shown", TEST_MASK),
-                          m_log->GetLog(wxLOG_Trace) );
+    CHECK( m_log->GetLog(wxLOG_Trace) == wxString::Format("(%s) Shown", TEST_MASK) );
 
     wxLog::RemoveTraceMask(TEST_MASK);
     m_log->Clear();

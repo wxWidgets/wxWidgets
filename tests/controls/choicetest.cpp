@@ -18,52 +18,39 @@
 
 #include "itemcontainertest.h"
 
-class ChoiceTestCase : public ItemContainerTestCase, public CppUnit::TestCase
+#include <memory>
+
+class ChoiceTestCase : public ItemContainerTestCase
 {
 public:
-    ChoiceTestCase() { }
+    ChoiceTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+protected:
+    virtual wxItemContainer *GetContainer() const override
+    { return m_choice.get(); }
+    virtual wxWindow *GetContainerWindow() const override
+    { return m_choice.get(); }
 
-private:
-    virtual wxItemContainer *GetContainer() const override { return m_choice; }
-    virtual wxWindow *GetContainerWindow() const override { return m_choice; }
-
-    CPPUNIT_TEST_SUITE( ChoiceTestCase );
-        wxITEM_CONTAINER_TESTS();
-        CPPUNIT_TEST( Sort );
-        CPPUNIT_TEST( GetBestSize );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Sort();
-    void GetBestSize();
-
-    wxChoice* m_choice;
+    std::unique_ptr<wxChoice> m_choice;
 
     wxDECLARE_NO_COPY_CLASS(ChoiceTestCase);
 };
 
-wxREGISTER_UNIT_TEST_WITH_TAGS(ChoiceTestCase,
-                               "[ChoiceTestCase][item-container]");
+wxITEM_CONTAINER_TESTS(ChoiceTestCase, "Choice",
+                       "[choice][item-container]");
 
-void ChoiceTestCase::setUp()
+ChoiceTestCase::ChoiceTestCase()
 {
-    m_choice = new wxChoice(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_choice = make_unique<wxChoice>(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
-void ChoiceTestCase::tearDown()
-{
-    wxDELETE(m_choice);
-}
 
-void ChoiceTestCase::Sort()
+TEST_CASE_METHOD(ChoiceTestCase, "Choice::Sort", "[choice]")
 {
 #if !defined(__WXOSX__)
-    wxDELETE(m_choice);
-    m_choice = new wxChoice(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
-                            wxCB_SORT);
+    m_choice = make_unique<wxChoice>(wxTheApp->GetTopWindow(), wxID_ANY,
+                                     wxDefaultPosition, wxDefaultSize, 0,
+                                     nullptr, wxCB_SORT);
 
     wxArrayString testitems;
     testitems.Add("aaa");
@@ -75,20 +62,20 @@ void ChoiceTestCase::Sort()
 
     m_choice->Append(testitems);
 
-    CPPUNIT_ASSERT_EQUAL("AAA", m_choice->GetString(0));
-    CPPUNIT_ASSERT_EQUAL("Aaa", m_choice->GetString(1));
-    CPPUNIT_ASSERT_EQUAL("aaa", m_choice->GetString(2));
-    CPPUNIT_ASSERT_EQUAL("aaab", m_choice->GetString(3));
-    CPPUNIT_ASSERT_EQUAL("aab", m_choice->GetString(4));
-    CPPUNIT_ASSERT_EQUAL("aba", m_choice->GetString(5));
+    CHECK(m_choice->GetString(0) == "AAA");
+    CHECK(m_choice->GetString(1) == "Aaa");
+    CHECK(m_choice->GetString(2) == "aaa");
+    CHECK(m_choice->GetString(3) == "aaab");
+    CHECK(m_choice->GetString(4) == "aab");
+    CHECK(m_choice->GetString(5) == "aba");
 
     m_choice->Append("a");
 
-    CPPUNIT_ASSERT_EQUAL("a", m_choice->GetString(0));
+    CHECK(m_choice->GetString(0) == "a");
 #endif
 }
 
-void ChoiceTestCase::GetBestSize()
+TEST_CASE_METHOD(ChoiceTestCase, "Choice::GetBestSize", "[choice]")
 {
     wxArrayString testitems;
     testitems.Add("1");

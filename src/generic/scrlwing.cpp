@@ -1651,10 +1651,10 @@ wxSize wxScrolledT_Helper::FilterBestSize(const wxWindow *win,
         wxSize minSize = win->GetMinSize();
 
         if ( ppuX > 0 )
-            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, win);
+            best.x = minSize.x + win->GetScrollbarSize(wxVERTICAL);
 
         if ( ppuY > 0 )
-            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, win);
+            best.y = minSize.y + win->GetScrollbarSize(wxHORIZONTAL);
     }
 
     return best;

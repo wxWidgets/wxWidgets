@@ -204,8 +204,8 @@ enum wxSystemMetric
     wxSYS_WINDOWMIN_Y,        //!< Minimum height of a window.
     wxSYS_SCREEN_X,           //!< Width of the screen in pixels.
     wxSYS_SCREEN_Y,           //!< Height of the screen in pixels.
-    wxSYS_FRAMESIZE_X,        //!< Width of the window frame for a wxTHICK_FRAME window.
-    wxSYS_FRAMESIZE_Y,        //!< Height of the window frame for a wxTHICK_FRAME window.
+    wxSYS_FRAMESIZE_X,        //!< Width of the window frame for a window with wxRESIZE_BORDER.
+    wxSYS_FRAMESIZE_Y,        //!< Height of the window frame for a window with wxRESIZE_BORDER.
     wxSYS_SMALLICON_X,        //!< Recommended width of a small icon (in window captions, and small icon view).
     wxSYS_SMALLICON_Y,        //!< Recommended height of a small icon (in window captions, and small icon view).
     wxSYS_HSCROLL_Y,          //!< Height of horizontal scrollbar in pixels.

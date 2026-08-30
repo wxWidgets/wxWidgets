@@ -21,61 +21,38 @@
 
 #include "testableframe.h"
 
-class DatePickerCtrlTestCase : public CppUnit::TestCase
+#include <memory>
+
+class DatePickerCtrlTestCase
 {
 public:
-    DatePickerCtrlTestCase() { }
+    DatePickerCtrlTestCase();
 
-    void setUp() override;
-    void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( DatePickerCtrlTestCase );
-        CPPUNIT_TEST( Value );
-        CPPUNIT_TEST( Range );
-        WXUISIM_TEST( Focus );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Value();
-    void Range();
-    void Focus();
-
-    wxDatePickerCtrl* m_datepicker;
-    wxButton* m_button;
+protected:
+    std::unique_ptr<wxDatePickerCtrl> m_datepicker;
+    std::unique_ptr<wxButton> m_button;
 
     wxDECLARE_NO_COPY_CLASS(DatePickerCtrlTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( DatePickerCtrlTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DatePickerCtrlTestCase, "DatePickerCtrlTestCase" );
-
-void DatePickerCtrlTestCase::setUp()
+DatePickerCtrlTestCase::DatePickerCtrlTestCase()
 {
-    m_datepicker = new wxDatePickerCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
-    m_button = nullptr;
+    m_datepicker = make_unique<wxDatePickerCtrl>(wxTheApp->GetTopWindow(),
+                                                 wxID_ANY);
 }
 
-void DatePickerCtrlTestCase::tearDown()
-{
-    delete m_button;
-    delete m_datepicker;
-}
-
-void DatePickerCtrlTestCase::Value()
+TEST_CASE_METHOD(DatePickerCtrlTestCase, "DatePickerCtrl::Value", "[datepicker]")
 {
     const wxDateTime dt(18, wxDateTime::Jul, 2011);
     m_datepicker->SetValue(dt);
 
-    CPPUNIT_ASSERT_EQUAL( dt, m_datepicker->GetValue() );
+    CHECK( m_datepicker->GetValue() == dt );
 
     // We don't use wxDP_ALLOWNONE currently, hence a value is required.
     WX_ASSERT_FAILS_WITH_ASSERT( m_datepicker->SetValue(wxDateTime()) );
 }
 
-void DatePickerCtrlTestCase::Range()
+TEST_CASE_METHOD(DatePickerCtrlTestCase, "DatePickerCtrl::Range", "[datepicker]")
 {
     // Initially we have no valid range but MSW version still has (built in)
     // minimum as it doesn't support dates before 1601-01-01, hence don't rely
@@ -86,7 +63,7 @@ void DatePickerCtrlTestCase::Range()
     // therefore we should omit this assertion for QT
 #ifndef __WXQT__
     m_datepicker->GetRange(&dtRangeStart, &dtRangeEnd);
-    CPPUNIT_ASSERT( !dtRangeEnd.IsValid() );
+    CHECK( !dtRangeEnd.IsValid() );
 #endif
 
     // After we set it we should be able to get it back.
@@ -95,32 +72,32 @@ void DatePickerCtrlTestCase::Range()
         dtEnd(18, wxDateTime::Jun, 2011);
 
     m_datepicker->SetRange(dtStart, dtEnd);
-    CPPUNIT_ASSERT( m_datepicker->GetRange(&dtRangeStart, &dtRangeEnd) );
-    CPPUNIT_ASSERT_EQUAL( dtStart, dtRangeStart );
-    CPPUNIT_ASSERT_EQUAL( dtEnd, dtRangeEnd );
+    CHECK( m_datepicker->GetRange(&dtRangeStart, &dtRangeEnd) );
+    CHECK( dtRangeStart == dtStart );
+    CHECK( dtRangeEnd == dtEnd );
 
     // Setting dates inside the range should work, including the range end
     // points.
     m_datepicker->SetValue(dtStart);
-    CPPUNIT_ASSERT_EQUAL( dtStart, m_datepicker->GetValue() );
+    CHECK( m_datepicker->GetValue() == dtStart );
 
     m_datepicker->SetValue(dtEnd);
-    CPPUNIT_ASSERT_EQUAL( dtEnd, m_datepicker->GetValue() );
+    CHECK( m_datepicker->GetValue() == dtEnd );
 
 
     // Setting dates outside the range should not work.
     m_datepicker->SetValue(dtEnd + wxTimeSpan::Day());
-    CPPUNIT_ASSERT_EQUAL( dtEnd, m_datepicker->GetValue() );
+    CHECK( m_datepicker->GetValue() == dtEnd );
 
     m_datepicker->SetValue(dtStart - wxTimeSpan::Day());
-    CPPUNIT_ASSERT_EQUAL( dtEnd, m_datepicker->GetValue() );
+    CHECK( m_datepicker->GetValue() == dtEnd );
 
 
     // Changing the range should clamp the current value to it if necessary.
     const wxDateTime
         dtBeforeEnd = dtEnd - wxDateSpan::Day();
     m_datepicker->SetRange(dtStart, dtBeforeEnd);
-    CPPUNIT_ASSERT_EQUAL( dtBeforeEnd, m_datepicker->GetValue() );
+    CHECK( m_datepicker->GetValue() == dtBeforeEnd );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
@@ -130,18 +107,21 @@ static wxPoint GetRectCenter(const wxRect& r)
     return (r.GetTopRight() + r.GetBottomLeft()) / 2;
 }
 
-void DatePickerCtrlTestCase::Focus()
+TEST_CASE_METHOD(DatePickerCtrlTestCase, "DatePickerCtrl::Focus", "[datepicker]")
 {
+    if ( !EnableUITests() )
+        return;
+
     // Create another control just to give focus to it initially.
-    m_button = new wxButton(wxTheApp->GetTopWindow(), wxID_OK);
+    m_button = make_unique<wxButton>(wxTheApp->GetTopWindow(), wxID_OK);
     m_button->Move(0, m_datepicker->GetSize().y * 3);
     m_button->SetFocus();
     wxYield();
 
     CHECK( !m_datepicker->HasFocus() );
 
-    EventCounter setFocus(m_datepicker, wxEVT_SET_FOCUS);
-    EventCounter killFocus(m_datepicker, wxEVT_KILL_FOCUS);
+    EventCounter setFocus(m_datepicker.get(), wxEVT_SET_FOCUS);
+    EventCounter killFocus(m_datepicker.get(), wxEVT_KILL_FOCUS);
 
     wxUIActionSimulator sim;
 

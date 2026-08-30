@@ -112,8 +112,6 @@ enum wxDialogLayoutAdaptationMode
     @style{wxMINIMIZE_BOX}
            Displays a minimize box on the dialog. This style implicitly enables
            wxCAPTION too.
-    @style{wxTHICK_FRAME}
-           Display a thick frame around the window.
     @style{wxSTAY_ON_TOP}
            The dialog stays on top of all other windows.
     @style{wxNO_3D}

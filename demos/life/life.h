@@ -36,7 +36,9 @@ public:
 
     // drawing
     void DrawChanged();
-    void DrawCell(wxInt32 i, wxInt32 j, bool alive);
+
+    // mark a cell as needing to be repainted from the Life object
+    void RefreshCell(wxInt32 i, wxInt32 j);
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -44,6 +46,9 @@ private:
 
     // draw a cell (parametrized by DC)
     void DrawCell(wxInt32 i, wxInt32 j, wxDC &dc);
+
+    // the area a cell occupies on screen
+    wxRect CellRect(wxInt32 i, wxInt32 j) const;
 
     // event handlers
     void OnPaint(wxPaintEvent& event);

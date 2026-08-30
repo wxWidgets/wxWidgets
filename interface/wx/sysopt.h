@@ -132,6 +132,10 @@
         Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on macOS but allows
         the selection of files from any of the supported types. Setting this to 1 shows a wxChoice
         for selection (if there is more than one supported filetype).
+    @flag{osx.openfiledialog.disable-extra-controls}
+        Setting this to 1 disables the extra controls (including the file type
+        filter) in wxFileDialog, restoring the behaviour of sandboxed
+        applications before wxWidgets 3.3.4. Since wxWidgets 3.3.4.
     @endFlagTable
 
 

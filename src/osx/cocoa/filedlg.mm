@@ -28,6 +28,7 @@
     #include "wx/sizer.h"
     #include "wx/stattext.h"
     #include "wx/choice.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/filename.h"
@@ -124,7 +125,21 @@ void wxFileDialog::Create(
 
 wxFileDialog::~wxFileDialog()
 {
-    if ( m_extraControl )
+    // The extra controls and the file-type filter panel are created as children
+    // of a hidden, in-process host window (see SetupExtraControls), so
+    // destroying the host tears down the whole accessory view hierarchy.
+    if ( m_accessoryHost )
+    {
+        m_accessoryHost->Destroy();
+        m_accessoryHost = nullptr;
+
+        // These were children of the host window and have been destroyed
+        // with it, don't leave dangling pointers to them.
+        m_extraControl = nullptr;
+        m_filterPanel = nullptr;
+        m_filterChoice = nullptr;
+    }
+    else if ( m_extraControl )
     {
         m_extraControl->Destroy();
         // if this is set, then m_filterPanel points to the same instance
@@ -281,6 +296,22 @@ void wxFileDialog::ShowWindowModal()
 
 }
 
+wxWindow* wxFileDialog::GetAccessoryHost()
+{
+    // Hidden, in-process host window owning the accessory controls: we build
+    // and lay them out here and only hand the finished NSView over to the
+    // native panel via -setAccessoryView:. This is never shown to the user.
+    if ( !m_accessoryHost )
+    {
+        m_accessoryHost = new wxFrame(nullptr, wxID_ANY, wxString(),
+                                      wxDefaultPosition, wxDefaultSize,
+                                      wxFRAME_TOOL_WINDOW | wxFRAME_NO_TASKBAR |
+                                      wxBORDER_NONE);
+    }
+
+    return m_accessoryHost;
+}
+
 // Fill a new or existing panel with the file type drop down list.
 // If extra controls need to be added (see wxFileDialog::SetExtraControlCreator),
 // use that as a panel if possible, otherwise add them to a new panel.
@@ -295,9 +326,13 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
     const bool useExtraControlAsPanel = extracontrol &&
         wxDynamicCast(extracontrol, wxPanel) != nullptr;
 
+    // Note: the filter panel is parented to the in-process host window,
+    // never to the file dialog/panel itself. The native save/open panel runs
+    // out of process when sandboxed, so our views must be built locally and
+    // only handed over via -setAccessoryView:.
     wxWindow* extrapanel = useExtraControlAsPanel
                             ? extracontrol
-                            : static_cast<wxWindow*>(new wxPanel(this));
+                            : static_cast<wxWindow*>(new wxPanel(GetAccessoryHost()));
 
     wxBoxSizer *verticalSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -378,17 +413,31 @@ void wxFileDialog::OnFilterSelected( wxCommandEvent &WXUNUSED(event) )
 void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 {
     NSSavePanel* panel = (NSSavePanel*) nativeWindow;
-    // for sandboxed app we cannot access the outer structures
-    // this leads to problems with extra controls, so as a temporary
-    // workaround for crashes we don't support those yet
-    if ( [panel contentView] == nil || getenv("APP_SANDBOX_CONTAINER_ID") != nullptr )
+    // Historically, sandboxed apps could not host the accessory view used for
+    // the file-type filter and other extra controls: the panel runs out of
+    // process (Powerbox / NSRemoteView) and inserting our views into its view
+    // hierarchy crashed (see #14906, hotfixed in 2013/2014 for OS X 10.8/10.9).
+    //
+    // The supported, documented contract is to build the accessory view
+    // entirely in-process and hand the finished NSView to
+    // -[NSSavePanel setAccessoryView:]; the panel (even when remote) then hosts
+    // it safely. We now do exactly that: the controls are created as children
+    // of a hidden in-process host window (m_accessoryHost) and never touch the
+    // panel's own view hierarchy, so this works in sandboxed apps too. As a
+    // safety valve, set the wxOSX_FILEDIALOG_DISABLE_EXTRA_CONTROLS system
+    // option (or the corresponding environment variable) to 1 to restore the
+    // old "skip extra controls" behaviour.
+    if ( [panel contentView] == nil ||
+         wxSystemOptions::GetOptionInt(wxOSX_FILEDIALOG_DISABLE_EXTRA_CONTROLS) == 1 )
         return;
 
     wxNonOwnedWindow::Create( GetParent(), nativeWindow );
 
     // This won't do anything if there are no extra controls to create and
-    // extracontrol will be null in this case.
-    CreateExtraControl();
+    // extracontrol will be null in this case. Note we parent the extra control
+    // to the in-process host rather than to the (possibly remote) panel.
+    if ( !m_extraControl && HasExtraControlCreator() )
+        m_extraControl = CreateExtraControlWithParent(GetAccessoryHost());
     wxWindow* const extracontrol = GetExtraControl();
 
     NSView* accView = nil;

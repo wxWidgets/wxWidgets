@@ -299,7 +299,7 @@ void wxFontRefData::SetStyle(wxFontStyle style)
             break;
         default:
             wxFAIL_MSG( wxT("unknown font style") );
-            // fall through
+            wxFALLTHROUGH;
         case wxFONTSTYLE_NORMAL:
             pango_font_description_set_style( desc, PANGO_STYLE_NORMAL );
             break;

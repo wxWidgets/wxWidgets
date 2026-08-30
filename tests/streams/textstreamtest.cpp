@@ -12,7 +12,6 @@
 
 #include "testprec.h"
 
-
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif // WX_PRECOMP
@@ -27,56 +26,8 @@
 #include "testfile.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// tests
 // ----------------------------------------------------------------------------
-
-class TextStreamTestCase : public CppUnit::TestCase
-{
-public:
-    TextStreamTestCase();
-
-private:
-    CPPUNIT_TEST_SUITE( TextStreamTestCase );
-        CPPUNIT_TEST( Endline );
-        CPPUNIT_TEST( MiscTests );
-
-        CPPUNIT_TEST( TestLongLong );
-        CPPUNIT_TEST( TestULongLong );
-
-        CPPUNIT_TEST( TestUTF8Input );
-        CPPUNIT_TEST( TestEmbeddedZerosUTF16LEInput );
-        CPPUNIT_TEST( TestEmbeddedZerosUTF16BEInput );
-        CPPUNIT_TEST( TestEmbeddedZerosUTF32LEInput );
-        CPPUNIT_TEST( TestEmbeddedZerosUTF32BEInput );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Endline();
-    void MiscTests();
-
-    void TestLongLong();
-    void TestULongLong();
-
-    void TestUTF8Input();
-    void TestEmbeddedZerosUTF16LEInput();
-    void TestEmbeddedZerosUTF16BEInput();
-    void TestEmbeddedZerosUTF32LEInput();
-    void TestEmbeddedZerosUTF32BEInput();
-    void TestInput(const wxMBConv& conv,
-                   const void* encodedText,
-                   size_t encodedSize );
-
-    wxDECLARE_NO_COPY_CLASS(TextStreamTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( TextStreamTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TextStreamTestCase, "TextStreamTestCase" );
-
-TextStreamTestCase::TextStreamTestCase()
-{
-}
 
 #if defined(__WINDOWS__)
 #   define NEWLINE "\r\n"
@@ -89,7 +40,7 @@ TextStreamTestCase::TextStreamTestCase()
 #   define NEWLINELEN 1
 #endif
 
-void TextStreamTestCase::Endline()
+TEST_CASE("TextStream::Endline", "[textstream][stream]")
 {
     TempFile f("test.txt");
 
@@ -106,10 +57,10 @@ void TextStreamTestCase::Endline()
 
     pInFile.Read(szIn, 9 + NEWLINELEN);
 
-    CPPUNIT_ASSERT( memcmp(&szIn[9], NEWLINE, NEWLINELEN) == 0 );
+    CHECK( memcmp(&szIn[9], NEWLINE, NEWLINELEN) == 0 );
 }
 
-void TextStreamTestCase::MiscTests()
+TEST_CASE("TextStream::MiscTests", "[textstream][stream]")
 {
     wxString filename = wxT("testdata.conf");
     wxFileInputStream fsIn(filename);
@@ -119,12 +70,12 @@ void TextStreamTestCase::MiscTests()
     }
 
     wxTextInputStream tis(fsIn);
-    CPPUNIT_ASSERT_EQUAL("# this is the test data file for wxFileConfig tests", tis.ReadLine());
-    CPPUNIT_ASSERT_EQUAL("value1=one", tis.ReadLine());
-    CPPUNIT_ASSERT_EQUAL("# a comment here", tis.ReadLine());
-    CPPUNIT_ASSERT_EQUAL("value2=two", tis.ReadLine());
-    CPPUNIT_ASSERT_EQUAL("value\\ with\\ spaces\\ inside\\ it=nothing special", tis.ReadLine());
-    CPPUNIT_ASSERT_EQUAL("path=$PATH", tis.ReadLine());
+    CHECK(tis.ReadLine() == "# this is the test data file for wxFileConfig tests");
+    CHECK(tis.ReadLine() == "value1=one");
+    CHECK(tis.ReadLine() == "# a comment here");
+    CHECK(tis.ReadLine() == "value2=two");
+    CHECK(tis.ReadLine() == "value\\ with\\ spaces\\ inside\\ it=nothing special");
+    CHECK(tis.ReadLine() == "path=$PATH");
 }
 
 template <typename T>
@@ -151,12 +102,12 @@ static void DoTestRoundTrip(const T *values, size_t numValues)
         {
             textIn >> value;
 
-            CPPUNIT_ASSERT( value == values[n] );
+            CHECK( value == values[n] );
         }
     }
 }
 
-void TextStreamTestCase::TestLongLong()
+TEST_CASE("TextStream::LongLong", "[textstream][stream]")
 {
     static const wxLongLong llvalues[] =
     {
@@ -172,7 +123,7 @@ void TextStreamTestCase::TestLongLong()
     DoTestRoundTrip(llvalues, WXSIZEOF(llvalues));
 }
 
-void TextStreamTestCase::TestULongLong()
+TEST_CASE("TextStream::ULongLong", "[textstream][stream]")
 {
     static const wxULongLong ullvalues[] =
     {
@@ -220,39 +171,43 @@ static const unsigned char txtUtf32be[16] =
     0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x01, 0x00,
 };
 
-void TextStreamTestCase::TestUTF8Input()
+static void TestInput(const wxMBConv& conv,
+                      const void *encodedText,
+                      size_t encodedSize);
+
+TEST_CASE("TextStream::UTF8Input", "[textstream][stream]")
 {
     TestInput(wxConvUTF8, txtUtf8, sizeof(txtUtf8));
     TestInput(wxCSConv(wxFONTENCODING_UTF8), txtUtf8, sizeof(txtUtf8));
 }
 
-void TextStreamTestCase::TestEmbeddedZerosUTF16LEInput()
+TEST_CASE("TextStream::EmbeddedZerosUTF16LEInput", "[textstream][stream]")
 {
     TestInput(wxMBConvUTF16LE(), txtUtf16le, sizeof(txtUtf16le));
     TestInput(wxCSConv(wxFONTENCODING_UTF16LE), txtUtf16le, sizeof(txtUtf16le));
 }
 
-void TextStreamTestCase::TestEmbeddedZerosUTF16BEInput()
+TEST_CASE("TextStream::EmbeddedZerosUTF16BEInput", "[textstream][stream]")
 {
     TestInput(wxMBConvUTF16BE(), txtUtf16be, sizeof(txtUtf16be));
     TestInput(wxCSConv(wxFONTENCODING_UTF16BE), txtUtf16be, sizeof(txtUtf16be));
 }
 
-void TextStreamTestCase::TestEmbeddedZerosUTF32LEInput()
+TEST_CASE("TextStream::EmbeddedZerosUTF32LEInput", "[textstream][stream]")
 {
     TestInput(wxMBConvUTF32LE(), txtUtf32le, sizeof(txtUtf32le));
     TestInput(wxCSConv(wxFONTENCODING_UTF32LE), txtUtf32le, sizeof(txtUtf32le));
 }
 
-void TextStreamTestCase::TestEmbeddedZerosUTF32BEInput()
+TEST_CASE("TextStream::EmbeddedZerosUTF32BEInput", "[textstream][stream]")
 {
     TestInput(wxMBConvUTF32BE(), txtUtf32be, sizeof(txtUtf32be));
     TestInput(wxCSConv(wxFONTENCODING_UTF32BE), txtUtf32be, sizeof(txtUtf32be));
 }
 
-void TextStreamTestCase::TestInput(const wxMBConv& conv,
-                                   const void *encodedText,
-                                   size_t encodedSize)
+static void TestInput(const wxMBConv& conv,
+                      const void *encodedText,
+                      size_t encodedSize)
 {
     wxMemoryInputStream byteIn(encodedText, encodedSize);
     wxTextInputStream textIn(byteIn, wxT("\n"), conv);
@@ -263,9 +218,9 @@ void TextStreamTestCase::TestInput(const wxMBConv& conv,
         temp.Append(c);
     }
 
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(txtWchar), temp.length() );
+    CHECK( temp.length() == WXSIZEOF(txtWchar) );
 
-    CPPUNIT_ASSERT_EQUAL( 0, memcmp(txtWchar, temp.wc_str(), sizeof(txtWchar)) );
+    CHECK( memcmp(txtWchar, temp.wc_str(), sizeof(txtWchar)) == 0 );
 }
 
 TEST_CASE("wxTextInputStream::GetChar", "[text][input][stream][char]")
