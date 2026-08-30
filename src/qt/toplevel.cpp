@@ -264,23 +264,24 @@ void wxTopLevelWindowQt::DoSetSizeHints( int minW, int minH,
                                          int maxW, int maxH,
                                          int incW, int incH )
 {
-    // The value -1 is special which means no constraints will be used.
-    // In other words, use the Qt defaults if -1 was specified.
+    const wxWeakRef<wxTopLevelWindowQt> self(this);
+    const QPointer<QWidget> widget(GetHandle());
+    wxCHECK_RET( widget, "Cannot constrain an uncreated top-level window" );
 
-    if ( maxW == wxDefaultCoord )
-        maxW = QWIDGETSIZE_MAX;
-    if ( maxH == wxDefaultCoord )
-        maxH = QWIDGETSIZE_MAX;
+    // Translate unspecified bounds only for Qt. The wx getters must retain
+    // wxDefaultCoord, including when a caller restores a saved constraint.
+    widget->setMinimumSize(wxMax(0, minW), wxMax(0, minH));
+    if ( !self || !widget )
+        return;
 
-    minW = wxMax(0, minW);
-    minH = wxMax(0, minH);
+    widget->setMaximumSize(maxW == wxDefaultCoord ? QWIDGETSIZE_MAX : maxW,
+                           maxH == wxDefaultCoord ? QWIDGETSIZE_MAX : maxH);
+    if ( !self || !widget )
+        return;
 
-    incW = wxMax(0, incW);
-    incH = wxMax(0, incH);
-
-    GetHandle()->setMinimumSize(minW, minH);
-    GetHandle()->setMaximumSize(maxW, maxH);
-    GetHandle()->setSizeIncrement(incW, incH);
+    widget->setSizeIncrement(wxMax(0, incW), wxMax(0, incH));
+    if ( !self || !widget )
+        return;
 
     wxTopLevelWindowBase::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
 }

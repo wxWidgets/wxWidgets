@@ -222,6 +222,20 @@ public:
         return allowTransferFrom;
     }
 
+    bool Show(bool show = true) override
+    {
+        // Probe the logical Hide() boundary, not native hide-event delivery:
+        // a premodal page can still have an invisible native parent. Keep the
+        // real native call and use only locals after it, as it can delete us.
+        std::function<void()> hideCallback;
+        if ( !show )
+            hideCallback.swap(onHide);
+        const bool changed = wxWizardPageSimple::Show(show);
+        if ( hideCallback )
+            hideCallback();
+        return changed;
+    }
+
     bool allowValidation = true;
     bool allowTransferTo = true;
     bool allowTransferFrom = true;
@@ -231,6 +245,7 @@ public:
     std::function<void()> onValidate;
     std::function<void()> onTransferTo;
     std::function<void()> onTransferFrom;
+    std::function<void()> onHide;
 };
 
 class ProtectedStateWizard final : public wxWizard
@@ -2754,26 +2769,21 @@ TEST_CASE("WinUIWizardContracts", "[wizard][winui-beta-dialogs]")
             AddWizardPage(&wizard, nestedTarget);
             int cancelEvents = 0;
             bool cancelFound = false;
-            bool terminalCleanupStarted = false;
             bool nestedShowAttempted = false;
             bool nestedShowResult = true;
             page->Bind(wxEVT_WIZARD_PAGE_SHOWN,
                        [&](wxWizardEvent& event)
                        {
-                           terminalCleanupStarted = true;
-                           cancelFound =
-                               CommandDialogButton(&wizard, wxID_CANCEL);
-                           event.Skip();
-                       });
-            page->Bind(wxEVT_SHOW,
-                       [&](wxShowEvent& event)
-                       {
-                           if ( terminalCleanupStarted && !event.IsShown() )
+                           // This one-shot, non-physical probe checks the
+                           // terminal guard while RunWizard cleans up Hide().
+                           page->onHide = [&]()
                            {
                                nestedShowAttempted = true;
                                nestedShowResult =
                                    wizard.ShowPage(nestedTarget);
-                           }
+                           };
+                           cancelFound =
+                               CommandDialogButton(&wizard, wxID_CANCEL);
                            event.Skip();
                        });
             page->Bind(wxEVT_WIZARD_CANCEL,
@@ -2808,15 +2818,16 @@ TEST_CASE("WinUIWizardContracts", "[wizard][winui-beta-dialogs]")
             REQUIRE(wizard->ShowPage(page));
 
             int finishedEvents = 0;
+            bool nestedShowAttempted = false;
             bool nestedShowResult = true;
-            page->Bind(wxEVT_SHOW,
-                       [wizard, nestedTarget,
-                        &nestedShowResult](wxShowEvent& event)
-                       {
-                           if ( !event.IsShown() )
-                               nestedShowResult = wizard->ShowPage(nestedTarget);
-                           event.Skip();
-                       });
+            // Arm after the initial page show: this checks terminal Hide()
+            // reentry even when the modeless dialog itself was never visible.
+            page->onHide = [wizard, nestedTarget,
+                            &nestedShowAttempted, &nestedShowResult]()
+            {
+                nestedShowAttempted = true;
+                nestedShowResult = wizard->ShowPage(nestedTarget);
+            };
             wizard->Bind(wxEVT_WIZARD_FINISHED,
                          [&finishedEvents](wxWizardEvent& event)
                          {
@@ -2825,6 +2836,7 @@ TEST_CASE("WinUIWizardContracts", "[wizard][winui-beta-dialogs]")
                          });
 
             CHECK(wizard->ShowPage(nullptr));
+            CHECK(nestedShowAttempted);
             CHECK_FALSE(nestedShowResult);
             CHECK(finishedEvents == 1);
             REQUIRE(WaitFor("modeless wizard finish cleanup",
@@ -4425,7 +4437,15 @@ TEST_CASE("WinUIPropertySheetContracts",
             REQUIRE(dialog.Create(parent,
                                   wxID_ANY,
                                   "Nested property sheet buttons"));
+            wxButton* const initialFocus =
+                new wxButton(&dialog, wxID_ANY, "Initial factory focus");
             dialog.Show();
+            initialFocus->SetFocus();
+            REQUIRE(WaitFor("initial focus before nested button factory",
+                            [initialFocus]()
+                            {
+                                return wxWindow::FindFocus() == initialFocus;
+                            }));
 
             bool nestedStarted = false;
             int nestedCallbacks = 0;
@@ -4460,7 +4480,14 @@ TEST_CASE("WinUIPropertySheetContracts",
                   == 0);
             CHECK(dialog.GetAffirmativeId() == expectedAffirmative);
             CHECK(dialog.GetDefaultItem() == defaultButton);
+#ifdef __WXQT__
+            // Qt buttons don't publish the optional wx temporary default on
+            // focus; the effective permanent default and real focus still
+            // belong to the latest successful factory below.
+            CHECK(dialog.GetTmpDefaultItem() == nullptr);
+#else
             CHECK(dialog.GetTmpDefaultItem() == defaultButton);
+#endif
             CHECK(wxWindow::FindFocus() == defaultButton);
             CHECK(dialog.GetInnerSizer()->GetItemCount() == 3);
         }
@@ -4901,11 +4928,40 @@ TEST_CASE("WinUIPropertySheetContracts",
                                 return wxWindow::FindFocus() ==
                                        originalTmpDefault;
                             }));
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+            wxSizer* const originalInnerSizer = dialog.GetInnerSizer();
+            wxBookCtrlBase* const originalBook = dialog.GetBookCtrl();
+#else
             const int originalAffirmativeId = dialog.GetAffirmativeId();
+#endif
             dialog.Arm();
 
             dialog.CreateButtons(wxYES | wxNO | wxCANCEL);
 
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+            // FromDIP() is an identity operation on these ports and must not
+            // enter GetDPI(). Check the real non-mutating success path rather
+            // than manufacturing the callback exercised on physical-pixel
+            // ports by the other branch.
+            CHECK(dialog.GetMutationCount() == 0);
+            CHECK(CountDescendantsWithId(&dialog, wxID_YES) == 1);
+            CHECK(CountDescendantsWithId(&dialog, wxID_NO) == 1);
+            CHECK(CountDescendantsWithId(&dialog, wxID_CANCEL) == 1);
+            CHECK(dialog.GetAffirmativeId() == wxID_YES);
+            CHECK(dialog.GetParent() == parent);
+            CHECK(dialog.GetSizer() == originalTopSizer);
+            CHECK(dialog.GetInnerSizer() == originalInnerSizer);
+            CHECK(dialog.GetBookCtrl() == originalBook);
+            CHECK(dialog.GetOriginalTopSizer() == nullptr);
+            CHECK(dialog.GetInnerSizer()->GetItemCount() == 3);
+            wxButton* const defaultButton = wxDynamicCast(
+                dialog.FindWindow(wxID_YES), wxButton);
+            REQUIRE(defaultButton);
+            // Expose the permanent default independently of each port's
+            // optional temporary-default representation.
+            dialog.SetTmpDefaultItem(nullptr);
+            CHECK(dialog.GetDefaultItem() == defaultButton);
+#else
             CHECK(dialog.GetMutationCount() == 1);
             CHECK(CountDescendantsWithId(&dialog, wxID_YES) == 0);
             CHECK(CountDescendantsWithId(&dialog, wxID_NO) == 0);
@@ -4925,6 +4981,7 @@ TEST_CASE("WinUIPropertySheetContracts",
                 CHECK(dialog.GetSizer() != originalTopSizer);
                 CHECK(dialog.GetOriginalTopSizer() == originalTopSizer);
             }
+#endif
         }
     }
 

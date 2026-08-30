@@ -24,6 +24,11 @@
 
 #include <memory>
 
+#ifdef __WXQT__
+    #include "wx/weakref.h"
+    #include <QtWidgets/QTabWidget>
+#endif
+
 class NotebookTestCase : public BookCtrlBaseTestCase
 {
 public:
@@ -148,6 +153,94 @@ TEST_CASE("wxNotebook::AddPageEvents",
     CHECK( countPageChanging.GetCount() == 1 );
     CHECK( countPageChanged.GetCount() == 1 );
 }
+
+#ifdef __WXQT__
+
+TEST_CASE("Notebook::SelectionVetoKeepsNativeAndWxState", "[notebook][qt]")
+{
+    wxNotebook notebook(wxTheApp->GetTopWindow(), wxID_ANY);
+    REQUIRE(notebook.AddPage(new wxPanel(&notebook), "First", true));
+    REQUIRE(notebook.AddPage(new wxPanel(&notebook), "Second"));
+    REQUIRE(notebook.GetSelection() == 0);
+
+    int changing = 0;
+    int changed = 0;
+    bool veto = true;
+    notebook.Bind(wxEVT_NOTEBOOK_PAGE_CHANGING,
+                  [&](wxBookCtrlEvent& event)
+                  {
+                      ++changing;
+                      CHECK(event.GetOldSelection() == 0);
+                      CHECK(event.GetSelection() == 1);
+                      if ( veto )
+                          event.Veto();
+                  });
+    notebook.Bind(wxEVT_NOTEBOOK_PAGE_CHANGED,
+                  [&](wxBookCtrlEvent& event)
+                  {
+                      ++changed;
+                      CHECK(event.GetOldSelection() == 0);
+                      CHECK(event.GetSelection() == 1);
+                  });
+
+    CHECK(notebook.SetSelection(1) == 0);
+    CHECK(changing == 1);
+    CHECK(changed == 0);
+    CHECK(notebook.GetSelection() == 0);
+    CHECK(notebook.GetQTabWidget()->currentIndex() == 0);
+    CHECK(notebook.GetCurrentPage() == notebook.GetPage(0));
+
+    veto = false;
+    CHECK(notebook.SetSelection(1) == 0);
+    CHECK(changing == 2);
+    CHECK(changed == 1);
+    CHECK(notebook.GetSelection() == 1);
+    CHECK(notebook.GetQTabWidget()->currentIndex() == 1);
+
+    CHECK(notebook.ChangeSelection(0) == 1);
+    CHECK(notebook.GetSelection() == 0);
+    CHECK(notebook.GetQTabWidget()->currentIndex() == 0);
+    CHECK(changing == 2);
+    CHECK(changed == 1);
+}
+
+TEST_CASE("Notebook::RemoveLastPageKeepsEmptySelection", "[notebook][qt]")
+{
+    wxNotebook source(wxTheApp->GetTopWindow(), wxID_ANY);
+    wxNotebook destination(wxTheApp->GetTopWindow(), wxID_ANY);
+    wxPanel* const page = new wxPanel(&source);
+    const wxWeakRef<wxPanel> weakPage(page);
+    REQUIRE(source.AddPage(page, "Movable", true));
+    REQUIRE(source.GetSelection() == 0);
+
+    // Removing the final tab produces Qt currentChanged(-1), not a request to
+    // select a page with an unsigned index. RemovePage must keep the page alive.
+    REQUIRE(source.RemovePage(0));
+    CHECK(source.GetPageCount() == 0);
+    CHECK(source.GetSelection() == wxNOT_FOUND);
+    CHECK(source.GetCurrentPage() == nullptr);
+    CHECK(source.GetQTabWidget()->count() == 0);
+    CHECK(source.GetQTabWidget()->currentIndex() == -1);
+    REQUIRE(weakPage.get() == page);
+
+    REQUIRE(page->Reparent(&destination));
+    REQUIRE(destination.AddPage(page, "Moved", true));
+    CHECK(destination.GetSelection() == 0);
+    CHECK(destination.GetCurrentPage() == page);
+    CHECK(destination.GetQTabWidget()->currentIndex() == 0);
+    CHECK(destination.GetPageImage(0) == wxNOT_FOUND);
+
+    REQUIRE(source.AddPage(new wxPanel(&source), "Replacement", true));
+    CHECK(source.GetSelection() == 0);
+    CHECK(source.GetQTabWidget()->currentIndex() == 0);
+    CHECK(source.GetPageImage(0) == wxNOT_FOUND);
+    REQUIRE(source.DeletePage(0));
+    CHECK(source.GetPageCount() == 0);
+    CHECK(source.GetSelection() == wxNOT_FOUND);
+    CHECK(source.GetQTabWidget()->currentIndex() == -1);
+}
+
+#endif // __WXQT__
 
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 

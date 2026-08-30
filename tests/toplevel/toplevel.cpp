@@ -122,6 +122,59 @@ TEST_CASE("wxTopLevel::ShowEvent", "[tlw][show][event]")
 }
 
 #ifdef __WXQT__
+TEST_CASE("wxTopLevel::SizeHintsPreserveUnspecifiedBounds", "[tlw][size][qt]")
+{
+    wxDialog dialog(wxTheApp->GetTopWindow(), wxID_ANY, "Size hints");
+    QWidget* const widget = dialog.GetHandle();
+    REQUIRE(widget);
+
+    const wxSize originalMinSize = dialog.GetMinSize();
+    const wxSize originalMaxSize = dialog.GetMaxSize();
+    const QSize originalNativeMinSize = widget->minimumSize();
+    const QSize originalNativeMaxSize = widget->maximumSize();
+    const QSize originalNativeIncrement = widget->sizeIncrement();
+    REQUIRE(originalMinSize == wxDefaultSize);
+    REQUIRE(originalMaxSize == wxDefaultSize);
+
+    dialog.SetSizeHints(120, 90, 460, 360, 7, 9);
+    CHECK(dialog.GetMinSize() == wxSize(120, 90));
+    CHECK(dialog.GetMaxSize() == wxSize(460, 360));
+    CHECK(widget->minimumSize() == QSize(120, 90));
+    CHECK(widget->maximumSize() == QSize(460, 360));
+    CHECK(widget->sizeIncrement() == QSize(7, 9));
+
+    // Each coordinate has its own unspecified sentinel, not just the pair.
+    dialog.SetSizeHints(wxDefaultCoord, 95, 480, wxDefaultCoord,
+                        wxDefaultCoord, 4);
+    CHECK(dialog.GetMinSize() == wxSize(wxDefaultCoord, 95));
+    CHECK(dialog.GetMaxSize() == wxSize(480, wxDefaultCoord));
+    CHECK(widget->minimumSize() == QSize(0, 95));
+    CHECK(widget->maximumSize() == QSize(480, QWIDGETSIZE_MAX));
+    CHECK(widget->sizeIncrement() == QSize(0, 4));
+
+    // Use the same separate setters as dialog layout rollback. Neither may
+    // normalize the other bound as a side effect of restoring its own value.
+    dialog.SetMinSize(originalMinSize);
+    CHECK(dialog.GetMinSize() == originalMinSize);
+    CHECK(dialog.GetMaxSize() == wxSize(480, wxDefaultCoord));
+    CHECK(widget->minimumSize() == originalNativeMinSize);
+    CHECK(widget->maximumSize() == QSize(480, QWIDGETSIZE_MAX));
+    dialog.SetMaxSize(originalMaxSize);
+    CHECK(dialog.GetMinSize() == originalMinSize);
+    CHECK(dialog.GetMaxSize() == originalMaxSize);
+    CHECK(widget->minimumSize() == originalNativeMinSize);
+    CHECK(widget->maximumSize() == originalNativeMaxSize);
+
+    dialog.SetSizeHints(originalMinSize, originalMaxSize,
+                        wxSize(originalNativeIncrement.width(),
+                               originalNativeIncrement.height()));
+    CHECK(dialog.GetMinSize() == originalMinSize);
+    CHECK(dialog.GetMaxSize() == originalMaxSize);
+    CHECK(widget->minimumSize() == originalNativeMinSize);
+    CHECK(widget->maximumSize() == originalNativeMaxSize);
+    CHECK(widget->sizeIncrement() == originalNativeIncrement);
+}
+
 TEST_CASE("wxTopLevel::ShowWithoutActivating", "[tlw][show][qt]")
 {
     wxFrame* const active = new wxFrame(nullptr, wxID_ANY, "Active frame");
