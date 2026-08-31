@@ -23,6 +23,7 @@
 #include "wx/slider.h"
 #include "wx/scopeguard.h"
 #include "wx/winui/private/appearance.h"
+#include "appearance-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "host-content-test-access.h"
 
@@ -47,20 +48,20 @@ class SliderHighContrastGuard final
 {
 public:
     explicit SliderHighContrastGuard(
-        wxWinUIHighContrastOverrideForTesting value)
+        wxWinUIAppearanceTestAccess::HighContrastOverride value)
     {
-        wxWinUISetHighContrastOverrideForTesting(value);
+        wxWinUIAppearanceTestAccess::SetHighContrastOverride(value);
     }
 
     ~SliderHighContrastGuard()
     {
-        wxWinUISetHighContrastOverrideForTesting(
-            wxWinUIHighContrastOverrideForTesting::System);
+        wxWinUIAppearanceTestAccess::SetHighContrastOverride(
+            wxWinUIAppearanceTestAccess::HighContrastOverride::System);
     }
 
-    void Set(wxWinUIHighContrastOverrideForTesting value)
+    void Set(wxWinUIAppearanceTestAccess::HighContrastOverride value)
     {
-        wxWinUISetHighContrastOverrideForTesting(value);
+        wxWinUIAppearanceTestAccess::SetHighContrastOverride(value);
     }
 
     wxDECLARE_NO_COPY_CLASS(SliderHighContrastGuard);
@@ -974,7 +975,7 @@ TEST_CASE("wxWinUI Slider selection follows enabled theme and high contrast",
           "[winui-range-events][slider][selection][theme][high-contrast]")
 {
     SliderHighContrastGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
     wxWindow * const parent = wxTheApp->GetTopWindow();
     REQUIRE(parent);
 
@@ -1010,7 +1011,7 @@ TEST_CASE("wxWinUI Slider selection follows enabled theme and high contrast",
     CHECK(visual.selectionBrushIdentity != 0);
     CHECK(visual.selectionHasSolidColor);
 
-    highContrast.Set(wxWinUIHighContrastOverrideForTesting::ForceOn);
+    highContrast.Set(wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn);
     REQUIRE(wxWinUISliderTestAccess::RefreshVisualState(slider));
     REQUIRE(WaitForSliderVisualState(slider, &visual));
     CHECK(visual.selectionVisual ==
@@ -1032,7 +1033,7 @@ TEST_CASE("wxWinUI Slider selection follows enabled theme and high contrast",
     CHECK(visual.selectionBrushIdentity != 0);
     CHECK(visual.selectionHasSolidColor);
 
-    highContrast.Set(wxWinUIHighContrastOverrideForTesting::ForceOff);
+    highContrast.Set(wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
     REQUIRE(wxWinUISliderTestAccess::RefreshVisualState(slider));
     wxWinUISliderTestAccess::VisualState beforeTheme;
     REQUIRE(WaitForSliderVisualState(slider, &beforeTheme));

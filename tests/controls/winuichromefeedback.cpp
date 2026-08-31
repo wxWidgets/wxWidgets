@@ -20,6 +20,7 @@
 #include "wx/log.h"
 #include "wx/msw/private.h"
 #include "wx/winui/private/appearance.h"
+#include "appearance-test-access.h"
 #include "host-resize-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "tooltip-policy-test-access.h"
@@ -102,20 +103,20 @@ class HighContrastOverrideRestorer final
 {
 public:
     explicit HighContrastOverrideRestorer(
-        wxWinUIHighContrastOverrideForTesting value)
+        wxWinUIAppearanceTestAccess::HighContrastOverride value)
     {
         Set(value);
     }
 
     ~HighContrastOverrideRestorer()
     {
-        wxWinUISetHighContrastOverrideForTesting(
-            wxWinUIHighContrastOverrideForTesting::System);
+        wxWinUIAppearanceTestAccess::SetHighContrastOverride(
+            wxWinUIAppearanceTestAccess::HighContrastOverride::System);
     }
 
-    void Set(wxWinUIHighContrastOverrideForTesting value)
+    void Set(wxWinUIAppearanceTestAccess::HighContrastOverride value)
     {
-        wxWinUISetHighContrastOverrideForTesting(value);
+        wxWinUIAppearanceTestAccess::SetHighContrastOverride(value);
     }
 
 private:
@@ -2074,7 +2075,7 @@ TEST_CASE("wxWinUI Hyperlink relinquishes only default colours in High "
         ~ThemeRestorer() { wxWinUISetAppTheme(saved); }
     } restoreTheme;
     HighContrastOverrideRestorer highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     wxHyperlinkCtrl link(
         parent, wxID_ANY, "Link", "https://example.invalid");
@@ -2096,7 +2097,7 @@ TEST_CASE("wxWinUI Hyperlink relinquishes only default colours in High "
     };
 
     highContrast.Set(
-        wxWinUIHighContrastOverrideForTesting::ForceOn);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn);
     notifySystemColourChange();
     REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, nullptr, &appearance));
@@ -2141,7 +2142,7 @@ TEST_CASE("wxWinUI Hyperlink relinquishes only default colours in High "
     // Leaving High Contrast republishes the concrete wx default. Getters stay
     // concrete in both modes; only local DependencyProperty ownership differs.
     highContrast.Set(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
     link.SetVisitedColour(wxNullColour);
     REQUIRE(wxWinUIHyperlinkTestAccess::GetState(link,
         nullptr, nullptr, nullptr, &effective, &appearance));
@@ -2151,7 +2152,7 @@ TEST_CASE("wxWinUI Hyperlink relinquishes only default colours in High "
     // Theme changes while High Contrast is active must not reintroduce a
     // local default brush.
     highContrast.Set(
-        wxWinUIHighContrastOverrideForTesting::ForceOn);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn);
     link.SetVisited(false);
     link.SetNormalColour(wxNullColour);
     wxWinUISetAppTheme(wxWinUIAppTheme::Light);

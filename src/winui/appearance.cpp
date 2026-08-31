@@ -12,6 +12,9 @@
 #include "wx/control.h"
 #include "private.h"
 #include "wx/winui/private/appearance.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "appearance-test-access.h"
+#endif // WXWINUI_TEST_SUPPORT
 
 #include <cstdint>
 #include <cmath>
@@ -31,8 +34,10 @@ namespace MUXM = winrt::Microsoft::UI::Xaml::Media;
 namespace
 {
 
-wxWinUIHighContrastOverrideForTesting gs_highContrastOverride =
-    wxWinUIHighContrastOverrideForTesting::System;
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIAppearanceTestAccess::HighContrastOverride gs_highContrastOverride =
+    wxWinUIAppearanceTestAccess::HighContrastOverride::System;
+#endif // WXWINUI_TEST_SUPPORT
 
 struct wxWinUIAccessibleElementPeer
     : MUXAP::FrameworkElementAutomationPeerT<
@@ -201,45 +206,51 @@ void wxWinUICaptureAccessibleValues(
 
 bool wxWinUIIsHighContrastActive()
 {
+#ifdef WXWINUI_TEST_SUPPORT
     switch ( gs_highContrastOverride )
     {
-        case wxWinUIHighContrastOverrideForTesting::ForceOff:
+        case wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff:
             return false;
 
-        case wxWinUIHighContrastOverrideForTesting::ForceOn:
+        case wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn:
             return true;
 
-        case wxWinUIHighContrastOverrideForTesting::System:
-        {
-            HIGHCONTRAST highContrast{};
-            highContrast.cbSize = sizeof(highContrast);
-            if ( !::SystemParametersInfo(
-                    SPI_GETHIGHCONTRAST,
-                    sizeof(highContrast),
-                    &highContrast,
-                    0) )
-            {
-                // This helper is called from peer projection transactions.
-                // Logging the failure here could invoke an application log
-                // target and synchronously destroy the projecting control.
-                // Conservatively relinquish default local brushes so WinUI's
-                // ThemeResources remain authoritative; custom colours are
-                // still kept by their per-state provenance.
-                return true;
-            }
-            return (highContrast.dwFlags & HCF_HIGHCONTRASTON) != 0;
-        }
-    }
+        case wxWinUIAppearanceTestAccess::HighContrastOverride::System:
+            break;
 
-    wxFAIL_MSG("unknown WinUI High Contrast override");
-    return false;
+        default:
+            wxFAIL_MSG("unknown WinUI High Contrast override");
+            return false;
+    }
+#endif // WXWINUI_TEST_SUPPORT
+
+    HIGHCONTRAST highContrast{};
+    highContrast.cbSize = sizeof(highContrast);
+    if ( !::SystemParametersInfo(
+            SPI_GETHIGHCONTRAST,
+            sizeof(highContrast),
+            &highContrast,
+            0) )
+    {
+        // This helper is called from peer projection transactions.
+        // Logging the failure here could invoke an application log
+        // target and synchronously destroy the projecting control.
+        // Conservatively relinquish default local brushes so WinUI's
+        // ThemeResources remain authoritative; custom colours are
+        // still kept by their per-state provenance.
+        return true;
+    }
+    return (highContrast.dwFlags & HCF_HIGHCONTRASTON) != 0;
 }
 
-void wxWinUISetHighContrastOverrideForTesting(
-    wxWinUIHighContrastOverrideForTesting overrideValue)
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIAppearanceTestAccess::SetHighContrastOverride(
+    wxWinUIAppearanceTestAccess::HighContrastOverride overrideValue)
 {
     gs_highContrastOverride = overrideValue;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 wxWinUILabelPresentation wxWinUIParseLabel(const wxString& label)
 {

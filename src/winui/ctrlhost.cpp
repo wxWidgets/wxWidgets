@@ -18,6 +18,7 @@
 #ifdef WXWINUI_TEST_SUPPORT
 #include "control-host-test-access.h"
 #include "tooltip-policy-test-access.h"
+#include "physical-disconnect-test-access.h"
 #endif // WXWINUI_TEST_SUPPORT
 
 #include "wx/winui/private/appearance.h"
@@ -2375,16 +2376,23 @@ bool wxWinUIIsPhysicalDisconnectPublicationPoisoned() noexcept
         std::memory_order_acquire);
 }
 
-void wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting() noexcept
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned() noexcept
+{
+    return wxWinUIIsPhysicalDisconnectPublicationPoisoned();
+}
+
+void wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison() noexcept
 {
     gs_physicalDisconnectPublicationPoisoned.store(
         false, std::memory_order_release);
 }
 
-void wxWinUIPoisonPhysicalDisconnectPublicationForTesting() noexcept
+void wxWinUIPhysicalDisconnectTestAccess::PoisonPublication() noexcept
 {
     wxWinUINotePhysicalDisconnectGateDegraded();
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 class wxWinUILoadedState
 {

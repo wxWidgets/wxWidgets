@@ -66,22 +66,11 @@ struct WXDLLIMPEXP_CORE wxWinUIAppearanceSnapshot
     wxString peerLocalizedControlType;
 };
 
-enum class wxWinUIHighContrastOverrideForTesting
-{
-    System,
-    ForceOff,
-    ForceOn
-};
-
 class wxWindow;
 
 // Centralize the native High Contrast policy so controls can relinquish local
-// brushes to WinUI ThemeResources. The override exists only for deterministic
-// tests and must be restored to System by their scope guard.
+// brushes to WinUI ThemeResources.
 WXDLLIMPEXP_CORE bool wxWinUIIsHighContrastActive();
-WXDLLIMPEXP_CORE void
-wxWinUISetHighContrastOverrideForTesting(
-    wxWinUIHighContrastOverrideForTesting overrideValue);
 
 WXDLLIMPEXP_CORE wxWinUILabelPresentation
 wxWinUIParseLabel(const wxString& label);

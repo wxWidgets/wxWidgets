@@ -29,6 +29,7 @@
 #include "host-cursor-test-access.h"
 #include "host-content-test-access.h"
 #include "host-observation-test-access.h"
+#include "physical-disconnect-test-access.h"
 #endif
 #include "hostnative.h"
 #include "hostinput.h"
@@ -880,11 +881,12 @@ bool wxWinUIOptimisationDisabled(const char *name)
 // wxWinUISlot
 // ============================================================================
 
-class wxWinUIPhysicalDisconnectGateForTesting final :
+#ifdef WXWINUI_TEST_SUPPORT
+class wxWinUITestPhysicalDisconnectGate final :
     public wxWinUIPhysicalDisconnectGate
 {
 public:
-    wxWinUIPhysicalDisconnectGateForTesting(
+    wxWinUITestPhysicalDisconnectGate(
         const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue,
         bool satisfied,
         bool degraded)
@@ -1020,6 +1022,7 @@ private:
     bool m_openAtSealedCompletion = false;
     bool m_openBeforeSourceClose = false;
 };
+#endif
 
 
 class wxWinUIContentLoadedState
@@ -10775,15 +10778,16 @@ void wxWinUITopLevelHost::ApplyThemeToAll(
     }
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 std::shared_ptr<wxWinUIPhysicalDisconnectGate>
-wxWinUICreatePhysicalDisconnectGateForTesting(
+wxWinUIPhysicalDisconnectTestAccess::CreateGate(
     const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue,
     bool satisfied,
     bool degraded)
 {
     try
     {
-        return std::make_shared<wxWinUIPhysicalDisconnectGateForTesting>(
+        return std::make_shared<wxWinUITestPhysicalDisconnectGate>(
             queue, satisfied, degraded);
     }
     catch ( ... )
@@ -10792,52 +10796,53 @@ wxWinUICreatePhysicalDisconnectGateForTesting(
     }
 }
 
-bool wxWinUISetPhysicalDisconnectGateStateForTesting(
+bool wxWinUIPhysicalDisconnectTestAccess::SetGateState(
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate,
     bool satisfied,
     bool degraded)
 {
     const auto probe = std::dynamic_pointer_cast<
-        wxWinUIPhysicalDisconnectGateForTesting>(gate);
+        wxWinUITestPhysicalDisconnectGate>(gate);
     if ( !probe )
         return false;
     probe->SetState(satisfied, degraded);
     return true;
 }
 
-bool wxWinUIIsPhysicalDisconnectGateSatisfiedForTesting(
+bool wxWinUIPhysicalDisconnectTestAccess::IsGateSatisfied(
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate)
 {
     return gate && gate->IsSatisfied();
 }
 
-bool wxWinUIIsPhysicalDisconnectGateDegradedForTesting(
+bool wxWinUIPhysicalDisconnectTestAccess::IsGateDegraded(
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate)
 {
     return gate && gate->IsDegraded();
 }
 
-bool wxWinUIOpenPhysicalDisconnectGateAtSealedCompletionForTesting(
+bool wxWinUIPhysicalDisconnectTestAccess::OpenGateAtSealedCompletion(
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate)
 {
     const auto probe = std::dynamic_pointer_cast<
-        wxWinUIPhysicalDisconnectGateForTesting>(gate);
+        wxWinUITestPhysicalDisconnectGate>(gate);
     if ( !probe )
         return false;
     probe->OpenAtSealedCompletion();
     return true;
 }
 
-bool wxWinUIOpenPhysicalDisconnectGateBeforeSourceCloseForTesting(
+bool wxWinUIPhysicalDisconnectTestAccess::OpenGateBeforeSourceClose(
     const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate)
 {
     const auto probe = std::dynamic_pointer_cast<
-        wxWinUIPhysicalDisconnectGateForTesting>(gate);
+        wxWinUITestPhysicalDisconnectGate>(gate);
     if ( !probe )
         return false;
     probe->OpenBeforeSourceClose();
     return true;
 }
+#endif
 
 #ifdef WXWINUI_TEST_SUPPORT
 unsigned long long wxWinUISlotTestAccess::GetSyncEpoch(const wxWinUISlot& slot)

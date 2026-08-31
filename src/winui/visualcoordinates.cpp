@@ -15,6 +15,9 @@
 // Clear conflicting Win32 macros before the WinRT projection headers.
 #include "private.h"
 #include "visualcoordinates.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "visual-coordinate-test-access.h"
+#endif // WXWINUI_TEST_SUPPORT
 
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -553,7 +556,8 @@ wxWinUICoordinateResult wxWinUIVisualCoordinates::ElementBoundsToClient(
         });
 }
 
-bool wxWinUIVisualCoordinates::TestRoundTripPhysicalSpaces(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIVisualCoordinateTestAccess::RoundTripPhysicalSpaces(
     const Rect& rootScreenPixels,
     const Rect& anchorScreenPixels,
     bool anchorMirrored,
@@ -571,21 +575,21 @@ bool wxWinUIVisualCoordinates::TestRoundTripPhysicalSpaces(
         return false;
     }
 
-    Snapshot snapshot;
+    wxWinUIVisualCoordinates::Snapshot snapshot;
     snapshot.rootScreenPixels = rootScreenPixels;
     snapshot.anchorScreenPixels = anchorScreenPixels;
     snapshot.anchorMirrored = anchorMirrored;
     snapshot.scale = scale;
 
-    const Point screen = ClientToScreen(snapshot, clientPixels);
-    const Point root = ScreenToRoot(snapshot, screen);
+    const Point screen = wxWinUIVisualCoordinates::ClientToScreen(snapshot, clientPixels);
+    const Point root = wxWinUIVisualCoordinates::ScreenToRoot(snapshot, screen);
     const Point screenAgain{
         rootScreenPixels.X +
             static_cast<float>(root.X * scale),
         rootScreenPixels.Y +
             static_cast<float>(root.Y * scale)
     };
-    const Point roundTrip = ScreenToClient(snapshot, screenAgain);
+    const Point roundTrip = wxWinUIVisualCoordinates::ScreenToClient(snapshot, screenAgain);
     if ( !wxWinUIIsFinitePoint(root) ||
          !wxWinUIIsFinitePoint(roundTrip) )
     {
@@ -596,6 +600,8 @@ bool wxWinUIVisualCoordinates::TestRoundTripPhysicalSpaces(
     *roundTrippedClientPixels = roundTrip;
     return true;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 wxWinUICoordinateResult
 wxWinUIVisualCoordinates::ClientPointToRootOnce(

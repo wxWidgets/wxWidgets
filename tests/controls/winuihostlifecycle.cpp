@@ -53,6 +53,7 @@
 #endif
 
 #include "wx/winui/private/tlwhost.h"
+#include "physical-disconnect-test-access.h"
 #include "tooltip-policy-test-access.h"
 #include "host-observation-test-access.h"
 #include "host-content-test-access.h"
@@ -60,6 +61,7 @@
 #include "host-input-test-access.h"
 #include "host-cursor-test-access.h"
 #include "host-geometry-test-access.h"
+#include "visual-coordinate-test-access.h"
 #include "host-uia-test-access.h"
 #include "control-host-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -1018,7 +1020,7 @@ TEST_CASE("HostLifecycle::PopupGateRejectsCrossTLWReparentWithoutMutation",
     REQUIRE(sourceSlot != nullptr);
     const auto content = sourceSlot->GetContent();
     const HWND nativeParent = ::GetParent(GetHwndOf(button));
-    const auto gate = wxWinUICreatePhysicalDisconnectGateForTesting(
+    const auto gate = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
         content.DispatcherQueue(), false);
     REQUIRE(gate != nullptr);
     sourceHost->SetSlotPhysicalDisconnectGate(button, gate);
@@ -1037,7 +1039,7 @@ TEST_CASE("HostLifecycle::PopupGateRejectsCrossTLWReparentWithoutMutation",
 
     // The caller closes the popup, its exact causal gate completes, and an
     // explicit retry transfers the same reusable/satisfied gate identity.
-    REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(
         gate, true));
     REQUIRE(button->Reparent(destination));
     wxWinUITopLevelHost * const destinationHost =
@@ -1073,7 +1075,7 @@ TEST_CASE("HostLifecycle::PopupOpenedBySetParentCallbackRollsBackExactly",
     REQUIRE(sourceSlot != nullptr);
     const auto content = sourceSlot->GetContent();
     const HWND nativeParent = ::GetParent(GetHwndOf(button));
-    const auto gate = wxWinUICreatePhysicalDisconnectGateForTesting(
+    const auto gate = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
         content.DispatcherQueue(), true);
     REQUIRE(gate != nullptr);
     sourceHost->SetSlotPhysicalDisconnectGate(button, gate);
@@ -1083,7 +1085,7 @@ TEST_CASE("HostLifecycle::PopupOpenedBySetParentCallbackRollsBackExactly",
         [gate, &gateOpenedAtBoundary](wxWindow *)
         {
             gateOpenedAtBoundary =
-                wxWinUISetPhysicalDisconnectGateStateForTesting(
+                wxWinUIPhysicalDisconnectTestAccess::SetGateState(
                     gate, false);
         });
     CHECK_FALSE(button->Reparent(destination));
@@ -1094,7 +1096,7 @@ TEST_CASE("HostLifecycle::PopupOpenedBySetParentCallbackRollsBackExactly",
     CHECK(sourceHost->FindSlot(button) == sourceSlot);
     CHECK(sourceSlot->GetContent() == content);
 
-    REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(
         gate, true));
     REQUIRE(button->Reparent(destination));
     wxWinUITopLevelHost * const destinationHost =
@@ -1133,7 +1135,7 @@ TEST_CASE("HostLifecycle::PhysicalGateCountersAreCausalAndBounded",
     REQUIRE(neverSlot != nullptr);
     REQUIRE(causalSlot != nullptr);
 
-    const auto satisfied = wxWinUICreatePhysicalDisconnectGateForTesting(
+    const auto satisfied = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
         neverSlot->GetContent().DispatcherQueue(), true);
     REQUIRE(satisfied != nullptr);
     host->SetSlotPhysicalDisconnectGate(neverOpened, satisfied);
@@ -1144,7 +1146,7 @@ TEST_CASE("HostLifecycle::PhysicalGateCountersAreCausalAndBounded",
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingTLWTerminalRetirementCount() == terminals0);
 
-    const auto retiring = wxWinUICreatePhysicalDisconnectGateForTesting(
+    const auto retiring = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
         causalSlot->GetContent().DispatcherQueue(), false);
     REQUIRE(retiring != nullptr);
     host->SetSlotPhysicalDisconnectGate(causal, retiring);
@@ -1155,7 +1157,7 @@ TEST_CASE("HostLifecycle::PhysicalGateCountersAreCausalAndBounded",
           pending0 + 1);
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingTLWTerminalRetirementCount() == terminals0);
-    REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(
         retiring, true));
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingPhysicalDisconnectGateCount() == pending0);
@@ -1179,7 +1181,7 @@ TEST_CASE("HostLifecycle::TLWShutdownCollectsLivePopupGate",
     REQUIRE(host != nullptr);
     wxWinUISlot * const slot = host->FindSlot(child);
     REQUIRE(slot != nullptr);
-    const auto gate = wxWinUICreatePhysicalDisconnectGateForTesting(
+    const auto gate = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
         slot->GetContent().DispatcherQueue(), false);
     REQUIRE(gate != nullptr);
     host->SetSlotPhysicalDisconnectGate(child, gate);
@@ -1193,7 +1195,7 @@ TEST_CASE("HostLifecycle::TLWShutdownCollectsLivePopupGate",
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingTLWTerminalRetirementCount() ==
           terminals0 + 1);
-    REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(gate, true));
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(gate, true));
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingTLWTerminalRetirementCount() ==
           terminals0);
@@ -1219,7 +1221,7 @@ TEST_CASE("HostLifecycle::TLWShutdownConsumesSealedNoPopupTickets",
         REQUIRE(host != nullptr);
         wxWinUISlot * const slot = host->FindSlot(child);
         REQUIRE(slot != nullptr);
-        const auto gate = wxWinUICreatePhysicalDisconnectGateForTesting(
+        const auto gate = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
             slot->GetContent().DispatcherQueue(), true);
         REQUIRE(gate != nullptr);
         host->SetSlotPhysicalDisconnectGate(child, gate);
@@ -1234,9 +1236,9 @@ TEST_CASE("HostLifecycle::TLWShutdownConsumesSealedNoPopupTickets",
     {
         // The logical gate was consumed, but publication authority is
         // permanently sealed rather than made reusable after host shutdown.
-        CHECK_FALSE(wxWinUIIsPhysicalDisconnectGateSatisfiedForTesting(
+        CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsGateSatisfied(
             gate));
-        CHECK_FALSE(wxWinUIIsPhysicalDisconnectGateDegradedForTesting(
+        CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsGateDegraded(
             gate));
     }
 
@@ -1247,10 +1249,10 @@ TEST_CASE("HostLifecycle::TLWShutdownConsumesSealedNoPopupTickets",
 TEST_CASE("HostLifecycle::LateOpenAtSealedSweepUsesExistingTerminalLedger",
           "[HostLifecycle][popup-gate][terminal][seal][late-open]")
 {
-    wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+    wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     const auto resetPoison = wxMakeGuard([]()
     {
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     });
     wxUnusedVar(resetPoison);
     const unsigned terminals0 =
@@ -1263,19 +1265,19 @@ TEST_CASE("HostLifecycle::LateOpenAtSealedSweepUsesExistingTerminalLedger",
     REQUIRE(host != nullptr);
     wxWinUISlot * const slot = host->FindSlot(child);
     REQUIRE(slot != nullptr);
-    const auto gate = wxWinUICreatePhysicalDisconnectGateForTesting(
+    const auto gate = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
         slot->GetContent().DispatcherQueue(), true);
     REQUIRE(gate != nullptr);
     host->SetSlotPhysicalDisconnectGate(child, gate);
-    REQUIRE(wxWinUIOpenPhysicalDisconnectGateAtSealedCompletionForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::OpenGateAtSealedCompletion(
         gate));
 
     wxWinUIHostContentTestAccess::Shutdown(*host);
-    CHECK(wxWinUIIsPhysicalDisconnectGateDegradedForTesting(gate));
+    CHECK(wxWinUIPhysicalDisconnectTestAccess::IsGateDegraded(gate));
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingTLWTerminalRetirementCount() ==
           terminals0 + 1);
-    REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(
         gate, true, false));
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingTLWTerminalRetirementCount() ==
@@ -1288,10 +1290,10 @@ TEST_CASE("HostLifecycle::LateOpenAtSealedSweepUsesExistingTerminalLedger",
 TEST_CASE("HostLifecycle::AcceptedOpenIsLatchedBeforeSourceClose",
           "[HostLifecycle][popup-gate][terminal][seal][pre-close]")
 {
-    wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+    wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     const auto resetPoison = wxMakeGuard([]()
     {
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     });
     wxUnusedVar(resetPoison);
     const unsigned terminals0 =
@@ -1304,19 +1306,19 @@ TEST_CASE("HostLifecycle::AcceptedOpenIsLatchedBeforeSourceClose",
     REQUIRE(host != nullptr);
     wxWinUISlot * const slot = host->FindSlot(child);
     REQUIRE(slot != nullptr);
-    const auto gate = wxWinUICreatePhysicalDisconnectGateForTesting(
+    const auto gate = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
         slot->GetContent().DispatcherQueue(), true);
     REQUIRE(gate != nullptr);
     host->SetSlotPhysicalDisconnectGate(child, gate);
-    REQUIRE(wxWinUIOpenPhysicalDisconnectGateBeforeSourceCloseForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::OpenGateBeforeSourceClose(
         gate));
 
     wxWinUIHostContentTestAccess::Shutdown(*host);
-    CHECK(wxWinUIIsPhysicalDisconnectGateDegradedForTesting(gate));
+    CHECK(wxWinUIPhysicalDisconnectTestAccess::IsGateDegraded(gate));
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingTLWTerminalRetirementCount() ==
           terminals0 + 1);
-    REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(
         gate, true, false));
     CHECK(wxWinUIHostObservationTestAccess::
               GetPendingTLWTerminalRetirementCount() ==
@@ -1329,10 +1331,10 @@ TEST_CASE("HostLifecycle::AcceptedOpenIsLatchedBeforeSourceClose",
 TEST_CASE("HostLifecycle::DegradedLivePeerPoisonsWithoutDetach",
           "[HostLifecycle][popup-gate][poison]")
 {
-    wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+    wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     const auto resetPoison = wxMakeGuard([]()
     {
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     });
     wxUnusedVar(resetPoison);
 
@@ -1344,14 +1346,14 @@ TEST_CASE("HostLifecycle::DegradedLivePeerPoisonsWithoutDetach",
     wxWinUISlot * const slot = host->FindSlot(child);
     REQUIRE(slot != nullptr);
     const auto content = slot->GetContent();
-    const auto gate = wxWinUICreatePhysicalDisconnectGateForTesting(
+    const auto gate = wxWinUIPhysicalDisconnectTestAccess::CreateGate(
         content.DispatcherQueue(), true);
     REQUIRE(gate != nullptr);
     host->SetSlotPhysicalDisconnectGate(child, gate);
 
-    REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(
         gate, false, true));
-    CHECK(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+    CHECK(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
     CHECK_FALSE(wxWinUITLWHostCanReparentSubtreeNow(child));
     CHECK(wxWinUITopLevelHost::FindSlotOwner(child) == host);
     CHECK(host->FindSlot(child) == slot);
@@ -1359,7 +1361,7 @@ TEST_CASE("HostLifecycle::DegradedLivePeerPoisonsWithoutDetach",
     CHECK(wxWinUISlotTestAccess::GetPhysicalDisconnectGateIdentity(*slot) ==
           reinterpret_cast<std::uintptr_t>(gate.get()));
 
-    REQUIRE(wxWinUISetPhysicalDisconnectGateStateForTesting(
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::SetGateState(
         gate, true, false));
     frame->Destroy();
     DrainDispatch();
@@ -12885,8 +12887,8 @@ TEST_CASE("HostLifecycle::FractionalCoordinateArithmetic",
                 WF::Point root{};
                 WF::Point roundTrip{};
                 REQUIRE(
-                    wxWinUIVisualCoordinates::
-                        TestRoundTripPhysicalSpaces(
+                    wxWinUIVisualCoordinateTestAccess::
+                        RoundTripPhysicalSpaces(
                             rootScreen,
                             anchorScreen,
                             mirrored,
@@ -12917,7 +12919,7 @@ TEST_CASE("HostLifecycle::FractionalCoordinateArithmetic",
     WF::Point untouchedRoot{11.0f, 12.0f};
     WF::Point untouchedClient{13.0f, 14.0f};
     CHECK_FALSE(
-        wxWinUIVisualCoordinates::TestRoundTripPhysicalSpaces(
+        wxWinUIVisualCoordinateTestAccess::RoundTripPhysicalSpaces(
             rootScreen,
             anchorScreen,
             false,

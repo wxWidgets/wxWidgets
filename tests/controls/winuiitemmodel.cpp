@@ -30,6 +30,7 @@
     #include "keyboard-test-access.h"
     #include "wx/winui/private/textpeer.h"
     #include "wx/winui/private/tlwhost.h"
+#include "physical-disconnect-test-access.h"
     #include "host-observation-test-access.h"
     #include "host-content-test-access.h"
 #endif
@@ -938,10 +939,10 @@ TEST_CASE("wxWinUI popup retirement core keeps detached correlation identity",
 TEST_CASE("wxWinUI ComboBox immediate popup operations are idempotent",
           "[winui-itemmodel][winui-combo][popup][retirement][generation]")
 {
-    wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+    wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     const auto resetPoison = wxMakeGuard([]()
     {
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     });
     wxUnusedVar(resetPoison);
 
@@ -990,16 +991,16 @@ TEST_CASE("wxWinUI ComboBox immediate popup operations are idempotent",
     combo.Dismiss();
     CHECK(closeups.GetCount() == 1);
     CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
-    CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+    CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
 }
 
 TEST_CASE("wxWinUI ComboBox coalesces synchronous close-handler reopen",
           "[winui-itemmodel][winui-combo][popup][retirement][generation]")
 {
-    wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+    wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     const auto resetPoison = wxMakeGuard([]()
     {
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     });
     wxUnusedVar(resetPoison);
 
@@ -1015,7 +1016,7 @@ TEST_CASE("wxWinUI ComboBox coalesces synchronous close-handler reopen",
     // popup/open-list publication gap without an intervening dispatcher pump.
     combo.Popup();
     CHECK(dropDowns.GetCount() == 1);
-    CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+    CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
     combo.Popup();
     CHECK(dropDowns.GetCount() == 1);
     REQUIRE(WaitFor("initial ComboBox popup", [&combo]()
@@ -1047,7 +1048,7 @@ TEST_CASE("wxWinUI ComboBox coalesces synchronous close-handler reopen",
     CHECK(schedules == 1);
     CHECK(runs == 0);
     CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
-    CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+    CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
 
     // WaitFor only services the real dispatcher. The replay is admitted by
     // the exact gate's causal callback, and the counters prove that no idle
@@ -1070,7 +1071,7 @@ TEST_CASE("wxWinUI ComboBox coalesces synchronous close-handler reopen",
     CHECK_FALSE(pending);
     CHECK(schedules == 1);
     CHECK(runs == 1);
-    CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+    CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
 
     REQUIRE(combo.Unbind(wxEVT_COMBOBOX_CLOSEUP, closeupHandler));
     combo.Dismiss();
@@ -1079,10 +1080,10 @@ TEST_CASE("wxWinUI ComboBox coalesces synchronous close-handler reopen",
 TEST_CASE("wxWinUI ComboBox observes final cancelled LosingFocus",
           "[winui-itemmodel][winui-combo][popup][retirement][focus-cancel]")
 {
-    wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+    wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     const auto resetPoison = wxMakeGuard([]()
     {
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     });
     wxUnusedVar(resetPoison);
 
@@ -1241,17 +1242,17 @@ TEST_CASE("wxWinUI ComboBox observes final cancelled LosingFocus",
     {
         return wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo);
     }));
-    CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+    CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
     combo.Dismiss();
 }
 
 TEST_CASE("wxWinUI ComboBox poison preflight blocks live peer publication",
           "[winui-itemmodel][winui-combo][popup][retirement][poison]")
 {
-    wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+    wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     const auto resetPoison = wxMakeGuard([]()
     {
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     });
     wxUnusedVar(resetPoison);
 
@@ -1262,8 +1263,8 @@ TEST_CASE("wxWinUI ComboBox poison preflight blocks live peer publication",
                      WXSIZEOF(items), items, wxCB_READONLY);
     frame.Show();
 
-    wxWinUIPoisonPhysicalDisconnectPublicationForTesting();
-    REQUIRE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+    wxWinUIPhysicalDisconnectTestAccess::PoisonPublication();
+    REQUIRE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
     combo.Popup();
     CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
 }
@@ -1271,10 +1272,10 @@ TEST_CASE("wxWinUI ComboBox poison preflight blocks live peer publication",
 TEST_CASE("wxWinUI ComboBox shutdown seal permanently rejects Popup",
           "[winui-itemmodel][winui-combo][popup][retirement][seal]")
 {
-    wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+    wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     const auto resetPoison = wxMakeGuard([]()
     {
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     });
     wxUnusedVar(resetPoison);
 
@@ -1291,7 +1292,7 @@ TEST_CASE("wxWinUI ComboBox shutdown seal permanently rejects Popup",
 
     combo.Popup();
     CHECK_FALSE(wxWinUIChoiceTestAccess::IsPeerDropDownOpen(&combo));
-    CHECK_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+    CHECK_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
 }
 
 #endif // wxUSE_COMBOBOX
@@ -1681,7 +1682,7 @@ TEST_CASE("wxWinUI ComboBox popup teardown leaves the next template focus clean"
             wxWinUIHostObservationTestAccess::
                 GetPendingTLWTerminalRetirementCount() <=
             terminalRetirementBaseline);
-        REQUIRE_FALSE(wxWinUIIsPhysicalDisconnectPublicationPoisoned());
+        REQUIRE_FALSE(wxWinUIPhysicalDisconnectTestAccess::IsPublicationPoisoned());
         combo.SetFocus();
         CHECK(wxWindow::FindFocus() == &combo);
         CHECK(combo.GetSelection() == 1);

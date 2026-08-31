@@ -153,8 +153,6 @@ WXDLLIMPEXP_CORE void
 wxWinUINotePhysicalDisconnectGateDegraded() noexcept;
 WXDLLIMPEXP_CORE bool
 wxWinUIIsPhysicalDisconnectPublicationPoisoned() noexcept;
-WXDLLIMPEXP_CORE void
-wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting() noexcept;
 
 class wxWinUIControlHost
 {

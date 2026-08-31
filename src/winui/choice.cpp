@@ -15,6 +15,7 @@
 
 #ifdef WXWINUI_TEST_SUPPORT
 #include "choice-test-access.h"
+#include "physical-disconnect-test-access.h"
 #endif
 
 #ifndef WX_PRECOMP
@@ -219,7 +220,7 @@ public:
         reopening->CompleteAtXamlBoundary();
 
         if ( !poisonWasAlreadySet )
-            wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+            wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
         return result;
     }
 #endif
@@ -3992,7 +3993,7 @@ wxWinUIChoiceTestAccess::PopupRetirementCoreProbe wxWinUIChoiceTestAccess::Probe
     sealedNative->CompleteAtXamlBoundary();
 
     if ( !poisonWasAlreadySet )
-        wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting();
+        wxWinUIPhysicalDisconnectTestAccess::ResetPublicationPoison();
     return result;
 }
 #endif // WXWINUI_TEST_SUPPORT

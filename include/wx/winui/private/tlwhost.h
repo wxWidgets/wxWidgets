@@ -670,6 +670,8 @@ enum class wxWinUICoordinateResult
     Superseded
 };
 
+class wxWinUIVisualCoordinateTestAccess;
+
 class WXDLLIMPEXP_CORE wxWinUIVisualCoordinates final
 {
 public:
@@ -701,18 +703,9 @@ public:
         const Rect& elementBoundsDips,
         Rect *clientBoundsPixels);
 
-    // Projection-free arithmetic seam: CI can exercise 125/150/175 % and
-    // mirrored physical spaces without depending on its monitor topology.
-    static bool TestRoundTripPhysicalSpaces(
-        const Rect& rootScreenPixels,
-        const Rect& anchorScreenPixels,
-        bool anchorMirrored,
-        double scale,
-        const Point& clientPixels,
-        Point *rootDips,
-        Point *roundTrippedClientPixels);
-
 private:
+    friend class wxWinUIVisualCoordinateTestAccess;
+
     struct Snapshot;
 
     static wxWinUITopLevelHost *ResolveHost(wxWindow *anchor);
@@ -1904,37 +1897,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxWinUITopLevelHost);
 };
-
-#if wxUSE_TOOLTIPS
-// Deterministic physical-retirement seam. It exercises host ownership,
-// migration, shutdown and counter contracts without using sleeps or treating
-// an arbitrary dispatcher turn as proof of popup causality.
-WXDLLIMPEXP_CORE std::shared_ptr<wxWinUIPhysicalDisconnectGate>
-wxWinUICreatePhysicalDisconnectGateForTesting(
-    const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue,
-    bool satisfied = true,
-    bool degraded = false);
-WXDLLIMPEXP_CORE bool wxWinUISetPhysicalDisconnectGateStateForTesting(
-    const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate,
-    bool satisfied,
-    bool degraded = false);
-WXDLLIMPEXP_CORE bool wxWinUIIsPhysicalDisconnectGateSatisfiedForTesting(
-    const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate);
-WXDLLIMPEXP_CORE bool wxWinUIIsPhysicalDisconnectGateDegradedForTesting(
-    const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate);
-WXDLLIMPEXP_CORE bool
-wxWinUIOpenPhysicalDisconnectGateAtSealedCompletionForTesting(
-    const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate);
-WXDLLIMPEXP_CORE bool
-wxWinUIOpenPhysicalDisconnectGateBeforeSourceCloseForTesting(
-    const std::shared_ptr<wxWinUIPhysicalDisconnectGate>& gate);
-WXDLLIMPEXP_CORE bool
-wxWinUIIsPhysicalDisconnectPublicationPoisoned() noexcept;
-WXDLLIMPEXP_CORE void
-wxWinUIResetPhysicalDisconnectPublicationPoisonForTesting() noexcept;
-WXDLLIMPEXP_CORE void
-wxWinUIPoisonPhysicalDisconnectPublicationForTesting() noexcept;
-#endif
 
 #endif // wxUSE_WINUI3
 

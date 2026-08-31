@@ -1,6 +1,6 @@
 # Plan 106: Move testing facilities out of installed public control APIs
 
-- Status: IN PROGRESS (28 control headers and seam storage qualified; runtime/host remainder and component failures open)
+- Status: IN PROGRESS (28 control headers and multiple host/runtime seam families qualified; remaining helper/component surfaces and shipping proof open)
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -425,6 +425,41 @@ Do not delete a lifetime/retirement service used by production merely because it
   the `audit106-host-policy-on-*.log` files in each active build tree. These
   are private-desktop, non-input checks; source canaries and fresh shipping OFF
   symbol/install verification remain pending.
+
+## Coordinate, disconnect and appearance test boundaries (2026-09-01)
+
+- The visual-coordinate round-trip helper leaves the production coordinate
+  class and is exposed only by the non-installed
+  `visual-coordinate-test-access.h`. The production logical/physical/client/
+  screen transforms and their scale source are unchanged; no conditional data
+  member or virtual function is introduced.
+- Six synthetic physical-disconnect gate operations plus the Reset and Poison
+  injectors move to `physical-disconnect-test-access.h`. The real disconnect
+  gate, composite gate, poison authority and passive poison query remain
+  production facilities used by ControlHost, Choice and ComboBox. All **52**
+  consumer calls are migrated without changing their assertion sites.
+- The High Contrast enum, override storage and setter move to
+  `appearance-test-access.h`. A build without test support contains only the
+  real `SystemParametersInfo(SPI_GETHIGHCONTRAST)` query, preserves the
+  conservative `true` result on query failure and tests the unchanged
+  `HCF_HIGHCONTRASTON` flag. Appearance snapshots and capture logic remain
+  production code.
+- Before migration, both linkages pass coordinate arithmetic **125/1**,
+  physical-disconnect/ComboBox **163/13** and High Contrast/theme policy
+  **295/13** assertions/cases. After migration, one combined private-desktop
+  run adds the detached-correlation retirement case and passes **590/28** in
+  both shared and static builds. Both linkages build `test_gui`, `minimal` and
+  `winuispike` with warnings as errors; ordinary wxMSW Debug `test_gui` also
+  builds, and runtime smoke/Supported V0 pass **2/2** per linkage. Logs are
+  `audit106-coordinate-baseline.log`,
+  `audit106-physical-gate-baseline.log`,
+  `audit106-appearance-high-contrast-baseline.log` and the
+  `audit106-coordinate-physical-appearance-on-{build,tests,gates}.log` files
+  in the active build trees; the wxMSW build log is
+  `audit106-coordinate-physical-appearance-cross-build.log`.
+- These are deterministic non-input tests with `WX_UI_TESTS=0`; they do not
+  qualify physical input. Fresh shipping OFF/ON source, symbol, install and
+  installed-consumer proof remains pending and keeps plan 106 open.
 
 ## Maintenance
 

@@ -17,6 +17,7 @@
 #include "wx/settings.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/appearance.h"
+#include "appearance-test-access.h"
 #include "wx/winui/private/shelltheme.h"
 #include "wx/winui/private/transient.h"
 #include "owner-backdrop-test-access.h"
@@ -526,20 +527,20 @@ struct ShellThemeSeamGuard
 struct HighContrastSeamGuard
 {
     explicit HighContrastSeamGuard(
-        wxWinUIHighContrastOverrideForTesting value)
+        wxWinUIAppearanceTestAccess::HighContrastOverride value)
     {
-        wxWinUISetHighContrastOverrideForTesting(value);
+        wxWinUIAppearanceTestAccess::SetHighContrastOverride(value);
     }
 
     ~HighContrastSeamGuard()
     {
-        wxWinUISetHighContrastOverrideForTesting(
-            wxWinUIHighContrastOverrideForTesting::System);
+        wxWinUIAppearanceTestAccess::SetHighContrastOverride(
+            wxWinUIAppearanceTestAccess::HighContrastOverride::System);
     }
 
-    void Set(wxWinUIHighContrastOverrideForTesting value)
+    void Set(wxWinUIAppearanceTestAccess::HighContrastOverride value)
     {
-        wxWinUISetHighContrastOverrideForTesting(value);
+        wxWinUIAppearanceTestAccess::SetHighContrastOverride(value);
     }
 };
 
@@ -1072,7 +1073,7 @@ TEST_CASE("WinUITransient::ShellThemeHotMessages",
     model.backdropResult = true;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOn);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn);
 
     const WXHWND hwnd = frame.GetHWND();
     wxWinUIApplyWindowBackdrop(&frame);
@@ -1122,7 +1123,7 @@ TEST_CASE("WinUITransient::ShellThemeHotMessages",
     // The next notification re-resolves the policy; no process restart or
     // actual desktop setting mutation is required.
     highContrast.Set(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
     const std::size_t transitionCallsBefore = model.backdropCalls.size();
     ::SendMessageW(
         nativeHwnd,
@@ -1149,7 +1150,7 @@ TEST_CASE("WinUITransient::ShellControlThemeFailureIsBestEffort",
     model.rejectControlThemeHwnd = child.GetHWND();
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOn);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn);
 
     wxWinUIApplyWindowBackdrop(&frame);
 
@@ -1176,7 +1177,7 @@ TEST_CASE("WinUITransient::ShellThemeNestedLatestPolicyWins",
     model.backdropResult = true;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     bool nested = false;
     model.reenterSetBackdrop =
@@ -1184,7 +1185,7 @@ TEST_CASE("WinUITransient::ShellThemeNestedLatestPolicyWins",
         {
             nested = true;
             highContrast.Set(
-                wxWinUIHighContrastOverrideForTesting::ForceOn);
+                wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn);
             wxWinUIApplyWindowBackdrop(&frame);
         };
 
@@ -1231,7 +1232,7 @@ TEST_CASE("WinUITransient::ShellThemeDriverRetiresDestroyedCurrentTLW",
     model.backdropResult = true;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     bool destroyed = false;
     model.reenterSetBackdropHwnd = doomedHwnd;
@@ -1287,7 +1288,7 @@ TEST_CASE("WinUITransient::ShellThemePartialMaterialRollsBack",
     model.extendFrameResult = false;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     wxWinUIApplyWindowBackdrop(&frame);
 
@@ -1323,7 +1324,7 @@ TEST_CASE("WinUITransient::FrameFailureCleanupFailureRetainsMaterial",
     model.extendFrameResult = true;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     wxWinUIApplyWindowBackdrop(&frame);
 
@@ -1378,7 +1379,7 @@ TEST_CASE("WinUITransient::ShellThemeMarkerFailureRollsBackWholeTree",
     model.rejectMarkerEnable = true;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     wxWinUIApplyWindowBackdrop(&frame);
 
@@ -1440,7 +1441,7 @@ TEST_CASE("WinUITransient::ShellThemeMarkerCleanupFailureRetainsMaterial",
     model.rejectMarkerDisableHwnd = frame.GetHWND();
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     wxWinUIApplyWindowBackdrop(&frame);
 
@@ -1488,7 +1489,7 @@ TEST_CASE("WinUITransient::HighContrastCleanupFailureRetainsMaterial",
     model.extendFrameResult = true;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     wxWinUIApplyWindowBackdrop(&frame);
 
@@ -1503,7 +1504,7 @@ TEST_CASE("WinUITransient::HighContrastCleanupFailureRetainsMaterial",
     model.controlThemeCalls.clear();
     model.rejectMarkerDisableHwnd = root;
     highContrast.Set(
-        wxWinUIHighContrastOverrideForTesting::ForceOn);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOn);
 
     wxWinUIApplyWindowBackdrop(&frame);
 
@@ -1541,7 +1542,7 @@ TEST_CASE("WinUITransient::OwnedTopLevelsUseIndependentShellTransactions",
     model.backdropResult = false;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
 
     const WXHWND frameHwnd = frame.GetHWND();
     const WXHWND childHwnd = child.GetHWND();
@@ -1585,7 +1586,7 @@ TEST_CASE("WinUITransient::AppThemeSnapshotSurvivesTLWDestruction",
     model.backdropResult = false;
     ShellThemeSeamGuard nativeGuard(model);
     HighContrastSeamGuard highContrast(
-        wxWinUIHighContrastOverrideForTesting::ForceOff);
+        wxWinUIAppearanceTestAccess::HighContrastOverride::ForceOff);
     std::size_t callsAtDestruction = 0;
     model.reenterSetBackdrop =
         [&]()
