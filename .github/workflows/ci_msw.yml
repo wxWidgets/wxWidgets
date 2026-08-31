@@ -353,7 +353,8 @@ jobs:
 
             cmake -S tests/winui/install-consumer -B $consumerDir `
               -G "Visual Studio 17 2022" -A x64 `
-              "-DCMAKE_PREFIX_PATH=$installDir"
+              "-DCMAKE_PREFIX_PATH=$installDir" `
+              -DWX_WINUI_RUNTIME_FAULT_MODE=ON
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
             cmake --build $consumerDir --config Release --parallel 4 -- /noLogo /nr:false
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

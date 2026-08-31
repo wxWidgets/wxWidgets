@@ -1,5 +1,18 @@
 cmake_minimum_required(VERSION 3.21)
 
+if(NOT WX_WINUI_RUNTIME_FAULT_MODE STREQUAL "ON" AND
+        NOT WX_WINUI_RUNTIME_FAULT_MODE STREQUAL "OFF")
+    message(FATAL_ERROR
+        "Set WX_WINUI_RUNTIME_FAULT_MODE explicitly to ON for a "
+        "wxBUILD_TESTS=ALL library, or OFF for a shipping library")
+endif()
+message(STATUS "wxWinUI installed runtime fault mode: ${WX_WINUI_RUNTIME_FAULT_MODE}")
+if(WX_WINUI_RUNTIME_FAULT_MODE STREQUAL "ON")
+    set(wx_winui_fault_argument --runtime-fault)
+else()
+    set(wx_winui_fault_argument --runtime-fault-inert)
+endif()
+
 if(NOT DEFINED WX_WINUI_TEST_EXE OR
         NOT EXISTS "${WX_WINUI_TEST_EXE}")
     message(FATAL_ERROR
@@ -124,14 +137,19 @@ endif()
 # unlike the permanent quarantines below. Recovery is tested in this same
 # child only after proving the one-shot guard was consumed and COM balanced.
 execute_process(
-    COMMAND "${WX_WINUI_TEST_EXE}" --runtime-fault before-bootstrap
+    COMMAND "${WX_WINUI_TEST_EXE}" "${wx_winui_fault_argument}" before-bootstrap
     WORKING_DIRECTORY "${wx_winui_test_dir}"
     RESULT_VARIABLE wx_winui_clean_result
     OUTPUT_VARIABLE wx_winui_clean_output
     ERROR_VARIABLE wx_winui_clean_error
     TIMEOUT 120)
-set(wx_winui_clean_marker
-    "wx_winui_runtime_clean_fault: name=before-bootstrap initializer_rejected=1 env_consumed=1 com_balanced=1 recovered=1 result=0")
+if(WX_WINUI_RUNTIME_FAULT_MODE STREQUAL "ON")
+    set(wx_winui_clean_marker
+        "wx_winui_runtime_clean_fault: name=before-bootstrap initializer_rejected=1 env_consumed=1 com_balanced=1 recovered=1 result=0")
+else()
+    set(wx_winui_clean_marker
+        "wx_winui_runtime_fault_inert: name=before-bootstrap initializer_accepted=1 env_preserved=1 repeated=1 com_balanced=1 result=0")
+endif()
 string(FIND "${wx_winui_clean_output}"
     "${wx_winui_clean_marker}" wx_winui_clean_marker_offset)
 if(NOT "${wx_winui_clean_result}" STREQUAL "0" OR
@@ -192,15 +210,20 @@ set(wx_winui_fault_report "")
 foreach(wx_winui_runtime_fault IN LISTS wx_winui_runtime_faults)
     execute_process(
         COMMAND "${WX_WINUI_TEST_EXE}"
-            --runtime-fault "${wx_winui_runtime_fault}"
+            "${wx_winui_fault_argument}" "${wx_winui_runtime_fault}"
         WORKING_DIRECTORY "${wx_winui_test_dir}"
         RESULT_VARIABLE wx_winui_fault_result
         OUTPUT_VARIABLE wx_winui_fault_output
         ERROR_VARIABLE wx_winui_fault_error
         TIMEOUT 120)
 
-    set(wx_winui_fault_marker
-        "wx_winui_runtime_fault: name=${wx_winui_runtime_fault} initializer_rejected=1 env_consumed=1 init_rejected=1 sta_retained=1 result=0")
+    if(WX_WINUI_RUNTIME_FAULT_MODE STREQUAL "ON")
+        set(wx_winui_fault_marker
+            "wx_winui_runtime_fault: name=${wx_winui_runtime_fault} initializer_rejected=1 env_consumed=1 init_rejected=1 sta_retained=1 result=0")
+    else()
+        set(wx_winui_fault_marker
+            "wx_winui_runtime_fault_inert: name=${wx_winui_runtime_fault} initializer_accepted=1 env_preserved=1 repeated=1 com_balanced=1 result=0")
+    endif()
     string(FIND "${wx_winui_fault_output}"
         "${wx_winui_fault_marker}" wx_winui_fault_marker_offset)
     if(NOT "${wx_winui_fault_result}" STREQUAL "0" OR
@@ -212,6 +235,42 @@ foreach(wx_winui_runtime_fault IN LISTS wx_winui_runtime_faults)
         "stdout:\n${wx_winui_fault_output}\n"
         "stderr:\n${wx_winui_fault_error}\n")
 endforeach()
+
+# Prove the mode is an expectation, not auto-detection: the same fresh child
+# using the opposite oracle must fail for the precise before-bootstrap
+# contract, not just return any error (e.g. a missing deployed DLL).
+if(WX_WINUI_RUNTIME_FAULT_MODE STREQUAL "ON")
+    set(wx_winui_mismatch_argument --runtime-fault-inert)
+    set(wx_winui_mismatch_expected_result 43)
+    set(wx_winui_mismatch_marker
+        "wx_winui_runtime_fault_inert: name=before-bootstrap initializer_accepted=0 env_preserved=0 repeated=0 com_balanced=1 result=43")
+else()
+    set(wx_winui_mismatch_argument --runtime-fault)
+    set(wx_winui_mismatch_expected_result 27)
+    set(wx_winui_mismatch_marker
+        "wx_winui_runtime_clean_fault: name=before-bootstrap initializer_rejected=0 env_consumed=0 com_balanced=1 recovered=0 result=27")
+endif()
+execute_process(
+    COMMAND "${WX_WINUI_TEST_EXE}"
+        "${wx_winui_mismatch_argument}" before-bootstrap
+    WORKING_DIRECTORY "${wx_winui_test_dir}"
+    RESULT_VARIABLE wx_winui_mismatch_result
+    OUTPUT_VARIABLE wx_winui_mismatch_output
+    ERROR_VARIABLE wx_winui_mismatch_error
+    TIMEOUT 120)
+string(FIND "${wx_winui_mismatch_output}"
+    "${wx_winui_mismatch_marker}" wx_winui_mismatch_marker_offset)
+if(NOT "${wx_winui_mismatch_result}" STREQUAL
+        "${wx_winui_mismatch_expected_result}" OR
+        wx_winui_mismatch_marker_offset EQUAL -1)
+    set(wx_winui_fault_failed true)
+endif()
+string(APPEND wx_winui_fault_report
+    "\n[opposite-mode must fail] mode=${WX_WINUI_RUNTIME_FAULT_MODE} "
+    "result=${wx_winui_mismatch_result} "
+    "expected=${wx_winui_mismatch_expected_result}\n"
+    "stdout:\n${wx_winui_mismatch_output}\n"
+    "stderr:\n${wx_winui_mismatch_error}\n")
 
 # LocalDumps is optional, but when it is enabled no new WER artifact may be
 # produced by a test which otherwise returns zero. The executable also has a

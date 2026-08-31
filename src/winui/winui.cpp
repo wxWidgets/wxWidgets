@@ -153,6 +153,7 @@ constexpr unsigned wxWinUIRejectFrameworkRetirementHook = 1u;
 constexpr unsigned wxWinUIRejectShutdownRetirementHook = 2u;
 #endif
 
+#ifdef WXWINUI_TEST_SUPPORT
 // These faults are intentionally unreachable unless a dedicated subprocess
 // supplies both exact environment variables. Consume and erase the guard at
 // the very start of wxWinUI3Initialize(), before COM, the Windows App SDK or
@@ -217,6 +218,7 @@ wxWinUIRuntimeFaultForTesting wxWinUIConsumeRuntimeFaultForTesting() noexcept
     return wxWinUIRuntimeFaultForTesting::None;
 }
 
+#endif // WXWINUI_TEST_SUPPORT
 bool wxWinUIFilesAreIdentical(
     const wxString& firstPath,
     const wxString& secondPath) noexcept
@@ -843,9 +845,12 @@ public:
     }
 
     bool BeginRuntime(
-        const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue,
-        wxWinUIRuntimeFaultForTesting fault =
-            wxWinUIRuntimeFaultForTesting::None)
+        const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue
+#ifdef WXWINUI_TEST_SUPPORT
+        , wxWinUIRuntimeFaultForTesting fault =
+            wxWinUIRuntimeFaultForTesting::None
+#endif // WXWINUI_TEST_SUPPORT
+        )
         noexcept
     {
         if ( m_quarantined ||
@@ -873,7 +878,11 @@ public:
         try
         {
             const std::uint64_t generation =
-                EnsureQueueGeneration(queue, true, fault);
+                EnsureQueueGeneration(queue, true
+#ifdef WXWINUI_TEST_SUPPORT
+                                      , fault
+#endif // WXWINUI_TEST_SUPPORT
+                                      );
             return HasAllQueueHooks(generation);
         }
         catch ( const winrt::hresult_error& e )
@@ -1150,9 +1159,12 @@ private:
 
     std::uint64_t EnsureQueueGeneration(
         const winrt::Microsoft::UI::Dispatching::DispatcherQueue& queue,
-        bool persistent = false,
-        wxWinUIRuntimeFaultForTesting runtimeFault =
-            wxWinUIRuntimeFaultForTesting::None)
+        bool persistent = false
+#ifdef WXWINUI_TEST_SUPPORT
+        , wxWinUIRuntimeFaultForTesting runtimeFault =
+            wxWinUIRuntimeFaultForTesting::None
+#endif // WXWINUI_TEST_SUPPORT
+        )
     {
         for ( auto& state : m_queues )
         {
@@ -1229,10 +1241,9 @@ private:
                 "WinUI FrameworkShutdownStarting retirement hook", e);
         }
 
-        const bool rejectFrameworkHook =
 #ifdef WXWINUI_TEST_SUPPORT
+        const bool rejectFrameworkHook =
             (hookFault & wxWinUIRejectFrameworkRetirementHook) != 0 ||
-#endif
             runtimeFault ==
                 wxWinUIRuntimeFaultForTesting::RejectRequiredQueueHook;
         const bool suppressFrameworkCompleted =
@@ -1240,18 +1251,25 @@ private:
                 wxWinUIRuntimeFaultForTesting::SuppressFrameworkCompleted;
 
         if ( !rejectFrameworkHook )
+#endif // WXWINUI_TEST_SUPPORT
         {
             try
             {
                 state.frameworkToken = queue.FrameworkShutdownCompleted(
-                    [generation, suppressFrameworkCompleted](
+                    [generation
+#ifdef WXWINUI_TEST_SUPPORT
+                     , suppressFrameworkCompleted
+#endif // WXWINUI_TEST_SUPPORT
+                     ](
                         const winrt::Microsoft::UI::Dispatching::
                             DispatcherQueue&,
                         const winrt::Windows::Foundation::IInspectable&)
                         noexcept
                     {
+#ifdef WXWINUI_TEST_SUPPORT
                         if ( suppressFrameworkCompleted )
                             return;
+#endif // WXWINUI_TEST_SUPPORT
                         wxWinUIFrameworkRetirementRuntime::Get()
                             .ObservePhase(
                                 generation,
@@ -1780,11 +1798,16 @@ void wxWinUIQuarantineRuntimeEpoch() noexcept
 }
 
 bool wxWinUIEnsureXamlShutdownRetirementHook(
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIRuntimeFaultForTesting fault =
-        wxWinUIRuntimeFaultForTesting::None) noexcept
+        wxWinUIRuntimeFaultForTesting::None
+#endif // WXWINUI_TEST_SUPPORT
+    ) noexcept
 {
+#ifdef WXWINUI_TEST_SUPPORT
     if ( fault == wxWinUIRuntimeFaultForTesting::RejectXamlShutdownHook )
         return false;
+#endif // WXWINUI_TEST_SUPPORT
 
     if ( gs_winuiXamlShutdownRetirementHookInstalled )
         return true;
@@ -1861,8 +1884,11 @@ bool wxWinUIEnsureXamlShutdownRetirementHook(
 }
 
 bool wxWinUIArmFrameworkRetirementRuntime(
+#ifdef WXWINUI_TEST_SUPPORT
     wxWinUIRuntimeFaultForTesting fault =
-        wxWinUIRuntimeFaultForTesting::None) noexcept
+        wxWinUIRuntimeFaultForTesting::None
+#endif // WXWINUI_TEST_SUPPORT
+    ) noexcept
 {
     bool queueHooksInstalled = false;
     try
@@ -1872,7 +1898,11 @@ bool wxWinUIArmFrameworkRetirementRuntime(
                 GetForCurrentThread();
         queueHooksInstalled =
             wxWinUIFrameworkRetirementRuntime::Get().BeginRuntime(
-                queue, fault);
+                queue
+#ifdef WXWINUI_TEST_SUPPORT
+                , fault
+#endif // WXWINUI_TEST_SUPPORT
+                );
     }
     catch ( const winrt::hresult_error& e )
     {
@@ -1886,7 +1916,11 @@ bool wxWinUIArmFrameworkRetirementRuntime(
     // Still try to arm the XAML hook after a partial queue-hook failure: it is
     // required to release any graph retained by causal initialization cleanup.
     const bool xamlHookInstalled =
-        wxWinUIEnsureXamlShutdownRetirementHook(fault);
+        wxWinUIEnsureXamlShutdownRetirementHook(
+#ifdef WXWINUI_TEST_SUPPORT
+            fault
+#endif // WXWINUI_TEST_SUPPORT
+            );
     return queueHooksInstalled && xamlHookInstalled;
 }
 
@@ -2003,8 +2037,11 @@ bool wxWinUIEnsureDispatcherQueue()
 
 bool wxWinUIShutdownOwnedDispatcherQueue(
     const char *what,
-    bool requireXamlBoundary = false,
-    bool throwBeforeShutdownForTesting = false) noexcept
+    bool requireXamlBoundary = false
+#ifdef WXWINUI_TEST_SUPPORT
+    , bool throwBeforeShutdownForTesting = false
+#endif // WXWINUI_TEST_SUPPORT
+    ) noexcept
 {
     if ( !gs_winuiDispatcherQueueController )
     {
@@ -2021,8 +2058,10 @@ bool wxWinUIShutdownOwnedDispatcherQueue(
 
     try
     {
+#ifdef WXWINUI_TEST_SUPPORT
         if ( throwBeforeShutdownForTesting )
             throw winrt::hresult_error(E_FAIL);
+#endif // WXWINUI_TEST_SUPPORT
         gs_winuiDispatcherQueueController.ShutdownQueue();
     }
     catch ( const winrt::hresult_error& e )
@@ -2739,8 +2778,10 @@ bool wxWinUI3IsGetMessageHookActive()
 
 bool wxWinUI3Initialize()
 {
+#ifdef WXWINUI_TEST_SUPPORT
     const wxWinUIRuntimeFaultForTesting runtimeFault =
         wxWinUIConsumeRuntimeFaultForTesting();
+#endif // WXWINUI_TEST_SUPPORT
 
     // Allocate the two intentionally immortal safety stores before claiming
     // any process/thread runtime resource. A failure here is a clean ordinary
@@ -2897,8 +2938,10 @@ bool wxWinUI3Initialize()
 
     try
     {
+#ifdef WXWINUI_TEST_SUPPORT
         if ( runtimeFault == wxWinUIRuntimeFaultForTesting::BeforeBootstrap )
             return failInitialization();
+#endif // WXWINUI_TEST_SUPPORT
 
         PACKAGE_VERSION minVersion{};
         minVersion.Version = WINDOWSAPPSDK_RUNTIME_VERSION_UINT64;
@@ -2948,12 +2991,14 @@ bool wxWinUI3Initialize()
             wxWinUIQuarantineRuntimeEpoch();
             return false;
         }
+#ifdef WXWINUI_TEST_SUPPORT
         if ( runtimeFault ==
                  wxWinUIRuntimeFaultForTesting::AfterApplication )
         {
             wxWinUIQuarantineRuntimeEpoch();
             return false;
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         if ( !wxWinUIEnsureXamlManager() )
         {
@@ -2963,17 +3008,23 @@ bool wxWinUI3Initialize()
             wxWinUIQuarantineRuntimeEpoch();
             return false;
         }
+#ifdef WXWINUI_TEST_SUPPORT
         if ( runtimeFault ==
                  wxWinUIRuntimeFaultForTesting::AfterXamlManager )
         {
             wxWinUIQuarantineRuntimeEpoch();
             return false;
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         // Install all DispatcherQueue phases and the XAML-specific terminal
         // hook before any control can own a peer graph. A runtime without this
         // causal boundary cannot be published as Running.
-        if ( !wxWinUIArmFrameworkRetirementRuntime(runtimeFault) )
+        if ( !wxWinUIArmFrameworkRetirementRuntime(
+#ifdef WXWINUI_TEST_SUPPORT
+                  runtimeFault
+#endif // WXWINUI_TEST_SUPPORT
+                  ) )
         {
             if ( !gs_winuiXamlShutdownRetirementHookInstalled )
             {
@@ -2994,6 +3045,7 @@ bool wxWinUI3Initialize()
             return failInitialization();
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         if ( runtimeFault ==
                  wxWinUIRuntimeFaultForTesting::ThrowShutdownQueue ||
              runtimeFault ==
@@ -3017,6 +3069,7 @@ bool wxWinUI3Initialize()
             // next Initialize() call exposes the qualification failure.
             return failInitialization();
         }
+#endif // WXWINUI_TEST_SUPPORT
 
         // Theme resources can only be loaded once the framework is initialized
         // by the XAML manager above; do it now that our application is current.

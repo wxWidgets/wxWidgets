@@ -142,6 +142,76 @@ int TestCleanRuntimeFault(int& argc, char** argv)
     return result;
 }
 
+bool RuntimeFaultEnvironmentIsIntact(const wchar_t *expectedFault)
+{
+    wchar_t guard[4]{};
+    wchar_t fault[64]{};
+    const DWORD guardLength = ::GetEnvironmentVariableW(
+        RuntimeFaultGuardName, guard, static_cast<DWORD>(WXSIZEOF(guard)));
+    const DWORD faultLength = ::GetEnvironmentVariableW(
+        RuntimeFaultName, fault, static_cast<DWORD>(WXSIZEOF(fault)));
+    return guardLength == 1 && guard[0] == L'1' &&
+           faultLength != 0 && faultLength < WXSIZEOF(fault) &&
+           ::lstrcmpW(fault, expectedFault) == 0;
+}
+
+int TestInertRuntimeFault(int& argc, char** argv,
+                         const char *name, const wchar_t *fault)
+{
+    const HRESULT externalSta =
+        ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    if ( externalSta != S_OK )
+    {
+        if ( SUCCEEDED(externalSta) )
+            ::CoUninitialize();
+        return 42;
+    }
+
+    int result = 0;
+    bool initializerAccepted = false;
+    bool envPreserved = false;
+    bool repeated = false;
+    bool callerStaPreserved = false;
+    {
+        wxInitializer initializer(argc, argv);
+        UseStderrLogging();
+        initializerAccepted = static_cast<bool>(initializer);
+        envPreserved = RuntimeFaultEnvironmentIsIntact(fault);
+        if ( initializerAccepted )
+            repeated = wxWinUI3Initialize() && wxWinUI3Initialize();
+        callerStaPreserved =
+            ProbeApartment(COINIT_APARTMENTTHREADED, S_FALSE);
+        if ( !initializerAccepted )
+            result = 43;
+        else if ( !envPreserved )
+            result = 44;
+        else if ( !repeated )
+            result = 45;
+        else if ( !callerStaPreserved )
+            result = 46;
+    }
+
+    UseStderrLogging();
+    // Shipping must not even consume these private test variables. Check
+    // again after normal wx cleanup, before balancing the caller's STA.
+    envPreserved = envPreserved && RuntimeFaultEnvironmentIsIntact(fault);
+    ::CoUninitialize();
+    const bool comBalanced =
+        callerStaPreserved && ProbeApartment(COINIT_MULTITHREADED, S_OK);
+    if ( !envPreserved && result == 0 )
+        result = 44;
+    if ( !comBalanced && result == 0 )
+        result = 47;
+
+    std::printf(
+        "wx_winui_runtime_fault_inert: name=%s initializer_accepted=%d "
+        "env_preserved=%d repeated=%d com_balanced=%d result=%d\n",
+        name, initializerAccepted ? 1 : 0, envPreserved ? 1 : 0,
+        repeated ? 1 : 0, comBalanced ? 1 : 0, result);
+    std::fflush(stdout);
+    return result;
+}
+
 class CountingRenderer : public wxDelegateRendererNative
 {
 public:
@@ -323,13 +393,18 @@ int main(int argc, char** argv)
         argc == 2 && std::strcmp(argv[1], "--renderer-default") == 0;
     const bool testRuntimeFault =
         argc == 3 && std::strcmp(argv[1], "--runtime-fault") == 0;
-    const char * const runtimeFaultName = testRuntimeFault ? argv[2] : nullptr;
-    const wchar_t * const runtimeFault = testRuntimeFault
+    const bool testRuntimeFaultInert =
+        argc == 3 && std::strcmp(argv[1], "--runtime-fault-inert") == 0;
+    const char * const runtimeFaultName =
+        testRuntimeFault || testRuntimeFaultInert ? argv[2] : nullptr;
+    const wchar_t * const runtimeFault =
+        testRuntimeFault || testRuntimeFaultInert
         ? GetRuntimeFaultValue(runtimeFaultName)
         : nullptr;
 
-    if ( (testRuntimeFault && !runtimeFault) ||
+    if ( ((testRuntimeFault || testRuntimeFaultInert) && !runtimeFault) ||
          (argc != 1 && !testMtaRejection && !testRuntimeFault &&
+          !testRuntimeFaultInert &&
           !testRendererCustom && !testRendererDefault) )
     {
         ::RemoveVectoredExceptionHandler(exceptionObserver);
@@ -339,7 +414,7 @@ int main(int argc, char** argv)
     if ( testRendererCustom || testRendererDefault )
         return TestRendererOwnership(argc, argv, testRendererCustom);
 
-    if ( testRuntimeFault )
+    if ( testRuntimeFault || testRuntimeFaultInert )
     {
         if ( !::SetEnvironmentVariableW(RuntimeFaultGuardName, L"1") ||
              !::SetEnvironmentVariableW(RuntimeFaultName, runtimeFault) )
@@ -347,6 +422,10 @@ int main(int argc, char** argv)
             ::RemoveVectoredExceptionHandler(exceptionObserver);
             return 19;
         }
+
+        if ( testRuntimeFaultInert )
+            return TestInertRuntimeFault(
+                argc, argv, runtimeFaultName, runtimeFault);
 
         if ( std::strcmp(runtimeFaultName, "before-bootstrap") == 0 )
             return TestCleanRuntimeFault(argc, argv);

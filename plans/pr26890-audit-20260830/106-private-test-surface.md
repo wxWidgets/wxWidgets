@@ -384,6 +384,24 @@ Do not delete a lifetime/retirement service used by production merely because it
   build and gate logs named above. Fresh shipping OFF verification remains
   pending.
 
+## Runtime bootstrap fault boundary (2026-08-31)
+
+- Runtime fault parsing, the private fault enum, fault-only parameters and
+  injected branches in `winui.cpp` now compile only with
+  `WXWINUI_TEST_SUPPORT`. A shipping build keeps the real COM, Windows App SDK,
+  DispatcherQueue, application, XAML-manager and retirement-hook sequence, but
+  does not inspect or consume the test environment variables.
+- The installed runtime consumer requires an explicit `ON` or `OFF` oracle.
+  `ON` requires all seven injected failures; `OFF` requires the same profiles
+  to remain inert and their environment to survive startup and cleanup. Each
+  mode also runs the opposite before-bootstrap oracle and requires its exact
+  failure diagnostic. WinUI test CI selects `ON`; the shipping documentation
+  selects `OFF`.
+- The current test-support tree builds and passes both runtime gates in shared
+  and static configurations. A fresh installed 12-child campaign in both `ON`
+  and `OFF` modes, including shipping symbol/header inspection, is still
+  required before closing this boundary.
+
 ## Maintenance
 
 Retest these contracts when the pinned Windows App SDK, compiler, installed-header surface or host lifecycle changes. Keep implementation, integration and physical qualification claims separate.

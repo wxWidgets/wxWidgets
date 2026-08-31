@@ -314,10 +314,18 @@ consumer directories:
 ```powershell
 cmake --install C:/build/wx-winui --config Release --prefix C:/stage/wx-winui
 cmake -S tests/winui/install-consumer -B C:/build/wx-winui-consumer -A x64 `
-  -DwxWidgets_DIR=C:/stage/wx-winui/lib/cmake/wxWidgets-3.3
+  -DwxWidgets_DIR=C:/stage/wx-winui/lib/cmake/wxWidgets-3.3 `
+  -DWX_WINUI_RUNTIME_FAULT_MODE=OFF
 cmake --build C:/build/wx-winui-consumer --config Release
 ctest --test-dir C:/build/wx-winui-consumer -C Release --output-on-failure
 ```
+
+The fault mode is a required expectation, not automatic detection: use `OFF`
+for a shipping library and `ON` for a library built with `wxBUILD_TESTS=ALL`.
+Both modes exercise normal startup, MTA rejection and renderer ownership.
+`ON` also requires all seven injected failures; `OFF` requires the same
+seven environment profiles to remain inert and unconsumed. Each mode checks
+that the opposite before-bootstrap oracle fails with its exact diagnostic.
 
 Moving `C:/stage/wx-winui` before configuring the fixture is an additional
 relocation check; only `wxWidgets_DIR` needs to change. The target machine
