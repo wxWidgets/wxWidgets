@@ -28,6 +28,10 @@
 #include "wx/msw/private.h"
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-focus-test-access.h"
+#include "host-input-test-access.h"
+#include "host-geometry-test-access.h"
+#include "host-uia-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/winui.h"
 
@@ -78,14 +82,14 @@ bool DrainToQuiescence()
     {
         const unsigned schedules =
             wxWinUITopLevelHost::GetFlushScheduleCount();
-        const unsigned runs = wxWinUITopLevelHost::GetFlushRunCount();
+        const unsigned runs = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
         const unsigned callbacks =
-            wxWinUITopLevelHost::GetFlushCallbackAttemptCount();
+            wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount();
         DrainDispatch(2);
         if ( schedules == wxWinUITopLevelHost::GetFlushScheduleCount() &&
-             runs == wxWinUITopLevelHost::GetFlushRunCount() &&
+             runs == wxWinUIHostGeometryTestAccess::GetFlushRunCount() &&
              callbacks ==
-                 wxWinUITopLevelHost::GetFlushCallbackAttemptCount() )
+                 wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() )
         {
             return true;
         }
@@ -124,14 +128,14 @@ struct RuntimeSnapshot
         snapshot.loadedHooks =
             wxWinUITopLevelHost::GetLiveLoadedHookCount();
         snapshot.automationObservers =
-            wxWinUITopLevelHost::
-                GetLiveAutomationNameStyleObserverCountForTest();
+            wxWinUIHostUIATestAccess::
+                GetLiveAutomationNameStyleObserverCount();
         snapshot.contentObservers =
             wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
         snapshot.invisibleShellProviders =
-            wxWinUITestGetLiveInvisibleShellProviderCount();
+            wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount();
         snapshot.pendingFocusMigrations =
-            wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+            wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         snapshot.slotHandlerAdds =
             wxWinUITopLevelHost::GetSlotHandlerAddCount();
         snapshot.slotHandlerRevokes =
@@ -162,15 +166,15 @@ struct RuntimeSnapshot
                wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
                    subclasses &&
                wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
-               wxWinUITopLevelHost::
-                       GetLiveAutomationNameStyleObserverCountForTest() ==
+               wxWinUIHostUIATestAccess::
+                       GetLiveAutomationNameStyleObserverCount() ==
                    automationObservers &&
                wxWinUITopLevelHost::
                        GetLiveContentLoadedObserverCountForTest() ==
                    contentObservers &&
-               wxWinUITestGetLiveInvisibleShellProviderCount() ==
+               wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
                    invisibleShellProviders &&
-               wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+               wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
                wxWinUITopLevelHost::GetSlotHandlerAddCount() -
                        slotHandlerAdds ==
@@ -198,15 +202,15 @@ struct RuntimeSnapshot
         CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
               subclasses);
         CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
-        CHECK(wxWinUITopLevelHost::
-                  GetLiveAutomationNameStyleObserverCountForTest() ==
+        CHECK(wxWinUIHostUIATestAccess::
+                  GetLiveAutomationNameStyleObserverCount() ==
               automationObservers);
         CHECK(wxWinUITopLevelHost::
                   GetLiveContentLoadedObserverCountForTest() ==
               contentObservers);
-        CHECK(wxWinUITestGetLiveInvisibleShellProviderCount() ==
+        CHECK(wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
               invisibleShellProviders);
-        CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
 
         const unsigned slotAdds =
@@ -733,8 +737,8 @@ void CheckFocusCoherenceAfterNoActivateCrossTLWReparent(
     {
         CHECK((::GetFocus() == hwnd) ==
               (wxWindow::FindFocus() == window));
-        CHECK(wxWinUITopLevelHost::
-                  GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::
+                  GetPendingFocusMigrationCount() ==
               expectedPendingFocusMigrations);
     };
     check();
@@ -1210,7 +1214,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
     const unsigned cursorsBefore = canvas->GetSetCursorCount();
     wxWinUIPointerSample sample = CanvasCentreSample(canvas);
     const wxWinUIRootPointerOutcome pointer =
-        fixture.hostA->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*fixture.hostA, sample);
     CHECK(pointer.status == wxWinUIRootPointerStatus::Completed);
     CHECK(pointer.disposition == wxWinUIInputDisposition::Routed);
     CHECK(pointer.cancelSource);
@@ -1252,7 +1256,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
 #endif
 
     // Adjacent and XAML-above-native overlap are representable.
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     REQUIRE(::SetWindowPos(
         hwnd, HWND_TOP, 0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE));
@@ -1267,7 +1271,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
         0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE));
     wxWinUITLWHostNotifyNativeLayout(canvas, true);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     fixture.hostA->FlushSync();
     REQUIRE(DrainToQuiescence());
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 0);
@@ -1279,7 +1283,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
         hwnd, HWND_TOP, 0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE));
     wxWinUITLWHostNotifyNativeLayout(canvas, true);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     fixture.hostA->FlushSync();
     REQUIRE(DrainToQuiescence());
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() >= 1);
@@ -1288,7 +1292,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
     // the overlap. Neither assertion attempts to infer DWM presentation.
     canvas->SetSize(wxRect(-240, 26, 196, 96));
     wxWinUITLWHostNotifyNativeLayout(canvas, true);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     fixture.hostA->FlushSync();
     REQUIRE(DrainToQuiescence());
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 0);
@@ -1298,7 +1302,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
         hwnd, HWND_TOP, 0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE));
     wxWinUITLWHostNotifyNativeLayout(canvas, true);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     fixture.hostA->FlushSync();
     REQUIRE(DrainToQuiescence());
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() >= 1);
@@ -1306,7 +1310,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
     REQUIRE(emptyClip != nullptr);
     REQUIRE(InstallWindowRegion(hwnd, emptyClip));
     wxWinUITLWHostNotifyNativeLayout(canvas, false);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     fixture.hostA->FlushSync();
     REQUIRE(DrainToQuiescence());
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 0);
@@ -1321,7 +1325,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
         0, 0, 0, 0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE));
     wxWinUITLWHostNotifyNativeLayout(canvas, true);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     fixture.hostA->FlushSync();
     REQUIRE(DrainToQuiescence());
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 0);
@@ -1346,12 +1350,12 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
     const unsigned movesBeforeHostMigration = canvas->GetMouseMoveCount();
     sample = CanvasCentreSample(canvas);
     const wxWinUIRootPointerOutcome staleHostRoute =
-        fixture.hostA->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*fixture.hostA, sample);
     CHECK(staleHostRoute.disposition == wxWinUIInputDisposition::Outside);
     CHECK(canvas->GetMouseMoveCount() == movesBeforeHostMigration);
     ++sample.timestamp;
     const wxWinUIRootPointerOutcome destinationHostRoute =
-        fixture.hostB->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*fixture.hostB, sample);
     CHECK(destinationHostRoute.status == wxWinUIRootPointerStatus::Completed);
     CHECK(destinationHostRoute.disposition ==
           wxWinUIInputDisposition::Routed);
@@ -1403,13 +1407,13 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
     const unsigned movesBeforeReturnMigration = canvas->GetMouseMoveCount();
     sample = CanvasCentreSample(canvas);
     const wxWinUIRootPointerOutcome oldDestinationRoute =
-        fixture.hostB->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*fixture.hostB, sample);
     CHECK(oldDestinationRoute.disposition ==
           wxWinUIInputDisposition::Outside);
     CHECK(canvas->GetMouseMoveCount() == movesBeforeReturnMigration);
     ++sample.timestamp;
     const wxWinUIRootPointerOutcome sourceHostRoute =
-        fixture.hostA->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*fixture.hostA, sample);
     CHECK(sourceHostRoute.status == wxWinUIRootPointerStatus::Completed);
     CHECK(sourceHostRoute.disposition == wxWinUIInputDisposition::Routed);
     CHECK(sourceHostRoute.cancelSource);
@@ -1443,7 +1447,7 @@ TEST_CASE("WinUIGLCanvas::CompositionInputDropAndStableCrossTLWReparent",
     fixture.hostA->FlushSync();
     REQUIRE(DrainToQuiescence());
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 0);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
     comB = nullptr;
@@ -1480,7 +1484,7 @@ TEST_CASE("WinUIGLCanvas::HundredCurrentAndNonCurrentLifetimeCycles",
     const unsigned steadySubclasses =
         wxWinUITopLevelHost::GetLiveSubclassContextCount();
     const unsigned steadyFocusMigrations =
-        wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+        wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     const wxWinUITransientRegistrySnapshot steadyTransients =
         wxWinUIGetTransientRegistrySnapshotForTesting();
 
@@ -1585,7 +1589,7 @@ TEST_CASE("WinUIGLCanvas::HundredCurrentAndNonCurrentLifetimeCycles",
               steadySlotLifetimes);
         CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
               steadySubclasses);
-        CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               steadyFocusMigrations);
         CHECK(SameTransientRegistry(
             wxWinUIGetTransientRegistrySnapshotForTesting(),

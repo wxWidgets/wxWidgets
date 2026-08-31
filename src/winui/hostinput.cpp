@@ -16,6 +16,9 @@
 #include "wx/winui/private/tlwhostmsw.h"
 #include "private.h"
 #include "hostinput.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "host-input-test-access.h"
+#endif
 #include "hostnative.h"
 #include "hostprofile.h"
 #include "hostresize.h"
@@ -386,7 +389,8 @@ bool wxWinUIIsPointerContactActive(wxWinUIInputDevice device,
     return false;
 }
 
-bool wxWinUITopLevelHost::TestPointerContactActiveSnapshot(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIHostInputTestAccess::PointerContactActiveSnapshot(
     wxWinUIInputDevice device,
     int virtualKey,
     unsigned pointerType,
@@ -399,6 +403,7 @@ bool wxWinUITopLevelHost::TestPointerContactActiveSnapshot(
         static_cast<UINT32>(pointerFlags),
         static_cast<UINT32>(penFlags));
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUITopLevelHost::CloseNativeHover()
 {
@@ -1530,12 +1535,15 @@ void wxWinUITopLevelHost::OnRootPointerBoundary(
         entered, sample, eventEpoch);
 }
 
-bool wxWinUITopLevelHost::TestRouteRootPointerBoundary(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIHostInputTestAccess::RouteRootPointerBoundary(
+    wxWinUITopLevelHost& host,
     bool entered,
     const wxWinUIPointerSample& originalSample)
 {
-    OperationGuard operation(this);
-    if ( m_shuttingDown || !m_tlw )
+    wxWinUITopLevelHost * const self = &host;
+    wxWinUITopLevelHost::OperationGuard operation(self);
+    if ( self->m_shuttingDown || !self->m_tlw )
         return false;
 
     wxWinUIPointerSample sample = originalSample;
@@ -1549,11 +1557,12 @@ bool wxWinUITopLevelHost::TestRouteRootPointerBoundary(
         return false;
     }
 
-    if ( ++m_inputTransitionEpoch == 0 )
-        ++m_inputTransitionEpoch;
-    return RouteRootPointerBoundaryAtEpoch(
-        entered, sample, m_inputTransitionEpoch);
+    if ( ++self->m_inputTransitionEpoch == 0 )
+        ++self->m_inputTransitionEpoch;
+    return self->RouteRootPointerBoundaryAtEpoch(
+        entered, sample, self->m_inputTransitionEpoch);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 bool wxWinUITopLevelHost::RouteRootPointerBoundaryAtEpoch(
     bool entered,
@@ -2108,16 +2117,19 @@ void wxWinUITopLevelHost::PruneModalAwaitingReleases()
     }
 }
 
-std::size_t
-wxWinUITopLevelHost::GetModalAwaitingReleaseCountForTest() const
+#ifdef WXWINUI_TEST_SUPPORT
+std::size_t wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(
+    const wxWinUITopLevelHost& host)
 {
+    const wxWinUITopLevelHost * const self = &host;
     return static_cast<std::size_t>(std::count_if(
-        m_modalAwaitingReleases.begin(), m_modalAwaitingReleases.end(),
+        self->m_modalAwaitingReleases.begin(), self->m_modalAwaitingReleases.end(),
         [](const wxWinUIInputAction& action)
         {
             return action.gestureSerial != 0;
         }));
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUITopLevelHost::DispatchPendingNativeInput()
 {
@@ -3586,30 +3598,37 @@ bool wxWinUITopLevelHost::RouteSlotPointerSample(
     return true;
 }
 
-bool wxWinUITopLevelHost::TestRouteSlotPointer(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIHostInputTestAccess::RouteSlotPointer(
+    wxWinUITopLevelHost& host,
     wxWindow *window,
     const wxWinUIPointerSample& sample,
     wxWinUIInputSurface physicalSurface)
 {
-    wxWinUISlot * const slot = FindSlot(window);
+    wxWinUITopLevelHost * const self = &host;
+    wxWinUISlot * const slot = self->FindSlot(window);
     return slot &&
-           RouteSlotPointerSample(
+           self->RouteSlotPointerSample(
                slot->m_lifetime, sample, physicalSurface);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-bool wxWinUITopLevelHost::TestMapRootPointerPointForSlot(
+#ifdef WXWINUI_TEST_SUPPORT
+bool wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+    const wxWinUITopLevelHost& host,
     wxWindow *window,
     double xDIP,
     double yDIP,
     wxPoint *screen,
-    bool *inside) const
+    bool *inside)
 {
-    const wxWinUISlot * const slot = FindSlot(window);
+    const wxWinUITopLevelHost * const self = &host;
+    const wxWinUISlot * const slot = self->FindSlot(window);
     if ( !slot || !screen )
         return false;
 
     POINT nativeScreen;
-    if ( !MapRootPointerPointForSlot(
+    if ( !self->MapRootPointerPointForSlot(
              *slot, xDIP, yDIP, &nativeScreen, inside) )
     {
         return false;
@@ -3618,23 +3637,31 @@ bool wxWinUITopLevelHost::TestMapRootPointerPointForSlot(
     *screen = wxPoint(nativeScreen.x, nativeScreen.y);
     return true;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-std::size_t
-wxWinUITopLevelHost::GetSlotPointerOwnerCountForTest() const
+#ifdef WXWINUI_TEST_SUPPORT
+std::size_t wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(
+    const wxWinUITopLevelHost& host)
 {
+    const wxWinUITopLevelHost * const self = &host;
     return static_cast<std::size_t>(std::count_if(
-        m_slotPointerOwners.begin(), m_slotPointerOwners.end(),
-        [](const SlotPointerOwner& owner)
+        self->m_slotPointerOwners.begin(), self->m_slotPointerOwners.end(),
+        [](const wxWinUITopLevelHost::SlotPointerOwner& owner)
         {
             return owner.IsActive();
           }));
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestRetireIslandCancelTarget()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostInputTestAccess::RetireIslandCancelTarget(
+    wxWinUITopLevelHost& host)
 {
-    RetireIslandCancelTarget(m_inner ? m_inner : m_bridge);
-    RetryDeferredIslandCancelMode();
+    wxWinUITopLevelHost * const self = &host;
+    self->RetireIslandCancelTarget(self->m_inner ? self->m_inner : self->m_bridge);
+    self->RetryDeferredIslandCancelMode();
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUITopLevelHost::CancelSlotPointerOwners(
     const wxWinUIPointerSample& sample,
@@ -3888,27 +3915,30 @@ void wxWinUITopLevelHost::OnRootPointer(
     wxWinUIProfileSample();
 }
 
-wxWinUIRootPointerOutcome
-wxWinUITopLevelHost::TestRouteRootPointerSample(
+#ifdef WXWINUI_TEST_SUPPORT
+wxWinUIRootPointerOutcome wxWinUIHostInputTestAccess::RouteRootPointerSample(
+    wxWinUITopLevelHost& host,
     const wxWinUIPointerSample& sample,
     bool sourceAlreadyHandled)
 {
-    OperationGuard operation(this);
+    wxWinUITopLevelHost * const self = &host;
+    wxWinUITopLevelHost::OperationGuard operation(self);
     wxWinUIRootPointerOutcome outcome;
-    if ( m_shuttingDown || !m_tlw )
+    if ( self->m_shuttingDown || !self->m_tlw )
         return outcome;
 
     const auto retryIslandReset = wxMakeGuard(
-        [this]()
+        [self]()
         {
-            RetryDeferredIslandCancelMode();
+            self->RetryDeferredIslandCancelMode();
         });
 
-    if ( ++m_inputTransitionEpoch == 0 )
-        ++m_inputTransitionEpoch;
-    return RouteRootPointerSampleAtEpoch(
-        sample, sourceAlreadyHandled, m_inputTransitionEpoch);
+    if ( ++self->m_inputTransitionEpoch == 0 )
+        ++self->m_inputTransitionEpoch;
+    return self->RouteRootPointerSampleAtEpoch(
+        sample, sourceAlreadyHandled, self->m_inputTransitionEpoch);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 wxWinUIRootPointerOutcome
 wxWinUITopLevelHost::RouteRootPointerSampleAtEpoch(
@@ -4197,5 +4227,88 @@ wxWinUITopLevelHost::RouteRootPointerSampleAtEpoch(
     }
     return outcome;
 }
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostInputTestAccess::HandleRootPointerInterrupted(
+    wxWinUITopLevelHost& host,
+    bool captureLost,
+    const wxWinUIPointerSample& sample)
+{
+    wxWinUITopLevelHost * const self = &host;
+    self->HandleRootPointerInterrupted(captureLost, sample);
+}
+
+bool wxWinUIHostInputTestAccess::RouteOwnedSlotRelease(
+    wxWinUITopLevelHost& host,
+    const wxWinUIPointerSample& sample)
+{
+    wxWinUITopLevelHost * const self = &host;
+    return self->DispatchSlotOwnedRelease(sample);
+}
+
+bool wxWinUIHostInputTestAccess::RememberModalAwaitingRelease(
+    wxWinUITopLevelHost& host,
+    const wxWinUIInputAction& action)
+{
+    wxWinUITopLevelHost * const self = &host;
+    return self->RememberModalAwaitingRelease(action);
+}
+
+wxWinUIInputAction wxWinUIHostInputTestAccess::TakeModalAwaitingRelease(
+    wxWinUITopLevelHost& host,
+    wxWinUIInputDevice device,
+    std::uint32_t pointerId,
+    wxWinUIInputButton button)
+{
+    wxWinUITopLevelHost * const self = &host;
+    return self->TakeModalAwaitingRelease(device, pointerId, button);
+}
+
+void wxWinUIHostInputTestAccess::CancelSlotPointerOwners(
+    wxWinUITopLevelHost& host,
+    const wxWinUIPointerSample& sample,
+    bool allPointers)
+{
+    wxWinUITopLevelHost * const self = &host;
+    self->CancelSlotPointerOwners(sample, allPointers);
+}
+
+std::uint32_t wxWinUIHostInputTestAccess::GetInputSiteGeneration(
+    const wxWinUITopLevelHost& host)
+{
+    const wxWinUITopLevelHost * const self = &host;
+    return self->m_inputSiteGeneration;
+}
+
+bool wxWinUIHostInputTestAccess::CanPostIslandCancelMode(
+    const wxWinUITopLevelHost& host,
+    std::uint32_t expectedGeneration)
+{
+    const wxWinUITopLevelHost * const self = &host;
+    return self->CanPostIslandCancelMode(expectedGeneration);
+}
+
+void wxWinUIHostInputTestAccess::PostIslandCancelMode(
+    wxWinUITopLevelHost& host,
+    std::uint32_t expectedGeneration)
+{
+    wxWinUITopLevelHost * const self = &host;
+    self->PostIslandCancelMode(expectedGeneration);
+}
+
+bool wxWinUIHostInputTestAccess::HasDeferredIslandCancel(
+    const wxWinUITopLevelHost& host)
+{
+    const wxWinUITopLevelHost * const self = &host;
+    return self->m_islandCancelDeferred;
+}
+
+unsigned wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(
+    const wxWinUITopLevelHost& host)
+{
+    const wxWinUITopLevelHost * const self = &host;
+    return self->m_postedIslandCancelMessages;
+}
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_WINUI3

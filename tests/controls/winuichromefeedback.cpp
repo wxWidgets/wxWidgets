@@ -20,7 +20,7 @@
 #include "wx/log.h"
 #include "wx/msw/private.h"
 #include "wx/winui/private/appearance.h"
-#include "wx/winui/private/nativeresize.h"
+#include "host-resize-test-access.h"
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/winui.h"
 
@@ -131,7 +131,7 @@ class NativeResizeContactOverride final
 public:
     NativeResizeContactOverride()
     {
-        wxWinUISetNativeResizeContactReaderForTesting(
+        wxWinUIHostResizeTestAccess::SetContactReader(
             [](void *context)
             {
                 return static_cast<NativeResizeContactOverride *>(
@@ -141,7 +141,7 @@ public:
 
     ~NativeResizeContactOverride()
     {
-        wxWinUISetNativeResizeContactReaderForTesting(nullptr);
+        wxWinUIHostResizeTestAccess::SetContactReader(nullptr);
     }
 
     bool down = true;
@@ -185,7 +185,7 @@ public:
                 ++nativeEntries;
                 wxWinUINativeResizeSnapshot snapshot;
                 enteredPhaseObserved =
-                    wxWinUIGetNativeResizeSnapshotForTesting(this, &snapshot) &&
+                    wxWinUIHostResizeTestAccess::GetSnapshot(this, &snapshot) &&
                     snapshot.phase == wxWinUINativeResizePhase::Entered;
                 cancelPosted = ::PostMessageW(
                     GetHwndOf(this), WM_CANCELMODE, 0, 0) != FALSE;
@@ -197,7 +197,7 @@ public:
                 ++nativeExits;
                 wxWinUINativeResizeSnapshot snapshot;
                 idlePhaseObserved =
-                    wxWinUIGetNativeResizeSnapshotForTesting(this, &snapshot) &&
+                    wxWinUIHostResizeTestAccess::GetSnapshot(this, &snapshot) &&
                     snapshot.phase == wxWinUINativeResizePhase::Idle;
                 break;
             }
@@ -705,7 +705,7 @@ TEST_CASE("wxWinUI grip request enters and exits the real native sizing loop onc
     CHECK_FALSE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(
         *status, true, true, true, point));
     wxWinUINativeResizeSnapshot pending;
-    REQUIRE(wxWinUIGetNativeResizeSnapshotForTesting(&frame, &pending));
+    REQUIRE(wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &pending));
     CHECK(pending.phase == wxWinUINativeResizePhase::Pending);
     CHECK(pending.scheduled == 1);
     CHECK(pending.entered == 0);
@@ -719,7 +719,7 @@ TEST_CASE("wxWinUI grip request enters and exits the real native sizing loop onc
     wxWinUINativeResizeSnapshot finished;
     REQUIRE(WaitFor("native sizing loop completion", [&]()
     {
-        return wxWinUIGetNativeResizeSnapshotForTesting(&frame, &finished) &&
+        return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
                finished.phase == wxWinUINativeResizePhase::Idle;
     }, 3000));
     CHECK(finished.ticket == pending.ticket);
@@ -789,7 +789,7 @@ TEST_CASE("wxWinUI grip cancels stale requests before native dispatch",
     wxWinUINativeResizeSnapshot finished;
     REQUIRE(WaitFor("stale native resize cancellation", [&]()
     {
-        return wxWinUIGetNativeResizeSnapshotForTesting(&frame, &finished) &&
+        return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
                finished.phase == wxWinUINativeResizePhase::Idle;
     }));
     CHECK(finished.scheduled == 1);
@@ -823,7 +823,7 @@ TEST_CASE("wxWinUI grip preserves foreign capture and rolls back post failure",
         wxWinUINativeResizeSnapshot finished;
         REQUIRE(WaitFor("foreign capture cancellation", [&]()
         {
-            return wxWinUIGetNativeResizeSnapshotForTesting(&frame, &finished) &&
+            return wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &finished) &&
                    finished.phase == wxWinUINativeResizePhase::Idle;
         }));
         CHECK(finished.cancelled == 1);
@@ -831,11 +831,11 @@ TEST_CASE("wxWinUI grip preserves foreign capture and rolls back post failure",
     }
     SECTION("failed post leaves no accepted transaction")
     {
-        wxWinUIFailNextNativeResizePostForTesting();
+        wxWinUIHostResizeTestAccess::FailNextPost();
         CHECK_FALSE(wxWinUIStatusBarTestAccess::InvokeSizeGrip(*status,
             true, true, true, point));
         wxWinUINativeResizeSnapshot state;
-        REQUIRE(wxWinUIGetNativeResizeSnapshotForTesting(&frame, &state));
+        REQUIRE(wxWinUIHostResizeTestAccess::GetSnapshot(&frame, &state));
         CHECK(state.phase == wxWinUINativeResizePhase::Idle);
         CHECK(state.scheduled == 0);
         YieldForAWhile(20);

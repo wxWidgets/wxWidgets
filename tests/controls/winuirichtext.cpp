@@ -50,6 +50,9 @@
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/inputtest.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-focus-test-access.h"
+#include "host-geometry-test-access.h"
+#include "host-uia-test-access.h"
 #include "wx/winui/private/transient.h"
 #include "wx/winui/winui.h"
 
@@ -122,14 +125,14 @@ bool DrainToQuiescence()
     {
         const unsigned schedules =
             wxWinUITopLevelHost::GetFlushScheduleCount();
-        const unsigned runs = wxWinUITopLevelHost::GetFlushRunCount();
+        const unsigned runs = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
         const unsigned callbacks =
-            wxWinUITopLevelHost::GetFlushCallbackAttemptCount();
+            wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount();
         DrainDispatch(2);
         if ( schedules == wxWinUITopLevelHost::GetFlushScheduleCount() &&
-             runs == wxWinUITopLevelHost::GetFlushRunCount() &&
+             runs == wxWinUIHostGeometryTestAccess::GetFlushRunCount() &&
              callbacks ==
-                 wxWinUITopLevelHost::GetFlushCallbackAttemptCount() )
+                 wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() )
         {
             return true;
         }
@@ -168,12 +171,12 @@ struct RuntimeSnapshot
         snapshot.loadedHooks =
             wxWinUITopLevelHost::GetLiveLoadedHookCount();
         snapshot.automationObservers =
-            wxWinUITopLevelHost::
-                GetLiveAutomationNameStyleObserverCountForTest();
+            wxWinUIHostUIATestAccess::
+                GetLiveAutomationNameStyleObserverCount();
         snapshot.contentObservers =
             wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
         snapshot.pendingFocusMigrations =
-            wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+            wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         snapshot.slotHandlerAdds =
             wxWinUITopLevelHost::GetSlotHandlerAddCount();
         snapshot.slotHandlerRevokes =
@@ -204,13 +207,13 @@ struct RuntimeSnapshot
                wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
                    subclasses &&
                wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
-               wxWinUITopLevelHost::
-                       GetLiveAutomationNameStyleObserverCountForTest() ==
+               wxWinUIHostUIATestAccess::
+                       GetLiveAutomationNameStyleObserverCount() ==
                    automationObservers &&
                wxWinUITopLevelHost::
                        GetLiveContentLoadedObserverCountForTest() ==
                    contentObservers &&
-               wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+               wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
                wxWinUITopLevelHost::GetSlotHandlerAddCount() -
                        slotHandlerAdds ==
@@ -238,13 +241,13 @@ struct RuntimeSnapshot
         CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
               subclasses);
         CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
-        CHECK(wxWinUITopLevelHost::
-                  GetLiveAutomationNameStyleObserverCountForTest() ==
+        CHECK(wxWinUIHostUIATestAccess::
+                  GetLiveAutomationNameStyleObserverCount() ==
               automationObservers);
         CHECK(wxWinUITopLevelHost::
                   GetLiveContentLoadedObserverCountForTest() ==
               contentObservers);
-        CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
 
         const unsigned slotAdds =

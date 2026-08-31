@@ -30,6 +30,7 @@
 #include "wx/uiaction.h"
 #include "wx/winui/winui.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-geometry-test-access.h"
 
 #include <winrt/Microsoft.UI.Dispatching.h>
 #include <winrt/Microsoft.UI.Xaml.Automation.h>
@@ -1501,7 +1502,7 @@ TEST_CASE("wxWinUI DatePicker nested range setter is last writer",
     const wxDateTime nestedMaximum(20, wxDateTime::May, 2024);
     picker.SetSize(wxSize(229, 41));
     bool slotSynced = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             slotSynced = true;
@@ -1510,7 +1511,7 @@ TEST_CASE("wxWinUI DatePicker nested range setter is last writer",
         });
 
     picker.SetRange(outerMinimum, outerMaximum);
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     CHECK(slotSynced);
     wxDateTime minimum;
     wxDateTime maximum;
@@ -1545,7 +1546,7 @@ TEST_CASE("wxWinUI DatePicker nested value setter is last writer",
     const wxDateTime nested(17, wxDateTime::May, 2024);
     picker.SetSize(wxSize(231, 43));
     bool slotSynced = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             slotSynced = true;
@@ -1554,7 +1555,7 @@ TEST_CASE("wxWinUI DatePicker nested value setter is last writer",
         });
 
     picker.SetValue(outer);
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     CHECK(slotSynced);
     CHECK(picker.GetValue() == nested);
     wxDateTime peer;
@@ -2227,7 +2228,7 @@ TEST_CASE("wxWinUI TimePicker setter stops after destructive ForceRender",
     }
     invoking->SetSize(wxSize(219, 41));
     bool slotSynced = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             slotSynced = true;
@@ -2239,7 +2240,7 @@ TEST_CASE("wxWinUI TimePicker setter stops after destructive ForceRender",
 
     invoking->SetValue(
         wxDateTime(1, wxDateTime::Jan, 2012, 9, 45, 0));
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     CHECK(slotSynced);
     CHECK(picker == nullptr);
     delete picker;
@@ -2265,7 +2266,7 @@ TEST_CASE("wxWinUI TimePicker nested setter is last writer",
         1, wxDateTime::Jan, 2012, 10, 30, 0);
     picker.SetSize(wxSize(221, 43));
     bool slotSynced = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             slotSynced = true;
@@ -2274,7 +2275,7 @@ TEST_CASE("wxWinUI TimePicker nested setter is last writer",
         });
 
     picker.SetValue(outer);
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     CHECK(slotSynced);
     CHECK(picker.GetValue() == nested);
     wxDateTime peer;
@@ -4537,7 +4538,7 @@ TEST_CASE("wxWinUI Calendar Create revalidates Loaded and ForceRender",
             {
                 attached = true;
                 CHECK(window == invoking);
-                wxWinUITopLevelHost::TestOnNextSlotSynced(
+                wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
                     [&](wxWindow *syncedWindow)
                     {
                         slotSynced = true;
@@ -4552,7 +4553,7 @@ TEST_CASE("wxWinUI Calendar Create revalidates Loaded and ForceRender",
         const bool created =
             invoking->Create(parent, wxID_ANY, initial);
         wxWinUITopLevelHost::TestOnNextSlotAttached({});
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(attached);
         CHECK(slotSynced);
         CHECK_FALSE(created);
@@ -4579,7 +4580,7 @@ TEST_CASE("wxWinUI Calendar setter stops after destructive ForceRender",
     }
     invoking->SetSize(wxSize(311, 359));
     bool slotSynced = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             slotSynced = true;
@@ -4591,7 +4592,7 @@ TEST_CASE("wxWinUI Calendar setter stops after destructive ForceRender",
 
     CHECK_FALSE(invoking->SetDate(
         wxDateTime(16, wxDateTime::May, 2024)));
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     CHECK(slotSynced);
     CHECK(calendar == nullptr);
     delete calendar;
@@ -4616,7 +4617,7 @@ TEST_CASE("wxWinUI Calendar nested setter is last writer",
     calendar.SetSize(wxSize(313, 361));
     bool slotSynced = false;
     bool nestedResult = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             slotSynced = true;
@@ -4625,7 +4626,7 @@ TEST_CASE("wxWinUI Calendar nested setter is last writer",
         });
 
     CHECK_FALSE(calendar.SetDate(outer));
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     CHECK(slotSynced);
     CHECK(nestedResult);
     CHECK(calendar.GetDate() == nested);
@@ -4655,7 +4656,7 @@ TEST_CASE("wxWinUI Calendar nested range setter is last writer",
     calendar.SetSize(wxSize(315, 363));
     bool slotSynced = false;
     bool nestedResult = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             slotSynced = true;
@@ -4665,7 +4666,7 @@ TEST_CASE("wxWinUI Calendar nested range setter is last writer",
         });
 
     CHECK_FALSE(calendar.SetDateRange(outerMinimum, outerMaximum));
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     CHECK(slotSynced);
     CHECK(nestedResult);
     wxDateTime minimum;

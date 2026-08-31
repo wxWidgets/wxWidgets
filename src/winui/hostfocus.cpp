@@ -15,6 +15,9 @@
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "hostfocus.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "host-focus-test-access.h"
+#endif
 #include "hostnative.h"
 #include "visualcoordinates.h"
 
@@ -2254,9 +2257,21 @@ bool wxWinUITopLevelHost::ShouldSuppressNativeKillFocus(
             (host->m_bridge && ::IsChild(host->m_bridge, target)));
 }
 
-unsigned wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount()
 {
-    return static_cast<unsigned>(ms_focusMigrations.size());
+    return static_cast<unsigned>(wxWinUITopLevelHost::ms_focusMigrations.size());
 }
+#endif // WXWINUI_TEST_SUPPORT
+
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostFocusTestAccess::TakeFocusRequested(
+    wxWinUITopLevelHost& host,
+    bool previous)
+{
+    wxWinUITopLevelHost * const self = &host;
+    self->OnTakeFocusRequested(previous);
+}
+#endif // WXWINUI_TEST_SUPPORT
 
 #endif // wxUSE_WINUI3

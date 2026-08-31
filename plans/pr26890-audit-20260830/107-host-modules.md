@@ -145,7 +145,7 @@ getter order is unchanged, and the shared mutable Name revision still guards
 every later geometry publication. The 16 outer early returns propagate to
 the same SyncSlot return; its existing exception boundary remains the owner.
 The ten nested lambda bodies and the re-expanded SyncSlot compare exactly.
-Only private non-virtual declarations are added to the installed host header;
+Only private non-virtual declarations are added to the source host header;
 no data member or public callable API is added.
 
 Both shared/static `test_gui` and `minimal` builds pass `/warnaserror`, then

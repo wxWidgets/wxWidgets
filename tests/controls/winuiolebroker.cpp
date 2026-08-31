@@ -30,6 +30,7 @@
 #include "wx/msw/wrapshl.h"
 #include "wx/winui/private/dropbroker.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-geometry-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
 #include <shellapi.h>
@@ -2633,9 +2634,9 @@ TEST_CASE("WinUI OLE broker production queries are passive",
     const auto callsBefore = log.calls;
     const auto mutationBefore = wxMSWOleGetDropTargetMutationGeneration();
     const auto schedulesBefore = wxWinUITopLevelHost::GetFlushScheduleCount();
-    const auto runsBefore = wxWinUITopLevelHost::GetFlushRunCount();
+    const auto runsBefore = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
     const auto attemptsBefore =
-        wxWinUITopLevelHost::GetFlushCallbackAttemptCount();
+        wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount();
     for ( unsigned i = 0; i < 32; ++i )
     {
         CHECK(broker->HasNativeOwnership() == expectedOwnership);
@@ -2648,8 +2649,8 @@ TEST_CASE("WinUI OLE broker production queries are passive",
     CHECK(log.calls == callsBefore);
     CHECK(wxMSWOleGetDropTargetMutationGeneration() == mutationBefore);
     CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() == schedulesBefore);
-    CHECK(wxWinUITopLevelHost::GetFlushRunCount() == runsBefore);
-    CHECK(wxWinUITopLevelHost::GetFlushCallbackAttemptCount() == attemptsBefore);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushRunCount() == runsBefore);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() == attemptsBefore);
     CHECK(after.status == before.status);
     CHECK(after.active == before.active);
     CHECK(after.ownsRegistration == before.ownsRegistration);

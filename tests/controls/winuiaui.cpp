@@ -40,6 +40,8 @@
 #include "wx/weakref.h"
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-focus-test-access.h"
+#include "host-geometry-test-access.h"
 
 #include <array>
 #include <memory>
@@ -104,10 +106,10 @@ bool DrainToQuiescence()
     {
         const unsigned schedules =
             wxWinUITopLevelHost::GetFlushScheduleCount();
-        const unsigned runs = wxWinUITopLevelHost::GetFlushRunCount();
+        const unsigned runs = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
         DrainDispatch(2);
         if ( schedules == wxWinUITopLevelHost::GetFlushScheduleCount() &&
-             runs == wxWinUITopLevelHost::GetFlushRunCount() )
+             runs == wxWinUIHostGeometryTestAccess::GetFlushRunCount() )
         {
             return true;
         }
@@ -144,7 +146,7 @@ struct RuntimeSnapshot
         snapshot.subclasses =
             wxWinUITopLevelHost::GetLiveSubclassContextCount();
         snapshot.pendingFocusMigrations =
-            wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+            wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         snapshot.slotHandlerAdds =
             wxWinUITopLevelHost::GetSlotHandlerAddCount();
         snapshot.slotHandlerRevokes =
@@ -170,7 +172,7 @@ struct RuntimeSnapshot
                    slotLifetimes &&
                wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
                    subclasses &&
-               wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+               wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
                wxWinUITopLevelHost::GetSlotHandlerAddCount() -
                        slotHandlerAdds ==
@@ -197,7 +199,7 @@ struct RuntimeSnapshot
               slotLifetimes);
         CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
               subclasses);
-        CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
 
         const unsigned slotAdds =

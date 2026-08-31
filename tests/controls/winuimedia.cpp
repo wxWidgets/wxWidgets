@@ -29,6 +29,9 @@
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-focus-test-access.h"
+#include "host-geometry-test-access.h"
+#include "host-uia-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/winui.h"
 
@@ -111,14 +114,14 @@ bool DrainToQuiescence()
     {
         const unsigned schedules =
             wxWinUITopLevelHost::GetFlushScheduleCount();
-        const unsigned runs = wxWinUITopLevelHost::GetFlushRunCount();
+        const unsigned runs = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
         const unsigned attempts =
-            wxWinUITopLevelHost::GetFlushCallbackAttemptCount();
+            wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount();
         DrainDispatch(2);
         if ( schedules == wxWinUITopLevelHost::GetFlushScheduleCount() &&
-             runs == wxWinUITopLevelHost::GetFlushRunCount() &&
+             runs == wxWinUIHostGeometryTestAccess::GetFlushRunCount() &&
              attempts ==
-                 wxWinUITopLevelHost::GetFlushCallbackAttemptCount() )
+                 wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() )
         {
             return true;
         }
@@ -145,12 +148,12 @@ struct HostSnapshot
         result.contentObservers =
             wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
         result.automationObservers =
-            wxWinUITopLevelHost::
-                GetLiveAutomationNameStyleObserverCountForTest();
+            wxWinUIHostUIATestAccess::
+                GetLiveAutomationNameStyleObserverCount();
         result.invisibleProviders =
-            wxWinUITestGetLiveInvisibleShellProviderCount();
+            wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount();
         result.pendingFocusMigrations =
-            wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+            wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         result.slotAdds = wxWinUITopLevelHost::GetSlotHandlerAddCount();
         result.slotRevokes =
             wxWinUITopLevelHost::GetSlotHandlerRevokeCount();
@@ -174,12 +177,12 @@ struct HostSnapshot
                wxWinUITopLevelHost::
                        GetLiveContentLoadedObserverCountForTest() ==
                    contentObservers &&
-               wxWinUITopLevelHost::
-                       GetLiveAutomationNameStyleObserverCountForTest() ==
+               wxWinUIHostUIATestAccess::
+                       GetLiveAutomationNameStyleObserverCount() ==
                    automationObservers &&
-               wxWinUITestGetLiveInvisibleShellProviderCount() ==
+               wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
                    invisibleProviders &&
-               wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+               wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
                wxWinUITopLevelHost::GetSlotHandlerAddCount() - slotAdds ==
                    wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
@@ -203,12 +206,12 @@ struct HostSnapshot
         CHECK(wxWinUITopLevelHost::
                   GetLiveContentLoadedObserverCountForTest() ==
               contentObservers);
-        CHECK(wxWinUITopLevelHost::
-                  GetLiveAutomationNameStyleObserverCountForTest() ==
+        CHECK(wxWinUIHostUIATestAccess::
+                  GetLiveAutomationNameStyleObserverCount() ==
               automationObservers);
-        CHECK(wxWinUITestGetLiveInvisibleShellProviderCount() ==
+        CHECK(wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
               invisibleProviders);
-        CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
 
         const unsigned addedSlots =
@@ -4310,7 +4313,7 @@ TEST_CASE("WinUIMedia::SharedSlotGeometryFocusUiaAndCrossXamlRoot",
     CHECK(mediaSlot->GetContainer().Visibility() == MUX::Visibility::Visible);
 
     fixture.buttonA->SetSize(wxRect(180, 95, 140, 58));
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     fixture.owner->Raise();
     fixture.hostA->FlushSync();
     CHECK(MUXC::Canvas::GetZIndex(mediaSlot->GetContainer()) >
@@ -4332,7 +4335,7 @@ TEST_CASE("WinUIMedia::SharedSlotGeometryFocusUiaAndCrossXamlRoot",
                    wxWindow::FindFocus() == fixture.owner &&
                    IsXamlFocusInside(peer, peer.XamlRoot());
         }, StateWaitRounds));
-    fixture.hostA->TestTakeFocusRequested(false);
+    wxWinUIHostFocusTestAccess::TakeFocusRequested(*fixture.hostA, false);
     REQUIRE(DrainUntil(
         [&fixture, peer]()
         {
@@ -4340,7 +4343,7 @@ TEST_CASE("WinUIMedia::SharedSlotGeometryFocusUiaAndCrossXamlRoot",
                    wxWindow::FindFocus() == fixture.buttonA &&
                    !IsXamlFocusInside(peer, peer.XamlRoot());
         }, StateWaitRounds));
-    fixture.hostA->TestTakeFocusRequested(true);
+    wxWinUIHostFocusTestAccess::TakeFocusRequested(*fixture.hostA, true);
     REQUIRE(DrainUntil(
         [&fixture, peer]()
         {
@@ -4449,7 +4452,7 @@ TEST_CASE("WinUIMedia::SharedSlotGeometryFocusUiaAndCrossXamlRoot",
         }, StateWaitRounds));
     CHECK(fixture.hostA->FindSlot(fixture.owner) == nullptr);
     CHECK(fixture.hostA->GetFocusOwner() != fixture.owner);
-    CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+    CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
           before.pendingFocusMigrations);
     // Reparenting to an inactive TLW does not promise to preserve focus.
     // Reacquire it explicitly and prove the destination host can establish
@@ -4514,7 +4517,7 @@ TEST_CASE("WinUIMedia::SharedSlotGeometryFocusUiaAndCrossXamlRoot",
     REQUIRE(fixture.hostA->FindSlot(fixture.owner) != nullptr);
     CHECK(peer.XamlRoot() == rootA);
     CHECK(peer.XamlRoot() != rootB);
-    CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+    CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
           before.pendingFocusMigrations);
     fixture.hostA->FocusSlot(fixture.owner);
     REQUIRE(DrainUntil(
@@ -4526,11 +4529,11 @@ TEST_CASE("WinUIMedia::SharedSlotGeometryFocusUiaAndCrossXamlRoot",
         }, StateWaitRounds));
     checkSemanticTargetAndUia(fixture.hostA, rootA);
     checkAttachedGraph(rootA, positionBeforeReturn);
-    CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+    CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
           before.pendingFocusMigrations);
 
     CheckDispatcherLedger(*fixture.ledger);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     FinishFixture(fixture, before);
 }
 
@@ -4574,7 +4577,7 @@ TEST_CASE("WinUIMedia::HundredLoadRetireAndRepeatedLoadCycles",
     const unsigned steadySlotLifetimes =
         wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
     const unsigned steadyFocusMigrations =
-        wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+        wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     const wxStopWatch cycles;
 
     for ( unsigned i = 0; i < 100; ++i )
@@ -4686,7 +4689,7 @@ TEST_CASE("WinUIMedia::HundredLoadRetireAndRepeatedLoadCycles",
                        wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
                            steadySlotLifetimes;
             }, slotRounds));
-        CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               steadyFocusMigrations);
         CHECK(ledger->handlerAdds.load() ==
               ledger->handlerRevokes.load());

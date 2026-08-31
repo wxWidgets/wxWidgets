@@ -201,6 +201,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
     #include "wx/winui/private/textpeer.h"
     #include "wx/winui/private/tlwhost.h"
+    #include "host-geometry-test-access.h"
     #include "wx/winui/private/tlwhostmsw.h"
 #endif
 
@@ -1456,7 +1457,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
             wxWinUITopLevelHost::GetSlotHandlerRevokeCount(),
             wxWinUITopLevelHost::GetRootHandlerAddCount(),
             wxWinUITopLevelHost::GetRootHandlerRevokeCount(),
-            wxWinUITopLevelHost::GetFlushCallbackAttemptCount(),
+            wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount(),
             wxWinUINotebookTestAccess::GetPendingPeerRetirementCount(),
             wxWinUINotebookTestAccess::GetLiveCallbackStateCount(),
             wxWinUINotebookTestAccess::GetFrameworkRetirementCount(),
@@ -1853,7 +1854,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 supported inventory",
 
         const unsigned stableFlushAttempts = afterDestroy.flushAttempts;
         drainDispatch();
-        CHECK( wxWinUITopLevelHost::GetFlushCallbackAttemptCount() ==
+        CHECK( wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() ==
                stableFlushAttempts );
     }
 
@@ -2168,7 +2169,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
             wxWinUITopLevelHost::GetSlotHandlerRevokeCount(),
             wxWinUITopLevelHost::GetRootHandlerAddCount(),
             wxWinUITopLevelHost::GetRootHandlerRevokeCount(),
-            wxWinUITopLevelHost::GetFlushCallbackAttemptCount(),
+            wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount(),
             wxWinUITextCallbackState::GetLiveCountForTesting(),
             wxWinUINotebookTestAccess::GetPendingPeerRetirementCount(),
             wxWinUINotebookTestAccess::GetLiveCallbackStateCount(),
@@ -2494,7 +2495,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::WinUI V0 mixed supported resource",
         // posted by teardown that retained an already-destroyed slot.
         const unsigned stableFlushAttempts = afterDestroy.flushAttempts;
         drainDispatch();
-        CHECK( wxWinUITopLevelHost::GetFlushCallbackAttemptCount() ==
+        CHECK( wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() ==
                stableFlushAttempts );
     }
 

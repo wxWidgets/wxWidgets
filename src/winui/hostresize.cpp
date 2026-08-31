@@ -15,6 +15,10 @@
 #include "hostresize.h"
 #include "hostnative.h"
 #include "private.h"
+#ifdef WXWINUI_TEST_SUPPORT
+#include "host-resize-test-access.h"
+#include <map>
+#endif
 
 #include "wx/toplevel.h"
 #include "wx/scopeguard.h"
@@ -29,9 +33,27 @@
 namespace
 {
 
+#ifdef WXWINUI_TEST_SUPPORT
 bool (*gs_nativeResizeContactReader)(void *) = nullptr;
 void *gs_nativeResizeContactContext = nullptr;
 bool gs_failNextNativeResizePost = false;
+
+// Test-only observations, not transaction authority. Weak control-block
+// identity rejects a later host at the same address without retaining it.
+// All callers keep the existing UI-thread contract. No snapshot reference
+// is used after a wx/XAML/native callback; ShutdownNativeResize erases this entry
+// before the host releases its lifetime control block.
+using NativeResizeSnapshots = std::map<
+    std::weak_ptr<wxWinUIHostLifetime>, wxWinUINativeResizeSnapshot,
+    std::owner_less<std::weak_ptr<wxWinUIHostLifetime>>>;
+NativeResizeSnapshots gs_nativeResizeSnapshots;
+
+wxWinUINativeResizeSnapshot& NativeResizeSnapshotFor(
+    const std::shared_ptr<wxWinUIHostLifetime>& lifetime)
+{
+    return gs_nativeResizeSnapshots[lifetime];
+}
+#endif // WXWINUI_TEST_SUPPORT
 std::set<wxWinUITopLevelHost *> gs_deferredNativeResizeWakes;
 
 } // anonymous namespace
@@ -43,28 +65,34 @@ UINT wxWinUINativeResizeMessage()
     return message;
 }
 
-void wxWinUISetNativeResizeContactReaderForTesting(
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostResizeTestAccess::SetContactReader(
     bool (*reader)(void *), void *context)
 {
     gs_nativeResizeContactReader = reader;
     gs_nativeResizeContactContext = reader ? context : nullptr;
 }
 
-void wxWinUIFailNextNativeResizePostForTesting()
+void wxWinUIHostResizeTestAccess::FailNextPost()
 {
     gs_failNextNativeResizePost = true;
 }
 
-bool wxWinUIGetNativeResizeSnapshotForTesting(
+bool wxWinUIHostResizeTestAccess::GetSnapshot(
     wxWindow *window, wxWinUINativeResizeSnapshot *snapshot)
 {
     wxWinUITopLevelHost * const host =
         wxWinUITopLevelHost::ForWindow(window, false);
     if ( !host || !snapshot )
         return false;
-    *snapshot = host->m_nativeResizeSnapshot;
+    const auto it = gs_nativeResizeSnapshots.find(host->m_hostLifetime);
+    *snapshot = it != gs_nativeResizeSnapshots.end()
+        ? it->second
+        : wxWinUINativeResizeSnapshot();
     return true;
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUITopLevelHost::ShutdownNativeResize()
 {
@@ -81,6 +109,9 @@ void wxWinUITopLevelHost::ShutdownNativeResize()
         }
         FinishNativeResize(nativeResize, true);
     }
+#ifdef WXWINUI_TEST_SUPPORT
+    gs_nativeResizeSnapshots.erase(m_hostLifetime);
+#endif
 }
 
 bool wxWinUITopLevelHost::ValidateNativeResize(
@@ -199,11 +230,14 @@ bool wxWinUITopLevelHost::RequestNativeResize(
     }
 
     request->accepted = true;
-    m_nativeResizeSnapshot.phase = wxWinUINativeResizePhase::Pending;
-    m_nativeResizeSnapshot.ticket = request->ticket;
-    m_nativeResizeSnapshot.hitTest = hitTest;
-    m_nativeResizeSnapshot.screenPoint = { sample.screenX, sample.screenY };
-    ++m_nativeResizeSnapshot.scheduled;
+#ifdef WXWINUI_TEST_SUPPORT
+    auto& snapshot = NativeResizeSnapshotFor(m_hostLifetime);
+    snapshot.phase = wxWinUINativeResizePhase::Pending;
+    snapshot.ticket = request->ticket;
+    snapshot.hitTest = hitTest;
+    snapshot.screenPoint = { sample.screenX, sample.screenY };
+    ++snapshot.scheduled;
+#endif
     return true;
 }
 
@@ -213,11 +247,13 @@ bool wxWinUITopLevelHost::PostNativeResizeWake()
         return true;
     if ( !m_nativeResize || m_shuttingDown || !m_bridge )
         return false;
+#ifdef WXWINUI_TEST_SUPPORT
     if ( gs_failNextNativeResizePost )
     {
         gs_failNextNativeResizePost = false;
         return false;
     }
+#endif
     const UINT message = wxWinUINativeResizeMessage();
     const std::uint64_t ticket = m_nativeResize->ticket;
     if ( !message ||
@@ -257,9 +293,14 @@ void wxWinUITopLevelHost::FinishNativeResize(
     m_nativeResize.reset();
     m_nativeResizeWakePosted = false;
     gs_deferredNativeResizeWakes.erase(this);
-    m_nativeResizeSnapshot.phase = wxWinUINativeResizePhase::Idle;
+#ifdef WXWINUI_TEST_SUPPORT
+    auto& snapshot = NativeResizeSnapshotFor(m_hostLifetime);
+    snapshot.phase = wxWinUINativeResizePhase::Idle;
     if ( cancelled || request->cancelled || !request->entered )
-        ++m_nativeResizeSnapshot.cancelled;
+        ++snapshot.cancelled;
+#else
+    wxUnusedVar(cancelled);
+#endif
     wxWinUIRetireSubclass(
         reinterpret_cast<HWND>(request->target.GetLeafHwnd()),
         NativeResizeSubclassProc, static_cast<UINT_PTR>(request->ticket),
@@ -346,10 +387,12 @@ void wxWinUITopLevelHost::DispatchNativeResize(std::uint64_t ticket)
     });
     const auto contactActive = []()
     {
-        return gs_nativeResizeContactReader
-            ? gs_nativeResizeContactReader(gs_nativeResizeContactContext)
-            : wxWinUIIsPointerContactActive(
-                  wxWinUIInputDevice::Mouse, 0, VK_LBUTTON);
+#ifdef WXWINUI_TEST_SUPPORT
+        if ( gs_nativeResizeContactReader )
+            return gs_nativeResizeContactReader(gs_nativeResizeContactContext);
+#endif
+        return wxWinUIIsPointerContactActive(
+            wxWinUIInputDevice::Mouse, 0, VK_LBUTTON);
     };
 
     try
@@ -479,14 +522,20 @@ LRESULT CALLBACK wxWinUITopLevelHost::NativeResizeSubclassProc(
         if ( msg == WM_ENTERSIZEMOVE &&
              request->Enter(request->dispatching) )
         {
-            host->m_nativeResizeSnapshot.phase = wxWinUINativeResizePhase::Entered;
-            ++host->m_nativeResizeSnapshot.entered;
+#ifdef WXWINUI_TEST_SUPPORT
+            auto& snapshot = NativeResizeSnapshotFor(host->m_hostLifetime);
+            snapshot.phase = wxWinUINativeResizePhase::Entered;
+            ++snapshot.entered;
+#endif
             wxWinUIInputLog("grip resize #%llu entered", request->ticket);
         }
         else if ( msg == WM_EXITSIZEMOVE && request->Exit() )
         {
-            host->m_nativeResizeSnapshot.phase = wxWinUINativeResizePhase::Idle;
-            ++host->m_nativeResizeSnapshot.exited;
+#ifdef WXWINUI_TEST_SUPPORT
+            auto& snapshot = NativeResizeSnapshotFor(host->m_hostLifetime);
+            snapshot.phase = wxWinUINativeResizePhase::Idle;
+            ++snapshot.exited;
+#endif
             wxWinUIInputLog("grip resize #%llu exited", request->ticket);
         }
         else if ( msg == WM_CANCELMODE || msg == WM_NCDESTROY )

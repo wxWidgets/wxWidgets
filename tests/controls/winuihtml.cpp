@@ -28,6 +28,8 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-focus-test-access.h"
+#include "host-geometry-test-access.h"
 
 #if wxUSE_GIF && wxUSE_TIMER
     #include "wx/timer.h"
@@ -208,10 +210,10 @@ bool DrainToQuiescence()
     {
         const unsigned schedules =
             wxWinUITopLevelHost::GetFlushScheduleCount();
-        const unsigned runs = wxWinUITopLevelHost::GetFlushRunCount();
+        const unsigned runs = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
         DrainDispatch(2);
         if ( schedules == wxWinUITopLevelHost::GetFlushScheduleCount() &&
-             runs == wxWinUITopLevelHost::GetFlushRunCount() )
+             runs == wxWinUIHostGeometryTestAccess::GetFlushRunCount() )
         {
             return true;
         }
@@ -223,9 +225,9 @@ bool DrainToQuiescence()
 bool FlushCallbacksStayQuiescent()
 {
     const unsigned callbacks =
-        wxWinUITopLevelHost::GetFlushCallbackAttemptCount();
+        wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount();
     DrainDispatch(4);
-    return wxWinUITopLevelHost::GetFlushCallbackAttemptCount() == callbacks;
+    return wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() == callbacks;
 }
 
 bool ShowOffscreenWithoutActivation(wxFrame *frame, int ordinal)
@@ -260,7 +262,7 @@ struct RuntimeSnapshot
         snapshot.loadedHooks =
             wxWinUITopLevelHost::GetLiveLoadedHookCount();
         snapshot.pendingFocusMigrations =
-            wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+            wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         snapshot.buttonCallbacks =
             wxWinUIButtonTestAccess::LiveCallbackStateCount();
         snapshot.slotHandlerAdds =
@@ -285,7 +287,7 @@ struct RuntimeSnapshot
                wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
                    subclasses &&
                wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
-               wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+               wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
                wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
                    buttonCallbacks &&
@@ -310,7 +312,7 @@ struct RuntimeSnapshot
         CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
               subclasses);
         CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
-        CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
         CHECK(wxWinUIButtonTestAccess::LiveCallbackStateCount() ==
               buttonCallbacks);

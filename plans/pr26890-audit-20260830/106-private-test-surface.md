@@ -166,7 +166,7 @@ Do not delete a lifetime/retirement service used by production merely because it
   **440 assertions**, and the preserved 11-case Choice/ComboBox allowlist
   passes **981 assertions**, in both shared/static private desktops.
   Logs: `audit106-family9-before-*` in the two existing build trees.
-- Nine probe operations move from the installed `tlwhost.h` surface to
+- Nine probe operations move from the source-private `tlwhost.h` surface to
   `tests/winui/test-support/control-host-test-access.h`. The two intra-core
   Loaded adapters are not DLL exports. Test-only hook storage leaves the
   shared ControlHost class unconditionally and is owned by a test-build-only
@@ -214,6 +214,69 @@ Do not delete a lifetime/retirement service used by production merely because it
   and consumer directories on F:. This completes this ControlHost sublot
   locally, not the remaining host/keyboard/bootstrap facilities or physical
   qualification. The first failed ON builds remain part of the record.
+
+## Host observation and input adapters (2026-08-31)
+
+- The geometry/UIA and input/focus/resize accessors now live in five
+  non-installed `tests/winui/test-support/host-*-test-access.h` headers.
+  The owning translation units opt in only for `wxBUILD_TESTS=ALL`.
+  Shared host/slot classes have unconditional friend declarations, with no
+  macro-dependent data layout. Native resize requests, transaction ownership,
+  contact validation and terminal cleanup remain production responsibilities.
+- Test-only resize snapshots leave the host class unconditionally. A test-build
+  registry uses weak lifetime-control-block identity and is erased on native
+  resize shutdown. Reading an untouched host returns a default snapshot without
+  inserting an entry. The real resize state machine is neither replaced nor
+  selected by this observation. Shipping builds have no registry or injected
+  contact-reader/post-failure state.
+- Flush scheduling and impossible-z-order counts remain passive production
+  diagnostics, used by `winuispike`. The sample compares the impossible-z-order
+  count before/after its operation instead of resetting host state; its expected
+  delta remains one. The synthetic root-pointer campaign uses private test
+  access when built with ALL. Without it, `--input-scenarios` is explicitly
+  unavailable (exit 30), not silently successful. The normal demo, diagnostics,
+  composition scenarios and real scroll-latency code remain available.
+- Both shared/static test binaries pass the unchanged focused groups:
+- The combined consumer proof covers all **22** changed test source files and
+  **409** migrated calls (200 geometry/UIA, 209 input/focus/resize). Inverting
+  only the declared adapters/includes gives the same **312221** C++ tokens;
+  assertion expressions, comments and preprocessing directive streams are
+  unchanged. Evidence: `audit107-geometry/uia-projection/test-access/combined-host-check`
+  under the existing F: proof directory. This is source equivalence, not a
+  runtime count or coverage for the separate sample changes.
+- Both shared/static test binaries pass the unchanged focused groups:
+  input **1205/31**, focus **132/14**, native resize/lifecycle **219/7**,
+  resize progress **14/1**, UIA **576/18**, tooltips **550/22**, geometry
+  **327/14**, root-input **101/5** and observation callbacks **27/3**
+  (executed assertions/cases). Some groups overlap; these are not a unique-case
+  aggregate. Runtime smoke and Supported V0 pass **2/2** per linkage.
+  Logs: `audit106-host-on-*.log` in the two existing build trees. Runs use
+  private desktops and `WX_UI_TESTS=0`; no physical input is qualified.
+- Four MSVC x64 `/W4 /WX` compile-only probes give identical ON/OFF and
+  shared/static size/alignment: host **6000/8**, slot **1224/8**, broker
+  **344/8** (broker not yet migrated). The actual source/setup include paths
+  and unchanged input hashes are checked. Evidence is retained under
+  `F:\wxwinui-pr26890-audit107-foundation\host-layout\host-adapters-bigobj`.
+  This is not a historical ABI or vtable proof. The initial COFF decoder
+  rejected a valid BIGOBJ; its failure is retained, and the corrected decoder
+  reads the SDK's BIGOBJ section table layout explicitly.
+- Installation scope correction: `tlwhost.h`, `dropbroker.h`, `nativeresize.h`
+  and `inputtest.h` are source-private headers and were already absent from the
+  install manifest. Of these host-related bridge headers, `tlwhostmsw.h` is
+  installed. Negative source-header canaries must include the source headers;
+  failing to find an uninstalled header proves nothing about its API. Shipping
+  checks must separately verify maintained header absence and removed DLL/archive
+  test symbols. New OFF/install/consumer qualification remains pending.
+- The first host ON builds compiled `test_gui` and `minimal` but failed on
+  four forgotten `winuispike` consumers. `audit106-host-on-build.log` preserves
+  that failure. Corrected builds use `audit106-host-on-build-samplefix.log`;
+  both corrected builds now pass `test_gui`, `minimal` and `winuispike` with
+  `/warnaserror`. One private-desktop synthetic campaign per linkage passes
+  all **9 scenarios**, exit 0, with `window_activated=false`; JSON and logs are
+  `audit106-host-on-sample-input.*`. This is not a 100-iteration campaign or
+  evidence about held physical mouse input. OFF CLI rejection remains pending.
+  The remaining slot/content, broker, keyboard, bootstrap and MSW test seams
+  keep plan 106 open.
 
 ## Maintenance
 

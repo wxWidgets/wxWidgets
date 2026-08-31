@@ -134,9 +134,17 @@ families can be correlated without depending on wall-clock changes.
 
 The phase-007a input gate is separate from freeze instrumentation. It starts a
 fresh process for each repetition and requires a new or empty output
-directory:
+directory. Configure and build with `wxBUILD_TESTS=ALL`: this synthetic
+campaign uses the private, non-installed host input test adapter. With
+`wxBUILD_TESTS=OFF` (or any mode other than `ALL`), `--input-scenarios`
+exits `30` with `winuispike: --input-scenarios requires wxBUILD_TESTS=ALL`;
+it creates neither a scenario window nor a result file. The interactive
+demo, diagnostics, z-order scenarios and real scroll-latency probe remain
+available without test support. For an already configured build:
 
 ```powershell
+cmake -S . -B build-winui-clean -DwxBUILD_TESTS=ALL
+cmake --build build-winui-clean --config Release --target winuispike --parallel 4
 samples\winuispike\run-input-scenarios.ps1 `
     -BuildDir build-winui-clean `
     -Iterations 100
@@ -149,7 +157,7 @@ setup fails closed instead of truncating the signed 16-bit coordinates packed
 in native mouse-message `LPARAM`s. It does not call `SendInput`, query or move
 the cursor position, request foreground/focus, install diagnostic hooks, or
 start the interactive spike timer. Normalized samples pass through
-`wxWinUITopLevelHost::TestRouteRootPointerSample()` and the native target
+`wxWinUIHostInputTestAccess::RouteRootPointerSample()` and the native target
 counts the actual synchronous messages emitted by the production adapter.
 
 Nine scenarios run in a fixed order:

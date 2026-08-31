@@ -26,6 +26,8 @@
 #include "wx/weakref.h"
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-focus-test-access.h"
+#include "host-geometry-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 
 #include <memory>
@@ -69,14 +71,14 @@ bool DrainToQuiescence()
     {
         const unsigned schedules =
             wxWinUITopLevelHost::GetFlushScheduleCount();
-        const unsigned runs = wxWinUITopLevelHost::GetFlushRunCount();
+        const unsigned runs = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
         const unsigned callbacks =
-            wxWinUITopLevelHost::GetFlushCallbackAttemptCount();
+            wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount();
         DrainDispatch(2);
         if ( schedules == wxWinUITopLevelHost::GetFlushScheduleCount() &&
-             runs == wxWinUITopLevelHost::GetFlushRunCount() &&
+             runs == wxWinUIHostGeometryTestAccess::GetFlushRunCount() &&
              callbacks ==
-                 wxWinUITopLevelHost::GetFlushCallbackAttemptCount() )
+                 wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() )
         {
             return true;
         }
@@ -115,7 +117,7 @@ struct RuntimeSnapshot
         snapshot.loadedHooks =
             wxWinUITopLevelHost::GetLiveLoadedHookCount();
         snapshot.pendingFocusMigrations =
-            wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+            wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
         snapshot.slotHandlerAdds =
             wxWinUITopLevelHost::GetSlotHandlerAddCount();
         snapshot.slotHandlerRevokes =
@@ -142,7 +144,7 @@ struct RuntimeSnapshot
                wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
                    subclasses &&
                wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks &&
-               wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+               wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
                    pendingFocusMigrations &&
                wxWinUITopLevelHost::GetSlotHandlerAddCount() -
                        slotHandlerAdds ==
@@ -170,7 +172,7 @@ struct RuntimeSnapshot
         CHECK(wxWinUITopLevelHost::GetLiveSubclassContextCount() ==
               subclasses);
         CHECK(wxWinUITopLevelHost::GetLiveLoadedHookCount() == loadedHooks);
-        CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+        CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
               pendingFocusMigrations);
 
         const unsigned slotAdds =
@@ -530,12 +532,12 @@ class ImpossibleZOrderResetGuard final
 public:
     ImpossibleZOrderResetGuard()
     {
-        wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+        wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     }
 
     ~ImpossibleZOrderResetGuard()
     {
-        wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+        wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     }
 };
 
@@ -784,7 +786,7 @@ TEST_CASE("WinUI native MDI records the single-bridge overlap STOP",
     // same production notification used by WM_WINDOWPOSCHANGED. Reset only
     // after this point so creation/initial layout cannot satisfy the oracle.
     wxWinUITLWHostNotifyNativeLayout(upper.child, true);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
 
     // The lower child's XAML button must be below the upper child's native
     // non-client/client surface, while the upper child's own XAML button must
@@ -1121,7 +1123,7 @@ TEST_CASE("WinUI native MDI migrates child content between parent hosts",
                    hostA->GetFocusOwner() == migrating;
         }));
     const unsigned pendingFocusMigrations =
-        wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+        wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
 
     const auto moveFocused =
         [migrating, pendingFocusMigrations](
@@ -1141,8 +1143,8 @@ TEST_CASE("WinUI native MDI migrates child content between parent hosts",
                 }));
             CHECK(wxGetTopLevelParent(migrating) ==
                   destination.child->GetMDIParent());
-            CHECK(wxWinUITopLevelHost::
-                      GetPendingFocusMigrationCountForTest() ==
+            CHECK(wxWinUIHostFocusTestAccess::
+                      GetPendingFocusMigrationCount() ==
                   pendingFocusMigrations);
         };
 
@@ -1167,7 +1169,7 @@ TEST_CASE("WinUI native MDI migrates child content between parent hosts",
     CHECK(hostA->GetFocusOwner() == migrating);
     CHECK(HasSingleHostOwner(migrating, hostA));
     CHECK_FALSE(hostB->FindSlot(migrating));
-    CHECK(wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest() ==
+    CHECK(wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount() ==
           pendingFocusMigrations);
 
     REQUIRE(environment.DestroyAndWait(before));

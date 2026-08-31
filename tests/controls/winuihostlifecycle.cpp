@@ -53,6 +53,10 @@
 #endif
 
 #include "wx/winui/private/tlwhost.h"
+#include "host-focus-test-access.h"
+#include "host-input-test-access.h"
+#include "host-geometry-test-access.h"
+#include "host-uia-test-access.h"
 #include "control-host-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/private/inputtest.h"
@@ -122,10 +126,10 @@ void DrainToQuiescence()
     for ( int i = 0; i < 50; ++i )
     {
         const unsigned sched = wxWinUITopLevelHost::GetFlushScheduleCount();
-        const unsigned runs = wxWinUITopLevelHost::GetFlushRunCount();
+        const unsigned runs = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
         DrainDispatch(2);
         if ( sched == wxWinUITopLevelHost::GetFlushScheduleCount() &&
-                runs == wxWinUITopLevelHost::GetFlushRunCount() )
+                runs == wxWinUIHostGeometryTestAccess::GetFlushRunCount() )
             return;
     }
 
@@ -840,8 +844,8 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
         wxWinUIGetManagedToolTipCountForTesting();
 #endif
     const unsigned styleObserversBefore =
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest();
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount();
     const unsigned loadedObserversBefore =
         wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
 
@@ -865,8 +869,8 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
 
     wxWinUISlot * const slot = host->RegisterSlot(frame, content);
     REQUIRE(slot != nullptr);
-    CHECK(wxWinUITopLevelHost::
-              GetLiveAutomationNameStyleObserverCountForTest() ==
+    CHECK(wxWinUIHostUIATestAccess::
+              GetLiveAutomationNameStyleObserverCount() ==
           styleObserversBefore + 1);
     CHECK(wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest() ==
           loadedObserversBefore + 1);
@@ -930,8 +934,8 @@ TEST_CASE("HostLifecycle::ShutdownRestoresRetainedContentState",
           MUX::DependencyProperty::UnsetValue());
     CHECK(MUXA::AutomationProperties::GetAccessibilityView(content) ==
           MUXAP::AccessibilityView::Control);
-    CHECK(wxWinUITopLevelHost::
-              GetLiveAutomationNameStyleObserverCountForTest() ==
+    CHECK(wxWinUIHostUIATestAccess::
+              GetLiveAutomationNameStyleObserverCount() ==
           styleObserversBefore);
     CHECK(wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest() ==
           loadedObserversBefore);
@@ -1359,7 +1363,7 @@ TEST_CASE("HostLifecycle::FocusedReparentAcrossTLW",
            "[HostLifecycle][HostState][winui-009]")
 {
     const unsigned migrations0 =
-        wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+        wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     const unsigned slots0 =
         wxWinUITopLevelHost::GetLiveSlotCount();
     const unsigned slotLifetimes0 =
@@ -1418,8 +1422,8 @@ TEST_CASE("HostLifecycle::FocusedReparentAcrossTLW",
         CHECK(wxWindow::FindFocus() == button);
         CHECK(setEvents == 0);
         CHECK(killEvents == 0);
-        CHECK(wxWinUITopLevelHost::
-                  GetPendingFocusMigrationCountForTest() == migrations0);
+        CHECK(wxWinUIHostFocusTestAccess::
+                  GetPendingFocusMigrationCount() == migrations0);
         current = target;
     }
 
@@ -1455,15 +1459,15 @@ TEST_CASE("HostLifecycle::FocusedReparentAcrossTLW",
     CHECK(wxWindow::FindFocus() == button);
     CHECK(setEvents == 0);
     CHECK(killEvents == 0);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == migrations0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == migrations0);
 
     frameA->Destroy();
     frameB->Destroy();
     frameC->Destroy();
     DrainDispatch();
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == migrations0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == migrations0);
     CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots0);
     CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() ==
           slotLifetimes0);
@@ -1473,7 +1477,7 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
           "[HostLifecycle][HostState][focus][loaded][winui-009]")
 {
     const unsigned pending0 =
-        wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+        wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     const unsigned slots0 = wxWinUITopLevelHost::GetLiveSlotCount();
     const unsigned lifetimes0 =
         wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
@@ -1551,8 +1555,8 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
     CHECK(targetSets == 0);
     CHECK(targetKills == 0);
     CHECK(holderKills == 0);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == pending0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == pending0);
 
     bool sawAttachB = false;
     bool sawAttachC = false;
@@ -1580,8 +1584,8 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
             slotB->SetContentLoadedForTest(false);
 
             // A to B owns exactly one transport ticket.
-            CHECK(wxWinUITopLevelHost::
-                      GetPendingFocusMigrationCountForTest() == pending0 + 1);
+            CHECK(wxWinUIHostFocusTestAccess::
+                      GetPendingFocusMigrationCount() == pending0 + 1);
             CHECK(hostB->GetFocusOwner() != target);
 
             // The attach hook is one-shot; arm it again for B to C.
@@ -1602,8 +1606,8 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
                     slotC->SetContentLoadedForTest(false);
 
                     // The second attach forwards the same ticket.
-                    CHECK(wxWinUITopLevelHost::
-                              GetPendingFocusMigrationCountForTest() ==
+                    CHECK(wxWinUIHostFocusTestAccess::
+                              GetPendingFocusMigrationCount() ==
                           pending0 + 1);
                     CHECK(hostC->GetFocusOwner() != target);
                 });
@@ -1638,8 +1642,8 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
 
     // The migration ticket is gone, but C still owns the original deferred
     // request. It must become effective without another FocusSlot() call.
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == pending0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == pending0);
     CHECK(hostC->GetFocusOwner() != target);
     CHECK(::GetFocus() == holderHwnd);
     CHECK(wxWindow::FindFocus() == holder);
@@ -1656,8 +1660,8 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
     CHECK(targetSets == 1);
     CHECK(targetKills == 0);
     CHECK(holderKills == 1);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == pending0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == pending0);
 
     frameA->Destroy();
     frameB->Destroy();
@@ -1666,8 +1670,8 @@ TEST_CASE("HostLifecycle::DeferredFocusSurvivesReentrantTripleAttach",
 
     CHECK(wxWinUITopLevelHost::GetLiveSlotCount() == slots0);
     CHECK(wxWinUITopLevelHost::GetLiveSlotLifetimeCount() == lifetimes0);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == pending0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == pending0);
 
     const unsigned adds =
         wxWinUITopLevelHost::GetSlotHandlerAddCount() - adds0;
@@ -1681,7 +1685,7 @@ TEST_CASE("HostLifecycle::FocusedReparentHonoursNativeRedirect",
           "[HostLifecycle][HostState][winui-009]")
 {
     const unsigned migrations0 =
-        wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+        wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     wxFrame * const frameA =
         new wxFrame(nullptr, wxID_ANY, "focused-redirect-A");
     wxFrame * const frameB =
@@ -1747,14 +1751,14 @@ TEST_CASE("HostLifecycle::FocusedReparentHonoursNativeRedirect",
     host = wxWinUITopLevelHost::FindSlotOwner(migrant);
     REQUIRE(host != nullptr);
     CHECK(host->GetFocusOwner() != migrant);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == migrations0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == migrations0);
 
     frameA->Destroy();
     frameB->Destroy();
     DrainDispatch();
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == migrations0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == migrations0);
 }
 
 TEST_CASE("HostLifecycle::FocusedReparentHonoursGettingFocusRedirect",
@@ -1765,7 +1769,7 @@ TEST_CASE("HostLifecycle::FocusedReparentHonoursGettingFocusRedirect",
     namespace MUXI = winrt::Microsoft::UI::Xaml::Input;
 
     const unsigned migrations0 =
-        wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+        wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     wxFrame * const frameA =
         new wxFrame(nullptr, wxID_ANY, "focused-getting-A");
     wxFrame * const frameB =
@@ -1845,14 +1849,14 @@ TEST_CASE("HostLifecycle::FocusedReparentHonoursGettingFocusRedirect",
         wxWinUITopLevelHost::FindSlotOwner(migrant);
     REQUIRE(host != nullptr);
     CHECK(host->GetFocusOwner() != migrant);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == migrations0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == migrations0);
 
     frameA->Destroy();
     frameB->Destroy();
     DrainDispatch();
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() == migrations0);
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() == migrations0);
 }
 
 TEST_CASE("HostLifecycle::FreezeThawCoalescedFlush", "[HostLifecycle]")
@@ -1867,9 +1871,9 @@ TEST_CASE("HostLifecycle::FreezeThawCoalescedFlush", "[HostLifecycle]")
     REQUIRE(host->FindSlot(button) != nullptr);
 
     const unsigned sched0 = wxWinUITopLevelHost::GetFlushScheduleCount();
-    const unsigned runs0 = wxWinUITopLevelHost::GetFlushRunCount();
+    const unsigned runs0 = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
     const unsigned attempts0 =
-        wxWinUITopLevelHost::GetFlushCallbackAttemptCount();
+        wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount();
 
     // Queue one callback BEFORE the freeze.  It must run while frozen, record
     // that a catch-up is owed and stop -- without re-posting itself.
@@ -1877,8 +1881,8 @@ TEST_CASE("HostLifecycle::FreezeThawCoalescedFlush", "[HostLifecycle]")
     REQUIRE(wxWinUITopLevelHost::GetFlushScheduleCount() - sched0 == 1);
     frame->Freeze();
     DrainDispatch(5);
-    CHECK(wxWinUITopLevelHost::GetFlushCallbackAttemptCount() - attempts0 == 1);
-    CHECK(wxWinUITopLevelHost::GetFlushRunCount() - runs0 == 0);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() - attempts0 == 1);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushRunCount() - runs0 == 0);
 
     wxPoint last;
     for ( int i = 0; i < 20; ++i )
@@ -1892,8 +1896,8 @@ TEST_CASE("HostLifecycle::FreezeThawCoalescedFlush", "[HostLifecycle]")
     // Strictly bounded freeze: the only schedule/callback is the one posted
     // before Freeze(); the Move storm added neither.
     CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() - sched0 == 1);
-    CHECK(wxWinUITopLevelHost::GetFlushCallbackAttemptCount() - attempts0 == 1);
-    CHECK(wxWinUITopLevelHost::GetFlushRunCount() - runs0 == 0);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() - attempts0 == 1);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushRunCount() - runs0 == 0);
 
     // Nested freeze: the first Thaw still leaves the TLW frozen and must not
     // release the catch-up.
@@ -1901,7 +1905,7 @@ TEST_CASE("HostLifecycle::FreezeThawCoalescedFlush", "[HostLifecycle]")
     frame->Thaw();
     DrainDispatch(5);
     CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() - sched0 == 1);
-    CHECK(wxWinUITopLevelHost::GetFlushRunCount() - runs0 == 0);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushRunCount() - runs0 == 0);
 
     frame->Thaw();
     DrainDispatch(5);
@@ -1909,8 +1913,8 @@ TEST_CASE("HostLifecycle::FreezeThawCoalescedFlush", "[HostLifecycle]")
     // exactly ONE catch-up flush was scheduled and executed at thaw time,
     // and it brought the geometry current
     CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() - sched0 == 2);
-    CHECK(wxWinUITopLevelHost::GetFlushCallbackAttemptCount() - attempts0 == 2);
-    CHECK(wxWinUITopLevelHost::GetFlushRunCount() - runs0 == 1);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() - attempts0 == 2);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushRunCount() - runs0 == 1);
     wxWinUISlot * const slot = host->FindSlot(button);
     REQUIRE(slot != nullptr);
     CHECK(slot->GetRectInTLW().x == last.x);
@@ -2623,7 +2627,7 @@ TEST_CASE("HostLifecycle::ReparentDeliversOrderedDPITransitions",
     REQUIRE(failingOwner->GetFocusOwner() == failingChild);
     REQUIRE(wxWindow::FindFocus() == failingChild);
     const unsigned pendingFocusMigrations =
-        wxWinUITopLevelHost::GetPendingFocusMigrationCountForTest();
+        wxWinUIHostFocusTestAccess::GetPendingFocusMigrationCount();
     failingChild->Bind(
         wxEVT_SET_FOCUS,
         [&](wxFocusEvent& event)
@@ -2650,8 +2654,8 @@ TEST_CASE("HostLifecycle::ReparentDeliversOrderedDPITransitions",
     CHECK(wxWindow::FindFocus() == failingChild);
     CHECK(failingSetFocusEvents == 0);
     CHECK(failingKillFocusEvents == 0);
-    CHECK(wxWinUITopLevelHost::
-              GetPendingFocusMigrationCountForTest() ==
+    CHECK(wxWinUIHostFocusTestAccess::
+              GetPendingFocusMigrationCount() ==
           pendingFocusMigrations);
 
     frame96->Destroy();
@@ -6210,7 +6214,7 @@ TEST_CASE("HostState::AccessibilityShellIsRawOnly",
     const HWND buttonHwnd = static_cast<HWND>(button->GetHWND());
     REQUIRE(buttonHwnd != nullptr);
     const unsigned shellRetiresBefore =
-        wxWinUITestGetAccessibilityShellProviderRetireCount();
+        wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount();
 
     // With no wxAccessible the XAML peer is authoritative. An application
     // authored view remains untouched, OBJID_CLIENT is suppressed, and the
@@ -6231,7 +6235,7 @@ TEST_CASE("HostState::AccessibilityShellIsRawOnly",
     // Installing a native accessible flips authority synchronously: MSAA is
     // available and XAML is Raw before SetAccessible() returns.
     new wxWindowAccessible(button);
-    CHECK(wxWinUITestGetAccessibilityShellProviderRetireCount() ==
+    CHECK(wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount() ==
           shellRetiresBefore + 1);
     CHECK(MUXA::AutomationProperties::GetAccessibilityView(content) ==
           MUXAP::AccessibilityView::Raw);
@@ -6252,7 +6256,7 @@ TEST_CASE("HostState::AccessibilityShellIsRawOnly",
               UiaRootObjectIdForTest) != 0);
 
     new wxWindowAccessible(button);
-    CHECK(wxWinUITestGetAccessibilityShellProviderRetireCount() ==
+    CHECK(wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount() ==
           shellRetiresBefore + 2);
     CHECK(MUXA::AutomationProperties::GetAccessibilityView(content) ==
           MUXAP::AccessibilityView::Raw);
@@ -6372,7 +6376,7 @@ TEST_CASE("HostState::RetainedAccessibilityShellProviderExpiresOnContentSwap",
     const WXHWND hwnd = xamlHost->GetHWND();
     REQUIRE(hwnd != nullptr);
     const unsigned shellRetiresBefore =
-        wxWinUITestGetAccessibilityShellProviderRetireCount();
+        wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount();
 
     // Prime the real USER32/UIA provider cache for generation A. The direct
     // COM seam below intentionally does not touch that cache.
@@ -6381,7 +6385,7 @@ TEST_CASE("HostState::RetainedAccessibilityShellProviderExpiresOnContentSwap",
                 UiaRootObjectIdForTest) != 0);
 
     winrt::com_ptr<IRawElementProviderSimple> retained;
-    REQUIRE(wxWinUITestCreateInvisibleShellProvider(
+    REQUIRE(wxWinUIHostUIATestAccess::CreateInvisibleShellProvider(
                 xamlHost, retained.put()) == S_OK);
 
     ProviderOptions providerOptions{};
@@ -6413,7 +6417,7 @@ TEST_CASE("HostState::RetainedAccessibilityShellProviderExpiresOnContentSwap",
     REQUIRE(xamlHost->GetHWND() == hwnd);
     REQUIRE(slot->GetContent() != nullptr);
     REQUIRE(slot->GetContent() != oldContent);
-    CHECK(wxWinUITestGetAccessibilityShellProviderRetireCount() ==
+    CHECK(wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount() ==
           shellRetiresBefore + 1);
 
     ::VariantInit(&value);
@@ -6432,7 +6436,7 @@ TEST_CASE("HostState::RetainedAccessibilityShellProviderExpiresOnContentSwap",
     // A newly requested provider is bound to the replacement generation and
     // remains usable, proving the invalidation is generation-specific.
     winrt::com_ptr<IRawElementProviderSimple> current;
-    REQUIRE(wxWinUITestCreateInvisibleShellProvider(
+    REQUIRE(wxWinUIHostUIATestAccess::CreateInvisibleShellProvider(
                 xamlHost, current.put()) == S_OK);
     ::VariantInit(&value);
     CHECK(current->GetPropertyValue(
@@ -6471,7 +6475,7 @@ TEST_CASE("HostState::AccessibilityShellProviderRetiresWithExactHwnd",
     const HWND hwnd = static_cast<HWND>(button->GetHWND());
     REQUIRE(hwnd != nullptr);
     const unsigned retiresBefore =
-        wxWinUITestGetAccessibilityShellProviderRetireCount();
+        wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount();
 
     // Exercise the real WM_GETOBJECT path so USER32/UIA records this exact
     // HWND as having exposed our provider and the destruction marker is set.
@@ -6487,7 +6491,7 @@ TEST_CASE("HostState::AccessibilityShellProviderRetiresWithExactHwnd",
 
     // HandleDestroy() and DoDetachHWND() both call the retirement seam, but
     // its per-HWND marker makes the exact provider identity retire once.
-    CHECK(wxWinUITestGetAccessibilityShellProviderRetireCount() ==
+    CHECK(wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount() ==
           retiresBefore + 1);
 
     frame->Destroy();
@@ -6519,18 +6523,18 @@ TEST_CASE("HostState::AccessibilityShellCacheRenewsOnReregister",
     REQUIRE(hwnd != nullptr);
 
     const unsigned retiresBefore =
-        wxWinUITestGetAccessibilityShellProviderRetireCount();
+        wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount();
     REQUIRE(::SendMessage(
                 static_cast<HWND>(hwnd), WM_GETOBJECT, 0,
                 UiaRootObjectIdForTest) != 0);
     winrt::com_ptr<IRawElementProviderSimple> retained;
-    REQUIRE(wxWinUITestCreateInvisibleShellProvider(
+    REQUIRE(wxWinUIHostUIATestAccess::CreateInvisibleShellProvider(
                 button, retained.put()) == S_OK);
 
     // Retire the complete slot identity while preserving both the wxWindow
     // and its exact HWND, then publish a fresh lifetime on that shell.
     host->UnregisterSlot(button);
-    CHECK(wxWinUITestGetAccessibilityShellProviderRetireCount() ==
+    CHECK(wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount() ==
           retiresBefore + 1);
     REQUIRE(wxWinUITopLevelHost::FindSlotOwner(button) == nullptr);
     wxWinUISlot * const newSlot = host->RegisterSlot(button, content);
@@ -6548,7 +6552,7 @@ TEST_CASE("HostState::AccessibilityShellCacheRenewsOnReregister",
                 static_cast<HWND>(hwnd), WM_GETOBJECT, 0,
                 UiaRootObjectIdForTest) != 0);
     winrt::com_ptr<IRawElementProviderSimple> current;
-    REQUIRE(wxWinUITestCreateInvisibleShellProvider(
+    REQUIRE(wxWinUIHostUIATestAccess::CreateInvisibleShellProvider(
                 button, current.put()) == S_OK);
     VARIANT value;
     ::VariantInit(&value);
@@ -9336,7 +9340,7 @@ TEST_CASE("HostState::KeyboardFocusExclusionPaths", "[HostState]")
     host->FocusSlot(b3);
     DrainDispatch(3);
     REQUIRE(host->GetFocusOwner() == b3);
-    host->TestTakeFocusRequested(true /* previous */);
+    wxWinUIHostFocusTestAccess::TakeFocusRequested(*host, true /* previous */);
     DrainDispatch(3);
     CHECK(host->GetFocusOwner() == b1);
 
@@ -9346,7 +9350,7 @@ TEST_CASE("HostState::KeyboardFocusExclusionPaths", "[HostState]")
     host->FocusSlot(b1);
     DrainDispatch(3);
     REQUIRE(host->GetFocusOwner() == b1);
-    host->TestTakeFocusRequested(false /* forward */);
+    wxWinUIHostFocusTestAccess::TakeFocusRequested(*host, false /* forward */);
     DrainDispatch(3);
     CHECK(host->GetFocusOwner() == b4);
 
@@ -9357,7 +9361,7 @@ TEST_CASE("HostState::KeyboardFocusExclusionPaths", "[HostState]")
     REQUIRE(host->GetFocusOwner() == b1);
     const HWND nativeFocusBeforeExhaustedWalk = ::GetFocus();
     REQUIRE(nativeFocusBeforeExhaustedWalk != nullptr);
-    host->TestTakeFocusRequested(false);
+    wxWinUIHostFocusTestAccess::TakeFocusRequested(*host, false);
     // The TLW also contains private WinAppSDK WS_TABSTOP helpers. They are not
     // wx tab stops: an exhausted logical walk must leave both native and
     // logical focus exactly where they were.
@@ -9528,8 +9532,8 @@ TEST_CASE("HostState::AuthoredAutomationRelationsSurviveSyncAndMigration",
 
     DrainToQuiescence();
     const unsigned observersBefore =
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest();
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount();
 
     wxFrame * const frameA =
         new wxFrame(nullptr, wxID_ANY, "uia-relations-A",
@@ -9553,8 +9557,8 @@ TEST_CASE("HostState::AuthoredAutomationRelationsSurviveSyncAndMigration",
     wxWinUISlot *slot = host->FindSlot(xamlHost);
     REQUIRE(slot != nullptr);
     REQUIRE(
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest() ==
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount() ==
         observersBefore + 1);
 
     const MUXC::Grid root;
@@ -9682,8 +9686,8 @@ TEST_CASE("HostState::AuthoredAutomationRelationsSurviveSyncAndMigration",
     CHECK(targetAPeer.GetLabeledBy() == labelAPeer);
     CHECK(targetAPeer.GetName() == L"authored label A");
     CHECK(
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest() ==
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount() ==
         observersBefore + 1);
 
     // A label update changes the object referred to by LabeledBy, not the
@@ -9725,8 +9729,8 @@ TEST_CASE("HostState::AuthoredAutomationRelationsSurviveSyncAndMigration",
     checkRelationsA();
     checkRelationsB();
     CHECK(
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest() ==
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount() ==
         observersBefore + 1);
 
     MUXA::AutomationProperties::SetLabeledBy(
@@ -9755,8 +9759,8 @@ TEST_CASE("HostState::AuthoredAutomationRelationsSurviveSyncAndMigration",
     checkRelationsA();
     checkRelationsB();
     CHECK(
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest() ==
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount() ==
         observersBefore + 1);
 
     xamlHost->SetLabel("wx fallback after migration");
@@ -9793,8 +9797,8 @@ TEST_CASE("HostState::AuthoredAutomationRelationsSurviveSyncAndMigration",
     xamlHost->Destroy();
     DrainDispatch();
     REQUIRE(
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest() ==
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount() ==
         observersBefore);
     const unsigned schedulesAfterDetach =
         wxWinUITopLevelHost::GetFlushScheduleCount();
@@ -9806,8 +9810,8 @@ TEST_CASE("HostState::AuthoredAutomationRelationsSurviveSyncAndMigration",
     CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() ==
           schedulesAfterDetach);
     CHECK(
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest() ==
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount() ==
         observersBefore);
     CHECK(MUXA::AutomationProperties::GetDescribedBy(targetB) ==
           describedByB);
@@ -12188,7 +12192,7 @@ TEST_CASE("HostLifecycle::SlotPointerOwnerBalancesAcrossSurfaces",
             {
                 reenterOnUp = false;
                 nestedPressSucceeded =
-                    host->TestRouteSlotPointer(slotA, nestedPress);
+                    wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, nestedPress);
             }
         });
     slotA->Bind(wxEVT_LEAVE_WINDOW,
@@ -12207,9 +12211,9 @@ TEST_CASE("HostLifecycle::SlotPointerOwnerBalancesAcrossSurfaces",
     press.screenY = 50;
     press.timestamp = 1000;
 
-    REQUIRE(host->TestRouteSlotPointer(slotA, press));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, press));
     CHECK(downsA == 1);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
 
     wxWinUIPointerSample release = press;
     release.kind = wxWinUIInputKind::Release;
@@ -12219,28 +12223,28 @@ TEST_CASE("HostLifecycle::SlotPointerOwnerBalancesAcrossSurfaces",
     // XAML first bubbles the release through the element currently under
     // the pointer. Its local state has no matching press and must not invent
     // an UP; the host broker then balances the original slot A gesture.
-    REQUIRE(host->TestRouteSlotPointer(slotB, release));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotB, release));
     CHECK(upsB == 0);
-    REQUIRE(host->TestRouteOwnedSlotRelease(release));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteOwnedSlotRelease(*host, release));
     CHECK(upsA == 1);
     CHECK(upsB == 0);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
 
     // A pointer-scoped cancellation retires the owner without fabricating a
     // wx UP and leaves the slot ready for an unrelated later gesture.
     press.timestamp = 1200;
-    REQUIRE(host->TestRouteSlotPointer(slotA, press));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, press));
     CHECK(downsA == 2);
     CHECK(doubleClicksA == 0);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
 
     wxWinUIPointerSample cancel = press;
     cancel.kind = wxWinUIInputKind::Cancel;
     cancel.buttonMask = 0;
     cancel.timestamp = 1210;
-    REQUIRE(host->TestRouteSlotPointer(slotA, cancel));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, cancel));
     CHECK(upsA == 1);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
 
     // The local UP handler can pump a newer DOWN before this routed release
     // bubbles to the root. The old receipt/serial must not clear the newer
@@ -12254,10 +12258,10 @@ TEST_CASE("HostLifecycle::SlotPointerOwnerBalancesAcrossSurfaces",
     hover.button = wxWinUIInputButton::None;
     hover.buttonMask = 0;
     hover.timestamp = press.timestamp - 10;
-    REQUIRE(host->TestRouteSlotPointer(slotA, hover));
-    REQUIRE(host->TestRouteSlotPointer(slotA, press));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, hover));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, press));
     CHECK(downsA == 3);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
 
     nestedPress = press;
     nestedPress.timestamp = press.timestamp + 1000;
@@ -12268,37 +12272,37 @@ TEST_CASE("HostLifecycle::SlotPointerOwnerBalancesAcrossSurfaces",
     localRelease.screenX = -10000;
     localRelease.screenY = -10000;
     localRelease.timestamp = press.timestamp + 10;
-    REQUIRE(host->TestRouteSlotPointer(
-        slotA, localRelease, wxWinUIInputSurface::Outside));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(
+        *host, slotA, localRelease, wxWinUIInputSurface::Outside));
     REQUIRE(nestedPressSucceeded);
     CHECK(upsA == 2);
     CHECK(leavesA == 1);
     CHECK(downsA == 4);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
-    REQUIRE(host->TestRouteOwnedSlotRelease(localRelease));
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
+    REQUIRE(wxWinUIHostInputTestAccess::RouteOwnedSlotRelease(*host, localRelease));
     CHECK(upsA == 2);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
 
     cancel = nestedPress;
     cancel.kind = wxWinUIInputKind::Cancel;
     cancel.buttonMask = 0;
     cancel.timestamp = nestedPress.timestamp + 10;
-    REQUIRE(host->TestRouteSlotPointer(slotA, cancel));
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, cancel));
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
 
     // Destruction/unregistration is the other mandatory owner-retirement
     // path: a late physical release must have nowhere stale to dispatch.
     press.pointerId = 75;
     press.timestamp = 200000;
-    REQUIRE(host->TestRouteSlotPointer(slotA, press));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, press));
     CHECK(downsA == 5);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
     host->UnregisterSlot(slotA);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
 
     release.pointerId = press.pointerId;
     release.timestamp = press.timestamp + 10;
-    CHECK_FALSE(host->TestRouteOwnedSlotRelease(release));
+    CHECK_FALSE(wxWinUIHostInputTestAccess::RouteOwnedSlotRelease(*host, release));
     CHECK(upsA == 2);
     CHECK(upsB == 0);
 
@@ -12345,109 +12349,109 @@ TEST_CASE("HostLifecycle::SlotPointerPolicy",
     press.buttonMask = MK_LBUTTON;
     press.timestamp = 100;
     const std::uint32_t generationBeforePress =
-        host->GetInputSiteGenerationForTest();
-    REQUIRE(host->TestRouteSlotPointer(slotA, press));
+        wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host);
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, press));
     const std::uint32_t firstGestureGeneration =
-        host->GetInputSiteGenerationForTest();
+        wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host);
     CHECK(firstGestureGeneration != generationBeforePress);
-    CHECK_FALSE(host->TestCanPostIslandCancelMode(
-        firstGestureGeneration));
-    host->TestPostIslandCancelMode(firstGestureGeneration);
-    CHECK(host->HasDeferredIslandCancelForTest());
-    CHECK(host->GetPostedIslandCancelCountForTest() == 0);
+    CHECK_FALSE(wxWinUIHostInputTestAccess::CanPostIslandCancelMode(
+        *host, firstGestureGeneration));
+    wxWinUIHostInputTestAccess::PostIslandCancelMode(*host, firstGestureGeneration);
+    CHECK(wxWinUIHostInputTestAccess::HasDeferredIslandCancel(*host));
+    CHECK(wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(*host) == 0);
 
     wxWinUIPointerSample release = press;
     release.kind = wxWinUIInputKind::Release;
     release.buttonMask = 0;
     release.timestamp = 120;
-    REQUIRE(host->TestRouteSlotPointer(
-        slotA, release, wxWinUIInputSurface::Outside));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(
+        *host, slotA, release, wxWinUIInputSurface::Outside));
     CHECK(upsA == 1);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
-    CHECK(host->TestCanPostIslandCancelMode(
-        firstGestureGeneration));
-    CHECK_FALSE(host->HasDeferredIslandCancelForTest());
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
+    CHECK(wxWinUIHostInputTestAccess::CanPostIslandCancelMode(
+        *host, firstGestureGeneration));
+    CHECK_FALSE(wxWinUIHostInputTestAccess::HasDeferredIslandCancel(*host));
     const unsigned postedResetCount =
-        host->GetPostedIslandCancelCountForTest();
+        wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(*host);
     CHECK(postedResetCount > 0);
-    host->TestPostIslandCancelMode(firstGestureGeneration);
-    CHECK(host->GetPostedIslandCancelCountForTest() ==
+    wxWinUIHostInputTestAccess::PostIslandCancelMode(*host, firstGestureGeneration);
+    CHECK(wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(*host) ==
           postedResetCount);
     DrainDispatch(2);
-    CHECK(host->GetPostedIslandCancelCountForTest() == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(*host) == 0);
 
     // A reset batch targets concrete bridge/inner HWNDs. If one of them is
     // recreated before acknowledging its message, the old count must not
     // coalesce every later reset for that input site generation.
     const std::uint32_t generationBeforeRetire =
-        host->GetInputSiteGenerationForTest();
-    host->TestPostIslandCancelMode(generationBeforeRetire);
-    REQUIRE(host->GetPostedIslandCancelCountForTest() > 0);
-    host->TestRetireIslandCancelTarget();
+        wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host);
+    wxWinUIHostInputTestAccess::PostIslandCancelMode(*host, generationBeforeRetire);
+    REQUIRE(wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(*host) > 0);
+    wxWinUIHostInputTestAccess::RetireIslandCancelTarget(*host);
     const std::uint32_t generationAfterRetire =
-        host->GetInputSiteGenerationForTest();
+        wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host);
     CHECK(generationAfterRetire != generationBeforeRetire);
-    CHECK_FALSE(host->HasDeferredIslandCancelForTest());
+    CHECK_FALSE(wxWinUIHostInputTestAccess::HasDeferredIslandCancel(*host));
     const unsigned replacementBatch =
-        host->GetPostedIslandCancelCountForTest();
+        wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(*host);
     REQUIRE(replacementBatch > 0);
-    host->TestPostIslandCancelMode(generationAfterRetire);
-    CHECK(host->GetPostedIslandCancelCountForTest() ==
+    wxWinUIHostInputTestAccess::PostIslandCancelMode(*host, generationAfterRetire);
+    CHECK(wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(*host) ==
           replacementBatch);
     DrainDispatch(4);
-    CHECK(host->GetPostedIslandCancelCountForTest() == 0);
-    CHECK_FALSE(host->HasDeferredIslandCancelForTest());
+    CHECK(wxWinUIHostInputTestAccess::GetPostedIslandCancelCount(*host) == 0);
+    CHECK_FALSE(wxWinUIHostInputTestAccess::HasDeferredIslandCancel(*host));
 
     // A release outside the visible/ancestor-clipped slot balances the UP
     // but cannot seed a double-click.
     press.timestamp = 200;
-    REQUIRE(host->TestRouteSlotPointer(slotA, press));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, press));
     CHECK(downsA == 2);
     CHECK(doubleClicksA == 0);
-    CHECK_FALSE(host->TestCanPostIslandCancelMode(
-        firstGestureGeneration));
+    CHECK_FALSE(wxWinUIHostInputTestAccess::CanPostIslandCancelMode(
+        *host, firstGestureGeneration));
     wxWinUIPointerSample cancel = press;
     cancel.kind = wxWinUIInputKind::Cancel;
     cancel.buttonMask = 0;
     cancel.timestamp = 210;
-    REQUIRE(host->TestRouteSlotPointer(slotA, cancel));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, cancel));
 
     // A promoted compatibility release is not allowed to consume the owner
     // created by the real pointer stream.
     press.pointerId = 31;
     press.timestamp = 1000;
-    REQUIRE(host->TestRouteSlotPointer(slotA, press));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, press));
     release = press;
     release.kind = wxWinUIInputKind::Release;
     release.buttonMask = 0;
     release.timestamp = 1010;
     release.isCompatibilityMouse = true;
-    CHECK_FALSE(host->TestRouteOwnedSlotRelease(release));
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+    CHECK_FALSE(wxWinUIHostInputTestAccess::RouteOwnedSlotRelease(*host, release));
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
     release.isCompatibilityMouse = false;
     release.timestamp = 1020;
-    REQUIRE(host->TestRouteOwnedSlotRelease(release));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteOwnedSlotRelease(*host, release));
     CHECK(upsA == 2);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
 
     // The same physical button/pointer cannot own two slots concurrently.
     press.pointerId = 32;
     press.timestamp = 2000;
-    REQUIRE(host->TestRouteSlotPointer(slotA, press));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, press));
     const std::uint32_t generationWithOwner =
-        host->GetInputSiteGenerationForTest();
-    CHECK_FALSE(host->TestRouteSlotPointer(slotB, press));
-    CHECK(host->GetInputSiteGenerationForTest() ==
+        wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host);
+    CHECK_FALSE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotB, press));
+    CHECK(wxWinUIHostInputTestAccess::GetInputSiteGeneration(*host) ==
           generationWithOwner);
     CHECK(downsB == 0);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
     release = press;
     release.kind = wxWinUIInputKind::Release;
     release.buttonMask = 0;
     release.timestamp = 2010;
-    REQUIRE(host->TestRouteOwnedSlotRelease(release));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteOwnedSlotRelease(*host, release));
     CHECK(upsA == 3);
-    CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
 
     // Native thread-wide interruption reconstructs an admissible primary
     // identity for touch and pen owners instead of clearing only the broker
@@ -12463,21 +12467,21 @@ TEST_CASE("HostLifecycle::SlotPointerPolicy",
         contact.isPrimary = true;
         contact.timestamp =
             device == wxWinUIInputDevice::Touch ? 3000 : 4000;
-        REQUIRE(host->TestRouteSlotPointer(slotA, contact));
-        CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+        REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, contact));
+        CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
 
         wxWinUIPointerSample interrupted;
         interrupted.kind = wxWinUIInputKind::Cancel;
         interrupted.interruptAll = true;
-        host->TestCancelSlotPointerOwners(interrupted, true);
-        CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
+        wxWinUIHostInputTestAccess::CancelSlotPointerOwners(*host, interrupted, true);
+        CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
 
         contact.timestamp += 100;
-        REQUIRE(host->TestRouteSlotPointer(slotA, contact));
-        CHECK(host->GetSlotPointerOwnerCountForTest() == 1);
+        REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, slotA, contact));
+        CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 1);
         contact.kind = wxWinUIInputKind::Cancel;
-        host->TestCancelSlotPointerOwners(contact, false);
-        CHECK(host->GetSlotPointerOwnerCountForTest() == 0);
+        wxWinUIHostInputTestAccess::CancelSlotPointerOwners(*host, contact, false);
+        CHECK(wxWinUIHostInputTestAccess::GetSlotPointerOwnerCount(*host) == 0);
     }
 
     host->UnregisterSlot(slotA);
@@ -13004,15 +13008,15 @@ TEST_CASE("HostLifecycle::SlotPointerCoordinatesRTL",
 
     bool inside = false;
     wxPoint physicalLeft;
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window, rect.x / scale, (rect.y + 1) / scale,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window, rect.x / scale, (rect.y + 1) / scale,
         &physicalLeft, &inside));
     CHECK(inside);
     CHECK(physicalLeft.x == rootScreen.left + rect.x);
 
     wxPoint physicalRight;
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window, rect.GetRight() / scale, (rect.y + 1) / scale,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window, rect.GetRight() / scale, (rect.y + 1) / scale,
         &physicalRight, &inside));
     CHECK(inside);
     CHECK(physicalRight.x == rootScreen.left + rect.GetRight());
@@ -13022,15 +13026,15 @@ TEST_CASE("HostLifecycle::SlotPointerCoordinatesRTL",
     // one just outside rounded onto the left edge, and one just inside the
     // half-open right edge rounded out of the slot.
     wxPoint fractionalPoint;
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window,
         (rect.x - 0.25) / scale,
         (rect.y + 1.25) / scale,
         &fractionalPoint,
         &inside));
     CHECK_FALSE(inside);
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window,
         (rect.x + rect.width - 0.25) / scale,
         (rect.y + 1.25) / scale,
         &fractionalPoint,
@@ -13060,11 +13064,11 @@ TEST_CASE("HostLifecycle::SlotPointerCoordinatesRTL",
     move.timestamp = 1;
     move.screenX = physicalLeft.x;
     move.screenY = physicalLeft.y;
-    REQUIRE(host->TestRouteSlotPointer(window, move));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, window, move));
     move.timestamp = 2;
     move.screenX = physicalRight.x;
     move.screenY = physicalRight.y;
-    REQUIRE(host->TestRouteSlotPointer(window, move));
+    REQUIRE(wxWinUIHostInputTestAccess::RouteSlotPointer(*host, window, move));
     REQUIRE(deliveredX.size() == 2);
     CHECK(deliveredX[0] >= rect.width - 2);
     CHECK(std::abs(deliveredX[1]) <= 1);
@@ -13074,8 +13078,8 @@ TEST_CASE("HostLifecycle::SlotPointerCoordinatesRTL",
     host->SetSlotClipHeight(window, 12);
     host->FlushSync();
     wxPoint clippedPoint;
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window, rect.x / scale, rect.y / scale + 13.0,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window, rect.x / scale, rect.y / scale + 13.0,
         &clippedPoint, &inside));
     CHECK_FALSE(inside);
 
@@ -13196,34 +13200,34 @@ TEST_CASE("HostLifecycle::ModalReleaseSetKeepsIndependentButtons",
     right.button = wxWinUIInputButton::Right;
     right.gestureSerial = 102;
 
-    REQUIRE(host->TestRememberModalAwaitingRelease(left));
-    REQUIRE(host->TestRememberModalAwaitingRelease(right));
-    CHECK(host->GetModalAwaitingReleaseCountForTest() == 2);
+    REQUIRE(wxWinUIHostInputTestAccess::RememberModalAwaitingRelease(*host, left));
+    REQUIRE(wxWinUIHostInputTestAccess::RememberModalAwaitingRelease(*host, right));
+    CHECK(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*host) == 2);
 
     // An unrelated serial for the same physical button cannot overwrite the
     // old obligation; the caller must retire it explicitly first.
     wxWinUIInputAction newerRight = right;
     newerRight.gestureSerial = 103;
-    CHECK_FALSE(host->TestRememberModalAwaitingRelease(newerRight));
-    CHECK(host->GetModalAwaitingReleaseCountForTest() == 2);
+    CHECK_FALSE(wxWinUIHostInputTestAccess::RememberModalAwaitingRelease(*host, newerRight));
+    CHECK(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*host) == 2);
 
     const wxWinUIInputAction takenLeft =
-        host->TestTakeModalAwaitingRelease(
-            left.device, left.pointerId, left.button);
+        wxWinUIHostInputTestAccess::TakeModalAwaitingRelease(
+            *host, left.device, left.pointerId, left.button);
     CHECK(takenLeft.gestureSerial == left.gestureSerial);
-    CHECK(host->GetModalAwaitingReleaseCountForTest() == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*host) == 1);
 
     const wxWinUIInputAction missing =
-        host->TestTakeModalAwaitingRelease(
-            right.device, right.pointerId, wxWinUIInputButton::X1);
+        wxWinUIHostInputTestAccess::TakeModalAwaitingRelease(
+            *host, right.device, right.pointerId, wxWinUIInputButton::X1);
     CHECK(missing.gestureSerial == 0);
-    CHECK(host->GetModalAwaitingReleaseCountForTest() == 1);
+    CHECK(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*host) == 1);
 
     const wxWinUIInputAction takenRight =
-        host->TestTakeModalAwaitingRelease(
-            right.device, right.pointerId, right.button);
+        wxWinUIHostInputTestAccess::TakeModalAwaitingRelease(
+            *host, right.device, right.pointerId, right.button);
     CHECK(takenRight.gestureSerial == right.gestureSerial);
-    CHECK(host->GetModalAwaitingReleaseCountForTest() == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*host) == 0);
 
     frame->Destroy();
     DrainDispatch();
@@ -13239,7 +13243,7 @@ TEST_CASE("HostLifecycle::PointerContactPolicyIsButtonSpecific",
            unsigned pointerFlags,
            unsigned penFlags = 0)
         {
-            return wxWinUITopLevelHost::TestPointerContactActiveSnapshot(
+            return wxWinUIHostInputTestAccess::PointerContactActiveSnapshot(
                 device, virtualKey, pointerType, pointerFlags, penFlags);
         };
 
@@ -13348,7 +13352,7 @@ TEST_CASE("HostLifecycle::NativeSiblingZOrderAndImpossibleOverlap",
     REQUIRE(hwndNative != nullptr);
     REQUIRE(hwndB != nullptr);
 
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     REQUIRE(::SetWindowPos(hwndA, HWND_TOP, 0, 0, 0, 0, flags));
     REQUIRE(::SetWindowPos(hwndNative, hwndA, 0, 0, 0, 0, flags));
     REQUIRE(::SetWindowPos(hwndB, hwndNative, 0, 0, 0, 0, flags));
@@ -13363,11 +13367,11 @@ TEST_CASE("HostLifecycle::NativeSiblingZOrderAndImpossibleOverlap",
     REQUIRE(::SetWindowPos(hwndNative, nullptr, 220, 130, 50, 40,
                            SWP_NOZORDER | SWP_NOACTIVATE));
     host->SetSlotClipHeight(xamlB, 8);
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     host->FlushSync();
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 0);
 
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     frame->Destroy();
     DrainDispatch();
 }
@@ -13450,7 +13454,7 @@ TEST_CASE("HostLifecycle::NestedZOrderFlushKeepsNewestEpoch",
     REQUIRE(::SetWindowPos(hwndA, HWND_TOP, 0, 0, 0, 0, flags));
     bool hookRan = false;
     bool movedB = false;
-    wxWinUITopLevelHost::TestOnNextZOrderSet(
+    wxWinUIHostGeometryTestAccess::SetNextZOrderSetHook(
         [&]()
         {
             hookRan = true;
@@ -13459,7 +13463,7 @@ TEST_CASE("HostLifecycle::NestedZOrderFlushKeepsNewestEpoch",
             host->FlushSync();
         });
     host->FlushSync();
-    wxWinUITopLevelHost::TestOnNextZOrderSet({});
+    wxWinUIHostGeometryTestAccess::SetNextZOrderSetHook({});
 
     REQUIRE(hookRan);
     REQUIRE(movedB);
@@ -13503,14 +13507,14 @@ TEST_CASE("HostLifecycle::ReentrantSlotSyncDefersNewStructureEpoch",
     bool syncHookRan = false;
     bool movedB = false;
     bool zOrderPassRan = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *synced)
         {
             syncHookRan = synced == a;
             movedB =
                 ::SetWindowPos(hwndB, nullptr, 120, 20, 0, 0, flags) != 0;
         });
-    wxWinUITopLevelHost::TestOnNextZOrderSet(
+    wxWinUIHostGeometryTestAccess::SetNextZOrderSetHook(
         [&]()
         {
             zOrderPassRan = true;
@@ -13522,14 +13526,14 @@ TEST_CASE("HostLifecycle::ReentrantSlotSyncDefersNewStructureEpoch",
     // armed rather than publishing B's new epoch against its old cache.
     host->SetSlotClipHeight(a, 9);
     host->FlushSync();
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     REQUIRE(syncHookRan);
     REQUIRE(movedB);
     CHECK_FALSE(zOrderPassRan);
 
     host->FlushSync();
     CHECK(zOrderPassRan);
-    wxWinUITopLevelHost::TestOnNextZOrderSet({});
+    wxWinUIHostGeometryTestAccess::SetNextZOrderSetHook({});
 
     frame->Destroy();
     DrainDispatch();
@@ -13555,7 +13559,7 @@ TEST_CASE("HostLifecycle::ZOrderFlushPinsHostAcrossDestroyYield",
     DrainToQuiescence();
 
     bool hookRan = false;
-    wxWinUITopLevelHost::TestOnNextZOrderSet(
+    wxWinUIHostGeometryTestAccess::SetNextZOrderSetHook(
         [&]()
         {
             hookRan = true;
@@ -13566,7 +13570,7 @@ TEST_CASE("HostLifecycle::ZOrderFlushPinsHostAcrossDestroyYield",
         });
     host->SetSlotClipHeight(window, 9);
     host->FlushSync();
-    wxWinUITopLevelHost::TestOnNextZOrderSet({});
+    wxWinUIHostGeometryTestAccess::SetNextZOrderSetHook({});
 
     CHECK(hookRan);
     if ( !hookRan )
@@ -13593,12 +13597,12 @@ TEST_CASE("HostLifecycle::TopLevelSlotDiagnosesNativeChildOnce",
     frame->ShowWithoutActivating();
     DrainToQuiescence();
 
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     native->Move(21, 20);
     host->FlushSync();
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 1);
 
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     frame->Destroy();
     DrainDispatch();
 }
@@ -13704,7 +13708,7 @@ TEST_CASE("HostLifecycle::ExactSlotClipRectIsPhysicalAndGenerationSafe",
     CHECK(std::abs(clip.Rect().Height - 23.0f) < 1.0f);
 
     bool nestedWriterRan = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *synced)
         {
             if ( synced == window )
@@ -13735,8 +13739,8 @@ TEST_CASE("HostLifecycle::ExactSlotClipRectIsPhysicalAndGenerationSafe",
     REQUIRE(!localClip.IsEmpty());
     bool inside = false;
     wxPoint screen;
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window,
         (slotRect.x + localClip.x + localClip.width / 2.0) /
             sourceScale,
         (slotRect.y + localClip.y + localClip.height / 2.0) /
@@ -13744,8 +13748,8 @@ TEST_CASE("HostLifecycle::ExactSlotClipRectIsPhysicalAndGenerationSafe",
         &screen,
         &inside));
     CHECK(inside);
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window,
         (slotRect.x + localClip.x - 0.25) / sourceScale,
         (slotRect.y + localClip.y + 1.0) / sourceScale,
         &screen,
@@ -13818,8 +13822,8 @@ TEST_CASE("HostLifecycle::ExactSlotClipRectIsPhysicalAndGenerationSafe",
     CHECK(std::abs(clip.Rect().Height -
                    migratedPhysical.height / destinationScale) < 0.001);
 
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window,
         (slotRect.x + migratedPhysical.x + 0.5) /
             destinationScale,
         (slotRect.y + migratedPhysical.y + 0.5) /
@@ -13827,8 +13831,8 @@ TEST_CASE("HostLifecycle::ExactSlotClipRectIsPhysicalAndGenerationSafe",
         &screen,
         &inside));
     CHECK(inside);
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window,
         (slotRect.x + migratedPhysical.x - 0.25) /
             destinationScale,
         (slotRect.y + migratedPhysical.y + 0.5) /
@@ -13837,7 +13841,7 @@ TEST_CASE("HostLifecycle::ExactSlotClipRectIsPhysicalAndGenerationSafe",
         &inside));
     CHECK_FALSE(inside);
 
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
     destination->Destroy();
     frame->Destroy();
     DrainDispatch();
@@ -13932,8 +13936,8 @@ TEST_CASE("HostLifecycle::DetachClipWriterWinsMigration",
     // rectangle after the migration.
     wxPoint screen;
     bool inside = false;
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window,
         (slotRect.x + expectedPhysical.x +
          expectedPhysical.width / 2.0) / destinationScale,
         (slotRect.y + expectedPhysical.y +
@@ -13941,8 +13945,8 @@ TEST_CASE("HostLifecycle::DetachClipWriterWinsMigration",
         &screen,
         &inside));
     CHECK(inside);
-    REQUIRE(host->TestMapRootPointerPointForSlot(
-        window,
+    REQUIRE(wxWinUIHostInputTestAccess::MapRootPointerPointForSlot(
+        *host, window,
         (slotRect.x + expectedPhysical.x - 0.25) / destinationScale,
         (slotRect.y + expectedPhysical.y + 0.5) / destinationScale,
         &screen,
@@ -13992,7 +13996,7 @@ TEST_CASE("HostLifecycle::NotebookInitialBandClip",
     REQUIRE(slot != nullptr);
 
     frame->ShowWithoutActivating();
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     host->FlushSync();
 
     const auto clip =
@@ -14005,7 +14009,7 @@ TEST_CASE("HostLifecycle::NotebookInitialBandClip",
     CHECK(clip.Rect().Height < slot->GetContainer().Height());
     CHECK(wxWinUITopLevelHost::GetImpossibleZOrderCount() == 0);
 
-    wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+    wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount();
     frame->Destroy();
     DrainDispatch();
 }

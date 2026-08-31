@@ -13,6 +13,9 @@
 #if wxUSE_WINUI3
 
 #include "private.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "host-uia-test-access.h"
+#endif // WXWINUI_TEST_SUPPORT
 #include "hostuia.h"
 #include "wx/winui/private/tlwhost.h"
 #include "wx/winui/private/tlwhostmsw.h"
@@ -1312,11 +1315,13 @@ bool wxWinUISlot::RestoreAccessibilityView()
     return true;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 unsigned
-wxWinUITopLevelHost::GetLiveAutomationNameStyleObserverCountForTest()
+wxWinUIHostUIATestAccess::GetLiveAutomationNameStyleObserverCount()
 {
     return gs_liveAutomationNameStylePropertyStates;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 bool wxWinUITopLevelHost::TryGetAccessibilityShellState(
     const wxWindow *window,
@@ -1589,8 +1594,9 @@ bool wxWinUITryGetInvisibleShellState(
 
 } // anonymous namespace
 
-WXDLLIMPEXP_CORE HRESULT
-wxWinUITestCreateInvisibleShellProvider(
+#ifdef WXWINUI_TEST_SUPPORT
+HRESULT
+wxWinUIHostUIATestAccess::CreateInvisibleShellProvider(
     wxWindow *window,
     IRawElementProviderSimple **provider)
 {
@@ -1622,6 +1628,7 @@ wxWinUITestCreateInvisibleShellProvider(
             authorityGeneration);
     return shell ? shell.CopyTo(provider) : E_OUTOFMEMORY;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 WXDLLIMPEXP_CORE bool
 wxWinUITLWHostIsInvisibleAccessibilityShell(wxWindow *window)
@@ -1728,18 +1735,22 @@ wxWinUITLWHostRetireAccessibilityShellProvider(WXHWND hwndValue)
     (void)::UiaReturnRawElementProvider(hwnd, 0, 0, nullptr);
 }
 
-WXDLLIMPEXP_CORE unsigned
-wxWinUITestGetAccessibilityShellProviderRetireCount()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned
+wxWinUIHostUIATestAccess::GetAccessibilityShellProviderRetireCount()
 {
     return gs_accessibilityShellProviderRetires;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-WXDLLIMPEXP_CORE unsigned
-wxWinUITestGetLiveInvisibleShellProviderCount()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned
+wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount()
 {
     return gs_liveInvisibleShellProviders.load(
         std::memory_order_relaxed);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 WXDLLIMPEXP_CORE void
 wxWinUITLWHostNotifyAccessibilityAuthority(wxWindow *window,

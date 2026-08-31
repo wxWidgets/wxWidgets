@@ -21,6 +21,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-input-test-access.h"
 
 #include <functional>
 #include <memory>
@@ -242,7 +243,7 @@ TEST_CASE_METHOD(
         });
 
     const wxWinUIRootPointerOutcome rejected =
-        m_host->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample);
     CHECK_FALSE(m_window->HasSetCursorCallback());
     CHECK(rejected.status == wxWinUIRootPointerStatus::FailedClosed);
     CHECK(rejected.disposition == wxWinUIInputDisposition::Routed);
@@ -257,7 +258,7 @@ TEST_CASE_METHOD(
     m_window->SetHitTest(HTCLIENT);
     ++sample.timestamp;
     const wxWinUIRootPointerOutcome delivered =
-        m_host->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample);
     CHECK(delivered.status == wxWinUIRootPointerStatus::Completed);
     CHECK(delivered.disposition == wxWinUIInputDisposition::Routed);
     CHECK(delivered.preparedActionCount == 2);
@@ -267,7 +268,7 @@ TEST_CASE_METHOD(
     // Moving to XAML retires the published native hover exactly once.
     ++sample.timestamp;
     const wxWinUIRootPointerOutcome xaml =
-        m_host->TestRouteRootPointerSample(sample, true);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample, true);
     CHECK(xaml.status == wxWinUIRootPointerStatus::Completed);
     CHECK(xaml.disposition == wxWinUIInputDisposition::Xaml);
     CHECK(xaml.preparedActionCount == 1);
@@ -276,7 +277,7 @@ TEST_CASE_METHOD(
 
     ++sample.timestamp;
     const wxWinUIRootPointerOutcome repeatedXaml =
-        m_host->TestRouteRootPointerSample(sample, true);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample, true);
     CHECK(repeatedXaml.status == wxWinUIRootPointerStatus::Completed);
     CHECK(repeatedXaml.preparedActionCount == 0);
     CHECK(m_window->GetLeaveCount() == 1);
@@ -304,12 +305,12 @@ TEST_CASE_METHOD(
         {
             reentry->called = true;
             reentry->outcome =
-                m_host->TestRouteRootPointerSample(
-                    reentry->sample, true);
+                wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                    *m_host, reentry->sample, true);
         });
 
     const wxWinUIRootPointerOutcome outerOutcome =
-        m_host->TestRouteRootPointerSample(outer);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, outer);
     CHECK_FALSE(m_window->HasSetCursorCallback());
     REQUIRE(reentry->called);
     CHECK(reentry->outcome.status ==
@@ -326,7 +327,7 @@ TEST_CASE_METHOD(
     // A later authoritative native sample can establish hover normally.
     outer.timestamp += 2;
     const wxWinUIRootPointerOutcome recovered =
-        m_host->TestRouteRootPointerSample(outer);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, outer);
     CHECK(recovered.status == wxWinUIRootPointerStatus::Completed);
     CHECK(recovered.disposition == wxWinUIInputDisposition::Routed);
     CHECK(recovered.preparedActionCount == 2);
@@ -341,7 +342,7 @@ TEST_CASE_METHOD(
 {
     wxWinUIPointerSample sample = Sample();
     const wxWinUIRootPointerOutcome initial =
-        m_host->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample);
     REQUIRE(initial.status == wxWinUIRootPointerStatus::Completed);
 
     const unsigned setCursorBefore = m_window->GetSetCursorCount();
@@ -358,7 +359,7 @@ TEST_CASE_METHOD(
     ++sample.screenX;
     ++sample.timestamp;
     const wxWinUIRootPointerOutcome afterBind =
-        m_host->TestRouteRootPointerSample(sample);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, sample);
 
     CHECK(afterBind.status == wxWinUIRootPointerStatus::Completed);
     CHECK(handlerCalled);
@@ -378,7 +379,7 @@ TEST_CASE_METHOD(
     left.button = wxWinUIInputButton::Left;
     left.buttonMask = MK_LBUTTON;
     const wxWinUIRootPointerOutcome leftDown =
-        m_host->TestRouteRootPointerSample(left);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, left);
     REQUIRE(leftDown.status == wxWinUIRootPointerStatus::Completed);
     REQUIRE(leftDown.pointerDispatch.gestureSerial != 0);
     REQUIRE(leftDown.pointerDispatch.button ==
@@ -391,7 +392,7 @@ TEST_CASE_METHOD(
     right.button = wxWinUIInputButton::Right;
     right.buttonMask = MK_LBUTTON | MK_RBUTTON;
     const wxWinUIRootPointerOutcome rightDown =
-        m_host->TestRouteRootPointerSample(right);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, right);
     REQUIRE(rightDown.status == wxWinUIRootPointerStatus::Completed);
     REQUIRE(rightDown.pointerDispatch.gestureSerial != 0);
     REQUIRE(rightDown.pointerDispatch.button ==
@@ -401,11 +402,11 @@ TEST_CASE_METHOD(
     // These are the exact committed actions returned by the production
     // state machine, including their serials; no synthetic PressState is
     // fabricated by this test.
-    REQUIRE(m_host->TestRememberModalAwaitingRelease(
-        leftDown.pointerDispatch));
-    REQUIRE(m_host->TestRememberModalAwaitingRelease(
-        rightDown.pointerDispatch));
-    REQUIRE(m_host->GetModalAwaitingReleaseCountForTest() == 2);
+    REQUIRE(wxWinUIHostInputTestAccess::RememberModalAwaitingRelease(
+        *m_host, leftDown.pointerDispatch));
+    REQUIRE(wxWinUIHostInputTestAccess::RememberModalAwaitingRelease(
+        *m_host, rightDown.pointerDispatch));
+    REQUIRE(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*m_host) == 2);
 
     struct CancelReentryState
     {
@@ -430,14 +431,14 @@ TEST_CASE_METHOD(
         {
             reentry->called = true;
             reentry->outcome =
-                m_host->TestRouteRootPointerSample(reentry->press);
+                wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, reentry->press);
         });
 
     wxWinUIPointerSample leave = right;
     ++leave.timestamp;
     leave.button = wxWinUIInputButton::None;
     const bool boundaryCompleted =
-        m_host->TestRouteRootPointerBoundary(false, leave);
+        wxWinUIHostInputTestAccess::RouteRootPointerBoundary(*m_host, false, leave);
     CHECK_FALSE(boundaryCompleted);
     CHECK_FALSE(m_window->HasCancelModeCallback());
     REQUIRE(reentry->called);
@@ -448,7 +449,7 @@ TEST_CASE_METHOD(
           leftDown.pointerDispatch.gestureSerial);
     CHECK(m_window->GetMiddleDownCount() == 1);
     CHECK(m_window->GetCancelModeCount() == 2);
-    CHECK(m_host->GetModalAwaitingReleaseCountForTest() == 0);
+    CHECK(wxWinUIHostInputTestAccess::GetModalAwaitingReleaseCount(*m_host) == 0);
     CHECK(::GetCapture() == GetHwndOf(m_window));
 
     wxWinUIPointerSample release = reentry->press;
@@ -456,7 +457,7 @@ TEST_CASE_METHOD(
     release.kind = wxWinUIInputKind::Release;
     release.buttonMask = 0;
     const wxWinUIRootPointerOutcome released =
-        m_host->TestRouteRootPointerSample(release);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, release);
     CHECK(released.status == wxWinUIRootPointerStatus::Completed);
     CHECK(released.pointerDispatch.balancesPress);
     CHECK(released.pointerDispatch.gestureSerial ==
@@ -479,7 +480,7 @@ TEST_CASE_METHOD(
     press.button = wxWinUIInputButton::Left;
     press.buttonMask = MK_LBUTTON;
     const wxWinUIRootPointerOutcome down =
-        m_host->TestRouteRootPointerSample(press);
+        wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, press);
     REQUIRE(down.status == wxWinUIRootPointerStatus::Completed);
     REQUIRE(down.pointerDispatch.gestureSerial != 0);
     REQUIRE(::GetCapture() == GetHwndOf(m_window));
@@ -496,7 +497,7 @@ TEST_CASE_METHOD(
         release.screenX = frameRect.right + 40;
         release.screenY = frameRect.bottom + 40;
         const wxWinUIRootPointerOutcome outcome =
-            m_host->TestRouteRootPointerSample(release);
+            wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, release);
         CHECK(outcome.status == wxWinUIRootPointerStatus::Completed);
         CHECK(outcome.pointerDispatch.balancesPress);
         CHECK(outcome.pointerDispatch.gestureSerial ==
@@ -515,7 +516,7 @@ TEST_CASE_METHOD(
         lost.kind = wxWinUIInputKind::CaptureLost;
         lost.button = wxWinUIInputButton::None;
         lost.buttonMask = 0;
-        m_host->TestHandleRootPointerInterrupted(true, lost);
+        wxWinUIHostInputTestAccess::HandleRootPointerInterrupted(*m_host, true, lost);
         CHECK(m_window->GetCancelModeCount() == 1);
         CHECK(::GetCapture() == nullptr);
 
@@ -524,7 +525,7 @@ TEST_CASE_METHOD(
         lateRelease.kind = wxWinUIInputKind::Release;
         lateRelease.button = wxWinUIInputButton::Left;
         const wxWinUIRootPointerOutcome outcome =
-            m_host->TestRouteRootPointerSample(lateRelease);
+            wxWinUIHostInputTestAccess::RouteRootPointerSample(*m_host, lateRelease);
         CHECK(outcome.status == wxWinUIRootPointerStatus::Completed);
         CHECK_FALSE(outcome.pointerDispatch.balancesPress);
         CHECK(m_window->GetLeftUpCount() == 0);

@@ -23,6 +23,7 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/winui/private/dialogsession.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-uia-test-access.h"
 #include "wx/winui/private/tlwhostmsw.h"
 #include "wx/winui/private/transient.h"
 
@@ -566,12 +567,12 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     const unsigned slotLifetimeBaseline =
         wxWinUITopLevelHost::GetLiveSlotLifetimeCount();
     const unsigned automationObserverBaseline =
-        wxWinUITopLevelHost::
-            GetLiveAutomationNameStyleObserverCountForTest();
+        wxWinUIHostUIATestAccess::
+            GetLiveAutomationNameStyleObserverCount();
     const unsigned loadedObserverBaseline =
         wxWinUITopLevelHost::GetLiveContentLoadedObserverCountForTest();
     const unsigned shellProviderBaseline =
-        wxWinUITestGetLiveInvisibleShellProviderCount();
+        wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount();
     const unsigned handlerAddsBaseline =
         wxWinUITopLevelHost::GetSlotHandlerAddCount();
     const unsigned handlerRevokesBaseline =
@@ -649,7 +650,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     // state must become unavailable immediately and the COM fragment itself
     // must disappear exactly when the final reference is released.
     IRawElementProviderSimple *shellProvider = nullptr;
-    REQUIRE(wxWinUITestCreateInvisibleShellProvider(
+    REQUIRE(wxWinUIHostUIATestAccess::CreateInvisibleShellProvider(
                 modelessSlot, &shellProvider) == S_OK);
     REQUIRE(shellProvider != nullptr);
     auto releaseShellProvider = wxMakeGuard(
@@ -661,7 +662,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
                 shellProvider = nullptr;
             }
         });
-    CHECK(wxWinUITestGetLiveInvisibleShellProviderCount() ==
+    CHECK(wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
           shellProviderBaseline + 1);
     VARIANT shellControlState;
     ::VariantInit(&shellControlState);
@@ -905,7 +906,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     ::VariantClear(&shellControlState);
     shellProvider->Release();
     shellProvider = nullptr;
-    CHECK(wxWinUITestGetLiveInvisibleShellProviderCount() ==
+    CHECK(wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
           shellProviderBaseline);
 
     wxWinUICancelTransientSessions(second);
@@ -951,8 +952,8 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
     CHECK(RegistryLifetimeEquals(finalRegistry, registryBaseline));
     CHECK(wxWinUI3GetOwnerSnapshotForTesting(nullptr).transactionCount ==
           detachedOwnerBaseline);
-    CHECK(wxWinUITopLevelHost::
-              GetLiveAutomationNameStyleObserverCountForTest() ==
+    CHECK(wxWinUIHostUIATestAccess::
+              GetLiveAutomationNameStyleObserverCount() ==
           automationObserverBaseline);
     CHECK(wxWinUITopLevelHost::
               GetLiveContentLoadedObserverCountForTest() ==
@@ -961,7 +962,7 @@ TEST_CASE("WinUIDialogSession::ExtendedTransientLifecycleHarness",
               handlerAddsBaseline ==
           wxWinUITopLevelHost::GetSlotHandlerRevokeCount() -
               handlerRevokesBaseline);
-    CHECK(wxWinUITestGetLiveInvisibleShellProviderCount() ==
+    CHECK(wxWinUIHostUIATestAccess::GetLiveInvisibleShellProviderCount() ==
           shellProviderBaseline);
 }
 

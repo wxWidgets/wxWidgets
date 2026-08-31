@@ -13,6 +13,9 @@
 #if wxUSE_WINUI3
 
 #include "private.h"
+#ifdef WXWINUI_TEST_SUPPORT
+    #include "host-geometry-test-access.h"
+#endif // WXWINUI_TEST_SUPPORT
 #include "hostgeometry.h"
 #include "hostnative.h"
 #include "hostprofile.h"
@@ -55,8 +58,10 @@ unsigned gs_flushSchedules = 0;
 unsigned gs_flushRuns = 0;
 unsigned gs_flushCallbackAttempts = 0;
 unsigned gs_impossibleZOrderOverlaps = 0;
+#ifdef WXWINUI_TEST_SUPPORT
 std::function<void (wxWindow *)> gs_testSlotSyncedHook;
 std::function<void ()> gs_testZOrderSetHook;
+#endif // WXWINUI_TEST_SUPPORT
 
 class wxWinUIOwnedRegion
 {
@@ -97,37 +102,47 @@ unsigned wxWinUITopLevelHost::GetFlushScheduleCount()
     return gs_flushSchedules;
 }
 
-unsigned wxWinUITopLevelHost::GetFlushRunCount()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIHostGeometryTestAccess::GetFlushRunCount()
 {
     return gs_flushRuns;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-unsigned wxWinUITopLevelHost::GetFlushCallbackAttemptCount()
+#ifdef WXWINUI_TEST_SUPPORT
+unsigned wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount()
 {
     return gs_flushCallbackAttempts;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 unsigned wxWinUITopLevelHost::GetImpossibleZOrderCount()
 {
     return gs_impossibleZOrderOverlaps;
 }
 
-void wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest()
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostGeometryTestAccess::ResetImpossibleZOrderCount()
 {
     gs_impossibleZOrderOverlaps = 0;
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestOnNextSlotSynced(
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
     std::function<void (wxWindow *)> callback)
 {
     gs_testSlotSyncedHook = std::move(callback);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
-void wxWinUITopLevelHost::TestOnNextZOrderSet(
+#ifdef WXWINUI_TEST_SUPPORT
+void wxWinUIHostGeometryTestAccess::SetNextZOrderSetHook(
     std::function<void ()> callback)
 {
     gs_testZOrderSetHook = std::move(callback);
 }
+#endif // WXWINUI_TEST_SUPPORT
 
 void wxWinUITopLevelHost::SetSlotClipRect(
     wxWindow *window,
@@ -1687,6 +1702,7 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
     current->m_visible = effectiveVisible;
     current->m_lastEnabled = static_cast<int>(enabled);
 
+#ifdef WXWINUI_TEST_SUPPORT
     // Consume first: the callback may synchronously run another FlushSync().
     // The outer frame has already snapshotted its structural generation and
     // will refuse to publish if this hook changes it.
@@ -1694,6 +1710,7 @@ void wxWinUITopLevelHost::SyncSlot(wxWinUISlot& slot)
         std::move(gs_testSlotSyncedHook);
     if ( slotSyncedHook )
         slotSyncedHook(w);
+#endif // WXWINUI_TEST_SUPPORT
 }
 
 bool wxWinUITopLevelHost::RecomputeZOrder(
@@ -2135,12 +2152,14 @@ bool wxWinUITopLevelHost::RecomputeZOrder(
             wxWinUILogException("slot z-order sync", e);
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         // Deterministic seam at the same post-setter boundary. Consume it
         // first so its nested flush cannot recursively invoke itself.
         std::function<void ()> zOrderHook =
             std::move(gs_testZOrderSetHook);
         if ( zOrderHook )
             zOrderHook();
+#endif // WXWINUI_TEST_SUPPORT
 
         // A bool is insufficient here: a nested FlushSync() can consume and
         // clear it before returning. The monotone epoch permanently records

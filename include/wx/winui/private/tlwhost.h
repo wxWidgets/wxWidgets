@@ -23,7 +23,6 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/winui/private/inputrouter.h"
 #include "wx/winui/private/inputstate.h"
-#include "wx/winui/private/nativeresize.h"
 
 #include <map>
 #include <memory>
@@ -282,6 +281,7 @@ public:
 
 private:
     friend class wxWinUITopLevelHost;
+    friend class wxWinUIHostInputTestAccess;
     friend class wxWinUIVisualCoordinates;
 
     wxWinUISlot();
@@ -1116,10 +1116,6 @@ public:
     static unsigned GetLiveSlotLifetimeCount()
         { return wxWinUISlotLifetime::GetLiveCount(); }
 
-    // Number of active FrameworkElement.StyleProperty observers used to
-    // detect an AutomationProperties.Name supplied by a late Style. A strong
-    // application reference to detached XAML content must not keep one alive.
-    static unsigned GetLiveAutomationNameStyleObserverCountForTest();
     // Same proof for the shared per-slot FrameworkElement.Loaded observer:
     // retaining application content after host shutdown must not retain a
     // callback state capable of reaching wx.
@@ -1132,12 +1128,10 @@ public:
     static unsigned GetSlotHandlerAddCount();
     static unsigned GetSlotHandlerRevokeCount();
 
-    // Cumulative count of scheduled (CallAfter posted) and actually executed
-    // coalesced flushes: under Freeze() the schedule count must stay flat
-    // instead of growing per MarkDirty(), and thawing runs one catch-up.
+    // Passive production diagnostic used by the composition/latency
+    // harness too: count CallAfter posts without altering coalescing.
+    // Under Freeze() it stays flat; thawing schedules one catch-up.
     static unsigned GetFlushScheduleCount();
-    static unsigned GetFlushRunCount();
-    static unsigned GetFlushCallbackAttemptCount();
     unsigned GetOwnFlushRunCountForTest() const
         { return m_flushRunsForTest; }
 
@@ -1146,7 +1140,6 @@ public:
     // renders all XAML above every native child. This is a diagnostic limit,
     // not an attempt to manufacture another island.
     static unsigned GetImpossibleZOrderCount();
-    static void ResetImpossibleZOrderCountForTest();
 
     // Host-owned callback state and subscriptions are tracked separately
     // from the per-slot ones.
@@ -1213,12 +1206,6 @@ public:
     // coalesced layout flush, making Loaded asynchronous and non-portable.
     static void TestOnNextSlotAttached(
         std::function<void (wxWindow *)> callback);
-    static unsigned GetPendingFocusMigrationCountForTest();
-    // One-shot seam after a slot has atomically published its geometry
-    // cache. It exercises a structural mutation raised reentrantly by a
-    // setter in an earlier slot without relying on asynchronous XAML layout.
-    static void TestOnNextSlotSynced(
-        std::function<void (wxWindow *)> callback);
     // One-shot seam after the requested element has been written to the
     // carrier but before SetContent() publishes it as the slot model. It
     // models a synchronous Loaded/property callback entering FlushSync().
@@ -1230,79 +1217,14 @@ public:
     // without depending on asynchronous XAML layout timing.
     static void TestOnNextContentTransactionStarted(
         std::function<void (wxWindow *)> callback);
-    // One-shot seam immediately after Canvas::SetZIndex(), i.e. the
-    // application-code boundary whose nested flush/destruction invariants
-    // the z-order lifecycle tests exercise.
-    static void TestOnNextZOrderSet(std::function<void ()> callback);
     // One-shot seam immediately after ResolveWindowAtScreenPoint() reads a
     // snapshotted slot's IsHitTestVisible value. It lets tests destroy that
     // exact slot at the first callback boundary and prove no raw m_slots
     // iterator or wxWinUISlot pointer survives the getter.
     static void TestOnNextWindowAtPointSlotStateRead(
         std::function<void (wxWindow *)> callback);
-    static bool TestPointerContactActiveSnapshot(
-        wxWinUIInputDevice device,
-        int virtualKey,
-        unsigned pointerType,
-        unsigned pointerFlags,
-        unsigned penFlags);
-    wxWinUIRootPointerOutcome TestRouteRootPointerSample(
-        const wxWinUIPointerSample& sample,
-        bool sourceAlreadyHandled = false);
-    bool TestRouteRootPointerBoundary(
-        bool entered,
-        const wxWinUIPointerSample& sample);
-    void TestHandleRootPointerInterrupted(
-        bool captureLost,
-        const wxWinUIPointerSample& sample)
-        { HandleRootPointerInterrupted(captureLost, sample); }
 
-    bool TestRouteSlotPointer(
-        wxWindow *window,
-        const wxWinUIPointerSample& sample,
-        wxWinUIInputSurface physicalSurface =
-            wxWinUIInputSurface::Native);
-    bool TestMapRootPointerPointForSlot(
-        wxWindow *window,
-        double xDIP,
-        double yDIP,
-        wxPoint *screen,
-        bool *inside) const;
-    bool TestRouteOwnedSlotRelease(
-        const wxWinUIPointerSample& sample)
-        { return DispatchSlotOwnedRelease(sample); }
-    bool TestRememberModalAwaitingRelease(
-        const wxWinUIInputAction& action)
-        { return RememberModalAwaitingRelease(action); }
-    wxWinUIInputAction TestTakeModalAwaitingRelease(
-        wxWinUIInputDevice device,
-        std::uint32_t pointerId,
-        wxWinUIInputButton button)
-        { return TakeModalAwaitingRelease(device, pointerId, button); }
-    std::size_t GetModalAwaitingReleaseCountForTest() const;
-    void TestCancelSlotPointerOwners(
-        const wxWinUIPointerSample& sample,
-        bool allPointers)
-        { CancelSlotPointerOwners(sample, allPointers); }
-    std::size_t GetSlotPointerOwnerCountForTest() const;
-    std::uint32_t GetInputSiteGenerationForTest() const
-        { return m_inputSiteGeneration; }
-    bool TestCanPostIslandCancelMode(
-        std::uint32_t expectedGeneration) const
-        { return CanPostIslandCancelMode(expectedGeneration); }
-    void TestPostIslandCancelMode(std::uint32_t expectedGeneration)
-        { PostIslandCancelMode(expectedGeneration); }
-    bool HasDeferredIslandCancelForTest() const
-        { return m_islandCancelDeferred; }
-    unsigned GetPostedIslandCancelCountForTest() const
-        { return m_postedIslandCancelMessages; }
-    void TestRetireIslandCancelTarget();
 
-    // Test seam: drive the island's take-focus exit path directly (the
-    // real trigger -- Tab off the island's last element -- needs a live
-    // keyboard).
-    void TestTakeFocusRequested(bool previous)
-        { OnTakeFocusRequested(previous); }
 
     // Cumulative count of per-slot cursor applications: proves the
     // wxWindow::SetCursor() plumbing reaches the slot seam.
@@ -1337,8 +1259,9 @@ public:
 
 private:
     friend class wxWinUISlot;
-    friend WXDLLIMPEXP_CORE bool wxWinUIGetNativeResizeSnapshotForTesting(
-        wxWindow *window, wxWinUINativeResizeSnapshot *snapshot);
+    friend class wxWinUIHostInputTestAccess;
+    friend class wxWinUIHostFocusTestAccess;
+    friend class wxWinUIHostResizeTestAccess;
     friend class wxWinUIVisualCoordinates;
     friend class wxWinUIDropBroker;
     friend class wxWinUIDropBrokerState;
@@ -2060,7 +1983,6 @@ private:
     // Shares the host's capture/InputSite cancellation authority, but keeps
     // the grip's typed peer validation separate from native geometric hits.
     std::shared_ptr<NativeResizeRequest> m_nativeResize;
-    wxWinUINativeResizeSnapshot m_nativeResizeSnapshot;
     bool m_nativeResizeWakePosted = false;
     PendingNativeDispatch m_inFlightNativeInput;
     unsigned long long m_nextNativeInputSequence = 0;
@@ -2123,27 +2045,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxWinUITopLevelHost);
 };
-
-// Build the exact Raw-only shell provider used by WM_GETOBJECT without
-// passing it through USER32's LRESULT marshalling. This implementation-only
-// seam lets lifecycle tests retain a real provider across slot generations.
-// The returned COM reference is owned by the caller.
-WXDLLIMPEXP_CORE HRESULT
-wxWinUITestCreateInvisibleShellProvider(
-    wxWindow *window,
-    IRawElementProviderSimple **provider);
-
-// Cumulative count of exact shell-provider retirements performed through the
-// real WM_DESTROY/DoDetachHWND path.
-WXDLLIMPEXP_CORE unsigned
-wxWinUITestGetAccessibilityShellProviderRetireCount();
-
-// Number of live Raw-only invisible shell provider objects. Unlike the
-// cumulative retirement count, this catches a retained UIA fragment after its
-// slot/owner has gone away. Providers can be released by UIA from a COM
-// callback thread, so the implementation uses an atomic counter.
-WXDLLIMPEXP_CORE unsigned
-wxWinUITestGetLiveInvisibleShellProviderCount();
 
 #if wxUSE_TOOLTIPS
 // Internal deterministic cleanup seam; not part of the wx public API.

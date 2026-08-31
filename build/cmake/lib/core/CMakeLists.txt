@@ -226,6 +226,11 @@ if(WXWINUI AND wxUSE_WINUI3)
             "${wxSOURCE_DIR}/src/winui/toolbar.cpp"
             "${wxSOURCE_DIR}/src/winui/winui.cpp"
             "${wxSOURCE_DIR}/src/winui/ctrlhost.cpp"
+            "${wxSOURCE_DIR}/src/winui/hostfocus.cpp"
+            "${wxSOURCE_DIR}/src/winui/hostinput.cpp"
+            "${wxSOURCE_DIR}/src/winui/hostresize.cpp"
+            "${wxSOURCE_DIR}/src/winui/hostgeometry.cpp"
+            "${wxSOURCE_DIR}/src/winui/hostuia.cpp"
             "${wxSOURCE_DIR}/tests/winui/test-support/combobox-uia-helper.cpp")
         # Source properties must be visible where the owning target is
         # created: core here, or the parent directory in monolithic builds.

@@ -23,6 +23,7 @@
 #include "wx/utils.h"
 #include "wx/weakref.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-geometry-test-access.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -1771,7 +1772,7 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
         invoking->SetSize(wxSize(223, 121));
 
         bool slotSynced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 CHECK(window == invoking);
@@ -1784,7 +1785,7 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
             });
 
         const wxTreeItemId root = invoking->AddRoot("root");
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(slotSynced);
         CHECK_FALSE(root.IsOk());
         CHECK(lifetime.get() == nullptr);
@@ -1811,7 +1812,7 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
         invoking->SetSize(wxSize(225, 123));
 
         bool slotSynced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 CHECK(window == invoking);
@@ -1824,7 +1825,7 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
             });
 
         invoking->SelectItem(child);
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(slotSynced);
         CHECK(changedEvents == 0);
         CHECK(lifetime.get() == nullptr);
@@ -1852,7 +1853,7 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
         invoking->SetSize(wxSize(227, 125));
 
         bool slotSynced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 CHECK(window == invoking);
@@ -1865,7 +1866,7 @@ TEST_CASE("wxWinUI TreeCtrl ForceRender callbacks are terminal",
             });
 
         invoking->Delete(child);
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(slotSynced);
         CHECK(deleteEvents == 1);
         CHECK(lifetime.get() == nullptr);

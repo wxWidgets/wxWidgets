@@ -31,6 +31,7 @@
 
 #ifdef __WXWINUI__
     #include "wx/winui/private/tlwhost.h"
+    #include "host-geometry-test-access.h"
     #include "winui/test-support/infobar-test-access.h"
 #endif
 
@@ -407,7 +408,7 @@ TEST_CASE("wxInfoBar::WinUIContentWriteAndFlushMayDestroyOwner",
         wxInfoBar * const invoking = info.get();
         invoking->SetSize(parent->FromDIP(wxSize(287, 57)));
         bool hookCalled = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -417,7 +418,7 @@ TEST_CASE("wxInfoBar::WinUIContentWriteAndFlushMayDestroyOwner",
             });
 
         invoking->ShowMessage("delete while flushing");
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(hookCalled);
         CHECK_FALSE(info);
     }

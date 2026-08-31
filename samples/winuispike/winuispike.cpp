@@ -47,6 +47,10 @@
 
 #include "wx/winui/private/tlwhost.h"
 
+#ifdef WXWINUI_TEST_SUPPORT
+#include "host-input-test-access.h"
+#endif
+
 #include "wx/msw/private.h"
 
 #include <windowsx.h>
@@ -1702,6 +1706,7 @@ namespace
 // ----------------------------------------------------------------------------
 
 constexpr int kPointerScenarioExitCli = 30;
+#ifdef WXWINUI_TEST_SUPPORT
 constexpr int kPointerScenarioExitSetup = 31;
 constexpr int kPointerScenarioExitHost = 32;
 constexpr int kPointerScenarioExitFailed = 33;
@@ -1759,6 +1764,8 @@ bool GetPointerScenarioOffscreenPosition(wxPoint *position)
     return false;
 }
 
+#endif // WXWINUI_TEST_SUPPORT
+
 bool IsPointerScenarioWindowOutsideVirtualDesktop(HWND hwnd)
 {
     RECT window = {};
@@ -1784,6 +1791,7 @@ bool IsPointerScenarioWindowOutsideVirtualDesktop(HWND hwnd)
            window.top >= virtualBottom;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 struct PointerScenarioMessageCounts
 {
     unsigned hitTests = 0;
@@ -1825,6 +1833,8 @@ struct PointerScenarioResult
     ULONGLONG elapsedMs = 0;
 };
 
+#endif // WXWINUI_TEST_SUPPORT
+
 std::string JsonEscape(const std::string& value)
 {
     static constexpr char hex[] = "0123456789abcdef";
@@ -1858,6 +1868,7 @@ std::string JsonEscape(const std::string& value)
     return escaped;
 }
 
+#ifdef WXWINUI_TEST_SUPPORT
 class PointerScenarioTarget : public wxWindow
 {
 public:
@@ -2158,8 +2169,8 @@ private:
     {
         ++result.samples;
         const wxWinUIRootPointerOutcome outcome =
-            m_host->TestRouteRootPointerSample(
-                sample, sourceAlreadyHandled);
+            wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                *m_host, sample, sourceAlreadyHandled);
         RecordOutcome(result, outcome);
         ObserveActivation();
         (void)CheckDeadline(result);
@@ -2229,7 +2240,7 @@ private:
         ++result.samples;
         ++result.boundaryCalls;
         const bool completed =
-            m_host->TestRouteRootPointerBoundary(entered, sample);
+            wxWinUIHostInputTestAccess::RouteRootPointerBoundary(*m_host, entered, sample);
         if ( completed )
             ++result.boundaryCompleted;
         ObserveActivation();
@@ -2243,7 +2254,7 @@ private:
     {
         ++result.samples;
         ++result.interruptions;
-        m_host->TestHandleRootPointerInterrupted(captureLost, sample);
+        wxWinUIHostInputTestAccess::HandleRootPointerInterrupted(*m_host, captureLost, sample);
         ObserveActivation();
         (void)CheckDeadline(result);
     }
@@ -2590,8 +2601,8 @@ private:
             {
                 reentry->called = true;
                 reentry->outcome =
-                    m_host->TestRouteRootPointerSample(
-                        reentry->sample, true);
+                    wxWinUIHostInputTestAccess::RouteRootPointerSample(
+                        *m_host, reentry->sample, true);
             });
 
         const wxWinUIRootPointerOutcome outer =
@@ -2838,6 +2849,8 @@ std::string SerializePointerScenarioResults(
          << "}\n";
     return json.str();
 }
+
+#endif // WXWINUI_TEST_SUPPORT
 
 bool WritePointerScenarioResult(const wxString& path,
                                 const std::string& contents,
@@ -3535,7 +3548,8 @@ private:
         CompositionCheck check;
         check.name = "impossible-native-xaml-interleave-signature";
 
-        wxWinUITopLevelHost::ResetImpossibleZOrderCountForTest();
+        const unsigned diagnosticsBefore =
+            wxWinUITopLevelHost::GetImpossibleZOrderCount();
         const UINT flags =
             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE |
             SWP_NOOWNERZORDER;
@@ -3550,7 +3564,8 @@ private:
         m_host->FlushSync();
 
         check.diagnosticCount =
-            wxWinUITopLevelHost::GetImpossibleZOrderCount();
+            wxWinUITopLevelHost::GetImpossibleZOrderCount() -
+            diagnosticsBefore;
         check.signature = NativeOrderSignature();
         Require(check, positioned,
                 "SetWindowPos could not establish the test topology");
@@ -4399,7 +4414,7 @@ public:
             "run the non-interactive sent-message diagnostics self-test");
         parser.AddSwitch(
             "", "input-scenarios",
-            "run the deterministic root-pointer scenario suite");
+            "run root-pointer scenarios (requires wxBUILD_TESTS=ALL)");
         parser.AddSwitch(
             "", "zorder-scenarios",
             "run deterministic z-order, clip and splitter scenarios");
@@ -4616,6 +4631,13 @@ public:
 
         if ( m_pointerScenariosRequested )
         {
+#ifndef WXWINUI_TEST_SUPPORT
+            fputws(
+                L"winuispike: --input-scenarios requires wxBUILD_TESTS=ALL\n",
+                stderr);
+            m_selfTestExitCode = kPointerScenarioExitCli;
+            return true;
+#else
             if ( m_scenarioResultPath.empty() )
             {
                 fputws(
@@ -4647,6 +4669,7 @@ public:
                     CallAfter(&SpikeApp::RunPointerScenarios);
                 });
             return true;
+#endif // WXWINUI_TEST_SUPPORT
         }
 
         if ( m_zOrderScenariosRequested || m_scrollLatencyRequested )
@@ -4698,8 +4721,10 @@ public:
             return m_selfTestExitCode;
 
         const int result = wxApp::OnRun();
+#ifdef WXWINUI_TEST_SUPPORT
         if ( m_pointerScenarioMode )
             return m_pointerScenarioExitCode;
+#endif // WXWINUI_TEST_SUPPORT
         return m_compositionScenarioMode
                  ? m_compositionScenarioExitCode
                  : result;
@@ -4707,14 +4732,18 @@ public:
 
     int OnExit() override
     {
+#ifdef WXWINUI_TEST_SUPPORT
         m_scenarioTimer.Stop();
+#endif // WXWINUI_TEST_SUPPORT
         m_compositionTimer.Stop();
         m_compositionLayoutTimer.Stop();
+#ifdef WXWINUI_TEST_SUPPORT
         if ( m_scenarioFrame )
         {
             m_scenarioFrame->Destroy();
             m_scenarioFrame = nullptr;
         }
+#endif // WXWINUI_TEST_SUPPORT
         if ( m_compositionFrame )
         {
             m_compositionFrame->Destroy();
@@ -4864,6 +4893,7 @@ private:
         ExitMainLoop();
     }
 
+#ifdef WXWINUI_TEST_SUPPORT
     void RunPointerScenarios()
     {
         if ( m_pointerScenarioFinished )
@@ -4994,16 +5024,22 @@ private:
         ExitMainLoop();
     }
 
+#endif // WXWINUI_TEST_SUPPORT
+
     int m_selfTestExitCode = -1;
     bool m_diagnosticsSelfTest = false;
     bool m_pointerScenariosRequested = false;
     bool m_zOrderScenariosRequested = false;
     bool m_scrollLatencyRequested = false;
+#ifdef WXWINUI_TEST_SUPPORT
     bool m_pointerScenarioMode = false;
     bool m_pointerScenarioFinished = false;
+#endif // WXWINUI_TEST_SUPPORT
     bool m_compositionScenarioMode = false;
     bool m_compositionScenarioFinished = false;
+#ifdef WXWINUI_TEST_SUPPORT
     int m_pointerScenarioExitCode = kPointerScenarioExitException;
+#endif // WXWINUI_TEST_SUPPORT
     int m_compositionScenarioExitCode =
         kCompositionScenarioExitException;
     unsigned m_targetHz = 60;
@@ -5014,9 +5050,13 @@ private:
     unsigned long m_scenarioTimeoutMs = 10000;
     ULONGLONG m_scenarioStarted = 0;
     wxString m_scenarioResultPath;
+#ifdef WXWINUI_TEST_SUPPORT
     PointerScenarioFrame *m_scenarioFrame = nullptr;
+#endif // WXWINUI_TEST_SUPPORT
     CompositionScenarioFrame *m_compositionFrame = nullptr;
+#ifdef WXWINUI_TEST_SUPPORT
     wxTimer m_scenarioTimer;
+#endif // WXWINUI_TEST_SUPPORT
     wxTimer m_compositionTimer;
     wxTimer m_compositionLayoutTimer;
     wxLog *m_previousLog = nullptr;

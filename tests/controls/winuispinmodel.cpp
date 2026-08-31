@@ -20,6 +20,7 @@
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-geometry-test-access.h"
 
 #include <winrt/Microsoft.UI.Xaml.Automation.Peers.h>
 
@@ -717,7 +718,7 @@ TEST_CASE("wxWinUI NumberBox ForceRender never resumes through a dead owner",
         }
         invoking->SetSize(wxSize(173, 41));
         bool slotSynced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 slotSynced = true;
@@ -728,7 +729,7 @@ TEST_CASE("wxWinUI NumberBox ForceRender never resumes through a dead owner",
             });
 
         invoking->SetValue(23);
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(slotSynced);
         CHECK(spin == nullptr);
         delete spin;
@@ -746,7 +747,7 @@ TEST_CASE("wxWinUI NumberBox ForceRender never resumes through a dead owner",
         }
         invoking->SetSize(wxSize(181, 43));
         bool slotSynced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 slotSynced = true;
@@ -757,7 +758,7 @@ TEST_CASE("wxWinUI NumberBox ForceRender never resumes through a dead owner",
             });
 
         invoking->SetValue(23.5);
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(slotSynced);
         CHECK(spin == nullptr);
         delete spin;

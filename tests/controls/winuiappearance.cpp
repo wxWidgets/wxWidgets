@@ -35,6 +35,7 @@
 #include "wx/tglbtn.h"
 #include "wx/winui/private/appearance.h"
 #include "wx/winui/private/tlwhost.h"
+#include "host-geometry-test-access.h"
 
 #include <winrt/Windows.UI.Text.h>
 #include <winrt/Microsoft.UI.Xaml.h>
@@ -761,7 +762,7 @@ TEST_CASE("wxWinUI action APIs stop after a terminal host flush",
         invoking->SetSize(size.x + 1, size.y);
 
         bool synced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -774,7 +775,7 @@ TEST_CASE("wxWinUI action APIs stop after a terminal host flush",
             });
 
         invoking->SetLabel("&Replacement");
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(synced);
         CHECK(button == nullptr);
         delete button;
@@ -794,7 +795,7 @@ TEST_CASE("wxWinUI action APIs stop after a terminal host flush",
         invoking->SetSize(size.x + 1, size.y);
 
         bool synced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -809,7 +810,7 @@ TEST_CASE("wxWinUI action APIs stop after a terminal host flush",
         wxCommandEvent event(wxEVT_CHECKBOX, invoking->GetId());
         event.SetInt(wxCHK_CHECKED);
         invoking->Command(event);
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(synced);
         CHECK(check == nullptr);
         CHECK(events == 0);
@@ -832,7 +833,7 @@ TEST_CASE("wxWinUI action APIs stop after a terminal host flush",
         invoking->SetSize(size.x + 1, size.y);
 
         bool synced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -847,7 +848,7 @@ TEST_CASE("wxWinUI action APIs stop after a terminal host flush",
         wxCommandEvent event(wxEVT_RADIOBUTTON, invoking->GetId());
         event.SetInt(1);
         invoking->Command(event);
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(synced);
         CHECK(radio == nullptr);
         CHECK(events == 0);
@@ -868,7 +869,7 @@ TEST_CASE("wxWinUI action APIs stop after a terminal host flush",
         invoking->SetSize(size.x + 1, size.y);
 
         bool synced = false;
-        wxWinUITopLevelHost::TestOnNextSlotSynced(
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
             [&](wxWindow *window)
             {
                 if ( window != invoking )
@@ -883,7 +884,7 @@ TEST_CASE("wxWinUI action APIs stop after a terminal host flush",
         wxCommandEvent event(wxEVT_TOGGLEBUTTON, invoking->GetId());
         event.SetInt(1);
         invoking->Command(event);
-        wxWinUITopLevelHost::TestOnNextSlotSynced({});
+        wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
         CHECK(synced);
         CHECK(toggle == nullptr);
         CHECK(events == 0);
@@ -1225,7 +1226,7 @@ TEST_CASE("wxWinUI RadioButton group clearing revalidates every sibling",
     // deterministic way to create pending host work.
     bool ownerSynced = false;
     bool siblingSynced = false;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             if ( window != invoking )
@@ -1233,7 +1234,7 @@ TEST_CASE("wxWinUI RadioButton group clearing revalidates every sibling",
 
             ownerSynced = true;
             host->MarkDirty(&first);
-            wxWinUITopLevelHost::TestOnNextSlotSynced(
+            wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
                 [&](wxWindow *sibling)
                 {
                     if ( sibling != &first )
@@ -1248,7 +1249,7 @@ TEST_CASE("wxWinUI RadioButton group clearing revalidates every sibling",
 
     host->MarkDirty(invoking);
     invoking->SetValue(true);
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
 
     CHECK(ownerSynced);
     CHECK(siblingSynced);
@@ -3461,7 +3462,7 @@ TEST_CASE("wxWinUI RadioBox stops after terminal flush destruction",
     wxRadioBox * const invoking = box;
     unsigned syncCallbacks = 0;
 
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             if ( window != invoking )
@@ -3473,7 +3474,7 @@ TEST_CASE("wxWinUI RadioBox stops after terminal flush destruction",
             delete doomed;
         });
     invoking->SetLabel("&After");
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
 
     CHECK(syncCallbacks == 1);
     CHECK(box == nullptr);
@@ -3547,7 +3548,7 @@ TEST_CASE("wxWinUI StaticText has no post-flush effect after destruction",
 
     wxStaticText * const invoking = text;
     unsigned syncCallbacks = 0;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             if ( window != invoking )
@@ -3559,7 +3560,7 @@ TEST_CASE("wxWinUI StaticText has no post-flush effect after destruction",
             delete doomed;
         });
     invoking->SetLabel("&After UpdateLayout");
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
 
     CHECK(syncCallbacks == 1);
     CHECK(text == nullptr);
@@ -3586,7 +3587,7 @@ TEST_CASE("wxWinUI StaticBitmap stops after terminal flush destruction",
 
     wxStaticBitmap * const invoking = bitmap;
     unsigned syncCallbacks = 0;
-    wxWinUITopLevelHost::TestOnNextSlotSynced(
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook(
         [&](wxWindow *window)
         {
             if ( window != invoking )
@@ -3598,7 +3599,7 @@ TEST_CASE("wxWinUI StaticBitmap stops after terminal flush destruction",
             delete doomed;
         });
     invoking->SetBitmap(MakeDPIBundle());
-    wxWinUITopLevelHost::TestOnNextSlotSynced({});
+    wxWinUIHostGeometryTestAccess::SetNextSlotSyncedHook({});
 
     CHECK(syncCallbacks == 1);
     CHECK(bitmap == nullptr);
