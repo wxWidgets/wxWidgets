@@ -85,6 +85,7 @@ if(WXMSW)
             src/winui/dropbroker.cpp
             src/winui/inputrouter.cpp
             src/winui/inputstate.cpp
+            src/winui/hostgeometry.cpp
             src/winui/titlebar.cpp
             src/winui/tlwhost.cpp
             src/winui/hostresize.cpp

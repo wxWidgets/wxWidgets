@@ -238,6 +238,34 @@ qualified separately for the frozen combined source. Projection/coalescing
 in `hostgeometry.cpp` is still pending; this extraction is not all of 107C
 and does not qualify physical monitor/DPI transitions.
 
+Projection/coalescing extraction after `a038f53764` (2026-08-31):
+`hostgeometry.cpp` owns dirty scheduling, clipping, native geometry/visibility
+notifications, slot projection and z-order publication. The 38 moved
+definitions retain their bodies: 37 exact, and `SyncSlot` exact after expanding
+three narrow adapters for the existing visual map/cursor authority. Private
+`hostvisual.h` shares the unchanged implementation types; passive `com_ptr`
+copies preserve the original pin across reentrant setters. The maps,
+`MarkAllHostsDirty`, `SynchronizeAllHosts`, lifetime and content transactions
+remain in the host. No installed declaration or class layout changes.
+
+The common `hostprofile.h` prerequisite exposes only the existing profiling
+scope/functions/counters inside the core; all seven counter definitions stay
+unique in the host. The log-enabled query likewise retains one implementation.
+No timer, rendering subscription, new observation state or retry is added.
+
+Both DLL/static `/warnaserror` builds pass. Before/after geometry retains
+**327 assertions / 14 cases** (the original six plus eight z-order/visibility/
+destruction cases). The unchanged input/focus selection passes **1205 / 31**,
+UIA passes **576 / 18**, and smoke/Supported passes **2/2** per linkage. The
+input candidate's initial lexical list omitted two cases selected by its tags;
+both actually ran, and no test was excluded to match the old count. Logs:
+`audit107c-geometry-before.log`, `audit107d-input-before.log` and
+`audit107c-geometry-on-*` in the two existing build trees. The three new module
+files match the reviewed candidate exactly after newline normalization;
+mechanical proof is under `F:\wxwinui-pr26890-audit107-geometry`.
+The UIA transaction still inside `SyncSlot` is the next 107A boundary;
+combined OFF/install/restore and physical DPI qualification remain separate.
+
 Extract `wxWinUIVisualCoordinates` implementation to
 `src/winui/visualcoordinates.cpp`, then projection/coalescing to
 `src/winui/hostgeometry.cpp`. Keep a single converter, fractional coordinates

@@ -37,6 +37,7 @@ void wxWinUIRetireSubclass(HWND hwnd,
                           void *&opaqueContext,
                           const char *description);
 void wxWinUIInputLog(const char *fmt, ...);
+bool wxWinUIInputLogEnabled();
 bool wxWinUIIsPointerContactActive(wxWinUIInputDevice device,
                                   std::uint32_t pointerId,
                                   int virtualKey);
