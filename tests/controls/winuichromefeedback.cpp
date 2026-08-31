@@ -13,6 +13,7 @@
 #if defined(__WXWINUI__) && wxUSE_WINUI3
 #include "feedback-test-access.h"
 #include "statusbar-test-access.h"
+#include "../../src/winui/hostresize.h"
 
 #include "wx/app.h"
 #include "wx/frame.h"
@@ -475,6 +476,28 @@ void ContinueActivityApplyStorm(void *opaque)
 #endif // wxUSE_ACTIVITYINDICATOR
 
 } // namespace
+
+TEST_CASE("wxWinUI native resize progress records entry and exit at most once",
+          "[winui-native-resize-state]")
+{
+    wxWinUINativeResizeProgress progress;
+    CHECK_FALSE(progress.entered);
+    CHECK_FALSE(progress.exited);
+    CHECK_FALSE(progress.Enter(false));
+    CHECK_FALSE(progress.Exit());
+    CHECK_FALSE(progress.entered);
+    CHECK_FALSE(progress.exited);
+
+    CHECK(progress.Enter(true));
+    CHECK(progress.entered);
+    CHECK_FALSE(progress.exited);
+    CHECK_FALSE(progress.Enter(true));
+
+    CHECK(progress.Exit());
+    CHECK(progress.exited);
+    CHECK_FALSE(progress.Exit());
+    CHECK_FALSE(progress.Enter(true));
+}
 
 #if wxUSE_STATUSBAR
 

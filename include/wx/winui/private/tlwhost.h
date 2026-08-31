@@ -1410,6 +1410,7 @@ private:
         std::shared_ptr<NativeResizeRequest> request,
         bool cancelled);
     void CancelNativeResize(const wxWinUIPointerSample& sample);
+    void ShutdownNativeResize();
 
     // The inner InputSiteWindow only exists once the island content has
     // realized; subclass it as soon as it shows up (idempotent).

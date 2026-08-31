@@ -1,6 +1,6 @@
 # Plan 107: Split host responsibilities behind private ownership boundaries
 
-- Status: IN PROGRESS — 107B LOCAL PASS shared/static ON/OFF/install/ON; 107A/C-F pending
+- Status: IN PROGRESS — 107B LOCAL PASS ON/OFF/install/ON; 107A native and first 107F boundary PASS shared/static ON; remaining modules pending
 - Planned at: f6ae07e1ade037e570b99df5369edd070b728a48, refreshed 2026-08-31
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -85,6 +85,24 @@ once its 106 control seams are qualified; **107F** follows the corresponding
 completion of every component or every physical campaign.
 
 ### 107A — Host authorities and native sizing transaction
+
+Native extraction implemented on 2026-08-31 after `33ae89a111`:
+`hostresize.cpp` now owns validation, posting, deferred dispatch, cancellation,
+shutdown and the USER32 subclass transaction. The host still owns the request,
+registry, global operation tail and native lifetime. The two non-installed
+headers share the existing weak subclass context and the request state; no
+second capture, teardown or deferred-wake authority is introduced.
+
+The four real native-loop cases are unchanged. The exact baseline passes
+**219 assertions / 7 cases** before and after in both DLL/static builds.
+The new pure progress case adds **14 / 1**, separately checking idempotent
+entry/exit; it does not replace USER32 integration. The 107F host **70/4**,
+broker **206/3**, presentation **15/1** and observation **372/1** groups also
+pass, along with smoke/Supported **2/2** in each linkage. `test_gui` and
+`minimal` compile with `/warnaserror`, without test retries. Evidence is
+`audit107a-on-*` in the two existing build trees. Shipping OFF/install/restore
+is reserved for the combined architecture batch. UIA/tooltip extraction and
+physical held-drag qualification remain open.
 
 Move `NativeResizeRequest`, validation, posting, dispatch, cancellation and
 termination to `src/winui/hostresize.cpp` with a private header only if needed.

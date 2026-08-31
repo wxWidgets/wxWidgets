@@ -21,7 +21,7 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | 28 CONTROLS + RETIREMENT + CONTROLHOST QUALIFIED LOCALLY; OTHER HOST HELPERS OPEN |
-| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | 107B LOCAL PASS; 107A/C-F SPECIFIED AND PENDING |
+| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | 107B QUALIFIED; NATIVE 107A / FIRST 107F BOUNDARY PASS ON; OTHER MODULES OPEN |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: CONCRETE FAILURES AND TEST ORACLES |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
@@ -36,9 +36,10 @@ publication, focus/input adapters, template identity, and production/test
 observation boundaries. Their exact source anchors, filters and stop
 conditions are in 107. Existing single-island and toolkit-ABI decisions are
 preserved; changing them requires a separate design decision. The minimal
-Gauge/ScrollBar lifetime primitive (107B) is now implemented and locally
-qualified; the other five sublots remain planned, not a claim that the host
-is already decomposed.
+Gauge/ScrollBar lifetime primitive (107B) is implemented and locally qualified.
+The native resize transaction (107A) and first production/observation boundary
+(107F) now pass both test-enabled linkages; their combined shipping check and
+the remaining modules are still open. This is not full host decomposition.
 
 ## Findings coverage
 
