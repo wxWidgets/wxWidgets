@@ -287,6 +287,26 @@ island require a separate design decision, not a refactor exception.
 
 ### 107D — Input policy versus focus/capture/native adapters
 
+Focus extraction implemented after `6a8e0e7503`: 27 member bodies move to
+`hostfocus.cpp`, together with the unique migration map and its native-focus
+resolver. The private query declaration is not installed. Reparent binding,
+registry scans and physical slot migration stay in the host; no public class
+layout, event ordering or existing test assertion changes.
+
+The initial shared/static build caught the native-focus resolver left behind
+in the old translation unit. Its exact static body now accompanies all seven
+users in `hostfocus.cpp`; this is not a second focus authority. Failed logs
+remain `audit107d1-focus-on-build.log`, corrected builds
+`audit107d1-focus-on-build-helperfix.log` in the two existing build trees.
+Both corrected builds pass `/warnaserror`. Identical before/after private-
+desktop tests pass **132 assertions / 14 focus cases**, **1205 / 31 input
+cases**, **327 / 14 geometry cases**, and smoke/Supported **2/2** in each
+linkage. Logs are `audit107d1-focus-before.log` and
+`audit107d1-focus-on-{focus,input,geometry,gates}.log` (the earlier input and
+geometry baselines belong to 107C). No physical input was used and no runtime
+failure was retried. Input extraction and the new combined OFF/install/
+consumer qualification remain pending.
+
 Extract host adapters to `src/winui/hostfocus.cpp` and
 `src/winui/hostinput.cpp`, after 107A/C. Reuse the existing pure
 `wxWinUIInputState` and router. Keep USER32 capture, XAML gesture ownership,
