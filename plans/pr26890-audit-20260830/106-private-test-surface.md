@@ -493,6 +493,17 @@ Do not delete a lifetime/retirement service used by production merely because it
   inject nor qualify physical input. A fresh shipping OFF install, symbol/
   source canaries and restored-ALL rerun are still required, so plan 106
   remains open.
+- The first frozen shipping-OFF compile exposed two warnings-as-errors in
+  `richtooltip.cpp`: once the Supported V0 generic fallback became
+  unconditional, the following test-selectable TeachingTip branch was
+  unreachable. The complete native-selection branch is now compiled only
+  with `WXWINUI_TEST_SUPPORT`; the shipping generic fallback and the real
+  backend methods remain production code. Focused shipping-OFF `wxcore`
+  builds pass `/warnaserror` in both linkages. After restoring
+  `wxBUILD_TESTS=ALL`, shared and static each rebuild `test_gui`, `minimal`
+  and `winuispike` with warnings as errors, pass RichToolTip **277/22** on a
+  private desktop, and pass runtime smoke plus Supported V0 **2/2**. The full
+  fresh install/symbol/consumer campaign is still required before closure.
 
 ## Maintenance
 

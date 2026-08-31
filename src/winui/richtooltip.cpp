@@ -1557,6 +1557,7 @@ public:
             return;
         }
 
+#ifdef WXWINUI_TEST_SUPPORT
         // TeachingTip has no safe equivalent for a custom gradient, bitmap
         // icon or title font. Honour the wx API by selecting the generic
         // implementation instead of silently discarding customization.
@@ -1612,6 +1613,7 @@ public:
             ++gs_teachingTipDiagnostics.cancellations;
 #endif // WXWINUI_TEST_SUPPORT
         }
+#endif // WXWINUI_TEST_SUPPORT
     }
 
 private:
