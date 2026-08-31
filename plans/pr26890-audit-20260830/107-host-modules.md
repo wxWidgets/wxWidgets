@@ -199,6 +199,24 @@ retirement policy is explicitly not part of this extraction.
 
 ### 107C — Coordinate units and atomic geometry publication
 
+First extraction implemented after `57334989e2` on 2026-08-31:
+`visualcoordinates.cpp` owns the existing Snapshot and coordinate methods,
+with one shared subtree predicate and one finite-point predicate declared in
+a non-installed intracore header. All 23 moved bodies are unchanged, including
+the two-attempt bound, fractional arithmetic, final publication checks and
+independent host/slot operation guards. Host/slot declarations, the tooltip
+extraction and all six characterization cases remain unchanged.
+
+The exact coordinate baseline passes **259 assertions / 6 cases** before and
+after, DLL and static. Native **219/7**, progress **14/1**, tooltip **550/22**,
+template **887/4** plus native invalidation **28/1**, and smoke/Supported
+**2/2** also pass, with `/warnaserror` builds of `test_gui` and `minimal`.
+Shared post-extraction logs use `audit107foundation-on-*`; static uses
+`audit107c-on-*`. No runtime failure or test change was needed. Shipping is
+qualified separately for the frozen combined source. Projection/coalescing
+in `hostgeometry.cpp` is still pending; this extraction is not all of 107C
+and does not qualify physical monitor/DPI transitions.
+
 Extract `wxWinUIVisualCoordinates` implementation to
 `src/winui/visualcoordinates.cpp`, then projection/coalescing to
 `src/winui/hostgeometry.cpp`. Keep a single converter, fractional coordinates
