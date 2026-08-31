@@ -120,6 +120,27 @@ in `audit107a-tooltip-before-exact.log`. No failing case was excluded. Builds
 and runtime logs are `audit107a-tooltip-on-*`; shipping remains the combined
 batch below. UIA policy and remaining host test-surface separation stay open.
 
+UIA ownership/observer extraction after `b38af994be` (2026-08-31):
+`hostuia.cpp` now owns the existing Name/style observer and retry, authored
+style lookup, semantic restoration/publication, accessibility authority and
+generation-qualified HWND shell provider. `hostuia.h` is intracore and not
+installed. The slot, lifetime, provider identity and public class layout stay
+unchanged; the fault forwarder consumes the original host mask, not a new
+one. The extraction verifier checks 16 exact source regions and unchanged
+remaining host code (only blank-line grouping is normalized).
+
+The unchanged 18-case UIA selection passes **576 assertions** before and after
+in both DLL and static builds, including real XAML Name/binding/style
+ownership, reentrant migration and real USER32/UIA shell retirement. Both
+`test_gui`/`minimal` builds pass `/warnaserror`; runtime smoke/Supported pass
+**2/2** in each linkage. Logs are `audit107a-uia-before.log` and
+`audit107a-uia-on-*` in the two existing build trees; extraction script/proof
+are under `F:\wxwinui-pr26890-audit107-foundation`. No physical input was run.
+The Name/HelpText transaction within `SyncSlot()` is deliberately unchanged
+for the geometry move and still needs its own UIA projection boundary.
+Combined OFF/install/restore and new remote CI remain pending for this lot;
+the preceding batch's shipping evidence does not cover this new code.
+
 Move `NativeResizeRequest`, validation, posting, dispatch, cancellation and
 termination to `src/winui/hostresize.cpp` with a private header only if needed.
 The host remains the authority for registry, TLW/island ownership and shutdown;
