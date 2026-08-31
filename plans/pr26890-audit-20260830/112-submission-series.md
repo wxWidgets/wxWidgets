@@ -1,6 +1,6 @@
 # Plan 112: Prepare reviewable submission boundaries without rewriting the integration branch
 
-- Status: TODO
+- Status: IN PROGRESS — first 107 batch mapped; whole-PR boundaries and independent replay pending
 - Planned at: c5cf4677b9627eebce7b69eba427e1658dfbcbe5, 2026-08-30
 - Priority: P3 / maintainer decision
 - Effort: L (split into independently verified commits)
@@ -24,6 +24,32 @@ The audits recommend splitting a 539-file integration PR. That is an upstream re
 local submission manifest and patch/commit mapping; PR draft text; no automatic public PR creation/history rewrite
 
 Out of scope: other worktrees, frozen beta snapshots, unrelated backend refactors, user files, new public PRs and unrequested physical input.
+
+## First bounded architecture batch
+
+This is a map of the existing integration history, not a proposal that these
+commits apply independently to upstream master. The required base is the
+already-published `00fe7a3b212fc14be7df2ebbf7657dba25c07318`, including its
+runtime/host implementation and private control-test support.
+
+| Existing commit | Review boundary | Behaviour/evidence |
+| --- | --- | --- |
+| `33ae89a111` | Broker production ownership query | Preserves fail-closed registration/lock meaning; new passive-query case |
+| `92c69b478c` | Native resize module | Exact native transaction extraction plus pure entry/exit guard characterization |
+| `eb36c450a5` | Native Combo template invalidation | Test-only weak accessor and real post-Loaded theme regression; local resolver contracts retained |
+| `57334989e2` | Host tooltip policy module | Existing observer/restoration/suppression bodies; registry and slot ownership unchanged |
+| `e2014c053b` | Coordinate mapping module | Existing fractional mapping and identity checks; no geometry-publication redesign |
+
+Each boundary was built and exercised in both existing DLL/static trees before
+advancing. Plan 107 records exact focused counts and the final frozen shipping
+cycle. Its external evidence is not added to the product patch. Commit-local
+plan entries remain in the integration audit trail; a future upstream series
+may separate those documents without discarding this history.
+
+The actual order above is preserved. No rebase, force push, replacement PR,
+feature removal or independent-boundary replay is claimed. Mapping the rest of
+the PR, proving alternative patch ordering in disposable worktrees and agreeing
+on any public split remain required before this plan can be marked DONE.
 
 ## Steps
 

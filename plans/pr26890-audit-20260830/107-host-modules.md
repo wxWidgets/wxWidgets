@@ -1,6 +1,6 @@
 # Plan 107: Split host responsibilities behind private ownership boundaries
 
-- Status: IN PROGRESS — 107B LOCAL PASS ON/OFF/install/ON; 107A native and first 107F boundary PASS shared/static ON; remaining modules pending
+- Status: IN PROGRESS — 107B/E and bounded 107A/C/F extractions qualified locally; remaining host modules and wider test separation pending
 - Planned at: f6ae07e1ade037e570b99df5369edd070b728a48, refreshed 2026-08-31
 - Priority: P1
 - Effort: L (split into independently verified commits)
@@ -57,10 +57,10 @@ Concrete boundaries verified in the current source:
   generation before token revocation. In `src/winui/combobox.cpp`, the layout
   callback is deliberately passive and calls `QueueEditPartResolutionAtLayoutEdge()`.
   Template realization belongs to its deferred continuation.
-- `RestartDropBrokerAfterPresentationInvalidation()` calls
-  `m_dropBroker->GetSnapshotForTest()` in production and refuses a new broker
-  if `ownsRegistration || locked`. Removing that decision as test-only would
-  break rollback safety.
+- `RestartDropBrokerAfterPresentationInvalidation()` originally called
+  `m_dropBroker->GetSnapshotForTest()` in production. The first 107F boundary
+  below now uses `HasNativeOwnership()` and still refuses a new broker when
+  `ownsRegistration || locked`; this rollback decision is production policy.
 
 ## Scope
 
@@ -349,6 +349,59 @@ Baseline filter:
 `HostLifecycle::FreezeThawCoalescedFlush,HostLifecycle::ReentrantSlotSyncDefersNewStructureEpoch,HostState::ContentSwapFlushSeesOnlyPublishedModel,HostState::LoadedNotificationIsContentTransactional`.
 Add the existing broker acquisition/rollback cases after reviewing their
 non-input paths; do not run physical OLE as part of an automatic refactor.
+
+## Combined shipping qualification, 2026-08-31
+
+Source frozen at **`e2014c053b46cbf564524edf35bde903bfeeaf33`**, following five
+separate implementation commits. Both existing build trees complete
+**ON -> OFF -> fresh install/consumer -> ALL restored**. No fresh wxWidgets
+build tree is introduced. The source proof covers 21 changed or directly
+coupled source/header/test paths and matches before and after each cycle.
+
+- Both OFF core/minimal builds and restored test_gui/minimal builds pass
+  `/warnaserror`. Both caches end at `wxBUILD_TESTS=ALL`.
+- The 28 migrated control headers, retired ControlHost/runtime test symbols,
+  private support/CMake exports and new implementation-only headers pass the
+  existing shipping checks. Intracore coordinate predicates and native progress
+  state are not DLL-exported. This does not claim that every remaining 106 host
+  test seam has been removed.
+- Fresh four-TU installed consumers compile and pass CTest **1/1** in both
+  linkages. One normal installed runtime process per linkage completes its
+  50-epoch/apartment-ownership checks; this is not the separate fault matrix,
+  physical-input campaign, WER-settling scan or 60-minute soak.
+- After restoring ALL, ten focused groups retain their exact counts in both
+  linkages: native **219/7**, progress **14/1**, coordinates **259/6**, templates
+  **887/4**, native Combo invalidation **28/1**, host publication **70/4**,
+  broker ownership **206/3**, presentation rollback **15/1**, passive ownership
+  queries **372/1**, and tooltip **550/22**. Groups deliberately overlap; these
+  are not a unique-case total. Smoke/Supported passes **2/2** in each linkage.
+
+Evidence recipe and frozen hashes:
+`F:\wxwinui-pr26890-audit107-foundation\{source-proof.json,verify-source.cjs,run-shipping.ps1,verify-shipping.ps1,run-runtime.ps1,test-groups.json}`.
+Logs: `audit107foundation-*` under each existing build tree. Fresh installations
+are `F:\wxwinui-pr26890-audit107foundation-install-{shared,static}`.
+Installed OFF core SHA256 values:
+
+- DLL: `10329C3E0A3733DC5C134FA2A97754D0EF1D3B2440F452B5C6369FCD05B9BDAE`.
+- Static: `DA42E5AD173F7AAEF5EB7CD27CA763CE19FAEE3A5A1743240065257E207B1E69`.
+
+No shipping/runtime failure was retried. The earlier template include failure
+and incomplete tooltip wildcard selection are documented in their sublots.
+New remote CI is separate from these local results.
+
+| Sublot | Qualified boundary | Still open |
+| --- | --- | --- |
+| 107A | Native resize and tooltip modules | UIA policy module; remaining host testing surface |
+| 107B | Gauge/ScrollBar owner/generation primitive | No third consumer assumed equivalent |
+| 107C | Fractional, generation-qualified coordinate mapping | Geometry projection/coalescing module |
+| 107D | Existing input policies retained unchanged | Focus and input adapter extraction |
+| 107E | Explicit local contracts; real Combo post-Loaded invalidation | Native Search/template inventory remains component work in 108 |
+| 107F | Production broker ownership query and passive-query regression | Broader observation/fault-injection separation with 106 |
+
+Next implementation order remains UIA/107A, geometry/107C, then focus/input/107D,
+with the remaining 106/107F boundaries handled explicitly. Plans 108–112 are not
+closed by these refactors; physical integration, performance and exhaustive
+component parity still need their own evidence.
 
 ## Verification and test plan
 

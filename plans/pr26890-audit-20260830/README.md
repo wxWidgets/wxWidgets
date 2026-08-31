@@ -21,12 +21,12 @@ The reports are evidence leads, not execution instructions. No raw audit dump or
 | [104](104-runtime-ownership.md) | Define runtime startup failure and ownership of process effects | LOCAL / REMOTE PASS |
 | [105](105-toolkit-contract.md) | Make toolkit identity and public source compatibility explicit | LOCAL / REMOTE PASS |
 | [106](106-private-test-surface.md) | Move testing facilities out of installed public control APIs | 28 CONTROLS + RETIREMENT + CONTROLHOST QUALIFIED LOCALLY; OTHER HOST HELPERS OPEN |
-| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | 107B QUALIFIED; NATIVE 107A / FIRST 107F BOUNDARY PASS ON; OTHER MODULES OPEN |
+| [107](107-host-modules.md) | Split host responsibilities behind private ownership boundaries | 107B/E QUALIFIED; BOUNDED 107A/C/F QUALIFIED; UIA/GEOMETRY/FOCUS/INPUT OPEN |
 | [108](108-component-contracts.md) | Close component parity gaps and version template dependencies | IN PROGRESS: CONCRETE FAILURES AND TEST ORACLES |
 | [109](109-real-integration.md) | Qualify native input, modal loops, UIA and OLE on real surfaces | TODO |
 | [110](110-performance-soak.md) | Measure pointer performance and lifecycle stability with reproducible budgets | TODO |
 | [111](111-capability-manifest.md) | Keep support documentation and feature evidence synchronized | TODO |
-| [112](112-submission-series.md) | Prepare reviewable submission boundaries without rewriting the integration branch | TODO |
+| [112](112-submission-series.md) | Prepare reviewable submission boundaries without rewriting the integration branch | INITIAL 107 COMMIT MAP; FULL PR SERIES/REPLAY PENDING |
 
 Execute one implementation lot at a time. A remote build may run while the next independent lot is prepared, but its predecessor remains pending until the result is known. No repetitive whole-repository re-audit between lots. Each defect receives one focused verification; new failures expand the same lot rather than starting an unrelated initiative.
 
@@ -37,9 +37,11 @@ observation boundaries. Their exact source anchors, filters and stop
 conditions are in 107. Existing single-island and toolkit-ABI decisions are
 preserved; changing them requires a separate design decision. The minimal
 Gauge/ScrollBar lifetime primitive (107B) is implemented and locally qualified.
-The native resize transaction (107A) and first production/observation boundary
-(107F) now pass both test-enabled linkages; their combined shipping check and
-the remaining modules are still open. This is not full host decomposition.
+Native resize and tooltip policy (107A), coordinate mapping (107C), the real
+Combo template regression (107E), and the first production/observation boundary
+(107F) now pass DLL/static ON/OFF/install/ON qualification. UIA, geometry
+publication, focus/input and the wider observation/test separation remain
+open. This is not full host decomposition or completion of plans 108–112.
 
 ## Findings coverage
 
@@ -88,6 +90,7 @@ DONE requires the implementation and its specified evidence. Local build, pure-s
 
 ## Evidence log
 
+- Five bounded architecture commits through `e2014c053b46cbf564524edf35bde903bfeeaf33` complete local shared/static ON/OFF/install/ON verification. Ten exact focused groups, smoke/Supported **2/2**, strict shipping header/symbol checks, fresh four-TU consumers **1/1**, and one normal 50-epoch installed runtime per linkage pass. Both active builds end in ALL with minimal rebuilt. Plan 107 records the original template include failure, the corrected tooltip selection, source/installed-core hashes and remaining modules; 112 maps the five review boundaries without rewriting history. New remote CI and physical qualification are not covered by this local entry.
 - Remote CI subsequently completes **45/45 SUCCESS** on `00fe7a3b212fc14be7df2ebbf7657dba25c07318`, including Windows Qt 5.15/6.10 and both WinUI linkages. This covers the published retirement/ControlHost/107B batch, not the new architecture changes below it.
 - 107B extracts only the common Gauge/ScrollBar owner/generation protocol into a private, allocation-free helper. Shared/static ON/OFF/install/ON pass the unchanged **332 assertions / 6 control cases**, **21 / 3** new lifetime cases, smoke/Supported **2/2**, shipping header/export checks, fresh four-TU consumers and one normal 50-epoch installed runtime process each. ScrollBar mutation policy, generation ordering and old test bodies are preserved. Both build trees end at `wxBUILD_TESTS=ALL`, with `minimal` rebuilt. The other architecture sublots, new remote CI and physical qualification remain open; exact logs and shipping hashes are in 107.
 - ControlHost's nine probe operations and two Loaded adapters are isolated from shipping. The real content getter remains a production dependency under `GetContent()`. Both shared/static ON/OFF/install/ON cycles pass **1421 assertions / 33 unchanged cases**, smoke/Supported **2/2**, strict installed-header/symbol checks, fresh four-TU consumers and one normal 50-epoch installed runtime process per linkage. The initial WinRT include/macro compilation failure and its correction are recorded in 106; no test is removed. Other host/keyboard/bootstrap helpers remain open.
