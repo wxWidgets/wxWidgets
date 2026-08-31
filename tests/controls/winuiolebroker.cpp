@@ -2593,6 +2593,56 @@ TEST_CASE("WinUI OLE broker owns exact bridge and TLW adapter registrations",
     external->Release();
 }
 
+TEST_CASE("WinUI OLE broker separates passive records from native validation",
+          "[winui-drop-broker][winui-broker-passive-snapshot]")
+{
+    NativeLog log;
+    auto broker = MakeBroker(log);
+    REQUIRE(broker);
+    REQUIRE(broker->Initialize().IsReady());
+    const auto before = wxWinUIDropBrokerTestAccess::ReadSnapshot(*broker);
+    REQUIRE(before.bridgeRegistration.current);
+    REQUIRE(before.tlwRegistration.current);
+
+    log.DestroyTestBridge();
+    const auto callsBefore = log.calls;
+    const auto mutationBefore = wxMSWOleGetDropTargetMutationGeneration();
+    const auto schedulesBefore = wxWinUITopLevelHost::GetFlushScheduleCount();
+    const auto runsBefore = wxWinUIHostGeometryTestAccess::GetFlushRunCount();
+    const auto attemptsBefore =
+        wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount();
+    for ( unsigned i = 0; i < 32; ++i )
+    {
+        const auto observed =
+            wxWinUIDropBrokerTestAccess::ReadSnapshot(*broker);
+        // These are deliberately cached records, not fresh HWND evidence.
+        CHECK(observed.bridgeRegistration.current);
+        CHECK(observed.bridgeRegistration.generation ==
+              before.bridgeRegistration.generation);
+        CHECK(observed.lockCalls == before.lockCalls);
+        CHECK(observed.registerCalls == before.registerCalls);
+        CHECK(observed.revokeCalls == before.revokeCalls);
+        CHECK(observed.unlockCalls == before.unlockCalls);
+    }
+    CHECK(log.calls == callsBefore);
+    CHECK(wxMSWOleGetDropTargetMutationGeneration() == mutationBefore);
+    CHECK(wxWinUITopLevelHost::GetFlushScheduleCount() == schedulesBefore);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushRunCount() == runsBefore);
+    CHECK(wxWinUIHostGeometryTestAccess::GetFlushCallbackAttemptCount() == attemptsBefore);
+
+    // Qualification must cross this explicit native boundary. It rejects the
+    // destroyed bridge even though a passive copy still has its old facts.
+    const auto validated =
+        wxWinUIDropBrokerTestAccess::ValidateNativeIdentity(*broker);
+    CHECK_FALSE(validated.bridgeRegistration.current);
+    CHECK(validated.tlwRegistration.current);
+    CHECK(validated.bridgeRegistration.generation ==
+          before.bridgeRegistration.generation);
+    CHECK(wxWinUIDropBrokerTestAccess::ReadSnapshot(*broker)
+              .bridgeRegistration.current);
+    broker->Shutdown();
+}
+
 TEST_CASE("WinUI OLE broker production queries are passive",
           "[winui-drop-broker][winui-broker-observation]")
 {

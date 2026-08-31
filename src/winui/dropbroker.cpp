@@ -320,6 +320,14 @@ public:
         { return m_registrationGeneration; }
 
 #ifdef WXWINUI_TEST_SUPPORT
+    wxWinUIDropBrokerSnapshot ReadSnapshot() const noexcept
+    {
+        std::lock_guard<std::mutex> lock(m_snapshotMutex);
+        wxWinUIDropBrokerSnapshot snapshot = m_snapshot;
+        snapshot.active = IsActive();
+        return snapshot;
+    }
+
     wxWinUIDropBrokerSnapshot ValidateNativeIdentity() const noexcept
     {
         // Query native identity before taking the snapshot mutex. Generation
@@ -327,9 +335,7 @@ public:
         // boundary that can re-enter broker diagnostics.
         const bool bridgeCurrent = IsBridgeCurrent();
         const bool tlwCurrent = IsRegistrationCurrent();
-        std::lock_guard<std::mutex> lock(m_snapshotMutex);
-        wxWinUIDropBrokerSnapshot snapshot = m_snapshot;
-        snapshot.active = IsActive();
+        wxWinUIDropBrokerSnapshot snapshot = ReadSnapshot();
         // `current` is evidence about the HWND identities at the instant the
         // snapshot is consumed, not merely when the last native operation
         // happened.  In particular, the physical qualification gate takes a
@@ -2201,6 +2207,14 @@ wxWinUIDropBrokerTestAccess::Create(
     const wxWinUIDropBrokerNativeOps* nativeOps) noexcept
 {
     return wxWinUIDropBrokerState::CreateBroker(tlw, bridge, lifetime, nativeOps);
+}
+
+wxWinUIDropBrokerSnapshot
+wxWinUIDropBrokerTestAccess::ReadSnapshot(
+    const wxWinUIDropBroker& broker) noexcept
+{
+    const std::shared_ptr<wxWinUIDropBrokerState> state = broker.m_state;
+    return state ? state->ReadSnapshot() : wxWinUIDropBrokerSnapshot();
 }
 
 wxWinUIDropBrokerSnapshot

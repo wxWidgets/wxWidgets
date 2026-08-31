@@ -22,6 +22,11 @@ public:
         const std::weak_ptr<wxWinUIHostLifetime>& lifetime,
         const wxWinUIDropBrokerNativeOps* nativeOps) noexcept;
 
+    // Pure stored-fact copy: no HWND/generation query, COM call or queued work.
+    // Registration current flags describe the last production update only.
+    static wxWinUIDropBrokerSnapshot ReadSnapshot(
+        const wxWinUIDropBroker& broker) noexcept;
+
     // Explicit native operation, not passive observation: performs the same
     // HWND/generation validation as the historical qualification getter before
     // copying counters. Physical pre-injection gates must keep using this.

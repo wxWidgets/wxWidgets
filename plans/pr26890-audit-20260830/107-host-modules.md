@@ -544,6 +544,24 @@ and actual include paths are verified in the existing `host-layout/broker`
 proof directory. OFF library/installation/export and consumer checks remain
 pending for the combined batch.
 
+### Additive passive record observation
+
+`ReadSnapshot()` now copies stored facts under the existing snapshot mutex
+and reads the active atomic only. It does not perform native identity lookups,
+create HWND cookies, call COM or schedule work. `ValidateNativeIdentity()`
+retains the explicit native checks before obtaining that stored copy. All
+historical consumers, including physical qualification, retain validation.
+
+The new `WinUI OLE broker separates passive records from native validation`
+case destroys its own offscreen bridge and performs 32 passive reads, checking
+unchanged native-operation, mutation and host-scheduling counts. Explicit
+validation then rejects the destroyed bridge while the passive record remains
+cached. It passes **210 assertions / 1 case** in shared and static. The two
+existing groups still pass **206/3 + 430/3** after the addition. Both test_gui
+builds pass `/warnaserror`; logs are `audit107f-broker-b-on-build.log` and
+`audit106-broker-b-{ownership,observation,passive}.log`. These tests do not
+provide physical OLE or shipping qualification.
+
 ## Verification and test plan
 
 Before and after each extraction run the identical host lifecycle/state/input/slot tests plus Supported V0 in both linkages. Build installed consumers and compare expected public exports. Every new module needs a pure state test and a real-island integration test.
